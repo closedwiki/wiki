@@ -236,13 +236,6 @@ sub jpegsize {
 sub addLinkToEndOfTopic
 {
     my ( $text, $pathFilename, $fileName, $fileComment ) = @_;
-    my( $before, $after ) = split( /<!--TWikiCat-->/, $text );
-    if( $after ) {
-       # PTh 31 Jan 2001: Fixed Codev.CreateLinkToAttachedFileBug
-       $after = "<!--TWikiCat-->$after";
-    } else {
-       $after = "";
-    }
     my $fileLink = "";
     if( $fileName =~ /\.(gif|jpg|jpeg|png)$/i ) {
         if( $fileComment ) {
@@ -260,12 +253,27 @@ sub addLinkToEndOfTopic
         }
         $fileLink = "\n<a href=\"%ATTACHURLPATH%/$fileName\">$fileName</a> $fileComment<br>\n";
     }
-    return "$before$fileLink$after";
+    return "$text$fileLink";
+}
+
+# =========================
+sub error
+{
+    my( $noredirect, $message, $query, $theWeb, $theTopic, 
+        $theOopsTemplate, $oopsArg1, $oopsArg2 ) = @_;
+    
+    if( $noredirect ) {
+        $oopsArg1 = "" if( ! $oopsArg1 );
+        $oopsArg2 = "" if( ! $oopsArg2 );
+        &TWiki::writeHeader( $query );
+        print "ERROR $theWeb.$theTopic $message $oopsArg1 $oopsArg2\n";
+    } else {
+	my $url = &TWiki::getOopsUrl( $theWeb, $theTopic, $theOopsTemplate, $oopsArg1, $oopsArg2 );
+	TWiki::redirect( $query, $url );
+    }
 }
 
 
-# FIXME rename upload to attachchange, not issue with view of attach table at present
-# also attach change to attachview
 # =========================
 sub main
 {
@@ -273,14 +281,9 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
-    my $theUploadButton = $query->param( 'uploadButton' );
-    my $theChangeButton = $query->param( 'changeButton' );
+    my $doChangeProperties = $query->param( 'changeproperties' );
     my $hideFile = $query->param( 'hidefile' ) || "";
-    if( ! $theChangeButton && ! $theUploadButton ) {
-        # Fix so DrawPlugin still works FIXE - patch DrawPlugin at some point
-        $theUploadButton = "yes";
-        $hideFile = "yes";
-    }
+    my $noredirect = $query->param( 'noredirect' ) || "";
     
     ( $topic, $webName, $dummy, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
@@ -289,22 +292,20 @@ sub main
     my $wikiUserName = &TWiki::userToWikiName( $userName );
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsnoweb" );
-        TWiki::redirect( $query, $url );
+        error( $noredirect, "Missing Web", $query, $webName, $topic, "oopsnoweb" );
         return;
     }
 
     my( $mirrorSiteName, $mirrorViewURL ) = &TWiki::readOnlyMirrorWeb( $webName );
     if( $mirrorSiteName ) {
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
-        TWiki::redirect( $query, $url );
+        error( $noredirect, "This is a readonly mirror", 
+               $query, $webName, $topic, "oopsmirror", $mirrorSiteName, $mirrorViewURL );
         return;
     }
 
     # check access permission
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
-        TWiki::redirect( $query, $url );
+        error( $noredirect, "No change permission", $query, $webName, $topic, "oopsaccesschange" );
         return;
     }
 
@@ -318,30 +319,20 @@ sub main
     my $fileComment = $query->param( 'filecomment' ) || "";
     my $createLink = $query->param( 'createlink' ) || "";
 
-    
-    # FIXME fileName doesn't seem to be defined when does update without upload
-
-    my $doUpload = "";
-    $doUpload = 1 if( $theUploadButton );
-    #TWiki::writeDebug( "upload: theUploadButton=$theUploadButton, doUpload=$doUpload" );
-
     # JET need to change windows path to unix path
     $tmpFilename =~ s@\\@/@go;
     $tmpFilename =~ /(.*)/;
     $tmpFilename = $1;
     #&TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
     
-    my( $fileSize, $fileUser, $fileDate ) = "";
+    my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
 
-    if( $doUpload ) {
+    if( ! $doChangeProperties ) {
 	# check if file exists and has non zero size
 	my $size = -s $tmpFilename;
-	&TWiki::writeDebug( "upload: size $size" );
-	if( ! -e $tmpFilename ) {
-	    #&TWiki::writeDebug( "upload: no file" );
-	    # PTh 20 Jun 2000: changed to getOopsUrl
-	    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsupload", $fileName );
-	    TWiki::redirect( $query, $url );
+	if( ! -e $tmpFilename || ! $size ) {
+	    error( $noredirect, "File missing or zero size", 
+	           $query, $webName, $topic, "oopsupload", $fileName );
 	    return;
 	}
 
@@ -353,9 +344,8 @@ sub main
 	$fileName =~ s/[^A-Za-z0-9_\.\-]//go;  # delete special characters
         $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
 
-	# Update RCS if required
-	# FIXME make optional
-    	my $text1 = "";
+	# Update
+	my $text1 = "";
 	my $saveCmd = "";
 	my $doNotLogChanges = 1;
 	my $doUnlock = 1;
@@ -364,9 +354,8 @@ sub main
 						   $dontNotify, $fileComment, $tmpFilename );
 
 	if ( $error ) {
-	    # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
-	    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
-	    TWiki::redirect( $query, $url );
+	    error( $noredirect, "Save attachment error", $query, $webName, $topic,
+	           "oopssaveerrr", $error );
 	    return;
 	}
 
@@ -380,32 +369,45 @@ sub main
 	  $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
 	$fileDate = $mtime;
 
+        $fileVersion = TWiki::Store::getRevisionNumber( $webName, $topic, $fileName );
+
 	if( $TWiki::doLogTopicUpload ) {
 	    # write log entry
 	    &TWiki::Store::writeLog( "upload", "$webName.$topic", $fileName );
+	    #FIXE also do log for change property?
 	}
     }
     
-    my $fileVersion = TWiki::Store::getRevisionNumber( $webName, $topic, $fileName );
     
     # update topic
     my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
-
-    TWiki::Attach::updateAttachment( 
+    
+    if( $doChangeProperties ) {
+        TWiki::Attach::updateProperties( $fileName, $hideFile, $fileComment, $meta );
+    } else {
+        TWiki::Attach::updateAttachment( 
                 $fileVersion, $fileName, $filePath, $fileSize,
                 $fileDate, $fileUser, $fileComment, $hideFile, $meta );
+    }
+    
     if( $createLink ) {
-        $text = addLinkToEndOfTopic( $text, $newFile, $fileName, $fileComment );
+        my $filePath = &TWiki::Store::getFileName( $webName, $topic, $fileName );
+        $text = addLinkToEndOfTopic( $text, $filePath, $fileName, $fileComment );
     }
 
     my $error = &TWiki::Store::saveTopic( $webName, $topic, $text, $meta );
     if( $error ) {
-        # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
-        TWiki::redirect( $query, $url );
+    	error( $noredirect, "Save topic error", $query, $webName, $topic,
+    	       "oopssaveerrr", $error );
     } else {
         # and finally display topic
-        TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
+        if( $noredirect ) {
+            &TWiki::writeHeader( $query );
+            my $message = ( $doChangeProperties ) ? "properties changed" : "$fileName uploaded";
+            print( "OK $message\n" );
+        } else {
+            TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
+        }
     }
 }
 
