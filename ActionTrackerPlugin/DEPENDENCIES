@@ -1,1 +1,2 @@
-Time::ParseDate perl Available from CPAN
+TWiki::Plugins::CairoCompatabilityModule perl Required if plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/SHaredCode repository.
+Time::ParseDate perl Available from CPAN.
