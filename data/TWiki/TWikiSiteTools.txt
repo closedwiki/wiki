@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007201024" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="MikeMannix" date="1007288520" format="1.0" version="1.4"}%
 %TOC%
 %STARTINCLUDE%
 ---# <nop>TWikiSiteTools
@@ -12,6 +12,8 @@ TWikiSiteTools include utilities for navigating, searching and keeping up with s
 ---++ <nop>WebNotify Recent Changes Alert
 
 Each TWiki web has an automatic email alert service that sends a list of recent changes on a preset schedule, like once a day. Users can subscribe and unsubscribe using %NOTIFYTOPIC% in each web. The Perl script =mailnotify= is called by a deamon in regular intervals. The script sends an automated email to subscribed users if topics were changed in a web within last interval.
+
+	* You can create a WebNotify using TWikiVariables with ==%<nop>NOTIFYTOPIC%==
 
 ---+++ Configuring Outgoing Mail
 
@@ -36,13 +38,11 @@ Microsoft lists several third-party
 [[http://www.microsoft.com/ntserver/partners/findoffering/serversolutions/Maintnce.asp#cron][replacements]]
 (as of 2001-11-20, none of them free).
 
----++ <nop>WebChanges
-
-To check for the most recently edited topics while on-site, use the WebChanges link, usually located on the upper toolbar. It lists the ___ most recently modified, newest first, along with the first couple of lines of the page content.
-
 ---++ <nop>WebStatistics Site Usage Log
 
 You can generate a listing manually, or on an automated schedule, of visits to individual pages, on a per web basis. Compiled as a running total on a monthly basis. Includes totals for Topic Views, Topic Saves, Attachment Uploads, Most Popular Topics with number of views, and Top Contributors showing total of saves and attachment uploads. Previous months are saved.
+
+	* You can create a WebStatistics link using TWikiVariables with ==%<nop>STATISTICSTOPIC%==
 
 ---+++ Configuring for Automatic Operation
 
@@ -71,4 +71,24 @@ WebSearch is an extremely fast and flexible search facility, part of the core TW
 
 See also: TWikiVariables for including hard-coded searches in text.
 
--- Main.MikeMannix - 30 Nov 2001	
+---+++ <nop>WebChanges
+
+To check for the most recently edited topics while on-site, use the WebChanges link, usually located on the upper toolbar. It lists the most recently modified topics, newest first, along with the first couple of lines of the page content. 
+
+This is simply a preset =SEARCH=. The number of topics listed by the =limit= parameter.:
+<blockquote style="background-color:#f5f5f5">
+<pre>
+%<nop>SEARCH{".*" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" <br />reverse="on" limit="50"}%
+</pre>
+</blockquote>
+
+---+++ <nop>WebIndex
+
+WebIndex lists all web topics in alphabetical order, with the first couple of lines of text. This is simply a preset =SEARCH=:
+<blockquote style="background-color:#f5f5f5">
+<pre>
+%<nop>SEARCH{"\.*" scope="topic" regex="on" nosearch="on"}%
+</pre>
+</blockquote>
+
+-- Main.MikeMannix - 01 Dec 2001
