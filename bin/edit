@@ -176,7 +176,7 @@ sub main
     if( ( $onlyWikiName ) && ( ! &TWiki::isWikiName( $topic ) ) &&
         ( ! &TWiki::Store::topicExists( $webName, $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
-        print $query->redirect( &TWiki::getViewUrl( $webName, $topic ) );
+        TWiki::redirect( $query, &TWiki::getViewUrl( $webName, $topic ) );
 	return;
     }
 
@@ -187,14 +187,14 @@ sub main
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, $text, $topic, $webName ) ) {
         # user has not permission to change the topic
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
     if( ( $saveCmd ) &&
         ( ! &TWiki::Access::userIsInGroup( $wikiUserName, $TWiki::superAdminGroup ) ) ) {
         # user has no permission to execute undocumented cmd=... parameter
-        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.$TWiki::superAdminGroup" );
-        print $query->redirect( $url );
+        my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessgroup", "$TWiki::mainWebname.TWikiAdminGroup" );
+        TWiki::redirect( $query, $url );
         return;
     }
 

@@ -42,5 +42,5 @@ sub main
 
     # PTh 20 Jun 2000: changed to getOopsUrl
     my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsdel" );
-    print $query->redirect( $url );
+    TWiki::redirect( $query, $url );
 }

@@ -52,7 +52,7 @@ sub main
     # check access permission
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -65,7 +65,7 @@ sub main
     # PTh 06 Nov 2000: check if proper use of save script
     if( ! ( defined $text ) ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssave" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -90,8 +90,8 @@ sub main
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
     } else {
-        print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
+        TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
     }
 }

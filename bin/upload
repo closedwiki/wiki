@@ -299,7 +299,7 @@ sub main
     # check access permission
     if( ! &TWiki::Access::checkAccessPermission( "change", $wikiUserName, "", $topic, $webName ) ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccesschange" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -338,7 +338,7 @@ sub main
 	    #&TWiki::writeDebug( "upload: no file" );
 	    # PTh 20 Jun 2000: changed to getOopsUrl
 	    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsupload", $fileName );
-	    print $query->redirect( $url );
+	    TWiki::redirect( $query, $url );
 	    return;
 	}
 
@@ -363,10 +363,10 @@ sub main
 	if ( $error ) {
 	    # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
 	    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
-	    print $query->redirect( $url );
+	    TWiki::redirect( $query, $url );
 	} else {
 	    # and finally display topic
-	    print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
+	    TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
 	}
 
 	# get user name
@@ -410,11 +410,11 @@ sub main
     if( $error ) {
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
 
     } else {
         # and finally display topic
-        print $query->redirect( &TWiki::getViewUrl( "", $topic ) );
+        TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
     }
 }
 

@@ -168,7 +168,7 @@ sub main
        $new_url = &TWiki::getViewUrl( $newWeb, $newTopic );
     }
 
-    print $query->redirect( $new_url );
+    TWiki::redirect( $query, $new_url );
     return;
 }
 
