@@ -111,6 +111,8 @@ sub replaceRevision {
         $rcsOut = "$TWiki::cfg{RCS}{ciDateCmd}\n$rcsOut";
         return $rcsOut;
     }
+    chmod( 0644, $self->{file} );
+
     return undef;
 }
 
@@ -129,6 +131,8 @@ sub _deleteRevision {
     $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{unlockCmd},
         FILENAME => $self->{file} );
+
+    chmod( 0644, $self->{file} );
 
     my ($rcsOut, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{delRevCmd},
@@ -249,11 +253,12 @@ sub revisionDiff {
     } else {
         $contextLines = "" unless defined($contextLines);
         ( $tmp, $exit ) =
-          $self->{session}->{sandbox}->readFromProcess( $TWiki::cfg{RCS}{diffCmd},
-                                  REVISION1 => "1.$rev1",
-                                  REVISION2 => "1.$rev2",
-                                  FILENAME => $self->{rcsFile},
-                                  CONTEXT => $contextLines );
+          $self->{session}->{sandbox}->readFromProcess
+            ( $TWiki::cfg{RCS}{diffCmd},
+              REVISION1 => "1.$rev1",
+              REVISION2 => "1.$rev2",
+              FILENAME => $self->{rcsFile},
+              CONTEXT => $contextLines );
         $error = "Error $exit when running $TWiki::cfg{RCS}{diffCmd}";
     }
 	

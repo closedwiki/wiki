@@ -1449,7 +1449,7 @@ sub _TOC {
     my $params = extractParameters( $args );
 
     # get the topic name attribute
-    my $topicname = $params->{_DEFAULT} || $defaultTopic;
+    my $topic = $params->{_DEFAULT} || $defaultTopic;
 
     # get the web name attribute
     my $web = $params->{web} || $defaultWeb;
@@ -1468,15 +1468,14 @@ sub _TOC {
     my $line  = "";
     my $level = "";
 
-    # If a topic name is explicitly defined, make sure we read it.
-    # Otherwise if we think the text being expanded is the text of the topic,
-    # don't try to read.
-    # SMELL: this is a hack, that overcomes muddy thinking in the
-    # code where handleCommonTags is called.
-    if( defined( $params->{_DEFAULT} ) ||
-        "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
-        my $params = { _DEFAULT => "$web.$topicname" };
-        $text = $this->_INCLUDE( $params, $defaultWeb, $defaultTopic );
+    if( "$web.$topic" ne "$defaultWeb.$defaultTopic" ) {
+        unless( $this->{security}->checkAccessPermission
+                ( "view", $this->{user}, "", $topic, $web ) ) {
+            return _inlineError( "Error: No permission to view $web.$topic" );
+        }
+        my $meta;
+        ( $meta, $text ) =
+          $this->{store}->readTopic( $this->{user}, $web, $topic );
     }
 
     my $headerDaRE =  $regex{headerPatternDa};
@@ -1491,6 +1490,7 @@ sub _TOC {
         split( /\n/, $text );
 
     my $insidePre = 0;
+    my $insideVerbatim = 0;
     my $i = 0;
     my $tabs = "";
     my $anchor = "";
@@ -1498,14 +1498,22 @@ sub _TOC {
     # SMELL: this handling of <pre> is archaic.
     foreach $line ( @list ) {
         if( $line =~ /^.*<pre>.*$/io ) {
-            $insidePre = 1;
-            $line = "";
+            $insidePre++;
+            next;
         }
         if( $line =~ /^.*<\/pre>.*$/io ) {
-            $insidePre = 0;
-            $line = "";
+            $insidePre--;
+            next;
         }
-        if (!$insidePre) {
+        if( $line =~ /^<verbatim>.*$/io ) {
+            $insideVerbatim++;
+            next;
+        }
+        if( $line =~ /^<\/verbatim>.*$/io ) {
+            $insideVerbatim--;
+            next;
+        }
+        if (!$insidePre && !$insideVerbatim) {
             $level = $line ;
             if ( $line =~  /$headerDaRE/o ) {
                 $level =~ s/$headerDaRE/$1/go;
@@ -1522,9 +1530,9 @@ sub _TOC {
                 $line  =~ s/$headerHtRE/$2/gio;
             }
             my $urlPath = "";
-            if( "$web.$topicname" ne "$defaultWeb.$defaultTopic" ) {
+            if( "$web.$topic" ne "$defaultWeb.$defaultTopic" ) {
                 # not current topic, can't omit URL
-                $urlPath = TWiki::getScriptUrl($webPath, $topicname);
+                $urlPath = $this->getScriptUrl($webPath, $topic, "view");
             }
             if( ( $line ) && ( $level <= $depth ) ) {
                 $anchor = $this->{renderer}->makeAnchorName( $line );
