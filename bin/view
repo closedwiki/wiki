@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT -I.
+#!/usr/bin/perl -wTI.
 #
 # TWiki WikiClone (see $wikiversion in wiki.pm for version)
 #
@@ -61,6 +61,16 @@ sub main
     }
 
     $tmpl= &wiki::readTemplate( "view", $topic );
+    if( ! $tmpl ) {
+        print "Content-type: text/html\n\n";
+        print "<html><body>";
+        print "<h1>TWiki Installation Error</h1>";
+        print "Template directory $wiki::templateDir not found.<p>";
+        print "Check the \$templateDir variable in wikicfg.pm.";
+        print "</body></html>";
+	return;
+    }
+
     my $topicExists = &wiki::topicExists( $webName, $topic );
     if( $topicExists ) {
 	$maxrev = &wiki::getRevisionNumber( $topic );
