@@ -9,6 +9,8 @@ use strict;
 
 use vars '$twikiLibPath';   # read from setlib.cfg
 
+use vars '$localPerlLibPath';   # read from setlib.cfg
+
 use vars '@storeSettings';  # read from TWiki.cfg
 
 # default Twiki.cfg contents, set in BEGIN block far below...
@@ -90,7 +92,7 @@ sub UpgradeTWikiConfig
 #
 ");
 
-    printToNewConfig( TWiki:: upgradeConfig() );
+    printToNewConfig( TWiki::upgradeConfig() );
 
     print "$targetDir/lib/TWiki.cfg created...\n";
 }
@@ -196,7 +198,7 @@ sub upgradeConfig {
     $newf .= old2new($ss{lockCmd}, "$rcsDir/rcs  -q -l %FILENAME% ", "\$cfg{RCS}{lockCmd}");
     $newf .= old2new($ss{tagCmd}, "$rcsDir/rcs  -N%TAG%:%REVISION% %FILENAME% ", "\$cfg{RCS}{tagCmd}");
 
-    return newf;
+    return $newf;
 }
 
 sub old2new {
