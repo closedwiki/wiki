@@ -409,7 +409,7 @@ sub setLock
     my $lockFilename = $self->_makeFileName( ".lock" );
     if( $lock ) {
         my $lockTime = time();
-        _saveFile( $lockFilename, "$userName\n$lockTime" );    
+        $self->_saveFile( $lockFilename, "$userName\n$lockTime" );    
     } else {
         unlink "$lockFilename";    
     }
