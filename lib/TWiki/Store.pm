@@ -958,9 +958,13 @@ sub writeLog
 
     my $filename = $TWiki::logFilename;
     $filename =~ s/%DATE%/$yearmonth/go;
-    open( FILE, ">>$filename");
-    print FILE "$text\n";
-    close( FILE);
+
+    if( open( FILE, ">>$filename" ) ) {
+         print FILE "$text\n";
+         close( FILE );
+    } else {
+         print STDERR "Couldn't write \"$text\" to $filename: $!\n";
+    }
 }
 
 =pod

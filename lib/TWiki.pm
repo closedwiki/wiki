@@ -269,15 +269,18 @@ Prints date, time, and contents of $text to $debugFilename, typically
 
 sub writeDebug {
     my( $text ) = @_;
-    open( FILE, ">>$debugFilename" );
     
     my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
     my( $tmon) = $isoMonth[$mon];
     $year = sprintf( "%.4u", $year + 1900 );
     my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
 
-    print FILE "$time $text\n";
-    close(FILE);
+    if( open( FILE, ">>$debugFilename" ) ) {
+         print FILE "$time $text\n";
+         close( FILE );
+    } else {
+         print STDERR "Couldn't write \"$text\" to $debugFilename: $!\n";
+    }
 }
 
 =pod
