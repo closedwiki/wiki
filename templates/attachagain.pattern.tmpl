@@ -43,12 +43,13 @@
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction"><div class="twikiTopicActionSecondary"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment...</a>
+</div>
 <table>
 <tr>
 <td class="twikiCancelCol">[[%WEB%.%TOPIC%][Cancel]]</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /><input type="submit" class="twikiSubmit twikiSecondary" name="changeproperties" value="Change properties" /></td>
-<td class="twikiAddCol"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%">Move&nbsp;attachment</a></td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
+<td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="changeproperties" value="Change properties" /></td>
 </tr>
 </table>
 </div>%TMPL:END%
