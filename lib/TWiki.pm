@@ -1504,13 +1504,8 @@ sub encodeSpecialChars
     $text =~ s/\"/%_Q_%/go;
     $text =~ s/>/%_G_%/go;
     $text =~ s/</%_L_%/go;
-    # PTh 10 Apr 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
-    $text =~ s/\r\r\n/%_N_%/go;
-    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
-    $text =~ s/\r\n/%_N_%/go;
-    $text =~ s/\n\r/%_N_%/go;
-    $text =~ s/\r/%_N_%/go;
-    $text =~ s/\n/%_N_%/go;
+    # PTh, JoachimDurchholz 22 Nov 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
+    $text =~ s/(\r*\n|\r)/%_N_%/go; 
     
     return $text;
 }
