@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092532414" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="WillNorris" date="1100974474" format="1.0" version="1.2"}%
 ---++ <nop>%WEB% Web Preferences
 
 The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, eg: %MAINWEB%.TWikiGuest in the [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] web).
@@ -59,3 +59,4 @@ __Related Topics:__
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
 
+%META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="placeholder until NonInfringingLogo created" date="1100974473" path="favicon.ico" size="318" tmpFilename="/var/tmp/CGItemp25580" user="guest" version="1.1"}%
