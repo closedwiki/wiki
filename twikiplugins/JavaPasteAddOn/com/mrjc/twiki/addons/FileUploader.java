@@ -240,8 +240,8 @@ public class FileUploader
 			
 			appendEndOfDelimitersToOutputStream(outStream);    		
 			// close streams
-			outStream.flush ();
-			outStream.close ();
+			outStream.flush();
+			outStream.close();
 
         }
         catch (IOException ioex) 

@@ -22,7 +22,7 @@ public class DebugPostServer
          Socket client = server.accept();
 
       	// Open server socket
-      	File output = new File("output.txt");
+      	File output = new File("DebugServerStdOut.txt");
       	FileWriter fw = new FileWriter(output);
 
          System.out.println("server: request received from "
