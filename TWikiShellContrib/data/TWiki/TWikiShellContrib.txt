@@ -1,10 +1,12 @@
+%META:TOPICINFO{author="guest" date="1099288894" format="1.0" version="1.2"}%
 ---+!! TWiki Shell
 
 %TOC%
 
 ---+ Purpose
-
+%STARTINCLUDE%
 TWikiShellContrib is  a shell that can be use to replace all twiki command line scripts with a single interface. Each command available in the twikishell is also available as a command line option using the -e switch.
+%ENDINCLUDE%
 
 ---+ Installation
 
@@ -31,6 +33,7 @@ This will fire the shell. The following command line options are available:
 | -v | Verbose mode (Verbosity level 1) (Default) |
 | -vv | Very Verbose mode (Verbosity level 2) |
 | -q | Quiet Operation (Verbosity level 0) |
+| -d | Turns on debugging (prints debug statements to console) |
 | -e <command> | Execute the specified command. Must be the last option in the cli. i.e: twikishell -e install plugin CalendarPlugin|
 
 ---+ Operation
@@ -47,9 +50,11 @@ On a bare installation (without any Extensions installed), you have the followin
 | import <perl module> | Imports a perl module and scan it for new commands to be added to the shell |
 | verbose <level> | Changes the verbosity level to either 1 or 2 |
 | quiet | Changes the verbosity level to 0 |
-| reload <command> | Reload the module associated with <command> |
-| reload <module> | Reload the extention module (assumes that it's under the extentions dir |
-| reload shell | Reloads the shell (don't clear the handler list) |
+| debug | Set debugging On and Off. Usage: debug [on/off] |
+| register | Register an extension to be loaded at shell startup |
+| unregister | Unregister an extension so it's not loaded at shell startup |
+| reload | Reloads an extension |
+| reload shell | Reloads the shell |
 
 The config file is a dump (using Data::Dumper) of the configuration object used internally
 
@@ -57,7 +62,7 @@ The config file is a dump (using Data::Dumper) of the configuration object used 
 
 ---++ Creation
 
-An extention is a perl module inside the TWiki::Contrib::TWikiShellContrib::Ext that defines one or more of the following subs:
+An extentions or command sets are perl modules that defines one or more of the following subs:
 
 | *Sub* | *Description*|
 | run | Command execution |
@@ -76,9 +81,10 @@ There are several ways to implement extentions. The first thing to understand is
 | dump handlers | Dump | run_handlers, smry_handlers, help_handlers |
 |^ | Dump::Handlers | run, smry, help |
 
-Module Name assumes the TWiki::Contrib::TWikiShellContrib::Ext prefix
 
-For an example, check the Dump.pm module (implementation of the dump command).
+The extension can be on any TWiki subpackage. Extensions under the TWiki::Contrib::TWikiShellContrib::Ext package are considered to be "Core" extensions, that is, are distributed with TWikiShellContrib.
+
+For an example, check the TWiki::Contrib::TWikiShellContrib::Ext::Dump module (implementation of the dump command).
 
 ---++ Loading an extension to the Shell
 
@@ -88,11 +94,19 @@ To load an extension, use:
 	import <command>
 </verbatim>
 
-or 
+or
 
 <verbatim>
 	import <extention_module_without_prefix>
 </verbatim>
+
+if it's a core extension, or 
+
+<verbatim>
+	import <extention_module>
+</verbatim>
+
+if not.
 
 Also, if the extension is in a subpackage of Ext (like the Dump extension) it will be imported automatically on it first invocation (for example, the Dump extension will be loaded automatically when the dump, dump config or dump handlers commands are called). 
 
@@ -105,14 +119,13 @@ All the handlers will be called with the following parameters (in order):
 |$config| A reference to the config object|
 |@args| The list of parameters passed to the command|
 
+
 ---+ Config Object
 
-The config object provides a centralized place where extentions can store their settings. It's a blessed hash with the following published methods
+The config object provides a centralized place where extentions can store their settings. It's a blessed hash with the following published subs
 
-	 
-	* sub printVeryVerbose : Prints no matter what is the verbosity
-	* sub printNotQuiet : Print if verbosity is not 0
 	* sub save : Save the configuration to the .twikishellrc file, using Data::Dumper
+	* sub saveAndDispose: Clean up the configuration and save it as per save sub.
 
 Also, the configuration will always have the following variables set:
 
@@ -121,22 +134,66 @@ Also, the configuration will always have the following variables set:
 	* verbosity : Last verbosity set
 
 
-Any extention that want to store a setting in the config object, must call the save method.
+Any extention that want to store a setting in the config object, must call the save method. 
 
+It's recommended for extensions using the config object to store settings to create a namespace using a hash for the settings so they won't conflict with others. Example:
+
+The ==TWiki::Contrib::TWikiShellContrib::Zip== base extension stores it's settings in ==$config->{ZIP}==, so it's settings are ==$config->{ZIP}{useArchiveZip}== , ==$config->{ZIP}{unzipDir}== and ==$config->{ZIP}{unzipParam}==
 ---++ Settings
    * Name of the perl package
       * Set STUB = TWiki::Contrib::TWikiShellContrib
 
----++ Contrib Info
+---+ Services
 
-|  Author: | TWiki:Main/RafaelAlvarez, based on the work of TWiki:Main/MartinCleaver |
-| Version: | 1.0|
-|  Copyright &copy;: |  2004, Rafael Alvarez and Martin Cleaver |
-|  License: | GNU |
-|  Dependencies: | Term::Shell |
-|  21/10/04 | 1.000 Initial release |
+---++ TWiki::Contrib::TWikiShellContrib::Zip
+
+---+++ unzip($sourceFile,$targetDir)
+
+Unzips $sourceFile to $targetDir. It's use ==Archive::Zip== if installed, or the configured unzip program if not.
+
+---+++ checkUnzipMechanism($config)
+
+Makes sure that the unzip service is correctly configured, and if not try to configure it automatically or asking the user.
+
+---++ TWiki::Contrib::TWikiShellContrib::DirHandling
+
+---+++ makepath($path)
+
+Creates the directory structure leading to $path. Examples:
+
+<verbatim>
+makepath("/lib/TWiki/Plugin/NewPlugin/NewPlugin.pm");
+</verbatim>
+
+will try to create the following directories if they don't exist:
+<verbatim>
+/lib
+/lib/TWiki
+/lib/TWiki/Plugin
+/lib/TWiki/Plugin/NewPlugin
+</verbatim>
+
+<verbatim>
+makepath("/pub/SomeDir/SomeSubDir");
+</verbatim>
+
+will try to create the following directories if they don't exist:
+
+<verbatim>
+/pub
+/pub/SomeDir
+</verbatim>
+
+
+---+ Contrib Info
+
+| Authors: | TWiki:Main.CrawfordCurrie, TWiki:Main.MartinCleaver,TWiki:Main.RafaelAlvarez |
+| Copyright &copy;: | 2004, Crawford Currie, Rafael Alvarez and Martin Cleaver|
+| License: | GPL |
+| Dependencies: | Term::Shell |
+| 21/10/04 | 1.000 Initial release, based on the work of TWiki:Main.CrawfordCurrie, TWiki:Main.MartinCleaver|
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+__Related Topics:__ TWiki:Main.TWikiShell
 
