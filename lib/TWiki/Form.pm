@@ -298,7 +298,7 @@ sub renderForEdit
 
     my $chooseForm = "";   
     if( TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) ) {
-        $chooseForm = chooseFormButton( "Change TWikiForm" );
+        $chooseForm = chooseFormButton( "Replace form" );
     }
     
     # FIXME could do with some of this being in template
