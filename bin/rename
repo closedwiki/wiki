@@ -100,8 +100,6 @@ sub main
               return;
         }
     }
-         
-
         
     my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
     my $newName = &TWiki::Store::getFileName($newWeb, $newTopic);
@@ -239,7 +237,7 @@ sub updateReferingPages
           $result .= ":$item: , "; 
           #open each file, replace $topic with $newTopic
           if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
-	     my( $scantext, @meta ) = &TWiki::Store::readWebTopicNew($itemWeb, $itemTopic);
+	     my( $meta, $scantext ) = &TWiki::Store::readTopic($itemWeb, $itemTopic);
 	     my $insidePRE = 0;
 	     my $insideVERBATIM = 0;
              my $noAutoLink = 0;
@@ -271,7 +269,7 @@ sub updateReferingPages
 		}
 	        $resultText .= "$_\n";
 	     }
-	     &TWiki::Store::saveTopicNew( $itemWeb, $itemTopic, $resultText, \@meta, "", "unlock", "dontNotify", "" );
+	     &TWiki::Store::saveTopic( $itemWeb, $itemTopic, $resultText, $meta, "", "unlock", "dontNotify", "" );
           } else {
 	    $result .= ";$item does not exist;"; # FIXME is this needed?
           }
@@ -298,6 +296,15 @@ sub checkPermissions
        my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsaccesschange" );
        TWiki::redirect( $query, $url );
        $ret = "";
+    }
+    
+    
+    # prevent rename of topics in main web unless user in TWikiAdminGroup
+    # FIXME - generlise to have rename permission
+    if( ! TWiki::Access::userIsInGroup( $wikiUserName, "TWikiAdminGroup" ) && $oldWeb eq "$TWiki::mainWebname" ) {           
+       my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsaccesschange" );
+       TWiki::redirect( $query, $url );
+       $ret = "";	
     }
     
     return $ret;
