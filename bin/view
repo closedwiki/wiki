@@ -263,7 +263,7 @@ sub main
         $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
     }
     writeDebugTimes( "view - handleCommonTags for template done" );
-    $tmpl = &TWiki::getRenderedVersion( $tmpl );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     TWiki::writeHeader( $query );
