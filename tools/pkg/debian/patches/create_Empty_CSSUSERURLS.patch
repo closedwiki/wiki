@@ -1,0 +1,12 @@
+--- data/TWiki/TWikiPreferences.txt	2004-08-31 16:12:19.000000000 +1000
++++ data/TWiki/TWikiPreferences.txt	2005-03-20 12:51:56.000000000 +1100
+@@ -170,7 +170,8 @@
+ 	* Using attachments for styles 
+ 		* Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
+ 		* Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
+-
++		* Set USERLAYOUTURL = 
++		* Set USERSTYLEURL = 
+ 
+ ---+++ DragonSkin
+ 
