@@ -1,5 +1,19 @@
 %TMPL:INCLUDE{"twiki"}%
 
+
+
+%TMPL:DEF{"titleaction"}%(search result) %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+
+
+
 %TMPL:P{"titleaction"}%
 (search result)
 %TMPL:END%
@@ -7,63 +21,27 @@
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
 %TMPL:P{"bodystart"}%
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-%TMPL:DEF{"titleaction"}%(search result) %TMPL:END%
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-%TMPL:P{"standardheader"}%
-</form>
-%SPLIT%Search: <b> %SEARCHSTRING% </b>
-<p />
+%SPLIT%Search: <b>%SEARCHSTRING%</b>
 <form>
-%SPLIT%<table width="100%" border="0" cellpadding="0" cellspacing="4">
-<tr>
-  <th bgcolor="%WEBBGCOLOR%" width="10%">
-    <b>Update ref:</b>
-  </th><th bgcolor="%WEBBGCOLOR%" width="45%">
-    <b>Topics in <nop>%WEB% web:</b>
-  </th><th bgcolor="%WEBBGCOLOR%" width="25%">
-    <b>Changed:</b> now %DISPLAYTIME{"$hour:$min"}% 
-  </th><th bgcolor="%WEBBGCOLOR%" width="20%">
-    <b>Changed by:</b>
-  </th>
-</tr>
+%SPLIT%
+%REPEAT%
+<div class="twikiRenameList" style="background-color:%WEBBGCOLOR%;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<th width="4%" align="left">%SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" /><input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION%
+		</th>
+		<th width="96%" align="left"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TOPICNAME%</a></th>
+	</tr>
+	<tr>
+		<td width="4%"></td>
+		<td width="96%">%TEXTHEAD% <span class="twikiLocked">%LOCKED%</span><span class="twikiRevision"><a href='%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%'>%TIME% - %REVISION%</a></span> Changed by: %AUTHOR%
+		</td>
+	</tr>
 </table>
-%REPEAT%<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr>
-  <td width="10%">
-    %SELECTION%<input type="checkbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" />
-    <input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION%
-  </td><td width="45%">
-    <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a> %LOCKED%
-  </td><td width="25%">
-    <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME%</a> - %REVISION% &nbsp;
-  </td><td width="20%">
-    %AUTHOR%
-  </td>
-</tr>
-<tr>
-  <td colspan="2">
-    %TEXTHEAD% 
-  </td><td width="20%">
-    &nbsp;
-  </td>
-</tr></table>
+</div>
 %REPEAT%<br clear="all" />
 <p />%SPLIT%Number of topics: <b>%NTOPICS%</b>
 <p />%SPLIT%
-
 </form>
-
-%TMPL:DEF{"topicaction"}% %TMPL:END%
 %TMPL:P{"standardfooter"}%
-<table width="100%" border="0" cellpadding="3" cellspacing="0">
- <tr>
-  <td valign="top">
-   &nbsp;
-  </td>
-  <td width="50%" valign="top">
-   %WEBCOPYRIGHT%
-  </td>
- </tr>
-</table>
 %TMPL:P{"bodyend"}%

@@ -33,14 +33,14 @@
 
 
 %TMPL:DEF{"content"}%
-<form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<form method="post" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 ---+ %TMPL:P{"webaction"}% %TOPIC%
 <div class="twikiVersatileTable">
 <table>
 <tr>
 <th>Move from:</th>
-<td align="right"><nop>%WEB%.</td>
-<td class="nameCol">%TOPIC%</td>
+<td align="right"><b><nop>%WEB%.</b></td>
+<td class="nameCol"><b>%TOPIC%</b></td>
 <td></td>
 </tr>
 <tr>
@@ -50,9 +50,8 @@
 <td class="nameCol">%TMPL:P{"namehelp"}%</td>
 </tr>
 <tr>
-<th class="lastRow"></th>
-<td colspan="2" class="twikiMainCol lastRow">%TMPL:P{"allownonwikiword"}%</td>
 <td class="lastRow"></td>
+<td class="lastRow" colspan="3">%TMPL:P{"allownonwikiword"}%</td>
 </tr>
 </table>
 </div>
@@ -68,9 +67,15 @@
 <div class="twikiRenameList">
 %RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
 </div>
+<div class="twikiTopicAction twikiSecondaryTopicAction">
+<table>
+<tr>
+<td><input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" /><input type="button" class="twikiButton" value="Clear all" onclick="checkAll(false);" /> checkboxes of referenced topics</td>
+</tr></table></div>
 
-<input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" />
-<input type="button" class="twikiButton" value="Clear" onclick="checkAll(false);" /> checkboxes of referenced topics
+
+
+
 <div class="twikiHelp">
 *Note:*
    * Get help on
