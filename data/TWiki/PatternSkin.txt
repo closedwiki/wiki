@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092747095" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="ArthurClemens" date="1092762706" format="1.0" version="1.8"}%
+%STARTINCLUDE%
 %STARTINCLUDE%
 ---+!! Pattern skin
 
@@ -8,7 +9,7 @@
 
 ---++ Screen Shot
 
-<a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
+<a href="%ATTACHURL%/patternskin_screenshot_full.gif"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a>
 <!--
 %SEARCH{ "%TOPIC%" scope="topic" nosearch="on" nototal="on" format="$pattern(.*\| *Screenshot\:[^\|]*\|([^\|]*).*)" }%
 <div class="twikiGrayText">Click to view full screenshot</div>-->
@@ -87,20 +88,22 @@ See: PatternSkinCustomization
 ---++ Skin Info
 
 |  Description: | Provides a CSS based default look and feel for TWiki - flexible and W3C-compliant |
-|  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.png"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
+|  Screenshot: | <a href="%ATTACHURL%/patternskin_screenshot_full.gif"><img src="%ATTACHURL%/patternskin_screenshot.gif" style="border:1px solid #eee;" alt="Click for full screen image" width="600" height="130" /></a> |
 |  Base Name: | pattern |
 |  Skin Author: | TWiki:Main/ArthurClemens |
-|  Skin Version: | 16 Aug 2004 (v1.0.4) | 
-|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  Skin Version: | 17 Aug 2004 (v1.0.6) | 
+|  History: | <!-- specify latest version first -->&nbsp; |
+|  17 Aug 2004: | v.1.0.6 - Support for twikiMoved css class |
+|  17 Aug 2004: | v.1.0.5 - Fix for not showing SEARCHSTRING |
 |  16 Aug 2004: | v.1.0.4 - Fixes search results layout with noheader="on" |
 |  14 Aug 2004: | v.1.0.3 - Update to attach template, css fix to edit template |
 |  14 Aug 2004: | v.1.0.2 - Fixes print template, table paddings in topics, minor changes to style.css |
 |  13 Aug 2004: | v.1.0.1 - Updated /data/TWiki/WebLeftBarPersonalTemplate and style.css |
-|  08 Aug 2004: | Initial version (v1.000) |
+|  08 Aug 2004: | Initial version (v1.0.0) |
 |  Dependencies: | TWiki.TablePlugin |
 |  Skin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev | %STOPINCLUDE%
-
+|  Download: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 ---++ Related topics
 
 	* TWikiCss
@@ -121,10 +124,10 @@ Other skins:
 
 Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 
--- TWiki:Main/ArthurClemens - 16 Aug 2004
+-- TWiki:Main/ArthurClemens - 17 Aug 2004
 
 %META:FILEATTACHMENT{name="i_arrow_down.gif" attr="" comment="Icon: down arrow; used for Table Of Contents" date="1092634909" path="i_arrow_down.gif" size="56" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="layout.css" attr="" comment="Layout: positioning of page elements" date="1092634933" path="layout.css" size="1713" user="ArthurClemens" version="1.1"}%
-%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1092647527" path="style.css" size="26003" user="ArthurClemens" version="1.2"}%
-%META:FILEATTACHMENT{name="patternskin_screenshot.gif" attr="h" comment="" date="1092635051" path="patternskin_screenshot.gif" size="6416" user="ArthurClemens" version="1.1"}%
-%META:FILEATTACHMENT{name="patternskin_screenshot_full.png" attr="h" comment="" date="1092635073" path="patternskin_screenshot_full.png" size="118816" user="ArthurClemens" version="1.1"}%
+%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1092762501" path="style.css" size="26112" user="ArthurClemens" version="1.3"}%
+%META:FILEATTACHMENT{name="patternskin_screenshot.gif" attr="h" comment="" date="1092762581" path="patternskin_screenshot.gif" size="8898" user="ArthurClemens" version="1.2"}%
+%META:FILEATTACHMENT{name="patternskin_screenshot_full.gif" attr="h" comment="" date="1092762639" path="patternskin_screenshot_full.gif" size="63480" user="ArthurClemens" version="1.1"}%
