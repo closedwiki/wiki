@@ -301,9 +301,12 @@ die unless $output;
         } elsif ( $anchor ) {
             # position relative to anchor
             if ( $position eq "BEFORE" ) {
-                $text =~ s/^($anchor)/$output$1/m;
+                # OlivierBerger: put newline after comment to
+                # keep anchor left justified
+                $text =~ s/^($anchor)/$output\n$1/m;
             } else { # AFTER
-                $text =~ s/^($anchor)/$1$output/m;
+                # put newline before comments so don't merge with anchor
+                $text =~ s/^($anchor)/$1\n$output/m;
             }
         } else {
             # Position relative to index'th comment
