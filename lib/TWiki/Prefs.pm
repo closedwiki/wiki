@@ -57,13 +57,14 @@ a web's preferences.
 | Parameter: =$parent= | Prefs object from which to inherit higher-level settings. |
 | Parameter: =@target= | What this object stores preferences for, see notes. |
 
-*Notes:* =$type= should be one of "global", "web", or "request".  If the type
-is "global", no parent or target should be specified; the object will cache
-sitewide preferences.  If the type is "web", =$parent= should hold global
+*Notes:* =$type= should be one of "global", "web", "request", or "copy". If the
+type is "global", no parent or target should be specified; the object will
+cache sitewide preferences.  If the type is "web", =$parent= should hold global
 preferences, and @target should contain only the web's name.  If the type is
 "request", then $parent should be a "web" preferences object for the current
 web, and =@target= should be ( $topicName, $userName ).  $userName should be
-just the WikiName, with no web specifier.
+just the WikiName, with no web specifier.  If the type is "copy", the result is
+a simple copy of =$parent=; no =@target= is needed.
 
 Call like this: =$mainWebPrefs = TWiki::Prefs->new("web", "Main");=
 
@@ -73,18 +74,28 @@ sub new
 {
     my ($theClass, $theType, $theParent, @theTarget) = @_;
     
-    my $self = {};
-    bless $self, $theClass;
+    my $self;
     
-    $self->{type} = $theType;
-    $self->{parent} = $theParent;
-    $self->{web} = $theTarget[0] if ($theType eq "web");
-    
-    if ($theType eq "request") {
-	$self->{topic} = $theTarget[0];
-	$self->{user} = $theTarget[1];
+    if ($theType eq "copy") {
+	$self = { %$theParent };
+	bless $self, $theClass;
+
+	$self->inheritPrefs($theParent);
+    } else {
+	$self = {};
+	bless $self, $theClass;
+
+	$self->{type} = $theType;
+	$self->{parent} = $theParent;
+	$self->{web} = $theTarget[0] if ($theType eq "web");
+	
+	if ($theType eq "request") {
+	    $self->{topic} = $theTarget[0];
+	    $self->{user} = $theTarget[1];
+	}
+
+	$self->readPrefs();	
     }
-    $self->readPrefs();
 
     return $self;
 }
@@ -305,23 +316,26 @@ sub initializePrefs
     $requestWeb = $theWebName;
     $globalPrefs = TWiki::Prefs->new("global");
     $webPrefs{$requestWeb} = TWiki::Prefs->new("web", $globalPrefs, $requestWeb);
+    $requestPrefs = TWiki::Prefs->new("copy", $webPrefs{$requestWeb});
 
     return;
 }
 
 # =========================
 =pod
----++ initializeUserPrefs( $completeUserName )
+---++ initializeUserPrefs( $userPrefsTopic )
 
-Called after user is known (potentially by Plugin), this function
-reads preferences from the user's personal topic.  Note that the
-parameter is of the form "Main.JohnSmith", not just "JohnSmith".
+Called after user is known (potentially by Plugin), this function reads
+preferences from the user's personal topic.  The parameter is the topic to read
+user-level preferences from (Generally "Main.CurrentUserName").
 
 =cut
 
 sub initializeUserPrefs
 {
     my( $theWikiUserName ) = @_;
+
+    $theWikiUserName = "Main.TWikiGuest" unless $theWikiUserName;
 
     if( $theWikiUserName =~ /^(.*)\.(.*)$/ ) {
 	$requestPrefs = TWiki::Prefs->new("request", $webPrefs{$requestWeb}, $TWiki::topicName, $2);
