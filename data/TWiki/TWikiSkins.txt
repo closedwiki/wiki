@@ -1,14 +1,14 @@
-%META:TOPICINFO{author="PeterThoeny" date="995179879" format="1.0beta2" version="1.3"}%
+%META:TOPICINFO{author="MikeMannix" date="999209301" format="1.0" version="1.4"}%
 ---## TWiki Skins
 
-Skins are customized [[TWikiTemplates][TWikiTemplate]] files. You can use skins to change the look of a %WIKITOOLNAME% topic, for example the layout of the header and footer. Note that the renderd text between header and footer does __not__ change. You can use skins also to define an alternate view, i.e. a view optimized for printing.
+Skins are customized [[TWikiTemplates][TWikiTemplate]] files. You can use skins to change the look of a %WIKITOOLNAME% topic, for example the layout of the header and footer. Note that the renderd text between header and footer does __not__ change. You can also use skins to define an alternate view, ex: a view optimized for printing.
 
-A skin file is located in the ==twiki/template== directory and has a name like ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. For example, the ==print== skin for the ==view== template is ==view<font color="red">.print</font>.tmpl== (red color added for clarification).
+Skin files are located in the ==twiki/template== directory and are name with this syntax: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. For example, the ==print== skin for the ==view== template is ==view<font color="red">.print</font>.tmpl== (red color added for clarification).
 
 A skin can be activated in two ways:
-	* Define the SKIN preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or a user preference. I.e. 
-		* =Set SKIN = wikiwiki=
-	* Add =?skin=name= to the URL, i.e. for this topic:
+	* Define the SKIN preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or a user preference. Ex: 
+		* =Set SKIN = print=
+	* Add =?skin=name= to the URL, for this example:
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print (for the print view skin)
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=plain (for the plain view skin that has no header and footer)
 
