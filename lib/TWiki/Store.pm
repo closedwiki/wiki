@@ -39,7 +39,6 @@ BEGIN {
     # Do a dynamic 'use locale' for this module
     if( $TWiki::useLocale ) {
         require locale;
-        import locale ();
     }
 }
 
@@ -166,6 +165,7 @@ sub changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
    my $preTopic = '^|[\*\s\[][-\(\s]*';
+   # TODO: i18n fix on topic names
    my $postTopic = '$|[^A-Za-z0-9_.]|\.\s';
    my $metaPreTopic = '"|[\s[,\(-]';
    my $metaPostTopic = '[^A-Za-z0-9_.]|\.\s';
