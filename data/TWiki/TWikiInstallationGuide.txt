@@ -86,7 +86,7 @@ Installation steps:
 		* If needed, create customized templates in the new templates directory. (Non existing templates are inherited from =twiki/templates= )
 		* If you want to use a category table, copy the three files =twikicatitems.tmpl= , =twikicatedit.tmpl= and =twikicatview.tmpl= from the =twiki/templates/Know= directory to the new templates directory, and customize it. More on that in <A href="TWikiDocumentation#category">TWiki Category Table</A>.
 		* In case you want usage statistics for this web: Copy file =WebStatistics.txt= from the =twiki/data/Main= directory to the new data directory. Edit topic <nop>WebStatistics in the new web and delete old usage entries.
-
+		* Note that user home topics are only located in the %WIKITOOLNAME%.%MAINWEB% web, so don't try to move them or create them in other webs. From any web you can refer to users located in the %WIKITOOLNAME%.%MAINWEB% web like =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName=.
 
 Here are contents of directories showing file permissions. Please note that this is for debugging reasons only and does not exactly reflect the distribution:
 
@@ -270,4 +270,4 @@ drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:21 ..
 -rw-rw-r--	1 twiki	twiki	 144 Mar  9  1999 zip.gif
 </pre>
 
--- Main.PeterThoeny - 24 Nov 2000 <br>
+-- Main.PeterThoeny - 29 Dec 2000 <br>
