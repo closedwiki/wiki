@@ -409,8 +409,10 @@ sub searchWeb
             }
             $tempVal =~ s/%REVISION%/$revNum/o;
             $tempVal =~ s/%AUTHOR%/$revUser/o;
-            $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
-            $tempVal = &TWiki::getRenderedVersion( $tempVal );
+            if( $doInline ) {
+                $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
+                $tempVal = &TWiki::getRenderedVersion( $tempVal );
+            }
 
             if( $doRenameView ) { # added JET 19 Feb 2000
                 $topicCount++;

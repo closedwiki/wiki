@@ -100,7 +100,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "09 Mar 2001";
+$wikiversion      = "15 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -465,23 +465,20 @@ sub makeTopicSummary
     # called by search, mailnotify & changes after calling readFileHead
 
     my $htext = $theText;
-    $htext =~ s/<[^>]*>//go;         # remove all HTML tags
-    $htext =~ s/%INCLUDE[^%]*%/ /go; # remove server side includes
-    $htext =~ s/%SEARCH[^%]*%/ /go;  # remove inline search
-    $htext =~ s/%DRAWING[^%]*%/ /go; # remove TWikiDraw drawing
-    $htext =~ s/%ATTACH[A-Z_0-9]*%//go;
-    $htext =~ s/%PUB[A-Z_0-9]*%//go;
-    $htext =~ s/%SCRIPT[A-Z_0-9]*%//go;
-    $htext = handleCommonTags( $htext, $theTopic, $theWeb );
-    $htext =~ s/<[^>]*>//go;         # remove all HTML tags
-    $htext =~ s/[\[\]\*\|=_]/ /go;   # remove Wiki formatting chars
-    $htext =~ s/\s+[\+\-]*/ /go;     # remove newlines and special chars
+    $htext =~ s/<[^>]*>//go;           # remove all HTML tags
+    $htext =~ s/%WEB%/$theWeb/go;      # resolve web
+    $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
+    $htext =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool name
+    $htext =~ s/[\%\[\]\*\|=_]/ /go;   # remove Wiki formatting chars & defuse %VARS%
+    $htext =~ s/\-\-\-+\+*/ /go;       # remove heading formatting
+    $htext =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
 
     # inline search renders text, 
     # so prevent linking of external and internal links:
     $htext =~ s/([\-\*\s])((http|ftp|gopher|news|file|https)\:)/$1<nop>$2/go;
     $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*\.[A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
     $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/$1<nop>$2/go;
+    $htext =~ s/([\*\s][\-\*\s]*)([A-Z]{3,})/$1<nop>$2/go;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
 
     # limit to 162 chars
