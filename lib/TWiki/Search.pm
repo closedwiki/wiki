@@ -181,11 +181,7 @@ sub searchWeb
 
     my $cmd = "";
     if( $theScope eq "topic" ) {
-        if( $noSearch ) {
-           $cmd = "$TWiki::lsCmd *.txt"; # FIXME this exists elsewhere
-        } else {
-           $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote";
-        }
+        $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote";
     } else {
         $cmd = "%GREP% %SWITCHES% -l $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote *.txt";
     }
