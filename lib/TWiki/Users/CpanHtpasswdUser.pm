@@ -34,7 +34,7 @@ my $htpasswd = ".htpasswd";
 
 
 #    # If something fails, check error
-#    $this{'cpan'}->error;
+#    $this->{'cpan'}->error;
 
 
 
@@ -68,10 +68,14 @@ BEGIN {
 # ======================
 sub new
 {
-   my( $proto ) = @_;
+   my( $proto ) = shift;
    my $class = ref($proto) || $proto;
    my $this = {};
-   $this{'cpan'} = new Apache::Htpasswd($htpasswd);
+   if (@_) {
+     $htpasswd = shift;
+#     print "Initialising with $htpasswd\n";
+   }
+   $this->{'cpan'} = new Apache::Htpasswd($htpasswd);
    bless( $this, $class );
    return $this;
 }
@@ -79,7 +83,7 @@ sub new
 # Change a password without checking against old password
 # The 1 signals that the change is being forced.
 
-# $this{'cpan'}->htpasswd("zog", "new-password2", 1);
+# $this->{'cpan'}->htpasswd("zog", "new-password2", 1);
 
 
 #| Description: | checks to see if there is a $user in the password system |
@@ -90,7 +94,7 @@ sub UserPasswordExists
     my ( $this, $user ) = @_;
 
     # Fetch an encrypted password
-    my $pw = $this{'cpan'}->fetchPass($user);
+    my $pw = $this->{'cpan'}->fetchPass($user);
 
     return $pw ne '';
 }
@@ -100,12 +104,12 @@ sub UserPasswordExists
 #| Parameter: =$oldUserPassword= | unencrypted password |
 #| Parameter: =$newUserPassword= | unencrypted password |
 #| Return: =$success= | '1' always |
-# TODO: needs to fail if it doesw not succed due to file permissions
+# TODO: needs to fail if it does not succeed, e.g. due to file permissions
 sub UpdateUserPassword
 {
     my ( $this, $user, $oldUserPassword, $newUserPassword ) = @_;
     # Change a password
-    return $this{'cpan'}->htpasswd($user, $oldUserPassword, $oldUserPassword);
+    return $this->{'cpan'}->htpasswd($user, $oldUserPassword, $newUserPassword);
 
 }
 
@@ -118,7 +122,7 @@ sub AddUserPassword
 {
     my ( $this, $user, $newUserPassword ) = @_;
     # Add an entry
-    $this{'cpan'}->htpasswd($user, $newUserPassword);
+    $this->{'cpan'}->htpasswd($user, $newUserPassword);
 
     return '1';
 }
@@ -131,7 +135,7 @@ sub RemoveUser
     my ( $this, $user ) = @_;
 
     # Delete entry
-    return $this{'cpan'}->htDelete($user);
+    return $this->{'cpan'}->htDelete($user);
 
 }
 
@@ -143,7 +147,7 @@ sub CheckUserPasswd
 {
     my ( $this, $user, $password ) = @_;
     # Check that a password is correct
-    return $this{'cpan'}->htCheckPassword($user, $password);
+    return $this->{'cpan'}->htCheckPassword($user, $password);
 
 }
  
