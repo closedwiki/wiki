@@ -75,9 +75,11 @@ sub processWeb
 
     $text = &TWiki::handleCommonTags($text, $topic);
     $text =~ s/<img src=.*?[^>]>/[IMG]/goi;  # remove all images
-
-    ( $before, $text, $after) = split( /%REPEAT%/, $text);
-    $emailbody = "$before";
+    my $before = "";
+    my $after = "";
+    ( $before, $text, $after) = split( /%REPEAT%/, $text );
+    $emailbody = &TWiki::getRenderedVersion( $before );
+    $after = &TWiki::getRenderedVersion( $after );
 
     my $prevLastmodify = &TWiki::Store::readFile( "$dataDir/$webName/.mailnotify" ) || "0";
     my $currLastmodify = "";
@@ -131,7 +133,7 @@ sub processWeb
             $head = &TWiki::makeTopicSummary( $head, $bar[0], $webName );
             $foo =~ s/%TEXTHEAD%/$head/go;
 
-	    $emailbody = "$emailbody$foo";
+	    $emailbody .= $foo;
 	    $exclude{ $bar[0] } = "1";
 
 	    $debug && print "$bar[0] ";
@@ -149,7 +151,7 @@ sub processWeb
     }
     $debug && print "\n";
 
-    $emailbody = "$emailbody$after";
+    $emailbody .= $after;
 
     my $from = &TWiki::Prefs::getPreferencesValue("WIKIWEBMASTER");
 
