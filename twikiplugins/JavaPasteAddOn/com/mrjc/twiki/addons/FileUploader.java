@@ -12,11 +12,11 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.Math;
 import java.util.AbstractList;
 import java.util.Iterator;
 import java.text.MessageFormat;
 
+import com.sun.corba.se.internal.core.SendingContextServiceContext;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
@@ -113,6 +113,7 @@ public class FileUploader
 			//the buffer for one file, there is, therefore, a risk that we will lose spaces from the
 			//middle of the file.  I have therefore changed the code.
 			//outStream.writeBytes((new String(buffer)).trim());
+			
 			outStream.writeBytes((new String(buffer)).substring(0, bytesRead));
 			bytesRead = inputStream.read(buffer, 0, maxBufferSize);
 		}
@@ -153,7 +154,26 @@ public class FileUploader
 		outStream.writeBytes(ClipboardHelper.readFileContents(file));
 	}
 	
+	public void appendDelimiterToOutputStream(DataOutputStream outStream) throws IOException
+	{
+		outStream.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
+	}
 	
+	public void appendEndOfDelimitersToOutputStream(DataOutputStream outStream) throws IOException
+	{
+		// send multipart form data necessary after file data
+		outStream.writeBytes(lineEnd);
+		outStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+	}
+	
+	public void appendCommentToOutputStream(String comment, DataOutputStream outStream) throws IOException
+	{
+		outStream.writeBytes(lineEnd);
+		outStream.writeBytes(twoHyphens + boundary + lineEnd);
+		outStream.writeBytes("Content-Disposition: form-data; name=\"filecomment\"");
+		outStream.writeBytes(lineEnd + lineEnd);
+		outStream.writeBytes(comment);	
+	}
     /**
      * Uploads data from clipboard.
      * 
@@ -171,22 +191,25 @@ public class FileUploader
     	{
             // open output stream to server, POST data and multipart form up to the file data
             outStream = new DataOutputStream (httpURLConn.getOutputStream ());
-            outStream.writeBytes(twoHyphens + boundary + lineEnd);
+            
 						 
 			// NB. reader type if uploading richtext.			 
 			if (data instanceof Reader)
 			{	
+				appendDelimiterToOutputStream(outStream);
 				appendToOutputStream((Reader)data, "clipboard.rtf", outStream);
 			}
 			// the thing on the clipboard is just some text, we want to make a file called clipboard.txt and shove it in.
 			else if (data instanceof String)
 			{
-				appendToOutputStream((String)data, "clipboard.txt", outStream);	
+				appendDelimiterToOutputStream(outStream);
+				appendToOutputStream((String)data, "clipboard.txt", outStream);
 			}
 			// the thing on the clipboard is an image, e.g. a bitmap
 			// WE WANT TO MAKE A FILE (ASK THEM FOR THE NAME) AND upload that.
 			else if (data instanceof Image)
 			{
+				appendDelimiterToOutputStream(outStream);
 				appendToOutputStream((Image)data, "clipboard.jpg", outStream);
 			}
 			// if there is more than one thing on the clipboard
@@ -202,10 +225,10 @@ public class FileUploader
 					f = ((File)iterator.next());
 
 					System.out.println("filename: "+f.getPath());
+					appendDelimiterToOutputStream(outStream);
 					// ToDo: need to output the right delimiter between files.
 					// this needs to call the right upload routine.
-					appendToOutputStream(f,outStream);
-					
+					appendToOutputStream(f,outStream);					
 				}
 			} else {
 			    System.out.println("Can't send this, as I don't understand the type!");
@@ -213,17 +236,10 @@ public class FileUploader
 			
 			// send comment 
 			if (comment.length() > 0 ) {
-				outStream.writeBytes(lineEnd);
-				outStream.writeBytes(twoHyphens + boundary + lineEnd);
-    			outStream.writeBytes("Content-Disposition: form-data; name=\"filecomment\"");
-    			outStream.writeBytes(lineEnd + lineEnd);
-    			outStream.writeBytes(comment);		
+				appendCommentToOutputStream(comment, outStream);
 			}
 			
-    		// send multipart form data necessary after file data
-    		outStream.writeBytes(lineEnd);
-    		outStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-    		
+			appendEndOfDelimitersToOutputStream(outStream);    		
 			// close streams
 			outStream.flush ();
 			outStream.close ();
