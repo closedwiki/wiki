@@ -132,6 +132,7 @@ sub UpgradeTWikiConfig
 	no strict 'refs';
 
 	my $configVal;
+	my $usedADefault = 0;
 
 	# Do scalars first...
 
@@ -145,7 +146,8 @@ sub UpgradeTWikiConfig
 	    {	    
 		# and if it is not defined, then we need to give it the default value
 		print NEW_CONFIG "\$$$configVal{varname} = $$configVal{default} ;\n";
-		print "There wasn't a definition for \"\$$$configVal{varname}\" in the old configuration... \n ...using the default: '$$configVal{default} '\n (You may want to check that this default works for you, edit if not!)\n";
+		print "There wasn't a definition for \"\$$$configVal{varname}\" in the old configuration... \n ...using the default: '$$configVal{default} '\n";
+		$usedADefault = 1;
 	    }
 	    else
 	    {
@@ -153,6 +155,11 @@ sub UpgradeTWikiConfig
 
 		print NEW_CONFIG Data::Dumper->Dump([${$$configVal{'varname'}}],[$$configVal{'varname'}]);
 	    }
+	}
+
+	if ($usedADefault) 
+	{
+	    print "(You may want to check that the defaults used above work for you, edit if not!)\n";
 	}
 
 	# Now do Arrays ... exactly the same code, except for @ instead of $.  

@@ -19,7 +19,7 @@ This script expected '.' to be the root of a TWiki distribution when it is calle
 
 BEGIN {
 (-d "lib" and -d "data") or 
-    die "Sorry - can't see ./lib and ./data files: you need to run $0 in the directory where you extracted the TWiki distribution!\n";
+    die "I was expecting to see a ./lib and ./data directories: you need to run $0 in the directory where you extracted the new TWiki distribution!\n";
 unshift @INC, "./lib";  # have to find Text::Diff, UpdateTopics, TWikiCfg which are bundled with TWiki.
 }
 
@@ -34,7 +34,7 @@ use File::Find;
 my $targetDir = shift or die "Usage: $0 <target directory for new wiki build>\n";
 
 # not sure if a relative path with be safe... better safe than sorry...
-$targetDir =~ m|^/| or die "Usage: $0 <full path to target directory for new wiki build>\n"; 
+$targetDir =~ m|^[/~]| or die "Usage: $0 <full path to target directory for new wiki build>\n"; 
 
 print "OK - I'm assuming you've unpacked a TWiki distribution in this directory.
 
@@ -137,10 +137,10 @@ if (-f "$setlibPath/.htaccess")
 	print "
 I copied in your existing .htaccess into $targetDir/bin.
 
-\tThe differences between the new template for .htacess and your previous one are:
+\tThe significant differences between the new template for .htacess and your previous one are:
 
 ";
-	print diff "$targetDir/bin/.htaccess", "./bin/.htaccess.txt";
+	print join "\n", grep( /^[+-][^#]/ , split( /\n/, diff("$targetDir/bin/.htaccess", "./bin/.htaccess.txt")));
     }
     else
     {

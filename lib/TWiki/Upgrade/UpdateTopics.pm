@@ -15,11 +15,12 @@ use strict;
 
 use File::Find;
 use File::Copy;
+use File::Basename;
 use Text::Diff;
 
 # Try to upgrade an installation's TWikiTopics using the rcs info in it.
 
-use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $BaseDir $debug @DefaultWebTopics %LinkedDirPathsInWiki $RcsLogFile);
+use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $BaseDir $debug @DefaultWebTopics %LinkedDirPathsInWiki $RcsLogFile $TempDir);
 
 sub UpdateTopics 
 {
@@ -39,6 +40,12 @@ sub UpdateTopics
 
     $BaseDir = `pwd`;
     chomp ($BaseDir);
+
+    $TempDir = "$BaseDir/tmp";
+
+    while (-d $TempDir ) { $TempDir .= 'p' }   # we want our own previously non-existing directory!
+
+    mkdir $TempDir or die "Uhoh - couldn't make a temporary directory called $TempDir: $!\n";
 
 #Set if you want to see the debug output
 #$debug = "yes";
@@ -62,7 +69,7 @@ sub UpdateTopics
     print "\tFor each file that is new in the NewReleaseDataDir a _+_ will be printed\n";
     print "\t When the script has attempted to patch the $NewReleaseDataDir, 
 \t *.rej files will contain the failed merges\n";
-    print "\t although many of these rejected chages will be discarable, 
+    print "\t although many of these rejected chages will be discardable, 
 \t please check them to see if your configuration is still ok\n\n";
 
     sussoutDefaultWebTopics();
@@ -105,6 +112,8 @@ sub UpdateTopics
     
     print "\n\n";
     
+    rmdir($TempDir);
+    chdir($BaseDir);  # seems the kind thing to do :-)
 }
     
 # ============================================
@@ -188,10 +197,11 @@ sub getRLog
         print "\n$filename appears to have been generated from from _default - merging with $newFilename from the new distribution!" if ($debug);
     }
     
-    if (! -e $filename.",v" ){
-#TODO: maybe copy this one too (this will inclure the .htpasswd file!!)   
+    if (! -e $filename.",v" )
+    {
         if ( $filename =~ /.txt$/ ) {
-#TODO: in interactive mode ask if they want to create this topic's rcs file..        
+	    # here we defer making an RCS file for this file to someone else :-)
+	    # (probably the process that checks all the new wiki files back in)
             print "\nWarning: $filename does not have any rcs information" if ($debug);
             print "v" if (! $debug);
         }
@@ -199,22 +209,68 @@ sub getRLog
         return;
     }
 
+    # make it easy for debugging to turn on or off the business about
+    # checking in the existing files before rcsdiffing them
+    # this is necessary, because you have to make changes in two places to make
+    # this switch, and if you forget the second one you're gunna delete lots of files
+    # you wanted to keep!
+
+    my $doCiCo = 1;
+#   my $doCiCo = 0;
+
+    # Now - the main business: if we're looking at a file that has a new version in
+    # the new distribution then we have to try merging etc...
+
     if ( -e $newFilename ) { 
-        #file that may need upgrading
-        my $highestCommonRevision = findHighestCommonRevision( $filename, $newFilename);
-#print "-r".$highestCommonRevision."\n";
-#is it the final version of $filename (in which case 
+        # file that may need upgrading
+
+	my $workingFilename;
+
+	if (!$doCiCo)
+	{
+	    $workingFilename = $filename;
+	}
+	else
+	{
+	    $workingFilename = "$TempDir/". basename($filename);
+	    
+	    print "Working file: $workingFilename\n" if ($debug);
+	    
+	    copy ( $filename, $workingFilename)
+		or die "Couldn't make copy of $filename at $workingFilename: $!\n";
+
+	    copy ( "$filename,v", "$workingFilename,v")
+		or die "Couldn't make copy of $filename,v at $workingFilename,v: $!\n";
+	    
+	    # This procedure copied from UI::Manage.pm
+	    # could be perhaps performed in less steps, but who cares...
+	    # break lock
+	    system("rcs -q -u -M $workingFilename 2>>$RcsLogFile");
+	    # relock
+	    system("rcs -q -l $workingFilename 2>>$RcsLogFile");
+	    # check outstanding changes in (note that -t- option should never be used, but it's there for completeness,
+	    #  and since it was in Manage.pm)
+	    system("ci -u -mUpdateTopics -t-missing_v $workingFilename 2>>RcsLogFile");
+	}
+
+        my $highestCommonRevision = findHighestCommonRevision( $workingFilename, $newFilename);
+
+	# is it the final version of $filename? 
+	# (in which case:
 #TODO: what about manually updated files?
-        if ( $highestCommonRevision =~ /\d*\.\d*/ ) {
-            my $diff = doDiffToHead( $filename, $highestCommonRevision );
-#print "\n========\n".$diff."\n========\n";            
+
+        if ( $highestCommonRevision =~ /\d*\.\d*/ ) 
+	{
+            my $diff = doDiffToHead( $workingFilename, $highestCommonRevision );
+
             patchFile( $filename, $destinationFilename, $diff );
+
             print "\npatching $newFilename from $filename ($highestCommonRevision)" if ($debug);
             print "\n$newFilename: p\n" if (!$debug);
             copy( $newFilename, $destinationFilename);
             copy( $newFilename.",v", $destinationFilename.",v");
         } elsif ($highestCommonRevision eq "head" ) {
-	    # I made this use the existing file instead of the new one, in case they manually
+	    # This uses the existing file rather than the new one, in case they manually
 	    # changed the exisiting one without using RCS.
             print "\nhighest revision also final revision in oldTopic (using existing Version)" if ($debug);
             print "c" if (!$debug);
@@ -226,10 +282,17 @@ sub getRLog
 #TODO: do something nicer about this.. I think i need to do lots of diffs 
             #to see if there is any commonality
             print "\nWarning: copying $filename (no common versions)" if ($debug);
-            print "c" if (!$debug);
+            print "\nNo common versions for $filename: C\n" if (!$debug);
             copy( $filename, $destinationFilename);
             copy( $filename.",v", $destinationFilename.",v");
         }
+
+	if ( $doCiCo )
+	{
+	    unlink ($workingFilename, "$workingFilename,v") or
+		warn "Couldn't remove temporary files $workingFilename, $workingFilename,v: $! Could be trouble ahead...\n";
+	}
+
     } else {
         #new file created by users
 #TODO: this will include topics copied using ManagingWebs (createWeb)
@@ -272,7 +335,8 @@ sub doDiffToHead
 
     my $cmd = "rcsdiff -r".$highestCommonRevision." -r".getHeadRevisionNumber($filename)." $filename";
     print "\n----------------\n".$cmd  if ($debug);
-    return `$cmd 2>>$RcsLogFile`;
+    my $diffs =  `$cmd 2>>$RcsLogFile`;
+    return $diffs;
 }
 
 # ==============================================
@@ -280,7 +344,10 @@ sub patchFile
 {
     my ( $oldFilename, $destinationFilename, $diff ) = @_;
 
-    print(PATCH "--- $oldFilename\n");
+    
+    # this looks odd: it's just telling patch to apply the patch to $destinationFilename
+    # perhaps only one file name line would do, but better safe than sorry!    
+    print(PATCH "--- $destinationFilename\n");
     print(PATCH "--- $destinationFilename\n");
     print(PATCH "$diff\n");
 
