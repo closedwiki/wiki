@@ -1551,19 +1551,19 @@ sub _handleINCLUDE {
 }
 
 sub _handleHTTP_HOST {
-    return $ENV{HTTP_HOST};
+    return $ENV{HTTP_HOST} || "";
 }
 
 sub _handleREMOTE_ADDR {
-    return $ENV{REMOTE_ADDR};
+    return $ENV{REMOTE_ADDR} || "";
 }
 
 sub _handleREMOTE_PORT {
-    return $ENV{REMOTE_PORT};
+    return $ENV{REMOTE_PORT} || "";
 }
 
 sub _handleREMOTE_USER {
-    return $ENV{REMOTE_USER};
+    return $ENV{REMOTE_USER} || "";
 }
 
 # Only does simple search for topicmoved at present, can be expanded when required
