@@ -17,32 +17,45 @@
 use strict;
 use integer;
 
-=begin twiki
+=begin text
 
 ---+ Package TWiki::Attrs
 Class of attribute sets, designed for parsing and storing attribute values
-from a TWiki tag e.g. %TAG{fred="bad" "sad" joe="mad"}%
+from a TWiki tag e.g. =%TAG{fred="bad" "sad" joe="mad"}%=
 
 An attribute set is a map containing an entry for each parameter. The
-default parameter (unnamed quoted string) is named __<nop>default__ in the map.
+default parameter (unnamed quoted string) is named <code>__<nop>default__</code> in the map.
 Attributes declared later in the string will override those of the same
 name defined earlier. Escaping quotes is _not_ supported.
 
 The parser is forgiving; it will handle standard TWiki syntax (parameter
 values double-quoted) but also single-quoted values, unquoted spaceless
-values, and spaces around the =.
+values, spaces around the =, and commas as well as spaces separating values.
 
 =cut
-package TWiki::Attrs;
-=pod
 
----+ new ($string) => Attrs object ref
+package TWiki::Attrs;
+
+=begin text
+
+---++ new ($string) => Attrs object ref
 | $string | String containing attribute specification |
 Parse a standard attribute string containing name=value pairs and create a new
 attributes object. The value may be a word or a quoted string. Will throw
-an exception (by dieing) if there is a problem.
+an exception (by dieing) if there is a problem. Example:
+<verbatim>
+use TWiki::Plugins::SharedCode;
+my $attrs = new TWiki::Attrs('the="time has come", "the walrus" said to=speak of='many things');
+</verbatim>
+In this example:
+   * =the= will be =time has come=
+   * <code>_<nop>_<nop>default__</code> will be =the walrus=
+   * =said= will be =on=
+   * =to= will be =speak=
+   * =of= will be =many things=
 
 =cut
+
 sub new {
   my ( $class, $string ) = @_;
   my $this = {};
@@ -81,35 +94,39 @@ sub new {
   return bless( $this, $class );
 }
 
-=pod
+=begin text
 
---++ get( $key) => value
+---++ get( $key) => value
 | $key | Attribute name |
 Get an attr value; return undef if not set
 
 =cut
+
 sub get {
   my ( $this, $attr ) = @_;
   return $this->{$attr};
 }
 
-=pod
+=begin text
 
---++ isEmpty() => boolean
+---++ isEmpty() => boolean
 Return false if attribute set is not empty.
 
 =cut
+
 sub isEmpty {
   my $this = shift;
   return !scalar(%$this);
 }
 
-=pod
-
+=begin text
 ---++ remove($key) => value
-Remove an attr value from the map, return old value
+| $key | Attribute to remove |
+Remove an attr value from the map, return old value. After a call to
+=remove= the attribute is no longer defined.
 
 =cut
+
 sub remove {
   my ( $this, $attr ) = @_;
   my $val = $this->{$attr};
@@ -117,7 +134,7 @@ sub remove {
   return $val;
 }
 
-=pod
+=begin text
 
 ---++ toString() => string
 Generate a printed form for the map, using standard
@@ -125,6 +142,7 @@ attribute syntax, with only the single-quote extension
 syntax observed (no {} brackets, though).
 
 =cut
+
 sub toString {
   my $this = shift;
   my $key;

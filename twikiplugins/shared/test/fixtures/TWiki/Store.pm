@@ -1,9 +1,14 @@
-#
-# Test fixture that implements the "Store" interface of TWiki.
-# Only the methods encountered in testing to date are implemented.
-#
-# To use this base class, inherit from it instead of inheriting from
-# Test::Unit::TestCase
+=begin text
+
+---+ Package TWiki::Store - test fixture
+A test fixture module that provides an ultra-thin implementation of the
+functions of the TWiki::Store module that are required by plugins and add-ons.
+
+Only the methods encountered in testing to date are implemented.
+
+For full details, read the code.
+
+=cut
 use strict;
 
 package TWiki::Store;

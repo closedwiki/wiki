@@ -1,6 +1,12 @@
-#
-# Test fixture providing functions of the TWiki module
-#
+=begin text
+
+---+ Package TWiki - test fixture
+A test fixture module that provides ultra-thin implementations of some of
+the TWiki functions that are required by plugins and add-ons.
+
+For full details, read the code.
+
+=cut
 
 $TWiki::wikiPrefsTopicname = "TWikiPreferences";
 $TWiki::webPrefsTopicname = "WebPreferences";
