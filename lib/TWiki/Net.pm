@@ -69,22 +69,20 @@ sub getUrl
     $theUrl = "/" unless( $theUrl );
     my $req = "GET $theUrl HTTP/1.0\r\n";
 
-    # RNF 22 Jan 2002 Support for vhosts and user authentication.
-    $req .= "Host: $theHost\r\n";
+    $req .= "Host: $theHost:$thePort\r\n";
     if( $theUser && $thePass ) {
-	# Use MIME::Base64 at run-time if using outbound proxy with 
-	# authentication
-	require MIME::Base64;
-	import MIME::Base64 ();
+        # Use MIME::Base64 at run-time if using outbound proxy with
+        # authentication
+        require MIME::Base64;
+        import MIME::Base64 ();
         $base64 = encode_base64( "$theUser:$thePass", "\r\n" );
         $req .= "Authorization: Basic $base64";
     }
 
-    # RNF 19 Apr 2002 Support for outbound proxies.
     my $proxyHost = &TWiki::Prefs::getPreferencesValue("PROXYHOST");
     my $proxyPort = &TWiki::Prefs::getPreferencesValue("PROXYPORT");
     if($proxyHost && $proxyPort) {
-        $req = "GET http://$theHost$theUrl HTTP/1.0\r\n";
+        $req = "GET http://$theHost:$thePort$theUrl HTTP/1.0\r\n";
         $theHost = $proxyHost;
         $thePort = $proxyPort;
     }
