@@ -832,10 +832,11 @@ Not yet documented.
 sub _patchN
 {
     my( $self, $text, $version, $target ) = @_;
+
     my $deltaText= $self->delta( $version );
     my @delta = _mySplit( \$deltaText );
     _patch( $text, \@delta );
-    if( $version == $target ) {
+    if( $version <= $target ) {
         return join( "", @$text );
     } else {
         return $self->_patchN( $text, $version-1, $target );
