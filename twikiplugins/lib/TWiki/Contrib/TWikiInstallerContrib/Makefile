@@ -17,7 +17,7 @@ twiki-cpan :
 	cd cpan ; ./mirror-cpan.pl --twiki `./calc-twiki-deps.pl`
 
 release :
-	[ -e downloads/releases/TWiki20040902.tar.gz ] || wget -nc --http-user=TWikiGuest --http-passwd=guest -O downloads/releases/TWiki20040902.tar.gz http://twiki.org/release/TWiki20040902.tar.gz
+	REL=TWiki20040902.tar.gz; OUT=downloads/releases/$$REL; [ -e $$OUT ] || wget -nc --http-user=TWikiGuest --http-passwd=guest -O $$OUT http://twiki.org/release/$$REL
 
 plugins :
 	bin/download-twiki-extensions.pl plugins
