@@ -1,4 +1,4 @@
-#
+#st
 # TWiki WikiClone ($wikiversion has version info)
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
@@ -66,8 +66,8 @@ use vars qw(
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-        $disableAllPlugins
-        @isoMonth $TranslationToken %mon2num $isList @listTypes @listElements
+        $disableAllPlugins @isoMonth @weekDay 
+	$TranslationToken %mon2num $isList @listTypes @listElements
         $newTopicFontColor $newTopicBgColor
         $linkProtocolPattern $headerPatternDa $headerPatternSp $headerPatternHt
         $debugUserTime $debugSystemTime
@@ -113,7 +113,8 @@ use Cwd;
 
 # ===========================
 # variables: (new variables must be declared in "use vars qw(..)" above)
-@isoMonth     = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+@isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+@weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @isoMonth; }
@@ -283,10 +284,8 @@ sub writeHeaderFull
         # print $query->header();
     }
 
-    # Generate date of format 'Thu, 23 Jul 1998 07:21:56 GMT'
-    my $lastModifiedString = gmtime();
-    $lastModifiedString =~ s/ /, /; # Comma after the day
-    $lastModifiedString =~ s/$/ GMT/;
+    # Get time now in HTTP header format
+    my $lastModifiedString = formatGmTime(time, 'http');
 
     # Expiry time is set high to avoid any data loss.  Each instance of Edit 
     # page has a unique URL with time-string suffix (fix for RefreshEditPage),
@@ -589,7 +588,6 @@ sub getGmDate
 
 # =========================
 # Get date in '1 Jan 2002' format, in local timezone of server
-# (used for %DATE%)
 sub getLocaldate
 {
     my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
@@ -604,23 +602,29 @@ sub formatGmTime
 {
     my( $theTime, $theFormat ) = @_;
 
-    my( $sec, $min, $hour, $mday, $mon, $year ) = gmtime( $theTime );
+    my( $sec, $min, $hour, $mday, $mon, $year, $wday ) = gmtime( $theTime );
 
     if( $theFormat ) {
-        $mon += 1;
         $year += 1900;
 
         if( $theFormat =~ /rcs/i ) {
             # RCS format, example: "2001/12/31 23:59:59:59"
             return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
-                            $year, $mon, $mday, $hour, $min, $sec );
-        }
-
-        # ISO Format, see ISO date spec at http://www.w3.org/TR/NOTE-datetime
-        return sprintf( "%.4u\-%.2u\-%.2uT%.2u\:%.2u:%.2uZ", 
-                        $year, $mon, $mday, $hour, $min, $sec );
+                            $year, $mon+1, $mday, $hour, $min, $sec );
+        } elsif ( $theFormat =~ /http/i ) {
+            # HTTP header format, example: "Thu, 23 Jul 1998 07:21:56 GMT"
+	    # - based on RFC 2616/1123 and HTTP::Date
+	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d GMT", 
+			$weekDay[$wday], $mday, $isoMonth[$mon], $year, 
+			$hour, $min, $sec );
+        } else {
+	    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
+	    return sprintf( "%.4u\-%.2u\-%.2uT%.2u\:%.2u:%.2uZ", 
+			    $year, $mon+1, $mday, $hour, $min, $sec );
+	}
     }
 
+    # Default format
     my( $tmon ) = $isoMonth[$mon];
     $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
     return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
