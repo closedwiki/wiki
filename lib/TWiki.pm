@@ -187,6 +187,15 @@ sub initialize
         }
     }
 
+    # RD 19 Mar 02: Fix for Support.WebNameIncludesViewScriptPath and
+    # Support.CobaltRaqInstall.  A valid PATH_INFO is '/Main/WebHome', 
+    # i.e. the text after the script name; invalid PATH_INFO is often 
+    # a full path starting with '/cgi-bin/...'.
+
+    # Fix path_info if broken - FIXME: extreme brokenness may require more work
+    $thePathInfo =~ s!$scriptUrlPath/[-.[:alnum:]]+$scriptSuffix/!/!;
+    &writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
+
     if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
         $webName   = $1 || "" if( ! $webName );
