@@ -1995,7 +1995,7 @@ sub encodeSpecialChars {
     my $text = shift;
 
     $text = "" unless defined( $text );
-    $text =~ s/%/%_P_%/g;
+    $text =~ s/\%/%_P_%/g;
     $text =~ s/&/%_A_%/g;
     $text =~ s/\"/%_Q_%/g;
     $text =~ s/>/%_G_%/g;

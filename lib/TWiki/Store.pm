@@ -1341,8 +1341,8 @@ sub _writeKeyValue {
     my( $key, $value ) = @_;
 
     if( defined( $value )) {
-        $value =~ s/\r*\n\r*/%_N_%/go;
-        $value =~ s/"/%_Q_%/go;
+        $value = TWiki::encodeSpecialChars( $value );
+print STDERR "Writing $value\n" if ($key eq "value");
     } else {
         $value = "";
     }
