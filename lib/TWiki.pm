@@ -675,7 +675,8 @@ sub readOnlyMirrorWeb {
             my $mirrorNote = $this->{templates}->readTemplate( "mirrornote" );
             $mirrorNote =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorNote =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
-            $mirrorNote = $this->{renderer}->getRenderedVersion( $mirrorNote, $theWeb );
+            $mirrorNote = $this->{renderer}->getRenderedVersion
+              ( $mirrorNote, $theWeb, $TWiki::cfg{HomeTopic} );
             $mirrorNote =~ s/\s*$//g;
             @mirrorInfo = ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote );
         }
@@ -1433,16 +1434,24 @@ sub _inlineError {
 =pod
 
 ---++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user ) -> $text
+   * =$text= - text to expand
+   * =$user= - reference to user object
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
 
 The expanded variables are:
 | =%<nop>DATE%= | Signature-format date |
+| =%<nop>TIME%= | Server time |
+| =%<nop>SERVERTIME%= | Server time |
+| =%<nop>GMTIME%= | GM time |
 | =%<nop>USERNAME%= | Base login name |
 | =%<nop>WIKINAME%= | Wiki name |
 | =%<nop>WIKIUSERNAME%= | Wiki name with prepended web |
 | =%<nop>URLPARAM%= | Parameters to the current CGI query |
 | =%<nop>NOP%= | No-op |
+
+SMELL: This should really be done by _expandAllTags but with
+a subset of the substitutions.
 
 =cut
 
@@ -1453,10 +1462,12 @@ sub expandVariablesOnTopicCreation {
     ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     $text =~ s/%DATE%/$this->_DATE()/ge;
-    $text =~ s/%USERNAME%/$user->login()/geo;               # "jdoe"
-    $text =~ s/%WIKINAME%/$user->wikiName()/geo;            # "JonDoe"
-    $text =~ s/%WIKIUSERNAME%/$user->webDotWikiName()/geo;# Main.JonDoe
-    $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(new TWiki::Attrs($1))/geo;
+    $text =~ s/%TIME%/%SERVERTIME%/g;
+    $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;
+    $text =~ s/%GMTIME(?:{(.*?)})?%/$this->_GMTIME(new TWiki::Attrs($1))/ge;
+
+    $text =~ s/%((USER|WIKI|WIKIUSER)NAME)%/$this->{SESSION_TAGS}{$1}/g;
+    $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(new TWiki::Attrs($1))/ge;
 
     # Remove filler: Use it to remove access control at time of
     # topic instantiation or to prevent search from hitting a template
@@ -1835,7 +1846,7 @@ sub registerTagHandler {
 
 =pod
 
----++ ObjectMethod handleCommonTags( $text, $topic, $web ) -> $text
+---++ ObjectMethod handleCommonTags( $text, $web, $topic ) -> $text
 Processes %<nop>VARIABLE%, and %<nop>TOC% syntax; also includes
 "commonTagsHandler" plugin hook.
 
@@ -1845,11 +1856,11 @@ table-of-contents generation, and any plugin changes from commonTagsHandler.
 =cut
 
 sub handleCommonTags {
-    my( $this, $text, $theTopic, $theWeb ) = @_;
+    my( $this, $text, $theWeb, $theTopic ) = @_;
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
-
-    $theWeb = $this->{webName} unless $theWeb;
+    ASSERT($theWeb);
+    ASSERT($theTopic);
 
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
