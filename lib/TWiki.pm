@@ -555,10 +555,6 @@ sub writeHeader {
 
     assert(ref($this) eq "TWiki") if DEBUG;
 
-    # Pass real content-length to make persistent connections work
-    # in HTTP/1.1 (performance improvement for browsers and servers)
-    $contentLength = 0 unless defined( $contentLength );
-
     # Just write a basic content-type header for text/html
     $this->writeHeaderFull( $query, 'basic', 'text/html', $contentLength);
 }
@@ -627,11 +623,10 @@ sub writeHeaderFull {
 
     # Add a content-length if one has been provided. HTTP1.1 says a
     # content-length should _not_ be specified unless the length is
-    # known.
-    # SMELL: is it valid to pass a content-length of 0?? The HTTP1.1
-    # spec suggests that it is, but only if the content length is
-    # genuinely 0.
-    push( @hopts, -content_length => $contentLength );
+    # known. There is a bug in Netscape such that it interprets a
+    # 0 content-length as "download until disconnect" but that is
+    # a bug. The correct way is to not set a content-length.
+    push( @hopts, -content_length => $contentLength ) if $contentLength;
 
     # Wiki Plugin Hook - get additional headers from plugin
     # SMELL: it would be far better to pass down the hopts array
