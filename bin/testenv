@@ -396,7 +396,7 @@ if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
     print "</td></tr>\n";
 } else {
     my $rcsvernum = `$rcsDir/ci$exeSuffix -V`;
-    $rcsvernum = (split(/\s+/, $rcsvernum))[2];
+    $rcsvernum = (split(/\s+/, $rcsvernum))[2] || "";
     
     print "<tr><th align=\"right\">RCS Version:</th><td>$rcsvernum";
     print "&nbsp;&nbsp;(Cygwin package <tt>rcs-$rcsver</tt>)" if defined($rcsver);
@@ -405,7 +405,7 @@ if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
     print "This is the version of RCS which will be used.";
     print "</td></tr>\n";
     
-    if( $rcsvernum < $rcsverRequired ) {
+    if( $rcsvernum && $rcsvernum < $rcsverRequired ) {
 	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
 	print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
 	print "</td></tr>\n";
