@@ -1,23 +1,40 @@
-#
-# If a plugin uses Cairo function calls, you can include this module
-# to ensure it is compatible with older releases of TWiki. Of course
-# you should instruct users to upgrade to Cairo by preference, but this
-# module should make sure the plugin works if they can't for some reason.
-#
-# The module should NOT ne included when running alongside Cairo (plugins
-# version 1.020)
-#
-# Plugin authors should feel free to check in to this module, but please
-# be careful not to break anything.
+=begin text
+
+---+ Cairo Compatibility Module
+If a plugin uses Cairo function calls, you can include this module
+to ensure it is compatible with older releases of TWiki. Of course
+you should instruct users to upgrade to Cairo by preference, but this
+module should make sure the plugin works if they can't for some reason.
+
+The module should NOT be used when running alongside Cairo (plugins
+version 1.020)
+
+Plugin authors should feel free to check in to this module, but please
+be careful not to break anything.
+
+=cut
+
 use TWiki;
 
-# Required by several plugins
+=begin text
+
+---++ TWiki::Func::getRegularExpression
+See documentation in TWiki:Codev/FuncDotPm
+
+=cut
+
 sub TWiki::Func::getRegularExpression {
   my $x = shift;
   eval "return \$TWiki::$x";
 }
 
-# Required by CommentPlugin
+=begin text
+
+---++ TWiki::expandVariablesOnTopicCreation
+See documentation in TWiki:Codev/TWikiDotPm
+
+=cut
+
 sub TWiki::expandVariablesOnTopicCreation {
   my ( $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
 
@@ -67,7 +84,14 @@ sub _loadFile {
   return $text;
 }
 
-# I want to undefine TWiki::Store::readTemplate and replace it with this
+=begin text
+
+---++ Cairo<nop>CompatibilityModule::readTemplate
+
+See documentation in TWiki:Codev/StoreDotPm
+
+=cut
+
 sub readTemplate {
   my( $theName, $theSkin ) = @_;
 

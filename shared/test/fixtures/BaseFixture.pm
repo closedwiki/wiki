@@ -1,11 +1,16 @@
-#
-# Base class of all tests
-#
-# Provides basic fixture management functionality
-#
-
-# Basic test fixture functionality
 use strict;
+
+=begin text
+
+---+ Package Base<nop>Fixture - test fixture
+Basic class of all test fixtures. Sets up a very basic TWiki environment
+suitable for testing plugins. As well as the standard =set_up= and
+=tear_down=, provides functions for the generation of data (.txt) files
+for tests and functions for asserting the contrents of generated HTML.
+
+For full details, read the code.
+
+=cut
 
 package BaseFixture;
 

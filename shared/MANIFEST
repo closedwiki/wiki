@@ -1,7 +1,7 @@
 data/TWiki/SharedCode.txt
+lib/TWiki/Plugins/SharedCode/Attrs.pm
 lib/TWiki/Plugins/Build.pm
 lib/TWiki/Plugins/CairoCompatibilityModule.pm
-lib/TWiki/Plugins/SharedCode/Attrs.pm
 lib/TWiki/Plugins/SharedCode/build.pl
 lib/TWiki/Plugins/SharedCode/test.zip
 tools/conformance_analyser.pl
