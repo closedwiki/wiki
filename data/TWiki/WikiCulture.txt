@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="999303361" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="999309114" format="1.0" version="1.6"}%
 ---++ FAQ:
 
 Everybody can edit any page, this is scary. Doesn't that lead to chaos?
@@ -17,7 +17,7 @@ Everybody can edit any page, this is scary. Doesn't that lead to chaos?
 
 (quoted from _WhyWikiWorks_ at Ward's original Wiki system, the Portland Pattern Repository, Wiki:WhyWikiWorks)
 
-Related topics: TWikiSite, WelcomeGuest, GoodStyle, WikiSyntax, TWikiFAQ, WabiSabi
+__Related topics:__ TWikiSite, WelcomeGuest, GoodStyle, WikiSyntax, TWikiFAQ, WabiSabi
 
 __Back to:__ TWikiFAQ
 
