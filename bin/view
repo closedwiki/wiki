@@ -48,13 +48,15 @@ sub main
     my $maxrev = 1;
     my $extra = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
+    my $revdate = "";
+    my $revuser = "";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
-	$tmpl= &TWiki::Store::readTemplate( "noweb" );
-	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+        $tmpl= &TWiki::Store::readTemplate( "noweb" );
+        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
         print "Content-type: text/html\n\n";
-	print $tmpl;
-	return;
+        print $tmpl;
+        return;
     }
 
     my $unlock = $query->param( "unlock" ) || "";
@@ -73,30 +75,37 @@ sub main
         print "Template directory $TWiki::templateDir not found.<p>";
         print "Check the \$templateDir variable in TWiki.cfg.";
         print "</body></html>";
-	return;
+        return;
     }
 
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
-        $maxrev =~ s/1\.//go;  # cut major
-	if( $rev ) {
+        # for performance assume top revision and read all revision info at once
+        ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfo( $topic, "", 1 );
+        if( $rev ) {
             $rev =~ s/1\.//go;  # cut major
-	    if( $rev < 1 )       { $rev = 1; }
+            if( $rev < 1 )       { $rev = 1; }
             if( $rev > $maxrev ) { $rev = $maxrev; }
-	    $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
+        } else {
+            $rev = $maxrev;
+        }
+
+        if( $rev >= $maxrev ) {
+            $text= &TWiki::Store::readTopic( $topic );
+
+        } else {
+            $text= &TWiki::Store::readVersion( $topic, "1.$rev" );
+            ( $revdate, $revuser ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
             $extra .= "r1.$rev";
-	} else {
-	    $text= &TWiki::Store::readTopic( $topic );
-	    $rev= $maxrev;
-	}
+        }
+
     } else {
-	$rev = 1;
-	if( &TWiki::isWikiName( $topic ) ) {
-	    $text= &TWiki::Store::readTemplate( "notext" );
-	} else {
-	    $text= &TWiki::Store::readTemplate( "notwiki" );
-	}
+        $rev = 1;
+        if( &TWiki::isWikiName( $topic ) ) {
+            $text= &TWiki::Store::readTemplate( "notext" );
+        } else {
+            $text= &TWiki::Store::readTemplate( "notwiki" );
+        }
         $extra .= " (not exist)";
     }
 
@@ -142,11 +151,12 @@ sub main
         $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
     } else {
         if( $topicExists ) {
-            $tmpl =~ s/%EDITTOPIC%/<A href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><B>Edit<\/B><\/A>/go; 
+            $tmpl =~ s/%EDITTOPIC%/<a href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><b>Edit<\/b><\/a>/go;
             # remove the NOINDEX meta tag
             $tmpl =~ s/<META NAME="ROBOTS"[^>]*>//goi;
         } else {
-            $tmpl =~ s/%EDITTOPIC%/<A href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><B>Create<\/B><\/A>/go; 
+            $tmpl =~ s/%EDITTOPIC%/<a href=\"$scriptUrlPath\/edit%SCRIPTSUFFIX%\/%WEB%\/%TOPIC%\"><b>Create<\/b><\/a>/go;
+
         }
         $tmpl =~ s/%REVTITLE%//go;
     }
@@ -162,15 +172,15 @@ sub main
         if( $i eq $rev) {
             $revisions = "$revisions | r1.$i";
         } else {
-            $revisions = "$revisions | <A href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</A>";
+            $revisions = "$revisions | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
         }
         if( $i != 1 ) {
             if( $i == $breakRev ) {
-                $revisions = "$revisions | <A href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</A>";
+                $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</a>";
                 $i = 1;
             } else {
                 $j = $i - 1;
-                $revisions = "$revisions | <A href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.$j\">&gt;</A>";
+                $revisions = "$revisions | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.$j\">&gt;</a>";
             }
         }
         $i = $i - 1;
@@ -178,9 +188,8 @@ sub main
     $tmpl =~ s/%REVISIONS%/$revisions/go;
 
     if( $topicExists ) {
-        my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
-        $user = &TWiki::userToWikiName( $user );
-        my $temp = &TWiki::getRenderedVersion( "r1.$rev - $date GMT - $user" );
+        $revuser = &TWiki::userToWikiName( $revuser );
+        my $temp = &TWiki::getRenderedVersion( "r1.$rev - $revdate GMT - $revuser" );
         $tmpl =~ s/%REVINFO%/$temp/go;
     } else {
         $tmpl =~ s/%REVINFO%//go;
@@ -192,3 +201,5 @@ sub main
     print "Content-type: text/html\n\n";
     print $tmpl;
 }
+
+# EOF

@@ -82,6 +82,7 @@ use vars qw(
         $scriptSuffix
         $newTopicFontColor $newTopicBgColor
         $headerPatternDa $headerPatternSp $headerPatternHt
+        $debugUserTime $debugSystemTime
     );
 
 # TWiki::Store config:
@@ -99,7 +100,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 Mar 2001";
+$wikiversion      = "06 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -124,6 +125,9 @@ use TWiki::Plugins;   # plugins handler  #AS
 $headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
 $headerPatternSp = '^\t(\++|\#+)\s+(.+)\s*$';         # '   ++ Header', '   + Header'
 $headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
+
+$debugUserTime   = 0;
+$debugSystemTime = 0;
 
 
 # =========================
@@ -216,7 +220,24 @@ sub writeDebug
     close( FILE);
 }
 
+# =========================
+sub writeDebugTimes
+{
+    my( $text ) = @_;
 
+    if( ! $debugUserTime ) {
+        writeDebug( "=====       sec:  (delta:)         sec:  (delta:)  function:" );
+    }
+    my( $puser, $psystem, $cuser, $csystem ) = times();
+    my $duser = $puser - $debugUserTime;
+    my $dsystem = $psystem - $debugSystemTime;
+    my $times = sprintf( "user: %1.3f (%1.3f), system: %1.3f (%1.3f)",
+                  $puser, $duser, $psystem, $dsystem );
+    $debugUserTime   = $puser;
+    $debugSystemTime = $psystem;
+
+    writeDebug( "===== $times,  $text" );
+}
 
 # =========================
 sub getEmailNotifyList
@@ -300,7 +321,7 @@ sub userToWikiListInit
             $wUser = $1;
             $lUser = $2;
             $lUser =~ s/$securityFilter//go;
-            %userToWikiList = ( %userToWikiList, $lUser, $wUser );
+            $userToWikiList{ $lUser } = $wUser;
         }
     }
 }
