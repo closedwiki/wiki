@@ -66,13 +66,18 @@ sub main
 
     my $tmpl = "";
     my $text = "";
-    my @meta = ();
+    my $meta = "";
     my $rev = $query->param( "rev" );
     my $maxrev = 1;
     my $extra = "";
     my $wikiUserName = &TWiki::userToWikiName( $userName );
     my $revdate = "";
     my $revuser = "";
+    
+    my $render = 1;
+    if( $query->param( "raw" ) ) {
+        $render = "";
+    }
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
         $tmpl= &TWiki::Store::readTemplate( "noweb" );
@@ -108,8 +113,13 @@ sub main
     # Most recent topic read in even if earlier topic requested - makes code simpler and performance impact should be minimal
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
-        ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, \@meta, "isoFormat" );
+        if( $render ) {
+            ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+        } else {
+            $text = "<pre>" . &TWiki::Store::readTopicRaw( $webName, $topic ) . "</pre>";
+        }
+        ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, $meta, "isoFormat" );
+        
         writeDebug( "maxrev = $maxrev" );
         if( $rev ) {
             $rev =~ s/1\.//go;  # cut major
@@ -120,17 +130,21 @@ sub main
         }
 
         if( $rev < $maxrev ) {
-            ( $text, @meta ) = &TWiki::Store::readVersion( $webName, $topic, "1.$rev" );
-            ( $revdate, $revuser ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, \@meta );
+            if( $render ) {
+                ( $meta, $text ) = &TWiki::Store::readTopicVersion( $webName, $topic, "1.$rev" );
+            } else {
+                $text = &TWiki::Store::readTopicRaw( $webName, $topic, "1.$rev" );
+            }
+            ( $revdate, $revuser ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, $meta );
             $extra .= "r1.$rev";
         }
 
     } else {
         $rev = 1;
         if( &TWiki::isWikiName( $topic ) ) {
-            ( $text, @meta ) = &TWiki::Store::readTemplateTopic( "WebTopicViewTemplate" )
+            ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicViewTemplate" );
         } else {
-            ( $text, @meta ) = &TWiki::Store::readTemplateTopic( "WebTopicNonWikiTemplate" );
+            ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicNonWikiTemplate" );
         }
         $extra .= " (not exist)";
     }
@@ -171,10 +185,12 @@ sub main
     # FIXME a rather messy way of doing things - maybe extra info to handleCommonTags?
     $TWiki::Attach::showAttr = $doShowAttachmentAttr;
 
-    $text = &TWiki::handleCommonTags( $text, $topic );
-    writeDebugTimes( "view - handleCommonTags done" );
-    $text = &TWiki::getRenderedVersion( $text );
-    writeDebugTimes( "view - getRendereredVersion done" );
+    if( $render ) {
+        $text = &TWiki::handleCommonTags( $text, $topic );
+        writeDebugTimes( "view - handleCommonTags done" );
+        $text = &TWiki::getRenderedVersion( $text );
+        writeDebugTimes( "view - getRendereredVersion done" );
+    }
 
     if( $TWiki::doLogTopicView ) {
         # write log entry
@@ -248,7 +264,11 @@ sub main
     }
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, \@meta );
+    if( $render ) {
+        $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+    } else {
+        $tmpl =~ s/%META{[^}]*}%//go;
+    }
     writeDebugTimes( "view - handleCommonTags for template done" );
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
     $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
