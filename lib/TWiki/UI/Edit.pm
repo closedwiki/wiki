@@ -220,7 +220,7 @@ sub edit {
         # if there's a form template, and no text defined in the save, then
         # get form data values from the form topic.
         my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
-        $this->fieldVars2Meta( $webName,  $session->{cgiQuery}, $meta,
+        $session->{form}->fieldVars2Meta( $webName,  $session->{cgiQuery}, $meta,
                                "override" );
         $formText = $session->{form}->renderForEdit
           ( $webName, $topic, $templateWeb, $form, $meta,
