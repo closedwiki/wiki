@@ -89,21 +89,22 @@ sub DISABLE_commonTagsHandler
 }
 
 # =========================
-sub DISABLE_startRenderingHandler
+sub startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
     &TWiki::Func::writeDebug( "- EncryptedPagesPlugin::startRenderingHandler( $_[1] )" ) if $debug;
+    $_[0] =~ s/$prefixPattern(.*)$postfixPattern/$replacementText/geo;
+    my $key= $1;
+    $_[0] =~ s/--!!--/$key/geo;
 }
 
 # =========================
 # Expand the Site:page references, called once per line of text
-sub outsidePREHandler
+sub DISABLE_outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    $_[0] =~ s/$prefixPattern(.*)$postfixPattern/$replacementText/geo;
-    my $key= $1;
-    $_[0] =~ s/--!!--/$key/geo;
+
 }
 
 # =========================
