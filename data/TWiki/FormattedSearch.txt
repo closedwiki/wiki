@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1021618648" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1029257204" format="1.0" version="1.9"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -14,7 +14,7 @@ Two parameters can be used to specify a customized search result:
 
 1. =header="..."= parameter
 
-Use the header paramter to specify the header of a search result. It should correspond to the format of the format parameter. This parameter is optional. <br /> Example: =header="| <nop>*Topic:*<nop> | <nop>*Summary:*<nop> |"=
+Use the header parameter to specify the header of a search result. It should correspond to the format of the format parameter. This parameter is optional. <br /> Example: =header="| <nop>*Topic:*<nop> | <nop>*Summary:*<nop> |"=
 
 2. =format="..."= parameter
 
