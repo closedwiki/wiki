@@ -91,14 +91,13 @@ sub main
         ( $meta, $dummy ) = &TWiki::Store::readTopic( $webName, $topic );
         
 	# parent setting
-	my $theParent = $query->param( 'parent' ) || "";
+	my $theParent = $query->param( 'topicparent' ) || "";
 	if( $theParent ) {
 	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
 	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
 	}
 	$tmpl =~ s/%TOPICPARENT%/$theParent/;
 
-        
 	my $formTemplate = $query->param( "formtemplate" );
 	if( $formTemplate ) {
 	   $meta->remove( "FORM" );

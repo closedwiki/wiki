@@ -107,7 +107,7 @@ sub main
         ( $meta, $tmp ) = &TWiki::Store::readTopic( $webName, $topic );
         
 	# parent setting
-	my $theParent = $query->param( 'parent' ) || "";
+	my $theParent = $query->param( 'topicparent' ) || "";
 	if( $theParent ) {
 	    $tmpl =~ s/%TOPICPARENT%/$theParent/go;
 	    $meta->put( "TOPICPARENT", ( "name" => $theParent ) );

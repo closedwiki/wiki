@@ -137,7 +137,7 @@ sub main
     }
     
     # parent setting
-    my $theParent = $query->param( 'parent' ) || "";
+    my $theParent = $query->param( 'topicparent' ) || "";
     if( $theParent ) {
         if( $theParent =~ /^([^.]+)\.([^.]+)$/ ) {
             my $parentWeb = $1;
