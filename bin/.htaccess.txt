@@ -10,11 +10,31 @@ SetHandler cgi-script
 
 # Password file for TWiki users
 #
-# The path here must be a system file pathname, not a URL - first part should 
+# The paths here must be a system file pathname, not a URL - first part should 
 # match the $dataDir setting in TWiki.cfg
+
+# Authentication type (htpasswd file) (comment out this if you configure htpasswd / LDAP support)
 AuthUserFile /filepath/to/TWiki/data/.htpasswd
 AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
 AuthType Basic
+
+#for htdigest password suport uncomment the following
+#AuthDigestDomain /urlpath/to/twiki/bin/viewauth /urlpath/to/twiki/bin/edit /urlpath/to/twiki/bin/preview /urlpath/to/twiki/bin/save /urlpath/to/twiki/bin/attach /urlpath/to/twiki/bin/upload /urlpath/to/twiki/bin/rename /urlpath/to/twiki/bin/manage /urlpath/to/twiki/bin/installpasswd /urlpath/to/twiki/bin/passwd
+#AuthDigestFile /filepath/to/TWiki/data/.htdigest
+# For "Digest" authentication to work properly, this string must match
+# the value of configuration variable $authRealm
+#AuthName 'Enter your WikiName. (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
+#AuthType Digest
+
+#for LDAP password support uncomment the following (and fix up the paths
+#AuthLDAPURL ldap://yourldapserver/dc=yourldapserver,dc=com?uid?sub?(objectClass=posixAccount)
+#AuthLDAPGroupAttribute memberUid
+#AuthLDAPGroupAttributeIsDN off
+#<Limit GET POST PUT>
+#    require group cn=mygroup,ou=groups,dc=yourldapserver,dc=com
+#</Limit>
+#AuthName ByPassword
+#AuthType Basic
 
 # File to return on access control error (e.g. wrong password)
 # The path here must be a URL path, not a file pathname - first part should 

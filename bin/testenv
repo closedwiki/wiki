@@ -2,7 +2,7 @@
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2000-2004 Peter Thoeny, peter@thoeny.com
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -142,6 +142,7 @@ my @optionalMods = (
 	'Unicode::Map', 	# For I18N conversions (CPAN)
 	'Unicode::Map8', 	# For I18N conversions (CPAN)
 	'Jcode', 		# For I18N conversions (CPAN)
+	'Digest::MD5',	#for md5 encoded passwords in HtPasswdUser.pm
    );
 
 
@@ -773,13 +774,28 @@ if( $OS eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
     print "to check that PERL5SHELL is set properly.\n";
     if ($perltype eq 'ActiveState' and 
 	    Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
-	print "</p>\n";
-	print "<p><b><font color=\"red\">Warning:</font></b> ";
-	print "ActiveState Perl must be upgraded to build <b>$ActivePerlRecommendedBuild</b> if you are going to use PERL5SHELL, which was broken in earlier builds.";
+    	print "</p>\n";
+    	print "<p><b><font color=\"red\">Warning:</font></b> ";
+    	print "ActiveState Perl must be upgraded to build <b>$ActivePerlRecommendedBuild</b> if you are going to use PERL5SHELL, which was broken in earlier builds.";
     }
     print "</p>\n";
     print "</td></tr>\n";
 }
+
+   #password handling
+print "</table>\n";
+print "<h3>User Authentication</h3>\n";
+print "<table>\n";
+
+    print "</td></tr>\n";
+    print "<tr><th align=\"right\">htpasswdFormatFamily:</th><td>$TWiki::htpasswdFormatFamily</td></tr>\n";
+    print "<tr><th align=\"right\">htpasswdEncoding:</th><td>$TWiki::htpasswdEncoding</td></tr>\n";
+    print "<tr><th align=\"right\">htpasswdFilename:</th><td>$TWiki::htpasswdFilename</td></tr>\n" if ( $TWiki::htpasswdFilename );
+    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+    print " only some combinations of Format, Encoding and Filename are valid, and fewer are tested\n";
+    print "\n";
+    print "</p>\n";
+    print "</td></tr>\n";
 
 # Generate a separate table for locale setup
 # FIXME: Need to update to handle core code's $localeRegexes feature

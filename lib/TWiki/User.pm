@@ -60,52 +60,27 @@ BEGIN {
 # template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
 use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
 
-#use $userTopicImpl = "HtPasswdUser";
+$UserImpl = "";
 
 # ===========================
-# TODO: why / what is this (docco it)
 =pod
 
----++ sub initialize ()
-
-Not yet documented.
+---+++ initialize ()
+| Description: | loads the selected User Implementation |
 
 =cut
-
 sub initialize
 {
     %templateVars = ();
-    eval "use TWiki::User::HtPasswdUser";
-}
-
-# ===========================
-# Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
-=pod
-
----++ sub _traceExec ()
-
-Not yet documented.
-
-=cut
-
-sub _traceExec
-{
-   #my( $cmd, $result ) = @_;
-   #TWiki::writeDebug( "User exec: $cmd -> $result" );
-}
-
-# ===========================
-=pod
-
----++ sub writeDebug ()
-
-Not yet documented.
-
-=cut
-
-sub writeDebug
-{
-   #TWiki::writeDebug( "User: $_[0]" );
+	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
+		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
+	    $UserImpl = "TWiki::User::HtPasswdUser";
+#	} elseif ($TWiki::htpasswdFormatFamily eq "something?") {
+#	    $UserImpl = "TWiki::User::SomethingUser";
+	} else {
+	    $UserImpl = "TWiki::User::NoPasswdUser";
+	}
+	eval "use ".$UserImpl;
 }
 
 # ===========================
@@ -123,7 +98,7 @@ sub _getUserHandler
 
    $attachment = "" if( ! $attachment );
 
-   my $handlerName = "TWiki::User::HtPasswdUser";
+   my $handlerName = $UserImpl;
 
    my $handler = $handlerName->new( );
    return $handler;
