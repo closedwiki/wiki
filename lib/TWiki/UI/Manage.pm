@@ -545,6 +545,8 @@ foreach my $web ( grep /^\w+$/, readdir DATA ) {
   }
 }
 closedir(DATA);
+print "<h2>Re-locking finished</h2>\n";
+print "It is now safe to reload <a href=\"$TWiki::defaultUrlHost$TWiki::scriptUrlPath/testenv\">testenv</a> \n";
 print "</body></html>";
 }
 
