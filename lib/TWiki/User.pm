@@ -76,6 +76,7 @@ sub writeDebug
    #TWiki::writeDebug( "User: $_[0]" );
 }
 
+# ===========================
 sub _getUserHandler
 {
    my( $web, $topic, $attachment ) = @_;
@@ -89,8 +90,13 @@ sub _getUserHandler
 }
 
 #========================= 
-# what if the login name is not the same as the twikiname??
-# $user == TWikiName..
+=pod
+---+++ UserPasswordExists( $user ) ==> $passwordExists
+| Description: | checks to see if there is a $user in the password system |
+| Parameter: =$user= | the username we are looking for  |
+| Return: =$passwordExists= | "1" if true, "" if not |
+| TODO: | what if the login name is not the same as the twikiname?? (I think we don't have TWikiName to username mapping fully worked out|
+=cut
 sub UserPasswordExists
 {
     my ( $user ) = @_;
@@ -101,8 +107,15 @@ sub UserPasswordExists
 }
  
 #========================= 
-# params: username, oldpassword (unencrypted), newpassword (unencrypted)
-# TODO: needs to fail if it doesw not succed due to file permissions
+=pod
+---+++ UpdateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
+| Description: | used to change the user's password |
+| Parameter: =$user= | the username we are replacing  |
+| Parameter: =$oldUserPassword= | unencrypted password |
+| Parameter: =$newUserPassword= | unencrypted password |
+| Return: =$success= | "1" if success |
+| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+=cut
 sub UpdateUserPassword
 {
     my ( $user, $oldUserPassword, $newUserPassword ) = @_;
@@ -112,7 +125,14 @@ sub UpdateUserPassword
 }
 
 #========================= 
-# params: username, newpassword (unencrypted)
+=pod
+---+++ AddUserPassword( $user, $newUserPassword ) ==> $success
+| Description: | creates a new user & password entry |
+| Parameter: =$user= | the username we are replacing  |
+| Parameter: =$newUserPassword= | unencrypted password |
+| Return: =$success= | "1" if success |
+| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+=cut
 sub AddUserPassword
 {
     my ( $user, $newUserPassword ) = @_;
@@ -122,7 +142,13 @@ sub AddUserPassword
 }
 
 #========================= 
-# params: username
+=pod
+---+++ RemoveUser( $user ) ==> $success
+| Description: | used to remove the user from the password system |
+| Parameter: =$user= | the username we are replacing  |
+| Return: =$success= | "1" if success |
+| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+=cut
 sub RemoveUser
 {
     my ( $user ) = @_;
@@ -132,6 +158,14 @@ sub RemoveUser
 }
 
 # =========================
+=pod
+---+++ CheckUserPasswd( $user, $password ) ==> $success
+| Description: | used to check the user's password |
+| Parameter: =$user= | the username we are replacing  |
+| Parameter: =$password= | unencrypted password |
+| Return: =$success= | "1" if success |
+| TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
+=cut
 sub CheckUserPasswd
 {
     my ( $user, $password ) = @_;
@@ -141,7 +175,14 @@ sub CheckUserPasswd
 }
  
 # =========================
-#TODO: this seems to me to belong elsewhere.. (??)
+=pod
+---+++ addUserToTWikiUsersTopic( $wikiName, $remoteUser ) ==> $topicName
+| Description: | create the User's TWikiTopic |
+| Parameter: =$wikiName= | the user's TWikiName |
+| Parameter: =$remoteUser= | the remote username (is this used in the password file at any time?) |
+| Return: =$topicName= | the name of the TWikiTopic created |
+| TODO: | does this really belong here? |
+=cut
 sub addUserToTWikiUsersTopic
 {
     my ( $wikiName, $remoteUser ) = @_;
