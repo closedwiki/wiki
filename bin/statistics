@@ -436,12 +436,13 @@ sub processWeb
     my $statTopViews = "";
     my $statTopContributors = "";
     if( @topViews ) {
-	printMsg( "  - top view: $topViews[0]", $cgiQuery );
 	$statTopViews = join( "<br /> ", @topViews );
+        $topViews[0] =~ s/[\[\]]*//g;
+	printMsg( "  - top view: $topViews[0]", $cgiQuery );
     }
     if( @topContribs ) {
-	printMsg( "  - top contributor: $topContribs[0]", $cgiQuery );
 	$statTopContributors = join( "<br /> ", @topContribs );
+	printMsg( "  - top contributor: $topContribs[0]", $cgiQuery );
     }
 
     # Update the WebStatistics topic
@@ -521,8 +522,12 @@ sub getTopList
     while( ( $topicName, $statValue ) = each( %$webhashref ) ) {
 	# Right-align statistic value for sorting
 	$statValue = sprintf "%7d", $statValue;	
-	# Add new array item at end	of array
-	$list[@list] = "$statValue $topicName";
+	# Add new array item at end of array
+        if( $topicName =~ /\./ ) {
+	    $list[@list] = "$statValue $topicName";
+	} else {
+	    $list[@list] = "$statValue [[$topicName]]";
+	}
     }
 
     # DEBUG
