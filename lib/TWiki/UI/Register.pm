@@ -870,7 +870,8 @@ sub _buildConfirmationEmail {
     $templateText = $before.$after;
     $templateText = $session->handleCommonTags
       ( $templateText, $data{webName}, $data{WikiName} );
-    $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois
+    $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
+    # remove <nop> and <noautolink> tags
 
     return $templateText;
 }
