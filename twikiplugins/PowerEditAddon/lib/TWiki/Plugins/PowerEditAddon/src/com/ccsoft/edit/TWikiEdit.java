@@ -244,13 +244,21 @@ public class TWikiEdit extends Applet implements Application {
 
     /** Download the text from the given server url */
     private String downloadText() {
-	try {
-	    String replyString = "";
-	    // a url of "debug" means run in appletviewer mode and
-	    // don't talk to the server
-	    if (!server.equals("debug")) {
-		URL url = new URL(getCodeBase(), server + "?action=get");
-		System.out.println("get: " + url);
+	String replyString = "";
+	// a url of "debug" means run in appletviewer mode and
+	// don't try to talk to the server
+	if (!server.startsWith("debug")) {
+	    URL url;
+	    try {
+		url = new URL(getCodeBase(),
+				  server + "?action=get");
+	    } catch (MalformedURLException mue) {
+		return mue.toString();
+	    }
+
+	    System.out.println("get: " + url);
+
+	    try {
 		InputStream ins = url.openStream();
 
 		BufferedReader in =
@@ -262,15 +270,18 @@ public class TWikiEdit extends Applet implements Application {
 			replyString += reply + "\n";
 		    }
 		} while (reply != null);
-	    } else
-		replyString = "Applet running in debug mode";
+	    } catch (IOException ioe) {
+		return ioe.toString();
+	    }
 
-	    return replyString;
-	} catch (MalformedURLException mue) {
-	    return mue.toString();
-	} catch (IOException ioe) {
-	    return ioe.toString();
+	    if ( replyString.startsWith("OK"))
+		replyString = replyString.substring(2);
+
+	} else {
+	    replyString = server.substring(5);
 	}
+
+	return replyString;
     }
 
     /** Command action on save. This command is reflected
@@ -281,6 +292,7 @@ public class TWikiEdit extends Applet implements Application {
 	    String serverCmd = server + "?action=put";
 	    System.out.println("put: " + serverCmd);
 	    String reply = post(serverCmd, text);
+	    // read the reply, which should be a URL
 	    try {
 		System.out.println("redirect:" + reply);
                 URL url = new URL(getCodeBase(), reply);
@@ -304,8 +316,9 @@ public class TWikiEdit extends Applet implements Application {
 
 	String message =
 	    "--" + MIME_SEP + "\r\n" 
+	    // shouldn't need this, as the url has ?action=put
             + "Content-Disposition: form-data; "
-            + "name=\"action\"\r\n\r\nsave\r\n"
+            + "name=\"action\"\r\n\r\nput\r\n"
 	    + "--" + MIME_SEP + "\r\n"
             + "Content-Disposition: form-data; "
             + "name=\"text\"\r\n"

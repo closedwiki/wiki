@@ -4,6 +4,8 @@
 // copyright notice appears in all copies.
 package com.ccsoft.edit;
 
+import com.kizna.html.*;
+
 import gnu.regexp.*;
 
 import java.awt.*;
@@ -17,10 +19,10 @@ import java.lang.reflect.*;
  * regular expression support a la emacs.<p>
  * This is MUCH lighter weight than using the equivalent 'lightweight'
  * JComponent! What's more, it's entirely JDK1.1 so it can be used with
- * Netscape Java 1.1.5
+ * Netscape Java 1.1.5.
+ * It also has hoopy HTML->TML conversion.
  */
-public class SearchableTextArea
-extends TextArea
+public class SearchableTextArea extends TextArea
 implements Difference.ModifiableText {
 
     private static final int UNDO_DEPTH = 100;
@@ -34,6 +36,8 @@ implements Difference.ModifiableText {
     private transient Application application;
     private transient boolean recordUndo;
     private transient String repeatCommand;
+
+    private HTML2TWiki html2wiki = null;
 
     /**
      * Create a new searchable text area. The area must be reset
@@ -281,8 +285,17 @@ implements Difference.ModifiableText {
      */
     public void cut() {
 	copy();
-        //System.out.println("Delete " + getSelectedText());
+        //System.out.println("Cut " + getSelectedText());
 	overwriteSelection("");
+	repeatCommand = null;
+    }
+
+    /**
+     * COMMAND
+     * Insert newline
+     */
+    public void br() {
+	overwriteSelection("\n");
 	repeatCommand = null;
     }
 
@@ -369,7 +382,7 @@ implements Difference.ModifiableText {
      */
     public void find() {
         //System.out.println("Find");
-	if (!reSearch && getSelectionStart() < getSelectionEnd())
+	if (!reSearch && haveSelection())
 	    searchString = getSelectedText();
 	FindDialog dlg = new FindDialog(
 	    application.getFrame(), searchString, caseSensitive, reSearch);
@@ -438,7 +451,7 @@ implements Difference.ModifiableText {
      */
     public void replace() {
         //System.out.println("Replace");
-	if (!reSearch && getSelectionStart() < getSelectionEnd())
+	if (!reSearch && haveSelection())
 	    searchString = getSelectedText();
 	ReplaceDialog dlg = new ReplaceDialog(
 	    application.getFrame(),
@@ -471,5 +484,22 @@ implements Difference.ModifiableText {
 	}
 	return false;
     }
+
+    /**
+     * COMMAND
+     * Converts the selection from HTML to
+     * TWikiML. If there is no selection, converts the whole textarea.
+     */
+    public void convert() {
+	if (haveSelection()) {
+	    String convertString = getSelectedText();
+	    if (html2wiki == null)
+		html2wiki = new HTML2TWiki();
+	    String result = html2wiki.process(convertString, "nourl");
+	    overwriteSelection(result);
+	} else
+	    beep();
+    }
+
 }
 
