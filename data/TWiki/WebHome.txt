@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000549422" format="1.0" version="1.46"}%
+%META:TOPICINFO{author="MikeMannix" date="1000848998" format="1.0" version="1.47"}%
 <table><tr><td>
 Welcome to TWiki, a flexible, powerful, and simple Web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or any other groupware tool, on an intranet or on the Web. <p>This is the place to learn about it, download it, and try it out for yourself... </p></td><td width="25">&nbsp;</td><td width="200">
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a> <br>
@@ -77,5 +77,6 @@ Site tools include utilities for navigating and keeping up with site activity on
 
 	* TWiki<sup>TM</sup> is a trademark of PeterThoeny
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
-	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br>
+	* This site is running TWiki version *%WIKIVERSION%*
+	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br />
 	  %PUBURL%/twikilogo88x31.gif
