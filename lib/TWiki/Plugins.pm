@@ -708,9 +708,19 @@ sub afterSaveHandler
 
 =pod
 ---++ sub beforeAttachmentSaveHandler  ( $attrHash, $topic, $web ) 
+
 | Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
-| Parameters:  | FIXME: Document $attrHash!! |
-| Return:      | |
+
+where $topic and $web pinpoint the topic and attrHash is a hash containing the keys:
+| *hash key*  | *value* |
+| attachment  | the name of the attachment |
+| tmpFilename | the name of the local file that stores the upload
+| comment     | the Comment to be associated with the upload
+| user        | A $TWiki::userName of the person submitting the attachment
+
+There is no defined return value for this call. 
+
+A future enhancement could be for the beforeAttachmentSaveHandler to return a value to veto the proposed upload.
 
 =cut
 
@@ -725,8 +735,17 @@ sub beforeAttachmentSaveHandler
 =pod
 ---++ sub afterAttachmentSaveHandler ( $attachmentAttrHash, $topic, $web, $error ) 
 | Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
-| Parameters:  | |
-| Return:      | |
+
+Where $topic and $web pinpoint the topic and attrHash is a hash containing the keys:
+| *hash key*  | *value* |
+| attachment  | the name of the attachment |
+| tmpFilename | the name of the local file that stores the upload
+| comment     | the Comment to be associated with the upload
+| user        | A $TWiki::userName of the person submitting the attachment
+ 
+ And where $error is the result of having called topicHandler->addRevision()
+
+ There is no defined return value for this call.
 
 =cut
 
