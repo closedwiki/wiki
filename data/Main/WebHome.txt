@@ -1,6 +1,11 @@
 Welcome to the home of TWiki.%WEB%. This is a web based collaboration area to get to know the TWiki tool.
 
-<B> The TWiki home is at http://www.mindspring.net/~peterthoeny/twiki/index.html </B>
+<table><tr><td>
+<a href="http://www.mindspring.com/~peterthoeny/twiki/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
+</td><td>
+<b>The TWiki home is at <br> http://www.mindspring.net/~peterthoeny/twiki/ </b>
+</td></tr>
+</table>
 
 Good *starting points* at the TWiki.Main web are:
 	* WelcomeGuest: Look here first to get you rolling on TWiki.
