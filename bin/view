@@ -26,6 +26,8 @@ use TWiki;
 
 use strict;
 
+writeDebugTimes( "view:start" );
+
 ##### for debug only: Remove next 2 comments (but redirect does not work)
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 #$| = 1;                  # no buffering
@@ -57,7 +59,9 @@ sub main
     my $doShowAttachmentAttr = $query->param( 'showAttr' );
 
     my( $topic, $webName, $scriptUrlPath, $userName ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+
+    writeDebugTimes( "view - initialized" );
 
     my $tmpl = "";
     my $text = "";
@@ -72,7 +76,7 @@ sub main
     if( ! &TWiki::Store::webExists( $webName ) ) {
         $tmpl= &TWiki::Store::readTemplate( "noweb" );
         $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-        print "Content-type: text/html\n\n";
+        TWiki::writeHeader( $query );
         print $tmpl;
         return;
     }
@@ -83,11 +87,13 @@ sub main
         &TWiki::Store::lockTopic( $topic, "on" );
     }
 
+    writeDebugTimes( "view - webExists" );
+
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "view", $topic, $skin );
     if( ! $tmpl ) {
-        print "Content-type: text/html\n\n";
+        TWiki::writeHeader( $query );
         print "<html><body>";
         print "<h1>TWiki Installation Error</h1>";
         print "Template directory $TWiki::templateDir not found.<p>";
@@ -95,6 +101,8 @@ sub main
         print "</body></html>";
         return;
     }
+
+    writeDebugTimes( "view - readTemplate" );
 
     # Most recent topic read in even if earlier topic requested - makes code simpler and performance impact should be minimal
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
@@ -126,6 +134,8 @@ sub main
         $extra .= " (not exist)";
     }
 
+    writeDebugTimes( "view - get rev info" );
+
     # check access permission
     # To Do: Need to protect also %INCLUDE% and search
     my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
@@ -154,12 +164,16 @@ sub main
         return;
     }
 
+    writeDebugTimes( "view - checked access permissions" );
+
     ##&TWiki::writeDebug("view showAtt = $doShowAttachmentAttr");
     # FIXME a rather messy way of doing things - maybe extra info to handleCommonTags?
     $TWiki::Attach::showAttr = $doShowAttachmentAttr;
 
     $text = &TWiki::handleCommonTags( $text, $topic );
+    writeDebugTimes( "view - handleCommonTags done" );
     $text = &TWiki::getRenderedVersion( $text );
+    writeDebugTimes( "view - getRendereredVersion done" );
 
     if( $TWiki::doLogTopicView ) {
         # write log entry
@@ -217,11 +231,14 @@ sub main
     }
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    writeDebugTimes( "view - handleCommonTags for template done" );
     my $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
     $tmpl =~ s/%TEXT%/$text\n$metaText/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
-    print "Content-type: text/html\n\n";
+    TWiki::writeHeader( $query );
     print $tmpl;
+
+    writeDebugTimes( "view - done" );
 }
 
 # EOF
