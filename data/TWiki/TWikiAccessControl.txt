@@ -1,3 +1,5 @@
+---## TWiki Access Control
+
 %WIKITOOLNAME% allows you to define restrictions of who is allowed to view a %WIKITOOLNAME% web, make changes to topics or attach files.
 
 *IMPORTANT NOTE:* Think twice before restricting read or write access to a web or a topic, because an open system where everybody can contribute is the essence of the %TWIKIWEB%.WikiCulture. Experience shows that unrestricted write access works very well because:
@@ -6,7 +8,7 @@
 	* A topic revision can be undone by a member of the %MAINWEB%.TWikiAdminGroup in case needed.
 
 
-__Users and Groups__
+---+++ Users and Groups
 
 Access control is based on users and groups.
 
@@ -22,7 +24,7 @@ __Groups__ are defined by group topics in the %MAINWEB% web, i.e. %MAINWEB%.TWik
 	* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of users and groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic, i.e. <br> =&nbsp; &nbsp; * Set <nop>ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup= <br> for the <nop>TWikiAdminGroup topic. (This is to prevent users not in the group from editing the topic and gaining unauthorized membership to the group.)
 
 
-__Write Access Restriction for Individual Topics__
+---+++ Write Access Restriction for Individual Topics
 
 You can define restrictions of who is allowed to make changes to a topic or attach files to it.
 
@@ -36,7 +38,7 @@ ALLOWTOPICCHANGE defines users or groups that *are* allowed to make changes to t
 
 DENYTOPICCHANGE is evaluated before ALLOWTOPICCHANGE. Access is denied if the authenticated person is in the DENYTOPICCHANGE list, or not in the ALLOWTOPICCHANGE list. Access is granted in case DENYTOPICCHANGE and ALLOWTOPICCHANGE is not defined.
 
-__Write Access Restriction for a Whole %WIKITOOLNAME% Web__
+---+++ Write Access Restriction for a Whole %WIKITOOLNAME% Web
 
 You can define restrictions of who is allowed to make changes to a %WIKITOOLNAME% web. This includes creating new topics, changing topics or attaching files.
 
@@ -48,7 +50,7 @@ The same rules apply like the one for Access Control for Individual Topics; with
 	* DENYTOPICCHANGE (in topic) overrides DENYWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 	* ALLOWTOPICCHANGE (in topic) overrides ALLOWWEBCHANGE (in <nop>%WEBPREFSTOPIC%)
 
-__Read Access Restriction for a Whole %WIKITOOLNAME% Web__
+---+++ Read Access Restriction for a Whole %WIKITOOLNAME% Web
 
 You can define restrictions of who is allowed to view a %WIKITOOLNAME% web.
 
@@ -73,4 +75,4 @@ _Notes for read access restriction:_
 
 __Related topics:__ %WIKIPREFSTOPIC%, %WEBPREFSTOPIC% (in every web), %MAINWEB%.TWikiAdminGroup, %MAINWEB%.TWikiGroups
 
--- Main.PeterThoeny - 20 Jan 2001 <br>
+-- PeterThoeny - 16 Mar 2001 <br>
