@@ -82,10 +82,11 @@ use vars qw(
             %staticInternalTags
             %dynamicInternalTags
             $siteCharset $siteLang $siteFullLang $urlCharEncoding
-            $langAlphabetic
+            $langAlphabetic $VERSION
            );
 
 $wikiversion = '12 Dec 2004 $Rev$';
+$VERSION = '$Rev:$';
 
 # SMELL: should this be part of the config?
 $defaultWikiName = "TWikiGuest";
