@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1021182945" format="1.0" version="1.20"}%
+%META:TOPICINFO{author="MikeMannix" date="1021230286" format="1.0" version="1.21"}%
 ---++ TWiki is a Web-based collaboration platform
 	* A TWiki site is an easy-to-use, full-featured open communications environment:
 		* people anywhere on the Web or on an intranet can meet
@@ -28,7 +28,7 @@
 
 ---+++ Selected TWiki Topics...
 	* TWikiSite provides a basic big picture overview of the TWiki platform
-	* TWikiPages is a quick and concentrated look at the TWiki core
+	* TWikiTopics is a quick and concentrated look at the TWiki core
 	* TWikiPlannedFeatures lists approved additions to future TWiki versions.
 	* TWikiEnhancementRequests is the place to add your new feature requests.
 	* [[WebHome][TWiki Documentation]]: a compact User's Guide and an in-depth Reference Manual.
