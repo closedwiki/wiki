@@ -264,7 +264,7 @@ sub main
 		$sectxt = "---+" . $s;
 	    }
 	    elsif ($pos < $theSec) {
-		$pretxt .= "---+" unless ($pos + 1 == $theSec);
+		$pretxt .= "---+" unless ($pos == 0);
 		$pretxt .= $s;
 	    }
 	    elsif ($pos > $theSec) {
