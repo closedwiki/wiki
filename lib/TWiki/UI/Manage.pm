@@ -159,7 +159,7 @@ sub createWeb {
     my $oopsTmpl = "mngcreateweb";
 
     # check permission, user authorized to create webs?
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{wikiUserName};
     TWiki::UI::checkAccess( $session, $webName, $topicName,
                             "manage", $wikiUserName );
 
@@ -285,8 +285,8 @@ sub _patchWebPreferences
     my ( $session, $theWeb, $theTopic, $theWebBgColor, $theSiteMapWhat, $theSiteMapUseTo, $doNoSearchAll ) = @_;
 
     my( $meta, $text ) =
-      $session->{store}->readTopic( Wikiusername(),
-                                $theWeb, $theTopic, undef, 1 );
+      $session->{store}->readTopic( $session->{wikiUserName},
+                                    $theWeb, $theTopic, undef, 1 );
 
     my $siteMapList = "";
     $siteMapList = "on" if( $theSiteMapWhat );
@@ -346,7 +346,7 @@ sub rename {
         $theAttachment = "";
     }
 
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{wikiUserName};
 
     # justChangeRefs will be true when some topics that had links to $oldTopic
     # still need updating, previous update being prevented by a lock.

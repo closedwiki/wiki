@@ -75,7 +75,7 @@ sub _save {
     my $saveCmd = $query->param( "cmd" ) || "";
     my $text = $query->param( "text" );
     my $meta = "";
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{wikiUserName};
 
     # A template was requested; read it, and expand URLPARAMs within the
     # template using our CGI record

@@ -146,7 +146,7 @@ sub getPreferencesValue {
     my( $this, $theKey, $theWeb ) = @_;
 
     my $sessionValue =
-      TWiki::Plugins::getSessionValueHandler( $theKey );
+      $this->{session}->{plugins}->getSessionValueHandler( $theKey );
 
     if( defined( $sessionValue ) ) {
         return $sessionValue;

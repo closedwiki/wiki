@@ -195,7 +195,7 @@ sub bulkRegister {
     #-- Read the topic containing a table of people to be registered
 
 
-    my ($meta, $text) = $session->{store}->readTopic($loginName,
+    my ($meta, $text) = $session->{store}->readTopic($session->{wikiUserName},
                                                      $web, $topic, undef, 1);
     my %data;
     ( $settings{fieldNames}, %data) =
@@ -414,7 +414,7 @@ sub resetPassword {
     my @userNames = @{$query->{LoginName}};
     my @wikiNames = ();
 
-    my $wikiName = $session->{users}->userToWikiName($remoteUser);
+    my $wikiName = $session->{wikiUserName};
     if ( @userNames && ( $#userNames > 0 || $userNames[0] ne $remoteUser )) {
         TWiki::UI::checkAdmin( $session, $web, $topic, $wikiName );
         foreach my $userName (@userNames) {
@@ -679,8 +679,9 @@ sub finish {
     }
 
     # Plugin callback to set cookies.
-    TWiki::Plugins::registrationHandler( $data{webName}, $data{WikiName},
-                                         $data{remoteUser} );
+    $session->{plugins}->registrationHandler( $data{webName},
+                                              $data{WikiName},
+                                              $data{remoteUser} );
     
     # add user to TWikiUsers topic
     my $userTopic =
@@ -1344,7 +1345,7 @@ sub addPhotoToTopic {
     my $session = $p{session};
     my $dirName = $p{photoDir};
     my $meta = $p{meta};
-    #    my ($meta, $text) = TWiki::Store::readTopic($p{web}, $p{user}, 1);
+
     opendir(D,$dirName);
     my @fileNames = sort(
                          grep(

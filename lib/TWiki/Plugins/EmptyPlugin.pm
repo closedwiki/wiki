@@ -104,7 +104,7 @@ sub DISABLE_initializeUserHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
 
-    # Allows a plugin to set the username based on cookies. Called by TWiki::initialize.
+    # Allows a plugin to set the username based on cookies.
     # Return the user name, or "guest" if not logged in.
     # New hook in TWiki::Plugins $VERSION = '1.010'
 

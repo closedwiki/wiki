@@ -125,7 +125,7 @@ Send an email specified as MIME format content.
 sub sendEmail {
     # $theText Format: "Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
 
-    my( $this, $theText ) = @_;
+    my( $this, $theText, $retries ) = @_;
 
     # Put in a Date header, mainly for Qmail
     my $dateStr = TWiki::formatTime(time, 'email');
@@ -143,9 +143,8 @@ sub sendEmail {
         }
     }
 
-    my $error = "";
-    # Send the email.  Use Net::SMTP if it's installed, otherwise use a
-    # sendmail type program.
+    my $from = "";
+    my @to = ();
     if( $this->{USENETSMTP} ) {
         my ( $header, $body ) = split( "\n\n", $theText, 2 );
         my @headerlines = split( /\n/, $header );
@@ -154,7 +153,6 @@ sub sendEmail {
         $theText = "$header\n\n$body";   # rebuild message
 
         # extract 'From:'
-        my $from = "";
         my @arr = grep( /^From: /i, @headerlines );
         if( scalar( @arr ) ) {
             $from = $arr[0];
@@ -166,7 +164,6 @@ sub sendEmail {
         }
 
         # extract @to from 'To:', 'CC:', 'BCC:'
-        my @to = ();
         @arr = grep( /^To: /i, @headerlines );
         my $tmp = "";
         if( scalar( @arr ) ) {
@@ -189,21 +186,40 @@ sub sendEmail {
             @arr = split( /[,\s]+/, $tmp );
             push( @to, @arr );
         }
-
         if( ! ( scalar( @to ) ) ) {
             return "ERROR: Can't send mail, missing receipient";
         }
-
-        $error = $this->_sendEmailByNetSMTP( $from, \@to, $theText );
-
     } else {
         # send with sendmail
         my ( $header, $body ) = split( "\n\n", $theText, 2 );
         $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
         $theText = "$header\n\n$body";   # rebuild message
-        $error = $this->_sendEmailBySendmail( $theText );
     }
-    return $error;
+
+    my $errors = "";
+    my $back_off = 1; # seconds, doubles on each retry
+    while ( $retries ) {
+        my $error;
+        if( $this->{USENETSMTP} ) {
+            $error = $this->_sendEmailByNetSMTP( $from, \@to, $theText );
+        } else {
+            $error = $this->_sendEmailBySendmail( $theText );
+        }
+        if( $error ) {
+            $errors .= "$error\n";
+            if ( --$retries ) {
+                sleep( $back_off );
+                $back_off *= 2;
+            } else {
+                $this->{session}->writeWarning( "Net::sendEmail: too many failures; aborting send" );
+                return $errors;
+            }
+        } else {
+            #$this->{session}->writeDebug( "Mailed $mail" );
+            return undef;
+        }
+    }
+    return undef;
 }
 
 sub _fixLineLength {

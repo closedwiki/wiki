@@ -59,7 +59,6 @@ sub view {
     my $meta = "";
     my $maxrev = 1;
     my $extra = "";
-    my $wikiUserName = $session->{users}->userToWikiName( $session->{userName} );
     my $revdate = "";
     my $revuser = "";
 
@@ -80,9 +79,9 @@ sub view {
     my $rev = $session->{store}->cleanUpRevID( $query->param( "rev" ));
     my $topicExists = $session->{store}->topicExists( $webName, $topicName );
     if( $topicExists ) {
-        ( $meta, $text ) = $session->{store}->readTopic( $wikiUserName,
-                                                     $webName, $topicName,
-                                                     undef, 1 );
+        ( $meta, $text ) = $session->{store}->readTopic
+          ( $session->{wikiUserName},
+            $webName, $topicName, undef, 1 );
         ( $revdate, $revuser, $maxrev ) =
           $meta->getRevisionInfo( $webName, $topicName );
 
@@ -98,7 +97,7 @@ sub view {
             # Most recent topic read in even if earlier topic requested - makes
             # code simpler and performance impact should be minimal
             ( $meta, $text ) =
-              $session->{store}->readTopic( $wikiUserName,
+              $session->{store}->readTopic( $session->{wikiUserName},
                                         $webName, $topicName, $rev, 0 );
 
             # SMELL: why doesn't this use $meta?
@@ -121,7 +120,9 @@ sub view {
 
     # This has to be done before $text is rendered!!
     my $viewAccessOK =
-      $session->{security}->checkAccessPermission( "view", $wikiUserName, $text, $topicName, $webName );
+      $session->{security}->checkAccessPermission
+        ( "view",
+          $session->{wikiUserName}, $text, $topicName, $webName );
     # SMELL: why wait so long before processing this if the read access failed?
 
     if( $viewRaw ) {

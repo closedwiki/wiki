@@ -26,19 +26,20 @@ package TWiki::UI::Statistics;
 use strict;
 use File::Copy qw(copy);
 use IO::File;
+use Error qw( :try );
 
 =pod
 
 ---++ statistics( $session )
 Generate statistics topic.
+If a web is specified in the session object, generate WebStatistics
+topic update for that web. Otherwise do it for all webs
 
 =cut
 sub statistics {
-    my ( $session, $thePathInfo, ) = @_;
+    my $session = shift;
 
     my $webName = $session->{webName};
-    my $topic = $session->{topicName};
-    my $userName = $session->{userName};
 
     my $tmp = "";
     my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
@@ -46,7 +47,7 @@ sub statistics {
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
     my $query;
 
-    if( $session ) {
+    if( !$session->{scripted} ) {
         $query = $session->{cgiQuery};
         # running from CGI
         my $mess =
@@ -57,10 +58,9 @@ sub statistics {
     }
 
     # Initial messages
-    _printMsg( "TWiki: Create Usage Statistics", $query );
-    if( $query ) {
-        print "<h4><font color=\"red\"><span class=\"twikiAlert\">Do not interrupt this script!</span></font> ( Please wait until page download has finished )</h4>\n";
-    }
+    _printMsg( "TWiki: Create Usage Statistics", $session );
+    _printMsg( "!Do not interrupt this script!" );
+    _printMsg( "(Please wait until page download has finished)" );
 
     unless( $logDate ) {
         # get current local time and format to "yyyymm" format:
@@ -82,94 +82,97 @@ sub statistics {
     $logYear = $logDate;
     $logYear =~ s/([0-9]{4})(.*)/$1/g;
     my $logMonthYear = "$logMonth $logYear";
-    _printMsg( "* Statistics for $logMonthYear", $query );
+    _printMsg( "* Statistics for $logMonthYear", $session );
 
     my $logFile = $TWiki::logFilename;
     $logFile =~ s/%DATE%/$logDate/g;
 
-    if( -e $logFile ) {
-        # Copy the log file to temp file, since analysis could take some time
+    unless( -e $logFile ) {
+        _printMsg( "  - Note: Log file $logFile does not exist", $session );
+        return;
+    }
 
-        # FIXME move the temp dir stuff to TWiki.cfg
-        my $tmpDir;
-        if ( $TWiki::OS eq "UNIX" ) { 
-            $tmpDir = $ENV{'TEMP'} || "/tmp"; 
-        } elsif ( $TWiki::OS eq "WINDOWS" ) {
-            $tmpDir = $ENV{'TEMP'} || "c:/"; 
-        } else {
-            # FIXME handle other OSs properly - assume Unix for now.
-            $tmpDir = "/tmp";
-        }
-        my $randNo = int ( rand 1000);	# For mod_perl with threading...
-        my $tmpFilename = "$tmpDir/twiki-stats.$$.$randNo";
-        $tmpFilename =~ /(.*)/; $tmpFilename = $1;   # Untaint
+    # Copy the log file to temp file, since analysis could take some time
 
-        File::Copy::copy ($logFile, $tmpFilename)
-            or die "Can't copy $logFile to $tmpFilename - $!";    # FIXME: Never die in a cgi script
+    # FIXME move the temp dir stuff to TWiki.cfg
+    my $tmpDir;
+    if ( $TWiki::OS eq "UNIX" ) { 
+        $tmpDir = $ENV{'TEMP'} || "/tmp"; 
+    } elsif ( $TWiki::OS eq "WINDOWS" ) {
+        $tmpDir = $ENV{'TEMP'} || "c:/"; 
+    } else {
+        # FIXME handle other OSs properly - assume Unix for now.
+        $tmpDir = "/tmp";
+    }
+    my $randNo = int ( rand 1000);	# For mod_perl with threading...
+    my $tmpFilename = "$tmpDir/twiki-stats.$$.$randNo";
+    $tmpFilename =~ /(.*)/; $tmpFilename = $1;   # Untaint
 
-        # Open the temp file
-        my $TMPFILE = new IO::File;
-        open $TMPFILE, $tmpFilename 
-          or die "Can't open $tmpFilename - $!";   # FIXME: Never die in a cgi script
+    File::Copy::copy ($logFile, $tmpFilename)
+        or throw Error::Simple( "Can't copy $logFile to $tmpFilename - $!" );
 
-        # Do a single data collection pass on the temporary copy of logfile,
-        # then call processWeb once for each web of interest.
-        my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, 
-            $statUploadsRef) = _collectLogData( $session, $TMPFILE, $logMonthYear );
+    my $TMPFILE = new IO::File;
+    open $TMPFILE, $tmpFilename
+      or throw Error::Simple( "Can't open $tmpFilename - $!" );
+
+    # Do a single data collection pass on the temporary copy of logfile,
+    # then process each web once.
+    my ($viewRef, $contribRef, $statViewsRef, $statSavesRef, 
+        $statUploadsRef) = _collectLogData( $session, $TMPFILE, $logMonthYear );
 
 =pod
-	# DEBUG ONLY
-	_debugPrintHash($viewRef);
-	_debugPrintHash($contribRef);
-	print "statViews tests===========\n";
-	print "Views in Main = " . ${$statViewsRef}{'Main'} . "\n";
-	print "hash stats (used/avail) = " . %{$statViewsRef}."\n";
-
-	foreach my $web (keys %{$statViewsRef}) {
-	   print "Web summary for $web\n";
-	   print $statViewsRef->{$web}."\n";
-	   print $statSavesRef->{$web}."\n";
-	   print $statUploadsRef->{$web}."\n";
-	}
+    # DEBUG ONLY
+    _debugPrintHash($viewRef);
+    _debugPrintHash($contribRef);
+    print "statViews tests===========\n";
+    print "Views in Main = " . ${$statViewsRef}{'Main'} . "\n";
+    print "hash stats (used/avail) = " . %{$statViewsRef}."\n";
+    foreach my $web (keys %{$statViewsRef}) {
+        print "Web summary for $web\n";
+        print $statViewsRef->{$web}."\n";
+        print $statSavesRef->{$web}."\n";
+        print $statUploadsRef->{$web}."\n";
+    }
 =cut
 
-  # Generate WebStatistics topic update for one or more webs
-  if( $thePathInfo =~ /\/./ ) {
-      # do a particular web:
-      $destWeb = _processWeb( $session, $thePathInfo, $userName, $topic,
-                              $logMonthYear, $viewRef, $contribRef, $statViewsRef,
-                              $statSavesRef, $statUploadsRef, $query, 1 );
-  } else {
-      # do all webs:
-      my @weblist = grep{ /^[^\.\_]/ } $session->{store}->getAllWebs( "" );
-      my $firstTime = 1;
-      foreach my $web ( @weblist ) {
-          if( $session->{store}->webExists( $web ) ) {
-              $destWeb = _processWeb( $session, "/$web", $userName, $topic,
-                                      $logMonthYear, $viewRef, $contribRef, $statViewsRef,
-                                      $statSavesRef, $statUploadsRef, $query, $firstTime );
-              $firstTime = 0;
-          } else {
-              _printMsg( "  *** Error: $web does not exist", $query );
-          }
-      }
-  }
-        close $TMPFILE;		# Shouldn't be necessary with 'my'
-        unlink $tmpFilename;	# FIXME: works on Windows???  Unlink before
-        # usage to ensure deleted on crash?
+    my @weblist;
+
+    if( $session->{webName} ) {
+        # do a particular web:
+        push( @weblist, $session->{webName} );
     } else {
-        _printMsg( "  - Note: Log file $logFile does not exist", $query );
+        # do all webs:
+        @weblist = grep{ /^[^\.\_]/ } $session->{store}->getAllWebs( "" );
+    }
+    my $firstTime = 1;
+    foreach my $web ( @weblist ) {
+        if( $session->{store}->webExists( $web ) ) {
+            $destWeb = _processWeb( $session,
+                                    "/$web",
+                                    $logMonthYear,
+                                    $viewRef,
+                                    $contribRef,
+                                    $statViewsRef,
+                                    $statSavesRef,
+                                    $statUploadsRef,
+                                    $firstTime );
+            $firstTime = 0;
+        } else {
+            _printMsg( "!Error: $web does not exist", $session );
+        }
     }
 
-    if( $query ) {
+    close $TMPFILE;		# Shouldn't be necessary with 'my'
+    unlink $tmpFilename;# FIXME: works on Windows???  Unlink before
+    # usage to ensure deleted on crash?
+
+    if( !$session->{scripted} ) {
         $tmp = $TWiki::statisticsTopicname;
         my $url = $session->getViewUrl( $destWeb, $tmp );
-        _printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic", $query );
-        _printMsg( "End creating usage statistics", $query );
-        print "</body></html>\n";
-    } else {
-        _printMsg( "End creating usage statistics", $query );
+        _printMsg( "* Go back to <a href=\"$url\">$tmp</a> topic", $session );
     }
+    _printMsg( "End creating usage statistics", $session );
+    print "</body></html>\n" unless( $session->{scripted} );
 }
 
 # Debug only
@@ -359,25 +362,31 @@ sub _collectLogData
 }
 
 # =========================
-sub _processWeb
-{
-    my( $session, $thePathInfo, $theRemoteUser, $theTopic, $theLogMonthYear, $viewRef, $contribRef, 
-        $statViewsRef, $statSavesRef, $statUploadsRef, $query, $isFirstTime ) = @_;
+sub _processWeb {
+    my( $session, $thePathInfo, $theLogMonthYear, $viewRef, $contribRef,
+        $statViewsRef, $statSavesRef, $statUploadsRef, $isFirstTime ) = @_;
 
-    my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
-      TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, "", $query );
-    my $wikiUserName = $session->{users}->userToWikiName( $userName);
+    # We create a new session object to parse the path info
+    $session =
+      new TWiki( $thePathInfo, $session->{userName},
+                 $session->{topicName}, "", $session->{cgiQuery} );
+
+    my ( $topic, $webName, $dummy, $userName, $dataDir ) =
+      ( $session->{topicName}, $session->{webName}, $session->{scriptUrlPath},
+        $session->{userName}, $TWiki::dataDir );
+
+    my $wikiUserName = $session->{users}->userToWikiName( $userName );
 
     if( $isFirstTime ) {
         my $tmp = $wikiUserName;
-        $tmp .= " as shell script" unless( $query );
-        _printMsg( "* Executed by $tmp", $query );
+        $tmp .= " as shell script" unless( $session );
+        _printMsg( "* Executed by $tmp", $session );
     }
 
-    _printMsg( "* Reporting on TWiki.$webName web", $query );
+    _printMsg( "* Reporting on TWiki.$webName web", $session );
 
     if( ! $session->{store}->webExists( $webName ) ) {
-        _printMsg( "  *** Error: Web $webName does not exist", $query );
+        _printMsg( "! Error: Web $webName does not exist", $session );
         return $TWiki::mainWebname;
     }
 
@@ -388,7 +397,7 @@ sub _processWeb
     $statViews ||= 0;
     $statSaves ||= 0;
     $statUploads ||= 0;
-    _printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads", $query );
+    _printMsg( "  - view: $statViews, save: $statSaves, upload: $statUploads", $session );
 
     
     # Get the top N views and contribs in this web
@@ -401,11 +410,11 @@ sub _processWeb
     if( @topViews ) {
         $statTopViews = join( "<br /> ", @topViews );
         $topViews[0] =~ s/[\[\]]*//g;
-        _printMsg( "  - top view: $topViews[0]", $query );
+        _printMsg( "  - top view: $topViews[0]", $session );
     }
     if( @topContribs ) {
         $statTopContributors = join( "<br /> ", @topContribs );
-        _printMsg( "  - top contributor: $topContribs[0]", $query );
+        _printMsg( "  - top contributor: $topContribs[0]", $session );
     }
 
     # Update the WebStatistics topic
@@ -458,10 +467,10 @@ sub _processWeb
         $text .= "\n";
 
         $session->{store}->saveTopic( $userName, $webName, $statsTopic, $text, $meta, "", 1, 1, 1 );
-        _printMsg( "  - Topic $statsTopic updated", $query );
+        _printMsg( "  - Topic $statsTopic updated", $session );
 
     } else {
-        _printMsg( "  *** Warning: No updates done, topic $webName.$statsTopic does not exist", $query );
+        _printMsg( "! Warning: No updates done, topic $webName.$statsTopic does not exist", $session );
     }
 
     return $webName;
@@ -520,29 +529,27 @@ sub _getTopList
     return @list;
 }
 
-# =========================
-sub _printMsg
-{
-    my( $msg, $query ) = @_;
-    my $htmlMsg = $msg;
+sub _printMsg {
+    my( $msg, $session ) = @_;
 
-    if( $query ) {
-        # TODO: May need to fix this regex if internationalised script
-        # messages are supported in future.
-        if( $htmlMsg =~ /^[A-Z]/ ) {
-            $htmlMsg =~ s/^([A-Z].*)/<h3>$1<\/h3>/go;
-        } else {
-            $htmlMsg =~ s/(\*\*\*.*)/<font color=\"#FF0000\"><span class=\"twikiAlert\">$1<\/span><\/font>/go;
-            $htmlMsg =~ s/^\s\s/&nbsp;&nbsp;/go;
-            $htmlMsg =~ s/^\s/&nbsp;/go;
-            $htmlMsg .= "<br />";
-        }
-        $htmlMsg =~ s/==([A-Z]*)==/<font color=\"#FF0000\"><span class=\"twikiAlert\">==$1==<\/span><\/font>/go;
-        print "$htmlMsg\n";
-    } else {
+    if( $session->{scripted} ) {
         $msg =~ s/&nbsp;/ /go;
-        print "$msg\n";
+    } else {
+        if( $msg =~ s/^\!// ) {
+            $msg = "<h4><font color=\"red\"><span class=\"twikiAlert\">$msg</span></font>";
+
+        } elsif( $msg =~ /^[A-Z]/ ) {
+            # SMELL: does not support internationalised script messages
+            $msg =~ s/^([A-Z].*)/<h3>$1<\/h3>/go;
+        } else {
+            $msg =~ s/(\*\*\*.*)/<font color=\"#FF0000\"><span class=\"twikiAlert\">$1<\/span><\/font>/go;
+            $msg =~ s/^\s\s/&nbsp;&nbsp;/go;
+            $msg =~ s/^\s/&nbsp;/go;
+            $msg .= "<br />";
+        }
+        $msg =~ s/==([A-Z]*)==/<font color=\"#FF0000\"><span class=\"twikiAlert\">==$1==<\/span><\/font>/go;
     }
+    print "$msg\n";
 }
 
 1;

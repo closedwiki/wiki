@@ -95,7 +95,6 @@ sub register {
                                       ]
                          });
     my $session = initialise($query, "guest");
-#    return Test::Unit::IO::StdoutCapture::do {
     TWiki::UI::Register::register(session=>$session,
                                       sendActivationCode=>1,
                                       tempUserDir=>$tempUserDir);
@@ -191,7 +190,7 @@ sub test_registerVerifyOk {
         $self->register();
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_str_equals($email, $e->{-text});
+        $self->assert_matches(qr/$email/, $e->{-text});
         $self->assert_str_equals("regconfirm", $e->{-template});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
@@ -218,7 +217,7 @@ sub test_registerBadVerify {
         $self->register();
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_str_equals($email, $e->{-text});
+        $self->assert_matches(qr/$email/, $e->{-text});
         $self->assert_str_equals("regconfirm", $e->{-template});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
@@ -253,7 +252,7 @@ sub test_resetPasswordNoSuchUser {
         TWiki::UI::Register::resetPassword($session);
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_str_equals("Main.TWikiAdminGroup", $e->{-text});
+        $self->assert_matches(qr/Main\.TWikiAdminGroup/, $e->{-text});
         $self->assert_str_equals("accessgroup", $e->{-template});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
@@ -281,7 +280,7 @@ sub test_resetPasswordNoPassword {
         TWiki::UI::Register::resetPassword($session);
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_str_equals("Main.TWikiAdminGroup", $e->{-text});
+        $self->assert_matches(qr/Main\.TWikiAdminGroup/, $e->{-text});
         $self->assert_str_equals("accessgroup", $e->{-template});
     } otherwise {
         $self->assert(0, "expected an oops redirect");

@@ -58,7 +58,7 @@ sub attach {
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{wikiUserName};
 
     TWiki::UI::checkAccess( $session, $webName, $topic,
                             "change", $wikiUserName );
@@ -134,6 +134,7 @@ sub upload {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $userName = $session->{userName};
+    my $wikiUserName = $session->{wikiUserName};
 
     my $hideFile = $query->param( 'hidefile' ) || "";
     my $fileComment = $query->param( 'filecomment' ) || "";
@@ -155,7 +156,6 @@ sub upload {
 
     close $filePath if( $TWiki::OS eq "WINDOWS");
 
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
     TWiki::UI::checkWebExists( $session, $webName, $topic );
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkAccess( $session, $webName, $topic,

@@ -40,6 +40,11 @@ TWiki::Plugins module, currently %PLUGINVERSION{}%. This can be shown by the
 =%<nop>PLUGINVERSION{}%= variable. The "Since" field in the function documentation 
 refers to the VERSION number and the date that the function was addded.
 
+*Note* Contrib authors beware! These methods should only ever be called
+from the context of a TWiki plugin. They require a session context to be
+established before they are called, and will not work if simply called from
+another TWiki module unless the session object is defined first.
+
 =cut
 
 package TWiki::Func;
@@ -100,7 +105,7 @@ sub setSessionValue
 # -------------------------
 sub getSkin
 {
-    return $TWiki::T->getSkin();
+    return $TWiki::Plugins::SESSION->getSkin();
 }
 
 # =========================
@@ -116,7 +121,7 @@ sub getSkin
 # -------------------------
 sub getUrlHost
 {
-    return $TWiki::T->{urlHost};
+    return $TWiki::Plugins::SESSION->{urlHost};
 }
 
 # =========================
@@ -136,7 +141,7 @@ sub getUrlHost
 sub getScriptUrl
 {
 #   my( $web, $topic, $script ) = @_;
-    return $TWiki::T->getScriptUrl( @_ ); 
+    return $TWiki::Plugins::SESSION->getScriptUrl( @_ ); 
 }
 
 # =========================
@@ -152,7 +157,7 @@ sub getScriptUrl
 # -------------------------
 sub getScriptUrlPath
 {
-    return $TWiki::T->{scriptUrlPath};
+    return $TWiki::Plugins::SESSION->{scriptUrlPath};
 }
 
 # =========================
@@ -171,7 +176,7 @@ sub getScriptUrlPath
 sub getViewUrl
 {
 #   my( $web, $topic ) = @_;
-    return $TWiki::T->getViewUrl( @_ );
+    return $TWiki::Plugins::SESSION->getViewUrl( @_ );
 }
 
 # =========================
@@ -193,7 +198,7 @@ sub getOopsUrl
 {
 #   my( $web, $topic, $template, @params ) = @_;
     # up to 4 parameters in @theParams
-    return $TWiki::T->getOopsUrl( @_ );
+    return $TWiki::Plugins::SESSION->getOopsUrl( @_ );
 }
 
 # =========================
@@ -225,7 +230,7 @@ sub getPubUrlPath
 # -------------------------
 sub getCgiQuery
 {
-    return $TWiki::T->{cgiQuery};
+    return $TWiki::Plugins::SESSION->{cgiQuery};
 }
 
 # =========================
@@ -244,7 +249,7 @@ sub getCgiQuery
 sub writeHeader
 {
 #   my( $theQuery ) = @_;
-    return $TWiki::T->writeHeader( @_ );
+    return $TWiki::Plugins::SESSION->writeHeader( @_ );
 }
 
 # =========================
@@ -263,7 +268,7 @@ sub writeHeader
 sub redirectCgiQuery
 {
     my( $theQuery, $theUrl ) = @_;
-    return $TWiki::T->redirect( @_ );
+    return $TWiki::Plugins::SESSION->redirect( @_ );
 }
 
 # =========================
@@ -349,7 +354,7 @@ sub extractNameValuePair
 sub getPreferencesValue
 {
 #   my( $theKey, $theWeb ) = @_;
-    return $TWiki::T->{prefs}->getPreferencesValue( @_ );
+    return $TWiki::Plugins::SESSION->{prefs}->getPreferencesValue( @_ );
 }
 
 =pod
@@ -368,7 +373,7 @@ sub getPluginPreferencesValue
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
-    return $TWiki::T->{prefs}->getPreferencesValue( "\U$package\E_$theKey" );
+    return $TWiki::Plugins::SESSION->{prefs}->getPreferencesValue( "\U$package\E_$theKey" );
 }
 
 # =========================
@@ -392,7 +397,7 @@ sub getPluginPreferencesValue
 sub getPreferencesFlag
 {
 #   my( $theKey, $theWeb ) = @_;
-    return $TWiki::T->{prefs}->getPreferencesFlag( @_ );
+    return $TWiki::Plugins::SESSION->{prefs}->getPreferencesFlag( @_ );
 }
 
 =pod
@@ -411,7 +416,7 @@ sub getPluginPreferencesFlag
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
-    return $TWiki::T->{prefs}->getPreferencesFlag( "\U$package\E_$theKey" );
+    return $TWiki::Plugins::SESSION->{prefs}->getPreferencesFlag( "\U$package\E_$theKey" );
 }
 
 # =========================
@@ -493,7 +498,7 @@ sub getDefaultUserName
 # -------------------------
 sub getWikiName
 {
-    return $TWiki::T->{users}->userToWikiName( $TWiki::T->{userName}, 1 );
+    return $TWiki::Plugins::SESSION->{users}->userToWikiName( $TWiki::Plugins::SESSION->{userName}, 1 );
 }
 
 # =========================
@@ -509,7 +514,7 @@ sub getWikiName
 # -------------------------
 sub getWikiUserName
 {
-    return $TWiki::T->{users}->userToWikiName( $TWiki::T->{userName} );
+    return $TWiki::Plugins::SESSION->{users}->userToWikiName( $TWiki::Plugins::SESSION->{userName} );
 }
 
 # =========================
@@ -527,7 +532,7 @@ sub getWikiUserName
 sub wikiToUserName
 {
 #   my( $wiki ) = @_;
-    return $TWiki::T->{users}->wikiToUserName( @_ );
+    return $TWiki::Plugins::SESSION->{users}->wikiToUserName( @_ );
 }
 
 # =========================
@@ -546,7 +551,7 @@ sub wikiToUserName
 sub userToWikiName
 {
 #   my( $loginName, $dontAddWeb ) = @_;
-    return $TWiki::T->{users}->userToWikiName( @_ );
+    return $TWiki::Plugins::SESSION->{users}->userToWikiName( @_ );
 }
 
 # =========================
@@ -562,7 +567,7 @@ sub userToWikiName
 # -------------------------
 sub isGuest
 {
-    return ( $TWiki::T->{userName} eq $TWiki::defaultUserName );
+    return ( $TWiki::Plugins::SESSION->{userName} eq $TWiki::defaultUserName );
 }
 
 # =========================
@@ -602,7 +607,7 @@ sub permissionsSet
 sub checkAccessPermission
 {
 #   my( $type, $user, $text, $topic, $web ) = @_;
-    return $TWiki::T->{security}->checkAccessPermission( @_ );
+    return $TWiki::Plugins::SESSION->{security}->checkAccessPermission( @_ );
 }
 
 # =========================
@@ -622,7 +627,7 @@ sub checkAccessPermission
 sub webExists
 {
 #   my( $theWeb ) = @_;
-    return $TWiki::T->{store}->webExists( @_ );
+    return $TWiki::Plugins::SESSION->{store}->webExists( @_ );
 }
 
 # =========================
@@ -641,7 +646,7 @@ sub webExists
 sub topicExists
 {
 #   my( $web, $topic ) = @_;
-    return $TWiki::T->{store}->topicExists( @_ );
+    return $TWiki::Plugins::SESSION->{store}->topicExists( @_ );
 }
 
 # =========================
@@ -664,7 +669,7 @@ sub topicExists
 # -------------------------
 sub getRevisionInfo
 {
-    return $TWiki::T->{store}->getRevisionInfo( @_ );
+    return $TWiki::Plugins::SESSION->{store}->getRevisionInfo( @_ );
 }
 
 # =========================
@@ -684,7 +689,7 @@ sub checkTopicEditLock
 {
     my( $web, $topic ) = @_;
     my( $loginName, $lockTime ) =
-      $TWiki::T->{store}->topicIsLockedBy( $web, $topic );
+      $TWiki::Plugins::SESSION->{store}->topicIsLockedBy( $web, $topic );
     my $oopsUrl = "";
     if( $loginName ) {
         use integer;
@@ -717,7 +722,7 @@ sub setTopicEditLock
         my( $oopsUrl ) = checkTopicEditLock( $web, $topic );
         return $oopsUrl if( $oopsUrl );
     }
-    $TWiki::T->{store}->lockTopic( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
+    $TWiki::Plugins::SESSION->{store}->lockTopic( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
     return "";
 }
 
@@ -743,12 +748,12 @@ sub readTopicText
     $ignorePermissions = 0 unless defined( $ignorePermissions );
 
     my $text =
-      $TWiki::T->{store}->readTopicRaw( $TWiki::T->{wikiUserName}, $web, $topic, $rev,
+      $TWiki::Plugins::SESSION->{store}->readTopicRaw( $TWiki::Plugins::SESSION->{wikiUserName}, $web, $topic, $rev,
                                   $ignorePermissions );
 
     # FIXME: The following breaks if spec of readTopicRaw() changes
     if( $text =~ /^No permission to read topic/ ) {
-        $text = $TWiki::T->getOopsUrl( $web, $topic, "oopsaccessview" );
+        $text = $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopsaccessview" );
     }
     return $text;
 }
@@ -796,31 +801,31 @@ sub saveTopicText
 {
     my( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
 
-    my( $mirrorSite, $mirrorViewURL ) = $TWiki::T->readOnlyMirrorWeb( $web );
-    return $TWiki::T->getOopsUrl( $web, $topic, "oopsmirror", $mirrorSite, $mirrorViewURL ) if( $mirrorSite );
+    my( $mirrorSite, $mirrorViewURL ) = $TWiki::Plugins::SESSION->readOnlyMirrorWeb( $web );
+    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopsmirror", $mirrorSite, $mirrorViewURL ) if( $mirrorSite );
 
     # check access permission
     unless( $ignorePermissions ||
-            $TWiki::T->{security}->checkAccessPermission( "change",
-                                                     $TWiki::T->{wikiUserName}, "",
+            $TWiki::Plugins::SESSION->{security}->checkAccessPermission( "change",
+                                                     $TWiki::Plugins::SESSION->{wikiUserName}, "",
                                                      $topic, $web )
           ) {
-        return $TWiki::T->getOopsUrl( $web, $topic, "oopsaccesschange" );
+        return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopsaccesschange" );
     }
 
-    return $TWiki::T->getOopsUrl( $web, $topic, "oopssave" )  unless( defined $text );
-    return $TWiki::T->getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
+    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopssave" )  unless( defined $text );
+    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
 
     # extract meta data and merge old attachment meta data
-    my $meta = $TWiki::T->{store}->extractMetaData( $web, $topic, \$text );
+    my $meta = $TWiki::Plugins::SESSION->{store}->extractMetaData( $web, $topic, \$text );
     my( $oldMeta, $oldText ) =
-      $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $web, $topic, undef, 1 );
+      $TWiki::Plugins::SESSION->{store}->readTopic( $TWiki::Plugins::SESSION->{wikiUserName}, $web, $topic, undef, 1 );
     $meta->copyFrom( $oldMeta, "FILEATTACHMENT" );
 
     # save topic
     my $error =
-      $TWiki::T->{store}->saveTopic( $TWiki::T->{userName}, $web, $topic, $text, $meta, "", 0, $dontNotify );
-    return $TWiki::T->getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
+      $TWiki::Plugins::SESSION->{store}->saveTopic( $TWiki::Plugins::SESSION->{userName}, $web, $topic, $text, $meta, "", 0, $dontNotify );
+    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
     return "";
 }
 
@@ -837,7 +842,7 @@ sub saveTopicText
 # -------------------------
 sub getPublicWebList
 {
-    return $TWiki::T->getPublicWebList();
+    return $TWiki::Plugins::SESSION->getPublicWebList();
 }
 
 # =========================
@@ -855,7 +860,7 @@ sub getPublicWebList
 sub getTopicList
 {
 #   my( $web ) = @_;
-    return $TWiki::T->{store}->getTopicNames ( @_ );
+    return $TWiki::Plugins::SESSION->{store}->getTopicNames ( @_ );
 }
 
 =pod
@@ -876,7 +881,7 @@ sub getTopicList
 sub expandCommonVariables
 {
 #   my( $text, $topic, $web ) = @_;
-    return $TWiki::T->handleCommonTags( @_ );
+    return $TWiki::Plugins::SESSION->handleCommonTags( @_ );
 }
 
 # =========================
@@ -895,7 +900,7 @@ sub expandCommonVariables
 sub renderText
 {
 #   my( $text, $web ) = @_;
-    return $TWiki::T->{renderer}->getRenderedVersion( @_ );
+    return $TWiki::Plugins::SESSION->{renderer}->getRenderedVersion( @_ );
 }
 
 # =========================
@@ -919,7 +924,7 @@ sub internalLink
 {
     my $pre = shift;
 #   my( $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
-    return $pre . $TWiki::T->{renderer}->internalLink( @_ );
+    return $pre . $TWiki::Plugins::SESSION->{renderer}->internalLink( @_ );
 }
 
 # =========================
@@ -1031,7 +1036,7 @@ sub readTopic
 {
     my( $web, $topic ) = @_;
 
-    return $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $web, $topic, undef, 0 );
+    return $TWiki::Plugins::SESSION->{store}->readTopic( $TWiki::Plugins::SESSION->{wikiUserName}, $web, $topic, undef, 0 );
 }
 
 # =========================
@@ -1068,7 +1073,7 @@ sub readTemplate
 sub readFile
 {
 #   my( $filename ) = @_;
-    return $TWiki::T->{store}->readFile( @_ );
+    return $TWiki::Plugins::SESSION->{store}->readFile( @_ );
 }
 
 # =========================
@@ -1088,7 +1093,7 @@ sub readFile
 sub saveFile
 {
 #   my( $filename, $text ) = @_;
-    return $TWiki::T->{store}->saveFile( @_ );
+    return $TWiki::Plugins::SESSION->{store}->saveFile( @_ );
 }
 
 # =========================
@@ -1106,7 +1111,7 @@ sub saveFile
 sub writeWarning
 {
 #   my( $theText ) = @_;
-    return $TWiki::T->writeWarning( @_ );
+    return $TWiki::Plugins::SESSION->writeWarning( @_ );
 }
 
 # =========================
@@ -1124,7 +1129,7 @@ sub writeWarning
 sub writeDebug
 {
 #   my( $theText ) = @_;
-    return $TWiki::T->writeDebug( @_ );
+    return $TWiki::Plugins::SESSION->writeDebug( @_ );
 }
 
 # =========================

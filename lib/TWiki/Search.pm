@@ -767,10 +767,11 @@ sub searchWeb
                 $topicRevDate{ $tempVal }   = $revdate;  # keep epoc sec for sorting
                 $topicRevNum{ $tempVal }    = $revnum;
                 $topicAllowView{ $tempVal } =
-                  $this->security()->checkAccessPermission( "view",
-                                                          $this->{session}->{wikiUserName},
-                                                          $text, $tempVal,
-                                                          $thisWebName );
+                  $this->security()->
+                    checkAccessPermission( "view",
+                                           $this->{session}->{wikiUserName},
+                                           $text, $tempVal,
+                                           $thisWebName );
             }
 
             # sort by date (second time if exercise), Schwartzian Transform
@@ -796,7 +797,9 @@ sub searchWeb
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
                 my( $meta, $text ) =
-                  $this->store()->readTopic( $this->{session}->{wikiUserName}, $thisWebName, $tempVal, undef, 1 );
+                  $this->store()->readTopicRaw
+                    ( $this->{session}->{wikiUserName},
+                      $thisWebName, $tempVal, undef, 1 );
                 my( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
                 $topicRevUser{ $tempVal }   = $this->users()->userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
@@ -1166,7 +1169,10 @@ sub searchWeb
                 if( $text ) {
                     $head = $text;
                 } else {
-                    $head = $this->store()->readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
+                    $head = $this->store()->readTopicRaw
+                      ( $this->{session}->{wikiUserName},
+                        $thisWebName, $topic, undef, 1
+                      );
                 }
                 $head = $this->renderer()->makeTopicSummary( $head, $topic, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;

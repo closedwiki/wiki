@@ -58,7 +58,6 @@ sub new {
     return $this;
 }
 
-sub users { my $this = shift; return $this->{session}->{users}; }
 sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 sub store { my $this = shift; return $this->{session}->{store}; }
 sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
@@ -289,11 +288,10 @@ sub getEmail {
 }
 
 # Returns array of email addresses referenced in 
-# the bulletfield / metafield on the page. 
+# the bulletfield / metafield on the page.
 sub _getEmailAddressesFromPage {
     my ($this, $mainWebname, $wikiName) = @_;
 
-#    die Dumper(\@_);
     return $this->_getField($mainWebname, $wikiName, "Email");
 }
 
@@ -301,8 +299,9 @@ sub _getEmailAddressesFromPage {
 # SMELL - returns singular if refering to a field in meta, but multiple if values are defined that way in topic content
 sub _getField {
     my ($this, $web, $topic, $fieldName) = @_;
-    my ($meta, @text) =
+    my ($meta, $text) =
       $this->store()->readTopic(
+                                $this->{session}->{wikiUserName},
                                $web,
                                $topic,
                                undef,
@@ -314,9 +313,9 @@ sub _getField {
         return ($entry{value});
     } else {
 
-        foreach (split ( /\n/, @text  )) {
+        foreach my $l (split ( /\r?\n/, $text  )) {
             # REFACTOR UserData::BulletFieldsImpl
-            if (/^\s\*\s$fieldName:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/) { # SMELL - is this only suited to email?
+            if ($l =~ /^\s\*\s$fieldName:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/) { # SMELL - is this only suited to email?
                 push @fieldValues, $1;
             }
         }

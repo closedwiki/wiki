@@ -99,7 +99,7 @@ sub edit {
         return;
     }
 
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{wikiUserName};
 
     if( $topicExists ) {
         ( $meta, $text ) =
@@ -204,7 +204,7 @@ sub edit {
     $text =~ s/>/&gt\;/go;
     $text =~ s/\t/   /go;
 
-    TWiki::Plugins::beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd eq "repRev" );
+    $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd eq "repRev" );
 
     if( $TWiki::doLogTopicEdit ) {
         # write log entry

@@ -42,6 +42,7 @@ sub run {
     my ( $class, $method ) = @_;
 
     my ( $query, $pathInfo, $user, $url, $topic );
+    my $scripted = 0;
 
     if( $ENV{'DOCUMENT_ROOT'} ) {
         # script is called by browser
@@ -78,6 +79,8 @@ sub run {
     } else {
         # script is called by cron job or user
         $query = new CGI( "" );
+        $scripted = 1;
+        # Interactive script name
         $user = "guest";
         $url = "";
         $topic = "";
@@ -108,9 +111,10 @@ sub run {
         }
     }
 
-    my $session = new TWiki( $pathInfo, $user, $topic, $url, $query );
-    $TWiki::T = $session;
-    $Error::Debug=1;
+    my $session = new TWiki( $pathInfo, $user, $topic, $url,
+                             $query, $scripted );
+
+    $Error::Debug = 1; # comment out in production
     try {
         eval "use $class";
         my $m = "$class"."::$method";

@@ -324,7 +324,7 @@ sub renderForEdit {
         $tooltip =~ s/</&lt\;/g;
         $tooltip =~ s/>/&gt\;/g;
 
-        my $output = TWiki::Plugins::renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
+        my $output = $this->{session}->{plugins}->renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
         if( $output ) {
             $value = $output;
         } elsif( $type eq "text" ) {

@@ -370,6 +370,7 @@ sub diff {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $userName = $session->{userName};
+    my $wikiUserName = $session->{wikiUserName};
 
     my $renderStyle = $query->param('render');
     $renderStyle = $session->{prefs}->getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
@@ -429,9 +430,8 @@ sub diff {
         $rev1 = 1;
         $rev2 = 1;
     }
-    
+
     # check access permission
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
     my $viewAccessOK =
       $session->{security}->checkAccessPermission( "view", $wikiUserName,
                                                    "", $topic, $webName );

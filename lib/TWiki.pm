@@ -450,19 +450,18 @@ sub writeDebug {
 Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
 
 STATIC Constructs a new singleton session instance.
-Until everything has been objectified it has to be kept, but as soon as
-everything is an object (no more references to $TWiki::T) it will be deprecated
-in favour of TWiki::new
+
+DEPRECATED maintained for script compatibility
 
 =cut
 
 sub initialize {
-    my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
+    my ( $pathInfo, $theRemoteUser, $topic, $theUrl, $theQuery ) = @_;
 
-    $TWiki::T = new TWiki( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery );
+    my $twiki = new TWiki( $pathInfo, $theRemoteUser, $topic, $theUrl, $theQuery );
 
-    return ( $TWiki::T->{topicName}, $TWiki::T->{webName}, $TWiki::T->{scriptUrlPath},
-             $TWiki::T->{userName}, $dataDir );
+    return ( $twiki->{topicName}, $twiki->{webName}, $twiki->{scriptUrlPath},
+             $twiki->{userName}, $dataDir );
 }
 
 # Return value: boolean $isCharsetInvalid
@@ -642,7 +641,7 @@ sub writeHeaderFull {
     $coreHeaders =~ s/\r\n\r\n$/\r\n/s;
 
     # Wiki Plugin Hook - get additional headers from plugin
-    $pluginHeaders = TWiki::Plugins::writeHeaderHandler( $query ) || '';
+    $pluginHeaders = $this->{plugins}->writeHeaderHandler( $query ) || '';
 
     # Delete any trailing blank line
     $pluginHeaders =~ s/\r\n\r\n$/\r\n/s;
@@ -687,7 +686,7 @@ sub redirect {
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
     $query = $this->{cgiQuery} unless $query;
-    if( ! TWiki::Plugins::redirectCgiQueryHandler( $query, $url ) ) {
+    if( ! $this->{plugins}->redirectCgiQueryHandler( $query, $url ) ) {
         die "ASSERT $this from ".join(",",caller)."\n" unless $query;
         print $query->redirect( $url );
     }
@@ -701,9 +700,7 @@ Check for a valid WikiWord or WikiName
 =cut
 
 sub isValidWikiWord {
-    my( $name ) = @_;
-
-    $name ||= "";	# Default value if undef
+    my $name  = shift || "";
     return ( $name =~ m/^$regex{wikiWordRegex}$/o )
 }
 
@@ -728,9 +725,7 @@ Check for a valid ABBREV (acronym)
 =cut
 
 sub isValidAbbrev {
-    my( $name ) = @_;
-
-    $name ||= "";	# Default value if undef
+    my $name = shift || "";
     return ( $name =~ m/^$regex{abbrevRegex}$/o )
 }
 
@@ -738,14 +733,12 @@ sub isValidAbbrev {
 
 ---++ isValidWebName (  $name  )
 
-Check for a valid web name
+STATIC Check for a valid web name
 
 =cut
 
 sub isValidWebName {
-    my( $name ) = @_;
-
-    $name ||= "";	# Default value if undef
+    my $name = shift || "";
     return ( $name =~ m/^$regex{webNameRegex}$/o )
 }
 
@@ -1155,7 +1148,7 @@ sub _handleVAR {
 
 sub _handlePLUGINVERSION {
     my( $this, $params ) = @_;
-    TWiki::Plugins::getPluginVersion( $params->{_DEFAULT} );
+    $this->{plugins}->getPluginVersion( $params->{_DEFAULT} );
 }
 
 # Fetch content from a URL for includion by an INCLUDE
@@ -1350,7 +1343,7 @@ sub _handleINCLUDE {
                         $verbatim, $theProcessedTopics );
 
     # 4th parameter tells plugin that its called from an include
-    TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 1 );
+    $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 1 );
 
     # If needed, fix all "TopicNames" to "Web.TopicNames" to get the
     # right context
@@ -2218,7 +2211,7 @@ sub handleCommonTags {
     my $theProcessedTopics = {};
 
     # Plugin Hook (for cache Plugins only)
-    TWiki::Plugins::beforeCommonTagsHandler( $text, $theTopic, $theWeb );
+    $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
     $text = $this->{renderer}->takeOutBlocks( $text, "verbatim", \@verbatim );
 
@@ -2234,7 +2227,7 @@ sub handleCommonTags {
                         \@verbatim, $theProcessedTopics );
 
     # Plugin Hook
-    TWiki::Plugins::commonTagsHandler( $text, $theTopic, $theWeb, 0 );
+    $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 0 );
 
     # process tags again because plugin hook may have added more in
     $this->_expandAllTags( \$text, $theTopic, $theWeb,
@@ -2255,7 +2248,7 @@ sub handleCommonTags {
     $text = $this->{renderer}->putBackBlocks( $text, \@verbatim, "verbatim" );
 
     # TWiki Plugin Hook (for cache Plugins only)
-    TWiki::Plugins::afterCommonTagsHandler( $text, $theTopic, $theWeb );
+    $this->{plugins}->afterCommonTagsHandler( $text, $theTopic, $theWeb );
 
     return $text;
 }
@@ -2265,29 +2258,33 @@ sub handleCommonTags {
 ---++ new( $pathInfo, $remoteUser, $topic, $url, $query )
 Constructs a new TWiki object.
 
-Initializes the Store, User, Access, and Prefs modules.  Contains two plugin
-initialization hooks: 'initialize1' to allow plugins to interact
-for authentication, and 'initialize2' once the authenticated username
-is available.
+Initializes the Store, User, Access, and Prefs modules.
 
 Also parses $theTopic to determine whether it's a URI, a "Web.Topic"
 pair, a "Web." WebHome shorthand, or just a topic name.  Note that
 if $pathInfo is set, this overrides $theTopic.
 
+| =$pathInfo= | .pathinfo from query |
+| =remoteUser= | the logged-in user |
+| =topic= | topic from "topic" parameter to url (overrides pathinfo if present ) |
+| =url= | the full url used |
+| =query= | the query |
+| =scripted= | true if this is called from a script rather than a browser query |
+
 =cut
 
 sub new {
-    my( $class, $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
+    my( $class, $pathInfo, $remoteUser, $topic, $url, $query, $scripted ) = @_;
 
     my $this = bless( {}, $class );
 
-    # has to be done here at present, as other modules need to refer to it during
-    # initialisation. When we are properly OO it will not be needed.
-    $T = $this;
-
-    $this->{sandbox} = new TWiki::Sandbox( $this, $TWiki::OS, $TWiki::detailedOS );
+    # create the various sub-objects
+    $this->{sandbox} = new TWiki::Sandbox( $this,
+                                           $TWiki::OS, $TWiki::detailedOS );
     die "ASSERT $this sandbox from ".join(",",caller)."\n" unless $this->{sandbox};
 
+    $this->{plugins} = new TWiki::Plugins( $this );
+    die "ASSERT $this plugins from ".join(",",caller)."\n" unless $this->{plugins};
     $this->{net} = new TWiki::Net( $this );
     die "ASSERT $this net from ".join(",",caller)."\n" unless $this->{net};
     my %ss = @storeSettings;
@@ -2302,7 +2299,11 @@ sub new {
     $this->{form} = new TWiki::Form( $this );
     die "ASSERT $this form from ".join(",",caller)."\n" unless $this->{form};
 
-    $this->{cgiQuery} = $theQuery;
+    # cache CGI information in the session object
+    $this->{cgiQuery} = $query;
+    $this->{remoteUser} = $remoteUser;
+    $this->{url} = $url;
+    $this->{pathInfo} = $pathInfo;
 
     # Initialise per-this vars here rather than at start of module,
     # so compatible with modPerl
@@ -2337,12 +2338,12 @@ sub new {
     # initialize $webName and $topicName from URL
     $this->{topicName} = "";
     $this->{webName}   = "";
-    if( $theTopic ) {
-        if(( $theTopic =~ /^$regex{linkProtocolPattern}\:\/\//o ) && ( $this->{cgiQuery} ) ) {
+    if( $topic ) {
+        if(( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o ) && ( $this->{cgiQuery} ) ) {
             # redirect to URI
-            print $this->{cgiQuery}->redirect( $theTopic );
+            print $this->redirect( undef, $topic );
             return; # should never return here
-        } elsif( $theTopic =~ /(.*)[\.\/](.*)/ ) {
+        } elsif( $topic =~ /(.*)[\.\/](.*)/ ) {
             # is "bin/script?topic=Webname.SomeTopic"
             $this->{webName}   = $1 || "";
             $this->{topicName} = $2 || "";
@@ -2350,7 +2351,7 @@ sub new {
             $this->{topicName} = $mainTopicname if( $this->{webName} && ( ! $this->{topicName} ) );
         } else {
             # assume "bin/script/Webname?topic=SomeTopic"
-            $this->{topicName} = $theTopic;
+            $this->{topicName} = $topic;
         }
     }
 
@@ -2358,14 +2359,14 @@ sub new {
     # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
     # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
     my $cgiScriptName = $ENV{'SCRIPT_NAME'} || "";
-    $thePathInfo =~ s!$cgiScriptName/!/!i;
+    $pathInfo =~ s!$cgiScriptName/!/!i;
 
     # Get the web and topic names from PATH_INFO
-    if( $thePathInfo =~ /\/(.*)[\.\/](.*)/ ) {
+    if( $pathInfo =~ /\/(.*)[\.\/](.*)/ ) {
         # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
         $this->{webName}   = $1 || "" if( ! $this->{webName} );
         $this->{topicName} = $2 || "" if( ! $this->{topicName} );
-    } elsif( $thePathInfo =~ /\/(.*)/ ) {
+    } elsif( $pathInfo =~ /\/(.*)/ ) {
         # is "bin/script/Webname" or "bin/script/"
         $this->{webName}   = $1 || "" if( ! $this->{webName} );
     }
@@ -2374,11 +2375,11 @@ sub new {
     # Refuse to work with character sets that allow TWiki syntax
     # to be recognised within multi-byte characters.  Only allow 'oops'
     # page to be displayed (redirect causes this code to be re-executed).
-    if ( _invalidSiteCharset() and $theUrl !~ m!$scriptUrlPath/oops! ) {  
+    if ( _invalidSiteCharset() and $url !~ m!$scriptUrlPath/oops! ) {  
         $this->writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
         $this->writeWarning( "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg." );
-        my $url = $this->getOopsUrl( $this->{webName}, $this->{topicName}, "oopsbadcharset" );
-        print $this->{cgiQuery}->redirect( $url );
+        $url = $this->getOopsUrl( $this->{webName}, $this->{topicName}, "oopsbadcharset" );
+        print $this->redirect( undef, $url );
         return;
     }
 
@@ -2396,9 +2397,10 @@ sub new {
     $this->{scriptUrlPath} = $scriptUrlPath;
 
     # initialize $urlHost and $scriptUrlPath 
-    if( ( $theUrl ) && ( $theUrl =~ m!^([^:]*://[^/]*)(.*)/.*$! ) && ( $2 ) ) {
+    if( $url && $url =~ m!^([^:]*://[^/]*)(.*)/.*$! && $2 ) {
         if( $doGetScriptUrlFromCgi ) {
-            # SMELL: this is a really dangerous hack. It will fail spectacularly with mod_perl.
+            # SMELL: this is a really dangerous hack. It will fail
+            # spectacularly with mod_perl.
             $this->{scriptUrlPath} = $2;
         }
         $this->{urlHost} = $1;
@@ -2413,41 +2415,40 @@ sub new {
     $this->{prefs} = new TWiki::Prefs( $this );
     die "ASSERT $this prefs from ".join(",",caller)."\n" unless $this->{prefs};
 
-    if( !$disableAllPlugins ) {
-        # Early plugin initialization, allow plugins like SessionPlugin
-	    # to set the user.  This must be done before preferences are set,
-	    # as we need to get user preferences
-        $this->{userName} =
-          TWiki::Plugins::initialize1( $this->{topicName}, $this->{webName},
-                                       $theRemoteUser, $theUrl, $thePathInfo );
+    my $user = $this->{plugins}->earlyInit( $disableAllPlugins );
+    unless( $user ) {
+        $user = $this->{users}->initializeRemoteUser( $remoteUser );
     }
-    $this->{wikiUserName} = $this->{users}->userToWikiName( $this->{userName} );         # i.e. "Main.JonDoe"
+    $this->{userName} = $user;
+    # i.e. "Main.JonDoa"
+    $this->{wikiUserName} = $this->{users}->userToWikiName( $user );
 
-    $this->{SESSION}{USERNAME} = $this->{userName};
-    $this->{SESSION}{WIKINAME} = $this->{users}->userToWikiName( $this->{userName}, 1 );      # i.e. "JonDoe";
-    $this->{SESSION}{WIKIUSERNAME} = $this->{wikiUserName};
-    $this->{SESSION}{BASEWEB} = $this->{webName};
-    $this->{SESSION}{BASETOPIC} = $this->{topicName};
+    # Static session variables that can be expanded in topics when they
+    # are enclosed int %% signs
+    $this->{SESSION}{USERNAME}       = $this->{userName};
+    $this->{SESSION}{WIKINAME}       =
+      $this->{users}->userToWikiName( $this->{userName}, 1 );  # i.e. "JonDoe";
+    $this->{SESSION}{WIKIUSERNAME}   = $this->{wikiUserName};
+    $this->{SESSION}{BASEWEB}        = $this->{webName};
+    $this->{SESSION}{BASETOPIC}      = $this->{topicName};
     $this->{SESSION}{INCLUDINGTOPIC} = $this->{topicName};
-    $this->{SESSION}{INCLUDINGWEB} = $this->{webName};
-    $this->{SESSION}{ATTACHURL} = $this->{urlHost}."%ATTACHURLPATH%";
-    $this->{SESSION}{PUBURL} = $this->{urlHost}.$pubUrlPath;
-    $this->{SESSION}{SCRIPTURL} = $this->{urlHost}.$dispScriptUrlPath;
+    $this->{SESSION}{INCLUDINGWEB}   = $this->{webName};
+    $this->{SESSION}{ATTACHURL}      = "$this->{urlHost}%ATTACHURLPATH%";
+    $this->{SESSION}{PUBURL}         = $this->{urlHost}.$pubUrlPath;
+    $this->{SESSION}{SCRIPTURL}      = $this->{urlHost}.$dispScriptUrlPath;
 
-    # initialize preferences, second part for user level
+    # initialize user preferences
     $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
 
     $this->{renderer} = new TWiki::Render( $this );
     die "ASSERT $this renderer from ".join(",",caller)."\n" unless $this->{renderer};
 
-    if( !$disableAllPlugins ) {
-        # Normal plugin initialization - userName is known and preferences available
-        TWiki::Plugins::initialize2( $this->{topicName}, $this->{webName}, $this->{userName} );
-    }
+    # Finish plugin initialization - register handlers
+    $this->{plugins}->lateInit( $disableAllPlugins );
 
     # Assumes all preferences values are set by now, which may well be false!
     # It would be better to get the Prefs module to maintain this
-    # hash.
+    # hash cache.
     $this->{prefs}->loadHash( \%{$this->{PREFS}} );
 
     return $this;

@@ -69,10 +69,12 @@ sub _setUserPref {
    $this->_set($TWiki::mainWebname, $user, $pref, $val);
 }
 
+my $twiki;
+
 sub set_up {
     my $this = shift;
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
+    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
 
     # back up TWiki.TWikiPreferences
     my $prefs = "$TWiki::dataDir/$TWiki::twikiWebname/$TWiki::wikiPrefsTopicname.txt";
@@ -81,7 +83,11 @@ sub set_up {
     $this->{TWIKIPREFSBACKUP} = "$prefs.bak";
     copy($this->{TWIKIPREFS}, $this->{TWIKIPREFSBACKUP});
 
-    `cp -r $TWiki::dataDir/_default $TWiki::dataDir/$web`;
+    `rm -rf $TWiki::dataDir/$web`;
+    die "Cannot create $TWiki::dataDir/$web: $@" if $@;
+    `mkdir $TWiki::dataDir/$web`;
+    die "Cannot create $TWiki::dataDir/$web: $@" if $@;
+    `cp $TWiki::dataDir/_default/*.txt* $TWiki::dataDir/$web`;
     die "Cannot create $TWiki::dataDir/$web: $@" if $@;
 
     mkdir "$TWiki::pubDir/$web" ||
@@ -117,10 +123,9 @@ sub test_system {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("TWIKI",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_web {
@@ -135,10 +140,9 @@ sub test_web {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("WEB",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_user {
@@ -153,10 +157,9 @@ sub test_user {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("USER",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_topic {
@@ -170,9 +173,9 @@ sub test_topic {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("TOPIC",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order1 {
@@ -190,10 +193,9 @@ sub test_order1 {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("USER",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order2 {
@@ -211,10 +213,9 @@ sub test_order2 {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("USER",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order3 {
@@ -232,10 +233,9 @@ sub test_order3 {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("USER",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_order4 {
@@ -253,10 +253,9 @@ sub test_order4 {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("TOPIC",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_finalSystem {
@@ -274,10 +273,9 @@ sub test_finalSystem {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("TWIKI",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_finalWeb {
@@ -295,10 +293,9 @@ sub test_finalWeb {
     $this->_setWebPref("FINALPREFERENCES", "SOURCE");
     $this->_setUserPref("FINALPREFERENCES", "");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("WEB",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 sub test_finalUser {
@@ -316,10 +313,9 @@ sub test_finalUser {
     $this->_setWebPref("FINALPREFERENCES", "");
     $this->_setUserPref("FINALPREFERENCES", "SOURCE");
 
-    TWiki::initialize( $thePathInfo, $user, $topic, $theUrl );
-
+    my $t = new TWiki( $thePathInfo, $user, $topic, $theUrl );
     $this->assert_str_equals("USER",
-                             $TWiki::T->{prefs}->getPreferencesValue("SOURCE"));
+                             $t->{prefs}->getPreferencesValue("SOURCE"));
 }
 
 1;

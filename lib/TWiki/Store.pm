@@ -170,7 +170,7 @@ sub readTopicRaw {
     unless ( defined( $version )) {
         $text = $this->readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
     } else {
-        die "ASSERT Bad rev $version" unless( $version =~ /^\d+$/ ); # temporary ASSERT
+        die "ASSERT Bad rev $version" unless( $version =~ /^\d+$/ );
         my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic, undef );
         $text = $topicHandler->getRevision( $version );
     }
@@ -511,7 +511,7 @@ sub updateReferringPages {
                                                    \$resultText );
                 $this->saveTopic( $user, $itemWeb, $itemTopic,
                                   $resultText, $meta,
-                                  "", "unlock", "dontNotify", "" );
+                                  "", 1, 1, 0, 0 );
             } else {
                 $result .= ";$item does not exist;";
             }
@@ -699,7 +699,7 @@ sub saveTopic {
     # Plugin callback. Why not simply pass the meta in? It would be far
     # more sensible.
     $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
-    TWiki::Plugins::beforeSaveHandler( $text, $topic, $web );
+    $this->{session}->{plugins}->beforeSaveHandler( $text, $topic, $web );
     # remove meta data again!
     $meta = $this->extractMetaData( $web, $topic, \$text );
     my $error =
@@ -707,7 +707,7 @@ sub saveTopic {
                               $dontLogSave, $doUnlock,
                               $dontNotify, $forceDate, "none" );
     $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
-    TWiki::Plugins::afterSaveHandler( $text, $topic, $web, $error );
+    $this->{session}->{plugins}->afterSaveHandler( $text, $topic, $web, $error );
     return $error;
 }
 
@@ -757,13 +757,13 @@ sub saveAttachment {
           );
 
         my $topicHandler = $this->_getTopicHandler( $web, $topic, $attachment );
-        TWiki::Plugins::beforeAttachmentSaveHandler( \%attrs,
+        $this->{session}->{plugins}->beforeAttachmentSaveHandler( \%attrs,
                                                      $topic, $web );
         my $error = $topicHandler->addRevision( $opts->{file},
                                                 $opts->{comment},
                                                 $user );
 
-        TWiki::Plugins::afterAttachmentSaveHandler( \%attrs,
+        $this->{session}->{plugins}->afterAttachmentSaveHandler( \%attrs,
                                                     $topic, $web, $error );
 
         return "attachment save failed: $error" if $error;
@@ -873,13 +873,12 @@ sub _normalSave {
         $fdate = ""; # suppress warning
         $fuser = ""; # suppress warning
 
-        my @foo = split( /\n/, $this->readFile( "$TWiki::dataDir/$web/.changes" ) );
+        my @foo = split( /\n/, $this->readMetaData( $web, "changes" ));
         if( $#foo > 100 ) {
             shift( @foo);
         }
         push( @foo, "$topic\t$userName\t".time()."\t$frev" );
-        open( FILE, ">$TWiki::dataDir/$web/.changes" );
-        print FILE join( "\n", @foo )."\n";
+        $this->saveMetaData( $web, "changes", join( "\n", @foo ));
         close(FILE);
     }
 
@@ -963,7 +962,11 @@ sub _delRev {
 
 Save an arbitrary file
 
-SMELL: Breaks Store encapsulation.
+SMELL: Breaks Store encapsulation, if it is used to save topic or
+meta-data files.
+Therefore this method should _never_ be used for saving topics or
+web-specific meta data files, as they may not be stored as text files
+in another store implementation. Use =saveTopic*= and =saveMetaData= instead.
 
 =cut
 
@@ -1174,9 +1177,10 @@ Return value: $fileContents
 Returns the entire contents of the given file, which can be specified in any
 format acceptable to the Perl open() function.
 
-Used for reading side-files of meta-data, such as fileTypes, changes, etc.
-
-SMELL: Breaks Store encapsulation, if it is used to read files other than the standard meta-files (e.g. if it is used to read topic files)
+SMELL: Breaks Store encapsulation, if it is used to read topic or meta-data
+files. Therefore this method should _never_ be used for reading topics or
+web-specific meta data files, as they may not be stored as text files
+in another store implementation. Use =readTopic*= and =readMetaData= instead.
 
 =cut
 
@@ -1196,13 +1200,51 @@ sub readFile {
 
 =pod
 
+---++ sub readMetaData( $web, $name ) -> $text
+Read a named meta-data string. If web is given the meta-data
+is stored alongside a web. If the web is not
+given, the meta-data is assumed to be globally unique.
+
+=cut
+
+sub readMetaData {
+    my ( $this, $web, $name ) = @_;
+
+    my $file = "$TWiki::dataDir/";
+    $file .= "$web/" if $web;
+    $file .= ".$name";
+
+    return $this->readFile( $file );
+}
+
+=pod
+
+---++ sub saveMetaData( $web, $name ) -> $text
+Write a named meta-data string. If web is given the meta-data
+is stored alongside a web. If the web is not
+given, the meta-data is assumed to be globally unique.
+
+=cut
+
+sub saveMetaData {
+    my ( $this, $web, $name, $text ) = @_;
+
+    my $file = "$TWiki::dataDir/";
+    $file .= "$web/" if $web;
+    $file .= ".$name";
+
+    return $this->saveFile( $file, $text );
+}
+
+=pod
+
 ---++ sub readFileHead (  $name, $maxLines  )
 
 A hack intended to deliver topic text more rapidly than "normal", but
 it goes astray and was actually slower. So it's been redone to use
 readFile.
 
-Thisi method is DEPRECATED and SHOULD NOT BE CALLED.
+This method is *DEPRECATED* and SHOULD NOT BE CALLED.
 
 =cut
 

@@ -45,7 +45,7 @@ sub preview {
     my $ptext = "";
     my $meta = "";
     my $formFields = "";
-    my $wikiUserName = $session->{users}->userToWikiName( $userName );
+    my $wikiUserName = $session->{wikiUserName};
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
 
@@ -97,7 +97,7 @@ sub preview {
             throw TWiki::UI::OopsException( $webName, $topic, "empty" );
         }
         #AS added hook for plugins that want to do heavy stuff
-        TWiki::Plugins::afterEditHandler( $text, $topic, $webName );
+        $session->{plugins}->afterEditHandler( $text, $topic, $webName );
         $ptext = $text;
 
         if( $meta->count( "FORM" ) ) {

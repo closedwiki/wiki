@@ -42,7 +42,7 @@ sub changes {
     my $skin = $session->getSkin();
 
     my $text = $session->{templates}->readTemplate( "changes", $skin );
-    my $changes= $session->{store}->readFile( "$TWiki::dataDir/$webName/.changes" );
+    my $changes= $session->{store}->readMetaData( $webName, "changes" );
 
     my @bar = ();
     my $foo = "";
@@ -85,8 +85,16 @@ sub changes {
             $foo =~ s/%REVISION%/$frev/go;
             $foo = $session->{renderer}->getRenderedVersion( $foo );
 
-            $summary = $session->{store}->readFile( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
-            $summary = $session->{renderer}->makeTopicSummary( $summary, $bar[0], $webName );
+            $summary =
+              $session->{store}->readTopicRaw($session->{wikiUserName},
+                                              $webName,
+                                              $bar[0],
+                                              undef,
+                                              1
+                                             );
+            $summary = $session->{renderer}->makeTopicSummary( $summary,
+                                                               $bar[0],
+                                                               $webName );
             $foo =~ s/%TEXTHEAD%/$summary/go;
             $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
             $page .= $foo;
