@@ -48,7 +48,6 @@ sub test_simple {
   my $text = "text=Zorba%20the%20Lithuanian";
 
   # Push us into "edit" mode on a topic, then preview it
-
   $this->getOld("edit", $web, $topic, undef);
   my $old = $this->getOld("preview", $web, $topic, $text);
   # view with unlock to cancel the edit

@@ -58,7 +58,7 @@ sub test_simple3 {
   $this->compareOldAndNew("view", "TWiki", "TWikiDocGraphics", undef, 1);
 }
 
-sub ntest_raw {
+sub notest_raw {
   my $this = shift;
   $this->compareOldAndNew("view", "TWiki", "TextFormattingFAQ", "raw=on", 0);
 }
@@ -71,6 +71,11 @@ sub test_print_skinned {
 sub test_dragon_skinned {
   my $this = shift;
   $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", "skin=dragon", 1);
+}
+
+sub test_rss_skinned {
+  my $this = shift;
+  $this->compareOldAndNew("view", "TWiki", "TextFormattingRules", "skin=rss", 1);
 }
 
 # Should test other view parameters

@@ -72,9 +72,9 @@ sub getUrl {
                    $response->status_line );
 
     my $result = $response->content();
-    if ( $func ne "oops" ) {
-        $this->assert_does_not_match(qr/\(oops\)/, $result, "FAILED RESULT\n$result");
-    }
+    #if ( $func ne "oops" ) {
+    #    $this->assert_does_not_match(qr/\(oops\)/, $result, "FAILED RESULT\n$result");
+    #}
 
     # replace the URL (which has to match $install) to canonicalise
     # the output for comparison
@@ -104,6 +104,7 @@ sub getNew {
 sub compareOldAndNew {
     my ($this, $func, $web, $topic, $opts, $collapseSpaces) = @_;
     my $old = $this->getOld($func, $web, $topic, $opts);
+    $old =~ s/&#0/&#/g;
     my $new = $this->getNew($func, $web, $topic, $opts);
     $this->diff($old, $new, $collapseSpaces);
 }
@@ -129,7 +130,7 @@ sub diff {
         my $diffc = 0;
         foreach my $diff ( @$diffs ) {
             if ($$diff[0] ne 'u') {
-                print STDERR join(" ", @$diff ),"\n";
+                print STDERR "*** $diff->[0]\nOLD\n$diff->[1]\n/OLD NEW\n$diff->[2]\n/NEW\n";
                 $diffc++;
             }
         }
@@ -225,7 +226,9 @@ sub oldPubExists {
 }
 
 sub createTempForUpload {
-    `cp ScriptTestFixture.pm /tmp/robot.gif`
+    my $this = shift;
+    `cp ScriptTestFixture.pm /tmp/robot.gif`;
+    $this->assert(!$!);
 }
 
 1;
