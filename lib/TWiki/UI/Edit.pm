@@ -199,7 +199,6 @@ sub edit {
     $text =~ s/&/&amp\;/go;
     $text =~ s/</&lt\;/go;
     $text =~ s/>/&gt\;/go;
-    $text =~ s/\t/   /go;
 
     $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd );
 

@@ -138,6 +138,7 @@ sub _setupRegexes {
     # '---++ Header', '---## Header'
     $regex{headerPatternDa} = '^---+(\++|\#+)\s*(.+)\s*$';
     # '   ++ Header', '   + Header'
+    # SMELL: is this ever used? It's not documented....
     $regex{headerPatternSp} = '^\t(\++|\#+)\s*(.+)\s*$';
     # '<h6>Header</h6>
     $regex{headerPatternHt} = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>';

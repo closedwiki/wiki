@@ -121,7 +121,6 @@ sub _save {
     }
 
     $newText = TWiki::decodeSpecialChars( $newText );
-    $newText =~ s/ {3}/\t/go;
 
     my $saveOpts = {};
     $saveOpts->{minor} = 1 if $query->param( "dontnotify" );

@@ -368,7 +368,7 @@ sub updateSets {
             if( $attributes && $attributes =~ /[S]/o ) {
                 $value =~ s/\n/\\\n/o;
                 # SMELL: Worry about verbatim?  Multi-lines?
-                $$rtext =~ s/^(\t+\*\sSet\s$key\s\=\s*).*$/$1$value/gm;
+                $$rtext =~ s/^((\t|   )+\*\sSet\s$key\s\=\s*).*$/$1$value/gm;
             }
         }
     }

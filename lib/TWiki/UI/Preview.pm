@@ -115,7 +115,6 @@ sub preview {
 
     my @verbatim = ();
     $ptext = $session->{renderer}->takeOutBlocks( $ptext, "verbatim", \@verbatim );
-    $ptext =~ s/ {3}/\t/go;
     $meta->updateSets( \$ptext );
     $ptext = $session->handleCommonTags( $ptext, $topic );
     $ptext = $session->{renderer}->getRenderedVersion( $ptext );

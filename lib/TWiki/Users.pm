@@ -222,7 +222,7 @@ sub addUserToTWikiUsersTopic {
     foreach my $line ( split( /\r?\n/, $text) ) {
         # TODO: I18N fix here once basic auth problem with 8-bit user names is
         # solved
-        if ( $entry && $line =~ /\t\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s\-\s(.*)/ ) {
+        if ( $entry && $line =~ /(t|   )+\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s\-\s(.*)/ ) {
             my $web = $1 || $TWiki::cfg{UsersWebName};
             my $name = $2;
             my $odate = $3;

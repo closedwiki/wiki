@@ -685,7 +685,7 @@ sub _writeRegistrationDetailsToTopic {
     # TODO - there should be some way of overwriting meta without blatting the content.
 
     my $form = $meta->findOne("FORM");
-    $text = "%SPLIT%\n\t* %KEY%: %VALUE%%SPLIT%\n" unless $text;
+    $text = "%SPLIT%\s+* %KEY%: %VALUE%%SPLIT%\n" unless $text;
     my ( $before, $repeat, $after ) = split( /%SPLIT%/, $text );
 
     my $log;

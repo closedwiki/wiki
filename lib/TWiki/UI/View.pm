@@ -140,7 +140,6 @@ sub view {
                 "cols=\"\%EDITBOXWIDTH%\">";
             $vtext = $session->handleCommonTags( $vtext, $topicName );
             $text = TWiki::entityEncode( $text );
-            $text =~ s/\t/   /go;
             $text = "$vtext$text</textarea></form>";
         }
     } else {
