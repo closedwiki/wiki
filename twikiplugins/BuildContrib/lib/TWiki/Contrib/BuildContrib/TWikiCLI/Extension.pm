@@ -1,18 +1,27 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use strict;
 use Cwd;
+my $oldPwd;
 
 # Ultimately we'd like to ask the Extension to handle this command 
 # itself. For now we just call build.pl
 
 sub _init {
-
-
+    $oldPwd = cwd();
 }
 
 sub upload {
-    return "Not implemented\n";
+    my ($extension) = @_;
 
+    print "Doing upload for $extension\n\n";
+    my $libFrag = getLibFragmentForExtension($extension);
+    my $dir = getTWikiLibFragDir($libFrag);
+
+    chdir($dir) || die "$!";
+
+    # CodeSmell: Yuk
+    print "Type TWiki.org username <return> password <return>\n";
+    my $ans = `perl build.pl upload`;
 }
 
 # now this really ought to be in Extension::CVS, but that directory would clash
@@ -22,9 +31,12 @@ sub cvsupdate {
     print "Doing cvs update for $extension\n\n";
     my $libFrag = getLibFragmentForExtension($extension);
 
-   	my $dir = selectTWikiLibDir($libFrag)."/..; # codesmell: Lazy 
+    my $dir = selectTWikiLibDir($libFrag)."/.."; # codesmell: Lazy 
 
-	$dir;
+    chdir ($dir) || die "Couldn't CD to $dir - $!";
+
+    my $ans  = `cvs update`;
+
 }
 
 sub install {
@@ -33,10 +45,10 @@ sub install {
     print "Installing $extension\n\n";
     my $libFrag = getLibFragmentForExtension($extension);
 
-    my $oldPwd = cwd();
+
     my $outputLog;
 
-    my $buildDotPlDir = selectTWikiLibDir($libFrag)."/TWiki/$libFrag/";
+    my $buildDotPlDir = getTWikiLibFragDir($libFrag);
     if ($buildDotPlDir) {
 	chdir ($buildDotPlDir) || die "Couldn't cd to $buildDotPlDir - $!";
 	print "From $buildDotPlDir...\n";
@@ -62,6 +74,11 @@ sub getHomes {
 }
 
 
+sub getTWikiLibFragDir {
+    my ($libFrag) = @_;
+    return selectTWikiLibDir($libFrag)."/TWiki/$libFrag/";
+}
+
 sub selectTWikiLibDir {
     my ($frag) = @_;
     unless ($ENV{"TWIKI_LIBS"}) {
@@ -69,8 +86,8 @@ sub selectTWikiLibDir {
     }
     my $result;
     my $lookedIn;
-    foreach my $libdir (split(/:/, $ENV{TWIKI_LIBS})) {
-	my $buildDotPlDir = "$libdir";
+    foreach my $libDir (split(/:/, $ENV{TWIKI_LIBS})) {
+	my $buildDotPlDir = "$libDir";
 	if (-f $libDir."/TWiki/$frag/build.pl") {
 	    $lookedIn .= "\tFound it\n";
 	    return $libDir;
