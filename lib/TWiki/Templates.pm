@@ -16,10 +16,6 @@
 #
 use strict;
 
-use TWiki;
-use TWiki::Store;
-use TWiki::Access;
-
 =pod
 
 ---+ package TWiki::Templates
@@ -45,7 +41,21 @@ easily be coverted into a true singleton (template manager).
 
 package TWiki::Templates;
 
-use vars qw( %templateVars );
+=pod
+
+---++ sub new ()
+Constructor. Creates a new template database object.
+
+=cut
+
+sub new {
+    my $class = shift;
+    my $this = bless( {}, $class );
+
+    %{$this->{VARS}} = ();
+
+    return $this;
+}
 
 =pod
 
@@ -56,9 +66,10 @@ Return true if the template exists and is loaded into the cache
 =cut
 
 sub haveTemplate {
-    my $template = shift;
+    my ( $this, $template ) = @_;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
 
-    return exists( $templateVars{ $template } );
+    return exists( $this->{VARS}{ $template } );
 }
 
 =pod
@@ -79,12 +90,12 @@ to do this in the MacrosPlugin.
 
 =cut
 
-sub expandTemplate
-{
-    my( $theParam ) = @_;
+sub expandTemplate {
+    my( $this, $theParam ) = @_;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
 
     $theParam = TWiki::extractNameValuePair( $theParam );
-    my $value = _tmplP( $theParam );
+    my $value = $this->_tmplP( $theParam );
     return $value;
 }
 
@@ -92,18 +103,18 @@ sub expandTemplate
 # in the register of template definitions.
 # If $theVar is the name of a previously defined template, returns the text of
 # that template after recursive expansion of any TMPL:P tags it contains.
-sub _tmplP
-{
+sub _tmplP {
     # Print template variable, called by %TMPL:P{"$theVar"}%
-    my( $theVar ) = @_;
+    my( $this, $theVar ) = @_;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
 
     my $val = "";
-    if( ( %templateVars ) && ( exists $templateVars{ $theVar } ) ) {
-        $val = $templateVars{ $theVar };
-        $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&_tmplP($1)/geo;  # recursion
+    if( exists($this->{VARS}{ $theVar } )) {
+        $val = $this->{VARS}{ $theVar };
+        $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/$this->_tmplP($1)/geo;  # recursion
     }
     if( ( $theVar eq "sep" ) && ( ! $val ) ) {
-        # set separator explicitely if not set
+        # set separator explicitly if not set
         $val = " | ";
     }
     return $val;
@@ -136,16 +147,16 @@ list of loaded templates, overwriting any previous definition.
 
 =cut
 
-sub readTemplate
-{
-    my( $theName, $theSkin, $theWeb ) = @_;
+sub readTemplate {
+    my( $this, $theName, $theSkin, $theWeb ) = @_;
+    die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Templates/;
 
     if( ! defined($theSkin) ) {
         $theSkin = TWiki::getSkin();
     }
 
     if( ! defined( $theWeb ) ) {
-      $theWeb = $TWiki::webName;
+      $theWeb = $TWiki::T->{webName};
     }
 
     # recursively read template file(s)
@@ -170,14 +181,14 @@ sub readTemplate
         } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
             # handle %TMPL:DEF{"key"}%
             if( $key ) {
-                $templateVars{ $key } = $val;
+                $this->{VARS}{ $key } = $val;
             }
             $key = $1;
             $val = $2 || "";
 
         } elsif( /^END%[\n\r]*(.*)/s ) {
             # handle %TMPL:END%
-            $templateVars{ $key } = $val;
+            $this->{VARS}{ $key } = $val;
             $key = "";
             $val = "";
             $result .= $1 || "";
@@ -191,18 +202,17 @@ sub readTemplate
     }
 
     # handle %TMPL:P{"..."}% recursively
-    $result =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&_tmplP($1)/geo;
+    $result =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/$this->_tmplP($1)/geo;
     $result =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
     return $result;
 }
 
-# Return value: raw template text, or "" if read fails
+# STATIC: Return value: raw template text, or "" if read fails
 sub _readTemplateFile
 {
     my( $theName, $theSkin, $theWeb ) = @_;
     $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
 
-    # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
     $theName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
     $theName =~ s/\.+/\./g;                      # Filter out ".." from filename
     $theSkin =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
@@ -248,7 +258,7 @@ sub _readTemplateFile
 
     # read the template file
     if( $tmplFile && -e $tmplFile ) {
-        return TWiki::Store::readFile( $tmplFile );
+        return $TWiki::T->{store}->readFile( $tmplFile );
     }
 
     # See if it is a user topic. Search first in current web
@@ -264,18 +274,19 @@ sub _readTemplateFile
         $theWeb = ucfirst( $1 );
         $theTopic = ucfirst( $2 );
     } else {
-        $theWeb = $TWiki::webName;
+        $theWeb = $TWiki::T->{webName};
         $theTopic = $theSkin . ucfirst( $theName ) . "Template";
-        if ( !TWiki::Store::topicExists( $theWeb, $theTopic )) {
+        if ( !$TWiki::T->{store}->topicExists( $theWeb, $theTopic )) {
             $theWeb = $TWiki::twikiWebname;
         }
     }
 
-    if ( TWiki::Store::topicExists( $theWeb, $theTopic ) &&
-         TWiki::Access::checkAccessPermission( "view",
-                                               $TWiki::wikiUserName, "", $theTopic, $theWeb )) {
+    if ( $TWiki::T->{store}->topicExists( $theWeb, $theTopic ) &&
+         $TWiki::T->{security}->checkAccessPermission( "view",
+                                                  $TWiki::T->{wikiUserName}, "",
+                                                  $theTopic, $theWeb )) {
         my ( $meta, $text ) =
-          TWiki::Store::readTopic( $theWeb, $theTopic, undef, 1 );
+          $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $theWeb, $theTopic, undef, 1 );
         return $text;
     }
 

@@ -19,7 +19,6 @@ use strict;
 use TWiki;
 use TWiki::UI;
 use TWiki::Form;
-use TWiki::Templates;
 
 sub preview {
   my ( $webName, $topic, $userName, $query ) = @_;
@@ -39,12 +38,12 @@ sub preview {
   my $ptext = "";
   my $meta = "";
   my $formFields = "";
-  my $wikiUserName = TWiki::User::userToWikiName( $userName );
-  
+  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+
   return if TWiki::UI::isMirror( $webName, $topic );
 
   # reset lock time, this is to prevent contention in case of a long edit session
-  TWiki::Store::lockTopic( $webName, $topic );
+  $TWiki::T->{store}->lockTopic( $webName, $topic );
 
   # Is user looking to change the form used?  Sits oddly in preview, but 
   # to avoid Javascript and pick up text on edit page it has to be in preview.
@@ -54,7 +53,7 @@ sub preview {
   }
 
   # get view template, standard view or a view with a different skin
-  $tmpl = &TWiki::Templates::readTemplate( "preview", $skin );
+  $tmpl = $TWiki::T->{templates}->readTemplate( "preview", $skin );
   $tmpl =~ s/%DONTNOTIFY%/$dontNotify/go;
   if( $saveCmd ) {
     return unless TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName );
@@ -64,7 +63,8 @@ sub preview {
 
   if( $saveCmd ne "repRev" ) {
     my $dummy = "";
-    ( $meta, $dummy ) = TWiki::Store::readTopic( $webName, $topic, undef, 0 );
+    ( $meta, $dummy ) =
+      $TWiki::T->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
 
     # parent setting
     if( $theParent eq "none" ) {
@@ -101,17 +101,17 @@ sub preview {
     # undocumented "repRev" mode
     $text = $textparam; # text to save
     $ptext = $text;
-    $meta = TWiki::Store::extractMetaData( $webName, $topic, \$ptext );
+    $meta = $TWiki::T->{store}->extractMetaData( $webName, $topic, \$ptext );
     # SMELL: what the heck is this supposed to do?????
     $text =~ s/%_(.)_%/%__$1__%/go;
   }
 
   my @verbatim = ();
-  $ptext = $TWiki::renderer->takeOutBlocks( $ptext, "verbatim", \@verbatim );
+  $ptext = $TWiki::T->{renderer}->takeOutBlocks( $ptext, "verbatim", \@verbatim );
   $ptext =~ s/ {3}/\t/go;
   $meta->updateSets( \$ptext );
   $ptext = TWiki::handleCommonTags( $ptext, $topic );
-  $ptext = TWiki::renderer->getRenderedVersion( $ptext );
+  $ptext = $TWiki::T->{renderer}->getRenderedVersion( $ptext );
 
   # do not allow click on link before save: (mods by TedPavlic)
   my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
@@ -120,16 +120,16 @@ sub preview {
   $ptext =~ s@<form(?:|\s.*?)>@<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">@goi;
   $ptext =~ s@(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))@$1onclick="location.href='$oopsUrl\?template=oopspreview'"@goi;
 
-  $ptext = $TWiki::renderer->putBackBlocks( $ptext, \@verbatim,
+  $ptext = $TWiki::T->{renderer}->putBackBlocks( $ptext, \@verbatim,
                                          "verbatim", "pre",
                                          \&TWiki::Render::verbatimCallBack );
 
   $tmpl = TWiki::handleCommonTags( $tmpl, $topic );
-  $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
-  $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
+  $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
+  $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
   $tmpl =~ s/%TEXT%/$ptext/go;
 
-  $text = $TWiki::renderer->encodeSpecialChars( $text );
+  $text = $TWiki::T->{renderer}->encodeSpecialChars( $text );
 
   $tmpl =~ s/%HIDDENTEXT%/$text/go;
   $tmpl =~ s/%FORMFIELDS%/$formFields/go;

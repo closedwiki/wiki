@@ -148,7 +148,7 @@ sub _htpasswdReadPasswd
         return "";
     }
  
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
     if( $text =~ /$user\:(\S+)/ ) {
         return $1;
     }
@@ -172,7 +172,7 @@ sub UserPasswordExists
         return "";
     }
 
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
     if( $text =~ /^${user}:/gm ) {	# mod_perl: don't use /o
         return "1";
     }
@@ -200,11 +200,11 @@ sub UpdateUserPassword
  
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
     # escape + sign; SHA-passwords can have + signs
     $oldUserEntry =~ s/\+/\\\+/g;
     $text =~ s/$user:$oldUserEntry/$user:$newUserEntry/;
-    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
+    $TWiki::T->{store}->saveFile( $TWiki::htpasswdFilename, $text );
 
     return "1";
 }
@@ -228,11 +228,11 @@ sub htpasswdUpdateUser
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
     # escape + sign; SHA-passwords can have + signs
     $oldEncryptedUserPassword =~ s/\+/\\\+/g;
     $text =~ s/$oldEncryptedUserPassword/$newEncryptedUserPassword/;
-    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
+    $TWiki::T->{store}->saveFile( $TWiki::htpasswdFilename, $text );
 
     return "1";
 }
@@ -255,10 +255,10 @@ sub AddUserPassword
 
     # can't use `htpasswd $wikiName` because htpasswd doesn't understand stdin
     # simply add name to file, but this is a security issue
-    my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
+    my $text = $TWiki::T->{store}->readFile( $TWiki::htpasswdFilename );
     ##TWiki::writeDebug "User entry is :$userEntry: before newline";
     $text .= "$userEntry\n";
-    &TWiki::Store::saveFile( $TWiki::htpasswdFilename, $text );
+    $TWiki::T->{store}->saveFile( $TWiki::htpasswdFilename, $text );
 
 	return "1";
 }

@@ -14,33 +14,39 @@
 =pod
 
 ---+ package TWiki::Sandbox
-This package provides functions that support execution of commands
-outside the 'TWiki Sandbox'. All calls to system functions, or
-handling of file names, should be passed through these functions.
+This object provides an interface to the outside world. All calls to
+system functions, or handling of file names, should be brokered by
+this object.
 
 =cut
 
 package TWiki::Sandbox;
 
 use strict;
-use TWiki;
 
-use vars qw( $_trace $begun $SAFE_PIPES );
+=pod
 
-$begun = 0;
-# Set to 1 to trace all command executrions to STDERR
-$_trace = 0;
+---++ new( $OS )
+Construct a new sandbox suitable for $OS
 
-sub init {
-    $begun = 1;
-    $SAFE_PIPES = 0;
-    if ( $TWiki::OS ne "WINDOWS" ) {
-        eval 'require 5.008;';
+=cut
+
+sub new {
+    my ( $class, $OS ) = @_;
+    my $this = bless( {}, $class );
+
+    $this->{USE_SAFE_PIPES} = 0;
+    if ( $OS ne "WINDOWS" ) {
+        eval 'require 5.008';
         return if $@;
-        eval 'use POSIX;';
+        eval 'use POSIX';
         return if $@;
-        $SAFE_PIPES = 1;
+        $this->{USE_SAFE_PIPES} = 1;
     }
+    # Set to 1 to trace all command executrions to STDERR
+    $this->{TRACE} = 0;
+
+    return $this;
 };
 
 =pod
@@ -55,8 +61,9 @@ places using grep.
 
 =cut
 
-sub untaintUnchecked ($){
-    my $string = shift;
+sub untaintUnchecked ($) {
+    my ( $string ) = @_;
+
     if ( defined( $string) && $string =~ /^(.*)$/ ) {
         return $1;
     }
@@ -67,7 +74,7 @@ sub untaintUnchecked ($){
 
 ---++ normalizeFileName ( $string [, $dotdot] ) -> $filename
 
-Errors out if $string contains whitespace characters.  If $dotdot is
+STATIC Errors out if $string contains whitespace characters.  If $dotdot is
 present and true, allow ".." in path names.
 
 The returned string is not tainted, but it may contain shell
@@ -130,7 +137,7 @@ single character flag.  Permitted flags are
 =cut
 
 sub buildCommandLine {
-    my ($template, %params) = @_;
+    my ($this, $template, %params) = @_;
     my @arguments;
 
     for my $tmplarg (split /\s+/, $template) {
@@ -168,7 +175,7 @@ sub buildCommandLine {
                             if ($param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/) {
                                 push @targs, $1;
                             } else {
-                                die "invalid number argument $param";
+                                die "invalid number argument '$param'";
                             }
                         } elsif ($flag =~ /S/) {
                             # Harmless string.
@@ -225,14 +232,12 @@ ensures that the shell does not interpret any of the passed arguments.
 
 =cut
 
-sub readFromProcessArray ($$@) {
-    my ($path, $template, %params) = @_;
+sub readFromProcessArray {
+    my ($this, $path, $template, %params) = @_;
 
-    init() unless $begun;
-
-    my @args = buildCommandLine( $template, %params );
+    my @args = $this->buildCommandLine( $template, %params );
     my @data;
-    if ( $SAFE_PIPES ) {
+    if ( $this->{USE_SAFE_PIPES} ) {
         my $process;
         open $process, '-|', $path, @args
           or die "open failed: $!";
@@ -245,7 +250,7 @@ sub readFromProcessArray ($$@) {
           $TWiki::cmdQuote;
         @data = split( /\r?\n/, `$cmd` );
     }
-    if( $_trace ) {
+    if( $this->{TRACE} ) {
         print STDERR "$path ",join( "  ", @args ), " -> ",
           join( "\n", @data ),"\n";
     }
@@ -263,15 +268,13 @@ error is redirected to standard input.
 
 =cut
 
-sub readFromProcess ($@) {
-    my ($template, %params) = @_;
+sub readFromProcess {
+    my ($this, $template, %params) = @_;
 
-    init() unless $begun;
-
-    my @args = buildCommandLine( $template, %params );
+    my @args = $this->buildCommandLine( $template, %params );
     my $data;
     my $exit;
-    if ( $SAFE_PIPES ) {
+    if ( $this->{USE_SAFE_PIPES} ) {
         # The code follows the safe pipe construct found in perlipc(1).
         my $pipe;
         my $pid = open $pipe, '-|';
@@ -297,7 +300,7 @@ sub readFromProcess ($@) {
         $data = `$cmd`;
         $exit = ( $? >> 8 );
     }
-    if( $_trace ) {
+    if( $this->{TRACE} ) {
         print STDERR join( " ", @args ), " -($exit)-> $data\n";
     }
     return ( $data, $exit );

@@ -63,13 +63,15 @@ sub _save {
   my $saveCmd = $query->param( "cmd" ) || "";
   my $text = $query->param( "text" );
   my $meta = "";
+  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
 
   # A template was requested; read it, and expand URLPARAMs within the
   # template using our CGI record
   my $templatetopic = $query->param( "templatetopic");
   if ($templatetopic) {
     ($meta, $text) =
-      TWiki::Store::readTopic( $webName, $templatetopic, undef, 0 );
+      $TWiki::T->{store}->readTopic( $wikiUserName, $webName,
+                                $templatetopic, undef, 0 );
     $text = TWiki::expandVariablesOnTopicCreation( $text );
   }
 	
@@ -81,7 +83,7 @@ sub _save {
   my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
   my $formTemplate = $query->param( "formtemplate" );
 
-  my $topicExists  = TWiki::Store::topicExists( $webName, $topic );
+  my $topicExists  = $TWiki::T->{store}->topicExists( $webName, $topic );
 
   return 0 if TWiki::UI::isMirror( $webName, $topic );
 
@@ -103,7 +105,6 @@ sub _save {
     return 0;
   }
 
-  my $wikiUserName = TWiki::User::userToWikiName( $userName );
   return 0 unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                             "change", $wikiUserName );
 
@@ -111,7 +112,6 @@ sub _save {
   return 0 if ( $saveCmd &&
               ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
 
-  # PTh 06 Nov 2000: check if proper use of save script
   if( ! ( defined $text ) ) {
     TWiki::UI::oops( $webName, $topic, "save" );
     return 0;
@@ -127,18 +127,18 @@ sub _save {
     return 0;
   }
 
-  $text = $TWiki::renderer->decodeSpecialChars( $text );
+  $text = $TWiki::T->{renderer}->decodeSpecialChars( $text );
   $text =~ s/ {3}/\t/go;
 
   if( $saveCmd eq "repRev" ) {
     $text =~ s/%__(.)__%/%_$1_%/go;
-    $meta = TWiki::Store::extractMetaData( $webName, $topic, \$text );
+    $meta = $TWiki::T->{store}->extractMetaData( $webName, $topic, \$text );
   } else {
     # normal case: Get latest attachment from file for preview
     my $tmp;
 	# read meta (if not already read when reading template)
     ( $meta, $tmp ) =
-      TWiki::Store::readTopic( $webName, $topic, undef, 0 ) unless $meta;
+      $TWiki::T->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 ) unless $meta;
 
     # parent setting
     if( $theParent eq "none" ) {
@@ -159,7 +159,7 @@ sub _save {
     $meta->updateSets( \$text );
   }
 
-  my $error = TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
+  my $error = $TWiki::T->{store}->saveTopic( $userName, $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
   if( $error ) {
     TWiki::UI::oops( $webName, $topic, "saveerr", $error );
     return 0;

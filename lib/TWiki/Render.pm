@@ -36,7 +36,6 @@ package TWiki::Render;
 
 use strict;
 
-use TWiki;
 use TWiki::Attach;
 
 BEGIN {
@@ -63,20 +62,20 @@ sub new {
     $this->{NOAUTOLINK} = 0;
     $this->{MODE} = 'html';		# Default is to render as HTML
     $this->{NEWTOPICBGCOLOR} =
-      $prefs->getValue("NEWTOPICBGCOLOR")
+      $prefs->getPreferencesValue("NEWTOPICBGCOLOR")
         || "#FFFFCE";
     $this->{NEWTOPICFONTCOLOR} =
-      $prefs->getValue("NEWTOPICFONTCOLOR")
+      $prefs->getPreferencesValue("NEWTOPICFONTCOLOR")
         || "#0000FF";
     $this->{NEWLINKSYMBOL} =
-      $prefs->getValue("NEWTOPICLINKSYMBOL")
+      $prefs->getPreferencesValue("NEWTOPICLINKSYMBOL")
         || "<sup>?</sup>";
     # tooltip init
     $this->{LINKTOOLTIPINFO} =
-      $prefs->getValue("LINKTOOLTIPINFO")
+      $prefs->getPreferencesValue("LINKTOOLTIPINFO")
         || "";
     $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary' if( $this->{LINKTOOLTIPINFO} =~ /^on$/ );
-    $this->{NOAUTOLINK} = $prefs->getValue("NOAUTOLINK")
+    $this->{NOAUTOLINK} = $prefs->getPreferencesValue("NOAUTOLINK")
       || 0;
 
     return $this;
@@ -120,7 +119,7 @@ sub _renderParent {
                  $visited{$parent} );
         $visited{$parent} = 1;
         unshift( @stack, "[[$parent][$pTopic]]" );
-        $parent = TWiki::Store::getTopicParent( $pWeb, $pTopic );
+        $parent = $TWiki::T->{store}->getTopicParent( $pWeb, $pTopic );
     }
     $text = join( $usesep, @stack );
 
@@ -148,7 +147,7 @@ sub _renderMoved {
         my $toWeb = $1;
         my $toTopic = $2;
         my $by   = $moved{"by"};
-        $by = TWiki::User::userToWikiName( $by );
+        $by = $TWiki::T->{users}->userToWikiName( $by );
         my $date = $moved{"date"};
         $date = TWiki::formatTime( $date, "", "gmtime" );
 
@@ -424,17 +423,18 @@ sub _linkToolTipInfo {
     return "" if( $this->{LINKTOOLTIPINFO} =~ /^off$/i );
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
-    my( $date, $user, $rev ) = TWiki::Store::getRevisionInfo( $theWeb, $theTopic );
+    my( $date, $user, $rev ) =
+      $TWiki::T->{store}->getRevisionInfo( $theWeb, $theTopic );
     my $text = $this->{LINKTOOLTIPINFO};
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
-    $text =~ s/\$wikiname/"<nop>" . TWiki::User::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
-    $text =~ s/\$wikiusername/"<nop>" . TWiki::User::userToWikiName( $user )/ge; # "Main.JohnSmith"
+    $text =~ s/\$wikiname/"<nop>" . $TWiki::T->{users}->userToWikiName( $user, 1 )/ge;  # "JohnSmith"
+    $text =~ s/\$wikiusername/"<nop>" . $TWiki::T->{users}->userToWikiName( $user )/ge; # "Main.JohnSmith"
     if( $text =~ /\$summary/ ) {
-        my $summary = TWiki::Store::readFileHead( "$TWiki::dataDir/$theWeb/$theTopic.txt", 16 );
+        my $summary = $TWiki::T->{store}->readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt", 16 );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
@@ -479,7 +479,7 @@ sub internalLink {
         $theLinkText = TWiki::Plugins::renderWikiWordHandler( $theLinkText ) || $theLinkText;
      }
 
-    my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
+    my $exist = $TWiki::T->{store}->topicExists( $theWeb, $theTopic );
 
     # I18N - Only apply plural processing if site language is English, or
     # if a built-in English-language web (Main, TWiki or Plugins).  Plurals
@@ -497,7 +497,7 @@ sub internalLink {
         $tmp =~ s/sses$/ss/;     # plurals like address / addresses
         $tmp =~ s/([Xx])es$/$1/; # plurals like box / boxes
         $tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
-        if( &TWiki::Store::topicExists( $theWeb, $tmp ) ) {
+        if( $TWiki::T->{store}->topicExists( $theWeb, $tmp ) ) {
             $theTopic = $tmp;
             $exist = 1;
         }
@@ -523,7 +523,8 @@ sub internalLink {
     } elsif( $doLink ) {
         $text .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
               .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
-              .  "<a href=\"$TWiki::dispScriptUrlPath/edit$TWiki::scriptSuffix/$theWeb/$theTopic?topicparent=$TWiki::webName.$TWiki::topicName\">$this->{NEWLINKSYMBOL}</a></span>";
+              .  "<a href=\"$TWiki::dispScriptUrlPath/edit$TWiki::scriptSuffix/$theWeb/$theTopic?topicparent="
+                .$TWiki::T->{webName}.".".$TWiki::T->{topicName}."\">$this->{NEWLINKSYMBOL}</a></span>";
         return $text;
 
     } elsif( $doKeepWeb ) {
@@ -650,7 +651,7 @@ sub filenameToIcon {
 
     my $iconDir = "$TWiki::pubDir/icn";
     my $iconUrl = "$TWiki::pubUrlPath/icn";
-    my $iconList = TWiki::Store::readFile( "$iconDir/_filetypes.txt" );
+    my $iconList = $TWiki::T->{store}->readFile( "$iconDir/_filetypes.txt" );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
 	if( $bits[0] eq $fileExt ) {
@@ -706,7 +707,7 @@ sub renderFormField {
     unless ( $meta ) {
         my $dummyText;
         ( $meta, $dummyText ) =
-          TWiki::Store::readTopic( $formWeb, $formTopic, undef, 0 );
+          $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $formWeb, $formTopic, undef, 0 );
         $this->{ffCache}{"$formWeb.$formTopic"} = $meta;
     }
 
@@ -757,10 +758,10 @@ sub getRenderedVersion {
 
     # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
     # (fails in %INCLUDE%, %SEARCH%)
-    my $theTopic = $TWiki::topicName;
+    my $theTopic = $TWiki::T->{topicName};
 
     if( !$theWeb ) {
-        $theWeb = $TWiki::webName;
+        $theWeb = $TWiki::T->{webName};
     }
 
     $head = "";
@@ -1033,7 +1034,7 @@ sub _handleLink {
         } else {
             $anchor = "";
             # 'Web.TopicName' or 'Web.ABBREV' link:
-            if ( $topic eq $TWiki::mainTopicname && $web ne $TWiki::webName ) {
+            if ( $topic eq $TWiki::mainTopicname && $web ne $TWiki::T->{webName} ) {
                 $text = $web;
             } else {
                 $text =
@@ -1145,7 +1146,7 @@ Makes a summary of the given topic by simply trimming a bit off the top.
 
 sub makeTopicSummary {
     my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
-    # called by search, mailnotify & changes after calling readFileHead
+    # called by search, mailnotify & changes after calling readFile
     die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Render/;
 
     my $htext = $theText;

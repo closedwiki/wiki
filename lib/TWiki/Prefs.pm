@@ -27,9 +27,6 @@ values. Inheritance should be handled by stacking the prefs object,
 which will slow down accessing prefs values but that is a relatively
 small part of the rendering process.
 
-SMELL: inherits the "old" function interface, though it has been internally
-re-coded as OO ready for mod_perl comnpatibility.
-
 =cut
 
 package TWiki::Prefs;
@@ -57,6 +54,8 @@ sub new {
     my $webs = new TWiki::Prefs::PrefsCache("web", $globs, $web);
     $this->{WEBS}{$web} = $webs;
     $this->{REQUEST} = new TWiki::Prefs::PrefsCache("copy", $webs);
+
+    $this->{TOPICCACHE} = undef;
 
     return $this;
 }
@@ -132,7 +131,7 @@ sub _flag {
 
 =pod
 
----+++ sub getValue( $theKey, $theWeb )
+---+++ sub getPreferencesValue( $theKey, $theWeb )
 
 Returns the value of the preference =$theKey=.  If =$theWeb= is also specified,
 looks up the value with respect to that web instead of the current one; also,
@@ -143,7 +142,7 @@ this value overrides all preference settings in any web.
 
 =cut
 
-sub getValue {
+sub getPreferencesValue {
     my( $this, $theKey, $theWeb ) = @_;
 
     my $sessionValue =
@@ -173,10 +172,10 @@ sub getValue {
 
 =pod
 
----+++ sub getFlag( $theKey, $theWeb )
+---+++ sub getPreferencesFlag( $theKey, $theWeb )
 
 Returns the preference =$theKey= from =$theWeb= as a flag.  See
-=getValue= for the semantics of the parameters.
+=getPreferencesValue= for the semantics of the parameters.
 Returns 1 if the pref value is "on", and 0 otherwise.  "On" means set to
 something with a true Perl-truth-value, with the special cases that "off" and
 "no" are forced to false.  (Both of the latter are case-insensitive.)  Note
@@ -185,19 +184,19 @@ prior to this conversion.
 
 =cut
 
-sub getFlag {
+sub getPreferencesFlag {
     my( $this, $theKey, $theWeb ) = @_;
 
-    my $value = $this->getValue( $theKey, $theWeb );
+    my $value = $this->getPreferencesValue( $theKey, $theWeb );
     return _flag( $value );
 }
 
 =pod
 
----+++ sub getNumber( $theKey, $theWeb )
+---+++ sub getPreferencesNumber( $theKey, $theWeb )
 
 Returns the preference =$theKey= from =$theWeb= as a flag.  See
-=getValue= for the semantics of the parameters.
+=getPreferencesValue= for the semantics of the parameters.
 Converts the string =$prefValue= to a number.  First any whitespace and commas
 are removed.  <em>L10N note: assumes thousands separator is comma and decimal
 point is period.</em>  Then, if the first character is a zero, the value is
@@ -211,10 +210,10 @@ will always return zero for these, rather than 'undef'.</strong>
 
 =cut
 
-sub getNumber {
+sub getPreferencesNumber {
     my( $this, $theKey, $theWeb ) = @_;
 
-    my $value = $this->getValue( $theKey, $theWeb );
+    my $value = $this->getPreferencesValue( $theKey, $theWeb );
 
     return undef unless defined( $value );
 

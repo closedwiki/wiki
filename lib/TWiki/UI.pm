@@ -73,7 +73,7 @@ calling TWiki::UI::oops and returning 0 if it doesn't.
 sub webExists {
   my ( $webName, $topic ) = @_;
 
-  return 1 if( TWiki::Store::webExists( $webName ) );
+  return 1 if( $TWiki::T->{store}->webExists( $webName ) );
 
   oops( $webName, $topic, "noweb", "ERROR $webName.$topic Missing Web" );
 
@@ -93,7 +93,7 @@ the oops template name thus: oops${fn}notopic
 sub topicExists {
   my ( $webName, $topic, $fn ) = @_;
 
-  return 1 if TWiki::Store::topicExists( $webName, $topic );
+  return 1 if $TWiki::T->{store}->topicExists( $webName, $topic );
 
   oops( $webName, $topic, "${fn}notopic", "ERROR $webName.$topic Missing topic" );
 
@@ -137,8 +137,8 @@ oops and return 0.
 sub isAccessPermitted {
    my ( $web, $topic, $mode, $user ) = @_;
 
-   return 1 if TWiki::Access::checkAccessPermission( $mode, $user, "",
-                                                     $topic, $web );
+   return 1 if $TWiki::T->{security}->checkAccessPermission( $mode, $user, "",
+                                                        $topic, $web );
    oops( $web, $topic, "access$mode" );
 
    return 0;
@@ -155,9 +155,7 @@ oops and return 0.
 sub userIsAdmin {
   my ( $webName, $topic, $user ) = @_;
 
-  use TWiki::Access;
-
-  return 1 if TWiki::Access::userIsInGroup( $user, $TWiki::superAdminGroup );
+  return 1 if $TWiki::T->{security}->userIsInGroup( $user, $TWiki::superAdminGroup );
 
   oops( $webName, $topic, "accessgroup",
         "$TWiki::mainWebname.$TWiki::superAdminGroup" );
@@ -183,10 +181,10 @@ sub readTemplateTopic
     # try to read in current web, if not read from TWiki web
 
     my $web = $TWiki::twikiWebname;
-    if( TWiki::Store::topicExists( $TWiki::webName, $theTopicName ) ) {
-        $web = $TWiki::webName;
+    if( $TWiki::T->{store}->topicExists( $TWiki::T->{webName}, $theTopicName ) ) {
+        $web = $TWiki::T->{webName};
     }
-    return TWiki::Store::readTopic( $web, $theTopicName, undef, 0 );
+    return $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $web, $theTopicName, undef, 0 );
 }
 
 1;

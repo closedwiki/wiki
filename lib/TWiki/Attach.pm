@@ -21,8 +21,6 @@
 
 use strict;
 
-use TWiki;
-use TWiki::Templates;
 use TWiki::Store;
 use TWiki::User;
 use TWiki::Prefs;
@@ -91,10 +89,10 @@ sub renderMetaData
 sub _getTemplate {
     my $template = shift;
 
-    TWiki::Templates::readTemplate("attachtables") unless
-        TWiki::Templates::haveTemplate( $template );
+    $TWiki::T->{templates}->readTemplate("attachtables") unless
+        $TWiki::T->{templates}->haveTemplate( $template );
 
-    return TWiki::Templates::expandTemplate( $template );
+    return $TWiki::T->{templates}->expandTemplate( $template );
 }
 
 =pod
@@ -112,7 +110,7 @@ sub formatVersions {
     my( $web, $topic, %attrs ) = @_;
 
     my $latestRev =
-      TWiki::Store::getRevisionNumber( $web, $topic, $attrs{name} );
+      $TWiki::T->{store}->getRevisionNumber( $web, $topic, $attrs{name} );
 
     my $header = _getTemplate("ATTACH:versions:header");
     my $footer = _getTemplate("ATTACH:versions:footer");
@@ -121,8 +119,8 @@ sub formatVersions {
     my $rows ="";
 
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
-        my( $date, $userName, $minorRev, $comment ) = 
-          TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attrs{name} );
+        my( $date, $userName, $minorRev, $comment ) =
+          $TWiki::T->{store}->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
         $rows .= _formatRow( $web, $topic,
                              {
                               name    => $attrs{name},
@@ -172,7 +170,7 @@ sub _expandAttrs {
         return $info->{version};
     }
     elsif ( $attr eq "ICON" ) {
-        my $fileIcon = $TWiki::renderer->filenameToIcon( $file );
+        my $fileIcon = $TWiki::T->{renderer}->filenameToIcon( $file );
         return $fileIcon;
     }
     elsif ( $attr eq "URL" ) {
@@ -215,7 +213,7 @@ sub _expandAttrs {
         return TWiki::formatTime( $info->{date} );
     }
     elsif ( $attr eq "USER" ) {
-        return TWiki::User::userToWikiName( $info->{user} );
+        return $TWiki::T->{users}->userToWikiName( $info->{user} );
     }
     else {
         return "\0A_$attr\0";
@@ -253,18 +251,18 @@ sub getAttachmentLink
         # downloaded. When you upload an image to TWiki and checkmark
         # the link checkbox, TWiki will generate the width and height
         # img parameters, speeding up the page rendering.
-        my $stream =  TWiki::Store::getAttachmentStream( $web, $topic, $attName );
+        my $stream =  $TWiki::T->{store}->getAttachmentStream( $web, $topic, $attName );
         my( $nx, $ny ) = &_imgsize( $stream, $attName );
 
         if( ( $nx > 0 ) && ( $ny > 0 ) ) {
             $imgSize = "width=\"$nx\" height=\"$ny\" ";
         }
-        $fileLink = $TWiki::prefsObject->getValue( "ATTACHEDIMAGEFORMAT" )
+        $fileLink = $TWiki::T->{prefs}->getPreferencesValue( "ATTACHEDIMAGEFORMAT" )
           || '   * $comment: <br />'
             . ' <img src="%ATTACHURLPATH%/$name" alt="$name" $size />';
     } else {
         # normal attached file
-        $fileLink = $TWiki::prefsObject->getValue( "ATTACHEDFILELINKFORMAT" )
+        $fileLink = $TWiki::T->{prefs}->getPreferencesValue( "ATTACHEDFILELINKFORMAT" )
           || '   * [[%ATTACHURL%/$name][$name]]: $comment';
     }
 
@@ -538,7 +536,7 @@ sub _getOldAttachAttr
 	if( ! $fileUser ) { 
             $fileUser = ""; 
         } else {
-            $fileUser = TWiki::User::wikiToUserName( $fileUser );
+            $fileUser = $TWiki::T->{users}->wikiToUserName( $fileUser );
         }
 	$fileUser =~ s/ //go;
 	( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
@@ -644,7 +642,7 @@ sub upgradeFrom1v0beta
            $date = TWiki::Store::RcsFile::revDate2EpSecs( $date );
        }
        $att->{"date"} = $date;
-       $att->{"user"} = TWiki::User::wikiToUserName( $att->{"user"} );
+       $att->{"user"} = $TWiki::T->{users}->wikiToUserName( $att->{"user"} );
    }
 }
 

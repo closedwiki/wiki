@@ -116,7 +116,7 @@ sub getSkin
 # -------------------------
 sub getUrlHost
 {
-    return $TWiki::urlHost;
+    return $TWiki::T->{urlHost};
 }
 
 # =========================
@@ -152,7 +152,7 @@ sub getScriptUrl
 # -------------------------
 sub getScriptUrlPath
 {
-    return $TWiki::scriptUrlPath;
+    return $TWiki::T->{scriptUrlPath};
 }
 
 # =========================
@@ -349,7 +349,7 @@ sub extractNameValuePair
 sub getPreferencesValue
 {
 #   my( $theKey, $theWeb ) = @_;
-    return $TWiki::prefsObject->getValue( @_ );
+    return $TWiki::T->{prefs}->getPreferencesValue( @_ );
 }
 
 =pod
@@ -368,7 +368,7 @@ sub getPluginPreferencesValue
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
-    return $TWiki::prefsObject->getValue( "\U$package\E_$theKey" );
+    return $TWiki::T->{prefs}->getPreferencesValue( "\U$package\E_$theKey" );
 }
 
 # =========================
@@ -392,7 +392,7 @@ sub getPluginPreferencesValue
 sub getPreferencesFlag
 {
 #   my( $theKey, $theWeb ) = @_;
-    return $TWiki::prefsObject->getFlag( @_ );
+    return $TWiki::T->{prefs}->getPreferencesFlag( @_ );
 }
 
 =pod
@@ -411,7 +411,7 @@ sub getPluginPreferencesFlag
     my( $theKey ) = @_;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
-    return $TWiki::prefsObject->getFlag( "\U$package\E_$theKey" );
+    return $TWiki::T->{prefs}->getPreferencesFlag( "\U$package\E_$theKey" );
 }
 
 # =========================
@@ -493,7 +493,7 @@ sub getDefaultUserName
 # -------------------------
 sub getWikiName
 {
-    return $TWiki::wikiName;
+    return $TWiki::T->{users}->userToWikiName( $TWiki::T->{userName}, 1 );
 }
 
 # =========================
@@ -509,7 +509,7 @@ sub getWikiName
 # -------------------------
 sub getWikiUserName
 {
-    return $TWiki::wikiUserName;
+    return $TWiki::T->{users}->userToWikiName( $TWiki::T->{userName} );
 }
 
 # =========================
@@ -527,7 +527,7 @@ sub getWikiUserName
 sub wikiToUserName
 {
 #   my( $wiki ) = @_;
-    return TWiki::User::wikiToUserName( @_ );
+    return $TWiki::T->{users}->wikiToUserName( @_ );
 }
 
 # =========================
@@ -546,7 +546,7 @@ sub wikiToUserName
 sub userToWikiName
 {
 #   my( $loginName, $dontAddWeb ) = @_;
-    return &TWiki::User::userToWikiName( @_ );
+    return $TWiki::T->{users}->userToWikiName( @_ );
 }
 
 # =========================
@@ -562,7 +562,7 @@ sub userToWikiName
 # -------------------------
 sub isGuest
 {
-    return ( $TWiki::userName eq $TWiki::defaultUserName );
+    return ( $TWiki::T->{userName} eq $TWiki::defaultUserName );
 }
 
 # =========================
@@ -580,7 +580,7 @@ sub isGuest
 sub permissionsSet
 {
 #   my( $web ) = @_;
-    return &TWiki::Access::permissionsSet( @_ );
+    return TWiki::security->permissionsSet( @_ );
 }
 
 # =========================
@@ -602,7 +602,7 @@ sub permissionsSet
 sub checkAccessPermission
 {
 #   my( $type, $user, $text, $topic, $web ) = @_;
-    return &TWiki::Access::checkAccessPermission( @_ );
+    return $TWiki::T->{security}->checkAccessPermission( @_ );
 }
 
 # =========================
@@ -622,7 +622,7 @@ sub checkAccessPermission
 sub webExists
 {
 #   my( $theWeb ) = @_;
-    return &TWiki::Store::webExists( @_ );
+    return $TWiki::T->{store}->webExists( @_ );
 }
 
 # =========================
@@ -641,7 +641,7 @@ sub webExists
 sub topicExists
 {
 #   my( $web, $topic ) = @_;
-    return &TWiki::Store::topicExists( @_ );
+    return $TWiki::T->{store}->topicExists( @_ );
 }
 
 # =========================
@@ -664,7 +664,7 @@ sub topicExists
 # -------------------------
 sub getRevisionInfo
 {
-    return TWiki::Store::getRevisionInfo( @_ );
+    return $TWiki::T->{store}->getRevisionInfo( @_ );
 }
 
 # =========================
@@ -683,7 +683,8 @@ sub getRevisionInfo
 sub checkTopicEditLock
 {
     my( $web, $topic ) = @_;
-    my( $loginName, $lockTime ) = TWiki::Store::topicIsLockedBy( $web, $topic );
+    my( $loginName, $lockTime ) =
+      $TWiki::T->{store}->topicIsLockedBy( $web, $topic );
     my $oopsUrl = "";
     if( $loginName ) {
         use integer;
@@ -716,7 +717,7 @@ sub setTopicEditLock
         my( $oopsUrl ) = checkTopicEditLock( $web, $topic );
         return $oopsUrl if( $oopsUrl );
     }
-    TWiki::Store::lockTopic( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
+    $TWiki::T->{store}->lockTopic( $web, $topic, ! $lock );    # reverse $lock parameter is correct!
     return "";
 }
 
@@ -742,7 +743,7 @@ sub readTopicText
     $ignorePermissions = 0 unless defined( $ignorePermissions );
 
     my $text =
-      TWiki::Store::readTopicRaw( $web, $topic, $rev,
+      $TWiki::T->{store}->readTopicRaw( $TWiki::T->{wikiUserName}, $web, $topic, $rev,
                                   $ignorePermissions );
 
     # FIXME: The following breaks if spec of readTopicRaw() changes
@@ -800,7 +801,9 @@ sub saveTopicText
 
     # check access permission
     unless( $ignorePermissions ||
-            TWiki::Access::checkAccessPermission( "change", $TWiki::wikiUserName, "", $topic, $web )
+            $TWiki::T->{security}->checkAccessPermission( "change",
+                                                     $TWiki::T->{wikiUserName}, "",
+                                                     $topic, $web )
           ) {
         return TWiki::getOopsUrl( $web, $topic, "oopsaccesschange" );
     }
@@ -809,13 +812,14 @@ sub saveTopicText
     return TWiki::getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
 
     # extract meta data and merge old attachment meta data
-    my $meta = TWiki::Store::extractMetaData( $web, $topic, \$text );
+    my $meta = $TWiki::T->{store}->extractMetaData( $web, $topic, \$text );
     my( $oldMeta, $oldText ) =
-      TWiki::Store::readTopic( $web, $topic, undef, 1 );
+      $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $web, $topic, undef, 1 );
     $meta->copyFrom( $oldMeta, "FILEATTACHMENT" );
 
     # save topic
-    my $error = TWiki::Store::saveTopic( $web, $topic, $text, $meta, "", 0, $dontNotify );
+    my $error =
+      $TWiki::T->{store}->saveTopic( $TWiki::T->{userName}, $web, $topic, $text, $meta, "", 0, $dontNotify );
     return TWiki::getOopsUrl( $web, $topic, "oopssaveerr", $error ) if( $error );
     return "";
 }
@@ -851,7 +855,7 @@ sub getPublicWebList
 sub getTopicList
 {
 #   my( $web ) = @_;
-    return &TWiki::Store::getTopicNames ( @_ );
+    return $TWiki::T->{store}->getTopicNames ( @_ );
 }
 
 =pod
@@ -891,7 +895,7 @@ sub expandCommonVariables
 sub renderText
 {
 #   my( $text, $web ) = @_;
-    return $TWiki::renderer->getRenderedVersion( @_ );
+    return $TWiki::T->{renderer}->getRenderedVersion( @_ );
 }
 
 # =========================
@@ -915,7 +919,7 @@ sub internalLink
 {
     my $pre = shift;
 #   my( $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
-    return $pre . $TWiki::renderer->internalLink( @_ );
+    return $pre . $TWiki::T->{renderer}->internalLink( @_ );
 }
 
 # =========================
@@ -1027,7 +1031,7 @@ sub readTopic
 {
     my( $web, $topic ) = @_;
 
-    return TWiki::Store::readTopic( $web, $topic, undef, 0 );
+    return $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $web, $topic, undef, 0 );
 }
 
 # =========================
@@ -1064,7 +1068,7 @@ sub readTemplate
 sub readFile
 {
 #   my( $filename ) = @_;
-    return &TWiki::Store::readFile( @_ );
+    return $TWiki::T->{store}->readFile( @_ );
 }
 
 # =========================
@@ -1084,7 +1088,7 @@ sub readFile
 sub saveFile
 {
 #   my( $filename, $text ) = @_;
-    return &TWiki::Store::saveFile( @_ );
+    return $TWiki::T->{store}->saveFile( @_ );
 }
 
 # =========================

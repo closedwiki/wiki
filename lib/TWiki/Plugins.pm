@@ -26,6 +26,8 @@ This module handles Plugins loading, initialization and execution
 package TWiki::Plugins;
 
 use strict;
+use TWiki;
+use TWiki::Func;
 
 use vars qw ( $VERSION );
 
@@ -170,13 +172,13 @@ sub _registerPlugin
     }
 
     if( ! $installWeb ) {
-        if ( TWiki::Store::topicExists( $TWiki::twikiWebname, $plugin ) ) {
+        if ( $TWiki::T->{store}->topicExists( $TWiki::twikiWebname, $plugin ) ) {
             # found plugin in TWiki web
             $installWeb = $TWiki::twikiWebname;
-        } elsif ( TWiki::Store::topicExists( "Plugins", $plugin ) ) {
+        } elsif ( $TWiki::T->{store}->topicExists( "Plugins", $plugin ) ) {
             # found plugin in Plugins web
             $installWeb = "Plugins";
-        } elsif ( TWiki::Store::topicExists( $web, $plugin ) ) {
+        } elsif ( $TWiki::T->{store}->topicExists( $web, $plugin ) ) {
             # found plugin in current web
             $installWeb = $web;
         } else {
@@ -226,7 +228,7 @@ use strict 'refs';
         return;
     }
     # read plugin preferences before calling initPlugin
-    $TWiki::prefsObject->getPrefsFromTopic( $installWeb, $plugin,
+    $TWiki::T->{prefs}->getPrefsFromTopic( $installWeb, $plugin,
                                                    uc( $plugin ) . "_");
 
 no strict 'refs';
@@ -292,10 +294,10 @@ sub initialize1
     }
 
     # Get INSTALLEDPLUGINS and DISABLEDPLUGINS variables
-    my $plugin = $TWiki::prefsObject->getValue( "INSTALLEDPLUGINS" ) || "";
+    my $plugin = $TWiki::T->{prefs}->getPreferencesValue( "INSTALLEDPLUGINS" ) || "";
     $plugin =~ s/[\n\t\s\r]+/ /go;
     my @setInstPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
-    $plugin = $TWiki::prefsObject->getValue( "DISABLEDPLUGINS" ) || "";
+    $plugin = $TWiki::T->{prefs}->getPreferencesValue( "DISABLEDPLUGINS" ) || "";
 	foreach my $p (split( /,?\s+/ , $plugin)) {
         if ( $p =~ /^.+Plugin$/ ) {
             $p =~ s/^.*\.(.*)$/$1/;
@@ -339,7 +341,7 @@ sub initialize1
         }
     }
     unless( $user ) {
-        $user = TWiki::User::initializeRemoteUser( $theLoginName );
+        $user = $TWiki::T->{users}->initializeRemoteUser( $theLoginName );
     }
     return $user;
 }
@@ -404,7 +406,7 @@ sub _handlePLUGINDESCRIPTIONS
     my $pref = "";
     foreach my $plugin ( @activePlugins ) {
         $pref = uc( $plugin ) . "_SHORTDESCRIPTION";
-        $line = $TWiki::prefsObject->getValue( $pref );
+        $line = $TWiki::T->{prefs}->getPreferencesValue( $pref );
         if( $line ) {
             $text .= "\t\* $activePluginWebs{$plugin}.$plugin: $line\n"
         }
@@ -570,7 +572,7 @@ sub afterEditHandler
 
 ---++ sub beforeSaveHandler ()
 
-Called by TWiki::Store::saveTopic before the save action
+Called just before the save action
 
 =cut
 
@@ -584,7 +586,7 @@ sub beforeSaveHandler
 
 ---++ sub afterSaveHandler ()
 
-Called by TWiki::Store::saveTopic after the save action
+Called just after the save action
 
 =cut
 

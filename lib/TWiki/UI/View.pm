@@ -31,7 +31,6 @@ use strict;
 use TWiki;
 use TWiki::User;
 use TWiki::UI;
-use TWiki::Templates;
 
 =pod
 
@@ -57,7 +56,7 @@ sub view {
     my $meta = "";
     my $maxrev = 1;
     my $extra = "";
-    my $wikiUserName = TWiki::User::userToWikiName( $userName );
+    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
     my $revdate = "";
     my $revuser = "";
 
@@ -67,19 +66,20 @@ sub view {
 
     # Set page generation mode to RSS if using an RSS skin
     if( $skin =~ /^rss/ ) {
-        $TWiki::renderer->setRenderMode( 'rss' );
+        $TWiki::T->{renderer}->setRenderMode( 'rss' );
     }
 
     if( $unlock eq "on" ) {
         # unlock topic, user cancelled out of edit
-        TWiki::Store::lockTopic( $webName, $topic, "on" );
+        $TWiki::T->{store}->lockTopic( $webName, $topic, "on" );
     }
 
-    my $rev = TWiki::Store::cleanUpRevID( $query->param( "rev" ));
-    my $topicExists = TWiki::Store::topicExists( $webName, $topic );
+    my $rev = $TWiki::T->{store}->cleanUpRevID( $query->param( "rev" ));
+    my $topicExists = $TWiki::T->{store}->topicExists( $webName, $topic );
     if( $topicExists ) {
-        ( $meta, $text ) = TWiki::Store::readTopic( $webName, $topic,
-                                                    undef, 1 );
+        ( $meta, $text ) = $TWiki::T->{store}->readTopic( $wikiUserName,
+                                                     $webName, $topic,
+                                                     undef, 1 );
         ( $revdate, $revuser, $maxrev ) =
           $meta->getRevisionInfo( $webName, $topic );
 
@@ -95,10 +95,12 @@ sub view {
             # Most recent topic read in even if earlier topic requested - makes
             # code simpler and performance impact should be minimal
             ( $meta, $text ) =
-              TWiki::Store::readTopic( $webName, $topic, $rev, 0 );
+              $TWiki::T->{store}->readTopic( $wikiUserName,
+                                        $webName, $topic, $rev, 0 );
 
+            # SMELL: why doesn't this use $meta?
             ( $revdate, $revuser ) =
-              TWiki::Store::getRevisionInfo( $webName, $topic, $rev );
+              $TWiki::T->{store}->getRevisionInfo( $webName, $topic, $rev );
             $revdate = TWiki::formatTime( $revdate );
             $extra .= "r$rev";
         }
@@ -116,13 +118,13 @@ sub view {
 
     # This has to be done before $text is rendered!!
     my $viewAccessOK =
-      TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
+      $TWiki::T->{security}->checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
     # SMELL: why wait so long before processing this if the read access failed?
 
     if( $viewRaw ) {
         $extra .= " raw=$viewRaw";
         if( $viewRaw =~ /debug/i ) {
-            $text = TWiki::Store::getDebugText( $meta, $text );
+            $text = $TWiki::T->{store}->getDebugText( $meta, $text );
         }
         # a skin name starting with the word 'text' is intended to be
         # used like this:
@@ -143,7 +145,7 @@ sub view {
         }
     } else {
         $text = TWiki::handleCommonTags( $text, $topic );
-        $text = $TWiki::renderer->getRenderedVersion( $text );
+        $text = $TWiki::T->{renderer}->getRenderedVersion( $text );
     }
 
     if( $TWiki::doLogTopicView ) {
@@ -152,7 +154,7 @@ sub view {
     }
 
     # get view template, standard view or a view with a different skin
-    my $tmpl = TWiki::Templates::readTemplate( "view", $skin );
+    my $tmpl = $TWiki::T->{templates}->readTemplate( "view", $skin );
     if( ! $tmpl ) {
         my $mess = "<html><body>\n"
           . "<h1>TWiki Installation Error</h1>\n"
@@ -241,18 +243,17 @@ sub view {
     if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
     } else {
-        $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, ( $rev == $maxrev ) );
+        $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, ( $rev == $maxrev ) );
     }
-    $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
+    $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%MAXREV%/$maxrev/go;
     $tmpl =~ s/%CURRREV%/$rev/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> tags (PTh 06 Nov 2000)
 
-    # SMELL: why calculate viewAccessOK and then use readTopicPermissionFailed
-    # SMELL: readTopicPermissionFailed break TWiki encapsulation
-    if( $TWiki::readTopicPermissionFailed ) {
+    # Check if some part of the sequence of Store accesses failed
+    if( $TWiki::T->{store}->accessFailed() ) {
         # Can't read requested topic and/or included (or other accessed topics
         # user could not be authenticated, may be not logged in yet?
         my $viewauthFile = $ENV{'SCRIPT_FILENAME'};
@@ -267,7 +268,7 @@ sub view {
             if( $url && $url =~ m|/view| ) {
                 # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
                 $url =~ s|/view|/viewauth|o;
-                $url = "$TWiki::urlHost$url";
+                $url = "Urlhost()$url";
             } else {
                 # If REQUEST_URI is rewritten and does not contain the name "view"
                 # try looking at the CGI environment variable SCRIPT_NAME.
@@ -282,12 +283,12 @@ sub view {
                 $queryString = '?' . $queryString if ($queryString);
                 if ($script && $script =~ m|/view| ) {
                     $script =~ s|/view|/viewauth|o;
-                    $url = "$TWiki::urlHost$script$pathInfo$queryString";
+                    $url = "Urlhost()$script$pathInfo$queryString";
                 } else {
                     # If SCRIPT_NAME does not contain the name "view"
                     # the last hope is to try the SCRIPT_FILENAME ...
                     $viewauthFile =~ s|^.*/viewauth|/viewauth|o;  # strip off $Twiki::scriptUrlPath
-                    $url = "$TWiki::urlHost$TWiki::scriptUrlPath/$viewauthFile$pathInfo$queryString";
+                    $url = $TWiki::T->{urlhost}.$TWiki::T->{scriptUrlPath}."/$viewauthFile$pathInfo$queryString";
                 }
             }
             TWiki::UI::redirect( $url );

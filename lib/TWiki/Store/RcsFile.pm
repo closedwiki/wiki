@@ -37,7 +37,7 @@ use Time::Local;	# Added for revDate2EpSecs
 # ======================
 =pod
 
----++ sub new (  $proto, $web, $topic, $attachment, %settings  )
+---++ sub new (  $proto, $web, $topic, $attachment, $settings  )
 
 Not yet documented.
 
@@ -45,47 +45,46 @@ Not yet documented.
 
 sub new
 {
-   my( $proto, $web, $topic, $attachment, %settings ) = @_;
-   my $class = ref($proto) || $proto;
-   my $self = {};
-   bless( $self, $class );
-   $self->{"web"} = $web;
-   $self->{"topic"} = $topic;
-   $self->{"attachment"} = $attachment || "";
-   $self->_settings( %settings );
-   $self->{"file"} = $self->_makeFileName();
-   $self->{"rcsFile"} = $self->_makeFileName( ",v" );
+    my( $class, $web, $topic, $attachment, $settings ) = @_;
+    my $self = bless( {}, $class );
+    $self->{"web"} = $web;
+    $self->{"topic"} = $topic;
+    $self->{"attachment"} = $attachment || "";
+    foreach my $key ( "useRcsDir", "dataDir", "pubDir", "binary",
+                      "attachAsciiPath", "dirPermission" ) {
+        $self->{$key} = $settings->{$key};
+    }
+    $self->{"file"} = $self->_makeFileName();
+    $self->{"rcsFile"} = $self->_makeFileName( ",v" );
 
-   return $self;
+    return $self;
 }
 
-# ======================
-sub _init
-{
-   my( $self ) = @_;
-   
-   # If attachment - make sure file and history directories exist
-   if( $self->{attachment} ) {
-      # Make sure directory for rcs history file exists
-      my $rcsDir = $self->_makeFileDir( 1, ",v" );
-      my $tempPath = $self->{dataDir} . "/" . $self->{web};
-      if( ! -e "$tempPath" ) {
-         umask( 0 );
-         mkdir( $tempPath, $self->{dirPermission} );
-      }
-      $tempPath = $rcsDir;
-      if( ! -e "$tempPath" ) {
-         umask( 0 );
-         mkdir( $tempPath, $self->{dirPermission} );
-      }
-   }
+# Call only after all settings initialised
+sub init {
+    my $self = shift;
 
-   
-   if( $self->{attachment} &&
-       ! -e $self->{"rcsFile"} && 
-       ! $self->isAsciiDefault() ) {
-       $self->setBinary( 1 );
-   }  
+    # If attachment - make sure file and history directories exist
+    if( $self->{attachment} ) {
+        # Make sure directory for rcs history file exists
+        my $rcsDir = $self->_makeFileDir( 1, ",v" );
+        my $tempPath = $self->{dataDir} . "/" . $self->{web};
+        if( ! -e "$tempPath" ) {
+            umask( 0 );
+            mkdir( $tempPath, $self->{dirPermission} );
+        }
+        $tempPath = $rcsDir;
+        if( ! -e "$tempPath" ) {
+            umask( 0 );
+            mkdir( $tempPath, $self->{dirPermission} );
+        }
+    }
+
+    if( $self->{attachment} &&
+        ! -e $self->{"rcsFile"} && 
+        ! $self->isAsciiDefault() ) {
+        $self->setBinary( 1 );
+    }
 }
 
 
@@ -186,8 +185,9 @@ sub _moveTopic
    my $error = "";
 
    # Change data file
+   my %sets = ( pubDir =>$self->{pubDir}, dataDir => $self->{dataDir} );
    my $new = TWiki::Store::RcsFile->new( $newWeb, $newTopic, "",
-        ( pubDir =>$self->{pubDir}, dataDir => $self->{dataDir} ) );
+                                       \%sets);
    my $from = $self->{file};
    my $to =  $new->{file};
    if( ! move( $from, $to ) ) {
@@ -353,18 +353,6 @@ sub useRcsDir
 }
 
 # ======================
-sub _settings
-{
-    my( $self, %settings ) = @_;
-    $self->{"useRcsDir"} = $settings{"useRcsDir"};
-    $self->{"dataDir"}   = $settings{"dataDir"};
-    $self->{"pubDir"}    = $settings{"pubDir"};
-    $self->{"binary"}    = "";
-    $self->{attachAsciiPath} = $settings{attachAsciiPath};
-    $self->{dirPermission} = $settings{dirPermission};
-}
-
-# ======================
 =pod
 
 ---++ sub isAsciiDefault (  $self  )
@@ -440,7 +428,7 @@ sub setLock
 {
     my( $self, $lock, $userName ) = @_;
     
-    $userName = $TWiki::userName if( ! $userName );
+    $userName = $TWiki::T->{userName} if( ! $userName );
 
     my $lockFilename = $self->_makeFileName( ".lock" );
     if( $lock ) {

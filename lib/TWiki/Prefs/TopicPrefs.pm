@@ -13,7 +13,6 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-use strict;
 
 =pod
 
@@ -24,9 +23,12 @@ topic.
 
 =cut
 
-package TWiki::Prefs::TopicPrefs;
-
+require TWiki;
 use TWiki::Prefs::Parser;
+
+use strict;
+
+package TWiki::Prefs::TopicPrefs;
 
 =pod
 
@@ -51,7 +53,7 @@ sub new {
 
 =pod
 
----+++ sub readPrefs()
+---+++ sub Prefs()
 
 Rereads preferences from the topic, updating the TopicPrefs object.
 
@@ -65,10 +67,11 @@ sub readPrefs {
 
     $self->{prefs} = {};
 
-    return unless TWiki::Store::topicExists( $theWeb, $theTopic );
+    return unless $TWiki::T->{store}->topicExists( $theWeb, $theTopic );
 
     my( $meta, $text ) =
-      TWiki::Store::readTopic( $theWeb, $theTopic, undef, 1 );
+      $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $theWeb, $theTopic,
+                               undef, 1 );
 
     my $parser = new TWiki::Prefs::Parser();
     $parser->parseText( $text, $self );

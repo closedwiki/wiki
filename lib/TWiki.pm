@@ -41,88 +41,65 @@ use strict;
 
 require 5.005;		# For regex objects and internationalisation
 
-# TWiki config variables from TWiki.cfg:
+# TWiki config variables from TWiki.cfg. These should be regarded as constants.
 use vars qw(
-        $defaultUserName $wikiHomeUrl $defaultUrlHost
-        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir $logDir
-        $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
-        $debugFilename $warningFilename $htpasswdFilename
-        $logFilename $remoteUserFilename $wikiUsersTopicname
-        $userListFilename $doMapUserToWikiName
-        $twikiWebname $mainWebname $mainTopicname $notifyTopicname
-        $wikiPrefsTopicname $webPrefsTopicname
-        $statisticsTopicname $statsTopViews $statsTopContrib $doDebugStatistics
-        $numberOfRevisions $editLockTime $scriptSuffix
-        $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
-        $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
-        $doRemoveImgInMailnotify $doRememberRemoteUser $doPluralToSingular
-        $doHidePasswdInRegistration $doSecureInclude
-        $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
-        $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
-        $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-        $superAdminGroup $doSuperAdminGroup $OS
-        $disableAllPlugins $attachAsciiPath $displayTimeValues
-        $dispScriptUrlPath $dispViewPath
-    );
+            $defaultUserName $wikiHomeUrl $defaultUrlHost
+            $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir $logDir
+            $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
+            $debugFilename $warningFilename $htpasswdFilename
+            $logFilename $remoteUserFilename $wikiUsersTopicname
+            $userListFilename $doMapUserToWikiName
+            $twikiWebname $mainWebname $mainTopicname $notifyTopicname
+            $wikiPrefsTopicname $webPrefsTopicname
+            $statisticsTopicname $statsTopViews $statsTopContrib $doDebugStatistics
+            $numberOfRevisions $editLockTime $scriptSuffix
+            $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
+            $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
+            $doRemoveImgInMailnotify $doRememberRemoteUser $doPluralToSingular
+            $doHidePasswdInRegistration $doSecureInclude
+            $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
+            $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
+            $doLogTopicChanges $doLogTopicSearch $doLogRegistration
+            $superAdminGroup $doSuperAdminGroup $OS
+            $disableAllPlugins $attachAsciiPath $displayTimeValues
+            $dispScriptUrlPath $dispViewPath
+            $useLocale
+            $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
+            @storeSettings
+            $cmdQuote $lsCmd $egrepCmd $fgrepCmd
+           );
 
-# Internationalisation (I18N) config from TWiki.cfg:
+# Other constants
 use vars qw(
-	$useLocale $localeRegexes $siteLocale $siteCharsetOverride 
-	$upperNational $lowerNational
-    );
-
-# TWiki::Store config from TWiki.cfg
-use vars qw(
-        $rcsDir $rcsArg $nullDev $endRcsCmd $storeTopicImpl $keywordMode
-        $storeImpl @storeSettings
-    );
-
-# TWiki::Search config from TWiki.cfg
-use vars qw(
-        $cmdQuote $lsCmd $egrepCmd $fgrepCmd
-    );
-
-# Global variables
-
-# Refactoring Note: these are split up by "site" globals and "request"
-# globals so that the latter may latter be placed inside a Perl object
-# instead of being globals as now.
-
-# ---------------------------
-# Site-Wide Global Variables
-
-# Misc. Globals
-use vars qw(
+            $localeRegexes $siteLocale $siteCharsetOverride 
+            $upperNational $lowerNational
             @isoMonth @weekDay $wikiversion
             $TranslationToken $twikiLibDir $formatVersion
             @publicWebList
             %regex
             %staticInternalTags
             %dynamicInternalTags
-            $prefsObject
-            $renderer
-           );
-
-# Internationalisation (I18N) setup:
-use vars qw(
             $siteCharset $useUnicode $siteLang $siteFullLang $urlCharEncoding
            );
 
-# Per-Request "Global" Variables
-use vars qw(
-            $webName $topicName
-            $userName $wikiName $wikiUserName $urlHost
-            $debugUserTime $debugSystemTime $script
-            $readTopicPermissionFailed $cgiQuery $basicInitDone
-            %sessionInternalTags
-            %preferencesTags
-           );
+# The singleton "twiki" object instance and exporter bits
+use vars qw( $T );
 
-# Key Global variables
 $wikiversion = '20 Oct 2004 $Rev$';
+
 # (new variables must be declared in "use vars qw(..)" above)
 @isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 @weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+
+# Token character that must not occur in any normal text - converted
+# to a flag character if it ever does occur (very unlikely)
+$TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
+
+# The following are also initialized in initialize, here for cases where
+# initialize not called.
+@publicWebList = ();
+
+$formatVersion = "1.0";
 
 # Run-time locale setup - If $useLocale is set, this function parses
 # $siteLocale from TWiki.cfg and passes it to the POSIX::setLocale
@@ -369,28 +346,12 @@ use TWiki::Sandbox;   # system command sandbox
 use TWiki::Prefs;     # preferences
 use TWiki::Access;    # access control
 use TWiki::Store;     # file I/O and rcs related functions
+use TWiki::Search;    # search engine
 use TWiki::Plugins;   # plugins handler
 use TWiki::User;
 use TWiki::Render;    # HTML generation
 use TWiki::Templates; # TWiki template language
-
-# Other Global variables
-
-# Token character that must not occur in any normal text - converted
-# to a flag character if it ever does occur (very unlikely)
-$TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
-
-# The following are also initialized in initialize, here for cases where
-# initialize not called.
-$cgiQuery = 0;
-@publicWebList = ();
-
-$debugUserTime   = 0;
-$debugSystemTime = 0;
-
-$formatVersion = "1.0";
-
-$basicInitDone = 0;		# basicInitialize not yet done
+use TWiki::Net;       # SMTP, get URL
 
 # Concatenates date, time, and $text to a log file.
 # The logfilename can optionally use a %DATE% variable to support
@@ -434,8 +395,8 @@ sub writeLog
     my $extra = shift || "";
     my $user = shift || "";
 
-    my $wuserName = $user || $userName;
-    $wuserName = TWiki::User::userToWikiName( $wuserName );
+    my $wuserName = $user || $TWiki::T->{userName};
+    $wuserName = $TWiki::T->{users}->userToWikiName( $wuserName );
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
     my $text = "$wuserName | $action | $webTopic | $extra | $remoteAddr |";
 
@@ -474,174 +435,18 @@ sub writeDebug {
 ---++ initialize( $pathInfo, $remoteUser, $topic, $url, $query )
 Return value: ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir )
 
-Per-web initialization of all aspects of TWiki.  Initializes the
-Store, User, Access, and Prefs modules.  Contains two plugin
-initialization hooks: 'initialize1' to allow plugins to interact
-for authentication, and 'initialize2' once the authenticated username
-is available.
-
-Also parses $theTopic to determine whether it's a URI, a "Web.Topic"
-pair, a "Web." WebHome shorthand, or just a topic name.  Note that
-if $pathInfo is set, this overrides $theTopic.
+Constructs a new singleton session instance.
+Deprecated, but retained because it is so widely (ab)used.
+Use "new TWiki(...)" instead.
 
 =cut
 
 sub initialize {
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
 
-    basicInitialize() unless( $basicInitDone );
+    $T = new TWiki( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery );
 
-    $cgiQuery = $theQuery;
-
-    # Initialise per-session vars here rather than at start of module,
-    # so compatible with modPerl
-    @publicWebList = ();
-    TWiki::Store::initialize();
-    TWiki::User::initialize();
-
-    # Make %ENV safer, preventing hijack of the search path
-    if( $safeEnvPath ) {
-        $ENV{'PATH'} = $safeEnvPath;
-    }
-    delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
-
-    # initialize lib directory early because of later 'cd's
-    getTWikiLibDir();
-
-    # initialize access control
-    TWiki::Access::initializeAccess();
-    $readTopicPermissionFailed = ""; # Will be set to name(s) of topic(s) that can't be read
-
-    # initialize $webName and $topicName from URL
-    $topicName = "";
-    $webName   = "";
-    if( $theTopic ) {
-        if(( $theTopic =~ /^$regex{linkProtocolPattern}\:\/\//o ) && ( $cgiQuery ) ) {
-            # redirect to URI
-            print $cgiQuery->redirect( $theTopic );
-            return; # should never return here
-        } elsif( $theTopic =~ /(.*)[\.\/](.*)/ ) {
-            # is "bin/script?topic=Webname.SomeTopic"
-            $webName   = $1 || "";
-            $topicName = $2 || "";
-            # jump to WebHome if ""bin/script?topic=Webname."
-            $topicName = $mainTopicname if( $webName && ( ! $topicName ) );
-        } else {
-            # assume "bin/script/Webname?topic=SomeTopic"
-            $topicName = $theTopic;
-        }
-    }
-
-    # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
-    # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
-    # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
-    my $cgiScriptName = $ENV{'SCRIPT_NAME'} || "";
-    $thePathInfo =~ s!$cgiScriptName/!/!i;
-
-    # Get the web and topic names from PATH_INFO
-    if( $thePathInfo =~ /\/(.*)[\.\/](.*)/ ) {
-        # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
-        $webName   = $1 || "" if( ! $webName );
-        $topicName = $2 || "" if( ! $topicName );
-    } elsif( $thePathInfo =~ /\/(.*)/ ) {
-        # is "bin/script/Webname" or "bin/script/"
-        $webName   = $1 || "" if( ! $webName );
-    }
-    ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
-
-    # Refuse to work with character sets that allow TWiki syntax
-    # to be recognised within multi-byte characters.  Only allow 'oops'
-    # page to be displayed (redirect causes this code to be re-executed).
-    if ( _invalidSiteCharset() and $theUrl !~ m!$scriptUrlPath/oops! ) {  
-        writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
-        writeWarning( "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg." );
-        my $url = TWiki::getOopsUrl( $webName, $topicName, "oopsbadcharset" );
-        print $cgiQuery->redirect( $url );
-        return;
-    }
-
-    # Convert UTF-8 web and topic name from URL into site charset 
-    # if necessary - no effect if URL is not in UTF-8
-    ( $webName, $topicName ) = convertUtf8URLtoSiteCharset ( $webName, $topicName );
-
-    # Filter out dangerous or unwanted characters
-    $topicName =~ s/$securityFilter//go;
-    $topicName =~ /(.*)/;
-    $topicName = $1 || $mainTopicname;  # untaint variable
-    $webName   =~ s/$securityFilter//go;
-    $webName   =~ /(.*)/;
-    $webName   = $1 || $mainWebname;  # untaint variable
-
-    # initialize $urlHost and $scriptUrlPath 
-    if( ( $theUrl ) && ( $theUrl =~ m!^([^:]*://[^/]*)(.*)/.*$! ) && ( $2 ) ) {
-        if( $doGetScriptUrlFromCgi ) {
-            $scriptUrlPath = $2;
-        }
-        $urlHost = $1;
-        if( $doRemovePortNumber ) {
-            $urlHost =~ s/\:[0-9]+$//;
-        }
-    } else {
-        $urlHost = $defaultUrlHost;
-    }
-
-    TWiki::Prefs::PrefsCache::resetCache(); # for mod_perl compatibility
-
-    # initialize preferences, first part for site and web level
-    $prefsObject = new TWiki::Prefs( $webName );
-
-    if( !$disableAllPlugins ) {
-        # Early plugin initialization, allow plugins like SessionPlugin
-	    # to set the user.  This must be done before preferences are set,
-	    # as we need to get user preferences
-        $userName = TWiki::Plugins::initialize1( $topicName, $webName, $theRemoteUser, $theUrl, $thePathInfo );
-    }
-    $wikiName     = TWiki::User::userToWikiName( $userName, 1 );      # i.e. "JonDoe"
-    $wikiUserName = TWiki::User::userToWikiName( $userName );         # i.e. "Main.JonDoe"
-
-    $sessionInternalTags{USERNAME} = $userName;
-    $sessionInternalTags{WIKINAME} = $wikiName;
-    $sessionInternalTags{WIKIUSERNAME} = $wikiUserName;
-    $sessionInternalTags{BASEWEB} = $webName;
-    $sessionInternalTags{BASETOPIC} = $topicName;
-    $sessionInternalTags{INCLUDINGTOPIC} = $topicName;
-    $sessionInternalTags{INCLUDINGWEB} = $webName;
-    $sessionInternalTags{ATTACHURL} = "$urlHost%ATTACHURLPATH%";
-    $sessionInternalTags{PUBURL} = "$urlHost$pubUrlPath";
-    $sessionInternalTags{SCRIPTURL} = "$urlHost$dispScriptUrlPath";
-
-    # initialize preferences, second part for user level
-    $prefsObject->initializeUser( $wikiUserName, $topicName );
-
-    $renderer = new TWiki::Render( $prefsObject );
-
-    if( !$disableAllPlugins ) {
-        # Normal plugin initialization - userName is known and preferences available
-        TWiki::Plugins::initialize2( $topicName, $webName, $userName );
-    }
-
-    # Assumes all preferences values are set by now, which may well be false!
-    # It would be better to get the Prefs module to maintain this
-    # hash.
-    $prefsObject->loadHash( \%preferencesTags );
-
-    return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
-}
-
-=pod
-
----++ basicInitialize()
-
-Sets up basic stuff - for use from scripts
-that require the BEGIN block of this class to be
-executed e.g. mailnotify and need regexes or
-isWebName/isValidWikiWord to work before the per-web initialize() is called.
-Also called from initialize() if not necessary beforehand.
-
-=cut
-
-sub basicInitialize() {
-    $basicInitDone = 1;
+    return ( $T->{topicName}, $TWiki::T->{webName}, $TWiki::T->{scriptUrlPath}, $TWiki::T->{userName}, $dataDir );
 }
 
 # Return value: boolean $isCharsetInvalid
@@ -869,7 +674,7 @@ Returns the CGI query object for the current request. See =perldoc CGI=
 =cut
 
 sub getCgiQuery {
-    return $cgiQuery;
+    return $TWiki::T->{cgiQuery};
 }
 
 =pod
@@ -960,10 +765,10 @@ sub readOnlyMirrorWeb {
     my @mirrorInfo = ( "", "", "", "" );
     if( $siteWebTopicName ) {
         my $mirrorSiteName =
-          $prefsObject->getValue( "MIRRORSITENAME", $theWeb );
+          $TWiki::T->{prefs}->getPreferencesValue( "MIRRORSITENAME", $theWeb );
         if( $mirrorSiteName && $mirrorSiteName ne $siteWebTopicName ) {
             my $mirrorViewURL  =
-              $prefsObject->getValue( "MIRRORVIEWURL", $theWeb );
+              $TWiki::T->{prefs}->getPreferencesValue( "MIRRORVIEWURL", $theWeb );
             my $mirrorLink = TWiki::Store::readTemplate( "mirrorlink" );
             $mirrorLink =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorLink =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
@@ -971,7 +776,7 @@ sub readOnlyMirrorWeb {
             my $mirrorNote = TWiki::Store::readTemplate( "mirrornote" );
             $mirrorNote =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorNote =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
-            $mirrorNote = $renderer->getRenderedVersion( $mirrorNote, $theWeb );
+            $mirrorNote = $TWiki::T->{renderer}->getRenderedVersion( $mirrorNote, $theWeb );
             $mirrorNote =~ s/\s*$//g;
             @mirrorInfo = ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote );
         }
@@ -1041,8 +846,8 @@ Get the name of the currently requested skin
 
 sub getSkin {
     my $skin = "";
-    $skin = $cgiQuery->param( 'skin' ) if( $cgiQuery );
-    $skin = $prefsObject->getValue( "SKIN" ) unless( $skin );
+    $skin = $TWiki::T->{cgiQuery}->param( 'skin' ) if( $TWiki::T->{cgiQuery} );
+    $skin = $TWiki::T->{prefs}->getPreferencesValue( "SKIN" ) unless( $skin );
     return $skin;
 }
 
@@ -1059,7 +864,7 @@ sub getViewUrl {
 
     $theTopic =~ s/\s*//gs; # Illegal URL, remove space
 
-    return "$urlHost$dispScriptUrlPath$dispViewPath$scriptSuffix/$theWeb/$theTopic";
+    return "$TWiki::T->{urlHost}$dispScriptUrlPath$dispViewPath$scriptSuffix/$theWeb/$theTopic";
 }
 
 =pod
@@ -1076,7 +881,7 @@ Returns the absolute URL to a TWiki script, providing the wub and topic as
 sub getScriptUrl {
     my( $theWeb, $theTopic, $theScript ) = @_;
     
-    my $url = "$urlHost$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
+    my $url = "$TWiki::T->{urlHost}$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
 
     # FIXME consider a plugin call here - useful for certificated logon environment
     
@@ -1099,12 +904,12 @@ The returned URL ends up looking something like:
 sub getOopsUrl {
     my( $theWeb, $theTopic, $theTemplate,
         $theParam1, $theParam2, $theParam3, $theParam4 ) = @_;
-    my $web = $webName;  # current web
+    my $web = $TWiki::T->{webName};  # current web
     if( $theWeb ) {
         $web = $theWeb;
     }
     my $url = "";
-    # $urlHost is needed, see Codev.PageRedirectionNotWorking
+    # $TWiki::T->{urlHost} is needed, see Codev.PageRedirectionNotWorking
     $url = getScriptUrl( $web, $theTopic, "oops" );
     $url .= "\?template=$theTemplate";
     $url .= "\&amp;param1=" . _urlEncode( $theParam1 ) if ( $theParam1 );
@@ -1140,8 +945,8 @@ sub normalizeWebTopicName {
        $theWeb = $1;
        $theTopic = $2;
    }
-   $theWeb = $TWiki::webName unless( $theWeb );
-   $theTopic = $TWiki::topicName unless( $theTopic );
+   $theWeb = $TWiki::T->{webName} unless( $theWeb );
+   $theTopic = $TWiki::T->{topicName} unless( $theTopic );
 
    return( $theWeb, $theTopic );
 }
@@ -1320,12 +1125,12 @@ sub applyPatternToIncludedText {
 }
 
 sub _handleFORMFIELD {
-    return $TWiki::renderer->renderFormField( @_ );
+    return $TWiki::T->{renderer}->renderFormField( @_ );
 }
 
 sub _handleTMPLP {
     my $params = shift;
-    return TWiki::Templates::expandTemplate( $params->{_DEFAULT} );
+    return $TWiki::T->{templates}->expandTemplate( $params->{_DEFAULT} );
 }
 
 sub _handleVAR {
@@ -1335,7 +1140,7 @@ sub _handleVAR {
     if( $web =~ /%[A-Z]+%/ ) { # handle %MAINWEB%-type cases 
         handleInternalTags( $web, $inweb, $topic );
     }
-    return $prefsObject->getValue( $key, $web );
+    return $TWiki::T->{prefs}->getPreferencesValue( $key, $web );
 }
 
 sub _handlePLUGINVERSION {
@@ -1354,7 +1159,7 @@ sub _includeUrl {
     my $pass = "";
 
     # For speed, read file directly if URL matches an attachment directory
-    if( $theUrl =~ /^$urlHost$pubUrlPath\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
+    if( $theUrl =~ /^$TWiki::T->{urlHost}$pubUrlPath\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
         my $web = $1;
         my $topic = $2;
         my $fileName = "$pubDir/$web/$topic/$3";
@@ -1364,12 +1169,15 @@ sub _includeUrl {
             }
             if( "$web.$topic" ne "$theWeb.$theTopic" ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
-                unless( TWiki::Access::checkAccessPermission( "VIEW", $wikiUserName, "", $topic, $web ) ) {
+                unless( $TWiki::T->{security}->checkAccessPermission( "VIEW",
+                                                                 $TWiki::T->{wikiUserName},
+                                                                 "", $topic,
+                                                                 $web ) ) {
                     return _inlineError( "Error: No permission to view files attached to $web.$topic" );
                 }
             }
-            $text = TWiki::Store::readFile( $fileName );
-            $text = _cleanupIncludedHTML( $text, $urlHost, $pubUrlPath );
+            $text = $TWiki::T->{store}->readFile( $fileName );
+            $text = _cleanupIncludedHTML( $text, $TWiki::T->{urlHost}, $pubUrlPath );
             $text = applyPatternToIncludedText( $text, $thePattern ) if( $thePattern );
             return $text;
         }
@@ -1389,9 +1197,7 @@ sub _includeUrl {
         return $text;
     }
 
-    use TWiki::Net;       # SMTP, get URL
-
-    $text = TWiki::Net::getUrl( $host, $port, $path, $user, $pass );
+    $text = $TWiki::T->{net}->getUrl( $host, $port, $path, $user, $pass );
     $text =~ s/\r\n/\n/gs;
     $text =~ s/\r/\n/gs;
     $text =~ s/^(.*?\n)\n(.*)/$2/s;
@@ -1477,7 +1283,7 @@ sub _handleINCLUDE {
         last TRY if( -e $fileName );
 
         # give up, file not found
-        $warn = $prefsObject->getValue( "INCLUDEWARNING" ) unless( $warn );
+        $warn = $TWiki::T->{prefs}->getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
         if( $warn =~ /^on$/i ) {
             return _inlineError( "Warning: Can't INCLUDE <nop>$incfile, topic not found" );
         } elsif( $warn && $warn !~ /^(off|no)$/i ) {
@@ -1493,7 +1299,7 @@ sub _handleINCLUDE {
     # prevent recursive loop
     if( $theProcessedTopics->{$inFile} ) {
         # file already included
-        if( $warn || $prefsObject->getFlag( "INCLUDEWARNING" ) ) {
+        if( $warn || $TWiki::T->{prefs}->getPreferencesFlag( "INCLUDEWARNING" ) ) {
             unless( $warn =~ /^(off|no)$/i ) {
                 return _inlineError( "Warning: Can't INCLUDE <nop>$incfile twice, topic is already included" );
             }
@@ -1505,8 +1311,8 @@ sub _handleINCLUDE {
     }
 
     # set include web/filenames and current web/filenames
-    $sessionInternalTags{INCLUDINGWEB} = $theWeb;
-    $sessionInternalTags{INCLUDINGTOPIC} = $theTopic;
+    $TWiki::T->{SESSION}{INCLUDINGWEB} = $theWeb;
+    $TWiki::T->{SESSION}{INCLUDINGTOPIC} = $theTopic;
     if( $fileName =~ s/\/([^\/]*)\/([^\/]*)\.txt$/$1/ ) {
         # identified "/Web/TopicName.txt" filename, e.g. a Wiki topic
         # so save the current web and topic name
@@ -1515,7 +1321,7 @@ sub _handleINCLUDE {
         $isTopic = 1;
 
         ( $meta, $text ) =
-          TWiki::Store::readTopic( $theWeb, $theTopic, $rev, 0 );
+          $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $theWeb, $theTopic, $rev, 0 );
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//s;
         $text =~ s/%STOPINCLUDE%.*//s;
@@ -1525,7 +1331,7 @@ sub _handleINCLUDE {
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
     # handle all preferences and internal tags
-    $text = $renderer->takeOutBlocks( $text, "verbatim", $verbatim );
+    $text = $TWiki::T->{renderer}->takeOutBlocks( $text, "verbatim", $verbatim );
 
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
     $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
@@ -1539,7 +1345,7 @@ sub _handleINCLUDE {
     # If needed, fix all "TopicNames" to "Web.TopicNames" to get the
     # right context
     # SMELL: This is a hack.
-    if( ( $isTopic ) && ( $theWeb ne $webName ) ) {
+    if( ( $isTopic ) && ( $theWeb ne $TWiki::T->{webName} ) ) {
         # "TopicName" to "Web.TopicName"
         $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
         $text =~ s/(^|[\s\(])($regex{wikiWordRegex})/$1$theWeb\.$2/go;
@@ -1611,7 +1417,7 @@ sub _handleMETASEARCH {
 
     use TWiki::Search;    # search engine
 
-    my $text = TWiki::Search::searchWeb(
+    my $text = $TWiki::T->{search}->searchWeb(
         #"_callback"    => undef,
         "search"        => $searchVal,
         "web"           => $searchWeb,
@@ -1807,7 +1613,7 @@ sub _TOC {
                 $urlPath = "$TWiki::dispScriptUrlPath$TWiki::dispViewPath$TWiki::scriptSuffix/$webPath/$topicname";
             }
             if( ( $line ) && ( $level <= $depth ) ) {
-                $anchor = $renderer->makeAnchorName( $line );
+                $anchor = $TWiki::T->{renderer}->makeAnchorName( $line );
                 # cut TOC exclude '---+ heading !! exclude'
                 $line  =~ s/\s*$headerNoTOC.+$//go;
                 $line  =~ s/[\n\r]//go;
@@ -1859,14 +1665,14 @@ sub _handleREVINFO {
     my $topic  = $params->{topic} || $theTopic;
     my $cgiQuery = getCgiQuery();
     my $cgiRev = "";
-    $cgiRev = $cgiQuery->param("rev") if( $cgiQuery );
+    $cgiRev = $TWiki::T->{cgiQuery}->param("rev") if( $TWiki::T->{cgiQuery} );
     my $revnum = $cgiRev || $params->{rev} || "";
-    $revnum = TWiki::Store::cleanUpRevID( $revnum );
+    $revnum = $TWiki::T->{store}->cleanUpRevID( $revnum );
 
     my( $date, $user, $rev, $comment ) =
-      TWiki::Store::getRevisionInfo( $web, $topic, $revnum );
-    my $wikiName     = TWiki::User::userToWikiName( $user, 1 );
-    my $wikiUserName = TWiki::User::userToWikiName( $user );
+      $TWiki::T->{store}->getRevisionInfo( $web, $topic, $revnum );
+    my $wikiName     = $TWiki::T->{users}->userToWikiName( $user, 1 );
+    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $user );
 
     my $value = $format;
     $value =~ s/\$web/$web/goi;
@@ -1902,11 +1708,9 @@ sub _handleSEARCH {
     $params->{baseweb} = $theTopic;
     $params->{basetopic} = $theWeb;
     $params->{search} = $params->{_DEFAULT} if( $params->{_DEFAULT} );
-    $params->{type} = $prefsObject->getValue( "SEARCHVARDEFAULTTYPE" ) unless( $params->{type} );
+    $params->{type} = $TWiki::T->{prefs}->getPreferencesValue( "SEARCHVARDEFAULTTYPE" ) unless( $params->{type} );
 
-    use TWiki::Search;    # search engine
-
-    return TWiki::Search::searchWeb( %$params );
+    return $TWiki::T->{search}->searchWeb( %$params );
 }
 
 # Format an error for inline inclusion in HTML
@@ -1924,12 +1728,12 @@ Return public web list, i.e. exclude hidden webs, but include current web
 
 sub getPublicWebList {
     if( ! @publicWebList ) {
-        my @list = TWiki::Store::getAllWebs();
+        my @list = $TWiki::T->{store}->getAllWebs();
         my $item = "";
         my $hidden = "";
         foreach $item ( @list ) {
-            $hidden = $prefsObject->getValue( "NOSEARCHALL", $item );
-            if( ( $item eq $TWiki::webName  ) || ( ( ! $hidden ) && ( $item =~ /^[^\.\_]/ ) ) ) {
+            $hidden = $TWiki::T->{prefs}->getPreferencesValue( "NOSEARCHALL", $item );
+            if( ( $item eq $TWiki::T->{webName}  ) || ( ( ! $hidden ) && ( $item =~ /^[^\.\_]/ ) ) ) {
                 push( @publicWebList, $item );
             }
         }
@@ -1956,10 +1760,10 @@ The expanded variables are:
 sub expandVariablesOnTopicCreation {
   my ( $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
 
-  $theUser = $userName unless $theUser;
-  $theWikiName = TWiki::User::userToWikiName( $theUser, 1 )
+  $theUser = $TWiki::T->{userName} unless $theUser;
+  $theWikiName = $TWiki::T->{users}->userToWikiName( $theUser, 1 )
     unless $theWikiName;
-  $theWikiUserName = TWiki::User::userToWikiName( $theUser )
+  $theWikiUserName = $TWiki::T->{users}->userToWikiName( $theUser )
     unless $theWikiUserName;
 
   $theText =~ s/%DATE%/&_handleDATE()/ge;
@@ -2005,17 +1809,17 @@ sub _webOrTopicList {
             if( $aweb eq "public" ) {
                 push( @list, getPublicWebList() );
             } elsif( $aweb eq "webtemplate" ) {
-                push( @list, grep { /^\_/o } TWiki::Store::getAllWebs() );
+                push( @list, grep { /^\_/o } $TWiki::T->{store}->getAllWebs() );
             } else{
-                push( @list, $aweb ) if( TWiki::Store::webExists( $aweb ) );
+                push( @list, $aweb ) if( $TWiki::T->{store}->webExists( $aweb ) );
             }
         }
     } else {
-        $web = $webName if( ! $web );
+        $web = $TWiki::T->{webName} if( ! $web );
         my $hidden =
-          $prefsObject->getValue( "NOSEARCHALL", $web );
-        if( ( $web eq $TWiki::webName  ) || ( ! $hidden ) ) {
-            @list = TWiki::Store::getTopicNames( $web );
+          $TWiki::T->{prefs}->getPreferencesValue( "NOSEARCHALL", $web );
+        if( ( $web eq $TWiki::T->{webName}  ) || ( ! $hidden ) ) {
+            @list = $TWiki::T->{store}->getTopicNames( $web );
         }
     }
     my $text = "";
@@ -2045,9 +1849,9 @@ sub _handleURLPARAM {
     my $separator = $params->{separator} || "\n";
 
     my $value = "";
-    if( $cgiQuery ) {
+    if( $TWiki::T->{cgiQuery} ) {
         if( $multiple ) {
-            my @valueArray = $cgiQuery->param( $param );
+            my @valueArray = $TWiki::T->{cgiQuery}->param( $param );
             if( @valueArray ) {
                 unless( $multiple =~ m/^on$/i ) {
                     my $item = "";
@@ -2061,7 +1865,7 @@ sub _handleURLPARAM {
                 $value = join ( $separator, @valueArray );
             }
         } else {
-            $value = $cgiQuery->param( $param );
+            $value = $TWiki::T->{cgiQuery}->param( $param );
             $value = "" unless( defined $value );
         }
     }
@@ -2187,7 +1991,7 @@ sub _handleICON {
 
     my $theParam = $params->{_DEFAULT};
 
-    my $value = $renderer->filenameToIcon( "file.$theParam" );
+    my $value = $TWiki::T->{renderer}->filenameToIcon( "file.$theParam" );
     return $value;
 }
 
@@ -2245,21 +2049,21 @@ sub processTags {
     my $text = shift; # reference
     my ( $topic, $web ) = @_;
 
-    my $memTopic = $sessionInternalTags{TOPIC};
-    my $memWeb = $sessionInternalTags{WEB};
-    my $memEurl = $sessionInternalTags{EDITURL};
+    my $memTopic = $TWiki::T->{SESSION}{TOPIC};
+    my $memWeb = $TWiki::T->{SESSION}{WEB};
+    my $memEurl = $TWiki::T->{SESSION}{EDITURL};
 
-    $sessionInternalTags{TOPIC} = $topic;
-    $sessionInternalTags{WEB} = $web;
+    $TWiki::T->{SESSION}{TOPIC} = $topic;
+    $TWiki::T->{SESSION}{WEB} = $web;
     # Make Edit URL unique - fix for RefreshEditPage.
-    $sessionInternalTags{EDITURL} =
+    $TWiki::T->{SESSION}{EDITURL} =
       "$dispScriptUrlPath/edit$scriptSuffix/$web/$topic\?t=" . time();
 
     # SMELL: why is this done every time, and not statically during
     # template loading?
     $$text =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $$text =~ s/%NOP%/<nop>/g;
-    my $sep = TWiki::Templates::expandTemplate('"sep"');
+    my $sep = $TWiki::T->{templates}->expandTemplate('"sep"');
     $$text =~ s/%SEP%/$sep/g;
 
     # NOTE TO DEBUGGERS
@@ -2273,9 +2077,9 @@ sub processTags {
     # course applies to _all_ tags and not just search.
     $$text = _processTags( $$text, 16, "", @_ );
 
-    $sessionInternalTags{TOPIC} = $memTopic;
-    $sessionInternalTags{WEB} = $memWeb;
-    $sessionInternalTags{EDITURL} = $memEurl;
+    $TWiki::T->{SESSION}{TOPIC} = $memTopic;
+    $TWiki::T->{SESSION}{WEB} = $memWeb;
+    $TWiki::T->{SESSION}{EDITURL} = $memEurl;
 }
 
 # Process TWiki %TAGS{}% by parsing the input tokenised into
@@ -2375,10 +2179,10 @@ sub _handleTag {
 
     my $res;
 
-    if ( defined( $preferencesTags{$tag} )) {
-        $res = $preferencesTags{$tag};
-    } elsif ( defined( $sessionInternalTags{$tag} )) {
-        $res = $sessionInternalTags{$tag};
+    if ( defined( $TWiki::T->{PREFS}{$tag} )) {
+        $res = $TWiki::T->{PREFS}{$tag};
+    } elsif ( defined( $TWiki::T->{SESSION}{$tag} )) {
+        $res = $TWiki::T->{SESSION}{$tag};
     } elsif ( defined( $staticInternalTags{$tag} )) {
         $res = $staticInternalTags{$tag};
     } elsif ( defined( $dynamicInternalTags{$tag} )) {
@@ -2404,9 +2208,7 @@ table-of-contents generation, and any plugin changes from commonTagsHandler.
 sub handleCommonTags {
     my( $text, $theTopic, $theWeb ) = @_;
 
-    if( !$theWeb ) {
-        $theWeb = $webName;
-    }
+    $theWeb = $TWiki::T->{webName} unless $theWeb;
 
     my @verbatim = ();
     my $theProcessedTopics = {};
@@ -2414,15 +2216,15 @@ sub handleCommonTags {
     # Plugin Hook (for cache Plugins only)
     TWiki::Plugins::beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
-    $text = $renderer->takeOutBlocks( $text, "verbatim", \@verbatim );
+    $text = $TWiki::T->{renderer}->takeOutBlocks( $text, "verbatim", \@verbatim );
 
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
     $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
 
-    my $memW = $sessionInternalTags{INCLUDINGWEB};
-    my $memT = $sessionInternalTags{INCLUDINGTOPIC};
-    $sessionInternalTags{INCLUDINGWEB} = $theWeb;
-    $sessionInternalTags{INCLUDINGTOPIC} = $theTopic;
+    my $memW = $TWiki::T->{SESSION}{INCLUDINGWEB};
+    my $memT = $TWiki::T->{SESSION}{INCLUDINGTOPIC};
+    $TWiki::T->{SESSION}{INCLUDINGWEB} = $theWeb;
+    $TWiki::T->{SESSION}{INCLUDINGTOPIC} = $theTopic;
 
     processTags( \$text, $theTopic, $theWeb,
                         \@verbatim, $theProcessedTopics );
@@ -2434,8 +2236,8 @@ sub handleCommonTags {
     processTags( \$text, $theTopic, $theWeb,
                         \@verbatim, $theProcessedTopics );
 
-    $sessionInternalTags{INCLUDINGWEB} = $memW;
-    $sessionInternalTags{INCLUDINGTOPIC} = $memT;
+    $TWiki::T->{SESSION}{INCLUDINGWEB} = $memW;
+    $TWiki::T->{SESSION}{INCLUDINGTOPIC} = $memT;
 
     # "Special plugin tag" TOC hack
     $text =~ s/%TOC(?:{(.*?)})?%/_TOC($text, $theTopic, $theWeb, $1)/ge;
@@ -2446,12 +2248,190 @@ sub handleCommonTags {
     # SMELL: is this a hack? Looks like it....
     $text =~ s/^<nop>\r?\n//gm;
 
-    $text = $renderer->putBackBlocks( $text, \@verbatim, "verbatim" );
+    $text = $TWiki::T->{renderer}->putBackBlocks( $text, \@verbatim, "verbatim" );
 
     # TWiki Plugin Hook (for cache Plugins only)
     TWiki::Plugins::afterCommonTagsHandler( $text, $theTopic, $theWeb );
 
     return $text;
+}
+
+=pod
+
+---++ new( $pathInfo, $remoteUser, $topic, $url, $query )
+Constructs a new TWiki object.
+
+Initializes the Store, User, Access, and Prefs modules.  Contains two plugin
+initialization hooks: 'initialize1' to allow plugins to interact
+for authentication, and 'initialize2' once the authenticated username
+is available.
+
+Also parses $theTopic to determine whether it's a URI, a "Web.Topic"
+pair, a "Web." WebHome shorthand, or just a topic name.  Note that
+if $pathInfo is set, this overrides $theTopic.
+
+=cut
+
+sub new {
+    my( $class, $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
+
+    my $this = bless( {}, $class );
+
+    # has to be done here at present, as other modules need to refer to it during
+    # initialisation. When we are properly OO it will not be needed.
+    $T = $this;
+
+    $this->{sandbox} = new TWiki::Sandbox( $TWiki::OS );
+
+    $this->{net} = new TWiki::Net();
+    my %ss = @storeSettings;
+    $this->{store} = new TWiki::Store( $storeTopicImpl, \%ss );
+    $this->{search} = new TWiki::Search();
+    $this->{templates} = new TWiki::Templates();
+
+    $this->{cgiQuery} = $theQuery;
+
+    # Initialise per-this vars here rather than at start of module,
+    # so compatible with modPerl
+    @publicWebList = ();
+
+	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
+		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
+        $this->{users} = new TWiki::User( "HtPasswdUser" );
+#	} elseif ($TWiki::htpasswdFormatFamily eq "something?") {
+#        $this->{users} = new TWiki::User( "SomethingUser" );
+	} else {
+        $this->{users} = new TWiki::User( "NoPasswdUser" );
+	}
+
+    # Make %ENV safer, preventing hijack of the search path
+    if( $safeEnvPath ) {
+        $ENV{'PATH'} = $safeEnvPath;
+    }
+    delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
+
+    # initialize lib directory early because of later 'cd's
+    getTWikiLibDir();
+
+    # initialize access control
+    $this->{security} = new TWiki::Access();
+
+    # initialize $webName and $topicName from URL
+    $this->{topicName} = "";
+    $this->{webName}   = "";
+    if( $theTopic ) {
+        if(( $theTopic =~ /^$regex{linkProtocolPattern}\:\/\//o ) && ( $this->{cgiQuery} ) ) {
+            # redirect to URI
+            print $this->{cgiQuery}->redirect( $theTopic );
+            return; # should never return here
+        } elsif( $theTopic =~ /(.*)[\.\/](.*)/ ) {
+            # is "bin/script?topic=Webname.SomeTopic"
+            $this->{webName}   = $1 || "";
+            $this->{topicName} = $2 || "";
+            # jump to WebHome if ""bin/script?topic=Webname."
+            $this->{topicName} = $mainTopicname if( $this->{webName} && ( ! $this->{topicName} ) );
+        } else {
+            # assume "bin/script/Webname?topic=SomeTopic"
+            $this->{topicName} = $theTopic;
+        }
+    }
+
+    # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
+    # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
+    # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
+    my $cgiScriptName = $ENV{'SCRIPT_NAME'} || "";
+    $thePathInfo =~ s!$cgiScriptName/!/!i;
+
+    # Get the web and topic names from PATH_INFO
+    if( $thePathInfo =~ /\/(.*)[\.\/](.*)/ ) {
+        # is "bin/script/Webname/SomeTopic" or "bin/script/Webname/"
+        $this->{webName}   = $1 || "" if( ! $this->{webName} );
+        $this->{topicName} = $2 || "" if( ! $this->{topicName} );
+    } elsif( $thePathInfo =~ /\/(.*)/ ) {
+        # is "bin/script/Webname" or "bin/script/"
+        $this->{webName}   = $1 || "" if( ! $this->{webName} );
+    }
+    ( $this->{topicName} =~ /\.\./ ) && ( $this->{topicName} = $this->{mainTopicname} );
+
+    # Refuse to work with character sets that allow TWiki syntax
+    # to be recognised within multi-byte characters.  Only allow 'oops'
+    # page to be displayed (redirect causes this code to be re-executed).
+    if ( _invalidSiteCharset() and $theUrl !~ m!$scriptUrlPath/oops! ) {  
+        writeWarning( "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding" );
+        writeWarning( "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg." );
+        my $url = TWiki::getOopsUrl( $this->{webName}, $this->{topicName}, "oopsbadcharset" );
+        print $this->{cgiQuery}->redirect( $url );
+        return;
+    }
+
+    # Convert UTF-8 web and topic name from URL into site charset 
+    # if necessary - no effect if URL is not in UTF-8
+    ( $this->{webName}, $this->{topicName} ) =
+      convertUtf8URLtoSiteCharset ( $this->{webName}, $this->{topicName} );
+
+    # Filter out dangerous or unwanted characters
+    $this->{topicName} =~ s/$securityFilter//go;
+    $this->{topicName} =~ /(.*)/;
+    $this->{topicName} = $1 || $mainTopicname;  # untaint variable
+    $this->{webName}   =~ s/$securityFilter//go;
+    $this->{webName}   =~ /(.*)/;
+    $this->{webName}   = $1 || $mainWebname;  # untaint variable
+    $this->{scriptUrlPath} = $scriptUrlPath;
+
+    # initialize $urlHost and $scriptUrlPath 
+    if( ( $theUrl ) && ( $theUrl =~ m!^([^:]*://[^/]*)(.*)/.*$! ) && ( $2 ) ) {
+        if( $doGetScriptUrlFromCgi ) {
+            # SMELL: this is a really dangerous hack. It will fail spectacularly with mod_perl.
+            $this->{scriptUrlPath} = $2;
+        }
+        $this->{urlHost} = $1;
+        if( $doRemovePortNumber ) {
+            $this->{urlHost} =~ s/\:[0-9]+$//;
+        }
+    } else {
+        $this->{urlHost} = $defaultUrlHost;
+    }
+
+    # initialize preferences, first part for site and web level
+    $this->{prefs} = new TWiki::Prefs( $this->{webName} );
+
+    if( !$disableAllPlugins ) {
+        # Early plugin initialization, allow plugins like SessionPlugin
+	    # to set the user.  This must be done before preferences are set,
+	    # as we need to get user preferences
+        $this->{userName} =
+          TWiki::Plugins::initialize1( $this->{topicName}, $this->{webName},
+                                       $theRemoteUser, $theUrl, $thePathInfo );
+    }
+    $this->{wikiUserName} = $TWiki::T->{users}->userToWikiName( $this->{userName} );         # i.e. "Main.JonDoe"
+
+    $this->{SESSION}{USERNAME} = $this->{userName};
+    $this->{SESSION}{WIKINAME} = $TWiki::T->{users}->userToWikiName( $this->{userName}, 1 );      # i.e. "JonDoe";
+    $this->{SESSION}{WIKIUSERNAME} = $this->{wikiUserName};
+    $this->{SESSION}{BASEWEB} = $this->{webName};
+    $this->{SESSION}{BASETOPIC} = $this->{topicName};
+    $this->{SESSION}{INCLUDINGTOPIC} = $this->{topicName};
+    $this->{SESSION}{INCLUDINGWEB} = $this->{webName};
+    $this->{SESSION}{ATTACHURL} = $this->{urlHost}."%ATTACHURLPATH%";
+    $this->{SESSION}{PUBURL} = $this->{urlHost}.$pubUrlPath;
+    $this->{SESSION}{SCRIPTURL} = $this->{urlHost}.$dispScriptUrlPath;
+
+    # initialize preferences, second part for user level
+    $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
+
+    $this->{renderer} = new TWiki::Render( $this->{prefs} );
+
+    if( !$disableAllPlugins ) {
+        # Normal plugin initialization - userName is known and preferences available
+        TWiki::Plugins::initialize2( $this->{topicName}, $this->{webName}, $this->{userName} );
+    }
+
+    # Assumes all preferences values are set by now, which may well be false!
+    # It would be better to get the Prefs module to maintain this
+    # hash.
+    $this->{prefs}->loadHash( \%{$this->{PREFS}} );
+
+    return $this;
 }
 
 =end twiki

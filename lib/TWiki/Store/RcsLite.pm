@@ -45,7 +45,6 @@ use strict;
 #use Algorithm::Diff;# qw(diff sdiff);
 use Algorithm::Diff;
 use FileHandle;
-use TWiki;
 
 #TWiki::writeDebug("Diff version $Algorithm::Diff::VERSION\n");
 
@@ -55,7 +54,7 @@ my $DIFFEND_DEBUG = 0;
 # ======================
 =pod
 
----++ sub new(  $proto, $web, $topic, $attachment, %settings  )
+---++ sub new(  $proto, $web, $topic, $attachment, $settings  )
 
 Construct new file
 
@@ -63,17 +62,17 @@ Construct new file
 
 sub new
 {
-   my( $proto, $web, $topic, $attachment, %settings ) = @_;
-   my $class = ref($proto) || $proto;
-   my $self = TWiki::Store::RcsFile->new( $web, $topic, $attachment, %settings );
-   bless( $self, $class );
-   $self->_init();
-   $self->{head} = 0;
-   $self->{access} = "";
-   $self->{symbols} = "";
-   $self->{comment} = "";
-   $self->{description} = "";
-   return $self;
+    my( $class, $web, $topic, $attachment, $settings ) = @_;
+    my $self =
+      bless( new TWiki::Store::RcsFile( $web, $topic, $attachment, $settings ),
+             $class );
+    $self->{head} = 0;
+    $self->{access} = "";
+    $self->{symbols} = "";
+    $self->{comment} = "";
+    $self->{description} = "";
+    $self->init();
+    return $self;
 }
 
 # Process an RCS file

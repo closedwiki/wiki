@@ -32,7 +32,6 @@ use TWiki::Plugins;
 use TWiki::Prefs;
 use TWiki::Store;
 use TWiki::UI;
-use TWiki::Templates;
 
 =pod
 
@@ -76,7 +75,7 @@ sub edit {
     my $text = "";
     my $meta = "";
     my $extra = "";
-    my $topicExists  = &TWiki::Store::topicExists( $webName, $topic );
+    my $topicExists  = $TWiki::T->{store}->topicExists( $webName, $topic );
 
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
@@ -94,11 +93,12 @@ sub edit {
         return;
     }
 
-    my $wikiUserName = TWiki::User::userToWikiName( $userName );
+    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
 
     if( $topicExists ) {
         ( $meta, $text ) =
-          TWiki::Store::readTopic( $webName, $topic, undef, 1 );
+          $TWiki::T->{store}->readTopic( $wikiUserName, $webName,
+                                    $topic, undef, 1 );
     }
 
     # If you want to edit, you have to be able to view and change.
@@ -113,10 +113,10 @@ sub edit {
 
     # Check for locks
     my( $lockUser, $lockTime ) =
-                   TWiki::Store::topicIsLockedBy( $webName, $topic );
+      $TWiki::T->{store}->topicIsLockedBy( $webName, $topic );
     if( ( ! $breakLock ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
-        $lockUser = &TWiki::User::userToWikiName( $lockUser );
+        $lockUser = $TWiki::T->{users}->userToWikiName( $lockUser );
         use integer;
         $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
         my $editLock = $TWiki::editLockTime / 60;
@@ -124,12 +124,12 @@ sub edit {
                          $lockUser, $editLock, $lockTime );
         return;
     }
-    TWiki::Store::lockTopic( $webName, $topic );
+    $TWiki::T->{store}->lockTopic( $webName, $topic );
 
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    $tmpl = &TWiki::Templates::readTemplate( "edit", $skin );
+    $tmpl = $TWiki::T->{templates}->readTemplate( "edit", $skin );
     unless( $topicExists ) {
         if( $templateTopic ) {
             if( $templateTopic =~ /^(.+)\.(.+)$/ ) {
@@ -140,7 +140,8 @@ sub edit {
             }
 
             ( $meta, $text ) =
-              TWiki::Store::readTopic( $templateWeb, $templateTopic, undef, 0 );
+              $TWiki::T->{store}->readTopic( $wikiUserName, $templateWeb,
+                                        $templateTopic, undef, 0 );
         }
         unless( $text ) {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( "WebTopicEditTemplate" );
@@ -184,12 +185,13 @@ sub edit {
         $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
         if( defined $ptext ) {
             $text = $ptext;
-            $text = $TWiki::renderer->decodeSpecialChars( $text );
+            $text = $TWiki::T->{renderer}->decodeSpecialChars( $text );
         }
     }
 
     if( $saveCmd eq "repRev" ) {
-        $text = TWiki::Store::readTopicRaw( $webName, $topic, undef, 0 );
+        $text = $TWiki::T->{store}->readTopicRaw( $wikiUserName, $webName, $topic,
+                                             undef, 0 );
     }
 
     $text =~ s/&/&amp\;/go;
@@ -209,8 +211,8 @@ sub edit {
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
-    $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
+    $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, $saveCmd eq "repRev" );
+    $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
 
     # Don't want to render form fields, so this after getRenderedVersion
     my %formMeta = $meta->findOne( "FORM" );
@@ -225,7 +227,7 @@ sub edit {
         }
         my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } elsif( $saveCmd ne "repRev" && $TWiki::prefsObject->getValue( "WEBFORMS", $webName )) {
+    } elsif( $saveCmd ne "repRev" && $TWiki::T->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at
         # the right of the page in all browsers
         $form = '<div style="text-align:right;"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="twikiChangeFormButtonHolder"><tr><td align="right">'

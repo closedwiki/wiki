@@ -81,7 +81,7 @@ sub _renderCellData {
         }
 
         $data = &TWiki::handleCommonTags( $data, $topic );
-        $data = $TWiki::renderer->getRenderedVersion( $data );
+        $data = $TWiki::T->{renderer}->getRenderedVersion( $data );
         if( $data =~ m/<\/?(th|td|table)/i )
         {
             # data has <th> or <td>, need to fix <table>
@@ -328,8 +328,8 @@ sub getRevInfo
 {
     my( $web, $rev, $topic, $short ) = @_;
 
-    my( $date, $user ) = TWiki::Store::getRevisionInfo( $web, $topic, $rev);
-    $user = $TWiki::renderer->getRenderedVersion( TWiki::User::userToWikiName( $user ) );
+    my( $date, $user ) = $TWiki::T->{store}->getRevisionInfo( $web, $topic, $rev);
+    $user = $TWiki::T->{renderer}->getRenderedVersion( $TWiki::T->{users}->userToWikiName( $user ) );
 	
     if ( $short ) {
 	    $date = TWiki::formatTime( $date, "\$day \$month \$year" );
@@ -369,10 +369,10 @@ sub diff {
   my ( $webName, $topic, $userName, $query ) = @_;
 
   my $renderStyle = $query->param('render');
-  $renderStyle = $TWiki::prefsObject->getValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
+  $renderStyle = $TWiki::T->{prefs}->getPreferencesValue( "DIFFRENDERSTYLE" ) unless ( $renderStyle );
   my $diffType = $query->param('type');
   my $contextLines = $query->param('context');
-  $contextLines = $TWiki::prefsObject->getValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
+  $contextLines = $TWiki::T->{prefs}->getPreferencesValue( "DIFFCONTEXTLINES" ) unless ( $contextLines );
   my $skin = TWiki::getSkin();
   my $rev1 = $query->param( "rev1" );
   my $rev2 = $query->param( "rev2" );
@@ -393,23 +393,23 @@ sub diff {
   my $revInfo1 = "";
   my $revInfo2 = "";
   my $isMultipleDiff = 0;
-  my $scriptUrlPath = $TWiki::scriptUrlPath;
+  my $scriptUrlPath = $TWiki::T->{scriptUrlPath};
 
-  $tmpl = TWiki::Templates::readTemplate( "rdiff", $skin );
+  $tmpl = $TWiki::T->{templates}->readTemplate( "rdiff", $skin );
   $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
   my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
 
-  my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
+  my $topicExists = $TWiki::T->{store}->topicExists( $webName, $topic );
   if( $topicExists ) {
-    $maxrev = &TWiki::Store::getRevisionNumber( $webName, $topic );
+    $maxrev = $TWiki::T->{store}->getRevisionNumber( $webName, $topic );
     $maxrev =~ s/r?1\.//go;  # cut 'r' and major
 
-    $rev1 = TWiki::Store::cleanUpRevID( $rev1 );
+    $rev1 = $TWiki::T->{store}->cleanUpRevID( $rev1 );
     if( $rev1 < 1 )       { $rev1 = $maxrev; }
     if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
 
-    $rev2 = TWiki::Store::cleanUpRevID( $rev2 );
+    $rev2 = $TWiki::T->{store}->cleanUpRevID( $rev2 );
     if( $rev2 < 1 )       { $rev2 = 1; }
     if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
     if ( $diffType eq "last" ) {
@@ -428,9 +428,11 @@ sub diff {
   }
 
   # check access permission
-  my $wikiUserName = &TWiki::User::userToWikiName( $userName );
-  my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, "", $topic, $webName );
-  if( $TWiki::readTopicPermissionFailed ) {
+  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
+  my $viewAccessOK =
+    $TWiki::T->{security}->checkAccessPermission( "view", $wikiUserName,
+                                             "", $topic, $webName );
+  if( $TWiki::T->{store}->accessFailed() ) {
     # Can't read requested topic and/or included (or other accessed topics)
     # user could not be authenticated, may be not logged in yet?
     my $rdiffauthFile = $ENV{'SCRIPT_FILENAME'};
@@ -442,9 +444,9 @@ sub diff {
       if( $url ) {
         # $url i.e. is "twiki/bin/rdiff.cgi/Web/Topic?cms1=val1&cmd2=val2"
         $url =~ s|/rdiff|/rdiffauth|o;
-        $url = "$TWiki::urlHost$url";
+        $url = $TWiki::T->{urlHost}.$url;
       } else {
-        $url = "$TWiki::urlHost$scriptUrlPath/$rdiffauthFile/$webName/$topic";
+        $url = $TWiki::T->{urlHost}."$scriptUrlPath/$rdiffauthFile/$webName/$topic";
       }
       TWiki::UI::redirect( $url );
       return;
@@ -459,7 +461,7 @@ sub diff {
   $before =~ s/%REVTITLE1%/$revTitle1/go;
   $before =~ s/%REVTITLE2%/$revTitle2/go;
   $before = &TWiki::handleCommonTags( $before, $topic );
-  $before = $TWiki::renderer->getRenderedVersion( $before );
+  $before = $TWiki::T->{renderer}->getRenderedVersion( $before );
   $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   my $page = $before;
 
@@ -478,8 +480,8 @@ sub diff {
       $diff =~ s/%REVTITLE1%/r1\.$r1/go;
       $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
       $diff =~ s/%REVINFO1%/$rInfo/go;
-      my $diffArrayRef = TWiki::Store::getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
-      # $text = TWiki::Store::getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+      my $diffArrayRef = $TWiki::T->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+      # $text = $TWiki::T->{store}->getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
       # if ( $renderStyle eq "raw" ) {
       #     $text = "\n<code>\n$text\n</code>\n";
       # } else {
@@ -545,7 +547,7 @@ sub diff {
   $after =~ s/%REVINFO2%/$revInfo2/go;
   
   $after = TWiki::handleCommonTags( $after, $topic );
-  $after = $TWiki::renderer->getRenderedVersion( $after );
+  $after = $TWiki::T->{renderer}->getRenderedVersion( $after );
   $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   
   $page .= $after;

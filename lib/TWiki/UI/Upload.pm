@@ -52,14 +52,14 @@ sub attach {
 
   return if TWiki::UI::isMirror( $webName, $topic );
 
-  my $wikiUserName = &TWiki::User::userToWikiName( $userName );
+  my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
   return unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                             "change", $wikiUserName );
 
   return unless TWiki::UI::topicExists( $webName, $topic, "attach" );
 
   ( $meta, $text ) =
-    TWiki::Store::readTopic( $webName, $topic, undef, 0 );
+    $TWiki::T->{store}->readTopic( $wikiUserName, $webName, $topic, undef, 0 );
   my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
   %args = (
            name => $fileName,
@@ -82,10 +82,10 @@ sub attach {
 
   my $fileWikiUser = "";
   if( $fileName && %args ) {
-    $tmpl = TWiki::Templates::readTemplate( "attachagain", $skin );
-    $fileWikiUser = &TWiki::User::userToWikiName( $args{"user"} );
+    $tmpl = $TWiki::T->{templates}->readTemplate( "attachagain", $skin );
+    $fileWikiUser = $TWiki::T->{users}->userToWikiName( $args{"user"} );
   } else {
-      $tmpl = TWiki::Templates::readTemplate( "attachnew", $skin );
+      $tmpl = $TWiki::T->{templates}->readTemplate( "attachnew", $skin );
   }
   if ( $fileName ) {
 	# must come after templates have been read
@@ -96,8 +96,8 @@ sub attach {
   $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
   # SMELL: The following two calls are done in the reverse order in all
   # the other handlers. Why are they done in this order here?
-  $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
-  $tmpl = $TWiki::renderer->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
+  $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
+  $tmpl = $TWiki::T->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
   $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
   $tmpl =~ s/%FILENAME%/$fileName/go;
   $tmpl =~ s/%FILEPATH%/$args{"path"}/go;
@@ -143,7 +143,7 @@ sub upload {
 
     close $filePath if( $TWiki::OS eq "WINDOWS");
 
-    my $wikiUserName = TWiki::User::userToWikiName( $userName );
+    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName );
     return ( 0 ) unless TWiki::UI::webExists( $webName, $topic );
     return ( 0 ) if TWiki::UI::isMirror( $webName, $topic );
     return ( 0 ) unless TWiki::UI::isAccessPermitted( $webName, $topic,
@@ -183,7 +183,7 @@ sub upload {
             return;
         }
 
-        my $maxSize = $TWiki::prefsObject->getValue( "ATTACHFILESIZELIMIT" );
+        my $maxSize = $TWiki::T->{prefs}->getPreferencesValue( "ATTACHFILESIZELIMIT" );
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {

@@ -43,14 +43,16 @@ sub view {
 
   my $fileName = $query->param( 'filename' );
 
-  my $rev = TWiki::Store::cleanUpRevID( $query->param( 'rev' ) );
+  my $rev = $TWiki::T->{store}->cleanUpRevID( $query->param( 'rev' ) );
 
   return unless TWiki::UI::webExists( $webName, $topic );
 
-  my $topRev = TWiki::Store::getRevisionNumber( $webName, $topic, $fileName );
+  my $topRev = $TWiki::T->{store}->getRevisionNumber( $webName, $topic, $fileName );
 
   if( ( $rev ) && ( $rev ne $topRev ) ) {
-    my $fileContent = TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
+    my $fileContent =
+      $TWiki::T->{store}->readAttachmentVersion( $webName, $topic,
+                                            $fileName, $rev ); 
     if( $fileContent ) {
       my $mimeType = _suffixToMimeType( $fileName );
       print $query->header( -type => $mimeType,
@@ -68,7 +70,7 @@ sub view {
   # for now, show the original document:
 
   my $pubUrlPath = $TWiki::pubUrlPath;
-  my $host = $TWiki::urlHost;
+  my $host = $TWiki::T->{urlHost};
   TWiki::UI::redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
 }
 
@@ -80,7 +82,7 @@ sub _suffixToMimeType {
     my $suffix = $1;
     my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/i }
       map{ "$_ " }
-        split( /[\n\r]/, &TWiki::Store::readFile( $TWiki::mimeTypesFilename ) );
+        split( /[\n\r]/, $TWiki::T->{store}->readFile( $TWiki::mimeTypesFilename ) );
     $mimeType = $types[0] if( @types );
   }
   return $mimeType;

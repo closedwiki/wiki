@@ -36,8 +36,8 @@ sub changes {
 
   my $skin = TWiki::getSkin();
 
-  my $text = TWiki::Templates::readTemplate( "changes", $skin );
-  my $changes= TWiki::Store::readFile( "$TWiki::dataDir/$webName/.changes" );
+  my $text = $TWiki::T->{templates}->readTemplate( "changes", $skin );
+  my $changes= $TWiki::T->{store}->readFile( "$TWiki::dataDir/$webName/.changes" );
 
   my @bar = ();
   my $foo = "";
@@ -47,7 +47,7 @@ sub changes {
   my $frev = "";
 
   $text = &TWiki::handleCommonTags( $text, $topic );
-  $text = $TWiki::renderer->getRenderedVersion( $text );
+  $text = $TWiki::T->{renderer}->getRenderedVersion( $text );
   $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
   my $before = "";
@@ -61,10 +61,10 @@ sub changes {
   foreach( reverse split( /\n/, $changes ) ) {
     @bar = split( /\t/ );
     if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
-      next unless TWiki::Store::topicExists( $webName, $bar[0] );
+      next unless $TWiki::T->{store}->topicExists( $webName, $bar[0] );
       $foo = $text;
       $foo =~ s/%TOPICNAME%/$bar[0]/go;
-      my $wikiuser = &TWiki::User::userToWikiName( $bar[1] );
+      my $wikiuser = $TWiki::T->{users}->userToWikiName( $bar[1] );
       $foo =~ s/%AUTHOR%/$wikiuser/go;
       $foo =~ s/%LOCKED%//go;
       $time = &TWiki::formatTime( $bar[2] );
@@ -78,10 +78,10 @@ sub changes {
       }
       $foo =~ s/%TIME%/$time/go;
       $foo =~ s/%REVISION%/$frev/go;
-      $foo = $TWiki::renderer->getRenderedVersion( $foo );
+      $foo = $TWiki::T->{renderer}->getRenderedVersion( $foo );
       
-      $summary = TWiki::Store::readFileHead( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
-      $summary = $TWiki::renderer->makeTopicSummary( $summary, $bar[0], $webName );
+      $summary = $TWiki::T->{store}->readFile( "$TWiki::dataDir\/$webName\/$bar[0].txt", 16 );
+      $summary = $TWiki::T->{renderer}->makeTopicSummary( $summary, $bar[0], $webName );
       $foo =~ s/%TEXTHEAD%/$summary/go;
       $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
       $page .= $foo;

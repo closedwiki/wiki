@@ -26,8 +26,7 @@ the TopicPrefs class.  These functions manage that cache.
 
 package TWiki::Prefs::PrefsCache;
 
-use vars qw( %topicCache );
-
+require TWiki;
 use TWiki::Prefs::TopicPrefs;
 
 =pod
@@ -40,7 +39,7 @@ to be reread.
 =cut
 
 sub resetCache {
-    undef %topicCache;
+    undef $TWiki::T->{prefs}->{TOPICCACHE};
 }
 
 =pod
@@ -52,14 +51,14 @@ This STATIC function invalidates the cache on a particular topic.
 =cut
 
 sub invalidateCache {
-    delete $topicCache{$_[0]}{$_[1]};
+    delete $TWiki::T->{prefs}->{TOPICCACHE}{$_[0]}{$_[1]};
 }
 
 =pod
 
 ---++ PrefsCache Object
 
-This defines an object used internally by the functions in TWiki::Prefs to hold
+This defines an object used internally by the functions in Prefs to hold
 preferences.  This object handles the cascading of preferences from site, to
 web, to topic/user.
 
@@ -79,7 +78,7 @@ web, and =@target= should be( $topicName, $userName ).  $userName should be
 just the WikiName, with no web specifier.  If the type is "copy", the result is
 a simple copy of =$parent=; no =@target= is needed.
 
-Call like this: =$mainWebPrefs = TWiki::Prefs->new("web", "Main");=
+Call like this: =$mainWebPrefs = Prefs->new("web", "Main");=
 
 =cut
 
@@ -186,10 +185,11 @@ sub loadPrefsFromTopic {
 
     my $topicPrefs;
 
-    if( $allowCache && exists( $topicCache{$theWeb}{$theTopic} )) {
-        $topicPrefs = $topicCache{$theWeb}{$theTopic};
+    if( $allowCache && $TWiki::T->{prefs} && 
+        exists( $TWiki::T->{prefs}->{TOPICCACHE}{$theWeb}{$theTopic} )) {
+        $topicPrefs = $TWiki::T->{prefs}->{TOPICCACHE}{$theWeb}{$theTopic};
     } else {
-        $topicPrefs = TWiki::Prefs::TopicPrefs->new( $theWeb, $theTopic );
+        $topicPrefs = new TWiki::Prefs::TopicPrefs( $theWeb, $theTopic );
     }
 
     $theKeyPrefix = "" unless defined $theKeyPrefix;

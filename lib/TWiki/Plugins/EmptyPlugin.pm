@@ -249,7 +249,7 @@ sub DISABLE_beforeSaveHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This handler is called by TWiki::Store::saveTopic just before the save action.
+    # This handler is called just before the save action.
     # New hook in TWiki::Plugins $VERSION = '1.010'
 
 }
@@ -261,7 +261,7 @@ sub DISABLE_afterSaveHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This handler is called by TWiki::Store::saveTopic just after the save action.
+    # This handler is called just after the save action.
     # New hook in TWiki::Plugins $VERSION = '1.020'
 
 }

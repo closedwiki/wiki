@@ -44,7 +44,7 @@ sub oops_cgi {
   my $tmplName = $query->param( 'template' ) || "oops";
   my $skin = TWiki::getSkin();
 
-  my $tmplData = TWiki::Templates::readTemplate( $tmplName, $skin );
+  my $tmplData = $TWiki::T->{templates}->readTemplate( $tmplName, $skin );
   if( ! $tmplData ) {
       $tmplData = "<html><body>\n"
         . "<h1>TWiki Installation Error</h1>\n"
@@ -63,7 +63,7 @@ sub oops_cgi {
       $tmplData =~ s/%PARAM4%/$param/go;
 
       $tmplData = TWiki::handleCommonTags( $tmplData, $topic );
-      $tmplData = $TWiki::renderer->getRenderedVersion( $tmplData );
+      $tmplData = $TWiki::T->{renderer}->getRenderedVersion( $tmplData );
       $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
   }
 

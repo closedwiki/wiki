@@ -28,8 +28,6 @@ package TWiki::Form;
 
 use strict;
 
-use TWiki::Templates;
-
 # ============================
 # Get definition from supplied topic text
 # Returns array of arrays
@@ -76,7 +74,7 @@ sub _parseFormDefinition
                     $vals =~ s/\s*$//go;
                     $vals =~ s/"//go; # " would break parsing off META variables
                     if( $vals eq '$users' ) {
-                       $vals = $TWiki::mainWebname . "." . join( ", ${TWiki::mainWebname}.", ( TWiki::Store::getTopicNames( $TWiki::mainWebname ) ) );
+                       $vals = $TWiki::mainWebname . "." . join( ", ${TWiki::mainWebname}.", ( $TWiki::T->{store}->getTopicNames( $TWiki::mainWebname ) ) );
                     }
                     $tooltip =~ s/^\s*//go;
                     $tooltip =~ s/\s*$//go;
@@ -168,9 +166,9 @@ sub getFormDef
     my @fieldDefs = ();    
    
     # Read topic that defines the form
-    if( &TWiki::Store::topicExists( $webName, $form ) ) {
+    if( $TWiki::T->{store}->topicExists( $webName, $form ) ) {
         my( $meta, $text ) =
-          TWiki::Store::readTopic( $webName, $form, undef, 0 );
+          $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $webName, $form, undef, 0 );
         @fieldDefs = _parseFormDefinition( $text );
     } else {
         # FIXME - do what if there is an error?
@@ -187,9 +185,9 @@ sub getFormDef
            @posValues = split( /,\s*/, $posValuesS );
         }
 
-        if( ( ! @posValues ) && &TWiki::Store::topicExists( $webName, $name ) ) {
+        if( ( ! @posValues ) && $TWiki::T->{store}->topicExists( $webName, $name ) ) {
             my( $meta, $text ) =
-              TWiki::Store::readTopic( $webName, $name, undef, 0 );
+              $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $webName, $name, undef, 0 );
             @posValues = getPossibleFieldValues( $text );
             if( ! $type ) {
                 $type = "select";  #FIXME keep?
@@ -240,7 +238,7 @@ sub _link
     
     my $link = "$name";
     
-    if( &TWiki::Store::topicExists( $web, $name ) ) {
+    if( $TWiki::T->{store}->topicExists( $web, $name ) ) {
         ( $web, $name ) = TWiki::normalizeWebTopicName( $web, $name );
         if( ! $tooltip ) {
             $tooltip = "Click to see details in separate window";
@@ -248,7 +246,7 @@ sub _link
         $link =  "<a target=\"$name\" " .
                  "onclick=\"return launchWindow('$web','$name')\" " .
                  "title=\"$tooltip\" " .
-                 "href=\"$TWiki::scriptUrlPath/view$TWiki::scriptSuffix/$web/$name\">$name</a>";
+                 "href=\"".$TWiki::T->{scriptUrlPath}."/view$TWiki::scriptSuffix/$web/$name\">$name</a>";
     } elsif ( $tooltip ) {
         $link = "<span title=\"$tooltip\">$name</span>";
     }
@@ -286,7 +284,7 @@ sub renderForEdit
     my( $web, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldsInfo ) = @_;
 
     my $chooseForm = "";   
-    if( $TWiki::prefsObject->getValue( "WEBFORMS", "$web" ) ) {
+    if( $TWiki::T->{prefs}->getPreferencesValue( "WEBFORMS", "$web" ) ) {
         $chooseForm = chooseFormButton( "Replace form..." );
     }
     
@@ -310,7 +308,7 @@ sub renderForEdit
         my $value = $field{"value"};
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
-            $value = $TWiki::prefsObject->getValue($fieldName);
+            $value = $TWiki::T->{prefs}->getPreferencesValue($fieldName);
         }
         if( ($getValuesFromFormTopic ) ) {
             my $tmp = $fieldInfo[0] || "";
@@ -552,20 +550,20 @@ sub changeForm
 {
     my( $theWeb, $theTopic, $theQuery ) = @_;
    
-    my $tmpl = TWiki::Templates::readTemplate( "changeform" );
+    my $tmpl = $TWiki::T->{templates}->readTemplate( "changeform" );
     $tmpl = TWiki::handleCommonTags( $tmpl, $theTopic );
-    $tmpl = $TWiki::renderer->getRenderedVersion( $tmpl );
+    $tmpl = $TWiki::T->{renderer}->getRenderedVersion( $tmpl );
     my $text = $theQuery->param( 'text' );
-    $text = $TWiki::renderer->encodeSpecialChars( $text );
+    $text = $TWiki::T->{renderer}->encodeSpecialChars( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
-    my $listForms = $TWiki::prefsObject->getValue( "WEBFORMS", "$theWeb" );
+    my $listForms = $TWiki::T->{prefs}->getPreferencesValue( "WEBFORMS", "$theWeb" );
     $listForms =~ s/^\s*//go;
     $listForms =~ s/\s*$//go;
     my @forms = split( /\s*,\s*/, $listForms );
     unshift @forms, "";
     my( $metat, $tmp ) =
-      TWiki::Store::readTopic( $theWeb, $theTopic, undef, 0 );
+      $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $theWeb, $theTopic, undef, 0 );
     my $formName = $theQuery->param( 'formtemplate' ) || "";
     if( ! $formName ) {
         my %form = $metat->findOne( "FORM" );
@@ -687,7 +685,7 @@ sub upgradeCategoryTable
 {
     my( $web, $topic, $meta, $text ) = @_;
     
-    my $icat = TWiki::Templates::readTemplate( "twikicatitems" );
+    my $icat = $TWiki::T->{templates}->readTemplate( "twikicatitems" );
     
     if( $icat ) {
         my @items = ();
@@ -708,7 +706,7 @@ sub upgradeCategoryTable
             }
         }
         
-        my $listForms = $TWiki::prefsObject->getValue( "WEBFORMS", "$web" );
+        my $listForms = $TWiki::T->{prefs}->getPreferencesValue( "WEBFORMS", "$web" );
         $listForms =~ s/^\s*//go;
         $listForms =~ s/\s*$//go;
         my @formTemplates = split( /\s*,\s*/, $listForms );

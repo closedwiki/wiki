@@ -26,7 +26,6 @@ package TWiki::UI::Search;
 use strict;
 use TWiki;
 use TWiki::UI;
-use TWiki::Templates;
 
 =pod
 
@@ -98,7 +97,7 @@ sub search {
 
     TWiki::writeHeader( $query, 0);
 
-    TWiki::Search::searchWeb(
+    $TWiki::T->{search}->searchWeb(
         _callback       => \&_contentCallback,
         inline          => 0,
         "search"        => scalar $query->param( "search" ),
@@ -108,7 +107,7 @@ sub search {
         "scope"         => scalar $query->param( "scope" ),
         "order"         => scalar $query->param( "order" ),
         "type"          => scalar $query->param( "type" ) ||
-                             $TWiki::prefsObject->getValue( "SEARCHDEFAULTTTYPE" ),
+                             $TWiki::T->{prefs}->getPreferencesValue( "SEARCHDEFAULTTTYPE" ),
         "regex"         => scalar $query->param( "regex" ),
         "limit"         => scalar $query->param( "limit" ),
         "reverse"       => scalar $query->param( "reverse" ),

@@ -14,26 +14,16 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Notes:
-# - Latest version at http://twiki.org/
-# - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
-# - Customize variables in TWiki.cfg when installing TWiki.
-# - Optionally change TWiki.pm for custom extensions of rendering rules.
-# - Upgrading TWiki is easy as long as you do not customize TWiki.pm.
-# - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
-#
 
 =begin twiki
 
 ---+ TWiki::User Package
-
-This module hosts the user authentication implementation
+Singleton object that handles mapping of users to wikinames and
+vice versa, and user authentication checking.
 
 =cut
 
 package TWiki::User;
-
-use TWiki::Templates;
 
 use strict;
 
@@ -46,49 +36,41 @@ BEGIN {
     }
 }
 
-use vars qw(
-            $UserImpl
-            %userToWikiList %wikiToUserList
-            $wikiNamesMapped
-           );
-
-$UserImpl = "";
-
 =pod
 
 ---+++ initialize ()
-| Description: | loads the selected User Implementation |
+Construct the user management object
 
 =cut
 
-sub initialize {
-	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
-		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
-	    $UserImpl = "TWiki::User::HtPasswdUser";
-#	} elseif ($TWiki::htpasswdFormatFamily eq "something?") {
-#	    $UserImpl = "TWiki::User::SomethingUser";
-	} else {
-	    $UserImpl = "TWiki::User::NoPasswdUser";
-	}
-	eval "use ".$UserImpl;
+sub new {
+    my ( $class, $impl ) = @_;
+    my $this = bless( {}, $class );
+
+    $this->{IMPL} = "TWiki::User::$impl";
+    $this->{CACHED} = 0;
+
+	eval "use $this->{IMPL}";
+
+    die $@ if $@;
+
+    return $this;
 }
 
-sub _getUserHandler {
-   my( $web, $topic, $attachment ) = @_;
+# Get the password implementation
+sub _getPasswordHandler {
+   my( $this, $web, $topic, $attachment ) = @_;
 
    $attachment = "" if( ! $attachment );
 
-   my $handlerName = $UserImpl;
+   my $passwordHandler = $this->{IMPL}->new( );
 
-   my $handler = $handlerName->new( );
-   $wikiNamesMapped = 0;
-
-   return $handler;
+   return $passwordHandler;
 }
 
 =pod
 
----++ UserPasswordExists( $user ) ==> $passwordExists
+---++ userPasswordExists( $user ) ==> $passwordExists
 | Description: | checks to see if there is a $user in the password system |
 | Parameter: =$user= | the username we are looking for  |
 | Return: =$passwordExists= | "1" if true, "" if not |
@@ -96,17 +78,17 @@ sub _getUserHandler {
 
 =cut
 
-sub UserPasswordExists {
-    my ( $user ) = @_;
+sub userPasswordExists {
+    my ( $this, $user ) = @_;
 
-    my $handler = _getUserHandler();
+    my $passwordHandler = $this->_getPasswordHandler();
 
-    return $handler->UserPasswordExists($user);
+    return $passwordHandler->UserPasswordExists($user);
 }
 
 =pod
 
----++ UpdateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
+---++ updateUserPassword( $user, $oldUserPassword, $newUserPassword ) ==> $success
 | Description: | used to change the user's password |
 | Parameter: =$user= | the username we are replacing  |
 | Parameter: =$oldUserPassword= | unencrypted password |
@@ -118,20 +100,20 @@ sub UserPasswordExists {
 
 =cut
 
-sub UpdateUserPassword {
-    my ( $user, $oldUserPassword, $newUserPassword ) = @_;
+sub updateUserPassword {
+    my ( $this, $user, $oldUserPassword, $newUserPassword ) = @_;
 
 	if ( $user =~ /AnonymousContributor/ ) {
 		return;
 	}
 
-    my $handler = _getUserHandler();
-    return $handler->UpdateUserPassword($user, $oldUserPassword, $newUserPassword);
+    my $passwordHandler = _getPasswordHandler();
+    return $passwordHandler->UpdateUserPassword($user, $oldUserPassword, $newUserPassword);
 }
 
 =pod
 
----++ AddUserPassword( $user, $newUserPassword ) ==> $success
+---++ addUserPassword( $user, $newUserPassword ) ==> $success
 | Description: | creates a new user & password entry |
 | Parameter: =$user= | the username we are replacing  |
 | Parameter: =$newUserPassword= | unencrypted password |
@@ -142,20 +124,20 @@ sub UpdateUserPassword {
 
 =cut
 
-sub AddUserPassword {
-    my ( $user, $newUserPassword ) = @_;
+sub addUserPassword {
+    my ( $this, $user, $newUserPassword ) = @_;
 
 	if ( $user =~ /AnonymousContributor/ ) {
 		return;
 	}
 
-    my $handler = _getUserHandler();
-    return $handler->AddUserPassword($user, $newUserPassword);
+    my $passwordHandler = _getPasswordHandler();
+    return $passwordHandler->AddUserPassword($user, $newUserPassword);
 }
 
 =pod
 
----++ RemoveUser( $user ) ==> $success
+---++ removeUser( $user ) ==> $success
 | Description: | used to remove the user from the password system |
 | Parameter: =$user= | the username we are replacing  |
 | Return: =$success= | "1" if success |
@@ -163,16 +145,16 @@ sub AddUserPassword {
 
 =cut
 
-sub RemoveUser {
-    my ( $user ) = @_;
+sub removeUser {
+    my ( $this, $user ) = @_;
 
-    my $handler = _getUserHandler();
-    return $handler->RemoveUser($user);
+    my $passwordHandler = _getPasswordHandler();
+    return $passwordHandler->RemoveUser($user);
 }
 
 =pod
 
----++ CheckUserPasswd( $user, $password ) ==> $success
+---++ checkUserPasswd( $user, $password ) ==> $success
 | Description: | used to check the user's password |
 | Parameter: =$user= | the username we are replacing  |
 | Parameter: =$password= | unencrypted password |
@@ -181,11 +163,11 @@ sub RemoveUser {
 
 =cut
 
-sub CheckUserPasswd {
+sub checkUserPasswd {
     my ( $user, $password ) = @_;
 
-    my $handler = _getUserHandler();
-    return $handler->CheckUserPasswd($user, $password);
+    my $passwordHandler = _getPasswordHandler();
+    return $passwordHandler->CheckUserPasswd($user, $password);
 }
 
 =pod
@@ -200,11 +182,13 @@ sub CheckUserPasswd {
 =cut
 
 sub addUserToTWikiUsersTopic {
-    my ( $wikiName, $remoteUser ) = @_;
+    my ( $this, $wikiName, $remoteUser ) = @_;
     my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
+#  use Data::Dumper;
+#  die Dumper(\@_);
     my $topicName = $TWiki::wikiUsersTopicname;
     my( $meta, $text ) =
-      TWiki::Store::readTopic( $TWiki::mainWebname, $topicName, undef, 0 );
+      $TWiki::T->{store}->readTopic( $TWiki::mainWebname, $topicName, undef, 0 );
     my $result = "";
     my $status = "0";
     my $line = "";
@@ -222,7 +206,7 @@ sub addUserToTWikiUsersTopic {
         if( $status == "1" ) {
             if( $isList ) {
                 $name = $line;
-                $name =~ s/(\t\*\s)([A-Z][a-zA-Z0-9]*)\s\-.*/$2/go;            
+                $name =~ s/(\t\*\s)([A-Z][a-zA-Z0-9]*)\s\-.*/$2/go;
                 if( $wikiName eq $name ) {
                     # name is already there, do nothing
                     return $topicName;
@@ -248,8 +232,87 @@ sub addUserToTWikiUsersTopic {
 
         $result .= "$line\n";
     }
-    TWiki::Store::saveTopic( $TWiki::mainWebname, $topicName, $result, $meta, "", 1 );
+    $TWiki::T->{store}->saveTopic( $TWiki::mainWebname, $topicName, $result, $meta, "", 1 );
     return $topicName;
+}
+
+=pod
+
+---++ getEmail( $wikiName ) ==> $emailAddress
+| Description: | get the Users EmailAddress |
+| Parameter: =$wikiName= | the users TWikiName |
+| Return: =$topicName= | the email address corresponding to  the wikiName |
+
+=cut
+
+sub getEmail {
+    my ($this, $wikiName) = @_;
+    my $mainWebname = $TWiki::mainWebname;
+
+    # Ignore guest entry and non-existent pages
+    unless ($TWiki::T->{store}->topicExists( $mainWebname, $wikiName )) {
+        return;
+    }
+
+    if ($wikiName eq "TWikiGuest") {
+        return;
+    }
+
+    my @list = ();
+
+    if ( $wikiName =~ /Group$/ ) {
+        # Page is for a group, get all users in group
+        ##writeDebug "using group: $mainWebname . $wikiName";
+        my @userList = TWiki::Access::getUsersOfGroup( $wikiName );
+        foreach my $user ( @userList ) {
+            $user =~ s/^.*\.//;# Get rid of 'Main.' part.
+            foreach my $email ( TWiki::getEmail($user) ) {
+                push @list, $email;
+            }
+        }
+    } else {
+        # Page is for a user
+        ##writeDebug "reading home page: $mainWebname . $wikiName";
+        push @list, _getEmailAddressesFromPage($mainWebname, $wikiName);
+    }
+    use Data::Dumper;
+    return (@list);
+}
+
+# Returns array of email addresses referenced in 
+# the bulletfield / metafield on the page. 
+sub _getEmailAddressesFromPage {
+    my ($mainWebname, $wikiName) = @_;
+
+#    die Dumper(\@_);
+    return _getField($mainWebname, $wikiName, "Email");
+}
+
+# SMELL - this is no longer specific to users - surely any topic has fields
+# SMELL - returns singular if refering to a field in meta, but multiple if values are defined that way in topic content
+sub _getField {
+    my ($web, $topic, $fieldName) = @_;
+    my ($meta, @text) =
+      $TWiki::T->{store}->readTopic(
+                               $web,
+                               $topic,
+                               undef,
+                               1   # SMELL Should this really be internal?
+                              );
+    my @fieldValues;
+    my %entry = $meta->findOne("FIELD", $fieldName); # SMELL - do we always want a singular entry?
+    if (keys %entry) {
+        return ($entry{value});
+    } else {
+
+        foreach (split ( /\n/, @text  )) {
+            # REFACTOR UserData::BulletFieldsImpl
+            if (/^\s\*\s$fieldName:\s+([\w\-\.\+]+\@[\w\-\.\+]+)/) { # SMELL - is this only suited to email?
+                push @fieldValues, $1;
+            }
+        }
+    }
+    return @fieldValues;
 }
 
 =pod
@@ -283,7 +346,7 @@ SMELL: this should be done in User.pm
 =cut
 
 sub initializeRemoteUser {
-    my( $theRemoteUser ) = @_;
+    my( $this, $theRemoteUser ) = @_;
 
     my $remoteUser = $theRemoteUser || $TWiki::defaultUserName;
     $remoteUser =~ s/$TWiki::securityFilter//go;
@@ -302,12 +365,12 @@ sub initializeRemoteUser {
         return $remoteUser;
     }
 
-    my $text = TWiki::Store::readFile( $TWiki::remoteUserFilename );
+    my $text = $TWiki::T->{store}->readFile( $TWiki::remoteUserFilename );
     # Assume no I18N characters in userids, as for email addresses
     # FIXME: Needs fixing for IPv6?
     my %AddrToName = map { split( /\|/, $_ ) }
-                     grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
-                     split( /\n/, $text );
+      grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
+        split( /\n/, $text );
 
     my $rememberedUser = "";
     if( exists( $AddrToName{ $remoteAddr } ) ) {
@@ -323,11 +386,11 @@ sub initializeRemoteUser {
                 my $usrName = $AddrToName{ $usrAddr };
                 # keep $userName unique
                 if(  ( $usrName ne $theRemoteUser )
-                  || ( $usrAddr eq $remoteAddr ) ) {
+                     || ( $usrAddr eq $remoteAddr ) ) {
                     $text .= "$usrAddr|$usrName|\n";
                 }
             }
-            TWiki::Store::saveFile( $TWiki::remoteUserFilename, $text );
+            $TWiki::T->{store}->saveFile( $TWiki::remoteUserFilename, $text );
         }
     } else {
         # get user name from AddrToName table
@@ -352,14 +415,16 @@ SMELL: this should be done in User.pm
 =cut
 
 sub _cacheUserToWikiTranslations {
-    return if $wikiNamesMapped;
-    $wikiNamesMapped = 1;
+    my $this = shift;
 
-    %userToWikiList = ();
-    %wikiToUserList = ();
+    return if $this->{CACHED};
+    $this->{CACHED} = 1;
+
+    %{$this->{U2W}} = ();
+    %{$this->{W2U}} = ();
     my @list = ();
     if( $TWiki::doMapUserToWikiName ) {
-        @list = split( /\n/, TWiki::Store::readFile( $TWiki::userListFilename ) );
+        @list = split( /\n/, $TWiki::T->{store}->readFile( $TWiki::userListFilename ) );
     } else {
         # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
         # for .htpasswd authenticated sites ignore user list, but map only guest to TWikiGuest
@@ -377,22 +442,23 @@ sub _cacheUserToWikiTranslations {
             $wUser = $1;	# WikiName
             $lUser = $2;	# userid
             $lUser =~ s/$TWiki::securityFilter//go;	# FIXME: Should filter in for security...
-            $userToWikiList{ $lUser } = $wUser;
-            $wikiToUserList{ $wUser } = $lUser;
+            $this->{U2W}{ $lUser } = $wUser;
+            $this->{W2U}{ $wUser } = $lUser;
         }
     }
 }
 
 =pod
 
----++ userToWikiName( $loginUser, $dontAddWeb )
-Return value: $wikiName
+---++ userToWikiName( $loginUser, $dontAddWeb ) --> $wikiName
 
 Translates intranet username (e.g. jsmith) to WikiName (e.g. JaneSmith)
+userToWikiListInit must be called before this function is used.
 
-Unless $dontAddWeb is set, "Main." is prepended to the returned WikiName.
+Unless $flag is set, "Main." is prepended to the returned WikiName.
 
-If you give an invalid username, we just return that (no appending Main. blindy)
+if you give an invalid username, we just return that (no appending Main. blindy),
+unless flag is set to 2, in which case it returns undef.
 
 SMELL: the userToWikiList cache should really contain the WebName so its possible 
 		to have userTopics in more than just the MainWeb (what if you move a user topic?)
@@ -400,39 +466,54 @@ SMELL: the userToWikiList cache should really contain the WebName so its possibl
 =cut
 
 sub userToWikiName {
-    my( $loginUser, $dontAddWeb ) = @_;
+    my( $this, $loginUser, $flag ) = @_;
 
     if( !$loginUser ) {
         return "";
     }
 
-    _cacheUserToWikiTranslations();
+    $this->_cacheUserToWikiTranslations();
 
     $loginUser =~ s/$TWiki::securityFilter//go;
-    my $wUser = $userToWikiList{ $loginUser } || $loginUser;
-    if( $dontAddWeb ) {
+    my $wUser = $this->{U2W}{ $loginUser };
+
+    # New behaviour for RegisterCgiScriptRewrite
+    if ($flag && ($flag == 2)) {
+        # return the real mapping, even if it is undef
         return $wUser;
     }
-    return "$TWiki::mainWebname.$wUser";
+
+    # Original behaviour - map existing entries
+    unless ($wUser) {
+        $wUser = $loginUser;
+    }
+
+    # return with webName
+    unless ($flag) {
+        return "$TWiki::mainWebname.$wUser";
+    }
+
+    # v2 - blindy return loginName if mapping not present.
+    return $wUser;
+
+
 }
 
 =pod
 
----++ wikiToUserName( $wikiName )
-Return value: $loginUser
+---++ wikiToUserName( $wikiName ) --> $loginUser
 
 Translates WikiName (e.g. JaneSmith) to an intranet username (e.g. jsmith)
+If there is no mapping, returns the WikiName.
 
 =cut
 
 sub wikiToUserName {
-    my( $wikiUser ) = @_;
+    my( $this, $wikiUser ) = @_;
     $wikiUser =~ s/^.*\.//g;
-    _cacheUserToWikiTranslations();
-    my $userName =  $wikiToUserList{"$wikiUser"} || $wikiUser;
+    $this->_cacheUserToWikiTranslations();
+    my $userName =  $this->{W2U}{$wikiUser} || $wikiUser;
     return $userName;
 }
 
 1;
-
-# EOF

@@ -42,11 +42,6 @@ This module implements all the search functionality.
 package TWiki::Search;
 use strict;
 
-use vars qw(
-    $cacheRev1webTopic $cacheRev1date $cacheRev1user
-);
-
-
 # 'Use locale' for internationalisation of Perl sorting and searching - 
 # main locale settings are done in TWiki::setupLocale
 BEGIN {
@@ -54,7 +49,24 @@ BEGIN {
     if( $TWiki::useLocale ) {
         eval 'require locale; import locale ();';
     }
-    $cacheRev1webTopic = "";
+}
+
+=pod
+
+---++ sub new ()
+Constructor for the signleton Search engine object.
+
+=cut
+
+sub new {
+    my $class = shift;
+    my $this = bless( {}, $class );
+
+    $this->{cacheRev1webTopic} = undef;
+    $this->{cacheRev1date} = undef;
+    $this->{cacheRev1user} = undef;
+
+    return $this;
 }
 
 # ===========================
@@ -118,7 +130,7 @@ sub _tokensFromSearchString
         $theSearchVal =~ s/[\+\-]\s+//go;
 
         # build pattern of stop words
-        my $stopWords = $TWiki::prefsObject->getValue( "SEARCHSTOPWORDS" ) || "";
+        my $stopWords = $TWiki::T->{prefs}->getPreferencesValue( "SEARCHSTOPWORDS" ) || "";
         $stopWords =~ s/[\s\,]+/\|/go;
         $stopWords =~ s/[\(\)]//go;
 
@@ -157,7 +169,7 @@ sub _searchTopicsInWeb
             $topics =~ s/\)\$//o;                                  #
             @topicList = split( /\|/, $topics );                   # build list from topic pattern
         } else {                                                   # topic list with wildcards
-            @topicList = TWiki::Store::getTopicNames( $theWeb );                 # get all topics in web
+            @topicList = $TWiki::T->{store}->getTopicNames( $theWeb );                 # get all topics in web
             if( $caseSensitive ) {
                 @topicList = grep( /$theTopic/, @topicList );      # limit by topic name,
             } else {                                               # Codev.SearchTopicNameAndTopicText
@@ -165,7 +177,7 @@ sub _searchTopicsInWeb
             }
         }
     } else {
-        @topicList = TWiki::Store::getTopicNames( $theWeb );                     # get all topics in web
+        @topicList = $TWiki::T->{store}->getTopicNames( $theWeb );                     # get all topics in web
     }
 
     my $sDir = "$TWiki::dataDir/$theWeb";
@@ -217,7 +229,7 @@ sub _searchTopicsInWeb
             while( @set ) {
                 @set = map { "$_.txt" } @set;              # add ".txt" extension to topic names
                 @set =
-                  TWiki::Sandbox::readFromProcessArray ($program, $template,
+                  $TWiki::T->{sandbox}->readFromProcessArray ($program, $template,
                                                TOKEN => $token,
                                                FILES => \@set);
                 @set = map { $_ =~ s/\.txt$//; $_ } @set;  # cut ".txt" extension
@@ -310,11 +322,12 @@ the search template head and tail blocks.
 
 sub searchWeb
 {
+    my $this = shift;
     my %params = @_;
     my $callback =      $params{_callback};
     my $inline =        $params{inline};
-    my $baseWeb =       $params{"baseweb"}   || $TWiki::webName;
-    my $baseTopic =     $params{"basetopic"} || $TWiki::topicName;
+    my $baseWeb =       $params{"baseweb"}   || $TWiki::T->{webName};
+    my $baseTopic =     $params{"basetopic"} || $TWiki::T->{topicName};
     my $emptySearch =   "something.Very/unLikelyTo+search-for;-)";
     my $theSearchVal =  $params{"search"} || $emptySearch;
     my $theWebName =    $params{"web"} || "";
@@ -412,7 +425,7 @@ sub searchWeb
 
     } else {
         #default to current web
-        push @webList, $TWiki::webName;
+        push @webList, $TWiki::T->{webName};
     }
 
     $theTopic   = _makeTopicPattern( $theTopic );    # E.g. "Bug*, *Patch" ==> "^(Bug.*|.*Patch)$"
@@ -434,13 +447,13 @@ sub searchWeb
     $theTemplate = "searchformat" if( $theFormat );
 
     if( $theTemplate ) {
-        $tmpl = TWiki::Templates::readTemplate( "$theTemplate" );
+        $tmpl = $TWiki::T->{templates}->readTemplate( "$theTemplate" );
         # FIXME replace following with this @@@
     } elsif( $doBookView ) {
-        $tmpl = &TWiki::Templates::readTemplate( "searchbookview" );
+        $tmpl = $TWiki::T->{templates}->readTemplate( "searchbookview" );
     } elsif ($doRenameView ) {
 	# Rename view, showing where topics refer to topic being renamed.
-        $tmpl = &TWiki::Templates::readTemplate( "searchrenameview" ); # JohnTalintyre
+        $tmpl = $TWiki::T->{templates}->readTemplate( "searchrenameview" ); # JohnTalintyre
 
         # Create full search string from topic name that is passed in
         $renameTopic = $theSearchVal;
@@ -459,7 +472,7 @@ sub searchWeb
 			"([^${alphaNum}_]" . '|$)|' .
                         '(\[\[' . $spacedTopic . '\]\])';
     } else {
-        $tmpl = &TWiki::Templates::readTemplate( "search" );
+        $tmpl = $TWiki::T->{templates}->readTemplate( "search" );
     }
 
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
@@ -489,7 +502,7 @@ sub searchWeb
         $tmplHead = TWiki::handleCommonTags( $tmplHead, $topic );
 
         if( $callback) {
-            $tmplHead = $TWiki::renderer->getRenderedVersion( $tmplHead );
+            $tmplHead = $TWiki::T->{renderer}->getRenderedVersion( $tmplHead );
             $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags
             &$callback( $tmplHead );
         } else {
@@ -509,7 +522,7 @@ sub searchWeb
         $searchStr =~ s/^\.\*$/Index/go;
         $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
         if( $callback) {
-            $tmplSearch = $TWiki::renderer->getRenderedVersion( $tmplSearch );
+            $tmplSearch = $TWiki::T->{renderer}->getRenderedVersion( $tmplSearch );
             $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $tmplSearch );
         } else {
@@ -533,17 +546,17 @@ sub searchWeb
         $thisWebName =~ /(.*)/;
         $thisWebName = $1;  # untaint variable
 
-        next unless &TWiki::Store::webExists( $thisWebName );  # can't process what ain't thar
+        next unless $TWiki::T->{store}->webExists( $thisWebName );  # can't process what ain't thar
 
-        my $thisWebBGColor     = $TWiki::prefsObject->getValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
-        my $thisWebNoSearchAll = $TWiki::prefsObject->getValue( "NOSEARCHALL", $thisWebName );
+        my $thisWebBGColor     = $TWiki::T->{prefs}->getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
+        my $thisWebNoSearchAll = $TWiki::T->{prefs}->getPreferencesValue( "NOSEARCHALL", $thisWebName );
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
         # PTh 18 Aug 2000: Need to include if it is the current web
         next if (   ( $searchAllFlag )
                  && ( ( $thisWebNoSearchAll =~ /on/i ) || ( $thisWebName =~ /^[\.\_]/ ) )
-                 && ( $thisWebName ne $TWiki::webName ) );
+                 && ( $thisWebName ne $TWiki::T->{webName} ) );
 
         # search topics in this web
         my @topicList = _searchTopicsInWeb( $thisWebName, $theTopic, $theScope, $theType, $caseSensitive, @tokens );
@@ -602,13 +615,17 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
+                my( $meta, $text ) =
+                  $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $tempVal, undef, 1 );
                 my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
-                $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
+                $topicRevUser{ $tempVal }   = $TWiki::T->{users}->userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = $revdate;  # keep epoc sec for sorting
                 $topicRevNum{ $tempVal }    = $revnum;
-                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
-                                                  $text, $tempVal, $thisWebName );
+                $topicAllowView{ $tempVal } =
+                  TWiki::security->checkAccessPermission( "view",
+                                                          $TWiki::T->{wikiUserName},
+                                                          $text, $tempVal,
+                                                          $thisWebName );
             }
 
             # sort by date (second time if exercise), Schwartzian Transform
@@ -633,14 +650,18 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
+                my( $meta, $text ) =
+                  $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $tempVal, undef, 1 );
                 my( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
-                $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
+                $topicRevUser{ $tempVal }   = $TWiki::T->{users}->userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
                 $topicRevNum{ $tempVal }    = $revnum;
-                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
-                                                  $text, $tempVal, $thisWebName );
-                my ( $createdate ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, 1 );
+                $topicAllowView{ $tempVal } =
+                  $TWiki::T->{security}->checkAccessPermission( "view",
+                                                           $TWiki::T->{wikiUserName},
+                                                           $text, $tempVal,
+                                                           $thisWebName );
+                my ( $createdate ) = $TWiki::T->{store}->getRevisionInfo( $thisWebName, $tempVal, 1 );
                 $topicCreated{ $tempVal } = $createdate;  # Sortable epoc second format
             }
 
@@ -664,13 +685,17 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
+                my( $meta, $text ) =
+                  $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $tempVal, undef, 1 );
                 my( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
-                $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
+                $topicRevUser{ $tempVal }   = $TWiki::T->{users}->userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
                 $topicRevNum{ $tempVal }    = $revnum;
-                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
-                                                  $text, $tempVal, $thisWebName );
+                $topicAllowView{ $tempVal } =
+                  $TWiki::T->{security}->checkAccessPermission( "view",
+                                                           $TWiki::T->{wikiUserName},
+                                                           $text, $tempVal,
+                                                           $thisWebName );
             }
 
             # sort by author, Schwartzian Transform
@@ -694,13 +719,17 @@ sub searchWeb
             foreach( @topicList ) {
                 $tempVal = $_;
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $tempVal, undef, 1 );
+                my( $meta, $text ) =
+                  $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $tempVal, undef, 1 );
                 my( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo( $thisWebName, $tempVal );
-                $topicRevUser{ $tempVal }   = TWiki::User::userToWikiName( $revuser );
+                $topicRevUser{ $tempVal }   = $TWiki::T->{users}->userToWikiName( $revuser );
                 $topicRevDate{ $tempVal }   = &TWiki::formatTime( $revdate );
                 $topicRevNum{ $tempVal }    = $revnum;
-                $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
-                                                  $text, $tempVal, $thisWebName );
+                $topicAllowView{ $tempVal } =
+                  $TWiki::T->{security}->checkAccessPermission( "view",
+                                                           $TWiki::T->{wikiUserName},
+                                                           $text, $tempVal,
+                                                           $thisWebName );
                 $fieldVals{ $tempVal } = getMetaFormField( $meta, $sortfield );
             }
  
@@ -769,20 +798,25 @@ sub searchWeb
           } else {
               # lazy query, need to do it at last
               ( $meta, $text ) =
-                TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 );
+                $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $topic, undef, 1 );
               $text =~ s/%WEB%/$thisWebName/gos;
               $text =~ s/%TOPIC%/$topic/gos;
-              $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
+              $allowView =
+                $TWiki::T->{security}->checkAccessPermission( "view",
+                                                         $TWiki::T->{wikiUserName},
+                                                         $text, $topic,
+                                                         $thisWebName );
               ( $revDate, $revUser, $revNum ) = $meta->getRevisionInfo( $thisWebName, $topic );
               $revDate = &TWiki::formatTime( $revDate );
-              $revUser = TWiki::User::userToWikiName( $revUser );
+              $revUser = $TWiki::T->{users}->userToWikiName( $revUser );
           }
 
           $locked = "";
           if( $doShowLock ) {
-              ( $tempVal ) = &TWiki::Store::topicIsLockedBy( $thisWebName, $topic );
+              ( $tempVal ) =
+                $TWiki::T->{store}->topicIsLockedBy( $thisWebName, $topic );
               if( $tempVal ) {
-                  $revUser = TWiki::User::userToWikiName( $tempVal );
+                  $revUser = $TWiki::T->{users}->userToWikiName( $tempVal );
                   $locked = "(LOCKED)";
               }
           }
@@ -797,7 +831,7 @@ sub searchWeb
           # Special handling for format="..."
           if( $theFormat ) {
               unless( $text ) {
-                  ( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 );
+                  ( $meta, $text ) = $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $topic, undef, 1 );
                   $text =~ s/%WEB%/$thisWebName/gos;
                   $text =~ s/%TOPIC%/$topic/gos;
               }
@@ -814,7 +848,7 @@ sub searchWeb
           if( $doMultiple ) {
               my $pattern = $tokens[$#tokens]; # last token in an AND search
               $pattern = quotemeta( $pattern ) if( $theType ne "regex" );
-              ( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 ) unless $text;
+              ( $meta, $text ) = $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $topic, undef, 1 ) unless $text;
               if( $caseSensitive ) {
                   @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
               } else {
@@ -837,15 +871,15 @@ sub searchWeb
                 $tempVal =~ s/\$rev/$revNum/gos;
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
                 $tempVal =~ s/\$wikiname/wikiName($revUser)/geos;
-                $tempVal =~ s/\$username/&TWiki::User::wikiToUserName($revUser)/geos;
-                $tempVal =~ s/\$createdate/_getRev1Info( $thisWebName, $topic, "date" )/geos;
-                $tempVal =~ s/\$createusername/_getRev1Info( $thisWebName, $topic, "username" )/geos;
-                $tempVal =~ s/\$createwikiname/_getRev1Info( $thisWebName, $topic, "wikiname" )/geos;
-                $tempVal =~ s/\$createwikiusername/_getRev1Info( $thisWebName, $topic, "wikiusername" )/geos;
+                $tempVal =~ s/\$username/$TWiki::T->{users}->wikiToUserName($revUser)/geos;
+                $tempVal =~ s/\$createdate/$this->_getRev1Info( $thisWebName, $topic, "date" )/geos;
+                $tempVal =~ s/\$createusername/$this->_getRev1Info( $thisWebName, $topic, "username" )/geos;
+                $tempVal =~ s/\$createwikiname/$this->_getRev1Info( $thisWebName, $topic, "wikiname" )/geos;
+                $tempVal =~ s/\$createwikiusername/$this->_getRev1Info( $thisWebName, $topic, "wikiusername" )/geos;
                 if( $tempVal =~ m/\$text/ ) {
                     # expand topic text
-                    ( $meta, $text ) = TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 ) unless $text;
-                    if( $topic eq $TWiki::topicName ) {
+                    ( $meta, $text ) = $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $topic, undef, 1 ) unless $text;
+                    if( $topic eq $TWiki::T->{topicName} ) {
                         # defuse SEARCH in current topic to prevent loop
                         $text =~ s/%SEARCH{.*?}%/SEARCH{...}/go;
                     }
@@ -873,14 +907,18 @@ sub searchWeb
                 # don't callback yet because of table
                 # rendering
                 $tempVal = TWiki::handleCommonTags( $tempVal, $topic );
-                $tempVal = $TWiki::renderer->getRenderedVersion( $tempVal );
+                $tempVal = $TWiki::T->{renderer}->getRenderedVersion( $tempVal );
             }
 
             if( $doRenameView ) { # added JET 19 Feb 2000
                 # Permission check done below, so force this read to succeed with "internal" parameter
-                my $rawText = TWiki::Store::readTopicRaw( $thisWebName, $topic, undef, 1 );
+                my $rawText = $TWiki::T->{store}->readTopicRaw( $TWiki::T->{wikiUserName}, $thisWebName, $topic, undef, 1 );
                 my $changeable = "";
-                my $changeAccessOK = &TWiki::Access::checkAccessPermission( "change", $TWiki::wikiUserName, $text, $topic, $thisWebName );
+                my $changeAccessOK =
+                  TWiki::security->checkAccessPermission( "change",
+                                                          $TWiki::T->{wikiUserName},
+                                                          $text, $topic,
+                                                          $thisWebName );
                 if( ! $changeAccessOK ) {
                    $changeable = "(NO CHANGE PERMISSION)";
                    $tempVal =~ s/%SELECTION%.*%SELECTION%//o;
@@ -940,21 +978,21 @@ sub searchWeb
                 # BookView, added PTh 20 Jul 2000
                 if( ! $text ) {
                     ( $meta, $text ) =
-                      TWiki::Store::readTopic( $thisWebName, $topic, undef, 1 );
+                      $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $thisWebName, $topic, undef, 1 );
                 }
                 if( "$thisWebName.$topic" eq "$baseWeb.$baseTopic" ) {
                     # primitive way to prevent recursion
                     $text =~ s/%SEARCH/%<nop>SEARCH/g;
                 }
                 $text = TWiki::handleCommonTags( $text, $topic, $thisWebName );
-                $text = $TWiki::renderer->getRenderedVersion( $text, $thisWebName );
+                $text = $TWiki::T->{renderer}->getRenderedVersion( $text, $thisWebName );
                 # FIXME: What about meta data rendering?
                 $tempVal =~ s/%TEXTHEAD%/$text/go;
 
             } elsif( $theFormat ) {
                 # free format, added PTh 10 Oct 2001
-                $tempVal =~ s/\$summary\(([^\)]*)\)/$TWiki::renderer->makeTopicSummary( $text, $topic, $thisWebName, $1 )/geos;
-                $tempVal =~ s/\$summary/$TWiki::renderer->makeTopicSummary( $text, $topic, $thisWebName )/geos;
+                $tempVal =~ s/\$summary\(([^\)]*)\)/$TWiki::T->{renderer}->makeTopicSummary( $text, $topic, $thisWebName, $1 )/geos;
+                $tempVal =~ s/\$summary/$TWiki::T->{renderer}->makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$parent\(([^\)]*)\)/breakName( getMetaParent( $meta ), $1 )/geos;
                 $tempVal =~ s/\$parent/getMetaParent( $meta )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
@@ -982,9 +1020,9 @@ sub searchWeb
                 if( $text ) {
                     $head = $text;
                 } else {
-                    $head = &TWiki::Store::readFileHead( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
+                    $head = $TWiki::T->{store}->readFile( "$TWiki::dataDir\/$thisWebName\/$topic.txt", 16 );
                 }
-                $head = $TWiki::renderer->makeTopicSummary( $head, $topic, $thisWebName );
+                $head = $TWiki::T->{renderer}->makeTopicSummary( $head, $topic, $thisWebName );
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             }
 
@@ -997,7 +1035,7 @@ sub searchWeb
                                                        $topic );
                 if ( $callback) {
                     $beforeText =
-                      $TWiki::renderer->getRenderedVersion( $beforeText,
+                      $TWiki::T->{renderer}->getRenderedVersion( $beforeText,
                                                          $thisWebName );
                     $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
                     &$callback( $beforeText );
@@ -1009,7 +1047,7 @@ sub searchWeb
             # output topic (or line if multiple=on)
             if( !( $inline || $theFormat )) {
                 $tempVal =
-                  $TWiki::renderer->getRenderedVersion( $tempVal, $thisWebName );
+                  $TWiki::T->{renderer}->getRenderedVersion( $tempVal, $thisWebName );
                 $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
             }
 
@@ -1035,7 +1073,7 @@ sub searchWeb
 
             if ( $callback) {
                 $afterText = 
-                  $TWiki::renderer->getRenderedVersion( $afterText,
+                  $TWiki::T->{renderer}->getRenderedVersion( $afterText,
                                                      $thisWebName );
                 $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
                 &$callback( $afterText );
@@ -1051,7 +1089,7 @@ sub searchWeb
                 $thisNumber =~ s/%NTOPICS%/$ntopics/go;
                 if ( $callback) {
                     $thisNumber =
-                      $TWiki::renderer->getRenderedVersion( $thisNumber,
+                      $TWiki::T->{renderer}->getRenderedVersion( $thisNumber,
                                                          $thisWebName );
                     $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
                     &$callback( $thisNumber );
@@ -1074,7 +1112,7 @@ sub searchWeb
         $tmplTail = TWiki::handleCommonTags( $tmplTail, $topic );
 
         if( $callback ) {
-            $tmplTail = $TWiki::renderer->getRenderedVersion( $tmplTail );
+            $tmplTail = $TWiki::T->{renderer}->getRenderedVersion( $tmplTail );
             $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $tmplTail );
         } else {
@@ -1084,7 +1122,7 @@ sub searchWeb
 
     return undef if ( $callback );
     $searchResult = TWiki::handleCommonTags( $searchResult, $topic );
-    $searchResult = $TWiki::renderer->getRenderedVersion( $searchResult );
+    $searchResult = $TWiki::T->{renderer}->getRenderedVersion( $searchResult );
 #    $searchResult =~ s|</*nop/*>||goi;   # remove <nop> tag
     return $searchResult;
 }
@@ -1102,24 +1140,27 @@ attributes are "date", "username", "wikiname",
 
 sub _getRev1Info
 {
-    my( $theWeb, $theTopic, $theAttr ) = @_;
+    my( $this, $theWeb, $theTopic, $theAttr ) = @_;
 
-    unless( $cacheRev1webTopic eq "$theWeb.$theTopic" ) {
+    unless( $this->{cacheRev1webTopic} eq "$theWeb.$theTopic" ) {
         # refresh cache
-        $cacheRev1webTopic = "$theWeb.$theTopic";
-        ( $cacheRev1date, $cacheRev1user ) = &TWiki::Store::getRevisionInfo( $theWeb, $theTopic, 1 );
+        $this->{cacheRev1webTopic} = "$theWeb.$theTopic";
+        my ( $d, $u ) =
+          $TWiki::T->{store}->getRevisionInfo( $theWeb, $theTopic, 1 );
+        $this->{cacheRev1date} = $d;
+        $this->{cacheRev1user} = $u;
     }
     if( $theAttr eq "username" ) {
-        return $cacheRev1user;
+        return $this->{cacheRev1user};
     }
     if( $theAttr eq "wikiname" ) {
-        return TWiki::User::userToWikiName( $cacheRev1user, 1 );
+        return $TWiki::T->{users}->userToWikiName( $this->{cacheRev1user}, 1 );
     }
     if( $theAttr eq "wikiusername" ) {
-        return TWiki::User::userToWikiName( $cacheRev1user );
+        return $TWiki::T->{users}->userToWikiName( $this->{cacheRev1user} );
     }
     if( $theAttr eq "date" ) {
-        return &TWiki::formatTime( $cacheRev1date );
+        return &TWiki::formatTime( $this->{cacheRev1date} );
     }
     # else assume attr "key"
     return 1;

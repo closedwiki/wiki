@@ -14,19 +14,12 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Notes:
-# - Latest version at http://twiki.org/
-# - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
-# - Customize variables in TWiki.cfg when installing TWiki.
-#
-#  14-02-2001 - Nicholas Lee
 
 =begin twiki
 
 ---+ TWiki::Net Module
 
-This module handles network related functions like http access and
-send mail.
+Object that brokers access to network resources.
 
 =cut
 
@@ -34,17 +27,16 @@ package TWiki::Net;
 
 use strict;
 
-use vars qw(
-        $useNetSmtp
-        $mailInitialized $mailHost $helloHost
-    );
+sub new {
+    my $class = shift;
+    my $this = bless( {}, $class );
 
-BEGIN {
-    $useNetSmtp = 0;
-    $mailInitialized = 0;
+    $this->{USENETSMTP} = 0;
+    $this->{MAILINITIALIZED} = 0;
+
+    return $this;
 }
 
-# =========================
 =pod
 
 ---++ sub getUrl (  $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader  )
@@ -53,9 +45,8 @@ Get the text at the other end of a URL
 
 =cut
 
-sub getUrl
-{
-    my ( $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
+sub getUrl {
+    my ( $this, $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
 
     # Run-time use of Socket module when needed
     require Socket;
@@ -79,8 +70,8 @@ sub getUrl
         $req .= "Authorization: Basic $base64";
     }
 
-    my $proxyHost = $TWiki::prefsObject->getValue("PROXYHOST");
-    my $proxyPort = $TWiki::prefsObject->getValue("PROXYPORT");
+    my $proxyHost = $TWiki::T->{prefs}->getPreferencesValue("PROXYHOST");
+    my $proxyPort = $TWiki::T->{prefs}->getPreferencesValue("PROXYPORT");
     if($proxyHost && $proxyPort) {
         $req = "GET http://$theHost:$thePort$theUrl HTTP/1.0\r\n";
         $theHost = $proxyHost;
@@ -121,32 +112,31 @@ Send an email specified as MIME format content.
 
 =cut
 
-sub sendEmail
-{
+sub sendEmail {
     # $theText Format: "Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
 
-    my( $theText ) = @_;
+    my( $this, $theText ) = @_;
 
     # Put in a Date header, mainly for Qmail
-    my $dateStr = &TWiki::formatTime(time, 'email');
+    my $dateStr = TWiki::formatTime(time, 'email');
     $theText = "Date: " . $dateStr . "\n" . $theText;
 
     # Check if Net::SMTP is available
-    if( ! $mailInitialized ) {
-        $mailInitialized = 1;
-        $mailHost  = $TWiki::prefsObject->getValue( "SMTPMAILHOST" );
-        $helloHost = $TWiki::prefsObject->getValue( "SMTPSENDERHOST" );
-        if( $mailHost ) {
-	   eval {	# May fail if Net::SMTP not installed
-	       $useNetSmtp = require Net::SMTP;
-	   }
+    unless( $this->{MAILINITIALIZED} ) {
+        $this->{MAILINITIALIZED} = 1;
+        $this->{MAIL_HOST}  = $TWiki::T->{prefs}->getPreferencesValue( "SMTPMAILHOST" );
+        $this->{HELLO_HOST} = $TWiki::T->{prefs}->getPreferencesValue( "SMTPSENDERHOST" );
+        if( $this->{MAIL_HOST} ) {
+            eval {	# May fail if Net::SMTP not installed
+                $this->{USENETSMTP} = require Net::SMTP;
+            }
         }
     }
 
     my $error = "";
     # Send the email.  Use Net::SMTP if it's installed, otherwise use a
     # sendmail type program.
-    if( $useNetSmtp ) {
+    if( $this->{USENETSMTP} ) {
         my ( $header, $body ) = split( "\n\n", $theText, 2 );
         my @headerlines = split( /\n/, $header );
         $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
@@ -194,20 +184,19 @@ sub sendEmail
             return "ERROR: Can't send mail, missing receipient";
         }
 
-        $error = _sendEmailByNetSMTP( $from, \@to, $theText );
+        $error = $this->_sendEmailByNetSMTP( $from, \@to, $theText );
 
     } else {
         # send with sendmail
         my ( $header, $body ) = split( "\n\n", $theText, 2 );
         $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
         $theText = "$header\n\n$body";   # rebuild message
-        $error = _sendEmailBySendmail( $theText );
+        $error = $this->_sendEmailBySendmail( $theText );
     }
     return $error;
 }
 
-sub _fixLineLength
-{
+sub _fixLineLength {
     my( $theAddrs ) = @_;
     # split up header lines that are too long
     $theAddrs =~ s/(.{60}[^,]*,\s*)/$1\n        /go;
@@ -215,9 +204,8 @@ sub _fixLineLength
     return $theAddrs;
 }
 
-sub _sendEmailBySendmail
-{
-    my( $theText ) = @_;
+sub _sendEmailBySendmail {
+    my( $this, $theText ) = @_;
 
     if( open( MAIL, "|-" ) || exec "$TWiki::mailProgram" ) {
         print MAIL $theText;
@@ -227,23 +215,23 @@ sub _sendEmailBySendmail
     return "ERROR: Can't send mail using TWiki::mailProgram";
 }
 
-sub _sendEmailByNetSMTP
-{
-    my( $from, $toref, $data ) = @_;
+sub _sendEmailByNetSMTP {
+    my( $this, $from, $toref, $data ) = @_;
 
     my @to;
     # $to is not a reference then it must be a single email address
     @to = ($toref) unless ref( $toref ); 
     if ( ref( $toref ) =~ /ARRAY/ ) {
-	@to = @{$toref};
+        @to = @{$toref};
     }
     return undef unless( scalar @to );
-    
+
     my $smtp = 0;
-    if( $helloHost ) {
-        $smtp = Net::SMTP->new( $mailHost, Hello => $helloHost );
+    if( $this->{HELLO_HOST} ) {
+        $smtp = Net::SMTP->new( $this->{MAIL_HOST},
+                                Hello => $this->{HELLO_HOST} );
     } else {
-        $smtp = Net::SMTP->new( $mailHost );
+        $smtp = Net::SMTP->new( $this->{MAIL_HOST} );
     }
     my $status = "";
     if ($smtp) {
@@ -252,18 +240,13 @@ sub _sendEmailByNetSMTP
             $smtp->to( @to, { SkipBad => 1 } ) or last;
             $smtp->data( $data ) or last;
             $smtp->dataend() or last;
-	}
-	$status = ($smtp->ok() ? "" : "ERROR: Can't send mail using Net::SMTP. " . $smtp->message );
-	$smtp->quit();
-
+        }
+        $status = ($smtp->ok() ? "" : "ERROR: Can't send mail using Net::SMTP. " . $smtp->message );
+        $smtp->quit();
     } else {
-	$status = "ERROR: Can't send mail using Net::SMTP (can't connect to '$mailHost')";
+        $status = "ERROR: Can't send mail using Net::SMTP (can't connect to '$this->{MAIL_HOST}')";
     }
-    return $status;    
+    return $status;
 }
 
-# =========================
-
 1;
-
-# EOF

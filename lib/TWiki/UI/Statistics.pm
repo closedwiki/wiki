@@ -45,9 +45,6 @@ sub statistics {
     my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
 
-    # Set up locale and regexes
-    TWiki::basicInitialize();
-
     if( $query ) {
       # running from CGI
         my $mess =
@@ -142,10 +139,10 @@ sub statistics {
 		$statSavesRef, $statUploadsRef, $query, 1 );
         } else {
             # do all webs:
-            my @weblist = grep{ /^[^\.\_]/ } TWiki::Store::getAllWebs( "" );
+            my @weblist = grep{ /^[^\.\_]/ } $TWiki::T->{store}->getAllWebs( "" );
             my $firstTime = 1;
             foreach my $web ( @weblist ) {
-                if( TWiki::Store::webExists( $web ) ) {
+                if( $TWiki::T->{store}->webExists( $web ) ) {
                     $destWeb = _processWeb( "/$web", $theRemoteUser, $topic,
 			$logMonthYear, $viewRef, $contribRef, $statViewsRef,
 			$statSavesRef, $statUploadsRef, $query, $firstTime );
@@ -366,18 +363,18 @@ sub _processWeb
         $statViewsRef, $statSavesRef, $statUploadsRef, $query, $isFirstTime ) = @_;
 
     my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
-        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, "", $query );
-    $dummy = "";  # to suppress warning
+      TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, "", $query );
+    my $wikiUserName = $TWiki::T->{users}->userToWikiName( $userName);
 
     if( $isFirstTime ) {
-        my $tmp = &TWiki::User::userToWikiName( $userName, 1 );
+        my $tmp = $wikiUserName;
         $tmp .= " as shell script" unless( $query );
         _printMsg( "* Executed by $tmp", $query );
     }
 
     _printMsg( "* Reporting on TWiki.$webName web", $query );
 
-    if( ! &TWiki::Store::webExists( $webName ) ) {
+    if( ! $TWiki::T->{store}->webExists( $webName ) ) {
         _printMsg( "  *** Error: Web $webName does not exist", $query );
         return $TWiki::mainWebname;
     }
@@ -415,9 +412,10 @@ sub _processWeb
     my $statsTopic = $TWiki::statisticsTopicname;
     # DEBUG
     # $statsTopic = "TestStatistics";		# Create this by hand
-    if( &TWiki::Store::topicExists( $webName, $statsTopic ) ) {
+    if( $TWiki::T->{store}->topicExists( $webName, $statsTopic ) ) {
 	my( $meta, $text ) =
-      TWiki::Store::readTopic( $webName, $statsTopic, undef, 1 );
+      $TWiki::T->{store}->readTopic( $wikiUserName, $webName, $statsTopic,
+                                undef, 1 );
 	my @lines = split( /\n/, $text );
 	my $statLine;
 	my $idxStat = -1;
@@ -457,7 +455,7 @@ sub _processWeb
 	$text = join( "\n", @lines );
 	$text .= "\n";
 
-	&TWiki::Store::saveTopic( $webName, $statsTopic, $text, $meta, "", 1, 1, 1 );
+	$TWiki::T->{store}->saveTopic( $userName, $webName, $statsTopic, $text, $meta, "", 1, 1, 1 );
 	_printMsg( "  - Topic $statsTopic updated", $query );
 
     } else {

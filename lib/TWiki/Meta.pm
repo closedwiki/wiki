@@ -312,7 +312,7 @@ sub addTopicInfo {
     my( $self, $web, $topic, $rev, $forceDate, $forceUser ) = @_;
 
     my $time = $forceDate || time();
-    my $user = $forceUser || $TWiki::userName;
+    my $user = $forceUser || $TWiki::T->{userName};
 
     die "ASSERT $rev" unless( $rev =~ /^\d+$/ ); # temporary
 
@@ -356,7 +356,7 @@ sub getRevisionInfo {
     } else {
        # Get data from Store
        ( $date, $author, $rev, $comment ) =
-         TWiki::Store::getRevisionInfo( $self->{_web}, $self->{_topic}, 0 );
+         $TWiki::T->{store}->getRevisionInfo( $self->{_web}, $self->{_topic}, 0 );
     }
 
     return( $date, $author, $rev, $comment );
