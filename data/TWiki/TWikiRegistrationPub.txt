@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1003994910" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1029129172" format="1.0" version="1.7"}%
 To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name and password. <br> __Note:__ You can also login anonymously as user *TWikiGuest* with password *guest*
 
 To register as a new user, simply fill out this form:
@@ -123,6 +123,7 @@ To register as a new user, simply fill out this form:
   <option>Malawi</option>
   <option>Malta</option>
   <option>Mexico</option>
+  <option>Moldova</option>
   <option>Monaco</option>
   <option>Morocco</option>
   <option>Mozambique</option>
