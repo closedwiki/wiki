@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="997551066" format="1.0beta2" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1003994561" format="1.0" version="1.7"}%
 To edit pages on this %WIKITOOLNAME% Collaborative Web, you must have a registered user name in WikiNotation.
 
 To register as a new user, simply fill out this form:
@@ -9,7 +9,7 @@ To register as a new user, simply fill out this form:
 <table border="1">
 <tr>
   <td align="right"> First & last name: </td>
-  <td><input type="text" name="Twk1Name" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if( (ch=='à')||(ch=='á')||(ch=='â')||(ch=='ã')||(ch=='å') ) { ch = 'a'; } if( (ch=='è')||(ch=='é')||(ch=='ê') ) { ch = 'e'; } if( ch=='ç') { ch = 'c'; } if( ch=='ó') { ch = 'o'; } if( ch=='ä') { ch = 'a'; ch2 = 'e'; } if( ch=='ö') { ch = 'o'; ch2 = 'e'; } if( ch=='ü') { ch = 'u'; ch2 = 'e'; } if( ch=='Ä') { ch = 'A'; ch2 = 'e'; } if( ch=='Ö') { ch = 'O'; ch2 = 'e'; } if( ch=='Ü') { ch = 'U'; ch2 = 'e'; } if( ch=='ß') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" /> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1Name" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if((ch=='&#224;')||(ch=='&#225;')||(ch=='&#226;')||(ch=='&#227;')||(ch=='&#229;') ) { ch = 'a'; } if( (ch=='&#232;')||(ch=='&#233;')||(ch=='&#234;') ) { ch = 'e'; } if( ch=='&#231;') { ch = 'c'; } if( ch=='&#241;') { ch = 'n'; } if( (ch=='&#242;')||(ch=='&#243;')||(ch=='&#244;') ) { ch = 'o'; } if( ch=='&#228;') { ch = 'a'; ch2 = 'e'; } if( ch=='&#246;') { ch = 'o'; ch2 = 'e'; } if( (ch=='&#249;')||(ch=='&#250;')||(ch=='&#251;') ) { ch = 'o'; } if( ch=='&#252;') { ch = 'u'; ch2 = 'e'; } if( ch=='&#196;') { ch = 'A'; ch2 = 'e'; } if( ch=='&#214;') { ch = 'O'; ch2 = 'e'; } if( ch=='&#220;') { ch = 'U'; ch2 = 'e'; } if( ch=='&#223;') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Your WikiName: </td>
   <td><input type="text" name="Twk1WikiName" size="40" value="" /> =<font color="red">**</font>= </td>
