@@ -134,4 +134,44 @@ sub test_sum {
   $this->assert_equals(3,$array->sum("f1"));
 }
 
+sub test_getsyntax {
+  my $this = shift;
+
+  my $array = new DBCachePlugin::Array();
+
+  my $a = new DBCachePlugin::Map("name=a");
+  my $b = new DBCachePlugin::Map("name=b");
+  my $c = new DBCachePlugin::Map("name=c");
+
+  $a->set("name", "a");
+  $a->set("age", "40");
+  $a->set("sex", "M");
+
+  $b->set("name", "b");
+  $b->set("age", "105");
+  $b->set("sex", "M");
+
+  $c->set("name", "c");
+  $c->set("age", 41);
+  $c->set("sex", "F");
+
+  $array->add($a);
+  $array->add($b);
+  $array->add($c);
+
+  my $s = $array->get("[?age<80]");
+  $this->assert(ref($s));
+  $this->assert_equals(2, $s->size());
+  $this->assert_str_equals("a", $s->get("0.name"));
+  $this->assert_str_equals("c", $s->get("[1].name"));
+  $this->assert_equals(186, $array->get("age"));
+
+  $s = $array->get("[*name]");
+  $this->assert_equals(3, $s->size());
+  $this->assert_str_equals("a", $s->get("0"));
+  $this->assert_str_equals("b", $s->get("1"));
+  $this->assert_str_equals("c", $s->get("2"));
+
+}
+
 1;

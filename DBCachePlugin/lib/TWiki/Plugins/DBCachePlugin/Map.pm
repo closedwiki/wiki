@@ -81,30 +81,48 @@ Get the value for a key, but without any subfield field expansion
 
 =begin text
 
----+++ =get($k)= -> datum
+---+++ =get($k, $root)= -> datum
    * =$k= - key
-Get the value corresponding to this key; return undef if not set.
-If =$k= is a string of the form =X.Y= then the result will be the
-result of calling =get("Y")= on the object in this map that matches =X=.
+   * =$root= what ! refers to
+Get the value corresponding to key =$k=; return undef if not set.
 
-Note that if X is a DBCachePlugin::Array, Y may be an integer index, or the name of a field
-in the class of the objects stored by X. In the latter case, =get= will return the result
-of calling =X->sum("Y")=.
+*Subfield syntax*
+   * =get("X",$r)= will get the subfield named =X=.
+   * =get("X.Y",$r)= will get the subfield =Y= of the subfield named =X=.
+   * =get("[X]",$r) = will get the subfield named =X= (so X[Y] and X.Y are synonymous)..
+   * =!= (exclamation mark) means "reset to root". So =get("!.Y", $r) will return the subfield =Y= of $r (assuming $r is a map!), as will =get("!{Y}"=.
+
+Where the result of a subfield expansion is another object (a Map or an Array) then further subfield expansions can be used. For example,
+<verbatim>
+get("UserTable[0].Surname", $web);
+</verbatim>
+
+See also =DBCachePlugin::Array= for syntax that applies to arrays.
 
 =cut
 
   sub get {
-    my ( $this, $attr ) = @_;
-    if ( index( $attr, "." ) > 0 && $attr =~ m/^(\w+)\.(\w+.*)$/o ) {
-      my $field = $2;
-      $attr = $this->{keys}{$1};
-      if ( defined( $attr ) && ref( $attr )) {
-		return $attr->get( $field );
-      } else {
-		return undef;
-      }
+    my ( $this, $key, $root ) = @_;
+
+	# If empty string, then we are the required result
+	return $this unless $key;
+
+    if ( $key =~ m/^(\w+)(.*)$/o ) {
+	  # Sub-expression
+      my $field = $this->{keys}{$1};
+      return $field->get( $2, $root ) if ( $2 && ref( $field ));
+	  return $field;
+    } elsif ( $key =~ m/^\.(.*)$/o ) {
+	  return $this->get( $1, $root );
+    } elsif ( $key =~ m/^\[(.*)$/o ) {
+	  my ( $one, $two ) = DBCachePlugin::Array::mbrf( "[", "]", $1 );
+	  my $field = $this->get( $one, $root );
+	  return $field->get( $two, $root ) if ( $two  && ref( $field ));
+	  return $field;
+    } elsif ( $key =~ m/^!(.*)$/o ) {
+	  return $root->get( $1, $root );
     } else {
-      return $this->{keys}{$attr};
+	  die "ERROR: bad Map expression at $key";
     }
   }
 

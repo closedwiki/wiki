@@ -38,6 +38,13 @@ Typical usage:
      }
   }
 </verbatim>
+Each topic hash is loaded with the following standard fields:
+| =form= | Name of the form used in this topic (undef if none) |
+| =parent= | Parent topic to this topic |
+| =attachments= | Array of attachments to this topic. Each attachment is loaded into the array as a Map with the following fields: =name=, =attr=, =comment=, =date=, =path=, =size=, =user=, and =version= |
+| =text= | The body text ||
+
+As topics are loaded, the readTopicLine method gives subclasses an opportunity to apply special processing to indivual lines, for example to extract special syntax such as %ACTION lines, or embedded tables in the text. See FormQueryPlugin for an example of this.
 
 =cut
 
@@ -106,6 +113,8 @@ Construct a new DBCache object.
       if ( $line =~ m/%META:/o ) {
 		if ( $line =~ m/%META:FORM{name=\"([^\"]*)\"}%/o ) {
 		  $meta->set( "form", $1 );
+		} elsif ( $line =~ m/%META:TOPICPARENT{name=\"([^\"]*)\"}%/o ) {
+		  $meta->set( "parent", $1 );
 		} elsif ( $line =~ m/%META:FIELD{(.*)}%/o ) {
 		  my $fs = new TWiki::Attrs($1);
 		  $meta->set( $fs->get("name"), $fs->get("value"));
