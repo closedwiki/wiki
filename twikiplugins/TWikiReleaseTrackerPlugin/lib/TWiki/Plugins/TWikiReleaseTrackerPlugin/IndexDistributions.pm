@@ -13,25 +13,38 @@ sub indexDistribution {
     unless (defined $pathPrefix) {$pathPrefix =""};
 
     my $preprocessCallback = sub {
-	return grep {! /$excludeFilePattern/ } @_;
+	my @ans = grep {! /$excludeFilePattern/ } @_;
+	return @ans;
     };
 
     my $findCallback = sub {
 	my $pathname = $File::Find::name; #  complete pathname to the file. 
 	Common::debug "$pathname\n";
+	my $relativePath = Common::relativeFromPathname($pathname, $distributionLocation);
+	#CodeSmell: should be able to do this in preprocessCallback
+	if (($relativePath =~ m!twiki/data/(.*)/!) or 
+	    ($relativePath =~ m!twiki/pub/(.*)/!)) {
+	    my $web = $1;
+#	    print "Index web '$web'?" ;
+	    if ($web =~ m/$Common::websToIndex/) {
+#		print "yes\n";
+	    } else {
+#		print "no\n";
+		return;
+	    } 
+	}
 	return unless -f $pathname;
         return if -z $pathname;
 	Common::debug "$pathname\n";
-        indexFile($distribution, $distributionLocation, $pathname, $pathPrefix);
+        indexFile($distribution, $distributionLocation, $pathname, $pathPrefix, $relativePath);
     };
     find({ wanted => $findCallback, preprocess => $preprocessCallback, follow => 0 }, $distributionLocation);  
 }
 
 sub indexFile {
-    my ($distribution, $distributionLocation, $file, $pathPrefix) = @_;
+    my ($distribution, $distributionLocation, $file, $pathPrefix, $relativePath) = @_;
     my $digest = digestForFile($file);
-    my $relativePath = Common::relativeFromPathname($file, $distributionLocation);
-    Common::debug $digest."\n";
+    Common::debug $relativePath." = ".$digest."\n";
     FileDigest::addOccurance($distribution, $pathPrefix.$relativePath, $digest);
 }
 

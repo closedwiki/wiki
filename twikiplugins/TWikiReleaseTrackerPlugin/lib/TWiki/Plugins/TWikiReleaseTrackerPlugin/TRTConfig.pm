@@ -4,7 +4,9 @@ use strict;
 
 BEGIN {
     $Common::excludeFilePattern = 'DEADJOE|.svn|\~$|\,v|.changes|.mailnotify|.session';
-    $Common::installationDir = "/home/mrjc/cleaver.org"; #NB. assumes below, e.g. twiki/bin/view, not bin/view
+    $Common::websToIndex = 'Main|TWiki|Know|Trash';
+    $Common::installationDir = ""; # Uncomment for distro; #NB. assumes below, e.g. twiki/bin/view, not bin/view
+#    $Common::installationDir = "/home/mrjc/beijingtwiki.mrjc.com/"; #NB. assumes below, e.g. twiki/bin/view, not bin/view
     $Common::downloadDir = "/home/mrjc/twikiplugindev/stage/twikiplugins/shared/tools/download/";
 }
 

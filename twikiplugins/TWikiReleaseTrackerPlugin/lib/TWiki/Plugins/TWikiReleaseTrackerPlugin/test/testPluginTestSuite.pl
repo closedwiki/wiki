@@ -29,6 +29,9 @@ TWiki::Plugins::TWikiReleaseTrackerPlugin::initPlugin("TRTTestSuite", "TWiki", "
 sub symlinkFromInstallToTestDir {
     my @testSuiteFiles = qw(testDistros.md5 testInstallation.md5 test1.correctResults test2.correctResults test3.correctResults test4.correctResults test5.correctResults);
     my $testDocAttachments = Common::getPubDir().'/TWiki/TRTTestSuite';
+    unless (-d $testDocAttachments) {
+	mkdir $testDocAttachments;
+    }
     chdir $testDocAttachments || die "can't cd to $testDocAttachments $!";
     linkFilesIntoDir($testDocAttachments, $testDir, @testSuiteFiles); # would be more elegant to use relative links
     print `ls -l $testDocAttachments`;

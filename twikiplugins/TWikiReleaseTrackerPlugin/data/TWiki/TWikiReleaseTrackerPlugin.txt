@@ -1,20 +1,23 @@
-%META:TOPICINFO{author="guest" date="1091452260" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="TWikiGuest" date="1092070800" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="Main.MartinCleaver"}%
----+ TWiki Release Tracker Plugin
+---+!! TWiki Release Tracker Plugin
 
 This plugin tells you how similar your install is to past releases of TWiki.
 
 %TOC%
 
 ---++ Settings
+One line description, is shown in the TextFormattingRules topic: 
+		* Set SHORTDESCRIPTION = Plugin telling you how similar your install is to past releases of TWiki 
 
+See the Parameters section for descriptions of the rest of these:
 		* Set STATUSFILTER = FSCD,FDCS
 		* Set FROM = localInstallation
-		* Set TO = TWiki20030201 
+		* Set TO = ,
 
 ---+++ Checking against particular versions
 
-The TRT is shipped with data about many versions of TWiki. As TWiki does not provide programmatic access to the CVS identifier, you'll have to assign the right starting point yourself. See TWiki:Codev.TWikiReleases
+The TRT is shipped with data about many versions of TWiki. As TWiki does not provide programmatic access to the CVS identifier, you'll have to assign the right starting point yourself. Compare %WIKIVERSION% to TWiki:Codev.TWikiReleases 
 
 
 ---++ Features and Benefits
@@ -30,10 +33,20 @@ The system is comprised of two parts:
 	2 a twiki plugin that provides a web interface to the API of the comparator.
 
 ---++ Set up
-	* You must run TWikiReleaseTrackerPlugin/buildIndex.pl to initialise the localInstallation.md5 file. It is shipped empty and without it the plugin will give no results.
+	* You must run TWikiReleaseTrackerPlugin/build.pl to initialise:
+<pre>
+cd lib/TWiki/Plugins/TWikiReleaseTrackerPlugin
+perl build.pl 
+</pre>
+
+This will set up the localInstallation.md5 file and fix up the links for the TRTTestSuite. They are shipped empty and without them the plugin will give no results.
 
 ---++ Testing
-	* The TRTTestSuite holds a sample testsuite. This showcases functionality and confirms that it still works.
+	1 The TRTTestSuite holds a sample testsuite. This showcases functionality and confirms that it still works.
+	2 Even before you have built the index for your own installation, you can use the TRT to determine what changes were made between versions: %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=TWiki19990901&to=TWiki20000501&statusFilter=all <!-- N.B. use of TWiki/ not TWiki. because athens did not support its use -->
+	3 Ensure you have built your index (see above)
+	4 Run %SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?from=localInstallation&statusFilter=FSCD ; pick the appropriate 'to' parameter 
+
 
 ---++ Parameters
 
@@ -47,7 +60,7 @@ All parameters can be sourced from one of three places:
 | *Parameter name* | *Values* | *Default* |
 | *Mode = listing* | listing, file | listing |
 | from | TWiki distribution name (e.g. TWiki20011201), or the string 'localInstallation' | localInstallation |
-| to | (see "from") ||
+| to | (see "from") | , - this says match against all distributions |
 | indexTopic | topic containing the md5 files | defaults to the plugin page |
 | debug | on, off, 2 | off |
 | statusFilter | "FSCS, FSCD, FDCS, FDCD, all" (Filename Same/Different, Content Same/Different) | all |
@@ -58,9 +71,73 @@ All parameters can be sourced from one of three places:
 | *Issue* | *Future Plan* | *Impact* |
 | To compare specific file changes (FSCD = File Same, Content Different), you need to have pre-downloaded all of the releases. | My plan is to have the plugin pull them down as needed, but I need a web address for a specific twiki version / file; currently this is not available (partly due to the switch to subversion) | High - file mode not yet functional |
 | The MD5 for specific releases (i.e. releases.md5) needs pregenerating. | Release the code (actually a merge for the TWiki:Codev.SharedCode) when I have cleaned it up | Low - releases are not very often |
+| If you want an unspecified destination (to) or source (from) distro you must set the param to "," | check for undef, not "" | Medium - ugly non-obvious workaround available |
 | The results are not sorted | sort them | Low - workaround available: Use table sort function |
 | The underlying data structures could do with some optimisation | Review | Low - Page load is slow in some cases |
 
+
+---++ Manifest
+	| ==./data/TWiki/TRTChangesFromDistribution.txt== |  |
+	| ==./data/TWiki/TRTTestSuite.txt== |  |
+	| ==./data/TWiki/TWikiReleaseTrackerPlugin.txt== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/ArraySets.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/diffwiki.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/makeTestSymlinks.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/matchDistributionAgainstInstallation.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/matchInstallationAgainstDistribution.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/matchTestSuite.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/oldBuildindex.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/testAttachmentSave.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/testIndexesLoad.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/old/testUnionOfArrays.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/Common.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/DistributionWalker.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/FileDigest.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/IndexDistributions.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/InstallationWalker.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/README== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/TRTConfig.pm== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test1.actualResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test1.correctResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test2.actualResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test2.correctResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test3.actualResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test3.correctResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test4.actualResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test4.correctResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test5.actualResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test5.correctResults== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/testDistros.md5== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/testInstallation.md5== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/testPluginCompiles.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/testPluginTestSuite.pl== |  |
+	| ==./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/build.pl== |  |
+	| ==./lib/TWiki/Plugins/Build.pm== |  |
+	| ==./pub/TWiki/TWikiReleaseTrackerPlugin/plugins.md5== |  |
+	| ==./pub/TWiki/TWikiReleaseTrackerPlugin/releases.md5== |  |
+	| ==./pub/TWiki/TRTTestSuite/== |  |
+	| ==./MANIFEST== |  |
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MartinCleaver |
+|  Plugin Version: | 08:07:11 18 August 2004 (1.010) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  01 Aug 2004: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION (Dec/2001, might work earlier) |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+If you have comments or questions, please put them at TWiki:Plugins.TWikiReleaseTrackerPluginDev
 %META:FILEATTACHMENT{name="localInstallation.md5" attr="" comment="" date="1090726845" path="There no API to add attachments from plugins, so I hacked it" size="592" user="MartinCleaver" version="1.1"}%
 %META:FILEATTACHMENT{name="releases.md5" attr="" comment="" date="1090726845" path="There no API to add attachments from plugins, so I hacked it" size="592" user="MartinCleaver" version="1.1"}%
 %META:FILEATTACHMENT{name="plugins.md5" attr="" comment="" date="1090726845" path="There no API to add attachments from plugins, so I hacked it" size="592" user="MartinCleaver" version="1.1"}%
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->

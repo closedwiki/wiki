@@ -28,8 +28,8 @@ use CGI;
 # =========================
 use vars qw(
 	    $web $topic $user $installWeb $VERSION $pluginName
-	    $debug $cgiQuery $addedFileFormat %showStatusFilter
-	    $sameFileFormat
+	    $debug $cgiQuery %showStatusFilter 
+	    $fdcsFormat $fscsFormat $fscdFormat $fdcdFormat 
 	    );
 
 BEGIN {
@@ -48,7 +48,7 @@ sub commonTagsHandler
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
     writeDebug( "commonTagsHandler( $_[2].$_[1] )" );
     $_[0] =~ s/%DIFFWIKI{(.*?)}%/&handleDiffWiki($1)/ge;
-#    $_[0] =~ s/%DIFFWIKI%/&handleDiffWiki()/ge;
+    $_[0] =~ s/%DIFFWIKIINDEX{(.*?)}%/&handleShowIndex($1)/ge;
 }
 
 sub getParam {
@@ -67,20 +67,33 @@ sub getParam {
 }
 
 sub handleDiffWiki {
-    my ($param) = @_; # || ("");
+    my ($param) = @_;
 
     $cgiQuery = new CGI;
 
     my $fileParam = getParam($param, 'file');
     my @distributions = split /,/, getParam($param, 'to'); 
+    if (($#distributions == -1) || ($distributions[0] eq "all")) {
+	@distributions = ();
+    }
+
     my $modeParam = getParam($param, 'mode') || 'listing';
     my $compareFromDistribution = getParam($param, 'from') || 'localInstallation';
     Common::setIndexTopic(getParam($param, 'indexTopic') || 'TWiki.TWikiReleaseTrackerPlugin');
-    $addedFileFormat = getParam($param, "addedfileformat") ||
+
+    $fscsFormat = getParam($param, "fscsFormat") || 
+        '| $relativeFile | FSCS | $locations |'."\n";
+
+    $fscdFormat = getParam($param, "fscdFormat") || 
+        '<TABLE border=1> <TR><TD><b> $fromDistribution - $relativeFile (FSCDCALLBACK)</b>'."\n".'</TD><TD>FSCDDIFF </TD></TR></TABLE>';
+#        '| $relativeFile | FSCDCALLBACK | FSCDDIST |'."\n";
+
+    $fdcdFormat = getParam($param, "fdcdFormat") ||
 	'| ($relativeFile name not recognised, and no content match)  | FDCD | |'."\n";
 
-    $sameFileFormat = getParam($param, "samefileformat") || 
+    $fdcsFormat = getParam($param, "fdcsFormat") || 
 	'| $relativeFile | FDCS | $locations |'."\n";
+
 
     $debug = getParam($param, 'debug') || 0;
     if ($debug eq "1") { $debug = "on" }; # NB. BROKEN should allow CGI to carry the debug flag
@@ -96,37 +109,80 @@ sub handleDiffWiki {
     $ans = "$param" if $debug;
     if (!defined ($modeParam) or $modeParam eq 'listing') {
 	$ans .= listFiles($compareFromDistribution, @distributions); # calls back to foundFile() with each file found in the current distro.
+    } elsif ($modeParam eq 'dumpIndex') {
+	$ans .= dumpIndex();
     } else {
 	$ans .= compareFile($fileParam, $modeParam, $compareFromDistribution, @distributions);
     }
     return $ans;
 }
 
+sub formatList {
+    my ($format, $separator, $selection, $marker, @list) = @_;
+#CodeSmell - stolen from handleWebAndTopicList, this needs making generic in Func.pm:
+    my $ans = "";
+    my $item = "";
+    my $line = "";
+    my $mark = "";
+
+    foreach my $item (@list) {
+	my $line = $format;
+	$line =~ s/\$name/$item/goi;
+	$mark = ( $item eq $selection ) ? $marker : "";
+	$line =~ s/\$marker/$mark/goi;
+	$ans .= "$line$separator";
+    }
+    return $ans;
+}
+
+sub handleShowIndex {
+    my ($param) = @_;
+    loadIndexes();
+
+    $cgiQuery = new CGI;
+
+    my $format = TWiki::Func::extractNameValuePair( $param, "format" ) || ',';
+    my $separator = TWiki::Func::extractNameValuePair( $param, "separator" ) || "";
+    $format .= '$name' if( ! ( $format =~ /\$name/ ) );
+    my $selection = TWiki::Func::extractNameValuePair( $param, "selection" ) || "";
+    my $marker    = TWiki::Func::extractNameValuePair( $param, "marker" ) || "selected";
+
+    if ($param =~ m/distributions/) {
+	return formatList($format, $separator, $selection, $marker, sort &FileDigest::getDistributions);
+    } elsif ($param =~ m/filenames/) {
+	return formatList($format, sort &FileDigest::getFilenames);
+    } else {
+	return "usage: distributions or filenames\n";
+    }
+
+}
+
 sub foundFile {
-    my ($debugInfo, $status, $relativeFile, $locations, @allDistributionsForFilename) = @_;
+    my ($debugInfo, $status, $relativeFile, $locations, $comparedToDistribution, @allDistributionsForFilename) = @_;
     my $ans;
     $ans .= $debugInfo if ($debug eq "2");
 
     return $ans unless $showStatusFilter{$status};
 
+    # FIXME: simplify into a hash
     if ($status eq "FSCS") {
-       $ans .= "| $relativeFile | FSCS | $locations |\n";
+       if ($fscsFormat) {
+	   my $line = $fscsFormat;
+	   $ans .= $line; 
+       }
    } elsif ($status eq "FSCD") {
-       $ans .= "| $relativeFile | ".
-	   browserCallback("FSCD ",
-			   'file'=>$relativeFile,
-			   'mode'=>'lineCount',
-			   'distributions'=> join(",",@allDistributionsForFilename)
-			   )
-	   ." | <LI>". join(" <LI>", @allDistributionsForFilename)." |\n";
+       if ($fscdFormat) {
+	   my $line = $fscdFormat;
+	   $ans .= $line; 
+       }
    } elsif ($status eq "FDCS") {
-       if ($sameFileFormat) {
-	   my $line = $sameFileFormat;
+       if ($fdcsFormat) {
+	   my $line = $fdcsFormat;
 	   $ans .= $line; 
        }
    } elsif ($status eq "FDCD") {
-       if ($addedFileFormat) {
-	   my $line = $addedFileFormat;
+       if ($fdcdFormat) {
+	   my $line = $fdcdFormat;
 	   $ans .= $line; 
        }
    } else {
@@ -137,6 +193,30 @@ sub foundFile {
    }
     $ans =~ s/\$relativeFile/$relativeFile/; 
     $ans =~ s/\$locations/$locations/; 
+    $ans =~ s/\$fromDistribution/$comparedToDistribution/; 
+
+
+
+    $ans =~ s/FSCDCALLBACK/&browserCallback("FSCD",
+					   'file'=>$relativeFile,
+					   'mode'=>'lineCount',
+					   'to'=> join(",",@allDistributionsForFilename))/e;
+    $ans =~ s/FSCDDIST/"<LI>".join("<LI>", @allDistributionsForFilename)/e;
+    $relativeFile = untaint($relativeFile);
+    $comparedToDistribution = untaint($comparedToDistribution);
+    
+    if ($ans =~ m/FSCDDIFF/) {
+	my $comparison;
+	foreach my $dist (@allDistributionsForFilename) {
+	    $dist = untaint($dist);
+
+	    my ($output, $changeExpression, $cmd) = diffFiles($relativeFile, $comparedToDistribution, $dist, "-u");
+	    $comparison .= "<b>\$toDistribution</b>\n<pre>$output</pre>\n";
+	    $comparison =~ s/\$toDistribution/$dist/; 
+	}
+	$ans =~ s!FSCDDIFF!$comparison!;	
+    }
+
 
     $ans .= $debugInfo if ($debug eq "on");
     return $ans;
@@ -149,53 +229,97 @@ sub compareFile {
 
     my $ans;
     my $modeCallback = selectModeCallback($mode);
-#    use Cwd;
+
     my $distString = join(",", @distributions);
-    $ans .= browserCallback("   <LI> Back to file listing (slow!)",
+    $ans .= browserCallback("   <LI> Back to file listing",
 			    'mode' => 'listing'
 			    )."\n";
     $ans .= browserCallback("   <LI> Linecount differences for distribution(s) ".$distString,
 			    'file' => $file,
-			    'distributions' => $distString,
+			    'to' => $distString,
 			    'mode' => "lineCount"
 			    )."\n";
     $ans .= browserCallback("   <LI> Detailed differences for distribution(s) ".$distString,
 			    'file' => $file,
-			    'distributions' => $distString,
+			    'to' => $distString,
 			    'mode' => 'diff'
 			    )."\n";
 
-    $ans .= "---++!! Comparing $compareToDistribution:$file ($mode)\n";
-    $ans .= "%TOC%\n";
+    $ans .= "---++!! Comparing $compareToDistribution:$file ($mode) \n";
+    $ans .= "%TOC%\n"; # FIXME (NB. This TOC does not work);
     foreach my $distribution (reverse sort @distributions) {
+	next if ($distribution eq $compareToDistribution);
 	$ans .= "---++ With <nop>$distribution\n";
-	$ans .= &$modeCallback($file, $distribution, "-u ");
+	$ans .= &$modeCallback($file, $distribution, $compareToDistribution, "-u ");
 	$ans .= "\n\n";
     }
+    loadIndexes();
+
+    # e.g. 
+    # if  allDistributions = (A, B, C);
+    # and distributions = (A, B)
+    # then unmentionedDistributions = (C);
+    my @mentionedDistributions = sort @distributions, $compareToDistribution;
+    my @allDistributions = FileDigest::retreiveDistributionsForFilename($file);
+    my @remainingDistributions = sort @allDistributions;
+
+    my $mentionedCount = 0;
+    foreach my $distribution (@mentionedDistributions) {
+	if ($mentionedDistributions[$mentionedCount] eq $distribution) {
+	    shift @remainingDistributions;
+#	    $ans .= "<LI> (so remainingDistributions now =)".join(",", @remainingDistributions);
+	}
+	$mentionedCount++;
+    }
+    my $unmentionedDistributions = join(",",@remainingDistributions);
+    my $allDistributions = join(",",sort @allDistributions);
+    $ans .= "---++ Widen comparison for $file to other distributions \n";
+    if ($unmentionedDistributions) {
+	$ans .=	"This file also occurs in other distributions - clicking below will open the comparison to these too<BR>".
+	    "<LI> ".browserCallback("Unlisted: <nop>".join(", <nop>",@remainingDistributions), 'to' => $unmentionedDistributions)."\n".
+	    "<LI> ".browserCallback("All: <nop>".join(", <nop>", sort @allDistributions), 'to' => $allDistributions)."\n";
+    } else {
+	$ans .= "All distributions where this file occurs are listed above\n";
+    }
+    $ans .= "---++ Swap to and from\n".
+	"<LI>".browserCallback("Swap to and from distributions",
+			       'to' => $compareToDistribution,
+			       'from' => $distString
+			       )."\n";
+    
     return $ans;
 }
 
 
 #==============================================================
 
-sub diffFilesLineCount {
-    my ($file, $distribution, $fileDiffParams) = @_;
-    my $file1 = getDistributionVersion($file, $distribution);
-    my $file2 = getLocalVersion($file);
+sub diffFiles {
+    my ($file, $distribution, $comparedDistribution, $fileDiffParams) = @_;
+    my $ans;
+    $ans .= "   * file = '$file', dist='$distribution', comp='$comparedDistribution' <HR>" if $debug;
+
+    my $file1 = getFile($file, $distribution);
+    my $file2 = getFile($file, $comparedDistribution);
 
     my $cmd = "diff $fileDiffParams $file1 $file2";
     my $output = captureOutput($cmd);
-    my ($totalChanged, @changeLines) = countChangesUnifiedDiff($output);
+    my $changeExpression = countChangesUnifiedDiff($output);
+
+    return ($output, $changeExpression, $cmd);
+}
+
+sub diffFilesLineCountModeCallback {
+    my ($file, $distribution, $comparedDistribution, $fileDiffParams) = @_;
+
+    my ($output, $changeExpression, $cmd) =
+	diffFiles($file, $distribution, $comparedDistribution, $fileDiffParams);
+
     my $ans = "<LI> Show diff detail for only this distribution: ".
-	browserCallback("$totalChanged (".
-			   join(", ", @changeLines).
-			")\n",
+	browserCallback($changeExpression,
 			'file' => $file,
-			'distributions' => $distribution,
+			'to' => $distribution,
 			'mode' => 'diff'
 			);
-    #my $ans = " <LI> ".join("\n <LI> ", ($diffLines));
-    #$ans =~ s/\*//g;
     return $ans;
 
 }
@@ -203,8 +327,9 @@ sub diffFilesLineCount {
 # from http://www.premodern.org/~nlanza/software/diffbrowse#parse_patch
 sub countChangesUnifiedDiff {
     my ($udiff) = @_;
-  
-#    if ($udiff !~ m|^\@\@|) { "return cannot parse\n"; } # FIXME
+    if ($udiff =~ /^diff:/) {
+	return "-1 (cannot parse $udiff)";
+    } # FIXME
     my @lines = split /\n/, $udiff;
 
     my $chunkno = -1;
@@ -222,23 +347,16 @@ sub countChangesUnifiedDiff {
 	    push @changeLines, $oldline;
 	}
     }
-    return ($totalChanged, @changeLines);
+    my $changeExpression = "$totalChanged (". join(", ", @changeLines).  ")\n";
+    return $changeExpression;
 }
 
-sub diffFiles {
-    my ($file, $distribution, $fileDiffParams) = @_;
-    my $file1 = getDistributionVersion($file, $distribution);
-    my $file2 = getLocalVersion($file);
-
-    my $cmd = "diff $fileDiffParams $file1 $file2";
-    my $ans = captureOutput($cmd);
-
-    my ($totalChanged, @changeLines) = countChangesUnifiedDiff($ans);
+sub diffFilesModeCallback {
+    my ($file, $distribution, $comparedDistribution, $fileDiffParams) = @_;
+    my ($output, $changeExpression, $cmd) = diffFiles($file, $distribution, $comparedDistribution, $fileDiffParams);
 		
-    return "---+++ ". "$totalChanged (".
-			   join(", ", @changeLines).
-			")\n".
-	"$cmd\n".monotypeToHTML($ans);
+    return "---+++ ". $changeExpression.
+	"$cmd\n".monotypeToHTML($output);
 }
 
 
@@ -253,8 +371,18 @@ sub countChangesNormalDiff {
        $totalChanged += ($last - $first);
        push @changeLines, "$first - $last";
    }
-    return ($totalChanged, @changeLines);
+    my $changeExpression = "$totalChanged (". join(", ", @changeLines).  ")\n";
+    return $changeExpression;
 }
+
+# =====================================================
+
+sub dumpIndex {
+    loadIndexes();
+
+    return "<pre>".FileDigest::dataOutline()."</pre>";
+}
+
 
 # =====================================================
 
@@ -262,15 +390,10 @@ sub listFiles {
     my ($compareToDistribution, @distributions) = @_;
     use Cwd;   
     my $ans;
-    writeDebug("Loading from $Common::md5IndexDir");
-    eval {
-	FileDigest::emptyIndexes();
-	  FileDigest::loadIndexes($Common::md5IndexDir);
-      };
-
     $| = 1; # unbuffered CGI output, not sure if this works.
 
-    writeDebug($@) if ($@);
+    loadIndexes();
+
     $ans .= $@ if ($@);
     $ans .= "| *File* | *Status* | *Also Occurs In* |\n";
 
@@ -318,7 +441,7 @@ sub listFiles {
 	    if ($numberOfDigestMatches > 0) { # and contents matched somewhere
 		$ans .= foundFile($debugInfo, "FSCS", $relativeFile, $locations); # so say where
 	    } else {                          # filename occurred, but our content different
-		$ans .= foundFile($debugInfo, "FSCD", $relativeFile, $locations, @allDistributionsForFilename);
+		$ans .= foundFile($debugInfo, "FSCD", $relativeFile, $locations, $comparedDistribution, @allDistributionsForFilename);
 	    }
 	} else { # this is a filename that has never occurred in a distro
 	    if ($numberOfDigestMatches > 0) { #content matches - was renamed
@@ -335,11 +458,14 @@ sub listFiles {
 #			     $Common::installationDir,
 #			     $Common::excludeFilePattern,
 #			     $matchCallback);
-
-    DistributionWalker::match($compareToDistribution,
-			     $Common::installationDir,
-			     $Common::excludeFilePattern,
-			     $matchCallback);
+    my $countMatches = 
+	DistributionWalker::match($compareToDistribution,
+				  $Common::installationDir,
+				  $Common::excludeFilePattern,
+				  $matchCallback);
+    if ($countMatches < 1) {
+	$ans = "No matches - is there an index for $compareToDistribution?";
+    }
 
     writeDebug("handling 4...");
     return $ans;
@@ -347,6 +473,15 @@ sub listFiles {
 
 
 # =====================================================
+
+sub getFile {
+    my ($file, $distribution) = @_;
+    if ($distribution eq "localInstallation") {
+	return getLocalVersion($file);
+    } else {
+	return getDistributionVersion($file, $distribution);
+    }
+}
 
 sub getLocalVersion {
     return "../../".$_[0];
@@ -365,9 +500,9 @@ sub selectModeCallback {
     my ($selector) = @_;
     my $modeCallback;
     if ($selector eq "diff") {
-	$modeCallback = \&diffFiles;
+	$modeCallback = \&diffFilesModeCallback;
     } else {
-	$modeCallback = \&diffFilesLineCount;
+	$modeCallback = \&diffFilesLineCountModeCallback;
     }
     return $modeCallback;
 }
@@ -470,5 +605,15 @@ sub initPlugin
 }
 
 
+sub loadIndexes 
+{
+    writeDebug("Loading from $Common::md5IndexDir");
+    eval {
+	FileDigest::emptyIndexes();
+	  FileDigest::loadIndexes($Common::md5IndexDir);
+      };
+    writeDebug($@) if ($@);
+    return $@;
+}
 
 1;

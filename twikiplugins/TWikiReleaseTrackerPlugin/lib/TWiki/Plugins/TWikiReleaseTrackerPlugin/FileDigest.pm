@@ -59,6 +59,18 @@ sub addOccurance {
     push @{$distributionToOccurances{$distribution}}, $filenameAndDigest;
 }
 
+sub getDistributions {
+    return keys %distributionToOccurances;
+}
+
+sub getFilenames {
+    return keys %filenameToOccurances;
+}
+
+sub getDigests {
+    return keys %digestToOccurances;
+}
+
 
 sub retreiveOccurancesForDigest {
 =pod
@@ -195,8 +207,12 @@ sub loadIndex {
     unless (defined $fh) {
         die "$filename - $!"
     };
+    local $/ = "\n"; # line mode
+
     while (my $line = <$fh>) {
 	chomp $line;
+	Common::debug "$line\n";
+
 	next if ($line eq "");
 	next if ($line =~ m/^#.*/);
 	my ($digest, $distributionfile) = split /\s+/, $line;
@@ -211,8 +227,9 @@ sub saveIndex {
     my ($filename) = @_;
     my $fh = new FileHandle $filename, "w";
     unless (defined $fh) {
-        die "$!";
+        die "$! - $filename";
     };
+    Common::debug "Saving to $filename\n";
     foreach my $digest (keys %digestToOccurances) {
 	my @occurances = retreiveOccurancesForDigest($digest);
 	foreach my $occurance (@occurances) {
@@ -245,5 +262,31 @@ sub dumpIndex {
     close $fh;
 }
 
+sub dataOutline {
+    my $ans;
+    my @distros = FileDigest::getDistributions();
+    $ans .= "Distributions:\n   * ".join("\n   * ", sort @distros)."\n";
+
+    $ans .= "Filenames:\n";
+    my @filenames = sort &FileDigest::getFilenames;
+    foreach my $file (@filenames) {
+	$ans .= "\n   * ". $file;
+	$ans .= "\n\t\t".join("\n\t\t",retreiveDistributionsForFilename($file))."\n";
+    }
+    $ans .= "\n";
+
+    my @digests = FileDigest::getDigests();
+    $ans .= "Digests:\n   * ".join("\n   * ", sort @digests);
+    foreach my $digest (@digests) {
+	$ans .= "\n   * ". $digest;
+	$ans .= "\n\t\t".join("\n\t\t",retreiveDistributionsForDigest($digest))."\n";
+    }
+    $ans .= "\n";
+
+
+    $ans .= "\n";
+
+    return $ans;
+}
 
 1;
