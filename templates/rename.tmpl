@@ -1,0 +1,37 @@
+<HEAD>
+  <TITLE> %WIKITOOLNAME% Rename a topic </TITLE>
+  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/WebHome"> <META NAME="ROBOTS" CONTENT="NOINDEX">
+</HEAD>
+<BODY bgcolor="#ffffff">
+<H1>Rename topic %OLD_TOPIC%</H1>
+<FORM name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%OLD_WEB%/%OLD_TOPIC%/">
+<input type="hidden" name="oldWeb" value="%OLD_WEB%">
+<input type="hidden" name="oldTopic" value="%OLD_TOPIC%">
+<TABLE>
+<TR>
+  <TH></TH><TH bgcolor=yellow>Currently</TH><TH bgcolor=red>Change to</TH>
+</TR>
+<TR>
+  <TH>Web</TH><TD  bgcolor=yellow>%OLD_WEB%</TD>
+  <TD bgcolor=red>%WEB_SELECTION%</TD>
+<TR>
+<TR>
+  <TH>Topic</TH><TD bgcolor=yellow>%OLD_TOPIC%</TD>
+  <TD bgcolor=red>
+  <input type="hidden" name="newWeb" value="%NEW_WEB%">
+  <input type="text" name="newTopic" size="16" value="%NEW_TOPIC%">
+  </TD>
+</TR>
+</TABLE>
+<!--input type="hidden" name="Redo" value="%REDO%"-->
+<hr>
+
+<B>Change references in refering pages</B> - the ticked pages will be updated (if not locked, in which case you'll be able to re-submit.)
+
+%SEARCH{ "(^|[_\*\> \t])((%OLD_WEB%\.)?%OLD_TOPIC%)([^A-Za-z0-9]|$)" web="all" nototal="on" casesensitive="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="on"}%
+ 
+
+<hr>
+<input type="submit" value="Rename">
+</FORM>
+</BODY>
