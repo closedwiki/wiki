@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Sep 2001";
+$wikiversion      = "29 Oct 2001";
 
 # ===========================
 # read the configuration part
@@ -322,7 +322,7 @@ sub getEmailNotifyList
     my( $web, $topicname ) = @_;
 
     $topicname |= $TWiki::notifyTopicname;
-    return undef unless &TWiki::Store::topicExists( $web, $topicname );
+    return() unless &TWiki::Store::topicExists( $web, $topicname );
 
     my @list = ();
     foreach ( split( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
@@ -330,7 +330,7 @@ sub getEmailNotifyList
 	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
 
-    return (scalar @list ? @list : undef);    
+    return( scalar @list ? @list : () );
 }
 
 # =========================
