@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091842546" format="1.0" version="1.32"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092552127" format="1.0" version="1.33"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -68,6 +68,9 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="topicbacklinks.gif"  width="16" height="16"  />  | =topicbacklinks.gif= | Topic back-links |
 |  <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  />  | =newtopic.gif= | New topic |
 |  <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  />  | =searchtopic.gif= | Search topic |
+|  <img src="%ATTACHURLPATH%/statistics.gif" alt="statistics.gif"  width="16" height="16"  />  | =statistics.gif= | Statistics |
+|  <img src="%ATTACHURLPATH%/index.gif" alt="index.gif"  width="16" height="16"  />  | =index.gif= | Index |
+|  <img src="%ATTACHURLPATH%/indexlist.gif" alt="indexlist.gif"  width="16" height="16"  />  | =indexlist.gif= | Index list |
 |  <img src="%ATTACHURLPATH%/cachetopic.gif" alt="cachetopic.gif"  width="16" height="16"  />  | =cachetopic.gif= | Cache topic |
 |  <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  />  | =printtopic.gif= | Print topic |
 |  <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  />  | =attachfile.gif= | Attach file |
@@ -194,3 +197,6 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="xml-feed.gif" attr="" comment="XML feed 36x14" date="1091842396" path="xml-feed.gif" size="429" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="gear.gif" attr="" comment="Gear" date="1091842414" path="gear.gif" size="191" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="wrench.gif" attr="" comment="Wrench" date="1091842433" path="wrench.gif" size="171" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="statistics.gif" attr="" comment="Statistics" date="1092551978" path="C:\Data\Temp\statistics.gif" size="899" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="index.gif" attr="" comment="Index" date="1092551993" path="C:\Data\Temp\index.gif" size="895" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="indexlist.gif" attr="" comment="Index list" date="1092552006" path="C:\Data\Temp\indexlist.gif" size="894" user="PeterThoeny" version="1.1"}%
