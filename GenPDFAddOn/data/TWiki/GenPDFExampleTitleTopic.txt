@@ -1,0 +1,46 @@
+%META:TOPICINFO{author="BrianSpinar" date="1107139924" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="GenPDFAddOn"}%
+<!-- PDFSTART -->
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<div align="center"> 
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <hr size="5" noshade>
+  <p align="left"><font size="7">%PDFBANNER%</font></p>
+  <p align="left"><font size="7">%PDFTITLE%</font></p>
+  <hr noshade>
+  <p align="left"><font size="5">%PDFSUBTITLE%</font></p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+	 Copyright &copy; 2005 Your Company Inc.<br>
+	 All rights reserved </p>
+</div>
+<p>This document contains Proprietary and Confidential information of Your Company, 
+  Inc. and is protected by copyright, trade secret and other state and federal 
+  laws. Its receipt or possession does not convey any rights to reproduce, disclose 
+  its contents, or to manufacture, use or sell anything it may describe. Reproduction, 
+  disclosure or use without specific written authorization of Your Company
+  is strictly prohibited.<br>
+</p>
+</body>
+</html>
+<!-- PDFSTOP -->
+

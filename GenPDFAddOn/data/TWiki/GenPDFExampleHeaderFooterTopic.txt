@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="BrianSpinar" date="1107140021" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="GenPDFAddOn"}%
+<!-- PDFSTART -->
+<!-- HEADER LEFT "%PDFTITLE%" -->
+<!-- HEADER CENTER "" -->
+<!-- HEADER RIGHT "Your Company Name" -->
+<!-- FOOTER LEFT "Created: $DATE $TIME" -->
+<!-- FOOTER CENTER "Proprietary and Confidential" -->
+<!-- FOOTER RIGHT "$PAGE(1)" -->
+<!-- PDFSTOP -->
+

@@ -1,0 +1,36 @@
+head	1.1;
+access;
+symbols;
+locks
+	nobody:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2005.01.31.02.53.41;	author BrianSpinar;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.1
+log
+@none
+@
+text
+@%META:TOPICINFO{author="BrianSpinar" date="1107140021" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="GenPDFAddOn"}%
+<!-- PDFSTART -->
+<!-- HEADER LEFT "%PDFTITLE%" -->
+<!-- HEADER CENTER "" -->
+<!-- HEADER RIGHT "Your Company Name" -->
+<!-- FOOTER LEFT "Created: $DATE $TIME" -->
+<!-- FOOTER CENTER "Proprietary and Confidential" -->
+<!-- FOOTER RIGHT "$PAGE(1)" -->
+<!-- PDFSTOP -->
+
+@

@@ -1,0 +1,373 @@
+head	1.9;
+access;
+symbols;
+locks
+	nobody:1.9; strict;
+comment	@# @;
+
+
+1.9
+date	2005.02.02.19.57.19;	author BrianSpinar;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2005.02.02.18.05.01;	author BrianSpinar;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2005.01.31.05.09.29;	author BrianSpinar;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2005.01.31.03.44.42;	author BrianSpinar;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2005.01.31.02.53.32;	author BrianSpinar;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2005.01.31.02.16.50;	author BrianSpinar;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2005.01.30.22.48.03;	author BrianSpinar;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.01.30.06.50.41;	author BrianSpinar;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.01.30.05.51.27;	author BrianSpinar;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.9
+log
+@none
+@
+text
+@%META:TOPICINFO{author="BrianSpinar" date="1107374239" format="1.0" version="1.9"}%
+---+!! Generate PDF Add-On
+%TOC%
+
+This is substantial re-write of the TWiki:Codev.PrintUsingPDF pdf script. It essentially accomplishes the same goal but with more integration with TWiki (e.g. use of TWiki variables for configuration and the TWiki rendering methods instead of using a hacked version of the =TWiki::view= for generating HTML) as well as more modular code structure (i.e. most of the logic is moved to a perl package).
+
+We began using the TWiki:Codev.PrintUsingPDF pdf script to publish pages but found it somewhat TWiki unfriendly (no offense to the authors as it's a great idea). This version allows most of the script configuration (such as page size, table of contents, etc.) via preference variables in TWiki. It also allows header, footer, and title page configuration via TWiki topics.
+
+This is the initial (very much beta) version of this add-on and has only been tried with the Cairo version of TWiki. I've made no attempt to determine if it will run on earlier versions. We've been running it in-house at my company for only a couple weeks now (and it seems to work fairly well), but it has obviously not undergone any significant level of testing.
+
+__Note: I could not get this to work with the latest version (1.8.24) of HTMLDOC and didn't want to spend a lot of time figuring out why (it seems the new CGI feature in HTMLDOC breaks stuff). It does, however, seem to work fine with version 1.8.23 of HTMLDOC.__
+
+---++ Usage
+
+	* Like the TWiki:Codev.PrintUsingPDF pdf script, a page can be published by substituting =genpdf= for =view= in the topic URL.
+	* To make it even easier for novice TWiki users to use, we added a link (like edit and attach) to our =view.tmpl= to publish the current page (using the current topic as the document title). The line we added to our template is:
+		* =&lt;a href="%<nop>SCRIPTURLPATH%/genpdf%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?pdftitle=%<nop>TOPIC%"&gt;PDF&lt;/a&gt;=
+
+---++ Configuring the Script
+
+The script can be configured either via URL parameters or web preference variables. URL parameters have precedence over web preference variables. If neither of these are present, the script will use hard-coded default variables. The general script configuration variables are explained in the next section while header/footer and title page configuration are explained in subsequent sections.
+
+---+++ General Configuration
+
+The following table shows the various configuration variables and their meaning. The first column gives the variable to use if passed in the URL. The second column shows the variable to use if using a TWiki preference variable (i.e. Set VARIABLE = ). The third column gives the default value if neither the URL nor TWiki preference variable is used. Note that URL variables have precedence over TWiki preference variables. For a more detailed description of the HTMLDOC related variables, see the HTMLDOC documentation at http://www.htmldoc.org.
+
+%TABLE{ cellpadding="3" columnwidths="15%, 15%, 15%, 55%"}%
+| *URL Variable* | *Twiki Preference Variable* | *Default Value* | *Explanation* |
+| =N/A= | HTMLDOCLOC | =/usr/local/bin/htmldoc= | The location of the HTMLDOC program |
+| =skin= | PDFSKIN | =print.pattern= | Default skin to use for PDF generation |
+| =pdfformat= | PDFFORMAT | =pdf14= | HTMLDOC output format |
+| =pdftoclevels= |PDFTOCLEVELS | =5= | Number of levels to include in the PDF table of contents (use 0 to disable the generation of a table of contents). Note that HTMLDOC generates a table of contents based on HTML headers in the page. |
+| =pdfpagesize= | PDFPAGESIZE | =a4= | The page size for PDF output |
+| =pdforientation= | PDFORIENTATION | =portrait= | The page orientation (e.g. landscape or portrait) |
+| =pdfwidth= | PDFWIDTH | =860= | The pixel width of the browser (used to scale images--images wider than this will be truncated) |
+| =shift= | PDFHEADERSHIFT | =0= |Shift all headers up or down (for negative values) by this amount (e.g. H1 would become H3 for a value of 2). *Note: The version of code attached currently has this feature disabled.* |
+
+If using TWiki preference variables, copy them to the appropriate web preferences page.
+
+---+++ Limiting the PDF Generation Region
+
+The add-on allows the user to define the region of the topic that should be included in the PDF generation (much like the TWiki %<nop>STARTINCLUDE% and %<nop>STOPINCLUDE% variables. In this case, HTML comments are used instead. Everything between these two comments will be included in the PDF generation. The rest of topic will be excluded.
+	* Use =&lt;!-- PDFSTART --&gt;= to mark the starting point in the topic for PDF generation.
+	* Use =&lt;!-- PDFSTOP --&gt;= to mark the stopping point in the topic for PDF generation.
+
+---+++ Creating and Configuring a Title Page
+
+The add-on allows the user to use a topic as a title page for PDF generation. The title page can also be configured with a couple TWiki variables for some amount of flexibility. Note that the title page topic should be expressed as pure HTML (not TWiki mark-up) as it is not rendered before being used (this may change in the future--see the actual perl package for the rationale of this design decision). The only exception to this is the substition of variables listed in the table below.
+
+%TABLE{ cellpadding="3" columnwidths="15%, 15%, 15%, 55%"}%
+| *URL Variable* | *Twiki Preference Variable* | *Default Value* | *Explanation* |
+| =pdftitletopic= | PDFTITLETOPIC | =N/A= | The topic to use for the title page of the PDF document |
+| =pdfbanner= | PDFBANNER | =N/A= | This can be used to make substitions for %<nop>PDFBANNER% in the title page topic |
+| =pdftitle= | PDFTITLE | =N/A= | This can be used to make substitions for %<nop>PDFTITLE% in the title page topic |
+| =pdfsubtitle= | PDFSUBTITLE | =N/A= | This can be used to make substitions for %<nop>PDFSUBTITLE% in the title page topic |
+
+Also note that the PDFSTART and PDFSTOP HTML comments should be placed at the beginning and end of title topic. An example title page can be found at GenPDFExampleTitleTopic.
+
+---+++ Creating and Configuring Headers and Footers
+
+The add-on also allows the user to configure header and footer formats for both the main section of the document and the table of contents. Configuring the main header and footer is much like configuring a title page. You can select a TWiki topic to use for the header and footer. Like the title page, this page should be expressed as pure HTML (not TWiki mark-up) as it is not rendered before being used. See the HTMLDOC documentation at http://www.htmldoc.org for details of the format of the header and footers. In addition, the =genpdf= script will perform variable substition for the %<nop>PDFBANNER%, %<nop>PDFTITLE%, and %<nop>PDFSUBTITLE% variables as it deos for the title page. Finally, the PDFSTART and PDFSTOP HTML comments should be placed at the beginning and end of header/footer topic. An example header/footer page can be found at GenPDFExampleHeaderFooterTopic.
+
+The table below explains the other variables related to header and footer formatting.
+%TABLE{ cellpadding="3" columnwidths="15%, 15%, 15%, 55%"}%
+| *URL Variable* | *Twiki Preference Variable* | *Default Value* | *Explanation* |
+| =pdfheadertopic= | PDFHEADERTOPIC | =N/A= | The topic to use for the main header and footers of the PDF document |
+| =pdftocheader= | PDFTOCHEADER | =...= | The header format for the table of contents (see the documentation at http://www.htmldoc.org) |
+| =pdftocfooter= | PDFTOCFOOTER | =..i= | The footer format for the table of contents (see the documentation at http://www.htmldoc.org) |
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+
+	* Download the ZIP file from the Add-on Home (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Add-on topic repository |
+	  | ==data/TWiki/GenPDFExampleTitleTopic.txt== | Example title topic |
+	  | ==data/TWiki/GenPDFExampleTitleTopic.txt,v== | Example title topic repository |
+	  | ==data/TWiki/GenPDFExampleHeaderFooterTopic.txt== | Example header and footer topic |
+	  | ==data/TWiki/GenPDFExampleHeaderFooterTopic.txt,v== | Example header and footer topic repository |
+	  | ==bin/genpdf== | Add-on script |
+	  | ==lib/TWiki/Contrib/GenPDF.pm== | Add-on perl package |
+	* Adjust the script ownership to match your webserver configuration (e.g. =chown nobody genpdf=) if needed.
+	* Make sure the script is executable (e.g chmod 755 genpdf).
+	* *Adjust the perl path in the script to match your perl installation location (the one in the zip file has =/usr/local/bin/perl=).*
+	* Make sure you set the HTMLDOCLOC preference variable in you TWiki web to the location of the htmldoc executable.
+	* Test if the installation was successful:
+		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation (or executable path--HTMLDOCLOC value) problem. Also, as mentioned at the top of this topic, this add-on does not seem to work with version 1.8.24 (the latest) of htmldoc. It does, however, work with the previous version (1.8.23) of htmldoc.
+
+---++ Add-On Info
+
+|  Add-on Author: | TWiki:Main/BrianSpinar |
+|  Add-on Version: | 30 Jan 2005 (v0.1) |
+|  Change History: | <!-- versions below in reverse order -->  |
+|  30 Jan 2005: | Initial version |
+|  CPAN Dependencies: | File::Temp (if for some reason you don't already have it installed ) |
+|  Other Dependencies: | HTMLDOC (http://www.htmldoc.org) version 1.8.23 only (I've had problems getting 1.8.24 to work with this Add-On) |
+|  Perl Version: | 5.005 |
+|  License: | GPL |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/BrianSpinar - 30 Jan 2005
+
+@
+
+
+1.8
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="BrianSpinar" date="1107367501" format="1.0" version="1.8"}%
+d43 2
+a44 2
+	* Use =<!-- PDFSTART -->= to mark the starting point in the topic for PDF generation.
+	* Use =<!-- PDFSTOP -->= to mark the stopping point in the topic for PDF generation.
+@
+
+
+1.7
+log
+@none
+@
+text
+@d1 2
+a2 1
+%META:TOPICINFO{author="BrianSpinar" date="1107148169" format="1.0" version="1.7"}%
+a3 1
+---+ Generate PDF Add-On
+d17 1
+a17 1
+		* =<a href="%<nop>SCRIPTURLPATH%/genpdf%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?pdftitle=%<nop>TOPIC%">PDF</a>=
+d36 1
+a36 1
+| =shift= | PDFHEADERSHIFT | =0= |Shift all headers up or down (for negative values) by this amount (e.g. H1 would become H3 for a value of 2) |
+d87 1
+a87 1
+	* Adjust the perl path in the script to match your perl installation location (e.g. =/usr/local/bin=).
+a103 1
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+@
+
+
+1.6
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="BrianSpinar" date="1107143082" format="1.0" version="1.6"}%
+d11 1
+a11 1
+__Note: I could not get this to work with the latest version (1.8.24) of HTMLDOC and didn't want to spend a lot of time figuring out why. It does, however, seem to work fine with version 1.8.23 of HTMLDOC.__
+@
+
+
+1.5
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="BrianSpinar" date="1107140012" format="1.0" version="1.5"}%
+d5 1
+a5 1
+This is substantial re-write of the TWiki:Codev.PrintUsingPDF pdf script. It essentially accomplishes the same goal but with more integration to TWiki (e.g. use of TWiki variables for configuration and the TWiki rendering methods instead of using a hacked version of the =TWiki::view=) as well as more modular code structure (i.e. most of the logic is moved to a perl package).
+d15 1
+a15 1
+	* Like the TWiki:Codev.PrintUsingPDF pdf script, a page can be published by substituting =pdf= for =view= in the topic URL.
+d17 1
+a17 1
+		* =&lt;a href="%<nop>SCRIPTURLPATH%/genpdf%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?pdftitle=%<nop>TOPIC%"&gt;PDF&lt;/a&gt;=
+d21 1
+a21 1
+The script can be configured either via URL parameters or web preference variables. URL parameters have precendence over web preference variables. If neither of these are present, the script will use hard-coded default variables. The general script configuration variables are explained in the next section while header/footer and title page configuration is explained in subsequent sections.
+d25 1
+a25 1
+The following table shows the various conifguration variables and their meaning. The first column gives the variable to use if passed in the URL. The second column shows the variable to use if using a TWiki preference variable (i.e. Set VARIABLE = ). The third column gives the default value if neither the URL or TWiki preference variable is used. Note that URL variables have precendence over TWiki preference variables. For a more detailed description of the HTMLDOC related variables, see the HTMLDOC documentation at http://www.htmldoc.org.
+d35 2
+a36 2
+| =pdfwidth= | PDFWIDTH | =860= | The pizel width of the browser (used to scale images--images wider than this will be truncated) |
+| =shift= | PDFHEADERSHIFT | =0= |Shift all headers upp or down (for negative values) by this amount (e.g. H1 would become H3 for a value of 2) |
+d42 3
+a44 3
+The Add-On allows the user to define the region of the topic that should be included in the PDF generation (much like the TWiki %<nop>STARTINCLUDE% and %<nop>STOPINCLUDE% variables. In this case, however, HTML comments are used instead. Everything between these two comments will be included in the PDF generation.
+	* Use =&lt;!-- PDFSTART --&gt;= to mark the starting point in the topic for PDF generation.
+	* Use =&lt;!-- PDFSTOP --&gt;= to mark the stopping point in the topic for PDF generation.
+d48 1
+a48 1
+The add-on allows the user to use a topic as a title page for PDF generation. The title page can also be configured with a couple TWiki variables for some amount of flexibility. Note that the title page topic should be expressed as pure HTML (not TWiki mark-up) as it is not rendered before being used (this may change in the future--see the actual code for the rationale of this design decision). The only exception to this is the substition of variables listed in the table below.
+d61 1
+a61 1
+The add-on also allows the user to configure header and footer formats for both the main section of the document and the table of contents. Configuring the main header and footer is much like configuring a title page. You can select a Twiki topic to use for the header and footer. Like the title page, this page should be expressed as pure HTML (not TWiki mark-up) as it is not rendered before being used. See the HTMLDOC documentation at http://www.htmldoc.org for details of the format of the header and footers. In addition, the genpdf script will perform variable substition for the %<nop>PDFBANNER%, %<nop>PDFTITLE%, and %<nop>PDFSUBTITLE% variables as it deos for the title page. Finally, the PDFSTART and PDFSTOP HTML comments should be placed at the beginning and end of title topic. An example title page can be found at GenPDFExampleHeaderFooterTopic.
+d88 1
+d90 1
+a90 1
+		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation (or executable path) problem. Also, as mentioned at the top of this topic, this add-on does not seem to work with version 1.8.24 (the latest) of htmldoc. It does, however, work with the previous version (1.8.23) of htmldoc.
+d96 1
+a96 1
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+@
+
+
+1.4
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="BrianSpinar" date="1107137810" format="1.0" version="1.4"}%
+d5 1
+a5 1
+This is substantial re-write of the TWiki:Codev.PrintUsingPDF pdf script. It essentially accomplishes the same goal but with more integration to TWiki and more modular code structure (i.e. most of the logic is moved to a perl package). We began using the TWiki:Codev.PrintUsingPDF pdf script to publish pages but found it somewhat user unfriendly to anyone who wasn;t comfortable typing long URL's with many parameters to simply publish a page. This version allows most of the script configuration (such as page size, table of contents, etc.) via preference variables in TWiki. It also allows header, footer, and title page configuration via TWiki topics.
+d7 3
+a9 1
+This is the initial (very much beta) version of this add-on and has only been tried with the Cairo version of TWiki. I've made no attempt to determine if it will run on earlier versions. We've been running it in-house at my company for a couple weeks now (and it seems to work fairly well), but it has obviously not undergone any significant level of testing.
+d79 4
+d89 1
+a89 1
+		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation (or executable path) problem. Also, as mentioned at the top of this topic, this add-on does not seem to work with version 1.8.24 (the latest) of htmldoc. It does, however, work with the previous version (1.8.23).
+d97 1
+a97 1
+|  CPAN Dependencies: | File::Temp |
+@
+
+
+1.3
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="BrianSpinar" date="1107125283" format="1.0" version="1.3"}%
+d9 1
+a9 1
+__Note: I could not get this to work with the latest version (1.8.24) of HTMLDOC. It does, however, seem to work fine with version 1.8.23 of HTMLDOC.__
+d46 1
+a46 1
+The Add-On allows you to use a topic as a title page for PDF generation. The title page can also be configured with a couple TWiki variables for some amount of flexibility. Note that the title page topic should be expressed as pure HTML (not TWiki mark-up) as it is not rendered before being used (this may change in the future--see the actual code for the rationale of this design decision). The only exception to this is the substition of variables listed in the table below.
+d55 1
+a55 1
+Also note that the PDFSTART and PDFSTOP HTML comments should be placed at the beginning and end of title topic. An example title page can be found at GenPDFExampleTitlePage.
+d57 10
+a66 1
+---+++ Creating and Configuring Complex Headers and Footers
+d79 3
+d83 1
+a83 1
+		* _describe, with example_
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="BrianSpinar" date="1107067841" format="1.0" version="1.2"}%
+d7 3
+a9 1
+*Note:* This is the initial (very much beta) version of this add-on and has only been tried with the Cairo version of TWiki. I've made no attempt to determine if it will run on earlier versions. We've been running it in-house at my company for a couple weeks now (and it seems to work fairly well), but it has obviously not undergone any significant level of testing.
+d23 20
+a42 3
+The following table shows the 
+The following preference variables should be cut, pasted, and uncommented to the appropriate web preferences page.
+	* The variable controls the 
+d46 11
+d80 1
+a80 1
+|  Other Dependencies: | HTMLDOC (http://www.htmldoc.org) |
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 2
+a2 1
+%META:TOPICINFO{author="BrianSpinar" date="1107064287" format="1.0" version="1.1"}%
+d5 3
+a7 1
+short description here
+d11 17
+a27 2
+	* 
+	* 
+d46 1
+a46 1
+|  Add-on Version: | 30 Jan 2005 (v1.000) |
+d49 2
+a50 2
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+@
