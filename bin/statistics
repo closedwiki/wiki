@@ -203,12 +203,12 @@ sub processWeb
         if( ! $statLine ) {
             $statLine = "| <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |";
         }
-        $statLine =~ s/<\!\-\-statDate\-\->/$theLogMonthYear/go;
-        $statLine =~ s/<\!\-\-statViews\-\->/$statViews/go;
-        $statLine =~ s/<\!\-\-statSaves\-\->/$statSaves/go;
-        $statLine =~ s/<\!\-\-statUploads\-\->/$statUploads/go;
-        $statLine =~ s/<\!\-\-statTopViews\-\->/$statTopViews/go;
-        $statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/go;
+        $statLine =~ s/<\!\-\-statDate\-\->/$theLogMonthYear/o;
+        $statLine =~ s/<\!\-\-statViews\-\->/ $statViews/o;
+        $statLine =~ s/<\!\-\-statSaves\-\->/ $statSaves/o;
+        $statLine =~ s/<\!\-\-statUploads\-\->/ $statUploads/o;
+        $statLine =~ s/<\!\-\-statTopViews\-\->/$statTopViews/o;
+        $statLine =~ s/<\!\-\-statTopContributors\-\->/$statTopContributors/o;
 
         if( $idxStat >= 0 ) {
             # entry already exists, need to update
