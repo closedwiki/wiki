@@ -28,7 +28,7 @@
         <input type="hidden" name="t" value="%SERVERTIME{$hour$min$sec}%">
 </form>
 
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
    * *View previous topic revision:*
       * Revision: <input type="text" name="rev" size="6" value="%PARAM2%" />
         in <input type="checkbox" name="raw"> raw text format
@@ -36,7 +36,7 @@
       * Revisions: 1.1 ... %PARAM1%
 </form>
 
-<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
    * *Compare revisions:*
       * Older revision:&nbsp;&nbsp; <input type="text" name="rev2" size="6" value="1.1" />
       * Newer revision: <input type="text" name="rev1" size="6" value="%PARAM1%" />

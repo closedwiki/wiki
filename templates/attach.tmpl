@@ -23,7 +23,7 @@ function launchWindow( theWeb, theTopic ) {
 </script>
 <body bgcolor="#ffffff"  onLoad="initForm()" >
 #PageTop
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%
 ---++ Existing attachments for <nop>%TOPIC%
 %META{"attachments" all="on"}%
