@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007279327" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1019369272" format="1.0" version="1.11"}%
 %TOC%
 %STARTINCLUDE%
 ---# 20-Minute TWiki
@@ -37,8 +37,8 @@ Go to the [[#PageBottom][bottom of the page]] to see what you can do. The color-
 	* ==[More]== - additional controls, like ==[Rename/move]==, version control and setting the topic's parent.
 
 ---++ 6. Change a page, and create a new one...
-Go to the [[Test.%HOMETOPIC%][Test]]. This is the sandbox web, where you can make changes and try it all out at will.
-	* Click the ==[Edit]== link. You are now in edit mode and you can see the source of the page. (Go to a different topic like Test.TestTopic3 in case you see a "Topic is locked by an other user" warning.)
+Go to the [[Sandbox.%HOMETOPIC%][Sandbox]]. This is the sandbox web, where you can make changes and try it all out at will.
+	* Click the ==[Edit]== link. You are now in edit mode and you can see the source of the page. (Go to a different topic like Sandbox.TestTopic3 in case you see a "Topic is locked by an other user" warning.)
 	* Look at the text in edit mode and compare it with the rendered page (move back and forth in your browser.)
 	* Notice how WikiWords are linked automatically; there is no link if you look at the text in edit mode.
 	* Now, create a new topic - your own test page:

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018768140" format="1.0" version="1.29"}%
+%META:TOPICINFO{author="PeterThoeny" date="1019369320" format="1.0" version="1.30"}%
 <H1>%WIKITOOLNAME% Site-Level Preferences</H1>
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
 	* %X% *NOTE:* You can lock individual settings at the site or web levels using User & Group Access Control - see section below.
@@ -8,7 +8,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---++ General Preferences
 
 	* List of %WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
-		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][Main]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][TWiki]] %SEP% [[Know.%HOMETOPIC%][Know]] %SEP% [[Test.%HOMETOPIC%][Test]]
+		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][Main]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][TWiki]] %SEP% [[Know.%HOMETOPIC%][Know]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
 		* %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use this variable instead: <br />Set WIKIWEBLIST = %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
 
 	* List of selected topics in a web - the second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%):
