@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079859914" format="1.0" version="1.21"}%
+%META:TOPICINFO{author="PeterThoeny" date="1091423297" format="1.0" version="1.22"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -113,9 +113,10 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
-|  Plugin Version: | 21 Mar 2004 |
+|  Plugin Version: | 01 Aug 2004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  21 Mar 2004: | PTh: Internal change: Fixed reference to inofficial variable |
+|  01 Aug 2004: | AC: Added CSS support for first column and ascending/descending table headers |
+|  21 Mar 2004: | PTh: Internal change: Fixed reference to unofficial variable |
 |  01 Jan 2004: | PTh: Alternating data row colors restart again after each header row |
 |  01 Dec 2003: | PTh: Fixed error when footerrows was specified on an empty table, contributed by TWiki:Main/PaulineCheung |
 |  24 May 2003: | PTh: New =&#124;^&#124;= rule for multi row span (TWiki:Main/WalterMundt); added tableframe and tablerules (TWiki:Main/JohannesMartin); ignore columnwidths for multi column span; validate headerrows and footerrows (TWiki:Main/DarrylGreen); fixed link color problem and up/down icon color problem for dark header background |
@@ -139,7 +140,8 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.StandardColors
 
 -- TWiki:Main/JohnTalintyre - 07 Oct 2001 <br />
--- TWiki:Main/PeterThoeny - 21 Mar 2004 <br />
+-- TWiki:Main/PeterThoeny - 01 Aug 2004 <br />
+
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1070351625" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\up.gif" size="867" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1070351653" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\down.gif" size="867" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1070351672" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
