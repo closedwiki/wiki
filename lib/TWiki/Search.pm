@@ -88,7 +88,7 @@ sub _translateSpace
 # ===========================
 =pod
 
----++ sub _tokensFromSearchString (  $theSearchVal, $theType, $theRegex  )
+---++ sub _tokensFromSearchString (  $theSearchVal, $theType  )
 
 Not yet documented.
 
@@ -96,10 +96,10 @@ Not yet documented.
 
 sub _tokensFromSearchString
 {
-    my( $theSearchVal, $theType, $theRegex ) = @_;
+    my( $theSearchVal, $theType ) = @_;
 
     my @tokens = ();
-    if( $theType eq "regex" || $theRegex ) {
+    if( $theType eq "regex" ) {
         # regular expression search Example: soap;wsdl;web service;!shampoo
         @tokens = split( /;/, $theSearchVal );
 
@@ -131,7 +131,7 @@ sub _tokensFromSearchString
 # =========================
 =pod
 
----++ sub _searchTopicsInWeb (  $theWeb, $theTopic, $theScope, $theRegex, $caseSensitive, @theTokens  )
+---++ sub _searchTopicsInWeb (  $theWeb, $theTopic, $theScope, $theType, $caseSensitive, @theTokens  )
 
 Not yet documented.
 
@@ -139,7 +139,7 @@ Not yet documented.
 
 sub _searchTopicsInWeb
 {
-    my( $theWeb, $theTopic, $theScope, $theRegex, $caseSensitive, @theTokens ) = @_;
+    my( $theWeb, $theTopic, $theScope, $theType, $caseSensitive, @theTokens ) = @_;
 
     my @topicList = ();
     return @topicList unless( @theTokens );                        # bail out if no search string
@@ -175,7 +175,7 @@ sub _searchTopicsInWeb
         # scope="text", e.g. Perl search on topic name:
         unless( $theScope eq "text" ) {
             my $qtoken = $token;
-            $qtoken = quotemeta( $qtoken ) unless( $theRegex );    # FIXME I18N
+            $qtoken = quotemeta( $qtoken ) if( $theType ne "regex" ); # FIXME I18N
             if( $caseSensitive ) {                                 # fix for Codev.SearchWithNoPipe
                 @scopeTopicList = grep( /$qtoken/, @topicList );
             } else {
@@ -188,8 +188,11 @@ sub _searchTopicsInWeb
             # Construct command line with 'grep'.  I18N: 'grep' must use locales if needed,
             # for case-insensitive searching.  See TWiki::setupLocale.
             my $cmd = "";
-            $cmd .= $TWiki::egrepCmd if( $theRegex );
-            $cmd .= $TWiki::fgrepCmd unless( $theRegex );
+            if( $theType eq "regex" ) {
+                $cmd .= $TWiki::egrepCmd;
+            } else {
+                $cmd .= $TWiki::fgrepCmd;
+            }
             $cmd .= " -i" unless( $caseSensitive );
             $cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
 
@@ -347,6 +350,8 @@ sub searchWeb
         $theLimit = 32000;         # Big number, needed for performance improvements
     }
 
+    $theType = "regex" if( $theRegex );
+
     if( $theSeparator ) {
         $theSeparator =~ s/\$n/\n/gos;
         $theSeparator =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
@@ -484,7 +489,7 @@ sub searchWeb
         }
     }
 
-    my @tokens = &_tokensFromSearchString( $theSearchVal, $theType, $theRegex );
+    my @tokens = &_tokensFromSearchString( $theSearchVal, $theType );
 
     # write log entry
     # FIXME: Move log entry further down to log actual webs searched
@@ -518,7 +523,7 @@ sub searchWeb
                  && ( $thisWebName ne $TWiki::webName ) );
 
         # search topics in this web
-        my @topicList = _searchTopicsInWeb( $thisWebName, $theTopic, $theScope, $theRegex, $caseSensitive, @tokens );
+        my @topicList = _searchTopicsInWeb( $thisWebName, $theTopic, $theScope, $theType, $caseSensitive, @tokens );
 
         # exclude topics, Codev.ExcludeWebTopicsFromSearch
         if( $caseSensitive ) {
@@ -735,7 +740,7 @@ sub searchWeb
           my @multipleHitLines = ();
           if( $doMultiple ) {
               my $pattern = $tokens[$#tokens]; # last token in an AND search
-              $pattern = quotemeta( $pattern ) unless( $theRegex );
+              $pattern = quotemeta( $pattern ) if( $theType ne "regex" );
               ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic ) unless $text;
               if( $caseSensitive ) {
                   @multipleHitLines = reverse grep { /$pattern/ } split( /[\n\r]+/, $text );
