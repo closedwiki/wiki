@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1089531986" format="1.0" version="1.45"}%
+%META:TOPICINFO{author="PeterThoeny" date="1090657293" format="1.0" version="1.46"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -307,13 +307,13 @@ class CatAnimal {
 <pre>
 WebNotify
 
-Know.ReadmeFirst
+%MAINWEB%.TWikiUsers
 </pre>
 </font></span>
 </td><td valign="top">
 WebNotify
 
-Know.ReadmeFirst
+%MAINWEB%.TWikiUsers
 </td>
 </tr>
 <tr bgcolor="#ffffff">
