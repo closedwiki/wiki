@@ -868,6 +868,8 @@ sub getViewUrl {
     my( $this, $theWeb, $theTopic ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /^TWiki=HASH/;
 
+    $theWeb = $this->{webName} unless $theWeb;
+
     $theTopic =~ s/\s*//gs; # Illegal URL, remove space
 
     return $this->{urlHost}."$dispScriptUrlPath/view$scriptSuffix/$theWeb/$theTopic";
