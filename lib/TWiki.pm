@@ -241,7 +241,11 @@ sub initialize
     $topicName = "";
     $webName   = "";
     if( $theTopic ) {
-        if( $theTopic =~ /(.*)\.(.*)/ ) {
+        if(( $theTopic =~ /^$linkProtocolPattern\:\/\//o ) && ( $cgiQuery ) ) {
+            # redirect to URI
+            print $cgiQuery->redirect( $theTopic );
+            return; # should never return here
+        } elsif( $theTopic =~ /(.*)\.(.*)/ ) {
             # is "bin/script?topic=Webname.SomeTopic"
             $webName   = $1 || "";
             $topicName = $2 || "";
@@ -542,8 +546,8 @@ sub initializeRemoteUser
 
     my $text = &TWiki::Store::readFile( $remoteUserFilename );
     my %AddrToName = map { split( /\|/, $_ ) }
-                   grep { /[^\|]*\|[^\|]*\|$/ }
-                   split( /\n/, $text );
+                     grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
+                     split( /\n/, $text );
 
     my $rememberedUser = "";
     if( exists( $AddrToName{ $remoteAddr } ) ) {
@@ -1107,6 +1111,7 @@ sub handleIncludeFile
     my( $theAttributes, $theTopic, $theWeb, $verbatim, @theProcessedTopics ) = @_;
     my $incfile = extractNameValuePair( $theAttributes );
     my $pattern = extractNameValuePair( $theAttributes, "pattern" );
+    my $rev = extractNameValuePair( $theAttributes, "rev" );
 
     if( $incfile =~ /^http\:/ ) {
         # include web page
@@ -1163,7 +1168,12 @@ sub handleIncludeFile
         $theWeb = $1;
         $theTopic = $2;
 
-        ( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+        if( $rev ) {
+            $rev = "1.$rev" unless( $rev =~ /^1\./ );
+            ( $meta, $text ) = &TWiki::Store::readTopicVersion( $theWeb, $theTopic, $rev );
+        } else {
+            ( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+        }
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//s;
         $text =~ s/%STOPINCLUDE%.*//s;
