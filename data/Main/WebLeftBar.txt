@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="WillNorris" date="1107843106" format="1.0" version="1.1"}%
 <div class="twikiLeftBarPersonal" style="margin-top:0;">
-%CALC{"$IF($EXACT(%USERNAME%,guest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]]<!-- <br /><small>[[Sandbox.LogoutAndLogin][Not me?]]</small> -->)"}%
+%CALC{"$IF($EXACT(%USERNAME%,guest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]]<!-- <br /><small>[[Sandbox.LogoutAndLogin][Not me?]]</small> -->)"}%
 <script type="text/javascript">
 //<![CDATA[
 writeToggle("show","hide","twikiLeftBarPersonalContent")
@@ -17,7 +17,7 @@ writeToggle("show","hide","twikiLeftBarPersonalContent")
 ---
    * *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
    * *[[%TWIKIWEB%.TWikiRegistration][Register]]*
-   * *[[Codev.TWikiSecurityAlerts][Security Alerts]]*
+   * *[[http://twiki.org/cgi-bin/view/Codev/TWikiSecurityAlerts][Security Alerts]]*
 ---
    * <b>%INCLUDINGWEB% Web</b>
    * [[%HOMETOPIC%][%WEB% Web Home]]
