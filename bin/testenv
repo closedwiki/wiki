@@ -19,6 +19,8 @@
 # for the bin directory, and check a variety of TWiki, Perl and RCS
 # setup.
 
+package TWiki;
+
 # Set library paths in @INC, at compile time
 BEGIN { 
     # Try to use setlib.cfg, use default path if missing
@@ -29,11 +31,25 @@ BEGIN {
     }
 }
 
+use vars qw( $useLocale );
+
+# ===========================
+# Read the configuration file at compile time in order to set locale
+BEGIN {
+    do "TWiki.cfg";
+
+    # Do a dynamic 'use locale' for this module
+    if( $useLocale ) {
+        require locale;
+        import locale ();
+    }
+}
+
+
 # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
 			# Doesn't work well here, due to 'do "TWiki.cfg"'
 # use diagnostics;	# Debug only
 
-package TWiki;
 
 my $setlibAvail = -r './setlib.cfg'; 
 
@@ -77,8 +93,6 @@ sub checkBasicModules {
 sub main
 {
 
-my @basicMods = qw( CGI CGI::Carp );
-
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
@@ -86,22 +100,29 @@ my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
 
 my $rcsverRequired = 5.7;
 
-my @requiredMods = ( 
+my @basicMods = qw( CGI CGI::Carp );	# Required for testenv to work
+
+my @requiredMods = ( 			# Required for TWiki
     	@basicMods,  
 	'File::Copy',
     ); 
+
+# Required on non-Unix platforms (mainly Windows)
 my @requiredModsNonUnix = ( 
 	'Digest::SHA1', 	# For register script
 	'MIME::Base64', 	# For register script
 	'Net::SMTP',		# For registration emails and mailnotify
    );
+
+# Optional modules on all platforms
 my @optionalMods = ( 
 	'Algorithm::Diff', 	# For RcsLite
 	'MIME::Base64', 	# For outbound HTTP Authentication to proxies
+	'POSIX', 		# For internationalisation (core module)
    );
 
 
-open(STDERR,'>&STDOUT'); # redirect error to browser
+open(STDERR,'>&STDOUT'); # redirect errors to browser
 $| = 1;                  # no buffering - FIXME: mod_perl issue?
 
 
@@ -138,7 +159,7 @@ EOM
 
 
 # Read the TWiki configuration early - includes OS detection
-do "TWiki.cfg";
+# do "TWiki.cfg";
 
 # Make %ENV safer for CGI (should reflect TWiki.pm)
 my $originalPath = $ENV{'PATH'} || '';
@@ -275,6 +296,7 @@ print "<tr><th align=\"right\">TWiki module in \@INC path:</th><td>";
 $mod = 'TWiki';
 eval "use $mod";
 print "<tr><th></th><td>\n";
+my $twikiFound = 0;
 if ($@) {
     print "<b><font color=\"red\">Warning:</font></b> ";
     print "'$mod.pm' not found - check path to <code>twiki/lib</code>";
@@ -282,12 +304,21 @@ if ($@) {
     print ".\n";
     print "</td></tr>\n";
 } else {
+    $twikiFound = 1;
     my $mod_version = eval '$TWiki::wikiversion';
     $mod_version ||= 'unknown';
     print "OK, $mod.pm found (TWiki version: <b>$mod_version</b>)";
     print "</td></tr>\n";
 }
 print "</td></tr>\n";
+
+# Do locale settings if TWiki.pm was found
+my $showLocales = 0;
+if ($twikiFound) {
+    TWiki::setupLocale();
+    $showLocales = 1;
+}
+
 
 # Check that each of the required Perl modules can be loaded, and
 # print its version number.
@@ -301,12 +332,7 @@ foreach $mod (@requiredMods) {
 	print "</td></tr>\n";
     } else {
 	my $mod_version;
-	if ( $mod eq 'TWiki' ) {
-	    $mod_version = eval '$TWiki::wikiversion';
-	    $mod_version ||= 'unknown';
-	} else {
-	    $mod_version = ${"${mod}::VERSION"};
-	}
+	$mod_version = ${"${mod}::VERSION"};
         print "$mod ($mod_version)";
 	print "</td></tr>\n";
     }
@@ -676,8 +702,70 @@ if( $OS eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
     print "</td></tr>\n";
 }
 
+# Generate a separate table for locale setup
+if ( $showLocales ) {		# Only if TWiki.pm found
+    print "</table>\n";
+    print "<h3>Internationalisation and Locale Setup</h3>\n";
+    print "<table>\n";
 
-# End last row of table
+    # $useLocale
+    print "<tr><th align=\"right\">\$useLocale:</th><td>$useLocale</td></tr>\n";
+    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+    print "This TWiki.cfg setting controls whether locales are used by Perl and 'grep'.\n";
+    print "</td></tr>\n";
+
+    if( $OS eq 'WINDOWS' ) {
+	# Warn re known broken locale setup
+	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+	print "Using Perl on Windows, which may have missing or incorrect locales (in Cygwin or ActiveState Perl, respectively)\n";
+	print "- use of <b>\$useLocale</b> = 0 is recommended unless you know your version of Perl has working locale support.\n";
+
+	print "</td></tr>\n";
+    } 
+
+    # $siteLocale
+    print "<tr><th align=\"right\">\$siteLocale:</th><td>$siteLocale</td></tr>\n";
+    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+    print "This TWiki.cfg parameter sets the site-wide locale - for\n";
+    print "example, <b>de_AT.ISO-8859-1</b> where 'de' is the language code, 'AT' the country code and 'ISO-8859-1' is the character set.  Use the <code>locale -a</code> command on your system to determine available locales.\n";
+    print "</td></tr>\n";
+
+    # Locales are off, or using old Perl, so have to explicitly list the accented characters
+    if ( not $useLocale or $perlvernum < 5.6 ) {
+
+	# If using Perl 5.005_03 or lower, generate upper and lower case character
+	# classes to avoid doing this at run-time in TWiki.
+	my $forUpperNat;
+	my $forLowerNat;
+	if ( $perlvernum < 5.6 ) {
+	    
+	    # Get strings with the non-ASCII alphabetic characters only, upper and lower case
+	    $forUpperNat = join '', grep { lc($_) ne $_ and m/[^A-Z]/ } map { chr($_) } 1..255;
+	    $forLowerNat = join '', grep { uc($_) ne $_ and m/[^a-z]/ } map { chr($_) } 1..255;
+	}
+
+	# $upperNational
+	print "<tr><th align=\"right\">\$upperNational:</th><td>$upperNational</td></tr>\n";
+	print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+	print "This TWiki.cfg parameter is used when <b>\$useLocale</b> is 0, to work around missing or non-working locales.\n";
+	print "It is also used with Perl 5.005 for efficiency reasons - upgrading to Perl 5.6 or higher removes the need for this. \n";
+	print "If required, this parameter should be set to the upper case accented characters you require in your locale.\n";
+	if ( $forUpperNat ) {
+	    print "<p>The following upper case accented characters have been found in this locale and should be considered for use in this parameter: <b>$forUpperNat</b></p>\n";
+	}
+	print "</td></tr>\n";
+
+	# $lowerNational
+	print "<tr><th align=\"right\">\$lowerNational:</th><td>$lowerNational</td></tr>\n";
+	print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+	print "This TWiki.cfg parameter is used whenever <b>\$upperNational</b> is used.\n";
+	print "This parameter should be set to the lower case accented characters you require in your locale.\n";
+	if ( $forLowerNat ) {
+	    print "<p>The following lower case accented characters have been found in this locale and should be considered for use in this parameter: <b>$forLowerNat</b></p>\n";
+	}
+	print "</td></tr>\n";
+    }
+}
 
 print "</table>\n";
 
