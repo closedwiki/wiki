@@ -23,34 +23,37 @@ system( "cp cgi-bin/tmp/twiki/templates/* twiki/templates/" );
 
 ################################################################################
 
-use WWW::Mechanize;
+if ( -e "TWikiInstallationReport.html" )
+{
+    use WWW::Mechanize;
 
-my $tt = TWiki::Topic->new() or die $!;
-
-my $mech = WWW::Mechanize::TWiki->new( agent => 'TWikiInstaller', autocheck => 1 ) or die $!;
-
-my $baseUrl = "http://localhost/~twiki/cgi-bin/twiki/view";
-my $baseWebUrl = "$baseUrl/TWiki";
-
-################################################################################
-# attach TWikiInstallationReport
-
-my $topic = 'TWikiInstallationReport';
-$mech->get( "http://localhost/~twiki/cgi-bin/twiki/edit/TWiki/$topic" );
-
-$mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/TWikiInstallationReport.html"}%\n] );
-$mech->click_button( value => 'Save' );
-
-$mech->follow_link( text => 'Attach' );
-if ( $mech->submit_form(
-		   form_name => 'main',
-		   fields    => { 
-		       filepath => getcwd() . "/TWikiInstallationReport.html",
-		       filecomment => `date`,
-		       hidefile => undef,
-		   },
-		   ) 
-     ) { unlink "TWikiInstallationReport.html" }
+    my $tt = TWiki::Topic->new() or die $!;
+    
+    my $mech = WWW::Mechanize::TWiki->new( agent => 'TWikiInstaller', autocheck => 1 ) or die $!;
+    
+    my $baseUrl = "http://localhost/~twiki/cgi-bin/twiki/view";
+    my $baseWebUrl = "$baseUrl/TWiki";
+    
+    ################################################################################
+    # attach TWikiInstallationReport
+    
+    my $topic = 'TWikiInstallationReport';
+    $mech->get( "http://localhost/~twiki/cgi-bin/twiki/edit/TWiki/$topic" );
+    
+    $mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/TWikiInstallationReport.html"}%\n] );
+    $mech->click_button( value => 'Save' );
+    
+    $mech->follow_link( text => 'Attach' );
+    if ( $mech->submit_form(
+			    form_name => 'main',
+			    fields    => { 
+				filepath => getcwd() . "/TWikiInstallationReport.html",
+				filecomment => `date`,
+				hidefile => undef,
+			    },
+			    ) 
+	 ) { unlink "TWikiInstallationReport.html" }
+}
 
 ################################################################################
 
