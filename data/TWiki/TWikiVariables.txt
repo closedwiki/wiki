@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1057016404" format="1.0" version="1.65"}%
+%META:TOPICINFO{author="PeterThoeny" date="1061617140" format="1.0" version="1.66"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -48,7 +48,12 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> Small 16x16 pixel icon of common attachment types, like =bmp=, =doc=, =gif=, =hlp=, =html=, =pdf=, =ppt=, =txt=, =wav=, =xml=, =zip=, etc. Specify file type only, file name, or full path name. Example: =%<nop>ICON{"pdf"}%= returns %ICON{"pdf"}% </td>
 </tr><tr>
   <td> =%<nop>URLPARAM{"name"}%= </td>
-  <td> Returns the value of a URL parameter. Note that there is a low risk that this variable could be misused for cross-scripting. Ex: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b> </td>
+  <td> Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting. Parameters are name and newline:
+	 | *Parameter:* | *Description:* |
+	 | ="name"= | The name of a URL parameter |
+	 | =newline="&lt;br /&gt;"= | Convert newlines to other delimiters |
+	 Example: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b>
+</td>
 </tr><tr>
   <td> =%<nop>URLENCODE{"string"}%= </td>
   <td> Encodes a string for use as a URL parameter. Ex: =%<nop>URLENCODE{"spaced name"}%= returns <b>%URLENCODE{"spaced name"}%</b> </td>
