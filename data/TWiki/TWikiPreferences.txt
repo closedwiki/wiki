@@ -293,13 +293,13 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---++ Preferences Control Settings
 
 	*  Allow topic level preferences, on or off:  If set to =on=, topic preferences will be read, and will override any web- or site-level preferences not set as =FINALPREFERENCES=.  By default, user preferences will override topic preferences.
-
+		* Set READTOPICPREFS = on
 
 	* Topic level overrides user level preferences, on or off: If set to =on=, topic preferences will override user preferences.  The user can in turn override this behavior by setting further =FINALPREFERENCES= in his or her user topic.
-
+		* Set TOPICOVERRIDESUSER = off
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER
 
 
 ---++ Creating New Preference Variables
