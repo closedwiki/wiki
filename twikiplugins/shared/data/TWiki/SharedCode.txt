@@ -1,16 +1,20 @@
 This topic describes the contents of the TWiki Plugins shared code repository. This repository gathers together common code from across different plugins, and provides compatibility interfaces with older TWiki releases for plugins written to use the latest plugins API.
 
-On a temporary basis only, just until we have worked out how to automatically manage dependencies, please get the code from the attached zip.
+The repository is installed over the top of an existing TWiki release, in the same way as other add-on package i.e. unzip the package in the directory where you installed TWiki.
 
 %TOC%
 
 ---+ Summary of Contents
+---++ JSCalendar
+The full distribution package of the [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML + Javascript calendar widget]] is included. The version shipped is 0.9.6, which includes hotkeys. The calendar works well with IE and Mozilla, less well with Opera and Konqueror.
+
+Once the repository has been unzipped, you will find the widget (and all documentation) under the pub/jscalendar-0.9.6 directory.
 ---++ Build & Install Modules
-SharedCode includes a Build.pm module that can be used to create a really simple build process for your plugin, including build, test, install, release and upload targets. The advantage of this module is that it defines a standard build procedure for plugins, so you won;t get file names wrong or get the list of files in the plugin topic wrong either. The easiest way to use the module is to copy the =build.pl= file from the =lib/TWiki/Plugins/SharedCode/= into your own plugin subdirectory. Note that the test target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
+SharedCode includes a Build.pm module that can be used to create a really simple build process for your plugin, including build, test, install, release and upload targets. The advantage of this module is that it defines a standard build procedure for plugins, so you won't get file names wrong or get the list of files in the plugin topic wrong either. The easiest way to use the module is to copy the =build.pl= file from the =lib/TWiki/Plugins/SharedCode/= into your own plugin subdirectory. Note that the test target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
 
 Note this is a _build_ module for use by developers, not an _install_ module for end users. The intent is that =Build.pm= will be extended to _auto-generate_ the installer for the plugin as part of the release process. We're not quite there yet, but watch this space!
 
-The build environment also requires curl.
+The build environment also requires =curl= if you want to use the =upload= target.
 
 Note that the Shared Code repository, including this topic and all the embedded POD documentation, is generated using this build module.
 
