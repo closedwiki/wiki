@@ -114,15 +114,15 @@ sub registerHandler
 
 ---++ sub initialisationError 
 
-Internal routine called every time a plugin fails to laod
+Internal routine called every time a plugin fails to load
 
 =cut
 
 sub initialisationError 
 {
-   my ($error) = @_;
+   my( $error ) = @_;
    $initialisationErrors .= $error."\n";
-   &TWiki::writeWarning($error);
+   &TWiki::writeWarning( $error );
 }
 
 =pod
@@ -359,21 +359,18 @@ sub handleFailedPlugins
    $text .= "---++ Plugins defined\n";
 
    foreach my $plugin (@instPlugins) {
-      $text .= "   * $plugin\n";
+      $text .= "\t* $plugin\n";
    }
 
    $text.="\n\n";
 
    foreach my $handler (@registrableHandlers) {
       $text .= "| $handler |";
-      $text .= join "<br>", @{$registeredHandlers{$handler}}; 
+      $text .= join "<br />", @{$registeredHandlers{$handler}}; 
       $text .= "|\n";
    }
 
-
-   $text .="<br>\n---++ Errors\n<br><verbatim>".$initialisationErrors."</verbatim>";
-
-
+   $text .= "<br />\n---++ Errors\n<br />\n<verbatim>\n$initialisationErrors\n</verbatim>\n";
 
    return $text;
 }

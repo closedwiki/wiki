@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "10 Apr 2004";
+$wikiversion      = "12 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -3183,7 +3183,7 @@ sub renderFormData
     if( %form ) {
         my $name = $form{"name"};
         $metaText = "<div class=\"TWikiForm\">\n|*[[$name]]*||\n";
-        
+
         my @fields = $meta->find( "FIELD" );
         foreach my $field ( @fields ) {
             my $title = $field->{"title"};
@@ -3191,7 +3191,7 @@ sub renderFormData
             $value =~ s/\n/<br \/>/g;      # undo expansion
             $metaText .= "|  $title:|$value  |\n";
         }
-		$metaText .= "<\/div>";
+        $metaText .= "</div>";
         $metaText = getRenderedVersion( $metaText, $web );
     }
 
@@ -3415,9 +3415,9 @@ sub makeAnchorHeading
     my $prefix = "<nop><h$theLevel><a name=\"$compatAnchorName\"> </a> " .
 		 "<a name=\"$anchorName\"> ";
     if( $hasAnchor ) {
-        $text = "$prefix </a> $text <\/h$theLevel>";
+        $text = "$prefix </a> $text </h$theLevel>";
     } else {
-        $text = "$prefix $text <\/a><\/h$theLevel>";
+        $text = "$prefix $text </a></h$theLevel>";
     }
 
     return $text;
@@ -3578,13 +3578,13 @@ sub internalLink {
             $text .= "<a href=\"$dispScriptUrlPath$dispViewPath"
 		  .  "$scriptSuffix/$theWeb/$theTopic\#$anchor\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
-                  .  ">$theLinkText<\/a>";
+                  .  ">$theLinkText</a>";
             return $text;
         } else {
             $text .= "<a href=\"$dispScriptUrlPath$dispViewPath"
 		  .  "$scriptSuffix/$theWeb/$theTopic\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
-                  .  ">$theLinkText<\/a>";
+                  .  ">$theLinkText</a>";
             return $text;
         }
 

@@ -57,9 +57,9 @@ sub renderMetaData
     $viewableAttachmentCount = 0;
     $noviewableAttachmentCount = 0;
     $attachmentCount = 0;
-    
+
     my $header = "<div class=\"TWikiAttachments\">\n";
-    $header = "|  *[[$TWiki::twikiWebname.FileAttachment][Attachment]]*  |  *Action*  |  *Size*  |  *Date*  |  *Who*  |  *Comment*  |";
+    $header .= "|  *[[$TWiki::twikiWebname.FileAttachment][Attachment]]*  |  *Action*  |  *Size*  |  *Date*  |  *Who*  |  *Comment*  |";
     if( $showAttr ) {
         $header .= "  *[[$TWiki::twikiWebname.FileAttribute][Attribute]]*  |";
     }
@@ -72,7 +72,7 @@ sub renderMetaData
     
     my $text = "";
     if( $showAll || $viewableAttachmentCount ) {
-       $text = "$header$metaText<\/div>\n"; # removed 2 newlines here
+       $text = "$header$metaText</div>\n"; # removed 2 newlines here
     }
     
     $text = &TWiki::handleCommonTags( $text, $topic, $web ); # FIXME needed?
