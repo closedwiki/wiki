@@ -62,6 +62,8 @@ sub imgsize {
       ( $x, $y ) = &jpegsize( \*STRM );
     } elsif( $file =~ /\.gif$/i ) {
       ( $x, $y ) = &gifsize(\*STRM);
+    } elsif( $file =~ /\.png$/i ) {
+      ( $x, $y ) = &pngsize(\*STRM);
     }
     close( STRM );
   }
@@ -236,6 +238,27 @@ sub jpegsize {
   return( 0, 0 );
 }
 
+# =========================
+#  pngsize : gets the width & height (in pixels) of a png file
+#  cor this program is on the cutting edge of technology! (pity it's blunt!)
+#  GRR 970619:  fixed bytesex assumption
+#  source: http://www.la-grange.net/2000/05/04-png.html
+sub pngsize {
+  local($PNG) = @_;
+  local($head) = "";
+  my($a, $b, $c, $d, $e, $f, $g, $h)=0;
+  if(defined($PNG)                              &&
+     read( $PNG, $head, 8 ) == 8                &&
+     $head eq "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" &&
+     read($PNG, $head, 4) == 4                  &&
+     read($PNG, $head, 4) == 4                  &&
+     $head eq "IHDR"                            &&
+     read($PNG, $head, 8) == 8                  ){
+    ($a,$b,$c,$d,$e,$f,$g,$h)=unpack("C"x8,$head);
+    return ($a<<24|$b<<16|$c<<8|$d, $e<<24|$f<<16|$g<<8|$h);
+  }
+  return (0,0);
+} 
 
 # =========================
 sub addLinkToEndOfTopic
