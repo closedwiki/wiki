@@ -1,5 +1,5 @@
 /*	----------------------------------------------- */
-/*	LAYOUT */
+/*	LAYOUT SVEN */
 /*	this file will migrate to TWiki.TWikiLayout
 /* ----------------------------------------------- */
 
@@ -401,13 +401,15 @@ html>body .TWikiLeftBarContents li a {
 *	---------------------------------- */
 
 .TWikiAttachments,
-.TWikiForm {
+.TWikiForm 
+.TWikiFormsEditTable {
 	background-color: #EBEDF2;
 	padding: 2em 2em 2em 2em;
 	border-top: 1px solid #C8D0DA;
 }
 .TWikiAttachments table,
-.TWikiForm table {
+.TWikiForm table,
+.TWikiFormsEditTable table {
 	font-size: 90%;
 	background-color: white;
 	border-collapse: collapse;
@@ -419,16 +421,19 @@ html>body .TWikiLeftBarContents li a {
 	width: 100%;
 }
 .TWikiAttachments th,
-.TWikiForm th {	
+.TWikiForm th,
+.TWikiFormsEditTable th {	
 	line-height: 1.4em;
 }
 .TWikiAttachments td,
-.TWikiForm td {	
+.TWikiForm td,
+.TWikiFormsEditTable td {	
 	border-bottom: 1px solid #C8D0DA;
 	line-height: 1.4em;
 }
 .TWikiAttachments th,
-.TWikiForm th {
+.TWikiForm th,
+.TWikiFormsEditTable th {
 	padding: 2px 6px 2px 6px;
 	background-color: #6b7f93;
 	text-align: middle;
@@ -436,7 +441,8 @@ html>body .TWikiLeftBarContents li a {
 	border-left: 1px solid white;
 }
 .TWikiAttachments th.first,
-.TWikiForm th.first {
+.TWikiForm th.first,
+.TWikiFormsEditTable th.first {
 	border-left: none;
 }
 .TWikiAttachments th.sortedAscending, .TWikiAttachments th.sortedDescending,
@@ -448,7 +454,8 @@ html>body .TWikiLeftBarContents li a {
 	display: none;
 }
 .TWikiAttachments td,
-.TWikiForm td {
+.TWikiForm td,
+.TWikiFormsEditTable td {
 	padding: 2px 6px 2px 6px;
 	background-color: white;
 	height: 1.4em;
@@ -456,9 +463,38 @@ html>body .TWikiLeftBarContents li a {
 	vertical-align: top;
 }
 .TWikiAttachments p,
-.TWikiForm p {
+.TWikiForm p,
+.TWikiFormsEditTable p {
 	display: none;
 }
+
+/* -- TWikiFormsEditFields ----------- */
+.TWikiFormsEditTextField {
+}
+
+.TWikiFormsEditLabelField {
+}
+
+.TWikiFormsEditTextAreaField 
+{
+	width: 100%;
+}
+
+.TWikiFormsEditSelectField {
+}
+
+.TWikiFormsEditCheckboxButton {
+}
+
+.TWikiFormsEditCheckboxField {
+}
+
+.TWikiFormsEditRadioField {
+}
+
+.TWikiFormsEditError {
+}
+
 
 /**	----------------------------------
 *	action buttons
