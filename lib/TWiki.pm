@@ -61,7 +61,7 @@ use vars qw(
         $attachAsciiPath $scriptSuffix $wikiversion
         $safeEnvPath $mailProgram $noSpamPadding $mimeTypesFilename
         $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
-        $doRememberRemoteUser $doPluralToSingular
+        $doRemoveImgInMailnotify $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "19 Dec 2001";
+$wikiversion      = "21 Dec 2001";
 
 # ===========================
 # read the configuration part
@@ -1859,6 +1859,8 @@ sub getRenderedVersion
 {
     my( $text, $theWeb, $meta ) = @_;
     my( $head, $result, $extraLines, $insidePRE, $insideVERBATIM, $insideTABLE, $noAutoLink );
+
+    return "" unless $text;  # nothing to do
 
     # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
     # (fails in %INCLUDE%, %SEARCH%)
