@@ -213,10 +213,11 @@ sub DISABLE_startRenderingHandler {
 sub endRenderingHandler {
     $called{endRenderingHandler} = join(",", @_);
     my $q = TWiki::Func::getCgiQuery();
+    my $t;
+    $t = $q->param( "test" ) if ( $q );
+    $t = "" unless $t;
 
-    if ( $q &&
-         $q->param( "test" ) eq "compare" &&
-         $_[0] =~ /<!--\s*actual\s*-->/ ) {
+    if ( $t eq "compare" && $_[0] =~ /<!--\s*actual\s*-->/ ) {
         my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
         my $res = _compareExpectedWithActual( _parse( $text, "expected" ),
                                               _parse( $_[0], "actual" ),
