@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="999567701" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="999755787" format="1.0" version="1.8"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki User Authentication
 
-Controlling TWiki site access and logging authorized user activity
+_TWiki site access control and user activity tracking_
 
 ---+++ Overview
 
@@ -14,9 +14,9 @@ TWiki uses visitor identification to keep track of who made changes to topics at
 ---+++ Authentication Options
 
 No special installation steps need to be performed if the server is already authenticated. If not, you have three remaining options to controlling user access:
-	1 *Forget about authentication.* All changes are registered to %MAINWEB%.TWikiGuest user, so you can't tell who made changes. Your site is completely open and public - anyone can browse and edit freely, in classic Wiki mode.<br>
-	1 *Use Basic Authentication* for the ==edit== and ==attach== scripts. This uses .htaccess and generates the familiar grey log-in window. The [[TWikiDocumentation#TWiki_Installation_Notes][TWiki Installation Guide]] has step-by-step instructions.<br>
-	1 *Use SSL* to authenticate and secure the whole server. 
+	1. *Forget about authentication.* All changes are registered to %MAINWEB%.TWikiGuest user, so you can't tell who made changes. Your site is completely open and public - anyone can browse and edit freely, in classic Wiki mode.<br>
+	1. *Use Basic Authentication* for the ==edit== and ==attach== scripts. This uses .htaccess and generates the familiar grey log-in window. The [[TWikiDocumentation#TWiki_Installation_Notes][TWiki Installation Guide]] has step-by-step instructions.<br>
+	1. *Use SSL* to authenticate and secure the whole server. 
 
 ---+++ Tracking by IP Address
 
@@ -43,11 +43,23 @@ This section applies only if your %WIKITOOLNAME% is installed on a server that i
 This points ==<nop>WikiUser== to the %WIKITOOLNAME%.%MAINWEB% web, where user registration pages are stored, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %MAINWEB% web.
 </blockquote>
 
+#ChangingPasswords
 ---+++ Changing Passwords
 
-%INCLUDE{"ChangePassword"}%
+Change and reset passwords using forms on regular pages. Use topic-level TWikiAccessControl to restrict use as required.
 
+	* The ChangePassword form, ==TWiki/ChangePassword==:
+
+<blockquote style="background-color:#f0f0f0">
+%INCLUDE{"ChangePassword"}%
+</blockquote>
+
+	* The ResetPassword form ==TWiki/ResetPassword==:
+
+<blockquote style="background-color:#f0f0f0">
 %INCLUDE{"ResetPassword"}%
+</blockquote>
+
 
 -- PeterThoeny - 16 Mar 2001 <br>
 -- MikeMannix - 29 Aug 2001 
