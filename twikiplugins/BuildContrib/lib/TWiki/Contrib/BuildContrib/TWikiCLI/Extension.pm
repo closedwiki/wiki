@@ -1,8 +1,8 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use TWiki::Contrib::DistributionContrib::DistributionFetcher;
 #use TWiki::Contrib::Build;
-use TWiki;    # TODO why do I have to use this? Why not just TWiki::Func?
-use TWiki::Func;
+#use TWiki;    # TODO why do I have to use this? Why not just TWiki::Func?
+#use TWiki::Func;
 use strict;
 use Cwd;
 my $oldPwd;
@@ -15,7 +15,7 @@ sub cli__init {
 }
 
 sub cli_dev {
-TWiki::Contrib::BuildContrib::TWikiCLI::Extension::Dev
+#TWiki::Contrib::BuildContrib::TWikiCLI::Extension::Dev
 
 }
 
@@ -134,7 +134,7 @@ sub selectTWikiLibDir {
  return "";
 }
 
-==pod
+=pod
 ---+++ sub getLibFragmentForExtension
 Given an TWiki:Plugins.TWikiExtension such as "BlahPlugin" or "FooAddOn",
 returns the directory under lib where code for it is stored

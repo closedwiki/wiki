@@ -12,7 +12,8 @@ $cwd =~ s/^C://g; # Code_Smell
 my $eclipseDevDir = "/DOCUME~1/MARTIN~1/MYDOCU~1/DEVELO~1";
 
 my $script = $cwd."/twikicli.pl";
-$ENV{TWIKI_LIBS} = $eclipseDevDir."/BuildContrib/lib:$eclipseDevDir/DistributionContrib/lib";
+$ENV{TWIKI_LIBS} = $eclipseDevDir."/BuildC~1/lib:$eclipseDevDir/DistributionContrib/lib";
+
 
 require $script;
 
