@@ -341,7 +341,7 @@ sub initialize
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
     # PROTOTYPE: Auto-detect UTF-8 vs. site charset
-    writeDebug "URL web.topic is $webName.$topicName";
+    ##writeDebug "URL web.topic is $webName.$topicName";
     my $charEncoding;
     my $fullTopicName = "$webName.$topicName";
     # Detect character encoding of the full topic name from URL
@@ -368,8 +368,8 @@ sub initialize
 	$charEncoding = $siteCharset;
     }
 
-    writeDebug "URL character encoding was: $charEncoding";
-    writeDebug "Final web and topic are $webName $topicName ($siteCharset)";
+    ##writeDebug "URL character encoding was: $charEncoding";
+    ##writeDebug "Final web and topic are $webName $topicName ($siteCharset)";
 
     # Filter out dangerous or unwanted characters
     $topicName =~ s/$securityFilter//go;
@@ -542,11 +542,11 @@ sub setupRegexes {
 
 				# 3 bytes
 
-				    # Refuse illegal code positions - negative
+				    # Avoid illegal codepoints - negative
 				    # lookahead
 				    (?!\xEF\xBF[\xBE\xBF])	
 
-				    # Main regex
+				    # Match valid codepoints
 				    (?:
 					([\xE0][\xA0-\xBF])|
 					([\xE1-\xEC\xEE-\xEF][\x80-\xBF])|
@@ -564,7 +564,7 @@ sub setupRegexes {
 				    [\x80-\xBF][\x80-\xBF]
 			    }x;
 
-    $validUtf8StringRegex = qr/^ (?: $validUtf8CharRegex )* $/x;
+    $validUtf8StringRegex = qr/^ (?: $validUtf8CharRegex )+ $/x;
 
 }
 
