@@ -86,7 +86,7 @@ sub getFormDefinition
                        $vals = $TWiki::mainWebname . "." . join( ", ${TWiki::mainWebname}.", ( TWiki::Store::getTopicNames( $TWiki::mainWebname ) ) );
                     }
                     $tooltip =~ s/^\s*//go;
-                    $tooltip =~ s/^\s*//go;
+                    $tooltip =~ s/\s*$//go;
                     # FIXME object if too short
                     push @fields, [ $name, $title, $type, $size, $vals, $tooltip, $attributes ];
             } else {
@@ -216,13 +216,13 @@ sub getFormDef
 # ============================
 =pod
 
----++ sub link (  $web, $name, $tooltip, $heading, $align, $span, $extra  )
+---++ sub _link (  $web, $name, $tooltip, $heading, $align, $span, $extra  )
 
 Not yet documented.
 
 =cut
 
-sub link
+sub _link
 {
     my( $web, $name, $tooltip, $heading, $align, $span, $extra ) = @_;
     
@@ -303,7 +303,7 @@ sub renderForEdit
     
     # FIXME could do with some of this being in template
     my $text = "<table class=\"TWikiFormsEditTable\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
-               &link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
+               _link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
                
     fieldVars2Meta( $web, $query, $meta, "override" );
     
@@ -320,16 +320,21 @@ sub renderForEdit
         my %field = $meta->findOne( "FIELD", $fieldName );
         my $value = $field{"value"};
         if( ! defined( $value ) && $attributes =~ /S/ ) {
-           # Allow initialisation based on a preference
-           $value = &TWiki::Prefs::getPreferencesValue($fieldName);
+            # Allow initialisation based on a preference
+            $value = &TWiki::Prefs::getPreferencesValue($fieldName);
         }
-		if( ($newFormForTopic)) {
-			my $tmp = $fieldInfo[0] || "";
-			$value = &TWiki::handleCommonTags( $tmp, $topic );
-		}
+        if( ($newFormForTopic)) {
+            my $tmp = $fieldInfo[0] || "";
+            $value = &TWiki::handleCommonTags( $tmp, $topic );
+        }
         $value = "" unless defined $value;  # allow "0" values
         my $extra = "";
-        
+
+        $tooltip =~ s/&/&amp\;/g;
+        $tooltip =~ s/"/&quot\;/g;
+        $tooltip =~ s/</&lt\;/g;
+        $tooltip =~ s/>/&gt\;/g;
+
         my $output = TWiki::Plugins::renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
         if( $output ) {
             $value = $output;
@@ -434,7 +439,7 @@ sub renderForEdit
             $value =~ s/>/&gt\;/go;
             $value = "<input class=\"TWikiFormsEditError\" type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
         }
-        $text .= "   <tr> " . &link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
+        $text .= "   <tr> " . _link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
     }
     $text .= "</table>\n";
     
