@@ -25,25 +25,6 @@ use strict;
 
 &main();
 
-sub changeSpecialChars
-{
-    my( $text ) = @_;
-    
-    $text =~ s/&/%_A_%/go;
-    $text =~ s/\"/%_Q_%/go;
-    $text =~ s/>/%_G_%/go;
-    $text =~ s/</%_L_%/go;
-    # PTh 10 Apr 2001: Fix for Codev.OperaBrowserDoublesEndOfLines
-    $text =~ s/\r\r\n/%_N_%/go;
-    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
-    $text =~ s/\r\n/%_N_%/go;
-    $text =~ s/\n\r/%_N_%/go;
-    $text =~ s/\r/%_N_%/go;
-    $text =~ s/\n/%_N_%/go;
-    
-    return $text;
-}
-
 
 sub main
 {
@@ -81,44 +62,11 @@ sub main
 
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
 
-    # Is user looking to change the form used?  Sits oddly in preivew, but would be okay if this was
-    # called postedit
+    # Is user looking to change the form used?  Sits oddly in preview, but to avoid Javascript and pick
+    # up text on edit page it has to be in preview.
     my $changeform = $query->param( 'submitChangeForm' ) || "";
     if( $changeform ) {
-        my $tmpl = &TWiki::Store::readTemplate( "changeform", $skin );
-        &TWiki::writeHeader( $query );
-        $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-        $tmpl = &TWiki::getRenderedVersion( $tmpl );
-        my $text = $query->param( 'text' );
-        $text = changeSpecialChars( $text );
-        $tmpl =~ s/%TEXT%/$text/go;
-
-        my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$webName" );
-	my @forms = split( /,\s*/, $listForms );	    
-	unshift @forms, "";
-	my( $metat, $tmp ) = &TWiki::Store::readTopic( $webName, $topic );
-	my $formName = $query->param( 'formtemplate' ) || "";
-	if( ! $formName ) {
-	    my %form = $metat->findOne( "FORM" );
-	    $formName = $form{"name"};
-	}
-	    
-	my $formList = "";
-	foreach my $form ( @forms ) {
-	   my $selected = ( $form eq $formName ) ? "checked" : "";
-	   $formList .= "\n<br>" if( $formList );
-	   my $show = $form ? $form : "&lt;none&gt;";
-	   my $value = $form ? $form : "none";
-	   $formList .= "<input type=\"radio\" name=\"formtemplate\" value=\"$value\" $selected>&nbsp;$show";
-	}
-        $tmpl =~ s/%FORMLIST%/$formList/go;
-        
-        my $parent = $query->param( 'parent' ) || "";
-        $tmpl =~ s/%PARENT%/$parent/go;
-    
-        $tmpl =~ s|</*nop/*>||goi;
-        
-        print $tmpl;
+        &TWiki::Form::changeForm( $webName, $topic, $query );
         return;
     }
 
@@ -153,14 +101,8 @@ sub main
         
 	my $formTemplate = $query->param( "formtemplate" );
 	if( $formTemplate ) {
-	   # FIXME temporary because potentially shared fields
-	   my @args = ( name => $formTemplate );
 	   $meta->remove( "FORM" );
-	   if( $formTemplate ne "none" ) {
-	       $meta->put( "FORM", @args );
-	   } else {
-	       $meta->remove( "FORM" );
-	   }
+	   $meta->put( "FORM", ( name => $formTemplate ) ) if( $formTemplate ne "none" );
 	   $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
 	} else {
 	   $tmpl =~ s/%FORMTEMPLATE%//go;
@@ -198,7 +140,7 @@ sub main
     $tmpl = &TWiki::getRenderedVersion( $tmpl );
     $tmpl =~ s/%TEXT%/$ptext/go;
     
-    $text = changeSpecialChars( $text );
+    $text = &TWiki::encodeSpecialChars( $text );
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
