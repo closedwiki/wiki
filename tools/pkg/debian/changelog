@@ -4,6 +4,8 @@ twiki (20040902-1) unstable; urgency=high
   * applied ViewAfterSaveCachesOldPage-ugly-fix.patch (Closes: #218922)
     - maybe!! (I could never re-produce it)
   * corrected the permssions of log and .htpasswd (Closes: #281761)
+  * added another test to reduce the chance of over-writing an existing
+    universe (Closes: #282947)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2005 00:00:01 -1000
 
