@@ -3,8 +3,7 @@
 #
 # Search engine of TWiki.
 #
-# Copyright (C) 2000 Peter Thoeny, TakeFive Software Inc., 
-# peter.thoeny@takefive.com , peter.thoeny@attglobal.net
+# Copyright (C) 2000 Peter Thoeny, Peter@Thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -181,28 +180,16 @@ sub searchWikiWeb
 
     foreach my $thisWebName (@webList) {
 
-        next unless webExists($thisWebName);  # can't process what ain't thar
+        next unless webExists( $thisWebName );  # can't process what ain't thar
 
-        # make white the default
-        my $thisWebBGColor = getPrefsValue( "WEBBGCOLOR" ) || "\#FF00FF";
-
-        # this sucks, but it works for now -- brittle overkill
-        # read the prefs topic for this web to get web specific settings.
-
-        ## #############
-        ## 0605 kk : vvv Made the match code more forgiving.
-        # get $thisWebName 's color
-	my $bar = &readWebTopic( $thisWebName, $webPrefsTopicname);
-        $bar =~ /(WEBBGCOLOR\s*\=\s*)(\S+)/o;
-
-        $thisWebBGColor = $2 ;
+        my $thisWebBGColor = getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
+        my $thisWebNoSearchAll = getPreferencesValue( "NOSEARCHALL", $thisWebName );
 
         # make sure we can report this web on an 'all' search
-        my $tf = ( $bar =~ /(NOSEARCHALL\s*\=\s*)([Oo][Nn])/o );
-
         # DON'T filter out unless it's part of an 'all' search.
         # PTh 18 Aug 2000: Need to include if it is the current web
-        next if ( ( $searchAllFlag ) && ( $tf ) && 
+        next if ( ( $searchAllFlag ) &&
+                  ( $thisWebNoSearchAll =~ /on/i ) &&
                   ( $thisWebName ne $wiki::webName ) );
 
         (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding

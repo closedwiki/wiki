@@ -4,8 +4,7 @@
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999, 2000 Peter Thoeny, TakeFive Software Inc., 
-# peter.thoeny@takefive.com , peter.thoeny@attglobal.net
+# Copyright (C) 1999, 2000 Peter Thoeny, Peter@Thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,8 +22,8 @@
 # - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
-# - Files wikifcg.pm, wikistore.pm and wikisearch.pm are included by wiki.pm
-# - Upgrading TWiki is easy as long as you do not customize wiki.pm.
+# - Files wiki[a-z]+.pm are included by wiki.pm
+# - Upgrading TWiki is easy as long as you only customize wikicfg.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
 # 20000501 Kevin Kinnell : changed beta0404 to have many new search
@@ -67,7 +66,7 @@ use vars qw(
         $debugFilename $htpasswdFilename 
         $logFilename $wikiUsersTopicname $userListFilename %userToWikiList
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
-        $wikiPrefsTopicname $webPrefsTopicname @prefsKeys @prefsValues
+        $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
 	$editLockTime 
         $mailProgram $wikiversion 
@@ -77,24 +76,30 @@ use vars qw(
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
         @isoMonth $TranslationToken $code @code $depth %mon2num
-        $scriptSuffix );
+        $scriptSuffix
+        $newTopicFontColor $newTopicBgColor
+);
 
 
 
 # ===========================
 # TWiki version:
-$wikiversion      = "19 Sep 2000";
+$wikiversion      = "28 Sep 2000";
 
 # ===========================
 # read the configuration part
 do "wikicfg.pm";
 
 # ===========================
+# read the preferences part
+do "wikiprefs.pm";
+
+# ===========================
 # read the search engine part
 do "wikisearch.pm";
 
 # ===========================
-# read the rcs relate functions
+# read the rcs related functions
 do "wikistore.pm";
 
 
@@ -164,17 +169,19 @@ sub initialize
     }
 
     # initialize preferences
-    # (Note: Do not use a %hash, because order is significant)
-    @prefsKeys = ();
-    @prefsValues = ();
-    getPrefsList( "$twikiWebname\.$wikiPrefsTopicname" ); # site-level
-    getPrefsList( "$webName\.$webPrefsTopicname" );      # web-level
-    getPrefsList( $wikiUserName );                       # user-level
+    &wiki::initializePrefs( $wikiUserName, $webName );
 
     # some remaining init
     $TranslationToken= "\263";
     $code="";
     @code= ();
+
+    # Add background color and font color (AlWilliams - 18 Sep 2000)
+    # PTh: Moved from interalLink to initialize ('cause of performance)
+    $newTopicBgColor = &wiki::getPreferencesValue("NEWTOPICBGCOLOR");
+    if ($newTopicBgColor eq "") { $newTopicBgColor="#FFFFCE"; }
+    $newTopicFontColor = &wiki::getPreferencesValue("NEWTOPICFONTCOLOR");
+    if ($newTopicFontColor eq "") { $newTopicFontColor="#0000FF"; }
 
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
@@ -285,79 +292,6 @@ sub userToWikiName
         return "$mainWebname.$wUser";
     }
     return "$mainWebname.$loginUser";
-}
-
-# =========================
-sub getPrefsList
-{
-    my ( $theWebTopic ) = @_;
-    my $fileName = $theWebTopic;                  # "Main.TopicName"
-    $fileName =~ s/([^\.]*)\.(.*)/$1\/$2\.txt/go; # "Main/TopicName.txt"
-    my $text = readFile( "$dataDir/$fileName" );  # read topic text
-    $text =~ s/\r//go;                            # cut CR
-    my $key;
-    my $value;
-    my $isKey = 0;
-    foreach( split( /\n/, $text ) ) {
-        if( /^\t+\*\sSet\s([a-zA-Z0-9_]*)\s\=\s*(.*)/ ) {
-            if( $isKey ) {
-                addToPrefsList( $key, $value );
-            }
-            $key = $1;
-            $value = $2 || "";
-            $isKey = 1;
-        } elsif ( $isKey ) {
-            if( ( /^\t+/ ) && ( ! /^\t+\*/ ) ) {
-                # follow up line, extending value
-                $value .= "\n";
-                $value .= $_;
-            } else {
-                addToPrefsList( $key, $value );
-                $isKey = 0;
-            }
-        }
-    }
-    if( $isKey ) {
-        addToPrefsList( $key, $value );
-    }
-}
-
-# =========================
-sub addToPrefsList
-{
-    my ( $theKey, $theValue ) = @_;
-
-    $theValue =~ s/\t/ /go;     # replace TAB by space
-    $theValue =~ s/\\n/\n/go;   # replace \n by new line
-    $theValue =~ s/`//go;       # filter out dangerous chars
-    my $x;
-    my $found = 0;
-    for( $x = 0; $x < @prefsKeys; $x++ ) {
-        if( $prefsKeys[$x] eq $theKey ) {
-            # replace value of existing key
-            $prefsValues[$x] = $theValue;
-            $found = "1";
-            last;
-        }
-    }
-    if( ! $found ) {
-        # append to list
-        $prefsKeys[@prefsKeys] = $theKey;
-        $prefsValues[@prefsValues] = $theValue;
-    }
-}
-
-# =========================
-sub getPrefsValue
-{
-    my ( $theKey ) = @_;
-    my $x;
-    for( $x = 0; $x < @prefsKeys; $x++ ) {
-        if( $prefsKeys[$x] eq $theKey ) {
-            return $prefsValues[$x];
-        }
-    }
-    return "";
 }
 
 # =========================
@@ -632,15 +566,16 @@ sub makeTopicSummary
     # called by search, mailnotify & changes after calling readFileHead
 
     my $htext = $theText;
-    $htext =~ s/<[^>]*>//go;         # remove all HTML tags
-    $htext =~ s/[\*\|=_]/ /go;       # remove all Wiki formatting
     $htext =~ s/%INCLUDE[^%]*%/ /go; # remove server side includes
     $htext =~ s/%SEARCH[^%]*%/ /go;  # remove inline search
+    $htext =~ s/%DRAWING[^%]*%/ /go; # remove TWikiDraw drawing
     $htext =~ s/%ATTACH[A-Z_0-9]*%//go;
     $htext =~ s/%PUB[A-Z_0-9]*%//go;
     $htext =~ s/%SCRIPT[A-Z_0-9]*%//go;
-    $htext =~ s/\s+[\+\-]*/ /go;     # remove newlines and special chars
     $htext = handleCommonTags( $htext, $theTopic, $theWeb );
+    $htext =~ s/<[^>]*>//go;         # remove all HTML tags
+    $htext =~ s/[\[\]\*\|=_]/ /go;   # remove Wiki formatting chars
+    $htext =~ s/\s+[\+\-]*/ /go;     # remove newlines and special chars
 
     # inline search renders text, 
     # so prevent linking of external and internal links:
@@ -794,14 +729,6 @@ sub handleTime
 }
 
 # =========================
-sub handlePrefsValue
-{
-    my( $theIdx ) = @_;
-    # dummy sub needed because eval can't have multiple lines in s/../../go
-    return $prefsValues[$theIdx];
-}
-
-# =========================
 sub handleEnvVariable
 {
     my( $theVar ) = @_;
@@ -819,6 +746,49 @@ sub handleSpacedTopic
 }
 
 # =========================
+sub handleInternalTags
+{
+    # modify arguments directly, e.g. call by reference
+    # $_[0] is text
+    # $_[1] is topic
+    # $_[2] is web
+
+    $_[0] =~ s/%HTTP_HOST%/&handleEnvVariable('HTTP_HOST')/geo;
+    $_[0] =~ s/%REMOTE_ADDR%/&handleEnvVariable('REMOTE_ADDR')/geo;
+    $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/geo;
+    $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/geo;
+    $_[0] =~ s/%TOPIC%/$_[1]/go;
+    $_[0] =~ s/%SPACEDTOPIC%/&handleSpacedTopic($_[1])/geo;
+    $_[0] =~ s/%WEB%/$_[2]/go;
+    $_[0] =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
+    $_[0] =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/go;
+    $_[0] =~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
+    $_[0] =~ s/%SCRIPTSUFFIX%/$scriptSuffix/go;
+    $_[0] =~ s/%PUBURL%/$urlHost$pubUrlPath/go;
+    $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/go;
+    $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/go;
+    $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/go;
+    $_[0] =~ s/%DATE%/&getLocaldate()/geo; # depreciated
+    $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
+    $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
+    $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/geo;
+    $_[0] =~ s/%SERVERTIME{(.*?)}%/&handleTime($1,"servertime")/geo;
+    $_[0] =~ s/%WIKIVERSION%/$wikiversion/go;
+    $_[0] =~ s/%USERNAME%/$userName/go;
+    $_[0] =~ s/%WIKIUSERNAME%/$wikiUserName/go;
+    $_[0] =~ s/%WIKITOOLNAME%/$wikiToolName/go;
+    $_[0] =~ s/%MAINWEB%/$mainWebname/go;
+    $_[0] =~ s/%TWIKIWEB%/$twikiWebname/go;
+    $_[0] =~ s/%HOMETOPIC%/$mainTopicname/go;
+    $_[0] =~ s/%WIKIUSERSTOPIC%/$wikiUsersTopicname/go;
+    $_[0] =~ s/%WIKIPREFSTOPIC%/$wikiPrefsTopicname/go;
+    $_[0] =~ s/%WEBPREFSTOPIC%/$webPrefsTopicname/go;
+    $_[0] =~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
+    $_[0] =~ s/%STATISTICSTOPIC%/$statisticsTopicname/go;
+    $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
+}
+
+# =========================
 sub handleCommonTags
 {
     my( $text, $topic, $theWeb ) = @_;
@@ -828,52 +798,21 @@ sub handleCommonTags
         $theWeb = $webName;
     }
 
-    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;
-    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;  # allow two level includes
+    # handle all preferences and internal tags (for speed: call by reference)
+    &wiki::handlePreferencesTags( $text );
+    handleInternalTags( $text, $topic, $theWeb );
+
+    my $tmp = 0; # quick hack to limit max 10 includes
+    # process prefs and multiple embeded %INCLUDE% statements     # added HaroldGottschalk
+    while( ( $text =~ /%INCLUDE{(.*?)}%/ ) && ($tmp < 10) ) {
+        $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;
+        &wiki::handlePreferencesTags( $text );
+        handleInternalTags( $text, $topic, $theWeb );
+        $tmp = $tmp + 1; # quick hack
+    }
 
     # Wiki extended rules
     $text = extendHandleCommonTags( $text, $topic, $theWeb );
-
-    my $x;
-    my $cmd;
-    for( $x = 0; $x < @prefsKeys; $x++ ) {
-        $cmd = "\$text =~ s/%$prefsKeys[$x]%/&handlePrefsValue($x)/geo;";
-        eval( $cmd );
-    }
-
-    $text =~ s/%HTTP_HOST%/&handleEnvVariable('HTTP_HOST')/geo;
-    $text =~ s/%REMOTE_ADDR%/&handleEnvVariable('REMOTE_ADDR')/geo;
-    $text =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/geo;
-    $text =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/geo;
-    $text =~ s/%TOPIC%/$topic/go;
-    $text =~ s/%SPACEDTOPIC%/&handleSpacedTopic($topic)/geo;
-    $text =~ s/%WEB%/$theWeb/go;
-    $text =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
-    $text =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/go;
-    $text =~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
-    $text =~ s/%SCRIPTSUFFIX%/$scriptSuffix/go;
-    $text =~ s/%PUBURL%/$urlHost$pubUrlPath/go;
-    $text =~ s/%PUBURLPATH%/$pubUrlPath/go;
-    $text =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$theWeb\/$topic/go;
-    $text =~ s/%ATTACHURLPATH%/$pubUrlPath\/$theWeb\/$topic/go;
-    $text =~ s/%DATE%/&getLocaldate()/geo; # depreciated
-    $text =~ s/%GMTIME%/&handleTime("","gmtime")/geo;
-    $text =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/geo;
-    $text =~ s/%SERVERTIME%/&handleTime("","servertime")/geo;
-    $text =~ s/%SERVERTIME{(.*?)}%/&handleTime($1,"servertime")/geo;
-    $text =~ s/%WIKIVERSION%/$wikiversion/go;
-    $text =~ s/%USERNAME%/$userName/go;
-    $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
-    $text =~ s/%WIKITOOLNAME%/$wikiToolName/go;
-    $text =~ s/%MAINWEB%/$mainWebname/go;
-    $text =~ s/%TWIKIWEB%/$twikiWebname/go;
-    $text =~ s/%HOMETOPIC%/$mainTopicname/go;
-    $text =~ s/%WIKIUSERSTOPIC%/$wikiUsersTopicname/go;
-    $text =~ s/%WIKIPREFSTOPIC%/$wikiPrefsTopicname/go;
-    $text =~ s/%WEBPREFSTOPIC%/$webPrefsTopicname/go;
-    $text =~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
-    $text =~ s/%STATISTICSTOPIC%/$statisticsTopicname/go;
-    $text =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
 
     return $text;
 }
@@ -937,17 +876,9 @@ sub internalLink
         }
     }
 
-    # Add background color and font color (AlWilliams - 18 Sep 2000)
-    my $bgcolor="";
-    my $fontcolor="";
-    $bgcolor = &wiki::getPrefsValue("NEWTOPICBGCOLOR");
-    if ($bgcolor eq "") { $bgcolor="#FFFFCE"; }
-    $fontcolor = &wiki::getPrefsValue("NEWTOPICFONTCOLOR");
-    if ($fontcolor eq "") { $fontcolor="#0000FF"; }
-
     topicExists( $web, $page) ?
         "$bar<A href=\"$scriptUrlPath/view$scriptSuffix/$web/$page\">$text<\/A>"
-        : $foo?"$bar<SPAN STYLE='background : $bgcolor;'><font color=\"$fontcolor\">$text</font></SPAN><A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
+        : $foo?"$bar<SPAN STYLE='background : $newTopicBgColor;'><font color=\"$newTopicFontColor\">$text</font></SPAN><A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
             : "$bar$text";
 }
 
@@ -955,7 +886,7 @@ sub internalLink
 sub externalLink
 {
     my( $pre, $url ) = @_;
-    if( $url =~ /\.(gif|jpg|jpeg)$/ ) {
+    if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
         return "$pre<IMG src=\"$url\" alt=\"$filename\">";
