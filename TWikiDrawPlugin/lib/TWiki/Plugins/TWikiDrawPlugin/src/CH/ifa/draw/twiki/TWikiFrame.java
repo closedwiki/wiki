@@ -41,10 +41,40 @@ public class TWikiFrame extends DrawFrame {
 
     private Label fStatusLabel;
 
-    public TWikiFrame(Application applet) {
+    public TWikiFrame(Application applet, String colors) {
         super("TWikiDraw", applet);
 
         this.view().setBackground(Color.white);
+
+	ColorMap.reset();
+	if (colors != null) {
+	    // parse the colors string and add colors to the static color map
+	    do {
+		String thisColor;
+		int split = colors.indexOf(',');
+		if (split == -1) {
+		    thisColor = colors;
+		    colors = "";
+		} else {
+		    thisColor = colors.substring(0, split);
+		    colors = colors.substring(split + 1);
+		}
+		split = thisColor.indexOf('=');
+		if (split == -1)
+		    continue;
+		String name = thisColor.substring(0, split).trim();
+		if (split < thisColor.length() - 1 &&
+		    thisColor.charAt(split + 1) == '#')
+		    split++;
+		String value = thisColor.substring(split + 1).trim();
+		try {
+		    int i = Integer.valueOf(value, 16).intValue();
+		    ColorMap.getColorMap().addColor(name, new Color(i));
+		} catch (NumberFormatException nfe) {
+		    nfe.printStackTrace();
+		}
+	    } while (colors.length() > 0);
+	}
 
         // load	drawing
         if (applet.getParameter(DRAWPATH_PARAMETER) !=	null) {

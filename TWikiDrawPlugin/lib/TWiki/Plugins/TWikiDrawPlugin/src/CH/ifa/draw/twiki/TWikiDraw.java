@@ -29,38 +29,8 @@ import java.net.*;
 public  class TWikiDraw extends LightweightDrawApplet {
 
     public void	init() {
-	ColorMap.reset();
-	if (getParameter("extracolors") != null) {
-	    String colors = getParameter("extracolors");
-	    // parse the colors string and add colors to the static color map
-	    do {
-		String thisColor;
-		int split = colors.indexOf(',');
-		if (split == -1) {
-		    thisColor = colors;
-		    colors = "";
-		} else {
-		    thisColor = colors.substring(0, split);
-		    colors = colors.substring(split + 1);
-		}
-		split = thisColor.indexOf('=');
-		if (split == -1)
-		    continue;
-		String name = thisColor.substring(0, split).trim();
-		if (split < thisColor.length() - 1 &&
-		    thisColor.charAt(split + 1) == '#')
-		    split++;
-		String value = thisColor.substring(split + 1).trim();
-		try {
-		    int i = Integer.valueOf(value, 16).intValue();
-		    ColorMap.getColorMap().addColor(name, new Color(i));
-		} catch (NumberFormatException nfe) {
-		    nfe.printStackTrace();
-		}
-	    } while (colors.length() > 0);
-	}
-
-        init(new TWikiFrame(this));
+	String colors = getParameter("extracolors");
+        init(new TWikiFrame(this, colors));
 	String drawPath = getParameter("drawpath");
 	add(new Label("TWikiDraw editing " + drawPath));
     }

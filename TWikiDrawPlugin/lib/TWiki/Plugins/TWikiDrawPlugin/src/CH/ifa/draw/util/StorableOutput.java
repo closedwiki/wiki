@@ -100,6 +100,8 @@ public  class StorableOutput extends Object {
         for(int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             switch(c) {
+		// RobWalker 17 Jul 2003 - suppress \r
+                case '\r': break;
                 case '\n': fStream.print('\\'); fStream.print('n'); break;
                 case '"' : fStream.print('\\'); fStream.print('"'); break;
                 case '\\': fStream.print('\\'); fStream.print('\\'); break;

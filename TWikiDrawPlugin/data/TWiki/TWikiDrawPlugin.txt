@@ -66,57 +66,57 @@ Set to 1 if an "Edit" button is to be generated attached to the image. You will 
 
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
-	| ==%TOPIC%.xml== | Ant build file |
-	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/TWikiDrawPlugin.txt== | Plugin topic |
 	| ==templates/twikidraw.tmpl== | Applet page template |
 	| ==pub/TWiki/TWikiDrawPlugin/twikidraw.jar== | JAR file |
-	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/%TOPIC%/source.zip== | Java sources |
-	| ==pub/TWiki/%TOPIC%/twikidraw.jar== | JAR file |
-	| ==pub/TWiki/%TOPIC%/example.gif== | Example file |
-	| ==pub/TWiki/%TOPIC%/example.draw== | Example file |
-	| ==pub/TWiki/%TOPIC%/ATEXT1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/ATEXT2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/ATEXT3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/BORDDEC1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/BORDDEC2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/BORDDEC3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/CONN1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/CONN2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/CONN3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/ELLIPSE1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/ELLIPSE2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/ELLIPSE3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/LINE1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/LINE2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/LINE3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/OCONN1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/OCONN2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/OCONN3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/POLYGON1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/POLYGON2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/POLYGON3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/RECT1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/RECT2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/RECT3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/RRECT1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/RRECT2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/RRECT3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/SCRIBBL1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/SCRIBBL2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/SCRIBBL3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/SEL1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/SEL2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/SEL3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/TEXT1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/TEXT2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/TEXT3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/URL1.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/URL2.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/URL3.gif== | Button image |
-	| ==pub/TWiki/%TOPIC%/applettest.html== | Test |
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
+	| ==lib/TWiki/Plugins/TWikiDrawPlugin.pm== | Plugin Perl module |
+	| ==lib/TWiki/Plugins/TWikiDrawPlugin/source.zip== | Java sources |
+	| ==lib/TWiki/Plugins/TWikiDrawPlugin/TWikiDrawPlugin.xml== | Ant build file |
+	| ==pub/TWiki/TWikiDrawPlugin/twikidraw.jar== | JAR file |
+	| ==pub/TWiki/TWikiDrawPlugin/example.gif== | Example file |
+	| ==pub/TWiki/TWikiDrawPlugin/example.draw== | Example file |
+	| ==pub/TWiki/TWikiDrawPlugin/ATEXT1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/ATEXT2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/ATEXT3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/BORDDEC1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/BORDDEC2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/BORDDEC3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/CONN1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/CONN2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/CONN3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/ELLIPSE1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/ELLIPSE2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/ELLIPSE3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/LINE1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/LINE2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/LINE3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/OCONN1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/OCONN2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/OCONN3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/POLYGON1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/POLYGON2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/POLYGON3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/RECT1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/RECT2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/RECT3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/RRECT1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/RRECT2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/RRECT3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/SCRIBBL1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/SCRIBBL2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/SCRIBBL3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/SEL1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/SEL2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/SEL3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/TEXT1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/TEXT2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/TEXT3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/URL1.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/URL2.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/URL3.gif== | Button image |
+	| ==pub/TWiki/TWikiDrawPlugin/applettest.html== | Test |
+	* Unzip ==TWikiDrawPlugin.zip== in your twiki installation directory.
+	* Add ==Plugins.TWikiDrawPlugin== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
 	* To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
 	%DRAWING{example}%
 
@@ -136,8 +136,8 @@ If you add a map to a drawing by setting a URL on any of the figures a map file 
 |  Other Dependencies: | Java 1.1 enabled browser |
 |  Perl Version: | 5.0 |
 |  Java Version: | 1.1 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDrawPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/TWikiDrawPluginDev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
