@@ -39,10 +39,10 @@ print `find cgi-bin/lib/ -print | xargs chmod go-w`;
 
 ################################################################################
 
-open( INDEX_PHP, ">htdocs/index.php" ) or die $!;
-print INDEX_PHP <<'EOF';
+open( INDEX_PHP, ">index.php" ) or die $!;
+print INDEX_PHP <<"EOF";
 <?php 
-Header( "Location: http://" . $_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view$opts->{scriptSuffix}/" );
+Header( "Location: http://" . \$_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view$opts->{scriptSuffix}/" );
 ?>
 EOF
 close( INDEX_PHP );
