@@ -1,4 +1,4 @@
-This Addon started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/CrawfordCurrie at Motorola. This version is a major rewrite from TWiki:Main/EricScouten.
+This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/CrawfordCurrie at Motorola. This version is a major rewrite from TWiki:Main/EricScouten.
 
 ---++ Usage
 
@@ -7,7 +7,7 @@ When TWiki generates a view, it does so dynamically i.e. there's a CGI script th
 	1 Published versions of TWiki pages must be read-only,
 	1 The TWiki server is inaccessible to the audience (e.g. on the other side of a corporate firewall).
 
-PublishAddon provides support for the generation of stand-alone HTML from a TWiki web. It will generate a directory containing rendered versions of a set of TWiki pages together with any attached files.
+PublishAddOn provides support for the generation of stand-alone HTML from a TWiki web. It will generate a directory containing rendered versions of a set of TWiki pages together with any attached files.
 
 *WARNING* This addon generates HTML output in the 'pub' directories of your twiki installation. For a large web, this can amount to a considerable amount of data!
 
@@ -39,8 +39,7 @@ The first thing you see is a web form that allows you to control the HTML genera
 The HTML is generated in a designated directory for the web; the progress messages printed during documentation generation indicate where the generated HTML has been written.
 
 ---++ Specialised templates
-
-Unlike the TWiki:Plugins/GenHTMLAddOn, this addon renders using existing skins. It will, by default, use the skin specified in WebPreferences for the published web. This can be overriden by adding the option *skin={skin name}* in the query string (same as the view script).
+This addon renders using existing skins. It will, by default, use the skin specified in WebPreferences for the published web. This can be overriden by adding the option *skin={skin name}* in the query string (same as the view script).
 
 ---+ Settings
    * Root directory for static-published HTML [scouten 12/08/02]
@@ -56,22 +55,22 @@ Unlike the TWiki:Plugins/GenHTMLAddOn, this addon renders using existing skins. 
 	* Plugin tags that create complex HTML (sug as TWikiDraw DRAWING tags) are not handled correctly.
 	* Links to excluded topics get generated as links
 
----+++ Addon Installation Instructions
+---+++ AddOn Installation Instructions
    * Download the ZIP file from the Plugin web (see below). Contents:
    | *File:* | *Description:* |
    %$MANIFEST%
    * Unzip ==%TOPIC%.zip== in your twiki installation directory.
    * Edit the 'Settings' above in your version of this topic to set the paths on your server.
 
----+++ Addon info
-|  Author: | Main.EricScouten |
-|  Dependencies: | %$DEPENDENCIES% |
-|  Version: | %$VERSION% |
-|  Change History: | |
+---+++ AddOn info
+| Author: | Main.EricScouten |
+| Dependencies: | %$DEPENDENCIES% |
+| Version: | %$VERSION% |
+| Change History: | |
 | 13 October 2004 | 1.200 Crawford Currie - Cairo compatible |
 | 7 Jan 2003 | 1.1 Initial version |
-|  Home: | TWiki:Plugins/%TOPIC% |
-|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+| Home: | TWiki:Plugins/%TOPIC% |
+| Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
