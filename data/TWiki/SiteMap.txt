@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="PeterThoeny" date="1018600320" format="1.0" version="1.1"}%
+---+ %WIKITOOLNAME% Site Map
+%STARTINCLUDE%
+<table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">
+  <tr bgcolor="#99CCCC">
+	 <th colspan="2">
+	  %WIKITOOLNAME% Site Map
+	 </th><th>
+		Use to...
+	 </th>
+  </tr>
+%SEARCH{ "\* Set SITEMAPLIST \= on" regex="on" web="all" nototal="on" nosearch="on" format=" <tr bgcolor=\"$pattern(.*?\* Set WEBBGCOLOR\s*=\s*([^\s]*).*)\">$n <td> <b>%WIKITOOLNAME%.[[$web.%HOMETOPIC%][$web]]</b></td>$n <td> $pattern(.*?\* Set SITEMAPWHAT\s*=([^\n\r]*).*)$n <font size=\"-2\"> &nbsp; &nbsp; <nobr> { [[$web.WebChanges][Changes]] | [[$web.WebSearch][Search]] | [[$web.WebPreferences][Prefs]] } </nobr></font> </td><td> $pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*) </td> </tr>" }%
+  <tr bgcolor="#ffffff">
+	 <td colspan="3"><font size="-1">You can use color coding by web for identification and reference. This table is updated automatically based on <nop>WebPreferences settings of the individual webs. Contact %WIKIWEBMASTER% if you need a separate collaboration web for your team. </font></td>
+  </tr>
+</table>
