@@ -610,6 +610,23 @@ if( ! ( -e "$dataDir" ) ) {
     print "</td></tr>\n";
 }
 
+
+print "<tr><th align=\"right\">\$logDir:</th><td>$logDir</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the log directory where TWiki stores records of access, errors and warnings.";
+print "</td></tr>\n";
+if( ! ( -e "$logDir" ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
+    print "Directory does not exist.";
+    print "</td></tr>\n";
+} elsif( ! testFileIsWritable( "$logDir/testenv.test" ) ) {
+    # directory is not writable
+    print "<tr><th></th><td><b><font color=\"red\">Error:</font></b> ";
+    print "This directory must be writable by the <b>$usr</b> user.";
+    print "</td></tr>\n";
+}
+
+
 # Check 'sendmail'
 $val = $mailProgram;
 $val =~ s/([^\s]*).*/$1/g;
