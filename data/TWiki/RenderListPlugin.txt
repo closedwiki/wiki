@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1070519880" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1070659140" format="1.0" version="1.2"}%
 ---+ Render List Plugin 
 
 Render bullet lists in a variety of formats
@@ -173,6 +173,7 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 		* Set HOME_THEME = icon, 1, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/home.gif
 		* Set ORG_THEME = icon, 0, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/home.gif
 		* Set GROUP_THEME = icon, 0, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/group.gif
+		* Set EMAIL_THEME = icon, 0, 16, 16, %ATTACHURL%/empty.gif, %ATTACHURL%/dot_udr.gif, %ATTACHURL%/dot_ud.gif, %ATTACHURL%/dot_ur.gif, %ATTACHURL%/email.gif
 
 ---++ Plugin Installation Instructions
 
@@ -191,9 +192,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 02 Dec 2003 (V1.000) |
+|  Plugin Version: | 05 Dec 2003 (V1.010) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  02 Nov 2003: | Initial version |
+|  05 Dec 2003: | Fixed rendering issue with IE, added EMAIL_THEME |
+|  02 Dec 2003: | Initial version |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
@@ -202,10 +204,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins/TreePlugin
 
--- TWiki:Main/PeterThoeny - 02 Dec 2003
+-- TWiki:Main/PeterThoeny - 05 Dec 2003
 %META:FILEATTACHMENT{name="empty.gif" attr="h" comment="Empty 16x16 spacer" date="1070519327" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\empty.gif" size="100" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_udr.gif" attr="h" comment="Dot T-graph 16x16" date="1070519374" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_udr.gif" size="109" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_ud.gif" attr="h" comment="Dot I-graph 16x16" date="1070519385" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_ud.gif" size="108" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_ur.gif" attr="h" comment="Dot L-graph 16x16" date="1070519398" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_ur.gif" size="106" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="home.gif" attr="h" comment="Home icon 16x16" date="1070519417" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\home.gif" size="172" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="group.gif" attr="h" comment="Group icon 16x16" date="1070519432" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\group.gif" size="160" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="email.gif" attr="h" comment="E-mail icon 16x16" date="1070659089" path="email.gif" size="183" user="PeterThoeny" version="1.1"}%
