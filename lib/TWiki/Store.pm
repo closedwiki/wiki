@@ -47,8 +47,7 @@ sub initialize
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
 sub _traceExec
 {
-   my( $cmd, $result ) = @_;
-   
+   #my( $cmd, $result ) = @_;
    #TWiki::writeDebug( "Store exec: $cmd -> $result" );
 }
 
@@ -239,14 +238,14 @@ sub moveAttachment
     my $newPubDir = getPubWebDir( $newWeb );
     if ( ! -e $newPubDir ) {
         umask( 0 );
-        mkdir( $newPubDir, 0777 );        
+        mkdir( $newPubDir, 0775 );        
     }
     
     # Make sure directory exists to move to - FIMXE might want to delete old one if empty?
     $newPubDir = getFileDir( $newWeb, $newTopic, $theAttachment, "" );
     if ( ! -e $newPubDir ) {
         umask( 0 );
-        mkdir( $newPubDir, 0777 );        
+        mkdir( $newPubDir, 0775 );        
     }
     
     # Move attachment
@@ -261,7 +260,7 @@ sub moveAttachment
     my $newRcsDir = getFileDir( $newWeb, $newTopic, $theAttachment, ",v" );
     if ( ! -e $newRcsDir ) {
         umask( 0 );
-        mkdir( $newRcsDir, 0777 );
+        mkdir( $newRcsDir, 0775 );
     }
     
     # Move attachment history
@@ -407,7 +406,7 @@ sub renameTopic
    my $newPubWebDir = getPubWebDir( $newWeb );
    if ( ! -e $newPubWebDir ) {
        umask( 0 );
-       mkdir( $newPubWebDir, 0777 );        
+       mkdir( $newPubWebDir, 0775 );
    }
     
    # Rename the attachment directory if there is one
@@ -598,7 +597,7 @@ sub getRevisionInfo
     $tmp =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
     my $date = $1;
     my $user = $2;
-    my $comment = $3;
+    my $comment = $3 || "";
     $tmp =~ /revision 1.([0-9]*)/;
     my $rev = $1 || ""; #AS 25-5-01 added default value
     writeDebug( "rev = $rev" );
@@ -752,18 +751,18 @@ sub saveAttachment
     my $tempPath = getFileDir( $web, "", $attachment );
     if( ! -e "$tempPath" ) {
         umask( 0 );
-        mkdir( $tempPath, 0777 );
+        mkdir( $tempPath, 0775 );
     }
     $tempPath = getFileDir( $web, $topic, $attachment );
     if( ! -e "$tempPath" ) {
         umask( 0 );
-        mkdir( $tempPath, 0777 );
+        mkdir( $tempPath, 0775 );
     }
 
     # save uploaded file
     my $newFile = "$tempPath/$attachment";
     copy($theTmpFilename, $newFile) or warn "copy($theTmpFilename, $newFile) failed: $!";
-    umask( 0027 );
+    umask( 002 );
     chmod( 0644, $newFile );
     
     # Update RCS
@@ -906,12 +905,12 @@ sub saveNew
                my $tempPath = "&TWiki::dataDir/$web";
                if( ! -e "$tempPath" ) {
                   umask( 0 );
-                  mkdir( $tempPath, 0777 );
+                  mkdir( $tempPath, 0775 );
                }
                $tempPath = $rcsDir;
                if( ! -e "$tempPath" ) {
                   umask( 0 );
-                  mkdir( $tempPath, 0777 );
+                  mkdir( $tempPath, 0775 );
                }
  
                if( ! -e $rcsFile && $TWiki::revInitBinaryCmd && isBinary( $attachment, $web ) ) {
@@ -1159,6 +1158,7 @@ sub saveFile
 {
     my( $name, $text ) = @_;
     
+    umask( 002 );
     open( FILE, ">$name" ) or warn "Can't create file $name\n";
     print FILE $text;
     close( FILE);
