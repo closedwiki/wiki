@@ -51,6 +51,15 @@ sub TESTwriteTopic {
   `ci -q -l -mnone -t-none $file`;
 }
 
+sub TESTdeleteTopic {
+  my ($web, $topic) = @_;
+  my $file = getDataDir()."/$web/$topic.txt";
+  unlink($file);
+  if ( -e "$file,v" ) {
+    unlink("$file,v");
+  }
+}
+
 # Write the RCS form of a topic. This is required for when we want
 # to fake a history.
 sub TESTwriteRcsTopic {

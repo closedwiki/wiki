@@ -171,6 +171,7 @@ use Time::ParseDate;
   }
 
   # PUBLIC STATIC calculate working days between two times
+  # Published because it's useful elsewhere
   sub workingDays {
     my ( $start, $end ) = @_;
 

@@ -1,10 +1,10 @@
 #
 # Copyright (C) Motorola 2003 - All rights reserved
 #
-#use strict;
+use strict;
 
 use Time::ParseDate;
-use Carp;
+use Benchmark;
 
 use TWiki::Plugins::FormQueryPlugin::Archive;
 use TWiki::Plugins::FormQueryPlugin::Array;
@@ -24,11 +24,17 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
   @FormQueryPlugin::WebDB::ISA = ("FormQueryPlugin::Map");
 
   BEGIN {
-    use vars qw( $storable );
+    use vars qw( $storable $cacheMonitor );
     $storable = eval { require Storable; };
+    $cacheMonitor = 0; # set 1 to get cache handling stats printed to stderr
   }
 
   my %prefs;
+  my @relations;
+  my %tables;
+  my $tablenames;
+  my $colourmap;
+  my $tableRE;
 
   # PUBLIC
   sub new {
@@ -54,206 +60,267 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     $this->{web} = $web;
 
-    my $relations = TWiki::Func::getPreferencesValue( "FQRELATIONS" ) ||
+    my $rtext = TWiki::Func::getPreferencesValue( "FQRELATIONS" ) ||
       "ReQ%Ax%B SubReq ReQ%A; TiT%An%B TestItem ReQ%A";
-    my $tables = TWiki::Func::getPreferencesValue( "FQTABLES" ) ||
+    $tablenames = TWiki::Func::getPreferencesValue( "FQTABLES" ) ||
       "TaskTable";
     my $hmap = TWiki::Func::getPreferencesValue( "FQHIGHLIGHTMAP" ) ||
 						 "HighlightMap";
-
-    foreach my $relation ( split( /;/, $relations )) {
-      push( @{$this->{relations}}, new FormQueryPlugin::Relation( $relation ));
+    foreach my $relation ( split( /;/, $rtext )) {
+      push( @relations, new FormQueryPlugin::Relation( $relation ));
     }
  
-    $this->{tablenames} = $tables;
-    foreach my $table ( split( /\s*,\s*/, $tables )) {
+    foreach my $table ( split( /\s*,\s*/, $tablenames )) {
       if ( !(TWiki::Func::topicExists( $web, $table ))) {
 	TWiki::Func::writeWarning( "No such table template topic '$table'" );
       } else {
 	my $text = TWiki::Func::readTopicText( $web, $table );
 	my $ttype = new FormQueryPlugin::TableDef( $text );
 	if ( defined( $ttype )) {
-	  $this->{tables}{$table} = $ttype;
+	  $tables{$table} = $ttype;
 	} else {
 	  TWiki::Func::writeWarning( "Error in table template topic '$table'" );
 	}
       }
     }
+    $tableRE = $tablenames;
+    $tableRE =~ s/\s*,\s*/\|/go;
 
     if ( defined( $hmap )) {
       if ( !(TWiki::Func::topicExists( $web, $hmap ))) {
 	TWiki::Func::writeWarning( "No such highlight map topic '$hmap'" );
       } else {
 	my $text = TWiki::Func::readTopicText( $web, $hmap );
-	$this->{colourmap} = new FormQueryPlugin::ColourMap( $text );
+	$colourmap = new FormQueryPlugin::ColourMap( $text );
       }
     }
   }
 
   # PRIVATE write a new cache of the listed files.
   sub _writeCache {
-    my ( $this, $dir, $files, $cache ) = @_;
-    #print STDERR "Writing cache $cache\n";
-    FormQueryPlugin::FileTime::setRoot( $dir );
-    my $scan = new FormQueryPlugin::Array();
-    foreach my $file ( @$files ) {
-      $scan->add( new FormQueryPlugin::FileTime( $file ));
-    }
-    # store the contents, not the WebDB itself
-    #print STDERR "Contents at ",$scan->size(),"\n";
-    $scan->add( $this );
+    my ( $this, $cache ) = @_;
+
     if ( $storable ) {
-      Storable::lock_store( $scan, $cache );
+      Storable::lock_store( $this, $cache );
     } else {
       my $archive = new FormQueryPlugin::Archive( $cache, "w" );
-      $archive->writeObject( $scan );
+      $archive->writeObject( $this );
       $archive->close();
     }
-    #print STDERR "Wrote ",$storable?"Storable":"Archive"," cache\n";
   }
 
   # PRIVATE compare the file times in the files list (files
-  # in $dir) to the cache. Return 0 if any files have been
-  # modified since the cache was written.
+  # in $dir) to the cache.
+  #
   sub _readCache {
-    my ( $this, $dir, $files, $cache ) = @_;
+    my ( $this, $cache ) = @_;
 
-    return 0 unless ( -r $cache );
+    return undef unless ( -r $cache );
 
-    #print STDERR "Reading cache $cache\n";
     # read the cache, aborting with an exception on error
     my $cached;
-    FormQueryPlugin::FileTime::setRoot( $dir );
+    my $archive;
     if ( $storable ) {
       eval { $cached = Storable::lock_retrieve( $cache ) };
-      # trap a die
-      if ( $@ ) {
-	return 0;
-      }
     } else {
-      my $archive = new FormQueryPlugin::Archive( $cache, "r" );
+      $archive = new FormQueryPlugin::Archive( $cache, "r" );
       eval { $cached = $archive->readObject(); };
-      # trap a die
-      if ( $@ ) {
-	return 0;
+    }
+
+    # trap a die
+    if ( $@ ) {
+      # trap; all files inconsistent, nothing loaded
+      $archive->close() unless ( $storable );
+      return undef;
+    }
+
+    $archive->close() unless ( $storable );
+
+    if ( ref( $cached ) ne "FormQueryPlugin::WebDB" ) {
+      return undef;
+    }
+
+    return $cached;
+  }
+
+  sub _loadTopic {
+    my ( $this, $dataDir, $topic ) = @_;
+    my $filename = "$dataDir/$topic.txt";
+    open( FH, "<$filename" )
+      or die "Failed to open $dataDir/$topic.txt";
+    my $meta = new FormQueryPlugin::Map();
+    $meta->set( "topic", $topic );
+    $meta->set( ".cache_time", new FormQueryPlugin::FileTime( $filename ));
+
+    my $line;
+    while ( $line = <FH> ) {
+      while ( $line =~ s/%EDITTABLE{\s*include=\"($tableRE)\"\s*}%//o ) {
+	my $tablename = $1;
+	my $ttype = $tables{$tablename};
+	if ( defined( $ttype )) {
+	  my $table = new FormQueryPlugin::Array();
+	  my $lc = 0;
+	  my $row = "";
+	  while ( $line = <FH> ) {
+	    if ( $line =~ s/\\\s*$//o ) {
+	      # This row is continued on the next line
+	      $row .= $line;
+	    } elsif ( $line =~ m/\|\s*$/o ) {
+	      # This line terminates a row
+	      $row .= $line;
+	      if ( $lc == 0 ) {
+		# It's the header, ignore it
+	      } else {
+		# Load the row
+		my $rowmeta =
+		  $ttype->loadRow( $row, "FormQueryPlugin::Map" );
+		$rowmeta->set( "topic", $topic );
+		$rowmeta->set( "${tablename}_of", $meta ); 
+		$table->add( $rowmeta );
+	      }
+	      $row = "";
+	      $lc++;
+	    } elsif ( $line !~ m/^\s*\|/o ) {
+	      # This is not a valid row start, so must be the
+	      # end of the table
+	      last;
+	    }
+	  }
+	  $meta->set( $tablename, $table );
+	}
+	# Fall through to allow further processing on $line
       }
-      $archive->close();
+      if ( $line =~ m/%META:/o ) {
+	if ( $line =~ m/%META:FORM{name=\"([^\"]*)\"}%/o ) {
+	  $meta->set( "form", $1 );
+	} elsif ( $line =~ m/%META:FIELD{(.*)}%/o ) {
+	  $line =~ m/name=\"(.*?)\"/o;
+	  my $name = $1;
+	  $line =~ m/value=\"(.*?)\"/o;
+	  my $value = $1;
+	  $meta->set( $name, $value );
+	}
+      }
     }
-    if ( ref( $cached ) ne "FormQueryPlugin::Array" ) {
-      # bad cache
-      return 0;
-    }
+    close( FH );
+    $this->set( $topic, $meta );
+  }
 
-    # Check all the cached files were there.
-    # This is fatal because relations to the lost files may
-    # be in the DB.
-    if ( $cached->size() != scalar( @$files ) + 1 ) {
-      return 0;
-    }
-
-    #print STDERR "Contents at ",$cached->size()-1,"\n";
-    my $readWeb = $cached->get( $cached->size() - 1 );
-    $this->{keys} = $readWeb->{keys};
-
-    #print STDERR "Read ",$storable?"Storable":"Archive"," cache\n";
-
-    return 1;
+  sub _tick {
+    my ( $time, $message ) = @_;
+    my $timenow = new Benchmark;
+    my $diff = Benchmark::timediff( $timenow, $time );
+    print STDERR "$message ", Benchmark::timestr( $diff ), "\n";
+    return $timenow;
   }
 
   # PUBLIC load the web into the database on demand
-  # Return 0 if loaded from file
-  # Return 1 if loaded from cache
-  # Return 2 if already loaded
+  # Return pair representing number of topics loaded from file
+  # and number of topics loaded from cache
+  # Return value is used in testing.
   sub _load {
-    my ( $this, $cache ) = @_;
-    my $source = 2;
+    my $this = shift;
 
-    return $source if ( $this->{loaded} );
+    return "0 0 0" if ( $this->{loaded} );
+
+    my $readFromCache = 0;
+    my $readFromFile = 0;
+    my $removed = 0;
 
     my $web = $this->{web};
     my @topics = TWiki::Func::getTopicList( $web );
     my $dataDir = TWiki::Func::getDataDir() . "/$web";
-    $cache = "$dataDir/_FormQueryCache";
-    my $tableRE = $this->{tablenames};
-    $tableRE =~ s/\s*,\s*/\|/go;
+    my $cacheFile = "$dataDir/_FormQueryCache";
 
-    # If the list matches what's in the cache, then load from
-    # the cache. Otherwise, refresh the cache.
-    if ( $this->_readCache( $dataDir, \@topics, $cache )) {
-      $source = 1;
-    } else {
-      $source = 0;
-      # Topics are opened directly because this is much
-      # faster than using the TWiki method
-      foreach my $topic ( @topics ) {
-	open( FH, "<$dataDir/$topic.txt" )
-	  or die "Failed to open $dataDir/$topic.txt";
-	my $meta = undef;
-	my $line;
-	while ( $line = <FH> ) {
-	  while ( $line =~ s/%EDITTABLE{\s*include=\"($tableRE)\"\s*}%//o ) {
-	    my $tablename = $1;
-	    my $ttype = $this->{tables}{$tablename};
-	    if ( defined( $ttype )) {
-	      $meta = new FormQueryPlugin::Map( ) unless ( $meta );
-	      my $table = new FormQueryPlugin::Array();
-	      my $lc = 0;
-	      my $row = "";
-	      while ( $line = <FH> ) {
-		if ( $line =~ s/\\\s*$//o ) {
-		  # This row is continued on the next line
-		  $row .= $line;
-		} elsif ( $line =~ m/\|\s*$/o ) {
-		  # This line terminates a row
-		  $row .= $line;
-		  if ( $lc == 0 ) {
-		    # It's the header, ignore it
-		  } else {
-		    # Load the row
-		    my $rowmeta =
-		      $ttype->loadRow( $row, "FormQueryPlugin::Map" );
-		    $rowmeta->set( "topic", $topic );
-		    $rowmeta->set( "${tablename}_of", $meta ); 
-		    $table->add( $rowmeta );
-		  }
-		  $row = "";
-		  $lc++;
-		} elsif ( $line !~ m/^\s*\|/o ) {
-		  # This is not a valid row start, so must be the
-		  # end of the table
-		  last;
-		}
-	      }
-	      $meta->set( $tablename, $table );
-	      $meta->set( "topic", $topic );
-	    }
-	    # Fall through to allow further processing on $line
-	  }
-	  if ( $line =~ m/%META:/o ) {
-	    if ( $line =~ m/%META:FORM{name=\"([^\"]*)\"}%/o ) {
-	      $meta = new FormQueryPlugin::Map() unless ( defined( $meta ));
-	      $meta->set( "form", $1 );
-	      $meta->set( "topic", $topic );
-	    } elsif ( $line =~ m/%META:FIELD{(.*)}%/o ) {
-	      $line =~ m/name=\"(.*?)\"/o;
-	      my $name = $1;
-	      $line =~ m/value=\"(.*?)\"/o;
-	      my $value = $1;
-	      $meta = new FormQueryPlugin::Map() unless ( defined( $meta ));
-	      $meta->set( $name, $value );
-	    }
-	  }
-	}
-	if ( defined( $meta )) {
-	  $this->set( $topic, $meta );
-	}
-	close( FH );
+    my $time;
+    $time = new Benchmark if ( $cacheMonitor );
+
+    my $writeCache = 0;
+    my $cache = $this->_readCache( $cacheFile );
+
+    $time = _tick($time, "Cache load") if ( $cacheMonitor );
+
+    if ( $cache ) {
+      # Managed to load a cache.
+      my $topic;
+      my %tophash;
+      foreach $topic ( @topics ) {
+	$tophash{$topic} = 1;
       }
+      my @remove;
+      $readFromCache = $cache->size();
+      foreach my $cached ( $cache->getValues()) {
+	$topic = $cached->fastget( "topic" );
+	if ( !$tophash{$topic} ) {
+	  # in the cache but are missing from @topics
+	  push( @remove, $topic );
+	  $writeCache = 1;
+	  $removed++;
+	} elsif ( !$cached->fastget( ".cache_time" )->uptodate() ) {
+	  push( @remove, $topic );
+	  $writeCache = 1;
+	}
+      }
+
+      # remove bad topics
+      foreach $topic ( @remove ) {
+	$cache->_removeTopic( $topic );
+	$writeCache = 1;
+	$readFromCache--;
+      }
+
+      $time = _tick($time, "Adjustment") if ( $cacheMonitor );
+
+      # load topics that are missing from the cache
+      foreach $topic ( @topics ) {
+	if ( !defined( $cache->fastget( $topic ))) {
+	  $cache->_loadTopic( $dataDir, $topic );
+	  $writeCache = 1;
+	  $readFromFile++;
+	}
+      }
+      $this->{keys} = $cache->{keys};
+    } else {
+      foreach my $topic ( @topics ) {
+	$this->_loadTopic( $dataDir, $topic );
+	$readFromFile++;
+      }
+      $writeCache = 1;
+    }
+    $time = _tick($time, "Topic read") if ( $cacheMonitor );
+    if ( $writeCache ) {
+      # refresh relations
       $this->_extractRelations();
-      $this->_writeCache( $dataDir, \@topics, $cache );
+      $this->_writeCache( $cacheFile );
     }
     $this->{loaded} = 1;
-    return $source;
+    if ( $cacheMonitor ) {
+      $time = _tick($time,
+         "Cache $readFromCache File $readFromFile Remove $removed\n");
+    }
+    return "$readFromCache $readFromFile $removed";
+  }
+
+  # Remove a topic from the db, unlinking all the relations
+  sub _removeTopic {
+    my ( $this, $topic ) = @_;
+    my $meta = $this->remove( $topic );
+    foreach my $relation ( @relations ) {
+      my $rname = $relation->{relation};
+      my $f = $meta->fastget( $relation->childToParent() );
+      if ( defined( $f )) {
+	# remove back-pointers to this from parent
+	my $bp = $f->fastget( $relation->parentToChild() );
+	my $i = $bp->find( $meta );
+	$bp->remove( $i ) if ( $i >= 0 );
+      }
+      my $rlist = $meta->fastget( $relation->parentToChild() );
+      if ( defined( $rlist )) {
+	foreach my $child ( $rlist->getValues() ) {
+	  $child->set( $relation->childToParent(), undef );
+	}
+      }
+    }
   }
 
   # PRIVATE extract childof relationships. This is done by applying
@@ -262,21 +329,22 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
   sub _extractRelations {
     my $this = shift;
 
-    return unless defined( $this->{relations} );
-    foreach my $relation ( @{$this->{relations}} ) {
+    foreach my $relation ( @relations ) {
       foreach my $topic ( $this->getKeys() ) {
 	my $parent = $relation->apply( $topic );
 	if ( defined( $parent ) ) {
-	  my $parentMeta = $this->get( $parent );
+	  my $parentMeta = $this->fastget( $parent );
 	  if ( defined( $parentMeta )) {
-	    my $childMeta = $this->get( $topic );
+	    my $childMeta = $this->fastget( $topic );
 	    $childMeta->set( $relation->childToParent(), $parentMeta );
-	    my $known = $parentMeta->get( $relation->parentToChild() );
+	    my $known = $parentMeta->fastget( $relation->parentToChild() );
 	    if ( !defined( $known )) {
 	      $known = new FormQueryPlugin::Array();
 	      $parentMeta->set( $relation->parentToChild(), $known );
 	    }
-	    $known->add( $childMeta );
+	    if ( !$known->contains( $childMeta )) {
+	      $known->add( $childMeta );
+	    }
 	  }
 	}
       }
@@ -313,14 +381,14 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $name = $attrs->remove( "name" );
+    my $name = $attrs->fastget( "name" );
     if ( !defined( $name )) {
       return moan( $macro, $params, "'name' not defined", "" );
     }
 
     my $search;
     eval {
-      $search = new FormQueryPlugin::Search( $attrs->remove( "search" ));
+      $search = new FormQueryPlugin::Search( $attrs->fastget( "search" ));
     };
     if ( !defined( $search )) {
       return moan( $macro, $params,
@@ -328,10 +396,9 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
     }
 
     # Make sure the DB is loaded
-
     $this->_load();
 
-    my $queryname = $attrs->remove( "query" );
+    my $queryname = $attrs->fastget( "query" );
     my $query;
     if ( defined( $queryname )) {
       $query = $this->{queries}{$queryname};
@@ -352,7 +419,7 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     my $matches = $query->search( $search );
 
-    my $extract = $attrs->remove( "extract" );
+    my $extract = $attrs->fastget( "extract" );
     if ( defined( $extract ) && $matches->size() > 0) {
       # Extract a defined subfield and make the query result an
       # array of the subfield. If the subfield is an array, flatten out
@@ -387,17 +454,17 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $name = $attrs->remove( "name" );
+    my $name = $attrs->fastget( "name" );
     if ( !defined( $name )) {
       return moan( $macro, $params, "'name' not defined", "" );
     }
 
-    my $format = $attrs->get( "format" );
+    my $format = $attrs->fastget( "format" );
     if ( !defined( $format )) {
       return moan( $macro, $params, "'format' not defined", "" );
     }
 
-    my $fmt = new FormQueryPlugin::TableFormat( $attrs, $this->{colourmap} );
+    my $fmt = new FormQueryPlugin::TableFormat( $attrs, $colourmap );
 
     $fmt->addToCache( $name );
 
@@ -417,16 +484,16 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $name = $attrs->remove( "query" );
+    my $name = $attrs->fastget( "query" );
     if ( !defined( $name )) {
       return moan( $macro, $params, "'query' not defined", "" );
     }
 
-    my $format = $attrs->get( "format" );
+    my $format = $attrs->fastget( "format" );
     if ( !defined( $format )) {
       return moan( $macro, $params, "'format' not defined", "" );
     }
-    $format = new FormQueryPlugin::TableFormat( $attrs, $this->{colourmap} );
+    $format = new FormQueryPlugin::TableFormat( $attrs, $colourmap );
 
     if ( !defined( $format )) {
       return moan( $macro, $params, "Table format not defined", "" );
@@ -437,7 +504,7 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
       return moan( $macro, $params, "Query '$name' returned no values", "" );
     }
 
-    return $format->formatTable( $matches, $this->{colourmap} );
+    return $format->formatTable( $matches, $colourmap );
   }
 
   # PUBLIC return the sum of all occurrences of a numeric
@@ -446,12 +513,12 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
     my ( $this, $macro, $params ) = @_;
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $name = $attrs->get( "query" );
+    my $name = $attrs->fastget( "query" );
     if ( !defined( $name )) {
       return moan( $macro, $params, "'query' not defined", 0 );
     }
 
-    my $field = $attrs->get( "field" );
+    my $field = $attrs->fastget( "field" );
     if ( !defined( $field )) {
       return moan( $macro, $params, "'field' not defined", 0 );
     }
@@ -471,20 +538,20 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
 
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $relation = $attrs->get( "relation" );
+    my $relation = $attrs->fastget( "relation" );
     if ( !defined( $relation )) {
       return moan( $macro, $params, "'relation' not defined", "" );
     }
 
-    my $base = $attrs->get( "base" );
+    my $base = $attrs->fastget( "base" );
     $base = $topic unless ( defined( $base ));
 
     # Optional
-    my $text = $attrs->get( "text" ) || "";
+    my $text = $attrs->fastget( "text" ) || "";
     # Optional
-    my $formtype = $attrs->get( "form" );
+    my $formtype = $attrs->fastget( "form" );
     # Optional
-    my $template = $attrs->get( "template" );
+    my $template = $attrs->fastget( "template" );
 
     my $tc = $this->{topiccreator}++;
     my $child;
@@ -517,7 +584,7 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
       $child =~ s/([^\d])(\d+)([^\d]*)$/$1\n$3/o;
     } else {
       # Find and apply the relation
-      foreach my $r ( @{$this->{relations}} ) {
+      foreach my $r ( @relations ) {
 	if ( $r->{relation} eq $relation ) {
 	  $child = $r->nextChild( $topic, $this );
 	  last;

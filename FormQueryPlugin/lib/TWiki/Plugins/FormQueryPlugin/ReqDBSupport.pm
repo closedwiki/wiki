@@ -24,11 +24,11 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     my ( $macro, $params, $web, $topic ) = @_;
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $mtop = $attrs->get( "topic" );
+    my $mtop = $attrs->fastget( "topic" );
 
     if ( !defined( $macros{$mtop} )) {
       if ( !TWiki::Func::topicExists( $web, $mtop )) {
-	return FormQueryPlugin::WebDB::moan( $macro, $params, "No such macro '$mtop'", "" );
+	return FormQueryPlugin::WebDB::moan( $macro, $params, "No such macro $mtop ", "" );
       }
       my $text = TWiki::Func::readTopicText( $web, $mtop );
       $text =~ s/%META:\w+{.*?}%//go;
@@ -38,11 +38,11 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     my $m = $macros{$mtop};
 
     foreach my $vbl ( $attrs->getKeys() ) {
-      my $val = $attrs->get( $vbl );
+      my $val = $attrs->fastget( $vbl );
       $m =~ s/%$vbl%/$val/g;
     }
 
-    $m = TWiki::Func::expandCommonVariables( $m, $topic, $web );
+    #$m = TWiki::Func::expandCommonVariables( $m, $topic, $web );
 
     if ( $m =~ s/%STRIP%//go ) {
       $m =~ s/[\r\n]+//go;
@@ -54,17 +54,16 @@ use TWiki::Plugins::FormQueryPlugin::Map;
   # Calculate number of working days between two dates.
   sub workingDays {
     my ( $macro, $params, $web, $topic ) = @_;
-    $params = TWiki::Func::expandCommonVariables( $params, "NoTopic", $web );
 
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $start = $attrs->get( "start" );
+    my $start = $attrs->fastget( "start" );
     $start = Time::ParseDate::parsedate( $start );
     if ( !defined( $start )) {
       return FormQueryPlugin::WebDB::moan( $macro, $params, "'start' not defined, or bad date format", 0 );
     }
 
-    my $end = $attrs->get( "end" );
+    my $end = $attrs->fastget( "end" );
     $end = Time::ParseDate::parsedate( $end );
     if ( !defined( $end )) {
       return FormQueryPlugin::WebDB::moan( $macro, $params, "'end' not defined, or bad date format", 0 );
@@ -85,13 +84,13 @@ use TWiki::Plugins::FormQueryPlugin::Map;
 
     my $attrs = new FormQueryPlugin::Map( $params );
 
-    my $total = $attrs->get( "total" );
+    my $total = $attrs->fastget( "total" );
     if ( !defined( $total ) || $total <= 0 ) {
       return FormQueryPlugin::WebDB::moan( $macro, $params, "'total' not defined, or is <= zero", 0 );
     }
 
-    my $target = $attrs->get( "target" );
-    my $actual = $attrs->get( "actual" );
+    my $target = $attrs->fastget( "target" );
+    my $actual = $attrs->fastget( "actual" );
     if ( !defined( $target ) && !defined( $actual )) {
       return moan( $macro, $params, "At least one of 'target' or 'actual must be defined", 0 );
     }

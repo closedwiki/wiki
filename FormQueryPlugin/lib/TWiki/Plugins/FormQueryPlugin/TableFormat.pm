@@ -17,10 +17,10 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     my ( $class, $attrs ) = @_;
     my $this = {};
 
-    my $header = $attrs->get( "header" );
-    my $footer = $attrs->get( "footer" );
-    my $sort = $attrs->get( "sort" );
-    my $format = $attrs->get( "format" );
+    my $header = $attrs->fastget( "header" );
+    my $footer = $attrs->fastget( "footer" );
+    my $sort = $attrs->fastget( "sort" );
+    my $format = $attrs->fastget( "format" );
 
     if ( defined( $header ) && $header =~ m/^\|.*\|$/o ) {
       # expand twiki-format table header. We have to format here rather

@@ -52,14 +52,21 @@ use TWiki::Plugins::FormQueryPlugin::Array;
     # should be enough; nothing else should be pointing to the keys
   }
 
+  # PUBLIC Get an attr value, but without any special interpretation
+  # such as field expansion
+  sub fastget {
+    my ( $this, $attr ) = @_;
+    return $this->{keys}{$attr};
+  }
+
   # PUBLIC Get an attr value; return undef if not set.
   # Supports subfields.
   sub get {
     my ( $this, $attr ) = @_;
-    if ( index( $attr, "." ) > 0 && $attr =~ m/^(\w+)\.(.*)$/o ) {
+    if ( index( $attr, "." ) > 0 && $attr =~ m/^(\w+)\.(\w+.*)$/o ) {
       my $field = $2;
       $attr = $this->{keys}{$1};
-      if ( defined( $attr )) {
+      if ( defined( $attr ) && ref( $attr )) {
 	return $attr->get( $field );
       } else {
 	return undef;
@@ -127,8 +134,7 @@ use TWiki::Plugins::FormQueryPlugin::Array;
     my ( $this, $search ) = @_;
     my $result = new FormQueryPlugin::Array();
 
-    foreach my $topic ( $this->getKeys() ) {
-      my $meta = $this->get( $topic );
+    foreach my $meta ( values( %{$this->{keys}} )) {
       if ( $search->matches( $meta )) {
 	$result->add( $meta );
       }

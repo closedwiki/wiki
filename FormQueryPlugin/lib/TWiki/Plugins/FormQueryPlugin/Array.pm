@@ -2,7 +2,6 @@
 # Copyright (C) Motorola 2003 - All rights reserved
 #
 use strict;
-use Carp;
 
 # Generic array object
 { package FormQueryPlugin::Array;
@@ -30,6 +29,24 @@ use Carp;
   sub add {
     my $this = shift;
     return push( @{$this->{values}}, shift );
+  }
+
+  # PUBLIC find the given element in the array and
+  # return it's index
+  sub find {
+    my ( $this, $obj ) = @_;
+    my $i = 0;
+    foreach my $meta ( @{$this->{values}} ) {
+      return $i if ( $meta == $obj );
+      $i++;
+    }
+    return -1;
+  }
+
+  # PUBLIC remove an entry at an index from the array.
+  sub remove {
+    my ( $this, $i ) = @_;
+    splice( @{$this->{values}}, $i, 1 );
   }
 
   # PUBLIC get the element at an index or, if the parameter is a string,
@@ -82,6 +99,11 @@ use Carp;
     return $sum;
   }
 
+  sub contains {
+    my ( $this, $tv ) = @_;
+    return ( $this->find( $tv ) >= 0 );
+  }
+
   # PRIVATE search the array for matches with the given field
   # values. Return a list of matched topics..
   sub search {
@@ -99,10 +121,15 @@ use Carp;
     return $result;
   }
 
+  # For some reason when an empty array is restored from Storable,
+  # getValues gives us a one-element array. Archive doesn't,
+  # it gives us a nice empty array. With storable, the one
+  # entry is undef.
   sub getValues {
     my $this = shift;
 
-    return undef unless (defined( $this->{values} ));
+    return undef unless ( defined( @{$this->{values}} ));
+    # does this return the array by reference? probably not...
     return @{$this->{values}};
   }
 
