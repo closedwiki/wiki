@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000447821" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="PeterThoeny" date="1006241455" format="1.0" version="1.20"}%
 *%WIKITOOLNAME% Site-Level Preferences*
 
 The following settings are __site-level preferences__ , e.g. affecting all users in all %WIKITOOLNAME% webs. These preferences can be overwritten by __web preferences__ (topic %WEBPREFSTOPIC% in each %WIKITOOLNAME% web) and __user preferences__ (your personal topic, i.e. Main.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -13,7 +13,7 @@ __Preferences:__
 		* Set WEBTOPICLIST = [[%HOMETOPIC%][Home]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
 	* Copyright notice:
-		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 2000 by the contributing authors. \nAll material on this collaboration tool is the property of the contributing authors. <br> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback">Send</a> feedback. </font>
+		* Set WEBCOPYRIGHT = <font size="-2">Copyright &copy; 2001 by the contributing authors. \nAll material on this collaboration tool is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback">Send</a> feedback. </font>
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
 		* Set NOSEARCHALL =
