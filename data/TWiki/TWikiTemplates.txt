@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000456909" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="MikeMannix" date="1000534076" format="1.0" version="1.6"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -36,7 +36,82 @@ The main difference is that templates are now defined using variables to include
 	* Templates and TWikiSkins work transparently and interchangeably. For example, you can create a skin that overloads just the =twiki.tmpl=, like =twiki.print.tmpl=, that redefines the header and footer.
 	* __Note:__ The template directives work only for templates, they do not get processed in topic text.
 
----++ New Template System by Example
+---++ TWiki Master Template
+
+All common parts are defined in a master template, ==twiki.tmpl==, that all other templates use.
+<blockquote>
+| *Template variable:* | *Defines:* |
+| %<nop>TMPL:DEF{"sep"}% | "&#124;" separator |
+| %<nop>TMPL:DEF{"htmldoctype"}% | Start of all HTML pages |
+| %<nop>TMPL:DEF{"standardheader"}% | Standard header (ex: view, index, seach)  |
+| %<nop>TMPL:DEF{"simpleheader"}% | Simple header with reduced links (ex: edit, attach, oops) |
+| %<nop>TMPL:DEF{"standardfooter"}% | Footer, excluding revision and copyright parts |
+| %<nop>TMPL:DEF{"oops"}% | Skeleton of oops dialog |
+</blockquote>
+---++ Types of Template
+There are two types of templates:
+
+	* *HTML Page Templates*: Defines layout of %WIKITOOLNAME% pages
+	* *Template Topics*: Defines default text when you create a new topic
+
+---+++ HTML Page Templates
+
+%WIKITOOLNAME% uses HTML template files for all actions like topic view, edit, preview and so on. This allows you to change the look and feel of all pages by editing just some template files.
+
+The template files are in the ==twiki/templates== directory. As an example, ==twiki/templates/view.tmpl== is the template file for the ==twiki/bin/view== script. Templates can be overloaded per web. The following search order applies:
+
+	1. ==twiki/templates/$webName/$scriptName.tmpl==
+	2. ==twiki/templates/$scriptName.tmpl==
+
+__Note:__ ==$webName== is the name of the web ( i.e. ==Main== ), and ==$scriptName== is the script ( i.e. ==view== ).
+
+__Note:__ TWikiSkins can be defined to overload the standard templates.
+
+Some special variables are used in templates ( especially ==view== ) to show meta data - see [[TWikiDocumentation#Meta_Data_Rendering][Meta Data Rendering]]
+
+---+++ Template Topics
+
+Template topics define the default text for new topics. There are three types of template topics:
+<blockquote>
+| *Topic Name:* | *What it is:* |
+| WebTopicViewTemplate | Help text shown when you view a non existing topic. |
+| WebTopicNonWikiTemplate | Help text shown when you view a non existing topic that has not a WikiName. |
+| WebTopicEditTemplate | Default text shown when you create a new topic. |
+</blockquote>
+All template topics are located in the %TWIKIWEB% web. The WebTopicEditTemplate can be overloaded. The following search order applies when you create a new topic:
+
+	1. The topic name specified by the =templatetopic= parameter.
+	1. <nop>WebTopicEditTemplate in the current web.
+	1. <nop>WebTopicEditTemplate in the %TWIKIWEB% web.
+
+---++++ Template Topics in Action
+
+Here is an example for creating new topics based on a specific template topic:
+
+<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/">
+	* New example topic: 
+	  <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$year$mo$day}%" size="22">
+	  <input type="hidden" name="templatetopic" value="ExampleTopicTemplate">
+	  <input type="submit" value="Create"> (date format is YYYYMMDD)
+</form>
+
+Above form asks for a topic name. A hidden input tag of name "templatetopic" specifies the ExampleTopicTemplate as the template topic. Here is the HTML source of the form:
+
+<pre>
+&lt;form name="new" action="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/"&gt;
+	* New example topic: 
+	  &lt;input type="text" name="topic" value="ExampleTopic%<nop>SERVERTIME{$year$mo$day}%" size="22"&gt;
+	  &lt;input type="hidden" name="templatetopic" value="ExampleTopicTemplate"&gt;
+	  &lt;input type="hidden" name="onlywikiname" value="on"&gt;
+	  &lt;input type="submit" value="Create"&gt; (date format is YYYYMMDD)
+&lt;/form&gt;
+</pre>
+
+The "onlywikiname" parameter enforces WikiWords for topic names.
+
+__Note:__ Use can use the =%<nop>WIKIUSERNAME%= and =%<nop>DATE%= variables in your topic templates as the signature; those variables are expanded when a new topic is created. The standard topic signature is: <br> =-- %<nop>WIKIUSERNAME% - %<nop>DATE%=
+
+---++ Templates by Example
 
 Attached is an example of an oops base template =oopsbase.tmpl= and a example oops dialog =oopstest.tmpl= which is based on the base template. __NOTE:__ This isn't the release version, just a quick, simple demo.
 
@@ -44,8 +119,8 @@ Attached is an example of an oops base template =oopsbase.tmpl= and a example oo
 
 The first line declares the delimiter variable called "sep", used to separate multiple link items. The variable can be called anywhere by writing =%<nop>TMPL:P{"sep"}%=
 
-<blockquote style="background-color:#f0f0f0">
-<table border="1" cellspacing="0" cellpadding="1">
+<blockquote>
+<table border="1" cellspacing="0" cellpadding="1" bgcolor="#f5f5f5">
 <tr><td>
 <pre>
 %<nop>TMPL:DEF{"sep"}% | %<nop>TMPL:END%
@@ -90,13 +165,12 @@ The first line declares the delimiter variable called "sep", used to separate mu
 </table>
 </blockquote>
 
-
 ---+++ Test template oopstest.tmpl
 
 Each oops template basically just defines some variables and includes the base template that does the layout work.
 
-<blockquote style="background-color:#f0f0f0">
-<table border="1" cellspacing="0" cellpadding="1">
+<blockquote>
+<table border="1" cellspacing="0" cellpadding="1" bgcolor="#f5f5f5">
 <tr><td>
 <pre>
 %<nop>TMPL:DEF{"titleaction"}% (test =titleaction=) %<nop>TMPL:END%
@@ -126,41 +200,15 @@ Test =topicaction=:
 
 With URL: ==.../bin/oops/Test/TestTopic2?template=oopstest&param1=WebHome&param2=WebNotify==
 
-<blockquote style="background-color:#f0f0f0">
+<blockquote>
 | <img src="%ATTACHURLPATH%/testscreen.gif" width="554" height="304" alt="testscreen.gif"> |
-</blockquote>
-
----++ TWiki master template
-
-All common template parts are defined in one master template, =twiki.tmpl=, that all other templates include.
-
-| *Template variable:* | *Defines:* |
-| %<nop>TMPL:DEF{"sep"}% | "&#124;" separator |
-| %<nop>TMPL:DEF{"htmldoctype"}% | Start of all HTML pages |
-| %<nop>TMPL:DEF{"standardheader"}% | Standard header (ex: view, index, seach)  |
-| %<nop>TMPL:DEF{"simpleheader"}% | Simple header with reduced links (ex: edit, attach, oops) |
-| %<nop>TMPL:DEF{"standardfooter"}% | Footer, excluding revision and copyright parts |
-| %<nop>TMPL:DEF{"oops"}% | Skeleton of oops dialog |
-
-<blockquote style="background-color:#f0f0f0">
-*Example: =oopspreview.tmpl= template*
-<pre>
-%<nop>TMPL:INCLUDE{"twiki"}%
-%<nop>TMPL:DEF{"titleaction"}% (oops) %<nop>TMPL:END%
-%<nop>TMPL:DEF{"webaction"}% *Attention* %<nop>TMPL:END%
-%<nop>TMPL:DEF{"heading"}% Topic is not saved yet %<nop>TMPL:END%
-%<nop>TMPL:DEF{"message"}% Please go back in your browser and save the topic. %<nop>TMPL:END%
-%<nop>TMPL:DEF{"topicaction"}%
-%<nop>TMPL:END%
-%<nop>TMPL:P{"oops"}%
-</pre>
 </blockquote>
 
 ---++ Known Issues
 
 	* A drawback of referring to a master template is that you can only test a template from within TWiki, where the include variables are resolved. In the previous system, each template is a structurally complete HTML document with a =.tmpl= filename extension - it contains unresolved =%VARIABLES%=, but can still be previewed directly in a browser.
 
--- PeterThoeny - 23 Jul 2001 <br>
--- MikeMannix - 30 Aug 2001 
+-- PeterThoeny - 23 Jul 2001 <br />
+-- MikeMannix - 14 Sep 2001 <br />	
 %META:FILEATTACHMENT{name="testscreen.gif" attr="h" comment="Example of oopstest.tmpl rendered" date="999598142" path="C:\02_TWikiDocs\testscreen.gif" size="9460" user="MikeMannix" version="1.1"}%
 %META:TOPICMOVED{by="MikeMannix" date="1000277381" from="TWiki.TWikiTemplateSystem" to="TWiki.TWikiTemplates"}%
