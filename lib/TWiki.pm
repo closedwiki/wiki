@@ -1,4 +1,4 @@
-#st
+#
 # TWiki WikiClone ($wikiversion has version info)
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
@@ -1402,6 +1402,9 @@ sub handleInternalTags
     # $_[1] is topic
     # $_[2] is web
 
+    # Make Edit URL unique for every edit - fix for RefreshEditPage
+    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%\?t=".time()!geo;
+
     $_[0] =~ s/%NOP%/<nop>/go;
     $_[0] =~ s/%TMPL\:P{(.*?)}%/&handleTmplP($1)/geo;
     $_[0] =~ s/%SEP%/&handleTmplP('"sep"')/geo;
@@ -1449,6 +1452,7 @@ sub handleInternalTags
     $_[0] =~ s/%STOPINCLUDE%//go;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/geo;
+
 }
 
 # =========================
