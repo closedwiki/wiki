@@ -18,6 +18,10 @@
  %TMPL:P{"heada"}%
  %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
 %TMPL:DEF{"css"}%
+<style type="text/css" media="screen,projection"><!--
+   /* make access keys auto activate in IE */
+   a { behavior: url(%SEESOURCE%/akey.htc) }
+--></style>
 <link rel="stylesheet" href='%SEESOURCE%/ss-c3.css' type="text/css" media="screen,projection" />
 <!-- %<nop>STYLESHEETS% -->
 <style type="text/css"><!--
