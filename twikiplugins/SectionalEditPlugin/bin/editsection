@@ -55,7 +55,6 @@ sub quoteForXml {
     $text =~ s/</&lt\;/go;
     $text =~ s/>/&gt\;/go;
     $text =~ s/\t/   /go;
-    $text =~ s/\r//g;
     return $text;
 }
 
@@ -252,6 +251,9 @@ sub main
     my $postxt = "";
     my $pos = 0;
 
+    # Get rid of CRs (we only want to deal with LFs)
+    $text =~ s/\r//g;
+
     if ( $text =~ m/<editsections\/>/i) {
 	my @sections = split(m/^---\+/m, $text);
 	foreach my $s (@sections) {
@@ -271,6 +273,11 @@ sub main
 	    }
 	    $pos++;
 	}
+        # Move the end of line to the beginning of postxt
+        # So that sections aren't accidentally collapsed
+        if ($sectxt =~ s/\n$//s) {
+	    $postxt = "\n" . $postxt;
+        }
     }
     elsif ( $text =~ m/<sectionbreak\/?>/i ) {    
 	my @sections = split(/<sectionbreak\/?>/i, $text);
@@ -325,8 +332,7 @@ sub main
     $pretxt =~ s/$nl/<br>/g;
     $postxt =~ s/$nl/<br>/g;
     $tmpl =~ s/%PRETEXT%/$pretxt/go;
-    $tmpl =~ s/%POSTEXT%/$postxt/go;
-    
+    $tmpl =~ s/%POSTEXT%/$postxt/go;   
     
     TWiki::writeHeaderFull ( $query, 'edit', 'text/html', length($tmpl) );
 
