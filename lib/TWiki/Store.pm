@@ -478,8 +478,14 @@ sub updateReferringPages {
     ASSERT(ref($user) eq "TWiki::User") if DEBUG;
 
     my $result = "";
-    my $preTopic = '^|\W';		# Start of line or non-alphanumeric
-    my $postTopic = '$|\W';	# End of line or non-alphanumeric
+
+    # SMELL: this is stinky; according to Render.pm this should be [\s\(] but that
+    # assumes that each line is protected by spaces either side. Then, this
+    # code does replacements in meta-data as well, so things like field names and
+    # data values all get munged (!!!!) - good grief, what a hack!
+    # SMELL: does not handle <nop> before the wikiword
+    my $preTopic = qr/^|[^!\w]/;    # Start of line or non-alphanumeric and not !
+    my $postTopic = qr/s?(?=$|\W)/;	# End of line or non-alphanumeric; s? for plurals
     my $spacedTopic = TWiki::searchableTopic( $oldTopic );
     my $lockFailures = 0;
 
@@ -487,7 +493,9 @@ sub updateReferringPages {
         my $type = shift @refs;
         my $item = shift @refs;
         my( $itemWeb, $itemTopic ) = $this->{session}->normalizeWebTopicName( "", $item );
-        my $resultText = "";
+        my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
+
+        my $newItemText = "";
         $result .= ":$item: , "; 
         #open each file, replace $topic with $newTopic
         if ( $this->topicExists($itemWeb, $itemTopic) ) {
@@ -509,42 +517,35 @@ sub updateReferringPages {
             my $insidePRE = 0;
             my $insideVERBATIM = 0;
             my $noAutoLink = 0;
-            foreach( split( /\n/, $scantext ) ) {
-                if( /^%META:TOPIC(INFO|MOVED)/ ) {
-                    $resultText .= "$_\n";
+            foreach my $line ( split( /\r?\n/, $scantext ) ) {
+                if( $line =~ /^%META:TOPIC(INFO|MOVED)/ ) {
+                    $newItemText .= "$line\n";
                     next;
                 }
-                # FIXME This code is in far too many places - also in Search.pm and Store.pm
-                m|<pre>|i  && ( $insidePRE = 1 );
-                m|</pre>|i && ( $insidePRE = 0 );
-                if( m|<verbatim>|i ) {
-                    $insideVERBATIM = 1;
-                }
-                if( m|</verbatim>|i ) {
-                    $insideVERBATIM = 0;
-                }
-                m|<noautolink>|i   && ( $noAutoLink = 1 );
-                m|</noautolink>|i  && ( $noAutoLink = 0 );
-                if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-                    if( $type eq "global" ) {
-                        my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
-                        s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-                    } else {
-                        # Only replace bare topic (i.e. not preceeded by web) if web of referring
-                        # topic is in original Web of topic that's being moved
-                        if( $oldWeb eq $itemWeb ) {
-                            my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
-                            s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-                            s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
-                        }
+                # SMELL: This code is in far too many places - also in Search.pm and Render.pm
+                $insidePRE      = 1 if( $line =~ m|<pre>|i );
+                $insidePRE      = 0 if( $line =~ m|</pre>|i );
+                $insideVERBATIM = 1 if( $line =~ m|<verbatim>|i );
+                $insideVERBATIM = 0 if( $line =~ m|</verbatim>|i );
+                $noAutoLink     = 1 if( $line =~ m|<noautolink>|i );
+                $noAutoLink     = 0 if( $line =~ m|</noautolink>|i );
+                # SMELL: this replaces within META!!
+                unless ( $insidePRE || $insideVERBATIM || $noAutoLink ) {
+                    $line =~ s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+                    # Only replace bare topic (i.e. not preceded by web) if
+                    # the web of the referring topic is the original web of
+                    # the topic that's being moved.
+                    if( $oldWeb eq $itemWeb ) {
+                        $line =~ s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
+                        $line =~ s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
                     }
                 }
-                $resultText .= "$_\n";
+                $newItemText .= "$line\n";
             }
             my $meta = $this->extractMetaData( $itemWeb, $itemTopic,
-                                               \$resultText );
+                                               \$newItemText );
             $this->saveTopic( $user, $itemWeb, $itemTopic,
-                              $resultText, $meta,
+                              $newItemText, $meta,
                               { unlock => 1, dontnotify => 1 } );
             $this->unlockTopic( $user, $itemWeb, $itemTopic );
         } else {

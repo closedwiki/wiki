@@ -294,7 +294,7 @@ sub rename {
         _newTopicScreen( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
                          $confirm, $currentWebOnly, $doAllowNonWikiWord, $skin );
         return;
-  }
+    }
 
     if( ! $justChangeRefs ) {
         if( $theAttachment ) {
@@ -311,10 +311,15 @@ sub rename {
                                                 $moveError );
             }
         } else {
-            if( ! $doAllowNonWikiWord &&
-                ! TWiki::isValidWikiWord( $newTopic ) ) {
-                throw TWiki::UI::OopsException( $newWeb, $newTopic,
-                                                "renamenotwikiword" );
+            unless( TWiki::isValidWikiWord( $newTopic ) ) {
+                unless( $doAllowNonWikiWord ) {
+                    throw TWiki::UI::OopsException( $newWeb, $newTopic,
+                                                    "renamenotwikiword" );
+                }
+                # Filter out dangerous characters (. and / may cause
+                # issues with pathnames
+                $newTopic =~ s![./]!_!g;
+                $newTopic =~ s/($TWiki::cfg{NameFilter})//go;
             }
 
             my $renameError =
