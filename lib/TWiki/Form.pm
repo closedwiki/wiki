@@ -557,13 +557,11 @@ sub upgradeCategoryTable
         my @items = ();
         
         # extract category section and build category form elements
-        my( $before, $ctext, $after) = split( /<!--TWikiCat-->/, $text);
+        my( $before, $ctext, $after) = split( /<!--TWikiCat-->/, $text );
         # cut TWikiCat part
-        $text = $before;
-        if( ! $ctext ) { $ctext = ""; }
-        if( $after ) {
-            $text .= $after;
-        }
+        $text = $before || "";
+        $text .= $after if( $after );
+        $ctext = "" if( ! $ctext );
 
         my $ttext = "";
         foreach( split( /\n/, $icat ) ) {

@@ -199,9 +199,10 @@ sub migrateToFileAttachmentMacro
    
    
    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
-   if( ! $before ) { $before = ""; }
-   if( ! $atext  ) { $atext  = ""; }
-   
+   $text = $before || "";
+   $text .= $after if( $after );
+   $atext  = "" if( ! $atext  );
+
    if( $atext =~ /<TwkNextItem>/ ) {
       my $line = "";
       foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
@@ -230,8 +231,6 @@ sub migrateToFileAttachmentMacro
        }
    }
        
-   $text = "$before$after";
-   
    return $text;
 }
 
