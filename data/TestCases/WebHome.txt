@@ -12,13 +12,13 @@ Each testcase consists of a single topic, always named <nop>TestCase<i>Something
 
 Testcases that test TWiki rendering may include markers that indicate to the %TWIKIWEB%.TestFixturePlugin what is _expected_ versus what TWiki _actually_ produces. See %TWIKIWEB%.TestFixturePlugin for details.
 
-The automatic tests may be run on a topic by clicking on the "run" link for the testcase in the table below. The testcases are run with _no plugins enabled_.
+The automatic tests may be run on a topic by clicking on the "run" link for the testcase in the table below. The testcases are run with _no plugins enabled_. The tests are also run as part of the daily smoke tests, the results of which can be seen at http://ntwiki.ethermage.net/users/develop/pub/TestOutput/runtest.html.
 
 _Note that only those testcases with names that start with =<nop>TestCaseAuto= are fully automated_.
 
 %INCLUDE{CreateNewTestCaseForm}%
 
 <table border=1><tr align=left><th>Testcase</th><th>Description</th><th>Tests</th></tr>
-%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin][run]]</td></tr>"}%
+%SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare&debugenableplugins=TestFixturePlugin&skin=pattern][run]]</td></tr>"}%
 %SEARCH{"^TestCase(?!Auto)" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>manual</td></tr>"}%
 </table>
