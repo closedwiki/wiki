@@ -1,5 +1,6 @@
 #
-# Copyright (C) Motorola 2002 - All rights reserved
+# Copyright (C) 2002 Motorola - All rights reserved
+# Copyright (C) 2004 Crawford Currie = All rights reserved
 #
 # TWiki extension that adds tags for action tracking
 #
@@ -23,23 +24,16 @@ package TWiki::Plugins::ActionTrackerPlugin;
 use strict;
 
 use TWiki::Func;
-use TWiki::Plugins::SharedCode::Attrs;
-use TWiki::Plugins::ActionTrackerPlugin::Action;
-use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-use TWiki::Plugins::ActionTrackerPlugin::Format;
-require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
 
 # =========================
 use vars qw(
-	    $web $topic $user $installWeb $VERSION
+	    $web $topic $user $installWeb $VERSION $initialised
 	    $allActions $useNewWindow $debug $javaScriptIncluded
-	    $pluginInitialized $perlTimeParseDateFound $pluginName
-	    $defaultFormat
+	    $pluginName $defaultFormat
 	   );
 
 $VERSION = '2.010';
-$pluginInitialized = 0;
-$perlTimeParseDateFound = 0;
+$initialised = 0;
 $pluginName = "ActionTrackerPlugin";
 $installWeb = "TWiki";
 
@@ -59,71 +53,13 @@ sub initPlugin {
   # check for Plugins.pm versions
   # COVERAGE OFF standard plugin code
 
-  my $depsOK = 1;
-  foreach my $dep ( @dependencies ) {
-    my ( $ok, $ver ) = ( 0, 0 );
-    eval "use $dep->{package}";
-    unless ( $@ ) {
-	  if ( defined( $dep->{constraint} )) {
-		eval "\$ver = \$$dep->{package}::VERSION;\$ok = (\$ver $dep->{constraint})";
-	  } else {
-		$ok = 1;
-	  }
-	}
-	unless ( $ok ) {
-	  my $mess = "$dep->{package} ";
-	  $mess .= "version $dep->{constraint} " if ( $dep->{constraint} );
-	  $mess .= "is required for $pluginName version $VERSION. ";
-	  $mess .= "$dep->{package} $ver is currently installed. " if ( $ver );
-	  $mess .= "Please check the plugin installation documentation. ";
-	  TWiki::Func::writeWarning( $mess );
-	  print STDERR "$mess\n";
-	  $depsOK = 0;
-	}
-  }
-  return 0 unless $depsOK;
-
   if( $TWiki::Plugins::VERSION < 1.020 ) {
     TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. Will not work without compatability module." );
   }
   # COVERAGE ON
 
-  # Get plugin debug flag
-  $debug = &TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) ||
-    0;
-
-  _loadPrefsOverrides( $web );
-
-  $useNewWindow = _getPref( "USENEWWINDOW", 0 );
-
-  # Colour for warning of late actions
-  $ActionTrackerPlugin::Format::latecol = _getPref( "LATECOL", "yellow" );
-  # Colour for an unparseable date
-  $ActionTrackerPlugin::Format::badcol = _getPref( "BADDATECOL", "red" );
-  # Colour for table header rows
-  $ActionTrackerPlugin::Format::hdrcol = _getPref( "HEADERCOL", "#FFCC66" );
-
-  my $hdr      = _getPref( "TABLEHEADER" );
-  my $bdy      = _getPref( "TABLEFORMAT" );
-  my $textform = _getPref( "TEXTFORMAT" );
-  my $orient   = _getPref( "TABLEORIENT" );
-  my $changes  = _getPref( "NOTIFYCHANGES" );
-  $defaultFormat =
-    new ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
-
-  my $extras = _getPref( "EXTRAS" );
-
-  if ( $extras ) {
-    my $e = ActionTrackerPlugin::Action::extendTypes( $extras );
-    # COVERAGE OFF safety net
-    if ( defined( $e )) {
-      TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );
-    }
-    # COVERAGE ON
-  }
-
   &TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
-  $pluginInitialized = 0;
+  $initialised = 0;
   $javaScriptIncluded = 0;
 
   return 1;
@@ -141,9 +77,7 @@ sub commonTagsHandler {
 
   return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
-  unless( $pluginInitialized ) {
-    return unless( _init_defaults() );
-  }
+  return unless _lazyInit();
 
   # Format actions in the topic.
   # Done this way so we get tables built up by
@@ -245,9 +179,7 @@ sub beforeEditHandler {
 
   return unless ( TWiki::Func::getSkin() eq "action" );
 
-  unless( $pluginInitialized ) {
-    return unless( _init_defaults() );
-  }
+  return unless _lazyInit();
 
   TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
 
@@ -393,9 +325,7 @@ sub afterEditHandler {
   my $query = TWiki::Func::getCgiQuery();
   return unless ( $query->param( 'closeactioneditor' ));
 
-  unless( $pluginInitialized ) {
-    return unless( _init_defaults() );
-  }
+  return unless _lazyInit();
 
   my $pretext = $query->param( 'pretext' ) || "";
    # Fix from RichardBaar 8/10/03 for Mozilla
@@ -430,9 +360,7 @@ sub afterEditHandler {
 sub beforeSaveHandler {
 ### my ( $text, $topic, $web ) = @_;
 
-  unless( $pluginInitialized ) {
-    return unless( _init_defaults() );
-  }
+  return unless _lazyInit();
 
   my $query = TWiki::Func::getCgiQuery();
   return unless ( $query ); # Fix from GarethEdwards 13 Jun 2003
@@ -595,39 +523,82 @@ sub _handleActionSearch {
   return _embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow );
 }
 
-# =========================
 # Lazy initialize of plugin 'cause of performance
-sub _init_defaults
-{
-  my $libsFound = 0;
-  eval {
-    require Exporter;
-    $perlTimeParseDateFound = require Time::ParseDate;
-    # If the Time::ParseDate module is not found, then there is no use in
-    # including any of the following.
-    if( $perlTimeParseDateFound ) {
-      eval {
-        $libsFound = require TWiki::Plugins::ActionTrackerPlugin::Action;
-        require TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-        require TWiki::Plugins::ActionTrackerPlugin::AttrDef;
-      };
-      unless( $libsFound ) {
-        # Could not find ActionTrackerPlugin utility libs possibly because
-        # of relative use of lib dir and chdir after initialization.
-        # Try again with absolute TWiki lib dir path
-        eval {
-          my $libDir = TWiki::getTWikiLibDir(); # COMPATIBILITY
-          $libDir =~ /(.*)/;
-          $libDir = $1;       # untaint
-          $libsFound = require "$libDir/TWiki/Plugins/ActionTrackerPlugin/Action.pm";
-          require "$libDir/TWiki/Plugins/ActionTrackerPlugin/ActionSet.pm";
-          require "$libDir/TWiki/Plugins/ActionTrackerPlugin/AttrDef.pm";
-        };
-      }
+sub _lazyInit {
+
+  return 1 if ( $initialised );
+
+  my $depsOK = 1;
+  foreach my $dep ( @dependencies ) {
+    my ( $ok, $ver ) = ( 0, 0 );
+    eval "use $dep->{package}";
+    unless ( $@ ) {
+	  if ( defined( $dep->{constraint} )) {
+		eval "\$ver = \$$dep->{package}::VERSION;\$ok = (\$ver $dep->{constraint})";
+	  } else {
+		$ok = 1;
+	  }
+	}
+	unless ( $ok ) {
+	  my $mess = "$dep->{package} ";
+	  $mess .= "version $dep->{constraint} " if ( $dep->{constraint} );
+	  $mess .= "is required for $pluginName version $VERSION. ";
+	  $mess .= "$dep->{package} $ver is currently installed. " if ( $ver );
+	  $mess .= "Please check the plugin installation documentation. ";
+	  TWiki::Func::writeWarning( $mess );
+	  print STDERR "$mess\n";
+	  $depsOK = 0;
+	}
+  }
+  return 0 unless $depsOK;
+
+  eval 'use TWiki::Plugins::SharedCode::Attrs';
+  return 0 if $@;
+  eval 'use TWiki::Plugins::ActionTrackerPlugin::Action';
+  return 0 if $@;
+  eval 'use TWiki::Plugins::ActionTrackerPlugin::ActionSet';
+  return 0 if $@;
+  eval 'use TWiki::Plugins::ActionTrackerPlugin::Format';
+  return 0 if $@;
+  eval 'use TWiki::Plugins::ActionTrackerPlugin::ActionNotify';
+  return 0 if $@;
+
+  # Get plugin debug flag
+  $debug = TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) || 0;
+
+  _loadPrefsOverrides( $web );
+
+  $useNewWindow = _getPref( "USENEWWINDOW", 0 );
+
+  # Colour for warning of late actions
+  $ActionTrackerPlugin::Format::latecol = _getPref( "LATECOL", "yellow" );
+  # Colour for an unparseable date
+  $ActionTrackerPlugin::Format::badcol = _getPref( "BADDATECOL", "red" );
+  # Colour for table header rows
+  $ActionTrackerPlugin::Format::hdrcol = _getPref( "HEADERCOL", "#FFCC66" );
+
+  my $hdr      = _getPref( "TABLEHEADER" );
+  my $bdy      = _getPref( "TABLEFORMAT" );
+  my $textform = _getPref( "TEXTFORMAT" );
+  my $orient   = _getPref( "TABLEORIENT" );
+  my $changes  = _getPref( "NOTIFYCHANGES" );
+  $defaultFormat =
+    new ActionTrackerPlugin::Format( $hdr, $bdy, $orient, $textform, $changes );
+
+  my $extras = _getPref( "EXTRAS" );
+
+  if ( $extras ) {
+    my $e = ActionTrackerPlugin::Action::extendTypes( $extras );
+    # COVERAGE OFF safety net
+    if ( defined( $e )) {
+      TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );
     }
-  };
-  $pluginInitialized = 1;
-  return $libsFound;
+    # COVERAGE ON
+  }
+
+  $initialised = 1;
+
+  return 1;
 }
 
 # PRIVATE embed the JavaScript that opens an edit subwindow
@@ -651,9 +622,8 @@ function editWindow(url) {
 sub _handleActionNotify {
   my ( $web, $expr ) = @_;
 
-  eval {
-    require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
-  };
+  eval 'require TWiki::Plugins::ActionTrackerPlugin::ActionNotify';
+  return if $@;
 
   my $text = ActionTrackerPlugin::ActionNotify::doNotifications( $web, $expr, 1 );
 
