@@ -1,1 +1,2 @@
-%SEARCH{".*" regex="on" nosearch="on" nototal="on" order="modified" reverse="on" limit="50"}%
+%META:TOPICINFO{author="PeterThoeny" date="997991760" format="1.0beta2" version="1.2"}%
+%INCLUDE{"%TWIKIWEB%.WebChanges"}%
