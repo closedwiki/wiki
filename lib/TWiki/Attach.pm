@@ -99,7 +99,7 @@ sub filenameToIcon
 
     my $tmp = &TWiki::getPubDir();
     my $iconDir = "$tmp/icn";
-    my $iconUrl = "%PUBURLPATH%/icn";
+    my $iconUrl = "$TWiki::pubUrlPath/icn";
     my $iconList = &TWiki::Store::readFile( "$iconDir/_filetypes.txt" );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
