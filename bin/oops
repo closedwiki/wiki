@@ -33,7 +33,7 @@ sub main
     my $theUrl = $query->url;
 
     ( $topic ) = 
-	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
 
     my $tmplName = $query->param( 'template' );
     if( ! $tmplName ) {
@@ -41,7 +41,7 @@ sub main
     }
     my $tmplData = &TWiki::Store::readTemplate( $tmplName );
     if( ! $tmplData ) {
-        print "Content-type: text/html\n\n";
+        TWiki::writeHeader( $query );
         print "<html><body>";
         print "<h1>TWiki Installation Error</h1>";
         print "Template directory $TWiki::templateDir not found.<p>";
@@ -64,6 +64,6 @@ sub main
     $body = &TWiki::getRenderedVersion( "</head>$body" );
     $body =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
-    print "Content-type: text/html\n\n";
+    TWiki::writeHeader( $query );
     print "$head$body";
 }
