@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1074472194" format="1.0" version="1.74"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079505060" format="1.0" version="1.75"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -52,9 +52,11 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 	 | *Parameter:* | *Description:* | *Default:* |
 	 | ="name"= | The name of a URL parameter | required |
 	 | =default="..."= | Default value in case parameter is empty or missing | empty string |
-	 | =newline="&lt;br /&gt;"= | Convert newlines to other delimiters | no conversion |
+	 | =newline="&lt;br /&gt;"= | Convert newlines in textarea to other delimiters | no conversion |
 	 | =encode="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. This is needed if text is put into an HTML form field | no encoding |
 	 | =encode="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | no encoding |
+	 | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
+	 | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (new line) |
 	 Example: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b>
 </td>
 </tr><tr>
@@ -160,21 +162,32 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> =%<nop>GMTIME{"format"}%= </td>
   <td> Formatted GM time based on time variables.
 	 | *Variable:* | *Unit:* | *Example* |
-	 | $seconds | seconds | 59 |
-	 | $minutes | minutes | 59 |
-	 | $hours | hours | 23 |
-	 | $day | day of month | 31 |
-	 | $month | month in ISO format | Dec |
-	 | $mo | 2 digit month | 12 |
-	 | $year | 4 digit year | 1999 |
-	 | $ye | 2 digit year | 99 |
+	 | =$seconds= | seconds | 59 |
+	 | =$minutes= | minutes | 59 |
+	 | =$hours= | hours | 23 |
+	 | =$day= | day of month | 31 |
+	 | =$wday= | day of the Week (Sun, Mon, Tue, Wed, Thu, Fri, Sat) | Thu |
+	 | =$month= | month in ISO format | Dec |
+	 | =$mo= | 2 digit month | 12 |
+	 | =$year= | 4 digit year | 1999 |
+	 | =$ye= | 2 digit year | 99 |
+	 | =$tz= | either "GMT" (if set to gmtime), or "Local" (if set to servertime) | GMT |
+	 | =$iso= | ISO format timestamp | %GMTIME{"$iso"}% |
+	 | =$rcs= | RCS format timestamp | %GMTIME{"$rcs"}% |
+	 | =$http= | E-mail & http format timestamp | %GMTIME{"$http"}% |
 	 Variables can be shortened to 3 characters. Example: <br /> =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= is <br /> <b>%GMTIME{"$day $month, $year - $hour:$min:$sec"}%</b> </td>
 </tr><tr>
   <td> =%<nop>SERVERTIME%= </td>
   <td> Server time, is <b>%SERVERTIME%</b> </td>
 </tr><tr>
   <td> =%<nop>SERVERTIME{"format"}%= </td>
-  <td> Formatted server time. <br /> Example: =%<nop>SERVERTIME{"$hou:$min"}%= is <b>%SERVERTIME{"$hou:$min"}%</b> </td>
+  <td> Formatted server time. Same format qualifiers as =%<nop>GMTIME%= <br /> Example: =%<nop>SERVERTIME{"$hou:$min"}%= is <b>%SERVERTIME{"$hou:$min"}%</b> </td>
+</tr><tr>
+  <td> =%<nop>DISPLAYTIME%= </td>
+  <td> Display time, is <b>%DISPLAYTIME%</b> </td>
+</tr><tr>
+  <td> =%<nop>DISPLAYTIME{"format"}%= </td>
+  <td> Formatted time - either GMT or Local server time, depending on setting in TWiki.cfg. Same format qualifiers as =%<nop>GMTIME%= <br /> Example: =%<nop>DISPLAYTIME{"$hou:$min"}%= is <b>%DISPLAYTIME{"$hou:$min"}%</b> </td>
 </tr><tr>
   <td> =%<nop>HTTP_HOST%= </td>
   <td> HTTP_HOST environment variable, is <b>%HTTP_HOST%</b> </td>
@@ -227,8 +240,8 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | None |
 | =type="keyword"= <br /> =type="literal"= <br /> =type="regex"= | Do a keyword search like =soap "web service" -shampoo=; a literal search like =web service=; or RegularExpression search like =soap;web service;!shampoo= | =%<nop>SEARCHVAR- DEFAULTTYPE%= [[TWikiPreferences][preferences]] setting |
 | =scope="topic"= <br /> =scope="text"= <br /> =scope="all"= | Search topic name (title); the text (body) of topic; or all (both) | ="text"= |
-| =order="topic"= <br /> =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, last modified time, last editor, or named field of TWikiForms | Sort by topic name |
-| =limit="all"= <br /> =limit="16"= | Limit the number of results returned | All results |
+| =order="topic"= <br /> =order="created"= <br />  =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, topic creation time, last modified time, last editor, or named field of TWikiForms. The sorting is done web by web; in case you want to sort across webs, create a [[FormattedSearch][formatted]] table and sort it with TablePlugin's initsort | Sort by topic name |
+| =limit="all"= <br /> =limit="16"= | Limit the number of results returned. This is done after sorting in case =order= is specified | All results |
 | =reverse="on"= | Reverse the direction of the search | Ascending search |
 | =casesensitive="on"= | Case sensitive search | Ignore case |
 | =nosummary="on"= | Show topic title only | Show topic summary |
@@ -237,6 +250,7 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
 | =nototal="on"= | Do not show number of topics found | Show number |
 | =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
+| =expandvariables="on"= | Expand variables before applying a FormattedSearch on a search hit. Useful to show the expanded text, e.g. to show the result of a SpreadSheetPlugin =%<nop>CALC{}%= instead of the formula | Raw text |
 | =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
 | =separator=", "= | Line separator between hits | Newline ="$n"= |
 Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= <br />
@@ -401,5 +415,5 @@ __Note:__ There are some more useful variables defined in the TWikiPreferences l
 		* ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
--- TWiki:Main.PeterThoeny - 14 Jan 2004 <br />
+-- TWiki:Main.PeterThoeny - 16 Mar 2004 <br />
 -- TWiki:Main.MikeMannix - 12 May 2002
