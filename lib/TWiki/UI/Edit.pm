@@ -68,33 +68,6 @@ sub edit {
 
   return if TWiki::UI::isMirror( $webName, $topic );
 
-#
-# Allow for dynamic topic creation if it contains a string of 10 x's XXXXXX
-#
-#SVEN - use sequential numbers :)
-    if ( $topic =~ /XXXXXXXXXX/o ) {
-		my ($bugCount) = 0;
-		my ($tempTopic) = $topic;
-		$topic =~ s|X{10}X*|$bugCount|e;
-		my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
-		#writeDebug($webName . "." . $topic . "lock(". $lockUser ."..." . $lockTime);
-
-		my $lockFilename = "$TWiki::dataDir/$webName/$topic.lock";
-
-		while ( (&TWiki::Store::topicExists( $webName, $topic )) ||
-                ( -e "$lockFilename" ) ||
-                ( $lockUser ) ) {
-			$bugCount = $bugCount + 1;
-			$topic = $tempTopic;
-			$topic =~ s|X{10}X*|$bugCount|e;
-			( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $webName, $topic );
-			$lockFilename = "$TWiki::dataDir/$webName/$topic.lock";
-			#writeDebug($webName . "." . $topic . "lock(". $lockUser ."..." . $lockTime . ") " . $lockFilename);
-        }
-    }
-	#writeDebug("sven - $webName . $topic");
-#SVEN - end
-
   my $tmpl = "";
   my $text = "";
   my $meta = "";
@@ -184,17 +157,6 @@ sub edit {
     $meta->put( "TOPICPARENT", ( "name" => $theParent ) );
   }
   $tmpl =~ s/%TOPICPARENT%/$theParent/;
-
-#SVEN - don'e show standard editbox if there is a HIDETEXTAREA tag on the page
-#    this is used for our Task system
-    if ( $topic eq $formTemplate ) {
-    } else {
-        if (( $text =~ /HIDETEXTAREA/ )) {
-            $tmpl =~ s/document.main.text(.*)//;
-            $tmpl =~ s/<textarea name=(.*)>(.*)/<input type="hidden" name="text" value="%TEXT%" \/>$2/;
-        }
-    }
-#end SVEN
 
   # Processing of formtemplate - comes directly from query parameter formtemplate , 
   # or indirectly from webtopictemplate parameter.
