@@ -28,9 +28,9 @@ my $theUrl = "/save/$web/$topic";
 
 sub _set {
     my ( $this, $web, $topic, $pref, $val ) = @_;
-    assert($web) if DEBUG;
-    assert($topic) if DEBUG;
-    assert($pref) if DEBUG;
+    ASSERT($web) if DEBUG;
+    ASSERT($topic) if DEBUG;
+    ASSERT($pref) if DEBUG;
 
     my $text = "";
     if ( -e "$TWiki::dataDir/$web/$topic.txt") {
