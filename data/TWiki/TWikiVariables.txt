@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1038026520" format="1.0" version="1.59"}%
+%META:TOPICINFO{author="PeterThoeny" date="1039594200" format="1.0" version="1.60"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -173,10 +173,13 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> REMOTE_USER environment variable, is <b>%REMOTE_USER%</b> </td>
 </tr><tr>
   <td> =%<nop>INCLUDE{"page" ...}%= </td>
-  <td> Server side include to IncludeTopicsAndWebPages. Parameters are page name, and an optional =pattern="(reg-exp)"=. The page name is:
-	| ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= |
-	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= |
-	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= |
+  <td> Server side include to IncludeTopicsAndWebPages:
+	| *Parameter:* | *Description:* | *Default:* |
+	| ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= | |
+	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= | |
+	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= | |
+	| =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
+	| =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
   </td>
 </tr><tr>
   <td> =%<nop>STARTINCLUDE%= </td>
@@ -213,7 +216,7 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =nosearch="on"= | Suppress search string | Show search string |
 | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
 | =nototal="on"= | Do not show number of topics found | Show number |
-| ==header="..."== <br /> ==format="..."== | Custom format results: see *[[FormattedSearch]]* for usage, variables & examples | Results in table |
+| =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
 Regular example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= <br />
 Formatted example: ==%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%== _(displays results in a table with header - [[FormattedSearch][details]])_
 </td>
