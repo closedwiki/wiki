@@ -1,0 +1,4 @@
+TWiki::Contrib::DBCache,>=1.001,perl,Required. Download and install from the TWiki:Plugins/DBCacheContrib code library.
+Time::ParseDate,>=2003.0211,perl,Required. Available from [[http://cpan.uwinnipeg.ca/dist/Time-modules][CPAN]].
+Storable,>=2.07,perl,2.13 recommended; accelerates cache handling. Available from [[http://cpan.uwinnipeg.ca/dist/Storable][CPAN]]
+
