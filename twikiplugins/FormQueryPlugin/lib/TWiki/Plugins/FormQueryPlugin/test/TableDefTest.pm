@@ -2,7 +2,7 @@ package TableDefTest;
 
 use base qw(Test::Unit::TestCase);
 use TWiki::Plugins::FormQueryPlugin::TableDef;
-use TWiki::Plugins::FormQueryPlugin::Map;
+use TWiki::Plugins::DBCachePlugin::Map;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
@@ -17,7 +17,7 @@ blah
 %EDITTABLE{format=\"|text,16,none|select,1,\"a\",\"b\"|\" header=\"|*Fld1*|*This is field 2*\"}%
 junk");
 
-  my $map = $td->loadRow("|A|B|C|","FormQueryPlugin::Map");
+  my $map = $td->loadRow("|A|B|C|","DBCachePlugin::Map");
   $this->assert_str_equals("A",$map->get("Fld1"));
   $this->assert_str_equals("B",$map->get("Thisisfield2"));
 }

@@ -6,61 +6,18 @@ use strict;
 use TWiki::Func;
 
 use TWiki::Plugins::FormQueryPlugin::WebDB;
-use TWiki::Plugins::FormQueryPlugin::Map;
+use TWiki::Plugins::SharedCode::Attrs;
 
 # Extra stuff specific to the application of the FormQueryPlugin to it's
 # role as a requirements database - though still generally useful, so
 # left in.
 { package FormQueryPlugin::ReqDBSupport;
 
-  my %macros;
-  my %macro_times; # TimSlidel 1/4/04
-
-  # PUBLIC STATIC
-  # Expand a macro. The macro is identified by the 'topic' parameter
-  # and is loaded from the named topic. The remaining parameters have
-  # their values replaced into the macro and the expanded macro body
-  # is returned.
-  sub callMacro {
-    my ( $macro, $params, $web, $topic ) = @_;
-    my $attrs = new FormQueryPlugin::Map( $params );
-    my $dataDir = TWiki::Func::getDataDir() . "/$web"; #TimSlidel 1/4/04
-
-    my $mtop = $attrs->fastget( "topic" );
-    my $filename = "$dataDir/$mtop.txt"; # TimSlidel 1/4/04
-
-    if ( !defined( $macros{$mtop} ) ||
-       !$macro_times{$mtop}->uptodat() ) { # TimSlidel 1/4/04
-      if ( !TWiki::Func::topicExists( $web, $mtop )) {
-	return FormQueryPlugin::WebDB::moan( $macro, $params, "No such macro $mtop ", "" );
-      }
-      my $text = TWiki::Func::readTopicText( $web, $mtop );
-      $macro_times{$mtop} = new FormQueryPlugin::FileTime( $filename );
-      $text =~ s/%META:\w+{.*?}%//go;
-      $macros{$mtop} = $text;
-    }
-
-    my $m = $macros{$mtop};
-
-    foreach my $vbl ( $attrs->getKeys() ) {
-      my $val = $attrs->fastget( $vbl );
-      $m =~ s/%$vbl%/$val/g;
-    }
-
-    #$m = TWiki::Func::expandCommonVariables( $m, $topic, $web );
-
-    if ( $m =~ s/%STRIP%//go ) {
-      $m =~ s/[\r\n]+//go;
-    }
-
-    return $m;
-  }
-
   # Calculate number of working days between two dates.
   sub workingDays {
     my ( $macro, $params, $web, $topic ) = @_;
 
-    my $attrs = new FormQueryPlugin::Map( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $start = $attrs->fastget( "start" );
     $start = Time::ParseDate::parsedate( $start );
@@ -74,7 +31,7 @@ use TWiki::Plugins::FormQueryPlugin::Map;
       return FormQueryPlugin::WebDB::moan( $macro, $params, "'end' not defined, or bad date format", 0 );
     }
 
-    return FormQueryPlugin::Search::workingDays( $start, $end );
+    return DBCachePlugin::Search::workingDays( $start, $end );
   }
 
   # Shows a progress bar given
@@ -87,7 +44,7 @@ use TWiki::Plugins::FormQueryPlugin::Map;
     my ( $macro, $params, $web, $topic ) = @_;
     $params = TWiki::Func::expandCommonVariables( $params, "NoTopic", $web );
 
-    my $attrs = new FormQueryPlugin::Map( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $total = $attrs->fastget( "total" );
     if ( !defined( $total ) || $total <= 0 ) {
