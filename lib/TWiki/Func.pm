@@ -847,20 +847,21 @@ sub getTopicList
 }
 
 # =========================
-=pod
-
----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
-
-| Description: | Sets a names tag on the specified revision |
-| Parameter: =$web= | Web name |
-| Parameter: =$topic= | Topic name |
-| Parameter: =$rev= | The revision to tag |
-| Parameter: =$tag= | The string to tag with |
-| Return: =$success= |  |
-| TODO: | we _need_ an error mechanism! |
-| Since: | TWiki::Plugins::VERSION 1.022 (20 April 2004) |
-
-=cut
+# (undocumented feature of Cairo since RcsLite is not implemented yet)
+#=pod
+#
+#---+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+#
+#| Description: | Sets a names tag on the specified revision |
+#| Parameter: =$web= | Web name |
+#| Parameter: =$topic= | Topic name |
+#| Parameter: =$rev= | The revision to tag |
+#| Parameter: =$tag= | The string to tag with |
+#| Return: =$success= | (CODE_SMELL: Other functions return error string, or empty if OK) |
+#| TODO: | we _need_ an error mechanism! |
+#| Since: | TWiki::Plugins::VERSION 1.022 (20 April 2004) |
+#
+#=cut
 
 sub setTopicRevisionTag
 {
