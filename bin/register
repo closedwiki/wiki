@@ -116,7 +116,7 @@ sub main
     }
 
     # check if wikiName is a WikiName
-    if( ! &TWiki::isWikiName( $wikiName ) ) {
+    if( ! TWiki::isValidWikiWord( $wikiName ) ) {
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregwiki" );
         TWiki::redirect( $query, $url );
         return;
