@@ -1,22 +1,32 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093932928" format="1.0" version="1.1"}%
-	* *[[%WIKILOGOURL%][TWiki.org]]*
-
-	* *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
-	* *[[%TWIKIWEB%.TWikiRegistration][Register]]*
----
-	* <b>%INCLUDINGWEB% Web</b>
-	* [[%HOMETOPIC%][%WEB% Web Home]]
-	* [[TWikiUsers][Users]]
-	* [[TWikiGroups][Groups]]
-	* [[OfficeLocations][Offices]]
-	* [[%SCRIPTURL%/changes/%WEB%][Changes]]
-	* [[WebChanges][Changes detailed]]
-	* [[WebIndex][Topic list]]
-	* [[%INCLUDINGWEB%.WebSearch][Search]]
----
-	* *TWiki Webs*
-%WEBLIST{"		* [[$name.%HOMETOPIC%][$name]]" separator=""}%
-<div class="twikiLeftBarPersonal">
-%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate\">Create</a> personal sidebar"}%
+%META:TOPICINFO{author="WillNorris" date="1107843106" format="1.0" version="1.1"}%
+<div class="twikiLeftBarPersonal" style="margin-top:0;">
+%CALC{"$IF($EXACT(%USERNAME%,guest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]]<!-- <br /><small>[[Sandbox.LogoutAndLogin][Not me?]]</small> -->)"}%
+<script type="text/javascript">
+//<![CDATA[
+writeToggle("show","hide","twikiLeftBarPersonalContent")
+//]]>
+</script>
+<div id="twikiLeftBarPersonalContent">
+%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create</a> personal sidebar"}%
+</div>
 </div>
 
+   * *[[%WIKILOGOURL%][TWiki.org]]*
+---
+   * *[[Sandbox.WebHome][%X% NOTE: Please use the Sandbox web for testing]]*
+---
+   * *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
+   * *[[%TWIKIWEB%.TWikiRegistration][Register]]*
+   * *[[Codev.TWikiSecurityAlerts][Security Alerts]]*
+---
+   * <b>%INCLUDINGWEB% Web</b>
+   * [[%HOMETOPIC%][%WEB% Web Home]]
+   * [[TWikiUsers][Users]]
+   * [[TWikiGroups][Groups]]
+   * [[OfficeLocations][Offices]]
+   * [[%SCRIPTURL%/changes/%WEB%][Changes]]
+   * [[WebChanges][Changes detailed]]
+   * [[WebIndex][Topic list]]
+   * [[%INCLUDINGWEB%.WebSearch][Search]]
+
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
