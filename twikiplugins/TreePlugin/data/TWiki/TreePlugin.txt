@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MartinRaabe" date="1042736880" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="MartinRaabe" date="1043065324" format="1.0" version="1.3"}%
 ---++ <nop>%TOPIC%
 
 Enables dynamic generation of TWiki topic trees based on topics' parent-child relationships.
@@ -82,26 +82,26 @@ Contents:
 	| ==data/Plugins/TreeBookviewOutlineSample.txt== | Tree Bookview Outline Sample |
 	| ==data/Plugins/TreeBookviewOutlineSample.txt,v== | Version file of Tree Bookview Outline Sample |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	| ==twiki/templates/booktree.tmpl== | Template for bookview mode |
-	| ==twiki/lib/TWiki/Plugins/ColorNodeFormatter.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/FormatHelper.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/FormatOutlineNodeFormatter.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/HOutlineNodeFormatter.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/ImgNodeFormatter.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/ListNodeFormatter.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/TreePlugin/Node.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/NodeFormatter.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/OutlineNodeFormatter.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/TWikiNode.pm== | Library component |
-	| ==twiki/lib/TWiki/Plugins/test.tar.gz== | Test files |
-	| ==twiki/pub/TWiki/TreePlugin/I.gif== | tree icon |
-	| ==twiki/pub/TWiki/TreePlugin/L.gif== | tree icon |
-	| ==twiki/pub/TWiki/TreePlugin/oL.gif== | tree icon |
-	| ==twiki/pub/TWiki/TreePlugin/oT.gif== | tree icon |
-	| ==twiki/pub/TWiki/TreePlugin/pL.gif== | tree icon |
-	| ==twiki/pub/TWiki/TreePlugin/pT.gif== | tree icon |
-	| ==twiki/pub/TWiki/TreePlugin/T.gif== | tree icon |
-	| ==twiki/pub/TWiki/TreePlugin/white.gif== | tree icon |
+	| ==lib/TWiki/Plugins/%TOPIC%/ColorNodeFormatter.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/FormatHelper.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/FormatOutlineNodeFormatter.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/HOutlineNodeFormatter.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/ImgNodeFormatter.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/ListNodeFormatter.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/TreePlugin/Node.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/NodeFormatter.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/OutlineNodeFormatter.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/TWikiNode.pm== | Library component |
+	| ==lib/TWiki/Plugins/%TOPIC%/test.tar.gz== | Test files |
+	| ==pub/TWiki/TreePlugin/I.gif== | tree icon |
+	| ==pub/TWiki/TreePlugin/L.gif== | tree icon |
+	| ==pub/TWiki/TreePlugin/oL.gif== | tree icon |
+	| ==pub/TWiki/TreePlugin/oT.gif== | tree icon |
+	| ==pub/TWiki/TreePlugin/pL.gif== | tree icon |
+	| ==pub/TWiki/TreePlugin/pT.gif== | tree icon |
+	| ==pub/TWiki/TreePlugin/T.gif== | tree icon |
+	| ==pub/TWiki/TreePlugin/white.gif== | tree icon |
+	| ==templates/booktree.tmpl== | Template for bookview mode |
 
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any Plugins.WebPreferences topic).
