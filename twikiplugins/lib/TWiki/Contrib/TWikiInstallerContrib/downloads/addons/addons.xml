@@ -1,0 +1,32 @@
+<opt>
+  <addon>
+    <name>CacheAddOn</name>
+  </addon>
+  <addon>
+    <name>DiscussionForumAddOn</name>
+  </addon>
+  <addon>
+    <name>GetAWebAddOn</name>
+  </addon>
+  <addon>
+    <name>KupuEditorAddOn</name>
+  </addon>
+  <addon>
+    <name>PublishAddOn</name>
+  </addon>
+  <addon>
+    <name>SetVariableAddOn</name>
+  </addon>
+  <addon>
+    <name>SpellCheckAddOn</name>
+  </addon>
+  <addon>
+    <name>TWikiCacheAddOn</name>
+  </addon>
+  <addon>
+    <name>TopicClassificationAddOn</name>
+  </addon>
+  <addon>
+    <name>UserHomePageAddOn</name>
+  </addon>
+</opt>
