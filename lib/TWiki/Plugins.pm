@@ -25,12 +25,13 @@ This module handles Plugins loading, initialization and execution
 
 package TWiki::Plugins;
 
-##use strict;
+use strict;
+no strict 'refs';
 
 use vars qw(
-        @activePluginWebs @activePluginTopics @instPlugins @disabledPlugins
-        @registrableHandlers %registeredHandlers %onlyOnceHandlers
-	$VERSION $initialisationErrors
+			%activePluginWebs @activePlugins @instPlugins %disabledPlugins
+			@registrableHandlers %registeredHandlers %onlyOnceHandlers
+			$VERSION $initialisationErrors
     );
 
 $VERSION = '1.024';
@@ -89,7 +90,7 @@ sub discoverPluginPerlModules
     my @plugins = ();
     my @modules = ();
     if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
-        @modules = map{ s/^(.*?)\.pm$/$1/oi; $_ }
+        @modules = map{ s/\.pm$//i; $_ }
                    sort
                    grep /.+Plugin\.pm$/i, readdir DIR;
         push( @plugins, @modules );
@@ -150,6 +151,12 @@ sub registerPlugin
     #   3 Plugins.plugin
     #   4 thisweb.plugin
 
+    # Ignore an empty plugin name (should not happen, fix the calling function!).
+	if ( ! $plugin ) {
+      initialisationError( "Plugins: undefined or empty plugin name" );
+	  return;
+    }
+
     my $installWeb = '';
     # first check for fully specified plugin
     if ( $plugin =~ m/^(.+)\.([^\.]+Plugin)$/ ) {
@@ -157,7 +164,7 @@ sub registerPlugin
         $plugin = $2;
     } 
 
-    if( grep { /^$plugin$/ } @activePluginTopics ) {
+    if( $activePluginWebs{$plugin} ) {
         # Plugin is already registered
         return;
     }
@@ -190,6 +197,7 @@ sub registerPlugin
     my $p   = 'TWiki::Plugins::'.$plugin;
 
     eval "use $p;";
+
     if ($@) {
 	initialisationError("Plugin \"$p\" could not be loaded by Perl.  Errors were:\n----\n$@----");
 	return;
@@ -223,8 +231,8 @@ sub registerPlugin
             $sub = $p.'::'.$h;
             &registerHandler( $h, $sub ) if defined( &$sub );
         }
-        $activePluginWebs[@activePluginWebs] = $installWeb;
-        $activePluginTopics[@activePluginTopics] = $plugin;
+        $activePluginWebs{$plugin} = $installWeb;
+        push( @activePlugins, $plugin );;
     }
 }
 
@@ -277,9 +285,10 @@ sub initialize1
 
     # initialize variables, needed when TWiki::initialize called more then once
     %registeredHandlers = ();
-    @activePluginTopics = ();
-    @activePluginWebs = ();
-    @instPlugins = ();
+    undef @activePlugins;
+    undef %activePluginWebs;
+    undef @instPlugins;
+	undef %disabledPlugins;
 
     if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
         # bail out if authentication failed
@@ -291,35 +300,37 @@ sub initialize1
     $plugin =~ s/[\n\t\s\r]+/ /go;
     my @setInstPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
     $plugin = &TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
-    $plugin =~ s/[\n\t\s\r]+/ /go;
-    @disabledPlugins = map{ s/^.*\.(.*)$/$1/o; $_ }
-                       grep { /^.+Plugin$/ }
-                       split( /,?\s+/ , $plugin );
+	foreach my $p (split( /,?\s+/ , $plugin)) {
+	  if ( $p =~ /^.+Plugin$/ ) {
+		$p =~ s/^.*\.(.*)$/$1/;
+		$disabledPlugins{$p} = 1 if ( $p );
+	  }
+	}
 
     my @discoveredPlugins = discoverPluginPerlModules();
     my $p = "";
     foreach $plugin ( @setInstPlugins ) {
-        $p = $plugin;
-        $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        unless( grep { /^$p$/ } @disabledPlugins ) {
-            push( @instPlugins, $plugin );
-        }
+	  $p = $plugin;
+	  $p =~ s/^.*\.(.*)$/$1/o; # cut web
+	  if( $p && !$disabledPlugins{$p} ) {
+		push( @instPlugins, $plugin );
+	  }
     }
     # append discovered plugin modules to installed plugin list
     push( @instPlugins, @discoveredPlugins );
-    
+
     # for efficiency we register all possible handlers at once
     my $user = "";
     my $posUser = "";
     foreach $plugin ( @instPlugins ) {
-        $p = $plugin;
-        $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        unless( grep { /^$p$/ } @disabledPlugins ) {
-            $posUser = registerPlugin( $plugin, $theTopicName, $theWebName, "", $theLoginName, $theUrl, $thePathInfo );
-            if( $posUser ) {
-               $user = $posUser;
-            }
-        }
+	  $p = $plugin;
+	  $p =~ s/^.*\.(.*)$/$1/o; # cut web
+	  unless( $disabledPlugins{$p} ) {
+		$posUser = registerPlugin( $plugin, $theTopicName, $theWebName, "", $theLoginName, $theUrl, $thePathInfo );
+		if( $posUser ) {
+		  $user = $posUser;
+		}
+	  }
     }
     unless( $user ) {
         $user = &TWiki::initializeRemoteUser( $theLoginName );
@@ -348,7 +359,7 @@ sub initialize2
     foreach $plugin ( @instPlugins ) {
         $p = $plugin;
         $p =~ s/^.*\.(.*)$/$1/o; # cut web
-        unless( grep { /^$p$/ } @disabledPlugins ) {
+        unless( $disabledPlugins{$p} ) {
             registerPlugin( $plugin, @_, $theWebName, $theUser );
         }
     }
@@ -399,11 +410,11 @@ sub handlePluginDescription
     my $text = "";
     my $line = "";
     my $pref = "";
-    for( my $i = 0; $i < @activePluginTopics; $i++ ) {
-        $pref = uc( $activePluginTopics[$i] ) . "_SHORTDESCRIPTION";
+    foreach my $plugin ( @activePlugins ) {
+        $pref = uc( $plugin ) . "_SHORTDESCRIPTION";
         $line = &TWiki::Prefs::getPreferencesValue( $pref );
         if( $line ) {
-            $text .= "\t\* $activePluginWebs[$i].$activePluginTopics[$i]: $line\n"
+            $text .= "\t\* $activePluginWebs{$plugin}.$plugin: $line\n"
         }
     }
 
@@ -422,8 +433,8 @@ Not yet documented.
 sub handleActivatedPlugins
 {
     my $text = "";
-    for( my $i = 0; $i < @activePluginTopics; $i++ ) {
-        $text .= "$activePluginWebs[$i].$activePluginTopics[$i], "
+    foreach my $plugin ( @activePlugins ) {
+	  $text .= "$activePluginWebs{$plugin}.$plugin, ";
     }
     $text =~ s/\,\s*$//o;
     return $text;
