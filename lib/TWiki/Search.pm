@@ -429,8 +429,8 @@ sub searchWeb
             $beforeText = $theHeader;
         }
 
-        $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/o;
-        $beforeText =~ s/%WEB%/$thisWebName/o;
+        $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
+        $beforeText =~ s/%WEB%/$thisWebName/go;
         $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
         $afterText  = &TWiki::handleCommonTags( $afterText, $topic );
         if( ! $noHeader ) {
