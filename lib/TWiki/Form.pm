@@ -286,7 +286,7 @@ sub chooseFormButton
 # Render form information 
 =pod
 
----++ sub renderForEdit (  $web, $topic, $form, $meta, $query, @fieldsInfo  )
+---++ sub renderForEdit (  $web, $topic, $form, $meta, $query, $newFormForTopic,  @fieldsInfo  )
 
 Not yet documented.
 
@@ -294,7 +294,7 @@ Not yet documented.
 
 sub renderForEdit
 {
-    my( $web, $topic, $form, $meta, $query, @fieldsInfo ) = @_;
+    my( $web, $topic, $form, $meta, $query, $newFormForTopic, @fieldsInfo ) = @_;
 
     my $chooseForm = "";   
     if( TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) ) {
@@ -323,6 +323,10 @@ sub renderForEdit
            # Allow initialisation based on a preference
            $value = &TWiki::Prefs::getPreferencesValue($fieldName);
         }
+		if( ($newFormForTopic)) {
+			my $tmp = $fieldInfo[0] || "";
+			$value = &TWiki::handleCommonTags( $tmp, $topic );
+		}
         $value = "" unless defined $value;  # allow "0" values
         my $extra = "";
         

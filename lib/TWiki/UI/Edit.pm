@@ -62,6 +62,8 @@ sub edit {
   my $theParent = $query->param( 'topicparent' ) || "";
   my $ptext = $query->param( 'text' );
 
+  my $newFormForTopic = $formTemplate ne "";
+
   return unless TWiki::UI::webExists( $webName, $topic );
 
   return if TWiki::UI::isMirror( $webName, $topic );
@@ -215,7 +217,7 @@ sub edit {
       TWiki::UI::oops( $webName, $topic, "noformdef" );
       return;
     }
-    my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, @fieldDefs );
+    my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $newFormForTopic, @fieldDefs );
     $tmpl =~ s/%FORMFIELDS%/$formText/go;
   } elsif( $saveCmd ne "repRev" && TWiki::Prefs::getPreferencesValue( "WEBFORMS", $webName )) {
     $form = '<table width="100%"><tr><td align="right">'
