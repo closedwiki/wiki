@@ -18,13 +18,12 @@
       * Child topics in __%WEB% Web__: %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title=""}%
 
 <form name="main" action="%EDITURL%">
-   * *Parent of <nop>%TOPIC%:*
-      * Set topic parent to
-        <select name="topicparent"><option value="">Select...</option>
+   * *Set new topic parent:*
+      * Step 1: Select topic parent: %BR%
+        <select name="topicparent" size="10"><option value="">Select...</option>
         %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
-        </select>,
-        then <input type="submit" value="Edit" /> and save the topic
-        to activate the new parent.
+        </select>
+      * Step 2: Continue to <input type="submit" value="Edit" /> and save <nop>%TOPIC% to activate the new parent
 </form>
 
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
