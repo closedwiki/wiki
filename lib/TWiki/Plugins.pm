@@ -98,6 +98,7 @@ sub initialize
 		  split( /,?\s+/ , $active );
 
     # for efficiency we register all possible handlers at once
+    %registeredHandlers = ();  # needed when TWiki::initialize called more then once
     my $plug    = "";
     foreach $plug ( @pluginList ) {
         &registerPlugin( $plug, @_ );

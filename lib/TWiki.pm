@@ -100,7 +100,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "06 Mar 2001";
+$wikiversion      = "08 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -296,7 +296,7 @@ sub initializeRemoteUser
                     $text .= "$usrAddr|$usrName|\n";
                 }
             }
-            TWiki::saveFile( $remoteUserFilename, $text );
+            &TWiki::Store::saveFile( $remoteUserFilename, $text );
         }
     } else {
         # get user name from AddrToName table
