@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1029257204" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1062998687" format="1.0" version="1.10"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -34,8 +34,9 @@ Variables that can be used in the format string:
 | =$date= | Time stamp of last topic update, like =%GMTIME{"$day $mon $year - $hour:$min"}%= |
 | =$isodate= | Time stamp of last topic update, like =%GMTIME{"$year-$mo-$dayT$hour:$minZ"}%= |
 | =$rev= | Number of last topic revision, like =1.4= |
+| =$username= | Login name of last topic update, like =jsmith= |
+| =$wikiname= | Wiki user name of last topic update, like =<nop>JohnSmith= |
 | =$wikiusername= | Wiki user name of last topic update, like =%MAINWEB%.<nop>JohnSmith= |
-| =$username= | User name of last topic update, like =<nop>JohnSmith= |
 | =$summary= | Topic summary |
 | =$formfield(name)= | The field value of a form field; for example, =$formfield(<nop>TopicClassification)= would get expanded to =PublicFAQ=. This applies only to topics that have a [[TWikiForms][TWikiForm]] |
 | =$formfield(name, 10)= | Form field value, "<tt>- </tt>" hyphenated each 10 characters |
