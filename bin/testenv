@@ -737,7 +737,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
     }
 
     # Locales are off, or using pre-5.6 Perl, so have to explicitly list the accented characters
-    my $perlVerPreferred = 5.006	# 5.6 or higher has [:lower:] etc
+    my $perlVerPreferred = 5.006;	# 5.6 or higher has [:lower:] etc
     if ( not $useLocale or $perlvernum < $perlVerPreferred ) {
 
 	# If using Perl 5.005_03 or lower, generate upper and lower case character
