@@ -34,20 +34,12 @@ package TWiki::Plugins::EncryptedPagesPlugin;
 use vars qw(
         $web $topic $user $installWeb  $VERSION $debug
         $prefixPattern $postfixPattern
-        $debug
+        $replacementText
     );
 
 
 $VERSION = '1.000';
 
-$prefixPattern  = '%ENCRYPTEDPAGE{';
-$postfixPattern = '}%';
-$replacementText = <<EOT;
-<APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%ATTACHURL%/TwikiEncrypt.jar,%ATTACHURL%/Crypt.jar"  WIDTH = 400 HEIGHT = 200>
-<PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
-<PARAM NAME="KEY" VALUE="--!!--">
-</APPLET>
-EOT
 
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -76,6 +68,15 @@ sub initPlugin
 
     $debug = &TWiki::Func::getPreferencesFlag( "ENCRYPTEDPAGESPLUGIN_DEBUG" );
 
+    $prefixPattern  = '%ENCRYPTEDPAGE{';
+    $postfixPattern = '}%';
+    $replacementText = <<EOT;
+<APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%ATTACHURL%/TwikiEncrypt.jar,%ATTACHURL%/Crypt.jar"  WIDTH = 400 HEIGHT = 200>
+<PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
+<PARAM NAME="KEY" VALUE="--!!--">
+</APPLET>
+EOT
+
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::EncryptedPagesPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
@@ -89,22 +90,21 @@ sub DISABLE_commonTagsHandler
 }
 
 # =========================
-sub startRenderingHandler
+sub DISABLE_startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
     &TWiki::Func::writeDebug( "- EncryptedPagesPlugin::startRenderingHandler( $_[1] )" ) if $debug;
-    $_[0] =~ s/$prefixPattern(.*)$postfixPattern/$replacementText/geo;
-    my $key= $1;
-    $_[0] =~ s/--!!--/$key/geo;
 }
 
 # =========================
 # Expand the Site:page references, called once per line of text
-sub DISABLE_outsidePREHandler
+sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-
+    $_[0] =~ s/$prefixPattern(.*)$postfixPattern/$replacementText/geo;
+    my $key= $1;
+    $_[0] =~ s/--!!--/$key/geo;
 }
 
 # =========================
