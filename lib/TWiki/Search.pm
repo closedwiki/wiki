@@ -447,30 +447,15 @@ sub searchWeb
 	    ##TWiki::writeDebug "Topic list after sort = @topicList";
         }
 
-        # output header of $thisWebName
+        # header and footer of $thisWebName
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
         if( $theHeader ) {
             $theHeader =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
 	    # TODO: i18n fix
             $theHeader =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
-            $theHeader =~ s/([^\n])$/$1\n/gos;
             $beforeText = $theHeader;
             $beforeText =~ s/\$web/$thisWebName/gos;
-        }
-
-        $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
-        $beforeText =~ s/%WEB%/$thisWebName/go;
-        $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
-        $afterText  = &TWiki::handleCommonTags( $afterText, $topic );
-        if( ! $noHeader ) {
-            if( $doInline || $theFormat ) {
-                # print at the end if formatted search because of table rendering
-                $searchResult .= $beforeText;
-            } else {
-                $beforeText = &TWiki::getRenderedVersion( $beforeText, $thisWebName );
-                $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
-                print $beforeText;
-            }
+            $beforeText =~ s/([^\n])$/$1\n/os;
         }
 
         # output the list of topics in $thisWebName
@@ -567,8 +552,6 @@ sub searchWeb
                 $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
                 $tempVal = &TWiki::getRenderedVersion( $tempVal );
             }
-
-
 
             if( $doRenameView ) { # added JET 19 Feb 2000
                 my $rawText = &TWiki::Store::readTopicRaw( $thisWebName, $topic );
@@ -668,6 +651,22 @@ sub searchWeb
                 $tempVal =~ s/%TEXTHEAD%/$head/go;
             }
 
+            # lazy output of header (only if needed for the first time)
+            unless( $ntopics || $noHeader ) {
+                $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
+                $beforeText =~ s/%WEB%/$thisWebName/go;
+                $beforeText = &TWiki::handleCommonTags( $beforeText, $topic );
+                if( $doInline || $theFormat ) {
+                    # print at the end if formatted search because of table rendering
+                    $searchResult .= $beforeText;
+                } else {
+                    $beforeText = &TWiki::getRenderedVersion( $beforeText, $thisWebName );
+                    $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
+                    print $beforeText;
+                }
+            }
+
+            # output topic
             if( $doInline || $theFormat ) {
                 # print at the end if formatted search because of table rendering
                 $searchResult .= $tempVal;
@@ -678,31 +677,37 @@ sub searchWeb
             }
 
             $ntopics += 1;
-            last if $ntopics >= $theLimit;
-        }
-    
-        # output footer of $thisWebName
-        if( $doInline || $theFormat ) {
-            # print at the end if formatted search because of table rendering
-            $afterText =~ s/\n$//gos;  # remove trailing new line
-            $searchResult .= $afterText;
-        } else {
-            $afterText = &TWiki::getRenderedVersion( $afterText, $thisWebName );
-            $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
-            print $afterText;
-        }
+            last if( $ntopics >= $theLimit );
+        } # end topic loop in a web
 
-        if( ! $noTotal ) {
-            # print "Number of topics:" part
-            my $thisNumber = $tmplNumber;
-            $thisNumber =~ s/%NTOPICS%/$ntopics/go;
+        # output footer only if hits in web
+        if( $ntopics ) {
+            # output footer of $thisWebName
+            $afterText  = &TWiki::handleCommonTags( $afterText, $topic );
             if( $doInline || $theFormat ) {
                 # print at the end if formatted search because of table rendering
-                $searchResult .= $thisNumber;
+                $afterText =~ s/\n$//gos;  # remove trailing new line
+                $searchResult .= $afterText;
             } else {
-                $thisNumber = &TWiki::getRenderedVersion( $thisNumber, $thisWebName );
-                $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
-                print $thisNumber;
+                $afterText = &TWiki::getRenderedVersion( $afterText, $thisWebName );
+                $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
+                print $afterText;
+            }
+        }
+
+        # output number of topics (only if hits in web or if search only one web)
+        if( $ntopics || @webList < 2 ) {
+            unless( $noTotal ) {
+                my $thisNumber = $tmplNumber;
+                $thisNumber =~ s/%NTOPICS%/$ntopics/go;
+                if( $doInline || $theFormat ) {
+                    # print at the end if formatted search because of table rendering
+                    $searchResult .= $thisNumber;
+                } else {
+                    $thisNumber = &TWiki::getRenderedVersion( $thisNumber, $thisWebName );
+                    $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
+                    print $thisNumber;
+                }
             }
         }
     }
