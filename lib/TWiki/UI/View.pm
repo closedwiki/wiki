@@ -203,7 +203,6 @@ sub view {
         # to use two templates
         # SMELL: won't work with non-default skins, see %EDITURL%
         $tmpl =~ s/%EDITTOPIC%/CGI::strike('Edit')/ge;
-print STDERR $tmpl;
         $tmpl =~ s/<a\s[^>]*href="[^"]*\/(attach|rename)\b[^>]*>(.*?)<\/a>/CGI::strike($2)/gei;
         $tmpl =~ s/%REVTITLE%/(r$rev)/go;
         $tmpl =~ s/%REVARG%/&rev=$rev/go;
