@@ -519,6 +519,7 @@ sub searchWeb
                 $tempVal =~ s/\$isodate/&TWiki::revDate2ISO($revDate)/geos;
                 $tempVal =~ s/\$rev/1.$revNum/gos;
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
+                $tempVal =~ s/\$wikiname/wikiName($revUser)/geos;
                 $tempVal =~ s/\$username/&TWiki::wikiToUserName($revUser)/geos;
                 if( $tempVal =~ m/\$text/ ) {
                     # expand topic text
@@ -771,6 +772,15 @@ sub getTextPattern
     $theText = "" unless( $theText =~ s/$thePattern/$1/is );
 
     return $theText;
+}
+
+#=========================
+sub wikiName
+{
+    my( $theWikiUserName ) = @_;
+
+    $theWikiUserName =~ s/^.*\.//o;
+    return $theWikiUserName;
 }
 
 #=========================
