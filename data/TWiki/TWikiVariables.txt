@@ -118,9 +118,10 @@
 Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web="%TWIKIWEB%"}%</b>=
 </tr><tr>
   <td> =%<nop>SEARCH{"str" ...}%= </td>
-  <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search string, followed by optional =name="value"= pairs:
+  <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search term (enclosed in double quotes), followed by optional =name="value"= pairs: [1]
 | *Pair:* | *Description:* | *Default:* |
-| =web="Name"= <br> =web="%MAINWEB% Know"= <br> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or all webs =[1]= | Current web |
+| =search="food"= | Search term, (either regex or literal, depending on the =regex= parameter) | (used if initial search term is missing) |
+| =web="Name"= <br> =web="%MAINWEB% Know"= <br> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or all webs =[2]= | Current web |
 | =scope="topic"= <br> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
 | =order="topic"= <br> =order="modified"= <br> =order="editby"= | Sort the results of search by the topic names, last modified time, or last editor | Sort by topic name |
 | =limit="all"= <br> =limit="16"= | Limit the number of results returned | All results |
@@ -139,7 +140,9 @@ Example: =<b>%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%</b>= </td>
 
 </tr></table>
 
-[1] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its %WEBPREFSTOPIC%.
+[1] __Note__: The search form uses identical names for input fields.
+
+[2] __Note__: A web can be excluded from a =web="all"= search if you define a =NOSEARCHALL=on= variable in its %WEBPREFSTOPIC%.
 
 ---+++ Preferences Variables
 
@@ -232,4 +235,4 @@ __Notes:__
 	* Additional preferences variables can be defined on all three level as needed. Example:
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
--- PeterThoeny - 15 Mar 2001 <br>
+-- PeterThoeny - 24 Mar 2001 <br>
