@@ -91,7 +91,7 @@ sub _save {
         return 1;
     }
 
-    if( $query->param( 'submitchangeform' )) {
+    if( $query->param( 'submitChangeForm' )) {
         $session->{form}->changeForm( $webName, $topic );
         # return 0 to prevent extra redirect
         return 0;
