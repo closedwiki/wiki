@@ -509,9 +509,7 @@ sub _renderNonExistingWikiWord {
 
 
 # NOTE: factored for clarity. Test for any speed penalty.
-=pod
-returns the (web, topic) 
-=cut
+# returns the (web, topic) 
 #SMELL - we must have implemented this elsewhere?
 sub _getWeb {
     # Internal link: get any 'Web.' prefix, or use current web
@@ -524,17 +522,14 @@ sub _getWeb {
     return ($web, $theLink);
 }
 
-=pod
- _handleWikiWord is called by the TWiki Render routine when it sees a 
- wiki word that needs linking.
- Handle the various link constructions. e.g.:
- WikiWord
- Web.WikiWord
- Web.WikiWord#anchor
-
- This routine adds missing parameters before passing off to internallink
-=cut
-
+# _handleWikiWord is called by the TWiki Render routine when it sees a 
+# wiki word that needs linking.
+# Handle the various link constructions. e.g.:
+# WikiWord
+# Web.WikiWord
+# Web.WikiWord#anchor
+#
+# This routine adds missing parameters before passing off to internallink
 sub _handleWikiWord {
     my ( $this, $theWeb, $web, $topic, $anchor ) = @_;
 
@@ -543,9 +538,11 @@ sub _handleWikiWord {
     my $text;
 
     $web = $theWeb unless (defined($web));
-    $anchor = "" unless (defined($anchor));
-
-    ASSERT(($anchor =~ m/\#.*/)) if DEBUG; # must include a hash.
+    if( defined( $anchor )) {
+        ASSERT(($anchor =~ m/\#.*/)) if DEBUG; # must include a hash.
+    } else {
+        $anchor = "" ;
+    }
 
     if ( defined( $anchor ) ) {
        # 'Web.TopicName#anchor' or 'Web.ABBREV#anchor' link
@@ -583,11 +580,9 @@ sub _handleWikiWord {
 }
 
 
-=pod
 # Handle SquareBracketed links mentioned on page $theWeb.$theTopic
 # format: [[$theText]]
 # format: [[$theLink][$theText]]
-=cut
 sub _handleSquareBracketedLink {
     my( $this, $theWeb, $theTopic, $theText, $theLink ) = @_;
 
@@ -597,7 +592,8 @@ sub _handleSquareBracketedLink {
     $theLink =~ s/^\s*//;
     $theLink =~ s/\s*$//;
     return _protocolLink($theLink, $theText) if( $theLink =~ /^$TWiki::regex{linkProtocolPattern}\:/ );
-    my ($web, $theLink) = _getWeb($theLink);
+    my $web;
+    ($web, $theLink) = _getWeb($theLink);
     $web = $theWeb unless ($web);
 
     # Extract '#anchor'
@@ -618,14 +614,12 @@ sub _handleSquareBracketedLink {
     return $this->internalLink( $web, $topic, $theText, $anchor, 1, undef );
 }
 
-=pod 
----++ sub _protocolLink 
- Called whenever SquareBracketed links point at an external URL 
- e.g. file: ftp: http: 
- used to be called specificLink, but renamed as it is specific to a protocol
- 
- returns the HTML fragment
-=cut
+#---++ _protocolLink
+# Called whenever SquareBracketed links point at an external URL 
+# e.g. file: ftp: http: 
+# used to be called specificLink, but renamed as it is specific to a protocol
+#
+# returns the HTML fragment
 sub _protocolLink {
     my ($theLink, $theText) = @_;
 

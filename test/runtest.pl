@@ -32,6 +32,11 @@ unless( $args =~ /\bnoupdate\n/ ) {
     print "</pre>\n";
 }
 
+unless( $args =~ /\bnodocs\b/ ) {
+    print "<h1>Update docs</h1>";
+    print `cd ../tools && perl gendocs.pl`;
+}
+
 unless( $args =~ /\bnocompile\b/ ) {
     print "<h1>Compile Tests</h1>\n";
     my $pms = `find ../lib -name '*.pm'`;
