@@ -90,10 +90,6 @@ sub main
        
        TWiki::writeDebug( "rename: about to checkLocks" );
        
-       if( ! getLocks( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock ) ) {
-          return;
-       }
-     
        # FIXME no point old and new topics being same (if in same WEB)
     }
     TWiki::writeDebug( "rename: permission okay" );
@@ -103,6 +99,14 @@ sub main
        newTopicScreen( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $confirm );
        return;    
     } 
+    
+    if( ! $justChangeRefs ) {
+        if( ! getLocks( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock ) ) {
+              return;
+        }
+    }
+         
+
         
     my $fileName = &TWiki::Store::getFileName($oldWeb, $oldTopic);
     my $newName = &TWiki::Store::getFileName($newWeb, $newTopic);
@@ -119,10 +123,13 @@ sub main
     TWiki::writeDebug( "rename: checkExist okay" );
 
     # FIXME should warn if newname is not a wiki name
+    # FIXME to do after move?
     TWiki::writeDebug( "rename: about to find referring pages" );
-    my @refs = findReferingPages( $oldWeb, $oldTopic );
-    my ( $lockFailues, $problems ) = 
-       updateReferingPages( $oldWeb, $oldTopic, $newWeb, $newTopic, @refs );
+    if( ! $theAttachment ) {
+        my @refs = findReferingPages( $oldWeb, $oldTopic );
+        my ( $lockFailues, $problems ) = 
+            updateReferingPages( $oldWeb, $oldTopic, $newWeb, $newTopic, @refs );
+    }
 
     if( ! $justChangeRefs ) {
        if( $theAttachment ) {
@@ -139,8 +146,16 @@ sub main
               return;
           }
        } else {
-	  &TWiki::Store::renameTopic( $oldWeb, $oldTopic, $newWeb, $newTopic );
-	  # FIXME possibly errors
+	  my $renameError = &TWiki::Store::renameTopic( $oldWeb, $oldTopic, $newWeb, $newTopic, "relink" );
+	  if( $renameError ) {
+	      TWiki::writeHeader( $query );
+	      my $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
+	      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+	      $tmpl =~ s/%SUMMARY%/problem renaming topic/go;
+	      $tmpl =~ s/%DETAIL%/$renameError/go;
+	      print $tmpl;
+	      return;
+           }
        } 
     }
 
@@ -186,17 +201,20 @@ sub findReferingPages
     my @result = ();
     
     # Go through parameters finding all topics for change
-    my $count = 1;
-    while ($query->param("TOPIC$count")) {
-       my $checked = $query->param("RENAME$count");
-       TWiki::writeDebug("$count $checked");
-       if ($checked) {
-          push @result, $query->param("TOPIC$count");
-          TWiki::writeDebug("$count @result");
-       }
-       $count++;
+    my @types = qw\local global\;
+    foreach my $type ( @types ) {
+	my $count = 1;
+	while( $query->param( "TOPIC$type$count" ) ) {
+	   my $checked = $query->param( "RENAME$type$count" );
+	   TWiki::writeDebug("rename: $count $type $checked");
+	   if ($checked) {
+	      push @result, $type;
+	      push @result, $query->param( "TOPIC$type$count" );
+	      TWiki::writeDebug("rename: $count $type @result");
+	   }
+	   $count++;
+	}
     }
-    
     return @result;
 }
 
@@ -210,11 +228,13 @@ sub updateReferingPages
     my $lockFailure = 0;
 
     my $result = "";
+    my $preTopic = "^\|[\\*\\s][\\(\\-\\*\\s]*";
+    my $postTopic = "$\|[_\\*<\\s]";
 
-    my $item = "";
-    foreach $item ( @refs )
-    {
-       my ($itemWeb, $itemTopic) = TWiki::Store::getWebTopic($item);
+    while ( @refs ) {
+       my $type = shift @refs;
+       my $item = shift @refs;
+       my($itemWeb, $itemTopic) = TWiki::Store::getWebTopic($item);
        TWiki::writeDebug("link to change in $item, $itemWeb, $itemTopic");
        if ( &TWiki::Store::topicIsLockedBy( $itemWeb, $itemTopic ) ) {
           $lockFailure = 1;
@@ -224,18 +244,22 @@ sub updateReferingPages
           $result .= ":$item: , "; 
           #open each file, replace $topic with $newTopic
           if ( &TWiki::Store::topicExists($itemWeb, $itemTopic) ) { 
-	     my $scantext = &TWiki::Store::readWebTopic($itemWeb, $itemTopic);
+	     my( $scantext, @meta ) = &TWiki::Store::readWebTopicNew($itemWeb, $itemTopic);
 	     foreach( split( /\n/, $scantext ) ) {
-	        # Deal with longest pattern first
-	        my $preTopic = "^\|[\\*\\s][\\(\\-\\*\\s]*";
-	        my $postTopic = "$\|[_\\*<\\s]";
-	        s/($preTopic)\Q$oldWeb.$oldTopic\E($postTopic)/$1$newWeb.$newTopic$2/go;
-	        my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
-	        s/($preTopic)\Q$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/go;
-	        #s/($preTopic)\Q$oldTopic\E$/$1$insertWeb$newTopic/go;
+	        if( $type eq "global" ) {
+	            my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
+	            s/($preTopic)\Q$oldWeb.$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
+	        } else {
+	            # Only replace bare topic (i.e. not preceeded by web) if web of referring
+	            # topic is in original Web of topic that's being moved
+	            if( $oldWeb eq $itemWeb ) {
+	                my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
+	                s/($preTopic)\Q$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
+	            }
+	        }
 	        $resultText .= "$_\n";
 	     }
-	     &TWiki::Store::save($itemWeb, $itemTopic, $resultText);
+	     &TWiki::Store::saveTopicNew( $itemWeb, $itemTopic, $resultText, \@meta, "", "unlock", "dontNotify", "" );
           } else {
 	    $result .= ";$item does not exist;"; # FIXME is this needed?
           }
@@ -295,9 +319,9 @@ sub checkExist
       $ret = "problem";
    }
 
-   # Does old topic exist?
+   # Does old attachment exist?
    if( ! -e $oldFileName) {
-      print "Content-type: text/html\n\n";
+      TWiki::writeHeader( $query );
       $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
       $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic );
       print $tmpl;
@@ -312,7 +336,7 @@ sub checkExist
       $tmpl = &TWiki::Store::readTemplate( "oopsgeneral" );
       ##TWiki::writeDebug( "rename: tmpl = $tmpl" );
       $tmpl =~ s/%SUMMARY%/Topic $newTopic already exists/go;
-      $tmpl =~ s/%DETAIL%/Topic $newTopic already exists in Web $newWeb, press _Back_ and try a new name/go;
+      $tmpl =~ s|%DETAIL%|Topic $newTopic already exists in Web $newWeb, press <I>Back</I> and try a new name|go;
       # FIXME - could offer number addition to topic name that doesn't exist?
       $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
       print $tmpl;
@@ -323,7 +347,7 @@ sub checkExist
    if( $theAttachment && ! -e $newFileName ) {
       print "Content-type: text/html\n\n";
       $tmpl= &TWiki::Store::readTemplate( "oopsmissing" );
-      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic );
+      $tmpl = &TWiki::handleCommonTags( $tmpl, $newTopic, $newWeb );
       print $tmpl;
       $ret = "problem"; 
    }
@@ -338,20 +362,54 @@ sub getLocks
 {
     my( $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment, $breakLock ) = @_;
     
-    # Check for lock - at present the lock can't be broken
-    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $oldWeb, $oldTopic );
-    TWiki::writeDebug( "rename lockUser = $lockUser");
-    if( ! $breakLock && $lockUser ) {
-       # warn user that other person is editing this topic
-       $lockUser = &TWiki::userToWikiName( $lockUser );
-       use integer;
-       $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
+    my( $oldLockUser, $oldLockTime, $newLockUser, $newLockTime );
+    
+    if( ! $breakLock ) {
+	# Check for lock - at present the lock can't be broken
+	( $oldLockUser, $oldLockTime ) = &TWiki::Store::topicIsLockedBy( $oldWeb, $oldTopic );
+	if( $oldLockUser ) {
+	   $oldLockUser = &TWiki::userToWikiName( $oldLockUser );
+	   use integer;
+	   $oldLockTime = ( $oldLockTime / 60 ) + 1; # convert to minutes
+	}
+
+	if( $theAttachment ) {
+	    ( $newLockUser, $newLockTime ) = &TWiki::Store::topicIsLockedBy( $newWeb, $newTopic );
+	    if( $newLockUser ) {
+	       $newLockUser = &TWiki::userToWikiName( $newLockUser );
+	       use integer;
+	       $newLockTime = ( $newLockTime / 60 ) + 1; # convert to minutes
+	       my $editLock = $TWiki::editLockTime / 60;
+	    }
+	}
+    }
+    
+    if( $oldLockUser || $newLockUser ) {
+       my $tmpl = &TWiki::Store::readTemplate( "oopslockedrename" );
        my $editLock = $TWiki::editLockTime / 60;
-       # PTh 20 Jun 2000: changed to getOopsUrl
-       my $url = &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopslockedrename",
-	   $lockUser, $editLock, $lockTime );
-       print $query->redirect( $url );
+       if( $oldLockUser ) {
+           $tmpl =~ s/%OLD_LOCK%/Source topic $oldWeb.$oldTopic is locked by $oldLockUser, lock expires in $oldLockTime minutes.<BR>/go;
+       } else {
+           $tmpl =~ s/%OLD_LOCK%//go;
+       }
+       if( $newLockUser ) {
+           $tmpl =~ s/%NEW_LOCK%/Destination topic $newWeb.$newTopic is locked by $newLockUser, lock expires in $newLockTime minutes.<BR>/go;
+       } else {
+           $tmpl =~ s/%NEW_LOCK%//go;
+       }
+       $tmpl =~ s/%NEW_WEB%/$newWeb/go;
+       $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
+       $tmpl =~ s/%ATTACHMENT%/$theAttachment/go;
+       $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+       $tmpl = &TWiki::getRenderedVersion( $tmpl, $oldWeb );
+       print "Content-type: text/html\n\n";
+       print $tmpl;
        return "";
+    } else {
+       &TWiki::Store::lockTopicNew( $oldWeb, $oldTopic );
+       if( $theAttachment ) {
+            &TWiki::Store::lockTopicNew( $newWeb, $newTopic );
+       }
     }
 
     # FIXME too much repeated code
