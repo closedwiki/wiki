@@ -164,12 +164,7 @@ sub main
        my $ptext = $query->param( 'text' );
        if( defined $ptext ) {
            $text = $ptext;
-       # FIXME move this to a common area
-       $text =~ s/%_N_%/\r\n/go;
-       $text =~ s/%_L_%/</go;
-       $text =~ s/%_G_%/>/go;
-       $text =~ s/%_Q_%/\"/go;
-       $text =~ s/%_A_%/&/go;
+           $text = &TWiki::decodeSpecialChars( $text );
     }
     }
     
@@ -202,12 +197,7 @@ sub main
     # Dont want to render form fields, so this after getRenderedVersion
     my %formMeta = $meta->findOne( "FORM" );
     my $form = "";
-    if( ! %formMeta ) {
-       $form = TWiki::Prefs::getPreferencesValue( "DEFFORM", $webName );
-       $tmpl =~ s/%FORMTEMPLATE%/$form/go;
-    } else {
-       $form = $formMeta{"name"};
-    }
+    $form = $formMeta{"name"} if( %formMeta );
     if( $form && $saveCmd ne "repRev" ) {
        my @fieldDefs = &TWiki::Form::getFormDef( $webName, $form );
        
