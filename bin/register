@@ -23,8 +23,8 @@ use TWiki;
 use TWiki::Net;
 
 if( $TWiki::OS eq "WINDOWS" ) {
-    use MIME::Base64;
-    use Digest::SHA1;
+    require MIME::Base64;
+    require Digest::SHA1;
 }
 
 
