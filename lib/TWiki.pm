@@ -79,10 +79,10 @@ use vars qw(
         $disableAllPlugins 
     );
 
-# Intercnationalisation (I18N) config frow TWiki.cfg:
+# Internationalisation (I18N) config from TWiki.cfg:
 use vars qw(
-	$useLocale $localeRegexes $siteLocale $upperNational
-	$lowerNational
+	$useLocale $localeRegexes $siteLocale $siteCharsetOverride 
+	$upperNational $lowerNational
     );
 
 # ===========================
@@ -103,8 +103,7 @@ use vars qw(
 
 # Internationalisation (I18N) setup:
 use vars qw(
-	$basicInitDone $siteCharset $siteCharsetEbcdic $siteCharsetOverride 
-	$siteLang $siteFullLang $urlCharEncoding 
+	$basicInitDone $siteCharset $siteLang $siteFullLang $urlCharEncoding 
     );
 
 # Regex setup for internationalisation:
@@ -134,7 +133,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "30 Jan 2004";
+$wikiversion      = "8 Feb 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -162,8 +161,6 @@ BEGIN {
 sub writeDebug;
 sub writeWarning;
 
-# writeDebug "got useLocale = $useLocale";
-
 
 # ===========================
 # use TWiki and other modules
@@ -183,9 +180,9 @@ use TWiki::User;
 # ===========================
 # Other Global variables
 
-# Token character/string that must not occur in any normal text - converted
-# to a flag character if it ever does occur (very unlikely).
-$TranslationToken= "\0";	# Null should not be used by any charsets
+# Token character that must not occur in any normal text - converted
+# to a flag character if it ever does occur (very unlikely)
+$TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
 
 # The following are also initialized in initialize, here for cases where
 # initialize not called.
