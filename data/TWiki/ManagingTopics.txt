@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="MikeMannix" date="999178132" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="MikeMannix" date="999297399" format="1.0" version="1.5"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
----## Rename/move/delete a topic
+---## Modifying Topics
 
 Select rename/move when viewing a topic to change its name, delete it or move it
 
