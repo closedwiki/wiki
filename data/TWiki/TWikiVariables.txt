@@ -67,6 +67,16 @@
   <td> =%<nop>SPACEDTOPIC%= </td>
   <td> The current topic name with added spaces, for regular expression search of Ref-By, is <b>%SPACEDTOPIC%</b> </td>
 </tr><tr>
+  <td> =%<nop>TOPICLIST{"format"}%= </td>
+  <td> Topic index of a web. Parameter is composed of the format, followed by an optional =web="Name"=. The ="format"= defines the format of one topic item; use it to create any formatting you need. The =$name= variable is expanded to the topic name; the =$web= variable is expanded to the name of the web.
+	 Examples:
+	 <br> =%<nop>TOPICLIST{"	* $web.$name"}%= creates a bullet list of all topics.
+	 <br> =%<nop>TOPICLIST{" &lt;option&gt;$name&lt;/option&gt;"}%= creates an option list (for drop down menus). </td>
+</tr><tr>
+  <td> =%<nop>WEBLIST{"format"}%= </td>
+  <td> Web index, e.g. list of all webs. Hidden webs are excluded, e.g. webs with a =NOSEARCHALL=on= preference variable. The ="format"= defines the format of one web item. The =$name= variable is expanded to the name of the web.
+	 Example: <br> =%<nop>WEBLIST{"	* [<nop>[$name.%HOMETOPIC%]]"}%= creates a bullet list of all webs. </td>
+</tr><tr>
   <td> =%<nop>GMTIME%= </td>
   <td> GM time, is <b>%GMTIME%</b> </td>
 </tr><tr>
