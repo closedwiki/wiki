@@ -25,7 +25,7 @@
 # handled and error checked.  If a newer feature or subroutine is not
 # there, it's OK to fail silently and not do the associated tests.
 # This is more painful to code, but it means that testenv can be downloaded
-# from CVS and used on older TWiki versions to diagnose problems.
+# from SVN and used on older TWiki versions to diagnose problems.
 
 package TWiki;
 
@@ -383,7 +383,7 @@ print "</td></tr>\n";
 # Do locale settings if TWiki.pm was found
 my $showLocales = 0;
 if ($twikiFound) {
-    if( eval 'TWiki::setupLocale()' ){	# Not in older TWiki.pm versions
+    if( eval 'TWiki::_setupLocale()' ){	# Not in older TWiki.pm versions
 	# Ignore errors silently
 	$showLocales = 1;
     }
@@ -537,7 +537,7 @@ if( $defaultUrlHost !~ /$val/ ) {
 }
 
 # Check Script URL Path against REQUEST_URI
-print "<tr><th align=\"right\">\$scriptUrlPath:</th><td>".$TWiki::T->{scriptUrlPath}."</td></tr>\n";
+print "<tr><th align=\"right\">\$scriptUrlPath:</th><td>".$scriptUrlPath."</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 print "This must match the 'cgi-bin' part of the URL used to access the TWiki cgi-bin directory.";
 print "</td></tr>\n";
@@ -848,7 +848,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	# Warn re known broken locale setup
 	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
 	print "Using Perl on Windows, which may have missing or incorrect locales (in Cygwin or ActiveState Perl, respectively)\n";
-	print "- use of <b>\$useLocale</b> = 0 is recommended unless you know your version of Perl has working locale support.\n";
+	print "- use of <b>\$localeRegexes</b> = 1 (see below) is recommended unless you know your version of Perl has working locale support.\n";
 	print "</td></tr>\n";
     } 
 
@@ -919,6 +919,19 @@ if ( $showLocales ) {		# Only if TWiki.pm found
         }
     }
 
+    # $localeRegexes
+    print "<tr><th align=\"right\">\$localeRegexes:</th><td>$localeRegexes</td></tr>\n";
+    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b>\n";
+    print "This TWiki.cfg setting (default: 1) controls whether\n";
+    print "locale-dependent regular expressions (e.g. <code>[:upper:]</code>) are\n";
+    print "used by Perl and 'grep'. It is used in environments where locales are\n";
+    print "broken, to allow use of internationalised WikiWords.  You should\n";
+    print "configure <b>\$useLocale</b> to 1, and set a reasonable\n";
+    print "<b>\$siteLocale</b>, since this enables correct setting of the\n";
+    print "<b>\$siteCharset</b> for use by web browsers. Don't change this\n";
+    print "setting unless your locales are not working for whatever reason\n"; 
+    print "</td></tr>\n";
+
     # Locales are off/broken, or using pre-5.6 Perl, so have to 
     # explicitly list the accented characters (but not if using UTF-8)
     my $perlVerPreferred = 5.006;	# 5.6 or higher has [:lower:] etc
@@ -941,7 +954,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	$upperNational = $upperNational;	# Warning fodder
 	print "<tr><th align=\"right\">\$upperNational:</th><td>$upperNational</td></tr>\n";
 	print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-	print "This TWiki.cfg parameter is used when <b>\$useLocale</b> is 0, to work around missing or non-working locales.\n";
+	print "This TWiki.cfg parameter is used when <b>\$useLocale</b> is 0 or <b>\$localeRegexes</b> is 0, to work around missing or non-working locales.\n";
 	print "It is also used with Perl 5.005 for efficiency reasons - upgrading to Perl 5.6.1 with working locales is recommended, and removes the need for this. \n";
 	print "If required, this parameter should be set to the upper case accented characters you require in your locale.\n";
 	if ( $forUpperNat ) {
