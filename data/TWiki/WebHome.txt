@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999395967" format="1.0" version="1.31"}%
+%META:TOPICINFO{author="MikeMannix" date="999556165" format="1.0" version="1.32"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about it, download it, and try it out for yourself.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -12,9 +12,10 @@ Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management t
 	* WelcomeGuest: Start here for a %WIKITOOLNAME% crash course.
 	* TWikiRegistration: Create an %WIKITOOLNAME% account in order to edit topics and explore customization features.
 
----+++ User Guide
+---+++ TWiki User Guide
 
-	* A collection of single-page topics: clear, concise how-to guides designed for busy TWiki users. (TWiki power users will also benefit from browsing the _Webmaster Reference_.)
+	* A collection of single-page topics: clear, concise how-to guides designed for busy TWiki users. <br>
+	  (TWiki power users will also benefit from browsing the _Reference Manual_.)
 
 		* TWikiSite: Brief %WIKITOOLNAME% backgrounder - first, there was Wiki...
 		* WikiSyntax: TWiki language basics
@@ -28,7 +29,7 @@ Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management t
 		* WebChangesNotify: A optional email alert tells you when web pages are changed
 		* HandlingTopics: Rename, move, delete pages
 
----+++ Webmaster Reference
+---+++ TWiki Reference Manual
 
 	* Documentation for Webmasters, system administrators, project managers, team leaders, everyone with an interest in installing a world-class TWiki Web collaboration site. 
 
