@@ -36,7 +36,7 @@ sub suffixToMimeType
         my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/i }
                     map{ "$_ " }
                     split( /[\n\r]/, &TWiki::Store::readFile( $TWiki::mimeTypesFilename ) );
-        $mimeType = @types[0] if( @types );
+        $mimeType = $types[0] if( @types );
     }
     return $mimeType;
 }
