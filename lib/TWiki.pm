@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 Jan 2004";
+$wikiversion      = "05 Jan 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1731,6 +1731,10 @@ sub handleToc
     # get the depth limit attribute
     my $depth = extractNameValuePair( $_[3], "depth" ) || 6;
 
+    #get the title attribute
+    my $title = extractNameValuePair( $_[3], "title" );
+    $title = "\n$title" if( $title );
+
     my $result  = "";
     my $line  = "";
     my $level = "";
@@ -1812,7 +1816,7 @@ sub handleToc
             $highest--;
             $result =~ s/^\t{$highest}//gm;
         }
-        $result = "<div class='twikitoc'>$result\n</div>";
+        $result = "<div class='twikitoc'>$title$result\n</div>";
         return $result;
 
     } else {
