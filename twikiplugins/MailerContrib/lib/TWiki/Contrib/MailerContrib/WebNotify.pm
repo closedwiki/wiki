@@ -17,7 +17,7 @@
 use strict;
 
 use TWiki::Func;
-use TWiki::Contrib::DBCache;
+
 use TWiki::Contrib::MailerContrib::Subscriber;
 use TWiki::Contrib::MailerContrib::Subscription;
 
@@ -158,8 +158,9 @@ sub toString {
 
 =begin text
 
----+++ sub processChange($change, $changeSet, $seenSet)
+---+++ sub processChange($change, $db, $changeSet, $seenSet)
 | $change | ref of a TWiki::Contrib::Mailer::Change |
+| $db | Database of parent references |
 | $changeSet | ref of a hash mapping emails to sets of changes |
 | $seenSet | ref of a hash recording indices of topics already seen |
 Find all subscribers that are interested in the given change, and
@@ -170,14 +171,14 @@ retained. This method does _not_ change this object.
 =cut
 
 sub processChange {
-    my ( $this, $change, $changeSet, $seenSet ) = @_;
+    my ( $this, $change, $db, $changeSet, $seenSet ) = @_;
 
     my $topic = $change->{TOPIC};
 
     foreach my $name ( keys %{$this->{subscribers}} ) {
         my $subscriber = $this->{subscribers}{$name};
 
-        if ( $subscriber->isSubscribedTo( $topic )) {
+        if ( $subscriber->isSubscribedTo( $topic, $db )) {
             my @emails = $subscriber->getEmailAddresses();
             foreach my $email ( @emails ) {
                 my $at = $seenSet->{$email}{$topic};
@@ -269,7 +270,7 @@ sub _parsePages {
             $kids = 0 unless ( $kids );
             $this->subscribe( $who, $1, $kids );
         } else {
-            print STDERR "Badly formatted page <$pe>\n";
+            print "Badly formatted page: $pe\n";
         }
     }
 }

@@ -74,8 +74,9 @@ sub toString {
 
 =begin text
 
----+++ sub matches($topic, $depth) -> boolean
+---+++ sub matches($topic, $db, $depth) -> boolean
 | $topic | Topic object we are checking |
+| $db | Database of parent names |
 | $depth | If non-zero, check if the parent of the given topic matches as well. undef = 0. |
 Check if we match this topic. Recurses up the parenthood tree seeing if
 this is a child of a parent that matches within the depth range.
@@ -83,18 +84,19 @@ this is a child of a parent that matches within the depth range.
 =cut
 
 sub matches {
-    my ( $this, $topic, $depth ) = @_;
+    my ( $this, $topic, $db, $depth ) = @_;
 
      unless ($topic) {
          return 0;
      }
 
-    return 1 if ( $topic->get("name") =~ $this->{topicsRE} );
+    return 1 if ( $topic =~ $this->{topicsRE} );
 
     $depth = $this->{depth} unless defined( $depth );
 
     if ( $depth ) {
-        return $this->matches( $topic->get( "_up" ), $depth - 1 );
+        my $parent = $db->getParent( $topic );
+        return $this->matches( $parent, $db, $depth - 1 ) if ( $parent );
     }
 
     return 0;

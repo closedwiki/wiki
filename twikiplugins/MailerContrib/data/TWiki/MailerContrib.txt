@@ -3,9 +3,9 @@
 A replacement for the core 'mailnotify' functionality. This module brings a new level of flexibility and ease of use to notifications.
 
 ---+ Summary of Contents
-The main part of the mailer module is a script, contrib/bin/mailnotify. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard Web<nop>Notify topic. As well as providing the usual notification service, it also provides per-topic notification services.
+The main part of the mailer module is a script, =bin/mailnotifier=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard Web<nop>Notify topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
 
-The second part of the module is a code library that provides the services for other applications to modify Web<nop>Notify through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =Web<nop>Notify= topic described below.
+The second part of the module is a code library that provides the services for other applications to modify Web<nop>Notify through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
 
 The "new" format of Web<nop>Notify is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
 
@@ -31,17 +31,27 @@ A user may be listed many times in the Web<nop>Notify topic. The basic rule is t
 As was the case with old =mailnotify=, if a _group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
 
 ---++ Future directions
-In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the contrib/bin/mailnotify script.
+In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =bin/mailnotifier= script.
 
 ---+ Detailed Documentation
-The =contrib/bin/mailnotify= is used as follows:
+The =bin/mailnotifier= is used from the command line as follows:
 
-Usage: contrib/bin/mailnotify [-q] [-m] [_web1_ _web2_ ... _webN_]
+Usage: bin/mailnotifier [-q] [-m] [_web1_ _web2_ ... _webN_]
 | -q | Don't print progress information |
-| -m | Send mail. Default behaviour is to print out mails to STDOUT |
-| list of webs | List of webs to process, separated by spaces. Default is to process all legal TWiki webs |
+| -m | Send mail. Default behaviour is to print out plain text of mails that would be sent to STDOUT |
+| list of webs | List of webs to process, separated by spaces. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
+
+from the browser the following CGI parameters are supported:
+
+| =verbose= | set to 0 to get the same effect as -q |
+| =sendmail= | Set to 1 to actually send mail |
+| =webs= | Comma-separated list of webs to process |
+
+<table bgcolor="light_yellow">
+%RED% The following POD documentation is provided for the use of developers only. %ENDCOLOR%. Everyone else can just ignore it.
 
 %$POD%
+</table>
 
 ---++ Settings
 
@@ -56,7 +66,7 @@ Usage: contrib/bin/mailnotify [-q] [-m] [_web1_ _web2_ ... _webN_]
      %$MANIFEST%
    * Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
    * To make sure the installation was successful, run the
-     =contrib/bin/mailnotify= script from the command
+     =bin/mailnotifier= script from the command
      line, with no parameters. In this case it will print out what it
      would have done to STDOUT.
 
@@ -68,9 +78,10 @@ Usage: contrib/bin/mailnotify [-q] [-m] [_web1_ _web2_ ... _webN_]
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  %DATE%: | Initial version |
-|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  27 September 2004 | 1.0001 runnable as CGI script, minor bugfixes, removed dependency on DBCacheContrib |
+|  8 September 2004 | 1.000 Initial version |
+|  Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 

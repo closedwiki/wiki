@@ -2,9 +2,10 @@ lib/TWiki/Contrib/MailerContrib/WebNotify.pm
 lib/TWiki/Contrib/MailerContrib/Subscriber.pm
 lib/TWiki/Contrib/MailerContrib/Subscription.pm
 lib/TWiki/Contrib/MailerContrib/Change.pm
+lib/TWiki/Contrib/MailerContrib/UpData.pm
 lib/TWiki/Contrib/MailerContrib/build.pl
 lib/TWiki/Contrib/Mailer.pm
 data/TWiki/MailerContrib.txt
-contrib/bin/mailnotify
+bin/mailnotifier
 MailerContrib_installer.pl
 
