@@ -7,7 +7,6 @@ package CH.ifa.draw.figures;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.net.URLEncoder;
 import CH.ifa.draw.framework.*;
 import CH.ifa.draw.standard.*;
 import CH.ifa.draw.util.FloatingTextField;
@@ -87,13 +86,12 @@ public class URLTool extends CreationTool {
     }
 
     protected void endEdit() {
-	if (fTypingTarget != null) {
-	    String s = URLEncoder.encode(fTextField.getText());
-	    fTypingTarget.setAttribute("Sensitive", s);
-	    fTypingTarget = null;
-	    fTextField.endOverlay();
-	    view().checkDamage();
-	}
+        if (fTypingTarget != null) {
+            fTypingTarget.setAttribute("Sensitive", fTextField.getText());
+            fTypingTarget = null;
+            fTextField.endOverlay();
+            view().checkDamage();
+        }
     }
 
     private Rectangle fieldBounds(Figure figure) {
