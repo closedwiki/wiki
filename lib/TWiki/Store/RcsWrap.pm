@@ -331,7 +331,6 @@ sub parseRevisionDiff {
 sub _ci {
     my( $self, $comment, $user ) = @_;
 
-print STDERR "BARGLE ",`cat $self->{file}`;
     $comment = "none" unless( $comment );
     my ($rcsOutput, $exit) = $self->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{ciCmd},
@@ -342,7 +341,6 @@ print STDERR "BARGLE ",`cat $self->{file}`;
     if( $exit && $rcsOutput ) {
         $rcsOutput = "$TWiki::cfg{RCS}{ciCmd}\n$rcsOutput";
     }
-print STDERR "BURGLE ",`cat $self->{file}`;
 
     # A ci -u leaves the file unwriteable, so fix that. We are still
     # rather mean with the permissions, but at least the webserver user
