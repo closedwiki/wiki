@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="PeterThoeny" date="1039464480" format="1.0" version="1.4"}%
----+ The 256 Standard Colors
+%META:TOPICINFO{author="PeterThoeny" date="1063074660" format="1.0" version="1.5"}%
+---+ The 216 Standard Colors
 
 This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
 
@@ -160,4 +160,4 @@ This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
 </tr>
 </table>
 
--- Main.PeterThoeny - 09 Dec 2002
+-- TWiki:Main.PeterThoeny - 09 Dec 2002
