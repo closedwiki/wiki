@@ -1805,7 +1805,7 @@ sub handleInternalTags
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/ge;
 
     # Un-encoded topic and web names. Note: In form action, URL encode variables 
-    # that might have 8-bit characters with %URLENCODE{"%TOPIC%"}%
+    # that might have 8-bit characters with %INTURLENCODE{"%TOPIC%"}%
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
@@ -1828,6 +1828,7 @@ sub handleInternalTags
     $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/g;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
     $_[0] =~ s/%URLENCODE{(.*?)}%/&handleUrlEncode($1,1)/ge;
+    $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleUrlEncode($1,1)/ge;
     $_[0] =~ s/%DATE%/&getGmDate()/ge; # deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/ge;
