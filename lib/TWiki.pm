@@ -3436,7 +3436,8 @@ sub makeAnchorHeading
     # - filter out $regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
 
     my $text = $theText;
-    my $anchorName = &makeAnchorName( $text );
+    my $anchorName =       makeAnchorName( $text, 0 );
+    my $compatAnchorName = makeAnchorName( $text, 1 );
     $text =~ s/$regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
     my $hasAnchor = 0;  # text contains potential anchor
     $hasAnchor = 1 if( $text =~ m/<a /i );
@@ -3445,12 +3446,15 @@ sub makeAnchorHeading
     $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{abbrevRegex})/ );
     $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/ );
     $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{wikiWordRegex})/ );
+
+    # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
+    #        empty <a> tag, which is not HTML conform
+    my $prefix = "<nop><h$theLevel><a name=\"$compatAnchorName\"> </a> " .
+		 "<a name=\"$anchorName\"> ";
     if( $hasAnchor ) {
-        # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
-        #        empty <a> tag, which is not HTML conform
-        $text = "<nop><h$theLevel><a name=\"$anchorName\"> </a> $text <\/h$theLevel>";
+        $text = "$prefix </a> $text <\/h$theLevel>";
     } else {
-        $text = "<nop><h$theLevel><a name=\"$anchorName\"> $text <\/a><\/h$theLevel>";
+        $text = "$prefix $text <\/a><\/h$theLevel>";
     }
 
     return $text;
@@ -3460,7 +3464,7 @@ sub makeAnchorHeading
 # Build a valid HTML anchor name
 =pod
 
----++ sub makeAnchorName (  $anchorName  )
+---++ sub makeAnchorName (  $anchorName, $compatibilityMode  )
 
 Not yet documented.
 
@@ -3468,8 +3472,19 @@ Not yet documented.
 
 sub makeAnchorName
 {
-    my( $anchorName ) = @_;
+    my( $anchorName, $compatibilityMode ) = @_;
 
+    if ( ! $compatibilityMode && $anchorName =~ /^$regex{anchorRegex}$/ ) {
+	# accept, already valid -- just remove leading #
+	return substr($anchorName, 1);
+    }
+
+    if ( $compatibilityMode ) {
+	# remove leading/trailing underscores first, allowing them to be
+	# reintroduced
+	$anchorName =~ s/^[\s\#\_]*//;
+        $anchorName =~ s/[\s\_]*$//;
+    }
     $anchorName =~ s/<\w[^>]*>//gi;         # remove HTML tags
     $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
     $anchorName =~ s/^(.+?)\s*$regex{headerPatternNoTOC}.*/$1/o; # filter TOC excludes if not at beginning
@@ -3477,9 +3492,13 @@ sub makeAnchorName
     # FIXME: More efficient to match with '+' on next line:
     $anchorName =~ s/$regex{singleMixedNonAlphaNumRegex}/_/g;      # only allowed chars
     $anchorName =~ s/__+/_/g;               # remove excessive '_'
-    $anchorName =~ s/^[\s\#\_]*//;          # no leading space nor '#', '_'
-    $anchorName =~ s/[\s\_]*$//;            # no trailing space, nor '_'
+    if ( !$compatibilityMode ) {
+        $anchorName =~ s/^[\s\#\_]*//;      # no leading space nor '#', '_'
+    }
     $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars - FIXME: Use Unicode chars before truncate
+    if ( !$compatibilityMode ) {
+        $anchorName =~ s/[\s\_]*$//;        # no trailing space, nor '_'
+    }
 
     # No need to encode 8-bit characters in anchor due to UTF-8 URL support
 
