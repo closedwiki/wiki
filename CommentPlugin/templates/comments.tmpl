@@ -8,10 +8,10 @@ Generic prompt box used by other templates
 <table>
  <tr valign="middle">
   <td>
-   <textarea %DISABLED% rows="3" cols="50" name="comment" wrap="soft">%MESSAGE%</textarea>
+   <textarea %DISABLED% rows="%rows|3%" cols="%cols|50%" name="comment" wrap="soft">%MESSAGE%</textarea>
   </td>
   <td>
-   <input %DISABLED% type="submit" value="Add comment" />
+   <input %DISABLED% type="submit" value="%button|Add comment%" />
   </td>
  </tr>
 </table>
@@ -19,7 +19,7 @@ Generic prompt box used by other templates
 
 Short comment, signed and dated
 %TMPL:DEF{outputoneliner}%
-<nop> %URLPARAM{"comment" newline="<br />"}% -- %WIKIUSERNAME% - %SERVERTIME%
+- %URLPARAM{"comment" newline="<br />"}% -- %WIKIUSERNAME% - %SERVERTIME%
 %TMPL:END%
 
 ---------------------------------------------------------------------------
@@ -80,4 +80,14 @@ Comments, signed and dated, added at end of table above the anchor
 
 %TMPL:DEF{OUTPUT:tableappend}%
 %POS:BEFORE%<tr><td> %URLPARAM{"comment" newline="<br />"}% </td><td> %WIKIUSERNAME% </td><td> %SERVERTIME% </td></tr>
+%TMPL:END%
+
+---------------------------------------------------------------------------
+Legacy support, add before the comment box
+%TMPL:DEF{PROMPT:after}%
+%TMPL:P{promptbox}%
+%TMPL:END%
+
+%TMPL:DEF{OUTPUT:after}%
+%TMPL:P{outputoneliner}% %POS:BEFORE%
 %TMPL:END%

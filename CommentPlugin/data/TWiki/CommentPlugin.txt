@@ -17,11 +17,36 @@ Inserts an edit box into the page that allows users to type in and save comments
 
 Write the command =%<nop>COMMENT{= _attributes_ =}%= anywhere in a TWiki topic.
 
-Only two attributes are supported:
+Only three attributes are [[#MoreAttrs][recognised]]
 	| *Name* | *Description* |
-	| =target= | Name of the topic to add the comment to. Defaults to the current topic. The target name may specify a web, and may specify an anchor within the target topic; for example, <code>target="%MAINWEB%.Personal<nop>Remarks#The<nop>Anchor"</code> |
+	| =target= | (Optional) Name of the topic to add the comment to. Defaults to the current topic. |
 	| =type= | This is the name of the template to use for this comment. Comment templates are defined in a TWiki template - see [[#TemPlates][Customisation]], below. If this attribute is not defined, the type is whatever is defined by COMMENTPLUGIN_DEFAULT_TYPE, either in this topic or in your WebPreferences. By default this is 'bottom'. |
+	| =location= | (Optional) Regular expression specifying the comment location in the target topic. Read _carefully_ below! |
 
+---++ Locating the comment
+=%COMMENT= supports several ways to specify _where_ a comment should be inserted in the target topic. This is referred to as the _location_ of the comment.
+
+The default _location_ is the =%COMMENT= tag itself. For example:
+<verbatim>
+%COMMENT{type="below"}%
+</verbatim>
+will add comments in the current topic, directly below the COMMENT tag.
+
+The =target= attribute may specify a web, and may also specify an anchor within the target topic; for example, 
+<verbatim>
+%COMMENT{type="above" target="%MAINWEB%.PersonalRemarks#InsertHere"}%
+</verbatim>
+This uses a standard TWiki in-topic anchor as the insertion location. See %TWIKIWEB%.TextFormattingRules for more about TWiki anchors.
+
+Getting more sophisticated, you can also specify a regular expression for the target location using the =location+ parameter. The regular expression is searched for in the target topic, and the comment inserted relative to the string that the RE matched. For example,
+<verbatim>
+%COMMENT{type="above" location="Flights of Fancy"}%
+</verbatim>
+will place comments above the first occurence of the string =Flights of Fancy" in the current topic. *Warning* of course, if a user's comment contains the string "Flights of Fancy" they will and up _changing the location_ for the next comment, so be careful how you specify locations! The RE is matched using perl "multiple line" mode, so ^ and $ match the start of a line and the end of a line respectively.
+
+If you specify an anchor _and_ a =location_, the anchor will be ignored.
+
+--++ Default templates
 A set of default comment templates are shipped with the plugin. These are:
 | *Template type* | *Description* |
 | =top= | Comments, signed and dated, added at top of the topic (the anchor is ignored) |
@@ -46,6 +71,20 @@ The plugin picks up its templates from a standard TWiki template file. This allo
 To define a comment type, you have to provide three simple template definitions in the template file; one for the prompt box, one for the generated output, and one to indicate where in the file to put the generated output. If we have a template type "mytype", these are named "PROMPTmytype" and "OUTPUTmytype" respectively. See 'comments.tmpl' in the templates directory for examples.
 
 The PROMPT definition defines the contents of an HTML form that is used to capture the comment. Parameters to the comment generator are defined using standard HTML input fields, such as =input=, =textarea= and =select=. The user enters values for these parameters that are then available when the OUTPUT template is expanded, in the form of %<nop>URLPARAM%s.
+
+#MoreAttrs
+If an attribute is given to the %COMMENT that is not one of the standard attributes, then that attribute is taken as the name of a parameter to the PROMPT template. Expressions in the template of the form <code>%</code><i>param</i><code>|</code><i>default</i><code>%</code> (e.g. <code>%rows|3%</code>, <code>%button|Push me%</code>) are expanded to the values given in the %COMMENT. For example, if the PROMPT template 'example' contains:
+<pre>
+&lt;textarea rows=%rows|3 cols="%cols|50%">
+</pre>
+and the %COMMENT tag is:
+<pre>
+%<nop>COMMENT{type="example" rows="5"}%
+</pre>
+then the template will be expanded as
+<pre>
+&lt;textarea rows=5 cols="50">
+</pre>
 
 As well as all the usual support for variables in templates, the following special variables are supported in the PROMPT definition:
     | *Variable* | *Description* |
@@ -98,6 +137,7 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 	| ==templates/comments.tmpl== | Comment templates |
 	| ==lib/TWiki/Plugins/CommentPlugin.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/CommentPlugin/Comment.pm== | Plugin Perl module |
+	| ==lib/TWiki/Plugins/CommentPlugin/Attrs.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/CommentPlugin/test.zip== | Tests |
 	| ==lib/TWiki/Plugins/CommentPlugin/build.xml== | Ant build file |
 

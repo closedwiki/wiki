@@ -1,6 +1,8 @@
 use strict;
 use integer;
 
+use TWiki::Plugins::CommentPlugin::Attrs;
+
 { package CommentPlugin::Comment;
 
   # PRIVATE get the given template and do standard expansions
@@ -49,13 +51,11 @@ use integer;
       "";    
 
     # Is commenting disabled?
-    my $disable = 'disabled';
+    my $disable = "";
     if ( $previewing ) {
       # We are in Preview mode
       $message  = "(Edit - Preview)";
-    } else { # view
-      # Not disabled
-      $disable = '';
+      $disable = "disabled";
     }
 
     my $idx = 0;
@@ -67,9 +67,12 @@ use integer;
     my ( $attributes, $topic, $web, $pidx, $message,
 	 $disable, $defaultType ) = @_;
 
+    my $attrs = new CommentPlugin::Attrs( $attributes );
+
     my $type =
-      TWiki::Func::extractNameValuePair( $attributes, "type" ) ||
-	$defaultType;
+      $attrs->remove( "type" ) || $attrs->remove( "mode" ) || $defaultType;
+
+    my $location = $attrs->remove( "location" );
 
     # clean off whitespace
     $type =~ m/(\S*)/o;
@@ -79,11 +82,13 @@ use integer;
     # box is (not the target of the comment!)
     my $input = _getTemplate( "PROMPT:$type", $topic, $web );
 
+    # Expand special attributes as required
+    $input =~ s/%([a-z]\w+)\|(.*?)%/&_expandPromptParams($1, $2, $attrs)/iego;
+
     # see if this comment is targeted at a different topic, and
     # change the url if it is.
-    my $anchor = "";
-    my $target =
-      TWiki::Func::extractNameValuePair( $attributes, "target" );
+    my $anchor = undef;
+    my $target = $attrs->remove( "target" );
     if ( $target ) {
       # extract web and anchor
       if ( $target =~ s/^($TWiki::webNameRegex)\.//o ) {
@@ -95,8 +100,8 @@ use integer;
       $topic = $target;
     }
 
-    my $url = $disable;
-    if ( $url ne "disabled" ) {
+    my $url = "";
+    if ( $disable eq "" ) {
       $url = TWiki::Func::getScriptUrl( $web, $topic, "save" );
 
       my ( $oopsUrl, $lockUser, $lockTime ) =
@@ -104,7 +109,7 @@ use integer;
 
       if ( $lockUser ) {
 	$message = "Commenting is locked out by $lockUser for at least $lockTime minutes";
-	$url = "disabled";
+	$disable = "disabled";
       }
     }
 
@@ -113,23 +118,41 @@ use integer;
       $input =~ s/%MESSAGE%/$message/g;
       my $n = $$pidx + 0;
 	
-      $input = "<form name=\"$type$n\" action=\"$url\" method=\"post\">\n" .
-	$input;
+      $input = "<form name=\"${disable}$type$n\" " .
+	"action=\"$disable$url\" method=\"${disable}post\">\n$input";
       # need to provide text or the save script will reject us; even though we
       # are going to override it in the beforeSaveHandler
-      $input .= "<input name=\"text\" type=\"hidden\" value=\"dummy\" />\n";
+      $input .= "<input $disable name=\"${disable}text\" " .
+	"type=\"hidden\" value=\"dummy\" />\n";
       # remember to unlock the page
-      $input .= "<input name=\"unlock\" type=\"hidden\" value=\"1\" />\n";
+      $input .= "<input $disable name=\"${disable}unlock\" " .
+	"type=\"hidden\" value=\"1\" />\n";
       # the presence of these next three urlparams indicates a comment save
-      $input .= "<input name=\"comment_type\" type=\"hidden\" ";
-      $input .= "value=\"$type\" />\n";
-      $input .= "<input name=\"comment_anchor\" type=\"hidden\"";
-      $input .= "value=\"$anchor\" />\n";
-      $input .= "<input name=\"comment_index\" type=\"hidden\" ";
-      $input .= "value=\"$$pidx\" />\n</form>\n";
+      $input .= "<input $disable name=\"${disable}comment_type\" " .
+	"type=\"hidden\" value=\"$type\" />\n";
+      if ( $location ) {
+	$input .= "<input $disable name=\"${disable}comment_location\" " .
+	  "type=\"hidden\" value=\"$location\" />\n";
+      } elsif ( $anchor ) {
+	$input .= "<input $disable name=\"${disable}comment_anchor\" " .
+	  "type=\"hidden\" value=\"$anchor\" />\n";
+      } else {
+	$input .= "<input $disable name=\"${disable}comment_index\" " .
+	  "type=\"hidden\" value=\"$$pidx\" />\n";
+      }
+      $input .= "</form>\n";
     }
     $$pidx++;
     return $input;
+  }
+
+  # PRIVATE expand special %param|default% parameters in PROMPT template
+  sub _expandPromptParams {
+    my ( $name, $default, $attrs ) = @_;
+
+    my $val = $attrs->get( $name );
+    return $val if defined( $val );
+    return $default;
   }
 
   # PUBLIC perform save actions
@@ -140,11 +163,14 @@ use integer;
     # my ( $query, $text, $topic, $web ) = @_;
 
     my $type = $_[0]->param( 'comment_type' );
-    my $tgt_idx = $_[0]->param( 'comment_index' );
+    my $index = $_[0]->param( 'comment_index' );
     my $anchor = $_[0]->param( 'comment_anchor' );
+    my $location = $_[0]->param( 'comment_location' );
 
     # the presence of these three urlparams indicates it's a comment save
-    return unless (defined($type) && defined($tgt_idx) && defined($anchor));
+    return unless ( defined( $type ) &&
+		   ( defined( $index ) || defined( $anchor ) ||
+		     defined( $location )));
 
     my $output = _getTemplate( "OUTPUT:$type", $_[3], $_[2] );
     if ( $output =~ m/^%RED%/o ) {
@@ -161,31 +187,37 @@ use integer;
     # _handleInput
     $_[1] = TWiki::Func::readTopicText( $_[3], $_[2], undef, 1 );
 
-    if ($position eq "TOP" ) {
+    if ( $position eq "TOP" ) {
       $_[1] = "$output$_[1]";
     } elsif ( $position eq "BOTTOM" ) {
       $_[1] .= "$output";
     } else {
-      if ( $anchor ne "" ) {
+      if ( $location ) {
+	if ( $position eq "BEFORE" ) {
+	  $_[1] =~ s/($location)/$output\n$1/m;
+	} else { # AFTER
+	  $_[1] =~ s/($location)/$1\n$output/m;
+	}
+      } elsif ( $anchor ) {
 	# position relative to anchor
 	if ( $position eq "BEFORE" ) {
-	  $_[1] =~ s/^($anchor)/$output\n$1/;
+	  $_[1] =~ s/^($anchor)/$output\n$1/m;
 	} else { # AFTER
-	  $_[1] =~ s/^($anchor)/$1\n$output/;
+	  $_[1] =~ s/^($anchor)/$1\n$output/m;
 	}
       } else {
-	# Position relative to comment
+	# Position relative to index'th comment
 	my $idx = 0;
-	$_[1] =~ s/(%COMMENT{.*?}%)/&_nth($1,\$idx,$position,$tgt_idx,$output)/ego;
+	$_[1] =~ s/(%COMMENT{.*?}%)/&_nth($1,\$idx,$position,$index,$output)/ego;
       }
     }
   }
 
   # PRIVATE embed output if this comment is the interesting one
   sub _nth {
-    my ( $tag, $pidx, $position, $tgt_idx, $output ) = @_;
+    my ( $tag, $pidx, $position, $index, $output ) = @_;
 
-    if ( $$pidx == $tgt_idx) {
+    if ( $$pidx == $index) {
       if ( $position eq "BEFORE" ) {
 	$tag = "$output$tag";
       } else { # AFTER
