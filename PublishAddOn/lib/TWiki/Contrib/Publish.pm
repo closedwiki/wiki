@@ -41,7 +41,7 @@ package TWiki::Contrib::Publish;
 
 use vars qw($query $thePathInfo $theRemoteUser $theUrl $debug $ZipPubUrl $publishDir $publishUrlPath $blah $TWikiPubDir $PubUrlPath $VERSION );
 
-$VERSION = 1.200;
+$VERSION = 1.201;
 
 $blah = "."; # x 16384;
 

@@ -48,7 +48,7 @@ The next two settings should be in %TWIKIWEB%.TWikiPreferences or WebPreferences
    * Root URL for static-published HTML (should point to the same dir as PUBLISH_DIR)
    * Set PUBLISH_URL_PATH = /url/path/to/published/files/
 
-Addon settings
+Local settings
    * Name of the perl package
       * Set STUB = %$STUB%
    * Short description
@@ -58,14 +58,17 @@ Addon settings
 	* Plugin tags that create complex HTML (sug as TWikiDraw DRAWING tags) are not handled correctly.
 	* Links to excluded topics get generated as links
 
----+++ AddOn Installation Instructions
+---+++ Installation Instructions
    * Download the ZIP file from the Plugin web (see below). Contents:
    | *File:* | *Description:* |
-   %$MANIFEST%
+%$MANIFEST%
    * Unzip ==%TOPIC%.zip== in your twiki installation directory.
+   * =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
+   * Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
    * Set the 'Settings' above in your %TWIKIWEB%.TWikiPreferences topic.
 
----+++ AddOn info
+---+++ Info
 | Author: | Main.EricScouten |
 | Dependencies: | %$DEPENDENCIES% |
 | Version: | %$VERSION% |
@@ -94,5 +97,5 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details, published at 
 http://www.gnu.org/copyleft/gpl.html
 
--- TWiki:Main/EricScouten%BR%
+-- TWiki:Main/EricScouten %BR%
 -- TWiki:Main/CrawfordCurrie - %$DATE%

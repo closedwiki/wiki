@@ -1,0 +1,2 @@
+Archive::Zip,>=1.05,perl,Required, available from CPAN:Archive::Zip
+Compress::Zlib,>=1.16,perl,Required, available from CPAN:Compress::Zlib
