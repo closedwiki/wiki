@@ -132,7 +132,7 @@ sub save {
   if( $error ) {
     TWiki::UI::oops( $webName, $topic, "saveerr", $error );
   } else {
-   	TWiki::UI::redirect( $query, TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic)) );
+   	TWiki::redirect( $query, TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic)) );
   }
 }
 
