@@ -93,7 +93,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "21 Jul 2001";
+$wikiversion      = "28 Jul 2001";
 
 # ===========================
 # read the configuration part
@@ -1878,9 +1878,9 @@ sub getRenderedVersion
 
 # Make internal links
             # '[[Web.odd wiki word#anchor][display text]]' link:
-            s/\[\[(.*?)\]\[(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/geo;
+            s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/geo;
             # '[[Web.odd wiki word#anchor]]' link:
-            s/\[\[(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$1,$1)/geo;
+            s/\[\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$1,$1)/geo;
 
             # do normal WikiWord link if not disabled by <noautolink>
             if( ! ( $noAutoLink ) ) {
