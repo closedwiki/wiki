@@ -47,8 +47,8 @@ BEGIN {
     print STDERR "account=[$account]\n";
 
 #    my $localLibBase = "$cpan/lib/" . $Config{version};
-#    my $localLibBase = $FindBin::Bin . "/lib/CPAN/lib/site_perl/" . $Config{version};
-    my $localLibBase = $FindBin::Bin . "/lib/CPAN/lib";
+#    my $localLibBase = "$FindBin::Bin/lib/CPAN/lib/site_perl/" . $Config{version};
+    my $localLibBase = "$FindBin::Bin/lib/CPAN/lib";
     my @localLibs = ( $localLibBase, "$localLibBase/$Config{archname}" );
     print STDERR "@localLibs\n";
     unshift @INC, @localLibs;
@@ -56,9 +56,6 @@ BEGIN {
 
     # dreamhost
     $home = "/home/$account/wbniv.wikihosting.com";
-
-    # darwin
-#    $home = "/Users/$account/Sites";
 
     $cgibin = "$home/cgi-bin";
     $ENV{SERVER_NAME} = "$account.wikihosting.com";
@@ -82,6 +79,10 @@ BEGIN {
 \$cfg{HtpasswdFileName}   = "\$cfg{DataDir}/.htpasswd";
 \$cfg{RemoteUserFileName} = "\$cfg{DataDir}/remoteusers.txt";
 \$cfg{MimeTypesFileName}  = "\$cfg{DataDir}/mime.types";
+
+
+
+
 };
 }
 use strict;
@@ -354,9 +355,10 @@ execute( "ls -lR tmp/install" );
 checkdir( $tmp, $dest, $bin, $lib, $cpan );
 
 # a handy link to the place to go *after* the next step
+my $BIN = "http://$hostname/cgi-bin/twiki";
 print qq{<hr><hr>\n};
-print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="http://$hostname/cgi-bin/twiki/view/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
-print qq{run <a target="details" href="http://$hostname/cgi-bin/twiki/testenv/foo/bar" >testenv</a><br/>\n};
+print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="$BIN/view.cgi/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
+print qq{run <a target="details" href="$BIN/testenv.cgi/foo/bar" >testenv</a><br/>\n};
 print qq{<br/><br/>};
 print "you can perform this installation again using the following URL: <br/>";
 ( my $urlInstall = $q->self_url ) =~ s/install=install//;
