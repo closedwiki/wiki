@@ -451,7 +451,7 @@ sub processWeb
     # DEBUG
     # $statsTopic = "TestStatistics";		# Create this by hand
     if( &TWiki::Store::topicExists( $webName, $statsTopic ) ) {
-	my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $statsTopic );
+	my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $statsTopic, 1 );
 	my @lines = split( /\n/, $text );
 	my $statLine;
 	my $idxStat = -1;
@@ -462,7 +462,7 @@ sub processWeb
 	    if( $tmp =~ /$theLogMonthYear/ ) {
 		$idxStat = $x;
 	    } elsif( $tmp =~ /<\!\-\-statDate\-\->/ ) {
-		$statLine = $_;
+		$statLine = $tmp;
 		$idxTmpl = $x;
 	    }
 	}
