@@ -528,12 +528,13 @@ sub getDefaultForm
     my( $web ) = @_;
     
     my $default = TWiki::Prefs::getPreferencesValue( "DEFFORM", $web );
-    if( $default ) {
+    if( ! $default ) {
         my @formTemplates = split( /,\s*/, TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) );
         if( @formTemplates ) {
             $default = @formTemplates[0];
         }
     }
+    return $default;
 }
 
 
