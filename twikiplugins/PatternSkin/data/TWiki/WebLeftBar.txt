@@ -1,0 +1,24 @@
+%META:TOPICINFO{author="guest" date="1087279800" format="1.0" version="1.3"}%
+%META:TOPICPARENT{name="Sandbox.FrontPage"}%
+Contents of the side panel on the left: 
+----
+<verbatim>
+%STARTINCLUDE%
+---+++++ Navigate the %INCLUDINGWEB% web
+%WEBTOPICLIST%
+
+---+++++ Go to other webs
+%WIKIWEBLIST%
+
+---+++++ Help
+	* [[%MAINWEB%.AboutThisSite][About this site]]
+	* [[%TWIKIWEB%.TWikiSite][About TWiki]]
+	* [[%TWIKIWEB%.GoodStyle][Good style]]
+	* [[%TWIKIWEB%.TextFormattingRules][Text formatting rules]]
+%STOPINCLUDE%
+</verbatim>
+----
+Most %TWIKIWEB%.TWikiVariables are set in %WEBPREFSTOPIC% and %WIKIPREFSTOPIC%
+
+|Note: this is a rough draft by Main.MattWilkie who is *not* the PatternSkin author. It is intended to give bleeding edge developers something to work with. The skin author Main.ArthurClemens will change things a great deal by the time the skin is released.|
+
