@@ -81,54 +81,50 @@ sub searchWeb
     my $searchResult = ""; 
     my $topic = $TWiki::mainTopicname;
 
-    ## #############
-    ## 0501 kk : vvv An entire new chunk devoted to setting up mult-web
-    ##               searches.
-
-    my @webList;
+    my @webList = ();
 
     # A value of 'all' or 'on' by itself gets all webs,
     # otherwise ignored (unless there is a web called "All".)
-    my $searchAllFlag = ( $theWebName =~ /^(([Aa][Ll][Ll])||([Oo][Nn]))$/ );
+    my $searchAllFlag = ( $theWebName =~ /(^|[\,\s])(all|on)([\,\s]|$)/i );
 
     # Search what webs?  "" current web, list gets the list, all gets
     # all (unless marked in WebPrefs as NOSEARCHALL)
 
-    if( ! $theWebName ) {
+    if( $theWebName ) {
+        foreach( split( /[\,\s]+/, $theWebName ) ) {
+            # the web processing loop filters for valid web names, so don't do it here.
 
-        #default to current web
-        push @webList, $TWiki::webName;
-
-    } elsif ($searchAllFlag) {
-
-        # get list of all webs by scanning $dataDir
-        opendir DIR, $TWiki::dataDir;
-        my @tmpList = readdir(DIR);
-        closedir(DIR);
-
-        # this is not magic, it just looks like it.
-        @webList = sort
+            if( $_ =~ /^(all|on)$/i  ) {
+                # get list of all webs by scanning $dataDir
+                opendir DIR, $TWiki::dataDir;
+                my @tmpList = readdir(DIR);
+                closedir(DIR);
+                @tmpList = sort
                    grep { s#^.+/([^/]+)$#$1# }
                    grep { -d }
                    map  { "$TWiki::dataDir/$_" }
                    grep { ! /^[._]/ } @tmpList;
 
-        # what that does (looking from the bottom up) is take the file
-        # list, filter out the dot directories and dot files, turn the
-        # list into full paths instead of just file names, filter out
-        # any non-directories, strip the path back off, and sort
-        # whatever was left after all that (which should be merely a
-        # list of directory's names.)
+                   # what that does (looking from the bottom up) is take the file
+                   # list, filter out the dot directories and dot files, turn the
+                   # list into full paths instead of just file names, filter out
+                   # any non-directories, strip the path back off, and sort
+                   # whatever was left after all that (which should be merely a
+                   # list of directory's names.)
+
+                foreach my $web ( @tmpList ) {
+                    push( @webList, $web ) unless( grep { /^$web$/ } @webList );
+                }
+
+            } else {
+                push( @webList, $_ ) unless( grep { /^$_$/ } @webList );
+            }
+        }
 
     } else {
-
-        # use whatever the user sent
-        @webList = split(" ", $theWebName); # the web processing loop filters
-                                            # for valid web names, so don't
-                                            # do it here.
+        #default to current web
+        push @webList, $TWiki::webName;
     }
-    ## 0501 kk : ^^^
-    ## ##############
 
     my $tempVal = "";
     my $tmpl = "";
@@ -482,6 +478,8 @@ sub searchWeb
             } else {
                 # lazy query, need to do it at last
                 ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                $text =~ s/%WEB%/$thisWebName/gos;
+                $text =~ s/%TOPIC%/$topic/gos;
                 $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $topic, $thisWebName );
                 ( $revDate, $revUser, $revNum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $topic, $meta, 1 );
                 $revUser = &TWiki::userToWikiName( $revUser );
@@ -539,8 +537,7 @@ sub searchWeb
             $tempVal =~ s/%REVISION%/$revNum/o;
             $tempVal =~ s/%AUTHOR%/$revUser/o;
 
-            if( ( $doInline || $theFormat ) && ( ! ( $forceRendering ) )
-) {
+            if( ( $doInline || $theFormat ) && ( ! ( $forceRendering ) ) ) {
                 # print at the end if formatted search because of table rendering
                 # do nothing
             } else {
@@ -619,6 +616,8 @@ sub searchWeb
                 # free format, added PTh 10 Oct 2001
                 if( ! $text ) {
                     ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
+                    $text =~ s/%WEB%/$thisWebName/gos;
+                    $text =~ s/%TOPIC%/$topic/gos;
                 }
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
