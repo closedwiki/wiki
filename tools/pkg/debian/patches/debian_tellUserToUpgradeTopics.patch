@@ -1,5 +1,5 @@
---- Prefs.pm	2005-03-20 14:07:07.000000000 +1100
-+++ Prefs.pm.new	2005-03-20 14:07:38.000000000 +1100
+--- lib/TWiki/Prefs.pm	2005-03-20 14:07:07.000000000 +1100
++++ lib/TWiki/Prefs.pm	2005-03-20 14:07:38.000000000 +1100
 @@ -308,6 +308,9 @@
      $self->inheritPrefs( $self->{parent} ) if defined $self->{parent};
  
