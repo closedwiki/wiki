@@ -1,6 +1,6 @@
 package TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 use TWiki::Contrib::DistributionContrib::DistributionFetcher;
-use TWiki::Contrib::Build;
+#use TWiki::Contrib::Build;
 use TWiki;    # TODO why do I have to use this? Why not just TWiki::Func?
 use TWiki::Func;
 use strict;
@@ -84,6 +84,13 @@ sub cli_install_download {
  chdir ($dirInInstallation) || die "Can't cd to $dirInInstallation";
 # TODO : Find out whether we can get rid of the need to be in here
 # TODO : Find out why its called both Build and BuildContrib...
+
+eval {
+require TWiki::Contrib::Build;
+}
+
+print $@ if $@;
+
  my $buildObj = TWiki::Contrib::Build->new($extension);
  $buildObj->manifest();
 
