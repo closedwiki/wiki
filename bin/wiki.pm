@@ -86,7 +86,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Dec 2000";
+$wikiversion      = "02 Dec 2000";
 
 # ===========================
 # read the configuration part
@@ -257,11 +257,11 @@ sub getEmailNotifyList
         foreach $line ( @list ) {
             $line =~ s/\-\s+([A-Za-z0-9\-_\.\+]+\@[A-Za-z0-9\-_\.\+]+)/$1/go;
             if( $1 ) {
-                $list = "$list $1";
+                $list = "$list, $1";
             }
         }
-        $list =~ s/^ *//go;
-        $list =~ s/ *$//go;
+        $list =~ s/^[\s\,]*//go;
+        $list =~ s/[\s\,]*$//go;
     }
     return $list;
 }
@@ -909,6 +909,16 @@ sub emitTR {
 }
 
 # =========================
+sub fixedFontText
+{
+    my( $theText ) = @_;
+    # preserve white space, so replace it by "&nbsp; " patterns
+    $theText =~ s/\t/   /go;
+    $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . "$2"|eg;
+    return "<CODE>$theText</CODE>";
+}
+
+# =========================
 sub internalLink
 {
     my( $web, $page, $text, $bar, $foo ) = @_;
@@ -990,14 +1000,19 @@ sub getRenderedVersion
 # Wiki extended rules
             $_ = extendGetRenderedVersionOutsidePRE( $_, $theWeb );
 
-#Blockquote
+# Blockquote
             s/^>(.*?)$/> <cite> $1 <\/cite><BR>/go;
 
+# Embedded HTML
+            s/\<(\!\-\-)/$TranslationToken$1/go;  # Allow standalone "<!--"
+            s/(\-\-)\>/$1$TranslationToken/go;    # Allow standalone "-->"
             s/\<(\S.*?)\>/$TranslationToken$1$TranslationToken/go;
             s/</&lt\;/go;
             s/>/&gt\;/go;
             s/$TranslationToken(\S.*?)$TranslationToken/\<$1\>/go;
-            
+            s/(\-\-)$TranslationToken/$1\>/go;
+            s/$TranslationToken(\!\-\-)/\<$1/go;
+
 # Handle embedded URLs
             s@(^|[\-\*\s])((http|ftp|gopher|news|https)\:(\S+[^\s\.,!\?;:]))@&externalLink($1,$2)@geo;
 
@@ -1035,11 +1050,11 @@ sub getRenderedVersion
             s/(.*)/\n$1\n/o;
 
 # Emphasizing
-            # PTh 20 Jul 2000: More relaxing rules, allow trailing ,.;:!?
-            s/(\s)__([^\s].*?[^\s])__([\s\,\.\;\:\!\?])/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
-            s/(\s)\*([^\s].*?[^\s])\*([\s\,\.\;\:\!\?])/$1<STRONG>$2<\/STRONG>$3/go;
-            s/(\s)=([^\s].*?[^\s])=([\s\,\.\;\:\!\?])/$1<CODE>$2<\/CODE>$3/go;
-            s/(\s)_([^\s].*?[^\s])_([\s\,\.\;\:\!\?])/$1<EM>$2<\/EM>$3/go;
+            # PTh 25 Sep 2000: More relaxing rules, allow leading '(' and trailing ',.;:!?)'
+            s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
+            s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<STRONG>$2<\/STRONG>$3/go;
+            s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<EM>$2<\/EM>$3/go;
+            s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . fixedFontText($2) . $3/geo;
 
 # Mailto
             s#(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+)(?=[\s\)]|$)#$1<A href=\"mailto\:$2">$2</A>#go;
