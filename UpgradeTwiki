@@ -163,6 +163,10 @@ Now: you need to
    For these files, you'll want to check the .rej file (in the same directory as the file)
    and see whether there are changes in there that you need to make manually.
 
+ - Check the files list above that have 'no common versions' - in those cases, your
+   new install will still work, but you need to be aware the topic file that is in 
+   place is your old one... no changes from the new release have been included.
+
  - Check if you modified your old version of setlib.cfg: if you did,
     then you need to do the same to the new one (which you will find in ./bin).
 
@@ -185,15 +189,15 @@ Now: you need to
 
    If you don't know what this means, it probably doesn't apply to you.
 
- - Re-install plugins you were using (?)
+ - Re-install plugins you were using
 
  - Copy over custom templates you put in the original templates directory
 
  - anything else I haven't thought of
 
- - archive your old installation 
+ - Archive your old installation 
 
- - move the newly created twiki directory ($targetDir) to the place where your previous version was.
+ - Move the newly created twiki directory ($targetDir) to the place where your previous version was.
 
  - Use your browser to check the whole thing: visit 
 

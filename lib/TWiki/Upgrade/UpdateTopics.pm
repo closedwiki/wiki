@@ -63,9 +63,10 @@ sub UpdateTopics
     print "\t This progam will attempt to use the rcs versioning information to upgrade the\n";
     print "\t   contents of your distributed topics in $CurrentDataDir to the content in $NewReleaseDataDir.\n\n";
     print "Output:\n";
-    print "\tFor each file that has no versioning information a _v_ will be printed\n";
+    print "\tFor each file that has no versioning information in your existing twiki a _v_ will be printed\n";
     print "\tFor each file that has no changes from the previous release a _c_ will be printed\n";
     print "\tFor each file that has no changes made in your existing release, a _u_ will be printed\n";
+    print "\tFor each file where no commonality could be found, your existing one is used, and a _C_ will be printed\n";
     print "\tFor each file that has changes and a patch is generated a _p_ will be printed\n";
     print "\tFor each file that is new in the NewReleaseDataDir a _+_ will be printed\n";
     print "\t When the script has attempted to patch the $NewReleaseDataDir, 
@@ -192,11 +193,11 @@ sub getRLog
         return;
     }
     
-    if ( isFromDefaultWeb($filename) )
-    {
-        $newFilename =~ s|^(.*)/[^/]*/([^/]*)|$1/_default/$2|g;
-        print "\n$filename appears to have been generated from from _default - merging with $newFilename from the new distribution!" if ($debug);
-    }
+#    if ( isFromDefaultWeb($filename) )
+#    {
+#        $newFilename =~ s|^(.*)/[^/]*/([^/]*)|$1/_default/$2|g;
+#        print "\n$filename appears to have been generated from from _default - merging with $newFilename from the new distribution" if ($debug);
+#    }
     
     if (! -e $filename.",v" )
     {
@@ -309,10 +310,9 @@ sub getRLog
 sub isFromDefaultWeb
 {
     my ($filename) = @_;
-    
-    $filename =~ /^(.*)\/[^\/]*\/([^\/]*)/;
-    my $topic = $2;    
-    return $topic if grep(/^$filename$/, @DefaultWebTopics);
+
+    my $topic = basename($filename);
+    return $topic if grep(/^$topic$/, @DefaultWebTopics);
 }
 
 sub sussoutDefaultWebTopics
@@ -346,11 +346,35 @@ sub patchFile
 {
     my ( $oldFilename, $destinationFilename, $diff ) = @_;
 
+
+    # Here's where we do a total hack to get WIKIWEBLIST right.  
+    # we have to check every stinkin line of diff just to intercept this one :-(
+
+    my @diff;
+
+    @diff = split(/\n/, $diff);
+
+    my $i;
+
+    for($i = 0; $i < @diff ; $i++)
+    {
+	if ($diff[$i] =~ m/<\s*\* Set WIKIWEBLIST = /)
+	{
+	    # come to mama
+	    # this had better be the value in the distribution!...
+	    $diff[$i] = '<		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]';
+	    last;
+	}
+    }
     
+    $diff = join("\n", @diff);
+
     # this looks odd: it's just telling patch to apply the patch to $destinationFilename
     # perhaps only one file name line would do, but better safe than sorry!    
+    # (diffs always seem to have two lines)
     print(PATCH "--- $destinationFilename\n");
     print(PATCH "--- $destinationFilename\n");
+
     print(PATCH "$diff\n");
 
 #    print(PATCH, "");

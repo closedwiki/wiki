@@ -836,6 +836,7 @@ sub printToNewConfig
 	$config =~ s/\.''//g;
     }
 
+    
     print NEW_CONFIG $config;
 }
 
