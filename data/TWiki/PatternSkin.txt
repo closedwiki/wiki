@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1093436425" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="ArthurClemens" date="1093599078" format="1.0" version="1.10"}%
 %STARTINCLUDE%
 ---+!! Pattern skin
 
@@ -130,6 +130,6 @@ Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 
 %META:FILEATTACHMENT{name="i_arrow_down.gif" attr="" comment="Icon: down arrow; used for Table Of Contents" date="1092634909" path="i_arrow_down.gif" size="56" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="layout.css" attr="" comment="Layout: positioning of page elements" date="1093436449" path="layout.css" size="1823" user="ArthurClemens" version="1.2"}%
-%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1093436572" path="style.css" size="26169" user="ArthurClemens" version="1.4"}%
+%META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1093599077" path="style.css" size="26189" user="ArthurClemens" version="1.5"}%
 %META:FILEATTACHMENT{name="patternskin_screenshot.gif" attr="h" comment="" date="1092762581" path="patternskin_screenshot.gif" size="8898" user="ArthurClemens" version="1.2"}%
 %META:FILEATTACHMENT{name="patternskin_screenshot_full.gif" attr="h" comment="" date="1092762639" path="patternskin_screenshot_full.gif" size="63480" user="ArthurClemens" version="1.1"}%
