@@ -376,11 +376,16 @@ if( ! ( -e "$dataDir" ) ) {
 
 print "<tr><th align=\"right\">\$mailProgram:</th><td>$mailProgram</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-print "This is the mail program TWiki uses to send mail.";
+if( $OS ne 'WINDOWS' ) {
+    print "This is the mail program TWiki uses to send mail.";
+} else {
+    print "This is not typically used on Windows - the Perl Net::SMTP module is used instead.";
+}
 print "</td></tr>\n";
 $val = $mailProgram;
 $val =~ s/([^\s]*).*/$1/go;
-if( ! ( -e $val ) ) {
+# Don't warn on Windows, as Net::SMTP is normally used
+if( $OS ne 'WINDOWS' && ! ( -e $val ) ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
     print "Mail program <tt>$val</tt> not found. Check the path.";
     print "</td></tr>\n";
