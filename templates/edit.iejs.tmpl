@@ -287,7 +287,7 @@ function writeToolbar()
   '<td>\n' +
   '<select name="topic" onchange="insert(this.options [this.selectedIndex].value);this.options [0].selected = true" class="editDropdown">\n' +
   '<option value="">Topic ...</option>\n' +
-  '%TOPICLIST{"<option value=$name>$name</option>" separator=" "}%>\n' +
+  '%TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%>\n' +
   '</select>\n' +
   '</td>\n' +
   '</tr>\n' +
