@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1041743619" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042010630" format="1.0" version="1.6"}%
 ---++ NOTE: This Wiki topic does not exist yet
 
 ---+++ If you would like to create this page:
@@ -12,7 +12,7 @@ link at the bottom of this page.
 ---+++ If you intend to do a full text search:
 
 <blockquote>
-<form name="search" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%URLENCODE{"%WEB%"}%/">
+<form name="search" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
 Use the <a href="WebSearch">Search</a> link on top of this page, or do a simple <br>
 <input type="text" name="search" size="32" value="%TOPIC%">
 <input type="submit" value="Search">
