@@ -54,7 +54,7 @@ sub main
 	return;
     }
 
-    my $unlock = $query->param( "unlock" );
+    my $unlock = $query->param( "unlock" ) || "";
     if( $unlock eq "on" ) {
         # unlock topic, user cancelled out of edit
         &wiki::lockTopic( $topic, "on" );
