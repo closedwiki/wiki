@@ -165,9 +165,16 @@ sub add_handlers {
 sub run_import {
     my $self = shift;
     my ( $config, $class, @args ) = @_;
-    $class=$prefix."::".ucfirst $class;
-    
+    unless ($class =~ /TWiki::/) {
+      $class=$prefix."::".ucfirst $class;
+    }
+    print "Importing $class\n";
+
     eval " require $class;";
+    if ($@) {
+      print "Import failed: $! $? $@\n";
+      # should unset %INC{$class} so that it can reload
+    }
     $self->find_handlers($class); ;
     if ($@) {
         return 0;
