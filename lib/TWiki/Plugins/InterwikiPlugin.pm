@@ -40,12 +40,17 @@ use vars qw(
 
 $VERSION = '1.000';
 $interSiteLinkRulesTopicName = "InterWikis";
+
+# Regexes for the Site:page format InterWiki reference - updated to support
+# 8-bit characters in both parts - see Codev.InternationalisationEnhancements
+# TODO: Need to update the Plugins API to support export of regexes and regex components
 $prefixPattern  = '(^|[\s\-\*\(])';
-$sitePattern    = '([A-Z][A-Za-z0-9]+)';
-$pagePattern    = '([a-zA-Z0-9_\/][a-zA-Z0-9\-\+\_\.\,\;\:\!\?\/\%]+?)';
+$sitePattern    = "([${TWiki::upperAlpha}][${TWiki::mixedAlphaNum}]+)";
+$pagePattern    = "([${TWiki::mixedAlphaNum}_\/][${TWiki::mixedAlphaNum}" . '\+\_\.\,\;\:\!\?\/\%-]+?)';
 $postfixPattern = '(?=[\s\.\,\;\:\!\?\)]*(\s|$))';
 
 # =========================
+# Plugin startup - read preferences and get all InterWiki Site->URL mappings
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
@@ -85,9 +90,10 @@ sub initPlugin
     close IN;
 
     # grep "| alias | URL | ..." table and extract into "alias", "URL" list
+    # FIXME: Should be able to do this pipeline with just one regex match
     @data = map { split /\s+/, $_, 2 }
             map { s/^\|\s*$sitePattern\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/$1 $2 $3/os ; $_ }
-            grep { /^\|\s*$sitePattern\s*\|.*?\|.*?\|/ } @data;
+            grep { m/^\|\s*$sitePattern\s*\|.*?\|.*?\|/o } @data;
     if( $debug ) {
         my $tmp = join(", " , @data );
         &TWiki::Func::writeDebug( "- InterwikiPlugin, table: $tmp" );
@@ -114,11 +120,12 @@ sub DISABLE_startRenderingHandler
 }
 
 # =========================
+# Expand the Site:page references, called once per line of text
 sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    $_[0] =~ s/$prefixPattern$sitePattern\:$pagePattern$postfixPattern/"$1" . &handleInterwiki($2,$3)/geo;
+    $_[0] =~ s/$prefixPattern$sitePattern:$pagePattern$postfixPattern/"$1" . &handleInterwiki($2,$3)/geo;
 }
 
 # =========================
