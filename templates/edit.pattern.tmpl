@@ -89,26 +89,16 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"topicaction"}%
-<fieldset><legend class="twikiGrayText"><a href="#" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: C = Cancel, Q = Quiet Save, K = Checkpoint, P = Preview, S = Save</legend>
-	<div class="twikiFieldsetButtons twikiLeft">
-   <label accesskey="c" for="cancel">
-        <input type="submit" class="twikiSubmit twikiCancel" name="action" id="cancel" value="Cancel" />
-   </label>
-  <label accesskey="p" for="preview">
-        <input type="submit" class="twikiSubmit twikiSecondary" name="action" id="preview" value="Preview" />
-   </label>
-   <label accesskey="k" for="checkpoint">
-        <input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" />
-   </label>
-   <label accesskey="q" for="quietsave">
-       <input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" />
-   </label>
-   <label accesskey="s" for="save">
-       <input type="submit" class="twikiSubmit" name="action" id="save" value="Save" />
-   </label>
-   </div>
-   <div class="twikiRight"></div>
-   <br class="twikiClearLine" />
+<fieldset><legend class="twikiGrayText"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: C = Cancel, P = Preview, K = Checkpoint, Q = Quiet Save, S = Save</legend>
+<div class="twikiFieldsetButtons twikiLeft">
+	<input type="submit" class="twikiSubmit twikiCancel" name="action" id="cancel" value="Cancel" /><label accesskey="c" for="cancel"></label>
+	<input type="submit" class="twikiSubmit twikiSecondary" name="action" id="preview" value="Preview" /><label accesskey="p" for="preview"></label>
+	<input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" /><label accesskey="k" for="checkpoint"></label>
+	<input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" /><label accesskey="q" for="quietsave"></label>
+	<input type="submit" class="twikiSubmit" name="action" id="save" value="Save" /><label accesskey="s" for="save"></label>
+</div>
+<div class="twikiRight"></div>
+<br class="twikiClearLine" />
 </fieldset>%TMPL:END%
 
 
