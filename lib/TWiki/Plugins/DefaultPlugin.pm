@@ -119,7 +119,7 @@ sub outsidePREHandler
     # $_[0] =~ s/old/new/go;
 
     # render depreciated *_text_* as "bold italic" text:
-    $_[0] =~ s/(^|\s)\*_([^\s].*?[^\s])_\*(\s|$)/$1<STRONG><EM>$2<\/EM><\/STRONG>$3/go;
+    $_[0] =~ s/(^|\s)\*_([^\s].*?[^\s])_\*(\s|$)/$1<strong><em>$2<\/em><\/strong>$3/go;
 
     # Use alternate %Web:WikiName% syntax (versus the standard Web.WikiName).
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)

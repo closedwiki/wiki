@@ -492,7 +492,7 @@ sub searchWeb
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
                        # This can incorrectly show matches becuase of case insenstive option, required to get [[spaced Word]] to match
                        my $subs = s|$theSearchVal|$1<font color="red">$2</font>&nbsp;|ig;
-                       $reducedOutput .= "$_<br>\n" if( $subs );
+                       $reducedOutput .= "$_<br />\n" if( $subs );
                    }
                 }
                 $tempVal =~ s/%TEXTHEAD%/$reducedOutput/go;

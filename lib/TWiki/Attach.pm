@@ -86,10 +86,10 @@ sub filenameToIcon
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
 	if( $bits[0] eq $fileExt ) {
-            return "<IMG src=\"$iconUrl/$bits[1].gif\" width=\"16\" hight=\"16\" align=\"top\">";
+            return "<img src=\"$iconUrl/$bits[1].gif\" width=\"16\" hight=\"16\" align=\"top\" />";
         }
     }
-    return "<IMG src=\"$iconUrl/else.gif\" width=\"16\" hight=\"16\" align=\"top\">";
+    return "<img src=\"$iconUrl/else.gif\" width=\"16\" hight=\"16\" align=\"top\" />";
 }
 
 

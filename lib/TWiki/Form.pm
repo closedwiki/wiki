@@ -211,8 +211,7 @@ sub chooseFormButton
 {
     my( $text ) = @_;
     
-    return "<INPUT type=\"submit\" STYLE=\"font-size:8pt; border-width:1px; " .
-           "margin:2px\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \">";
+    return "<input type=\"submit\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \" />";
 }
 
 
@@ -247,7 +246,7 @@ sub renderForEdit
         my $extra = "";
         
         if( $type eq "text" ) {
-            $value = "<input name=\"$name\" size=\"$size\" type=\"input\" value=\"$value\">";
+            $value = "<input name=\"$name\" size=\"$size\" type=\"input\" value=\"$value\" />";
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
             my $rows = 5;
@@ -278,8 +277,8 @@ sub renderForEdit
         } elsif( $type =~ "^checkbox" ) {
             if( $type eq "checkbox+buttons" ) {
                 my $boxes = $#fieldInfo + 1;
-                $extra = "<br>\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $boxes, true)\">&nbsp;\n" .
-                         "<input type=\"button\" value=\"Clear\" onClick=\"checkAll(this, 1, $boxes, false)\">\n";
+                $extra = "<br />\n<input type=\"button\" value=\" Set \" onClick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
+                         "<input type=\"button\" value=\"Clear\" onClick=\"checkAll(this, 1, $boxes, false)\" />\n";
             }
 
             my $val ="<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
@@ -287,9 +286,9 @@ sub renderForEdit
             foreach my $item ( @fieldInfo ) {
                 my $flag = "";
                 if( $value =~ /(^|,\s*)$item(,|$)/ ) {
-                    $flag = "checked";
+                    $flag = ' checked="checked"';
                 }
-                $val .= "\n<td><input type=\"checkbox\" name=\"$name$item\" $flag>$item &nbsp;&nbsp;</td>";
+                $val .= "\n<td><input type=\"checkbox\" name=\"$name$item\"$flag />$item &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
                 }
@@ -304,11 +303,11 @@ sub renderForEdit
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
                 if( $item eq $value ) {
-                   $selected = " checked";
+                   $selected = 'checked="checked"';
                    $matched = $item;
                 }
                 $defaultMarker = "";
-                $val .= "\n<td><input type=\"radio\" name=\"$name\" value=\"$item\" $selected>$item &nbsp;&nbsp;</td>";
+                $val .= "\n<td><input type=\"radio\" name=\"$name\" value=\"$item\" $selected />$item &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
                 }
@@ -411,7 +410,7 @@ sub getFieldParams
        my $value = $field->{"value"};
        $value = TWiki::Meta::cleanValue( $value );
        $name .= "FLD";
-       $params .= "<input type=\"hidden\" name=\"$name\" value=\"$value\">\n";
+       $params .= "<input type=\"hidden\" name=\"$name\" value=\"$value\" />\n";
     }
     
     return $params;
@@ -444,11 +443,11 @@ sub changeForm
 
     my $formList = "";
     foreach my $form ( @forms ) {
-       my $selected = ( $form eq $formName ) ? "checked" : "";
-       $formList .= "\n<br>" if( $formList );
+       my $selected = ( $form eq $formName ) ? 'checked="checked"' : "";
+       $formList .= "\n<br />" if( $formList );
        my $show = $form ? $form : "&lt;none&gt;";
        my $value = $form ? $form : "none";
-       $formList .= "<input type=\"radio\" name=\"formtemplate\" value=\"$value\" $selected>&nbsp;$show";
+       $formList .= "<input type=\"radio\" name=\"formtemplate\" value=\"$value\" $selected />&nbsp;$show";
     }
     $tmpl =~ s/%FORMLIST%/$formList/go;
 
