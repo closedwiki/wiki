@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1089961961" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="ArthurClemens" date="1092739533" format="1.0" version="1.8"}%
 ---++ NOTE: This Wiki topic does not exist yet
 
 ---+++ If you used the "Go" feature to jump to this page:
@@ -20,5 +20,5 @@
 
 ---+++ If you would like to create this page:
 
-	* Simply click on the <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%"><b>Create</b></a> link at the bottom of this page
+	* Continue to <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%"><b>Create the new page</b></a>
 
