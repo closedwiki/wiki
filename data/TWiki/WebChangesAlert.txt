@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="1006243410" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043309291" format="1.0" version="1.13"}%
 %INCLUDE{"DocsUserNote"}%
 
 ---++ Web Changes Notification Service
 
-Each TWiki web has an automatic email notification service that sends you an email with links to all of the topics modified since the last alert. 
+Each %WIKITOOLNAME% web has an automatic email notification service that sends you an email with links to all of the topics modified since the last alert. 
 
 	* You can subscribe and unsubscribe yourself in WebNotify on each web. Changes are immediate.
 
