@@ -717,7 +717,7 @@ sub _newUserFromTemplate {
     
     $log .= "$b2 RegistrationHandler: ";
     my $regLog;
-    ($row, $meta, $text, $regLog) = RegistrationHandler::register($row, $meta, $text);
+    ($row, $meta, $text, $regLog) = RegistrationHandler::register($session, $row, $meta, $text);
     $log .= join("$b2 ", split /\n/, $regLog)."\n";
     
     $log .= "$b2 ".join("$b2 ", split /\n/, _writeRegistrationDetailsToTopic( $session, $row, $meta, $text ))."\n";
@@ -762,7 +762,7 @@ sub _writeRegistrationDetailsToTopic {
 
     $meta->put( "TOPICPARENT", ( "name" => $TWiki::wikiUsersTopicname ) );
 
-    $session->{store}->saveTopic( $data{webName}, $data{WikiName}, $text, $meta );
+    $session->{store}->saveTopic($userName, $data{webName}, $data{WikiName}, $text, $meta );
     return $log;
 }
 
@@ -1288,7 +1288,8 @@ sub deleteKey {
     #-- We delete only the field in the {form} array - this makes the original value still there should 
     #-- we want it
     #-- i.e. it must still be available via $row->{$key} even though $row-{form}[] does not contain it
-    #warn "BEFORE:". Dumper(\@_);
+#    warn "BEFORE:". Dumper(\@_);
+#    warn "Deleting $key from ".Dumper($row);
     my @formArray = @{$row->{form}};
 
     foreach my $index (0..$#formArray) {

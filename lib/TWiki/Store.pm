@@ -677,6 +677,7 @@ Save a new revision of the topic, calling plugins handlers as appropriate.
 sub saveTopic {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
     ASSERT(ref($this) eq "TWiki::Store") if DEBUG;
+    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     $options = {} unless defined( $options );
 
@@ -1391,7 +1392,7 @@ sub _writeKeyValue {
 # Write all the key=value pairs for the types listed
 sub _writeTypes {
     my( $meta, @types ) = @_;
-    ASSERT(ref($meta) eq "TWiki::Meta");
+    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     my $text = "";
 
@@ -1451,6 +1452,7 @@ sub _writeEnd {
 # STATIC Prepend/append meta data to topic
 sub _writeMeta {
     my( $meta, $text ) = @_;
+    ASSERT(ref($meta) eq "TWiki::Meta") if DEBUG;
 
     my $start = _writeStart( $meta );
     my $end = _writeEnd( $meta );

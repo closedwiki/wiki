@@ -77,6 +77,7 @@ sub new {
     # fields will be assumed to be meta-data.
     $self->{_session} = $session;
 
+#$ENV{'TWIKI_ASSERTS'} = 1;
     throw Error::Simple("ASSERT: no web") unless $web;
     throw Error::Simple("ASSERT: no topic") unless $topic;
 
