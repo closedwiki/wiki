@@ -44,7 +44,7 @@ BEGIN {
     do "TWiki.cfg";
 
     # Do a dynamic 'use locale' for this module
-    if( $useLocale ) {
+    if( $TWiki::useLocale ) {
         require locale;
         import locale ();
     }
