@@ -42,7 +42,7 @@ $VERSION = '1.000';
 $interSiteLinkRulesTopicName = "InterWikis";
 $prefixPattern  = '(^|[\s\-\*\(])';
 $sitePattern    = '([A-Z][A-Za-z0-9]+)';
-$pagePattern    = '([a-zA-Z0-9_\/][a-zA-Z0-9\-\+\_\.\,\;\:\!\?\/]+?)';
+$pagePattern    = '([a-zA-Z0-9_\/][a-zA-Z0-9\-\+\_\.\,\;\:\!\?\/\%]+?)';
 $postfixPattern = '(?=[\s\.\,\;\:\!\?\)]*(\s|$))';
 
 # =========================
