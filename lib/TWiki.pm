@@ -133,11 +133,14 @@ BEGIN {
     }
 
     do "LocalSite.cfg";
-    die "Bad configuration: $@" if $@;
-
-    foreach my $var ( "DataDir", "DefaultUrlHost", "PubUrlPath", "PubDir", "TemplateDir" ) {
-        die "$var must be defined in LocalSite.cfg"
-          unless( defined $TWiki::cfg{$var} );
+    unless( $@ ) {
+        # found it and read it; make sure key variables are defined
+        # if it wasn't there, site may be relying on TWiki.cfg
+        foreach my $var ( "DataDir", "DefaultUrlHost", "PubUrlPath",
+                          "PubDir", "TemplateDir" ) {
+            die "$var must be defined in LocalSite.cfg"
+              unless( defined $TWiki::cfg{$var} );
+        }
     }
 
     do "TWiki.cfg";
