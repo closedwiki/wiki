@@ -182,7 +182,7 @@ sub renderMoved
         my $by   = $moved{"by"};
         $by = TWiki::userToWikiName( $by );
         my $date = $moved{"date"};
-        $date = TWiki::formatTime( $date, , "gmtime" );
+        $date = TWiki::formatTime( $date, "", "gmtime" );
         
         # Only allow put back if current web and topic match stored information
         my $putBack = "";
