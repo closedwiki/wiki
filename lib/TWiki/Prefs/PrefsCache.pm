@@ -190,22 +190,19 @@ sub loadPrefsFromTopic {
                                   $topicPrefs->{prefs}{$key} );
     }
 
-    if ( defined( $self->{prefs}{$TWiki::Prefs::finalPrefsName} )) {
-        my $finalPrefs = $self->{prefs}{$TWiki::Prefs::finalPrefsName};
+    if ( defined( $self->{prefs}{FINALPREFERENCES} )) {
+        my $finalPrefs = $self->{prefs}{FINALPREFERENCES};
         my @finalPrefsList = split /[\s,]+/, $finalPrefs;
         $self->{finalHash} = { map { $_ => 1 } @finalPrefsList };
     }
 }
 
 # Private function to insert a value into a PrefsCache object
-# SMELL: This is almost the same as insertPrefsValue
 sub _insertPreference {
     my( $self, $theKey, $theValue ) = @_;
 
     return if (exists $self->{finalHash}{$theKey}); # $theKey is in FINALPREFERENCES, don't update it
-
-    if ( $theKey eq $TWiki::Prefs::finalPrefsName &&
-         defined( $self->{prefs}{$theKey} )) {
+    if ( $theKey eq "FINALPREFERENCES" && defined( $self->{prefs}{$theKey} )) {
 
         # key exists, need to deal with existing preference
         # merge final preferences lists
@@ -225,9 +222,14 @@ current one, overwriting anything that may currently be there.
 
 sub inheritPrefs {
     my( $self, $otherPrefsObject ) = @_;
+    my $key;
 
-    foreach my $key( keys %{$otherPrefsObject->{prefs}} ) {
+    foreach $key( keys %{$otherPrefsObject->{prefs}} ) {
         $self->{prefs}{$key} = $otherPrefsObject->{prefs}{$key};
+    }
+
+    foreach $key( keys %{$otherPrefsObject->{finalHash}} ) {
+        $self->{finalHash}{$key} = 1;
     }
 }
 

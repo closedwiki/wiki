@@ -94,8 +94,7 @@ sub _insertPrefsValue {
     $theValue =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
     $theValue =~ s/`//g;                   # filter out dangerous chars
 
-    if( $theKey eq $TWiki::Prefs::finalPrefsName &&
-        defined( $self->{prefs}{$theKey} )) {
+    if( $theKey eq "FINALPREFERENCES" && defined( $self->{prefs}{$theKey} )) {
 
         # key exists, need to deal with existing preference
         # merge final preferences lists

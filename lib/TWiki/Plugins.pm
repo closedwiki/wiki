@@ -96,7 +96,9 @@ sub getPluginVersion
     if( $thePlugin ) {
         foreach my $plugin ( @activePlugins ) {
             if( $plugin eq $thePlugin ) {
+no strict 'refs';
                 $version = ${"TWiki::Plugins::${plugin}::VERSION"};
+use strict 'refs';
             }
         }
     } else {
@@ -200,8 +202,8 @@ sub _registerPlugin
     #print STDERR "Compile $plugin: ".timestr(timediff(new Benchmark, $begin))."\n";
 
     if ($@) {
-	_initialisationError("Plugin \"$plugin\" could not be loaded by Perl.  Errors were:\n----\n$@----");
-	return;
+        _initialisationError("Plugin \"$plugin\" could not be loaded by Perl.  Errors were:\n----\n$@----");
+        return;
     }
 
     my $h   = "";
@@ -213,7 +215,9 @@ sub _registerPlugin
             return;
         }
         $sub = $p. '::initializeUserHandler';
+no strict 'refs';
         $user = &$sub( $theLoginName );
+use strict 'refs';
         return $user;
 
     }

@@ -35,11 +35,9 @@ use TWiki::Prefs::PrefsCache;
 
 use vars qw(
             $globalPrefs %webPrefs $requestPrefs $requestWeb
-            $finalPrefsName $formPrefPrefix
+            $formPrefPrefix
           );
 
-
-$finalPrefsName = "FINALPREFERENCES";
 $formPrefPrefix = "FORM_";
 
 =pod
@@ -266,7 +264,6 @@ sub getPreferencesValue {
     if( defined( $sessionValue ) ) {
         return $sessionValue;
     }
-
     my $val;
     if( $theWeb ) {
         if (!exists $webPrefs{$theWeb}) {
