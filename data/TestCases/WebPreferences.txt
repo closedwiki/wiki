@@ -17,8 +17,8 @@ __Preferences:__
 	* List this web in the %TWIKIWEB%.SiteMap:
 		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. %WEB%.Topic links.
 		* Set SITEMAPLIST = on
-		* Set SITEMAPWHAT = Sandbox test area with all features enabled. 
-		* Set SITEMAPUSETO = ...experiment in an unrestricted hands-on web. 
+		* Set SITEMAPWHAT = Test Cases for TWiki 
+		* Set SITEMAPUSETO = Test TWiki. 
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
 		* Set NOSEARCHALL = 
