@@ -104,12 +104,21 @@ sub indexLocalInstallation {
  ensureInstallationDir();
  FileDigest::emptyIndexes();
  $ans .=  "Indexing localInstallation\n";
- IndexDistributions::indexDistribution( "localInstallation", "/home/mrjc/beijingtwiki.mrjc.com/", "");
-#					$Common::excludeFilePattern );
-#  $Common::installationDir, 
- $ans .= saveIndex("localInstallation.md5");
+ IndexDistributions::indexDistribution( "localInstallation", 
+					$Common::installationDir, $Common::excludeFilePattern,
+					"twiki");
 
+ $ans .= saveIndex("localInstallation.md5");
+ return $ans;
  #	print FileDigest::dataOutline();
+}
+
+sub indexLocalEmptyDistribution {
+    my $ans;
+    FileDigest::emptyIndexes();
+    $ans .=  "Emptying localInstallation\n";
+    $ans .= saveIndex("localInstallation.md5");
+    return $ans;
 }
 
 sub indexReleases {
@@ -169,7 +178,6 @@ sub installsOfMine {
 }
 
 sub ensureInstallationDir {
- use TRTConfig;
  if ( $Common::installationDir eq "" ) {
   die "You must edit TRTConfig to tell it where you've installed TWiki";
  }

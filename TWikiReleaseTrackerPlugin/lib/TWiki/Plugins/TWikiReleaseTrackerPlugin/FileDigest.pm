@@ -82,10 +82,11 @@ inner: pair of distribution, filename
 
     my ($digest) = @_;
     my $values = $digestToOccurances{$digest};
+
     if (defined $values) {
 	return @{$values};
     } else {
-	return ();
+	wantarray ? () : 0;
     }
 }
 
@@ -99,10 +100,11 @@ inner: pair of filename, digest
 
     my ($digest) = @_;
     my $values = $distributionToOccurances{$digest};
+
     if (defined $values) {
 	return @{$values};
     } else {
-	return ();
+	wantarray ? () : 0;
     }
 }
 

@@ -539,7 +539,15 @@ sub listFiles {
 		$Common::excludeFilePattern, $matchCallback
 	);
 	if ( $countMatches < 1 ) {
-		$ans = "No matches - is there an index for $compareToDistribution?";
+	    $ans .= "No luck matching... perhaps you need to regenerate the indexes?\n";
+	    foreach my $dist (@distributions, $compareToDistribution) {
+		my $numberEntries = scalar(FileDigest::retreiveOccurancesForDistribution($dist));
+		$ans .= "<LI> Distribution $dist has ". $numberEntries." entries\n";
+		if ($dist eq "localInstallation") {
+		    $ans .= browserCallback("regenerate index", 'mode' => 'indexLocalInstallation');
+		}
+	    }
+#	    $ans .= "localInstallation has ".scalar(retreiveOccurancesForDistribution('localInstallation'))." entries\n";
 	}
 
 	writeDebug("handling 4...");

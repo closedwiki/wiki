@@ -59,10 +59,8 @@ sub target_build {
 
 sub target_install {
 	my $this = shift;
+	print IndexDistributions::indexLocalEmptyDistribution();
 	$this->SUPER::target_install();
-
-	#	target_indexLocalInstallation();
-
 }
 
 sub target_indexLocalInstallation {
