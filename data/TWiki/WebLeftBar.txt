@@ -11,8 +11,7 @@
 	* [[WebIndex][Index]]
 	* [[WebSearch][Search]]
 ---
-	* *TWiki Webs*
-%WEBLIST{"		* [[$name.%HOMETOPIC%][$name]]" separator=""}%
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
 <div class="twikiLeftBarPersonal">
 %INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate\">Create</a> personal sidebar"}%
 </div>
