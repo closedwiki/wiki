@@ -1,37 +1,40 @@
 __Platform__
 
-TWiki is written in PERL 5, but it uses also many shell command. The current implementation runs only on a Unix machine. RCS for revision control must be installed on the system.
+TWiki is written in PERL 5, but it uses also many shell command. The current implementation runs best on a Unix machine; also possible on Windows. RCS for revision control must be installed on the system.
 
 __Directories__
 
-| *Directory:*	 | *Used for:* |
-| twiki/bin		 | TWiki PERL scripts |
-| twiki/pub		 | Public files (FileAttachments, images) |
-| twiki/data		| source text |
-| twiki/templates | HTML templates, used by TWiki scripts |
+| *Directory:*		| *Used for:* |
+| =twiki/bin=		 | TWiki PERL scripts |
+| =twiki/pub=		 | Public files (FileAttachments, images) |
+| =twiki/data=		| source text |
+| =twiki/templates= | HTML templates, used by TWiki scripts |
 
 __Files in twiki/bin__
 
 | *File:*		 | *Used for:* |
-| .htaccess.txt | Authentication. Rename to .htaccess and customize if used |
-| attach		  | Script that shows the attach file page (FileAttachment) |
-| delete		  | (not used yet) |
-| edit			 | Script to edit a topic |
-| geturl		  | Script to fetch URL data |
-| mailnotify	 | Script called by cron job to notify users of changes |
-| oops			 | Script that shows a OK or oops dialog |
-| preview		 | Script to preview topic after edit |
-| rdiff			| Script to see differences of topics |
-| register		| Script to register new users |
-| save			 | Script that saves a topic, called by preview |
-| search		  | Script that displays search results |
-| statistics	 | Script to create statistics topic |
-| testenv		 | Script to test CGI environment variables |
-| upload		  | Script that does file upload (FileAttachment) |
-| view			 | Script to view a topic ( *the* script ) |
-| viewfile		| Script to view an file attachment |
-| wiki.pm		 | main TWiki library |
-| wikicfg.pm	 | for initialization and configuration, used by wiki.pm |
-| wikisearch.pm | search engine, used by wiki.pm |
+| =.htaccess.txt= | Authentication. Rename to .htaccess and customize if used |
+| =attach=		  | Script that shows the attach file page (FileAttachment) |
+| =delete=		  | (not used yet) |
+| =edit=			 | Script to edit a topic |
+| =geturl=		  | Script to fetch URL data |
+| =mailnotify=	 | Script called by cron job to notify users of changes |
+| =oops=			 | Script that shows a OK or oops dialog |
+| =preview=		 | Script to preview topic after edit |
+| =rdiff=			| Script to see differences of topics |
+| =register=		| Script to register new users |
+| =save=			 | Script that saves a topic, called by preview |
+| =search=		  | Script that displays search results |
+| =statistics=	 | Script to create statistics topic |
+| =testenv=		 | Script to test CGI environment variables |
+| =upload=		  | Script that does file upload (FileAttachment) |
+| =view=			 | Script to view a topic ( *the* script ) |
+| =viewfile=		| Script to view an file attachment |
+| =wiki.pm=		 | main TWiki library |
+| =wikiaccess.pm= | access control |
+| =wikicfg.pm=	 | for initialization and configuration, used by wiki.pm |
+| =wikiprefs.pm=  | preferences handling |
+| =wikisearch.pm= | search engine, used by wiki.pm |
+| =wikistore.pm=  | back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
 
--- Main.PeterThoeny - 19 Aug 2000 <br>
+-- Main.PeterThoeny - 02 Nov 2000 <br>
