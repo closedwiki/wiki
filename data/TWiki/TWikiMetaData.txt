@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1059252743" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1074237044" format="1.0" version="1.14"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -152,6 +152,6 @@ Current support covers:
 
 At present, there is no Meta Data support for Plugins. However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
 
--- JohnTalintyre - 29 Aug 2001 <br />
--- MikeMannix - 03 Dec 2001 <br />
--- Main.PeterThoeny - 10 Jan 2002
+-- TWiki:Main.JohnTalintyre - 29 Aug 2001 <br />
+-- TWiki:Main.MikeMannix - 03 Dec 2001 <br />
+-- TWiki:Main.PeterThoeny - 10 Jan 2002
