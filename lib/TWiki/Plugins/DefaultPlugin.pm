@@ -16,41 +16,13 @@
 #
 # =========================
 #
-# This is the default TWiki plugin. Use EmptyPlugin.pm as a template
+# Use EmptyPlugin.pm as a template
 # for your own plugins; see TWiki.TWikiPlugins for details.
 #
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   earlyInitPlugin         ( )                                     1.020
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   beforeCommonTagsHandler ( $text, $topic, $web )                 1.024
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   afterCommonTagsHandler  ( $text, $topic, $web )                 1.024
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
-#   renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, $possibleValues)
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, unused handlers are disabled. To
-# enable a handler remove the leading DISABLE_ from the function
-# name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
+# This plugin implements compatability functions that support
+# data defined using earlier versions of TWiki. The chances are
+# good that you don't need it, and can simply disable it (add
+# it to the DISABLEDPLUGINS list)
 
 # =========================
 package TWiki::Plugins::DefaultPlugin;
@@ -62,18 +34,17 @@ use strict;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
-        $debug $doOldInclude $renderingWeb
+        $debug $doOldInclude
     );
 
 $VERSION = '1.030';
 $pluginName = 'DefaultPlugin';  # Name of this Plugin
 
-sub initPlugin
-{
+sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.021 ) {
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
@@ -84,15 +55,12 @@ sub initPlugin
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
-    $renderingWeb = $web;
-
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
-sub commonTagsHandler
-{
+sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
@@ -117,22 +85,11 @@ sub commonTagsHandler
     $_[0] =~ s!$attfexpr/($fnRE)!"$attfexpr/".&TWiki::nativeUrlEncode($1)!ge;
 }
 
-sub startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-    $renderingWeb = $_[1];
-}
-
-sub outsidePREHandler
-{
+# Remove DISABLE_ if you uncomment any of the functionality in here
+sub DISABLE_outsidePREHandler {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
-    ##TWiki::Func::writeDebug( "- ${pluginName}::outsidePREHandler( $renderingWeb.$topic )" ) if $debug;
+    TWiki::Func::writeDebug( "- ${pluginName}::outsidePREHandler( $topic )" ) if $debug;
 
     # This handler is called by getRenderedVersion, once per line, before any changes,
     # for lines outside <pre> and <verbatim> tags. 
@@ -142,24 +99,24 @@ sub outsidePREHandler
     # $_[0] =~ s/old/new/go;
 
     # render deprecated *_text_* as "bold italic" text:
-    $_[0] =~ s/(^|\s)\*_([^\s].*?[^\s])_\*(\s|$)/$1<strong><em>$2<\/em><\/strong>$3/go;
+    #$_[0] =~ s/(^|\s)\*_([^\s].*?[^\s])_\*(\s|$)/$1<strong><em>$2<\/em><\/strong>$3/go;
 
     # Use alternate %Web:WikiName% syntax (versus the standard Web.WikiName).
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
-#   $_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s]):([^\s].*?[^\s])\%/&TWiki::Render::internalLink($2,$3,"$2:$3",$1,1)/geo;
+    #$_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s]):([^\s].*?[^\s])\%/$1.$TWiki::Plugins::SESSION->_handleWikiWord($web,$2,$3)/geo;
 
     # Use "forced" non-WikiName links (i.e. %Linkname%)
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
-#   $_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s])\%/&TWiki::Render::internalLink($web,$2,$2,$1,1)/geo;
+    #$_[0] =~ s/(^|\s|\()\%([^\s].*?[^\s])\%/$1.$TWiki::Plugins::SESSION->_handleWikiWord($web,$web,$2)/geo;
 
     # Use "forced" non-WikiName links (i.e. %Web.Linkname%)
     # This is an old JosWiki render option combined with the new Web.LinkName notation
     # (Uncomment for JosWiki compatibility)
-#   $_[0] =~ s/(^|\s|\()\%([a-zA-Z0-9]+)\.(.*?[^\s])\%(\s|\)|$)/&TWiki::Render::internalLink($2,$3,$3,$1,1)/geo;
+    #$_[0] =~ s/(^|\s|\()\%([a-zA-Z0-9]+)\.(.*?[^\s])\%(\s|\)|$)/$1.$TWiki::Plugins::SESSION->_handleWikiWord($web,$2,$3)/geo;
 
     # Use <link>....</link> links
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
-#   $_[0] =~ s/<link>(.*?)<\/link>/&TWiki::internalLink("",$web,$1,$1,"",1)/geo;
+    #$_[0] =~ s/<link>(.*?)<\/link>/$1.$TWiki::Plugins::SESSION->_handleWikiWord($web,$web,$1)/geo;
 }
 
 1;

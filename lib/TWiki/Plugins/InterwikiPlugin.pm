@@ -37,7 +37,7 @@ use vars qw(
         %interSiteTable $debug
     );
 
-$VERSION = '1.005'; # 16 Feb 2004
+$VERSION = '1.007';
 $interSiteLinkRulesTopicName = "InterWikis";
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
@@ -82,6 +82,8 @@ sub initPlugin
 
     my $interTopic = TWiki::Func::getPreferencesValue( "INTERWIKIPLUGIN_RULESTOPIC" )
       || $interSiteLinkRulesTopicName;
+    $interTopic =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
+    $interTopic =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname/geo;
     if( $interTopic =~ s/^(.*)\.// ) {
         $installWeb = $1;
     }
