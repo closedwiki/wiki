@@ -57,7 +57,8 @@ sub main
             $value = $query->param( "$1$2$3" );
             $formDataRequired[@formDataRequired] = $2;
             $name = $3;
-            $name =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go;
+            $name =~ s/([a-z0-9])([A-Z0-9])/$1 $2/go; # Space the names
+            $name =~ s/(AIM)(Screen)/$1 $2/go;  # Horrible hack to space AIMScreen
             $formDataName[@formDataName] = $name;
             $formDataValue[@formDataValue] = $value;
             if( $name eq "Name" ) {
