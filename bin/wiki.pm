@@ -57,7 +57,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 Mar 2000";
+$wikiversion      = "20 Mar 2000";
 
 # ===========================
 # read the configuration part
@@ -266,7 +266,7 @@ sub getPrefsList
                 addToPrefsList( $key, $value );
             }
             $key = $1;
-            $value = $2;
+            $value = $2 || "";
             $isKey = 1;
         } elsif ( $isKey ) {
             if( ( /^\t+/ ) && ( ! /^\t+\*/ ) ) {

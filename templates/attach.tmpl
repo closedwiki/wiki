@@ -53,12 +53,18 @@ function initForm() {
       <INPUT TYPE="text" NAME="filecomment" VALUE="%FILECOMMENT%" MAXLENGTH="50" SIZE="50">
     </TD>
   </TR>
+  <TR>
+    <TD ALIGN="right">
+      Link:
+    </TD><TD>
+      <INPUT TYPE="checkbox" NAME="createlink" %ATTACHLINKBOX%> Create a link to the attached file at the end of the topic.
+    </TD>
+  </TR>
 </TABLE>
-<P>
-<B><I>Note:</I></B> There is a bug with Internet Explorer. In case you get an
-"Internal Server Error" message when you upload a file, you need to
-try again. It works the second time.
-<P>
+<UL>
+<LI> <B>Note:</B> Link checkbox: In case the attached file is a JPG or GIF image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.
+<LI> <B>Note:</B> There is a bug with Internet Explorer. In case you get an "Internal Server Error" message when you upload a file, you need to try again. It works the second time.
+</UL>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
   <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">

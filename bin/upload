@@ -117,20 +117,42 @@ sub updateAttachment
 }
 
 
+sub addLinkToEndOfTopic
+{
+    my ( $text, $fileName, $fileComment ) = @_;
+    my( $before, $after ) = split( /<!--TWikiCat-->/, $text );
+    if( ! $after ) { $after = ""; }
+    my $fileLink = "";
+    if( $fileName =~ /\.(gif|jpg|jpeg)$/ ) {
+        if( $fileComment ) {
+            $fileComment = "<br> $fileComment ";
+        }
+        $fileLink = "\n<img src=\"%ATTACHURLPATH%/$fileName\" alt=\"$fileName\"> $fileComment<br>\n";
+    } else {
+        if( $fileComment ) {
+            $fileComment = "($fileComment) ";
+        }
+        $fileLink = "\n<a href=\"%ATTACHURLPATH%/$fileName\">$fileName</a> $fileComment<br>\n";
+    }
+    return "$before$fileLink$after";
+}
+
+
 sub main
 {
     my $thePathInfo = $query->path_info(); 
     my $theRemoteUser = $query->remote_user();
-    my $theTopic = $query->param('topic');
+    my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
     ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    my $filePath = $query->param('filepath');
-    my $fileName = $query->param('filename');
-    my $tmpFilename = $query->tmpFileName($filePath);
-    my $fileComment = $query->param('filecomment');
+    my $filePath = $query->param( 'filepath' ) || "";
+    my $fileName = $query->param( 'filename' ) || "";
+    my $tmpFilename = $query->tmpFileName( $filePath ) || "";
+    my $fileComment = $query->param( 'filecomment' ) || "";
+    my $createLink = $query->param( 'createlink' ) || "";
 
     # check if file exists and has non zero size
     if( ! -s "$tmpFilename" ) {
@@ -191,8 +213,11 @@ sub main
     if( ! $atext  ) { $atext  = ""; }
     $atext = updateAttachment( $atext, $fileName, $filePath, $fileSize,
                                $fileDate, $fileUser, $fileComment );
+    if( $createLink ) {
+        $before = addLinkToEndOfTopic( $before, $fileName, $fileComment );
+    }
     $text = "$before<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
-    if( $after  ) {
+    if( $after ) {
         $text .= $after;
     }
     &wiki::saveTopic( $topic, $text );

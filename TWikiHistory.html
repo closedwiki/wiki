@@ -1,7 +1,7 @@
 <html><head>
 <title>TWikiHistory</title>
 </head><body>
-<STRONG>History of the TWiki Implementation (version 16 Mar 2000)</STRONG>
+<STRONG>History of the TWiki Implementation (version 20 Mar 2000)</STRONG>
 <p> 
 <UL>
 <LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 23 Jul 1998: Installed initial version, based on the JOS Wiki. See <A href="/crew/scharf/TWiki/bin/view/Main/WikiWikiClones">WikiWikiClones</A> for details.
@@ -58,8 +58,10 @@
 <LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 07 Feb 2000: Changed the syntax for server side include variable from <CODE>%<nop>INCLUDE:"filename.ext"%</CODE> to <CODE>%<nop>INCLUDE{"filename.ext"}%</CODE> . (Previous syntax still supported. Change was done because of inline search syntax)
 <LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 11 Feb 2000: New variable <CODE>%<nop>SCRIPTURLPATH%</CODE> / $scriptUrlPath containing the script URL without the domain name. Templates have been changed to use this variable instead of <CODE>%<nop>SCRIPTURL%</CODE> . This is for performance reasons.
 <LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 11 Feb 2000: New variable <CODE>%<nop>SCRIPTSUFFIX%</CODE> / $scriptSuffix containing an optional file extension of the TWiki Perl script. Templates have been changed to use this variable. This allows you to rename the Perl script files to have a file extension like for example ".cgi".
-<LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 25 Feb 2000: Edit preferences topics to set TWiki variables. There are three level of preferences: Site-level (<A href="/crew/scharf/TWiki/bin/view/Main/TWikiPreferences">TWikiPreferences</A>), web-level (<A href="/crew/scharf/TWiki/bin/view/Main/WebPreferences">WebPreferences</A> in each web) and user-level (for each of the <A href="/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>). With this, discontinue use of server side include of <CODE>wikiwebs.inc</CODE> , <CODE>wikiwebtable.inc</CODE> , <CODE>weblist.inc</CODE> , <CODE>webcopyright.inc</CODE> and <CODE>webcolors.inc</CODE> files. 
-<LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 25 Feb 2000: New preference variables <CODE>%<nop>EDITBOXWIDTH%</CODE> and <CODE>%<nop>EDITBOXWIDTH%</CODE> to specify the edit box size.
+<LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 25 Feb 2000: Edit preferences topics to set TWiki variables. There are three level of preferences: Site-level (<A href="/crew/scharf/TWiki/bin/view/Main/TWikiPreferences">TWikiPreferences</A>), web-level (<A href="/crew/scharf/TWiki/bin/view/Main/WebPreferences">WebPreferences</A> in each web) and user-level preferences (for each of the <A href="/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>). With this, discontinue use of server side include of <CODE>wikiwebs.inc</CODE> , <CODE>wikiwebtable.inc</CODE> , <CODE>weblist.inc</CODE> , <CODE>webcopyright.inc</CODE> and <CODE>webcolors.inc</CODE> files. 
+<LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 25 Feb 2000: New preference variables <CODE>%<nop>EDITBOXWIDTH%</CODE> and <CODE>%<nop>EDITBOXHEIGHT%</CODE> to specify the edit box size.
+<LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 11 Mar 2000: Better security with taint checking ( <CODE>Perl -T</CODE> option )
+<LI> <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 20 Mar 2000: Uploading a file (topic file attachment) will optionally create a link to the uploaded file at the end of the topic. The preference variable <CODE>%<nop>ATTACHLINKBOX%</CODE> controls the default state of the <STRONG><EM>link</EM></STRONG> check box in the attach file page.
 </UL>
 <p> 
 <STRONG>Related Topics</STRONG>
@@ -69,6 +71,6 @@
 <LI> <A href="/crew/scharf/TWiki/bin/view/Main/TWikiEnhancementRequests">TWikiEnhancementRequests</A> is the place where you can add your enhancement requests. 
 </UL>
 <p> 
--- <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 27 Feb 2000 <br>
+-- <A href="/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 20 Mar 2000 <br>
 <p> 
 </body></html>
