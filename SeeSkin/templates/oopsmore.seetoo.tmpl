@@ -1,0 +1,52 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(more)%TMPL:END%
+%TMPL:DEF{"webaction"}% *Topic actions* %TMPL:END%
+%TMPL:DEF{"heading"}%More Actions on Topic %TOPIC%%TMPL:END%
+%TMPL:DEF{"message"}%
+
+   * *Rename, move or delete:*
+      * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a> <nop>%TOPIC%
+
+   * *Ref-By:*
+      * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
+        in __%WEB% web__ that link to <nop>%TOPIC%.
+      * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;web=all;&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Find topics</a>
+        in __all public webs__ that link to <nop>%TOPIC%.
+      * Child topics in __%WEB% Web__: %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" title=""}%
+
+<form name="main" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+   * *Parent of <nop>%TOPIC%:*
+      * Set topic parent to
+        <select name="topicparent"><option value="">Select...</option>
+        %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
+        </select>,
+        then <input type="submit" value="Edit" /> and save the topic
+        to activate the new parent.
+</form>
+
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+   * *View previous topic revision:*
+      * Revision: <input type="text" name="rev" size="6" value="%PARAM2%" />
+        in <input type="checkbox" name="raw"> raw text format
+        <input type="submit" value="View revision" />
+      * Revisions: 1.1 ... %PARAM1%
+</form>
+
+<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<table>
+<tr><td>
+   * *Compare revisions:*
+</td></td><tr><td>
+      * Older revision:
+</td><td>
+<input type="text" name="rev2" size="6" value="1.1" />
+</td></tr><tr><td>
+      * Newer revision:
+</td><td>
+<input type="text" name="rev1" size="6" value="%PARAM1%" />
+<input type="submit" value="View difference" />
+</td></tr>
+</table>
+</form> %TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:P{"oops"}%

@@ -1,0 +1,42 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:P{"htmldoctype"}%
+<head>
+ %TMPL:P{"headview"}%
+ %TMPL:P{"css"}%
+</head>
+<body bgcolor="%WEBBGCOLOR%">
+#PageTop
+<!-- <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/"> -->
+<div id="topsection">%TMPL:P{"standardheader"}%</div>
+<!-- </form> -->
+<div id="midsection">
+<div id="content">
+%REPEAT%<table width="100%" border="3" cellpadding="0" cellspacing="0">
+  <tr bgcolor="%WEBBGCOLOR%">
+    <td width="99%">
+      &nbsp;<tt><b>&lt;&lt;O&gt;&gt;</b></tt>&nbsp; Difference Topic
+      <b><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">%TOPIC%</a></b>
+      (<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%REVTITLE1%</a> - %REVINFO1%)
+    </td>
+  </tr>
+</table>
+%TEXT%
+<br clear="all" />%REPEAT%
+%TMPL:P{"standardfooter"}%
+</div> <!-- end #content -->
+ Revision %REVTITLE2% - %REVINFO2%
+ Revision %REVTITLE1% - %REVINFO1%<br />
+</div> <!-- end #midsection -->
+<div id="bottsection">
+	<hr>
+ %WEBCOPYRIGHT%
+</div>
+#PageBottom
+</body>
+</html>
+%TMPL:DEF{"sep"}% ~ %TMPL:END%
+%TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%)%TMPL:END%
+%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
+%TMPL:DEF{"topicaction"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">View</a>
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a> %REVISIONS%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%">More</a> %TMPL:END%
