@@ -286,10 +286,11 @@ sub renderForEdit
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $flag = "";
+                my $expandedItem = &TWiki::handleCommonTags( $item );
                 if( $value =~ /(^|,\s*)$item(,|$)/ ) {
                     $flag = ' checked="checked"';
                 }
-                $val .= "\n<td><input type=\"checkbox\" name=\"$name$item\"$flag />$item &nbsp;&nbsp;</td>";
+                $val .= "\n<td><input type=\"checkbox\" name=\"$name$item\"$flag />$expandedItem &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
                 }
@@ -303,12 +304,13 @@ sub renderForEdit
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
+                my $expandedItem = &TWiki::handleCommonTags( $item );
                 if( $item eq $value ) {
                    $selected = 'checked="checked"';
                    $matched = $item;
                 }
                 $defaultMarker = "";
-                $val .= "\n<td><input type=\"radio\" name=\"$name\" value=\"$item\" $selected />$item &nbsp;&nbsp;</td>";
+                $val .= "\n<td><input type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
                 }
