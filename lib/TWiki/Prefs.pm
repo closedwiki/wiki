@@ -77,7 +77,7 @@ sub getPrefsFromTopic
                 prvAddToPrefsList( $key, $value );
             }
             $key = "$keyPrefix$1";
-            $value = $2 || "";
+            $value = defined $2 ? $2 : "";
             $isKey = 1;
         } elsif ( $isKey ) {
             if( ( /^\t+/ ) && ( ! /^\t+\*/ ) ) {
