@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071563928" format="1.0" version="1.29"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092564225" format="1.0" version="1.30"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
@@ -12,8 +12,8 @@ Low client and server requirements are core features that keep TWiki widely depl
 TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements.
 
 | *Resource* | *Required Server Environment *<nop>* |
-| Perl | 5.005_03 or higher (5.6.1 recommended, 5.8.0 *not* recommended yet, see TWiki:Codev.IssuesWithPerl5dot8) |
-| Non-standard Perl modules | %BULLET% Unix: =Net::SMTP= (or =sendmail=) %BB% Windows: =Net::SMTP=, =MIME::Base64=, =Digest::SHA1= |
+| Perl | 5.005_03 or higher (5.6.1 recommended, 5.8.x does work in most cases, but see TWiki:Codev.IssuesWithPerl5dot8) |
+| Non-standard Perl modules | %BULLET% Unix: =Net::SMTP= (or =sendmail=) %BB% Windows: =Net::SMTP=, =MIME::Base64=, =Digest::SHA1= %BB% Internationalisation: =Unicode::MapUTF8= &nbsp; <font size="-1">(only for non-ISO-8859-1 sites using TWiki:Codev.EncodeURLsWithUTF8 with Perl 5.6 or lower)</font> |
 | RCS | 5.7 or higher (including GNU =diff=) %BR% Optional, but the all-Perl RCS replacement is not currently recommended for live sites - see TWiki:Codev.RcsLite |
 | GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  %BR% Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
 | Other external programs | =fgrep, egrep= |
@@ -41,5 +41,6 @@ You can easily add functionality, by customizing TWikiTemplates, for one, while 
 		* %H% Plugins included in the TWiki distribution do not add requirements.
 
 -- TWiki:Main.MikeMannix - 12 Jan 2002 %BR%
--- TWiki:Main.PeterThoeny - 16 Dec 2003
+-- TWiki:Main.PeterThoeny - 15 Aug 2004
+
 %META:TOPICMOVED{by="PeterThoeny" date="1042701667" from="TWiki.TWikiImplementationNotes" to="TWiki.TWikiSystemRequirements"}%
