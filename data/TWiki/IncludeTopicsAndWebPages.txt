@@ -1,0 +1,58 @@
+*Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable*
+
+Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included.
+
+%TOC%
+
+
+---++ Syntax
+
+==%<nop>INCLUDE{"page" pattern="reg-exp"}%==
+
+	* =="page"==: <br>
+	  The nameless parameter specifies the page to include. It is
+		* The name of a topic located in the current web, i.e. ==%<nop>INCLUDE{"WebNotify"}%==
+		* A =Web.Topic= name specifying a topic in another web, i.e. ==%<nop>INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%==
+		* A full qualified URL with ==http== protocol, domain name and optional port number, i.e. ==%<nop>INCLUDE{"http://twiki.org:80/index.html"}%==. Supported content types are ==text/html== and ==text/plain==. The full page is included by default, but the HTML header and scripts are stripped in case it is a web page.
+
+	* ==pattern="reg-exp"==: <br>
+	  The *pattern* parameter is optional and allows you to extract some parts of a web page. Specify a %TWIKIWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, i.e. ==pattern="^.*?(from here.*?to here).*"==. You need to make sure that the integrity of a web page is not compromised, i.e. if you include a table make sure to include everything including the table end tag.
+
+__Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUDE%==, ==%<nop>STOPINCLUDE%== and/or a *pattern* parameter.
+
+
+---++ Usage Examples
+
+---+++ 1. Display regression test results in a TWiki page
+<pre>
+  &lt;pre&gt;
+  %<nop>INCLUDEURL{"http://domain/~qa/v1.1/REDTest.log.txt"}%
+  &lt;/pre&gt;
+</pre>
+
+---+++ 2. Display Yahoo's robot.txt file
+
+	* You type:
+		* ==%<nop>INCLUDE{"http://www.yahoo.com/robots.txt"}%== <br>
+	* You get:
+<verbatim>
+%INCLUDE{"http://www.yahoo.com/robots.txt"}%
+</verbatim>
+
+---+++ 3. Display the SUNW stock quote in a TWiki page
+
+	* You type:
+		* ==SUNW: %<nop>INCLUDE{"http://finance.yahoo.com/q?s=SUNW&d=v1&o=t" pattern="^.*?&gt;SUNW&lt;/a&gt;[^&lt;]+(.*?)\s+\S+\s+&lt;small.*"}%== <br>
+	* You get:
+		* SUNW: %INCLUDE{"http://finance.yahoo.com/q?s=SUNW&d=v1&o=t" pattern="^.*?>SUNW</a>[^<]+(.*?)\s+\S+\s+<small.*"}%
+
+---+++ 4. Display the temperature in San Francisco
+
+	* You type:
+		* ==San Francisco: %<nop>INCLUDE{"http://weather.yahoo.com/forecast/San_Francisco_CA_US_f.html" pattern="^.*?([0-9]+\&amp;ordm\;F).*"}%== <br>
+	* You get:
+		* San Francisco: %INCLUDE{"http://weather.yahoo.com/forecast/San_Francisco_CA_US_f.html" pattern="^.*?([0-9]+\&ordm\;F).*"}%
+
+See also other TWikiVariables.
+
+-- Main.PeterThoeny - 25 Jun 2001 <br>

@@ -111,8 +111,12 @@
   <td> =%<nop>REMOTE_USER%= </td>
   <td> REMOTE_USER environment variable, is <b>%REMOTE_USER%</b> </td>
 </tr><tr>
-  <td> =%<nop>INCLUDE{"SomeTopic"}%= </td>
-  <td> Server side include, includes another topic. The current Wiki web is searched by default. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%</b>= </td>
+  <td> =%<nop>INCLUDE{"page" ...}%= </td>
+  <td> Server side include to IncludeTopicsAndWebPages. The parameter is composed of the page name, followed by an optional =pattern="(reg-exp)"= pair. The page name is:
+	| ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= |
+	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%= |
+	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= |
+  </td>
 </tr><tr>
   <td> =%<nop>STARTINCLUDE%= </td>
   <td> If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everyting exept the =%<nop>STARTINCLUDE%= variable itself. </td>
@@ -134,7 +138,7 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
   <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search term (enclosed in double quotes), followed by optional =name="value"= pairs: [1]
 | *Pair:* | *Description:* | *Default:* |
 | =search="food"= | Search term, (either regex or literal, depending on the =regex= parameter) | (used if initial search term is missing) |
-| =web="Name"= <br> =web="%MAINWEB% Know"= <br> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or all webs =[2]= | Current web |
+| =web="Name"= <br> =web="%MAINWEB% Know"= <br> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. [2] | Current web |
 | =scope="topic"= <br> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
 | =order="topic"= <br> =order="modified"= <br> =order="editby"= | Sort the results of search by the topic names, last modified time, or last editor | Sort by topic name |
 | =limit="all"= <br> =limit="16"= | Limit the number of results returned | All results |
@@ -248,4 +252,4 @@ __Notes:__
 	* Additional preferences variables can be defined on all three level as needed. Example:
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
--- PeterThoeny - 24 Mar 2001 <br>
+-- PeterThoeny - 25 Jun 2001 <br>
