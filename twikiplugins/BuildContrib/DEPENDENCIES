@@ -1,3 +1,5 @@
 Test::Unit,>=0.24,perl,Optional, required for unit testing
 Pod::Text,>=2.21,perl, POD documentation extracter
 File::Spec,>=0.86,perl,Used to convert relative paths to absolute
+File::Find,>=1.05,perl,Used to find file components
+File::Copy,>=2.06,perl,Used to copy files

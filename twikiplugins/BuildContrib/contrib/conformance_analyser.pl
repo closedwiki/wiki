@@ -160,6 +160,7 @@ sub downloadModuleList {
     getPackageList( "SkinPackage",   \@modules );
     getPackageList( "AddOnPackage",  \@modules );
     getPackageList( "ContributedCode",  \@modules );
+    @modules = grep { !/^(Build|Cairo)Contrib$/ } @modules;
     return @modules;
 }
 

@@ -28,8 +28,10 @@ Use by writing a subclass in a script that you then run. Targets are defined as 
 The list of files to be installed is determined from the MANIFEST.
 Only these files will get into the release zip.
 
-Requires the environment variable TWIKI_LIBS (a colon-separated path
-list) to be set to point at any required dependencies.
+The environment variable TWIKI_LIBS (a colon-separated path
+list) may be set to point at any required dependencies. TWIKI_LIBS is
+used to extend @INC for the duration of the build. If all dependencies
+are satisfied by directories on @INC it isn't required.
 
 The following help information is cursory; for full details, look at an example or read the code.
 
@@ -46,13 +48,13 @@ The following targets will always exist:
 Note: if you override any of these targets it is generally wise to call the SUPER version of the target!
 ---+++ Standard directory structure
 The standard module directory structure mirrors the TWiki installation directory structure, so each file in the development directory structure is in the place it will be in in the actual installation. From the root, these are the key files:
-| MANIFEST | required - list of files and descriptions to include in release zip. Each file is given by the full path to the file relative to the build TWiki installation directory. Wildcards may NOT be used. |
-| DEPENDENCIES | optional list of dependencies on other modules and descriptions. See below |
-| PREINSTALL, POSTINSTALL, PREUNINSTALL, POSTUNINSTALL | these optional files _may_ contain Perl fragments that must execute at the given stage of the process. The script fragments will be inserted into the generated installer script. Read contrib/TEMPLATE_installer.pl to see how they fit in. |
-| lib/TWiki/Plugins/ | this is where your <plugin name>.pm file goes for plugins |
-| lib/TWiki/Plugins/<plugin name>/ | directory containing sub-modules used by your plugin, and your build.pl script. |
-| lib/TWiki/Contrib/ | this is where your <contrib name>.pm file goes for contribs |
-| lib/TWiki/Contrib/<contrib name>/ | directory containing sub-modules used by your contrib, and your build.pl script. |
+| lib/TWiki/Plugins/ | this is where your <code><i>name</i>.pm</code> file goes for plugins |
+| lib/TWiki/Plugins/<i>name</i>/ | directory containing sub-modules used by your plugin, and your build.pl script. |
+| lib/TWiki/Contrib/ | this is where your <code><i>name</i>.pm</code> file goes for contribs |
+| lib/TWiki/Contrib/<i>name</i>/ | directory containing sub-modules used by your contrib, and your build.pl script. |
+| lib/TWiki/Plugins _or_ Contrib/<i>name</i>/MANIFEST | required - list of files and descriptions to include in release zip. Each file is given by the full path to the file relative to the build TWiki installation directory. Wildcards may NOT be used. |
+| .../<i>name</i>/DEPENDENCIES | optional list of dependencies on other modules and descriptions. See below |
+| .../<i>name</i>/PREINSTALL, POSTINSTALL, PREUNINSTALL, POSTUNINSTALL | these optional files _may_ contain Perl fragments that must execute at the given stage of the process. The script fragments will be inserted into the generated installer script. Read contrib/TEMPLATE_installer.pl to see how they fit in. |
 | data/ | as you expect to see in the installation |
 | pub/ | as you expect to see in the installation. You must list required directories, even if they are initially empty. |
 | templates/ | as you expect to see in installation |
@@ -86,12 +88,13 @@ The build supports limited token expansion in =.txt= files. See the documentatio
 use strict;
 use File::Copy;
 use File::Spec;
+use File::Find;
 use Pod::Text;
 use POSIX;
 use diagnostics;
 use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
 
-$VERSION = 1.004;
+$VERSION = 1.006;
 
 BEGIN {
     use File::Spec;
@@ -182,10 +185,14 @@ sub new {
     $this->{data_twiki_module} = "$this->{data_twiki}/$this->{project}";
 
     # read the manifest
-    my $manifest = "$basedir/MANIFEST";
+    my $manifest = "$basedir/$libpath/$project/MANIFEST";
+    unless( -f $manifest) {
+        $manifest = "$basedir/MANIFEST";
+    }
     unless (open(PF, "<$manifest")) {
+        print STDERR "NO MANIFEST FILE\n";
         target_manifest(); #CodeSmell - calling package sub not object method
-        die "$manifest missing";
+        exit(1);
     }
     my $line;
     while ($line = <PF>) {
@@ -196,11 +203,13 @@ sub new {
     }
     close(PF);
 
-    my $deps = "$basedir/DEPENDENCIES";
+    my $deps = "$basedir/$libpath/$project/DEPENDENCIES";
+    $deps = "$basedir/DEPENDENCIES" unless -f $deps;
+    die "Failed to find DEPENDENCIES" unless -f $deps;
     my $condition = "";
     if (-f $deps) {
         open(PF, "<$deps") ||
-          die "$deps open failed";
+          die "Failed to open $deps";
         while ($line = <PF>) {
             if ($line =~ /^ONLYIF\s*(\(.*\))\s*$/) {
                 $condition = $1;
@@ -215,7 +224,7 @@ sub new {
                        trigger=>$condition });
                 $condition="";
             } elsif ($line !~ /^\s*$/ && $line !~ /^\s*#/) {
-                warn "WARNING: LINE $line IN $basedir/DEPENDENCIES IGNORED\n";
+                warn "WARNING: LINE $line IN $deps IGNORED\n";
             }
         }
     } else {
@@ -830,6 +839,10 @@ sub target_installer {
     foreach my $d ( @INC ) {
         my $dir = `dirname $d`;
         chop($dir);
+        if ( -f "$dir/TEMPLATE_installer.pl" ) {
+            $template = "$dir/TEMPLATE_installer.pl";
+            last;
+        }
         $dir .= "/contrib";
         if ( -f "$dir/TEMPLATE_installer.pl" ) {
             $template = "$dir/TEMPLATE_installer.pl";
@@ -909,15 +922,40 @@ Generate and print to STDOUT a rough guess at the MANIFEST listing
 
 =cut
 
+my %manilist;
 sub target_manifest {
     my $this = shift;
-    my $extensionName = `basename $basedir`;
-    chomp($extensionName);
-    print "Here's a rough guess at ${extensionName}'s MANIFEST list (from $basedir)\n";
-    chdir("$basedir") || die "can't cd to $basedir - $!";
-    print `find . -type f | grep -v CVS | egrep -v '~\$' | egrep $extensionName`;
-    print "\n";
-    print "Save this as $basedir/MANIFEST and check it manually!\n";
+
+    my $manifest = "$basedir/MANIFEST";
+    if( -e $manifest ) {
+        open(F, "<$manifest") || die "Could not open existing $manifest";
+        undef $/;
+        %manilist = map{ /^(.*?)(\s+.*)?$/; $1 => ($2||"") } split(/\r?\n/, <F> );
+        close(F);
+    }
+    require File::Find;
+    File::Find::find(\&_manicollect, $basedir);
+    print "DRAFT $manifest follows:\n";
+    print "################################################\n";
+    for (keys %manilist) {
+        print "$_ $manilist{$_}\n";
+    }
+    print "################################################\n";
+    print "Copy and paste the text between the ###### lines into the file\n";
+    print "$manifest\n";
+    print "to create an initial manifest. Don't forget to remove any files\n";
+    print "that should _not_ be released (such as build.pl!), and add a\n";
+    print "description of each file in place of NEW.\n";
+}
+
+sub _manicollect {
+    if( /^CVS$/ ) {
+        $File::Find::prune = 1;
+    } elsif ( !-d && /^\w.*\w$/ && !/^DEPENDENCIES$/ && !/^MANIFEST$/ ) {
+        my $n = $File::Find::name;
+        $n =~ s/$basedir\/?//;
+        $manilist{$n} = "NEW" unless exists $manilist{$n};
+    }
 }
 
 1;
