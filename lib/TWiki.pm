@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "21 Aug 2001";
+$wikiversion      = "28 Aug 2001";
 
 # ===========================
 # read the configuration part
@@ -576,6 +576,7 @@ sub getSkin
     return $skin;
 }
 
+# =========================
 sub getViewUrl
 {
     my( $theWeb, $theTopic ) = @_;
@@ -591,12 +592,13 @@ sub getViewUrl
     return "$urlHost$scriptUrlPath/view$scriptSuffix/$web/$theTopic";
 }
 
-
+# =========================
 sub getScriptUrl
 {
     my( $theWeb, $theTopic, $theScript ) = @_;
     
     my $url = "$urlHost$scriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
+
     # FIXME consider a plugin call here - useful for certificated logon environment
     
     return $url;
@@ -1695,7 +1697,7 @@ sub internalLink
     } elsif( $doLink ) {
         $text .= "<span style='background : $newTopicBgColor;'>"
               .  "<font color=\"$newTopicFontColor\">$theLinkText</font></span>"
-              .  "<a href=\"$scriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?parent=$webName.$topicName\">?</a>";
+              .  "<a href=\"$scriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?topicparent=$webName.$topicName\">?</a>";
         return $text;
 
     } else {
