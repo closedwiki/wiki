@@ -1,6 +1,12 @@
-<font size="+2"><b>Form Query Plugin</b></font>
+---+!! Form Query Plugin
 
 The Form Query Plugin is designed to provide query capabilities across a database defined using forms and embedded tables in TWiki topics. It depends on the EditTablePlugin, which must be installed. If notification is required, the ActionTrackerPlugin must also be installed.
+
+A three sentence summary of what this plugin does:
+   1 Like %SEARCH, allows you to list topics which match a particular search criteria _(e.g. where a particular topic form field is set to a particular value)_, FormQueryPlugin allows you to list only those rows of TWiki tables which match a particular search criteria.
+   1 Kind of cross between %SEARCH and a SQL select statement and _(for those experienced with SQL)_ can be thought of as =SELECT column1, column2, etc FROM table_type WHERE column2 > 5 AND column2 < 10=.
+   1 So the 'search granularity' is finer than that of %SEARCH because whereas %SEARCH only lists topic names, the plugin lists rows _(in tables)_ in topics.
+   1 It's also _much_ faster over large data sets.
 
 This plugin is a generalisation of an original requirements tracking database built by Wolfgang Eisenmann and Henning Spruth, Motorola Inc.
 
@@ -162,10 +168,13 @@ or
 Used to show the results of a query, <code>%SHOWQUERY</code> accepts all the same parameters as <code>%TABLEFORMAT</code> (except =name=), and also the following parameter:
 | *Parameter* | *Description* |
 | =query= | Required, gives the name of the query to show |
+| =row_from= | Optional, first row to display |
+| =row_count= | Optional, number of rows to display |
 For example,
 <pre>
 %<nop>SHOWQUERY{ query=AFORMQUERY format=ATBLFMT }%
 </pre>
+*Note:* If you render your results in TWiki table format and limit the rows displayed using row_count (e.g. first 10 from 99 rows), and also use TWiki.TablePlugin to allow sorting on the headers, then only the 10 displayed rows will be sorted by TablePlugin (and not the full 99 rows in the table).
 
 ---+++ <code>%CALLMACRO</code>
 <code>%CALLMACRO</code> is used to include a macro defined in a topic in the current web immediately, as if it were simply typed in the topic. The macros may be parameterised and the parameters expanded in the included topic.
@@ -344,11 +353,11 @@ A feature of the plugin is that special words in the fields of <code>%SHOWQUERY<
 
 For example, let's say you want to detect the words "No progress" in a table field and highlight it in bold red text. This is done through a special topic in the web that contains a set of mappings from perl regular expressions that match the words to be recognised and the special formatting. For example, the highlight map might contain the following:
 <pre>
-   * /No progress/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>
+   * /(No progress)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>
 </pre>
 The /No progress/ defines the perl RE to be matched, and the HTML on the right of the equals defines what to replace it with. The $1 inserts whatever was matched by the RE. The RE must match the whole string in the table field, so the above map will *NOT* match "No progress with editing"; to match that, you'd have to write:
 <pre>
-   * /No progress.*/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>
+   * /(No progress)(.*)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>$2
 </pre>
 Only the first RE in the map matched by the string is expanded. Note that spaces between the '=' and the first non-whitespace character of the RHS are ignored. If you want a space here use <code>&amp;nbsp;</code>
 
@@ -385,6 +394,10 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==bin/autocreate== | Topic creation script |
 	| ==bin/tasknotify== | Mailer script |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. If you are short of disc space you can delete all the files under lib/TWiki/Plugins/FormQueryPlugin/test without breaking the plugin.
+	* The variable %<nop>FORMQUERYPLUGIN_ENABLE% must be set either globally or in the web where you want to use it.
+	* Set ENABLE = 1
+	*  By default the plugin is enabled globally (on all webs). To enable it for selected webs only, comment out the previous line (put a # in front of the word 'Set') and put the following line (without the #) into the WebPreferences topic of the web you want to enable it on:
+	* #Set FORMQUERYPLUGIN_ENABLE = 1
 
 ---++ Plugin Uninstallation Instructions (Unix/Linux)
 cd to =lib/TWiki/Plugins/FormQueryPlugin/= and type =make uninstall=
@@ -393,9 +406,9 @@ cd to =lib/TWiki/Plugins/FormQueryPlugin/= and type =make uninstall=
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 1.1 |
+|  Plugin Version: | 1.2 |
 |  Change History: | 11 Jul 2003: Initial version |
-|  | 22 Jan 2004: Bugfix version |
+|  | 05 Feb 2004: Bugfix version |
 |  CPAN Dependencies: | Time::Parse<nop>Date, Storable |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |

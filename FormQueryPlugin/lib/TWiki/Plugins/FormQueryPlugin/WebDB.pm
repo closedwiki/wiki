@@ -506,6 +506,8 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
   #        to insert the topic name.
   # header header of the table
   # sort   Comma-separated list of fields to sort on
+  # row_from  (optional) Render rows starting from row_from (1st row == 1)
+  # row_count (optional) Render a maximum of row_count rows
   sub showQuery {
     my ( $this, $macro, $params ) = @_;
 
@@ -531,7 +533,47 @@ use TWiki::Plugins::FormQueryPlugin::TableFormat;
       return moan( $macro, $params, "Query '$name' returned no values", "" );
     }
 
-    return $format->formatTable( $matches, $colourmap );
+    ## get finished html or twiki format table as string
+    # Patch from SimonHardyFrancis
+    
+    my $result_table_all_rows = $format->formatTable( $matches, $colourmap );
+    
+    ## extract (optional) header, body rows, and (optional) footer
+    
+    my $work_table = $result_table_all_rows;
+    $work_table =~ s/([^\n])(<tr)/$1\n$2/g; # ensure html table row always starts on NL
+    $work_table =~ s/\$n/\n/g;
+    $work_table =~ s/~/|/g;
+    my $header = $1 if ( $work_table =~ s/^(.*?)(<tr|\|)/$2/is );
+    my @rows;
+    while ( $work_table =~ s/^((<tr|\|)[^\n]+\n)//is ) {
+      push ( @rows, $1 );
+    }
+    my $footer = $work_table;
+
+    ## get command line parameters 'row_from' & 'row_count' or create default values if they are not given
+    
+    my $row_from = $attrs->fastget( "row_from" );
+    $row_from = 1 if ( ! defined $row_from ); # default to first body row
+    my $row_count = $attrs->fastget ( "row_count" );
+    $row_count = 1 + $#rows - $row_from unless ( defined $row_count );
+    # default to all body rows
+    my $row_to = $row_from + $row_count - 1;
+
+    ## render table
+
+    my $result_table;
+
+    if ( $#rows != $row_count ) {
+      # only render this line if not all body rows are to be shown
+      $result_table .= sprintf "Rows %d to %d from %d:\n",
+	$row_from, $row_to, $#rows;
+    }
+
+    $result_table .= sprintf "%s%s%s%s",
+      $header, "@rows[0..0]", "@rows[$row_from..$row_to]", $footer;
+    
+    return $result_table;
   }
 
   # PUBLIC return the sum of all occurrences of a numeric
