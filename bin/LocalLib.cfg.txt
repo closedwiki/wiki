@@ -1,0 +1,11 @@
+use vars qw( $twikiLibPath $CPANBASE );
+
+# -------------- Change these settings if required
+#    Path to lib directory containing TWiki.pm. 
+#    See setlib.cfg for more information
+#
+#$twikiLibPath = "/home/your/twiki/lib";
+#$CPANBASE = "/home/your/CPAN/lib/site_perl";
+
+1;			    	# Return success for module loading
+
