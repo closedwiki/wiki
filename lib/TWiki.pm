@@ -3378,7 +3378,7 @@ sub makeAnchorName
     # causes some anchors to collide, a consistent 8-bit-to-7-bit
     # alphabetic character mapping could be defined to minimise this issue.  
     # FIXME: Issue for EBCDIC/UTF-8
-    $anchorName =~ s/([\x7f-\xff])/_/g;		# Map 8-bit chars
+    # $anchorName =~ s/([\x7f-\xff])/_/g;		# Map 8-bit chars
 
     return $anchorName;
 }
