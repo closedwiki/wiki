@@ -1,6 +1,7 @@
 ---++ Settings
 
-    * Set ENCRYPTEDPAGESPLUGIN_APPLET_INVOCATION = <APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%PUBURL%/%TWIKIWEB%/TwikiEncrypt.jar,PUBURL%/%TWIKIWEB%/Crypt.jar"  WIDTH = 400 HEIGHT = 200> <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%"> <PARAM NAME="KEY" VALUE="--!!--"> </APPLET>
+    * Set ENCRYPTEDPAGESPLUGIN_APPLET_INVOCATION = FOO
+    <!--APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%PUBURL%/%TWIKIWEB%/TwikiEncrypt.jar,PUBURL%/%TWIKIWEB%/Crypt.jar"  WIDTH = 400 HEIGHT = 200> <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%"> <PARAM NAME="KEY" VALUE="--!!--"> </APPLET>
 
 
 ---++ Things to Do
