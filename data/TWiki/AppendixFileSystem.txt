@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1021531492" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1022825996" format="1.0" version="1.9"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -127,7 +127,7 @@ TWiki topics: data stored as individual text files and rendered by TWiki for dis
 | =warning.txt= | Diagnostic messages for identifying problems |
 | _default directory can be copied to empty directory when creating new webs ||
 | =_default/.changes= | Per web record of topic changes |
-| =_default/.mailnotify= | Per web timstamp of most recent email notification |
+| =_default/.mailnotify= | Per web timestamp of most recent email notification |
 | =_default/WebChanges.txt= | Display most recent topic changes in web|
 | =_default/WebChanges.txt,v= | Revisions history (RCS) |
 | =_default/WebHome.txt= | Default web home page |
