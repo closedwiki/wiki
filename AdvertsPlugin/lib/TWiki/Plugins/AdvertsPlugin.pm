@@ -27,7 +27,7 @@ package TWiki::Plugins::AdvertsPlugin;
 # =========================
 use vars qw(
   $web $topic $user $installWeb $VERSION $pluginName
-  $debug $phpAdsNewBase;
+  $debug $phpAdsNewBase $selectionStringPrefix $selectionStringPostfix;
 );
 
 $VERSION    = '1.0';
@@ -49,6 +49,9 @@ sub initPlugin {
 
  # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
  $phpAdsNewBase = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSCRIPTBASE");
+ 
+ $selectionStringPrefix = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSPREFIX") || "";
+ $selectionStringPostfix = TWiki::Func::getPreferencesValue("ADVERTSPLUGIN_ADVERTSPOSTFIX") || "";
 
  # Plugin correctly initialized
  TWiki::Func::writeDebug(
@@ -123,7 +126,8 @@ which then causes this:
 sub handleAdvertRIJS {
     my ($param) = @_;
     my $ans = getTemplateAdvertRemoteInvocationJavaScript();
-    $what          = $param || "";
+    $selectionString          = $param || "";
+    $selectionString = $selectionStringPrefix . $selectionString . $selectionStringPostfix;
     $random        = "ad13xc123"; # TODO fix this
     $serverUrlBase = $phpAdsNewBase;
     
@@ -150,7 +154,6 @@ sub getTemplateAdvertRemoteInvocationJavaScript {
    document.write ("'><" + "/script>");
 // Stop hiding and stop </pre> escaping TWiki rendering -->
 </script><noscript><a href='%SERVERURLBASE%?n=%RANDOM%' target='_blank'><img src='%SERVERURLDIR%/adview.php?what=%WHAT%;%RANDOM%' border='0' alt=''></a></noscript>
-   
 EOM
  return $ans;
 
