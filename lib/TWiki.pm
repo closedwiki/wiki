@@ -838,7 +838,7 @@ sub makeTopicSummary
     $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/go; # resolve TWiki tool name
     $htext =~ s/%META:.*?%//go;        # remove meta data variables
-    $htext =~ s/[\%\[\]\*\|=_\&]/ /go; # remove Wiki formatting chars & defuse %VARS%
+    $htext =~ s/[\%\[\]\*\|=_\&\<\>]/ /go; # remove Wiki formatting chars & defuse %VARS%
     $htext =~ s/\-\-\-+\+*\s*\!*/ /go; # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /go;       # remove newlines and special chars
 
