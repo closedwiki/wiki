@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = "29 Apr 2004";
+$wikiversion      = "30 Apr 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -3036,6 +3036,10 @@ sub handleCommonTags
 
     $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/ge;
     $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/ge;
+
+    # Codev.FormattedSearchWithConditionalOutput: remove <nop> lines, possibly introduced by
+    # SEARCHes with conditional CALC. This needs to be done after CALC and before table rendering
+    $text =~ s/^<nop>\r?\n//gm;
 
     # Ideally would put back in getRenderedVersion rather than here which would save removing
     # it again!  But this would mean altering many scripts to pass back verbatim
