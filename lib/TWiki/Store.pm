@@ -283,10 +283,10 @@ sub moveAttachment
 sub changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
-   my $preTopic = '^|[\*\s\[][\(-\s]*';
+   my $preTopic = '^|[\*\s\[][_\(\s]*';
    my $postTopic = '$|[^A-Za-z0-9_.]|\.\s';
    my $metaPreTopic = '"|[\s[,\(-]';
-   my $metaPostTopic = '"|([^A-Za-z0-9_.]|\.\s';
+   my $metaPostTopic = '[^A-Za-z0-9_.]|\.\s';
    
    my $out = "";
    
@@ -298,7 +298,10 @@ sub changeRefTo
    my $noAutoLink = 0;
    
    foreach( split( /\n/, $text ) ) {
-       next if( /^%META:TOPIC(INFO|MOVED)/ );
+       if( /^%META:TOPIC(INFO|MOVED)/ ) {
+           $out .= "$_\n";
+           next;
+       }
 
        # change state:
        m|<pre>|i  && ( $insidePRE = 1 );
@@ -316,7 +319,7 @@ sub changeRefTo
            # Fairly inefficient, time will tell if this should be changed.
            foreach my $topic ( @topics ) {
               if( $topic ne $oldTopic ) {
-                  if( /^META:/ ) {
+                  if( /^%META:/ ) {
                       s/($metaPreTopic)\Q$topic\E(?=$metaPostTopic)/$1$oldWeb.$topic/g;
                   } else {
                       s/($preTopic)\Q$topic\E(?=$postTopic)/$1$oldWeb.$topic/g;
