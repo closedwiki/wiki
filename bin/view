@@ -74,10 +74,7 @@ sub main
     my $revdate = "";
     my $revuser = "";
     
-    my $render = 1;
-    if( $query->param( "raw" ) ) {
-        $render = "";
-    }
+    my $viewRaw = $query->param( "raw" ) || "";
 
     if( ! &TWiki::Store::webExists( $webName ) ) {
         $tmpl= &TWiki::Store::readTemplate( "noweb" );
@@ -113,13 +110,16 @@ sub main
     # Most recent topic read in even if earlier topic requested - makes code simpler and performance impact should be minimal
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-        if( $render ) {
-            ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+        if( $viewRaw ) {
+            $text = "<form><textarea wrap=\"virtual\" rows=\"%EDITBOXHEIGHT%\" cols=\"%EDITBOXWIDTH%\">";
+            $text = &TWiki::handleCommonTags( $text, $topic );
+            $text .= &TWiki::Store::readTopicRaw( $webName, $topic );
+            $text .= "</textarea></form>";
+            if( $viewRaw !~ /debug/i ) {
+                $text =~ s/%META[\:A-Z]*{[^\}]*}%[\n\r]*//gos;
+            }
         } else {
-            my $raw = &TWiki::Store::readTopicRaw( $webName, $topic );
-            $raw =~ s/</&lt;/go;
-            $raw =~ s/>/&gt;/go;
-            $text = "<pre>$raw</pre>";
+            ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
         }
         ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, $meta, "isoFormat" );
         
@@ -133,10 +133,10 @@ sub main
         }
 
         if( $rev < $maxrev ) {
-            if( $render ) {
-                ( $meta, $text ) = &TWiki::Store::readTopicVersion( $webName, $topic, "1.$rev" );
-            } else {
+            if( $viewRaw ) {
                 $text = &TWiki::Store::readTopicRaw( $webName, $topic, "1.$rev" );
+            } else {
+                ( $meta, $text ) = &TWiki::Store::readTopicVersion( $webName, $topic, "1.$rev" );
             }
             ( $revdate, $revuser ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, $meta );
             $extra .= "r1.$rev";
@@ -188,7 +188,7 @@ sub main
     # FIXME a rather messy way of doing things - maybe extra info to handleCommonTags?
     $TWiki::Attach::showAttr = $doShowAttachmentAttr;
 
-    if( $render ) {
+    if( ! $viewRaw ) {
         $text = &TWiki::handleCommonTags( $text, $topic );
         writeDebugTimes( "view - handleCommonTags done" );
         $text = &TWiki::getRenderedVersion( $text );
@@ -267,10 +267,10 @@ sub main
     }
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    if( $render ) {
-        $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
-    } else {
+    if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
+    } else {
+        $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
     }
     writeDebugTimes( "view - handleCommonTags for template done" );
     my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
