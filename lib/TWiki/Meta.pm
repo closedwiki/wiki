@@ -248,7 +248,7 @@ sub _writeTypes
 sub cleanValue
 {
     my( $value ) = @_;
-   
+
     $value =~ s/\r\r\n/%_N_%/go;
     $value =~ s/\r\n/%_N_%/go;
     $value =~ s/\n\r/%_N_%/go;
@@ -256,17 +256,17 @@ sub cleanValue
     $value =~ s/\r/\n/go;
     $value =~ s/\n/%_N_%/go;
     $value =~ s/"/%_Q_%/go;
-    
+
     return $value;
 }
 
 sub restoreValue
 {
     my( $value ) = @_;
-    
+
     $value =~ s/%_N_%/\n/go;
     $value =~ s/%_Q_%/"/go;
-    
+
     return $value;
 }
 
@@ -299,7 +299,7 @@ sub read
     my $newText = "";
 
     foreach ( split( /\n/, $text ) ) {
-        if( /^%META:([^{]+){([^}]*)}%/ ) {
+        if( /^%META:([^{]+){(.*)}%$/ ) {   # greedy match for ending "}%"
             my $type = $1;
             my $args = $2;
             my %list = _keyValue2Hash( $args );
