@@ -77,9 +77,26 @@ sub _acceptB {
 
 sub _change {
     my ( $a, $b, $out, $ai, $bi ) = @_;
+    my $simpleInsert = 0;
 
-    push( @$out, "<del>$ai->[$a]</del>" );
-    push( @$out, "<ins>$bi->[$b]</ins>" );
+    # Diff isn't terribly smart sometimes; it will generate changes
+    # with a or b empty, which I would have thought should have
+    # been accepts.
+    if( $ai->[$a] =~ /\S/ ) {
+        # there is some non-white text to delete
+        push( @$out, "<del>$ai->[$a]</del>" );
+    } else {
+        # otherwise this insert is not replacing anything
+        $simpleInsert = 1;
+    }
+
+    if( !$simpleInsert && $bi->[$b] =~ /\S/ ) {
+        # this insert is replacing something with something
+        push( @$out, "<ins>$bi->[$b]</ins>" );
+    } else {
+        # otherwise it is replacing nothing, or is whitespace or null
+        push( @$out, $bi->[$b] );
+    }
 }
 
 1;

@@ -30,6 +30,8 @@ simply returns the recognized settings in the order it sees them in.
 
 package TWiki::Prefs::Parser;
 
+use Assert;
+
 my $formPrefPrefix = "FORM_";
 
 =pod
@@ -62,7 +64,7 @@ sub parseText {
     foreach my $line ( split( /\r?\n/, $text ) ) {
         if( $line =~ /^\t+\*\sSet\s(\w+)\s\=\s*(.*)$/ ) {
             if( $isKey ) {
-                $prefs->_insertPrefsValue( $key, $value );
+                $prefs->insertPrefsValue( $key, $value );
             }
             $key = $1;
             $value = (defined $2) ? $2 : "";
@@ -72,13 +74,13 @@ sub parseText {
                 # follow up line, extending value
                 $value .= "\n$line";
             } else {
-                $prefs->_insertPrefsValue( $key, $value );
+                $prefs->insertPrefsValue( $key, $value );
                 $isKey = 0;
             }
         }
     }
     if( $isKey ) {
-        $prefs->_insertPrefsValue( $key, $value );
+        $prefs->insertPrefsValue( $key, $value );
     }
 }
 
@@ -105,11 +107,11 @@ sub parseMeta {
             my $title = $field->{"title"};
             my $prefixedTitle = $formPrefPrefix . $title;
             my $value = $field->{"value"};
-            $prefs->_insertPrefsValue( $prefixedTitle, $value );
+            $prefs->insertPrefsValue( $prefixedTitle, $value );
             my $attributes = $field->{"attributes"};
             if( $attributes && $attributes =~ /[S]/o ) {
                 my $name = $field->{"name"};
-                $prefs->_insertPrefsValue( $name, $value );
+                $prefs->insertPrefsValue( $name, $value );
             }
         }
     }

@@ -159,13 +159,13 @@ sub equals {
 
 =pod
 
----++ toString()
+---++ stringify()
 
 Generate a string representation of this object, suitable for debugging
 
 =cut
 
-sub toString {
+sub stringify {
     my $this = shift;
     ASSERT(ref($this) eq "TWiki::User") if DEBUG;
 

@@ -546,7 +546,8 @@ sub updateReferringPages {
                                                \$newItemText );
             $this->saveTopic( $user, $itemWeb, $itemTopic,
                               $newItemText, $meta,
-                              { unlock => 1, dontnotify => 1 } );
+                              { unlock => 1,
+                                minor => 1 } );
             $this->unlockTopic( $user, $itemWeb, $itemTopic );
         } else {
             $result .= ";$item does not exist;";
@@ -699,10 +700,10 @@ sub _readKeyValue
 | =$options= | Ref to hash of options |
 =$options= may include:
 | =dontlog= | don't log this change in twiki log |
-| =dontnotify= | don't log this change in .changes |
 | =hide= | if the attachment is to be hidden in normal topic view |
 | =comment= | comment for save |
 | =file= | Temporary file name to upload |
+| =minor= | True if this is a minor change (used in log) |
 | =savecmd= | Save command |
 | =forcedate= | grr |
 | =unlock= | |
@@ -752,7 +753,7 @@ sub saveTopic {
 | =$opts= | Ref to hash of options |
 =$opts= may include:
 | =dontlog= | don't log this change in twiki log |
-| =dontnotify= | don't log this change in .changes |
+| =minor= | don't log this change in .changes |
 | =hide= | if the attachment is to be hidden in normal topic view |
 | =comment= | comment for save |
 | =file= | Temporary file name to upload |
@@ -888,23 +889,19 @@ sub _noHandlersSave {
 
     return $error if( $error );
 
-    if( ! $options->{dontnotify} ) {
-        # update .changes
-        my @revi = $this->getRevisionInfo( $web, $topic, "", undef, $topicHandler );
-
-        my @foo = split( /\n/, $this->readMetaData( $web, "changes" ));
-        if( $#foo > 100 ) {
-            shift( @foo);
-        }
-        push( @foo, "$topic\t".$user->login()."\t".time()."\t$revi[2]" );
-        $this->saveMetaData( $web, "changes", join( "\n", @foo ));
-        close(FILE);
-    }
+    # update .changes
+    my @foo = split( /\n/, $this->readMetaData( $web, "changes" ));
+    shift( @foo) if( $#foo > 500 );
+    my $minor = "";
+    $minor = "\tminor" if $options->{minor};
+    push( @foo, "$topic\t".$user->login()."\t".time()."\t$nextRev$minor" );
+    $this->saveMetaData( $web, "changes", join( "\n", @foo ));
+    close(FILE);
 
     if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
         # write log entry
         my $extra = "";
-        $extra   .= "dontNotify" if( $options->{dontnotify} );
+        $extra   .= "minor" if( $options->{minor} );
         $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }
 
@@ -961,7 +958,7 @@ sub repRev {
         my $extra = "repRev by ".$user->login().": $rev " .
           $revuser->login().
             " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
-        $extra   .= " dontNotify" if( $options->{dontnotify} );
+        $extra   .= " minor" if( $options->{minor} );
         $this->{session}->writeLog( "save", "$web.$topic", $extra );
     }
     return "";

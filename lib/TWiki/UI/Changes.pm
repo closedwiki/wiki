@@ -42,7 +42,6 @@ sub changes {
     my $skin = $session->getSkin();
 
     my $text = $session->{templates}->readTemplate( "changes", $skin );
-    my $changes= $session->{store}->readMetaData( $webName, "changes" );
 
     my $summary = "";
 
@@ -52,8 +51,14 @@ sub changes {
 
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
 
+    my $changeData = $session->{store}->readMetaData( $webName, "changes" );
+    my @changes = split( /\r?\n/, $changeData );
+    unless( $query->param( 'minor' )) {
+        @changes = grep { !/\tminor$/ } @changes;
+        $page .= "<b>Note:</b>This page is showing major changes only. To see all changes <a href='".$query->url() . "/$webName?minor=1'>click here</a>";
+    }
     my %done = ();
-    foreach my $change ( reverse split( /\r?\n/, $changes ) ) {
+    foreach my $change ( reverse @changes ) {
         my( $changedTopic, $login, $time, $rev ) = split( /\t/, $change );
         unless( $done{$changedTopic} ) {
             next unless $session->{store}->topicExists( $webName, $changedTopic );
@@ -82,20 +87,13 @@ sub changes {
                     ( $query->{user}, $webName, $changedTopic, $rev - 1 );
                 $text = $session->{renderer}->TML2PlainText
                   ( $text, $webName, $changedTopic, "nonop" );
+                $text = substr( $text, 0, 162 )."..."
+                  if ( length($text) > 162);
                 $otext = $session->{renderer}->TML2PlainText
                   ( $otext, $webName, $changedTopic, "nonop" );
+                $otext = substr( $otext, 0, 162 )."..."
+                  if ( length($otext) > 162);
                 $summary = TWiki::Merge::merge( $otext, $text, qr/\s+/ );
-                if( length( $summary ) > 162 ) {
-                    $text = $summary;
-                    $summary = "";
-                    # SMELL: there's got to be a better way to do this
-                    foreach my $c ( split( /(<\/?(?:ins|del)>)/i, $text )) {
-                        if( $c !~ /<\/?(ins|del)>/i ) {
-                            $c =~ s/^(.{12}).*(.{12})$/$1...$2/s;
-                        }
-                        $summary .= $c;
-                    }
-                }
                 $summary = $session->{renderer}->protectPlainText( $summary );
             } else {
                 # only one version, show summary

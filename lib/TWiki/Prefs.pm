@@ -65,7 +65,7 @@ sub new {
 
 ---+++ sub initializeUser( $user, $usertopic )
 
-STATIC Reads preferences from the user's personal topic.
+Reads preferences from the user's personal topic.
 
 =cut
 

@@ -124,7 +124,7 @@ sub _save {
     $newText =~ s/ {3}/\t/go;
 
     my $saveOpts = {};
-    $saveOpts->{dontnotify} = 1 if $query->param( "dontnotify" );
+    $saveOpts->{minor} = 1 if $query->param( "dontnotify" );
     $saveOpts->{forcenewrevision} = 1 if $query->param( "forcenewrevision" );
 
     if( $saveCmd eq "repRev" ) {
@@ -170,7 +170,9 @@ sub _save {
     # assumes rev numbers start at 1
     if ( $originalrev ) {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
-
+        # temporary to find problem
+        print STDERR "Merge ",$user->stringify(),
+          $author->stringify(), $originalrev, $rev\n");
         if ( $rev ne $originalrev ) {
             $newText = TWiki::Merge::merge( $currText, $newText, "\\r?\\n" );
             $newMeta->merge( $currMeta );

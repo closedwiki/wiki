@@ -457,13 +457,13 @@ sub _resetUsersPassword {
     unless ($email) {
         throw TWiki::UI::OopsException
           ( undef, $user->wikiName(), "regemail",
-            "Can't get an email address for " . $user->toString());
+            "Can't get an email address for " . $user->stringify());
     }
 
     my $message = "";
     unless( $user->passwordExists() ) {
         $email = "ResetPassword created new htpasswd entry for ".
-          $user->toString()." as it was missing in .htpasswd";
+          $user->stringify()." as it was missing in .htpasswd";
     }
 
     my $password = $user->resetPassword();
@@ -541,7 +541,7 @@ sub changePassword {
     # OK - password may be changed
     $user->changePassword( $passwordA );
 
-    $session->writeLog("changepasswd", $user->toString());
+    $session->writeLog("changepasswd", $user->stringify());
     #recording the email would be nice
 
     # OK - password changed

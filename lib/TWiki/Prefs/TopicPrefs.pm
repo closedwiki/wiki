@@ -49,52 +49,24 @@ sub new {
     $self->{web} = $theWeb;
     $self->{topic} = $theTopic;
 
-    $self->readPrefs();
+    $self->{prefs} = {};
+
+    if( $session->{store}->topicExists( $theWeb, $theTopic )) {
+        my( $meta, $text ) =
+          $session->{store}->readTopic( undef,
+                                         $theWeb, $theTopic,
+                                         undef );
+        my $parser = new TWiki::Prefs::Parser();
+        $parser->parseText( $text, $self );
+        $parser->parseMeta( $meta, $self );
+    }
 
     return $self;
 }
 
-sub store { my $this = shift; return $this->{session}->{store}; }
-
-=pod
-
----+++ sub Prefs()
-
-Rereads preferences from the topic, updating the TopicPrefs object.
-
-=cut
-
-sub readPrefs {
-    my $self = shift;
-    ASSERT(ref($self) eq "TWiki::Prefs::TopicPrefs") if DEBUG;
-
-    my $theWeb = $self->{web};
-    my $theTopic = $self->{topic};
-
-    $self->{prefs} = {};
-
-    return unless $self->store()->topicExists( $theWeb, $theTopic );
-
-    my( $meta, $text ) =
-      $self->store()->readTopic( undef,
-                                 $theWeb, $theTopic,
-                                 undef );
-
-    my $parser = new TWiki::Prefs::Parser();
-    $parser->parseText( $text, $self );
-    $parser->parseMeta( $meta, $self );
-}
-
-=pod
-
----+++ sub _insertPrefsValue( $key, $value )
-
-Adds a key-value pair to the TopicPrefs object.
-SMELL: this is almost the same as insertPreference, below.
-
-=cut
-
-sub _insertPrefsValue {
+# Adds a key-value pair to the TopicPrefs object. Callback defined for
+# the Prefs::Parser object.
+sub insertPrefsValue {
     my( $self, $theKey, $theValue ) = @_;
 
     return if exists $self->{finalHash}{$theKey}; # key is final, may not be overridden

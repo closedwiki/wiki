@@ -85,7 +85,7 @@ sub removeUser {
     #TODO: need to handle the NoPasswdUser case (userPasswordExists will retun false here)
     if( $user && !$user->passwordExists()) {
         throw TWiki::UI::OopsException( $webName, $topic,
-                                        "notwikiuser", $user->toString() );
+                                        "notwikiuser", $user->stringify() );
     }
 
     #check to see it the user we are trying to remove is a memebr of a group.
@@ -121,7 +121,7 @@ sub removeUser {
     $user->remove();
 
     throw TWiki::UI::OopsException( $webName, $topic, "removeuserdone",
-                                    $user->toString() );
+                                    $user->stringify() );
 }
 
 #changePassword is now in register (belongs in User.pm though)

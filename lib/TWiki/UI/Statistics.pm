@@ -248,9 +248,11 @@ sub _collectLogData
 
     my ($webName, $opName, $topicName, $userName, $newTopicName, $newTopicWeb);
     binmode $TMPFILE;
-    while ( <$TMPFILE> ) {
-        my $line = $_;
+    while ( my $line = <$TMPFILE> ) {
         $line =~ s/\r*\n$//;		# Clean out line endings
+
+        # ignore minor changes - not statistically helpful
+        next if( $line =~ / (minor|dontNotify) / );
 
         $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)[. ]/o;
         $userName = $1 || "";		# Main.FredBloggs
@@ -269,7 +271,6 @@ sub _collectLogData
         }
 
         my $logContrib = 0;
-
         if ($opName eq 'view' ) {
             $statViews{$webName}++;
             # Pick up the topic name and any error string
@@ -466,7 +467,7 @@ sub _processWeb {
 
         $session->{store}->saveTopic( $user, $webName, $statsTopic,
                                       $text, $meta,
-                                      { dontnotify => 1,
+                                      { minor => 1,
                                         dontlog => 1 } );
 
         _printMsg( "  - Topic $statsTopic updated", $session );
