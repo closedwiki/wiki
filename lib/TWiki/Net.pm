@@ -105,6 +105,7 @@ sub sendEmail
         my ( $header, $body ) = split( "\n\n", $theText, 2 );
         my @headerlines = split( /\n/, $header );
         $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
+        $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
         $theText = "$header\n\n$body";   # rebuild message
 
         # extract 'From:'
@@ -150,15 +151,28 @@ sub sendEmail
         $error = _sendEmailByNetSMTP( $from, \@to, $theText );
 
     } else {
+        # send with sendmail
+        my ( $header, $body ) = split( "\n\n", $theText, 2 );
+        $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
+        $theText = "$header\n\n$body";   # rebuild message
         $error = _sendEmailBySendmail( $theText );
     }
     return $error;
 }
 
 # =========================
+sub _fixLineLength
+{
+    my( $theAddrs ) = @_;
+    # split up header lines that are too long
+    $theAddrs =~ s/(.{60}[^,]*,\s*)/$1\n        /go;
+    $theAddrs =~ s/\n\s*$//gos;
+    return $theAddrs;
+}
+
+# =========================
 sub _sendEmailBySendmail
 {
-
     my( $theText ) = @_;
 
     if( open( MAIL, "|-" ) || exec "$TWiki::mailProgram" ) {
