@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1019270220" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1021618648" format="1.0" version="1.8"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -50,48 +50,30 @@ Variables that can be used in the format string:
 
 __Note:__ For =$pattern(reg-exp)=, specify a RegularExpression that scans from start to end and contains the text you want to keep in parenthesis, like =$pattern(.*?(from here.*?to here).*)=. You need to make sure that the integrity of a web page is not compromised; for example, if you include a table make sure to include everything including the table end tag.
 
----++ Nested Search
-
-Search can be nested. For example, search for some topics, then form a new search for each topic found in the first search. The idea is to build the nested search string using a formatted search in the first search.
-
-Here is an example. We want to search for topics, do a nested search with each hit, and show the result as nested bullets. Parameters like =scope="text" regex="on" nosearch="on" nototal="on"= are omitted for simplicity.
-
-	* First search:
-		* =%<nop>SEARCH{ "freedom" format="	* $topic" }%=
-	* Second search. For each hit we want this search:
-		* =%<nop>SEARCH{ "(topic of first search)" format="		* $topic" }%=
-	* Now we nest the searches. We need to escape the second search, e.g. the first search will build a valid second search string:
-		* =%<nop>SEARCH{ "freedom" format="	* $topic: $n$percntSEARCH{ \"$topic\" format=\"		* $dollartopic" }$nop%\" }%=
-
-Note that we escape the second search so that it does not get evaluated by the first search:
-
-	* =$percnt= to escape the leading percent of the second search
-	* =\"= to escape the qouble quotes
-	* =$dollar= to escape the =$= of =$topic=
-	* =$nop= to escape the =}%= sequence
-
 
 ---++ Examples
+
 
 #SearchBulletList
 ---+++ Bullet list showing topic name and summary
 
-Write this:
+*Write this:*
 
 =%<nop>SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="	* <nop>*Topic: Summary:*" format="	* [<nop>[$topic]]: $summary" }%=
 
-To get this:
+*To get this:*
 
 %SEARCH{ "FAQ" scope="topic" nosearch="on" nototal="on" header="	* *Topic: Summary:*" format="	* [[$topic]]: $summary" }%
 
+
 ---+++ Table showing form field values of topics with a form
 
-Write this in the Know web:
+*Write this in the Know web:*
 
 =| <nop>*Topic:*<nop> | <nop>*<nop>OperatingSystem:*<nop> | <nop>*<nop>OsVersion:*<nop> |= <br />
 =%<nop>SEARCH{ "[T]opicClassification.*?value=\"[P]ublicFAQ\"" scope="text" regex="on" nosearch="on" nototal="on" format="| [<nop>[$topic]] | $formfield(<nop>OperatingSystem) | $formfield(<nop>OsVersion) |" }%=
 
-To get this:
+*To get this:*
 
 <table border="1" cellspacing="0" cellpadding="1">
 <tr>
@@ -106,14 +88,41 @@ To get this:
  <td>  95  </td></tr>
 </table>
 
+
 ---+++ Extract some text from a topic using regular expression
 
-Write this:
+*Write this:*
 
 =%<nop>SEARCH{ "__Back to\:__ <nop>TWikiFAQ" scope="text" regex="on" nosearch="on" nototal="on" header="TWiki FAQs:" format="	* $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [<nop>[$topic][Answer...]]" }%=
 
-To get this:
+*To get this:*
 
 %SEARCH{ "__Back to\:__ TWikiFAQ" scope="text" regex="on" nosearch="on" nototal="on" header="TWiki FAQs:" format="	* $pattern(.*?FAQ\:[\n\r]*([^\n\r]+).*) [[$topic][Answer...]]" }%
+
+
+---+++ Nested Search
+
+Search can be nested. For example, search for some topics, then form a new search for each topic found in the first search. The idea is to build the nested search string using a formatted search in the first search.
+
+Here is an example. Let's search for all topics that contain the word "culture" (first search), and let's find out where each topic found is linked from (second search).
+
+	* First search:
+		* =%<nop>SEARCH{ "culture" format="	* $topic is referenced by: (list all references)" nosearch="on" nototal="on" }%=
+	* Second search. For each hit we want this search:
+		* =%<nop>SEARCH{ "(topic found in first search)" format="	$topic" nosearch="on" nototal="on" }%=
+	* Now let's nest the two. We need to escape the second search, e.g. the first search will build a valid second search string. Note that we escape the second search so that it does not get evaluated prematurely by the first search:
+		* Use =$percnt= to escape the leading percent of the second search
+		* Use =\"= to escape the double quotes
+		* Use =$dollar= to escape the =$= of =$topic=
+		* Use =$nop= to escape the =}%= sequence
+
+*Write this:*
+
+=%<nop>SEARCH{ "culture" format="	* $topic is referenced by:$n		* $percntSEARCH{ \"$topic\" format=\"	$dollartopic\" nosearch=\"on\" nototal=\"on\" }$nop%" nosearch="on" nototal="on" }%=
+
+*To get this:*
+
+%SEARCH{ "culture" format="	* $topic is referenced by:$n		* $percntSEARCH{ \"$topic\" format=\"	$dollartopic\" nosearch=\"on\" nototal=\"on\" }$nop%" nosearch="on" nototal="on" }%
+
 
 -- Main.PeterThoeny - 16 May 2002
