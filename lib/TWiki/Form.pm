@@ -278,7 +278,7 @@ sub chooseFormButton
 {
     my( $text ) = @_;
     
-    return "<input type=\"submit\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \" class=\"TWikiSubmitChangeFormButton\" />";
+    return "<input type=\"submit\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \" class=\"twikiSubmit twikiChangeFormButton\" />";
 }
 
 
@@ -302,11 +302,11 @@ sub renderForEdit
     }
     
     # FIXME could do with some of this being in template
-    my $text = "<table class=\"TWikiFormsEditTable\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
+    my $text = "<table class=\"twikiForm twikiEditForm\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>" . 
                _link( $web, $form, "", "h", "", 2, $chooseForm ) . "</tr>\n";
-
+               
     fieldVars2Meta( $web, $query, $meta, "override" );
-
+    
     foreach my $c ( @fieldsInfo ) {
         my @fieldInfo = @$c;
         my $fieldName = shift @fieldInfo;
@@ -343,14 +343,14 @@ sub renderForEdit
             $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $value =~ s/</&lt\;/go;
             $value =~ s/>/&gt\;/go;
-            $value = "<input class=\"TWikiFormsEditTextField\" type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
+            $value = "<input class=\"twikiEditFormTextField\" type=\"text\" name=\"$name\" size=\"$size\" value=\"$value\" />";
         } elsif( $type eq "label" ) {
             my $escaped = $value;
             $escaped =~ s/&/&amp\;/go;
             $escaped =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $escaped =~ s/</&lt\;/go;
             $escaped =~ s/>/&gt\;/go;
-            $value = "<input class=\"TWikiFormsEditLabelField\" type=\"hidden\" name=\"$name\" value=\"$escaped\" />$value";
+            $value = "<input class=\"twikiEditFormLabelField\" type=\"hidden\" name=\"$name\" value=\"$escaped\" />$value";
         } elsif( $type eq "textarea" ) {
             my $cols = 40;
             my $rows = 5;
@@ -362,7 +362,7 @@ sub renderForEdit
             $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $value =~ s/</&lt\;/go;
             $value =~ s/>/&gt\;/go;
-            $value = "<textarea class=\"TWikiFormsEditTextAreaField\" cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
+            $value = "<textarea class=\"twikiEditFormTextAreaField\" cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
         } elsif( $type eq "select" ) {
             my $val = "";
             my $matched = "";
@@ -382,12 +382,12 @@ sub renderForEdit
             } else {
                $val =~ s/%DEFAULTOPTION%//go;
             }
-            $value = "<select class=\"TWikiFormsEditSelectField\" name=\"$name\" size=\"$size\">$val</select>";
+            $value = "<select class=\"twikiEditFormSelectField\" name=\"$name\" size=\"$size\">$val</select>";
         } elsif( $type =~ "^checkbox" ) {
             if( $type eq "checkbox+buttons" ) {
                 my $boxes = $#fieldInfo + 1;
-                $extra = "<br />\n<input class=\"TWikiFormsEditCheckboxButton\" type=\"button\" value=\" Set \" onclick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
-                         "<input class=\"TWikiFormsEditCheckboxButton\" type=\"button\" value=\"Clear\" onclick=\"checkAll(this, 1, $boxes, false)\" />\n";
+                $extra = "<br />\n<input class=\"twikiEditFormCheckboxButton\" type=\"button\" value=\" Set \" onclick=\"checkAll(this, 2, $boxes, true)\" />&nbsp;\n" .
+                         "<input class=\"twikiEditFormCheckboxButton\" type=\"button\" value=\"Clear\" onclick=\"checkAll(this, 1, $boxes, false)\" />\n";
             }
 
             my $val ="<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
@@ -398,13 +398,12 @@ sub renderForEdit
                 if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ ) {
                     $flag = ' checked="checked"';
                 }
-                $val .= "\n<td><input class=\"TWikiFormsEditCheckboxField\" type=\"checkbox\" name=\"$name$item\"$flag />$expandedItem &nbsp;&nbsp;</td>";
+                $val .= "\n<td><input class=\"twikiEditFormCheckboxField\" type=\"checkbox\" name=\"$name$item\"$flag />$expandedItem &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
                 }
                 $lines++;
             }
-            $val =~ s/\n<\/tr><tr>$//;
             $value = "$val\n</tr></table>\n";
         } elsif( $type eq "radio" ) {
             my $val = "<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
@@ -419,7 +418,7 @@ sub renderForEdit
                    $matched = $item;
                 }
                 $defaultMarker = "";
-                $val .= "\n<td><input class=\"TWikiFormsEditRadioField\" type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
+                $val .= "\n<td><input class=\"twikiEditFormRadioField\" type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
                 if( $size > 0 && ($lines % $size == $size - 1 ) ) {
                    $val .= "\n</tr><tr>";
                 }
@@ -439,7 +438,7 @@ sub renderForEdit
             $value =~ s/"/&quot\;/go; # Make sure double quote don't kill us
             $value =~ s/</&lt\;/go;
             $value =~ s/>/&gt\;/go;
-            $value = "<input class=\"TWikiFormsEditError\" type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
+            $value = "<input class=\"twikiEditFormError\" type=\"text\" name=\"$name\" size=\"80\" value=\"$value\" />";
         }
         $text .= "   <tr> " . _link( $web, $title, $tooltip, "h", "right", "", $extra ) . "<td align=\"left\"> $value </td> </tr>\n";
     }
