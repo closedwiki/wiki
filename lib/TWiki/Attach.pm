@@ -108,8 +108,8 @@ sub formatAttachments
         $viewableAttachmentCount++;     
         my $fileIcon = TWiki::Attach::filenameToIcon( $file );
         $attrComment = $attrComment || "&nbsp;";
-        $row .= "| $fileIcon <a href=\"%SCRIPTURLPATH%/viewfile/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a> \\\n";
-        $row .= "   | <a href=\"%SCRIPTURL%/attach/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a> \\\n";
+        $row .= "| $fileIcon <a href=\"%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a> \\\n";
+        $row .= "   | <a href=\"%SCRIPTURL%/attach%SCRIPTSUFFIX%/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a> \\\n";
         $row .= "   | $attrSize | $attrDate | $attrUser | $attrComment |";
         if ( $showAttr ) {
             $attrAttr = $attrAttr || " &nbsp; ";
