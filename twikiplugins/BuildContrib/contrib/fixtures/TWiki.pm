@@ -192,4 +192,23 @@ sub handleUrlParam
     return $value;
 }
 
+sub TWiki::expandVariablesOnTopicCreation {
+  my ( $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
+
+  my $today = TWiki::Func::formatTime(time(), "\$day \$mon \$year", "gmtime");
+  #$theUser         = $userName                     unless $theUser;
+  $theWikiName     = TWiki::Func::userToWikiName( $theUser, 1 ) unless $theWikiName;
+  $theWikiUserName = TWiki::Func::userToWikiName( $theUser )    unless $theWikiUserName;
+
+  $theText =~ s/%DATE%/$today/go;
+  $theText =~ s/%USERNAME%/$theUser/go;                     # "jdoe"
+  $theText =~ s/%WIKINAME%/$theWikiName/go;                 # "JonDoe"
+  $theText =~ s/%WIKIUSERNAME%/$theWikiUserName/go;         # "Main.JonDoe"
+  $theText =~ s/%URLPARAM{(.*?)}%/&TWiki::handleUrlParam($1)/geo;  # expand URL parameters
+  $theText =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
+  $theText =~ s/%NOP%//go;        # topic instantiation or to prevent search from hitting a template
+
+  return $theText;
+}
+
 1;
