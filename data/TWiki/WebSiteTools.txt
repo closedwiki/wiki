@@ -1,0 +1,17 @@
+%META:TOPICINFO{author="PeterThoeny" date="1018764180" format="1.0" version="1.1"}%
+---+ Web Site Tools
+%STARTINCLUDE%
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/SearchResult">
+	* <input type="text" name="search" size="32" /> <input type="submit" value="Search" /> &nbsp;&nbsp; (More options in [[%INCLUDINGWEB%.WebSearch][WebSearch]])
+	* [[%INCLUDINGWEB%.WebChanges][WebChanges]]: Display recent changes to the %INCLUDINGWEB% web
+	* [[%INCLUDINGWEB%.WebIndex][WebIndex]]: List all %INCLUDINGWEB% topics in alphabetical order. See also the faster [[%INCLUDINGWEB%.WebTopicList][WebTopicList]]
+	* [[%INCLUDINGWEB%.%NOTIFYTOPIC%][%NOTIFYTOPIC%]]: Subscribe to an e-mail alert sent when something changes in the %INCLUDINGWEB% web
+	* [[%INCLUDINGWEB%.%STATISTICSTOPIC%][%STATISTICSTOPIC%]]: View access statistics of the %INCLUDINGWEB% web
+	* [[%INCLUDINGWEB%.%WEBPREFSTOPIC%][%WEBPREFSTOPIC%]]: Preferences of the %INCLUDINGWEB% web (%TWIKIWEB%.%WIKIPREFSTOPIC% has site-wide preferences)
+</form>
+%STOPINCLUDE%
+---
+	* The list above provides the TWikiSiteTools used to navigate, search and maintain a particular web. It is included within other topics using the following directive: <p />
+	  =%<nop>INCLUDE{"%<nop>TWIKIWEB%.WebSiteTools"}%=
+
+	* [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%WEB%?scope=text&amp;web=all&amp;search=%25INCLUDE%7B%22%25TWIKIWEB%25.WebSiteTools%22%7D%25&amp;casesensitive=on&amp;nosummary=on&amp;nototal=on][List]] all topics which include this <nop>WebSiteTools topic.
