@@ -110,7 +110,7 @@ __Note:__ Don't worry if you are not able to put the =twiki/lib= directory at th
 
 ---+++ Step 3: Edit the Configuration Files
 
-	* Create the file =/twiki/bin/LocalLib.cfg=. Add the following line:
+	* Create the file =/twiki/bin/LocalLib.cfg=; =/twiki/bin/LocalLib.cfg.txt= is provided as a template. In essence, LocalLib.cfg should contain the following:
 <verbatim>
 $twikiLibPath = "/absolute/path/to/your/lib";
 </verbatim>
