@@ -33,6 +33,10 @@ use Time::Local;
 
 use strict;
 
+# FIXME: Move elsewhere?
+# template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
+use vars qw( %templateVars ); # init in TWiki.pm so okay for modPerl
+
 # ===========================
 # Normally writes no output, uncomment writeDebug line to get output of all RCS etc command to debug file
 sub _traceExec
@@ -1408,11 +1412,6 @@ sub _readTemplateFile
     return "";
 }
 
-# FIXME: Move elsewhere?
-# template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
-use vars qw( %templateVars );
-%templateVars = ();
-
 # =========================
 sub handleTmplP
 {
@@ -1435,6 +1434,10 @@ sub handleTmplP
 sub readTemplate
 {
     my( $theName, $theSkin ) = @_;
+
+    if( ! defined($theSkin) ) {
+        $theSkin = &TWiki::getSkin();
+    }
 
     # recursively read template file(s)
     my $text = _readTemplateFile( $theName, $theSkin );
