@@ -14,6 +14,8 @@ BEGIN {
 	$initialised = 0;
 }
 
+my $context;
+
 sub initPlugin {
     #my ( $topic, $web, $user, $installWeb ) = @_;
 
@@ -22,12 +24,13 @@ sub initPlugin {
     }
 
     $firstCall = 1;
+    $context = "$_[1].$_[0]";
 
     return 1;
 }
 
 sub commonTagsHandler {
-    ### my ( $text, $topic, $web ) = @_;
+    my ( $text, $topic, $web ) = @_;
 
     unless ($initialised) {
         return unless _lazyInit();
@@ -37,18 +40,20 @@ sub commonTagsHandler {
     return unless( defined( $query ));
     my $action = $query->param( 'comment_action' ) || "";
 
-    if ( defined( $action ) && $action eq "save" ) {
+    if ( defined( $action ) && $action eq "save" &&
+         "$web.$topic" eq $context ) {
         # $firstCall ensures we only save once, ever.
         if ( $firstCall ) {
             $firstCall = 0;
-            TWiki::Plugins::CommentPlugin::Comment::save( $_[2], $_[1], $query );
+            TWiki::Plugins::CommentPlugin::Comment::save( $web, $topic, $query );
         }
     } elsif ( $_[0] =~ m/%COMMENT({.*?})?%/o ) {
         # SMELL: Nasty, tacky way to find out where we were invoked from
         my $scriptname = $ENV{'SCRIPT_NAME'} || "";
         # SMELL: unreliable
         my $previewing = ($scriptname =~ /\/(preview|gnusave|rdiff)/);
-        TWiki::Plugins::CommentPlugin::Comment::prompt( $previewing, @_ );
+        TWiki::Plugins::CommentPlugin::Comment::prompt( $previewing,
+                                                        $_[0], $web, $topic );
     }
 }
 

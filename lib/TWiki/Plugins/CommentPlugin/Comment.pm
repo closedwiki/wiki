@@ -34,6 +34,7 @@ sub save {
         $url = TWiki::Func::getOopsUrl( $web, $topic, "oopsaccesschange" );
     } else {
         $inSave = 1;
+
         my $error = _buildNewTopic( $web, $topic, $query );
         $inSave = 0;
 
@@ -51,7 +52,7 @@ sub save {
 
 # PUBLIC STATIC convert COMMENT statements to form prompts
 sub prompt {
-    #my ( $previewing, $text, $topic, $web ) = @_;
+    #my ( $previewing, $text, $web, $topic ) = @_;
 
     my $defaultType = 
       TWiki::Func::getPreferencesValue("COMMENTPLUGIN_DEFAULT_TYPE") ||
@@ -72,7 +73,7 @@ sub prompt {
 
 # PRIVATE generate an input form for a %COMMENT tag
 sub _handleInput {
-    my ( $attributes, $topic, $web, $pidx, $message,
+    my ( $attributes, $web, $topic, $pidx, $message,
          $disable, $defaultType ) = @_;
 
     $attributes =~ s/^{(.*)}$/$1/o if ( $attributes );
@@ -118,9 +119,7 @@ sub _handleInput {
         # invoke viewauth so we get authentication. When viewauth is run,
         # the 'save' method in here will be invoked as the commenTagsHandler
         # is run as flagged by the "comment_action" parameter.
-        $url = TWiki::Func::getScriptUrl( "%INTURLENCODE{$web}%",
-                                          "%INTURLENCODE{$topic}%",
-                                          "viewauth" );
+        $url = TWiki::Func::getScriptUrl( $web, $topic, "viewauth" );
     }
 
     my $noform = $attrs->remove("noform") || "";
@@ -130,10 +129,10 @@ sub _handleInput {
         $input =~ s/%MESSAGE%/$message/g;
         my $n = $$pidx + 0;
 
-	unless ($noform eq "on") {
-	    $input = "<form name=\"${disable}$type$n\" " .
-		"action=\"$disable$url\" method=\"${disable}post\">$input";
-	}
+        unless ($noform eq "on") {
+            $input = "<form name=\"${disable}$type$n\" " .
+              "action=\"$disable$url\" method=\"${disable}post\">$input";
+        }
         if ( $disable eq "" ) {
             $input .= "<input name=\"comment_action\" " .
               "type=\"hidden\" value=\"save\" />";
@@ -157,9 +156,9 @@ sub _handleInput {
                   "type=\"hidden\" value=\"$$pidx\" />";
             }
         }
-	unless ($noform eq "on") {
-	    $input .= "</form>";
-	}
+        unless ($noform eq "on") {
+            $input .= "</form>";
+        }
     }
     $$pidx++;
     return $input;
@@ -207,12 +206,11 @@ sub _buildNewTopic {
     my $anchor = $query->param( 'comment_anchor' );
     my $location = $query->param( 'comment_location' );
     my $silent = $query->param( 'comment_quietly' );
-
     my $output = _getTemplate( "OUTPUT:$type", $topic, $web );
     if ( $output =~ m/^%RED%/o ) {
         return $output;
     }
-
+print STDERR "TEMPLATE $output\n";
     # Expand the template
     $output =~ s/%POS:(.*?)%//go;
     my $position = $1 || "AFTER";
@@ -222,13 +220,7 @@ sub _buildNewTopic {
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
         eval 'use TWiki::Contrib::CairoContrib';
 	}
-    my $uwn = TWiki::Func::getWikiName();
-    $output = TWiki::Func::expandVariablesOnTopicCreation($output, $uwn);
-
-	# CODE_SMELL: This should be part of TWiki::expandVariablesOnTopicCreation
-    my @t = gmtime();
-    my $now = sprintf( "%02d:%02d:%02d", $t[2], $t[1], $t[0] );
-    $output =~ s/%TIME%/$now/go;
+    $output = TWiki::Func::expandVariablesOnTopicCreation($output);
 
     my $bloody_hell = TWiki::Func::readTopicText( $web, $topic, undef, 1 );
     my $premeta = "";
@@ -254,9 +246,9 @@ sub _buildNewTopic {
         # Awkward newlines here, to avoid running into meta-data.
         # This should _not_ be a problem.
         $text =~ s/[\r\n]+$//;
-        $text .= "\n" unless $output =~ /^\n/;;
+        $text .= "\n" unless $output =~ m/^\n/s;
         $text .= $output;
-        $text .= "\n" unless $text =~ m/\n$/;
+        $text .= "\n" unless $text =~ m/\n$/s;
     } else {
         if ( $location ) {
             if ( $position eq "BEFORE" ) {
@@ -267,9 +259,11 @@ sub _buildNewTopic {
         } elsif ( $anchor ) {
             # position relative to anchor
             if ( $position eq "BEFORE" ) {
-                $text =~ s/^($anchor)/$output$1/m;
+                $output =~ s/\n$//;
+                $text =~ s/^($anchor)\b/$output\n$1/m;
             } else { # AFTER
-                $text =~ s/^($anchor)/$1$output/m;
+                $output =~ s/^\n+//;
+                $text =~ s/^($anchor)\b/$1\n$output/m;
             }
         } else {
             # Position relative to index'th comment
@@ -282,6 +276,7 @@ sub _buildNewTopic {
         }
     }
     $text = $premeta . $text . $postmeta;
+
 	return TWiki::Func::saveTopicText( $web, $topic, $text, 1, $silent );
 }
 
