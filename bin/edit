@@ -157,8 +157,9 @@ sub main
             $formTemplate = $args{"name"};
         }
 
-        my $foo = &TWiki::getGmDate();
-        $text =~ s/%DATE%/$foo/go;
+        # expand limited set of variables (keep it in sync with the register script)
+        my $today = &TWiki::getGmDate();
+        $text =~ s/%DATE%/$today/go;
         $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
         $text =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;  # expand URL parameters
         $text =~ s/%NOP{.*?}%//gos;  # Remove filler: Use it to remove access control at time of
