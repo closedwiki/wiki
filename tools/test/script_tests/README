@@ -3,26 +3,38 @@ Script Tests
 
 - YOU MUST CONFIGURE THE PATHS IN ScriptTestFixture.pm FOR YOUR CONFIGURATION
 - the command is perl TestRunner.pl CGIScriptSuite.pm
+- the tests have only been tested on Linux
+- you must have Test::Unit, LWP and HTML::Diff
 
-The test suite CGIScriptsSuite.pm is a Test::Unit suite designed to exercise the CGI scripts in TWiki, and is intended primarily to support refactorings. It does this by comparing script results from one server with results from the same script on another, on the assumption that the two servers are standard TWiki installations and both have identical data and pub areas (they can even share the same data and pub if necessary).
+The test suite CGIScriptsSuite.pm is a Test::Unit suite designed to exercise the CGI scripts in TWiki. It is intended primarily to support refactorings. It does this by comparing script results from one server with results from the same script on another, on the assumption that the two servers are standard TWiki installations and both have identical data and pub areas (they can even share the same data and pub if necessary).
 
 The general idea is that you create two CVS checkout areas, keeping one on the latest proven code and the other on bleeding edge code. Running the suite will tell you what you have changed in the system from a user perspective. Ultimately there should be an automatic script that maintains these areas, runs the tests, and mails the results to the core team.
 
 CGIScriptSuite uses 'wget' extensively, so it's generally wise to use http://localhost as your server.
 
-Note that as of April 2004 the script tests are very naive; many of them are little more than compile and compare tests. All the scripts need more sophisticated testing of their various parameters.
+Getting the tests running
+=========================
+To get the tests running you have to configure ScriptTestFixture to your local environment. IMPORTANT: you must use exactly the right URL in ScriptTestFixture for each install. Because the tests use 'diff' to compare outputs, the output from each install has to be made canonical. This is done by substituting the URLs and other known variable link components (such as the date). This requires the URL in the returned HTML to be IDENTICAL to the URL specified in ScriptTestFixture.pm. If you get loads of differences in URLs, it's probably because you got this wrong.
 
-The CGIScriptSuite is configured in the ScriptTestFixture.pm file and run with the command:
+You should ne be able to run the tests with the command
 
 perl TestRunner.pl CGIScriptSuite.pm
 
-Individual tests can be run by using the name of the test e.g.
+If you get any errors, you can work out what's going on by running individual test cases. Individual test cases can be run by using the name of the testcase e.g.
 
 perl TestRunner.pl viewScriptTest.pm
 
+If this is still too much information, open the testcase and disable all but one of the tests (the easiest way to do this it to change "sub test_..." to "sub notest_...".
+
+If you are now getting a diff all compressed onto a single line, you can tell the comparison not to fiddle with newlines by changing the last parameter of the "compare" to a 0 (which means, don;t strip newlines).
+
+If you are still getting diffs, it's probably because you have corrupted your data areas somehow (or the code is broken!)
+
 WARNING if tests fail, there is a chance that parts of the fixture may be left. You can make sure you delete any fixture leftovers by:
 
-rm -f <path to data>/Sandbox/AutoCreated*.*
+rm -rf <path to data>/Sandbox/AutoCreated*.*
 rm -rf <path to pub>/Sandbox/AutoCreated*.*
 
 for both old and new installations. Please don't complain at me until you've tried this and re-run the tests.
+
+Note that as of April 2004 the script tests are very naive; many of them are little more than compile and compare tests. All the scripts need more sophisticated testing of their various parameters.
