@@ -756,11 +756,16 @@ sub getRevisionInfo
     my( $self, $version ) = @_;
     $self->_ensureProcessed();
     $version = $self->numRevisions() if( ! $version );
+
+    my @result;
+    
     if( $self->{where} && $self->{where} ne "nofile" ) {
-        return ( "", $version, $self->date( $version ), $self->author( $version ), $self->comment( $version ) );
+        @result = ( "", $version, $self->date( $version ), $self->author( $version ), $self->comment( $version ) );
     } else {
-        return $self->_getRevisionInfoDefault();
+        @result = $self->_getRevisionInfoDefault();
     }
+
+    return @result;
 }
 
 
@@ -800,7 +805,7 @@ sub _patch
              $adj -= $length;
              $pos++;
           } elsif( $last eq "a" ) {
-             my @toAdd = @${delta}[$pos+1..$pos+$length];
+             my @toAdd = @$delta[$pos+1..$pos+$length];
              if( $extra ) {
                  if( @toAdd ) {
                      $toAdd[$#toAdd] .= $extra;
@@ -961,7 +966,7 @@ sub _diffEnd
    
    $posNew++;
    my $toDel = ( $countNew < 2 ) ? 1 : $countNew;
-   my $startA = @${new} - ( ( $countNew > 0 ) ? 1 : 0 );
+   my $startA = @$new - ( ( $countNew > 0 ) ? 1 : 0 );
    my $toAdd = ( $countOld < 2 ) ? 1 : $countOld;
    my $theEnd = "d$posNew $toDel\na$startA $toAdd\n";
    for( my $i=$posOld; $i<@${old}; $i++ ) {

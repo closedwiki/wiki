@@ -35,8 +35,8 @@ Plugins should *only* use functions published in this module. If you use
 functions in other TWiki libraries you might impose a security hole and 
 you will likely need to change your Plugin when you upgrade TWiki.
 
-Functions listing an "Introduced" field refer to the VERSION number of 
-the TWiki::Plugins module.
+The "Since" field refers to the VERSION number of 
+the TWiki::Plugins module and the date that the function was addded.
 
 =cut
 

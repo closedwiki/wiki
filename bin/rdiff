@@ -52,7 +52,6 @@ my %diffColours = ( "+" => [ "#ccccff", "TWikiDiffAddedMarker"],
 #and can be over-ridden :)
 #(now can we do this in a way that automagically can cope eith word / letter based diffs?)
 #NOTE: if we do our own diffs in perl we can go straight to renderDiffs
-#CPAN: there is a Diffs module - it outputs **********
 #TODO: I'm starting to think that we should have a variable number of lines of context. more context if you are doing a 1.13 tp 1.14 diff, less when you do a show page history.
 #TODO: ***URGENT*** the diff rendering dies badly when you have table cell changes and context
 #TODO: ?type={history|diff} so that you can do a normal diff between r1.3 and r1.32 (rather than a history) (and when doing a history, we maybe should not expand %SEARCH...
@@ -76,12 +75,6 @@ sub renderCellData
 {
     my( $data, $topic ) = @_;
     if (( $data ) && ( $data ne "" )) {
-#remove possibly mis-matched html tags :(
-#this also un-does the mess of <!------ to hide multiple lines of topic
-#and therefore its probably only important when you don't have full topic context
-#TODO: re-write?
-#        $data =~ s/</$lt/gm;
-#        $data =~ s/>/$gt/gm;
 #improve meta-data diff's - Main.PeterKlausner
         if( $data =~ /%META/ )
         {
@@ -290,23 +283,23 @@ sub parseRevisionDiff
 	        push @diffArray, ["l", $1, $3];
 	    } elsif ( /^\-/ ) {
 	        s/^\-//go;
-	        if ( ($#diffArray >= 0) && ( @{@diffArray[$#diffArray]}[0] eq "-" ) ) {
-	            @{@diffArray[$#diffArray]}[1] .= "\n$_";
+	        if ( ($#diffArray >= 0) && ( @{$diffArray[$#diffArray]}[0] eq "-" ) ) {
+	            @{$diffArray[$#diffArray]}[1] .= "\n$_";
 	        } else {
 	            push @diffArray, ["-", $_, ""];
 	        }
 	    } elsif ( /^\+/ ) {
 	        s/^\+//go;
-	        if ( ($#diffArray >= 0) && ( @{@diffArray[$#diffArray]}[0] eq "+" ) ) {
-	            @{@diffArray[$#diffArray]}[2] .= "\n$_";
+	        if ( ($#diffArray >= 0) && ( @{$diffArray[$#diffArray]}[0] eq "+" ) ) {
+	            @{$diffArray[$#diffArray]}[2] .= "\n$_";
 	        } else {
 	            push @diffArray, ["+", "", $_];
 	        }
 	    } else {
 	        s/^ (.*)$/$1/go;
-	        if ( ($#diffArray >= 0) && ( @{@diffArray[$#diffArray]}[0] eq "u" ) ) {
-	            @{@diffArray[$#diffArray]}[1] .= "\n$_";
-	            @{@diffArray[$#diffArray]}[2] .= "\n$_";
+	        if ( ($#diffArray >= 0) && ( @{$diffArray[$#diffArray]}[0] eq "u" ) ) {
+	            @{$diffArray[$#diffArray]}[1] .= "\n$_";
+	            @{$diffArray[$#diffArray]}[2] .= "\n$_";
 	        } else {
 	            push @diffArray, ["u", $_, $_];
 	        }
@@ -320,15 +313,15 @@ sub parseRevisionDiff
 	        push @diffArray, ["l", $1, $3];
 	    } elsif ( /^</ ) {
 	        s/^< //go;
-	        if ( @{@diffArray[$#diffArray]}[0] eq "-" ) {
-	            @{@diffArray[$#diffArray]}[1] .= "\n$_";
+	        if ( @{$diffArray[$#diffArray]}[0] eq "-" ) {
+	            @{$diffArray[$#diffArray]}[1] .= "\n$_";
 	        } else {
 	            push @diffArray, ["-", $_, ""];
 	        }
 	    } elsif ( /^>/ ) {
 	        s/^> //go;
-	        if ( @{@diffArray[$#diffArray]}[0] eq "+" ) {
-	            @{@diffArray[$#diffArray]}[2] .= "\n$_";
+	        if ( @{$diffArray[$#diffArray]}[0] eq "+" ) {
+	            @{$diffArray[$#diffArray]}[2] .= "\n$_";
 	        } else {
 	            push @diffArray, ["+", "", $_];
 	        }
