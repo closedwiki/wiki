@@ -91,6 +91,9 @@ case "$1" in
 	for server in $servers; do 
 		if [ -e /etc/$server/conf.d ]; then
 			includefile=/etc/twiki/apache.conf
+			if [ -e /etc/$server/conf.d/twiki.conf ]; then
+				rm /etc/$server/conf.d/twiki.conf
+			fi
 			ln -s $includefile /etc/$server/conf.d/twiki.conf 
 		fi
 	done

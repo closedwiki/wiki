@@ -7,6 +7,7 @@ twiki (20040902-1) unstable; urgency=high
   * added another test to reduce the chance of over-writing an existing
     universe (Closes: #282947)
   * moved postinst backup files (~) to /tmp (Closes: #283812)
+  * postinst can now deal with remnant apache.conf files (Closes: #282006)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 16 Nov 2005 00:00:01 -1000
 
