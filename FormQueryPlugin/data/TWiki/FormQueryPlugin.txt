@@ -98,13 +98,14 @@ In all cases
 
 ---+++ Reports
 ---++++ <code>%TABLEFORMAT</code>
-<code>%TABLEFORMAT</code> is like the old Fortran 'format' statement, in that it provides a template for the display of values extracted from a query.
+<code>%TABLEFORMAT</code> provides a template for the display of values extracted from a query (like the old Fortran 'format' statement).
 | *Parameter* | *Description* |
 | =name= | Required, gives the name of the format for use in <code>%SHOWQUERY</code> or another <code>%FORMQUERY</code> |
 | =format= | Required, gives the format of the body rows (or the format to subclass) |
 | =header= | Optional, gives the format of the header row |
 | =footer= | Optional, gives the string to use to terminate the table |
 | =sort= | Optional, defines the sort order |
+| =help= | Optional, if present then a helpful message will be output for undefined fields. So if you see a table entry that is blank and you don;t think it should be, add the =help= parameter and it should give some guidance. |
 | =moan= | Optional, if set to "off" disables error output |
 
 The =header=, =footer= and =format= parameters are very similar in application to the parameters used in the standard <code>%SEARCH</code> TWiki command. For the uninitiated, the header is used to define the first row of the results table:
@@ -229,47 +230,7 @@ If =target= is omitted, then it creates a standard two-part progress bar. If all
 </table>
 
 ---+++ Tutorial
-Imagine this scenario; we have a web of topics, each of which _may_ contain a form of type =MyForm= and _may_ contain a table of attachments.
-
-The first thing we want to do is produce a summary table of all attachments in the web with size > 1024.
-
-The web is represented as a Map (a.k.a hash, or associative array) indexed by the topic name. Within this map each topic is itself represented by a Map, within which there is always a field named =attachments=. This field contains a reference to an Array of Maps, one for each attachment. Each attachment Map is indexed by the name of a parameter of the record describing the attachment viz. =name=, =attr=, =comment=, =date=, =path=, =size=, =user=, and =version=. Pictorially:
-   * TopicOne (Map)
-      * attachments (Array)
-         1 (Map)
-            * name=pitcha.gif
-            * size=2048
-         1 (Map)
-            * name=image.jpg
-            * size=556
-   * TopicTwo (Map)
-      * attachments (Array)
-   * TopicThree
-etc.
-The first thing we want to do is extract a single table of all the attachments in all the topics.
-<pre>
-%<nop>FORMQUERY{name=Allatts search="" extract="attachments"}%
-</pre>
-An empty =search= matches all entries, so =AttQuery= will now be set to the result of this query i.e. a flat Array of all attachments. We can narrow this down to attachments with size > 1024:
-<pre>
-%<nop>FORMQUERY{name=Bigatts query=Allatts search="size>'1024'"}%
-</pre>
-Now we can generate a table of these using =SHOWQUERY=:
-<pre>
-%<nop>SHOWQUERY{query=Bigatts header="|*Topic*|*Name*|*Size*|" format="|$_up.topic|$name|$size|"}%
-</pre>
-Note that we have to refer to =$_up.topic= to get the name of the topic because each attachment entry contains a _reference_ to the parent topic's Map ( =_up= ), but not the topic's name. See the schema in TWiki::Plugins/DBCacheContrib for a list of available fields in each table in the database.
-
-To extract the total size of the big attachments we can:
-<pre>
-%<nop>SUMFIELD{query=Bigatts field="size"}%
-</pre>
-Now let's say we want to extract all topics whose form attachment is of type =MyForm=, and then list all the topics referenced in the =Othertopic= field of =MyForm=.
-<pre>
-%<nop>FORMQUERY{name=formed search="form='MyForm'"}%
-%<nop>SHOWQUERY{query=formed header="|*Topic*|" format="|$Othertopic|"}%
-</pre>
-Actiually, this isn't quite enough. What we really want to do is list the 
+See TWiki::Plugins/FormQueryPluginTutorial for a tutorial describing how to use the plugin in real-world applications.
 
 ---
 #SettingsAnchor
@@ -316,7 +277,7 @@ For example, let's say you want to detect the words "No progress" in a table fie
 <pre>
    * /(No progress)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>
 </pre>
-The /No progress/ defines the perl RE to be matched, and the HTML on the right of the equals defines what to replace it with. The $1 inserts whatever was matched by the RE. The RE must match the whole string in the table field, so the above map will *NOT* match "No progress with editing"; to match that, you'd have to write:
+The =/(No progress)/= defines the perl RE to be matched, and the HTML on the right of the equals defines what to replace it with. The =$1= inserts whatever was matched by the RE. The RE must match the whole string in the table field, so the above map will *NOT* match "No progress with editing"; to match that, you'd have to write:
 <pre>
    * /(No progress)(.*)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>$2
 </pre>
@@ -353,11 +314,14 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 1.3 |
-|  Change History: | 16 Jul 2004: Split into sub-components |
-|  | 02 Apr 2004: SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
-|  | 05 Feb 2004: Bugfix version |
-|  | 11 Jul 2003: Initial version |
+|  Plugin Version: | %$VERSION% |
+|  Change History: | |
+| | Added option to switch on/off "Undefined" messages for undefined field values |
+| | Expanded fields no longer have spaces around them. This is more correct, but requires care in =format= definitions. |
+| 16 Jul 2004 | Split into sub-components |
+| 02 Apr 2004 | SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
+|  05 Feb 2004 | Bugfix version |
+|  11 Jul 2003 | Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
