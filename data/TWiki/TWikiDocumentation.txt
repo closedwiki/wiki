@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999180393" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="MikeMannix" date="999189018" format="1.0" version="1.25"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -30,9 +30,6 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 %INCLUDE{"TWikiAuthentication"}%
 
 -----
-%INCLUDE{"TWikiUsernameVsLoginUsername"}%
-
------
 %INCLUDE{"TWikiAccessControl"}%
 
 -----
@@ -44,20 +41,17 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 -----
 %INCLUDE{"TWikiVariables"}%
 
------
-%INCLUDE{"TWikiNotificationOfChanges"}%
+----
+%INCLUDE{"TWikiMetaData"}%
 
 -----
 %INCLUDE{"TWikiFormTemplate"}%
 
-----
-%INCLUDE{"MetaDataDefinition"}%
-
-----
-%INCLUDE{"MetaDataRendering"}%
-
 -----
 %INCLUDE{"TWikiPlugins"}%
+
+-----
+%INCLUDE{"TWikiNotificationOfChanges"}%
 
 ----
 %INCLUDE{"RenameTopic"}%
