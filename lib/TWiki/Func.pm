@@ -55,7 +55,7 @@ use TWiki::Attrs;
 
 ---++ Functions: CGI Environment
 
----+++ getSessionValue( $key ) ==> $value
+---+++ getSessionValue( $key ) -> $value
 
 | Description:      | Get a session value from the Session Plugin (if installed) |
 | Parameter: =$key= | Session key |
@@ -75,7 +75,7 @@ sub getSessionValue
 # =========================
 =pod
 
----+++ setSessionValue( $key, $value ) ==> $result
+---+++ setSessionValue( $key, $value ) -> $result
 
 | Description:        | Set a session value via the Session Plugin (if installed) |
 | Parameter: =$key=   | Session key |
@@ -94,7 +94,7 @@ sub setSessionValue
 # =========================
 =pod
 
----+++ getSkin( ) ==> $skin
+---+++ getSkin( ) -> $skin
 
 | Description:    | Get the name of the skin, set by the =SKIN= preferences variable or the =skin= CGI parameter |
 | Return: =$skin= | Name of skin, e.g. ="gnu"=. Empty string if none |
@@ -110,7 +110,7 @@ sub getSkin
 # =========================
 =pod
 
----+++ getUrlHost( ) ==> $host
+---+++ getUrlHost( ) -> $host
 
 | Description:    | Get protocol, domain and optional port of script URL |
 | Return: =$host= | URL host, e.g. ="http://example.com:80"= |
@@ -126,7 +126,7 @@ sub getUrlHost
 # =========================
 =pod
 
----+++ getScriptUrl( $web, $topic, $script ) ==> $url
+---+++ getScriptUrl( $web, $topic, $script ) -> $url
 
 | Description:         | Compose fully qualified URL |
 | Parameter: =$web=    | Web name, e.g. ="Main"= |
@@ -146,7 +146,7 @@ sub getScriptUrl
 # =========================
 =pod
 
----+++ getScriptUrlPath( ) ==> $path
+---+++ getScriptUrlPath( ) -> $path
 
 | Description:    | Get script URL path |
 | Return: =$path= | URL path of TWiki scripts, e.g. ="/cgi-bin"= |
@@ -162,7 +162,7 @@ sub getScriptUrlPath
 # =========================
 =pod
 
----+++ getViewUrl( $web, $topic ) ==> $url
+---+++ getViewUrl( $web, $topic ) -> $url
 
 | Description:        | Compose fully qualified view URL |
 | Parameter: =$web=   | Web name, e.g. ="Main"=. The current web is taken if empty |
@@ -181,7 +181,7 @@ sub getViewUrl
 # =========================
 =pod
 
----+++ getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) ==> $url
+---+++ getOopsUrl( $web, $topic, $template, $param1, $param2, $param3, $param4 ) -> $url
 
 | Description:                       | Compose fully qualified "oops" dialog URL |
 | Parameter: =$web=                  | Web name, e.g. ="Main"=. The current web is taken if empty |
@@ -202,7 +202,7 @@ sub getOopsUrl
 # =========================
 =pod
 
----+++ getPubUrlPath( ) ==> $path
+---+++ getPubUrlPath( ) -> $path
 
 | Description:    | Get pub URL path |
 | Return: =$path= | URL path of pub directory, e.g. ="/pub"= |
@@ -218,7 +218,7 @@ sub getPubUrlPath
 # =========================
 =pod
 
----+++ getCgiQuery( ) ==> $query
+---+++ getCgiQuery( ) -> $query
 
 | Description:     | Get CGI query object. Important: Plugins cannot assume that scripts run under CGI, Plugins must always test if the CGI query object is set |
 | Return: =$query= | CGI query object; or 0 if script is called as a shell script |
@@ -274,7 +274,7 @@ sub redirectCgiQuery
 
 ---++ Functions: Preferences
 
----+++ extractParameters( $attr ) ==> %params
+---+++ extractParameters( $attr ) -> %params
 
 | Description:       | Extract all parameters from a variable string and returns a hash of parameters |
 | Parameter: =$attr= | Attribute string |
@@ -303,7 +303,7 @@ sub extractParameters
 # =========================
 =pod
 
----+++ extractNameValuePair( $attr, $name ) ==> $value
+---+++ extractNameValuePair( $attr, $name ) -> $value
 
 | Description:       | Extract a named or unnamed value from a variable parameter string |
 | Note:              | Function TWiki::Func::extractParameters is more efficient for extracting several parameters |
@@ -335,7 +335,7 @@ sub extractNameValuePair
 # =========================
 =pod
 
----+++ getPreferencesValue( $key, $web ) ==> $value
+---+++ getPreferencesValue( $key, $web ) -> $value
 
 | Description:      | Get a preferences value from TWiki or from a Plugin |
 | Parameter: =$key= | Preferences key |
@@ -362,7 +362,7 @@ sub getPreferencesValue
 
 =pod
 
----+++ getPluginPreferencesValue( $key ) ==> $value
+---+++ getPluginPreferencesValue( $key ) -> $value
 
 | Description:      | Get a preferences value from your Plugin |
 | Parameter: =$key= | Plugin Preferences key w/o PLUGINNAME_ prefix. |
@@ -382,7 +382,7 @@ sub getPluginPreferencesValue
 # =========================
 =pod
 
----+++ getPreferencesFlag( $key, $web ) ==> $value
+---+++ getPreferencesFlag( $key, $web ) -> $value
 
 | Description:      | Get a preferences flag from TWiki or from a Plugin |
 | Parameter: =$key= | Preferences key |
@@ -405,7 +405,7 @@ sub getPreferencesFlag
 
 =pod
 
----+++ getPluginPreferencesFlag( $key ) ==> $flag
+---+++ getPluginPreferencesFlag( $key ) -> $flag
 
 | Description:      | Get a preferences flag from your Plugin |
 | Parameter: =$key= | Plugin Preferences key w/o PLUGINNAME_ prefix. |
@@ -425,7 +425,7 @@ sub getPluginPreferencesFlag
 # =========================
 =pod
 
----+++ getWikiToolName( ) ==> $name
+---+++ getWikiToolName( ) -> $name
 
 | Description:    | Get toolname as defined in TWiki.cfg |
 | Return: =$name= | Name of tool, e.g. ="TWiki"= |
@@ -441,7 +441,7 @@ sub getWikiToolName
 # =========================
 =pod
 
----+++ getMainWebname( ) ==> $name
+---+++ getMainWebname( ) -> $name
 
 | Description:    | Get name of Main web as defined in TWiki.cfg |
 | Return: =$name= | Name, e.g. ="Main"= |
@@ -457,7 +457,7 @@ sub getMainWebname
 # =========================
 =pod
 
----+++ getTwikiWebname( ) ==> $name
+---+++ getTwikiWebname( ) -> $name
 
 | Description:    | Get name of TWiki documentation web as defined in TWiki.cfg |
 | Return: =$name= | Name, e.g. ="TWiki"= |
@@ -475,7 +475,7 @@ sub getTwikiWebname
 
 ---++ Functions: User Handling and Access Control
 
----+++ getDefaultUserName( ) ==> $loginName
+---+++ getDefaultUserName( ) -> $loginName
 
 | Description:         | Get default user name as defined in the configuration as =DefaultUserLogin= |
 | Return: =$loginName= | Default user name, e.g. ="guest"= |
@@ -491,7 +491,7 @@ sub getDefaultUserName
 # =========================
 =pod
 
----+++ getWikiName( ) ==> $wikiName
+---+++ getWikiName( ) -> $wikiName
 
 | Description:        | Get Wiki name of logged in user |
 | Return: =$wikiName= | Wiki Name, e.g. ="JohnDoe"= |
@@ -507,7 +507,7 @@ sub getWikiName
 # =========================
 =pod
 
----+++ getWikiUserName( $text ) ==> $wikiName
+---+++ getWikiUserName( $text ) -> $wikiName
 
 | Description:        | Get Wiki name of logged in user with web prefix |
 | Return: =$wikiName= | Wiki Name, e.g. ="Main.JohnDoe"= |
@@ -523,7 +523,7 @@ sub getWikiUserName
 # =========================
 =pod
 
----+++ wikiToUserName( $wikiName ) ==> $loginName
+---+++ wikiToUserName( $wikiName ) -> $loginName
 
 | Description:           | Translate a Wiki name to a login name based on [[%MAINWEB%.TWikiUsers]] topic |
 | Parameter: =$wikiName= | Wiki name, e.g. ="Main.JohnDoe"= or ="JohnDoe"= |
@@ -543,7 +543,7 @@ sub wikiToUserName
 # =========================
 =pod
 
----+++ userToWikiName( $loginName, $dontAddWeb ) ==> $wikiName
+---+++ userToWikiName( $loginName, $dontAddWeb ) -> $wikiName
 
 | Description:             | Translate a login name to a Wiki name based on [[%MAINWEB%.TWikiUsers]] topic |
 | Parameter: =$loginName=  | Login name, e.g. ="jdoe"= |
@@ -565,7 +565,7 @@ sub userToWikiName
 # =========================
 =pod
 
----+++ isGuest( ) ==> $flag
+---+++ isGuest( ) -> $flag
 
 | Description:    | Test if logged in user is a guest |
 | Return: =$flag= | ="1"= if yes, ="0"= if not |
@@ -581,7 +581,7 @@ sub isGuest
 # =========================
 =pod
 
----+++ permissionsSet( $web ) ==> $flag
+---+++ permissionsSet( $web ) -> $flag
 
 | Description:      | Test if any access restrictions are set for this web, ignoring settings on individual pages |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
@@ -599,7 +599,7 @@ sub permissionsSet
 # =========================
 =pod
 
----+++ checkAccessPermission( $type, $wikiName, $text, $topic, $web ) ==> $flag
+---+++ checkAccessPermission( $type, $wikiName, $text, $topic, $web ) -> $flag
 
 | Description:           | Check access permission for a topic based on the [[%TWIKIWEB%.TWikiAccessControl]] rules |
 | Parameter: =$type=     | Access type, e.g. ="VIEW"=, ="CHANGE"=, ="CREATE"= |
@@ -623,7 +623,7 @@ sub checkAccessPermission
 
 ---++ Functions: Content Handling
 
----+++ webExists( $web ) ==> $flag
+---+++ webExists( $web ) -> $flag
 
 | Description:      | Test if web exists |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
@@ -641,7 +641,7 @@ sub webExists
 # =========================
 =pod
 
----+++ topicExists( $web, $topic ) ==> $flag
+---+++ topicExists( $web, $topic ) -> $flag
 
 | Description:        | Test if topic exists |
 | Parameter: =$web=   | Web name, optional, e.g. ="Main"= |
@@ -660,7 +660,7 @@ sub topicExists
 # =========================
 =pod
 
----+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment ) ==> ( $date, $user, $rev, $comment ) 
+---+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment ) -> ( $date, $user, $rev, $comment ) 
 | Description:           | Get revision info of a topic |
 | Parameter: =$theWebName= | Web name, optional, e.g. ="Main"= |
 | Parameter: =$theTopic=   | Topic name, required, e.g. ="TokyoOffice"= |
@@ -683,7 +683,7 @@ sub getRevisionInfo
 # =========================
 =pod
 
----+++ checkTopicEditLock( $web, $topic ) ==> ( $oopsUrl, $loginName, $unlockTime )
+---+++ checkTopicEditLock( $web, $topic ) -> ( $oopsUrl, $loginName, $unlockTime )
 
 *DOES NOTHING* - deprecated by ReleaseEditLocksOnSave since
 TWiki::Plugins::VERSION 1.026
@@ -698,7 +698,7 @@ sub checkTopicEditLock
 # =========================
 =pod
 
----+++ setTopicEditLock( $web, $topic, $lock ) ==> $oopsUrl
+---+++ setTopicEditLock( $web, $topic, $lock ) -> $oopsUrl
 
 *DOES NOTHING* - deprecated by ReleaseEditLocksOnSave since
 TWiki::Plugins::VERSION 1.026
@@ -713,7 +713,7 @@ sub setTopicEditLock
 # =========================
 =pod
 
----+++ readTopicText( $web, $topic, $rev, $ignorePermissions ) ==> $text
+---+++ readTopicText( $web, $topic, $rev, $ignorePermissions ) -> $text
 
 | Description:                     | Read topic text, including meta data |
 | Parameter: =$web=                | Web name, e.g. ="Main"=, or empty |
@@ -750,7 +750,7 @@ sub readTopicText
 # =========================
 =pod
 
----+++ saveTopicText( $web, $topic, $text, $ignorePermissions, $dontNotify ) ==> $oopsUrl
+---+++ saveTopicText( $web, $topic, $text, $ignorePermissions, $dontNotify ) -> $oopsUrl
 
 | Description:                     | Save topic text, typically obtained by readTopicText(). Topic data usually includes meta data; the file attachment meta data is replaced by the meta data from the topic file if it exists. |
 | Parameter: =$web=                | Web name, e.g. ="Main"=, or empty |
@@ -813,7 +813,7 @@ sub saveTopicText
 # =========================
 =pod
 
----+++ getPublicWebList( ) ==> @webs
+---+++ getPublicWebList( ) -> @webs
 
 | Description:    | Get list of all public webs, e.g. all webs that do not have the =NOSEARCHALL= flag set in the WebPreferences |
 | Return: =@webs= | List of all public webs, e.g. =( "Main",  "Know", "TWiki" )= |
@@ -829,7 +829,7 @@ sub getPublicWebList
 # =========================
 =pod
 
----+++ getTopicList( $web ) ==> @topics
+---+++ getTopicList( $web ) -> @topics
 
 | Description:      | Get list of all topics in a web |
 | Parameter: =$web= | Web name, required, e.g. ="Sandbox"= |
@@ -848,7 +848,7 @@ sub getTopicList
 
 ---++ Functions: Rendering
 
----+++ expandCommonVariables( $text, $topic, $web ) ==> $text
+---+++ expandCommonVariables( $text, $topic, $web ) -> $text
 
 | Description:        | Expand all common =%<nop>VARIABLES%= |
 | Parameter: =$text=  | Text with variables to expand, e.g. ="Current user is %<nop>WIKIUSER%"= |
@@ -856,6 +856,8 @@ sub getTopicList
 | Parameter: =$web=   | Web name, optional, e.g. ="Main"=. The current web is taken if missing |
 | Return: =$text=     | Expanded text, e.g. ="Current user is <nop>TWikiGuest"= |
 | Since:              | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
+
+See also: expandVariablesOnTopicCreation
 
 =cut
 # -------------------------
@@ -868,7 +870,7 @@ sub expandCommonVariables
 # =========================
 =pod
 
----+++ renderText( $text, $web ) ==> $text
+---+++ renderText( $text, $web ) -> $text
 
 | Description:       | Render text from TWiki markup into XHTML as defined in [[%TWIKIWEB%.TextFormattingRules]] |
 | Parameter: =$text= | Text to render, e.g. ="*bold* text and =fixed font="= |
@@ -887,7 +889,7 @@ sub renderText
 # =========================
 =pod
 
----+++ internalLink( $pre, $web, $topic, $label, $anchor, $createLink ) ==> $text
+---+++ internalLink( $pre, $web, $topic, $label, $anchor, $createLink ) -> $text
 
 | Description:             | Render topic name and link label into an XHTML link. Normally you do not need to call this funtion, it is called internally by =renderText()= |
 | Parameter: =$pre=        | Text occuring before the TWiki link syntax, optional |
@@ -911,7 +913,7 @@ sub internalLink
 # =========================
 =pod
 
----+++ search text( $text ) ==> $text
+---+++ search text( $text ) -> $text
 
 | Description:       | This is not a function, just a how-to note. Use: =expandCommonVariables("%<nop>SEARCH{...}%" );= |
 | Parameter: =$text= | Search variable |
@@ -922,7 +924,7 @@ sub internalLink
 # =========================
 =pod
 
----+++ formatTime( $time, $format, $timezone ) ==> $text
+---+++ formatTime( $time, $format, $timezone ) -> $text
 
 | Description:            | Format the time in seconds into the desired time string |
 | Parameter: =$time=     | Time in epoc seconds |
@@ -943,7 +945,7 @@ sub formatTime
 # =========================
 =pod
 
----+++ formatGmTime( $time, $format ) ==> $text
+---+++ formatGmTime( $time, $format ) -> $text
 
 | NOTE:                | <b>This function is deprecated and should not be used. Use formatTime() instead</b> |
 | Description:         | Format the time to GM time |
@@ -970,7 +972,7 @@ sub formatGmTime
 
 ---++ Functions: File I/O
 
----+++ getDataDir( ) ==> $dir
+---+++ getDataDir( ) -> $dir
 
 | Description:   | Get data directory (topic file root) |
 | Return: =$dir= | Data directory, e.g. ="/twiki/data"= |
@@ -989,7 +991,7 @@ sub getDataDir
 # =========================
 =pod
 
----+++ getPubDir( ) ==> $dir
+---+++ getPubDir( ) -> $dir
 
 | Description:   | Get pub directory (file attachment root). Attachments are in =$dir/Web/TopicName= |
 | Return: =$dir= | Pub directory, e.g. ="/htdocs/twiki/pub"= |
@@ -1008,7 +1010,7 @@ sub getPubDir
 # =========================
 =pod
 
----+++ readTopic( $web, $topic ) ==> ( $meta, $text )
+---+++ readTopic( $web, $topic ) -> ( $meta, $text )
 
 | NOTE:                      | <b>The following function is deprecated and should not be used. Use readTopicText() instead</b> |
 | Description:               | Read topic text and meta data, regardless of access permissions. |
@@ -1029,7 +1031,7 @@ sub readTopic
 # =========================
 =pod
 
----+++ readTemplate( $name, $skin ) ==> $text
+---+++ readTemplate( $name, $skin ) -> $text
 
 | Description:       | Read a template or skin file. Embedded [[%TWIKIWEB%.TWikiTemplates][template directives]] get expanded |
 | Parameter: =$name= | Template name, e.g. ="view"= |
@@ -1048,7 +1050,7 @@ sub readTemplate
 # =========================
 =pod
 
----+++ readFile( $filename ) ==> $text
+---+++ readFile( $filename ) -> $text
 
 | Description:           | Read text file, low level. NOTE: For topics use readTopicText() |
 | Parameter: =$filename= | Full path name of file |
@@ -1124,7 +1126,7 @@ sub writeDebug
 
 ---++ Functions: System and I18N related
 
----+++ getRegularExpression( $regexName ) ==> $pattern
+---+++ getRegularExpression( $regexName ) -> $pattern
 
 | Description:            | Retrieves a TWiki predefined regular expression |
 | Parameter: =$regexName= | Name of the regular expression to retrieve.  See notes below |
@@ -1161,7 +1163,7 @@ sub getRegularExpression
 
 =pod
 
----+++ checkDependencies( $moduleName, $dependenciesRef ) ==> $error
+---+++ checkDependencies( $moduleName, $dependenciesRef ) -> $error
 
 | Description: | Checks a list of Perl dependencies at runtime |
 | Parameter: =$moduleName= | Context description e.g. name of the module being checked |
@@ -1228,6 +1230,89 @@ sub checkDependencies {
   return undef if( $depsOK );
 
   return $report;
+}
+
+=pod
+
+---++ Functions: Template handling and topic creation
+
+---+++ loadTemplate ( $theName, $theSkin, $theWeb ) -> $text
+
+| Parameter: =$theName= | template file name |
+| Parameter: =$theSkin= | the skin to use (default: current skin) |
+| Parameter: =$theWeb= | the web to look in for topics that contain templates (default: current web) |
+| Return: | expanded template text (what's left after removal of all %TMPL:DEF% statements) |
+| Since: | TWiki::Plugins::VERSION 1.026 |
+
+Reads a template and extracts template definitions, adding them to the
+list of loaded templates, overwriting any previous definition.
+
+This function constructs a candidate name for the template thus:
+   * look for a file =$name.$skin.tmpl=
+      * first in templates/$web 
+      * then if that fails in templates/.
+   * If a template is not found, tries:
+      * to parse $name into a web name and a topic name, and
+      * read topic $Web.${Skin}Skin${Topic}Template. 
+   * If $name does not contain a web specifier, $Web defaults to
+     TWiki::cfg{SystemWebName}.
+   * If no skin is specified, topic is ${Topic}Template.
+In the event that the read fails (template not found, access permissions fail)
+returns the empty string "".
+
+skin, web and topic names are forced to an upper-case first character
+when composing user topic names.
+
+If template text is found, extracts include statements and fully expands them.
+
+=cut
+
+sub loadTemplate {
+    return $TWiki::Plugins::SESSION->{templates}->readTemplate( @_ );
+}
+
+=pod
+
+---+++ sub expandTemplate( $theDef  ) -> $string
+| Description: | Do a %TMPL:P{$theDef}%, only expanding the template (not expanding any tags other than %TMPL tags) |
+| Parameter: =$theDef= | template name |
+| Return: | the text of the expanded template |
+| Since: | TWiki::Plugins::VERSION 1.026 |
+
+A template is defined using a %TMPL:DEF% statement in a template
+file. See the documentation on TWiki templates for more information.
+
+=cut
+
+sub expandTemplate {
+    return $TWiki::Plugins::SESSION->{templates}->expandTemplate( @_ );
+}
+
+=pod
+
+---+++ expandVariablesOnTopicCreation ( $text ) -> $text
+| Description: | Expand the limited set of variables that are always expanded during topic creation |
+| Parameter: =$text= | the text to process |
+| Return: | text with variables expanded |
+| Since: | TWiki::Plugins::VERSION 1.026 |
+
+Expands only the variables expected in templates that must be statically
+expanded in new content.
+
+The expanded variables are:
+| =%<nop>DATE%= | Signature-format date |
+| =%<nop>USERNAME%= | Base login name |
+| =%<nop>WIKINAME%= | Wiki name |
+| =%<nop>WIKIUSERNAME%= | Wiki name with prepended web |
+| =%<nop>URLPARAM{...}%= | Parameters to the current CGI query |
+| =%<nop>NOP%= | No-op |
+
+See also: expandVariables
+
+=cut
+
+sub expandVariablesOnTopicCreation {
+    return $TWiki::Plugins::SESSION->expandVariablesOnTopicCreation( shift, $TWiki::Plugins::SESSION->{user} );
 }
 
 # =========================

@@ -537,7 +537,7 @@ sub getFieldParams {
        my $name  = $field->{"name"};
        my $value = $field->{"value"};
        #$this->{session}->writeDebug( "Form::getFieldParams " . $name . ", " . $value );
-       $value = TWiki::Meta::cleanValue( $value );
+       $value = TWiki::decodeSpecialChars( $value );
        $value =~ s/&/&amp\;/go;
        $value =~ s/</&lt\;/go;
        $value =~ s/>/&gt\;/go;
