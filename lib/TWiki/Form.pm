@@ -364,14 +364,6 @@ sub fieldVars2Meta
        my $value     = $query->param( $fieldName . "FLD" );
        my $cvalue    = "";
        
-       if( $fieldName eq "UseForm" && useFormSpecial() ) {
-          if( $value && lc $value ne "yes" ) {
-              $meta->remove( "FORM" );
-              $meta->remove( "FIELD" );
-              return $meta;
-          }
-       }
-       
        if( ! $value && $type =~ "^checkbox" ) {
           foreach my $name ( @fieldInfo ) {
              $cvalue = $query->param( "$fieldName" . "FLD$name" );
