@@ -23,7 +23,17 @@ To register as a new user, simply fill out this form:
   <td><input type="text" name="Twk0Phone" size="40" value="" ></td>
 </tr><tr>
   <td align="right"> Department: </td>
-  <td><input type="text" name="Twk0Department" size="40" value="" ></td>
+  <td><input type="text" name="Twk0Department" size="40" value="" </tr><tr>
+  <td align="right"> Office location: </td>
+  <td>
+  <select name="Twk1Location" size="1">
+  <option selected value="">Select...</option>
+  <option>SanJoseOffice</option>
+  <option>LondonOffice</option>
+  <option>TokyoOffice</option>
+  <option value="(Please specify office location)">Other</option>
+  </select> =<font color="red">**</font>=
+  </td>
 </tr><tr>
   <td valign="top" align="right"> Comments : <br> (optional) &nbsp; </td>
   <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
