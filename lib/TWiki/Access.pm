@@ -100,13 +100,6 @@ sub permissionsSet
 | Return:    =$ok=      | 1 if OK to access, 0 if no permission |
 
 =cut to implementation
-=pod
-
----++ sub checkAccessPermission ()
-
-Not yet documented.
-
-=cut to implementation
 
 sub checkAccessPermission
 {
@@ -213,13 +206,6 @@ sub checkAccessPermission
 | Return:    =$ok=    | 1 user is in group, 0 if not |
 
 =cut to implementation
-=pod
-
----++ sub userIsInGroup (  $theUserName, $theGroupTopicName  )
-
-Not yet documented.
-
-=cut to implementation
 
 sub userIsInGroup
 {
@@ -250,13 +236,6 @@ sub userIsInGroup
 | Description:         | Get all members of a group; groups are expanded recursively |
 | Parameter: =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
 | Return:    =@users=  | List of users, e.g. ( "Main.JohnSmith", "Main.JaneMiller" ) |
-
-=cut to implementation
-=pod
-
----++ sub getUsersOfGroup (  $theGroupTopicName  )
-
-Not yet documented.
 
 =cut to implementation
 

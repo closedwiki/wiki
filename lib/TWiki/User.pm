@@ -139,13 +139,6 @@ sub _getUserHandler
 | TODO: | what if the login name is not the same as the twikiname?? (I think we don't have TWikiName to username mapping fully worked out|
 
 =cut
-=pod
-
----++ sub UserPasswordExists (  $user  )
-
-Not yet documented.
-
-=cut to implementation
 
 sub UserPasswordExists
 {
@@ -166,13 +159,6 @@ sub UserPasswordExists
 | Parameter: =$newUserPassword= | unencrypted password |
 | Return: =$success= | "1" if success |
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
-
-=cut
-=pod
-
----++ sub UpdateUserPassword (  $user, $oldUserPassword, $newUserPassword  )
-
-Not yet documented.
 
 =cut to implementation
 
@@ -195,13 +181,6 @@ sub UpdateUserPassword
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
-=pod
-
----++ sub AddUserPassword (  $user, $newUserPassword  )
-
-Not yet documented.
-
-=cut to implementation
 
 sub AddUserPassword
 {
@@ -221,13 +200,6 @@ sub AddUserPassword
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
-=pod
-
----++ sub RemoveUser (  $user  )
-
-Not yet documented.
-
-=cut to implementation
 
 sub RemoveUser
 {
@@ -248,13 +220,6 @@ sub RemoveUser
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
-=pod
-
----++ sub CheckUserPasswd (  $user, $password  )
-
-Not yet documented.
-
-=cut to implementation
 
 sub CheckUserPasswd
 {
@@ -275,13 +240,6 @@ sub CheckUserPasswd
 | TODO: | does this really belong here? |
 
 =cut
-=pod
-
----++ sub addUserToTWikiUsersTopic (  $wikiName, $remoteUser  )
-
-Not yet documented.
-
-=cut to implementation
 
 sub addUserToTWikiUsersTopic
 {

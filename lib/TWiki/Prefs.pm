@@ -41,12 +41,6 @@ $finalPrefsName = "FINALPREFERENCES";
 Resets all preference globals (for mod_perl compatibility), and reads
 preferences from TWiki::TWikiPreferences, Main::TWikiPreferences, and
 $webName::WebPreferences.
-=cut to implementation
-=pod
-
----++ sub initializePrefs (  $theWebName  )
-
-Not yet documented.
 
 =cut to implementation
 
@@ -75,12 +69,6 @@ sub initializePrefs
 Called after user is known (potentially by Plugin), this function
 reads preferences from the user's personal topic.  Note that the
 parameter is of the form "Main.JohnSmith", not just "JohnSmith".
-=cut to implementation
-=pod
-
----++ sub initializeUserPrefs (  $theWikiUserName  )
-
-Not yet documented.
 
 =cut to implementation
 
