@@ -100,8 +100,7 @@ sub checkAccessPermission
     my( $theAccessType, $theUserName,
         $theTopicText, $theTopicName, $theWebName ) = @_;
 
-    if ( $TWiki::doSuperAdminGroup && 
-         $TWiki::superAdminGroup ) {
+    if ( $TWiki::doSuperAdminGroup && $TWiki::superAdminGroup ) {
         if ( userIsInGroup( $theUserName, $TWiki::superAdminGroup )) {
             return 1;
         }
@@ -116,43 +115,47 @@ sub checkAccessPermission
         $theTopicText = TWiki::Store::readWebTopic( $theWebName, $theTopicName );
     }
 
-    # parse the " * Set (ALLOWTOPIC|DENYTOPIC)$theAccessType = " in body text
-    my %deny;
-    my %allow;
+    # extract the " * Set (ALLOWTOPIC|DENYTOPIC)$theAccessType = " in body text
+    my $allowText;
+    my $denyText;
+
     foreach( split( /\n/, $theTopicText ) ) {
         if( /^\s+\*\sSet\s(ALLOWTOPIC|DENYTOPIC)$theAccessType\s*\=\s*(.*)/ ) {
-            if( $2 ) {
-                my $allowOrDeny = $1;        # "ALLOWTOPIC" or "DENYTOPIC"
-                my %tmp = _parseUserList( $2, 1 );
-                if( $allowOrDeny eq "DENYTOPIC" ) {
-                    %deny = %tmp;
+            my ( $how, $set ) = ( $1, $2 );
+            if( defined( $set ) && $set =~ /\S/ ) {
+                if( $how eq "DENYTOPIC" ) {
+                    $denyText = $set;
                 } else {
-                    %allow = %tmp;
+                    $allowText = $set;
                 }
             }
         }
     }
 
     # if empty, get access permissions from preferences
-    unless( %deny ) {
+    unless( defined( $denyText )) {
         my $tmpVal =
           TWiki::Prefs::getPreferencesValue( "DENYWEB$theAccessType",
                                              $theWebName );
-        %deny = _parseUserList( $tmpVal, 1 );
+        $denyText = $tmpVal	if defined($tmpVal) && $tmpVal =~ /\S/;
     }
 
-    unless( %allow ) {
+    unless( defined( $allowText )) {
         my $tmpVal =
           TWiki::Prefs::getPreferencesValue( "ALLOWWEB$theAccessType",
                                              $theWebName );
-        %allow  = _parseUserList( $tmpVal, 1 );
+        $allowText = $tmpVal	if defined($tmpVal) && $tmpVal =~ /\S/;
+    }
+    if( defined( $denyText )) {
+        my %deny = _parseUserList( $denyText, 1 );
+        return 0 if $deny{$theUserName};
     }
 
-    return 0 if( %deny && $deny{$theUserName}  );
+    if( defined( $allowText )) {
+    	my %allow = _parseUserList( $allowText, 1 );
+        return 0 unless $allow{$theUserName};
+    }
 
-    return $allow{$theUserName} if ( %allow );
-
-    # allow is undefined, so grant access
     return 1;
 }
 

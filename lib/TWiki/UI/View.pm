@@ -115,6 +115,11 @@ sub view {
         $extra .= " (not exist)";
     }
 
+    # This has to be done before $text is rendered!!
+    my $viewAccessOK =
+      TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
+    # SMELL: why wait so long before processing this if the read access failed?
+
     if( $viewRaw ) {
         $extra .= " raw=$viewRaw";
         if( $viewRaw =~ /debug/i ) {
@@ -245,9 +250,6 @@ sub view {
     $tmpl =~ s/%MAXREV%/1.$maxrev/go;
     $tmpl =~ s/%CURRREV%/1.$rev/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> tags (PTh 06 Nov 2000)
-
-    # check access permission
-    my $viewAccessOK = TWiki::Access::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName );
 
     # SMELL: why calculate viewAccessOK and then use readTopicPermissionFailed
     # SMELL: readTopicPermissionFailed break TWiki encapsulation

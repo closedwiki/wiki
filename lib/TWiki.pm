@@ -1486,7 +1486,6 @@ sub _handleINCLUDE {
         return "";
     } else {
         # remember for recursions
-print STDERR "Push $inFile\n";
         $theProcessedTopics->{$inFile} = 1;
     }
 
