@@ -61,10 +61,12 @@
 	* Main.PeterThoeny - 21 Apr 2000: New TWikiVariables =%<nop>HTTP_HOST%= , =%<nop>REMOTE_ADDR%= , =%<nop>REMOTE_PORT%= and =%<nop>REMOTE_USER%= .
 	* Main.KevinKinnell - 02 May 2000: Advanced search (under construction)
 	* Main.PeterFokkinga - 15 May 2000: Each topic can have its own template file. TWikiTemplates has more.
+	* Main.PeterThoeny - 28 May 2000: Lock warning shows remaining lock time in minutes.
+	* Main.PeterThoeny - 29 May 2000: New =%<nop>GMTIME%= variable that shows the current GM time.
 
 *Related Topics*
 	* TWikiDocumentation has implementation details.
 	* TWikiPlannedFeatures has a list of planned features. 
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests. 
 
--- Main.PeterThoeny - 22 May 2000 <br>
+-- Main.PeterThoeny - 29 May 2000 <br>
