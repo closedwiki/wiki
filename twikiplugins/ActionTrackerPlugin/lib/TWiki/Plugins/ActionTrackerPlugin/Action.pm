@@ -60,59 +60,61 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # be made to load a value for it when the action is created. If it
   # is defined 'nomatch' then the attribute will be ignored in match
   # expressions.
+  my $dw = 16;
+  my $nw = 35;
   my %basetypes =
     (
      changedsince =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      closed       =>
-     new ActionTrackerPlugin::AttrDef( 'date',  13, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
      closer       =>
-     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      created      =>
-     new ActionTrackerPlugin::AttrDef( 'date',  13, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
      creator      =>
-     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      dollar       =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      due          =>
-     new ActionTrackerPlugin::AttrDef( 'date',  13, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'date',  $dw, 1, 0, undef ),
      edit         =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      format       =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      header       =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      late         =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      n            =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      nop          =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      notify       =>
-     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      percnt       =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      quot         =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      sort         =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
      state        =>
      new ActionTrackerPlugin::AttrDef( 'select', 1, 1, 1,
 				       [ "open","closed" ] ),
      text         =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      topic        =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      uid          =>
-     new ActionTrackerPlugin::AttrDef( 'text',  10, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'text',  $nw, 1, 0, undef ),
      web          =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      who          =>
-     new ActionTrackerPlugin::AttrDef( 'names', 25, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'names', $nw, 1, 0, undef ),
      within       =>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 1, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 1, 0, undef ),
      ACTION_NUMBER=>
-     new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
+     new ActionTrackerPlugin::AttrDef( 'noload', 0, 0, 0, undef ),
     );
 
   my %types = %basetypes;
@@ -141,7 +143,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # conditionally load field values, interpreting them
     # according to their type.
     foreach my $key ( keys %$attr ) {
-      my $type = getBaseType( $key ) || "ignore";
+      my $type = getBaseType( $key ) || "noload";
       my $val = $attr->get( $key );
       if ( $type eq "names" && defined( $val )) {
 	my @names = split( /[,\s]+/, $val );
@@ -153,7 +155,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	if ( defined( $val )) {
 	  $this->{$key} = Time::ParseDate::parsedate( $val, %pdopt );
 	}
-      } elsif ( $type ne "ignore" ) {
+      } elsif ( $type !~ "noload" ) {
 	# treat as plain string; text, select
 	$this->{$key} = $attr->get( $key );
       }
@@ -185,8 +187,8 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $defs = shift;
     $defs =~ s/^\s*\|//o;
     $defs =~ s/\|\s*$//o;
-    foreach my $def ( split( /\|/, $defs )) {
-      if ( $def =~ m/^\s*(\w+)\s*,\s*(\w+)\s*(,\s*(\d+)\s*)?(,\s*(.*))?$/o ) {
+    foreach my $def ( split( /\s*\|\s*/, $defs )) {
+      if ( $def =~ m/^(\w+)\s*,\s*(\w+)\s*(,\s*(\d+)\s*)?(,\s*(.*))?$/o ) {
 	my $name = $1;
 	my $type = $2;
 	my $size = $4;
@@ -199,11 +201,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	} elsif ( $type eq "select" ) {
 	  @values = split( /\s*,\s*/, $params );
 	  foreach my $option ( @values ) {
-	    $option =~ s/^\s*\"(.*)\"\s*$/$1/o;
+	    $option =~ s/^\"(.*)\"$/$1/o;
 	  }
 	}
 	$types{$name} =
-	  new ActionTrackerPlugin::AttrDef( $type, $size, 1, 1, @values );
+	  new ActionTrackerPlugin::AttrDef( $type, $size, 1, 1, \@values );
       } else {
 	return "Bad EXTRAS definition '$def' in EXTRAS";
       }
@@ -211,6 +213,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return undef;
   }
 
+  # STATIC remove type extensions
   sub unextendTypes {
     %types = %basetypes;
   }
@@ -248,7 +251,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $this = shift;
     my $me = _canonicalName( TWiki::Func::getWikiName() );
 
-    if ( !defined($this->{uid} )) {
+    if ( !defined( $this->{uid} )) {
       $this->{uid} = $this->{web} . $this->{topic} .
 	  formatTime( $now, "uid" ) . "n" . $this->{ACTION_NUMBER};
     }
@@ -293,7 +296,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	if ( $type->{type} eq 'date' ) {
 	  $attrs .= " $key=\"" .
 	    formatTime( $this->{$key}, "attr" ) . "\"";
-	} elsif ( $type->{type} ne 'ignore' ) {
+	} elsif ( $type->{type} !~ /noload/ ) {
 	  # select or text; treat as plain text
 	  $attrs .= " $key=\"" . $this->{$key} . "\"";
 	}
@@ -639,7 +642,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub findChanges {
     my ( $this, $old, $format, $notifications ) = @_;
 
-    if ( !$this->{notify} ) {
+    if ( !defined( $this->{notify} ) || $this->{notify} !~ m/\w/o ) {
       return 0;
     }
 
@@ -715,11 +718,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     # for each of the legal attribute types, see if the query
     # contains a value for that attribute. If it does, fill it
-    # in. Must ignore text.
+    # in.
     my $attrs = "";
     foreach my $attrname ( keys %types ) {
       my $type = $types{$attrname};
-      if ( $attrname ne 'text' && $type->{type} ne 'ignore' ) {
+      if ( $type->{type} !~ m/noload/o ) {
 	my $val = $query->param( $attrname );
 	if ( defined( $val )) {
 	  $attrs .= " $attrname=\"$val\"";
@@ -727,6 +730,23 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       }
     }
     return new ActionTrackerPlugin::Action( $web, $topic, $an, $attrs, $desc );
+  }
+
+  sub formatForEdit {
+    my ( $this, $format ) = @_;
+
+    my %expanded;
+    my $table = $format->formatEditableFields( $this, \%expanded );
+
+    foreach my $attrname ( keys %types ) {
+      if ( !$expanded{$attrname} ) {
+	my $type = $types{$attrname};
+	if ( $type->{type} !~ m/noload/ ) {
+	  $table .= $format->formatHidden( $this, $attrname );
+	}
+      }
+    }
+    return $table;
   }
 }
 

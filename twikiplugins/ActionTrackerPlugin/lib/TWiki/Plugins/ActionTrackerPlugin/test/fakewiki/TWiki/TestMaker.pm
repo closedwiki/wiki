@@ -77,7 +77,11 @@
     open(WF,">$file") || die;
     print WF $text;
     close(WF) || die;
-    print STDERR "Not there $file\n" unless ( -e $file );
+    if ( -e $file ) {
+      #print STDERR "TestMaker wrote $file\n";
+    } else {
+      die "Not there $file\n";
+    }
   }
 
   sub writeRcsTopic {

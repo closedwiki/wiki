@@ -42,6 +42,10 @@ use TWiki::TestMaker;
 ");
   }
 
+  sub tearDown() {
+    TWiki::TestMaker::purge();
+  }
+
   sub testActionSearchFn {
     my $chosen = TWiki::Plugins::ActionTrackerPlugin::handleActionSearch("Main", "web=\".*\"");
     Assert::assert($chosen =~ /Test0:/);
@@ -73,6 +77,7 @@ use TWiki::TestMaker;
 
   sub testActionSearchFormat {
     my $chosen = TWiki::Plugins::ActionTrackerPlugin::handleActionSearch("Main", "web=\".*\" who=Sam header=\"|Who|Due|\" format=\"|\$who|\$due|\"");
+    $chosen =~ s/\n//og;
     Assert::sEquals($chosen, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Who</th><th>Due</th></tr><tr valign=\"top\"><td>Main.Sam</td><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>");
   }
 
@@ -114,7 +119,7 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
 
     TWiki::Plugins::ActionTrackerPlugin::commonTagsHandler($text, "TheTopic", "TheWeb");
 
-    my $tblhdr = "<table border=\"$ActionTrackerPlugin::Format::border\"><tr bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th>&nbsp;</th></tr>";
+    my $tblhdr = "<table border=\"$ActionTrackerPlugin::Format::border\">\n<tr bgcolor=\"$ActionTrackerPlugin::Format::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th> Notify </th><th>&nbsp;</th></tr>\n";
 
     Assert::htmlEquals
       (
@@ -153,10 +158,10 @@ break the table here $tblhdr".
     my ($anch, $actor, $col, $date, $txt, $state) = @_;
 
     my $text = "<tr valign=\"top\">".anchor($anch);
-    $text .= "<td> $actor </td><td";
+    $text .= "<td> $actor </td>\n<td";
     $text .= " bgcolor=\"$col\"" if ($col);
-    $text .= "> $date </td><td> $txt </td><td> $state </td><td> ".
-      edit($anch)." </td></tr>";
+    $text .= "> $date </td>\n<td> $txt </td>\n<td> $state </td>\n<td> \&nbsp; </td>\n<td> ".
+      edit($anch)." </td></tr>\n";
     return $text;
   }
 
@@ -196,7 +201,7 @@ After");
     $text =~ s/ who=\"Main.TestRunner\"//o;
     $text =~ s/ uid=\"WebTopic102153000n0\"//o;
     $text =~ s/ No description//o;
-    Assert::sEquals($text, "%ACTION{ }%");
+    Assert::sEquals($text, "%ACTION{ }%\n");
   }
 }
 

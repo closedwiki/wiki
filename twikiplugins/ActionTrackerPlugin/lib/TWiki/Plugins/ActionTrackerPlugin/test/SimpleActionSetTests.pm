@@ -40,10 +40,13 @@ use TWiki::Func;
 					      "horizontal");
     my $s;
     $s = $actions->formatAsHTML( $fmt, "href", 0 );
+    $s =~ s/\n//go;
     Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
     $s = $actions->formatAsHTML( $fmt, "name", 0 );
+    $s =~ s/\n//go;
     Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
     $s = $actions->formatAsHTML( $fmt, "name", 1 );
+    $s =~ s/\n//go;
     Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2')\">edit</a></td></tr></table>");
   }
 
@@ -54,10 +57,13 @@ use TWiki::Func;
 					      "vertical");
     my $s;
     $s = $actions->formatAsHTML( $fmt, "href", 0 );
+    $s =~ s/\n//go;
     Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
     $s = $actions->formatAsHTML( $fmt, "name", 0 );
+    $s =~ s/\n//go;
     Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\">edit</a></td></tr></table>");
     $s = $actions->formatAsHTML( $fmt, "name", 1 );
+    $s =~ s/\n//go;
     Assert::sEquals($s, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Web</th><th>Topic</th><th>Edit</th></tr><tr valign=\"top\"><a name=\"AcTion0\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion0')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion1\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion1')\">edit</a></td></tr><tr valign=\"top\"><a name=\"AcTion2\"></a><td>Test</td><td>Topic</td><td><a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2\" onClick=\"return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action&action=AcTion2')\">edit</a></td></tr></table>");
   }
 
