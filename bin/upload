@@ -450,8 +450,18 @@ sub main
     if( $after ) {
         $text .= $after;
     }
-    &wiki::saveTopic( $topic, $text );
 
-    # and finally display topic
-    print $query->redirect( &wiki::getViewUrl( "", $topic ) );
+    my $error = &wiki::saveTopic( $topic, $text );
+    if( $error ) {
+        # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
+        # PTh 07 Jan 2001: escape error for HTML
+        $error =~ s/[\n\r]/<br>/go;
+        $error =~ s/\s+/\%20/go;
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
+        print $query->redirect( $url );
+
+    } else {
+        # and finally display topic
+        print $query->redirect( &wiki::getViewUrl( "", $topic ) );
+    }
 }

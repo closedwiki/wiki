@@ -101,7 +101,7 @@ sub getRevisionDiff
 # =========================
 # rdiff:         my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
 # view:          my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
-# wikisearch.pm: my ( $revdate, $revuser ) = getRevisionInfo( $filename, "", 1, $thisWebName );
+# wikisearch.pm: my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $filename, "", 1, $thisWebName );
 sub getRevisionInfo
 {
     my( $theTopic, $theRev, $changeToIsoDate, $theWebName ) = @_;
@@ -127,6 +127,8 @@ sub getRevisionInfo
     $tmp =~ /date: (.*?);  author: (.*?);/;
     my $date = $1;
     my $user = $2;
+    $tmp =~ /revision 1.([0-9]*)/;
+    my $rev = $1;
     if( ! $user ) {
         # repository file is missing or corrupt, use file timestamp
         $user = $defaultUserName;
@@ -135,6 +137,7 @@ sub getRevisionInfo
         # format to RCS date "2000.12.31.23.59.59"
         $date = sprintf( "%.4u.%.2u.%.2u.%.2u.%.2u.%.2u", $arr[5] + 1900,
                          $arr[4] + 1, $arr[3], $arr[2], $arr[1], $arr[0] );
+        $rev = 1;
     }
     if( $changeToIsoDate ) {
         # change date to ISO format
@@ -151,7 +154,7 @@ sub getRevisionInfo
             }
         }
     }
-    return ( $date, $user );
+    return ( $date, $user, $rev );
 }
 
 # =========================
@@ -163,6 +166,7 @@ sub saveTopic
     my $name = "$dataDir/$webName/$topic.txt";
     my $time = time();
     my $tmp = "";
+    my $rcsError = "";
 
     #### Normal Save
     if( ! $saveCmd ) {
@@ -204,15 +208,22 @@ sub saveTopic
             $tmp =~ s/%FILENAME%/$name/;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            `$tmp`;
+            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            if( $rcsError ) {   # oops, stderr was not empty, return error
+                return $rcsError;
+            }
 
             if( ! $doNotLogChanges ) {
                 # update .changes
+                my( $fdate, $fuser, $frev ) = getRevisionInfo( $topic, "" );
+                $fdate = ""; # suppress warning
+                $fuser = ""; # suppress warning
+
                 my @foo = split(/\n/, &readFile( "$dataDir/$webName/.changes" ) );
                 if( $#foo > 100 ) {
                     shift( @foo);
                 }
-                push( @foo, "$topic\t$userName\t$time" );
+                push( @foo, "$topic\t$userName\t$time\t$frev" );
                 open( FILE, ">$dataDir/$webName/.changes" );
                 print FILE join( "\n", @foo )."\n";
                 close(FILE);
@@ -245,19 +256,28 @@ sub saveTopic
             $tmp =~ s/%FILENAME%/$name/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            `$tmp`;
+            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            if( $rcsError ) {   # oops, stderr was not empty, return error
+                return $rcsError;
+            }
             $tmp= $revDelRevCmd;
             $tmp =~ s/%REVISION%/$rev/go;
             $tmp =~ s/%FILENAME%/$name/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            `$tmp`;
+            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            if( $rcsError ) {   # oops, stderr was not empty, return error
+                return $rcsError;
+            }
             $tmp= $revLockCmd;
             $tmp =~ s/%REVISION%/$rev/go;
             $tmp =~ s/%FILENAME%/$name/go;
             $tmp =~ /(.*)/;
             $tmp = $1;       # safe, so untaint variable
-            `$tmp`;
+            $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+            if( $rcsError ) {   # oops, stderr was not empty, return error
+                return $rcsError;
+            }
         }
         $tmp = $revCiDateCmd;
         $tmp =~ s/%DATE%/$date/;
@@ -265,7 +285,10 @@ sub saveTopic
         $tmp =~ s/%FILENAME%/$name/;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        `$tmp`;
+        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        if( $rcsError ) {   # oops, stderr was not empty, return error
+            return $rcsError;
+        }
 
         if( ( $doLogTopicSave ) && ( ! $doNotLogChanges ) ) {
             # write log entry
@@ -288,19 +311,28 @@ sub saveTopic
         $tmp =~ s/%FILENAME%/$name/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        `$tmp`;
+        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        if( $rcsError ) {   # oops, stderr was not empty, return error
+            return $rcsError;
+        }
         $tmp= $revDelRevCmd;
         $tmp =~ s/%REVISION%/$rev/go;
         $tmp =~ s/%FILENAME%/$name/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        `$tmp`;
+        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        if( $rcsError ) {   # oops, stderr was not empty, return error
+            return $rcsError;
+        }
         $tmp= $revLockCmd;
         $tmp =~ s/%REVISION%/$rev/go;
         $tmp =~ s/%FILENAME%/$name/go;
         $tmp =~ /(.*)/;
         $tmp = $1;       # safe, so untaint variable
-        `$tmp`;
+        $rcsError = `$tmp 2>&1 1>/dev/null`; # capture stderr  (S.Knutson)
+        if( $rcsError ) {   # oops, stderr was not empty, return error
+            return $rcsError;
+        }
 
         # restore last topic from repository
         $rev = getRevisionNumber( $topic );
@@ -315,5 +347,6 @@ sub saveTopic
             writeLog( "cmd", "$webName.$topic", "delRev $rev" );
         }
     }
+    return 0; # all is well
 }
 

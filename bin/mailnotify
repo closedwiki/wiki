@@ -76,11 +76,12 @@ sub processWeb
     ( $before, $text, $after) = split( /%REPEAT%/, $text);
     $emailbody = "$before";
 
-    my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify" );
+    my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify" ) || "0";
     my $currLastmodify = "";
     my $scriptSuffix = $wiki::scriptSuffix;
     my $scriptUrlPath = $wiki::scriptUrlPath;
     my $scriptUrl = "$wiki::urlHost$scriptUrlPath";
+    my $frev = "";
 
     foreach( reverse split( /\n/, $changes ) ) {
 	@bar = split( /\t/);
@@ -103,6 +104,14 @@ sub processWeb
 	        # found item of last notification
 	        last;
 	    }
+            $frev = "";
+            if( $bar[3] ) {
+                if( $bar[3] > 1 ) {
+                    $frev = " - r1.$bar[3]";
+                } else {
+                    $frev = " - <b>NEW</b>";
+                }
+            }
 
 	    #create entry in HTML attachment
 	    $foo = $text;
@@ -110,7 +119,7 @@ sub processWeb
 	    $wikiuser = &wiki::userToWikiName( $bar[1] );
 	    $foo =~ s/%AUTHOR%/$wikiuser/go;
 	    $time = &wiki::formatGmTime( $bar[2] );
-	    $foo =~ s/%TIME%/$time/go;
+	    $foo =~ s/%TIME%/$time$frev/go;
 	    $foo = &wiki::getRenderedVersion( $foo );
 
             $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );

@@ -240,6 +240,7 @@ sub searchWikiWeb
         # use hash tables for date and author
         my %topicRevDate = ();
         my %topicRevUser = ();
+        my %topicRevNum = ();
 
         # sort the topic list by date, author or topic name
         if( $theOrder eq "modified" ) {
@@ -280,9 +281,10 @@ sub searchWikiWeb
             # build the hashes for date and author
             foreach( @topicList ) {
                 my $tempVal = $_;
-                my ( $revdate, $revuser ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
                 $topicRevUser{ $tempVal } = &wiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
+                $topicRevNum{ $tempVal } = $revnum;
             }
 
             # sort by date (second time if exercise), Schwartzian Transform
@@ -304,9 +306,10 @@ sub searchWikiWeb
             # first we need to build the hashes for date and author
             foreach( @topicList ) {
                 $tempVal = $_;
-                my ( $revdate, $revuser ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
                 $topicRevUser{ $tempVal } = &wiki::userToWikiName( $revuser );
                 $topicRevDate{ $tempVal } = $revdate;
+                $topicRevNum{ $tempVal } = $revnum;
             }
 
             # sort by author, Schwartzian Transform
@@ -357,6 +360,7 @@ sub searchWikiWeb
         my $topic = "";
         my $revDate = "";
         my $revUser = "";
+        my $revNum = "";
         foreach( @topicList ) {
             $topic = $_;
 
@@ -364,17 +368,24 @@ sub searchWikiWeb
             if( exists( $topicRevUser{$topic} ) ) {
                 $revDate = $topicRevDate{$topic};
                 $revUser = $topicRevUser{$topic};
+                $revNum  = $topicRevNum{$topic};
             } else {
                 # lazy query, need to do it at last
-                my ( $revdate, $revuser ) = getRevisionInfo( $topic, "", 1, $thisWebName );
+                my ( $revdate, $revuser, $revnum ) = getRevisionInfo( $topic, "", 1, $thisWebName );
                 $revUser = &wiki::userToWikiName( $revuser );
                 $revDate = $revdate;
+                $revNum  = $revnum;
             }
 
             $tempVal = $repeatText;
             $tempVal =~ s/%WEB%/$thisWebName/go;
             $tempVal =~ s/%TOPICNAME%/$topic/go;
-            $tempVal =~ s/%TIME%/$revDate/go;
+            if( $revNum > 1 ) {
+                $revNum = "$revDate - r1.$revNum";
+            } else {
+                $revNum = "$revDate - <b>NEW</b>";
+            }
+            $tempVal =~ s/%TIME%/$revNum/go;
             $tempVal =~ s/%AUTHOR%/$revUser/go;
             $tempVal = handleCommonTags( $tempVal, $topic );
             $tempVal = getRenderedVersion( $tempVal );
