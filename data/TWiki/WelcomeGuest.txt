@@ -1,57 +1,63 @@
-%META:TOPICINFO{author="PeterThoeny" date="1041040853" format="1.0" version="1.19"}%
-<H3>Welcome, %WIKIUSERNAME%!</H3>
+%META:TOPICINFO{author="PeterThoeny" date="1042883580" format="1.0" version="1.20"}%
+---++ Welcome, %WIKIUSERNAME%!
 
-You have reached a TWikiSite (pronounced _twee-kee site_). TWiki is a meeting place where people collaborate on common interests. Anyone can contribute using a regular Web browser. TWiki looks like a normal Web site, but it allows (and encourages) everyone to *freely edit the pages* by contributing questions, answers, comments, changes - ideas can be transformed into published input, instantly. TWiki is very simple to learn and use, and provides possibly the most powerful way to exchange and develop ideas online, in an open, uncomplicated environment.
+Welcome to %WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. %WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
+
+__Mission: &quot;TWiki is a leading-edge, web-based collaboration platform targeting the corporate intranet world. TWiki fosters information flow within an organization; lets distributed teams work together seamlessly and productively; and eliminates the one-webmaster syndrome of outdated intranet content.&quot;__
+
+"Wiki" systems are fundamentally editable web pages.  It's a fun and useful way of communicating asynchronously over the web for many existing intranet and public Internet sites.  TWiki is simple to learn and use.  It aims to provide a transparent way for you to publish and exchange your ideas with others over the web.
 
 *How TWiki Works*
 
-	1. *Read:* You can treat this site like any other. Browse, and follow interesting links. A couple of hints:
-		* *web:* A TWikiSite is divided into webs; each one represents one subject, one area of collaboration. You can reach any web from the links in the upper right corner of every page.
-		* *topic:* Each web is made up of hyperlinked topics - TWikiTopics that appear in your browser.
-		* *What's new:* Visit WebChanges in any TWiki web to see what other people are discussing and what's been added most recently.
-	1. *Create an Account:* To be able to write new content on this site, you'll need to create an account for yourself. It's simple, and only takes a minute: just visit TWikiRegistration and fill out the form. This will also create your personal home page.
-	1. *Write:* If you have something to say, speak your mind! Anyone can change or add to anything they see written in a TWiki topic. You can edit a topic from within your browser, using TWikiShorthand, a very simple markup language (you can also use HTML if you like, but you'll usually find you can get the same results more easily with TWikiShorthand). To contribute:
-		* click the ==Edit== link at the bottom of the page, edit the text, and then
-		* click the ==[&nbsp;Preview&nbsp;Changes&nbsp;]== button at the bottom of the page to see what your topic will look like (use your brower's ==Back== button if you want to make changes), and finally
-		* click the ==[&nbsp;Save&nbsp;Changes&nbsp;]== to save what you did.
-	1. *Do you find this...scary?!* Anybody can do anything! That's not how things are usually done. It's...uncontrollable. And yet, collaborating in the Wiki way works! Try it out for even a couple of minutes. Take a look at WikiCulture. (And then, with TWiki, you can define fine-grained TWikiAccessControl, based on users and groups, whenever and wherever you feel its necessary, across a site, a web, or page by page, if you like. And there's also full revision control that retains all changes, for good measure!)
-	1. *Experiment:* To get your virtual hands dirty, visit [[Sandbox.%HOMETOPIC%][Sandbox]] web, where you can try out anything at all, in a consequence-free environment!
-	1. *Create a link:* To link to another topic, start by editing an existing topic.
-		* To create a link to a topic that already exists, type its ==JoinCapitalizedWords== name (topics are automatically linked if they are WikiWords, names composed of two or more words with initial capitals, run together).
-		* To create a link to a page that does not yet exist, make up and enter a ==NeverBeforeUsedPhrase==. You are encouraged to include WikiWords in your content, for others to fill out later.
-		* When you've saved the topic, and redisplayed it, the references to existing topics will be linked and the references to topics that don't exist will be followed by a linked "<u>?</u>" (question mark).
-	1. *Create a topic:*
-		* To write something up for a new topic, click on the "<u>?</u>" (question mark) that follows a WikiWord.
-		* To create a free-floating topic - a topic that is not linked from anywhere - type its WikiWord in the entry field at the top of any page. If the topic already exists you'll then be taken to it. If it doesn't exist, you'll then have the option to create it.
-	1. *See the history of a topic:* Click the ==Diffs== link on the control strip at the bottom of every page to see a complete history of edits for that topic.
-	1. *Attach files:* Use your browser to upload and attach any type of file to a topic using the ==Attach== link at the bottom of the page.
-	1. *Organize:* Use TWikiForms to include specific information with individual topics - for example, classify pages by subject, status, or date.
-	1. *Learn more*: TWikiTutorial takes you on a 20-minute tour of the TWiki essentials. WikiReferences links to selected articles and books about online collaboration, and Wiki technology in particular.
+	1. *Browse* This is a site like other sites. Read and follow interesting links.
+		* *web:* A TWikiSite is divided into webs, each one represents an area for collaboration.  Your site has the following webs: %WIKIWEBLIST%
+		* *topic:* Each web is made up of hyperlinked topics (TWikiTopics) that appear in your browser.
+		* *WebChanges:* in each TWiki web to find what's new
+	1. *Write* Speak your mind! From your browser you can change or add to anything you see in a TWiki topic. Use regular text, HTML or TWikiShorthand. To contribute:
+		* *Create An Account* To be able to edit or write new content, you'll need to create an account for yourself. It's simple, and only takes a minute.  TWikiRegistration  This will also create your personal home page.
+		* click ==Edit== at the bottom of any topic and make your changes
+		* click ==[&nbsp;Preview&nbsp;Changes&nbsp;]== at the bottom to verify the topic (use your brower's ==Back== button if necessary)
+		* click ==[&nbsp;Save&nbsp;Changes&nbsp;]==
+	1. *Don't worry!* It can be scary at first to change "public" content. Please just try it. _Revision control_ keeps all content, nothing is lost.  For special cases, [[TWikiAccessControl][access control]] is available yet you may find you don't need it in most cases. You'll soon see how successful WikiCulture works in this kind of collaboration environment. This is new.  Just try to relax.
+	1. *Experiment*  Edit your personal page or visit the [[Sandbox.WebHome][Sandbox]] web.
+		1. *Link* To link to another topic, start by editing an existing topic.
+			* To create a link to an existing topic type its ==JoinCapitalizedWords== name.  WikiWords (two or more capitalized words run together) link automatically.
+			* To create a link to a new topic, enter a newly ==UsedPhrase==. 
+			* When previewing, the links show and "<u>?</u>" (question marks) are used to create topics.
+			* Another way to create a topic is to type it's WikiWord in the Go box or URL.
+		2. *Topic history* click ==Diffs== at the bottom of a topic
+		3. *Attach files* click ==Attach== to upload and attach any type of file.
+	1. *Organize:* You can learn to use TWikiForms and [[FormattedSearch]]es to include topic information - for example, classify pages by subject, status, or date.
+	1. *Learn more* TWikiTutorial is a 20-minute tour of TWiki essentials. WikiReferences links to selected articles and books about Wiki technology and online collaboration.
 
-*Main Features of TWiki*
+<table>
+<tr valign="top"><td width="40%">
+*Starting Points*
 
-	* Create and edit pages, and use all other features, through any Web browser.
-	* Web pages are automatically linked. You do not need to learn HTML commands to link pages.
-	* Very simple text formatting. Basically, you write a page the same way you would write an email.
-	* Fast, full-text search with or without regular expressions.
-	* All changes to pages and attachments are under revision control. Find out who changed what and when.
-	* Fine-grained access control based on users and groups.
-	* Automatic email notification when pages change.
-	* File attachments: Upload and download any file as an attachment to a page, using your browser. This is similar to email file attachments, but it happens on web pages.
-	* Topic locking: Users are warned if a page is being edited by another person, to avoid simultaneous page editing.
-	* Templates and skins: Customize every possible aspect of the look and feel of each TWiki installation, down to the individual page level.
-	* Plugins: A growing collection of plugins allows you to easily add optional extended functions, or to create your own.
-	* Support: An active, helpful development community keeps TWiki support and development constantly moving forward.
-	* __Read more__ about the TWiki at http://TWiki.org/ .
+	* *[[TWikiTutorial]]* Familiarize yourself with TWiki
+	* TWikiRegistration *Sign up to edit* topics, personal home page
+	* WebChanges in this %WEB% web
+	* %HOMETOPIC% this web's entry point
+	* TWikiSite What is a TWiki site?
+	* WikiSyntax simple syntax for edits
+	* GoodStyle recommendations for edits
 
-*Starting Points in the %TWIKIWEB% web*
+</td><td width="60%">
+*TWiki Highlights*
 
-	* *[[TWikiTutorial]]*: Familiarize yourself with TWiki before you start editing content.
-	* %HOMETOPIC%: Entry point for this web.
-	* TWikiSite: Explains what a TWiki site is.
-	* GoodStyle: Things to consider when changing text.
-	* WikiSyntax: Easy to learn rules for editing text.
-	* WebChanges: Newest topic changes in the %WEB% web.
-	* TWikiRegistration: *Sign up so you can use edit* and other features.
+	* *Web browser* used to create and edit topics
+	* *Automatic linking* HTML not required
+	* *Search* topic names or full-text (regular expressions available)
+	* *Revision control* for changes (who, what, when) for topics and attachments
+	* *Access control* using users and groups
+	* *Email notification* of topic changes
+	* *File attachments* upload and download any file to any topic similar to email attachments
+	* *Warnings* for simultaneous topic editing
+	* *Plug-in* via TWiki's flexible architecture using templates, skins, plug-ins and add-ons to customize everything
+	* *Development* active with growing set of features in TWiki releases and plug-ins
+	* *Strong community* for support of users, administrators and developers
+	* __Read more__ about TWiki at http://TWiki.org/
+</td></tr>
+</table>
 
 %INCLUDE{"%TWIKIWEB%.SiteMap"}%

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042331912" format="1.0" version="1.1"}%
-Tim Berners-Lee invented the World Wide Web. See bio at http://www.w3.org/People/Berners-Lee/
+%META:TOPICINFO{author="PeterThoeny" date="1042883822" format="1.0" version="1.2"}%
+Tim Berners-Lee invented the World Wide Web while working at CERN in 1989. See his biography at http://www.w3.org/People/Berners-Lee/
 
 -- Main.PeterThoeny - 12 Jan 2003
