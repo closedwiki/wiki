@@ -38,7 +38,7 @@ use integer;
     
     #my ( $text, $topic, $web ) = @_;
     # Nasty, tacky, error prone way to find out if we are previewing or not
-    my $scriptname = $ENV{'SCRIPT_NAME'};
+    my $scriptname = $ENV{'SCRIPT_NAME'} || "";
     my $previewing = ( $scriptname =~ /^.*\/preview/ );
 
     my $defaultType = 
