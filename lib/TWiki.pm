@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "20 Aug 2003";
+$wikiversion      = "22 Aug 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1332,7 +1332,8 @@ sub handleIncludeFile
     my( $theAttributes, $theTopic, $theWeb, $verbatim, @theProcessedTopics ) = @_;
     my $incfile = extractNameValuePair( $theAttributes );
     my $pattern = extractNameValuePair( $theAttributes, "pattern" );
-    my $rev = extractNameValuePair( $theAttributes, "rev" );
+    my $rev     = extractNameValuePair( $theAttributes, "rev" );
+    my $warn    = extractNameValuePair( $theAttributes, "warn" );
 
     if( $incfile =~ /^http\:/ ) {
         # include web page
@@ -1361,9 +1362,14 @@ sub handleIncludeFile
                 $fileName = "$dataDir/$incfile.txt";      # Web.TopicName
                 if( ! -e $fileName ) {
                     # give up, file not found
-                    if( TWiki::Prefs::getPreferencesFlag("INCLUDEWARNING") ) {
+                    $warn = TWiki::Prefs::getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
+                    if( $warn =~ /^on$/i ) {
                         return showError( "Warning: Can't INCLUDE <nop>$incfile, topic not found" );
-                    }
+                    } elsif( $warn && $warn !~ /^(off|no)$/i ) {
+                        $incfile =~ s/\//\./go;
+                        $warn =~ s/\$topic/$incfile/go;
+                        return $warn;
+                    } # else fail silently
                     return "";
                 }
             }
@@ -1373,8 +1379,10 @@ sub handleIncludeFile
     # prevent recursive loop
     if( ( @theProcessedTopics ) && ( grep { /^$fileName$/ } @theProcessedTopics ) ) {
         # file already included
-        if( TWiki::Prefs::getPreferencesFlag("INCLUDEWARNING") ) {
-            return showError( "Warning: Can't INCLUDE <nop>$incfile twice, topic is already included" );
+        if( $warn || TWiki::Prefs::getPreferencesFlag( "INCLUDEWARNING" ) ) {
+            unless( $warn =~ /^(off|no)$/i ) {
+                return showError( "Warning: Can't INCLUDE <nop>$incfile twice, topic is already included" );
+            }
         }
         return "";
     } else {
