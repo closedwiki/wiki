@@ -1,9 +1,9 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:INCLUDE{"search"}%
-%TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<tr><td class="twikiTopRow" width="6%" style="text-align:center;">%SELECTION%<input type="checkbox" class="twikiCheckbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" /><input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION% </td>
-<td class="twikiTopRow" width="46%"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%WEB%.%TOPICNAME%</b></a> <span class="twikiAlert">%LOCKED%</span></td><td class="twikiTopRow" width="30%"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">
-%TIME%</a> - %REVISION%</td><td class="twikiTopRow" width="20%">%AUTHOR%</td>
-</tr><tr class="twikiBottomRow"><td class="twikiBottomRow">&nbsp;</td><td width="80%" colspan="2" class="twikiSummary twikiGrayText twikiBottomRow">%TEXTHEAD%</td><td class="twikiBottomRow" width="20%">&nbsp;</td></tr>%REPEAT%%TMPL:END%
+%TMPL:DEF{"repeatedsearchblock"}%%REPEAT%<tr><td class="twikiTopRow" style="width:6%;" style="text-align:center;">%SELECTION%<input type="checkbox" class="twikiCheckbox" name="RENAME%LABEL%%TOPIC_NUMBER%" checked="checked" /><input type="hidden" name="TOPIC%LABEL%%TOPIC_NUMBER%" value="%WEB%.%TOPICNAME%" />%SELECTION% </td>
+<td class="twikiTopRow" style="width:44%;"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%WEB%.%TOPICNAME%</b></a> <span class="twikiAlert">%LOCKED%</span></td><td class="twikiTopRow" style="width:30%;"><a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">
+%TIME%</a> - %REVISION%</td><td class="twikiTopRow" style="width:20%;">%AUTHOR%</td></tr>
+<tr><td class="twikiBottomRow" style="width:6%">&nbsp;</td><td colspan="3" class="twikiSummary twikiGrayText twikiBottomRow" style="width:94%">%TEXTHEAD%</td></tr>%REPEAT%%TMPL:END%
 
 
 
