@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007276152" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="MikeMannix" date="1007298139" format="1.0" version="1.11"}%
 ---# <nop>TWikiShorthand Basics
 
 If you can enter text, you're ready for TWiki. With a few simple, intuitive TWikiShorthand rules, you'll be able to use plain text to create well-styled postings, instantly. Here's a fast-track guide to shorthand basics...
@@ -33,12 +33,14 @@ If you can enter text, you're ready for TWiki. With a few simple, intuitive TWik
 
 	* To display a word or phrase in =MONOSPACED TYPE=, put it in equal signs: =<nop>=like this==. <br />Use =<nop>=<nop>=two=== for bold: ==bold mono==.
 
+	* Use ==&lt;pre&gt;== to enclose code excerpts, filenames, and other unformatted text, with the opening and closing tags on their own separate lines:
+<blockquote style="background-color:#f5f5f5">
 <pre>
-	  Surround code excerpts, filenames, and other
-	  unformatted text with &lt;pre&gt; or &lt;/pre&gt;
-	  or the special TWiki use &lt;verbatim&gt; and 
-	  &lt;/verbatim&gt; tags.
+<b>&lt;pre&gt;</b>
+unformatted text!
+<b>&lt;/pre&gt;</b>
 </pre>
+</blockquote>
 
 	* Use three (or more) consecutive *hyphens* expands into a horizontal rule: =---=
 
