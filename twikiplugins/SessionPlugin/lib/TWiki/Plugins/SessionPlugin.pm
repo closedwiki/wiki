@@ -2,7 +2,7 @@ package TWiki::Plugins::SessionPlugin;
 
 use vars qw(
         $web $topic $user $installWeb $VERSION $debug
-        $doOldInclude $renderingWeb $noAutoLink;
+        $doOldInclude $renderingWeb $noAutoLink
         $query $sessionId $initcookie $sessionDir %sessionInfo $doneInit
     );
     
