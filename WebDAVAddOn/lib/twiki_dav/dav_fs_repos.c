@@ -43,13 +43,6 @@
 #define OUT_OF_SPACE(e) ((e) == ENOSPC)
 #endif
 
-/* context needed to identify a resource */
-struct dav_resource_private {
-    pool *pool;             /* memory storage pool associated with request */
-    const char *pathname;   /* full pathname to resource */
-    struct stat finfo;      /* filesystem info */
-};
-
 /* private context for doing a filesystem walk */
 typedef struct {
     dav_walker_ctx *wctx;
@@ -145,10 +138,13 @@ static const dav_fs_liveprop_name dav_fs_props[] =
 
 /* define the dav_stream structure for our use */
 struct dav_stream {
-    pool *p;
-    int fd;
-    const char *pathname;	/* we may need to remove it at close time */
-    const char *alt_path;       /* path to temp copy in .DAV/ */
+  pool *p;
+  int fd;
+  const char *pathname;	/* we may need to remove it at close time */
+  const char *alt_path;       /* path to temp copy in .DAV/ */
+  const dav_resource* resource;
+  int mode;
+  int is_twiki;
 };
 
 /* forward declaration for internal treewalkers */
@@ -901,128 +897,163 @@ static int dav_fs_is_parent_resource(
 }
 
 static dav_error * dav_fs_open_stream(const dav_resource *resource,
-				      dav_stream_mode mode,
-				      dav_stream **stream)
+									  dav_stream_mode mode,
+									  dav_stream **stream)
 {
-    pool *p = resource->info->pool;
-    dav_stream *ds = ap_palloc(p, sizeof(*ds));
-    int flags;
-    const char *path = resource->info->pathname;
+  pool *p = resource->info->pool;
+  dav_stream *ds = ap_palloc(p, sizeof(*ds));
+  int flags;
+  const char *path = resource->info->pathname;
 
-    ds->p = p;
-    ds->pathname = path;
-    ds->alt_path = NULL;
+  ds->p = p;
+  ds->pathname = path;
+  ds->alt_path = NULL;
+  ds->is_twiki = 0;
+  ds->mode = mode;
+  ds->resource = resource;
 
-    switch (mode) {
-    case DAV_MODE_READ:
-    case DAV_MODE_READ_SEEKABLE:
-    default:
+  switch (mode) {
+  case DAV_MODE_READ:
+  case DAV_MODE_READ_SEEKABLE:
+  default:
 	flags = O_RDONLY;
+
+	/** If this is a twiki topic file, do some magic */
+	if (resource->twiki && resource->twiki->type == TWIKI_DATA) {
+	  path = dav_twiki_detach_metadata(resource);
+	  ds->alt_path = path;
+	  ds->is_twiki = 1;
+	  /*fprintf(stderr, "Opening %s for read via %s\n", ds->pathname, path);*/
+	}
+
 	break;
 
-    case DAV_MODE_WRITE_TRUNC:
+  case DAV_MODE_WRITE_TRUNC:
     {
-        const char *dirname;
-        const char *fname;
-        char pidstr[10];
-
-        /* When uploading a new file, put it into a temporary file first.
-           When the file is closed and "committed", then we will move it
-           into the "real" space.
-
-           If an error occurs while writing the file, then we will remove
-           the file at close and "abort" time. */
-
-        /* Note that on platforms where getpid() is the same for all requests
-           (such as Windows), this implies that two clients will be stomping
-           on each others' files as they upload. This is better than the
-           prior behavior, where they stomped on each other AND the file that
-           people were reading from.
-
-           We could attempt to open O_EXCL to watch out for this case, but
-           that would suck if a turd was left for some reason. Then nobody
-           could upload a file until an admin cleared the turd. For now,
-           we just zap whatever might be there.
-
-           The use of the pid will at least help for some platforms for the
-           case where two people are uploading simultaneously. Note that the
-           last one wins (they should have LOCKed it :-). */
-
-        flags = O_WRONLY | O_CREAT | O_TRUNC | O_BINARY;
-
-        /* Ensure the temp area is around, compute the pathname for the temp
-           area, and stash the new pathname away. */
-        dav_fs_dir_file_name(resource, &dirname, &fname);
-        dav_fs_ensure_state_dir(p, dirname);
-        ap_snprintf(pidstr, sizeof(pidstr), "%d", (int)getpid());
-
-        /* ### for now: disable the alternate file usage. this changes the
-           ### inode of the file, which breaks the lock database. we have
-           ### no easy way to reach the lock database and give it the old
-           ### and new inode; thus, we have no easy way to repair the lock.
-           ### sigh... damn modularity :-) */
+	  const char *dirname;
+	  const char *fname;
+	  char pidstr[10];
+	  
+	  /* When uploading a new file, put it into a temporary file first.
+		 When the file is closed and "committed", then we will move it
+		 into the "real" space.
+		 
+		 If an error occurs while writing the file, then we will remove
+		 the file at close and "abort" time. */
+	  
+	  /* Note that on platforms where getpid() is the same for all requests
+		 (such as Windows), this implies that two clients will be stomping
+		 on each others' files as they upload. This is better than the
+		 prior behavior, where they stomped on each other AND the file that
+		 people were reading from.
+		 
+		 We could attempt to open O_EXCL to watch out for this case, but
+		 that would suck if a turd was left for some reason. Then nobody
+		 could upload a file until an admin cleared the turd. For now,
+		 we just zap whatever might be there.
+		 
+		 The use of the pid will at least help for some platforms for the
+		 case where two people are uploading simultaneously. Note that the
+		 last one wins (they should have LOCKed it :-). */
+	  
+	  flags = O_WRONLY | O_CREAT | O_TRUNC | O_BINARY;
+	  
+	  /* Ensure the temp area is around, compute the pathname for the temp
+		 area, and stash the new pathname away. */
+	  dav_fs_dir_file_name(resource, &dirname, &fname);
+	  dav_fs_ensure_state_dir(p, dirname);
+	  ap_snprintf(pidstr, sizeof(pidstr), "%d", (int)getpid());
+	  
+	  /* ### for now: disable the alternate file usage. this changes the
+		 ### inode of the file, which breaks the lock database. we have
+		 ### no easy way to reach the lock database and give it the old
+		 ### and new inode; thus, we have no easy way to repair the lock.
+		 ### sigh... damn modularity :-) */
 #if 0
-        path = ap_pstrcat(p, dirname, "/" DAV_FS_STATE_DIR "/", fname,
-                          ".", pidstr, NULL);
-        ds->alt_path = path;
+	  path = ap_pstrcat(p, dirname, "/" DAV_FS_STATE_DIR "/", fname,
+						".", pidstr, NULL);
+	  ds->alt_path = path;
 #endif
-	break;
+	  if (resource->twiki && resource->twiki->type == TWIKI_DATA) {
+		/* TWiki, on the other hand, doesn't care. */
+		path = dav_twiki_make_tmp_filename(p);
+		ds->alt_path = path;
+		ds->is_twiki = 1;
+		/*fprintf(stderr, "Opening %s for write via %s\n", ds->pathname, path);*/
+	  }
+	  break;
     }
-    case DAV_MODE_WRITE_SEEKABLE:
+  case DAV_MODE_WRITE_SEEKABLE:
 	flags = O_WRONLY | O_CREAT | O_BINARY;
 	break;
-    }
-
-    ds->fd = open(path, flags, DAV_FS_MODE_FILE);
-    if (ds->fd == -1) {
+  }
+  
+  ds->fd = open(path, flags, DAV_FS_MODE_FILE);
+  if (ds->fd == -1) {
 	/* ### use something besides 500? */
 	return dav_new_error(p, HTTP_INTERNAL_SERVER_ERROR, 0,
-			     "An error occurred while opening a resource.");
-    }
-    ap_note_cleanups_for_fd(p, ds->fd);
-
-    *stream = ds;
-    return NULL;
+						 "An error occurred while opening a resource.");
+  }
+  ap_note_cleanups_for_fd(p, ds->fd);
+  
+  *stream = ds;
+  return NULL;
 }
 
 static dav_error * dav_fs_close_stream(dav_stream *stream, int commit)
 {
-    ap_kill_cleanups_for_fd(stream->p, stream->fd);
-    close(stream->fd);
+  ap_kill_cleanups_for_fd(stream->p, stream->fd);
+  close(stream->fd);
 
-    if (!commit) {
-        const char *path;
-
-        /* remove the temp file or the normal file, depending on where we
-           were writing. */
-        path = stream->alt_path ? stream->alt_path : stream->pathname;
+  if (!commit) {
+	const char *path;
+	
+	/* remove the temp file or the normal file, depending on where we
+	   were writing. */
+	path = stream->alt_path ? stream->alt_path : stream->pathname;
 	if (remove(path) != 0) {
-	    /* ### use a better description? */
-            return dav_new_error(stream->p, HTTP_INTERNAL_SERVER_ERROR, 0,
-				 "There was a problem removing (rolling "
-				 "back) the resource "
-				 "when it was being closed.");
+	  /* ### use a better description? */
+	  return dav_new_error(stream->p, HTTP_INTERNAL_SERVER_ERROR, 0,
+						   "There was a problem removing (rolling "
+						   "back) the resource "
+						   "when it was being closed.");
 	}
-    }
-    else if (stream->alt_path != NULL) {
-        /* we were storing to an alternative area. move it to the real area
-           (blowing away anything that might be there) */
-        if (rename(stream->alt_path, stream->pathname) != 0) {
-            int save_errno = errno;
-            dav_error *err;
+  }
+  else if (stream->alt_path != NULL) {
+	/* we were storing to an alternative area. move it to the real area
+	   (blowing away anything that might be there) */
+	dav_error *err;
 
-            /* whoops. get rid of the temp file before returning an error. */
-            (void) remove(stream->alt_path);
-
-            /* ### should have a better error than this. */
-            err = dav_new_error(stream->p, HTTP_INTERNAL_SERVER_ERROR, 0,
-                                "Could not commit resource.");
-            err->save_errno = save_errno;
-            return err;
-        }
-    }
-
-    return NULL;
+	/*fprintf(stderr, "Closing %s\n", stream->alt_path);*/
+	if (stream->mode == DAV_MODE_WRITE_TRUNC) {
+	  if (stream->is_twiki) {
+		/*fprintf(stderr, "Reattaching %s to %s\n", stream->pathname, stream->alt_path);*/
+		return dav_twiki_reattach_metadata(stream->alt_path, stream->resource);
+	  } else {
+		int e = rename(stream->alt_path, stream->pathname);
+		if (e != 0) {
+		  int save_errno = errno;
+	  
+		  /* whoops. get rid of the temp file before returning an error. */
+		  (void) remove(stream->alt_path);
+	  
+		  /* ### should have a better error than this. */
+		  err = dav_new_error(stream->p, HTTP_INTERNAL_SERVER_ERROR, 0,
+							  "Could not commit resource.");
+		  err->save_errno = save_errno;
+		  return err;
+		}
+	  }
+	} else {
+	  if (stream->is_twiki) {
+		/*fprintf(stderr, "Removing %s\n", stream->alt_path);*/
+		/* remove temp file used during read */
+		remove(stream->alt_path);
+	  }
+	}
+  }
+  
+  return NULL;
 }
 
 static dav_error * dav_fs_read_stream(dav_stream *stream,
@@ -1890,7 +1921,11 @@ static const char *dav_fs_getetag(const dav_resource *resource)
 
 static const dav_hooks_repository dav_hooks_repository_fs =
 {
-    DEBUG_GET_HANDLER,   /* normally: special GET handling not required */
+#ifdef TWIKI_EXTENSIONS
+  1,
+#else
+  DEBUG_GET_HANDLER,   /* normally: special GET handling not required */
+#endif
     dav_fs_get_resource,
     dav_fs_get_parent_resource,
     dav_fs_is_same_resource,

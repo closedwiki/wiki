@@ -71,4 +71,11 @@ dav_error * dav_dbm_open_direct(pool *p, const char *pathname, int ro,
 void dav_dbm_get_statefiles(pool *p, const char *fname,
 			    const char **state1, const char **state2);
 
+/* context needed to identify a resource */
+struct dav_resource_private {
+    pool *pool;             /* memory storage pool associated with request */
+    const char *pathname;   /* full pathname to resource */
+    struct stat finfo;      /* filesystem info */
+};
+
 #endif /* _DAV_FS_REPOS_H_ */

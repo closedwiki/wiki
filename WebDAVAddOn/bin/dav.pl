@@ -10,6 +10,7 @@ BEGIN {
 }
 
 use TWiki;
+use TWiki::Store;
 use TWiki::UI::Upload;
 use File::Copy;
 
@@ -41,18 +42,18 @@ fail("No user") unless $user;
 my $function = $ARGV[2];
 fail("No function") unless $function;
 my $theResource = $ARGV[3];
+my $path = $ARGV[4];
+$path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo if ( $path );
 
-unless ( $theResource =~ m/(\w+)\/(\w+)\/(.*)$/o) {
+unless ( $theResource =~ m/(\w+)\/(\w+)(\/.*)?$/o) {
   fail("Bad resource $theResource");
 }
 my ( $web, $topic, $att ) = ($1, $2, $3);
 fail("No web in $theResource") unless ($web);
 fail("No topic in $theResource") unless ($topic);
-fail("No attachment in $theResource") unless ($att);
 
 $web =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
 $topic =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
-$att =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
 
 # Delete environment variables that would cause RCS to
 # take the lock as the named user rather than as the Apache user.
@@ -68,15 +69,14 @@ if ( $function eq "delete" ) {
   # target for the move.
   # Need to lock src and dest
 
+  fail("No attachment in $theResource") unless ($att);
+  $att =~ s/^\///o;
+  $att =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+
   # CODE_SMELL: If there is no filename, moveAttachment tries to move
   # the f***ing topic!
 
-  my $wikiUserName = TWiki::userToWikiName( $user );
-  fail("Web $web does not exist")  unless TWiki::UI::webExists( $web, $topic );
-  fail("Mirror") if TWiki::UI::isMirror( $web, $topic );
-  fail("Access to $web/$topic denied") unless
-	TWiki::UI::isAccessPermitted( $web, $topic,
-								  "change", $wikiUserName );
+  _standardChecks( "change", $web, $topic, $user );
 
   my $error = _lockTopic( $jWeb, $jTopic, $user );
   if ( !( $error )) {
@@ -92,11 +92,15 @@ if ( $function eq "delete" ) {
 
   fail( $error ) if ( $error );
 
-} elsif ( $function eq "commit" ) {
+} elsif ( $function eq "commit_pub" ) {
+  print STDERR "Commit ".join(" ",@ARGV);
+  _standardChecks( "change", $web, $topic, $user );
 
-  my $path = $ARGV[4];
+  fail("No attachment in $theResource") unless ($att);
+  $att =~ s/^\///o;
+  $att =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
+
   fail("No path") unless ($path);
-  $path =~ s/%(\d[A-Fa-f\d])/&_decode($1)/geo;
   fail( "$path does not exist") unless (-e $path);
 
   # copy to temp file to avoid conflict over the actual file
@@ -145,6 +149,48 @@ if ( $function eq "delete" ) {
   if ( ( @error ) && scalar( @error ) && defined( $error[0] )) {
 	fail("Update failed $error[0]");
   }
+
+} elsif ($function eq "detach") {
+
+  # Get a topic, stripping meta-data, and write it to the path given
+  # in $ARGV[4]
+  fail("No path") unless ($path);
+
+  # Put a topic, re-adding meta-data. The new text is passed in
+  _standardChecks( "view", $web, $topic, $user );
+
+  my ( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
+
+  open(TXT, ">$path") or fail("Could not open $path");
+  print TXT $text;
+  close(TXT);
+
+} elsif ($function eq "reattach") {
+
+  # Put a topic, re-adding previous meta-data. The new text is passed in
+  # the given pathname.
+  fail( "No path" ) unless ($path);
+
+  _standardChecks( "change", $web, $topic, $user );
+
+  $error = _lockTopic( $web, $topic, $user );
+  fail( $error ) if ( $error );
+
+  my ( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
+
+  $text = "";
+  open(TXT, "<$path") or fail("Could not open $path");
+  while (<TXT>) {
+	$text .= $_;
+  }
+  close(TXT);
+
+  $error = TWiki::Store::saveTopic( $web, $topic, $text, $meta, "", 0, 0 );
+
+  TWiki::Store::lockTopicNew( $web, $topic, 1 );
+
+  fail( $error ) if ( $error );
+
 } else {
   fail("Bad function $function");
 }
@@ -166,6 +212,16 @@ sub _lockTopic {
   TWiki::Store::lockTopicNew( $web, $topic, 0 );
 
   return undef;
+}
+
+sub _standardChecks {
+  my ( $access, $web, $topic, $user ) = @_;
+  my $wikiUserName = TWiki::userToWikiName( $user );
+  fail("Web $web does not exist")  unless TWiki::UI::webExists( $web, $topic );
+  fail("Mirror") if TWiki::UI::isMirror( $web, $topic );
+  fail("Access to $access $web/$topic denied") unless
+	TWiki::UI::isAccessPermitted( $web, $topic,
+								  $access, $wikiUserName );
 }
 
 1;

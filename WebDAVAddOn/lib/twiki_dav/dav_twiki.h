@@ -19,6 +19,8 @@
 extern "C" {
 #endif
 
+#define TWIKI_EXTENSIONS 1
+
 extern int dav_twiki_setDBpath(const char* dbname);
 extern int dav_twiki_accessible(const request_rec* r,
 								const dav_resource* dr, int tgt);
@@ -31,9 +33,14 @@ extern int dav_twiki_accessible(const request_rec* r,
 /* anything above DATA|WEB is strange */
 /* anything above PUB|TOPIC is strange */
 
+const char* dav_twiki_make_tmp_filename(pool* p);
 const char* dav_twiki_tostring(const dav_resource* r);
 dav_error* dav_twiki_delete(const dav_resource* r);
 dav_error* dav_twiki_commit(const dav_resource* r, const char* path);
+const char* dav_twiki_detach_metadata(const dav_resource* r);
+dav_error* dav_twiki_reattach_metadata(const char* tmppath,
+									   const dav_resource* r);
+int dav_twiki_ignore_file(const char* file);
 
 #ifdef __cplusplus
 }
