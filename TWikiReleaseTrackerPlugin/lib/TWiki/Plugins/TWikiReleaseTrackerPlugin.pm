@@ -86,8 +86,8 @@ sub handleDiffWiki {
         '| $relativeFile | FSCS | $locations |'."\n";
 
     $fscdFormat = getParam($param, "fscdFormat") || 
-#        '<TABLE border=1> <TR><TD><b> $fromDistribution - $relativeFile (FSCDCALLBACK)</b>'."\n".'</TD><TD>FSCDDIFF </TD></TR></TABLE>';
-        '| $relativeFile | FSCDCALLBACK | FSCDDIST |'."\n";
+        '<TABLE border=1> <TR><TD><b> $fromDistribution - $relativeFile (FSCDCALLBACK)</b>'."\n".'</TD><TD>FSCDDIFF </TD></TR></TABLE>';
+#        '| $relativeFile | FSCDCALLBACK | FSCDDIST |'."\n";
 
     $fdcdFormat = getParam($param, "fdcdFormat") ||
 	'| ($relativeFile name not recognised, and no content match)  | FDCD | |'."\n";
