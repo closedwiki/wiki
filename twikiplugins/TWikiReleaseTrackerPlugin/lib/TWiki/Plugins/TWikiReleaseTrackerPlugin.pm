@@ -21,7 +21,7 @@ use strict;
 
 # =========================
 package TWiki::Plugins::TWikiReleaseTrackerPlugin;
-# See also TWiki::Plugins::TWikiReleaseTrackerPlugin::Shell2
+# See also TWiki::Plugins::TWikiReleaseTrackerPlugin::Commands
 use TWiki::Func;
 use TWiki;
 use CGI;
@@ -623,9 +623,9 @@ sub captureOutput {
 
 sub monotypeToHTML {
  my ($res) = @_;
- my $ans = "\n<verbatim>\n";
+ my $ans = "\n<pre>\n";
  $ans .= CGI::escapeHTML($res);
- $ans .= "\n</verbatim>\n";
+ $ans .= "\n</pre>\n";
  return $ans;
 }
 
