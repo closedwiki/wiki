@@ -3,7 +3,10 @@ use strict;
 use diagnostics;
 
 =pod 
-'01 Feb 2003' => "TWiki20030201"
+
+sub wikiVersionToDistributionName($wikiVersion)
+
+turns '01 Feb 2003' => "TWiki20030201"
 
 =cut
 
@@ -37,6 +40,9 @@ sub wikiVersionToDistributionName {
 }
 
 =pod 
+
+sub releaseTopicToDistributionName($releaseTopic)
+
 TWikiBetaRelease2004x07x30 => TWiki20040730beta
 TWikiRelease20030201 => TWiki20030201
 

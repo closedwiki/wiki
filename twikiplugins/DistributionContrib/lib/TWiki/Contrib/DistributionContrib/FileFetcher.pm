@@ -12,6 +12,7 @@ use LWP::Simple;
 Fetches a copy of a given file and distribution. 
 Saves according to TWiki::Contrib::DistributionContrib::Config;
 
+---++ sub fetchDistributionFile() 
 
 In:
 | $file | name of filename, e.g. bin/view |
