@@ -1,7 +1,5 @@
-<nop>WebNotify is a subscription service to be automatically notified by email when topics change in the *TWiki.%WEB%* web. This is a convenient service, so you do not have to come back and check all the time if something has changed. To subscribe to the service, please put yourself on the list below. The format is: <BR> 3 spaces * Main.yourWikiName - yourEmailAddress
+<nop>WebNotify is a subscription service to be automatically notified by email when topics change in the *%WIKITOOLNAME%.%WEB%* web. This is a convenient service, so you do not have to come back and check all the time if something has changed. To subscribe to the service, please put yourself on the list below. The format is: =3 spaces * %MAINWEB%.yourWikiName - yourEmailAddress=
 
 	* Main.PeterThoeny - Peter@Thoeny.com
 
-__Note:__ TWiki checks for changes once every day. It will send an email in case some topics have been added or changed.
-
-Related topics: Main.TWikiUsers, Main.TWikiRegistration
+Related topics: %MAINWEB%.TWikiUsers, %TWIKIWEB%.TWikiRegistration
