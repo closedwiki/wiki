@@ -184,7 +184,6 @@ use TWiki::Plugins::SharedCode::Attrs;
     my $templates;
 
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-	  eval "use TWiki::Plugins::CairoCompatibilityModule;";
 	  $templates = CairoCompatibilityModule::readTemplate( $templateFile );
 	} else {
 	  $templates = TWiki::Store::readTemplate( $templateFile );

@@ -131,7 +131,7 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-    * __Note:__ If you intend to use this plugin with a TWiki version earlier than Feb 2004, then you must also download and install TWiki:Plugins/SharedCode. SharedCode includes a compatibility module that enables the Comment plugin to use new TWiki features with earlier TWiki releases.
+    * Make sure you have the TWiki:Plugins/SharedCode module installed. Among other things, TWiki:Plugins/SharedCode includes a compatibility module that enables plugins to use new TWiki features with earlier TWiki releases. If you don't already have it, install it now.
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
