@@ -75,8 +75,9 @@ use vars qw(
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-		$superAdminGroup $doSuperAdminGroup $OS
+        $superAdminGroup $doSuperAdminGroup $OS
         $disableAllPlugins $attachAsciiPath $displayTimeValues
+        $dispScriptUrlPath $dispViewPath
     );
 
 # Internationalisation (I18N) config from TWiki.cfg:
@@ -1537,7 +1538,7 @@ sub getViewUrl
 
     # PTh 24 May 2000: added $urlHost, needed for some environments
     # see also Codev.PageRedirectionNotWorking
-    return "$urlHost$scriptUrlPath/view$scriptSuffix/$theWeb/$theTopic";
+    return "$urlHost$dispScriptUrlPath$dispViewPath$scriptSuffix/$theWeb/$theTopic";
 }
 
 =pod
@@ -1555,7 +1556,7 @@ sub getScriptUrl
 {
     my( $theWeb, $theTopic, $theScript ) = @_;
     
-    my $url = "$urlHost$scriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
+    my $url = "$urlHost$dispScriptUrlPath/$theScript$scriptSuffix/$theWeb/$theTopic";
 
     # FIXME consider a plugin call here - useful for certificated logon environment
     
@@ -2199,7 +2200,7 @@ sub formatTime
     $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
     $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
     $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-    my $weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+    my @weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
     $value =~ s/\$wday/$weekDay[$wday]/geoi;
     $value =~ s/\$mon[t]?[h]?/$isoMonth[$mon]/goi;
     $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
@@ -2342,7 +2343,13 @@ sub handleToc
                 $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/g;  # 'TopicName'
                 $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/g;  # 'TLA'
                 # create linked bullet item
-                $line = "$tabs* <a href=\"$scriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
+                # AB change
+		# $line = "$tabs* <a href=\"$dispScriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
+		if ( $viewScript eq 'view' ) {
+		    $line = "$tabs* <a href=\"$dispScriptUrlPath$dispViewPath/$webPath/$topicname#$anchor\">$line</a>";
+		} else {
+		    $line = "$tabs* <a href=\"$dispScriptUrlPath/$viewScript$scriptSuffix/$webPath/$topicname#$anchor\">$line</a>";
+		}
                 $result .= "\n$line";
             }
         }
@@ -2696,7 +2703,7 @@ sub handleInternalTags
     # $_[2] is web
 
     # Make Edit URL unique for every edit - fix for RefreshEditPage.
-    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%WEB%/%TOPIC%\?t=" . time()!ge;
+    $_[0] =~ s!%EDITURL%!"$dispScriptUrlPath/edit$scriptSuffix/%WEB%/%TOPIC%\?t=" . time()!ge;
 
     $_[0] =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $_[0] =~ s/%NOP%/<nop>/g;
@@ -2726,8 +2733,8 @@ sub handleInternalTags
 
     # URLs and paths
     $_[0] =~ s/%WIKIHOMEURL%/$wikiHomeUrl/g;
-    $_[0] =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/g;
-    $_[0] =~ s/%SCRIPTURLPATH%/$scriptUrlPath/g;
+    $_[0] =~ s/%SCRIPTURL%/$urlHost$dispScriptUrlPath/g;
+    $_[0] =~ s/%SCRIPTURLPATH%/$dispScriptUrlPath/g;
     $_[0] =~ s/%SCRIPTSUFFIX%/$scriptSuffix/g;
     $_[0] =~ s/%PUBURL%/$urlHost$pubUrlPath/g;
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/g;
@@ -3091,7 +3098,7 @@ sub renderMoved
         my $putBack = "";
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
-            $putBack .= " href=\"$scriptUrlPath/rename/$web/$topic?newweb=$fromWeb&newtopic=$fromTopic&";
+            $putBack .= " href=\"$dispScriptUrlPath/rename/$web/$topic?newweb=$fromWeb&newtopic=$fromTopic&";
             $putBack .= "confirm=on\">put it back</a>";
         }
         $text = "<p><i><nop>$to moved from <nop>$from on $date by $by </i>$putBack</p>";
@@ -3536,12 +3543,14 @@ sub internalLink {
     if( $exist) {
         if( $theAnchor ) {
             my $anchor = makeAnchorName( $theAnchor );
-            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/$theWeb/$theTopic\#$anchor\""
+            $text .= "<a href=\"$dispScriptUrlPath$dispViewPath"
+		  .  "$scriptSuffix/$theWeb/$theTopic\#$anchor\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText<\/a>";
             return $text;
         } else {
-            $text .= "<a href=\"$scriptUrlPath/view$scriptSuffix/$theWeb/$theTopic\""
+            $text .= "<a href=\"$dispScriptUrlPath$dispViewPath"
+		  .  "$scriptSuffix/$theWeb/$theTopic\""
                   .  &linkToolTipInfo( $theWeb, $theTopic )
                   .  ">$theLinkText<\/a>";
             return $text;
@@ -3550,7 +3559,7 @@ sub internalLink {
     } elsif( $doLink ) {
         $text .= "<span style='background : $newTopicBgColor;'>"
               .  "<font color=\"$newTopicFontColor\">$theLinkText</font></span>"
-              .  "<a href=\"$scriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?topicparent=$webName.$topicName\">?</a>";
+              .  "<a href=\"$dispScriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?topicparent=$webName.$topicName\">?</a>";
         return $text;
 
     } else {
