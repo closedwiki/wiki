@@ -1,0 +1,147 @@
+<!-- ANTfile for PowerEdit
+  Ant is at http://jakarta.apache.org
+  Four main targets are available:
+        test - runs unit tests on the package
+        release - runs tests and creates a zipped package
+        install - installs in the local TWiki
+        uninstall - inverse of install
+-->
+<project name="PowerEditAddon" default="build">
+
+    <property environment="ENV"/>
+    <property name="twiki" value="${ENV.TWIKI_HOME}"/>
+    <property name="junit" value="${ENV.JUNIT_HOME}"/>
+
+    <property name="lib.plugins" value="lib/TWiki/Plugins"/>
+    <property name="data.plugins" value="data/Plugins"/>
+    <property name="pub.plugins" value="pub/Plugins"/>
+
+    <property name="addon.lib" value="${lib.plugins}/${ant.project.name}"/>
+    <property name="addon.data" value="${data.plugins}/${ant.project.name}"/>
+    <property name="addon.pub" value="${pub.plugins}/${ant.project.name}"/>
+
+    <property name="app.test" value="${addon.lib}/test" />
+    <property name="jar.file" value="${addon.pub}/poweredit.jar"/>
+    <property name="src.zip" value="${addon.lib}/source.zip" />
+    <property name="release.zip" value="${ant.project.name}.zip" />
+
+    <property name="src.classes" value="${addon.lib}/src.classes"/>
+    <property name="test.classes" value="${addon.lib}/test.classes"/>
+
+    <!-- Init target -->
+    <target name="init">
+        <tstamp />
+    </target>
+
+    <!-- Classpath for running tests -->
+    <path id="test.class.path">
+        <pathelement path="${java.class.path}/"/>
+        <pathelement path="${test.classes}" />
+        <pathelement path="${jar.file}"/>
+        <pathelement path="${junit}"/>
+    </path>
+
+    <!-- Files that get installed in the twiki -->
+    <patternset id="installed.files">
+	<include name="${ant.project.name}.xml"/>
+	<include name="bin/poweredit"/>
+	<include name="templates/edit.power.tmpl"/>
+	<include name="${jar.file}"/>
+	<include name="${addon.data}*.txt"/>
+	<include name="${src.zip}"/>
+    </patternset>
+
+    <target name="installBAD" unless="ENV.TWIKI_HOME">
+        <fail message="TWIKI_HOME must be set to install or uninstall!!" />
+    </target>
+
+    <!-- Install in local TWiki -->
+    <target name="installOK" depends="test,src.zip" if="ENV.TWIKI_HOME">
+        <copy todir="${twiki}">
+            <fileset dir="${basedir}">
+                <patternset refid="installed.files"/>
+            </fileset>
+        </copy>
+
+        <chmod perm="ugoa+rwx" parallel="no">
+            <fileset dir="${twiki}">
+                <patternset refid="installed.files"/>
+            </fileset>
+        </chmod>
+    </target>
+
+    <target name="uninstallOK" if="ENV.TWIKI_HOME">
+        <delete>
+            <fileset dir="${twiki}">
+                <patternset refid="installed.files"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <!-- Build jar -->
+    <target name="build" depends="init">
+        <!-- Build jar -->
+        <mkdir dir="${src.classes}" />
+        <javac srcdir="${addon.lib}/packages"
+            destdir="${src.classes}"
+            target="1.1"
+            includes="**/gnu/regexp/*.java"
+        />
+        <javac srcdir="${addon.lib}/src"
+            destdir="${src.classes}"
+            target="1.1"
+            includes="**/*.java"
+        />
+        <jar jarfile="${jar.file}" basedir="${src.classes}" />
+    </target>
+
+    <!-- Build and execute tests -->
+    <target name="test" depends="testedBAD,testedOK"/>
+
+    <target name="testedBAD" unless="ENV.JUNIT_HOME">
+        <echo message="JUNIT_HOME must be set to run tests!!"/>
+    </target>
+
+    <target name="testedOK" depends="build" if="ENV.JUNIT_HOME">
+        <mkdir dir="${test.classes}" />
+        <javac srcdir="${addon.lib}/test"
+            destdir="${test.classes}"
+            classpathref="test.class.path"
+            includes="**/*.java"
+        />
+        <junit fork="no" printsummary="yes" haltonerror="yes">
+	    <formatter type="plain" usefile="no"/>
+            <test name="com.ccsoft.edit.TWikiEditSuite"/>
+            <classpath refid="test.class.path"/>
+        </junit>
+    </target>
+
+    <target name="src.zip">
+	<delete file="${src.zip}"/>
+	<zip zipfile="${src.zip}">
+	    <zipfileset dir="${addon.lib}">
+		<include name="**/*.java"/>
+		<include name="**/*.html"/>
+	    </zipfileset>
+	</zip>
+    </target>
+
+    <!--
+        MAIN TARGETS
+     -->
+
+    <target description="Build from sources and package"
+            name="release" depends="test,src.zip">
+        <delete file="${release.zip}" />
+        <zip zipfile="${release.zip}">
+            <zipfileset dir="${basedir}">
+                <patternset refid="installed.files"/>
+            </zipfileset>
+	</zip>
+    </target>
+
+    <target name="install" depends="installBAD,installOK" />
+
+    <target name="uninstall" depends="installBAD,uninstallOK" />
+
+</project>

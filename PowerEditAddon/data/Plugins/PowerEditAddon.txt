@@ -1,0 +1,122 @@
+---++ <nop>%TOPIC%
+
+The %TOPIC% is a plug-in extension to TWiki that supports a Java 1.1 applet text editor. This applet works on most Java-enabled browsers (we haven't tested them <u>all</u>!).
+
+The applet provides the same editing capabilities as a standard browser text area, and adds some common editor functionality:
+	* Cut, Copy, Paste - the cut buffer is a static variable in the applet as there is no access to the system cut buffer from an applet. The cut buffer persists over different invocations of %TOPIC%, however, and you can always use the cut and paste functions in the browser menus to cut and paste outside the window.
+	* Undo - undoes up to 100 commands per edit session.
+	* Do again - repeats the last command.
+	* Find, Replace - optionally use Emacs style regular expressions as provided by the gnu.regexp library. Replace is currently not smart enough to use field replacement, however.
+	* Can be invoked in a separate frame.
+	* Programmable buttons.
+
+---++ Usage information</h2>
+---+++ The buttons
+Buttons on the applet are all created by defining applet parameters in the =templates/edit.power.tmpl= template.
+Button panels can be placed at the top, bottom, left and right of the applet, and are defined by the parameters "top_buttons", "bottom_buttons",
+"left_buttons" and "right_buttons".
+
+Each button panel is defined using a | separated string, each field of which
+is a name=value pair where the name is used as the label on the button, and
+the value is interpreted as a command. Commands are either macro sequences of
+basic editor commands (see below) interleaved with text, or may be simple
+names of other parameters which are in turn intepreted as macro sequences.
+For example:
+<pre>
+&lt;param name="top_buttons" value="Tele type=%cut%=%paste%=|A Space=space">
+</pre>
+The first button will be labelled "Tele type" and will perform the macro
+sequence %cut%=%paste= - which will put = signs around the currently
+selected text. The second button will be labelled "A Space" and will:
+	* If there's another param named "space" it will execute the macro defined in that parameter.
+	* If there's no param named "space" it will simply insert the string "space" in the text.
+A | may be inserted in a button panel macro definition using ||. It is not
+possible to insert an = sign in a button name - though they can obviously be
+used in definitions.
+
+---+++ Commands</h3>
+The following commands are basic to the editor and can be used in button definitions:
+| *Name* | *Description* |
+| %copy% | Copy the currently selected text to the internal cut buffer |
+| %cut% | Cut the currently selected text to the internal cut buffer |
+| %find% | Invoke the find dialog |
+| %paste% | Paste the internal cut buffer. Will erase the current selection. |
+| %save% | Save the text by posting it to the server, and quits the edit |
+| %undo% | Undo the last edit |
+| %redo% | Repeats the last command executed (does *not* repeat typing) |
+| %refind% | Repeat the last find |
+| %replace% | Invoke the replace dialog |
+| %rereplace% | Repeat the last replacement |
+
+---+++ Other applet parameters
+| *Parameter* | *Values* | *Description* |
+| useframe | "yes" or "no" | Whether to use a separate window or not |
+| editboxwidth | Number of columns | If useframe=yes, then defines the number of columns width of the edit area. Ignored if useframe=no. |
+| editboxheight | Number of rows | If useframe=yes, then defines the number of rows height of the edit area. Ignored if useframe=no. |
+| server | URL | The URL that the editor will use to pass information back to the server. |
+
+It is a condition of use that any useful customisations are fed back to the %TOPIC%Dev page at http://www.twiki.org !
+
+---+++ Addon Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below). Contents:
+	| *File:* | *Description:* |
+	| ==%TOPIC%.xml== | Ant build file |
+	| ==data/Plugins/%TOPIC%.txt== | Plugin topic |
+	| ==bin/poweredit== | Server module |
+	| ==templates/edit.power.tmpl== | Specialised skin |
+	| ==pub/Plugins/%TOPIC%/poweredit.jar== | JAR file |
+	| ==lib/TWiki/Plugins/%TOPIC%/source.zip== | Source and test code |
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	* Add the following line to the "TWiki Addons" section of %TWIKIWEB%.TextFormattingRules:
+		* Plugins.%TOPIC%: Power Editor Addon
+
+	* The editor is invoked by putting the following line into your =bin/view= script, immediately after the line reading %<nop>EDITTOPIC%:
+	<pre>
+	%<nop>TMPL:P{"sep"}% &lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=power">PowerEdit&lt;/a>
+	</pre>
+
+---+++ Addon Info
+
+|  One Line Description: | Extended functionality editor |
+|  Addon Author: | Main.CrawfordCurrie |
+|  Addon Version: | 1.0 |
+|  Change History: | 1 Oct 2001: Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Java Version: | 1.1 |
+|  Addon Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+---++++ eXtreme Customisation
+All the sources and unit tests are provided with the distribution, together with an Ant build file (see http://www.jakarta.org) should further customisation be required. The source.zip is shipped in the =lib/TWiki/Plugins/%TOPIC%= directory and when unzipped creates source, packages and test subdirectories. The =src= directory contains the PowerEdit applet sources, the =test= directory contains JUnit unit tests, and the =packages= directory contains the GNU 'regexp' packages, which is used by search and replace.
+
+Getting Java to talk to TWiki perl scripts isn't all that easy, so it's worth understanding how it works before you try to make any changes.
+
+The applet is started using the standard =edit= script, which is passed a =skin= parameter to make it use the poweredit skin (edit.power.tmpl) rather than the standard edit skin. This skin contains the HTML necessary to invoke the applet. The applet is a simple Java 1.1 applet that uses an AWT TextArea to perform the bulk of the editing functions.
+
+The applet uses a simple server in the form of the 'poweredit' script (called _server_ below) to communicate back with TWiki. When the applet starts up, the text of the topic is _not_ passed in parameters. Instead, the applet is passed the URL of the server script 'poweredit' in the twiki/bin directory. The server script takes a single parameter called "action" which can take one of two values; "get" and "put". The _server_ URL is used, with "action" set to "get", to get the plain text of the topic.
+
+When the text is saved in the editor, the applet creates a MIME form containing the text contents and writes it to the _server_ with "action" set to "put" . The _server_ caches the text in a temporary file, and replies to the applet with a URL appropriate for previewing the text.
+
+The applet reads this URL and redirects to it. Note that Java does not support passing parameters to a URL which is being redirected to, hence the necessity for the cache of the topic. The redirection is (of course) back to the _server_, this time with "action" set to "commit". The _server_ in turn invokes the standard =preview= script with the cached text as parameter, and deletes the cache.
+
+---++++ Copyright
+This code is a development of the Architectures and Systems
+Platforms group of Motorola Inc. and is protected by the following
+copyrights:
+	* Copyright (C) 2001 Motorola. All Rights Reserved.
+
+---++++ License
+As required for the publication of all extensions to TWiki, this
+software is published under the terms of the GNU General Public
+License.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details, published at
+http://www.gnu.org/copyleft/gpl.html
