@@ -3041,8 +3041,9 @@ sub putBackVerbatim
     for( my $i=0; $i<=$#verbatim; $i++ ) {
         my $val = $verbatim[$i];
         if( $type ne "verbatim" ) {
+            $val =~ s/&/&amp;/g;
             $val =~ s/</&lt;/g;
-            $val =~ s/</&gt;/g;
+            $val =~ s/>/&gt;/g;
             $val =~ s/\t/   /g; # A shame to do this, but been in TWiki.org have converted
                                 # 3 spaces to tabs since day 1
         }
