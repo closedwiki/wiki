@@ -402,8 +402,6 @@ sub setupRegexes {
     if ( not $useLocale or $] < 5.006 ) {
 	# No locales needed/working, or Perl 5.005_03 or lower, so just use
 	# any additional national characters defined in TWiki.cfg
-	# TODO: Build character set maps by applying '\w' to all 
-	# characters in character set, for Perl 5.005 with locales turned on.
 	$upperAlpha = "A-Z$upperNational";
 	$lowerAlpha = "a-z$lowerNational";
 	$numeric = '\d';

@@ -19,8 +19,7 @@
 # Notes:
 # - Latest version at http://twiki.org/
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
-# - Customize variables in wikicfg.pm when installing TWiki.
-# - Files wiki[a-z]+.pm are included by wiki.pm
+# - Customize variables in TWiki.cfg when installing TWiki.
 #
 # 20000501 Kevin Kinnell  : Many many many changes, best view is to
 #                           run a diff.
@@ -35,7 +34,7 @@
 package TWiki::Search;
 use strict;
 
-# 'Use locale' for internationalisation of Perl sorting - 
+# 'Use locale' for internationalisation of Perl sorting and searching - 
 # main locale settings are done in TWiki::setupLocale
 BEGIN {
     # Do a dynamic 'use locale' for this module
@@ -156,6 +155,7 @@ sub searchWeb
         }
         $spacedTopic = spacedTopic( $renameTopic );
         $spacedTopic = $renameWeb . '\.' . $spacedTopic if( $renameWeb );
+	# TODO: i18n fix
         $theSearchVal = "(^|[^A-Za-z0-9_])$theSearchVal" . '([^A-Za-z0-9_]|$)|' .
                         '(\[\[' . $spacedTopic . '\]\])';
     } else {
@@ -204,6 +204,10 @@ sub searchWeb
         }
     }
 
+    # Construct command line with 'ls' and 'grep.  Note that 'ls' does not
+    # need to be locale-aware as long as it does not transform filenames -
+    # all results are sorted by Perl 'sort'.  However, 'grep' must use
+    # locales if needed, for case-insensitive searching.
     my $cmd = "";
     if( $theScope eq "topic" ) {
         $cmd = "$TWiki::lsCmd %FILES% | %GREP% %SWITCHES% -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote";
@@ -447,6 +451,7 @@ sub searchWeb
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
         if( $theHeader ) {
             $theHeader =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
+	    # TODO: i18n fix
             $theHeader =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
             $theHeader =~ s/([^\n])$/$1\n/gos;
             $beforeText = $theHeader;
@@ -519,6 +524,7 @@ sub searchWeb
                 $tempVal = $theFormat;
                 $tempVal =~ s/([^\n])$/$1\n/gos;       # cut last trailing new line
                 $tempVal =~ s/\$n\(\)/\n/gos;          # expand "$n()" to new line
+		# TODO: i18n fix
                 $tempVal =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
                 $tempVal =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
@@ -603,8 +609,11 @@ sub searchWeb
                    m|</noautolink>|i  && ( $noAutoLink = 0 );
 
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-                       # Case insenstive option is required to get [[spaced Word]] to match
+                       # Case insensitive option is required to get [[spaced Word]] to match
+		       # TODO: i18n fix
                        my $match =  "(^|[^A-Za-z0-9_.])($originalSearch)(?=[^A-Za-z0-9_]|\$)";
+		       # FIXME: Should use /o here since $match is based on
+		       # search string.
                        my $subs = s|$match|$1<font color="red">$2</font>&nbsp;|g;
                        $match = '(\[\[)' . "($spacedTopic)" . '(?=\]\])';
                        $subs += s|$match|$1<font color="red">$2</font>&nbsp;|gi;
@@ -788,6 +797,7 @@ sub spacedTopic
 {
     my( $topic ) = @_;
     # FindMe -> Find\s*Me
+    # TODO: i18n fix
     $topic =~ s/([a-z])([A-Z])/$1 *$2/go;
     return $topic;
 }
