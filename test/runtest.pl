@@ -35,6 +35,9 @@ unless( $args =~ /\bnodocs\b/ ) {
     print "</pre>";
 }
 
+#disabled in case it is knackering ntwiki
+exit 1;
+
 unless( $args =~ /\bnocompile\b/ ) {
     print "<h1>Compile Tests</h1>\n";
     my $pms = `find ../lib -name '*.pm'`;
