@@ -93,7 +93,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "17 Aug 2001";
+$wikiversion      = "21 Aug 2001";
 
 # ===========================
 # read the configuration part
@@ -569,10 +569,9 @@ sub setSessionValue
 # =========================
 sub getSkin
 {
-    my $skin = $cgiQuery->param( 'skin' );
-    if( ! defined( $skin ) ) {
-        $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" );
-    }
+    my $skin = "";
+    $skin = $cgiQuery->param( 'skin' ) if( $cgiQuery );
+    $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" ) unless( $skin );
     return $skin;
 }
 
