@@ -22,7 +22,7 @@
 #
 # Each plugin is a package that contains the subs:
 #
-#   initPlugin           ( $topic, $web, $user )
+#   initPlugin           ( $topic, $web, $user, $installWeb )
 #   commonTagsHandler    ( $text, $topic, $web )
 #   startRenderingHandler( $text, $web )
 #   outsidePREHandler    ( $text )
@@ -36,12 +36,12 @@
 package TWiki::Plugins::EmptyPlugin; 	# change the package name!!!
 
 # =========================
-use vars qw( $web $topic $user $myConfigVar );
+use vars qw( $web $topic $user $installWeb $myConfigVar );
 
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user ) = @_;
+    ( $topic, $web, $user, $installWeb ) = @_;
 
     # Get plugin preferences
     $myConfigVar = &TWiki::Prefs::getPreferencesFlag( "EMPTYPLUGIN_VAR1" ) || "";

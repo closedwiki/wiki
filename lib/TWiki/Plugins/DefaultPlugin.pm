@@ -22,7 +22,7 @@
 #
 # Each plugin is a package that contains the subs:
 #
-#   initPlugin           ( $topic, $web, $user )
+#   initPlugin           ( $topic, $web, $user, $installWeb )
 #   commonTagsHandler    ( $text, $topic, $web )
 #   startRenderingHandler( $text, $web )
 #   outsidePREHandler    ( $text )
@@ -36,12 +36,12 @@
 package TWiki::Plugins::DefaultPlugin;
 
 # =========================
-use vars qw( $web $topic $user $doOldInclude $renderingWeb );
+use vars qw( $web $topic $user $installWeb $doOldInclude $renderingWeb );
 
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user ) = @_;
+    ( $topic, $web, $user, $installWeb ) = @_;
 
     $renderingWeb = $web;
 
