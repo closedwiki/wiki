@@ -124,8 +124,19 @@ sub readPrefs
 	# web prefs
 	$self->readPrefsFromTopic( $self->{web}, $TWiki::webPrefsTopicname);
     } elsif (exists($self->{topic})) {
-	#$self->readPrefsFromTopic( $self->{parent}{web}, $self->{topic} ); # topic-level prefs
+	# request prefs - read topic and user
+	my $parent = $self->{parent};
+	my $topicPrefsSetting = $parent->getPreferenceFlag("READTOPICPREFS");
+	my $topicPrefsOverride = $parent->getPreferenceFlag("TOPICOVERRIDESUSER");
+	if ($topicPrefsSetting && !$topicPrefsOverride) {
+	    # topic prefs overridden by user prefs
+	    $self->readPrefsFromTopic( $parent->{web}, $self->{topic} );
+	}
 	$self->readPrefsFromTopic( $TWiki::mainWebname, $self->{user} );   # user-level prefs
+	if ($topicPrefsSetting && $topicPrefsOverride) {
+	    # topic prefs override user prefs
+	    $self->readPrefsFromTopic( $parent->{web}, $self->{topic} );
+	}
     } else {
 	# global prefs
         $self->readPrefsFromTopic( $TWiki::twikiWebname, $TWiki::wikiPrefsTopicname);
@@ -293,6 +304,31 @@ sub getPreferenceValue
 	return ${ $self->{prefsHash}{$theKey} }; #double dereference
     } else {
 	return "";
+    }
+}
+
+=pod
+
+---+++ sub getPreferenceFlag( $key )
+
+Returns 1 if the preference =$key= is "on", and 0 otherwise.  "On" means set to
+something with a true Perl-truth-value, with the special cases that "off" and
+"no" are forced to false.  Both of the latter are case-insensitive.
+
+=cut
+
+sub getPreferenceFlag
+{
+    my ( $self, $theKey  ) = @_;
+
+    my $flag = $self->getPreferenceValue( $theKey );
+    $flag =~ s/^\s*(.*?)\s*$/$1/gi;
+    $flag =~ s/off//gi;
+    $flag =~ s/no//gi;
+    if( $flag ) {
+        return 1;
+    } else {
+        return 0;
     }
 }
 
