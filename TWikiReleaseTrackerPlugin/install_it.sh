@@ -8,7 +8,9 @@ cd lib/TWiki/Plugins/TWikiReleaseTrackerPlugin
 
 for i in athenstwiki.mrjc.com/twiki beijingtwiki.mrjc.com/twiki cairotwiki.mrjc.com/twiki cleaver.org/twiki
 do
+   echo "Installing to $i"
    export TWIKI_HOME=/home/mrjc/$i
    perl build.pl install
+   echo
 done
 

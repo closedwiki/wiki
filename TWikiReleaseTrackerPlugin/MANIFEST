@@ -34,7 +34,6 @@
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/testPluginCompiles.pl
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/testPluginTestSuite.pl
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/build.pl
-./lib/TWiki/Plugins/Build.pm
 ./pub/TWiki/TWikiReleaseTrackerPlugin/plugins.md5
 ./pub/TWiki/TWikiReleaseTrackerPlugin/releases.md5
 ./pub/TWiki/TRTTestSuite/

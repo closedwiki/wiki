@@ -18,10 +18,10 @@
 #
 # Standard preamble
 BEGIN {
-	print $ENV{TWIKI_LIBS};
-	foreach my $pc ( split( /:/, $ENV{TWIKI_LIBS} ) ) {
-		unshift @INC, $pc;
-	}
+    warn '$TWIKI_LIBS is not set' unless $ENV{TWIKI_LIBS};
+    foreach my $pc ( split( /:/, $ENV{TWIKI_LIBS} ) ) {
+	unshift @INC, $pc;
+    }
 }
 use TWiki::Contrib::Build;
 
@@ -68,7 +68,7 @@ sub target_indexLocalInstallation {
 	indexLocalInstallation();
 	chdir($runDir) || die "Can't cd into $runDir - $!";
 	my $saveFile = $Common::md5IndexDir . "/localInstallation.md5" ;
-	print "saving to $saveFile";
+	print "saving to ".File::Spec->rel2abs($saveFile)."\n";
 	FileDigest::saveIndex($saveFile);
 
 	#    print FileDigest::dataOutline();
@@ -95,15 +95,16 @@ sub target_test {
 	chdir( $runDir . "/test" ) || die "$! - can't cd into test dir";
 	print `perl testPluginTestSuite.pl`;
 	1;
-}
+    }
 
-sub target_release {
-	my $this = shift;
-	if ( $Common::installationDir ne "" ) {
-		die "YOU FORGOT TO REMOVE THE DEFAULT INSTALL DIR!\n";
-	}
-	$this->SUPER::target_release();
-}
+  sub target_release {
+      my $this = shift;
+      if ($Common::installationDir ne "") {
+	  warn "YOU FORGOT TO REMOVE THE DEFAULT INSTALL DIR!\n";
+      }
+      $this->SUPER::target_release();      
+  }
+
 
 # Create the build object
 my $builder = new TWikiReleaseTrackerPluginBuild();
