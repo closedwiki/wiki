@@ -32,8 +32,10 @@ Construct a new sandbox suitable for $OS
 =cut
 
 sub new {
-    my ( $class, $OS ) = @_;
+    my ( $class, $session, $OS ) = @_;
     my $this = bless( {}, $class );
+
+    $this->{session} = $session;
 
     $this->{USE_SAFE_PIPES} = 0;
     if ( $OS ne "WINDOWS" ) {

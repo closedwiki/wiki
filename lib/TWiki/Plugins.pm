@@ -718,7 +718,7 @@ sub setSessionValueHandler
 
 ---++ sub renderFormFieldForEditHandler ( $name, $type, $size, $value, $attributes, $possibleValues )
 
-| Description:       | This handler is called by Form.renderForEdit, before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers. |
+| Description:       | This handler is called before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers. |
 | Parameter: =$name= | name of form field |
 | Parameter: =$type= | type of form field |
 | Parameter: =$size= | size of form field |
@@ -726,8 +726,6 @@ sub setSessionValueHandler
 | Parameter: =$attributes= | attributes of form field  |
 | Parameter: =$possibleValues= | the values defined as options for form field, if any |
 | Return: =$text=  | HTML text that renders this field. If false, form rendering continues by considering the built-in types. |
-
-Typical usage is in the style of Form.renderForEdit:
 
 <pre>
    if ( is_type1($type) ) {

@@ -44,18 +44,17 @@ $webName::WebPreferences.
 =cut
 
 sub new {
-    my( $class, $web ) = @_;
-
+    my( $class, $session ) = @_;
     my $this = bless( {}, $class );
+    $this->{session} = $session;
+    my $web = $session->{webName};
 
     $this->{WEBNAME} = $web;
-    my $globs =  new TWiki::Prefs::PrefsCache("global");
+    my $globs =  new TWiki::Prefs::PrefsCache($session, "global");
     $this->{GLOBAL} = $globs;
-    my $webs = new TWiki::Prefs::PrefsCache("web", $globs, $web);
+    my $webs = new TWiki::Prefs::PrefsCache($session, "web", $globs, $web);
     $this->{WEBS}{$web} = $webs;
-    $this->{REQUEST} = new TWiki::Prefs::PrefsCache("copy", $webs);
-
-    $this->{TOPICCACHE} = undef;
+    $this->{REQUEST} = new TWiki::Prefs::PrefsCache($session, "copy", $webs);
 
     return $this;
 }
@@ -78,7 +77,8 @@ sub initializeUser {
     if( $wikiname =~ /^(.*)\.(.*)$/ ) {
         my $webPrefs = $this->{WEBS}{$this->{WEBNAME}};
         $this->{REQUEST} =
-          new TWiki::Prefs::PrefsCache("request", $webPrefs,
+          new TWiki::Prefs::PrefsCache($this->{session},
+                                       "request", $webPrefs,
                                        $topic, $2);
     }
 }
@@ -155,7 +155,8 @@ sub getPreferencesValue {
     if( $theWeb ) {
         if (!exists $this->{WEBS}{$theWeb}) {
             $this->{WEBS}{$theWeb} =
-              new TWiki::Prefs::PrefsCache("web", $this->{GLOBAL}, $theWeb);
+              new TWiki::Prefs::PrefsCache($this->{session},
+                                           "web", $this->{GLOBAL}, $theWeb);
         }
         $val = $this->{WEBS}{$theWeb}->{prefs}{$theKey};
     } else {

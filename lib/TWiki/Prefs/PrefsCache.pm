@@ -31,38 +31,13 @@ use TWiki::Prefs::TopicPrefs;
 
 =pod
 
----+++ sub resetCache()
-
-This STATIC function clears cached topic preferences, forcing all settings
-to be reread.
-
-=cut
-
-sub resetCache {
-    undef $TWiki::T->{prefs}->{TOPICCACHE};
-}
-
-=pod
-
----+++ sub invalidateCache( $web, $topic )
-
-This STATIC function invalidates the cache on a particular topic.
-
-=cut
-
-sub invalidateCache {
-    delete $TWiki::T->{prefs}->{TOPICCACHE}{$_[0]}{$_[1]};
-}
-
-=pod
-
 ---++ PrefsCache Object
 
 This defines an object used internally by the functions in Prefs to hold
 preferences.  This object handles the cascading of preferences from site, to
 web, to topic/user.
 
----+++ sub new( $type, $parent, @target )
+---+++ sub new( $session, $type, $parent, @target )
 
 | Description: | Creates a new Prefs object. |
 | Parameter: =$type= | Type of prefs object to create, see notes. |
@@ -83,18 +58,19 @@ Call like this: =$mainWebPrefs = Prefs->new("web", "Main");=
 =cut
 
 sub new {
-    my( $theClass, $theType, $theParent, @theTarget ) = @_;
-
+    my( $class, $session, $theType, $theParent, @theTarget ) = @_;
     my $self;
 
     if( $theType eq "copy" ) {
         $self = { %$theParent };
-        bless $self, $theClass;
+        $self->{session} = $session;
+        bless $self, $class;
 
         $self->inheritPrefs( $theParent );
     } else {
         $self = {};
-        bless $self, $theClass;
+        $self->{session} = $session;
+        bless $self, $class;
 
         $self->{type} = $theType;
         $self->{parent} = $theParent;
@@ -110,6 +86,8 @@ sub new {
 
     return $self;
 }
+
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
 
 =pod
 
@@ -183,14 +161,8 @@ with =$keyPrefix=.
 sub loadPrefsFromTopic {
     my( $self, $theWeb, $theTopic, $theKeyPrefix, $allowCache ) = @_;
 
-    my $topicPrefs;
-
-    if( $allowCache && $TWiki::T->{prefs} && 
-        exists( $TWiki::T->{prefs}->{TOPICCACHE}{$theWeb}{$theTopic} )) {
-        $topicPrefs = $TWiki::T->{prefs}->{TOPICCACHE}{$theWeb}{$theTopic};
-    } else {
-        $topicPrefs = new TWiki::Prefs::TopicPrefs( $theWeb, $theTopic );
-    }
+    my $topicPrefs = new TWiki::Prefs::TopicPrefs( $self->{session},
+                                                   $theWeb, $theTopic );
 
     $theKeyPrefix = "" unless defined $theKeyPrefix;
 

@@ -39,9 +39,9 @@ Reads preferences from the specified topic into a new TopicPrefs object.
 =cut
 
 sub new {
-    my( $class, $theWeb, $theTopic ) = @_;
-    my $self = {};
-    bless $self, $class;
+    my( $class, $session, $theWeb, $theTopic ) = @_;
+    my $self = bless( {}, $class );
+    $self->{session} = $session;
 
     $self->{web} = $theWeb;
     $self->{topic} = $theTopic;
@@ -50,6 +50,8 @@ sub new {
 
     return $self;
 }
+
+sub store { my $this = shift; return $this->{session}->{store}; }
 
 =pod
 
@@ -67,11 +69,12 @@ sub readPrefs {
 
     $self->{prefs} = {};
 
-    return unless $TWiki::T->{store}->topicExists( $theWeb, $theTopic );
+    return unless $self->store()->topicExists( $theWeb, $theTopic );
 
     my( $meta, $text ) =
-      $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $theWeb, $theTopic,
-                               undef, 1 );
+      $self->store()->readTopic( $self->{session}->{wikiUserName},
+                                 $theWeb, $theTopic,
+                                 undef, 1 );
 
     my $parser = new TWiki::Prefs::Parser();
     $parser->parseText( $text, $self );

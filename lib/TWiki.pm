@@ -343,9 +343,10 @@ BEGIN {
 }
 
 use TWiki::Sandbox;   # system command sandbox
+use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Prefs;     # preferences
 use TWiki::Access;    # access control
-use TWiki::Store;     # file I/O and rcs related functions
+use TWiki::Form;    # access control
 use TWiki::Search;    # search engine
 use TWiki::Plugins;   # plugins handler
 use TWiki::User;
@@ -2281,13 +2282,15 @@ sub new {
     # initialisation. When we are properly OO it will not be needed.
     $T = $this;
 
-    $this->{sandbox} = new TWiki::Sandbox( $TWiki::OS );
+    $this->{sandbox} = new TWiki::Sandbox( $this, $TWiki::OS );
 
-    $this->{net} = new TWiki::Net();
+    $this->{net} = new TWiki::Net( $this );
     my %ss = @storeSettings;
-    $this->{store} = new TWiki::Store( $storeTopicImpl, \%ss );
-    $this->{search} = new TWiki::Search();
-    $this->{templates} = new TWiki::Templates();
+    $this->{store} = new TWiki::Store( $this, $storeTopicImpl, \%ss );
+    $this->{search} = new TWiki::Search( $this );
+    $this->{templates} = new TWiki::Templates( $this );
+    $this->{attach} = new TWiki::Attach( $this );
+    $this->{form} = new TWiki::Form( $this );
 
     $this->{cgiQuery} = $theQuery;
 
@@ -2297,11 +2300,11 @@ sub new {
 
 	if ( # (-e $TWiki::htpasswdFilename ) && #<<< maybe
 		( $TWiki::htpasswdFormatFamily eq "htpasswd" ) ) {
-        $this->{users} = new TWiki::User( "HtPasswdUser" );
+        $this->{users} = new TWiki::User( $this, "HtPasswdUser" );
 #	} elseif ($TWiki::htpasswdFormatFamily eq "something?") {
-#        $this->{users} = new TWiki::User( "SomethingUser" );
+#        $this->{users} = new TWiki::User( $this, "SomethingUser" );
 	} else {
-        $this->{users} = new TWiki::User( "NoPasswdUser" );
+        $this->{users} = new TWiki::User( $this, "NoPasswdUser" );
 	}
 
     # Make %ENV safer, preventing hijack of the search path
@@ -2314,7 +2317,7 @@ sub new {
     getTWikiLibDir();
 
     # initialize access control
-    $this->{security} = new TWiki::Access();
+    $this->{security} = new TWiki::Access( $this );
 
     # initialize $webName and $topicName from URL
     $this->{topicName} = "";
@@ -2393,7 +2396,7 @@ sub new {
     }
 
     # initialize preferences, first part for site and web level
-    $this->{prefs} = new TWiki::Prefs( $this->{webName} );
+    $this->{prefs} = new TWiki::Prefs( $this );
 
     if( !$disableAllPlugins ) {
         # Early plugin initialization, allow plugins like SessionPlugin
@@ -2419,7 +2422,7 @@ sub new {
     # initialize preferences, second part for user level
     $this->{prefs}->initializeUser( $this->{wikiUserName}, $this->{topicName} );
 
-    $this->{renderer} = new TWiki::Render( $this->{prefs} );
+    $this->{renderer} = new TWiki::Render( $this );
 
     if( !$disableAllPlugins ) {
         # Normal plugin initialization - userName is known and preferences available

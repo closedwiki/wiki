@@ -56,30 +56,38 @@ Creates a new renderer with initial state from preference values
 =cut
 
 sub new {
-    my ( $class, $prefs ) = @_;
+    my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
+    $this->{session} = $session;
 
     $this->{NOAUTOLINK} = 0;
     $this->{MODE} = 'html';		# Default is to render as HTML
     $this->{NEWTOPICBGCOLOR} =
-      $prefs->getPreferencesValue("NEWTOPICBGCOLOR")
+      $session->{prefs}->getPreferencesValue("NEWTOPICBGCOLOR")
         || "#FFFFCE";
     $this->{NEWTOPICFONTCOLOR} =
-      $prefs->getPreferencesValue("NEWTOPICFONTCOLOR")
+      $session->{prefs}->getPreferencesValue("NEWTOPICFONTCOLOR")
         || "#0000FF";
     $this->{NEWLINKSYMBOL} =
-      $prefs->getPreferencesValue("NEWTOPICLINKSYMBOL")
+      $session->{prefs}->getPreferencesValue("NEWTOPICLINKSYMBOL")
         || "<sup>?</sup>";
     # tooltip init
     $this->{LINKTOOLTIPINFO} =
-      $prefs->getPreferencesValue("LINKTOOLTIPINFO")
+      $session->{prefs}->getPreferencesValue("LINKTOOLTIPINFO")
         || "";
-    $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary' if( $this->{LINKTOOLTIPINFO} =~ /^on$/ );
-    $this->{NOAUTOLINK} = $prefs->getPreferencesValue("NOAUTOLINK")
-      || 0;
+    $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
+      if( $this->{LINKTOOLTIPINFO} =~ /^on$/ );
+    $this->{NOAUTOLINK} =
+      $session->{prefs}->getPreferencesValue("NOAUTOLINK")
+        || 0;
 
     return $this;
 }
+
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub attach { my $this = shift; return $this->{session}->{attach}; }
 
 sub _renderParent {
     my( $this, $web, $topic, $meta, $args ) = @_;
@@ -119,7 +127,7 @@ sub _renderParent {
                  $visited{$parent} );
         $visited{$parent} = 1;
         unshift( @stack, "[[$parent][$pTopic]]" );
-        $parent = $TWiki::T->{store}->getTopicParent( $pWeb, $pTopic );
+        $parent = $this->store()->getTopicParent( $pWeb, $pTopic );
     }
     $text = join( $usesep, @stack );
 
@@ -147,7 +155,7 @@ sub _renderMoved {
         my $toWeb = $1;
         my $toTopic = $2;
         my $by   = $moved{"by"};
-        $by = $TWiki::T->{users}->userToWikiName( $by );
+        $by = $this->users()->userToWikiName( $by );
         my $date = $moved{"date"};
         $date = TWiki::formatTime( $date, "", "gmtime" );
 
@@ -424,17 +432,17 @@ sub _linkToolTipInfo {
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my( $date, $user, $rev ) =
-      $TWiki::T->{store}->getRevisionInfo( $theWeb, $theTopic );
+      $this->store()->getRevisionInfo( $theWeb, $theTopic );
     my $text = $this->{LINKTOOLTIPINFO};
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
-    $text =~ s/\$wikiname/"<nop>" . $TWiki::T->{users}->userToWikiName( $user, 1 )/ge;  # "JohnSmith"
-    $text =~ s/\$wikiusername/"<nop>" . $TWiki::T->{users}->userToWikiName( $user )/ge; # "Main.JohnSmith"
+    $text =~ s/\$wikiname/"<nop>" . $this->users()->userToWikiName( $user, 1 )/ge;  # "JohnSmith"
+    $text =~ s/\$wikiusername/"<nop>" . $this->users()->userToWikiName( $user )/ge; # "Main.JohnSmith"
     if( $text =~ /\$summary/ ) {
-        my $summary = $TWiki::T->{store}->readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt", 16 );
+        my $summary = $this->store()->readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt", 16 );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
         $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
@@ -479,7 +487,7 @@ sub internalLink {
         $theLinkText = TWiki::Plugins::renderWikiWordHandler( $theLinkText ) || $theLinkText;
      }
 
-    my $exist = $TWiki::T->{store}->topicExists( $theWeb, $theTopic );
+    my $exist = $this->store()->topicExists( $theWeb, $theTopic );
 
     # I18N - Only apply plural processing if site language is English, or
     # if a built-in English-language web (Main, TWiki or Plugins).  Plurals
@@ -497,7 +505,7 @@ sub internalLink {
         $tmp =~ s/sses$/ss/;     # plurals like address / addresses
         $tmp =~ s/([Xx])es$/$1/; # plurals like box / boxes
         $tmp =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
-        if( $TWiki::T->{store}->topicExists( $theWeb, $tmp ) ) {
+        if( $this->store()->topicExists( $theWeb, $tmp ) ) {
             $theTopic = $tmp;
             $exist = 1;
         }
@@ -524,7 +532,7 @@ sub internalLink {
         $text .= "<span class=\"twikiNewLink\" style='background : $this->{NEWTOPICBGCOLOR};'>"
               .  "<font color=\"$this->{NEWTOPICFONTCOLOR}\">$theLinkText</font>"
               .  "<a href=\"$TWiki::dispScriptUrlPath/edit$TWiki::scriptSuffix/$theWeb/$theTopic?topicparent="
-                .$TWiki::T->{webName}.".".$TWiki::T->{topicName}."\">$this->{NEWLINKSYMBOL}</a></span>";
+                .$this->{session}->{webName}.".".$this->{session}->{topicName}."\">$this->{NEWLINKSYMBOL}</a></span>";
         return $text;
 
     } elsif( $doKeepWeb ) {
@@ -651,7 +659,7 @@ sub filenameToIcon {
 
     my $iconDir = "$TWiki::pubDir/icn";
     my $iconUrl = "$TWiki::pubUrlPath/icn";
-    my $iconList = $TWiki::T->{store}->readFile( "$iconDir/_filetypes.txt" );
+    my $iconList = $this->store()->readFile( "$iconDir/_filetypes.txt" );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
 	if( $bits[0] eq $fileExt ) {
@@ -707,7 +715,7 @@ sub renderFormField {
     unless ( $meta ) {
         my $dummyText;
         ( $meta, $dummyText ) =
-          $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $formWeb, $formTopic, undef, 0 );
+          $this->store()->readTopic( $this->{session}->{wikiUserName}, $formWeb, $formTopic, undef, 0 );
         $this->{ffCache}{"$formWeb.$formTopic"} = $meta;
     }
 
@@ -758,10 +766,10 @@ sub getRenderedVersion {
 
     # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
     # (fails in %INCLUDE%, %SEARCH%)
-    my $theTopic = $TWiki::T->{topicName};
+    my $theTopic = $this->{session}->{topicName};
 
     if( !$theWeb ) {
-        $theWeb = $TWiki::T->{webName};
+        $theWeb = $this->{session}->{webName};
     }
 
     $head = "";
@@ -1034,7 +1042,7 @@ sub _handleLink {
         } else {
             $anchor = "";
             # 'Web.TopicName' or 'Web.ABBREV' link:
-            if ( $topic eq $TWiki::mainTopicname && $web ne $TWiki::T->{webName} ) {
+            if ( $topic eq $TWiki::mainTopicname && $web ne $this->{session}->{webName} ) {
                 $text = $web;
             } else {
                 $text =
@@ -1125,7 +1133,7 @@ sub renderMetaTags {
 
     $text =~ s/%META{\s*"form"\s*}%/$this->_renderFormData( $theWeb, $theTopic, $meta )/ge;    #this renders META:FORM and META:FIELD
     $text =~ s/%META{\s*"formfield"\s*(.*?)}%/$this->_renderFormField( $meta, $1 )/ge;                 #TODO: what does this do? (is this the old forms system, and so can be deleted)
-    $text =~ s/%META{\s*"attachments"\s*(.*)}%/TWiki::Attach::renderMetaData( $theWeb,
+    $text =~ s/%META{\s*"attachments"\s*(.*)}%/$this->attach()->renderMetaData( $theWeb,
                                                 $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
     $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information

@@ -89,7 +89,7 @@ sub attach {
   }
   if ( $fileName ) {
 	# must come after templates have been read
-    $atext .= TWiki::Attach::formatVersions( $webName, $topic, %args );
+    $atext .= $TWiki::T->{attach}->formatVersions( $webName, $topic, %args );
   }
   $tmpl =~ s/%ATTACHTABLE%/$atext/go;
   $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
@@ -194,7 +194,7 @@ sub upload {
     }
 
     my $error =
-      TWiki::Store::saveAttachment( $webName, $topic, $fileName, $userName,
+      $TWiki::T->{store}->saveAttachment( $webName, $topic, $fileName, $userName,
                                     { dontlog => !$TWiki::doLogTopicUpload,
                                       comment => $fileComment,
                                       hide => $hideFile,

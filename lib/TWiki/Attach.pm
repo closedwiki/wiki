@@ -38,6 +38,28 @@ package TWiki::Attach;
 
 =pod
 
+---++ new( $session )
+Constructor for singleton obeject.
+
+=cut
+
+sub new {
+    my ( $class, $session ) = @_;
+    my $this = bless( {}, $class );
+    $this->{session} = $session;
+    return $this;
+}
+
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub templates { my $this = shift; return $this->{session}->{templates}; }
+sub renderer { my $this = shift; return $this->{session}->{renderer}; }
+
+=pod
+
 ---++ sub renderMetaData (  $web, $topic, $meta, $args, $isTopRev  )
 
 Generate a table of attachments suitable for the bottom of a topic
@@ -50,9 +72,8 @@ view, using templates for the header, footer and each row.
 
 =cut
 
-sub renderMetaData
-{
-    my( $web, $topic, $meta, $attrs, $isTopTopicRev ) = @_;
+sub renderMetaData {
+    my( $this, $web, $topic, $meta, $attrs, $isTopTopicRev ) = @_;
 
     my $showAll = TWiki::extractNameValuePair( $attrs, "all" );
     my $showAttr = $showAll ? "h" : "";
@@ -61,12 +82,12 @@ sub renderMetaData
 	my @attachments = $meta->find( "FILEATTACHMENT" );
 
 	my $rows = "";
-	my $row = _getTemplate("ATTACH:files:row$a");
+	my $row = $this->_getTemplate("ATTACH:files:row$a");
     foreach my $attachment ( @attachments ) {
         my $attrAttr = $attachment->{attr};
 
         if( ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ )) {
-            $rows .= _formatRow( $web, $topic,
+            $rows .= $this->_formatRow( $web, $topic,
                                  $attachment,
                                  $isTopTopicRev,
                                  $row );
@@ -76,8 +97,8 @@ sub renderMetaData
     my $text = "";
 
     if( $showAll || $rows ne "" ) {
-        my $header = _getTemplate("ATTACH:files:header$a");
-        my $footer = _getTemplate("ATTACH:files:footer$a");
+        my $header = $this->_getTemplate("ATTACH:files:header$a");
+        my $footer = $this->_getTemplate("ATTACH:files:footer$a");
 
         $text = "$header$rows$footer";
     }
@@ -87,17 +108,17 @@ sub renderMetaData
 # PRIVATE get a template, reading the attachment tables template
 # if not already defined.
 sub _getTemplate {
-    my $template = shift;
+    my ( $this, $template ) = @_;
 
-    $TWiki::T->{templates}->readTemplate("attachtables") unless
-        $TWiki::T->{templates}->haveTemplate( $template );
+    $this->templates()->readTemplate("attachtables") unless
+        $this->templates()->haveTemplate( $template );
 
-    return $TWiki::T->{templates}->expandTemplate( $template );
+    return $this->templates()->expandTemplate( $template );
 }
 
 =pod
 
----++ sub formatVersions (  $theWeb, $theTopic, $attrs )
+---++ sub formatVersions ( $theWeb, $theTopic, $attrs )
 
 Generate a version history table for a single attachment
 | =$web= | the web |
@@ -107,21 +128,21 @@ Generate a version history table for a single attachment
 =cut
 
 sub formatVersions {
-    my( $web, $topic, %attrs ) = @_;
+    my( $this, $web, $topic, %attrs ) = @_;
 
     my $latestRev =
-      $TWiki::T->{store}->getRevisionNumber( $web, $topic, $attrs{name} );
+      $this->store()->getRevisionNumber( $web, $topic, $attrs{name} );
 
-    my $header = _getTemplate("ATTACH:versions:header");
-    my $footer = _getTemplate("ATTACH:versions:footer");
-    my $row    = _getTemplate("ATTACH:versions:row");
+    my $header = $this->_getTemplate("ATTACH:versions:header");
+    my $footer = $this->_getTemplate("ATTACH:versions:footer");
+    my $row    = $this->_getTemplate("ATTACH:versions:row");
 
     my $rows ="";
 
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
         my( $date, $userName, $minorRev, $comment ) =
-          $TWiki::T->{store}->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
-        $rows .= _formatRow( $web, $topic,
+          $this->store()->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
+        $rows .= $this->_formatRow( $web, $topic,
                              {
                               name    => $attrs{name},
                               version => $rev,
@@ -152,25 +173,25 @@ Format a single row in an attachment table by expanding a template.
 =cut
 
 sub _formatRow {
-    my ( $web, $topic, $info, $topRev, $tmpl ) = @_;
+    my ( $this, $web, $topic, $info, $topRev, $tmpl ) = @_;
 
     my $row = $tmpl;
 
-    $row =~ s/%A_(\w+)%/&_expandAttrs($1,$web,$topic,$info,$topRev)/ge;
+    $row =~ s/%A_(\w+)%/$this->_expandAttrs($1,$web,$topic,$info,$topRev)/ge;
     $row =~ s/\0/%/g;
 
     return $row;
 }
 
 sub _expandAttrs {
-    my ( $attr, $web, $topic, $info, $topRev ) = @_;
+    my ( $this, $attr, $web, $topic, $info, $topRev ) = @_;
     my $file = $info->{name};
 
     if ( $attr eq "REV" ) {
         return $info->{version};
     }
     elsif ( $attr eq "ICON" ) {
-        my $fileIcon = $TWiki::T->{renderer}->filenameToIcon( $file );
+        my $fileIcon = $this->renderer()->filenameToIcon( $file );
         return $fileIcon;
     }
     elsif ( $attr eq "URL" ) {
@@ -213,7 +234,7 @@ sub _expandAttrs {
         return TWiki::formatTime( $info->{date} );
     }
     elsif ( $attr eq "USER" ) {
-        return $TWiki::T->{users}->userToWikiName( $info->{user} );
+        return $this->users()->userToWikiName( $info->{user} );
     }
     else {
         return "\0A_$attr\0";
@@ -233,7 +254,7 @@ Build a link to the attachment, suitable for insertion in the topic.
 
 sub getAttachmentLink
 {
-    my ( $web, $topic, $attName, $meta ) = @_;
+    my ( $this, $web, $topic, $attName, $meta ) = @_;
 
     my %att = $meta->findOne( "FILEATTACHMENT", $attName );
     my $fileComment = $att{comment};
@@ -251,18 +272,18 @@ sub getAttachmentLink
         # downloaded. When you upload an image to TWiki and checkmark
         # the link checkbox, TWiki will generate the width and height
         # img parameters, speeding up the page rendering.
-        my $stream =  $TWiki::T->{store}->getAttachmentStream( $web, $topic, $attName );
+        my $stream =  $this->store()->getAttachmentStream( $web, $topic, $attName );
         my( $nx, $ny ) = &_imgsize( $stream, $attName );
 
         if( ( $nx > 0 ) && ( $ny > 0 ) ) {
             $imgSize = "width=\"$nx\" height=\"$ny\" ";
         }
-        $fileLink = $TWiki::T->{prefs}->getPreferencesValue( "ATTACHEDIMAGEFORMAT" )
+        $fileLink = $this->prefs()->getPreferencesValue( "ATTACHEDIMAGEFORMAT" )
           || '   * $comment: <br />'
             . ' <img src="%ATTACHURLPATH%/$name" alt="$name" $size />';
     } else {
         # normal attached file
-        $fileLink = $TWiki::T->{prefs}->getPreferencesValue( "ATTACHEDFILELINKFORMAT" )
+        $fileLink = $this->prefs()->getPreferencesValue( "ATTACHEDFILELINKFORMAT" )
           || '   * [[%ATTACHURL%/$name][$name]]: $comment';
     }
 
@@ -502,7 +523,7 @@ format.
 
 sub _getOldAttachAttr
 {
-    my( $atext ) = @_;
+    my( $this, $atext ) = @_;
     my $fileName="";
 	my $filePath="";
 	my $fileSize="";
@@ -536,7 +557,7 @@ sub _getOldAttachAttr
 	if( ! $fileUser ) { 
             $fileUser = ""; 
         } else {
-            $fileUser = $TWiki::T->{users}->wikiToUserName( $fileUser );
+            $fileUser = $this->users()->wikiToUserName( $fileUser );
         }
 	$fileUser =~ s/ //go;
 	( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $atext );
@@ -573,7 +594,7 @@ Migrate old HTML format
 
 sub migrateToFileAttachmentMacro
 {
-   my ( $meta, $text ) = @_;
+   my ( $this, $meta, $text ) = @_;
 
    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
    $text = $before || "";
@@ -584,7 +605,7 @@ sub migrateToFileAttachmentMacro
       my $line = "";
       foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
           my( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) =
-            _getOldAttachAttr( $line );
+            $this->_getOldAttachAttr( $line );
 
           if( $fileName ) {
 			my @attrs = (
@@ -629,9 +650,8 @@ CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
 
 =cut
 
-sub upgradeFrom1v0beta
-{
-   my( $meta ) = @_;
+sub upgradeFrom1v0beta {
+   my( $this, $meta ) = @_;
    
    my @attach = $meta->find( "FILEATTACHMENT" );
    foreach my $att ( @attach ) {
@@ -642,7 +662,7 @@ sub upgradeFrom1v0beta
            $date = TWiki::Store::RcsFile::revDate2EpSecs( $date );
        }
        $att->{"date"} = $date;
-       $att->{"user"} = $TWiki::T->{users}->wikiToUserName( $att->{"user"} );
+       $att->{"user"} = $this->users()->wikiToUserName( $att->{"user"} );
    }
 }
 

@@ -122,9 +122,8 @@ sub _save {
   }
 
   if( $changeform ) {
-    use TWiki::Form;
-    TWiki::Form::changeForm( $webName, $topic, $query );
-    return 0;
+      $TWiki::T->{form}->changeForm( $webName, $topic, $query );
+      return 0;
   }
 
   $text = $TWiki::T->{renderer}->decodeSpecialChars( $text );
@@ -153,9 +152,8 @@ sub _save {
     }
 
     use TWiki::Form;
-    # CODE_SMELL: this fieldVars2Meta thing should be in UI, not Meta
 	# Expand field variables, unless this new page is templated
-    TWiki::Form::fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
+    $TWiki::T->{form}->fieldVars2Meta( $webName, $query, $meta ) unless $templatetopic;
     $meta->updateSets( \$text );
   }
 

@@ -49,13 +49,22 @@ Constructor. Creates a new template database object.
 =cut
 
 sub new {
-    my $class = shift;
+    my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
+    $this->{session} = $session;
 
     %{$this->{VARS}} = ();
 
     return $this;
 }
+
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub templates { my $this = shift; return $this->{session}->{templates}; }
+sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
@@ -156,13 +165,13 @@ sub readTemplate {
     }
 
     if( ! defined( $theWeb ) ) {
-      $theWeb = $TWiki::T->{webName};
+      $theWeb = $this->{session}->{webName};
     }
 
     # recursively read template file(s)
-    my $text = _readTemplateFile( $theName, $theSkin, $theWeb );
+    my $text = $this->_readTemplateFile( $theName, $theSkin, $theWeb );
     while( $text =~ /%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/s ) {
-        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/&_readTemplateFile( $1, $theSkin, $theWeb )/geo;
+        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/$this->_readTemplateFile( $1, $theSkin, $theWeb )/geo;
     }
 
     if( ! ( $text =~ /%TMPL\:/s ) ) {
@@ -210,7 +219,7 @@ sub readTemplate {
 # STATIC: Return value: raw template text, or "" if read fails
 sub _readTemplateFile
 {
-    my( $theName, $theSkin, $theWeb ) = @_;
+    my( $this, $theName, $theSkin, $theWeb ) = @_;
     $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
 
     $theName =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
@@ -258,7 +267,7 @@ sub _readTemplateFile
 
     # read the template file
     if( $tmplFile && -e $tmplFile ) {
-        return $TWiki::T->{store}->readFile( $tmplFile );
+        return $this->store()->readFile( $tmplFile );
     }
 
     # See if it is a user topic. Search first in current web
@@ -274,19 +283,20 @@ sub _readTemplateFile
         $theWeb = ucfirst( $1 );
         $theTopic = ucfirst( $2 );
     } else {
-        $theWeb = $TWiki::T->{webName};
+        $theWeb = $this->{session}->{webName};
         $theTopic = $theSkin . ucfirst( $theName ) . "Template";
-        if ( !$TWiki::T->{store}->topicExists( $theWeb, $theTopic )) {
+        if ( !$this->store()->topicExists( $theWeb, $theTopic )) {
             $theWeb = $TWiki::twikiWebname;
         }
     }
 
-    if ( $TWiki::T->{store}->topicExists( $theWeb, $theTopic ) &&
-         $TWiki::T->{security}->checkAccessPermission( "view",
-                                                  $TWiki::T->{wikiUserName}, "",
+    if ( $this->store()->topicExists( $theWeb, $theTopic ) &&
+         $this->security()->checkAccessPermission( "view",
+                                                  $this->{session}->{wikiUserName}, "",
                                                   $theTopic, $theWeb )) {
         my ( $meta, $text ) =
-          $TWiki::T->{store}->readTopic( $TWiki::T->{wikiUserName}, $theWeb, $theTopic, undef, 1 );
+          $this->store()->readTopic( $this->{session}->{wikiUserName},
+                                     $theWeb, $theTopic, undef, 1 );
         return $text;
     }
 

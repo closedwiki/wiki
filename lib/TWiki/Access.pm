@@ -35,14 +35,23 @@ database.
 =cut
 
 sub new {
-    my $class = shift;
-
+    my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
+    $this->{session} = $session;
 
     %{$this->{GROUPS}} = ();
 
     return $this;
 }
+
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub templates { my $this = shift; return $this->{session}->{templates}; }
+sub renderer { my $this = shift; return $this->{session}->{renderer}; }
+sub search { my $this = shift; return $this->{session}->{search}; }
 
 =pod
 
@@ -65,7 +74,7 @@ sub permissionsSet {
   OUT: foreach my $type ( @types ) {
         foreach my $action ( @actions ) {
             my $pref = $type . "WEB" . $action;
-            my $prefValue = $TWiki::T->{prefs}->getPreferencesValue( $pref, $web ) || "";
+            my $prefValue = $this->prefs()->getPreferencesValue( $pref, $web ) || "";
             if( $prefValue =~ /\S/ ) {
                 $permSet = 1;
                 last OUT;
@@ -104,13 +113,13 @@ sub checkAccessPermission {
 
     $theAccessType = uc( $theAccessType );  # upper case
     if( ! $theWebName ) {
-        $theWebName = $TWiki::T->{webName};
+        $theWebName = $this->{session}->{webName};
     }
     if( ! $theTopicText ) {
         # text not supplied as parameter, so read topic. The
         # read is "Raw" just to hint to store that we want the
         # data _fast_.
-        $theTopicText = $TWiki::T->{store}->readTopicRaw( $TWiki::T->{wikiUserName}, $theWebName, $theTopicName, undef, 1 );
+        $theTopicText = $this->store()->readTopicRaw( $this->{session}->{wikiUserName}, $theWebName, $theTopicName, undef, 1 );
     }
 
     my $allowText;
@@ -135,7 +144,7 @@ sub checkAccessPermission {
     # DENYTOPIC overrides DENYWEB, even if it is empty
     unless( defined( $denyText )) {
         $denyText =
-          $TWiki::T->{prefs}->getPreferencesValue( "DENYWEB$theAccessType",
+          $this->prefs()->getPreferencesValue( "DENYWEB$theAccessType",
                                              $theWebName );
     }
 
@@ -150,7 +159,7 @@ sub checkAccessPermission {
     } else {
         # ALLOWTOPIC overrides ALLOWWEB, even if it is empty
         $allowText =
-          $TWiki::T->{prefs}->getPreferencesValue( "ALLOWWEB$theAccessType",
+          $this->prefs()->getPreferencesValue( "ALLOWWEB$theAccessType",
                                              $theWebName );
 
         if( defined( $allowText ) && $allowText =~ /\S/ ) {
@@ -164,9 +173,10 @@ sub checkAccessPermission {
 
 # get a list of groups definedin this TWiki 
 sub _getListOfGroups {
+    my $this = shift;
 
     my $text =
-      $TWiki::T->{search}->searchWeb
+      $this->search()->searchWeb
           (
            #_callback      => undef,
            inline          => 1,
@@ -202,7 +212,7 @@ sub getGroupsUserIsIn {
     die "$this from ".join(",",caller)."\n" unless $this =~ /TWiki::Access/;
     my $userTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
     my @grpMembers = ();
-    my @listOfGroups = _getListOfGroups();
+    my @listOfGroups = $this->_getListOfGroups();
     my $group;
 
     foreach $group ( @listOfGroups) {
@@ -279,7 +289,8 @@ sub _getUsersOfGroup {
     }
     $processedGroups->{"$web.$topic"} = 1;
 
-    my $text = $TWiki::T->{store}->readTopicRaw( $TWiki::T->{wikiUserName}, $web, $topic, undef, 1 );
+    my $text = $this->store()->readTopicRaw( $this->{session}->{wikiUserName},
+                                             $web, $topic, undef, 1 );
 
     # SMELL: what the blazes is this? Comment it out, and
     # see what breaks.... DFP rules.

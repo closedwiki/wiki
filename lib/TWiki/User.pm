@@ -44,8 +44,9 @@ Construct the user management object
 =cut
 
 sub new {
-    my ( $class, $impl ) = @_;
+    my ( $class, $session, $impl ) = @_;
     my $this = bless( {}, $class );
+    $this->{session} = $session;
 
     $this->{IMPL} = "TWiki::User::$impl";
     $this->{CACHED} = 0;
@@ -56,6 +57,14 @@ sub new {
 
     return $this;
 }
+
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub templates { my $this = shift; return $this->{session}->{templates}; }
+sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 # Get the password implementation
 sub _getPasswordHandler {
@@ -188,7 +197,7 @@ sub addUserToTWikiUsersTopic {
 #  die Dumper(\@_);
     my $topicName = $TWiki::wikiUsersTopicname;
     my( $meta, $text ) =
-      $TWiki::T->{store}->readTopic( $TWiki::mainWebname, $topicName, undef, 0 );
+      $this->store()->readTopic( $TWiki::mainWebname, $topicName, undef, 0 );
     my $result = "";
     my $status = "0";
     my $line = "";
@@ -232,7 +241,7 @@ sub addUserToTWikiUsersTopic {
 
         $result .= "$line\n";
     }
-    $TWiki::T->{store}->saveTopic( $TWiki::mainWebname, $topicName, $result, $meta, "", 1 );
+    $this->store()->saveTopic( $TWiki::mainWebname, $topicName, $result, $meta, "", 1 );
     return $topicName;
 }
 
@@ -250,7 +259,7 @@ sub getEmail {
     my $mainWebname = $TWiki::mainWebname;
 
     # Ignore guest entry and non-existent pages
-    unless ($TWiki::T->{store}->topicExists( $mainWebname, $wikiName )) {
+    unless ($this->store()->topicExists( $mainWebname, $wikiName )) {
         return;
     }
 
@@ -273,7 +282,7 @@ sub getEmail {
     } else {
         # Page is for a user
         ##writeDebug "reading home page: $mainWebname . $wikiName";
-        push @list, _getEmailAddressesFromPage($mainWebname, $wikiName);
+        push @list, $this->_getEmailAddressesFromPage($mainWebname, $wikiName);
     }
     use Data::Dumper;
     return (@list);
@@ -282,18 +291,18 @@ sub getEmail {
 # Returns array of email addresses referenced in 
 # the bulletfield / metafield on the page. 
 sub _getEmailAddressesFromPage {
-    my ($mainWebname, $wikiName) = @_;
+    my ($this, $mainWebname, $wikiName) = @_;
 
 #    die Dumper(\@_);
-    return _getField($mainWebname, $wikiName, "Email");
+    return $this->_getField($mainWebname, $wikiName, "Email");
 }
 
 # SMELL - this is no longer specific to users - surely any topic has fields
 # SMELL - returns singular if refering to a field in meta, but multiple if values are defined that way in topic content
 sub _getField {
-    my ($web, $topic, $fieldName) = @_;
+    my ($this, $web, $topic, $fieldName) = @_;
     my ($meta, @text) =
-      $TWiki::T->{store}->readTopic(
+      $this->store()->readTopic(
                                $web,
                                $topic,
                                undef,
@@ -365,7 +374,7 @@ sub initializeRemoteUser {
         return $remoteUser;
     }
 
-    my $text = $TWiki::T->{store}->readFile( $TWiki::remoteUserFilename );
+    my $text = $this->store()->readFile( $TWiki::remoteUserFilename );
     # Assume no I18N characters in userids, as for email addresses
     # FIXME: Needs fixing for IPv6?
     my %AddrToName = map { split( /\|/, $_ ) }
@@ -390,7 +399,7 @@ sub initializeRemoteUser {
                     $text .= "$usrAddr|$usrName|\n";
                 }
             }
-            $TWiki::T->{store}->saveFile( $TWiki::remoteUserFilename, $text );
+            $this->store()->saveFile( $TWiki::remoteUserFilename, $text );
         }
     } else {
         # get user name from AddrToName table
@@ -424,7 +433,7 @@ sub _cacheUserToWikiTranslations {
     %{$this->{W2U}} = ();
     my @list = ();
     if( $TWiki::doMapUserToWikiName ) {
-        @list = split( /\n/, $TWiki::T->{store}->readFile( $TWiki::userListFilename ) );
+        @list = split( /\n/, $this->store()->readFile( $TWiki::userListFilename ) );
     } else {
         # fix for Codev.SecurityAlertGainAdminRightWithTWikiUsersMapping
         # for .htpasswd authenticated sites ignore user list, but map only guest to TWikiGuest

@@ -28,14 +28,24 @@ package TWiki::Net;
 use strict;
 
 sub new {
-    my $class = shift;
+    my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
+
+    $this->{session} = $session;
 
     $this->{USENETSMTP} = 0;
     $this->{MAILINITIALIZED} = 0;
 
     return $this;
 }
+
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub prefs { my $this = shift; return $this->{session}->{prefs}; }
+sub store { my $this = shift; return $this->{session}->{store}; }
+sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub templates { my $this = shift; return $this->{session}->{templates}; }
+sub renderer { my $this = shift; return $this->{session}->{renderer}; }
 
 =pod
 
@@ -70,8 +80,8 @@ sub getUrl {
         $req .= "Authorization: Basic $base64";
     }
 
-    my $proxyHost = $TWiki::T->{prefs}->getPreferencesValue("PROXYHOST");
-    my $proxyPort = $TWiki::T->{prefs}->getPreferencesValue("PROXYPORT");
+    my $proxyHost = $this->prefs()->getPreferencesValue("PROXYHOST");
+    my $proxyPort = $this->prefs()->getPreferencesValue("PROXYPORT");
     if($proxyHost && $proxyPort) {
         $req = "GET http://$theHost:$thePort$theUrl HTTP/1.0\r\n";
         $theHost = $proxyHost;
@@ -124,8 +134,8 @@ sub sendEmail {
     # Check if Net::SMTP is available
     unless( $this->{MAILINITIALIZED} ) {
         $this->{MAILINITIALIZED} = 1;
-        $this->{MAIL_HOST}  = $TWiki::T->{prefs}->getPreferencesValue( "SMTPMAILHOST" );
-        $this->{HELLO_HOST} = $TWiki::T->{prefs}->getPreferencesValue( "SMTPSENDERHOST" );
+        $this->{MAIL_HOST}  = $this->prefs()->getPreferencesValue( "SMTPMAILHOST" );
+        $this->{HELLO_HOST} = $this->prefs()->getPreferencesValue( "SMTPSENDERHOST" );
         if( $this->{MAIL_HOST} ) {
             eval {	# May fail if Net::SMTP not installed
                 $this->{USENETSMTP} = require Net::SMTP;

@@ -219,13 +219,13 @@ sub edit {
     my $form = "";
     $form = $formMeta{"name"} if( %formMeta );
     if( $form && $saveCmd ne "repRev" ) {
-        my @fieldDefs = &TWiki::Form::getFormDef( $templateWeb, $form );
+        my @fieldDefs = $TWiki::T->{form}->getFormDef( $templateWeb, $form );
 
         if( ! @fieldDefs ) {
             TWiki::UI::oops( $webName, $topic, "noformdef" );
             return;
         }
-        my $formText = &TWiki::Form::renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
+        my $formText = $TWiki::T->{form}->renderForEdit( $webName, $topic, $form, $meta, $query, $getValuesFromFormTopic, @fieldDefs );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( $saveCmd ne "repRev" && $TWiki::T->{prefs}->getPreferencesValue( "WEBFORMS", $webName )) {
         # follows a hybrid html monster to let the 'choose form button' align at

@@ -64,8 +64,10 @@ Construct a Store module, linking in the chosen implementation.
 =cut
 
 sub new {
-    my ( $class, $impl, $storeSettings ) = @_;
+    my ( $class, $session, $impl, $storeSettings ) = @_;
     my $this = bless( {}, $class );
+
+    $this->{session} = $session;
 
     $this->{IMPL} = "TWiki::Store::$impl";
     eval "use $this->{IMPL}";
@@ -75,6 +77,11 @@ sub new {
 
     return $this;
 }
+
+sub security { my $this = shift; return $this->{session}->{security}; }
+sub users { my $this = shift; return $this->{session}->{users}; }
+sub form { my $this = shift; return $this->{session}->{form}; }
+sub attach { my $this = shift; return $this->{session}->{attach}; }
 
 # PRIVATE
 # Get the handler for the current store implementation, either RcsFile
@@ -170,8 +177,8 @@ sub readTopicRaw {
     my $viewAccessOK = 1;
     unless( $internal ) {
         $viewAccessOK =
-          $TWiki::T->{security}->checkAccessPermission( "view", $user,
-                                                   $text, $theTopic, $theWeb );
+          $this->security()->checkAccessPermission( "view", $user,
+                                                    $text, $theTopic, $theWeb );
     }
 
     unless( $viewAccessOK ) {
@@ -385,7 +392,7 @@ sub renameTopic {
 
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, "" );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
-    my $wName = $TWiki::T->{users}->userToWikiName( $user );
+    my $wName = $this->users()->userToWikiName( $user );
 
     if( ! $error ) {
         my $time = time();
@@ -634,7 +641,7 @@ sub topicIsLockedBy {
     if( ( -e "$lockFilename" ) && ( $TWiki::editLockTime > 0 ) ) {
         my $tmp = $this->readFile( $lockFilename );
         my( $lockUser, $lockTime ) = split( /\n/, $tmp );
-        if( $lockUser ne $TWiki::T->{userName} ) {
+        if( $lockUser ne $this->{session}->{userName} ) {
             # time stamp of lock within editLockTime of current time?
             my $systemTime = time();
             # calculate remaining lock time in seconds
@@ -776,7 +783,7 @@ sub saveAttachment {
     }
 
     if( $opts->{createlink} ) {
-        $text .= TWiki::Attach::getAttachmentLink( $web, $topic,
+        $text .= $this->attach()->getAttachmentLink( $web, $topic,
                                                    $attachment, $meta );
     }
 
@@ -792,15 +799,11 @@ sub saveAttachment {
 }
 
 # Add meta data to the topic.
-sub _addMeta
-{
+sub _addMeta {
     my( $web, $topic, $text, $nextRev, $meta, $forceDate, $forceUser ) = @_;
 
-    $nextRev = 1 if( ! $nextRev );
-    $meta->addTopicInfo(  $web, $topic, $nextRev, $forceDate, $forceUser );
-    $text = _writeMeta( $meta, $text );
-
-    return $text;
+    $meta->addTOPICINFO(  $web, $topic, $nextRev, $forceDate, $forceUser );
+    return _writeMeta( $meta, $text );
 }
 
 # _noHandlersSave
@@ -918,7 +921,7 @@ sub _repRev {
     if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
         # write log entry
         my $extra = "repRev by $userName: $rev " .
-          $TWiki::T->{users}->userToWikiName( $user ) .
+          $this->users()->userToWikiName( $user ) .
               " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
         $extra   .= " dontNotify" if( $dontNotify );
         TWiki::writeLog( "save", "$web.$topic", $extra );
@@ -1090,19 +1093,18 @@ sub extractMetaData {
     my( $this, $web, $topic, $rtext ) = @_;
     die "ASSERT $this from ".join(",",caller)."\n" unless $this =~ /TWiki::Store/;
 
-    my $meta = TWiki::Meta->new( $web, $topic );
+    my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
     $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2)/gem;
 
     # If there is no meta data then convert from old format
     if( ! $meta->count( "TOPICINFO" ) ) {
         if ( $$rtext =~ /<!--TWikiAttachment-->/ ) {
-            $$rtext = TWiki::Attach::migrateToFileAttachmentMacro( $meta,
+            $$rtext = $this->attach()->migrateToFileAttachmentMacro( $meta,
                                                                    $$rtext );
         }
 
         if ( $$rtext =~ /<!--TWikiCat-->/ ) {
-            eval 'use TWiki::Form;';
-            $$rtext = TWiki::Form::upgradeCategoryTable( $web, $topic,
+            $$rtext = $this->form()->upgradeCategoryTable( $web, $topic,
                                                          $meta, $$rtext );
         }
     } else {
@@ -1110,15 +1112,14 @@ sub extractMetaData {
         if( $topicinfo{"format"} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
             if( $$rtext =~ /<!--TWikiCat-->/ ) {
-                eval 'use TWiki::Form;';
-                $$rtext = TWiki::Form::upgradeCategoryTable( $web, $topic,
-                                                             $meta,
-                                                             $$rtext );
+                $$rtext = $this->form()->upgradeCategoryTable( $web, $topic,
+                                                               $meta,
+                                                               $$rtext );
             }
-            TWiki::Attach::upgradeFrom1v0beta( $meta );
+            $this->attach()->upgradeFrom1v0beta( $meta );
             if( $meta->count( "TOPICMOVED" ) ) {
                  my %moved = $meta->findOne( "TOPICMOVED" );
-                 $moved{"by"} = $TWiki::T->{users}->wikiToUserName( $moved{"by"} );
+                 $moved{"by"} = $this->users()->wikiToUserName( $moved{"by"} );
                  $meta->put( "TOPICMOVED", %moved );
             }
         }
@@ -1346,7 +1347,7 @@ sub _writeTypes {
                 }
             }
             $text .= "\}%\n";
-         }
+        }
     }
 
     return $text;

@@ -64,15 +64,23 @@ Construct a new, empty Meta collection.
 =cut
 
 sub new {
-    my ( $class, $web, $topic ) = @_;
-    my $self = {};
+    my ( $class, $session, $web, $topic ) = @_;
+    my $self = bless( {}, $class );
+
+    # Note: internal fields must be prepended with _. All other
+    # fields will be assumed to be meta-data.
+    $self->{_session} = $session;
+
     throw Error::Simple("ASSERT: no web") unless $web;
     throw Error::Simple("ASSERT: no topic") unless $topic;
+
     $self->{_web} = $web;
     $self->{_topic} = $topic;
-    bless( $self, $class );
+
     return $self;
 }
+
+sub store { my $this = shift; return $this->{_session}->{store}; }
 
 =pod
 
@@ -120,7 +128,6 @@ sub put
        } else {
            $data->[0] = \%args; 
        }
-
    } else {
        my @data = ( \%args );
        $self->{$type} = \@data;
@@ -155,7 +162,7 @@ SMELL: This method would be better named "lookup" or "get".
 sub findOne
 {
    my( $self, $type, $keyValue ) = @_;
-   
+
    my %args = ();
 
    my $data = $self->{$type};
@@ -302,19 +309,19 @@ sub restoreValue
 
 =pod
 
----++ sub addTopicInfo (  $web, $topic, $rev, $meta, $forceDate, $forceUser  )
+---++ sub addTOPICINFO (  $web, $topic, $rev, $meta, $forceDate, $forceUser  )
 
 Add TOPICINFO type data to the object, as specified by the parameters.
 
 =cut
 
-sub addTopicInfo {
+sub addTOPICINFO {
     my( $self, $web, $topic, $rev, $forceDate, $forceUser ) = @_;
 
     my $time = $forceDate || time();
-    my $user = $forceUser || $TWiki::T->{userName};
+    my $user = $forceUser || $self->{_session}->{userName};
 
-    die "ASSERT $rev" unless( $rev =~ /^\d+$/ ); # temporary
+    $rev = 1 unless $rev;
 
     my @args =
       (
@@ -356,7 +363,7 @@ sub getRevisionInfo {
     } else {
        # Get data from Store
        ( $date, $author, $rev, $comment ) =
-         $TWiki::T->{store}->getRevisionInfo( $self->{_web}, $self->{_topic}, 0 );
+         $self->store()->getRevisionInfo( $self->{_web}, $self->{_topic}, 0 );
     }
 
     return( $date, $author, $rev, $comment );

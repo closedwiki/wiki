@@ -48,7 +48,7 @@ sub preview {
   # Is user looking to change the form used?  Sits oddly in preview, but 
   # to avoid Javascript and pick up text on edit page it has to be in preview.
   if( $changeform ) {
-    &TWiki::Form::changeForm( $webName, $topic, $query );
+      $TWiki::T->{form}->changeForm( $webName, $topic, $query );
     return;
   }
 
@@ -83,7 +83,7 @@ sub preview {
     }
 
     # get the edited text and combine text, form and attachments for preview
-    TWiki::Form::fieldVars2Meta( $webName, $query, $meta );
+    $TWiki::T->{form}->fieldVars2Meta( $webName, $query, $meta );
     $text = $textparam;
     if( ! $text ) {
       # empty topic not allowed
