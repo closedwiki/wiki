@@ -634,7 +634,7 @@ sub _checkExist {
       }
   } else {
       # Check new topic doesn't exist
-      if( TWiki::Store::topicExists( $newWeb, $newTopic)) {
+      if( $newTopic && TWiki::Store::topicExists( $newWeb, $newTopic)) {
           # Unless moving an attachment, new topic should not already exist
           TWiki::UI::oops( $newWeb, $newTopic, "topicexists" );
           $ret = 1;
