@@ -41,7 +41,7 @@ sub main
     if( ! &TWiki::Store::webExists( $webName ) ) {
 	$tmpl= &TWiki::Store::readTemplate( "noweb" );
 	$tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-        print "Content-type: text/html\n\n";  # Fixed n.lee 20000922
+	TWiki::writeHeader( $query );
 	print $tmpl;
 	return;
     }
@@ -51,16 +51,18 @@ sub main
     my $rev = $query->param( 'rev' );
 
     if ( $rev ) {
-        # FIXME doesn't deal with extension correctly yet.
         my $fileContent = TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
-        #TWiki::writeDebug( "$fileContent" );
-        if ( $fileName =~ /\.txt$/ ) {
-           print "Content-type: text/plain\n\n";
+        if( $fileContent ) {
+	    if ( $fileName =~ /\.txt$/ ) {
+	       print "Content-type: text/plain\n\n";
+	    } else {
+	       print "Content-type: application\n\n";
+	    }
+	    print "$fileContent";
+	    return;
         } else {
-           print "Content-type: application\n\n";
+            # If no file content we'll try and show pub content, should there be a warning FIXME
         }
-        print "$fileContent";
-        return;
     }
 
     # this should actually kick off a document conversion 
@@ -71,5 +73,5 @@ sub main
     # PTh 20 Jun 2000: Added host
     my $pubUrlPath = &TWiki::getPubUrlPath();
     my $host = $TWiki::urlHost;
-    print $query->redirect( "$host$pubUrlPath/$webName/$topic/$fileName" );
+    TWiki::redirect( $query, "$host$pubUrlPath/$webName/$topic/$fileName" );
 }
