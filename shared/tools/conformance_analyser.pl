@@ -7,7 +7,8 @@
 # repository and download.
 #
 # Usage: -nodownload will skip the update from the web and re-analyse
-# previously downloaded data. -debug will switch on a verbose debug trace
+# previously downloaded data. -debug will switch on a verbose debug trace.
+# -used will automatically assume the last download was the right one.
 #
 use strict;
 use Time::ParseDate;
@@ -217,16 +218,14 @@ if ($directivesReport ne "") {
       $directivesReport);
 }
 
-print "<html><body><h1>Report on the current status of packages in the Plugins web</h1>";
+print "---+ Report on the current status of packages in the Plugins web\n";
 print RED("This report was script-generated on ".`date`."<p>");
 print "The goal of the analysis is to determine conformance to standards.\n";
-print "<p>Questionable code is code that appears to read or write topics ";
-print "or webs directly.<p>";
+print "\nQuestionable code is code that appears to read or write topics ";
+print "or webs directly.\n\n";
 print "Conformance is degree to which module conforms with published ";
 print "interfaces. Low number *good*, high number *bad*\n";
-print "<h1>Table of Contents</h1>\n";
-print "<ol>".$data{toc}."</ol>";
-print $data{body}."</body></html>";
+print $data{body};
 
 # Find occurences of TWiki functions not from TWiki::Func in the module.
 # Also analyse module for questionable code use.
@@ -242,43 +241,44 @@ sub analyseCode {
       my @finds = split(/\n/, `grep "TWiki::" $r`);
       my $find;
       foreach $find (@finds) {
-	if ($find =~ /^(use|require)/ ||
-	    $find =~ /package TWiki/) {
-	} else {
-	  while ($find =~ s/\b(TWiki(::(\w+))+)[^\w:]//o) {
-	    my $token = $1;
-	    if ($token !~ /TWiki::Func/o &&
-		$token !~ /TWiki::Plugins/o &&
-		$token !~ /TWiki::TestMaker/o) {
-	      # Index twice, by module and by token
-	      $data->{illmod}{$module}{$token}{$file}++;
-	      $data->{illtok}{$token}{$module}++;
-	      $token =~ m/(\w+)$/o;
-	      if ($data->{funcsyms}{$1}) {
-		$data->{howbad}{$module} += 5;
-		$data->{howbad}{$token} += 5;
-	      } else {
-		$data->{howbad}{$module}++;
-		$data->{howbad}{$token}++;
-	      }
-	    } elsif ($token =~ /TWiki::Func::(\w+)\b/o) {
-	      $token = $1;
-	      if (defined($data->{funcsyms}{$token})) {
-		$data->{funcsyms}{$token}++;
-	      }
-	    }
-	  }
-	}
+		if ($find =~ /^(use|require)/ ||
+			$find =~ /package TWiki/ ||
+			$find =~ /COMPATIBILITY/ ) {
+		} else {
+		  while ($find =~ s/\b(TWiki(::(\w+))+)[^\w:]//o) {
+			my $token = $1;
+			if ($token !~ /TWiki::Func/o &&
+				$token !~ /TWiki::Plugins/o &&
+				$token !~ /TWiki::TestMaker/o) {
+			  # Index twice, by module and by token
+			  $data->{illmod}{$module}{$token}{$file}++;
+			  $data->{illtok}{$token}{$module}++;
+			  $token =~ m/(\w+)$/o;
+			  if ($data->{funcsyms}{$1}) {
+				$data->{howbad}{$module} += 5;
+				$data->{howbad}{$token} += 5;
+			  } else {
+				$data->{howbad}{$module}++;
+				$data->{howbad}{$token}++;
+			  }
+			} elsif ($token =~ /TWiki::Func::(\w+)\b/o) {
+			  $token = $1;
+			  if (defined($data->{funcsyms}{$token})) {
+				$data->{funcsyms}{$token}++;
+			  }
+			}
+		  }
+		}
       }
 
       # search for probable directives %DIRECTIVE
       my @finds = split(/\n/, `egrep '^.*s/%[^\/]*%' $r`);
       foreach $find (@finds) {
-	if ($find !~ /^\s*\#/o) {
-	  if ($find =~ s/^.*s\/%(\w+)%.*$/$1/o) {
-	    $data->{directives}{$find}{$module} = 1;
-	  }
-	}
+		if ($find !~ /^\s*\#/o) {
+		  if ($find =~ s/^.*s\/%(\w+)%.*$/$1/o) {
+			$data->{directives}{$find}{$module} = 1;
+		  }
+		}
       }
 
       # search for suspect code
@@ -294,8 +294,8 @@ sub analyseCode {
       $grr =~ s/^\s*//go;
       $grr =~ s/\n\n/\n/gos;
       if ($grr !~ /^\s*$/os) {
-	$data->{suspect}{$module}{$file} = $grr;
-	$data->{howbad}{$module} += scalar(split(/\n/,$grr)) * 3;
+		$data->{suspect}{$module}{$file} = $grr;
+		$data->{howbad}{$module} += scalar(split(/\n/,$grr)) * 3;
       }
     }
   }
@@ -620,8 +620,7 @@ sub TABLE {
 sub TOC {
   my ($data, $anchor, $title, $heads, $report) = @_;
 
-  $data->{toc} .= "<li><a href=\"#$anchor\">$title</a></li>";
-  $data->{body} .= "\n<a name=\"$anchor\"><h1>$title</h1></a>\n";
+  $data->{body} .= "---++ $title\n";
   $data->{body} .= TABLE($heads,$report);
 }
 

@@ -67,12 +67,14 @@ use File::Copy;
 use File::Spec;
 use POSIX;
 use diagnostics;
-use vars qw( $basedir );
+use vars qw( $basedir $shared $twiki_home);
 
 BEGIN {
   use File::Spec;
   my $cwd = `dirname $0`; chop($cwd);
   $basedir = File::Spec->rel2abs("../../../..", $cwd);
+  $shared = $ENV{"TWIKI_SHARED"};
+  $twiki_home = $ENV{"TWIKI_HOME"};
   unshift @INC, $basedir;
   unshift @INC, '.';
 }
@@ -248,6 +250,8 @@ directories in the target. Also works for target directories.
 sub cp {
   my ($this, $from, $to) = @_;
 
+  die "Source file $from does not exist " unless ( $this->{-n} || -e $from);
+
   $this->makepath(`dirname $to`);
 
   if ($this->{-v} || $this->{-n}) {
@@ -284,7 +288,7 @@ Run a Test::Unit test module, using TestRunner
 =cut
 sub run_tests {
   my ($this, $module) = @_;
-  $this->sys_action("perl -w -I../../../.. -I. TestRunner.pl $module");
+  $this->sys_action("perl -w -I$basedir/lib -I$shared/lib -I$shared/test/fixtures -I. $shared/lib/TWiki/Plugins/SharedCode/test/TestRunner.pl $module");
 }
 
 =pod
@@ -327,7 +331,6 @@ sub target_test {
   my $this = shift;
   $this->build("build");
   $this->cd("$basedir/".$this->{plugin_libdir}."/test");
-  $this->sys_action("make");
   $this->run_tests($this->{project}."Suite");
 }
 
@@ -409,15 +412,18 @@ resetting protections as we go.
 sub copy_fileset {
   my ($this, $set, $from, $to) = @_;
 
-  print "Copying " . scalar(@$set) . " files to $to\n";
+  my $uncopied = scalar(@$set);
+  print "Copying $uncopied files to $to\n";
   foreach my $file (@$set) {
 	my $name = $file->{name};
 	if (! -e "$from/$name") {
 	  die "$from/$name does not exist - cannot copy\n";
 	}
 	$this->cp("$from/$name", "$to/$name");
-	$this->prot("a+rx,u+w", "$to/$name");
+	#$this->prot("a+rx,u+w", "$to/$name");
+	$uncopied--;
   }
+  die "Files left uncopied" if ($uncopied);
 }
 
 =pod
@@ -432,7 +438,7 @@ sub target_install {
 
   my $twiki = $ENV{TWIKI_HOME};
   die "TWIKI_HOME not set" unless $twiki;
-  copy_all($basedir, $twiki);
+  $this->copy_fileset($this->{files}, $basedir, $twiki);
 }
 
 =pod
@@ -479,6 +485,10 @@ sub build {
   my $target = shift;
   print "Building $target\n";
   eval "\$this->target_$target()";
+  if ($@) {
+	print "Failed to build $target: $@\n";
+	die $@;
+  }
   print "Built $target\n";
 }
 use strict "refs";
