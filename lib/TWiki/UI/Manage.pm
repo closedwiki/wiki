@@ -62,12 +62,12 @@ sub manage {
     } elsif( $action eq 'deleteUserAccount' ) {
         TWiki::UI::Manage::removeUser( $session );
     } elsif( $action ) {
-        throw TWiki::UI::OopsException( '', '', 'manage',
-                                        _template('msg_unrecognized_action'),
-                                        $action );
+        throw TWiki::UI::OopsException
+          ( '', '', 'manage', '%TMPL:P{"unrecognized_action"}%',
+            $action );
     } else {
-        throw TWiki::UI::OopsException( '', '', 'manage',
-                                        _template('msg_missing_action') );
+        throw TWiki::UI::OopsException
+          ( '', '', 'manage', '%TMPL:P{"missing_action"}%', '' );
     }
 }
 
@@ -136,12 +136,10 @@ sub removeUser {
                                     $user->stringify() );
 }
 
-#changePassword is now in register (belongs in User.pm though)
+sub _isValidHTMLColor {
+    my $c = shift;
+    return $c =~ m/^(#[0-9a-f]{6}|black|silver|gray|white|maroon|red|purple|fuchsia|green|lime|olive|yellow|navy|blue|teal|aqua)/i;
 
-# PRIVATE Prepare a template var for expansion in a message
-sub _template {
-    my $theTmplVar = shift;
-    return "%TMPL:P{\"$theTmplVar\"}%";
 }
 
 =pod
@@ -165,12 +163,11 @@ sub createWeb {
     my $newWeb = $query->param( 'newweb' ) || '';
     my $newTopic = $query->param( 'newtopic' ) || '';
     my $baseWeb = $query->param( 'baseweb' ) || '';
-    my $webBgColor = $query->param( 'webbgcolor' ) || '';
+    my $webBGColor = $query->param( 'webbgcolor' ) || '';
     my $siteMapWhat = $query->param( 'sitemapwhat' ) || '';
     my $siteMapUseTo = $query->param( 'sitemapuseto' ) || '';
     my $noSearchAll = $query->param( 'nosearchall' ) || '';
     my $theUrl = $query->url;
-    my $oopsTmpl = 'mngcreateweb';
 
     # check permission, user authorized to create webs?
     TWiki::UI::checkAccess( $session, $webName, $topicName,
@@ -178,36 +175,39 @@ sub createWeb {
 
     unless( $newWeb ) {
         throw TWiki::UI::OopsException
-          ( '', '', $oopsTmpl, _template('msg_web_missing') );
+          ( '', '', 'mngcreateweb', '%TMPL:P{"web_missing"}%', '' );
     }
 
     unless ( TWiki::isValidWebName( $newWeb, 1 )) {
         throw TWiki::UI::OopsException
-          ( '', '', $oopsTmpl, _template( 'msg_web_name' ));
+          ( '', '', 'mngcreateweb', '%TMPL:P{"invalid_web_name"}%',
+            "Web: $newWeb" );
     }
 
     if( $session->{store}->isKnownWeb( $newWeb )) {
-        throw TWiki::UI::OopsException( '', '', $oopsTmpl,
-                                        _template('msg_web_exist'), $newWeb );
+        throw TWiki::UI::OopsException
+          ( '', '', 'mngcreateweb', '%TMPL:P{"web_exists"}%',
+            "Web: $newWeb" );
     }
 
     $baseWeb =~ s/$TWiki::cfg{NameFilter}//go;
     $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
     unless( $session->{store}->isKnownWeb( $baseWeb )) {
-        throw TWiki::UI::OopsException( '', '', $oopsTmpl,
-                                        _template('msg_base_web'), $baseWeb );
+        throw TWiki::UI::OopsException
+          ( '', '', 'mngcreateweb', '%TMPL:P{"base_web_missing"}%',
+            'Based on web:'.$baseWeb );
     }
-
-    unless( $webBgColor =~ /\#[0-9a-f]{6}/i ) {
-        throw TWiki::UI::OopsException( '', '', $oopsTmpl,
-                                        _template('msg_web_color') );
+    unless( _isValidHTMLColor( $webBGColor )) {
+        throw TWiki::UI::OopsException
+          ( '', '', 'mngcreateweb', '%TMPL:P{"invalid_web_color"}%',
+            'Color: '.$webBGColor );
     }
 
     # create the empty web
     my $opts =
       {
-       WEBBGCOLOR => $webBgColor,
+       WEBBGCOLOR => $webBGColor,
        SITEMAPWHAT => $siteMapWhat,
        SITEMAPUSETO => $siteMapUseTo,
        NOSEARCHALL => $noSearchAll,
@@ -216,14 +216,16 @@ sub createWeb {
 
     my $err = $session->{store}->createWeb( $newWeb, $baseWeb, $opts );
     if( $err ) {
-        throw TWiki::UI::OopsException( '', '', $oopsTmpl,
-                                        _template('msg_web_create'), $err );
+        throw TWiki::UI::OopsException
+          ( '', '', 'mngcreateweb', '%TMPL:P{"web_creation_error"}%',
+            'Error: '.$err );
     }
 
     # everything OK, redirect to last message
     $newTopic = $TWiki::cfg{HomeTopicName} unless( $newTopic );
-    throw TWiki::UI::OopsException( $newWeb, $newTopic, $oopsTmpl,
-                                    _template('msg_create_web_ok') );
+
+    throw TWiki::UI::OopsException
+      ( $newWeb, $newTopic, 'mngcreateweb', '%TMPL:P{"created_web"}%', 'Web: '.$newWeb );
 }
 
 =pod

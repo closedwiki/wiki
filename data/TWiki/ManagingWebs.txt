@@ -14,7 +14,7 @@ A TWikiSite is divided into webs; each one represents one subject, one area of c
 #WebTemplate
 ---++ Choose Web Template
 
-There are two methods used to create a new web.  First you can use a specially designed TemplateWeb.  This is an invisible web that begins with an underscore &quot;_&quot; character.  All topics in the _default template web will be copied into your new web.
+There are two methods used to create a new web.  First you can use a specially designed TemplateWeb.  This is an invisible web that begins with an underscore &quot;_&quot; character (for example =_default=).  All topics in the template web will be copied into your new web.
 
 The second method is to use an existing web as a template web.  This may be useful if you already have a web that you like to use as a starting point.  Only topics that have names beginning with *Web...* (like "%HOMETOPIC%", "%NOTIFYTOPIC%", etc.) are copied.
 
@@ -25,7 +25,7 @@ In either case you will want to be sure to verify that your new web has all the 
 
 <form name="admin" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 Create a new web by filling out this form. __Note:__ It is not recommended to create a new web for each little project. You can organize content within a web using TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
-|  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | Enter a short name of up to 10 characters. The name must start with an upper case letters, followed by optional upper or lower case letters or numbers |
+|  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | The name must start with an upper case letter, followed by upper or lower case letters or numbers |
 |  *Based on web:* | <select name="baseweb"> %WEBLIST{ "<option>$name</option>" webs="webtemplate,public" selection="_default" separator=" "}% </select> | Select a TemplateWeb |
 |  *Web color:* | <input name="webbgcolor" type="text" value="#D0D0D0" size="16" /> | Enter a StandardColors code for the web |
 |  *Description:<br /> &nbsp;<br /> &nbsp;* | <input type="text" name="sitemapwhat" value="" size="60" /><br /> Enter a short description of the web. Write =Web.TopicName= instead of just =TopicName= if you include links. This will list the web in the %TWIKIWEB%.SiteMap (leave field empty if you prefer not to update the directory.) ||
@@ -38,9 +38,8 @@ Create a new web by filling out this form. __Note:__ It is not recommended to cr
 
 __Notes:__
 	* Attachments will NOT get copied over along with their topics
-	* The manage script while creating the new web will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
-	* This script does not edit the [[%TWIKIWEB%.TWikiPreferences]] file to update the =WIKIWEBLIST=.  This must be done by hand
-	* As of TWiki Release 01 Sep 2004, a web name can be a WikiWord. Prior to that it could be only =UPPER= or =UPPERlower=. A side effect of this is that if you do use a wiki name, =%<nop>WEB%= must be written as =&lt;nop&gt;%<nop>WEB%= or else it will try to link to a non-existing topic of that name
+	* While creating the new web TWiki will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
+	* TWiki does not edit the [[%TWIKIWEB%.TWikiPreferences]] file to update the =WIKIWEBLIST=.  This must be done by hand
 
 ---++ Renaming or Deleting a Web
 
@@ -55,6 +54,8 @@ Renaming or deleting a web requires direct access to the installation files on t
 		* __Note:__ See TWiki:Codev.RenameWebs for some complications
 	1. Go to =twiki/pub= and rename or remove the web directory if present
 
----+++ Renaming the MAINWEB
+---+++ Renaming the webs in the distribution
 
-If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, default named =Main=. That means, every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
+If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, which by default is =Main= (this is assigned in the site configuration). That means that every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
+
+If you want to rename the TWiki web, remember it is referred to by =%<nop>TWIKIWEB%= which is also defined up by a configuration setting.

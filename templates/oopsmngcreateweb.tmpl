@@ -2,36 +2,34 @@
 %TMPL:DEF{"titleaction"}%(oops) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
 %TMPL:DEF{"heading"}%Create New Web%TMPL:END%
-%TMPL:DEF{"msg_web_missing"}%
+%TMPL:DEF{"web_missing"}%
 ---++ Error: Name of new web is missing
 Please go back in your browser and try again. %TMPL:END%
-%TMPL:DEF{"msg_web_name"}%
----++ Error: Invalid name of new web 
-Enter a short name of up to 10 characters. The name must start with one 
-or more upper case letters, followed by optional lower case letters or 
-numbers; it cannot be a %TWIKIWEB%.WikiWord. If you want to create a
-template web (a web just used as a base to create new webs) choose a
-name that starts with an underscore and has only alphanumeric characters.
+%TMPL:DEF{"invalid_web_name"}%
+---++ Error: Invalid name for a new web 
+You are recommended to choose short names, preferably less than 10 characters, starting with an upper-case alphabetic character and using only alphanumeric characters. If you want to create a template web (a web just used as a base to create new webs) choose a name that starts with an underscore and has only alphanumeric characters.
 
 Please go back in your browser and try again. %TMPL:END%
-%TMPL:DEF{"msg_web_exist"}%
+%TMPL:DEF{"web_exists"}%
 ---++ Error: Cannot create this web because it already exists
 Please go back in your browser and try again.
 
 Web: %TMPL:END%
-%TMPL:DEF{"msg_base_web"}%
+%TMPL:DEF{"base_web_missing"}%
 ---++ Error: Name of base web is missing or does not exist
 Please go back in your browser and try again.
 Base web: %TMPL:END%
-%TMPL:DEF{"msg_web_color"}%
----++ Error: Web color is missing or has an invalid format
-A color starts with the number sign, followed by 6 hexadecimal
-numbers, e.g. yellow is =#FFFF00=. 
+%TMPL:DEF{"invalid_web_color"}%
+---++ Error: Color is missing or has an invalid format
+A color starts with a # sign, followed by 6 hexadecimal
+numbers, e.g. =#FFFF00=.
 
 Pick one of the %TWIKIWEB%.StandardColors.
 
+You can also use the names of the standard HTML colors (black, silver, gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, teal, or aqua)
+
 Please go back in your browser and try again. %TMPL:END%
-%TMPL:DEF{"msg_web_create"}%
+%TMPL:DEF{"web_creation_error"}%
 ---++ Error: Could not create the new web
 
 Error message: %TMPL:END%
@@ -42,14 +40,7 @@ The new web has been created, however not all topics could
 be copied from the base web.
 
 Error message: %TMPL:END%
-%TMPL:DEF{"msg_patch_webpreferences"}%
----++ Error: Could not update the <nop>WebPreferences
-
-The new web has been created and all topics have been copied.
-However, there was an error while trying to update the WebPreferences.
-
-Error message: %TMPL:END%
-%TMPL:DEF{"msg_create_web_ok"}%
+%TMPL:DEF{"created_web"}%
 ---++ Note: The new web has been created and populated with topics from the base web
 
 Would you like to go to:
@@ -59,8 +50,10 @@ Would you like to go to:
 	* [[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] home
 %TMPL:END%
 %TMPL:DEF{"message"}%
+<b> %PARAM2% </b>
+
 %PARAM1%
-%PARAM2% %TMPL:END%
+%TMPL:END%
 %TMPL:DEF{"topicaction"}%
  [[%WEB%.%TOPIC%][OK]] %TMPL:END%
 %TMPL:P{"oops"}%

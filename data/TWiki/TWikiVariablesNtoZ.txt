@@ -166,11 +166,12 @@ __Note:__ This topic is included by TWikiVariables
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarSPACEDTOPIC
----+++ SPACEDTOPIC -- topic name, spaced and encoded
+---+++ SPACEDTOPIC -- topic name, spaced and URL-encoded
 	* The current topic name with added spaces, for regular expression search of Ref-By
 	* Syntax: =%<nop>SPACEDTOPIC%=
 	* Expands to: =%SPACEDTOPIC%=
 	* Related: [[#VarTOPIC][TOPIC]]
+%T% This rather bizarre function is provided almost exclusively for generating URLs for searching for backlinks to topics.
 
 #VarSTARTINCLUDE
 ---+++ STARTINCLUDE -- start position of topic text if included
