@@ -28,39 +28,6 @@ $| = 1;                  # no buffering
 
 &main();
 
-# FIXME Remove
-sub getAttachAttr
-{
-    my( $atext, $fileName ) = @_;
-    my $filePath="", $fileSize="", $fileDate="", $fileUser="", $fileComment="";
-    my $before="", $item="", $after="", $set="";
-
-    foreach( split( /<TwkNextItem>/, $atext ) ) {
-        $set = $_;
-        ( $before, $item, $after ) = split( /<(?:\/)*TwkFileName>/, $set );
-        if( ( $item ) && ( $item eq $fileName ) ) {
-            ( $before, $filePath,    $after ) = split( /<(?:\/)*TwkFilePath>/, $set );
-            if( ! $filePath ) { $filePath = ""; }
-            $filePath =~ s/<TwkData value="(.*)">//go;
-            if( $1 ) { $filePath = $1; } else { $filePath = ""; }
-            $filePath =~ s/\%NOP\%//goi;   # delete placeholder that prevents WikiLinks
-            ( $before, $fileSize,    $after ) = split( /<(?:\/)*TwkFileSize>/, $set );
-            if( ! $fileSize ) { $fileSize = "0"; }
-            ( $before, $fileDate,    $after ) = split( /<(?:\/)*TwkFileDate>/, $set );
-            if( ! $fileDate ) { $fileDate = ""; }
-            ( $before, $fileUser,    $after ) = split( /<(?:\/)*TwkFileUser>/, $set );
-            if( ! $fileUser ) { $fileUser = ""; }
-            $fileUser =~ s/ //go;
-            ( $before, $fileComment, $after ) = split( /<(?:\/)*TwkFileComment>/, $set );
-            if( ! $fileComment ) { $fileComment = ""; }
-
-            return ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
-        }
-    }
-
-    return ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
-}
-
 
 # =========================
 sub listVersions
@@ -108,11 +75,6 @@ sub main
     my $theRemoteUser = $query->remote_user();
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
-    my $action = 1; # !!! do I need action and revInfo?
-    my $revInfo = $query->param( 'revInfo' ) || "";
-    if( $revInfo ) {
-       $action = 0;
-    }
     
     ( $topic, $webName, $dummy, $userName ) = 
         &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
@@ -151,33 +113,26 @@ sub main
         if( ! $atext ) { $atext = ""; }
     }
 
-    # Process old style attachment table # FIXME -remove at some point
-    my $oldStyleAttach = "";
     if ( $atext =~ /\<TwkNextItem\>/ ) {
-        $oldStyleAttach = 1;
+       # Process old style attachment table
+       # FIXME just doing an in memory update for now, upload will cause replacement
+       $atext = TWiki::Attach::migrateToFileAttachmentMacro( $atext );
     }
-    # get filePath and fileComment:
-    my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment );
-    if ( $oldStyleAttach ) {
-        ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
-            = getAttachAttr( $atext, $fileName );
-    } else {
-       my ( $tmpFile, $tmpVersion, $tmpAttr );
-       $atext =~ /%FILEATTACHMENT{( \"$fileName\"[^}]*)}%/;
-       ( $tmpFile, $tmpVersion, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $tmpAttr ) =
-          TWiki::Attach::extractFileAttachmentArgs( $1 );
-       if ( $tmpAttr =~ /h/o ) {
+    $atext =~ /%FILEATTACHMENT{([\s]*\"$fileName\"[^}]*)}%/;
+    my( $tmpFile, $tmpVersion, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, 
+        $tmpAttr ) = TWiki::Attach::extractFileAttachmentArgs( $1 );
+    if ( $tmpAttr =~ /h/o ) {
           $isHideChecked = "checked";
-       } 
     }
 
-    # FIXME temp to block table at top of page
-    if( ! $action ) { $atext = listVersions( $webName, $topic, $fileName ); }
+    # FIXME too simplistic - different template for general upload and one to specific file?
+    if ( $fileName ) { $atext = listVersions( $webName, $topic, $fileName ); }
 
 
     # why log attach before post is called?
     # FIXME: Move down, log only if successful (or with error msg?)
-    if( $TWiki::doLogTopicAttach && $action ) {
+    # Attach is a read function, only has potential for a change
+    if( $TWiki::doLogTopicAttach ) {
         # write log entry
         &TWiki::Store::writeLog( "attach", "$webName.$topic", $fileName );
     }
