@@ -1,10 +1,20 @@
-%META:TOPICINFO{author="MikeMannix" date="1021185975" format="1.0" version="1.1"}%
----++ Installed Plugins
+%META:TOPICINFO{author="PeterThoeny" date="1084862660" format="1.0" version="1.2"}%
+---+ Installed Plugins
 
 Plugins are mainly user-contributed add-ons that enhance and extend TWiki features and capabilities. A limited number of plugins are included in the core TWiki distribution - and most those can be removed - while the rest are optional, available from TWiki:Plugins/%HOMETOPIC%.
 
-Here is a list of the plugins currently installed on this TWiki site:
+Here is a list of the plugins currently installed and enabled on this TWiki site:
 
 %PLUGINDESCRIPTIONS%
 
--- Main.MikeMannix - 12 May 2002
+---+ Plugin Diagnostics
+
+%FAILEDPLUGINS%
+
+__Note:__ The diagnostics are provided by the =%<nop>FAILEDPLUGINS%= variable
+
+__Related Topics:__ TWikiPlugins, %WIKIPREFSTOPIC%
+
+-- TWiki:Main.MikeMannix - 12 May 2002 %BR%
+-- TWiki:Main.PeterThoeny - 18 May 2004
+
