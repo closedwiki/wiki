@@ -103,6 +103,16 @@
   <td> =%<nop>STOPINCLUDE%= </td>
   <td> If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself. </td>
 </tr><tr>
+  <td> =%<nop>TOC%= </td>
+  <td> Table of Content of current topic. </td>
+</tr><tr>
+  <td> =%<nop>TOC{"SomeTopic" ...}%= </td>
+  <td> Table of Content. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;h2&gt;"=) are taken into account. Parameter is composed of the topic name, followed by optional =name="value"= pairs:
+| *Pair:* | *Description:* | *Default:* |
+| =web="Name"= | Name of web | Current web |
+| =depth="2"= | Limit depth of headings shown in TOC | 6 |
+Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web="%TWIKIWEB%"}%</b>=
+</tr><tr>
   <td> =%<nop>SEARCH{"str" ...}%= </td>
   <td> Inline search, shows a search result embedded in a topic. Parameter is composed of the search string, followed by optional =name="value"= pairs:
 | *Pair:* | *Description:* | *Default:* |
@@ -216,4 +226,4 @@ __Notes:__
 	* Additional preferences variables can be defined on all three level as needed. Example:
 		* =<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif=
 
--- %MAINWEB%.PeterThoeny - 19 Jan 2001 <br>
+-- %MAINWEB%.PeterThoeny - 01 Mar 2001 <br>
