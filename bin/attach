@@ -110,6 +110,7 @@ sub main
     }
     
     my %args = $meta->findOne( "FILEATTACHMENT", $fileName );
+    %args = ( "attr" => "", "path" => "", "comment" => "" ) if( ! % args );
 
     if ( $args{"attr"} =~ /h/o ) {
           $isHideChecked = "checked";
@@ -128,7 +129,7 @@ sub main
     }
 
     my $fileWikiUser = "";
-    if( $fileName ) {
+    if( $fileName && %args ) {
         $tmpl = &TWiki::Store::readTemplate( "attachagain" );
         $fileWikiUser = &TWiki::userToWikiName( $args{"user"} );
     } else {
