@@ -95,6 +95,7 @@ sub highlight_text
 	{
 		$self->{context}->{prepro} = 0;
 		my $line = $lines[$i];
+                $line =~ s/\r$//;
 		if ($self->{context}->{preprolength}>0 && substr($line, 0, $self->{context}->{preprolength}) == $self->{highlightfile}->{prepro})
 		{
 			$out .= $self->{context}->{prepro_parts}[0];
@@ -152,6 +153,55 @@ if (!$DEBUG) { print "Selection close\n"; }
 				$j += length($self->{highlightfile}->{selectoff});
 				next;
 			}
+
+			# Handle block comments. This can't be done quickly
+                        # (like above), as we may have a block comment
+			# embedded inside a line.
+			if (!$self->{context}->{lineselect} && !$self->{context}->{inselection} && !$self->{context}->{inquote} && !$self->{context}->{inbcomment} && in_array($currchar, $self->{context}->{startingbkonchars}))
+			{
+if ($DEBUG) { print "BC check\n"; }
+				my $currmax = 0;
+				my $bkcl = 0;
+				my $bkc = "";
+				foreach(@{$self->{highlightfile}->{blockcommenton}})
+				{
+					if (substr($_, 0, 1) ne $currchar) { next; }
+					my $boln = @{$self->{context}->{bcolengths}}{$_};
+					if (substr($line, $j, $boln) eq $_)
+					{
+						if ($boln > $currmax)
+						{
+							$bkc = $_;
+							$bkcl = $boln;
+							$currmax = $boln;
+						}
+					}
+				}
+
+				if ($currmax != 0)
+				{
+if ($DEBUG) { print "Block Comment!\n"; }
+					if ($self->{prepro})
+					{
+						$out .= $self->{context}->{prepro_parts}[1];
+						$self->{prepro} = 0;
+					}
+					$self->{context}->{closingstrings} = @{$self->{context}->{bcomatches}}{$bkc};
+					$lineout = $self->munge($lineout);
+					if ($self->{output_module}->{html})
+					{
+						$bkc =~ s/>/&gt;/g;
+						$bkc =~ s/</&lt;/g;
+					}
+					$out .= $lineout;
+					$out .= @{$self->{context}->{blockcomment_parts}}[0].$bkc;
+					$lineout = "";
+					$self->{context}->{inbcomment} = 1;
+					$j += $bkcl-1;
+					next;
+				}
+			}
+
 			# Line comments. Once we get a line comment we can skip straight to the next line, as nothing else can be done.
 			if (!$self->{context}->{lineselect} && !$self->{context}->{inselection} && !$self->{context}->{inquote} && !$self->{context}->{incomment} && !($self->{highlightfile}->{perl} && $j>0 && substr($line, $j-1, 1) eq "\$"))
 			{
@@ -198,55 +248,6 @@ if ($DEBUG) { print "Line Comment!\n"; }
 				}
 			}
 
-			# Handle block comments. This can't be done quickly (like above), as we may have a block comment
-			# embedded inside a line.
-
-
-			if (!$self->{context}->{lineselect} && !$self->{context}->{inselection} && !$self->{context}->{inquote} && !$self->{context}->{inbcomment} && in_array($currchar, $self->{context}->{startingbkonchars}))
-			{
-if ($DEBUG) { print "BC check\n"; }
-				my $currmax = 0;
-				my $bkcl = 0;
-				my $bkc = "";
-				foreach(@{$self->{highlightfile}->{blockcommenton}})
-				{
-					if (substr($_, 0, 1) ne $currchar) { next; }
-					my $boln = @{$self->{context}->{bcolengths}}{$_};
-					if (substr($line, $j, $boln) eq $_)
-					{
-						if ($boln > $currmax)
-						{
-							$bkc = $_;
-							$bkcl = $boln;
-							$currmax = $boln;
-						}
-					}
-				}
-
-				if ($currmax != 0)
-				{
-if ($DEBUG) { print "Block Comment!\n"; }
-					if ($self->{prepro})
-					{
-						$out .= $self->{context}->{prepro_parts}[1];
-						$self->{prepro} = 0;
-					}
-					$self->{context}->{closingstrings} = @{$self->{context}->{bcomatches}}{$bkc};
-					$lineout = $self->munge($lineout);
-					if ($self->{output_module}->{html})
-					{
-						$bkc =~ s/>/&gt;/g;
-						$bkc =~ s/</&lt;/g;
-					}
-					$out .= $lineout;
-					$out .= @{$self->{context}->{blockcomment_parts}}[0].$bkc;
-					$lineout = "";
-					$self->{context}->{inbcomment} = 1;
-					$j += $bkcl-1;
-					next;
-				}
-			}
-
 			# Handle closing comments
 			if (!$self->{context}->{lineselect} && !$self->{context}->{inselection} && !$self->{context}->{inquote} && $self->{context}->{inbcomment})
 			{
@@ -287,9 +288,8 @@ if ($DEBUG) { print "Closing Block Comment!\n"; }
 			}
 
 			# TODO: Zones
-
-			# If we're in a comment, skip keyword checks, cache comments, and continue.
-		
+			# If we're in a comment, skip keyword checks,
+                        # cache comments, and continue.
 			if ($self->{context}->{incomment} || $self->{context}->{inbcomment})
 			{
 if ($DEBUG) { print "Skipping checks.\n"; }
@@ -533,7 +533,7 @@ sub munge
 						#        very rough, me bad perl hacker.
 						my $ls = $self->{highlightfile}->{linkscripts}{$category};
 						my $outchunk = "";
-						if( $ls =~ donothing ) {
+						if( $ls =~ /donothing/ ) {
 						    $outchunk = $self->{context}->{category_parts}{$category}[0].$currword.$self->{context}->{category_parts}{$category}[1];
 						} else {
 						    $outchunk = $self->{context}->{category_parts}{$category}[0].$self->{highlightfile}->$ls($currword).$self->{context}->{category_parts}{$category}[1];
