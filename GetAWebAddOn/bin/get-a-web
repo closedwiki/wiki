@@ -1,20 +1,8 @@
 #!/usr/bin/perl -w
-#
-# TWiki WikiClone (see $wikiversion in wiki.pm for version)
-#
-# Copyright (C) 2000 Sterbini, Andrea a.sterbini@flashnet.it
-# Heavily modified from 'createwikiweb' by Gottschalk, Harold heg@sirlabs.com, 
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
-# http://www.gnu.ai.mit.edu/copyleft/gpl.html 
+# Copyright 2004 Will Norris.  All Rights Reserved.
+# License: GPL
+
+use Data::Dumper qw( Dumper );
 
 use CGI;
 
@@ -31,85 +19,73 @@ BEGIN {
 use TWiki;
 use TWiki::Func;
 
-my $query = new CGI;
+use Cwd qw( cwd );
+use Archive::Tar;
+#use IO::Zlib;
 
-#open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering
 
 &main();
 
 sub main
 {
-    my $lastOnly = $query->param( 'lastOnly' );
+    my $error = '';
 
-    my $webName = $query->path_info(); 
-    my $zipKind = $webName;
-    # get the compression format from the file extension
-    $zipKind =~ s/^\/?(.*)\.(zip|tgz|tar\.gz|tar\.bz2)$/$2/ ;
-    $webName =~ s/^\/?(.*)\.(zip|tgz|tar\.gz|tar\.bz2)$/$1/ ;
-
-    # "all" means all webs
-    if($webName eq "all") {
-	$webName = "";
-    }
-
-    my $zipType = "";
-    my $zipCommand = "";
-    my $zipOpts = "";
-
-    if($zipKind eq "zip") {
-        # zip command settings
-        #zip
-        $zipType    = "application/zip";
-        $zipCommand = "zip -9qr -";
-	$zipOpts    = "-x .htaccess .htpasswd *.lock";
-	if ($lastOnly) {
-	    $zipOpts .= " *,v";
-	}
-    } elsif($zipKind eq "tar.bz2") {
-        #bzip2
-        $zipType    = "application/x-bzip2";
-        $zipCommand = "tar cf -";		###
-	$zipOpts    = "--exclude .htaccess --exclude .htpasswd --exclude *.lock";
-	if ($lastOnly) {
-	    $zipOpts .= " --exclude *,v";
-	}
-	$zipOpts    .= "| bzip2";
-    } elsif($zipKind eq "tgz" || $zipKind eq "tar.gz") {
-        #gzip (boh)
-	$zipType    = "application/x-gzip";
-        $zipCommand = "tar cf -";		###
-	$zipOpts    = "--exclude .htaccess --exclude .htpasswd --exclude *.lock";
-	if ($lastOnly) {
-	    $zipOpts .= " --exclude *,v";
-	}
-	$zipOpts    .= "| gzip";		###
-    } else {
-    	    print "Content-type: text/html\n\n";
-	    my $tmpl = "get-a-web error %RESULTTEXT% - %MSGTEXT%";
-	    $tmpl =~ s/%TITLETEXT%/Get-A-Web Error/go;
-	    $tmpl =~ s/%RESULTTEXT%/Zip Error/go;
-	    $tmpl =~ s/%MSGTEXT%/Unknown zip type! (known are: zip, gzip, bzip2)/go;
-    	    $tmpl = TWiki::Func::handleCommonTags( $tmpl, $topic );
-    	    print $tmpl;
-    	    return;
-    }
+    my $query = CGI->new() or die $!;
+    (my $webName = $query->path_info()) =~ s|^/?(.*)\.(tar)$|$1|;
+    my $saveasweb = $query->param('saveasweb' ) || $webName;
 
     # check for Web existence
-    if( ! TWiki::Func::webExists( $webName ) ) {
-    	print "Content-type: text/html\n\n";
-	my $tmpl = TWiki::Func::readTemplate( "noweb" );
-	$tmpl = TWiki::Func::expandCommonVariables( $tmpl, $topic );
-	print $tmpl;
-	return;
+    unless ( TWiki::Func::webExists( $webName ) ) 
+    {
+	$error .= "web $webName doesn't exist\n";
     }
 
+    if ( $error ) 
+    {
+    	print "Content-type: text/html\n\n";
+	print $error;
+	return;
+    }
+	
     # sets response header
-    print $query->header(-type=>$zipType, -expire=>'now');
+    print $query->header(-type=>'application/x-tar', -expire=>'now');
 
-#    print STDERR "dataDir=[$TWiki::dataDir] pubDir=[$TWiki::pubDir] templateDir=[$TWiki::templateDir]\n";
+    my $tar = Archive::Tar->new() or die $!;
+    foreach my $dirEntry ( 
+			   { dir => $TWiki::dataDir, name => 'data' },
+			   { dir => $TWiki::pubDir, name => 'pub' },
+			   { dir => $TWiki::templateDir, name => 'templates' },
+			   )
+    {
+	next unless -d "$dirEntry->{dir}/$webName";
+	my $pushd = cwd();
+	chdir "$dirEntry->{dir}/$webName" or die $!;
 
-    # zips the files to stdout
-#    system("$zipCommand --directory $TWiki::dataDir $webName --directory $TWiki::pubDir $webName --directory $TWiki::templateDir $webName $zipOpts 2> /dev/null");
-    system("$zipCommand $TWiki::dataDir/$webName $TWiki::pubDir/$webName $TWiki::templateDir/$webName $zipOpts 2> /dev/null");
+	my @files = <* */*>;		# HACK: make true recursive thingee
+	foreach my $file ( @files )
+	{
+	    next if -d $file;
+	    local( $/, *FH ) ;
+	    open( FH, $file ) or die $!;
+	    my $contents = <FH>;
+	    
+	    $tar->add_data( "$dirEntry->{name}/$saveasweb/$file", $contents );
+	}
+	chdir $pushd;
+    }
+
+#    my $fh = IO::File->new( '| gzip -c -', 'w' ) or die $!;
+#    my $fh = IO::File->new( '| cat -', 'w' ) or die $!;
+
+    my $io = IO::Handle->new() or die $!;
+    $io->fdopen(fileno(STDOUT), "w") or die $!;
+
+#    my $ioz = IO::Zlib->new() or die $!;
+#    $ioz->fdopen( $io, "w" ) or die $!;
+
+    $tar->write( $io );
+
+#    tie *STDOUT, 'IO::Zlib', "file.gz", "wb";
+#    print $tar->write;
 }
