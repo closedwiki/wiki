@@ -107,7 +107,7 @@ unless ( $q->param('install') =~ /install/i )
 <input type="submit" name="install" value="install" /> <br/>
 __HTML__
 
-    print catalogue({ xml => "tmp/install/downloads/contrib/contrib.xml", title => "Contrib", type => "contrib", cgi => $q });
+    print catalogue({ xml => "tmp/install/downloads/contribs/contrib.xml", title => "Contrib", type => "contrib", cgi => $q });
     print catalogue({ xml => "tmp/install/downloads/plugins/plugins.xml", title => "Plugins", type => "plugin", cgi => $q });
     print catalogue({ xml => "tmp/install/downloads/addons/addons.xml", title => "AddOns", type => "addon", cgi => $q });
     print catalogue({ xml => "tmp/install/downloads/skins/skins.xml", title => "Skins", type => "skin", cgi => $q });
@@ -282,7 +282,7 @@ foreach my $plugin ( @preinstalledPlugins )
 # install contrib
 
 print "<h2>Contrib</h2>\n";
-my $xmlContrib = $xs->XMLin( "tmp/install/downloads/contrib/contrib.xml" ) or warn "No contrib catalogue: $!";
+my $xmlContrib = $xs->XMLin( "tmp/install/downloads/contribs/contrib.xml" ) or warn "No contrib catalogue: $!";
 my %hContrib = map { $_->{name}->[0], $_ } @{$xmlContrib->{contrib}};
 foreach my $contribID ( $q->param('contrib') )
 {
@@ -290,7 +290,7 @@ foreach my $contribID ( $q->param('contrib') )
     my $contrib = $contribS->{name}->[0] or die "no contrib name? wtf?";
 
     installTWikiExtension({ file => "$contrib.tar.gz",
-			    dir => "downloads/contrib",
+			    dir => "downloads/contribs",
 			    name => $contrib,
 			});
 }
