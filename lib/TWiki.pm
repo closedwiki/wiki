@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "30 Nov 2003";
+$wikiversion      = "01 Dec 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -180,7 +180,7 @@ $cgiQuery = 0;
 $noAutoLink = 0;
 $viewScript = "view";
 
-$linkProtocolPattern = "(file|ftp|gopher|http|https|irc|news|telnet)";
+$linkProtocolPattern = "(file|ftp|gopher|http|https|irc|news|nntp|telnet)";
 
 # Header patterns based on '+++'. The '###' are reserved for numbered headers
 $headerPatternDa = '^---+(\++|\#+)\s*(.+)\s*$';       # '---++ Header', '---## Header'
