@@ -92,7 +92,7 @@ use vars qw(
 # Internationalisation and regex setup:
 use vars qw(
 	$basicInitDone $useLocale $localeRegexes $siteLocale $siteCharset 
-	$siteCharsetOverride $siteLang
+	$siteCharsetOverride $siteLang $urlCharEncoding 
 
 	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
@@ -101,8 +101,7 @@ use vars qw(
 	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
 	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
 	$singleMixedNonAlphaRegex $mixedAlphaNumRegex
-	$validAsciiStringRegex 
-	$validUtf8CharRegex $validUtf8StringRegex
+	$validAsciiStringRegex $validUtf8CharRegex $validUtf8StringRegex 
     );
 
 # TWiki::Store config:
@@ -616,22 +615,20 @@ sub invalidSiteCharset {
     return ( $siteCharset =~ /^(?:iso-2022-?|hz-?)/i );
 }
 
+
 =head2 convertUtf8URLtoSiteCharset( $webName, $topicName )
 Return value: ( string $convertedWebName, string $convertedTopicName)
-
 Auto-detect UTF-8 vs. site charset in URL, and convert UTF-8 into site charset.
-FIXME: remove dependence on webname and topicname, i.e. generic encoding
-subroutine
+
+TODO: remove dependence on webname and topicname, i.e. generic encoding
+subroutine.
 =cut to implementation
 sub convertUtf8URLtoSiteCharset {
     my ( $webName, $topicName ) = @_;
 
-    # FIXME: Make it possible to set $siteCharset independently to 
-    # handle mismatch between 'locale -a' and Perl supported charset names 
-
     writeDebug "URL web.topic is $webName.$topicName";
     my $fullTopicName = "$webName.$topicName";
-    my ( $urlCharEncoding, $charEncoding );
+    my $charEncoding;
 
     # Detect character encoding of the full topic name from URL
     if ( $fullTopicName =~ $validAsciiStringRegex ) {
@@ -665,15 +662,17 @@ sub convertUtf8URLtoSiteCharset {
 		if( not $charEncoding ) {
 		    writeWarning "Conversion to \$siteCharset '$siteCharset' not supported, or name not recognised - check 'perldoc Encode::Supported'";
 		} else {
-		    writeDebug "Converting with Encode, valid encoding is '$charEncoding'";
-		    # Convert text, inserting HTML entities for characters that can't be converted
-		    # - first convert from UTF8 bytes into internal UTF-8) characters
+		    writeDebug "Converting with Encode, valid 'to' encoding is '$charEncoding'";
+		    # Convert text using Encode:
+		    # - first, convert from UTF8 bytes into internal (UTF-8) characters
 		    $fullTopicName = Encode::decode("utf8", $fullTopicName);	
-		    ##writeDebug "Encode::decode result is $fullTopicName";
-		    # - then convert into site charset from internal UTF-8
-		    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName );
-		    # $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &Encode::FB_HTMLCREF );
-		    ##writeDebug "Encode::encode result is $fullTopicName";
+		    # - then convert into site charset from internal UTF-8,
+		    # inserting \x{NNNN} for characters that can't be converted
+		    {   
+			no strict 'subs';
+			$fullTopicName = Encode::encode( $charEncoding, $fullTopicName, Encode::FB_PERLQQ );
+		    }
+		    ##writeDebug "Encode result is $fullTopicName";
 		}
 
 	    } else {
@@ -2087,7 +2086,7 @@ sub handleUrlEncode
     }
     if( $type =~ /^entit(y|ies)$/i ) {
         # HTML entity encoding
-	# TODO: Encode to Unicode first
+	# TODO: Encode characters > 0x7F to Unicode first
         $text =~ s/\"/\&\#034;/g;
         $text =~ s/\%/\&\#037;/g;
         $text =~ s/\*/\&\#042;/g;
@@ -2100,7 +2099,6 @@ sub handleUrlEncode
         $text =~ s/\|/\&\#124;/g;
     } else {
         # URL encoding
-	# TODO: Encode to UTF-8 first
         $text =~ s/[\n\r]/\%3Cbr\%20\%3E/g;
         $text =~ s/\s+/\%20/g;
         $text =~ s/\"/\%22/g;
@@ -2109,7 +2107,8 @@ sub handleUrlEncode
         $text =~ s/\</\%3C/g;
         $text =~ s/\>/\%3E/g;
         $text =~ s/\\/\%5C/g;
-        # Encode characters with 8th bit set (ASCII-derived charsets only)
+        # Encode characters > 0x7F (ASCII-derived charsets only)
+	# TODO: Encode to UTF-8 first
         $text =~ s/([\x7f-\xff])/'%' . unpack( "H*", $1 ) /ge;
     }
     return $text;
@@ -2117,18 +2116,16 @@ sub handleUrlEncode
 
 # =========================
 # Encode characters with 8th bit set for use in URLs with non-UTF-8 '$siteCharset'
-# encoding by browser - mainly for Mozilla POST URLs.  Ignored when using UTF-8 URLs
-# or when on EBCDIC platforms 
+# encoding by browser - mainly for older browsers with no UTF-8 support.
+# Ignored when using UTF-8 URLs or when on EBCDIC platforms.
 sub handleIntUrlEncode
 {
     my( $theStr, $doExtract ) = @_;
 
-    # FIXME: Detect whether UTF-8 URL was used when requesting this page
-
     # Detect EBCDIC platform 
     my $isEbcdic = ( 'A' eq chr(193) ); 
-    if( $isEbcdic ) {
-	# URL encoding breaks EBCDIC, so just strip double quotes
+    if( $urlCharEncoding eq 'UTF-8' or $isEbcdic ) {
+	# Just strip double quotes, no URL encoding
 	$theStr =~ s/^"(.*)"$/$1/;	
 	return $theStr;
     } else {
@@ -2185,8 +2182,7 @@ sub handleInternalTags
     # $_[2] is web
 
     # Make Edit URL unique for every edit - fix for RefreshEditPage.
-    # URL encoding fixes Codev.MozillaURLEncodingWithI18N.
-    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%INTURLENCODE{\"%WEB%/%TOPIC%\"}%\?t=" . time()!ge;
+    $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%WEB%/%TOPIC%\?t=" . time()!ge;
 
     $_[0] =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $_[0] =~ s/%NOP%/<nop>/g;
@@ -2198,9 +2194,6 @@ sub handleInternalTags
     $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/ge;
     $_[0] =~ s/%REMOTE_USER%/&handleEnvVariable('REMOTE_USER')/ge;
 
-    # Un-encoded topic and web names. Note: In form action, URL encode variables 
-    # that might have 8-bit characters with %INTURLENCODE{"%TOPIC%"}% -
-    # introduced due to Codev.MozillaURLEncodingWithI18N.
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
@@ -2219,12 +2212,12 @@ sub handleInternalTags
     $_[0] =~ s/%SCRIPTSUFFIX%/$scriptSuffix/g;
     $_[0] =~ s/%PUBURL%/$urlHost$pubUrlPath/g;
     $_[0] =~ s/%PUBURLPATH%/$pubUrlPath/g;
-    $_[0] =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$_[2]\/$_[1]/g;
-    $_[0] =~ s/%ATTACHURLPATH%/$pubUrlPath\/$_[2]\/$_[1]/g;
+    $_[0] =~ s!%ATTACHURL%!$urlHost$scriptUrlPath/viewfile$scriptSuffix/$_[2]/$_[1]?filename=!g;
+    $_[0] =~ s!%ATTACHURLPATH%!$scriptUrlPath/viewfile$scriptSuffix/$_[2]/$_[1]?filename=!g;
     $_[0] =~ s/%ICON{(.*?)}%/&handleIcon($1)/geo;
     $_[0] =~ s/%URLPARAM{(.*?)}%/&handleUrlParam($1)/ge;
     $_[0] =~ s/%(URL)?ENCODE{(.*?)}%/&handleUrlEncode($2,1)/ge; # ENCODE is documented, URLENCODE is legacy
-    $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1,1)/ge;
+    $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1,1)/ge;	# Deprecated due to UTF-8 URL support
     $_[0] =~ s/%DATE%/&getGmDate()/ge; # deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/ge;

@@ -107,8 +107,8 @@ sub formatAttachments
     if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
         $viewableAttachmentCount++;     
         my $fileIcon = TWiki::Attach::filenameToIcon( $file );
+	# To support attachments via UTF-8 URLs, go through viewfile at all times
         my $fileUrl = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/$theWeb/$theTopic?rev=$attrVersion&filename=$file";
-        $fileUrl = "%PUBURLPATH%/$theWeb/$theTopic/$file" if( $isTopRev || $attrVersion eq "1.1" );
         $attrSize = 100 if( $attrSize < 100 );
         $attrSize = sprintf( "%1.1f&nbsp;K", $attrSize / 1024 );
         $attrComment = $attrComment || "&nbsp;";
