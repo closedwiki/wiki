@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1048309920" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1050383965" format="1.0" version="1.5"}%
 ---+!! Regular Expressions
 
 %TOC%
@@ -12,7 +12,8 @@ REs are similar to (but more poweful than) the "wildcards" used in the command-l
 
 | =compan(y&#124;ies)= | Search for *company*, *companies* |
 | =(peter&#124;paul)= | Search for *peter*, *paul* |
-| =bug*= | Search for *bug*, *bugs*, *bugfix* |
+| =bug*= | Search for *bug*, *bugg*, *buggg* or simply *bu* (a star matches *zero* or more instances of the previous character) |
+| =bug.*= | Search for *bug*, *bugs*, *bugfix* (a dot-star matches zero or more instances of *any* character) |
 | =[Bb]ag= | Search for *Bag*, *bag* |
 | =b[aiueo]g= | Second letter is a vowel. Matches *bag*, *bug*, *big* |
 | =b.g= | Second letter is any letter. Matches also *b&amp;g* |
