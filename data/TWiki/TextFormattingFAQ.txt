@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042088369" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1061529569" format="1.0" version="1.15"}%
 ---++!! Text Formatting FAQ
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
@@ -49,6 +49,7 @@ The quickest way is to enclose the text in equal signs:
 	  __Result:__ Proportional text, =fixed font=, proportional again.
 
 ---
+#VerbatimText
 ---+++ Text I enter gets wrapped around. How can I keep the formatting as it is?
 
 TWiki interprets text as HTML, so you can use the =preformatted= HTML option to keep the new line of text as is. Enclose the text in &lt;pre&gt; &lt;/pre&gt;, or in TWiki's own &lt;verbatim&gt; &lt;/verbatim&gt; tag:
@@ -112,7 +113,7 @@ __Result:__
 
 *3. Use preformatted text with &lt;verbatim&gt; tags*
 
-See [[#TextEnclosed]["Text enclosed..."]] 
+See [[#VerbatimText]["Text I enter gets wrapped around..."]] 
 
 ---
 ---+++ Can I include images on a page?
