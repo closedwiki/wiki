@@ -322,7 +322,8 @@ use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
     my $web;
     foreach $web ( @weblist ) {
       if ( -d "$dataDir/$web" && $web =~ /^$webs$/ ) {
-	$web =~ s/$ActionTrackerPlugin::ActionTrackerConfig::securityFilter//go;  # FIXME: This bypasses the official API
+          # CODE_SMELL: fix the plugins API
+	$web =~ s/$ActionTrackerPlugin::ActionTrackerConfig::securityFilter//go;
 	$web =~ /(.*)/; # untaint
 	$web = $1;
 	# Exclude webs flagged as NOSEARCHALL

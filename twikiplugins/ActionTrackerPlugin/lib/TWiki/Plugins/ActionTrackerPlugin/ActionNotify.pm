@@ -481,7 +481,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 
     my $grep = "";
 	foreach $group ( @groups ) {
-	  $grep .= `$cmd -H -c $q%ACTION\\{.*\\}%$q $group`;
+        my $c = "$cmd -H -c $q%ACTION\\{.*\\}%$q $group";
+        $c =~ /^(.*)$/;
+        $grep .= `$1`;
 	}
 
     my $number = 0;

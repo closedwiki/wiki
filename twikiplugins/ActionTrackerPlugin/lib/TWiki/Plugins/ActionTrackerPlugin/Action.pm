@@ -466,11 +466,11 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # action falls due
   sub _matchField_within {
     my ( $this, $val ) = @_;
-    my $stg = $this->secsToGo();
-    if ( $val < 0 ) {
-        return ( $stg < 0 && $stg >= $val * 60 * 60 * 24 );
+    my $slack = $this->secsToGo() - $val * 60 * 60 * 24;
+    if ($val > 0) {
+      return ($slack <= 0);
     } else {
-        return ( $stg <= $val * 60 * 60 * 24 );
+      return ($slack >= 0);
     }
   }
 
@@ -599,7 +599,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $text = "<a href=\"$url\"";
     if ( $newWindow ) {
       # Javascript window call
-      $text .= " onClick=\"return editWindow('$url')\"";
+      $text .= " onclick=\"return editWindow('$url')\"";
     }
     return ( "${text}>edit</a>", 0 );
   }
@@ -634,7 +634,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       $sum += _partialMatch( $old->{text}, $this->{text} ) * 4;
     }
     if ( $this->{ACTION_NUMBER} == $old->{ACTION_NUMBER} ) {
-      $sum += 3;
+      $sum += 3; # 50;
     }
     if ( defined( $this->{notify} ) && defined( $old->{notify} ) &&
 	 $this->{notify} eq $old->{notify} ) {

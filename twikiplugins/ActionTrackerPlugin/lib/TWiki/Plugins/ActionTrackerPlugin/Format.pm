@@ -423,23 +423,23 @@ use TWiki::Func;
     return $attrname unless ( defined( $type ));
     my $size = $type->{size};
     if ( $type->{type} eq 'select' ) {
-      my $field = "<SELECT NAME=\"$attrname\" SIZE=\"$size\">\n";
+      my $field = "<select name=\"$attrname\" size=\"$size\">\n";
       foreach my $option ( @{$type->{values}} ) {
-		$field .= "<OPTION NAME=\"$option\"";
+		$field .= "<option value=\"$option\"";
 		if ( defined( $object->{$attrname} ) &&
 			 $object->{$attrname} eq $option ) {
-		  $field .= " SELECTED";
+		  $field .= " selected";
 		}
-		$field .= ">$option</OPTION>\n";
+		$field .= ">$option</option>\n";
       }
-      return $field . "</SELECT>";
+      return $field . "</select>";
     } elsif ( $type->{type} !~ m/noload/ ) {
       my ( $val, $c ) = _expandVar( $object, $attrname );
-      my $field = "<INPUT TYPE=\"text\" NAME=\"$attrname\" ";
+      my $field = "<input type=\"text\" name=\"$attrname\" ";
       if ( $type->{type} eq 'date' ) {
 		$val =~ s/ \(LATE\)//o;
       }
-      $field .= "VALUE=\"$val\" SIZE=\"$size\" ";
+      $field .= "value=\"$val\" size=\"$size\" ";
       if ( $type->{type} eq 'date') {
           # make sure JSCalendar is there
           eval 'use TWiki::Contrib::JSCalendarContrib';
@@ -468,7 +468,7 @@ use TWiki::Func;
 
     my ( $v, $c ) = _expandVar( $object, $attrname, 0 );
     if ( defined( $v ) ) {
-      return "<INPUT TYPE=\"hidden\" NAME=\"$attrname\" VALUE=\"$v\">\n";
+      return "<input type=\"hidden\" name=\"$attrname\" value=\"$v\"/>\n";
     }
     return "";
   }

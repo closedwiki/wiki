@@ -177,19 +177,26 @@ sub unhtml {
 
   # Lift out REs protected by {* *}
   my $i = 0;
-  my %res;
-  while ( $re =~ s/{\*(.*?)\*}/PROTECTEDRE{$i}/) {
-      $res{$i} = $1;
+  my %prot;
+  while ( $re =~ s/{\*(.*?)\*}/PROTECTED$i/) {
+      $prot{$i} = $1;
       $i++;
   }
+  # lift out strings
+#  while ( $re =~ s/("[^"]*")/PROTECTED$i/) {
+#      $prot{$i} = $1;
+#      $i++;
+#  }
+#  while ( $re =~ s/('[^']+')/PROTECTED$i/) {
+#      $prot{$i} = $1;
+#      $i++;
+#  }
   $re = unregex($re);
-  # Add conditional spaces around > in tags
-  $re =~ s/(<\/?($htmltags).*?)(\/?>)/$1\\s*$3\\s*/gio;
-  # make open tag param names case-insensitive
-  while ($re =~ s/(<($htmltags)\b[^>]*?\s)([a-zA-Z]+)=/$1\\s+(?i)$3(?-i)\\s*=\\s*/go) {
-  }
-  # make open and close tags case insensitive
-  $re =~ s/(<\/?)($htmltags)\b/$1(?i)$2(?i-)/gio;
+  # Open tags
+  $re =~ s/(<($htmltags).*?>)/&_openTag($1)/geo;
+
+  # close tags lower case (XHTML)
+  $re =~ s/(<\/$htmltags>)/&_closeTag($1)/geo;
 
   # Turn whitespace into \s+
   $re =~ s/\s+/\\s+/go;
@@ -199,9 +206,35 @@ sub unhtml {
   $re =~ s/\\s([*+])\\s\*/\\s$1/g;
   $re =~ s/\\s\+\\s\+/\\s+/g;
 
-  $re =~ s/PROTECTEDRE{(\d+)}/$res{$1}/g;
+  while ($re =~ s/PROTECTED(\d+)/$prot{$1}/g) {
+  }
 
   return $re;
+}
+
+sub _openTag {
+    my $tag = shift;
+
+    # make open tag and param names lower case (XHTML compatibility)
+    $tag =~ s/(<\w+)\b/&_lower($1)/e;
+    $tag =~ s/\/>$/\\s*\/>/;
+    $tag =~ s/\s([a-zA-Z]+)=/&_tagParam($1)/ge;
+
+    return "\\s*$tag\\s*";
+}
+
+sub _closeTag {
+    my $tag = lc(shift);
+
+    return "\\s*$tag\\s*";
+}
+
+sub _tagParam {
+    return lc("\\s+$_[0]\\s*=\\s*");
+}
+
+sub _lower {
+    return lc($_[0]);
 }
 
 sub assert_html_matches {
