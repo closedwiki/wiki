@@ -15,15 +15,15 @@
 
 %TMPL:DEF{"twikistyle"}%
 <style type="text/css" media="all">
-		@import url("%PUBURL%/skins/pattern/PatternStyle.css");
+		/*@import url("%PUBURL%/skins/pattern/PatternStyle.css");*/
+		/* Default TWiki layout */
+        @import url("%TWIKILAYOUTURL%");
+        /* Default TWiki style */
+        @import url("%TWIKISTYLEURL%");
 </style>
 %TMPL:END%
 %TMPL:DEF{"topicstyle"}%
 <style type="text/css" media="all">
-        /* Default TWiki layout */
-        @import url("%TWIKILAYOUTURL%");
-        /* Default TWiki style */
-        @import url("%TWIKISTYLEURL%");
         /* Custom overriding layout */
         @import url("%USERLAYOUTURL%");
         /* Custom overriding style */
