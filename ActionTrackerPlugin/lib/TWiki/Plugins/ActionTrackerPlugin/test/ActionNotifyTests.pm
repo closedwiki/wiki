@@ -15,8 +15,6 @@ sub new {
   my $self = shift()->SUPER::new(@_);
   return $self;
 }
-sub tear_down {
-}
 
 sub set_up {
   my $this = shift;
