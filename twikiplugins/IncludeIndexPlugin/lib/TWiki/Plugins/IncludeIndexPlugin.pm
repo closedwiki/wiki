@@ -42,19 +42,19 @@ sub initPlugin
 # =========================
 sub linkToInclude	  # instead of handling %INCLUDE, return link to it
 {
-    my( $theAttributes, $linktext, $format ) = @_;
+    my( $theAttributes, $format ) = @_;
     my $incfile = &TWiki::extractNameValuePair( $theAttributes );
+    my $linktext = " &bull;&nbsp;[[$incfile]]";	# tbd: get default from pref
 
     if ( $format )	{
-	$linktext = '%SEARCH{"' . $incfile . '" regex="on" nosearch="on"'
-	    . ' scope="topic" nototal="on"' 
-	    . ' format="' . $format . '"}%'; 
-    }
-    else	{
-	if ( $linktext )	{
-	    $linktext =~ s/\$page/$incfile/;
-	} else {
-	    $linktext = "    -- [[$incfile]] ";
+	$linktext = $format;
+	$linktext =~ s/\$topic/$incfile/;	# straight substition
+	$linktext =~ s/\$page/$incfile/;
+
+	if ( $linktext =~ /\$/ ) {	# delegate complex formats to %SEARCH:
+	    $linktext = '%SEARCH{"^' . $incfile . '\.txt"'
+		. ' regex="on" nosearch="on"'
+		. ' scope="topic" nototal="on" format="' . $format . '"}%'; 
 	}
     }
     return $linktext;
@@ -66,7 +66,6 @@ sub handleIncludeIndex	  # clone of TWiki::handleIncludeFile
     my( $theAttributes, $theWeb ) = @_;
     my $incfile = &TWiki::extractNameValuePair( $theAttributes );
     my $headers = &TWiki::extractNameValuePair( $theAttributes, "headers" );
-    my $linktext = &TWiki::extractNameValuePair( $theAttributes, "linktext" );
     my $format = &TWiki::extractNameValuePair( $theAttributes, "format" );
 
     $headers = 4	unless $headers =~ /^[0-6]$/;
@@ -105,7 +104,7 @@ sub handleIncludeIndex	  # clone of TWiki::handleIncludeFile
     foreach $line (@lines)
     {
 	if ($line =~ /^\s*%INCLUDE{/)	{
-	    $line =~ s/%INCLUDE{(.*?)}%/&linkToInclude($1, $linktext, $format)/geo;
+	    $line =~ s/%INCLUDE{(.*?)}%/&linkToInclude($1, $format)/geo;
 	    $text .= $line;
 	}
 	elsif ($headers && $line =~ /^----*\+/)	{
@@ -123,6 +122,7 @@ sub handleIncludeIndex	  # clone of TWiki::handleIncludeFile
 	    $text .= $line;
 	}
     }
+    chomp $text;
     return $text;
 }
 
@@ -142,3 +142,4 @@ sub commonTagsHandler
 
 # =========================
 1;
+

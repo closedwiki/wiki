@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1029422940" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1054768421" format="1.0" version="1.1"}%
 This plugin generates an index of all the pages included from one master page.
 This allows you to put together one huge document for print out
 plus a lean index for online browsing without extra maintenance.
@@ -40,6 +40,10 @@ The following rules proved useful in bigger projects:
 	  editorial hints etc.
 	0 Use TWiki:Main.ColasNahaboos savemulti Checkpoint function
 	  to save the master document without lengthy rendering
+	0 For really huge documents, where you want to print parts/chapters:
+		0 create master page per printable chapter
+		0 include master pages in global print page
+		0 %INCLUDEINDEXes of master pages in index page
 	
 
 ---------++++ You write:
@@ -53,8 +57,8 @@ The following rules proved useful in bigger projects:
 %INCLUDEINDEX{...
 
 --<nop>-++ See also: <br>
-   1 &lt;a href=%SCRIPTURLPATH%/edit/MyProjectManual>edit structure&lt;/a><br>
-   2 &lt;a href=%SCRIPTURLPATH%/pdf/MyProjectManual>Print PDF&lt;/a><br>
+	1 &lt;a href=%SCRIPTURLPATH%/edit/MyProjectManual>edit structure&lt;/a><br>
+	2 &lt;a href=%SCRIPTURLPATH%/pdf/MyProjectManual>Print PDF&lt;/a><br>
 </td>
 <td bgcolor=#ffcccc rowspan=4>
 --<nop>-+ Foo Topic 1<br>
@@ -129,7 +133,7 @@ Advantages of SectionalEditPlugin:
 	* Sometimes, it is more convenient to edit many topics in one go
 	* TWiki (shame!) doesn't support Wiki:WayBackMode (yet),
 	  It is _very_ hard to get a previous version of a composite doc
-          other than storing printouts
+			 other than storing printouts
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -151,7 +155,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	the list of topics in the TWikiDocumentation should show up:
 <dl><dt></dt><dd>
 -----
-%INCLUDEINDEX{"TWikiDocumentation" format="$n   0 $topic"}%
+%INCLUDEINDEX{"TWikiDocumentation" format="$n	0 $topic"}%
 -----
 </dl>
 
@@ -167,8 +171,8 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Source:	| CVSPlugins:InlcudeIndexPlugin |
 
 __Related Topics:__<br>
 SectionalEditPlugin, PdfPlugin,
 %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
-
