@@ -29,7 +29,7 @@ The TRT centres on the concept of a unique CONTENT identifier - instead of ident
 ---++ Plugin Installation and Set up Instructions
 
 	1 Download the ZIP file from the Plugin web (see below).
-	1 Unzip EditTablePlugin.zip in your twiki installation directory. 
+	1 Unzip TWiki:Plugins.EditTablePlugin.zip in your twiki installation directory. (This will facilitate sorting the table entries)
 	1 This plugin requires TWiki:Plugins.BuildContrib and TWiki:Plugins.DistributionContrib to run. If you do not have these two plugins installed, download and install them before proceeding.
 	1 Create a md5 index of your local installation by clicking [[%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/TRTChangesFromDistribution?mode=indexLocalInstallation][here]]. _(Repeat this step after modifying installation files to create new index.)_
 	1 Test if the Plugin is correctly installed:
