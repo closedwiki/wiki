@@ -1,18 +1,18 @@
 /*
  *  gnu/regexp/REFilterInputStream.java
- *  Copyright (C) 1998 Wes Biggs
+ *  Copyright (C) 1998-2001 Wes Biggs
  *
  *  This library is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Library General Public License as published
- *  by the Free Software Foundation; either version 2 of the License, or
+ *  it under the terms of the GNU Lesser General Public License as published
+ *  by the Free Software Foundation; either version 2.1 of the License, or
  *  (at your option) any later version.
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Library General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
@@ -22,37 +22,41 @@ import java.io.FilterInputStream;
 import java.io.InputStream;
 
 /**
- * Replaces instances of a given RE with replacement text. 
+ * Replaces instances of a given RE found within an InputStream
+ * with replacement text.   The replacements are interpolated into the
+ * stream when a match is found.
  *
  * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
- * @since gnu.regexp 1.0.5
+ * @deprecated This class cannot properly handle all character
+ *             encodings.  For proper handling, use the REFilterReader
+ *             class instead.
  */
 
 public class REFilterInputStream extends FilterInputStream {
 
-  private RE m_expr;
-  private String m_replace;
-  private String m_buffer;
-  private int m_bufpos;
-  private int m_offset;
-  private CharIndexedInputStream m_stream;
+    private RE expr;
+    private String replace;
+    private String buffer;
+    private int bufpos;
+    private int offset;
+    private CharIndexedInputStream stream;
 
   /**
    * Creates an REFilterInputStream.  When reading from this stream,
    * occurrences of patterns matching the supplied regular expression
    * will be replaced with the supplied replacement text (the
    * metacharacters $0 through $9 may be used to refer to the full
-   * match or subexpression matches.
+   * match or subexpression matches).
    *
-   * @param f_stream The InputStream to be filtered.
-   * @param f_expr The regular expression to search for.
-   * @param f_replace The text pattern to replace matches with.  
+   * @param stream The InputStream to be filtered.
+   * @param expr The regular expression to search for.
+   * @param replace The text pattern to replace matches with.  
    */
-  public REFilterInputStream(InputStream f_stream, RE f_expr, String f_replace) {
-    super(f_stream);
-    m_stream = new CharIndexedInputStream(f_stream,0);
-    m_expr = f_expr;
-    m_replace = f_replace;
+  public REFilterInputStream(InputStream stream, RE expr, String replace) {
+    super(stream);
+    this.stream = new CharIndexedInputStream(stream,0);
+    this.expr = expr;
+    this.replace = replace;
   }
 
   /**
@@ -61,32 +65,32 @@ public class REFilterInputStream extends FilterInputStream {
    */
   public int read() {
     // If we have buffered replace data, use it.
-    if ((m_buffer != null) && (m_bufpos < m_buffer.length())) {
-      return (int) m_buffer.charAt(m_bufpos++);
+    if ((buffer != null) && (bufpos < buffer.length())) {
+      return (int) buffer.charAt(bufpos++);
     }
 
     // check if input is at a valid position
-    if (!m_stream.isValid()) return -1;
+    if (!stream.isValid()) return -1;
 
-    REMatch mymatch = new REMatch(m_expr.getNumSubs(),m_offset);
-    int[] result = m_expr.match(m_stream,0,0,mymatch);
-    if (result != null) {
-      mymatch.end[0] = result[0];
-      mymatch.finish(m_stream);
-      m_stream.move(mymatch.toString().length());
-      m_offset += mymatch.toString().length();
-      m_buffer = mymatch.substituteInto(m_replace);
-      m_bufpos = 1;
+    REMatch mymatch = new REMatch(expr.getNumSubs(),offset,0);
+    if (expr.match(stream, mymatch)) {
+      mymatch.end[0] = mymatch.index;
+      mymatch.finish(stream);
+      stream.move(mymatch.toString().length());
+      offset += mymatch.toString().length();
+      buffer = mymatch.substituteInto(replace);
+      bufpos = 1;
 
       // This is prone to infinite loops if replace string turns out empty.
-      return m_buffer.charAt(0);
-    } else {
-      char ch = m_stream.charAt(0);
-      if (ch == CharIndexed.OUT_OF_BOUNDS) return -1;
-      m_stream.move(1);
-      m_offset++;
-      return ch;
+      if (buffer.length() > 0) {
+	  return buffer.charAt(0);
+      }
     }
+    char ch = stream.charAt(0);
+    if (ch == CharIndexed.OUT_OF_BOUNDS) return -1;
+    stream.move(1);
+    offset++;
+    return ch;
   }
 
   /** 

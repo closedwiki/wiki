@@ -5,7 +5,6 @@
 package com.ccsoft.edit;
 
 import java.awt.Frame;
-import java.awt.event.KeyEvent;
 import java.net.URL;
 
 /**
@@ -16,5 +15,6 @@ interface Application {
     /** Get the parent frame for the controlling application. Needed
      * for dialogs. */
     Frame getFrame();
+    /** Do whatever you do to show the status */
     void showStatus(String s);
 }
