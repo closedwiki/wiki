@@ -1,0 +1,1010 @@
+=== README.robustness
+==================================================================
+--- README.robustness   (/twiki/trunk)   (revision 287)
++++ README.robustness   (/twiki/branches/robustness)   (revision 287)
+@@ -0,0 +1,51 @@
++This is the unofficial robustness branch of TWiki.  The goal of this
++branch is to remove questionable code from the TWiki code base, to
++improve its security against attackers which can change TWiki topics
++and try to gain shell command access to the web server.  (Attacks
++against the TWiki application itself and its access control mechanisms
++are not a focus of this work.)
++
++The following steps have been performed:
++
++  - The Perl backtick operator has been replaced with a central
++    subprocess invocation mechanism.  The shell is no longer used
++    to parse command lines, and shell meta-characters are no longer
++    a problem.
++
++  - In some places, file names are checked for directory traversal
++    attempts.  These checks might not be completely sufficient,
++    though.
++
++  - Some untaint operations have been removed.  Others have been
++    replaced with a call to TWiki::untaintUnchecked, which can be found
++    easily using grep in future audits.
++
++NOTE: You have to update your TWiki.cfg file.  You should use the
++following settings:
++
++$endRcsCmd        = "";
++
++And further below:
++
++    # Rcs only 
++    # This settings are security-relevant.
++    initBinaryCmd => "$rcsDir/rcs $rcsArg -q -i -t-none -kb %FILENAME|F% $endRcsCmd",
++    tmpBinaryCmd  => "$rcsDir/rcs $rcsArg -q -kb %FILENAME|F% $endRcsCmd",
++    ciCmd         => "$rcsDir/ci $rcsArg -q -l -m%COMMENT|U% -t-none -w%USERNAME|S% %FILENAME|F% $endRcsCmd",
++    coCmd         => "$rcsDir/co $rcsArg -q -p%REVISION|N% $keywordMode %FILENAME|F% $endRcsCmd",
++    histCmd       => "$rcsDir/rlog $rcsArg -h %FILENAME|F% $endRcsCmd",
++    infoCmd       => "$rcsDir/rlog $rcsArg -r%REVISION|N% %FILENAME|F% $endRcsCmd",
++    diffCmd       => "$rcsDir/rcsdiff $rcsArg -q -w -B -r%REVISION1|N% -r%REVISION2|N% $keywordMode --unified=%CONTEXT|N% %FILENAME|F% $endRcsCmd",
++    breakLockCmd  => "$rcsDir/rcs $rcsArg -q -l -M %FILENAME|F% $endRcsCmd",
++    ciDateCmd     => "$rcsDir/ci -l $rcsArg -q -mnone -t-none -d%DATE|D% -w%USERNAME|S% %FILENAME|F% $endRcsCmd",
++    delRevCmd     => "$rcsDir/rcs $rcsArg -q -o%REVISION|N% %FILENAME|F% $endRcsCmd",
++    unlockCmd     => "$rcsDir/rcs $rcsArg -q -u %FILENAME|F%  $endRcsCmd",
++    lockCmd       => "$rcsDir/rcs $rcsArg -q -l %FILENAME|F% $endRcsCmd",
++    tagCmd       => "$rcsDir/rcs $rcsArg -N%TAG|S%:%REVISION|N% %FILENAME|F% $endRcsCmd",
++
++Test cases for new helper routines are contained in t/20robustness.t.
++
++Note that these changes break native Windows support, and require
++Perl 5.8.  It is not clear how to safely support native Windows because
++command line handling is completely different from UNIX (one large string
++which is parsed by the called program vs. one string for each argument).
+=== t/20robustness.t
+==================================================================
+--- t/20robustness.t   (/twiki/trunk)   (revision 287)
++++ t/20robustness.t   (/twiki/branches/robustness)   (revision 287)
+@@ -0,0 +1,77 @@
++#!/usr/bin/perl
++use strict;
++use warnings;
++use Test::More tests => 54;
++
++require 'bin/setlib.cfg';
++require_ok ('TWiki');
++require_ok ('TWiki::Store::RcsWrap');
++
++is (TWiki::untaintUnchecked (''), '');
++is (TWiki::untaintUnchecked ('abc'), 'abc');
++is (TWiki::untaintUnchecked (undef), undef);
++
++is (TWiki::normalizeFileName ('abc'), 'abc');
++is (TWiki::normalizeFileName ('./abc'), 'abc');
++is (TWiki::normalizeFileName ('abc/.'), 'abc');
++is (TWiki::normalizeFileName ('-abc'), './-abc');
++is (TWiki::normalizeFileName ('-'), './-');
++is (TWiki::normalizeFileName ('--abc'), './--abc');
++is (TWiki::normalizeFileName ('--'), './--');
++is (TWiki::normalizeFileName ('/abc'), '/abc');
++is (TWiki::normalizeFileName ('//abc'), '/abc');
++is (TWiki::normalizeFileName ('/a/bc'), '/a/bc');
++is (TWiki::normalizeFileName ('//a/bc'), '/a/bc');
++is (TWiki::normalizeFileName ('/a/b/c'), '/a/b/c');
++is (TWiki::normalizeFileName ('//a/b/c'), '/a/b/c');
++is (TWiki::normalizeFileName ('/a/b/c/'), '/a/b/c');
++is (TWiki::normalizeFileName ('//a/b/c/'), '/a/b/c');
++is (TWiki::normalizeFileName ('/a/b/c/..', 1), '/a/b');
++is (TWiki::normalizeFileName ('//a/b/c/..', 1), '/a/b');
++is (TWiki::normalizeFileName ('/a/b/c/../..', 1), '/a');
++is (TWiki::normalizeFileName ('//a/b/c/../..', 1), '/a');
++is (TWiki::normalizeFileName ('/a/b/c/../../..', 1), '/');
++is (TWiki::normalizeFileName ('//a/b/c/../../..', 1), '/');
++is (TWiki::normalizeFileName ('a/b/c/..', 1), 'a/b');
++is (TWiki::normalizeFileName ('a/b/c/../..', 1), 'a');
++eval { TWiki::normalizeFileName ('a/b/c/../../..', 1) };
++isnt ($@, '');
++eval { TWiki::normalizeFileName ('a/..', 1) };
++isnt ($@, '');
++eval { TWiki::normalizeFileName ('-/..', 1) };
++isnt ($@, '');
++eval { TWiki::normalizeFileName ('') };
++isnt ($@, '');
++eval { TWiki::normalizeFileName ('', 1) };
++isnt ($@, '');
++eval { TWiki::normalizeFileName (undef) };
++isnt ($@, '');
++eval { TWiki::normalizeFileName (undef, 1) };
++isnt ($@, '');
++eval { TWiki::normalizeFileName ('a/b/../c') };
++isnt ($@, '');
++
++is_deeply ([TWiki::buildCommandLine ('a b c', ())], ['a', 'b', 'c']);
++is_deeply ([TWiki::buildCommandLine (' a  b  c ', ())], ['a', 'b', 'c']);
++is_deeply ([TWiki::buildCommandLine (' %A%  %B%  %C% ', (A => 1, B => 2, C => 3))], [1, 2, 3]);
++is_deeply ([TWiki::buildCommandLine (' %A|U%  %B|F%  %C|F% ', (A => 1, B => "-..", C => "a/b"))], [1, "./-..", 'a/b']);
++is_deeply ([TWiki::buildCommandLine (' %A%  %B%:%C% ', (A => 1, B => 2, C => 3))], [1, "2:3"]);
++is_deeply ([TWiki::buildCommandLine (' %A%  -n%B%:%C% ', (A => 1, B => 2, C => 3))], [1, "-n2:3"]);
++is_deeply ([TWiki::buildCommandLine (' %A%  -r%B%:HEAD %C% ', (A => 1, B => 2, C => 3))], [1, "-r2:HEAD", 3]);
++is_deeply ([TWiki::buildCommandLine (' %A|F%  ', (A => ["a", "b", "/c"]))], ['a', 'b', '/c']);
++is_deeply ([TWiki::buildCommandLine (' %A|N% %B|S% %C|S%', (A => [1, 2.3, 4], B => 'string', C => ''))], ['1', '2.3', '4', 'string', '']);
++is_deeply ([TWiki::buildCommandLine ('%A|D%', A => TWiki::formatTime (1100944661, '$rcs', 'gmtime'))], ['2004/11/20 09:57:41']);
++eval { TWiki::buildCommandLine ('%A|%') };
++isnt ($@, '');
++eval { TWiki::buildCommandLine ('%A|X%') };
++isnt ($@, '');
++eval { TWiki::buildCommandLine (' %A|N%  ', A => '2/3') };
++isnt ($@, '');
++eval { TWiki::buildCommandLine (' %A|S%  ', A => '2/3') };
++isnt ($@, '');
++
++is_deeply ([TWiki::readFromProcessArray ('echo', ' %A%  %B% ', (A => " 1", B => "2 "))], [" 1 2 "]);
++
++is_deeply ([TWiki::readFromProcess ('sh -c %A%', A => 'exit 7')], ['', 7]);
++is_deeply ([TWiki::readFromProcess ('sh -c %A%', A => 'echo 1; echo 2')], ["1\n2\n", 0]);
++is_deeply ([TWiki::readFromProcess ('sh -c %A%', A => 'echo 1; echo 2 1>&2')], ["1\n2\n", 0]);
+=== lib/TWiki.pm
+==================================================================
+--- lib/TWiki.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -3212,6 +3212,243 @@
+     return $text;
+ }
+ 
++=pod
++---++untaintUnchecked ( $string )
++Return value: $untainted
++
++Untaints $string without any checks (dangerous).  If $string is
++undefined, return undef.
++
++The intent is to use this routine to be able to find all untainting
++places using grep.
++
++=cut
++
++sub untaintUnchecked ($) {
++    my $string = shift;
++    return undef unless defined $string;
++    if ($string =~ /^(.*)$/) {
++	return $1;
++    } 
++    return $string;		# Can't happen.
++}
++
++=pod
++---++normalizeFileName ( $string [, $dotdot] )
++Return value: $filename
++
++Errors out if $string contains whitespace characters.  If $dotdot is
++present and true, allow ".." in path names.
++
++The returned string is not tainted, but it may contain shell
++metacharacters and even control characters.
++
++=cut
++
++sub normalizeFileName ($;$) {
++    my ($string, $dotdot) = @_;
++    my $absolute = $string =~ /^\//;
++    my @result;
++    for my $component (split /\//, $string) {
++	next unless $component;
++	next if $component eq '.';
++	if ($component eq '..') {
++	    if ($dotdot && @result > 0) {
++		pop @result;
++	    } else {
++		die 'directory traversal attempt';
++	    }
++	} elsif ($component =~ /^(\S+)$/) {
++            # We need to untaint the string explicitly.
++            # FIXME: This might be a Perl bug.
++            push @result, untaintUnchecked $1;
++	} else {
++	    die 'whitespace in file name component';
++	}
++    }
++    if (@result) {
++	if ($absolute) {
++	    $result[0] = "/$result[0]";
++	} elsif ($result[0] =~ /^-/) {
++	    $result[0] = "./$result[0]";
++	}
++	return join '/', @result;
++    } else {
++	return '/' if $absolute;
++	die 'empty file name';
++    }
++}
++
++=pod
++---++buildCommandLine ( $template, %params )
++Return value: @arguments
++
++$template is split at whitespace, and '%VAR%' strings contained in it
++are replaced with $params{VAR}.  %params may consist of scalars and
++array references as values.  Array references are dereferenced and the
++array elements are inserted into the command line at the indicated
++point.
++
++'%VAR%' can optionally take the form '%VAR|FLAG%', where FLAG is a
++single character flag.  Permitted flags are U (untaint without further
++checks -- dangerous), F (normalize as file name), N (generalized
++number), and S (simple, short string).
++
++=cut
++
++sub buildCommandLine ($%) {
++    my ($template, %params) = @_;
++    my @arguments;
++
++    for my $tmplarg (split /\s+/, $template) {
++	next if $tmplarg eq '';	# ignore leading/trailing whitespace
++
++	# Split single argument into its parts.  It may contain
++	# multiple substitutions.
++
++	my @tmplarg = $tmplarg =~ /([^%]+|%[^%]+%)/g;
++	my @targs;
++	for my $t (@tmplarg) {
++	    if ($t =~ /%(.*?)(|\|[A-Z])%/) {
++		my ($p, $flag) = ($1, $2);
++		if (! exists $params{$p}) {
++		    die "unknown parameter name $p";
++		}
++		my $type = ref $params{$p};
++		my @params;
++		if ($type eq '') {
++		    @params = ($params{$p});
++		} elsif ($type eq 'ARRAY') {
++		    @params =  @{$params{$p}};
++		} else {
++		    die "$type reference passed in $p";
++		}
++
++		for my $param (@params) {
++		    if ($flag) {
++			if ($flag =~ /U/) {
++			    push @targs, untaintUnchecked $param;
++			} elsif ($flag =~ /F/) {
++			    push @targs, normalizeFileName $param;
++			} elsif ($flag =~ /N/) {
++			    # Generalized number.
++			    if ($param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/) {
++				push @targs, $1;
++			    } else {
++				die "invalid number argument";
++			    }
++			} elsif ($flag =~ /S/) {
++			    # Harmless string.
++			    if ($param =~ /^([0-9A-Za-z.+_\-]{0,30})$/) {
++				push @targs, $1;
++			    } else {
++				die "invalid string argument";
++			    }
++			} elsif ($flag =~ /D/) {
++			    # RCS date.
++			    if ($param =~ m!^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$!) {
++				push @targs, $1;
++			    } else {
++				die "invalid date argument";
++			    }
++			} else {
++			    die "illegal flag in $t";
++			}
++		    } else {
++			push @targs, $param;
++		    }
++		}
++	    } else {
++		push @targs, $t;
++	    }
++	}
++
++	# Recombine the argument if the template argument contained
++	# multiple parts.
++
++	if (@tmplarg == 1) {
++	    push @arguments, @targs;
++	} else {
++	    push @arguments, join ('', @targs);
++	}
++    }
++
++    return @arguments;
++}
++
++=pod
++
++---++readFromProcessArray ( $path, $template, @params )
++Return value: @outputLines
++
++Invokes the program $path with the arguments described by $template
++and @params, and returns the output of the program as an array of
++lines.  If $path is not absolute, $ENV{PATH} is searched.
++
++$template is interpreted by buildCommandLine.
++
++The caller has to ensure that the invoked program does not react in a
++harmful way to the passed arguments.  readFromProcessArray merely
++ensures that the shell does not interpret any of the passed arguments.
++
++=cut
++
++sub readFromProcessArray ($$@) {
++    my ($path, $template, %params) = @_;
++
++    my @args = buildCommandLine $template, %params;
++
++    # The code follows the safe pipe construct found in perlipc(1).
++    my $pipe;
++    my $pid = open $pipe, '-|';
++    if ($pid) {			# parent
++	my @data = map { chomp $_; $_ } <$pipe>; # remove newline characters.
++	close $pipe;
++	return @data;
++    } else {
++	exec { $path } $path, @args;
++	# Usually not reached.
++	exit 127;
++    }
++}
++
++=pod 
++
++---++readFromProcess ( $template, @params )
++Return value: ($output, $status)
++
++Like readFromProcessArray, but returns the process output as a single
++string, together with the exit status.  Furthermore, the program to
++execute is taken from the first argument in $template, and standard
++error is redirected to standard input.
++
++=cut
++
++use POSIX;
++
++sub readFromProcess ($@) {
++    my ($template, %params) = @_;
++
++    my @args = buildCommandLine $template, %params;
++
++    # The code follows the safe pipe construct found in perlipc(1).
++    my $pipe;
++    my $pid = open $pipe, '-|';
++    if ($pid) {			# parent
++	local $/;		# read everything in one operation
++	my $data = <$pipe>;
++	close $pipe;
++	return ($data, $? >> 8);
++    } else {
++	# Redirect standard error to standard output.
++	POSIX::close 2;
++	POSIX::dup 1;
++	exec { $args[0] } @args;
++	# Usually not reached.
++	exit 127;
++    }
++}
++
+ =end twiki
+ 
+ =cut
+=== lib/TWiki.cfg
+==================================================================
+--- lib/TWiki.cfg   (/twiki/trunk)   (revision 287)
++++ lib/TWiki.cfg   (/twiki/branches/robustness)   (revision 287)
+@@ -192,7 +192,8 @@
+ $useRcsDir        = "0";
+ # This should enable gathering of extra error information on most OSes.  However, won't work on NT4 unless unix like shell is used
+ $endRcsCmd        = "";
+-$endRcsCmd        = " 2>&1" if( $OS eq "UNIX" );
++# Disable verbose error output because safe pipes do not support them yet.
++# $endRcsCmd        = " 2>&1" if( $OS eq "UNIX" );
+ #                   Command quote ' for unix, \" for Windows
+ $cmdQuote         = "'";
+ $cmdQuote         = "\"" if( $OS eq "WINDOWS" );
+@@ -304,19 +305,20 @@
+     useRcsDir       => $TWiki::useRcsDir,
+ 
+     # Rcs only 
+-    initBinaryCmd => "$rcsDir/rcs $rcsArg -q -i -t-none -kb %FILENAME% $endRcsCmd",
+-    tmpBinaryCmd  => "$rcsDir/rcs $rcsArg -q -kb %FILENAME% $endRcsCmd",
+-    ciCmd         => "$rcsDir/ci $rcsArg -q -l -m$cmdQuote%COMMENT%$cmdQuote -t-none -w$cmdQuote%USERNAME%$cmdQuote %FILENAME% $endRcsCmd",
+-    coCmd         => "$rcsDir/co $rcsArg -q -p%REVISION% $keywordMode %FILENAME% $endRcsCmd",
+-    histCmd       => "$rcsDir/rlog $rcsArg -h %FILENAME% $endRcsCmd",
+-    infoCmd       => "$rcsDir/rlog $rcsArg -r%REVISION% %FILENAME% $endRcsCmd",
+-    diffCmd       => "$rcsDir/rcsdiff $rcsArg -q -w -B -r%REVISION1% -r%REVISION2% $keywordMode --unified=%CONTEXT% %FILENAME% $endRcsCmd",
+-    breakLockCmd  => "$rcsDir/rcs $rcsArg -q -l -M %FILENAME% $endRcsCmd",
+-    ciDateCmd     => "$rcsDir/ci -l $rcsArg -q -mnone -t-none -d$cmdQuote%DATE%$cmdQuote -w$cmdQuote%USERNAME%$cmdQuote %FILENAME% $endRcsCmd",
+-    delRevCmd     => "$rcsDir/rcs $rcsArg -q -o%REVISION% %FILENAME% $endRcsCmd",
+-    unlockCmd     => "$rcsDir/rcs $rcsArg -q -u %FILENAME%  $endRcsCmd",
+-    lockCmd       => "$rcsDir/rcs $rcsArg -q -l %FILENAME% $endRcsCmd",
+-    tagCmd       => "$rcsDir/rcs $rcsArg -N%TAG%:%REVISION% %FILENAME% $endRcsCmd",
++    # This settings are security-relevant.
++    initBinaryCmd => "$rcsDir/rcs $rcsArg -q -i -t-none -kb %FILENAME|F% $endRcsCmd",
++    tmpBinaryCmd  => "$rcsDir/rcs $rcsArg -q -kb %FILENAME|F% $endRcsCmd",
++    ciCmd         => "$rcsDir/ci $rcsArg -q -l -m%COMMENT|U% -t-none -w%USERNAME|S% %FILENAME|F% $endRcsCmd",
++    coCmd         => "$rcsDir/co $rcsArg -q -p%REVISION|N% $keywordMode %FILENAME|F% $endRcsCmd",
++    histCmd       => "$rcsDir/rlog $rcsArg -h %FILENAME|F% $endRcsCmd",
++    infoCmd       => "$rcsDir/rlog $rcsArg -r%REVISION|N% %FILENAME|F% $endRcsCmd",
++    diffCmd       => "$rcsDir/rcsdiff $rcsArg -q -w -B -r%REVISION1|N% -r%REVISION2|N% $keywordMode --unified=%CONTEXT|N% %FILENAME|F% $endRcsCmd",
++    breakLockCmd  => "$rcsDir/rcs $rcsArg -q -l -M %FILENAME|F% $endRcsCmd",
++    ciDateCmd     => "$rcsDir/ci -l $rcsArg -q -mnone -t-none -d%DATE|D% -w%USERNAME|S% %FILENAME|F% $endRcsCmd",
++    delRevCmd     => "$rcsDir/rcs $rcsArg -q -o%REVISION|N% %FILENAME|F% $endRcsCmd",
++    unlockCmd     => "$rcsDir/rcs $rcsArg -q -u %FILENAME|F%  $endRcsCmd",
++    lockCmd       => "$rcsDir/rcs $rcsArg -q -l %FILENAME|F% $endRcsCmd",
++    tagCmd       => "$rcsDir/rcs $rcsArg -N%TAG|S%:%REVISION|N% %FILENAME|F% $endRcsCmd",
+   );
+ 
+ #                   Regex security filter for web name, topic name, user name :
+=== lib/TWiki/Search.pm
+==================================================================
+--- lib/TWiki/Search.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki/Search.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -193,16 +193,17 @@
+         unless( $theScope eq "topic" ) {
+             # Construct command line with 'grep'.  I18N: 'grep' must use locales if needed,
+             # for case-insensitive searching.  See TWiki::setupLocale.
+-            my $cmd = "";
++            my $program;
+             if( $theType eq "regex" ) {
+-                $cmd .= $TWiki::egrepCmd;
++                $program = $TWiki::egrepCmd;
+             } else {
+-                $cmd .= $TWiki::fgrepCmd;
++                $program = $TWiki::fgrepCmd;
+             }
+-            $cmd .= " -i" unless( $caseSensitive );
+-            $cmd .= " -l -- $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
+ 
+-            my $result = "";
++            my $template = '';
++            $template .= ' -i' unless( $caseSensitive );
++            $template .= ' -l -- %TOKEN|U% %FILES|F%';
++
+             if( $sDir ) {
+                 chdir( "$sDir" );
+                 _traceExec( "chdir to $sDir", "" );
+@@ -215,15 +216,10 @@
+             my @set = splice( @take, 0, $maxTopicsInSet );
+             while( @set ) {
+                 @set = map { "$_.txt" } @set;                      # add ".txt" extension to topic names
+-                my $acmd = $cmd;
+-                $acmd =~ s/%TOKEN%/$token/o;
+-                $acmd =~ s/%FILES%/@set/o;
+-                $acmd =~ /(.*)/;
+-                $acmd = "$1";                                      # untaint variable (FIXME: Needs a better check!)
+-                $result = `$acmd`;
+-                _traceExec( $acmd, $result );
+-                @set = split( /\n/, $result );
+-                @set = map { /(.*)\.txt$/; $_ = $1; } @set;        # cut ".txt" extension
++                @set = TWiki::readFromProcessArray ($program, $template,
++					     TOKEN => $token, 
++					     FILES => \@set);
++                @set = map { $_ =~ s/\.txt$//; $_ } @set;             # cut ".txt" extension
+                 my %seen = ();
+                 foreach my $topic ( @set ) {
+                     $seen{$topic}++;                               # make topics unique
+=== lib/TWiki/Store/RcsLite.pm
+==================================================================
+--- lib/TWiki/Store/RcsLite.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki/Store/RcsLite.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -234,7 +234,7 @@
+ sub _process
+ {
+     my( $self ) = @_;
+-    my $rcsFile = $self->rcsFile();
++    my $rcsFile = TWiki::normalizeFileName( $self->rcsFile() );
+     if( ! -e $rcsFile ) {
+         $self->{where} = "nofile";
+         return;
+@@ -624,7 +624,7 @@
+     my $out = new FileHandle;
+     
+     chmod( 0644, $self->rcsFile()  ); # FIXME move permission to config or similar
+-    if( ! $out->open( "> " . $self->rcsFile() ) ) {
++    if( ! $out->open( "> " . TWiki::normalizeFileName( $self->rcsFile() ) ) ) {
+        $dataError = "Problem opening " . $self->rcsFile() . " for writing";
+     } else {
+        binmode( $out );
+@@ -730,32 +730,6 @@
+ }
+ 
+ 
+-=pod
+-
+----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+-
+-| Description: | sets a names tag on the specified revision |
+-| Parameter: =$web= | webname |
+-| Parameter: =$topic= | topic name |
+-| Parameter: =$rev= | the revision we are taging |
+-| Parameter: =$tag= | the string to tag with |
+-| Return: =$success= |  |
+-| TODO: | we _need_ an error mechanism! |
+-| Since: | TWiki:: (20 April 2004) |
+-
+-=cut
+-
+-sub setTopicRevisionTag
+-{
+-#	my ( $self, $web, $topic, $rev, $tag ) = @_;
+-
+-	TWiki::writeDebug("setTopicRevisionTag - not implemented in RCSLite");
+-#TODO: implement me :)
+-	
+-	return "";
+-}
+-
+-
+ # ======================
+ =pod
+ 
+=== lib/TWiki/Store/RcsWrap.pm
+==================================================================
+--- lib/TWiki/Store/RcsWrap.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki/Store/RcsWrap.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -159,11 +159,7 @@
+         # Can only do something when changing to binary
+         my $cmd = $self->{"initBinaryCmd"};
+         my $file = $self->file();
+-        $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
+-        $cmd =~ /(.*)/;
+-        $cmd = "$1";       # safe, so untaint variable
+-        my $rcsOutput = `$cmd`;
+-        my $exit = $? >> 8;
++	my ($rcsOutput, $exit) = TWiki::readFromProcess ($cmd, FILENAME => $file);
+         _traceExec( $cmd, $rcsOutput, $exit );
+         if( $exit && $rcsOutput ) {
+            $rcsOutput = "$cmd\n$rcsOutput";
+@@ -216,7 +212,6 @@
+     my $file    = $self->{file};
+     my $rcsFile = $self->{rcsFile};
+     my $cmd;
+-    my $rcsOut;
+     
+     # update repository with same userName and date
+     if( $rev == 1 ) {
+@@ -228,15 +223,11 @@
+     $self->_saveFile( $self->file(), $text );
+     $cmd = $self->{ciDateCmd};
+ 	$date = TWiki::formatTime( $date , "\$rcs", "gmtime");
+-    $cmd =~ s/%DATE%/$date/;
+-    $cmd =~ s/%USERNAME%/$user/;
+-    $file =~ s/$TWiki::securityFilter//go;
+-    $rcsFile =~ s/$TWiki::securityFilter//go;
+-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/;
+-    $cmd =~ /(.*)/;
+-    $cmd = $1;       # safe, so untaint variable
+-    $rcsOut = `$cmd`;
+-    my $exit = $? >> 8;
++    my ($rcsOut, $exit) = TWiki::readFromProcess 
++	($cmd, 
++	 DATE => $date,
++	 USERNAME => $user,
++	 FILENAME => [$file, $rcsFile]);
+     _traceExec( $cmd, $rcsOut, $exit );
+     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+     if( $exit ) {
+@@ -281,11 +272,8 @@
+     my $file    = $self->{file};
+     my $rcsFile = $self->{rcsFile};
+     my $cmd= $self->{unlockCmd};
+-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
+-    $cmd =~ /(.*)/;
+-    $cmd = $1;       # safe, so untaint
+-    my $rcsOut = `$cmd`; # capture stderr
+-    my $exit = $? >> 8;
++    my ($rcsOut, $exit) = TWiki::readFromProcess
++	($cmd, FILENAME => [$file, $rcsFile]);
+     _traceExec( $cmd, $rcsOut, $exit );
+     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+     if( $exit ) {
+@@ -293,12 +281,10 @@
+         return $rcsOut;
+     }
+     $cmd= $self->{delRevCmd};
+-    $cmd =~ s/%REVISION%/1.$rev/go;
+-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
+-    $cmd =~ /(.*)/;
+-    $cmd = $1;       # safe, so untaint variable
+-    $rcsOut = `$cmd`;
+-    $exit = $? >> 8;
++    ($rcsOut, $exit) = TWiki::readFromProcess
++	($cmd,
++	 REVISION => "1.$rev",
++	 FILENAME => [$file, $rcsFile]);
+     _traceExec( $cmd, $rcsOut, $exit );
+     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+     if( $exit ) {
+@@ -306,11 +292,10 @@
+         return $rcsOut;
+     }
+     $cmd= $self->{lockCmd};
+-    $cmd =~ s/%REVISION%/$rev/go;
+-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote $cmdQuote$rcsFile$cmdQuote/go;
+-    $cmd =~ /(.*)/;
+-    $cmd = $1;       # safe, so untaint variable
+-    $rcsOut = `$cmd`;
++    ($rcsOut, $exit) = TWiki::readFromProcess
++	($cmd,
++	 REVISION => "$rev",
++	 FILENAME => [$file, $rcsFile]);
+     _traceExec( $cmd, $rcsOut, $exit );
+     #$rcsOut =~ s/^Warning\: missing newline.*//os; # forget warning
+     if( $exit ) {
+@@ -344,26 +329,21 @@
+         $tmpRevFile = "$tmpfile,v";
+         copy( $self->rcsFile(), $tmpRevFile );
+         my $cmd1 = $self->{tmpBinaryCmd};
+-        $cmd1 =~ s/%FILENAME%/$cmdQuote$tmpRevFile$cmdQuote/;
+-        $cmd1 =~ /(.*)/;
+-        $cmd1 = "$1";
+-        my $tmp = `$cmd1`;
++        my ($tmp) = TWiki::readFromProcess ($cmd1, FILENAME => $tmpRevFile);
+         _traceExec( $cmd1, $tmp );
+         $file = $tmpfile;
+         $cmd =~ s/-p%REVISION%/-r%REVISION%/;
+     }    
+-    $cmd =~ s/%REVISION%/1.$version/;
+-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
+-    $cmd =~ /(.*)/;
+-    $cmd = "$1"; # untaint
+-    my $text = `$cmd`;
++    my ($text) = TWiki::readFromProcess
++	($cmd,
++	 REVISION => "1.$version",
++	 FILENAME => $file);
+     if( $tmpfile ) {
+         $text = $self->_readFile( $tmpfile );
+-        $tmpfile =~ /(.*)/;
+-        $tmpfile = "$1"; # untaint		
++        # FIXME: Is untainting really necessary here?
++        $tmpfile = TWiki::untaintUnchecked $tmpfile;
+         unlink $tmpfile;
+-        $tmpRevFile =~ /(.*)/;
+-        $tmpRevFile = "$1"; # untaint		
++        $tmpRevFile = TWiki::untaintUnchecked $tmpRevFile;
+         unlink $tmpRevFile;
+     }
+     _traceExec( $cmd, $text );
+@@ -388,10 +368,7 @@
+        return "";
+     }
+ 
+-    $cmd =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
+-    $cmd =~ /(.*)/;
+-    $cmd = $1;       # now safe, so untaint variable
+-    my $rcsOutput = `$cmd`;
++    my ($rcsOutput) = TWiki::readFromProcess ($cmd, FILENAME => $rcsFile);
+     _traceExec( $cmd, $rcsOutput );
+     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
+         return $1;
+@@ -433,11 +410,10 @@
+     my( $dummy, $rev, $date, $user, $comment );
+     if ( -e $rcsFile ) {
+        my $cmd= $self->{infoCmd};
+-       $cmd =~ s/%REVISION%/$version/;
+-       $cmd =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
+-       $cmd =~ /(.*)/; $cmd = $1;       # Untaint
+-       my $rcsOut = `$cmd`;
+-       my $exit = $? >> 8;
++       my ($rcsOut, $exit) = TWiki::readFromProcess
++	   ($cmd,
++	    REVISION => $version,
++	    FILENAME => $rcsFile);
+        _traceExec( $cmd, $cmd, $exit );
+        $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
+        if( ! $rcsError ) {
+@@ -477,6 +453,7 @@
+     my $error = "";
+ 
+     my $tmp= "";
++    my $exit;
+     if ( $rev1 eq "1" && $rev2 eq "1" ) {
+         my $text = $self->getRevision(1);
+         $tmp = "1a1\n";
+@@ -484,20 +461,16 @@
+            $tmp = "$tmp> $_\n";
+         }
+     } else {
+-        $tmp= $self->{"diffCmd"};
+-        $tmp =~ s/%REVISION1%/1.$rev1/;
+-        $tmp =~ s/%REVISION2%/1.$rev2/;
++        my $cmd = $self->{"diffCmd"};
+         my $rcsFile = $self->rcsFile();
+-        $rcsFile =~ s/$TWiki::securityFilter//go;
+-        $tmp =~ s/%FILENAME%/$cmdQuote$rcsFile$cmdQuote/;
+-        $tmp =~ s/%CONTEXT%/$contextLines/;
+-        $tmp =~ /(.*)/;
+-        my $cmd = $1;       # now safe, so untaint variable
+-        $tmp = `$cmd`;
+-        my $exit = $? >> 8;
++	($tmp, $exit) = TWiki::readFromProcess
++	    ($cmd,
++	     REVISION1 => "1.$rev1",
++	     REVISION2 => "1.$rev2",
++	     FILENAME => $rcsFile,
++	     CONTEXT => $contextLines);
+         $error = "Error $exit when runing $cmd";
+         _traceExec( $cmd, $tmp, $exit );       
+-        _trace( "and now $tmp" );
+         # Avoid showing change in revision number!
+         # I'm not too happy with this implementation, I think it may be better to filter before sending to diff command,
+         # possibly using Algorithm::Diff from CPAN.
+@@ -593,32 +566,27 @@
+     return "$file is not writable" unless ( -w $file );
+ 
+     my $cmd = $self->{"ciCmd"};
+-    my $rcsOutput = "";
+-    $cmd =~ s/%USERNAME%/$userName/;
+-    $file =~ s/$TWiki::securityFilter//go;
+-    $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
+-    $comment = "none" unless( $comment );
+-    $comment =~ s/[\"\'\`\;]//go;  # security, Codev.NoShellCharacterEscapingInFileAttachComment, MikeSmith
+-    $cmd =~ s/%COMMENT%/$comment/;
+-    $cmd =~ /(.*)/;
+-    $cmd = $1;       # safe, so untaint variable
+-    $rcsOutput = `$cmd`; # capture stderr  (S.Knutson)
+-    my $exit = $? >> 8;
++    my ($rcsOutput, $exit) = TWiki::readFromProcess
++	($cmd,
++	 USERNAME => $userName,
++	 FILENAME => $file,
++	 COMMENT => $comment);
+     _traceExec( $cmd, $rcsOutput );
+     if( $exit && $rcsOutput =~ /no lock set by/ ) {
+-          # Try and break lock, setting new one and doing ci again
+-          my $cmd = $self->{"breakLockCmd"};
+-          $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/go;
+-          $cmd =~ /(.*)/;
+-          my $out = `$cmd`;
+-          _traceExec( $cmd, $out );
+-          # Assume it worked, as not sure how to trap failure
+-          $rcsOutput = `$cmd`; # capture stderr  (S.Knutson)
+-          $exit = $? >> 8;
+-          _traceExec( $cmd, $rcsOutput );
+-          if( ! $exit ) {
+-              $rcsOutput = "";
+-          }
++	# Try and break lock, setting new lock and doing ci again
++	# Assume it worked, as not sure how to trap failure
++	TWiki::readFromProcess ($self->{"breakLockCmd"}, FILENAME => $file);
++
++        # re-do the ci command
++	($rcsOutput, $exit) = TWiki::readFromProcess
++            ($cmd,
++	     USERNAME => $userName,
++	     FILENAME => $file,
++	     COMMENT => $comment);
++        # FIXME: Is this really correct?  It suppresses the error return below.
++	if( ! $exit ) {
++	    $rcsOutput = "";
++	}
+     }
+     if( $exit && $rcsOutput ) { # oops, stderr was not empty, return error
+         $rcsOutput = "$cmd\n$rcsOutput";
+@@ -626,45 +594,4 @@
+     return $rcsOutput;
+ }
+ 
+-=pod
+-
+----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+-
+-| Description: | sets a names tag on the specified revision |
+-| Parameter: =$web= | webname |
+-| Parameter: =$topic= | topic name |
+-| Parameter: =$rev= | the revision we are taging |
+-| Parameter: =$tag= | the string to tag with |
+-| Return: =$success= |  |
+-| TODO: | we _need_ an error mechanism! |
+-| TODO: | NEED to check if the version exists (rcs does not) |
+-| Since: | TWiki:: (20 April 2004) |
+-
+-=cut
+-
+-sub setTopicRevisionTag
+-{
+-	my ( $self,  $web, $topic, $rev, $tag ) = @_;
+-
+-    my $file = $self->{file};
+-    if ( -e $file ) {
+-       my $cmd= $self->{tagCmd};
+-       $cmd =~ s/%REVISION%/$rev/;
+-       $cmd =~ s/%FILENAME%/$cmdQuote$file$cmdQuote/;
+-       $cmd =~ s/%TAG%/$tag/;
+-	   $cmd = $cmd."  2>> $TWiki::warningFilename";
+-       $cmd =~ /(.*)/; $cmd = $1;       # Untaint
+-       my $rcsOut = `$cmd`;
+-       my $exit = $? >> 8;
+-       _traceExec( $cmd, $cmd, $exit );
+-		if( $exit && $rcsOut ) { # oops, stderr was not empty, return error
+-			$rcsOut = "$cmd\n$$rcsOut";
+-			TWiki:writeDebug("RCSWrap::setTopicRevisionTag error - $rcsOut");
+-			return;
+-		}
+-   }
+-	   
+-	return 1;#success 
+-}
+-
+ 1;
+=== lib/TWiki/Func.pm
+==================================================================
+--- lib/TWiki/Func.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki/Func.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -848,29 +848,6 @@
+ }
+ 
+ # =========================
+-# (undocumented feature of Cairo since RcsLite is not implemented yet)
+-#=pod
+-#
+-#---+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+-#
+-#| Description: | Sets a names tag on the specified revision |
+-#| Parameter: =$web= | Web name |
+-#| Parameter: =$topic= | Topic name |
+-#| Parameter: =$rev= | The revision to tag |
+-#| Parameter: =$tag= | The string to tag with |
+-#| Return: =$success= | (CODE_SMELL: Other functions return error string, or empty if OK) |
+-#| TODO: | we _need_ an error mechanism! |
+-#| Since: | TWiki::Plugins::VERSION 1.022 (20 April 2004) |
+-#
+-#=cut
+-
+-sub setTopicRevisionTag
+-{
+-#	my ( $web, $topic, $rev, $tag ) = @_;
+-	
+-    return TWiki::Store::setTopicRevisionTag( @_ );
+-}
+-
+ =pod
+ 
+ ---++ Functions: Rendering
+=== lib/TWiki/Store.pm
+==================================================================
+--- lib/TWiki/Store.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki/Store.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -981,6 +981,7 @@
+ sub saveFile
+ {
+     my( $name, $text ) = @_;
++    $name = TWiki::normalizeFileName( $name );
+     
+     umask( 002 );
+     unless ( open( FILE, ">$name" ) )  {
+@@ -1236,7 +1237,7 @@
+     my( $theWeb, $theTopic ) = @_;
+     
+     my $topicHandler = _getTopicHandler( $theWeb, $theTopic );
+-    my $filename = getFileName( $theWeb, $theTopic );
++    my $filename = TWiki::normalizeFileName( getFileName( $theWeb, $theTopic ) );
+     
+     my $data = "";
+     my $line;
+@@ -1579,15 +1580,14 @@
+ Return value: $fileContents
+ 
+ Returns the entire contents of the given file, which can be specified in any
+-format acceptable to the Perl open() function.  SECURITY NOTE: make sure
+-any $filename coming from a user is stripped of special characters that might
+-change Perl's open() semantics.
++format acceptable to the Perl open() function.
+ 
+ =cut
+ 
+ sub readFile
+ {
+     my( $name ) = @_;
++    $name = TWiki::normalizeFileName( $name );
+     my $data = "";
+     undef $/; # set to read to EOF
+     open( IN_FILE, "<$name" ) || return "";
+@@ -1610,6 +1610,7 @@
+ sub readFileHead
+ {
+     my( $name, $maxLines ) = @_;
++    $name = TWiki::normalizeFileName( $name );
+     my $data = "";
+     my $line;
+     my $l = 0;
+@@ -1727,34 +1728,6 @@
+ }
+ #/AS
+ 
+-=pod
+-
+----+++ setTopicRevisionTag( $web, $topic, $rev, $tag ) ==> $success
+-
+-| Description: | sets a names tag on the specified revision |
+-| Parameter: =$web= | webname |
+-| Parameter: =$topic= | topic name |
+-| Parameter: =$rev= | the revision we are taging |
+-| Parameter: =$tag= | the string to tag with |
+-| Return: =$success= |  |
+-| TODO: | we _need_ an error mechanism! |
+-| Since: | TWiki:: (20 April 2004) |
+-
+-=cut
+-
+-sub setTopicRevisionTag
+-{
+-	my ( $web, $topic, $rev, $tag ) = @_;
+-	
+-    my $topicHandler = _getTopicHandler( $web, $topic );
+-#	TWiki::writeDebug("Store - setTopicRevisionTag ( $web, $topic, $rev, $tag )");	
+-    return $topicHandler->setTopicRevisionTag( $web, $topic, $rev, $tag );
+-}
+-
+-
+-
+-# =========================
+-
+ 1;
+ 
+ # EOF
+=== lib/TWiki/Access.pm
+==================================================================
+--- lib/TWiki/Access.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki/Access.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -140,6 +140,10 @@
+                     @denyList = @tmpList;
+                 } else {
+                     @allowList = @tmpList;
++		    if ($2 =~ /\S/ && !@allowList) {
++		    	##&TWiki::writeDebug( "  return 0, empty ALLOWTOPIC" );
++			return 0;
++		    }
+                 }
+             }
+         }
+@@ -159,6 +163,10 @@
+                       prvGetUserList( $tmpVal );
+         ##my $tmp = join( ', ', @allowList );
+         ##&TWiki::writeDebug( "  Prefs ALLOWWEB$theAccessType: {$tmp}" );
++	if ($tmpVal && $tmpVal =~ /\S/ && !@allowList) {
++	    ##&TWiki::writeDebug( " return 0, empty ALLOWWEB" );
++	    return 0;
++	}
+     }
+ 
+     # access permission logic
+=== lib/TWiki/UI/Upload.pm
+==================================================================
+--- lib/TWiki/UI/Upload.pm   (/twiki/trunk)   (revision 287)
++++ lib/TWiki/UI/Upload.pm   (/twiki/branches/robustness)   (revision 287)
+@@ -119,6 +119,7 @@
+   my( $file ) = shift @_;
+   my( $x, $y) = ( 0, 0 );
+ 
++  $file = TWiki::normalizeFileName( $file );
+   if( defined( $file ) && open( STRM, "<$file" ) ) {
+     binmode( STRM ); # for crappy MS OSes - Win/Dos/NT use is NOT SUPPORTED
+     if( $file =~ /\.jpg$/i || $file =~ /\.jpeg$/i ) {
+=== bin/manage
+==================================================================
+--- bin/manage   (/twiki/trunk)   (revision 287)
++++ bin/manage   (/twiki/branches/robustness)   (revision 287)
+@@ -87,8 +87,10 @@
+ 
+     TWiki::UI::Manage::removeUser($webName, $topic, $wikiName, $query);
+ 
+-} elsif( $action eq "relockrcs" ) {
+-    TWiki::UI::Manage::relockRcsFiles();
++# FIXME: Contains backticks, needs refactoring, upstream has been informed.
++# } elsif( $action eq "relockrcs" ) {
++#     TWiki::UI::Manage::relockRcsFiles();
++
+ } elsif( $action ) {
+ 
+   my( $topic, $webName, $dummy, $userName ) = 
+
+Property changes on: 
+___________________________________________________________________
+Name: svk:merge
+ +a00a5322-12db-0310-a70b-8735589c885e:/twiki/trunk:3342
+Name: svm:source
+ -http://ntwiki.ethermage.net:8181/svn!/twiki/trunk
+ +svn://subversion.enyo.de/twiki!/twiki/branches/robustness
+Name: svm:uuid
+ -a00a5322-12db-0310-a70b-8735589c885e
+ +0d0f78c6-ffe8-0310-8651-bed26cca55cd
+
