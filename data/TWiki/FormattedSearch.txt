@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1084053269" format="1.0" version="1.14"}%
+%META:TOPICINFO{author="PeterThoeny" date="1090896168" format="1.0" version="1.15"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -6,7 +6,7 @@
 
 _Inline search feature allows flexible formatting of search result_
 
-The =%<nop>SEARCH{...}%= variable documented in TWikiVariables has a fixed format for the search result, that is, a table consisting of topic names and topic summaries. Use the =format="..."= parameter to specify a customized format of the search result. The string of the format parameter is typically a bullet list or table row containing variables (such as =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=).
+The =[[TWikiVariables#VarSEARCH][%<nop>SEARCH{...}%]]= variable documented in TWikiVariables has a fixed format for the search result, that is, a table consisting of topic names and topic summaries. Use the =format="..."= parameter to specify a customized format of the search result. The string of the format parameter is typically a bullet list or table row containing variables (such as =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=).
 
 ---++ Syntax
 
@@ -29,6 +29,8 @@ Variables that can be used in the format string:
 | =$topic(20)= | Topic name, "<tt>- </tt>" hyphenated each 20 characters |
 | =$topic(30, -&lt;br /&gt;)= | Topic name, hyphenated each 30 characters with separator "<tt>-&lt;br /&gt;</tt>" |
 | =$topic(40, ...)= | Topic name, shortended to 40 characters with "<tt>...</tt>" indication |
+| =$parent= | Name of parent topic; empty if not set |
+| =$parent(20)= | Name of parent topic, same hyphenation/shortening like =$topic()= |
 | =$text= | Formatted topic text. In case of a =multiple="on"= search, it is the line found for each search hit. |
 | =$locked= | LOCKED flag (if any) |
 | =$date= | Time stamp of last topic update, e.g. =%GMTIME{"$day $mon $year - $hour:$min"}%= |
@@ -47,14 +49,12 @@ Variables that can be used in the format string:
 | =$formfield(name, 10)= | Form field value, "<tt>- </tt>" hyphenated each 10 characters |
 | =$formfield(name, 20, -&lt;br /&gt;)= | Form field value, hyphenated each 20 characters with separator "<tt>-&lt;br /&gt;</tt>" |
 | =$formfield(name, 30, ...)= | Form field value, shortended to 30 characters with "<tt>...</tt>" indication |
-| =$pattern(reg-exp)= | A regular expression pattern to extract some text from a topic (does not search meta data; use =$formfield= instead). In case of a =multiple="on"= search, the pattern is applied to the line found in each search hit. The pattern must cover the whole text (topic or line). For example, =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the email address from a bullet of format =* Email: ...=. This example has non-greedy =.*?= patterns to scan for the first occurance of the Email bullet; use greedy =.*= patterns to scan for the last occurance. |
+| =$pattern(reg-exp)= | A regular expression pattern to extract some text from a topic (does not search meta data; use =$formfield= instead). In case of a =multiple="on"= search, the pattern is applied to the line found in each search hit.%BB% Specify a RegularExpression that covers the whole text (topic or line), which typically starts with =.*=, and must end in =.*= %BB% Put text you want to keep in parenthesis, like =$pattern(.*?(from here.*?to here).*)= %BB% Example: =$pattern(.*?\*.*?Email\:\s*([^\n\r]+).*)= extracts the email address from a bullet of format =* Email: ...= %BB% This example has non-greedy =.*?= patterns to scan for the first occurance of the Email bullet; use greedy =.*= patterns to scan for the last occurance %BB% Limitation: Do not use =.*)= inside the pattern, e.g. =$pattern(.*foo(.*)bar.*)= does not work, but =$pattern(.*foo(.*?)bar.*)= does %BB% Note: Make sure that the integrity of a web page is not compromised; for example, if you include an HTML table make sure to include everything including the table end tag |
 | =$n= or =$n()= | New line |
 | =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
 | =$quot= | Double quote (="=). Alternatively write =\"= to escape it |
 | =$percnt= | Percent sign (=%=) |
 | =$dollar= | Dollar sign (=$=) |
-
-__Note:__ For =$pattern(reg-exp)=, specify a RegularExpression that scans from start to end and contains the text you want to keep in parenthesis, like =$pattern(.*?(from here.*?to here).*)=. You need to make sure that the integrity of a web page is not compromised; for example, if you include a table make sure to include everything including the table end tag.
 
 
 ---++ Examples
@@ -74,12 +74,12 @@ __Note:__ For =$pattern(reg-exp)=, specify a RegularExpression that scans from s
 
 ---+++ Table showing form field values of topics with a form
 
-*Write this in the Know web:*
+In a web where there is a form that contains a =Topic<nop>Classification= field, an =Operating<nop>System= field and an =Os<nop>Version= field we could write:
 
 =| <nop>*Topic:*<nop> | <nop>*<nop>OperatingSystem:*<nop> | <nop>*<nop>OsVersion:*<nop> |= <br />
 =%<nop>SEARCH{ "[T]opicClassification.*?value=\"[P]ublicFAQ\"" scope="text" regex="on" nosearch="on" nototal="on" format="| [<nop>[$topic]] | $formfield(<nop>OperatingSystem) | $formfield(<nop>OsVersion) |" }%=
 
-*To get this:*
+To get this:
 
 <table border="1" cellspacing="0" cellpadding="1">
 <tr>
@@ -87,10 +87,10 @@ __Note:__ For =$pattern(reg-exp)=, specify a RegularExpression that scans from s
  <th bgcolor="#99CCCC"> <strong>OperatingSystem:</strong> </th>
  <th bgcolor="#99CCCC"> <strong>OsVersion:</strong> </th></tr>
 <tr>
- <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/IncorrectDllVersionW32PTH10DLL">IncorrectDllVersionW32PTH10DLL</a>  </td><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/OsWin">OsWin</a>  </td><td>  95/98  </td></tr>
+ <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/IncorrectDllVersionW32PTH10DLL">IncorrectDllVersionW32PTH10DLL</a>  </td><td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/OsWin">OsWin</a>  </td><td>  95/98  </td></tr>
 <tr>
- <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/WinDoze95Crash">WinDoze95Crash</a>  </td>
- <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Know/OsWin">OsWin</a>  </td>
+ <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/WinDoze95Crash">WinDoze95Crash</a>  </td>
+ <td>  <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Sandbox/OsWin">OsWin</a>  </td>
  <td>  95  </td></tr>
 </table>
 
@@ -129,6 +129,8 @@ Here is an example. Let's search for all topics that contain the word "culture" 
 *To get this:*
 
 %SEARCH{ "culture" format="	* $topic is referenced by:$n		* $percntSEARCH{ \"$topic\" format=\"$dollartopic\" nosearch=\"on\" nototal=\"on\" separator=\", \" }$nop%" nosearch="on" nototal="on" }%
+
+__Note:__ Nested search can be slow, especially if you nest more then 3 times. Nesting is limited to 16 levels. For each new nesting level you need to "escape the escapes", e.g. write =$dollarpercntSEARCH{= for level three, =$dollardollarpercntSEARCH{= for level four, etc.
 
 ---+++ Most recently changed pages
 
@@ -192,5 +194,5 @@ Find Topics:
 Result:
 %SEARCH{ search="%URLPARAM{"q"}%" format="	* $web.$topic: %BR% $summary" nosearch="on" }%
 
--- TWiki:Main.PeterThoeny - 16 Mar 2004
+-- TWiki:Main.PeterThoeny - 26 Jul 2004
 
