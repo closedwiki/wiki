@@ -130,8 +130,10 @@ sub main
     # reset lock time, this is to prevent contention in case of a long edit session
     &wiki::lockTopic( $topic );
 
-    $tmpl= &wiki::readTemplate( "preview" );
-    $icat= &wiki::readTemplate( "twikicatitems" );
+    # get view template, standard view or a view with a different skin
+    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
+    $tmpl = &wiki::readTemplate( "preview", "", $skin );
+    $icat = &wiki::readTemplate( "twikicatitems" );
     my $saveCmd = $query->param( "cmd" ) || "";
     if( $saveCmd ) {
         $tmpl =~ s/\(preview\)/\(preview cmd=$saveCmd\)/go;

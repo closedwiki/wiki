@@ -109,7 +109,9 @@ sub main
         &wiki::writeLog( "attach", "$webName.$topic", $fileName );
     }
 
-    $tmpl = &wiki::readTemplate( "attach" );
+    # get view template, standard view or a view with a different skin
+    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
+    $tmpl = &wiki::readTemplate( "attach", "", $skin );
     $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
     $atext = &wiki::getRenderedVersion( $atext );
     $atext = &wiki::handleCommonTags( $atext, $topic );

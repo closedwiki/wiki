@@ -128,7 +128,10 @@ sub main
 	print $tmpl;
 	return;
     }
-    $tmpl= &wiki::readTemplate( "rdiff" );
+
+    # get view template, standard view or a view with a different skin
+    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
+    $tmpl = &wiki::readTemplate( "rdiff", $topic, $skin );
     my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
 
     my $topicExists = &wiki::topicExists( $webName, $topic );

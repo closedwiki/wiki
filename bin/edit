@@ -210,8 +210,10 @@ sub main
 
     print "Content-type: text/html\n\n";
 
-    $tmpl= &wiki::readTemplate( "edit", $topic );
-    $icat= &wiki::readTemplate( "twikicatitems" );
+    # get edit template, standard or a different skin
+    my $skin = $query->param( "skin" ) || &wiki::getPreferencesValue( "SKIN" );
+    $tmpl = &wiki::readTemplate( "edit", $topic, $skin );
+    $icat = &wiki::readTemplate( "twikicatitems" );
     if( ! &wiki::topicExists( $webName, $topic ) ) {
         $text= &wiki::readTemplate( "notedited" );
         $extra = "(not exist)";
