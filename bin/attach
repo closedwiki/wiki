@@ -49,7 +49,7 @@ sub listVersions
 
     my $found = 0;
 
-    my $result = "\n|  *Version:*  |  *Action:*   |  *Date:*  |  *Who:*  |  *Comment:*  |\n";
+    my $result = "\n|  *Version*  |  *Action*   |  *Date*  |  *Who*  |  *Comment*  |\n";
 
     for( my $version = $maxRevNum; $version >= 1; $version-- ) {
 

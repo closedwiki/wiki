@@ -48,9 +48,9 @@ sub renderMetaData
     $noviewableAttachmentCount = 0;
     $attachmentCount = 0;
     
-    my $header = "|  *[[$TWiki::twikiWebname.FileAttachment][Attachment]]:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
+    my $header = "|  *[[$TWiki::twikiWebname.FileAttachment][Attachment]]*  |  *Action*  |  *Size*  |  *Date*  |  *Who*  |  *Comment*  |";
     if( $showAttr ) {
-        $header .= "  *[[$TWiki::twikiWebname.FileAttribute][Attribute]]:*  |";
+        $header .= "  *[[$TWiki::twikiWebname.FileAttribute][Attribute]]*  |";
     }
     $header .= "\n";
     
@@ -109,10 +109,13 @@ sub formatAttachments
         my $fileIcon = TWiki::Attach::filenameToIcon( $file );
         my $fileUrl = "%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/$theWeb/$theTopic?rev=$attrVersion&filename=$file";
         $fileUrl = "%PUBURLPATH%/$theWeb/$theTopic/$file" if( $isTopRev || $attrVersion eq "1.1" );
+        $attrSize = 100 if( $attrSize < 100 );
+        $attrSize = sprintf( "%1.1f&nbsp;K", $attrSize / 1024 );
         $attrComment = $attrComment || "&nbsp;";
-        $row .= "| $fileIcon <a href=\"$fileUrl\">$file</a> \\\n";
-        $row .= "   | <a href=\"%SCRIPTURL%/attach%SCRIPTSUFFIX%/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a> \\\n";
-        $row .= "   | $attrSize | $attrDate | $attrUser | $attrComment |";
+        $row .= "| $fileIcon <a href=\"$fileUrl\">$file</a> "
+              . "|  <a href=\"%SCRIPTURL%/attach%SCRIPTSUFFIX%/$theWeb/$theTopic?filename=$file&revInfo=1\""
+              . " title=\"change, update, previous revisions, move, delete...\">manage</a>  "
+              . "|   $attrSize | $attrDate | $attrUser | $attrComment |";
         if ( $showAttr ) {
             $attrAttr = $attrAttr || " &nbsp; ";
             $row .= " $attrAttr |";
@@ -214,7 +217,7 @@ sub migrateToFileAttachmentMacro
           if( $fileName ) {
              my @args = formFileAttachmentArgs( $fileName, "", $filePath, $fileSize, 
                                               $fileDate, $fileUser, $fileComment, "" );
-             $meta->put( "FILEATTACHMENT", @args );                                 
+             $meta->put( "FILEATTACHMENT", @args );
           }
        }
    } else {
@@ -349,7 +352,7 @@ sub updateAttachment
     my ( $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile, $meta ) = @_;
 
     my $tmpAttr = ( $hideFile ) ? "h" : "";
-          
+
     my @args = formFileAttachmentArgs(
         $fileName, $fileVersion, $filePath, $fileSize, $fileDate, $fileUser, 
         $fileComment, $tmpAttr );
