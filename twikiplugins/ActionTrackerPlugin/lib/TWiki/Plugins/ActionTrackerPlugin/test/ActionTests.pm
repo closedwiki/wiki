@@ -22,11 +22,6 @@ sub set_up {
   ActionTrackerPlugin::Action::forceTime("31 May 2002");
 }
 
-sub tear_down {
-  my $this = shift;
-  $this->SUPER::tear_down();
-}
-
 sub testNewNoState {
   my $this = shift;
 

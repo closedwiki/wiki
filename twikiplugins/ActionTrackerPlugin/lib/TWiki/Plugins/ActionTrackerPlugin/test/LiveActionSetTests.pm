@@ -16,9 +16,6 @@ sub new {
   return $self;
 }
 
-sub tear_down {
-}
-
 sub set_up {
   my $this = shift;
   $this->SUPER::set_up();
