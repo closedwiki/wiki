@@ -198,4 +198,17 @@ sub test__group {
 	 $hash{"G:SodGroup"});
 }
 
+sub test__open_nonexistent {
+  my $this = shift;
+
+  # use illegal pathname
+  my $db = new WebDAVPlugin::Permissions("*");
+
+  eval {
+	$db->processText("Web", "Topic", "empty");
+  };
+
+  $this->assert_not_null($@);
+}
+
 1;

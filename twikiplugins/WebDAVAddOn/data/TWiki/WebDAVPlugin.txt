@@ -7,22 +7,16 @@ TWiki integration with <nop>WebDAV means that users can edit attachments on topi
 TWiki protections on topics are honoured through use of a Plugin that caches protections in a database, allowing Apache to rapidly test them when a file in a TWiki folder is being accessed.
 
 The TWiki DAV integration consists of a [[http://webdav.org/mod_dav/][mod_dav]] based Apache module, a bin script used for checking in, and the plugin used to extract protections. The Apache module is based on mod_dav version 1.0.3 and includes all of the functionality of that module, so should be a drop-in replacement on Apache 1.3 servers. Apache 2 servers are *not* supported.
-
 ---++ Usage
-
 To edit the attachments for a topic, open the topic in the TWiki. Open the application you want to use (e.g. MS Word), and drag the name of the attachment into the application.
 
 At present you can only save back to the file you edited, or to another location (either a web folder or local folder).
 
 Log messages may be generated in the apache error_log.
-
 ---++ Add-On Installation Instructions
-
 __Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
 
-	* Satisfy these dependencies on other modules:
-	| *Module* | *Type* | *Version* | *Description* |
-	| TDB_File | perl | Any | TDB database interface |
+	* Install =tdb= (http://sourceforge.net/projects/tdb/) and =TDB_File= (available from CPAN). You may well already have these installed.
 	* Download the ZIP file from the Add-on Home (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
@@ -64,13 +58,15 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin module |
 	| ==lib/TWiki/Plugins/%TOPIC%/test.zip== | Tests |
 
-Unzip the zip over your TWiki installation. It won't break anything. To build and install the Apache module, follow the instructions on http://webdav.org/mod_dav/install.html Note that administrator access will usually be required to install the module.
+Unzip the zip over your TWiki installation. It won't break anything. To build and install the Apache module, follow the instructions on http://webdav.org/mod_dav/install.html
 
-Your server is now DAV-enabled, and you should be able to set up DAV access to web folders, as per the instructions.
+*Note that administrator access will usually be required to install the Apache module.*
 
-To enable the TWiki-specific functions of twiki-dav, edit your =httpd.conf= and in the &lt;Directory> (or &lt;Location>) section for your pub directory put the =DAV= and =TWikiDir= directives.
+To enable the TWiki-specific functions of twiki-dav, edit your =httpd.conf= and set up an appropriate Alias to point at your pub directory (see example below). Add a &lt;Location> section for your pub directory and add the following directives.
 	* =DAV= is the standard DAV directive for enabling DAV on the directory.
-	* =TWikiDir= defines the type of the directory (pub or data), the absolute path to the directory after the URI has been resolved, and the path to the checkin script. For example,
+	* =TWikiDir= defines the type of the directory (pub or data), and the absolute path to the directory after the URI has been resolved.
+   * =TWikiScript- defines the path to the checkin script.
+For example,
 <verbatim>
 Alias /twiki/dav/ /home/twiki/pub/
 <Location /twiki/dav/>
@@ -86,18 +82,36 @@ Alias /twiki/dav/ /home/twiki/pub/
    Require valid-user
 </Location>
 </verbatim>
+Restart the Apache server.
 
+To configure the plugin, set the %TOPIC%_LOCK_DB variable below. Build your initial lock database by running the =recache.pl= script, which should have been installed in your twiki bin directory. This should build a lock database in the directory pointed at by =%%TOPIC%_LOCK_DB<nop>%=. Dump the content of this database using the =lib/TWiki/Plugins/WebDAVPlugin/davLockDB.pl= script. In a normal TWiki instllation this database will _not_ be empty.
+
+To test the plugin, edit a topic in TWiki that should be controlled and put an access restriction in - for example, edit Sandbox.%TOPIC%Test and put in the lines:
+<pre>
+   * <nop>Set ALLOWTOPICVIEW = allowher
+   * <nop>Set DENYTOPICVIEW = denyit
+</pre>
+Save the topic, dump the database again and grep for =Sandbox/%TOPIC%Test=. You should see two P: entries, one for ALLOW (:A) and one for DENY (:D).
+
+The most likely reason for any problems is permissions; the DAVLockDB must be writable by the Apache user. Check the TWiki warning.txt file anthe Apache error logs.
+
+Now attach an arbitrary file to that topic, preferably one associated with a WebDAV-enabled application e.g. a =.doc= file.
+
+Open up the attachment directory using a WebDAV enabled application such as IE. If you used the example =Location= above, a URL such as =http<nop>://localhost/twiki/dav/Sandbox/%TOPIC%Test should work.
+
+If you are not sure what applications are WebDAV enabled, just try typing a URL that uses the =Location= described above into the Open dialog until you find one that offers to let you save the file back to the URL, instead of to a local folder.
+
+---++ Settings
 	* *IMPORTANT* The following TWiki variable must be set to point to the same directory as your Apache DAVLockDB directive:
 		* Set LOCK_DB = /var/lock/webdav
 
 ---++ Add-On Info
-
 |  Add-on Author: | TWiki:Main/CrawfordCurrie |
 |  Add-on Version: | 14 Apr 2004 (v1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  14 Apr 2004: | Initial very _very_ early access release |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | Apache 1.3, SDBM, SDBM_File |
+|  Other Dependencies: | Apache 1.3, TDB, TDB_File |
 |  Perl Version: | 5.005 |
 |  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -105,7 +119,7 @@ Alias /twiki/dav/ /home/twiki/pub/
 
 This product includes software developed by Greg Stein <gstein@lyra.org> for use in the mod_dav module for Apache (http://www.webdav.org/mod_dav/). mod_dav is licensed under the terms of the following license: http://webdav.org/mod_dav/license-1.html
 
-TDB is licensed under the terms of the GPL.
+This work was commissioned by [[http://www.windriver.com/][Wind River Systems]].
 
 __Related Topic:__ %TWIKIWEB%.TWikiAddOns, -- TWiki:Codev.WebDAV
 

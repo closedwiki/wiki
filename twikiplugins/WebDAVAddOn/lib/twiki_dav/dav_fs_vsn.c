@@ -24,8 +24,10 @@ static const char * dav_fs_get_vsn_header(void) {
 static dav_error * dav_fs_mkresource(dav_resource *resource)
 {
     const char *dirpath;
+	pool* p;
+
     dav_fs_dir_file_name(resource, &dirpath, NULL);
-    pool* p = dav_fs_pool(resource);
+    p = dav_fs_pool(resource);
     return dav_new_error(p,
 			 HTTP_BAD_REQUEST,
 			 0,
@@ -63,32 +65,34 @@ static dav_error * dav_fs_uncheckout(dav_resource *resource)
  */
 static dav_error * dav_fs_checkin(dav_resource *resource)
 {
-    /*logEvent("FS_CHECKIN ", resource);*/
-    twiki_resources* tr = resource->twiki;
-    pool* p = dav_fs_pool(resource);
-    const char* cmd = ap_psprintf(p,
-                                  "%s commit %s %s %s %s",
-                                  tr->script,
-                                  tr->web,
-                                  tr->topic,
-                                  tr->file,
-                                  tr->user ? tr->user : "guest");
+  /* logEvent("FS_CHECKIN ", resource);*/
+  twiki_resources* tr = resource->twiki;
+  pool* p = dav_fs_pool(resource);
+  const char* cmd = ap_psprintf(p,
+								"%s commit %s %s %s %s",
+								tr->script,
+								tr->web,
+								tr->topic,
+								tr->file,
+								tr->user ? tr->user : "guest");
 
-    /* Wait for process to finish. Dangerous? Maybe. */
-    int e = system(cmd);
-    if (e) {
-        return dav_new_error(p,
-                             HTTP_PAYMENT_REQUIRED,
-                             0,
-                             ap_psprintf(p, "%s ext code %d",
-                                         cmd,
-                                         e));
-    }
+  /*fprintf(stderr, "%s\n", cmd);*/
 
-    /* release the resource */
-    resource->working = 0;
+  /* Wait for process to finish. Dangerous? Maybe. */
+  int e = system(cmd);
+  if (e) {
+	return dav_new_error(p,
+						 HTTP_FORBIDDEN,
+						 0,
+						 ap_psprintf(p, "%s ext code %d",
+									 cmd,
+									 e));
+  }
 
-    return NULL;
+  /* release the resource */
+  resource->working = 0;
+
+  return NULL;
 }
 
 /* Determine whether a non-versioned (or non-existent) resource

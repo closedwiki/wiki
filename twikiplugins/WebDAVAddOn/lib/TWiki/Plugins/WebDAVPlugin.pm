@@ -42,13 +42,13 @@ sub initPlugin {
 
   my $twn = TWiki::Func::getTwikiWebname();
   my $pd = TWiki::Func::getPubDir();
-  my $pdb = TWiki::Func::getPreferencesValue("WEBDAVPLUGIN_LOCK_DB");
+  my $pdb = TWiki::Func::getPreferencesValue( "WEBDAVPLUGIN_LOCK_DB" );
   if ($pdb) {
 	$permDB = new WebDAVPlugin::Permissions( $pdb );
   }
 
   if ( ! $permDB ) {
-    TWiki::Func::writeDebug( "$pluginName failed to initialize" );
+    TWiki::Func::writeWarning( "$pluginName failed to initialize $pdb" );
     return 0;
   }
 
@@ -58,7 +58,13 @@ sub initPlugin {
 sub beforeSaveHandler {
   my ( $text, $topic, $web ) = @_;
 
-  $permDB->processText( $web, $topic, $text );
+  return unless ( $permDB );
+
+  eval {
+	$permDB->processText( $web, $topic, $text );
+  }; if ( $@ ) {
+    TWiki::Func::writeWarning( "$pluginName: $@" );
+  }
 }
 
 1;

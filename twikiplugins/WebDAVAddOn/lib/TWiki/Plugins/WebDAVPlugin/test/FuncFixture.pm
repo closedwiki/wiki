@@ -103,12 +103,17 @@ sub TESTreadFile {
   return $data;
 }
 
+my %prefs;
+
 sub TESTsetPreference {
   my ($what, $val) = @_;
   $prefs{$what} = $val;
 }
 
-my %prefs;
+sub getPreferencesValue {
+  my $what = shift;
+  return $prefs{$what};
+}
 
 sub TESTcallersCaller {
   my ($package, $filename, $line) = caller(1);
@@ -344,12 +349,6 @@ sub _evbl {
   } else {
     return "%".$vbl."%";
   }
-}
-
-sub getPreferencesValue {
-  my $what = shift;
-
-  return $prefs{$what};
 }
 
 sub writeDebug {

@@ -105,18 +105,10 @@ typedef struct {
 /* forward-declare for use in configuration lookup */
 extern module MODULE_VAR_EXPORT dav_module;
 
-/* DEBUG */
-void writeLog(const char* s) {
-    FILE* f = fopen("/tmp/vsnlog", "a+");
-    fprintf(f, "%s\n", s);
-    fclose(f);
-}
-
-/* DEBUG */
+/* DEBUG - log protocol events */
+#ifdef LOG_EVENTS
 #define LOGEVENT(x,y) logEvent(x,y)
-extern pool* dav_fs_pool(dav_resource* r);
 void logEvent(const char* s, dav_resource* r) {
-  pool* p = dav_fs_pool(r);
   if (r) {
     const char* exists = r->exists ? "exists" : "does not exist";
     const char* collection = r->collection ? "collection" : "file";
@@ -134,21 +126,24 @@ void logEvent(const char* s, dav_resource* r) {
     case DAV_RESOURCE_TYPE_CONFIGURATION: type = "configuration"; break;
     }
       
-    writeLog(ap_psprintf(p, "%s %s: %s %s %s, %s, base %d work %d (%s/%s)",
-                         s,
-                         r->uri,
-                         type,
-                         versioned,
-                         collection,
-                         exists,
-                         r->baselined,
-                         r->working,
-                         web,
-                         topic));
+    fprintf(stderr, "%s %s: %s %s %s, %s, base %d work %d (%s/%s)\n",
+			s,
+			r->uri,
+			type,
+			versioned,
+			collection,
+			exists,
+			r->baselined,
+			r->working,
+			web,
+			topic);
   } else {
-    writeLog(ap_psprintf(p, "%s no resource", s));
+	fprintf(stderr, "%s no resource\n", s);
   }
 }
+#else
+#define LOGEVENT(x,y)
+#endif
 
 /* copy a module's providers into our per-directory configuration state */
 static const char * dav_copy_providers(pool *p, dav_dir_conf *conf)
@@ -1216,7 +1211,7 @@ static int dav_method_put(request_rec *r)
     off_t range_end;
 
     if ((result = ap_setup_client_block(r, REQUEST_CHUNKED_DECHUNK)) != OK) {
-	return result;
+	  return result;
     }
 
     /* Ask repository module to resolve the resource */
@@ -1265,8 +1260,8 @@ static int dav_method_put(request_rec *r)
 				    resource_state == DAV_RESOURCE_NULL ?
 				    DAV_VALIDATE_PARENT :
 				    DAV_VALIDATE_RESOURCE, NULL)) != NULL) {
-	/* ### add a higher-level description? */
-	return dav_handle_err(r, err, multi_response);
+	  /* ### add a higher-level description? */
+	  return dav_handle_err(r, err, multi_response);
     }
 
     /* make sure the resource can be modified (if versioning repository) */
@@ -1276,8 +1271,8 @@ static int dav_method_put(request_rec *r)
 					    &resource_existed,
 					    &resource_was_writable,
 					    &parent_was_writable)) != NULL) {
-	/* ### add a higher-level description? */
-	return dav_handle_err(r, err, NULL);
+	  /* ### add a higher-level description? */
+	  return dav_handle_err(r, err, NULL);
     }
 
     /* truncate and rewrite the file unless we see a Content-Range */
@@ -1291,8 +1286,8 @@ static int dav_method_put(request_rec *r)
     /* Create the new file in the repository */
     if ((err = (*resource->hooks->open_stream)(resource, mode,
                                                &stream)) != NULL) {
-	/* ### assuming FORBIDDEN is probably not quite right... */
-	err = dav_push_error(r->pool, HTTP_FORBIDDEN, 0,
+	  /* ### assuming FORBIDDEN is probably not quite right... */
+	  err = dav_push_error(r->pool, HTTP_FORBIDDEN, 0,
 			     ap_psprintf(r->pool,
 					 "Unable to PUT new contents for %s.",
 					 ap_escape_html(r->pool, r->uri)),
@@ -1342,10 +1337,10 @@ static int dav_method_put(request_rec *r)
 
         err2 = (*resource->hooks->close_stream)(stream,
                                                 err == NULL /* commit */);
-	if (err2 != NULL && err == NULL) {
-	    /* no error during the write, but we hit one at close. use it. */
-	    err = err2;
-	}
+		if (err2 != NULL && err == NULL) {
+		  /* no error during the write, but we hit one at close. use it. */
+		  err = err2;
+		}
     }
 
     /*
@@ -3379,8 +3374,6 @@ static int dav_access_checker(request_rec *r)
     twiki_resources* tr;
     const char* mode;
 	const char* script;
-	const char* whoami;
-	const char* pw;
 
     conf = (dav_dir_conf *) ap_get_module_config(r->per_dir_config,
 						 &dav_module);
@@ -3407,12 +3400,9 @@ static int dav_access_checker(request_rec *r)
     if (result != OK)
         return DECLINED;
 
-	ap_get_basic_auth_pw(r, &pw);
-	whoami = r->connection->user;
-
     tr = resource->twiki;
 
-	if (!PROT_accessible(tr->web, tr->topic, mode, whoami))
+	if (!PROT_accessible(tr->web, tr->topic, mode, tr->user))
       return HTTP_UNAUTHORIZED;
     
     return OK;
