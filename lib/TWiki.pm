@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "25 Mar 2004";
+$wikiversion      = "30 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1969,9 +1969,8 @@ sub handleIncludeFile
     # handle all preferences and internal tags (for speed: call by reference)
     $text = takeOutVerbatim( $text, $verbatim );
 
-    # Escape rendering: Change "!%VARIABLE%" to "%<nop>VARIABLE%", for final "%VARIABLE%" output
-    # Special case: Do not escape if preceeded by ";" for "this;that;!%TOPIC%" AND NOT regex search
-    $text =~ s/(^|[^\;])\!\%([A-Z])/$1%<nop>$2/g;
+    # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
+    $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
 
     # handle all preferences and internal tags
     &TWiki::Prefs::handlePreferencesTags( $text );
@@ -2460,7 +2459,6 @@ sub handleWebAndTopicList
     my $text = "";
     my $item = "";
     my $line = "";
-#$text .= "format: $format, selection: $selection, marker: $marker\n";
     my $mark = "";
     foreach $item ( @list ) {
         $line = $format;
@@ -2468,7 +2466,6 @@ sub handleWebAndTopicList
         $line =~ s/\$name/$item/goi;
         $line =~ s/\$qname/"$item"/goi;
         $mark = ( $selection =~ / $item / ) ? $marker : "";
-#$text .= "item: $item, mark: $mark.";
         $line =~ s/\$marker/$mark/goi;
         $text .= "$line$separator";
     }
@@ -2956,9 +2953,8 @@ sub handleCommonTags
     my @verbatim = ();
     $text = takeOutVerbatim( $text, \@verbatim );
 
-    # Escape rendering: Change "!%VARIABLE%" to "%<nop>VARIABLE%", for final "%VARIABLE%" output
-    # Special case: Do not escape if preceeded by ";" for "this;that;!%TOPIC%" AND NOT regex search
-    $text =~ s/(^|[^\;])\!\%([A-Z])/$1%<nop>$2/g;
+    # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
+    $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
 
     # handle all preferences and internal tags (for speed: call by reference)
     $includingWebName = $theWeb;
@@ -4008,8 +4004,8 @@ sub getRenderedVersion {
             s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/ge;
 
 # Make internal links
-            # Escape rendering: Change "![[..." to "[<nop>[...", for final unescaped "[[..." output
-            s/\!\[\[/\[<nop>\[/g;
+            # Escape rendering: Change " ![[..." to " [<nop>[...", for final unrendered " [[..." output
+            s/(\s)\!\[\[/$1\[<nop>\[/g;
 	    # Spaced-out Wiki words with alternative link text
             # '[[Web.odd wiki word#anchor][display text]]' link:
             s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/ge;
