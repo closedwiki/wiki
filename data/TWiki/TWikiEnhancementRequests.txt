@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043310851" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092561971" format="1.0" version="1.5"}%
 	* Please bring your enhancement requests to TWiki:Codev.FeatureEnhancementRequest
 
 *Related Topics*
@@ -6,4 +6,5 @@
 	* TWikiPlannedFeatures has a list of planned features.
 	* TWikiDocumentation is the implementation documentation. 
 
--- Main.PeterThoeny - 23 Jan 2003
+-- TWiki:Main.PeterThoeny - 23 Jan 2003
+

@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043310971" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092562074" format="1.0" version="1.13"}%
 ---+ Frequently Asked Questions About %WIKITOOLNAME%
 
 This is a real FAQ, and also a demo of one easily implemented knowledge base solution. See how it's done, click ==[Edit]==.
@@ -31,5 +31,6 @@ Other places where you can find answers to your questions:
 	* TextFormattingFAQ: Answers to frequently asked questions about text styling in TWiki
 	* If you can't find an answer, ask a question - post it in the TWiki:Support web
 
--- PeterThoeny - 26 Nov 2000 <br />
--- MikeMannix - 13 Sep 2001 <br />	
+-- TWiki:Main.PeterThoeny - 26 Nov 2000 %BR%
+-- TWiki:Main.MikeMannix - 13 Sep 2001	
+
