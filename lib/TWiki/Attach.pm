@@ -1,29 +1,70 @@
+#
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
+#
+# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+#
+# Notes:
+# - Latest version at http://twiki.org/
+# - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
+# - Customize variables in TWiki.cfg when installing TWiki.
+#
+#
+#
+# This package contains routines for dealing with attachments to topics.
+# 
+# 
+
 package TWiki::Attach;
 
-# FIXME: will use of globals here be a problem for mod_perl?
-
 use vars qw(
-        $showAttr $viewableAttachmentCount $noviewableAttachmentCount
+        $showAttr $viewableAttachmentCount $noviewableAttachmentCount $attachmentCount $noFooter
     );
 
-
-# Render the %FILEATTACHMENT...% tags to HTML
 # =========================
+# Render the %FILEATTACHMENT...% tags to HTML
 sub handleTags
-{;
+{
     my $theWeb = $_[1];
     my $theTopic = $_[2];
     
     $viewableAttachmentCount = 0;
     $noviewableAttachmentCount = 0;
-
-    # First do rows of attachment table
-    $_[0] =~ s/(%FILEATTACHMENT\{)([^\}]*)(}%)/&formatAttachments( $1, $2, $3, "", $theWeb, $theTopic )/geo;
-
-    # Rest depends on whether any rows exists to display
-    $_[0] =~ s/(%FILEATTACHMENT\{)([^\}]*)(}%)/&formatAttachments( $1, $2, $3, "cmd", $theWeb, $theTopic )/geo;
+    $attachmentCount = 0;
     
-    return $theText;
+    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $_[0] );
+    
+    if( ! $before ) { $before = ""; }
+    if( ! $atext  ) { $atext  = ""; }
+    if( ! $after  ) { $after  = ""; }
+        
+    $atext =~ s/(%FILEATTACHMENT\{)([^\}]*)(}%)/&formatAttachments( $1, $2, $3, $theWeb, $theTopic )/geo;
+
+    # FIXME allow specification of text or image for this.
+    my $footer = "";
+    if( $attachmentCount && ! $noFooter ) {
+        if( $showAttr ) {
+            $footer = "<a href=\"%SCRIPTURLPATH%/view/$theWeb/$theTopic\">List ordinary attachments</a>";
+        } else {
+            if( $noviewableAttachmentCount > 0 ) {
+                $footer = "<a href=\"%SCRIPTURLPATH%/view/$theWeb/$theTopic?showAttr=hd\">View all attachments</a>";
+            }
+        }
+        $atext =~ s/(\s)*$/\n|  $footer  |||||||$1/;
+    }
+    $atext =~ s/\n+/\n/go;
+        
+    $_[0] = "$before$atext$after";
 }
 
 
@@ -52,61 +93,34 @@ sub filenameToIcon
 # =========================
 sub formatAttachments
 {
-    my ( $start, $attributes, $end, $justCmd, $theWeb, $theTopic ) = @_;
+    my ( $start, $attributes, $end, $theWeb, $theTopic ) = @_;
 
     my $row = "";
 
-    my $attrCmd     = TWiki::extractNameValuePair( $attributes, "cmd" );
-    if ( $attrCmd ) {
-        # FIXME this is far too complicated
-        
-        if ( $attrCmd eq "Start" ) {
-           $showAttr = TWiki::extractNameValuePair( $attributes, "view" );
-        }
+    my ( $file, $attrVersion, $attrPath, $attrSize, $attrDate, $attrUser, $attrComment, $attrAttr ) =
+        TWiki::Attach::extractFileAttachmentArgs( $attributes );
 
-        if ( ! $justCmd ) {
-           return "$start$attributes$end";
-        }
-        
-        if ( $attrCmd eq "Start" && $viewableAttachmentCount > 0 ) {
-           $showAttr = TWiki::extractNameValuePair( $attributes, "view" );
-           $row .= "|  *FileAttachment:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
-           if ( $showAttr ) {
-               #$row .= "    <th title=\"h : hidden, d : deleted, - none\">Attrib:</th>";
-               $row .= "  *Attrib:*  |";
-           }
-        } elsif ( $attrCmd eq "End" ) {
-           if ( $viewableAttachmentCount > 0 ) {
-           }
-           if ( $showAttr ) {
-              # FIXME move to a template
-              $row .= "<a href=\"%SCRIPTURL%/view/$theWeb/$theTopic\">List ordinary attachments</a>";
-           } else {
-              if( $noviewableAttachmentCount > 0 ) {
-                 # FIXME move to a template
-                 $row .= "<a href=\"%SCRIPTURL%/view/$theWeb/$theTopic?showAttr=hd\">View all attachments</a>";
-              }
-           }
-        }
-    } else {
-
-        my ( $file, $attrVersion, $attrPath, $attrSize, $attrDate, $attrUser, $attrComment, $attrAttr ) =
-            TWiki::Attach::extractFileAttachmentArgs( $attributes );
-
-        if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
-            $viewableAttachmentCount++;
-            my $fileIcon = TWiki::Attach::filenameToIcon( $file );
-            $attrComment = $attrComment || "&nbsp;";
-            $row .= "| $fileIcon <a href=\"%SCRIPTURL%/viewfile/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a> \\\n";
-            $row .= "   | <a href=\"%SCRIPTURL%/attach/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a> \\\n";
-            $row .= "   | $attrSize | $attrDate | $attrUser | $attrComment |";
-            if ( $showAttr ) {
-                $attrAttr = $attrAttr || "-";
-                $row .= " $attrAttr |";
+    $attachmentCount++;
+    if (  ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ ) ) {
+        $viewableAttachmentCount++;     
+        if( $viewableAttachmentCount == 1 ) {
+            $row .= "|  *[[%TWIKIWEB%.FileAttachment]]:*  |  *Action:*  |  *Size:*  |  *Date:*  |  *Who:*  |  *Comment:*  |";
+            if( $showAttr ) {
+                $row .= "  *[[%TWIKIWEB%.FileAttribute]]:*  |";
             }
-        }  else {
-            $noviewableAttachmentCount++;
+            $row .= "\n";
         }
+        my $fileIcon = TWiki::Attach::filenameToIcon( $file );
+        $attrComment = $attrComment || "&nbsp;";
+        $row .= "| $fileIcon <a href=\"%SCRIPTURLPATH%/viewfile/$theWeb/$theTopic?rev=$attrVersion&filename=$file\">$file</a> \\\n";
+        $row .= "   | <a href=\"%SCRIPTURL%/attach/$theWeb/$theTopic?filename=$file&revInfo=1\">action</a> \\\n";
+        $row .= "   | $attrSize | $attrDate | $attrUser | $attrComment |";
+        if ( $showAttr ) {
+            $attrAttr = $attrAttr || " &nbsp; ";
+            $row .= " $attrAttr |";
+        }
+    }  else {
+        $noviewableAttachmentCount++;
     }
 
     return $row;
@@ -129,7 +143,6 @@ sub migrateFormatForTopic
       $text = "$before<!--TWikiAttachment-->$newtext<!--TWikiAttachment-->";
 
       my ( $dontLogSave, $doUnlock, $dontNotify ) = ( "", "1", "1" );
-      # FIXME seems to be failing to update RCS at present
       my $error = TWiki::Store::save( $theWeb, $theTopic, $text, "", $dontLogSave, $doUnlock, $dontNotify, "upgraded attachment format" );
       if ( $error ) {
          print "Attach: error from save: $error\n";
@@ -177,9 +190,7 @@ sub getOldAttachAttr
 sub migrateToFileAttachmentMacro
 {
    my ( $atext ) = @_;
-   TWiki::writeDebug( "Attach: migrateToFileAttachmentMacro" );
-
-   my $res = "\n" . startMacro();
+   my $res = "\n";
    
    my $line = "";
    foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
@@ -193,8 +204,6 @@ sub migrateToFileAttachmentMacro
       }
    }
    
-   $res .= endMacro();
-
    return $res;
 }
 
@@ -218,18 +227,7 @@ sub formFileAttachmentMacro
     return $macro;
 }
 
-# =========================
-sub startMacro
-{
-    return "%FILEATTACHMENT{ cmd=\"Start\" }%\n";
-}
 
-
-# =========================
-sub endMacro
-{
-    return "%FILEATTACHMENT{ cmd=\"End\" }%\n";
-}
 
 # =========================
 sub extractFileAttachmentArgs
@@ -249,7 +247,7 @@ sub extractFileAttachmentArgs
              $attrComment, $attrAttr );
 }
 
-# FIXME not yet used
+# FIXME - could be used more?
 # ==========================
 sub extractArgsForFile
 {
@@ -263,6 +261,9 @@ sub extractArgsForFile
 }
 
 
+# =========================
+# Remove attachment macro for specified file from topic
+# return "", or error string
 sub removeFile
 {
     my $theFile = $_[1];
@@ -277,6 +278,8 @@ sub removeFile
 
 
 # =========================
+# Add/update attachment for a topic
+# $text is full set of attachments, new attachments will be added to the end.
 sub updateAttachment
 {
    my ( $atext, $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile ) = @_;
@@ -291,23 +294,21 @@ sub updateAttachment
           $fileName, $fileVersion, $filePath, $fileSize, $fileDate, $fileUser, 
           $fileComment, $tmpAttr );
           
-   TWiki::writeDebug( "upload: attachMacro = $attachMacro" );
-          
-   my $endMacro = TWiki::Attach::endMacro();
+   TWiki::writeDebug( "Attach: attachMacro = $attachMacro" );
+   TWiki::writeDebug( "Attach: text = \"$atext\"" );
 
-   if ( ! $atext ) {
-      $atext = "\n" . &TWiki::Attach::startMacro();
+   if( ! $atext ) {
+      $atext = "\n";
       $atext .= "$attachMacro\n";
-      $atext .= $endMacro;
    } else {
-      if ( ! $fileSize ) {
+      if( ! $fileSize ) {
          # Only trying to change attribute
          $atext =~ s/(%FILEATTACHMENT{[\s]*\"$fileName\"[^}]* attr=\")([^\"]*)(\"[^}]*}%)/$1$tmpAttr$3/o;
-         # FIXME error if no entry?
+         # FIXME warning if no entry?
       } else {
          # Is there already an entry for this file replace, otherwise, add to end
          if ( ! ( $atext =~ s/%FILEATTACHMENT{[\s]*\"$fileName\"[^}]*}%/$attachMacro/o ) ) {
-             $atext =~ s/(\Q$endMacro\E)/$attachMacro\n$1/o;
+             $atext =~ s/\s*$/\n$attachMacro/;
          }
       }
    }
