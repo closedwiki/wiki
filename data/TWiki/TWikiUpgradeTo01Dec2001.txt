@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000784824" format="1.0" version="1.21"}%
+%META:TOPICINFO{author="MikeMannix" date="1000791372" format="1.0" version="1.22"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -194,7 +194,7 @@ __NOTE:__ Skip this step if you did not customize your template files.
 	1. Form Templates replace the <nop>TWikiCategoryTables:
 		* Create a replacement TWikiForms template based on =twikicatitems.tmpl= in each web that used a Category Table.
 		* Searches need to be adjusted to deal with format change - if all topics are upgrades, a more specific search can be done.
-	1. For each web that has a custom ==notedited.tmpl== template, create a WebTopicEditTemplate to conform with the new [[#SelectableNewTopicTemplates]] feature. Retired =notedited.tmpl=, =notext.tmpl= and =notwiki.tmpl= templates.
+	1. For each web that has a custom ==notedited.tmpl== template, create an equivalent WebTopicEditTemplate to conform with the new [[%TWIKIWEB%.TWikiTemplates#TemplateTopics][TemplateTopics]]. The new format replaces the =notedited.tmpl=, =notext.tmpl= and =notwiki.tmpl= templates.
 
 ---+++ Step 10: Switch over to new installation
 
