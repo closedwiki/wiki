@@ -31,7 +31,7 @@
 #PageTop
 <form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 %TMPL:P{"simpleheader"}%
----+ Rename or move topic <code>%TOPIC%</code>
+---+ %TMPL:P{"webaction"}% <code>%TOPIC%</code>
 
 | |  *Web:* | *&nbsp;Topic:* |
 |  *From:* |    %WEB%. | &nbsp;%TOPIC% |
@@ -52,7 +52,7 @@ __Note:__
    * Get help on
      <a target="ManagingTopics" onClick="return launchWindow('%TWIKIWEB%','ManagingTopics')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingTopics">Renaming and moving topics</a>.
    * Select the Trash Web to delete the topic.
-   * The checkmarked topics will be updated (if not locked, in which case you'll be able to re-submit.)
+   * The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)
 
 %TMPL:P{"hidden"}%
 %TMPL:P{"standardfooter"}%
