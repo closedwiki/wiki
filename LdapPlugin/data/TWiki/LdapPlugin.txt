@@ -1,0 +1,110 @@
+%META:TOPICINFO{author="GeraldSkerbitz" date="1081183020" format="1.0" version="1.8"}%
+---++ LDAP Plugin
+
+This is an LDAP plugin to allow data to be pulled out of an LDAP directory and displayed in a Twiki web. I wrote this Plugin to dynamically pull data out of a corporate directory.
+
+---+++ LDAP Settings
+
+| *Argument* | *Comment* | *Example* |
+|host |LDAP host to query|host="myldap.myco.com"|
+|base |LDAP base |base ="ou=Mydep,o=myco"|
+|filter |LDAP Search Filter |filter="fullName=Gerald Skerbitz"|
+|header |Format of the Header for the query table|header="*Phone*"|
+|format |Format of the data returned by the query. Use $attribute for the fields.  Use the word FIELDLIST if you want alist of the valid fields in the LDAP database for the entry|format="&#124;$fullName&#124;$telephoneNumber&#124;"|
+|order |Sort order |order="sn,givenName"|
+|mvformat |Separater for multiple values |mvformat="&lt;LI&gt;"|
+|notfounderror|Error message you want to get in case LDAP Plugin found nothing, useful to use LDAP to define Javascript vars (see TWiki.TWikiLdapRegistration)|notfounderror=""|
+|jpegPhoto|LDAP attribute keyname to extract photo, __$jpegPhoto__ is then a URL to an image |JPEGPHOTO="jpegPhoto"|
+
+ 
+More Examples:
+
+	* <nop>%LDAP{host="myldap.myco.com" base="ou=purchasing,o=MYCO" filter="employeenumber=00009707" format="$telephoneNumber"}%
+	* <nop>%LDAP{host="myldap.myco.com" base="ou=finance,o=MYCO" filter="fullName=Johnson*" format="| $ou | $telephoneNumber |" header="| <nop>*Phone* | <nop>*OU* |"}%
+	* <nop>%LDAP{format="Name : *$cn*  &lt;IMG SRC=$jpegPhoto width=100 &gt; " header="" JPEGPHOTO="jpegPhoto"}%
+	* The CGI parameter, ldapfilter,  for the topic will be used as the filter for the LDAP query.	
+		* Put the following on a wiki page or form:<br>
+<verbatim>
+<FORM action="%SCRIPTURL%/view%SCRIPTSUFFIX%/Main/LdapPeople">
+Filter: <input type="text" name="ldapfilter" size="25">
+<input type="submit" value="LDAP Search" >
+</FORM>
+</verbatim>
+And the LdapPeople page will be called up with your input as the filter.
+
+---+++ Limitations
+	* Should have a =limit= parameter to limit the rows returned
+	* Should have an =offset= parameter to enable partial listings and more control.
+
+
+
+---+++ <nop>%TOPIC% Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>LDAPPLUGIN_SHORTDESCRIPTION%==
+
+	* LDAP host to connect to access the directory.
+		* Set HOST = 
+
+	* The base DN to use for searching the LDAP directory.
+		* Set BASE = 
+
+	* The default header for returning query data
+		* Set HEADER = 
+
+	* The default format to use for returning data (similar to the FormattedSearch)
+		* Set FORMAT = 
+
+	* The default sort order
+		* Set ORDER =
+
+	* The default separator for multiple values 
+		* Set MVFORMAT =
+
+	* Define the default LDAP attribute name for LDAP photo
+		* Set JPEGPHOTO = 
+
+	* Define the default LDAP Photo for an LDAP entry without one
+		* Set JPEGDEFAULTPHOTO = 
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin retrieves data from an LDAP directory and displays it on the current page.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+	* Default filter  (If you set this to alias=TOPIC the word topic will be replace with the TOPIC of the page which the LDAP tag is on.  That way you can use the WIki username extracted from current TOPIC name to automatically display LDAP user information from any Wiki Home page.)
+		* Set DEFAULTFILTER =
+
+	* Not Found Error Message
+		* Set NOTFOUNDERROR = 
+
+---+++ Plugin Installation Instructions
+
+	* Install <nop>LdapPlugin.pm and <nop>LdapPlugin.txt.
+
+---+++ Plugin Info
+
+|  Plugin Author: | %MAINWEB%.GerardHickey |
+|  Plugin Version: | 22 Apr 2002 |
+|  Change History: | 11 Jan 2002: Initial version |
+| | 22 Apr 2002: Modified to use quoted strings in params (GS)| 
+| | 23 Apr 2002: Modified to return multiple attributes and rows with formatting (GS) |  
+| | 24 Apr 2002: Modified to remove reference to =show=.  Fields are now extracted from =format= |
+| | 27 Mar 2003: added LDAP photo extract / display. <br>added default FILTER definition (assigned on current TOPIC namme translated into username).  <br>added possibilty to define error message in case no record is found. <br> intended to work (also) well with TWiki Ldap Registration. PatrickNomblot|
+| | 9 Dec 2003: Changed Photo processing code to NOT include the IMG tag.  This will break things for people doing photos!!!!|
+| | 13 Jan 2004: Added utf processing (another dependency!)|
+| | 14 Jan 2004: Patrick and Gerald Skerbitz -- CGI now allowed and Default filter set on Preferences page|
+| | 2 Feb 2004: Code and doc cleanups -- basedn changed to base everywhere|
+| | 04 Feb 2004:  Modified by GeraldSkerbitz 04 Feb 2004 Code contributed by PatrickNomblot to accomodate multiple values per attribute | 
+| | 05 Apr 2004: Added sort Order - GeraldSkerbitz |
+|  CPAN Dependencies: | Net::LDAP, Unicode::String|
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% ( TWiki:Plugins/%TOPIC% )|
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev ( TWiki:Plugins/%TOPIC%Dev )|
+
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, DefaultPlugin
+
+
