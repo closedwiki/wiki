@@ -274,7 +274,14 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
     my $theUploadButton = $query->param( 'uploadButton' );
-
+    my $theChangeButton = $query->param( 'changeButton' );
+    my $hideFile = $query->param( 'hidefile' ) || "";
+    if( ! $theChangeButton && ! $theUploadButton ) {
+        # Fix so DrawPlugin still works FIXE - patch DrawPlugin at some point
+        $theUploadButton = "yes";
+        $hideFile = "yes";
+    }
+    
     ( $topic, $webName, $dummy, $userName ) = 
 	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
     $dummy = "";  # to suppress warning
@@ -298,10 +305,15 @@ sub main
 
     my $filePath = $query->param( 'filepath' ) || "";
     my $fileName = $query->param( 'filename' ) || "";
+    if ( $filePath && ! $fileName ) {
+        $filePath =~ m|/([^/]*$)|;
+        $fileName = $1;
+        TWiki::writeDebug( "upload: fileName=$fileName **********************" );
+    }
     my $tmpFilename = $query->tmpFileName( $filePath ) || "";
     my $fileComment = $query->param( 'filecomment' ) || "";
     my $createLink = $query->param( 'createlink' ) || "";
-    my $hideFile = $query->param( 'hidefile' ) || "";
+
     
     # FIXME fileName doesn't seem to be defined when does update without upload
     TWiki::writeDebug( "upload: fileName=$fileName" );
@@ -366,6 +378,7 @@ sub main
 	( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
 	  $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
 	$fileDate = &TWiki::formatGmTime( $mtime );
+	TWiki::writeDebug( "upload: size = $fileSize" );
 
 	if( $TWiki::doLogTopicUpload ) {
 	    # write log entry
