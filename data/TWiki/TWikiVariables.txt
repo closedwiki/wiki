@@ -1,3 +1,4 @@
+%META:TOPICINFO{version="1.26" date="994871489" author="PeterThoeny" format="1.0beta2"}%
 ---## TWiki Variables
 
 ---+++ Predefined Variables
@@ -43,8 +44,11 @@
   <td> =%<nop>USERNAME%= </td>
   <td> Your login username, is <b>%USERNAME%</b> </td>
 </tr><tr>
+  <td> =%<nop>WIKINAME%= </td>
+  <td> Your Wiki username. Same as %<nop>USERNAME% if not defined in the %MAINWEB%.%WIKIUSERSTOPIC% topic. Is <b>%WIKINAME%</b> </td>
+</tr><tr>
   <td> =%<nop>WIKIUSERNAME%= </td>
-  <td> Your Wiki username, if defined in %MAINWEB%.%WIKIUSERSTOPIC%. Same as %<nop>USERNAME% if not defined. Is <b>%WIKIUSERNAME%</b> </td>
+  <td> Your %<nop>WIKINAME% including the %MAINWEB% web name. Usefull for signatures. Is <b>%WIKIUSERNAME%</b> </td>
 </tr><tr>
   <td> =%<nop>WEB%= </td>
   <td> The current web, is <b>%WEB%</b> </td>
