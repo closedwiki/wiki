@@ -696,14 +696,15 @@ sub extractNameValuePair
 
     if( $name ) {
         # format is: %VAR{ ... name = "value" }%
-        if( ( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) && ( $2 ) ) {
-            $value = $2;
+        if( $str =~ /(^|[^\S])$name\s*=\s*\"([^\"]*)\"/ ) {
+            $value = $2 if defined $2;  # distinguish between "" and "0"
         }
+
     } else {
         # test if format: { "value" ... }
-        if( ( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"([^\"]*)\"/ ) && ( $2 ) ) {
+        if( $str =~ /(^|\=\s*\"[^\"]*\")\s*\"([^\"]*)\"/ ) {
             # is: %VAR{ ... = "..." "value" ... }%
-            $value = $2;
+            $value = $2 if defined $2;  # distinguish between "" and "0";
 
         } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
             # is: %VAR{ name = "value" }%
