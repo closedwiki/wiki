@@ -1,0 +1,26 @@
+The TWiki DAV integration consists of a mod_dav based Apache module and a bin script. The Apache module is based on mod_dav version 1.0.3 and includes all of the functionality of that module, so should be a drop-in replacement on Apache 1.3 servers. Apache 2 servers are *not* supported.
+
+To build the module,
+
+cd twiki_dav
+./configure, make and make install following the instructions in INSTALL
+
+edit your httpd.conf
+
+in the <Directory> section for your pub directory put the following directives:
+
+DAV On
+TWiki <path to twiki>/bin/dav.pl pub
+
+Add the following alias alongside the standard /twiki/ alias
+
+Alias /twikiedit/ "/home/twiki/alpha/"
+
+It _must_ be /twikiedit/, as the module uses that to recognise an edit request coming from the TWiki.
+
+
+To edit the attachments for a topic, open the topic in the TWiki. Open the application you want to use (e.g. MS Word), and drag the name of the attachment into the application.
+
+At present you can only save back to the file you edited, or to another location.
+
+As with standard twiki, the pub directory is accessible to a GET by an authorised user i.e. TWiki protections are *not* honoured on attachments. twiki_dav does not have an opportunity to check the TWiki access permissions when a user drags and drops a URL into an application; access checks are _only_ performed when the file is saved back. Since the protections prevent the user browsing to the topic in the first place, this shouldn't be an issue.
