@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000278407" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="JohnTalintyre" date="1000367740" format="1.0" version="1.4"}%
 %META:TOPICPARENT{name="WebHome"}%
 %INCLUDE{"UtilTempDocNote"}%
 
@@ -21,8 +21,8 @@ You can rename the root TWiki directory - =twiki= - to whatever you like by chan
 | =twiki=			  |  [[#TWikiFiles][list]]  | Start-up info |
 | =twiki/bin=		 |  [[#BinFiles][list]]  | Perl scripts  |
 | =twiki/lib=		 |  [[#LibFiles][list]]  | Configuration file, main library, Perl system modules, Plugins |
-| =twiki/pub=		 |  [[#PubFiles][list]]  | Public support files (ex: FileAttachments, images) and RCS histories) |
-| =twiki/data=		|  [[#DataFiles][list]]  | Topic text (page content) and RCS histories; |
+| =twiki/pub=		 |  [[#PubFiles][list]]  | Public files (e.g. images) and FileAttachments and their RCS histories |
+| =twiki/data=		|  [[#DataFiles][list]]  | Topic text (page content) and RCS histories |
 | =twiki/templates= |  [[#TemplatesFiles][list]]  | HTML templates, used by TWiki scripts |
 
 ---++ File Descriptions
