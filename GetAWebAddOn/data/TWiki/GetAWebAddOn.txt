@@ -1,0 +1,51 @@
+*Get-A-Web version 0.6*
+	* avoids *.lock files
+	* usable as a link
+	* you can download last version of topics
+
+Here you can download a zipped copy of the web of your choice.
+
+The .haccess and .htpasswd files are excluded for security reasons.
+(the access rights can be checked by apache <Location> directives ...).
+
+%INCLUDE{"getweb-list"}%
+
+Here you can easily download all TWiki.tgz topics.
+(the link works if you install also the following rules in wikicfg.pl)
+
+   * Add the rendering rule
+<PRE>
+#AS
+    # Automatically gets a web content
+    s#(^|\s)(([A-Z][a-zA-Z0-9]*[\.\/])*([A-Z][a-zA-Z0-9]*))\.((zip)|(tgz)|(tar\.gz)|(tar\.bz2))(\s|$)#"$1".&handleGetAWeb("$2","$4","$5","yes")."$10"#geo;
+#AS
+</PRE>
+
+   * And add the sub
+<PRE>
+#AS
+# =========================
+sub handleGetAWeb
+{
+    # we substitute the web with a get-a-web link
+    my ($web, $name, $zip, $lastOnly) = @_ ;
+
+    $web =~ s/\./\//go ;
+
+    if (webExists($web)) {
+	return "<b><A href=\"$scriptUrlPath/get-a-web$scriptSuffix/$web.$zip?lastOnly=$lastOnly\">$name.$zip</A></b>";
+
+    }
+    return "$name.$zip";
+}
+#AS
+</PRE>
+
+-- %MAINWEB%.AndreaSterbini 25 Aug 2000 <br><!--TWikiCat--> <h4> TWikiCategory </h4>
+<table border="2" cellspacing="1" cellpadding="1">
+<tr>
+<td valign="top" align="right"> TopicClassification:  <br></td><td>  Enhancement </td>
+</tr><tr>
+<td valign="top" align="right"> TopicStatus:  <br></td><td>  Test </td>
+</tr>
+</table><!--TWikiCat-->
