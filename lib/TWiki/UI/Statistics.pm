@@ -42,7 +42,7 @@ sub statistics {
 
     my $tmp = "";
     my $theRemoteUser = $query->remote_user();
-    my $logDate = $query->param( 'logdate' );
+    my $logDate = $query->param( 'logdate' ) || "";
 
     my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
