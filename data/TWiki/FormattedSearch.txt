@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007296400" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1011075257" format="1.0" version="1.4"}%
 %META:TOPICPARENT{name="TWikiVariables"}%
 %TOC%
 %STARTINCLUDE%
@@ -8,7 +8,7 @@ _Inline search feature allows flexible formatting of search result_
 
 ---++ Overview
 
-By default, the format for displaying a search result is fixed, e.g. a table with rows of topic name and topic summary. Use the =format="..."= parameter to specify a customized format of the search result. The string of the format parameter is typically a bullet list or table row containing variables (i.e. =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=).
+The =%<nop>SEARCH{...}%= variable documented in TWikiVariables has a fixed format for the search result, that is, a table consisting of topic names and topic summaries. Use the =format="..."= parameter to specify a customized format of the search result. The string of the format parameter is typically a bullet list or table row containing variables (such as =%<nop>SEARCH{ "food" format="| $topic | $summary |" }%=).
 
 ---++ Syntax
 
