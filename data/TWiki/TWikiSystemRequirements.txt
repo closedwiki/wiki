@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999856896" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="JohnTalintyre" date="999877336" format="1.0" version="1.17"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Operating Environment
@@ -101,6 +101,7 @@ The new =lib/TWiki/Plugins= directories contain core configuration, libraries an
 | =TWiki.cfg=	  | For configuration, used by =TWiki.pm= |
 | =TWiki/Access.pm=	| Access control |
 | =TWiki/Attach.pm=	| Attachment handling |
+| =TWiki/Form.pm=	  | Form handling |
 | =TWiki/Meta.pm=	  | Meta data in topics |
 | =TWiki/Net.pm=		| SMTP mail handling |
 | =TWiki/Plugins.pm=  | Plugin handling |
@@ -171,9 +172,10 @@ The =data= directory stores TWiki page data as individual text files. Each activ
 | =debug.txt= | xxxx |
 | =mime.types= | xxxx |
 | =warning.txt= | xxxx |
-| =_default/.changes= | xxxx |
-| =_default/WebChanges.txt= | xxxx |
-| =_default/WebChanges.txt,v= | xxxx |
+| _default directory can be copied to empty directory when creating new Webs ||
+| =_default/.changes= | Record of topic changes recorded here |
+| =_default/WebChanges.txt= | Display most recent changes |
+| =_default/WebChanges.txt,v= | History |
 | =_default/WebHome.txt= | xxxx |
 | =_default/WebHome.txt,v= | xxxx |
 | =_default/WebIndex.txt= | xxxx |
@@ -273,14 +275,14 @@ _Used to flexibly control appearance of rendered pages..._
 | =rdiff.tmpl= | xxxx |
 | =register.tmpl= | xxxx |
 | =registernotify.tmpl= | xxxx |
-| =rename.tmpl= | xxxx |
-| =renamebase.tmpl= | xxxx |
-| =renameconfirm.tmpl= | xxxx |
-| =renamerefs.tmpl= | xxxx |
+| =rename.tmpl= | Doing a new topic rename, user chooses web & topic |
+| =renamebase.tmpl= | Used by other rename templates |
+| =renameconfirm.tmpl= | Confirming a pre-specified rename e.g. when undoing a rename |
+| =renamerefs.tmpl= | Rename done, still some references to change (topcis were previously locked) |
 | =search.tmpl= | xxxx |
 | =searchbookview.tmpl= | xxxx |
 | =searchmeta.tmpl= | xxxx |
-| =searchrenameview.tmpl= | xxxx |
+| =searchrenameview.tmpl= | Used by =rename= to list references to topic being renamed |
 | =twiki.tmpl= | xxxx |
 | =view.plain.tmpl= | xxxx |
 | =view.print.tmpl= | xxxx |
