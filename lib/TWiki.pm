@@ -2039,7 +2039,6 @@ sub handleIncludeFile
     if( ( $isTopic ) && ( $theWeb ne $webName ) ) {
         # "TopicName" to "Web.TopicName"
         $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
-        $text =~ s/(^|[\s\(])($regex{wikiWordRegex}|$regex{abbrevRegex})/$1$theWeb\.$2/go;
         $text =~ s/(^|[\s\(])$TranslationToken/$1/go;
         # "[[TopicName]]" to "[[Web.TopicName][TopicName]]"
         $text =~ s/\[\[([^\]]+)\]\]/fixIncludeLink( $theWeb, $1 )/geo;
@@ -3555,16 +3554,17 @@ sub linkToolTipInfo
 # =========================
 =pod
 
----++ sub internalLink (  $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink  )
+---++ sub internalLink (  $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb )
 
 Not yet documented.
 
 =cut
 
 sub internalLink {
-    my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
+    my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) = @_;
     # $thePreamble is text used before the TWiki link syntax
     # $doLink is boolean: false means suppress link for non-existing pages
+    # $doKeepWeb is boolean: true to keep web prefix (for non existing Web.TOPIC)
 
     # Get rid of leading/trailing spaces in topic name
     $theTopic =~ s/^\s*//;
@@ -3623,6 +3623,10 @@ sub internalLink {
         $text .= "<span style='background : $newTopicBgColor;'>"
               .  "<font color=\"$newTopicFontColor\">$theLinkText</font></span>"
               .  "<a href=\"$dispScriptUrlPath/edit$scriptSuffix/$theWeb/$theTopic?topicparent=$webName.$topicName\">?</a>";
+        return $text;
+
+    } elsif( $doKeepWeb ) {
+        $text .= "$theWeb.$theLinkText";
         return $text;
 
     } else {
@@ -4057,7 +4061,7 @@ sub getRenderedVersion {
 
 		# Handle acronyms/abbreviations of three or more letters
                 # 'Web.ABBREV' link:
-                s/([\s\(])($regex{webNameRegex})\.($regex{abbrevRegex})/&internalLink($1,$2,$3,$3,"",0)/geo;
+                s/([\s\(])($regex{webNameRegex})\.($regex{abbrevRegex})/&internalLink($1,$2,$3,$3,"",0,1)/geo;
                 # 'ABBREV' link:
 		s/([\s\(])($regex{abbrevRegex})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
                 # (deprecated <link> moved to DefaultPlugin)
