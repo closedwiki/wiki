@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092630659" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093850055" format="1.0" version="1.16"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -58,6 +58,7 @@ Perl CGI scripts. _Full file list:_
 | =passwd=		  | Reset and change password |
 | =preview=		 | Preview topic after edit |
 | =rdiff=			| See differences of topics |
+| =rdiffauth=	  | Copy of rdiff script (ideally a link). The .htaccess file sets this as requiring authorisation |
 | =register=		| Register new users |
 | =rename=		  | Rename/move topics and move attachments |
 | =save=			 | Saves a topic, called by preview |
@@ -66,8 +67,8 @@ Perl CGI scripts. _Full file list:_
 | =statistics=	 | Create statistics topic |
 | =testenv=		 | Test CGI environment variables |
 | =upload=		  | Does file upload (FileAttachment) |
-| =view=			 | View a topic ( *the* script ) |
-| =viewauth=		| View a topic (should be a softlink to view, but a copy works) the .htaccess file sets this as requireing authorisation |
+| =view=			 | View a topic (*the* script) |
+| =viewauth=		| Copy of view script (ideally a link). The .htaccess file sets this as requiring authorisation |
 | =viewfile=		| View a file attachment |
 
 #LibFiles
@@ -281,7 +282,8 @@ drwxrwxr-x	 5 twiki	twiki		  4096 Nov 18  2002 ..
 -rwxrwxr-x	 1 twiki	twiki		  1448 May 28 23:51 oops
 -rwxrwxr-x	 1 twiki	twiki		  4062 May 28 23:51 passwd
 -rwxrwxr-x	 1 twiki	twiki		  1506 May 28 23:51 preview
--rwxrwxr-x	 1 twiki	twiki		  1490 May 28 23:51 rdiff
+-rwxrwxr-x	 2 twiki	twiki		  1490 May 28 23:51 rdiff
+-rwxrwxr-x	 2 twiki	twiki		  1490 May 28 23:51 rdiffauth
 -rwxrwxr-x	 1 twiki	twiki		  7635 May 28 23:51 register
 -rwxrwxr-x	 1 twiki	twiki		  1774 May 28 23:51 rename
 -rwxrwxr-x	 1 twiki	twiki		  1654 Jul 25 00:31 save
@@ -526,7 +528,7 @@ drwxrwx--x	 8 nobody  nobody		 4096 Nov 18 12:31 ..
 -r--r--r--	 1 nobody  nobody			81 Aug 15 10:14 Smile.gif,v
 </pre>
 
--- TWiki:Main.PeterThoeny - 13 Aug 2004 <br />
+-- TWiki:Main.PeterThoeny - 29 Aug 2004 <br />
 -- TWiki:Main.MikeMannix - 16 May 2002 <br />
 -- TWiki:Main.ArthurClemens - 08 Aug 2004
 
