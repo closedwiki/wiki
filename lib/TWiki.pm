@@ -1,4 +1,3 @@
-
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
@@ -68,7 +67,7 @@ use vars qw(
         $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
         $debugFilename $warningFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
-        $userListFilename %userToWikiList
+        $userListFilename %userToWikiList %wikiToUserList
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
@@ -87,8 +86,9 @@ use vars qw(
         $headerPatternDa $headerPatternSp $headerPatternHt
         $debugUserTime $debugSystemTime
         $viewableAttachmentCount $noviewableAttachmentCount
-	$superAdminGroup $doSuperAdminGroup
+        $superAdminGroup $doSuperAdminGroup
         $cgiQuery @publicWebList
+        $formatVersion
     );
 
 # Experimental persistent vars - modPerl issue?
@@ -112,7 +112,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Jul 2001";
+$wikiversion      = "04 Jul 2001";
 
 # ===========================
 # read the configuration part
@@ -123,6 +123,7 @@ do "TWiki.cfg";
 use TWiki::Prefs;     # preferences
 use TWiki::Search;    # search engine
 use TWiki::Access;    # access control
+use TWiki::Meta;      # Meta class - topic meta data
 use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Attach;    # file attachment functions
 use TWiki::Form;      # forms for topics
@@ -146,6 +147,8 @@ $headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
 
 $debugUserTime   = 0;
 $debugSystemTime = 0;
+
+$formatVersion = "1.0beta2";
 
 
 # =========================
@@ -386,6 +389,7 @@ sub userToWikiListInit
     my @list = split( /\n/, $text );
     @list = grep { /^\s*\* [A-Za-z0-9]*\s*\-\s*[^\-]*\-/ } @list;
     %userToWikiList = ();
+    %wikiToUserList = ();
     my $wUser;
     my $lUser;
     foreach( @list ) {
@@ -395,6 +399,7 @@ sub userToWikiListInit
             $lUser = $2;
             $lUser =~ s/$securityFilter//go;
             $userToWikiList{ $lUser } = $wUser;
+            $wikiToUserList{ $wUser } = $lUser;
         }
     }
 }
@@ -410,6 +415,9 @@ sub userToWikiName
 
     $loginUser =~ s/$securityFilter//go;
     my $wUser = $userToWikiList{ $loginUser };
+    if( $wUser && $onlyTranslate ) {
+        return "$wUser";
+    }
     if( $wUser ) {
         return "$mainWebname.$wUser";
     }
@@ -443,6 +451,17 @@ sub readOnlyMirrorWeb
         }
     }
     return @mirrorInfo;
+}
+
+
+# =========================
+sub wikiToUserName
+{
+    my( $wikiUser ) = @_;
+    $wikiUser =~ s/^.*\.//go;
+    my $userName =  $wikiToUserList{"$wikiUser"};
+    #TWiki::writeDebug( "TWiki::wikiToUserName: $wikiUser->$userName" );
+    return $userName;
 }
 
 # =========================
@@ -619,7 +638,7 @@ sub extractNameValuePair
             # is: { "value" ... }
             return $2;
 
-        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) {
+        } elsif( ( $str =~ /^\s*\w+\s*=\s*\"([^\"]*)/ ) && ( $1 ) ) { # value in double quotes (")
             # is not a standalone var, but: %VAR{ name = "value" }%
             return "";
 
@@ -776,7 +795,7 @@ sub handleIncludeFile
     }
 
     my $text = "";
-    my @meta = ();
+    my $meta = "";
 
     # set include web/filenames and current web/filenames
     $includingWebName = $theWeb;
@@ -788,7 +807,7 @@ sub handleIncludeFile
         $theWeb = $1;
         $theTopic = $2;
 
-        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $theWeb, $theTopic );
+        ( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//os;
         $text =~ s/%STOPINCLUDE%.*//os;
@@ -1232,17 +1251,17 @@ sub handleHeader
 # Experimental routine for header/footer
 sub handleFooter
 {
-    my( $pos, $theTopic, $theSkin  ) = @_;
+    my( $start, $end, $theTopic, $theSkin  ) = @_;
     
     readHeaderFooter( $theTopic, $theSkin );
     
     my $ret = "";
 
-    if( ! $pos || $pos =~ /:START/ ) {
+    if( ! $end ) {
        $ret .= $headerfooter{"footerstart"};
     }
     
-    if( ! $pos || $pos =~ /:END/ ) {
+    if( ! $start ) {
        $ret .= $headerfooter{"footerend"};
     }
     
@@ -1294,12 +1313,12 @@ sub handleCommonTags
 # =========================
 sub handleMetaTags
 {
-    my( $theWeb, $theTopic, $text, $metar ) = @_;
-    
-    $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $metar )/goe;
-    $text =~ s/%META{\s*"attachments"\s*}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $metar )/goe;
-    $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $metar )/goe;
-    $text =~ s/%META{\s*"parent"\s*}%/&renderParent( $theWeb, $theTopic, $metar )/goe;
+    my( $theWeb, $theTopic, $text, $meta ) = @_;
+
+    $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $meta )/goe;
+    $text =~ s/%META{\s*"attachments"\s*}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $meta )/goe;
+    $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/goe;
+    $text =~ s/%META{\s*"parent"\s*}%/&renderParent( $theWeb, $theTopic, $meta )/goe;
         
     return $text;
 }
@@ -1307,17 +1326,13 @@ sub handleMetaTags
 # ========================
 sub renderParent
 {
-    my( $web, $topic, $metar ) = @_;
+    my( $web, $topic, $meta ) = @_;
     
     my $text = "";
-    my @meta = @$metar;
     
-    my @tmp = grep { /^%META:TOPICPARENT/ } @meta;
-    if( @tmp ) {
-        my $parentMeta = shift @tmp;
-        $parentMeta =~ /{([^}]*)}/;
-        my $args = $1;
-        my $name = extractNameValuePair( $args, "name" );
+    my %parent = $meta->findOne( "TOPICPARENT" );
+    if( %parent ) {
+        my $name = $parent{"name"};
         $text = $name;
     }
     
@@ -1331,27 +1346,23 @@ sub renderParent
 # ========================
 sub renderMoved
 {
-    my( $web, $topic, $metar ) = @_;
+    my( $web, $topic, $meta ) = @_;
     
-    my @meta = @$metar;
     my $text = "";
     
-    my @tmp = grep { /^%META:TOPICMOVED/ } @meta;
+    my %moved = $meta->findOne( "TOPICMOVED" );
     
-    if( @tmp ) {
-        my $movedMeta = shift @tmp;
-        $movedMeta =~ /{([^}]*)}/;
-        my $args = $1;
-        my $from = extractNameValuePair( $args, "from" );
+    if( %moved ) {
+        my $from = $moved{"from"};
         $from =~ /(.*)\.(.*)/;
         my $fromWeb = $1;
         my $fromTopic = $2;
-        my $to   = extractNameValuePair( $args, "to" );
+        my $to   = $moved{"to"};
         $to =~ /(.*)\.(.*)/;
         my $toWeb = $1;
         my $toTopic = $2;
-        my $by   = extractNameValuePair( $args, "by" );
-        my $date = extractNameValuePair( $args, "date" );
+        my $by   = $moved{"by"};
+        my $date = $moved{"date"};
         $date = formatGmTime( $date );
         
         # Only allow put back, if current web and topic match stored to information
@@ -1375,28 +1386,21 @@ sub renderMoved
 # =========================
 sub renderFormData
 {
-    my( $web, $topic, $metaP ) = @_;
+    my( $web, $topic, $meta ) = @_;
 
-    my @meta = @$metaP;
-    
     my $metaText = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n   <tr>";
     
-    foreach my $metaItem ( @meta ) {
-       if( $metaItem =~ /(%META:FORM\{)([^\}]*)(}%)/ ) {
-           my $args = $2;
-           my $name = extractNameValuePair( $args, "name" );
-           $metaText .= "<th colspan=\"2\" align=\"center\" bgcolor=\"#99CCCC\"> $name </th></tr>\n";
-       }
+    my %form = $meta->findOne( "FORM" );
+    if( %form ) {
+       my $name = $form{"name"};
+       $metaText .= "<th colspan=\"2\" align=\"center\" bgcolor=\"#99CCCC\"> $name </th></tr>\n";        
     }
     
-    foreach my $metaItem( @meta ) {
-       if( $metaItem =~ /(%META:FIELD\{)([^\}]*)(}%)/ ) {
-           my $args = $2;
-           my $title  = extractNameValuePair( $args, "title" );
-           my $value = extractNameValuePair($args,  "value" );
-
-           $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
-       }
+    my @fields = $meta->find( "FIELD" );
+    foreach my $field ( @fields ) {
+        my $title = $field->{"title"};
+        my $value = $field->{"value"};
+        $metaText .= "<tr><th bgcolor=\"#99CCCC\" align=\"right\"> $title:</th><td align=\"left\"> $value </td></tr>\n";
     }
     
     $metaText .= "</table>\n";
