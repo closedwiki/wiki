@@ -111,6 +111,7 @@ sub registerPlugin
             $installWeb = $web;
         } else {
             # not found
+            &TWiki::writeWarning( "Plugins: couldn't register $plugin, no plugin topic" );
             return;
         }
     }
