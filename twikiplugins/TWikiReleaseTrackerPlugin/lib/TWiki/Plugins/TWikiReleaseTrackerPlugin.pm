@@ -567,6 +567,7 @@ Pick up from CVS if before XXXX/2004, else look in SVN.
 sub getDistributionVersion {
 	my ( $file, $distribution ) = @_;
 	$file =~ s!^twiki/!!;
+	use TWiki::Contrib::DistributionContrib::FileFetcher;
 	my $file2 = TWiki::Contrib::DistributionContrib::FileFetcher::fetchDistributionFile($file, $distribution);
 	return $file2;
 }
