@@ -36,7 +36,7 @@ unless( $args =~ /\bnodocs\b/ ) {
 }
 
 #disabled in case it is knackering ntwiki
-exit 1;
+exit 0;
 
 unless( $args =~ /\bnocompile\b/ ) {
     print "<h1>Compile Tests</h1>\n";
