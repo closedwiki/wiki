@@ -14,8 +14,16 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
+
+## Bugfix:
+## Ammendments fro handling foreign named 
+## users like me (NielsKoldsø) are tagged NKO 
+##
 use strict;
 use integer;
+
+# Added by NKO to fix problem with non danish names
+use locale;
 
 use TWiki;# for unpublished functions
 
@@ -92,7 +100,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $actions;
     if ( scalar( keys %$attrs ) > 0 ) {
       # Get all the actions that match the search
-      $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $webs, $attrs );
+      $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $webs, $attrs, 1 );
       $actions->getActionees( \%people );
     }
 
@@ -262,11 +270,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 	$person = _getMailAddress( $person, $mailAddress );
       }
       $addresses = join( ",", @persons );
-    } elsif ( $who =~ m/^[A-Z]+[a-z]+[A-Z]+\w+$/o ) {
+# Replaced by NKO, so that danish names accepted ... damn its hard to be Danish
+#   } elsif ( $who =~ m/^[A-Z]+[a-z]+[A-Z]+\w+$/o ) {
+    } elsif ( $who =~ m/^$TWiki::wikiWordRegex$/o ) {
       # A legal topic wikiname
       $who = ActionTrackerPlugin::Action::_canonicalName( $who );
       $addresses = _getMailAddress( $who, $mailAddress );
-    } elsif ( $who =~ m/^(\w+)\.([A-Z]+[a-z]+[A-Z]+\w+)$/o ) {
+# Replaced by NKO
+#   } elsif ( $who =~ m/^(\w+)\.([A-Z]+[a-z]+[A-Z]+\w+)$/o ) {
+    } elsif ( $who =~ m/^($TWiki::webNameRegex)\.($TWiki::wikiWordRegex)$/o ) {
       # A topic in a web
       my ( $inweb, $intopic ) = ( $1, $2 );
       if ( TWiki::Func::topicExists( $inweb, $intopic ) ) {

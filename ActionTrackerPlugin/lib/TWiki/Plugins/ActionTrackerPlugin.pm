@@ -357,6 +357,11 @@ sub afterEditHandler {
   }
 
   my $pretext = $query->param( 'pretext' ) || "";
+   # Fix from RichardBaar 8/10/03 for Mozilla
+  my $char = chop( $pretext );
+  $pretext .= $char if ( $char ne "\n" );
+  $pretext .= "\n";
+   # end of fix from RichardBaar 8/10/03
   my $posttext = $query->param( 'posttext' ) || "";
 
   # count the previous actions so we get the right action number
