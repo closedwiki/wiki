@@ -3,16 +3,38 @@ package com.ccsoft.edit;
 import java.applet.*;
 import java.awt.*;
 import java.net.*;
+import java.util.Enumeration;
 import junit.framework.*;
 
 public class TWikiEditTest extends TestCase {
+
+    private class AContext implements AppletContext {
+	public Applet getApplet(String name) {
+	    return null;
+	}
+	public Enumeration getApplets() {
+	    return null;
+	}
+	public AudioClip getAudioClip(URL url) {
+	    return null;
+	}
+	public Image getImage(URL url) {
+	    return null;
+	}
+        public void showDocument(URL url) {
+	}
+        public void showDocument(URL url, String target) {
+	}
+        public void showStatus(String status) {
+	}
+    }
 
     private class AStub implements AppletStub {
 	public void appletResize(int width, int height) {
 	}
 
 	public AppletContext getAppletContext() {
-	    return null;
+	    return new AContext();
 	}
 
 	public URL getCodeBase() {

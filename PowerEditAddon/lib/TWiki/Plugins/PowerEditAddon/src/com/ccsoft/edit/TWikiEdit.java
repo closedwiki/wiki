@@ -80,6 +80,9 @@ public class TWikiEdit extends Applet implements Application {
     /** MIME form separator */
     static private final String MIME_SEP =
     "---------------------------89692781418184";
+    static private String NL = "\r\n";
+    static private final String END_MESSAGE =
+    "--" + MIME_SEP + "--" + NL;
 
     /** Implements Application to provide the containing Frame */
     public Frame getFrame() {
@@ -244,119 +247,116 @@ public class TWikiEdit extends Applet implements Application {
 
     /** Download the text from the given server url */
     private String downloadText() {
-	String replyString = "";
+	String reply = "";
 	// a url of "debug" means run in appletviewer mode and
 	// don't try to talk to the server
 	if (!server.startsWith("debug")) {
-	    URL url;
-	    try {
-		url = new URL(getCodeBase(),
-				  server + "?action=get");
-	    } catch (MalformedURLException mue) {
-		return mue.toString();
+	    reply = post(server, formParameter("action", "get"));
+	    if (reply.startsWith("OK")) {
+		return reply.substring(2);
+	    } else {
+		showStatus(reply);
+		return "ERROR during download: " + reply;
 	    }
-
-	    System.out.println("get: " + url);
-
-	    try {
-		InputStream ins = url.openStream();
-
-		BufferedReader in =
-		    new BufferedReader(new InputStreamReader(ins));
-		String reply = null;
-		do {
-		    reply = in.readLine();
-		    if (reply != null) {
-			replyString += reply + "\n";
-		    }
-		} while (reply != null);
-	    } catch (IOException ioe) {
-		return ioe.toString();
-	    }
-
-	    if ( replyString.startsWith("OK"))
-		replyString = replyString.substring(2);
-
 	} else {
-	    replyString = server.substring(5);
+	    reply = server.substring(5);
 	}
 
-	return replyString;
+	return reply;
     }
 
     /** Command action on save. This command is reflected
      * from the textarea. */
     public void save() {
-	try {
-	    String text = textarea.getText();
-	    String serverCmd = server + "?action=put";
-	    System.out.println("put: " + serverCmd);
-	    String reply = post(serverCmd, text);
-	    // read the reply, which should be a URL
+	String text = textarea.getText();
+	String reply = post(server,	    
+			    formParameter("action", "put") +
+			    formParameter("text", text));
+	if (reply.startsWith("OK")) {
+	    reply = reply.substring(2) + "?action=commit";
 	    try {
-		System.out.println("redirect:" + reply);
-                URL url = new URL(getCodeBase(), reply);
-                getAppletContext().showDocument(url);
-            } catch (MalformedURLException murle) {
-            }
-	} catch (MalformedURLException mue) {
-            mue.printStackTrace();
-	    showStatus("Bad url: " + mue.getMessage());
-	} catch (IOException ioe) {
-            ioe.printStackTrace();
-	    showStatus("Save failed: " + ioe.getMessage());
+		URL url = new URL(getCodeBase(), reply);
+		getAppletContext().showDocument(url);
+		// never returns because we've navigated away from
+		// this page
+	    } catch (MalformedURLException mue) {
+		showStatus("ERROR Bad url: " + mue.getMessage());
+	    }
+	} else {
+	    showStatus(reply);
 	}
+    }
+
+    /** Command action on preview. This command is reflected
+     * from the textarea. */
+    public void preview() {
+	String text = textarea.getText();
+	String reply = post(server,	    
+			    formParameter("action", "put") +
+			    formParameter("text", text));
+	if (reply.startsWith("OK")) {
+	    reply = reply.substring(2) + "?action=preview&skin=power";
+	    try {
+		URL url = new URL(getCodeBase(), reply);
+		showStatus("Reply is " + reply);
+		getAppletContext().showDocument(url, "_blank");
+	    } catch (MalformedURLException mue) {
+		showStatus("ERROR Bad url: " + mue.getMessage());
+	    }
+	} else {
+	    showStatus("ERROR: " + reply);
+	}
+    }
+
+    private String formParameter(String name, String value) {
+	return "--" + MIME_SEP + NL +
+            "Content-Disposition: form-data; name=\"" +
+	    name +
+	    "\"" + NL + "Content-Type: text/plain" + NL + NL +
+	    value +
+	    NL;
     }
 
     /**
      * Submits POST command to the server, and reads the reply.
+     * If everything works it will return OK+the reply, otherwise
+     * it will return ERROR+the error message.
      */
-    public String post(String url, String content)
-	throws MalformedURLException, IOException {
+    public String post(String url, String message) {
 
-	String message =
-	    "--" + MIME_SEP + "\r\n" 
-	    // shouldn't need this, as the url has ?action=put
-            + "Content-Disposition: form-data; "
-            + "name=\"action\"\r\n\r\nput\r\n"
-	    + "--" + MIME_SEP + "\r\n"
-            + "Content-Disposition: form-data; "
-            + "name=\"text\"\r\n"
-            + "Content-Type: text/plain\r\n\r\n"
-            + content + "\r\n"
-	    + "--" + MIME_SEP + "--\r\n";
+	message += END_MESSAGE;
 
 	if (server.equals("debug")) {
 	    System.out.println(message);
-	    return "no_response";
+	    return "OKno_response";
 	}
 
-        URL server = new URL(
-	    getCodeBase().getProtocol(),
-	    getCodeBase().getHost(),
-	    getCodeBase().getPort(),
-	    url);
-        URLConnection connection = server.openConnection();
-
-        connection.setAllowUserInteraction(true);
-        connection.setDoOutput(true);
-        connection.setDoInput(true);
-        connection.setUseCaches(false);
-
-        connection.setRequestProperty(
-	    "Content-type",
-	    "multipart/form-data; boundary=" + MIME_SEP);
-        connection.setRequestProperty(
-	    "Content-length",
-	    Integer.toString(message.length()));
-
-        DataOutputStream out =
-	    new DataOutputStream(connection.getOutputStream());
-        out.writeBytes(message);
-        out.close();
-
-	String replyString = "";
 	try {
+	    URL server = new URL(
+		getCodeBase().getProtocol(),
+		getCodeBase().getHost(),
+		getCodeBase().getPort(),
+		url);
+	    URLConnection connection = server.openConnection();
+
+	    connection.setAllowUserInteraction(true);
+	    connection.setDoOutput(true);
+	    connection.setDoInput(true);
+	    connection.setUseCaches(false);
+
+	    connection.setRequestProperty(
+		"Content-type",
+		"multipart/form-data; boundary=" + MIME_SEP);
+	    connection.setRequestProperty(
+		"Content-length",
+		Integer.toString(message.length()));
+
+	    DataOutputStream out =
+		new DataOutputStream(connection.getOutputStream());
+	    out.writeBytes(message);
+	    out.close();
+
+	    StringBuffer replyBuffer = new StringBuffer();
 	    BufferedReader in =
 		new BufferedReader(new InputStreamReader(
 		    connection.getInputStream()));
@@ -364,13 +364,16 @@ public class TWikiEdit extends Applet implements Application {
 	    do {
 		reply = in.readLine();
 		if (reply != null) {
-		    replyString += reply;
+		    replyBuffer.append(reply);
+		    replyBuffer.append('\n');
 		}
 	    } while (reply != null);
 	    in.close();
+	    return replyBuffer.toString().trim();
+	} catch (MalformedURLException mue) {
+	    return "ERROR Bad url: " + mue.getMessage();
 	} catch (IOException ioe) {
-	    replyString = ioe.toString();
+	    return "ERROR " + ioe.getMessage();
 	}
-	return replyString;
     }
 }

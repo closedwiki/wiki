@@ -73,10 +73,11 @@ It is a condition of use that any useful customisations are fed back to the %TOP
 	* Add the following line to the "TWiki Addons" section of %TWIKIWEB%.TextFormattingRules:
 		* Plugins.%TOPIC%: Power Editor Addon
 
-	* The editor is invoked by putting the following line into your =bin/view= script, immediately after the line reading %<nop>EDITTOPIC%:
+	* A command to invoke the editor can by added to the normal topic view by putting the following line into your =bin/view= template, immediately after the line reading %<nop>EDITTOPIC%:
 	<pre>
 	%<nop>TMPL:P{"sep"}% &lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=power">PowerEdit&lt;/a>
 	</pre>
+	* *NOTE* because of the way the 'save' script is used some httpd error messages may be generated in your apache log files. To stop these messages, edit the distributed 'save' script (in twiki/bin) and add the word 'my' before the return values from TWiki::initialize (it ought to be there anyway!).
 
 ---+++ Addon Info
 
@@ -93,7 +94,7 @@ It is a condition of use that any useful customisations are fed back to the %TOP
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
----++++ eXtreme Customisation
+---++++ Customisation
 All the sources and unit tests are provided with the distribution, together with an Ant build file (see http://www.jakarta.org) should further customisation be required. The source.zip is shipped in the =lib/TWiki/Plugins/%TOPIC%= directory and when unzipped creates source, packages and test subdirectories. The =src= directory contains the PowerEdit applet sources, the =test= directory contains JUnit unit tests, and the =packages= directory contains the GNU 'regexp' packages, which is used by search and replace.
 
 Getting Java to talk to TWiki perl scripts isn't all that easy, so it's worth understanding how it works before you try to make any changes.
