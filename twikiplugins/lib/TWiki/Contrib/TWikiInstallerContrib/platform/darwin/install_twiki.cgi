@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # $Id$
-#  Stage 2-3/4 of an automatic twiki install on macosx darwin
+#  Stages 2-3/4 of an automatic twiki install on macosx darwin
 # Copyright 2004 Will Norris.  All Rights Reserved.
 # License: GPL
 
@@ -37,7 +37,7 @@ BEGIN {
     $account = [ split( '/', getcwd() ) ]->[-3];   # format: /Users/(account)/Sites/cgi-bin/...
     my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
-    # TODO: use setlib.cfg (is that which one it is?  along with some patch mc and i were working on)
+    # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 }
 use strict;
 ++$|;
@@ -58,7 +58,8 @@ use CPAN;
 my $q = CGI->new() or die $!;
 
 ################################################################################
-
+# configuration page (in html) if the install button hasn't been clicked
+################################################################################
 unless ( $q->param('install') =~ /install/i )
 {
     my $title = "TWiki Installation (Step 2/4)";
@@ -105,13 +106,21 @@ function toggleHover( e )
 
 <form id="form">
 <table id="hdr"><tr>
-<td>Step 2/4 <br/>
-TWiki Release: 01 Sep 2004 (Cairo)</td>
+<td>Step 2/4 <!-- <br/>
+TWiki Release: 01 Sep 2004 (Cairo) --> </td>
 <td align="right" width="1%" nowrap >
 <input type="submit" name="install" value="install" /> <br/>
 </td>
 </table>
 __HTML__
+
+    my @releases = ();
+    if ( opendir( RELEASES, "tmp/install/downloads/releases" ) )
+    {
+	@releases = grep { /\.tar\.gz$/ } readdir( RELEASES );  #or warn $!; 
+	closedir( RELEASES ) or warn $!;
+    }
+    print releasesCatalogue({ list => [ @releases ], title => 'TWiki Kernel', type => 'twiki', cgi => $q });
 
     print catalogue({ xml => "tmp/install/downloads/contribs/contrib.xml", title => "Contrib", type => "contrib", cgi => $q });
     print catalogue({ xml => "tmp/install/downloads/plugins/plugins.xml", title => "Plugins", type => "plugin", cgi => $q });
@@ -132,10 +141,10 @@ __HTML__
 }
 
 ################################################################################
+# INSTALL
 ################################################################################
 
 my $cgibin      = "/Users/$account/Sites/cgi-bin";
-my $tar		= "TWiki20040901.tar.gz";
 my $home        = "/Users/$account/Sites";
 my $tmp		= "$cgibin/tmp";
 my $htdocs	= $home . '/htdocs';
@@ -167,6 +176,8 @@ checkdir( $cpan );
 ################################################################################
 # setup directory skeleton workplace
 
+my $tar		= $q->param( 'twiki' ) || "TWiki20040901.tar.gz";
+
 installTWikiExtension({ file => $tar,
 			dir => "downloads/releases",
 			name => 'TWiki',
@@ -181,7 +192,7 @@ foreach my $plugin ( @preinstalledPlugins )
 }
 
 ################################################################################
-# update TWiki.cfg for SourceForge specifics
+# update TWiki.cfg for local directories configuration
 
 print qq{<h2>TWiki.cfg</h2>\n};
 my $file = "$lib/TWiki.cfg";
@@ -189,7 +200,7 @@ open(FH, "<$file") or die "Can't open $file: $!";
 my $config = join( "", <FH> );
 close(FH) || die "Can't write to $file: $!";
 
-my $sourceForgeConfig = qq{
+my $localDirConfig = qq{
 
 \$defaultUrlHost   = "http://localhost";
 \$scriptUrlPath    = "/~$account/cgi-bin/twiki";
@@ -205,7 +216,7 @@ my $sourceForgeConfig = qq{
 # need to put our configurations in the "right" spot in the configuration file
 # they need to be inserted after the default definitions, but before any of them are used
 # hm, maybe i could have just put the whole thing in a BEGIN { } block ?
-$config =~ s/(# FIGURE OUT THE OS WE'RE RUNNING UNDER - from CGI.pm)/$sourceForgeConfig\n$1/;
+$config =~ s/(# FIGURE OUT THE OS WE'RE RUNNING UNDER - from CGI.pm)/$localDirConfig\n$1/;
 open(FH, ">$file") || die "Can't open $file: $!";
 print FH $config;
 close(FH) || die "Can't write to $file: $!";
@@ -233,6 +244,8 @@ close( FH ) or die $!;
 execute( "rm $dest/data/TWiki/TWikiRegistration.txt $dest/data/TWiki/TWikiRegistration.txt,v" ) or warn $!;
 execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt $dest/data/TWiki/TWikiRegistration.txt") or warn $!;
 execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt,v $dest/data/TWiki/TWikiRegistration.txt,v") or warn $!;
+
+# TODO: setup data/.htpasswd (default file contains TWikiGuest/guest)
 
 ################################################################################
 # install contrib
@@ -400,6 +413,47 @@ sub wikiCatalogue
 	$text .= qq{<tr class="$p->{type}" onclick="toggleHover(this)" ><td>};
 	# BLECH - force a checkbox click, because the TD handler above will undo it (happens twice :( )
 	$text .= qq{<input type="checkbox" name="$p->{type}" value="$web" $checked onclick="toggleHover(this.parentNode.parentNode);" /> $web};
+	$text .= "</td></tr>";
+    }
+
+    $text .= "</table>";
+
+    return $text;
+}
+
+################################################################################
+
+sub releasesCatalogue
+{
+    my $p = shift;
+    die unless $p->{type} && $p->{cgi};
+    unless ( @{ $p->{list} } ) { return "" }
+    $p->{title} ||= $p->{type};
+
+    my $text = "";
+    $text .= "<table>";
+    $text .= qq{<tr><th onclick="toggleAll( document.getElementById('form'), '$p->{type}' )" >} . $p->{title} . "</th></tr>\n";
+
+    foreach my $web ( @{ $p->{list} } )
+    {
+	my $checked = ( grep { /^\Q$web\E$/ } ( $p->{cgi}->param($p->{type}) ) ) ? qq{checked="checked"} : '';
+
+	$text .= qq{<tr class="$p->{type}" onclick="toggleHover(this)" ><td>};
+	# BLECH - force a checkbox click, because the TD handler above will undo it (happens twice :( )
+	$text .= qq{<input type="radio" name="$p->{type}" value="$web" $checked onclick="toggleHover(this.parentNode.parentNode);" /> };
+	( my $displayRelease = $web ) =~ s/.tar.gz//;
+	$displayRelease =~ s/TWiki//;
+	my ( $year, $month, $day, undef, $hour, $min, $sec ) = $displayRelease =~ m/(\d\d\d\d)(\d\d)(\d\d)(\.(\d\d)(\d\d)(\d\d))?/;
+	my @month = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+	if ( $displayRelease =~ /\./ ) 
+	{ 
+	    $displayRelease = "Beta $day $month[$month] $year ${hour}.${min}.${sec}";
+	}
+	else
+	{
+	    $displayRelease = "$day $month[$month] $year";
+	}
+	$text .= "TWikiKernel Release $displayRelease";
 	$text .= "</td></tr>";
     }
 
@@ -584,9 +638,11 @@ sub erasePlugin
     my ( $plugin ) = @_;
 
     print qq{<h3>Erasing preinstalled plugin $plugin</h3>\n};
-    execute( "rm $lib/TWiki/Plugins/${plugin}.pm $dest/data/TWiki/${plugin}.txt*" );
+    execute( "rm $lib/TWiki/Plugins/${plugin}.pm" ) if -e "$lib/TWiki/Plugins/${plugin}.pm";
+    execute( "rm $dest/data/TWiki/${plugin}.txt*" );
     execute( "rm -r $lib/TWiki/Plugins/${plugin}" ) if -d "$lib/TWiki/Plugins/${plugin}";
     execute( "rm -r tmp/twiki/pub/TWiki/${plugin}" ) if -d "tmp/twiki/pub/TWiki/${plugin}";
+    # TODO: how to delete templates distribute with this? (and other files, too?)
 }
 
 ################################################################################
