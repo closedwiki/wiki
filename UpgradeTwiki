@@ -47,6 +47,8 @@ $targetDir =~ m|^[/~]| or die "Usage: $0 <full path to target directory for new 
 
 $targetDir =~ s|/$||;  # avoid ugly double slashes.
 
+mkdir $targetDir or die "Couldn't create the target directory ($targetDir): $!\n";
+
 print "
 That means that there should be all the normal TWiki directories here: bin, lib, pub, templates etc. right here.
 
@@ -64,16 +66,13 @@ Please tell me a path to either the setlib.cfg (preferred) or the TWiki.cfg...
 
 my ($configPath, $setlibPath, $libPath);
 
-do
-{
+do {
     chomp ($configPath = <STDIN>) ;
-}
-until ((-f "$configPath/setlib.cfg" || -f "$configPath/TWiki.cfg") ? 1 :
-       (print("Hmmm - I can't see setlib.cfg or Twiki.cfg at $configPath ... please check and try again\n"), 0) 
-       );
+} until ((-f "$configPath/setlib.cfg" || -f "$configPath/TWiki.cfg") ? 1 :
+         (print("Hmmm - I can't see setlib.cfg or TWiki.cfg at $configPath ... please check and try again\n"), 0) 
+        );
 
-if (-f "$configPath/TWiki.cfg")
-{
+if (-f "$configPath/TWiki.cfg") {
     $libPath = $configPath;
 
     print "OK - found TWiki.cfg.  Now I need you to tell me where the existing TWiki bin directory is:\n";
@@ -82,14 +81,12 @@ if (-f "$configPath/TWiki.cfg")
     # should also be used to fix up bin scripts with $scriptSuffix: TBD!
     do
     {
-	chomp ($setlibPath = <STDIN>) ;
+        chomp ($setlibPath = <STDIN>) ;
     }
     until ((-d $setlibPath) ? 1 :
-	   (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
-	   );
-}
-else
-{
+           (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
+          );
+} else {
     $libPath = "";
     $setlibPath = $configPath;
 }
@@ -100,16 +97,11 @@ print "First, creating $targetDir structures...\n";
 
 opendir(HERE , ".");
 
-mkdir $targetDir or die "Couldn't create the target directory ($targetDir): $!\n";
-
-my $file;
-
-foreach $file (readdir(HERE))
-{
-    next if ($file eq '.');
-    next if ($file eq '..');
+foreach my $file (readdir(HERE)) {
+    next if ($file =~ /^\./);
+    next if ($file =~ /~$/);
     next if ($file =~ /.zip$/);
-    next if ($file =~ /^data$/); # UpgradeTopics will copy the data as appropriate.
+    next if ($file eq "data"); # UpgradeTopics will copy the data as appropriate.
 
     print "$file\n";
     system("cp -R $file $targetDir");
@@ -119,7 +111,7 @@ print "Preparing to write new format configuration files for you...\n\n";
 
 TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 
-print "\n\nMerging your existing twiki data ($TWikiCfg::dataDir) with new release twiki data...\n";
+print "\n\nMerging your existing twiki data ($TWiki::dataDir) with new release twiki data...\n";
 
 my $baseDir = `pwd`;
 chomp ($baseDir);
