@@ -112,7 +112,9 @@ sub checkAccessPermission
         $theWebName = $TWiki::webName;
     }
     if( ! $theTopicText ) {
-        # text not supplied as parameter, so read topic
+        # text not supplied as parameter, so read topic. The
+        # read is "Raw" just to hint to store that we want the
+        # data _fast_.
         $theTopicText = TWiki::Store::readTopicRaw( $theWebName, $theTopicName, undef, 1 );
     }
 

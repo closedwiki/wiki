@@ -54,7 +54,6 @@ BEGIN {
     }
 }
 
-# ===========================
 =pod
 
 ---++ sub initialize ()
@@ -79,7 +78,8 @@ sub _getTopicHandler
 
    my $handlerName = "TWiki::Store::$TWiki::storeTopicImpl";
 
-   my $handler = $handlerName->new( $web, $topic, $attachment, @TWiki::storeSettings );
+   my $handler = $handlerName->new( $web, $topic,
+                                    $attachment, @TWiki::storeSettings );
    return $handler;
 }
 
@@ -93,7 +93,8 @@ an ordinal or a "1.x" style decimal.
 
 If $internal is false, view permission will be required for the topic
 read to be successful.  A failed topic read is indicated by setting
-$TWiki::readTopicPermissionFailed.
+$TWiki::readTopicPermissionFailed. Permissions are checked for
+TWiki::wikiUserName, there is no way to overrides this.
 
 If the topic contains a web specification (is of the form Web.Topic) the
 web specification will override whatever is passed in $theWeb.
@@ -127,17 +128,20 @@ or a "1.x" style decimal.
 
 If $internal is false, view access permission will be checked.  If permission
 is not granted, then an error message will be returned in $text, and set in
-$TWiki::readTopicPermissionFailed.
+$TWiki::readTopicPermissionFailed. Permissions are checked for
+TWiki::wikiUserName, there is no way to overrides this.
 
 If the topic contains a web specification (is of the form Web.Topic) the
 web specification will override whatever is passed in $theWeb.
 
-SMELL: breaks encapsulation of the store, as it assumes meta is stored embedded in the text, and clients use this. Other implementors of store will be forced to insert meta-data to ensure correct operation of View raw=debug and the "repRev" mode of Edit.
+SMELL: DO NOT CALL THIS METHOD UNLESS YOU HAVE NO CHOICE. This method breaks
+encapsulation of the store, as it assumes meta is stored embedded in the text.
+Other implementors of store will be forced to insert meta-data to ensure
+correct operation of View raw=debug and the "repRev" mode of Edit.
 
 =cut
 
-sub readTopicRaw
-{
+sub readTopicRaw {
     my( $theWeb, $theTopic, $version, $internal ) = @_;
 
     die "Insufficient parameters ",caller unless defined( $internal );
@@ -199,10 +203,8 @@ sub moveAttachment
     my %fileAttachment =
       $meta->findOne( "FILEATTACHMENT", $theAttachment );
     $meta->remove( "FILEATTACHMENT", $theAttachment );
-    $error .=
-      TWiki::Store::noHandlersSave( $oldWeb, $oldTopic, $text, $meta,
-                                    "", "", "", "doUnlock",
-                                    "dont notify", "" );
+    $error .= _noHandlersSave( undef, $oldWeb, $oldTopic, $text, $meta,
+                               0, 1, 1, 0, "none" );
     # Remove lock
     lockTopic( $oldWeb, $oldTopic, 1 );
 
@@ -216,10 +218,8 @@ sub moveAttachment
     $fileAttachment{"movedwhen"} = time();
     $meta->put( "FILEATTACHMENT", %fileAttachment );
 
-    $error .=
-      TWiki::Store::noHandlersSave( $newWeb, $newTopic, $text, $meta,
-                                          "", "", "", "doUnlock",
-                                          "dont notify", "" );
+    $error .= _noHandlersSave( undef, $newWeb, $newTopic, $text, $meta,
+                               0, 1, 1, 0, "none" );
     # Remove lock file.
     lockTopic( $newWeb, $newTopic, 1 );
 
@@ -354,7 +354,7 @@ topics & lock taken for topic
 sub renameTopic
 {
    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo ) = @_;
-   
+
    my $topicHandler = _getTopicHandler( $oldWeb, $oldTopic, "" );
    my $error = $topicHandler->moveMe( $newWeb, $newTopic );
 
@@ -373,7 +373,8 @@ sub renameTopic
       my $meta = extractMetaData( $newWeb, $newTopic, \$text );
       $meta->put( "TOPICMOVED", @args );
 
-      noHandlersSave( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
+      _noHandlersSave( undef, $newWeb, $newTopic, $text, $meta,
+                       0, 1, 0, 0, "none");
    }
 
    # Log rename
@@ -495,7 +496,8 @@ sub readAttachmentVersion
 
 ---++ sub getRevisionNumber (  $theWebName, $theTopic, $attachment  )
 
-Get the revision number of the most recent revision.
+Get the revision number of the most recent revision. Returns
+major.minor, or null if the topic doesn't exist.
 
 WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 
@@ -504,33 +506,19 @@ WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 sub getRevisionNumber
 {
     my( $theWebName, $theTopic, $attachment ) = @_;
-    my $ret = _getMostRecentRevision( $theWebName, $theTopic, $attachment );
-    ##TWiki::writeDebug( "Store: rev = $ret" );
-    if( ! $ret ) {
-       $ret = "1.1"; # Temporary
-    }
-    
-    return $ret;
-}
 
-# PRIVATE sub _getMostRecentRevision (  $theWebName, $theTopic, $attachment  )
-#
-# Latest revision number. <br/>
-# Returns "" if there is no revision.
-#
-# WORKS FOR ATTACHMENTS AS WELL AS TOPICS
-sub _getMostRecentRevision {
-    my( $theWebName, $theTopic, $attachment ) = @_;
-    if( ! $theWebName ) {
-        $theWebName = $TWiki::webName;
-    }
-    if( ! $attachment ) {
-        $attachment = "";
-    }
+    die unless $theWebName;
+    $attachment = "" unless $attachment;
 
     my $topicHandler = _getTopicHandler( $theWebName, $theTopic, $attachment );
     my $revs = $topicHandler->numRevisions();
-    $revs = "1.$revs" if( $revs );
+    if ( $revs ) {
+        $revs = "1.$revs";
+    } else {
+        # SMELL: commented as "Temporary" but why? if the topic doesn't exist,
+        # surely it should not be version 1.1????
+        $revs = "1.1"; # Temporary
+    }
     return $revs;
 }
 
@@ -558,10 +546,6 @@ sub getRevisionDiff
 }
 
 
-# =========================
-# FIXME try and get rid of this it's a mess
-# In direct calls changeToIsoDate always seems to be 1
-
 =pod
 
 ---+++ getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) ==> ( $date, $user, $rev, $comment ) 
@@ -582,16 +566,18 @@ sub getRevisionDiff
 sub getRevisionInfo
 {
     my( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) = @_;
-    if( ! $theWebName ) {
-        $theWebName = $TWiki::webName;
-    }
+    die unless $theWebName;
 
     $theRev = "" unless( $theRev );
     $theRev =~ s/^1\.//o;
 
-    $topicHandler = _getTopicHandler( $theWebName, $theTopic, $attachment ) if( ! $topicHandler );
-    my( $rcsOut, $rev, $date, $user, $comment ) = $topicHandler->getRevisionInfo( $theRev );
-    
+    unless( $topicHandler ) {
+        $topicHandler =
+          _getTopicHandler( $theWebName, $theTopic, $attachment );
+    }
+    my( $rcsOut, $rev, $date, $user, $comment ) =
+      $topicHandler->getRevisionInfo( $theRev );
+
     return ( $date, $user, $rev, $comment );
 }
 
@@ -672,8 +658,6 @@ Save a new revision of the topic, calling plugins handlers as appropriate.
 sub saveTopic
 {
     my( $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate ) = @_;
-    my $attachment = "";
-    my $comment = "";
 
     # SMELL: Staggeringly inefficient code that adds meta-data for
     # Plugin callback. Why not simply pass the meta in? It would be far
@@ -682,9 +666,9 @@ sub saveTopic
     TWiki::Plugins::beforeSaveHandler( $text, $topic, $web );
     # remove meta data again!
     $meta = extractMetaData( $web, $topic, \$text );
-    my $error = noHandlersSave( $web, $topic, $text, $meta, $saveCmd,
-                                $attachment, $dontLogSave, $doUnlock,
-                                $dontNotify, $comment, $forceDate );
+    my $error = _noHandlersSave( $saveCmd, $web, $topic, $text, $meta,
+                                 $dontLogSave, $doUnlock,
+                                 $dontNotify, $forceDate, "none" );
     $text = _writeMeta( $meta, $text );  # add meta data for Plugin callback
     TWiki::Plugins::afterSaveHandler( $text, $topic, $web, $error );
     return $error;
@@ -778,56 +762,44 @@ sub saveAttachment
     return $error;
 }
 
-
-# PRIVATE sub _addMeta (  $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser  )
-#
 # Add meta data to the topic.
 sub _addMeta
 {
-    my( $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate, $forceUser ) = @_;
+    my( $web, $topic, $text, $nextRev, $meta, $forceDate, $forceUser ) = @_;
 
-    if( ! $attachment ) {
-        $nextRev = "1.1" if( ! $nextRev );
-        $meta->addTopicInfo(  $web, $topic, $nextRev, $forceDate, $forceUser );
-        $text = _writeMeta( $meta, $text );
-    }
+    $nextRev = "1.1" if( ! $nextRev );
+    $meta->addTopicInfo(  $web, $topic, $nextRev, $forceDate, $forceUser );
+    $text = _writeMeta( $meta, $text );
 
     return $text;
 }
 
-=pod
+# _noHandlersSave
+# Save a topic or attachment _without_ invoking plugin handlers.
+# Return non-null string if there is an error.
+# FIXME: does rev info from meta work if user saves a topic with no change?
+sub _noHandlersSave {
+    my $saveCmd = shift;
 
----++ sub noHandlersSave (  $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate  )
-| =$web= | |
-| =$topic= | |
-| =$text= | |
-| =$meta= | |
-| =$saveCmd= | |
-| =$attachment= | |
-| =$dontLogSave= | |
-| =$doUnlock= | |
-| =$dontNotify= | |
-| =$theComment= | |
-| =$forceDate= | |
+    if ( !$saveCmd ) {
+        return _normalSave( @_ );
+    }
+    elsif ( $saveCmd eq "delRev" ) {
+        return _delRev( @_ );
+    }
+    elsif ( $saveCmd eq "repRev" ) {
+        return _repRev( @_ );
+    } else {
+        die "Illegal use of cmd=$saveCmd parameter";
+    }
+}
 
-Save a topic or attachment _without_ invoking plugin handlers.
+# nothing-special save
+sub _normalSave {
+    my( $web, $topic, $text, $meta,
+        $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
 
-Return non-null string if there is an (RCS) error.
-
-FIXME: does rev info from meta work if user saves a topic with no change?
-
-=cut
-
-sub noHandlersSave
-{
-    my( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $theComment, $forceDate ) = @_;
-    my $time = time();
-    my $tmp = "";
-    my $rcsError = "";
-    my $dataError = "";
-
-    my $topicHandler = _getTopicHandler( $web, $topic, $attachment );
-
+    my $topicHandler = _getTopicHandler( $web, $topic );
     my $currentRev = $topicHandler->numRevisions();
 
     my $nextRev    = "";
@@ -838,127 +810,122 @@ sub noHandlersSave
     }
     $currentRev = "1." . $currentRev if( $currentRev );
 
-    if( ! $attachment ) {
-        # RCS requires a newline for the last line,
-        # so add newline if needed
-        $text =~ s/([^\n\r])$/$1\n/os;
-    }
-
-    if( ! $theComment ) {
-       $theComment = "none";
-    }
-
-    #### Normal Save
-    if( ! $saveCmd ) {
-        $saveCmd = "";
-
-        # get time stamp of existing file
+    if( $TWiki::doKeepRevIfEditLock && $currentRev ) {
+        # See if we want to replace the existing top revision
         my $mtime1 = $topicHandler->getTimestamp();
         my $mtime2 = time();
 
-        # how close time stamp of existing file to now?
         if( abs( $mtime2 - $mtime1 ) < $TWiki::editLockTime ) {
-            # FIXME no previous topic?
-            my( $date, $user ) = getRevisionInfo( $web, $topic, $currentRev, $attachment, $topicHandler );
-            # TWiki::writeDebug( "Store::save date = $date" );
+            my( $date, $user ) =
+              getRevisionInfo( $web, $topic, $currentRev,
+                               undef, $topicHandler );
             # same user?
-            if( ( $TWiki::doKeepRevIfEditLock ) && ( $user eq $TWiki::userName ) && $currentRev ) {
-                # TODO shouldn't this also check to see if its still locked?
-                # replace last repository entry
-                $saveCmd = "repRev";
-                if( $attachment ) {
-                   $saveCmd = ""; # cmd option not supported for attachments.
-                }
-            }
-        }
-
-        if( $saveCmd ne "repRev" ) {
-            $text = _addMeta( $web, $topic, $text, $attachment, $nextRev, $meta, $forceDate );
-
-            $dataError = $topicHandler->addRevision( $text, $theComment, $TWiki::userName );
-            return $dataError if( $dataError );
-
-            $topicHandler->setLock( ! $doUnlock );
-
-            if( ! $dontNotify ) {
-                # update .changes
-                my( $fdate, $fuser, $frev ) = getRevisionInfo( $web, $topic, "", $attachment, $topicHandler );
-                $fdate = ""; # suppress warning
-                $fuser = ""; # suppress warning
-
-                my @foo = split( /\n/, readFile( "$TWiki::dataDir/$TWiki::webName/.changes" ) );
-                if( $#foo > 100 ) {
-                    shift( @foo);
-                }
-                push( @foo, "$topic\t$TWiki::userName\t$time\t$frev" );
-                open( FILE, ">$TWiki::dataDir/$web/.changes" );
-                print FILE join( "\n", @foo )."\n";
-                close(FILE);
-            }
-
-            if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
-                # write log entry
-                my $extra = "";
-                $extra   .= "dontNotify" if( $dontNotify );
-                TWiki::writeLog( "save", "$web.$topic", $extra );
+            if(  $user eq $TWiki::userName ) {
+                return _repRev( @_ );
             }
         }
     }
 
-    #### Replace Revision Save
-    if( $saveCmd eq "repRev" ) {
-        # fix topic by replacing last revision, but do not update .changes
+    $text = _addMeta( $web, $topic, $text, $nextRev, $meta, $forceDate );
 
-        # save topic with same userName and date
-        # FIXME why should date be the same if same user replacing with editLockTime?
-        my( $date, $user, $rev ) = getRevisionInfo( $web, $topic, "", $attachment, $topicHandler );
-        $rev = "1.$rev";
+    # RCS requires a newline for the last line,
+    $text =~ s/([^\n\r])$/$1\n/os;
 
-        # Add one minute (make small difference, but not too big for notification)
-        my $epochSec = $date + 60; #TODO: this seems wrong. if editLockTime == 3600, and i edit, 30 mins later... why would the recorded date be 29 mins too early?
-        $text = _addMeta( $web, $topic, $text, $attachment, $rev,
-                          $meta, $epochSec, $user );
+    my $dataError =
+      $topicHandler->addRevision( $text, $theComment, $TWiki::userName );
+    return $dataError if( $dataError );
 
-        my $dataError = $topicHandler->replaceRevision( $text, $theComment, $user, $epochSec );
-        return $dataError if( $dataError );
-        $topicHandler->setLock( ! $doUnlock );
+    $topicHandler->setLock( ! $doUnlock );
 
-        if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
-            # write log entry
-            my $extra = "repRev $rev ";
-            $extra   .= TWiki::User::userToWikiName( $user );
-            $date = TWiki::formatTime( $epochSec, "rcs", "gmtime" );
-            $extra   .= " $date";
-            $extra   .= " dontNotify" if( $dontNotify );
-            TWiki::writeLog( "save", "$web.$topic", $extra );
+    if( ! $dontNotify ) {
+        # update .changes
+        my( $fdate, $fuser, $frev ) = getRevisionInfo( $web, $topic, "", undef, $topicHandler );
+        $fdate = ""; # suppress warning
+        $fuser = ""; # suppress warning
+
+        my @foo = split( /\n/, readFile( "$TWiki::dataDir/$web/.changes" ) );
+        if( $#foo > 100 ) {
+            shift( @foo);
         }
+        push( @foo, "$topic\t$TWiki::userName\t".time()."\t$frev" );
+        open( FILE, ">$TWiki::dataDir/$web/.changes" );
+        print FILE join( "\n", @foo )."\n";
+        close(FILE);
     }
 
-    #### Delete Revision
-    if( $saveCmd eq "delRev" ) {
-        # delete last revision
-
-        # delete last entry in repository (unlock, delete revision, lock operation)
-        my $rev = getRevisionNumber( $web, $topic );
-        if( $rev eq "1.1" ) {
-            # can't delete initial revision
-            return;
-        }
-        my $dataError = $topicHandler->deleteRevision();
-        return $dataError if( $dataError );
-
-        # restore last topic from repository
-        $topicHandler->restoreLatestRevision();
-        $topicHandler->setLock( ! $doUnlock );
-
-        # delete entry in .changes : FIXME
-
-        if( $TWiki::doLogTopicSave ) {
-            # write log entry
-            TWiki::writeLog( "cmd", "$web.$topic", "delRev $rev" );
-        }
+    if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
+        # write log entry
+        my $extra = "";
+        $extra   .= "dontNotify" if( $dontNotify );
+        TWiki::writeLog( "save", "$web.$topic", $extra );
     }
-    return ""; # all is well
+
+    return "";
+}
+
+# fix topic by replacing last revision, but do not update .changes
+# save topic with same userName and date
+sub _repRev {
+    my( $web, $topic, $text, $meta,
+        $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
+
+    # FIXME why should date be the same if same user replacing with
+    # editLockTime?
+    my $topicHandler = _getTopicHandler( $web, $topic );
+    my( $date, $user, $rev ) =
+      getRevisionInfo( $web, $topic, "", undef, $topicHandler );
+    $rev = "1.$rev";
+
+    # RCS requires a newline for the last line,
+    $text =~ s/([^\n\r])$/$1\n/os;
+
+    # Add one minute (make small difference, but not too big for notification)
+    # TODO: this seems wrong. if editLockTime == 3600, and i edit, 30 mins
+    # later... why would the recorded date be 29 mins too early?
+    my $epochSec = $date + 60;
+    $text = _addMeta( $web, $topic, $text, $rev, $meta, $epochSec, $user );
+
+    my $dataError =
+      $topicHandler->replaceRevision( $text, $theComment, $user, $epochSec );
+    return $dataError if( $dataError );
+    $topicHandler->setLock( ! $doUnlock );
+
+    if( ( $TWiki::doLogTopicSave ) && ! ( $dontLogSave ) ) {
+        # write log entry
+        my $extra = "repRev $rev " .
+          TWiki::User::userToWikiName( $user ) .
+              " ". TWiki::formatTime( $epochSec, "rcs", "gmtime" );
+        $extra   .= " dontNotify" if( $dontNotify );
+        TWiki::writeLog( "save", "$web.$topic", $extra );
+    }
+    return "";
+}
+
+# delete last entry in repository
+sub _delRev {
+    my( $web, $topic, $text, $meta,
+        $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
+
+    my $rev = getRevisionNumber( $web, $topic );
+    if( $rev =~ /1$/ ) {
+        return "can't delete initial revision";
+    }
+    my $topicHandler = _getTopicHandler( $web, $topic );
+    my $dataError = $topicHandler->deleteRevision();
+    return $dataError if( $dataError );
+
+    # restore last topic from repository
+    $topicHandler->restoreLatestRevision();
+    $topicHandler->setLock( ! $doUnlock );
+
+    # TODO: delete entry in .changes
+
+    if( $TWiki::doLogTopicSave ) {
+        # write log entry
+        TWiki::writeLog( "cmd", "$web.$topic", "delRev $rev" );
+    }
+
+    return "";
 }
 
 =pod
@@ -1196,6 +1163,22 @@ sub readFile
     close( IN_FILE );
     $data = "" unless $data; # no undefined
     return $data;
+}
+
+=pod
+
+---++ sub readFileHead (  $name, $maxLines  )
+
+A hack intended to deliver topic text more rapidly than "normal", but
+it goes astray and was actually slower. So it's been redone to use
+readFile.
+
+Thsi method is DEPRECATED and SHOULD NOT BE CALLED.
+
+=cut
+
+sub readFileHead {
+    return readFile( shift );
 }
 
 =pod

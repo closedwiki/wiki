@@ -39,7 +39,6 @@ This package contains routines for dealing with attachments to topics.
 
 package TWiki::Attach;
 
-# ======================
 =pod
 
 ---++ sub renderMetaData (  $web, $topic, $meta, $args, $isTopRev  )
@@ -67,23 +66,23 @@ sub renderMetaData
 	my $rows = "";
 	my $row = _getTemplate("ATTACH:files:row$a");
     foreach my $attachment ( @attachments ) {
-	  my $attrAttr = $attachment->{attr};
+        my $attrAttr = $attachment->{attr};
 
-	  if( ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ )) {
-		$rows .= _formatRow( $web, $topic,
-							 $attachment,
-							 $isTopTopicRev,
-							 $row );
-	  }
+        if( ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ )) {
+            $rows .= _formatRow( $web, $topic,
+                                 $attachment,
+                                 $isTopTopicRev,
+                                 $row );
+        }
     }
 
     my $text = "";
 
     if( $showAll || $rows ne "" ) {
-	  my $header = _getTemplate("ATTACH:files:header$a");
-	  my $footer = _getTemplate("ATTACH:files:footer$a");
+        my $header = _getTemplate("ATTACH:files:header$a");
+        my $footer = _getTemplate("ATTACH:files:footer$a");
 
-	  $text = "$header$rows$footer";
+        $text = "$header$rows$footer";
     }
     return $text;
 }
@@ -91,15 +90,14 @@ sub renderMetaData
 # PRIVATE get a template, reading the attachment tables template
 # if not already defined.
 sub _getTemplate {
-  my $template = shift;
+    my $template = shift;
 
-  TWiki::Templates::readTemplate("attachtables") unless
-      TWiki::Templates::haveTemplate( $template );
+    TWiki::Templates::readTemplate("attachtables") unless
+        TWiki::Templates::haveTemplate( $template );
 
-  return TWiki::Templates::expandTemplate( $template );
+    return TWiki::Templates::expandTemplate( $template );
 }
 
-#=========================
 =pod
 
 ---++ sub formatVersions (  $theWeb, $theTopic, $attrs )
@@ -112,42 +110,41 @@ Generate a version history table for a single attachment
 =cut
 
 sub formatVersions {
-  my( $web, $topic, %attrs ) = @_;
+    my( $web, $topic, %attrs ) = @_;
 
-  my $latestRev =
-    TWiki::Store::getRevisionNumber( $web, $topic, $attrs{name} );
-  $latestRev =~ m/\.(.*)/o;
-  my $maxRevNum = $1;
+    my $latestRev =
+      TWiki::Store::getRevisionNumber( $web, $topic, $attrs{name} );
+    $latestRev =~ m/\.(.*)/o;
+    my $maxRevNum = $1;
 
-  my $header = _getTemplate("ATTACH:versions:header");
-  my $footer = _getTemplate("ATTACH:versions:footer");
-  my $row    = _getTemplate("ATTACH:versions:row");
+    my $header = _getTemplate("ATTACH:versions:header");
+    my $footer = _getTemplate("ATTACH:versions:footer");
+    my $row    = _getTemplate("ATTACH:versions:row");
 
-  my $rows ="";
+    my $rows ="";
 
-  for( my $version = $maxRevNum; $version >= 1; $version-- ) {
-    my $rev = "1.$version";
+    for( my $version = $maxRevNum; $version >= 1; $version-- ) {
+        my $rev = "1.$version";
 
-	my( $date, $userName, $minorRev, $comment ) = 
-	  TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attrs{name} );
-	$rows .= _formatRow( $web, $topic,
-						 {
-                          name    => $attrs{name},
-                          version => $rev,
-                          date    => $date,
-                          user    => $userName,
-                          comment => $comment,
-                          attr    => $attrs{attr},
-                          size    => $attrs{size}
-                         },
-						 ( $rev eq $latestRev),
-						 $row );
-  }
+        my( $date, $userName, $minorRev, $comment ) = 
+          TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attrs{name} );
+        $rows .= _formatRow( $web, $topic,
+                             {
+                              name    => $attrs{name},
+                              version => $rev,
+                              date    => $date,
+                              user    => $userName,
+                              comment => $comment,
+                              attr    => $attrs{attr},
+                              size    => $attrs{size}
+                             },
+                             ( $rev eq $latestRev),
+                             $row );
+    }
 
-  return "$header$rows$footer";
+    return "$header$rows$footer";
 }
 
-#=========================
 =pod
 
 ---++ sub _formatRow ( $web, $topic, $info, $topRev, $attrs, $tmpl )
@@ -162,14 +159,14 @@ Format a single row in an attachment table by expanding a template.
 =cut
 
 sub _formatRow {
-  my ( $web, $topic, $info, $topRev, $tmpl ) = @_;
+    my ( $web, $topic, $info, $topRev, $tmpl ) = @_;
 
-  my $row = $tmpl;
+    my $row = $tmpl;
 
-  $row =~ s/%A_(\w+)%/&_expandAttrs($1,$web,$topic,$info,$topRev)/ge;
-  $row =~ s/\0/%/g;
+    $row =~ s/%A_(\w+)%/&_expandAttrs($1,$web,$topic,$info,$topRev)/ge;
+    $row =~ s/\0/%/g;
 
-  return $row;
+    return $row;
 }
 
 sub _expandAttrs {
@@ -230,8 +227,6 @@ sub _expandAttrs {
     }
 }
 
-# =========================
-
 =pod
 
 ---++ sub getAttachmentLink( $web, $topic, $name, $meta )
@@ -290,14 +285,11 @@ sub getAttachmentLink
     return $fileLink;
 }
 
-# =========================
 # code fragment to extract pixel size from images
 # taken from http://www.tardis.ed.ac.uk/~ark/wwwis/
 # subroutines: _imgsize, _gifsize, _OLDgifsize, _gif_blockskip,
 #              _NEWgifsize, _jpegsize
 #
-
-# =========================
 sub _imgsize {
     my( $file, $att ) = @_;
     my( $x, $y) = ( 0, 0 );
@@ -329,242 +321,193 @@ sub _imgsize {
     return( $x, $y );
 }
 
-
-# =========================
 sub _gifsize
 {
-  my( $GIF ) = @_;
-  if( 0 ) {
-    return &_NEWgifsize( $GIF );
-  } else {
-    return &_OLDgifsize( $GIF );
-  }
+    my( $GIF ) = @_;
+    if( 0 ) {
+        return &_NEWgifsize( $GIF );
+    } else {
+        return &_OLDgifsize( $GIF );
+    }
 }
 
-
-# =========================
 sub _OLDgifsize {
-  my( $GIF ) = @_;
-  my( $type, $a, $b, $c, $d, $s ) = ( 0, 0, 0, 0, 0, 0 );
+    my( $GIF ) = @_;
+    my( $type, $a, $b, $c, $d, $s ) = ( 0, 0, 0, 0, 0, 0 );
 
-  if( defined( $GIF )              &&
-      read( $GIF, $type, 6 )       &&
-      $type =~ /GIF8[7,9]a/        &&
-      read( $GIF, $s, 4 ) == 4     ) {
-    ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
-    return( $b<<8|$a, $d<<8|$c );
-  }
-  return( 0, 0 );
+    if( defined( $GIF )              &&
+        read( $GIF, $type, 6 )       &&
+        $type =~ /GIF8[7,9]a/        &&
+        read( $GIF, $s, 4 ) == 4     ) {
+        ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
+        return( $b<<8|$a, $d<<8|$c );
+    }
+    return( 0, 0 );
 }
 
-
-# =========================
 # part of _NEWgifsize
 sub _gif_blockskip {
-  my ( $GIF, $skip, $type ) = @_;
-  my ( $s ) = 0;
-  my ( $dummy ) = '';
+    my ( $GIF, $skip, $type ) = @_;
+    my ( $s ) = 0;
+    my ( $dummy ) = '';
 
-  read( $GIF, $dummy, $skip );       # Skip header (if any)
-  while( 1 ) {
-    if( eof( $GIF ) ) {
-      #warn "Invalid/Corrupted GIF (at EOF in GIF $type)\n";
-      return "";
+    read( $GIF, $dummy, $skip );       # Skip header (if any)
+    while( 1 ) {
+        if( eof( $GIF ) ) {
+            #warn "Invalid/Corrupted GIF (at EOF in GIF $type)\n";
+            return "";
+        }
+        read( $GIF, $s, 1 );             # Block size
+        last if ord( $s ) == 0;          # Block terminator
+        read( $GIF, $dummy, ord( $s ) ); # Skip data
     }
-    read( $GIF, $s, 1 );             # Block size
-    last if ord( $s ) == 0;          # Block terminator
-    read( $GIF, $dummy, ord( $s ) ); # Skip data
-  }
 }
 
-
-# =========================
 # this code by "Daniel V. Klein" <dvk@lonewolf.com>
 sub _NEWgifsize {
-  my( $GIF ) = @_;
-  my( $cmapsize, $a, $b, $c, $d, $e ) = 0;
-  my( $type, $s ) = ( 0, 0 );
-  my( $x, $y ) = ( 0, 0 );
-  my( $dummy ) = '';
+    my( $GIF ) = @_;
+    my( $cmapsize, $a, $b, $c, $d, $e ) = 0;
+    my( $type, $s ) = ( 0, 0 );
+    my( $x, $y ) = ( 0, 0 );
+    my( $dummy ) = '';
 
-  return( $x,$y ) if( !defined $GIF );
+    return( $x,$y ) if( !defined $GIF );
 
-  read( $GIF, $type, 6 );
-  if( $type !~ /GIF8[7,9]a/ || read( $GIF, $s, 7 ) != 7 ) {
-    #warn "Invalid/Corrupted GIF (bad header)\n";
-    return( $x, $y );
-  }
-  ( $e ) = unpack( "x4 C", $s );
-  if( $e & 0x80 ) {
-    $cmapsize = 3 * 2**(($e & 0x07) + 1);
-    if( !read( $GIF, $dummy, $cmapsize ) ) {
-      #warn "Invalid/Corrupted GIF (global color map too small?)\n";
-      return( $x, $y );
-    }
-  }
- FINDIMAGE:
-  while( 1 ) {
-    if( eof( $GIF ) ) {
-      #warn "Invalid/Corrupted GIF (at EOF w/o Image Descriptors)\n";
-      return( $x, $y );
-    }
-    read( $GIF, $s, 1 );
-    ( $e ) = unpack( "C", $s );
-    if( $e == 0x2c ) {           # Image Descriptor (GIF87a, GIF89a 20.c.i)
-      if( read( $GIF, $s, 8 ) != 8 ) {
-        #warn "Invalid/Corrupted GIF (missing image header?)\n";
+    read( $GIF, $type, 6 );
+    if( $type !~ /GIF8[7,9]a/ || read( $GIF, $s, 7 ) != 7 ) {
+        #warn "Invalid/Corrupted GIF (bad header)\n";
         return( $x, $y );
-      }
-      ( $a, $b, $c, $d ) = unpack( "x4 C4", $s );
-      $x = $b<<8|$a;
-      $y = $d<<8|$c;
-      return( $x, $y );
     }
-    if( $type eq "GIF89a" ) {
-      if( $e == 0x21 ) {         # Extension Introducer (GIF89a 23.c.i)
+    ( $e ) = unpack( "x4 C", $s );
+    if( $e & 0x80 ) {
+        $cmapsize = 3 * 2**(($e & 0x07) + 1);
+        if( !read( $GIF, $dummy, $cmapsize ) ) {
+            #warn "Invalid/Corrupted GIF (global color map too small?)\n";
+            return( $x, $y );
+        }
+    }
+  FINDIMAGE:
+    while( 1 ) {
+        if( eof( $GIF ) ) {
+            #warn "Invalid/Corrupted GIF (at EOF w/o Image Descriptors)\n";
+            return( $x, $y );
+        }
         read( $GIF, $s, 1 );
         ( $e ) = unpack( "C", $s );
-        if( $e == 0xF9 ) {       # Graphic Control Extension (GIF89a 23.c.ii)
-          read( $GIF, $dummy, 6 );        # Skip it
-          next FINDIMAGE;       # Look again for Image Descriptor
-        } elsif( $e == 0xFE ) {  # Comment Extension (GIF89a 24.c.ii)
-          &_gif_blockskip( $GIF, 0, "Comment" );
-          next FINDIMAGE;       # Look again for Image Descriptor
-        } elsif( $e == 0x01 ) {  # Plain Text Label (GIF89a 25.c.ii)
-          &_gif_blockskip( $GIF, 12, "text data" );
-          next FINDIMAGE;       # Look again for Image Descriptor
-        } elsif( $e == 0xFF ) {  # Application Extension Label (GIF89a 26.c.ii)
-          &_gif_blockskip( $GIF, 11, "application data" );
-          next FINDIMAGE;       # Look again for Image Descriptor
-        } else {
-          #printf STDERR "Invalid/Corrupted GIF (Unknown extension %#x)\n", $e;
-          return( $x, $y );
+        if( $e == 0x2c ) {           # Image Descriptor (GIF87a, GIF89a 20.c.i)
+            if( read( $GIF, $s, 8 ) != 8 ) {
+                #warn "Invalid/Corrupted GIF (missing image header?)\n";
+                return( $x, $y );
+            }
+            ( $a, $b, $c, $d ) = unpack( "x4 C4", $s );
+            $x = $b<<8|$a;
+            $y = $d<<8|$c;
+            return( $x, $y );
         }
-      } else {
-        #printf STDERR "Invalid/Corrupted GIF (Unknown code %#x)\n", $e;
-        return( $x, $y );
-      }
-    } else {
-      #warn "Invalid/Corrupted GIF (missing GIF87a Image Descriptor)\n";
-      return( $x, $y );
+        if( $type eq "GIF89a" ) {
+            if( $e == 0x21 ) {         # Extension Introducer (GIF89a 23.c.i)
+                read( $GIF, $s, 1 );
+                ( $e ) = unpack( "C", $s );
+                if( $e == 0xF9 ) {       # Graphic Control Extension (GIF89a 23.c.ii)
+                    read( $GIF, $dummy, 6 );        # Skip it
+                    next FINDIMAGE;       # Look again for Image Descriptor
+                } elsif( $e == 0xFE ) {  # Comment Extension (GIF89a 24.c.ii)
+                    &_gif_blockskip( $GIF, 0, "Comment" );
+                    next FINDIMAGE;       # Look again for Image Descriptor
+                } elsif( $e == 0x01 ) {  # Plain Text Label (GIF89a 25.c.ii)
+                    &_gif_blockskip( $GIF, 12, "text data" );
+                    next FINDIMAGE;       # Look again for Image Descriptor
+                } elsif( $e == 0xFF ) {  # Application Extension Label (GIF89a 26.c.ii)
+                    &_gif_blockskip( $GIF, 11, "application data" );
+                    next FINDIMAGE;       # Look again for Image Descriptor
+                } else {
+                    #printf STDERR "Invalid/Corrupted GIF (Unknown extension %#x)\n", $e;
+                    return( $x, $y );
+                }
+            } else {
+                #printf STDERR "Invalid/Corrupted GIF (Unknown code %#x)\n", $e;
+                return( $x, $y );
+            }
+        } else {
+            #warn "Invalid/Corrupted GIF (missing GIF87a Image Descriptor)\n";
+            return( $x, $y );
+        }
     }
-  }
 }
 
-# =========================
 # _jpegsize : gets the width and height (in pixels) of a jpeg file
 # Andrew Tong, werdna@ugcs.caltech.edu           February 14, 1995
 # modified slightly by alex@ed.ac.uk
 sub _jpegsize {
-  my( $JPEG ) = @_;
-  my( $done ) = 0;
-  my( $c1, $c2, $ch, $s, $length, $dummy ) = ( 0, 0, 0, 0, 0, 0 );
-  my( $a, $b, $c, $d );
+    my( $JPEG ) = @_;
+    my( $done ) = 0;
+    my( $c1, $c2, $ch, $s, $length, $dummy ) = ( 0, 0, 0, 0, 0, 0 );
+    my( $a, $b, $c, $d );
 
-  if( defined( $JPEG )             &&
-      read( $JPEG, $c1, 1 )        &&
-      read( $JPEG, $c2, 1 )        &&
-      ord( $c1 ) == 0xFF           &&
-      ord( $c2 ) == 0xD8           ) {
-    while ( ord( $ch ) != 0xDA && !$done ) {
-      # Find next marker (JPEG markers begin with 0xFF)
-      # This can hang the program!!
-      while( ord( $ch ) != 0xFF ) {
-        return( 0, 0 ) unless read( $JPEG, $ch, 1 );
-      }
-      # JPEG markers can be padded with unlimited 0xFF's
-      while( ord( $ch ) == 0xFF ) {
-        return( 0, 0 ) unless read( $JPEG, $ch, 1 );
-      }
-      # Now, $ch contains the value of the marker.
-      if( ( ord( $ch ) >= 0xC0 ) && ( ord( $ch ) <= 0xC3 ) ) {
-        return( 0, 0 ) unless read( $JPEG, $dummy, 3 );
-        return( 0, 0 ) unless read( $JPEG, $s, 4 );
-        ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
-        return( $c<<8|$d, $a<<8|$b );
-      } else {
-        # We **MUST** skip variables, since FF's within variable names are
-        # NOT valid JPEG markers
-        return( 0, 0 ) unless read( $JPEG, $s, 2 );
-        ( $c1, $c2 ) = unpack( "C"x2, $s );
-        $length = $c1<<8|$c2;
-        last if( !defined( $length ) || $length < 2 );
-        read( $JPEG, $dummy, $length-2 );
-      }
+    if( defined( $JPEG )             &&
+        read( $JPEG, $c1, 1 )        &&
+        read( $JPEG, $c2, 1 )        &&
+        ord( $c1 ) == 0xFF           &&
+        ord( $c2 ) == 0xD8           ) {
+        while ( ord( $ch ) != 0xDA && !$done ) {
+            # Find next marker (JPEG markers begin with 0xFF)
+            # This can hang the program!!
+            while( ord( $ch ) != 0xFF ) {
+                return( 0, 0 ) unless read( $JPEG, $ch, 1 );
+            }
+            # JPEG markers can be padded with unlimited 0xFF's
+            while( ord( $ch ) == 0xFF ) {
+                return( 0, 0 ) unless read( $JPEG, $ch, 1 );
+            }
+            # Now, $ch contains the value of the marker.
+            if( ( ord( $ch ) >= 0xC0 ) && ( ord( $ch ) <= 0xC3 ) ) {
+                return( 0, 0 ) unless read( $JPEG, $dummy, 3 );
+                return( 0, 0 ) unless read( $JPEG, $s, 4 );
+                ( $a, $b, $c, $d ) = unpack( "C"x4, $s );
+                return( $c<<8|$d, $a<<8|$b );
+            } else {
+                # We **MUST** skip variables, since FF's within variable
+                # names are NOT valid JPEG markers
+                return( 0, 0 ) unless read( $JPEG, $s, 2 );
+                ( $c1, $c2 ) = unpack( "C"x2, $s );
+                $length = $c1<<8|$c2;
+                last if( !defined( $length ) || $length < 2 );
+                read( $JPEG, $dummy, $length-2 );
+            }
+        }
     }
-  }
-  return( 0, 0 );
+    return( 0, 0 );
 }
 
-# =========================
 #  _pngsize : gets the width & height (in pixels) of a png file
-#  cor this program is on the cutting edge of technology! (pity it's blunt!)
-#  GRR 970619:  fixed bytesex assumption
 #  source: http://www.la-grange.net/2000/05/04-png.html
 sub _pngsize {
-  my ($PNG) = @_;
-  my ($head) = "";
-  my($a, $b, $c, $d, $e, $f, $g, $h)=0;
-  if(defined($PNG)                              &&
-     read( $PNG, $head, 8 ) == 8                &&
-     $head eq "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" &&
-     read($PNG, $head, 4) == 4                  &&
-     read($PNG, $head, 4) == 4                  &&
-     $head eq "IHDR"                            &&
-     read($PNG, $head, 8) == 8                  ){
-    ($a,$b,$c,$d,$e,$f,$g,$h)=unpack("C"x8,$head);
-    return ($a<<24|$b<<16|$c<<8|$d, $e<<24|$f<<16|$g<<8|$h);
-  }
-  return (0,0);
+    my ($PNG) = @_;
+    my ($head) = "";
+    my($a, $b, $c, $d, $e, $f, $g, $h)=0;
+    if( defined($PNG)                              &&
+       read( $PNG, $head, 8 ) == 8                 &&
+       $head eq "\x89\x50\x4e\x47\x0d\x0a\x1a\x0a" &&
+       read($PNG, $head, 4) == 4                   &&
+       read($PNG, $head, 4) == 4                   &&
+       $head eq "IHDR"                             &&
+       read($PNG, $head, 8) == 8 ){
+        ($a,$b,$c,$d,$e,$f,$g,$h)=unpack("C"x8,$head);
+        return ($a<<24|$b<<16|$c<<8|$d, $e<<24|$f<<16|$g<<8|$h);
+    }
+    return (0,0);
 }
 
-#=========================
 =pod
 
----++ sub migrateFormatForTopic (  $theWeb, $theTopic, $doLogToStdOut  )
-
-CODE_SMELL: Is this really necessary? migrateFormatForTopic?
-
-=cut
-
-sub migrateFormatForTopic
-{
-   my ( $theWeb, $theTopic, $doLogToStdOut ) = @_;
-   
-   my $text = TWiki::Store::readTopicRaw( $theWeb, $theTopic, undef, 0 );
-   my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
-   if( ! $before ) { $before = ""; }
-   if( ! $atext  ) { $atext  = ""; }
-
-   if ( $atext =~ /<TwkNextItem>/ ) {
-      my $newtext = migrateToFileAttachmentMacro( $atext );
-      
-      $text = "$before<!--TWikiAttachment-->$newtext<!--TWikiAttachment-->";
-
-      my ( $dontLogSave, $doUnlock, $dontNotify ) = ( "", "1", "1" );
-      my $meta = TWiki::Meta->new();
-      my $error = TWiki::Store::noHandlersSave( $theWeb, $theTopic, $text, $meta, "", $dontLogSave, $doUnlock, $dontNotify, "upgraded attachment format" );
-      if ( $error ) {
-         print "Attach: error from save: $error\n";
-      }
-      if ( $doLogToStdOut ) {
-         print "Changed attachment format for $theWeb.$theTopic\n";
-      }
-   }
-}
-
-# =========================
-=pod
-
----++ sub getOldAttachAttr (  $atext  )
+---++ sub _getOldAttachAttr (  $atext  )
 
 Get file attachment attributes for old html
 format.
-CODE_SMELL: Is this really necessary? getOldAttachAttr?
 
 =cut
 
-sub getOldAttachAttr
+sub _getOldAttachAttr
 {
     my( $atext ) = @_;
     my $fileName="";
@@ -631,17 +574,14 @@ sub _keyValue2list
 
 ---++ sub migrateToFileAttachmentMacro (  $meta, $text  )
 
-Migrate old HTML format, to %FILEATTACHMENT ... format
-for one piece of text
-CODE_SMELL: Is this really necessary? migrateToFileAttachmentMacro?
+Migrate old HTML format
 
 =cut
 
 sub migrateToFileAttachmentMacro
 {
    my ( $meta, $text ) = @_;
-   
-   
+
    my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
    $text = $before || "";
    $text .= $after if( $after );
@@ -651,7 +591,7 @@ sub migrateToFileAttachmentMacro
       my $line = "";
       foreach $line ( split( /<TwkNextItem>/, $atext ) ) {
           my( $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) =
-             getOldAttachAttr( $line );
+            _getOldAttachAttr( $line );
 
           if( $fileName ) {
 			my @attrs = (
@@ -682,7 +622,7 @@ sub migrateToFileAttachmentMacro
            }
        }
    }
-       
+
    return $text;
 }
 
