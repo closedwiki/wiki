@@ -2300,12 +2300,14 @@ sub handleRevisionInfo
 {
     my( $theWeb, $theTopic, $theArgs ) = @_;
 
-    my $cgiQuery = getCgiQuery();
     my $format = extractNameValuePair( $theArgs ) || extractNameValuePair( $theArgs, "format" )
                  || "r1.\$rev - \$date - \$wikiusername";
     my $web    = extractNameValuePair( $theArgs, "web" ) || $theWeb;
     my $topic  = extractNameValuePair( $theArgs, "topic" ) || $theTopic;
-    my $revnum = $cgiQuery->param('rev') || extractNameValuePair( $theArgs, "rev" ) || "";
+    my $cgiQuery = getCgiQuery();
+    my $cgiRev = "";
+    $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
+    my $revnum = $cgiRev || extractNameValuePair( $theArgs, "rev" ) || "";
 
     my( $date, $user, $rev, $comment ) = TWiki::Store::getRevisionInfo( $web, $topic, $revnum );
     my $wikiName     = userToWikiName( $user, 1 );
