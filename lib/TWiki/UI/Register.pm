@@ -284,6 +284,9 @@ sub _registerSingleBulkUser {
         #TODO: need a path for if it doesn't succeed.
     }
 
+    $session->writeLog("bulkregister", $row->{webName}.'.'.$row->{WikiName},
+                         $row->{Email}, $row->{WikiName} );
+
     if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
         $log .= _newUserFromTemplate($session,"NewUserTemplate", $row);
     } else {
@@ -378,6 +381,9 @@ sub register {
     UnregisteredUser::setDir($tmpuserDir);
     UnregisteredUser::putRegDetailsByCode(  \%data );
 
+    $session->writeLog( "regstart", "$data{webName}.$data{WikiName}",
+			$data{Email}, $data{WikiName} );
+
     _sendEmail( session=>$session, template => "registerconfirm", %data );
 
     throw TWiki::UI::OopsException( $data{webName}, $topic,
@@ -412,16 +418,24 @@ sub resetPassword {
     my @userNames = @{$query->{LoginName}};
     my @wikiNames = ();
 
-    my $wikiName = $session->{wikiUserName};
-    if ( @userNames && ( $#userNames > 0 || $userNames[0] ne $remoteUser )) {
-        TWiki::UI::checkAdmin( $session, $web, $topic, $wikiName );
+#    die Dumper($session);
+
+    # Only admin is able to reset more than one password.
+    if ($#userNames > 0) {
+        TWiki::UI::checkAdmin( $session, $web, $topic, $session->{wikiUserName} );
         foreach my $userName (@userNames) {
             resetUserPassword($session, $userName, $introduction);
         }
     } else {
-        my( $p, $m ) = resetUserPassword($session, $remoteUser, $introduction);
+      # Anyone can reset a single password - important because by definition the user cannot authenticate
+      # Note that the variables in this block are unrelated to the authenticated user
+        my( $p, $m ) = resetUserPassword($session, $userNames[0], $introduction);
+
+      # Inefficient, as resetUserPassword fetched wikiName, but no harm...
+	my ($wikiName, $loginName) =
+	  _getUserByEitherLoginOrWikiName( $session, $userNames[0]);
         throw TWiki::UI::OopsException( undef, $wikiName, "resetpasswd",
-                                        $m, $p, $remoteUser );
+                                        $m, $loginName ); # do not pass $p - they have to get this from their email!
     }
 }
 
@@ -453,15 +467,19 @@ sub resetUserPassword {
         $session->{users}->removeUser($loginName);
     } else {
         # Assume the htpasswd file is out of sync with TWikiUsers, and generate a new one.
-        # Would be nice to 
         # We could do with an integrity checker for loginname <-> twikiusers <-> home topics <-> .htpasswd
         $message = "ResetPassword created new htpasswd entry for ".$loginName." as it was missing in .htpasswd";
     }
 
     my $password = _randomPassword();
-    my $err = $session->{users}->addUserPassword( $loginName, $password );
-    if ($err) {
-        $message = $err;
+
+    my $res = $session->{users}->addUserPassword( $loginName, $password );
+    $session->writeLog("resetpasswd", $loginName, $wikiName, $email, $res);
+
+    if ($res == 1) {
+      $message = "$email";
+    } else {
+      $message = "Unknown error resetting password: $res - please contact site administrator";
     }
 
     _sendEmail( session=>$session,
@@ -572,6 +590,8 @@ sub changePassword {
     # OK - password may be changed
     $session->{users}->updateUserPassword($loginName,  $oldpassword, $passwordA );
 
+    $session->writeLog("changepasswd", $loginName, $wikiName); #recording the email would be nice
+
     # OK - password changed
     throw TWiki::UI::OopsException( $webName, $topic, "changepasswd" );
 }
@@ -609,6 +629,8 @@ sub verifyEmailAddress {
 
     my $topic = $session->{topicName};
     my $web = $session->{webName};
+
+#    $this->{session}->writeLog("verifyuser", $loginName, "$userName");
 
     _emailRegistrationConfirmations( $session, \%data );
 }

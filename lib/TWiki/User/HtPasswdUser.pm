@@ -274,13 +274,12 @@ sub AddUserPassword
 | TODO: | need to improve the error mechanism so TWikiAdmins know what failed |
 
 =cut
-#i'm a wimp - comment out the password entry
 sub RemoveUser
 {
     my ( $self, $user ) = @_;
     my $userEntry = $user.":".$self->htpasswdReadPasswd( $user );
 
-    return $self->htpasswdUpdateUser( $userEntry, "#".$userEntry);
+    return $self->htpasswdUpdateUser( $userEntry, "");
 }
 
 # =========================

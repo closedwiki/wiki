@@ -12,6 +12,7 @@ use Data::Dumper;
 use FileHandle;
 use CGI;
 use Error qw( :try );
+use File::Copy;
 
 my $temporaryWeb = "Temporary";
 my $peopleWeb = "Main";
@@ -21,6 +22,7 @@ my $userEmail = 'yourtestuser@localhost';
 my $testUserWikiName = 'TestUser3';
 my $testUserLoginName = 'testuser';
 my $tempUserDir = "/tmp";
+my $saveHtpasswd = $tempUserDir.'/rcsr$$'; # not saved as '.htpasswd' to minimise onlookers interest.
 
 $TWiki::UI::Register::password = "foo";
 
@@ -46,6 +48,8 @@ sub set_up {
     $Error::Debug = 1;
     $TWiki::UI::Register::unitTestMode = 1;
     setupUnregistered();
+    copy ($TWiki::htpasswdFilename, $saveHtpasswd) || die "Can't backup $TWiki::htpasswdFilename";
+
     #print "--------------- ".$self->name()." ----------------------\n";
     # provide fixture
 }
@@ -60,6 +64,9 @@ sub tear_down {
     # clean up after test
     my $file = "$TWiki::dataDir/$peopleWeb/$testUserWikiName.txt";
     unlink $file;
+
+    copy ($saveHtpasswd, $TWiki::htpasswdFilename) || die "Can't backup $TWiki::htpasswdFilename";
+    unlink $saveHtpasswd || die "Can't remove backup of $TWiki::htpasswdFilename saved as $saveHtpasswd";
     #  system ("ls -la ".$file);
     # print "\n== done ==\n";
 }
@@ -153,7 +160,7 @@ sub finish {
                                      ]
                         });
     my $session = initialise($query, $TWiki::defaultUserName);
-    try {
+
         TWiki::UI::Register::finish (
                                      session => $session,
                                      'code' => $code,
@@ -161,8 +168,10 @@ sub finish {
                                      'tempUserDir' => $tempUserDir,
                                      'query' => $query
                                     );
+    try {
     } catch TWiki::UI::OopsException with {
         my $e = shift;
+	print $e;
         $self->assert_str_equals($email, $e->{-text});
         $self->assert_str_equals("regconfirm", $e->{-template});
     } catch Error::Simple with {
@@ -261,13 +270,16 @@ sub test_resetPasswordNoSuchUser {
     }
 }
 
+# This test is supposed to ensure that the system can reset passwords for a user
+# currently absent from .htpasswd
+# Presently it simply tests a passwd reset
 sub test_resetPasswordNoPassword {
     my $self = shift;
     my $query = new CGI (
                          {
                           '.path_info' => '/'.$peopleWeb.'/WebHome',
                           'LoginName' => [
-                                          $TWiki::defaultWikiName
+                                          $testUserWikiName
                                          ],
                           'TopicName' => [
                                           'ResetPassword'
@@ -282,8 +294,7 @@ sub test_resetPasswordNoPassword {
         TWiki::UI::Register::resetPassword($session);
     } catch TWiki::UI::OopsException with {
         my $e = shift;
-        $self->assert_matches(qr/Main\.TWikiAdminGroup/, $e->{-text});
-        $self->assert_str_equals("accessgroup", $e->{-template});
+        $self->assert_matches(qr/$email/, $e->{-text});
     } otherwise {
         $self->assert(0, "expected an oops redirect");
     }
@@ -316,6 +327,7 @@ sub test_resetPasswordOkay {
         TWiki::UI::Register::resetPassword($session);
     } catch TWiki::UI::OopsException with {
         my $e = shift;
+	print $e;
         $self->assert_str_equals($email, $e->{-text});
         $self->assert_str_equals("resetpasswd", $e->{-template});
     } otherwise {

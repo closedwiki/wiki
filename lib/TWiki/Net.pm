@@ -130,6 +130,7 @@ sub sendEmail {
 
     my( $this, $theText, $retries ) = @_;
     ASSERT(ref($this) eq "TWiki::Net") if DEBUG;
+    $retries = 1 unless $retries;
 
     # Put in a Date header, mainly for Qmail
     my $dateStr = TWiki::formatTime(time, 'email');

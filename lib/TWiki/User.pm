@@ -178,7 +178,7 @@ sub removeUser {
 sub checkUserPasswd {
     my ( $this, $user, $password ) = @_;
 
-    my $passwordHandler = $this->getPasswordHandler();
+    my $passwordHandler = $this->_getPasswordHandler();
     return $passwordHandler->CheckUserPasswd($user, $password);
 }
 
@@ -198,7 +198,7 @@ sub addUserToTWikiUsersTopic {
     my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
     my $topicName = $TWiki::wikiUsersTopicname;
     my( $meta, $text ) =
-      $this->store()->readTopic( $TWiki::mainWebname, $topicName, undef, 0 );
+      $this->store()->readTopic( $remoteUser, $TWiki::mainWebname, $topicName, undef, 0 );
     my $result = "";
     my $status = "0";
     my $line = "";
@@ -242,7 +242,7 @@ sub addUserToTWikiUsersTopic {
 
         $result .= "$line\n";
     }
-    $this->store()->saveTopic( $TWiki::mainWebname, $topicName,
+    $this->store()->saveTopic( $remoteUser, $TWiki::mainWebname, $topicName,
                                $result, $meta );
     return $topicName;
 }
