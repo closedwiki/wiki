@@ -134,6 +134,21 @@ sub main
     if( $lockFailure ) {
        moreRefsToChange( $oldWeb, $oldTopic, $newWeb, $newTopic, $skin );
        return;
+    } elsif ( "$newWeb" eq "Trash" && "$oldWeb" ne "Trash" ) {
+        #redirect to parent: ending in Trash is not the expected way (ColasNahaboo - 31 Mar 2003)
+        my $meta = ""; my $text = "";
+        ( $meta, $text ) = &TWiki::Store::readTopic( $newWeb, $newTopic, 1 );
+        my %parent = $meta->findOne( "TOPICPARENT" );
+        if( %parent && $parent{"name"} && $parent{"name"} ne $oldTopic ) {
+            if ( $parent{"name"} =~ /([^.]+)[.]([^.]+)/ ) {
+                $new_url = &TWiki::getViewUrl( $1, $2 );
+            } else {
+                $new_url = &TWiki::getViewUrl( $oldWeb, $parent{"name"} );
+            }
+        } else {
+            use vars qw( $mainTopicname );
+            $new_url = &TWiki::getViewUrl( $oldWeb, $mainTopicname );
+        }
     } else {
        #redirect to new topic
        $new_url = &TWiki::getViewUrl( $newWeb, $newTopic );
