@@ -106,7 +106,7 @@ sub normalizeWebTopicName
 
 
 # =========================
-# Get rid a topic and its attachments completely
+# Get rid of a topic and its attachments completely
 # Intended for TEST purposes.
 # Use with GREAT CARE as file will be gone, including RCS history
 sub erase
@@ -161,19 +161,23 @@ sub moveAttachment
 }
 
 # =========================
-# Change refs out of a topic, I have a feeling this shouldn't be in Store.pm
+# When moving a topic to another web, change within-web refs from this topic so that they'll work
+# when the topic is in the new web. I have a feeling this shouldn't be in Store.pm.
 sub changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
+
    my $preTopic = '^|[\*\s\[][-\(\s]*';
-   # TODO: i18n fix on topic names
-   my $postTopic = '$|[^A-Za-z0-9_.]|\.\s';
+   # I18N: match non-alpha before/after topic names
+   my $alphaNum = $TWiki::mixedAlphaNum;
+   my $postTopic = '$|' . "[^${alphaNum}_.]" . '|\.\s';
    my $metaPreTopic = '"|[\s[,\(-]';
-   my $metaPostTopic = '[^A-Za-z0-9_.]|\.\s';
+   my $metaPostTopic = "[^${alphaNum}_.]" . '|\.\s';
    
    my $out = "";
    
-   # Get list of topics in $oldWeb, replace local refs topic, with full web.topic
+   # Get list of topics in $oldWeb, replace local refs to these topics with full web.topic
+   # references
    my @topics = getTopicNames( $oldWeb );
    
    my $insidePRE = 0;
@@ -219,8 +223,9 @@ sub changeRefTo
 
 
 # =========================
-# Rename a topic, allow for transfer between Webs
-# It is the responsibility of the caller to check: exstance webs, topics & lock taken for topic
+# Rename a topic, allowing for transfer between Webs
+# It is the responsibility of the caller to check for existence of webs,
+# topics & lock taken for topic
 sub renameTopic
 {
    my( $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo ) = @_;
