@@ -366,8 +366,11 @@ sub doFunc
         $result = _properSpace( $theAttr );
 
     } elsif( $theFunc eq "CHAR" ) {
-        $theAttr =~ /([0-9]+)/;
-        $i = $1 || 0;
+        if( $theAttr =~ /([0-9]+)/ ) {
+            $i = $1;
+        } else {
+            $i = 0;
+        }
         $i = 255 if $i > 255;
         $i = 0 if $i < 0;
         $result = chr( $i );
@@ -620,7 +623,7 @@ sub doFunc
         $result = $theAttr;
         # greedy match for comma separated parameters (in case first parameter has embedded commas)
         if( $theAttr =~ /^(.*)\,\s*(.+)\,\s*(.+)$/ ) {
-            my $string = $1 || "";
+            my $string = $1;
             my $from = $2;
             my $to   = $3;
             $from =~ s/\$comma/,/g;  $from =~ s/\$sp/ /g;  $from = quotemeta( $from );
