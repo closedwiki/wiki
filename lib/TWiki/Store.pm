@@ -89,7 +89,7 @@ sub getFileName
       } else {
          if( $extension eq ",v" ) {
             $extension = ".txt$extension";
-            if( $TWiki::useRcsDir ) {
+            if( $TWiki::useRcsDir && -d "$TWiki::dataDir/$web/RCS" ) {
                $extra = "/RCS";
             }
          }
@@ -97,7 +97,7 @@ sub getFileName
       $file = "$TWiki::dataDir/$web$extra/$topic$extension";
 
    } else {
-      if ( $extension eq ",v" && $TWiki::useRcsDir ) {
+      if ( $extension eq ",v" && $TWiki::useRcsDir && -d "$TWiki::dataDir/$web/RCS" ) {
          $extra = "/RCS";
       }
       
@@ -121,14 +121,14 @@ sub getFileDir
    
    my $dir = "";
    if( ! $attachment ) {
-      if( ! $TWiki::useRcsDir || $extension ne ",v" ) {
-         $dir = "$TWiki::dataDir/$web";
-      } else {
+      if( $extension eq ",v" && $TWiki::useRcsDir && -d "$TWiki::dataDir/$web/RCS" ) {
          $dir = "$TWiki::dataDir/$web/RCS";
+      } else {
+         $dir = "$TWiki::dataDir/$web";
       }
    } else {
       my $suffix = "";
-      if ( $extension eq ",v" && $TWiki::useRcsDir ) {
+      if ( $extension eq ",v" && $TWiki::useRcsDir && -d "$TWiki::dataDir/$web/RCS" ) {
          $suffix = "/RCS";
       }
       $dir = "$TWiki::pubDir/$web/$topic$suffix";
@@ -151,20 +151,21 @@ sub erase
    my( $web, $topic ) = @_;
 
    my $file = getFileName( $web, $topic );
-   my $rcsFile = "$file,v";
+   my $rcsDirFile = "$TWiki::dataDir/$web/RCS/$topic,v";
 
-   my @files = ( $file, $rcsFile );
+   # Because test switches between using/not-using RCS dir, do both
+   my @files = ( $file, "$file,v", $rcsDirFile );
    unlink( @files );
    
    # Delete all attachments and the attachment directory
-   my $attDir = "$TWiki::pubDir/$web/$topic";
+   my $attDir = getFileDir( $web, $topic, 1, "" );
    if( -e $attDir ) {
        opendir( DIR, $attDir );
        my @attachments = readdir( DIR );
        closedir( DIR );
        my $attachment;
        foreach $attachment ( @attachments ) {
-          if( $attachment !~ /^\./ ) {
+          if( ! -d "$attDir/$attachment" ) {
              unlink( "$attDir/$attachment" ) || warn "Couldn't remove $attDir/$attachment";
              if( $attachment !~ /,v$/ ) {
                 writeLog( "erase", "$web.$topic.$attachment" );
@@ -172,25 +173,22 @@ sub erase
           }
        }
        
-       rmdir( "$attDir" ) || warn "Couldn't remove directory $attDir";
-   }
-   
-   # Delete any attachment history
-   $attDir = getFileDir( $web, $topic, 1, ",v" );
-   if ( -e $attDir ) {
-       opendir( DIR, $attDir );
-       my @attachments = readdir( DIR );
-       closedir( DIR );
-       my $attachment;
-       foreach $attachment ( @attachments ) {
-          if( $attachment !~ /^\./ ) {
-             unlink( "$attDir/$attachment" ) || warn "Couldn't remove $attDir/$attachment";
-             if( $attachment !~ /,v$/ ) {
-                writeLog( "erase", "$web.$topic.$attachment" );
-             }
-          }
+       # Deal with RCS dir if it exists
+       my $attRcsDir = "$attDir/RCS";
+       if( -e $attRcsDir ) {
+           opendir( DIR, $attRcsDir );
+           my @attachments = readdir( DIR );
+           closedir( DIR );
+           my $attachment;
+           foreach $attachment ( @attachments ) {
+              if( ! -d "$attRcsDir/$attachment" ) {
+                 unlink( "$attRcsDir/$attachment" ) || warn "Couldn't remove $attDir/$attachment";
+              }
+           }  
+           rmdir( "$attRcsDir" ) || warn "Couldn't remove directory $attRcsDir";
        }
-    
+       
+       rmdir( "$attDir" ) || warn "Couldn't remove directory $attDir";
    }
 
    writeLog( "erase", "$web.$topic", "" );
@@ -1264,13 +1262,17 @@ sub topicExists
 
 # =========================
 # Try and get from meta information in topic, if this can't be done then use RCS
+# Note there is no "1." prefix to this data
 sub getRevisionInfoFromMeta
 {
     my( $web, $topic, $metar, $changeToIsoDate ) = @_;
     
     my( $date, $author, $rev );
     
-    my @meta = @$metar;
+    my @meta = ();
+    if( $metar ) {
+       @meta = @$metar;
+    }
     
     my @metainfo = grep( /^%META:TOPICINFO/, @meta );
     if( @metainfo ) {
