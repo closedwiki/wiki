@@ -5,6 +5,9 @@ use Data::Dumper qw( Dumper );
 use Cwd qw( cwd );
 use File::Basename qw( basename );
 
+# TODO notes:
+# * tighten up templates directory permissions (chmod -R o-w twiki/templates)
+
 BEGIN {
     use Config;
     my $localLibBase = cwd() . "/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
@@ -15,7 +18,8 @@ BEGIN {
 system( "mkdir htdocs/" );
 system( "mv cgi-bin/tmp/twiki/pub htdocs/twiki/" );
 system( "mv cgi-bin/tmp/twiki/templates twiki/" );
-system( "chmod o-w cgi-bin/twiki/" );
+system( "chmod -R o-w cgi-bin/twiki cgi-bin/lib cgi-bin/lib/CPAN" );
+#system( "rm -rf cgi-bin/tmp" );
 
 my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
