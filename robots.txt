@@ -10,6 +10,7 @@ Disallow: /bin/oops
 Disallow: /bin/passwd
 Disallow: /bin/preview
 Disallow: /bin/rdiff
+Disallow: /bin/rdiffauth
 Disallow: /bin/register
 Disallow: /bin/rename
 Disallow: /bin/save
