@@ -27,6 +27,7 @@ use TWiki;
 use TWiki::Prefs;
 use TWiki::Store;
 use TWiki::UI;
+use TWiki::Merge;
 
 # Command handler for changes command
 sub changes {
@@ -43,69 +44,76 @@ sub changes {
     my $text = $session->{templates}->readTemplate( "changes", $skin );
     my $changes= $session->{store}->readMetaData( $webName, "changes" );
 
-    my @bar = ();
-    my $foo = "";
-    my %exclude = ();
     my $summary = "";
-    my $time = "";
-    my $frev = "";
 
     $text = $session->handleCommonTags( $text, $topic );
     $text = $session->{renderer}->getRenderedVersion( $text );
     $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
-    my $before = "";
-    my $after = "";
-    ( $before, $text, $after) = split( /%REPEAT%/, $text );
+    my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
 
-    $before =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;  # remove <nop> and <noautolink> tags
-
-    my $page = $before;
-
-    foreach( reverse split( /\n/, $changes ) ) {
-        @bar = split( /\t/ );
-        if( ( ! %exclude ) || ( ! $exclude{ $bar[0] } ) ) {
-            next unless $session->{store}->topicExists( $webName, $bar[0] );
-            $foo = $text;
-            $foo =~ s/%TOPICNAME%/$bar[0]/go;
+    my %done = ();
+    foreach my $change ( reverse split( /\r?\n/, $changes ) ) {
+        my( $changedTopic, $login, $time, $rev ) = split( /\t/, $change );
+        unless( $done{$changedTopic} ) {
+            next unless $session->{store}->topicExists( $webName, $changedTopic );
+            my $thisChange = $eachChange;
+            $thisChange =~ s/%TOPICNAME%/$changedTopic/go;
             my $wikiuser = "";
-            my $u = $session->{users}->findUser( $bar[1] );
+            my $u = $session->{users}->findUser( $login );
             $wikiuser = $u->webDotWikiName() if $u;
-            $foo =~ s/%AUTHOR%/$wikiuser/go;
-            $time = TWiki::formatTime( $bar[2] );
-            $frev = "";
-            if( $bar[3] ) {
-                if( $bar[3] > 1 ) {
-                    $frev = $bar[3];
-                } else {
-                    $frev = "<span class=\"twikiNew\"><b>NEW</b></span>";
-                }
+            $thisChange =~ s/%AUTHOR%/$wikiuser/go;
+            $time = TWiki::formatTime( $time );
+            $rev = 1 unless $rev;
+            my $srev = $rev;
+            if( $rev == 1 ) {
+                $srev = "<span class=\"twikiNew\"><b>NEW</b></span>";
             }
-            $foo =~ s/%TIME%/$time/go;
-            $foo =~ s/%REVISION%/$frev/go;
-            $foo = $session->{renderer}->getRenderedVersion( $foo );
+            $thisChange =~ s/%TIME%/$time/go;
+            $thisChange =~ s/%REVISION%/$rev/go;
+            $thisChange = $session->{renderer}->getRenderedVersion( $thisChange );
 
-            $summary =
-              $session->{store}->readTopicRaw( undef,
-                                               $webName,
-                                               $bar[0],
-                                               undef
-                                             );
-            $summary = $session->{renderer}->makeTopicSummary( $summary,
-                                                               $bar[0],
-                                                               $webName );
-            $foo =~ s/%TEXTHEAD%/$summary/go;
-            $foo =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-            $page .= $foo;
-            $exclude{ $bar[0] } = "1";
+            my( $meta, $text ) = $session->{store}->readTopic
+              ( $query->{user}, $webName, $changedTopic, undef );
+            if( $rev > 1 ) {
+                # there was a prior version. Diff it.
+                my( $ometa, $otext ) =
+                  $session->{store}->readTopic
+                    ( $query->{user}, $webName, $changedTopic, $rev - 1 );
+                $text = $session->{renderer}->TML2PlainText
+                  ( $text, $webName, $changedTopic, "nonop" );
+                $otext = $session->{renderer}->TML2PlainText
+                  ( $otext, $webName, $changedTopic, "nonop" );
+                $summary = TWiki::Merge::merge( $text, $otext, qr/\s+/ );
+                if( length( $summary ) > 162 ) {
+                    $text = $summary;
+                    $summary = "";
+                    foreach my $c ( split( /(<\/?(?:ins|del)>)/i, $text )) {
+                        if( $c !~ /<\/?(ins|del)>/i ) {
+                            $c =~ s/^(.{12}).*(.{12})$/$1...$2/s;
+                        }
+                        $summary .= $c;
+                    }
+                }
+            } else {
+                # only one version, show summary
+                $summary = $session->{renderer}->makeTopicSummary
+                  ( $text, $changedTopic, $webName );
+            }
+            $thisChange =~ s/%TEXTHEAD%/$summary/go;
+
+            $page .= $thisChange;
+            $done{$changedTopic} = 1;
         }
     }
     if( $TWiki::doLogTopicChanges ) {
         # write log entry
         $session->writeLog( "changes", $webName, "" );
     }
-    $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
     $page .= $after;
+
+    # remove <nop> and <noautolink> tags
+    $page =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
     $session->writeCompletePage( $page );
 }

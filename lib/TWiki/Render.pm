@@ -1100,6 +1100,7 @@ Defuses TML.
 $opts:
    * showvar - keeps !%VARS%
    * nohead - strips ---+ headings at the top of the text
+   * nonop - doesn't add &lt;nop&gt; before every word
 
 =cut
 
@@ -1109,6 +1110,7 @@ sub TML2PlainText {
 
     $opts = "" unless( $opts );
     $text =~ s/\r//g;
+    $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data SMELL
 
     # Format e-mail to add spam padding (HTML tags removed later)
     $text =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
@@ -1119,7 +1121,6 @@ sub TML2PlainText {
     $text =~ s/%WEB%/$web/g;
     $text =~ s/%TOPIC%/$topic/g;
     $text =~ s/%WIKITOOLNAME%/$TWiki::wikiToolName/g;
-    $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data variables
     if( $opts =~ /nohead/ ) {
         # skip headings on top
         while( $text =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
@@ -1145,9 +1146,11 @@ sub TML2PlainText {
         $text =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
     }
 
-    # prevent text from getting rendered in inline search and link tool 
+    # prevent text from getting rendered in inline search and link tool
     # tip text by escaping links (external, internal, Interwiki)
-    $text =~ s/([\s\(])(?=\S)/$1<nop>/g;
+    unless( $opts =~ /nonop/ ) {
+        $text =~ s/([\s\(])(?=\S)/$1<nop>/g;
+    }
     $text =~ s/([\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/$1<nop>$2/go;
     $text =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
