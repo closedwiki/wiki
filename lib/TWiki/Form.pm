@@ -215,12 +215,6 @@ sub chooseFormButton
            "margin:2px\" name=\"submitChangeForm\" value=\" &nbsp; $text &nbsp; \">";
 }
 
-# ============================
-sub useFormSpecial
-{
-   return &TWiki::Prefs::getPreferencesValue( "DEFFORM" );
-}
-
 
 # ============================
 # Render form information 
@@ -252,11 +246,6 @@ sub renderForEdit
         my $value = $field{"value"} || "";
         my $extra = "";
         
-        # Special processing for UseForm
-        if( ! $value && $fieldName eq "UseForm" && useFormSpecial() ) {
-           $value = $fieldInfo[1];
-        }
-                
         if( $type eq "text" ) {
             $value = "<input name=\"$name\" size=\"$size\" type=\"input\" value=\"$value\">";
         } elsif( $type eq "textarea" ) {
@@ -437,6 +426,49 @@ sub getFieldParams
 
 }
 
+# =============================
+# Called by script to change the form for a topic
+sub changeForm
+{
+    my( $theWeb, $theTopic, $theQuery ) = @_;
+   
+    my $tmpl = &TWiki::Store::readTemplate( "changeform" );
+    &TWiki::writeHeader( $theQuery );
+    $tmpl = &TWiki::handleCommonTags( $tmpl, $theTopic );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl );
+    my $text = $theQuery->param( 'text' );
+    $text = &TWiki::encodeSpecialChars( $text );
+    $tmpl =~ s/%TEXT%/$text/go;
+
+    my $listForms = TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$theWeb" );
+    my @forms = split( /,\s*/, $listForms );            
+    unshift @forms, "";
+    my( $metat, $tmp ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+    my $formName = $theQuery->param( 'formtemplate' ) || "";
+    if( ! $formName ) {
+        my %form = $metat->findOne( "FORM" );
+        $formName = $form{"name"};
+    }
+
+    my $formList = "";
+    foreach my $form ( @forms ) {
+       my $selected = ( $form eq $formName ) ? "checked" : "";
+       $formList .= "\n<br>" if( $formList );
+       my $show = $form ? $form : "&lt;none&gt;";
+       my $value = $form ? $form : "none";
+       $formList .= "<input type=\"radio\" name=\"formtemplate\" value=\"$value\" $selected>&nbsp;$show";
+    }
+    $tmpl =~ s/%FORMLIST%/$formList/go;
+
+    my $parent = $theQuery->param( 'parent' ) || "";
+    $tmpl =~ s/%PARENT%/$parent/go;
+
+    $tmpl =~ s|</*nop/*>||goi;
+
+    print $tmpl;
+}
+
+
 # ============================
 # load old style category table item
 sub upgradeCategoryItem
@@ -522,21 +554,6 @@ sub upgradeCategoryItem
 }
 
 
-# ============================
-sub getDefaultForm
-{
-    my( $web ) = @_;
-    
-    my $default = TWiki::Prefs::getPreferencesValue( "DEFFORM", $web );
-    if( ! $default ) {
-        my @formTemplates = split( /,\s*/, TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) );
-        if( @formTemplates ) {
-            $default = @formTemplates[0];
-        }
-    }
-    return $default;
-}
-
 
 # ============================
 # load old style category table
@@ -567,7 +584,9 @@ sub upgradeCategoryTable
             }
         }
         
-        my $defaultFormTemplate = getDefaultForm( $web );
+        my @formTemplates = split( /,\s*/, TWiki::Prefs::getPreferencesValue( "WEBFORMS", "$web" ) );
+        my $defaultFormTemplate = "";
+        $defaultFormTemplate = @formTemplates[0] if ( @formTemplates );
         
         if( ! $defaultFormTemplate ) {
             &TWiki::writeWarning( "Form: can't get form definition to convert category table " .
@@ -598,7 +617,6 @@ sub upgradeCategoryTable
                   last;
                }
            }
-           $value = "yes" if( $fieldName eq "UseForm" && useFormSpecial() );
            my @args = ( "name" => $fieldName,
                         "title" => $title,
                         "value" => $value );
