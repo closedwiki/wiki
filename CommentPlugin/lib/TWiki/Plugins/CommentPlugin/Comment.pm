@@ -5,10 +5,8 @@
 # This version Copyright (C) 2004 Crawford Currie
 #
 use strict;
-use integer;
 
 use TWiki::Plugins::CommentPlugin::Attrs;
-use TWiki::Plugins::CommentPlugin::Templates;
 
 { package CommentPlugin::Comment;
 
@@ -180,7 +178,14 @@ use TWiki::Plugins::CommentPlugin::Templates;
       TWiki::Func::getPreferencesValue("COMMENTPLUGIN_TEMPLATES") ||
 	"comments";
 
-    my $templates = CommentPlugin::Templates::readTemplate( $templateFile );
+    my $templates;
+
+	if ( $TWiki::Plugins::VERSION < 1.020 ) {
+	  use TWiki::Plugins::CairoCompatibilityModule;
+	  $templates = CairoCompatibilityModule::readTemplate( $templateFile );
+	} else {
+	  $templates = TWiki::Store::readTemplate( $templateFile );
+	}
     if (! $templates ) {
       TWiki::Func::writeWarning("No such template file '$templateFile'");
       return;
@@ -224,21 +229,16 @@ use TWiki::Plugins::CommentPlugin::Templates;
     my $position = $1 || "AFTER";
 
     # Expand common variables in the template, but don't expand other
-    # tags. KEEP IN SYNC WITH edit and register SCRIPTS. NOTE: A patch
-    # has been submitted to add this function to TWiki, for Cairo and beyond.
-    my $wikiName = TWiki::Func::getWikiName();
-    my $wikiUserName = TWiki::Func::getWikiUserName();
-    my $userName = TWiki::Func::wikiToUserName( $wikiName );
+    # tags.
+	if ( $TWiki::Plugins::VERSION < 1.020 ) {
+	  use TWiki::Plugins::CairoCompatabilityModule;
+	}
+	$output = TWiki::expandVariablesOnTopicCreation($output);
 
+	# CODE_SMELL: This should be part of TWiki::expandVariablesOnTopicCreation
     my @t = gmtime();
     my $now = sprintf( "%02d:%02d:%02d", $t[2], $t[1], $t[0] );
     $output =~ s/%TIME%/$now/go;
-    $output =~ s/%USERNAME%/$userName/go;
-    $output =~ s/%WIKINAME%/$wikiName/go;
-    $output =~ s/%WIKIUSERNAME%/$wikiUserName/go;
-    $output =~ s/%URLPARAM{(.*?)}%/TWiki::handleUrlParam($1)/geo;
-    $output =~ s/%NOP{.*?}%//gos;
-    $output =~ s/%NOP%//go;
 
     my $bloody_hell = TWiki::Func::readTopicText( $web, $topic, undef, 1 );
     my $premeta = "";

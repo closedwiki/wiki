@@ -2,19 +2,11 @@ use strict;
 
 package CommentTest;
 
+use base qw(BaseFixture);
+
 use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
-require 'FuncFixture.pm';
-require 'StoreFixture.pm';
-import TWiki::Func;
-import TWiki::Store;
-
 use CGI;
-# Base ourselves on the "Func" fixture. This makes set-up and
-# tear-down easier - though we could equally create and use a
-# FuncFixture object to do the same thing.
-use base qw(TWiki::Func);
-my $query;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
@@ -26,6 +18,9 @@ sub set_up {
   my $this = shift;
 
   $this->SUPER::set_up();
+  # to force it to use Cairo compatability mode, change the following
+  # to "1"
+  $TWiki::Plugins::VERSION = 1.020;
   TWiki::Plugins::CommentPlugin::initPlugin();
 }
 
@@ -83,7 +78,7 @@ sub inputTest {
   $sample .= "$commentref\n";
   $sample .= "BottomOfTopic\n";
 
-  TWiki::Func::TESTwriteTopic($web, $topic, $sample);
+  BaseFixture::writeTopic($web, $topic, $sample);
   my $pidx = $eidx;
   my $html =
     CommentPlugin::Comment::_handleInput
@@ -178,7 +173,7 @@ sub inputTest {
 
   # Compose the query
   my $comm = "This is the comment";
-  $query = new CGI({'comment_action' => 'save',
+  my $query = new CGI({'comment_action' => 'save',
 		    'comment_type' => $type,
 		    'comment' => $comm });
   if ( $anchor ) {
@@ -189,7 +184,7 @@ sub inputTest {
     $query->param(-name=>'comment_index', -value=>$eidx);
   }
 
-  TWiki::Func::TESTsetCGIQuery($query);
+  BaseFixture::setCGIQuery($query);
   my $text = "Ignore this text";
   # invoke the save handler
   TWiki::Plugins::CommentPlugin::commonTagsHandler($text, $topic, $web);
@@ -198,12 +193,12 @@ sub inputTest {
     # Even though the button is disabled, we need to check that a locked
     # target bounces the save and nothing gets written
     $this->assert_str_equals("OOPSLOCKED",
-			     TWiki::Func::TESTredirected());
+			     BaseFixture::redirected());
     $text = TWiki::Func::readTopic($web, $topic);
     $this->assert_str_equals($sample, $text);
   } else {
     $this->assert_str_equals("http://twiki/view.cgi/$web/$topic",
-			     TWiki::Func::TESTredirected());
+			     BaseFixture::redirected());
     $text = TWiki::Func::readTopic($web, $topic);
     $this->assert_matches(qr/$comm/, $text);
 
@@ -280,20 +275,20 @@ sub test8location {
 
 sub test5input_locked {
   my $this = shift;
-  TWiki::Func::TESTlockTopic("TESTWEB", "TESTTOPIC", 0);
+  BaseFixture::lockTopic("TESTWEB", "TESTTOPIC", 0);
   $this->inputTest("top", undef, undef, undef, undef, 1);
 }
 
 sub test6input_locked {
   my $this = shift;
-  TWiki::Func::TESTlockTopic("TESTWEB", "TargetTopic", 0);
+  BaseFixture::lockTopic("TESTWEB", "TargetTopic", 0);
   $this->inputTest("above", undef, "TargetTopic", undef, undef, 1);
 }
 
 
 sub test7input_locked {
   my $this = shift;
-  TWiki::Func::TESTlockTopic("TargetWeb", "TargetTopic", 0);
+  BaseFixture::lockTopic("TargetWeb", "TargetTopic", 0);
   $this->inputTest("bottom", "TargetWeb", "TargetTopic", undef, undef, 1);
 }
 

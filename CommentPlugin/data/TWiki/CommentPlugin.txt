@@ -134,15 +134,7 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
-	| ==data/TWiki/CommentPlugin.txt== | Plugin doc page (this page) |
-	| ==data/TWiki/CommentsTmpl.txt== | Example user templates |
-	| ==templates/comments.tmpl== | Master comment templates |
-	| ==lib/TWiki/Plugins/CommentPlugin.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/CommentPlugin/Comment.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/CommentPlugin/Attrs.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/CommentPlugin/Templates.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/CommentPlugin/test.zip== | Tests |
-	| ==lib/TWiki/Plugins/CommentPlugin/build.xml== | Ant build file |
+%$MANIFEST%
 	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file.
 
 If installed correctly, you should see a =%COMMENT= edit box below here.
@@ -164,8 +156,7 @@ If installed correctly, you should see a =%COMMENT= edit box below here.
 | | 24 Feb 2002 added a few more user requests, made "English" text configurable |
 | | 4 Dec 2001: 1.01 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft" |
 | | 30 Nov 2001: Initial version |
-|  CPAN Dependencies: | None |
-|  Other Dependencies: | None |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
@@ -174,4 +165,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/DavidWeller - 05 Mar 2002 <br>
 -- TWiki:Main/PeterMasiar - 15 Jul 2003, 23 Sep 2003<br>
--- TWiki:Main/CrawfordCurrie - 18 Feb 2004
+-- TWiki:Main/CrawfordCurrie - %$DATE%
