@@ -1826,6 +1826,9 @@ sub getRenderedVersion
         if( $insidePRE || $insideVERBATIM ) {
             # inside <PRE> or <VERBATIM>
 
+            $result .= &emitCode( "", 0 );
+            $code = "";
+
             if( $insideVERBATIM ) {
                 s/\&/&amp;/go;
                 s/\</&lt;/go;
@@ -1889,7 +1892,7 @@ sub getRenderedVersion
             }
 
 # Lists etc.
-            s/^\s*$/<p> /o                   && ( $code = 0 );
+            s/^\s*$/<p \/>/o                 && ( $code = 0 );
             m/^(\S+?)/o                      && ( $code = 0 );
             s/^(\t+)(\S+?):\s/<dt> $2<dd> /o && ( $result .= &emitCode( "dl", length $1 ) );
             s/^(\t+)\* /<li> /o              && ( $result .= &emitCode( "ul", length $1 ) );
