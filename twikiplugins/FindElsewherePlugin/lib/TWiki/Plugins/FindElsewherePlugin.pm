@@ -53,6 +53,8 @@
 # 12-Feb-2004:	Matt Wilkie 
 #		- put all of above into twikiplugins cvs, 
 #		- removed "/o"'s as there may be issues with modperl (Codev.ModPerl)
+# 31-Mar-2005:  SteffenPoulsen
+#		- updated plugin to be I18N-aware
 #
 
 
@@ -65,6 +67,18 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $debug
         $doPluralToSingular
     );
+
+use TWiki qw(%regex); 
+
+# ===========================
+# Read the configuration file at compile time in order to set locale
+BEGIN {
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::useLocale ) {
+        require locale;
+        import locale ();
+    }
+} 
 
 $VERSION = '1.000';
 
@@ -83,7 +97,6 @@ sub initPlugin
    $debug = &TWiki::Func::getPreferencesFlag( "FINDELSEWHEREPLUGIN_DEBUG" );
    
    $otherWebMulti =  &TWiki::Func::getPreferencesValue( "FINDELSEWHEREPLUGIN_LOOKELSEWHERE" ) || "";
-   $otherWebMulti = &TWiki::Func::expandCommonVariables($otherWebMulti);
    @webList = split( /[\,\s]+/, $otherWebMulti );
    &TWiki::Func::writeDebug( "- TWiki::Plugins::FindElsewherePlugin will look in @webList" ) if $debug;
 
@@ -107,7 +120,10 @@ sub startRenderingHandler
    # If the WikiWord is found in theWeb, put the word back unchanged
    # If the WikiWord is found in the otherWeb, link to it via [[otherWeb.WikiWord]]
    # If it isn't found there either, put the word back unchnaged
-   $_[0] =~ s/([\s\(])([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/&findTopicElsewhere($_[1],$1,$2,$2,"")/ge;
+
+   # Match WikiWords, [[wiki words]] and WIK IWO RDS
+   $_[0] =~ s/([\s\(])($regex{wikiWordRegex}|\[\[[$regex{mixedAlphaNum}\s]+\]\]|$regex{abbrevRegex})/&findTopicElsewhere($_[1],$1,$2,$2,"")/geo;
+
 }
 
 sub makeTopicLink
@@ -123,16 +139,19 @@ sub findTopicElsewhere
    
    my( $theWeb, $thePreamble, $theTopic, $theLinkText, $theAnchor ) = @_;
 
-   # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
-   $theTopic =~ s/^\s*//;
-   $theTopic =~ s/\s*$//;
-   $theTopic =~ s/^(.)/\U$1/;
-   $theTopic =~ s/\s([a-zA-Z0-9])/\U$1/g;
-   # Add <nop> before WikiWord inside text to prevent double links
-   $theLinkText =~ s/([\s\(])([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
+   # Get rid of leading/trailing spaces in topic name
+   $theTopic =~ s/^\s*//o;
+   $theTopic =~ s/\s*$//o; 
+    
+   # Turn spaced-out names into WikiWords - upper case first letter of
+   # whole link, and first of each word.
+   $theTopic =~ s/^(.)/\U$1/o;
+   $theTopic =~ s/\s($regex{singleMixedAlphaNumRegex})/\U$1/go;
 
-   my $text = $thePreamble;
+   # Handle [[this example]] style separately
+   $theTopic =~ s/\[\[($regex{singleMixedAlphaNumRegex})(.*)\]\]/\u$1$2/go;
    
+   my $text = $thePreamble;
 
    # Look in the current web, return when found
    my $exist = &TWiki::Func::topicExists( $theWeb, $theTopic );
@@ -184,7 +203,11 @@ sub findTopicElsewhere
 
    if ($#topicLinks >= 0)
    { # topic found elsewhere
-     $text .= "<nop>$theTopic<sup>(".join(",", @topicLinks ).")</sup>" ;
+     # If link text [[was in this form]] <em> it
+     $theLinkText =~ s/\[\[(.*)\]\]/<em>$1<\/em>/go;
+     # Prepend WikiWords with <nop>, preventing double links
+     $theLinkText =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;
+     $text .= "<nop>$theLinkText<sup>(".join(",", @topicLinks ).")</sup>" ;
    }
    else
    {
@@ -200,10 +223,10 @@ sub makeSingular
 {
    my ($theWord) = @_;
 
-   $theWord =~ s/ies$/y/;       # plurals like policy / policies
-   $theWord =~ s/sses$/ss/;     # plurals like address / addresses
-   $theWord =~ s/([Xx])es$/$1/; # plurals like box / boxes
-   $theWord =~ s/([A-Za-rt-z])s$/$1/; # others, excluding ending ss like address(es)
+   $theWord =~ s/ies$/y/o;       # plurals like policy / policies
+   $theWord =~ s/sses$/ss/o;     # plurals like address / addresses
+   $theWord =~ s/([Xx])es$/$1/o; # plurals like box / boxes
+   $theWord =~ s/([A-Za-rt-z])s$/$1/o; # others, excluding ending ss like address(es)
    return $theWord;
 }
 
