@@ -113,7 +113,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Dec 2002";
+$wikiversion      = "29 Dec 2002";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2485,7 +2485,6 @@ sub mailtoLinkSimple
 }
 
 
-
 # =========================
 sub getRenderedVersion {
     my( $text, $theWeb, $meta ) = @_;
@@ -2652,7 +2651,7 @@ sub getRenderedVersion {
 	    # Explicit [[mailto:... ]] link including '@', with anti-spam 
 	    # padding, so match name@subdom.dom.
             # '[[mailto:string display text]]' link
-            s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)\s+(.*?)\]\]/&mailtoLinkFull( $1, $2, $3, $4 )/ge;
+            s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)(\s+|\]\[)(.*?)\]\]/&mailtoLinkFull( $1, $2, $3, $5 )/ge;
 
 	    # Normal mailto:foo@example.com ('mailto:' part optional)
             s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/ge;
