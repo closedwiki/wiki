@@ -153,8 +153,8 @@ File::Find::find( \&filterDoc, "$installBase/data/TWiki" );
 map { my $doc = $_; cp( $doc, "$installBase/$doc" ) or warn "$doc: $!" }
 qw (
       pub-htaccess.txt root-htaccess.txt subdir-htaccess.txt robots.txt
-      index.html readme.txt license.txt
-      UpgradeTwiki
+      index.html UpgradeTwiki
+      AUTHORS COPYING COPYRIGHT LICENSE readme.txt 
     );
 
 my $ua = LWP::UserAgent::TWiki::TWikiGuest->new( agent => $Config->{agent} ) or die $!;
