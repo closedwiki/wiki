@@ -127,15 +127,6 @@ sub main
 
 
 #=========================
-sub spacedTopic
-{
-    my( $topic ) = @_;
-    # FindMe -> Find\s*Me
-    $topic =~ s/([a-z])([A-Z])/$1 *$2/go;
-    return $topic;
-}
-
-#=========================
 sub findReferingPages
 {
     my @result = ();
@@ -168,7 +159,7 @@ sub updateReferingPages
     my $result = "";
     my $preTopic = '^|[^A-Za-z0-9_]';
     my $postTopic = '$|[^A-Za-z0-9_]';
-    my $spacedTopic = spacedTopic( $oldTopic );
+    my $spacedTopic = TWiki::Search::spacedTopic( $oldTopic );
 
     while ( @refs ) {
        my $type = shift @refs;
@@ -401,8 +392,6 @@ sub newTopicScreen
      my( $tmpl, $oldTopic, $newWeb, $newTopic ) = @_;
      $tmpl =~ s/%NEW_WEB%/$newWeb/go;
      $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
-     my $spacedTopic = '\[' . &spacedTopic( $oldTopic ) . '\]';
-     $tmpl =~ s/%RESPACEDTOPIC%/$spacedTopic/geo;
      
      return $tmpl;
  }
