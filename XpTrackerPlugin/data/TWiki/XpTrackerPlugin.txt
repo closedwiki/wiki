@@ -1,30 +1,25 @@
----++ %TOPIC%
+%META:TOPICINFO{author="RafaelAlvarez" date="1090993345" format="1.0" version="1.2"}%
+---+ XP Tracker Plugin
 
-<b>Version 3.0 - Nov 19 2002</b>
+<b>Version 3.2 - Jul 28 2004</b>
 
-This is a plugin for tracking XP projects. The original code was
-written by Main.RichardBennett, It was converted into this plugin by
-Main.MartinWatt and enhanced. 
+This is a plugin for tracking [[http://www.c2.com/cgi/wiki?ExtremeProgramming][eXtreme Programming]] projects. The original code was
+written by TWiki:Main.RichardBennett, It was converted into this plugin by
+TWiki:Main.MartinWatt and enhanced by TWiki:Main.AndreaBacchetta, TWiki:Main.AnthonPang, TWiki:Main.AndreaSterbini, TWiki:Main.ThomasEschner and TWiki:Main.RafaelAlvarez
 
----++ Changes in 3.0
+See TWiki:Plugins/XpTrackerPluginHistory for a description of changes in this new version.
 
-See http://twiki.org/cgi-bin/view/Plugins/XpTrackerPluginHistory for a
-description of changes in this new version.
+---++Documentation
+The documentation is hosted in the Twiki.org site, and is not being distributed with the plugin as it's a ongoing effort.
 
----++ Upgrading from 2.0 to 3.0
-
-To make 2.0 data work with this plugin you need to change each Team page to have one extra table which contains the project the team is working on, in this format:
-
-<verbatim>
- | *Project* | ProjName |
-</verbatim>
-
-An easy way to check the team pages are all updated is to go to the <nop>WebHome page for the XP tracker. In the first table on that page, any teams pages that have not had the above table added correctly will be shown as belonging to an unnamed project. Edit these team pages to add their correct project name to replace <nop>ProjName in the table above.
-
+	* TWiki:Plugins.XpTrackerPluginManual
+	* TWiki:Plugins.ZenAndXpTracking
+	* TWiki:Plugins.XpTrackerUpgradeGuide
+	* TWiki:Plugins.XpTrackerCustomizationGuide
 
 ---++ Description
 
-<h3>Layout</h3>
+---+++Layout
 
 There is a hierarchy of information here:
 
@@ -35,25 +30,20 @@ There is a hierarchy of information here:
 	* *Story* - An iteration comprises a number of stories. Stories are pieces of related functionality that are owned by a lead developer but can be worked on by more than one developer. The story page contains information on the acceptance criteria, and also a list of tasks.
 	* *Tasks* - these are the atomic units of work. A story is usually broken up into a number of tasks. Tasks may be shared among more than one developer. Tasks details are entered on the story page.
 
-<b>Information is entered for Stories and their associated tasks, and for iteration dates. Information for all other levels in the hierarchy is automatically generated.</b>
+__Information is entered for Stories and their associated tasks, and for iteration dates. Information for all other levels in the hierarchy is automatically generated.__
 
-Example of hierarchy:
-
- | *Web*	|  *Project*		 |  *Team*  | *Iteration* | *Story* | *Tasks* |
- | Tracking |  <nop>BeijingRelease  | <nop>CoreTeam | <nop>ItFinishUp  | <nop>FinalFixesStory | <nop>IncrementVersion |
-
-<h3>Usage</h3>
+---+++Usage
 
  Creation of pages is recursive, each page has an html form that uses a template to create child pages:
 
-	* <b>Projects/Teams</b>. You can create a new project page using the html form on the home page for the tracking web. You can create a new team page using the form on the project page. You can add additional content to these pages if desired, but do not delete the existing content. This is used to provide high level overviews of schedule progress.
+	* <b>Projects/Teams</b>. You can create a new project page using the html form on the home page for the tracking web. You can create a new team page using the form on the project page. You can add additional content to these pages if desired, but do not delete the existing content. This is used to provide high level overviews of schedule progress. Projects and Teams will not be shown in the pages if they don't have any iteration.
 
 	* <b>Iterations</b> Create new iterations from the team pages.
 
 	* <b>Stories</b> Create new stories from the iteration page. The story name can be any unique name, <b>as long as it ends with the string "Story"</b>. Fill in the two tables for the story summary and task list respectively.
  
 
----+++ %TOPIC% Settings
+---++ <nop>%TOPIC% Settings
 
 Plugin settings are stored as preferences variables.
 
@@ -61,125 +51,107 @@ Plugin settings are stored as preferences variables.
 		* Set SHORTDESCRIPTION = This plugin tracks XP projects
 
 	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+		* Set DEBUG = 1
 
----+++ %TOPIC% sample output
+	* Plugin coloring schema:
+		* Set UNSTARTEDCOLOR = #FFCCCC
+		* Set INPROGRESSCOLOR = #FFFF99
+		* Set FINISHEDCOLOR = #99FF00
+		* Set DEPLOYMENTCOLOR = #99CCCC
+		* Set ACCEPTANCECOLOR = #CCFFFF
+		* Set COMPLETECOLOR = #99FF99
+		* Set ERRORCOLOR = #999999
+		* Set HOLDCOLOR = #FFFFFF
 
-The iteration status page displays the stories and tasks currently allocated to that particular interation.
-
-Stories are displayed in the order in which they are to be developed.
-
-Tasks within a story are displayed in the order in which they are to be developed. Tasks are considered complete once their estimate until completion is 0 days.
-
-Below are examples of the autogenerated tables produced by parsing the story pages:
-
-
-<b>Show all iterations in a project</b>: <tt>XPSHOWPROJECTITERATIONS</tt>
-<noautolink>
-<table border="1" cellspacing="1" cellpadding="0">
-<tr><th  bgcolor="#99CCCC"> Team  </th><th  bgcolor="#99CCCC"> Iter </th><th  bgcolor="#99CCCC"> Summary </th><th  bgcolor="#99CCCC"> Start </th><th  bgcolor="#99CCCC"> End </th><th  bgcolor="#99CCCC"> Est</th><th  bgcolor="#99CCCC"> Spent </th><th  bgcolor="#99CCCC"> ToDo  </th><th  bgcolor="#99CCCC"> Progress  </th><th  bgcolor="#99CCCC"> Done  </th><th  bgcolor="#99CCCC"> Overrun  </th></tr>
-
-<tr><td  bgcolor="#FFFEE4"> <a href="/twiki/bin/view.pl/Green/DemoTeam">DemoTeam</a>  </td><td  bgcolor="#FFFEE4"> <a href="/twiki/bin/view.pl/Green/DemoIter">DemoIter</a>  </td><td  bgcolor="#FFFEE4"> One line summary  </td><td  bgcolor="#FFFEE4"> 16 Sep 2002  </td><td  bgcolor="#FFFEE4"> 27 Sep 2002	</td><td  bgcolor="#FFFEE4"> 7  </td><td  bgcolor="#FFFEE4"> 4.5  </td><td  bgcolor="#FFFEE4"> 3.5  </td><td  bgcolor="#FFFEE4"> <table height=100% width=100%><tr><td width=56% bgcolor="#00cc00">&nbsp;</td><td width=44% bgcolor="#cc0000">&nbsp;</td></tr></table>  </td><td  bgcolor="#FFFEE4"> 56%  </td><td  bgcolor="#FFFEE4"> 14%  </td></tr>
-
-</table>
-</noautolink>
+---+++ Templates
+		* Set PROJECTTEMPLATE = XpProjectTemplate
+		* Set TEAMTEMPLATE = XpTeamTemplate
+		* Set ITERATIONTEMPLATE = XpIterationTemplate
 
 
-<b>Show summary of iterations in a project</b> - <tt>XPSHOWITERATIONTERSE</tt>
-<table border="1"><tr bgcolor="#CCCCCC"><th align="left">Story</th><th>FEA</th><th>Estimate</th><th>Spent</th><th>ToDo</th><th>Progress</th><th>Done</th><th>Overrun</th><th>Completion</th></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/DemoStory">DemoStory</a><br> Summary of story </td>
-
-<td align="center">  </td>
-<td align="center"><b>3</b></td>
-<td align="center"><b>1.5</b></td>
-<td align="center"><b>2.5</b></td><td><table height=100% width=100%><tr><td width=37% bgcolor="#00cc00">&nbsp;</td><td width=63% bgcolor="#cc0000">&nbsp;</td></tr></table></td><td align=right>37%</td><td align=right> +33%</td><td>In progress</td></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/SecondDemoStory">SecondDemoStory</a><br> Finish remaining tasks </td>
-<td align="center">  </td>
-
-<td align="center"><b>4</b></td>
-<td align="center"><b>3</b></td>
-<td align="center"><b>1</b></td><td><table height=100% width=100%><tr><td width=75% bgcolor="#00cc00">&nbsp;</td><td width=25% bgcolor="#cc0000">&nbsp;</td></tr></table></td><td align=right>75%</td><td align=right> +0%</td><td>In progress</td></tr><tr bgcolor="#CCCCCC"><td><b>Team totals</b></td><td></td><td align="center"><b>7</b></td><td align="center"><b>4.5</b></td><td align="center"><b>3.5</b></td><td><table height=100% width=100%><tr><td width=56% bgcolor="#00cc00">&nbsp;</td><td width=44% bgcolor="#cc0000">&nbsp;</td></tr></table></td><td align=right>56%</td><td align=right> +14%</td><td></td></tr>
-
-</table>
-
-
-<b>Show details of iterations in a project</b> - <tt>XPSHOWITERATION</tt>
-<noautolink>
-<table border="1"><tr bgcolor="#CCCCCC"><th align="left">Story<br>&nbsp; Tasks </th><th>Estimate</th><th>Who</th><th>Spent</th><th>To do</th><th>Status</th></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/DemoStory">DemoStory</a> </td><td align="center"><b>3</b></td><td> <nop>DevOne </td><td align="center"><b>1.5</b></td><td align="center"><b>2.5</b></td><td nowrap>In progress</td></tr><tr bgcolor="#99FF99"><td>&nbsp;&nbsp;&nbsp;&nbsp;do the first task</td><td align="center">2</td><td> <span style='background : #FFFFCE;'><font color="#0000FF"><nop>DevOne</font></span><a href="/twiki/bin/edit.pl/Green/DevOne?topicparent=Green.DemoIter">?</a> </td><td align="center">1</td><td align="center">2</td><td nowrap>In progress</td></tr><tr bgcolor="#99FF99"><td>&nbsp;&nbsp;&nbsp;&nbsp;do the second task</td><td align="center">1</td><td> <span style='background : #FFFFCE;'><font color="#0000FF"><nop>DevTwo</font></span><a href="/twiki/bin/edit.pl/Green/DevTwo?topicparent=Green.DemoIter">?</a> </td><td align="center">.5</td><td align="center">0.5</td><td nowrap>In progress</td></tr><tr><td colspan="6">&nbsp;</td></tr><tr bgcolor=#99FF99><td> <a href="/twiki/bin/view.pl/Green/SecondDemoStory">SecondDemoStory</a> </td><td align="center"><b>4</b></td><td> <nop>DevOne </td><td align="center"><b>3</b></td><td align="center"><b>1</b></td><td nowrap>In progress</td></tr><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Do some more stuff</td><td align="center">3</td><td> <span style='background : #FFFFCE;'><font color="#0000FF"><nop>DevOne</font></span><a href="/twiki/bin/edit.pl/Green/DevOne?topicparent=Green.DemoIter">?</a> </td><td align="center">3</td><td align="center">0</td><td nowrap>Complete</td></tr><tr bgcolor="#FFCCCC"><td>&nbsp;&nbsp;&nbsp;&nbsp;Do other things</td><td align="center">1</td><td> <span style='background : #FFFFCE;'><font color="#0000FF"><nop>DevTwo</font></span><a href="/twiki/bin/edit.pl/Green/DevTwo?topicparent=Green.DemoIter">?</a> </td><td align="center">0</td><td align="center">1</td><td nowrap>Waiting</td></tr><tr><td colspan="6">&nbsp;</td></tr><tr bgcolor="#CCCCCC"><td><b>Team totals</b></td><td align="center"><b>7</b></td><td></td><td align="center"><b>4.5</b></td><td align="center"><b>3.5</b></td><td> </td></tr></table>
-</noautolink>
-
-<b>Developer velocity</b> - <tt>XPVELOCITIES</tt>
-<table border="1"><tr bgcolor="#CCCCCC"><th rowspan="2">Who</th><th colspan="3">Ideals</th><th colspan="2">Tasks</th></tr><tr bgcolor="#CCCCCC"><th>Assigned</th><th>Spent</th><th>Remaining</th><th>Assigned</th><th>Remaining</th></tr><tr><td> <span style='background : #FFFFCE;'><font color="#0000FF"><nop>DevOne</font></span><a href="/twiki/bin/edit.pl/Green/DevOne?topicparent=Green.DemoIter">?</a> </td><td align="center">5</td><td align="center">4</td><td align="center">2</td><td align="center">2</td><td align="center">1</td></tr><tr><td> <span style='background : #FFFFCE;'><font color="#0000FF"><nop>DevTwo</font></span><a href="/twiki/bin/edit.pl/Green/DevTwo?topicparent=Green.DemoIter">?</a> </td><td align="center">2</td><td align="center">0.5</td><td align="center">1.5</td><td align="center">2</td><td align="center">2</td></tr><tr bgcolor="#CCCCCC"><th align="left">Total</th><th>7</th><th>4.5</th><th>3.5</th><th>4</th><th>3</th></tr></table>
-
-Note - the column <b>FEA</b> (meaning Feature) in the <tt>XPSHOWITERATIONTERSE</tt> table is something we use at our company to link a story to an entry in our feature/bug tracking database which in turn links to the code checkin, thus providing a link from the XP tracker through to the associated code change and back. Since I am sure other companies have similar setups, I've left this field in there for this purpose.
-
-<h3>Other tables available</h3>
+---+++Recognized Variables.
 
 This is a list of all the tables available. The names should be self-explanatory.
 
-| *Variable*  | *Parameters*   | *Comment*   |
-| XPSHOWALLPROJECTS     | none   | |
-| XPSHOWALLTEAMS        | none   | |
-| XPSHOWALLITERATIONS   | none   | |
-| XPSHOWPROJECTTEAMS    | project topic    | |
-| XPSHOWPROJECTITERATIONS   | project topic    | |
-| XPSHOWPROJECTSTORIES  | project topic    | |
-| XPSHOWTEAMITERATIONS  | team topic   | |
-| XPSHOWITERATION       | iteration topic    | |
-| XPSHOWITERATIONTERSE  | iteration topic    | |
-| XPSHOWPROJECTCOMPLETIONBYSTORIES  | project topic   | |
-| XPSHOWPROJECTCOMPLETIONBYTASKS    | project topic   | |
-| XPVELOCITIES       | iteration topic    | |
-| XPDUMPITERATION    | iteration topic    | |
+| *Variable*  | *Parameters*	| *Comment*	|
+| XPSHOWALLPROJECTS	  | none	| |
+| XPSHOWALLTEAMS		  | none	| |
+| XPSHOWALLITERATIONS	| none	| |
+| XPSHOWPROJECTTEAMS	 | project topic	 | |
+| XPSHOWPROJECTITERATIONS	| project topic	 | |
+| XPSHOWPROJECTSTORIES  | project topic	 | |
+| XPSHOWTEAMITERATIONS  | team topic	| |
+| XPSHOWITERATION		 | iteration topic	 | |
+| XPSHOWITERATIONTERSE  | iteration topic	 | |
+| XPSHOWPROJECTCOMPLETIONBYSTORIES  | project topic	| |
+| XPSHOWPROJECTCOMPLETIONBYTASKS	 | project topic	| |
+| XPVELOCITIES		 | iteration topic	 | |
+| XPDUMPITERATION	 | iteration topic	 | Shows the iteration in the Book format (the complete text for each story one after another)|
+| XPSHOWDEVELOPERTASKS  | developer |Show a developer's open tasks group by project and iteration|
+| XPSHOWDEVELOPERTASKS  | developer, web |Show a developer's open tasks group by project and iteration, in the specified tracking web |
+| XPSHOWDEVELOPERTASKSBYITERATION  | developer,iteration| Show a developer's open tasks for a given iteration|
+| XPSHOWDEVELOPERTASKSBYITERATION  | developer,iteration,web| Show a developer's open tasks for a given iteration, in the specified tracking web |
+| XPSHOWLOAD  | developer |Show a developer's group by project/iteration |
+| XPSHOWCOLOURS  | |Service procedure to show current colours for each story status |
+| XPGETSTORYSTATUS  | story | Shows the status text for the given story|
 
----+++ Limitations
+---++ Limitations
+	* This version has not been checked against data from V2.0. 
 
-	* This version is not quite compatible with V2.0. 
-	* This plugin has only been tested successfully with the 01Dec2001 TWiki release. 
+---++ Additional TWiki plugins/changes needed to get this plugin to work at its best
 
----+++ Additional TWiki plugins/changes needed to get this plugin to work at its best
+	* The plugin should work in a standard 01Dec2001, 01Feb2003 and TWiki20040119beta TWiki install, but it is easier to use with these additional plugins:
+		* TWiki:Plugins.TablePlugin is optional but useful as it allows you to sort tabulated information by column
+		* TWiki:Plugins.EditTablePlugin is used to simplify entering of stories and tasks. The latest version (with support for the %<nop>EDITCELL% variable) is required.
+	* If not using the latest TWiki version, you need to apply the patch in TWiki:Codev.AfterSavePluginHandler
 
-The plugin should work in a standard 01Dec2001 TWiki install, but it is easier to use with these additional plugins:
+---++ Plugin Installation Instructions
 
-	* TablePlugin is optional but useful as it allows you to sort tabulated information by column
-	* EditTablePlugin is used to simplify entering of stories and tasks.
+__Note:__ You do not need to install anything on the browser to use this Plugin. The following instructions are for the administrator who installs the Plugin on the server where TWiki is running. 
 
----+++ Plugin Installation Instructions
+	* Download the ZIP file XpTrackerPlugin.zip from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 
-	* This plugin has only been tested with the 01Dec2001 TWiki release.
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+Content:
 | *File:* | *Description:* | 
 | ==data/TWiki/%TOPIC%.txt== | Plugin topic | 
 | ==data/Tracking/WebHome.txt== | Home page for XP tracking web |
 | ==data/Tracking/SetupHowto.txt== | Help page - how to set up tracking for a project|
 | ==data/Tracking/TrackingIntro.txt== | Help page - Introduction to web layout |
-| ==data/Tracking/IterationTemplate.txt== | Page template for iteration |
-| ==data/Tracking/TeamTemplate.txt== | Page template for team |
-| ==data/Tracking/ProjectTemplate.txt== | Page template for project |
-| ==data/Tracking/StoryTemplate.txt== | Page template for story |
 | ==data/Tracking/WebTopicEditTemplate.txt== | Template for any other type of new page (empty) |
-| ==data/Tracking/NewPageError.txt== | Page displayed when a new page creation operation failed |
-| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module | 
- 
+| ==data/Tracking/XpAdminPage.txt== | Tracking Web Admin Page |
+| ==data/Tracking/XpIterationDetails.txt== | Show XPSHOWITERATION for the including iteration topic |
+| ==data/Tracking/XpIterationTemplate.txt== | New Iteration template |
+| ==data/Tracking/XpMyOpenTasks.txt== | List the open tasks for the logged used |
+| ==data/Tracking/XpNewPageError.txt== | Page shown when there is an error creating a page |
+| ==data/Tracking/XpProjectStories.txt== | List all the stories for the including project topic |
+| ==data/Tracking/XpProjectStoriesStatus.txt== | Show the stories status for the including project topic |
+| ==data/Tracking/XpProjectTasksStatus.txt== | Show the tasks status for the including project topic |
+| ==data/Tracking/XpProjectTemplate.txt== | New project template |
+| ==data/Tracking/XpShowWindowScript.txt== | A utility javascript to show a topic in a new window |
+| ==data/Tracking/XpStoryTemplate.txt== | New Story template |
+| ==data/Tracking/XpTeamTemplate.txt== | New Team Template |
+| ==lib/TWiki/Plugins/%TOPIC%.pm== | Main plugin Perl module | 
+| ==lib/TWiki/Plugins/Xp/*.pm== | plugin Perl submodules | 
+| ==pub/TWiki/%TOPIC%/sorttable.js== | javascript used to sort tables on the client side | 
+
 
 <b>Installation test</b>
 
-	* If installed correctly you should see the following content between the two horizontal lines below - a title "All Projects" and a single cell table with the field containing the word "Project", and finally an html form to add a new project (dont use this form from here though!)
+	* If installed correctly,you should see the table with all the possible Story status and their colors, if not then you'll see <nop>%XPSHOWCOLOURS<nop>%
+<br />
+%XPSHOWCOLOURS%
 
-<hr>
+---++ Plugin Info
 
-	%XPSHOWALLPROJECTS%
-
-<hr>
-
----+++ Plugin Info
-
-|  Plugin Author: | Main.RichardBennett, Main.MartinWatt|
-|  Plugin Version: | V3.0 - 19 Nov 2002 |
+|  Plugin Author: | TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, Thomas Eschner, TWiki:Main.AnthonPang, TWiki:Main.AndreaBacchetta, TWiki:Main.RafaelAlvarez |
+|  Plugin Version: | V3.2 - 28 Jul 2004 |
+|  Change History: | V3.1 22 Feb 2003: Updated version |
 |  Change History: | V3.0 19 Nov 2002: Updated version |
-|  Change History: | V2.0 16 Oct 2002: New version of Plugin by Main.MartinWatt |
-|  Change History: | V1.0 29 Jul 2002: Initial version of Plugin by Main.MartinWatt based on code by Main.RichardBennett |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | TWiki.EditTablePlugin, TWiki.TablePlugin |
+|  Change History: | V2.0 16 Oct 2002: New version of Plugin by TWiki:Main.MartinWatt |
+|  Change History: | V1.0 29 Jul 2002: Initial version of Plugin by TWiki:Main.MartinWatt based on code by TWiki:Main.RichardBennett |
+|  CPAN Dependencies: | HTTP::Date |
+|  Other Dependencies: | TWiki:TWiki.EditTablePlugin (The latest version (with support for the %<nop>EDITCELL% variable)), TWiki:TWiki.TablePlugin |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
