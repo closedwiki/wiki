@@ -64,7 +64,8 @@ use vars qw(
         $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiName $wikiUserName
         $wikiHomeUrl $defaultUrlHost $urlHost
-        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
+        $scriptUrlPath $pubUrlPath
+        $pubDir $templateDir $dataDir $twikiLibDir
         $siteWebTopicName $wikiToolName $securityFilter $uploadFilter
         $debugFilename $warningFilename $htpasswdFilename
         $logFilename $remoteUserFilename $wikiUsersTopicname
@@ -113,14 +114,14 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "04 Jul 2001";
+$wikiversion      = "14 Jul 2001";
 
 # ===========================
 # read the configuration part
 do "TWiki.cfg";
 
 # ===========================
-# use TWiki modules
+# use TWiki and other modules
 use TWiki::Prefs;     # preferences
 use TWiki::Search;    # search engine
 use TWiki::Access;    # access control
@@ -128,8 +129,10 @@ use TWiki::Meta;      # Meta class - topic meta data
 use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Attach;    # file attachment functions
 use TWiki::Form;      # forms for topics
+use TWiki::Func;      # official TWiki functions for plugins
 use TWiki::Plugins;   # plugins handler  #AS
 use TWiki::Net;       # SMTP, get URL
+use Cwd;
 
 # ===========================
 # variables: (new variables must be declared in "use vars qw(..)" above)
@@ -168,6 +171,9 @@ sub initialize
         $ENV{'PATH'} = $safeEnvPath;
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
+
+    # initialize lib directory early because of later 'cd's
+    getTWikiLibDir();
 
     # initialize access control
     &TWiki::Access::initializeAccess();
@@ -438,6 +444,13 @@ sub wikiToUserName
 }
 
 # =========================
+sub getWikiUserTopic
+{
+    # Topic without Web name
+    return $wikiName;
+}
+
+# =========================
 sub readOnlyMirrorWeb
 {
     my( $theWeb ) = @_;
@@ -482,11 +495,32 @@ sub getPubUrlPath
 }
 
 # =========================
-# Topic without Web name
-sub getWikiUserTopic
+sub getTWikiLibDir
 {
-    $wikiUserName =~ /([^.]+)$/;
-    return $1;
+    if( $twikiLibDir ) {
+        return $twikiLibDir;
+    }
+
+    my $dir = "";
+    foreach $dir ( @INC ) {
+        if( -e "$dir/TWiki.pm" ) {
+            $twikiLibDir = $dir;
+            last;
+        }
+    }
+
+    # fix relative path
+    if( $twikiLibDir =~ /^\./ ) {
+        my $curr = cwd();
+        $twikiLibDir = "$curr/$twikiLibDir/";
+        # normalize "/../" and "/./"
+        $twikiLibDir =~ s|([\\/])[^\\/]+[\\/]\.\.[\\/]|$1|go;
+        $twikiLibDir =~ s|([\\/])\.[\\/]|$1|go;
+    }
+    $twikiLibDir =~ s|([\\/])[\\/]*|$1|go; # reduce "//" to "/"
+    $twikiLibDir =~ s|[\\/]$||o;           # cut trailing "/"
+
+    return $twikiLibDir;
 }
 
 # =========================
