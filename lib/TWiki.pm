@@ -1,4 +1,3 @@
-
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
@@ -61,7 +60,7 @@ use vars qw(
         $numberOfRevisions $editLockTime
         $attachAsciiPath
         $scriptSuffix $safeEnvPath $mailProgram $wikiversion
-        $doKeepRevIfEditLock $doRemovePortNumber
+        $doKeepRevIfEditLock $doGetScriptUrlFromCgi $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
@@ -201,8 +200,11 @@ sub initialize
     $includingTopicName = $topicName;
     $includingWebName = $webName;
 
-    # initialize $urlHost
-    if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)/ ) && ( $1 ) ) {
+    # initialize $urlHost and $scriptUrlPath 
+    if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)(.*)\/.*$/ ) && ( $2 ) ) {
+        if( $doGetScriptUrlFromCgi ) {
+            $scriptUrlPath = $2;
+        }
         $urlHost = $1;
         if( $doRemovePortNumber ) {
             $urlHost =~ s/\:[0-9]+$//;
