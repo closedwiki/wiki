@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1078653879" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="PeterThoeny" date="1078814460" format="1.0" version="1.4"}%
 ---+ TWiki Spreadsheet Plugin
 
 This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulas like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables.
@@ -56,6 +56,7 @@ The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you 
 | =="$INT(formula)"== | Evaluates a simple formula and rounds the result down to the nearest integer. Example: ==%<nop>CALC{"$INT( 10 / 4 )"}%== returns ==2== |
 | =="$LEFT()"== | The address range of cells to the left of the current cell |
 | =="$LENGTH(text)"== | The length in bytes of text. Example: ==%<nop>CALC{"$LENGTH(abcd)"}%== returns ==4== |
+| =="$LIST(range)"== | Converts the content of a range of cells into a flat list, delimited by comma. Example: ==%<nop>CALC{"$LIST( $LEFT() )"}%== returns ==Apples, Lemons, Oranges, Kiwis== assuming the cells to the left contain ==&#124; Apples &#124; Lemons, Oranges &#124; Kiwis &#124;== |
 | =="$LOWER(text)"== | The lower case string of a text. Example: ==%<nop>CALC{"$LOWER( $T(R1:C5) )"}%== returns the lower case string of the text in cell ==R1:C5== |
 | =="$MAX(list)"== | The biggest value of a list or range of cells. Example: To find the biggest number to the left of the current cell, write: ==%<nop>CALC{"$MAX( $LEFT() )"}%== |
 | =="$MEDIAN(list)"== | The median of a list or range of cells. Example: ==%<nop>CALC{"$MEDIAN(3, 9, 4, 5)"}%== returns ==4.5== |
@@ -68,7 +69,7 @@ The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you 
 | =="$PROPER(text)"== | Capitalizes letters in ==text== that follow any character other than a letter. Converts all other letters to lowercase letters. Examples:%BR% ==%<nop>CALC{"PROPER(a small STEP)"}%== returns ==A Small Step== %BR% ==%<nop>CALC{"PROPER(f1 (formula-1))"}%== returns ==F1 (Formula 1)== |
 | =="$PROPERSPACE(text)"== | Properly spaces out %TWIKIWEB%.WikiWords preceeded by white space, parenthesis, or ==][==. Words listed in the DONTSPACE %TWIKIWEB%.%WIKIPREFSTOPIC% variable or DONTSPACE Plugins setting are excluded. Example, assuming DONTSPACE contains <nop>McIntosh: ==%<nop>CALC{"PROPERSPACE(<nop>McIntosh likes <nop>WikiWord links like <nop>WebHome and [<nop>[%HOMETOPIC%][<nop>WebHome]])"}%== returns ==<nop>McIntosh likes Wiki Word links like Web Home and [[%HOMETOPIC%][Web Home]]== |
 | =="$RAND(max)"== | Random number, evenly distributed between 0 and ==max==, or 0 and 1 if max is not specified. |
-| =="$REPEAT(text)"== | Repeat ==text== a number of times. Example: ==%<nop>CALC{"$REPEAT(Hi! , 3)"}%== returns ==Hi! Hi! Hi!== |
+| =="$REPEAT(text)"== | Repeat ==text== a number of times. Example: ==%<nop>CALC{"$REPEAT(/\, 5)"}%== returns ==/\/\/\/\/\== |
 | =="$REPLACE(text, start_num, num_chars, new_text)"== | Replaces part of text string =text=,  based on the starting position =start_num=, and the number of characters to replace =num_chars=. The characters are replaced with =new_text=. Starting position is 1; use a negative =start_num= to count from the end of the text. See also =$SUBSTITUTE()=, =$TRANSLATE()=. Example: %BR% ==%<nop>CALC{"$REPLACE(abcdefghijk,6,5,*)"}%== returns ==abcde*k== |
 | =="$RIGHT()"== | The address range of cells to the right of the current cell |
 | =="$ROUND(formula, digits)"== | Evaluates a simple ==formula== and rounds the result up or down to the number of digits if ==digits== is positive; to the nearest integer if digits is missing; or to the left of the decimal point if digits is negative. Examples: %BR% ==%<nop>CALC{"$ROUND(3.15, 1)"}%== returns ==3.2== %BR% ==%<nop>CALC{"$ROUND(3.149, 1)"}%== returns ==3.1== %BR% ==%<nop>CALC{"$ROUND(-2.475, 2)"}%== returns ==-2.48== %BR% ==%<nop>CALC{"$ROUND(34.9, -1)"}%== returns ==30== |
@@ -88,7 +89,7 @@ The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you 
 | =="$TODAY()"== | Get the serialized date of today at midnight GMT. The related =$TIME()= returns the serialized date of today at the current time, e.g. it includes the number of seconds since midnight GMT. See also =$FORMATTIME()=, =$FORMATGMTIME()=, =$TIMEDIFF()=. Example: ==%<nop>CALC{"$TODAY()"}%== returns the number of seconds since Epoch |
 | =="$TRIM(text)"== | Removes all spaces from text except for single spaces between words. Example: ==%<nop>CALC{"$TRIM( eat  spaces  )"}%== returns ==eat spaces==.  |
 | =="$UPPER(text)"== | The upper case string of a text. Example: ==%<nop>CALC{"$UPPER( $T(R1:C5) )"}%== returns the upper case string of the text in cell ==R1:C5== |
-| =="$VALUE(text)"== | Extracts a number from ==text==. Returns ==0== if not found. Examples:%BR% ==%<nop>CALC{"$VALUE(US$1,200)"}%== returns ==1200== %BR% ==%<nop>CALC{"$VALUE(<nop>PrjNotebook1234)"}%== returns ==1234== %BR% ==%<nop>CALC{"$VALUE(Total: -12.5)"}%== returns ==12.5== |
+| =="$VALUE(text)"== | Extracts a number from ==text==. Returns ==0== if not found. Examples:%BR% ==%<nop>CALC{"$VALUE(US$1,200)"}%== returns ==1200== %BR% ==%<nop>CALC{"$VALUE(<nop>PrjNotebook1234)"}%== returns ==1234== %BR% ==%<nop>CALC{"$VALUE(Total: -12.5)"}%== returns ==-12.5== |
 
 ---++ Bug Tracking Example
 
@@ -148,8 +149,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 06 Mar 2004 |
+|  Plugin Version: | 08 Mar 2004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  08 Mar 2004: | Added $LIST() |
 |  06 Mar 2004: | Added $AND(), $MOD(), $NOT(), $OR(), $PRODUCT(), $PROPER(), $PROPERSPACE(), $RAND(), $REPEAT(), $SIGN(), $VALUE(); added digits parameter to $ROUND(); renamed $MULT() to $PRODUCT(); $MULT() is deprecated and undocumented |
 |  27 Feb 2004: | Added $COUNTUNIQUE() |
 |  24 Oct 2003: | Added $SET(), $GET(), $MEDIAN(); added $SUMPRODUCT(), inspired by TWiki:Main/RobertWithrow; added $SUMDAYS(), contributed by TWiki:Main/SvenDowideit |
@@ -178,4 +180,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 06 Mar 2004
+-- TWiki:Main/PeterThoeny - 08 Mar 2004
