@@ -124,8 +124,9 @@ use Cwd;
 }
 
 
-# Token character that must not occur in any normal text 
-$TranslationToken= "\0";	# Null is valid character for Perl
+# Token character/string that must not occur in any normal text - converted
+# to a flag character if it ever does occur (very unlikely).
+$TranslationToken= "\0";	# Null should not be used by any charsets
 
 # Use a multi-byte token only if above clashes with multi-byte character sets
 # $TranslationToken= "_token_\0";
@@ -2252,8 +2253,12 @@ sub getRenderedVersion
     $isList = 0;
     @listTypes = ();
     @listElements = ();
+
+    # Initial cleanup
     $text =~ s/\r//g;
     $text =~ s/(\n?)$/\n<nop>\n/s; # clutch to enforce correct rendering at end of doc
+    $text =~ s/$TranslationToken/!/go;	# Convert any occurrences of token
+    					# (very unlikely)
 
     my @verbatim = ();
     $text = takeOutVerbatim( $text, \@verbatim );
