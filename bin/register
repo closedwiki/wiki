@@ -70,7 +70,7 @@ sub main
     my $topicName = $query->param( 'TopicName' );
     my $thePathInfo = $query->path_info(); 
     my $theUrl = $query->url;
-    ( $topic, $webName, $scriptUrlPath ) = 
+    ( $topic, $webName ) = 
 	&wiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
 
     my $text = "";
@@ -164,8 +164,8 @@ sub main
     }
 
     # and finally display thank you page
-        $url = &wiki::getOopsUrl( $webName, $topic, "oopsregthanks", $emailAddress );
-        print $query->redirect( $url );
+    $url = &wiki::getOopsUrl( $webName, $wikiName, "oopsregthanks", $emailAddress );
+    print $query->redirect( $url );
 }
 
 sub htpasswdGeneratePasswd

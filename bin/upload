@@ -354,8 +354,9 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrlPath, $userName ) = 
+    ( $topic, $webName, $dummy, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
+    $dummy = "";  # to suppress warning
 
     my $filePath = $query->param( 'filepath' ) || "";
     my $fileName = $query->param( 'filename' ) || "";

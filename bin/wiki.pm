@@ -85,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "13 Jun 2000";
+$wikiversion      = "21 Jun 2000";
 
 # ===========================
 # read the configuration part
@@ -540,11 +540,45 @@ sub readWebTopic
 }
 
 # =========================
-sub viewUrl
+sub getViewUrl
 {
-    my( $topic ) = @_;
+    my( $theWeb, $theTopic ) = @_;
+    # PTh 20 Jun 2000: renamed sub viewUrl to getViewUrl, added $theWeb
+    my $web = $webName;  # current web
+    if( $theWeb ) {
+        $web = $theWeb;
+    }
     # PTh 24 May 2000: added $urlHost, needed for some environments
-    return "$urlHost$scriptUrlPath/view$scriptSuffix/$webName/$topic";
+    # see also Codev.PageRedirectionNotWorking
+    return "$urlHost$scriptUrlPath/view$scriptSuffix/$web/$theTopic";
+}
+
+# =========================
+sub getOopsUrl
+{
+    my( $theWeb, $theTopic, $theTemplate,
+        $theParam1, $theParam2, $theParam3, $theParam4 ) = @_;
+    # PTh 20 Jun 2000: new sub
+    my $web = $webName;  # current web
+    if( $theWeb ) {
+        $web = $theWeb;
+    }
+    # $urlHost is needed, see Codev.PageRedirectionNotWorking
+    my $url = "$urlHost$scriptUrlPath/oops$scriptSuffix/$web/$theTopic";
+    $url .= "\?template=$theTemplate";
+    if( $theParam1 ) {
+        $url .= "\&param1=$theParam1";
+    }
+    if( $theParam2 ) {
+        $url .= "\&param2=$theParam2";
+    }
+    if( $theParam3 ) {
+        $url .= "\&param3=$theParam3";
+    }
+    if( $theParam4 ) {
+        $url .= "\&param4=$theParam4";
+    }
+    return $url;
 }
 
 # =========================
