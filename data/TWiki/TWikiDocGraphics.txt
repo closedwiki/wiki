@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1036034940" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1042874460" format="1.0" version="1.9"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -18,9 +18,13 @@ In this example, %TOPIC% - this topic - acts as the icon library. Graphics are u
 	* <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  /> Moved to...
 	* <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  /> View topic
 	* <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  /> Edit topic
+	* <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  /> Search topic
+	* <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  /> Print topic
+	* <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  /> Attach file
 
--- Main.PeterThoeny - 14 Apr 2002<br />
+-- Main.PeterThoeny - 17 Jan 2003<br />
 -- Main.MikeMannix - 16 May 2002
+
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="MikeMannix" version="1.1"}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" comment="Tip" date="1007360101" path="C:\02_TWikiDocs\tip.gif" size="123" user="MikeMannix" version="1.2"}%
 %META:FILEATTACHMENT{name="warning.gif" attr="" comment="Warning" date="1001637707" path="C:\02_TWikiDocs\warning.gif" size="138" user="MikeMannix" version="1.1"}%
@@ -32,3 +36,6 @@ In this example, %TOPIC% - this topic - acts as the icon library. Graphics are u
 %META:FILEATTACHMENT{name="arrowright.gif" attr="" comment="Red arrow to right" date="1018768726" path="C:\DATA\arrowright.gif" size="81" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="viewtopic.gif" attr="" comment="View topic" date="1036034850" path="C:\Data\Temp\viewtopic.gif" size="904" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="edittopic.gif" attr="" comment="Edit topic" date="1036034837" path="C:\Data\Temp\edittopic.gif" size="931" user="PeterThoeny" version="1.2"}%
+%META:FILEATTACHMENT{name="searchtopic.gif" attr="" comment="Search topic" date="1042874143" path="C:\Data\Temp\searchtopic.gif" size="192" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="printtopic.gif" attr="" comment="Print topic" date="1042874157" path="C:\Data\Temp\printtopic.gif" size="147" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="attachfile.gif" attr="" comment="Attach file" date="1042874171" path="C:\Data\Temp\attachfile.gif" size="193" user="PeterThoeny" version="1.1"}%
