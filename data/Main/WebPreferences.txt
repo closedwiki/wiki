@@ -1,16 +1,17 @@
 *%WIKITOOLNAME%.%WEB% Web Preferences*
 
-The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %MAINWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.PeterThoeny in the %WIKITOOLNAME%.%MAINWEB% web)
+The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
+
 
 __Preferences:__
 
 	* List of topics of the %WIKITOOLNAME%.%WEB% web:
 		* Set WEBTOPICLIST = %WEB% . {
-				<a href="%HOMETOPIC%">Home</a> 
-			 | <a href="WelcomeGuest">Welcome</a> 
-			 | <A href="%WIKIUSERSTOPIC%">Users</A>
-			 | <a href="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%">Changes</a>
-			 | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&amp;regex=on&amp;search=.*">Index</A>
+				<a href="%HOMETOPIC%">Home</a>
+			 | <a href="TWikiUsers">Users</a>
+			 | <a href="OfficeLocations">Offices</a>
+			 | <a href="WebChanges">Changes</a>
+			 | <a href="WebIndex">Index</a>
 			 | <a href="WebSearch">Search</a>
 			 | Go <input type="text" name="topic" size="16">
 		  }
@@ -18,15 +19,18 @@ __Preferences:__
 	* Web specific background color:
 		* Set WEBBGCOLOR = #FFFFC0
 
+	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
+		* Set NOSEARCHALL =
+
 __Notes:__
 	* A preference is defined as: <br> =6 spaces * Set NAME = value= <br> Example:
 		* S<nop>et WEBBGCOLOR = #FFFFC0
-	* Preferences are used as %MAINWEB%.TWikiVariables by enclosing the name in percent signs. Example:
+	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs. Example:
 		* When you write variable =%WEB<nop>BGCOLOR%= , it gets expanded to =%WEBBGCOLOR%= .
 	* The sequential order of the preference settings is significant. Define preferences that use other preferences first, i.e. set =<nop>WEBCOPYRIGHT= before =<nop>WIKIWEBMASTER= since =%<nop>WEBCOPYRIGHT%= uses the =%<nop>WIKIWEBMASTER%= variable.
 	* You can introduce new preferences variables and use them in your topics and templates. There is no need to change the %WIKITOOLNAME% engine (Perl scripts).
 
 __Related Topics:__
-	* %MAINWEB%.%WIKIPREFSTOPIC% has site-level preferences.
+	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
-	* %MAINWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%= .
+	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%= .
