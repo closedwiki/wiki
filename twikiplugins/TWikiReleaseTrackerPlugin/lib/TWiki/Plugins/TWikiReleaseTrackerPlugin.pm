@@ -221,7 +221,7 @@ sub foundFile {
 			$dist = untaint($dist);
 
 			my ( $output, $changeExpression, $cmd ) =
-			  diffFiles( $relativeFile, $comparedToDistribution, $dist, "-u" );
+			  diffFiles( $relativeFile, $comparedToDistribution, $dist, "-w -u" );
 			$comparison .= "<b>\$toDistribution</b>\n<pre>$output</pre>\n";
 			$comparison =~ s/\$toDistribution/$dist/;
 		}
@@ -274,7 +274,7 @@ sub compareFile {
 		next if ( $distribution eq $compareToDistribution );
 		$ans .= "---++ With <nop>$distribution\n";
 		$ans .=
-		  &$modeCallback( $file, $distribution, $compareToDistribution, "-u " );
+		  &$modeCallback( $file, $distribution, $compareToDistribution, "-w -u " );
 		$ans .= "\n\n";
 	}
 	loadIndexes();
