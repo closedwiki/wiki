@@ -898,8 +898,8 @@ static int dav_get_resource(request_rec *r, dav_resource **res_p, int tgt)
 	return HTTP_NOT_FOUND;
   }
   
-  if ((*res_p)->twiki && !dav_twiki_accessible(r, (*res_p), tgt)) {
-	return HTTP_FORBIDDEN;
+  if ((*res_p)->twiki) {
+    return dav_twiki_accessible(r, (*res_p), tgt);
   }
 
   return OK;
