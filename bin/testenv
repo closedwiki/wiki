@@ -716,7 +716,7 @@ if( $cfg{StoreImpl} eq "RcsWrap") {
     BOTH("The following programs are used by the RCS module");
     # Check RCS directory
     foreach my $key( %{$cfg{RCS}} ) {
-        if ( $key =~ /Cmd$/ ) {
+        if ( $key && $key =~ /Cmd$/ ) {
             my $proggy = $cfg{RCS}{$key};
             $proggy =~ s/\s.*$//;
             LOWLEFT($key);

@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="guest" date="1102566706" format="1.0" version="1.4"}%
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
 <table cols=3 border=2>
@@ -73,16 +72,27 @@ __Bold italic__
 <!-- /actual -->
 </td></tr>
 <tr><td> Verbatim Mode</td><td>
-<!-- expected -->
-%_verbatim0%
-<!-- /expected -->
-Note: at the point the test handler is called, verbatim has not been put back into the text, so we can't test this properly.
-</td><td>
-<!-- actual -->
-<verbatim>
+<!-- expected VERBATIM -->
+<pre>
+&lt;verbatim&gt;
+Description
+&lt;/verbatim&gt;
 class CatAnimal {
   void purr() {
-	 code here
+	 code &lt;here&gt;
+  }
+}
+</pre>
+<!-- /expected -->
+</td><td>
+<!-- actual VERBATIM -->
+<verbatim>
+<verbatim>
+Description
+</verbatim>
+class CatAnimal {
+  void purr() {
+	 code <here>
   }
 }
 </verbatim>
@@ -211,9 +221,7 @@ class CatAnimal {
 </td></tr>
 <tr><td> Disable Links</td><td>
 <!-- expected -->
- <noautolink>
  RedHat &amp; SuSE
- </noautolink>
 <!-- /expected -->
 Note: noautolink tags will still be there, because they are not removed until immediately before topic display.
 </td><td>

@@ -1,45 +1,44 @@
-%META:TOPICINFO{author="guest" date="1100255507" format="1.0" version="1.2"}%
-%META:TOPICPARENT{name="WebHome"}%
 Description: check the behaviour of the inside and outside PRE handlers
 This test is designed to be automatic; it cannot be performed manually. *DO NOT CHANGE THE NUMBER OF LINES IN THIS TOPIC AS THE TEST COUNTS CALLS TO THE HANDLERS!*
 
-<verbatim>
-<!-- expected -->
-OPH7_line1
-OPH7_line2
-OPH7_line3
-<pre>IPH2_line1
-IPH2_line2
-IPH2_line3
-</pre>
-OPH12_line1
-OPH12_line2
-OPH12_line3
-<pre>
-IPH4_line1
-IPH4_line2
-IPH4_line3
 
-IPH5_line1
-IPH5_line2
-IPH5_line3
-
-</pre>
-OPH17_line1
-OPH17_line2
-OPH17_line3
-<!-- /expected -->
-</verbatim>
 ---+ Actual
 <!-- actual -->
-%outsidePreHandler%
+%outsidePreHandler1%
 <pre>
-%insidePreHandler%
+%insidePreHandler1%
 </pre>
-%outsidePreHandler%
+%outsidePreHandler2%
 <pre>
-%insidePreHandler%
-%insidePreHandler%
+%insidePreHandler2%
+%insidePreHandler3%
 </pre>
-%outsidePreHandler%
+%outsidePreHandler3%
 <!-- /actual -->
+---+ Expected
+<!-- expected -->
+1OPH7_line1
+1OPH7_line2
+1OPH7_line3
+<pre>
+1IPH1_line1
+1IPH1_line2
+1IPH1_line3
+</pre>
+2OPH12_line1
+2OPH12_line2
+2OPH12_line3
+<pre>
+2IPH5_line1
+2IPH5_line2
+2IPH5_line3
+
+3IPH9_line1
+3IPH9_line2
+3IPH9_line3
+
+</pre>
+3OPH17_line1
+3OPH17_line2
+3OPH17_line3
+<!-- /expected -->

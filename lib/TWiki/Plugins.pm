@@ -318,6 +318,22 @@ sub _applyHandlers {
     return undef;
 }
 
+=pod
+
+---++ ObjectMethod haveHandlerFor( $handlerName ) -> $boolean
+   * =$handlerName= - name of the handler e.g. preRenderingHandler
+Return: true if at least one plugin has registered a handler of
+this type.
+
+=cut
+
+sub haveHandlerFor {
+    my( $this, $handlerName ) = @_;
+
+    return 0 unless defined( $this->{registeredHandlers}{$handlerName} );
+    return scalar( @{$this->{registeredHandlers}{$handlerName}} );
+}
+
 # %FAILEDPLUGINS reports reasons why plugins failed to load
 # note this is invoked with the session as the first parameter
 sub _handleFAILEDPLUGINS {
@@ -431,9 +447,61 @@ sub afterCommonTagsHandler {
 
 =pod
 
+---++ ObjectMethd preRenderingHandler( $text, \%map )
+
+   * =\$text= - a reference to the text, with the head, verbatim and pre blocks replaced with placeholders
+   * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
+
+Placeholders are text strings constructed using the tag name and a sequence number e.g. "pre1", "verbatim6", "head1" etc. Placeholders are inserted into the text inside \1 characters so the text will contain \1_pre1\1 for placeholder pre1.
+
+Each removed block is represented by the block text and the parameters passed to the tag (usually empty) e.g. for
+<verbatim>
+<pre class="slobadob">
+XYZ
+</pre>
+the map will contain:
+<pre>
+$removed->{"pre1"}{text}:   XYZ
+$removed->{"pre1"}{params}: class="slobadob"
+</pre>
+
+Iterating over blocks for a single tag is easy. For example, to prepend a line number to every line of a pre block you might use this code:
+
+foreach my $placeholder ( keys %$map ) {
+    if( $placeholder =~ /^pre/i ) {
+       my $n = 1;
+       $map->{$placeholder}{text} =~ s/^/$n++/gem;
+    }
+}
+
+=cut
+
+sub preRenderingHandler {
+    my $this = shift;
+    $this->_applyHandlers( 'preRenderingHandler', @_ );
+    # Apply the startRenderingHandler if any are defined
+}
+
+=pod
+
+---++ ObjectMethod postRenderingHandler( \$text )
+
+   * =\$text= - a reference to the HTML, with the head, verbatim and pre blocks replaced with placeholders
+
+=cut
+
+sub postRenderingHandler {
+    my $this = shift;
+    $this->_applyHandlers( 'postRenderingHandler', @_ );
+}
+
+=pod
+
 ---++ ObjectMethod startRenderingHandler ()
 
 Called just before the line loop
+
+*DEPRECATED*
 
 =cut
 
@@ -449,6 +517,8 @@ sub startRenderingHandler {
 
 Called in line loop outside of &lt;PRE&gt; tag
 
+*DEPRECATED*
+
 =cut
 
 sub outsidePREHandler {
@@ -462,6 +532,8 @@ sub outsidePREHandler {
 ---++ ObjectMethod insidePREHandler ()
 
 Called in line loop inside of &lt;PRE&gt; tag
+
+*DEPRECATED*
 
 =cut
 

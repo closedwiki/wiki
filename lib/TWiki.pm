@@ -1867,10 +1867,10 @@ sub handleCommonTags {
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
-    my @verbatim = ();
     # remember the block for when we handle includes
-    $this->{_verbatims} = \@verbatim;
-    $text = $this->{renderer}->takeOutBlocks( $text, "verbatim", \@verbatim );
+    my $verbatims = {};
+    $text = $this->{renderer}->takeOutBlocks( $text, "verbatim",
+                                              $verbatims );
 
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
     $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
@@ -1900,7 +1900,7 @@ sub handleCommonTags {
     # SMELL: is this a hack? Looks like it....
     $text =~ s/^<nop>\r?\n//gm;
 
-    $text = $this->{renderer}->putBackBlocks( $text, \@verbatim, "verbatim" );
+    $this->{renderer}->putBackBlocks( $text, $verbatims, "verbatim" );
 
     # TWiki Plugin Hook (for cache Plugins only)
     $this->{plugins}->afterCommonTagsHandler( $text, $theTopic, $theWeb );

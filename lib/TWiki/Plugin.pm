@@ -25,7 +25,7 @@ use TWiki;
 use TWiki::Sandbox;
 use Assert;
 
-use vars qw( @registrableHandlers );
+use vars qw( @registrableHandlers %deprecated );
 
 @registrableHandlers =
   (                                # VERSION:
@@ -36,10 +36,12 @@ use vars qw( @registrableHandlers );
    'beforeCommonTagsHandler',      # 1.024
    'commonTagsHandler',            # 1.000
    'afterCommonTagsHandler',       # 1.024
-   'startRenderingHandler',        # 1.000
-   'outsidePREHandler',            # 1.000
-   'insidePREHandler',             # 1.000
-   'endRenderingHandler',          # 1.000
+   'startRenderingHandler',        # 1.000 DEPRECATED
+   'outsidePREHandler',            # 1.000 DEPRECATED
+   'insidePREHandler',             # 1.000 DEPRECATED
+   'endRenderingHandler',          # 1.000 DEPRECATED
+   'preRenderingHandler',          # 1.026
+   'postRenderingHandler',         # 1.026
    'beforeEditHandler',            # 1.010
    'afterEditHandler',             # 1.010
    'beforeSaveHandler',            # 1.010
@@ -52,6 +54,15 @@ use vars qw( @registrableHandlers );
    'setSessionValueHandler',       # 1.010
    'renderFormFieldForEditHandler',# ?
    'renderWikiWordHandler',        # 1.023
+  );
+
+# deprecated handlers
+%deprecated =
+  (
+   startRenderingHandler => 1,
+   outsidePREHandler => 1,
+   insidePREHandler => 1,
+   endRenderingHandler => 1,
   );
 
 sub new {
@@ -176,6 +187,10 @@ sub registerHandlers {
     }
 
     foreach my $h ( @registrableHandlers ) {
+        if( $deprecated{$h} ) {
+            $this->{session}->writeWarning
+              ( "$this->{name} defines deprecated $h" );
+        }
         my $sub = $p.'::'.$h;
         push( @{$plugins->{registeredHandlers}{$h}}, $sub )
           if( defined( &$sub ));

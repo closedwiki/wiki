@@ -23,42 +23,40 @@ This is an empty TWiki plugin. It is a fully defined plugin, but is
 disabled by default in a TWiki installation. Use it as a template
 for your own plugins; see TWiki.TWikiPlugins for details.
 
-Each plugin is a package that may contain these functions:
-| Function | $TWiki::Plugins::VERSION |
-| earlyInitPlugin         ( )                                     | 1.020 |
-| initPlugin              ( $topic, $web, $user, $installWeb )    | 1.000 |
-| initializeUserHandler   ( $loginName, $url, $pathInfo )         | 1.010 |
-| registrationHandler     ( $web, $wikiName, $loginName )         | 1.010 |
-| beforeCommonTagsHandler ( $text, $topic, $web )                 | 1.024 |
-| commonTagsHandler       ( $text, $topic, $web )                 | 1.000 |
-| afterCommonTagsHandler  ( $text, $topic, $web )                 | 1.024 |
-| startRenderingHandler   ( $text, $web )                         | 1.000 |
-| outsidePREHandler       ( $text )                               | 1.000 |
-| insidePREHandler        ( $text )                               | 1.000 |
-| endRenderingHandler     ( $text )                               | 1.000 |
-| beforeEditHandler       ( $text, $topic, $web )                 | 1.010 |
-| afterEditHandler        ( $text, $topic, $web )                 | 1.010 |
-| beforeSaveHandler       ( $text, $topic, $web )                 | 1.010 |
-| afterSaveHandler        ( $text, $topic, $web, $errors )        | 1.020 |
-| beforeAttachmentSaveHandler( $attrHashRef, $topic, $web )       | 1.023 |
-| afterAttachmentSaveHandler( $attrHashRef, $topic, $web )        | 1.023 |
-| writeHeaderHandler      ( $query )                              | 1.010 |
-| redirectCgiQueryHandler ( $query, $url )                        | 1.010 |
-| getSessionValueHandler  ( $key )                                | 1.010 |
-| setSessionValueHandler  ( $key, $value )                        | 1.010 |
+Each plugin is a package that may contain these handlers:
+| *Handler*                   | *$TWiki::Plugins::VERSION* |
+| earlyInitPlugin             | 1.020 |
+| initPlugin                  | 1.000 |
+| initializeUserHandler       | 1.010 |
+| registrationHandler         | 1.010 |
+| beforeCommonTagsHandler     | 1.024 |
+| commonTagsHandler           | 1.000 |
+| afterCommonTagsHandler      | 1.024 |
+| preRenderingHandler         | 1.026 |
+| postRenderingHandler        | 1.026 |
+| beforeEditHandler           | 1.010 |
+| afterEditHandler            | 1.010 |
+| beforeSaveHandler           | 1.010 |
+| afterSaveHandler            | 1.020 |
+| beforeAttachmentSaveHandler | 1.023 |
+| afterAttachmentSaveHandler  | 1.023 |
+| writeHeaderHandler          | 1.010 |
+| redirectCgiQueryHandler     | 1.010 |
+| getSessionValueHandler      | 1.010 |
+| setSessionValueHandler      | 1.010 |
 
 =initPlugin= is REQUIRED, all other are OPTIONAL.
-
-For increased performance, all handlers except initPlugin are
-disabled. *To enable a handler* remove the leading DISABLE_ from
-the function name. You should comment out or delete the whole of
-handlers you don't use before you release your plugin.
 
 __NOTE:__ To interact with TWiki use ONLY the official API functions
 in the TWiki::Func module. Do not reference any functions or
 variables elsewhere in TWiki, as these are subject to change
 without prior warning, and your plugin may suddenly stop
 working.
+
+For increased performance, all handlers except initPlugin are
+disabled below. *To enable a handler* remove the leading DISABLE_ from
+the function name. You should comment out or delete the whole of
+handlers you don't use before you release your plugin.
 
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
@@ -109,17 +107,19 @@ sub initPlugin {
         return 0;
     }
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+    # Get plugin preferences, variables defined by:
+    #   * Set EXAMPLE = ...
+    $exampleCfgVar = TWiki::Func::getPreferencesValue( "\U$pluginName\E_EXAMPLE" );
+    # There is also an equivalent:
+    # $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" );
+    # that may _only_ be called from the main plugin package.
 
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
+    $exampleCfgVar ||= "default"; # make sure it has a value
 
     # register the _EXAMPLETAG function to handle %EXAMPLETAG{...}%
     TWiki::Func::registerTagHandler( "EXAMPLETAG", \&_EXAMPLETAG );
 
     # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
@@ -281,83 +281,51 @@ sub DISABLE_afterCommonTagsHandler {
 
 =pod
 
----++ startRenderingHandler($text, $web )
-   * =$text= - text to be processed
-   * =$web= - the name of the web in the current CGI query
-The TWiki rendering engine works on a line-by-line basis. This handler is
-called on the entire text just before the line loop starts, but after
-&lt;verbatim> blocks and the HTML &lt;head> have been removed.
+---++ preRenderingHandler( $text, \%map ) -> $boolean
+   * =\$text= - a reference to the text, with the head, verbatim and pre blocks replaced with placeholders
+   * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
+
+Handler called immediately before TWiki syntax structures (such as lists) are
+processed, but 
+
+Placeholders are text strings constructed using the tag name and a sequence number e.g. "pre1", "verbatim6", "head1" etc. Placeholders are inserted into the text inside &lt;!--!marker!--&gt; characters so the text will contain &lt;!--!pre1!--&gt; for placeholder pre1.
+
+Each removed block is represented by the block text and the parameters passed to the tag (usually empty) e.g. for
+<verbatim>
+<pre class="slobadob">
+XYZ
+</pre>
+the map will contain:
+<pre>
+$removed->{"pre1"}{text}:   XYZ
+$removed->{"pre1"}{params}: class="slobadob"
+</pre>
+Iterating over blocks for a single tag is easy. For example, to prepend a line number to every line of every pre block you might use this code:
+<verbatim>
+foreach my $placeholder ( keys %$map ) {
+    if( $placeholder =~ /^pre/i ) {
+       my $n = 1;
+       $map->{$placeholder}{text} =~ s/^/$n++/gem;
+    }
+}
+</verbatim>
+Since TWiki::Plugins::VERSION = '1.026'
 
 =cut
 
-sub DISABLE_startRenderingHandler {
-    # do not uncomment, use $_[0], $_[1] instead
-    ### my ( $text, $web ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
+sub DISABLE_preRenderingHandler {
+    my( $pText, $pMap ) = @_;
 }
 
 =pod
 
----++ outsidePREHandler($text )
-   * =$text= - single line of text to be processed
-The TWiki rendering engine works on a line-by-line basis. This handler is
-called on each line that is _outside_ a &lt;pre> block.
-*It is very expensive in performance to implement this handler*. Consider
-using =startRenderingHandler= instead.
+---++ postRenderingHandler( $text )
+   * =\$text= - a reference to the entire rendered HTML page (not including HTTP headers). May be modified in place.
 
 =cut
 
-sub DISABLE_outsidePREHandler {
-    # do not uncomment, use $_[0] instead
-    ### my ( $text ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::outsidePREHandler( $renderingWeb.$topic )" ) if $debug;
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-}
-
-=pod
-
----++ insidePREHandler($text )
-   * =$text= - single line of text to be processed
-The TWiki rendering engine works on a line-by-line basis. This handler is
-called on each line that is _within_ a &lt;pre> block.
-*It is very expensive in performance to implement this handler*. Consider
-using =startRenderingHandler= instead.
-
-=cut
-
-sub DISABLE_insidePREHandler {
-    # do not uncomment, use $_[0] instead
-    ### my ( $text ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::insidePREHandler( $web.$topic )" ) if $debug;
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-}
-
-=pod
-
----++ endRenderingHandler($text )
-   * =$text= - text to be processed
-The TWiki rendering engine works on a line-by-line basis. This handler is
-called on the entire text just after the line loop starts, but before
-&lt;verbatim> blocks and the HTML &lt;head> have been replaced into the
-text and before  &lt;nop> tags have been removed.
-
-=cut
-
-sub DISABLE_endRenderingHandler {
-    # do not uncomment, use $_[0] instead
-    ### my ( $text ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
+sub DISABLE_postRenderingHandler {
+    my $pText = shift;
 }
 
 =pod

@@ -42,7 +42,7 @@ use TWiki::Func;
 #
 use vars qw(
             $installWeb $VERSION $pluginName
-            %called $topic $web $user $installWeb
+            $topic $web $user $installWeb
            );
 
 $VERSION = '1.000';
@@ -152,9 +152,6 @@ sub _compareResults {
         if ( $diff->[0] eq 'u' || $a eq $b || $rex && _rexeq( $a, $b )) {
             $ok = 1;
         }
-        if ($a =~ /Sushi/) {
-            print STDERR "X${a}X${b}X\n";
-        }
         $a = _tidy( $a );
         $b = _tidy( $b );
         if ( $ok ) {
@@ -187,43 +184,9 @@ sub _rexeq {
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    #throw Error::Simple( "initPlugin called twice" ) if $called{initPlugin};
-
-    undef %called;
-    $called{initPlugin} = 1;
     TWiki::Func::registerTagHandler("STRICTTAG", \&_STRICTTAG);
 
     return 1;
-}
-
-sub DISABLE_earlyInitPlugin {
-    # There's a delicate relationship between this and initializeUserHandler
-    throw Error::Simple( "unexpected call to earlyInitPlugin", join(",",@_));
-}
-
-sub DISABLE_initializeUserHandler {
-    # There's a delicate relationship between this and earlyInitPlugin
-    throw Error::Simple( "unexpected call to initializeUserHandler", join(",",@_));
-}
-
-sub DISABLE_registrationHandler {
-    throw Error::Simple( "unexpected call to registrationHandler(", join(",",@_));
-}
-
-sub DISABLE_getSessionValueHandler {
-    # this can only be enabled in one plugin
-    throw Error::Simple( "unexpected call to getSessionValueHandler ", join(",",@_));
-}
-
-sub DISABLE_setSessionValueHandler {
-    # this can only be enabled in one plugin
-    throw Error::Simple( "unexpected call to setSessionValueHandler ", join(",",@_));
-}
-
-sub DISABLE_beforeCommonTagsHandler {
-    # Replace the text "beforeCommonTagsHandler" with some
-    # recognisable text.
-    $_[0] =~ s/beforeCommonTagsHandler/BCT1\nBCT2 $_[2].$_[1]\nBCT3\n/g;
 }
 
 sub commonTagsHandler {
@@ -241,42 +204,36 @@ sub _STRICTTAG {
     return $params->stringify();
 }
 
-sub DISABLE_afterCommonTagsHandler {
-    # Replace the text "afterCommonTagsHandler" with some
-    # recognisable text.
-    $_[0] =~ s/afterCommonTagsHandler/ACT1\nACT2 $_[2].$_[1]\nACT3\n/g;
+my $iph = 0;
+my $oph = 0;
+sub preRenderingHandler {
+    $iph = 0;
+    $oph = 0;
 }
 
 sub outsidePREHandler {
     # Replace the text "%outsidePREHandler%" with some
     # recognisable text.
-    my $n = ++$called{outsidePreHandler};
-    $_[0] =~ s/%outsidePreHandler%/OPH${n}_line1\nOPH${n}_line2\nOPH${n}_line3\n/g;
+    $oph++;
+    $_[0] =~ s/%outsidePreHandler(\d+)%/$1OPH${oph}_line1\n$1OPH${oph}_line2\n$1OPH${oph}_line3\n/g;
 }
 
 sub insidePREHandler {
     # Replace the text "%insidePREHandler%" with some
     # recognisable text.
-    my $n = ++$called{insidePreHandler};
-    $_[0] =~ s/%insidePreHandler%/IPH${n}_line1\nIPH${n}_line2\nIPH${n}_line3\n/g;
+    $iph++;
+    $_[0] =~ s/%insidePreHandler(\d+)%/$1IPH${iph}_line1\n$1IPH${iph}_line2\n$1IPH${iph}_line3\n/g;
 }
 
-sub startRenderingHandler {
-    $called{startRenderingHandler} = join( ",", @_||() );
-    $called{insidePreHandler} = 0;
-    $called{outsidePreHandler} = 0;
-}
-
-sub endRenderingHandler {
-    $called{endRenderingHandler} = join( ",", @_||() );
+sub postRenderingHandler {
     my $q = TWiki::Func::getCgiQuery();
     my $t;
     $t = $q->param( "test" ) if ( $q );
     $t = "" unless $t;
 
     if ( $t eq "compare" && $_[0] =~ /<!--\s*actual\s*-->/ ) {
-        my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
-        my $res = _compareExpectedWithActual( _parse( $text, "expected" ),
+        my ( $meta, $expected ) = TWiki::Func::readTopic( $web, $topic );
+        my $res = _compareExpectedWithActual( _parse( $expected, "expected" ),
                                               _parse( $_[0], "actual" ),
                                               $topic, $web);
         if ( $res ) {
@@ -286,35 +243,6 @@ sub endRenderingHandler {
         }
         $_[0] = $res;
     }
-}
-
-sub DISABLE_beforeEditHandler {
-    $called{beforeEditHandler} = join(",", @_);
-}
-
-sub DISABLE_afterEditHandler {
-    $called{afterEditHandler} = join(",", @_);
-}
-
-sub DISABLE_beforeSaveHandler {
-    $called{beforeSaveHandler} = join(",", @_);
-}
-
-sub DISABLE_afterSaveHandler {
-    $called{afterSaveHandler} = join(",", @_);
-}
-
-sub DISABLE_writeHeaderHandler {
-    # This is the last opportunity we get in the 'view' cycle
-    # to check what has happened.
-    return "";
-}
-
-sub DISABLE_redirectCgiQueryHandler {
-    # This is the last opportunity we get in a rendering sequence that
-    # ends in a redirect to check what happened. Redirects come at the
-    # end of many scripts.
-    return 0;
 }
 
 1;

@@ -794,7 +794,7 @@ The main rendering function.
 sub getRenderedVersion {
     my( $this, $text, $theWeb, $theTopic ) = @_;
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
-    my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink );
+    my( $head, $result, $insideNoAutoLink );
 
     return "" unless $text;  # nothing to do
 
@@ -803,8 +803,6 @@ sub getRenderedVersion {
 
     $head = "";
     $result = "";
-    $insidePRE = 0;
-    $insideTABLE = 0;
     $insideNoAutoLink = 0;
 
     @{$this->{LIST}} = ();
@@ -817,122 +815,118 @@ sub getRenderedVersion {
     # Codev.NationalCharTokenClash)
     $text =~ s/$TWiki::TranslationToken/!/go;	
 
-    my @verbatim = ();
-    $text = $this->takeOutBlocks( $text, "verbatim", \@verbatim );
+    my $removed = {};    # Map of placeholders to tag parameters and text
+
+    $text =~ s/(<!DOCTYPE.*?>)//is;
+    my $doctype = $1 || "";
+
+    $text = $this->takeOutBlocks( $text, "verbatim", $removed );
+    $text = $this->takeOutBlocks( $text, "head", $removed );
+
+    # DEPRECATED startRenderingHandler before PRE removed
+    # SMELL: could parse more efficiently if this wasn't
+    # here.
+    $this->plugins()->startRenderingHandler( $text, $theWeb, $theTopic );
+
+    $text = $this->takeOutBlocks( $text, "pre", $removed );
+
+    $this->plugins()->preRenderingHandler( \$text, $removed );
+
+    if( $this->plugins()->haveHandlerFor( 'insidePREHandler' )) {
+        foreach my $region ( sort keys %$removed ) {
+            next unless ( $region =~ /^pre\d+$/i );
+            my @lines = split( /\n/, $removed->{$region}{text} );
+            my $result = "";
+            while ( scalar( @lines )) {
+                my $line = shift( @lines );
+                $this->plugins()->insidePREHandler( $line );
+                if ( $line =~ /\n/ ) {
+                    unshift( @lines, split( /\n/, $line ));
+                    next;
+                }
+                $result .= "$line\n";
+            }
+            $removed->{$region}{text} = $result;
+        }
+    }
 
     $text =~ s/\\\n//gs;  # Join lines ending in "\"
 
-    # do not render HTML head, style sheets and scripts
-    # SMELL: this is easily defeated by <body in a comment in the head
-    if( $text =~ m/<body[\s\>]/i ) {
-        my $bodyTag = "";
-        my $bodyText = "";
-        ( $head, $bodyTag, $bodyText ) = split( /(<body)/i, $text, 3 );
-        $text = $bodyTag . $bodyText;
+    if( $this->plugins()->haveHandlerFor( 'outsidePREHandler' )) {
+        # DEPRECATED - this is the one call preventing
+        # effective optimisation of the TWiki ML processing loop,
+        # as it exposes the concept of a "line loop" to plugins,
+        # but HTML is not a line-oriented language (though TML is).
+        # But without it, a lot of processing could be moved
+        # outside the line loop.
+        my @lines = split( /\n/, $text );
+        my @result = ();
+        while ( scalar( @lines ) ) {
+            my $line = shift( @lines );
+            $this->plugins()->outsidePREHandler( $line );
+            if ( $line =~ /\n/ ) {
+                unshift( @lines, split( /\n/, $line ));
+                next;
+            }
+            push( @result, $line );
+        }
+
+        $text = join("\n", @result );
     }
 
-    # Wiki Plugin Hook
-    $this->plugins()->startRenderingHandler( $text, $theWeb, $theTopic );
+    # Escape rendering: Change " !AnyWord" to " <nop>AnyWord",
+    # for final " AnyWord" output
+    $text =~ s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/g;
 
+    # Blockquoted email (indented with '> ')
+    # Could be used to provide different colours for different numbers of '>'
+    $text =~ s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/gm;
+
+    # locate isolated < and > and translate to entities
+    # Protect isolated <!-- and -->
+    $text =~ s/<!--/{$TWiki::TranslationToken!--/g;
+    $text =~ s/-->/--}$TWiki::TranslationToken/g;
+    # SMELL: this next fragment is a frightful hack, to handle the
+    # case where simple HTML tags (i.e. without values) are embedded
+    # in the values provided to other tags. The only way to do this
+    # correctly (i.e. handle HTML tags with values as well) is to
+    # parse the HTML (bleagh!)
+    $text =~ s/<(\/[A-Za-z]+)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    $text =~ s/<([A-Za-z]+(\s+\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    $text =~ s/<(\S.*?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
+    # entitify lone < and >, praying that we haven't screwed up :-(
+    $text =~ s/</&lt\;/g;
+    $text =~ s/>/&gt\;/g;
+    $text =~ s/{$TWiki::TranslationToken/</go;
+    $text =~ s/}$TWiki::TranslationToken/>/go;
+
+    # standard URI
+    $text =~ s/(^|[\-\*\s\(])($TWiki::regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))/$this->_externalLink($1,$2)/geo;
+
+    # other entities
+    $text =~ s/&(\w+);/$TWiki::TranslationToken$1;/g;      # "&abc;"
+    $text =~ s/&(#[0-9]+);/$TWiki::TranslationToken$1;/g;  # "&#123;"
+    $text =~ s/&/&amp;/g;                         # escape standalone "&"
+    $text =~ s/$TWiki::TranslationToken(#[0-9]+;)/&$1/go;
+    $text =~ s/$TWiki::TranslationToken(\w+;)/&$1/go;
+
+    # Headings
+    # '<h6>...</h6>' HTML rule
+    $text =~ s/$TWiki::regex{headerPatternHt}/$this->_makeAnchorHeading($2,$1)/geomi;
+    # '\t+++++++' rule
+    $text =~ s/$TWiki::regex{headerPatternSp}/$this->_makeAnchorHeading($2,(length($1)))/geom;
+    # '----+++++++' rule
+    $text =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geom;
+
+    # Horizontal rule
+    $text =~ s/^---+/<hr \/>/gm;
+
+    # Now we really _do_ need a line loop, to process TML
+    # line-oriented stuff.
     my $isList = 0;		# True when within a list
-
-    my @lines = split( /\n/, $text );
-    my @result;
-
-    while ( scalar( @lines ) ) {
-        my $line = shift( @lines );
-
-        # change state:
-        if ( $line =~ m/<pre>/i ) {
-            $insidePRE = 1;
-        }
-        if ( $line =~ m/<\/pre>/i ) {
-            $insidePRE = 0;
-        }
-        if ( $line =~ m/<noautolink>/i ) {
-            $insideNoAutoLink = 1;
-        }
-        if ( $line =~ m/<\/noautolink>/i ) {
-            $insideNoAutoLink = 0;
-        }
-
-        if( $insidePRE ) {
-            # inside <PRE>
-
-            # close list tags if any
-            if( @{$this->{LIST}} ) {
-                $this->_addListItem( \@result, "", "", "" );
-                $isList = 0;
-            }
-
-            # Wiki Plugin Hook
-            $this->plugins()->insidePREHandler( $line );
-
-            # \n is required inside PRE blocks
-            push( @result, "$line\n" );
-
-            next;
-        }
-
-        # normal state, do Wiki rendering
-
-        $this->plugins()->outsidePREHandler( $line );
-
-        # insert any extra lines generated by the plugin. New lines
-        # are inserted at the head of the queue of lines, in the order
-        # they would appear in the text.
-        if ( $line =~ /\n/ ) {
-            unshift( @lines, split( /\n/, $line ));
-            # need to do full processing on these new lines, so start again
-            next;
-        }
-
-        # Escape rendering: Change " !AnyWord" to " <nop>AnyWord",
-        # for final " AnyWord" output
-        $line =~ s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/g;
-
-        # Blockquoted email (indented with '> ')
-        # Could be used to provide different colours for different numbers of '>'
-        $line =~ s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/g;
-
-        # locate isolated < and > and translate to entities
-        # Protect isolated <!-- and -->
-        $line =~ s/<!--/{$TWiki::TranslationToken!--/g;
-        $line =~ s/-->/--}$TWiki::TranslationToken/g;
-        # SMELL: this next fragment is a frightful hack, to handle the
-        # case where simple HTML tags (i.e. without values) are embedded
-        # in the values provided to other tags. The only way to do this
-        # correctly (i.e. handle HTML tags with values as well) is to
-        # parse the HTML (bleagh!)
-        $line =~ s/<(\/[A-Za-z]+)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
-        $line =~ s/<([A-Za-z]+(\s+\/)?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
-        $line =~ s/<(\S.*?)>/{$TWiki::TranslationToken$1}$TWiki::TranslationToken/g;
-        # entitify lone < and >, praying that we haven't screwed up :-(
-        $line =~ s/</&lt\;/g;
-        $line =~ s/>/&gt\;/g;
-        $line =~ s/{$TWiki::TranslationToken/</go;
-        $line =~ s/}$TWiki::TranslationToken/>/go;
-
-        # standard URI
-        $line =~ s/(^|[\-\*\s\(])($TWiki::regex{linkProtocolPattern}\:([^\s\<\>\"]+[^\s\.\,\!\?\;\:\)\<]))/$this->_externalLink($1,$2)/geo;
-
-        # other entities
-        $line =~ s/&(\w+?)\;/$TWiki::TranslationToken$1\;/g;      # "&abc;"
-        $line =~ s/&(\#[0-9]+)\;/$TWiki::TranslationToken$1\;/g;  # "&#123;"
-        $line =~ s/&/&amp;/g;                              # escape standalone "&"
-        $line =~ s/$TWiki::TranslationToken/&/go;
-
-        # Headings
-        # '<h6>...</h6>' HTML rule
-        $line =~ s/$TWiki::regex{headerPatternHt}/$this->_makeAnchorHeading($2,$1)/geoi;
-        # '\t+++++++' rule
-        $line =~ s/$TWiki::regex{headerPatternSp}/$this->_makeAnchorHeading($2,(length($1)))/geo;
-        # '----+++++++' rule
-        $line =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geo;
-
-        # Horizontal rule
-        $line =~ s/^---+/<hr \/>/;
-
+    my $insideTABLE = 0;
+    my @result = ();
+    foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*)\|.*\|\s*$/ ) {
@@ -987,72 +981,76 @@ sub getRenderedVersion {
             $isList = 0;
         }
 
-        # '#WikiName' anchors
-        $line =~ s/^(\#)($TWiki::regex{wikiWordRegex})/ '<a name="' . $this->makeAnchorName( $2 ) . '"><\/a>'/geo;
-
-        # enclose in white space for the regex that follow
-        $line = "\n$line\n";
-
-        # Emphasizing
-        $line =~ s/([\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 1 ) . $3/ge;
-        $line =~ s/([\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<strong><em>$2<\/em><\/strong>$3/g;
-        $line =~ s/([\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<strong>$2<\/strong>$3/g;
-        $line =~ s/([\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<em>$2<\/em>$3/g;
-        $line =~ s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 0 ) . $3/ge;
-
-        # Mailto
-        # Email addresses must always be 7-bit, even within I18N sites
-
-        # FIXME: check security...
-        # Explicit [[mailto:... ]] link without an '@' - hence no 
-        # anti-spam padding needed.
-        # '[[mailto:string display text]]' link (no '@' in 'string'):
-        $line =~ s/\[\[mailto:(.*?)\]\]/$this->_handleMailto($1)/geo;
-
-        # Normal mailto:foo@example.com ('mailto:' part optional)
-        # FIXME: Should be '?' after the 'mailto:'...
-        $line =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
-
-        # Handle [[][] and [[]] links
-        # Escape rendering: Change " ![[..." to " [<nop>[...", for final unrendered " [[..." output
-        $line =~ s/(\s)\!\[\[/$1\[<nop>\[/g;
-        # Spaced-out Wiki words with alternative link text
-        # i.e. [[$1][$3]]
-        $line =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
-
-        # do normal WikiWord link if not disabled by <noautolink> or
-        # NOAUTOLINK preferences variable
-        unless( $this->{NOAUTOLINK} || $insideNoAutoLink ) {
-            # Handle WikiWords 
-            # " WebName.TopicName#anchor" or (WebName.TopicName#anchor) -> currentWeb, explicit web, topic, anchor
-            $line =~ s/([\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geo;
-        }
-
-        $line =~ s/\n//;
-
         push( @result, $line );
     }
+
     if( $insideTABLE ) {
         push( @result, "</table>" );
     }
     $this->_addListItem( \@result, "", "", "" );
 
-    if( $insidePRE ) {
-        push( @result, "</pre>" );
+    $text = join("\n", @result );
+
+    # '#WikiName' anchors
+    $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/ '<a name="' . $this->makeAnchorName( $2 ) . '"><\/a>'/geom;
+
+    # Emphasizing
+    $text =~ s/(^|[\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 1 ) . $3/gem;
+    $text =~ s/(^|[\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<strong><em>$2<\/em><\/strong>$3/gm;
+    $text =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<strong>$2<\/strong>$3/gm;
+    $text =~ s/(^|[\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<em>$2<\/em>$3/gm;
+    $text =~ s/(^|[\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 0 ) . $3/gem;
+
+    # Mailto
+    # Email addresses must always be 7-bit, even within I18N sites
+
+    # FIXME: check security...
+    # Explicit [[mailto:... ]] link without an '@' - hence no 
+    # anti-spam padding needed.
+    # '[[mailto:string display text]]' link (no '@' in 'string'):
+    $text =~ s/\[\[mailto:(.*?)\]\]/$this->_handleMailto($1)/geo;
+
+    # Normal mailto:foo@example.com ('mailto:' part optional)
+    # FIXME: Should be '?' after the 'mailto:'...
+    $text =~ s/(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/gem;
+
+    # Handle [[][] and [[]] links
+    # Escape rendering: Change " ![[..." to " [<nop>[...", for final unrendered " [[..." output
+    $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
+    # Spaced-out Wiki words with alternative link text
+    # i.e. [[$1][$3]]
+    $text =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
+
+    $text = $this->takeOutBlocks( $text, "noautolink", $removed );
+    unless( $this->{NOAUTOLINK} ) {
+
+        # do normal WikiWord link if not disabled by <noautolink> or
+        # NOAUTOLINK preferences variable
+        # Handle WikiWords 
+        # " WebName.TopicName#anchor" or (WebName.TopicName#anchor) -> currentWeb, explicit web, topic, anchor
+        $text =~ s/(^|[\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geom;
     }
+    $this->putBackBlocks( $text, $removed, "noautolink" );
+    $text =~ s/<\/?noautolink>//gi;
 
-    my $res = join( "", @result );
-    $res =~ s/\t/   /g;
+    $this->putBackBlocks( $text, $removed, "pre" );
 
-    # Wiki Plugin Hook
-    $this->plugins()->endRenderingHandler( $res );
+    # DEPRECATED plugins hook after PRE re-inserted
+    $this->plugins()->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
-    $result = $this->putBackBlocks( $res, \@verbatim, "verbatim",
-                                    "pre", \&verbatimCallBack );
+    $this->putBackBlocks( $text, $removed,
+                          "verbatim", "pre", \&verbatimCallBack );
 
-    $result =~ s|\n?<nop>\n$||o; # clean up clutch
-    return "$head$result";
+    $text =~ s|\n?<nop>\n$||o; # clean up clutch
+
+    $this->putBackBlocks( $text, $removed, "head" );
+
+    $text = "$doctype$text";
+
+    $this->plugins()->postRenderingHandler( $text );
+
+    return $text;
 }
 
 sub _handleMailto {
@@ -1278,11 +1276,11 @@ sub setRenderMode {
 
 =pod
 
----++ ObjectMethod takeOutBlocks( $text, $tag, \@buffer ) -> $text
+---++ ObjectMethod takeOutBlocks( \$text, $tag, \%map ) -> $text
 
    * =$text= - Text to process
    * =$tag= - XHTML-style tag.
-   * =\@buffer= - Reference to an array to contain the remove blocks
+   * =\%map= - Reference to a hash to contain the removed blocks
 
 Return value: $text with blocks removed
 
@@ -1296,30 +1294,35 @@ Parameters to the open tag are recorded.
 =cut
 
 sub takeOutBlocks {
-    my( $this, $intext, $tag, $buffer ) = @_;
+    my( $this, $intext, $tag, $map ) = @_;
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
     return $intext unless ( $intext =~ m/<$tag>/ );
 
-    my $open = qr/^\s*<$tag(\s[^>]+)?>\s*$/i;
-    my $close = qr/^\s*<\/$tag>\s*$/i;
+    my $open = qr/^\s*<$tag(\s[^>]+)?>(.*)$/i;
+    my $close = qr/^\s*<\/$tag>(.*)$/i;
     my $out = "";
     my $depth = 0;
     my $scoop;
     my $tagParams;
+    my $n = 0;
 
     foreach my $line ( split/\r?\n/, $intext ) {
         if ( $line =~ m/$open/ ) {
             unless ( $depth++ ) {
-                $scoop = "";
+                $scoop = $2 || "";
                 next;
             }
             $tagParams = $1;
         }
         if ( $depth && $line =~ m/$close/ ) {
+            my $rest = $1;
             unless ( --$depth ) {
-                push( @$buffer, { params=>$tagParams, text=>$scoop } );
-                $line = "%_$tag$#$buffer%";
+                my $placeholder = "$tag$n";
+                $map->{$placeholder}{params} = $tagParams;
+                $map->{$placeholder}{text} = $scoop;
+                $line = "<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->$rest";
+                $n++;
             }
         }
         if ( $depth ) {
@@ -1334,8 +1337,10 @@ sub takeOutBlocks {
         # while ( $depth-- ) {
         #     $scoop .= "</$tag>\n";
         # }
-        push( @$buffer, { params=>$tagParams, text=>$scoop } );
-        $out .= "%_$tag$#$buffer%\n";
+        my $placeholder = "$tag$n";
+        $map->{$placeholder}{params} = $tagParams;
+        $map->{$placeholder}{text} = $scoop;
+        $out .= "<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->\n";
     }
 
     return $out;
@@ -1343,13 +1348,13 @@ sub takeOutBlocks {
 
 =pod
 
----++ ObjectMethod putBackBlocks( $text, \@buffer, $tag, $newtag, $callBack ) -> $text
+---++ ObjectMethod putBackBlocks( $text, \%map, $tag, $newtag, $callBack ) -> $text
 
 Return value: $text with blocks added back
    * =$text= - text to process
-   * =$buffer= - Buffer of removed blocks generated by takeOutBlocks
+   * =\%map= - map placeholders to blocks removed by takeOutBlocks
    * =$tag= - Tag name processed by takeOutBlocks
-   * =$newtag= - Tag name to use in output, in place of $tag (optional)
+   * =$newtag= - Tag name to use in output, in place of $tag. If undefined, uses $tag.
    * =$callback= - Reference to function to call on each block being inserted (optional)
 
 Reverses the actions of takeOutBlocks.
@@ -1368,19 +1373,20 @@ Cool, eh what? Jolly good show.
 =cut
 
 sub putBackBlocks {
-    my( $this, $text, $buffer, $tag, $newtag, $callback ) = @_;
+    my( $this, $text, $map, $tag, $newtag, $callback ) = @_;
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
 
-    $newtag = $tag unless defined( $newtag );
-
-    for( my $i = $#$buffer; $i >= 0; $i-- ) {
-        my $params = $buffer->[$i]{params} || "";
-        my $val = $buffer->[$i]{text};
-        $val = &$callback( $val ) if ( defined( $callback ));
-        $text =~ s|%_$tag$i%|<$newtag$params>\n$val</$newtag>|;
+    $newtag ||= $tag;
+    my @k = keys %$map;
+    foreach my $placeholder ( @k ) {
+        if( $placeholder =~ /^$tag\d+$/ ) {
+            my $params = $map->{$placeholder}{params} || "";
+            my $val = $map->{$placeholder}{text};
+            $val = &$callback( $val ) if ( defined( $callback ));
+            $_[1] =~ s|<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->|<$newtag$params>\n$val</$newtag>|;
+            delete( $map->{$placeholder} );
+        }
     }
-
-    return $text;
 }
 
 =pod
