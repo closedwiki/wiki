@@ -30,6 +30,7 @@ package TWiki::Search;
 use strict;
 use Assert;
 use TWiki::Sandbox;
+use TWiki::User;
 
 # 'Use locale' for internationalisation of Perl sorting and searching - 
 # main locale settings are done in TWiki::setupLocale
@@ -771,7 +772,7 @@ sub searchWeb {
                     $out =~ s/\$date/$revDate/gos;
                     $out =~ s/\$isodate/&revDate2ISO($revDate)/geos;
                     $out =~ s/\$rev/$revNum/gos;
-                    $out =~ s/\$wikiusername/$revUser->webDotWikiName()/geos;
+                    $out =~ s/\$wikiusername/TWiki::User->new( $this->{session}, $revUser, $revUser )->webDotWikiName()/geos;
                     $out =~ s/\$wikiname/$revUser->wikiName()/geos;
                     $out =~ s/\$username/$revUser->login()/geos;
                     my $r1info = {};
