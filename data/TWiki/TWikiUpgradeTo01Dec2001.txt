@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000791372" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000798012" format="1.0" version="1.23"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -167,18 +167,22 @@ You can do the following changes using your old TWiki 01-Dec-2000 or new TWiki 0
 	1. In =WebPreferences= of all webs, add or change the following web preferences: (see =TWiki.WebPreferences=)
 		* Add a NOSEARCHALL in case you want to exclude the web from a =web="all"= search:
 		  <br /> =* Set NOSEARCHALL = on=
-		* Modify WEBTOPICLIST, ex:
-		  <br /> =* Set WEBTOPICLIST = [<nop>[%<nop>HOMETOPIC%][Home]] %<nop>SEP% [<nop>[WebChanges][Changes]] %<nop>SEP% [<nop>[WebIndex][Index]] %<nop>SEP% [<nop>[WebSearch][Search]] %<nop>SEP% Go &lt;input type="text" name="topic" size="16" /&gt;=
+		* In WEBTOPICLIST, remove the =%<nop>WEB% . {}= decoration from the list (it is now in the templates), ex:
+		  <br /> =* Set WEBTOPICLIST = &lt;a href="%HOMETOPIC%"&gt;Home&lt;/a&gt;=
+		  <br /> =&nbsp; | &lt;a href="WebChanges"&gt;Changes&lt;/a&gt;=
+	<br /> =&nbsp; | &lt;a href="WebIndex"&gt;Index&lt;/a&gt;=
+	<br /> =&nbsp; | &lt;a href="WebSearch"&gt;Search&lt;/a&gt;=
+	<br /> =&nbsp; | Go &lt;input type="text" name="topic" size="16" /&gt;=
 		* Add a these new preferences:
 		  <br /> =* Set DENYWEBVIEW ==
 		  <br /> =* Set ALLOWWEBVIEW ==
 		  <br /> =* Set DENYWEBRENAME ==
 		  <br /> =* Set ALLOWWEBRENAME ==
-		* Set FINALPREFERENCES:
+		* Set the FINALPREFERENCES:
 		  <br /> =* Set FINALPREFERENCES = WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME=
-	1. In =WebSearch= of all webs, replace content with this one line:
+	1. Optional: In =WebSearch= of all webs, replace content with this one line:
 		  <br /> =%<nop>INCLUDE{"%<nop>TWIKIWEB%.WebSearch"}%=
-	1. In =WebChanges= of all webs, replace content with this one line:
+	1. Optional: In =WebChanges= of all webs, replace content with this one line:
 		  <br /> =%<nop>INCLUDE{"%<nop>TWIKIWEB%.WebChanges"}%=
 
 ---+++ Step 9: Customize template files 
@@ -192,13 +196,14 @@ __NOTE:__ Skip this step if you did not customize your template files.
 		* Templates are now rendered by TWiki. You can use all TextFormattingRules, but you have to escape unwanted ones. Also, remove empty lines unless you want a ==&lt;p /&gt;= tag added.
 		* Added TWikiMetaData rendering.
 	1. Form Templates replace the <nop>TWikiCategoryTables:
-		* Create a replacement TWikiForms template based on =twikicatitems.tmpl= in each web that used a Category Table.
+		* Create a replacement =WebForm= topic based on =twikicatitems.tmpl= in each web that uses a Category Table. See details in TWikiForms and compare with the settings in the =Know2.<nop>WebPreferences= topic.
+		  <br /> __NOTE:__ Do not remove the =twikicatitems.tmpl= file, it is still used for topics that are of the old format.
 		* Searches need to be adjusted to deal with format change - if all topics are upgrades, a more specific search can be done.
 	1. For each web that has a custom ==notedited.tmpl== template, create an equivalent WebTopicEditTemplate to conform with the new [[%TWIKIWEB%.TWikiTemplates#TemplateTopics][TemplateTopics]]. The new format replaces the =notedited.tmpl=, =notext.tmpl= and =notwiki.tmpl= templates.
 
 ---+++ Step 10: Switch over to new installation
 
-In this step, you move the working 01-Sep-2001 installation to the old 01-Dec-2000 installation, so that you don't have to change the URL.
+In this step, you move the working 01-Sep-2001 installation to the old 01-Dec-2000 installation, so that users don't have to change the URL.
 
 	1. Test your new 01-Sep-2001 installation under =twiki/bin/2/view= to make sure everything works as expected.
 		* __NOTE:__ Don't worry about the Plugins, they'll work after the switch.
@@ -260,7 +265,7 @@ In this step, you move the working 01-Sep-2001 installation to the old 01-Dec-20
 
 ---++ Known Issues
 
-		* Check TWiki:Codev/KnownIssuesOfTWiki01Sep2001 for known issues of TWiki 01 Sep 2001 (production release)
+	* Check TWiki:Codev/KnownIssuesOfTWiki01Sep2001 for known issues of TWiki 01 Sep 2001 (production release)
 		
 -- JohnTalintyre - 18 Jul 2001 <br />
 -- MikeMannix - 12 Sep 2001 <br />
