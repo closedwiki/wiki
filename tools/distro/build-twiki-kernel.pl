@@ -11,9 +11,20 @@ use File::Find::Rule;
 use File::Slurp::Tree;
 #use File::Spec::Functions qw( abs2rel rel2abs );
 #use LWP::Simple qw( mirror RC_OK RC_NOT_MODIFIED );
+use LWP::UserAgent;
+#use Error;
+
+################################################################################
+{
+    package TWikiGuestAgent;
+    our @ISA = qw(LWP::UserAgent);
+    sub new			{ my $self = LWP::UserAgent::new(@_); $self->agent("TWikiKernel Builder/0.5"); $self; }
+    sub get_basic_credentials	{ qw( TWikiGuest guest ) }
+}
 
 ################################################################################
 
+# commonly-used File::Find::Rule rules
 my $discardSVN = File::Find::Rule->directory
     ->name(".svn")
     ->prune          # don't go into it
@@ -26,13 +37,16 @@ my $installBase = cwd() . "/twiki";
 
 ( rmtree( $installBase ) or die $! ) if -e $installBase;
 my $tar = 'TWiki20040901.tar.gz';
-execute( "wget --http-user=TWikiGuest --http-passwd=guest -O $tar http://twiki.org/release/$tar" ) unless -e $tar;
+unless ( -e $tar )
+{
+    my $ua = TWikiGuestAgent->new or die $!;
+    my $status = $ua->mirror( "http://twiki.org/release/$tar", $tar );
+    # TODO: check for error
+#    print Dumper( $status );
+#    execute( "wget --http-user=TWikiGuest --http-passwd=guest -O $tar http://twiki.org/release/$tar" ) unless -e $tar;
+}
 execute( "tar xzf $tar" ) or die $!;
-
-################################################################################
-
-my @filesOriginal = File::Find::Rule->file->in( 'twiki' );
-print scalar @filesOriginal . " original files\n";
+print scalar File::Find::Rule->file->in( 'twiki' ), " original files\n";
 
 ################################################################################
 
@@ -42,43 +56,37 @@ chdir( '../..' ) or die $!;
 #-[bin]-------------------------------------------------------------------------------
 ##my @bin = qw( attach changes edit geturl installpasswd mailnotify manage oops passwd preview rdiff rdiffauth
 ##	      register rename save search setlib.cfg statistics testenv upload view viewauth viewfile );
-
 rmtree "$installBase/bin" or die $!;
 my $treeBin = slurp_tree( 'bin', rule => File::Find::Rule->or( $discardSVN, $all )->start( 'bin' ) );
 spew_tree( "$installBase/bin" => $treeBin );
-
-#execute( "chmod a+rx,o+w $bin/*" );
-
-#-[templates]-------------------------------------------------------------------------------
-
-rmtree "$installBase/templates" or die $!;
-my $treeTemplates = slurp_tree( 'templates', rule => File::Find::Rule->or( $discardSVN, $all )->start( 'templates' ) );
-spew_tree( "$installBase/templates" => $treeTemplates );
+# ??? execute( "chmod a+rx,o+w $bin/*" );
 
 #-[lib]-------------------------------------------------------------------------------
-
 rmtree "$installBase/lib" or die $!;
 my $treeLib = slurp_tree( 'lib', rule => File::Find::Rule->or( $discardSVN, $all )->start( 'lib' ) );
 spew_tree( "$installBase/lib" => $treeLib );
 
+#-[templates]-------------------------------------------------------------------------------
+rmtree "$installBase/templates" or die $!;
+my $treeTemplates = slurp_tree( 'templates', rule => File::Find::Rule->or( $discardSVN, $all )->start( 'templates' ) );
+spew_tree( "$installBase/templates" => $treeTemplates );
+
 ################################################################################
 # some cleanup
 unlink "$installBase/data/warning.txt", "$installBase/data/debug.txt";
-
+# ??? what else?
 
 ################################################################################
 
 chdir $pwdStart;
-
-my @filesNew = File::Find::Rule->file->in( 'twiki' );
-print scalar @filesNew . " new files\n";
+print scalar File::Find::Rule->file->in( 'twiki' ), " new files\n";
 
 ################################################################################
-
+# create TWikiKernel distribution file
 chomp( my $now = `date +'%Y%m%d.%H%M%S'` );
-chomp( my $branch = `cat branch` || 'MAIN' );
+chomp( my $branch = `head -n 1 branch` || 'MAIN' );
 my $newDistro = "TWikiKernel-$branch-$now";
-execute( "tar czf $newDistro.tar.gz twiki" );
+execute( "tar czf $newDistro.tar.gz twiki" );	# .tar.gz goes *here* because *z* is here
 
 exit 0;
 
@@ -121,7 +129,7 @@ __END__
    * delete debug.txt, warning.txt
 
 /pub
-   * Main, Sandbox, TWiki, Trash, _default
+   * Main/, Sandbox/, TWiki/, Trash/, _default/
    * icn/_filetypes.txt, icn/*.gif
    * favicon.ico [blasted robot]
    * wikiHome.gif [blasted robot]
