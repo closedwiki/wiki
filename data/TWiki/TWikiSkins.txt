@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000619467" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="PeterThoeny" date="1041669480" format="1.0" version="1.9"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
@@ -13,6 +13,62 @@ Skins are customized TWikiTemplates files. You can use skins to change the look 
 
 Skin files are located in the =twiki/templates= directory and are named with the syntax: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. For example, the *Printable* skin for the =view= template is =view.print.tmpl=.
 
+Use the existing TWikiTemplates (like =view.tmpl=) or skin files as a base for your own skin, name it for example =view.myskin.tmpl=.
+
+---++ Variables in Skins
+
+You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVariables, and other predefined variables to compose your skins. Some commonly used variables in skins:
+
+| *Variable:* | *Expanded to:* |
+| =%<nop>WIKILOGOURL%= | Link of page logo |
+| =%<nop>WIKILOGOIMG%= | Image URL of page logo |
+| =%<nop>WIKILOGOALT%= | Alt text of page logo |
+| =%<nop>WEBBGCOLOR%= | Web specific background color, defined in the WebPreferences |
+| =%<nop>WIKITOOLNAME%= | The name of your TWiki site |
+| =%<nop>SCRIPTURL%= | The script URL of TWiki |
+| =%<nop>SCRIPTSUFFIX%= | The script suffix, ex: =.pl=, =.cgi= |
+| =%<nop>WEB%= | The name of the current web |
+| =%<nop>WEBURLENCODED%= | The name of the current web, URL encoded (for form action) |
+| =%<nop>TOPIC%= | The name of the current topic |
+| =%<nop>TOPICURLENCODED%= | The name of the current topic, URL encoded (for form action) |
+| =%<nop>WEBTOPICLIST%= | Common links of current web, defined in the WebPreferences. It includes a [[#GoBox]] |
+| =%<nop>TEXT%= | The topic text, e.g. the content that can be edited |
+| =%<nop>META{"form"}%= | [[TWikiForms][TWikiForm]], if any |
+| =%<nop>META{"attachments"}%= | FileAttachment table |
+| =%<nop>META{"parent"}%= | The topic parent |
+| =%<nop>EDITTOPIC%= | Edit link |
+| =%<nop>REVTITLE%= | The revision title, if any, ex: =(r1.6)= |
+| =%<nop>REVINFO%= | Revision info, ex: =r1.6 - 24 Dec 2002 - 08:12 GMT - %WIKIUSERNAME%= |
+| =%<nop>WEBCOPYRIGHT%= | Copyright notice, defined in the WebPreferences |
+
+#GoBox
+---+++ The "Go" Box and Navigation Box
+
+The =%<nop>WEBTOPICLIST%= includes a "Go" box to jump to a topic. The box also understand URLs, e.g. you can type http://www.google.com/ to jump to an external web site. The feature is handy if you build a skin that has a select box of frequently used links, like Intranet home, employee database, sales database and such. A little <nop>JavaScript gets into action on the onSelect method of the select tag to fill the selected URL into the "Go" box field, then submits the form.
+
+Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
+
+<form name="sample" action="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEBURLENCODED%/%TOPICURLENCODED%">
+<table border="3"><tr><td>
+<select name="sel" onchange="this.form.topic.value=this.options[this.selectedIndex].value; this.form.submit()">
+ <option selected="selected" value="">Navigate...</option>
+ <option value="http://www.twiki.org/">Intranet home</option>
+ <option value="%MAINWEB%.TWikiUsers">Employee index</option>
+ <option value="%MAINWEB%.WebHome">%MAINWEB% web</option>
+ <option value="%TWIKIWEB%.WebHome">%TWIKIWEB% web</option>
+ <option value="http://www.google.com/">Google</option>
+ <option value="http://www.yahoo.com/">Yahoo!</option>
+ </select>
+Bare bones header for demo only
+</td></tr><tr><td>
+%WEBTOPICLIST%
+</td></tr></table>
+</form> 
+
+---++ Packaging and Publishing Skins
+
+See TWiki:Plugins/SkinPackagingHowTo 
+
 ---++ Activating Skins
 
 A skin can be activated in two ways:
@@ -26,4 +82,4 @@ A skin can be activated in two ways:
 
 The ==?skin=name== URL parameter overrides the SKIN Preference value.
 
--- PeterThoeny - 14 Jul 2001 <br>
+-- PeterThoeny - 03 Jan 2003
