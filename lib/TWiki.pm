@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = 'Alpha 17 Jul 2004 $Rev$';
+$wikiversion      = 'Alpha 25 Jul 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1206,21 +1206,11 @@ sub userToWikiName
     }
 
     $loginUser =~ s/$securityFilter//go;
-    my $wUser = $userToWikiList{ $loginUser };
-    if ( ! $wUser ) { #if we didn't find a user, just use the input param (NoPasswdUser, or de-registered)
-		$wUser = $loginUser;
-	}
-
-    if( ! $dontAddWeb ) {
-		my $web = "$mainWebname";
-		( $web, $wUser ) = TWiki::Store::normalizeWebTopicName( $web, $wUser );
-
-		if ( isWikiName($wUser) ) {
-            $wUser = "$web.$wUser";
-		}
+    my $wUser = $userToWikiList{ $loginUser } || $loginUser;
+    if( $dontAddWeb ) {
+        return $wUser;
     }
-   
-   return $wUser;
+    return "$mainWebname.$wUser";
 }
 
 =pod

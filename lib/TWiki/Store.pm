@@ -271,7 +271,10 @@ sub changeRefTo
            foreach my $topic ( @topics ) {
               if( $topic ne $oldTopic ) {
                   if( /^%META:/ ) {
+                      s/^(%META:FILEATTACHMENT.*? user\=\")(\w)/$1$TWiki::TranslationToken$2/;
+                      s/^(%META:TOPICMOVED.*? by\=\")(\w)/$1$TWiki::TranslationToken$2/;
                       s/($metaPreTopic)\Q$topic\E(?=$metaPostTopic)/$1$oldWeb.$topic/g;
+                      s/$TWiki::TranslationToken//;
                   } else {
                       s/($preTopic)\Q$topic\E(?=$postTopic)/$1$oldWeb.$topic/g;
                   }
