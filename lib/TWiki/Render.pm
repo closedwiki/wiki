@@ -1042,7 +1042,6 @@ sub getRenderedVersion {
         $text =~ s/(^|[\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geom;
     }
     $this->putBackBlocks( $text, $removed, 'noautolink' );
-    $text =~ s/<\/?noautolink>//gi;
 
     $this->putBackBlocks( $text, $removed, 'pre' );
 
