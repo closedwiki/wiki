@@ -4,7 +4,7 @@
 use strict;
 use Data::Dumper qw( Dumper );
 
-use Cwd qw( getcwd );
+use Cwd qw( cwd );
 use File::Copy qw( cp );
 use File::Path qw( rmtree mkpath );
 use File::Find::Rule;
@@ -17,8 +17,8 @@ use LWP::UserAgent;
 #	print "\toutputDirectory : where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed\n";
 #	print "no parameters will default to current dir\n";
 
-my $tempDir = getcwd(); 
-my $outputDirectory = getcwd();
+my $tempDir = cwd(); 
+my $outputDirectory = cwd();
 
 if ( $#ARGV == 1 ) {
 	$tempDir = $ARGV[0]; 
@@ -77,7 +77,7 @@ print scalar File::Find::Rule->file->in( $installBase ), " original files\n";
 
 ################################################################################
 
-my $pwdStart = getcwd();
+my $pwdStart = cwd();
 chdir( '../..' ) or die $!;
 
 #[ PRE ]###############################################################################
