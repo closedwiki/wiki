@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1059253445" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092605068" format="1.0" version="1.16"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! TWiki Topics
 %TOC%
@@ -139,6 +139,7 @@ RCS revision control automatically saves all topic changes. To look at earlier v
 	1 Preview and save the topic.
 See: [[TWikiDocumentation#Managing_Topics][ManagingTopics]] for more details.
 
--- MikeMannix - 22 May 2002 %BR%
--- Main.GrantBow - 17 Jan 2003 %BR%
+-- TWiki:MikeMannix - 22 May 2002 %BR%
+-- TWiki::Main.GrantBow - 17 Jan 2003 %BR%
+
 %META:TOPICMOVED{by="MikeMannix" date="1021230286" from="TWiki.TWikiPages" to="TWiki.TWikiTopics"}%

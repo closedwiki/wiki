@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1082876858" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092604921" format="1.0" version="1.23"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -59,16 +59,33 @@ Common parts, appearing in two or more templates, can be defined in a master tem
 #HtmlTemplates
 ---+++ HTML Page Templates
 
-%WIKITOOLNAME% uses HTML template files for all actions, like topic view, edit, and preview. This allows you to change the look and feel of all pages by editing just a few template files.
+TWiki uses HTML template files for all actions, like topic view, edit, and preview. This allows you to change the look and feel of all pages by editing just a few template files.
 
-Templates are in the ==twiki/templates== directory. As an example, ==twiki/templates/view.tmpl== is the template file for the ==twiki/bin/view== script. Templates can be overloaded by individual webs. The following search order applies:
+Templates are stored either in the ==twiki/templates== directory or in user topics. As an example, ==twiki/templates/view.tmpl== is the template file for the ==twiki/bin/view== script.
 
-	1. ==twiki/templates/$webName/$scriptName.tmpl==
-	2. ==twiki/templates/$scriptName.tmpl==
-		* =$webName= is the name of the web (ex: =Main=)
-		* =$scriptName= is the script (ex: =view=).
+%H% Templates can be overloaded by individual webs.
 
-%H% *NOTE:* TWikiSkins can be defined to overload the standard templates.
+%H% TWikiSkins can overload the standard templates.
+
+TWiki uses the following search order to determine which template to use:
+
+<blockquote>
+| *If a skin is specified* | *If no skin is specified* |
+| =templates/%<nop>WEB%/%RED%script</b>.%RED%skin%ENDCOLOR%.tmpl= | =templates/%<nop>WEB%/%RED%script%ENDCOLOR%.tmpl= |
+| =templates/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl= | =templates/%RED%script%ENDCOLOR%.tmpl= |
+| =data/%<nop>WEB%/%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template.txt= | =data/%<nop>WEB%/%RED%Script%ENDCOLOR%Template.txt= |
+| =data/%TWIKIWEB%/%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template.txt= | =data/%TWIKIWEB%/%RED%Script%ENDCOLOR%Template.txt= |
+| *Legend:* %BB% %RED%script%ENDCOLOR% refers to the script name, e.g =view=, =edit= %BB% %RED%Script%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =View= %BB% %RED%skin%ENDCOLOR% refers to the skin name, e.g =dragon=, =pattern= %BB% %RED%Skin%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =Dragon= %BB% =%<nop>WEB%= refers to the current web ||
+</blockquote>
+
+Additionally (and primarily for use in =%TMPL<nop>:INCLUDE{}%=) the template name may be a wiki topic name, specified as =%RED%Web%ENDCOLOR%.%RED%Topic%ENDCOLOR%=, in which case the search is:
+<blockquote>
+| *If a skin is specified* | *If no skin is specified* |
+| =templates/%RED%web%ENDCOLOR%/%RED%Web%ENDCOLOR%.%RED%Topic%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl= | =templates/%RED%web%ENDCOLOR%/%RED%Web%ENDCOLOR%.%RED%Topic%ENDCOLOR%.tmpl= |
+| =templates/%RED%Web%ENDCOLOR%.%RED%Topic%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl= | =templates/%RED%Web%ENDCOLOR%.%RED%Topic%ENDCOLOR%.tmpl= |
+|  =data/%RED%Web%ENDCOLOR%/%RED%Topic%ENDCOLOR%.txt=  ||
+</blockquote>
+If %RED%Web%ENDCOLOR% is not specified in the INCLUDE, it defaults to %TWIKIWEB%, and the search to the first type.
 
 Special variables are used in templates, especially in =view=, to display [[TWikiMetaData#MetaDataRendering][meta data]].
 
@@ -149,6 +166,7 @@ The =edit= scipt understands the following parameters, typically supplied by HTM
 | =templatetopic= | The name of the template topic, e.g. topic used to copy the initial content |
 | =topicparent= | Sets the parent topic |
 | =TopicClassification= | Assuming the template topic has a form with a field called "TopicClassification", it will set the value of the field |
+| =contenttype= | Optional parameter that defines the application type to write into the CGI header. Defaults to =text/html=. May be used to invoke alternative client applications |
 | =anyname= | Any parameter can passed to the new topic; if the template topic contains =%<nop>URLPARAM{"anyname"}%=, it will be replaced by its value |
 </blockquote>
 
@@ -252,7 +270,8 @@ With URL: ==.../bin/oops/Sandbox/TestTopic2?template=oopstest&param1=WebHome&par
 
 	* A drawback of referring to a master template is that you can only test a template from within TWiki, where the include variables are resolved. In the previous system, each template was a structurally complete HTML document with a =.tmpl= filename extension - it contained unresolved =%VARIABLES%=, but could still be previewed directly in a browser.
 
--- TWiki:Main.PeterThoeny - 25 Apr 2004 %BR%
+-- TWiki:Main.CrawfordCurrie - 30 Jun 2004 %BR%
+-- TWiki:Main.PeterThoeny - 15 Aug 2004 %BR%
 -- TWiki:Main.MikeMannix - 14 Sep 2001 %BR%
 -- TWiki:Main.DavidLeBlanc - 11 Mar 2002
 
