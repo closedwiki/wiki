@@ -16,7 +16,6 @@ html body {
 	background-color:#f8f8f8;
 	margin:0;
 	padding:0;
-	font-size:90%; /* seems to make a difference */
 	font-size:x-small;
 	voice-family:"\"}\""; 
 	voice-family:inherit;
@@ -50,7 +49,12 @@ hr {
 }
 pre, code, tt {
 	font-size:100%;
+	line-height:1.4em;
 	color:#844F0C;
+}
+pre {
+	margin-top:1em;
+	margin-bottom:1em;
 }
 
 /* Text */
@@ -58,12 +62,13 @@ pre, code, tt {
 h1, h2, h3, h4, h5, h6 {
 	font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
 	line-height:104%;
-	margin:0 0 0.1em 0;
 	padding:0;
+	margin:1em 0 0.1em 0;
 }
 h1 {
 	font-size:210%;
 	color:#e24628;
+	margin:0 0 0.1em 0;
 }
 h2 {
 	font-size:145%;
@@ -71,7 +76,7 @@ h2 {
 	background-color:#F3EDE7;
 	color:#900;
 	padding:0.2em 0.7em;
-	margin:0.15em -0.7em;
+	margin:1em -0.7em 0.15em -0.7em;
 	height:auto;
 }
 h3 { font-size:140%; color:#900;}
@@ -172,7 +177,7 @@ label {
 	TWiki specific elements
 	-----------------------------------------------------------	*/
 
-.twikiMiddleContainer { }
+.twikiMiddleContainer {}
 .twikiMain {
 	padding:0 3.5em;
 	background-color:white;
@@ -810,16 +815,19 @@ html>body .twikiToc li a {
 	styles and overridden styles used in search.pattern.tmpl
 	-----------------------------------------------------------	*/
 	
-.twikiSearchResults {
-	margin-top:1.25em;
-}
-.twikiSearchResultsHeader {
+.twikiSearchResults {}
+.twikiSearchResultsHeader,
+.twikiSearchString {
 	padding:0.2em 0.7em 0.2em 0.7em;
-	margin:0.15em -0.7em 0.15em -0.7em;
+	margin:0.15em -0.7em 0.25em -0.7em;
 	font-weight:bold;
-	margin-bottom:0;
 	background-color:#F3EDE7;
 	border-bottom:1px solid #ccc;
+}
+.twikiSearchString {
+	background-color:transparent;
+	margin-bottom:1em;
+	border-bottom:0px;
 }
 .twikiSearchResults table {
 	width:auto;
@@ -849,31 +857,35 @@ html>body .twikiToc li a {
 	margin:0.5em 0 2em 0;
 	font-size:95%;
 }
+.twikiViewPage .twikiSearchResultsBegin { /* for changes template with noheader="on" */
+	height:1px;
+	border-bottom:1px solid #ddd;
+}
 
 /* Search results in book view format */
 
 .twikiBookViewList .twikiSearchResultsHeader {
 	margin-bottom:1em;
 }
-.twikiBookViewList .twikiSearchResults .twikiTopRow {
+.twikiBookViewList .twikiTopRow {
 	padding:0.2em 0.7em 0.2em 0.7em;
-	margin:0.15em -0.7em 0.15em -0.7em;
+	margin:2.5em -0.7em 0.15em -0.7em;
 	background-color:#22638c;
+	color:#ccc;
+}
+.twikiBookViewList .twikiTopRow a:link, 
+.twikiBookViewList .twikiTopRow a:visited {
 	color:white;
 }
-.twikiBookViewList .twikiSearchResults .twikiTopRow a:link, 
-.twikiBookViewList .twikiSearchResults .twikiTopRow a:visited {
-	color:white;
-}
-.twikiBookViewList .twikiSearchResults .twikiTopRow a:hover {
+.twikiBookViewList .twikiTopRow a:hover {
 	color:#1e5bbd;
 }
-.twikiBookViewList .twikiSearchResults .twikiBottomRow {
+.twikiBookViewList .twikiBottomRow {
 	font-size:100%;
-	padding:1em 0 3em 0;
-	border-color:#22638c;
+	padding:1em 0;
+	border-color:#ddd;
 }
-.twikiBookViewList .twikiSearchResults .twikiBottomRow table {
+.twikiBookViewList .twikiBottomRow {
 	width:auto;
 }
 .twikiBookViewList .twikiSearchResultCount {
