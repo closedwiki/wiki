@@ -58,8 +58,8 @@ sub new
 # ======================
 sub _trace
 {
-   my( $text ) = @_;
-   TWiki::writeDebug( $text );
+#   my( $text ) = @_;
+#   TWiki::writeDebug( $text );
 }
 
 
@@ -529,7 +529,7 @@ sub getRevision
         return $self->delta( $version );
     } else {
         my $headText = $self->delta( $head );
-        my @text = _mySplit( \$headText );
+        my @text = _mySplit( \$headText, 1 );
         return $self->_patchN( \@text, $head-1, $version );
     }
 }
@@ -562,14 +562,13 @@ sub _patch
    my $adj = 0;
    my $pos = 0;
    my $last = "";
-   my $len = @$text;
    my $d;
-   my $doPop = "";
-   my( $posLast, $blanksAtEnd ) = _lastNoEmptyItem( $text );
+   my $extra = "";
    while( $pos <= $#${delta} ) {
        $d = $delta->[$pos];
-       if( $d =~ /^([ad])(\d+)\s(\d+)$/ ) {
+       if( $d =~ /^([ad])(\d+)\s(\d+)\n(\n*)/ ) {
           $last = $1;
+          $extra = $4;
           my $offset = $2;
           my $length = $3;
           if( $last eq "d" ) {
@@ -577,21 +576,22 @@ sub _patch
              my @removed = splice( @$text, $start, $length );
              $adj -= $length;
              $pos++;
-             $doPop =  ( $start + length >= $posLast );
           } elsif( $last eq "a" ) {
-             splice( @$text, $offset + $adj, 0, @${delta}[$pos+1..$pos+$length] );
+             my @toAdd = @${delta}[$pos+1..$pos+$length];
+             if( $extra ) {
+                 if( @toAdd ) {
+                     $toAdd[$#toAdd] .= $extra;
+                 } else {
+                     @toAdd = ( $extra );
+                 }
+             }
+             splice( @$text, $offset + $adj, 0, @toAdd );
              $adj += $length;
              $pos += $length + 1;
-             pop @$text if( $doPop && $blanksAtEnd);
-          } else {
-             die( "only a and d supported, found " . $d );
           }
-       } elsif( $pos = $#${delta} && $d =~ /^$/o ) {
-          push @$text, ("") if( $last eq "a" && $doPop );
-          $last = "";
-          last;
        } else {
-          die( "wrong! - should be \"[ad]<num> <num>\" and was: \"" . $d . "\"\n\n" ); #FIXME remove die
+          warn( "wrong! - should be \"[ad]<num> <num>\" and was: \"" . $d . "\"\n\n" ); #FIXME remove die
+          return;
        }
    }
 }
@@ -605,7 +605,7 @@ sub _patchN
     my @delta = _mySplit( \$deltaText );
     _patch( $text, \@delta );
     if( $version == $target ) {
-        return join( "\n", @$text );
+        return join( "", @$text );
     } else {
         return $self->_patchN( $text, $version-1, $target );
     }
@@ -615,15 +615,38 @@ sub _patchN
 # Split and make sure we have trailing carriage returns
 sub _mySplit
 {
-    my( $text ) = @_;
-    
-    my @list = split( /\n/o, $$text );
+    my( $text, $addEntries ) = @_;
+
+    my $ending = "";
     if( $$text =~ /(\n+)$/o ) {
-       my $lineEnds = length( $1 );
-       for( my $i = 0; $i<$lineEnds; $i++ ) {
-           push @list, ("");
-       }
+        $ending = $1;
     }
+
+    my @list = split( /\n/o, $$text );
+    for( my $i = 0; $i<$#list; $i++ ) {
+        $list[$i] .= "\n";
+    }
+
+    if( $ending ) {
+        if( $addEntries ) {
+            my $len = length($ending);
+            if( @list ) {
+               $len--;
+               $list[$#list] .= "\n";
+            }
+            for( my $i=0; $i<$len; $i++ ) {
+                push @list, ("\n");
+            }
+        } else {
+            if( @list ) {
+                $list[$#list] .= $ending;
+            } else {
+                @list = ( $ending );
+            }
+        }
+    }
+    # TODO: deal with Mac style line ending??
+
     return @list; # FIXME would it be more efficient to return a reference?
 }
 
@@ -696,9 +719,6 @@ sub _diffEnd
 sub _diff
 {
     my( $new, $old, $type ) = @_;
-    
-    my $theEnd = _diffEnd( $new, $old, $type );
-    
     # Work out diffs to change new to old, params are refs to lists
     my $diffs = Algorithm::Diff::diff( $new, $old );
 
@@ -740,6 +760,7 @@ sub _diff
            $chunkSign = $sign if( $chunkSign ne "c" );
            push @lines, ( $what );
        }
+
        $last = 1 if( $count == $numChunks );
        if( $last && $chunkSign eq "+" ) {
            my $endings = 0;
@@ -768,7 +789,7 @@ sub _diff
     # Make sure we have the correct number of carriage returns at the end
     
     print "pre end: \"$out\"\n" if( $DIFFEND_DEBUG );
-    return $out . $theEnd;
+    return $out; # . $theEnd;
 }
 
 
@@ -787,51 +808,42 @@ sub _range
 sub _addChunk
 {
    my( $chunkSign, $out, $lines, $start, $adj, $type, $start1, $last, $newLines ) = @_;
-   # FIXME - do away with $last special processing use _diffEnd instead
-   #print "chunk: sign start adj $chunkSign $start $adj $start1\n";
    my $nLines = @$lines;
+   if( $lines->[$#${lines}] =~ /(\n+)$/o ) {
+      $nLines += ( ( length( $1 ) == 0 ) ? 0 : length( $1 ) -1 );
+   }
    if( $nLines > 0 ) {
-       $$out .= "\n" if( $$out );
+       print "addChunk chunkSign=$chunkSign start=$start adj=$adj type=$type start1=$start1 " .
+             "last=$last newLines=$newLines nLines=$nLines\n" if( $DIFF_DEBUG );
+       $$out .= "\n" if( $$out && $$out !~ /\n$/o );
        if( $chunkSign eq "c" ) {
           $$out .= _range( $start+1, $start+$nLines/2 );
           $$out .= "c";
           $$out .= _range( $start1+1, $start1+$nLines/2 );
           $$out .= "\n";
-          $$out .= "< " . join( "\n< ", @$lines[0..$nLines/2-1] );
+          $$out .= "< " . join( "< ", @$lines[0..$nLines/2-1] );
           $$out .= "\n" if( $lines->[$nLines/2-1] !~ /\n$/o );
           $$out .= "---\n";
-          $$out .= "> " . join( "\n> ", @$lines[$nLines/2..$nLines-1] );
-          $$out .= "\n" if( $last );
+          $$out .= "> " . join( "> ", @$lines[$nLines/2..$nLines-1] );
           $nLines = 0;
        } elsif( $chunkSign eq "+" ) {
           if( $type eq "diff" ) {
               $$out .= $start-$adj . "a";
-              if( $last && ! $lines->[$#${lines}] ) {
-                  pop @$lines;
-                  $nLines--;
-              }
               $$out .= _range( $start+1, $start+$nLines ) . "\n";
-              
-              $$out .= "> " . join( "\n> ", @$lines );
-              $$out .= "\n" if( $last );
+              $$out .= "> " . join( "> ", @$lines );
           } else {
               $$out .= "a";
               $$out .= $start-$adj;
-              my $num = $nLines - $last;
-              $$out .= " $num\n";
-              $$out .= join( "\n", @$lines );
+              $$out .= " $nLines\n";
+              $$out .= join( "", @$lines );
           }
        } else {
           print "Start nLines newLines: $start $nLines $newLines\n" if( $DIFF_DEBUG );
-          $nLines-- if( $last && $start+$nLines-1 > $newLines );
           if( $type eq "diff" ) {
-              $start-- if( $last && $start + 1 > $newLines ); #???
               $$out .= _range( $start+1, $start+$nLines );
               $$out .= "d";
               $$out .= $start + $adj . "\n";
-              pop @$lines if( $last && ! $lines->[$#${lines}] );
-              $$out .= "< " . join( "\n< ", @$lines );
-              $$out .= "\n" if( $last );
+              $$out .= "< " . join( "< ", @$lines );
           } else {
               $$out .= "d";
               $$out .= $start+1;
