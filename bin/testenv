@@ -24,6 +24,9 @@ package TWiki;
 
 use vars qw( $useLocale $setlibAvail );
 
+
+my $brokenTWikiCfg;
+
 # Set library paths in @INC, read TWiki.cfg and set locale, at compile time
 BEGIN { 
     # Try to use setlib.cfg, use default path if missing
@@ -35,8 +38,17 @@ BEGIN {
 	$setlibAvail = 0;
     }
 
-    # Read the configuration file now in order to set locale
-    do "TWiki.cfg";		# Includes OS detection
+    # Read the configuration file now in order to set locale;
+    # includes checking for broken syntax etc.  Need 'require'
+    # to get the $!/$@ to work.
+    $brokenTWikiCfg = 0;
+    unless (eval 'require "TWiki.cfg" ' ){	# Includes OS detection
+	# Capture the Perl error(s)
+	$brokenTWikiCfg ||= 1;	
+	$brokenTWikiCfgError = 
+			( $! ? "$!\n" : '') .	# $! if not readable,
+			( $@ ? "$@\n" : '');	# $@ if not compileable
+    }
 
     # Do a dynamic 'use locale' for this script
     if( $useLocale ) {
@@ -49,7 +61,6 @@ BEGIN {
 # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
 			# Doesn't work well here, due to 'do "TWiki.cfg"'
 # use diagnostics;	# Debug only
-
 
 
 &main();
@@ -143,6 +154,24 @@ print <<EOM;
 <body>
 <h1>Test the environment for TWiki</h1>
 Please read the <a href="http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationNotes">TWikiInstallationNotes</a> for more information on TWiki installation.
+EOM
+
+# TWiki.cfg was read earlier, in BEGIN block.
+# Check for broken TWiki.cfg and report the Perl error found earlier.
+if ($brokenTWikiCfg) {
+    # Warn user and give up
+    $brokenTWikiCfgError =~ s!\n!<br />\n!sg; 	# Format properly
+    print "<h3>TWiki.cfg error</h3>\n";
+    print "<b><font color=\"red\">WARNING:</font></b> ";
+    print "TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) relate to TWiki.cfg and should help locate the problem.<p />\n";
+    print "$brokenTWikiCfgError\n";
+    
+    # EARLY EXIT
+    print "</pre>\n</body>\n</html>";
+    exit;
+}
+
+print <<EOM;
 <h3>Environment variables:</h3>
 <table>
 EOM
@@ -278,16 +307,16 @@ print "This is the Perl library path, used to load TWiki modules, ";
 print "third-party modules used by some plugins, and Perl built-in modules.";
 print "</td></tr>\n";
 
-# Add to list of required modules if non-Unix, or MacOS X (detected by
-# Perl as 'Darwin')
-if ( $detailedOS =~ /darwin/i or $OS ne 'UNIX' ) {
-    push @requiredMods,  @requiredModsNonUnix;
-}
-
 
 # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
-# browser in some environments.
+# browser in some environments.  
 $CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
+
+# Add to list of required modules if non-Unix, or MacOS X (detected by
+# Perl as 'Darwin') - $detailedOS is set in TWiki.cfg.
+if ( defined $detailedOS and ($detailedOS =~ /darwin/i or $OS ne 'UNIX') ) {
+    push @requiredMods,  @requiredModsNonUnix;
+}
 
 # Check that the TWiki.pm module can be found
 print "<tr><th align=\"right\">TWiki module in \@INC path:</th><td>";
@@ -415,9 +444,8 @@ print "</table>\n";
 
 
 
-print "<h3>Test of <tt>TWiki.cfg</tt> Configuration:</h3>\n";
 
-# TWiki.cfg read earlier
+print "<h3>Test of <tt>TWiki.cfg</tt> Configuration:</h3>\n";
 
 print "<table>\n";
 
@@ -772,6 +800,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	}
 
 	# $upperNational
+	$upperNational = $upperNational;	# Warning fodder
 	print "<tr><th align=\"right\">\$upperNational:</th><td>$upperNational</td></tr>\n";
 	print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 	print "This TWiki.cfg parameter is used when <b>\$useLocale</b> is 0, to work around missing or non-working locales.\n";
@@ -783,6 +812,7 @@ if ( $showLocales ) {		# Only if TWiki.pm found
 	print "</td></tr>\n";
 
 	# $lowerNational
+	$lowerNational = $lowerNational;	# Warning fodder
 	print "<tr><th align=\"right\">\$lowerNational:</th><td>$lowerNational</td></tr>\n";
 	print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 	print "This TWiki.cfg parameter is used whenever <b>\$upperNational</b> is used.\n";
