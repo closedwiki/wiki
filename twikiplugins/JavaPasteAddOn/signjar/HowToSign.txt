@@ -1,3 +1,5 @@
+See http://java.sun.com/j2se/1.4/docs/guide/security/SecurityToolsSummary.html
+
 +---First off, create the policy file for the applet:
 
 Run jdk/bin/policytool on twiki.policy.

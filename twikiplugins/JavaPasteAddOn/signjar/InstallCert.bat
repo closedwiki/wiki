@@ -5,3 +5,4 @@ pause
 
 keytool -import -alias user -file %CERTIFICATEFILE% -keystore %KEYSTORE% -storepass %STOREPASS%
 pause
+	
