@@ -31,16 +31,17 @@ In case you were wondering, this template is different in that it inverts the fo
 
 
 
-%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></div>%TMPL:P{"form"}%<div class="twikiTopic">%TEXT%<br class="twikiClear" />
+%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></div>
+<div class="twikiTopic">%TEXT%<br class="twikiClear" />
 #TopicEnd
 <span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" />
-</div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back&nbsp;to&nbsp;top</a><hr /></div>
-%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
+</div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back to top</a><hr /></div>
+%TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" %NOFOLLOW%>Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" %NOFOLLOW%>Printable version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on" %NOFOLLOW%>Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" %NOFOLLOW%>More topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" %NOFOLLOW%>Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult?scope=text&amp;regex=on&amp;excludetopic=%TOPIC%&amp;search=%SPACEDTOPIC%%5Cb" %NOFOLLOW%>Backlinks</a></div>%TMPL:END%
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%EDITTOPIC% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" %NOFOLLOW%>Attach image or document</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" %NOFOLLOW%>Printable version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on" %NOFOLLOW%>Raw text</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" %NOFOLLOW%>More topic actions</a><br />Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" %NOFOLLOW%>Total page history</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?web=all&amp;scope=text&amp;regex=on&amp;excludetopic=%TOPIC%&amp;search=%WEB%.%TOPIC%(%24%7C%5Cb)">Backlinks</a></div>%TMPL:END%
 
 
 
