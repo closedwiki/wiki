@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="JohnTalintyre" date="997981653" format="1.0beta2" version="1.15"}%
+%META:TOPICINFO{author="MikeMannix" date="999102360" format="1.0" version="1.16"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about the tool.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -8,37 +8,42 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 </table>
 
 *Starting points* at the %WIKITOOLNAME%.%WEB% web:
-	* WelcomeGuest: Look here first to get you rolling on %WIKITOOLNAME%.
-	* TWikiRegistration: Create your %WIKITOOLNAME% account in order to edit topics.
-	* __User documentation:__
-		* TWikiWeb: Explains what %WIKITOOLNAME% is.
-		* TWikiFAQ: List of frequently asked questions around the %WIKITOOLNAME% tool.
-		* TWikiTutorial: Get a jump start on %WIKITOOLNAME%.
-		* GoodStyle: Things to consider when changing text.
-		* WikiSyntax, TextFormattingRules: Easy to learn rules for editing text.
-		* TextFormattingFAQ: Answers to frequently asked questions about text formatting.
-		* TWikiVariables: Add variable content like other topics and inline search.
-		* FileAttachments: Add files to any topic.
-		* RenameTopic: Renaming, moving, deleting topics.
-		* TWikiFormTemplate: Defining and using forms that add structured information to a topic.
-	* __Webmaster documentation:__
-		* TWikiHistory shows TWiki's implementation history. 
-		* TWikiDocumentation is the implementation documentation of TWiki, containing these topics:
-			1 TWikiImplementationNotes 
+	* WelcomeGuest: Start here for a %WIKITOOLNAME% crash course.
+	* TWikiRegistration: Create an %WIKITOOLNAME% account in order to edit topics and customize services.
+
+---+++ User Guide
+
+		* TWikiWeb: Brief %WIKITOOLNAME% backgrounder: first there was Wiki...
+		* WikiSyntax: TWiki language basics.
+		* TWikiFAQ: The first things people ask about %WIKITOOLNAME%.
+		* TextFormattingFAQ: Most requested facts about posting in TWiki.
+		* TWikiTutorial: A %WIKITOOLNAME% quick start alternative.
+		* GoodStyle: Tips for an open communications environment.
+		* TextFormattingRules: The full power of TWiki on a page.
+		* TWikiVariables: Manipulate text, graphics, calculations, and more with simple expanding text strings.
+		* FileAttachments: Upload files to any topic, for display or distribution.
+		* [[RenameTopic][ModifyTopics]]: Rename, move, delete pages.
+		* [[TWikiFormTemplate][TWikiForms]]: Create custom forms to structure information as required.
+
+---+++ Webmaster Reference
+
+		* TWikiHistory: a timeline tracing the development of TWiki. 
+		* TWikiDocumentation: the complete Web administrator's reference, containing:
+			1 [[TWikiImplementationNotes][TWikiSystemRequirements]]
 			1 TWikiInstallationNotes 
 			1 TWikiUpgradeNotes
 			1 TWikiAuthentication
-			1 TWikiUsernameVsLoginUsername
+			<!--1 TWikiUsernameVsLoginUsername-->
 			1 TWikiAccessControl
+			1 TWikiVariables
+			1 TWikiFormTemplate
 			1 TWikiTemplates
 			1 TWikiSkins
-			1 TWikiVariables
-			1 TWikiNotificationOfChanges
-			1 MetaDataDefinition
-			1 TWikiFormTemplate
 			1 TWikiPlugins
-			1 RenameTopic
-			1 TWikiAdministration tells you how to rename or delete a topic or web.
+			1 MetaDataDefinition
+			1 [[TWikiNotificationOfChanges][MonitorSiteActivity]]
+			1 [[RenameTopic][ModifyTopics]]
+			1 [[TWikiAdministration][ModifyWebs]]
 
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
 	* WebSearch: Full text search of the %WIKITOOLNAME%.%WEB% web.
