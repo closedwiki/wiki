@@ -46,6 +46,9 @@ sub main
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || "";
 
     
+    $newTopic =~ s/\s//go;
+    $newTopic =~ s/$TWiki::securityFilter//go;
+
     if( ! $theAttachment ) {
         $theAttachment = "";
     }
@@ -88,13 +91,6 @@ sub main
         }
     }
 
-    if( ! $theAttachment ) {
-        my @refs = findReferingPages( $oldWeb, $oldTopic );
-        my $problems;
-        ( $lockFailure, $problems ) = 
-            updateReferingPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
-    }
-
     if( ! $justChangeRefs ) {
        if( $theAttachment ) {
 	  my $moveError = 
@@ -104,12 +100,7 @@ sub main
               return;
           }
        } else {
-          if( $doAllowNonWikiWord ) {
-              if( $newTopic =~ /$TWiki::securityFilter/o  ) {
-                  TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsrenameinvalidchars" ) );
-                  return;
-              }
-          } elsif( ! &TWiki::isWikiName( $newTopic )) {
+          if( ! $doAllowNonWikiWord && ! &TWiki::isWikiName( $newTopic ) ) {
               TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsrenamenotwikiword" ) );
               return;
           }
@@ -119,6 +110,14 @@ sub main
 	      return;
            }
        } 
+    }
+
+    # Update references in referring pages - not applicable to attachments.
+    if( ! $theAttachment ) {
+        my @refs = findReferingPages( $oldWeb, $oldTopic );
+        my $problems;
+        ( $lockFailure, $problems ) = 
+            updateReferingPages( $oldWeb, $oldTopic, $wikiUserName, $newWeb, $newTopic, @refs );
     }
 
     my $new_url = "";
