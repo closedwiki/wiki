@@ -50,7 +50,7 @@ hr {
 pre, code, tt {
 	font-size:100%;
 	line-height:1.4em;
-	color:#844F0C;
+	color:#7A4707;
 }
 pre {
 	margin-top:1em;
@@ -94,7 +94,7 @@ h6 { font-size:95%; color:#900;}
 :visited:active {
 	text-decoration:none;
 	color:#1e5bbd;
-	font-weight:bold;
+	font-weight:normal;
 	background-color:transparent;
 }
 :link:hover,
@@ -108,6 +108,10 @@ a:visited img,
 a:hover img,
 a:active img {
 	background-color:transparent;
+}
+th a:link,
+th a:visited {
+	font-weight:bold;
 }
 
 /* sorting of table columns */
@@ -279,6 +283,9 @@ html>body .twikiLeftBar li a {
 .twikiLeftBarPersonal p {
 	margin:0.5em 0 0 0;
 }
+.twikiLeftBarPersonal a:visited {
+	color:#666;
+}
 
 /* Bottom bar */
 
@@ -294,7 +301,7 @@ html>body .twikiLeftBar li a {
 /* Topic text */
 
 .twikiTopic {
-	padding-bottom:3em;
+	padding-bottom:1.5em;
 	background-color:transparent;
 }
 .twikiTopic table {
@@ -309,7 +316,7 @@ html>body .twikiLeftBar li a {
 }
 .twikiTopic a:visited {
 	text-decoration:underline;
-	color:gray;
+	color:#666;
 }
 .twikiTopic h1 a:link,
 .twikiTopic h1 a:visited,
@@ -317,6 +324,8 @@ html>body .twikiLeftBar li a {
 .twikiTopic h2 a:visited {
 	text-decoration:none;
 	color:#1559B3;
+	border:none;
+	font-weight:bold;
 }
 .twikiTopic a:hover {
 	color:#1559B3;
@@ -332,6 +341,7 @@ html>body .twikiLeftBar li a {
 }
 .twikiAttachments table,
 .twikiForm table {
+	border-collapse:collapse;
 	padding:0px;
 	border-spacing:0px;
 	empty-cells:show;
@@ -438,14 +448,15 @@ create a div based solution instead of tables */
 	margin:2em 0 3em 0;
 	background-color:#22638c; /* for Explorer 5.x so the whole row is blue */
 }
-.twikiTopicAction table {
+.twikiTopicAction table,
+table.twikiTopicAction {
 	padding:0px;
 	border-spacing:0px;
 	border-collapse:collapse;
 	empty-cells:show;
 	border:0px;
-	color:white;
 	font-size:95%;
+	color:white;
 	width:inherit;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
@@ -456,14 +467,17 @@ create a div based solution instead of tables */
 	color:white;
 	border-bottom:1px solid #698FA8;
 	text-decoration:none;
+	font-weight:bold;
 }
 .twikiTopicAction a:hover {
 	color:#1559B3;
 	border-bottom:1px solid #b4d5ff;
 }
+.twikiTopicAction tr {
+	background-color:#22638c;
+}
 .twikiTopicAction td {
 	height:2em;
-	background-color:#22638c;
 	border:none;
 	padding:0.3em 1em;
 	vertical-align:middle;
@@ -474,36 +488,48 @@ create a div based solution instead of tables */
 	width:auto;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
-	width:15%;
+	width:20%;
 }
 .twikiTopicAction td.twikiSubmitCol {
 	text-align:center;
 	width:auto;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
-	width:50%;
+	width:40%;
+}
+.twikiTopicAction .twikiSubmitOptions {
+	background-color:#D4E6FC;
+	border:1px solid #B6C6D9;
+	margin:0.25em 0;
 }
 .twikiTopicAction td.twikiAddCol {
 	text-align:right;
 	width:auto;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
-	width:15%;
-}
-.twikiTopicActionSecondary,
-.twikiTopicActionHelp {
-	font-size:95%;
-	padding:0.3em 0.5em 0.3em 1em;
-	background-color:white;
+	width:20%;
 }
 .twikiTopicAction a:hover {
 	color:#1559B3;
 	border-bottom:1px solid #b4d5ff;
 }
 .twikiTopicActionSecondary {
+	padding:0.15em 0.5em 0.15em 1em;
+	background-color:white;
+}
+.twikiTopicActionHelp,
+.twikiTopicAction .twikiTopicActionHelp {
+	background-color:white;
+	padding:0;
+}
+.twikiTopicActionSecondary,
+.twikiTopicAction .twikiTopicActionSecondary {
 	background-color:#DFEDFD;
 	color:#22638c;
 	border-top:1px solid #bbb;
+}
+.twikiTopicActionSecondary td.twikiSubmitCol {
+	text-align:left;
 }
 .twikiTopicActionSecondary a:link,
 .twikiTopicActionSecondary a:visited {
@@ -523,7 +549,8 @@ create a div based solution instead of tables */
 	display:inline;
 	color:white;
 }
-.twikiTopicAction input {
+.twikiTopicAction input,
+.twikiTopicAction label {
 	font-size:100%;
 }
 
@@ -563,6 +590,7 @@ create a div based solution instead of tables */
 	text-decoration:none;
 	color:#1e5bbd;
 	font-weight:normal;
+	border:0;
 }
 .twikiToc a:hover {
 	text-decoration:underline;
@@ -646,6 +674,7 @@ html>body .twikiToc li a {
 	float:left;
 	text-decoration:none;
 	color:#8490A1; /* .twikiGrayText value */
+	font-weight:bold;
 }
 .twikiToolBar ul li a:hover {
 	background-color:#b4d5ff;
@@ -744,8 +773,8 @@ html>body .twikiToc li a {
 .twikiButton {
 	font-size:90%;
 	font-weight:normal;
-	padding:0 0.15em;
-	margin:0 0.25em;
+	padding:0;
+	margin:0 0.15em;
 }
 .twikiSubmit {
 	color:#041D3A;
@@ -840,10 +869,10 @@ html>body .twikiToc li a {
 	width:100%;
 }
 .twikiSearchResults .twikiTopRow {
-	padding-top:0.5em;
+	padding-top:0.2em;
 }
 .twikiSearchResults .twikiBottomRow {
-	padding-bottom:0.5em;
+	padding-bottom:0.25em;
 	border-bottom:1px solid #ddd;
 }
 .twikiSearchResults .twikiAlert {
@@ -1194,14 +1223,6 @@ html>body .twikiToc li a {
 .twikiDiffPage .twikiDiffTable td {
 	padding:0.1em;
 }
-.twikiDiffPage .twikiDiffTable td table td {
-	background-color:transparent;
-}
-.twikiDiffPage .twikiDiffTable th,
-.twikiDiffPage .twikiDiffTable th font {
-	background-color:transparent;
-	color:#666;
-}
 
 /* Deleted */
 
@@ -1245,19 +1266,7 @@ html>body .twikiToc li a {
 /* Unchanged */
 
 .twikiDiffPage .twikiDiffUnchangedText {}
-.twikiDiffPage .twikiDiffUnchangedTextContents {
-	color:#ccc;
-}
-.twikiDiffPage td.twikiDiffUnchangedText h1,
-.twikiDiffPage td.twikiDiffUnchangedText h2,
-.twikiDiffPage td.twikiDiffUnchangedText h3,
-.twikiDiffPage td.twikiDiffUnchangedText h4,
-.twikiDiffPage td.twikiDiffUnchangedText h5,
-.twikiDiffPage td.twikiDiffUnchangedText h6,
-.twikiDiffPage td.twikiDiffUnchangedText a:link,
-.twikiDiffPage td.twikiDiffUnchangedText a:visited {
-	color:#ccc;
-}
+.twikiDiffPage .twikiDiffUnchangedTextContents { }
 .twikiDiffPage .twikiDiffLineNumberHeader {
 	margin:2em 0;
 	background-color:#ddd;
@@ -1279,4 +1288,11 @@ html>body .twikiToc li a {
 .twikiPrintPage .twikiAttachments,
 .twikiPrintPage .twikiForm {
 	background-color:#ddd;
+}
+
+/* Plain */
+
+.twikiPlainPage .twikiMain {
+	padding-top:2.5em;
+	padding-bottom:2em;
 }

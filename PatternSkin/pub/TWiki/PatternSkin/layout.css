@@ -94,3 +94,11 @@
 .twikiPrintPage .twikiBottomBarContents {
 	padding-left:1em;
 }
+
+/* Plain */
+
+.twikiPlainPage .twikiMain {
+	margin-left:0px;
+	margin-right:0px;
+	/* padding in style.css */
+}
