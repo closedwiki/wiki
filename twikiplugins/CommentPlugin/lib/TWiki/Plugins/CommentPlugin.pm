@@ -8,7 +8,7 @@ use TWiki::Func;
 use vars qw( $initialised $VERSION $firstCall $pluginName $testing );
 
 BEGIN {
-    $VERSION = 3.004;
+    $VERSION = 3.005;
     $pluginName = "CommentPlugin";
     $firstCall = 0;
 	$testing = 0;
