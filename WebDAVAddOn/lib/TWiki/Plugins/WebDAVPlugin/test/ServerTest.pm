@@ -3,13 +3,14 @@ package ServerTest;
 use HTTP::DAV;
 
 my @davuser;
-
 #######################################################
 # Configure the following for your local installation #
 # Requres a correctly installed server and a twiki    #
 #######################################################
 my $twikicfg = "/home/twiki/alpha/lib/TWiki.cfg";
 my $davpath  = "twiki/dav";
+my $lockpath = "/var/lock/webdav";
+my $bindir = "/home/twiki/alpha/bin";
 $davuser[0] = {
 			   wikiname => "TestUser1",
 			   password => "hubbahubba",
@@ -67,17 +68,21 @@ sub set_up {
   `cp -R $dataDir/_default $dataDir/Davtest` or $this->assert("Fixture");
   # DavTest0 is accessible only to $davuser[0]
   # DavTest1 is accessible only to $davuser[1]
-  # DavTest2 is accessible to both
+  # DavTest2 is accessible to both, except user 0 can't rename it
   # DavTest3 is accessible to neither
   savetopic(1, "Davtest", "DavTest0",
 			"\t* Set DENYTOPICVIEW = $davuser[1]{wikiname}\n".
+			"\t* Set DENYTOPICRENAME = $davuser[1]{wikiname}\n".
 			"\t* Set DENYTOPICCHANGE = $davuser[1]{wikiname}\n");
   savetopic(0, "Davtest", "DavTest1",
 			"\t* Set DENYTOPICVIEW = $davuser[0]{wikiname}\n".
+			"\t* Set DENYTOPICRENAME = $davuser[0]{wikiname}\n".
 			"\t* Set DENYTOPICCHANGE = $davuser[0]{wikiname}\n");
-  savetopic(0, "Davtest", "DavTest2", "");
+  savetopic(0, "Davtest", "DavTest2",
+			"\t* Set DENYTOPICRENAME = $davuser[0]{wikiname}\n");
   savetopic(0, "Davtest", "DavTest3",
 			"\t* Set DENYTOPICVIEW = $davuser[0]{wikiname},$davuser[1]{wikiname}\n".
+			"\t* Set DENYTOPICRENAME = $davuser[0]{wikiname},$davuser[1]{wikiname}\n".
 			"\t* Set DENYTOPICCHANGE = $davuser[0]{wikiname},$davuser[1]{wikiname}\n");
   `chmod -f -R 777 $dataDir/Davtest`;
   `mkdir -p $pubDir/Davtest`;
@@ -352,6 +357,16 @@ sub test_moveToDenied {
 							  "Davtest/DavTest1/MarilynMonroe.dat"),$dav);
 }
 
+sub test_moveRenameDenied {
+  my $this=shift;
+  $this->copymovefixture();
+  my $dav = $this->davopen(0);
+  $this->saveattachment(0,"Davtest","DavTest2","SugarKane.txt");
+
+  $this->davcheck(!$dav->move("Davtest/DavTest2/SugarKane.txt",
+							  "Davtest/DavTest0/MarilynMonroe.dat"), $dav);
+}
+
 sub test_moveToWebLevel {
   my $this=shift;
   $this->copymovefixture();
@@ -411,6 +426,83 @@ sub test_put {
   $this->davcheck($dav->put(-local=>$tmpfile,
 							-url=>"Davtest/DavTest0/SugarKane.txt"), $dav);
   $this->checkatt(1, "Davtest","DavTest0", "SugarKane.txt", 1);
+}
+
+sub test_recache_command_line {
+  my $this = shift;
+  # delete the db, regenerate it, create a topic with limitation,
+  # recache, check the difference.
+  $this->assert(-w $lockpath, "No permission to run this test");
+  $this->assert(-w "$lockpath/TWiki", "No permission to run this test");
+  unlink("$lockpath/TWiki");
+  $this->assert(!$?, "Can't set up");
+  my $monitor = `$bindir/dav_recache$scriptSuffix`;
+  $this->assert(!$?, "Can't run $bindir/dav_recache$scriptSuffix");
+  # Make sure it ran over all webs
+  foreach my $web(glob("$dataDir/*")) {
+	if (-d $web) {
+	  my @topics = glob("$web/*.txt");
+	  $web = `basename $web`;
+	  chop($web);
+	  $this->assert_matches(qr/(\d+)\b.*\b$web\b/, $monitor);
+	  $monitor =~ /(\d+)\b.*\b$web\b/;
+	  $this->assert($1 <= scalar(@topics), "$web $1 ".scalar(@topics));
+	}
+  }
+  my $dump = `../dumpLockDB.pl $lockpath`;
+  $this->assert(!$?, "Can't dump");
+  my $du = $davuser[1]{wikiname};
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => \|$du\|/, $dump);
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => \|$du\|/, $dump);
+  savetopic(0, "Davtest", "DavTest0",
+			"\t* Set DENYTOPICVIEW = OakTree\n".
+			"\t* Set DENYTOPICCHANGE = AshTree\n");
+  unlink("$lockpath/TWiki") || die "Failed";
+  $this->assert(!$?, "Can't set_up");
+  $this->assert(!-e "$lockpath/TWiki");
+  $monitor = `$bindir/dav_recache$scriptSuffix`;
+  $this->assert(!$?, "Can't run");
+  $dump = `../dumpLockDB.pl $lockpath`;
+  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:V:D => \|$du\|/, $dump);
+  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:C:D => \|$du\|/, $dump);
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => |OakTree|/, $dump);
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => |AshTree|/, $dump);
+
+  $monitor = `$bindir/dav_recache$scriptSuffix Sandbox`;
+  $this->assert_matches(qr/Processed \d+ topics from Sandbox\b/, $monitor);
+  $monitor =~ s/Processed \d+ topics from Sandbox\b//;
+  $this->assert_does_not_match(qr/Processed \d+ topics from \w+/, $monitor);
+
+  $monitor = `$bindir/dav_recache$scriptSuffix Davtest.DavTest0`;
+  $this->assert_matches(qr/Processing topic Davtest\.DavTest0\b/, $monitor);
+  $monitor =~ s/Processing topic Davtest\.DavTest0\b//;
+  $this->assert_matches(qr/Processed 1 topics from Davtest\b/, $monitor);
+  $monitor =~ s/Processed \d+ topics from Davtest\b//;
+  $this->assert_does_not_match(qr/Processed \d+ topics from \w+/, $monitor);
+}
+
+sub test_query {
+  my $this = shift;
+  unlink("$lockpath/TWiki") || die "Failed";
+  my $monitor = `curl -s -S $binurl/dav_recache/$scriptSuffix`;
+  $this->assert(!$?, "Can't run");
+  my $dump = `../dumpLockDB.pl $lockpath`;
+  $this->assert(!$?, "Can't dump");
+  my $du = $davuser[1]{wikiname};
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => \|$du\|/, $dump);
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => \|$du\|/, $dump);
+  savetopic(0, "Davtest", "DavTest0",
+			"\t* Set DENYTOPICVIEW = OakTree\n".
+			"\t* Set DENYTOPICCHANGE = AshTree\n");
+  unlink("$lockpath/TWiki");
+  $this->assert(!$?, "Can't set_up");
+  $monitor = `curl -s -S $binurl/dav_recache/$scriptSuffix`;
+  $this->assert(!$?, "Can't run");
+  $dump = `../dumpLockDB.pl $lockpath`;
+  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:V:\w => \|$du\|/, $dump);
+  $this->assert_does_not_match(qr/P:\/Davtest\/DavTest0:C:\w => \|$du\|/, $dump);
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:V:D => \|OakTree\|/, $dump);
+  $this->assert_matches(qr/P:\/Davtest\/DavTest0:C:D => \|AshTree\|/, $dump);
 }
 
 1;

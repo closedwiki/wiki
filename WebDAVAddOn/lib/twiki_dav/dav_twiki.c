@@ -66,7 +66,7 @@
  */
 static char dbfile[512];
 
-static int barred(char* path, const char* mode, const char* user,
+static int barred(char* path, char mode, const char* user,
 				  DBM* db, int m);
 static DBM_DATUM getKey(const char* path, const char* ad,
 						  DBM* db);
@@ -75,11 +75,11 @@ static int isInList(DBM_DATUM list, const char* user,
 static int isInGroup(const char* group, const char*user,
 					 DBM* db, int depth);
 static int isAccessible(DBM* db, const char* web, const char* topic,
-						const char* mode, const char* user, int m);
+						char mode, const char* user, int m);
 static int checkAccessibility(const char* web,
   const char* topic,
   const char* file,
-  const char* mode,
+  char mode,
   const char* user,
 							  int monitor);
 
@@ -109,31 +109,36 @@ int dav_twiki_setDBpath(const char* dbname) {
 /**
  * Main interface to permissions database. KISS.
  */
-int dav_twiki_accessible(const request_rec *r, const dav_resource* dr) {
+int dav_twiki_accessible(const request_rec *r, const dav_resource* dr,
+						 int tgt) {
   twiki_resources* tr;
-  const char* mode;
+  char mode;
   const char* pw;
 
   /* determine our TWiki access mode */
   if (r->method_number == M_GET ||
-	  r->method_number == M_COPY ||
+	  (r->method_number == M_COPY && !tgt) ||
 	  r->method_number == M_PROPFIND)
-	mode = "V";
+	mode = 'V';/*IEW*/
   else if (r->method_number == M_PUT ||
-		   r->method_number == M_DELETE ||
+		   r->method_number == M_POST ||
 		   r->method_number == M_LOCK ||
 		   r->method_number == M_UNLOCK ||
 		   r->method_number == M_PROPPATCH ||
-		   r->method_number == M_MOVE)
-	mode = "C";
+		   (r->method_number == M_COPY && tgt) ||
+		   (r->method_number == M_MOVE && tgt))
+	mode = 'C';/*HANGE*/
+  else if (r->method_number == M_DELETE ||
+		   (r->method_number == M_MOVE && !tgt))
+	mode = 'R';/*ENAME*/
   else
-	return 0;
+	return 1;
   
   tr = dr->twiki;
 
   /* if this is a twiki resource, check permissions */
   if (tr) {
-	if (dr->collection && mode[0] == 'C')
+	if (dr->collection && mode != 'V')
 	  return 0;
 
 	/** connection->user gets filled in by ap_get_basic_auth, but there
@@ -160,15 +165,12 @@ int dav_twiki_accessible(const request_rec *r, const dav_resource* dr) {
 static int checkAccessibility(const char* web,
   const char* topic,
   const char* file,
-  const char* mode,
+  char mode,
   const char* user,
   int monitor) {
 
   DBM* db = NULL;
   int ret;
-
-  if (mode == NULL)
-	return 1;
 
   /* ,v file access is always denied, in all modes */
   if (file && strcmp(file + strlen(file) - 2, ",v") == 0) {
@@ -176,7 +178,7 @@ static int checkAccessibility(const char* web,
   }
 
   /* Do collection checks before opening protections DB */
-  if (mode[0] == 'C') {
+  if (mode != 'V') {
 	/* disallow change ops on directories */
 	if (file == NULL || topic == NULL || web == NULL) {
 	  return 0;
@@ -184,7 +186,7 @@ static int checkAccessibility(const char* web,
   }
 
   if ((monitor & 4) != 0)
-	fprintf(stderr, "Check access %s/%s/%s:%s for %s\n",
+	fprintf(stderr, "Check access %s/%s/%s:%c for %s\n",
 			web, topic, file, mode, user);
 
   db = DBM_OPEN(dbfile, O_RDONLY, 0);
@@ -220,11 +222,11 @@ static int checkAccessibility(const char* web,
 }
 
 static int isAccessible(DBM* db, const char* web, const char* topic,
-						const char* mode, const char* user, int monitor) {
+						char mode, const char* user, int monitor) {
   char path[255];
 
   if ((monitor & 4) != 0)
-	fprintf(stderr, "Check %s/%s:%s for %s\n",web,topic,mode,user);
+	fprintf(stderr, "Check %s/%s:%c for %s\n",web,topic,mode,user);
 
   strcpy(path, "P:/");
   if (barred(path, mode, user, db, monitor))
@@ -234,7 +236,7 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
 	sprintf(path, "P:/%s/", web);
 
 	if ((monitor & 4) != 0)
-	  fprintf(stderr, "WebCheck %s/%s:%s for %s\n",web,topic,mode,user);
+	  fprintf(stderr, "WebCheck %s/%s:%c for %s\n",web,topic,mode,user);
 
 	if (barred(path, mode, user, db, monitor))
 	  return 0;
@@ -243,24 +245,24 @@ static int isAccessible(DBM* db, const char* web, const char* topic,
   if (web && topic) {
 	sprintf(path, "P:/%s/%s", web, topic);
 	if ((monitor & 4) != 0)
-	  fprintf(stderr, "TopicCheck %s/%s:%s for %s\n",web,topic,mode,user);
+	  fprintf(stderr, "TopicCheck %s/%s:%c for %s\n",web,topic,mode,user);
 	if (barred(path, mode, user, db, monitor))
 	  return 0;
   }
 
   if ((monitor & 4) != 0)
-	fprintf(stderr, "%s/%s:%s for %s is accessible\n",web,topic,mode,user);
+	fprintf(stderr, "%s/%s:%c for %s is accessible\n",web,topic,mode,user);
 
   return 1;
 }
 
-static int barred(char* path, const char* mode, const char* user,
+static int barred(char* path, char mode, const char* user,
 		   DBM* db, int monitor) {
   DBM_DATUM list;
 
   strcat(path, ":");
-  strcat(path, mode);
-  strcat(path, ":");
+  strcat(path, " :");
+  path[strlen(path) - 2] = mode;
 
   /* Paranoia; deny before allow */
   if (user) {

@@ -871,7 +871,7 @@ static int dav_get_overwrite(request_rec *r)
 }
 
 /* resolve a request URI to a resource descriptor */
-static int dav_get_resource(request_rec *r, dav_resource **res_p)
+static int dav_get_resource(request_rec *r, dav_resource **res_p, int tgt)
 {
   dav_dir_conf *conf;
   const dav_hooks_repository *repos_hooks;
@@ -898,7 +898,7 @@ static int dav_get_resource(request_rec *r, dav_resource **res_p)
 	return HTTP_NOT_FOUND;
   }
   
-  if ((*res_p)->twiki && !dav_twiki_accessible(r, (*res_p))) {
+  if ((*res_p)->twiki && !dav_twiki_accessible(r, (*res_p), tgt)) {
 	return HTTP_FORBIDDEN;
   }
 
@@ -1005,7 +1005,7 @@ static int dav_method_get(request_rec *r)
    * visible to Apache. We will fetch the resource from the repository,
    * then create a subrequest for Apache to handle.
    */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);
@@ -1180,7 +1180,7 @@ static int dav_method_post(request_rec *r)
   int result;
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK) {
 	return result;
   }
@@ -1222,7 +1222,7 @@ static int dav_method_put(request_rec *r)
   }
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK) {
 	return result;
   }
@@ -1455,7 +1455,7 @@ static int dav_method_delete(request_rec *r)
   }
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);
@@ -1584,7 +1584,7 @@ static int dav_method_options(request_rec *r)
   ap_set_content_length(r, 0);
   
   /* resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);
@@ -1805,7 +1805,7 @@ static int dav_method_propfind(request_rec *r)
   dav_walker_ctx ctx = { 0 };
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   
@@ -2071,7 +2071,7 @@ static int dav_method_proppatch(request_rec *r)
   dav_prop_ctx *ctx;
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);
@@ -2273,7 +2273,7 @@ static int dav_method_mkcol(request_rec *r)
 											   &dav_module);
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);
@@ -2404,7 +2404,7 @@ static int dav_method_copymove(request_rec *r, int is_move)
   int resource_state;
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   if (!resource->exists) {
@@ -2462,7 +2462,7 @@ static int dav_method_copymove(request_rec *r, int is_move)
   }
   
   /* Resolve destination resource */
-  result = dav_get_resource(lookup.rnew, &resnew);
+  result = dav_get_resource(lookup.rnew, &resnew, 1);
   if (result != OK)
 	return result;
   
@@ -2794,7 +2794,7 @@ static int dav_method_lock(request_rec *r)
   }
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   
@@ -2993,7 +2993,7 @@ static int dav_method_unlock(request_rec *r)
   }
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   
@@ -3067,7 +3067,7 @@ static int dav_method_checkout(request_rec *r)
   }
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);
@@ -3130,7 +3130,7 @@ static int dav_method_uncheckout(request_rec *r)
   }
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);
@@ -3193,7 +3193,7 @@ static int dav_method_checkin(request_rec *r)
   }
   
   /* Ask repository module to resolve the resource */
-  result = dav_get_resource(r, &resource);
+  result = dav_get_resource(r, &resource, 0);
   if (result != OK)
 	return result;
   monitor_method(r, resource);

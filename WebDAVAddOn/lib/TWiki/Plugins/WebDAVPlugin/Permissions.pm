@@ -61,22 +61,32 @@ sub recache {
 sub _processWeb {
   my ( $this, $web, $topic ) = @_;
   my $npr = 0;
+  my $dataDir = TWiki::Func::getDataDir();
+  my $cmd = "$TWiki::egrepCmd ";
+  $cmd .= $TWiki::cmdQuote;
+  $cmd .= "\* Set (ALLOW|DENY)(TOPIC|WEB)(VIEW|CHANGE)";
+  $cmd .= $TWiki::cmdQuote;
 
   if ( $topic ) {
     $this->_processTopic( $web, $topic );
 	$npr++;
   } else {
-	# I tried doing this using grep instead of reading each topic, but
-	# it didn't make a vast difference.
-	my $cmd = "$TWiki::egrepCmd ";
-	$cmd .= $TWiki::cmdQuote;
-	$cmd .= "\* Set (ALLOW|DENY)(TOPIC|WEB)(VIEW|CHANGE)";
-	$cmd .= $TWiki::cmdQuote;
-	my @topics = split( /\n/, `$cmd $TWiki::dataDir/$web/*.txt` );
-	foreach my $topic ( @topics ) {
-	  if ( $topic =~ /^.*[\/\\](.*?)\.txt:/o ) {
-		$this->_processTopic( $web, $1 );
-		$npr++;
+	my @topics = TWiki::Func::getTopicList( $web );
+	my %processed;
+	while ( scalar( @topics )) {
+	  my $p = "";;
+	  my $ninset = 500;
+	  while ( scalar( @topics ) && $ninset-- ) {
+		$p .= " $dataDir/$web/" . pop( @topics ) . ".txt";
+	  }
+	  foreach my $topic ( split( /\n/, `$cmd $p` )) {
+		if ( $topic =~ /^.*[\/\\](.*?)\.txt:/o ) {
+		  if ( !$processed{$1} ) {
+			$this->_processTopic( $web, $1 );
+			$npr++;
+			$processed{$1} = 1;
+		  }
+		}
 	  }
 	}
   }
@@ -88,6 +98,7 @@ sub _processTopic {
   my ( $this, $web, $topic ) = @_;
 
   my ( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+  print "Processing topic $web.$topic\n";
   $this->processText( $web, $topic, $text );
 }
 
@@ -171,6 +182,7 @@ sub _clearPath {
 
   my %db;
   $this->_tieDB(\%db);
+  #print STDERR "Clear P:$path\n";
   delete($db{"P:$path:V:D"});
   delete($db{"P:$path:V:A"});
   delete($db{"P:$path:C:D"});
