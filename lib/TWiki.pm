@@ -63,22 +63,22 @@ use vars qw(
         $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiUserName 
         $wikiHomeUrl $defaultUrlHost $urlHost
-        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
+        $scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir $libsDir
         $wikiToolName $securityFilter $uploadFilter
-        $debugFilename $htpasswdFilename 
-        $logFilename $remoteUserFilename $wikiUsersTopicname 
+        $debugFilename $htpasswdFilename
+        $logFilename $remoteUserFilename $wikiUsersTopicname
         $userListFilename %userToWikiList
         $twikiWebname $mainWebname $mainTopicname $notifyTopicname
         $wikiPrefsTopicname $webPrefsTopicname
         $statisticsTopicname $statsTopViews $statsTopContrib
         $numberOfRevisions $editLockTime
         $attachAsciiPath
-        $scriptSuffix $safeEnvPath $mailProgram $wikiversion 
+        $scriptSuffix $safeEnvPath $mailProgram $wikiversion
         $doKeepRevIfEditLock $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
-        $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
+        $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
         $disableAllPlugins
         @isoMonth $TranslationToken $code @code $depth %mon2num
@@ -86,6 +86,7 @@ use vars qw(
         $headerPatternDa $headerPatternSp $headerPatternHt
         $debugUserTime $debugSystemTime
         $viewableAttachmentCount $noviewableAttachmentCount
+	$superAdminGroup
     );
 
 

@@ -44,6 +44,14 @@ sub checkAccessPermission
     my( $theAccessType, $theUserName,
         $theTopicText, $theTopicName, $theWebName ) = @_;
 
+#AS 2001-11-04 see Codev.UnchangeableTopicBug
+    if ( $TWiki::superAdminGroup ) {
+	if ( &userIsInGroup( $theUserName, $TWiki::superAdminGroup ) ) {
+	    return 1;
+	}
+    }
+#/AS
+
     # $theAccessType  "VIEW", "CHANGE", "CREATE", e.t.c.
     # $theUserName    Remote WikiName, i.e. "Main.PeterThoeny"
     # $theTopicText   If empty: Read "$theWebName.$theTopicName"
