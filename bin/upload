@@ -384,7 +384,7 @@ sub main
     $tmpFilename =~ s!\\!/!go;
     $tmpFilename =~ /(.*)/;
     $tmpFilename = $1;
-    #&TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
+    ##TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
     
     my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
 
@@ -418,7 +418,7 @@ sub main
         $fileName =~ s/${nonAlphaNum}//go;
         $fileName =~ s/$TWiki::uploadFilter/$1\.txt/goi;  # apply security filter
 
-	TWiki::writeDebug ("Upload filename after cleanup is '$fileName'");
+	##TWiki::writeDebug ("Upload filename after cleanup is '$fileName'");
 
 	# Update
 	my $text1 = "";
