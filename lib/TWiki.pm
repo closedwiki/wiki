@@ -2128,6 +2128,7 @@ sub handleSearchWeb
         "bookview"      => extractNameValuePair( $attributes, "bookview" ),
         "renameview"    => extractNameValuePair( $attributes, "renameview" ),
         "showlock"      => extractNameValuePair( $attributes, "showlock" ),
+        "expandvariables" => extractNameValuePair( $attributes, "expandvariables" ),
         "noempty"       => extractNameValuePair( $attributes, "noempty" ),
         "template"      => extractNameValuePair( $attributes, "template" ),
         "header"        => extractNameValuePair( $attributes, "header" ),

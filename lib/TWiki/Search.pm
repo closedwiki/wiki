@@ -318,6 +318,7 @@ sub searchWeb
     my $doBookView =    $params{"bookview"} || "";
     my $doRenameView =  $params{"renameview"} || "";
     my $doShowLock =    $params{"showlock"} || "";
+    my $doExpandVars =  $params{"expandvariables"} || "";
     my $noEmpty =       $params{"noempty"} || "";
     my $theTemplate =   $params{"template"} || "";
     my $theHeader =     $params{"header"} || "";
@@ -878,6 +879,10 @@ sub searchWeb
                     ( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $topic );
                     $text =~ s/%WEB%/$thisWebName/gos;
                     $text =~ s/%TOPIC%/$topic/gos;
+                }
+                if( $doExpandVars ) {
+                    $text =~ s/%SEARCH/%<nop>SEARCH/g;  # primitive way to prevent recursion
+                    $text = &TWiki::handleCommonTags( $text, $topic, $thisWebName );
                 }
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;

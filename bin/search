@@ -109,6 +109,7 @@ sub main
         "bookview"      => scalar $query->param( "bookview" ),
         "renameview"    => scalar $query->param( "renameview" ),
         "showlock"      => scalar $query->param( "showlock" ),
+        "expandvariables" => scalar $query->param( "expandvariables" ),
         "noempty"       => scalar $query->param( "noempty" ),
         "template"      => scalar $query->param( "template" ),
         "header"        => scalar $query->param( "header" ),
