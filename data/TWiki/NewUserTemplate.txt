@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1048658040" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1082853232" format="1.0" version="1.6"}%
 %SPLIT%
 	* %KEY%: %VALUE%%SPLIT%
 
@@ -10,6 +10,8 @@ __My Links__
 	* 
 
 __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
+	* Show tool-tip topic info on mouse-over of %TWIKIWEB%.WikiWord links, on or off: (see details in %TWIKIWEB%.%WIKIPREFSTOPIC%)
+		* Set LINKTOOLTIPINFO = on
 	* Horizontal size of text edit box:
 		* Set EDITBOXWIDTH = 70
 	* Vertical size of text edit box:
@@ -23,3 +25,4 @@ __Related topics__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users.
+
