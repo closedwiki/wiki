@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007461980" format="1.0" version="1.26"}%
+%META:TOPICINFO{author="PeterThoeny" date="1007582375" format="1.0" version="1.27"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -62,11 +62,11 @@ The TWiki directory structure remains the same, with one exception, the TWiki co
 A new =twiki/lib/TWiki/Plugins= directory contains the new Plugin modules.
 
 
----++ Standard Upgrade Procedure from 01-Sep-2000 to 01-Dec-2001 Release
+---++ Standard Upgrade Procedure from 01-Sep-2001 to 01-Dec-2001 Release
 
 This incremental update can be performed easily.
 
-The following steps describe the upgrade assuming that =$TWIKIROOT= is the root of your current 01-Sep-2000 release.
+The following steps describe the upgrade assuming that =$TWIKIROOT= is the root of your current 01-Sep-2001 release.
 
 	1. Back up and prepare:
 		* Back up all existing TWiki directories =$TWIKIROOT/bin=, =$TWIKIROOT/pub=, =$TWIKIROOT/data=, =$TWIKIROOT/templates=.
