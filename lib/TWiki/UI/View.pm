@@ -135,6 +135,9 @@ sub view {
 
   if( $viewRaw ) {
     $extra .= " raw=$viewRaw";
+    if( $viewRaw !~ /debug/i ) {
+      $text =~ s/%META[\:A-Z]*{[^\}]*}%[\n\r]*//gos;
+    }
     if( $skin !~ /^text/ ) {
       my $vtext = "<form><textarea readonly=\"readonly\" wrap=\"virtual\" rows=\"%EDITBOXHEIGHT%\" cols=\"%EDITBOXWIDTH%\">";
       $vtext = &TWiki::handleCommonTags( $vtext, $topic );
@@ -144,9 +147,6 @@ sub view {
       $text =~ s/>/&gt\;/go;
       $text =~ s/\t/   /go;
       $text = "$vtext$text</textarea></form>";
-    }
-    if( $viewRaw !~ /debug/i ) {
-      $text =~ s/%META[\:A-Z]*{[^\}]*}%[\n\r]*//gos;
     }
   }
 
