@@ -145,15 +145,16 @@ will notify registered users of action changes that occurred in the last 24 hour
 Not all action changes get notified; only changes to the action state, or changes to the text of the action (usually additions) get notified. For example, if the person responsible for the action is changed, or its due date, then no notification is generated.
 
 ---++ <nop>%TOPIC% Settings
-
-	* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statii
-	* Set DEBUG = 0
-	* Set USENEWWINDOW = 1
-		* Set to 1 to encourage the browser to edit an action in a separate nrowser window (requires JavaScript)
-	* Set EDITBOXWIDTH = 79
-		* Set the width of the action text edit box
-	* Set EDITBOXHEIGHT = 5
-		* Set the height of the action text edit box
+	* One line description, shown in the TextFormattingRules topic
+		* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statii
+	* Debug; output in data/debug.txt
+		* Set DEBUG = 0
+	* Set to 1 to encourage the browser to edit an action in a separate browser window (requires JavaScript)
+		* Set USENEWWINDOW = 1
+	* Set the width of the action text edit box
+		* Set EDITBOXWIDTH = 79
+	* Set the height of the action text edit box
+		* Set EDITBOXHEIGHT = 5
 
 ---++ Plugin Installation Instructions
 

@@ -50,6 +50,7 @@ sub initPlugin {
   # Get plugin debug flag
   $debug = &TWiki::Prefs::getPreferencesFlag( "ACTIONTRACKERPLUGIN_DEBUG" ) || 0;
   $useNewWindow = &TWiki::Prefs::getPreferencesFlag( "ACTIONTRACKERPLUGIN_USENEWWINDOW" );
+
   &TWiki::Func::writeDebug( "ActionTrackerPlugin: USENEWWINDOW=$useNewWindow" ) if ( $debug );
 
   &TWiki::Func::writeDebug( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
