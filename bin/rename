@@ -259,13 +259,13 @@ sub updateReferingPages
 		if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
 		    if( $type eq "global" ) {
 			my $insertWeb = ($itemWeb eq $newWeb) ? "" : "$newWeb.";
-			s/($preTopic)\Q$oldWeb.$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
+			s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
 		    } else {
 			# Only replace bare topic (i.e. not preceeded by web) if web of referring
 			# topic is in original Web of topic that's being moved
 			if( $oldWeb eq $itemWeb ) {
 			    my $insertWeb = ($oldWeb eq $newWeb) ? "" : "$newWeb.";
-			    s/($preTopic)\Q$oldTopic\E($postTopic)/$1$insertWeb$newTopic$2/g;
+			    s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
 			}
 		    }
 		}
