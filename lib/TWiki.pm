@@ -1,5 +1,4 @@
 # Main Module of TWiki Collaboration Platform, http://TWiki.org/
-# ($wikiversion has version info)
 #
 # Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
@@ -117,10 +116,8 @@ use vars qw(
             %preferencesTags
            );
 
-# TWiki version:
-$wikiversion      = '20 Oct 2004 $Rev$';
-
 # Key Global variables
+$wikiversion = '20 Oct 2004 $Rev$';
 # (new variables must be declared in "use vars qw(..)" above)
 @isoMonth = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 @weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
@@ -319,7 +316,7 @@ sub _setupHandlerMaps {
        WIKIPREFSTOPIC  => $wikiPrefsTopicname,
        WIKITOOLNAME    => $wikiToolName,
        WIKIUSERSTOPIC  => $wikiUsersTopicname,
-       WIKIVERSION     => $wikiversion,
+       WIKIVERSION     => '20 Oct 2004 $Rev$',
       );
 
     %dynamicInternalTags =
@@ -630,7 +627,7 @@ sub initialize {
 Sets up basic stuff - for use from scripts
 that require the BEGIN block of this class to be
 executed e.g. mailnotify and need regexes or
-isWebName/isWikiWord to work before the per-web initialize() is called.
+isWebName/isValidWikiWord to work before the per-web initialize() is called.
 Also called from initialize() if not necessary beforehand.
 
 =cut
@@ -1423,7 +1420,7 @@ sub _includeUrl {
 sub _handleINCLUDE {
     my ( $params, $theTopic, $theWeb, $verbatim, $theProcessedTopics ) = @_;
 
-    my $incfile = $params->{_DEFAULT};
+    my $incfile = $params->{_DEFAULT} || "";
     my $pattern = $params->{pattern};
     my $rev     = $params->{rev};
     my $warn    = $params->{warn};
@@ -1575,11 +1572,11 @@ sub _handleREMOTE_USER {
 # text.
 sub _handleMETASEARCH {
     my $params = shift;
-    my $attrWeb           = $params->{web};
-    my $attrTopic         = $params->{topic};
+    my $attrWeb           = $params->{web} || "";
+    my $attrTopic         = $params->{topic} || "";
     my $attrType          = $params->{type};
-    my $attrTitle         = $params->{title};
-    my $attrDefault       = $params->{default};
+    my $attrTitle         = $params->{title} || "";
+    my $attrDefault       = $params->{default} || "";
 
     my $searchVal = "XXX";
 
@@ -1626,17 +1623,17 @@ sub _handleDATE {
 
 sub _handleGMTIME {
     my $params = shift;
-    return formatTime( time(), $params->{_DEFAULT}, "gmtime" );
+    return formatTime( time(), $params->{_DEFAULT} || "", "gmtime" );
 }
 
 sub _handleSERVERTIME {
     my $params = shift;
-    return formatTime( time(), $params->{_DEFAULT}, "servertime" );
+    return formatTime( time(), $params->{_DEFAULT} || "", "servertime" );
 }
 
 sub _handleDISPLAYTIME {
     my $params = shift;
-    return formatTime( time(), $params->{_DEFAULT}, $displayTimeValues );
+    return formatTime( time(), $params->{_DEFAULT} || "", $displayTimeValues );
 }
 
 =pod
@@ -1737,7 +1734,7 @@ sub _handleENCODE {
     my $params = shift;
 
     my $type = $params->{type};
-    my $text = $params->{_DEFAULT};
+    my $text = $params->{_DEFAULT} || "";
     if ( $type && $type =~ /^entit(y|ies)$/i ) {
         return entityEncode( $text );
     } else {
@@ -1889,8 +1886,8 @@ sub _webOrTopicList {
 sub _handleURLPARAM {
     my $params = shift;
 
-    my $param     = $params->{_DEFAULT};
-    my $newLine   = $params->{newline};
+    my $param     = $params->{_DEFAULT} || "";
+    my $newLine   = $params->{newline} || "";
     my $encode    = $params->{encode};
     my $multiple  = $params->{multiple};
     my $separator = $params->{separator} || "\n";
@@ -2007,7 +2004,7 @@ sub _handleINTURLENCODE {
     my $params = shift;
     # Just strip double quotes, no URL encoding - Mozilla UTF-8 URLs
     # directly supported now
-    return $params->{_DEFAULT};
+    return $params->{_DEFAULT} || "";
 }
 
 =pod
@@ -2045,7 +2042,7 @@ sub _handleICON {
 sub _handleRELATIVETOPICPATH {
     my ( $params, $theTopic, $theWeb ) = @_;
 
-    my $theStyleTopic = $params->{_DEFAULT};
+    my $theStyleTopic = $params->{_DEFAULT} || "";
 
     return "" unless $theStyleTopic;
 
@@ -2153,73 +2150,61 @@ sub _processTags {
     }
 
     my @queue = split( /%/, $text );
-
     my $sep = "";
-    $sep = "%" if ( $text =~ /^%/ );
     my @stack;
-    my $cycle = 0;
-    #my $tell = 1;
+    #my $tell = 0;
     push( @stack, "" );
-    while ( scalar( @queue )) {
-        my $token = shift( @queue );
-        #print STDERR "PROCESSING $token \n" if $tell;
-        my $simple = 0;
-
-        $cycle++;
+    foreach my $token ( @queue ) {
+        #print  "PROCESSING $token \n" if $tell;
+        my $close = 0;
 
         if ( $sep && $token =~ /^[A-Z][A-Z0-9_:]*{/ ) {
             # a parameterised tag; push a new context
+            #print  "PUSHING $token\n" if $tell;
             push( @stack, $token );
-            $simple = $token =~ /}$/;
-            $token = "";
-            # fall through to handle close }%
+            $close = ( $token =~ /}$/ );
         } elsif ( $sep && $token =~ /^[A-Z][A-Z0-9_:]*$/ ) {
-            #print STDERR "PUSHING $token ",$stack[$#stack],"\n" if $tell;
-            push( @stack, "" ); # push a context
-            $simple = 1;
-            # fall through to handle close }%
+            #print  "PUSHING $token\n" if $tell;
+            push( @stack, $token ); # push a new context
+            $close = 1;
+        } else {
+            #print  "ADDING $sep$token\n" if $tell;
+            $stack[$#stack] .= "$sep$token";
+            $sep = "%";
+            $close = ( $#stack && $token =~ /}$/ );
         }
 
-        if ( $#stack && ( $simple || $token =~ /}$/ )) {
+        if ( $close) {
             # close of a tag. Pop the context.
-            my $expr = pop( @stack ) . $token;
+            my $expr = pop( @stack );
             my ( $tag, $args );
             if( $expr =~ /^(.*?)\{(.*)\}$/s ) {
                 ( $tag, $args) = ( $1, $2 );
             } else {
                 ( $tag, $args ) = ( $expr, undef );
             }
-            #print STDERR "expand $expr ",$stack[$#stack],"\n" if $tell;
-            my ( $r, $e ) = _handleTag( $expr, $tag, $args, @_ );
-            if ( $r ) {
+            my ( $ok, $e ) = _handleTag( $expr, $tag, $args, @_ );
+            if ( $ok ) {
                 # recursively expand what we just got
                 $e = _processTags( $e, $depth - 1,
                                    "$expanding:$depth/$tag", @_ );
-                if ( defined( $e ) && $e !~ /\n/ ) {
-                    #print STDERR "EXPANDED $tag -> $e\n" if $tell;
-                    #print STDERR "Added to ",$stack[$#stack],"\n" if $tell;
-                }
+                #print  "EXPANDED $tag -> $e\n" if $tell;
+                # no sep between this and the next token;
+                # we just ate it.
                 $sep = "";
             } else {
-                #print STDERR "EXPANSION OF $tag ( $expr )failed\n" if $tell;
+                #print  "EXPANSION OF $tag\{$expr\} FAILED\n" if $tell;
                 $e = "%$expr";
             }
             $stack[$#stack] .= $e;
-            next;
         }
-
-        $sep = "" if $cycle == 1;
-        # something else separated by % signs
-        #print STDERR "ADDED $sep$token ".ord($token),"\n" if $tell;
-        $stack[$#stack] .= "$sep$token";
-        $sep = "%";
     }
 
     # Run out of input. Close open tags.
     while ( $#stack ) {
         my $expr = pop( @stack );
         writeWarning( "Unclosed tag $expr...");
-        $stack[$#stack] .= $expr;
+        $stack[$#stack] .= "%$expr";
     }
 
     return pop( @stack );
@@ -2251,9 +2236,6 @@ sub _handleTag {
         $res = &{$dynamicInternalTags{$tag}}( \%params, @_ );
     }
 
-    #if ( defined( $res )) {
-    #    print STDERR "EXPAND $tag -> $res\n";
-    #}
     return ( defined( $res ), $res );
 }
 
