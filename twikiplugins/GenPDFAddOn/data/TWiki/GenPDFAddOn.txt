@@ -1,14 +1,15 @@
-%META:TOPICINFO{author="BrianSpinar" date="1107374239" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="BrianSpinar" date="1111541224" format="1.0" version="1.13"}%
+<!-- PDFSTART -->
 ---+!! Generate PDF Add-On
+<!-- PDFSTOP -->
 %TOC%
+<!-- PDFSTART -->
 
 This is substantial re-write of the TWiki:Codev.PrintUsingPDF pdf script. It essentially accomplishes the same goal but with more integration with TWiki (e.g. use of TWiki variables for configuration and the TWiki rendering methods instead of using a hacked version of the =TWiki::view= for generating HTML) as well as more modular code structure (i.e. most of the logic is moved to a perl package).
 
 We began using the TWiki:Codev.PrintUsingPDF pdf script to publish pages but found it somewhat TWiki unfriendly (no offense to the authors as it's a great idea). This version allows most of the script configuration (such as page size, table of contents, etc.) via preference variables in TWiki. It also allows header, footer, and title page configuration via TWiki topics.
 
-This is the initial (very much beta) version of this add-on and has only been tried with the Cairo version of TWiki. I've made no attempt to determine if it will run on earlier versions. We've been running it in-house at my company for only a couple weeks now (and it seems to work fairly well), but it has obviously not undergone any significant level of testing.
-
-__Note: I could not get this to work with the latest version (1.8.24) of HTMLDOC and didn't want to spend a lot of time figuring out why (it seems the new CGI feature in HTMLDOC breaks stuff). It does, however, seem to work fine with version 1.8.23 of HTMLDOC.__
+This is the initial (very much beta) version of this add-on and has only been tried with the Cairo version of TWiki. I've made no attempt to determine if it will run on earlier versions. We've been running it in-house at my company for a while (and it seems to work fairly well), but it has obviously not undergone any significant level of testing.
 
 ---++ Usage
 
@@ -40,8 +41,11 @@ If using TWiki preference variables, copy them to the appropriate web preference
 ---+++ Limiting the PDF Generation Region
 
 The add-on allows the user to define the region of the topic that should be included in the PDF generation (much like the TWiki %<nop>STARTINCLUDE% and %<nop>STOPINCLUDE% variables. In this case, HTML comments are used instead. Everything between these two comments will be included in the PDF generation. The rest of topic will be excluded.
+
 	* Use =&lt;!-- PDFSTART --&gt;= to mark the starting point in the topic for PDF generation.
 	* Use =&lt;!-- PDFSTOP --&gt;= to mark the stopping point in the topic for PDF generation.
+
+Note that there can be multiple PDFSTART and PDFSTOP comment pairs in a single topic to selectively include/exclude multiple sections of the topic in the PDF document. (If you view this page in =raw= mode or edit it, you'll see an example of multiple PDFSTART/PDFSTOP sections to exclude the TWiki table of contents). If no PDFSTART/PDFSTOP comment pair appears in the topic, the entire topic text is used. In general, this should not be a problem except for topics that include forms as the form meta-data will show up in a fairly illegible manner at the end of the document. Therefore, for topics that reference forms, a PDFSTART comment should be placed at the beginning of the topic and a PDFSTOP should be placed at the end.
 
 ---+++ Creating and Configuring a Title Page
 
@@ -87,22 +91,33 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	* *Adjust the perl path in the script to match your perl installation location (the one in the zip file has =/usr/local/bin/perl=).*
 	* Make sure you set the HTMLDOCLOC preference variable in you TWiki web to the location of the htmldoc executable.
 	* Test if the installation was successful:
-		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation (or executable path--HTMLDOCLOC value) problem. Also, as mentioned at the top of this topic, this add-on does not seem to work with version 1.8.24 (the latest) of htmldoc. It does, however, work with the previous version (1.8.23) of htmldoc.
+		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation (or executable path--HTMLDOCLOC value) problem.
+
+---++ Add-On History
+	* Version 0.2
+		* Fixed bug with table of contents generation (i.e. it was always generated even if =pdftoclevels= was set to 0)
+		* Now allow multiple =PDFSTART/PDFSTOP= pairs within a single page to include/exclude multiple sections of the same page
+		* Added BrentRoberts fix to allow operation with latest version (1.8.24) of HTMLDOC
+	* Version 0.1
+		* Initial version
 
 ---++ Add-On Info
 
 |  Add-on Author: | TWiki:Main/BrianSpinar |
-|  Add-on Version: | 30 Jan 2005 (v0.1) |
+|  Add-on Version: | 30 Jan 2005 (v0.2) |
 |  Change History: | <!-- versions below in reverse order -->  |
 |  30 Jan 2005: | Initial version |
 |  CPAN Dependencies: | File::Temp (if for some reason you don't already have it installed ) |
-|  Other Dependencies: | HTMLDOC (http://www.htmldoc.org) version 1.8.23 only (I've had problems getting 1.8.24 to work with this Add-On) |
+|  Other Dependencies: | HTMLDOC (http://www.htmldoc.org) |
 |  Perl Version: | 5.005 |
 |  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
 
 __Related Topic:__ %TWIKIWEB%.TWikiAddOns
+<!-- PDFSTOP -->
 
--- TWiki:Main/BrianSpinar - 30 Jan 2005
+-- TWiki:Main/BrianSpinar - 22 Mar 2005
 
