@@ -505,6 +505,7 @@ sub searchWeb
                 $tempVal =~ s/([^\n])$/$1\n/gos;       # cut last trailing new line
                 $tempVal =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
+                $tempVal =~ s/\$topic\(([^\)]*)\)/breakName( $topic, $1 )/geos;
                 $tempVal =~ s/\$topic/$topic/gos;
                 $tempVal =~ s/\$locked/$locked/gos;
                 $tempVal =~ s/\$date/$revDate/gos;
@@ -700,16 +701,26 @@ sub searchWeb
 #=========================
 sub getMetaFormField
 {
-    my( $theMeta, $theTitle ) = @_;
+    my( $theMeta, $theParams ) = @_;
 
+    my $name = $theParams;
+    my $break = "";
+    my @params = split( /\,\s*/, $theParams, 2 );
+    if( @params > 1 ) {
+        $name = $params[0] || "";
+        $break = $params[1] || 1;
+    }
     my $title = "";
     my $value = "";
     my @fields = $theMeta->find( "FIELD" );
     foreach my $field ( @fields ) {
-       $title = $field->{"title"};
-       $value = $field->{"value"};
-       $value =~ s/^\s*(.*?)\s*$/$1/go;
-       return $value if( $title eq $theTitle );
+        $title = $field->{"title"};
+        $value = $field->{"value"};
+        $value =~ s/^\s*(.*?)\s*$/$1/go;
+        if( $title eq $name ) {
+            $value = breakName( $value, $break );
+            return $value;
+        }
     }
     return "";
 }
@@ -728,6 +739,30 @@ sub getTextPattern
 }
 
 #=========================
+sub breakName
+{
+    my( $theText, $theParams ) = @_;
+
+    my @params = split( /[\,\s]+/, $theParams, 2 );
+    if( @params ) {
+        my $len = $params[0] || 1;
+        $len = 1 if( $len < 1 );
+        my $sep = "- ";
+        $sep = $params[1] if( @params > 1 );
+        if( $sep =~ /^\.\.\./i ) {
+            # make name shorter like "ThisIsALongTop..."
+            $theText =~ s/(.{$len})(.+)/$1.../;
+
+        } else {
+            # split and hyphenate the topic like "ThisIsALo- ngTopic"
+            $theText =~ s/(.{$len})/$1$sep/g;
+            $theText =~ s/$sep$//;
+        }
+    }
+    return $theText;
+}
+
+#=========================
 sub spacedTopic
 {
     my( $topic ) = @_;
@@ -736,7 +771,7 @@ sub spacedTopic
     return $topic;
 }
 
-# =========================
+#=========================
 
 1;
 
