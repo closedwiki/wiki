@@ -9,13 +9,15 @@ print "TWiki Installation (Step 1/4)\n";
 my $whoami = mychomp(`whoami`);
 my $INSTALL = "http://" . mychomp(`hostname`) . "/~$whoami/config/install.html";
 
-if ( -e "twiki/" )
+#if ( -e "twiki/" )
+if ( 0 )
 {
     print "pre-twiki.pl already run; continue installatin at $INSTALL (you shouldn't have a ./twiki directory)\n";
     exit 0;
 }
 
-print `mkdir -p cgi-bin/ ; cp install_twiki.cgi ./cgi-bin/ ; chmod +x cgi-bin/install_twiki.cgi`;
+print `mkdir -p cgi-bin/` unless -d "cgi-bin";
+print `cp install_twiki.cgi cgi-bin/ ; chmod +x cgi-bin/install_twiki.cgi` unless -e "cgi-bin/install_twiki.cgi";
 
 print `mkdir -p cgi-bin/tmp/ cgi-bin/tmp/twiki/pub/ cgi-bin/tmp/twiki/templates/ cgi-bin/tmp/install/`;
 print `cp -R downloads cgi-bin/tmp/install/`;
@@ -32,8 +34,10 @@ if ( -e ( my $mirrorOrigLoc = "cgi-bin/tmp/install/cpan/MIRROR/" ) ) { print `mv
 unless ( -e ( my $cpanConfig = "/Users/$whoami/.cpan/CPAN/MyConfig.pm" ) ) { print `mkdir -p /Users/$whoami/.cpan/CPAN; mv MyConfig.pm $cpanConfig` }
 print `perl cpan/install-cpan.pl XML::Parser XML::Simple Text::Diff Algorithm::Diff HTML::Diff`;
 #print `perl cpan/install-cpan.pl'`;
-print `chmod -R 777 cgi-bin/lib/CPAN/`;
 
-print `find cgi-bin -print | xargs chmod go-w`;
+print `find cgi-bin/twiki -print | xargs chmod go-w`;
+print `find cgi-bin/lib -print | xargs chmod go-w`;
 
-system( open => $INSTALL ) or print "continue installation at $INSTALL\n";
+print `chmod -R 777 cgi-bin/tmp/`;
+
+system( open => $INSTALL ) == 0 or print "continue installation at $INSTALL\n";
