@@ -1089,9 +1089,81 @@ sub renderMetaTags {
 
 =pod
 
+---++ sub TML2PlainText( $text, $web, $topic, $opts )
+
+Clean up TWiki text for display as plain text without pushing it
+through the full rendering pipeline. Intended for generation of
+topic and change summaries.
+
+Defuses TML.
+
+$opts:
+   * showvar - keeps !%VARS%
+   * nohead - strips ---+ headings at the top of the text
+
+=cut
+
+sub TML2PlainText {
+    my( $this, $text, $web, $topic, $opts ) = @_;
+    ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
+
+    $opts = "" unless( $opts );
+    $text =~ s/\r//g;
+
+    # Format e-mail to add spam padding (HTML tags removed later)
+    $text =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
+    $text =~ s/<\!\-\-.*?\-\->//gs;  # remove all HTML comments
+    $text =~ s/<\!\-\-.*$//s;        # cut HTML comment
+    $text =~ s/<[^>]*>//g;           # remove all HTML tags
+    $text =~ s/\&[a-z]+;/ /g;        # remove entities
+    $text =~ s/%WEB%/$web/g;
+    $text =~ s/%TOPIC%/$topic/g;
+    $text =~ s/%WIKITOOLNAME%/$TWiki::wikiToolName/g;
+    $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data variables
+    if( $opts =~ /nohead/ ) {
+        # skip headings on top
+        while( $text =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
+    }
+    unless( $opts =~ /showvar/ ) {
+        # remove variables
+        $text =~ s/%[A-Z_]+%//g;     # remove %VARS%
+        $text =~ s/%[A-Z_]+{.*?}%//g;# remove %VARS{}%
+    }
+    $text =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g; # keep only link text of [[][]]
+    $text =~ s/[\%\[\]\*\|=_\&\<\>\$]/ /g;              # remove Wiki formatting chars & defuse %VARS%
+    $text =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
+    $text =~ s/\s+[-\+]*/ /g;        # remove newlines and special chars
+    $text =~ s/^\s+/ /;              # remove leading spaces
+    $text =~ s/\s+$/ /;              # remove trailing spaces
+
+    # Encode special chars into XML &#nnn; entities for use in RSS feeds
+    # - no encoding for HTML pages, to avoid breaking international 
+    # characters. Only works for ISO-8859-1 sites, since the Unicode
+    # encoding (&#nnn;) is identical for first 256 characters. 
+    # I18N TODO: Convert to Unicode from any site character set.
+    if( $this->{MODE} eq 'rss' and $TWiki::siteCharset =~ /^iso-?8859-?1$/i ) {
+        $text =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
+    }
+
+    # prevent text from getting rendered in inline search and link tool 
+    # tip text by escaping links (external, internal, Interwiki)
+    $text =~ s/([\s\(])(?=\S)/$1<nop>/g;
+    $text =~ s/([\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/$1<nop>$2/go;
+    $text =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
+
+    $text =~ s/^\s+//;    # remove leading whitespace
+    $text =~ s/\s+$//;    # remove trailing whitespace
+
+    return $text;
+}
+
+=pod
+
 ---++ sub makeTopicSummary (  $theText, $theTopic, $theWeb, $theFlags )
 
-Makes a summary of the given topic by simply trimming a bit off the top.
+Makes a plain text summary of the given topic by simply trimming a bit
+off the top. Truncates to 162 chars or, if a number is specified in $theFlags,
+to that length.
 
 =cut
 
@@ -1100,33 +1172,7 @@ sub makeTopicSummary {
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
     # called by search, mailnotify & changes after calling readFile
 
-    my $htext = $theText;
-    $theFlags = "" unless( $theFlags );
-    # Format e-mail to add spam padding (HTML tags removed later)
-    $htext =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
-    $htext =~ s/<\!\-\-.*?\-\->//gs;  # remove all HTML comments
-    $htext =~ s/<\!\-\-.*$//s;        # cut HTML comment
-    $htext =~ s/<[^>]*>//g;           # remove all HTML tags
-    $htext =~ s/\&[a-z]+;/ /g;        # remove entities
-    $htext =~ s/%WEB%/$theWeb/g;      # resolve web
-    $htext =~ s/%TOPIC%/$theTopic/g;  # resolve topic
-    $htext =~ s/%WIKITOOLNAME%/$TWiki::wikiToolName/g; # resolve TWiki tool name
-    $htext =~ s/%META:[A-Z].*?}%//g;  # remove meta data variables
-    if( $theFlags =~ /nohead/ ) {
-        # skip headings on top
-        while( $htext =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
-    }
-    unless( $theFlags =~ /showvar/ ) {
-        # remove variables
-        $htext =~ s/%[A-Z_]+%//g;     # remove %VARS%
-        $htext =~ s/%[A-Z_]+{.*?}%//g;# remove %VARS{}%
-    }
-    $htext =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g; # keep only link text of [[][]]
-    $htext =~ s/[\%\[\]\*\|=_\&\<\>\$]/ /g;              # remove Wiki formatting chars & defuse %VARS%
-    $htext =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
-    $htext =~ s/\s+[-\+]*/ /g;        # remove newlines and special chars
-    $htext =~ s/^\s+/ /;              # remove leading spaces
-    $htext =~ s/\s+$/ /;              # remove trailing spaces
+    my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
 
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
     # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
@@ -1144,24 +1190,6 @@ sub makeTopicSummary {
     }
     $nchar = 16 if( $nchar < 16 );
     $htext =~ s/(.{$nchar})($TWiki::regex{mixedAlphaNumRegex})(.*?)$/$1$2 \.\.\./;
-
-    # Encode special chars into XML &#nnn; entities for use in RSS feeds
-    # - no encoding for HTML pages, to avoid breaking international 
-    # characters. Only works for ISO-8859-1 sites, since the Unicode
-    # encoding (&#nnn;) is identical for first 256 characters. 
-    # I18N TODO: Convert to Unicode from any site character set.
-    if( $this->{MODE} eq 'rss' and $TWiki::siteCharset =~ /^iso-?8859-?1$/i ) {
-        $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
-    }
-
-    # prevent text from getting rendered in inline search and link tool 
-    # tip text by escaping links (external, internal, Interwiki)
-    $htext =~ s/([\s\(])(?=\S)/$1<nop>/g;
-    $htext =~ s/([\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/$1<nop>$2/go;
-    $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
-
-    $htext =~ s/^\s+//;    # remove leading whitespace
-    $htext =~ s/\s+$//;    # remove trailing whitespace
 
     return $htext;
 }
