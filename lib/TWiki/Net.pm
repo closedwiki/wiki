@@ -28,6 +28,9 @@ package TWiki::Net;
 
 use strict;
 
+# RNF 22 Jan 2002 For basic HTTP authentication.
+use MIME::Base64;
+
 use vars qw(
         $useSocket $useNetSmtp
         $mailInitialized $mailHost $helloHost
@@ -42,7 +45,7 @@ BEGIN {
 # =========================
 sub getUrl
 {
-    my ( $theHost, $thePort, $theUrl, $theHeader ) = @_;
+    my ( $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
 
     if( ! $useSocket ) {
         use Socket;
@@ -51,22 +54,39 @@ sub getUrl
     if( $thePort < 1 ) {
         $thePort = 80;
     }
-    if( ! $theHeader ) {
-        $theHeader = "Host: $theHost";
-    }
+    my $base64;
     my $result = '';
-    my $req = "GET $theUrl HTTP/1.1\r\n$theHeader\r\n\r\n";
+    my $req = "GET http://$theHost$theUrl HTTP/1.1\r\n";
+
+    # RNF 22 Jan 2002 Support for vhosts and user authentication.
+    $req .= "Host: $theHost\r\n";
+    if( $theUser && $thePass ) {
+        $base64 = encode_base64( "$theUser:$thePass", "\r\n" );
+        $req .= "Authorization: Basic $base64";
+    }
+
+    # RNF 19 Apr 2002 Support for outbound proxies.
+    my $proxyHost = &TWiki::Prefs::getPreferencesValue("PROXY_HOST");
+    my $proxyPort = &TWiki::Prefs::getPreferencesValue("PROXY_PORT");
+    if($proxyHost && $proxyPort) {
+        $theHost = $proxyHost;
+        $thePort = $proxyPort;
+    }
+
+    $req .= $theHeader if( $theHeader );
+    $req .= "\r\n\r\n";
+
     my ( $iaddr, $paddr, $proto );
     $iaddr   = inet_aton( $theHost );
     $paddr   = sockaddr_in( $thePort, $iaddr );
     $proto   = getprotobyname( 'tcp' );
     unless( socket( SOCK, PF_INET, SOCK_STREAM, $proto ) ) {
         &TWiki::writeWarning( "TWiki::Net::getUrl socket: $!" );
-        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl socket: $!";
+        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl socket: $!.";
     }
     unless( connect( SOCK, $paddr ) ) {
         &TWiki::writeWarning( "TWiki::Net::getUrl connect: $!" );
-        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl connect: $!";
+        return "content-type: text/plain\n\nERROR: TWiki::Net::getUrl connect: $!. \n$req";
     }
     select SOCK; $| = 1;
     print SOCK $req;

@@ -91,7 +91,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 Jul 2002";
+$wikiversion      = "02 Aug 2002";
 
 # ===========================
 # read the configuration part
@@ -931,8 +931,24 @@ sub handleIncludeUrl
     my $host = "";
     my $port = 80;
     my $path = "";
+    my $user = "";
+    my $pass = "";
 
-    if( $theUrl =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
+    # RNF 22 Jan 2002 Handle http://user:pass@host
+    if( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\:]+)\:([0-9]+)(\/.*)/ ) {
+        $user = $1;
+        $pass = $2;
+        $host = $3;
+        $port = $4;
+        $path = $5;
+
+    } elsif( $theUrl =~ /http\:\/\/(.+)\:(.+)\@([^\/]+)(\/.*)/ ) {
+        $user = $1;
+        $pass = $2;
+        $host = $3;
+        $path = $4;
+
+    } elsif( $theUrl =~ /http\:\/\/([^\:]+)\:([0-9]+)(\/.*)/ ) {
         $host = $1;
         $port = $2;
         $path = $3;
@@ -946,7 +962,7 @@ sub handleIncludeUrl
         return $text;
     }
 
-    $text = &TWiki::Net::getUrl( $host, $port, $path );
+    $text = &TWiki::Net::getUrl( $host, $port, $path, $user, $pass );
     $text =~ s/\r\n/\n/gos;
     $text =~ s/\r/\n/gos;
     $text =~ s/^(.*?\n)\n(.*)/$2/os;
