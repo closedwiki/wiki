@@ -190,7 +190,7 @@ sub processWeb
 
     my $statsFile = $TWiki::statisticsTopicname;
     if( &TWiki::Store::topicExists( $webName, $statsFile ) ) {
-        my $text = &TWiki::Store::readTopic( $statsFile );
+        my( $text, @meta ) = &TWiki::Store::readTopicNew( $webName, $statsFile );
         my @lines = split( /\n/, $text );
         my $statLine;
         my $idxStat = -1;
