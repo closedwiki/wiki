@@ -11,66 +11,77 @@ my $URL = "http://ntwiki.ethermage.net/~develop/cgi-bin";
 
 my $outputDir;
 
-if  ( $#ARGV == 0 ) {
-	$outputDir = $ARGV[0];
+if  ( @ARGV ) {
+	$outputDir = shift @ARGV;
 } else {
 	print "please provide an outputDir\n";
     exit(1);
- }
+}
+
+my $args = join(" ", @ARGV);
 
 my $now = `date +'%Y%m%d.%H%M%S'`;
 chomp( $now );
 
 print "<HTML><TITLE>Running tests</TITLE><BODY>\n";
 
-print "<h1><code>svn update</code>\n";
-print "<pre>\n";
-print `svn update`;
-print "</pre>\n";
+unless( $args =~ /\bnoupdate\n/ ) {
+    print "<h1><code>svn update</code>\n";
+    print "<pre>\n";
+    print `svn update`;
+    print "</pre>\n";
+}
 
-print "<h1>Compile Tests</h1>\n";
-my $pms = `find ../lib -name '*.pm'`;
-my $rose = "";
-foreach my $pm (split /\n/, $pms){
-    my $mess = `perl -I ../lib -I . -w -c $pm 2>&1`;
-    $mess =~ s/^.*Subroutine .*? redefined at .*?$//gm;
-    $mess =~ s/^.*Name ".*?" used only once: possible typo.*$//gm;
-    $mess =~ s/^.*?syntax OK$//m;
-    $mess =~ s/\n\n/\n/sg;
-    if ( $mess =~ /\S/ ) {
-        $rose .= "<tr align='top'><td>$pm</td><td>\n";
-        $rose .= "<pre>$mess</pre></td></tr>\n";
+unless( $args =~ /\bnocompile\b/ ) {
+    print "<h1>Compile Tests</h1>\n";
+    my $pms = `find ../lib -name '*.pm'`;
+    my $rose = "";
+    foreach my $pm (split /\n/, $pms){
+        my $mess = `perl -I ../lib -I . -w -c $pm 2>&1`;
+        $mess =~ s/^.*Subroutine .*? redefined at .*?$//gm;
+        $mess =~ s/^.*Name ".*?" used only once: possible typo.*$//gm;
+        $mess =~ s/^.*?syntax OK$//m;
+        $mess =~ s/\n\n/\n/sg;
+        if ( $mess =~ /\S/ ) {
+            $rose .= "<tr align='top'><td>$pm</td><td>\n";
+            $rose .= "<pre>$mess</pre></td></tr>\n";
+        }
     }
-}
-if ( $rose) {
-    print "<table border='1'>$rose</table\n";
-} else {
-    print "No compile errors\n";
-}
-print "<h1>Unit Tests</h1>\n";
-print "Errors will be in $outputDir/unit$now\n<pre>\n";
-execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm > $outputDir/unit$now ; cd ..") or die $!;
-print "</pre>\n";
-
-print "<h1>Automated Test Cases</h1>\n";
-my $userAgent = LWP::UserAgent->new();
-$userAgent->agent( "ntwiki Test Script " );
-
-opendir( TESTS, "../data/TestCases" ) || die "Can't get testcases: $!";
-foreach my $test ( grep { /^TestCaseAuto.*\.txt$/ } readdir TESTS ) {
-    $test =~ s/\.txt//;
-    my $result = $userAgent->get( "$URL/view/TestCases/$test?test=compare&debugenableplugins=TestFixturePlugin" );
-
-    print "$test ";
-    if ( $result->content() =~ /ALL TESTS PASSED/ ) {
-        print "<font color='green'>PASSED</font>";
+    if ( $rose) {
+        print "<table border='1'>$rose</table\n";
     } else {
-        print "<font color='red'><b>FAILED</b></font>";
-        #print $result->content();
+        print "No compile errors\n";
     }
-    print "<br>\n";
 }
-closedir(TESTS);
+
+unless( $args =~ /\bnounit\b/ ) {
+    print "<h1>Unit Tests</h1>\n";
+    print "Errors will be in $outputDir/unit$now\n<pre>\n";
+    execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm > $outputDir/unit$now ; cd ..") or die $!;
+    print "</pre>\n";
+}
+
+unless( $args =~ /\bnopage\b/ ) {
+    print "<h1>Automated Test Cases</h1>\n";
+    my $userAgent = LWP::UserAgent->new();
+    $userAgent->agent( "ntwiki Test Script " );
+
+    opendir( TESTS, "../data/TestCases" ) || die "Can't get testcases: $!";
+    foreach my $test ( grep { /^TestCaseAuto.*\.txt$/ } readdir TESTS ) {
+        $test =~ s/\.txt//;
+        my $result = $userAgent->get( "$URL/view/TestCases/$test?test=compare&debugenableplugins=TestFixturePlugin" );
+
+        print "$test ";
+        if ( $result->content() =~ /ALL TESTS PASSED/ ) {
+            print "<font color='green'>PASSED</font>";
+        } else {
+            print "<font color='red'><b>FAILED</b></font>";
+            #print $result->content();
+        }
+        print "<br>\n";
+    }
+    closedir(TESTS);
+}
 
 print "</BODY></HTML>";
 
