@@ -60,8 +60,7 @@ sub main
     $tmplData =~ s/%PARAM4%/$param/go;
 
     $tmplData = &TWiki::handleCommonTags( $tmplData, $topic );
-    my( $head, $tag, $body ) = split( /(<body)/i, $tmplData, 3 );
-    $tmplData = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
+    $tmplData = &TWiki::getRenderedVersion( $tmplData );
     $tmplData =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
     TWiki::writeHeader( $query );

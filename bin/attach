@@ -133,8 +133,7 @@ sub main
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "attach", $skin );
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
-    my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
-    $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl );
     $atext = &TWiki::handleCommonTags( $atext, $topic );
     $atext = &TWiki::getRenderedVersion( $atext );
     $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );

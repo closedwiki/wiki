@@ -163,8 +163,7 @@ sub main
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
-    my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
-    $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl );
     $tmpl =~ s/%TEXT%/$ptext/go;
 
     $text =~ s/&/%_A_%/go;

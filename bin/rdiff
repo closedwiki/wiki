@@ -172,8 +172,7 @@ sub main
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
     $before = &TWiki::handleCommonTags( $before, $topic );
-    my( $head, $tag, $body ) = split( /(<body)/i, $before, 3 );
-    $before = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
+    $before = &TWiki::getRenderedVersion( $before );
     $before =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print $before;
 

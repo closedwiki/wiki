@@ -60,10 +60,10 @@ sub main
     my $frev = "";
 
     $text = &TWiki::handleCommonTags( $text, $topic );
-    my( $head, $tag, $body ) = split( /(<body)/i, $text, 3 );
-    $text = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
-
-    ( $before, $text, $after) = split( /%REPEAT%/, $text);
+    $text = &TWiki::getRenderedVersion( $text );
+    my $before = "";
+    my $after = "";
+    ( $before, $text, $after) = split( /%REPEAT%/, $text );
     print $before;
 
     foreach( reverse split( /\n/, $changes ) ) {

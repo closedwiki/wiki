@@ -191,8 +191,7 @@ sub main
     } else {
         $tmpl =~ s/%META{[^}]*}%//go;
     }
-    my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
-    $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
+    $tmpl = &TWiki::getRenderedVersion( $tmpl );
 
     # Dont want to render form fields, so this after getRenderedVersion
     my %formMeta = $meta->findOne( "FORM" );
