@@ -21,7 +21,7 @@ function launchWindow( theWeb, theTopic ) {
 <div id="wrapper">
 <div id="content" style="background-image: url(%PREVIEWBGIMAGE%);">%TEXT%
 </div> <!-- end #content -->%META{"form"}% %META{"attachments"}%
-<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%URLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 <input type="hidden" name="text" value="%HIDDENTEXT%" />
 <input type="hidden" name="cmd" value="%CMD%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
