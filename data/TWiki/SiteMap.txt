@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1067679615" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="ArthurClemens" date="1092532647" format="1.0" version="1.6"}%
 ---+ %WIKITOOLNAME% Site Map
 %STARTINCLUDE%
 <table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">
-  <tr bgcolor="#99CCCC">
+  <tr bgcolor="#ffffff">
 	 <th>
 	  Web
 	 </th><th>
@@ -38,3 +38,4 @@ Legend of icons:
 </font></td>
   </tr>
 </table>
+
