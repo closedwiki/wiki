@@ -78,10 +78,16 @@ my $tree = slurp_tree( $dir, rule => File::Find::Rule->or( $discardSVN, $all )->
 spew_tree( "$installBase/$dir" => $tree ); }
 
 #-[pub]-------------------------------------------------------------------------------
-if ( 0 ) { my $dir = 'pub/TWiki';
+{ 
+rmtree "$installBase/pub/Main/" or warn "Main: $!";
+rmtree "$installBase/pub/Sandbox/" or warn "Sandbox; $!";
+rmtree "$installBase/pub/Trash/" or warn "Trash: $!";
+
+my $dir = 'pub/TWiki';
 rmtree "$installBase/$dir" or die $!;
 my $tree = slurp_tree( $dir, rule => File::Find::Rule->or( $discardSVN, $all )->start( $dir ) );
-spew_tree( "$installBase/$dir" => $tree ); }
+spew_tree( "$installBase/$dir" => $tree ); 
+}
 
 ################################################################################
 # some cleanup
@@ -118,16 +124,9 @@ sub execute
 }
 
 __END__
-1352 -rw-r--r--    1 twiki  twiki  692162 31 Aug 12:35 TWikiDocumentation.html
- 248 -rw-r--r--    1 twiki  twiki  123154 31 Aug 12:35 TWikiHistory.html
-  24 -rwxr-xr-x    1 twiki  twiki   10283 21 Aug 18:35 UpgradeTwiki*
-   8 -rw-r--r--    1 twiki  twiki     837 30 Aug 03:02 index.html
-  40 -rw-r--r--    1 twiki  twiki   19696 30 Aug 02:52 license.txt
-   8 -rw-r--r--    1 twiki  twiki     475 29 May 02:51 pub-htaccess.txt
-  16 -rw-r--r--    1 twiki  twiki    4516 31 Aug 12:35 readme.txt
-   8 -rw-r--r--    1 twiki  twiki     564 30 Aug 02:37 robots.txt
-   8 -rw-r--r--    1 twiki  twiki     554 29 May 02:51 root-htaccess.txt
-   8 -rw-r--r--    1 twiki  twiki     516 29 May 02:51 subdir-htaccess.txt
+
+################################################################################
+# from source control and/or automated 
 
 [X] /bin (SVN)
 
@@ -143,7 +142,23 @@ __END__
 
 /pub
    * TWiki/ (SVN)
-   * Main/, Sandbox/, Trash/, _default/
+   * Main/, Sandbox/, Trash/, <strike>_default/</strike> (empty; deleted by build-twiki-kernel.pl)
+
+================================================================================
+# not assembled (yet) by build-twiki-kernel.pl; uses files from TWiki20040901.tar.gz
+
+1352 -rw-r--r--    1 twiki  twiki  692162 31 Aug 12:35 TWikiDocumentation.html
+ 248 -rw-r--r--    1 twiki  twiki  123154 31 Aug 12:35 TWikiHistory.html
+  24 -rwxr-xr-x    1 twiki  twiki   10283 21 Aug 18:35 UpgradeTwiki*
+   8 -rw-r--r--    1 twiki  twiki     837 30 Aug 03:02 index.html
+  40 -rw-r--r--    1 twiki  twiki   19696 30 Aug 02:52 license.txt
+   8 -rw-r--r--    1 twiki  twiki     475 29 May 02:51 pub-htaccess.txt
+  16 -rw-r--r--    1 twiki  twiki    4516 31 Aug 12:35 readme.txt
+   8 -rw-r--r--    1 twiki  twiki     564 30 Aug 02:37 robots.txt
+   8 -rw-r--r--    1 twiki  twiki     554 29 May 02:51 root-htaccess.txt
+   8 -rw-r--r--    1 twiki  twiki     516 29 May 02:51 subdir-htaccess.txt
+
+/pub
    * icn/_filetypes.txt, icn/*.gif
    * favicon.ico [blasted robot]
    * wikiHome.gif [blasted robot]
