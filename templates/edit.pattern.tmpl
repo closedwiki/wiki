@@ -90,13 +90,13 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 %TMPL:DEF{"simpleheader"}%
 ---+ <nop>%TOPIC% (edit)
-%BR%
-%TMPL:END%
+%BR%%TMPL:END%
 
 
 
 %TMPL:DEF{"topicaction"}%
 <fieldset><legend class="twikiGrayText">[[%TWIKIWEB%.AccessKeys][AccessKeys]]: C = Cancel, Q = Quiet Save, K = Checkpoint, P = Preview, S = Save</legend>
+	<div class="twikiFieldsetButtons twikiLeft">
    <label accesskey="c" for="cancel">
         <input type="submit" class="twikiSubmit twikiCancel" name="action" id="cancel" value="Cancel" />
    </label>
@@ -112,6 +112,11 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
    <label accesskey="s" for="save">
        <input type="submit" class="twikiSubmit" name="action" id="save" value="Save" />
    </label>
+   </div>
+   <div class="twikiRight">
+       <style>/*<input type="submit" class="twikiSubmit twikiChangeFormButton" name="submitChangeForm" id="changeForm" value=%CHANGEFORMLABEL% />*/</style>
+   </div>
+   <br class="twikiClearLine" />
 </fieldset>%TMPL:END%
 
 
@@ -131,8 +136,8 @@ See below for help in editing this page.
 </table>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
-<div class="twikiHelp">
-%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div></form>%TMPL:END%
+</form><div class="twikiHelp">
+%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>%TMPL:END%
 
 
 
