@@ -67,6 +67,9 @@ db_get twiki/wikiwebmaster
 # do rcs checkout first?
 perl -pi~ -e '$U=q{'"$RET"'}; s/^(\s*\*\s*Set\s*WIKIWEBMASTER\s*=\s*).*(\r\n)$/$1$U$2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
 
+#force default to use sendmail by setting SMTPMAILHOST to blank
+perl -pi~ -e 's/^(\s*\*\s*Set\s*SMTPMAILHOST\s*=\s*).*(\r\n)$/$1$2/;' /var/lib/twiki/data/TWiki/TWikiPreferences.txt
+
 
 # prevent further confusion: done with debconfig
 
