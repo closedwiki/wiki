@@ -86,7 +86,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "22 Oct 2000";
+$wikiversion      = "23 Oct 2000";
 
 # ===========================
 # read the configuration part
@@ -300,7 +300,11 @@ sub initializeRemoteUser
             $text = "# This is a generated file, do not modify.\n";
             foreach my $usrAddr ( sort keys %AddrToName ) {
                 my $usrName = $AddrToName{ $usrAddr };
-                $text .= "$usrAddr|$usrName|\n";
+                # keep $userName unique
+                if(  ( $usrName ne $theRemoteUser )
+                  || ( $usrAddr eq $remoteAddr ) ) {
+                    $text .= "$usrAddr|$usrName|\n";
+                }
             }
             saveFile( $remoteUserFilename, $text );
         }

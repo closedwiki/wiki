@@ -17,10 +17,10 @@
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 #
 # Notes:
-# - Latest version at http://www.mindspring.net/~peterthoeny/twiki/
+# - Latest version at http://twiki.sourceforge.net/
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
-# - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
+# - Files wiki[a-z]+.pm are included by wiki.pm
 #
 # 20000501 Kevin Kinnell  : Many many many changes, best view is to
 #                           run a diff.

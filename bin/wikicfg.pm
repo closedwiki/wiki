@@ -3,8 +3,7 @@
 #
 # Configuration and custom extensions for wiki.pm of TWiki.
 #
-# Copyright (C) 1999, 2000 Peter Thoeny, TakeFive Software Inc., 
-# peter.thoeny@takefive.com , peter.thoeny@attglobal.net
+# Copyright (C) 1999, 2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,7 +22,7 @@
 # - Customize variables in wikicfg.pm when installing TWiki.
 #   NOTE: Don't forget to customize also the TWiki.TWikiPreferences topic.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
-# - Files wikifcg.pm, wikistore.pm and wikisearch.pm are included by wiki.pm
+# - Files wiki[a-z]+.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 # - Variables that can be accessed from topics (see details in
 #   TWikiDocumentation.html) :
@@ -156,8 +155,8 @@ $editLockTime       = "3600";
 $doKeepRevIfEditLock = "1";
 #                   Remove port number from URL. Default "0"
 $doRemovePortNumber = "0";
-#                   Remember remote user for non-authenticated scripts
-#                   by matching the IP address with known users. Default "0"
+#                   Remember remote user by matching the IP address
+#                   in case REMOTE_USER is empty. Default "0"
 #                   (Note: Does not work reliably with dynamic IP addresses)
 $doRememberRemoteUser = "0";
 #                   Change non existing plural topic name to singular,

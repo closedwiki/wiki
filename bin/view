@@ -5,8 +5,7 @@
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999 Peter Thoeny, peter.thoeny@takefive.com , 
-# TakeFive Software Inc.
+# Copyright (C) 1999 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -19,6 +18,13 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html 
 
+BEGIN {
+    use CGI::Carp qw(carpout);
+    open( LOG, ">>/home/groups/twiki/a/data/carp-log.txt" )
+      or die "unable to append to /home/groups/twiki/a/data/carp-log.txt: $!\n";
+    carpout( *LOG );
+}
+
 use CGI;
 use wiki;
 
@@ -27,7 +33,6 @@ $query= new CGI;
 ##### for debug only: Remove next 2 comments (but redirect does not work)
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 #$| = 1;                  # no buffering
-print "Content-type: text/html\n\n";
 
 &main();
 
@@ -38,17 +43,20 @@ sub main
     my $theTopic = $query->param( 'topic' );
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrlPath ) = 
+    ( $topic, $webName, $scriptUrlPath, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
-    my $tmpl= "", $text="";
-    my $rev= $query->param( "rev" );
+    my $tmpl = "";
+    my $text = "";
+    my $rev = $query->param( "rev" );
     my $maxrev = 1;
     my $extra = "";
+    my $wikiUserName = &wiki::userToWikiName( $userName );
 
     if( ! &wiki::webExists( $webName ) ) {
 	$tmpl= &wiki::readTemplate( "noweb" );
 	$tmpl = &wiki::handleCommonTags( $tmpl, $topic );
+        print "Content-type: text/html\n\n";
 	print $tmpl;
 	return;
     }
@@ -76,6 +84,14 @@ sub main
 	}
         $extra .= " (not exist)";
     }
+
+    # check access permission
+    if( ! &wiki::checkAccessPermission( "view", $wikiUserName, $text, $topic, $webName ) ) {
+        my $url = &wiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
+        print $query->redirect( $url );
+        return;
+    }
+
     $text = &wiki::handleCommonTags( $text, $topic );
     $text = &wiki::getRenderedVersion( $text );
 
@@ -136,5 +152,6 @@ sub main
 
     $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
     $tmpl =~ s/%TEXT%/$text/go;
+    print "Content-type: text/html\n\n";
     print $tmpl;
 }

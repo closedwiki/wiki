@@ -4,8 +4,7 @@
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
 # Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
-# Copyright (C) 1999, 2000 Peter Thoeny, TakeFive Software Inc., 
-# peter.thoeny@takefive.com , peter.thoeny@attglobal.net
+# Copyright (C) 1999, 2000 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,7 +22,7 @@
 # - Installation instructions in $dataDir/Main/TWikiDocumentation.txt
 # - Customize variables in wikicfg.pm when installing TWiki.
 # - Optionally change wikicfg.pm for custom extensions of rendering rules.
-# - Files wikifcg.pm and wikisearch.pm are included by wiki.pm
+# - Files wiki[a-z]+.pm are included by wiki.pm
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 # - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
 #
