@@ -37,7 +37,7 @@ use vars qw(
 	    $defaultFormat
 	   );
 
-$VERSION = '1.000';
+$VERSION = '2.010';
 $pluginInitialized = 0;
 $perlTimeParseDateFound = 0;
 $pluginName = "ActionTrackerPlugin";

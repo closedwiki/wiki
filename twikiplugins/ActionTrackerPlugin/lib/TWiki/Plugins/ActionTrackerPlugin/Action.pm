@@ -465,7 +465,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # action falls due
   sub _matchField_within {
     my ( $this, $val ) = @_;
-    return ( $this->secsToGo() <= $val * 60 * 60 * 24 );
+    return ( abs( $this->secsToGo() ) <= $val * 60 * 60 * 24 );
   }
 
   # PRIVATE match boolean attribute "closed"

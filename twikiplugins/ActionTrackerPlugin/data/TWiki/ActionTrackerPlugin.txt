@@ -1,13 +1,17 @@
 ---+!! Action Tracker Plugin
 
-This plugin provides support for action tracking and notification in meeting minutes. It can also be used for private reminders, for example TODO lists and diary entries. _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
+This plugin provides support for tracking actions embedded in meeting minutes. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live".
+
+Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'. The action tracker can also be used for private reminders, for example TODO lists and diary entries, and has been successfully applied to functions as diverse as risk management and bug tracking.
+
+_( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
 
 %TOC%
 
 ---+ Features
 
-	* Action tags may be added to TWiki topics that will be displayed formatted in-line.
-	* Actions in a web can also be listed using searches.
+	* Action tags may be embedded in TWiki topics and will be displayed formatted in-line.
+	* Actions can be listed using searches.
 	* A script is provided for automatic action notification.
 	* Actions can be assigned to individuals, or to predefined groups of individuals.
 	* Fully configurable.
@@ -17,7 +21,7 @@ This plugin provides support for action tracking and notification in meeting min
 
 ---++ Actions
 
-Write the command =%<nop>ACTION{= _attributes_ =}%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description (i.e. you can only have one action per line). Standard attributes are
+Write the command =%<nop>ACTION{= _attributes_ =}%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description. Standard attributes are
 	| *Name* | *Value* | *Description* |
 	| =who= | See [[#PeopleAnchor][People]] | The person or team responsible for completing the action. %GREEN% Auto-completed, current user %ENDCOLOR% |
 	| =due= | See [[#DateFormats][Date Formats]] | The due date %GREEN% Auto-completed, today %ENDCOLOR% |
@@ -66,7 +70,7 @@ The following absolute date formats are recognised. Dates containing spaces must
 	* yy/mm		(only if year > 12)
 	* yy/mm/dd	(only if year > 12 and day < 32)
 
-You are *strongly* recommended never to use the 'mm/dd/yyyy or mm/dd/yyyy' formats, to avoid confusing users in Europe (like me).
+You are *strongly* recommended never to use the 'mm/dd/yyyy or mm/dd/yyyy' formats, to avoid confusing users in Europe (like me). Note that due to limitations in the Time::Parsedate module, dates before 1970 will not work as expected.
 
 #PeopleAnchor
 ---+++ People
@@ -88,7 +92,7 @@ __Note__ in general you should *not* use these mechanisms for assigning actions,
 
 #UiDs
 ---+++ UIDs
-
+_For administrators only_:
 Each action is assigned a Unique Identifier (UID) when it is created. This UID is a six-digit number, and is generated when the action is first saved by incrementing a number in a special file (<code>data/atUidReg</code> under the TWiki installation). If this file is accidentally deleted, or is not writable, then you will have problems and you may get duplicate UIDs. Normally this won't matter a hoot, as UIDs only _have_ to be unique within a single topic, but if you are using UIDs for something else you will need to take care.
 
 ---++ Action searches
@@ -98,7 +102,7 @@ Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki to
 	| =who= | See [[#PeopleAnchor][People]] | Person responsible for closing the action. |
 	| =notify= | See [[#PeopleAnchor][People]] | Persons who want to be notified of a change |
 	| =state= | =late=, or any legal state value | Set to =late= to search for late actions; set to any any legal state value to search for actions in that state. See [[#SettingsAnchor][Settings]] for details on how to extend the state set. |
-	| =within= | a number of days | Search for actions that are within a number of days of their due date |
+	| =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. Works in both directions, so you can use this to search for actions which _are going to fall due_ within a certain number of days, or actions that _fell due_ in the past i.e. the window is 2 * within wide. |
 	| =web= | Perl regular expression | A regular expression that matches the names of all the webs to search. If this attribute is omitted, the default is to search only the current web. Searching many webs is much slower, especially in a large installation. Webs marked NOSEARCHALL will not be searched. | 
 	| =topic= | Perl regular expression | A regular expression that matches the names of all the topics to search. If this attribute is omitted, the default is to search all the topics in the selected webs. | 
 	| =due= | See [[#DateFormats][Date Formats]] | Due date for the action. |
@@ -139,7 +143,7 @@ Result:
 #NotiFication
 ---+ Notification
 
-%TOPIC% comes with a notifier script, like the =mailnotify= script used for WebNotify (see TWiki.MonitoringSiteActivity for more information on setting up mailnotify). This script allows you to:
+ActionTrackerPlugin comes with a notifier script, like the =mailnotify= script used for WebNotify (see TWiki.MonitoringSiteActivity for more information on setting up mailnotify). This script allows you to:
 	* examine all the actions in all webs (except those specified NOSEARCHALL) and notify owners of the state of actions,
 	* find actions that have changed state, and notify people who have registered an interest in that action.
 
@@ -285,7 +289,7 @@ will match both of the following actions:
 
 ---
 #SettingsAnchor
----+ <nop>%TOPIC% Settings
+---+ <nop>ActionTrackerPlugin Settings
 
 These settings can be overridden in the Web<nop>Preferences topic of the current web (by defining ACTIONTRACKERPLUGIN_TABLEHEADER or ACTIONTRACKERPLUGIN_TABLEFORMAT etc).
 	* Set to 1 to enable debug features, including the undocumented =%<nop>ACTIONNOTIFICATIONS{}%= and =%<nop>ACTIONTRACKERPREFS%= features.
@@ -336,25 +340,25 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* Make sure you have Time::ParseDate installed in your perl installation (available from www.cpan.org)
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
-	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	| ==data/TWiki/ActionTrackerPlugin.txt== | Plugin topic |
 	| ==bin/actionnotify== | Mailer script |
 	| ==templates/actionnotify.tmpl== | Page template for notify message |
 	| ==templates/edit.action.tmpl== | Action editor page template |
 	| ==templates/actionform.tmpl== | Action editor page subtemplate |
-	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	| ==lib/TWiki/Plugins/%TOPIC%/Action.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/%TOPIC%/ActionNotify.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/%TOPIC%/ActionSet.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/%TOPIC%/Attrs.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/%TOPIC%/AttrDef.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/%TOPIC%/Config.pm== | Configuration module |
-	| ==lib/TWiki/Plugins/%TOPIC%/Format.pm== | Perl support module |
-	| ==lib/TWiki/Plugins/%TOPIC%/build.xml== | Ant build file |
-	| ==lib/TWiki/Plugins/%TOPIC%/test.zip== | Test scripts |
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin.pm== | Plugin Perl module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Action.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/ActionNotify.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/ActionSet.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Attrs.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/AttrDef.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Config.pm== | Configuration module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/Format.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/build.xml== | Ant build file |
+	| ==lib/TWiki/Plugins/ActionTrackerPlugin/test.zip== | Test scripts |
+	* Unzip ==ActionTrackerPlugin.zip== in your twiki installation directory.
 	* Configure lib/TWiki/Plugins/ActionTrackerPlugin/Config.pm appropriately for your installation. Several of the configuration items are the same as in lib/TWiki.cfg - you can copy your local values from there if you're not sure what you're doing. If you are using Rcs<nop>Lite, just ignore the rlogCmd; you can't use the changedsince feature with Rcs<nop>Lite anyway.
 	* If the plugin is installed and enabled correctly you should see a formatted action below: %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
-	* ... and the result of a formatted search below: %ACTIONSEARCH{topic=%TOPIC% who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text|" orient="rows" }%
+	* ... and the result of a formatted search below: %ACTIONSEARCH{topic=ActionTrackerPlugin who=TWikiGuest header="|Who|Due|State|Description|" format="| $who |$due|$state|$text|" orient="rows" }%
 
 ---++ Upgrade notes
 Earlier versions of this plugin installed a number of files that are no longer required. Relative to the root of the TWiki installation these are:
@@ -370,13 +374,15 @@ The mechanism for defining notification groups as lists of "EMail" lines in a to
 ---+ %RED%Known Issues%ENDCOLOR%
 
 ---++ Use of unpublished functions
-The following unpublished TWiki core functions are used:
-<pre>
+The following unpublished TWiki core functions and variables are used:
+<verbatim>
 TWiki::initialize()
 TWiki::getGmDate()
 TWiki::getTWikiLibDir()
 TWiki::Net::sendEmail()
-</pre>
+$TWiki::wikiWordRegex
+$TWiki::webNameRegex
+</verbatim>
 
 ---++ Behaviour of egrep
 The output of the =$egrepCmd= in TWiki.cfg (with no switches) must be of the form:
@@ -391,11 +397,13 @@ The changedsince feature of the notificationscript requires you to be using RCS 
 ---++ Dates before 1970
 Due to limitations in the Time::Parsedate module, dates before January 1, 1970 may be parsed incorrectly.
 
+%RED% Please do *not* post bugs here. Either use the standard TWiki bug reporting mechanisms or add them to the developer topic http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev. %ENDCOLOR%
+
 ---
 ---+ Plugin Info
 
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
-|  Plugin Version: | 2.0 |
+|  Plugin Version: | 2.010 |
 |  Change History: | 4 Jan 2002: Initial version |
 |			| 9 Jan 2002: Bugfix version |
 |			| 11 Jan 2002: Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
@@ -404,10 +412,11 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 |			| 30 Jan 2003: Query-by-example action search with notify field; notfication of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
 |			| 30 Apr 2003: Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
 |			| 21 May 2003: Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
+|			| 3 Feb 2004: Fixes for internationalisation, name matching, QBE, within= behaviour, documentation. |
 |  CPAN Dependencies: | Time::ParseDate |
 |  Perl Version: | 5.0 |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
@@ -415,20 +424,11 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 Further development of this code is welcomed. It is recommended that you unpack the distribution into a development directory and use the supplied Ant (http://jakarta.apache.org) build file which provides targets to run the test suite, and install and uninstall your development code into a test installation. Please, please, _please_ run, and extend if necessary, the test set!
 
-Some ideas:
-	1 Make the _go to action_ link in action text a button image.
-	1 Fix the "close subwindow on save" functionality. See ActionTrackerPlugin.pm, search for <code>$submitScript</code>.
-	1 Generalise the search to support =within= and =late= style searches on all date fields, including non-standard ones.
-	1 A really brave soul might consider moving action change notification to where it belongs; in the beforeSaveHandler.
-	1 You could turn this into a full-blooded issue tracker by constraining state transitions.
-	1 Make it work for a PC server
-
 Developer discussion is in TWiki:Plugins/ActionTrackerPluginDev.
 
 ---++ Copyright
 
-This code is a development of Motorola Inc. and is protected by the following
-copyrights:
+This code is an original development of Motorola Inc. and is protected by the following copyrights:
 	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
 
 ---++ License
@@ -442,5 +442,3 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
-
-
