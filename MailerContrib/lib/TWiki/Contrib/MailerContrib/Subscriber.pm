@@ -114,15 +114,16 @@ sub unsubscribe {
 
 ---+++ sub isSubscribedTo($topic) -> boolean
 | $topic | Topic object we are checking |
+| $db | Database of parents |
 Check if we have a subscription to the given topic.
 
 =cut
 
 sub isSubscribedTo {
-   my ( $this, $topic ) = @_;
+   my ( $this, $topic, $db ) = @_;
 
    foreach my $subscription ( @{$this->{subscriptions}} ) {
-       if ( $subscription->matches( $topic )) {
+       if ( $subscription->matches( $topic, $db )) {
            return 1;
        }
    }

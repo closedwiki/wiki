@@ -24,8 +24,7 @@ use TWiki::Store;
 
 use TWiki::Contrib::MailerContrib::WebNotify;
 use TWiki::Contrib::MailerContrib::Change;
-
-use TWiki::Contrib::DBCache;
+use TWiki::Contrib::MailerContrib::UpData;
 
 =begin text
 
@@ -41,7 +40,7 @@ package TWiki::Contrib::Mailer;
 
 use vars qw ( $VERSION $sendmail $verbose );
 
-$VERSION = 1.000;
+$VERSION = 1.001;
 
 =begin text
 
@@ -55,7 +54,16 @@ only be called by =mailnotify= scripts.
 =cut
 
 sub mailNotify {
-    ( $sendmail, $verbose ) = @_;
+    my $webs;
+
+    ( $sendmail, $verbose, $webs ) = @_;
+
+    my $webstr;
+    if ( defined( $webs )) {
+        $webstr = join( "|", @{$webs} );
+    }
+    $webstr = '*' unless ( $webstr );
+    $webstr =~ s/\*/\.\*/g;
 
     # No point, since we have to do a full initialise anyway
     #TWiki::basicInitialize();
@@ -63,9 +71,9 @@ sub mailNotify {
     # SMELL: without a full initialise I get an error when trying to
     # list all webs!! Shouldn't be needed.
     my ( $topic, $webName, $dummy, $userName, $dataDir) =
-      &TWiki::initialize( "/TWiki", "nobody" );
+      TWiki::initialize( "/TWiki", "nobody" );
 
-    foreach my $web ( TWiki::Func::getPublicWebList() ) {
+    foreach my $web ( grep( /$webstr/o, TWiki::Func::getPublicWebList() )) {
         _processWeb( $web );
     }
 }
@@ -78,7 +86,7 @@ sub _processWeb {
       TWiki::initialize( "/$web", "nobody" );
 
     if( ! TWiki::Func::webExists( $web ) ) {
-        print STDERR "mailnotify cannot find web $webName\n";
+        print "**** ERROR mailnotifier cannot find web $webName\n";
         return;
     }
 
@@ -90,11 +98,8 @@ sub _processWeb {
     if ( $wn->isEmpty() ) {
         print "\t$web has no subscribers\n" if $verbose;
     } else {
-        # read the topics so we can get the "_up" pointer
-        my $db = new TWiki::Contrib::DBCache( $web );
-
-        die "Can't create DB" unless $db;
-        $db->load();
+        # create a DB object for parent pointers
+        my $db = new TWiki::Contrib::MailerContrib::UpData( $web );
 
         _processChanges( $web, $wn, $db );
     }
@@ -154,23 +159,21 @@ sub _processChanges {
             }
         }
 
-        my $topicHash = $db->get( $topicName );
-        next unless ( $topicHash ); # topic still there?
-
         my $change =
           new TWiki::Contrib::MailerContrib::Change
             ( $web,
-              $topicHash,
+              $topicName,
               TWiki::Func::userToWikiName( $userName, 1 ),
-              TWiki::formatTime( $changeTime ),
+              TWiki::Func::formatTime( $changeTime ),
               $frev,
               # SMELL: Call to TWiki::makeTopicSummary is unavoidable
-              TWiki::makeTopicSummary( $topicHash->get( "text" ),
-                                       $topicName,
-                                       $web ));
+              TWiki::makeTopicSummary
+              (TWiki::Func::readTopicText($web, $topicName),
+               $topicName,
+               $web ));
 
         # Now, find subscribers to this change and extend the change set
-        $notify->processChange( $change, \%changeset, \%seenset );
+        $notify->processChange( $change, $db, \%changeset, \%seenset );
     }
 
     # Now generate emails for each recipient
@@ -196,6 +199,7 @@ sub _generateEmails {
     $template =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
     # SMELL: unexported function call TWiki:: doRemoveImgInMailnotify
+    # STINK: preferences like this should be exported from TWiki.cfg
     if( $TWiki::doRemoveImgInMailnotify ) {
         # change images to [alt] text if there, else remove image
         $template =~ s/<img src=.*?alt=\"([^\"]+)[^>]*>/[$1]/goi;
@@ -209,11 +213,13 @@ sub _generateEmails {
 
     my $mailtmpl = TWiki::Func::readTemplate( "mailnotify", $skin );
 
+    my $sentMails = 0;
+
     foreach my $email ( keys %{$changeset} ) {
         my $html = "";
         my $plain = "";
 
-        foreach my $change (sort { $a->getTopic() cmp $b->getTopic() }
+        foreach my $change (sort { $a->{TOPIC} cmp $b->{TOPIC} }
                             @{$changeset->{$email}} ) {
 
             $html .= $change->expandHTML( $middle );
@@ -249,13 +255,15 @@ sub _generateEmails {
         if ( $sendmail ) {
             my $error = TWiki::Net::sendEmail( $mail );
             if( $error ) {
-                print STDERR "Mail send failed: $error\n";
+                print "**** ERROR :Mail send failed: $error\n";
             }
         } elsif ( $verbose ) {
             print "Please tell $email about the following changes:\n";
             print $plain;
         }
+        $sentMails++;
     }
+    print "\t$sentMails change notifications\n";
 }
 
 1;

@@ -32,7 +32,8 @@ package TWiki::Contrib::MailerContrib::Change;
 =begin text
 
 ---+++ sub new($web)
-| $topic | Reference to topic hash |
+| $web | Web name |
+| $topic | Topic name |
 | $author | String author of change |
 | $time | String time of change |
 | $rev | String revision identifier |
@@ -59,19 +60,6 @@ sub new {
 
 =begin text
 
----+++ sub getTopic() -> string
-Get the name of the topic
-
-=cut
-
-sub getTopic {
-    my $this = shift;
-
-    return $this->{TOPIC}->get( "name" );
-}
-
-=begin text
-
 ---+++ sub expandHTML($html) -> string
 Expand an HTML template using the values in this change. The following
 keys are expanded: %<nop>TOPICNAME%, %<nop>AUTHOR%, %<nop>TIME%,
@@ -82,8 +70,7 @@ keys are expanded: %<nop>TOPICNAME%, %<nop>AUTHOR%, %<nop>TIME%,
 sub expandHTML {
     my ( $this, $html ) = @_;
 
-    my $topic = $this->getTopic();
-    $html =~ s/%TOPICNAME%/$topic/go;
+    $html =~ s/%TOPICNAME%/$this->{TOPIC}/go;
     $html =~ s/%AUTHOR%/$this->{AUTHOR}/geo;
     $html =~ s/%TIME%/$this->{TIME}/go;
     $html =~ s/%REVISION%/$this->{REVISION}/go;
@@ -107,10 +94,9 @@ sub expandPlain {
     my $scriptUrl =
       TWiki::Func::getScriptUrl
           ( URI::Escape::uri_escape( $web ),
-            URI::Escape::uri_escape( $this->getTopic()),
+            URI::Escape::uri_escape( $this->{TOPIC}),
             "view" );
-    my $topic = $this->getTopic();
-    return "- $topic ($this->{AUTHOR})\n  $scriptUrl\n";
+    return "- $this->{TOPIC} ($this->{AUTHOR})\n  $scriptUrl\n";
 }
 
 1;
