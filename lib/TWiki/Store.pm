@@ -1391,15 +1391,26 @@ sub readTemplateTopic
 # =========================
 =pod
 
----++ sub _readTemplateFile (  $theName, $theSkin  )
+---++ _readTemplateFile (  $theName, $theSkin  )
+Return value: raw template text, or "" if read fails
 
-Not yet documented.
+WARNING! THIS FUNCTION DEPENDS ON GLOBAL VARIABLES
+
+PRIVATE Reads a template, constructing a candidate name for the template thus: $name.$skin.tmpl,
+and looking for a file of that name first in templates/$web and then if that fails in templates/.
+If a template is not found, tries to parse $name into a web name and a topic name, and
+read topic $Web.${Skin}Skin${Topic}Template. If $name does not contain a web specifier,
+$Web defaults to TWiki::twikiWebname. If no skin is specified, topic is ${Topic}Template.
+If the topic exists, checks access permissions and reads the topic
+without meta-data. In the event that the read fails (template not found, access permissions fail)
+returns the empty string "". skin, web and topic names are forced to an upper-case first character
+when composing user topic names.
 
 =cut
 
 sub _readTemplateFile
 {
-    my( $theName, $theSkin ) = @_;
+    my( $theName, $theSkin, $theWeb ) = @_;
     $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
 
     # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
@@ -1412,7 +1423,7 @@ sub _readTemplateFile
 
     # search first in twiki/templates/Web dir
     # for file script(.skin).tmpl
-    my $tmplDir = "$TWiki::templateDir/$TWiki::webName";
+    my $tmplDir = "$TWiki::templateDir/$theWeb";
     if( opendir( DIR, $tmplDir ) ) {
         # for performance use readdir, not a row of ( -e file )
         my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
@@ -1446,6 +1457,35 @@ sub _readTemplateFile
         }
     }
 
+    # See if it is a user topic. Search first in current web
+    # twiki web. Note that neither web nor topic may be variables when used in a template.
+    if ( ! $tmplFile ) {
+      if ( $theSkin ne "" ) {
+	$theSkin = ucfirst( $theSkin ) . "Skin";
+      }
+
+      my $theTopic;
+      my $theWeb;
+
+      if ( $theName =~ /^(\w+)\.(\w+)$/ ) {
+	$theWeb = ucfirst( $1 );
+	$theTopic = ucfirst( $2 );
+      } else {
+	$theWeb = $TWiki::webName;
+	$theTopic = $theSkin . ucfirst( $theName ) . "Template";
+	if ( !TWiki::Store::topicExists( $theWeb, $theTopic )) {
+	  $theWeb = $TWiki::twikiWebname;
+	}
+      }
+
+      if ( TWiki::Store::topicExists( $theWeb, $theTopic ) &&
+	   TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, "",
+						 $theTopic, $theWeb )) {
+	  my ( $meta, $text ) = TWiki::Store::readTopic( $theWeb, $theTopic, 1 );
+	  return $text;
+      }
+    }
+
     # read the template file
     if( -e $tmplFile ) {
         return &readFile( $tmplFile );
@@ -1457,8 +1497,12 @@ sub _readTemplateFile
 =pod
 
 ---++ sub handleTmplP (  $theVar  )
+Return value: expanded text of the named template, as found from looking in the global register of template definitions.
 
-Not yet documented.
+WARNING! THIS FUNCTION DEPENDS ON GLOBAL VARIABLES
+
+If $theVar is the name of a previously defined template, returns the text of
+that template after recursive expansion of any TMPL:P tags it contains.
 
 =cut
 
@@ -1482,24 +1526,36 @@ sub handleTmplP
 # =========================
 =pod
 
----++ sub readTemplate (  $theName, $theSkin  )
+---++ sub readTemplate ( $theName, $theSkin, $theWeb )
+Return value: expanded template text
 
-Not yet documented.
+WARNING! THIS IS A SIDE-EFFECTING FUNCTION
+
+PUBLIC Reads a template, constructing a candidate name for the template as described in
+_readTemplateFile.
+
+If template text is found, extracts include statements and fully expands them.
+Also extracts template definitions and adds them to the
+global templateVars hash, overwriting any previous definition.
 
 =cut
 
 sub readTemplate
 {
-    my( $theName, $theSkin ) = @_;
+    my( $theName, $theSkin, $theWeb ) = @_;
 
     if( ! defined($theSkin) ) {
         $theSkin = &TWiki::getSkin();
     }
 
+    if( ! defined( $theWeb ) ) {
+      $theWeb = $TWiki::webName;
+    }
+
     # recursively read template file(s)
-    my $text = _readTemplateFile( $theName, $theSkin );
+    my $text = _readTemplateFile( $theName, $theSkin, $theWeb );
     while( $text =~ /%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/s ) {
-        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/&_readTemplateFile( $1, $theSkin )/geo;
+        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/&_readTemplateFile( $1, $theSkin, $theWeb )/geo;
     }
 
     if( ! ( $text =~ /%TMPL\:/s ) ) {
