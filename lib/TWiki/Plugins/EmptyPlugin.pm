@@ -33,6 +33,7 @@
 #   beforeEditHandler       ( $text, $topic, $web )                 1.010
 #   afterEditHandler        ( $text, $topic, $web )                 1.010
 #   beforeSaveHandler       ( $text, $topic, $web )                 1.010
+#   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
 #   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
 #   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
 #   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
@@ -226,6 +227,18 @@ sub DISABLE_beforeSaveHandler
 
     # This handler is called by TWiki::Store::saveTopic just before the save action.
     # New hook in TWiki::Plugins $VERSION = '1.010'
+
+}
+
+# =========================
+sub DISABLE_afterSaveHandler
+{
+### my ( $text, $topic, $web, $error ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    TWiki::Func::writeDebug( "- ${pluginName}::afterSaveHandler( $_[2].$_[1] )" ) if $debug;
+
+    # This handler is called by TWiki::Store::saveTopic just after the save action.
+    # New hook in TWiki::Plugins $VERSION = '1.020'
 
 }
 
