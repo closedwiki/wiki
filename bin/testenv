@@ -93,6 +93,10 @@ my @requiredModsNonUnix = (
 	'Digest::SHA1', 
 	'Net::SMTP',
    );
+my @optionalMods = ( 
+	'Algorithm::Diff', 		# For RcsLite
+   );
+
 
 open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering - FIXME: mod_perl issue?
@@ -254,13 +258,31 @@ if ( $detailedOS =~ /darwin/i or $OS ne 'UNIX' ) {
 
 # Check that each of the required Perl modules can be loaded, and
 # print its version number.
-print "<tr><th align=\"right\">Perl modules:</th><td>";
+print "<tr><th align=\"right\">Required Perl modules:</th><td>";
 foreach $mod (@requiredMods) {
     eval "use $mod";
     print "<tr><th></th><td>\n";
     if ($@) {
 	print "<b><font color=\"red\">Warning:</font></b> ";
 	print "'$mod' not installed - check TWiki documentation to see if this is required.\n";
+	print "</td></tr>\n";
+    } else {
+	my $mod_version = $ {"$ {mod}::VERSION"};
+        print "$mod ($mod_version)";
+	print "</td></tr>\n";
+    }
+    print "</td></tr>\n";
+}
+
+# Check that each of the optional Perl modules can be loaded, and
+# print its version number.
+print "<tr><th align=\"right\">Optional Perl modules:</th><td>";
+foreach $mod (@optionalMods) {
+    eval "use $mod";
+    print "<tr><th></th><td>\n";
+    if ($@) {
+	print "<b><font color=\"green\">Note:</font></b> ";
+	print "Optional module '$mod' not installed - check TWiki documentation to see if your configuration needs this module.\n";
 	print "</td></tr>\n";
     } else {
 	my $mod_version = $ {"$ {mod}::VERSION"};
