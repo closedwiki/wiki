@@ -90,9 +90,9 @@ sub PushRemoteTWikiInstall
 	my $distro = $parms->{distro} or die "no distro?";
 	my $kernel = $parms->{kernel} or die "no kernel?";
 
-	die "no account?" unless $parms->{install_account};
-	die "no host?" unless $parms->{install_host};
-	die "no dir?" unless $parms->{install_dir};
+	die "no install_account?" unless $parms->{install_account};
+	die "no install_host?" unless $parms->{install_host};
+	die "no install_dir?" unless $parms->{install_dir};
 
 	# copy TWikiDistribution
     logSystem( qq{scp $distro $parms->{install_account}\@$parms->{install_host}:$parms->{install_dir}} );
