@@ -117,7 +117,7 @@ h5 { font-size: 1.0em; margin: 1.2em 0em 1.2em 0em; font-weight: bold; }
 h6 { font-size: 0.8em; margin: 1.2em 0em 1.2em 0em; font-weight: bold; }
 img { border: 0; }
 p,td,th,tr { font-size: 1.0em;  }
-pre {	font-family: monospace;	font-size: 1.1em;	}
+pre {	font-family: monospace;	font-size: 1.1em; overflow: auto; background-color: #ddd;	}
 strong, b {	font-weight: bold;	}
 code { font-size: 1.1em; }
 /* --------- end font sizing --------- */
@@ -131,7 +131,7 @@ code { font-size: 1.1em; }
 textarea {width: 95%;}
 
 .skiplink { display: none; }
-
+.deem {font-size: xx-small;}
 
 /* ------ for debugging layout positioning ------*/
 /*div { border: 1px dotted orange; } #topsection, #midsection, #bottsection { border: 1px dashed red; }*/
