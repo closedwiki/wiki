@@ -8,7 +8,7 @@ __Preferences:__
 	* List of topics of the %WIKITOOLNAME%.%WEB% web:
 		* Set WEBTOPICLIST = %WEB% . {
 				<a href="%HOMETOPIC%">Home</a>
-			 | <a href="TWikiUsers">Users</a>
+			 | <a href="%WIKIUSERSTOPIC%">Users</a>
 			 | <a href="OfficeLocations">Offices</a>
 			 | <a href="WebChanges">Changes</a>
 			 | <a href="WebIndex">Index</a>

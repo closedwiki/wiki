@@ -12,6 +12,6 @@ Add your groups to this list and define new group topics similar to existing one
 	* Content does not get lost because topics are under revision control.
 	* A topic revision can be undone by a member of the %MAINWEB%.TWikiAdminGroup in case needed.
 
-__Related topics:__ %TWIKIWEB%.TWikiAccessControl, WebPreferences, TWikiUsers, %TWIKIWEB%.WikiCulture.
+__Related topics:__ %TWIKIWEB%.TWikiAccessControl, %WEBPREFSTOPIC%, %WIKIUSERSTOPIC%, %TWIKIWEB%.WikiCulture.
 
 -- %MAINWEB%.PeterThoeny - 07 Nov 2000 <br>
