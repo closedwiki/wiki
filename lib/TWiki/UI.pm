@@ -28,7 +28,7 @@ use TWiki::UI::OopsException;
 use IO::Handle; STDOUT->blocking(0);
 use Data::Dumper;
 
-use vars qw( $enableBM );
+use constant ENABLEBM => 0;
 
 =pod
 
@@ -61,15 +61,13 @@ sub run {
         $topic = $query->param( 'topic' );
         # If the 'benchmark' parameter is set in the browser, save the
         # query and other info to the given file on the server.
-        # To benchmark a script, put the following lines into the
-        # top level CGI script.
+        # To benchmark a script, set ENABLEBM above and
+        # put the following lines into the top level CGI script.
         # use Benchmark qw(:all :hireswallclock);
         # use vars qw( $begin );
-        # BEGIN{$TWiki::UI::enableBM=1;$begin=new Benchmark;}
+        # BEGIN{$begin=new Benchmark;}
         # END{print STDERR "Total ".timestr(timediff(new Benchmark,$begin))."\n";}
-        if ( $enableBM ) {
-            # $enableBM must be explicitly set, otherwise a footpad could use
-            # the benchmark parameter to write a file on the server.
+        if ( ENABLEBM ) {
             my $bm = $query->param( 'benchmark' );
             if ( $bm ) {
                 open(OF, ">$bm") || throw Error::Simple( "Store failed" );
@@ -97,7 +95,7 @@ sub run {
                 $pathInfo = $arg;
             }
         }
-        if( $enableBM ) {
+        if( ENABLEBM ) {
             my $bm = $query->param( 'benchmark' );
             if( $bm ) {
                 open(IF, "<$bm") || die "Benchmark query $bm retrieve failed";
@@ -115,35 +113,27 @@ sub run {
     my $session = new TWiki( $pathInfo, $user, $topic, $url,
                              $query, $scripted );
 
-    $Error::Debug = 1; # comment out in production
-    if( $query && $query->param( 'compile_debug' )) {
+    $Error::Debug = 1 if DEBUG; # comment out in production
+    try {
         eval "use $class";
         my $m = "$class"."::$method";
         no strict 'refs';
         &$m( $session );
         use strict 'refs';
-    } else {
-        try {
-            eval "use $class";
-            my $m = "$class"."::$method";
-            no strict 'refs';
-            &$m( $session );
-            use strict 'refs';
-        } catch TWiki::UI::OopsException with {
-            my $e = shift;
-            my $url = $session->getOopsUrl( $e->{-web},
-                                            $e->{-topic},
-                                            "oops$e->{-template}",
-                                            $e->{-param1},
-                                            $e->{-param2},
-                                            $e->{-param3},
-                                            $e->{-param4} );
-            $session->redirect( undef, $url );
-        } catch Error::Simple with {
-            my $e = shift;
-            print "Content-type: text/plain\n\n";
-            print $e->stringify();
-        }
+    } catch TWiki::UI::OopsException with {
+        my $e = shift;
+        my $url = $session->getOopsUrl( $e->{-web},
+                                        $e->{-topic},
+                                        "oops$e->{-template}",
+                                        $e->{-param1},
+                                        $e->{-param2},
+                                        $e->{-param3},
+                                        $e->{-param4} );
+        $session->redirect( undef, $url );
+    } catch Error::Simple with {
+        my $e = shift;
+        print "Content-type: text/plain\n\n";
+        print $e->stringify();
     }
 }
 

@@ -2,9 +2,6 @@
 #
 # Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
-# Based on parts of Ward Cunninghams original Wiki and JosWiki.
-# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
-# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
 #
 # For licensing info read license.txt file in the TWiki root.
 # This program is free software; you can redistribute it and/or
@@ -600,70 +597,56 @@ sub writeHeaderFull {
 
     $contentType .= "; charset=$siteCharset";
 
+    my @hopts = ();
+
+    push( @hopts, -content_type => $contentType );
+
     if ($pageType eq 'edit') {
-	# Get time now in HTTP header format
-	my $lastModifiedString = formatTime(time, '\$http', "gmtime");
+        # Get time now in HTTP header format
+        my $lastModifiedString = formatTime(time, '\$http', "gmtime");
 
-	# Expiry time is set high to avoid any data loss.  Each instance of 
-	# Edit page has a unique URL with time-string suffix (fix for 
-	# RefreshEditPage), so this long expiry time simply means that the 
-	# browser Back button always works.  The next Edit on this page 
-	# will use another URL and therefore won't use any cached 
-	# version of this Edit page.
-	my $expireHours = 24;
-	my $expireSeconds = $expireHours * 60 * 60;
+        # Expiry time is set high to avoid any data loss.  Each instance of 
+        # Edit page has a unique URL with time-string suffix (fix for 
+        # RefreshEditPage), so this long expiry time simply means that the 
+        # browser Back button always works.  The next Edit on this page 
+        # will use another URL and therefore won't use any cached 
+        # version of this Edit page.
+        my $expireHours = 24;
+        my $expireSeconds = $expireHours * 60 * 60;
 
-	# Set content length, to enable HTTP/1.1 persistent connections 
-	# (aka HTTP keepalive), and cache control headers, to ensure edit page 
-	# is cached until required expiry time.
-	$coreHeaders = $query->header(
-			    -content_type => $contentType,
-			    -content_length => $contentLength,
-			    -last_modified => $lastModifiedString,
-			    -expires => "+${expireHours}h",
-			    -cache_control => "max-age=$expireSeconds",
-			 );
-    } elsif ($pageType eq 'basic') {
-        $coreHeaders = $query->header(
-                                      -content_type => $contentType,
-                                     );
-    } else {
+        # and cache control headers, to ensure edit page 
+        # is cached until required expiry time.
+        push( @hopts, -last_modified => $lastModifiedString );
+        push( @hopts, -expires => "+${expireHours}h" );
+        push( @hopts, -cache_control => "max-age=$expireSeconds" );
+    }
+
+    if ($pageType ne 'basic') {
         $this->writeWarning( "Invalid page type in TWiki.pm, writeHeaderFull(): $pageType" );
     }
 
-    # Delete extra CR/LF to allow suffixing more headers
-    $coreHeaders =~ s/\r\n\r\n$/\r\n/s;
+    # Add a content-length if one has been provided. HTTP1.1 says a
+    # content-length should _not_ be specified unless the length is
+    # known.
+    # SMELL: is it valid to pass a content-length of 0?? The HTTP1.1
+    # spec suggests that it is, but only if the content length is
+    # genuinely 0.
+    push( @hopts, -content_length => $contentLength );
 
     # Wiki Plugin Hook - get additional headers from plugin
+    # SMELL: it would be far better to pass down the hopts array
+    # for the plugin to add to/remove from, rather than parsing the
+    # string this way.
     $pluginHeaders = $this->{plugins}->writeHeaderHandler( $query ) || '';
-
-    # Delete any trailing blank line
-    $pluginHeaders =~ s/\r\n\r\n$/\r\n/s;
-
-    # Add headers supplied by plugin, omitting any already in core headers
-    my $finalHeaders = $coreHeaders;
     if( $pluginHeaders ) {
-	# Build hash of all core header names, lower-cased
-	my ($headerLine, $headerName, %coreHeaderSeen);
-	for $headerLine (split /\r\n/, $coreHeaders) {
-	    $headerLine =~ m/^([^ ]+): /i;		# Get header name
-	    $headerName = lc($1);
-	    $coreHeaderSeen{$headerName}++;
-	}
-	# Append plugin headers if legal and not seen in core headers
-	for $headerLine (split /\r\n/, $pluginHeaders) {
-	    $headerLine =~ m/^([^ ]+): /i;		# Get header name
-	    $headerName = lc($1);
-	    if ( $headerName =~ m/[\-a-z]+/io ) {	# Skip bad headers
-		$finalHeaders .= $headerLine . "\r\n"
-		    unless $coreHeaderSeen{$headerName};
-	    }
-
-	}
+        foreach ( split /\r\n/, $pluginHeaders ) {
+            if ( m/^([\-a-z]+): (.*)$/i ) {
+                push( @hopts, $1 => $2 );
+            }
+        }
     }
-    $finalHeaders .= "\r\n" if ( $finalHeaders);
 
-    print $finalHeaders;
+    print $query->header( @hopts );
 }
 
 =pod
@@ -804,7 +787,7 @@ sub getTWikiLibDir {
 
     # fix path relative to location of called script
     if( $twikiLibDir =~ /^\./ ) {
-        print STDERR "WARNING: TWiki lib path is relative; you should make it absolute, otherwise some scripts may not run from the command line.";
+        print STDERR "WARNING: TWiki lib path $twikiLibDir is relative; you should make it absolute, otherwise some scripts may not run from the command line.";
         my $bin;
         if( $ENV{"SCRIPT_FILENAME"} &&
             $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
