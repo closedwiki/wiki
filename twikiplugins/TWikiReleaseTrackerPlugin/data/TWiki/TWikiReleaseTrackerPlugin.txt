@@ -7,6 +7,8 @@ The TWiki Release Tracker (aka TRT) plugin tells you exactly how your install di
 If you find it useful, please send me (Martin AT Cleaver.org) a note of thanks. 
 Donations towards specifics for further development can be sent to the same paypal address.
 
+XX
+
 %TOC%
 
 ---++ %TOPIC% Overview
