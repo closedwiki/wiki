@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018596360" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043012182" format="1.0" version="1.13"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ %WIKITOOLNAME%.%WEB% Web Preferences
 
@@ -8,7 +8,7 @@ The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. 
 __Preferences:__
 
 	* List of topics of the %WIKITOOLNAME%.%WEB% web:
-		* Set WEBTOPICLIST = [[%HOMETOPIC%][Home]] %SEP% [[%WIKIUSERSTOPIC%][Users]] %SEP% [[TWikiGroups][Groups]] %SEP% [[OfficeLocations][Offices]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
+		* Set WEBTOPICLIST = [[%WIKIUSERSTOPIC%][Users]] %SEP% [[TWikiGroups][Groups]] %SEP% [[OfficeLocations][Offices]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
 	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFFFC0
