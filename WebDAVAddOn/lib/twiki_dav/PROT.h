@@ -12,7 +12,6 @@
  * GNU General Public License for more details, published at 
  * http://www.gnu.org/copyleft/gpl.html
  */
-extern int PROT_open(const char* dbname);
-extern void PROT_close();
+extern int PROT_setDBpath(const char* dbname);
 extern int PROT_accessible(const char* web, const char* topic,
 						   const char* mode, const char* user);

@@ -79,6 +79,7 @@ int PROT_setDBpath(const char* dbname) {
 int PROT_accessible(const char* web, const char* topic,
 			   const char* mode, const char* user) {
   DBM* db = NULL;
+  DATUM d;
   int ret;
 
   if (mode == NULL)
@@ -96,7 +97,7 @@ int PROT_accessible(const char* web, const char* topic,
 
 #ifdef PROT_PRINT
   fprintf(stderr, "<DB %s>\n", dbfile);
-  DATUM d = FIRSTKEY(db);
+  d = FIRSTKEY(db);
   while(d.dptr && d.dsize) {
 	fprintf(stderr,"\tKey %s\n", dump(d));
 	d = NEXTKEY(db,d);
@@ -206,6 +207,7 @@ static DATUM getKey(const char* path, const char* ad, DBM* db) {
  */
 static int isInGroup(const char* group, const char*user, DBM* db, int depth) {
   DATUM expanded;
+  int ret;
 
   if (depth > 99) {
 	fprintf(stderr, "Infinite cycle in TWiki group %s\n", group);
@@ -216,7 +218,7 @@ static int isInGroup(const char* group, const char*user, DBM* db, int depth) {
 #ifdef PROT_PRINT
   fprintf(stderr,"\tG:%s => %s\n", group, dump(expanded));
 #endif
-  int ret = 0;
+  ret = 0;
   if (expanded.dptr) {
 	ret = isInList(expanded, user, db, depth);
 	FREEDATUM(expanded);
@@ -227,9 +229,11 @@ static int isInGroup(const char* group, const char*user, DBM* db, int depth) {
 static int isInList(DATUM list, const char* user, DBM* db, int depth) {
   const char* start = list.dptr;
   const char* stop = list.dptr + list.dsize;
+  const char* end;
+
   while (start != stop) {
 	start++; /* skip the | */
-	const char* end = start;
+	end = start;
 	while (end != stop && *end != '|')
 	  end++;
 	if (!*end)

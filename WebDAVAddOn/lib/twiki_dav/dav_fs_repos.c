@@ -153,6 +153,10 @@ struct dav_stream {
 /* forward declaration for internal treewalkers */
 static dav_error * dav_fs_walk(dav_walker_ctx *wctx, int depth);
 
+extern int dav_get_twiki_dir_type(const request_rec *r);
+extern const char* dav_get_twiki_dir_root(const request_rec *r);
+extern const char* dav_get_twiki_access_script(const request_rec *r);
+
 /* --------------------------------------------------------------------
 **
 ** PRIVATE REPOSITORY FUNCTIONS
@@ -548,26 +552,35 @@ static dav_error *dav_fs_deleteset(pool *p, const dav_resource *resource)
 /** Create a TWiki resource decorator for resources that are known to be in a TWiki
  * tree. This includes the root, webs, topics and attachments.
  */
-static twiki_resources* make_twiki_resource(pool* p,
+static twiki_resources* make_twiki_resource(request_rec* r,
                                             int type,
-                                            const char* script,
                                             const char* web, int webl,
                                             const char*topic, int topicl,
                                             const char* file) {
+  twiki_resources* tr;
+  const char* pw;
 
-  twiki_resources* tr = (twiki_resources *) ap_pcalloc(p, sizeof(twiki_resources));
+  tr = (twiki_resources *) ap_pcalloc(r->pool, sizeof(twiki_resources));
+
   tr->type = type;
-  tr->script = ap_pstrdup(p, script);
+  tr->script = ap_pstrdup(r->pool, dav_get_twiki_access_script(r));
   if (webl > 0) {
-    tr->web = ap_pcalloc(p, webl + 1);
+    tr->web = ap_pcalloc(r->pool, webl + 1);
     strncpy((char*)tr->web, web, webl);
   }
   if (topicl > 0) {
-    tr->topic = ap_pcalloc(p, topicl + 1);
+    tr->topic = ap_pcalloc(r->pool, topicl + 1);
     strncpy((char*)tr->topic, topic, topicl);
   }
-  tr->file = ap_pstrdup(p, file);
+  tr->file = ap_pstrdup(r->pool, file);
 
+  /** connection->user gets filled in by ap_get_basic_auth, but there
+   * are probably other ways by which authentication generates a user
+   * id. It's a big assumption that the user will be valid. However
+   * this is the value used to create REMOTE_USER, so if it kinda has
+   * to work. I should really check Apache::AuthHandler. */
+  ap_get_basic_auth_pw(r, &pw);
+  tr->user = ap_pstrdup(r->pool, r->connection->user);
   return tr;
 }
 
@@ -576,9 +589,6 @@ static twiki_resources* make_twiki_resource(pool* p,
  * is based on a parse of the filename of the resource (which is canonical with the
  * directory infor path).
  */
-extern int dav_get_twiki_dir_type(const request_rec *r);
-extern const char* dav_get_twiki_dir_root(const request_rec *r);
-extern const char* dav_get_twiki_access_script(const request_rec *r);
 static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* resource) {
 
     int type = dav_get_twiki_dir_type(r);
@@ -589,14 +599,17 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
         /* Not a twiki enabled dir */
         return resource;
 
+
     a = dav_get_twiki_dir_root(r);
     b = r->filename;
 
     if (!a || !b)
         return resource;
 
+	/*fprintf(stderr, "Get %s from root %s\n", b, a);*/
+
     /* remove common prefix and the / after it */
-    while (*a == *b && *a != '\0' && *b != '\0') {
+    while (*a == *b && *a  && *b) {
         a++; b++;
     }
     while (*b == '/' || *b == '\\')
@@ -604,12 +617,12 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
 
     if (!*b) {
       /* This is the root of the web hierarchy, and should be browseable */
-      resource->twiki = make_twiki_resource(r->pool,
+      resource->twiki = make_twiki_resource(r,
                                             type,
-                                            dav_get_twiki_access_script(r),
                                             NULL, 0,
                                             NULL, 0,
                                             NULL);
+	  /*fprintf(stderr, "OK, root\n");*/
       return resource;
     }
 
@@ -623,12 +636,12 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
     if (!*b) {
       /* This is a TWiki web, and should be browseable, filtered by TWiki
        * protections, though not versioned */
-      resource->twiki = make_twiki_resource(r->pool,
+      resource->twiki = make_twiki_resource(r,
                                             type,
-                                            dav_get_twiki_access_script(r),
                                             web, webl,
                                             NULL, 0,
                                             NULL);
+	  /*fprintf(stderr, "OK, web\n");*/
       return resource;
     }
     b++; /* trailing / */
@@ -643,38 +656,43 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
     if (!*b) {
       /* This is a topic directory, and should be browseable for attachments,
        filtered by protections, though not versioned */
-      resource->twiki = make_twiki_resource(r->pool,
+      resource->twiki = make_twiki_resource(r,
                                             type,
-                                            dav_get_twiki_access_script(r),
                                             web, webl,
                                             topic, topicl,
                                             NULL);
+	  /*fprintf(stderr, "OK, topic\n");*/
       return resource;
     }
 
     /* if this is data, expect a .txt extension. If it's pub, expect a subdirectory. */
     if (type == TWIKI_DATA && strcmp(b, ".txt") != 0) {
+	  /*fprintf(stderr, "NOT OK, data\n");*/
         return resource;
     } else if (type == TWIKI_PUB) {
-        if (*b != '/' && *b != '\\')
-            return resource;
-        b++;
-        while (*b != '\0' && *b != '/' && *b != '\\' && *b != '.') {
-            b++;
-        }
-        if (*b == '/' || *b == '\\')
-            return resource;
+	  if (*b != '/' && *b != '\\') {
+		/*fprintf(stderr, "NOT OK, pub\n");*/
+		return resource;
+	  }
+	  b++;
+	  while (*b != '\0' && *b != '/' && *b != '\\' && *b != '.') {
+		b++;
+	  }
+	  if (*b == '/' || *b == '\\') {
+		/*fprintf(stderr, "NOT OK, pub2\n");*/
+		return resource;
+	  }
     }
 
     /* This is a twiki file (topic or attachment), versioned, checked out */
     resource->versioned = 1;
     resource->working = 1; /* to make sure it gets checked in */
-    resource->twiki = make_twiki_resource(r->pool,
+    resource->twiki = make_twiki_resource(r,
                                           type,
-                                          dav_get_twiki_access_script(r),
                                           web, webl,
                                           topic, topicl,
                                           r->filename);
+	/*fprintf(stderr, "OK, attachment\n");*/
     return resource;
 }
 

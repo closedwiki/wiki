@@ -1,4 +1,7 @@
 #!/usr/bin/perl -w
+#
+# Build class for WebDAVPlugin
+#
 BEGIN {
   use File::Spec;
   my $cwd = `dirname $0`; chop($cwd);
@@ -21,16 +24,12 @@ use Build;
   # Override the build target to build the twiki_dav C code
   sub target_build {
 	my $this = shift;
+
 	$this->SUPER::target_build();
 
 	$this->cd($this->{basedir}."/lib/twiki_dav");
 	$this->sys_action("./configure");
 	$this->sys_action("make");
-	if (-w "/usr/lib/apache/libdav.so") {
-	  $this->sys_action("make install");
-	} else {
-	  warn "No privilege to make install";
-	}
   }
 
   # Override the install target to install twiki_dav
