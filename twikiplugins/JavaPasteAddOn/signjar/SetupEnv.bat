@@ -1,0 +1,13 @@
+@echo off
+set PATH=c:\j2sdk1.4.0\bin;%PATH%
+set ECLIPSEPROJECTDIR=c:\eclipse\workspace\JavaPasteAddOn\com\mrjc\twiki\addons
+set SOURCEFILES=%ECLIPSEPROJECTDIR%\*.class
+set JAVAPASTEDIR=c:\javapaste
+set UNSIGNEDJAR=%JAVAPASTEDIR%\TWikiPasteUnsigned.jar
+set SIGNEDJAR=%JAVAPASTEDIR%\TWikiPasteSigned.jar
+set LOCALUSERPROFILEDIR=c:\WINNT\Profiles\Cmacleod
+set CERTIFICATEFILE=c:\javapaste\TWikiCertificate.cer
+set KEYSTORE=ks0001
+set KEYPASS=kp0001
+set STOREPASS=usp0001
+set KEYSTOREALIAS=TWikiStoreAlias
