@@ -50,17 +50,17 @@
 	height:60px;
 }
 
-/* positioning the left bar (width:14em) */
+/* positioning the left bar (width:13em) */
 
 .twikiLeftBar,
 .twikiLeftBarContents /* needed for Explorer 5.0 */ {
-	width:14em;
+	width:13em;
 }
 .twikiMain {
-	margin-left:14em;
+	margin-left:13em;
 }
 .twikiBottomBar {
-	margin:0 0 0 14.5em; /* add small margin for content offset */
+	margin:0 0 0 13.5em; /* add small margin for content offset */
 }
 
 /*	-----------------------------------------------------------
@@ -68,13 +68,13 @@
 	-----------------------------------------------------------	*/
 	
 .twikiNoViewPage .twikiMain {
-	margin-left:10%;
-	margin-right:10%;
+	margin-left:6em;
+	margin-right:6em;
 	/* padding in style.css */
 }
 
 /* Print */
-	
+/*
 .twikiPrintPage .twikiMain {
 	margin-left:0;
 	margin-right:14em;
@@ -82,4 +82,20 @@
 .twikiPrintPage .twikiBottomBar {
 	margin-left:3em;
 	margin-right:14em;
+}
+*/
+.twikiPrintPage .twikiMain {
+	margin-left:0;
+	margin-right:0;
+	padding:0 0 0 2em;
+	border-width:1px;
+	border-color:#ddd #fff #ddd #ddd;
+}
+.twikiPrintPage .twikiBottomBar {
+	margin-left:1em;
+	margin-right:0;
+	padding:0;
+}
+.twikiPrintPage .twikiBottomBarContents {
+	padding-left:1em;
 }
