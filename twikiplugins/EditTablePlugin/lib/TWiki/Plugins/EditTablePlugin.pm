@@ -1,7 +1,7 @@
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2002 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2004 Peter Thoeny, Peter@Thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -34,11 +34,6 @@
 # in the &TWiki::Func module. Do not reference any functions or
 # variables elsewhere in TWiki!!
 
-# FIXME: The following TWiki calls used will likely break in a
-# future TWiki release:
-# TWiki::Store::readTopic(), TWiki::Store::saveTopic()
-# TWiki::Store::lockTopic(), TWiki::Store::topicIsLockedBy()
-
 
 # =========================
 package TWiki::Plugins::EditTablePlugin;
@@ -47,13 +42,16 @@ package TWiki::Plugins::EditTablePlugin;
 use vars qw(
         $web $topic $user $installWeb $VERSION $debug
         $query $renderingWeb
-        $preSp $header $footer @format $changeRows $helpTopic $nrCols
-        $encodeStart $encodeEnd $table
+        $preSp %params @format @formatExpanded
+        $prefsInitialized $prefCHANGEROWS $prefEDITBUTTON
+        $prefJSCALENDARDATEFORMAT $prefJSCALENDARLANGUAGE $prefJSCALENDAROPTIONS
+        $nrCols $encodeStart $encodeEnd $table
     );
 
-$VERSION = '1.001';
+$VERSION = '1.022';
 $encodeStart = "--EditTableEncodeStart--";
 $encodeEnd   = "--EditTableEncodeEnd--";
+$prefsInitialized  = 0;
 undef $table;
 
 # =========================
@@ -72,12 +70,10 @@ sub initPlugin
         return 0;
     }
 
-    # Get plugin preferences
-#    $doEnable = &TWiki::Func::getPreferencesFlag( "EDITTABLEPLUGIN_ENABLE" ) || "";
-
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "EDITTABLEPLUGIN_DEBUG" );
 
+    $prefsInitialized = 0;
     $renderingWeb = $web;
 
     # Plugin correctly initialized
@@ -90,28 +86,37 @@ sub initPlugin
 }
 
 # =========================
-sub extractParameters
+sub extractParams
 {
-    my( $theArgs, $theHeader, $theFooter, $theFormat, $theChangeRows, $theHelpTopic ) = @_;
+    my( $theArgs, $theHashRef ) = @_;
 
     my $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "header" );
-    $theHeader = $tmp if( $tmp );
+    $$theHashRef{"header"} = $tmp if( $tmp );
 
     $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "footer" );
-    $theFooter = $tmp if( $tmp );
+    $$theHashRef{"footer"} = $tmp if( $tmp );
+
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "headerislabel" );
+    $$theHashRef{"headerislabel"} = $tmp if( $tmp );
 
     $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "format" );
     $tmp =~ s/^\s*\|*\s*//o;
     $tmp =~ s/\s*\|*\s*$//o;
-    $theFormat = $tmp if( $tmp );
+    $$theHashRef{"format"} = $tmp if( $tmp );
 
     $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "changerows" );
-    $theChangeRows = $tmp if( $tmp );
+    $$theHashRef{"changerows"} = $tmp if( $tmp );
+
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "quietsave" );
+    $$theHashRef{"quietsave"} = $tmp if( $tmp );
 
     $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "helptopic" );
-    $theHelpTopic = $tmp if( $tmp );
+    $$theHashRef{"helptopic"} = $tmp if( $tmp );
 
-    return ( $theHeader, $theFooter, $theFormat, $theChangeRows, $theHelpTopic );
+    $tmp = &TWiki::Func::extractNameValuePair( $theArgs, "editbutton" );
+    $$theHashRef{"editbutton"} = $tmp if( $tmp );
+
+    return;
 }
 
 # =========================
@@ -121,7 +126,39 @@ sub commonTagsHandler
 
     &TWiki::Func::writeDebug( "- EditTablePlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    return unless $_[0] =~ /%EDITTABLE{(.*)}%/os;
+    # Add style sheet for date calendar to skin if needed.
+    # Handling of the common tags is done separately for the topic text and view skin
+    # The following if statement must be done before the early escape.
+    #
+    # NOTE:
+    # When adding a new button to the table that needs the table to be in the edit mode,
+    # be sure to add it below.
+    if( ( $_[0] =~ m/^[<][!]DOCTYPE/ ) &&
+        ( $query->param( 'etedit' ) || $query->param( 'etaddrow' ) || $query->param( 'etdelrow') ) &&
+        (!($_[0] =~ m/calendar-system/) ) ) {
+
+        my $string = " <link type=\"text/css\" rel=\"stylesheet\""
+                   . " href=\"%PUBURL%/$installWeb/EditTablePlugin/calendar-system.css\" />\n";
+        $_[0] =~ s/([<]\/head[>])/$string$1/i;
+    }
+
+    return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
+
+    unless( $prefsInitialized ) {
+        $prefCHANGEROWS           = &TWiki::Func::getPreferencesValue("CHANGEROWS") ||
+                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_CHANGEROWS") || "on";
+        $prefQUIETSAVE            = &TWiki::Func::getPreferencesValue("QUIETSAVE") ||
+                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_QUIETSAVE") || "on";
+        $prefEDITBUTTON           = &TWiki::Func::getPreferencesValue("EDITBUTTON") ||
+                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_EDITBUTTON") || "Edit table";
+        $prefJSCALENDARDATEFORMAT = &TWiki::Func::getPreferencesValue("JSCALENDARDATEFORMAT") ||
+                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_JSCALENDARDATEFORMAT") || "%Y/%m/%d";
+        $prefJSCALENDARLANGUAGE   = &TWiki::Func::getPreferencesValue("JSCALENDARLANGUAGE") ||
+                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_JSCALENDARLANGUAGE") || "en";
+        $prefJSCALENDAROPTIONS    = &TWiki::Func::getPreferencesValue("JSCALENDAROPTIONS") ||
+                    &TWiki::Func::getPreferencesValue("EDITTABLEPLUGIN_JSCALENDAROPTIONS") || "";
+        $prefsInitialized = 1;
+    }
 
     my $theWeb = $_[2];
     my $theTopic = $_[1];
@@ -132,8 +169,9 @@ sub commonTagsHandler
     my $insideTable = 0;
     my $doEdit = 0;
     my $cgiRows = -1;
+
     foreach( split( /\n/, $_[0] ) ) {
-        if( s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $1, $2 )/geo ) {
+        if( s/(\s*)%EDITTABLE{(.*)}%/&handleEditTableTag( $theWeb, $theTopic, $1, $2 )/geo ) {
             $enableForm = 1;
             $tableNr += 1;
 
@@ -143,7 +181,12 @@ sub commonTagsHandler
 
                if( $query->param( 'etsave' ) ) {
                    # [Save table] button pressed
-                   doSaveTable( $theWeb, $theTopic, $tableNr );   # never return
+                   doSaveTable( $theWeb, $theTopic, $tableNr, "" );   # never return
+                   return; # in case browser does not redirect
+
+               } elsif( $query->param( 'etqsave' ) ) {
+                   # [Quiet save] button pressed
+                   doSaveTable( $theWeb, $theTopic, $tableNr, "on" );   # never return
                    return; # in case browser does not redirect
 
                } elsif( $query->param( 'etcancel' ) ) {
@@ -204,7 +247,7 @@ sub commonTagsHandler
                     $result .= handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit );
                     $rowNr = 0;
                     if( $doEdit ) {
-                       if( $header ) {
+                       if( $params{"header"} ) {
                            $rowNr++;
                            $result .= handleTableRow( $preSp, "", $tableNr, $cgiRows, $rowNr, $doEdit, 0 ) . "\n";
                         }
@@ -224,46 +267,6 @@ sub commonTagsHandler
     }
 
     $_[0] = $result;
-}
-
-# =========================
-sub DISABLE_startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    &TWiki::Func::writeDebug( "- EditTablePlugin::startRenderingHandler( $_[1] )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-    $renderingWeb = $_[1];
-}
-
-# =========================
-sub DISABLE_outsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    &TWiki::Func::writeDebug( "- EditTablePlugin::outsidePREHandler( $renderingWeb.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion, in loop outside of <PRE> tag
-    # This is the place to define customized rendering rules
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/go;
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    &TWiki::Func::writeDebug( "- EditTablePlugin::insidePREHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag
-    # This is the place to define customized rendering rules
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/go;
 }
 
 # =========================
@@ -291,6 +294,9 @@ sub encodeValue
     # FIXME: *very* crude encoding to escape Wiki rendering inside form fields
     $theText =~ s/\./%dot%/gos;
     $theText =~ s/(.)/\.$1/gos;
+
+    # convert <br /> markup to unicode linebreak character for text areas
+    $theText =~ s/.<.b.r. .\/.>/&#10;/gos;
     return $theText;
 }
 
@@ -301,24 +307,49 @@ sub decodeValue
 
     $theText =~ s/\.(.)/$1/gos;
     $theText =~ s/%dot%/\./gos;
-    $theText =~ s/\&([^a-z])/&amp;$1/go; # escape non-entities
-    $theText =~ s/</\&lt;/go;            # change < to entity
-    $theText =~ s/>/\&gt;/go;            # change > to entity
-    $theText =~ s/\"/\&quot;/go;         # change " to entity
+    $theText =~ s/\&([^#a-z])/&amp;$1/go; # escape non-entities
+    $theText =~ s/</\&lt;/go;             # change < to entity
+    $theText =~ s/>/\&gt;/go;             # change > to entity
+    $theText =~ s/\"/\&quot;/go;          # change " to entity
 
     return $theText;
 }
 
 # =========================
+sub parseFormat
+{
+    my( $theFormat, $theTopic, $theWeb, $doExpand ) = @_;
+
+    $theFormat =~ s/\$nop(\(\))?//gos;      # remove filler
+    $theFormat =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
+    $theFormat =~ s/\$percnt(\(\))?/\%/gos; # expand percent
+    $theFormat =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
+    if( $doExpand ) {
+        # expanded form to be able to use %-vars in format
+        $theFormat =~ s/<nop>//gos;
+        $theFormat = &TWiki::Func::expandCommonVariables( $theFormat, $theTopic, $theWeb );
+    }
+    my @aFormat = split( /\s*\|\s*/, $theFormat );
+    $aFormat[0] = "text,16" unless @aFormat;
+    return @aFormat;
+}
+
+# =========================
 sub handleEditTableTag
 {
-    my( $theWeb, $thePreSpace, $theArgs ) = @_;
+    my( $theWeb, $theTopic, $thePreSpace, $theArgs ) = @_;
 
     $preSp = $thePreSpace || "";
-    $header = "";
-    $footer = "";
-    my $tFormat = "";
-    $changeRows = "";
+    %params = (
+        "header"        => "",
+        "footer"        => "",
+        "headerislabel" => "1",
+        "format"        => "",
+        "changerows"    => $prefCHANGEROWS,
+        "quietsave"     => $prefQUIETSAVE,
+        "helptopic"     => "",
+        "editbutton"    => "",
+    );
 
     my $iTopic = &TWiki::Func::extractNameValuePair( $theArgs, "include" );
     if( $iTopic ) {
@@ -327,7 +358,7 @@ sub handleEditTableTag
            $theWeb = $1;
            $iTopic = $2;
        }
-       my( $meta, $text ) = &TWiki::Func::readTopic( $theWeb, $iTopic );
+       my $text = &TWiki::Func::readTopicText( $theWeb, $iTopic );
        $text =~ /%EDITTABLE{(.*)}%/os;
        if( $1 ) {
            my $args = $1;
@@ -335,29 +366,24 @@ sub handleEditTableTag
                # expand common vars, unless oneself to prevent recursion
                $args = &TWiki::Func::expandCommonVariables( $1, $iTopic, $theWeb );
            }
-           ( $header, $footer, $tFormat, $changeRows, $helpTopic ) = extractParameters( $args,
-             $header, $footer, $tFormat, $changeRows, $helpTopic );
+           extractParams( $args, \%params );
        }
     }
 
-    ( $header, $footer, $tFormat, $changeRows, $helpTopic ) = extractParameters( $theArgs,
-      $header, $footer, $tFormat, $changeRows, $helpTopic );
+    extractParams( $theArgs, \%params );
 
-    $header = "" if( $header =~ /^off$/oi );
-    $header =~ s/^\s*\|//o;
-    $header =~ s/\|\s*$//o;
-    $footer = "" if( $footer =~ /^off$/oi );
-    $footer =~ s/^\s*\|//o;
-    $footer =~ s/\|\s*$//o;
-    $changeRows = "" if( $changeRows =~ /^off$/oi );
+    $params{"header"} = "" if( $params{"header"} =~ /^(off|no)$/oi );
+    $params{"header"} =~ s/^\s*\|//o;
+    $params{"header"} =~ s/\|\s*$//o;
+    $params{"headerislabel"} = "" if( $params{"headerislabel"} =~ /^(off|no)$/oi );
+    $params{"footer"} = "" if( $params{"footer"} =~ /^(off|no)$/oi );
+    $params{"footer"} =~ s/^\s*\|//o;
+    $params{"footer"} =~ s/\|\s*$//o;
+    $params{"changerows"} = "" if( $params{"changerows"} =~ /^(off|no)$/oi );
+    $params{"quietsave"}  = "" if( $params{"quietsave"}  =~ /^(off|no)$/oi );
 
-    $tFormat =~ s/\$nop(\(\))?//gos;      # remove filler
-    $tFormat =~ s/\$quot(\(\))?/\"/gos;   # expand double quote
-    $tFormat =~ s/\$percnt(\(\))?/\%/gos; # expand percent
-    $tFormat =~ s/\$dollar(\(\))?/\$/gos; # expand dollar
-
-    @format = split( /\s*\|\s*/, $tFormat );
-    $format[0] = "text,16" unless @format;
+    @format = parseFormat( $params{"format"}, $theTopic, $theWeb, 0 );
+    @formatExpanded = parseFormat( $params{"format"}, $theTopic, $theWeb, 1 );
     $nrCols = @format;
 
     # FIXME: No handling yet of footer
@@ -372,6 +398,13 @@ sub handleTableStart
 
     my $viewUrl = &TWiki::Func::getScriptUrl( $theWeb, $theTopic, "viewauth" ) . "\#edittable$theTableNr";
     my $text = "";
+    if( $doEdit ) {
+        my $dir = "%PUBURL%/$installWeb/EditTablePlugin";
+        $text .= "$preSp<script type=\"text/javascript\" src=\"$dir/calendar.js\"></script>\n";
+        $text .= "$preSp<script type=\"text/javascript\" src=\"$dir/calendar-"
+               . "$prefJSCALENDARLANGUAGE.js\"></script>\n";
+        $text .= "$preSp<script type=\"text/javascript\" src=\"$dir/calendar-setup.js\"></script>\n";
+    }
     $text .= "$preSp<noautolink>\n" if $doEdit;
     $text .= "$preSp<a name=\"edittable$theTableNr\"></a>\n";
     $text .= "$preSp<form name=\"edittable$theTableNr\" action=\"$viewUrl\" method=\"post\">\n";
@@ -385,24 +418,29 @@ sub handleTableEnd
 {
     my( $theWeb, $theRowNr, $doEdit ) = @_;
 
-    my $text = "$preSp<input type=\"hidden\" name=\"etrows\"   value=\"$theRowNr\" />\n";
+    my $text   = "$preSp<input type=\"hidden\" name=\"etrows\"   value=\"$theRowNr\" />\n";
     if( $doEdit ) {
         # Edit mode
         $text .= "$preSp<input type=\"submit\" name=\"etsave\"   value=\"Save table\" />\n";
-        if( $changeRows ) {
+        if( $params{"quietsave"} ) {
+            $text .= "$preSp<input type=\"submit\" name=\"etqsave\"  value=\"Quiet save\" />\n";
+        }
+        if( $params{"changerows"} ) {
             $text .= "$preSp<input type=\"submit\" name=\"etaddrow\" value=\"Add row\" />\n";
             $text .= "$preSp<input type=\"submit\" name=\"etdelrow\" value=\"Delete last row\" />\n"
-              unless( $changeRows =~ /^add$/oi );
+              unless( $params{"changerows"} =~ /^add$/oi );
         }
         $text .= "$preSp<input type=\"submit\" name=\"etcancel\" value=\"Cancel\" />\n";
 
-        if( $helpTopic ) {
+        if( $params{"helptopic"} ) {
             # read help topic and show below the table
-            if( $helpTopic =~ /^([^\.]+)\.(.*)$/o ) {
+            if( $params{"helptopic"} =~ /^([^\.]+)\.(.*)$/o ) {
                 $theWeb = $1;
-                $helpTopic = $2;
+                $params{"helptopic"} = $2;
             }
-            my( $meta, $helpText ) = &TWiki::Func::readTopic( $theWeb, $helpTopic );
+            my $helpText = &TWiki::Func::readTopicText( $theWeb, $params{"helptopic"} );
+                        #Strip out the meta data so it won't be displayed.
+            $helpText =~ s/%META:[A-Za-z0-9]+{.*?}%//g;
             if( $helpText ) {
                 $helpText =~ s/.*?%STARTINCLUDE%//os;
                 $helpText =~ s/%STOPINCLUDE%.*//os;
@@ -412,7 +450,12 @@ sub handleTableEnd
 
     } else {
         # View mode
-        $text .= "$preSp<input type=\"submit\" value=\"Edit table\" />\n";
+        if( $params{"editbutton"} eq "hide" ) {
+            # do nothing, button assumed to be in a cell
+        } else {
+            # Add edit button to end of table
+            $text .= "$preSp" . viewEditCell( "editbutton, 1, $params{'editbutton'}" );
+        }
     }
     $text .= "$preSp</form>\n";
     $text .= "$preSp</noautolink>\n" if $doEdit;
@@ -420,28 +463,93 @@ sub handleTableEnd
 }
 
 # =========================
+sub parseEditCellFormat
+{
+    $_[1] = &TWiki::Func::extractNameValuePair( $_[0] );
+    return "";
+}
+
+# =========================
+sub viewEditCell
+{
+    my ( $theAttr ) = @_;
+    $theAttr = &TWiki::Func::extractNameValuePair( $theAttr );
+    return "" unless( $theAttr =~ /^editbutton/ );
+
+    $params{"editbutton"} = "hide" unless( $params{"editbutton"} ); # Hide below table edit button
+
+    my @bits  = split( /,\s*/, $theAttr );
+    my $value = "";  $value = $bits[2] if( @bits > 2);
+    my $img   = "";  $img   = $bits[3] if( @bits > 3);
+
+    unless( $value ) {
+        $value = $prefEDITBUTTON;
+        $img = "";
+        if( $value =~ s/(.+),\s*(.+)/$1/o ) {
+            $img = $2;
+            $img =~ s|%ATTACHURL%|%PUBURL%/$installWeb/EditTablePlugin|o;
+            $img =~ s|%WEB%|$installWeb|o;
+        }
+    }
+
+    if( $img ) {
+        return "<input type=\"image\" src=\"$img\" alt=\"$value\" />";
+    } else {
+        return "<input type=\"submit\" value=\"$value\" />";
+    }
+}
+
+# =========================
+sub saveEditCellFormat
+{
+    my ( $theFormat, $theName ) = @_;
+    return "" unless( $theFormat );
+    $theName =~ s/cell/format/;
+    return "<input type=\"hidden\" name=\"$theName\" value=\"$theFormat\" />";
+}
+
+# =========================
 sub inputElement
 {
     my ( $theTableNr, $theRowNr, $theCol, $theName, $theValue ) = @_;
 
-    $theValue = "" if( $theValue eq " " );
     my $text = "";
     my $i = @format - 1;
     $i = $theCol if( $theCol < $i );
     my @bits = split( /,\s*/, $format[$i] );
+    my @bitsExpanded = split( /,\s*/, $formatExpanded[$i] );
+
+    my $cellFormat = "";
+    $theValue =~ s/\s*%EDITCELL{(.*?)}%/&parseEditCellFormat( $1, $cellFormat )/eo;
+    $theValue = "" if( $theValue eq " " );
+    if( $cellFormat ) {
+        my @aFormat = parseFormat( $cellFormat, $theTopic, $theWeb, 0);
+        @bits = split( /,\s*/, $aFormat[0] );
+        @aFormat = parseFormat( $cellFormat, $theTopic, $theWeb, 1);
+        @bitsExpanded = split( /,\s*/, $aFormat[0] );
+    }
+
     my $type = "text";
     $type = $bits[0] if @bits > 0;
+    # a table header is considered a label if read only header flag set
+    $type = "label" if( ( $params{"headerislabel"} ) && ( $theValue =~ /^\s*\*.*\*\s*$/ ) );
+    $type = "label" if( $type eq "editbutton" );  # Hide [Edit table] button
     my $size = 0;
     $size = $bits[1] if @bits > 1;
     my $val  = "";
+    my $valExpanded = "";
     my $sel  = "";
+    my $style = "";
+    $style = " style='background:#e8e8e8'" if ($theRowNr % 2);
     if( $type eq "select" ) {
+        my $expandedValue = &TWiki::Func::expandCommonVariables( $theValue, $theTopic, $theWeb );
         $size = 1 if $size < 1;
-        $text = "<select name=\"$theName\" size=\"$size\">";
+        $text = "<select$style name=\"$theName\" size=\"$size\">";
         $i = 2;
         while( $i < @bits ) {
             $val  = $bits[$i] || "";
-            if( $val eq $theValue ) {
+            $valExpanded  = $bitsExpanded[$i] || "";
+            if( $valExpanded eq $expandedValue ) {
                 $text .= " <option selected=\"selected\">$val</option>";
             } else {
                 $text .= " <option>$val</option>";
@@ -449,13 +557,17 @@ sub inputElement
             $i++;
         }
         $text .= " </select>";
+        $text .= saveEditCellFormat( $cellFormat, $theName );
 
     } elsif( $type eq "row" ) {
         $size = $size + $theRowNr;
         $text = "$size<input type=\"hidden\" name=\"$theName\" value=\"$size\" />";
+        $text .= saveEditCellFormat( $cellFormat, $theName );
 
     } elsif( $type eq "label" ) {
         # show label text as is, and add a hidden field with value
+        my $isHeader = 0;
+        $isHeader = 1 if( $theValue =~ s/^\s*\*(.*)\*\s*$/$1/o );
         $text = $theValue;
 
         # To optimize things, only in the case where a read-only column is
@@ -467,18 +579,44 @@ sub inputElement
             # %CALC%, have already been processed and end up getting saved
             # in the table that way (processed), we need to read in the
             # topic page in raw format
-            my( $meta, $topicContents ) = TWiki::Func::readTopic( $web, $topic );
+            my $topicContents = TWiki::Func::readTopicText( $web, $topic );
             $table = TWiki::Plugins::Table->new( $topicContents );
         }
         my $cell = $table->getCell( $theTableNr, $theRowNr - 1, $theCol );
         $theValue = $cell if( defined $cell );  # original value from file
         $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd if $theValue;
-        $text .= "<input type=\"hidden\" name=\"$theName\" value=\"$theValue\" />";
+        $theValue = "\*$theValue\*" if( $isHeader );
+        $text .= "<input$style type=\"hidden\" name=\"$theName\" value=\"$theValue\" />";
+        $text = "\*$text\*" if( $isHeader );
 
-    } else {  # if( $type eq "text" )
+    } elsif( $type eq "textarea" ) {
+        my ($rows, $cols) = split( /x/, $size );
+        $rows = 3 if $rows < 1;
+        $cols = 30 if $cols < 1;
+
+        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd if $theValue;
+        $text .= "<textarea$style rows=\"$rows\" cols=\"$cols\" name=\"$theName\">$theValue</textarea>";
+        $text .= saveEditCellFormat( $cellFormat, $theName );
+
+    } elsif( $type eq "date" ) {
+        my $ifFormat = "";
+        $ifFormat = $bits[3] if( @bits > 3 );
+        $ifFormat = $ifFormat || $prefJSCALENDARDATEFORMAT;
+        $size = 10 if $size < 1;
+        $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd if $theValue;
+        $text .= "<input type=\"text\" name=\"$theName\" id=\"id$theName\" size=\"$size\" value=\"$theValue\" />";
+        $text .= saveEditCellFormat( $cellFormat, $theName );
+        $text .= "<button type=\"reset\" id=\"trigger$theName\">...</button>";
+        $text .= "<script type=\"text/javascript\">Calendar.setup({inputField : \"id$theName\", ifFormat ";
+        $text .= ": \"$ifFormat\", button : \"trigger$theName\", singleClick : true $prefJSCALENDAROPTIONS });</script>";
+
+        $query->{'jscalendar'} = 1;
+
+    } else { #  if( $type eq "text")
         $size = 16 if $size < 1;
         $theValue = $encodeStart . encodeValue( $theValue ) . $encodeEnd if $theValue;
-        $text = "<input type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\" />";
+        $text = "<input$style type=\"text\" name=\"$theName\" size=\"$size\" value=\"$theValue\"/>";
+        $text .= saveEditCellFormat( $cellFormat, $theName );
     }
     return $text;
 }
@@ -488,6 +626,7 @@ sub handleTableRow
 {
     my ( $thePre, $theRow, $theTableNr, $theRowMax, $theRowNr, $doEdit, $doSave ) = @_;
 
+    $thePre = "" unless( defined( $thePre ) );
     my $text = "$thePre\|";
 
     if( $doEdit ) {
@@ -496,6 +635,7 @@ sub handleTableRow
         my $tmp = @cells;
         $nrCols = $tmp if( $tmp > $nrCols );  # expand number of cols
         my $val = "";
+        my $cellFormat = "";
         my $cell = "";
         my $cellDefined = 0;
         my $col = 0;
@@ -503,9 +643,13 @@ sub handleTableRow
             $col += 1;
             $cellDefined = 0;
             $val = $query->param( "etcell${theRowNr}x$col" );
+            $cellFormat = $query->param( "etformat${theRowNr}x$col" );
+            $val .= " %EDITCELL{$cellFormat}%" if( $cellFormat );
             if( defined $val ) {
-                $val =~ s/[\n\r]/ /gos;  # Netscape on Unix can have new lines in an edit field
+                # change any new line character sequences to <br />
+                $val =~ s/(\n\r?)|(\r\n?)+/<br \/>/gos;
                 $cellDefined = 1;
+                # Expand %-vars
                 $cell = $val;
             } elsif( $col <= @cells ) {
                 $cell = $cells[$col-1];
@@ -515,16 +659,16 @@ sub handleTableRow
             } else {
                 $cell = "";
             }
-            if( ( $theRowNr <= 1 ) && ( $header ) ) {
+            if( ( $theRowNr <= 1 ) && ( $params{"header"} ) ) {
                 unless( $cell ) {
-                    if( $header =~ /^on$/i ) {
+                    if( $params{"header"} =~ /^on$/i ) {
                         if( ( @format >= $col ) && ( $format[$col-1] =~ /(.*?)\,/ ) ) {
                             $cell = $1;
                         }
                         $cell = "text" unless $cell;
                         $cell = "*$cell*";
                     } else {
-                        my @hCells = split( /\|/, $header );
+                        my @hCells = split( /\|/, $params{"header"} );
                         $cell = $hCells[$col-1] if( @hCells >= $col );
                         $cell = "*text*" unless $cell;
                     }
@@ -541,12 +685,13 @@ sub handleTableRow
                      # default value of "| select, 1, a, b, c |" cell is "a"
                      $val = $1;  # type
                      $cell = $3 || "";
-                     $cell =~ s/\,.*$//o if( $val eq "select" );
+                     $cell =~ s/\,.*$//o if( $val eq "select" || $val eq "date" );
                 }
                 $text .= inputElement( $theTableNr, $theRowNr, $col-1, "etcell${theRowNr}x$col", $cell ) . " \|";
             }
         }
     } else {
+        $theRow =~ s/%EDITCELL{(.*?)}%/viewEditCell($1)/geo;
         $text .= "$theRow";
     }
     return $text;
@@ -555,11 +700,11 @@ sub handleTableRow
 # =========================
 sub doSaveTable
 {
-    my ( $theWeb, $theTopic, $theTableNr ) = @_;
+    my ( $theWeb, $theTopic, $theTableNr, $quiet ) = @_;
 
-    &TWiki::Func::writeDebug( "- EditTablePlugin::doSaveTable( $theWeb, $theTopic, $theTableNr )" ) if $debug;
+    &TWiki::Func::writeDebug( "- EditTablePlugin::doSaveTable( $theWeb, $theTopic, $theTableNr, $quiet )" ) if $debug;
 
-    my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+    my $text = &TWiki::Func::readTopicText( $theWeb, $theTopic );
 
     my $cgiRows = $query->param( 'etrows' ) || 1;
     my $tableNr = 0;
@@ -600,7 +745,7 @@ sub doSaveTable
                 if( $doSave ) {
                     # empty %EDITTABLE%, so create a default table
                     $rowNr = 0;
-                    if( $header ) {
+                    if( $params{"header"} ) {
                         $rowNr++;
                         $result .= handleTableRow( $preSp, "", $tableNr, $cgiRows, $rowNr,1 , 1 ) . "\n";
                     }
@@ -616,8 +761,8 @@ sub doSaveTable
         $result .= "$_\n";
     }
 
-    my $error = &TWiki::Store::saveTopic( $theWeb, $theTopic, $result, $meta );
-    &TWiki::Store::lockTopic( $theTopic, "on" );
+    my $error = &TWiki::Func::saveTopicText( $theWeb, $theTopic, $result, "", $quiet );
+    TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );  # unlock Topic
     my $url = &TWiki::Func::getViewUrl( $theWeb, $theTopic );
     if( $error ) {
         $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopssaveerr", $error );
@@ -632,7 +777,7 @@ sub doCancelEdit
 
     &TWiki::Func::writeDebug( "- EditTablePlugin::doCancelEdit( $theWeb, $theTopic )" ) if $debug;
 
-    &TWiki::Store::lockTopic( $theTopic, "on" );
+    TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 0 );
 
     &TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $theWeb, $theTopic ) );
 }
@@ -652,19 +797,13 @@ sub doEnableEdit
         return 0;
     }
 
-    my( $lockUser, $lockTime ) = &TWiki::Store::topicIsLockedBy( $theWeb, $theTopic );
+    my( $oopsUrl, $lockUser ) = &TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
     if( ( $doCheckIfLocked ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
-        $lockUser = &TWiki::Func::userToWikiName( $lockUser );
-        use integer;
-        $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
-        my $editLock = $TWiki::editLockTime / 60;
-        my $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopslocked",
-            $lockUser, $editLock, $lockTime );
-        &TWiki::Func::redirectCgiQuery( $query, $url );
+        &TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
         return 0;
     }
-    &TWiki::Store::lockTopic( $theTopic );
+    TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 1 );
 
     return 1;
 }
