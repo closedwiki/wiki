@@ -86,7 +86,7 @@ sub cli_install_download {
 # TODO : Find out why its called both Build and BuildContrib...
 
 eval {
-require TWiki::Contrib::Build;
+require "TWiki/Contrib/Build.pm";
 };
 
 print $@ if $@;
