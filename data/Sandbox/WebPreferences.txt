@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071560035" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071957908" format="1.0" version="1.13"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ <nop>%WEB% Web Preferences
 
@@ -38,7 +38,7 @@ __Preferences:__
 
 	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
-		* Set ALLOWTOPICRENAME = 
+		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 	* Web preferences that are *not* allowed to be overridden by user preferences:
 		* Set FINALPREFERENCES = NOSEARCHALL, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
