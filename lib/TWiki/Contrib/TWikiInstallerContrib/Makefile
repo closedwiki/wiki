@@ -9,7 +9,7 @@ twiki-$(PLATFORM).tar.bz2 : twiki-$(PLATFORM).tar
 twiki-$(PLATFORM).tar : 
 	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform/$(PLATFORM) `cd platform/$(PLATFORM); ls` 
 	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
-#	tar -r $(TAR_EXCLUDE) -f twiki-$(PLATFORM).tar webs/local/
+	tar -r $(TAR_EXCLUDE) -f twiki-$(PLATFORM).tar webs/local/
 
 components : twiki-cpan plugins contribs addons release 
 
@@ -38,8 +38,19 @@ addons :
 	bin/download-twiki-extensions.pl addons
 	bin/zip2tgz.pl downloads/addons/*.zip
 
-patches :
-	bin/download-twiki-extensions.pl patches
-
 print :
+	@echo Settings
+	@echo ================================================================================
 	@echo PLATFORM = $(PLATFORM)
+
+help : print
+	@echo 
+	@echo Usage
+	@echo ================================================================================
+	@echo make twiki-$(PLATFORM).tar[.bz2] - bundle existing extensions + kernels into .tar[.bz2]
+	@echo make test-distro - download and bundle extensions + kernel
+	@echo make distro - test-distro + bzip2 compression
+	@echo make plugins contribs addons - download and convert extensions
+	@echo make minicpan - mirror latest version of cpan
+	@echo make twiki-cpan - create twiki cpan repository
+	@echo 
