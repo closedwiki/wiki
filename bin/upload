@@ -312,8 +312,7 @@ sub main
     my $fileName = $query->param( 'filename' ) || "";
     if ( $filePath && ! $fileName ) {
         $filePath =~ m|([^/\\]*$)|;
-        $fileName = $1; #FIXME - what is this used for?
-        TWiki::writeDebug( "upload: fileName=$fileName **********************" );
+        $fileName = $1;
     }
     my $tmpFilename = $query->tmpFileName( $filePath ) || "";
     my $fileComment = $query->param( 'filecomment' ) || "";
@@ -321,17 +320,16 @@ sub main
 
     
     # FIXME fileName doesn't seem to be defined when does update without upload
-    TWiki::writeDebug( "upload: fileName=$fileName" );
 
     my $doUpload = "";
-    if( $theUploadButton ) { $doUpload = 1 };
-    TWiki::writeDebug( "upload: theUploadButton=$theUploadButton, doUpload=$doUpload" );
+    $doUpload = 1 if( $theUploadButton );
+    #TWiki::writeDebug( "upload: theUploadButton=$theUploadButton, doUpload=$doUpload" );
 
     # JET need to change windows path to unix path
     $tmpFilename =~ s@\\@/@go;
     $tmpFilename =~ /(.*)/;
     $tmpFilename = $1;
-    &TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
+    #&TWiki::writeDebug( "upload: tmpFilename $tmpFilename" );
     
     my( $fileSize, $fileUser, $fileDate ) = "";
 
@@ -369,12 +367,8 @@ sub main
 	    # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
 	    my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
 	    TWiki::redirect( $query, $url );
-	} else {
-	    # and finally display topic
-	    TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
+	    return;
 	}
-
-        # FIXME: Buggy code: Below is never reached! Compare with TWiki20010315beta
 
 	# get user name
 	$fileUser = $userName;
@@ -392,11 +386,8 @@ sub main
 	}
     }
     
-    # FIXME don't do if no RCS for attachments
     my $fileVersion = TWiki::Store::getRevisionNumber( $webName, $topic, $fileName );
     
-    # FIXME more code probably that shouldn't run if no new attachment
-
     # update topic
     my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
 
@@ -412,7 +403,6 @@ sub main
         # S. Knutson 30 Nov 2000: error happened (probably from RCS), show it
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopssaveerr", $error );
         TWiki::redirect( $query, $url );
-
     } else {
         # and finally display topic
         TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
