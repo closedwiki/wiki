@@ -77,6 +77,13 @@ install: build
 # so now we don't even care if TWIKI_OWNER exists at build time
 #	chown -R $(TWIKI_OWNER) debian/twiki/var/lib/twiki/data
 # and change the RCS lock owners to match
+
+# Copy the TWikiRegistrationPub topic to TWikiRegistration
+        cp debian/twiki/var/lin/twiki/data/TWikiRegistration.txt debian/twiki/var/lin/twiki/data/TWikiRegistrationIntranet.txt
+        cp debian/twiki/var/lin/twiki/data/TWikiRegistration.txt,v debian/twiki/var/lin/twiki/data/TWikiRegistrationIntranet.txt,v
+        cp debian/twiki/var/lin/twiki/data/TWikiRegistrationPub.txt debian/twiki/var/lin/twiki/data/TWikiRegistration.txt
+        cp debian/twiki/var/lin/twiki/data/TWikiRegistrationPub.txt,v debian/twiki/var/lin/twiki/data/TWikiRegistration.txt,v
+
 	find debian/twiki/var/lib/twiki/data -type f -name '*,v' | \
 	  xargs -n1 perl -pi -e 's/^(\s)nobody:/\1$(TWIKI_OWNER):/ unless $$done; $$done=1 if /^\n$$/;'
 	tar -cf - -C debian/twiki var/lib/twiki/data \

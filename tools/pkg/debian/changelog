@@ -6,6 +6,8 @@ twiki (20030201-5) unstable; urgency=high
   * added primitive test and use of htpasswd2 for apache2 (Closes: #233943)
   * added upstream patch ProxiedIncludesBrokenImplementationBug
     - (Closes: #255782)
+  * made TWikiRegistrationPub the default to match .htaccess default
+    - (Closes: #221514)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sat, 17 Jan 2004 00:00:01 -1000
 
