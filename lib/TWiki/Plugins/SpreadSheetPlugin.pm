@@ -24,7 +24,7 @@ use vars qw(
             $skipInclude
     );
 
-$VERSION = '1.014';
+$VERSION = '1.017';
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;

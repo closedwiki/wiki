@@ -135,6 +135,8 @@ sub doFunc {
 
     &TWiki::Func::writeDebug( "- SpreadSheetPlugin::doFunc: $theFunc( $theAttr ) start" ) if $debug;
 
+    $theAttr ||= '';
+
     unless( $theFunc =~ /^(IF|LISTIF|LISTMAP)$/ ) {
         # Handle functions recursively
         $theAttr =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
@@ -168,7 +170,7 @@ sub doFunc {
         $format =~ s/^\s*(.*?)\s*$/$1/; #Strip leading and trailing spaces
         $res =~ s/^\s*(.*?)\s*$/$1/;
         $value =~ s/^\s*(.*?)\s*$/$1/;
-        if ($format eq 'DOLLAR') {
+        if( $format eq 'DOLLAR' ) {
             my $neg = 1 if $value < 0;
             $value = abs($value);
             $result = sprintf("%0.${res}f", $value);
@@ -176,17 +178,32 @@ sub doFunc {
             $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
             $result = "\$" . (scalar reverse $temp);
             $result = "(".$result.")" if $neg;
-        } elsif ($format eq 'COMMA') {
+        } elsif( $format eq 'COMMA' ) {
             $result = sprintf("%0.${res}f", $value);
             my $temp = reverse $result;
             $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
             $result = scalar reverse $temp;
-        } elsif ($format eq 'PERCENT') {
+        } elsif( $format eq 'PERCENT' ) {
             $result = sprintf("%0.${res}f%%", $value * 100);
-        } elsif ($format eq 'NUMBER') {
+        } elsif( $format eq 'NUMBER' ) {
             $result = sprintf("%0.${res}f", $value);
+        } elsif( $format eq 'K' ) {
+            $result = sprintf("%0.${res}f K", $value / 1024);
+        } elsif( $format eq 'KB' ) {
+            $result = sprintf("%0.${res}f KB", $value / 1024);
+        } elsif ($format eq 'MB') {
+            $result = sprintf("%0.${res}f MB", $value / (1024 * 1024));
+        } elsif( $format =~ /^KBMB/ ) {
+            $value /= 1024;
+            my @lbls = ( 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB' );
+            my $lbl = 'KB';
+            while( $value >= 1024 && @lbls ) {
+                $value /= 1024;
+                $lbl = shift @lbls;
+            }
+            $result = sprintf("%0.${res}f", $value) . " $lbl";
         } else {
-            #FORMAT not recognized, just return value
+            # FORMAT not recognized, just return value
             $result = $value;
         }
 
@@ -239,6 +256,12 @@ sub doFunc {
         if( $num1 && $num2 ) {
             $result = $num1 % $num2;
         }
+
+    } elsif( $theFunc eq 'ODD' ) {
+        $result = _getNumber( $theAttr ) % 2;
+
+    } elsif( $theFunc eq 'EVEN' ) {
+        $result = ( _getNumber( $theAttr ) + 1 ) % 2;
 
     } elsif( $theFunc eq 'AND' ) {
         $result = 0;
@@ -455,6 +478,31 @@ sub doFunc {
             $result = ( $arr[$i] + $arr[$i-1] ) / 2;
         }
 
+    } elsif( $theFunc eq 'PERCENTILE' ) {
+        my( $percentile, $set ) = split( /,\s*/, $theAttr, 2 );
+        my @arr = sort { $a <=> $b } grep { defined $_ } getListAsFloat( $set );
+        $result = 0;
+
+        my $size = scalar( @arr );
+        if( $size > 0 ) {
+            $i = $percentile / 100 * ( $size + 1 );
+            my $iInt = int( $i );
+            if( $i <= 1 ) {
+                $result = $arr[0];
+            } elsif( $i >= $size ) {
+                $result = $arr[$size-1];
+            } elsif( $i == $iInt ) {
+                $result = $arr[$i-1];
+            } else {
+                # interpolate beween neighbors # Example: $i = 7.25
+                my $r1 = $iInt + 1 - $i;       # 0.75 = 7 + 1 - 7.25
+                my $r2 = 1 - $r1;              # 0.25 = 1 - 0.75
+                my $x1 = $arr[$iInt-1];
+                my $x2 = $arr[$iInt];
+                $result = ($r1 * $x1) + ($r2 * $x2);
+            }
+        }
+
     } elsif( $theFunc eq 'COUNTSTR' ) {
         $result = 0;  # count any string
         $i = 0;       # count string equal second attr
@@ -511,6 +559,8 @@ sub doFunc {
         my( $string, $start, $num, $replace ) = split ( /,\s*/, $theAttr, 4 );
         $result = $string;
         $start-- unless ($start < 1);
+        $num = 0 unless( $num );
+        $replace = '' unless( defined $replace );
         if( eval 'substr( $string, $start, $num, $replace )' && $string ) {
             $result = $string;
         }
@@ -518,6 +568,7 @@ sub doFunc {
     } elsif( $theFunc eq 'SUBSTITUTE' ) {
         my( $string, $from, $to, $inst, $options ) = split( /,\s*/, $theAttr );
         $result = $string;
+        $to = '' unless( defined $to );
         $from = quotemeta( $from ) unless( $options && $options =~ /r/i);
         if( $inst ) {
             # replace Nth instance
@@ -642,6 +693,16 @@ sub doFunc {
             $result = $arr[$index] if( ( $index >= 0 ) && ( $index < $size ) );
         }
 
+    } elsif( $theFunc eq 'LISTJOIN' ) {
+        my( $sep, $str ) = _properSplit( $theAttr, 2 );
+        $str = '' unless( defined( $str ) );
+        $result = _listToDelimitedString( getList( $str ) );
+        $sep = ', ' unless( $sep );
+        $sep =~ s/\$comma/,/go;
+        $sep =~ s/\$sp/ /go;
+        $sep =~ s/\$n/\n/go;
+        $result =~ s/, /$sep/go;
+
     } elsif( $theFunc eq 'LISTSIZE' ) {
         my @arr = getList( $theAttr );
         $result = scalar @arr;
@@ -731,6 +792,10 @@ sub doFunc {
        # for example the %SEARCH{}% variable
        $theAttr =~ s/\$per/%/g;
        $result = $theAttr;
+
+    } elsif ( $theFunc eq 'EXISTS' ) {
+        $result = TWiki::Func::topicExists( '', $theAttr );
+        $result = 0 unless( $result );
     }
 
     &TWiki::Func::writeDebug( "- SpreadSheetPlugin::doFunc: $theFunc( $theAttr ) returns: $result" ) if $debug;
@@ -739,7 +804,7 @@ sub doFunc {
 
 sub _listToDelimitedString {
     my @arr = map { s/^\s*//o; s/\s*$//o; $_ } @_;
-    my $text = join( ", ", @arr );
+    my $text = join( ', ', @arr );
     return $text;
 }
 
@@ -823,7 +888,7 @@ sub getListAsFloat {
     for my $i (0 .. $#list ) {
         $val = $list[$i] || '';
         # search first float pattern, skip over HTML tags
-        if( $val =~ /^\s*(?:<[^>]*>)*([\-\+]*[0-9\.]+).*/o ) {
+        if( $val =~ /^\s*(?:<[^>]*>)*\$?([\-\+]*[0-9\.]+).*/o ) {
             $list[$i] = $1;  # untainted variable, possibly undef
         } else {
             $list[$i] = undef;
@@ -943,6 +1008,10 @@ sub _date2serial {
         $year -= 1900 if( $year >= 1900 );  # '2005' --> "105"
     } else {
         # unsupported format
+        return 0;
+    }
+    if( ( $sec > 60 ) || ( $min > 59 ) || ( $hour > 23 ) || ( $day < 1 ) || ( $day > 31 ) || ( $mon > 11 ) ) {
+        # unsupported, out of range
         return 0;
     }
     if( $theText =~ /gmt/i ) {
