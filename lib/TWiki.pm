@@ -2378,7 +2378,7 @@ sub handleToc
 
     #get the title attribute
     my $title = extractNameValuePair( $_[3], "title" ) || "";
-    $title = "\n<span class=\"title\">$title</span>" if( $title );
+    $title = "\n<span class=\"twikiTocTitle\">$title</span>" if( $title );
 
     my $result  = "";
     my $line  = "";
