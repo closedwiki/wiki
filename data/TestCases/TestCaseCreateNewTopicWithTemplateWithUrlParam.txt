@@ -1,0 +1,16 @@
+%META:TOPICINFO{author="SvenDowideit" date="1105010043" format="1.0" version="1.1"}%
+Description: Verify the correct creation of a topic from a template.
+
+The topic created should contain the following text:
+<verbatim>
+The topic %TOPIC% was correctly created from the template in TopicTemplateWithUrlParamFixture
+
+
+the Url Param _testtext_ = textfromtheurl
+
+</verbatim>
+All the following tests should be run. They look identical, but all use different URLs
+	1 [[%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases?topic=TemplatedTopic&templatetopic=TopicTemplateWithUrlParamFixture&testtext=textfromtheurl][Click here]] to create the topic *DO NOT SAVE IT*!!
+	1 [[%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/TemplatedTopic?templatetopic=TopicTemplateWithUrlParamFixture&testtext=textfromtheurl][Click here]] to create the topic *DO NOT SAVE IT*!!
+	1 [[%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/TemplatedTopic?templatetopic=TopicTemplateWithUrlParamFixture&onlynewtopic=1&testtext=textfromtheurl][Click here]] to create the topic *DO NOT SAVE IT*!!
+
