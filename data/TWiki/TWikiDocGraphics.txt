@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1075364160" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="PeterThoeny" date="1077756660" format="1.0" version="1.25"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -16,6 +16,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/tip.gif" alt="tip.gif"  width="16" height="16"  />  | =tip.gif= | Tip / Idea |
 |  <img src="%ATTACHURLPATH%/warning.gif" alt="warning.gif"  width="16" height="16" />  | =warning.gif= | Warning / Important |
 |  <img src="%ATTACHURLPATH%/stop.gif" alt="stop.gif"  width="16" height="16"  />  | =stop.gif= | Stop |
+|  <img src="%ATTACHURLPATH%/target.gif" alt="target.gif"  width="16" height="16"  />  | =target.gif= | Blue target |
 |  <img src="%ATTACHURLPATH%/pencil.gif" alt="pencil.gif"  width="16" height="16"  />  | =pencil.gif= | Refactor / Edit |
 |  <img src="%ATTACHURLPATH%/choice-yes.gif" alt="choice-yes.gif"  width="16" height="16"  />  | =choice-yes.gif= | Yes / Done |
 |  <img src="%ATTACHURLPATH%/choice-no.gif" alt="choice-no.gif"  width="16" height="16"  />  | =choice-no.gif= | No |
@@ -128,3 +129,4 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="choice-cancel.gif" attr="" comment="Cancel" date="1073890377" path="C:\Data\Temp\choice-cancel.gif" size="886" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="globe.gif" attr="" comment="Globe" date="1075364114" path="C:\Data\Temp\globe.gif" size="1024" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="folder.gif" attr="" comment="Folder" date="1075364129" path="C:\Data\Temp\folder.gif" size="903" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="target.gif" attr="" comment="Blue Target" date="1077756487" path="target.gif" size="199" user="PeterThoeny" version="1.1"}%
