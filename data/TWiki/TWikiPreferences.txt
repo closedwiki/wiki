@@ -191,8 +191,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---++ Plugins Settings
 
 	* TWikiPlugins configuration: All plugin modules that exist in the =lib/TWiki/Plugins= directory are activated automatically unless disabled by DISABLEDPLUGINS. You can optionally list the installed plugins in INSTALLEDPLUGINS. This is useful to define the sequence of plugin execution, or to specify other webs then the %TWIKIWEB% web for the plugin topics. Specify plugins as a comma separated list of topics.
-		* Set INSTALLEDPLUGINS = TWiki.DefaultPlugin, SpreadSheetPlugin
-		* Set DISABLEDPLUGINS = EmptyPlugin
+		* Set INSTALLEDPLUGINS = TWiki.DefaultPlugin
+SpreadSheet is disabled by default as it makes a mess of the ~develop logfiles
+		* Set DISABLEDPLUGINS = EmptyPlugin, SpreadSheetPlugin
 		* Currently activated plugins: %ACTIVATEDPLUGINS%
 		* %T% *NOTE:* You can enable/disable all plugins with the ==$disableAllPlugins== flag in the ==lib/TWiki.cfg== file.
 
