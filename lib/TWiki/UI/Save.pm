@@ -31,6 +31,7 @@ package TWiki::UI::Save;
 use strict;
 use TWiki;
 use TWiki::UI;
+use TWiki::UI::Preview;
 
 =pod
 
@@ -43,10 +44,20 @@ Command handler for save command. Some parameters are passed in CGI:
 | =submitChangeForm= | |
 | =topicparent= | |
 | =formtemplate= | if define, use the named template for the form |
+Note that this function is rundundant once savemulti takes over all saving
+duties.
 
 =cut
 
 sub save {
+  my( $webName, $topic, $userName, $query ) = @_;
+  if ( _save( @_ )) {
+    TWiki::redirect( $query, TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic)) );
+  }
+}
+
+# Private - do not call outside this module!
+sub _save {
   my( $webName, $topic, $userName, $query ) = @_;
 
   my $saveCmd = $query->param( "cmd" ) || "";
@@ -67,38 +78,37 @@ sub save {
   my $theParent = $query->param( 'topicparent' ) || "";
   my $formTemplate = $query->param( "formtemplate" );
 
-  return unless TWiki::UI::webExists( $webName, $topic );
+  return 0 unless TWiki::UI::webExists( $webName, $topic );
 
-  return if TWiki::UI::isMirror( $webName, $topic );
+  return 0 if TWiki::UI::isMirror( $webName, $topic );
 
   my $wikiUserName = TWiki::userToWikiName( $userName );
-  return unless TWiki::UI::isAccessPermitted( $webName, $topic,
+  return 0 unless TWiki::UI::isAccessPermitted( $webName, $topic,
                                             "change", $wikiUserName );
 
   # check permission for undocumented cmd=... parameter
-  return if ( $saveCmd &&
+  return 0 if ( $saveCmd &&
               ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
 
   # PTh 06 Nov 2000: check if proper use of save script
   if( ! ( defined $text ) ) {
     TWiki::UI::oops( $webName, $topic, "save" );
-    return;
+    return 0;
   } elsif( ! $text ) {
     # empty topic not allowed
     TWiki::UI::oops( $webName, $topic, "empty" );
-    return;
+    return 0;
   }
 
   if( $changeform ) {
     use TWiki::Form;
     TWiki::Form::changeForm( $webName, $topic, $query );
-    return;
+    return 0;
   }
 
   $text = TWiki::Render::decodeSpecialChars( $text );
   $text =~ s/ {3}/\t/go;
 
-  $meta = "";
   if( $saveCmd eq "repRev" ) {
     $text =~ s/%__(.)__%/%_$1_%/go;
     ( $meta, $text ) = TWiki::Store::_extractMetaData( $webName, $topic, $text );
@@ -131,9 +141,65 @@ sub save {
   my $error = TWiki::Store::saveTopic( $webName, $topic, $text, $meta, $saveCmd, $unlock, $dontNotify );
   if( $error ) {
     TWiki::UI::oops( $webName, $topic, "saveerr", $error );
-  } else {
-   	TWiki::redirect( $query, TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic)) );
+    return 0;
+  }
+
+  return 1;
+}
+
+=pod
+
+---++ savemulti( )
+Command handler for savemulti command. Some parameters are passed in CGI:
+| =action= | savemulti overrides, everything else is passed on the normal =save= |
+action values are:
+| =save= | save, unlock topic, return to view, dontnotify is OFF |
+| =quietsave= | save, unlock topic,  return to view, dontnotify is ON |
+| =checkpoint= | save and continue editing, dontnotify is ON |
+| =cancel= | exit without save, unlock topic, return to view (does _not_ undo Checkpoint saves) |
+| =preview= | preview edit text; same as before |
+This function can replace "save" eventually.
+
+=cut
+
+sub savemulti {
+  my( $webName, $topic, $userName, $query ) = @_;
+
+  my $redirecturl = TWiki::getViewUrl( TWiki::Store::normalizeWebTopicName($webName, $topic));
+
+  my $saveaction = lc($query->param( 'action' ));
+  if ( $saveaction eq "checkpoint" ) {
+    $query->param( -name=>"dontnotify", -value=>"checked" );
+    $query->param( -name=>"unlock", -value=>'0' );
+    my $editURL = TWiki::getScriptUrl( $webName, $topic, "edit" );
+    my $randompart = randomURL();
+    $redirecturl = "$editURL|$randompart";
+  } elsif ( $saveaction eq "quietsave" ) {
+    $query->param( -name=>"dontnotify", -value=>"checked" );
+  } elsif ( $saveaction eq "cancel" ) {
+    my $viewURL = TWiki::getScriptUrl( $webName, $topic, "view" );
+    TWiki::redirect( $query, "$viewURL?unlock=on" );
+    return;
+  } elsif( $saveaction eq "preview" ) {
+		TWiki::UI::Preview::preview( $webName, $topic, $userName, $query );
+    return;
+  }
+
+  if ( _save( $webName, $topic, $userName, $query )) {
+    TWiki::redirect( $query, $redirecturl );
   }
 }
 
+## Random URL:
+# returns 4 random bytes in 0x01-0x1f range in %xx form
+# =========================
+sub randomURL
+{
+  my (@hc) = (qw (01 02 03 04 05 06 07 08 09 0b 0c 0d 0e 0f 10
+		  11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f));
+  #  srand; # needed only for perl < 5.004
+  return "%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]";
+}
+
 1;
+

@@ -46,5 +46,5 @@ my ( $topic, $web, $dummy, $userName ) =
   TWiki::initialize( $thePathInfo, $theRemoteUser,
                      $theTopic, $theUrl, $query );
 
-TWiki::UI::Save::save( $web, $topic, $userName, $query );
+TWiki::UI::Save::savemulti( $web, $topic, $userName, $query );
 
