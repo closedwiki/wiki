@@ -1,5 +1,5 @@
 bin/dav.pl										Checkin script
-bin/recache.pl									Protections DB build script
+bin/dav_recache									Protections DB maintenance script
 data/TWiki/WebDAVPlugin.txt						Plugin topic
 lib/TWiki/Plugins/WebDAVPlugin.pm				Main plugin module
 lib/TWiki/Plugins/WebDAVPlugin/build.pl			Main build script

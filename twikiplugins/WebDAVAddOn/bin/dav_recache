@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT
+#!/usr/bin/perl -w
 #
 # Copyright (C) 2004 Wind River Systems Inc.
 #
@@ -27,14 +27,50 @@ BEGIN {
 # Refresh the content of the TWiki protections cache.
 # Deleting the cache first is a valid thing to do.
 
-
 use strict;
 use TWiki;
 use TWiki::Plugins::WebDAVPlugin::Permissions;
 
-TWiki::initialize( "/Main", "nobody" );
+my $topic = "";
+my $web;
+my $thePathInfo;
+my $theRemoteUser;
+my $theTopic;
+my $theUrl;
+my $query;
+my $chosenWeb;
+my $chosenTopic;
+my $fromBrowser = 0;
+
+if( $ENV{'DOCUMENT_ROOT'} ) {
+  # Called from browser
+  $query = new CGI;
+  $thePathInfo = $query->path_info() || ""; 
+  $theRemoteUser = $query->remote_user() || "";
+  $theTopic = $query->param( 'topic' ) || "";
+  $theUrl = $query->url;
+  $fromBrowser = 1;
+} else {
+  # called from the command line
+  $chosenWeb = $ARGV[$#ARGV];
+  if ( $chosenWeb && $chosenWeb =~ m/(.*)\.(.*)/o ) {
+	( $chosenWeb, $chosenTopic ) = ( $1, $2 );
+  }
+  $thePathInfo = "/Main";
+  $thePathInfo = "/$chosenWeb" if ( $chosenWeb );
+  $thePathInfo .= "/$chosenTopic" if ( $chosenWeb && $chosenTopic );
+  $theRemoteUser = "nobody";
+}
+
+( $topic, $web ) =
+  TWiki::initialize( $thePathInfo, $theRemoteUser,
+					 $theTopic, $theUrl, $query );
 
 my $pdb = TWiki::Prefs::getPreferencesValue("WEBDAVPLUGIN_LOCK_DB");
 my $permDB = new WebDAVPlugin::Permissions( $pdb );
 
-$permDB->recache();
+if ( $fromBrowser ) {
+  ( $chosenWeb, $chosenTopic ) = ( $web, $topic );
+}
+
+$permDB->recache( $chosenWeb, $chosenTopic );

@@ -57,7 +57,7 @@
 #define DBM_FIRSTKEY(db) tdb_firstkey(db)
 #define DBM_NEXTKEY(db,d) tdb_nextkey(db,d)
 #define DBM_DATUM TDB_DATA
-#define DBM_FREE(x) (x).dptr ? free((x).dptr) : 0
+#define DBM_FREE(x) { if((x).dptr) free((x).dptr); }
 #define DBM_ERROR(_db) tdb_error(_d)
 #endif
 
@@ -76,6 +76,12 @@ static int isInGroup(const char* group, const char*user,
 					 DBM* db, int depth);
 static int isAccessible(DBM* db, const char* web, const char* topic,
 						const char* mode, const char* user, int m);
+static int checkAccessibility(const char* web,
+  const char* topic,
+  const char* file,
+  const char* mode,
+  const char* user,
+							  int monitor);
 
 static char* dump(DBM_DATUM d) {
   static char dumpdata[255];
@@ -99,15 +105,65 @@ int dav_twiki_setDBpath(const char* dbname) {
   return 1;
 }
 
+#ifndef PROT_PRINT
 /**
  * Main interface to permissions database. KISS.
  */
-int dav_twiki_accessible(const char* web,
-					const char* topic,
-					const char* file,
-					const char* mode,
-					const char* user,
-					int monitor) {
+int dav_twiki_accessible(const request_rec *r, const dav_resource* dr) {
+  twiki_resources* tr;
+  const char* mode;
+  const char* pw;
+
+  /* determine our TWiki access mode */
+  if (r->method_number == M_GET ||
+	  r->method_number == M_COPY ||
+	  r->method_number == M_PROPFIND)
+	mode = "V";
+  else if (r->method_number == M_PUT ||
+		   r->method_number == M_DELETE ||
+		   r->method_number == M_LOCK ||
+		   r->method_number == M_UNLOCK ||
+		   r->method_number == M_PROPPATCH ||
+		   r->method_number == M_MOVE)
+	mode = "C";
+  else
+	return 0;
+  
+  tr = dr->twiki;
+
+  /* if this is a twiki resource, check permissions */
+  if (tr) {
+	if (dr->collection && mode[0] == 'C')
+	  return 0;
+
+	/** connection->user gets filled in by ap_get_basic_auth, but there
+	 * are probably other ways by which authentication generates a user
+	 * id. It's a big assumption that the user will be valid. However
+	 * this is the value used to create REMOTE_USER, so if it kinda has
+	 * to work. I should really check Apache::AuthHandler. */
+	if (!r->connection->user) {
+	  fprintf(stderr, "twiki_dav using basic auth\n");
+	  ap_get_basic_auth_pw((request_rec*)r, &pw);
+	}
+
+	tr->user = ap_pstrdup(r->pool, r->connection->user);
+
+	if (!checkAccessibility(tr->web, tr->topic, tr->file, mode, tr->user,
+							dav_get_monitor(r)))
+	  return 0;
+  }
+
+  return 1;
+}
+#endif
+
+static int checkAccessibility(const char* web,
+  const char* topic,
+  const char* file,
+  const char* mode,
+  const char* user,
+  int monitor) {
+
   DBM* db = NULL;
   int ret;
 
@@ -277,6 +333,7 @@ static int isInList(DBM_DATUM list, const char* user, DBM* db, int depth) {
   const char* start = list.dptr;
   const char* stop = list.dptr + list.dsize;
   const char* end;
+  char group[255];
 
   while (start != stop) {
 	start++; /* skip the | */
@@ -289,7 +346,6 @@ static int isInList(DBM_DATUM list, const char* user, DBM* db, int depth) {
 	  return 1;
 	}
 	if (strncmp(start + (end - start - 5), "Group", 5) == 0) {
-	  char group[end - start + 1];
 	  strncpy(group, start, end - start);
 	  group[end - start] = '\0';
 	  if (isInGroup(group, user, db, depth + 1)) {

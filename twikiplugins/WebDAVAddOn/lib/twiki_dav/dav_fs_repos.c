@@ -559,7 +559,6 @@ static twiki_resources* make_twiki_resource(const request_rec* r,
                                             const char*topic, int topicl,
                                             const char* file) {
   twiki_resources* tr;
-  const char* pw;
 
   tr = (twiki_resources *) ap_pcalloc(r->pool, sizeof(twiki_resources));
 
@@ -575,13 +574,7 @@ static twiki_resources* make_twiki_resource(const request_rec* r,
   }
   tr->file = ap_pstrdup(r->pool, file);
 
-  /** connection->user gets filled in by ap_get_basic_auth, but there
-   * are probably other ways by which authentication generates a user
-   * id. It's a big assumption that the user will be valid. However
-   * this is the value used to create REMOTE_USER, so if it kinda has
-   * to work. I should really check Apache::AuthHandler. */
-  ap_get_basic_auth_pw((request_rec*)r, &pw);
-  tr->user = ap_pstrdup(r->pool, r->connection->user);
+  /** user doesn't get filled in yet */
   return tr;
 }
 
@@ -713,9 +706,7 @@ static dav_resource* dav_fs_get_twiki_info(const request_rec *r, dav_resource* r
 										web, webl,
 										topic, topicl,
 										r->filename);
-  if ((resource->monitor & 2) != 0)
-	fprintf(stderr, "OK\n");
-  
+
   return resource;
 }
 

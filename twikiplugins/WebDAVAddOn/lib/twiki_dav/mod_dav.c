@@ -898,6 +898,10 @@ static int dav_get_resource(request_rec *r, dav_resource **res_p)
 	return HTTP_NOT_FOUND;
   }
   
+  if ((*res_p)->twiki && !dav_twiki_accessible(r, (*res_p))) {
+	return HTTP_FORBIDDEN;
+  }
+
   return OK;
 }
 
@@ -2282,6 +2286,12 @@ static int dav_method_mkcol(request_rec *r)
 	return HTTP_METHOD_NOT_ALLOWED;
   }
   
+  if (resource->twiki) {
+	/* mkcol is barred for twiki resources */
+	/* ### we should provide a specific error message! */
+	return HTTP_METHOD_NOT_ALLOWED;
+  }
+
   resource_state = dav_get_resource_state(r, resource);
   
   /*
@@ -2405,13 +2415,15 @@ static int dav_method_copymove(request_rec *r, int is_move)
   monitor_method(r, resource);
   
   /* If not a file or collection resource, COPY/MOVE not allowed */
-  if (resource->type != DAV_RESOURCE_TYPE_REGULAR) {
+  /* if a twiki resource and a collection, COPY/MOVE not allowed */
+  if (resource->type != DAV_RESOURCE_TYPE_REGULAR ||
+	  (resource->twiki && resource->collection)) {
 	body = ap_psprintf(r->pool,
 					   "Cannot COPY/MOVE resource %s.",
 					   ap_escape_html(r->pool, r->uri));
 	return dav_error_response(r, HTTP_METHOD_NOT_ALLOWED, body);
   }
-  
+
   /* get the destination URI */
   dest = ap_table_get(r->headers_in, "Destination");
   if (dest == NULL) {
@@ -3345,61 +3357,6 @@ static int dav_handler(request_rec *r)
   return result;
 }
 
-static int dav_access_checker(request_rec *r)
-{
-  dav_dir_conf *conf;
-  dav_resource* resource;
-  int result;
-  twiki_resources* tr;
-  const char* mode;
-  const char* script;
-  
-  conf = (dav_dir_conf *) ap_get_module_config(r->per_dir_config,
-											   &dav_module);
-  
-  /* if DAV is not enabled, then we've got nothing to do */
-  if (conf->provider_name == NULL)
-	return DECLINED;
-
-  /* determine our TWiki access mode */
-  if (r->method_number == M_GET ||
-	  r->method_number == M_COPY ||
-	  r->method_number == M_PROPFIND)
-	mode = "V";
-  else if (r->method_number == M_PUT ||
-		   r->method_number == M_DELETE ||
-		   r->method_number == M_LOCK ||
-		   r->method_number == M_UNLOCK ||
-		   r->method_number == M_PROPPATCH ||
-		   r->method_number == M_MOVE)
-	mode = "C";
-  else
-	return DECLINED;
-  
-  if (conf->twiki_dir_root == NULL)
-	return DECLINED;
-  
-  script = dav_get_twiki_access_script(r);
-  if (script == NULL)
-	return DECLINED;
-  
-  result = dav_get_resource(r, &resource);
-  if (result != OK)
-	return DECLINED;
-
-  tr = resource->twiki;
-
-  /* if this is a twiki resource, check permissions */
-  if (tr &&
-	  ((resource->collection && mode[0] == 'C') ||
-	   !dav_twiki_accessible(tr->web, tr->topic, tr->file, mode, tr->user,
-							 dav_get_monitor(r)))) {
-	return HTTP_FORBIDDEN;
-  }
-
-  return OK;
-}
-
 static int dav_type_checker(request_rec *r)
 {
   dav_dir_conf *conf;
@@ -3551,7 +3508,7 @@ module MODULE_VAR_EXPORT dav_module =
     NULL,			/* filename translation */
     NULL,			/* check_user_id */
     NULL,			/* check auth */
-    dav_access_checker,		/* check access */
+    NULL,		/* check access */
     dav_type_checker,		/* type_checker */
     NULL,			/* fixups */
     NULL,			/* logger */

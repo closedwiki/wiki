@@ -75,9 +75,11 @@ static dav_error * dav_fs_uncheckout(dav_resource *resource)
  */
 static dav_error * dav_fs_checkin(dav_resource *resource)
 {
+  dav_error* e;
+
   if (resource->twiki) {
 	monitor("CHECKIN ", resource);
-	dav_error* e = dav_twiki_commit(resource, resource->twiki->file);
+	e = dav_twiki_commit(resource, resource->twiki->file);
 	if (e)
 	  return e;
 
