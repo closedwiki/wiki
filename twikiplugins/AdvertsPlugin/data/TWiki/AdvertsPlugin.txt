@@ -1,11 +1,11 @@
 %META:TOPICINFO{author="PeterThoeny" date="1079856240" format="1.0" version="1.6"}%
----+ Empty TWiki Plugin
+---+ Adverts TWiki Plugin
 
 This is an empty plugin you can use as a template to build your own %TWIKIWEB%.TWikiPlugins. This plugin does nothing, but is ready to be used.
 
 To create your own plugin:
 
-	* Copy file ==TWiki/Plugins/EmptyPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
+	* Copy file ==TWiki/Plugins/AdvertsPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
 	* Create a  ==&lt;name&gt;Plugin== topic in the %TWIKIWEB% web. Do so by visiting http://TWiki.org/cgi-bin/view/Plugins/ and starting a new topic to get the default plugin topic text (don't save the topic). Customize your plugin topic to your needs.
 	* See details in %TWIKIWEB%.TWikiPlugins.
 
@@ -33,7 +33,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>E
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main.AndreaSterbini, TWiki:Main.PeterThoeny |
+|  Plugin Author: | TWiki:Main.MartinCleaver  |
 |  Plugin Version: | 21 Mar 2003 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  21 Mar 2004: | Added afterSaveHandler |
