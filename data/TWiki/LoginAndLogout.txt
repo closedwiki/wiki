@@ -1,0 +1,29 @@
+%META:TOPICINFO{author="RicardoLopez" date="1109091569" format="1.0" version="1.5"}%
+__%X% Note:__ This topic is TWiki.org specific and is not part of the TWiki distribution.
+
+---+ Logout and Login
+
+<!-- The following spreadsheet magic outputs text conditionally based on view/viewauth and guest/not guest -->
+%CALC{Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]], you are using IP address %REMOTE_ADDR%. <p />%T% $IF($EXACT(%WIKINAME%, TWikiGuest), $IF($FIND(auth, %SCRIPTNAME%), You are logged in as =TWikiGuest=. Please restart your browser if you want to login with your own account., You are currently not logged in (try to [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%][login]]); or you are logged in as =TWikiGuest= (in which case you need to restart your browser if you want to login with your own account).), $IF($FIND(auth, %SCRIPTNAME%), Please restart your browser if this is not you., If you are not $PROPERSPACE(%WIKINAME%) please [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%][login]] (you might share the IP address with someone else)))}%
+
+---++ Background Information
+
+TWiki.org uses BasicAuthentication with IP address based session tracking. The advantage is that there is a very low requirement on the client side. Any browser is supported, even those without cookies.
+
+There is a drawback however. IP address based session tracking fails if people share an IP address, e.g. a whole company might expose just one IP address through a NAT. In this case TWiki.org might tell you that you are someone else in your organization.
+
+-- Main.PeterThoeny - 12 Feb 2005
+
+---++ Discussions
+
+Why are we not using what I suggest in Codev.RememberUserBug?
+
+-- Main.SvenDowideit - 12 Feb 2005
+
+That approach seems to have a drawback, see my reply in Codev.RememberUserBug.
+
+-- Main.PeterThoeny - 12 Feb 2005
+
+Changed the view/not guest message because I didn't like the grammar of "not me?" and "not you?" seemed a bit impolite.
+
+-- Main.SamHasler - 12 Feb 2005
