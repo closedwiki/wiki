@@ -32,6 +32,15 @@ package TWiki::Func;
 use strict;
 
 # =========================
+# get session value (from session plugin)
+# =========================
+sub getSessionValue
+{
+#   my( $key ) = @_;
+    return &TWiki::getSessionValue( @_ );
+}
+
+# =========================
 # get a preferences value
 # =========================
 sub getPreferencesValue
@@ -43,7 +52,7 @@ sub getPreferencesValue
 }
 
 # =========================
-# get a preferences flag value
+# get a preferences flag value (on/off 1/0 etc)
 # =========================
 sub getPreferencesFlag
 {
@@ -112,6 +121,40 @@ sub getPubUrlPath
 }
 
 # =========================
+# get script URL path
+# =========================
+sub getScriptUrlPath
+{
+    return $TWiki::scriptUrlPath;
+}
+
+# =========================
+# get default URL host
+# =========================
+sub getDefaultUrlHost
+{
+    return $TWiki::defaultUrlHost;
+}
+
+# =========================
+# get URL host
+# would this be better as $cgiQuery->url()???
+# =========================
+sub getUrlHost
+{
+    return $TWiki::urlHost;
+}
+
+# =========================
+# compose fully qualified URL
+# =========================
+sub getScriptUrl
+{
+#   my( $web, $topic, $script ) = @_;
+    return &TWiki::getScriptUrl( @_ ); 
+}
+
+# =========================
 # compose fully qualified view URL
 # =========================
 sub getViewUrl
@@ -128,6 +171,38 @@ sub getOopsUrl
 #   my( $theWeb, $theTopic, $theTemplate, @theParams ) = @_;
     # up to 4 parameters in @theParams
     return &TWiki::getOopsUrl( @_ );
+}
+
+# =========================
+# get wikiToolName
+# =========================
+sub getWikiToolName
+{
+    return $TWiki::wikiToolName;
+}
+
+# =========================
+# get mainWebname
+# =========================
+sub getMainWebname
+{
+    return $TWiki::mainWebname;
+}
+
+# =========================
+# get twikiWebname
+# =========================
+sub getTwikiWebname
+{
+    return $TWiki::twikiWebname;
+}
+
+# ==========================
+# get ScriptName
+# ==========================
+sub getScriptName
+{
+    return &TWiki::getScriptName();
 }
 
 # =========================
@@ -149,6 +224,15 @@ sub renderText
 }
 
 # =========================
+# do internal link
+# =========================
+sub internalLink
+{
+#   my( $thePreamble, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink ) = @_;
+    return &TWiki::internalLink( @_ );
+}
+
+# =========================
 # get list of all public webs
 # =========================
 sub getPublicWebList
@@ -163,6 +247,23 @@ sub getTopicList
 {
 #   my( $theWeb ) = @_;
     return &TWiki::Store::getTopicNames ( @_ );
+}
+# =========================
+# test if any permissions are set on this web
+# =========================
+sub permissionsSet
+{
+#   my( $web ) = @_;
+    return &TWiki::Access::permissionsSet( @_ );
+}
+
+# =========================
+# check access permissions for this topic
+# =========================
+sub checkAccessPermission
+{
+#   my( $theAccessType, $theUserName, $theTopicText, $theTopicName, $theWebName ) = @_;
+    return &TWiki::Access::checkAccessPermission( @_ );
 }
 
 # =========================
@@ -179,8 +280,17 @@ sub webExists
 # =========================
 sub topicExists
 {
-#   my( $theTopic ) = @_;
+#   my( $theWeb, $theTopic ) = @_;
     return &TWiki::Store::topicExists( @_ );
+}
+
+# =========================
+# get revision info from meta
+# =========================
+sub getRevisionInfoFromMeta
+{
+#   my( $web, $topic, $meta, $format );
+    return &TWiki::Store::getRevisionInfoFromMeta( @_ );
 }
 
 # =========================
@@ -189,7 +299,7 @@ sub topicExists
 sub readTopic
 {
 #   my( $theWebName, $theTopic ) = @_;
-    return &TWiki::Store::readWebTopic( @_ );
+    return &TWiki::Store::readTopic( @_ );
 }
 
 # =========================
@@ -220,6 +330,48 @@ sub saveFile
 }
 
 # =========================
+# get defaultUserName e.g. guest
+# =========================
+sub getDefaultUserName
+{
+    return $TWiki::defaultUserName;
+}
+
+# =========================
+# get wikiName e.g. JohnDoe
+# =========================
+sub getWikiName
+{
+    return $TWiki::wikiName;
+}
+
+# =========================
+# get wikiUserName e.g. Main.JohnDoe
+# =========================
+sub getWikiUserName
+{
+    return $TWiki::wikiUserName;
+}
+
+# =========================
+# translate wikiUserName to userName
+# =========================
+sub wikiToUserName
+{
+#   my $wiki = @_;
+    return &TWiki::wikiToUserName( @_ );
+}
+
+# =========================
+# translate wikiUserName to userName
+# =========================
+sub userToWikiName
+{
+#   my $user = @_;
+    return &TWiki::userToWikiName( @_ );
+}
+
+# =========================
 # Write HTML header
 # =========================
 sub writeHeader
@@ -243,6 +395,27 @@ sub redirectCgiQuery
 {
 #   my( $theQuery, $theUrl ) = @_;
     return &TWiki::redirect( @_ );
+}
+
+# =========================u
+# search web
+# =========================
+sub searchWeb
+{
+#   my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
+#         $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
+#         $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
+#         $doShowLock, $noEmpty, $template, $meta, $external, @junk ) = @_;
+    return &TWiki::Search::searchWeb( @_ );
+}
+
+# =========================
+# format the time
+# =========================
+sub formatGmTime
+{
+#   my $epSecs = @_;
+    return &TWiki::formatGmTime( @_ );
 }
 
 1;
