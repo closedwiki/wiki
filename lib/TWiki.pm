@@ -88,7 +88,7 @@ use vars qw(
 
 # Internationalisation and regex setup:
 use vars qw(
-	$useLocale $siteLocale 
+	$basicInitDone $useLocale $siteLocale 
 
 	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
@@ -110,11 +110,9 @@ use vars qw(
         $cmdQuote $lsCmd $egrepCmd $fgrepCmd
     );
 
-
-
 # ===========================
 # TWiki version:
-$wikiversion      = "26 Nov 2002";
+$wikiversion      = "8 Dec 2002";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -139,19 +137,10 @@ BEGIN {
     }
 }
 
-
-
-# Forward declarations for debug
 sub writeDebug;
 sub writeWarning;
 
 # writeDebug "got useLocale = $useLocale";
-
-# Set up locale for internationalisation and pre-compile regexes
-# - done outside 'initialize' since sometimes needed before that routine
-# is called (e.g. mailnotify and other multi-web scripts).
-setupLocale();
-setupRegexes();
 
 
 # ===========================
@@ -197,6 +186,9 @@ $debugUserTime   = 0;
 $debugSystemTime = 0;
 
 $formatVersion = "1.0";
+
+$basicInitDone = 0;		# basicInitialize not yet done
+
 
 # =========================
 # Warning and errors that may require admin intervention, to 'warnings.txt' typically.
@@ -250,12 +242,26 @@ sub writeDebugTimes
     writeDebug( "==> $times,  $text" );
 }
 
+# Basic initialisation - for use from scripts that handle multiple webs
+# (e.g. mailnotify) and need regexes or isWebName/isWikiName to work before
+# the per-web initialize() is called.
+sub basicInitialize() {
+    # Set up locale for internationalisation and pre-compile regexes
+    setupLocale();
+    setupRegexes();
+    
+    $basicInitDone = 1;
+}
 
 # =========================
 sub initialize
 {
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $theQuery ) = @_;
     
+    if( not $basicInitDone ) {
+	basicInitialize();
+    }
+
     ##writeDebug( "\n---------------------------------" );
 
     $cgiQuery = $theQuery;

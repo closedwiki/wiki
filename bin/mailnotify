@@ -34,6 +34,8 @@ my $debug = ! ( @ARGV && $ARGV[0] eq "-q" );
 
 sub main
 {
+    &TWiki::basicInitialize();
+
     $debug && print "TWiki mail notification\n";
     $debug && print "- to suppress all normal output: mailnotify -q\n";
 
