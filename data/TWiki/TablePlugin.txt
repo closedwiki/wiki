@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1053833520" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="PeterThoeny" date="1053858660" format="1.0" version="1.19"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -18,7 +18,7 @@ Click on column heading text to sort by a column.  Initial column will be sorted
 
 	* date if format is:
 		* dd MMM YYY - hh:mm
-		* dd-MMM-YY or dd-MM-YYYY (can be / or space in place of -)
+		* dd-MMM-YY or dd-MMM-YYYY (can be / or space in place of -)
 		* MMM is Jan, Feb, etc
 	* number is digits, with optional decimal point
 	* otherwise treated as text
@@ -70,7 +70,9 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 
 The =%<nop>TABLE{...}%= settings override =TABLEATTRIBUTES= preferences settings, which override the =TABLEATTRIBUTES= Plugin settings. 
 
----++ Example
+---++ Examples
+
+---+++ Use of %<nop>TABLE{...}%
 
 Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cellspacing="3" headerbg="#000099" headercolor="#FFFFCC" databg="#C8CB8F, #DBDDB5" headerrows="2" footerrows="1" }%=
 
@@ -83,6 +85,13 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 | 12 | C | Spec error handling | Jack | 1-Dec-02 | |
 | 5 |	| Abc | John | | |
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
+
+---+++ Table with 4 digit year dates and no use of %<nop>TABLE{...}%
+
+| *When* |
+| 1-Jan-2004 |
+| 1-Jan-2003 |
+| 2-Jan-2005 |
 
 ---++ Plugin Installation Instructions
 
@@ -103,10 +112,11 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 
 ---++ Plugin Info
 
-|  Plugin Author: | %TWIKIWEB%.JohnTalintyre, %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 24 May 2003 |
+|  Plugin Author: | TWiki:Main/JohnTalintyre, TWiki:Main/PeterThoeny |
+|  Plugin Version: | 01 Dec 2003 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  24 May 2003: | PTh: New =&#124;^&#124;= rule for multi row span (TWiki:Main/WalterMundt); added tableframe and tablerules (TWiki:Main/JohannesMartin); ignore columnwidths for multi column span; validate headerrows and footerrows (TWiki:Main/DarrylGreen) |
+|  01 Dec 2003: | PTh: Fixed error when footerrows was specified on an empty table, contributed by TWiki:Main/PaulineCheung |
+|  24 May 2003: | PTh: New =&#124;^&#124;= rule for multi row span (TWiki:Main/WalterMundt); added tableframe and tablerules (TWiki:Main/JohannesMartin); ignore columnwidths for multi column span; validate headerrows and footerrows (TWiki:Main/DarrylGreen); fixed link color problem and up/down icon color problem for dark header background |
 |  17 Dec 2002: | PTh: Removed individual table Plugin settings; added TABLEATTRIBUTES Plugins setting and TABLEATTRIBUTES preferences setting |
 |  15 Dec 2002: | PTh: Added headerrows and footerrows params (TWiki:Main/DarrylGreen, TWiki:Main/WoutMertens); added tablewidth and columnwidths params (TWiki:Main/ThorstenSommermann) |
 |  09 Dec 2002: | PTh: Added headercolor and datacolor parameters |
@@ -126,8 +136,8 @@ Line before table: =%<nop>TABLE{ sort="on" tableborder="0" cellpadding="1" cells
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, %TWIKIWEB%.StandardColors
 
--- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
--- %TWIKIWEB%.PeterThoeny - 24 May 2003 <br />
-%META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
-%META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
+-- TWiki:Main/JohnTalintyre - 07 Oct 2001 <br />
+-- TWiki:Main/PeterThoeny - 01 Dec 2003 <br />
+%META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1070351625" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\up.gif" size="867" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1070351653" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\down.gif" size="867" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1070351672" path="C:\Data\MyTWiki\Plugins\TablePlugin\pub\TWiki\TablePlugin\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
