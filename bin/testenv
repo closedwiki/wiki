@@ -36,10 +36,15 @@ BEGIN {
 package TWiki;
 
 
+
+&main();
+
+
 sub checkBasicModules {
     # Check whether basic CGI modules exist (some broken installations of
     # Perl don't have this, even though they are standard modules), and warn user
-    my @basicMods = qw( CGI CGI::Carp );
+    my @basicMods = @_;
+
     my $modMissing = 0;
     my $mod;
     foreach $mod (@basicMods) {
@@ -65,23 +70,13 @@ sub checkBasicModules {
 	print "</body>\n</html>\n";
 	exit;
     }
-
-    # Call main routine to make variable available
-    &main(@basicMods);
 }
-
-&checkBasicModules;
-
-# Load CGI modules (run-time, after lib path checks)
-require CGI;
-require CGI::Carp;
-import CGI::Carp qw( fatalsToBrowser );
 
 
 sub main
 {
 
-my @basicMods = @_;
+my @basicMods = qw( CGI CGI::Carp );
 
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
@@ -93,7 +88,7 @@ my $rcsverRequired = 5.7;
 my @requiredMods = ( @basicMods,  
 	'File::Copy'
     ); 
-my @requiredModsWindows = ( 
+my @requiredModsNonUnix = ( 
 	'Digest::SHA1', 
 	'MIME::Base64', 
 	'Net::SMTP',
@@ -101,6 +96,15 @@ my @requiredModsWindows = (
 
 open(STDERR,'>&STDOUT'); # redirect error to browser
 $| = 1;                  # no buffering - FIXME: mod_perl issue?
+
+
+# Check for modules required by this script
+&checkBasicModules( @basicMods );
+
+# Load CGI modules (run-time, after checking they are accessible)
+require CGI;
+require CGI::Carp;
+import CGI::Carp qw( fatalsToBrowser );
 
 my $query = new CGI;
 
@@ -245,11 +249,12 @@ print "This is the Perl library path, used to load TWiki modules, ";
 print "third-party modules used by some plugins, and Perl built-in modules.";
 print "</td></tr>\n";
 
-# Add to list of required modules if on Windows (FIXME: also needed for 
-# most non-Unix OSes)
-if ( $OS eq 'WINDOWS') {
-    push @requiredMods,  @requiredModsWindows;
+# Add to list of required modules if non-Unix, e.g. Windows and MacOS X 
+# FIXME: also needed for most non-Unix OSes 
+if ( $OS ne 'UNIX' ) {
+    push @requiredMods,  @requiredModsNonUnix;
 }
+
 
 # Check that each of the required Perl modules can be loaded, and
 # print its version number.
