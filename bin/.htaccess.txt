@@ -6,7 +6,7 @@ AuthType Basic
 
 SetHandler cgi-script
 
-ErrorDocument 401 /urlpath/to/TWiki/bin/view/TWiki/TWikiRegistration
+ErrorDocument 401 /urlpath/to/TWiki/bin/oops/TWiki/TWikiRegistration?template=oopsauth
 
 <Files ~ "[^/]*\.html$">
        SetHandler blabla
