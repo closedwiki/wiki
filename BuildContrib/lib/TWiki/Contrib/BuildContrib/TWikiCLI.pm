@@ -26,10 +26,10 @@ print $dispatchSub;
   return helpText();
  }
 
- print "Unprocessed by Getopt::Long\n" if $ARGV[0];
- foreach (@ARGV) {
-  print "$_\n";
- }
+# print "Unprocessed by Getopt::Long\n" if $ARGV[0];
+# foreach (@ARGV) {
+#  print "$_\n";
+# }
 }
 
 sub noSuchMethod {
