@@ -6,7 +6,7 @@
 	* <A href="#category">(5)</A> TWiki Category Table
 	* <A href="#implementation">(6)</A> Implementation Notes
 	* <A href="#installation">(7)</A> Installation Notes
-	* <A href="#upgrade20000501">(8)</A> Upgrading Earlier Versions to TWiki 01 Mai 2000
+	* <A href="#upgrade">(8)</A> Upgrading Earlier Versions of TWiki
 
 Related Topics: TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests.
 
@@ -14,53 +14,53 @@ Related Topics: TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRe
 -----
 *(1) Wiki Username vs. Login Username*
 
-%INCLUDE{"TWikiUsernameVsLoginUsername.txt"}%
+%INCLUDE{"TWikiUsernameVsLoginUsername"}%
 
 
 <A name="templates">
 -----
 *(2) Wiki Templates*
 
-%INCLUDE{"TWikiTemplates.txt"}%
+%INCLUDE{"TWikiTemplates"}%
 
 
 <A name="variables">
 -----
 *(3) Wiki Variables*
 
-%INCLUDE{"TWikiVariables.txt"}%
+%INCLUDE{"TWikiVariables"}%
 
 
 <A name="notification">
 -----
 *(4) Notification of Changes by Email*
 
-%INCLUDE{"TWikiNotificationOfChanges.txt"}%
+%INCLUDE{"TWikiNotificationOfChanges"}%
 
 
 <A name="category">
 -----
 *(5) TWiki Category Table*
 
-%INCLUDE{"TWikiCategoryTable.txt"}%
+%INCLUDE{"TWikiCategoryTable"}%
 
 
 <A name="implementation">
 -----
 *(6) Implementation Notes*
 
-%INCLUDE{"TWikiImplementationNotes.txt"}%
+%INCLUDE{"TWikiImplementation"}%
 
 
 <A name="installation">
 -----
 *(7) Installation Notes*
 
-%INCLUDE{"TWikiInstallationNotes.txt"}%
+%INCLUDE{"TWikiInstallationNotes"}%
 
 
-<A name="upgrade20000501">
+<A name="upgrade">
 -----
-*(8) Upgrading Earlier Versions to TWiki 01 Mai 2000*
+*(8) Upgrading Earlier Versions of TWiki*
 
-%INCLUDE{"TWikiUpgradeTo01May2000.txt"}%
+%INCLUDE{"TWikiUpgradeNotes"}%

@@ -1,16 +1,16 @@
-The %WIKITOOLNAME% web is a web based collaboration tool. 
+The %WIKITOOLNAME% web is a web-based collaboration tool. 
 	* WelcomeGuest tells you more about how to use it.
 	* TWiki's home is at http://TWiki.SourceForge.net/
 
-%WIKITOOLNAME% is a cgi-bin script written in Perl. It reads a text file, hyperlinks it and converteds it to HTML on the fly. The point is to:
-	* make the text editing process a very simple ( click on the *Edit* link at the bottom of the page ) 
+%WIKITOOLNAME% is a cgi-bin script written in Perl. It reads a text file, hyperlinks it and converts it to HTML on the fly. The point is to:
+	* make the text editing process very simple ( click on the *Edit* link at the bottom of the page ) 
 	* and to find information fast ( WebSearch ). 
 
 What does the name TWiki stand for?
 	* _Wiki wiki_ means quick in Hawai'ian. They call the shuttle at the Honolulu airport the <A HREF="http://www.quickaid.com/airports/hnl/company/trans_tm.html"> wiki wiki bus</A>. 
 	* _TWiki_ is the short form of _TakeFive Wiki_ . (Later on I found out that _Twiki_ is the name of a robot in a <a href="http://www.buck-rogers.com/">Buck Rogers</a> TV show in 1979)
 
-%WIKITOOLNAME% is one of many WikiWikiClones, the first one was built by Ward Cummingham.
+%WIKITOOLNAME% is one of many WikiWikiClones; the first one was built by Ward Cummingham.
 
 Topics of interest:
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests.
@@ -24,12 +24,12 @@ Topics of interest:
 		* TWikiCategoryTable 
 		* TWikiImplementationNotes 
 		* TWikiInstallationNotes 
-		* TWikiUpgradeTo01May2000
-	* TWikiAdministration tells you how to do administrative stuff like renaming or deleting a topic.
+		* TWikiUpgradeNotes
+	* TWikiAdministration tells you how to do administrative stuff, like renaming or deleting a topic.
 
 *Note:*
 	* %WIKITOOLNAME% automatically signs new pages with your WikiName in case TWiki is running on an Intranet where you log in. In case your TWiki installation does not authenticate users, TWiki does not know about user names, all visitors have the user name Main.TWikiGuest.
 	* TWiki's source code is available upon request, see http://TWiki.SourceForge.net/download.html
 	* This %WIKITOOLNAME% version is *%WIKIVERSION%* .
 
--- Main.PeterThoeny - 18 Aug 2000 <br>
+-- Main.PeterThoeny - 21 Aug 2000 <br>
