@@ -223,6 +223,9 @@ sub debugPrintHash {
 
 # =========================
 # Process the whole log file and collect information in hash tables.
+# Must build stats for all webs, to handle case of renames into web
+# requested for a single-web statistics run.
+#
 # Main hash tables are divided by web:
 #
 #   $view{$web}{$TopicName} == number of views, by topic
@@ -232,12 +235,13 @@ sub collectLogData
 {
     my( $TMPFILE, $theLogMonthYear ) = @_;
 
-    # format example of log:
+    # Examples of log file format:
     # | 03 Feb 2000 - 02:43 | Main.PeterThoeny | view | Know.WebHome |  |
     # | 03 Feb 2000 - 02:43 | Main.PeterThoeny | save | Know.WebHome |  |
     # | 03 Feb 2000 - 02:53 | Main.PeterThoeny | save | Know.WebHome | repRev 1.7 Main.PeterThoeny 2000/02/03 02:43:22 |
     # | 23 Feb 2002 - 11:07 | Main.TWikiGuest | search | Main | Office *Locations[^A-Za-z] | 127.0.0.1 |
     #   	Note: there's no topic name on search log entry
+    # | 28 Mar 2002 - 07:11 | Main.FredBloggs | rename | Test.TestTopic7 | moved to Test.TestTopic7New  | 127.0.0.1 |
 
 
     my %view;		# Hash of hashes, counts topic views by <web, topic>
@@ -248,13 +252,13 @@ sub collectLogData
     my %statSaves;
     my %statUploads;
 
-    my ($webName, $opName, $topicName, $userName);
+    my ($webName, $opName, $topicName, $userName, $newTopicName, $newTopicWeb);
     binmode $TMPFILE;
     while ( <$TMPFILE> ) {
         my $line = $_;
 	$line =~ s/\r*\n$//o;		# Clean out line endings
 
-	$line =~ /^\|[^\|]*\| ([A-Za-z0-9]+\.[A-Za-z0-9]+) \| ([A-Za-z0-9]+) \| ([A-Za-z0-9]+)[. ]/o;
+	$line =~ /^\|[^\|]*\| ([a-z0-9]+\.[a-z0-9]+) \| ([a-z0-9]+) \| ([a-z0-9]+)[. ]/io;
 	$userName = $1 || "";		# Main.FredBloggs
 	$opName = $2 || "";
 	$webName = $3 || "";
@@ -268,8 +272,8 @@ sub collectLogData
 	my $logContrib = 0;
 	if ($opName eq 'view' ) {
 	    $statViews{$webName}++;
-	    # Pick up the topic name - should be in this log entry
-	    $line =~ /^\|[^\|]*\| ([A-Za-z0-9]+\.[A-Za-z0-9]+) \| ([A-Za-z0-9]+) \| ([A-Za-z0-9]+)\.([A-Za-z0-9]+) /o;
+	    # Pick up the topic name 
+	    $line =~ /^\|[^\|]*\| ([a-z0-9]+\.[a-z0-9]+) \| ([a-z0-9]+) \| ([a-z0-9]+)\.([a-z0-9]+) /io;
 	    $topicName = $4;
 	    $view{$webName}{$topicName}++;
 	} elsif ($opName eq 'save' ) {
@@ -278,6 +282,17 @@ sub collectLogData
 	} elsif ($opName eq 'upload' ) {
 	    $statUploads{$webName}++;
 	    $logContrib = 1;
+	} elsif ($opName eq 'rename' ) {
+	    # Pick up the old and new topic names
+	    $line =~ /^\|[^\|]*\| ([a-z0-9]+\.[a-z0-9]+) \| ([a-z0-9]+) \| ([a-z0-9]+)\.([a-z0-9]+) \| moved to ([a-z0-9]+)\.([a-z0-9]+) /io;
+	    $topicName = $4;
+	    $newTopicWeb = $5;
+	    $newTopicName = $6;
+	    ## TWiki::writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
+	    # Transfer view stats so far to new topic, or zero if not viewed
+	    # this month.
+	    $view{$newTopicWeb}{$newTopicName} = $view{$webName}{$topicName} || 0;
+	    delete $view{$webName}{$topicName};
 	}
 	# Record saves and uploads
 	if ($logContrib) {
