@@ -119,7 +119,7 @@ sub outsidePREHandler
     # do custom extension rule, like for example:
     # $_[0] =~ s/old/new/go;
 
-    # render depreciated *_text_* as "bold italic" text:
+    # render deprecated *_text_* as "bold italic" text:
     $_[0] =~ s/(^|\s)\*_([^\s].*?[^\s])_\*(\s|$)/$1<strong><em>$2<\/em><\/strong>$3/go;
 
     # Use alternate %Web:WikiName% syntax (versus the standard Web.WikiName).

@@ -40,7 +40,6 @@ BEGIN {
     # Do a dynamic 'use locale' for this module
     if( $TWiki::useLocale ) {
         require locale;
-        import locale ();
     }
 }
 
