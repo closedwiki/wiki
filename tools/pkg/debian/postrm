@@ -30,9 +30,9 @@ case "$1" in
 		fi
 	done
 
-	if [ -e /usr/sbin/apachectl ]; then
-		/usr/sbin/apachectl restart
-	fi
+#	if [ -e /usr/sbin/apachectl ]; then
+#		/usr/sbin/apachectl restart
+#	fi
         ;;
 
     *)
