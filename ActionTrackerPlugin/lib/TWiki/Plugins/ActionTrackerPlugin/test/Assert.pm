@@ -31,6 +31,7 @@ use integer;
     $re =~ s/\]/\\]/go;
     $re =~ s/\^/\\^/go;
     $re =~ s/\$/\\\$/go;
+    $re =~ s/\|/\\|/go;
     return $re;
   }
 
@@ -49,46 +50,67 @@ use integer;
     return $re;
   }
 
-  sub assertMismatch {
-    my ($file,$line,$test,$expected) = @_;
+  sub _assertMismatch {
+    my ($file,$line,$cond,$saw,$exp) = @_;
+
+    if ($cond) {
+      print "Passed line $line\n" if ( $debug );
+      return 1;
+    }
 
     # Would like to do this by extracting subexpressions from the re and
     # matching them, and keep adding subexpressions until there's
     # a match, but it's too complicated. Just rely on a visual match
-    # (after all, this *is* for test, and shouldn't fail often!)
+    # (after all, this *is* for saw, and shouldn't fail often!)
 
     # find the first mismatched character
-    my $i = 1;
-    while ($i < length($test) && $i < length($expected)) {
-      my $ts = substr($test, 0, $i);
-      my $es = substr($expected, 0, $i);
-      if ($ts ne $es) {
-	my $rest = substr($test, $i, length($test));
-	$rest = substr($rest, 0, 10) . "....";
-	assert($file,$line, 0,
-	       "\nsaw      \"$ts***** Maybe here *****$rest\"\nexpected \"$expected\"");
+    my $i = 0;
+    while ($i < length($saw) && $i < length($exp)) {
+      my $sawCh = substr($saw, $i, 1);
+      my $expCh = substr($exp, $i, 1);
+      if ($sawCh ne $expCh) {
+	my $beforeSaw = substr($saw, 0, $i);
+	if (length($beforeSaw) > 30) {
+	  $beforeSaw = "....".substr($beforeSaw,length($beforeSaw)-30);
+	}
+
+	my $afterSaw = substr($saw, $i, length($saw));
+	if (length($afterSaw) > 30) {
+	  $afterSaw = substr($afterSaw, 0, 30) . "....";
+	}
+
+	my $beforeExp = substr($exp, 0, $i);
+	if (length($beforeExp) > 30) {
+	  $beforeExp = "....".substr($beforeExp,length($beforeExp)-30);
+	}
+
+	my $afterExp = substr($exp, $i, length($exp));
+	if (length($afterExp) > 30) {
+	  $afterExp = substr($afterExp, 0, 30) . "....";
+	}
+	assert($file, $line, 0,
+	       "\nsaw      \"$beforeSaw***** HERE->$afterSaw\"".
+	       "\nexpected \"$beforeExp***** HERE->$afterExp\"");
       }
       $i++;
     }
-    assert($file,$line, 0, "\nsaw      \"$test\"\nexpected \"$expected\"");
+    return 1;
   }
 
   sub sContains {
     my ($file,$line,$test,$expected) = @_;
     my $re = unregex($expected);
-    if ($test !~ m/$re/s) {
-      assert($file,$line, 0,
-	     "\nsaw      \"$test\"\nsContains\"$expected\"" );
-    }
+    my $pass = $test =~ m/$re/s ? 1 : 0;
+    assert($file,$line, $pass,
+	   "\nsaw      \"$test\"\nsContains\"$expected\"" );
     return 1;
   }
   
   sub sEquals {
     my ($file,$line,$test,$expected) = @_;
     my $re = unregex($expected);
-    if ($test !~ m/^$re$/s) {
-      assertMismatch($file,$line, $test, $expected);
-    }
+    my $pass = $test =~ m/^$re$/s ? 1 : 0;
+    _assertMismatch($file,$line, $test, $expected);
     return 1;
   }
 
@@ -96,10 +118,9 @@ use integer;
     my ($file,$line,$test,$expected) = @_;
     my $re = unhtml($expected);
 
-    if ($test !~ m/$re/s) {
-      assert($file,$line, 0,
-	     "\nsaw      \"$test\"\nnContains\"$expected\"");
-    }
+    my $pass = $test =~ m/$re/s ? 1 : 0;
+    assert($file,$line, $pass,
+	   "\n$test\n*********failed htmlContains\n$expected");
     return 1;
   }
   
@@ -107,15 +128,15 @@ use integer;
     my ($file,$line,$test,$expected) = @_;
     my $re = unhtml($expected);
 
-    if ($test !~ m/^$re$/s) {
-      assertMismatch($file,$line, $test, $expected);
-    }
+    my $pass = ($test =~ m/^$re$/s ? 1 : 0);
+    _assertMismatch($file,$line, $pass, $test, $expected);
     return 1;
   }
 
   sub equals {
     my ($file,$line,$test,$expected) = @_;
-    assert($file,$line, $test == $expected, "saw $test expected $expected");
+    my $pass = ($test == $expected);
+    assert($file,$line, $pass, "saw $test expected $expected");
   }
 
   sub fileContains {

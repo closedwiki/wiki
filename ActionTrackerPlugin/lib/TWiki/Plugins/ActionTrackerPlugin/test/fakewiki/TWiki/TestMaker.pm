@@ -3,12 +3,37 @@
 
 { package TWiki::TestMaker;
 
+  use vars qw ( %prefs );
+
   my $pwd = undef;
 
   sub init {
+    my $plugin = shift;
     $pwd = `pwd`;
     chop($pwd);
     purge();
+    setPreferencesValue("WIKITOOLNAME","mailsender");
+    setPreferencesValue("WIKIWEBMASTER","wikiwebmaster");
+    setPreferencesValue("SCRIPTSUFFIX",".cgi");
+    setPreferencesValue("SCRIPTURLPATH","scripturl");
+    loadPreferencesFor($plugin);
+  }
+
+  sub setPreferencesValue {
+    my ($thing, $val) = @_;
+    $prefs{$thing}=$val;
+  }
+
+  sub loadPreferencesFor {
+    my $plugin = shift;
+    my $ucw = uc($plugin);
+    open PF,"<".TWiki::TestMaker::pwd()."/../../../../../data/TWiki/$plugin.txt";
+    while (<PF>) {
+      if ($_ =~ /^\s+\* Set (\w+) = ([^\r\n]+)/o) {
+	$prefs{"${ucw}_$1"} = $2;_
+      }
+    }
+    close PF;
   }
 
   sub pwd {

@@ -10,9 +10,10 @@ use Assert;
 use TWiki::TestMaker;
 use TWiki::Func;
 
-Action::forceTime(Time::ParseDate::parsedate("2 Jan 2002"));
 #Assert::showProgress();
-TWiki::TestMaker::init();
+
+Action::forceTime(Time::ParseDate::parsedate("2 Jan 2002"));
+TWiki::TestMaker::init("ActionTrackerPlugin");
 
 TWiki::TestMaker::writeTopic("Test", "Topic1", "
 %ACTION{who=Main.Sam,due=\"1 Jan 02\",open}% A0: Sam_open_late");
@@ -44,54 +45,50 @@ TWiki::TestMaker::writeTopic("Main", "TheWholeBunch", "
 
 $notify = {};
 ActionNotify::_gatherNotablesFromWeb("Main", $notify );
-Assert::assert(__FILE__,__LINE__, $notify->{"Sam"} eq "sam\@sesame.street.com");
+Assert::sEquals(__FILE__,__LINE__, $notify->{"Sam"}, "sam\@sesame.street.com");
 
 $notify = {};
 ActionNotify::_gatherNotablesFromWeb("Test", $notify );
-Assert::assert(__FILE__,__LINE__, $notify->{"Fred"} eq "fred\@sesame.street.com");
+Assert::sEquals(__FILE__,__LINE__, $notify->{"Fred"}, "fred\@sesame.street.com");
 
 $notify = {};
 ActionNotify::_gatherNotables($notify);
-Assert::assert(__FILE__,__LINE__, $notify->{"Sam"} eq "sam\@sesame.street.com");
-Assert::assert(__FILE__,__LINE__, $notify->{"Fred"} eq "fred\@sesame.street.com");
+Assert::sEquals(__FILE__,__LINE__, $notify->{"Sam"}, "sam\@sesame.street.com");
+Assert::sEquals(__FILE__,__LINE__, $notify->{"Fred"}, "fred\@sesame.street.com");
 
 $address = ActionNotify::_getMailAddress("Fred", $notify);
-Assert::assert(__FILE__,__LINE__, $address eq "fred\@sesame.street.com");
+Assert::sEquals(__FILE__,__LINE__, $address, "fred\@sesame.street.com");
 $address = ActionNotify::_getMailAddress("Sam", $notify);
-Assert::assert(__FILE__,__LINE__, $address eq "sam\@sesame.street.com");
+Assert::sEquals(__FILE__,__LINE__, $address, "sam\@sesame.street.com");
 $address = ActionNotify::_getMailAddress("Joe", $notify);
-Assert::assert(__FILE__,__LINE__, $address eq "joe\@sesame.street.com");
+Assert::sEquals(__FILE__,__LINE__, $address, "joe\@sesame.street.com");
 $address = ActionNotify::_getMailAddress("TheWholeBunch", $notify);
-Assert::assert(__FILE__,__LINE__, $address eq 
+Assert::sEquals(__FILE__,__LINE__, $address, 
 "joe\@sesame.street.com,fred\@sesame.street.com,sam\@sesame.street.com,gunga-din\@war_lords-home.ind");
 
 # Do the whole shebang; the output generation is rather dependent on the
 # correct format of the template, however...
-ActionNotify::actionNotify( "state=late" );
-Assert::assert(__FILE__,__LINE__, scalar(@TWiki::Net::sent) == 3);
+ActionNotify::actionNotify( "late" );
+Assert::equals(__FILE__,__LINE__, scalar(@TWiki::Net::sent), 3);
 $html = shift(@TWiki::Net::sent);
-Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
+Assert::sContains(__FILE__,__LINE__, $html, "From: mailsender");
 Assert::sContains(__FILE__,__LINE__, $html, "To: joe\@sesame.street.com,fred\@sesame.street.com,sam\@sesame.street.com,gunga-din\@war_lords-home.ind");
-Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on PREFS(WIKITOOLNAME)");
-Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border>
-<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
-<tr valign=\"top\"><td> Main.TheWholeBunch </td><td bgcolor=\"$Action::latecol\"> Mon, 29 Jan 2001 </td><td> [[Main.Topic2#AcTion2][ A4: Joe_open_ontime ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Main/Topic2?action=2\">edit</a></td></tr></table>");
+Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on mailsender");
+Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border><tr bgcolor=\"$Action::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.TheWholeBunch </td><td bgcolor=\"$Action::latecol\"> Mon, 29 Jan 2001 (LATE) </td><td>[[Main.Topic2#AcTion2][A4: Joe_open_ontime]] </td><td> open </td><td> <a href=\"scripturl/edit.cgi/Main/Topic2?skin=action&action=AcTion2\">edit</a> </td></tr></table>");
+Assert::sContains(__FILE__,__LINE__, $html, "Action for Main.TheWholeBunch, due Mon, 29 Jan 2001 (LATE), open");
 $html = shift(@TWiki::Net::sent);
-Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
+Assert::sContains(__FILE__,__LINE__, $html, "From: mailsender");
 Assert::sContains(__FILE__,__LINE__, $html, "To: sam\@sesame.street.com");
-Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on PREFS(WIKITOOLNAME)");
-Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border>
-<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
-<tr valign=\"top\"><td> Main.Sam </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 </td><td> [[Test.Topic1#AcTion0][ A0: Sam_open_late ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/Topic1?action=0\">edit</a></td></tr>
+Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on mailsender");
+Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border><tr bgcolor=\"$Action::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.Sam </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 (LATE) </td><td> [[Test.Topic1#AcTion0][A0: Sam_open_late]] </td><td> open </td><td> <a href=\"scripturl/edit.cgi/Test/Topic1?skin=action&action=AcTion0\">edit</a> </td></tr>
 </table>");
 $html = shift(@TWiki::Net::sent);
-Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
+Assert::sContains(__FILE__,__LINE__, $html, "From: mailsender");
 Assert::sContains(__FILE__,__LINE__, $html, "To: fred\@sesame.street.com");
-Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on PREFS(WIKITOOLNAME)");
-Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border>
-<tr bgcolor=\"$Action::hdrcol\"><th>Assignee</th><th>Due date</th><th>Description</th><th>State</th><th>&nbsp;</th></tr>
-<tr valign=\"top\"><td> Main.Fred </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 </td><td> [[Test.Topic2#AcTion0][ A1: Fred_open_ontime ]] </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/Topic2?action=0\">edit</a></td></tr>
+Assert::sContains(__FILE__,__LINE__, $html, "Subject: Outstanding actions on mailsender");
+Assert::htmlContains(__FILE__,__LINE__, $html, "<table border=$Action::border><tr bgcolor=\"$Action::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th>&nbsp;</th></tr><tr valign=\"top\"><td> Main.Fred </td><td bgcolor=\"$Action::latecol\"> Tue, 1 Jan 2002 (LATE) </td><td> [[Test.Topic2#AcTion0][A1: Fred_open_ontime]] </td><td> open </td><td> <a href=\"scripturl/edit.cgi/Test/Topic2?skin=action&action=AcTion0\">edit</a> </td></tr>
 </table>");
+Assert::sContains(__FILE__,__LINE__, $html, "Action for Main.Fred, due Tue, 1 Jan 2002 (LATE), open");
 
 # Action changes are hard to fake because the RCS files are not there.
 TWiki::TestMaker::writeRcsTopic("Test", "ActionChanged", "head	1.2;
@@ -143,18 +140,23 @@ a3 3
 \@
 ");
 ActionNotify::actionNotify( "changedsince=\"1 dec 2001\"" );
+Assert::equals(__FILE__,__LINE__, scalar(@TWiki::Net::sent), 2);
 $html = shift(@TWiki::Net::sent);
-Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
+Assert::sContains(__FILE__,__LINE__, $html, "From: mailsender");
 Assert::sContains(__FILE__,__LINE__, $html, "To: Mowgli\@there.com");
-Assert::sContains(__FILE__,__LINE__, $html, "Subject: Changed actions on PREFS(WIKITOOLNAME)");
-Assert::sContains(__FILE__,__LINE__, $html, "Actions that have changed since Sat Dec  1 00:00:00 2001");
-Assert::htmlContains(__FILE__,__LINE__, $html, "<table><td> Main.RikkiTikkiTavi </td><td bgcolor=\"yellow\"> Sun, 22 Jul 2001 </td><td> [[Test.ActionChanged#AcTion2][  Text change from original ]]  </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/ActionChanged?action=2\">edit</a></td></table>Text appended ... from original");
+Assert::sContains(__FILE__,__LINE__, $html, "Subject: Changes to actions on mailsender");
+Assert::sContains(__FILE__,__LINE__, $html, "Changes to actions since Sat Dec  1 00:00:00 2001");
+Assert::htmlContains(__FILE__,__LINE__, $html, "<tr><td>text</td><td> Text change</td><td> Text change from original</td></tr>");
+Assert::sContains(__FILE__,__LINE__, $html, "Action for Main.RikkiTikkiTavi, due Sun, 22 Jul 2001 (LATE), open\n");
+Assert::sContains(__FILE__,__LINE__, $html, "Attribute \"text\" changed, was \"Text change\", now \"Text change from original\"");
+
 $html = shift(@TWiki::Net::sent);
-Assert::sContains(__FILE__,__LINE__, $html, "From: PREFS(WIKIWEBMASTER)");
+Assert::sContains(__FILE__,__LINE__, $html, "From: mailsender");
 Assert::sContains(__FILE__,__LINE__, $html, "To: RikkiTikkiTavi\@here.com");
-Assert::sContains(__FILE__,__LINE__, $html, "Subject: Changed actions on PREFS(WIKITOOLNAME)");
-Assert::sContains(__FILE__,__LINE__, $html, "Actions that have changed since Sat Dec  1 00:00:00 2001");
-Assert::htmlContains(__FILE__,__LINE__, $html, "<table><td> Main.Mowgli </td><td> Sat, 22 Jun 2002 </td><td> [[Test.ActionChanged#AcTion0][  Date change ]]  </td><td> open </td><td><A href=\"PREFS(SCRIPTURLPATH)/editactionPREFS(SCRIPTSUFFIX)/Test/ActionChanged?action=0\">edit</a></td></table>	*Due date changed from *Fri, 22 Jun 2001* to *Sat, 22 Jun 2002*");
+Assert::sContains(__FILE__,__LINE__, $html, "Subject: Changes to actions on mailsender");
+Assert::sContains(__FILE__,__LINE__, $html, "Changes to actions since Sat Dec  1 00:00:00 2001");
+Assert::htmlContains(__FILE__,__LINE__, $html, "<table><td> Main.Mowgli </td>");
+Assert::htmlContains(__FILE__,__LINE__, $html, "<tr><td>due</td><td>Fri, 22 Jun 2001 (LATE)</td><td>Sat, 22 Jun 2002</td></tr>");
 
 1;
 

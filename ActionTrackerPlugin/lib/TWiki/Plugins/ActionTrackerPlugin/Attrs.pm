@@ -28,15 +28,15 @@ use integer;
 
     if (defined($string)) {
       # name="value" pairs
-      while ($string =~ s/([a-z]+)\s*=\s*\"([^\"]*)\"//o) {
+      while ($string =~ s/([a-z]\w+)\s*=\s*\"([^\"]*)\"//io) {
         $this->{$1} = $2;
       }
       # name=value pairs
-      while ($string =~ s/([a-z]+)\s*=\s*([^\s,\}]*)//o) {
+      while ($string =~ s/([a-z]\w+)\s*=\s*([^\s,\}]*)//io) {
         $this->{$1} = $2;
       }
       # simple name with no value (boolean)
-      while ($string =~ s/([a-z]+)//o) {
+      while ($string =~ s/([a-z]\w+)\b//o) {
         $this->{$1} = "on";
       }
     }

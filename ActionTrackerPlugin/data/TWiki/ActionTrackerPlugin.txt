@@ -1,9 +1,11 @@
 %META:TOPICINFO{author="pthoeny" date="1026518625" format="1.0" version="1.7"}%
----++ Action Tracker Plugin
+---++!! Action Tracker Plugin
 
-This plugin provides support for action tracking and notification in meeting minutes. It can also be used for private reminders, for example TODO lists and diary entries.
+This plugin provides support for action tracking and notification in meeting minutes. It can also be used for private reminders, for example TODO lists and diary entries. _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
 
----+++ Features
+%TOC%
+
+---++ Features
 
 	* Action tags may be added to TWiki topics that will be displayed formatted in-line.
 	* Actions in a web can also be listed using searches.
@@ -14,15 +16,27 @@ This plugin provides support for action tracking and notification in meeting min
 
 ---+++ Actions
 
-Write the command =%<nop>ACTION{ attributes }%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description. Supported attributes are
+Write the command =%<nop>ACTION{ attributes }%= anywhere in a TWiki topic. All the text following the final % up to the next end-of-line is taken as the action description. Standard attributes are
 	| *Name* | *Value* | *Description* |
-	| who | a wiki name, or an e-mail address | The person or team responsible for completing the action |
-	| due | A valid date as understood by Time::ParseDate | The due date |
-	| state | "open" or "closed" | Set to "open" if the action is still open;<br />Set to "closed" if the action is closed |
-	| notify | A comma-separated list | wiki names, or e-mail addresses, of people to notify when the date, state or text of the action changes. |
+	| =who= | a wiki name, or an e-mail address | The person or team responsible for completing the action |
+	| =due= | A valid date as understood by Time::ParseDate | The due date |
+	| =state= | "open" or "closed" | Set to "open" if the action is still open;<br />Set to "closed" if the action is closed |
+	| =notify= | A comma-separated list | wiki names, or e-mail addresses, of people to notify when the date, state or text of the action changes. |
+	| =creator= | Who created the action. |
+	| =created= | Date the action was created |
+	| =closed= | Date the action was closed, if ever, and who closed it |
+	| =uid= | Unique ID of the action (auto-generated) |
 For example,
 <pre>
 %<nop>ACTION{ who="TWikiGuest" due="2 Jan 2004" state="open" notify="AttillaTheHun" }% An action for TWikiGuest
+</pre>
+The fields =who=, =creator=, =created=, =closed= and =uid= are auto-generated when you first save the topic containing the action. =who= and =creator= default to the name of the person doing the saving. You can override this behaviour by providing values for any of these attributes when you type the action.
+
+#ArbitraryAttributes
+---++++ Arbitrary Attributes
+As well as the standard attributes you can add arbitrary non-standard attributes to actions, and use them in searches. For example:
+<pre>
+%<nop>ACTION{ who="EmperorHadrian" due="1 Jan 0053" state="closed" legion="7th" cohort="6th" maniple="3rd" }% Build a wall to keep the Scots out of England
 </pre>
 
 #DateFormats
@@ -47,14 +61,17 @@ You are *strongly* recommended never to use the 'mm/dd/yyyy or mm/dd/yyyy' forma
 
 ---+++ Action searches
 
-Write the command =%<nop>ACTIONSEARCH{ attributes }%= anywhere in a TWiki topic. Supported attributes are
+Write the command =%<nop>ACTIONSEARCH{ attributes }%= anywhere in a TWiki topic. Standard attributes are
 	| *Name* | *Value* | *Description* |
 	| who | a wiki name or an e-mail address, or 'me' for the currently logged-in user (this is 'TWikiGuest' unless you have been prompted for a username and password) | The name of the person responsible |
+	| notify | same as =who= | Persons who want to be notified of a change |
 	| state | "late", "open" or "closed" | Set to "late" to search for late actions;<br /> Set to "open" to search for open actions;<br /> Set to "closed" to search for closed actions |
 	| within | a number of days | Search for actions that are within a number of days of their due date |
 	| web | Perl regular expression | A regular expression that matches the names of all the webs to search. If this attribute is omitted, the default is to search only the current web. Searching many webs is much slower, especially in a large installation. Webs marked NOSEARCHALL will not be searched. | 
 	| topic | Perl regular expression | A regular expression that matches the names of all the topics to search. If this attribute is omitted, the default is to search all the topics in the selected webs. | 
-
+	| format | Presentation format | See #FormattingActions |
+	| header | Presentation format | See #FormattingActions |
+	| sort | Comma-separated list of field names to sort the matched actions by. For example, <code>sort="$who,$due"</code> will sort by who first and then due. This field is optional; by default the table will be sorted by due date. |
 For example,
 <pre>
 %<nop>ACTIONSEARCH{ who="me" state="late" }%
@@ -62,18 +79,61 @@ For example,
 %<nop>ACTIONSEARCH{ web=".*" who="Genghis.Khan@mongol.empire.org" state="open" within="7" }%
 </pre>
 
+---++++ Searching arbitrary attributes
+You can of course search for values of arbitrary attributes (see #ArbitraryAttributes above). For example:
+<pre>
+%<nop>ACTIONSEARCH{ legion="7th" state="closed" }%
+</pre>
+The search expression for arbitrary attributes is always a perl regular expression, so you can search for the actions of all the legions:
+<pre>
+%<nop>ACTIONSEARCH{ legion="[0-9]+th" state="closed" }%
+</pre>
+
 #QueryByExample
----+++ Query-by-example action search
+---++++ Query-by-example action search
 
 <form name="searchaction" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%#QueryByExample">
 |  Who: | <input type="text" name="qwho" value="%URLPARAM{"qwho"}%" size="20" /> |
+|  Notify: | <input type="text" name="qnotify" value="%URLPARAM{"qnotify"}%" size="20" /> |
 |  State: | <select name="qstate"> <option>%URLPARAM{"qstate"}%</option> <option>open</option> <option>late</option> <option>closed</option> <option></option> </select> |
 |  Within: | <input type="text" name="qwithin" value="%URLPARAM{"qwithin"}%" size="3" /> days |
 |  Web: | <input type="text" name="qweb" value="%URLPARAM{"qweb"}%" size="20" /> |
 |  Topic: | <input type="text" name="qtopic" value="%URLPARAM{"qtopic"}%" size="20" /> |
 | | <input type="submit" value="Go" /> |
 </form>
-%ACTIONSEARCH{ who="%URLPARAM{"qwho"}%" state="%URLPARAM{"qstate"}%" within="%URLPARAM{"qwithin"}%" web="%URLPARAM{"qweb"}%" topic="%URLPARAM{"qtopic"}%" }%
+%ACTIONSEARCH{ who="%URLPARAM{"qwho"}%" notify="%URLPARAM{"qnotify"}%" state="%URLPARAM{"qstate"}%" within="%URLPARAM{"qwithin"}%" web="%URLPARAM{"qweb"}%" topic="%URLPARAM{"qtopic"}%" }%
+
+---+++ Formatting actions
+#FormattingActions
+The =header= and =format= parameters support formatting of the action table using a similar syntax to that described in %TWIKIWEB%.FormattedSearch.
+
+| *Name:* | *Expands To:* |
+| =$who= | Who is responsible for the action |
+| =$due= | When the action is due |
+| =$state= | Current state of the action (see also note below) |
+| =$notify= | Who to notify when the action state changes |
+| =$closed= | When the action was closed, and who closed it |
+| =$creator= | Who created the action |
+| =$created= | When the action was created |
+| =$edit= | A link to the action editor for this action |
+| =$uid= | Unique identifier for the action |
+| =$web= | Name of the web containing the action |
+| =$topic= | Topic name containing the action |
+| =$text= | Formatted action text |
+| =$n= or =$n()= | New line |
+| =$nop= or =$nop()= | Is a "no operation". This variable gets removed; useful for nested search |
+| =$quot= | Double quote (="=). Alternatively write =\"= to escape it |
+| =$percnt= | Percent sign (=%=) |
+| =$dollar= | Dollar sign (=$=) |
+
+__Note:__ the =state= field is automatically formatted with closure information if the action is closed e.g. "closed 1-Mar-2003 by Mad<nop>March<nop>Hare". The default format can be defined in this topic; see #Settings, below.
+
+A default format for actions and action search results can be defined in this topic or the Web<nop>Preferences topic of the current web. See #Settings for more details.
+
+Arbitrary attributes (see #ArbitraryAttributes above) can be inserted using the same syntax; for example,
+<pre>
+%<nop>ACTIONSEARCH{ legion="[0-9]+th" state="closed" format="|$cohort|$maniple|$text|"}%
+</pre>
 
 ---+++ Assigning actions to groups
 
@@ -112,7 +172,7 @@ The =actionnotify= script interprets its parameters as a search expression of th
 	4 Actions that are still open within thirty days of their due date will be notified once a week, at midnight on monday.
 A rather aggressive schedule!
 
-(__Note:__ Here at Wind River we notify folks twice a week (Mon &amp; Wed) for open action items due within 8 days.Crontab entry for geeks:  <br /><font size="-2"> =0 0 * * 1,3 (cd /twiki1/httpd/twiki-bin; ./actionnotify state=open within=8 'web=<nop>[CEIMPSW].*' &gt; /twiki1/httpd/htdocs/pub/actionnotify.txt 2&gt;&amp;1)= </font> <br />-- Main.PeterThoeny)
+__Note:__ At Wind River they notify folks three times a week on Mon, Wed and Fri for open action items due within 8 days. <br /><font size="-2">Crontab entry for geeks: =0 0 * * 1,3,5 (cd /twiki1/httpd/twiki-bin; ./actionnotify state=open within=8 'web=<nop>[CEIMPSW].*' &gt; /twiki1/httpd/htdocs/pub/actionnotify.txt 2&gt;&amp;1)= </font>
 
 The wiki name of the user to be notified is translated to a mail address according to the following rules:
 	* If they are listed in WebNotify *in any web*, the mail address given there is used.
@@ -145,18 +205,28 @@ will notify registered users of action changes that occurred in the last 24 hour
 Not all action changes get notified; only changes to the action state, or changes to the text of the action (usually additions) get notified. For example, if the person responsible for the action is changed, or its due date, then no notification is generated.
 
 ---++ <nop>%TOPIC% Settings
+#Settings
 	* One line description, shown in the TextFormattingRules topic
 		* Set SHORTDESCRIPTION = Adds support for action tags in topics, and automatic notification of action statii
-	* Debug; output in data/debug.txt
-		* Set DEBUG = 0
-	* Set to 1 to encourage the browser to edit an action in a separate browser window (requires JavaScript)
+	* The format of an action output. The following fields can be output: web, topic, text, who, due, notify, uid, creator, state, edit. FORMAT defines the contents of the columns, HEADER defines the column headings. These settings can be overridden in the Web<nop>Preferences topic of the current web (by defining ACTIONTRACKERPLUGIN_HEADER and ACTIONTRACKERPLUGIN_FORMAT) or in an ACTIONSEARCH command.
+		* Set TABLEHEADER = | Assigned to | Due date | Description | State ||
+		* Set TABLEFORMAT = | $who | $due | $text | $state | $edit |
+		* Set TEXTFORMAT = Action for $who, due $due, $state$n$text
+	* If set to 1 will edit an action in a separate browser window (requires <nop>JavaScript)
 		* Set USENEWWINDOW = 1
 	* Set the width of the action text edit box
 		* Set EDITBOXWIDTH = 79
 	* Set the height of the action text edit box
 		* Set EDITBOXHEIGHT = 5
-
+	* If set to 1, action edits will offer a 'Save Changes' instead of the usual 'Preview Changes' button. If this is set along with the USENEWWINDOW parameter, the subwindow will close on save.
+		* Set NOPREVIEW = 1
+	* The command to use to recover revision info. This is only required if you want to use actionnotify with the 'changedsince' parameter, and must be the command used to find out the revision number of a topic (in standard RCS format) at a given date. The response is searched to find the string "revision x.y" where x.y was the revision at the given date.
+		* Set LOGCMD = /usr/bin/rlog -d'%DATE%' %FILENAME%
+	* The fields to scan to detect changes for actionnotify. Changes in other fields are ignored.
+		* Set NOTIFYCHANGES = $due,$state,$text
 ---++ Plugin Installation Instructions
+
+__Note:__ These instructions are for the TWiki maintainer. No changes to your browser are required.
 
 	* Make sure you have Time::ParseDate installed in your perl installation (available from www.cpan.org)
 	* Download the ZIP file from the Plugin web (see below). Contents:
@@ -165,23 +235,27 @@ Not all action changes get notified; only changes to the action state, or change
 	| ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	| ==bin/actionnotify== | Mailer script |
 	| ==bin/editaction== | Action editor |
-	| ==bin/previewaction== | Edit preview script |
 	| ==templates/actionnotify.tmpl== | Page template for notify |
 	| ==templates/actionchangenotify.tmpl== | Page template for change notify |
-	| ==templates/editaction.tmpl== | Edit page template |
+	| ==templates/editaction.tmpl== | Action editor page template |
 	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	| ==lib/TWiki/Plugins/%TOPIC%/Action.pm== | Perl support module |
 	| ==lib/TWiki/Plugins/%TOPIC%/ActionNotify.pm== | Perl support module |
 	| ==lib/TWiki/Plugins/%TOPIC%/ActionSet.pm== | Perl support module |
 	| ==lib/TWiki/Plugins/%TOPIC%/Attrs.pm== | Perl support module |
+	| ==lib/TWiki/Plugins/%TOPIC%/Bin.pm== | Perl support module |
 	| ==lib/TWiki/Plugins/%TOPIC%/test.zip== | Test scripts |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
 	* If the plugin is installed and enabled correctly you should see a formatted action below: %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
 
----+++ Known issues
+---++ %RED%Known Issues%ENDCOLOR%
 
----++++ Behaviour of egrep
+---+++ Corruption of action items with Mozilla browser
+Action lines are joined together if edited by a Mozilla browser, resulting in an odd display.
+	* Work-around: Edit the topic ("Edit" at the bottom of the page, not the "edit" of the ActionTrackerPlugin) and add a new line to the =%<nop>ACTION{...}%=. Basically, each =%<nop>ACTION{...}%= needs to be on its own line. 
+
+---+++ Behaviour of egrep
 
 The output of the =$egrepCmd= in TWiki.cfg (with no switches) must be of the form:
 	<pre>
@@ -189,15 +263,17 @@ The output of the =$egrepCmd= in TWiki.cfg (with no switches) must be of the for
 	</pre>
 	While this is true for all UNIX grep implementations, it may be a potential issue for other operating systems.
 
----+++ Plugin Info
+---++ Plugin Info
 
-|  Plugin Author: | Main.CrawfordCurrie |
-|  Plugin Version: | 1.1 |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie |
+|  Plugin Version: | 2.0 |
 |  Change History: | 4 Jan 2002: Initial version |
 |			| 9 Jan 2002: Bugfix version |
 |			| 11 Jan 2002: Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
 |			| 14 Feb 2002: Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
 |			| 26 Sep 2002: Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
+|			| 30 Jan 2003: Query-by-example action search with notify field; notfication of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
+			| 30 Apr 2003: Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support. Added UIDs and formattable action searches |
 |  CPAN Dependencies: | Time::ParseDate |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -205,17 +281,17 @@ The output of the =$egrepCmd= in TWiki.cfg (with no switches) must be of the for
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
----++++ Further development
+---+++ Further development
 
 Further development of this code is welcomed. It is recommended that you unpack the distribution into a development directory and use the supplied Ant (http://jakarta.apache.org) build file which provides targets to run the test suite, and install and uninstall your development code into a test installation.
 
----++++ Copyright
+---+++ Copyright
 
 This code is a development of Motorola Inc. and is protected by the following
 copyrights:
-	* Copyright (C) 2002 Motorola. All Rights Reserved.
+	* Copyright (C) 2002-2003 Motorola. All Rights Reserved.
 
----++++ License
+---+++ License
 
 As required for the publication of all extensions to TWiki, this
 software is published under the terms of the GNU General Public
