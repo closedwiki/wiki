@@ -17,7 +17,7 @@ twiki-cpan :
 	cd cpan ; ./mirror-cpan.pl --twiki `./calc-twiki-deps.pl`
 
 release :
-	wget -nc --http-user=TWikiGuest --http-passwd=guest -O downloads/releases/TWiki20040901.tar.gz http://twiki.org/release/TWiki20040901.tar.gz
+	wget -nc --http-user=TWikiGuest --http-passwd=guest -O downloads/releases/TWiki20040902.tar.gz http://twiki.org/release/TWiki20040902.tar.gz
 
 plugins :
 	bin/download-twiki-plugins.pl 
