@@ -1533,7 +1533,7 @@ sub handleSpacedTopic
 {
     my( $theTopic ) = @_;
     my $spacedTopic = $theTopic;
-    $spacedTopic =~ s/([a-z]+)([A-Z0-9]+)/$1%20*$2/go;   # "%20*" is " *"
+    $spacedTopic =~ s/([a-z]+)([A-Z0-9]+)/$1%20*$2/g;   # "%20*" is " *"
     return $spacedTopic;
 }
 
@@ -2108,13 +2108,17 @@ sub internalLink
 }
 
 # =========================
+# Handle most internal and external links
 sub specificLink
 {
     my( $thePreamble, $theWeb, $theTopic, $theText, $theLink ) = @_;
 
     # format: $thePreamble[[$theText]]
     # format: $thePreamble[[$theLink][$theText]]
+    #
+    # Current page's $theWeb and $theTopic are also used
 
+    # Strip leading/trailing spaces
     $theLink =~ s/^\s*//o;
     $theLink =~ s/\s*$//o;
 
@@ -2125,11 +2129,16 @@ sub specificLink
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
     }
 
+    # Get any 'Web.' prefix, or use current web
     $theLink =~ s/^([A-Z]+[a-z0-9]*|_[a-zA-Z0-9_]+)\.//o;
-    my $web = $1 || $theWeb;            # extract 'Web.'
+    my $web = $1 || $theWeb;
     (my $baz = "foo") =~ s/foo//;       # reset $1, defensive coding
+
+    # Extract '#anchor'
     $theLink =~ s/(\#[a-zA-Z_0-9\-]*$)//o;
-    my $anchor = $1 || "";              # extract '#anchor'
+    my $anchor = $1 || "";
+
+    # Get the topic name
     my $topic = $theLink || $theTopic;  # remaining is topic
     $topic =~ s/\&[a-z]+\;//goi;        # filter out &any; entities
     $topic =~ s/\&\#[0-9]+\;//go;       # filter out &#123; entities
@@ -2360,15 +2369,18 @@ sub getRenderedVersion
 	    # padding, so match name@subdom.dom.
             # '[[mailto:string display text]]' link
             s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)\s+(.*?)\]\]/&mailtoLinkFull( $1, $2, $3, $4 )/geo;
+
 	    # Normal mailto:foo@example.com ('mailto:' part optional)
             s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/geo;
 
 # Make internal links
+	    # Spaced-out Wiki words with alternative link text
             # '[[Web.odd wiki word#anchor][display text]]' link:
             s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/geo;
             # RD 25 Mar 02: Codev.EasierExternalLinking
             # '[[URL#anchor display text]]' link:
             s/\[\[([a-z]+\:\S+)\s+(.*?)\]\]/&specificLink("",$theWeb,$theTopic,$2,$1)/geo;
+	    # Spaced-out Wiki words
             # '[[Web.odd wiki word#anchor]]' link:
             s/\[\[([^\]]+)\]\]/&specificLink("",$theWeb,$theTopic,$1,$1)/geo;
 
@@ -2389,7 +2401,7 @@ sub getRenderedVersion
                 s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]{3,})/&internalLink($1,$2,$3,$3,"",0)/geo;
                 # 'ABBREV' link:
                 s/([\s\(])([A-Z]{3,})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
-                # (depreciated <link> moved to DefaultPlugin)
+                # (deprecated <link> moved to DefaultPlugin)
 
                 s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
             }
