@@ -269,7 +269,9 @@ sub changeRefTo
 {
    my( $text, $oldWeb, $oldTopic ) = @_;
    my $preTopic = '^|[\*\s\[][\(-\s]*';
-   my $postTopic = '$|[^A-Za-z0-9_]';
+   my $postTopic = '$|[^A-Za-z0-9_.]|\.\s';
+   my $metaPreTopic = '"|[\s[,\(-]';
+   my $metaPostTopic = '"|([^A-Za-z0-9_.]|\.\s';
    
    my $out = "";
    
@@ -298,7 +300,11 @@ sub changeRefTo
            # Fairly inefficient, time will tell if this should be changed.
            foreach my $topic ( @topics ) {
               if( $topic ne $oldTopic ) {
-                  s/($preTopic)\Q$topic\E(?=$postTopic)/$1$oldWeb.$topic/g;
+                  if( /^META:/ ) {
+                      s/($metaPreTopic)\Q$topic\E(?=$metaPostTopic)/$1$oldWeb.$topic/g;
+                  } else {
+                      s/($preTopic)\Q$topic\E(?=$postTopic)/$1$oldWeb.$topic/g;
+                  }
               }
            }
        }
@@ -345,11 +351,12 @@ sub renameTopic
          "to"   => "$newWeb.$newTopic",
          "date" => "$time",
          "by"   => "$user" );
-      my( $meta, $text ) = readTopic( $newWeb, $newTopic );
-      $meta->put( "TOPICMOVED", @args );
+      my $fullText = readTopicRaw( $newWeb, $newTopic );
       if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
-         $text = changeRefTo( $text, $oldWeb, $oldTopic );
+         $fullText = changeRefTo( $fullText, $oldWeb, $oldTopic );
       }
+      my ( $meta, $text ) = _extractMetaData( $newWeb, $newTopic, $fullText );
+      $meta->put( "TOPICMOVED", @args );
       saveNew( $newWeb, $newTopic, $text, $meta, "", "", "", "unlock" );
    }
 
