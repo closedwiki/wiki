@@ -1,74 +1,90 @@
 <h3>Documentation of the TWiki Implementation (version %WIKIVERSION%)</h3>
-	* <A href="#login">(1)</A> Wiki Username vs. Login Username
-	* <A href="#access">(2)</A> TWiki Access Control
-	* <A href="#templates">(3)</A> Wiki Templates
-	* <A href="#variables">(4)</A> Wiki Variables
-	* <A href="#notification">(5)</A> Notification of Changes by Email
-	* <A href="#category">(6)</A> TWiki Category Table
-	* <A href="#implementation">(7)</A> Implementation Notes
-	* <A href="#installation">(8)</A> Installation Notes
-	* <A href="#upgrade">(9)</A> Upgrading Earlier Versions of TWiki
+	* <A href="#implementation">(1)</A> Implementation Notes
+	* <A href="#installation">(2)</A> Installation Notes
+	* <A href="#upgrade">(3)</A> Upgrading Earlier Versions of TWiki
+	* <A href="#authentication">(4)</A> TWiki Authentication
+	* <A href="#login">(5)</A> Wiki Username vs. Login Username
+	* <A href="#access">(6)</A> TWiki Access Control
+	* <A href="#templates">(7)</A> Wiki Templates
+	* <A href="#variables">(8)</A> Wiki Variables
+	* <A href="#notification">(9)</A> Notification of Changes by Email
+	* <A href="#category">(10)</A> TWiki Category Table
+	* <A href="#administration">(11)</A> TWiki Administration
 
 Related Topics: TWikiWeb, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests.
 
-<A name="login">
------
-*(1) Wiki Username vs. Login Username*
-
-%INCLUDE{"TWikiUsernameVsLoginUsername"}%
-
-
-<A name="control">
------
-*(2) TWiki Access Control*
-
-%INCLUDE{"TWikiAccessControl"}%
-
-
-<A name="templates">
------
-*(3) Wiki Templates*
-
-%INCLUDE{"TWikiTemplates"}%
-
-
-<A name="variables">
------
-*(4) Wiki Variables*
-
-%INCLUDE{"TWikiVariables"}%
-
-
-<A name="notification">
------
-*(5) Notification of Changes by Email*
-
-%INCLUDE{"TWikiNotificationOfChanges"}%
-
-
-<A name="category">
------
-*(6) TWiki Category Table*
-
-%INCLUDE{"TWikiCategoryTable"}%
-
-
 <A name="implementation">
 -----
-*(7) Implementation Notes*
+*(1) Implementation Notes*
 
-%INCLUDE{"TWikiImplementation"}%
+%INCLUDE{"TWikiImplementationNotes"}%
 
 
 <A name="installation">
 -----
-*(8) Installation Notes*
+*(2) Installation Notes*
 
 %INCLUDE{"TWikiInstallationNotes"}%
 
 
 <A name="upgrade">
 -----
-*(9) Upgrading Earlier Versions of TWiki*
+*(3) Upgrading Earlier Versions of TWiki*
 
 %INCLUDE{"TWikiUpgradeNotes"}%
+
+
+<A name="authentication">
+-----
+*(4) TWiki Authentication*
+
+%INCLUDE{"TWikiAuthentication"}%
+
+
+<A name="login">
+-----
+*(5) Wiki Username vs. Login Username*
+
+%INCLUDE{"TWikiUsernameVsLoginUsername"}%
+
+
+<A name="control">
+-----
+*(6) TWiki Access Control*
+
+%INCLUDE{"TWikiAccessControl"}%
+
+
+<A name="templates">
+-----
+*(7) Wiki Templates*
+
+%INCLUDE{"TWikiTemplates"}%
+
+
+<A name="variables">
+-----
+*(8) Wiki Variables*
+
+%INCLUDE{"TWikiVariables"}%
+
+
+<A name="notification">
+-----
+*(9) Notification of Changes by Email*
+
+%INCLUDE{"TWikiNotificationOfChanges"}%
+
+
+<A name="category">
+-----
+*(10) TWiki Category Table*
+
+%INCLUDE{"TWikiCategoryTable"}%
+
+
+<A name="administration">
+-----
+*(11) TWiki Administration*
+
+%INCLUDE{"TWikiAdministration"}%
