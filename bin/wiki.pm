@@ -73,7 +73,7 @@ use vars qw(
         $mailProgram $wikiversion 
         $doKeepRevIfEditLock $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
-        $doSecureInclude
+        $doHidePasswdInRegistration $doSecureInclude
         $doLogTopicView $doLogTopicEdit $doLogTopicSave
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
@@ -86,7 +86,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Nov 2000";
+$wikiversion      = "03 Nov 2000";
 
 # ===========================
 # read the configuration part
