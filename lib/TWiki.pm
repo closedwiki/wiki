@@ -18,15 +18,6 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Notes:
-# - Latest version at http://twiki.org/
-# - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
-# - Customize variables in TWiki.cfg when installing TWiki.
-# - Optionally create a new plugin or customize DefaultPlugin.pm for
-#   custom rendering rules.
-# - Upgrading TWiki is easy as long as you only customize DefaultPlugin.pm.
-# - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
-
 =begin twiki
 
 ---+ TWiki Package
@@ -76,7 +67,6 @@ use vars qw(
 use vars qw(
             $localeRegexes $siteLocale $siteCharsetOverride
             $upperNational $lowerNational
-            $wikiversion
             $TranslationToken $twikiLibDir
             %regex
             %staticInternalTags
@@ -85,8 +75,7 @@ use vars qw(
             $langAlphabetic $VERSION
            );
 
-$wikiversion = '12 Dec 2004 $Rev$';
-$VERSION = '$Rev:$';
+$VERSION = '$LastChangedDate$ $Rev$';
 
 # SMELL: should this be part of the config?
 $defaultWikiName = "TWikiGuest";
@@ -300,7 +289,7 @@ sub _setupHandlerMaps {
        WIKIPREFSTOPIC  => $wikiPrefsTopicname,
        WIKITOOLNAME    => $wikiToolName,
        WIKIUSERSTOPIC  => $wikiUsersTopicname,
-       WIKIVERSION     => '20 Oct 2004 $Rev$',
+       WIKIVERSION     => $VERSION,
       );
 
     %dynamicInternalTags =
@@ -1252,121 +1241,111 @@ sub _includeUrl {
 # Returns the text to be inserted in place of the INCLUDE command.
 # $topic and $web should be for the immediate parent topic in the
 # include hierarchy. Works for both URLs and absolute server paths.
-# 
-# \@verbatim is a buffer for storing removed verbatim blocks.
-# It is optional.
-# 
-# \%theProcessedTopics is a hash of topics already %<nop>INCLUDE%'ed.
-# These are not allowed to be included again to prevent infinte recursive
-# inclusion. It is optional (will be created on demand).
 sub _handleINCLUDE {
-    my ( $this, $params, $theTopic, $theWeb, $verbatim, $theProcessedTopics ) = @_;
-    my $incfile = $params->{_DEFAULT} || "";
+    my ( $this, $params, $theTopic, $theWeb ) = @_;
+    my $path = $params->{_DEFAULT} || "";
     my $pattern = $params->{pattern};
     my $rev     = $params->{rev};
     my $warn    = $params->{warn};
 
-    if( $incfile =~ /^https?\:/ ) {
+    if( $path =~ /^https?\:/ ) {
         # include web page
-        return $this->_includeUrl( $incfile, $pattern, $theWeb, $theTopic );
+        return $this->_includeUrl( $path, $pattern, $theWeb, $theTopic );
     }
 
-    $theProcessedTopics = {} unless $theProcessedTopics;
-
-    $incfile =~ s/$securityFilter//go;    # zap anything suspicious
+    $path =~ s/$securityFilter//go;    # zap anything suspicious
     if( $doSecureInclude ) {
         # Filter out ".." from filename, this is to
         # prevent includes of "../../file"
-        $incfile =~ s/\.+/\./g;
+        $path =~ s/\.+/\./g;
     } else {
         # danger, could include .htpasswd with relative path
-        $incfile =~ s/passwd//gi;    # filter out passwd filename
+        $path =~ s/passwd//gi;    # filter out passwd filename
     }
 
     my $text = "";
     my $meta = "";
-    my $isTopic = 0;
 
     # test for different topic name and file name patterns
-    my $fileName = "";
-    TRY: {
-        # check for topic
-        $fileName = "$dataDir/$theWeb/$incfile.txt";      # TopicName
-        last TRY if( -e $fileName );
-        my $incwebfile = $incfile;
-        $incwebfile =~ s/\.([^\.]*)$/\/$1/;
-        $fileName = "$dataDir/$incwebfile.txt";           # Web.TopicName
-        last TRY if( -e $fileName );
-        $fileName = "$dataDir/$theWeb/$incfile";          # TopicName.txt
-        last TRY if( -e $fileName );
-        $fileName = "$dataDir/$incfile";                  # Web/TopicName.txt
-        last TRY if( -e $fileName );
+    # TopicName
+    # Web.TopicName
+    # Web/TopicName
+    # TopicName.txt
+    # Web.TopicName.txt
+    # Web/TopicName.txt
+    my $incweb = $theWeb;
+    my $inctopic = $path;
+    $inctopic =~ s/\.txt$//; # strip .txt extension
+    if ( $inctopic =~ /^($regex{webNameRegex})[\.\/]($regex{wikiWordRegex})$/ ) {
+        $incweb = $1;
+        $inctopic = $2;
+    }
 
+    unless( $this->{store}->topicExists($incweb, $inctopic)) {
         # give up, file not found
         $warn = $this->{prefs}->getPreferencesValue( "INCLUDEWARNING" ) unless( $warn );
         if( $warn =~ /^on$/i ) {
-            return _inlineError( "Warning: Can't INCLUDE <nop>$incfile, topic not found" );
+            return _inlineError( "Warning: Can't INCLUDE <nop>$inctopic, topic not found" );
         } elsif( $warn && $warn !~ /^(off|no)$/i ) {
-            $incfile =~ s/\//\./go;
-            $warn =~ s/\$topic/$incfile/go;
+            $inctopic =~ s/\//\./go;
+            $warn =~ s/\$topic/$inctopic/go;
             return $warn;
         } # else fail silently
         return "";
     }
+    $path = "$incweb.$inctopic";
 
-    my $inFile = $fileName;
-
-    # prevent recursive loop
-    if( $theProcessedTopics->{$inFile} ) {
+    # prevent recursive includes. Note that the inclusion of a topic into
+    # itself is not blocked; however subsequent attempts to include the
+    # topic will fail.
+    if( $this->{processingTopic}{$path} ) {
         # file already included
         if( $warn || $this->{prefs}->getPreferencesFlag( "INCLUDEWARNING" ) ) {
             unless( $warn =~ /^(off|no)$/i ) {
-                return _inlineError( "Warning: Can't INCLUDE <nop>$incfile twice, topic is already included" );
+                return _inlineError( "Warning: Can't INCLUDE <nop>$inctopic twice, topic is already included" );
             }
         }
         return "";
     } else {
-        # remember for recursions
-        $theProcessedTopics->{$inFile} = 1;
+        $this->{processingTopic}{$path} = 1;
     }
 
     # set include web/filenames and current web/filenames
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
-    if( $fileName =~ s/\/([^\/]*)\/([^\/]*)\.txt$/$1/ ) {
-        # identified "/Web/TopicName.txt" filename, e.g. a Wiki topic
-        # so save the current web and topic name
-        $theWeb = $1;
-        $theTopic = $2;
-        $isTopic = 1;
 
-        ( $meta, $text ) =
-          $this->{store}->readTopic( $this->{wikiUserName}, $theWeb, $theTopic, $rev, 0 );
+    $theWeb = $incweb;
+    $theTopic = $inctopic;
 
-        # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
-        $text =~ s/.*?%STARTINCLUDE%//s;
-        $text =~ s/%STOPINCLUDE%.*//s;
+    ( $meta, $text ) =
+      $this->{store}->readTopic( $this->{wikiUserName}, $theWeb, $theTopic,
+                                 $rev, 0 );
 
-    } # else is a file with relative path, e.g. $dataDir/../../path/to/non-twiki/file.ext
+    # remove everything before %STARTINCLUDE% and
+    # after %STOPINCLUDE%
+    $text =~ s/.*?%STARTINCLUDE%//s;
+    $text =~ s/%STOPINCLUDE%.*//s;
 
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 
-    # handle all preferences and internal tags
-    $text = $this->{renderer}->takeOutBlocks( $text, "verbatim", $verbatim );
+    # take out verbatims, pushing them into the same storage block
+    # as the including topic so when we do the replacement at
+    # the end they are all there
+    $text = $this->{renderer}->takeOutBlocks( $text, "verbatim",
+                                              $this->{_verbatims} );
 
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
     $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
 
-    $this->_expandAllTags( \$text, $theTopic, $theWeb,
-                        $verbatim, $theProcessedTopics );
+    $this->_expandAllTags( \$text, $theTopic, $theWeb );
 
-    # 4th parameter tells plugin that its called from an include
+    # 4th parameter tells plugin that its called for an included file
     $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 1 );
 
     # If needed, fix all "TopicNames" to "Web.TopicNames" to get the
     # right context
     # SMELL: This is a hack.
-    if( ( $isTopic ) && ( $theWeb ne $this->{webName} ) ) {
+    if( $theWeb ne $this->{webName} ) {
         # "TopicName" to "Web.TopicName"
         $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
         $text =~ s/(^|[\s\(])($regex{wikiWordRegex})/$1$theWeb\.$2/go;
@@ -1379,16 +1358,12 @@ sub _handleINCLUDE {
     }
 
     # handle tags again because of plugin hook
-    $this->_expandAllTags( \$text, $theTopic, $theWeb,
-                        $verbatim, $theProcessedTopics );
+    $this->_expandAllTags( \$text, $theTopic, $theWeb );
 
     $text =~ s/^\n+/\n/;
     $text =~ s/\n+$/\n/;
 
-    # FIXME What about attachments?
-
-    # no longer processing this
-    $theProcessedTopics->{$inFile} = 0;
+    $this->{processingTopic}{$path} = 0;
 
     return $text;
 }
@@ -1871,7 +1846,7 @@ sub _handleURLPARAM {
     }
     $value =~ s/\r?\n/$newLine/go if( $newLine );
     if ( $encode ) {
-	if ( $encode =~ /^entit(y|ies)$/ ) {
+        if ( $encode =~ /^entit(y|ies)$/ ) {
         	$value = entityEncode( $value );
     	} else {
         	$value = _urlEncode( $value );
@@ -2134,7 +2109,7 @@ sub _processTags {
     my $depth = shift;
     my $expanding = shift;
 
-    # my( $topic, $web, $verbatim, $processedTopics ) = @_;
+    # my( $topic, $web ) = @_;
 
     unless ( $depth ) {
         my $mess = "Max recursive depth reached: $expanding";
@@ -2214,7 +2189,7 @@ sub _expandTag {
     my $this = shift;
     my $tag = shift;
     my $args = shift;
-    # my( $topic, $web, $verbatim, $processedTopics ) = @_;
+    # my( $topic, $web ) = @_;
 
     my $res;
 
@@ -2264,12 +2239,12 @@ sub handleCommonTags {
 
     $theWeb = $this->{webName} unless $theWeb;
 
-    my @verbatim = ();
-    my $theProcessedTopics = {};
-
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
+    my @verbatim = ();
+    # remember the block for when we handle includes
+    $this->{_verbatims} = \@verbatim;
     $text = $this->{renderer}->takeOutBlocks( $text, "verbatim", \@verbatim );
 
     # Escape rendering: Change " !%VARIABLE%" to " %<nop>VARIABLE%", for final " %VARIABLE%" output
@@ -2280,15 +2255,13 @@ sub handleCommonTags {
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
 
-    $this->_expandAllTags( \$text, $theTopic, $theWeb,
-                        \@verbatim, $theProcessedTopics );
+    $this->_expandAllTags( \$text, $theTopic, $theWeb );
 
     # Plugin Hook
     $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 0 );
 
     # process tags again because plugin hook may have added more in
-    $this->_expandAllTags( \$text, $theTopic, $theWeb,
-                        \@verbatim, $theProcessedTopics );
+    $this->_expandAllTags( \$text, $theTopic, $theWeb );
 
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $memW;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $memT;
