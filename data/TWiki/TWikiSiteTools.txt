@@ -1,11 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="1007450541" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="MikeMannix" date="1020528636" format="1.0" version="1.6"}%
 %TOC%
 %STARTINCLUDE%
 ---# <nop>TWikiSiteTools
 
 _Utilities for searching, navigation, and monitoring site activity_
-
----++ Overview
 
 TWikiSiteTools include utilities for navigating, searching and keeping up with site activity. Preferences can be configured by web or site-wide. You are currently in the *%TWIKIWEB%* web. In particular, TWiki provides two highly configurable, automated site monitoring tools, *<nop>WebNotify*, to email alerts when topics are edited, and *<nop>WebStats*, to generate detailed activity reports.
 
