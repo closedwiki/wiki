@@ -42,7 +42,8 @@ sub main
     @weblist = grep !/^\.\.?$/, readdir DIR;
     closedir DIR;
     foreach $web ( @weblist ) {
-        if( -d "$dataDir/$web" && "$web" =~ /^[A-Z]/ ) {
+	# Only process webs with normal names, i.e. not starting with '_'
+        if( -d "$dataDir/$web" && &TWiki::isWebName($web) ) {
              processWeb( $web );
 
              # remove obsolete .lock files
@@ -193,12 +194,12 @@ sub processWeb
     my $error = &TWiki::Net::sendEmail( $text );
     if( $error ) {
 	print STDERR "* $error\n";
-        $debug && print "- End Twiki.$webName\n";
+        $debug && print "- End TWiki.$webName\n";
 
     } else {
         &TWiki::Store::saveFile( "$dataDir/$webName/.mailnotify", $currLastmodify );
 
-	$debug && print "- End Twiki.$webName, mail notification sent\n";
+	$debug && print "- End TWiki.$webName, mail notification sent\n";
     }
 }
 

@@ -45,7 +45,7 @@ use Cwd qw( cwd ); 	# Added for getTWikiLibDir
 require 5.005;		# For regex objects and internationalisation
 
 # ===========================
-# TWiki global config variables:
+# TWiki config variables from TWiki.cfg:
 use vars qw(
         $webName $topicName $includingWebName $includingTopicName
         $defaultUserName $userName $wikiName $wikiUserName
@@ -68,7 +68,13 @@ use vars qw(
         $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
-        $disableAllPlugins @isoMonth @weekDay 
+        $disableAllPlugins 
+    );
+
+# ===========================
+# Global variables:
+use vars qw(
+	@isoMonth @weekDay 
 	$TranslationToken %mon2num $isList @listTypes @listElements
         $newTopicFontColor $newTopicBgColor $linkProtocolPattern
         $headerPatternDa $headerPatternSp $headerPatternHt $headerPatternNoTOC
@@ -85,9 +91,9 @@ use vars qw(
 	$useLocale $siteLocale 
 
 	$upperNational $lowerNational 
-	$upperAlpha $lowerAlpha $mixedAlphaNum $lowerAlphaNum $numeric
+	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
 
-	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex
+	$wikiWordRegex $webNameRegex $defaultWebNameRegex $anchorRegex $abbrevRegex $emailAddrRegex
 
 	$singleUpperAlphaRegex $singleLowerAlphaRegex $singleUpperAlphaNumRegex
 	$singleMixedAlphaNumRegex $singleMixedNonAlphaNumRegex 
@@ -140,6 +146,12 @@ sub writeDebug;
 sub writeWarning;
 
 # writeDebug "got useLocale = $useLocale";
+
+# Set up locale for internationalisation and pre-compile regexes
+# - done outside 'initialize' since sometimes needed before that routine
+# is called (e.g. mailnotify and other multi-web scripts).
+setupLocale();
+setupRegexes();
 
 
 # ===========================
@@ -265,10 +277,6 @@ sub initialize
     &TWiki::Access::initializeAccess();
     $readTopicPermissionFailed = ""; # Will be set to name(s) of topic(s) that can't be read
 
-    # Set up locale for internationalisation and pre-compile regexes
-    setupLocale();
-    setupRegexes();
-
     # initialize user name and user to WikiName list
     userToWikiListInit();
     $userName = &TWiki::Plugins::initializeUser( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
@@ -379,7 +387,7 @@ sub setupLocale {
 	$ENV{'LC_CTYPE'}= $siteLocale;
 	$ENV{'LC_COLLATE'}= $siteLocale;
 
-	# Load i18n support module
+	# Load POSIX for i18n support 
 	require POSIX;
 	import POSIX qw( locale_h LC_CTYPE LC_COLLATE );
 
@@ -394,7 +402,10 @@ sub setupLocale {
 }
 
 # =========================
-# Set up pre-compiled regexes for use in rendering
+# Set up pre-compiled regexes for use in rendering.  All regexes with
+# unchanging variables in match should use the '/o' option, even if not in a
+# loop, to help mod_perl, where the same code can be executed many times
+# without recompilation.
 sub setupRegexes {
 
     # Build up character class components for use in regexes.
@@ -405,20 +416,22 @@ sub setupRegexes {
 	$upperAlpha = "A-Z$upperNational";
 	$lowerAlpha = "a-z$lowerNational";
 	$numeric = '\d';
-	$lowerAlphaNum = "${lowerAlpha}${numeric}";
-	$mixedAlphaNum = "${lowerAlphaNum}${upperAlpha}";
+	$mixedAlpha = "${upperAlpha}${lowerAlpha}";
     } else {
 	# Perl 5.6 or higher with working locales
 	$upperAlpha = "[:upper:]";
 	$lowerAlpha = "[:lower:]";
 	$numeric = "[:digit:]";
-	$lowerAlphaNum = "[:lower:][:digit:]";
-	$mixedAlphaNum = "[:alpha:][:digit:]";
+	$mixedAlpha = "[:alpha:]";
     }
+    $mixedAlphaNum = "${mixedAlpha}${numeric}";
+    $lowerAlphaNum = "${lowerAlpha}${numeric}";
 
     # Compile regexes for efficiency and ease of use
     # Note: qr// locks in regex modes (i.e. '-xism' here) - see Friedl
-    # book at http://regex.info/
+    # book at http://regex.info/. 
+
+    # TWiki concept regexes
     $wikiWordRegex = qr/[$upperAlpha]+[$lowerAlpha]+[$upperAlpha]+[$mixedAlphaNum]*/;
     $webNameRegex = qr/[$upperAlpha]+[$lowerAlphaNum]*/;
     $defaultWebNameRegex = qr/_[${mixedAlphaNum}_]+/;
@@ -426,6 +439,10 @@ sub setupRegexes {
     # anchor
     $anchorRegex = qr/\#[${mixedAlphaNum}_]*/;
     $abbrevRegex = qr/[$upperAlpha]{3,}/;
+
+    # Simplistic email regex, e.g. for WebNotify processing - no i18n
+    # characters allowed, and only alphanumeric and '-' in domain part.
+    $emailAddrRegex = qr/([A-Za-z0-9\.\+\-]+\@[A-Za-z0-9\.\-]+)/;
 
     # Single-character alpha-based regexes
     $singleUpperAlphaRegex = qr/[$upperAlpha]/;
@@ -577,24 +594,20 @@ sub getEmailNotifyList
 
     # Allow %MAINWEB% as well as 'Main' in front of users/groups -
     # non-capturing regex.
-    my $mainWebPattern = "(?:$mainWebname|%MAINWEB%)";	
+    my $mainWebPattern = qr/(?:$mainWebname|%MAINWEB%)/;
 
     my @list = ();
     my %seen;			# Incremented when email address is seen
     foreach ( split ( /\n/, TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
-        if (/^\s\*\s[A-Za-z0-9\.]+\s+\-\s+/) {
-	    # TODO: i18n fix on prev line
-            # full form:   * Main.WikiName - email@domain
+        if ( /^\s+\*\s(?:$mainWebPattern\.)?($wikiWordRegex)\s+\-\s+($emailAddrRegex)/o ) {
+	    # Got full form:   * Main.WikiName - email@domain
 	    # (the 'Main.' part is optional, non-capturing)
-            if ( !/^\s\*\s(?:$mainWebPattern\.)?TWikiGuest\s/o ) {
-		# Add email address to list if it's not a duplicate
-                if ( /([\w\-\.\+]+\@[\w\-\.\+]+)/ ) {
-		    push (@list, $1) unless $seen{$1}++;
-		}
+	    if ( $1 ne 'TWikiGuest' ) {
+		# Add email address to list if non-guest and non-duplicate
+		push (@list, $2) unless $seen{$1}++;
             }
-        } elsif (/^\s\*\s(?:$mainWebPattern\.)?([A-Z][A-Za-z0-9]+)/o ) {   
-	    # TODO: i18n fix on prev line
-	    # short form:   * Main.WikiName
+        } elsif ( /^\s+\*\s(?:$mainWebPattern\.)?($wikiWordRegex)\s*$/o ) { 
+	    # Got short form:   * Main.WikiName
 	    # (the 'Main.' part is optional, non-capturing)
             my $userWikiName = $1;
             foreach ( getEmailOfUser($userWikiName) ) {
@@ -659,7 +672,7 @@ sub initializeRemoteUser
     }
 
     my $text = &TWiki::Store::readFile( $remoteUserFilename );
-    # TODO: i18n fix
+    # Assume no I18N characters in userids, as for email addresses
     my %AddrToName = map { split( /\|/, $_ ) }
                      grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
                      split( /\n/, $text );
@@ -693,25 +706,26 @@ sub initializeRemoteUser
 }
 
 # =========================
-# Build hashes to translate in both dirctions between username (e.g. jsmith) 
+# Build hashes to translate in both directions between username (e.g. jsmith) 
 # WikiName (e.g. JaneSmith)
 sub userToWikiListInit
 {
     my $text = &TWiki::Store::readFile( $userListFilename );
     my @list = split( /\n/, $text );
-    # TODO: i18n fix
-    @list = grep { /^\s*\* [A-Za-z0-9]*\s*\-\s*[^\-]*\-/ } @list;
+
+    # Get all entries with two '-' characters on same line, i.e.
+    # 'WikiName - userid - date created'
+    @list = grep { /^\s*\* $wikiWordRegex\s*-\s*[^\-]*-/o } @list;
     %userToWikiList = ();
     %wikiToUserList = ();
     my $wUser;
     my $lUser;
     foreach( @list ) {
-	# TODO: i18n fix
-        if(  ( /^\s*\* ([A-Za-z0-9]*)\s*\-\s*([^\s]*).*/ ) 
-          && ( isWikiName( $1 ) ) && ( $2 ) ) {
-            $wUser = $1;
-            $lUser = $2;
-            $lUser =~ s/$securityFilter//go;
+	# Get the WikiName and userid, and build hashes in both directions
+        if(  ( /^\s*\* ($wikiWordRegex)\s*\-\s*([^\s]*).*/o ) && $2 ) {
+            $wUser = $1;	# WikiName
+            $lUser = $2;	# userid
+            $lUser =~ s/$securityFilter//go;	# FIXME: Should filter in for security...
             $userToWikiList{ $lUser } = $wUser;
             $wikiToUserList{ $wUser } = $lUser;
         }
@@ -1072,7 +1086,6 @@ sub makeTopicSummary
 
     # Encode special chars into HTML &#nnn; entities for international
     # character support
-    # TODO: Review for i18n issues
     $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
 
     # inline search renders text, so prevent linking of external and
@@ -1081,7 +1094,7 @@ sub makeTopicSummary
     $htext =~ s/([\s\(])($webNameRegex\.$wikiWordRegex)/$1<nop>$2/g;
     $htext =~ s/([\s\(])($wikiWordRegex)/$1<nop>$2/g;
     $htext =~ s/([\s\(])($abbrevRegex)/$1<nop>$2/g;
-    $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# FIXME: i18n for email address?
+    $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
     return $htext;
 }
@@ -1694,11 +1707,12 @@ sub handleTmplP
 }
 
 # =========================
+# Create spaced-out topic name for Ref-By search 
 sub handleSpacedTopic
 {
     my( $theTopic ) = @_;
     my $spacedTopic = $theTopic;
-    $spacedTopic =~ s/($singleLowerAlphaRegex+)($singleUpperAlphaNumRegex+)/$1%20*$2/g;   # "%20*" is " *"
+    $spacedTopic =~ s/($singleLowerAlphaRegex+)($singleUpperAlphaNumRegex+)/$1%20*$2/go;   # "%20*" is " *"
     return $spacedTopic;
 }
 
@@ -2254,16 +2268,16 @@ sub internalLink {
     $theTopic =~ s/\s*$//;
 
     # Turn spaced-out names into WikiWords - upper case first letter of
-    # whole link, and first of each word.
-    # TODO: option to turn off uppercasing of spaced-out wiki words, for i18n
+    # whole link, and first of each word. TODO: Try to turn this off,
+    # avoiding spaces being stripped elsewhere - e.g. $doPreserveSpacedOutWords 
     $theTopic =~ s/^(.)/\U$1/;
-    $theTopic =~ s/\s($singleMixedAlphaNumRegex)/\U$1/g;	
+    $theTopic =~ s/\s($singleMixedAlphaNumRegex)/\U$1/go;	
 
     # Add <nop> before WikiWord inside link text to prevent double links
-    $theLinkText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/g;
+    $theLinkText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/go;
 
     my $exist = &TWiki::Store::topicExists( $theWeb, $theTopic );
-    # TODO: i18n - Only apply plural processing if sitelocale is English..
+    # TODO: i18n - Only apply plural processing if site language is English..
     if(  ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) && ! ( $exist ) ) {
         # Topic name is plural in form and doesn't exist as written
         my $tmp = $theTopic;
@@ -2321,7 +2335,7 @@ sub specificLink
 
         # External link: add <nop> before WikiWord and ABBREV 
 	# inside link text, to prevent double links
-	$theText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/g;
+	$theText =~ s/([\s\(])($singleUpperAlphaRegex)/$1<nop>$2/go;
         return "$thePreamble<a href=\"$theLink\" target=\"_top\">$theText</a>";
 
     } else {
@@ -2553,11 +2567,14 @@ sub getRenderedVersion {
             s/([\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . &fixedFontText( $2, 0 ) . $3/ge;
 
 # Mailto
+	    # Email addresses must always be 7-bit, even within I18N sites
+
 	    # RD 27 Mar 02: Mailto improvements - FIXME: check security...
 	    # Explicit [[mailto:... ]] link without an '@' - hence no 
 	    # anti-spam padding needed.
             # '[[mailto:string display text]]' link (no '@' in 'string'):
             s/\[\[mailto\:([^\s\@]+)\s+(.+?)\]\]/&mailtoLinkSimple( $1, $2 )/ge;
+
 	    # Explicit [[mailto:... ]] link including '@', with anti-spam 
 	    # padding, so match name@subdom.dom.
             # '[[mailto:string display text]]' link
@@ -2595,7 +2612,7 @@ sub getRenderedVersion {
                 # 'Web.ABBREV' link:
                 s/([\s\(])($webNameRegex)\.($abbrevRegex)/&internalLink($1,$2,$3,$3,"",0)/geo;
                 # 'ABBREV' link:
-                s/([\s\(])($abbrevRegex)/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
+		s/([\s\(])($abbrevRegex)/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
                 # (deprecated <link> moved to DefaultPlugin)
 
                 s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
