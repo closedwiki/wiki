@@ -10,6 +10,7 @@ use File::Path qw( rmtree mkpath );
 use File::Find::Rule;
 use File::Slurp::Tree;
 use LWP::UserAgent;
+use Getopt::Long;
 
 #	print "build-twiki-kernel.pl <tempDir> <outputDirectory>\n";
 #	print "\n";
@@ -20,10 +21,10 @@ use LWP::UserAgent;
 my $tempDir = cwd(); 
 my $outputDirectory = cwd();
 
-if ( $#ARGV == 1 ) {
+if ( @ARGV == 2 ) {
 	$tempDir = $ARGV[0]; 
 	$outputDirectory = $ARGV[1];
-} elsif  ( $#ARGV == 0 ) {
+} elsif  ( @ARGV == 1 ) {
 	$tempDir = $ARGV[0]; 
 }
 if (( ! -e $tempDir ) || ( ! -d $tempDir )) {
