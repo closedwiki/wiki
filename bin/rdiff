@@ -438,7 +438,7 @@ sub getRevInfo
 | Parameter: param( "rev1" ) | the higher revision |
 | Parameter: param( "rev2" ) | the lower revision |
 | Parameter: param('render') | the rendering style {sequential, sidebyside, raw, debug} |
-| Parameter: param( 'type' ) | {history, diff} history diff, or version to version |
+| Parameter: param( 'type' ) | {history, diff, last} history diff, version to version, last version to previous |
 | Parameter: param( 'context' ) | number of lines of context |
 | TODO: | add a {word} render style |
 | Parameter: param( "skin" ) | the skin to use to display the diff |
@@ -498,6 +498,10 @@ sub main
         if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
         if( $rev2 < 1 )       { $rev2 = 1; }
         if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
+	if ( $diffType eq "last" ) {
+	    $rev1 = $maxrev;
+	    $rev2 = $maxrev-1;
+	}
         $revTitle1 = "r1.$rev1";
         $revInfo1 = getRevInfo( $webName, $rev1, $topic );
         if( $rev1 != $rev2 ) {
