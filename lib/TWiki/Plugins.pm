@@ -707,20 +707,30 @@ sub afterSaveHandler
 }
 
 =pod
----++ sub beforeAttachmentSaveHandler  ( $attrHash, $topic, $web ) 
 
-| Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
+---++ sub beforeAttachmentSaveHandler ( $attrHashRef, $topic, $web ) 
 
-where $topic and $web pinpoint the topic and attrHash is a hash containing the keys:
-| *hash key*  | *value* |
-| attachment  | the name of the attachment |
-| tmpFilename | the name of the local file that stores the upload
-| comment     | the Comment to be associated with the upload
-| user        | A $TWiki::userName of the person submitting the attachment
+| Description: | This code provides Plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other Plugins. |
+| Parameter: =$attrHashRef= | Hash reference of attachment attributes (keys are indicated below) |
+| Parameter: =$topic=       | Topic name |
+| Parameter: =$web=         | Web name |
+| Return:                   | There is no defined return value for this call |
 
-There is no defined return value for this call. 
+Keys in $attrHashRef:
+| *Key*       | *Value* |
+| attachment  | Name of the attachment |
+| tmpFilename | Name of the local file that stores the upload |
+| comment     | Comment to be associated with the upload |
+| user        | Login name of the person submitting the attachment, e.g. "jsmith" |
 
-A future enhancement could be for the beforeAttachmentSaveHandler to return a value to veto the proposed upload.
+Note: All keys should be used read-only, except for comment which can be modified.
+
+Example usage:
+
+<pre>
+   my( $attrHashRef, $topic, $web ) = @_;
+   $$attrHashRef{"comment"} .= " (NOTE: Extracted from blah.tar.gz)";
+</pre>
 
 =cut
 
@@ -733,19 +743,25 @@ sub beforeAttachmentSaveHandler
 }
 
 =pod
----++ sub afterAttachmentSaveHandler ( $attachmentAttrHash, $topic, $web, $error ) 
+
+---++ sub afterAttachmentSaveHandler( $attachmentAttrHash, $topic, $web, $error ) 
+
 | Description: | This code provides plugins with the opportunity to alter an uploaded attachment between the upload and save-to-store processes. It is invoked as per other plugins. |
 
-Where $topic and $web pinpoint the topic and attrHash is a hash containing the keys:
-| *hash key*  | *value* |
-| attachment  | the name of the attachment |
-| tmpFilename | the name of the local file that stores the upload
-| comment     | the Comment to be associated with the upload
-| user        | A $TWiki::userName of the person submitting the attachment
- 
- And where $error is the result of having called topicHandler->addRevision()
+| Parameter: =$attrHashRef= | Hash reference of attachment attributes (keys are indicated below) |
+| Parameter: =$topic=       | Topic name |
+| Parameter: =$web=         | Web name |
+| Parameter: =$error=       | Error string of save action, empty if OK |
+| Return:                   | There is no defined return value for this call |
 
- There is no defined return value for this call.
+Keys in $attrHashRef:
+| *Key*       | *Value* |
+| attachment  | Name of the attachment |
+| tmpFilename | Name of the local file that stores the upload |
+| comment     | Comment to be associated with the upload |
+| user        | Login name of the person submitting the attachment, e.g. "jsmith" |
+
+Note: All keys should be used read-only.
 
 =cut
 
