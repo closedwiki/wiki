@@ -29,6 +29,7 @@
 package TWiki::Store;
 
 use File::Copy;
+use Time::Local;
 
 use strict;
 
@@ -633,9 +634,15 @@ sub keyValue2list
 # ========================
 sub metaAddTopicData
 {
-    my( $web, $topic, $rev, $meta ) = @_;
+    my( $web, $topic, $rev, $meta, $forceDate ) = @_;
     
-    my $time = time();
+    my $time;
+    if( $forceDate ) {
+        $time = $forceDate;
+    } else {
+        $time = time();
+    }
+    
     my $user = $TWiki::userName;
         
     my @args = (
@@ -678,9 +685,10 @@ sub saveTopicNew
 # =========================
 sub saveTopic
 {
-    my( $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave ) = @_;
+    my( $web, $topic, $text, $meta, $saveCmd, $doUnlock, $dontNotify, $dontLogSave, $forceDate ) = @_;
     my $attachment = "";
-    saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify );
+    my $comment = "";
+    saveNew( $web, $topic, $text, $meta, $saveCmd, $attachment, $dontLogSave, $doUnlock, $dontNotify, $comment, $forceDate );
 }
 
 # =========================
@@ -742,7 +750,7 @@ sub save
 # ========================
 sub _saveWithMeta
 {
-    my( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta ) = @_;
+    my( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta, $forceDate ) = @_;
     
     if( ! $attachment ) {
         my $name = getFileName( $web, $topic, $attachment );
@@ -751,7 +759,7 @@ sub _saveWithMeta
             $nextRev = "1.1";
         }
 
-        metaAddTopicData(  $web, $topic, $nextRev, $meta );
+        metaAddTopicData(  $web, $topic, $nextRev, $meta, $forceDate );
         $text = $meta->write( $text );
     
 	# save file
@@ -838,7 +846,7 @@ sub saveNew
         }
 
         if( $saveCmd ne "repRev" ) {
-            $text = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta );
+            $text = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta, $forceDate );
 
             # If attachment and RCS file doesn't exist, initialise things
             if( $attachment ) {
@@ -877,6 +885,8 @@ sub saveNew
             $tmp = $TWiki::revCiCmd;
             if( $forceDate ) {
                 $tmp = $TWiki::revCiDateCmd;
+                my( $sec, $min, $hour, $mday, $mon, $year) = gmtime( $forceDate );
+                $forceDate = sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", $year + 1900, $mon, $mday, $hour, $min, $sec );
                 $tmp =~ s/%DATE%/$forceDate/o;
             }
             $tmp =~ s/%USERNAME%/$TWiki::userName/;
