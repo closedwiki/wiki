@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1087499640" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1093299089" format="1.0" version="1.2"}%
 ---+ <nop/>%TOPIC%
 
 BibliographyPlugin manages citations inside a TWiki topic, and can generate an References List at the end of the topic. This should be every usefull for writing conference papers, journal articles, ellaborated news, etc.
@@ -19,7 +19,7 @@ Then, in the topic where you want to reference and get a references list, you ca
 	* =%<nop/>BIBLIOGRAPHY{...}%= to get a list of references. =%<nop/>BIBLIOGRAPHY{...}%= accepts the following arguments:
 	  | *Argument* | *Description* | *Default value* |
 	  | =header= | the header for the references list (like "References", "Referências" (in portuguese), and so on. | DEFAULTHEADER setting (see below). |
-	  | =referencesTopic= | indicates the topic bibliography must be taken from. | DEFAULTBIBLIOGRAPHYTOPIC setting (see below). |
+	  | =referencesTopic= | indicates the topic bibliography must be taken from. Can be a comma-separated list of topics. | DEFAULTBIBLIOGRAPHYTOPIC setting (see below). |
 	  | =order= | in which order the references should appear. Accepted values are =citation= (references appear in citation order) and =alpha= (references appear in alphabetical order). | DEFAULTSORTING setting (see below). |
 	  | *Usage example:* |||
 	  | =%<nop/>BIBLIOGRAPHY{header="---++ Referências" referencesTopic="<nop/>MinhaBibliografia" order="citation"}%= %BR% The above usage tells BibliographyPlugin to use "Referências" (in portuguese) as the title of the references list, to take bibliography from a topic names <nop/>MinhaBibliografia and to list the references in citation order.  |||
