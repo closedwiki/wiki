@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999259487" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="MikeMannix" date="999320061" format="1.0" version="1.11"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Software Environment
@@ -390,8 +390,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==TWiki/TWikiAccessControl.txt,v== | xxxx |
 | ==TWiki/TWikiAdministration.txt== | xxxx |
 | ==TWiki/TWikiAdministration.txt,v== | xxxx |
-| ==TWiki/TWikiAuthentication.txt== | xxxx |
-| ==TWiki/TWikiAuthentication.txt,v== | xxxx |
+| ==TWiki/TWikiUserAuthentication.txt== | xxxx |
+| ==TWiki/TWikiUserAuthentication.txt,v== | xxxx |
 | ==TWiki/TWikiCategoryTable.txt== | xxxx |
 | ==TWiki/TWikiCategoryTable.txt,v== | xxxx |
 | ==TWiki/TWikiContributor.txt== | xxxx |
@@ -410,8 +410,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==TWiki/TWikiHistory.txt,v== | xxxx |
 | ==TWiki/TWikiImplementationNotes.txt== | xxxx |
 | ==TWiki/TWikiImplementationNotes.txt,v== | xxxx |
-| ==TWiki/TWikiInstallationNotes.txt== | xxxx |
-| ==TWiki/TWikiInstallationNotes.txt,v== | xxxx |
+| ==TWiki/TWikiInstallationGuide.txt== | xxxx |
+| ==TWiki/TWikiInstallationGuide.txt,v== | xxxx |
 | ==TWiki/TWikiNotificationOfChanges.txt== | xxxx |
 | ==TWiki/TWikiNotificationOfChanges.txt,v== | xxxx |
 | ==TWiki/TWikiPlannedFeatures.txt== | xxxx |
@@ -431,8 +431,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==TWiki/TWikiTutorial.txt== | xxxx |
 | ==TWiki/TWikiTutorial.txt,v== | xxxx |
 | ==TWiki/TWikiTutorialKK.txt== | xxxx |
-| ==TWiki/TWikiUpgradeNotes.txt== | xxxx |
-| ==TWiki/TWikiUpgradeNotes.txt,v== | xxxx |
+| ==TWiki/TWikiUpgradeGuide.txt== | xxxx |
+| ==TWiki/TWikiUpgradeGuide.txt,v== | xxxx |
 | ==TWiki/TWikiUpgradeTo01May2000.txt== | xxxx |
 | ==TWiki/TWikiUpgradeTo01May2000.txt,v== | xxxx |
 | ==TWiki/TWikiUsernameVsLoginUsername.txt== | xxxx |

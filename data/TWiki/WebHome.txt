@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999259672" format="1.0" version="1.27"}%
+%META:TOPICINFO{author="MikeMannix" date="999320021" format="1.0" version="1.28"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about it, download it, and try it out for yourself.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -34,9 +34,9 @@ Welcome to %WIKITOOLNAME%, a Web-based collaboration tool, document management t
 		* TWikiHistory: a TWiki development timeline
 		* TWikiDocumentation: complete operator's reference, comprising:
 			1 [[TWikiImplementationNotes][TWikiSoftwareEnvironment]]
-			1 [[TWikiInstallationNotes][TWikiInstallationGuide]] 
-			1 [[TWikiUpgradeNotes][TWikiUpgradeGuide]]
-			1 [[TWikiAuthentication][TWikiUserAuthentication]]
+			1 TWikiInstallationGuide
+			1 TWikiUpgradeGuide
+			1 TWikiUserAuthentication
 			1 TWikiAccessControl
 			1 [[TWikiTemplates][TWikiTemplates OLD?]]
 			1 [[TWikiTemplatingSystem][TWikiTemplateSystem NEW?]]

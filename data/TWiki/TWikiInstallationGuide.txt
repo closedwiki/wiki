@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999255302" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="MikeMannix" date="999319650" format="1.0" version="1.25"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Installation Guide
@@ -230,3 +230,4 @@ drwxrwxrwx	6 nobody  nobody  4096 Aug  3 01:21 ..
 </pre>
 
 -- PeterThoeny - 16 Mar 2001 <br>
+%META:TOPICMOVED{by="MikeMannix" date="999319650" from="TWiki.TWikiInstallationNotes" to="TWiki.TWikiInstallationGuide"}%

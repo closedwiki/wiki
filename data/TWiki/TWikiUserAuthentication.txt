@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="MikeMannix" date="999098621" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="MikeMannix" date="999320253" format="1.0" version="1.4"}%
 %TOC%
 %STARTINCLUDE%
----## TWiki Authentication
+---## TWiki User Authentication
 
 TWiki does not authenticate users internally, it depends on the ==REMOTE_USER== environment variable. This variable is set when you enable basic authentication or authentication via SSL (https protocol).
 
@@ -41,3 +41,5 @@ This points ==<nop>WikiUser== to the %WIKITOOLNAME%.%MAINWEB% web, where user re
 
 -- PeterThoeny - 16 Mar 2001 <br>
 -- MikeMannix - 29 Aug 2001 
+
+%META:TOPICMOVED{by="MikeMannix" date="999320061" from="TWiki.TWikiAuthentication" to="TWiki.TWikiUserAuthentication"}%

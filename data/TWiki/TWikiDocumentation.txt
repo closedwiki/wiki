@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999201704" format="1.0" version="1.26"}%
+%META:TOPICINFO{author="MikeMannix" date="999320061" format="1.0" version="1.27"}%
 <script language="JavaScript1.2" type="text/javascript">
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -21,13 +21,13 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 %INCLUDE{"TWikiImplementationNotes"}%
 
 -----
-%INCLUDE{"TWikiInstallationNotes"}%
+%INCLUDE{"TWikiInstallationGuide"}%
 
 -----
-%INCLUDE{"TWikiUpgradeNotes"}%
+%INCLUDE{"TWikiUpgradeGuide"}%
 
 -----
-%INCLUDE{"TWikiAuthentication"}%
+%INCLUDE{"TWikiUserAuthentication"}%
 
 -----
 %INCLUDE{"TWikiAccessControl"}%
