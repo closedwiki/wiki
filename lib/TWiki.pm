@@ -90,6 +90,10 @@ use vars qw(
         $cgiQuery @publicWebList
     );
 
+# Experimental persistent vars - modPerl issue?
+use vars qw (
+        %headerfooter
+    );
 
 # TWiki::Store config:
 use vars qw(
@@ -121,6 +125,7 @@ use TWiki::Access;    # access control
 use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Attach;    # file attachment functions
 use TWiki::Plugins;   # plugins handler  #AS
+use TWiki::Classification; # category handling functions
 
 # ===========================
 # variables: (new variables must be declared in "use vars qw(..)" above)
@@ -273,7 +278,13 @@ sub writeDebug
 {
     my( $text ) = @_;
     open( FILE, ">>$debugFilename" );
-    print FILE "$text\n";
+    
+    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
+    my( $tmon) = $isoMonth[$mon];
+    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
+
+    print FILE "$time $text\n";
     close( FILE);
 }
 
@@ -1065,6 +1076,71 @@ sub handleInternalTags
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/geo;
 }
 
+sub readHeaderFooter
+{
+    my( $theWeb, $theSkin ) = @_;
+    
+    if( ! %headerfooter ) {
+        my $tmpl = &TWiki::Store::readTemplate( "headerfooter", $theWeb, $theSkin );
+        # Might want to have generalised variable rather than just sep
+        my( $header, $footerstart, $footerend, $sep ) = split /%SPLIT%/, $tmpl;
+    
+        $headerfooter{"header"} = $header;
+        $headerfooter{"footerstart"} = $footerstart;
+        $headerfooter{"footerend"}   = $footerend;
+        $headerfooter{"sep"} = $sep;
+     }
+}
+
+# =========================
+# Experimental routine for header/footer
+sub handleHeader
+{
+    my( $args, $theTopic, $theSkin ) = @_;
+    
+    readHeaderFooter( $theTopic, $theSkin );
+    
+    my $action = extractNameValuePair( $args, "action" );
+    my $description = extractNameValuePair( $args, "description" );
+    
+    my $tmpl = $headerfooter{"header"}; #&TWiki::Store::readTemplate( "top" );
+    $tmpl =~ s/%ACTION%/$action/go;
+    $tmpl =~ s/%DESCRIPTION%/$description/go;
+    
+    return $tmpl;
+}
+
+# =========================
+# Experimental routine for header/footer
+sub handleFooter
+{
+    my( $pos, $theTopic, $theSkin  ) = @_;
+    
+    readHeaderFooter( $theTopic, $theSkin );
+    
+    my $ret = "";
+
+    if( ! $pos || $pos =~ /:START/ ) {
+       $ret .= $headerfooter{"footerstart"};
+    }
+    
+    if( ! $pos || $pos =~ /:END/ ) {
+       $ret .= $headerfooter{"footerend"};
+    }
+    
+    return $ret;
+}
+
+# =========================
+# Experimental routine for header/footer
+sub handleSep
+{
+    my( $theTopic, $theSkin ) = @_;
+    
+    readHeaderFooter( $theTopic, $theSkin );
+    return $headerfooter{"sep"};
+}
+
 # =========================
 sub handleCommonTags
 {
@@ -1136,6 +1212,37 @@ sub renderMoved
     return $text;
 }
 
+
+# =========================
+sub renderClassificationData
+{
+    my( $web, $topic, $metaP ) = @_;
+
+    my @meta = @$metaP;
+    
+    my $metaText = "";
+    
+    foreach my $metaItem ( @meta ) {
+       if( $metaItem =~ /(%META:CLASSIFICATION\{)([^\}]*)(}%)/ ) {
+           my $args = $2;
+           my $name = extractNameValuePair( $args, "name" );
+           $metaText .= "| *[[$name]]*  ||\n";
+       }
+    }
+    
+    foreach my $metaItem( @meta ) {
+       if( $metaItem =~ /(%META:CATEGORY\{)([^\}]*)(}%)/ ) {
+           my $args = $2;
+           my $name  = extractNameValuePair( $args, "name" );
+           my $value = extractNameValuePair( $args, "value" );
+           $metaText .= "|  *[[$name]]*  |  $value  |\n";
+       }
+    }
+    
+    return $metaText;
+}
+
+
 # =========================
 sub renderMetaData
 {
@@ -1143,12 +1250,14 @@ sub renderMetaData
 
     my $attachmentText = TWiki::Attach::renderMetaData( $web, $topic, $meta );
     
+    my $classificationText = renderClassificationData( $web, $topic, $meta );
+
     my $movedText = "";
     if( ! $dontRenderMoved ) {
         $movedText = renderMoved( $web, $topic, $meta );
     }
     
-    my $text = "$attachmentText\n$movedText";
+    my $text = "\n---\n$attachmentText\n$classificationText\n$movedText";
     
     $text = handleCommonTags( $text, $topic, $web );
     $text = getRenderedVersion( $text, $web );
