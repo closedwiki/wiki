@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044102412" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092555397" format="1.0" version="1.7"}%
 ---+!! Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable
 
 Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included. If needed, set a proxy server in %WIKIPREFSTOPIC%.
@@ -22,8 +22,7 @@ Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic o
 	* ==rev="1.x"==: %BR%
 	  The *rev* parameter is optional and allows you to include an earlier revision of a topic. This can be used to include an official version of a topic, e.g. one that has been signed of by management. This parameter does not apply to URLs.
 
-__Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUDE%==, ==%<nop>STOPINCLUDE%== and/or a *pattern* parameter.
-
+__Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUDE%==, ==%<nop>STOPINCLUDE%== and/or a *pattern* parameter. A pattern will only search between ==%<nop>STARTINCLUDE%== and ==%<nop>STOPINCLUDE%==.
 
 ---++ Usage Examples
 
@@ -34,25 +33,19 @@ __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUD
   &lt;/pre&gt;
 </pre>
 
----+++ 2. Display Yahoo's robot.txt file
+---+++ 2. Display Google's robot.txt file
 
 	* You type:
-		* ==%<nop>INCLUDE{"http://www.yahoo.com/robots.txt"}%==
+		* ==%<nop>INCLUDE{"http://www.google.com/robots.txt"}%==
 
----+++ 3. Display the SUNW stock quote in a TWiki page
+---+++ 3. Display the current time in Tokyo in a TWiki page
 
 	* You type:
-		* ==SUNW: %<nop>INCLUDE{"http://finance.yahoo.com/q?s=SUNW&d=v1&o=t" pattern="^.*?&gt;SUNW&lt;/a&gt;[^&lt;]+(.*?)\s+\S+\s+&lt;small.*"}%==
+		* ==Tokyo: %<nop>INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%==
 	* You get:
-		* SUNW: %INCLUDE{"http://finance.yahoo.com/q?s=SUNW&d=v1&o=t" pattern="^.*?>SUNW</a>[^<]+(.*?)\s+\S+\s+<small.*"}%
-
----+++ 4. Display the temperature in San Francisco
-
-	* You type:
-		* ==San Francisco: %<nop>INCLUDE{"http://weather.yahoo.com/forecast/San_Francisco_CA_US_f.html" pattern="^.*?([0-9]+\&amp;ordm\;F).*"}%==
-	* You get:
-		* San Francisco: %INCLUDE{"http://weather.yahoo.com/forecast/San_Francisco_CA_US_f.html" pattern="^.*?([0-9]+\&ordm\;F).*"}%
+		* Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
 
 See also other TWikiVariables.
 
--- Main.PeterThoeny - 15 Jan 2003
+-- TWiki:Main.PeterThoeny - 15 Aug 2004
+
