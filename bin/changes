@@ -59,6 +59,8 @@ sub main
 
     $text = &TWiki::handleCommonTags( $text, $topic );
     $text = &TWiki::getRenderedVersion( $text );
+    $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+
     my $before = "";
     my $after = "";
     ( $before, $text, $after) = split( /%REPEAT%/, $text );

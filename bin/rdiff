@@ -139,6 +139,8 @@ sub main
     # get view template, standard view or a view with a different skin
     my $skin = $query->param( "skin" ) || &TWiki::Prefs::getPreferencesValue( "SKIN" );
     $tmpl = &TWiki::Store::readTemplate( "rdiff", $skin );
+    $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+
     my( $before, $difftmpl, $after) = split( /%REPEAT%/, $tmpl);
 
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );

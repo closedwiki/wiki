@@ -158,6 +158,9 @@ sub searchWeb
     } else {
         $tmpl = &TWiki::Store::readTemplate( "search" );
     }
+
+    $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
+
     my( $tmplHead, $tmplSearch,
 	$tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
     $tmplHead   = &TWiki::handleCommonTags( $tmplHead, $topic );
