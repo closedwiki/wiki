@@ -190,14 +190,14 @@ sub extendHandleCommonTags
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
 
-    my( $text, $topic ) = @_;
+    my( $text, $topic, $theWeb ) = @_;
 
     # for compatibility for earlier TWiki versions:
     $text=~ s/%INCLUDE:"(.*?)"%/&handleIncludeFile($1)/geo;
     $text=~ s/%INCLUDE:"(.*?)"%/&handleIncludeFile($1)/geo;  # allow two level includes
 
     # do custom extension rule, like for example:
-    # $text=~ s/%WIKIWEB%/$wikiToolName.$webName/go;
+    # $text=~ s/%WIKIWEB%/$wikiToolName.$theWeb/go;
 
     return $text;
 }
@@ -209,7 +209,7 @@ sub extendGetRenderedVersionOutsidePRE
     # This is the place to define customized rendering rules
     # Called by sub getRenderedVersion, in loop outside of <PRE> tag
 
-    my( $text ) = @_;
+    my( $text, $theWeb ) = @_;
 
     # do custom extension rule, like for example:
     # s/old/new/go;
@@ -223,7 +223,7 @@ sub extendGetRenderedVersionOutsidePRE
 
     # Use "forced" non-WikiName links (i.e. %Linkname%)
     # This is an old JosWiki render option. (Uncomment for JosWiki compatibility)
-#    s/(^|\s|\()\%([^\s].*?[^\s])\%/&internalLink($wiki::webName,$2,$2,$1,1)/geo;
+#    s/(^|\s|\()\%([^\s].*?[^\s])\%/&internalLink($theWeb,$2,$2,$1,1)/geo;
 
     # Use "forced" non-WikiName links (i.e. %Web.Linkname%)
     # This is an old JosWiki render option combined with the new Web.LinkName notation
@@ -240,7 +240,7 @@ sub extendGetRenderedVersionInsidePRE
     # This is the place to define customized rendering rules
     # Called by sub getRenderedVersion, in loop inside of <PRE> tag
 
-    my( $text ) = @_;
+    my( $text, $theWeb ) = @_;
 
     # do custom extension rule, like for example:
     # s/old/new/go;
