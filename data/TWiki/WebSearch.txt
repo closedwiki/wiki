@@ -1,9 +1,9 @@
-<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/">
 	* <B>Simple search</B>:
 	<TABLE border="0" cellspacing="0" cellpadding="0"><TR><TD>
 	  <INPUT type="radio" name="scope" value="text" checked> Topic text (body) &nbsp; &nbsp;
 	</TD><TD>
-	  <INPUT type="checkbox" name="web"> All webs (not only %WIKITOOLNAME%.%WEB% web)
+	  <INPUT type="checkbox" name="web"> All webs (not only %WIKITOOLNAME%.%INCLUDINGWEB% web)
 	</TD></TR><TR><TD>
 	  <INPUT type="radio" name="scope" value="topic"> Topic name
 	</TD><TD>
@@ -13,7 +13,7 @@
 </FORM>
 
 
-<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
+<FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/">
 	* <B>Advanced search</B>:
 	<TABLE border="0" cellspacing="0" cellpadding="0"><TR><TD>
 	  <INPUT type="radio" name="scope" value="text" checked> Topic text (body) &nbsp; &nbsp;
@@ -52,22 +52,23 @@
 	</TD><TD>
 	  <INPUT type="checkbox" name="nosearch"> search string
 	</TD><TD>
-	  <INPUT type="checkbox" name="nosummary"> summaries &nbsp;
+	  <INPUT type="checkbox" name="nosummary"> summaries &nbsp; &nbsp;
 	  <INPUT type="checkbox" name="nototal"> total matches
 	</TD></TR><TR><TD>
 	  Do show:
 	</TD><TD>
 	  <INPUT type="checkbox" name="bookview"> %TWIKIWEB%.BookView
 	</TD><TD>
+	  <INPUT type="checkbox" name="showlock"> locked topic &nbsp;
 	  <INPUT type="text" name="limit" size="5" value="all"> topics (result count)
 	</TD></TR></TABLE>
 </FORM>
 
-	* <B><A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=\.*">Topic index</A></B>: List of %WIKITOOLNAME%.%WEB% topics in alphabetical order. <BR> <B>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=\.*">All</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ea">A</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Eb">B</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ec">C</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ed">D</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ee">E</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ef">F</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Eg">G</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Eh">H</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ei">I</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ej">J</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ek">K</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5El">L</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Em">M</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5En">N</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Eo">O</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ep">P</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Eq">Q</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Er">R</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Es">S</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Et">T</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Eu">U</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ev">V</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ew">W</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ex">X</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ey">Y</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=%5Ez">Z</A>| <BR> | <A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&bookview=on&search=\.*">All</A></B> topics in %TWIKIWEB%.BookView <B>|</B>
+	* <B><A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">Topic index</A></B>: List of %WIKITOOLNAME%.%INCLUDINGWEB% topics in alphabetical order. <BR> <B>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">All</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ea">A</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Eb">B</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ec">C</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ed">D</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ee">E</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ef">F</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Eg">G</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Eh">H</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ei">I</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ej">J</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ek">K</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5El">L</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Em">M</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5En">N</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Eo">O</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ep">P</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Eq">Q</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Er">R</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Es">S</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Et">T</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Eu">U</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ev">V</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ew">W</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ex">X</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ey">Y</A>|<A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=%5Ez">Z</A>| <BR> | <A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&bookview=on&search=\.*">All</A></B> topics in %TWIKIWEB%.BookView <B>|</B>
 
 	* <B>Jump to topic</B>: If you already know the name of the topic, enter the name of the topic at the second line of this page.
 
-	* <B> WebChanges </B>: Find out what topics in %WIKITOOLNAME%.%WEB% have changed recently.
+	* <B> WebChanges </B>: Find out what topics in %WIKITOOLNAME%.%INCLUDINGWEB% have changed recently.
 
 	* <B><A HREF="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">How to edit text</A></B>:
 		* Make changes to topics in %TWIKIWEB%.GoodStyle,
