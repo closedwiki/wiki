@@ -2,13 +2,12 @@ package com.mrjc.twiki.addons;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-//import java.io.FileInputStream;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -45,7 +44,7 @@ public class FileUploader
      * @author	Catherine Macleod
      * @param	cgiScript script to action HTTP POST request 
      */
-    public FileUploader(String cgiScript)
+    public FileUploader(String cgiScript) throws IOException
     {
 		httpURLConn = null;
 		initialiseConnection(cgiScript);
@@ -56,34 +55,22 @@ public class FileUploader
      * 
      * @author	Catherine Macleod
     
-     *  * @param	url 
+     *  * @param	url to send the upload 
      */
-    public void initialiseConnection (String cgiScript)
+    public void initialiseConnection (String cgiScript) throws IOException  
     {
-		try
-		{
+		// create HTTP-connection to the script/servlet/whatever on the server and set its properties
+		URL theURL = new URL(cgiScript);
+		httpURLConn  = (HttpURLConnection)theURL.openConnection();
 
-			// create HTTP-connection to the script/servlet/whatever on the server and set its properties
-			URL theURL = new URL(cgiScript);
-			httpURLConn  = (HttpURLConnection)theURL.openConnection();
-
-			httpURLConn.setRequestMethod("POST");
-			httpURLConn.setRequestProperty("Connection", "Keep-Alive");
-			httpURLConn.setDoOutput(true);
-			httpURLConn.setUseCaches(false);
-			httpURLConn.setRequestProperty("Accept-Charset", "iso-8859-1,*,utf-8");
-			httpURLConn.setRequestProperty("Accept-Language", "en");
-			httpURLConn.setRequestProperty("Content-type", "multipart/form-data; boundary=" + boundary);
-		}
-	    catch (MalformedURLException ex) 
-	    {
-	    	ex.printStackTrace();
-	    }
-	    catch (IOException ioex) 
-	    {
-	    	ioex.printStackTrace(); 
-	    }
-		
+		httpURLConn.setRequestMethod("POST");
+		httpURLConn.setRequestProperty("Connection", "Keep-Alive");
+		httpURLConn.setDoOutput(true);
+		httpURLConn.setUseCaches(false);
+		httpURLConn.setRequestProperty("Accept-Charset", "iso-8859-1,*,utf-8");
+		httpURLConn.setRequestProperty("Accept-Language", "en");
+		httpURLConn.setRequestProperty("Content-type", "multipart/form-data; boundary=" + boundary);
+	     
     }
 	
 	void appendDispositionToOutputStream(DataOutputStream outStream, String fileName) throws IOException {
@@ -99,21 +86,14 @@ public class FileUploader
 		
 		int bytesRead, bytesAvailable;
 		int maxBufferSize = 1*1024*1024;
-		char[] buffer = new char[maxBufferSize
-		];
+		char[] buffer = new char[maxBufferSize];
 
 		InputStreamReader inputStream = (InputStreamReader)data;
 		// read file data and write it into form
 		bytesRead = inputStream.read(buffer, 0, maxBufferSize);
 		while (bytesRead > 0)
 		{
-			//RJE: I don't like this - trim() removes all spaces and non-displayable characters from 
-			//the end of the data just read from the buffer.  Since there may be multiple reads into
-			//the buffer for one file, there is, therefore, a risk that we will lose spaces from the
-			//middle of the file.  I have therefore changed the code.
-			//outStream.writeBytes((new String(buffer)).trim());
-			
-			outStream.writeBytes((new String(buffer)).substring(0, bytesRead));
+   		    outStream.writeBytes((new String(buffer)).substring(0, bytesRead));
 			bytesRead = inputStream.read(buffer, 0, maxBufferSize);
 		}
 		inputStream.close();
@@ -145,13 +125,36 @@ public class FileUploader
 		File f = new File(fileName);
 		appendToOutputStream(f, outStream);
 	}
+
+	/**
+	 * Reads contents of a file.
+	 *
+	 * @author	Catherine Macleod
+	 * @param	file file from which content is to be read
+	 * @return	file contents
+	 */
 	
 	public void appendToOutputStream(File file, DataOutputStream outStream) throws IOException
 	{
 		String fileName = file.getName();		
 		appendDispositionToOutputStream(outStream, fileName);
-		ClipboardHelper.writeFileContentsToOutputStream(file, outStream);
+		
+		final int BUFLEN = 1024;
+		byte[] buff = new byte[BUFLEN];
+
+		FileInputStream fis = new FileInputStream(file);
+		while (fis.available() > 0)
+		{
+
+			/* WE are working on this  */
+			int lengthRead = fis.read(buff, 0, BUFLEN);
+			outStream.write(buff, 0, lengthRead);
+		}
+
+		fis.close();
+		
 	}
+
 	
 	public void appendDelimiterToOutputStream(DataOutputStream outStream) throws IOException
 	{
@@ -173,6 +176,27 @@ public class FileUploader
 		outStream.writeBytes(lineEnd + lineEnd);
 		outStream.writeBytes(comment);	
 	}
+	
+	public DataOutputStream startUpload() throws IOException
+	{
+		DataOutputStream outStream = new DataOutputStream (httpURLConn.getOutputStream());
+		appendDelimiterToOutputStream(outStream);
+		return outStream;
+	}
+	
+	public void finishUpload(DataOutputStream outStream) throws IOException
+	{
+		String comment = "";
+		appendEndOfDelimitersToOutputStream(outStream);
+		// send comment
+		if (comment.length() > 0 ) {
+			appendCommentToOutputStream(comment, outStream);
+		}
+		// close streams
+		outStream.flush();
+		outStream.close();
+		
+	}
     /**
      * Uploads data from clipboard.
      * 
@@ -182,75 +206,63 @@ public class FileUploader
      * @author	Catherine Macleod
      * @param	filename file to upload
      */
-    public void uploadData(Object data, String comment)
+    public void uploadData(Object data, String comment) throws IOException
     {
-        DataOutputStream outStream;
-
-        try 
-    	{
-            // open output stream to server, POST data and multipart form up to the file data
-            outStream = new DataOutputStream (httpURLConn.getOutputStream ());
-            
+        
 						 
-			// NB. reader type if uploading richtext.			 
-			if (data instanceof Reader)
-			{	
-				appendDelimiterToOutputStream(outStream);
-				appendToOutputStream((Reader)data, "clipboard.rtf", outStream);
-			}
-			// the thing on the clipboard is just some text, we want to make a file called clipboard.txt and shove it in.
-			else if (data instanceof String)
-			{
-				appendDelimiterToOutputStream(outStream);
-				appendToOutputStream((String) data, "clipboard.txt", outStream);
-			}
-			// the thing on the clipboard is an image, e.g. a bitmap
-			// WE WANT TO MAKE A FILE (ASK THEM FOR THE NAME) AND upload that.
-			else if (data instanceof Image)
-			{
-				appendDelimiterToOutputStream(outStream);
-				appendToOutputStream((Image)data, "clipboard.jpg", outStream);
-			}
-			// if there is more than one thing on the clipboard
-			else if (data instanceof AbstractList)
-			{
-				System.out.println("AbstractList uploader");
-				AbstractList al = (AbstractList)data;
-				// if more than 1 thing in the iterator, abort as we don't support that yet.
-				Iterator iterator = al.iterator();
-				File f = null;
-				while (iterator.hasNext())
-				{
-					f = ((File)iterator.next());
-
-					System.out.println("filename: "+f.getPath());
-					appendDelimiterToOutputStream(outStream);
-					// ToDo: need to output the right delimiter between files.
-					// this needs to call the right upload routine.
-					appendToOutputStream(f,outStream);					
-				}
-			} else {
-			    System.out.println("Can't send this, as I don't understand the type: " +  data.getClass().getName());
-    		}
+		// NB. reader type if uploading richtext.			 
+		if (data instanceof Reader)
+		{
+			// open output stream to server, POST data and multipart form up to the file data
+			DataOutputStream outStream = startUpload(); 
+			appendToOutputStream((Reader)data, "clipboard.rtf", outStream);
+			finishUpload(outStream);
 			
-			// send comment 
-			if (comment.length() > 0 ) {
-				appendCommentToOutputStream(comment, outStream);
-			}
-			
-			appendEndOfDelimitersToOutputStream(outStream);    		
-			// close streams
-			outStream.flush();
-			outStream.close();
+		}
+		// the thing on the clipboard is just some text, we want to make a file called clipboard.txt and shove it in.
+		else if (data instanceof String)
+		{
+			DataOutputStream outStream = startUpload();
+			appendToOutputStream((String) data, "clipboard.txt", outStream);
+			finishUpload(outStream);
+		}
+		// the thing on the clipboard is an image, e.g. a bitmap
+		// WE WANT TO MAKE A FILE (ASK THEM FOR THE NAME) AND upload that.
+		else if (data instanceof Image)
+		{
+			DataOutputStream outStream = startUpload();
+			appendToOutputStream((Image)data, "clipboard.jpg", outStream);
+			finishUpload(outStream);				
+		}
+		// if there is more than one thing on the clipboard
+		else if (data instanceof AbstractList)
+		{
+			System.out.println("AbstractList uploader");
+			AbstractList al = (AbstractList)data;
 
-        }
-        catch (IOException ioex) 
-    	{
-    		ioex.printStackTrace(); 
-    	}
+			Iterator iterator = al.iterator();
+			File f = null;
+			while (iterator.hasNext())
+			{
+				f = ((File)iterator.next());
+				DataOutputStream outStream = startUpload();
+				System.out.println("filename: "+f.getPath());
+				appendToOutputStream(f,outStream);					
+				finishUpload(outStream);
+			}
+		} else {
+		    System.out.println("Can't send this, as I don't understand the type: " +  data.getClass().getName());
+		}
+
     }
 
 
+    /**
+     * Get extension of a filename
+     * 
+     * @param fileName
+     * @return String
+     */
 	String getExtension(String fileName) {
 			String fileExtension = "";
 			
