@@ -2,17 +2,22 @@
 package TWiki::Contrib::TWikiShellContrib::TWikiShell;
 
 use TWiki::Contrib::TWikiShellContrib::Standard;
+use TWiki::Contrib::TWikiShellContrib::Common;
 use Data::Dumper;
 
-my $prefix = "TWiki::Contrib::TWikiShellContrib::Ext";
-my $standardModule= "TWiki::Contrib::TWikiShellContrib::Standard";
+ 
+
 #use diagnostics;
 use Cwd;
 use strict;
  no strict 'refs';
 
 use base qw(Term::Shell);
-use vars qw {$config};
+use vars qw {$config $prefix};
+
+
+$prefix= "TWiki::Contrib::TWikiShellContrib::Ext";
+my $standardModule= "TWiki::Contrib::TWikiShellContrib::Standard";
 
 sub run_ { } #Do nothing on empty lines
 
@@ -23,13 +28,26 @@ sub new {
   $config = shift;
   my $new = $self->SUPER::new(@_);
 
-  $new->find_handlers($standardModule);
-  #TODO: Scan directory for installed extentions
+    $new->init_handlers();
   return $new;
 }
 
-sub prompt_str() { return "\ntwiki> "}; 
+sub init_handlers {
+    my $self=shift;
+    $self->find_handlers($standardModule);
+    $self->find_handlers("TWiki::Contrib::TWikiShellContrib::Ext::Reload");
+    
+    #TODO: Scan directory for installed extentions
+}
 
+#sub prompt_str() { return "\ntwiki> "}; 
+sub prompt_str() { 
+    if ($config->mode) {
+        return "\ntwiki/".$config->mode." > "; 
+    } else {
+        return "\ntwiki > "; 
+    }
+}
 ####################### HANDLERS ##############################################
     
 # Add support for multi-level commands
@@ -43,6 +61,7 @@ sub handler {
     # which control whether the name of the command should be pushed onto the
     # args.
     my @tries = (
+	[$config->mode." ".$command, $type, 0],
 	[$command, $type, 0],
 	[$o->cmd_prefix . $type . $o->cmd_suffix, 'catch', 1],
     );
@@ -51,6 +70,7 @@ sub handler {
     foreach my $arg (@$args) {
         $concat.=" ".$arg;
         unshift @tries, [$command.$concat ,$type,0];
+        unshift @tries, [$config->mode." ".$command.$concat ,$type,0];
     }
 
     # The user can control whether or not to search for "unique" matches,
@@ -79,15 +99,39 @@ sub handler {
 
 #-----------------------------------------------------------------------------
 
+sub remove_handlers {
+    my $self = shift;
+    my $pkg = shift || $self->{API}{class};
+    
+    my %cmdHandlers = %{$self->{handlers}};
+    my @toRemove=();
+    foreach my $command (keys %cmdHandlers) {
+        my %actions=%{$cmdHandlers{$command}};
+        foreach my $action (keys %actions) {            
+            my $handler=$actions{$action};
+            my $package=extractPackageFromSub($handler);
+            if ($pkg eq $package) {
+                unshift @toRemove,$command;
+            }            
+        }
+    }
+    
+    foreach my $toRemove (@toRemove) {
+        $self->{handlers}{$toRemove}=undef;
+    }
+}
+
+#-----------------------------------------------------------------------------
 sub find_handlers {
     my $o = shift;
     my $pkg = shift || $o->{API}{class};
-    
+    my $showHandlers = shift;
+	my $count=0;
     # Find the handlers in the given namespace:
     {
 	    no strict 'refs';
 	    my @r = keys %{ $pkg . "::" };
-	    $o->add_handlers($pkg, @r );
+	    $count=$o->add_handlers($pkg, $showHandlers , @r);
    }
 
     # Find handlers in its base classes.
@@ -95,54 +139,59 @@ sub find_handlers {
 	    no strict 'refs';
 	    my @isa = @{ $pkg . "::ISA" };
 	    for my $pkg (@isa) {
-	        $o->find_handlers($pkg);
+	        $count+=$o->find_handlers($pkg,$showHandlers);
 	    }
     }
+	return $count;
 }
 
 #-----------------------------------------------------------------------------
 
+sub _getBaseCommandPrefix {
+    my $pkg=shift;
+    my $commandPrefix="";
+	if ($pkg =~ /$prefix\:\:(.*)/) {
+        $commandPrefix = join(" ",map { lc } split("::",$1)); #My first perlish one-liner :)
+    }
+    chomp $commandPrefix;
+    return $commandPrefix;
+}
 sub add_handlers {
     my $o = shift;
     my $pkg = shift;
+	my $showHandlers= shift;
+	my $count=0;
 
     for my $hnd (@_) {
-    	next unless $hnd =~ /^(cli|run|help|smry|comp|catch|alias)_/o;
+        my $commandPrefix=_getBaseCommandPrefix($pkg);
+        
+        if ( $hnd eq "run" || $hnd eq "help" || $hnd eq "smry") {
+            if ($commandPrefix) {
+                $o->{handlers}{$commandPrefix}{$hnd} = $pkg."::".$hnd;
+				$count++;
+				print "$commandPrefix $hnd added.\n" if $showHandlers;
+            }
+            next;
+        }
+    	next unless $hnd =~ /^(cli|run|help|smry|comp|catch|alias)_?(.*)/o;
     	my $t = $1;
     	    
-    	my $a = substr($hnd, length($t) + 1);
-    	#print "t= $t   a=$a \n";
+    	my $a = $2 || "";
+    	$a = $commandPrefix." ".$a if $commandPrefix;
+    	
     	# Add on the prefix and suffix if the command is defined
     	if (length $a) {
     	    substr($a, 0, 0) = $o->cmd_prefix;
     	    $a .= $o->cmd_suffix;
     	}
-#    	print "1) hnd= $hnd\n";
     	if ($o ne $pkg) {
     	 $hnd = $pkg."::".$hnd;
     	}
-#    	print "2) hnd= $hnd\n";
-    	my $c="";
-##### (RAF)    	
-    	if ($pkg =~ /$prefix\:\:(.*)/) {
-    	    my @childpkgs=split("::",$1);
-    	    foreach my $childpkg (@childpkgs) {
-    	        #print "Prefixed ".lc $1."\n";
-    	        $c.=lc $childpkg." ";
-            }
-        }
+    	$o->{handlers}{$a}{$t} = $hnd;				
+		$count++;
+		print "$a $t added.\n" if $showHandlers;
 
-
-        if ($c) {
-            $a=$c.$a;
-            chop $c;
-            $o->{handlers}{$c}{run} = $pkg."::run";
-            $o->{handlers}{$c}{help} = $pkg."::help";
-            $o->{handlers}{$c}{smry} = $pkg."::smry";
-        }
-##### (RAF)        
-    	$o->{handlers}{$a}{$t} = $hnd;
-#    	print $o->{handlers}{$a}{$t} ."\n";
+    	$o->{packages}{$pkg}=$pkg;
     	
     	if ($o->has_aliases($a)) {
     	    my @a = $o->get_aliases($a);
@@ -150,9 +199,12 @@ sub add_handlers {
         		substr($alias, 0, 0) = $o->cmd_prefix;
         		$alias .= $o->cmd_suffix;
         		$o->{handlers}{$alias}{$t} = $hnd;
+				$count++;
+				print "$alias $t added.\n" if $showHandlers;
     	    }
     	}
     }
+	return $count;
 }
 
 #-----------------------------------------------------------------------------
@@ -162,28 +214,39 @@ sub add_handlers {
 # Import an external module
 ##############################
 
+# TODO: import Some::Command using "import some command "
 sub run_import {
     my $self = shift;
-    my ( $config, $class, @args ) = @_;
-    unless ($class =~ /TWiki::/) {
-      $class=$prefix."::".ucfirst $class;
+    my ( $config, $cmd, @args ) = @_;
+	
+	my $class=$cmd;
+
+    unless ($cmd =~ /TWiki::/) {
+      $class=$prefix."::".ucfirst $cmd;
     }
     print "Importing $class\n";
+    {
+        no warnings;
+        local $SIG{__WARN__}=sub { $@.=$_[0];};
+		eval " require $class;";
+        if ($@) {
+            if ($@ =~ /Can\'t locate/) {
+            print "No extension for $cmd found\n";
+            } else {
+                $self->{packages}{$class}=$class;
+                print $@."\nPlease, use the reload command after fixing the above error\n";
+                return 0;
+            }
+        }else {
+			my $commandCount=keys %{$self->{handlers}};
+			
 
-    eval " require $class;";
-    if ($@) {
-      print "Import failed: $! $? $@\n";
-      # should unset %INC{$class} so that it can reload
+            my $handlersCount = $self->find_handlers($class,1); ;
+			$commandCount = (keys %{$self->{handlers}})-$commandCount;
+            $config->printNotQuiet("$commandCount commands ($handlersCount handlers) imported\n");
+            return 1;
+        }
     }
-    $self->find_handlers($class); ;
-    if ($@) {
-        return 0;
-    }else {
-        return 1;
-    }
-   
-#  die "missing param" unless $class;
-  $self->find_handlers($class);
 }
 
 ############################## HOOKS ############################## 
@@ -200,15 +263,34 @@ sub precmd {
         return;
     }
 
+    # All this mumbo-jumbo is to guarantee 
+    # that the right args are passed down to the command
+    # Because the way Term::Shell works, when handling 
+    # multi-level commands (like "dump config"), the value 
+    # of $cmd will be "dump" and the value of @$args 
+    # will be ("config"), even if there is a handler 
+    # for the "dump config" command.
     if ($$handler =~ /$prefix/) {
-        shift @$args;
+        my $tmp=$$handler;
+        $tmp =~ s/$prefix//;
+        if ($tmp =~ /(.*)\:\:[^\:]+/) {
+            $tmp=lc $1;
+            $tmp=~ s/\:\:/ /g; 
+            my $arg="";
+            do {
+                $arg=shift @$args;
+            } while($arg && $tmp=~ /$arg/);
+            
+            unshift @$args,$arg if ($arg && !($$handler =~ /_/));
+        }
     }
-    
+
+    #I can't remember why this code is here... :S    
     if ($$handler =~/(.*)_.*\s+/) {
         $$handler =~ s/$$cmd//;
         $$handler =~ s/\s+//;
         
-        my ( $class, @remainingArgs ) = findTargetClassForString($$cmd,@$args);
+        my ( $class, @remainingArgs ) = $self->findTargetClassForString($$cmd,@$args);
         @$args=@remainingArgs;
         print "Class: $class\n";
         print "prefix: $prefix\n";
@@ -235,14 +317,14 @@ sub catch_run() {
 sub dispatch {
  my ($self,@args) = @_;
 
- my ( $class, @remainingArgs ) = findTargetClassForString(@args);
+ my ( $class, @remainingArgs ) = $self->findTargetClassForString(@args);
 
  unless ($class) {
     print "Couldn't resolve your request\n";
     return;
  }
  
- $self->run_import($class,@remainingArgs);
+ $self->run_import($config,$class,@remainingArgs);
  $self->cmd(join(" ",@remainingArgs));
 
 }
@@ -250,7 +332,7 @@ sub dispatch {
 #-----------------------------------------------------------------------------
 
 sub findTargetClassForString {
- my ($config,@cli_args) = @_;
+ my ($self,$config,@cli_args) = @_;
 
  # e.g. extension dev foo bar
  # we match extension dev, because Extension::Dev exists but
