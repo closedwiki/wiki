@@ -36,39 +36,6 @@ $query = new CGI;
 
 &main();
 
-sub includeTmpl
-{
-    my( $args, $theTopic, $theSkin ) = @_;
-    
-    my $inc = &TWiki::extractNameValuePair( $args );
-    my $condition = &TWiki::extractNameValuePair( $args, "condition" );
-    
-    my $tmpl = "";
-    my $doInclude = "";
-    if( ! $condition ) {
-        $doInclude = 1;
-    } else {
-        if( $condition eq "ie" && $query->user_agent( "msie" ) ) {
-            my $editorPref = lc &TWiki::Prefs::getPreferencesValue( "EDITOR" );
-            if( $editorPref ne "none" ) {
-                $doInclude = 1;
-            }
-        } else {
-            my $alt = &TWiki::extractNameValuePair( $args, "alt" );
-            if( $alt ) {
-                $inc = $alt;
-                $doInclude = 1;
-            }
-        }
-    }
-    
-    if( $doInclude ) {
-        $tmpl = &TWiki::Store::readTemplate( $inc, $theSkin );
-    }
-    
-    return $tmpl;
-}
-
 sub main
 {
     my $thePathInfo = $query->path_info(); 
@@ -213,9 +180,6 @@ sub main
         # write log entry
         &TWiki::Store::writeLog( "edit", "$webName.$topic", $extra );
     }
-
-    # Deal with optional inclusion
-    $tmpl =~ s/%INCLUDE{([^}]*)}%/&includeTmpl( $1, $topic, $skin )/goe;
 
     if( $saveCmd ) {
         $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go;
