@@ -53,6 +53,49 @@ sub _traceExec
    #TWiki::writeDebug( "Search exec: $cmd -> $result" );
 }
 
+# ===========================
+sub _translateSpace
+{
+    my( $theText ) = @_;
+    $theText =~ s/\s+/$TWiki::TranslationToken/go;
+    return $theText;
+}
+
+# ===========================
+sub _tokensFromSearchString
+{
+    my( $theSearchVal, $theType, $theRegex ) = @_;
+
+    my @tokens = ();
+    if( $theType eq "regex" || $theRegex ) {
+        # regular expression search Example: soap;wsdl;web service;!shampoo
+        @tokens = split( /;/, $theSearchVal );
+
+    } elsif( $theType eq "literal" ) {
+        # literal search
+        $tokens[0] = $theSearchVal;
+
+    } else {
+        # keyword search. Example: soap +wsdl +"web service" -shampoo
+        $theSearchVal =~ s/(\".*?)\"/&_translateSpace($1)/geo;  # hide spaces in "literal text"
+        $theSearchVal =~ s/[\+\-]\s+//go;
+
+        # build pattern of stop words
+        my $stopWords = &TWiki::Prefs::getPreferencesValue( "SEARCHSTOPWORDS" ) || "";
+        $stopWords =~ s/[\s\,]+/\|/go;
+        $stopWords =~ s/[\(\)]//go;
+
+        # read from bottom to up:
+        @tokens =
+            map { s/^\+//o; s/^\-/\!/o; s/^\"//o; $_ }    # remove +, change - to !, remove "
+            grep { ! /^($stopWords)$/i }                  # remove stopwords
+            map { s/$TWiki::TranslationToken/ /go; $_ }   # restore space
+            split( /[\s]+/, $theSearchVal );              # split on spaces
+    }
+
+    return @tokens;
+}
+
 # =========================
 sub _searchTopicsInWeb
 {
@@ -199,6 +242,7 @@ sub searchWeb
     my $theExclude =    $params{"excludetopic"} || "";
     my $theScope =      $params{"scope"} || "";
     my $theOrder =      $params{"order"} || "";
+    my $theType =       $params{"type"} || "";
     my $theRegex =      $params{"regex"} || "";
     my $theLimit =      $params{"limit"} || "";
     my $revSort =       $params{"reverse"} || "";
@@ -375,12 +419,7 @@ sub searchWeb
         }
     }
 
-    my @tokens;
-    if( $theRegex ) {
-        @tokens = split( /;/, $theSearchVal );
-    } else {
-        @tokens = $theSearchVal;
-    }
+    my @tokens = &_tokensFromSearchString( $theSearchVal, $theType, $theRegex );
 
     # write log entry
     # FIXME: Move log entry further down to log actual webs searched

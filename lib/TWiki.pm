@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "18 Dec 2003";
+$wikiversion      = "04 Jan 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1604,7 +1604,7 @@ sub handleMetaSearch
         "inline"        => "1",
         "search"        => $searchVal,
         "web"           => $searchWeb,
-        "regex"         => "on",
+        "type"          => "regex",
         "nosummary"     => "on",
         "nosearch"      => "on",
         "noheader"      => "on",
@@ -1633,6 +1633,8 @@ sub handleSearchWeb
         "excludetopic"  => extractNameValuePair( $attributes, "excludetopic" ),
         "scope"         => extractNameValuePair( $attributes, "scope" ),
         "order"         => extractNameValuePair( $attributes, "order" ),
+        "type"          => extractNameValuePair( $attributes, "type" )
+                        || TWiki::Prefs::getPreferencesValue( "SEARCHVARDEFAULTTYPE" ),
         "regex"         => extractNameValuePair( $attributes, "regex" ),
         "limit"         => extractNameValuePair( $attributes, "limit" ),
         "reverse"       => extractNameValuePair( $attributes, "reverse" ),
