@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1064988720" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="PeterThoeny" date="1069116360" format="1.0" version="1.19"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -32,6 +32,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 	* <img src="%ATTACHURLPATH%/home.gif" alt="home.gif"  width="16" height="16"  /> Home
 	* <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  /> Changes
 	* <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  /> Notify
+	* <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif"  width="16" height="16"  /> Empty transparent 16x16 spacer
 
 -- Main.PeterThoeny - 17 Jan 2003<br />
 -- Main.MikeMannix - 16 May 2002
@@ -61,3 +62,4 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="days.gif" attr="" comment="Days" date="1055022662" path="C:\Data\Temp\days.gif" size="125" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="hourglass.gif" attr="" comment="Hour glass" date="1055022919" path="C:\Data\Temp\hourglass.gif" size="128" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="stargold.gif" attr="" comment="Favorites" date="1064988628" path="C:\Data\Temp\stargold.gif" size="180" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="empty.gif" attr="" comment="Empty transparent 16x16 spacer" date="1069116309" path="C:\Data\Temp\empty.gif" size="100" user="PeterThoeny" version="1.1"}%
