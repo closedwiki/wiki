@@ -1,7 +1,12 @@
+#! perl -w
+use strict;
+use diagnostics;
+
 package TWiki::Contrib::BuildContrib::TWikiCLI;
 my $prefix = "TWiki::Contrib::BuildContrib::TWikiCLI";
 
 use Getopt::Long; # see http://www.aplawrence.com/Unix/perlgetopts.html
+use TWiki::Contrib::BuildContrib::TWikiCLI::Extension;
 
 sub dispatch {
  my $verboseFlag = 0;
@@ -12,28 +17,17 @@ sub dispatch {
  my $class = ucfirst lc shift @args; # eg. extension => Extension 
  my $fqClass = $prefix."::".$class;
 
- eval { require $fqClass; } ;
-
- if ($@ ){
-     print "no can do - $@";
- }
+ dispatch2($fqClass, @args);
  
- my $dispatchSub = $@
-  ? \&noSuchMethod  # don't have it
-  : sub { dispatch2(@_) };
 
- if (defined &$dispatchSub) {
-     print "calling $dispatchSub\n";
-  return &$dispatchSub(@args);
- } else {
-  return helpText();
+ 
  }
 
 # print "Unprocessed by Getopt::Long\n" if $ARGV[0];
 # foreach (@ARGV) {
 #  print "$_\n";
 # }
-}
+
 
 sub noSuchMethod {
     my ($err) = @_;
@@ -47,6 +41,24 @@ sub helpText {
 }
 
 sub dispatch2 {
-    return "ok";
+    my ($class,$do,@args) = @_;
+
+    my $dispatchSubName = $class."::".$do;
+    print "dispatching to $dispatchSubName\n";
+    my $ans;
+    if (defined &$dispatchSubName) {
+	no strict 'refs';
+	eval {
+	    $ans = &$dispatchSubName(@args);
+	};
+	if ($@){
+	    return $@;
+	} else {
+	    return $ans;
+	}
+    } else {
+	print "No such $dispatchSubName\n";
+	return helpText();
+    }
 }
 1;
