@@ -106,7 +106,7 @@ sub main
        } else {
 	  my $renameError = &TWiki::Store::renameTopic( $oldWeb, $oldTopic, $newWeb, $newTopic, "relink" );
 	  if( $renameError ) {
-	      TWiki::redirect( $query, &TWiki::getOopsUrl( $newWeb, $newTopic, "oopsrenameerr", $renameError ) );
+	      TWiki::redirect( $query, &TWiki::getOopsUrl( $oldWeb, $oldTopic, "oopsrenameerr", $renameError, $newWeb, $newTopic ) );
 	      return;
            }
        } 
@@ -183,7 +183,10 @@ sub updateReferingPages
 	     my $insideVERBATIM = 0;
              my $noAutoLink = 0;
 	     foreach( split( /\n/, $scantext ) ) {
-	        next if( /^%META:TOPIC(INFO|MOVED)/ );
+	        if( /^%META:TOPIC(INFO|MOVED)/ ) {
+	            $resultText .= "$_\n";
+	            next;
+	        }
 		# FIXME This code is in far too many places - also in Search.pm and Store.pm
 		m|<pre>|i  && ( $insidePRE = 1 );
 		m|</pre>|i && ( $insidePRE = 0 );
