@@ -56,7 +56,7 @@ sub searchWeb
     my ( $doInline, $theWebName, $theSearchVal, $theScope, $theOrder,
          $theRegex, $theLimit, $revSort, $caseSensitive, $noSummary,
          $noSearch, $noHeader, $noTotal, $doBookView, $doRenameView,
-         $doShowLock, $noEmpty, @junk ) = @_;
+         $doShowLock, $noEmpty, $template, @junk ) = @_;
 
     ## 0501 kk : vvv new option to limit results
     # process the result limit here, this is the 'global' limit for
@@ -132,7 +132,10 @@ sub searchWeb
     my $tempVal = "";
     my $tmpl = "";
     my $topicCount = 0; # JohnTalintyre
-    if( $doBookView ) {
+    if( $template ) {
+        $tmpl = &TWiki::Store::readTemplate( "$template" );
+        # FIXME replace following with this @@@
+    } elsif( $doBookView ) {
         $tmpl = &TWiki::Store::readTemplate( "searchbookview" );
     } elsif ($doRenameView ) {
         $tmpl = &TWiki::Store::readTemplate( "searchrenameview" ); # JohnTalintyre
