@@ -33,6 +33,7 @@ use vars qw( $setlibAvail );
 
 
 my $brokenTWikiCfg;
+my $brokenLocalSiteCfg;
 
 BEGIN {
     # Set default current working directory
@@ -49,7 +50,6 @@ BEGIN {
         unshift @INC, '../lib';
         $setlibAvail = 0;
     }
-
     if( $OS ) {
         $cfg{DetailedOS} = $detailedOS;
         $cfg{OS} = $OS;
@@ -80,12 +80,20 @@ BEGIN {
     # Read the configuration file now in order to set locale;
     # includes checking for broken syntax etc.  Need 'require'
     # to get the $!/$@ to work.
+    $brokenLocalSiteCfg = 0;
+    unless( eval 'require "LocalSite.cfg" ' ) {
+        # Capture the Perl error(s)
+        $brokenLocalSiteCfg = 1;	
+        $brokenLocalSiteError = 
+          ( $! ? "$!\n" : '') .	# $! if not readable,
+			( $@ ? "$@\n" : '');	# $@ if not compileable
+    }
     $brokenTWikiCfg = 0;
-    unless( eval 'require "TWiki.cfg" ' ){	# Includes OS detection
-	# Capture the Perl error(s)
-	$brokenTWikiCfg = 1;	
-	$brokenTWikiCfgError = 
-			( $! ? "$!\n" : '') .	# $! if not readable,
+    unless( eval 'require "TWiki.cfg" ' ) {
+        # Capture the Perl error(s)
+        $brokenTWikiCfg = 1;	
+        $brokenTWikiCfgError = 
+          ( $! ? "$!\n" : '') .	# $! if not readable,
 			( $@ ? "$@\n" : '');	# $@ if not compileable
     }
 
@@ -164,7 +172,6 @@ BEGIN {
     $cfg{RCS}{histCmd} ||= $ss{histCmd};
     $cfg{RCS}{infoCmd} ||= $ss{infoCmd};
     $cfg{RCS}{diffCmd} ||= $ss{diffCmd};
-    $cfg{RCS}{breakLockCmd} ||= $ss{breakLockCmd};
     $cfg{RCS}{ciDateCmd} ||= $ss{ciDateCmd};
     $cfg{RCS}{delRevCmd} ||= $ss{delRevCmd};
     $cfg{RCS}{unlockCmd} ||= $ss{unlockCmd};
@@ -284,6 +291,17 @@ if ($brokenTWikiCfg) {
     print "<b><font color=\"red\">WARNING:</font></b> ";
     print "TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) relate to TWiki.cfg and should help locate the problem.<p />\n";
     print "$brokenTWikiCfgError\n";
+
+    # EARLY EXIT
+    print $query->end_html();
+    exit;
+}
+if ($brokenLocalSiteCfg) {
+    $brokenLocalSiteError =~ s!\n!<br />\n!sg; 	# Format properly
+    print $query->h3("Configuration error");
+    print "<b><font color=\"red\">WARNING:</font></b> ";
+    print "LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) relate to TWiki.cfg and should help locate the problem.<p />\n";
+    print "$brokenLocalSiteError\n";
 
     # EARLY EXIT
     print $query->end_html();
@@ -627,34 +645,37 @@ RIGHT($cfg{PubUrlPath},
        "<img src=\"$cfg{PubUrlPath}/wikiHome.gif\" />"));
 
 checkdir( "PubDir", $cfg{PubDir},
-          "This is the public directory, as seen from the file system. ".
-          "It must correspond to <b>PubUrlPath</b>.",
+          NOTE("This is the public directory, as seen from the file system. ".
+          "It must correspond to <b>PubUrlPath</b>."),
           "wikiHome.gif", "w" );
 
 checkdir( "TemplateDir", $cfg{TemplateDir},
-          "This is the template directory, as seen from the file system. ",
+          NOTE("This is the template directory, as seen from the file system. "),
           "view.tmpl", "r" );
 
 checkdir( "DataDir", $cfg{DataDir},
-          "This is the data directory where TWiki stores all topics.",
+          NOTE("This is the data directory where TWiki stores all topics."),
           undef, "w" );
 
-my $logFile = $cfg{LogFileName};
-checkdir( "LogFileName",
-          $logFile, undef, undef, "w" );
+my $logFile = $cfg{LogFileName} || "";
+my $logDir = $logFile;
+$logDir =~ s/\/.*?$//;
+checkdir( "LogFileName", $logDir, $logFile, undef, "w" );
 
-$logFile = $cfg{WarningFileName};
-checkdir( "WarningFileName",
-          $logFile, undef, undef, "w" );
+$logFile = $cfg{WarningFileName} || "";
+$logDir = $logFile;
+$logDir =~ s/\/.*?$//;
+checkdir( "WarningFileName", $logDir, $logFile, undef, "w" );
 
-$logFile = $cfg{DebugFileName};
-checkdir( "DebugFileName",
-          $logFile, undef, undef, "w" );
+$logFile = $cfg{DebugFileName} || "";
+$logDir = $logFile;
+$logDir =~ s/\/.*?$//;
+checkdir( "DebugFileName", $logDir, $logFile, undef, "w" );
 
 LEFT("MailProgram");
 $n = $cfg{MailProgram};
-$val = $cfg{MailProgram};
-$val =~ s/\s.*$/$1/g;
+$val = $cfg{MailProgram} || '';
+$val =~ s/\s.*$//g;
 if( $cfg{OS} ne 'WINDOWS' && ! ( -e $val ) ) {
     $n .= WARN("Mail program <tt>$val</tt> not found. Check the path.");
 } elsif( $cfg{OS} ne 'WINDOWS' ) {
@@ -717,17 +738,19 @@ if( $cfg{StoreImpl} eq "RcsWrap") {
     # Check RCS directory
     foreach my $key( %{$cfg{RCS}} ) {
         if ( $key && $key =~ /Cmd$/ ) {
-            my $proggy = $cfg{RCS}{$key};
+            my $proggy = $cfg{RCS}{$key} || "";
             $proggy =~ s/\s.*$//;
             LOWLEFT($key);
-            my $rcsVerNum = `$proggy -V`;
-            $rcsVerNum = (split(/\s+/, $rcsVerNum))[2] || "";	# Recover from unset variable
-            $proggy .= " (version $rcsVerNum)";
-            $proggy .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)" if defined($cygwinRcsVerNum);
-            if( $rcsVerNum && $rcsVerNum < $rcsverRequired ) {
-                # RCS too old
-                $proggy .= ERROR("The version of this program is too old, upgrade to version $rcsverRequired or higher.");
-                $badRCS = 1;
+            if( $proggy) {
+                my $rcsVerNum = `$proggy -V`;
+                $rcsVerNum = (split(/\s+/, $rcsVerNum))[2] || "";	# Recover from unset variable
+                $proggy .= " (version $rcsVerNum)";
+                $proggy .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)" if defined($cygwinRcsVerNum);
+                if( $rcsVerNum && $rcsVerNum < $rcsverRequired ) {
+                    # RCS too old
+                    $proggy .= ERROR("The version of this program is too old, upgrade to version $rcsverRequired or higher.");
+                    $badRCS = 1;
+                }
             }
             RIGHT($proggy);
         }
@@ -1063,15 +1086,23 @@ sub checkGnuVersion {
     }
 }
 
+# check we can create a file
 sub checkdir {
     my( $id, $dir, $descr, $file, $perms ) = @_;
-    LEFT("$id");
+    LEFT($id);
+
+    if (! defined $dir) {
+      $file =~ /(.*)\/(.*?)/;
+      $dir = $1;
+      $file = $2;
+    }
+    
     my $n = $dir;
     if( $descr ) {
-        $n .= NOTE( $descr );
+        $n .= $descr;
     }
     if( defined $file && !-e "$dir/$file" ) {
-        $n .= ERROR("Directory does not exist or file <tt>$file</tt> does not exist in this directory.");
+        $n .= ERROR("Directory $dir does not exist or file <tt>$file</tt> does not exist in this directory.");
     } elsif( $perms =~ /w/ && ! testFileIsWritable( "$dir/testenv.test" ) ) {
         $n .= ERROR("The directory must exist and be writable by the <b>$usr</b> user.");
     } elsif( $perms !~ /w/ && testFileIsWritable( "$dir/testenv.test" ) ) {
@@ -1139,7 +1170,8 @@ sub explode {
         if( ref($hash->{$n}) =~ /^HASH/) {
             $tab .= "<td valign='top'>{".explode($hash->{$n})."}</td>\n";
         } else {
-            $tab .= "<td><tt>$hash->{$n}</tt></td>\n";
+            my $val = $hash->{$n} || "";
+            $tab .= "<td><tt>$val</tt></td>\n";
         }
         $tab .= "</tr>";
     }
