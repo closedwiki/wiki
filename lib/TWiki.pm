@@ -275,8 +275,12 @@ sub writeWarning
 {
     my( $text ) = @_;
     if( $warningFilename ) {
+    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
+    my( $tmon) = $isoMonth[$mon];
+    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
         open( FILE, ">>$warningFilename" );
-        print FILE "$text\n";
+        print FILE "$time $text\n";
         close( FILE );
     }
 }
@@ -843,18 +847,23 @@ sub handleMetaSearch
     my $attrType          = extractNameValuePair( $attributes, "type" );
     my $attrTitle         = extractNameValuePair( $attributes, "title" );
     
-    #%META:TOPICMOVED{from="Test.HiJohn"
     my $searchVal = "XXX";
     
     if( ! $attrType ) {
        $attrType = "";
     }
     
+    
+    my $searchWeb = "all";
+    
     if( $attrType eq "topicmoved" ) {
        $searchVal = "%META:TOPICMOVED\{.*from=\\\"$attrWeb\.$attrTopic\\\".*\}%";
+    } elsif ( $attrType eq "parent" ) {
+       $searchWeb = $attrWeb;
+       $searchVal = "%META:TOPICPARENT\{.*name=\\\"($attrWeb\\.)?$attrTopic\\\".*\}%";
     }
     
-    my $text = &TWiki::Search::searchWeb( "1", "all", $searchVal, "",
+    my $text = &TWiki::Search::searchWeb( "1", $searchWeb, $searchVal, "",
        "", "on", "", "",
        "", "on", "on",
        "on", "on", "", "",
@@ -1318,7 +1327,7 @@ sub handleMetaTags
     $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $meta )/goe;
     $text =~ s/%META{\s*"attachments"\s*}%/&TWiki::Attach::renderMetaData( $theWeb, $theTopic, $meta )/goe;
     $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/goe;
-    $text =~ s/%META{\s*"parent"\s*}%/&renderParent( $theWeb, $theTopic, $meta )/goe;
+    $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/goe;
         
     return $text;
 }
@@ -1326,16 +1335,62 @@ sub handleMetaTags
 # ========================
 sub renderParent
 {
-    my( $web, $topic, $meta ) = @_;
+    my( $web, $topic, $meta, $args ) = @_;
     
     my $text = "";
     
-    my %parent = $meta->findOne( "TOPICPARENT" );
-    if( %parent ) {
-        my $name = $parent{"name"};
-        $text = $name;
+    my $dontRecurse;
+    my $prefix;
+    my $usesep;
+    
+    if( $args ) {
+       $dontRecurse = extractNameValuePair( $args, "dontrecurse" );
+       $prefix = extractNameValuePair( $args, "prefix" );
+       $usesep = extractNameValuePair( $args, "seperator" );
     }
     
+    if( ! $usesep ) {
+       $usesep = " > ";
+    }
+
+    my %visited = ();    
+    $visited{"$web.$topic"} = 1;
+    
+    my $sep = "";
+    while( 1 ) {
+	my %parent = $meta->findOne( "TOPICPARENT" );
+	if( %parent ) {
+	    my $name = $parent{"name"};
+	    $text = "$name$sep$text";
+	    $sep = $usesep;
+	    if( $dontRecurse || ! $name ) {
+               last;
+	    } else {
+	       my $dummy;
+	       my $pWeb = $web;
+	       my $pTopic = $name;
+	       if( $name =~ /^(.*)\.(.*)$/ ) {
+	          $pWeb = $1;
+	          $pTopic = $2;
+	       }
+	       if( $visited{"$pWeb.$pTopic"} ) {
+	          last;
+	       } else {
+	          $visited{"$pWeb.$pTopic"} = 1;
+	       }
+	       ( $meta, $dummy ) = TWiki::Store::readTopMeta( $pWeb, $pTopic );
+	    }
+	} else {
+	    last;
+	}
+    }
+
+    if( $prefix ) {
+       $text = "$prefix$text";
+    }
+        
+
+
     $text = handleCommonTags( $text, $topic, $web );
     $text = getRenderedVersion( $text, $web );
     
