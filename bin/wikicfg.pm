@@ -62,7 +62,7 @@ $defaultUrlHost   = "http://your.domain.com";
 #                   %SCRIPTURLPATH% : cgi-bin path of TWiki URL:
 $scriptUrlPath    = "/twiki/bin";
 #                   %PUBURLPATH% : Public data path of TWiki URL (root of attachments) :
-$pubUrlPath       = "/home/httpd/twiki/pub";
+$pubUrlPath       = "/twiki/pub";
 #                   Public data directory, must match $pubUrlPath :
 $pubDir           = "/home/httpd/twiki/pub";
 #                   Template directory :
@@ -110,7 +110,7 @@ $fgrepCmd         = "/bin/fgrep";
 # variables that probably do not change:
 # ==================================================================
 #                   %WIKITOOLNAME% : TWiki tool name, default "TWiki" :
-$wikiToolName       = "TWikibeta";
+$wikiToolName       = "TWiki";
 #                   Regex security filter for web name, topic name, user name :
 $securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\n\r]";
 #                   Default user name, default "guest" :

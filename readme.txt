@@ -1,8 +1,8 @@
 TWiki Distribution
 ------------------
 
-Version: 21 Apr 2000
-Release type: Beta release
+Version: 01 May 2000
+Release type: Production release
 
 Installation instructions in TWikiDocumentation.html or
 http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiDocumentation

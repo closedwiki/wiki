@@ -1,7 +1,7 @@
 <html><head>
 <title>TWikiDocumentation</title>
 </head><body>
-<h3>Documentation of the TWiki Implementation (version 21 Apr 2000)</h3>
+<h3>Documentation of the TWiki Implementation (version 01 May 2000)</h3>
 <UL>
 <LI> <A href="#login">(1)</A> Wiki Username vs. Login Username
 <LI> <A href="#variables">(2)</A> Wiki Variables
@@ -66,7 +66,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>21 Apr 2000</b> </td>
+  <td> Wiki tool version, is <b>01 May 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -81,7 +81,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>28 Apr 2000</b> </td>
+  <td> Todays date, is <b>01 May 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>HTTP_HOST%</CODE> </td>
   <td> HTTP_HOST environment variable, is <b></b> </td>
@@ -623,9 +623,10 @@ drwxrwxrwx  11 twiki   twiki       1024 Feb  8 18:10 ..
 <HR>
 <STRONG>(7) Upgrading Earlier Versions to TWiki 01 Mai 2000</STRONG>
 <p> 
-To upgrade an earlier TWiki version like <CODE>01 Sep 1999</CODE> to version <CODE>01 Mai 2000</CODE> you should do the following things:
+To upgrade an earlier TWiki version like <CODE>01 Sep 1999</CODE> to version <CODE>01 May 2000</CODE> you should do the following things:
 <p> 
 <UL>
+<LI> Back up your system.
 <LI> Update the templates in the <CODE>/templates</CODE> directory (and its subdirs):
 <UL>
 <LI> Take the templates of the latest distribution as the base and merge your changes back into it.
@@ -639,7 +640,7 @@ To upgrade an earlier TWiki version like <CODE>01 Sep 1999</CODE> to version <CO
 <LI> Copy the new Main. <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiPreferences">TWikiPreferences</A> topic (and <CODE>*,v</CODE> file) into your TWiki.Main web. Customize the topic to your needs.
 <LI> Copy the new Main. <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebPreferences">WebPreferences</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebStatistics">WebStatistics</A> topics (and <CODE>*,v</CODE> files) into all your webs. Customize all <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebPreferences">WebPreferences</A> topics to your needs (e.g. web color).
 <LI> Copy <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/WebSearch">WebSearch</A> into all your webs, or modify the existing ones. <STRONG><EM>Reason:</EM></STRONG> Some switches for search changed.
-<LI> Copy the TWiki documentation into your Main web: Topics <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiDocumentation">TWikiDocumentation</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUsernameVsLoginUsername">TWikiUsernameVsLoginUsername</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiVariables">TWikiVariables</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiNotificationOfChanges">TWikiNotificationOfChanges</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiCategoryTable">TWikiCategoryTable</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiImplementationNotes">TWikiImplementationNotes</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiInstallationNotes">TWikiInstallationNotes</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUpgradeTo01Mai2000">TWikiUpgradeTo01Mai2000</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TextFormattingRules">TextFormattingRules</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiHistory">TWikiHistory</A> .
+<LI> Copy the TWiki documentation into your Main web: Topics <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiDocumentation">TWikiDocumentation</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUsernameVsLoginUsername">TWikiUsernameVsLoginUsername</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiVariables">TWikiVariables</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiNotificationOfChanges">TWikiNotificationOfChanges</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiCategoryTable">TWikiCategoryTable</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiImplementationNotes">TWikiImplementationNotes</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiInstallationNotes">TWikiInstallationNotes</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiUpgradeTo01May2000">TWikiUpgradeTo01May2000</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TextFormattingRules">TextFormattingRules</A>, <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiHistory">TWikiHistory</A> .
 <LI> Copy the registration topic into your Main web:
 <UL>
 <LI> In case you are on an Intranet: Copy topic <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/TWikiRegistration">TWikiRegistration</A> to Main.<nop>TWikiRegistration. Customize if needed.
@@ -651,7 +652,7 @@ To upgrade an earlier TWiki version like <CODE>01 Sep 1999</CODE> to version <CO
 <LI> Add the <a href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> if TWiki is installed on a public web server.
 </UL>
 <p> 
--- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 21 Apr 2000 <br>
+-- <A href="http://TWiki.SourceForge.net/cgi-bin/view/Main/PeterThoeny">PeterThoeny</A> - 28 Apr 2000 <br>
 <p> 
 <p> 
 </body></html>
