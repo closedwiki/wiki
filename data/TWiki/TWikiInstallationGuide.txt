@@ -1,4 +1,4 @@
-%META:TOPICINFO{version="1.20" date="994838433" author="PeterThoeny" format="1.0beta2"}%
+%META:TOPICINFO{author="PeterThoeny" date="997578208" format="1.0beta2" version="1.21"}%
 ---## TWiki Installation Notes
 
 These installation steps use the Apache web server on Linux as an example. TWiki should run on other web servers and Unix systems as well. (TWiki on Windows is possible, but has not been documented well. More on that at http://TWiki.org/cgi-bin/view/Codev/TWikiOnWindows )
@@ -63,10 +63,11 @@ Read http://TWiki.org/cgi-bin/view/Codev/SourceForgeHowTo in case you want to in
 		* Rename file =.htaccess.txt= in the =twiki/bin= directory to =.htaccess= and change it to your needs. For details consult the HTTP server documentation (for Apache server: <a href="http://www.apache.org/docs/mod/directives.html">[1]</a>, <a href="http://www.mcs.kent.edu/system/web_help/htaccess/introduction.html">[2]</a>). In particular, the following <font color="red">red</font> part needs to be configured correctly: <br>
 		  =Redirect <font color="red">/urlpath/to/TWiki/index.html</font> http<nop>://<font color="red">your.domain.com/urlpath/to/TWiki/bin/</font>view= <br>
 		  =AuthUserFile <font color="red">/filepath/to/TWiki/data/</font>.htpasswd= <br>
-		  =ErrorDocument 401 <font color="red">/urlpath/to/TWiki/bin/</font>view/TWiki/TWikiRegistration=
+		  =ErrorDocument 401 <font color="red">/urlpath/to/TWiki/bin/</font>oops/TWiki/TWikiRegistration?template=oopsauth=
 			* __Note:__ The browser should ask for login name and password when you click on the <u>Edit</u> link. In case =.htaccess= does not have the desired effect you need to enable it: Add "AllowOverride All" to the Directory section of =access.conf= for your =twiki/bin= directory.
 		* Copy the TWikiRegistrationPub topic to TWikiRegistration. Do that by either editing the topics in the%TWIKIWEB% web, or by renaming the =.txt= and =.txt,v= files in the =twiki/data/%TWIKIWEB%= directory.
 			* __Note:__ You can customize the registration form if needed, like deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This will ensure that the fields are processed correctly.
+		* A new line containing user name and encrypted password gets added to the =data/.htpasswd= file when a users registers. The file that comes with the TWiki installation contains a few user accounts of TWiki core team members (needed for testing). You can edit the file and delete those lines.
 
 	* Optional: You can automatically generate usage statistics for all webs. To enable this:
 		* Make sure variable =$doLogTopicView, $doLogTopicSave and $doLogTopicUpload= in =wikicfg.pm= are set. This will generate log entries in file =twiki/data/log&lt;date&gt;.txt= .
