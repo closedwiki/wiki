@@ -1,0 +1,36 @@
+%META:TOPICINFO{author="RahulMundke" date="1069345440" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+This plugin maintains the Visitor Count for the site.
+
+
+
+Here are the settings for the plugin:
+
+
+
+		* Set DEBUG = 1
+
+		* Set FILEPATH = /home/web/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Main.RahulMundke - 20 Nov 2003
+
