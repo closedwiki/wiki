@@ -3,33 +3,53 @@
   <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/WebHome"> <META NAME="ROBOTS" CONTENT="NOINDEX">
 </HEAD>
 <BODY bgcolor="#ffffff">
-<H1>Move attachment %FILENAME%</H1>
 <FORM name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%OLD_WEB%/%OLD_TOPIC%/">
 <input type="hidden" name="oldWeb" value="%OLD_WEB%">
 <input type="hidden" name="oldTopic" value="%OLD_TOPIC%">
-<TABLE>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
+      <A href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
+    </TD>
+    <TD>
+      <B>%OLD_WEB% . </B><FONT size="+2"><B>%OLD_TOPIC%.%FILENAME%</B> (move)</FONT>
+    </TD>
+  </TR>
+    <TR BGCOLOR="%WEBBGCOLOR%">
+      <TD colspan="2">&nbsp;
+      </TD>
+  </TR>
+</TABLE>
+<BR>
+<TABLE border="1" cellpadding="1" cellspacing="0">
 <TR>
-  <TH></TH><TH bgcolor=yellow>Currently</TH><TH bgcolor=red>Change to</TH>
+  <TH></TH><TH bgcolor=#00FFFF>Currently</TH><TH bgcolor=#FFFFC0>Change to</TH>
 </TR>
 <TR>
-  <TH>Web</TH><TD  bgcolor=yellow>&nbsp;%OLD_WEB%&nbsp;</TD>
-  <TD bgcolor=red>&nbsp;%WEB_SELECTION%&nbsp;</TD>
+  <TH>Web</TH><TD  bgcolor=#00FFFF>&nbsp;%OLD_WEB%&nbsp;</TD>
+  <TD bgcolor=#FFFFC0>&nbsp;%WEB_SELECTION%&nbsp;</TD>
 <TR>
 <TR>
-  <TH>Topic</TH><TD bgcolor=yellow>&nbsp;%OLD_TOPIC%&nbsp;</TD>
-  <TD bgcolor=red>&nbsp;<input type="text" name="newTopic" size="16" value="%NEW_TOPIC%">
+  <TH>Topic</TH><TD bgcolor=#00FFFF>&nbsp;%OLD_TOPIC%&nbsp;</TD>
+  <TD bgcolor=#FFFFC0>
   <input type="hidden" name="newWeb" value="%NEW_WEB%">
-  &nbsp;
+  &nbsp;%NEW_TOPIC%&nbsp;
   </TD>
 </TR>
 </TABLE>
 <input type="hidden" name="attachment" value="%FILENAME%">
 <input type="hidden" name="changeRefs" value="0">
 <BR>
-The attachment and any history will be moved to the new topic.  There will be an error if either of the topics are
+The attachment and any history will be moved to the new topic.  An error page will be shown if either of the topics are
 locked by another user.  The new topic chosen must already exist.  Note that any URLs that refer to the attachment will be broken after this move.
-<BR>
-<BR>
-<input type="submit" value="Rename">
+
+<br>
+<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
+  <TR>
+    <TD bgcolor="%WEBBGCOLOR%" align="center">
+       <input type="submit" value="Rename/Move">
+    </TD>
+  </TR>
+</TABLE>
 </FORM>
 </BODY>
