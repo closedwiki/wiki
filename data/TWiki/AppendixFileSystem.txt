@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1022825996" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="PeterThoeny" date="1026976138" format="1.0" version="1.10"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -8,6 +8,7 @@
 _Annotated directory and file listings, for the 01-Dec-2001 TWiki production release._
 
 ---++ Who and What is This Good For?
+
 Interested __Users__ and __Site Administrators__ can find out in simple terms what each part of TWiki actually does. Adventurous _Adminstrators_ with server access to files (eg: FTP) can also figure out where to look to make minor modifications, like changing hardcode text or color. __Software Developers__ can get an at-a-glance overview of TWiki code architecture.
 
 ---++ Directory Structure
@@ -49,6 +50,7 @@ Perl CGI scripts. _Full file list:_
 | =edit=			 | Edit a topic |
 | =geturl=		  | Fetch URL data |
 | =installpasswd= | Install new password by admin |
+| =manage=		  | Manage webs |
 | =mailnotify=	 | Script called by cron job to notify users of changes |
 | =oops=			 | Shows an OK or oops dialog |
 | =passwd=		  | Reset and change password |
@@ -118,7 +120,7 @@ The =pub= directory stores topic-related files, including images used by TWiki a
 #DataFiles
 ---+++ Files under <code>twiki/data</code>
 
-TWiki topics: data stored as individual text files and rendered by TWiki for display as regular Web pages. Each active web has its own subdirectory. The TWiki distribution includes four start-up webs - ==Main==, ==TWiki==, ==Know==, ==Test== - with documentation and demo content, a ==Trash== web for browser-based, recoverable topic deletion, and a ==_default== directory containing core topic set required to start a new web. _Partial file list:_ 
+TWiki topics: data stored as individual text files and rendered by TWiki for display as regular Web pages. Each active web has its own subdirectory. The TWiki distribution includes four start-up webs - ==Main==, ==TWiki==, ==Know==, ==Sandbox== - with documentation and demo content, a ==Trash== web for browser-based, recoverable topic deletion, and a ==_default== directory containing core topic set required to start a new web. _Partial file list:_ 
 
 | *File:*			| *Used for:* |
 | =.htpasswd= | Basic Authentication (htaccess) users file with username and encrypted password pairs |
@@ -312,8 +314,8 @@ drwxrwxr-x	 4 nobody nobody  4096 Sep 10 23:21 ..
 -rw-rw-rw-	 1 twiki  twiki	 159 Aug 24 19:49 .htpasswd
 drwxrwxr-x	 2 nobody nobody  4096 Sep  9 02:45 Know
 drwxrwxr-x	 2 nobody nobody  4096 Sep  9 02:45 Main
+drwxrwxr-x	 2 nobody nobody  4096 Sep  9 02:45 Sandbox
 drwxrwxr-x	 2 nobody nobody  8192 Sep 14 23:22 TWiki
-drwxrwxr-x	 2 nobody nobody  4096 Sep  9 02:45 Test
 drwxrwxr-x	 2 nobody nobody  4096 Sep 14 12:04 Trash
 drwxrwxr-x	 2 nobody nobody  4096 Sep  9 02:45 _default
 -rw-rw-rw--	1 twiki  twiki		0 Jul  1 02:20 debug.txt
