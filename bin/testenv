@@ -75,6 +75,7 @@ sub main
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
+my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
 
 my $rcsverRequired = 5.7;
 
@@ -116,6 +117,13 @@ EOM
 
 # Read the TWiki configuration early - includes OS detection
 do "TWiki.cfg";
+
+# Make %ENV safer for CGI (should reflect TWiki.pm)
+my $originalPath = $ENV{'PATH'};
+if( $safeEnvPath ) {
+    $ENV{'PATH'} = $safeEnvPath;
+}
+delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
 
 # Get Perl version - output looks neater with new variable
 my $perlvernum = $];
@@ -288,8 +296,8 @@ print "</table>\n";
 print "<h3>Test of <tt>TWiki.cfg</tt> Configuration:</h3>\n";
 
 # TWiki.cfg read earlier
-print "<table>\n";
 
+print "<table>\n";
 
 print "<tr><th align=\"right\">\$wikiHomeUrl:</th><td>$wikiHomeUrl</td></tr>\n";
 my $junk1 = $wikiHomeUrl; 	# Avoid warning
@@ -374,6 +382,15 @@ if( ! ( -e "$dataDir" ) ) {
     print "</td></tr>\n";
 }
 
+$val = $mailProgram;
+$val =~ s/([^\s]*).*/$1/go;
+# Don't warn on Windows, as Net::SMTP is normally used
+if( $OS ne 'WINDOWS' && ! ( -e $val ) ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+    print "Mail program <tt>$val</tt> not found. Check the path.";
+    print "</td></tr>\n";
+}
+
 print "<tr><th align=\"right\">\$mailProgram:</th><td>$mailProgram</td></tr>\n";
 print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
 if( $OS ne 'WINDOWS' ) {
@@ -455,6 +472,80 @@ if( ! ( -e $val ) ) {
     print "Search program <tt>$val</tt> not found. Check the path.";
     print "</td></tr>\n";
 }
+
+print "<tr><th align=\"right\">\$safeEnvPath:</th><td>$safeEnvPath</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is used to initialise the PATH variable, and is used to run the\n";
+print "'diff' program used by RCS, as well as to run shell programs such as\n";
+if( $OS eq 'WINDOWS' ) {
+    print "cmd.exe or Cygwin's 'bash'.\n";
+    print "<p>\n";
+    if( $perltype eq 'Cygwin' ) {
+	print "Since you are using Cygwin Perl, 'bash' will be used without any special setup.\n";
+    } elsif( $perltype eq 'ActiveState' ) {
+	print "To use 'bash' with ActiveState Perl, see the PERL5SHELL section below\n"; 
+	print "- this is recommended\n";
+	print "if Cygwin is installed.\n";
+    }
+    print "</p>\n";
+} else {
+    print "Bourne shell or 'bash'.";
+}
+if( $safeEnvPath eq '' ) {
+    print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> \n";
+    print "Security issue: <b>\$safeEnvPath</b> set to empty string. Check TWiki.cfg.\n";
+    print "</td></tr>\n";
+}
+print "</td></tr>\n";
+
+
+# Generate a separate table about specific environment variables
+print "</table>\n";
+print "<h3>Selected Environment Variables</h3>\n";
+print "<table>\n";
+
+# PATH check on all platforms
+
+print "<tr><th align=\"right\">Original PATH:</th><td>$originalPath</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the PATH value passed in from the web server to this script - it is reset by TWiki scripts to the PATH below, and is provided here for comparison purposes only.\n";
+print "</td></tr>\n";
+
+print "<tr><th align=\"right\">Current PATH:</th><td>$ENV{'PATH'}</td></tr>\n";
+print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+print "This is the actual PATH setting that will be used by Perl to run programs.\n";
+print "It is normally identical to <b>\$safeEnvPath</b>, unless that variable is empty.\n";
+print "</td></tr>\n";
+
+# PERL5SHELL check for ActiveState Perl on Windows only
+if( $OS eq 'WINDOWS' && $perltype eq 'ActiveState' ) {
+
+    print "</td></tr>\n";
+    print "<tr><th align=\"right\">PERL5SHELL:</th><td>$ENV{'PERL5SHELL'}</td></tr>\n";
+    print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
+    print "This environment variable is used by ActiveState Perl to run \n";
+    print "commands from TWiki scripts - it determines which shell\n";
+    print "program is used to run commands that use 'pipes'.  Examples of shell programs are \n";
+    print "cmd.exe, command.com (aka 'DOS Prompt'), and Cygwin's 'bash'\n";
+    print "(<b>recommended</b> if Cygwin is installed).\n";
+    print "<p>\n";
+    print "To use 'bash' with ActiveState Perl, you should set the \n";
+    print "PERL5SHELL environment variable to something like <tt><b>c:/YOURCYGWINDIR/bin/bash.exe -c</b></tt>.\n"; 
+    print "This should be set in the System Environment, and ideally set \n";
+    print "directly in the web server (e.g. using the Apache <tt>SetEnv</tt> \n";
+    print "command, followed by an Apache restart). Once this is done, you should re-run <b>testenv</b>\n";
+    print "to check that PERL5SHELL is set properly.\n";
+    if( Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
+	print "</p>\n";
+	print "<p><b><font color=\"red\">Warning:</font></b> ";
+	print "ActiveState Perl must be upgraded to build <b>$ActivePerlRecommendedBuild</b> if you are going to use PERL5SHELL, which was broken in earlier builds.";
+    }
+    print "</p>\n";
+    print "</td></tr>\n";
+}
+
+
+# End last row of table
 
 print "</table>\n";
 
