@@ -91,7 +91,8 @@ use vars qw(
 
 # Internationalisation and regex setup:
 use vars qw(
-	$basicInitDone $useLocale $localeRegexes $siteLocale $siteCharset $siteLang
+	$basicInitDone $useLocale $localeRegexes $siteLocale $siteCharset 
+	$siteCharsetOverride $siteLang
 
 	$upperNational $lowerNational 
 	$upperAlpha $lowerAlpha $mixedAlpha $mixedAlphaNum $lowerAlphaNum $numeric
@@ -250,17 +251,6 @@ sub writeDebugTimes
     writeDebug( "==> $times,  $text" );
 }
 
-# Basic initialisation - for use from scripts that handle multiple webs
-# (e.g. mailnotify) and need regexes or isWebName/isWikiName to work before
-# the per-web initialize() is called.
-sub basicInitialize() {
-    # Set up locale for internationalisation and pre-compile regexes
-    setupLocale();
-    setupRegexes();
-    
-    $basicInitDone = 1;
-}
-
 # =========================
 sub initialize
 {
@@ -293,7 +283,7 @@ sub initialize
     &TWiki::Access::initializeAccess();
     $readTopicPermissionFailed = ""; # Will be set to name(s) of topic(s) that can't be read
 
-    # initialize $webName and $topicName
+    # initialize $webName and $topicName from URL
     $topicName = "";
     $webName   = "";
     if( $theTopic ) {
@@ -316,10 +306,8 @@ sub initialize
     # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
     # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
     # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
-    ## DEBUG: Simulate broken path_info
-    ## $thePathInfo = "$scriptUrlPath/view/Main/WebStatistics";
     $thePathInfo =~ s!$scriptUrlPath/[\-\.A-Z]+$scriptSuffix/!/!i;
-    ##writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
+    ## writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
 
     # Get the web and topic names from PATH_INFO
     if( $thePathInfo =~ /\/(.*)[\.\/](.*)/ ) {
@@ -332,36 +320,26 @@ sub initialize
     }
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
-    # PROTOTYPE: Auto-detect UTF-8 vs. site charset
-    ##writeDebug "URL web.topic is $webName.$topicName";
-    my $charEncoding;
-    my $fullTopicName = "$webName.$topicName";
-    # Detect character encoding of the full topic name from URL
-    if ( $fullTopicName =~ $validAsciiStringRegex ) {
-	$charEncoding = 'ASCII';
-    } elsif ( $fullTopicName =~ $validUtf8StringRegex ) {
-	$charEncoding = 'UTF-8';
+    # Refuse to work with modal character sets that allow TWiki syntax
+    # to be recognised within multi-byte characters.  Only allow 'oops'
+    # page to be displayed (redirect causes this code to be re-executed).
+    if ( invalidSiteCharset() and $theUrl !~ m!$scriptUrlPath/oops! ) {  
+	writeWarning "Cannot use multi-byte ASCII-based encoding ('$siteCharset') as site character encoding";
+	writeWarning "Please set a different character encoding in the \$siteLocale setting in TWiki.cfg.";
 
-	# Convert into ISO-8859-1 if it is the site charset
-	if ( $siteCharset =~ /^iso-?8859-?1$/io ) {
-	    # ISO-8859-1 maps onto first 256 codepoints of Unicode
-	    # (conversion from 'perldoc perluniintro')
-	    $fullTopicName =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
-				 chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F)
-				 /egx;
-	    ($webName, $topicName) = split /\./, $fullTopicName;
-	} else {
-	    # Do nothing for non-supported conversions - would require use
-	    # of Encode.pm or similar.
-	    writeDebug "Conversion from UTF-8 to $siteCharset not supported";
-	}
-    } else {
-	# Non-ASCII and non-UTF-8 - assume in site character set
-	$charEncoding = $siteCharset;
+        my $url = &TWiki::getOopsUrl( $webName, $topicName, "oopsbadcharset" );
+
+	writeDebug "URL of redirect is $url";
+	my $foo = $cgiQuery->redirect( $url );
+
+	print $cgiQuery->redirect( $url );
+	writeDebug "Redirect output is $foo";
+        return;
     }
 
-    ##writeDebug "URL character encoding was: $charEncoding";
-    ##writeDebug "Final web and topic are $webName $topicName ($siteCharset)";
+    # Convert UTF-8 web and topic name from URL into site charset 
+    # if necessary - no effect if URL is not in UTF-8
+    ( $webName, $topicName ) = convertUtf8URLtoSiteCharset ( $webName, $topicName );
 
     # Filter out dangerous or unwanted characters
     $topicName =~ s/$securityFilter//go;
@@ -374,7 +352,7 @@ sub initialize
     $includingWebName = $webName;
 
     # initialize $urlHost and $scriptUrlPath 
-    if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)(.*)\/.*$/ ) && ( $2 ) ) {
+    if( ( $theUrl ) && ( $theUrl =~ m!^([^:]*://[^/]*)(.*)/.*$! ) && ( $2 ) ) {
         if( $doGetScriptUrlFromCgi ) {
             $scriptUrlPath = $2;
         }
@@ -428,13 +406,24 @@ sub initialize
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
 
+# Basic initialisation - for use from scripts that handle multiple webs
+# (e.g. mailnotify) and need regexes or isWebName/isWikiName to work before
+# the per-web initialize() is called.
+sub basicInitialize() {
+    # Set up locale for internationalisation and pre-compile regexes
+    setupLocale();
+    setupRegexes();
+    
+    $basicInitDone = 1;
+}
+
 # =========================
 # Run-time locale setup - 'use locale' must be done in BEGIN block
 # for regexes and sorting to work properly, although regexes can still
 # work without this in 'non-locale regexes' mode (see setupRegexes routine).
 sub setupLocale {
  
-    $siteCharset = 'ISO-8859-1';	# Defaults if locale mis-configured
+    $siteCharset = 'ISO-8859-1';	# Default values if locale mis-configured
     $siteLang = 'en';
 
     if ( $useLocale ) {
@@ -446,19 +435,20 @@ sub setupLocale {
 	# and HTTP headers
 	$siteLocale =~ m/\.([a-z0-9_-]+)$/i;
 	$siteCharset = $1 if defined $1;
-	##writeDebug "Charset is now $siteCharset";
+	# writeDebug "Charset is $siteCharset based on locale";
+
+	# Override charset if locale setting not usable with Perl
+	# conversion modules
+	$siteCharset = $siteCharsetOverride || $siteCharset;
+	# writeDebug "Charset is now $siteCharset after any override by \$siteCharsetOverride";
 
 	# Extract the language - use to disable plural processing if
 	# non-English
 	$siteLocale =~ m/^([a-z]+)_/i;
 	$siteLang = $1 if defined $1;
-	##writeDebug "Language is now $siteLang";
 
 	# Set environment variables for grep 
-	# FIXME: collate probably not necessary since all sorting is done
-	# in Perl
 	$ENV{'LC_CTYPE'}= $siteLocale;
-	$ENV{'LC_COLLATE'}= $siteLocale;
 
 	# Load POSIX for i18n support 
 	require POSIX;
@@ -533,9 +523,11 @@ sub setupRegexes {
     # 7-bit ASCII only
     $validAsciiStringRegex = qr/^[\x01-\x7F]+$/;
     
-    # Regex to match only a valid UTF-8 character, taking care to avoid overlong
-    # encodings by excluding the relevant gaps in UTF-8 encoding space - see
-    # 'perldoc perlunicode', Unicode Encodings section.
+    # Regex to match only a valid UTF-8 character, taking care to avoid
+    # security holes due to overlong encodings by excluding the relevant
+    # gaps in UTF-8 encoding space - see 'perldoc perlunicode', Unicode
+    # Encodings section.  Tested against Markus Kuhn's UTF-8 test file
+    # at http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt.
     $validUtf8CharRegex = qr{
 				# Single byte - ASCII
 				[\0-\x7F] 
@@ -547,8 +539,7 @@ sub setupRegexes {
 
 				# 3 bytes
 
-				    # Avoid illegal codepoints - negative
-				    # lookahead
+				    # Avoid illegal codepoints - negative lookahead
 				    (?!\xEF\xBF[\xBE\xBF])	
 
 				    # Match valid codepoints
@@ -571,6 +562,94 @@ sub setupRegexes {
 
     $validUtf8StringRegex = qr/^ (?: $validUtf8CharRegex )+ $/x;
 
+}
+
+# Check for unusable ASCII-based multi-byte encodings as site character set
+# - anything that enables a single ASCII character such as '[' to be
+# matched within a multi-byte character cannot be used for TWiki.
+sub invalidSiteCharset {
+    # FIXME: match other problematic multi-byte character sets 
+    return ( $siteCharset =~ /^(?:iso-2022-?|hz-?)/i );
+}
+
+# Auto-detect UTF-8 vs. site charset in URL, and convert
+# UTF-8 into site charset.
+# FIXME: remove dependence on webname and topicname, i.e. generic encoding
+# subroutine
+sub convertUtf8URLtoSiteCharset {
+    my ( $webName, $topicName ) = @_;
+
+    # FIXME: Make it possible to set $siteCharset independently to 
+    # handle mismatch between 'locale -a' and Perl supported charset names 
+
+    writeDebug "URL web.topic is $webName.$topicName";
+    my $fullTopicName = "$webName.$topicName";
+    my ( $urlCharEncoding, $charEncoding );
+
+    # Detect character encoding of the full topic name from URL
+    if ( $fullTopicName =~ $validAsciiStringRegex ) {
+	$urlCharEncoding = 'ASCII';
+    } elsif ( $fullTopicName =~ $validUtf8StringRegex ) {
+	$urlCharEncoding = 'UTF-8';
+
+	# Convert into ISO-8859-1 if it is the site charset
+	if ( $siteCharset =~ /^iso-?8859-?1$/i ) {
+	    # FIXME: Use 'unpack' if on Perl 5.6 or higher (Unicode aware)
+	    # - should be more efficient? See
+	    # http://search.cpan.org/src/EHOOD/MHonArc-2.6.8/lib/MHonArc/CharEnt.pm
+
+	    # ISO-8859-1 maps onto first 256 codepoints of Unicode
+	    # (conversion from 'perldoc perluniintro')
+	    $fullTopicName =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
+				 chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
+				 /egx;
+	} elsif ( $siteCharset =~ /^utf-?8$/i ) {
+	    writeDebug "UTF-8 not yet supported as site charset...";
+	    writeDebug "No conversion needed from UTF-8 to $siteCharset";
+	} else {
+	    # Convert from UTF-8 into some other site charset
+	    writeDebug "Converting from UTF-8 to $siteCharset";
+
+	    # Use conversion modules depending on Perl version
+	    if( $] >= 5.008 ) {
+		# FIXME: Test on 5.8
+		require Encode;			# Perl 5.8 or higher only
+		# Map $siteCharset into real encoding name
+		$charEncoding = Encode::resolve_alias( $siteCharset );
+		if( not $charEncoding ) {
+		    writeWarning "Conversion to \$siteCharset '$siteCharset' not supported, or name not recognised - check 'perldoc Encode::Supported'";
+		} else {
+		    writeDebug "Converting with Encode, valid encoding is '$charEncoding'";
+		    # Convert text, inserting HTML entities for characters that can't be converted
+		    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &Encode::FB_HTMLCREF );
+		}
+
+	    } else {
+		require Unicode::MapUTF8;	# Pre-5.8 Perl versions
+		$charEncoding = $siteCharset;
+		if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
+		    writeWarning "Conversion to \$siteCharset '$siteCharset' not supported, or name not recognised - check 'perldoc Unicode::MapUTF8'";
+		} else {
+		    # Convert text
+		    writeDebug "Converting with Unicode::MapUTF8, valid encoding is '$charEncoding'";
+		    $fullTopicName = Unicode::MapUTF8::from_utf8({ 
+			    			-string => $fullTopicName, 
+		    			 	-charset => $charEncoding });
+		    # FIXME: Check for failed conversion?
+		}
+	    }
+	}
+	($webName, $topicName) = split /\./, $fullTopicName;
+
+    } else {
+	# Non-ASCII and non-UTF-8 - assume in site character set, 
+	# no conversion required
+	$charEncoding = $siteCharset;
+    }
+    ##writeDebug "URL character encoding was: $urlCharEncoding";
+    writeDebug "Final web and topic are $webName $topicName ($siteCharset)";
+
+    return ($webName, $topicName);
 }
 
 # =========================
@@ -826,6 +905,7 @@ sub initializeRemoteUser
 
     my $text = &TWiki::Store::readFile( $remoteUserFilename );
     # Assume no I18N characters in userids, as for email addresses
+    # FIXME: Needs fixing for IPv6?
     my %AddrToName = map { split( /\|/, $_ ) }
                      grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
                      split( /\n/, $text );
@@ -930,7 +1010,7 @@ sub getWikiUserTopic
 }
 
 # =========================
-# Check for a valid WikiWord
+# Check for a valid WikiWord or WikiName
 sub isWikiName
 {
     my( $name ) = @_;
@@ -1247,13 +1327,20 @@ sub makeTopicSummary
     $htext =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /g;       # remove newlines and special chars
 
+    # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
+    # encoding). Unicode-aware versions of Perl (5.6+) will not split
+    # within a Unicode codepoint, but need to avoid splitting closely
+    # related Unicode codepoints, specifically: (1) Unicode combining
+    # character sequences (e.g. letters + accents) and (2) surrogate pairs
+    # (i.e. two 16 bit codepoints for single character higher than U+FFFF).  
+
     # limit to 162 chars 
-    # FIXME I18N: Avoid splitting within multi-byte characters
     $htext =~ s/(.{162})($mixedAlphaNumRegex)(.*?)$/$1$2 \.\.\./g;
 
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
     # - no encoding for HTML pages, to avoid breaking international 
-    # characters.
+    # characters. FIXME: Only works for ISO-8859-1 characters, where the
+    # Unicode encoding (&#nnn;) is identical.
     if( $pageMode eq 'rss' ) {
 	# FIXME: Issue for EBCDIC/UTF-8
 	$htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
@@ -1962,11 +2049,14 @@ sub handleUrlEncode
 }
 
 # =========================
-# Encode characters with 8th bit set for use in URLs (not using UTF8 URL
-# encoding by browser) - mainly for Mozilla
+# Encode characters with 8th bit set for use in URLs with non-UTF-8 '$siteCharset'
+# encoding by browser - mainly for Mozilla POST URLs.  Ignored when using UTF-8 URLs
+# or when on EBCDIC platforms 
 sub handleIntUrlEncode
 {
     my( $theStr, $doExtract ) = @_;
+
+    # FIXME: Detect whether UTF-8 URL was used when requesting this page
 
     # Detect EBCDIC platform 
     my $isEbcdic = ( 'A' eq chr(193) ); 
@@ -2005,7 +2095,7 @@ sub handleSpacedTopic
 {
     my( $theTopic ) = @_;
     my $spacedTopic = $theTopic;
-    $spacedTopic =~ s/($singleLowerAlphaRegex+)($singleUpperAlphaNumRegex+)/$1%20*$2/go;   # "%20*" is " *"
+    $spacedTopic =~ s/($singleLowerAlphaRegex+)($singleUpperAlphaNumRegex+)/$1%20*$2/go;   # "%20*" is " *" - I18N: only in ASCII-derived charsets
     return $spacedTopic;
 }
 
@@ -2028,7 +2118,7 @@ sub handleInternalTags
     # $_[2] is web
 
     # Make Edit URL unique for every edit - fix for RefreshEditPage.
-    # URL encoding fixes Mozilla I18N problem (Codev.MacOSXwithI18N).
+    # URL encoding fixes Codev.MozillaURLEncodingWithI18N.
     $_[0] =~ s!%EDITURL%!"$scriptUrlPath/edit$scriptSuffix/%INTURLENCODE{\"%WEB%/%TOPIC%\"}%\?t=" . time()!ge;
 
     $_[0] =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
@@ -2043,7 +2133,7 @@ sub handleInternalTags
 
     # Un-encoded topic and web names. Note: In form action, URL encode variables 
     # that might have 8-bit characters with %INTURLENCODE{"%TOPIC%"}% -
-    # introduced due to Mozilla issues (Codev.MacOSXwithI18N).
+    # introduced due to Codev.MozillaURLEncodingWithI18N.
     $_[0] =~ s/%TOPIC%/$_[1]/g;
     $_[0] =~ s/%BASETOPIC%/$topicName/g;
     $_[0] =~ s/%INCLUDINGTOPIC%/$includingTopicName/g;
@@ -2099,7 +2189,7 @@ sub handleInternalTags
 # =========================
 sub takeOutVerbatim
 {
-    my( $intext, $verbatim ) = @_;
+    my( $intext, $verbatim ) = @_;	# $verbatim is ref to array
     
     if( $intext !~ /<verbatim>/oi ) {
         return( $intext );
@@ -2328,7 +2418,7 @@ sub renderMoved
         my $date = $moved{"date"};
         $date = formatGmTime( $date );
         
-        # Only allow put back, if current web and topic match stored to information
+        # Only allow put back if current web and topic match stored information
         my $putBack = "";
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = " - <a title=\"Click to move topic back to previous location, with option to change references.\"";
@@ -2384,7 +2474,8 @@ sub renderFormData
     return $metaText;
 }
 
-# =========================
+# Before including topic text in a hidden field in web form, encode
+# characters that would break the field
 sub encodeSpecialChars
 {
     my( $text ) = @_;
@@ -2414,10 +2505,16 @@ sub decodeSpecialChars
 
 
 # =========================
+# Render bulleted and numbered lists, including nesting.
+# Called from several places.  Accumulates @listTypes and @listElements
+# to track nested lists.
 sub emitList {
     my( $theType, $theElement, $theDepth, $theOlType ) = @_;
+
     my $result = "";
     $isList = 1;
+
+    # Ordered list type
     $theOlType = "" unless( $theOlType );
     $theOlType =~ s/^(.).*/$1/;
     $theOlType = "" if( $theOlType eq "1" );
@@ -2478,7 +2575,7 @@ sub emitTR {
     foreach( split( /\|/, $theRow ) ) {
         $attr = "";
         #AS 25-5-01 Fix to avoid matching also single columns
-        if ( s/$TranslationToken([0-9]+)// ) { # No o flag for mod-perl compatibility
+        if ( s/$TranslationToken([0-9]+)//o ) { 
             $attr = " colspan=\"$1\"" ;
         }
         s/^\s+$/ &nbsp; /;
@@ -2797,6 +2894,10 @@ sub getRenderedVersion {
     # Wiki Plugin Hook
     &TWiki::Plugins::startRenderingHandler( $text, $theWeb, $meta );
 
+    # $isList is tested and set by this loop and 'emitList' function
+    $isList = 0;		# True when within a list
+    my $isPara = 0;		# True when within a paragraph
+
     foreach( split( /\n/, $text ) ) {
 
         # change state:
@@ -2832,12 +2933,14 @@ sub getRenderedVersion {
             s/^(.*?)\n(.*)$/$1/s;
             $extraLines = $2;    # Save extra lines, need to parse each separately
 
-# Blockquote
+# Blockquoted email (indented with '> ')
             s/^>(.*?)$/> <cite> $1 <\/cite><br \/>/g;
 
 # Embedded HTML
             s/\<(\!\-\-)/$TranslationToken$1/g;  # Allow standalone "<!--"
             s/(\-\-)\>/$1$TranslationToken/g;    # Allow standalone "-->"
+	    # FIXME: next 2 lines are redundant since s///g's below do same
+	    # thing
             s/(\<\<+)/"&lt\;" x length($1)/ge;
             s/(\>\>+)/"&gt\;" x length($1)/ge;
             s/\<nop\>/nopTOKEN/g;  # defuse <nop> inside HTML tags
@@ -2883,9 +2986,13 @@ sub getRenderedVersion {
 # Lists and paragraphs
             s/^\s*$/<p \/>/o                 && ( $isList = 0 );
             m/^(\S+?)/o                      && ( $isList = 0 );
+	    # Definition list
             s/^(\t+)(\S+?):\s/<dt> $2<\/dt><dd> /o && ( $result .= &emitList( "dl", "dd", length $1 ) );
+	    # Unnumbered list
             s/^(\t+)\* /<li> /o              && ( $result .= &emitList( "ul", "li", length $1 ) );
+	    # Numbered list
             s/^(\t+)([1AaIi]\.|\d+\.?) ?/<li> /o && ( $result .= &emitList( "ol", "li", length $1, $2 ) );
+	    # Finish the list
             if( ! $isList ) {
                 $result .= &emitList( "", "", 0 );
                 $isList = 0;

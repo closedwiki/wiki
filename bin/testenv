@@ -134,9 +134,14 @@ my @requiredModsNonUnix = (
 
 # Optional modules on all platforms
 my @optionalMods = ( 
-	'Algorithm::Diff', 	# For RcsLite
-	'MIME::Base64', 	# For outbound HTTP Authentication to proxies
-	'POSIX', 		# For internationalisation (core module)
+	'Algorithm::Diff', 	# For RcsLite (CPAN)
+	'MIME::Base64', 	# For HTTP Authentication to proxies (CPAN)
+	'POSIX', 		# For I18N (core module)
+	'Encode', 		# For I18N conversions (core module in Perl 5.8)
+	'Unicode::MapUTF8', 	# For I18N conversions (CPAN)
+	'Unicode::Map', 	# For I18N conversions (CPAN)
+	'Unicode::Map8', 	# For I18N conversions (CPAN)
+	'Jcode', 		# For I18N conversions (CPAN)
    );
 
 
