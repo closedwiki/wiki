@@ -1,9 +1,7 @@
-	* Name: Peter Thoeny, author of the %TWIKIWEB%.TWikiWeb (and therefore a %TWIKIWEB%.TWikiContributor)
-	* Work: Peter.Thoeny@WindRiver.com
-	* Home: Peter@Thoeny.com
-	* Location: SanJoseOffice
-	* Personal web: http://www.thoeny.com/peter/
-	* Local time: Current <A HREF="http://www.bsdi.com/date?America/Los_Angeles">time</A> in the Silicon Valley.
+%META:TOPICINFO{author="PeterThoeny" date="1042330156" format="1.0" version="1.8"}%
+	* Name: Peter Thoeny
+	* Email: Peter@Thoeny.com
+	* Comment: Peter is the author of TWiki and therefore a TWiki:Codev/CoreTeam member. See home page at TWiki:Main/PeterThoeny
 
 __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 	* Horizontal size of text edit box:
