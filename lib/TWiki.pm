@@ -2300,6 +2300,7 @@ sub makeAnchorName
     $anchorName =~ s/^[\s\#\_]*//;          # no leading space nor '#', '_'
     $anchorName =~ s/[\s\_]*$//;            # no trailing space, nor '_'
     $anchorName =~ s/<\w[^>]*>//gi;         # remove HTML tags
+    $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
     $anchorName =~ s/^(.+?)\s*$headerPatternNoTOC.*/$1/o; # filter TOC excludes if not at beginning
     $anchorName =~ s/$headerPatternNoTOC//o; # filter '!!', '%NOTOC%'
     # FIXME: More efficient to match with '+' on next line:
