@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043479075" format="1.0" version="1.26"}%
+%META:TOPICINFO{author="PeterThoeny" date="1043917178" format="1.0" version="1.27"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
@@ -21,7 +21,7 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 | Cron/scheduler |  =cron=  | =cron= equivalents |
 | Web server |  Apache 1.3 is well supported; Apache 2.0 is *not* recommended yet (see TWiki:Support.FailedAuthenticationWithApache2OnWinNT). %BR% For other servers, CGI support, authentication, extended path required  ||
 
-%X% *** _Current documentation mainly covers Linux and Apache installations. See TWiki:Codev.WindowsInstallCookbook for a Windows installation guide.  See TWiki:Codev.TWikiOn for help with installation on various platforms including Unix, <nop>MacOS X, Apache =mod_perl=, web hosts, etc._
+%X% *** _Current documentation mainly covers Linux and Apache installations. See WindowsInstallCookbook for a Windows installation guide.  See TWiki:Codev.TWikiOn for help with installation on various platforms including Unix, <nop>MacOS X, Apache =mod_perl=, web hosts, etc._
 
 #ClientRequirements
 ---++ Client Requirements
