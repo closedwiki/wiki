@@ -79,6 +79,9 @@ sub cli_install_download {
  my $localFile = getFilenameForDistributionDownload($extension);
  print "$localFile\n";
 
+ my $dirInInstallation = getDistributionTopicDir();
+ chdir ($dirInInstallation) || die "Can't cd to $dirInInstallation";
+# TODO : Find out whether we can get rid of the need to be in here
 # TODO : Find out why its called both Build and BuildContrib...
  my $buildObj = TWiki::Contrib::Build->new($extension);
  $buildObj->manifest();
