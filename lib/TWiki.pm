@@ -330,7 +330,7 @@ sub getEmailNotifyList
 
     my @list = ();
     foreach ( split( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) ) ) {
-	next unless /^\s\*\s[A-Za-z0-9\.]+\s+\-\s+/;
+	next unless /^\s\*\s[A-Za-z0-9\.\%]+\s+\-\s+/;
 	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
 
