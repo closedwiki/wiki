@@ -458,7 +458,7 @@ sub searchWeb
             if( $theFormat ) {
                 $tempVal = $theFormat;
                 $tempVal =~ s/([^\n])$/$1\n/gos;    # cut last trailing new line
-                $tempVal =~ s/\\n/\n/gos;           # expand "\n" to new line
+                $tempVal =~ s/\$n/\n/gos;            # expand "$n" to new line
                 $tempVal =~ s/\$web/$thisWebName/gos;
                 $tempVal =~ s/\$topic/$topic/gos;
                 $tempVal =~ s/\$locked/$locked/gos;
