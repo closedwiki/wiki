@@ -56,7 +56,7 @@ $VERSION = '1.000';
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
-    %langs = { };
+    %langs = ();
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
@@ -99,7 +99,7 @@ sub commonTagsHandler
 sub handleCode
 {
     my $lang = shift();
-    if ($langs->{$lang} == 0)
+    unless ($langs->{$lang})
     {
         local $SIG{__DIE__};
         eval "use HFile::HFile_$lang";

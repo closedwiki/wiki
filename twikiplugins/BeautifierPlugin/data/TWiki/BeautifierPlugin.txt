@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="LingLo" date="1042318800" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="LingLo" date="1059177060" format="1.0" version="1.10"}%
 ---+ <nop>%TOPIC%
 
 This plugin allows you to have code fragments automatically formatted and highlighted.  It depends on the [[http://www.beautifier.org/][Beautifier library]] written by Mike Jewell.
@@ -12,12 +12,15 @@ This plugin allows you to have code fragments automatically formatted and highli
 | C++ | =%<nop>CODE{"cpp"}%= ... =%ENDCODE%= |
 | C# | =%<nop>CODE{"csharp"}%= ... =%ENDCODE%= |
 | Java | =%<nop>CODE{"java"}%= ... =%ENDCODE%= |
+| Lua | =%<nop>CODE{"lua"}%= ... =%ENDCODE%= |
 | Makefile | =%<nop>CODE{"makefile"}%= ... =%ENDCODE%= |
 | Perl | =%<nop>CODE{"perl"}%= ... =%ENDCODE%= |
+| PL/SQL | =%<nop>CODE{"plsql"}%= ... =%ENDCODE%= |
 | Python | =%<nop>CODE{"python"}%= ... =%ENDCODE%= |
 | PHP3 | =%<nop>CODE{"php3"}%= ... =%ENDCODE%= |
 | Scheme | =%<nop>CODE{"scheme"}%= ... =%ENDCODE%= |
 | TCL | =%<nop>CODE{"tcl"}%= ... =%ENDCODE%= |
+| XML | =%<nop>CODE{"xml"}%= ... =%ENDCODE%= |
 </blockquote>
 
 Additional languages can be added since the Beautifier library is flexible and can support a wide range of language families.  Other languages can be added with relative easy by downloading the full PHP dist from http://www.beautifier.org and converting the relevant language file from PHP to Perl.
@@ -59,14 +62,17 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==lib/Beautifier/Magic.pm== |  |
 	  | ==lib/Beautifier/MagicConfig.pm== |  |
 	  | ==lib/HFile/HFile_cpp.pm== |  |
-	  | ==lib/HFile/HFile_csharp.pm== | C#, courtesy of Main.MatthewMastracci  |
+	  | ==lib/HFile/HFile_csharp.pm== | C#, courtesy of TWiki:Main/MatthewMastracci  |
 	  | ==lib/HFile/HFile_java.pm== |  |
+	  | ==lib/HFile/HFile_lua.pm== |  |
 	  | ==lib/HFile/HFile_makefile.pm== | Makefile, courtesy of Agora:Main/BruceMitchener |
 	  | ==lib/HFile/HFile_perl.pm== |  |
 	  | ==lib/HFile/HFile_php3.pm== |  |
+	  | ==lib/HFile/HFile_plsql.pm== | PL/SQL, courtesy of TWiki:Main/FranzJosefSilli |
 	  | ==lib/HFile/HFile_python.pm== |  |
 	  | ==lib/HFile/HFile_scheme.pm== |  |
 	  | ==lib/HFile/HFile_tcl.pm== |  |
+	  | ==lib/HFile/HFile_xml.pm== | XML, courtesy of TWiki:Main/FranzJosefSilli |
 	  | ==lib/Output/ANSI.pm== |  |
 	  | ==lib/Output/DocBook.pm== |  |
 	  | ==lib/Output/HTML.pm== |  |
@@ -108,24 +114,26 @@ void nWorld::StepSim()
 ---++ Bugs
 
 	* Why doesn't it highlight Tcl keywords with 3 spaces in front? See Nebula.AudioExample, the first code snippet has 4 space indents the rest have 3.  <br />
-	-- Main.LeafGarland 31 Jul 2002
+	-- TWiki:Main/LeafGarland 31 Jul 2002
 
 ---++ History
 
 | *Date* | *Change* | *Name* |
-| 28 Dec 2002 | Accepts mixed case language names | Main.LingLo |
-| 20 Dec 2002 | Changed syntax to allow for simpler addition of new languages | Main.LingLo |
-| 16 Oct 2002 | Added nebula nodes and links to Python scripts, but it doesn't work since the node names are usually in strings | Main.LeafGarland |
-| 30 Jul 2002 | Added nebula nodes and links to Tcl scripts | Main.LeafGarland |
-| 30 Jul 2002 | Changed Beautifier::Core to use 'linkscripts' | Main.LeafGarland |
-| 28 Jul 2002 | Created | Main.LingLo |
+| 26 Jul 2003 | Syntax fixes from TWiki:Main/WillNorris  | TWiki:Main/LingLo |
+| 10 Feb 2003 | Syntax fix from TWiki:Main/JoshMore  | TWiki:Main/LingLo |
+| 28 Dec 2002 | Accepts mixed case language names | TWiki:Main/LingLo |
+| 20 Dec 2002 | Changed syntax to allow for simpler addition of new languages | TWiki:Main/LingLo |
+| 16 Oct 2002 | Added nebula nodes and links to Python scripts, but it doesn't work since the node names are usually in strings | TWiki:Main/LeafGarland |
+| 30 Jul 2002 | Added nebula nodes and links to Tcl scripts | TWiki:Main/LeafGarland |
+| 30 Jul 2002 | Changed Beautifier::Core to use 'linkscripts' | TWiki:Main/LeafGarland |
+| 28 Jul 2002 | Created | TWiki:Main/LingLo |
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/LingLo |
-|  Plugin Version: | 11 Jan 2003 (V1.12) |
+|  Plugin Version: | 26 Jul 2003 (V1.14) |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | [[http://www.beautifier.org][Beautifier]] |
+|  Other Dependencies: | [[http://www.beautifier.org][Beautifier]] (supplied) |
 |  Perl Version: | 5.005 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |

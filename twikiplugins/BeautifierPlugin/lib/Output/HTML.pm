@@ -27,8 +27,10 @@ sub new
 	$self->{select} 	= '<b>_WORD_</b>';
 	$self->{quote} 		= '<font color="blue">_WORD_</font>';
 	$self->{category_1} 	= '<font color="brown">_WORD_</font>';
-	$self->{category_2} 	= '<font color="blue">_WORD_</font>';
-	$self->{category_3} 	= '<font color="blue">_WORD_</font>';
+	$self->{category_2} 	= '<font color="maroon">_WORD_</font>';
+	$self->{category_3} 	= '<font color="navy">_WORD_</font>';
+	$self->{category_4} 	= '<font color="purple">_WORD_</font>';
+	$self->{category_5} 	= '<font color="teal">_WORD_</font>';
 	return $self;
 }
 
