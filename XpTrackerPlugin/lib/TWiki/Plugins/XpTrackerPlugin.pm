@@ -41,6 +41,7 @@
 # =========================
 package TWiki::Plugins::XpTrackerPlugin;
 
+#  $Revision$ $Date$
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $debug
@@ -48,12 +49,11 @@ use vars qw(
     );
 
 use vars qw ( @timeRec
-			 $cachedWebName
-
-			 %cachedProjectTeams
-			 %cachedTeamIterations
-			 %cachedIterationStories
-			 );
+        $cachedWebName
+        %cachedProjectTeams
+        %cachedTeamIterations
+        %cachedIterationStories
+    );
 
 $VERSION = '3.000';
 
@@ -81,26 +81,25 @@ sub initPlugin
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
 
-    # reasonable defaults to produce a small calendar
+    # reasonable defaults for colouring. By default task and stories have similar colour schemes. 
     %defaults = (
-	# normal HTML::CalendarMonthSimple options
-	# colors
-	headercolor			=> $webColor,
-	taskwaitcolor			=> 'red',
-	taskprogresscolor		=> 'yellow',
-	taskcompletecolor		=> 'green',
-	storywaitcolor			=> 'red',
-	storyprogresscolor		=> 'yellow',
-	storycompletecolor		=> 'blue',
-	storyacceptedcolor		=> 'green'
-	);
+        # colors
+        headercolor             => $webColor,
+        taskwaitcolor           => '#FFCCCC',
+        taskprogresscolor       => '#99FF99',
+        taskcompletecolor       => '#FFFFFF',
+        storywaitcolor          => '#FFCCCC',
+        storyprogresscolor      => '#CCFFFF',
+        storycompletecolor      => '#99FF99',
+        storyacceptancecolor    => '#FFFFFF'
+    );
 
     # now get defaults from XpTrackerPlugin topic
     my $v;
     foreach $option (keys %defaults) {
-	# read defaults from XpTrackerPlugin topic
-	$v = &TWiki::Func::getPreferencesValue("XPTRACKERPLUGIN_\U$option\E") || undef;
-	$defaults{$option} = $v if defined($v);
+        # read defaults from XpTrackerPlugin topic
+        $v = &TWiki::Func::getPreferencesValue("XPTRACKERPLUGIN_\U$option\E") || undef;
+        $defaults{$option} = $v if defined($v);
     }
 
     # Plugin correctly initialized
@@ -130,11 +129,11 @@ sub commonTagsHandler
 
     # ========================== START XP TAGS ========================== RJB 2001.03.13
 
-	# search for create new page link
-	if( $query->param( 'xpsave' ) ) {
-	  xpSavePage($web);
-	  # return; # in case browser does not redirect
-	}
+    # search for create new page link
+    if( $query->param( 'xpsave' ) ) {
+        xpSavePage($web);
+        # return; # in case browser does not redirect
+    }
 
     # %XPSHOWALLPROJECTS% - Show all projects
     $_[0] =~ s/%XPSHOWALLPROJECTS%/&xpShowAllProjects($web)/geo;
@@ -229,19 +228,19 @@ sub DISABLE_endRenderingHandler
 # Return value from passed in text with passed in title
 
 sub xpGetValue {
-	my $title = $_[0];
-	# my $text = $_[1]; # DONT MAKE COPY for performance reasons
-	my $oldStyle = $_[2];
-	my $result = "";
+    my $title = $_[0];
+    # my $text = $_[1]; # DONT MAKE COPY for performance reasons
+    my $oldStyle = $_[2];
+    my $result = "";
 
-	my $pattern1 = "<!--".$oldStyle."--> *(.*?) *<!--\\/".$oldStyle."-->";
-	my $pattern2 = "\\|[ \\t]*".$title."[ \\t]*\\|[ \\t]*(.*?)[ \\t]*\\|";
+    my $pattern1 = "<!--".$oldStyle."--> *(.*?) *<!--\\/".$oldStyle."-->";
+    my $pattern2 = "\\|[ \\t]*".$title."[ \\t]*\\|[ \\t]*(.*?)[ \\t]*\\|";
 
-	if ($_[1] =~ /$pattern1/s) {
-		$result = $1;
-	}
+    if ($_[1] =~ /$pattern1/s) {
+        $result = $1;
+    }
     elsif ($_[1] =~ /$pattern2/s) {
-		$result = $1;
+        $result = $1;
     }
     return $result;
 }
@@ -261,10 +260,10 @@ sub xpGetValueAndRemove {
     my $pattern2 = "\\|[ \\t]*".$title."[ \\t]*\\|[ \\t]*(.*?)[ \\t]*\\|";
 
     if ($_[1] =~ s/$pattern1//s) {
-		$result = $1;
+        $result = $1;
     }
     elsif ($_[1] =~ s/$pattern2//s) {
-		$result = $1;
+        $result = $1;
     }
     return $result;
 }
@@ -285,19 +284,18 @@ sub xpDumpIteration {
     my $bigList = "";
 
     foreach my $story (@allStories) {
-		my $storyText = &TWiki::Store::readTopic($web, $story);
-		# TODO: This is a hack!
-		# Patch the embedded "DumpStoryList" name to the real story name
-		if(&xpGetValue("\\*Iteration\\*", $storyText, "storyiter") eq $iteration) {
-			# TODO: This is a hack!
-			# Patch the embedded %TOPIC% before the main TWiki code does
-			$storyText =~ s/%TOPIC%/$story/go;
-			$bigList .= "<h2>Story: ".$story."</h2>\n".$storyText."<br><br><hr> \n";
-		}
+        my $storyText = &TWiki::Store::readTopic($web, $story);
+        # TODO: This is a hack!
+        # Patch the embedded "DumpStoryList" name to the real story name
+        if(&xpGetValue("\\*Iteration\\*", $storyText, "storyiter") eq $iteration) {
+            # TODO: This is a hack!
+            # Patch the embedded %TOPIC% before the main TWiki code does
+            $storyText =~ s/%TOPIC%/$story/go;
+            $bigList .= "<h2>Story: ".$story."</h2>\n".$storyText."<br><br><hr> \n";
+        }
     }
-	
+    
     return $bigList;
-
 }
 
 ###########################
@@ -312,7 +310,7 @@ sub xpShowIteration {
     my @statusLiterals = ("Not Started", "In progress", "Complete", "Acceptance");
 
     my $list = "<h3>Iteration details</h3>";
-	$list .= "<table border=\"1\">";
+    $list .= "<table border=\"1\">";
     $list .= "<tr bgcolor=\"#CCCCCC\"><th align=\"left\">Story<br>&nbsp; Tasks </th><th>Estimate</th><th>Who</th><th>Spent</th><th>To do</th><th>Status</th></tr>";
 
     my @allStories = &xpGetIterStories($iterationName, $web);  
@@ -320,10 +318,10 @@ sub xpShowIteration {
     # Iterate over each story and add to hash
     my (%targetStories,%targetOrder) = ();
     foreach my $story (@allStories) {
-	    my $storyText = &TWiki::Store::readTopic($web, $story);
-	    $targetStories{$story} = $storyText;
-	    # Get the ordering and save it
-	    $targetOrder{$story} = &xpGetValue("\\*Development order\\*", $storyText, "order");
+        my $storyText = &TWiki::Store::readTopic($web, $story);
+        $targetStories{$story} = $storyText;
+        # Get the ordering and save it
+        $targetOrder{$story} = &xpGetValue("\\*Development order\\*", $storyText, "order");
     }
 
     my ($totalSpent,$totalEtc,$totalEst) = 0;
@@ -331,130 +329,134 @@ sub xpShowIteration {
     # Show them
     foreach my $story (sort { $targetOrder{$a} cmp $targetOrder{$b} || $a cmp $b } keys %targetStories) {
 
-		my $storyText = $targetStories{$story};
-		
-		# Get acceptance test status
-		my $storyComplete = "N";
-		my $ret = &xpGetValue("\\*Passed acceptance test\\*", $storyText, "complete");
-		$storyComplete = uc(substr($ret,0,1));	
-		
-		# Get story lead
-		my $storyLead = &xpGetValue("\\*Story Lead\\*", $storyText, "storyLead");
-		
-		# Set up other story stats
-		my ($storySpent,$storyEtc,$storyCalcEst) = 0;
-		
-		# Suck in the tasks
-		my (@taskName, @taskStat, @taskEst, @taskWho, @taskSpent, @taskEtc) = (); # arrays for each task
-		my $taskCount = 0; # Amount of tasks in this story
-		my @storyStat = ( 0, 0, 0 ); # Array of counts of task status
-	
-		while(1) {
-			(my $status,my $name,my $est,my $who,my $spent,my $etc,my $tstatus) = xpGetNextTask($storyText);
-			if (!$status) {
-				last;
-			}
-			
-			$taskName[$taskCount] = $name;
-			$taskEst[$taskCount] = $est;
-			$taskWho[$taskCount] = $who;
-			$taskSpent[$taskCount] = $spent;
-			$taskEtc[$taskCount] = $etc;
-			
-			$taskStat[$taskCount] = $tstatus;
-			$storyStat[$taskStat[$taskCount]]++;
-			
-			# Calculate spent
-			my @spentList = xpRipWords($taskSpent[$taskCount]);
-			foreach my $spent (@spentList) {
-				$storySpent += $spent;
-			}
-			
-			# Calculate etc
-			my @etcList = xpRipWords($taskEtc[$taskCount]);
-			foreach my $etc (@etcList) {
-				$storyEtc += $etc;
-			}
-			
-			# Calculate est
-			my @estList = xpRipWords($taskEst[$taskCount]);
-			foreach my $etc (@estList) {
-				$storyCalcEst += $etc;
-			}
-			$taskCount++;
-		}
-		
-		# Calculate story status
-		my $color = "";
-		my $storyStatS = "";
-		if ( ($storyStat[1] == 0) and ($storyStat[2] == 0) ) { # All tasks are unstarted
-			$color = "#FFCCCC";
-			$storyStatS = $statusLiterals[0];
-		} elsif ( ($storyStat[0] == 0) and ($storyStat[1] == 0) ) { # All tasks complete
-			if ($storyComplete eq "Y") {
-				$storyStatS = $statusLiterals[2];
-			} else {
-				$color = "#ccffff";
-				$storyStatS = $statusLiterals[3];
-			}
-		} else {
-			$color = "#99FF99";
-			$storyStatS = $statusLiterals[1];
-		}
-		
-		# Show story line
-		$list .= "<tr";
-		if ($color) {
-			$list .= " bgcolor=$color";
-		}
-		$list .= "><td> ".$story." </td><td align=\"center\"><b>".$storyCalcEst."</b></td><td> ".$storyLead." </td><td align=\"center\"><b>".$storySpent."</b></td><td align=\"center\">";
-		$list .= "<b>".$storyEtc."</b>";
-		$list .= "</td><td nowrap>".$storyStatS."</td></tr>";
-		
-		# Show each task
-		for (my $i=0; $i<$taskCount; $i++) {
-			
-			my $taskBG = "";
-			if ($taskStat[$i] == 0) {
-				$taskBG = " bgcolor=\"#FFCCCC\"";
-			}
-			elsif ($taskStat[$i] == 1) {
-				$taskBG = " bgcolor=\"#99FF99\"";
-			}
-			
-			# Line for each engineer
-			my $doName = 1;
-			my @who = xpRipWords($taskWho[$i]);
-			my @est = xpRipWords($taskEst[$i]);
-			my @spent = xpRipWords($taskSpent[$i]);
-			my @etc = xpRipWords($taskEtc[$i]);
-			for (my $x=0; $x<@who; $x++) {
-				$list .= "<tr".$taskBG."><td>&nbsp;";
-				if ($doName) {
-					$list .= "&nbsp;&nbsp;&nbsp;".$taskName[$i];
-				}
-				$list .= "</td><td align=\"center\">".$est[$x]."</td><td> ".$who[$x]." </td><td align=\"center\">".$spent[$x]."</td><td align=\"center\">".$etc[$x]."</td><td nowrap>";
-				
-				$list .= $statusLiterals[$taskStat[$i]];
-				
-				$list .= "</td></tr>";
-				$doName = 0;
-			}
-			
-		}
-		
-		# Add a spacer
-		$list .= "<tr><td colspan=\"6\">&nbsp;</td></tr>";
-		
-		# Add to totals
-		$totalSpent += $storySpent;
-		$totalEtc += $storyEtc;
-		$totalEst += $storyCalcEst;
-		
+        my $storyText = $targetStories{$story};
+        
+        # Get acceptance test status
+        my $storyComplete = "N";
+        my $ret = &xpGetValue("\\*Passed acceptance test\\*", $storyText, "complete");
+        $storyComplete = uc(substr($ret,0,1));  
+        
+        # Get story lead
+        my $storyLead = &xpGetValue("\\*Story Lead\\*", $storyText, "storyLead");
+        
+        # Set up other story stats
+        my ($storySpent,$storyEtc,$storyCalcEst) = 0;
+        
+        # Suck in the tasks
+        my (@taskName, @taskStat, @taskEst, @taskWho, @taskSpent, @taskEtc) = (); # arrays for each task
+        my $taskCount = 0; # Amount of tasks in this story
+        my @storyStat = ( 0, 0, 0 ); # Array of counts of task status
+    
+        while(1) {
+            (my $status,my $name,my $est,my $who,my $spent,my $etc,my $tstatus) = xpGetNextTask($storyText);
+            if (!$status) {
+                last;
+            }
+            
+            $taskName[$taskCount] = $name;
+            $taskEst[$taskCount] = $est;
+            $taskWho[$taskCount] = $who;
+            $taskSpent[$taskCount] = $spent;
+            $taskEtc[$taskCount] = $etc;
+            
+            $taskStat[$taskCount] = $tstatus;
+            $storyStat[$taskStat[$taskCount]]++;
+            
+            # Calculate spent
+            my @spentList = xpRipWords($taskSpent[$taskCount]);
+            foreach my $spent (@spentList) {
+                $storySpent += $spent;
+            }
+            
+            # Calculate etc
+            my @etcList = xpRipWords($taskEtc[$taskCount]);
+            foreach my $etc (@etcList) {
+                $storyEtc += $etc;
+            }
+            
+            # Calculate est
+            my @estList = xpRipWords($taskEst[$taskCount]);
+            foreach my $etc (@estList) {
+                $storyCalcEst += $etc;
+            }
+            $taskCount++;
+        }
+        
+        # Calculate story status
+        my $color = "";
+        my $storyStatS = "";
+        if ( ($storyStat[1] == 0) and ($storyStat[2] == 0) ) { # All tasks are unstarted
+            $color = "$defaults{storywaitcolor}";
+            $storyStatS = $statusLiterals[0];
+        } elsif ( ($storyStat[0] == 0) and ($storyStat[1] == 0) ) { # All tasks complete
+            if ($storyComplete eq "Y") {
+                $storyStatS = $statusLiterals[2];
+                $color = "$defaults{storycompletecolor}";
+            } else {
+                $color = "$defaults{storyacceptancecolor}";
+                $storyStatS = $statusLiterals[3];
+            }
+        } else {
+            $color = "$defaults{storyprogresscolor}";
+            $storyStatS = $statusLiterals[1];
+        }
+        
+        # Show story line
+        $list .= "<tr";
+        if ($color) {
+            $list .= " bgcolor=$color";
+        }
+        $list .= "><td> ".$story." </td><td align=\"center\"><b>".$storyCalcEst."</b></td><td> ".$storyLead." </td><td align=\"center\"><b>".$storySpent."</b></td><td align=\"center\">";
+        $list .= "<b>".$storyEtc."</b>";
+        $list .= "</td><td nowrap>".$storyStatS."</td></tr>";
+        
+        # Show each task
+        for (my $i=0; $i<$taskCount; $i++) {
+            
+            my $taskBG = "";
+            if ($taskStat[$i] == 0) {
+                $taskBG = " bgcolor=\"$defaults{taskwaitcolor}\"";
+            }
+            elsif ($taskStat[$i] == 1) {
+                $taskBG = " bgcolor=\"$defaults{taskprogresscolor}\"";
+            }
+            elsif ($taskStat[$i] == 2) {
+                $taskBG = " bgcolor=\"$defaults{taskcompletecolor}\"";
+            }
+
+            # Line for each engineer
+            my $doName = 1;
+            my @who = xpRipWords($taskWho[$i]);
+            my @est = xpRipWords($taskEst[$i]);
+            my @spent = xpRipWords($taskSpent[$i]);
+            my @etc = xpRipWords($taskEtc[$i]);
+            for (my $x=0; $x<@who; $x++) {
+                $list .= "<tr".$taskBG."><td>&nbsp;";
+                if ($doName) {
+                    $list .= "&nbsp;&nbsp;&nbsp;".$taskName[$i];
+                }
+                $list .= "</td><td align=\"center\">".$est[$x]."</td><td> ".$who[$x]." </td><td align=\"center\">".$spent[$x]."</td><td align=\"center\">".$etc[$x]."</td><td nowrap>";
+                
+                $list .= $statusLiterals[$taskStat[$i]];
+                
+                $list .= "</td></tr>";
+                $doName = 0;
+            }
+            
+        }
+        
+        # Add a spacer
+        $list .= "<tr><td colspan=\"6\">&nbsp;</td></tr>";
+        
+        # Add to totals
+        $totalSpent += $storySpent;
+        $totalEtc += $storyEtc;
+        $totalEst += $storyCalcEst;
+        
     }
-	
+    
     # Do iteration totals
-	
+    
     $list .= "<tr bgcolor=\"#CCCCCC\"><td><b>Team totals</b></td><td align=\"center\"><b>".$totalEst."</b></td><td></td><td align=\"center\"><b>".$totalSpent."</b></td><td align=\"center\"><b>".$totalEtc."</b></td><td> </td></tr>";
     $list .= "</table>";
     return $list;
@@ -491,7 +493,7 @@ sub xpShowIterationTerse {
     my @statusLiterals = ("Not Started", "In progress", "Complete", "Acceptance");
 
     my $list = "<h3>Iteration summary</h3>";
-	$list .= "<table border=\"1\">";
+    $list .= "<table border=\"1\">";
     $list .= "<tr bgcolor=\"#CCCCCC\"><th align=\"left\">Story</th><th>FEA</th><th>Estimate</th><th>Spent</th><th>ToDo</th><th>Progress</th><th>Done</th><th>Overrun</th><th>Completion</th></tr>";
 
     my @allStories = &xpGetIterStories($iterationName, $web);  
@@ -499,167 +501,168 @@ sub xpShowIterationTerse {
     # Iterate over each story and add to hash
     my (%targetStories,%targetOrder) = ();
     foreach my $story (@allStories) {
-	my $storyText = &TWiki::Store::readTopic($web, $story);
-	$targetStories{$story} = $storyText;
-	# Get the ordering and save it
-	$targetOrder{$story} = &xpGetValue("\\*Development order\\*", $storyText, "order");
+    my $storyText = &TWiki::Store::readTopic($web, $story);
+    $targetStories{$story} = $storyText;
+    # Get the ordering and save it
+    $targetOrder{$story} = &xpGetValue("\\*Development order\\*", $storyText, "order");
     }
 
     my ($totalSpent,$totalEtc,$totalEst) = 0;
 
     # Show them
     foreach my $story (sort { $targetOrder{$a} cmp $targetOrder{$b} || $a cmp $b } keys %targetStories) {
-	my $storyText = $targetStories{$story};
-	
-	# Get FEA
-	my $fea = &xpGetValue("\\*FEA\\*", $storyText, "notagsforthis");
+    my $storyText = $targetStories{$story};
+    
+    # Get FEA
+    my $fea = &xpGetValue("\\*FEA\\*", $storyText, "notagsforthis");
 
-	# Get story summary
-	my $storySummary = &xpGetValue("\\*Story summary\\*", $storyText, "notagsforthis");
+    # Get story summary
+    my $storySummary = &xpGetValue("\\*Story summary\\*", $storyText, "notagsforthis");
 
-	# Get acceptance test status
-	my $storyComplete = "N";
-	my $ret = &xpGetValue("\\*Passed acceptance test\\*", $storyText, "complete");
-	if($ret) {
-	    $storyComplete = uc(substr($ret,0,1));
-	}
+    # Get acceptance test status
+    my $storyComplete = "N";
+    my $ret = &xpGetValue("\\*Passed acceptance test\\*", $storyText, "complete");
+    if($ret) {
+        $storyComplete = uc(substr($ret,0,1));
+    }
 
-	# Set up other story stats
-	my ($storySpent,$storyEtc,$storyCalcEst) = 0;
-	
-	# still need to parse tasks to track total time estimates
-	# Suck in the tasks. Move this code into separate routine
-	my (@taskName, @taskStat, @taskEst, @taskWho, @taskSpent, @taskEtc) = (); # arrays for each task
-	my $taskCount = 0; # Amount of tasks in this story
-	my @storyStat = ( 0, 0, 0 ); # Array of counts of task status
-	my $storyStatS = '';
+    # Set up other story stats
+    my ($storySpent,$storyEtc,$storyCalcEst) = 0;
+    
+    # still need to parse tasks to track total time estimates
+    # Suck in the tasks. Move this code into separate routine
+    my (@taskName, @taskStat, @taskEst, @taskWho, @taskSpent, @taskEtc) = (); # arrays for each task
+    my $taskCount = 0; # Amount of tasks in this story
+    my @storyStat = ( 0, 0, 0 ); # Array of counts of task status
+    my $storyStatS = '';
 
-	while(1) {
-	    (my $status,my $name,my $est,my $who,my $spent,my $etc,my $tstatus) = xpGetNextTask($storyText);
-	    if (!$status) {
-		last;
-	    }
-
-	    $taskName[$taskCount] = $name;
-	    $taskEst[$taskCount] = $est;
-	    $taskWho[$taskCount] = $who;
-	    $taskSpent[$taskCount] = $spent;
-	    $taskEtc[$taskCount] = $etc;
-
-	    $taskStat[$taskCount] = $tstatus;
-	    $storyStat[$taskStat[$taskCount]]++;
-
-	    # Calculate spent
-	    my @spentList = xpRipWords($taskSpent[$taskCount]);
-	    foreach my $spent (@spentList) {
-		$storySpent += $spent;
-	    }
-
-		# Calculate etc
-	    my @etcList = xpRipWords($taskEtc[$taskCount]);
-	    foreach my $etc (@etcList) {
-			$storyEtc += $etc;
-	    }
-	    # Calculate est
-	    my @estList = xpRipWords($taskEst[$taskCount]);
-	    foreach my $etc (@estList) {
-			$storyCalcEst += $etc;
-	    }
-	    $taskCount++;
-	}
-
-	# Calculate story status
-	if ( ($storyStat[1] == 0) and ($storyStat[2] == 0) ) { # All tasks are unstarted
-	    # status: not started
-	    $color = "#FFCCCC";
-	    $storyStatS = $statusLiterals[0];
-	} elsif ( ($storyStat[0] == 0) and ($storyStat[1] == 0) ) { # All tasks complete
-	    if ($storyComplete eq "Y") {
-		# status: complete
-		$storyStatS = $statusLiterals[2];
-	    } else {
-		# status: acceptance
-		$color = "#ccffff";
-		$storyStatS = $statusLiterals[3];
-	    }
-	} else {
-	    # status: in progress
-	    $color = "#99FF99";
-	    $storyStatS = $statusLiterals[1];
-	}
-	
-	# Show story line
-	$list .= "<tr";
-	if ($storyComplete ne "Y") {
-	    $list .= " bgcolor=$color";
-	}
-	$list .= "><td> ".$story."<br> ".$storySummary." </td>\n";
-	$list .= "<td align=\"center\"> ".$fea." </td>\n";
-	$list .= "<td align=\"center\"><b>".$storyCalcEst."</b></td>\n";
-	$list .= "<td align=\"center\"><b>".$storySpent."</b></td>\n";
-	$list .= "<td align=\"center\"><b>".$storyEtc."</b></td>";
-	my $done = 0;
-	if(($storySpent + $storyEtc) > 0) {
-	    $done = int(100.0 * $storySpent / ($storySpent + $storyEtc));
+    while(1) {
+        (my $status,my $name,my $est,my $who,my $spent,my $etc,my $tstatus) = xpGetNextTask($storyText);
+        if (!$status) {
+        last;
         }
-	$list .= "<td>";
-	$list .= gaugeLite($done);
-	$list .= "</td>";
 
-	$list .= "<td align=right>".$done."%</td>";
+        $taskName[$taskCount] = $name;
+        $taskEst[$taskCount] = $est;
+        $taskWho[$taskCount] = $who;
+        $taskSpent[$taskCount] = $spent;
+        $taskEtc[$taskCount] = $etc;
 
-	my $cfEst = 0;
-	if($storyCalcEst > 0) {
-	  $cfEst = int(100*(($storySpent + $storyEtc) / $storyCalcEst) - 100);
-	}
-	if($cfEst >= 0) {
-	  $list .= "<td align=right> +".$cfEst."%</td>";
-	} else {
-	  $list .= "<td align=right>".$cfEst."%</td>";	
-	}
+        $taskStat[$taskCount] = $tstatus;
+        $storyStat[$taskStat[$taskCount]]++;
 
-	$list .= "<td>".$storyStatS."</td>";
+        # Calculate spent
+        my @spentList = xpRipWords($taskSpent[$taskCount]);
+        foreach my $spent (@spentList) {
+        $storySpent += $spent;
+        }
+
+        # Calculate etc
+        my @etcList = xpRipWords($taskEtc[$taskCount]);
+        foreach my $etc (@etcList) {
+            $storyEtc += $etc;
+        }
+        # Calculate est
+        my @estList = xpRipWords($taskEst[$taskCount]);
+        foreach my $etc (@estList) {
+            $storyCalcEst += $etc;
+        }
+        $taskCount++;
+    }
+
+    # Calculate story status
+    if ( ($storyStat[1] == 0) and ($storyStat[2] == 0) ) { # All tasks are unstarted
+        # status: not started
+        $color = "$defaults{storywaitcolor}";
+        $storyStatS = $statusLiterals[0];
+    } elsif ( ($storyStat[0] == 0) and ($storyStat[1] == 0) ) { # All tasks complete
+        if ($storyComplete eq "Y") {
+            # status: complete
+            $storyStatS = $statusLiterals[2];
+            $color = "$defaults{storycompletecolor}";
+        } else {
+            # status: acceptance
+            $color = "$defaults{storyacceptancecolor}";
+            $storyStatS = $statusLiterals[3];
+        }
+    } else {
+        # status: in progress
+        $color = "$defaults{storyprogresscolor}";
+        $storyStatS = $statusLiterals[1];
+    }
+    
+    # Show story line
+    $list .= "<tr";
+    # if ($storyComplete ne "Y") {
+        $list .= " bgcolor=$color";
+    # }
+    $list .= "><td> ".$story."<br> ".$storySummary." </td>\n";
+    $list .= "<td align=\"center\"> ".$fea." </td>\n";
+    $list .= "<td align=\"center\"><b>".$storyCalcEst."</b></td>\n";
+    $list .= "<td align=\"center\"><b>".$storySpent."</b></td>\n";
+    $list .= "<td align=\"center\"><b>".$storyEtc."</b></td>";
+    my $done = 0;
+    if(($storySpent + $storyEtc) > 0) {
+        $done = int(100.0 * $storySpent / ($storySpent + $storyEtc));
+        }
+    $list .= "<td>";
+    $list .= gaugeLite($done);
+    $list .= "</td>";
+
+    $list .= "<td align=right>".$done."%</td>";
+
+    my $cfEst = 0;
+    if($storyCalcEst > 0) {
+      $cfEst = int(100*(($storySpent + $storyEtc) / $storyCalcEst) - 100);
+    }
+    if($cfEst >= 0) {
+      $list .= "<td align=right> +".$cfEst."%</td>";
+    } else {
+      $list .= "<td align=right>".$cfEst."%</td>";  
+    }
+
+    $list .= "<td>".$storyStatS."</td>";
 
         $list .= "</tr>";
 
-	# Show each task
-	if($showTasks eq "Y") {
+    # Show each task
+    if($showTasks eq "Y") {
 
-	    for (my $i=0; $i<$taskCount; $i++) {
-		
-		my $taskBG = "";
-		if ($taskStat[$i] != 2) {
-		    $taskBG = " bgcolor=\"#FFCCCC\"";
-		}
-		
-		# Line for each engineer
-		my $doName = 1;
-		my @who = xpRipWords($taskWho[$i]);
-		my @est = xpRipWords($taskEst[$i]);
-		my @spent = xpRipWords($taskSpent[$i]);
-		my @etc = xpRipWords($taskEtc[$i]);
-		for (my $x=0; $x<@who; $x++) {
-		    $list .= "<tr".$taskBG."><td>&nbsp;";
-		    if ($doName) {
-			$list .= "&nbsp;&nbsp;&nbsp;".$taskName[$i];
-		    }
-		    $list .= "</td><td align=\"center\">".$est[$x]."</td><td> ".$who[$x]." </td><td align=\"center\">".$spent[$x]."</td><td align=\"center\">".$etc[$x]."</td><td nowrap>";
-		    $list .= $statusLiterals[$taskStat[$i]];
-		    $list .= "</td></tr>";
-		    $doName = 0;
-		}
-		
-	    }
-	    
-	    # Add a spacer if showing tasks
-	    $list .= "<tr><td colspan=\"6\">&nbsp;</td></tr>";
-	}
+        for (my $i=0; $i<$taskCount; $i++) {
+        
+        my $taskBG = "";
+        if ($taskStat[$i] != 2) {
+            $taskBG = " bgcolor=\"#FFCCCC\"";
+        }
+        
+        # Line for each engineer
+        my $doName = 1;
+        my @who = xpRipWords($taskWho[$i]);
+        my @est = xpRipWords($taskEst[$i]);
+        my @spent = xpRipWords($taskSpent[$i]);
+        my @etc = xpRipWords($taskEtc[$i]);
+        for (my $x=0; $x<@who; $x++) {
+            $list .= "<tr".$taskBG."><td>&nbsp;";
+            if ($doName) {
+            $list .= "&nbsp;&nbsp;&nbsp;".$taskName[$i];
+            }
+            $list .= "</td><td align=\"center\">".$est[$x]."</td><td> ".$who[$x]." </td><td align=\"center\">".$spent[$x]."</td><td align=\"center\">".$etc[$x]."</td><td nowrap>";
+            $list .= $statusLiterals[$taskStat[$i]];
+            $list .= "</td></tr>";
+            $doName = 0;
+        }
+        
+        }
+        
+        # Add a spacer if showing tasks
+        $list .= "<tr><td colspan=\"6\">&nbsp;</td></tr>";
+    }
 
-	# Add to totals
-	$totalSpent += $storySpent;
-	$totalEtc += $storyEtc;
-	$totalEst += $storyCalcEst;
-	
+    # Add to totals
+    $totalSpent += $storySpent;
+    $totalEtc += $storyEtc;
+    $totalEst += $storyCalcEst;
+    
     }
 
     # Do iteration totals
@@ -669,7 +672,7 @@ sub xpShowIterationTerse {
     # refactor this code! (mwatt)
     my $totDone = 0;
     if(($totalSpent + $totalEtc) > 0) {
-	$totDone = int(100.0 * $totalSpent / ($totalSpent + $totalEtc));
+    $totDone = int(100.0 * $totalSpent / ($totalSpent + $totalEtc));
     }
     my $totLeft = (100 - $totDone);
     my $gaugeTxt = gaugeLite($totDone);
@@ -685,7 +688,7 @@ sub xpShowIterationTerse {
     if($cfTotEst >= 0) {
       $list .= "<td align=right> +".$cfTotEst."%</td>";
     } else {
-      $list .= "<td align=right> ".$cfTotEst."%</td>";	
+      $list .= "<td align=right> ".$cfTotEst."%</td>";  
     }
 
     $list .= "<td></td></tr>\n";
@@ -718,21 +721,21 @@ sub xpShowAllIterations {
     my @projects = &xpGetAllProjects($web);
     foreach my $project (@projects) {
 
-	    my @teams = &xpGetProjectTeams($project, $web);
-		foreach my $team (@teams){ 
+        my @teams = &xpGetProjectTeams($project, $web);
+        foreach my $team (@teams){ 
 
-		    my @teamIters = &xpGetTeamIterations($team, $web);
+            my @teamIters = &xpGetTeamIterations($team, $web);
 
-			# write out all iterations to table
-			foreach my $iter (@teamIters) {
-			  
-			    # get additional information from iteration
-			    my $iterText = &TWiki::Store::readTopic($web, $iter);
-				my $summary = &xpGetValueAndRemove("\\*Summary\\*", $iterText);
-			  
-				$list .= "| ".$project." | ".$team." | ".$iter." | ".$summary." |\n";
-			}
-		}
+            # write out all iterations to table
+            foreach my $iter (@teamIters) {
+              
+                # get additional information from iteration
+                my $iterText = &TWiki::Store::readTopic($web, $iter);
+                my $summary = &xpGetValueAndRemove("\\*Summary\\*", $iterText);
+              
+                $list .= "| ".$project." | ".$team." | ".$iter." | ".$summary." |\n";
+            }
+        }
     }
     return $list;
 }
@@ -751,28 +754,28 @@ sub xpShowProjectIterations {
 
     $list .= "| *Team* | *Iter* | *Summary* | *Start* | *End* | *Est* | *Spent* | *ToDo* | *Progress* | *Done* | *Overrun* |\n";
 
-	my @projTeams = &xpGetProjectTeams($project, $web);
-	foreach my $team (@projTeams){ 
-	  
-	    my @teamIters = &xpGetTeamIterations($team, $web);
+    my @projTeams = &xpGetProjectTeams($project, $web);
+    foreach my $team (@projTeams){ 
+      
+        my @teamIters = &xpGetTeamIterations($team, $web);
 
-		# write out all iterations to table
-		foreach my $iter (@teamIters) {
-		  
-  		    # get additional information from iteration
-		    my $iterText = &TWiki::Store::readTopic($web, $iter);
-			my $summary = &xpGetValueAndRemove("\\*Summary\\*", $iterText, "notagsforthis");
-			my $start = &xpGetValueAndRemove("\\*Start\\*", $iterText, "notagsforthis");
-			my $end = &xpGetValueAndRemove("\\*End\\*", $iterText, "notagsforthis");
-			
-			$list .= "| ".$team." | ".$iter." | ".$summary." | ".$start." | ".$end." ";
-			
-			# call xpShowIterationTerse, which internally computes totals for
-			# est, spent, todo, overrun etc and places them in an html comment for pickup here :-)
-			my $iterSummary = &xpShowIterationTerse($iter, $web);
-			$iterSummary =~ /SUMMARY(.*?)END/s;
-			$list .= "$1 \n";
-		}
+        # write out all iterations to table
+        foreach my $iter (@teamIters) {
+          
+            # get additional information from iteration
+            my $iterText = &TWiki::Store::readTopic($web, $iter);
+            my $summary = &xpGetValueAndRemove("\\*Summary\\*", $iterText, "notagsforthis");
+            my $start = &xpGetValueAndRemove("\\*Start\\*", $iterText, "notagsforthis");
+            my $end = &xpGetValueAndRemove("\\*End\\*", $iterText, "notagsforthis");
+            
+            $list .= "| ".$team." | ".$iter." | ".$summary." | ".$start." | ".$end." ";
+            
+            # call xpShowIterationTerse, which internally computes totals for
+            # est, spent, todo, overrun etc and places them in an html comment for pickup here :-)
+            my $iterSummary = &xpShowIterationTerse($iter, $web);
+            $iterSummary =~ /SUMMARY(.*?)END/s;
+            $list .= "$1 \n";
+        }
 
     }
     return $list;
@@ -794,37 +797,37 @@ sub xpShowProjectStories {
     $listIncomplete .= "| *Team* | *Iteration* | *Story* | *Summary* | *FEA* |\n";
 
 
-	my @teams = &xpGetProjectTeams($project, $web);
-	foreach my $team (@teams){ 
-	  
-		my @teamIters = &xpGetTeamIterations($team, $web);
+    my @teams = &xpGetProjectTeams($project, $web);
+    foreach my $team (@teams){ 
+      
+        my @teamIters = &xpGetTeamIterations($team, $web);
 
-		# write out all iterations to table
-		foreach my $iter (@teamIters) {
-			  
-		    # get additional information from iteration
-		  my $iterText = &TWiki::Store::readTopic($web, $iter);
-		  my $end = &xpGetValueAndRemove("\\*End\\*", $iterText, "notagsforthis");
-		  
-		  my @allStories = &xpGetIterStories($iter, $web);
-		  
-		  foreach my $story (@allStories) {
-		      my $storyText = &TWiki::Store::readTopic($web, $story);
-			  $targetOrder{$story} = &xpGetValue("\\*Development order\\*", $storyText, "order");
-			  
-			  my $storySummary = &xpGetValue("\\*Story summary\\*", $storyText, "notagsforthis");
-			  my $fea = &xpGetValue("\\*FEA\\*", $storyText, "notagsforthis");
-			  my $ret = &xpGetValue("\\*Passed acceptance test\\*", $storyText, "complete");			
-			  my $storyComplete = uc(substr($ret,0,1));
-			  if ($storyComplete eq "Y") {
-				  $listComplete .= "| ".$team." | ".$iter." | ".$story." | ".$storySummary." | ".$fea." | " .$end. "|\n";
-				} else {
-				    $listIncomplete .= "| ".$team." | ".$iter." | ".$story." | ".$storySummary." | ".$fea. "|\n";
-				}
-			}
-		}
-	}
-	$listComplete .= "\n\n";
+        # write out all iterations to table
+        foreach my $iter (@teamIters) {
+              
+            # get additional information from iteration
+          my $iterText = &TWiki::Store::readTopic($web, $iter);
+          my $end = &xpGetValueAndRemove("\\*End\\*", $iterText, "notagsforthis");
+          
+          my @allStories = &xpGetIterStories($iter, $web);
+          
+          foreach my $story (@allStories) {
+              my $storyText = &TWiki::Store::readTopic($web, $story);
+              $targetOrder{$story} = &xpGetValue("\\*Development order\\*", $storyText, "order");
+              
+              my $storySummary = &xpGetValue("\\*Story summary\\*", $storyText, "notagsforthis");
+              my $fea = &xpGetValue("\\*FEA\\*", $storyText, "notagsforthis");
+              my $ret = &xpGetValue("\\*Passed acceptance test\\*", $storyText, "complete");            
+              my $storyComplete = uc(substr($ret,0,1));
+              if ($storyComplete eq "Y") {
+                  $listComplete .= "| ".$team." | ".$iter." | ".$story." | ".$storySummary." | ".$fea." | " .$end. "|\n";
+                } else {
+                    $listIncomplete .= "| ".$team." | ".$iter." | ".$story." | ".$storySummary." | ".$fea. "|\n";
+                }
+            }
+        }
+    }
+    $listComplete .= "\n\n";
 
     return $listComplete.$listIncomplete;
 }
@@ -848,19 +851,19 @@ sub xpShowTeamIterations {
     # write out all iterations to table
     foreach my $iter (@teamIters) {
 
-		# get additional information from iteration
-		my $iterText = &TWiki::Store::readTopic($web, $iter);
-		my $start = &xpGetValueAndRemove("\\*Start\\*", $iterText, "notagsforthis");
-		my $end = &xpGetValueAndRemove("\\*End\\*", $iterText, "notagsforthis");
-		my $summary = &xpGetValueAndRemove("\\*Summary\\*", $iterText, "notagsforthis");
+        # get additional information from iteration
+        my $iterText = &TWiki::Store::readTopic($web, $iter);
+        my $start = &xpGetValueAndRemove("\\*Start\\*", $iterText, "notagsforthis");
+        my $end = &xpGetValueAndRemove("\\*End\\*", $iterText, "notagsforthis");
+        my $summary = &xpGetValueAndRemove("\\*Summary\\*", $iterText, "notagsforthis");
 
-		$list .= "| ".$iter." | ".$summary." | ".$start." | ".$end." ";
+        $list .= "| ".$iter." | ".$summary." | ".$start." | ".$end." ";
 
-		# call xpShowIterationTerse, which internally computes totals for
-		# est, spent, todo, overrun etc and places them in an html comment for pickup here :-)
-		my $iterSummary = &xpShowIterationTerse($iter, $web);
+        # call xpShowIterationTerse, which internally computes totals for
+        # est, spent, todo, overrun etc and places them in an html comment for pickup here :-)
+        my $iterSummary = &xpShowIterationTerse($iter, $web);
         $iterSummary =~ /SUMMARY(.*?)END/s;
-		$list .= "$1 \n";
+        $list .= "$1 \n";
 
     }
 
@@ -887,8 +890,8 @@ sub xpShowAllTeams {
 
     foreach my $project (@projects) {
 
-	  my @projTeams = &xpGetProjectTeams($project, $web);
-	  $list .= "| ".$project." | @projTeams |\n";
+      my @projTeams = &xpGetProjectTeams($project, $web);
+      $list .= "| ".$project." | @projTeams |\n";
     }
 
     # append form to allow creation of new projects
@@ -953,9 +956,9 @@ sub xpGetProjectTeams {
 
     my ($project, $web) = @_;
 
-	if( $web eq $cachedWebName ) {
-		return split( /,/, $cachedProjectTeams{$project} );
-	}
+    if( $web eq $cachedWebName ) {
+        return split( /,/, $cachedProjectTeams{$project} );
+    }
 }
 
 ###########################
@@ -985,39 +988,39 @@ sub xpShowProjectCompletionByStories{
 
     # initialise hash. There must be a better way! (MWATT)
     foreach my $story (@projectStories) {
-	    my $storyText = &TWiki::Store::readTopic($web, $story);
-		my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
-		$waiting{$iter} = 0;
-		$progress{$iter} = 0;
-		$complete{$iter} = 0;
-		$accepted{$iter} = 0;
+        my $storyText = &TWiki::Store::readTopic($web, $story);
+        my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
+        $waiting{$iter} = 0;
+        $progress{$iter} = 0;
+        $complete{$iter} = 0;
+        $accepted{$iter} = 0;
     }
 
     foreach my $story (@projectStories) {
-	my $storyText = &TWiki::Store::readTopic($web, $story);
-	my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
-	if ($iter ne "TornUp") {
-	    $master{$iter}++;
-	    my $status = &xpGetStoryStatus($storyText);
-	    if ($status == 0) {
-		    # all tasks waiting
-		    $waiting{$iter}++;
-		    $waiting++;
-	    } elsif ($status == 1) {
-        	# in progress
-			$progress{$iter}++;
-			$progress++;
-	    } elsif ($status == 3) {
-		# tasks complete but not acceptance tested
-		$complete{$iter}++;
-		$complete++; 
-	    } else {
-		# 2 - complete and acceptance tested
-		$accepted{$iter}++;
-		$accepted++;
-	    }
-	    $total++;
-	}
+    my $storyText = &TWiki::Store::readTopic($web, $story);
+    my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
+    if ($iter ne "TornUp") {
+        $master{$iter}++;
+        my $status = &xpGetStoryStatus($storyText);
+        if ($status == 0) {
+            # all tasks waiting
+            $waiting{$iter}++;
+            $waiting++;
+        } elsif ($status == 1) {
+            # in progress
+            $progress{$iter}++;
+            $progress++;
+        } elsif ($status == 3) {
+        # tasks complete but not acceptance tested
+        $complete{$iter}++;
+        $complete++; 
+        } else {
+        # 2 - complete and acceptance tested
+        $accepted{$iter}++;
+        $accepted++;
+        }
+        $total++;
+    }
     }
 
     # Get date of each iteration
@@ -1030,15 +1033,15 @@ sub xpShowProjectCompletionByStories{
 
     # OK, display them
     foreach my $iteration (sort { $iterKeys{$a} <=> $iterKeys{$b} } keys %master) {
-	my $pctAccepted = 0;
-	if ($accepted{$iteration} > 0) {
-	    $pctAccepted = sprintf("%u",($accepted{$iteration}/$master{$iteration})*100);
-	}
-	$list .= "| ".$iteration."  |  ".$master{$iteration}."  |  ".$waiting{$iteration}."  |  ".$progress{$iteration}."  |  ".$complete{$iteration}."  |  ".$accepted{$iteration}."  |  ".$pctAccepted."\%  | \n";
+    my $pctAccepted = 0;
+    if ($accepted{$iteration} > 0) {
+        $pctAccepted = sprintf("%u",($accepted{$iteration}/$master{$iteration})*100);
+    }
+    $list .= "| ".$iteration."  |  ".$master{$iteration}."  |  ".$waiting{$iteration}."  |  ".$progress{$iteration}."  |  ".$complete{$iteration}."  |  ".$accepted{$iteration}."  |  ".$pctAccepted."\%  | \n";
     }
     my $pctAccepted = 0;
     if ($accepted > 0) {
-	$pctAccepted = sprintf("%u",($accepted/$total)*100);
+    $pctAccepted = sprintf("%u",($accepted/$total)*100);
     }
     $list .= "| Totals  |  ".$total."  |  ".$waiting."  |  ".$progress."  |  ".$complete."  |  ".$accepted."  |  ".$pctAccepted."%  |\n";
 
@@ -1069,36 +1072,36 @@ sub xpShowProjectCompletionByTasks {
 
     # initialise hash. There must be a better way! (mwatt)
     foreach my $story (@projectStories) {
-	my $storyText = &TWiki::Store::readTopic($web, $story);
-	my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
-	$waiting{$iter} = 0;
-	$progress{$iter} = 0;
-	$complete{$iter} = 0;
+    my $storyText = &TWiki::Store::readTopic($web, $story);
+    my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
+    $waiting{$iter} = 0;
+    $progress{$iter} = 0;
+    $complete{$iter} = 0;
     }
 
     foreach my $story (@projectStories) {
-	my $storyText = &TWiki::Store::readTopic($web, $story);
-	my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
-	if ($iter ne "TornUp") {
-	    while (1) {
-		(my $status,my $taskName,my $taskEst,my $taskWho,my $taskSpent,my $taskEtc,my $taskStatus) = xpGetNextTask($storyText);
-		if (!$status) {
-		    last;
-		}
-		$master{$iter}++;
-		if ($taskStatus == 0) {
-		    $waiting{$iter}++;
-		    $waiting++;
-		} elsif ( ($taskStatus == 1) or ($taskStatus == 3) ) {
-		    $progress{$iter}++;
-		    $progress++;
-		} else {
-		    $complete{$iter}++;
-		    $complete++;
-		}
-		$total++;
-	    }
-	}
+    my $storyText = &TWiki::Store::readTopic($web, $story);
+    my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
+    if ($iter ne "TornUp") {
+        while (1) {
+        (my $status,my $taskName,my $taskEst,my $taskWho,my $taskSpent,my $taskEtc,my $taskStatus) = xpGetNextTask($storyText);
+        if (!$status) {
+            last;
+        }
+        $master{$iter}++;
+        if ($taskStatus == 0) {
+            $waiting{$iter}++;
+            $waiting++;
+        } elsif ( ($taskStatus == 1) or ($taskStatus == 3) ) {
+            $progress{$iter}++;
+            $progress++;
+        } else {
+            $complete{$iter}++;
+            $complete++;
+        }
+        $total++;
+        }
+    }
     }
 
     # Get date of each iteration
@@ -1111,15 +1114,15 @@ sub xpShowProjectCompletionByTasks {
 
     # OK, display them
     foreach my $iteration (sort { $iterKeys{$a} <=> $iterKeys{$b} } keys %master) {
-	my $pctComplete = 0;
-	if ($complete{$iteration} > 0) {
-	    $pctComplete = sprintf("%u",($complete{$iteration}/$master{$iteration})*100);
-	}
-	$list .= "| ".$iteration."  |  ".$master{$iteration}."  |  ".$waiting{$iteration}."  |   ".$progress{$iteration}."  |  ".$complete{$iteration}."  |  ".$pctComplete."\%  |\n";
+    my $pctComplete = 0;
+    if ($complete{$iteration} > 0) {
+        $pctComplete = sprintf("%u",($complete{$iteration}/$master{$iteration})*100);
+    }
+    $list .= "| ".$iteration."  |  ".$master{$iteration}."  |  ".$waiting{$iteration}."  |   ".$progress{$iteration}."  |  ".$complete{$iteration}."  |  ".$pctComplete."\%  |\n";
     }
     my $pctComplete = 0;
     if ($complete > 0) {
-	$pctComplete = sprintf("%u",($complete/$total)*100);
+    $pctComplete = sprintf("%u",($complete/$total)*100);
     }
     $list .= "| Totals |  ".$total."  |  ".$waiting."  |  ".$progress."  |  ".$complete."  |  ".$pctComplete."%  |";
 
@@ -1140,33 +1143,33 @@ sub xpTaskStatus {
 
     # anyone assigned?
     if (@who == 0) {
-	return 0; # nobody assigned, not started
+    return 0; # nobody assigned, not started
     }
     foreach my $who (@who) {
-	if ($who eq "?") {
-	    return 0; # not assigned correctly, not started
-	}
+    if ($who eq "?") {
+        return 0; # not assigned correctly, not started
+    }
     }
 
     # someone is assigned, see if ANY time remaining
     my $isRemaining = 0;
     foreach my $etc (@etc) {
-	if ($etc eq "?") {
-	    return 0; # no "todo", so still not started
-	}
-	if ($etc > 0) {
-	    $isRemaining = 1;
-	}
+    if ($etc eq "?") {
+        return 0; # no "todo", so still not started
+    }
+    if ($etc > 0) {
+        $isRemaining = 1;
+    }
     }
     if (!$isRemaining) {
-	return 2; # If no time remaining, must be complete
+    return 2; # If no time remaining, must be complete
     }
 
     # If ANY spent > 0, then in progress, else not started
     foreach my $spent (@spent) {
-	if ($spent > 0) {
-	    return 1; # in progress
-	}
+    if ($spent > 0) {
+        return 1; # in progress
+    }
     }
     return 0;
 
@@ -1192,46 +1195,46 @@ sub xpShowVelocities {
     my (%whoAssigned,%whoSpent,%whoEtc,%whoTAssigned,%whoTRemaining) = ();
     my ($totalSpent,$totalEtc,$totalAssigned,$totalVelocity,$totalTAssigned) = 0;
     foreach my $story (@allStories) {
-	my $storyText = &TWiki::Store::readTopic($web, $story);
-	if(&xpGetValue("\\*Iteration\\*", $storyText, "storyiter") eq $iteration) {
-	    while (1) {
-		(my $status,my $taskName,my $taskEst,my $taskWho,my $taskSpent,my $taskEtc,my $taskStatus) = xpGetNextTask($storyText);
-		if (!$status) {
-		    last;
-		}
-		my @who = xpRipWords($taskWho);
-		my @spent = xpRipWords($taskSpent);
-		my @est = xpRipWords($taskEst);
-		my @etc = xpRipWords($taskEtc);
-		for (my $i=0; $i<@who; $i++) {
-		    $whoSpent{$who[$i]} += $spent[$i];
-		    $totalSpent += $spent[$i];
+    my $storyText = &TWiki::Store::readTopic($web, $story);
+    if(&xpGetValue("\\*Iteration\\*", $storyText, "storyiter") eq $iteration) {
+        while (1) {
+        (my $status,my $taskName,my $taskEst,my $taskWho,my $taskSpent,my $taskEtc,my $taskStatus) = xpGetNextTask($storyText);
+        if (!$status) {
+            last;
+        }
+        my @who = xpRipWords($taskWho);
+        my @spent = xpRipWords($taskSpent);
+        my @est = xpRipWords($taskEst);
+        my @etc = xpRipWords($taskEtc);
+        for (my $i=0; $i<@who; $i++) {
+            $whoSpent{$who[$i]} += $spent[$i];
+            $totalSpent += $spent[$i];
 
-		    $whoEtc{$who[$i]} += $etc[$i];
-		    $totalEtc += $etc[$i];
+            $whoEtc{$who[$i]} += $etc[$i];
+            $totalEtc += $etc[$i];
 
-		    $whoAssigned{$who[$i]} += $est[$i];
-		    $totalAssigned += $est[$i];
+            $whoAssigned{$who[$i]} += $est[$i];
+            $totalAssigned += $est[$i];
 
-		    $whoTAssigned{$who[$i]}++;
-		    $totalTAssigned++;
+            $whoTAssigned{$who[$i]}++;
+            $totalTAssigned++;
 
-		    if ($etc[$i] > 0) {
-			$whoTRemaining{$who[$i]}++;
-		        $totalTRemaining++;
-		    } else {
-			# ensure these variables always get initialised
-			$whoTRemaining{$who[$i]}+= 0;
-		        $totalTRemaining+= 0;
-		    }
-		}
-	    }
-	}
+            if ($etc[$i] > 0) {
+            $whoTRemaining{$who[$i]}++;
+                $totalTRemaining++;
+            } else {
+            # ensure these variables always get initialised
+            $whoTRemaining{$who[$i]}+= 0;
+                $totalTRemaining+= 0;
+            }
+        }
+        }
+    }
     }
     
     # Show them
     foreach my $who (sort { $whoEtc{$b} <=> $whoEtc{$a} } keys %whoSpent) {
-	$list .= "<tr><td> ".$who." </td><td align=\"center\">".$whoAssigned{$who}."</td><td align=\"center\">".$whoSpent{$who}."</td><td align=\"center\">".$whoEtc{$who}."</td><td align=\"center\">".$whoTAssigned{$who}."</td><td align=\"center\">".$whoTRemaining{$who}."</td></tr>";
+    $list .= "<tr><td> ".$who." </td><td align=\"center\">".$whoAssigned{$who}."</td><td align=\"center\">".$whoSpent{$who}."</td><td align=\"center\">".$whoEtc{$who}."</td><td align=\"center\">".$whoTAssigned{$who}."</td><td align=\"center\">".$whoTRemaining{$who}."</td></tr>";
     }
     $list .= "<tr bgcolor=\"#CCCCCC\"><th align=\"left\">Total</th><th>".$totalAssigned."</th><th>".$totalSpent."</th><th>".$totalEtc."</th><th>".$totalTAssigned."</th><th>".$totalTRemaining."</th></tr>";
 
@@ -1270,18 +1273,18 @@ sub xpGetProjectStories {
 
     my @matchingStories = ();
 
-	my @teams = &xpGetProjectTeams($project, $web);
-	foreach my $team (@teams){ 
-	  
-	    my @teamIters = &xpGetTeamIterations($team, $web);
-		
-		# write out all iterations to table
-		foreach my $iter (@teamIters) {
-			  
-		    my @allStories = &xpGetIterStories($iter, $web);  
-			push @matchingStories, @allStories;
-		}
-	}
+    my @teams = &xpGetProjectTeams($project, $web);
+    foreach my $team (@teams){ 
+      
+        my @teamIters = &xpGetTeamIterations($team, $web);
+        
+        # write out all iterations to table
+        foreach my $iter (@teamIters) {
+              
+            my @allStories = &xpGetIterStories($iter, $web);  
+            push @matchingStories, @allStories;
+        }
+    }
     return @matchingStories;
 }
 
@@ -1294,10 +1297,10 @@ sub xpGetIterStories {
 
     my ($iteration,$web) = @_;
 
-	if( $web eq $cachedWebName ) {
-		return split( /,/, $cachedIterationStories{$iteration} );
+    if( $web eq $cachedWebName ) {
+        return split( /,/, $cachedIterationStories{$iteration} );
 
-	}
+    }
 }
 
 ###########################
@@ -1314,30 +1317,30 @@ sub xpGetStoryStatus {
     my $storyComplete = "N";
     my $ret = &xpGetValue("\\*Passed acceptance test\\*", $storyText, "complete");
     if($ret) {
-	  $storyComplete = uc(substr($ret,0,1));
+      $storyComplete = uc(substr($ret,0,1));
     }
 
     # Run through tasks and get their status
     while (1) {
-	(my $status,my $taskName,my $taskEst,my $taskWho,my $taskSpent,my $taskEtc,my $tStatus) = xpGetNextTask($storyText);
-	if (!$status) {
-	    last;
-	}
-	$taskStatus[$tStatus]++;
+    (my $status,my $taskName,my $taskEst,my $taskWho,my $taskSpent,my $taskEtc,my $tStatus) = xpGetNextTask($storyText);
+    if (!$status) {
+        last;
+    }
+    $taskStatus[$tStatus]++;
     }
 
     # Calculate story status
     my $storyStatus = 0;
     if ( ($taskStatus[1] == 0) and ($taskStatus[2] == 0) ) { # All tasks are not started
-	$storyStatus = 0;
+    $storyStatus = 0;
     } elsif ( ($taskStatus[0] == 0) and ($taskStatus[1] == 0) ) { # All tasks complete
-	if ($storyComplete eq "Y") {
-	    $storyStatus = 2;
-	} else {
-	    $storyStatus = 3;
-	}
+    if ($storyComplete eq "Y") {
+        $storyStatus = 2;
     } else {
-	$storyStatus = 1;
+        $storyStatus = 3;
+    }
+    } else {
+    $storyStatus = 1;
     }
     
     return $storyStatus;
@@ -1352,9 +1355,9 @@ sub xpRipWords {
     my $string = $_[0];
     my @out = ();
     foreach my $word (split(/[ \|]/,$string)) {
-	if ($word ne "") {
-	    push @out,$word;
-	}
+    if ($word ne "") {
+        push @out,$word;
+    }
     }
     return @out;
 }
@@ -1366,7 +1369,7 @@ sub xpRipWords {
 
 sub xpZero2Null {
     if ($_[0] == 0) {
-	return "";
+    return "";
     } else {
         return $_[0];
     }
@@ -1397,7 +1400,7 @@ sub xpGetNextTask {
     } else {
       $taskName = &xpGetValueAndRemove("\\*Task name\\*", $_[0], "taskname");
       if(! $taskName) {
-	return 0;
+    return 0;
       }
       
       $taskEst = &xpGetValueAndRemove("\\*Original estimate\\*", $_[0], "est");
@@ -1414,16 +1417,16 @@ sub xpGetNextTask {
 
 ###########################
 sub sort_unique(@) {
-	my @array = @_;
-	my %hash;
+    my @array = @_;
+    my %hash;
 
-	#make the names the keys of a hash, so the keys will be unique
-	foreach my $el (@array) {
-		$hash{$el}++;
-	}
+    #make the names the keys of a hash, so the keys will be unique
+    foreach my $el (@array) {
+        $hash{$el}++;
+    }
 
-	#now sort the keys
-	return (sort keys(%hash));
+    #now sort the keys
+    return (sort keys(%hash));
 }
 
 
@@ -1439,13 +1442,13 @@ sub xpGetIterDevelopers {
 
     my @dev = ();
     foreach my $story (@iterStories) {
-	my $storyText = &TWiki::Store::readTopic($web, $story);      
+    my $storyText = &TWiki::Store::readTopic($web, $story);      
 
-	# search for text matching a developer
-	my $ret = "";
-	while ($ret = &xpGetValueAndRemove("\\*Assigned to\\*", $storyText, "who")) {
-	    push @dev, $ret;
-	}
+    # search for text matching a developer
+    my $ret = "";
+    while ($ret = &xpGetValueAndRemove("\\*Assigned to\\*", $storyText, "who")) {
+        push @dev, $ret;
+    }
     }
     @dev = sort_unique(@dev);
 
@@ -1461,9 +1464,9 @@ sub xpGetTeamIterations {
 
     my ($team, $web) = @_;
 
-	if( $web eq $cachedWebName ) {
-		return split( /,/, $cachedTeamIterations{$team} );
-	}
+    if( $web eq $cachedWebName ) {
+        return split( /,/, $cachedTeamIterations{$team} );
+    }
 }
 
 ###########################
@@ -1482,7 +1485,7 @@ sub xpShowAllProjects {
 
     # write out all iterations to table
     foreach my $project (@projects) {
-	  $list .= "| $project |\n";
+      $list .= "| $project |\n";
     }
 
     # append form to allow creation of new projects
@@ -1500,9 +1503,9 @@ sub xpGetAllProjects {
 
     my ($web) = @_;
 
-	if( $web eq $cachedWebName ) {
-		return keys %cachedProjectTeams;
-	}
+    if( $web eq $cachedWebName ) {
+        return keys %cachedProjectTeams;
+    }
 }
 
 ###########################
@@ -1519,7 +1522,7 @@ sub xpGetTableValue {
     my $pattern2 = "\\|[ \\t]*".$title."[ \\t]*\\|[ \\t]*(.*?)[ \\t]*\\|";
 
     if ($_[1] =~ /$pattern2/s) {
-	  $result = $1;
+      $result = $1;
     }
     return $result;
 }
@@ -1539,88 +1542,88 @@ sub xpCacheBuild
     my $web = shift;
     my ($eachP, $eachI, $eachS, $eachT, $allS, $allI);
 
-	$cachedWebName = "";
+    $cachedWebName = "";
     # Put the return in here, and suddenly, no cacheing.
     # return;
 
-	$cachedWebName = $web;
+    $cachedWebName = $web;
 
-	# Get all the stories and their iterations:
-	my @stories = &xpGetAllStories( $web );
-	foreach $eachS ( @stories ) {
-		my $storyText = &TWiki::Store::readTopic($web, $eachS);
+    # Get all the stories and their iterations:
+    my @stories = &xpGetAllStories( $web );
+    foreach $eachS ( @stories ) {
+        my $storyText = &TWiki::Store::readTopic($web, $eachS);
 
-		# To go from iteration -> story (multiple values)
-		my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
-		$cachedIterationStories{$iter} .= "$eachS,";
-	}
+        # To go from iteration -> story (multiple values)
+        my $iter = &xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
+        $cachedIterationStories{$iter} .= "$eachS,";
+    }
 
-	foreach $eachI (keys %cachedIterationStories) {
-		my $iterText = &TWiki::Store::readTopic($web, $eachI);
+    foreach $eachI (keys %cachedIterationStories) {
+        my $iterText = &TWiki::Store::readTopic($web, $eachI);
 
-		# To go from team -> iteration (multiple values)
-		my $team = &xpGetValue("\\*Team\\*", $iterText, "notagsforthis");
-		$cachedTeamIterations{$team} .= "$eachI,";
+        # To go from team -> iteration (multiple values)
+        my $team = &xpGetValue("\\*Team\\*", $iterText, "notagsforthis");
+        $cachedTeamIterations{$team} .= "$eachI,";
 
-	}
+    }
 
-	foreach $eachT (keys %cachedTeamIterations) {
-		my $teamText = &TWiki::Store::readTopic($web, $eachT);
+    foreach $eachT (keys %cachedTeamIterations) {
+        my $teamText = &TWiki::Store::readTopic($web, $eachT);
 
-		# To go from project -> team (multiple values)
-		my $project = &xpGetValue("\\*Project\\*", $teamText, "notagsforthis");
-		$cachedProjectTeams{$project} .= "$eachT,";
-	}
+        # To go from project -> team (multiple values)
+        my $project = &xpGetValue("\\*Project\\*", $teamText, "notagsforthis");
+        $cachedProjectTeams{$project} .= "$eachT,";
+    }
 }
 
 sub xpSavePage()
 {
     my ( $web ) = @_;
 
-	# check the user has entered a non-null string
-	my $title = $query->param( 'topic' );
-	if($title eq "") {
-	    TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
-		return;
-	}
+    # check the user has entered a non-null string
+    my $title = $query->param( 'topic' );
+    if($title eq "") {
+        TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
+        return;
+    }
 
-	# check topic does not already exist
-	if(TWiki::Func::topicExists($web, $title)) {
-	    TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
-		return;
-	}
+    # check topic does not already exist
+    if(TWiki::Func::topicExists($web, $title)) {
+        TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
+        return;
+    }
 
-	# check the user has entered a WIKI name
-	if(!TWiki::isWikiName($title)) {
-	    TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
-		return;
-	}
+    # check the user has entered a WIKI name
+    if(!TWiki::isWikiName($title)) {
+        TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
+        return;
+    }
 
-	# if creating a story, check name ends in *Story
-	my $template = $query->param( 'templatetopic' );
-	if($template eq "StoryTemplate") {
-	    if(!($title =~ /^[\w]*Story$/)) {
-		    TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
-			return;
-		}
-	}
+    # if creating a story, check name ends in *Story
+    my $template = $query->param( 'templatetopic' );
+    if($template eq "StoryTemplate") {
+        if(!($title =~ /^[\w]*Story$/)) {
+            TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
+            return;
+        }
+    }
 
-	# load template for page type requested
-	my( $meta, $text ) = &TWiki::Store::readTopic( $web, $template );
+    # load template for page type requested
+    my( $meta, $text ) = &TWiki::Store::readTopic( $web, $template );
 
-	# write parent name into page
-	my $parent = $query->param( 'parent' );
-	$text =~ s/XPPARENTPAGE/$parent/geo;
+    # write parent name into page
+    my $parent = $query->param( 'parent' );
+    $text =~ s/XPPARENTPAGE/$parent/geo;
 
-	# save new page and open in browser
-	my $error = &TWiki::Store::saveTopic( $web, $title, $text, $meta );
-	TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
-	
-	&TWiki::Store::lockTopic( $theTopic, "on" );
-	if( $error ) {
-	    $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopssaveerr", $error );
-		TWiki::redirect( $query, $url );
-	}
+    # save new page and open in browser
+    my $error = &TWiki::Store::saveTopic( $web, $title, $text, $meta );
+    TWiki::redirect( $query, &TWiki::getViewUrl( "", $topic ) );
+    
+    &TWiki::Store::lockTopic( $theTopic, "on" );
+    if( $error ) {
+        $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopssaveerr", $error );
+        TWiki::redirect( $query, $url );
+    }
 }
 
 ###########################
@@ -1638,8 +1641,8 @@ sub xpShowColours {
     $table .= "|*name*|*colour*|\n";
     my ($key, $value);
     while (($key, $value) = each(%defaults)) {
-	# read colours and put them in table
-	$table .= "|$key| <table width=\"100%\"><tr><td bgcolor=\"$value\">&nbsp;</td></tr></table>|\n";
+    # read colours and put them in table
+    $table .= "|$key| <table width=\"100%\"><tr><td bgcolor=\"$value\">$value</td></tr></table>|\n";
     }
     return $table;
 }
