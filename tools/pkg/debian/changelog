@@ -1,6 +1,8 @@
 twiki (20040902-2) unstable; urgency=emergency
   * removed Text::Diff, added depends libtext-diff-perl (Closes #29522)
   * set twikiLibPath to /usr/share/perl5 in setlib.cfg (Closes #296461)
+  * applied robustness patch from Florian Weimer <fw@deneb.enyo.de>
+    (Closes #296655)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 13 Mar 2005 00:00:01 -1000
 
