@@ -37,6 +37,7 @@ use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
 use TWiki::Plugins::Xp::Status;
+use TWiki::Plugins::Xp::Common;
 
 
 #(RAF)
@@ -62,14 +63,15 @@ sub xpShowProjectCompletionByTasks {
 
     foreach my $story (@projectStories) {
         my $storyText = &TWiki::Func::readTopicText($web, $story);
+        my $storyAcceptance = TWiki::Plugins::Xp::Common::acceptanceTestStatus($storyText);
         my $iter = &TWiki::Plugins::XpTrackerPlugin::xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
         if ($iter ne "TornUp") {
             if (!exists $unstarted{$iter}) {
     	        $unstarted{$iter} = 0;
-    		    $progress{$iter} = 0;
-    		    $complete{$iter} = 0;
-    		    $accepted{$iter} = 0;
-    		}	
+    		    	$progress{$iter} = 0;
+    		    	$complete{$iter} = 0;
+    		    	$accepted{$iter} = 0;
+    				}	
             
             while (1) {
                 (my $status,my $taskName,my $taskEst,my $taskWho,my $taskSpent,my $taskEtc,my $taskStatus) = TWiki::Plugins::XpTrackerPlugin::xpGetNextTask($storyText);
@@ -78,18 +80,33 @@ sub xpShowProjectCompletionByTasks {
                 }
                 $master{$iter}++;
             	
-                my ($color,$statusS,$desc) =TWiki::Plugins::Xp::Status::getStatus($taskSpent,$taskEst,"N");
+                my ($color,$statusS,$desc) =TWiki::Plugins::Xp::Status::getStatus($taskSpent,$taskEtc,$storyAcceptance);
                 if ($desc eq "unstarted") {
-                    $unstarted{$iter}++;
-                    $unstarted++;
-                } elsif ($desc eq "inprogress") {
-                    $progress{$iter}++;
-                    $progress++;
-                } else{
-    	            $complete{$iter}++;
-    	            $complete++; 
-                } 
-                $total++;
+	            		$unstarted{$iter}++;
+	            		$unstarted++;
+	        			} elsif ($desc eq "inprogress") {
+	            		$progress{$iter}++;
+	            		$progress++;
+	        			} elsif ($desc eq "complete") {
+		        			$complete{$iter}++;
+		        			$complete++; 
+	        			} else {
+		        			$accepted{$iter}++;
+		        			$accepted++;
+	        			}
+	        			$total++;
+                
+#                if ($desc eq "unstarted") {
+#                    $unstarted{$iter}++;
+#                    $unstarted++;
+#                } elsif ($desc eq "inprogress") {
+#                    $progress{$iter}++;
+#                    $progress++;
+#                } else{
+#    	            $complete{$iter}++;
+#    	            $complete++; 
+#                } 
+#                $total++;
             }
         }
     }
@@ -105,7 +122,7 @@ sub xpShowProjectCompletionByTasks {
 
     # Show the list
     my $list = "<h3>Project ".$project." tasks status</h3>\n\n";
-    $list .= "| *Iteration* |  *Total tasks* | *Not Started* | *In progress* | *Complete* | *Percent complete* |\n";
+    $list .= "| *Iteration* |  *Total tasks* | *Not Started* | *In progress* | *Completed* | *Acceptance* | *Percent completed* |\n";
 
     # OK, display them
     foreach my $iteration (sort { $iterKeys{$b} <=> $iterKeys{$a} } keys %master) {
@@ -113,13 +130,13 @@ sub xpShowProjectCompletionByTasks {
         if ($complete{$iteration} > 0) {
             $pctComplete = sprintf("%u",($complete{$iteration}*100/$master{$iteration}));
         }
-        $list .= "| ".$iteration."  |  ".$master{$iteration}."  |  ".$unstarted{$iteration}."  |   ".$progress{$iteration}."  |  ".$complete{$iteration}."  |  ".$pctComplete."\%  |\n";
+        $list .= "| ".$iteration."  |  ".$master{$iteration}."  |  ".$unstarted{$iteration}."  |   ".$progress{$iteration}."  |  ".$complete{$iteration}."  |  ".$accepted{$iteration}."  |  ".$pctComplete."\%  |\n";
     }
     my $pctComplete = 0;
     if ($complete > 0) {
         $pctComplete = sprintf("%u",($complete*100/$total));
     }
-    $list .= "| *Totals*  |  *".$total."*  |  *".$unstarted."*  |  *".$progress."*  |  *".$complete."*  |  *".$pctComplete."%*  |\n";
+    $list .= "| *Totals*  |  *".$total."*  |  *".$unstarted."*  |  *".$progress."*  |  *".$complete."*  |  *".$accepted."*  |  *".$pctComplete."%*  |\n";
 
     return $list;
 }

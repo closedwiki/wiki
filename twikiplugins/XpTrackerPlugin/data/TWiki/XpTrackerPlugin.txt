@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="RafaelAlvarez" date="1090993345" format="1.0" version="1.2"}%
 ---+ XP Tracker Plugin
 
-<b>Version 3.2 - Jul 28 2004</b>
+<b>Version 3.2.2 - Jan 27 2005</b>
 
 This is a plugin for tracking [[http://www.c2.com/cgi/wiki?ExtremeProgramming][eXtreme Programming]] projects. The original code was
 written by TWiki:Main.RichardBennett, It was converted into this plugin by
@@ -145,6 +145,7 @@ Content:
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.RichardBennett, TWiki:Main.MartinWatt, Thomas Eschner, TWiki:Main.AnthonPang, TWiki:Main.AndreaBacchetta, TWiki:Main.RafaelAlvarez |
+|  Plugin Version: | V3.2.2 - 27 Jan 2005: Bugfixes |
 |  Plugin Version: | V3.2 - 28 Jul 2004 |
 |  Change History: | V3.1 22 Feb 2003: Updated version |
 |  Change History: | V3.0 19 Nov 2002: Updated version |
