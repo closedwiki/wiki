@@ -192,9 +192,18 @@ sub _getTemplate {
     my $templates;
 
 	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-        eval 'use TWiki::Contrib::CairoContrib; $templates = TWiki::Contrib::CairoContrib::readTemplate( $templateFile )';
-	} else {
+        # pre-Cairo TWiki version
+        eval "use TWiki::Contrib::CairoContrib;";
+        $templates =
+          TWiki::Contrib::CairoContrib::readTemplate( $templateFile );
+    } elsif ( $TWiki::Plugins::VERSION < 1.026 ) {
+        # pre-Dakar TWiki version
+        use TWiki::Store;
         $templates = TWiki::Store::readTemplate( $templateFile );
+	} else {
+        # Dakar and beyond
+        eval "use TWiki::Templates";
+        $templates = TWiki::Templates::readTemplate( $templateFile );
 	}
     if (! $templates ) {
         TWiki::Func::writeWarning("Could not read template file '$templateFile'");
