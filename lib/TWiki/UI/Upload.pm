@@ -238,6 +238,8 @@ sub upload {
     }
 
     $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
+
+    # generate a message useful for those calling this script from the command line
     my $message = ( $doPropsOnly ) ?
       'properties changed' : "$fileName uploaded";
 

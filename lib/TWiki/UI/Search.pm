@@ -142,8 +142,8 @@ sub search {
 }
 
 sub _contentCallback {
-    my $cbdata = shift;
-    print @_;
+    TWiki::spamProof( $_[1] );
+    print @_[1];
 }
 
 1;

@@ -588,7 +588,9 @@ sub _handleSquareBracketedLink {
     # Strip leading/trailing spaces
     $theLink =~ s/^\s*//;
     $theLink =~ s/\s*$//;
-    return _protocolLink($theLink, $theText) if( $theLink =~ /^$TWiki::regex{linkProtocolPattern}\:/ );
+    if( $theLink =~ /^$TWiki::regex{linkProtocolPattern}\:/ ) {
+        return _protocolLink($theLink, $theText);
+    }
     my $web;
     ($web, $theLink) = _getWeb($theLink);
     $web = $theWeb unless ($web);
@@ -625,37 +627,37 @@ sub _handleSquareBracketedLink {
 #
 # returns the HTML fragment
 sub _protocolLink {
-    my ($theLink, $theText) = @_;
+    my ($url, $theText) = @_;
 
-    if ( $theLink =~ /^(\S+)\s+(.*)$/ ) {
-	 # '[[URL#anchor display text]]' link:
-	    $theLink = $1;
-            $theText = $2;
+    if ( $url =~ /^(\S+)\s+(.*)$/ ) {
+        # '[[URL#anchor display text]]' link:
+	    $url = $1;
+        $theText = $2;
 
-        } else {
-            # '[[Web.odd wiki word#anchor][display text]]' link:
-            # '[[Web.odd wiki word#anchor]]' link:
-
-            # External link: add <nop> before WikiWord and ABBREV 
-            # inside link text, to prevent double links
-            # SMELL - why is adding <nop> necessary? why is the output reparsed?
-	    # SMELL - why regex{upperAlpha} here - surely this is a web match, not a CAPWORD match?
-
-            $theText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
-        }
-#	  die $theText unless ($theText eq 'GNU' || $theText eq 'Run Test' || $theText eq 'XHTML Validator');
-       return CGI::a( { -href=>$theLink, -target=>'_top' }, $theText );
+    } else {
+        # '[[Web.odd wiki word#anchor][display text]]' link:
+        # '[[Web.odd wiki word#anchor]]' link:
+        # External link: add <nop> before WikiWord and ABBREV
+        # inside link text, to prevent double links
+        # SMELL - why regex{upperAlpha} here - surely this is a web
+        # match, not a CAPWORD match?
+        $theText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
+    }
+    return CGI::a( { href=>$url, target=>'_top' }, $theText );
 }
 
+# Handle an external link typed directly into text. If it's an image
+# (as indicated by the file type), then use an img tag, otherwise
+# generate a link.
 sub _externalLink {
     my( $this, $pre, $url ) = @_;
+
     if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
         return $pre.CGI::img( src => $url, alt => $filename );
     }
-
-    return $pre.CGI::a( {href=>$url, target=>'_top'}, $url );
+    return $pre.CGI::a( {href => $url, target => '_top' }, $url );
 }
 
 sub _mailtoLink {

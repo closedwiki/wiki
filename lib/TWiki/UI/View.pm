@@ -307,6 +307,8 @@ sub _bungOut {
             $text =~ s/<img [^>]*>//gi;  # remove image tags
             $text =~ s/<a [^>]*>//gi;    # remove anchor tags
             $text =~ s/<\/a>//gi;        # remove anchor tags
+        } else {
+            TWiki::spamProof( $text );
         }
     }
     print $text;
