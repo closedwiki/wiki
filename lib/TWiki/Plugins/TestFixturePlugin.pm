@@ -191,6 +191,7 @@ sub initPlugin {
 
     undef %called;
     $called{initPlugin} = 1;
+    TWiki::Func::registerTagHandler("STRICTTAG", \&_STRICTTAG);
 
     return 1;
 }
@@ -225,10 +226,19 @@ sub DISABLE_beforeCommonTagsHandler {
     $_[0] =~ s/beforeCommonTagsHandler/BCT1\nBCT2 $_[2].$_[1]\nBCT3\n/g;
 }
 
-sub DISABLE_commonTagsHandler {
-    # Replace the text "commonTagsHandler" with some
-    # recognisable text.
-    $_[0] =~ s/commonTagsHandler/CT1\nCT2 $_[2].$_[1]\nCT3\n/g;
+sub commonTagsHandler {
+    $_[0] =~ s/%FRIENDLYTAG{(.*?)}%/&_extractParams($1)/ge;
+}
+
+sub _extractParams {
+    my $params = new TWiki::Attrs(shift, 1);
+    return $params->stringify();
+}
+
+sub _STRICTTAG {
+    my( $session, $params ) = @_;
+
+    return $params->stringify();
 }
 
 sub DISABLE_afterCommonTagsHandler {
