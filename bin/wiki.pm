@@ -31,28 +31,32 @@ package wiki;
 use strict;
 
 use vars qw(
-	$webName $topicName $defaultUserName $userName 
-	$wikiToolName $wikiHomeUrl $pubUrl $templateDir 
-	$dataDir $pubDir $debugFilename $logDateCmd $htpasswdFilename 
+	$webName $topicName
+	$defaultUserName $userName $wikiUserName 
+	$wikiHomeUrl $defaultUrlHost $urlHost
+	$scriptUrlPath $pubUrlPath $pubDir $templateDir $dataDir
+	$wikiToolName
+	$debugFilename $htpasswdFilename 
 	$logFilename $wikiUsersTopicname $userListFilename %userToWikiList
 	$mainWebname $mainTopicname $notifyTopicname
 	$wikiPrefsTopicname $webPrefsTopicname @prefsKeys @prefsValues
 	$statisticsTopicname $statsTopViews $statsTopContrib
 	$mailProgram $wikiversion 
 	$revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
-	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
+	$revDiffCmd $revDelRevCmd
+	$lsCmd $cpCmd $egrepCmd $fgrepCmd
 	$doRemovePortNumber $doPluralToSingular
 	$doLogTopicView $doLogTopicEdit $doLogTopicSave
 	$doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
 	$doLogTopicChanges $doLogTopicSearch $doLogRegistration
 	@isoMonth $TranslationToken $code @code $depth
-	$defaultScriptUrl $scriptUrl $scriptUrlPath $scriptSuffix );
+	$scriptSuffix );
 
 
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "25 Feb 2000";
+$wikiversion      = "02 Mar 2000";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -76,57 +80,40 @@ sub initialize
         $userName = $theRemoteUser;
     }
     userToWikiListInit();
+    $wikiUserName = userToWikiName( $userName );
 
+    # initialize $webName and $topicName
     # test if $thePathInfo is "/Webname/SomeTopic" or "/Webname/"
-    if( ( $thePathInfo =~ /[\/](.*)\/(.*)/ ) && ( $1 ) )
-    {
+    if( ( $thePathInfo =~ /[\/](.*)\/(.*)/ ) && ( $1 ) ) {
         $webName = $1;
-    }
-    else
-    {
+    } else {
         # test if $thePathInfo is "/Webname" or "/"
         $thePathInfo =~ /[\/](.*)/;
         $webName = $1 || $mainWebname;
     }
-
-    if( $2 )
-    {
+    if( $2 ) {
         $topicName = $2;
-    }
-    else
-    {
-        if( $theTopic )
-        {
+    } else {
+        if( $theTopic ) {
             $topicName = $theTopic;
-        }
-        else
-        {
+        } else {
             $topicName = $mainTopicname;
         }
     }
-
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
-    if( $theUrl )
-    {
-        $scriptUrl = $theUrl;
-        $scriptUrl =~ s/(.*)\/.*$/$1/;
+    # initialize $urlHost and $scriptUrlPath 
+    if( ( $theUrl ) && ( $theUrl =~ /^([^\:]*\:\/\/[^\/]*)(.*)\/.*$/ ) && ( $2 ) ) {
+        $urlHost = $1;
+        $scriptUrlPath = $2;
         if( $doRemovePortNumber )
         {
-            $scriptUrl =~ s/:[0-9]+\//\//;
+            $urlHost =~ s/\:[0-9]+$//;
         }
+    } else {
+        $urlHost = $defaultUrlHost;
+        # $scriptUrlPath does not change
     }
-    else
-    {
-        $scriptUrl = $defaultScriptUrl;
-    }
-
-    $scriptUrlPath = $scriptUrl;
-    $scriptUrlPath =~ s/.*\:\/\/[^\/]*(.*)/$1/go;
-
-    $TranslationToken= "\263";
-    $code="";
-    @code= ();
 
     # initialize preferences
     # (Note: Do not use a %hash, because order is significant)
@@ -134,7 +121,12 @@ sub initialize
     @prefsValues = ();
     getPrefsList( "$mainWebname\.$wikiPrefsTopicname" ); # site-level
     getPrefsList( "$webName\.$webPrefsTopicname" );      # web-level
-    getPrefsList( userToWikiName( $userName ) );         # user-level
+    getPrefsList( $wikiUserName );                       # user-level
+
+    # some remaining init
+    $TranslationToken= "\263";
+    $code="";
+    @code= ();
 
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
@@ -153,16 +145,21 @@ sub writeLog
 {
     my( $action, $webTopic, $extra, $user ) = @_;
 
-    my $time = formatGmTime( time() );
+    # use local time for log, not UTC (gmtime)
+
+    my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
+    my( $tmon) = $isoMonth[$mon];
+    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+    my $time = sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
+    my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
+
     my $wuserName = $user || $userName;
     $wuserName = userToWikiName( $wuserName );
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
     my $text = "| $time | $wuserName | $action | $webTopic | $extra | $remoteAddr |";
 
-    my $date = `$logDateCmd`;
-    $date =~ s/\n//go;
     my $filename = $logFilename;
-    $filename =~ s/%DATE%/$date/go;
+    $filename =~ s/%DATE%/$yearmonth/go;
     open( FILE, ">> $filename");
     print FILE "$text\n";
     close( FILE);
@@ -175,11 +172,10 @@ sub sendEmail
 
     my( $mailText) = @_;
 
-    if (open (MAIL,"|-") || exec "$mailProgram") 
-    {
-      print MAIL $mailText;
-      close (MAIL);
-      return "OK";
+    if( open( MAIL, "|-" ) || exec "$mailProgram" ) {
+        print MAIL $mailText;
+        close( MAIL );
+        return "OK";
     }
     return "";
 }
@@ -189,21 +185,20 @@ sub getEmailNotifyList
 {
     my( $web, $topicname ) = @_;
 
-    if ( ! $topicname )
-    {
+    if ( ! $topicname ) {
         $topicname = $notifyTopicname;
     }
     my $list = "";
     my $line = "";
     my $fileName = "$dataDir/$web/$topicname.txt";
-    if ( -e $fileName )
-    {
-        my $result = `grep '\* *.*[-:<].* *\@' $fileName`;
-        foreach $line ( split( /\n/, $result))
-        {
-            $line =~ s/\s/ /go;
-            $line =~ s/(^.*[- :<])([-_A-Za-z0-9\.]*\@[-_A-Za-z0-9\.]*)(.*)/$2/go;
-            $list = "$list $line";
+    if ( -e $fileName ) {
+        my @list = split( /\n/, readFile( $fileName ) );
+        @list = grep { /^\s\*\s[A-Za-z0-9\.]+\s+\-\s+[A-Za-z0-9\-_\.\+]+/ } @list;
+        foreach $line ( @list ) {
+            $line =~ s/\-\s+([A-Za-z0-9\-_\.\+]+\@[A-Za-z0-9\-_\.\+]+)/$1/go;
+            if( $1 ) {
+                $list = "$list $1";
+            }
         }
         $list =~ s/^ *//go;
         $list =~ s/ *$//go;
@@ -324,10 +319,9 @@ sub getPubDir
 }
 
 # =========================
-sub getPubUrl
+sub getPubUrlPath
 {
-    my( $topic) = @_;
-    return "$pubUrl";
+    return $pubUrlPath;
 }
 
 # =========================
@@ -365,7 +359,7 @@ sub readFile
     my( $name ) = @_;
     my $data = "";
     undef $/; # set to read to EOF
-    open( IN_FILE, $name ) || return "";
+    open( IN_FILE, "<$name" ) || return "";
     $data = <IN_FILE>;
     $/ = "\n";
     close( IN_FILE );
@@ -375,11 +369,18 @@ sub readFile
 # =========================
 sub readFileHead
 {
-    my( $name, $lines ) = @_;
-    my $cmd= $headCmd;
-    $cmd =~ s/%LINES%/$lines/;
-    $cmd =~ s/%FILENAME%/$name/;
-    return `$cmd`;
+    my( $name, $maxLines ) = @_;
+    my $data = "";
+    my $line;
+    my $l = 0;
+    $/ = "\n";     # read line by line
+    open( IN_FILE, "<$name" ) || return "";
+    while( ( $l < $maxLines ) && ( $line = <IN_FILE> ) ) {
+        $data .= $line;
+        $l += 1;
+    }
+    close( IN_FILE );
+    return $data;
 }
 
 # =========================
@@ -453,10 +454,8 @@ sub removeObsoleteTopicLocks
         # time stamp of lock over one hour of current time?
         if( abs( $systemTime - $lockTime ) > 3600 )
         {
-            # obsolete, so delete
-            $tmp= $rmFileCmd;
-            $tmp =~ s/%FILENAME%/$webDir\/$file/;
-            `$tmp`;
+            # obsolete, so delete file
+            unlink "$webDir/$file";
         }
     }
 }
@@ -670,9 +669,7 @@ sub saveTopic
         if( $rev eq "1.1" )
         {
             # initial revision, so delete repository file and start again
-            $tmp = $revDelRepCmd;
-            $tmp =~ s/%FILENAME%/$name/go;
-            `$tmp`;
+            unlink "$name,v";
         }
         else
         {
@@ -830,15 +827,17 @@ sub handleCommonTags
     $text =~ s/%TOPIC%/$topic/go;
     $text =~ s/%WEB%/$webName/go;
     $text =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
-    $text =~ s/%SCRIPTURL%/$scriptUrl/go;
+    $text =~ s/%SCRIPTURL%/$urlHost$scriptUrlPath/go;
     $text =~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
     $text =~ s/%SCRIPTSUFFIX%/$scriptSuffix/go;
-    $text =~ s/%PUBURL%/$pubUrl/go;
-    $text =~ s/%ATTACHURL%/$pubUrl\/$webName\/$topic/go;
+    $text =~ s/%PUBURL%/$urlHost$pubUrlPath/go;
+    $text =~ s/%PUBURLPATH%/$pubUrlPath/go;
+    $text =~ s/%ATTACHURL%/$urlHost$pubUrlPath\/$webName\/$topic/go;
+    $text =~ s/%ATTACHURLPATH%/$pubUrlPath\/$webName\/$topic/go;
     $text =~ s/%DATE%/&getLocaldate()/geo;
     $text =~ s/%WIKIVERSION%/$wikiversion/go;
     $text =~ s/%USERNAME%/$userName/go;
-    $text =~ s/%WIKIUSERNAME%/&userToWikiName($userName)/geo;
+    $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
     $text =~ s/%WIKITOOLNAME%/$wikiToolName/go;
     $text =~ s/%MAINWEB%/$mainWebname/go;
     $text =~ s/%HOMETOPIC%/$mainTopicname/go;

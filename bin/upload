@@ -160,21 +160,22 @@ sub main
     my $tempPath = "$pubDir/$webName";
     if( ! -e "$tempPath" )
     {
-        `mkdir $tempPath`;
-        `chmod 777 $tempPath`;
+        umask( 0 );
+        mkdir( $tempPath, 0777 );
     }
     $tempPath = "$tempPath/$topic";
     if( ! -e "$tempPath" )
     {
-        `mkdir $tempPath`;
-        `chmod 777 $tempPath`;
+        umask( 0 );
+        mkdir( $tempPath, 0777 );
     }
 
     # save uploaded file
-    my $tempPath = "$tempPath/$fileName";
-    # use "$tmpFilename" because filename may have spaces
-    `cp "$tmpFilename" $tempPath`;
-    `chmod 644 $tempPath`;
+    my $newFile = "$tempPath/$fileName";
+    ## link( $tmpFilename, $newFile );      # fails, don't know why
+    `$wiki::cpCmd $tmpFilename $newFile`;   # ==> use shell cp
+    umask( 0027 );
+    chmod( 0644, $newFile );
 
     # get user name
     my $fileUser = &wiki::userToWikiName( $userName );

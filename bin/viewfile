@@ -51,6 +51,6 @@ sub main
     # Convert only if html file does not yet exist
     # for now, show the original document:
 
-    my $pubUrl = &wiki::getPubUrl();
+    my $pubUrl = &wiki::getPubUrlPath();
     print $query->redirect( "$pubUrl/$webName/$topic/$fileName" );
 }

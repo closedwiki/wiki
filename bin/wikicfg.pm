@@ -33,7 +33,9 @@
 #       %SCRIPTURLPATH%  like %SCRIPTURL%, but path only (cut protocol and domain)
 #       %SCRIPTSUFFIX%   script suffix (empty by default, ".pl" if required)
 #       %PUBURL%         public URL (root of attachment URL)
+#       %PUBURLPATH%     path of public URL
 #       %ATTACHURL%      attachment URL of current topic
+#       %ATTACHURLPATH%  path of attachment URL of current topic
 #       %DATE%           today's date
 #       %WIKIVERSION%    tool version
 #       %USERNAME%       login user name
@@ -54,11 +56,13 @@
 # ==================================================================
 #                   %WIKIHOMEURL% : link of TWiki icon in upper left corner :
 $wikiHomeUrl      = "http://your.domain.com/twiki/";
-#                   %SCRIPTURL% : cgi-bin URL of TWiki :
-$defaultScriptUrl = "http://your.domain.com/twiki/bin";
-#                   %PUBURL% : path of public data URL (root of attachments) :
-$pubUrl           = "http://your.domain.com/twiki/pub";
-#                   Public data directory (root of attachments), must match $pubUrl :
+#                   Host of TWiki URL :    (Example "http://myhost.com:123")
+$defaultUrlHost   = "http://your.domain.com";
+#                   %SCRIPTURLPATH% : cgi-bin path of TWiki URL:
+$scriptUrlPath    = "/twiki/bin";
+#                   %PUBURLPATH% : Public data path of TWiki URL (root of attachments) :
+$pubUrlPath       = "/twiki/pub";
+#                   Public data directory, must match $pubUrlPath :
 $pubDir           = "/home/httpd/twiki/pub";
 #                   Template directory :
 $templateDir      = "/home/httpd/twiki/templates";
@@ -69,8 +73,6 @@ $dataDir          = "/home/httpd/twiki/data";
 # ==================================================================
 #                   %SCRIPTSUFFIX% : Suffix of TWiki Perl scripts (i.e. ".pl") :
 $scriptSuffix     = "";
-#                   shell command to get date for $logFilename :
-$logDateCmd       = "date '+%Y%m'";
 #                   mail program :
 $mailProgram      = "/usr/sbin/sendmail -t -oi -oeq";
 #                   RCS directory (find out by 'which rcs') :
@@ -89,12 +91,14 @@ $revInfoCmd       = "$rcsDir/rlog -r%REVISION% %FILENAME%";
 $revDiffCmd       = "$rcsDir/rcsdiff -q -w -B -r%REVISION1% -r%REVISION2% %FILENAME%";
 #                   RCS delete revision command :
 $revDelRevCmd     = "$rcsDir/rcs -q -u %FILENAME%; rcs -o%REVISION% %FILENAME%; rcs -l %FILENAME%";
-#                   Delete RCS repository file command :
-$revDelRepCmd     = "rm -f %FILENAME%,v";
-#                   Print head of files command :
-$headCmd          = "head -%LINES% %FILENAME%";
-#                   Delete file command :
-$rmFileCmd        = "rm -f %FILENAME%";
+#                   Unix ls command :
+$lsCmd            = "/bin/ls";
+#                   Unix cp command :
+$cpCmd            = "/bin/cp";
+#                   Unix egrep command :
+$egrepCmd         = "/bin/egrep";
+#                   Unix fgrep command :
+$fgrepCmd         = "/bin/fgrep";
 
 # variables that probably do not change:
 # ==================================================================

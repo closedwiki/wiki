@@ -77,8 +77,8 @@ sub main
     }
 
     if( ! $logDate ) {
-        # get current time and format to "yyyymm" format:
-        my ( $sec, $min, $hour, $mday, $mon, $year) = gmtime( time() );
+        # get current local time and format to "yyyymm" format:
+        my ( $sec, $min, $hour, $mday, $mon, $year) = localtime( time() );
         $year = sprintf("%.4u", $year + 1900);  # Y2K fix
         $mon = $mon+1;
         $logDate = sprintf("%.4u%.2u", $year, $mon);

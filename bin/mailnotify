@@ -81,7 +81,7 @@ sub processWeb
     my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify");
     my $currLastmodify = "";
     my $scriptSuffix = $wiki::scriptSuffix;
-    my $scriptUrl = $wiki::scriptUrl;
+    my $scriptUrl = "$wiki::urlHost$wiki::scriptUrlPath";
 
     foreach( reverse split( /\n/, $changes))
     {

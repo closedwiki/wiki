@@ -1,7 +1,7 @@
 <html><head>
 <title>TWikiDocumentation</title>
 </head><body>
-<h3>Documentation of the TWiki Implementation (version 25 Feb 2000)</h3>
+<h3>Documentation of the TWiki Implementation (version 02 Mar 2000)</h3>
 <UL>
 <LI> <A href="#login">(1)</A> Login Username vs. Wiki Username
 <LI> <A href="#variables">(2)</A> Wiki Variables
@@ -41,19 +41,28 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The base script URL of TWiki, link of Home icon in upper left corner is <b>http://starship.python.net/crew/scharf/TWiki/</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>SCRIPTURL%</CODE> </td>
-  <td> The base script URL of TWiki, is <b>http://starship.python.net/crew/scharf/TWiki/bin</b></td>
+  <td> The script URL of TWiki, is <b>http://starship.python.net/crew/scharf/TWiki/bin</b></td>
+</tr><tr>
+  <td> <CODE>%<nop>SCRIPTURLPATH%</CODE> </td>
+  <td> The path of the script URL of TWiki, is <b>/crew/scharf/TWiki/bin</b></td>
 </tr><tr>
   <td> <CODE>%<nop>PUBURL%</CODE> </td>
-  <td> The base public URL of TWiki, is <b>http://starship.python.net/crew/scharf/TWiki/pub</b> </td>
+  <td> The public URL of TWiki, is <b>http://starship.python.net/crew/scharf/TWiki/pub</b> </td>
+</tr><tr>
+  <td> <CODE>%<nop>PUBURLPATH%</CODE> </td>
+  <td> The path of the public URL of TWiki, is <b>/crew/scharf/TWiki/pub</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>ATTACHURL%</CODE> </td>
   <td> The attachment URL of the current topic, is <b>http://starship.python.net/crew/scharf/TWiki/pub/Main/TWikiDocumentation</b> <br> Example: If you attach a file you can refer to it as <CODE><b>%<nop>ATTACHURL%/image.gif</b></CODE> </td>
+</tr><tr>
+  <td> <CODE>%<nop>ATTACHURLPATH%</CODE> </td>
+  <td> The path of the attachment URL of the current topic, is <b>/crew/scharf/TWiki/pub/Main/TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKITOOLNAME%</CODE> </td>
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>25 Feb 2000</b> </td>
+  <td> Wiki tool version, is <b>02 Mar 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -68,7 +77,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>28 Feb 2000</b> </td>
+  <td> Todays date, is <b>03 Mar 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>INCLUDE{"file.ext"}%</CODE> </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE{"../Know/TopicName.txt"}%</b></CODE> </td>
