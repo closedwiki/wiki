@@ -37,12 +37,22 @@ sub buildCategoryItem
     {
         return ( $catname, $catmodifier, $catvalue )
     }
-    foreach( split( /\n/, $ctext ))
+
+    # check for CategoryName=CategoryValue parameter
+    my $cvalue = $query->param( @cmd[1] );
+    if( $cvalue )
     {
-        if( /@cmd[1]/ )
+        $src = "<!---->$cvalue<!---->";
+    }
+    else
+    {
+        foreach( split( /\n/, $ctext ))
         {
-            $src = $_;
-            last;
+            if( /@cmd[1]/ )
+            {
+                $src = $_;
+                last;
+            }
         }
     }
 
@@ -153,8 +163,10 @@ sub main
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $saveCmd = $query->param('cmd');
+    my $breakLock = $query->param('breaklock');
     my $tmpl="", $tcat="", $icat="", $text="";
     my $before="", $atext="", $ctext="", $after="";
+    my $catname="", $catmod="", $catvalue="";
     my $extra = "";
 
     if( ! &wiki::webExists($webName))
@@ -166,7 +178,6 @@ sub main
         return;
     }
 
-    my $breakLock = $query->param('breaklock');
     my $lockUser = &wiki::topicIsLocked( $topic );
     if( ( ! $breakLock ) && ( $lockUser ne "" ) )
     {
@@ -219,7 +230,7 @@ sub main
         ( $before, $line, $after) = split( /%REPEAT%/, $tcat);
         foreach( split( /\n/, $icat))
         {
-            my( $catname, $catmod, $catvalue ) = buildCategoryItem( $_, $ctext );
+            ( $catname, $catmod, $catvalue ) = buildCategoryItem( $_, $ctext );
             if( $catname ne "" )
             {
                 $catname = &wiki::getRenderedVersion( $catname );

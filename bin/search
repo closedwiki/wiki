@@ -77,8 +77,13 @@ sub main
     }
     $cmd =~ s/%GREP%/$foo/go;
 
-    $result = `cd $dataDir/$webName;$cmd`;
-    $result =~ s/\.txt//go;
+    my $result = "";
+    if( $search )
+    {
+        # do grep search
+        $result = `cd $dataDir/$webName;$cmd`;
+        $result =~ s/\.txt//go;
+    }
 
     $text = &wiki::handleCommonTags($text, $topic);
 

@@ -56,7 +56,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> Name of wiki tool, is <b>TWikibeta</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>WIKIVERSION%</CODE> </td>
-  <td> Wiki tool version, is <b>10 Jan 2000</b> </td>
+  <td> Wiki tool version, is <b>14 Jan 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>USERNAME%</CODE> </td>
   <td> Your login username, is <b>guest</b> </td>
@@ -71,7 +71,7 @@ TWiki expands the following variables enclosed in % percent signs:
   <td> The current topic name, is <b>TWikiDocumentation</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>DATE%</CODE> </td>
-  <td> Todays date, is <b>10 Jan 2000</b> </td>
+  <td> Todays date, is <b>18 Jan 2000</b> </td>
 </tr><tr>
   <td> <CODE>%<nop>INCLUDE:"file.ext"%</CODE> </td>
   <td> Server side include, includes the text of a file. The default directory is the current Wiki web. Example: <CODE><b>%<nop>INCLUDE:"../Know/TopicName.txt"%</b></CODE> </td>
@@ -205,6 +205,14 @@ Above template files will result in the following table when <STRONG><EM>editing
 </table>
 </form>
 <p> 
+<STRONG><EM>Note:</EM></STRONG> It is possible to force the values of a category table when creating a new topic. This is useful to create new topics using a form for the topic name. The default values of the category table can be specified as hidden fields if needed, i.e. <CODE>&lt;input type="hidden" name="someCategory" value="someValue"&gt;</CODE> 
+<p> 
+Example (edit this page to see the source) :
+<UL>
+<LI> <form name="main" action="../../edit/Know/"> New <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Know/PublicFAQ">PublicFAQ</A> topic: <input type="text" name="topic" size="32"> <input type="hidden" name="TopicClassification" value="PublicFAQ"> <input type="hidden" name="OperatingSystem" value="OsSolaris,OsSunOS"> <input type="hidden" name="OsVersion" value="Just testing..."> <input type="submit" value="Create"> </FORM>
+</UL>
+<p> 
+<p> 
 <A name="implementation">
 <HR>
 <STRONG>(5) Implementation Notes</STRONG>
@@ -281,7 +289,7 @@ These installation steps use Apache web server on Linux as an example. TWiki sho
 <UL>
 <LI> Use a topic name consisting of characters <CODE>A..Z</CODE> , <CODE>a..z</CODE> but <STRONG>not</STRONG> in <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WikiNotation">WikiNotation</A>.
 <LI> Create a new template directory under <CODE>twiki/templates</CODE> .
-<LI> Create a new data directory under <CODE>twiki/data</CODE> .
+<LI> Create a new data directory under <CODE>twiki/data</CODE> and check the file permission of the directory.
 <LI> Copy the files <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/TWikiUsers">TWikiUsers</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebHome">WebHome</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebNotify">WebNotify</A>.txt, <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/WebSearch">WebSearch</A>.txt, webcolor.inc, and weblist.inc from the <CODE>twiki/data/Main</CODE> directory to the new data directory.
 <LI> Make changes to webcolor.inc (unique color for web), and possibly also weblist.inc (web specific links on top).
 <LI> In case you need a web specific copyright notice (at the bottom), copy file webcopyright.inc from the <CODE>twiki/data</CODE> directory to the new data directory, and customize it.
@@ -463,5 +471,6 @@ drwxrwxrwx   4 twiki    t5           1024 Mar 27 02:58 ..
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 23 Jun 1999 <br>
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 01 Sep 1999 <br>
 -- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 29 Sep 1999 <br>
+-- <A href="http://starship.python.net/crew/scharf/TWiki/bin/view/Main/PeterThoeny">PeterThoeny</A> - 14 Jan 2000 <br>
 <p> 
 </body></html>
