@@ -157,8 +157,11 @@ sub replaceRevision
     }
     $self->_saveFile( $self->file(), $text );
     $cmd = $self->{ciDateCmd};
+    $date =~ s/$TWiki::securityFilter//go;
     $cmd =~ s/%DATE%/$date/;
     $cmd =~ s/%USERNAME%/$user/;
+    $file =~ s/$TWiki::securityFilter//go;
+    $rcsFile =~ s/$TWiki::securityFilter//go;
     $cmd =~ s/%FILENAME%/$file $rcsFile/;
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint variable
@@ -383,8 +386,10 @@ sub _ci
     my $cmd = $self->{"ciCmd"};
     my $rcsOutput = "";
     $cmd =~ s/%USERNAME%/$userName/;
+    $file =~ s/$TWiki::securityFilter//go;
     $cmd =~ s/%FILENAME%/$file/;
-    $comment = "none" if ( ! $comment );
+    $comment = "none" unless( $comment );
+    $comment =~ s/[\"\'\`\;]//go;  # security, Codev.NoShellCharacterEscapingInFileAttachComment, MikeSmith
     $cmd =~ s/%COMMENT%/$comment/;
     $cmd =~ /(.*)/;
     $cmd = $1;       # safe, so untaint variable
