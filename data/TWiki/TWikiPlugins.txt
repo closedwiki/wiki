@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999237943" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="MikeMannix" date="999317099" format="1.0" version="1.9"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Plugins
@@ -28,7 +28,7 @@ Some Plugins need certain Perl modules to be pre-installed on the host system. P
 	* *Dev page:* Post feature requests, bug reports and general dev comments; topic title ends in ==Dev== (ex: ==SomePluginDev==).
 	* *User support:* Post installation, how to use type questions (and answers, if you have them) in the TWiki:Support web.
 
----+++ Pre-Installed Plugins
+---+++ Preinstalled Plugins
 
 TWiki comes with three Plugins as part of the standard installation.
 
@@ -38,11 +38,11 @@ TWiki comes with three Plugins as part of the standard installation.
 
 	* *InterwikiPlugin* is included but can be disabled or removed. Use it for quick linking to frequently linked to remote sites. Ex: ==TWiki:Plugins== expands to TWiki:Plugins - on TWiki.org. You can add your own shortcuts and URLs to the existing directory of Wiki-related sites.
 
----+++ Managing Installed Plugins
+---+++ Managing Plugins
 
 Ideally, after you've [[#InstallPlugin][installed a Plugin]], just read the instructions and you're set. In fact, some Plugins require additional settings or offer extra options that you can modify on Preferences pages. You may want to make a Plugin available only in certain webs, or temporarily disable it. And having to list all available Plugins will probably come up. You can handle all of these with simple procedures.
 
----++++ Set Preferences for Individual Plugins
+---++++ Setting Preferences
 
 Installed Plugins can be *toggled on or off*, site-wide or by web, through <nop>TWikiPreferences and individual <nop>WebPreferences:
 
@@ -59,7 +59,7 @@ Installed Plugins can be *toggled on or off*, site-wide or by web, through <nop>
 		* ==Set DEBUG = 0==
 	* The settings can be retrieved as Preferences variables like ==%&lt;pluginname&gt;_&lt;var&gt;%==, ex: ==%<nop>DEFAULTPLUGIN_SHORTDESCRIPTION%== shows the description of the <nop>DefaultPlugin.
 
----++++ List Active Plugins Automatically  
+---++++ Listing Active Plugins
 
 Plugin status variables let you list all active Plugins wherever needed. There are two list formats:
 	* The ==%<nop>ACTIVATEDPLUGINS%== variable lists activated Plugins by name. (This variable is displayed in %TWIKIWEB%.TWikiPreferences for debugging use.)
@@ -83,7 +83,7 @@ You can use any of these active TWiki Plugins:
 	* *Method 2:* List the Plugin under test in the DISABLEDPLUGINS variable in %TWIKIWEB%.TWikiPreferences. Redefine the DISABLEDPLUGINS variable in the test web and do the testing there.
 
 #CreatePlugins
----+++ Creating New Plugins
+---+++ Creating Plugins
 
 With a reasonable knowledge of the Perl scripting language, you can create new Plugins or modify and extend existing ones. Basic plug-in architecture uses an Application Programming Interface (API), a set of software instructions that allow external code to interact with the main program. The [[#PluginAPI][TWiki Plugin API]] Plugins by providing a programming interface for TWiki.
 
@@ -113,16 +113,16 @@ In addition to TWiki core functions, Plugins can use *predefined hooks*, or *cal
 
 	* For improve performance, enable only the functions you really need. NOTE: ==outsidePREHandler== and ==insidePREHandler== are particularly expensive. 
 
----++++ Customize the <nop>DefaultPlugin
+---++++ The <nop>DefaultPlugin Alternative
 
 	* *<nop>DefaultPlugin* can handle some outdated TWiki variables, found, for example, in sites recently updated from an old version. Settings are in %TWIKIWEB%.TWikiPreferences. You can also add your own simple custom processing rules here, though in all but very simple cases, writing a new Plugin is preferable.
 
----++++ Create a Plugin Module in Perl
+---++++ Creating the Perl Module 
 
 Copy file ([[http://twiki.org/lib/TWiki/Plugins/EmptyPlugin.pm][<code>EmptyPlugin.pm</code>]] to ==&lt;name&gt;Plugin.pm== ==EmptyPlugin.pm== contains no executable code, so it does nothing, but it's ready to be used. Customize it. Refer to the [[#PluginAPI][Plugin API]] specs for more information.
 
 #CreatePluginTopic
----++++ Create a Plugin Documentation Topic
+---++++ Writing the Documentation Topic
 
 The Plugin documentation topic contains usage instructions and version details. It serves the Plugin files as %TWIKIWEB%.FileAttachments for downloading. (The doc topic is also included _in_ the [[#CreatePluginPackage][distribution package]].) To create a documentation topic:
 
@@ -153,7 +153,7 @@ Plugins Preferences work exactly like %TWIKIWEB%.TWikiPreferences and WebPrefere
 </blockquote>
 
 #CreatePluginPackage
----++++ Package a Plugin for Distribution
+---++++ Packaging for Distribution
 
 A minimum Plugin release consists of a Perl module with a TWiki.WikiName that ends in ==Plugin==, ex: ==YourPlugin.pm==, and a documentation page with the same name(==YourPlugin.txt==).
 
@@ -167,7 +167,7 @@ A minimum Plugin release consists of a Perl module with a TWiki.WikiName that en
 		* ==pub/TWiki/YourPlugin/uparrow.gif==
 
 #PublishPlugin
----++++ Publish a Plugin for General Use
+---++++ Publishing for Public Use
 
 You can release your tested, packaged Plugin to the TWiki community through the TWiki:Plugins web, where all Plugins submitted to TWiki.org are available for download and further development discussion. Publish your Plugin in three steps:
 
