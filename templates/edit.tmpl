@@ -1,8 +1,10 @@
-<HTML>
-<HEAD>
-  <TITLE> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</TITLE>
-  <BASE href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> <META NAME="ROBOTS" CONTENT="NOINDEX"> %HTTP_EQUIV_ON_EDIT%
-<SCRIPT LANGUAGE="JavaScript">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+ <title> %WIKITOOLNAME% . %WEB% . %TOPIC% (edit)</title>
+ <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
+<script language="JavaScript">
 <!--HIDE
 function initForm() {
    document.main.text.focus();
@@ -34,47 +36,48 @@ function launchWindow( theWeb, theTopic ) {
   return false;
 }
 //STOP HIDING-->
-</SCRIPT>
-</HEAD>
-<BODY bgcolor="#ffffff"  onLoad="initForm()" >
-<FORM name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR>
-    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
-      <A target="TWikiHome" href="%WIKIHOMEURL%"><IMG src="%PUBURLPATH%/wikiHome.gif" border="0"></A>
-    </TD>
-    <TD>
-      <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (edit)</FONT>
-    </TD>
-  </TR>
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD>
+</script>
+</head>
+<body bgcolor="#ffffff" onLoad="initForm()">
+<form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+  <tr>
+    <td bgcolor="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
+      <a target="TWikiHome" href="%WIKIHOMEURL%"><img src="%PUBURLPATH%/wikiHome.gif" border="0" /></a>
+    </td>
+    <td>
+      <b>%WIKITOOLNAME% . %WEB% . </b><font size="+2"><b>%TOPIC%</b> (edit)</font>
+    </td>
+  </tr>
+  <tr bgcolor="%WEBBGCOLOR%">
+    <td>
       Change topic
-    </TD>
-  </TR>
-</TABLE>
-<TEXTAREA name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%">%TEXT%</TEXTAREA>
-<INPUT TYPE="hidden" NAME="TWikiAttachment" value="%TWIKIATTACHMENT%">
-<INPUT TYPE="hidden" NAME="formtemplate" value="%FORMTEMPLATE%">
-<INPUT type="hidden" name="parent" value="%TOPICPARENT%">
-<BR>
+    </td>
+  </tr>
+</table>
+<textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%">%TEXT%</textarea>
+<input type="hidden" name="TWikiAttachment" value="%TWIKIATTACHMENT%" />
+<input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+<input type="hidden" name="parent" value="%TOPICPARENT%" />
+<br />
 Don't forget - if you change something, do it in 
-<A target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</A>
+<a target="GoodStyle" onClick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">GoodStyle</a>
 and follow the
-<A target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</A>.
-<BR> <b>-- %WIKIUSERNAME% - %DATE% &lt;br&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> This is your signature for easy copy & paste operation
+<a target="TextFormattingRules" onClick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">TextFormattingRules</a>.
+<br /> <b>-- %WIKIUSERNAME% - %DATE% &lt;br&gt;</b> &nbsp;&nbsp;<code>&lt;==</code> 
+This is your signature for easy copy & paste operation
 <br />
 %FORMFIELDS%
-<TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%WEBBGCOLOR%">
-    <TD valign="top">
-      Topic <B>%TOPIC%</B> . {
-      <INPUT type="submit" value=" &nbsp; Preview Changes &nbsp; "> <INPUT type="hidden" name="cmd" value="%CMD%">     
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+  <tr bgcolor="%WEBBGCOLOR%">
+    <td valign="top">
+      Topic <b>%TOPIC%</b> . {
+      <input type="submit" value=" &nbsp; Preview Changes &nbsp; " /> <input type="hidden" name="cmd" value="%CMD%" />     
       &nbsp; | &nbsp; %CHANGEFORM% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit
       }
-    </TD>
-  </TR>
-</TABLE>
+    </td>
+  </tr>
+</table>
 %WEBCOPYRIGHT%
-</FORM>
-</BODY></HTML>
+</form>
+</body></html>
