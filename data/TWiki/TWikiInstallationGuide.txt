@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093810144" format="1.0" version="1.61"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093967374" format="1.0" version="1.62"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -56,7 +56,7 @@ Download the TWiki 01-Sep-2004 distribution in Unix ZIP format from http://TWiki
 
 	* Restart Apache by =service httpd restart= (or as appropriate to your flavor of UNIX or Linux).
 	* Test that the =twiki/bin= directory is CGI-enabled by trying visiting it in your browser:
-		* Enter the URL for the =bin= directory, =http://yourdomain.com/twiki/bin/=.
+		* Enter the URL for the =bin= directory, =http://yourdomain.com/twiki/bin/=
 		* Your settings are OK if you get a message like ="Forbidden. You don't have permission to access /twiki/bin/ on this server"=.
 		* Settings are NOT correct if you get something like ="Index of /twiki/bin"= - recheck your =httpd.conf= file. 
 
@@ -199,7 +199,7 @@ With your new TWiki installation up and running, you can manage most aspects of 
 
 At this time, TWiki does not ship with an "what you see is what you get" editor. TWiki:Codev/IntegrateHtmlAreaEditor describes how to integrate an HTML editor.
 
-%X% *NOTE:* User home topics are located in the %WIKITOOLNAME%.%MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %WIKITOOLNAME%.%MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line! 
+%X% *NOTE:* User home topics are located in the %WIKITOOLNAME%.%MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %WIKITOOLNAME%.%MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line!)
 
 ---++ TWiki File System Info
 
