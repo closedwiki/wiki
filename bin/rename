@@ -379,6 +379,7 @@ sub getLocks
        $tmpl =~ s/%ATTACHMENT%/$theAttachment/go;
        $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
        $tmpl = &TWiki::getRenderedVersion( $tmpl, $oldWeb );
+       $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
        TWiki::writeHeader( $query );
        print $tmpl;
        return "";
@@ -423,6 +424,7 @@ sub newTopicScreen
    }
    $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
    $tmpl = &TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );   
+   $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
    print $tmpl;
  }
  
@@ -447,6 +449,7 @@ sub newTopicScreen
     $tmpl = TWiki::getRenderedVersion( $tmpl );
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
     $tmpl = TWiki::handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+    $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags
     print $tmpl;
  }
 
