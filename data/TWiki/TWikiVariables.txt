@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999315578" format="1.0" version="1.37"}%
+%META:TOPICINFO{author="MikeMannix" date="999839991" format="1.0" version="1.38"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Variables
@@ -334,8 +334,8 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
 	* You can add your own preference variables for an entire site, a single web, or a single topic, using the standard syntax. Whatever you include in your variable will be expanded on display, and treated exactly as if it had been written out. So you can place formatted text, page links, image paths.
 
 <blockquote style="background-color:#f0f0f0">
-<span style="color:#0000ff"><b>HOW-TO: Create a custom logo variable</b></span><br>
-To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, simply define the variable on the web's WebPreferences page. In this case, you also have to upload ==logo.gif== to the same directory.: 
+*Example: Create a custom logo variable* <br>
+	* To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, simply define the variable on the web's WebPreferences page. You also have to upload =logo.gif= - this can be done by [[FileAttachment][attaching a file]] to =LogoTopic= (any topic name you choose):
 		* ==<nop>Set MYLOGO = %<nop>PUBURLPATH%/%<nop>MAINWEB%/LogoTopic/logo.gif== 
 </blockquote>
 
