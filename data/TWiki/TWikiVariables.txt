@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1011781320" format="1.0" version="1.48"}%
+%META:TOPICINFO{author="PeterThoeny" date="1013855830" format="1.0" version="1.49"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -200,7 +200,7 @@ Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web
 | =search="text"= | (Alternative to above) | N/A |
 | =web="Name"= <br /> =web="%MAINWEB% Know"= <br /> =web="all"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. [2] | Current web |
 | =scope="topic"= <br /> =scope="text"= | Search topic name (title) or in the text (body) of the topic | Topic text (body) |
-| =order="topic"= <br /> =order="modified"= <br /> =order="editby"= | Sort the results of search by the topic names, last modified time, or last editor | Sort by topic name |
+| =order="topic"= <br /> =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, last modified time, last editor, or named field of TWikiForms | Sort by topic name |
 | =limit="all"= <br /> =limit="16"= | Limit the number of results returned | All results |
 | =regex="on"= | RegularExpression search | Literal search |
 | =reverse="on"= | Reverse the direction of the search | Ascending search |
