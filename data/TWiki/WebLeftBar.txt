@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="ArthurClemens" date="1092608409" format="1.0" version="1.1"}%
+	* *[[%WIKILOGOURL%][TWiki.org]]*
+
+	* *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
+	* *[[%TWIKIWEB%.TWikiRegistration][Register]]*
+---
+	* <b>%INCLUDINGWEB% Web</b>
+	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
+	* [[WebChanges][Changes]] 
+	* [[WebTopicList][Topics]]
+	* [[WebIndex][Index]]
+	* [[WebSearch][Search]]
+---
+	* *TWiki Webs*
+%WEBLIST{"		* [[$name.%HOMETOPIC%][$name]]" separator=""}%
+<div class="twikiLeftBarPersonal">
+%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate\">Create</a> personal sidebar"}%
+</div>
+
