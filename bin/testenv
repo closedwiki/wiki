@@ -654,6 +654,7 @@ print "This is the directory where RCS is located.";
 print "</td></tr>\n";
 
 # Check RCS
+my $badRCS = 0;
 if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
     # RCS not installed
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
@@ -675,11 +676,17 @@ if( ! ( -e "$rcsDir/ci$exeSuffix" ) ) {
     print "</td></tr>\n";
     
     if( $rcsVerNum && $rcsVerNum < $rcsverRequired ) {
-	# RCS too old
-	print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-	print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
-	print "</td></tr>\n";
+        # RCS too old
+        print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
+        print "RCS program is too old, upgrade to version $rcsverRequired or higher.";
+        print "</td></tr>\n";
+        $badRCS = 1;
     }
+}
+
+if( $badRCS ) {
+    print "TWiki will not work unless you are using TWiki's built-in RCS implementation, <b>RcsLite</b>).<br>";
+    print "To enable RCSLite you need to change the setting of \$storeTopicImpl in the TWiki.cfg file.";
 }
 
 # Check 'ls'

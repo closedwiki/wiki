@@ -59,7 +59,7 @@ BEGIN {
     # 'Use locale' for internationalisation of Perl regexes -
     # main locale settings are done in TWiki::setupLocale
     # Do a dynamic 'use locale' for this module
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         require locale;
         import locale ();
     }

@@ -23,7 +23,7 @@ BEGIN {
     }
     unshift @INC, '.';
     require 'setlib.cfg';
-    if( $TWiki::useLocale ) {
+    if( $TWiki::cfg{UseLocale} ) {
         require locale;
         import locale ();
     }
