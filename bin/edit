@@ -128,6 +128,16 @@ sub main
         $text =~ s/%WIKIUSERNAME%/$wikiUserName/go;
     }
     
+    # parent setting
+    my $theParent = $query->param( 'parent' ) || "";
+    if( $theParent ) {
+        if( $theParent !~ /\./ ) {
+           $theParent = "$webName.$theParent";
+        }
+        $tmpl =~ s/%TOPICPARENT%/$theParent/go;
+    }
+    $tmpl =~ s/%TOPICPARENT%/$theParent/;
+    
     my $oldargsr;
     my $formTemplate = $query->param( "formtemplate" );
     if( $formTemplate ) {
