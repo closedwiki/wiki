@@ -420,7 +420,7 @@ sub replacePreferencesTags
     my $vals = $self->{prefsVals};
     
     for( $x = 0; $x < @$keys; $x++ ) {
-        $term = '%' . $keys->[$x] . '%';
+        $term = qr/%\Q$keys->[$x]\E%/;
         $_[0] =~ s/$term/$vals->[$x]/ge;
     }
 }
