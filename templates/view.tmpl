@@ -28,13 +28,15 @@
 </table>
 </form>
 %TEXT%
+%META{"form"}%
+%META{"attachments"}%
+
 <br clear="all"><p>
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr bgcolor="%WEBBGCOLOR%">
   <td valign="top">
    Topic <b>%TOPIC%</b> . {
      %EDITTOPIC%
-   | <a href="%SCRIPTURLPATH%/classification%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Classification</a>
    | <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Attach</a>
    | <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Rename/move</a>
    | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&web=all&amp;regex=on&amp;search=%SPACEDTOPIC%%5B%5EA-Za-z%5D">Ref-By</a>
@@ -48,6 +50,7 @@
  <tr>
   <td valign="top">
    Revision %REVINFO%
+   %META{"moved"}%
   </td>
   <td width="40%" valign="top">
    %WEBCOPYRIGHT%
