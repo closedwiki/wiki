@@ -1,7 +1,7 @@
 # Tests for TWiki::Store::RcsLite and TWiki::Store::RcsWrap
 # JohnTalintyre
 # Ported to Test::Unit by CrawfordCurrie
-require 5.008;
+require 5.006;
 use strict;
 
 package RcsTests;

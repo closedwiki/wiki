@@ -1,5 +1,5 @@
 # Copyright (C) 2004 Crawford Currie
-require 5.008;
+require 5.006;
 package PrefsTests;
 
 use base qw(Test::Unit::TestCase);

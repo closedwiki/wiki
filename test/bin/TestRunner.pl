@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-require 5.008;
+require 5.006;
 
 use strict;
 
