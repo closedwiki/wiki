@@ -210,13 +210,13 @@ sub insidePREHandler {
 }
 
 sub startRenderingHandler {
-    $called{startRenderingHandler} = join(",", @_);
+    $called{startRenderingHandler} = join( ",", @_||() );
     $called{insidePreHandler} = 0;
     $called{outsidePreHandler} = 0;
 }
 
 sub endRenderingHandler {
-    $called{endRenderingHandler} = join(",", @_);
+    $called{endRenderingHandler} = join( ",", @_||() );
     my $q = TWiki::Func::getCgiQuery();
     my $t;
     $t = $q->param( "test" ) if ( $q );
