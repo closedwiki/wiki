@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = 'Alpha 16 Aug 2004 $Rev$';
+$wikiversion      = 'Alpha 29 Aug 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1672,6 +1672,56 @@ sub makeTopicSummary
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
     return $htext;
+}
+
+# =========================
+=pod
+
+---++ sub extractParameters (  $str )
+
+Extracts parameters from a variable string and returns a hash with all parameters.
+The nameless parameter's key is _DEFAULT.
+
+   * Example variable: %TEST{ "nameless" name1="val1" name2="val2" }%
+   * First extract text between {...} to get: "nameless" name1="val1" name2="val2"
+   * Then call this on the text:
+   * =my %params = TWiki::Func::extractParameters( $text );=
+   * The hash contains now: <br />
+     _DEFAULT => "nameless" <br />
+     name1 => "val1" <br />
+     name2 => "val2"
+
+=cut
+
+sub extractParameters
+{
+    my( $str ) = @_;
+
+    my %params = ();
+    return %params unless defined $str;
+    $str =~ s/\\\"/\\$TranslationToken/g;  # escape \"
+
+    if( $str =~ s/^\s*\"(.*?)\"\s*(\w+\s*=\s*\"|$)/$2/ ) {
+        # is: %VAR{ "value" }%
+        # or: %VAR{ "value" param="etc" ... }%
+        # Note: "value" may contain embedded double quotes
+        $params{"_DEFAULT"} = $1 if defined $1;  # distinguish between "" and "0";
+        if( $2 ) {
+            while( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) {
+                $params{"$1"} = $2 if defined $2;
+            }
+        }
+    } elsif( ( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) && ( $1 ) ) {
+        # is: %VAR{ name = "value" }%
+        $params{"$1"} = $2 if defined $2;
+        while( $str =~ s/^\s*(\w+)\s*=\s*\"([^\"]*)\"// ) {
+            $params{"$1"} = $2 if defined $2;
+        }
+    } elsif( $str =~ s/^\s*(.*?)\s*$// ) {
+        # is: %VAR{ value }%
+        $params{"_DEFAULT"} = $1 unless $1 eq "";
+    }
+    return map{ s/\\$TranslationToken/\"/go; $_ } %params;
 }
 
 # =========================

@@ -269,9 +269,38 @@ sub redirectCgiQuery
 
 ---++ Functions: Preferences
 
+---+++ extractParameters( $attr ) ==> %params
+
+| Description:       | Extract all parameters from a variable string and returns a hash of parameters |
+| Parameter: =$attr= | Attribute string |
+| Return: =%params=  | Hash containing all parameters. The nameless parameter is stored in key =_DEFAULT= |
+| Since:             | TWiki::Plugins::VERSION 1.025 (26 Aug 2004) |
+
+   * Example:
+      * Variable: =%<nop>TEST{ "nameless" name1="val1" name2="val2" }%=
+      * First extract text between ={...}= to get: ="nameless" name1="val1" name2="val2"=
+      * Then call this on the text: <br />
+        =my %params = TWiki::Func::extractParameters( $text );=
+      * The =%params= hash contains now: <br />
+        =_DEFAULT => "nameless"= <br />
+        =name1 => "val1"= <br />
+        =name2 => "val2"=
+
+=cut
+# -------------------------
+sub extractParameters
+{
+#   my( $theAttr ) = @_;
+    return &TWiki::extractParameters( @_ );
+}
+
+# =========================
+=pod
+
 ---+++ extractNameValuePair( $attr, $name ) ==> $value
 
 | Description:       | Extract a named or unnamed value from a variable parameter string |
+| Note:              | Function TWiki::Func::extractParameters is more efficient for extracting several parameters |
 | Parameter: =$attr= | Attribute string |
 | Parameter: =$name= | Name, optional |
 | Return: =$value=   | Extracted value |
