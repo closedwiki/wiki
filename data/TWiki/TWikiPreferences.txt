@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1073580224" format="1.0" version="1.60"}%
+%META:TOPICINFO{author="PeterThoeny" date="1076437528" format="1.0" version="1.61"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -106,7 +106,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set WIKIWEBMASTER = webmaster@your.company
 
 	* TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
-		* Set WIKIWEBMASTERNAME = TWiki Webmaster
+		* Set WIKIWEBMASTERNAME = TWiki Administrator
 
 	* Mail host for outgoing mail. This is used for WebChangesAlert if Perl module ==Net::SMTP== is installed. If not, or if =SMTPMAILHOST= is empty, the external sendmail program is used instead (defined by ==$mailProgram== in ==TWiki.cfg==). Examples: ==mail.your.company== or ==localhost==
 		* Set SMTPMAILHOST = mail
