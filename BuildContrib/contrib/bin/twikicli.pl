@@ -7,8 +7,8 @@ use diagnostics;
 # foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {unshift @INC, $pc;}
 BEGIN {
 
-use Cwd;
-print cwd(); 
+#use Cwd;
+#print cwd(); 
 
 
  my $twikiLibs = $ENV{TWIKI_LIBS} || "" ;

@@ -3,11 +3,6 @@ use strict;
 use diagnostics;
 use Cwd;
 
-print cwd()."\n";
-#BEGIN {
-#chdir "../../lib";
-#}
-
 package TWiki::Contrib::BuildContrib::TWikiCLI;
 my $prefix = "TWiki::Contrib::BuildContrib::TWikiCLI";
 
@@ -23,13 +18,14 @@ sub dispatch {
  my ($class, $args) = findTargetClassForString(@args);
  
  unless ($class) {
-     return helpText();
+     
+     return "Couldn't resolve your request\n\n".helpText();
      exit;
  }
  my $fqClass = $prefix."::".$class;
 
  dispatch2($fqClass, "_init");
- dispatch2($fqClass, @args);
+ dispatch2($fqClass, $args);
  
  }
 
@@ -54,7 +50,7 @@ sub findTargetClassForString {
   $classToTry = join("::", map {ucfirst} @cli_args[0..$argsSeparator]);
   $remainingParameters = join(" ", @cli_args[$argsSeparator+1..$#cli_args]);
   
-  print "Trying $classToTry '$remainingParameters'\n";
+  print "Trying $prefix"."::".$classToTry ." '$remainingParameters'\n";
   if (classExists($classToTry)) {
    last;
   }
@@ -67,10 +63,10 @@ sub findTargetClassForString {
 sub classExists {
   my ($class) = @_;
   my $fqClass = $prefix."::".$class;
-  print "\tTesting $fqClass\n";
-  eval { require $fqClass; };
+#  print "\tTesting $fqClass\n";
+  eval " require $fqClass ";
   if ($@) {
-   print $@;
+#   print $@;
    return 0;
   } {
    return 1;
@@ -84,12 +80,23 @@ sub noSuchMethod {
 }
 
 sub helpText {
-   return "Help text goes here\n";
+   my $ans =<<EOM;
+This utility searches the PERL5LIB / TWIKILIBS path for cli_ subs to execute
 
+For a feel of how it works, try:
+
+twikicli a b c d
+
+It prefixes its class search path with $prefix
+EOM
+   return $ans; 
 }
 
 sub dispatch2 {
-    my ($class,$do,@args) = @_;
+    my ($class,$args) = @_;
+    my @args = split ',', $args;
+    
+    my $do = shift @args;
 
     my $dispatchSubName = $class."::".'cli_'.$do;
     print "dispatching to $dispatchSubName\n";
