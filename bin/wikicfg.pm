@@ -112,7 +112,7 @@ $fgrepCmd         = "/bin/fgrep";
 #                   %WIKITOOLNAME% : TWiki tool name, default "TWiki" :
 $wikiToolName       = "TWiki";
 #                   Regex security filter for web name, topic name, user name :
-$securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\n\r]";
+$securityFilter     = "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]";
 #                   Default user name, default "guest" :
 $defaultUserName    = "guest";
 #                   %MAINWEB% : Name of Main web, default "Main" :
