@@ -1,4 +1,4 @@
-#!c:/apps/perl/bin/perl
+#!/usr/bin/perl -wT
 #
 # TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
 #
