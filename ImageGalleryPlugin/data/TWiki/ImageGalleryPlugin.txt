@@ -1,0 +1,131 @@
+%META:TOPICINFO{author="RobertSuna" date="1075560360" format="1.0" version="1.3"}%
+%META:TOPICPARENT{name="TWikiPreferences"}%
+---++ TWiki Image Gallery Plugin
+
+Pages containing ==%<nop>IMAGEGALLERY%== variables are expanded at view time, providing a thumbnailed image gallery for those images attached to a wiki page.  Thumbnails are created automatically and subsequently cached.  Display is simple ( trivial--probably not really good enough, although each picture is surrounded by a =span= with a class of =imgGallery= )
+
+	* size => =small=, *<tt>medium</tt>*, =large=, =xlarge=, =huge=
+	* web => _web_; default is *%<nop>WEB%*
+	* topic => _topic_; default is *%<nop>TOPIC%*
+	* format => how to format each image (see [[#VariAbles][Variables]]), default format is:
+<verbatim>
+		  <span class="imgGallery"><a href="$imageurl"><img src="$thumburl" title="$sizeK: $comment"/></a></span>$n
+</verbatim>
+	* options => additionaly oprins for the CONVERT program, default is "" (empty)
+	* columns => number of columns default is "0" which means infinity%BR%
+	  if set to some number, the following sequence is generated:%BR%
+	  __$rowstart$format$rowinside$format ... $format$rowend__
+	* rowstart => formatted text at start of a row if columns > 0, default is "" (empty)
+	* rowinside => formatted text inside of a row if columns > 0, default is "" (empty)
+	* rowend => formatted text at end of a row if columns > 0, default is "" (empty)
+	* rowinsideempty => formatted text inside of a row if columns > 0 and no more images, default is "" (empty)
+	* rowendempty => formatted text at end of a row if columns > 0 and no more images, default is "" (empty)
+
+#VariAbles
+---+++ Variables
+Variables are recognized and replaced in the format strings: _format_, _rowstart_, _rowinside_, _rowend_, _rowinsideempty_, _rowendempty_
+	* ==$web== the *%<nop>WEB%* the image is from 
+	* ==$topic== the *%<nop>TOPIC%* the image is from
+	* ==$width== width in pixels of the original image
+	* ==$height== height in pixels of the original image
+	* ==$version== version number of the ioriginal mage
+	* ==$name== complete name of the original image (no path)
+	* ==$sizeK== size of the original image in kilobytes (example: 8k)
+	* ==$size== size of the original image in bytes (example: 8234)
+	* ==$comment== the comment of the image attachment
+	* ==$wikiusername== the WikiName of the user checked in the image
+	* ==$username== the user name of the user checked in the image
+	* ==$thumburl== the complete URL of the thumbnail image
+	* ==$imageurl== the complete URL of the original image
+	* ==$date{...}== the check in date of the original image, can be formatted like *%<nop>GMTIME%* (see %TWIKIWEB%.TWikiVariables). The default format is like (if no {} spezified) "31 Dec 2002 - 19:30"
+	* ==$n== insert a line break
+	* ==$imgnr== number of the image (starts at 1)
+
+---+++ Examples
+
+=%<nop>IMAGEGALLERY%<br/>=
+%IMAGEGALLERY%
+
+=%<nop>IMAGEGALLERY{ web="%<nop>WEB%" topic="%<nop>TOPIC%" size="small" }%<br/>=
+%IMAGEGALLERY{ web="%WEB%" size="small" }%
+
+=%<nop>IMAGEGALLERY{ web="Saneasylum" topic="ArtworkGallery" size="x50" }%<br/>=
+%IMAGEGALLERY{ web="Saneasylum" topic="ArtworkGallery" size="x50" }%
+
+Generates a table with 4 rows, images are centerd and with a tooltip. Below each image is a simple description line with a image number.
+<verbatim>
+%IMAGEGALLERY{columns="4" rowstart="|  " rowinside="  |  " rowend="  |$n" rowinsideempty="  |" rowendempty=" |$n" 
+  format="<span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span><br/>$imgnr: $comment"}%
+</verbatim>
+%BR%
+%IMAGEGALLERY{columns="4" rowstart="|  " rowinside="  |  " rowend="  |$n" rowinsideempty="  |" rowendempty=" |$n" format="<span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span><br/>$imgnr: $comment"}%
+
+Format the Images as a list, images have tool tips.
+<verbatim>
+%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date$n"}%
+</verbatim>
+%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date$n"}%
+
+Format the Images as a list, images have tool tips and customized date.
+<verbatim>
+%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date{$year$mo$day-$hour:$min:$sec}$n"}%
+</verbatim>
+%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date{$year$mo$day-$hour:$min:$sec}$n"}%
+
+
+---++ <nop>%TOPIC% Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>IMAGEGALLERYPLUGIN_SHORTDESCRIPTION%==
+
+	* Names and sizes for thumbnails (feel free to add additional entries or to modify these defaults)
+		* Set TINY = 25x25
+		* Set SMALL = 50x50
+		* Set MEDIUM = 95x95
+		* Set LARGE = 150x150
+		* Set XLARGE = 250x250
+
+	* Name and location of program used to generate thumbnails
+		* Set IMAGE_MAGICK = /usr
+		* Set CONVERT = /usr/bin/convert
+		* Set IDENTIFY = /usr/bin/identify
+
+	* Additionaly program options for the CONVERT program
+		* Set CONVERT_OPTIONS = ""
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Displays image gallery with auto-generated thumbnails for attachments.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+
+---++ Plugin Installation Instructions
+
+	* Download the ZIP file from the <nop>%TOPIC% home
+	* Unzip == ImageGalleryPlugin.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==pub/TWiki/%TOPIC%/twikiwide.gif== | test image for this page |
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/WillNorris |
+|  Plugin Version: | 31 Jan 2004 (V1.1) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  31 Jan 2004 | Add format fields and variable substitution (autor TWiki:Main.RobertSuna) |
+|	1 Aug 2003 | Updates from feedback from a Windows installation |
+|  25 Jul 2003 | Initial version posted to TWiki.org |
+|  15 Mar 2002 | Initial (internal) version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | [[http://www.imagemagick.org/][ImageMagick]]'s =convert= and =identify= |
+|  Perl Version: | 5 something ? (not sure--i'm using 5.8.0) |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- Main.WillNorris - 1 Aug 2003 <br>
+%META:FILEATTACHMENT{name="twikiwide.gif" attr="" comment="" date="1059773705" path="twikiwide.gif" size="5850" user="WillNorris" version="1.1"}%
