@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1020375710" format="1.0" version="1.33"}%
+%META:TOPICINFO{author="PeterThoeny" date="1023240420" format="1.0" version="1.34"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---+ TWiki Text Formatting
@@ -38,7 +38,7 @@ Working in TWiki is as easy as typing in text - exactly like email. You don't ne
 <tr bgcolor="#ffffff">
 <td valign="top">
  *Headings:* <br>
- At least three dashes at the beginning of a line, followed by plus signs and the heading text. One plus creates a level 1 heading (most important), two pluses a level 2 heading; the maximum is level 6. __Note:__ A Table of Content can be created automatically with the =%<nop>TOC%= variable, see TWikiVariables.
+ At least three dashes at the beginning of a line, followed by plus signs and the heading text. One plus creates a level 1 heading (most important), two pluses a level 2 heading; the maximum is level 6. __Note:__ A Table of Content can be created automatically with the =%<nop>TOC%= variable, see TWikiVariables. Any heading text after =!!= is excluded from the TOC; for example, write =---+!! text= if you do not want to list a header in the TOC.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -289,7 +289,8 @@ Know.ReadmeFirst
 </td>
 </tr>
 <tr bgcolor="#ffffff">
-<td valign="top">#SquareBrackets
+<td valign="top">
+#SquareBrackets
  *Forced Links:* <br>
  You can create a forced internal link by enclosing words in double square brackets. <br> __Note:__ Text within the brackets may contain optional spaces; the topic name is formed by capitalizing the initial letter and by removing the spaces; i.e. =[<nop>[text formatting FAQ]]= links to topic TextFormattingFAQ.  You can also refer to a different web and use anchors.
 </td><td valign="top">
@@ -374,8 +375,6 @@ Know.ReadmeFirst
 <nop>SunOS
 </td>
 </tr>
-</table>
-</td></tr>
 </table>
 
 ---++ Using HTML
