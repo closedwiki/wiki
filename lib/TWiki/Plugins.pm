@@ -78,6 +78,33 @@ $VERSION = '1.025'; # TWiki production release 01 Aug 2004
 # =========================
 =pod
 
+---++ sub getPluginVersion()
+
+Returns the $TWiki::Plugins::VERSION number if no parameter is specified,
+else returns the version number of a named Plugin. If the Plugin cannot
+be found or is not active, 0 is returned.
+
+=cut
+
+sub getPluginVersion
+{
+    my ( $thePlugin ) = @_;
+    my $version = 0;
+    if( $thePlugin ) {
+        foreach my $plugin ( @activePlugins ) {
+            if( $plugin eq $thePlugin ) {
+                $version = ${"TWiki::Plugins::${plugin}::VERSION"};
+            }
+        }
+    } else {
+        $version = $VERSION;
+    }
+    return $version;
+}
+
+# =========================
+=pod
+
 ---++ sub discoverPluginPerlModules ()
 
 Not yet documented.

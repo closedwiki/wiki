@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = 'Alpha 30 Jul 2004 $Rev$';
+$wikiversion      = 'Alpha 13 Aug 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2924,6 +2924,7 @@ sub handleInternalTags
     $_[0] =~ s/%DISPLAYTIME{(.*?)}%/&handleTime($1, $displayTimeValues)/ge;
 
     $_[0] =~ s/%WIKIVERSION%/$wikiversion/g;
+    $_[0] =~ s/%PLUGINVERSION{(.*?)}%/TWiki::Plugins::getPluginVersion($1)/ge;
     $_[0] =~ s/%USERNAME%/$userName/g;
     $_[0] =~ s/%WIKINAME%/$wikiName/g;
     $_[0] =~ s/%WIKIUSERNAME%/$wikiUserName/g;
