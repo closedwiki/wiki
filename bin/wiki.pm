@@ -479,11 +479,15 @@ sub topicIsLocked
 # =========================
 sub lockTopic
 {
-    my( $name ) = @_;
+    my( $name, $doUnlock ) = @_;
 
     my $lockFilename = "$dataDir/$webName/$name.lock";
-    my $lockTime = time();
-    saveFile( $lockFilename, "$userName\n$lockTime" );
+    if( $doUnlock ) {
+        unlink "$lockFilename";
+    } else {
+        my $lockTime = time();
+        saveFile( $lockFilename, "$userName\n$lockTime" );
+    }
 }
 
 # =========================
@@ -709,7 +713,7 @@ sub getRevisionInfo
 # =========================
 sub saveTopic
 {
-    my( $topic, $text, $saveCmd, $doNotLogChanges ) = @_;
+    my( $topic, $text, $saveCmd, $doNotLogChanges, $doUnlock ) = @_;
     my $name = "$dataDir/$webName/$topic.txt";
     my $time = time();
     my $tmp = "";
@@ -731,7 +735,7 @@ sub saveTopic
         saveFile( $name, $text );
 
         # reset lock time, this is to prevent contention in case of a long edit session
-        lockTopic( $topic );
+        lockTopic( $topic, $doUnlock );
 
         # time stamp of existing file within one hour of old one?
         my( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$tmp8,$tmp9,
@@ -781,7 +785,7 @@ sub saveTopic
 
         # save file
         saveFile( $name, $text );
-        lockTopic( $topic );
+        lockTopic( $topic, $doUnlock );
 
         # update repository with same userName and date, but do not update .changes
         my $rev = getRevisionNumber( $topic );
@@ -856,7 +860,7 @@ sub saveTopic
         $rev = getRevisionNumber( $topic );
         $tmp = readVersion( $topic, $rev );
         saveFile( $name, $tmp );
-        lockTopic( $topic );
+        lockTopic( $topic, $doUnlock );
 
         # delete entry in .changes : To Do !
 

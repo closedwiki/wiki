@@ -200,10 +200,15 @@ sub main
     $tmpl =~ s/%TEXT%/$ptext/go;
     $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
 
-    $text =~ s/</%_L_%/go;
-    $text =~ s/>/%_G_%/go;
-    $text =~ s/\"/%_Q_%/go;
     $text =~ s/&/%_A_%/go;
+    $text =~ s/\"/%_Q_%/go;
+    $text =~ s/>/%_G_%/go;
+    $text =~ s/</%_L_%/go;
+    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
+    $text =~ s/\r\n/%_N_%/go;
+    $text =~ s/\n\r/%_N_%/go;
+    $text =~ s/\r/%_N_%/go;
+    $text =~ s/\n/%_N_%/go;
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
 

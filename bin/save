@@ -45,8 +45,9 @@ sub main
 	print $tmpl;
 	return;
     }
-    $saveCmd = $query->param( "cmd" );
 
+    my $unlock = $query->param( "unlock" ) || "";
+    my $saveCmd = $query->param( "cmd" ) || "";
     if( $saveCmd ne "repRev" ) {
         # normal case: Get latest attachment from file for preview
         $text= &wiki::readTopic( $topic );
@@ -66,12 +67,14 @@ sub main
         $text = $query->param( "text" );
     }
 
+    # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
+    $text =~ s/%_N_%/\r\n/go;
     $text =~ s/%_L_%/</go;
     $text =~ s/%_G_%/>/go;
     $text =~ s/%_Q_%/\"/go;
     $text =~ s/%_A_%/&/go;
     $text =~ s/ {3}/\t/go;
 
-    &wiki::saveTopic( $topic, $text, $saveCmd );
+    &wiki::saveTopic( $topic, $text, $saveCmd, "", $unlock );
     print $query->redirect( &wiki::getViewUrl( "", $topic ) );
 }
