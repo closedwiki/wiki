@@ -5,7 +5,6 @@
 %TMPL:DEF{"heada"}%
  <title> %TOPIC% %TMPL:P{"titleaction"}% &#171; %WEB% &#171; %WIKITOOLNAME%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <meta name="robots" content="noindex" />
  <meta name="MSSmartTagsPreventParsing" content="true" />
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />%TMPL:END%
 %TMPL:DEF{"headview"}%
@@ -13,9 +12,11 @@
  %HTTP_EQUIV_ON_VIEW% %TMPL:END%
 %TMPL:DEF{"headedit"}%
  %TMPL:P{"heada"}%
+ <meta name="robots" content="noindex" />
  %HTTP_EQUIV_ON_EDIT% %TMPL:END%
 %TMPL:DEF{"headpreview"}%
  %TMPL:P{"heada"}%
+ <meta name="robots" content="noindex" />
  %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
 %TMPL:DEF{"css"}%
 <style type="text/css" media="screen,projection"><!--
