@@ -1,0 +1,35 @@
+%META:TOPICINFO{author="MikeMannix" date="1000082597" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+%TOC%
+%STARTINCLUDE%
+---# TWiki Glossary
+
+TWiki uses a handful of general computer and Internet terms in a TWiki-specific way. This _could_ get confusing, but it actually works out fine in use. The <nop>TWikiGlossary is also a quick way to get familiar with the overall TWiki set-up...
+
+__(Under...construction: this is a rough draft)__
+
+*Attachment* _aka_ *File Attachment* - upload files by browser and attach them to any page, where they can be viewed, edited, downloaded; accessed by clicking *Attach* at page bottom (%TWIKIWEB%.FileAttachments)
+
+*Plugin* - a TWiki feature add-on; a Perl module that enhances TWiki, through the Plugin API spec; named =&lt;_&gt;Plugin.pm=, ex: =SomePlugin.pm= ([[TWikiDocumentation#TWiki_Plugins][TWikiPlugins]])
+
+*Plugin API* - specs for building TWiki Plugins with Perl modules ([[TWikiDocumentation#TWiki_Plugins][TWikiPlugins]])
+
+*Preference* - a customizable TWiki parameter; settings  site-wide, by the web, by the topic on %TWIKIWEB%.TWikiPreferences and WebPreferences pages, also on Plugins, user and regular topic pages.
+
+*site* - a TWiki installation consisting of one or more TWiki _[[#TWikiWeb][webs]]_
+
+#TWikiTopic
+*topic* _aka_ *<nop>WikiTopic* - a single TWiki page, it has a %TWIKIWEB%.WikiName that's unique within its home _[[#TWikiWeb][web]]_
+
+*TWiki* - based on "Wiki", from the original <nop>WikiWikiWeb, first OF this style of edit-anything-anywhere Web environment; by chance, also the name of a robot (as in, the robo-head in the TWiki logo) in the old _Buck Rogers_ TV series (%TWIKIWEB%.TWikiSite) 
+
+*TWiki.org (twiki.org)* - official home site, center of all development, housed on <nop>SourceForge.com
+
+*variable* - text-strings of the form =%VARIABLE%= that are expanded on the fly into text, image, or any other type of embedded content; predefined variables are coded into the main TWiki package, Plugins variables, and user-specified variables are created in TWiki.TWikiPreferences, WebPreferences, or single topics
+
+#TWikiWeb
+*web* - with a small "w", as opposed to the Web, World Wide; a collection of TWiki topics under a common name; topics share Preference settings, disk file structure, and are handled as a group by search
+
+*<nop>WikiTopic* - _see: [[#TWikiTopic][topic]]_
+
+-- Main.MikeMannix - 09 Sep 2001 <br />
