@@ -21,9 +21,9 @@ Donations towards specifics for further development can be sent to the same payp
 The TRT centres on the concept of a unique CONTENT identifier - instead of identifying a file *by its filename*, identities are based on *file content*. This means that a file copied to another place has the same unique content identifier. The system used md5 signatures as the identifier.
 
 %TOPIC% is comprised of two parts:
-   1 a twiki plugin that provides a web interface to the API of the comparator.
-      Unlike previous versions, this one includes in situ building of indexes for the local installation using the web interface.
-   1 a command line indexer that builds and saves indexes. This is used to generate the md5 files included in pub/TWiki/TWikiReleaseTrackerPlugin
+	1 a twiki plugin that provides a web interface to the API of the comparator.
+		Unlike previous versions, this one includes in situ building of indexes for the local installation using the web interface.
+	1 a command line indexer that builds and saves indexes. This is used to generate the md5 files included in pub/TWiki/TWikiReleaseTrackerPlugin
 
 ---++ Plugin Installation and Set up Instructions
 
@@ -39,7 +39,7 @@ The TRT centres on the concept of a unique CONTENT identifier - instead of ident
 
 ---+++ Basic usage
 
-	* The TRT is shipped with data about standard TWiki "Production Releases". By default, the TRTChangesFromDistribution topic automatically generates a report comparing your local installation against the standard TWiki distribution specified by the WIKIVERSION variable. %RED%Note:%ENDCOLOR% If you are running a "Beta Release," you will need to download the "beta.mp5" file from TWiki:Plugins.TWikiReleaseTrackerPluginDev and attach it to your local version of the %TOPIC% topic. 
+	* The TRT is shipped with data about standard TWiki "Production Releases". By default, the TRTChangesFromDistribution topic automatically generates a report comparing your local installation against the standard TWiki distribution specified by the WIKIVERSION variable. %RED%Note:%ENDCOLOR% If you are running a "Beta Release," you will need to download the "beta.md5" file from TWiki:Plugins.TWikiReleaseTrackerPluginDev and attach it to your local version of the %TOPIC% topic. 
 	* To view the changes for a particular file listed in the report, click on the corresponding link in the "Status" column.
 
 ---+++ Comparing differences between standard TWiki installations
