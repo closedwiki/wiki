@@ -1869,10 +1869,12 @@ sub _handleURLPARAM {
         }
     }
     $value =~ s/\r?\n/$newLine/go if( $newLine );
-    if ( $encode && $encode =~ /^entit(y|ies)$/ ) {
-        $value = entityEncode( $value );
-    } else {
-        $value = _urlEncode( $value );
+    if ( $encode ) {
+	if ( $encode =~ /^entit(y|ies)$/ ) {
+        	$value = entityEncode( $value );
+    	} else {
+        	$value = _urlEncode( $value );
+    	}
     }
     unless( $value ) {
         $value = $params->{default} || "";
