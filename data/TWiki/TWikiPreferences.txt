@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1018172520" format="1.0" version="1.27"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018739332" format="1.0" version="1.28"}%
 <H1>%WIKITOOLNAME% Site-Level Preferences</H1>
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %MAINWEB%.%USERNAME%). 
 	* %X% *NOTE:* You can lock individual settings at the site or web levels using User & Group Access Control - see section below.
@@ -142,8 +142,11 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set ALLOWTOPICCHANGE = 
 		* Set ALLOWTOPICRENAME = 
 
+	* Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
+		* Set ALLOWWEBCREATEWEB = %MAINWEB%.TWikiAdminGroup
+
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKIWEBMASTER, SMTPMAILHOST , SMTPSENDERHOST
+		* Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKIWEBMASTER, SMTPMAILHOST , SMTPSENDERHOST, ALLOWWEBCREATEWEB
 
 ---++ Creating New Preference Variables
  
