@@ -84,7 +84,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "24 May 2000";
+$wikiversion      = "28 May 2000";
 
 # ===========================
 # read the configuration part
@@ -464,13 +464,15 @@ sub topicIsLocked
         if( $lockUser ne $userName ) {
             # time stamp of lock within one hour of current time?
             my $systemTime = time();
-            if( abs( $systemTime - $lockTime ) < $editLockTime ) {
+            # calculate remaining lock time in seconds
+            $lockTime = $lockTime + $editLockTime - $systemTime;
+            if( $lockTime > 0 ) {
                 # must warn user that it is locked
-                return $lockUser;
+                return ( $lockUser, $lockTime );
             }
         }
     }
-    return "";
+    return ( "", 0);
 }
 
 # =========================

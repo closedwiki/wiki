@@ -167,11 +167,14 @@ sub main
 	return;
     }
 
-    my $lockUser = &wiki::topicIsLocked( $topic );
+    my( $lockUser, $lockTime ) = &wiki::topicIsLocked( $topic );
     if( ( ! $breakLock ) && ( $lockUser ) ) {
         # warn user that other person is editing this topic
         $lockUser = &wiki::userToWikiName( $lockUser );
-        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopslocked&param1=$lockUser" );
+        use integer;
+        $lockTime = ( $lockTime / 60 ) + 1; # convert to minutes
+        my $editLock = $wiki::editLockTime / 60;
+        print $query->redirect( "$scriptUrlPath/oops$scriptSuffix/$webName/$topic?template=oopslocked&param1=$lockUser&param2=$editLock&param3=$lockTime" );
 	return;
     }
     &wiki::lockTopic( $topic );
