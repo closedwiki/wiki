@@ -804,7 +804,7 @@ sub writeHeaderFull
 
     if ($pageType eq 'edit') {
 	# Get time now in HTTP header format
-	my $lastModifiedString = formatTime(time, 'http', "gmtime");
+	my $lastModifiedString = formatTime(time, '\$http', "gmtime");
 
 	# Expiry time is set high to avoid any data loss.  Each instance of 
 	# Edit page has a unique URL with time-string suffix (fix for 

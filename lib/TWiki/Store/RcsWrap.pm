@@ -222,7 +222,7 @@ sub replaceRevision
     }
     $self->_saveFile( $self->file(), $text );
     $cmd = $self->{ciDateCmd};
-	$date = TWiki::formatTime( $date , "rcs", "gmtime");
+	$date = TWiki::formatTime( $date , "\$rcs", "gmtime");
     $cmd =~ s/%DATE%/$date/;
     $cmd =~ s/%USERNAME%/$user/;
     $file =~ s/$TWiki::securityFilter//go;

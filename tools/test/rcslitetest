@@ -93,7 +93,6 @@ sub testRead
 sub now
 {
     my $time = time();
-#    $date = &TWiki::formatTime( $time, "rcs", "gmtime" );
     return $date;
 }
 

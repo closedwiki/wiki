@@ -307,7 +307,7 @@ Not yet documented.
 sub revDate2ISO
 {
     my $epochSec = &TWiki::revDate2EpSecs( $_[0] );
-    return &TWiki::formatTime( $epochSec, "iso", "gmtime");
+    return &TWiki::formatTime( $epochSec, "\$iso", "gmtime");
 }
 
 # =========================
