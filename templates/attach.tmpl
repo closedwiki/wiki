@@ -43,7 +43,6 @@ function initForm() {
     <TD ALIGN="right">
       Local file:
     </TD><TD>
-      <!--
       <INPUT TYPE="hidden" NAME="filename" VALUE="%FILENAME%">
       <INPUT TYPE="file" NAME="filepath" VALUE="%FILEPATH%" SIZE="50">
     </TD>
@@ -62,6 +61,13 @@ function initForm() {
       <INPUT TYPE="checkbox" NAME="createlink" %ATTACHLINKBOX%> Create a link to the attached file at the end of the topic.
     </TD>
   </TR>
+  <TR>
+    <TD ALIGN="right">
+      Hide file:
+    </TD><TD>
+      <INPUT TYPE="checkbox" NAME="hidefile" %HIDEFILE%> Hide attachment in normal topic view.
+    </TD>
+  </TR>
 </TABLE>
 <UL>
 <LI> <B>Note:</B> Link checkbox: In case the attached file is a JPG or GIF image and you check the box, it will create an inline image (e.g. show the image) at the end of the topic.
@@ -75,10 +81,12 @@ function initForm() {
       <A href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">cancel</A>
       }
     </TD>
+<!-- FIXME: Hidden until implemented
     <TD>
     <a href="!!!">Delete attachment</a> <a href="!!!">&nbsp;(Help)</a>
     &nbsp;|&nbsp;<a href="!!!">Move attachment</a> <a href="!!!">&nbsp;(Help)</a>
-    </TD
+    </TD>
+-->
   </TR>
 </TABLE>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
