@@ -1860,7 +1860,7 @@ sub _handleREVINFO {
     my $value = $format;
     $value =~ s/\$web/$web/goi;
     $value =~ s/\$topic/$topic/goi;
-    $value =~ s/\$rev/$rev/goi;
+    $value =~ s/\$rev/r$rev/goi;
     $value =~ s/\$date/&formatTime($date)/geoi;
     $value =~ s/\$comment/$comment/goi;
     $value =~ s/\$username/$user/goi;

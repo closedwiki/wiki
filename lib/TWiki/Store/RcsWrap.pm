@@ -313,8 +313,10 @@ sub getRevisionInfo
     my $rcsError = "";
     my( $dummy, $rev, $date, $user, $comment );
     if ( -e $rcsFile ) {
+        unless ( $version ) {
+            $version = $self->numRevisions();
+        }
         my $cmd = $self->{infoCmd};
-        $cmd = $self->{histCmd} unless $version;
         my ( $rcsOut, $exit ) = TWiki::Sandbox::readFromProcess
           ( $cmd,
             REVISION => "1.$version",
@@ -327,8 +329,8 @@ sub getRevisionInfo
             $comment = $3 || "";
             $date = TWiki::Store::RcsFile::_rcsDateTimeToEpoch( $date );
             $rcsOut =~ /revision 1.([0-9]*)/;
-            $rev = $1 || "";
-            $rcsError = "Rev missing from revision file $rcsFile" if( ! $rev );
+            $rev = $1;
+            $rcsError = "Rev missing from revision file $rcsFile" unless( $rev );
        }
     } else {
        $rcsError = "Revision file $rcsFile is missing";

@@ -335,7 +335,7 @@ sub addTopicInfo {
 Try and get revision info from the meta information, or, if it is not
 present, kick down to the Store module for the same information.
 
-Returns ( $revDate, $author, $rev )
+Returns ( $revDate, $author, $rev, $comment )
 
 $rev is an integer revision number.
 
@@ -346,20 +346,20 @@ sub getRevisionInfo {
 
     my %topicinfo = $self->findOne( "TOPICINFO" );
 
-    my( $date, $author, $rev );
+    my( $date, $author, $rev, $comment );
     if( %topicinfo ) {
        $date = $topicinfo{"date"} ;
        $author = $topicinfo{"author"};
-       my $tmp = $topicinfo{"version"};
-       $tmp =~ /1\.(.*)/o;
-       $rev = $1;
+       $rev = $topicinfo{"version"};
+       $rev =~ s/^\d+\.//;
+       $comment = "";
     } else {
        # Get data from Store
-       ( $date, $author, $rev ) =
-         TWiki::Store::getRevisionInfo( $self->{_web}, $self->{_topic}, "" );
+       ( $date, $author, $rev, $comment ) =
+         TWiki::Store::getRevisionInfo( $self->{_web}, $self->{_topic}, 0 );
     }
 
-    return( $date, $author, $rev );
+    return( $date, $author, $rev, $comment );
 }
 
 1;
