@@ -33,7 +33,7 @@ use TWiki::Contrib::Build;
 
   sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "AdvertsPlugin", "Build" ), $class );
+    return bless( $class->SUPER::new( "AdvertsPlugin", "AdvertsPlugin" ), $class );
   }
 
   # Example: Override the build target
