@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043997325" format="1.0" version="1.43"}%
+%META:TOPICINFO{author="PeterThoeny" date="1090999355" format="1.0" version="1.44"}%
 ---+!! TWiki Reference Manual (%WIKIVERSION%)
 
-<script language="JavaScript1.2" type="text/javascript">
+<script type="text/javascript">
 <!--
 function dblclick() { window.scrollTo(0,0) }
 if (document.layers) { document.captureEvents(Event.ONDBLCLICK); }
@@ -80,3 +80,4 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 
 -----
 %INCLUDE{"TWikiHistory"}%
+
