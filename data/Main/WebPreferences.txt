@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="PeterThoeny" date="1043012182" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="PeterThoeny" date="1048318439" format="1.0" version="1.14"}%
 %META:TOPICPARENT{name="WebHome"}%
----++ %WIKITOOLNAME%.%WEB% Web Preferences
+---++ <nop>%WEB% Web Preferences
 
-The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
+The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%]] web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
 
 
 __Preferences:__
@@ -14,7 +14,7 @@ __Preferences:__
 		* Set WEBBGCOLOR = #FFFFC0
 
 	* List this web in the %TWIKIWEB%.SiteMap:
-		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. %WEB%.Topic links.
+		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
 		* Set SITEMAPLIST = on
 		* Set SITEMAPWHAT = Welcome to %WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]], [[%WEB%.OfficeLocations][Offices]] - tour this expandable virtual workspace.
 		* Set SITEMAPUSETO = ...get a first-hand feel for TWiki possibilities.
@@ -28,7 +28,7 @@ __Preferences:__
 		* %TWIKIWEB%.TWikiForms: How to enable form(s)
 		* Set WEBFORMS = 
 
-	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
+	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
 		* Set DENYWEBVIEW = 
 		* Set ALLOWWEBVIEW = 
 		* Set DENYWEBCHANGE = 
