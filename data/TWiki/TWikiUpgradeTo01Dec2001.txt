@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1007582375" format="1.0" version="1.27"}%
+%META:TOPICINFO{author="PeterThoeny" date="1016272805" format="1.0" version="1.28"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -250,7 +250,7 @@ In this step, you move the working 01-Dec-2001 installation to the old 01-Dec-20
 
 	1. Test your new 01-Dec-2001 installation under =twiki/bin/2/view= to make sure everything works as expected.
 		* __NOTE:__ Don't worry about the Plugins, they'll work after the switch.
-	1. Edit =$TWIKIROOT/bin/2/TWiki.cfg= and remove the =/2= from =$scriptUrlPath= and =$templateDir=, ex:
+	1. Edit =$TWIKIROOT/bin/lib/TWiki.cfg= and remove the =/2= from =$scriptUrlPath= and =$templateDir=, ex:
 	  <br /> =$scriptUrlPath	 = "/twiki/bin";=
 	  <br /> =$templateDir		= "/home/httpd/twiki/templates";=
 	1. Rename the =TWiki2= web to =TWiki=, including attachments, ex:
