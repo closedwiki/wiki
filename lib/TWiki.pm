@@ -729,8 +729,10 @@ sub makeTopicSummary
     # called by search, mailnotify & changes after calling readFileHead
 
     my $htext = $theText;
+    # Format e-mail to add spam padding (HTML tags removed later)
+    $htext =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &mailtoLink( $2, $3, $4 )/geo;
     $htext =~ s/<\!\-\-.*?\-\->//gos;  # remove all HTML comments
-    $htext =~ s/<\!\-\-.*$//os;        # remove cut HTML comment
+    $htext =~ s/<\!\-\-.*$//os;        # cut HTML comment
     $htext =~ s/<[^>]*>//go;           # remove all HTML tags
     $htext =~ s/%WEB%/$theWeb/go;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/go;  # resolve topic
