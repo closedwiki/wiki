@@ -36,9 +36,9 @@ TODO: User.pm and the impls propbably shouldn't use Store.pm - they are not TWik
 
 package TWiki::Users::HtPasswdUser;
 
-if( 'md5' eq $TWiki::htpasswdEncoding ) {
+if( 'md5' eq $TWiki::cfg{HtpasswdEncoding} ) {
 	require Digest::MD5;
-} elsif( 'sha1' eq $TWiki::htpasswdEncoding ) {
+} elsif( 'sha1' eq $TWiki::cfg{HtpasswdEncoding} ) {
     require MIME::Base64;
     import MIME::Base64 qw( encode_base64 );
     require Digest::SHA1;
@@ -94,12 +94,12 @@ sub htpasswdGeneratePasswd
 
 	my $encodedPassword = '';
 
-    if( 'sha1' eq $TWiki::htpasswdEncoding ) {
+    if( 'sha1' eq $TWiki::cfg{HtpasswdEncoding} ) {
 
         $encodedPassword = '{SHA}' . MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) ); 
         chomp $encodedPassword;
 
-    } elsif ( 'crypt' eq $TWiki::htpasswdEncoding ) {
+    } elsif ( 'crypt' eq $TWiki::cfg{HtpasswdEncoding} ) {
 	    # by David Levy, Internet Channel, 1997
 	    # found at http://world.inch.com/Scripts/htpasswd.pl.html
 
@@ -119,12 +119,12 @@ sub htpasswdGeneratePasswd
 			$encodedPassword = crypt( $passwd, $salt );
 		}
 
-    } elsif ( 'md5' eq $TWiki::htpasswdEncoding ) {
+    } elsif ( 'md5' eq $TWiki::cfg{HtpasswdEncoding} ) {
 #what does this do if we are using a htpasswd file?
 		my $toEncode= "$user:$TWiki::authRealm:$passwd";
 		$encodedPassword = Digest::MD5::md5_hex( $toEncode );
 
-    } elsif ( 'plain' eq $TWiki::htpasswdEncoding ) {
+    } elsif ( 'plain' eq $TWiki::cfg{HtpasswdEncoding} ) {
 
 		$encodedPassword = $passwd;
 
