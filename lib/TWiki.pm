@@ -75,7 +75,7 @@ use vars qw(
         $doKeepRevIfEditLock $doRemovePortNumber
         $doRememberRemoteUser $doPluralToSingular
         $doHidePasswdInRegistration $doSecureInclude
-        $doLogTopicView $doLogTopicEdit $doLogTopicSave
+        $doLogTopicView $doLogTopicEdit $doLogTopicSave $doLogRename
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
         @isoMonth $TranslationToken $code @code $depth %mon2num
@@ -86,8 +86,8 @@ use vars qw(
 
 # TWiki::Store config:
 use vars qw(
-        $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd
-        $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
+        $revInitBinaryCmd $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd
+        $revInfoCmd $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
     );
 
 # TWiki::Search config:
@@ -99,7 +99,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "01 Mar 2001";
+$wikiversion      = "02 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -574,23 +574,24 @@ sub handleSearchWeb
         $searchVal = extractNameValuePair( $attributes, "search" );
     }
 
-    my $attrWeb = extractNameValuePair( $attributes, "web" );
-    my $attrScope = extractNameValuePair( $attributes, "scope" );
-    my $attrOrder = extractNameValuePair( $attributes, "order" );
-    my $attrRegex = extractNameValuePair( $attributes, "regex" );
-    my $attrLimit = extractNameValuePair( $attributes, "limit" );
-    my $attrReverse = extractNameValuePair( $attributes, "reverse" );
+    my $attrWeb           = extractNameValuePair( $attributes, "web" );
+    my $attrScope         = extractNameValuePair( $attributes, "scope" );
+    my $attrOrder         = extractNameValuePair( $attributes, "order" );
+    my $attrRegex         = extractNameValuePair( $attributes, "regex" );
+    my $attrLimit         = extractNameValuePair( $attributes, "limit" );
+    my $attrReverse       = extractNameValuePair( $attributes, "reverse" );
     my $attrCasesensitive = extractNameValuePair( $attributes, "casesensitive" );
-    my $attrNosummary = extractNameValuePair( $attributes, "nosummary" );
-    my $attrNosearch = extractNameValuePair( $attributes, "nosearch" );
-    my $attrNoheader = extractNameValuePair( $attributes, "noheader" );
-    my $attrNototal = extractNameValuePair( $attributes, "nototal" );
-    my $attrBookview = extractNameValuePair( $attributes, "bookview" );
+    my $attrNosummary     = extractNameValuePair( $attributes, "nosummary" );
+    my $attrNosearch      = extractNameValuePair( $attributes, "nosearch" );
+    my $attrNoheader      = extractNameValuePair( $attributes, "noheader" );
+    my $attrNototal       = extractNameValuePair( $attributes, "nototal" );
+    my $attrBookview      = extractNameValuePair( $attributes, "bookview" );
+    my $attrRenameview    = extractNameValuePair( $attributes, "renameview" );
 
     return &TWiki::Search::searchWeb( "1", $attrWeb, $searchVal, $attrScope,
        $attrOrder, $attrRegex, $attrLimit, $attrReverse,
        $attrCasesensitive, $attrNosummary, $attrNosearch,
-       $attrNoheader, $attrNototal, $attrBookview
+       $attrNoheader, $attrNototal, $attrBookview, $attrRenameview
     );
 }
 

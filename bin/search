@@ -87,8 +87,9 @@ sub main
     my $noheader      = $query->param( "noheader" )  || "";
     my $nototal       = $query->param( "nototal" ) || "";
     my $bookView      = $query->param( "bookview" )  || ""; # PTh 20 Jul 2000
+    my $renameView    = $query->param( "renameview" )  || "";
 
     &TWiki::Search::searchWeb( "0", $websStr, $search, $scope, $order, $regex,
                                $limit, $revSort, $caseSensitive, $nosummary,
-                               $nosearch, $noheader, $nototal, $bookView );
+                               $nosearch, $noheader, $nototal, $bookView, $renameView );
 }
