@@ -3051,8 +3051,8 @@ sub handleMetaTags
     $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/&renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 
-  $text = getRenderedVersion( $text, $theWeb );
   $text = handleCommonTags( $text, $theTopic );
+  $text = getRenderedVersion( $text, $theWeb );
 
     return $text;
 }
