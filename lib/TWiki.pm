@@ -376,7 +376,8 @@ sub initialize
     # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
     # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
     # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
-    $thePathInfo =~ s!$scriptUrlPath/[\-\.A-Z]+$scriptSuffix/!/!i;
+    my $cgiScriptName = $ENV{'SCRIPT_NAME'};
+    $thePathInfo =~ s!$cgiScriptName/!/!i;
     ## writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
 
     # Get the web and topic names from PATH_INFO
