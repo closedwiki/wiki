@@ -1,7 +1,6 @@
 ---++ Settings
 
-   * Set ENCRYPTEDPAGESPLUGIN_APPLET_INVOCATION = FOO
-    <!--APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%PUBURL%/%TWIKIWEB%/EncryptedPagesPlugin/TwikiEncrypt.jar,%PUBURL%/%TWIKIWEB%/EncryptedPagesPlugin/Crypt.jar"  WIDTH = 400 HEIGHT = 200> <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%"> <PARAM NAME="KEY" VALUE="--!!--"> </APPLET>
+   * Set APPLET_INVOCATION = <APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%PUBURL%/%TWIKIWEB%/EncryptedPagesPlugin/TwikiEncrypt.jar,%PUBURL%/%TWIKIWEB%/EncryptedPagesPlugin/Crypt.jar"  WIDTH = 400 HEIGHT = 200> <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%"> <PARAM NAME="KEY" VALUE="--!!--"> </APPLET>
 
 
 ---++ Things to Do
@@ -12,7 +11,7 @@
    * Test properly
 
 
-Raw java test:
+---++ Raw java test:
 
 <!--TWIKIENCRYPT COPY THIS BIT INTO YOUR UPLOAD FORM -->
 <p />
@@ -21,11 +20,10 @@ Raw java test:
 <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
 </APPLET>
 
-And now for a Twiki plugin test:
+---++ And now for a Twiki plugin test:
+%ENCRYPTEDPAGE{key1}%
+
 %ENCRYPTEDPAGE{key2}%
-
-
-
-   
+  
 
 -- Main.RichardJEllery - 13 Jan 2003
