@@ -97,7 +97,7 @@ use POSIX;
     } elsif ( $o eq "*" ) {
       push( @$opands, $l * $r );
     } elsif ( $o eq "/" ) {
-      my $res = ( $r == 0 ) ? $POSIX::FLT_MAX : ( $l / $r );
+      my $res = ( $r == 0 ) ? 0x7fffffff : ( $l / $r );
       push( @$opands, $res );
     } elsif ( $o eq "#round" ) {
       push( @$opands, int( $r + ( $r < 0 ? -0.5 : 0.5 )));

@@ -13,12 +13,12 @@ package TWiki::Plugins::FormQueryPlugin;
 
 use vars qw(
 	    $web $topic $user $installWeb $VERSION $pluginName
-	    $debug $db $depth
+	    $debug $db $bming
 	   );
 
 $VERSION = '1.010';
 $pluginName = 'FormQueryPlugin';
-$depth = 0;
+$bming = 0;
 
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
@@ -65,28 +65,49 @@ sub commonTagsHandler {
 
   my $bmstart;
 
-  if ( $debug && $depth++ == 0 ) {
+  if ( $debug && !$bming ) {
     $bmstart = new Benchmark;
+    $bming = 1;
   }
 
-  while ( $_[0] =~ s/%SET (\w+)\s*=\s*([^\r\n]*)\r?\n//so ) {
-    my $setname = $1;
-    my $setval = $2;
-    $setval = TWiki::Func::expandCommonVariables( $setval, $topic, $web );
-    $_[0] =~ s/%$setname%/$setval/g;
-  }
+  my $text = "";
 
-  $_[0] =~ s/%(ARITH){\"(.+?)\"}%/&_handleCalc($2)/geo;
-  $_[0] =~ s/%(WORKDAYS){(.+?)}%/&_handleWorkingDays($1, $2,$_[2],$_[1])/geo;
+  # flatten out macros
   $_[0] =~ s/%(CALLMACRO){(.+?)}%/&_handleMacroCall($1,$2,$_[2],$_[1])/geo;
-  $_[0] =~ s/%(FORMQUERY){(.+?)}%/&_handleFormQuery($1,$2)/geo;
-  $_[0] =~ s/%(TABLEFORMAT){(.+?)}%/&_handleTableFormat($1,$2)/geo;
-  $_[0] =~ s/%(SHOWQUERY){(.+?)}%/&_handleShowQuery($1,$2)/geo;
-  $_[0] =~ s/%(TOPICCREATOR){(.+?)}%/&_handleTopicCreator($1,$2,$_[2],$_[1])/geo;
-  $_[0] =~ s/%(SUMFIELD){(.+?)}%/&_handleSumQuery($1,$2)/geo;
-  $_[0] =~ s/%(PROGRESS){(.+?)}%/&_handleProgress($1,$2,$_[2],$_[1])/geo;
 
-  if ( $debug && --$depth == 0 && $_[0] !~ m/--Time: /o ) {
+  my %sets; # scope of this topic only
+  foreach my $line ( split( /\r?\n/, $_[0] )) {
+    foreach my $set ( keys %sets ) {
+      $line =~ s/\%$set\%/$sets{$set}/g;
+    }
+    if ( $line =~ m/^%SET\s+(\w+)\s*=\s*(.*)$/mo ) {
+      my $setname = $1;
+      my $setval = $2;
+      $setval = TWiki::Func::expandCommonVariables( $setval, $topic, $web );
+      $sets{$setname} = $setval;
+    } else {
+      $line =~
+	s/%(FORMQUERY){(.+?)}%/&_handleFormQuery($1,$2)/geo;
+      $line =~
+	s/%(WORKDAYS){(.+?)}%/&_handleWorkingDays($1, $2,$_[2],$_[1])/geo;
+      $line =~
+	s/%(SUMFIELD){(.+?)}%/&_handleSumQuery($1,$2)/geo;
+      $line =~
+	s/%(ARITH){\"(.+?)\"}%/&_handleCalc($2)/geo;
+      $line =~
+	s/%(TABLEFORMAT){(.+?)}%/&_handleTableFormat($1,$2)/geo;
+      $line =~
+	s/%(SHOWQUERY){(.+?)}%/&_handleShowQuery($1,$2)/geo;
+      $line =~
+	s/%(TOPICCREATOR){(.+?)}%/&_handleTopicCreator($1,$2,$_[2],$_[1])/geo;
+      $line =~ s/%(PROGRESS){(.+?)}%/&_handleProgress($1,$2,$_[2],$_[1])/geo;
+      $text .= "$line\n";
+    }
+  }
+  chop( $text ); # remove trailing NL
+  $_[0] =~ s/^.*$/$text/s;
+
+  if ( $debug && $bmstart ) {
     my $bmend = new Benchmark;
     my $td = Benchmark::timestr( Benchmark::timediff( $bmend, $bmstart ));
     my $mess = "<br><b>--Time: $td";

@@ -32,7 +32,7 @@ Topics can be also related to each other by name. To support this, the plugin en
 	* They *must* contain at least one alphanumeric character
 	* They must be unique *after* all the non-alphanumeric characters have been removed
 	* They *must not* conflict with any of the auto-generated relation names.
-You have been warned!
+You have been warned! Stick to alphanumeric characters for field names.
 
 For the purposes of what follows we refer to topics, and rows in embedded tables, as "hashes".
 
@@ -70,15 +70,16 @@ FORMQUERY is silent i.e. it generates no output unless there is an error, in whi
 
 #SearchOperators
 ---++++ Search operators
-Search operators work on the fields of each hash, be it a topic or an embedded table row. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'.
+Search operators work on the fields of each hash, be it a topic or an embedded table row. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
 
 *Warning* single and double quotes are not allowed in values!
 
 The following operators are available:
 
 | *Operator* | *LHS* | *RHS* | *Meaning* |
-| <code>=</code> | field name | string | Field is this string. Regular expression matching is used. Regular expressions must match the whole string. |
-| <code>!=</code> | field name | string | Field is not this string. Inverse of = |
+| <code>=</code> | field name | regular expression | Value exactly matches this regular expression. The expression must match the whole string. |
+| <code>!=</code> | field name | regular expression | Field is not this RE. Inverse of = |
+| <code>=~</code> | field name | regular expression | Value contains this regular expression i.e. the RE is found somewhere in the field value. |
 | <code>&lt;</code> | field name | integer (string containing an integer e.g '4') | Number is < |
 | <code>&gt;</code> | field name | integer | Number is > |
 | <code>&gt;=</code> | field name | integer | Number is >= |
@@ -91,7 +92,7 @@ The following operators are available:
 | <code>OR</code> | expr | expr | Boolean OR |
 | <code>()</code> | N/A | N/A | Bracketed subexpression |
 
-Field names can also include references to fields in parent topics found using [[#TopicRelations][topic relations]]. For example, if you have relation called =SubReq= you can look at the parent of a topic that has this relation using =SubReq_of= - for example, <code>SubReq_of.Product='Boiled Egg'</code>.
+Field names can also include references to fields in parent topics found using [[#TopicRelations][topic relations]]. For example, if you have relation called =SubReq= you can look at the parent of a topic that has this relation using =SubReq_of= - for example, <code>search="SubReq_of.Product='Boiled Egg'"</code>.
 
 Dates for =EARLIER_THAN=, =LATER_THAN= and =WITHIN_DAYS= must be dates in the format expected by =Time::ParseDate= (like the ActionTrackerPlugin). =WITHIN_DAYS= works out the number of _working_ days (i.e. excluding Saturday and Sunday). Apologies in advance if your weekend is offset &plusmn; a day!
 
@@ -121,7 +122,7 @@ footer="&lt;/table>"
 
 The =format= parameter is overloaded so it can also be used to refer to a table format previously defined using <code>%TABLEFORMAT</code>. This allows you to derive new formats (e.g. with different sort orders) For example,
 <pre>
-%<nop>TABLEFORMAT{ name=TBLFMT format="$topic..." sort="Owner,Priority"}%
+%<nop>TABLEFORMAT{ name=TBLFMT format="|$topic|" sort="Owner,Priority"}%
 %<nop>TABLEFORMAT{ name=SUBFMT format=TBLFMT sort="Priority,Owner" }%
 </pre>
 Any of the =header=, =footer= or =sort= parameters in the referenced table format can be overridden by giving new values in the <code>%SHOWQUERY</code>.
@@ -136,7 +137,7 @@ The format is used to define the rows in the body of the table:
 
 =format="| $topic | $Summary |"=
 
-Any fields in the form in the topic can be output by putting a $ sign before the name of the field. The two special fields =$topic= and =$form= are available for outputting the name of the topic and the type of the form. The =$topic= field also works for embedded tables.
+Any fields in the form in the topic can be output by putting a $ sign before the name of the field. The two special fields =$topic= and =$form= are available for outputting the name of the topic and the type of the form (The =$topic= field also works for embedded tables, where it is set to the name of the containing topic). You can also refer to fields in related topics using the syntax <code>$field.field</code> where $field is the name of the relation and =field= is a field in the related topic; for example, <code>format="|$Child_of.topic|"</code>.
 
 #SummingFields
 It is also possible to expand the contents of tables embedded in the topic, in two ways:
@@ -170,13 +171,13 @@ The science of %science% is %state%
 This macro can be included in another topic using <code>%CALLMACRO</code> :
 
 <pre>
-%<nop>CALLMACRO{name=MacroMaturity science="biology" state="mature"}%
-%<nop>CALLMACRO{name=MacroMaturity science="nanotechnology" state="in its infancy"}%
+%<nop>CALLMACRO{topic=MacroMaturity science="biology" state="mature"}%
+%<nop>CALLMACRO{topic=MacroMaturity science="nanotechnology" state="in its infancy"}%
 </pre>
 
-With fairly obvious results. Note that standard TWiki variables such as <code>%<nop>TOPIC%</code> are expanded with the values of _the calling topic_ and not the macro topic.
+With fairly obvious results. Note that standard TWiki variables such as <code>%<nop>TOPIC%</code> are expanded with the values of _the calling topic_ and not the macro topic. Macro parameter expansions take precedence over any =%SET+ value for the same name.
 ---++++ <code>%STRIP</code>
-To support the inclusion of macros that don't generate any text (e.g. macros containing only <code>%FORMQUERY</code> and <code>%TABLEFORMAT</code>) then the special tag <code>%<nop>STRIP%</code> can be included in the macro text. If this is seen, all newlines will be stripped from the macro before it is included in the calling topic, but after expansion of any embedded variables. The <code>%STRIP</code> tag only works in the context of a macro body.
+To support the inclusion of macros that don't generate any text (e.g. macros containing only <code>%FORMQUERY</code> and <code>%TABLEFORMAT</code>) then the special tag <code>%<nop>STRIP%</code> can be included in the macro text. If this is seen, all newlines will be stripped from the macro before it is included in the calling topic. The <code>%STRIP</code> tag only works in the context of a macro body.
 
 ---+++ <code>%TOPICCREATOR</code>
 Used to create a new topic generator button using rules defined in [[#TopicRelations][topic relations]].
@@ -214,7 +215,7 @@ The operators +, -, *, / and % are supported for floating-point arithmetic. The 
 ---+++ <code>%SET</code> pseudo-tag
 <code>%SET</code> is called a pseudo-tag because it doesn't operate the same way as normal twiki tags; it generates no output, and is delimited by end-of line. It is typically used with the <code>%ARITH</code> tag.
 
-<code>%SET</code> is used to set a variable value within the context of the current topic. Variable values which are set remain in force only within the current topic. The first occurrence of a <code>%SET</code> will set that variable for the whole topic i.e. it is *not* possible to set a variable and then reset it to a different value later in the topic. Only the first value will be used.
+<code>%SET</code> is used to set a variable value within the context of the current topic. Variable values which are set remain in force only within the current topic, or until the variable is set to a new value. Note that variable values =%SET= within a =%CALLMACRO= are available in the calling topic.
 
 <code>%SET</code> tags *must* occur at the start of a line (no leading spaces) and are terminated by the end of line. For example,
 <pre>
@@ -266,6 +267,21 @@ If =target= is omitted, then it creates a standard two-part progress bar. If all
   <td><table border=0 cellspacing=0 width=100%><tr><td width=50% bgcolor="#999999" align=center><font color="white">&nbsp;</font></td><td width=1% bgcolor="black" align=center><font color="white">&nbsp;</font></td><td width=20% bgcolor="lime" align=center><font color="black">2</font></td><td width=29% bgcolor="#CCCCCC" align=center><font color="black">&nbsp;</font></td></tr></table></td>
  </tr>
 </table>
+
+---+++ A note about evaluation order
+When displaying a topic, the plugin evaluates tags on a line-by-line basis. Each tag is fully expanded before moving on to the next tag. The tags are evaluated in the following order.
+   1 First all variables set using =%SET= are substituted.
+   1 Then =%CALLMACRO= is evaluated to flatten all macro text into the topic. Macro parameters are expanded at this time.
+   1 Now new =%SET=s are done. The value of the variable is recursively expanded.
+   1 Then =%FORMQUERY=
+   1 Then =%WORKDAYS=
+   1 Then =%SUMFIELD=
+   1 Then =%ARITH=
+   1 Then =%TABLEFORMAT=
+   1 Then =%SHOWQUERY=
+   1 Then =%TOPICCREATOR=
+   1 Finally =%PROGRESS=
+If you are having trouble getting the results you expect, consider this order carefully.
 ---
 #NotiFication
 ---++ Notification
@@ -309,7 +325,7 @@ The default value of =FQRELATIONS= is <code>Re<nop>Q%Ax%B Sub<nop>Req Re<nop>Q%A
 ---+++ Tables
 Tables to be read into the database must be formatted to use the Edit<nop>table plugin using the 'include=' feature that defined the format of the tables in another topic. Tables to be read are defined by setting the =FQTABLES= variable in the WebPreferences topic of the web. This is a list of the names of the topics that Edit<nop>TablePlugin uses to find it's table formats. Tables are read in as arrays of hashes, with each hash keyed on a field name generated by stripping all non-alphabetic characters from the column header. Note that the column header where the table is defined is used, not the column header in the Edit<nop>Table include= topic.
 
-Two special hash entries are added to each table row, =topic= and the equivalent of the reverse releation described above, represented by the name of the table with "_of" appended. So if you load a table type "CookingTimes", each row will have =topic= set to the name of the topic it was loaded from and =CookingTimes_of= set to the hash of that topic. This allows you to refer to the fields of the topic that contains a table even after the table has been extracted.
+Two special hash entries are added to each table row, =topic= and the equivalent of the reverse relation described above, represented by the name of the table with "_of" appended. So if you load a table type "CookingTimes", each row will have =topic= set to the name of the topic it was loaded from and =CookingTimes_of= set to the hash of that topic. This allows you to refer to the fields of the topic that contains a table even after the table has been extracted.
 
 The default value of =FQTABLES= is <code>Task<nop>Table</code>
 
@@ -354,6 +370,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	| ==lib/TWiki/Plugins/FormQueryPlugin/ReqDBSupport.pm== | Extra features |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/WebDB.pm== | Subclass of Map for a whole web |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArchiveTest.pm== | Test::Unit module |
+	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArithmeticTest.pm== | Test::Unit module |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/ArrayTest.pm== | Test::Unit module |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/FileTimeTest.pm== | Test::Unit module |
 	| ==lib/TWiki/Plugins/FormQueryPlugin/test/FuncFixture.pm== | Test::Unit module |
