@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1014358573" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="PeterThoeny" date="1014367320" format="1.0" version="1.12"}%
 <font size="+3"><b>Text Formatting FAQ</b></font>
 
 The most frequently asked questions about text formatting are answered. Also, TextFormattingRules contains the complete TWiki shorthand system on one quick reference page.
@@ -143,41 +143,19 @@ This is a manual process where you have more control over the rendering of the i
 -----
 ---+++ Can I write colored text?
 
-Sure. The quickest way is to go &lt;font color="colorCode"&gt;colorize&lt;/font&gt; - =font= is an HTML tag that works in any browser, although it's been phased out in the latest HTML specs. 
+TWikiPreferences defines some commonly used colors: *%YELLOW% %<nop>YELLOW%%ENDCOLOR%, %RED% %<nop>RED%%ENDCOLOR%, %PINK% %<nop>PINK%%ENDCOLOR%, %PURPLE% %<nop>PURPLE%%ENDCOLOR%, %TEAL% %<nop>TEAL%%ENDCOLOR%, %NAVY% %<nop>NAVY%%ENDCOLOR%, %BLUE% %<nop>BLUE%%ENDCOLOR%, %AQUA% %<nop>AQUA%%ENDCOLOR%, %LIME% %<nop>LIME%%ENDCOLOR%, %GREEN% %<nop>GREEN%%ENDCOLOR%, %OLIVE% %<nop>OLIVE%%ENDCOLOR%, %MAROON% %<nop>MAROON%%ENDCOLOR%, %BLACK% %<nop>BLACK%%ENDCOLOR%, %GRAY% %<nop>GRAY%%ENDCOLOR%, %SILVER% %<nop>SILVER%%ENDCOLOR%* and *%<nop>ENDCOLOR%*.
 
-You can also use the up-to-date =style= attribute - ex:  =style="color:#ff0000"= - placed in most HTML tags. =span= is an all-purpose choice: "&lt;span style="color:#ff0000"&gt;CoLoR&lt;/span&gt;. Only old (like 3.x IE &amp; NS) browsers have a problem with =style=.
+	* __You enter:__ =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= <p /> 
+	  __Result:__ %RED% red text %ENDCOLOR% and %GREEN% green text %ENDCOLOR%
 
-"colorCode" is the _hexadecimal RGB color code_, which is simply Red, Green and Blue values in hex notation (base 16, 0-F). For pure red, the RGB components are 255-0-0 - full red (255), no green or blue. That's FF-0-0 in hex, or ="#ff000=" for Web page purposes. For a basic color selection (you can [[StandardColors][StandardColor]] names instead of hex code in the =font= tag only):
+__Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%= . If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, e.g. write =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
 
-<table>
-<tr bgcolor="#e0e0e0">
-  <td><font color="#000000"> *Black:* </font></td><td> ="#000000"= </td>
-  <td><font color="#008000"> *Green:* </font></td><td> ="#008000"= </td>
-  <td><font color="#c0c0c0"> *Silver:* </font></td><td> ="#c0c0c0"= </td>
-  <td><font color="#00ff00"> *Lime:* </font></td><td> ="#00ff00"= </td>
-</tr><tr bgcolor="#c0c0c0">
-  <td><font color="#808080"> *Gray:* </font></td><td> ="#808080"= </td>
-  <td><font color="#808000"> *Olive:* </font></td><td> ="#808000"= </td>
-  <td><font color="#ffffff"> *White:* </font></td><td> ="#ffffff"= </td>
-  <td><font color="#ffff00"> *Yellow:* </font></td><td> ="#ffff00"= </td>
-</tr><tr bgcolor="#e0e0e0">
-  <td><font color="#800000"> *Maroon:* </font></td><td> ="#800000"= </td>
-  <td><font color="#000080"> *Navy:* </font></td><td> ="#000080"= </td>
-  <td><font color="#ff0000"> *Red:* </font></td><td> ="#ff0000"= </td>
-  <td><font color="#0000ff"> *Blue:* </font></td><td> ="#0000ff"= </td>
-</tr><tr bgcolor="#c0c0c0">
-  <td><font color="#800080"> *Purple:* </font></td><td> ="#800080"= </td>
-  <td><font color="#008080"> *Teal:* </font></td><td> ="#008080"= </td>
-  <td><font color="#ff00ff"> *Fuchsia:* </font></td><td> ="#ff00ff"= </td>
-  <td><font color="#00ffff"> *Aqua:* </font></td><td> ="#00ffff"= </td>
-</tr>
-</table>
+If you need more colors you can use HTML, like =&lt;font color="#ff0000"&gt; red text &lt;/font&gt;=. You can also use the up-to-date =style= attribute - ex:  =style="color:#ff0000"= - placed in most HTML tags. =span= is an all-purpose choice: =&lt;span style="color:#ff0000"&gt;CoLoR&lt;/span&gt;=. Only old (like 3.x IE &amp; NS) browsers have a problem with =style=.
 
-	* __You enter:__ <code> &lt;font color="#ff0000"&gt; Red color &lt;/font&gt; draws attention. </code><p>
-	  __Result:__ <font color="#ff0000"> Red color </font> draws attention.
+The code is the _hexadecimal RGB color code_, which is simply Red, Green and Blue values in hex notation (base 16, 0-F). For pure red, the RGB components are 255-0-0 - full red (255), no green or blue. That's FF-0-0 in hex, or ="#ff000"= for Web page purposes. StandardColors lists basic colors.
 
 -----
 </blockquote>
 
--- PeterThoeny - 13 Sep 2001 <br />
+-- PeterThoeny - 21 Feb 2002 <br />
 -- MikeMannix - 14 Sep 2001 <br />	
