@@ -22,12 +22,16 @@ BEGIN {
  }
 }
 
-use TWiki::Contrib::BuildContrib::TWikiCLI;
-
+#use TWiki::Contrib::BuildContrib::TWikiCLI;
+use TWiki::Contrib::BuildContrib::TWikiShell;
 =pod
 
 twikicli extension install DistributionContrib
 
 =cut 
 
-print TWiki::Contrib::BuildContrib::TWikiCLI::dispatch($ENV{ARGV});
+#print TWiki::Contrib::BuildContrib::TWikiCLI::dispatch($ENV{ARGV});
+my $shell = new TWiki::Contrib::BuildContrib::TWikiShell;
+$shell->cmdloop();
+
+1;

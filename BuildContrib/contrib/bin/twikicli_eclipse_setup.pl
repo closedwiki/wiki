@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 use strict;
+no strict 'refs';
 use diagnostics;
 
 
