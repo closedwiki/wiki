@@ -25,10 +25,6 @@ use CGI::Carp qw( fatalsToBrowser );
 use CGI;
 use TWiki;
 use TWiki::UI::OopsException;
-# Apache 2.0 fix, to avoid STDOUT hanging terminally on STDERR.
-# SMELL: should this really be here???
-use IO::Handle;
-STDOUT->blocking(0);
 use Data::Dumper;
 
 use constant ENABLEBM => 0;
@@ -47,6 +43,9 @@ sub run {
 
     my ( $query, $pathInfo, $user, $url, $topic );
     my $scripted = 0;
+
+    # Use unbuffered IO
+    $| = 1;
 
     if( $ENV{'DOCUMENT_ROOT'} ) {
         # script is called by browser
@@ -112,9 +111,6 @@ sub run {
             }
         }
     }
-
-    # Use unbuffered IO
-    $| = 1;
 
     my $session = new TWiki( $pathInfo, $user, $topic, $url,
                              $query, $scripted );
