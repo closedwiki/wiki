@@ -1,0 +1,92 @@
+%META:TOPICINFO{author="guest" date="1014576900" format="1.0" version="1.3"}%
+
+<H4> _post development notes in %TOPIC%Dev_ </H4>
+
+%TOC%
+
+---++ %TOPIC%
+
+The CommentPlugin gives the ability to quickly post comments in forward/reverse
+chronological order.  Simply entering text and clicking on the Comment button will have your comments added before or after the form, including your name and date.
+
+
+---++ Syntax Rules
+
+There are only five options with the Comment meta tag:
+   * rows: Any number > 0 will set the rows of the text area (default is 5)
+   * cols: Any number > 10 will set the columns of the textarea (default is 70)
+   * mode: The word "after" tells Comment to put the posted data after the form in reverse chronological order (default = "normal" chronological order)
+   * button: This lets you change the text of the submit button (default is "Add Comment")
+   * id: This gives a unique name for a COMMENT, in case you have more than one COMMENT tag in a topic (mandatory with > 1 COMMENT)
+
+---++ %TOPIC% Settings
+
+   * Description:
+      * Set SHORTDESCRIPTION = Allows users to quickly edit a topic without going through the edit/preview/save cycle
+
+   * Default number of rows in a COMMENT
+      * Set ROWS = 5
+   * Default number of columns in a COMMENT
+      * Set COLS = 70
+
+   * Default "submit button" text for COMMENT
+      * Set BUTTONNAME = Add Comment
+
+   * Default signature line
+      * Set SIGNATURE = -- %WIKIUSERNAME% - %DATE%
+
+   * Default label for "mode" in a COMMENT
+      * Set PREFIXMODENAME = before
+      * Set PREFIXLABEL = Your post will appear before this form in chronological order (newest at bottom)
+      * Set POSTFIXMODENAME = after
+      * Set POSTFIXLABEL = Your post will appear after this form in reverse chronological order (newest at top)
+
+---+++ Plugin Installation Instructions
+
+*TWO WARNINGS*
+
+   * *WARNING 1*: Anybody can refactor Comments, just like any other topic.  CommentPlugin knows nothing about what you've done once you have posted your comments.
+   * *WARNING 2 (Installation warning)*: Because Plugins have no capability to handle form post-processing (from what I can see), I was left with no recourse but to create a =savecomment= script in the bin directory.  I will be delighted if one of the more seasoned developers could help fix this, but for now I guess it's in the "hack" category.
+
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+| *File:* | *Description:* | 
+| ==data/TWiki/%TOPIC%.txt== | Plugin topic | 
+| ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository | 
+| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module | 
+| ==bin/savecomment== | Plugin save script (*HACK*)| 
+   * Check this topic here if the installation was successful
+   * Test if the plugin is correctly installed:
+
+If installed correctly, you should see a 4 "Comment" form fields below here, not
+ the meta tag.  Feel free to use this sequence of comments as a way to test the
+"behaviour" of multiple comments with multiple modes.  But please test it in ano
+ther topic, preferably in the [[Test.WebHome][Test]] Web :) :
+
+%COMMENT{mode="before" id="first" button="Comment 1"}%
+
+%COMMENT{mode="after" id="second" button="Comment 2"}%
+----
+----
+
+%COMMENT{mode="before" id="third" button="Comment 3"}%
+
+%COMMENT{mode="after" id="fourth" button="Comment 4"}%
+
+
+---+++ Plugin Info
+
+|  Plugin Author: | Main.DavidWeller |
+|  Plugin Version: | 30 Nov 2001 |
+|  Change History: | 30 Nov 2001: Initial version<br> 4 Dec 2001: 1.01 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft"<br> 24 Feb 2002 added a few more user requests, made "English" text configurable <br> 5 March 2002  Bug fixes |
+|  CPAN Dependencies: | None |
+|  Other Dependencies: | None |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- Main.DavidWeller - 05 Mar 2002 <br>
+
