@@ -1,5 +1,5 @@
 
-PLATFORM ?= sourceforge
+PLATFORM ?= darwin
 
 TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 
