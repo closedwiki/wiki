@@ -25,21 +25,35 @@
 # - Upgrading TWiki is easy as long as you do not customize wiki.pm.
 # - You can use variables in the wiki.pm namespace by including the
 #   package name, e.g. $wiki::webName (name of the current web.)
+# - Variables that can be accessed from topics (see details in
+#   TWikiDocumentation.html) :
+#       %TOPIC%          name of current topic
+#       %WEB%            name of current web
+#       %WIKIHOMEURL%    link of top left icon
+#       %SCRIPTURL%      base TWiki script URL (place of view, edit...)
+#       %PUBURL%         public URL (root of attachment URL)
+#       %ATTACHURL%      attachment URL of current topic
+#       %DATE%           today's date
+#       %WIKIWEBMASTER%  webmaster email
+#       %WIKIVERSION%    tool version
+#       %USERNAME%       login user name
+#       %WIKIUSERNAME%   wiki user name
+#       %WIKITOOLNAME%   tool name
 
 package wikicfg;
 use wiki;
 
 # variables that need to be changed when installing on a new server:
 # ==================================================================
-#                   link of TWiki icon in upper left corner :
+#                   %WIKIHOMEURL% : link of TWiki icon in upper left corner :
 $wikiHomeUrl      = "http://your.domain.com/twiki";
-#                   cgi-bin URL of TWiki :
+#                   %SCRIPTURL% : cgi-bin URL of TWiki :
 $defaultRootUrl   = "http://your.domain.com/twiki/bin";
-#                   public data URL (root of attachments) :
+#                   %PUBURL% : public data URL (root of attachments) :
 $pubUrl           = "http://your.domain.com/twiki/pub";   # must match $pubDir
 #                   TWiki root directory :
 $wikiDir          = "/home/httpd/twiki";
-#                   webmaster ("From:" in email notification) :
+#                   %WIKIWEBMASTER% : webmaster ("From:" in email notification) :
 $wikiwebmaster    = "yourname\@your.domain.com";
 
 # variables that might need to be changed:
@@ -71,8 +85,8 @@ $rmFileCmd        = "rm -f %FILENAME%";
 
 # variables that probably do not change:
 # ==================================================================
-#                   TWiki tool name :
-$wikiToolName     = "betaTWiki";
+#                   %WIKITOOLNAME% : TWiki tool name :
+$wikiToolName     = "TWiki";
 #                   Template directory :
 $templateDir      = "$wikiDir/bin/templates";
 #                   Data (topic files) root directory :
@@ -98,7 +112,9 @@ $notifyTopicname  = "WebNotify";
 # =========================
 sub extendHandleCommonTags
 {
+    # This is the place to define customized tags and variables
     # Called by wiki::handleCommonTags, after %INCLUDE:"..."%
+
     my( $text, $topic ) = @_;
 
     # do custom extension rule, like for example:
@@ -111,7 +127,9 @@ sub extendHandleCommonTags
 # =========================
 sub extendGetRenderedVersionOutsidePRE
 {
+    # This is the place to define customized rendering rules
     # Called by wiki::getRenderedVersion, in loop outside of <PRE> tag
+
     my( $text ) = @_;
 
     # do custom extension rule, like for example:
@@ -127,7 +145,9 @@ sub extendGetRenderedVersionOutsidePRE
 # =========================
 sub extendGetRenderedVersionInsidePRE
 {
+    # This is the place to define customized rendering rules
     # Called by wiki::getRenderedVersion, in loop inside of <PRE> tag
+
     my( $text ) = @_;
 
     # do custom extension rule, like for example:
