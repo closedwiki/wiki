@@ -1,2 +1,3 @@
-TWiki::Plugins::CairoCompatabilityModule perl Required if plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/SHaredCode repository.
+TWiki::Plugins::CairoCompatabilityModule perl Required if plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/SharedCode repository.
 Time::ParseDate perl Available from CPAN.
+TWiki::Attrs perl Required for Attrs module. Available from TWiki:Plugins/SharedCode repository.
