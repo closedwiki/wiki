@@ -8,16 +8,6 @@
  <title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
- <style type="text/css" media="all">
-	/* Default TWiki layout */
-	@import url("%TWIKILAYOUTURL%");
-	/* Default TWiki style */
-	@import url("%TWIKISTYLEURL%");
-	/* Custom overriding layout */
-	@import url("%USERLAYOUTURL%");
-	/* Custom overriding style */
-	@import url("%USERSTYLEURL%");
- </style>
  %TMPL:P{"script"}%
 </head>
 %TMPL:END%
@@ -65,7 +55,7 @@
 
 %TMPL:DEF{"copyright"}%
 <div class="TWikiCopyright">
-%WEBCOPYRIGHT%
+<font size=-2">%WEBCOPYRIGHT%</font>
 </div>
 %TMPL:END%
 
