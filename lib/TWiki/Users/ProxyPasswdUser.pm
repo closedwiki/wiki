@@ -2,6 +2,9 @@ package TWiki::Users::ProxyPasswdUser;
 use strict;
 # By Martin Cleaver
 # Hacky, but it seems to work :)
+use Data::Dumper;
+$Data::Dumper::Maxdepth = 2;
+$Data::Dumper::Pad = "                                    ";
 
 use vars qw( $AUTOLOAD );
 my $delegate = 'TWiki::Users::HtPasswdUser'; #SMELL should be delegateClass
@@ -23,9 +26,15 @@ sub new {
     my ($subname) = $AUTOLOAD =~ /([^:]+)$/;
     if (my $sub = UNIVERSAL::can( $delegate, # SMELL - should be proxy?
 				  $subname )) {
-      $self->{session}->writeDebug("Calling $subname(".join(' ', @_).")");
-      $sub->( @_ ); # TODO capture result, but preserve ANY return type
-      $self->{session}->writeDebug("After");
+      my ($ppackage, $pfilename, $pline) = caller(2);
+      my ($package, $filename, $line, $subroutine, $hasargs,
+    $wantarray, $evaltext, $is_require, $hints, $bitmask) = caller(1); 
+      $self->{session}->writeDebug("$ppackage:$pline => $package:$line");
+      $self->{session}->writeDebug("[ hasargs = $hasargs, wantarray = $wantarray, evaltext = $evaltext, is_require = $is_require, hints = $hints, bitmask = $bitmask ]");
+      $self->{session}->writeDebug("        => Calling $delegate:$subname (\n".Dumper(@_).$Data::Dumper::Pad.")");
+      my $ans = $sub->( @_ ); # TODO capture result, but preserve ANY return type
+      $self->{session}->writeDebug("Returned:\n".Dumper($ans));
+      $ans;
     } else {
       die "In $delegate cannot call <$subname>\n";
     }
