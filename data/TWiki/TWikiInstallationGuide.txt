@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000800431" format="1.0" version="1.37"}%
+%META:TOPICINFO{author="PeterThoeny" date="1006509736" format="1.0" version="1.38"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -128,7 +128,7 @@ With your new TWiki installation up and running, you can manage most aspects of 
 
 To create a new web:
 	1. *Create* a new web data directory under =twiki/data= and check the file permission of the directory.
-		* Use a name consisting of characters =A..Z= , =a..z= but __not__ in WikiNotation.
+		* Use a name starting with characters =A..Z=, followed by =a..z= and/or =0..9= characters, but __not__ a WikiWord.
 	1. *Copy* all files from the =twiki/data/_default= directory to the new data directory, preserving the original files' owner, group and permissions (on Unix, use =cp -p=). The data files must be writable by the owner the CGI scripts are running on (usually, =nobody=). 
 		* __HINT:__ You can set permissions of =.txt= and =.txt,v= files to =-rw-rw-rw-= (666) and then edit the topic using your browser; RCS will restore the file permissions correctly when saving the topic.
 	1. *Add* the new web to the web list (visible in the upper right corner of each topic) by editing the site-level preferences, %TWIKIWEB%.%WIKIPREFSTOPIC%:
