@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079428480" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079853100" format="1.0" version="1.6"}%
 ---+ TWiki Spreadsheet Plugin
 
-This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulas like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables.
+This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
 
 Example:
 
@@ -18,8 +18,9 @@ The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you 
 
 ---++ Syntax Rules
 
-	* The formula in the ==%<nop>CALC{"formula"}%== variable can contain built-in functions
-	* Built-in function are of format ==$<nop>FUNCNAME(parameter)%==
+The action of this Plugin is triggered by the ==%<nop>CALC{"..."}%== variable, which gets rendered according to the built-in function(s) found between the quotes.
+
+	* Built-in function are of format ==$FUNCNAME(parameter)==
 	* Functions may be nested, e.g. ==%<nop>CALC{"$SUM( R2:C$COLUMN(0)..R$ROW(-1):C$COLUMN(0) )"}%==
 	* Functions are evaluated from left to right, and from inside to outside if nested
 	* The function parameter can be text; a mathematical formula; a cell address; or a range of cell addresses
@@ -48,14 +49,15 @@ The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you 
 | =="$EXACT(text1, text2)"== | Compares two text strings and returns ==1== if they are exactly the same, or ==0== if not. Example: ==%<nop>CALC{"$EXACT( foo, Foo )"}%== returns ==0==; ==%<nop>CALC{"$EXACT( foo, $LOWER(Foo) )"}%== returns ==1== |
 | =="$FIND(search_string, text, start_index)"== | Finds one text string =search_string=, within another text string =text=, and returns the number of the starting position of =search_string=, from the first character of =text=. This search is case sensitive and is not a regular expression search; use =$SEARCH()= for regular expression searching. Starting position is 1; an empty string is returned if nothing is matched. Examples: %BR% ==%<nop>CALC{"$FIND(f, fluffy)"}%== returns ==1== %BR% ==%<nop>CALC{"$FIND(f, fluffy, 2)"}%== returns ==4== %BR% ==%<nop>CALC{"$FIND(@, fluffy, 1)"}%== returns an empty string |
 | =="$FORMAT(type, prec, number)"== | Formats a number to a certain type and precision. Types with examples:<br />&nbsp; - ==%<nop>CALC{"$FORMAT( COMMA, 2, 12345.6789 )"}%== returns ==12,345.68== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( DOLLAR, 2, 12345.67 )"}%== returns ==$12,345.68== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( NUMBER, 1, 12345.67 )"}%== returns ==12345.7== <br />&nbsp; - ==%<nop>CALC{"$FORMAT( PERCENT, 1, 0.1234567 )"}%== returns ==12.3%== |
-| =="$FORMATTIME( serial, text )"== | Convert a serialized date into a date string; the following variables in text are expanded: =$second= (seconds, 00..59); =$minute= (minutes, 00..59); =$hour= (hours, 00..23); =$day= (day of month, 01..31); =$month= (month, 01..12); =$mon= (month in text format, Jan..Dec); =$year= (4 digit year, 1999); =$ye= (2 digit year, 99), =$wd= (day number of the week, 1 for Sunday, 2 for Monday, etc), =$wday= (day of the week, Sun..Sat), =$weekday= (day of the week, Sunday..Saturday), =$yearday= (day of the year, 1..365, or 1..366 in leap years). Date is assumed to be server time; add =GMT= to indicate Greenwich time zone. See also =$TIME()=, =$TODAY()=, =$FORMATGMTIME()=, =$TIMEDIFF()=. Example: ==%<nop>CALC{"$FORMATTIME( 0, $year/$month/$day GMT )"}%== returns ==1970/01/01 GMT== |
-| =="$FORMATGMTIME( serial, text )"== | Convert a serialized date into a date string in Greenwich time zone. Same variables expansion as in =$FORMATTIME()=. Example: ==%<nop>CALC{"$FORMATGMTIME( 1041379200, $day $mon $year )"}%== returns ==01 Jan 2003== |
-| =="$GET(name)"== | Get the value of a previously set variable. Specify the variable name (alphanumeric characters and underscores). An empty string is returned if the variable does not exist. Use =$SET()= to set a variable first. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables. See also =$SET()=. Example: ==%<nop>CALC{"$GET( my_total )"}%== returns the value of the =my_total= variable |
-| =="$IF(condition, value if true, value if 0)"== | Returns one value if a condition is met, and another value if not. The condition can be a number (where ==0== means condition not met), or two numbers with a comparison operator ==&lt;== (less than), ==&lt;=<nop>== (less than or equal), ==<nop>==<nop>== (equal), ==<nop>!=<nop>== (not equal), ==&gt;=<nop>== (greater than or equal), ==&gt;== (greater than). Examples:%BR% ==%<nop>CALC{"$IF( $T(R1:C5) > 1000, Over Budget, OK )"}%== returns ==Over Budget== if value in R1:C5 is over 1000, ==OK== if not%BR% ==%<nop>CALC{"$IF( $EXACT($T(R1:C2),), empty, $T(R1:C2) )"}%== returns the content of R1:C2 or ==empty== if empty%BR% ==%<nop>CALC{"$SET(val, $IF( $T(R1:C2) == 0, zero, $T(R1:C2) ))"}%== sets a variable conditionally |
-| =="$INT(formula)"== | Evaluates a simple formula and rounds the result down to the nearest integer. Example: ==%<nop>CALC{"$INT( 10 / 4 )"}%== returns ==2== |
+| =="$FORMATTIME(serial, text)"== | Convert a serialized date into a date string; the following variables in text are expanded: =$second= (seconds, 00..59); =$minute= (minutes, 00..59); =$hour= (hours, 00..23); =$day= (day of month, 01..31); =$month= (month, 01..12); =$mon= (month in text format, Jan..Dec); =$year= (4 digit year, 1999); =$ye= (2 digit year, 99), =$wd= (day number of the week, 1 for Sunday, 2 for Monday, etc), =$wday= (day of the week, Sun..Sat), =$weekday= (day of the week, Sunday..Saturday), =$yearday= (day of the year, 1..365, or 1..366 in leap years). Date is assumed to be server time; add =GMT= to indicate Greenwich time zone. See also =$TIME()=, =$TODAY()=, =$FORMATGMTIME()=, =$TIMEDIFF()=. Example: ==%<nop>CALC{"$FORMATTIME(0, $year/$month/$day GMT)"}%== returns ==1970/01/01 GMT== |
+| =="$FORMATGMTIME(serial, text)"== | Convert a serialized date into a date string in Greenwich time zone. Same variables expansion as in =$FORMATTIME()=. Example: ==%<nop>CALC{"$FORMATGMTIME(1041379200, $day $mon $year)"}%== returns ==01 Jan 2003== |
+| =="$GET(name)"== | Get the value of a previously set variable. Specify the variable name (alphanumeric characters and underscores). An empty string is returned if the variable does not exist. Use =$SET()= to set a variable first. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables. See also =$SET()=. Example: ==%<nop>CALC{"$GET(my_total)"}%== returns the value of the =my_total= variable |
+| =="$IF(condition, value if true, value if 0)"== | Returns one value if a condition is met, and another value if not. The condition can be a number (where ==0== means condition not met), or two numbers with a comparison operator ==&lt;== (less than), ==&lt;=<nop>== (less than or equal), ==<nop>==<nop>== (equal), ==<nop>!=<nop>== (not equal), ==&gt;=<nop>== (greater than or equal), ==&gt;== (greater than). Examples:%BR% ==%<nop>CALC{"$IF( $T(R1:C5) > 1000, Over Budget, OK)"}%== returns ==Over Budget== if value in R1:C5 is over 1000, ==OK== if not%BR% ==%<nop>CALC{"$IF( $EXACT($T(R1:C2),), empty, $T(R1:C2))"}%== returns the content of R1:C2 or ==empty== if empty%BR% ==%<nop>CALC{"$SET(val, $IF( $T(R1:C2) == 0, zero, $T(R1:C2)))"}%== sets a variable conditionally |
+| =="$INT(formula)"== | Evaluates a simple formula and rounds the result down to the nearest integer. Example: ==%<nop>CALC{"$INT(10 / 4)"}%== returns ==2== |
 | =="$LEFT()"== | The address range of cells to the left of the current cell |
 | =="$LENGTH(text)"== | The length in bytes of text. Example: ==%<nop>CALC{"$LENGTH(abcd)"}%== returns ==4== |
 | =="$LIST(range)"== | Converts the content of a range of cells into a flat list, delimited by comma. Cells containing commas are merged into the list. Example: ==%<nop>CALC{"$LIST( $LEFT() )"}%== returns ==Apples, Lemons, Oranges, Kiwis== assuming the cells to the left contain ==&#124; Apples &#124; Lemons, Oranges &#124; Kiwis &#124;== |
+| =="$LISTITEM(index, list)"== | Get one item of a list. Index is 1 to size of list; use a negative number to count from the end of the list. Examples:%BR% ==%<nop>CALC{"$LISTITEM(2, Apple, Orange, Apple, Kiwi)"}%== returns ==Orange== %BR% ==%<nop>CALC{"$LISTITEM(-1, Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi== |
 | =="$LISTMAP(formula, list)"== | Evaluate and update each element of a list. In the formla, ==$item== indicates the element, ==$index== the index of the list starting at 1. Example: ==%<nop>CALC{"$LISTMAP($index: $EVAL(2 * $item), 3, 5, 7, 11)"}%== returns ==1: 6, 2: 10, 3: 14, 4: 22== |
 | =="$LISTREVERSE(list)"== | The opposite order of a list. Example: ==%<nop>CALC{"$LISTREVERSE(Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi, Apple, Orange, Apple== |
 | =="$LISTSIZE(list)"== | The number of elements in a list. Example: ==%<nop>CALC{"$LISTSIZE(Apple, Orange, Apple, Kiwi)"}%== returns ==4== |
@@ -71,7 +73,7 @@ The formula next to "Total" is ==%<nop>CALC{"$SUM( $ABOVE() )"}%==. <br /> (you 
 | =="$OR(list)"== | The logcial OR of a list. Example: ==%<nop>CALC{"$OR(1, 0, 1)"}%== returns ==1== |
 | =="$PRODUCT(list)"== | The product of a list or range of cells. Example: to calculate the product of the cells to the left of the current one use ==%<nop>CALC{"$PRODUCT($LEFT())"}%== |
 | =="$PROPER(text)"== | Capitalizes letters in ==text== that follow any character other than a letter. Converts all other letters to lowercase letters. Examples:%BR% ==%<nop>CALC{"PROPER(a small STEP)"}%== returns ==A Small Step== %BR% ==%<nop>CALC{"PROPER(f1 (formula-1))"}%== returns ==F1 (Formula 1)== |
-| =="$PROPERSPACE(text)"== | Properly spaces out %TWIKIWEB%.WikiWords preceeded by white space, parenthesis, or ==][==. Words listed in the DONTSPACE %TWIKIWEB%.%WIKIPREFSTOPIC% variable or DONTSPACE Plugins setting are excluded. Example, assuming DONTSPACE contains <nop>McIntosh: ==%<nop>CALC{"PROPERSPACE(<nop>McIntosh likes <nop>WikiWord links like <nop>WebHome and [<nop>[%HOMETOPIC%][<nop>WebHome]])"}%== returns ==<nop>McIntosh likes Wiki Word links like Web Home and [[%HOMETOPIC%][Web Home]]== |
+| =="$PROPERSPACE(text)"== | Properly spaces out %TWIKIWEB%.WikiWords preceeded by white space, parenthesis, or ==][==. Words listed in the DONTSPACE %TWIKIWEB%.%WIKIPREFSTOPIC% variable or DONTSPACE Plugins setting are excluded. Example, assuming DONTSPACE contains <nop>McIntosh: ==%<nop>CALC{"PROPERSPACE(Old <nop>MacDonald had a <nop>ServerFarm, <nop>EeEyeEeEyeOh"}%== returns ==Old <nop>MacDonald had a Server Farm, Ee Eye Ee Eye Oh== |
 | =="$RAND(max)"== | Random number, evenly distributed between 0 and ==max==, or 0 and 1 if max is not specified. |
 | =="$REPEAT(text)"== | Repeat ==text== a number of times. Example: ==%<nop>CALC{"$REPEAT(/\, 5)"}%== returns ==/\/\/\/\/\== |
 | =="$REPLACE(text, start_num, num_chars, new_text)"== | Replaces part of text string =text=,  based on the starting position =start_num=, and the number of characters to replace =num_chars=. The characters are replaced with =new_text=. Starting position is 1; use a negative =start_num= to count from the end of the text. See also =$SUBSTITUTE()=, =$TRANSLATE()=. Example: %BR% ==%<nop>CALC{"$REPLACE(abcdefghijk,6,5,*)"}%== returns ==abcde*k== |
@@ -135,7 +137,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>S
 
 <noautolink>
 	* [[%TWIKIWEB%.WikiWord][WikiWords]] to exclude from being spaced out by the ==$PROPERSPACE(text)== function. This comma delimited list can be overloaded by a DONTSPACE preferences variable:
-		* Set DONTSPACE = CodeWarrior, McIntosh, RedHat, SuSE
+		* Set DONTSPACE = CodeWarrior, MacDonald, McIntosh, RedHat, SuSE
 </noautolink>
 
 
@@ -154,9 +156,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 16 Mar 2004 |
+|  Plugin Version: | 21 Mar 2004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-|  16 Mar 2004: | Added $LISTMAP(), $LISTREVERSE(), $LISTSIZE(), $LISTSORT(), $LISTUNIQUE(), $SETM(); retired $COUNTUNIQUE() in favor of $COUNTITEMS($LISTUNIQUE(); fixed evaluation order issue of $IF(); fixed missing eval error messages suppressed since version 06 Mar 2004; redirect stderr messages to warning |
+|  21 Mar 2004: | Added $LISTINDEX(); fixed call to inofficial function |
+|  16 Mar 2004: | Added $LISTMAP(), $LISTREVERSE(), $LISTSIZE(), $LISTSORT(), $LISTUNIQUE(), $SETM(); retired $COUNTUNIQUE() in favor of $COUNTITEMS($LISTUNIQUE()); fixed evaluation order issue of $IF(); fixed missing eval error messages suppressed since version 06 Mar 2004; redirect stderr messages to warning |
 |  08 Mar 2004: | Added $LIST() |
 |  06 Mar 2004: | Added $AND(), $MOD(), $NOT(), $OR(), $PRODUCT(), $PROPER(), $PROPERSPACE(), $RAND(), $REPEAT(), $SIGN(), $VALUE(); added digits parameter to $ROUND(); renamed $MULT() to $PRODUCT(); $MULT() is deprecated and undocumented |
 |  27 Feb 2004: | Added $COUNTUNIQUE() |
@@ -186,4 +189,4 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 16 Mar 2004
+-- TWiki:Main/PeterThoeny - 21 Mar 2004
