@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092547029" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093672399" format="1.0" version="1.2"}%
 ---+ Access Keys
 
 ---++ What are access keys?
@@ -18,12 +18,13 @@ This depends on the browser you are using (see also cross-browser support below)
 		* Press the required letter
 		* Release the keys and press the 'ENTER' key
 
-	* If you use Netscape Navigator
+	* If you use Netscape Navigator, Mozilla, or Firefox
 		* Press and hold the 'Alt' key
 		* Press the required letter
 
 	* If you are using a Mac
-		* Substitute the 'Ctrl' key for the 'Alt' key.
+		* Press and hold the 'Ctrl' key
+		* Press the required letter
 
 [[http://www.salford.gov.uk/online/howto/accesskeys.htm][Learn more]]
 
