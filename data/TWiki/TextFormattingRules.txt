@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1023240420" format="1.0" version="1.34"}%
+%META:TOPICINFO{author="PeterThoeny" date="1033609205" format="1.0" version="1.35"}%
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---+ TWiki Text Formatting
@@ -363,7 +363,7 @@ Know.ReadmeFirst
 </tr>
 <tr bgcolor="#ffffff">
 <td valign="top">
- *Prevent a Link:* <br>
+ *Prevent a Link:* %BR%
  Prevent a WikiWord from being linked by prepending it with the =&lt;nop&gt;= tag.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
@@ -373,6 +373,26 @@ Know.ReadmeFirst
 </font></span>
 </td><td valign="top">
 <nop>SunOS
+</td>
+</tr>
+<tr bgcolor="#ffffff">
+<td valign="top">
+ *Disable Links:* %BR%
+ You can disable automatic linking of WikiWords by surrounding text with =&lt;noautolink&gt;= and =&lt;/noautolink&gt;= tags. %BR% __Note:__ Each tag must be on a line by itself.%BR% __Note:__ This also works for TWiki tables, but only if you add a blank line between the end of the table and the closing =&lt;/noautolink&gt;= tag (known issue of the TablePlugin).
+</td><td valign="top">
+<span style='background : #FFFFCC;'><font color="#990000">
+<verbatim>
+ <noautolink>
+ RedHat &
+ SuSE
+ </noautolink>
+</verbatim>
+</font></span>
+</td><td valign="top">
+ <noautolink>
+ RedHat &
+ SuSE
+ </noautolink>
 </td>
 </tr>
 </table>
