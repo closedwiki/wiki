@@ -40,7 +40,7 @@ sub main
     if( $action eq "createweb" ) {
         createWeb();
 
-#    } elsif( $action eq "othercommand" ) {
+    # } elsif( $action eq "othercommand" ) {
 
     } elsif( $action ) {
         oopsRedirectMsg( "", "", "", "msg_unrecognized_action", $action );
@@ -79,11 +79,19 @@ sub createWeb
     my $oopsTmpl = "oopsmngcreateweb";
 
     # initialize TWiki
-    my( $topicName, $webName, $scriptUrlPath, $userName ) = 
+    my( $topicName, $webName, $dummy, $userName ) = 
         &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = ""; # avoid warning
 
-    # FIXME: Check for access permission
-
+    # check permission, user authorized to create webs?
+    my $wikiUserName = &TWiki::userToWikiName( $userName );
+    if( ! &TWiki::Access::checkAccessPermission( "createweb", $wikiUserName, "", 
+                                                 $topicName, $webName ) ) {
+       # user has not permission to change the topic
+       my $url = &TWiki::getOopsUrl( $webName, $topicName, "oopsaccesscreateweb" );
+       TWiki::redirect( $query, $url );
+       return;
+    }
 
     if( $newWeb =~ /^_[a-zA-Z0-9_]+$/ ) {
         # valid template web name, untaint
