@@ -1,14 +1,17 @@
 	* Name: Peter Thoeny, author of the TWikiWeb
-	* Work: peter.thoeny@windriver.com
-	* Home: peter.thoeny@attglobal.net
-	* Location: Cupertino, CA
-	* Local time: Current <A HREF="http://www.bsdi.com/date?America/Los_Angeles">time</A> in Cupertino.
+	* Work: Peter.Thoeny@WindRiver.com
+	* Home: Peter@Thoeny.com
+	* Location: San Jose, CA
+	* Personal web: http://www.thoeny.com/peter/
+	* Local time: Current <A HREF="http://www.bsdi.com/date?America/Los_Angeles">time</A> in the Silicon Valley.
 
-__Personal Preferences__
+__Personal Preferences (details in TWikiVariables)__
 	* Horizontal size of text edit box:
 		* Set EDITBOXWIDTH = 70
 	* Vertical size of text edit box:
 		* Set EDITBOXHEIGHT = 17
+	* Default state of the __link__ check box in the attach file page:
+		* Set ATTACHLINKBOX = 
 
 __Related topics__
 	* %WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.

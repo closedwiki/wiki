@@ -1,10 +1,12 @@
 A guest of this TWiki web, not unlike yourself. You can leave your trace behind you, just add your name in TWikiUsers and create your own page.
 
-__Personal Preferences__
+__Personal Preferences (details in TWikiVariables)__
 	* Horizontal size of text edit box:
 		* Set EDITBOXWIDTH = 70
 	* Vertical size of text edit box:
 		* Set EDITBOXHEIGHT = 17
+	* Default state of the __link__ check box in the attach file page:
+		* Set ATTACHLINKBOX = 
 
 __Related Topics__
 	* %WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
