@@ -191,6 +191,9 @@ sub main
         &TWiki::Store::saveTopic( $webName, $wikiName, $text, $meta, "", 1 );
     }
 
+    # Plugin callback to set cookies. Contrib by SvenDowideit
+    TWiki::registrationHandler( $webName, $wikiName, $remoteUser );
+
     # add user to TWikiUsers topic
     my $userTopic = addUserToTWikiUsersTopic( $wikiName, $remoteUser );
 

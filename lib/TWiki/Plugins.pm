@@ -33,6 +33,8 @@ $VERSION = '1.010';
 
 @registrableHandlers = (           #                                         VERSION:
         'initPlugin',              # ( $topic, $web, $user, $installWeb )    1.000
+        'initializeUserHandler',   # ( $loginName, $url, $pathInfo )         1.010
+        'registrationHandler',     # ( $web, $wikiName, $loginName )         1.010
         'commonTagsHandler',       # ( $text, $topic, $web )                 1.000
         'startRenderingHandler',   # ( $text, $web )                         1.000
         'outsidePREHandler',       # ( $text )                               1.000
@@ -47,7 +49,9 @@ $VERSION = '1.010';
         'setSessionValueHandler'   # ( $key, $value )                        1.010
     );
     
-%onlyOnceHandlers = ( 'writeHeaderHandler'      => 1,
+%onlyOnceHandlers = ( 'initializeUserHandler'   => 1,
+                      'registrationHandler'     => 1,
+                      'writeHeaderHandler'      => 1,
                       'redirectCgiQueryHandler' => 1,
                       'getSessionValueHandler'  => 1,
                       'getSessionValueHandler'  => 1 );
@@ -239,26 +243,28 @@ sub handleActivatedPlugins
 }
 
 # =========================
-# This could be better integrated with the other auto discovery for plugins
-sub initializeUser
+sub initializeUserHandler
 {
-#   my( $theRemoteUser, $theUrl,  $thePathInfo ) = @_;
-    my $user;
-    my $p = "TWiki::Plugins::SessionPlugin";
-    my $sub = $p.'::initializeUserHandler';
+    # Called by TWiki::initialize
+#   my( $theLoginName, $theUrl, $thePathInfo ) = @_;
 
-    my $libDir = &TWiki::getTWikiLibDir();
-    if(  -e "$libDir/TWiki/Plugins/SessionPlugin.pm" ) {
-        eval "use $p;";
-        if( defined( &$sub ) ) {
-            $user = &$sub( @_ );
-        }
-    }
+    unshift @_, ( 'initializeUserHandler' );
+    my $user = &applyHandlers;
+
     if( ! defined( $user ) ) {
         $user = &TWiki::initializeRemoteUser( $_[0] );
     }
-    
+
     return $user;
+}
+
+# =========================
+sub registrationHandler
+{
+    # Called by the register script
+#    my( $web, $wikiName, $loginName ) = @_;
+    unshift @_, ( 'registrationHandler' );
+    &applyHandlers;
 }
 
 # =========================

@@ -113,7 +113,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "17 Dec 2002";
+$wikiversion      = "28 Dec 2002";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -288,7 +288,7 @@ sub initialize
 
     # initialize user name and user to WikiName list
     userToWikiListInit();
-    $userName = &TWiki::Plugins::initializeUser( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
+    $userName = TWiki::Plugins::initializeUserHandler( $theRemoteUser, $theUrl, $thePathInfo );  # e.g. "jdoe"
     $wikiName     = userToWikiName( $userName, 1 );      # i.e. "JonDoe"
     $wikiUserName = userToWikiName( $userName );         # i.e. "Main.JonDoe"
 
