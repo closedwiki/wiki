@@ -90,7 +90,7 @@ sub testCommas {
   $this->assert_str_equals("Main.SamPeckinpah, Main.QuentinTarantino", $action->{notify});
 }
 
-sub testMatches {
+sub testMatchesOpen {
   my $this = shift;
 
   my $action =
@@ -127,8 +127,6 @@ sub testMatches {
   $this->assert($action->matches($attrs));
   $attrs = new TWiki::Contrib::Attrs("openday");
   $this->assert(!$action->matches($attrs));
-  $attrs = new TWiki::Contrib::Attrs("closed");
-  $this->assert(!$action->matches($attrs));
   
   TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("31 May 2002");
   $attrs = new TWiki::Contrib::Attrs("within=2");
@@ -156,6 +154,15 @@ sub testMatches {
   $this->assert($action->matches($attrs));
   $attrs = new TWiki::Contrib::Attrs("due=\"3 Jun 02\"");
   $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("due=\"< 3 Jun 02\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("due=\"> 3 Jun 02\"");
+  $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("due=\"> 1 Jun 02\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("due=\"< 1 Jun 02\"");
+  $this->assert(!$action->matches($attrs));
+
   
   $attrs = new TWiki::Contrib::Attrs("creator=ThomasMoore");
   $this->assert($action->matches($attrs));
@@ -166,7 +173,19 @@ sub testMatches {
   $this->assert($action->matches($attrs));
   $attrs = new TWiki::Contrib::Attrs("created=\"2 Jun 02\"");
   $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("created=\"2 Jan 1999\"");
+  $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("created=\"< 2 Jan 1999\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("created=\"> 2 Jan 1999\"");
+  $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("created=\">= 1 Jan 1999\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("created=\"< 1 Jan 1999\"");
+  $this->assert(!$action->matches($attrs));
   
+  $attrs = new TWiki::Contrib::Attrs("closed");
+  $this->assert(!$action->matches($attrs));
   $attrs = new TWiki::Contrib::Attrs("closed=\"2 Jun 02\"");
   $this->assert(!$action->matches($attrs));
   $attrs = new TWiki::Contrib::Attrs("closed=\"1 Jan 1999\"");
@@ -178,11 +197,23 @@ sub testMatches {
   $this->assert($action->matches($attrs));
   $attrs = new TWiki::Contrib::Attrs("within=1");
   $this->assert($action->matches($attrs), $action->secsToGo());
-  
-  # now again, only closed
-  $action = new TWiki::Plugins::ActionTrackerPlugin::Action( "Test", "Topic", 0, "who=\"JohnDoe,SlyStallone\",due=\"2 Jun 02\" closed=\"2 Dec 00\" closer=\"Death\" notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
-  $attrs = new TWiki::Contrib::Attrs("closed");
+}
+
+sub testMatchesClosed {
+  my $this = shift;
+
+  my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( "Test", "Topic", 0, "who=\"JohnDoe,SlyStallone\",due=\"2 Jun 02\" closed=\"2 Dec 00\" closer=\"Death\" notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
+  my $attrs = new TWiki::Contrib::Attrs("closed");
   $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("closed=\"2 Dec 00\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("closed=\"> 1 Dec 00\"");
+  $this->assert($action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("closed=\"< 1 Dec 00\"");
+  $this->assert(!$action->matches($attrs));
+  $attrs = new TWiki::Contrib::Attrs("closed=\"2 Dec 01\"");
+  $this->assert(!$action->matches($attrs));
+
   $attrs = new TWiki::Contrib::Attrs("closer=Death");
   $this->assert($action->matches($attrs));
   $attrs = new TWiki::Contrib::Attrs("open");

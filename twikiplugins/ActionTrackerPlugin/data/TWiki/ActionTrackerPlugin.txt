@@ -72,6 +72,8 @@ The following absolute date formats are recognised. Dates containing spaces must
 
 You are *strongly* recommended never to use the 'mm/dd/yyyy or mm/dd/yyyy' formats, to avoid confusing users in Europe (like me). Note that due to limitations in the Time::Parsedate module, dates before 1970 will not work as expected.
 
+When you are searching for fields containing dates (such as =closed=, =created= and =due=) you can prepend one of the conditions <code>&gt;, &lt;, &gt;= and &lt;=</code> to the date. For example, <code>closed=">1-Jan-1999"</code> will match all actions that have been closed at any time since 1-Jan-1999, and <code>created=">= 1-Jan-2000"</code> will match all actions created this century.
+
 #PeopleAnchor
 ---+++ People
 
@@ -401,12 +403,13 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| 13 Oct 2004 | 2.013 If a user cuts and pastes an action with a uid in it, the action editor would get confused. This updated ensures all action UIDs are unique within a topic when it is saved. |
+| 19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
+| 13 Oct 2004 | 2.013 If a user cuts and pastes an action with a uid in it, the action editor would get confused. This update ensures all action UIDs are unique within a topic when it is saved. |
 | 16 Aug 2004 | 2.012 Dependency automation and Cairo readiness, further change to =within= behaviour (bidirectionality) |
 | 3 Feb 2004 | Fixes for internationalisation, name matching, QBE, within= behaviour, documentation. |
 | 21 May 2003 | Non-standard fields. Configurability of tables and action editor. Non-standard attributes. Eliminated chdir. Multi-line actions. Optimisation of notifies. |
 | 30 Apr 2003 | Version 2.0; Large sections rewritten to take advantage of improvements in Plugin support, eliminating two scripts in bin. Added UIDs and formattable action searches |
-| 30 Jan 2003 | Query-by-example action search with notify field; notfication of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
+| 30 Jan 2003 | Query-by-example action search with notify field; notification of change emails and actions email are sent as one; notify field was added to topic view and edit; various bug fixes by TWiki:Main/PaulineCheung |
 | 26 Sep 2002 | Added changedsince notify support, added support for editing in a seperate window, incorporated attribute syntax corrections contributed by Main.PeterThoeny, sorted ACTIONSEARCH output and action notifications |
 | 14 Feb 2002 | Sorted ACTIONSEARCH results by due date; Fixed bugs editaction kills form data, Actions flagged as late the day before, TWiki table and bullet formatting doesn't work within action text |
 | 11 Jan 2002 | Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |

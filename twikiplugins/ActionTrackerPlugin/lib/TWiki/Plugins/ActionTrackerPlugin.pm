@@ -24,6 +24,7 @@ package TWiki::Plugins::ActionTrackerPlugin;
 use strict;
 
 use TWiki::Func;
+use TWiki::Plugins;
 
 # =========================
 use vars qw(
@@ -32,7 +33,7 @@ use vars qw(
 	    $pluginName $defaultFormat $calendarIncludes
 	   );
 
-$VERSION = 2.013;
+$VERSION = 2.020;
 $initialised = 0;
 $pluginName = "ActionTrackerPlugin";
 $installWeb = "TWiki";
@@ -58,7 +59,7 @@ sub initPlugin {
   }
   # COVERAGE ON
 
-  &TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
+  TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
   $initialised = 0;
   $javaScriptIncluded = 0;
 
@@ -66,7 +67,10 @@ sub initPlugin {
 };
 
 sub commonTagsHandler {
-    ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    ### my ( $text, $topic, $web ) = @_;
+
+    return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
+
     unless ($calendarIncludes) {
         # must do this before checking if %ACTION is in the text, as this
         # is intended to apply to the skin, not the body
@@ -86,96 +90,95 @@ sub commonTagsHandler {
     }
     $_[0] =~ s/<!-- INCLUDEJSCALENDAR -->/$calendarIncludes/;
 
-  return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
-
     if ( !$initialised ) {
         return unless _lazyInit();
     }
 
-  # Format actions in the topic.
-  # Done this way so we get tables built up by
-  # collapsing successive actions.
-  my $actionNumber = 0;
-  my $text = "";
-  my $actionSet = undef;
-  my $javaScriptRequired = 0;
-  my $gathering;
-  my $pre;
-  my $attrs;
-  my $descr;
-  my $processAction = 0;
+    # Format actions in the topic.
+    # Done this way so we get tables built up by
+    # collapsing successive actions.
+    my $actionNumber = 0;
+    my $text = "";
+    my $actionSet = undef;
+    my $javaScriptRequired = 0;
+    my $gathering;
+    my $pre;
+    my $attrs;
+    my $descr;
+    my $processAction = 0;
 
-  # FORMAT DEPENDANT ACTION SCAN HERE
-  foreach my $line ( split( /\r?\n/, $_[0] )) {
-    if ( $gathering ) {
-      if ( $line =~ m/^$gathering\b.*/ ) {
-	$gathering = undef;
-	$processAction = 1;
-      } else {
-	$descr .= "$line\n";
-	next;
-      }
-    } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)/o ) {
-      ( $pre, $attrs, $descr ) = ( $1, $2, $3 );
+    # FORMAT DEPENDANT ACTION SCAN HERE
+    foreach my $line ( split( /\r?\n/, $_[0] )) {
+        if ( $gathering ) {
+            if ( $line =~ m/^$gathering\b.*/ ) {
+                $gathering = undef;
+                $processAction = 1;
+            } else {
+                $descr .= "$line\n";
+                next;
+            }
+        } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)/o ) {
+            ( $pre, $attrs, $descr ) = ( $1, $2, $3 );
+            if ( $pre ne "" ) {
+                if ( $pre !~ m/^[ \t]*$/o && $actionSet ) {
+                    # spit out pending action table if the pre text is more
+                    # than just spaces or tabs
+                    $text .=
+                      $actionSet->formatAsHTML( $defaultFormat, "name",
+                                                $useNewWindow ) .
+                        "\n";
+                    $javaScriptRequired = 1;
+                    $actionSet = undef;
+                }
+                $text .= $pre;
+            }
 	
-      if ( $pre ne "" ) {
-	if ( $pre !~ m/^[ \t]*$/o && $actionSet ) {
-	  # spit out pending action table if the pre text is more
-	  # than just spaces or tabs
-	  $text .=
-	    $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) .
-	      "\n";
-	  $javaScriptRequired = 1;
-	  $actionSet = undef;
-	}
-	$text .= $pre;
-      }
-	
-      if ( $descr =~ m/\s*<<(\w+)\s*(.*)$/o ) {
-	$descr = $2;
-	$gathering = $1;
-	next;
-      }
+            if ( $descr =~ m/\s*<<(\w+)\s*(.*)$/o ) {
+                $descr = $2;
+                $gathering = $1;
+                next;
+            }
 
-      $processAction = 1;
-    } else {
-      if ( $actionSet ) {
-	$text .=
-	  $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow ) .
-	    "\n";
-	$javaScriptRequired = 1;
-	$actionSet = undef;
-      }
-      $text .= "$line\n";
-    }
+            $processAction = 1;
+        } else {
+            if ( $actionSet ) {
+                $text .=
+                  $actionSet->formatAsHTML( $defaultFormat, "name",
+                                            $useNewWindow ) .
+                    "\n";
+                $javaScriptRequired = 1;
+                $actionSet = undef;
+            }
+            $text .= "$line\n";
+        }
 
-    if ( $processAction ) {
-      my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
-      if ( !defined( $actionSet )) {
-	$actionSet = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
-      }
-      $actionSet->add( $action );
-      $processAction = 0;
+        if ( $processAction ) {
+            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
+            if ( !defined( $actionSet )) {
+                $actionSet = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+            }
+            $actionSet->add( $action );
+            $processAction = 0;
+        }
     }
-  }
-  if ( $actionSet ) {
-    $text .=
-      $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow );
-    $javaScriptRequired = 1;
-  }
-  if ( $javaScriptRequired ) {
-    # do this here rather than as we emit the actions, because it can
-    # screw up the other TWiki formatting if it's embedded.
-    $text = _embedJS() . $text;
-  }
-  $_[0] = $text;
-  $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
-  # COVERAGE OFF debug only
-  if ( $debug ) {
-    $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
-    $_[0] =~ s/%ACTIONTRACKERPREFS%/&_dumpPrefs()/geo;
-  }
-  # COVERAGE ON
+    if ( $actionSet ) {
+        $text .=
+          $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow );
+        $javaScriptRequired = 1;
+    }
+    if ( $javaScriptRequired ) {
+        # do this here rather than as we emit the actions, because it can
+        # screw up the other TWiki formatting if it's embedded.
+        $text = _embedJS() . $text;
+    }
+    $_[0] = $text;
+    $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
+    # COVERAGE OFF debug only
+    if ( $debug ) {
+        $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
+        $_[0] =~ s/%ACTIONTRACKERPREFS%/&_dumpPrefs()/geo;
+    }
+    # COVERAGE ON
 }
 
 # This handler is called by the edit script just before presenting
