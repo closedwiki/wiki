@@ -42,17 +42,22 @@ function launchWindow( theWeb, theTopic ) {
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction"><div class="twikiTopicActionSecondary">
-<input type="checkbox" class="twikiCheckbox" name="unlock" id="releaselock" %RELEASEEDITLOCKCHECKBOX% /><label for="releaselock">Release edit lock</label>&nbsp;&nbsp;<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a><br />
-   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a>
-</div>
-<table>
-<tr>
+%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
+<tr class="twikiTopicActionHelp twikiGrayText">
+<td colspan="3" class="twikiTopicActionHelp twikiGrayText"></td>
+</tr>
+<tr class="twikiTopicActionSecondary">
+<td class="twikiCancelCol"></td>
+<td class="twikiSubmitCol"><div class="twikiSubmitOptions"><input type="checkbox" class="twikiCheckbox" name="unlock" id="releaselock" %RELEASEEDITLOCKCHECKBOX% /><label for="releaselock">Release edit lock</label>&nbsp;&nbsp;<a target="UnlockTopic" onclick="return launchWindow('%TWIKIWEB%','UnlockTopic')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/UnlockTopic">help</a><br />
+   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify">help</a></div></td>
+<td class="twikiAddCol"></td>
+</tr>
+<tr class="twikiTopicAction">
 <td class="twikiCancelCol"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Discard</a></td>
 <td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Save Changes" />%FORMFIELDS%</td>
 <td class="twikiAddCol"></td>
-</tr></table>
-</div>%TMPL:END%
+</tr>
+</table>%TMPL:END%
 
 
 
