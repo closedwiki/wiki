@@ -19,44 +19,8 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	* Install =tdb= (http://sourceforge.net/projects/tdb/) and =TDB_File= (available from CPAN). You may well already have these installed.
 	* Download the ZIP file from the Add-on Home (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
-	| ==bin/dav.pl== | Add-on script |
-	| ==bin/recache.pl== | Script to rebuild the protections cache |
-    | ==data/TWiki/%TOPIC%.txt== | This topic |
-	| ==lib/twiki_dav/autogen.sh== | twiki_dav build script |
-	| ==lib/twiki_dav/CHANGES== | twiki_dav document |
-	| ==lib/twiki_dav/config.h.in== | twiki_dav module |
-	| ==lib/twiki_dav/configure.in== | twiki_dav build script |
-	| ==lib/twiki_dav/configure== | twiki_dav build script |
-	| ==lib/twiki_dav/dav_dyn.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_fs_dbm.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_fs_lock.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_fs_repos.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_fs_repos.h== | twiki_dav module |
-	| ==lib/twiki_dav/dav_fs_vsn.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_lock.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_opaquelock.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_opaquelock.h== | twiki_dav module |
-	| ==lib/twiki_dav/dav_props.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_shared_stub.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_util.c== | twiki_dav module |
-	| ==lib/twiki_dav/dav_xmlparse.c== | twiki_dav module |
-	| ==lib/twiki_dav/INSTALL== | twiki_dav document |
-	| ==lib/twiki_dav/LICENSE.html== | twiki_dav document |
-	| ==lib/twiki_dav/libdav.module.in== | twiki_dav build script |
-	| ==lib/twiki_dav/Makefile.in== | twiki_dav build script |
-	| ==lib/twiki_dav/Makefile.libdir== | twiki_dav build script |
-	| ==lib/twiki_dav/Makefile.tmpl== | twiki_dav build_script |
-	| ==lib/twiki_dav/mod_dav.c== | twiki_dav module |
-	| ==lib/twiki_dav/mod_dav.h== | twiki_dav module |
-	| ==lib/twiki_dav/PROT.c== | twiki_dav module |
-	| ==lib/twiki_dav/PROT.h== | twiki_dav module |
-    | ==lib/twiki_dav/README== | twiki_dav document |
-	| ==lib/TWiki/Plugins/%TOPIC%/Build.pm== | Build and uninstall script |
-	| ==lib/TWiki/Plugins/%TOPIC%/build.pl== | Build and uninstall script |
-	| ==lib/TWiki/Plugins/%TOPIC%/Permissions.pm== | Plugin module |
-	| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin module |
-	| ==lib/TWiki/Plugins/%TOPIC%/test.zip== | Tests |
+	| *File* | *Description* |
+%$MANIFEST%
 
 Unzip the zip over your TWiki installation. It won't break anything. To build and install the Apache module, follow the instructions on http://webdav.org/mod_dav/install.html
 
@@ -107,11 +71,11 @@ If you are not sure what applications are WebDAV enabled, just try typing a URL 
 
 ---++ Add-On Info
 |  Add-on Author: | TWiki:Main/CrawfordCurrie |
-|  Add-on Version: | 14 Apr 2004 (v1.000) |
+|  Add-on Version: | %$DATE% %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  14 Apr 2004: | Initial very _very_ early access release |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | Apache 1.3, TDB, TDB_File |
+|  Other Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.005 |
 |  License: | GPL |
 |  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
@@ -123,4 +87,4 @@ This work was commissioned by [[http://www.windriver.com/][Wind River Systems]].
 
 __Related Topic:__ %TWIKIWEB%.TWikiAddOns, -- TWiki:Codev.WebDAV
 
--- TWiki:Main/CrawfordCurrie - 14 Apr 2004
+-- TWiki:Main/CrawfordCurrie - %$DATE%
