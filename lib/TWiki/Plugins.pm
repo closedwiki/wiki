@@ -30,7 +30,7 @@ package TWiki::Plugins;
 ##use strict;
 
 use vars qw(
-        @pluginList @registrableHandlers %registeredHandlers
+        @pluginList @activeWebTopicList @registrableHandlers %registeredHandlers
 	$VERSION
     );
 
@@ -102,15 +102,20 @@ sub registerPlugin
     eval "use $p;";
     my $h   = "";
     my $sub = "";
+    my $prefix = "";
     $sub = $p.'::initPlugin';
     # we register a plugin ONLY if it defines initPlugin AND it returns true 
-    if (defined( &$sub ) 
-	&& 
-	&$sub($topic, $web, $user, $installWeb)) {
-	    foreach $h ( @registrableHandlers ) {
-    		$sub = $p.'::'.$h;
-    		&registerHandler( $h, $sub ) if defined( &$sub );
-		}
+    if( defined( &$sub ) && &$sub( $topic, $web, $user, $installWeb ) ) {
+        foreach $h ( @registrableHandlers ) {
+            $sub = $p.'::'.$h;
+            &registerHandler( $h, $sub ) if defined( &$sub );
+        }
+
+        # read plugin preferences
+        $prefix = uc( $plugin ) . "_";
+        &TWiki::Prefs::getPrefsFromTopic( $installWeb, $plugin, $prefix );
+
+        $activeWebTopicList[@activeWebTopicList] = "$installWeb.$plugin";
     }
 }
 
@@ -141,10 +146,30 @@ sub initialize
 
     # for efficiency we register all possible handlers at once
     %registeredHandlers = ();  # needed when TWiki::initialize called more then once
+    @activeWebTopicList = ();
     my $plug    = "";
     foreach $plug ( @pluginList ) {
         &registerPlugin( $plug, @_ );
     }
+}
+
+# =========================
+sub handlePluginDescription
+{
+    my $text = "";
+    my $line = "";
+    my $pref = "";
+    my $webTopic = "";
+    foreach $webTopic ( @activeWebTopicList ) {
+        $webTopic =~ /^(.*)\.(.*)$/;
+        $pref = uc( $2 ) . "_SHORTDESCRIPTION";
+        $line = &TWiki::Prefs::getPreferencesValue( $pref );
+        if( $line ) {
+            $text .= "\t\* $webTopic: $line\n"
+        }
+    }
+
+    return $text;
 }
 
 # =========================
@@ -154,6 +179,7 @@ sub commonTagsHandler
 #    my( $text, $topic, $theWeb ) = @_;
     unshift @_, ( 'commonTagsHandler' );
     &applyHandlers;
+    $_[0] =~ s/%PLUGINDESCRIPTIONS%/&handlePluginDescription()/geo;
 }
 
 # =========================

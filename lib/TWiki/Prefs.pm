@@ -48,43 +48,41 @@ sub initializePrefs
     $defaultWebName = $theWebName;
     $altWebName = "";
     @finalPrefsKeys = ();
-    prvGetPrefsList( "$TWiki::twikiWebname\.$TWiki::wikiPrefsTopicname" ); # site-level
-    prvGetPrefsList( "$theWebName\.$TWiki::webPrefsTopicname" );           # web-level
-    prvGetPrefsList( $theWikiUserName );                                   # user-level
+    getPrefsFromTopic( $TWiki::twikiWebname, $TWiki::wikiPrefsTopicname ); # site-level
+    getPrefsFromTopic( $theWebName, $TWiki::webPrefsTopicname );           # web-level
+    if( $theWikiUserName =~ /^(.*)\.(.*)$/ ) {
+        getPrefsFromTopic( $1, $2 );                                       # user-level
+    }
 
     return;
 }
 
 
 # =========================
-sub prvGetPrefsList
+sub getPrefsFromTopic
 {
-    my ( $theWebTopic ) = @_;
+    my ( $theWeb, $theTopic, $theKeyPrefix ) = @_;
 
-    my $topicName = $theWebTopic;
-    my $webName = $TWiki::mainWebname;
-    $topicName =~ s/([^\.]*)\.(.*)/$2/o;    # "Web.TopicName" to "TopicName"
-    if( $2 ) {
-        $webName = $1;
-    }
-    my $text = &TWiki::Store::readWebTopic( $webName, $topicName );  # read topic text
-    $text =~ s/\r//go;                            # cut CR
-    my $key;
-    my $value;
+    my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+    $text =~ s/\r/\n/go;
+    $text =~ s/\n+/\n/go;
+
+    my $keyPrefix = $theKeyPrefix || "";  # prefix is for plugin prefs
+    my $key = "";
+    my $value ="";
     my $isKey = 0;
     foreach( split( /\n/, $text ) ) {
         if( /^\t+\*\sSet\s([a-zA-Z0-9_]*)\s\=\s*(.*)/ ) {
             if( $isKey ) {
                 prvAddToPrefsList( $key, $value );
             }
-            $key = $1;
+            $key = "$keyPrefix$1";
             $value = $2 || "";
             $isKey = 1;
         } elsif ( $isKey ) {
             if( ( /^\t+/ ) && ( ! /^\t+\*/ ) ) {
                 # follow up line, extending value
-                $value .= "\n";
-                $value .= $_;
+                $value .= "\n$_";
             } else {
                 prvAddToPrefsList( $key, $value );
                 $isKey = 0;
@@ -195,8 +193,8 @@ sub getPreferencesValue
             @finalPrefsKeys = ();
             my @saveKeys    = @prefsKeys; # quick hack, this stinks
             my @saveValues  = @prefsValues; # ditto
-            prvGetPrefsList( "$TWiki::twikiWebname\.$TWiki::wikiPrefsTopicname" );
-            prvGetPrefsList( "$altWebName\.$TWiki::webPrefsTopicname" );
+            getPrefsFromTopic( $TWiki::twikiWebname, $TWiki::wikiPrefsTopicname );
+            getPrefsFromTopic( $altWebName, $TWiki::webPrefsTopicname );
             @altPrefsKeys   = @prefsKeys; # quick hack, this stinks
             @altPrefsValues = @prefsValues; # quick hack, this stinks
             @prefsKeys      = @saveKeys; # quick hack, this stinks
