@@ -3,6 +3,9 @@
 %TMPL:DEF{"webaction"}% *Rename and choose parameters* %TMPL:END%
 %TMPL:DEF{"newtopic"}%<input name="newtopic" value="%TOPIC%" />%TMPL:END%
 %TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}%</select>%TMPL:END%
+%TMPL:DEF{"notes"}%Please choose a
+<a target="WikiWord" onClick="return launchWindow('%TWIKIWEB%','WikiWord')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WikiWord">WikiWord</a>
+for the new topic name, otherwise automatic linking may not work.%TMPL:END%
 %TMPL:DEF{"topicaction"}%
  <input type="submit" value="Rename/Move" />
  %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
