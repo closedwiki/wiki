@@ -51,11 +51,13 @@ sub match {
 
         &$matchCallback($distribution, $location, $pathname, $relativeFile, $digest);
     };
-    
-    foreach my $occurance (FileDigest::retreiveOccurancesForDistribution($distribution)) {
+
+    my @occurances = FileDigest::retreiveOccurancesForDistribution($distribution);
+    foreach my $occurance (@occurances) {
 	my ($filename, $digest) = @{$occurance};
 	&$findCallback($filename, $digest);
     }
+    return $#occurances;
 }
 
 

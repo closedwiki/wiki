@@ -1,10 +1,23 @@
-%META:TOPICINFO{author="guest" date="1091451960" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="TWikiGuest" date="1092833628" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="TWikiReleaseTrackerPlugin"}%
-%DIFFWIKI{}%
-
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> 
 
-|*From: <select name="from" size="1"> <option>%URLPARAM{"from" default="localInstallation"}%<option>localInstallation</option><option>TWiki19990901</option><option>TWiki20000501</option><option>TWiki20001201</option><option>TWiki20010901p0</option><option>TWiki20011201</option><option>TWiki20020316beta</option><option>TWiki20020414beta</option><option>TWiki20020803beta</option><option>TWiki20021210beta</option><option>TWiki20021217beta</option><option>TWiki20021229beta</option><option>TWiki20021230beta</option><option>TWiki20030201</option><option>TWiki20030811beta</option><option>TWiki20031218beta</option><option>TWiki20040119beta</option><option>TWiki20040320beta</option><option>TWiki20040507beta</option><option></select>*|*To: <select name="to" size="1"> <option>%URLPARAM{"to" default="TWiki20011201"}%<option>localInstallation</option><option>TWiki19990901</option><option>TWiki20000501</option><option>TWiki20001201</option><option>TWiki20010901p0</option><option>TWiki20011201</option><option>TWiki20020316beta</option><option>TWiki20020414beta</option><option>TWiki20020803beta</option><option>TWiki20021210beta</option><option>TWiki20021217beta</option><option>TWiki20021229beta</option><option>TWiki20021230beta</option><option>TWiki20030201</option><option>TWiki20030811beta</option><option>TWiki20031218beta</option><option>TWiki20040119beta</option><option>TWiki20040320beta</option><option>TWiki20040507beta</option><option></select>*|*Status: <select name="statusFilter" size="1"> <option>%URLPARAM{"statusFilter" default="From"}%</option> <option>FSCS</option> <option>FSCD</option> <option>FDCS</option> <option>FDCD</option> <option>all</option></select>*| <input type=checkbox name="debug" default=%URLPARAM{"debug"}%> | <input type="submit" value="Go" /></nobr> |
+|*From: <select name="from" size="1"> <option>%URLPARAM{"from" default="localInstallation"}%</option>%DIFFWIKIINDEX{distributions format="<option>$name</option>"}%</select>*| *To: <select name="to" size="1"> <option>%URLPARAM{"to" default="TWiki20011201"}%<option>all</option><option>localInstallation</option>%DIFFWIKIINDEX{distributions format="<option>$name</option>"}%</select>*|*Status: <select name="statusFilter" size="1"> <option>%URLPARAM{"statusFilter" default="From"}%</option> <option value=FSCS>File Same, Content Same</option> <option value=FSCD>File Same, Content Different</option> <option value=FDCS>File Different, Content Same</option> <option value=FDCD>File Different, Content Different</option> <option>all</option></select>*| <input type=checkbox name="debug" default=%URLPARAM{"debug"}%> | <input type="submit" value="Go" /></nobr> | <A HREF='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?from=%URLPARAM{"to"}%&to=%URLPARAM{"from"}%'>Swap</A> |
 </form>
 
+----
+
+%DIFFWIKI{}%
+
+----
+
+Notes:
+	* "From" is usually set to 'localInstallation"
+	* "To" is usually set to correspond to your TWiki version. TWiki says you are running version '%WIKIVERSION%': 
+	* The Status filter is most usefully set to "File Same, Content Different" 
+	* The checkbox turns on copious debug information
+
 -- TWiki.MartinCleaver - 29 Jul 2004
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->

@@ -13,12 +13,12 @@ The results are generated here live - you can either manually compare them or ru
 %STARTINCLUDE%
 ---++ testInstallation
 <pre>
-%INCLUDE{http://cleaver.org/twiki/pub/TWiki/TRTTestSuite/testInstallation.md5}%
+%INCLUDE{%ATTACHURL%/testInstallation.md5}%
 </pre>
 
 ---++ testDistros
 <pre>
-%INCLUDE{http://cleaver.org/twiki/pub/TWiki/TRTTestSuite/testDistros.md5}%
+%INCLUDE{%ATTACHURL%/testDistros.md5}%
 </pre>
 %STOPINCLUDE%
 
@@ -26,7 +26,7 @@ The results are generated here live - you can either manually compare them or ru
 %INCLUDE{%ATTACHURL%/test1.correctResults}%
 
 ---+++ Actual Test
-%DIFFWIKI{from="localInstallation" indexTopic="TWiki.TRTTestSuite" statusFilter="all"}% 
+%DIFFWIKI{from="localInstallation" to="," indexTopic="TWiki.TRTTestSuite" statusFilter="all"}% 
 
 ----
 
@@ -78,3 +78,6 @@ The results are generated here live - you can either manually compare them or ru
 %META:FILEATTACHMENT{name="test3.correctResults" attr="" comment="" date="1090726845" path="TWiki could just scan the plugins directory for attachments" size="592" user="MartinCleaver" version="1.1"}%
 %META:FILEATTACHMENT{name="test4.correctResults" attr="" comment="" date="1090726845" path="TWiki could just scan the plugins directory for attachments" size="592" user="MartinCleaver" version="1.1"}%
 %META:FILEATTACHMENT{name="test5.correctResults" attr="" comment="" date="1090726845" path="TWiki could just scan the plugins directory for attachments" size="592" user="MartinCleaver" version="1.1"}%
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
