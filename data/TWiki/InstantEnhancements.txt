@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092548024" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093211669" format="1.0" version="1.3"}%
 ---+!! Instant TWiki Site Enhancements
 
 These quick enhancements are aimed at improving TWiki's ease-of-use.  New TWiki site administrators are especially encouraged to review this document for ideas before deploying a new TWikiSite. The metaphor of building a house is useful.  The listed enhancements are some of the details possible when moving into a new office or home. These small changes can make a *big* differences for user satisfaction at your site. All modifications can be done through your Web browser, and they don't take more then in a couple of minutes.  No system administration expertise is required. Some of these enhancements are also mentioned in the reference manual and other topics.
@@ -131,9 +131,9 @@ The SEARCH variable has many more formatting options, see TWikiVariables.
 Here, last 15 is formatted into neat table.
 
 <verbatim>
-&lt;font size="-1">&lt;table>
- %SEARCH{ "\.*" scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on"  format="&lt;tr>&lt;td>  [[$topic]] &lt;/td>&lt;td>  $wikiusername  &lt;/td>&lt;td> $date  &lt;/td>&lt;/tr>" limit="15" }%
- &lt;/table>&lt;/font>
+<table>
+%SEARCH{ "\.*" scope="topic" regex="on" nosearch="on" nototal="on" order="modified" reverse="on"  format="<tr><td>  [[$topic][$topic]] </td><td>  $wikiusername  </td><td> $date  </td></tr>" limit="15" }%
+</table>
 </verbatim>
 
 ---
