@@ -155,8 +155,7 @@ sub searchWeb
         }
         $spacedTopic = spacedTopic( $renameTopic );
         $spacedTopic = $renameWeb . '\.' . $spacedTopic if( $renameWeb );
-	# TODO: i18n fix
-        $theSearchVal = "(^|[^A-Za-z0-9_])$theSearchVal" . '([^A-Za-z0-9_]|$)|' .
+        $theSearchVal = "(^|[^[:alpha:][:digit:]_])$theSearchVal" . '([^A[:alpha:][:digit:]_]|$)|' .
                         '(\[\[' . $spacedTopic . '\]\])';
     } else {
         $tmpl = &TWiki::Store::readTemplate( "search" );
@@ -594,10 +593,9 @@ sub searchWeb
 
                    if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
                        # Case insensitive option is required to get [[spaced Word]] to match
-		       # TODO: i18n fix
-                       my $match =  "(^|[^A-Za-z0-9_.])($originalSearch)(?=[^A-Za-z0-9_]|\$)";
-		       # FIXME: Should use /o here since $match is based on
-		       # search string.
+                       my $match =  "(^|[^[:alpha:][:digit:]_.])($originalSearch)(?=[^[:alpha:][:digit:]]|\$)";
+                       # FIXME: Should use /o here since $match is based on
+                       # search string.  I would think shouldn't use because based on search string JohnTalintyre
                        my $subs = s|$match|$1<font color="red">$2</font>&nbsp;|g;
                        $match = '(\[\[)' . "($spacedTopic)" . '(?=\]\])';
                        $subs += s|$match|$1<font color="red">$2</font>&nbsp;|gi;
