@@ -39,9 +39,11 @@ The TRT centres on the concept of a unique CONTENT identifier - instead of ident
 ---++ Plugin Usage Instructions
 
 ---+++ Basic usage
-
+---++++ Web usage
 	* The TRT is shipped with data about standard TWiki "Production Releases". By default, the TRTChangesFromDistribution topic automatically generates a report comparing your local installation against the standard TWiki distribution specified by the WIKIVERSION variable. %RED%Note:%ENDCOLOR% If you are running a "Beta Release," you will need to download the "beta.md5" file from TWiki:Plugins.TWikiReleaseTrackerPluginDev and attach it to your local version of the %TOPIC% topic. 
 	* To view the changes for a particular file listed in the report, click on the corresponding link in the "Status" column.
+---++++ Command line usage
+        * This is strictly experimental - see TWiki:Plugins.TWikiShellContrib and  TWiki:Plugins.TWikiReleaseTrackerPluginCommands
 
 ---+++ Comparing differences between standard TWiki installations
 
@@ -110,6 +112,7 @@ See the Parameters section for descriptions of the rest of these:
 |  Plugin Author: | TWiki:Main.MartinCleaver |
 |  Plugin Version: | %$DATE% (%$VERSION%) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  24 Oct 2004: | Minor bugfixes and inclusion of TWiki:Plugins.TWikiReleaseTrackerPluginCommands |
 |  29 Aug 2004: | Documentation update (thanks to TWiki:Main.LynnwoodBrown) |
 |  25 Aug 2004: | Diff is now passed the -w flag to ignore whitespace changes | 
 |  24 Aug 2004: | Bugfix when comparing two arbitrary versions |

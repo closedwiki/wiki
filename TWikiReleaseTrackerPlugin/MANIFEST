@@ -8,6 +8,7 @@
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/IndexDistributions.pm
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/InstallationWalker.pm
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/README
+./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/Commands.pm
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/TRTConfig.pm
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test1.actualResults
 ./lib/TWiki/Plugins/TWikiReleaseTrackerPlugin/test/test1.correctResults
