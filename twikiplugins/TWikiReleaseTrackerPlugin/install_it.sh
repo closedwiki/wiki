@@ -6,7 +6,8 @@ export TWIKI_LIBS=`echo $TWIKI_LIBSDIR*/lib/ | tr " " ":"`
 
 cd lib/TWiki/Plugins/TWikiReleaseTrackerPlugin
 
-for i in athenstwiki.mrjc.com/twiki beijingtwiki.mrjc.com/twiki cairotwiki.mrjc.com/twiki cleaver.org/twiki
+for i in beijingtwiki.mrjc.com/twiki
+#athenstwiki.mrjc.com/twiki beijingtwiki.mrjc.com/twiki cairotwiki.mrjc.com/twiki cleaver.org/twiki
 do
    echo "Installing to $i"
    export TWIKI_HOME=/home/mrjc/$i
