@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="PeterThoeny" date="1035268976" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1093126463" format="1.0" version="1.13"}%
 %TOC%
 %STARTINCLUDE%
----# 20-Minute TWiki
+---# 20-Minute TWiki Tutorial
 
 This step-by-step, hands-on tutorial gets you up to speed with all the TWikiSite basics, in _mere minutes_...
 <blockquote>
@@ -76,3 +76,4 @@ That's it! You're now equipped with all the TWiki essentials. You are ready to r
 __NOTE:__ When first using TWiki, it will probably seem strange to be able to change other people's postings - we're used to _separating_ individual messages, with  email, message boards, non-Wiki collaboration platforms. __Don't worry about it.__ You can't accidentally delete important stuff - you can always check previous versions, and copy-and-paste from them if you want to undo any changes. After a short while, TWiki-style free-form communication becomes second-nature. You'll expect it everywhere!
 
 -- Main.MikeMannix - 01 Dec 2001
+
