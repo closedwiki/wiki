@@ -1,2 +1,3 @@
-<!-- include from TWiki web to prevent broken links -->
+<!-- Include from TWiki web to avoid broken links. -->
+<!-- To edit, edit the FileAttachment topic in the TWiki web. -->
 %INCLUDE{"TWiki.FileAttachment"}%
