@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1042964520" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092558303" format="1.0" version="1.24"}%
 %TOC%
 %STARTINCLUDE%
 ---# Managing Webs
@@ -23,7 +23,7 @@ In either case you will want to be sure to verify that your new web has all the 
 
 <form name="admin" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 Create a new web by filling out this form. __Note:__ It is not recommended to create a new web for each little project. You can organize content within a web using TWikiForms and FormattedSearch. Cross-linking topics and search is easier if there are only a few larger webs.
-|  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | Enter a short name of up to 10 characters. The name must start with one or more upper case letters, followed by optional lower case letters or numbers; it cannot be a %TWIKIWEB%.WikiWord |
+|  *Name of new web:* | <input name="newweb" type="text" value="%URLPARAM{"newweb"}%" size="16" /> | Enter a short name of up to 10 characters. The name must start with an upper case letters, followed by optional upper or lower case letters or numbers |
 |  *Based on web:* | <select name="baseweb"> %WEBLIST{ "<option>$name</option>" webs="webtemplate,public" selection="_default" separator=" "}% </select> | Select a TemplateWeb |
 |  *Web color:* | <input name="webbgcolor" type="text" value="#D0D0D0" size="16" /> | Enter a StandardColors code for the web |
 |  *Description:<br /> &nbsp;<br /> &nbsp;* | <input type="text" name="sitemapwhat" value="" size="60" /><br /> Enter a short description of the web. Write =Web.TopicName= instead of just =TopicName= if you include links. This will list the web in the %TWIKIWEB%.SiteMap (leave field empty if you prefer not to update the directory.) ||
@@ -34,25 +34,29 @@ Create a new web by filling out this form. __Note:__ It is not recommended to cr
 <input name="action" type="hidden" value="createweb" />
 </form>
 
-*Note:* Attachments will NOT get copied over along with their topics.  This will be a feature added for the TWiki:Codev/CairoRelease.
-
-*Note:* This script does not yet edit the [[%TWIKIWEB%.TWikiPreferences]] file to update the =WIKIWEBLIST=.  This must be done by hand.
-
-The manage script while creating the new web will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are now used to dynamically generate the SiteMap.
+__Notes:__
+	* Attachments will NOT get copied over along with their topics
+	* The manage script while creating the new web will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
+	* This script does not edit the [[%TWIKIWEB%.TWikiPreferences]] file to update the =WIKIWEBLIST=.  This must be done by hand
+	* As of TWiki Release 01 Sep 2004, a web name can be a WikiWord. Prior to that it could be only =UPPER= or =UPPERlower=. A side effect of this is that if you do use a wiki name, =%<nop>WEB%= must be written as =&lt;nop&gt;%<nop>WEB%= or else it will try to link to a non-existing topic of that name
 
 ---++ Renaming or Deleting a Web
 
 Renaming or deleting a web requires direct access to the installation files on the host server. There are currently no browser-based equivalents of the Rename/move/delete topic tools for working with webs.
 
-*NOTE:* If you plan to rename the %WIKITOOLNAME%.%MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, default named =Main=. That means, every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
-	1. Prepare your site: Search each web for links to the target web, searching topic text for =Oldwebname.=, including the dot so you'll find references like =Oldwebname.SomeTopic=. 
-		* Make changes as required, to =Newwebname.SomeTopic= or better yet, to =%<nop>MAINWEB%.<nop>SomeTopic=.
-	1. Edit the %WIKIPREFSTOPIC% topic: Rename or delete the web from the =WIKIWEBLIST= variable.
-	1. Login to the %WIKITOOLNAME% server, via Telnet or FTP.
-	1. Go to =twiki/data= and rename or remove the web directory.
-	1. Go to =twiki/templates= and rename or remove the web directory if present.
-	1. Go to =twiki/pub= and rename or remove the web directory if present.
+---+++ Renaming the MAINWEB
 
--- %MAINWEB%.MikeMannix - 14 Sep 2001 <br />
--- %MAINWEB%.PeterThoeny - 07 Apr 2002 <br />
--- %MAINWEB%.GrantBow - 16 Jan 2003
+If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, default named =Main=. That means, every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
+	1. Prepare your site: Search each web for links to the target web, searching topic text for =Oldwebname.=, including the dot so you'll find references like =Oldwebname.SomeTopic=
+		* Make changes as required, to =Newwebname.SomeTopic= or better yet, to =%<nop>MAINWEB%.<nop>SomeTopic=
+	1. Edit the %WIKIPREFSTOPIC% topic: Rename or delete the web from the =WIKIWEBLIST= variable
+	1. Login to the %WIKITOOLNAME% server, via Telnet or FTP
+	1. Go to =twiki/data= and rename or remove the web directory
+	1. Go to =twiki/templates= and rename or remove the web directory if present
+		* __Note:__ See TWiki:Codev.RenameWebs for some complications
+	1. Go to =twiki/pub= and rename or remove the web directory if present
+
+-- TWiki:Main.MikeMannix - 14 Sep 2001 %BR%
+-- TWiki:Main.PeterThoeny - 07 Apr 2002 %BR%
+-- TWiki:Main.GrantBow - 16 Jan 2003
+
