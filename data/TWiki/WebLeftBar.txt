@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092608409" format="1.0" version="1.1"}%
-	* *[[%WIKILOGOURL%][TWiki.org]]*
+%META:TOPICINFO{author="PeterThoeny" date="1092718938" format="1.0" version="1.2"}%
+	* *[[%WIKILOGOURL%][TWiki]]*
 
 	* *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
 	* *[[%TWIKIWEB%.TWikiRegistration][Register]]*

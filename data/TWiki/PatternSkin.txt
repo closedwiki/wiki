@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092701025" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092718912" format="1.0" version="1.5"}%
 ---+!! Pattern skin
 
 *<nop>PatternSkin is developed to provide a CSS based default look and feel for TWiki - flexible and W3C-compliant.* Its layout and color scheme are designed to provide a nice, clean and productive _editing environment_. For use in corporate or perhaps in personal websites it should be fairly easy to tune the looks or even create a !PatternSkin-based new skin.
@@ -67,10 +67,10 @@ You can eiter:
 	* Change the =layout.css= and =style.css= attachment files for this topic (upload updated versions)
 	* In TWiki.TWikiPreferences, point the variables =TWIKILAYOUTURL= and =TWIKISTYLEURL= to other attachments, perhaps in another topic (your new skin topic?)
 
-If you want to change colors and white space of screen elements, modify =style.css=. <br/>
+If you want to change colors and white space of screen elements, modify =style.css=. %BR%
 If you want to change the positioning of screen elements, modify =layout.css=.
 
-See for practical details: PatternSkinCustomization <br />
+See for practical details: PatternSkinCustomization %BR%
 The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
 
 ---++ Customization
@@ -103,29 +103,26 @@ See: PatternSkinCustomization
 
 ---++ Related topics
 
-	* TWiki:TWiki/TWikiCss
-	* TWiki:TWiki/WebBottomBar
-	* TWiki:TWiki/WebLeftBar
-	* TWiki:TWiki/WebLeftBarExample
-	* TWiki:TWiki/WebLeftBarPersonalTemplate
-	* TWiki:TWiki/WebLeftBarCookbook
-	* TWiki:TWiki/WebTopBar
+	* TWikiCss
+	* WebBottomBar
+	* WebLeftBar
+	* WebLeftBarExample
+	* WebLeftBarPersonalTemplate
+	* WebLeftBarCookbook
+	* WebTopBar
 
 See also [[%TOPIC%#Further_reading][Further reading]] on this page.
 
 Other skins:
-	* TWiki:TWiki/TWikiSkins
-	* TWiki:TWiki/TWikiSkinBrowser
-
----
-
--- TWiki:Main/ArthurClemens - 16 Aug 2004
+	* TWikiSkins
+	* TWikiSkinBrowser
 
 ---++ Feedback
 
-Leave remarks, suggestions and other feedback in [[Plugins.PatternSkinDev]].
+Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
 
-%META:FILEATTACHMENT{name="PatternSkin.zip" attr="" comment="Skin package v.1.0.4" date="1092701504" path="PatternSkin.zip" size="162422" user="ArthurClemens" version="1.4"}%
+-- TWiki:Main/ArthurClemens - 16 Aug 2004
+
 %META:FILEATTACHMENT{name="i_arrow_down.gif" attr="" comment="Icon: down arrow; used for Table Of Contents" date="1092634909" path="i_arrow_down.gif" size="56" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="layout.css" attr="" comment="Layout: positioning of page elements" date="1092634933" path="layout.css" size="1713" user="ArthurClemens" version="1.1"}%
 %META:FILEATTACHMENT{name="style.css" attr="" comment="Style: appearance: margins, fonts, colors" date="1092647527" path="style.css" size="26003" user="ArthurClemens" version="1.2"}%
