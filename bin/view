@@ -132,7 +132,7 @@ sub main
 
     } else {
         $rev = 1;
-        if( &TWiki::isWikiName( $topic ) ) {
+        if( ( &TWiki::isWikiName( $topic ) ) || ( $topic =~ /^[A-Z]{3,}$/ ) ) {
             ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicViewTemplate" );
         } else {
             ( $meta, $text ) = &TWiki::Store::readTemplateTopic( "WebTopicNonWikiTemplate" );
