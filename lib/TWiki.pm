@@ -190,7 +190,7 @@ sub initialize
     # a full path starting with '/cgi-bin/...'.
 
     # Fix path_info if broken - FIXME: extreme brokenness may require more work
-    $thePathInfo =~ s!$scriptUrlPath/[-.[:alnum:]]+$scriptSuffix/!/!;
+    $thePathInfo =~ s!$scriptUrlPath/[-.A-Z]+$scriptSuffix/!/!i;
     ## writeDebug( "===== thePathInfo after cleanup = $thePathInfo" );
 
     if( $thePathInfo =~ /\/(.*)\/(.*)/ ) {
