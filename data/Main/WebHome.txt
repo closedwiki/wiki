@@ -1,4 +1,4 @@
-Welcome to the home of TWiki.%WEB%. This is a web based collaboration area to get to know the TWiki tool.
+Welcome to the home of %WIKITOOLNAME%.%WEB%. This is a web based collaboration area to get to know the %WIKITOOLNAME% tool.
 
 <table><tr><td>
 <a href="http://www.mindspring.com/~peterthoeny/twiki/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0"></a>
@@ -7,28 +7,30 @@ Welcome to the home of TWiki.%WEB%. This is a web based collaboration area to ge
 </td></tr>
 </table>
 
-Good *starting points* at the TWiki.Main web are:
-	* WelcomeGuest: Look here first to get you rolling on TWiki.
-	* TWikiWeb: Explains what a TWiki web is.
-	* <b> TWikiUsers: </b> List of visitors to this TWiki web.
+Good *starting points* at the %WIKITOOLNAME%.%WEB% web are:
+	* WelcomeGuest: Look here first to get you rolling on %WIKITOOLNAME%.
+	* TWikiWeb: Explains what a %WIKITOOLNAME% web is.
+	* <b> TWikiUsers: </b> List of visitors to this %WIKITOOLNAME% web.
 
 	* GoodStyle: Things to consider when changing text.
 	* TextFormattingRules: Easy to learn rules when editing text.
 	* TextFormattingFAQ: Answers to frequently asked questions about text formatting.
-	* TestArea: The place to get your virtual TWiki hands dirty!
+	* TestArea: The place to get your virtual %WIKITOOLNAME% hands dirty!
 
 <FORM action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/">
-	* <A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=.*">Topic index</A>: List up all TWiki.%WEB% topics in alphabetical order.
-	* <A HREF="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebSearch">Search</A>: Full text search of TWiki.%WEB%.
-	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> <INPUT type="hidden" name="scope" value="text"> &nbsp;&nbsp; (More options in WebSearch)
-	* <A HREF="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%">Changes</A>: Find out recent changes of the %WEB% web.
-	* WebNotify: Subscribe to be automatically notified when something changes in TWiki.%WEB%.
-	* WebStatistics: View access statistics of the TWiki.%WEB% web.
+	* <A HREF="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=topic&regex=on&search=.*">Topic index</A>: List up all %WIKITOOLNAME%.%WEB% topics in alphabetical order.
+	* <A HREF="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebSearch">Search</A>: Full text search of the %WIKITOOLNAME%.%WEB% web.
+	* <INPUT type="text" name="search" size="32"> <INPUT type="submit" value="Search"> &nbsp;&nbsp; (More options in WebSearch)
+	* <A HREF="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%">Changes</A>: Find out recent changes of the %WIKITOOLNAME%.%WEB% web.
+	* %NOTIFYTOPIC%: Subscribe to be automatically notified when something changes in the %WIKITOOLNAME%.%WEB% web.
+	* %STATISTICSTOPIC%: View access statistics of the %WIKITOOLNAME%.%WEB% web.
+	* %WEBPREFSTOPIC%: Preferences of the %WIKITOOLNAME%.%WEB% web.
+	* %MAINWEB%.%WIKIPREFSTOPIC%: %WIKITOOLNAME% site-level preferences .
 </FORM>
 
 *Notes:*
-	* You are currently in the TWiki.%WEB% web. The color code for this web is a light yellow background, so you know where you are.
+	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light yellow background, so you know where you are.
 
 ----
 
-%INCLUDE{"wikiwebtable.inc"}%
+%INCLUDE{"Main/TWikiWebsTable.txt"}%
