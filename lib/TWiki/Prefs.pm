@@ -101,7 +101,7 @@ sub getPrefsFromTopic
             $key = $field->{"name"};
             $value = $field->{"value"};
             my $attributes = $field->{"attributes"};
-            if( $attributes =~ /[S]/o ) {
+            if( $attributes && $attributes =~ /[S]/o ) {
                 prvAddToPrefsList( $key, $value );
             }
         }
