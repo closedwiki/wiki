@@ -1,0 +1,9 @@
+%META:TOPICINFO{author="PeterThoeny" date="1071955740" format="1.0" version="1.1"}%
+The site-level preferences are located in [[%TWIKIWEB%.%TOPIC%]]
+<!-- keep this as a security measure:
+	* Set ALLOWTOPICCHANGE = TWikiAdminGroup
+	* Set ALLOWTOPICRENAME = TWikiAdminGroup
+-->
+
+
+-- Main.PeterThoeny - 20 Dec 2003
