@@ -18,6 +18,8 @@ my $cgibin      = "/Users/$account/Sites/cgi-bin";
 my $lib		= $cgibin . '/lib';
 my $cpan        = "$lib/CPAN";
 
+`mkdir -p $cpan; chmod -R 777 $cpan` unless -d $cpan;
+
 ################################################################################
 
 installLocalModules({
@@ -138,3 +140,45 @@ sub checkdir {
 }
 
 ################################################################################
+
+__END__
+################################################################################
+[~/.cpan/CPAN/MyConfig.pm]:
+
+$CPAN::Config = {
+  'build_cache' => q[10],
+  'build_dir' => q[/Users/twiki/.cpan/build],
+  'cache_metadata' => q[1],
+  'cpan_home' => q[/Users/twiki/.cpan],
+  'ftp' => q[/usr/bin/ftp],
+  'ftp_proxy' => q[],
+  'getcwd' => q[cwd],
+  'gpg' => q[],
+  'gzip' => q[/sw/bin/gzip],
+  'histfile' => q[/Users/twiki/.cpan/histfile],
+  'histsize' => q[100],
+  'http_proxy' => q[],
+  'inactivity_timeout' => q[0],
+  'index_expire' => q[1],
+  'inhibit_startup_message' => q[0],
+  'keep_source_where' => q[/Users/twiki/.cpan/sources],
+  'lynx' => q[],
+  'make' => q[/usr/bin/make],
+  'make_arg' => q[],
+  'make_install_arg' => q[],
+  'makepl_arg' => q[PREFIX=/Users/twiki/Sites/cgi-bin/lib/CPAN/],
+  'ncftp' => q[],
+  'ncftpget' => q[],
+  'no_proxy' => q[],
+  'pager' => q[/usr/bin/less],
+  'prerequisites_policy' => q[follow],
+  'scan_cache' => q[atstart],
+  'shell' => q[/bin/bash],
+  'tar' => q[/sw/bin/tar],
+  'term_is_latin' => q[1],
+  'unzip' => q[/sw/bin/unzip],
+  'urllist' => ["file:///Users/twiki/Sites/cpan/MIRROR/TWIKI/"],
+  'wget' => q[/sw/bin/wget],
+};
+1;
+__END__
