@@ -1,11 +1,10 @@
 # Tests for module ActionSet.pm
 use lib ('fakewiki');
 use lib ('../../../..');
-use lib ('../../../../TWiki/Plugins');
-use ActionTrackerPlugin::Action;
-use ActionTrackerPlugin::ActionSet;
-use ActionTrackerPlugin::Attrs;
-use ActionTrackerPlugin::Format;
+use TWiki::Plugins::ActionTrackerPlugin::Action;
+use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::ActionTrackerPlugin::Format;
 use Assert;
 use TWiki::TestMaker;
 use TWiki::Func;

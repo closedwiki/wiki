@@ -2,10 +2,9 @@
 use lib ('fakewiki');
 use lib ('.');
 use lib ('../../../..');
-use lib ('../../../../TWiki/Plugins');
-use ActionTrackerPlugin::Action;
-use ActionTrackerPlugin::Format;
-use ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::ActionTrackerPlugin::Action;
+use TWiki::Plugins::ActionTrackerPlugin::Format;
+use TWiki::Plugins::ActionTrackerPlugin::Attrs;
 use Assert;
 use Time::ParseDate;
 require CGI;
@@ -69,14 +68,24 @@ require CGI;
     Assert::assert(!$action->isLate());
   }
 
+  sub testCommas {
+    my $action =
+      new ActionTrackerPlugin::Action( "Test", "Topic", 0,
+				       "who=\"JohnDoe,SlyStallone\",due=\"2 Jun 02\",notify=\"SamPeckinpah,QuentinTarantino\",creator=\"ThomasMoore\"", "Sod");
+    Assert::sEquals($action->{who},"Main.JohnDoe,Main.SlyStallone");
+    Assert::sEquals($action->{notify},"Main.SamPeckinpah,Main.QuentinTarantino");
+  }
+
   sub testMatches {
     my $action =
       new ActionTrackerPlugin::Action( "Test", "Topic", 0,
-				       "who=\"JohnDoe,SlyStallone\" due=\"2 Jun 02\" state=open notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
+				       "who=\"JohnDoe,SlyStallone,TestRunner\" due=\"2 Jun 02\" state=open notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
 
     my $attrs = new ActionTrackerPlugin::Attrs("who=JohnDoe"); 
-    Assert::assert($action->matches($attrs));
+    Assert::assert($action->matches($attrs),$attrs->toString());
     $attrs = new ActionTrackerPlugin::Attrs("who=Main.JohnDoe"); 
+    Assert::assert($action->matches($attrs));
+    $attrs = new ActionTrackerPlugin::Attrs("who=me"); 
     Assert::assert($action->matches($attrs));
     $attrs = new ActionTrackerPlugin::Attrs("who=JohnSmith"); 
     Assert::assert(!$action->matches($attrs));
@@ -155,7 +164,7 @@ require CGI;
     Assert::assert($action->matches($attrs), $action->secsToGo());
 
     # now again, only closed
-    $action = new ActionTrackerPlugin::Action( "Test", "Topic", 0, "who=\"JohnDoe,SlyStallone\" due=\"2 Jun 02\" closed=\"2 Dec 00\" closer=\"Death\" notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
+    $action = new ActionTrackerPlugin::Action( "Test", "Topic", 0, "who=\"JohnDoe,SlyStallone\",due=\"2 Jun 02\" closed=\"2 Dec 00\" closer=\"Death\" notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
     $attrs = new ActionTrackerPlugin::Attrs("closed");
     Assert::assert($action->matches($attrs));
     $attrs = new ActionTrackerPlugin::Attrs("closer=Death");
@@ -166,9 +175,9 @@ require CGI;
 
   sub testStringFormattingOpen {
     my $action = new ActionTrackerPlugin::Action( "Test", "Topic", 0, "who=\"JohnDoe\" due=\"2 Jun 02\" state=open notify=\"SamPeckinpah,QuentinTarantino\" created=\"1 Jan 1999\" creator=\"ThomasMoore\"", "A new action");
-    my $fmt = new ActionTrackerPlugin::Format("","","Who: \$who \$who\n");
+    my $fmt = new ActionTrackerPlugin::Format("|Who|Due|","|\$who|","Who: \$who \$who\n","\$who,\$due","vertical");
     my $s = $fmt->formatStringTable([$action]);
-    Assert::sEquals($s, "Who: Main.JohnDoe Main.JohnDoe\n");
+    Assert::sEquals($s, "Who: Main.JohnDoe Main.JohnDoe\n",$fmt->toString());
     $fmt = new ActionTrackerPlugin::Format("","","Due: \$due\n");
     # make it late
     ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
@@ -241,7 +250,7 @@ require CGI;
     ActionTrackerPlugin::Action::forceTime("3 Jun 2002");
     $s = $fmt->formatHTMLTable([$action], "href", 0);
     Assert::sContains($s,
-		    "<td bgcolor=\"yellow\"> Sun, 2 Jun 2002 (LATE) </td>");
+		    "<td bgcolor=\"yellow\"> Sun, 2 Jun 2002 </td>");
     # make it ontime
     ActionTrackerPlugin::Action::forceTime("1 Jun 2002");
     $fmt = new ActionTrackerPlugin::Format("", "| \$due |", "");
@@ -300,7 +309,7 @@ require CGI;
   sub testAutoPopulation {
     my $action =
       new ActionTrackerPlugin::Action( "Test", "Topic", 7,
-				       "due=\"2 Jun 02\" state=closed", "A new action");
+				       "state=closed", "A new action");
     ActionTrackerPlugin::Action::forceTime("31 May 2002");
     my $tim = Time::ParseDate::parsedate("31 May 2002");
     my @els = localtime( $tim );
@@ -313,6 +322,13 @@ require CGI;
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|Main.TestRunner|Fri, 31 May 2002|");
     $fmt = new ActionTrackerPlugin::Format("","","|\$closer|\$closed|");
+    $s = $fmt->formatStringTable([$action]);
+    Assert::sEquals($s, "|Main.TestRunner|Fri, 31 May 2002|");
+    $action =
+      new ActionTrackerPlugin::Action( "Test", "Topic", 8,
+				       "who=me", "action");
+    $action->populateMissingFields();
+    $fmt = new ActionTrackerPlugin::Format("","","|\$who|\$due|");
     $s = $fmt->formatStringTable([$action]);
     Assert::sEquals($s, "|Main.TestRunner|Fri, 31 May 2002|");
   }
@@ -456,6 +472,15 @@ require CGI;
     Assert::assert(!$action->matches($attrs));
     $attrs = ActionTrackerPlugin::Attrs->new("sentence=\"\\d+ years\"");
     Assert::assert($action->matches($attrs));
+
+    $s = ActionTrackerPlugin::Action::extendTypes("|state,select,17,life,\"5 years\",\"community service\"|");
+    Assert::assert(!defined($s),$s);
+    ActionTrackerPlugin::Action::unextendTypes();
+    $s = ActionTrackerPlugin::Action::extendTypes("|who,text,17|");
+    Assert::sEquals($s,"Attempt to redefine attribute 'who' in EXTRAS" );
+    $s = ActionTrackerPlugin::Action::extendTypes("|fleegle|");
+    Assert::sEquals($s,"Bad EXTRAS definition 'fleegle' in EXTRAS" );
+    ActionTrackerPlugin::Action::unextendTypes();
   }
 
   sub testCreateFromQuery {
@@ -527,7 +552,7 @@ require CGI;
       Assert::assert($s =~ s/<th>$n<\/th>//, $n);
       $s =~ s/<td><input type=\"text\" name=\"$n\" value=\"(.*?)\" size=\"(.*?)\/><\/td>//gim;
     }
-    Assert::assert($s =~ s/<td><SELECT NAME=\"state\" SIZE=\"1\"><OPTION NAME=\"open\">open<\/OPTION><OPTION NAME=\"closed\">closed<\/OPTION><\/SELECT><\/td>//om);
+    Assert::assert($s =~ s/<td><SELECT NAME=\"state\" SIZE=\"1\"><OPTION NAME=\"open\" SELECTED>open<\/OPTION><OPTION NAME=\"closed\">closed<\/OPTION><\/SELECT><\/td>//om);
     Assert::assert($s =~ s/<table border=\"1\">//mo);
     $s =~ s/<tr( bgcolor=\"orange\")?>//gom;
     $s =~ s/<tr valign=\"top\">//gos;

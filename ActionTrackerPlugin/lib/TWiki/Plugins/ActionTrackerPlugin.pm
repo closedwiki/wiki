@@ -86,7 +86,13 @@ sub initPlugin {
   my $extras =
     TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_EXTRAS" );
 
-  $types = ActionTrackerPlugin::Action::extendTypes( $extras ) if ( $extras );
+  if ( $extras ) {
+    my $e = ActionTrackerPlugin::Action::extendTypes( $extras );
+    if ( defined( $e )) {
+print STDERR "Bottlin $e\n";
+      TWiki::Func::writeWarning( "- TWiki::Plugins::ActionTrackerPlugin ERROR $e" );
+    }
+  }
 
   &TWiki::Func::writeDebug( "- TWiki::Plugins::ActionTrackerPlugin::initPlugin($web.$topic) is OK" ) if $debug;
   $pluginInitialized = 0;
@@ -178,8 +184,11 @@ sub beforeEditHandler {
   my $web = $_[2];
 
   my $query = TWiki::Func::getCgiQuery();
+  # editaction.tmpl is a sub-template inserted into the parent template
+  # as %TEXT%. This is done so we can use the standard template mechanism
+  # without screwing up the content of the subtemplate.
   my $tmpl = TWiki::Func::readTemplate( "editaction", "");
-  my $date = &TWiki::getGmDate();
+  my $date = TWiki::getGmDate();
   $tmpl =~ s/%DATE%/$date/go;
   my $user = TWiki::Func::getWikiUserName();
   $tmpl =~ s/%WIKIUSERNAME%/$user/go;
@@ -192,7 +201,9 @@ sub beforeEditHandler {
   my $fields = $query->hidden( -name=>'closeactioneditor', -value=>1 );
   $fields .= $query->hidden( -name=>'cmd', -value=>"" );
 
-  # Throw away $_[0] and re-read the topic, extracting meta-data
+  # Throw away $_[0] and re-read the topic, extracting meta-data.
+  # Oh, how I wish the topic reading/writing was smarter! Or even
+  # that already extracted meta-data was passed in here!
   my $oldText = TWiki::Func::readTopicText( $_[2], $_[1]);
   my $text = "";
   foreach my $line ( split( /\n/, $oldText ) ) {
@@ -215,7 +226,8 @@ sub beforeEditHandler {
     }
   }
 
-  # Find the action
+  # Find the action. This re-reads the topic, but the cost doesn't seem
+  # to be too high.
   my $uid = $query->param( "action" );
   my ( $action, $pretext, $posttext ) =
     ActionTrackerPlugin::Action::findActionByUID( $webName, $topic, $text, $uid );
@@ -235,9 +247,11 @@ sub beforeEditHandler {
   if ( TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_NOPREVIEW" )) {
     $submitCmd = "Save";
     if ( $useNewWindow ) {
-      # I'd like to do this, but not sure how. Like this, the ONSUBMIT
-      # overrides the ACTION and closes the window before the POST
-      # is done. There's probably something like window.submit().
+      # I'd like close the subwindow here, but not sure how. Like this,
+      # the ONCLICK overrides the ACTION and closes the window before
+      # the POST is done. All the various solutions I've found on the
+      # web do something like "wait x seconds" before closing the
+      # subwindow, but this seems very risky.
       #$submitScript = "ONCLICK=\"document.form.submit();window.close();return true\"";
     }
   }
@@ -272,9 +286,12 @@ sub beforeEditHandler {
       TWiki::Func::getPreferencesValue( 'EDITBOXWIDTH' );
   $tmpl =~ s/%EBW%/$ebw/go;
   $text = $action->{text};
+  # Process the text so it's nice to edit. This gets undone in Action.pm
+  # when the action is saved.
   $text =~ s/^\t/   /gos;
   $text =~ s/<br( \/)?>/\n/gios;
   $text =~ s/<p( \/)?>/\n\n/gios;
+
   $tmpl =~ s/%TEXT%/$text/go;
   $tmpl =~ s/%HIDDENFIELDS%/$fields/go;
 
@@ -385,6 +402,7 @@ sub handleActionSearch {
   my $fmts = $attrs->remove( "format" );
   my $hdrs = $attrs->remove( "header" );
   my $orient = $attrs->remove( "orient" );
+  my $sort = $attrs->remove( "sort" );
   if ( defined( $fmts ) || defined( $hdrs ) || defined( $orient )) {
     if ( !defined( $fmts ) ) {
       # header not defined; use default
@@ -402,13 +420,8 @@ sub handleActionSearch {
     $fmt = $defaultFormat;
   }
 
-  my $sort = $attrs->remove( "sort" );
-
   my $actions = ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
-
-  # by default actions will be sorted by due date
   $actions->sort( $sort );
-
   return embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow );
 }
 
@@ -427,10 +440,11 @@ sub _init_defaults
         $libsFound = require TWiki::Plugins::ActionTrackerPlugin::Action;
         require TWiki::Plugins::ActionTrackerPlugin::ActionSet;
         require TWiki::Plugins::ActionTrackerPlugin::Attrs;
+        require TWiki::Plugins::ActionTrackerPlugin::AttrDef;
       };
       unless( $libsFound ) {
         # Could not find ActionTrackerPlugin utility libs possibly because
-        # of relative use lib dir and chdir after initialization.
+        # of relative use of lib dir and chdir after initialization.
         # Try again with absolute TWiki lib dir path
         eval {
           my $libDir = TWiki::getTWikiLibDir();
@@ -439,6 +453,7 @@ sub _init_defaults
           $libsFound = require "$libDir/TWiki/Plugins/ActionTrackerPlugin/Action.pm";
           require "$libDir/TWiki/Plugins/ActionTrackerPlugin/ActionSet.pm";
           require "$libDir/TWiki/Plugins/ActionTrackerPlugin/Attrs.pm";
+          require "$libDir/TWiki/Plugins/ActionTrackerPlugin/AttrDef.pm";
         };
       }
 #      @TWiki::Plugins::ISA = qw(
@@ -473,7 +488,10 @@ function editWindow(url) {
 sub handleActionNotify {
   my ( $web, $expr ) = @_;
 
-  use TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
+  eval {
+    require TWiki::Plugins::ActionTrackerPlugin::ActionNotify;
+  };
+
   my $text = ActionTrackerPlugin::ActionNotify::doNotifications( $web, $expr, 1 );
 
   $text =~ s/<html>/<\/pre>/gos;

@@ -260,6 +260,9 @@ use integer;
     return $this->_generateHTMLTable( \@rows, \@anchors );
   }
 
+  # PRIVATE generate an HTML table from a 2D-array of rows and
+  # a, optional list of anchors, one for each row. The anchors
+  # are more useful if the table is oriented as rows.
   sub _generateHTMLTable {
     my ( $this, $rows, $anchors ) = @_;
     my $text = "<table border=\"$border\">";
@@ -309,11 +312,11 @@ use integer;
       my $horzrow = $this->_formatAsString( $row, @_ );
       $text .= "$horzrow\n";
     }
-    return "$text\n";
+    return $text;
   }
 
-  # PUBLIC Get the changes in the change fields between the old object and
-  # the new object.
+  # PUBLIC Get the changes in the selected change fields between
+  # the old object and the new object.
   sub formatChangesAsHTML {
     my ( $this, $old, $new ) = @_;
     my $tbl = "";
@@ -412,8 +415,8 @@ use integer;
       my $field = "<SELECT NAME=\"$attrname\" SIZE=\"$size\">";
       foreach my $option ( @{$type->{values}} ) {
 	$field .= "<OPTION NAME=\"$option\"";
-	if ( defined( $this->{$attrname} ) &&
-	     $this->{$attrname} eq $option ) {
+	if ( defined( $object->{$attrname} ) &&
+	     $object->{$attrname} eq $option ) {
 	  $field .= " SELECTED";
 	}
 	$field .= ">$option</OPTION>";

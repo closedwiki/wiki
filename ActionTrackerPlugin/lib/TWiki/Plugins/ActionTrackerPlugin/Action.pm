@@ -60,7 +60,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # be made to load a value for it when the action is created. If it
   # is defined 'nomatch' then the attribute will be ignored in match
   # expressions.
-  my %types =
+  my %basetypes =
     (
      changedsince =>
      new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
@@ -114,7 +114,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
      ACTION_NUMBER=>
      new ActionTrackerPlugin::AttrDef( 'ignore', 0, 0, 0, undef ),
     );
-  
+
+  my %types = %basetypes;
+
   # PUBLIC Constructor
   sub new {
     my ( $class, $web, $topic, $number, $attrs, $descr ) = @_;
@@ -161,10 +163,14 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     $this->{web} = $web;
     $this->{topic} = $topic;
     $this->{ACTION_NUMBER} = $number;
+
     $descr =~ s/^\s+//o;
     $descr =~ s/\s+$//o;
+
+    # Translate newlines in the description to XHTML tags
     $descr =~ s/\n\n/<p \/>/gos;
     $descr =~ s/\n/<br \/>/gos;
+
     $this->{text} = $descr;
 
     return bless( $this, $class );
@@ -205,12 +211,25 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return undef;
   }
 
+  sub unextendTypes {
+    %types = %basetypes;
+  }
+
+  # STATIC Debug only
+  sub dumpTypes {
+    foreach my $key ( keys %types ) {
+      print STDERR "$key ", $types{$key}->toString(), "\n";
+    }
+  }
+
   # PUBLIC get the base type of an attribute name i.e.
   # with the formatting attributes stripped off.
   sub getBaseType {
     my $vbl = shift;
     my $type = $types{$vbl};
-    return $type->{type} if ( defined( $type ) );
+    if ( defined( $type ) ) {
+      return $type->{type};
+    }
     return undef;
   }
 
@@ -238,14 +257,25 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       $this->{who} = $me;
     }
 
-    if ( !defined( $this->{created} )) {
-      $this->{created} = $now;
+    if ( !defined( $this->{due} )) {
+      $this->{due} = $now;
+    }
+
+    if ( !defined( $this->{creator} )) {
       $this->{creator} = $me;
     }
 
-    if ( $this->{state} eq "closed" && !defined( $this->{closed} )) {
-      $this->{closed} = $now;
-      $this->{closer} = $me;
+    if ( !defined( $this->{created} )) {
+      $this->{created} = $now;
+    }
+
+    if ( $this->{state} eq "closed" ) {
+      if ( !defined( $this->{closer} )) {
+	$this->{closer} = $me;
+      }
+      if ( !defined( $this->{closed} )) {
+	$this->{closed} = $now;
+      }
     }
   }
 
@@ -277,10 +307,16 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub _canonicalName {
     my $who = shift;
 
-    return undef if !defined( $who );
+    if ( !defined( $who )) {
+      return undef;
+    }
     if ( $who !~ /([A-Za-z0-9\.\+\-\_]+\@[A-Za-z0-9\.\-]+)/ ) {
-      $who = TWiki::Func::getWikiName() if ( $who eq "me" );
-      $who = "$mainweb.$who" unless $who =~ /\./o;
+      if ( $who eq "me" ) {
+	$who = TWiki::Func::getWikiName();
+      }
+      if ( $who !~ /\./o ) {
+	$who = "$mainweb.$who";
+      }
     }
     return $who;
   }
@@ -326,17 +362,13 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     return $stime;
   }
 
-  # PUBLIC due time, as a date string
-  sub dueString {
-    my $this = shift;
-    return formatTime( $this->{due}, "string" );
-  }
-
   # PUBLIC return number of seconds to go before due date, negative if action
   # is late
   sub secsToGo {
     my $this = shift;
-    $now = time() unless ( defined( $now ) );
+    if ( !defined( $now )) {
+      $now = time();
+    }
     if ( defined( $this->{due} )) {
       return $this->{due} - $now;
     }
@@ -359,8 +391,10 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # PUBLIC true if due time is before now and not closed
   sub isLate {
     my $this = shift;
-    return 0 if ( $this->{state} eq "closed" );
-    return ( ($this->{due} - $now) <= 0 );
+    if ( $this->{state} eq "closed" ) {
+      return 0;
+    }
+    return ( ($this->{due} - $now) < 0 );
   }
 
   # PRIVATE match the passed names against the given names type field.
@@ -368,11 +402,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # names in the field.
   sub _matchType_names {
     my ( $this, $vbl, $val ) = @_;
-    return 0 unless defined( $this->{$vbl} );
+    if ( !defined( $this->{$vbl} )) {
+      return 0;
+    }
     foreach my $name ( split( /\s*,\s*/, $val )) {
       my $who = _canonicalName( $name );
       $who =~ s/\./\\./go;
-      return 1 if ( $this->{$vbl} =~ /$who/ );
+      if ( $this->{$vbl} =~ /$who/ ) {
+	return 1;
+      }
     }
     return 0;
   }
@@ -422,18 +460,21 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       if ( defined( &{$class."::_matchField_$attrName"} ) ) {
 	# function match
 	my $fn = "_matchField_$attrName";
-	return 0 unless ( $this->$fn( $attrVal ));
+	if ( !$this->$fn( $attrVal )) {
+	  return 0;
+	}
       } elsif ( defined( $attrType ) &&
 		defined( &{$class."::_matchType_$attrType"} ) ) {
 	my $fn = "_matchType_$attrType";
-	return 0 unless ( $this->$fn( $attrName, $attrVal ));
-      } elsif ( defined( $attrType ) &&
-		$attrType =~ m/nomatch/o ) {
-	# do nothing
+	if ( !$this->$fn( $attrName, $attrVal )) {
+	  return 0;
+	}
       } elsif ( defined( $attrVal ) &&
 		defined( $this->{$attrName} ) ) {
 	# re match
-	return 0 unless ( $this->{$attrName} =~ m/$attrVal/ );
+	if ( $this->{$attrName} !~ m/$attrVal/ ) {
+	  return 0;
+	}
       } else {
 	return 0;
       }
@@ -451,7 +492,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   # PRIVATE format the given field (takes precedence of standard
   # date formatting)
   sub _formatField_due {
-    my $this = shift;
+    my ( $this, $asHTML ) = @_;
     my $bgcol = 0;
     my $text = formatTime( $this->{due}, "string" );
 
@@ -459,7 +500,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       $bgcol = $ActionTrackerPlugin::Format::badcol;
     } elsif ( $this->isLate() ) {
       $bgcol = $ActionTrackerPlugin::Format::latecol;
-      $text .= " (LATE)";
+      if ( !$asHTML ) {
+	$text .= " (LATE)";
+      }
     }
 
     return ( $text, $bgcol );
@@ -489,7 +532,10 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub _formatField_edit {
     my ( $this, $asHTML, $type, $newWindow ) = @_;
 
-    return "" unless ( $asHTML );
+    if ( !$asHTML ) {
+      # Can't edit from plain text
+      return "";
+    }
 
     my $url = "%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/" .
       $this->{web} . "/" . $this->{topic} .
@@ -506,7 +552,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub _formatField_uid {
     my ( $this, $asHTML ) = @_;
     my $uid = $this->{uid};
-    return "<nop>$uid" if ( $asHTML );
+    if ( $asHTML ) {
+      return "<nop>$uid";
+    }
     return ( $uid, 0 );
   }
 
@@ -524,10 +572,12 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my ( $this, $old ) = @_;
     my $sum = 0;
 
-    return 100 if ( defined( $this->{uid} ) &&
-		    "$this->{uid}" eq "$old->{uid}" );
-    return 0 if ( defined( $this->{uid} ) &&
-		  "$this->{uid}" ne "$old->{uid}" );
+    if ( defined( $this->{uid} )) {
+      if ( defined( $old->{uid} ) && $this->{uid} eq $old->{uid} ) {
+	return 100;
+      }
+      return 0;
+    }
 
     # identical text
     if ( $this->{text} =~ m/^\Q$old->{text}\E/ ) {
@@ -535,13 +585,23 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     } else {
       $sum += _partialMatch( $old->{text}, $this->{text} ) * 4;
     }
-    $sum += 3 if ( $this->{ACTION_NUMBER} == $old->{ACTION_NUMBER} );
-    $sum += 2 if ( defined( $this->{notify} ) && defined( $old->{notify} ) &&
-		   $this->{notify} eq $old->{notify} );
-    $sum += 2 if ( defined( $this->{who} ) &&
-		   $this->{who} eq $old->{who} );
-    $sum += 1 if ( $this->{due} == $old->{due} );
-    $sum += 1 if ( $this->{state} eq $old->{state} );
+    if ( $this->{ACTION_NUMBER} == $old->{ACTION_NUMBER} ) {
+      $sum += 3;
+    }
+    if ( defined( $this->{notify} ) && defined( $old->{notify} ) &&
+	 $this->{notify} eq $old->{notify} ) {
+      $sum += 2;
+    }
+    if ( defined( $this->{who} ) &&
+	 $this->{who} eq $old->{who} ) {
+      $sum += 2;
+    }
+    if ( $this->{due} == $old->{due} ) {
+      $sum += 1;
+    }
+    if ( $this->{state} eq $old->{state} ) {
+      $sum += 1;
+    }
 
     return $sum;
   }
@@ -579,10 +639,14 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
   sub findChanges {
     my ( $this, $old, $format, $notifications ) = @_;
 
-    return 0 if ( !$this->{notify} );
+    if ( !$this->{notify} ) {
+      return 0;
+    }
 
     my $changes = $format->formatChangesAsString( $old, $this );
-    return 0 if ( $changes eq "" );
+    if ( $changes eq "" ) {
+      return 0;
+    }
 
     my $plain_text = $format->formatStringTable( [ $this ] );
     $plain_text .= "\n$changes\n";
@@ -657,7 +721,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       my $type = $types{$attrname};
       if ( $attrname ne 'text' && $type->{type} ne 'ignore' ) {
 	my $val = $query->param( $attrname );
-	$attrs .= " $attrname=\"$val\"" if ( defined( $val ));
+	if ( defined( $val )) {
+	  $attrs .= " $attrname=\"$val\"";
+	}
       }
     }
     return new ActionTrackerPlugin::Action( $web, $topic, $an, $attrs, $desc );

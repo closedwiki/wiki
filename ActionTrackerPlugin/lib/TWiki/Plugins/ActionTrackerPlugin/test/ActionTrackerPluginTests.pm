@@ -1,9 +1,7 @@
 # Tests for module ActionNotify.pm
 use lib ('fakewiki');
 use lib ('../../../..');
-use lib ('../../../../TWiki/Plugins');
-use ActionTrackerPlugin;
-use lib ('.');
+use TWiki::Plugins::ActionTrackerPlugin;
 use Assert;
 use TWiki::TestMaker;
 
@@ -75,7 +73,7 @@ use TWiki::TestMaker;
 
   sub testActionSearchFormat {
     my $chosen = TWiki::Plugins::ActionTrackerPlugin::handleActionSearch("Main", "web=\".*\" who=Sam header=\"|Who|Due|\" format=\"|\$who|\$due|\"");
-    Assert::sEquals($chosen, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Who</th><th>Due</th></tr><tr valign=\"top\"><td>Main.Sam</td><td bgcolor=\"yellow\">Thu, 3 Jan 2002 (LATE)</td></tr></table>");
+    Assert::sEquals($chosen, "<table border=\"1\"><tr bgcolor=\"orange\"><th>Who</th><th>Due</th></tr><tr valign=\"top\"><td>Main.Sam</td><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>");
   }
 
   sub testCommonTagsHandler1 {
@@ -125,15 +123,15 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
        action("AcTion1","Main.ActorTwo",undef,"Mon, 11 Mar 2002","Open <table><td>status<td>status2</table>","closed")."</table>
 text $tblhdr".
        action("AcTion2","Main.ActorThree",undef,"Sun, 11 Mar 2001","The *world* is flat","closed").
-       action("AcTion3","Main.ActorFour",$ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001 (LATE)","_Late_ the late great *date*","open").
-       action("AcTion4","Main.ActorFiveVeryLongNameBecauseItsATest",$ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002 (LATE)","This is an action with a lot of associated text to test <br />   * the VingPazingPoodleFactor, <br />   * when large actions get edited by the edit button.<br />   * George Bush is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open").
+       action("AcTion3","Main.ActorFour",$ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001","_Late_ the late great *date*","open").
+       action("AcTion4","Main.ActorFiveVeryLongNameBecauseItsATest",$ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002","This is an action with a lot of associated text to test <br />   * the VingPazingPoodleFactor, <br />   * when large actions get edited by the edit button.<br />   * George Bush is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open").
        action("AcTion5","Main.ActorSix",$ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see Plugins.ActionTrackerPlugin#DateFormats","Bad date","open")."</table>
 break the table here $tblhdr".
-       action("AcTion6","Main.ActorSeven",$ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002 (LATE)","Create the mailer, %USERNAME%","open")."</table>
+       action("AcTion6","Main.ActorSeven",$ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002","Create the mailer, %USERNAME%","open")."</table>
 
    * A list
    * $tblhdr".
-       action("AcTion7","Main.ActorEight","yellow","Tue, 1 Jan 2002 (LATE)","Create the mailer","open")."</table>
+       action("AcTion7","Main.ActorEight","yellow","Tue, 1 Jan 2002","Create the mailer","open")."</table>
    * endofthelist
 
    * Another list
@@ -191,7 +189,14 @@ After");
     TWiki::Func::setQuery($q);
     my $text = "%ACTION{}%";
     TWiki::Plugins::ActionTrackerPlugin::beforeSaveHandler($text,"Topic","Web");
-    Assert::sContains($text, "%ACTION{ state=\"open\" creator=\"Main.TestRunner\" created=\"3-Jun-2002\" who=\"Main.TestRunner\" uid=\"WebTopic102153000n0\" }% No description");
+    $text =~ s/ state=\"open\"//o;
+    $text =~ s/ creator=\"Main.TestRunner\"//o;
+    $text =~ s/ created=\"3-Jun-2002\"//o;
+    $text =~ s/ due=\"3-Jun-2002\"//o;
+    $text =~ s/ who=\"Main.TestRunner\"//o;
+    $text =~ s/ uid=\"WebTopic102153000n0\"//o;
+    $text =~ s/ No description//o;
+    Assert::sEquals($text, "%ACTION{ }%");
   }
 }
 

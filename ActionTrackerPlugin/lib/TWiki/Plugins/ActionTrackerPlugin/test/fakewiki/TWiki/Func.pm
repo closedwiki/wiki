@@ -45,7 +45,7 @@ require CGI;
 
   sub getPreferencesValue {
     my $thing = shift;
-    if ($TWiki::TestMaker::prefs{$thing}) {
+    if (defined($TWiki::TestMaker::prefs{$thing})) {
       return $TWiki::TestMaker::prefs{$thing};
     } else {
       return "PREFS($thing)";

@@ -17,11 +17,11 @@
 use strict;
 use integer;
 
-use TWiki; # required for unpublished constants!
 use TWiki::Func;
 
 use TWiki::Plugins::ActionTrackerPlugin::Attrs;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
+use TWiki::Plugins::ActionTrackerPlugin::Config;
 
 # Perl object that represents a set of actions.
 { package ActionTrackerPlugin::ActionSet;
@@ -55,8 +55,15 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
       @_sortfields = split( /,/, $order );
       @{$this->{ACTIONS}} = sort {
 	foreach my $sf ( @_sortfields ) {
-	  my $c = ( $a->{$sf} cmp $b->{$sf} );
-	  return $c if ( $c != 0 );
+	  my ( $x, $y ) = ( $a->{$sf}, $b->{$sf} );
+	  if ( defined( $x ) && defined( $y )) {
+	    my $c = ( $x cmp $y );
+	    return $c if ( $c != 0 );
+	  } elsif ( defined( $x ) ) {
+	    return -1;
+	  } elsif ( defined( $y ) ) {
+	    return 1;
+	  }
 	}
 	# default to sorting on due
 	$a->{due} <=> $b->{due};
@@ -83,11 +90,16 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $action;
     my $chosen = new ActionTrackerPlugin::ActionSet();
 
+    my $sort = $attr->remove( "sort" );
+
     foreach $action ( @{$this->{ACTIONS}} ) {
       if ( $action->matches( $attr ) ) {
 	$chosen->add( $action );
       }
     }
+
+    # by default actions will be sorted by due date
+    $chosen->sort( $sort );
 
     return $chosen;
   }
@@ -155,7 +167,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $action;
 
     foreach $action ( @{$this->{ACTIONS}} ) {
-      my @persons = split( /[,\s]+/, $action->{who} );
+      my @persons = split( /,/, $action->{who} );
       foreach my $person ( @persons ) {
 	$whos->{$person} = 1;
       }
@@ -177,8 +189,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     # isn't very useful in TWiki.
     # Also assumed: the output of the egrepCmd must be of the form
     # file.txt: ...matched text...
-    # SMELL: uses unpublished TWiki:: constants
-    my $grep = `${TWiki::egrepCmd} ${TWiki::cmdQuote}%ACTION\\{.*\\}%${TWiki::cmdQuote} $dd/$web/*.txt`;
+    my $cmd = $ActionTrackerPlugin::Config::egrepCmd;
+    my $q = $ActionTrackerPlugin::Config::cmdQuote;
+    my $grep = `$cmd $q%ACTION\\{.*\\}%$q $dd/$web/*.txt`;
     my $number = 0;
     my $topics = $attrs->get( "topic" ) || "";
     my $lastTopic = "";
@@ -213,7 +226,7 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
     my $web;
     foreach $web ( @weblist ) {
       if ( -d "$dataDir/$web" && $web =~ /^$webs$/ ) {
-	$web =~ s/$TWiki::securityFilter//go;  # FIXME: This bypasses the official API
+	$web =~ s/$ActionTrackerPlugin::Config::securityFilter//go;  # FIXME: This bypasses the official API
 	$web =~ /(.*)/; # untaint
 	$web = $1;
 	# Exclude webs flagged as NOSEARCHALL

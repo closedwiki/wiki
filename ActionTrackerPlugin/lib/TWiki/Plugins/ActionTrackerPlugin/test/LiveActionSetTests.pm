@@ -1,11 +1,10 @@
 # Tests for module ActionSet.pm
 use lib ('fakewiki');
 use lib ('../../../..');
-use lib ('../../../../TWiki/Plugins');
-use ActionTrackerPlugin::Action;
-use ActionTrackerPlugin::ActionSet;
-use ActionTrackerPlugin::Attrs;
-use ActionTrackerPlugin::Format;
+use TWiki::Plugins::ActionTrackerPlugin::Action;
+use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+use TWiki::Plugins::ActionTrackerPlugin::Attrs;
+use TWiki::Plugins::ActionTrackerPlugin::Format;
 use Assert;
 use TWiki::TestMaker;
 use TWiki::Func;
@@ -88,13 +87,13 @@ TWiki::TestMaker::writeTopic("Main", "E", "
     Assert::assert($chosen =~ /Main_Topic2_E_open_ontime/o);
 
     # Make sure they are sorted correctly
-#%ACTION{who=E,due=\"29 Jan 2001\",open}% Main_Topic2_E_open_ontime");
-#%ACTION{who=A,due=\"1 Jan 02\",open}% Test_Topic2_A_open_late");
-#%ACTION{who=Main.A,due=\"1 Jan 02\",closed}% Main_Topic2_A_closed_ontime
-#%ACTION{who=Main.C,due=\"16 Dec 02\",open}% Test_Topic1_C_open_ontime
-#%ACTION{who=B,due=\"29 Jan 2010\",open}% Main_Topic2_B_open_ontime
+    #%ACTION{who=E,due=\"29 Jan 2001\",open}% Main_Topic2_E_open_ontime");
+    #%ACTION{who=A,due=\"1 Jan 02\",open}% Test_Topic2_A_open_late");
+    #%ACTION{who=Main.A,due=\"1 Jan 02\",closed}% Main_Topic2_A_closed_ontime
+    #%ACTION{who=Main.C,due=\"16 Dec 02\",open}% Test_Topic1_C_open_ontime
+    #%ACTION{who=B,due=\"29 Jan 2010\",open}% Main_Topic2_B_open_ontime
 
-    Assert::assert($chosen =~ /Main_Topic2_E_open_ontime.*Test_Topic2_A_open_late.*Main_Topic2_A_closed_ontime.*Test_Topic1_C_open_ontime.*Main_Topic2_B_open_ontime/so);
+    Assert::assert($chosen =~ /Main_Topic2_E_open_ontime.*Test_Topic2_A_open_late.*Main_Topic2_A_closed_ontime.*Test_Topic1_C_open_ontime.*Main_Topic2_B_open_ontime/so, $chosen);
   }
 
   sub testSortAllWebs {

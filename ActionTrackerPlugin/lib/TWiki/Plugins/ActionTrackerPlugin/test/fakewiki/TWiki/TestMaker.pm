@@ -31,11 +31,13 @@
     my $pwd = `pwd`;
     chop($pwd);
     my ($p,$f,$l) = caller(1);
-    print STDERR "Prefs from $pwd/../../../../../data/TWiki/$plugin.txt\n";
+    print STDERR "*** Prefs loaded from $pwd/../../../../../data/TWiki/$plugin.txt\n";
     open PF,"<$pwd/../../../../../data/TWiki/$plugin.txt";
     while (<PF>) {
-      if ($_ =~ /^\s+\* Set (\w+) = ([^\r\n]+)/o) {
-	$prefs{"${ucw}_$1"} = $2;
+      if ($_ =~ /^\s+\* Set (\w+) = (.*)$/o) {
+	my $at = $1;
+	my $thng = $2;
+	$prefs{"${ucw}_$at"} = $thng;
       }
     }
     close PF;
