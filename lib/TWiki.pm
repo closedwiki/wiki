@@ -542,14 +542,26 @@ sub formatGmTime
 }
 
 # =========================
+sub revDate2ISO {
+
+    # NOTE: This routine *will break* if formatGMTime changes output format.
+    # Change "28 Nov 2001 - 06:41" to "2001-11-28T18:41Z"
+    # ISO date spec at http://www.w3.org/TR/NOTE-datetime
+
+    my ($day, $mon, $year, $hyph, $hrmin, @junk) = split(" ",$_[0]);
+    $mon = $mon2num{$mon};
+
+    return "$year-$mon-$day" . "T$hrmin" . "Z";
+}
+
+# =========================
 sub revDate2EpSecs {
 
-# This routine *will break* if formatGMTime changes output format.
+    # NOTE: This routine *will break* if formatGMTime changes output format.
+    # Change "28 Nov 2001 - 06:41" to "1234567"
 
     my ($day, $mon, $year, $hyph, $hrmin, @junk) = split(" ",$_[0]);
     my ($hr, $min) = split(/:/, $hrmin);
-
-    #my $mon = $mon2num{$monstr};
 
     return timegm(0, $min, $hr, $day, $mon2num{$mon}, $year - 1900);
 }
@@ -1971,8 +1983,7 @@ sub getRenderedVersion
                 s/([\s\(])([A-Z]+[a-z0-9]*)\.([A-Z]{3,})/&internalLink($1,$2,$3,$3,"",0)/geo;
                 # 'ABBREV' link:
                 s/([\s\(])([A-Z]{3,})/&internalLink($1,$theWeb,$2,$2,"",0)/geo;
-                # depreciated link:
-                s/<link>(.*?)<\/link>/&internalLink("",$theWeb,$1,$1,"",1)/geo;
+                # (depreciated <link> moved to DefaultPlugin)
 
                 s/$TranslationToken(\S.*?)$TranslationToken/$1/go;
             }
