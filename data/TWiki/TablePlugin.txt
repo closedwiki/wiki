@@ -1,24 +1,31 @@
-%META:TOPICINFO{author="PeterThoeny" date="1005707632" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="PeterThoeny" date="1005880790" format="1.0" version="1.3"}%
 ---+ Table Plugin
 
 Gives extra control off table display:
 	* Allows sorting
-	* Changing background colour for header cells
-	* Changing background colour for data cells - colours can _alternate_
+	* Changing background color for header cells
+	* Changing background color for data cells - colors can _alternate_
 	* Behaviour can be specified for a specific table using %<nop>TABLE{...}% or with global preferences
 
 ---++ Global Preferences
 	* Set DEBUG to on to get debug messages in =data/debug.txt=.  Default: =off=
-		* Set DEBUG = on
-	* Colour for header cells ('*'s around text).  Default: <font color=\"#99CCCC\">#99CCCC</font>
+		* Set DEBUG = off
+	* Table border width.  Default: 1
+		* Set TABLEBORDER = 3
+	* Table cell padding.  Default: 0
+		* Set CELLPADDING = 5
+	* Table cell spacing.  Default: 1
+		* Set CELLSPACING = 2
+	* Color for header cells ('*'s around text).  Default: <span style="background : #99CCCC;">#99CCCC</span>
 		* #Set HEADER_BG = red
-	* #Set DATA_BG = #C8CB8F,#DBDDB5
-	* Set DATA_BG = #FFFFCC,#FFFFFF
-	* #Set SORT = attachments
-	* Set SORT = all
-	* #Set SORT = none
-
-	* Set SHORTDESCRIPTION = Control sorting and colours for table display
+	* Background color for table rows, two alternate colors.  Default: <span style="background : #FFFFCC;">#FFFFCC</span>,<span style="background : #FFFFFF;">#FFFFFF</span>
+		* Set DATA_BG = #FFFFCC,#FFFFFF
+	* Make sortable:
+		* #Set SORT = attachments
+		* Set SORT = all
+		* #Set SORT = none
+	* Short description:
+		* Set SHORTDESCRIPTION = Control attributes of tables and sorting of table columns
 
 ---++ Sorting
 
@@ -33,20 +40,23 @@ Click on column heading text to sort by a column.  Initial column will be sorted
 
 ---++ Per table settings
 
-On line before the table use %<nop>TABLE{...}%:
+On line before the table use =%<nop>TABLE{...}%=:
 
-| *Argument* | *Comment* |
-| =sort=	  | =on= or =off= |
-| =headerbg=  | header cell background colour |
-| =databg=	| data cell background colour, a comma seperated list |
+| *Argument* | *Comment* | *Example* |
+| =sort=	  | Set =on= or =off= | =sort="on"= |
+| =headerbg= | Header cell background colour | =headerbg="#99CCCC"= |
+| =databg=	| Data cell background colour, a comma seperated list | =databg="#C8CB8F,#DBDDB5"= |
+| =tableborder= | Table border width (pixels) | =tableborder="2"= |
+| =cellpadding= | Cell padding (pixels) | =cellpadding="0"= |
+| =cellspacing= | Cell spacing (pixels) | =cellspacing="3"= |
 
 All default to the global setting
 
 ---++ Examples
 
-Line before table: %<nop>TABLE{sort="on" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
+Line before table: =%<nop>TABLE{sort="on" tableborder="0" cellpadding="2" cellspacing="1" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%=
 
-%TABLE{sort="on" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
+%TABLE{sort="on" tableborder="0" cellpadding="3" cellspacing="0" headerbg="#99CCCC" databg="#C8CB8F,#DBDDB5"}%
 | *Num* | *Status* | *Action* | *Who* | *When* | *Progress* |
 | 1 | C | Chose new colours | John | 1-Dec-02 | |
 | 2 | X | Release | John | 1-Apr-02 | |
@@ -54,8 +64,8 @@ Line before table: %<nop>TABLE{sort="on" headerbg="#99CCCC" databg="#C8CB8F,#DBD
 | 12 | C | Spec error handling | Jack | 1-Dec-02 | |
 | 5 |	| Abc | John | | |
 
-
 -- %TWIKIWEB%.JohnTalintyre - 07 Oct 2001 <br />
+-- %TWIKIWEB%.PeterThoeny - 15 Nov 2001 <br />
 %META:FILEATTACHMENT{name="up.gif" attr="" comment="Up arrow" date="1005707580" path="C:\Data\Temp\up.gif" size="876" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="down.gif" attr="" comment="Down arrow" date="1005707591" path="C:\Data\Temp\down.gif" size="869" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="diamond.gif" attr="" comment="Diamond symbol" date="1005707607" path="C:\Data\Temp\diamond.gif" size="881" user="PeterThoeny" version="1.1"}%
