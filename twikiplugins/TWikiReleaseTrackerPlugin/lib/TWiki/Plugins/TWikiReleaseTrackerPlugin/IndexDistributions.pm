@@ -9,6 +9,9 @@ use Common;
 package IndexDistributions;
 
 sub indexDistribution {
+    use Cwd;
+    my $runDir = cwd();
+
 	my ( $distribution, $distributionLocation, $excludeFilePattern,
 		$pathPrefix ) = @_;
 	use File::Find;
@@ -39,6 +42,7 @@ sub indexDistribution {
 		},
 		$distributionLocation
 	);
+    chdir($runDir);
 }
 
 sub indexFile {
@@ -75,8 +79,8 @@ sub includeInResults {
 	my ($relativePath) = @_;
 
 	#CodeSmell: should be able to do this in preprocessCallback
-	if (   ( $relativePath =~ m!twiki/data/(.*)/! )
-		or ( $relativePath =~ m!twiki/pub/(.*)/! ) )
+	if (   ( $relativePath =~ m!data/(.*)/! )
+		or ( $relativePath =~ m!pub/(.*)/! ) )
 	{
 		my $web = $1;
 
@@ -90,6 +94,7 @@ sub includeInResults {
 			#		print "no\n";
 		}
 	}
+	return 1;
 }
 
 sub indexLocalInstallation {
@@ -102,18 +107,18 @@ sub indexLocalInstallation {
 	print "saving to ".File::Spec->rel2abs($saveFile)."\n";
 	FileDigest::saveIndex($saveFile);
 
-	#    print FileDigest::dataOutline();
+#	print FileDigest::dataOutline();
 }
 
 sub indexReleases {
-	die "feature broken";
-	indexReleases("(?!beta)");
+#	die "feature broken";
+	indexDistributions("(?!beta)");
 	chdir($runDir) || die "Can't cd into $runDir - $!";
 	FileDigest::saveIndex( $Common::md5IndexDir . "/releases.md5" );
 }
 
 sub indexBetaReleases {
-	indexReleases("beta");
+	indexDistributions("beta");
 	chdir($runDir) || die "Can't cd into $runDir - $!";
 	FileDigest::saveIndex( $Common::md5IndexDir . "/betas.md5" );
 }
@@ -162,10 +167,16 @@ sub ensureInstallationDir {
 	if ( $Common::installationDir eq "" ) {
 		die "You must edit TRTConfig to tell it where you've installed TWiki";
 	}
+	print "$Common::installationDir\n";
 }
 
 sub setRunDir {
 	($runDir) = @_;
+}
+
+sub indexDistributions {
+
+
 }
 
 1;
