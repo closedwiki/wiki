@@ -836,7 +836,8 @@ sub _buildConfirmationEmail {
         }
     }
     $templateText = "$before$after";
-    $templateText = $session->handleCommonTags( $templateText, $data{WikiName} );
+    $templateText = $session->handleCommonTags
+      ( $templateText, $data{webName}, $data{WikiName} );
     $templateText =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois
       ;    # remove <nop> and <noautolink> tags
 
@@ -947,7 +948,7 @@ sub _sendEmail {
     $text =~ s/%INTRODUCTION%/$p{Introduction}/go;
     $text =~ s/%VERIFICATIONCODE%/$p{VerificationCode}/go;
     $text =~ s/%PASSWORD%/$p{PasswordA}/go;
-    $text = $session->handleCommonTags( $text, $p{WikiName} );
+    $text = $session->handleCommonTags( $text, $p{webName}, $p{WikiName} );
 
     my $senderr = $session->{net}->sendEmail($text);
     if ($senderr) {

@@ -70,8 +70,8 @@ sub oops_cgi {
         $param = $query->param( 'param4' ) || "";
         $tmplData =~ s/%PARAM4%/$param/go;
 
-        $tmplData = $session->handleCommonTags( $tmplData, $topic );
-        $tmplData = $session->{renderer}->getRenderedVersion( $tmplData );
+        $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
+        $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web, $topic );
         $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
     }
 

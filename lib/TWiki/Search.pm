@@ -412,7 +412,8 @@ sub searchWeb {
     }
 
     my $searchResult = "";
-    my $topic = $TWiki::cfg{HomeTopicName};
+    my $homeWeb = $this->{session}->{webName};
+    my $homeTopic = $TWiki::cfg{HomeTopicName};
 
     my @webList = ();
 
@@ -514,15 +515,23 @@ sub searchWeb {
     }
 
     # Expand tags in template sections
-    $tmplSearch = $this->{session}->handleCommonTags( $tmplSearch, $topic );
-    $tmplNumber = $this->{session}->handleCommonTags( $tmplNumber, $topic );
+    $tmplSearch = $this->{session}->handleCommonTags( $tmplSearch,
+                                                      $homeWeb,
+                                                      $homeTopic );
+    $tmplNumber = $this->{session}->handleCommonTags( $tmplNumber,
+                                                      $homeWeb,
+                                                      $homeTopic );
 
     # If not inline search, also expand tags in head and tail sections
     unless( $inline ) {
-        $tmplHead = $this->{session}->handleCommonTags( $tmplHead, $topic );
+        $tmplHead = $this->{session}->handleCommonTags( $tmplHead,
+                                                        $homeWeb,
+                                                        $homeTopic );
 
         if( defined $callback ) {
-            $tmplHead = $this->renderer()->getRenderedVersion( $tmplHead );
+            $tmplHead = $this->renderer()->getRenderedVersion( $tmplHead,
+                                                               $homeWeb,
+                                                               $homeTopic );
             $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags
             &$callback( $cbdata, $tmplHead );
         } else {
@@ -542,7 +551,9 @@ sub searchWeb {
         $searchStr =~ s/^\.\*$/Index/go;
         $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
         if( defined $callback ) {
-            $tmplSearch = $this->renderer()->getRenderedVersion( $tmplSearch );
+            $tmplSearch = $this->renderer()->getRenderedVersion( $tmplSearch,
+                                                                 $homeWeb,
+                                                                 $homeTopic );
             $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $cbdata, $tmplSearch );
         } else {
@@ -697,7 +708,8 @@ sub searchWeb {
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $this->{session}->handleCommonTags( $text, $topic, $web );
+                    $text = $this->{session}->handleCommonTags( $text, $web,
+                                                                $topic );
                 }
             }
 
@@ -764,8 +776,12 @@ sub searchWeb {
                 } else {
                     # don't callback yet because of table
                     # rendering
-                    $out = $this->{session}->handleCommonTags( $out, $topic );
-                    $out = $this->renderer()->getRenderedVersion( $out );
+                    $out = $this->{session}->handleCommonTags( $out,
+                                                               $web,
+                                                               $topic );
+                    $out = $this->renderer()->getRenderedVersion( $out,
+                                                                  $web,
+                                                                  $topic );
                 }
 
                 if( $doRenameView ) {
@@ -774,10 +790,9 @@ sub searchWeb {
                       ( undef, $web, $topic, undef );
                     my $changeable = "";
                     my $changeAccessOK =
-                      $this->security()->checkAccessPermission( "change",
-                                                                $this->{session}->{user},
-                                                                $text, $topic,
-                                                                $web );
+                      $this->security()->checkAccessPermission
+                        ( "change", $this->{session}->{user},
+                          $text, $topic, $web );
                     if( ! $changeAccessOK ) {
                         $changeable = "(NO CHANGE PERMISSION)";
                         $out =~ s/%SELECTION%.*%SELECTION%//o;
@@ -837,8 +852,11 @@ sub searchWeb {
                         # primitive way to prevent recursion
                         $text =~ s/%SEARCH/%<nop>SEARCH/g;
                     }
-                    $text = $this->{session}->handleCommonTags( $text, $topic, $web );
-                    $text = $this->renderer()->getRenderedVersion( $text, $web );
+                    $text = $this->{session}->handleCommonTags( $text,
+                                                                $web, $topic );
+                    $text = $this->renderer()->getRenderedVersion( $text,
+                                                                   $web,
+                                                                   $topic );
                     # FIXME: What about meta data rendering?
                     $out =~ s/%TEXTHEAD%/$text/go;
 
@@ -881,12 +899,13 @@ sub searchWeb {
                     my $thisWebBGColor = $this->prefs()->getPreferencesValue( "WEBBGCOLOR", $web ) || "\#FF00FF";
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;
-                    $beforeText = $this->{session}->handleCommonTags( $beforeText,
-                                                                      $topic );
+                    $beforeText = $this->{session}->handleCommonTags
+                      ( $beforeText, $web, $topic );
                     if ( defined $callback ) {
                         $beforeText =
                           $this->renderer()->getRenderedVersion( $beforeText,
-                                                                 $web );
+                                                                 $web,
+                                                                 $topic );
                         $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
                         &$callback( $cbdata, $beforeText );
                     } else {
@@ -897,7 +916,8 @@ sub searchWeb {
                 # output topic (or line if multiple=on)
                 unless( $inline || $theFormat ) {
                     $out =
-                      $this->renderer()->getRenderedVersion( $out, $web );
+                      $this->renderer()->getRenderedVersion( $out, $web,
+                                                             $topic );
                     $out =~ s|</*nop/*>||goi;   # remove <nop> tag
                 }
 
@@ -910,13 +930,19 @@ sub searchWeb {
             } while( @multipleHitLines ); # multiple=on loop
 
             $ntopics += 1;
+
+            # delete topic info to clear any cached data
+            undef $topicInfo->{$topic};
+
             last if( $ntopics >= $theLimit );
         } # end topic loop
 
         # output footer only if hits in web
         if( $ntopics ) {
             # output footer of $web
-            $afterText  = $this->{session}->handleCommonTags( $afterText, $topic );
+            $afterText  = $this->{session}->handleCommonTags( $afterText,
+                                                              $web,
+                                                              $homeTopic );
             if( $inline || $theFormat ) {
                 $afterText =~ s/\n$//os;  # remove trailing new line
             }
@@ -924,7 +950,8 @@ sub searchWeb {
             if ( defined $callback ) {
                 $afterText = 
                   $this->renderer()->getRenderedVersion( $afterText,
-                                                         $web );
+                                                         $web,
+                                                         $homeTopic );
                 $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
                 &$callback( $cbdata, $afterText );
             } else {
@@ -940,7 +967,8 @@ sub searchWeb {
                 if ( defined $callback ) {
                     $thisNumber =
                       $this->renderer()->getRenderedVersion( $thisNumber,
-                                                             $web );
+                                                             $web,
+                                                             $homeTopic );
                     $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
                     &$callback( $cbdata, $thisNumber );
                 } else {
@@ -948,9 +976,6 @@ sub searchWeb {
                 }
             }
         }
-
-        # delete topic info to clear any cached data
-        undef $topicInfo->{$topic};
     }
 
     if( $theFormat ) {
@@ -962,10 +987,14 @@ sub searchWeb {
     }
 
     unless( $inline ) {
-        $tmplTail = $this->{session}->handleCommonTags( $tmplTail, $topic );
+        $tmplTail = $this->{session}->handleCommonTags( $tmplTail,
+                                                        $homeWeb,
+                                                        $homeTopic );
 
         if( defined $callback ) {
-            $tmplTail = $this->renderer()->getRenderedVersion( $tmplTail );
+            $tmplTail = $this->renderer()->getRenderedVersion( $tmplTail,
+                                                               $homeWeb,
+                                                               $homeTopic );
             $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
             &$callback( $cbdata, $tmplTail );
         } else {
@@ -975,9 +1004,13 @@ sub searchWeb {
 
     return undef if ( defined $callback );
     return $searchResult if $inline;
-    
-    $searchResult = $this->{session}->handleCommonTags( $searchResult, $topic );
-    $searchResult = $this->renderer()->getRenderedVersion( $searchResult );
+
+    $searchResult = $this->{session}->handleCommonTags( $searchResult,
+                                                        $homeWeb,
+                                                        $homeTopic );
+    $searchResult = $this->renderer()->getRenderedVersion( $searchResult,
+                                                           $homeWeb,
+                                                           $homeTopic );
 
     return $searchResult;
 }

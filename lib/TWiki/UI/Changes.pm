@@ -46,8 +46,8 @@ sub changes {
 
     my $summary = "";
 
-    $text = $session->handleCommonTags( $text, $topic );
-    $text = $session->{renderer}->getRenderedVersion( $text );
+    $text = $session->handleCommonTags( $text, $webName, $topic );
+    $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topic );
     $text =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
@@ -77,7 +77,8 @@ sub changes {
             }
             $thisChange =~ s/%TIME%/$time/go;
             $thisChange =~ s/%REVISION%/$rev/go;
-            $thisChange = $session->{renderer}->getRenderedVersion( $thisChange );
+            $thisChange = $session->{renderer}->getRenderedVersion
+              ( $thisChange, $webName, $changedTopic );
 
             my( $meta, $text ) = $session->{store}->readTopic
               ( $query->{user}, $webName, $changedTopic, undef );

@@ -140,13 +140,15 @@ sub view {
               "wrap=\"virtual\" rows=\"\%EDITBOXHEIGHT%\" " .
 	        "style=\"\%EDITBOXSTYLE%\" " .
                 "cols=\"\%EDITBOXWIDTH%\">";
-            $vtext = $session->handleCommonTags( $vtext, $topicName );
+            $vtext = $session->handleCommonTags( $vtext, $webName, $topicName );
             $text = TWiki::entityEncode( $text );
             $text = "$vtext$text</textarea></form>";
         }
     } else {
-        $text = $session->handleCommonTags( $text, $topicName );
-        $text = $session->{renderer}->getRenderedVersion( $text );
+        $text = $session->handleCommonTags( $text, $webName, $topicName );
+        $text = $session->{renderer}->getRenderedVersion( $text,
+                                                          $webName,
+                                                          $topicName );
     }
 
     if( $TWiki::cfg{Log}{view} ) {
@@ -251,7 +253,7 @@ sub view {
 
     $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
 
-    $tmpl = $session->handleCommonTags( $tmpl, $topicName, $webName );
+    $tmpl = $session->handleCommonTags( $tmpl, $webName, $topicName );
 
     if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
@@ -259,7 +261,7 @@ sub view {
         $tmpl = $session->{renderer}->renderMetaTags( $webName, $topicName, $tmpl, $meta, ( $rev == $maxrev ) );
     }
 
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, "", $meta );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topicName );
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%MAXREV%/$maxrev/go;

@@ -117,12 +117,12 @@ sub preview {
     my @verbatim = ();
     $ptext = $session->{renderer}->takeOutBlocks( $ptext, "verbatim", \@verbatim );
     $meta->updateSets( \$ptext );
-    $ptext = $session->handleCommonTags( $ptext, $topic );
-    $ptext = $session->{renderer}->getRenderedVersion( $ptext );
+    $ptext = $session->handleCommonTags( $ptext, $webName, $topic );
+    $ptext = $session->{renderer}->getRenderedVersion( $ptext, $webName, $topic );
 
     # do not allow click on link before save: (mods by TedPavlic)
     my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-    $oopsUrl = $session->handleCommonTags( $oopsUrl, $topic );
+    $oopsUrl = $session->handleCommonTags( $oopsUrl, $webName, $topic );
     $ptext =~ s/(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))/$1href="$oopsUrl?template=oopspreview" $TWiki::cfg{NoFollow}/goi;
     $ptext =~ s/<form(?:|\s.*?)>/<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">/goi;
     $ptext =~ s/(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))/$1onclick="location.href='$oopsUrl\?template=oopspreview'"/goi;
@@ -131,9 +131,9 @@ sub preview {
                                                   "verbatim", "pre",
                                                   \&TWiki::Render::verbatimCallBack );
 
-    $tmpl = $session->handleCommonTags( $tmpl, $topic );
+    $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
     $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0 );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%TEXT%/$ptext/go;
 
     $text = TWiki::encodeSpecialChars( $text );

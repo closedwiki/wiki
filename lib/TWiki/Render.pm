@@ -779,31 +779,26 @@ sub renderFormField {
 
     return "" unless $text;
 
-    return $this->getRenderedVersion( $text, $web );
+    return $this->getRenderedVersion( $text, $web, $topic );
 }
 
 =pod
 
----++ ObjectMethod getRenderedVersion (  $text, $theWeb, $meta  ) -> $html
+---++ ObjectMethod getRenderedVersion ( $text, $theWeb, $theTopic ) -> $html
 
 The main rendering function.
 
 =cut
 
 sub getRenderedVersion {
-    my( $this, $text, $theWeb, $meta ) = @_;
+    my( $this, $text, $theWeb, $theTopic ) = @_;
     ASSERT(ref($this) eq "TWiki::Render") if DEBUG;
     my( $head, $result, $extraLines, $insidePRE, $insideTABLE, $insideNoAutoLink );
 
     return "" unless $text;  # nothing to do
 
-    # FIXME: Get $theTopic from parameter to handle [[#anchor]] correctly
-    # (fails in %INCLUDE%, %SEARCH%)
-    my $theTopic = $this->{session}->{topicName};
-
-    if( !$theWeb ) {
-        $theWeb = $this->{session}->{webName};
-    }
+    $theTopic ||= $this->{session}->{topicName};
+    $theWeb ||= $this->{session}->{webName};
 
     $head = "";
     $result = "";
@@ -836,7 +831,7 @@ sub getRenderedVersion {
     }
 
     # Wiki Plugin Hook
-    $this->plugins()->startRenderingHandler( $text, $theWeb, $meta );
+    $this->plugins()->startRenderingHandler( $text, $theWeb, $theTopic );
 
     my $isList = 0;		# True when within a list
 
@@ -1128,8 +1123,8 @@ sub renderMetaTags {
     $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 
-    $text = $this->{session}->handleCommonTags( $text, $theTopic );
-    $text = $this->getRenderedVersion( $text, $theWeb );
+    $text = $this->{session}->handleCommonTags( $text, $theWeb, $theTopic );
+    $text = $this->getRenderedVersion( $text, $theWeb, $theTopic );
 
     return $text;
 }
@@ -1159,7 +1154,7 @@ sub TML2PlainText {
     $opts = "" unless( $opts );
     if( $opts =~ /expandvar/ ) {
         $text =~ s/(\%)(SEARCH){/$1<nop>$2/g; # prevent recursion
-        $text = $this->{session}->handleCommonTags( $text, $topic, $web );
+        $text = $this->{session}->handleCommonTags( $text, $web, $topic );
     }
     $text =~ s/\r//g;  # SMELL, what about OS10?
     $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data SMELL

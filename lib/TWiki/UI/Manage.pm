@@ -448,12 +448,12 @@ sub _newTopicScreen {
     }
 
     $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $oldTopic );
     if( $currentWebOnly ) {
         $tmpl =~ s/%RESEARCH\{.*?web=\"all\".*\}%/(skipped)/o; # Remove search all web search
     }
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = $session->handleCommonTags( $tmpl, $oldTopic, $oldWeb );
+    $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $oldTopic );
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
     $session->writeCompletePage( $tmpl );

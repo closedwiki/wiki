@@ -319,7 +319,8 @@ sub renderForEdit {
         if( !defined( $value ) && $type !~ /^checkbox/ && $getValuesFromFormTopic ) {
             my $tmp = $fieldInfo[0];
             if( defined( $tmp )) {
-                $value = $this->{session}->handleCommonTags( $tmp, $topic );
+                $value = $this->{session}->handleCommonTags( $tmp,
+                                                             $web, $topic );
             }
         }
         $value = "" unless defined $value;  # allow "0" values
@@ -389,7 +390,8 @@ sub renderForEdit {
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $flag = "";
-                my $expandedItem = $this->{session}->handleCommonTags( $item, $topic );
+                my $expandedItem = $this->{session}->handleCommonTags
+                  ( $item, $web, $topic );
                 if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ ) {
                     $flag = ' checked="checked"';
                 }
@@ -408,7 +410,8 @@ sub renderForEdit {
             my $lines = 0;
             foreach my $item ( @fieldInfo ) {
                 my $selected = $defaultMarker;
-                my $expandedItem = $this->{session}->handleCommonTags( $item, $topic );
+                my $expandedItem = $this->{session}->handleCommonTags
+                  ( $item, $web, $topic );
                 if( $item eq $value ) {
                    $selected = ' checked="checked"';
                    $matched = $item;
@@ -564,8 +567,8 @@ sub changeForm {
     ASSERT(ref($this) eq "TWiki::Form") if DEBUG;
 
     my $tmpl = $this->templates()->readTemplate( "changeform" );
-    $tmpl = $this->{session}->handleCommonTags( $tmpl, $theTopic );
-    $tmpl = $this->renderer()->getRenderedVersion( $tmpl );
+    $tmpl = $this->{session}->handleCommonTags( $tmpl, $theWeb, $theTopic );
+    $tmpl = $this->renderer()->getRenderedVersion( $tmpl, $theWeb, $theTopic );
     my $q = $this->{session}->{cgiQuery};
     my $text = $q->param( 'text' );
     $text = TWiki::encodeSpecialChars( $text );

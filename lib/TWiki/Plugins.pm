@@ -391,7 +391,7 @@ sub registrationHandler {
 
 ---++ ObjectMethod beforeCommonTagsHandler ()
 
-Called by sub handleCommonTags at the beginning (for cache Plugins only)
+Called at the beginning (for cache Plugins only)
 
 =cut
 
@@ -405,7 +405,7 @@ sub beforeCommonTagsHandler {
 
 ---++ ObjectMethod commonTagsHandler ()
 
-Called by sub handleCommonTags, after %INCLUDE:"..."%
+Called after %INCLUDE:"..."%
 
 =cut
 
@@ -419,7 +419,7 @@ sub commonTagsHandler {
 
 ---++ ObjectMethod afterCommonTagsHandler ()
 
-Called by sub handleCommonTags at the end (for cache Plugins only)
+Called at the end (for cache Plugins only)
 
 =cut
 
@@ -433,13 +433,13 @@ sub afterCommonTagsHandler {
 
 ---++ ObjectMethod startRenderingHandler ()
 
-Called by getRenderedVersion just before the line loop
+Called just before the line loop
 
 =cut
 
 sub startRenderingHandler {
     my $this = shift;
-    #my ( $text, $web ) = @_;
+    #my ( $text, $web, $topic ) = @_;
     $this->_applyHandlers( 'startRenderingHandler', @_ );
 }
 
@@ -447,7 +447,7 @@ sub startRenderingHandler {
 
 ---++ ObjectMethod outsidePREHandler ()
 
-Called by sub getRenderedVersion, in loop outside of &lt;PRE&gt; tag
+Called in line loop outside of &lt;PRE&gt; tag
 
 =cut
 
@@ -461,7 +461,7 @@ sub outsidePREHandler {
 
 ---++ ObjectMethod insidePREHandler ()
 
-Called by sub getRenderedVersion, in loop inside of &lt;PRE&gt; tag
+Called in line loop inside of &lt;PRE&gt; tag
 
 =cut
 
@@ -475,7 +475,7 @@ sub insidePREHandler {
 
 ---++ ObjectMethod endRenderingHandler ()
 
-Called by getRenderedVersion just after the line loop
+Called just after the line loop
 
 =cut
 
