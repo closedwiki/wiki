@@ -1,4 +1,4 @@
-#! /usr/bin/perl -wT
+#! /usr/bin/perl -w
 ################################################################################
 # download-twiki-plugins.pl
 # Copyright 2004 Will Norris.  All Rights Reserved.
@@ -11,6 +11,15 @@
 use strict;
 use diagnostics;
 ++$|;
+
+my $account;
+BEGIN {
+    use Cwd qw( cwd getcwd );
+    use Config;
+    chomp( $account = `whoami` );
+    my $localLibBase = getcwd() . "/lib/CPAN/lib/site_perl/" . $Config{version};
+    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
+}
 
 ################################################################################
 # config
@@ -33,8 +42,10 @@ my ( $nPlugins, $nDownloadedPlugins ) = ( 0, 0 );
 my @plugins = getPluginsCatalogList();
 
 print "\n| *Plugin* | *Download Status* |";
-foreach my $plugin ( @plugins )
+foreach my $pluginS ( @plugins )
 {
+    my $plugin = $pluginS->{name} or die "no name?";
+
     print "\n| TWiki:Plugins.$plugin ";
     ++$nPlugins;
 
@@ -62,6 +73,12 @@ local $, = "\n   * TWiki:Plugins.";
 print "Missing/Error plugin topics: ", @errors; 
 print "\n";
 
+use XML::Simple;
+my $xs = new XML::Simple() or die $!;
+open( XML, ">$Config->{local_cache}/contrib.xml" ) or die $!;
+print XML $xs->XMLout( { contrib => [ @plugins ] }, NoAttr => 1 );
+close( XML ) or warn $!;
+
 ################################################################################
 
 sub getPluginsCatalogList
@@ -79,7 +96,8 @@ sub getPluginsCatalogList
 	next unless $tag->[1]{href} && $tag->[1]{href} =~ m|/view/Plugins/.+Contrib$|;
 	my ( $plugin ) = $tag->[1]{href} =~ m|.+/(.+Contrib)|;
 	next unless $plugin;
-	push @plugins, $plugin;
+	my $pluginS = { name => $plugin };
+	push @plugins, $pluginS;
     }
 
     return @plugins;
