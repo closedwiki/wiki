@@ -30,9 +30,21 @@ BEGIN {
 
 ################################################################################
 
+# eg
+#installLocalModules({
+#    dir => $cpan,
+#    config => {
+#	'XML::SAX' => [ ( 'Do you want XML::SAX to alter ParserDetails.ini? [Y]' => 'Y' ) ],
+#(or)	'XML::SAX' => [ ( 'Do you want XML::SAX to alter ParserDetails.ini?' => 'Y' ) ],
+#(or)	'XML::SAX' => [ ( qr/^Do you want XML::SAX to alter ParserDetails.ini\?/ => 'Y' ) ],
+#    },
+#    modules => [ qw( XML::SAX ) ],
+#});
+
 installLocalModules({
     dir => $cpan,
     config => {
+	'HTML::Parser' => [ qw( no ) ],
 	'XML::SAX' => [ qw( Y ) ],
 	'Data::UUID' => [ qw( /var/tmp 0007 ) ],
 	'GD' => [ qw( /sw/lib y y y ) ],
@@ -45,6 +57,10 @@ installLocalModules({
 				     File::Slurp File::Slurp::Tree
 				     List::Permutor File::Temp 
 				     WWW::Mechanize
+				     Archive::Zip 
+				     IO::String Archive::Tar 
+				     File::AnySpec File::Package Data::Startup Tie::Gzip File::Where Archive::TarGzip
+				     Class::Virtually::Abstract Carp::Assert Class::Data::Inheritable Archive::Any
 				     Time::HiRes
 				     Carp::Clan Bit::Vector Date::Calc 
 				     Error Class::Inner Devel::Symdump
