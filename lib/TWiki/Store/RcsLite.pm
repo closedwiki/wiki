@@ -60,7 +60,7 @@ sub new
 sub _trace
 {
 #   my( $text ) = @_;
-#   TWiki::writeDebug( $text );
+#   TWiki::writeDebug( "RcsLite $text" );
 }
 
 
@@ -430,6 +430,7 @@ sub delta
 sub addRevision
 {
     my( $self, $text, $log, $author, $date ) = @_;
+    _trace( "::addRevision date=\"$date\"" );
     $self->_ensureProcessed();
     
     $self->_save( $self->file(), \$text );
@@ -449,6 +450,7 @@ sub addRevision
     } else {
         $date = TWiki::Store::RcsFile::_epochToRcsDateTime( time() );
     }
+    _trace("::addRevision date now=\"$date\"" );
     ${$self->{"date"}}[$head] = $date;
 
     return $self->_writeMe();
@@ -479,6 +481,7 @@ sub _writeMe
 sub replaceRevision
 {
     my( $self, $text, $comment, $user, $date ) = @_;
+    _trace( "::replaceRevision date=\"$date\"" );
     $self->_ensureProcessed();
     $self->_delLastRevision();
     $self->addRevision( $text, $comment, $user, $date );    
