@@ -18,7 +18,7 @@ my $opts = {
 BEGIN {
     use Config;
     use FindBin;
-#    my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
+
     my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib";
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
@@ -62,9 +62,11 @@ $ENV{SERVER_NAME} = "$account.wikihosting.com";
 chomp( my $hostname = $ENV{SERVER_NAME} || `hostname --long` || 'localhost' );
 die "hostname?" unless $hostname;
 
+my $BIN = "http://$hostname/cgi-bin/twiki";
+
 my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
-$mech->cgibin( "http://$hostname/cgi-bin/twiki", { scriptSuffix => $opts->{scriptSuffix} } );
+$mech->cgibin( $BIN, { scriptSuffix => $opts->{scriptSuffix} } );
 
 # open up the system (could be locked down at the end)
 $mech->edit( "Main.TWikiAdminGroup" );
@@ -76,9 +78,6 @@ $mech->click_button( value => 'Save' );
 ################################################################################
 
 #rm -rf cgi-bin/install_twiki$opts->{scriptSuffix} cgi-bin/tmp/
-
-# $account = /Users/(twiki)/Sites
-# echo `curl http://localhost/~twiki/cgi-bin/twiki/manage?action=relockrcs | grep code | wc -l` topic(s) unlocked
 
 ################################################################################
 
@@ -108,8 +107,7 @@ if ( -e "TWikiInstallationReport.html" )
 
 ################################################################################
 
-my $START = "http://$hostname/cgi-bin/twiki/view$opts->{scriptSuffix}/$opts->{startupTopic}";
-print "$START\n";
+my $START = "$BIN/view$opts->{scriptSuffix}/$opts->{startupTopic}";
 system( links => $START ) == 0 or print "start using your wiki at $START\n";
 
 ################################################################################
@@ -137,8 +135,6 @@ sub cgibin {
 
     $self->{cgibin} = $cgibin;
     $self->{scriptSuffix} = $args->{scriptSuffix};
-
-    print STDERR $self->{scriptSuffix}, "\n";
 
     return $self;
 }
