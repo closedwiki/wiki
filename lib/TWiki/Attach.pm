@@ -61,7 +61,7 @@ sub renderMetaData
     
     my $text = "";
     if( $showAll || $viewableAttachmentCount ) {
-       $text = "<p />\n$header$metaText\n";
+       $text = "\n$header$metaText\n\n";
     }
     
     $text = &TWiki::handleCommonTags( $text, $topic, $web ); # FIXME needed?

@@ -94,7 +94,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "16 Nov 2001";
+$wikiversion      = "20 Nov 2001";
 
 # ===========================
 # read the configuration part
@@ -1796,7 +1796,7 @@ sub getRenderedVersion
     $code = "";
     $text =~ s/\r//go;
     $text =~ s/\\\n//go;  # Join lines ending in "\"
-    $text .= "\n<nop>\n"; # clutch to enforce correct rendering at end of doc
+    $text =~ s/(\n?)$/\n<nop>\n/os; # clutch to enforce correct rendering at end of doc
 
     # do not render HTML head, style sheets and scripts
     if( $text =~ m/<body[\s\>]/i ) {
