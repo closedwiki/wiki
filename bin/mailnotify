@@ -124,7 +124,7 @@ sub processWeb
 
 	    if( ! $currLastmodify ) {
 	        # newest entry
-	        $time = &TWiki::formatDisplayTime( $prevLastmodify );
+	        $time = &TWiki::formatTime( $prevLastmodify );
 	        if( $prevLastmodify eq $changeTime ) {
 	            # newest entry is same as at time of previous notification
 	            $debug && print "- Note: No topics changed since $time\n";
@@ -155,7 +155,7 @@ sub processWeb
 
 	    $newText =~ s/%AUTHOR%/$wikiuser/go;
             $newText =~ s/%LOCKED%//go;
-	    $time = &TWiki::formatDisplayTime( $changeTime );
+	    $time = &TWiki::formatTime( $changeTime );
             $newText =~ s/%TIME%/$time/go;
             $newText =~ s/%REVISION%/$frev/go;
 	    $newText = &TWiki::getRenderedVersion( $newText );
@@ -197,7 +197,7 @@ sub processWeb
     $text =~ s/%EMAILTO%/$notifylist/go;
     $text =~ s/%EMAILBODY%/$emailbody/go;
     $text =~ s/%TOPICLIST%/$topiclist/go;
-    $text =~ s/%LASTDATE%/&TWiki::formatDisplayTime($prevLastmodify)/geo;
+    $text =~ s/%LASTDATE%/&TWiki::formatTime($prevLastmodify)/geo;
     $text = &TWiki::handleCommonTags( $text, $topic );
 
     # change absolute addresses to relative ones & do some cleanup
@@ -218,4 +218,3 @@ sub processWeb
 	$debug && print "- End TWiki.$webName, mail notification sent\n";
     }
 }
-

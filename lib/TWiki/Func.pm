@@ -815,19 +815,21 @@ sub internalLink
 # =========================
 =pod
 
----+++ formatGmTime( $time, $format ) ==> $text
+---+++ formatTime( $time, $format, $timezone ) ==> $text
 
-| Description: | Format the time to GM time |
+| Description: | Format the time int seconds into the desired time string |
 | Parameter: =$time= | Time in epoc seconds |
 | Parameter: =$format= | Format type, optional. Default e.g. ="31 Dec 2002 - 19:30"=, can be ="iso"= (e.g. ="2002-12-31T19:30Z"=), ="rcs"= (e.g. ="2001/12/31 23:59:59"=, ="http"= for HTTP header format (e.g. ="Thu, 23 Jul 1998 07:21:56 GMT"=) |
+| Parameter: =$timezone= | either not defined (uses the displaytime setting), "gmtime", or "servertime" |
 | Return: =$text= | Formatted time string |
+| Note: | if you used the removed formatGmTime, add a third parameter "gmtime" |
 
 =cut
 # -------------------------
-sub formatGmTime
+sub formatTime
 {
 #   my $epSecs = @_;
-    return &TWiki::formatGmTime( @_ );
+    return &TWiki::formatTime( @_ );
 }
 
 # =========================

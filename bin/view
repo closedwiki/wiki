@@ -126,7 +126,7 @@ sub main
             ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
         }
         ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, $meta);
-        $revdate = TWiki::formatDisplayTime( $revdate );
+        $revdate = TWiki::formatTime( $revdate );
         
         writeDebug( "maxrev = $maxrev" );
         if( $rev ) {
@@ -144,7 +144,7 @@ sub main
                 ( $meta, $text ) = &TWiki::Store::readTopicVersion( $webName, $topic, "1.$rev" );
             }
             ( $revdate, $revuser ) = &TWiki::Store::getRevisionInfo( $webName, $topic, "1.$rev");
-            $revdate = TWiki::formatDisplayTime( $revdate );
+            $revdate = TWiki::formatTime( $revdate );
             $extra .= "r1.$rev";
         }
 

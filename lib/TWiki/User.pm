@@ -231,7 +231,7 @@ sub CheckUserPasswd
 sub addUserToTWikiUsersTopic
 {
     my ( $wikiName, $remoteUser ) = @_;
-    my $today = &TWiki::getGmDate();
+    my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
     my $topicName = $TWiki::wikiUsersTopicname;
     my( $meta, $text )  = &TWiki::Store::readTopic( $TWiki::mainWebname, $topicName );
     my $result = "";

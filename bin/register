@@ -199,7 +199,7 @@ sub main
 
         # expand limited set of variables
         # NOTE: Keep it in sync with the edit script (FIXME: Put in function)
-        my $today = &TWiki::getGmDate();
+        my $today = &TWiki::formatTime(time(), "\$day \$mon \$year", "gmtime");
         my $userName = $remoteUser || $wikiName;
         $text =~ s/%DATE%/$today/go;
         $text =~ s/%USERNAME%/$userName/go;               # "jdoe"

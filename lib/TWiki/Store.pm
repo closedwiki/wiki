@@ -591,7 +591,7 @@ sub getRevisionInfo
     my( $rcsOut, $rev, $date, $user, $comment ) = $topicHandler->getRevisionInfo( $theRev );
     
 #    if( $changeToIsoDate ) {
-#        $date = TWiki::formatDisplayTime( $date );
+#        $date = TWiki::formatTime( $date );
 #    } else {
 #         # FIXME get rid of this - shouldn't be needing rcs date time format
 #        $date = TWiki::Store::RcsFile::_epochToRcsDateTime( $date );
@@ -919,7 +919,7 @@ sub saveNew
             # write log entry
             my $extra = "repRev $rev ";
             $extra   .= &TWiki::userToWikiName( $user );
-            $date = &TWiki::formatGmTime( $epochSec, "rcs" );
+            $date = &TWiki::formatTime( $epochSec, "rcs", "gmtime" );
             $extra   .= " $date";
             $extra   .= " dontNotify" if( $dontNotify );
             writeLog( "save", "$TWiki::webName.$topic", $extra );

@@ -823,7 +823,7 @@ sub writeHeaderFull
 
     if ($pageType eq 'edit') {
 	# Get time now in HTTP header format
-	my $lastModifiedString = formatGmTime(time, 'http');
+	my $lastModifiedString = formatTime(time, 'http', "gmtime");
 
 	# Expiry time is set high to avoid any data loss.  Each instance of 
 	# Edit page has a unique URL with time-string suffix (fix for 
@@ -1419,141 +1419,6 @@ sub getTWikiLibDir
 }
 
 # =========================
-# Get date in '1 Jan 2002' format, in GMT as for other dates
-=pod
-
----++ sub getGmDate (  $sec, $min, $hour, $mday, $mon, $year) = gmtime(time() )
-
-Not yet documented.
-
-=cut
-
-sub getGmDate
-{
-    my( $sec, $min, $hour, $mday, $mon, $year) = gmtime(time());
-    $year = sprintf("%.4u", $year + 1900);
-    my( $tmon) = $isoMonth[$mon];
-    my $date = sprintf("%.2u ${tmon} %.2u", $mday, $year);
-    return $date;
-}
-
-# =========================
-# Get date in '1 Jan 2002' format, in local timezone of server
-=pod
-
----++ sub getLocaldate (  $sec, $min, $hour, $mday, $mon, $year) = localtime(time() )
-
-Not yet documented.
-
-=cut
-
-sub getLocaldate
-{
-    my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
-    $year = sprintf("%.4u", $year + 1900);
-    my( $tmon) = $isoMonth[$mon];
-    my $date = sprintf("%.2u ${tmon} %.2u", $mday, $year);
-    return $date;
-}
-
-# =========================
-sub formatDisplayTime
-{
-    my( $theTime, $theFormat ) = @_;
-
-	my $displayTime = "";
-
-	if ($displayTimeValues eq 'servertime' ) {
-		$displayTime = formatLocTime($theTime, $theFormat);
-	} else {
-		$displayTime = formatGmTime($theTime, $theFormat);
-	}
-
-	return $displayTime;
-}
-
-# =========================
-# Return GMT date/time as formatted string 
-=pod
-
----++ sub formatGmTime (  $theTime, $theFormat  )
-
-Not yet documented.
-
-=cut
-
-sub formatGmTime
-{
-    my( $theTime, $theFormat ) = @_;
-
-    my( $sec, $min, $hour, $mday, $mon, $year, $wday ) = gmtime( $theTime );
-
-    if( $theFormat ) {
-        $year += 1900;
-
-        if( $theFormat =~ /rcs/i ) {
-            # RCS format, example: "2001/12/31 23:59:59"
-            return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
-                            $year, $mon+1, $mday, $hour, $min, $sec );
-        } elsif ( $theFormat =~ /http|email/i ) {
-            # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 GMT"
-	    # - based on RFC 2616/1123 and HTTP::Date; also used
-	    # by TWiki::Net for Date header in emails.
-	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d GMT", 
-			$weekDay[$wday], $mday, $isoMonth[$mon], $year, 
-			$hour, $min, $sec );
-        } else {
-	    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
-	    # e.g. "2002-12-31T19:30Z"
-	    return sprintf( "%.4u\-%.2u\-%.2uT%.2u\:%.2u:%.2uZ", 
-			    $year, $mon+1, $mday, $hour, $min, $sec );
-	}
-    }
-
-    # Default format, e.g. "31 Dec 2002 - 19:30"
-    my( $tmon ) = $isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );
-    return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
-}
-
-# =========================
-# Return local date/time as formatted string
-# Suggested by Richard Lewis, October 2002
-sub formatLocTime
-{
-    my( $theTime, $theFormat ) = @_;
-
-    my( $sec, $min, $hour, $mday, $mon, $year, $wday ) = localtime( $theTime );
-
-    if( $theFormat ) {
-        $year += 1900;
-
-        if( $theFormat =~ /rcs/i ) {
-            # RCS format, example: "2001/12/31 23:59:59"
-            return sprintf( "%.4u/%.2u/%.2u %.2u:%.2u:%.2u", 
-                            $year, $mon+1, $mday, $hour, $min, $sec );
-        } elsif ( $theFormat =~ /http|email/i ) {
-        # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
-	    # - based on RFC 2616/1123 and HTTP::Date; also used
-	    # by TWiki::Net for Date header in emails.
-	    return sprintf( "%s, %02d %s %04d %02d:%02d:%02d ServerTime", 
-			$weekDay[$wday], $mday, $isoMonth[$mon], $year, 
-			$hour, $min, $sec );
-        } else {
-	    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
-	    # e.g. "2002-12-31T19:30Z"
-	    return sprintf( "%.4u\-%.2u\-%.2uT%.2u\:%.2u:%.2uZ", 
-			    $year, $mon+1, $mday, $hour, $min, $sec );
-	}
-    }
-
-    # Default format, e.g. "31 Dec 2002 - 19:30"
-    my( $tmon ) = $isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
-    return sprintf( "%.2u ${tmon} %.2u - %.2u:%.2u", $mday, $year, $hour, $min );
-}
-
-# =========================
 =pod
 
 ---++ sub revDate2ISO ()
@@ -1565,7 +1430,7 @@ Not yet documented.
 sub revDate2ISO
 {
     my $epochSec = revDate2EpSecs( $_[0] );
-    return formatGmTime( $epochSec, 1 );
+    return formatTime( $epochSec, 1, "gmtime");
 }
 
 # =========================
@@ -2295,32 +2160,80 @@ sub handleTime
     my $value = "";
     my $time = time();
 
-    if( $format ) {
-        my( $sec, $min, $hour, $day, $mon, $year ) = gmtime( $time );
-          ( $sec, $min, $hour, $day, $mon, $year ) = localtime( $time ) if( $theZone eq "servertime" );
-        $value = $format;
-        $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
-        $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
-        $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
-        $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-        $value =~ s/\$mon[t]?[h]?/$isoMonth[$mon]/goi;
-        $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-        $value =~ s/\$yea[r]?/sprintf("%.4u",$year+1900)/geoi;
-        $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
-
-    } else {
-        if( $theZone eq "gmtime" ) {
-            $value = gmtime( $time );
-        } elsif( $theZone eq "servertime" ) {
-            $value = localtime( $time );
-        }
-    }
+#    if( $format ) {
+        $value = formatTime($time, $format, $theZone);
+ #   } else {
+ #       if( $theZone eq "gmtime" ) {
+ #           $value = gmtime( $time );
+ #       } elsif( $theZone eq "servertime" ) {
+ #           $value = localtime( $time );
+ #       }
+ #   }
 
 #    if( $theZone eq "gmtime" ) {
 #		$value = $value." GMT";
 #	}
 
     return $value;
+}
+
+# =========================
+=pod
+---++ sub formatTime ($epochSeconds, $formatString, $outputTimeZone) ==> $value
+| $epochSeconds | epochSecs GMT |
+| $formatString | twiki time date format |
+| $outputTimeZone | timezone to display. (not sure this will work)(gmtime or servertime) |
+
+=cut
+sub formatTime 
+{
+    my ($epochSeconds, $formatString, $outputTimeZone) = @_;
+    my $value = $epochSeconds;
+    
+    $formatString = "\$wday \$month \$day \$hour:\$min:\$sec \$year" if ((! $formatString) || ($formatString eq ""));
+    $outputTimeZone = $displayTimeValues if ((! $outputTimeZone) || ($outputTimeZone eq ""));
+    
+    my( $sec, $min, $hour, $day, $mon, $year, $wday) = gmtime( $epochSeconds );
+        ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ) if( $outputTimeZone eq "servertime" );
+            
+    #standard twiki date time formats
+    if( $formatString =~ /rcs/i ) {
+        # RCS format, example: "2001/12/31 23:59:59"
+        $formatString = "\$year/\$mo/\$day \$hour:\$min:\$sec";
+    } elsif ( $formatString =~ /http|email/i ) {
+        # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
+ 	    # - based on RFC 2616/1123 and HTTP::Date; also used
+        # by TWiki::Net for Date header in emails.
+        $formatString = "\$wday, \$day \$month \$year \$hour:\$min:\$sec \$tz";
+    } elsif ( $formatString =~ /iso/i ) {
+  	    # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
+        # e.g. "2002-12-31T19:30Z"
+        $formatString = "\$year-\$mo-\$dayT\$hour:\$min";
+        if( $outputTimeZone eq "gmtime" ) {
+            $formatString = $formatString."Z";
+        } else {
+            #TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
+        }
+	} 
+    
+    $value = $formatString;
+    $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
+    $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
+    $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
+    $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
+    my $weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+    $value =~ s/\$wday/$weekDay[$wday]/geoi;
+    $value =~ s/\$mon[t]?[h]?/$isoMonth[$mon]/goi;
+    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
+    $value =~ s/\$yea[r]?/sprintf("%.4u",$year+1900)/geoi;
+    $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
+        
+#TODO: how do we get the different timezone strings (and when we add usertime, then what?)    
+    my $tz_str = "GMT";
+    $tz_str = "Local" if ( $outputTimeZone eq "servertime" );
+    $value =~ s/\$tz/$tz_str/geoi;
+ 
+    return $value;        
 }
 
 #AS
@@ -2860,7 +2773,7 @@ sub handleInternalTags
     $_[0] =~ s/%INTURLENCODE{(.*?)}%/&handleIntUrlEncode($1)/ge;	# Deprecated - not needed with UTF-8 URL support
     
     # Dates and times
-    $_[0] =~ s/%DATE%/&getGmDate()/ge; 					# Deprecated, but used in signatures
+    $_[0] =~ s/%DATE%/&formatTime(time(), "\$day \$mon \$year", "gmtime")/ge; 					# Deprecated, but used in signatures
     $_[0] =~ s/%GMTIME%/&handleTime("","gmtime")/ge;
     $_[0] =~ s/%GMTIME{(.*?)}%/&handleTime($1,"gmtime")/ge;
     $_[0] =~ s/%SERVERTIME%/&handleTime("","servertime")/ge;
@@ -3192,7 +3105,7 @@ sub renderMoved
         my $by   = $moved{"by"};
         $by = userToWikiName( $by );
         my $date = $moved{"date"};
-        $date = formatGmTime( $date );
+        $date = formatTime( $date, , "gmtime" );
         
         # Only allow put back if current web and topic match stored information
         my $putBack = "";
@@ -3576,7 +3489,7 @@ sub linkToolTipInfo
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
-    $text =~ s/\$date/&formatDisplayTime( $date )/ge;
+    $text =~ s/\$date/&formatTime( $date )/ge;
     $text =~ s/\$username/<nop>$user/g;                                     # "jsmith"
     $text =~ s/\$wikiname/"<nop>" . &TWiki::userToWikiName( $user, 1 )/ge;  # "JohnSmith"
     $text =~ s/\$wikiusername/"<nop>" . &TWiki::userToWikiName( $user )/ge; # "Main.JohnSmith"

@@ -376,7 +376,7 @@ sub extractFileAttachmentArgs
     my $attrComment = $attributes{"comment"}; 
     my $attrAttr    = $attributes{"attr"};
 
-    $attrDate = &TWiki::formatDisplayTime( $attrDate );
+    $attrDate = &TWiki::formatTime( $attrDate );
     
     $attrUser = &TWiki::userToWikiName( $attrUser );
 
