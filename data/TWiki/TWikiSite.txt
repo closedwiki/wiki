@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999172600" format="1.0" version="1.13"}%
+%META:TOPICINFO{author="MikeMannix" date="999329583" format="1.0" version="1.14"}%
 ---++ TWiki is a Web-based collaboration tool
 
 	* A TWiki site is an easy-to-use, satisfying open communication environment where...
@@ -27,7 +27,7 @@ In addition to being quick, %WIKITOOLNAME% aspires to the Zen ideals known as Wa
 	* TWikiPlannedFeatures has a list of planned features for upcoming TWiki versions.
 	* TWikiHistory shows TWiki's implementation history.
 	* TWikiDocumentation is the implementation documentation.
-	* TWikiAdministration tells you how to do administrative stuff, like renaming or deleting a topic.
+	* ManagingWebs tells you how to do administrative stuff, like renaming or deleting a topic.
 	* WikiCulture talks about the unique type of collaboration Wiki systems offer.
 	* WikiReferences has links to articles and books around collaboration and the Wiki technology in particular.
 
@@ -38,4 +38,3 @@ TWiki is trademarked to Peter Thoeny, originator and lead developer.
 	* Source code is available upon request, see http://twiki.org/download.html
 	* WelcomeGuest is a basic instant guide to TWiki.
 	* This %WIKITOOLNAME% version is *%WIKIVERSION%*.
-%META:TOPICMOVED{by="MikeMannix" date="999166913" from="TWiki.TWikiWeb" to="TWiki.TWikiSite"}%
