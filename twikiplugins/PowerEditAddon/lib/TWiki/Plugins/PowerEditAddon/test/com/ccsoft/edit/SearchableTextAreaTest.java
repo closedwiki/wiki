@@ -231,7 +231,7 @@ public class SearchableTextAreaTest extends TestCase implements Application {
         sa.reset(this, testText, 5, 5);
         sa.searchString = line2;
         sa.refind();
-        sa.replayMacro("%cut%_%paste%_");
+        sa.replayMacro("/cut/_/paste/_");
         assertEquals(line1 + "_" + line2 + "_" + line3, sa.getText());
     }
 
@@ -239,8 +239,8 @@ public class SearchableTextAreaTest extends TestCase implements Application {
         sa.reset(this, testText, 5, 5);
         sa.searchString = line2;
         sa.refind();
-        sa.replayMacro("%%");
-        assertEquals(line1 + "%" + line3, sa.getText());
+        sa.replayMacro("//");
+        assertEquals(line1 + "/" + line3, sa.getText());
     }
 
     static String ocSeen;
@@ -253,7 +253,7 @@ public class SearchableTextAreaTest extends TestCase implements Application {
         sa.reset(this, testText, 5, 5);
         sa.searchString = line2;
         sa.refind();
-        sa.replayMacro("%boogle%");
+        sa.replayMacro("/boogle/");
         assertEquals(testText, sa.getText());
 	assertEquals("boogle", ocSeen);
     }

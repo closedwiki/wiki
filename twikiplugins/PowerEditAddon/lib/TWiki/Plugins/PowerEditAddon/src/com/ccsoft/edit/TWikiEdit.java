@@ -11,6 +11,8 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 import java.lang.reflect.*;
+import netscape.javascript.JSException;
+import netscape.javascript.JSObject;
 
 /**
  * Editor applet using a Frame and a SearchableTextArea, specifically
@@ -82,8 +84,23 @@ public class TWikiEdit extends Applet implements Application {
             getParameter("useframe").equals("yes");
 
         textarea = new SearchableTextArea();
-	String text = download("get");
-	controls = new Controls(download("controls"));
+
+	// default empty controls object
+	controls = new Controls();
+
+	String text = "", ct = "";
+	try {
+	    text = download("get");
+	    ct = download("controls");
+	    try {
+		controls.parse(ct);
+	    } catch (IOException cioe) {
+		text = cioe.getMessage() + "\n" + ct;
+	    }
+	} catch (IOException ioe) {
+	    text = ioe.getMessage();
+	}
+
 	ActionListener actionListener =
 	    new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
@@ -154,6 +171,7 @@ public class TWikiEdit extends Applet implements Application {
 	    Method m = getClass().getMethod(command, null);
 	    m.invoke(this, null);
 	} catch (Exception e) {
+	    System.err.println(e.getMessage());
 	    e.printStackTrace();
 	    showStatus("Can't " + command + ": " + e.getMessage());
 	    Toolkit.getDefaultToolkit().beep();
@@ -161,7 +179,7 @@ public class TWikiEdit extends Applet implements Application {
     }
 
     /** Download text from the server, using the given command. */
-    private String download(String command) {
+    private String download(String command) throws IOException {
 	String reply = "";
 	// a url of "debug" means run in appletviewer mode and
 	// don't try to talk to the server
@@ -170,8 +188,7 @@ public class TWikiEdit extends Applet implements Application {
 	    if (reply.startsWith("OK")) {
 		return reply.substring(2);
 	    } else {
-		showStatus(reply);
-		return "ERROR during get?action=" + command + " -> " + reply;
+		throw new IOException("ERROR during get?action=" + command + " -> " + reply);
 	    }
 	} else {
 	    reply = server.substring(5);
@@ -190,21 +207,19 @@ public class TWikiEdit extends Applet implements Application {
 	    String sp = "&unlock=" + (controls.getReleaseLock() ? 1 : 0) +
 		"&dontnotify=" + (controls.getDontNotify() ? 1 : 0);
 	    String text = textarea.getText();
-	    String reply = post(server,	    
-				formParameter("action", "put") +
-				formParameter("text", text));
-	    if (reply.startsWith("OK")) {
-		reply = reply.substring(2) + "?action=commit" + sp;
-		try {
+	    try {
+		String reply = post(server,	    
+				    formParameter("action", "put") +
+				    formParameter("text", text));
+		if (reply.startsWith("OK")) {
+		    reply = reply.substring(2) + "?action=commit" + sp;
 		    URL url = new URL(getCodeBase(), reply);
 		    getAppletContext().showDocument(url);
 		    // never returns because we've navigated away from
 		    // this page
-		} catch (MalformedURLException mue) {
-		    showStatus("ERROR Bad url: " + mue.getMessage());
 		}
-	    } else {
-		showStatus(reply);
+	    } catch (IOException ioe) {
+		showStatus("ERROR " + ioe.getMessage());
 	    }
 	} else {
 	    showStatus("No changes to save");
@@ -218,19 +233,35 @@ public class TWikiEdit extends Applet implements Application {
      */
     public void preview() {
 	String text = textarea.getText();
-	String reply = post(server,	    
-			    formParameter("action", "put") +
-			    formParameter("text", text));
-	if (reply.startsWith("OK")) {
-	    reply = reply.substring(2) + "?action=preview";
-	    try {
+	try {
+	    String reply = post(server,	    
+				formParameter("action", "put") +
+				formParameter("text", text));
+	    if (reply.startsWith("OK")) {
+		reply = reply.substring(2) + "?action=preview";
 		URL url = new URL(getCodeBase(), reply);
-		getAppletContext().showDocument(url, "_blank");
-	    } catch (MalformedURLException mue) {
-		showStatus("ERROR Bad url: " + mue.getMessage());
+		try {
+		    JSObject jsWin = JSObject.getWindow(this);
+		    System.out.println("Win " + jsWin);
+		    if (jsWin != null) {
+			String[] args = {
+			    url.toString(),
+			    "preview",
+			    "titlebar=0,width=500,height=480,resizable,scrollbars"
+			};
+			Object argh = jsWin.call("open", args);
+			System.out.println("Argh " + argh);
+		    } else {
+			getAppletContext().showDocument(url, "_blank");
+		    }
+		} catch (Exception jse) {
+		    //System.err.println(jse.getWrappedExceptionType());
+		    System.err.println(jse);
+		    showStatus("ERROR " + jse.getMessage());
+		}
 	    }
-	} else {
-	    showStatus("ERROR: " + reply);
+	} catch (IOException ioe) {
+	    showStatus("ERROR " + ioe.getMessage());
 	}
     }
 
@@ -248,7 +279,7 @@ public class TWikiEdit extends Applet implements Application {
      * If everything works it will return OK+the reply, otherwise
      * it will return ERROR+the error message.
      */
-    public String post(String url, String message) {
+    public String post(String url, String message) throws IOException {
 
 	message += END_MESSAGE;
 
@@ -257,49 +288,43 @@ public class TWikiEdit extends Applet implements Application {
 	    return "OKno_response";
 	}
 
-	try {
-	    URL server = new URL(
-		getCodeBase().getProtocol(),
-		getCodeBase().getHost(),
-		getCodeBase().getPort(),
-		url);
-	    URLConnection connection = server.openConnection();
-
-	    connection.setAllowUserInteraction(true);
-	    connection.setDoOutput(true);
-	    connection.setDoInput(true);
-	    connection.setUseCaches(false);
-
-	    connection.setRequestProperty(
-		"Content-type",
-		"multipart/form-data; boundary=" + MIME_SEP);
-	    connection.setRequestProperty(
-		"Content-length",
-		Integer.toString(message.length()));
-
-	    DataOutputStream out =
-		new DataOutputStream(connection.getOutputStream());
-	    out.writeBytes(message);
-	    out.close();
-
-	    StringBuffer replyBuffer = new StringBuffer();
-	    BufferedReader in =
-		new BufferedReader(new InputStreamReader(
-		    connection.getInputStream()));
-	    String reply = null;
-	    do {
-		reply = in.readLine();
-		if (reply != null) {
-		    replyBuffer.append(reply);
-		    replyBuffer.append('\n');
-		}
-	    } while (reply != null);
-	    in.close();
-	    return replyBuffer.toString().trim();
-	} catch (MalformedURLException mue) {
-	    return "ERROR Bad url: " + mue.getMessage();
-	} catch (IOException ioe) {
-	    return "ERROR " + ioe.getMessage();
-	}
+	URL server = new URL(
+	    getCodeBase().getProtocol(),
+	    getCodeBase().getHost(),
+	    getCodeBase().getPort(),
+	    url);
+	URLConnection connection = server.openConnection();
+	
+	connection.setAllowUserInteraction(true);
+	connection.setDoOutput(true);
+	connection.setDoInput(true);
+	connection.setUseCaches(false);
+	
+	connection.setRequestProperty(
+	    "Content-type",
+	    "multipart/form-data; boundary=" + MIME_SEP);
+	connection.setRequestProperty(
+	    "Content-length",
+	    Integer.toString(message.length()));
+	
+	DataOutputStream out =
+	    new DataOutputStream(connection.getOutputStream());
+	out.writeBytes(message);
+	out.close();
+	
+	StringBuffer replyBuffer = new StringBuffer();
+	BufferedReader in =
+	    new BufferedReader(new InputStreamReader(
+		connection.getInputStream()));
+	String reply = null;
+	do {
+	    reply = in.readLine();
+	    if (reply != null) {
+		replyBuffer.append(reply);
+		replyBuffer.append('\n');
+	    }
+	} while (reply != null);
+	in.close();
+	return replyBuffer.toString().trim();
     }
 }
