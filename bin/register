@@ -27,7 +27,7 @@ $query = new CGI;
 ##### for debug only: Remove next 3 comments (but redirect does not work)
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 #$| = 1;                  # no buffering
-#print "Content-type: text/html\n\n";
+#TWiki::writeHeader( $query );
 
 &main();
 
@@ -228,7 +228,7 @@ sub addUserToTWikiUsersTopic
     my $today = &TWiki::getLocaldate();
     my $topicName = $TWiki::userListFilename;
     $topicName =~ s/(.*[^\/])\/([a-zA-Z0-9]*)\.txt$/$2/go;
-    my( $text, @meta )  = &TWiki::Store::readWebTopicNew( $TWiki::mainWebname, $topicName );
+    my( $meta, $text )  = &TWiki::Store::readTopic( $TWiki::mainWebname, $topicName );
     my $result = "";
     my $status = "0";
     my $line = "";
