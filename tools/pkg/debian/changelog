@@ -2,6 +2,7 @@ twiki (20030201-6) unstable; urgency=emergency
 
   * patched security vunerability in Search (Closes: #281005)
   * removed apachectl restart as it fails in postrm (Closes: #276058)
+  * enable apache2 cgi using symlink (Closes: #266873)
 
  -- Sven Dowideit <svenud@ozemail.com.au>  Sat, 13 Nov 2004 00:00:01 -1000
 

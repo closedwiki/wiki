@@ -84,6 +84,11 @@ case "$1" in
 		fi
 	done
 
+	#add apache2 cgi
+	if [ -e /etc/apache2/conf.d ]; then
+		ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/cgi.load
+	fi
+
 	if [ -e /usr/sbin/apachectl ]; then
 		/usr/sbin/apachectl restart
 	fi
