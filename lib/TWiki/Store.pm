@@ -483,7 +483,7 @@ sub getRevisionNumber
 {
     my( $theWebName, $theTopic, $attachment ) = @_;
     my $ret = getRevisionNumberX( $theWebName, $theTopic, $attachment );
-    TWiki::writeDebug( "Store: rev = $ret" );
+    ##TWiki::writeDebug( "Store: rev = $ret" );
     if( ! $ret ) {
        $ret = "1.1"; # Temporary
     }
@@ -557,7 +557,7 @@ sub getRevisionDiff
         $tmp =~ s/[0-9]+c[0-9]+\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n---\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n//go;
         $tmp =~ s/[<>]\s*%META:TOPICINFO{[^}]*}%\s*//go;
         
-        TWiki::writeDebug( "and now $tmp" );
+        ##TWiki::writeDebug( "and now $tmp" );
     }
     return "$tmp";
 }
@@ -691,17 +691,11 @@ sub keyValue2list
 # ========================
 sub metaAddTopicData
 {
-    my( $web, $topic, $rev, $meta, $forceDate ) = @_;
-    
-    my $time;
-    if( $forceDate ) {
-        $time = $forceDate;
-    } else {
-        $time = time();
-    }
-    
-    my $user = $TWiki::userName;
-        
+    my( $web, $topic, $rev, $meta, $forceDate, $forceUser ) = @_;
+
+    my $time = $forceDate || time();
+    my $user = $forceUser || $TWiki::userName;
+
     my @args = (
        "version" => "$rev",
        "date"    => "$time",
@@ -807,7 +801,7 @@ sub save
 # ========================
 sub _saveWithMeta
 {
-    my( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta, $forceDate ) = @_;
+    my( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta, $forceDate, $forceUser ) = @_;
     
     if( ! $attachment ) {
         my $name = getFileName( $web, $topic, $attachment );
@@ -816,7 +810,7 @@ sub _saveWithMeta
             $nextRev = "1.1";
         }
 
-        metaAddTopicData(  $web, $topic, $nextRev, $meta, $forceDate );
+        metaAddTopicData(  $web, $topic, $nextRev, $meta, $forceDate, $forceUser );
         $text = $meta->write( $text );
     
 	# save file
@@ -999,14 +993,18 @@ sub saveNew
 
     #### Replace Revision Save
     if( $saveCmd eq "repRev" ) {
-        # fix topic by replacing last revision
-        
-        $nextRev = $currentRev;
-        $text = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $nextRev, $meta );
+        # fix topic by replacing last revision, but do not update .changes
 
-        # update repository with same userName and date, but do not update .changes
-        my $rev = getRevisionNumber( $web, $topic, $attachment );
-        my( $date, $user ) = getRevisionInfo( $web, $topic, $rev, "", $attachment );
+        # save topic with same userName and date
+        my( $date, $user, $rev ) = getRevisionInfo( $web, $topic, "", 1, $attachment );
+        $rev = "1.$rev";
+        # Add two minutes (make small difference, but not too big for notification)
+        my $epochSec = &TWiki::revDate2EpSecs( $date ) + 120;
+        $date = &TWiki::formatGmTime( $epochSec, "rcs" );
+        $text = _saveWithMeta( $web, $topic, $text, $attachment, $doUnlock, $rev,
+                               $meta, $epochSec, $user );
+
+        # update repository with same userName and date
         if( $rev eq "1.1" ) {
             # initial revision, so delete repository file and start again
             unlink "$name,v";
