@@ -198,8 +198,16 @@ if ($detailedOS eq 'cygwin') {
 	$cygwinRcsVerNum = $pkg;	
     }
 } elsif ($detailedOS =~ /win/i && $detailedOS !~ /darwin/i ) {
-    $perltype = 'ActiveState';
-    $perlver .= ", build " . Win32::BuildNumber();	# ActivePerl only
+    # Windows Perl - try ActivePerl-only function: returns number if
+    # successful, otherwise treated as a literal (bareword).
+    my $isActivePerl= eval 'Win32::BuildNumber !~ /Win32/';
+    if( $isActivePerl ) {
+	$perltype = 'ActiveState';
+        $perlver .= ", build " . Win32::BuildNumber();
+    } else {
+	# Could be SiePerl or some other Win32 port of Perl
+	$perltype = 'SiePerl/Other Win32 Perl';
+    }
 } else {
     $perltype = 'generic';
 }
@@ -226,19 +234,18 @@ my $LOAD_MOD_PERL = ( exists $ENV{'SERVER_SOFTWARE'} &&
 my $USE_MOD_PERL = ( exists $ENV{'MOD_PERL'} ) && "Used" || "Not used";
 
 
-
 # OS
 print "<tr><th align=\"right\">Operating system:</th><td>" .  ucfirst(lc($OS));
 print " ($detailedOS)" if ( $detailedOS ne '' );
 print "</td></tr>\n";
 
-# Perl version
+# Perl version and type
 print "<tr><th align=\"right\">Perl version:</th><td>$perlver";
 print " ($perltype)" if $perltype ne 'generic';
 print "</td></tr>\n";
 if ( $perlvernum < $perlverRequired ) {
     print "<tr><th></th><td><b><font color=\"red\">Warning:</font></b> ";
-    print "This version of Perl is old - upgrade to at least Perl $perlverRequiredString\n";
+    print "This version of Perl is too old for use with TWiki - upgrade to at least Perl $perlverRequiredString\n";
     print "and preferably to Perl $perlverRecommended.\n";
     print "</td></tr>\n";
 }
@@ -260,7 +267,7 @@ if ( $detailedOS =~ /darwin/i or $OS ne 'UNIX' ) {
 
 
 # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
-# browser.
+# browser in some environments.
 $CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
 
 # Check that the TWiki.pm module can be found
@@ -275,7 +282,7 @@ if ($@) {
     print ".\n";
     print "</td></tr>\n";
 } else {
-    my $mod_version = eval "\$TWiki::wikiversion";
+    my $mod_version = eval '$TWiki::wikiversion';
     $mod_version ||= 'unknown';
     print "OK, $mod.pm found (TWiki version: <b>$mod_version</b>)";
     print "</td></tr>\n";
@@ -295,7 +302,7 @@ foreach $mod (@requiredMods) {
     } else {
 	my $mod_version;
 	if ( $mod eq 'TWiki' ) {
-	    $mod_version = eval "\$TWiki::wikiversion";
+	    $mod_version = eval '$TWiki::wikiversion';
 	    $mod_version ||= 'unknown';
 	} else {
 	    $mod_version = ${"${mod}::VERSION"};
@@ -344,12 +351,12 @@ my $usr = lc( getlogin || getpwuid($<) );
 # 
 # Get group info
 my $grp = "";
-if ( $perltype ne 'ActiveState' ) {
+if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
     foreach( split( " ", $( ) ) {	# Unix/Cygwin Perl
 	my $onegrp = getgrgid( $_ );
 	$grp .= " " . lc($onegrp);
     }
-} else {		# ActiveState Perl
+} else {		# ActiveState or other Win32 Perl
     # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
     # is probably installed to supply ls, egrep, etc - if it isn't, give up.
     # Run command without stderr output, to avoid CGI giving error.
@@ -639,26 +646,28 @@ if( $OS eq 'UNIX' or  ($OS eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {
     print "</td></tr>";
 }
 
-# PERL5SHELL check for ActiveState Perl on Windows only
-if( $OS eq 'WINDOWS' && $perltype eq 'ActiveState' ) {
+# PERL5SHELL check for non-Cygwin Perl on Windows only
+if( $OS eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
 
+    # ActiveState or SiePerl/other
     my $perl5shell = $ENV{'PERL5SHELL'} || '';
     print "</td></tr>\n";
     print "<tr><th align=\"right\">PERL5SHELL:</th><td>$perl5shell</td></tr>\n";
     print "<tr><th></th><td><b><font color=\"green\">Note:</font></b> ";
-    print "This environment variable is used by ActiveState Perl to run \n";
+    print "This environment variable is used by ActiveState and other Win32 Perls to run \n";
     print "commands from TWiki scripts - it determines which shell\n";
     print "program is used to run commands that use 'pipes'.  Examples of shell programs are \n";
     print "cmd.exe, command.com (aka 'DOS Prompt'), and Cygwin's 'bash'\n";
     print "(<b>recommended</b> if Cygwin is installed).\n";
     print "<p>\n";
-    print "To use 'bash' with ActiveState Perl, you should set the \n";
+    print "To use 'bash' with ActiveState or other Win32 Perls, you should set the \n";
     print "PERL5SHELL environment variable to something like <tt><b>c:/YOURCYGWINDIR/bin/bash.exe -c</b></tt>.\n"; 
     print "This should be set in the System Environment, and ideally set \n";
     print "directly in the web server (e.g. using the Apache <tt>SetEnv</tt> \n";
     print "command, followed by an Apache restart). Once this is done, you should re-run <b>testenv</b>\n";
     print "to check that PERL5SHELL is set properly.\n";
-    if( Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
+    if ($perltype eq 'ActiveState' and 
+	    Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
 	print "</p>\n";
 	print "<p><b><font color=\"red\">Warning:</font></b> ";
 	print "ActiveState Perl must be upgraded to build <b>$ActivePerlRecommendedBuild</b> if you are going to use PERL5SHELL, which was broken in earlier builds.";
