@@ -124,7 +124,9 @@ open(FH, ">$file") || die "Can't open $file: $!";
 print FH $config;
 close(FH) || die "Can't write to $file: $!";
 
+
 ################################################################################
+# authentication
 
 print "<h2>Authentication</h2>\n";
 
@@ -149,7 +151,12 @@ execute( "mv $dest/data/TWiki/TWikiRegistrationPub.txt,v $dest/data/TWiki/TWikiR
 
 ################################################################################
 
-eraseBundledPlugins();
+# TODO: fix errors when removing DefaultPlugin
+my @preinstalledPlugins = qw( CommentPlugin EditTablePlugin EmptyPlugin InterwikiPlugin RenderListPlugin SlideShowPlugin SmiliesPlugin SpreadSheetPlugin TablePlugin );
+foreach my $plugin ( @preinstalledPlugins )
+{
+    erasePlugin( $plugin );
+}
 
 #installLocalModules({
 #    modules => [ qw( Data::UUID Date::Handler Safe Language::Prolog CGI::Session File::Temp List::Permutor File::Temp ) ],
@@ -236,110 +243,121 @@ my @availPlugins = (
 		    'RandomQuotePlugin',
 		    'RecursiveRenderPlugin',
 		    'RedirectPlugin',
-		    'RicherSyntaxPlugin',
 		    'SectionalEditPlugin',
 		    'SessionPlugin',
 		    'SingletonWikiWordPlugin',
 		    'TextSectionPlugin',
-		    'TopicVarsPlugin',
 		    'TranslateTagPlugin',
 		    'TreePlugin',
 		    'TWikiDrawPlugin',
 		    'TWikiReleaseTrackerPlugin',
 		    'VarCachePlugin',
 
-
 ################################################################################
 # not very good tests, so i can't really tell if it's working or not, but it seems to have installed correctly
 		    'VersionLinkPlugin',	# attachment foo.c, reference by the example, isn't included (or maybe the %META% isn't correct)
 
 ################################################################################
-# not showing up in the list
-#AbusePlugin - ABUSEFILE_LOCATION - need to specify file location, and upload a word filter file
-#ChildTopicTemplatePlugin - dunno
-#CounterPlugin - COUNTERPLUGIN_COUNTER_FILE_PATH - /home/students/mtech03/rahulm/web/twiki/lib/TWiki/Plugins/datacount.txt!?!
-#NavPlugin - dunno
-#NavbarPlugin - dunno
-#PerlSamplePlugin - dunno - don't have CPAN:Safe installed?
-#PhotoarchivePlugin - ANYTOPNM => "/usr/bin/anytopnm" - PNMSCALE => "/usr/bin/pnmscale" - PNMTOPNG => "/usr/bin/pnmtopng" - PNMTOJPEG => "/usr/bin/pnmtojpeg"
-#PrologSamplePlugin - need CPAN:Language::Prolog
-#SearchToTablePlugin - dunno - needs lots of cleanup from original template
-#StylePlugin - dunno
-#SuggestLinksPlugin - need CPAN:List::Permutor ?
-#UpdateInfoPlugin - dunno
-#UserCookiePlugin - dunno
 
-# or other installation issues
-#BlackListPlugin - needs additional setup (should be renamed throttler (what did i call it before??))
-#EmbedBibPlugin - need bibtool and bibtex2html
-#GuidPlugin - needs CPAN:Data::UUID
-#LocalTimePlugin - Date::Handler
-#SourceHighlightPlugin - can't find CPAN:File::Temp
-#TodaysVisitorsPlugin - configure the $TWIKILIBPATH var in lib/TWiki/Plugins/TodaysVisitorsPlugin.pm - configure the $LOGPATH var in lib/todaysvisitors.sh
+		    'ActionTrackerPlugin',	# exists operator argument is not a HASH element at ../lib/TWiki/Plugins/ActionTrackerPlugin.pm line 213.
 
+################################################################################
+# need cpan modules
+#		    'GuidPlugin',		# CPAN:Data::UUID
+#		    'LocalTimePlugin',		# CPAN:Date::Handler
+#		    'PerlSamplePlugin',		# CPAN:Safe
+#		    'PrologSamplePlugin',	# CPAN:Language::Prolog
+#		    'SourceHighlightPlugin',	# CPAN:File::Temp (sf/perl v5.6?)
+#		    'SuggestLinksPlugin',	# CPAN:List::Permutor
+#		    'CalendarPlugin',		# CPAN:Date::Calc
 
-# wrong directory structure, won't install
-#EmbedFlashPlugin - left EmbedFlashPlugin - wrong directory structure
-#FormFieldsPlugin - wrong directory structure
-#FormPivotPlugin - wrong directory structure#
-#IrcLogPlugin - IrcLogPlugin.txt.gz ???
-#RevRecoverPlugin - left RevRecoverPlugin in (local) root
-#RevisionLinkPlugin - left RevisionLinkPlugin in (local) root
-#SyntaxHighlightingPlugin - wrong directory structure
-#TocPlugin - left TocPlugin.xml in (local) root
-#XpTrackerPlugin - wrong directory structure
+# other dependencies (not cpan)
+#		    'EmbedBibPlugin',		# need bibtool and bibtex2html
+#		    'MathModePlugin',		# latex2html, (Not enough arguments for mkdir at ../lib/TWiki/Plugins/MathModePlugin.pm line 193, near "$path - sf)
 
-# plain old install/runtime errors
-#ActionTrackerPlugin - exists operator argument is not a HASH element at ../lib/TWiki/Plugins/ActionTrackerPlugin.pm line 213. (but i didn't run build.pl yet)
-#AliasPlugin - []'s __everywhere__
-#BugzillaQueryPlugin - can't rest - says "can't connect to database", which is true for the default install
-#CalendarPlugin - Can't continue after import errors at ../lib/TWiki/Plugins/CalendarPlugin.pm line 240 BEGIN failed--compilation aborted at ../lib/TWiki/Plugins/CalendarPlugin.pm line 240.
-#DiskUsagePlugin - Illegal division by zero at ../lib/TWiki/Plugins/DiskUsagePlugin.pm line 158.
-#DoxygenPlugin - needs help
-#HeadlinesPlugin - doesn't work from within sourceforge (http out)
-#ImageGalleryPlugin - mkdir problem, too
-#IncludeRevisionPlugin - co: /home/groups/g/gd/gdutree/twiki/data/1/RCS/3.txt,v: No such file or directory
-#JavaDocPlugin - Unmatched right bracket at ../lib/TWiki/Plugins/JavaDocPlugin.pm line 119, at end of line syntax error at ../lib/TWiki/Plugins/JavaDocPlugin.pm line 119, near "}" - almost seems to work, tho? (tests show up right) - also, i think this left a tmp/ directory
-#LaTeXToMathMLPlugin - page rendered inside page, no math to be seen - don't know if it's a problem with this plugin, or an interaction with another one
-#MathModePlugin - Not enough arguments for mkdir at ../lib/TWiki/Plugins/MathModePlugin.pm line 193, near "$path )
-#MessageBoardPlugin - warnings.pm (?)
-#PdfPlugin - nope
-#PhantomPlugin - interacts with RicherSyntaxPlugin?
-#TouchGraphPlugin - don't know why
-#TypographyPlugin - doesn't seem to work
-
-
+################################################################################
 # related to sourceforge restrictions (at least)
-#LocalCityTimePlugin - ERROR: TWiki::Net::getUrl connect: Connection timed out.
+		    'HeadlinesPlugin',
+		    'LocalCityTimePlugin',
 
+################################################################################
+# dunno? section
+		    'ChildTopicTemplatePlugin',
+		    'NavPlugin',
+		    'NavbarPlugin',
+		    'SearchToTablePlugin', 	# needs lots of cleanup from original template
+		    'StylePlugin',
+		    'UpdateInfoPlugin',
+		    'UserCookiePlugin',
+		    'TouchGraphPlugin',
 
+################################################################################
+# additional configuration required
+#		    'AbusePlugin',		# ABUSEFILE_LOCATION - need to specify file location, and upload a word filter file
+#		    'BlackListPlugin',		# needs additional setup (should be renamed throttler (what did i call it before??))
+#		    'BugzillaQueryPlugin',	# can't rest - says "can't connect to database", which is true for the default install
+#		    'CounterPlugin',		# COUNTERPLUGIN_COUNTER_FILE_PATH - /home/students/mtech03/rahulm/web/twiki/lib/TWiki/Plugins/datacount.txt!?!
+#		    'MessageBoardPlugin',	# - warnings.pm (?)
+#		    'PhotoarchivePlugin',	# ANYTOPNM => "/usr/bin/anytopnm" - PNMSCALE => "/usr/bin/pnmscale" - PNMTOPNG => "/usr/bin/pnmtopng" - PNMTOJPEG => "/usr/bin/pnmtojpeg"
+#PhotoarchivePlugin - ANYTOPNM => "/sw/bin/anytopnm" - PNMSCALE => "/sw/bin/pnmscale" - PNMTOPNG => "/sw/bin/pnmtopng" - PNMTOJPEG => "/sw/bin/pnmtojpeg"
+#		    'TodaysVisitorsPlugin',	# configure the $TWIKILIBPATH var in lib/TWiki/Plugins/TodaysVisitorsPlugin.pm - configure the $LOGPATH var in lib/todaysvisitors.sh
+
+################################################################################
+# plain old runtime errors/bugs
+#		    'DiskUsagePlugin',	# Illegal division by zero at ../lib/TWiki/Plugins/DiskUsagePlugin.pm line 158.
+#		    'TopicVarsPlugin',		# gives lots of warnings...
+#		    'DoxygenPlugin',		# needs help
+#		    'ImageGalleryPlugin',	# (mkdir problem on sf)
+#		    'IncludeRevisionPlugin',	# co: /home/groups/g/gd/gdutree/twiki/data/1/RCS/3.txt,v: No such file or directory
+#		    'JavaDocPlugin',		# Unmatched right bracket at ../lib/TWiki/Plugins/JavaDocPlugin.pm line 119, at end of line syntax error at ../lib/TWiki/Plugins/JavaDocPlugin.pm line 119, near "}" - almost seems to work, tho? (tests show up right) - also, i think this left a tmp/ directory
+#		    'LaTeXToMathMLPlugin',	# page rendered inside page, no math to be seen - don't know if it's a problem with this plugin, or an interaction with another one
+#		    'PdfPlugin',		# nope
+		    'PhantomPlugin',		# interacts with RicherSyntaxPlugin?
+
+################################################################################
+# rendering problems
+#		    'RicherSyntaxPlugin',	# not surprisingly, doesn't seem to still work (did it ever truly not interact poorly?)
+#		    'TypographyPlugin',
+#		    'AliasPlugin',		# []'s __everywhere__
+
+################################################################################
+# wrong directory structure, won't install
+#		    'EmbedFlashPlugin',		# left EmbedFlashPlugin - wrong directory structure
+#		    'FormFieldsPlugin',		# wrong directory structure
+#		    'FormPivotPlugin',		# wrong directory structure#
+#		    'IrcLogPlugin',		# IrcLogPlugin.txt.gz ???
+#		    'RevRecoverPlugin',		# left RevRecoverPlugin in (local) root
+#		    'RevisionLinkPlugin',	# left RevisionLinkPlugin in (local) root
+#		    'SyntaxHighlightingPlugin',	# wrong directory structure
+#		    'TocPlugin',		# left TocPlugin.xml in (local) root
+#		    'XpTrackerPlugin',		# wrong directory structure
+
+################################################################################
 # untested because they're scary user authentication stuff
-#LDAPPasswordChangerPlugin
-#LdapPlugin
-#LoginNameAliasesPlugin
+#		    'LDAPPasswordChangerPlugin',
+#		    'LdapPlugin',
+#		    'LoginNameAliasesPlugin',
 
-
+################################################################################
 # mail/notify - related stuff (also untested)
-#ImmediateNotifyPlugin
-#NotificationPlugin
+#		    'ImmediateNotifyPlugin',
+#		    'NotificationPlugin',
 
 # can't test
-#MsOfficeAttachmentsAsHTMLPlugin
-#DatabasePlugin - need db to test it with (also look into CPAN:SQL::Lite)
-#MovableTypePlugin
-#SiteMinderPlugin
-#WebDAVPlugin
+#		    'MsOfficeAttachmentsAsHTMLPlugin',
+#		    'DatabasePlugin', 		# need db to test it with (also look into CPAN:SQL::Lite)
+#		    'MovableTypePlugin',
+#		    'SiteMinderPlugin',
+#		    'WebDAVPlugin',
 
 # "special" plugins
-#WtfPlugin - not a real plugin
-
+		    'WtfPlugin',		# not a real plugin
 
 # obselete (?)
-#PollPlugin - obseleted in favor of CommentPlugin?
-
+#		    'PollPlugin',		# obseleted in favour of CommentPlugin?
 
 # addons
-#SpellCheckerPlugin - more like an addon; has bin/ directory
+#		    'SpellCheckerPlugin',	# more like an addon; has bin/ directory
 		    );
 
 ################################################################################
@@ -461,6 +479,7 @@ chdir( "../.." ) or warn $!;
 ################################################################################
 #  cleanup / permissions
 
+print qq{<h2>Final</h2>\n};
 execute( "ls -lR tmp/install" );
 
 execute("chmod -R 777 $dest");
@@ -536,25 +555,16 @@ __HTML__
 
     print qq{<br/>[<font color="$clrError">$error</font>]: };
     $cmd =~ s/&/&amp;/g;  $cmd =~ s/</&lt;/g;  $cmd =~ s/>/&gt;/g;
-    print qq{<font color="$clrCommand"><pre>$cmd</pre></font>\n};
+    print qq{<font color="$clrCommand"><tt>$cmd</tt></font><br/>\n};
 
     print join( '<br/>', @output );
 
-    print "</span>\n";
+    print "<br/></span>\n";
 }
 
 }
 
 #--------------------------------------------------------------------------------
-
-sub eraseBundledPlugins
-{ # (remove plugins that ship with twiki)
-    # TODO: fix errors when removing DefaultPlugin
-    foreach my $plugin ( qw( CommentPlugin EditTablePlugin EmptyPlugin InterwikiPlugin RenderListPlugin SlideShowPlugin SmiliesPlugin SpreadSheetPlugin TablePlugin ) )
-    {
-	erasePlugin( $plugin );
-    }
-}
 
 sub erasePlugin
 {
@@ -661,3 +671,57 @@ sub WebBrowser
 }
 
 ################################################################################
+
+__DATA__
+#================================================================================
+# check to run as root (need permissions--- grrr, fix that) (why, again? i forget..., oh yeah, for apache.conf)
+# TODO: try putting all setup in bin/.htaccess (sourceforge version does this)
+chomp( my $whoami = `whoami` );
+die "must run this as root (or sudo)\n" unless $whoami eq 'root';
+
+my $account = shift or die "Usage: install.pl <accountName>\n";
+# validate account exists -- how do you do that generally?  (eg, /etc/users doesn't exist on MacOsX)
+
+my $install = cwd();
+
+################################################################################
+
+my $apacheConfig = "/private/etc/httpd/users/$account.conf";
+
+# MacOsX-specific apache configuration file (shouldn't be hard to finish generalising)
+
+if ( open( CONF, ">$apacheConfig" ) )
+{
+    print CONF <<__APACHECONF__;
+<Directory "/Users/$account/Sites/">
+    Options Indexes MultiViews
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+
+ScriptAlias /~$account/twiki/bin/ "/Users/$account/Sites/twiki/bin/"
+Alias /~$account/twiki/ "/Users/$account/Sites/twiki/"
+<Directory "/Users/$account/Sites/twiki/bin">
+    Options +ExecCGI
+    SetHandler cgi-script
+    Allow from all
+</Directory>
+<Directory "/Users/$account/Sites/twiki/pub">
+    Options FollowSymLinks +Includes
+    AllowOverride None
+    Allow from all
+</Directory>
+<Directory "/Users/$account/Sites/twiki/data">
+    deny from all
+</Directory>
+<Directory "/Users/$account/Sites/twiki/templates">
+    deny from all
+</Directory>
+__APACHECONF__
+    close( CONF );
+}
+else
+{
+    print STDERR "Unable to write apache configuration file!\n";
+}
