@@ -5,13 +5,12 @@ use strict;
 
 use TWiki::Func;
 
-use vars qw( $initialised $VERSION $firstCall $pluginName $context );
+use vars qw( $VERSION $firstCall $pluginName $context );
 
 BEGIN {
     $VERSION = 3.100;
     $pluginName = "CommentPlugin";
     $firstCall = 0;
-	$initialised = 0;
 }
 
 sub initPlugin {
@@ -32,8 +31,10 @@ sub initPlugin {
 sub commonTagsHandler {
     my ( $text, $topic, $web ) = @_;
 
-    unless ($initialised) {
-        return unless _lazyInit();
+    require TWiki::Plugins::CommentPlugin::Comment;
+    if ($@) {
+        TWiki::Func::writeWarning( $@ );
+        return 0;
     }
 
     my $query = TWiki::Func::getCgiQuery();
@@ -60,16 +61,6 @@ sub commonTagsHandler {
         TWiki::Plugins::CommentPlugin::Comment::prompt( $previewing,
                                                         $_[0], $web, $topic );
     }
-}
-
-sub _lazyInit {
-    eval 'use TWiki::Plugins::CommentPlugin::Comment';
-    if ($@) {
-        TWiki::Func::writeWarning( $@ );
-        return 0;
-    }
-    $initialised = 1;
-    return 1;
 }
 
 1;

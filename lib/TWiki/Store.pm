@@ -42,15 +42,6 @@ use Error qw( :try );
 
 use strict;
 
-# 'Use locale' for internationalisation of Perl sorting in getTopicNames
-# and other routines - main locale settings are done in TWiki::setupLocale
-BEGIN {
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        eval 'require locale; import locale ();';
-    }
-}
-
 =pod
 
 ---++ ClassMethod new()
@@ -62,6 +53,12 @@ Construct a Store module, linking in the chosen sub-implementation.
 sub new {
     my ( $class, $session ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
+
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+    }
+
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
@@ -1084,7 +1081,7 @@ sub lockTopic {
         # held that long, by _any_ process.
         if ( time() - $time > 2 * 60 ) {
             $this->{session}->writeWarning
-              ( $locker->wikiName()." broke $user's lock on $web.$topic" );
+              ( $locker->wikiName()." broke ${user}s lock on $web.$topic" );
             $topicHandler->setLock( 0 );
             last;
         }

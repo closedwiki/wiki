@@ -40,12 +40,6 @@ use Error qw( :try );
 # output goes only to web server error log - otherwise it might give
 # useful debugging information to someone developing an exploit.
 
-sub _writeDebug {
-    my $this = shift;
-    $this->{session}->writeDebug($_[0]);
-    print STDERR $_[0],"\n";
-}
-
 =pod
 
 ---++ ClassMethod new( $session, $os, $realOS )
@@ -61,8 +55,8 @@ sub new {
     my $this = bless( {}, $class );
 
     ASSERT(ref($session) eq "TWiki") if DEBUG;
-    ASSERT( defined $os );
-    ASSERT( defined $realOS );
+    ASSERT( defined $os ) if DEBUG;
+    ASSERT( defined $realOS ) if DEBUG;
 
     $this->{session} = $session;
 
@@ -84,15 +78,15 @@ sub new {
         $this->{EMULATED_SAFE_PIPE_OPEN} = 0;
     }
 
-    #$this->_writeDebug("use safe pipes setting = $this->{REAL_SAFE_PIPE_OPEN}");
-    #$this->_writeDebug("emulated safe pipes setting = $this->{EMULATED_SAFE_PIPE_OPEN}");
+    #$this->{session}->writeDebug("use safe pipes setting = $this->{REAL_SAFE_PIPE_OPEN}");
+    #$this->{session}->writeDebug("emulated safe pipes setting = $this->{EMULATED_SAFE_PIPE_OPEN}");
 
     # 'Safe' means no need to filter in on this platform - check 
     # sandbox status at time of filtering
     $this->{SAFE} = ($this->{REAL_SAFE_PIPE_OPEN} || 
                     $this->{EMULATED_SAFE_PIPE_OPEN});
 
-    ##$this->_writeDebug("safe setting = $this->{SAFE}");
+    ##$this->{session}->writeDebug("safe setting = $this->{SAFE}");
 
     # Shell quoting - shell used only on non-safe platforms
     if ($os eq "UNIX" or ($os eq "WINDOWS" and $realOS eq "cygwin"  ) ) {
@@ -307,25 +301,25 @@ sub readFromProcessArray {
     # Build argument list from template
     my @args = $this->buildCommandLine( $template, %params );
 
-    #$this->_writeDebug("path = $path");
-    #$this->_writeDebug("args = @args");
+    #$this->{session}->writeDebug("path = $path");
+    #$this->{session}->writeDebug("args = @args");
 
     if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
-        #$this->_writeDebug("Got to safe pipes section");
+        #$this->{session}->writeDebug("Got to safe pipes section");
         # Real safe pipes, open from process directly - works
         # for most Unix/Linux Perl platforms and on Cygwin.  Based on
         # perlipc(1).
         my $pid = open ($processFileHandle, '-|');
         throw Error::Simple( "open of pipe failed: $!" ) unless defined $pid;
 
-        #$this->_writeDebug("processFileHandle = $processFileHandle");
+        #$this->{session}->writeDebug("processFileHandle = $processFileHandle");
 
         if ( $pid ) {
             # Parent - read data from process filehandle and remove newlines 
-            #$this->_writeDebug("pid = $pid");
+            #$this->{session}->writeDebug("pid = $pid");
             undef $/; # set to read to EOF
             $data = <$processFileHandle>;
-            #$this->_writeDebug("data = $data");
+            #$this->{session}->writeDebug("data = $data");
             close $processFileHandle;
             $/ = "\n";
         } else {
@@ -337,7 +331,7 @@ sub readFromProcessArray {
         }
 
     } elsif ( $this->{EMULATED_SAFE_PIPE_OPEN} ) {
-        #$this->_writeDebug("Got to emulated pipes section");
+        #$this->{session}->writeDebug("Got to emulated pipes section");
 
         # FIXME: not working yet for ActivePerl on Windows
         # Safe pipe emulation mostly on Windows platforms
@@ -345,14 +339,14 @@ sub readFromProcessArray {
         ($pid, $processFileHandle) = $this->_openSafePipeFromProcess();
         if ( $pid ) {
             # Parent - read data from process filehandle and remove newlines 
-            #$this->_writeDebug("pid = $pid");
+            #$this->{session}->writeDebug("pid = $pid");
             # Exec definitely does work, can cause error if wrong pathname 
-            #$this->_writeDebug("fileno of processFileHandle= " . fileno($processFileHandle) );
+            #$this->{session}->writeDebug("fileno of processFileHandle= " . fileno($processFileHandle) );
             # FIXME: Doesn't read (or perhaps write in child) any data here... File handle
             # issue of some sort...
             undef $/; # set to read to EOF
             $data = <$processFileHandle>;
-            #$this->_writeDebug("data = $data ");
+            #$this->{session}->writeDebug("data = $data ");
             close $processFileHandle;
             $/ = "\n";
         } else {
@@ -398,7 +392,7 @@ sub _openSafePipeFromProcess {
     my $childFileHandle;
     pipe ($parentFileHandle, $childFileHandle) or
                      throw Error::Simple( "could not create pipe: $!" );
-    #$this->_writeDebug("filehandles = $parentFileHandle $childFileHandle ");
+    #$this->{session}->writeDebug("filehandles = $parentFileHandle $childFileHandle ");
 
     my $pid = fork();
     if (not defined $pid) {
@@ -406,20 +400,20 @@ sub _openSafePipeFromProcess {
     }
 
     if ($pid) {
-        #$this->_writeDebug("Parent, pid = $pid");
+        #$this->{session}->writeDebug("Parent, pid = $pid");
         # Parent
         close $childFileHandle or die;
-        #$this->_writeDebug("fileno of parent handle is " . fileno($parentFileHandle));
+        #$this->{session}->writeDebug("fileno of parent handle is " . fileno($parentFileHandle));
         return ($pid, $parentFileHandle);
     } else {
         # Child
-        #$this->_writeDebug("Child, pid = $pid");
+        #$this->{session}->writeDebug("Child, pid = $pid");
         close $parentFileHandle or die;
         # FIXME: standard output to pipe disappears - hard to work out
         # what's happening
-        #$this->_writeDebug("fileno of stdout handle is " . fileno(STDOUT));
-        #$this->_writeDebug("fileno of stderr handle is " . fileno(STDERR));
-        #$this->_writeDebug("fileno of child handle is " . fileno($childFileHandle));
+        #$this->{session}->writeDebug("fileno of stdout handle is " . fileno(STDOUT));
+        #$this->{session}->writeDebug("fileno of stderr handle is " . fileno(STDERR));
+        #$this->{session}->writeDebug("fileno of child handle is " . fileno($childFileHandle));
         # Tried this from readFromProcess routine - doesn't work either ...
         # use POSIX;
         # POSIX::close 2;
@@ -427,10 +421,10 @@ sub _openSafePipeFromProcess {
 
         close STDOUT;
         open(STDOUT, ">&=" . fileno($childFileHandle)) or die;
-        #$this->_writeDebug("fileno of stdout handle is now " . fileno(STDOUT));
+        #$this->{session}->writeDebug("fileno of stdout handle is now " . fileno(STDOUT));
         close STDERR;
         open(STDERR, ">&=" . fileno($childFileHandle)) or die;
-        #$this->_writeDebug("fileno of stderr handle is now " . fileno(STDERR));
+        #$this->{session}->writeDebug("fileno of stderr handle is now " . fileno(STDERR));
         return ($pid, $parentFileHandle);
     }
 }

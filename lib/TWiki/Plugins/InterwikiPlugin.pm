@@ -92,6 +92,7 @@ sub initPlugin {
     # "| alias | URL | ..." table and extract into "alias", "URL" list
     $text =~ s/^\|\s*$sitePattern\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|.*$/_map($1,$2,$3)/mego;
 
+    $sitePattern = "(" . join( "|", keys %interSiteTable ) . ")";
     return 1;
 }
 
@@ -104,7 +105,7 @@ sub _map {
     return "";
 }
 
-sub startRenderingHandler {
+sub preRenderingHandler {
     # ref in [[ref]] or [[ref][
     $_[0] =~ s/(\[\[)$sitePattern:$pagePattern(\]\]|\]\[| )/_link($1,$2,$3,$4)/geo;
     # ref in text

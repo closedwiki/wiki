@@ -119,7 +119,7 @@ sub expandHTML {
             $frev = "r$this->{BASE_REV}-&gt;r$this->{CURR_REV}";
         } else {
             # new _since the last notification_
-            $frev = "<b>NEW</b>";
+            $frev = "<span class=\"twikinew\">>NEW</span>";
         }
     }
     $html =~ s/%REVISION%/$frev/go;

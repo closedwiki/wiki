@@ -401,9 +401,6 @@ Merge the data in the other meta block.
 sub merge {
     my ( $this, $other ) = @_;
 
-    require TWiki::Merge;
-    import TWiki::Merge;
-
     my $data = $other->{FIELD};
     if( $data ) {
         foreach my $otherD ( @$data ) {

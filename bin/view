@@ -22,15 +22,7 @@ BEGIN {
     # Set library paths in @INC, at compile time
     unshift @INC, '.';
     require 'setlib.cfg';
-
-    # 'Use locale' for internationalisation of Perl regexes -
-    # main locale settings are done in TWiki::setupLocale
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-        import locale ();
-    }
 }
 
-use TWiki::UI;
-TWiki::UI::run( "TWiki::UI::View", "view" );
+use TWiki::UI::View;
+TWiki::UI::run( \&TWiki::UI::View::view );

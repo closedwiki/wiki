@@ -1,38 +1,27 @@
-<!-- In case you were wondering, this template is different in that it inverts the form to be above the text facilitating the use of the form as structured data entry for data fields about the user.-->
+%TMPL:DEF{"noise_comment"}%
+In case you were wondering, this template is different in that it inverts the form to be above the text facilitating the use of the form as structured data entry for data fields about the user.
+%TMPL::END%
 
 %TMPL:INCLUDE{"twiki"}%
-
-
-
 
 %TMPL:DEF{"bodystart"}%
 <body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
 
-
-
 %TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
-
-
 
 %TMPL:DEF{"form"}%
 <!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
 %META{"form"}%%TMPL:END%
 
-
-
 %TMPL:DEF{"attachments"}%
 <!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
 %META{"attachments"}%%TMPL:END%
-
-
 
 %TMPL:DEF{"toolbar"}%<div class="twikiToolBar"><div>
    * <a href="%EDITURL%" accesskey="e" %NOFOLLOW%>Edit</a>
    * <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" %NOFOLLOW%>Attach</a>
    * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" %NOFOLLOW%>Printable</a>
 </div><div class="twikiRevInfo"><span class="twikiGrayText"><span class="twikiToolbarElem"><nop>%WEB%.%TOPIC%</span><span class="twikiToolbarElem">%REVINFO%</span><span class="twikiToolbarElem"><a href="#TopicEnd">topic&nbsp;end</a></span></span></div></div>%TMPL:END%
-
-
 
 %TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
 %TMPL:P{"content"}%

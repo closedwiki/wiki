@@ -37,12 +37,12 @@ use TWiki::Attach;
 use TWiki::Attrs;
 use TWiki::Time;
 
-BEGIN {
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        eval 'require locale; import locale ();';
-    }
-}
+# defaults for trunctation of summary text
+my $TMLTRUNC = 162;
+my $PLAINTRUNC = 70;
+my $MINTRUNC = 16;
+# max number of lines in a summary (best to keep it even)
+my $SUMMARYLINES = 6;
 
 =pod
 
@@ -58,6 +58,12 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
     ASSERT(ref($session) eq "TWiki") if DEBUG;
+
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+    }
+
     $this->{session} = $session;
 
     $this->{NOAUTOLINK} = 0;
@@ -450,25 +456,19 @@ sub _renderWikiWord {
         }
     }
 
-    my $ans = "";
-    #NOTE: Yes, this hierarchy of ifs could be flattened but doing so makes
-    # the logic much harder to read.
     if( $topicExists) {
-        $ans = _renderExistingWikiWord($this, $theWeb,
+        return _renderExistingWikiWord($this, $theWeb,
                                        $theTopic, $theLinkText, $theAnchor);
-    } else {
-        if( $doLinkToMissingPages ) {
-            $ans = _renderNonExistingWikiWord($this, $theWeb, $theTopic,
-                                              $theLinkText, $theAnchor);
-        } else {
-            if( $doKeepWeb ) {
-                $ans = "$theWeb.$theLinkText";
-            } else {
-                $ans = $theLinkText;
-            }
-        }
     }
-    return $ans;
+    if( $doLinkToMissingPages ) {
+        return _renderNonExistingWikiWord($this, $theWeb, $theTopic,
+                                          $theLinkText, $theAnchor);
+    }
+    if( $doKeepWeb ) {
+        return "$theWeb.$theLinkText";
+    }
+
+    return $theLinkText;
 }
 
 sub _renderExistingWikiWord {
@@ -1190,6 +1190,8 @@ sub TML2PlainText {
     $text =~ s/[\+\-]+/ /g;             # remove special chars
     $text =~ s/^\s+//;                  # remove leading whitespace
     $text =~ s/\s+$//;                  # remove trailing whitespace
+    $text =~ s/\n+/\n/s;
+    $text =~ s/[ \t]+/ /s;
 
     return $text;
 }
@@ -1230,7 +1232,7 @@ sub protectPlainText {
 ---++ ObjectMethod makeTopicSummary (  $theText, $theTopic, $theWeb, $theFlags ) -> $tml
 
 Makes a plain text summary of the given topic by simply trimming a bit
-off the top. Truncates to 162 chars or, if a number is specified in $theFlags,
+off the top. Truncates to $TMTRUNC chars or, if a number is specified in $theFlags,
 to that length.
 
 =cut
@@ -1242,7 +1244,8 @@ sub makeTopicSummary {
     # called by search, mailnotify & changes after calling readFile
 
     my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
-
+    $htext =~ s/\n+/ /g;
+ 
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
     # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
     # This avoids splitting within a Unicode codepoint (or a UTF-16
@@ -1255,10 +1258,10 @@ sub makeTopicSummary {
     # limit to n chars
     my $nchar = $theFlags;
     unless( $nchar =~ s/^.*?([0-9]+).*$/$1/ ) {
-        $nchar = 162;
+        $nchar = $TMLTRUNC;
     }
-    $nchar = 16 if( $nchar < 16 );
-    $htext =~ s/(.{$nchar})($TWiki::regex{mixedAlphaNumRegex})(.*?)$/$1$2 \.\.\./;
+    $nchar = $MINTRUNC if( $nchar < $MINTRUNC );
+    $htext =~ s/^(.{$nchar}.*?)($TWiki::regex{mixedAlphaNumRegex}).*$/$1$2 \.\.\./s;
 
     # newline conversion to permit embedding in TWiki tables
     $htext =~ s/\s+/ /g;
@@ -1494,21 +1497,26 @@ sub summariseChanges {
         my @revised;
         my $getnext = 0;
         my $prev = "";
-        while ( scalar @$blocks && scalar( @revised ) < 10 ) {
+        my $ellipsis = $tml ? "&hellip;" : "...";
+        my $trunc = $tml ? $TMLTRUNC : $PLAINTRUNC;
+        while ( scalar @$blocks && scalar( @revised ) < $SUMMARYLINES ) {
             my $block = shift( @$blocks );
             next unless $block =~ /\S/;
-            $block =~ s/^(.{67}).*$/$1.../ if( length($block) > 70 );
+            my $trim = length($block) > $trunc;
+            $block =~ s/^(.{$trunc}).*$/$1/ if( $trim );
             if ( $block =~ m/^[-+]/ ) {
                 if( $tml ) {
-                    $block =~ s/^-(.*)$/<br \/><del>$1<\/del>/s;
+                    $block =~ s/^-(.*)$/<del>$1<\/del>/s;
                     $block =~ s/^\+(.*)$/<ins>$1<\/ins>/s;
                 }
                 push( @revised, $prev ) if $prev;
+                $block .= $ellipsis if $trim;
                 push( @revised, $block );
                 $getnext = 1;
                 $prev = "";
             } else {
                 if( $getnext ) {
+                    $block .= $ellipsis if $trim;
                     push( @revised, $block );
                     $getnext = 0;
                     $prev = "";

@@ -36,15 +36,6 @@ use TWiki::Sandbox;
 use TWiki::User;
 use TWiki::Time;
 
-# 'Use locale' for internationalisation of Perl sorting and searching - 
-# main locale settings are done in TWiki::setupLocale
-BEGIN {
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        eval 'require locale; import locale ();';
-    }
-}
-
 my $emptySearch =   "something.Very/unLikelyTo+search-for;-)";
 
 =pod
@@ -59,6 +50,13 @@ sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
 
+    # 'Use locale' for internationalisation of Perl sorting and searching - 
+    # main locale settings are done in TWiki::setupLocale
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+    }
+
     ASSERT(ref($session) eq "TWiki") if DEBUG;
     $this->{session} = $session;
 
@@ -72,8 +70,6 @@ sub sandbox { my $this = shift; return $this->{session}->{sandbox}; }
 sub security { my $this = shift; return $this->{session}->{security}; }
 sub templates { my $this = shift; return $this->{session}->{templates}; }
 sub renderer { my $this = shift; return $this->{session}->{renderer}; }
-
-sub writeDebug { my $this = shift; $this->{session}->writeDebug($_[0]); }
 
 # Untaints the search value (text string, regex or search expression) by
 # 'filtering in' valid characters only.
@@ -93,8 +89,8 @@ sub _filterSearchString {
     # FIXME: Use of new global
     my $useFilterIn = ($unsafePlatform and not $TWiki::cfg{ForceUnsafeRegexes});
 
-    #$this->writeDebug("unsafePlatform = $unsafePlatform");
-    #$this->writeDebug("useFilterIn = $useFilterIn");
+    #$this->{session}->writeDebug("unsafePlatform = $unsafePlatform");
+    #$this->{session}->writeDebug("useFilterIn = $useFilterIn");
 
     # Non-alphabetic language sites (e.g. Japanese and Chinese) cannot use
     # filtering-in and must use safe pipes, since TWiki does not currently
@@ -387,7 +383,7 @@ sub searchWeb {
     my $theType =       $params{type} || "";
     my $theWebName =    $params{web} || "";
 
-    ##$this->writeDebug "Search locale is $TWiki::cfg{SiteLocale}";
+    ##$this->{session}->writeDebug "Search locale is $TWiki::cfg{SiteLocale}";
 
     # Limit search results
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
@@ -652,13 +648,13 @@ sub searchWeb {
             # simple sort, suggested by RaymondLutz in Codev.SchwartzianTransformMisused
             # note no extraction of topic info here, as not needed for the sort. Instead it
             # will be read lazily, later on.
-            ##$this->writeDebug "Topic list before sort = @topicList";
+            ##$this->{session}->writeDebug "Topic list before sort = @topicList";
             if( $revSort ) {
                 @topicList = sort {$b cmp $a} @topicList;
             } else {
                 @topicList = sort {$a cmp $b} @topicList;
             }
-            ##$this->writeDebug "Topic list after sort = @topicList";
+            ##$this->{session}->writeDebug "Topic list after sort = @topicList";
         }
 
         # header and footer of $web

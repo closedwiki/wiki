@@ -40,16 +40,15 @@ use TWiki::UI::OopsException;
 
 =pod
 
----++ StaticMethod run( $class, $method )
+---++ StaticMethod run( \&method )
 
-Entry point for execution of a UI function. The parameters are the
-class that contains the method, and the name of the method. This
-function handles redirection to Oops topics by catching OopsException.
+Entry point for execution of a UI function. The parameter is a
+reference to the method.
 
 =cut
 
 sub run {
-    my ( $class, $method ) = @_;
+    my $method = shift;
 
     my ( $query, $pathInfo, $user, $url, $topic );
     my $scripted = 0;
@@ -130,15 +129,8 @@ sub run {
     local $SIG{__DIE__} = sub { Carp::confess $_[0] };
     # end of comment out in production version
 
-    my $m = "$class"."::$method";
     try {
-        eval "use $class";
-        if( $@ ) {
-            die "$class compile failed: $@";
-        }
-        no strict 'refs';
-        &$m( $session );
-        use strict 'refs';
+        &$method( $session );
     } catch TWiki::AccessControlException with {
         my $e = shift;
         # Had an access control violation. See if there is an "auth" version

@@ -33,7 +33,6 @@ the TopicPrefs class.  These functions manage that cache.
 
 package TWiki::Prefs::PrefsCache;
 
-require TWiki;
 use TWiki::Prefs::Parser;
 use Assert;
 

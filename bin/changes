@@ -22,12 +22,9 @@ BEGIN {
     }
     unshift @INC, '.';
     require 'setlib.cfg';
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-        import locale ();
-    }
 }
 
 use TWiki::UI;
-TWiki::UI::run( "TWiki::UI::Changes", "changes" );
+use TWiki::UI::Changes;
+TWiki::UI::run( \&TWiki::UI::Changes::changes );
 

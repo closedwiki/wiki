@@ -35,15 +35,6 @@ use Assert;
 use TWiki::User;
 use TWiki::Time;
 
-# 'Use locale' for internationalisation of Perl sorting in getTopicNames
-# and other routines - main locale settings are done in TWiki::setupLocale
-BEGIN {
-    # Do a dynamic 'use locale' for this module
-    if( $TWiki::cfg{UseLocale} ) {
-        eval 'require locale; import locale ();';
-    }
-}
-
 =pod
 
 ---++ ClassMethod new ($session, $impl)
@@ -55,6 +46,12 @@ sub new {
     my ( $class, $session, $impl ) = @_;
     ASSERT(ref($session) eq "TWiki") if DEBUG;
     my $this = bless( {}, $class );
+
+    # Do a dynamic 'use locale' for this module
+    if( $TWiki::cfg{UseLocale} ) {
+        require locale;
+    }
+
     $this->{session} = $session;
 
     $this->{IMPL} = "TWiki::Users::$impl";

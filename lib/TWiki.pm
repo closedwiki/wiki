@@ -65,6 +65,8 @@ use vars qw(
             $urlCharEncoding
             $langAlphabetic
             $VERSION
+            $TRUE
+            $FALSE
            );
 
 # Token character that must not occur in any normal text - converted
@@ -72,6 +74,9 @@ use vars qw(
 $TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
 
 BEGIN {
+
+    $TRUE = 1;
+    $FALSE = 0;
 
     if( DEBUG ) {
         # If ASSERTs are on, then warnings are errors. Paranoid,
@@ -144,26 +149,26 @@ BEGIN {
         $TWiki::cfg{OS} = 'OS2';
     }
 
+    # Get LocalSite first, to pick up definitions of things like
+    # {RCS}{BinDir} and {LibDir} that are used in TWiki.cfg
+    # do, not require, because we do it twice
     do "LocalSite.cfg";
-    unless( $@ ) {
-        # found it and read it; make sure key variables are defined
-        # if it wasn't there, site may be relying on TWiki.cfg
-        foreach my $var ( "DataDir", "DefaultUrlHost", "PubUrlPath",
-                          "PubDir", "TemplateDir" ) {
-            die "$var must be defined in LocalSite.cfg"
-              unless( defined $TWiki::cfg{$var} );
-        }
-    }
-
-    do "TWiki.cfg";
-    die "Cannot read TWiki.cfg: $!" if $!;
+    # Now get all the defaults
+    require "TWiki.cfg";
+    die "Cannot read TWiki.cfg: $@" if $@;
     die "Bad configuration: $@" if $@;
-
+    # Make sure key variables are defined
+    foreach my $var ( "DataDir", "DefaultUrlHost", "PubUrlPath",
+                      "PubDir", "TemplateDir" ) {
+        die "$var must be defined in LocalSite.cfg"
+          unless( defined $TWiki::cfg{$var} );
+    }
+    # read localsite again to ensure local definitions override TWiki.cfg
     do "LocalSite.cfg";
     die "Bad configuration: $@" if $@;
 
     if( $TWiki::cfg{UseLocale} ) {
-        eval 'require locale; import locale ();';
+        require locale;
     }
 
     $TWiki::cfg{DispScriptUrlPath} = $TWiki::cfg{ScriptUrlPath}
@@ -233,10 +238,9 @@ BEGIN {
         # Set environment variables for grep 
         $ENV{'LC_CTYPE'}= $TWiki::cfg{SiteLocale};
 
-        # Load POSIX for I18N support. Eval because otherwise
-        # it gets compiled even if we don't have a locale
-        # SMELL: eval should not be necessary for require+import!
-        eval 'require POSIX; import POSIX qw( locale_h LC_CTYPE );';
+        # Load POSIX for I18N support.
+        require POSIX;
+        import POSIX qw( locale_h LC_CTYPE );
 
         # Set new locale - deliberately not checked since tested
         # in testenv
@@ -734,7 +738,9 @@ sub getTWikiLibDir {
             $bin = $1;
         } else {
             # last ditch; relative to current directory.
-            eval 'use Cwd qw( cwd ); $bin = cwd();';
+            require Cwd;
+            import Cwd qw( cwd );
+            $bin = cwd();
         }
         $twikiLibDir = "$bin/$twikiLibDir/";
         # normalize "/../" and "/./"
@@ -1759,17 +1765,17 @@ sub _processTags {
 
     my @queue = split( /(%)/, $text );
     my @stack;
-    my $tell = 0; # uncomment all tell lines set this to 1 to print debugging
+    #my $tell = 0; # uncomment all tell lines set this to 1 to print debugging
 
     push( @stack, "" );
     while ( scalar( @queue )) {
         my $token = shift( @queue );
-        print " " x $tell,"PROCESSING $token \n" if $tell;
+        #print " " x $tell,"PROCESSING $token \n" if $tell;
 
         # each % sign either closes an existing stacked context, or
         # opens a new context.
         if ( $token eq "%" ) {
-            print " " x $tell,"CONSIDER $stack[$#stack]\n" if $tell;
+            #print " " x $tell,"CONSIDER $stack[$#stack]\n" if $tell;
             # If this is a closing }%, try to rejoin the previous
             # tokens until we get to a valid tag construct. This is
             # a bit of a hack, but it's hard to think of a better
@@ -1779,16 +1785,17 @@ sub _processTags {
                 while ( $#stack &&
                         $stack[$#stack] !~ /^%([A-Z][A-Z0-9_:]*){(.*)}$/ ) {
                     my $top = pop( @stack );
-                    print " " x $tell,"COLLAPSE $top \n" if $tell;
+                    #print " " x $tell,"COLLAPSE $top \n" if $tell;
                     $stack[$#stack] .= $top;
                 }
             }
-            if ( $stack[$#stack] =~ /^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
-                my ( $tag, $args ) = ( $1, $2 );
-                print " " x $tell,"POP $tag\n" if $tell;
+            if ( $stack[$#stack] =~ m/^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
+                my $tag = $1;
+                my $args = $2;
+                #print " " x $tell,"POP $tag\n" if $tell;
                 my $e = $this->_expandTag( $tag, $args, @_ );
                 if ( defined( $e )) {
-                    print " " x $tell--,"EXPANDED $tag -> $e\n" if $tell;
+                    #print " " x $tell--,"EXPANDED $tag -> $e\n" if $tell;
                     pop( @stack );
                     # Choice: can either tokenise and push the expanded
                     # tag, or can recursively expand the tag. The
@@ -1802,7 +1809,7 @@ sub _processTags {
                 }
             } else {
                 push( @stack, "%" ); # push a new context
-                $tell++ if ( $tell );
+                #$tell++ if ( $tell );
             }
         } else {
             $stack[$#stack] .= $token;
@@ -1873,8 +1880,8 @@ sub handleCommonTags {
     my( $this, $text, $theWeb, $theTopic ) = @_;
 
     ASSERT(ref($this) eq "TWiki") if DEBUG;
-    ASSERT($theWeb);
-    ASSERT($theTopic);
+    ASSERT($theWeb) if DEBUG;
+    ASSERT($theTopic) if DEBUG;
 
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );

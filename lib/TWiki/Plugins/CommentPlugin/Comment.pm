@@ -216,9 +216,6 @@ sub _buildNewTopic {
 
     # Expand common variables in the template, but don't expand other
     # tags.
-	if ( $TWiki::Plugins::VERSION < 1.020 ) {
-        eval 'use TWiki::Contrib::CairoContrib';
-	}
     $output = TWiki::Func::expandVariablesOnTopicCreation($output);
 
     my $bloody_hell = TWiki::Func::readTopicText( $web, $topic, undef, 1 );
