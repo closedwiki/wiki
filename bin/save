@@ -63,7 +63,7 @@ sub main
     }
 
     # get text and other parameters
-    $text = $query->param( "text" );
+    my $text = $query->param( "text" );
     my $unlock = $query->param( "unlock" ) || "";
     my $saveCmd = $query->param( "cmd" ) || "";
     my $dontNotify = $query->param( "dontnotify" ) || "";
@@ -75,22 +75,13 @@ sub main
         return;
     }
 
-    my $tmp = "";
     my @meta = ();
     if( $saveCmd eq "repRev" ) {
-        # for debug: Use $text as is, it possibly contains an attachment table
+        # Nothing to do
     } else {
         # normal case: Get latest attachment from file for preview
+        my $tmp;
         ( $tmp, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
-        my ( $tmp1, $atext, $tmp2 ) = split( /<!--TWikiAttachment-->/, $tmp );
-        # combine text and attachment
-        ( $before, $tmp, $after ) = split( /<!--TWikiAttachment-->/, $text );
-        if( ! $after ) { $after = ""; }
-        if( ! $atext ) {
-            $text = "$before$after";
-        } else {
-            $text = "$before$after<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
-        }
     }
 
     # PTh 21 Jun 2000: Fix for Codev.KfmBrowserSupportForEditing
