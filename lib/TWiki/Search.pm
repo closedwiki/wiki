@@ -441,7 +441,8 @@ Search one or more webs according to the parameters.
 
 If =_callback= is set, that means the caller wants results as
 soon as they are ready. =_callback_ should be set to a reference
-to a function which takes identical parameters to "print".
+to a function which takes =_cbdata= as the first parameter and
+remaining parameters the same as "print".
 
 If =_callback= is set, the result is always undef. Otherwise the
 result is a string containing the rendered search results.
@@ -456,6 +457,7 @@ sub searchWeb {
     assert(ref($this) eq "TWiki::Search") if DEBUG;
     my %params = @_;
     my $callback =      $params{_callback};
+    my $cbdata =        $params{_cbdata};
     my $inline =        $params{inline};
     my $baseWeb =       $params{"baseweb"}   || $this->{session}->{webName};
     my $baseTopic =     $params{"basetopic"} || $this->{session}->{topicName};
@@ -480,11 +482,10 @@ sub searchWeb {
     my $doShowLock =    $params{"showlock"} || "";
     my $doExpandVars =  $params{"expandvariables"} || "";
     my $noEmpty =       $params{"noempty"} || "";
-    my $theTemplate =   $params{"template"} || "";
     my $theHeader =     $params{"header"} || "";
     my $theFormat =     $params{"format"} || "";
     my $doMultiple =    $params{"multiple"} || "";
-    my $theSeparator =  $params{"separator"} || "";
+    my $theSeparator =  $params{"separator"};
     my $newLine =       $params{"newline"} || "";
 
     ##$this->writeDebug "Search locale is $TWiki::siteLocale";
@@ -505,7 +506,7 @@ sub searchWeb {
     $theSearchVal = $this->_filterSearchString( $theSearchVal, $theType );
 
     my $mixedAlpha = $TWiki::regex{mixedAlpha};
-    if( $theSeparator ) {
+    if( defined( $theSeparator )) {
         $theSeparator =~ s/\$n\(\)/\n/gos;  # expand "$n()" to new line
         $theSeparator =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos;
     }
@@ -577,6 +578,8 @@ sub searchWeb {
     my $renameTopic;
     my $renameWeb = "";
     my $spacedTopic;
+
+    my $theTemplate =   $params{"template"} || "";
     $theTemplate = "searchformat" if( $theFormat );     # FormattedSearch
 
     # Handle normal, book view and rename cases
@@ -586,7 +589,7 @@ sub searchWeb {
     } elsif( $doBookView ) {
         $tmpl = $this->templates()->readTemplate( "searchbookview" );
     } elsif ($doRenameView ) {
-	# Rename view, showing where topics refer to topic being renamed.
+        # Rename view, showing where topics refer to topic being renamed.
         $tmpl = $this->templates()->readTemplate( "searchrenameview" ); # JohnTalintyre
 
         # Create full search string from topic name that is passed in
@@ -598,9 +601,9 @@ sub searchWeb {
         $spacedTopic = TWiki::searchableTopic( $renameTopic );
         $spacedTopic = $renameWeb . '\.' . $spacedTopic if( $renameWeb );
 
-	# I18N: match non-alpha before and after topic name in renameview searches
-	# This regex must work under grep, i.e. if using Perl 5.6 or higher
-	# the POSIX character classes will be used in grep as well.
+        # I18N: match non-alpha before and after topic name in renameview searches
+        # This regex must work under grep, i.e. if using Perl 5.6 or higher
+        # the POSIX character classes will be used in grep as well.
         my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
         $theSearchVal = "(^|[^${mixedAlphaNum}_])$theSearchVal" . 
 			"([^${mixedAlphaNum}_]" . '|$)|' .
@@ -622,8 +625,8 @@ sub searchWeb {
             # Might not be search.tmpl FIXME
             "Incorrect format of search.tmpl (missing sections? There should be 4 %SPLIT% tags.)" .
               "</body></html>";
-        if ( $callback ) {
-            &$callback( $mess );
+        if ( defined $callback ) {
+            &$callback( $cbdata, $mess );
             return undef;
         } else {
             return $mess;
@@ -638,10 +641,10 @@ sub searchWeb {
     unless( $inline ) {
         $tmplHead = $this->{session}->handleCommonTags( $tmplHead, $topic );
 
-        if( $callback) {
+        if( defined $callback ) {
             $tmplHead = $this->renderer()->getRenderedVersion( $tmplHead );
             $tmplHead =~ s|</*nop/*>||goi;   # remove <nop> tags
-            &$callback( $tmplHead );
+            &$callback( $cbdata, $tmplHead );
         } else {
             # don't getRenderedVersion; this will be done by a single
             # call at the end.
@@ -658,10 +661,10 @@ sub searchWeb {
         $searchStr =~ s/>/&gt;/go;
         $searchStr =~ s/^\.\*$/Index/go;
         $tmplSearch =~ s/%SEARCHSTRING%/$searchStr/go;
-        if( $callback) {
+        if( defined $callback ) {
             $tmplSearch = $this->renderer()->getRenderedVersion( $tmplSearch );
             $tmplSearch =~ s|</*nop/*>||goi;   # remove <nop> tag
-            &$callback( $tmplSearch );
+            &$callback( $cbdata, $tmplSearch );
         } else {
             # don't getRenderedVersion; will be done later
             $searchResult .= $tmplSearch;
@@ -686,7 +689,6 @@ sub searchWeb {
 
         next unless $this->store()->webExists( $thisWebName );  # can't process what ain't thar
 
-        my $thisWebBGColor = $this->prefs()->getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
         my $thisWebNoSearchAll = $this->prefs()->getPreferencesValue( "NOSEARCHALL", $thisWebName );
 
         # make sure we can report this web on an 'all' search
@@ -905,7 +907,7 @@ sub searchWeb {
            $theHeader =~ s/\$n([^$mixedAlpha]|$)/\n$1/gos; # expand "$n" to new line
             $beforeText = $theHeader;
             $beforeText =~ s/\$web/$thisWebName/gos;
-            if( $theSeparator ) {
+            if( defined( $theSeparator )) {
                 $beforeText .= $theSeparator;
             } else {
                 $beforeText =~ s/([^\n])$/$1\n/os;  # add new line at end if needed
@@ -1141,7 +1143,7 @@ sub searchWeb {
                 # FIXME: Allow all regex characters but escape them
                 $tempVal =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
                 $tempVal =~ s/\r?\n/$newLine/gos if( $newLine );
-                if( $theSeparator ) {
+                if( defined( $theSeparator ) ) {
                     $tempVal .= $theSeparator;
                 } else {
                     $tempVal =~ s/([^\n])$/$1\n/os;    # add new line at end if needed
@@ -1174,16 +1176,17 @@ sub searchWeb {
             # lazy output of header (only if needed for the first time)
             unless( $headerDone || $noHeader ) {
                 $headerDone = 1;
+                my $thisWebBGColor = $this->prefs()->getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
                 $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                 $beforeText =~ s/%WEB%/$thisWebName/go;
                 $beforeText = $this->{session}->handleCommonTags( $beforeText,
                                                        $topic );
-                if ( $callback) {
+                if ( defined $callback ) {
                     $beforeText =
                       $this->renderer()->getRenderedVersion( $beforeText,
                                                          $thisWebName );
                     $beforeText =~ s|</*nop/*>||goi;   # remove <nop> tag
-                    &$callback( $beforeText );
+                    &$callback( $cbdata, $beforeText );
                 } else {
                     $searchResult .= $beforeText;
                 }
@@ -1196,8 +1199,8 @@ sub searchWeb {
                 $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
             }
 
-            if ( $callback) {
-                &$callback( $tempVal );
+            if ( defined $callback ) {
+                &$callback( $cbdata, $tempVal );
             } else {
                 $searchResult .= $tempVal;
             }
@@ -1216,12 +1219,12 @@ sub searchWeb {
                 $afterText =~ s/\n$//os;  # remove trailing new line
             }
 
-            if ( $callback) {
+            if ( defined $callback ) {
                 $afterText = 
                   $this->renderer()->getRenderedVersion( $afterText,
                                                      $thisWebName );
                 $afterText =~ s|</*nop/*>||goi;   # remove <nop> tag
-                &$callback( $afterText );
+                &$callback( $cbdata, $afterText );
             } else {
                 $searchResult .= $afterText;
             }
@@ -1232,12 +1235,12 @@ sub searchWeb {
             unless( $noTotal ) {
                 my $thisNumber = $tmplNumber;
                 $thisNumber =~ s/%NTOPICS%/$ntopics/go;
-                if ( $callback) {
+                if ( defined $callback ) {
                     $thisNumber =
                       $this->renderer()->getRenderedVersion( $thisNumber,
                                                          $thisWebName );
                     $thisNumber =~ s|</*nop/*>||goi;   # remove <nop> tag
-                    &$callback( $thisNumber );
+                    &$callback( $cbdata, $thisNumber );
                 } else {
                     $searchResult .= $thisNumber;
                 }
@@ -1256,16 +1259,16 @@ sub searchWeb {
     unless( $inline ) {
         $tmplTail = $this->{session}->handleCommonTags( $tmplTail, $topic );
 
-        if( $callback ) {
+        if( defined $callback ) {
             $tmplTail = $this->renderer()->getRenderedVersion( $tmplTail );
             $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
-            &$callback( $tmplTail );
+            &$callback( $cbdata, $tmplTail );
         } else {
             $searchResult .= $tmplTail;
         }
     }
 
-    return undef if ( $callback );
+    return undef if ( defined $callback );
     $searchResult = $this->{session}->handleCommonTags( $searchResult, $topic );
     $searchResult = $this->renderer()->getRenderedVersion( $searchResult );
 #    $searchResult =~ s|</*nop/*>||goi;   # remove <nop> tag

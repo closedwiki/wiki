@@ -1553,28 +1553,40 @@ sub searchMetaData {
         $searchVal .= "[}]%";
     }
 
-    my $text = $this->search()->searchWeb(
-        #"_callback"    => undef,
-        "search"        => $searchVal,
-        "web"           => $searchWeb,
-        "type"          => "regex",
-        "nosummary"     => "on",
-        "nosearch"      => "on",
-        "noheader"      => "on",
-        "nototal"       => "on",
-        "noempty"       => "on",
-        "template"      => "searchmeta",
-    );
+    my $text = "";
+    $this->search()->searchWeb
+      (
+       _callback     => \&_collate,
+       _cbdata       => \$text,,
+       search        => $searchVal,
+       web           => $searchWeb,
+       type          => "regex",
+       nosummary     => "on",
+       nosearch      => "on",
+       noheader      => "on",
+       nototal       => "on",
+       noempty       => "on",
+       template      => "searchmeta",
+       inline        => 1,
+      );
+
     my $attrTitle = $params->{title} || "";
-    if( $text =~ /^\s*$/ ) {
-        # this doesn't work with pattern skin (or much else, for that matter!)
+    if( $text ) {
+        $text = "$attrTitle$text";
+    } else {
         my $attrDefault = $params->{default} || "";
         $text = "$attrTitle$attrDefault";
-    } else {
-        $text = "$attrTitle$text";
     }
 
     return $text;
+}
+
+# callback for search function to collate
+# results
+sub _collate {
+    my $ref = shift;
+
+    $$ref .= join( " ", @_ );
 }
 
 1;

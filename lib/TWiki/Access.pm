@@ -172,29 +172,37 @@ sub checkAccessPermission {
     return 1;
 }
 
-# get a list of groups definedin this TWiki 
+# get a list of groups defined in this TWiki 
 sub _getListOfGroups {
     my $this = shift;
 
-    my $text =
-      $this->search()->searchWeb
-          (
-           #_callback      => undef,
-           inline          => 1,
-           "search"        => "Set GROUP =",
-           "web"           => "all",
-           "topic"         => "*Group",
-           "type"          => "regex",
-           "nosummary"     => "on",
-           "nosearch"      => "on",
-           "noheader"      => "on",
-           "nototal"       => "on",
-           "noempty"       => "on",
-           "format"	 => "\$web.\$topic",
-          );
+    my @list;
+    $this->search()->searchWeb
+      (
+       _callback     => \&_collateGroups,
+       _cbdata       => \@list,
+       inline        => 1,
+       search        => "Set GROUP =",
+       web           => "all",
+       topic         => "*Group",
+       type          => "regex",
+       nosummary     => "on",
+       nosearch      => "on",
+       noheader      => "on",
+       nototal       => "on",
+       noempty       => "on",
+       format	     => "\$web.\$topic",
+       separator     => "",
+      );
 
-    my ( @list ) =  split ( /\n/, $text );	
     return @list;
+}
+
+# callback for search function to collate results
+sub _collateGroups {
+    my $ref = shift;
+    my $group = shift;
+    push( @$ref, $group ) if $group;
 }
 
 # =========================
@@ -212,11 +220,9 @@ sub getGroupsUserIsIn {
     assert(ref($this) eq "TWiki::Access") if DEBUG;
 
     my $userTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
-    my @grpMembers = ();
-    my @listOfGroups = $this->_getListOfGroups();
-    my $group;
 
-    foreach $group ( @listOfGroups) {
+    my @grpMembers = ();
+    foreach my $group ( $this->_getListOfGroups() ) {
         if ( $this->userIsInGroup( $userTopic, $group )) {
 	    	push ( @grpMembers, $group );
 		}
@@ -243,28 +249,24 @@ sub userIsInGroup {
 
     my $usrTopic = _getWebTopicName( $TWiki::mainWebname, $theUserName );
     my $grpTopic = _getWebTopicName( $TWiki::mainWebname, $theGroupTopicName );
-    my @grpMembers = ();
 
     if( $grpTopic !~ /.*Group$/ ) {
         # not a group, so compare user to user
         return ( $grpTopic eq $usrTopic );
     }
-    unless ( exists $this->{GROUPS}{$grpTopic} ) {
+    unless( $this->{GROUPS}{$grpTopic} ) {
         $this->_getUsersOfGroup( $grpTopic );
     }
-
-    return 0 unless exists( $this->{GROUPS}{$grpTopic} );
 
     return $this->{GROUPS}{$grpTopic}{$usrTopic};
 }
 
-# Get all members of a group; groups are expanded recursively
-# Return list of users, e.g. ( "Main.JohnSmith", "Main.JaneMiller" )
+# Expand groups recursively, returning a list of the leaf-level
+# members of the group
 # | =$group=  | Group topic name, e.g. "Main.EngineeringGroup" |
 sub _getUsersOfGroup {
     my( $this, $theGroupTopicName, $processedGroups ) = @_;
 
-    my @resultList = ();
     # extract web and topic name
     my $topic = $theGroupTopicName;
     my $web = $TWiki::mainWebname;
@@ -273,57 +275,27 @@ sub _getUsersOfGroup {
         $web = $1;
         $topic = $2;
     }
+    my $grpTopic = "$web.$topic";
 
     if( $topic !~ /.*Group$/ ) {
         # return user, is not a group
-        return ( "$web.$topic" );
+        return ( $grpTopic );
     }
 
-    # check if group topic is already processed
-    if( !defined( $processedGroups )) {
-        $processedGroups = {};
-    } elsif( $processedGroups->{"$web.$topic"} ) {
-        return ();
-    }
-    $processedGroups->{"$web.$topic"} = 1;
+    unless( defined( $this->{GROUPS}{$grpTopic} )) {
+        my $text = $this->store()->readTopicRaw( $this->{session}->{wikiUserName},
+                                                 $web, $topic, undef, 1 );
 
-    my $text = $this->store()->readTopicRaw( $this->{session}->{wikiUserName},
-                                             $web, $topic, undef, 1 );
-
-    # SMELL: what the blazes is this? Comment it out, and
-    # see what breaks.... DFP rules.
-    # reset variables, defensive coding needed for recursion
-    #(my $baz = "foo") =~ s/foo//;
-
-    # extract users
-    my $user = "";
-    my %glist;
-    foreach( split( /\n/, $text ) ) {
-        if( /^\s+\*\sSet\sGROUP\s*\=\s*(.+)$/ ) {
-            # Note: if there are multiple GROUP assignments in the
-            # topic, the last will be taken.
-            %glist = $this->_parseUserList( $1, 0 );
-        }
-    }
-    foreach ( keys %glist ) {
-        if( /.*Group$/ ) {
-            # $user is actually a group
-            my $group = $_;
-            if( exists $this->{GROUPS}{ $group } ) {
-                # already known, so add to list
-                push( @resultList, keys %{$this->{GROUPS}{$group}} );
-            } else {
-                # call recursively
-                push( @resultList,
-                      map { $this->{GROUPS}{$group}{$_} = 1; }
-                      $this->_getUsersOfGroup( $group, $processedGroups ));
+        foreach( split( /\n/, $text ) ) {
+            if( /^\s+\*\sSet\sGROUP\s*\=\s*(.+)$/ ) {
+                # Note: if there are multiple GROUP assignments in the
+                # topic, the last will be taken.
+                %{$this->{GROUPS}{$grpTopic}} = $this->_parseUserList( $1, 1 );
             }
-        } else {
-            # add user to list
-            push( @resultList, $_ );
         }
     }
-    return @resultList;
+
+    return keys %{$this->{GROUPS}{$grpTopic}};
 }
 
 # Build a Web.Topic name,

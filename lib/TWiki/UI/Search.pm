@@ -101,8 +101,10 @@ sub search {
 
     $session->writeHeader( $query, 0);
 
+    # SMELL: what's all the "scalar" crud, below?
     $session->{search}->searchWeb(
         _callback       => \&_contentCallback,
+        _cbdata         => undef,
         inline          => 0,
         "search"        => scalar $query->param( "search" ),
         "web"           => $attrWeb,
@@ -134,6 +136,7 @@ sub search {
 }
 
 sub _contentCallback {
+    my $cbdata = shift;
     print @_;
 }
 

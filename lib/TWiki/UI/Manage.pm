@@ -91,7 +91,7 @@ sub removeUser {
     #check to see it the user we are trying to remove is a memebr of a group.
     #initially we refuse to delete the user
     #in a later implementation we will remove the from the group (if Access.pm implements it..)
-    my @groups =  $session->{security}->getGroupsUserIsIn( $wikiName );
+    my @groups = $session->{security}->getGroupsUserIsIn( $wikiName );
     my $numberOfGroups =  $#groups;
     if ( $numberOfGroups > -1 ) { 
         throw TWiki::UI::OopsException( $webName, $topic, "genericerror");

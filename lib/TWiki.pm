@@ -2483,8 +2483,4 @@ sub new {
     return $this;
 }
 
-=end twiki
-
-=cut
-
 1;
