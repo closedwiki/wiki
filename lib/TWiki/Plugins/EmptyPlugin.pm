@@ -282,7 +282,7 @@ sub DISABLE_afterCommonTagsHandler {
 =pod
 
 ---++ preRenderingHandler( $text, \%map )
-   * =\$text= - a reference to the text, with the head, verbatim and pre blocks replaced with placeholders
+   * =$text= - the text, with the head, verbatim and pre blocks replaced with placeholders
    * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
 
 Handler called immediately before TWiki syntax structures (such as lists) are

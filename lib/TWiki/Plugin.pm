@@ -187,13 +187,14 @@ sub registerHandlers {
     }
 
     foreach my $h ( @registrableHandlers ) {
-        if( $deprecated{$h} ) {
-            $this->{session}->writeWarning
-              ( "$this->{name} defines deprecated $h" );
-        }
         my $sub = $p.'::'.$h;
-        push( @{$plugins->{registeredHandlers}{$h}}, $sub )
-          if( defined( &$sub ));
+        if( defined( &$sub )) {
+            push( @{$plugins->{registeredHandlers}{$h}}, $sub );
+            if( $deprecated{$h} ) {
+                $this->{session}->writeWarning
+                  ( "$this->{name} defines deprecated $h" );
+            }
+        }
     }
 }
 

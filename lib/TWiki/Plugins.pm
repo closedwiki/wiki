@@ -449,7 +449,7 @@ sub afterCommonTagsHandler {
 
 ---++ ObjectMethd preRenderingHandler( $text, \%map )
 
-   * =\$text= - a reference to the text, with the head, verbatim and pre blocks replaced with placeholders
+   * =$text= - the text, with the head, verbatim and pre blocks replaced with placeholders
    * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
 
 Placeholders are text strings constructed using the tag name and a sequence number e.g. "pre1", "verbatim6", "head1" etc. Placeholders are inserted into the text inside \1 characters so the text will contain \1_pre1\1 for placeholder pre1.

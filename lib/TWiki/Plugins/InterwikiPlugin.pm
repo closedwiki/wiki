@@ -114,6 +114,11 @@ sub startRenderingHandler {
 sub _link {
     my( $prefix, $site, $page, $postfix ) = @_;
 
+    $prefix ||= "";
+    $site ||= "";
+    $page ||= "";
+    $postfix ||= "";
+
     my $text;
     if( defined( $interSiteTable{$site} ) ) {
         my $url = $interSiteTable{$site}{url};

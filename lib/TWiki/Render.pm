@@ -830,7 +830,7 @@ sub getRenderedVersion {
 
     $text = $this->takeOutBlocks( $text, "pre", $removed );
 
-    $this->plugins()->preRenderingHandler( \$text, $removed );
+    $this->plugins()->preRenderingHandler( $text, $removed );
 
     if( $this->plugins()->haveHandlerFor( 'insidePREHandler' )) {
         foreach my $region ( sort keys %$removed ) {
