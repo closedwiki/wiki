@@ -233,7 +233,7 @@ sub moveAttachment
 
     # Remove file attachment from old topic
     my $text = readWebTopic( $oldWeb, $oldTopic );
-    my ( $file, $attrVersion, $filePath, $fileSize, $fileDate, $fileUser, 
+    my ( $file, $fileVersion, $filePath, $fileSize, $fileDate, $fileUser, 
              $fileComment, $fileAttr ) = TWiki::Attach::extractArgsForFile( $text, $theAttachment );
     TWiki::Attach::removeFile( $text, $theAttachment );
     $error .= save( $oldWeb, $oldTopic, $text, "", "", "", "doUnlock", "dont notify", "" ); 
@@ -251,7 +251,7 @@ sub moveAttachment
     if( ! $before ) { $before = ""; }
     if( ! $atext  ) { $atext  = ""; }
     $atext = TWiki::Attach::updateAttachment( 
-                    $atext, $theAttachment, $filePath, $fileSize,
+                    $atext, $fileVersion, $theAttachment, $filePath, $fileSize,
                     $fileDate, $fileUser, $fileComment, $hideFile );
     $text = "$before<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
     
@@ -687,7 +687,7 @@ sub save
                if( ! -e $rcsFile && $TWiki::revInitBinaryCmd ) {
                   $tmp = $TWiki::revInitBinaryCmd;
                   $tmp =~ s/%FILENAME%/$rcsFile/go;
-                  if( ! isBinary( $attachment ) ) {
+                  if( ! isBinary( $attachment, $web ) ) {
                       # FIXME naff
                       $tmp =~ s/-kb //go;
                   }
