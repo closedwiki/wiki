@@ -130,7 +130,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "28 Feb 2004";
+$wikiversion      = "05 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1621,6 +1621,7 @@ sub makeTopicSummary
     $htext =~ s/%TOPIC%/$theTopic/g;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/g; # resolve TWiki tool name
     $htext =~ s/%META:.*?%//g;        # remove meta data variables
+    $htext =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g; # keep only link text of [[][]]
     $htext =~ s/[\%\[\]\*\|=_\&\<\>]/ /g; # remove Wiki formatting chars & defuse %VARS%
     $htext =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
     $htext =~ s/\s+[\+\-]*/ /g;       # remove newlines and special chars
@@ -1648,8 +1649,8 @@ sub makeTopicSummary
 
     # prevent text from getting rendered in inline search and link tool 
     # tip text by escaping links (external, internal, Interwiki)
+    $htext =~ s/([\s\(])(?=\S)/$1<nop>/g;
     $htext =~ s/([\-\*\s])($regex{linkProtocolPattern}\:)/$1<nop>$2/go;
-    $htext =~ s/([\s\(])(\S)/$1<nop>$2/g;
     $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
     return $htext;
