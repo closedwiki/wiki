@@ -29,23 +29,24 @@ use IO::File;
 
 =pod
 
----++ statistics( $logDate, $query )
-Generate statistics topic. Optional parameters passed by
-optional CGI query:
-| path_info | |
-| remote_user | |
-| =logdate= | date of log to analyse |
+---++ statistics( $query, $pathInfo, $remoteUser, $topic, $logDate )
+Generate statistics topic. Optional parameters passed by optional CGI query:
+| =$query= | |
+| =$pathInfo= | |
+| =$remoteUser= | |
+| =$topic= | |
+| =$logdate= | date of log to analyse, format "yyyymm" |
 
 =cut
 sub statistics {
-    my ( $web, $topic, $query ) = @_;
+    my ( $query, $thePathInfo, $theRemoteUser, $topic, $logDate ) = @_;
 
     my $tmp = "";
-    my $theRemoteUser = $query->remote_user();
-    my $logDate = $query->param( 'logdate' ) || "";
-
     my $destWeb = $TWiki::mainWebname; #web to redirect to after finishing
     $logDate =~ s/[^0-9]//g;  # remove all non numerals
+
+    # Set up locale and regexes
+    TWiki::basicInitialize();
 
     if( $query ) {
       # running from CGI
@@ -59,15 +60,8 @@ sub statistics {
     if( $query ) {
         print "<h4><font color=\"red\">Do not interrupt this script!</font> ( Please wait until page download has finished )</h4>\n";
     }
-    if ( $theRemoteUser ) {
-        $tmp = &TWiki::userToWikiName( $theRemoteUser );
-        $tmp =~ s/^Main\.//;
-        _printMsg( "* Executed by $tmp", $query );
-    } else {
-        _printMsg( "* Executed by a guest or a cron job scheduler", $query );
-    }
 
-    if( ! $logDate ) {
+    unless( $logDate ) {
         # get current local time and format to "yyyymm" format:
         my ( $sec, $min, $hour, $mday, $mon, $year) = localtime( time() );
         $year = sprintf("%.4u", $year + 1900);  # Y2K fix
@@ -110,12 +104,12 @@ sub statistics {
 	$tmpFilename =~ /(.*)/; $tmpFilename = $1;   # Untaint
 
 	File::Copy::copy ($logFile, $tmpFilename)
-	    or die "Can't copy $logFile to $tmpFilename - $!";
+	    or die "Can't copy $logFile to $tmpFilename - $!";    # FIXME: Never die in a cgi script
 
 	# Open the temp file
 	my $TMPFILE = new IO::File;
 	open $TMPFILE, $tmpFilename 
-	    or die "Can't open $tmpFilename - $!";
+	    or die "Can't open $tmpFilename - $!";   # FIXME: Never die in a cgi script
 
 	# Do a single data collection pass on the temporary copy of logfile,
 	# then call processWeb once for each web of interest.
@@ -139,26 +133,23 @@ sub statistics {
 =cut
 
 	# Generate WebStatistics topic update for one or more webs
-        if ( $web ) {
+        if( $thePathInfo =~ /\/./ ) {
             # do a particular web:
-            $destWeb = _processWeb( $web, $theRemoteUser, $topic,
+            $destWeb = _processWeb( $thePathInfo, $theRemoteUser, $topic,
 		$logMonthYear, $viewRef, $contribRef, $statViewsRef,
-		$statSavesRef, $statUploadsRef, $query );
+		$statSavesRef, $statUploadsRef, $query, 1 );
         } else {
             # do all webs:
-            my $dataDir = &TWiki::getDataDir();
-            my @weblist = ();
-            if( opendir( DIR, "$dataDir" ) ) {
-                @weblist = grep /^[^\.\_]/, readdir DIR; # exclude webs starting with . or _
-                closedir DIR;
-            } else {
-                _printMsg( "  *** Error: opendir $dataDir, $!", $query );
-            }
+            my @weblist = grep{ /^[^\.\_]/ } TWiki::Store::getAllWebs( "" );
+            my $firstTime = 1;
             foreach my $web ( @weblist ) {
-                if( TWiki::Store::webExists($web) ) {
-                    $destWeb = _processWeb( $web, $theRemoteUser, $topic,
+                if( TWiki::Store::webExists( $web ) ) {
+                    $destWeb = _processWeb( "/$web", $theRemoteUser, $topic,
 			$logMonthYear, $viewRef, $contribRef, $statViewsRef,
-			$statSavesRef, $statUploadsRef, $query );
+			$statSavesRef, $statUploadsRef, $query, $firstTime );
+                    $firstTime = 0;
+                } else {
+                    _printMsg( "  *** Error: $web does not exist", $query );
                 }
             }
         }
@@ -369,12 +360,18 @@ sub _collectLogData
 # =========================
 sub _processWeb
 {
-    my( $web, $theTopic, $theRemoteUser, $theLogMonthYear, $viewRef, $contribRef, 
-        $statViewsRef, $statSavesRef, $statUploadsRef, $query ) = @_;
+    my( $thePathInfo, $theTopic, $theRemoteUser, $theLogMonthYear, $viewRef, $contribRef, 
+        $statViewsRef, $statSavesRef, $statUploadsRef, $query, $isFirstTime ) = @_;
 
     my ( $topic, $webName, $dummy, $userName, $dataDir ) = 
-        &TWiki::initialize( "/$web", $theRemoteUser, $theTopic, "", $query );
+        &TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, "", $query );
     $dummy = "";  # to suppress warning
+
+    if( $isFirstTime ) {
+        my $tmp = &TWiki::userToWikiName( $userName, 1 );
+        $tmp .= " as shell script" unless( $query );
+        _printMsg( "* Executed by $tmp", $query );
+    }
 
     _printMsg( "* Reporting on TWiki.$webName web", $query );
 
@@ -540,6 +537,7 @@ sub _printMsg
 	$htmlMsg =~ s/==([A-Z]*)==/<font color=\"FF0000\">==$1==<\/font>/go;
         print "$htmlMsg\n";
     } else {
+        $msg =~ s/&nbsp;/ /go;
         print "$msg\n";
     }
 }

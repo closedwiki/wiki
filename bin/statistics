@@ -51,33 +51,33 @@ use TWiki::UI::Statistics;
 # FIXME: Beware global $| in mod_perl!  Should use 'local'
 $| = 1;                    # no buffering
 
-my $query;
-my $web;
-my $topic;
+my $query = undef;
+my $pathInfo = "";
+my $remoteUser = "";
+my $topic = "";
+my $logDate = "";
 
 # determine at runtime if script is called by browser or cron job
 if( $ENV{'DOCUMENT_ROOT'} ) {
   # script is called by browser
   $query = new CGI;
-  my $thePathInfo = $query->path_info() || ""; 
-  my $theRemoteUser = $query->remote_user() || "";
-  my $theTopic = $query->param( 'topic' ) || "";
-  my $theUrl = $query->url;
-  ( $topic, $web ) = 
-    TWiki::initialize( $thePathInfo, $theRemoteUser,
-                       $theTopic, $theUrl, $query );
+  $pathInfo = $query->path_info() || ""; 
+  $remoteUser = $query->remote_user() || "guest";
+  $topic = $query->param( 'topic' ) || "";
+  $logDate = $query->param( 'logdate' ) || "";
+
 } else {
-  $query = new CGI("");
   # script is called by cron job or user
   foreach my $arg ( @ARGV ) {
     if ( $arg =~ /^-web=(.*)$/o ) {
-      $web = $1;
+      $pathInfo = "/$1";
     } elsif ( $arg =~ /^-logdate=(.*)$/o ) {
-      $query->param( -name=>"logdate", -value=>$1 );
+      $logDate = $1;
     }
   }
-  # Set up locale and regexes
-  TWiki::basicInitialize();
 }
 
-TWiki::UI::Statistics::statistics( $web, $topic, $query );
+TWiki::UI::Statistics::statistics( $query, $pathInfo, $remoteUser, $topic, $logDate );
+
+# =========================
+# EOF
