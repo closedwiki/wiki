@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079505783" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="PeterThoeny" date="1079600640" format="1.0" version="1.24"}%
 ---++ Welcome, %WIKIUSERNAME%!
 
 Welcome to %WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. %WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
@@ -9,38 +9,39 @@ __Mission: &quot;TWiki is a leading-edge, web-based collaboration platform targe
 
 *How TWiki Works*
 
-	1. *Browse* This is a site like other sites. Read and follow interesting links.
+	1. *Browse.* This is a site like other sites. Read and follow interesting links.
 		* *web:* A TWikiSite is divided into webs, each one represents an area for collaboration.  Your site has the following webs: %WIKIWEBLIST%
 		* *topic:* Each web is made up of hyperlinked topics (TWikiTopics) that appear in your browser.
 		* *WebChanges:* in each TWiki web to find what's new
-	1. *Write* Speak your mind! From your browser you can change or add to anything you see in a TWiki topic. Use regular text, HTML or TWikiShorthand. To contribute:
-		* *Create An Account* To be able to edit or write new content, you'll need to create an account for yourself. It's simple, and only takes a minute.  TWikiRegistration  This will also create your personal home page.
+	1. *Write.* Speak your mind! From your browser you can change or add to anything you see in a TWiki topic. Use regular text, HTML or TWikiShorthand. To contribute:
+		* *Create An Account.* To be able to edit or write new content, you'll need to create an account for yourself. It's simple, and only takes a minute.  TWikiRegistration  This will also create your personal home page.
 		* click ==Edit== at the bottom of any topic and make your changes
 		* click ==[&nbsp;Preview&nbsp;Changes&nbsp;]== at the bottom to verify the topic (use your brower's ==Back== button if necessary)
 		* click ==[&nbsp;Save&nbsp;Changes&nbsp;]==
 	1. *Don't worry!* It can be scary at first to change "public" content. Please just try it. _Revision control_ keeps all content, nothing is lost.  For special cases, [[TWikiAccessControl][access control]] is available yet you may find you don't need it in most cases. You'll soon see how successful WikiCulture works in this kind of collaboration environment. This is new.  Just try to relax.
-	1. *Experiment*  Edit your personal page or visit the Sandbox.%HOMETOPIC% web.
-		1. *Link* To link to another topic, start by editing an existing topic.
+	1. *Experiment.*  Edit your personal page or visit the Sandbox.%HOMETOPIC% web.
+		1. *Link.* To link to another topic, start by editing an existing topic.
 			* To create a link to an existing topic type its ==JoinCapitalizedWords== name.  WikiWords (two or more capitalized words run together) link automatically.
 			* To create a link to a new topic, enter a newly ==UsedPhrase==. 
 			* When previewing, the links show and "<u>?</u>" (question marks) are used to create topics.
 			* Another way to create a topic is to type its WikiWord in the Go box or URL.
-		2. *Topic history* click ==Diffs== at the bottom of a topic
-		3. *Attach files* click ==Attach== to upload and attach any type of file.
-	1. *Organize:* You can learn to use TWikiForms and [[FormattedSearch]]es to include topic information - for example, classify pages by subject, status, or date.
-	1. *Learn more* TWikiTutorial is a 20-minute tour of TWiki essentials. WikiReferences links to selected articles and books about Wiki technology and online collaboration.
+		2. *Topic history.* click ==Diffs== at the bottom of a topic
+		3. *Attach files.* click ==Attach== to upload and attach any type of file.
+	1. *Organize.* You can learn to use TWikiForms and [[FormattedSearch]]es to include topic information - for example, classify pages by subject, status, or date.
+	1. *Learn more.* TWikiTutorial is a 20-minute tour of TWiki essentials. ATasteOfTWiki is a short introduction training course for beginners. WikiReferences links to selected articles and books about Wiki technology and online collaboration.
 
 <table>
 <tr valign="top"><td width="40%">
 *Starting Points*
 
-	* *[[TWikiTutorial]]* Familiarize yourself with TWiki
-	* TWikiRegistration *Sign up to edit* topics, personal home page
-	* WebChanges in this <nop>%WEB% web
-	* %HOMETOPIC% this web's entry point
-	* TWikiSite What is a TWiki site?
-	* WikiSyntax simple syntax for edits
-	* GoodStyle recommendations for edits
+	* *[[TWikiTutorial]]* - familiarize yourself with TWiki
+	* ATasteOfTWiki - a short introduction training course for beginners
+	* TWikiRegistration - *Sign up to edit* topics, personal home page
+	* WebChanges - in this <nop>%WEB% web
+	* %HOMETOPIC% - this web's entry point
+	* TWikiSite - what is a TWiki site?
+	* WikiSyntax - simple syntax for edits
+	* GoodStyle - recommendations for edits
 
 </td><td width="60%">
 *TWiki Highlights*
