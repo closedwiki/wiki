@@ -85,7 +85,7 @@ case "$1" in
 	done
 
 	#add apache2 cgi
-	if [ -e /etc/apache2/conf.d ]; then
+	if [ -e /etc/apache2/mods-available/cgi.load ]; then
 		if [ ! -e /etc/apache2/mods-enabled/cgi.load ]; then
 			ln -s /etc/apache2/mods-available/cgi.load /etc/apache2/mods-enabled/cgi.load
 		fi
