@@ -1,5 +1,5 @@
---- /tmp/twiki/twiki/lib/TWiki.cfg	2004-09-01 02:35:19.000000000 +1000
-+++ ../../lib/TWiki.cfg	2005-01-16 12:50:00.000000000 +1100
+--- lib/TWiki.cfg	2004-09-01 02:35:19.000000000 +1000
++++ lib/TWiki.cfg	2005-01-16 12:50:00.000000000 +1100
 @@ -367,8 +367,10 @@
  #                   (e.g. 'fsmith') to Wiki name (e.g. 'FredSmith') :
  $userListFilename   = "$dataDir/$mainWebname/$wikiUsersTopicname.txt";
