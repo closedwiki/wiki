@@ -66,9 +66,9 @@ sub searchWikiWeb
 
     my @webList;
 
-    # A value of 'all' by itself gets all webs, otherwise ignored (unless
-    # there is a web called "All".)
-    my $searchAllFlag = ($theWebName =~ /^[Aa][Ll][Ll]$/);
+    # A value of 'all' or 'on' by itself gets all webs,
+    # otherwise ignored (unless there is a web called "All".)
+    my $searchAllFlag = ( $theWebName =~ /^(([Aa][Ll][Ll])||([Oo][Nn]))$/ );
 
     # Search what webs?  "" current web, list gets the list, all gets
     # all (unless marked in WebPrefs as NOSEARCHALL)
@@ -196,8 +196,10 @@ sub searchWikiWeb
         # make sure we can report this web on an 'all' search
         my $tf = ( $bar =~ /(NOSEARCHALL\s*\=\s*)([Oo][Nn])/o );
 
-        next if $searchAllFlag and $tf; # DON'T filter out unless it's
-                                        # part of an 'all' search.
+        # DON'T filter out unless it's part of an 'all' search.
+        # PTh 18 Aug 2000: Need to include if it is the current web
+        next if ( ( $searchAllFlag ) && ( $tf ) && 
+                  ( $thisWebName ne $wiki::webName ) );
 
         (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
 
@@ -294,7 +296,7 @@ sub searchWikiWeb
                # Got the data, use a modified Schwartzian Transform to
                # sort.  First, save the key.
 
-                if ($theOrder eq "date") {  # dates are tricky.
+                if ($theOrder eq "modified") {  # dates are tricky.
 	            # $skey = (stat "$filename.txt")[9]; # not always accurate.
                     $skey = revDate2EpSecs($revdate);
                 } elsif ($theOrder eq "editby") {
@@ -320,7 +322,7 @@ sub searchWikiWeb
         # reverse-order sort.
 
         if (! $revSort) {
-            if ($theOrder eq "date") {
+            if ($theOrder eq "modified") {
                 @sorted = map { $_->[1] }
 	                  sort {$a->[0] <=> $b->[0] } @unsorted;
             } else {
@@ -328,7 +330,7 @@ sub searchWikiWeb
 	                  sort {$a->[0] cmp $b->[0] } @unsorted;
 	    }
         } else {
-            if ($theOrder eq "date") {
+            if ($theOrder eq "modified") {
                 @sorted = map { $_->[1] }
 	                  sort {$b->[0] <=> $a->[0] } @unsorted;
             } else {
