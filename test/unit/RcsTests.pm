@@ -23,7 +23,7 @@ use TWiki::Store;
 use TWiki::Store::RcsLite;
 use TWiki::Store::RcsWrap;
 
-my $web = "TestRcsWeb";
+my $web = "TestRcsWebTests";
 my $topic = "TestRcsTopic";
 my $user = "TestUser1";
 my $thePathInfo = "/$web/$topic";

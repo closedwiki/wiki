@@ -110,9 +110,10 @@ sub tear_down {
             close F;
         }
     }
-    my $s = `rm -rf $TWiki::cfg{DataDir}/$web`;
+    die unless $web eq "TestPrefsWeb";
+    my $s = `rm -r $TWiki::cfg{DataDir}/$web`;
     die "Could not clean fixture $s: $?" if $?;
-    $s = `rm -rf $TWiki::cfg{PubDir}/$web`;
+    $s = `rm -r $TWiki::cfg{PubDir}/$web`;
     die "Could not clean fixture $s: $?" if $?;
 }
 

@@ -34,8 +34,6 @@ sub set_up {
 
 sub tear_down {
     $TWiki::cfg{UsersTopicName} = $saveTopic;
-    `rm -f $ttpath*`;
-    print STDERR "tear_down failed: $!\n" if $!;
 }
 
 my $initial = <<'THIS';

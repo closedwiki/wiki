@@ -17,7 +17,7 @@ sub new {
 use TWiki;
 use TWiki::Access;
 
-my $peopleWeb = "AccessControlPeopleWeb";
+my $peopleWeb = "AccessControlPeopleTestWeb";
 my $testWeb = "AccessControlTestsWeb";
 my $twiki;
 my $currUser;
@@ -67,7 +67,7 @@ THIS
 
 sub tear_down {
     $TWiki::cfg{UsersWebName} = $savePeople;
-    unmake_web($TWiki::cfg{UsersWebName});
+    unmake_web($peopleWeb);
     unmake_web($testWeb);
 }
 

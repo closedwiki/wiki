@@ -21,7 +21,7 @@ use TWiki::UI::Save;
 use TWiki::OopsException;
 
 
-my $zanyweb = "ZanyTestZeebleWeb";
+my $testweb = "StoreTestsTestWeb";
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -36,16 +36,16 @@ my $saveLF;
 # Set up the test fixture
 sub set_up {
     my $this = shift;
-    mkdir "$TWiki::cfg{DataDir}/$zanyweb";
-    chmod 0777, "$TWiki::cfg{DataDir}/$zanyweb";
-    mkdir "$TWiki::cfg{PubDir}/$zanyweb";
-    chmod 0777, "$TWiki::cfg{PubDir}/$zanyweb";
+    mkdir "$TWiki::cfg{DataDir}/$testweb";
+    chmod 0777, "$TWiki::cfg{DataDir}/$testweb";
+    mkdir "$TWiki::cfg{PubDir}/$testweb";
+    chmod 0777, "$TWiki::cfg{PubDir}/$testweb";
     $saveWF = $TWiki::cfg{WarningFileName};
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     $saveLF = $TWiki::cfg{LogFileName};
     $TWiki::cfg{LogFileName} = "/tmp/junk";
 
-    my $web = $zanyweb;
+    my $web = $testweb;
     my $topic = "";
     my $user = "TestUser1";
     my $thePathInfo = "/$web/$topic";
@@ -67,9 +67,9 @@ sub set_up {
 }
 
 sub tear_down {
-    my $s = `rm -fr $TWiki::cfg{DataDir}/$zanyweb`;
+    my $s = `rm -rf $TWiki::cfg{DataDir}/$testweb`;
     die "Could not clean fixture $?: $s" if $?;
-    $s = `rm -rf $TWiki::cfg{PubDir}/$zanyweb`;
+    $s = `rm -rf $TWiki::cfg{PubDir}/$testweb`;
     die "Could not clean fixture $?: $s" if $?;
     $TWiki::cfg{WarningFileName} = $saveWF;
     $TWiki::cfg{LogFileName} = $saveLF;
@@ -77,9 +77,9 @@ sub tear_down {
 
 sub test_notopic {
     my $this = shift;
-    my $web = $zanyweb;
+    my $web = $testweb;
     my $topic = "UnitTest1";
-    my $rev = $twiki->{store}->getRevisionNumber( $zanyweb, "UnitTest1" );
+    my $rev = $twiki->{store}->getRevisionNumber( $testweb, "UnitTest1" );
     $this->assert(!$twiki->{store}->topicExists($web, $topic));
     # Would be better if there was a different result !!!
     $this->assert_num_equals(0, $rev);
@@ -117,7 +117,7 @@ sub test_checkin
     my $this = shift;
     my $topic = "UnitTest1";
     my $text = "hi";
-    my $web = $zanyweb;
+    my $web = $testweb;
     my $user = $twiki->{users}->findUser("TestUser1");
 
     saveTopic1( $web, $topic, $text, $user );
@@ -157,7 +157,7 @@ sub test_checkin_attachment {
     # Create topic
     my $topic = "UnitTest2";
     my $text = "hi";
-    my $web = $zanyweb;
+    my $web = $testweb;
     my $user = $twiki->{users}->findUser("TestUser1");
 
     saveTopic1($web, $topic, $text, $user );
@@ -201,7 +201,7 @@ sub test_checkin_attachment {
 sub test_rename() {
     my $this = shift;
 
-    my $oldWeb = $zanyweb;
+    my $oldWeb = $testweb;
     my $oldTopic = "UnitTest2";
     my $newWeb = $oldWeb;
     my $newTopic = "UnitTest2Moved";
@@ -244,7 +244,7 @@ sub test_rename() {
 
 sub test_releaselocksonsave {
     my $this = shift;
-    my $web = $zanyweb;
+    my $web = $testweb;
     my $topic = "MultiEditTopic";
     my $meta = new TWiki::Meta($twiki, $web, $topic);
 

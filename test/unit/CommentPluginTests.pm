@@ -9,13 +9,14 @@ BEGIN {
     require 'setlib.cfg';
 };
 
+use strict;
 use TWiki;
 use TWiki::UI::Save;
 use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
 use CGI;
 
-my $baseweb = "TestCommentPluginWeb";
+my $baseweb = "TestCommentPluginTestWeb";
 my $targetweb = "TestCommentPluginTargetWeb";
 my $basetopic = "TestCommentPluginTopic";
 my $targettopic = "TargetTopic";
