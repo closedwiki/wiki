@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1006601942" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="PeterThoeny" date="1018175040" format="1.0" version="1.6"}%
 The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
 
 	* TestTopic1, TestTopic2, TestTopic3, TestTopic4 
@@ -18,4 +18,4 @@ The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Ever
 	* You are currently in the %WIKITOOLNAME%.%WEB% web. The color code for this web is a light gray background, so you know where you are.
 	* If you are not familiar with the %WIKITOOLNAME% collaboration tool, please visit %TWIKIWEB%.WelcomeGuest in the %WIKITOOLNAME%.%TWIKIWEB% web first.
 
-%INCLUDE{"%TWIKIWEB%.TWikiWebsTable"}%
+%INCLUDE{"%TWIKIWEB%.SiteMap"}%
