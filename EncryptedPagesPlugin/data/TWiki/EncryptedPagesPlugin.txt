@@ -15,7 +15,7 @@ Raw java test:
 
 <!--TWIKIENCRYPT COPY THIS BIT INTO YOUR UPLOAD FORM -->
 <p />
-<APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%ATTACHURL%/TwikiEncrypt.jar,%ATTACHURL%/Crypt.jar"  WIDTH = 400 HEIGHT = 55>
+<APPLET CODE = "uk.org.ellery.twiki.TwikiEncrypt.class"  ARCHIVE = "%PUBURL%/%TWIKIWEB%/TwikiEncrypt.jar,%PUBURL%/%TWIKIWEB%/Crypt.jar"  WIDTH = 400 HEIGHT = 55>
 <PARAM NAME="KEY" VALUE="key1">
 <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
 </APPLET>
