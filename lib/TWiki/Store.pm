@@ -957,7 +957,6 @@ sub saveNew
                   my $out = `$cmd`;
                   _traceExec( $cmd, $out );
                   # Assume it worked, as not sure how to trap failure
-                  $tmp= $TWiki::revCiCmd;
                   $rcsError = `$tmp`; # capture stderr  (S.Knutson)
                   _traceExec( $tmp, $rcsError );
                   $rcsError = "";
