@@ -57,7 +57,8 @@ sub preview {
     # Is user looking to change the form used?  Sits oddly in preview, but 
     # to avoid Javascript and pick up text on edit page it has to be in preview.
     if( $changeform ) {
-        $session->{form}->changeForm( $webName, $topic );
+        $session->writeCompletePage
+          ( TWiki::UI::generateChangeFormPage( $session, $webName, $topic ) );
         return;
     }
 
@@ -130,12 +131,14 @@ sub preview {
     $ptext = $session->handleCommonTags( $ptext, $webName, $topic );
     $ptext = $session->{renderer}->getRenderedVersion( $ptext, $webName, $topic );
 
-    # do not allow click on link before save: (mods by TedPavlic)
+    # Disable links and forms
     my $oopsUrl = '%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
     $oopsUrl = $session->handleCommonTags( $oopsUrl, $webName, $topic );
-    $ptext =~ s/(?<=<a\s)([^>]*)(href=(?:".*?"|[^"].*?(?=[\s>])))/$1href="$oopsUrl?template=oopspreview" rel="nofollow"/goi;
-    $ptext =~ s/<form(?:|\s.*?)>/<form action="$oopsUrl">\n<input type="hidden" name="template" value="oopspreview">/goi;
-    $ptext =~ s/(?<=<)([^\s]+?[^>]*)(onclick=(?:"location.href='.*?'"|location.href='[^']*?'(?=[\s>])))/$1onclick="location.href='$oopsUrl\?template=oopspreview'"/goi;
+    $ptext =~ s/(<a\s[^>]*\bhref=[^>]*>)/_killLink($1, $oopsUrl)/geis;
+    my $formKiller = CGI::start_form( -action=>$oopsUrl )
+      . CGI::hidden(-name=>'template' -value=>'oopspreview');
+    $ptext =~ s/<form(?:|\s.*?)>/$formKiller/gois;
+    $ptext =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1._killEvent($1, $oopsUrl)/geis;
 
     $session->{renderer}->putBackBlocks( $ptext, $verbatim,
                                          'verbatim', 'pre',
@@ -148,9 +151,31 @@ sub preview {
 
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
-    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
     $session->writeCompletePage( $tmpl );
+}
+
+# change the href in a link to the oops url
+sub _killLink {
+    my( $a, $oopsUrl ) = @_;
+
+    $a =~ s/\bhref=".*?"/href="$oopsUrl?template=oopspreview"/;
+    $a =~ s/>$/ rel="nofollow">/;
+
+    return $a;
+}
+
+# Subtly edit javascript in an event trigger
+sub _killEvent {
+    my( $event, $oopsUrl ) = @_;
+
+    $event =~ s/^(.)//;
+    my $quote = $1;
+    $event =~ s/$quote$//;
+    my $etouq = ( $quote eq '"' ? "'" : '"' ); # opposite quote
+    $event =~ s/\blocation\.href=$etouq.*?$etouq/location.href=$etouq$oopsUrl?template=oopspreview$etouq/g;
+
+    return $quote.$event.$quote;
 }
 
 1;

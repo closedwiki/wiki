@@ -296,4 +296,57 @@ sub readTemplateTopic {
     return $session->{store}->readTopic( $session->{user}, $web, $theTopicName, undef );
 }
 
+=pod
+
+---++ ObjectMethod generateChangeFormPage ( $session, $theWeb, $theTopic )
+
+Generate the page that supports selection of the form.
+
+=cut
+
+sub generateChangeFormPage {
+    my( $session, $web, $topic ) = @_;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+
+    my $page = $session->{templates}->readTemplate( 'changeform' );
+    $page = $session->handleCommonTags( $page, $web, $topic );
+    $page = $session->{renderer}->getRenderedVersion( $page, $web, $topic );
+    my $q = $session->{cgiQuery};
+    my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
+    $page =~ s/%TEXT%/$text/go;
+
+    my $prefs = $session->{prefs};
+    my $legalForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
+    $legalForms =~ s/^\s*//;
+    $legalForms =~ s/\s*$//;
+    my @forms = split( /[,\s]+/, $legalForms );
+    unshift @forms, ''; # for <none>
+    my $store = $session->{store};
+    my $formName = $q->param( 'formtemplate' ) || '';
+    unless( $formName ) {
+        my( $meta, $tmp ) = $store->readTopic( undef, $web, $topic, undef );
+        my $form = $meta->get( 'FORM' );
+        $formName = $form->{name} if $form;
+    }
+    $formName = '' if( !$formName || $formName eq 'none' );
+
+    my $formList = '';
+    foreach my $form ( @forms ) {
+       my $selected = ( $form eq $formName ) ? 'checked' : '';
+       $formList .= CGI::br() if( $formList );
+       $formList .= CGI::input( {
+                                 type => 'radio',
+                                 name => 'formtemplate',
+                                 value => $form ? $form : 'none',
+                                 checked => $selected,
+                                } ). ( $form ? $form : '&lt;none&gt;' );
+    }
+    $page =~ s/%FORMLIST%/$formList/go;
+
+    my $parent = $q->param( 'topicparent' ) || '';
+    $page =~ s/%TOPICPARENT%/$parent/go;
+
+    return $page;
+}
+
 1;

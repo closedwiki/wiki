@@ -253,7 +253,6 @@ sub edit {
                           -onKeyDown => 'if(window.event.keyCode==27)return false;',
                           -default=>"\n".$text );
     $tmpl =~ s/%TEXT%/$text/go;
-    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
     $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );
 }

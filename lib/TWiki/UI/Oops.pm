@@ -79,7 +79,6 @@ sub oops_cgi {
 
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web, $topic );
-        $tmplData =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
     }
 
     $session->writeCompletePage( $tmplData );

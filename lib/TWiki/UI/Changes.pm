@@ -102,9 +102,6 @@ sub changes {
     }
     $page .= $after;
 
-    # remove <nop> and <noautolink> tags
-    $page =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
-
     $session->writeCompletePage( $page );
 }
 

@@ -517,7 +517,6 @@ sub fieldVars2Meta {
 }
 
 
-# =============================
 =pod
 
 ---++ StaticMethod getFieldParams (  $meta  )
@@ -543,65 +542,6 @@ sub getFieldParams {
     }
     return $params;
 
-}
-
-=pod
-
----++ ObjectMethod changeForm (  $theWeb, $theTopic )
-
-Called by script to change the form for a topic
-
-=cut
-
-# SMELL: surely this should be in UI somewhere??
-
-sub changeForm {
-    my( $this, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
-
-    my $tmpl = $this->{session}->{templates}->readTemplate( 'changeform' );
-    $tmpl = $this->{session}->handleCommonTags( $tmpl, $theWeb, $theTopic );
-    $tmpl = $this->{session}->{renderer}->getRenderedVersion( $tmpl, $theWeb, $theTopic );
-    my $q = $this->{session}->{cgiQuery};
-    my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
-    $tmpl =~ s/%TEXT%/$text/go;
-
-    my $prefs = $this->{session}->{prefs};
-    my $listForms = $prefs->getPreferencesValue( 'WEBFORMS', $theWeb );
-    $listForms =~ s/^\s*//go;
-    $listForms =~ s/\s*$//go;
-    my @forms = split( /\s*,\s*/, $listForms );
-    unshift @forms, '';
-    my $store = $this->{session}->{store};
-    my( $metat, $tmp ) =
-      $store->readTopic( $this->{session}->{user}, $theWeb, $theTopic, undef );
-    my $formName = $q->param( 'formtemplate' ) || '';
-    if( ! $formName ) {
-        my $form = $metat->get( 'FORM' );
-        $formName = $form->{name} if $form;
-    }
-    $formName = '' if( !$formName || $formName eq 'none' );
-
-    my $formList = '';
-    foreach my $form ( @forms ) {
-       my $selected = ( $form eq $formName ) ? 'checked' : '';
-       $formList .= CGI::br() if( $formList );
-       my $value = 
-       $formList .= CGI::input( {
-                                 type => 'radio',
-                                 name => 'formtemplate',
-                                 value => $form ? $form : 'none',
-                                 checked => $selected,
-                                } ). ( $form ? $form : '&lt;none&gt;' );
-    }
-    $tmpl =~ s/%FORMLIST%/$formList/go;
-
-    my $parent = $q->param( 'topicparent' ) || '';
-    $tmpl =~ s/%TOPICPARENT%/$parent/go;
-
-    $tmpl =~ s|</*nop/*>||goi;
-
-    $this->{session}->writeCompletePage( $tmpl );
 }
 
 #Upgrade old style category table item

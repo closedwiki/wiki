@@ -145,7 +145,7 @@ sub _getTemplate {
     }
 
     my $t = TWiki::Func::expandTemplate( $name );
-    return "%RED%No such template def %<nop>TMPL:DEF{$name}%%ENDCOLOR%"
+    return "%RED%No such template def TMPL:DEF{$name}%ENDCOLOR%"
       unless ( defined($t) && $t ne '' );
 
     return $t;

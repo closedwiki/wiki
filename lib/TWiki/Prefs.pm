@@ -253,15 +253,15 @@ sub getPreferencesFlag {
 Returns the preference =$key= from =$web= as a flag.  See
 =getPreferencesValue= for the semantics of the parameters.
 Converts the string =$prefValue= to a number.  First any whitespace and commas
-are removed.  <em>L10N note: assumes thousands separator is comma and decimal
-point is period.</em>  Then, if the first character is a zero, the value is
+are removed.  *L10N note: assumes thousands separator is comma and decimal
+point is period.*  Then, if the first character is a zero, the value is
 passed to oct(), which will interpret hex (0x prefix), octal (leading zero
 only), or binary (0b prefix) numbers.  If the first character is a digit
 greater than zero, the value is assumed to be a decimal number and returned.
 If the =$prefValue= is empty or not a number, zero is returned.  Finally, if
-=$prefValue= is undefined, an undefined value is returned.  <strong>Undefined
+=$prefValue= is undefined, an undefined value is returned.  *Undefined
 preferences are automatically converted to empty strings, and so this function
-will always return zero for these, rather than 'undef'.</strong>
+will always return zero for these, rather than 'undef'.*
 
 =cut
 

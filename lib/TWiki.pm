@@ -477,6 +477,8 @@ sub _convertUtf8URLtoSiteCharset {
 Write a complete HTML page with basic header to the browser.
 $text is the HTML of the page body (&lt;html&gt; to &lt;/html&gt;)
 
+This method removes noautolink and no tags before outputting the page.
+
 =cut
 
 sub writeCompletePage {
@@ -484,6 +486,8 @@ sub writeCompletePage {
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
+    # Remove <nop> and <noautolink> tags
+    $text =~ s/([\t ]?)[ \t]*<\/?(nop|noautolink)\/?>/$1/gis;
     $text .= "\n" unless $text =~ /\n$/s;
 
     # can't use simple length() in case we have UNICODE

@@ -514,8 +514,6 @@ sub diff {
 
     $after = $session->handleCommonTags( $after, $webName, $topic );
     $after = $session->{renderer}->getRenderedVersion( $after, $webName, $topic );
-    $after =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
-
     $page .= $after;
 
     $session->writeCompletePage( $page );

@@ -461,7 +461,6 @@ sub _newTopicScreen {
     }
     $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
     $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $oldTopic );
-    $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
 
     $session->writeCompletePage( $tmpl );
 }

@@ -97,7 +97,8 @@ sub _save {
     }
 
     if( $query->param( 'submitChangeForm' )) {
-        $session->{form}->changeForm( $webName, $topic );
+        $session->writeCompletePage
+          ( TWiki::UI::generateChangeFormPage( $session, $webName, $topic ) );
         # return 0 to prevent extra redirect
         return 0;
     }
@@ -241,7 +242,7 @@ sub save {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );
         my $randompart = randomURL();
-        $redirecturl = "$editURL|$randompart";
+        $redirecturl = $editURL.'|'.$randompart;
     } elsif ( $saveaction eq 'quietsave' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
     } elsif ( $saveaction eq 'cancel' ) {
