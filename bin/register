@@ -211,7 +211,10 @@ sub htpasswdExistUser
     }
 
     my $text = &TWiki::Store::readFile( $TWiki::htpasswdFilename );
-    if( $text =~ /$user\:/go ) {
+
+    # RD: Fix for Codev.ModPerlOnceRegex - don't use 'o' flag where variable
+    # is part of a pattern.
+    if( $text =~ /^${user}:/gm ) {
         return "1";
     }
     return "";
