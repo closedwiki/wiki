@@ -22,6 +22,9 @@
 # 15-12-2003 moved requesting a passwd reset from passwd (as it is also htpasswd specific)
 #
 
+#NOTE:  InstallPassword code is protected from anonymous use, but it is still risky 
+#(anyone who has a valid htpasswd entry can call it by hand 
+
 #WARNING: this script only works when using htpasswd files.
 #usage example:
 #
@@ -34,7 +37,7 @@
 #<input type="hidden" name="installPasswd" value="on" />
 #</form>
 #
-#
+# this code is here for symetery only - the actual usable bit is in the passwd script
 #R e s e t
 #
 #<form name="passwd" action="/%SCRIPTURLPATH%/installpasswd%SCRIPTSUFFIX%/%WEB%/">
