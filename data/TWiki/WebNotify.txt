@@ -1,7 +1,11 @@
-<nop>%NOTIFYTOPIC% is a subscription service to be automatically notified by email when topics change in the *%WIKITOOLNAME%.%WEB%* web. This is a convenient service, so you do not have to come back and check all the time if something has changed. To subscribe to the service, please put yourself on the list below. The format is: =3 spaces * %MAINWEB%.yourWikiName - yourEmailAddress=
+%META:TOPICINFO{author="PeterThoeny" date="1043488920" format="1.0" version="1.5"}%
+This is a subscription service to be automatically notified by e-mail when topics change in this *%WEB%* web. This is a convenient service, so you do not have to come back and check all the time if something has changed. To subscribe, please add a bullet with your %TWIKIWEB%.WikiName in alphabetical order to this list:
 
 	* Main.TWikiGuest - example@your.company
 
-__Note:__ It is helpful to insert your name in alphabetical order (by first name -- ignore the "Main.") -- then you can find your name (or not) more easily if you wish to remove it or confirm that you are on the list.
+__Format:__ &lt;space&gt;&lt;space&gt;&lt;space&gt;, followed by:%BR%
+=* %MAINWEB%.yourWikiName= (if you want that the e-mail address in your home page is used) %BR%
+=* %MAINWEB%.yourWikiName - yourEmailAddress= (if you want to specify a different e-mail address) %BR%
+=* %MAINWEB%.anyTWikiGroup= (if you want to notify all members of a particular [[%MAINWEB%.TWikiGroups][TWikiGroup]])
 
-Related topics: %MAINWEB%.%WIKIUSERSTOPIC%, %TWIKIWEB%.TWikiRegistration
+__Related topics:__ %MAINWEB%.%WIKIUSERSTOPIC%, %TWIKIWEB%.TWikiRegistration
