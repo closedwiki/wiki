@@ -28,6 +28,15 @@ print "<pre>\n";
 print `svn update`;
 print "</pre>\n";
 
+print "<h1>Compile Tests</h1>\n<table border='1'>";
+my $pms = `find ../lib -name '*.pm'`;
+foreach my $pm (split /\n/, $pms){
+    print "<tr><td>$pm</td><td><pre>\n";
+    print `perl -I ../lib -I . -w -c $pm`;
+    print "</pre></td></tr>\n";
+}
+print "</table\n\n";
+
 print "<h1>Unit Tests</h1>";
 print "Errors will be in $outputDir/unit$now\n<pre>\n";
 execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm > $outputDir/unit$now ; cd ..") or die $!;
@@ -47,6 +56,7 @@ foreach my $test ( grep { /^TestCaseAuto.*\.txt$/ } readdir TESTS ) {
         print "<font color='green'>PASSED</font>";
     } else {
         print "<font color='red'><b>FAILED</b></font>";
+        print $result->content();
     }
     print "<br>\n";
 }
