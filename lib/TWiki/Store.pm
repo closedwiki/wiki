@@ -383,7 +383,7 @@ sub readVersion
     my $text = _readVersionNoMeta( $theWeb, $theTopic, $theRev );
     my @meta = ();
    
-    ($text, @meta) = _extractMetaData( $text );
+    ( $text, @meta ) = _extractMetaData( $theWeb, $text );
         
     return( $text, @meta );
 }
@@ -472,15 +472,14 @@ sub getRevisionNumberX
 
 
 # =========================
-# rdiff:            $text = &TWiki::Store::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
+# rdiff:            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
 sub getRevisionDiff
 {
-    my( $topic, $rev1, $rev2 ) = @_;
+    my( $web, $topic, $rev1, $rev2 ) = @_;
 
     my $tmp= "";
     if ( $rev1 eq "1.1" && $rev2 eq "1.1" ) {
-        my( $text, @meta ) = readVersion($topic, 1.1);    # bug fix 19 Feb 1999
-        $text = TWiki::renderMetaData( $TWiki::webName, $topic, \@meta );
+        my $text = _readVersionNoMeta( $web, $topic, 1.1);    # bug fix 19 Feb 1999
         $tmp = "1a1\n";
         foreach( split( /\n/, $text ) ) {
            $tmp = "$tmp> $_\n";
@@ -615,6 +614,17 @@ sub topicIsLockedBy
 
 
 # ============================
+# Remove all meta information of a given type
+sub metaRemove
+{
+    my( $metaDataType, @meta ) = @_;
+    
+    @meta = grep( !/^%META:$metaDataType\{/, @meta );
+    return sort @meta;
+}
+
+
+# ============================
 # Replace all of a meta data item
 # e.g. 
 # @args = ( "author" => "JohnTalintyre" );
@@ -712,7 +722,7 @@ sub metaUpdatePartial
        $sep = " ";
     }
     
-    @meta = grep( !/^%META:$metaDataType\{$identifier/, @meta );
+    @meta = grep( !/^%META:$metaDataType\{(.*\s)?$identifier/, @meta );
 
     push @meta, "%META:$metaDataType\{$metaDataArgs}%";
     return sort @meta;
@@ -723,12 +733,11 @@ sub keyValue2list
 {
     my( $args ) = @_;
     
-    my @items = split /\s/, $args;
-    
     my @res = ();
     
-    foreach my $item ( @items ) {
-        $item =~ /(.*)="([^"]*)"/;
+    # Format of data is name="value" name1="value1" [...]
+    while( $args ) {
+        $args =~ s/\s*([^=]+)=\"([^"]*)\"//o;
         push @res, $1;
         push @res, $2;
     }
@@ -749,7 +758,7 @@ sub metaAddTopicData
        "version" => "$rev",
        "date"    => "$time",
        "author"  => "$user",
-       "format"  => "1.0beta" ); # FIXME put correct format version here
+       "format"  => "1.0beta2" ); # FIXME put correct format version here
     @meta = metaUpdate( "TOPICINFO", \@args, "", @meta );
     
     return @meta;
@@ -1301,14 +1310,17 @@ sub getRevisionInfoFromMeta
 # =========================
 sub convert2metaFormat
 {
-    my( $text ) = @_;
+    my( $web, $text ) = @_;
     
     my @meta = ();
      
     if ( $text =~ /<!--TWikiAttachment-->/ ) {
        ( $text, @meta ) = TWiki::Attach::migrateToFileAttachmentMacro( $text );
     }
-
+    
+    if ( $text =~ /<!--TWikiCat-->/ ) {
+       ( $text, @meta ) = TWiki::Form::upgradeCategoryTable( $web, $text, @meta );    
+    }
     
     return( $text, @meta );
 }
@@ -1319,7 +1331,7 @@ sub convert2metaFormat
 # If we have an old file format without meta data, then convert
 sub _extractMetaData
 {
-    my( $fulltext ) = @_;
+    my( $web, $fulltext ) = @_;
     
     my $text = "";
     my @meta = ();
@@ -1334,7 +1346,17 @@ sub _extractMetaData
     
     # If there is no meta data then convert
     if( $#meta == -1 ) {
-        ($text, @meta ) = convert2metaFormat( $text );
+        ($text, @meta ) = convert2metaFormat( $web, $text );
+    } else {
+        my $fieldP;
+        ( $fieldP, @meta ) = metaExtract( "TOPICINFO", "", "", @meta );
+        my @fields = @$fieldP;
+        my %fld = @fields;
+        if( $fld{"format"} eq "1.0beta" ) {
+            if( $text =~ /<!--TWikiCat-->/ ) {
+               ( $text, @meta ) = TWiki::Form::upgradeCategoryTable( $web, $text, @meta );
+            }
+        }
     }
     
     return( $text, @meta );
@@ -1356,6 +1378,15 @@ sub readWebTopic
     return $text;
 }
 
+# =========================
+sub readTopicRaw
+{
+    my( $theWeb, $theName ) = @_;
+    my $text = &readFile( "$TWiki::dataDir/$theWeb/$theName.txt" );
+    
+    return $text;
+}
+
 # FIXME replace readWebTopic
 sub readWebTopicNew
 {
@@ -1364,7 +1395,7 @@ sub readWebTopicNew
     
     my @meta = ();
     
-    ($text, @meta) = _extractMetaData( $text );
+    ($text, @meta) = _extractMetaData( $theWeb, $text );
     
     return( $text, @meta );
 }
