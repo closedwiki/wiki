@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000000073" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="MikeMannix" date="1000277488" format="1.0" version="1.16"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -23,10 +23,10 @@ The 01 Sep 2001 release includes the following new features and enhancements:
 
 	* *[[TWikiDocumentation#TWiki_Plugins][TWiki Plugins]]* - Easily install program enhancements using external plug-in modules. Developers can create plug-ins in Perl, with the [[TWikiPlugins#PluginAPI][TWiki Plugin API]].
 		* [[TWikiDocumentation#InterwikiPlugin][InterwikiPlugin]] (preinstalled) - Link to external sites with text aliases, =SiteAlias:Page=; rules are defined in InterWikis. (Get more Plugins from the TWiki:Plugins web.) 
-	* *[[TWikiDocumentation#TWiki_Template_System][TWikiTemplateSystem]]* - New, more flexible template system.
+	* *[[TWikiDocumentation#TWiki_Template_System][TWikiTemplates]]* - New, more flexible template system.
 	* *[[TWikiDocumentation#TWiki_Skins][TWikiSkins]]* - Overwrite template headers and footers; page content is unaffected. 
 	* *[[TWikiDocumentation#TWiki_Meta_Data][TWikiMetaData]]* - New data format 
-	* *[[TWikiDocumentation#TWiki_Form_Template][TWikiFormTemplate]]* - Create multiple input forms per web; data is rendered in HTML tables.
+	* *[[TWikiDocumentation#TWiki_Form_Template][TWikiForms]]* - Create multiple input forms per web; data is rendered in HTML tables.
 	* *[[TWikiDocumentation#Managing_Topics][Rename/move/delete topics]]* Individual pages can be managed  through the browser. Deleted topics are stored in a common Trash web.
 	* *[[TWikiDocumentation#Changing_Passwords][Change passwords]]* Change and reset passwords using forms.
 	* *[[%TWIKIWEB%.TWikiVariables][TOC (Table of Contents)]]* - =%<nop>TOC%= variable generates a hierarchical table of contents from topic headings: &lt;HI&gt;...&lt;H6&gt;. Set depth.

@@ -1,5 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000023630" format="1.0" version="1.8"}%
-%META:TOPICPARENT{name="WebHome"}%
+%META:TOPICINFO{author="MikeMannix" date="1000277489" format="1.0" version="1.9"}%
 ---++ %WIKITOOLNAME%.%WEB% Web Preferences
 
 The following settings are __web preferences__ of the %WIKITOOLNAME%.%WEB% web. These preferences overwrite the __site-level preferences__ in %TWIKIWEB%.%WIKIPREFSTOPIC%, and can be overwritten by __user preferences__ (your personal topic, i.e. %MAINWEB%.TWikiGuest in the %WIKITOOLNAME%.%MAINWEB% web)
@@ -18,7 +17,7 @@ __Preferences:__
 
 	* Default template for new topics and form(s) for this web:
 		* WebTopicEditTemplate: Site-level default template for new topics
-		* TWikiFormTemplate: How to enable form(s)
+		* TWikiForms: How to enable form(s)
 		* Set WEBFORMS = 
 
 	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the %WEB% web: (See %TWIKIWEB%.TWikiAccessControl)

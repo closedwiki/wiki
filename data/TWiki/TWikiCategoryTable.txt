@@ -1,6 +1,6 @@
-%META:TOPICINFO{author="MikeMannix" date="999338304" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="MikeMannix" date="1000277489" format="1.0" version="1.6"}%
 ---++ Dev Reorg
-	* This feature has been replaced by: TWikiFormTemplate
+	* This feature has been replaced by: TWikiForms
 
 ---
 

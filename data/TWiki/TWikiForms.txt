@@ -1,8 +1,10 @@
-%META:TOPICINFO{author="MikeMannix" date="1000019840" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="MikeMannix" date="1000277643" format="1.0" version="1.10"}%
 %META:TOPICPARENT{name="WebHome"}%
+%INCLUDE{"UtilTempDocNote"}%
+
 %TOC%
 %STARTINCLUDE%
----# TWiki Form Templates
+---# TWiki Forms
 
 _Form-based input in topics, with name/value pairs stored as Meta Data variables; multiple forms per web &amp; topic_
 
@@ -148,3 +150,4 @@ A form embedded in a topic also appears in a new topic. This is done by specifyi
 The Form Template topic name, fields and values are stored as [[TWikiDocumentation#TWikiMetaData][Meta Data]]. The order of field/value pairs in the Meta Data is the same as in the Template.
 
 -- JohnTalintyre - 16 Aug 2001 <br>
+%META:TOPICMOVED{by="MikeMannix" date="1000277489" from="TWiki.TWikiFormTemplate" to="TWiki.TWikiForms"}%
