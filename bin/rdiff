@@ -427,8 +427,12 @@ sub main
             $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
             $diff =~ s/%REVINFO1%/$rInfo/go;
             $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1" );
-            my $diffArray = parseRevisionDiff( $text, $topic, "1.$r2", "1.$r1" );
-            $text = renderRevisionDiff( $diffArray, $renderStyle );
+            if ( $renderStyle eq "raw" ) {
+                $text = "\n<code>\n$text\n</code>\n";
+            } else {
+                my $diffArray = parseRevisionDiff( $text, $topic, "1.$r2", "1.$r1" );
+                $text = renderRevisionDiff( $diffArray, $renderStyle );
+            }
             $diff =~ s/%TEXT%/$text/go;
             $diff =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> and <noautolink> tags
             print $diff;
