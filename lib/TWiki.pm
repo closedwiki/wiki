@@ -131,7 +131,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "10 Mar 2004";
+$wikiversion      = "15 Mar 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -2497,13 +2497,31 @@ sub handleUrlParam
 {
     my( $theArgs ) = @_;
 
-    my $param   = extractNameValuePair( $theArgs );
-    my $newLine = extractNameValuePair( $theArgs, "newline" ) || "";
-    my $encode = extractNameValuePair( $theArgs, "encode" ) || "";
+    my $param     = extractNameValuePair( $theArgs );
+    my $newLine   = extractNameValuePair( $theArgs, "newline" ) || "";
+    my $encode    = extractNameValuePair( $theArgs, "encode" ) || "";
+    my $multiple  = extractNameValuePair( $theArgs, "multiple" ) || "";
+    my $separator = extractNameValuePair( $theArgs, "separator" ) || "\n";
     my $value = "";
     if( $cgiQuery ) {
-        $value = $cgiQuery->param( $param );
-        $value = "" unless( defined $value );
+        if( $multiple ) {
+            my @valueArray = $cgiQuery->param( $param );
+            if( @valueArray ) {
+                unless( $multiple =~ m/^on$/i ) {
+                    my $item = "";
+                    @valueArray = map {
+                        $item = $_;
+                        $_ = $multiple;
+                        $_ .= $item unless( s/\$item/$item/go );
+                        $_
+                    } @valueArray;
+                }
+                $value = join ( $separator, @valueArray );
+            }
+        } else {
+            $value = $cgiQuery->param( $param );
+            $value = "" unless( defined $value );
+        }
     }
     $value = handleUrlEncode( "\"$value\" type=\"$encode\"", 1 ) if( $encode );
     $value =~ s/\r?\n/$newLine/go if( $newLine );
