@@ -161,18 +161,18 @@ A list of Events is just a bullet list like this:
 | %<nop>CALENDAR{&lt;attributes>}% | is the full syntax |
 
 ---+++ Attributes recognized
-| *Attribute*				| *Meaning* | *Default* |
-| ==year="yyyy"==		  | The year | Current year |
+| *Attribute*            | *Meaning* | *Default* |
+| ==year="yyyy"==        | The year | Current year |
 | ==year="+yy"== or =="-yy"== | Relative year | Current year |
-| ==month="mm"==			| The month | Current month |
+| ==month="mm"==         | The month | Current month |
 | ==month="+mm"== or =="-mm"== | relative month | Current month |
 | ==gmtoffset="+/-hh"== | Timezone expressed as number of hours offset from GMT | Server timezone |
 | ==topic="TopicName"==  | Topic containig events | The topic containing the tag |
 | ==topic="Web.TopicName1, Web.TopicName2"==  | Topics containig events | The topics containing the tags |
-| ==web="Webname"==		| Web containing the event topic | The current web |
-| ==lang="language"==	 | Language: First few characters of "English", "Français", "Deutsch", "Español", "Português", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "suomi", "Magyar", "Polski | "English" |
+| ==web="Webname"==      | Web containing the event topic | The current web |
+| ==lang="language"==    | Language: First few characters of "English", "Français", "Deutsch", "Español", "Português", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "suomi", "Magyar", "Polski | "English" |
 | ==daynames="Mon&brvbar;Tue&brvbar;..."== | Custom day names | "Monday&brvbar;Tuesday&brvbar;Wednesday&brvbar;Thursday&brvbar;<br />Friday&brvbar;Saturday&brvbar;Sunday" |
-| ==header="..."==	 | Text at the top of the calendar; use ==$m== for current month, ==$y== for year | Current month and year |
+| ==header="..."==    | Text at the top of the calendar; use ==$m== for current month, ==$y== for year | Current month and year |
 | ==weekstartsonmonday="1"== or =="0"== | Flag to start week on Monday | "0" (Sunday) |
 | ==showdatenumbers="0"== | Show day numbers 1...31 in date cells | "1" |
 | ==showweekdayheaders="1"== | Show the weekday headers | "0" |
@@ -213,10 +213,10 @@ Events are defined by bullets with the following syntax:
 | *Monthly*: | ==&nbsp;&nbsp; * w DDD - description== | 1 Fri - Every 1st Friday of the month |
 |^| ==&nbsp;&nbsp; * dd - description== | 14 - The 14th of every month |
 | *Weekly*: | ==&nbsp;&nbsp; * E DDD - description== | E Wed - Every Wednesday |
-| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005|
+| ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005 |
 | ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - dd MMM yyyy - description== | E Wed 1 Jan 2005 - 27 Jan 2005 - Every Wednesday from 1 Jan 2005 through 27 Jan 2005 (inclusive) |
 | *Periodic*: | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - description== </nobr> | E3 02 Dec 2002 - Every three days starting 02 Dec 2002 |
-| *Exception*: | Above syntax, followed by:<br /> =={ dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
+| *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
 
 If an event falls in the selected month then the corresponding day is (by default):
 	* highlighted (font size +2)
@@ -233,7 +233,13 @@ I.e. ==format== is:
 		* Set SHORTDESCRIPTION = This plugin shows a monthly calendar with highlighted events
 	* How the cell content is formatted
 <verbatim>
-		* Set FORMAT = $old <br /> $description
+		* Set FORMAT = $old<br><small>-&nbsp; $description</small>
+		* Set WIDTH = 100%
+		* Set CELLALIGNMENT = left
+		* Set VCELLALIGNMENT = top
+		* Set GMTOFFSET = +10
+		* Set SHOWWEEKDAYHEADERS = 1
+		* Set WEEKSTARTSONMONDAY = 1
 </verbatim>
 	* __Note:__ You can add settings of any of the recognized attributes (in upper case like SHOWWEEKDAYHEADERS)
 
@@ -245,8 +251,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* The Plugin uses the ==HTML::CalendarMonthSimple== and ==Date::Calc== CPAN packages (see http://www.cpan.org)
 		* Install ==Date::Calc==
 		* Install ==HTML::CalendarMonthSimple==
-		* Change line 197 of <nop>CalendarMonthSimple.pm as follows to avoid an annoying log message:<br />
-		  =if ($self->year == $todayyear && $self->month == $todaymonth &lt;font color="red"&gt;&& defined $thisday&lt;/font&gt; && $thisday == $todaydate)=
+		* To avoid an annoying log message, change line 272 of <nop>CalendarMonthSimple.pm v1.25 by adding the section marked in %RED% RED %ENDCOLOR% :<br />
+		  <verbatim>if ($self->year = = $todayyear && $self->month = = $todaymonth %RED% && defined $thisday %ENDCOLOR% && $thisday = = $todaydate)</verbatim>
+			     * For earlier or later versions where the line number may be different, search for =todayyear=. It currently (v1.22-v1.25) only appears twice: once to declare and set it, once to use it. On the line that uses it, add the =%RED%&& defined $thisday%ENDCOLOR%= as shown above. -- Main.AngusRogerson - 16 Aug 2004
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
@@ -261,7 +268,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main/AndreaSterbini |
 |  Plugin Version: | V1.015 (3 Mar 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  V1.015: | TWiki:Main.PatriceFournier: Added back support for preview showing unsaved events; Two loop fixes from DanielRohde |
+|  V1.015: | TWiki:Main.PatriceFournier: Added back support for preview showing unsaved events; Two loop fixes from TWiki:Main.DanielRohde |
 |  V1.014: | TWiki:Main.NathanKerr: Added start and end date support for weekly repeaters |
 |  V1.013: | TWiki:Main.MartinCleaver: Added multiple topic=web.topic parameters |
 |  V1.012: | TWiki:Main/PeterThoeny: Added missing doc of gmtoffset parameter (was deleted in V1.011) |
@@ -278,7 +285,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  V1.000: | first release using only HTML::CalendarMonth |
 |  CPAN Dependencies: | CPAN:HTML::CalendarMonthSimple >= v1.23, CPAN:Date::Calc |
 |  Other Dependencies: | none |
-|  Perl Version: | 5.000 and up |
+|  Perl Version: | 5.000 and up - %RED%Attention!%ENDCOLOR% the "our" declarations in CalendarPlugin.pm require Perl>=5.6.0 -- TWiki:Main.IraByerly - 09 Apr 2004 |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 95%, %TWIKIWEB%.FormattedSearch 97%, %TOPIC% 88% with installed Plugin |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
@@ -287,5 +294,6 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/AndreaSterbini - 27 Feb 2001 <br />
 -- TWiki:Main/PeterThoeny - 15 Jan 2004
+-- Main.NathanKerr - 28 Jan 2005
 
 %META:FILEATTACHMENT{name="exclam.gif" attr="h" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="PeterThoeny" version="1.1"}%
