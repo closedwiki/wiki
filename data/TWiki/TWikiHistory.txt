@@ -43,10 +43,11 @@
 	* Main.PeterThoeny - 08 Aug 1999: New text formatting rule for creating tables. Text gets rendered as a table if enclosed in "|" vertical bars. Example line as it is written and how it shows up: <br>
 	  =| This | is | a table | with | cells |=
 	  | This | is | a table | with | cells |
+	* Main.PeterThoeny - 31 Aug 1999: Fixed Y2K bug. (Date in year 2000 had wrong format.)
 
 *Related Topics*
 	* TWikiDocumentation has implementation details.
 	* TWikiPlannedFeatures has a list of planned features. 
 	* TWikiEnhancementRequests is the place where you can add your enhancement requests. 
 
--- Main.PeterThoeny - 08 Aug 1999 <br>
+-- Main.PeterThoeny - 31 Aug 1999 <br>
