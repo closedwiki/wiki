@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999188266" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="MikeMannix" date="999197399" format="1.0" version="1.24"}%
 <table><tr><td>
 Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management tool, and knowledge base tool. This is the place to learn about the tool.</td><td>
 <a href="http://TWiki.org/"><img src="%PUBURL%/twikilogo3.gif" width="131" height="64" alt="Powered by TWiki" border="0" /></a>
@@ -37,7 +37,8 @@ Welcome to %WIKITOOLNAME%, a web-based collaboration tool, document management t
 			1 [[TWikiUpgradeNotes][TWikiUpgradeGuide]]
 			1 [[TWikiAuthentication][TWikiUserAuthentication]]
 			1 TWikiAccessControl
-			1 TWikiTemplates
+			1 [[TWikiTemplates][TWikiTemplates OLD?]]
+			1 [[TWikiTemplatingSystem][TWikiTemplateSystem NEW?]]
 			1 TWikiSkins
 			1 TWikiVariables
 			1 TWikiMetaData
