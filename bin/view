@@ -235,7 +235,7 @@ sub main
         $breakRev = $maxrev - $TWiki::numberOfRevisions + 1;
     }
     while( $i > 0 ) {
-        if( $i eq $rev) {
+        if( $i == $rev) {
             $revisions = "$revisions | r1.$i";
         } else {
             $revisions = "$revisions | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
@@ -266,7 +266,7 @@ sub main
     if( $viewRaw ) {
         $tmpl =~ s/%META{[^}]*}%//go;
     } else {
-        $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+        $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta, ( $rev == $maxrev ) );
     }
     writeDebugTimes( "view - handleCommonTags for template done" );
     $tmpl = &TWiki::getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
@@ -274,7 +274,18 @@ sub main
     $tmpl =~ s/%MAXREV%/1.$maxrev/go;
     $tmpl =~ s/%CURRREV%/1.$rev/go;
     $tmpl =~ s|( ?) *</*nop/*>\n?|$1|gois;   # remove <nop> tags (PTh 06 Nov 2000)
-    TWiki::writeHeader( $query );
+
+    # print header information.
+    # check for "contenttype" parameter, used to produce
+    # other MIME types like text/plain or text/xml
+    my $contentType = $query->param( "contenttype" );
+    if( $contentType ) {
+        print "Content-type: $contentType\n\n";
+    } else {
+        TWiki::writeHeader( $query );
+    }
+
+    # print page content
     print $tmpl;
 
     writeDebugTimes( "view - done" );
