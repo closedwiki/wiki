@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000599260" format="1.0" version="1.20"}%
+%META:TOPICINFO{author="MikeMannix" date="1000784824" format="1.0" version="1.21"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -21,20 +21,20 @@ The latest version of TWiki (01-Sep-2001) involves several major new features an
 
 The 01-Sep-2001 release includes the following new features and enhancements:
 
-	* *[[TWikiPlugins]]* - Easily install program enhancements using external plug-in modules. Developers can create plug-ins in Perl, with the [[TWikiPlugins#PluginAPI][TWiki Plugin API]].
-		* InterwikiPlugin (preinstalled) - Link to external sites with text aliases, =SiteAlias:Page=; rules are defined in InterWikis. (Get more Plugins from the TWiki:Plugins web.) 
-	* *[[TWikiTemplates]]* - New, more flexible template system.
-	* *[[TWikiSkins]]* - Overwrite template headers and footers; page content is unaffected. 
-	* *[[TWikiMetaData]]* - New data format 
-	* *[[TWikiForms]]* - Create multiple input forms per web; data is rendered in HTML tables.
-	* *[[ManagingTopics]]* Individual topics can be renamed, moved and deleted through the browser. Deleted topics are stored in a common Trash web.
-	* *[[ChangingPasswords][Change passwords]]* Change and reset passwords using forms.
-	* *[[TWikiVariables][TOC (Table of Contents)]]* - =%<nop>TOC%= variable generates a hierarchical table of contents from topic headings: &lt;hI&gt;...&lt;h6&gt;. Set depth.
-	* *[[TWikiVariables][Arbitrary Text for <nop>WikiWord Links]]* - Text formatting rules to generate automatic links from any combination of words and spaces.
-	* *[[FileAttachment][Attachments Under Revision Control]]* Changes made to files attached to topics are now saved under revision control (RCS).
-	* *Convert to XHTML* - Templates and HTML page rendering are in XHTML 1.0 as far as possible without breaking HTML 3.2 compliance.
-	* *HierarchicalNavigation* uses new Meta Data variables to link hierarchically.
-	* *<nop>SuperAdministrator Group* allows you to give one user group - by default, <nop>TWikiAdminGroup - superpowers: the ability to overwrite locked topics from the browser interface. (This gets around a potential problem where mistyping topic access definition could result in locking everyone out.)
+	* *[[%TWIKIWEB%.TWikiPlugins][TWikiPlugins]]* - Easily install program enhancements using external plug-in modules. Developers can create plug-ins in Perl, with the [[%TWIKIWEB%.TWikiPlugins#PluginAPI][TWiki Plugin API]].
+		* %TWIKIWEB%.InterwikiPlugin (preinstalled) - Link to external sites with text aliases, =SiteAlias:Page=; rules are defined in InterWikis. (Get more Plugins from the TWiki:Plugins web.) 
+	* *[[%TWIKIWEB%.TWikiTemplates][TWikiTemplates]]* - New, more flexible template system.
+	* *[[%TWIKIWEB%.TWikiSkins][TWikiSkins]]* - Overwrite template headers and footers; page content is unaffected. 
+	* *[[%TWIKIWEB%.TWikiMetaData][TWikiMetaData]]* - New data format 
+	* *[[%TWIKIWEB%.TWikiForms]]* - Create multiple input forms per web; data is rendered in HTML tables.
+	* *[[%TWIKIWEB%.ManagingTopics][ManagingTopics]]* - Individual topics can be renamed, moved and deleted through the browser. Deleted topics are stored in a common Trash web.
+	* *[[%TWIKIWEB%.TWikiUserAuthentication#ChangingPasswords][Change passwords]]* - Change and reset passwords using forms.
+	* *[[%TWIKIWEB%.TWikiVariables][TOC (Table of Contents)]]* - =%<nop>TOC%= variable generates a hierarchical table of contents from topic headings: &lt;h1&gt;...&lt;h6&gt;.
+	* *[[%TWIKIWEB%.TWikiVariables][Arbitrary Text for <nop>WikiWord Links]]* - Text formatting rules to generate automatic links from any combination of words and spaces.
+	* *[[%TWIKIWEB%.FileAttachment][Attachments Under Revision Control]]* - Changes made to files attached to topics are now saved under revision control (RCS).
+	* *[[%TWIKIWEB%.TWikiAccessControl#SuperAdminGroup][<nop>SuperAdministrator Group]]* - Lets you to make the members of one user group - by default, <nop>TWikiAdminGroup - into TWiki superusers, with the ability to overwrite locked topics from the browser interface. (This gets around the problem of topic lockouts, caused by typos in access privilege definitions.)
+	* *HierarchicalNavigation* uses new [[%TWIKIWEB%.TWikiMetaData][Meta Data]] variables to link hierarchically.
+	* *Convert to XHTML* - Pages are rendered for display in XHTML 1.0, as far as possible without breaking HTML 3.2 compliance.
 
 ---++ TWiki Directory Structure and File Names
 
