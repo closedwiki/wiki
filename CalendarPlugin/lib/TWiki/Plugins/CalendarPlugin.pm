@@ -26,9 +26,9 @@ package TWiki::Plugins::CalendarPlugin;
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
-
-$VERSION    = '1.013';  #mrjc# Added support for multiple sources in topic=
-$VERSION    = '1.012';  #PTh# Added missing doc of gmtoffset parameter (was deleted in 1.011)
+$VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
+#$VERSION   = '1.013';  #mrjc# Added support for multiple sources in topic=
+#$VERSION   = '1.012';  #PTh# Added missing doc of gmtoffset parameter (was deleted in 1.011)
 #$VERSION   = '1.011';  #PTh# fix deep recursion bug; preview shows unsaved events; performance improvements
 #$VERSION   = '1.010';  #db# fix variable conflict in timezone code
 #$VERSION   = '1.009';  #db# fix to allow event topics in other webs
@@ -419,7 +419,7 @@ sub handleCalendar
             &highlightDay( $cal, $dd, $descr, %options );
         }
     }
-    
+
     # collect monthly repeaters
     @days = fetchDays( "$monthly_rx", \@bullets );
     foreach $d (@days) {
@@ -430,9 +430,50 @@ sub handleCalendar
             @xmap = &emptyxmap($y, $m);
         }
         $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, $nn);
-    	if ($hd <= Days_in_Month($y, $m) && $xmap[$hd]) {
+        if ($hd <= Days_in_Month($y, $m) && $xmap[$hd]) {
             &highlightDay( $cal, $hd, $descr, %options );
         }
+    }
+
+    # collect weekly repeaters with start and end dates
+    @days = fetchDays( "$weekly_rx\\s+$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
+    foreach $d (@days) {
+        ($dd, $dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
+        if (length($xcstr) > 9) {
+            @xmap = &fetchxmap($xcstr, $y, $m);
+        } else {
+            @xmap = &emptyxmap($y, $m);
+        }
+        my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
+        my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
+        $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
+        do {
+            my $date = Date_to_Days ($y, $m, $hd);
+            if ($xmap[$hd] && $date1 <= $date && $date <= $date2) {
+                &highlightDay( $cal, $hd, $descr, %options );
+            }
+            ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
+        } while ($ny == $y && $nm == $m);
+    }
+
+    # collect weekly repeaters with start dates
+    @days = fetchDays( "$weekly_rx\\s+$full_date_rx", \@bullets );
+    foreach $d (@days) {
+        ($dd, $dd1, $mm1, $yy1, $xs, $xcstr, $descr) = split( /\|/, $d);
+        if (length($xcstr) > 9) {
+            @xmap = &fetchxmap($xcstr, $y, $m);
+        } else {
+            @xmap = &emptyxmap($y, $m);
+        }
+        my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
+        $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
+        do {
+            my $date = Date_to_Days ($y, $m, $hd);
+            if ($xmap[$hd] && $date1 <= $date) {
+                &highlightDay( $cal, $hd, $descr, %options );
+            }
+            ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
+        } while ($ny == $y && $nm == $m);
     }
 
     # collect weekly repeaters
