@@ -328,7 +328,17 @@ sub removeFile
     return $error;
 }
 
+# =========================
+sub updateProperties
+{
+    my( $fileName, $hideFile, $fileComment, $meta ) = @_;
 
+    my %fileAttachment = $meta->findOne( "FILEATTACHMENT", $fileName );
+    $fileAttachment{"attr"} = ( $hideFile ) ? "h" : "";
+    $fileAttachment{"comment"} = $fileComment;
+    $meta->put( "FILEATTACHMENT", %fileAttachment );
+    # FIXME warning if no entry?
+}
 
 # =========================
 # Add/update attachment for a topic
@@ -337,24 +347,12 @@ sub updateAttachment
 {
     my ( $fileVersion, $fileName, $filePath, $fileSize, $fileDate, $fileUser, $fileComment, $hideFile, $meta ) = @_;
 
-    my $tmpAttr = "";
-    if ( $hideFile ) {
-       $tmpAttr .= "h";
-    }
+    my $tmpAttr = ( $hideFile ) ? "h" : "";
           
-    if( ! $fileDate ) {
-        # Only trying to change attribute
-        
-        my %fileAttachment = $meta->findOne( "FILEATTACHMENT", $fileName );
-        $fileAttachment{"attr"} = $tmpAttr;
-        $meta->put( "FILEATTACHMENT", %fileAttachment );
-        # FIXME warning if no entry?
-    } else {
-        my @args = formFileAttachmentArgs(
-          $fileName, $fileVersion, $filePath, $fileSize, $fileDate, $fileUser, 
-          $fileComment, $tmpAttr );
-        $meta->put( "FILEATTACHMENT", @args );
-    }
+    my @args = formFileAttachmentArgs(
+        $fileName, $fileVersion, $filePath, $fileSize, $fileDate, $fileUser, 
+        $fileComment, $tmpAttr );
+    $meta->put( "FILEATTACHMENT", @args );
 }
 
 1;
