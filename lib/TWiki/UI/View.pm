@@ -261,18 +261,26 @@ sub view {
         $url =~ s|/view|/viewauth|o;
         $url = "$TWiki::urlHost$url";
       } else {
-        # If REQUEST_URI is rewritten and does not contain the name "view"
+       # If REQUEST_URI is rewritten and does not contain the name "view"
         # try looking at the CGI environment variable SCRIPT_NAME.
-        $url = $ENV{'SCRIPT_NAME'};
-        if ($url && $url =~ m|/view| ) {
-          $url =~ s|/view|/viewauth|o;
-          $url = "$TWiki::urlHost$url/$webName/$topic";
+        #
+        # Assemble the new URL using the host, the changed script name,
+        # the path info, and the query string.  All three query variables
+        # are in the list of the canonical request meta variables in CGI 1.1.
+        my $script      = $ENV{'SCRIPT_NAME'};
+        my $pathInfo    = $ENV{'PATH_INFO'};
+        my $queryString = $ENV{'QUERY_STRING'};
+        $pathInfo    = '/' . $pathInfo    if ($pathInfo);
+        $queryString = '?' . $queryString if ($queryString);
+        if ($script && $script =~ m|/view| ) {
+          $script =~ s|/view|/viewauth|o;
+          $url = "$TWiki::urlHost$script$pathInfo$queryString";
         } else {
-          # If SCRIPT_NAME doesn not contain the name "view"
+          # If SCRIPT_NAME does not contain the name "view"
           # the last hope is to try the SCRIPT_FILENAME ...
           $viewauthFile =~ s|^.*/viewauth|/viewauth|o;  # strip off $Twiki::scriptUrlPath
-          $url = "$TWiki::urlHost$TWiki::scriptUrlPath/$viewauthFile/$webName/$topic";
-        }
+         $url = "$TWiki::urlHost$TWiki::scriptUrlPath/$viewauthFile$pathInfo$queryString";
+         }
       }
       TWiki::UI::redirect( $url );
     }
