@@ -1,12 +1,22 @@
 ---## TWiki Notification of Changes
 
-Each %WIKITOOLNAME% web does an automatic email notification of recent changes. Users can subscribe / unsubscribe themselves in %NOTIFYTOPIC% of each TWiki web. The Perl script =mailnotify= is called by a deamon in regular intervals. The script is sending an automated email to subscribed users in case some topics changed in a web within this interval. 
+Each %WIKITOOLNAME% web does an automatic email notification of recent changes. Users can subscribe / unsubscribe themselves in %NOTIFYTOPIC% of each TWiki web. The Perl script ==mailnotify== is called by a deamon in regular intervals. The script is sending an automated email to subscribed users in case some topics changed in a web within this interval.
 
-Installation note for Unix platforms: Edit the cron table so that =mailnotify= is called in an interval of your choice. Please consult =man crontab= of how to modify the table that schedules program execution at certain intervals. Example:
+---+++ Configuring outgoing mail
+
+%WIKITOOLNAME% will use the ==Net::SMTP== module in case it is installed on your system. You need to specify the ==SMTPMAILHOST== variable in TWikiPreferences.
+
+You can use an external mail program like ==sendmail== in case the ==Net::SMTP== module is not installed. In this case specify the ==$mailProgram== in ==twiki/bin/TWiki.cfg==.
+
+---+++ Call ==mailnotify== in regular intervals
+
+For Unix platforms: Edit the cron table so that ==mailnotify== is called in an interval of your choice. Please consult ==man crontab== of how to modify the table that schedules program execution at certain intervals. Example:
 <pre>
 % crontab -e
 15,45 * * * * (cd ~twiki/public_html/bin; ./mailnotify -q)
 </pre>
-The above line will call mailnotify at 15 minutes and 45 minutes past every hour. The =-q= switch suppresses all normal output.
+The above line will call mailnotify at 15 minutes and 45 minutes past every hour. The ==-q== switch suppresses all normal output.
+
+On Windows NT / 2000 you can use a scheduled task.
 
 -- PeterThoeny - 16 Mar 2001 <br>
