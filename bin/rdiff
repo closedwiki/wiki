@@ -173,7 +173,27 @@ sub main
     # check access permission
     my $wikiUserName = &TWiki::userToWikiName( $userName );
     my $viewAccessOK = &TWiki::Access::checkAccessPermission( "view", $wikiUserName, "", $topic, $webName );
-    if( ( $TWiki::readTopicPermissionFailed ) || ( ! $viewAccessOK ) ) {
+    if( $TWiki::readTopicPermissionFailed ) {
+        # Can't read requested topic and/or included (or other accessed topics)
+        # user could not be authenticated, may be not logged in yet?
+        my $rdiffauthFile = $ENV{'SCRIPT_FILENAME'};
+        $rdiffauthFile =~ s|/rdiff|/rdiffauth|o;
+        if( ( ! $theRemoteUser ) && (-e $rdiffauthFile ) ) {
+            # try again with authenticated rdiffauth script
+            # instead of non authenticated rdiff script
+            my $url = $ENV{"REQUEST_URI"};
+            if( $url ) {
+                # $url i.e. is "twiki/bin/rdiff.cgi/Web/Topic?cms1=val1&cmd2=val2"
+                $url =~ s|/rdiff|/rdiffauth|o;
+                $url = "$TWiki::urlHost$url";
+            } else {
+                $url = "$TWiki::urlHost$scriptUrlPath/$rdiffauthFile/$webName/$topic";
+            }
+            TWiki::redirect( $query, $url );
+            return;
+        }
+    }
+    if( ! $viewAccessOK ) {
         my $url = &TWiki::getOopsUrl( $webName, $topic, "oopsaccessview" );
         TWiki::redirect( $query, $url );
         return;

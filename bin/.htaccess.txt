@@ -54,6 +54,10 @@ ErrorDocument 401 /urlpath/to/twiki/bin/oops/TWiki/TWikiRegistration?template=oo
        require valid-user
 </Files>
 
+<Files "rdiffauth">
+       require valid-user
+</Files>
+
 <Files "manage">
        require valid-user
 </Files>
