@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+//import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -87,7 +87,7 @@ public class FileUploader
     }
 	
 	void appendDispositionToOutputStream(DataOutputStream outStream, String fileName) throws IOException {
-		String contentDispositionLines = "Content-Disposition: form-data; name=\"filepath\";" + " filename=\"{0}\"" + lineEnd;
+		String contentDispositionLines = "XXContent-Disposition: form-data; name=\"filepath\";" + " filename=\"{0}\"" + lineEnd +lineEnd;
 		Object[] args = {fileName};
 		outStream.writeBytes(MessageFormat.format(contentDispositionLines, args));		
 	}
@@ -269,7 +269,7 @@ public class FileUploader
      * 
      * @author	Catherine Macleod
      * @param	filename file to upload
-     */
+     
     public void testUploadFile(String filename, String comment)
     {
 	    DataOutputStream outStream;
@@ -317,7 +317,8 @@ public class FileUploader
 			ioex.printStackTrace(); 
 		}
     }
-	
+	*/
+    
     /**
      * Returns POST request response.
      * 
@@ -350,6 +351,7 @@ public class FileUploader
 		return results.toString();
     }
 
+/*
     public static void main (String[] args) 
 	{
 //		FileUploader fu = new FileUploader("http://10.117.16.143/twiki/bin/upload.pl/Main/CatherineMacleod");
@@ -357,5 +359,6 @@ public class FileUploader
 		fu.testUploadFile("C:\\WINNT\\Profiles\\Cmacleod\\Desktop\\test.txt","");
 		System.out.println(fu.getPOSTRequestResponse());
 		
-    } 
+    }
+    */ 
 }
