@@ -961,6 +961,7 @@ sub searchWeb
 
             } elsif( $theFormat ) {
                 # free format, added PTh 10 Oct 2001
+                $tempVal =~ s/\$summary\(([^\)]*)\)/&TWiki::makeTopicSummary( $text, $topic, $thisWebName, $1 )/geos;
                 $tempVal =~ s/\$summary/&TWiki::makeTopicSummary( $text, $topic, $thisWebName )/geos;
                 $tempVal =~ s/\$parent\(([^\)]*)\)/breakName( getMetaParent( $meta ), $1 )/geos;
                 $tempVal =~ s/\$parent/getMetaParent( $meta )/geos;

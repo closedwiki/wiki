@@ -154,7 +154,7 @@ BEGIN {
 
 # ===========================
 # TWiki version:
-$wikiversion      = '16 Sep 2004 $Rev$';
+$wikiversion      = '25 Sep 2004 $Rev$';
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1617,7 +1617,7 @@ sub getOopsUrl
 # =========================
 =pod
 
----++ sub makeTopicSummary (  $theText, $theTopic, $theWeb  )
+---++ sub makeTopicSummary (  $theText, $theTopic, $theWeb, $theFlags )
 
 Not yet documented.
 
@@ -1625,10 +1625,11 @@ Not yet documented.
 
 sub makeTopicSummary
 {
-    my( $theText, $theTopic, $theWeb ) = @_;
+    my( $theText, $theTopic, $theWeb, $theFlags ) = @_;
     # called by search, mailnotify & changes after calling readFileHead
 
     my $htext = $theText;
+    $theFlags = "" unless( $theFlags );
     # Format e-mail to add spam padding (HTML tags removed later)
     $htext =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &TWiki::Render::mailtoLink( $2, $3, $4 )/ge;
     $htext =~ s/<\!\-\-.*?\-\->//gs;  # remove all HTML comments
@@ -1638,11 +1639,22 @@ sub makeTopicSummary
     $htext =~ s/%WEB%/$theWeb/g;      # resolve web
     $htext =~ s/%TOPIC%/$theTopic/g;  # resolve topic
     $htext =~ s/%WIKITOOLNAME%/$wikiToolName/g; # resolve TWiki tool name
-    $htext =~ s/%META:.*?%//g;        # remove meta data variables
+    $htext =~ s/%META:[A-Z].*?}%//g;  # remove meta data variables
+    if( $theFlags =~ /nohead/ ) {
+        # skip headings on top
+        while( $htext =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
+    }
+    if( $theFlags =~ /novar/ ) {
+        # remove variables
+        $htext =~ s/%[A-Z_]+%//g;     # remove %VARS%
+        $htext =~ s/%[A-Z_]+{.*?}%//g;# remove %VARS{}%
+    }
     $htext =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g; # keep only link text of [[][]]
-    $htext =~ s/[\%\[\]\*\|=_\&\<\>]/ /g; # remove Wiki formatting chars & defuse %VARS%
+    $htext =~ s/[\%\[\]\*\|=_\&\<\>\$]/ /g;              # remove Wiki formatting chars & defuse %VARS%
     $htext =~ s/\-\-\-+\+*\s*\!*/ /g; # remove heading formatting
-    $htext =~ s/\s+[\+\-]*/ /g;       # remove newlines and special chars
+    $htext =~ s/\s+[-\+]*/ /g;        # remove newlines and special chars
+    $htext =~ s/^\s+/ /;              # remove leading spaces
+    $htext =~ s/\s+$/ /;              # remove trailing spaces
 
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
     # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
@@ -1653,8 +1665,13 @@ sub makeTopicSummary
     # letters and accents) - might be better to split on word boundary if
     # possible.
 
-    # limit to 162 chars 
-    $htext =~ s/(.{162})($regex{mixedAlphaNumRegex})(.*?)$/$1$2 \.\.\./g;
+    # limit to n chars
+    my $nchar = $theFlags;
+    unless( $nchar =~ s/^.*?([0-9]+).*$/$1/ ) {
+        $nchar = 162;
+    }
+    $nchar = 16 if( $nchar < 16 );
+    $htext =~ s/(.{$nchar})($regex{mixedAlphaNumRegex})(.*?)$/$1$2 \.\.\./;
 
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
     # - no encoding for HTML pages, to avoid breaking international 
