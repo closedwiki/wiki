@@ -43,7 +43,7 @@ sub sendEmail
     if ( ref($toref) =~ /ARRAY/ ) {
 	@to = @{$toref};
     }
-    return "" unless ($#to);
+    return undef unless (scalar @to);
     my $mailhost = &TWiki::Prefs::getPreferencesValue("MAILHOST") || "mail";
     
     # ToDo For later:

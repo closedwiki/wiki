@@ -60,7 +60,7 @@ sub processWeb
     }
 
     my @notifylist = &TWiki::getEmailNotifyList($webName);
-    unless (  @notifylist ) {
+    unless (  scalar @notifylist ) {
 	$debug && print "- Note: Notification list is empty\n";
 	return;
     }

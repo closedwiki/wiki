@@ -225,7 +225,7 @@ sub getEmailNotifyList
 	push @list, $1 if (/([\w\-\.\+]+\@[\w\-\.\+]+)/);
     }
 
-    return ($#list ? @list : undef);    
+    return (scalar @list ? @list : undef);    
 }
 
 # =========================
