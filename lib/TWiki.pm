@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "17 Jun 2003";
+$wikiversion      = "18 Jun 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -1986,6 +1986,7 @@ sub handleMetaTags
     my( $theWeb, $theTopic, $text, $meta, $isTopRev ) = @_;
 
     $text =~ s/%META{\s*"form"\s*}%/&renderFormData( $theWeb, $theTopic, $meta )/ge;
+    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/&renderFormField( $meta, $1 )/ge;
     $text =~ s/%META{\s*"attachments"\s*(.*)}%/&TWiki::Attach::renderMetaData( $theWeb,
                                                 $theTopic, $meta, $1, $isTopRev )/ge;
     $text =~ s/%META{\s*"moved"\s*}%/&renderMoved( $theWeb, $theTopic, $meta )/ge;
@@ -2119,6 +2120,18 @@ sub renderMoved
     return $text;
 }
 
+
+# ========================
+sub renderFormField
+{
+    my( $meta, $args ) = @_;
+    my $text = "";
+    if( $args ) {
+        my $name = extractNameValuePair( $args, "name" );
+        $text = TWiki::Search::getMetaFormField( $meta, $name ) if( $name );
+    }
+    return $text;
+}
 
 # =========================
 sub renderFormData
