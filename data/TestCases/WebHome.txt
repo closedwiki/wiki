@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="guest" date="1099830121" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="guest" date="1100972693" format="1.0" version="1.1"}%
 This is the <nop>%WEB% web. If you are here, you want to test this version of TWiki. This web is held in the TWiki Subversion repository, so:
 	1 You must manually ensure that all topics in this web are readable and writable by the apache user
 	1 You must _not_ check in ,v files. Topic histories will be maintained in Subversion.
@@ -13,6 +13,8 @@ Each testcase consists of a single topic, always named <nop>TestCase<i>Something
 Testcases that test TWiki rendering may include markers that indicate to the %TWIKIWEB%.TestFixturePlugin what is _expected_ versus what TWiki _actually_ produces. See %TWIKIWEB%.TestFixturePlugin for details.
 
 The automatic tests may be run on a topic by clicking on the "run" link for the testcase in the table below. _Note that only those testcases with names that start with =<nop>TestCaseAuto= are fully automated_.
+
+%INCLUDE{CreateNewTestCaseForm}%
 
 <table border=1><tr align=left><th>Testcase</th><th>Description</th><th>Tests</th></tr>
 %SEARCH{"^TestCaseAuto" type="regex" scope="topic" nosearch="on" nototal="on" format="<tr align=left><td> $topic </td><td> $pattern(.*Description:(.*?\n).*) </td><td>[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/$topic?test=compare][run]]</td></tr>"}%
