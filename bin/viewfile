@@ -61,10 +61,10 @@ sub main
 
     my $fileName = $query->param( 'filename' );
 
-    my $rev = $query->param( 'rev' );
+    my $rev = $query->param( 'rev' ) || "";
     my $topRev = &TWiki::Store::getRevisionNumber( $webName, $topic, $fileName );
 
-    if ( $rev ne $topRev ) {
+    if( ( $rev ) && ( $rev ne $topRev ) ) {
         my $fileContent = &TWiki::Store::readAttachmentVersion( $webName, $topic, $fileName, $rev ); 
         if( $fileContent ) {
             my $mimeType = suffixToMimeType( $fileName );
