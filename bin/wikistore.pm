@@ -102,9 +102,9 @@ sub getRevisionDiff
 
 
 # =========================
-# rdiff:    my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
-# view:        my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
-# wikisearch.pm:                my ( $revdate, $revuser ) = getRevisionInfo( $filename, "", 1, $thisWebName );
+# rdiff:         my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
+# view:          my( $date, $user ) = &wiki::getRevisionInfo( $topic, "1.$rev", 1 );
+# wikisearch.pm: my ( $revdate, $revuser ) = getRevisionInfo( $filename, "", 1, $thisWebName );
 sub getRevisionInfo
 {
     my( $theTopic, $theRev, $changeToIsoDate, $theWebName ) = @_;
@@ -112,7 +112,9 @@ sub getRevisionInfo
         $theWebName = $webName;
     }
     if( ! $theRev ) {
-        $theRev = getRevisionNumber( $theTopic, $theWebName );
+        # PTh 03 Nov 2000: comment out for performance
+        ### $theRev = getRevisionNumber( $theTopic, $theWebName );
+        $theRev = "";  # do a "rlog -r filename" to get top revision info
     }
     my $tmp= $revInfoCmd;
     $theRev =~ s/$securityFilter//go;

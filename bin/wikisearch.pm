@@ -30,6 +30,7 @@
 #                           search limits because Perl (as we all know
 #                           but may forget) doesn't clear the $n match
 #                           params if a match fails... *^&$#!!!
+# PTh 03 Nov 2000: Performance improvements
 
 use vars qw(
         $lsCmd $egrepCmd $fgrepCmd
@@ -54,11 +55,11 @@ sub searchWikiWeb
     ##               Perl doesn't do The Right Thing, but whatever--it's
     ##               fixed now.
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
-	$theLimit = $1;            # an empty string.  "+10" won't work.
-    } else {                       # if there's anything but a digit, zap!
-	$theLimit = "";
+        $theLimit = $1;            # an empty string.  "+10" won't work.
     }
-    ## #############
+    if (! $theLimit ) {            # PTh 03 Nov 2000:
+        $theLimit = 32000;         # Big number, needed for performance improvements
+    }
 
     my $searchResult = ""; 
     my $topic = $wiki::mainTopicname;
@@ -173,12 +174,27 @@ sub searchWikiWeb
     }
     $cmd =~ s/%GREP%/$tempVal/go;
 
+    # write log entry
+    if( ( $wiki::doLogTopicSearch ) && ( ! $doInline ) ) {
+        # 0501 kk : vvv Moved from search
+        # PTh 17 May 2000: reverted to old behaviour,
+        #     e.g. do not log inline search
+        # PTh 03 Nov 2000: Moved out of the 'foreach $thisWebName' loop
+        my $tempVal = join( ' ', @webList );
+        &wiki::writeLog( "search", $tempVal, $theSearchVal );
+    }
+
     ## #############
     ## 0501 kk : vvv New web processing loop, does what the old straight
     ##               code did for each web the user requested.  Note that
     ##               '$theWebName' is mostly replaced by '$thisWebName'
 
     foreach my $thisWebName (@webList) {
+
+        # PTh 03 Nov 2000: Add security check
+        $thisWebName =~ s/$wiki::securityFilter//go;
+        $thisWebName =~ /(.*)/;
+        $thisWebName = $1;  # untaint variable
 
         next unless webExists( $thisWebName );  # can't process what ain't thar
 
@@ -194,24 +210,8 @@ sub searchWikiWeb
 
         (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
 
-        ## #############
-        ## 0501 kk : vvv Moved from search
-        ## 20000517 pth : reverted to old behaviour,
-        ##                e.g. do not log inline search
-        if( ( $wiki::doLogTopicSearch ) && ( ! $doInline ) ) {
-            # write log entry
-            &wiki::writeLog( "search", $thisWebName, $theSearchVal );
-        }
-        ## 0501 kk : ^^^
-        ## ##############
-
-        ## 0501 kjk : vvv New var for accessing web dirs.
-        # TODO  vvv  do the Right Thing to untaint, current method sucks.      
-        my $sDir = "$dataDir/$thisWebName"; # lousy insecure way to remove
-                                            # the taint.
-        $sDir =~ m/(.+)/;                   #
-        $sDir = $1;                         #
-
+        # 0501 kjk : vvv New var for accessing web dirs.
+        my $sDir = "$dataDir/$thisWebName";
         my @topicList = "";
         if( $theSearchVal ) {
             # do grep search
@@ -221,126 +221,182 @@ sub searchWikiWeb
             $tempVal = `$cmd`;
             @topicList = split( /\n/, $tempVal );
             # cut .txt extension
-            @topicList = map { /(.*)\.txt$/; $_ = $1; } @topicList;
+            my @tmpList = map { /(.*)\.txt$/; $_ = $1; } @topicList;
+            @topicList = ();
+            my $lastTopic = "";
+            foreach( @tmpList ) {
+                $tempVal = $_;
+                # make topic unique
+                if( $tempVal ne $lastTopic ) {
+                    push @topicList, $tempVal;
+                }
+            }
         }
 
+        # use hash tables for date and author
+        my %topicRevDate = ();
+        my %topicRevUser = ();
+
+        # sort the topic list by date, author or topic name
+        if( $theOrder eq "modified" ) {
+            # PTh 03 Nov 2000: Performance improvement
+            # Dates are tricky. For performance we do not read, say,
+            # 2000 records of author/date, sort and then use only 50.
+            # Rather we 
+            #   * sort by file timestamp (to get a rough list)
+            #   * shorten list to the limit + some slack
+            #   * sort by rev date on shortened list to get the acurate list
+
+            # Do performance exercise only if it pays off
+            if(  $theLimit + 20 < scalar(@topicList) ) {
+                # sort by file timestamp, Schwartzian Transform
+                my @tmpList = ();
+                if( $revSort ) {
+                    @tmpList = map { $_->[1] }
+                               sort {$b->[0] <=> $a->[0] }
+                               map { [ (stat "$dataDir\/$thisWebName\/$_.txt")[9], $_ ] }
+                               @topicList;
+                } else {
+                    @tmpList = map { $_->[1] }
+                               sort {$a->[0] <=> $b->[0] }
+                               map { [ (stat "$dataDir\/$thisWebName\/$_.txt")[9], $_ ] }
+                               @topicList;
+                }
+
+                # then shorten list and build the hashes for date and author
+                my $idx = $theLimit + 10;  # slack on limit
+                @topicList = ();
+                foreach( @tmpList ) {
+                    push( @topicList, $_ );
+                    $idx -= 1;
+                    last if $idx <= 0;
+                }
+            }
+
+            # build the hashes for date and author
+            foreach( @topicList ) {
+                my $tempVal = $_;
+                my ( $revdate, $revuser ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                $topicRevUser{ $tempVal } = &wiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal } = $revdate;
+            }
+
+            # sort by date (second time if exercise), Schwartzian Transform
+            if( $revSort ) {
+                @topicList = map { $_->[1] }
+                             sort {$b->[0] <=> $a->[0] }
+                             map { [ &wiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
+                             @topicList;
+            } else {
+                @topicList = map { $_->[1] }
+                             sort {$a->[0] <=> $b->[0] }
+                             map { [ &wiki::revDate2EpSecs( $topicRevDate{$_} ), $_ ] }
+                             @topicList;
+            }
+
+        } elsif( $theOrder eq "editby" ) {
+            # sort by author
+
+            # first we need to build the hashes for date and author
+            foreach( @topicList ) {
+                $tempVal = $_;
+                my ( $revdate, $revuser ) = getRevisionInfo( $tempVal, "", 1, $thisWebName );
+                $topicRevUser{ $tempVal } = &wiki::userToWikiName( $revuser );
+                $topicRevDate{ $tempVal } = $revdate;
+            }
+
+            # sort by author, Schwartzian Transform
+            if( $revSort ) {
+                @topicList = map { $_->[1] }
+                             sort {$b->[0] cmp $a->[0] }
+                             map { [ $topicRevUser{$_}, $_ ] }
+                             @topicList;
+            } else {
+                @topicList = map { $_->[1] }
+                             sort {$a->[0] cmp $b->[0] }
+                             map { [ $topicRevUser{$_}, $_ ] }
+                             @topicList;
+    	    }
+
+        } else {
+            # sort by filename, Schwartzian Transform
+            if( $revSort ) {
+                @topicList = map { $_->[1] }
+                             sort {$b->[0] cmp $a->[0] }
+                             map { [ $_, $_ ] }
+                             @topicList;
+            } else {
+                @topicList = map { $_->[1] }
+                             sort {$a->[0] cmp $b->[0] }
+                             map { [ $_, $_ ] }
+                             @topicList;
+    	    }
+        }
+
+        # output header of $thisWebName
         my( $beforeText, $repeatText, $afterText ) = split( /%REPEAT%/, $tmplTable );
         $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/o;
         $beforeText =~ s/%WEB%/$thisWebName/o;
         $beforeText = handleCommonTags( $beforeText, $topic );
         $afterText = handleCommonTags( $afterText, $topic );
-
         if( $doInline ) {
             $searchResult .= $beforeText;
         } else {
             print $beforeText;
         }
 
-        $lasttopic = "";
-        $ntopics = 0;
-        my (@unsorted, @sorted);  ## 0501 kk : <<< new vars
+        # output the list of topics in $thisWebName
+        my $ntopics = 0;
+        my $topic = "";
+        my $revDate = "";
+        my $revUser = "";
         foreach( @topicList ) {
-            $filename = $_;
-            if( $filename ne $lasttopic) {
-                my $skey = "";  ## 0501 kk : <<< new
-                my ( $revdate, $revuser ) = getRevisionInfo( $filename, "", 1, $thisWebName );
-                $revuser = userToWikiName( $revuser );
+            $topic = $_;
 
-                $tempVal = $repeatText;
-                $tempVal =~ s/%WEB%/$thisWebName/go;
-                $tempVal =~ s/%TOPICNAME%/$filename/go;
-                $tempVal =~ s/%TIME%/$revdate/go;
-                $tempVal =~ s/%AUTHOR%/$revuser/go;
-                $tempVal = handleCommonTags( $tempVal, $filename );
-	        $tempVal = getRenderedVersion( $tempVal );
-
-                if( $noSummary ) {
-                    $tempVal =~ s/%TEXTHEAD%//go;
-                    $tempVal =~ s/&nbsp;//go;
-                } elsif( $doBookView ) {  # added PTh 20 Jul 2000
-                    $head = readFile( "$dataDir\/$thisWebName\/$filename.txt" );
-                    $head = handleCommonTags( $head, $filename, $thisWebName );
-                    $head = getRenderedVersion( $head, $thisWebName );
-                    $tempVal =~ s/%TEXTHEAD%/$head/go;
-                } else {
-                    $head = readFileHead( "$dataDir\/$thisWebName\/$filename.txt", 16 );
-                    $head = makeTopicSummary( $head, $filename, $thisWebName );
-                    $tempVal =~ s/%TEXTHEAD%/$head/go;
-                }
-
-## 0501 kk : vvv Can't do this here if we want to sort, we'll have to iterate
-##               over the sorted values after we get them.
-#
-#            if( $doInline ) {
-#                $searchResult .= $tempVal;
-#            } else {
-#                print $tempVal;
-#            }
-##
-
-               # Got the data, use a modified Schwartzian Transform to
-               # sort.  First, save the key.
-
-                if ($theOrder eq "modified") {  # dates are tricky.
-	            # $skey = (stat "$filename.txt")[9]; # not always accurate.
-                    $skey = revDate2EpSecs($revdate);
-                } elsif ($theOrder eq "editby") {
-                    $skey = $revuser;
-                } else {
-                    $skey = $filename;
-                }
-
-                # Now add an anonymous array element to @unsorted. The
-                # first anonymous element is the sort key, the next is
-                # the data.
-
-                $unsorted[$ntopics] = [ $skey, $tempVal ]; # end mod ---
-
-                $lasttopic = $filename;
-                $ntopics += 1;
-	    }
-        }
-
-        # Finished gathering data, now sort it.  This is just the last
-        # (first?) part of the Schwartzian Transform, see the Ram,
-        # pg. 118.  The (ugly) twist here is the tests for numeric and
-        # reverse-order sort.
-
-        if (! $revSort) {
-            if ($theOrder eq "modified") {
-                @sorted = map { $_->[1] }
-	                  sort {$a->[0] <=> $b->[0] } @unsorted;
+            # make sure we have date and author
+            if( exists( $topicRevUser{$topic} ) ) {
+                $revDate = $topicRevDate{$topic};
+                $revUser = $topicRevUser{$topic};
             } else {
-                @sorted = map { $_->[1] }
-	                  sort {$a->[0] cmp $b->[0] } @unsorted;
-	    }
-        } else {
-            if ($theOrder eq "modified") {
-                @sorted = map { $_->[1] }
-	                  sort {$b->[0] <=> $a->[0] } @unsorted;
-            } else {
-                @sorted = map { $_->[1] }
-	                  sort {$b->[0] cmp $a->[0] } @unsorted;
-    	    }
-        }
-
-        # Iterate back over the sorted data to get it into
-        # $searchResult, but only as much as requested.
-
-        my $thisLimit = $theLimit;
-        if ($thisLimit ne "") { 
-	    $thisLimit-- if $thisLimit > 0;                 # count from zero.
-            $#sorted = $thisLimit if $thisLimit < $#sorted; # don't go nuts.
-        }
-    
-        foreach my $dval (@sorted) {
-            if( $doInline ) {
-                $searchResult .= $dval;
-            } else {
-                print $dval;
+                # lazy query, need to do it at last
+                my ( $revdate, $revuser ) = getRevisionInfo( $topic, "", 1, $thisWebName );
+                $revUser = &wiki::userToWikiName( $revuser );
+                $revDate = $revdate;
             }
+
+            $tempVal = $repeatText;
+            $tempVal =~ s/%WEB%/$thisWebName/go;
+            $tempVal =~ s/%TOPICNAME%/$topic/go;
+            $tempVal =~ s/%TIME%/$revDate/go;
+            $tempVal =~ s/%AUTHOR%/$revUser/go;
+            $tempVal = handleCommonTags( $tempVal, $topic );
+            $tempVal = getRenderedVersion( $tempVal );
+
+            if( $noSummary ) {
+                $tempVal =~ s/%TEXTHEAD%//go;
+                $tempVal =~ s/&nbsp;//go;
+            } elsif( $doBookView ) {  # added PTh 20 Jul 2000
+                $head = readFile( "$dataDir\/$thisWebName\/$topic.txt" );
+                $head = handleCommonTags( $head, $topic, $thisWebName );
+                $head = getRenderedVersion( $head, $thisWebName );
+                $tempVal =~ s/%TEXTHEAD%/$head/go;
+            } else {
+                $head = readFileHead( "$dataDir\/$thisWebName\/$topic.txt", 16 );
+                $head = makeTopicSummary( $head, $topic, $thisWebName );
+                $tempVal =~ s/%TEXTHEAD%/$head/go;
+            }
+
+            if( $doInline ) {
+                $searchResult .= $tempVal;
+            } else {
+                print $tempVal;
+            }
+
+            $ntopics += 1;
+            last if $ntopics >= $theLimit;
         }
     
+        # output footer of $thisWebName
         if( $doInline ) {
             $searchResult .= $afterText;
         } else {
