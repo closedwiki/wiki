@@ -316,9 +316,11 @@ sub renderForEdit {
             # Allow initialisation based on a preference
             $value = $this->prefs()->getPreferencesValue($fieldName);
         }
-        if( ($getValuesFromFormTopic ) ) {
-            my $tmp = $fieldInfo[0] || "";
-            $value = $this->{session}->handleCommonTags( $tmp, $topic );
+        if( !defined( $value ) && $type !~ /^checkbox/ && $getValuesFromFormTopic ) {
+            my $tmp = $fieldInfo[0];
+            if( defined( $tmp )) {
+                $value = $this->{session}->handleCommonTags( $tmp, $topic );
+            }
         }
         $value = "" unless defined $value;  # allow "0" values
         my $extra = "";
