@@ -615,9 +615,7 @@ sub writeHeaderFull {
         push( @hopts, -last_modified => $lastModifiedString );
         push( @hopts, -expires => "+${expireHours}h" );
         push( @hopts, -cache_control => "max-age=$expireSeconds" );
-    }
-
-    if ($pageType ne 'basic') {
+    } elsif ($pageType ne 'basic') {
         $this->writeWarning( "Invalid page type in TWiki.pm, writeHeaderFull(): $pageType" );
     }
 
