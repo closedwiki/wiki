@@ -112,18 +112,20 @@ $notifyTopicname    = "WebNotify";
 $doRemovePortNumber = "0";
 #                   Log topic views to $logFilename. "0", "1", default "0"
 $doLogTopicView     = "0";
+#                   Log topic saves to $logFilename. "0", "1", default "0"
+$doLogTopicEdit     = "0";
 #                   Log topic saves to $logFilename. "0", "1", default "1"
 $doLogTopicSave     = "1";
 #                   Log view attach to $logFilename. "0", "1", default "0"
-$doLogTopicAttach  = "0";
+$doLogTopicAttach   = "0";
 #                   Log file upload to $logFilename. "0", "1", default "1"
-$doLogTopicUpload  = "1";
+$doLogTopicUpload   = "1";
 #                   Log topic rdiffs to $logFilename. "0", "1", default "0"
 $doLogTopicRdiff    = "0";
-#                   Log view changes to $logFilename. "0", "1", default "1"
-$doLogTopicChanges  = "1";
-#                   Log view changes to $logFilename. "0", "1", default "1"
-$doLogTopicSearch  = "1";
+#                   Log view changes to $logFilename. "0", "1", default "0"
+$doLogTopicChanges  = "0";
+#                   Log view changes to $logFilename. "0", "1", default "0"
+$doLogTopicSearch   = "0";
 
 
 # =========================

@@ -149,12 +149,13 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrl, $userName) = 
+    ( $topic, $webName, $scriptUrl, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $saveCmd = $query->param('cmd');
     my $tmpl="", $tcat="", $icat="", $text="";
     my $before="", $atext="", $ctext="", $after="";
+    my $extra = "";
 
     if( ! &wiki::webExists($webName))
     {
@@ -189,10 +190,12 @@ sub main
 	if( &wiki::isWikiName($topic))
 	{
 	    $text= &wiki::readTemplate("notedited");
+            $extra = "(not exist)";
 	}
 	else
 	{
 	    $text= &wiki::readTemplate("notwiki");
+            $extra = "(not exist, not wiki)";
 	}
 
         my $foo = &wiki::getLocaldate();
@@ -249,6 +252,15 @@ sub main
     $text =~ s/</&lt\;/go;
     $text =~ s/>/&gt\;/go;
     $text =~ s/\t/   /go;
+
+    if( $wiki::doLogTopicEdit )
+    {
+        # write log entry
+        my $time = time();
+        $time = &wiki::formatGmTime( $time );
+        my $wikiUser = &wiki::userToWikiName( $userName );
+        &wiki::writeLog( "| $time | $wikiUser | edit | $webName.$topic | $extra |" );
+    }
 
     if( $saveCmd )
     {

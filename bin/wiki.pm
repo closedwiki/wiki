@@ -36,7 +36,7 @@ use vars qw(
 	$mainWebname $mainTopicname $notifyTopicname $mailProgram $wikiwebmaster 
 	$wikiversion $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
 	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
-	$doRemovePortNumber $doLogTopicView $doLogTopicSave
+	$doRemovePortNumber $doLogTopicView $doLogTopicEdit $doLogTopicSave
 	$doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
 	$doLogTopicChanges $doLogTopicSearch
 	@isoMonth $TranslationToken $code @code $depth $scriptUrl );
@@ -44,7 +44,7 @@ use vars qw(
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "21 Jul 1999";
+$wikiversion      = "22 Jul 1999";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -598,7 +598,7 @@ sub saveTopic
             $time = formatGmTime( $time );
             $name = userToWikiName( $userName );
             $tmp  = userToWikiName( $user );
-            writeLog( "| $time | $name | repRev | $webName.$topic | $rev $tmp $date |" );
+            writeLog( "| $time | $name | save | $webName.$topic | repRev $rev $tmp $date |" );
         }
     }
 
@@ -631,7 +631,7 @@ sub saveTopic
             # write log entry
             $time = formatGmTime( $time );
             $name = userToWikiName( $userName );
-            writeLog( "| $time | $name | delRev | $webName.$topic | $rev |" );
+            writeLog( "| $time | $name | cmd | $webName.$topic | delRev $rev |" );
         }
     }
 }
