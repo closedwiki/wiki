@@ -45,9 +45,12 @@ use TWiki::Store::RcsFile;
 @ISA = qw(TWiki::Store::RcsFile);
 
 use strict;
+#use Algorithm::Diff;# qw(diff sdiff);
 use Algorithm::Diff;
 use FileHandle;
 use TWiki;
+
+TWiki::writeDebug("Diff version $Algorithm::Diff::VERSION\n");
 
 my $DIFF_DEBUG = 0;
 my $DIFFEND_DEBUG = 0;
@@ -702,7 +705,7 @@ sub _delLastRevision
 ---++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
 
 Not yet documented.
-
+| TODO: | so why does this read the rcs file, re-create each of the 2 revisions and then diff them? isn't the delta in the rcs file good enough? (until you want context?) |
 =cut to implementation
 
 sub revisionDiff
@@ -710,11 +713,20 @@ sub revisionDiff
     my( $self, $rev1, $rev2, $contextLines ) = @_;
     $self->_ensureProcessed();
     my $text1 = $self->getRevision( $rev1 );
-    $text1 =~ s/%META:TOPICINFO{[^\n]*}%\n//o;
     my $text2 = $self->getRevision( $rev2 );
-    $text2 =~ s/%META:TOPICINFO{[^\n]*}%\n//o;
-    my $diff = _diffText( \$text1, \$text2, "diff", $contextLines );
-    return ("", $diff);
+	
+    my @lNew = _mySplit( \$text1 );
+    my @lOld = _mySplit( \$text2 );
+	my $diff = Algorithm::Diff::sdiff( \@lNew, \@lOld );
+
+	#the Diff::sdiff algol seems to work better with \n, and the rendering currently needs no \n's
+	my @list;
+	foreach my $ele ( @$diff ) {
+		@$ele[1] =~ s/\n//go;
+		@$ele[2] =~ s/\n//go;
+		push @list, $ele;
+	}
+	return ("", \@list);	
 }
 
 # ======================
@@ -869,9 +881,9 @@ sub _mySplit
 
     my @list = split( /\n/o, $$text );
     for( my $i = 0; $i<$#list; $i++ ) {
-        $list[$i] .= "\n";
+    	    $list[$i] .= "\n";
     }
-
+	
     if( $ending ) {
         if( $addEntries ) {
             my $len = length($ending);
@@ -881,7 +893,7 @@ sub _mySplit
             }
             for( my $i=0; $i<$len; $i++ ) {
                 push @list, ("\n");
-            }
+           }
         } else {
             if( @list ) {
                 $list[$#list] .= $ending;
@@ -1000,7 +1012,7 @@ sub _diff
     my( $new, $old, $type, $contextLines ) = @_;
     # Work out diffs to change new to old, params are refs to lists
     my $diffs = Algorithm::Diff::diff( $new, $old );
-
+	
     my $adj = 0;
     my @patch = ();
     my @del = ();

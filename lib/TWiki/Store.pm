@@ -521,8 +521,9 @@ sub getRevisionNumberX
 ---++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  )
 
 <pre>
-rdiff:            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", 3 );
+rdiff:            $diffArray = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", 3 );
 </pre>
+| Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
 
 =cut
 
@@ -533,8 +534,8 @@ sub getRevisionDiff
     my $rcs = _getTopicHandler( $web, $topic );
     my $r1 = substr( $rev1, 2 );
     my $r2 = substr( $rev2, 2 );
-    my( $error, $diff ) = $rcs->revisionDiff( $r1, $r2, $contextLines );
-    return $diff;
+    my( $error, $diffArrayRef ) = $rcs->revisionDiff( $r1, $r2, $contextLines );
+    return $diffArrayRef;
 }
 
 

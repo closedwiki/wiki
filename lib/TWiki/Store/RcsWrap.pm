@@ -452,6 +452,7 @@ sub getRevisionInfo
 ---++ sub revisionDiff (  $self, $rev1, $rev2, $contextLines  )
 
 Not yet documented.
+| Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
 
 =cut to implementation
 
@@ -489,7 +490,85 @@ sub revisionDiff
         $tmp =~ s/[0-9]+c[0-9]+\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n---\n[<>]\s*%META:TOPICINFO{[^}]*}%\s*\n//go;
         $tmp =~ s/[<>]\s*%META:TOPICINFO{[^}]*}%\s*//go;
     }
-    return ($error, $tmp );
+	
+    return ($error, parseRevisionDiff( $tmp ) );
+}
+
+# =========================
+=pod
+
+---+++ parseRevisionDiff( $text ) ==> \@diffArray
+
+| Description: | parse the text into an array of diff cells |
+| #Description: | unlike Algorithm::Diff I concatinate lines of the same diffType that are sqential (this might be something that should be left up to the renderer) |
+| Parameter: =$text= | currently unified or rcsdiff format |
+| Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
+| TODO: | move into RcsFile and add indirection in Store |
+
+=cut
+# -------------------------
+sub parseRevisionDiff
+{
+    my( $text ) = @_;
+
+    my ( $diffFormat ) = "normal"; #or rcs, unified...
+    my ( @diffArray );
+
+    $diffFormat = "unified" if ( $text =~ /^---/ );
+
+    if ( $diffFormat eq "unified" ) {
+	#skip the 2 header lines
+	$text =~ s/^---.*$//go;  #  --- WebHome.txt 2000/08/03 08:37:18     1.1
+        $text =~ s/^\+\+\+.*$//go;  #  +++ WebHome.txt 2000/08/19 00:08:37     1.3
+    }
+
+    $text =~ s/\r//go;  # cut CR
+
+    if ( $diffFormat eq "unified" ) {
+        foreach( split( /\n/, $text ) ) {
+	    if ( /^\-\-\- / ) {
+	    } elsif ( /^\+\+\+ / ) {
+    	    } elsif ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
+    	        #line number
+	        push @diffArray, ["l", $1, $3];
+	    } elsif ( /^\-/ ) {
+	        s/^\-//go;
+	            push @diffArray, ["-", $_, ""];
+	    } elsif ( /^\+/ ) {
+	        s/^\+//go;
+	            push @diffArray, ["+", "", $_];
+	    } else {
+	        s/^ (.*)$/$1/go;
+	            push @diffArray, ["u", $_, $_];
+	    }
+        }
+    } else {
+        #"normal" rcsdiff output 
+        foreach( split( /\n/, $text ) ) {
+    	    if ( /^([0-9]+)[0-9\,]*([acd])([0-9]+)/ ) {
+    	        #line number
+	        push @diffArray, ["l", $1, $3];
+	    } elsif ( /^</ ) {
+	        s/^< //go;
+	        if ( @{$diffArray[$#diffArray]}[0] eq "-" ) {
+	            @{$diffArray[$#diffArray]}[1] .= "\n$_";
+	        } else {
+	            push @diffArray, ["-", $_, ""];
+	        }
+	    } elsif ( /^>/ ) {
+	        s/^> //go;
+	        if ( @{$diffArray[$#diffArray]}[0] eq "+" ) {
+	            @{$diffArray[$#diffArray]}[2] .= "\n$_";
+	        } else {
+	            push @diffArray, ["+", "", $_];
+	        }
+	    } else {
+	        #empty lines and the --- selerator in the diff
+	        #push @diffArray, ["u", "$_", $_];
+	    }
+        }
+    }
+    return \@diffArray;
 }
 
 # ======================
