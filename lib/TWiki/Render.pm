@@ -1216,10 +1216,10 @@ sub makeTopicSummary
 
     # Encode special chars into XML &#nnn; entities for use in RSS feeds
     # - no encoding for HTML pages, to avoid breaking international 
-    # characters. FIXME: Only works for ISO-8859-1 characters, where the
-    # Unicode encoding (&#nnn;) is identical.
-    if( $renderMode eq 'rss' ) {
-        # FIXME: Issue for EBCDIC/UTF-8
+    # characters. Only works for ISO-8859-1 sites, since the Unicode
+    # encoding (&#nnn;) is identical for first 256 characters. 
+    # I18N TODO: Convert to Unicode from any site character set.
+    if( $renderMode eq 'rss' and $TWiki::siteCharset =~ /^iso-?8859-?1$/i ) {
         $htext =~ s/([\x7f-\xff])/"\&\#" . unpack( "C", $1 ) .";"/ge;
     }
 
