@@ -505,7 +505,7 @@ sub target_release {
     my $project = $this->{project};
 
     $this->build("tests_zip");
-    $this->build("installscript");
+    $this->build("installer");
 
     my $tmpdir = "/tmp/$$";
     $this->makepath($tmpdir);
@@ -725,21 +725,18 @@ sub target_pod {
 
 =begin text
 
----++++ target_installscript
+---++++ target_installer
 
 Write an install script that checks dependencies, tries (using curl, wget
 and geturl in that order) to find a program to download and install required
 zips. If it fails, generates a message.
-
-An install ascript is written only if required. If there are no dependencies,
-then no install script gets written.
 
 At present there is no support for a caller-provided post-install script, but
 this would be straightforward to invoke if it were required.
 
 =cut
 
-sub target_installscript {
+sub target_installer {
     my $this = shift;
 
     # Find the template on @INC
@@ -757,26 +754,41 @@ sub target_installscript {
         die "COULD NOT LOCATE TEMPLATE_installer.pl - required for install script generation";
     }
 
-    my $deps = "";
+    my $satisfies = "";
     foreach my $dep (@{$this->{dependencies}}) {
-        $deps .= "satisfy(\"$dep->{name}\", \"$dep->{type}\",\"$dep->{version}\",\"$dep->{description}\");\n";
+        my $descr = $dep->{description};
+        $descr =~ s/"/\\\"/g;
+        $descr =~ s/\$/\\\$/g;
+        $descr =~ s/\@/\\\@/g;
+        $descr =~ s/\%/\\\%/g;
+        $satisfies .= "{ name=>\"$dep->name}\", type=>\"$dep->{type}\",version=>\"$dep->{version}\",description=>\"$descr\" },\n";
     }
 
-    if ($deps ne "") {
-        my $installScript = "$basedir/$this->{project}_installer.pl";
-        $this->cp($template, $installScript);
-        if ($this->{-v} || $this->{-n}) {
-            print "Generating $installScript\n";
-        }
-        unless ($this->{-n}) {
-            open(IS, ">>$installScript") or die "Could not open $installScript";
-            print IS "\$module = \"$this->{project}\";\n";
-            print IS "print \"\$module Installation\\n\\n\";\n";
-            print IS $deps;
-            close(IS);
-        }
-        $this->prot("a+rx,u+w", $installScript);
+    my $mantable = "";
+    foreach my $file (@{$this->{files}}) {
+        $mantable .= "\t\"$file->{name}\", # $file->{description}\n";
     }
+
+    my $installScript = "$basedir/$this->{project}_installer.pl";
+    if ($this->{-v} || $this->{-n}) {
+        print "Generating installer in $installScript\n";
+    }
+    my $is = "";
+    open(IS, "<$template") or die "Could not open $template";
+    while (<IS>) {
+        $is .= $_;
+    }
+    close(IS);
+    $is =~ s/%\$MODULE%/$this->{project}/g;
+    $is =~ s/%\$DEPENDENCIES%/$satisfies/g;
+    $is =~ s/%\$MANIFEST%/$mantable/g;
+
+    unless ($this->{-n}) {
+        open(IS, ">$installScript") or die "Could not open $installScript";
+        print IS $is;
+        close(IS);
+    }
+    $this->prot("a+rx,u+w", $installScript);
 }
 
 =begin text

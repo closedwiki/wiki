@@ -3,7 +3,7 @@
 use Socket;
 use strict;
 
-my $module;
+my $noconfirm = 0;
 
 # Borrowed from geturl
 # Copyright (C) 1999 Jon Udell, BYTE
@@ -42,7 +42,7 @@ sub satisfy {
         } else {
             if ( defined( $version ) ) {
                 my $ver;
-                eval "\$ver = \$${module}::VERSION;";
+                eval "\$ver = \$${dep}::VERSION;";
                 if ( $@ ) {
                     $msg .= "The VERSION of the package could not be found: $@";
                     $ok = 0;
@@ -57,22 +57,26 @@ sub satisfy {
         }
     } else {
         $ok = 0;
-        $msg = "Module is type $type, and cannot be automatically checked for.\n";
+        $msg = "Module is type $type, and cannot be automatically checked.\n";
     }
 
     unless ($ok) {
-        print "$module depends on package $dep $version,\n";
+        print "%$MODULE% depends on package $dep $version,\n";
         print "which is described as \"$description\"\nBut when I tried to find it I found this error: $msg\n";
     }
 
     if (!$ok && $dep =~ /^TWiki::(Contrib|Plugins)::(\w*)/) {
         my $pack = $1;
         my $packname = $2;
-        $packname .= $pack if ($pack eq "Contrib");
-        print "Would you like me to try to download and install the correct version of $packname from twiki.org? [y/n] ";
         my $reply;
-        while (($reply = <STDIN>) !~ /^[yn]/i) {
-            print "Please answer yes or no\n";
+        $packname .= $pack if ($pack eq "Contrib");
+        if ($noconfirm) {
+            $reply = "y";
+        } else {
+            print "Would you like me to try to download and install the correct version of $packname from twiki.org? [y/n] ";
+            while (($reply = <STDIN>) !~ /^[yn]/i) {
+                print "Please answer yes or no\n";
+            }
         }
         if ($reply =~ /^y/i) {
             my $zip;
@@ -89,10 +93,14 @@ sub satisfy {
             } else {
                 print `unzip $zip`;
                 unless ($?) {
-                    print `perl ${packname}_installer.pl install`;
-                    unless ($?) {
-                        print STDERR "Installation of $packname failed\n";
+                    if ( -e "${packname}_installer.pl" ) {
+                        print `perl ${packname}_installer.pl install`;
+                        unless ($?) {
+                            print STDERR "Installation of $packname failed\n";
+                        }
                     }
+                } else {
+                    print STDERR "Unzip of $zip failed\n";
                 }
             }
         } else {
@@ -101,10 +109,80 @@ sub satisfy {
     }
 }
 
-print "This install script must be run from the root directory where you unzipped the package.\n";
-print "   * The script will not do anything without asking you for confirmation first.\n";
-print "   * You can abort the script at any point and re-run it later\n";
-print "   * If you answer 'no' to any questions you can always re-run the script again later\n";
-print "Hit <Enter> to proceed\n";
-<STDIN>;
+sub usage {
+    print "Usage:\t%$MODULE%_installer [-a] install\n";
+    print "\t%$MODULE%_installer uninstall\n";
+    print "Install or uninstall %$MODULE%. Default is to install. Must be run from\n";
+    print "the directory where you unzipped the package.\n";
+    print "Options:\n";
+    print "\t-a Don't prompt for confirmations\n";
+}
 
+print "%$MODULE% Installer\n\n";
+my $n = 0;
+my $install = 1;
+while ($n < scalar(@ARGV)) {
+    if ($ARGV[$n] eq "-a") {
+        $noconfirm = 1;
+    } elsif ($ARGV[$n] eq "install") {
+        $install = 1;
+    } elsif ($ARGV[$n] eq "uninstall") {
+        $install = 0;
+    } else {
+        usage();
+        die "Bad parameter $ARGV[$n]";
+    }
+    $n++;
+}
+
+if ($ARGV[0] !~ /^(install|uninstall)$/) {
+}
+
+print "This installer must be run from the root directory of your TWiki\n";
+print "installation. It can also be run from another directory but it will\n";
+print "not detect previously installed dependencies if it is.\n";
+if ($install && !$noconfirm) {
+    print "\t* The script will not do anything without asking you for\n";
+    print "\t  confirmation first.\n";
+}
+print "\t* You can abort the script at any point and re-run it later\n";
+print "\t* If you answer 'no' to any questions you can always re-run\n";
+print "\t  the script again later\n";
+
+if ($install) {
+    unless ($noconfirm) {
+        print "Hit <Enter> to proceed with installation\n";
+    }
+    <STDIN>;
+    foreach my $dep ( %$DEPENDENCIES% ) {
+        satisfy($dep);
+    }
+    print "%$MODULE% installed\n";
+} else {
+    my @manifest = ( %$MANIFEST% );
+    my $file;
+    my @dead;
+    foreach $file ( @manifest ) {
+        if ( -e $file ) {
+           push(@dead, $file);
+        }
+    }
+    unless ($#dead > 1) {
+        die "No part of %$MODULE% is installed";
+    }
+    print "To uninstall %$MODULE%, the following files will be deleted:\n";
+    print join(", ", @dead);
+    my $reply;
+    print "Are you SURE you want to uninstall %$MODULE%? [y/n] ";
+    while (($reply = <STDIN>) !~ /^[yn]/i) {
+        print "Please answer yes or no\n";
+    }
+    if ($reply =~ /^y/i) {
+        foreach $file ( @manifest ) {
+            if ( -e $file ) {
+                unlink($file);
+            }
+        }
+    }
+    print "%$MODULE% uninstalled\n";
+}
