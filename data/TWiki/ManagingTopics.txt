@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1000328894" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="PeterThoeny" date="1000462013" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="WebHome"}%
 %INCLUDE{"UtilTempDocNote"}%
 
@@ -13,7 +13,7 @@ _Browser-based rename, move, and delete for individual topics_
 Select *Rename/move* when viewing a topic to change its name, move it to another TWiki web, or delete it:
 
 	1. *Select* target web if other than the current web - chose ==Trash== to [[#DeleteTopic][delete a topic]]
-	1. *Enter* the new topic name - default is current name <br>
+	1. *Enter* the new topic name - default is current name <br />
 	  __NOTE:__ You will be warned if there are locks or if there is a name conflict
 	1. *Select* from the list of links to the topic that will be changed those to OMIT from changes (by default, all referring links will be updated)
 	1. *Click* on *Rename/Move* to rename/remove topic will be renamed and links to the topic updated as requested.
@@ -48,13 +48,13 @@ title="This topic used to exist and was moved to: "}%
 
 ---++ Impact of Topic Access Settings
 
-Permissions affect the rename function in various ways.  To rename a topic, you need both change and rename permissions.  To alter refer4ing topics, you need change permission.  See [[TWikiDocumentation#TWiki_Access_Control]] for information on setting up access permissions.
+Permissions affect the rename function in various ways.  To rename a topic, you need both change and rename permissions.  To alter refer4ing topics, you need change permission.  See TWikiAccessControl for information on setting up access permissions.
 
 ---++ How Rename/move Works
 
-	* %<nop>SEARCH% is used with a special template to show text in topics that requires updating to point to the new topic and/or web name.  This includes relevent [[TWikiDocumentation#Meta_Data_Definition][<nop>MetaData]]
+	* %<nop>SEARCH% is used with a special template to show text in topics that requires updating to point to the new topic and/or web name.  This includes relevent TWikiMetaData definition.
 		* User chooses which topics will be altered
-	* &lt;PRE&gt; and &lt;VERBATIM&gt; are honoured - no changes are made to text within these areas
+	* =&lt;pre&gt;= and =&lt;verbatim&gt;= are honoured - no changes are made to text within these areas
 	* Topic is moved (if locks allow)
 	* References are changed (locks and permissions permitting)
 	* Any referring topics that can't be changed due to locks are listed - user can change them at another time.
