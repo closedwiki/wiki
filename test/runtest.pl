@@ -66,7 +66,7 @@ foreach my $test ( grep { /^TestCaseAuto.*\.txt$/ } readdir TESTS ) {
         print "<font color='green'>PASSED</font>";
     } else {
         print "<font color='red'><b>FAILED</b></font>";
-        print $result->content();
+        #print $result->content();
     }
     print "<br>\n";
 }
