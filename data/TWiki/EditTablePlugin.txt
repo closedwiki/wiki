@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079857314" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="PeterThoeny" date="1084087287" format="1.0" version="1.8"}%
 ---+!! Edit Table Plugin
 
 This plugin allows you to edit TWiki tables using edit fields and drop down boxes. Tables have an *[&nbsp;Edit&nbsp;table&nbsp;]* button if preceeded by an =%<nop>EDITTABLE{...}%= variable. Each column can be a text field, a drop down box, a date field, etc. Multiple tables per topic are editable, but only one at a time can be edited.
@@ -62,6 +62,8 @@ Line before table: =%<nop>EDITTABLE{ header="|*Nr*|*Text field sandbox*|*Drop do
 |*Nr*|*Text field sandbox*|*Drop down sandbox*|*Timestamp*|
 | 1 | hello table | one | 26 Jun 2002 12:30 |
 | 2 |  | two | 27 Jun 2002 12:40 |
+
+__Note:__ Please use TWiki:Sandbox.EditTablePluginTesting if you want to try out this Plugin
 
 If this plugin is installed you will see an *[&nbsp;Edit&nbsp;table&nbsp;]* button above; when you click on it you get this form:
 
@@ -132,15 +134,12 @@ __Note:__ The Plugin looks for the =JSCALENDAR*= settings first in the TWiki Pre
 
 ---++ Limitations and Known Issues
 
-	* This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |	right |=).
-	* There is a performance issue when editing a large table, say, with more then 50 rows.
-	* The Plugin fails if the table is at the very end of the topic
-	  (without a new line) Always ensure there is a newline after the table
-	* Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label.
-	* You cannot put two %<nop>EDITTABLE% statements on the same line
-	  in the source.
-	* You can include %-vars now in select values, by quoting them with
-	  &lt;nop&gt;, as in %&lt;nop&gt;X% for %<nop>X%, say for instance:
+	* %X% Bug: The Plugin fails if the table is at the very end of the topic (without a new line) Always ensure there is a newline after the table
+	* This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |	right |=)
+	* There is a performance issue when editing a large table, say, with more then 50 rows
+	* Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label
+	* You cannot put two =%<nop>EDITTABLE{}%= statements on the same line in the source
+	* You can include %-vars now in select values, by quoting them with &lt;nop&gt;, as in %&lt;nop&gt;X% for %<nop>X%, say for instance:
 	  <br /> =select,1,%&lt;nop&gt;X%,%&lt;nop&gt;Y%=
 
 ---++ Plugin Installation Instructions
@@ -174,8 +173,9 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 02 Mar 2004 |
+|  Plugin Version: | 07 Apr 2004 |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  07 Apr 2004: | Fixed bug where two tables got updated when you edit and save a table included into a topic containing other edit tables |
 |  02 Mar 2004: | Default for =%<nop>EDITCELL{editbutton}%= is EDITBUTTON preference |
 |  27 Feb 2004: | Added QUIETSAVE setting and =quietsave= parameter; image for Edit button |
 |  18 Feb 2004: | Doc fixes; allow edit button anywhere in a cell not just at the end of a cell |
@@ -204,7 +204,8 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 02 Mar 2004
+-- TWiki:Main/PeterThoeny - 07 Apr 2004
+
 %META:FILEATTACHMENT{name="EditTablePluginCalendarExample.gif" attr="h" comment="Screenshot" date="1078005196" path="C:\Data\Temp\EditTablePluginCalendarExample.gif" size="7823" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="README" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361959" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\README" size="823" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="release-notes.html" attr="h" comment="Component of Mishoo DHTML calendar" date="1071361968" path="C:\Data\MyTWiki\Plugins\EditTablePlugin\pub\TWiki\EditTablePlugin\release-notes.html" size="10593" user="PeterThoeny" version="1.1"}%
