@@ -327,7 +327,7 @@ sub _cacheTWikiUsersTopic {
     my $lUser;
     foreach( @list ) {
         # Get the WikiName and userid, and build hashes in both directions
-        if(  ( /^\s*\* ($TWiki::regex{webNameRegex}\.)?(\S+)\s*\-\s*([^\s]*).*/o ) && $2 ) {
+        if( /^\s*\* ($TWiki::regex{webNameRegex}\.)?(\w+)\s*-\s*(\S+)\s*-\s*\d+ \w+ \d+$/o && $2 ) {
             my $web = $1 || $TWiki::cfg{UsersWebName};
             $wUser = $2;	# WikiName
             $lUser = $3;	# userid
