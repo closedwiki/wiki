@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1040164692" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="PeterThoeny" date="1051945822" format="1.0" version="1.17"}%
 ---+ Table Plugin
 
 Gives extra control of table display:
@@ -50,7 +50,7 @@ Attributes are defined as a =TABLEATTRIBUTES= Plugin setting in this topic, a =T
 | *Argument* | *Comment* | *Example* |
 | =sort=	  | Set table sorting =on= or =off= | =sort="on"= |
 | =initsort= | Column to sort initially (1 to number of columns) | =initsort="2"= |
-| =initdirection= | Initial sorting direction for =initsort=, set to  =up= or =down= | =initsort="down"= |
+| =initdirection= | Initial sorting direction for =initsort=, set to  =up= or =down= | =initdirection="up"= |
 | =headerbg= | Header cell background colour. Choose one of the %TWIKIWEB%.StandardColors | =headerbg="#99CCCC"= |
 | =headercolor= | Header cell text colour | =headercolor="#0000CC"= |
 | =databg=	| Data cell background colour, a comma separated list. Specify ="none"= for no colour, that is to use the colour/background of the page the table is on. | =databg="#C8CB8F, #DBDDB5"= |
