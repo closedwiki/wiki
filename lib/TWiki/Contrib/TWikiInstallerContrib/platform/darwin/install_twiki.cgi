@@ -49,8 +49,8 @@ use File::Path qw( rmtree );
 use File::Basename qw( basename );
 use Cwd qw( cwd getcwd );
 use Data::Dumper qw( Dumper );
-use CPAN;
 use XML::Simple;
+use CPAN;
 
 ################################################################################
 
@@ -63,12 +63,44 @@ unless ( $q->param('install') =~ /install/i )
     my $title = "TWiki Installation (Step 2/4)";
     print $q->header(), $q->start_html( 
 					-title => $title,
-					-style => { -code => 'table { width:100% }' },
+					-style => { -code => "\
+table, tr, td, td p  { padding:0em; margin:0em; } \
+table { width:100%; border:thin solid black; background:#66dd99; } \
+tr { border:thin dotted red; } \
+td { padding:0.2em; background:#9999cc; } \
+td:hover { background:#bbbbff; } \
+th { background:pink; font:1.5em; padding:0.35em; } \
+th:hover { background:#ffeeee; } \
+" },
 					);
 #    print "$q";
     print <<'__HTML__';
-<form>
-<input type="submit" name="install" value="install" /> <br/>
+<script>
+<!--
+function toggleDisplay( e )
+{
+	var style = e.style;
+	return style.display = style.display ? "" : "none";
+}
+
+function toggleAll(theForm, cName)
+{
+    for ( var i=0; i<theForm.elements.length; ++i )
+    {
+        var e = theForm.elements[i].parentNode.parentNode;
+	if ( e.className == cName ) toggleDisplay( e );
+    }
+}
+
+function toggleHover( e )
+{
+    var ee = e.firstChild.firstChild;	// >TR< --> TD --> [[INPUT]] checkbox
+    if ( ee && !ee.disabled ) ee.checked = !ee.checked;
+    return true;
+}
+-->
+</script>
+<form id="form">
 __HTML__
 
     print catalogue({ xml => "tmp/install/downloads/contribs/contrib.xml", title => "Contrib", type => "contrib", cgi => $q });
@@ -77,44 +109,12 @@ __HTML__
 #    print catalogue({ xml => "tmp/install/downloads/skins/skins.xml", title => "Skins", type => "skin", cgi => $q });
     print catalogue({ xml => "tmp/install/downloads/patches/patches.xml", title => "Patches", type => "patch", cgi => $q });
     print catalogue({ xml => "tmp/install/downloads/webs/webs.xml", title => "Web Templates", type => "web", cgi => $q });
-
-    chdir "tmp/install";
-    my @systemwebs = ();
-    if ( opendir( WIKIS, "downloads/webs/system" ) )
-    {
-	@systemwebs = grep { /\.wiki\.tar\.gz$/ } readdir( WIKIS );  #or warn $!; 
-	closedir( WIKIS ) or warn $!;
-    }
-    chdir "../..";
-
-    print qq{<h2>System Webs (Updates)</h2>\n};
-    print checkbox_group( -name => "systemweb",
-		    -values => \@systemwebs,
-		    -defaults => [ $q->param( "systemweb" ) ],
-#		    -cols => 5,
-		    -linebreak => 'true',
-		    );
-
-    #--------------------------------------------------------------------------------
-
-    chdir "tmp/install";
-    my @localwebs = ();
-    if ( opendir( WIKIS, "webs/local" ) )
-    {
-	@localwebs = grep { /\.wiki\.tar\.gz$/ } readdir( WIKIS );  #or warn $!; 
-	closedir( WIKIS ) or warn $!;
-    }
-    chdir "../..";
-
-    print qq{<h2>Local Webs</h2>\n};
-    print checkbox_group( -name => "localweb",
-		    -values => \@localwebs,
-		    -defaults => [ $q->param( "localweb" ) ],
-#		    -cols => 5,
-		    -linebreak => 'true',
-		    );
+    print wikiCatalogue({ type => "systemweb", webs => [ wikiWebList({ dir => "downloads/webs/system" }) ], title => "System Webs (Updates)", cgi => $q });
+    print wikiCatalogue({ type => "localweb", title => "Local Webs", webs => [ wikiWebList({ dir => "webs/local" }) ], cgi => $q });
 
     print <<__HTML__;
+<br/>
+<input type="submit" name="install" value="install" /> <br/>
 </form>
 </body>
 </html>
@@ -140,7 +140,7 @@ my $cpan        = "$lib/CPAN";
 my $xs = new XML::Simple( ForceArray => 1, KeyAttr => 1, AttrIndent => 1 ) or die $!;
 
 ################################################################################
-# check prerequisites
+# start installation
 
 my $title = "TWiki Installation (Step 3/4)";
 print header(), start_html( -title => $title );
@@ -234,7 +234,7 @@ my $xmlContrib = $xs->XMLin( "tmp/install/downloads/contribs/contrib.xml" ) or w
 my %hContrib = map { $_->{name}->[0], $_ } @{$xmlContrib->{contrib}};
 foreach my $contribID ( $q->param('contrib') )
 {
-    my $contribS = $hContrib{$contribID} or die "no contrib entry for $contribID ?";
+    my $contribS = $hContrib{$contribID} or warn "no contrib entry for $contribID ?", next;
     my $contrib = $contribS->{name}->[0] or die "no contrib name? wtf?";
 
     installTWikiExtension({ file => "$contrib.tar.gz",
@@ -251,12 +251,52 @@ my $xmlPlugins = $xs->XMLin( "tmp/install/downloads/plugins/plugins.xml" ) or wa
 my %hPlugins = map { $_->{name}->[0], $_ } @{$xmlPlugins->{plugin}};
 foreach my $pluginName ( $q->param('plugin') )
 {
-    my $pluginS = $hPlugins{$pluginName} or die "no plugin entry for $pluginName ?";
-    my $plugin = $pluginS->{name}->[0] or die "no plugin name? wtf?";
+    my $pluginS = $hPlugins{$pluginName} or warn "no plugin entry for $pluginName ?", next;
+    my $plugin = $pluginS->{name}->[0] or warn "no plugin name? wtf?", next;
 
     installTWikiExtension({ file => "$plugin.tar.gz",
 			    dir => "downloads/plugins",
 			    name => $plugin,
+			});
+}
+
+################################################################################
+# AddOns
+print qq{<h2>AddOns</h2>\n};
+
+my $xmlAddOns = $xs->XMLin( "tmp/install/downloads/addons/addons.xml" ) or warn "No addons catalogue: $!";
+my %hAddOns = map { $_->{name}->[0], $_ } @{$xmlAddOns->{addon}};
+foreach my $addonName ( $q->param('addon') )
+{
+    my $addonS = $hAddOns{$addonName} or warn "no addon entry for $addonName ?", next;
+    my $addon = $addonS->{name}->[0] or warn "no addon name? wtf?", next;
+
+    installTWikiExtension({ file => "$addon.tar.gz",
+			    dir => "downloads/addons",
+			    name => $addon,
+			});
+}
+
+################################################################################
+# update standard webs 
+
+print qq{<h2>Updating system webs</h2>\n};
+foreach my $web ( $q->param('systemweb') )
+{
+    installTWikiExtension({ file => "$web",
+			    dir => "downloads/webs/system",
+			    name => $web,
+			});
+}
+
+################################################################################
+# install local webs
+print qq{<h2>Installing local webs</h2>\n};
+foreach my $web ( $q->param('localweb') )
+{
+    installTWikiExtension({ file => "$web",
+			    dir => "webs/local",
+			    name => $web,
 			});
 }
 
@@ -283,24 +323,7 @@ foreach my $patch ( @patches )
 {
     print qq{<h3>Applying patch "$patch"</h3>\n};
     my $patchFile = "tmp/install/downloads/patches/local/${patch}.patch";
-    execute( "(patch -p1 <$patchFile) || (patch -p0 <$patchFile)" ) or warn $!;
-}
-
-################################################################################
-# AddOns
-print qq{<h2>AddOns</h2>\n};
-
-my $xmlAddOns = $xs->XMLin( "tmp/install/downloads/addons/addons.xml" ) or warn "No addons catalogue: $!";
-my %hAddOns = map { $_->{name}->[0], $_ } @{$xmlAddOns->{addon}};
-foreach my $addonName ( $q->param('addon') )
-{
-    my $addonS = $hAddOns{$addonName} or die "no addon entry for $addonName ?";
-    my $addon = $addonS->{name}->[0] or die "no addon name? wtf?";
-
-    installTWikiExtension({ file => "$addon.tar.gz",
-			    dir => "downloads/addons",
-			    name => $addon,
-			});
+    execute( "cat $patchFile ; (patch -p1 <$patchFile) || (patch -p0 <$patchFile)" ) or warn $!;
 }
 
 ################################################################################
@@ -309,29 +332,6 @@ foreach my $addonName ( $q->param('addon') )
 # ImageGalleryPlugin: sudo fink install ImageMagick (...)
 # ChartPlugin: sudo fink install GD
 
-
-################################################################################
-# update standard webs 
-
-print qq{<h2>Updating system webs</h2>\n};
-foreach my $web ( $q->param('systemweb') )
-{
-    installTWikiExtension({ file => "$web",
-			    dir => "downloads/webs/system",
-			    name => $web,
-			});
-}
-
-################################################################################
-# install local webs
-print qq{<h2>Installing local webs</h2>\n};
-foreach my $web ( $q->param('localweb') )
-{
-    installTWikiExtension({ file => "$web",
-			    dir => "webs/local",
-			    name => $web,
-			});
-}
 
 ################################################################################
 #  cleanup / permissions
@@ -357,13 +357,58 @@ exit 0;
 ################################################################################
 ################################################################################
 
+sub wikiWebList
+{
+    my $p = shift;
+
+    chdir "tmp/install";
+    my @webs = ();
+    if ( opendir( WIKIS, $p->{dir} ) )
+    {
+	@webs = grep { /\.wiki\.tar\.gz$/ } readdir( WIKIS );  #or warn $!; 
+	closedir( WIKIS ) or warn $!;
+    }
+    chdir "../..";
+
+    return @webs;
+}
+
+################################################################################
+
+sub wikiCatalogue
+{
+    my $p = shift;
+
+    my $text = "";
+    $text .= "<table>";
+    $text .= qq{<tr><th onclick="toggleAll( document.getElementById('form'), '$p->{type}' )" >} . $p->{title} . "</th></tr>\n";
+
+    foreach my $web ( @{ $p->{webs} } )
+    {
+	my $checked = ( grep { /^\Q$web\E$/ } ( $p->{cgi}->param($p->{type}) ) ) ? qq{checked="checked"} : '';
+
+	$text .= qq{<tr class="$p->{type}" onclick="toggleHover(this)" ><td>};
+	# BLECH - force a checkbox click, because the TD handler above will undo it (happens twice :( )
+	$text .= qq{<input type="checkbox" name="$p->{type}" value="$web" $checked onclick="toggleHover(this.parentNode.parentNode);" /> $web};
+	$text .= "</td></tr>";
+    }
+
+    $text .= "</table>";
+
+    return $text;
+}
+
+################################################################################
+
 sub catalogue
 {
     my $p = shift;
     die unless $p->{xml} && $p->{type} && $p->{cgi};
     $p->{title} ||= $p->{type};
 
-    my $text = "<h2>" . $p->{title} . "</h2>\n";
+    my $text = "";
+    $text .= qq{<table>};
+    $text .= qq{<tr><th onclick="toggleAll( document.getElementById('form'), '$p->{type}' )" >} . $p->{title} . "</th></tr>\n";
 
     if ( -e $p->{xml} )
     {
@@ -373,6 +418,8 @@ sub catalogue
 #	print "<pre>", Dumper( $p->{cgi}->param( $p->{type} ) ), "</pre>\n";
 	foreach ( @{$xmlCatalogue->{ $p->{type} } } )
 	{
+	    $text .= qq{<tr class="$p->{type}" onclick="toggleHover(this);" >};
+	    #--------------------------------------------------------------------------------
 	    my $findCheck = $_->{name}->[0];
 	    my $checked = ( grep { /^\Q$findCheck\E$/ } ( $p->{cgi}->param($p->{type}) ) ) ? qq{checked="checked"} : '';
 	    my $aAttr = {
@@ -380,10 +427,19 @@ sub catalogue
 		title => $_->{description}->[0],
 	    };
 	    $aAttr->{href} = $_->{homepage}->[0] if $_->{homepage}->[0];
-	    $text .= qq{<input type="checkbox" name="$p->{type}" value="$_->{name}->[0]" $checked/> } . 
-		$p->{cgi}->a( $aAttr, $_->{name}->[0] ) . "<br/>";
+#	    my $disabled = $_->{file}->[0] ? '' : 'disabled';
+	    my $disabled = '';
+	    $text .= "<td>";
+	    # BLECH - force a checkbox click, because the TD handler above will undo it (happens twice :( )
+	    $text .= qq{<input type="checkbox" name="$p->{type}" value="$_->{name}->[0]" $checked $disabled onclick="toggleHover(this.parentNode.parentNode);" /> };
+	    $text .= "<big><b>" . $p->{cgi}->a( $aAttr, $_->{name}->[0] ) . "</b></big>\n";
+	    $text .= $_->{description}->[0] || '';
+	    $text .= "</td>";
+	    #--------------------------------------------------------------------------------
+	    $text .= "</tr>\n";
 	}
     }
+    $text .= "</table>\n";
 
     return $text;
 }
@@ -419,7 +475,7 @@ sub installTWikiExtension
     if ( -d 'data/Plugins' ) { execute( "cp -rv data/Plugins/ $dest/data/TWiki" ); execute( "rm -rf data/Plugins" ); }
     if ( -d 'data' ) { execute( "cp -rv data $dest" ); execute( "rm -rf data" ); }
     if ( -d 'lib' ) { execute( "cp -rv lib/ $lib" ); execute( "rm -rf lib" ); }
-    # execute( "chmod +x bin/*" ); ???
+#    if ( -d 'bin' ) { execute( "chmod +x bin/*" ); execute( "cp -rv bin/ $bin" ); execute( "rm -rf bin" ); }
     if ( -d 'bin' ) { execute( "cp -rv bin/ $bin" ); execute( "rm -rf bin" ); }
     if ( -d 'pub/Plugins' ) { execute( "cp -rv pub/Plugins/ $tmp/twiki/TWiki" ); execute( "rm -rf pub/Plugins" ); }
     if ( -d 'pub' ) { execute( "cp -rv pub $tmp/twiki" ); execute( "rm -rf pub" ); }
@@ -435,11 +491,14 @@ sub installTWikiExtension
 
 ################################################################################
 
-sub mode {
-	my ($file) = @_;
-	my ($dev, $ino, $mode) = stat $file;
-	return $mode;
+sub mode 
+{
+    my ($file) = @_;
+    my ($dev, $ino, $mode) = stat $file;
+    return $mode;
 }
+
+#--------------------------------------------------------------------------------
 
 sub checkdir {
     foreach my $dir ( @_ )
@@ -455,6 +514,8 @@ sub checkdir {
     }
 }
 
+#--------------------------------------------------------------------------------
+
 {
     my $nCmd = 0;
 
@@ -464,6 +525,7 @@ sub execute {
     {
 	print <<'__HTML__';
 	<script type="text/javascript">
+<!--	    
 	function toggleDisplay( id )
 	{
 	    var e = document.getElementById( id );
@@ -478,6 +540,7 @@ sub execute {
 	    //	alert( e + ': was: ' + e.className + ', now: ' + c );
 	    e.className = c;
 	}
+-->
 	</script>
 __HTML__
     }
