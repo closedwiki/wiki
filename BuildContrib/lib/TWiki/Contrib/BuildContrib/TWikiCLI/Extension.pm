@@ -10,7 +10,7 @@ sub _init {
     $oldPwd = cwd();
 }
 
-sub upload {
+sub cli_upload {
     my ($extension) = @_;
 
     print "Doing upload for $extension\n\n";
@@ -25,7 +25,7 @@ sub upload {
 }
 
 # now this really ought to be in Extension::CVS, but that directory would clash
-sub cvsupdate {
+sub cli_cvsupdate {
     my ($extension) = @_;
 
     print "Doing cvs update for $extension\n\n";
@@ -39,7 +39,7 @@ sub cvsupdate {
 
 }
 
-sub install {
+sub cli_install {
     my ($extension) = @_;
 
     print "Installing $extension\n\n";
@@ -66,6 +66,24 @@ sub install {
     }
     chdir ($oldPwd); # Not strictly necessary, but...
     return $outputLog;
+}
+
+sub cli_download {
+    my ($extension) = @_;
+
+    print "Installing $extension\n\n";
+    my $libFrag = getLibFragmentForExtension($extension);
+
+    my $localCopy = TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion($extension);
+
+    my $buildDotPlDir = $localCopy."/lib/TWiki/$libFrag/";
+    
+    if (-f $buildDotPlDir."/build.pl") {
+     print "Woah! Found it!!\n";
+    } else {
+     print "boo :( failed - no build.pl in $buildDotPlDir \n";
+    }
+
 }
 
 sub getHomes {
