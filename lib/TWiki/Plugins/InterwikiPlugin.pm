@@ -102,6 +102,10 @@ sub initPlugin
     my @data = <IN>;
     close IN;
 
+#    this attempted fix results in the following error message
+#    'co: /Users/wbniv/Sites/twiki/data/TWiki/RCS/InterWikis.txt,v: No such file or directory'
+#    my @data = split( /[\n\r]+/, TWiki::Func::readTopicText( $installWeb, $interTopic, "", 1 ) );
+
     # grep "| alias | URL | ..." table and extract into "alias", "URL" list
     # FIXME: Should be able to do this pipeline with just one regex match
     @data = map { split /\s+/, $_, 2 }
