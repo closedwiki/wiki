@@ -328,7 +328,7 @@ sub getRevInfo
 {
     my( $web, $rev, $topic, $short ) = @_;
 
-    my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev");
+    my( $date, $user ) = TWiki::Store::getRevisionInfo( $web, $topic, $rev);
     $user = TWiki::Render::getRenderedVersion( TWiki::User::userToWikiName( $user ) );
 	
     if ( $short ) {
@@ -404,22 +404,22 @@ sub diff {
   if( $topicExists ) {
     $maxrev = &TWiki::Store::getRevisionNumber( $webName, $topic );
     $maxrev =~ s/r?1\.//go;  # cut 'r' and major
-    if( ! $rev1 ) { $rev1 = 0; }
-    if( ! $rev2 ) { $rev2 = 0; }
-    $rev1 =~ s/r?1\.//go;  # cut 'r' and major
-    $rev2 =~ s/r?1\.//go;  # cut 'r' and major
+
+    $rev1 = TWiki::Store::cleanUpRevID( $rev1 );
     if( $rev1 < 1 )       { $rev1 = $maxrev; }
     if( $rev1 > $maxrev ) { $rev1 = $maxrev; }
+
+    $rev2 = TWiki::Store::cleanUpRevID( $rev2 );
     if( $rev2 < 1 )       { $rev2 = 1; }
     if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
     if ( $diffType eq "last" ) {
       $rev1 = $maxrev;
       $rev2 = $maxrev-1;
     }
-    $revTitle1 = "r1.$rev1";
+    $revTitle1 = $rev1;
     $revInfo1 = getRevInfo( $webName, $rev1, $topic );
     if( $rev1 != $rev2 ) {
-      $revTitle2 = "r1.$rev2";
+      $revTitle2 = $rev2;
       $revInfo2 = getRevInfo( $webName, $rev2, $topic );
     }
   } else {
@@ -478,12 +478,12 @@ sub diff {
       $diff =~ s/%REVTITLE1%/r1\.$r1/go;
       $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
       $diff =~ s/%REVINFO1%/$rInfo/go;
-      my $diffArrayRef = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", $contextLines );
-      #            $text = &TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", $contextLines );
-      #            if ( $renderStyle eq "raw" ) {
-      #                $text = "\n<code>\n$text\n</code>\n";
-      #            } else {
-      #                my $diffArray = parseRevisionDiff( $text );
+      my $diffArrayRef = TWiki::Store::getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+      # $text = TWiki::Store::getRevisionDiff( $webName, $topic, $r2, $r1, $contextLines );
+      # if ( $renderStyle eq "raw" ) {
+      #     $text = "\n<code>\n$text\n</code>\n";
+      # } else {
+      #    my $diffArray = parseRevisionDiff( $text );
       my $text = _renderRevisionDiff( $topic, $diffArrayRef, $renderStyle );
       #            }
       $diff =~ s/%TEXT%/$text/go;
@@ -505,7 +505,7 @@ sub diff {
   
   if( $TWiki::doLogTopicRdiff ) {
     # write log entry
-    TWiki::writeLog( "rdiff", "$webName.$topic", "r1.$rev1 r1.$rev2" );
+    TWiki::writeLog( "rdiff", "$webName.$topic", "$rev1 $rev2" );
   }
   
   # format "after" part
@@ -518,11 +518,11 @@ sub diff {
   }
   
   while( $i > 0 ) {
-    $revisions .= " | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
+    $revisions .= " | <a href=\"$scriptUrlPath/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">$i</a>";
     if( $i != 1 ) {
       if( $i == $breakRev ) {
         # Now obsolete because of 'More' link
-        # $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=1.$maxrev\">&gt;...</a>";
+        # $revisions = "$revisions | <a href=\"$scriptUrlPath/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsrev&amp;param1=$maxrev\">&gt;...</a>";
         $i = 1;
         
       } else {
@@ -530,15 +530,15 @@ sub diff {
           $revisions .= " | &gt;";
         } else {
           $j = $i - 1;
-          $revisions .= " | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.$j\">&gt;</a>";
+          $revisions .= " | <a href=\"$scriptUrlPath/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
         }
       }
     }
     $i = $i - 1;
   }
   $after =~ s/%REVISIONS%/$revisions/go;
-  $after =~ s/%CURRREV%/1.$rev1/go;
-  $after =~ s/%MAXREV%/1.$maxrev/go;
+  $after =~ s/%CURRREV%/$rev1/go;
+  $after =~ s/%MAXREV%/$maxrev/go;
   $after =~ s/%REVTITLE1%/$revTitle1/go;
   $after =~ s/%REVINFO1%/$revInfo1/go;
   $after =~ s/%REVTITLE2%/$revTitle2/go;

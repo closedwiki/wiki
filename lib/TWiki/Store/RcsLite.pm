@@ -26,7 +26,6 @@
 #  - need to tidy up dealing with \n for differences
 #  - still have difficulty on line ending at end of sequences, consequence of doing a line based diff
 #  - most serious is when having multiple line ends on one seq but not other - this needs fixing
-#  - tidyup us of 1. for revisions
 #  - cleaner dealing with errors/warnings
 
 =begin twiki

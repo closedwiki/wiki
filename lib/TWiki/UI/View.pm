@@ -49,7 +49,6 @@ The view is controlled by CGI parameters as follows:
 sub view {
     my ( $webName, $topic, $userName, $query ) = @_;
 
-    my $rev = $query->param( "rev" );
     my $viewRaw = $query->param( "raw" ) || "";
     my $unlock  = $query->param( "unlock" ) || "";
     my $contentType = $query->param( "contenttype" );
@@ -76,6 +75,7 @@ sub view {
         TWiki::Store::lockTopic( $webName, $topic, "on" );
     }
 
+    my $rev = TWiki::Store::cleanUpRevID( $query->param( "rev" ));
     my $topicExists = TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
         ( $meta, $text ) = TWiki::Store::readTopic( $webName, $topic,
@@ -85,12 +85,10 @@ sub view {
 
         $revdate = TWiki::formatTime( $revdate );
 
-        if( $rev ) {
-            $rev =~ s/r?1\.//go;  # cut 'r' and major
-            $rev = 1 if( $rev < 1 );
-            $rev = $maxrev if( $rev > $maxrev );
-        } else {
+        if ( !$rev || $rev > $maxrev ) {
             $rev = $maxrev;
+        } elsif ( $rev < 0 ) {
+            $rev = 1;
         }
 
         if( $rev < $maxrev ) {
@@ -102,7 +100,7 @@ sub view {
             ( $revdate, $revuser ) =
               TWiki::Store::getRevisionInfo( $webName, $topic, $rev );
             $revdate = TWiki::formatTime( $revdate );
-            $extra .= "r1.$rev";
+            $extra .= "r$rev";
         }
     } else { # Topic does not exist yet
         $rev = 1;
@@ -189,8 +187,8 @@ sub view {
         $tmpl =~ s/%EDITTOPIC%/<strike>Edit<\/strike>/go;
         $tmpl =~ s/<a [^>]*?>Attach<\/a>/<strike>Attach<\/strike>/goi;
         $tmpl =~ s|<a [^>]*?>Rename/move<\/a>|<strike>Rename/move<\/strike>|goi;
-        $tmpl =~ s/%REVTITLE%/\(r1.$rev\)/go;
-        $tmpl =~ s/%REVARG%/&rev=1.$rev/go;
+        $tmpl =~ s/%REVTITLE%/\(r$rev\)/go;
+        $tmpl =~ s/%REVARG%/&rev=$rev/go;
     } else {
         # Remove the NOINDEX meta tag (for robots) from both Edit and 
         # Create pages
@@ -221,16 +219,16 @@ sub view {
     }
     while( $i > 0 ) {
         if( $i == $rev) {
-            $revisions = "$revisions | r1.$i";
+            $revisions = "$revisions | r$i";
         } else {
-            $revisions = "$revisions | <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$i\">r1.$i</a>";
+            $revisions = "$revisions | <a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=$i\">r$i</a>";
         }
         if( $i != 1 ) {
             if( $i == $breakRev ) {
                 $i = 1;
             } else {
                 $j = $i - 1;
-                $revisions = "$revisions | <a href=\"%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=1.$i&amp;rev2=1.$j\">&gt;</a>";
+                $revisions = "$revisions | <a href=\"%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=$i&amp;rev2=$j\">&gt;</a>";
             }
         }
         $i = $i - 1;
@@ -248,8 +246,8 @@ sub view {
     $tmpl = TWiki::Render::getRenderedVersion( $tmpl, "", $meta ); ## better to use meta rendering?
 
     $tmpl =~ s/%TEXT%/$text/go;
-    $tmpl =~ s/%MAXREV%/1.$maxrev/go;
-    $tmpl =~ s/%CURRREV%/1.$rev/go;
+    $tmpl =~ s/%MAXREV%/$maxrev/go;
+    $tmpl =~ s/%CURRREV%/$rev/go;
     $tmpl =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;   # remove <nop> tags (PTh 06 Nov 2000)
 
     # SMELL: why calculate viewAccessOK and then use readTopicPermissionFailed

@@ -42,7 +42,8 @@ sub view {
   my ( $webName, $topic, $query ) = @_;
 
   my $fileName = $query->param( 'filename' );
-  my $rev = $query->param( 'rev' ) || "";
+
+  my $rev = TWiki::Store::cleanUpRevID( $query->param( 'rev' ) );
 
   return unless TWiki::UI::webExists( $webName, $topic );
 

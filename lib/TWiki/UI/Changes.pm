@@ -71,7 +71,7 @@ sub changes {
       $frev = "";
       if( $bar[3] ) {
         if( $bar[3] > 1 ) {
-          $frev = "r1.$bar[3]";
+          $frev = $bar[3];
         } else {
           $frev = "<span class=\"twikiNew\"><b>NEW</b></span>";
         }

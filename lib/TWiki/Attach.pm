@@ -114,8 +114,6 @@ sub formatVersions {
 
     my $latestRev =
       TWiki::Store::getRevisionNumber( $web, $topic, $attrs{name} );
-    $latestRev =~ m/\.(.*)/o;
-    my $maxRevNum = $1;
 
     my $header = _getTemplate("ATTACH:versions:header");
     my $footer = _getTemplate("ATTACH:versions:footer");
@@ -123,9 +121,7 @@ sub formatVersions {
 
     my $rows ="";
 
-    for( my $version = $maxRevNum; $version >= 1; $version-- ) {
-        my $rev = "1.$version";
-
+    for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
         my( $date, $userName, $minorRev, $comment ) = 
           TWiki::Store::getRevisionInfo( $web, $topic, $rev, $attrs{name} );
         $rows .= _formatRow( $web, $topic,
@@ -138,7 +134,7 @@ sub formatVersions {
                               attr    => $attrs{attr},
                               size    => $attrs{size}
                              },
-                             ( $rev eq $latestRev),
+                             ( $rev == $latestRev),
                              $row );
     }
 

@@ -1843,15 +1843,14 @@ sub _handleREVINFO {
     my ( $params, $theTopic, $theWeb ) = @_;
 
     my $format = $params->{_DEFAULT} || $params->{format}
-                 || "r1.\$rev - \$date - \$wikiusername";
+                 || "\$rev - \$date - \$wikiusername";
     my $web    = $params->{web} || $theWeb;
     my $topic  = $params->{topic} || $theTopic;
     my $cgiQuery = getCgiQuery();
     my $cgiRev = "";
-    $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
+    $cgiRev = $cgiQuery->param("rev") if( $cgiQuery );
     my $revnum = $cgiRev || $params->{rev} || "";
-
-    $revnum =~ s/r?1\.//; # cut "r" and major
+    $revnum = TWiki::Store::cleanUpRevID( $revnum );
 
     my( $date, $user, $rev, $comment ) =
       TWiki::Store::getRevisionInfo( $web, $topic, $revnum );

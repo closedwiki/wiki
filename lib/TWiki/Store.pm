@@ -88,8 +88,8 @@ sub _getTopicHandler
 ---++ readTopic($web, $topic, $version, $internal) -> ($meta, $text)
 
 Reads the given version of a topic and it's meta-data. If the version
-is undef, then read the most recent version. The version number may be
-an ordinal or a "1.x" style decimal.
+is undef, then read the most recent version. The version number must be
+an integer, or undef for the latest version.
 
 If $internal is false, view permission will be required for the topic
 read to be successful.  A failed topic read is indicated by setting
@@ -108,11 +108,9 @@ sub readTopic
 {
     my( $theWeb, $theTopic, $version, $internal ) = @_;
 
-    die "Insufficient parameters ",caller unless defined( $internal );
-
     my $text = readTopicRaw( $theWeb, $theTopic, $version, $internal );
     my $meta = extractMetaData( $theWeb, $theTopic, \$text );
-    die "Internal error |$theWeb|$theTopic|" unless $meta;
+    die "ASSERT Internal error |$theWeb|$theTopic|" unless $meta;
     return( $meta, $text );
 }
 
@@ -122,9 +120,8 @@ sub readTopic
 Return value: $topicText
 
 Reads the given version of a topic, without separating out any embedded
-meta-data. If the version is undef, then
-read the most recent version. The version number may be an ordinal
-or a "1.x" style decimal.
+meta-data. If the version is undef, then read the most recent version.
+The version number must be an integer or undef.
 
 If $internal is false, view access permission will be checked.  If permission
 is not granted, then an error message will be returned in $text, and set in
@@ -144,7 +141,7 @@ correct operation of View raw=debug and the "repRev" mode of Edit.
 sub readTopicRaw {
     my( $theWeb, $theTopic, $version, $internal ) = @_;
 
-    die "Insufficient parameters ",caller unless defined( $internal );
+    die "ASSERT Insufficient parameters" unless defined( $internal ); # temporary ASSERT
 
     # test if theTopic contains a webName to override $theWeb
     ( $theWeb, $theTopic ) =
@@ -155,7 +152,7 @@ sub readTopicRaw {
     unless ( defined( $version )) {
         $text = readFile( "$TWiki::dataDir/$theWeb/$theTopic.txt" );
     } else {
-        $version =~ s/^1\.//o;
+        die "ASSERT Bad rev $version" unless( $version =~ /^\d+$/ ); # temporary ASSERT
         my $topicHandler = _getTopicHandler( $theWeb, $theTopic, undef );
         $text = $topicHandler->getRevision( $version );
     }
@@ -497,7 +494,7 @@ sub readAttachmentVersion
 ---++ sub getRevisionNumber (  $theWebName, $theTopic, $attachment  )
 
 Get the revision number of the most recent revision. Returns
-major.minor, or null if the topic doesn't exist.
+the integer revision number or "" if the topic doesn't exist.
 
 WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 
@@ -507,19 +504,11 @@ sub getRevisionNumber
 {
     my( $theWebName, $theTopic, $attachment ) = @_;
 
-    die unless $theWebName;
+    die unless $theWebName; # temporary ASSERT
     $attachment = "" unless $attachment;
 
     my $topicHandler = _getTopicHandler( $theWebName, $theTopic, $attachment );
-    my $revs = $topicHandler->numRevisions();
-    if ( $revs ) {
-        $revs = "1.$revs";
-    } else {
-        # SMELL: commented as "Temporary" but why? if the topic doesn't exist,
-        # surely it should not be version 1.1????
-        $revs = "1.1"; # Temporary
-    }
-    return $revs;
+    return $topicHandler->numRevisions();
 }
 
 
@@ -527,8 +516,10 @@ sub getRevisionNumber
 
 ---++ sub getRevisionDiff (  $web, $topic, $rev1, $rev2, $contextLines  )
 
-<pre>
-rdiff:            $diffArray = TWiki::Store::getRevisionDiff( $webName, $topic, "1.$r2", "1.$r1", 3 );
+| $webName|
+| $topic |
+| $rev1 | Integer revision number |
+| $rev2 | Integer revision number |
 </pre>
 | Return: =\@diffArray= | reference to an array of [ diffType, $right, $left ] |
 
@@ -539,9 +530,8 @@ sub getRevisionDiff
     my( $web, $topic, $rev1, $rev2, $contextLines ) = @_;
 
     my $rcs = _getTopicHandler( $web, $topic );
-    my $r1 = substr( $rev1, 2 );
-    my $r2 = substr( $rev2, 2 );
-    my( $error, $diffArrayRef ) = $rcs->revisionDiff( $r1, $r2, $contextLines );
+    my( $error, $diffArrayRef ) =
+      $rcs->revisionDiff( $rev1, $rev2, $contextLines );
     return $diffArrayRef;
 }
 
@@ -552,13 +542,13 @@ sub getRevisionDiff
 | Description: | Get revision info of a topic |
 | Parameter: =$theWebName= | Web name, optional, e.g. ="Main"= |
 | Parameter: =$theTopic= | Topic name, required, e.g. ="TokyoOffice"= |
-| Parameter: =$theRev= | revsion number, or tag name (can be in the format 1.2, or just the minor number) |
+| Parameter: =$theRev= | revision number |
 | Parameter: =$attachment= |attachment filename |
 | Parameter: =$topicHandler= | internal store use only |
-| Return: =( $date, $user, $rev, $comment )= | List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 1234561, "phoeny", "5" )= |
+| Return: =( $date, $user, $rev, $comment )= | List with: ( last update date, login name of last user, integer revision number ), e.g. =( 1234561, "phoeny", "5" )= |
 | $date | in epochSec |
 | $user | |
-| $rev | TODO: this needs to be improves to contain the major number too (and what do we do is we have a different numbering system?) |
+| $rev | the revision number |
 | $comment | WHAT COMMENT? |
 
 =cut
@@ -566,10 +556,10 @@ sub getRevisionDiff
 sub getRevisionInfo
 {
     my( $theWebName, $theTopic, $theRev, $attachment, $topicHandler ) = @_;
-    die unless $theWebName;
+    die unless $theWebName; # temporary ASSERT
 
-    $theRev = "" unless( $theRev );
-    $theRev =~ s/^1\.//o;
+    $theRev = 0 unless( $theRev );
+    die "ASSERT $theRev ".join("",caller) unless $theRev =~ /^\d+$/;
 
     unless( $topicHandler ) {
         $topicHandler =
@@ -767,7 +757,7 @@ sub _addMeta
 {
     my( $web, $topic, $text, $nextRev, $meta, $forceDate, $forceUser ) = @_;
 
-    $nextRev = "1.1" if( ! $nextRev );
+    $nextRev = 1 if( ! $nextRev );
     $meta->addTopicInfo(  $web, $topic, $nextRev, $forceDate, $forceUser );
     $text = _writeMeta( $meta, $text );
 
@@ -800,15 +790,9 @@ sub _normalSave {
         $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
 
     my $topicHandler = _getTopicHandler( $web, $topic );
-    my $currentRev = $topicHandler->numRevisions();
+    my $currentRev = $topicHandler->numRevisions() || 0;
 
-    my $nextRev    = "";
-    if( ! $currentRev ) {
-        $nextRev = "1.1";
-    } else {
-        $nextRev = "1." . ($currentRev + 1);
-    }
-    $currentRev = "1." . $currentRev if( $currentRev );
+    my $nextRev = $currentRev + 1;
 
     if( $TWiki::doKeepRevIfEditLock && $currentRev ) {
         # See if we want to replace the existing top revision
@@ -874,7 +858,6 @@ sub _repRev {
     my $topicHandler = _getTopicHandler( $web, $topic );
     my( $date, $user, $rev ) =
       getRevisionInfo( $web, $topic, "", undef, $topicHandler );
-    $rev = "1.$rev";
 
     # RCS requires a newline for the last line,
     $text =~ s/([^\n\r])$/$1\n/os;
@@ -907,7 +890,7 @@ sub _delRev {
         $dontLogSave, $doUnlock, $dontNotify, $forceDate, $theComment ) = @_;
 
     my $rev = getRevisionNumber( $web, $topic );
-    if( $rev =~ /1$/ ) {
+    if( $rev <= 1 ) {
         return "can't delete initial revision";
     }
     my $topicHandler = _getTopicHandler( $web, $topic );
@@ -1387,6 +1370,27 @@ sub getDebugText {
     my ( $meta, $text ) = @_;
 
     return _writeMeta( $meta, $text );
+}
+
+=pod
+
+---++ sub cleanUpRevID( $rev )
+Cleans up (maps) a user-supplied revision ID and converts it to an integer
+number that can be incremented to create a new revision number.
+
+This method should be used to sanitise user-provided revision IDs.
+
+=cut
+
+sub cleanUpRevID {
+    my $rev = shift;
+
+    return 0 unless $rev;
+
+    $rev =~ s/^r//i;
+    $rev =~ s/^\d+\.//; # clean up RCS rev number
+
+    return $rev;
 }
 
 # =========================

@@ -172,7 +172,7 @@ sub replaceRevision
 
 ---++ sub deleteRevision (  $self  )
 
-Return with empty string if only one revision
+Return with empty string if only one revision.
 
 =cut
 
@@ -211,7 +211,7 @@ sub _deleteRevision
 
     ($rcsOut, $exit) =
       TWiki::Sandbox::readFromProcess( $self->{lockCmd},
-                              REVISION => "$rev",
+                              REVISION => "1.$rev",
                               FILENAME => [$file, $rcsFile] );
     if( $exit ) {
         $rcsOut = "$self->{lockCmd}\n$rcsOut";
@@ -224,7 +224,7 @@ sub _deleteRevision
 
 ---++ sub getRevision (  $self, $version  )
 
-Get the text for a given revision
+Get the text for a given revision. The version number must be an integer.
 
 =cut
 
@@ -270,7 +270,8 @@ sub getRevision
 
 ---++ sub numRevisions (  $self  )
 
-Find out how many revisions there are.
+Find out how many revisions there are. If there is a problem, such
+as a nonexistant file, returns the null string.
 
 =cut
 
@@ -296,9 +297,11 @@ sub numRevisions
 
 ---++ sub getRevisionInfo (  $self, $version  )
 
-| FIXME | there is an inconguity here. if you ask for a revisino that does not exist, getRevisionInfo gives you 1.1, but readTopic gives you the last version |
-# Date return in epoch seconds
-# If revision file is missing, information based on actual file is returned.
+A version number of 0 or undef will return info on the _latest_ revision.
+
+If revision file is missing, information based on actual file is returned.
+
+Date return in epoch seconds. Revision returned as a number.
 
 =cut
 
@@ -306,26 +309,16 @@ sub getRevisionInfo
 {
     my( $self, $version ) = @_;
 
-    if( ! $version ) {
-        # PTh 03 Nov 2000: comment out for performance
-        ### $theRev = getRevisionNumber( $theTopic, $theWebName );
-        $version = "";  # do a "rlog -r filename" to get top revision info
-    } else {
-		if ( $version =~ /^\d/ ) 
-		{
-			#if we are asking for a minor nmber, re-constitue it to Major.minor
-			$version = "1.$version";
-		}
-    }
-
     my $rcsFile = $self->{rcsFile};
     my $rcsError = "";
     my( $dummy, $rev, $date, $user, $comment );
     if ( -e $rcsFile ) {
-       my ($rcsOut, $exit) = TWiki::Sandbox::readFromProcess
-         ( $self->{infoCmd},
-           REVISION => $version,
-           FILENAME => $rcsFile );
+        my $cmd = $self->{infoCmd};
+        $cmd = $self->{histCmd} unless $version;
+        my ( $rcsOut, $exit ) = TWiki::Sandbox::readFromProcess
+          ( $cmd,
+            REVISION => "1.$version",
+            FILENAME => $rcsFile );
        $rcsError = "Error with $self->{infoCmd}, output: $rcsOut" if( $exit );
        if( ! $rcsError ) {
             $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/;
@@ -340,9 +333,10 @@ sub getRevisionInfo
     } else {
        $rcsError = "Revision file $rcsFile is missing";
     }
-    
-    ( $dummy, $rev, $date, $user, $comment ) = $self->_getRevisionInfoDefault() if( $rcsError );
-    
+
+    ( $dummy, $rev, $date, $user, $comment ) =
+      $self->_getRevisionInfoDefault() if( $rcsError );
+
     return( $rcsError, $rev, $date, $user, $comment );
 }
 

@@ -26,58 +26,58 @@ This module handles Plugins loading, initialization and execution
 package TWiki::Plugins;
 
 use strict;
-no strict 'refs';
 
-use vars qw(
-			%activePluginWebs @activePlugins @instPlugins %disabledPlugins
-			@registrableHandlers %registeredHandlers %onlyOnceHandlers
-			$VERSION $initialisationErrors
-    );
+use vars qw ( $VERSION );
 
 $VERSION = '1.026';
 
-$initialisationErrors = "";
+my %activePluginWebs;
+my @instPlugins;
+my %disabledPlugins;
+my @activePlugins;
 
-@registrableHandlers = (                 #                                      VERSION:
-        'earlyInitPlugin',               # ( )                                   1.020
-        'initPlugin',                    # ( $topic, $web, $user, $installWeb )  1.000
-        'initializeUserHandler',         # ( $loginName, $url, $pathInfo )       1.010
-        'registrationHandler',           # ( $web, $wikiName, $loginName )       1.010
-        'beforeCommonTagsHandler',       # ( $text, $topic, $web )               1.024
-        'commonTagsHandler',             # ( $text, $topic, $web )               1.000
-        'afterCommonTagsHandler',        # ( $text, $topic, $web )               1.024
-        'startRenderingHandler',         # ( $text, $web )                       1.000
-        'outsidePREHandler',             # ( $text )                             1.000
-        'insidePREHandler',              # ( $text )                             1.000
-        'endRenderingHandler',           # ( $text )                             1.000
-        'beforeEditHandler',             # ( $text, $topic, $web )               1.010
-        'afterEditHandler',              # ( $text, $topic, $web )               1.010
-        'beforeSaveHandler',             # ( $text, $topic, $web )               1.010
-        'afterSaveHandler',              # ( $text, $topic, $web, $errors )      1.020
-        'beforeAttachmentSaveHandler',   # ( $attrHash, $topic, $web )           1.022
-        'afterAttachmentSaveHandler',    # ( $attrHash, $topic, $web, $error )   1.022
-        'writeHeaderHandler',            # ( $query )                            1.010
-        'redirectCgiQueryHandler',       # ( $query, $url )                      1.010
-        'getSessionValueHandler',        # ( $key )                              1.010
-        'setSessionValueHandler',        # ( $key, $value )                      1.010
-        'renderFormFieldForEditHandler', # ( $name, $type, $size, $value, $attributes, $output )
-        'renderWikiWordHandler',         # ( text )                              1.023
-    );
-    
-%onlyOnceHandlers = ( 'initializeUserHandler'   => 1,
-                      'registrationHandler'     => 1,
-                      'writeHeaderHandler'      => 1,
-                      'redirectCgiQueryHandler' => 1,
-                      'getSessionValueHandler'  => 1,
-                      'setSessionValueHandler'  => 1,
-                      'renderFormFieldForEditHandler'  => 1,
-                      'renderWikiWordHandler'  => 1
-                    );
+my $initialisationErrors = "";
 
-%registeredHandlers = ();
+my @registrableHandlers =
+  (                                # VERSION:
+   'earlyInitPlugin',              # 1.020
+   'initPlugin',                   # 1.000
+   'initializeUserHandler',        # 1.010
+   'registrationHandler',          # 1.010
+   'beforeCommonTagsHandler',      # 1.024
+   'commonTagsHandler',            # 1.000
+   'afterCommonTagsHandler',       # 1.024
+   'startRenderingHandler',        # 1.000
+   'outsidePREHandler',            # 1.000
+   'insidePREHandler',             # 1.000
+   'endRenderingHandler',          # 1.000
+   'beforeEditHandler',            # 1.010
+   'afterEditHandler',             # 1.010
+   'beforeSaveHandler',            # 1.010
+   'afterSaveHandler',             # 1.020
+   'beforeAttachmentSaveHandler',  # 1.022
+   'afterAttachmentSaveHandler',   # 1.022
+   'writeHeaderHandler',           # 1.010
+   'redirectCgiQueryHandler',      # 1.010
+   'getSessionValueHandler',       # 1.010
+   'setSessionValueHandler',       # 1.010
+   'renderFormFieldForEditHandler',# ?
+   'renderWikiWordHandler',        # 1.023
+  );
 
+my %onlyOnceHandlers =
+  ( initializeUserHandler          => 1,
+    registrationHandler            => 1,
+    writeHeaderHandler             => 1,
+    redirectCgiQueryHandler        => 1,
+    getSessionValueHandler         => 1,
+    setSessionValueHandler         => 1,
+    renderFormFieldForEditHandler  => 1,
+    renderWikiWordHandler          => 1,
+  );
 
-# =========================
+my %registeredHandlers = ();
+
 =pod
 
 ---++ sub getPluginVersion()
@@ -160,7 +160,7 @@ sub _registerPlugin
     if ( $plugin =~ m/^(.+)\.([^\.]+Plugin)$/ ) {
         $installWeb = $1;
         $plugin = $2;
-    } 
+    }
 
     if( $activePluginWebs{$plugin} ) {
         # Plugin is already registered
@@ -192,15 +192,18 @@ sub _registerPlugin
         return;
     }
 
-    my $p   = 'TWiki::Plugins::'.$plugin;
+    my $p = 'TWiki::Plugins::'.$plugin;
 
+    #use Benchmark qw(:all :hireswallclock);
+    #my $begin = new Benchmark;
     eval "use $p;";
+    #print STDERR "Compile $plugin: ".timestr(timediff(new Benchmark, $begin))."\n";
 
     if ($@) {
-	_initialisationError("Plugin \"$p\" could not be loaded by Perl.  Errors were:\n----\n$@----");
+	_initialisationError("Plugin \"$plugin\" could not be loaded by Perl.  Errors were:\n----\n$@----");
 	return;
     }
-    
+
     my $h   = "";
     my $sub = "";
     my $prefix = "";
@@ -215,7 +218,7 @@ sub _registerPlugin
 
     }
     $sub = $p.'::initPlugin';
-    # we register a plugin ONLY if it defines initPlugin AND it returns true 
+    # we register a plugin ONLY if it defines initPlugin AND it returns true
     if( ! defined( &$sub ) ) {
         _initialisationError("Plugin $p iniPlugin did not return true");
         return;
@@ -224,7 +227,10 @@ sub _registerPlugin
     $prefix = uc( $plugin ) . "_";
     TWiki::Prefs::getPrefsFromTopic( $installWeb, $plugin, $prefix );
 
-    if( &$sub( $topic, $web, $user, $installWeb ) ) {
+no strict 'refs';
+    my $status = &$sub( $topic, $web, $user, $installWeb );
+use strict 'refs';
+    if( $status ) {
         foreach $h ( @registrableHandlers ) {
             $sub = $p.'::'.$h;
             _registerHandler( $h, $sub ) if defined( &$sub );
@@ -242,17 +248,18 @@ sub _applyHandlers
         return;
     }
     my $status;
-    
+
     foreach $theHandler ( @{$registeredHandlers{$handlerName}} ) {
         # apply handler on the remaining list of args
+no strict 'refs';
         $status = &$theHandler;
+use strict 'refs';
         if( $onlyOnceHandlers{$handlerName} ) {
             if( $status ) {
                 return $status;
             }
         }
     }
-    
     return undef;
 }
 
@@ -288,20 +295,20 @@ sub initialize1
     my @setInstPlugins = grep { /^.+Plugin$/ } split( /,?\s+/ , $plugin );
     $plugin = TWiki::Prefs::getPreferencesValue( "DISABLEDPLUGINS" ) || "";
 	foreach my $p (split( /,?\s+/ , $plugin)) {
-	  if ( $p =~ /^.+Plugin$/ ) {
-		$p =~ s/^.*\.(.*)$/$1/;
-		$disabledPlugins{$p} = 1 if ( $p );
-	  }
+        if ( $p =~ /^.+Plugin$/ ) {
+            $p =~ s/^.*\.(.*)$/$1/;
+            $disabledPlugins{$p} = 1 if ( $p );
+        }
 	}
 
     my @discoveredPlugins = _discoverPluginPerlModules();
     my $p = "";
     foreach $plugin ( @setInstPlugins ) {
-	  $p = $plugin;
-	  $p =~ s/^.*\.(.*)$/$1/o; # cut web
-	  if( $p && !$disabledPlugins{$p} ) {
-		push( @instPlugins, $plugin );
-	  }
+        $p = $plugin;
+        $p =~ s/^.*\.(.*)$/$1/o; # cut web
+        if( $p && !$disabledPlugins{$p} ) {
+            push( @instPlugins, $plugin );
+        }
     }
     # append discovered plugin modules to installed plugin list
     push( @instPlugins, @discoveredPlugins );
@@ -317,15 +324,17 @@ sub initialize1
     # for efficiency we register all possible handlers at once
     my $user = "";
     my $posUser = "";
+    my %reg = ();
     foreach $plugin ( @instPlugins ) {
-	  $p = $plugin;
-	  $p =~ s/^.*\.(.*)$/$1/o; # cut web
-	  unless( $disabledPlugins{$p} ) {
-		$posUser = _registerPlugin( $plugin, $theTopicName, $theWebName, "", $theLoginName, $theUrl, $thePathInfo );
-		if( $posUser ) {
-		  $user = $posUser;
-		}
-	  }
+        $p = $plugin;
+        $p =~ s/^.*\.(.*)$/$1/o; # cut web
+        unless( $disabledPlugins{$p} || $reg{$p} ) {
+            $posUser = _registerPlugin( $plugin, $theTopicName, $theWebName, "", $theLoginName, $theUrl, $thePathInfo );
+            if( $posUser ) {
+                $user = $posUser;
+            }
+            $reg{$p} = 1;
+        }
     }
     unless( $user ) {
         $user = TWiki::User::initializeRemoteUser( $theLoginName );
@@ -457,7 +466,6 @@ sub commonTagsHandler
     $_[0] =~ s/%FAILEDPLUGINS%/&_handleFAILEDPLUGINS()/geo;
 }
 
-# =========================
 =pod
 
 ---++ sub afterCommonTagsHandler ()
@@ -472,7 +480,6 @@ sub afterCommonTagsHandler
     _applyHandlers( 'afterCommonTagsHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub startRenderingHandler ()
@@ -487,7 +494,6 @@ sub startRenderingHandler
     _applyHandlers( 'startRenderingHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub outsidePREHandler ()
@@ -502,7 +508,6 @@ sub outsidePREHandler
     _applyHandlers( 'outsidePREHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub insidePREHandler ()
@@ -517,7 +522,6 @@ sub insidePREHandler
     _applyHandlers( 'insidePREHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub endRenderingHandler ()
@@ -532,7 +536,6 @@ sub endRenderingHandler
     _applyHandlers( 'endRenderingHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub beforeEditHandler ()
@@ -547,7 +550,6 @@ sub beforeEditHandler
     _applyHandlers( 'beforeEditHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub afterEditHandler ()
@@ -562,7 +564,6 @@ sub afterEditHandler
     _applyHandlers( 'afterEditHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub beforeSaveHandler ()
@@ -657,7 +658,6 @@ sub afterAttachmentSaveHandler
 }
 
 
-# =========================
 =pod
 
 ---++ sub writeHeaderHandler ()
@@ -671,7 +671,6 @@ sub writeHeaderHandler
     return _applyHandlers( 'writeHeaderHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub redirectCgiQueryHandler ()
@@ -685,7 +684,6 @@ sub redirectCgiQueryHandler
     return _applyHandlers( 'redirectCgiQueryHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub getSessionValueHandler ()
@@ -699,7 +697,6 @@ sub getSessionValueHandler
     return _applyHandlers( 'getSessionValueHandler', @_ );
 }
 
-# =========================
 =pod
 
 ---++ sub setSessionValueHandler ()
@@ -713,7 +710,6 @@ sub setSessionValueHandler
     return _applyHandlers( 'setSessionValueHandler', @_ );
 }
 
-# ========================
 =pod
 
 ---++ sub renderFormFieldForEditHandler ( $name, $type, $size, $value, $attributes, $possibleValues )

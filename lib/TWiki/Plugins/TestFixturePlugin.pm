@@ -90,7 +90,7 @@ sub _compareExpectedWithActual {
     my $errors = "";
 
     unless( $#$actual == $#$expected ) {
-        my $mess = "Numbers of actual ($#$actual) and expected ($#$expected) blocks don't match<table><th>Expected</th><th>Actual</th></tr>";
+        my $mess = "Numbers of actual ($#$actual) and expected ($#$expected) blocks don't match<table width=\"100%\"><th>Expected</th><th>Actual</th></tr>";
         for my $i ( 0..$#$actual ) {
             my $e = $expected->[$i];
             my $et = $e->{text};

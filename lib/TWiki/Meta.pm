@@ -53,6 +53,8 @@ package TWiki::Meta;
 
 use strict;
 
+use Error qw(:try);
+
 =pod
 
 ---++ sub new ()
@@ -64,8 +66,8 @@ Construct a new, empty Meta collection.
 sub new {
     my ( $class, $web, $topic ) = @_;
     my $self = {};
-    die join(" ", caller(2)) unless $web;
-    die join(" ", caller(2)) unless $topic;
+    throw Error::Simple("ASSERT: no web") unless $web;
+    throw Error::Simple("ASSERT: no topic") unless $topic;
     $self->{_web} = $web;
     $self->{_topic} = $topic;
     bless( $self, $class );
@@ -92,10 +94,10 @@ represented.
 sub put
 {
    my( $self, $type, %args ) = @_;
-   
+
    my $data = $self->{$type};
    my $key = _key( $type );
-   
+
    if( $data ) {
        if( $key ) {
            my $found = "";
@@ -172,7 +174,7 @@ sub findOne
            %args = %$item;
        }
    }
-   
+
    return %args;
 }
 
@@ -312,11 +314,17 @@ sub addTopicInfo {
     my $time = $forceDate || time();
     my $user = $forceUser || $TWiki::userName;
 
-    my @args = (
-       "version" => "$rev",
-       "date"    => "$time",
-       "author"  => "$user",
-       "format"  => $TWiki::formatVersion );
+    die "ASSERT $rev" unless( $rev =~ /^\d+$/ ); # temporary
+
+    my @args =
+      (
+       # compatibility; older versions of the code use RCS rev numbers
+       # save with them so old code can read these topics
+       version => "1.$rev",
+       date    => $time,
+       author  => $user,
+       format  => $TWiki::formatVersion
+      );
     $self->put( "TOPICINFO", @args );
 }
 
@@ -329,7 +337,7 @@ present, kick down to the Store module for the same information.
 
 Returns ( $revDate, $author, $rev )
 
-Note there is no "1." prefix to the revision number returned.
+$rev is an integer revision number.
 
 =cut
 
@@ -350,7 +358,6 @@ sub getRevisionInfo {
        ( $date, $author, $rev ) =
          TWiki::Store::getRevisionInfo( $self->{_web}, $self->{_topic}, "" );
     }
-    # writeDebug( "rev = $rev" );
 
     return( $date, $author, $rev );
 }

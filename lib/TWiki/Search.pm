@@ -640,7 +640,7 @@ sub searchWeb
                 $topicRevNum{ $tempVal }    = $revnum;
                 $topicAllowView{ $tempVal } = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName,
                                                   $text, $tempVal, $thisWebName );
-                my ( $createdate ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, "1.1" );
+                my ( $createdate ) = &TWiki::Store::getRevisionInfo( $thisWebName, $tempVal, 1 );
                 $topicCreated{ $tempVal } = $createdate;  # Sortable epoc second format
             }
 
@@ -834,7 +834,7 @@ sub searchWeb
                 $tempVal =~ s/\$locked/$locked/gos;
                 $tempVal =~ s/\$date/$revDate/gos;
                 $tempVal =~ s/\$isodate/&revDate2ISO($revDate)/geos;
-                $tempVal =~ s/\$rev/1.$revNum/gos;
+                $tempVal =~ s/\$rev/$revNum/gos;
                 $tempVal =~ s/\$wikiusername/$revUser/gos;
                 $tempVal =~ s/\$wikiname/wikiName($revUser)/geos;
                 $tempVal =~ s/\$username/&TWiki::User::wikiToUserName($revUser)/geos;
@@ -860,7 +860,7 @@ sub searchWeb
             $tempVal =~ s/%LOCKED%/$locked/o;
             $tempVal =~ s/%TIME%/$revDate/o;
             if( $revNum > 1 ) {
-                $revNumText = "r1.$revNum";
+                $revNumText = $revNum;
             } else {
                 $revNumText = "<span class=\"twikiNew\"><b>NEW</b></span>";
             }
@@ -1094,7 +1094,8 @@ sub searchWeb
 
 ---++ sub _getRev1Info( $theWeb, $theTopic, $theAttr )
 
-Returns the topic revision info of version 1.1, attributes are "date", "username", "wikiname",
+Returns the topic revision info of the base version,
+attributes are "date", "username", "wikiname",
 "wikiusername". Revision info is cached for speed
 
 =cut
@@ -1106,7 +1107,7 @@ sub _getRev1Info
     unless( $cacheRev1webTopic eq "$theWeb.$theTopic" ) {
         # refresh cache
         $cacheRev1webTopic = "$theWeb.$theTopic";
-        ( $cacheRev1date, $cacheRev1user ) = &TWiki::Store::getRevisionInfo( $theWeb, $theTopic, "1.1" );
+        ( $cacheRev1date, $cacheRev1user ) = &TWiki::Store::getRevisionInfo( $theWeb, $theTopic, 1 );
     }
     if( $theAttr eq "username" ) {
         return $cacheRev1user;
@@ -1121,7 +1122,7 @@ sub _getRev1Info
         return &TWiki::formatTime( $cacheRev1date );
     }
     # else assume attr "key"
-    return "1.1";
+    return 1;
 }
 
 #=========================

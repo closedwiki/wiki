@@ -168,7 +168,7 @@ sub buildCommandLine {
                             if ($param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/) {
                                 push @targs, $1;
                             } else {
-                                die "invalid number argument";
+                                die "invalid number argument $param";
                             }
                         } elsif ($flag =~ /S/) {
                             # Harmless string.

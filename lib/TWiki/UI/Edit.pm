@@ -106,7 +106,7 @@ sub edit {
                                                  "view", $wikiUserName )
                    &&
                    TWiki::UI::isAccessPermitted( $webName, $topic,
-                                                 "change", $wikiUserName );
+                                                 "change", $wikiUserName ));
 
     # Special save command, restricted to admin use
     return if( $saveCmd && ! TWiki::UI::userIsAdmin( $webName, $topic, $wikiUserName ));
