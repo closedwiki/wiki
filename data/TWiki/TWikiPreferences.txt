@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071559800" format="1.0" version="1.56"}%
+%META:TOPICINFO{author="PeterThoeny" date="1071957779" format="1.0" version="1.57"}%
 ---+!! %WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
@@ -235,7 +235,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 
 	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (ex: %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWTOPICCHANGE = 
-		* Set ALLOWTOPICRENAME = 
+		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
 
 	* Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
 		* Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
