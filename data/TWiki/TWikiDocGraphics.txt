@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1073862780" format="1.0" version="1.22"}%
+%META:TOPICINFO{author="PeterThoeny" date="1073890440" format="1.0" version="1.23"}%
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -17,7 +17,9 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/warning.gif" alt="warning.gif"  width="16" height="16" />  | =warning.gif= | Warning / Important |
 |  <img src="%ATTACHURLPATH%/stop.gif" alt="stop.gif"  width="16" height="16"  />  | =stop.gif= | Stop |
 |  <img src="%ATTACHURLPATH%/pencil.gif" alt="pencil.gif"  width="16" height="16"  />  | =pencil.gif= | Refactor / Edit |
-|  <img src="%ATTACHURLPATH%/choice-yes.gif" alt="choice-yes.gif"  width="16" height="16"  />  | =choice-yes.gif= | Done |
+|  <img src="%ATTACHURLPATH%/choice-yes.gif" alt="choice-yes.gif"  width="16" height="16"  />  | =choice-yes.gif= | Yes / Done |
+|  <img src="%ATTACHURLPATH%/choice-no.gif" alt="choice-no.gif"  width="16" height="16"  />  | =choice-no.gif= | No |
+|  <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="choice-cancel.gif"  width="16" height="16"  />  | =choice-cancel.gif= | Cancel |
 |  <img src="%ATTACHURLPATH%/updated.gif" alt="updated.gif"  width="56" height="8"  />  | =updated.gif= | Updated |
 |  <img src="%ATTACHURLPATH%/new.gif" alt="new.gif"  width="28" height="8"  />  | =new.gif= | New |
 |  <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  />  | =starred.gif= | Highlight (positive) |
@@ -120,3 +122,5 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="topicdiffs.gif" attr="" comment="Topic difference" date="1073858341" path="C:\Data\Temp\topicdiffs.gif" size="916" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="topicbacklinks.gif" attr="" comment="Topic back-links" date="1073858382" path="C:\Data\Temp\topicbacklinks.gif" size="933" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="mail.gif" attr="" comment="Mail" date="1073864027" path="C:\Data\Temp\mail.gif" size="897" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="choice-no.gif" attr="" comment="No" date="1073890365" path="C:\Data\Temp\choice-no.gif" size="908" user="PeterThoeny" version="1.1"}%
+%META:FILEATTACHMENT{name="choice-cancel.gif" attr="" comment="Cancel" date="1073890377" path="C:\Data\Temp\choice-cancel.gif" size="886" user="PeterThoeny" version="1.1"}%
