@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1074422460" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="PeterThoeny" date="1089962863" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="WebSearch"}%
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%"}%/">
 	* <b>Advanced search</b>:
@@ -19,14 +19,14 @@
 	  Sort by
 	</td><td>
 	  <select name="order">
-	  <option VALUE="topic">Topic name</option>
-	  <option VALUE="modified">Last modified time</option>
-	  <option VALUE="editby">Last editor</option>
+	  <option value="topic">Topic name</option>
+	  <option value="modified">Last modified time</option>
+	  <option value="editby">Last editor</option>
 	  </select> in
 	  <input type="checkbox" name="reverse" /> reversed order
 	</td></tr></table>
 	<input type="text" name="search" size="32" />
-	<input type="submit" value="Search text" /> <br>
+	<input type="submit" value="Search text" /> <br />
 	<table><tr><td>
 	  Make search:
 	</td><td>
@@ -65,3 +65,4 @@
 		* Have a look at the %TWIKIWEB%.TextFormattingFAQ
 
 -- TWiki:Main.PeterThoeny - 18 Jan 2004
+
