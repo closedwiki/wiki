@@ -75,6 +75,7 @@ use vars qw(
         $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd
         $lsCmd $cpCmd $egrepCmd $fgrepCmd
         $doKeepRevIfEditLock $doRemovePortNumber $doPluralToSingular
+        $doSecureInclude
         $doLogTopicView $doLogTopicEdit $doLogTopicSave
         $doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
         $doLogTopicChanges $doLogTopicSearch $doLogRegistration
@@ -84,7 +85,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "12 Jun 2000";
+$wikiversion      = "13 Jun 2000";
 
 # ===========================
 # read the configuration part
@@ -551,7 +552,13 @@ sub readTemplate
 {
     my( $name, $topic ) = @_;
     $topic = "" unless $topic; # prevent 'uninitialized value' warnings
-    
+
+    # CrisBailiff, PeterThoeny 13 Jun 2000: Add security
+    $name =~ s/$securityFilter//go;    # zap anything suspicious
+    $name =~ s/\.+/\./g;               # Filter out ".." from filename
+    $topic =~ s/$securityFilter//go;   # zap anything suspicious
+    $topic =~ s/\.+/\./g;              # Filter out ".." from filename
+
     my $webtmpl = "$templateDir/$webName/$name.$topic.tmpl";
     if( -e $webtmpl ) {
         return &readFile( $webtmpl );
@@ -862,11 +869,14 @@ sub handleIncludeFile
     my( $attributes ) = @_;
     my $incfile = extractNameValuePair( $attributes );
 
-    # CrisBailiff, PeterThoeny 12 Jun 2000:
-    # Quick hack to plug security hole
-    # (Should be made optional with new flag in wikicfg.pm)
-    $incfile =~ s/\.+/\./g;               # collapse all '..' to '.'
+    # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
     $incfile =~ s/$securityFilter//go;    # zap anything suspicious
+    $incfile =~ s/passwd//goi;    # filter out passwd filename
+    if( $doSecureInclude ) {
+        # Filter out ".." from filename, this is to
+        # prevent includes of "../../file"
+        $incfile =~ s/\.+/\./g;
+    }
 
     my $fileName = "$dataDir/$webName/$incfile";
     if( -e $fileName ) {
