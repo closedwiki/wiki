@@ -1,6 +1,10 @@
-call Sign.bat
+call SetupEnv.bat
 
-call GenerateCertificate.bat
+call %SCRIPTDIR%\Sign.bat
 
-call InstallCert.bat
+call %SCRIPTDIR%\GenerateCertificate.bat
+
+call %SCRIPTDIR%\InstallCert.bat
+
+cd %SCRIPTDIR% 
 
