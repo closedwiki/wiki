@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1059253080" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1065939300" format="1.0" version="1.13"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Skins
@@ -38,6 +38,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>REVTITLE%= | The revision title, if any, ex: =(r1.6)= |
 | =%<nop>REVINFO%= | Revision info, ex: =r1.6 - 24 Dec 2002 - 08:12 GMT - %WIKIUSERNAME%= |
 | =%<nop>WEBCOPYRIGHT%= | Copyright notice, defined in the WebPreferences |
+| =%<nop>BROADCASTMESSAGE%= | Broadcast message at the beginning of your view template, can be used to alert users of scheduled downtimes; is defined in TWikiPreferences |
 
 #GoBox
 ---+++ The "Go" Box and Navigation Box
@@ -65,7 +66,7 @@ Bare bones header for demo only
 
 ---++ Packaging and Publishing Skins
 
-See TWiki:Plugins/SkinPackagingHowTo 
+See TWiki:Plugins/SkinPackagingHowTo and TWiki:Plugins/SkinDeveloperFAQ
 
 ---++ Activating Skins
 
