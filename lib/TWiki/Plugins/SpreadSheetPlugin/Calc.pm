@@ -27,7 +27,7 @@ use Time::Local;
 
 use vars qw( $skipInclude $dontSpaceRE
              $renderingWeb @tableMatrix $cPos $rPos $escToken
-             %varStore @monArr @wdayArr %mon2num $level $debug );
+             %varStore @monArr @wdayArr %mon2num $debug );
 
 $escToken = "\0";
 %varStore = ();
@@ -104,6 +104,7 @@ sub doCalc {
 
     # Add nesting level to parenthesis,
     # e.g. "A(B())" gets "A-esc-1(B-esc-2(-esc-2)-esc-1)"
+    my $level = 0;
     $text =~ s/([\(\)])/addNestingLevel($1, \$level)/geo;
     $text = doFunc( 'MAIN', $text );
 
