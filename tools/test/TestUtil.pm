@@ -30,7 +30,7 @@ sub check
       $okay = 0;
       carp "*** $message";
    } else {
-      trace( "--- Trace: $message" );
+      trace( "$message" );
    }
 }
 
@@ -42,7 +42,7 @@ sub checkNot
       $okay = 0;
       carp "*** $condition, $message";
    } else {
-      trace("--- Trace: $message");
+      trace("$message");
    }
 }
 
@@ -50,8 +50,18 @@ sub check_match
 {
    my( $text, $pattern, $extra ) = @_;
 
-   check($text =~ /$pattern/, "Failed $text match $pattern", $extra );
+   my $match = $text =~ /$pattern/;
+   check( $match, "$text match $pattern", $extra );
 }
+
+sub check_matchs
+{
+   my( $text, $pattern, $extra ) = @_;
+
+   my $match = $text =~ /$pattern/s;
+   check( $match, "$text should match $pattern (s option)", $extra );
+}
+
 
 sub check_equal
 {
@@ -59,6 +69,7 @@ sub check_equal
 
    check( $result eq $expected, "\"$result\" should be \"$expected\"", $extra );
 }
+
 
 sub enter
 {
