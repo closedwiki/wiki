@@ -89,9 +89,9 @@ sub renderRevisionDiff
 
 sub getRevInfo
 {
-    my( $rev, $topic, $short ) = @_;
+    my( $web, $rev, $topic, $short ) = @_;
 
-    my( $date, $user ) = &TWiki::Store::getRevisionInfo( $topic, "1.$rev", 1 );
+    my( $date, $user ) = &TWiki::Store::getRevisionInfo( $web, $topic, "1.$rev", 1 );
     $user = &TWiki::userToWikiName( $user );
     my $revInfo = &TWiki::getRenderedVersion( "$date GMT - $user" );
     if( $short ) {
@@ -139,7 +139,7 @@ sub main
 
     my $topicExists = &TWiki::Store::topicExists( $webName, $topic );
     if( $topicExists ) {
-	$maxrev = &TWiki::Store::getRevisionNumber( $topic );
+	$maxrev = &TWiki::Store::getRevisionNumber( $web, $topic );
         $maxrev =~ s/1\.//go;  # cut major
 	if( ! $rev1 ) { $rev1 = 0; }
 	if( ! $rev2 ) { $rev2 = 0; }
@@ -150,10 +150,10 @@ sub main
         if( $rev2 < 1 )       { $rev2 = 1; }
         if( $rev2 > $maxrev ) { $rev2 = $maxrev; }
         $revTitle1 = "r1.$rev1";
-        $revInfo1 = getRevInfo( $rev1, $topic );
+        $revInfo1 = getRevInfo( $webName, $rev1, $topic );
         if( $rev1 != $rev2 ) {
             $revTitle2 = "r1.$rev2";
-            $revInfo2 = getRevInfo( $rev2, $topic );
+            $revInfo2 = getRevInfo( $webName, $rev2, $topic );
         }
     } else {
 	$rev1 = 1;
@@ -179,7 +179,7 @@ sub main
         do {
             $diff = $difftmpl;
             $diff =~ s/%REVTITLE1%/r1\.$r1/go;
-            $rInfo = getRevInfo( $r1, $topic, 1 );
+            $rInfo = getRevInfo( $webName, $r1, $topic, 1 );
             $diff =~ s/%REVINFO1%/$rInfo/go;
             $text = &TWiki::Store::getRevisionDiff( $topic, "1.$r2", "1.$r1" );
             $text = renderRevisionDiff( $text, $topic );
