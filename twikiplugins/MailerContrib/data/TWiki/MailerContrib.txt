@@ -1,0 +1,77 @@
+%RED% *Not released yet; posted here as a taster only. Comments in MailerContribDev, please!* %ENDCOLOR%
+
+A replacement for the core 'mailnotify' functionality. This module brings a new level of flexibility and ease of use to notifications.
+
+---+ Summary of Contents
+The main part of the mailer module is a script, contrib/bin/mailnotify. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard Web<nop>Notify topic. As well as providing the usual notification service, it also provides per-topic notification services.
+
+The second part of the module is a code library that provides the services for other applications to modify Web<nop>Notify through a clean, well documented interface. This allows (for example) skin developers to add a "Register me for noitification" button to their skins.
+
+The "new" format of Web<nop>Notify is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
+
+_three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ %BR%
+_three spaces_ * [ _webName_ . ] _wikiName_
+
+The second format uses the home topic of the user to recover their mail address. This format is extended to accept the following syntaxes:
+
+_three spaces_ * _SMTP mail address_ %BR%
+_three spaces_ * _SMTP mail address_ : _topics_ %BR%
+_three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
+
+where _topics_ is a space-separated list of topic names (without a web specification; the topics must exist in this web). Topics may be specified using wildcards. Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself.
+
+For example:
+<verbatim>
+   * daisy@flowers.com
+   * daisy@flowers.com: Web*
+   * DaisyCutter: Petal* (1), WeedKillers (3), Red*Phlox
+</verbatim>
+A user may be listed many times in the Web<nop>Notify topic. The basic rule is that they are registered for "old style" notification of changes, that is what they will receive i.e. listing them with a specific topic will _not_ change how they are notified. Where a user has several lines in Web<nop>Notify that all match the same topic, they will only be notified of changes to that topic _once_.
+
+As was the case with old =mailnotify=, if a _group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
+
+---++ Future directions
+In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the contrib/bin/mailnotify script.
+
+---+ Detailed Documentation
+The =contrib/bin/mailnotify= is used as follows:
+
+Usage: contrib/bin/mailnotify [-q] [-m] [_web1_ _web2_ ... _webN_]
+| -q | Don't print progress information |
+| -m | Send mail. Default behaviour is to print out mails to STDOUT |
+| list of webs | List of webs to process, separated by spaces. Default is to process all legal TWiki webs |
+
+%$POD%
+
+---++ Settings
+
+   * Name of the perl package
+      * Set STUB = %$STUB%
+
+---++ Installation Instructions
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     %$MANIFEST%
+   * Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
+   * To make sure the installation was successful, run the
+     =contrib/bin/mailnotify= script from the command
+     line, with no parameters. In this case it will print out what it
+     would have done to STDOUT.
+
+---++ Contrib Info
+
+|  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
+|  Copyright &copy;: | 2004, Wind River Systems |
+|  License: | GPL |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  %DATE%: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/%USERNAME% - %$DATE%
