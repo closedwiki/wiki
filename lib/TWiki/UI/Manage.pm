@@ -37,6 +37,7 @@ use TWiki::User;
 use TWiki::Sandbox;
 use Error qw( :try );
 use TWiki::UI::OopsException;
+use TWiki::UI::Register;
 
 =pod
 
