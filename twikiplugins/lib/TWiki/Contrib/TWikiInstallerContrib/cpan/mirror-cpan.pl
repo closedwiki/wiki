@@ -14,7 +14,7 @@ Usage:
       --h(elp) | --?	usage info
 
 Examples:
-Creates local mirror from CPAN containing only the latest version of each module (~476MB 17 Oct 2004)
+Creates local mirror from CPAN containing only the latest version of each module (~523MB 12 Mar 2005)
   ./mirror-cpan.pl     
 Creates a local mirror of everything related to WWW::Mechanize
   ./mirror-cpan.pl WWW::Mechanize
