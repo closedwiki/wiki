@@ -79,10 +79,7 @@ use vars qw(
 
 # TWiki::Store config:
 use vars qw(
-        $useRcsDir
-        $revInitBinaryCmd $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd
-        $revInfoCmd $revDiffCmd $revDelRevCmd $revUnlockCmd $revLockCmd $nullDev
-        $rcsArg
+        $storeImpl @storeSettings
     );
 
 # TWiki::Search config:
@@ -583,7 +580,8 @@ sub revDate2EpSecs
 {
     my( $date ) = @_;
     # NOTE: This routine *will break* if input is not one of below formats!
-
+    
+    # FIXME - why aren't ifs around pattern match rather than $5 etc
     # try "31 Dec 2001 - 23:59"  (TWiki date)
     $date =~ /([0-9]+)\s+([A-Za-z]+)\s+([0-9]+)[\s\-]+([0-9]+)\:([0-9]+)/;
     if( $5 ) {
