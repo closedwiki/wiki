@@ -1,9 +1,9 @@
-%META:TOPICINFO{author="MikeMannix" date="1000619828" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="MikeMannix" date="1002008290" format="1.0" version="1.8"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
 #MetaDataDefinition
----# TWiki Meta Data
+---# Appendix B: TWiki Meta Data
 
 _Additional topic data, not editable from main freeform text box, stored in =META= variable name/value pairs_
 
@@ -151,3 +151,4 @@ Current support covers:
 At present, there is no Meta Data support for Plugins. However, the format is readily extendable and the =Meta.pm= code that supports the format needs only minor alteration.
 
 -- JohnTalintyre - 29 Aug 2001 <br />
+-- MikeMannix - 02 Oct 2001 <br />
