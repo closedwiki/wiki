@@ -30,14 +30,18 @@ print `mkdir -p cgi-bin/lib/ ; chmod -R 777 cgi-bin/lib/`;
 print `mkdir -p twiki/ ; chmod -R 777 twiki/`;
 
 print `mkdir -p cgi-bin/lib/CPAN/ ; chmod -R 777 cgi-bin/lib/CPAN/`;
-if ( -e ( my $mirrorOrigLoc = "cgi-bin/tmp/install/cpan/MIRROR/" ) ) { print `mv $mirrorOrigLoc/ cgi-bin/lib/CPAN/` }
-unless ( -e ( my $cpanConfig = "/Users/$whoami/.cpan/CPAN/MyConfig.pm" ) ) { print `mkdir -p /Users/$whoami/.cpan/CPAN; mv MyConfig.pm $cpanConfig` }
+if ( -e ( my $mirrorOrigLoc = "cgi-bin/tmp/install/cpan/MIRROR/" ) ) 
+{ 
+    print `mv $mirrorOrigLoc/ cgi-bin/lib/CPAN/`;
+}
+unless ( -e ( my $cpanConfig = "/Users/$whoami/.cpan/CPAN/MyConfig.pm" ) ) 
+{ 
+    print `mkdir -p /Users/$whoami/.cpan/CPAN; mv MyConfig.pm $cpanConfig`;
+}
 print `perl cpan/install-cpan.pl XML::Parser XML::Simple Text::Diff Algorithm::Diff HTML::Diff`;
 #print `perl cpan/install-cpan.pl'`;
 
-print `find cgi-bin/twiki -print | xargs chmod go-w`;
-print `find cgi-bin/lib -print | xargs chmod go-w`;
-
 print `chmod -R 777 cgi-bin/tmp/`;
+#print `chmod -R 777 cgi-bin/lib/CPAN/`;
 
 system( open => $INSTALL ) == 0 or print "continue installation at $INSTALL\n";
