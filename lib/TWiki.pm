@@ -1,7 +1,7 @@
 # Main Module of TWiki Collaboration Platform, http://TWiki.org/
 # ($wikiversion has version info)
 #
-# Copyright (C) 1999-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
 #
 # Based on parts of Ward Cunninghams original Wiki and JosWiki.
 # Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
@@ -117,7 +117,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "19 Jan 2004";
+$wikiversion      = "30 Jan 2004";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -3046,6 +3046,7 @@ sub getRenderedVersion {
             s/^\s*$/<p \/>/o                 && ( $isList = 0 );
             m/^(\S+?)/o                      && ( $isList = 0 );
 	    # Definition list
+            s/^(\t+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $2 <\/dt><dd> /o && ( $result .= &emitList( "dl", "dd", length $1 ) );
             s/^(\t+)(\S+?):\s/<dt> $2<\/dt><dd> /o && ( $result .= &emitList( "dl", "dd", length $1 ) );
 	    # Unnumbered list
             s/^(\t+)\* /<li> /o              && ( $result .= &emitList( "ul", "li", length $1 ) );
