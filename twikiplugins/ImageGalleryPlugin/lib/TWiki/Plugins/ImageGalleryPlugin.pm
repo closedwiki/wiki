@@ -1,3 +1,5 @@
+#! perl -w
+use strict; #TODO: check for problems with -w and strict
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
@@ -25,7 +27,7 @@ use Data::Dumper;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $debug
-        $IMAGE_MAGICK $CONVERT $IDENTIFY $CONVERT_OPTIONS
+        $IMAGE_MAGICK $CONVERT $IDENTIFY $CONVERT_OPTIONS 
     );
 
 $VERSION = '1.1';
@@ -51,70 +53,108 @@ sub initPlugin
     $debug = &TWiki::Func::getPreferencesFlag( "IMAGEGALLERYPLUGIN_DEBUG" );
 
     if ( $debug ) {
-	&TWiki::Func::writeDebug( "image_magick=[$IMAGE_MAGICK]" );
-	&TWiki::Func::writeDebug( "convert=[$CONVERT]: " . ((-x $CONVERT) ? 'found executable' : 'missing') );
-	&TWiki::Func::writeDebug( "identify=[$IDENTIFY]: " . ((-x $IDENTIFY) ? 'found executable' : 'missing'));
+	   &TWiki::Func::writeDebug( "image_magick=[$IMAGE_MAGICK]" );
+	   &TWiki::Func::writeDebug( "convert=[$CONVERT]: " . ((-x $CONVERT) ? 'found executable' : 'missing') );
+	   &TWiki::Func::writeDebug( "identify=[$IDENTIFY]: " . ((-x $IDENTIFY) ? 'found executable' : 'missing'));
 	# Plugin correctly initialized
-	&TWiki::Func::writeDebug( "- TWiki::Plugins::ImageGalleryPlugin::initPlugin( $web.$topic ) is OK" );
+	   &TWiki::Func::writeDebug( "- TWiki::Plugins::ImageGalleryPlugin::initPlugin( $web.$topic ) is OK" );
     }
-
     return 1;
 }
 
+
+
 # =========================
+# When %IMAGEGALLERY is seen, it:
+#    1 finds the meta data for the current topic
+#    2 initialises a buffer $t for the output to be inserted
+#    3 for each attachment $i (does it check to ensure Image type?), it:
+#       a finds the dimensions of the image (using IMAGEGALLERYPLUGIN_IDENTIFY)
+#            (it aborts this attachment in the results if it cannot find the dimension)
+#       b adds to $t the image <IMG SRC> pointer; this is subject to formatting into columns and rows
+#    4 returns the buffer
 sub handleImageGallery
 {
     my( $attributes ) = @_;
 
-    my $size = scalar &TWiki::extractNameValuePair( $attributes, "size" ) || 'medium';
-    my $topic = scalar &TWiki::extractNameValuePair( $attributes, "topic" ) || $TWiki::topicName;
-    my $web = scalar &TWiki::extractNameValuePair( $attributes, "web" ) || $TWiki::webName;
-    my $columns = scalar &TWiki::extractNameValuePair( $attributes, "columns" ) || '0';
-    my $rowstart = scalar &TWiki::extractNameValuePair( $attributes, "rowstart" ) || '';
-    my $rowinside = scalar &TWiki::extractNameValuePair( $attributes, "rowinside" ) || '';
-    my $rowend = scalar &TWiki::extractNameValuePair( $attributes, "rowend" ) || '';
-    my $rowinsideempty = scalar &TWiki::extractNameValuePair( $attributes, "rowinsideempty" ) || '';
-    my $rowendempty = scalar &TWiki::extractNameValuePair( $attributes, "rowendempty" ) || '';
-    my $options = scalar &TWiki::extractNameValuePair( $attributes, "options" ) || $CONVERT_OPTIONS;
-    my $format = scalar &TWiki::extractNameValuePair( $attributes, "format")
-	|| q(<span class="imgGallery"><a href="$imageurl"><img src="$thumburl" title="$sizeK: $comment"/></a></span>$n);
+    $settings = {
+       size => scalar &TWiki::extractNameValuePair( $attributes, "size" ) || 'medium',
+       topic => scalar &TWiki::extractNameValuePair( $attributes, "topic" ) || $TWiki::topicName,
+       web => scalar &TWiki::extractNameValuePair( $attributes, "web" ) || $TWiki::webName,
+       columns => scalar &TWiki::extractNameValuePair( $attributes, "columns" ) || '0',
+       rowstart => scalar &TWiki::extractNameValuePair( $attributes, "rowstart" ) || '',
+       rowinside => scalar &TWiki::extractNameValuePair( $attributes, "rowinside" ) || '',
+       rowend => scalar &TWiki::extractNameValuePair( $attributes, "rowend" ) || '',
+       rowinsideempty => scalar &TWiki::extractNameValuePair( $attributes, "rowinsideempty" ) || '',
+       rowendempty = scalar &TWiki::extractNameValuePair( $attributes, "rowendempty" ) || '',
+       options = scalar &TWiki::extractNameValuePair( $attributes, "options" ) || $CONVERT_OPTIONS,
+       format = scalar &TWiki::extractNameValuePair( $attributes, "format"),
+    	|| q(<span class="imgGallery"><a href="$imageurl"><img src="$thumburl" title="$sizeK: $comment"/></a></span>$n),
+       resize = &TWiki::Prefs::getPreferencesValue( uc "IMAGEGALLERYPLUGIN_$size" ) || $size
+    };
+    
+    my @topics = _getTopics($web, $topic);
+    my $output = '';
+    foreach my $wantedTopic (@topics) {
+       my ( $meta, $text ) = &TWiki::Func::readTopic( $web, $wantedTopic ); # SMELL - don't need text
+       $output .= _formatTMLforTopic($web, $wantedTopic, $meta, $settings);
+    }
+    return $output;
+}
 
-    my ( $meta, $page ) = &TWiki::Func::readTopic( $web, $topic );
-    my @text = $meta->find( 'FILEATTACHMENT' );
+# Potentially we could provide a topic name/other-attribute(e.g. form) filter...
+sub _getTopics {
 
-    my $resize = &TWiki::Prefs::getPreferencesValue( uc "IMAGEGALLERYPLUGIN_$size" ) || $size;
+    return ($topic) unless ($topic eq 'all');
+    return TWiki::Func::getTopicList();
+}
 
-    &TWiki::Func::writeDebug( "- web=[$web] topic=[$topic] size=[$size] resize=[$resize]" ) if $debug;
-
+# DESIGN: I chose to reset the image number with each new topic, but arguably
+# you'd want to be able to compile pictures from different topics into the 
+# same rows. 
+#
+# DESIGN: I chose to select all images attached to a page but 
+# you might choose to select only the first image from each topic
+sub _formatTMLforTopic {
+    my ($web, $topic, $meta, $settings) = @_;
+    
+    my @attachments = $meta->find( 'FILEATTACHMENT' );
+    &TWiki::Func::writeDebug( "- web=[$web] topic=[$topic] size=[$settings->{size}] resize=[$settings->{resize}]" ) if $debug;
+#TODO: check what's resize vs size
+  
     my $t = "";
-    my $inr = 0;
-    foreach my $i ( @text )
-    {
-	$i->{humanReadableSize} = sprintf( "%dk", $i->{size}/1024 );
-	my $fn = &TWiki::Func::getPubDir() . "/$web/$topic/$i->{name}";
-	my $thumb = &TWiki::Func::getPubDir() . "/$web/$topic/thumbs/$resize/$i->{name}";
+    my $imageNumber = 0;
 
-	next unless ($fn =~ m/jpg$|gif$|png$/);
+    foreach my $attachment (@attachments) {
+      $attachment->{humanReadableSize} = sprintf( "%dk", $attachment->{size}/1024 );
 
-	&TWiki::Func::writeDebug( Dumper( $i ) ) if $debug;
+	  my $filename = &TWiki::Func::getPubDir() . "/$web/$topic/$attachment->{name}";
+      &TWiki::Func::writeDebug( Dumper( $i ) ) if $debug;
 
-	next unless (my $dimensions = `"$IDENTIFY" "$fn"`) =~
+	  next unless (my $dimensions = `"$IDENTIFY" "$filename"`) =~
 	    m/(\d+)x(\d+)/; # fix, else don't work for jpg, png ...!
 	    #m/(\d+)x(\d+)\+(\d+)\+(\d+)/;
+      my ( $width, $height ) = ( $1, $2 );
+      
+	  $imageNumber++;
+      $t .= _formatImageSRC($imageNumber, $web, $topic, $attachment, $width, $height, $settings );
+      _updateThumb($filename);  # SMELL - might want to do this periodically?
+    } 
+    
+    if ($columns && ($imageNumber>0)) {
+      $t .= _completeAnyUnfinishedTables($imageNumber, $web, $topic, $width, $height, $settings);
+    }
 
-	$inr++;
-	my ( $width, $height ) = ( $1, $2 );
+    return $t;
+}
 
-	if($columns && (($inr-1)%$columns==0 || $inr==1)){ # row start
-	    $t .= &_replaceVars($rowstart, $i, $web, $topic, $resize, $width, $height, $inr);
-	}else{	# inside row
-	    $t .= &_replaceVars($rowinside, $i, $web, $topic, $resize, $width, $height, $inr);
-	}
-	$t .= &_replaceVars($format, $i, $web, $topic, $resize, $width, $height, $inr);
-	# row end
-	$t .= &_replaceVars($rowend, $i, $web, $topic, $resize, $width, $height, $inr) if $columns && ($inr%$columns==0);
-
-	unless ( ( -M $thumb ) && ( -M $fn > -M $thumb ) )
+sub _updateThumb {
+   my ($fn, $settings) = @_;
+   my $resize = $settings->{resize};
+   my $options = $settings->{options};
+   
+   my $thumb = &TWiki::Func::getPubDir() . "/$web/$topic/thumbs/$resize/$i->{name}";
+   unless ( ( -M $thumb ) && ( -M $fn > -M $thumb ) )
 	{   # only update the thumbnail if (1) it doesn't exist or (2) the thumbnail is older than the source image
 	    my $thumbDir = &TWiki::Func::getPubDir() . "/$web/$topic/thumbs";
 	    mkdir $thumbDir unless -d $thumbDir;
@@ -122,23 +162,42 @@ sub handleImageGallery
 	    mkdir $thumbDir unless -d $thumbDir;
 
 	    &TWiki::Func::writeDebug( "- running CONVERT" ) if $debug;
-	    system( qq{$CONVERT -sample $resize $options "$fn" "$thumb"} );
+	    system( qq{$CONVERT -sample $resize $options  "$fn" "$thumb"} );
 	}
-    }
-
-    # complete incomplete last row, needed for tables!!
-    if($columns && $inr>0 && ($inr%$columns!=0)){
- 	do{
- 	    $t .= &_replaceVars($rowinsideempty, undef, $web, $topic, $resize, '', '', $inr);
- 	    $inr++;
- 	}while($inr%$columns!=0);
-	# row end
-	$t .= &_replaceVars($rowendempty, undef, $web, $topic, $resize, '', '', $inr);
-    }
-
-    return $t;
 }
 
+
+sub _formatImageSRC {
+   my ($inr, $web, $topic, $i, $width, $height, $settings) = @_;
+   my $ans;
+   if($columns && (($inr-1)%$columns==0 || $inr==1)){ # row start
+ 	    $ans = &_replaceVars($rowstart, $i, $web, $topic, $resize, $width, $height, $inr);
+   }else{	# inside row
+	    $ans = &_replaceVars($rowinside, $i, $web, $topic, $resize, $width, $height, $inr);
+   }
+   $ans .= &_replaceVars($format, $i, $web, $topic, $resize, $width, $height, $inr);
+	# row end
+   if $columns && ($inr%$columns==0) {
+	  $ans .= &_replaceVars($rowend, $i, $web, $topic, $resize, $width, $height, $inr) 
+   }
+   return $ans;
+}
+
+
+=pod
+ complete incomplete last row, needed for tables!!
+=cut
+sub _completeAnyUnfinishedTables {
+   my ($inr, $web, $topic, $width, $height, $settings) = @_;
+ # finish columns
+   while($inr%$columns!=0) {
+ 	 $t .= &_replaceVars($settings->{rowinsideempty}, undef, $web, $topic, $resize, '', '', $inr);
+ 	 $inr++;
+   } 
+
+ # empty end row 
+   $t .= &_replaceVars($settings->{rowendempty}, undef, $web, $topic, $resize, '', '', $inr);
+}
 
 # =========================
 sub _replaceVars
