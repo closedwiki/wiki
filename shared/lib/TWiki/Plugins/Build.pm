@@ -27,6 +27,7 @@ The list of files to be installed is determined from the MANIFEST.
 Only these files will get into the release zip.
 
 The following help information is cursory; for full details, look at an example or read the code.
+
 ---++ Targets
 The following targets will always exist:
    1 build - check that everything is perl
@@ -36,14 +37,14 @@ The following targets will always exist:
    1 pod - build POD documentation
    1 release - build, pod and package a release zip
    1 upload - build, pod, package and upload to twiki.org
-Note: if you orverride any of these targets it is generally wise to call the SUPER version of the target!
+Note: if you override any of these targets it is generally wise to call the SUPER version of the target!
 ---++ Standard directory structure
 The standard module directory structure mirrors the TWiki installation directory structure, so each file in the development directory structure is in the place it will be in in the actual installation. From the root, these are the key files:
    * MANIFEST - required - list of files and descriptions to include in release zip
       * each file is given by the full path to the file relative to the build TWiki installation directory. Wildcards may NOT be used.
    * DEPENDENCIES - optional list of dependencies on other modules and descriptions
-      * Dependencies should be expressed as "name type description" where name is the name of the module, type is its type (CPAN, perl, C etc) and description is a short description of the module and where to get it.
-      *  The special type "shared" is used to refer to a module from the plugins shared code repository.
+      * Dependencies should be expressed as "name,version,type,description" where name is the name of the module, version is the version constraint (e.g. ">1.5"), type is its type (CPAN, perl, C etc) and description is a short description of the module and where to get it.
+      *  The special type "plugin" is used to refer to another plugin or code library. In this case "name" must be the fully-qualified package name, and the description should describe how to get the package.
    * lib/ - as you expect to see in installation. Should also contain other Perl modules.
       * lib/TWiki/
          * lib/TWiki/Plugins/ - this is where your <plugin name>.pm file goes for plugins
@@ -158,20 +159,58 @@ sub new {
 	while ($line = <PF>) {
 	  if ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
 		push(@{$this->{dependencies}},
-			 { name=>$1, type=>$2, description=>$3 });
+			 { name=>$1, type=>$2, version=>"1.000", description=>$3 });
+	  } elsif ($line =~ m/^([^,]+),([^,]+),\s*(\w*)\s*,\s*(.+)$/o) {
+		push(@{$this->{dependencies}},
+			 { name=>$1, version=>$2, type=>$3, description=>$4 });
 	  }
 	}
   }
   close(PF);
+
+  if (open(PF,"<$basedir/$this->{plugin_pm}")) {
+	my $text = "";
+	while ($line = <PF>) {
+	  $line =~ s/\s+//g;
+	  $text .= $line;
+	}
+	if ($text =~ /\@dependencies=\((.*?)\)/o ) {
+	  $text = $1;
+	  while ($text =~ s/package=>'(.*?)',constraint=>'(.*?)'//) {
+		my ($name,$ver,$found) = ($1,$2,0);
+		if ($name ne "TWiki::Plugins") {
+		  foreach my $dep (@{$this->{dependencies}}) {
+			if ($dep->{name} eq $name) {
+			  $dep->{version} = $ver;
+			  $found = 1;
+			  last;
+			}
+		  }
+		  unless ($found) {
+			push(@{$this->{dependencies}},
+				 { name=>$name, version=>$ver, type=>'plugin', description=>$name });
+		  }
+		}
+	  }
+	}
+  }
+  close(PF);
+
   my $deptable = "";
   my $a = " align=\"left\"";
   foreach my $dep (@{$this->{dependencies}}) {
-	$deptable .= "<tr><td$a>" . $dep->{name} . "</td><td$a>" .
-	  $dep->{type} . "</td><td$a>" . $dep->{description} . "</td></tr>";
+	my $v = $dep->{version};
+	$v =~ s/&/&amp;/go;
+	$v =~ s/>/&gt;/go;
+	$v =~ s/</&lt;/go;
+	$deptable .= "<tr><td$a>" .
+	  $dep->{name} . "</td><td$a>" .
+		$v . "</td><td$a>" .
+		  $dep->{description} . "</td></tr>";
   }
   $this->{DEPENDENCIES} = "None";
   if ($deptable ne "") {
-	$this->{DEPENDENCIES} = "<table border=1><tr><th$a>Name</th><th$a>Type</th><th$a>Description</th></tr>$deptable</table>";
+	$this->{DEPENDENCIES} = "<table border=1><tr><th$a>Name</th><th$a>Version</th><th$a>Description</th></tr>$deptable</table>";
   }
 
   my $version = "Unknown";
@@ -294,7 +333,8 @@ Run a Test::Unit test module, using TestRunner
 =cut
 sub run_tests {
   my ($this, $module) = @_;
-  $this->sys_action("perl -w -I$basedir/lib -I$shared/lib -I$shared/test/fixtures -I. $shared/test/TestRunner.pl $module");
+  my $inc = join(" -I", @INC);
+  $this->sys_action("perl -w -I ../../../.. -I$inc -I $shared/test/fixtures $shared/test/TestRunner.pl $module");
 }
 
 =begin text

@@ -36,6 +36,10 @@ values, spaces around the =, and commas as well as spaces separating values.
 
 package TWiki::Attrs;
 
+use vars qw( $VERSION );
+
+$VERSION = '1.000';
+
 my $ERRORKEY = "__error__";
 my $DEFAULTKEY = "__default__";
 
