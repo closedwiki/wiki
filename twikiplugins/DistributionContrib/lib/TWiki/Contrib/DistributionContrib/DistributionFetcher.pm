@@ -44,4 +44,5 @@ sub fetchLatestDistributionVersion {
 	return $ans;
 
 }
-	
+
+1;

@@ -74,6 +74,7 @@ sub cli_download {
     print "Installing $extension\n\n";
     my $libFrag = getLibFragmentForExtension($extension);
 
+    use TWiki::Contrib::DistributionContrib::DistributionFetcher;
     my $localCopy = TWiki::Contrib::DistributionContrib::DistributionFetcher::fetchLatestDistributionVersion($extension);
 
     my $buildDotPlDir = $localCopy."/lib/TWiki/$libFrag/";
