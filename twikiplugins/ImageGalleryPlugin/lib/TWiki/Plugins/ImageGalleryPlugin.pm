@@ -91,6 +91,7 @@ sub handleImageGallery
        options => scalar &TWiki::Func::extractNameValuePair( $attributes, "options" ) || $CONVERT_OPTIONS,
        format => scalar &TWiki::Func::extractNameValuePair( $attributes, "format")
     	|| q(<span class="imgGallery"><a href="$imageurl"><img src="$thumburl" title="$sizeK: $comment"/></a></span>$n),
+       max => scalar &TWiki::Func::extractNameValuePair( $attributes, "max") || 0,
     };
        $settings->{resize} = TWiki::Func::getPreferencesValue( uc "IMAGEGALLERYPLUGIN_$settings->{size}" ) || $settings->{size};
 
@@ -123,8 +124,12 @@ sub _formatTMLforTopic {
   
     my $t = "";
     my $imageNumber = 0;
+    my $max = $settings->{max};
 
     foreach my $attachment (@attachments) {
+    
+      last if ($max > 0 and $imageNumber >= $max);
+
       $attachment->{humanReadableSize} = sprintf( "%dk", $attachment->{size}/1024 );
 
 	  my $filename = &TWiki::Func::getPubDir() . "/$web/$topic/$attachment->{name}";
