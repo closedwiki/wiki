@@ -34,11 +34,11 @@
 ---+ %TMPL:P{"webaction"}% <code>%TOPIC%</code>
 
 | |  *Web:* | *&nbsp;Topic:* |
-|  *From:* |    %WEB%. | &nbsp;%TOPIC% |
+|  *From:* |    <nop>%WEB%. | &nbsp;%TOPIC% |
 |  *To:* |  %TMPL:P{"newweb"}%. | %TMPL:P{"newtopic"}% |
 %TMPL:P{"notes"}%
 
----++ Change links in topics that refer to <nop>%TOPIC% in the %WEB% Web:
+---++ Change links in topics that refer to <nop>%TOPIC% in the <nop>%WEB% Web:
 
 %RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
 

@@ -115,7 +115,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "06 Mar 2003";
+$wikiversion      = "21 Mar 2003";
 
 # ===========================
 # Key Global variables, required for writeDebug
@@ -468,7 +468,7 @@ sub setupRegexes {
 
     # TWiki concept regexes
     $wikiWordRegex = qr/[$upperAlpha]+[$lowerAlpha]+[$upperAlpha]+[$mixedAlphaNum]*/;
-    $webNameRegex = qr/[$upperAlpha]+[$lowerAlphaNum]*/;
+    $webNameRegex = qr/[$upperAlpha]+[$mixedAlphaNum]*/;
     $defaultWebNameRegex = qr/_[${mixedAlphaNum}_]+/;
     $anchorRegex = qr/\#[${mixedAlphaNum}_]+/;
     $abbrevRegex = qr/[$upperAlpha]{3,}/;
