@@ -6,6 +6,7 @@
 	* Test properly
 
 
+Raw java test:
 
 <!--TWIKIENCRYPT COPY THIS BIT INTO YOUR UPLOAD FORM -->
 <p />
@@ -13,5 +14,8 @@
 <PARAM NAME="KEY" VALUE="key1">
 <PARAM NAME ="ATTACHURL" VALUE="%ATTACHURL%">
 </APPLET>
+
+And now for a Twiki plugin test:
+ENCRYPTEDPAGE{key2}%
 
 -- Main.RichardJEllery - 13 Jan 2003
