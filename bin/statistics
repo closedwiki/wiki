@@ -274,9 +274,9 @@ sub collectLogData
     my $intranetUserRegex = qr/[a-z0-9]+/;	# FIXME: should centralise this
     my $userRegex = qr/(?:$intranetUserRegex|$wikiWordRegex)/; 
     my $opRegex = qr/[a-z0-9]+/;        	# Operation, no i18n needed
-    my $topicRegex = qr/(?:$wikiWordRegex|$abbrevRegex)/; 	# Strict topic names only
-    # my $topicRegex = qr/(?:[${TWiki::mixedAlphaNum}]+)/; 	# Relaxed topic names - any alphanumeric,
-								# won't be auto-linked in WebStatistics
+    # my $topicRegex = qr/(?:$wikiWordRegex|$abbrevRegex)/; 	# Strict topic names only
+    my $topicRegex = qr/(?:[^ ]+)/; 	# Relaxed topic names - any non-space OK
+					# but won't be auto-linked in WebStatistics
 
     my ($webName, $opName, $topicName, $userName, $newTopicName, $newTopicWeb);
     binmode $TMPFILE;
