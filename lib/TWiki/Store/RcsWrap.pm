@@ -288,6 +288,7 @@ sub getRevisionInfo
        my $cmd= $self->{infoCmd};
        $cmd =~ s/%REVISION%/$version/;
        $cmd =~ s/%FILENAME%/$rcsFile/;
+       $cmd =~ /(.*)/; $cmd = $1;       # Untaint
        my $rcsOut = `$cmd`;
        my $exit = $? >> 8;
        _traceExec( $cmd, $cmd, $exit );
