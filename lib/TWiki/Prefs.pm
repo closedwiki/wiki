@@ -409,7 +409,7 @@ current one, overwriting anything that may currently be there.
 sub inheritPrefs {
     my( $self, $otherPrefsObject ) = @_;
 
-    foreach my $key( %{$otherPrefsObject->{prefs}} ) {
+    foreach my $key( keys( %{$otherPrefsObject->{prefs}} ) ) {
         $self->{prefs}{$key} = $otherPrefsObject->{prefs}{$key};
     }
 }
