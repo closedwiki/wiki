@@ -5,8 +5,14 @@
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
  <style type="text/css" media="all">
-	/* Basic TWiki style */
+	/* Default TWiki layout */
+	@import url("%RELATIVETOPICPATH{%TWIKILAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css");
+	/* Default TWiki style */
 	@import url("%RELATIVETOPICPATH{%TWIKISTYLETOPIC%}%?skin=text&amp;contenttype=text/css");
+	/* Custom overriding layout */
+	@import url("%RELATIVETOPICPATH{%LAYOUTTOPIC%}%?skin=text&amp;contenttype=text/css");
+	/* Custom overriding style */
+	@import url("%RELATIVETOPICPATH{%STYLETOPIC%}%?skin=text&amp;contenttype=text/css");
  </style>
 </head>
 <body bgcolor="#ffffff">
