@@ -87,7 +87,7 @@ sub main
          ) ) {
         # PTh 20 Jun 2000: changed to getOopsUrl
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregexist", $wikiName );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -96,7 +96,7 @@ sub main
     for( $x = 0; $x < $formLen; $x++ ) {
         if( ( $formDataRequired[$x] ) && ( ! $formDataValue[$x] ) ) {
             $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregrequ", );
-            print $query->redirect( $url );
+            TWiki::redirect( $query, $url );
             return;
         }
     }
@@ -104,7 +104,7 @@ sub main
     # check if wikiName is a WikiName
     if( ! &TWiki::isWikiName( $wikiName ) ) {
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregwiki" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
     # a WikiName is safe, so untaint variable
@@ -114,7 +114,7 @@ sub main
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
         $url = &TWiki::getOopsUrl( $webName, $topic, "oopsregpasswd" );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
         return;
     }
 
@@ -175,12 +175,12 @@ sub main
 
     if( $senderr ) {
         my $url = &TWiki::getOopsUrl( $webName, $wikiName, "oopssendmailerr", $senderr );
-        print $query->redirect( $url );
+        TWiki::redirect( $query, $url );
     }
 
     # and finally display thank you page
     $url = &TWiki::getOopsUrl( $webName, $wikiName, "oopsregthanks", $emailAddress );
-    print $query->redirect( $url );
+    TWiki::redirect( $query, $url );
 }
 
 sub htpasswdGeneratePasswd
@@ -228,7 +228,7 @@ sub addUserToTWikiUsersTopic
     my $today = &TWiki::getLocaldate();
     my $topicName = $TWiki::userListFilename;
     $topicName =~ s/(.*[^\/])\/([a-zA-Z0-9]*)\.txt$/$2/go;
-    my $text  = &TWiki::Store::readTopic( $topicName );
+    my( $text, @meta )  = &TWiki::Store::readWebTopicNew( $TWiki::mainWebname, $topicName );
     my $result = "";
     my $status = "0";
     my $line = "";
