@@ -6,7 +6,7 @@
 You cannot attach a file to a non-existing topic. Please
 create the topic first before you attach files to it.
  %TMPL:END%
-%TMPL:DEF{"topicaction"}% [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%][View]] %SEP%
-[[%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][Create]] %SEP%
-[[%WEB%.%HOMETOPIC%][Cancel]] %TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%HOMETOPIC%][Cancel]] %SEP%
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%][View]] %SEP%
+[[%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][Create]] %TMPL:END%
 %TMPL:P{"oops"}%

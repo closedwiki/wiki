@@ -12,8 +12,5 @@ Please ask the contributor before making changes to this topic.
 
 __Note:__ Locking gets reset after %PARAM2% minutes of inactivity, 
 the earliest in <b>%PARAM3% minutes</b>. %TMPL:END%
-%TMPL:DEF{"topicaction"}%
- [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw text]] %TMPL:P{"sep"}% 
- <a href="%EDITURL%&amp;breaklock=on">Edit anyway</a> %TMPL:P{"sep"}% 
- [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:DEF{"topicaction"}%[[%WEB%.%TOPIC%][Cancel]] %TMPL:P{"sep"}% [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw text]] %TMPL:P{"sep"}% <a href="%EDITURL%&amp;breaklock=on">Edit anyway</a> %TMPL:P{"sep"}% %TMPL:END%
 %TMPL:P{"oops"}%

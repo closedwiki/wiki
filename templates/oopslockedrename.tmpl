@@ -11,7 +11,5 @@
    * To cancel go back in your browser or click on *Cancel*
 
 %TMPL:END%
-%TMPL:DEF{"topicaction"}%
-  [[%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&amp;newWeb=%NEW_WEB%&amp;newTopic=%NEW_TOPIC%&amp;attachment=%ATTACHMENT%][Rename anyway]]
-  %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:DEF{"topicaction"}%[[%WEB%.%TOPIC%][Cancel]] %TMPL:P{"sep"}% [[%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&amp;newWeb=%NEW_WEB%&amp;newTopic=%NEW_TOPIC%&amp;attachment=%ATTACHMENT%][Rename anyway]]%TMPL:END%
 %TMPL:P{"oops"}%
