@@ -3,12 +3,19 @@ PLATFORM ?= darwin
 
 TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 
-twiki-$(PLATFORM).tar.bz2 :
-	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform/$(PLATFORM) `cd platform/$(PLATFORM); ls` 
-	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl cpan/MIRROR/TWIKI/ downloads/ config/
+twiki-$(PLATFORM).tar.bz2 : twiki-$(PLATFORM).tar
 	bzip2 twiki-$(PLATFORM).tar
 
-distro : twiki-cpan plugins contribs addons release twiki-$(PLATFORM).tar.bz2 
+twiki-$(PLATFORM).tar : 
+	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform/$(PLATFORM) `cd platform/$(PLATFORM); ls` 
+	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
+#	tar -r $(TAR_EXCLUDE) -f twiki-$(PLATFORM).tar webs/local/
+
+components : twiki-cpan plugins contribs addons release 
+
+distro : components twiki-$(PLATFORM).tar.bz2 
+
+test-distro : components twiki-$(PLATFORM).tar
 
 minicpan :
 	cd cpan ; ./mirror-cpan.pl
