@@ -108,9 +108,9 @@ sub searchWeb
 
         # this is not magic, it just looks like it.
         @webList = sort
-	           grep { s#^.+/([^/]+)$#$1# }
+                   grep { s#^.+/([^/]+)$#$1# }
                    grep { -d }
-	           map  { "$TWiki::dataDir/$_" }
+                   map  { "$TWiki::dataDir/$_" }
                    grep { ! /^[._]/ } @tmpList;
 
         # what that does (looking from the bottom up) is take the file
@@ -162,7 +162,7 @@ sub searchWeb
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
 
     my( $tmplHead, $tmplSearch,
-	$tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
+        $tmplTable, $tmplNumber, $tmplTail ) = split( /%SPLIT%/, $tmpl );
     $tmplHead   = &TWiki::handleCommonTags( $tmplHead, $topic );
     $tmplSearch = &TWiki::handleCommonTags( $tmplSearch, $topic );
     $tmplNumber = &TWiki::handleCommonTags( $tmplNumber, $topic );
@@ -203,9 +203,9 @@ sub searchWeb
 
     my $cmd = "";
     if( $theScope eq "topic" ) {
-        $cmd = "$TWiki::lsCmd *.txt | %GREP% %SWITCHES% $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote";
+        $cmd = "$TWiki::lsCmd %FILES% | %GREP% %SWITCHES% $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote";
     } else {
-        $cmd = "%GREP% %SWITCHES% -l $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote *.txt";
+        $cmd = "%GREP% %SWITCHES% -l $TWiki::cmdQuote%TOKEN%$TWiki::cmdQuote %FILES%";
     }
 
     if( $caseSensitive ) {
@@ -215,10 +215,13 @@ sub searchWeb
     }
     $cmd =~ s/%SWITCHES%/$tempVal/go;
 
+    my @tokens;
     if( $theRegex ) {
         $tempVal = $TWiki::egrepCmd;
+        @tokens = split( /;/, $theSearchVal );
     } else {
         $tempVal = $TWiki::fgrepCmd;
+        @tokens = $theSearchVal;
     }
     $cmd =~ s/%GREP%/$tempVal/go;
 
@@ -265,11 +268,18 @@ sub searchWeb
             # do grep search
             chdir( "$sDir" );
             _traceExec( "chdir to $sDir", "" );
-            $cmd =~ /(.*)/;
-            $cmd = $1;       # untaint variable (NOTE: Needs a better check!)
-            $tempVal = `$cmd`;
-            _traceExec( $cmd, $tempVal );
-            @topicList = split( /\n/, $tempVal );
+            @topicList = ( "*.txt" );
+            foreach my $token ( @tokens ) {
+                my $acmd = $cmd;
+                $acmd =~ s/%TOKEN%/$token/o;
+                $acmd =~ s/%FILES%/@topicList/;
+                $acmd =~ /(.*)/;
+                $acmd = "$1";       # untaint variable (NOTE: Needs a better check!)
+                $tempVal = `$acmd`;
+                _traceExec( $acmd, $tempVal );
+                @topicList = split( /\n/, $tempVal );
+                last if( ! @topicList );
+            }
             # cut .txt extension
             my @tmpList = map { /(.*)\.txt$/; $_ = $1; } @topicList;
             @topicList = ();
@@ -377,7 +387,7 @@ sub searchWeb
                              sort {$a->[0] cmp $b->[0] }
                              map { [ $topicRevUser{$_}, $_ ] }
                              @topicList;
-    	    }
+            }
 
         } elsif( $theOrder =~ m/^formfield\((.*)\)$/ ) {
             # sort by TWikiForm field
@@ -420,7 +430,7 @@ sub searchWeb
                              sort {$a->[0] cmp $b->[0] }
                              map { [ $_, $_ ] }
                              @topicList;
-    	    }
+            }
         }
 
         # output header of $thisWebName
@@ -685,6 +695,7 @@ sub searchWeb
         $tmplTail =~ s|</*nop/*>||goi;   # remove <nop> tag
         print $tmplTail;
     }
+    return $searchResult;
 }
 
 #=========================
