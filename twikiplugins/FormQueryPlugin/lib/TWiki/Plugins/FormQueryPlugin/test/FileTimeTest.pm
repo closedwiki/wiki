@@ -2,15 +2,13 @@ use strict;
 
 package FileTimeTest;
 
+use base qw(BaseFixture);
+
 use TWiki::Plugins::FormQueryPlugin::WebDB;
 use TWiki::Plugins::FormQueryPlugin::Archive;
 use TWiki::Plugins::FormQueryPlugin::FileTime;
+use TWiki::Func;
 use Storable;
-
-require 'FuncFixture.pm';
-import TWiki::Func;
-
-use base qw(TWiki::Func);
 
 my $files; # fixture
 my $web = "FT"; # fixture
@@ -28,12 +26,12 @@ sub set_up {
 
   $this->SUPER::set_up();
 
-  my $dbt = TWiki::Func::TESTreadFile("./testDB.dat");
+  my $dbt = BaseFixture::readFile("./testDB.dat");
   $root = TWiki::Func::getDataDir() . "/$web";
   $files = new FormQueryPlugin::Array();
   foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
     if ( $t =~ m/\"(.*?)\"/o ) {
-      TWiki::Func::TESTwriteTopic($web, $1, $t);
+      BaseFixture::writeTopic($web, $1, $t);
       $files->add(new FormQueryPlugin::FileTime( "$root/$1.txt" ));
     }
   }

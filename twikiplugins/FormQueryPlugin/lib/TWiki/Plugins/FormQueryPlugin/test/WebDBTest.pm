@@ -3,11 +3,10 @@ use Benchmark;
 
 package WebDBTest;
 
-use TWiki::Plugins::FormQueryPlugin::WebDB;
-require 'FuncFixture.pm';
-import TWiki::Func;
+use base qw(BaseFixture);
 
-use base qw(TWiki::Func);
+use TWiki::Plugins::FormQueryPlugin::WebDB;
+use TWiki::Func;
 
 my $db;
 my $truesum;
@@ -22,14 +21,14 @@ sub set_up {
 
   $this->SUPER::set_up();
 
-  my $dbt = TWiki::Func::TESTreadFile("./testDB.dat");
+  my $dbt = BaseFixture::readFile("./testDB.dat");
   foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
     if ( $t =~ m/\"(.*?)\"/o ) {
-      TWiki::Func::TESTwriteTopic("Test", $1, $t);
+      BaseFixture::writeTopic("Test", $1, $t);
     }
   }
 
-  $dbt = TWiki::Func::TESTreadFile("./testDB.dat");
+  $dbt = BaseFixture::readFile("./testDB.dat");
   $truesum = 0;
   foreach my $t ( split(/\n/,$dbt)) {
     if ( $t =~ /\|\s*(\d+)\s*\|/o ) {
@@ -37,9 +36,9 @@ sub set_up {
     }
   }
 
-  TWiki::Func::TESTsetPreference("FQRELATIONS","Dir%B_%A subdir Dir%B; Dir%A_%C_%B subsubdir Dir%A_%C");
-  TWiki::Func::TESTsetPreference("FQTABLES", "FileTable,DirTable");
-  TWiki::Func::TESTsetPreference("FQHIGHLIGHTMAP", "PrettyPrint");
+  BaseFixture::setPreference("FQRELATIONS","Dir%B_%A subdir Dir%B; Dir%A_%C_%B subsubdir Dir%A_%C");
+  BaseFixture::setPreference("FQTABLES", "FileTable,DirTable");
+  BaseFixture::setPreference("FQHIGHLIGHTMAP", "PrettyPrint");
   #$FormQueryPlugin::WebDB::storable = 0;
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
 }
@@ -240,25 +239,25 @@ sub test_saveAndLoad {
   # One file in the cache has been touched
   sleep(1);# wait for clock tick
   my $Dir2 = TWiki::Func::readTopicText("Test","Dir2");
-  TWiki::Func::TESTwriteTopic("Test", "Dir2", $Dir2);
+  BaseFixture::writeTopic("Test", "Dir2", $Dir2);
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
   $this->assert_str_equals("13 1 0", $this->{db}->_load());
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
   $this->assert_str_equals("14 0 0", $this->{db}->_load());
 
   # A new file has been created
-  TWiki::Func::TESTwriteTopic("Test", "NewFile", "Blah");
+  BaseFixture::writeTopic("Test", "NewFile", "Blah");
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
   $this->assert_str_equals("14 1 0", $this->{db}->_load());
 
   # One file in the cache has been deleted
   my $Dir4 = TWiki::Func::readTopicText("Test","Dir4");
-  TWiki::Func::TESTdeleteTopic("Test", "Dir4");
+  BaseFixture::deleteTopic("Test", "Dir4");
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
   $this->assert_str_equals("14 0 1", $this->{db}->_load());
 
-  TWiki::Func::TESTdeleteTopic("Test", "NewFile");
-  TWiki::Func::TESTwriteTopic("Test", "Dir4", $Dir4);
+  BaseFixture::deleteTopic("Test", "NewFile");
+  BaseFixture::writeTopic("Test", "Dir4", $Dir4);
   $this->{db} = new FormQueryPlugin::WebDB( "Test" );
   $this->assert_str_equals("13 1 1", $this->{db}->_load());
   my $final = $this->{db};

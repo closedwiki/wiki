@@ -375,24 +375,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* Make sure you have the perl module =Time::ParseDate= installed in your perl include path. To check this you can add the following line:<br><code>'Time::ParseDate'</code><br>to the testenv script in twiki/bin, in the @requiredMods list. The plugin will be significantly faster if you also have the =Storable= module installed. Both of these modules are available from www.cpan.org
 	* Download the ZIP file from the Plugin web (see below). Contents:
 	| *File:* | *Description:* |
-	| ==lib/TWiki/Plugins/FormQueryPlugin.pm== | Main plugin script |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/Arithmetic.pm== | Arithmetic interpreter |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/Archive.pm== | Archiver used if Storable is not available |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/Array.pm== | Array class |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/FileTime.pm== | Cache support |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/Map.pm== | Map class |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/build.xml== | Ant build file |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/Search.pm== | Search class |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/ColourMap.pm== | Highlight map class |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/TableFormat.pm== | Table formatter |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/TableDef.pm== | Table format definition class |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/Relation.pm== | Topic relation class |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/ReqDBSupport.pm== | Extra features |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/WebDB.pm== | Subclass of Map for a whole web |
-	| ==lib/TWiki/Plugins/FormQueryPlugin/test.zip== | Test::Unit tests |
-	| ==data/TWiki/FormQueryPlugin.txt== | Plugin topic |
-	| ==bin/autocreate== | Topic creation script |
-	| ==bin/tasknotify== | Mailer script |
+%$MANIFEST%
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. If you are short of disc space you can delete all the files under lib/TWiki/Plugins/FormQueryPlugin/test without breaking the plugin.
 	* The variable %<nop>FORMQUERYPLUGIN_ENABLE% must be set either globally or in the web where you want to use it.
 	* Set ENABLE = 1
@@ -410,7 +393,7 @@ cd to =lib/TWiki/Plugins/FormQueryPlugin/= and type =make uninstall=
 |  Change History: | 02 Apr 2004: SimonHardyFrancis bugfixes incorporated. TimSlidel patches incoporated for mod_perl, autocreate, and collapsing same-type tables in a single topic |
 |  | 05 Feb 2004: Bugfix version |
 |  | 11 Jul 2003: Initial version |
-|  CPAN Dependencies: | Time::Parse<nop>Date, Storable |
+|  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
@@ -439,3 +422,5 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%
