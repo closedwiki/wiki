@@ -41,7 +41,7 @@ sub main
              &TWiki::Store::removeObsoleteTopicLocks( $web );
         }
     }
-    $debug && print "End Twiki mail notification\n";
+    $debug && print "End TWiki mail notification\n";
 }
 
 sub processWeb

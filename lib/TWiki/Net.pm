@@ -126,7 +126,7 @@ sub _sendEmailByNetSMTP
 	@to = @{$toref};
     }
     return undef unless( scalar @to );
-    my $mailhost = &TWiki::Prefs::getPreferencesValue( "MAILHOST" ) || "mail";
+    my $mailhost = &TWiki::Prefs::getPreferencesValue( "SMTPMAILHOST" ) || "mail";
     
     my $smtp = Net::SMTP->new( $mailhost );
     $smtp->mail( $from );
