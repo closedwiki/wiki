@@ -63,7 +63,6 @@ EOF
     my $actions = ActionTrackerPlugin::ActionSet::allActionsInWeb("Main", $attrs);
     my $fmt = $textonlyfmt;
     my $chosen = $actions->formatAsString( $fmt );
-
     Assert::assert($chosen !~ /C_open_ontime/o);
     Assert::assert($chosen !~ /A_open_late/o);
     Assert::assert($chosen !~ /TestRunner_open_late/o);
