@@ -14,13 +14,6 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-# Notes:
-# - Latest version at http://twiki.org/
-# - Installation instructions in $dataDir/TWiki/TWikiDocumentation.txt
-# - Customize variables in TWiki.cfg when installing TWiki.
-# - Upgrading TWiki is easy as long as you use Plugins.
-# - Check web server error logs for errors, i.e. % tail /var/log/httpd/error_log
-#
 # Note: Use the TWiki:Plugins/PerlDocPlugin to extract the documentation
 #       Unlike in other modules, do not use a ---+ level one heading
 
@@ -585,7 +578,7 @@ sub isGuest
 sub permissionsSet
 {
 #   my( $web ) = @_;
-    return TWiki::security->permissionsSet( @_ );
+    return $TWiki::Plugins::SESSION->{security}->permissionsSet( @_ );
 }
 
 # =========================
@@ -995,6 +988,9 @@ sub formatGmTime
 | Return: =$dir= | Data directory, e.g. ="/twiki/data"= |
 | Since:         | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
 
+SMELL: this function violates store encapsulation and should be avoided
+wherever possible!
+
 =cut
 # -------------------------
 sub getDataDir
@@ -1010,6 +1006,9 @@ sub getDataDir
 | Description:   | Get pub directory (file attachment root). Attachments are in =$dir/Web/TopicName= |
 | Return: =$dir= | Pub directory, e.g. ="/htdocs/twiki/pub"= |
 | Since:         | TWiki::Plugins::VERSION 1.000 (7 Dec 2002) |
+
+SMELL: this function violates store encapsulation and should be avoided
+wherever possible!
 
 =cut
 # -------------------------
