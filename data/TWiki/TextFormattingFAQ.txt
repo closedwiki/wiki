@@ -62,10 +62,10 @@ If you do not intend to create a topic for a valid TWiki topic name, you can pre
 <A NAME="fixe">Q:</A>
 *How can I write fixed font text?*
 
-Enclose text in &lt;CODE&gt; and &lt;/CODE&gt; HTML tags.
+Enclose text in "=" equal signs.
 
-	* Example text: <br> <code>Proportional text, &lt;CODE&gt; fixed font text, &lt;/CODE&gt; proportional again.</code>
-	* Example output: <br> Proportional text, <CODE> fixed font text, </CODE> proportional again.
+	* Example text: <br> =Proportional text, <nop>=fixed font text=<nop> , proportional again.=
+	* Example output: <br> Proportional text, =fixed font text= , proportional again.
 
 Alternatively you could also use preformatted text, see next question for details.
 
@@ -89,13 +89,19 @@ It is recommended to use preformatting for tables and source code.
 <A NAME="tabl">Q:</A>
 *How do I create tables?*
 
-There are two possibilities:
-	1 Use preformatted text with &lt;PRE&gt; tags.
+There are three possibilities:
+	1 Use Wiki rule with "|" vertical bars.
 	2 Use HTML tables with &lt;TABLE&gt;, &lt;TR&gt;, &lt;TD&gt; tags.
+	3 Use preformatted text with &lt;PRE&gt; tags.
 
-*_1. Use preformatted text with &lt;PRE&gt; tags_*
+*_1. Use Wiki rule with "|" vertical bars_*
 
-See <A HREF="#wrap">Q:</A> Text I enter gets wrapped around. How can I keep the formatting as it is?
+	* Example text: <br>
+	  =| cell A1 | cell B1 | cell C1 |= <br>
+	  =| cell A2 | cell B2 | cell C2 |=
+	* Example output: 
+	  | cell A1 | cell B1 | cell C1 |
+	  | cell A2 | cell B2 | cell C2 |
 
 *_2. Use HTML tables with &lt;TABLE&gt;, &lt;TR&gt;, &lt;TD&gt; tags_*
 
@@ -128,6 +134,10 @@ It is displayed as a table like this:
 You can copy the example from &lt;TABLE&gt; to &lt;/TABLE&gt; and change it to your needs.
 
 More information about HTML tables can be found at http://www.htmlhelp.com/reference/wilbur/table/table.html
+
+*_3. Use preformatted text with &lt;PRE&gt; tags_*
+
+See <A HREF="#wrap">Q:</A> Text I enter gets wrapped around. How can I keep the formatting as it is?
 
 -----
 <A NAME="imag">Q:</A>
@@ -190,4 +200,4 @@ hexadecimal notation. For example, to specify white, the red, green and blue com
 
 -----
 
--- Main.PeterThoeny - 26 Oct 1998
+-- Main.PeterThoeny - 08 Aug 1999
