@@ -116,7 +116,10 @@ sub main
         if( $render ) {
             ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
         } else {
-            $text = "<pre>" . &TWiki::Store::readTopicRaw( $webName, $topic ) . "</pre>";
+            my $raw = &TWiki::Store::readTopicRaw( $webName, $topic );
+            $raw =~ s/</&lt;/go;
+            $raw =~ s/>/&gt;/go;
+            $text = "<pre>$raw</pre>";
         }
         ( $revdate, $revuser, $maxrev ) = &TWiki::Store::getRevisionInfoFromMeta( $webName, $topic, $meta, "isoFormat" );
         
