@@ -90,26 +90,36 @@ sub main
     my ( $filePath, $fileSize, $fileDate, $fileUser, $fileComment ) 
       = getAttachAttr( $atext, $fileName );
 
+    if( $wiki::doLogTopicAttach )
+    {
+        # write log entry
+        my $time = time();
+        $time = &wiki::formatGmTime( $time );
+        my $wikiUser = &wiki::userToWikiName( $userName );
+        &wiki::writeLog( "| $time | $wikiUser | attach | $webName.$topic | $fileName |" );
+    }
+
     $tmpl = &wiki::readTemplate( "attach" );
     $tmpl = &wiki::handleCommonTags( $tmpl, $topic );
     $atext = &wiki::getRenderedVersion( $atext );
     $atext = &wiki::handleCommonTags( $atext, $topic );
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
-    if( $fileName eq "" )
+    if( $fileName )
     {
-        $tmpl =~ s/%ACTION%/Attach new file/go;
-        $tmpl =~ s/%PREVIOUS%//go;
-        $tmpl =~ s/%FILEUSER%/$fileUser/go;
-    }
-    else
-    {
+        $tmpl =~ s/%FILENAME%/$fileName/go;
         $tmpl =~ s/%ACTION%/Update file:/go;
         $tmpl =~ s/%PREVIOUS%/Previous <br> upload:/go;
         $fileUser = &wiki::getRenderedVersion( $fileUser );
         $fileUser =~ s/\n//go;
         $tmpl =~ s/%FILEUSER%/\($fileUser\)/go;
     }
-    $tmpl =~ s/%FILENAME%/$fileName/go;
+    else
+    {
+        $tmpl =~ s/%FILENAME%//go;
+        $tmpl =~ s/%ACTION%/Attach new file/go;
+        $tmpl =~ s/%PREVIOUS%//go;
+        $tmpl =~ s/%FILEUSER%/$fileUser/go;
+    }
     $tmpl =~ s/%FILEPATH%/$filePath/go;
     $tmpl =~ s/%FILECOMMENT%/$fileComment/go;
     print $tmpl;

@@ -37,15 +37,15 @@ sub buildCategoryItem
         return ( $catname, $catvalue )
     }
 
-    if( @cmd[0] eq "select" )
+    if( $cmd[0] eq "select" )
     {
-        $catname = @cmd[1];
+        $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
         $param = $query->param("$scatname");
         for( $i = 3; $i < $len; $i++ )
         {
-            my $value = @cmd[$i];
+            my $value = $cmd[$i];
             my $svalue = $value;
             $svalue =~ s/[^a-zA-z0-9]//g;
             if( $param eq $svalue )
@@ -59,14 +59,14 @@ sub buildCategoryItem
             $catvalue = "&nbsp;";
         }
     }
-    elsif( @cmd[0] eq "checkbox" )
+    elsif( $cmd[0] eq "checkbox" )
     {
-        $catname = @cmd[1];
+        $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
         for( $i = 4; $i < $len; $i++ )
         {
-            my $value = @cmd[$i];
+            my $value = $cmd[$i];
             my $svalue = $value;
             $svalue =~ s/[^a-zA-z0-9]//g;
             $param = $query->param("$scatname$svalue");
@@ -81,15 +81,15 @@ sub buildCategoryItem
             $catvalue = "&nbsp;";
         }
     }
-    elsif( @cmd[0] eq "radio" )
+    elsif( $cmd[0] eq "radio" )
     {
-        $catname = @cmd[1];
+        $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
         $param = $query->param("$scatname");
         for( $i = 3; $i < $len; $i++ )
         {
-            my $value = @cmd[$i];
+            my $value = $cmd[$i];
             my $svalue = $value;
             $svalue =~ s/[^a-zA-z0-9]//g;
             if( $param eq $svalue )
@@ -116,9 +116,9 @@ sub buildCategoryItem
             }
         }
     }
-    elsif( @cmd[0] eq "text" )
+    elsif( $cmd[0] eq "text" )
     {
-        $catname = @cmd[1];
+        $catname = $cmd[1];
         $scatname = $catname;
         $scatname =~ s/[^a-zA-z0-9]//g;
         $param = $query->param("$scatname");
@@ -160,7 +160,7 @@ sub main
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
 
-    if( icat ne "" )
+    if( $icat ne "" )
     {
         # get category items from parameters and build category section
         $tcat = &wiki::readTemplate("twikicatview");
@@ -200,8 +200,9 @@ sub main
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
         # get the edited text and combine text, category table and attachment for preview
         $text = $query->param( "text" );
-        $ptext = "$text$tcat$atext"; # text to preview
-        $text = "$text$tcat";        # text to save
+        $text .= $tcat;        # text to save
+        $ptext = $text;        # text to preview
+        if( $atext ) { $ptext .= $atext; }
     }
     else
     {
@@ -209,14 +210,15 @@ sub main
         $text = $query->param( "text" );
         ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
         # combine text, category table and attachment for preview
-        $ptext = "$before$after$tcat$atext";     # text to preview
-        if( $atext eq "" )
+        if( $atext )
         {
-            $text = "$before$after$tcat";
+            $text = "$before$after$tcat<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
+            $ptext = "$before$after$tcat$atext";     # text to preview
         }
         else
         {
-            $text = "$before$after$tcat<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
+            $text = "$before$after$tcat";   # text to save
+            $ptext = $text;                 # text to preview
         }
     }
 

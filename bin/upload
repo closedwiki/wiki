@@ -185,9 +185,15 @@ sub main
     ( $tmp1,$tmp2,$tmp3,$tmp4,$tmp5,$tmp6,$tmp7,$fileSize,$tmp9,
       $mtime,$tmp11,$tmp12,$tmp13 ) = stat $tmpFilename;
     my $fileDate = &wiki::formatGmTime( $mtime );
-    $fileDate =~ s/ /&nbsp;/go;
+
+    if( $wiki::doLogTopicUpload )
+    {
+        # write log entry
+        &wiki::writeLog( "| $fileDate | $fileUser | upload | $webName.$topic | $fileName |" );
+    }
 
     # update topic
+    $fileDate =~ s/ /&nbsp;/go;
     my $text = "", $before="", $atext, $after="";
     $text = &wiki::readTopic( $topic );
     # extract attachment section:

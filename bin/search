@@ -119,6 +119,16 @@ sub main
             $ntopics += 1;
         }
     }
+
+    if( $wiki::doLogTopicSearch )
+    {
+        # write log entry
+        my $time = time();
+        $time = &wiki::formatGmTime( $time );
+        my $wikiUser = &wiki::userToWikiName( $userName );
+        &wiki::writeLog( "| $time | $wikiUser | search | $webName | $search |" );
+    }
+
     $after =~ s/%NTOPICS%/$ntopics/go;
     print $after;
 

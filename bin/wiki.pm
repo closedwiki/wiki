@@ -36,12 +36,15 @@ use vars qw(
 	$mainWebname $mainTopicname $notifyTopicname $mailProgram $wikiwebmaster 
 	$wikiversion $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
 	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
+	$doRemovePortNumber $doLogTopicView $doLogTopicSave
+	$doLogTopicAttach $doLogTopicUpload $doLogTopicRdiff 
+	$doLogTopicChanges $doLogTopicSearch
 	@isoMonth $TranslationToken $code @code $depth $scriptUrl );
 
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "17 Jul 1999";
+$wikiversion      = "21 Jul 1999";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -90,15 +93,18 @@ sub initialize
 
     ( $topicName =~ /\.\./ ) && ( $topicName = $mainTopicname );
 
-    if( $theUrl eq "")
-    {
-        $scriptUrl = $defaultRootUrl;
-    }
-    else
+    if( $theUrl )
     {
         $scriptUrl = $theUrl;
         $scriptUrl =~ s/(.*)\/.*$/$1/;
-        $scriptUrl =~ s/:[0-9]+\//\//;
+        if( $doRemovePortNumber )
+        {
+            $scriptUrl =~ s/:[0-9]+\//\//;
+        }
+    }
+    else
+    {
+        $scriptUrl = $defaultRootUrl;
     }
 
     $TranslationToken= "\263";
@@ -119,7 +125,7 @@ sub writeDebug
 # =========================
 sub writeLog
 {
-    my( $text) = @_;
+    my( $text ) = @_;
     my $date = `$logDateCmd`;
     $date =~ s/\n//go;
     my $filename = $logFilename;
@@ -543,10 +549,13 @@ sub saveTopic
             print FILE join("\n",@foo)."\n";
             close(FILE);
 
-            # write log entry
-            $time = formatGmTime( $time );
-            $name = userToWikiName( $userName );
-            writeLog( "$time  $webName.$topic -- $name" );
+            if( $doLogTopicSave )
+            {
+                # write log entry
+                $time = formatGmTime( $time );
+                $name = userToWikiName( $userName );
+                writeLog( "| $time | $name | save | $webName.$topic |  |" );
+            }
         }
     }
 
@@ -583,10 +592,14 @@ sub saveTopic
         $tmp =~ s/%FILENAME%/$name/;
         `$tmp`;
 
-        # write log entry
-        $time = formatGmTime( $time );
-        $name = userToWikiName( $userName );
-        writeLog( "$time  $webName.$topic -- $name  cmd=$saveCmd $rev $user $date" );
+        if( $doLogTopicSave )
+        {
+            # write log entry
+            $time = formatGmTime( $time );
+            $name = userToWikiName( $userName );
+            $tmp  = userToWikiName( $user );
+            writeLog( "| $time | $name | repRev | $webName.$topic | $rev $tmp $date |" );
+        }
     }
 
     #### Delete Revision
@@ -611,13 +624,15 @@ sub saveTopic
         saveFile( $name, $tmp );
         lockTopic( $topic );
 
-        # delete entry in .changes
+        # delete entry in .changes : To Do !
 
-        # write log entry
-        $time = formatGmTime( $time );
-        $name = userToWikiName( $userName );
-        $rev = $rev + 0.1;
-        writeLog( "$time  $webName.$topic -- $name  cmd=$saveCmd $rev" );
+        if( $doLogTopicSave )
+        {
+            # write log entry
+            $time = formatGmTime( $time );
+            $name = userToWikiName( $userName );
+            writeLog( "| $time | $name | delRev | $webName.$topic | $rev |" );
+        }
     }
 }
 
@@ -716,7 +731,7 @@ sub externalLink
 sub isWikiName
 {
     my( $name ) = @_;
-     if ( $name =~ /[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ )
+    if ( $name =~ /[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*)$/ )
     {
         return "1";
     }

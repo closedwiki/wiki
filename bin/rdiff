@@ -117,7 +117,7 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName) = 
+    ( $topic, $webName, $scriptUrl, $userName ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     my $tmpl = "", $text = "", $diff = "";
@@ -208,6 +208,14 @@ sub main
         print $diff;
     }
 
+    if( $wiki::doLogTopicRdiff )
+    {
+        # write log entry
+        my $time = time();
+        $time = &wiki::formatGmTime( $time );
+        my $wikiUser = &wiki::userToWikiName( $userName );
+        &wiki::writeLog( "| $time | $wikiUser | rdiff | $webName.$topic | r1.$rev1 r1.$rev2 |" );
+    }
 
     # format "after" part
     $i = $maxrev;

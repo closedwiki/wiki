@@ -87,5 +87,14 @@ sub main
 	}
     }
 
+    if( $wiki::doLogTopicChanges )
+    {
+        # write log entry
+        my $time = time();
+        $time = &wiki::formatGmTime( $time );
+        my $wikiUser = &wiki::userToWikiName( $userName );
+        &wiki::writeLog( "| $time | $wikiUser | changes | $webName |  |" );
+    }
+
     print $after;
 }
