@@ -99,7 +99,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "02 Mar 2001";
+$wikiversion      = "04 Mar 2001";
 
 # ===========================
 # read the configuration part
@@ -120,8 +120,9 @@ use TWiki::Plugins;   # plugins handler  #AS
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @isoMonth; }
 
-$headerPatternDa = '^---+(\++)\s+(.+)\s*$';     # '---++ Header', '---+ Header'
-$headerPatternSp = '^\t(\++)\s+(.+)\s*$';       # '   ++ Header', '   + Header'
+# Header patterns based on '+++'. The '###' are reserved for numbered headers
+$headerPatternDa = '^---+(\++|\#+)\s+(.+)\s*$';       # '---++ Header', '---## Header'
+$headerPatternSp = '^\t(\++|\#+)\s+(.+)\s*$';         # '   ++ Header', '   + Header'
 $headerPatternHt = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>'; # '<h6>Header</h6>
 
 
@@ -694,8 +695,8 @@ sub handleToc
         if ( ! &TWiki::Store::topicExists( $web, $topicname ) ) {
             return showError( "TOC: Cannot find topic \"$web.$topicname\"" );
         }
-        @list = split( /\n/, &TWiki::Store::readWebTopic( $web, $topicname ) );
-        # FIXME: Recursively %INCLUDE{...}% handling is pending
+        @list = split( /\n/, handleCommonTags( 
+            &TWiki::Store::readWebTopic( $web, $topicname ), $topicname, $web ) );
     }
 
     @list = grep { /(<\/?[pP][rR][eE]>)|($headerPatternDa)|($headerPatternSp)|($headerPatternHt)/ } @list;
@@ -813,8 +814,6 @@ sub handleInternalTags
     $_[0] =~ s/%STARTINCLUDE%//go;
     $_[0] =~ s/%STOPINCLUDE%//go;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
-    $_[0] =~ s/%TOC{([^}]*)}%/&handleToc($_[0],$_[1],$_[2],$1)/geo;
-    $_[0] =~ s/%TOC%/&handleToc($_[0],$_[1],$_[2],"")/geo;
 }
 
 # =========================
@@ -842,6 +841,9 @@ sub handleCommonTags
     # handle tags again because of extend
     &TWiki::Prefs::handlePreferencesTags( $text );
     handleInternalTags( $text, $theTopic, $theWeb );
+
+    $text =~ s/%TOC{([^}]*)}%/&handleToc($text,$theTopic,$theWeb,$1)/geo;
+    $text =~ s/%TOC%/&handleToc($text,$theTopic,$theWeb,"")/geo;
 
     return $text;
 }
