@@ -409,7 +409,7 @@ sub searchWeb
             }
             $tempVal =~ s/%REVISION%/$revNum/o;
             $tempVal =~ s/%AUTHOR%/$revUser/o;
-            if( $doInline ) {
+            if( ! $doInline ) {
                 $tempVal = &TWiki::handleCommonTags( $tempVal, $topic );
                 $tempVal = &TWiki::getRenderedVersion( $tempVal );
             }
