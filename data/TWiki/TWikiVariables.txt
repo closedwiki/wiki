@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1073719550" format="1.0" version="1.71"}%
+%META:TOPICINFO{author="PeterThoeny" date="1074237929" format="1.0" version="1.72"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -47,17 +47,24 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> =%<nop>ICON{"type"}%= </td>
   <td> Small 16x16 pixel icon of common attachment types, like %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=, etc. Specify file type only, file name, or full path name. Example: =%<nop>ICON{"pdf"}%= returns %ICON{"pdf"}% </td>
 </tr><tr>
-  <td> =%<nop>URLPARAM{"name"}%= </td>
-  <td> Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting. Parameters are name, default and newline:
+  <td> =%<nop>PARAM{"name"}%= </td>
+  <td> Returns the value of a URL parameter. Note that there is a risk that this variable could be misused for cross-scripting. Supported parameters:
 	 | *Parameter:* | *Description:* | *Default:* |
 	 | ="name"= | The name of a URL parameter | required |
 	 | =default="..."= | Default value in case parameter is empty or missing | empty string |
 	 | =newline="&lt;br /&gt;"= | Convert newlines to other delimiters | no conversion |
-	 Example: =%<nop>URLPARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%URLPARAM{"skin"}%</b>
+	 | =encode="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. This is needed if text is put into an HTML form field | no encoding |
+	 | =encode="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | no encoding |
+	 Example: =%<nop>PARAM{"skin"}%= returns <b>print</b> for a =.../view/%WEB%/%TOPIC%?skin=print= URL. Is <b>%PARAM{"skin"}%</b>
 </td>
 </tr><tr>
-  <td> =%<nop>URLENCODE{"string"}%= </td>
-  <td> Encodes a string for use as a URL parameter. Ex: =%<nop>URLENCODE{"spaced name"}%= returns <b>%URLENCODE{"spaced name"}%</b> </td>
+  <td> =%<nop>ENCODE{"string"}%= </td>
+  <td> Encodes a string. Supported parameters:
+	 | *Parameter:* | *Description:* | *Default:* |
+	 | ="string"= | String to encode | required (can be empty) |
+	 | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;= | URL encoding |
+	 | =type="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | (this is the default) |
+	 Example: =%<nop>ENCODE{"spaced name"}%= returns <b>%ENCODE{"spaced name"}%</b> </td>
 </tr><tr>
   <td> =%<nop>WIKITOOLNAME%= </td>
   <td> The name of your TWiki site - <b>%WIKITOOLNAME%</b> </td>
@@ -202,12 +209,13 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
   <td> Table of Contents of current topic. </td>
 </tr><tr>
   <td> =%<nop>TOC{"SomeTopic" ...}%= </td>
-  <td> Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;/h2&gt;"=) are taken into account. Any heading text after ="!!"= is excluded from the TOC; for example, write ="---+!! text"= if you do not want to list a header in the TOC. Parameters are topic name, web and depth:
+  <td> Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;/h2&gt;"=) are taken into account. Any heading text after ="!!"= is excluded from the TOC; for example, write ="---+!! text"= if you do not want to list a header in the TOC. Supported parameters:
 | *Parameter:* | *Description:* | *Default:* |
 | ="TopicName"= | topic name | Current topic |
 | =web="Name"= | Name of web | Current web |
 | =depth="2"= | Limit depth of headings shown in TOC | 6 |
-Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web="%TWIKIWEB%"}%</b>=
+| =title="Some text"= | Title to appear at top of TOC | none |
+Examples: =<b>%<nop>TOC{depth="2"}%</b>=, =<b>%<nop>TOC{"TWikiDocumentation" web="%TWIKIWEB%" title="Contents:"}%</b>=
 </tr><tr>
   <td> =%<nop>SEARCH{"text" ...}%= </td>
   <td> Inline search, shows a search result embedded in a topic. Parameters are the search term, web, scope, order and many more: [1]
@@ -396,5 +404,5 @@ __Note:__ There are some more useful variables defined in the TWikiPreferences l
 		* ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
--- PeterThoeny - 19 Jan 2003 <br />
--- Main.MikeMannix - 12 May 2002
+-- TWiki:Main.PeterThoeny - 14 Jan 2004 <br />
+-- TWiki:Main.MikeMannix - 12 May 2002
