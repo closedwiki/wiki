@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="guest" date="1101889600" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! %TOPIC%
+
+Description: _a brief description of the testcase_
+
+Enter the golden HTML surrounded by structured HTML comments:
+<!-- expected -->
+<h1><a name="heading_1"></a>heading 1</h1>
+<!-- /expected -->
+
+<!-- actual -->
+%INCLUDE{"%ATTACHURL%/noexist"}%
+<!-- /actual -->
