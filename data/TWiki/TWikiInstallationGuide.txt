@@ -114,7 +114,7 @@ __Note:__ Don't worry if you are not able to put the =twiki/lib= directory at th
 <verbatim>
 $twikiLibPath = "/absolute/path/to/your/lib";
 </verbatim>
-        * =$twikiLibPath= must be set to the absolute file path of your =/twiki/lib= as seen by the web server.
+		* =$twikiLibPath= must be set to the absolute file path of your =/twiki/lib= as seen by the web server.
 		* %X% __Attention:__ While TWiki will work if you don't create this file, it will be slower.
 		* You can also set =$CPANBASE= if you are not root and need to install additional CPAN modules, but can't update the main Perl installation files on the server.  Just set this variable to the full pathname to your local lib directory, typically under your home directory. 
 		* %X% __Attention:__ If you are running TWiki on Apache 2.0 on Unix you might experience cgi scripts to hang forever. This is a known Apache 2.0 bug. See details and workaround described in the =setlib.cfg= file.
