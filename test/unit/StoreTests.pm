@@ -67,10 +67,10 @@ sub set_up {
 }
 
 sub tear_down {
-    `rm -fr $TWiki::cfg{DataDir}/$zanyweb`;
-    die "Could not clean fixture $?" if $!;
-    `rm -rf $TWiki::cfg{PubDir}/$zanyweb`;
-    die "Could not clean fixture $?" if $!;
+    my $s = `rm -fr $TWiki::cfg{DataDir}/$zanyweb`;
+    die "Could not clean fixture $!: $s" if $!;
+    $s = `rm -rf $TWiki::cfg{PubDir}/$zanyweb`;
+    die "Could not clean fixture $!: $s" if $!;
     $TWiki::cfg{WarningFileName} = $saveWF;
     $TWiki::cfg{LogFileName} = $saveLF;
 }

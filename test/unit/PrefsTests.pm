@@ -106,10 +106,10 @@ sub tear_down {
     my $this = shift;
     # restore TWiki.TWikiPreferences
     copy( $this->{TWIKIPREFSBACKUP}, $this->{TWIKIPREFS} );
-    `rm -rf $TWiki::cfg{DataDir}/$web`;
-    die "Could not clean fixture $?" if $!;
-    `rm -rf $TWiki::cfg{PubDir}/$web`;
-    die "Could not clean fixture $?" if $!;
+    my $s = `rm -rf $TWiki::cfg{DataDir}/$web`;
+    die "Could not clean fixture $s: $!" if $!;
+    $s = `rm -rf $TWiki::cfg{PubDir}/$web`;
+    die "Could not clean fixture $s: $!" if $!;
 
     foreach my $t ( keys %safe ) {
         $t =~ /^(.*)\.(.*)$/;
