@@ -13,6 +13,7 @@ cannot be subclassed e.g. for serialisation. To avoid lots of horrid code to han
 special cases of the different perl data structures, we use this array object instead.
 
 =cut
+use TWiki::Plugins::DBCachePlugin::Search;
 
 { package DBCachePlugin::Array;
 
@@ -88,21 +89,67 @@ Remove an entry at an index from the array.
 
 =begin text
 
----+++ =get($index)= -> object
-   * =$index= - integer index
-Get the element at an index. if =$index= is not an integer, will return the result
-of $this->sum($index)
+---+++ =get($key, $root)= -> datum
+   * =$k= - key
+   * $root - what ! refers to
+*Subfield syntax*
+   * =get("9", $r)= where $n is a number will get the 9th entry in the array
+   * =get("[9]", $r)= will also get the 9th entry
+   * =get(".9", $r)= will also get the 9th entry
+   * =get(".X", $r)= will return the sum of the subfield =X= of each entry
+   * =get("[?<i>search</i>]", $r)= will perform the given search over the entries in the array. Always returns an array result, even when there is only one result. For example: <code>[?name='Sam']</code> will return an array of all the entries that have their subfield =name= set to =Sam=.
+   * =!= (exclamation mark) means "reset to root". So =get("![3]", $r)= will return the 4th entry of $r (assuming $r is an array!).
+   * =get("[*X]", $r)= will get a new array made from subfield X of each entry in this array.
+
+Where the result of a subfield expansion is another object (a Map or an Array) then further subfield expansions can be used. For example,
+<verbatim>
+get("parent.UserTable[?SubTopic='ThisTopic'].UserName", $web);
+</verbatim>
+
+See also =DBCachePlugin::Map= for syntax that applies to maps.
 
 =cut
 
   sub get {
-    my ( $this, $index ) = @_;
-	if ( $index !~ /^\d+$/ ) {
-     return $this->sum( $index );
-	}
+    my ( $this, $key, $root ) = @_;
+    # Field
+    if ( $key =~ m/^(\d+)(.*)/o ) {
+	  return undef unless ( $this->size() > $1 );
+	  my $field = $this->{values}[$1];
+	  return $field->get( $2, $root ) if ( $2  && ref( $field ));
+	  return $field;
+    } elsif ( $key =~ m/^\.(.*)$/o ) {
+	  return $this->get( $1, $root );
+	} elsif ( $key =~ /^(\w+)$/o ) {
+      return $this->sum( $key );
+	} elsif ( $key =~ m/^\[\?(.+)$/o ) {
+	  my ( $one, $two ) = mbrf( "[", "]", $1);
+      my $res = $this->search( new DBCachePlugin::Search( $one ) );
+	  return $res->get( $two ) if ( $two && ref( $res ));
+	  return $res;
+	} elsif ( $key =~ m/^\[\*(.+)$/o ) {
+	  my ( $one, $two ) = mbrf( "[", "]", $1);
+      my $res = new DBCachePlugin::Array();
 
-    return undef unless ( $this->size() > $index );
-    return $this->{values}[$index];
+	  foreach my $meta ( @{$this->{values}} ) {
+		if ( ref( $meta )) {
+		  my $fieldval = $meta->get( $one, $root );
+		  if ( defined( $fieldval ) ) {
+			$res->add( $fieldval );
+		  }
+		}
+	  }
+
+	  return $res;
+	} elsif ( $key =~ m/^\[(.+)\](.*)$/o ) {
+	  my $field = $this->get( $1, $root );
+	  return $field->get( $2, $root ) if ( $2 && ref( $field ));
+	  return $field;
+    } elsif ( $key =~ m/^!(.*)$/o ) {
+	  return $root->get( $1, $root );
+    } else {
+	  die "ERROR: bad Array expression at $key";
+	}
   }
 
 =begin text
@@ -139,7 +186,7 @@ Returns the sum of values of the given field in the objects stored in this array
 
     foreach my $meta ( @{$this->{values}} ) {
       if ( ref( $meta )) {
-		my $fieldval = $meta->get( $field );
+		my $fieldval = $meta->get( $field, undef );
 		if ( defined( $fieldval ) ) {
 		  if ( defined( $subfields )) {
 			die "$field has no subfield $subfields" unless ( ref( $fieldval ));
@@ -278,6 +325,33 @@ method must be overridden by subclasses is serialisation of their data fields is
     while ( $sz-- > 0 ) {
       push( @{$this->{values}}, $archive->readObject() );
     }
+  }
+
+  # PUBLIC but not exported
+  # bracket-matching split of a string into ( $one, $two ) where $one
+  # matches the section before the closing bracket and $two matches
+  # the section after. throws if the closing bracket isn't found.
+  sub mbrf {
+	my ($ob, $cb, $s) = @_;
+	
+	my @a = reverse(split(/ */, $s));
+	my $pre = "";
+	my $d = 0;
+	
+	while ( $#a >= 0 ) {
+	  my $c = pop( @a );
+	  if ($c eq $cb) {
+		if ( !$d ) {
+		  return ( $pre, join("", reverse(@a)));
+		} else {
+		  $d--;
+		}
+	  } elsif ( $c eq $ob ) {
+		$d++;
+	  }
+	  $pre .= $c;
+	}
+	die "ERROR: mismatched $ob$cb at $s";
   }
 }
 

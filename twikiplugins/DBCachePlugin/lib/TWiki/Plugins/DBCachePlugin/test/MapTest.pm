@@ -83,13 +83,14 @@ sub testMultipleDefs4 {
   $this->assert_str_equals("one", $attrs->remove("a"));
 }
 
-sub testStringOnOwn {
-  my $this = shift;
-  my $attrs = new DBCachePlugin::Map( "\"able cain\" a=\"no\"" );
-  $this->assert_not_null($attrs);
-  $this->assert_str_equals("able cain", $attrs->get("\$1"));
-  $this->assert_str_equals("no", $attrs->remove("a"));
-}
+# Where did this come from? Undocumented "feature"
+#sub testStringOnOwn {
+#  my $this = shift;
+#  my $attrs = new DBCachePlugin::Map( "\"able cain\" a=\"no\"" );
+#  $this->assert_not_null($attrs);
+#  $this->assert_str_equals("able cain", $attrs->get("\$1"));
+#  $this->assert_str_equals("no", $attrs->remove("a"));
+#}
 
 sub test_big {
   my $this = shift;
@@ -145,6 +146,32 @@ sub test_search {
     $tst =~ s/$v//;
   }
   $this->assert_str_equals("", $tst);
+}
+
+sub test_get {
+  my $this = shift;
+  my $a = new DBCachePlugin::Map("name=a");
+  my $b = new DBCachePlugin::Map("name=b");
+  my $c = new DBCachePlugin::Map("name=c");
+
+  $a->set("b", $b);
+  $a->set("c", $c);
+  $a->set("ref", "b");
+  $b->set("a", $a);
+  $b->set("c", $c);
+  $b->set("ref", "c");
+  $c->set("a", $a);
+  $c->set("b", $b);
+  $c->set("ref", "a");
+
+  $this->assert_str_equals("a", $a->get("name", $a));
+  $this->assert_str_equals("a", $a->get(".name", $a));
+  $this->assert_str_equals("a", $a->get("[name]", $a));
+  $this->assert_str_equals("b", $a->get("b.name", $a));
+  $this->assert_str_equals("b", $a->get("b[name]", $a));
+  $this->assert_str_equals("c", $a->get("[c].name", $a));
+  $this->assert_str_equals("c", $a->get("[c][name]", $a));
+  $this->assert_str_equals("a", $a->get("[c.ref].name", $a));
 }
 
 1;
