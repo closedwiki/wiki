@@ -1,9 +1,13 @@
-%META:TOPICINFO{author="MikeMannix" date="999336394" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="MikeMannix" date="999566131" format="1.0" version="1.13"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Operating Environment
 
-Low requirements on client-side and server-side environment, to keep TWiki deployment as broad as possible is a key element of the TWikiMission. Strict W3C and ECMA standards compliance is also a mandate. These requirements are amended from time to time as technology progresses.
+Server and client system requirements, file system structure
+
+---+++ Overview
+
+Low requirements on client-side and server-side environment, to keep TWiki deployment as broad as possible is a key element of the __TWikiMission__. Strict W3C and ECMA standards compliance is also a mandate. These requirements are amended from time to time as technology progresses.
 
 ---+++ Server-Side Requirements
 
@@ -31,49 +35,51 @@ The basic TWiki engine and templates have a low requirement on the browser:
 |  *Browser Requirements*  ||
 | *Resource* | *Details* |
 | HTML 3.2 browser | |
-| JavaScript 1.? | Optional: JS degrades gracefully |
+| <nop>JavaScript 1.? | Optional: JS degrades gracefully |
 | Cookies | Not used |
 | CSS1/2 | ???? |
 
 	* TWiki generates XHTML 1.0 code as long as it is compatible with HTML 3.2.
 
-__WHAT ABOUT WEB STANDARDS PROJECT - CSS CONTROL__
+__WHAT ABOUT WEB STANDARDS BROWSER COMPATIBILITY MOVEMENT & CSS CONTROL__
 
 ---+++ Known Issues
 
-	* Some TWikiSkins may require more, like cookies and JavaScript
+	* Some <nop>TWikiSkins may require more, like cookies and <nop>JavaScript
 	* At present, contributed Plugins are not checked against compatibility standards, and may require anything imaginable: browser-specific functions, Java, cookies, CSS, etc.
 
----+++ TWiki Directory Structure
+---+++ TWiki File System
 
-You can easily rename the root TWiki directory - ==twiki== - to whatever you like by changing it in the ==twiki.cfg== configuration file. However, to keep the current installation and future upgrades simple, you should leave the subdirectory structure intact:
+You can rename the root TWiki directory - ==twiki== - to whatever you like by changing it in the ==twiki.cfg== configuration file. However, to keep the current installation and future upgrades simple, you should leave the subdirectory structure intact:
 
 | *Directory:*		  | *Files:*		 | *Used for:* |
 | ==twiki==			  |  [[#TWikiFiles][list]]  | Start-up info |
 | ==twiki/bin==		 |  [[#BinFiles][list]]  | Perl scripts  |
-| ==twiki/lib==		 |  [[#LibFiles][list]]  | Configuration file &amp; main library |
-| ==twiki/lib/TWiki== |  [[#LibFiles][list]]  | Perl modules |
-| ==twiki/lib/TWiki/Plugins== |  [[#LibFiles][list]]  | TWikiPlugins Perl modules |
+| ==twiki/lib==		 |  [[#LibFiles][list]]  | Configuration file, main library, Perl system modules, Plugins |
 | ==twiki/pub==		 |  [[#PubFiles][list]]  | Public support files (ex: FileAttachments, images) and RCS histories) |
 | ==twiki/data==		|  [[#DataFiles][list]]  | Topic text (page content) and RCS histories; |
 | ==twiki/templates== |  [[#TemplatesFiles][list]]  | HTML templates, used by TWiki scripts |
 
 ---+++ File Descriptions
 
-A rundown of the individual files in the current %VERSION% distribution, organized by TWiki root directories. Note that there may be minor differences in the start-up ==data== files.
+A rundown of the individual files in the current %VERSION% distribution, organized by TWiki root directories. Note that there may be minor differences in the start-up ==data== files. All listings are complete unless otherwise noted.
 
 #TWikiFiles
 ---++++ Files in <code>twiki</code>
 
+Introductory and installation files.
+
 | *File:*		 | *Used for:* |
-| ==index.html== | A page with a link to first launch TWiki after install. |
-| ==license.txt==		  | Gnu General Public License and TWiki-specific info. |
+| ==index.html== | A page with a link to first launch TWiki after install |
+| ==license.txt==		  | GNU General Public License and TWiki-specific info |
 | ==readme.txt==		  | General TWiki start-up info with relevant URLs. |
-| ==TWikiDocumentation.html==			 | All documentation packaged as a single page. |
-| ==TWikiHistory.html==		  | TWiki development timeline. |
+| ==TWikiDocumentation.html==			 | All documentation packaged as a single page |
+| ==TWikiHistory.html==		  | TWiki development timeline |
 
 #BinFiles
 ---++++ Files in <code>twiki/bin</code>
+
+All Perl CGI scripts.
 
 | *File:*		 | *Used for:* |
 | ==.htaccess.txt== | Authentication. Rename to .htaccess and customize if used |
@@ -98,6 +104,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 #LibFiles
 ---++++ Files under <code>twiki/lib</code>
 
+The new ==lib/TWiki/Plugins== directories contain core configuration, libraries and function modules, and Plugins.
+
 | *File:*			  | *Used for:* |
 | ==TWiki.pm==		| Main TWiki library |
 | ==TWiki.cfg==	  | For configuration, used by ==TWiki.pm== |
@@ -115,6 +123,8 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 
 #PubFiles
 ---++++ Files under <code>twiki/pub</code>
+
+__attachments like images...__
 
 | *File:*			| *Used for:* |
 | ==favicon.ico== | xxxx |
@@ -162,7 +172,9 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==TWiki/WabiSabi/wabisabi.gif== | xxxx |
 
 #DataFiles
----++++ Files under <code>twiki/data</code> 
+---++++ Files under <code>twiki/data</code>
+
+The ==data== directory stores the content of TWiki pages as individual text files. Each active web has its own subdirectory. The TWiki distribution package includes four start-up webs, and quite a number of pages with documentation and demo content. _This is a representative partial file listing..._
 
 | *File:*			| *Used for:* |
 | ==.htpasswd== | xxxx |
@@ -184,36 +196,7 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==_default/WebSearch.txt,v== | xxxx |
 | ==_default/WebStatistics.txt== | xxxx |
 | ==_default/WebStatistics.txt,v== | xxxx |
-| ==Know/.changes== | xxxx |
-| ==Know/.mailnotify== | xxxx |
-| ==Know/IncorrectDllVersionW32PTH10DLL.txt== | xxxx |
-| ==Know/IncorrectDllVersionW32PTH10DLL.txt,v== | xxxx |
-| ==Know/NoDisclosure.txt== | xxxx |
-| ==Know/NoDisclosure.txt,v== | xxxx |
-| ==Know/OperatingSystem.txt== | xxxx |
-| ==Know/OperatingSystem.txt,v== | xxxx |
-| ==Know/OsHPUX.txt== | xxxx |
-| ==Know/OsHPUX.txt,v== | xxxx |
-| ==Know/OsLinux.txt== | xxxx |
-| ==Know/OsLinux.txt,v== | xxxx |
-| ==Know/OsMacOS.txt== | xxxx |
-| ==Know/OsMacOS.txt,v== | xxxx |
-| ==Know/OsSolaris.txt== | xxxx |
-| ==Know/OsSolaris.txt,v== | xxxx |
-| ==Know/OsSunOS.txt== | xxxx |
-| ==Know/OsSunOS.txt,v== | xxxx |
-| ==Know/OsVersion.txt== | xxxx |
-| ==Know/OsVersion.txt,v== | xxxx |
-| ==Know/OsWin.txt== | xxxx |
-| ==Know/OsWin.txt,v== | xxxx |
-| ==Know/PublicFAQ.txt== | xxxx |
-| ==Know/PublicFAQ.txt,v== | xxxx |
-| ==Know/PublicSupported.txt== | xxxx |
-| ==Know/PublicSupported.txt,v== | xxxx |
-| ==Know/ReadmeFirst.txt== | xxxx |
-| ==Know/ReadmeFirst.txt,v== | xxxx |
-| ==Know/SunOS.txt== | xxxx |
-| ==Know/SunOS.txt,v== | xxxx |
+|  ...  |  ...  |
 | ==Know/TopicClassification.txt== | xxxx |
 | ==Know/TopicClassification.txt,v== | xxxx |
 | ==Know/TWikiCategory.txt== | xxxx |
@@ -224,32 +207,7 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==Know/WebChanges.txt,v== | xxxx |
 | ==Know/WebForm.txt== | xxxx |
 | ==Know/WebForm.txt,v== | xxxx |
-| ==Know/WebHome.txt== | xxxx |
-| ==Know/WebHome.txt,v== | xxxx |
-| ==Know/WebIndex.txt== | xxxx |
-| ==Know/WebIndex.txt,v== | xxxx |
-| ==Know/WebNotify.txt== | xxxx |
-| ==Know/WebNotify.txt,v== | xxxx |
-| ==Know/WebPreferences.txt== | xxxx |
-| ==Know/WebPreferences.txt,v== | xxxx |
-| ==Know/WebSearch.txt== | xxxx |
-| ==Know/WebSearch.txt,v== | xxxx |
-| ==Know/WebStatistics.txt== | xxxx |
-| ==Know/WebStatistics.txt,v== | xxxx |
-| ==Know/WebTopicEditTemplate.txt== | xxxx |
-| ==Know/WebTopicEditTemplate.txt,v== | xxxx |
-| ==Know/WinDoze95Crash.txt== | xxxx |
-| ==Know/WinDoze95Crash.txt,v== | xxxx |
-| ==Main/TWikiAdminGroup.txt,v== | xxxx |
-| ==Main/.mailnotify== | xxxx |
-| ==Main/FileAttachment.txt== | xxxx |
-| ==Main/FileAttachment.txt,v== | xxxx |
-| ==Main/JohnTalintyre.txt== | xxxx |
-| ==Main/JohnTalintyre.txt,v== | xxxx |
-| ==Main/KevinKinnell.txt== | xxxx |
-| ==Main/KevinKinnell.txt,v== | xxxx |
-| ==Main/LondonOffice.txt== | xxxx |
-| ==Main/LondonOffice.txt,v== | xxxx |
+|  ...  |  ...  |
 | ==Main/NicholasLee.txt== | xxxx |
 | ==Main/NicholasLee.txt,v== | xxxx |
 | ==Main/NobodyGroup.txt== | xxxx |
@@ -260,10 +218,7 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==Main/PeterThoeny.txt,v== | xxxx |
 | ==Main/SanJoseOffice.txt== | xxxx |
 | ==Main/SanJoseOffice.txt,v== | xxxx |
-| ==Main/TokyoOffice.txt== | xxxx |
-| ==Main/TokyoOffice.txt,v== | xxxx |
-| ==Main/TWikiAdminGroup.txt== | xxxx |
-| ==Main/.changes== | xxxx |
+|  ...  |  ...  |
 | ==Main/TWikiGroups.txt== | xxxx |
 | ==Main/TWikiGroups.txt,v== | xxxx |
 | ==Main/TWikiGuest.txt== | xxxx |
@@ -272,251 +227,34 @@ A rundown of the individual files in the current %VERSION% distribution, organiz
 | ==Main/TWikiUsers.txt,v== | xxxx |
 | ==Main/TWikiVariables.txt== | xxxx |
 | ==Main/TWikiVariables.txt,v== | xxxx |
-| ==Main/WebChanges.txt== | xxxx |
-| ==Main/WebChanges.txt,v== | xxxx |
-| ==Main/WebHome.txt== | xxxx |
-| ==Main/WebHome.txt,v== | xxxx |
-| ==Main/WebIndex.txt== | xxxx |
-| ==Main/WebIndex.txt,v== | xxxx |
-| ==Main/WebNotify.txt== | xxxx |
-| ==Main/WebNotify.txt,v== | xxxx |
-| ==Main/WebPreferences.txt== | xxxx |
-| ==Main/WebPreferences.txt,v== | xxxx |
-| ==Main/WebSearch.txt== | xxxx |
-| ==Main/WebSearch.txt,v== | xxxx |
-| ==Main/WebStatistics.txt== | xxxx |
-| ==Main/WebStatistics.txt,v== | xxxx |
-| ==Test/.changes== | xxxx |
-| ==Test/.mailnotify== | xxxx |
+|  ...  |  ...  |
 | ==Test/TestTopic1.txt== | xxxx |
 | ==Test/TestTopic1.txt,v== | xxxx |
 | ==Test/WebChanges.txt== | xxxx |
 | ==Test/WebChanges.txt,v== | xxxx |
 | ==Test/WebHome.txt== | xxxx |
 | ==Test/WebHome.txt,v== | xxxx |
-| ==Test/WebIndex.txt== | xxxx |
-| ==Test/WebIndex.txt,v== | xxxx |
-| ==Test/WebNotify.txt== | xxxx |
-| ==Test/WebNotify.txt,v== | xxxx |
-| ==Test/WebPreferences.txt== | xxxx |
-| ==Test/WebPreferences.txt,v== | xxxx |
-| ==Test/WebSearch.txt== | xxxx |
-| ==Test/WebSearch.txt,v== | xxxx |
-| ==Test/WebStatistics.txt== | xxxx |
-| ==Test/WebStatistics.txt,v== | xxxx |
+|  ...  |  ...  |
 | ==Trash/.changes== | xxxx |
 | ==Trash/WebChanges.txt== | xxxx |
 | ==Trash/WebChanges.txt,v== | xxxx |
 | ==Trash/WebHome.txt== | xxxx |
 | ==Trash/WebHome.txt,v== | xxxx |
-| ==Trash/WebIndex.txt== | xxxx |
-| ==Trash/WebIndex.txt,v== | xxxx |
-| ==Trash/WebNotify.txt== | xxxx |
-| ==Trash/WebNotify.txt,v== | xxxx |
-| ==Trash/WebPreferences.txt== | xxxx |
-| ==Trash/WebPreferences.txt,v== | xxxx |
-| ==Trash/WebSearch.txt== | xxxx |
-| ==Trash/WebSearch.txt,v== | xxxx |
-| ==Trash/WebStatistics.txt== | xxxx |
-| ==Trash/WebStatistics.txt,v== | xxxx |
-| ==TWiki/.changes== | xxxx |
-| ==TWiki/.mailnotify== | xxxx |
+|  ...  |  ...  |
 | ==TWiki/AlWilliams.txt== | xxxx |
 | ==TWiki/AlWilliams.txt,v== | xxxx |
 | ==TWiki/AndreaSterbini.txt== | xxxx |
 | ==TWiki/AndreaSterbini.txt,v== | xxxx |
-| ==TWiki/BillClinton.txt== | xxxx |
-| ==TWiki/BillClinton.txt,v== | xxxx |
-| ==TWiki/BookView.txt== | xxxx |
-| ==TWiki/BookView.txt,v== | xxxx |
-| ==TWiki/BumpyWord.txt== | xxxx |
-| ==TWiki/BumpyWord.txt,v== | xxxx |
-| ==TWiki/ChristopheVermeulen.txt== | xxxx |
-| ==TWiki/ChristopheVermeulen.txt,v== | xxxx |
-| ==TWiki/CrisBailiff.txt== | xxxx |
-| ==TWiki/CrisBailiff.txt,v== | xxxx |
-| ==TWiki/DavidWarman.txt== | xxxx |
-| ==TWiki/DavidWarman.txt,v== | xxxx |
-| ==TWiki/DefaultPlugin.txt== | xxxx |
-| ==TWiki/DefaultPlugin.txt,v== | xxxx |
-| ==TWiki/DeleteOrRenameATopic.txt== | xxxx |
-| ==TWiki/DeleteOrRenameATopic.txt,v== | xxxx |
+|  ...  |  ...  |
 | ==TWiki/DeleteTopic.txt== | xxxx |
 | ==TWiki/DeleteTopic.txt,v== | xxxx |
 | ==TWiki/DontNotify.txt== | xxxx |
 | ==TWiki/DontNotify.txt,v== | xxxx |
-| ==TWiki/EditDoesNotIncreaseTheRevision.txt== | xxxx |
-| ==TWiki/EditDoesNotIncreaseTheRevision.txt,v== | xxxx |
-| ==TWiki/EmptyPlugin.txt== | xxxx |
-| ==TWiki/EmptyPlugin.txt,v== | xxxx |
-| ==TWiki/ExampleTopicTemplate.txt== | xxxx |
-| ==TWiki/ExampleTopicTemplate.txt,v== | xxxx |
-| ==TWiki/FileAttachment.txt== | xxxx |
-| ==TWiki/FileAttachment.txt,v== | xxxx |
-| ==TWiki/GnuGeneralPublicLicense.txt== | xxxx |
-| ==TWiki/GnuGeneralPublicLicense.txt,v== | xxxx |
-| ==TWiki/GoodStyle.txt== | xxxx |
-| ==TWiki/GoodStyle.txt,v== | xxxx |
-| ==TWiki/HaroldGottschalk.txt== | xxxx |
-| ==TWiki/HaroldGottschalk.txt,v== | xxxx |
-| ==TWiki/Hey.txt== | xxxx |
-| ==TWiki/Hey.txt,v== | xxxx |
-| ==TWiki/IncludeTopicsAndWebPages.txt== | xxxx |
-| ==TWiki/IncludeTopicsAndWebPages.txt,v== | xxxx |
-| ==TWiki/InterwikiPlugin.txt== | xxxx |
-| ==TWiki/InterwikiPlugin.txt,v== | xxxx |
-| ==TWiki/InterWikis.txt== | xxxx |
-| ==TWiki/InterWikis.txt,v== | xxxx |
-| ==TWiki/JaneDoeTestCreateForm.txt== | xxxx |
-| ==TWiki/JaneDoeTestCreateForm.txt,v== | xxxx |
-| ==TWiki/JaneDoeTestEditForm.txt== | xxxx |
-| ==TWiki/JaneDoeTestEditForm.txt,v== | xxxx |
-| ==TWiki/JohnAltstadt.txt== | xxxx |
-| ==TWiki/JohnAltstadt.txt,v== | xxxx |
-| ==TWiki/JohnTalintyre.txt== | xxxx |
-| ==TWiki/JohnTalintyre.txt,v== | xxxx |
-| ==TWiki/KevinKinnell.txt== | xxxx |
-| ==TWiki/KevinKinnell.txt,v== | xxxx |
-| ==TWiki/ManpreetSingh.txt== | xxxx |
-| ==TWiki/ManpreetSingh.txt,v== | xxxx |
-| ==TWiki/MetaDataDefinition.txt== | xxxx |
-| ==TWiki/MetaDataDefinition.txt,v== | xxxx |
-| ==TWiki/MoveTopic.txt== | xxxx |
-| ==TWiki/MoveTopic.txt,v== | xxxx |
-| ==TWiki/MoveWeb.txt== | xxxx |
-| ==TWiki/MoveWeb.txt,v== | xxxx |
-| ==TWiki/NicholasLee.txt== | xxxx |
-| ==TWiki/NicholasLee.txt,v== | xxxx |
-| ==TWiki/PeterFokkinga.txt== | xxxx |
-| ==TWiki/PeterFokkinga.txt,v== | xxxx |
-| ==TWiki/PeterThoeny.txt== | xxxx |
-| ==TWiki/PeterThoeny.txt,v== | xxxx |
-| ==TWiki/PreviewBackground.txt== | xxxx |
-| ==TWiki/PreviewBackground.txt,v== | xxxx |
-| ==TWiki/RandyKramer.txt== | xxxx |
-| ==TWiki/RandyKramer.txt,v== | xxxx |
-| ==TWiki/RegularExpression.txt== | xxxx |
-| ==TWiki/RegularExpression.txt,v== | xxxx |
-| ==TWiki/ManagingTopics.txt== | xxxx |
-| ==TWiki/ManagingTopics.txt,v== | xxxx |
-| ==TWiki/SearchDoesNotWork.txt== | xxxx |
-| ==TWiki/SearchDoesNotWork.txt,v== | xxxx |
-| ==TWiki/SimultaneousEdits.txt== | xxxx |
-| ==TWiki/SimultaneousEdits.txt,v== | xxxx |
-| ==TWiki/StandardColors.txt== | xxxx |
-| ==TWiki/StandardColors.txt,v== | xxxx |
-| ==TWiki/StanleyKnutson.txt== | xxxx |
-| ==TWiki/StanleyKnutson.txt,v== | xxxx |
-| ==TWiki/SvenDowideit.txt== | xxxx |
-| ==TWiki/SvenDowideit.txt,v== | xxxx |
-| ==TWiki/TextFormattingFAQ.txt== | xxxx |
-| ==TWiki/TextFormattingFAQ.txt,v== | xxxx |
-| ==TWiki/TextFormattingRules.txt== | xxxx |
-| ==TWiki/TextFormattingRules.txt,v== | xxxx |
-| ==TWiki/TWikiAccessControl.txt== | xxxx |
-| ==TWiki/TWikiAccessControl.txt,v== | xxxx |
-| ==TWiki/ManagingWebs.txt== | xxxx |
-| ==TWiki/ManagingWebs.txt,v== | xxxx |
-| ==TWiki/TWikiUserAuthentication.txt== | xxxx |
-| ==TWiki/TWikiUserAuthentication.txt,v== | xxxx |
-| ==TWiki/TWikiCategoryTable.txt== | xxxx |
-| ==TWiki/TWikiCategoryTable.txt,v== | xxxx |
-| ==TWiki/TWikiContributor.txt== | xxxx |
-| ==TWiki/TWikiContributor.txt,v== | xxxx |
-| ==TWiki/TWikiDocumentation.txt== | xxxx |
-| ==TWiki/TWikiDocumentation.txt,v== | xxxx |
-| ==TWiki/TWikiDownload.txt== | xxxx |
-| ==TWiki/TWikiDownload.txt,v== | xxxx |
-| ==TWiki/TWikiEnhancementRequests.txt== | xxxx |
-| ==TWiki/TWikiEnhancementRequests.txt,v== | xxxx |
-| ==TWiki/TWikiFAQ.txt== | xxxx |
-| ==TWiki/TWikiFAQ.txt,v== | xxxx |
-| ==TWiki/TWikiFormTemplate.txt== | xxxx |
-| ==TWiki/TWikiFormTemplate.txt,v== | xxxx |
-| ==TWiki/TWikiHistory.txt== | xxxx |
-| ==TWiki/TWikiHistory.txt,v== | xxxx |
-| ==TWiki/TWikiImplementationNotes.txt== | xxxx |
-| ==TWiki/TWikiImplementationNotes.txt,v== | xxxx |
-| ==TWiki/TWikiInstallationGuide.txt== | xxxx |
-| ==TWiki/TWikiInstallationGuide.txt,v== | xxxx |
-| ==TWiki/WebNotification.txt== | xxxx |
-| ==TWiki/WebNotification.txt,v== | xxxx |
-| ==TWiki/TWikiPlannedFeatures.txt== | xxxx |
-| ==TWiki/TWikiPlannedFeatures.txt,v== | xxxx |
-| ==TWiki/TWikiPlugins.txt== | xxxx |
-| ==TWiki/TWikiPlugins.txt,v== | xxxx |
-| ==TWiki/TWikiPreferences.txt== | xxxx |
-| ==TWiki/TWikiPreferences.txt,v== | xxxx |
-| ==TWiki/TWikiRegistration.txt== | xxxx |
-| ==TWiki/TWikiRegistration.txt,v== | xxxx |
-| ==TWiki/TWikiRegistrationPub.txt== | xxxx |
-| ==TWiki/TWikiRegistrationPub.txt,v== | xxxx |
-| ==TWiki/TWikiSkins.txt== | xxxx |
-| ==TWiki/TWikiSkins.txt,v== | xxxx |
-| ==TWiki/TWikiTemplates.txt== | xxxx |
-| ==TWiki/TWikiTemplates.txt,v== | xxxx |
-| ==TWiki/TWikiTutorial.txt== | xxxx |
-| ==TWiki/TWikiTutorial.txt,v== | xxxx |
-| ==TWiki/TWikiTutorialKK.txt== | xxxx |
-| ==TWiki/TWikiUpgradeGuide.txt== | xxxx |
-| ==TWiki/TWikiUpgradeGuide.txt,v== | xxxx |
-| ==TWiki/TWikiUpgradeTo01May2000.txt== | xxxx |
-| ==TWiki/TWikiUpgradeTo01May2000.txt,v== | xxxx |
-| ==TWiki/TWikiUsernameVsLoginUsername.txt== | xxxx |
-| ==TWiki/TWikiUsernameVsLoginUsername.txt,v== | xxxx |
-| ==TWiki/TWikiVariables.txt== | xxxx |
-| ==TWiki/TWikiVariables.txt,v== | xxxx |
-| ==TWiki/TWikiWeb.txt== | xxxx |
-| ==TWiki/TWikiWeb.txt,v== | xxxx |
-| ==TWiki/TWikiWebsTable.txt== | xxxx |
-| ==TWiki/TWikiWebsTable.txt,v== | xxxx |
-| ==TWiki/UnlockTopic.txt== | xxxx |
-| ==TWiki/UnlockTopic.txt,v== | xxxx |
-| ==TWiki/WabiSabi.txt== | xxxx |
-| ==TWiki/WabiSabi.txt,v== | xxxx |
-| ==TWiki/WebChanges.txt== | xxxx |
-| ==TWiki/WebChanges.txt,v== | xxxx |
-| ==TWiki/WebHome.txt== | xxxx |
-| ==TWiki/WebHome.txt,v== | xxxx |
-| ==TWiki/WebIndex.txt== | xxxx |
-| ==TWiki/WebIndex.txt,v== | xxxx |
-| ==TWiki/WebNotify.txt== | xxxx |
-| ==TWiki/WebNotify.txt,v== | xxxx |
-| ==TWiki/WebPreferences.txt== | xxxx |
-| ==TWiki/WebPreferences.txt,v== | xxxx |
-| ==TWiki/WebSearch.txt== | xxxx |
-| ==TWiki/WebSearch.txt,v== | xxxx |
-| ==TWiki/WebStatistics.txt== | xxxx |
-| ==TWiki/WebStatistics.txt,v== | xxxx |
-| ==TWiki/WebTopicEditTemplate.txt== | xxxx |
-| ==TWiki/WebTopicEditTemplate.txt,v== | xxxx |
-| ==TWiki/WebTopicNonWikiTemplate.txt== | xxxx |
-| ==TWiki/WebTopicNonWikiTemplate.txt,v== | xxxx |
-| ==TWiki/WebTopicViewTemplate.txt== | xxxx |
-| ==TWiki/WebTopicViewTemplate.txt,v== | xxxx |
-| ==TWiki/WelcomeGuest.txt== | xxxx |
-| ==TWiki/WelcomeGuest.txt,v== | xxxx |
-| ==TWiki/WhatIsWikiWiki.txt== | xxxx |
-| ==TWiki/WhatIsWikiWiki.txt,v== | xxxx |
-| ==TWiki/WikiCulture.txt== | xxxx |
-| ==TWiki/WikiCulture.txt,v== | xxxx |
-| ==TWiki/WikiName.txt== | xxxx |
-| ==TWiki/WikiName.txt,v== | xxxx |
-| ==TWiki/WikiNotation.txt== | xxxx |
-| ==TWiki/WikiNotation.txt,v== | xxxx |
-| ==TWiki/WikiReferences.txt== | xxxx |
-| ==TWiki/WikiReferences.txt,v== | xxxx |
-| ==TWiki/WikiSyntax.txt== | xxxx |
-| ==TWiki/WikiSyntax.txt,v== | xxxx |
-| ==TWiki/WikiTopic.txt== | xxxx |
-| ==TWiki/WikiTopic.txt,v== | xxxx |
-| ==TWiki/WikiWikiClones.txt== | xxxx |
-| ==TWiki/WikiWikiClones.txt,v== | xxxx |
-| ==TWiki/WikiWord.txt== | xxxx |
-| ==TWiki/WikiWord.txt,v== | xxxx |
 
 #TemplatesFiles
 ---++++ Files in <code>twiki/templates</code>
+
+__Used to flexibly control appearance of rendered pages...__
 
 | *File:*			| *Used for:* |
 | ==oopsbadpwformat.tmpl== | xxxx |
