@@ -8,8 +8,16 @@
 
 #include "mod_dav.h"
 #include "dav_fs_repos.h"
+#include "dav_twiki.h"
 
 extern const dav_hooks_vsn dav_hooks_vsn_fs;
+
+static void monitor(const char* mess, dav_resource* resource) {
+  if (resource->monitor < 2)
+	return;
+
+  fprintf(stderr, "DAV_FS_VSN: %s %s\n", mess, dav_twiki_tostring(resource));
+}
 
 /*
  * Return supported versioning level for the Versioning header
@@ -26,6 +34,7 @@ static dav_error * dav_fs_mkresource(dav_resource *resource)
     const char *dirpath;
 	pool* p;
 
+	monitor("MKRESOURCE ", resource);
     dav_fs_dir_file_name(resource, &dirpath, NULL);
     p = dav_fs_pool(resource);
     return dav_new_error(p,
@@ -40,13 +49,13 @@ static dav_error * dav_fs_mkresource(dav_resource *resource)
  */
 static dav_error * dav_fs_checkout(dav_resource *resource) {
 
-    /*logEvent("FS_CHECKOUT ", resource);*/
-    /* working is supposed to be the revision number of the working
-     * revision, but I'm cheating here and simply using it as a
-     * semaphore to ensure the rest of mod_dav understands that this
-     * file is checked out. */
-    resource->working = 1;
-    return NULL;
+  monitor("CHECKOUT ", resource);
+  /* working is supposed to be the revision number of the working
+   * revision, but I'm cheating here and simply using it as a
+   * semaphore to ensure the rest of mod_dav understands that this
+   * file is checked out. */
+  resource->working = 1;
+  return NULL;
 }
 
 /* Uncheckout a resource. If successful, the resource
@@ -54,10 +63,11 @@ static dav_error * dav_fs_checkout(dav_resource *resource) {
  */
 static dav_error * dav_fs_uncheckout(dav_resource *resource)
 {
-    /*logEvent("FS_UNCHECKOUT ", resource);*/
+  if (resource->twiki) {
+	monitor("UNCHECKOUT ", resource);
     resource->working = 0;
-
-    return NULL;
+  }
+  return NULL;
 }
 
 /* Checkin a working resource. If successful, the resource
@@ -65,32 +75,15 @@ static dav_error * dav_fs_uncheckout(dav_resource *resource)
  */
 static dav_error * dav_fs_checkin(dav_resource *resource)
 {
-  /* logEvent("FS_CHECKIN ", resource);*/
-  twiki_resources* tr = resource->twiki;
-  pool* p = dav_fs_pool(resource);
-  const char* cmd = ap_psprintf(p,
-								"%s commit %s %s %s %s",
-								tr->script,
-								tr->web,
-								tr->topic,
-								tr->file,
-								tr->user ? tr->user : "guest");
+  if (resource->twiki) {
+	monitor("CHECKIN ", resource);
+	dav_error* e = dav_twiki_commit(resource, resource->twiki->file);
+	if (e)
+	  return e;
 
-  /*fprintf(stderr, "%s\n", cmd);*/
-
-  /* Wait for process to finish. Dangerous? Maybe. */
-  int e = system(cmd);
-  if (e) {
-	return dav_new_error(p,
-						 HTTP_FORBIDDEN,
-						 0,
-						 ap_psprintf(p, "%s ext code %d",
-									 cmd,
-									 e));
+	/* release the resource */
+	resource->working = 0;
   }
-
-  /* release the resource */
-  resource->working = 0;
 
   return NULL;
 }
@@ -100,8 +93,7 @@ static dav_error * dav_fs_checkin(dav_resource *resource)
  */
 static int dav_fs_versionable(const dav_resource *resource)
 {
-    /* Assume twiki resources can always be versioned just now */
-    return (resource->twiki != NULL);
+  return (resource->twiki != NULL);
 }
 
 /* Determine whether auto-versioning is enabled for a resource
@@ -110,8 +102,9 @@ static int dav_fs_versionable(const dav_resource *resource)
  */
 static int dav_fs_auto_version_enabled(const dav_resource *resource)
 {
-    /* Assume twiki resources can always be versioned just now */
-    return (resource->twiki != NULL);
+    /* TWiki leaf resources are auto-versioned */
+    return (resource->twiki != NULL &&
+			resource->twiki->file != NULL);
 }
 
 /* Don't actually use all these hooks, just get_vsn_header, checkout,

@@ -234,20 +234,21 @@ typedef struct twiki_resources {
  * to determine whether a non-existent resource is a lock-null resource.
  */
 typedef struct dav_resource {
-    dav_resource_type type;
+  dav_resource_type type;
 
-    int exists;		/* 0 => null resource */
-    int collection;	/* 0 => file (if type == DAV_RESOURCE_TYPE_REGULAR) */
-    int versioned;	/* 0 => unversioned */
-    int working;	/* 0 => revision (if versioned) */
-    int baselined;	/* 0 => not baselined */
-    twiki_resources* twiki;
+  int exists;		/* 0 => null resource */
+  int collection;	/* 0 => file (if type == DAV_RESOURCE_TYPE_REGULAR) */
+  int versioned;	/* 0 => unversioned */
+  int working;	/* 0 => revision (if versioned) */
+  int baselined;	/* 0 => not baselined */
+  twiki_resources* twiki;
+  int monitor;
 
-    const char *uri;	/* the URI for this resource */
+  const char *uri;	/* the URI for this resource */
 
-    dav_resource_private *info;
-
-    const dav_hooks_repository *hooks;	/* hooks used for this resource */
+  dav_resource_private *info;
+  
+  const dav_hooks_repository *hooks;	/* hooks used for this resource */
 
 } dav_resource;
 
@@ -1814,14 +1815,8 @@ int dav_insert_uri(array_header *uri_array, const char *uri);
 /* return the text for a given HTTP status code. */
 const char * dav_lookup_status(int status);
 
-#define TWIKI_NOTYPE 0
-/* .../data */
-#define TWIKI_DATA 1
-/* .../pub */
-#define TWIKI_PUB  2
-
-/* anything above DATA|WEB is strange */
-/* anything above PUB|TOPIC is strange */
+/* get the monitor status */
+int dav_get_monitor(const request_rec* r);
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,7 @@ dav_error *dav_new_error(pool *p, int status, int error_id, const char *desc)
     err->error_id = error_id;
     err->desc = desc;
     err->save_errno = save_errno;
-
+	/*fprintf(stderr, "dev_new_error %s\n", desc);*/
     return err;
 }
 
@@ -275,12 +275,14 @@ dav_lookup_result dav_lookup_uri(const char *uri, request_rec * r)
     /* now, if a hostname was provided, then verify that it represents the
        same server as the current connection. note that we just use our
        port, since we've verified the URI matches ours */
+	/* SOD THAT - doesn't work!
     if (comp.hostname != NULL &&
 	!ap_matches_request_vhost(r, comp.hostname, port)) {
 	result.err.status = HTTP_BAD_GATEWAY;
 	result.err.desc = "Destination URI refers to a different server.";
 	return result;
     }
+	*/
 
     /* we have verified that the requested URI denotes the same server as
        the current request. Therefore, we can use ap_sub_req_lookup_uri() */
@@ -2171,3 +2173,4 @@ const char * dav_lookup_status(int status)
             return code->text;
     return "unknown HTTP status code";
 }
+
