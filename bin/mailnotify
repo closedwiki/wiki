@@ -77,7 +77,8 @@ sub processWeb
     my $prevLastmodify = &wiki::readFile( "$dataDir/$webName/.mailnotify" );
     my $currLastmodify = "";
     my $scriptSuffix = $wiki::scriptSuffix;
-    my $scriptUrl = "$wiki::urlHost$wiki::scriptUrlPath";
+    my $scriptUrlPath = $wiki::scriptUrlPath;
+    my $scriptUrl = "$wiki::urlHost$scriptUrlPath";
 
     foreach( reverse split( /\n/, $changes ) ) {
 	@bar = split( /\t/);
@@ -110,14 +111,8 @@ sub processWeb
 	    $foo =~ s/%TIME%/$time/go;
 	    $foo = &wiki::getRenderedVersion( $foo );
 
-	    $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 12 );
-            $head =~ s/<[^>]*>//go;         # remove all HTML tags
-            $head =~ s/[\*\|=_]/ /go;       # remove all Wiki formatting
-            $head =~ s/%INCLUDE[^%]*%/ /go; # remove server side includes
-            $head =~ s/%SEARCH[^%]*%/ /go;  # remove inline search
-            $head =~ s/\n/ /go;
-            $head = &wiki::handleCommonTags( $head, $bar[0] );
-            $head =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+            $head = &wiki::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
+            $head = &wiki::makeTopicSummary( $head, $bar[0], $webName );
             $foo =~ s/%TEXTHEAD%/$head/go;
 
 	    $emailbody = "$emailbody$foo";
@@ -149,6 +144,10 @@ sub processWeb
     $text =~ s/%TOPICLIST%/$topiclist/go;
     $text =~ s/%LASTDATE%/&wiki::formatGmTime($prevLastmodify)/geo;
     $text = &wiki::handleCommonTags( $text, $topic );
+
+    # change absolute addresses to relative ones
+    $text =~ s/(href=\")$scriptUrlPath/$1..\/../goi;
+    $text =~ s/(action=\")$scriptUrlPath/$1..\/../goi;
 
     print "- Sending mail notification to: $notifylist\n";
 

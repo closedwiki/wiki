@@ -83,7 +83,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "18 Sep 2000";
+$wikiversion      = "19 Sep 2000";
 
 # ===========================
 # read the configuration part
@@ -617,14 +617,42 @@ sub readTemplate
     return &readFile( "$templateDir/$name.tmpl" );
 }
 
-# =========================
-
 
 # =========================
 sub webExists
 {
     my( $web ) = @_;
     return -e "$dataDir/$web";
+}
+
+# =========================
+sub makeTopicSummary
+{
+    my( $theText, $theTopic, $theWeb ) = @_;
+    # called by search, mailnotify & changes after calling readFileHead
+
+    my $htext = $theText;
+    $htext =~ s/<[^>]*>//go;         # remove all HTML tags
+    $htext =~ s/[\*\|=_]/ /go;       # remove all Wiki formatting
+    $htext =~ s/%INCLUDE[^%]*%/ /go; # remove server side includes
+    $htext =~ s/%SEARCH[^%]*%/ /go;  # remove inline search
+    $htext =~ s/%ATTACH[A-Z_0-9]*%//go;
+    $htext =~ s/%PUB[A-Z_0-9]*%//go;
+    $htext =~ s/%SCRIPT[A-Z_0-9]*%//go;
+    $htext =~ s/\s+[\+\-]*/ /go;     # remove newlines and special chars
+    $htext = handleCommonTags( $htext, $theTopic, $theWeb );
+
+    # inline search renders text, 
+    # so prevent linking of external and internal links:
+    $htext =~ s/([\-\*\s])((http|ftp|gopher|news|https)\:)/$1<nop>$2/go;
+    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]*\.[A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/$1<nop>$2/go;
+    $htext =~ s/([\*\s][\(\-\*\s]*)([A-Z]+[a-z]+(?:[A-Z]+[a-zA-Z0-9]*))/$1<nop>$2/go;
+    $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
+
+    # limit to 162 chars
+    $htext =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+
+    return $htext;
 }
 
 # =========================
@@ -889,15 +917,13 @@ sub internalLink
     # bar is heading space
     # foo is boolean, false suppress link for non-existing pages
 
-    if( $page =~ /\s/ ) {
-        # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
-        $page =~ s/^\s*//;
-        $page =~ s/\s*$//;
-        $page =~ s/^(.)/\U$1/;
-        $page =~ s/\s([a-zA-Z0-9])/\U$1/g;
-        # Add <nop> before WikiWord inside text to prevent double links
-        $text =~ s/(\s)([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
-    }
+    # kill spaces and Wikify page name (ManpreetSingh - 15 Sep 2000)
+    $page =~ s/^\s*//;
+    $page =~ s/\s*$//;
+    $page =~ s/^(.)/\U$1/;
+    $page =~ s/\s([a-zA-Z0-9])/\U$1/g;
+    # Add <nop> before WikiWord inside text to prevent double links
+    $text =~ s/(\s)([A-Z]+[a-z]+[A-Z])/$1<nop>$2/go;
 
     if( $doPluralToSingular && $page =~ /s$/ && ! topicExists( $web, $page) ) {
         # page is a non-existing plural
@@ -912,9 +938,16 @@ sub internalLink
     }
 
     # Add background color and font color (AlWilliams - 18 Sep 2000)
+    my $bgcolor="";
+    my $fontcolor="";
+    $bgcolor = &wiki::getPrefsValue("NEWTOPICBGCOLOR");
+    if ($bgcolor eq "") { $bgcolor="#FFFFCE"; }
+    $fontcolor = &wiki::getPrefsValue("NEWTOPICFONTCOLOR");
+    if ($fontcolor eq "") { $fontcolor="#0000FF"; }
+
     topicExists( $web, $page) ?
         "$bar<A href=\"$scriptUrlPath/view$scriptSuffix/$web/$page\">$text<\/A>"
-        : $foo?"$bar<SPAN STYLE='background : cornsilk;'><font color=#0000FF>$text</font></SPAN><A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
+        : $foo?"$bar<SPAN STYLE='background : $bgcolor;'><font color=\"$fontcolor\">$text</font></SPAN><A href=\"$scriptUrlPath/edit$scriptSuffix/$web/$page\">?</A>"
             : "$bar$text";
 }
 

@@ -276,14 +276,8 @@ sub searchWikiWeb
                     $head = getRenderedVersion( $head, $thisWebName );
                     $tempVal =~ s/%TEXTHEAD%/$head/go;
                 } else {
-                    $head = readFileHead( "$dataDir\/$thisWebName\/$filename.txt", 12 );
-                    $head =~ s/<[^>]*>//go;         # remove all HTML tags
-                    $head =~ s/[\*\|=_]/ /go;       # remove all Wiki formatting
-                    $head =~ s/%INCLUDE[^%]*%/ /go; # remove server side includes
-                    $head =~ s/%SEARCH[^%]*%/ /go;  # remove inline search
-                    $head =~ s/\n/ /go;
-                    $head = handleCommonTags( $head, $filename );
-                    $head =~ s/(.{162})([a-zA-Z0-9]*)(.*?)$/$1$2 \.\.\./go;
+                    $head = readFileHead( "$dataDir\/$thisWebName\/$filename.txt", 16 );
+                    $head = makeTopicSummary( $head, $filename, $thisWebName );
                     $tempVal =~ s/%TEXTHEAD%/$head/go;
                 }
 
