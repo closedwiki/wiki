@@ -26,7 +26,7 @@ print "<HR />\n";
 <pre>
 chomp( my $now = `date +'%Y%m%d.%H%M%S'` );
 
-execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite > $outputDir/unit$now ; cd ..") or die $!;
+execute ( "cd unit ; perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm > $outputDir/unit$now ; cd ..") or die $!;
 
 print "</pre>\n";
 print "<HR />\n";
