@@ -38,14 +38,14 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $scriptUrlPath, $userName ) = 
+    ( $topic, $webName, $scriptUrlPath ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
 
     $tmp = "";  # set to suppress warning
     my $tmpl= "", $text="";
     my $rev= $query->param("rev");
     my $maxrev = 1;
-    my $extra = $query->remote_host();
+    my $extra = "";
 
     if( ! &wiki::webExists( $webName ) )
     {
@@ -66,7 +66,7 @@ sub main
 	    if( $rev < 1 )       { $rev = 1; }
             if( $rev > $maxrev ) { $rev = $maxrev; }
 	    $text= &wiki::readVersion( $topic, "1.$rev" );
-            $extra .= " r1.$rev";
+            $extra .= "r1.$rev";
 	}
 	else
 	{
@@ -93,10 +93,7 @@ sub main
     if( $wiki::doLogTopicView )
     {
         # write log entry
-        my $time = time();
-        $time = &wiki::formatGmTime( $time );
-        my $wikiUser = &wiki::userToWikiName( $userName );
-        &wiki::writeLog( "| $time | $wikiUser | view | $webName.$topic | $extra |" );
+        &wiki::writeLog( "view", "$webName.$topic", $extra );
     }
 
     if( $rev < $maxrev )

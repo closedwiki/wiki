@@ -7,18 +7,18 @@
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
 <FORM name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
   <TR>
-    <TD BGCOLOR="%INCLUDE{"webcolor.inc"}%" rowspan="2" valign="top" width="1%">
+    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
       <A href="%WIKIHOMEURL%"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>SearchResult</B></FONT>
     </TD><TD ALIGN="right">
-      %INCLUDE{"wikiwebs.inc"}%
+      %WIKIWEBLIST%
     </TD>
   </TR>
-  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
+  <TR BGCOLOR="%WEBBGCOLOR%">
     <TD COLSPAN="2">
-      %INCLUDE{"weblist.inc"}%
+      %WEBTOPICLIST%
     </TD>
   </TR>
 </FORM>
@@ -58,12 +58,12 @@ Search: <B> %SEARCHSTRING% </B>
 %SPLIT%<P>Number of topics: <B>%NTOPICS%</B>
 %SPLIT%<P>
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
+  <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
       Topic <B>SearchResult</B> . { }
     </TD>
   </TR>
 </TABLE>
-%INCLUDE{"webcopyright.inc"}%
+%WEBCOPYRIGHT%
 </TABLE>
 </BODY></HTML>

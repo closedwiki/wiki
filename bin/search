@@ -31,9 +31,10 @@ sub main
     my $theTopic = $query->param('topic');
     my $theUrl = $query->url;
 
-    ( $topic, $webName, $dummy, $userName, $dataDir ) = 
+    ( $topic, $webName, $dummy1, $dummy2, $dataDir ) = 
 	&wiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl );
-    $dummy = "";  # to suppress warning
+    $dummy1 = "";  # to suppress warning
+    $dummy2 = "";  # to suppress warning
 
     if( ! &wiki::webExists($webName))
     {
@@ -53,10 +54,7 @@ sub main
     if( $wiki::doLogTopicSearch )
     {
         # write log entry
-        my $time = time();
-        $time = &wiki::formatGmTime( $time );
-        my $wikiUser = &wiki::userToWikiName( $userName );
-        &wiki::writeLog( "| $time | $wikiUser | search | $webName | $search |" );
+        &wiki::writeLog( "search", $webName, $search );
     }
 }
 

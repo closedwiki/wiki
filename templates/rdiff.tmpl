@@ -8,18 +8,18 @@
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
 <FORM name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
   <TR>
-    <TD BGCOLOR="%INCLUDE{"webcolor.inc"}%" rowspan="2" valign="top" width="1%">
+    <TD BGCOLOR="%WEBBGCOLOR%" rowspan="2" valign="top" width="1%">
       <A href="%WIKIHOMEURL%"><IMG src="%PUBURL%/wikiHome.gif" border="0"></A>
     </TD>
     <TD>
       <B>%WIKITOOLNAME% . %WEB% . </B><FONT size="+2"><B>%TOPIC%</B> (%REVTITLE2% vs. %REVTITLE1%)</FONT>
     </TD><TD ALIGN="right">
-      %INCLUDE{"wikiwebs.inc"}%
+      %WIKIWEBLIST%
     </TD>
   </TR>
-  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
+  <TR BGCOLOR="%WEBBGCOLOR%">
     <TD COLSPAN="2">
-      %INCLUDE{"weblist.inc"}%
+      %WEBTOPICLIST%
     </TD>
   </TR>
 </FORM>
@@ -38,7 +38,7 @@
 %TEXT%
 <BR clear=all>%REPEAT%
 <TABLE width="100%" border="0" cellpadding="3" cellspacing="0">
-  <TR BGCOLOR="%INCLUDE{"webcolor.inc"}%">
+  <TR BGCOLOR="%WEBBGCOLOR%">
     <TD valign="top">
       Topic <B>%TOPIC%</B> . {
       <A href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</A>
@@ -53,7 +53,7 @@
       Revision %REVTITLE1% - %REVINFO1%
     </TD>
     <TD width="50%" valign="top">
-      %INCLUDE{"webcopyright.inc"}%
+      %WEBCOPYRIGHT%
     </TD>
   </TR>
 </TABLE>

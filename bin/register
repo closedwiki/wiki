@@ -44,7 +44,7 @@ sub main
 
     my $thePathInfo = $query->path_info(); 
     my $theUrl = $query->url;
-    ( $topic, $webName, $scriptUrlPath, $userName ) = 
+    ( $topic, $webName, $scriptUrlPath ) = 
 	&wiki::initialize( $thePathInfo, $wikiName, $topicName, $theUrl );
 
     my $text = "";
@@ -118,7 +118,7 @@ sub main
         my $time = time();
         $time = &wiki::formatGmTime( $time );
         $text = &wiki::userToWikiName( $wikiName );
-        &wiki::writeLog( "| $time | $text | register | $webName.$userTopic | $emailAddress |" );
+        &wiki::writeLog( "register", "$webName.$userTopic", $emailAddress, $wikiName );
     }
 
     # and finally display thank you page

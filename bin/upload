@@ -189,7 +189,7 @@ sub main
     if( $wiki::doLogTopicUpload )
     {
         # write log entry
-        &wiki::writeLog( "| $fileDate | $fileUser | upload | $webName.$topic | $fileName |" );
+        &wiki::writeLog( "upload", "$webName.$topic", "$fileName" );
     }
 
     # update topic

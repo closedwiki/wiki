@@ -34,11 +34,12 @@ use vars qw(
 	$webName $topicName $defaultUserName $userName 
 	$wikiToolName $wikiHomeUrl $pubUrl $templateDir 
 	$dataDir $pubDir $debugFilename $logDateCmd $htpasswdFilename 
-	$logFilename $userListFilename 
+	$logFilename $wikiUsersTopicname $userListFilename %userToWikiList
 	$mainWebname $mainTopicname $notifyTopicname
+	$wikiPrefsTopicname $webPrefsTopicname @prefsKeys @prefsValues
 	$statisticsTopicname $statsTopViews $statsTopContrib
-	$mailProgram $wikiwebmaster 
-	$wikiversion $revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
+	$mailProgram $wikiversion 
+	$revCoCmd $revCiCmd $revCiDateCmd $revHistCmd $revInfoCmd 
 	$revDiffCmd $revDelRevCmd $revDelRepCmd $headCmd $rmFileCmd 
 	$doRemovePortNumber $doPluralToSingular
 	$doLogTopicView $doLogTopicEdit $doLogTopicSave
@@ -47,10 +48,11 @@ use vars qw(
 	@isoMonth $TranslationToken $code @code $depth
 	$defaultScriptUrl $scriptUrl $scriptUrlPath $scriptSuffix );
 
+
 # variables: (new variables must be declared in "use vars qw(..)" above)
 
 # TWiki version:
-$wikiversion      = "11 Feb 2000";
+$wikiversion      = "25 Feb 2000";
 
 @isoMonth         = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
 
@@ -68,10 +70,12 @@ sub initialize
 {
     my ( $thePathInfo, $theRemoteUser, $theTopic, $theUrl ) = @_;
 
+    # initialize user name and user to WikiName list
     $userName = $defaultUserName;
     if( $theRemoteUser ) {
         $userName = $theRemoteUser;
     }
+    userToWikiListInit();
 
     # test if $thePathInfo is "/Webname/SomeTopic" or "/Webname/"
     if( ( $thePathInfo =~ /[\/](.*)\/(.*)/ ) && ( $1 ) )
@@ -123,6 +127,15 @@ sub initialize
     $TranslationToken= "\263";
     $code="";
     @code= ();
+
+    # initialize preferences
+    # (Note: Do not use a %hash, because order is significant)
+    @prefsKeys = ();
+    @prefsValues = ();
+    getPrefsList( "$mainWebname\.$wikiPrefsTopicname" ); # site-level
+    getPrefsList( "$webName\.$webPrefsTopicname" );      # web-level
+    getPrefsList( userToWikiName( $userName ) );         # user-level
+
     return ( $topicName, $webName, $scriptUrlPath, $userName, $dataDir );
 }
 
@@ -138,7 +151,14 @@ sub writeDebug
 # =========================
 sub writeLog
 {
-    my( $text ) = @_;
+    my( $action, $webTopic, $extra, $user ) = @_;
+
+    my $time = formatGmTime( time() );
+    my $wuserName = $user || $userName;
+    $wuserName = userToWikiName( $wuserName );
+    my $remoteAddr = $ENV{'REMOTE_ADDR'} || "";
+    my $text = "| $time | $wuserName | $action | $webTopic | $extra | $remoteAddr |";
+
     my $date = `$logDateCmd`;
     $date =~ s/\n//go;
     my $filename = $logFilename;
@@ -151,7 +171,7 @@ sub writeLog
 # =========================
 sub sendEmail
 {
-    # Notefor format: "From: ...\nTo: ...\nSubject: ...\n\nMailBody..."
+    # Format: "From: ...\nTo: ...\nSubject: ...\n\nMailBody..."
 
     my( $mailText) = @_;
 
@@ -192,21 +212,103 @@ sub getEmailNotifyList
 }
 
 # =========================
+sub userToWikiListInit
+{
+    my $text = readFile( $userListFilename );
+    my @list = split( /\n/, $text );
+    @list = grep { /^\s*\* [A-Za-z0-9]*\s*\-\s*[^\-]*\-/ } @list;
+    %userToWikiList = ();
+    foreach( @list ) {
+        if(  ( /^\s*\* ([A-Za-z0-9]*)\s*\-\s*([^\s]*).*/ ) 
+          && ( isWikiName( $1 ) ) && ( $2 ) ) {
+            %userToWikiList = ( %userToWikiList, $2, $1 );
+        }
+    }
+}
+
+# =========================
 sub userToWikiName
 {
     my( $loginUser ) = @_;
 
-    my $result = `grep '\* [A-Za-z0-9]* \- $loginUser' $userListFilename`;
-    my @foo = split( " ", $result );
-    if ( ( $foo[1] ) && ( isWikiName( $foo[1] ) ) )
-    {
-        return "$mainWebname.$foo[1]";
-    }
-    if ( ( $foo[2] ) && ( isWikiName( $foo[2] ) ) )
-    {
-        return "$mainWebname.$foo[2]";
+    my $wUser = $userToWikiList{ $loginUser };
+    if( $wUser ) {
+        return "$mainWebname.$wUser";
     }
     return "$mainWebname.$loginUser";
+}
+
+# =========================
+sub getPrefsList
+{
+    my ( $theWebTopic ) = @_;
+    my $fileName = $theWebTopic;                  # "Main.TopicName"
+    $fileName =~ s/([^\.]*)\.(.*)/$1\/$2\.txt/go; # "Main/TopicName.txt"
+    my $text = readFile( "$dataDir/$fileName" );  # read topic text
+    $text =~ s/\r//go;                            # cut CR
+    my $key;
+    my $value;
+    my $isKey = 0;
+    foreach( split( /\n/, $text ) ) {
+        if( /^\t+\*\sSet\s([a-zA-Z0-9_]*)\s\=\s*(.*)/ ) {
+            if( $isKey ) {
+                addToPrefsList( $key, $value );
+            }
+            $key = $1;
+            $value = $2;
+            $isKey = 1;
+        } elsif ( $isKey ) {
+            if( ( /^\t+/ ) && ( ! /^\t+\*/ ) ) {
+                # follow up line, extending value
+                $value .= "\n";
+                $value .= $_;
+            } else {
+                addToPrefsList( $key, $value );
+                $isKey = 0;
+            }
+        }
+    }
+    if( $isKey ) {
+        addToPrefsList( $key, $value );
+    }
+}
+
+# =========================
+sub addToPrefsList
+{
+    my ( $theKey, $theValue ) = @_;
+
+    $theValue =~ s/\t/ /go;     # replace TAB by space
+    $theValue =~ s/\\n/\n/go;   # replace \n by new line
+    $theValue =~ s/`//go;       # filter out dangerous chars
+    my $x;
+    my $found = 0;
+    for( $x = 0; $x < @prefsKeys; $x++ ) {
+        if( $prefsKeys[$x] eq $theKey ) {
+            # replace value of existing key
+            $prefsValues[$x] = $theValue;
+            $found = "1";
+            last;
+        }
+    }
+    if( ! $found ) {
+        # append to list
+        $prefsKeys[@prefsKeys] = $theKey;
+        $prefsValues[@prefsValues] = $theValue;
+    }
+}
+
+# =========================
+sub getPrefsValue
+{
+    my ( $theKey ) = @_;
+    my $x;
+    for( $x = 0; $x < @prefsKeys; $x++ ) {
+        if( $prefsKeys[$x] eq $theKey ) {
+            return $prefsValues[$x];
+        }
+    }
+    return "";
 }
 
 # =========================
@@ -543,14 +645,12 @@ sub saveTopic
                 open( FILE, "> $dataDir/$webName/.changes");
                 print FILE join("\n",@foo)."\n";
                 close(FILE);
-            }
 
-            if( $doLogTopicSave )
-            {
-                # write log entry
-                $time = formatGmTime( $time );
-                $name = userToWikiName( $userName );
-                writeLog( "| $time | $name | save | $webName.$topic |  |" );
+                if( $doLogTopicSave )
+                {
+                    # write log entry
+                    writeLog( "save", "$webName.$topic", "" );
+                }
             }
         }
     }
@@ -588,13 +688,11 @@ sub saveTopic
         $tmp =~ s/%FILENAME%/$name/;
         `$tmp`;
 
-        if( $doLogTopicSave )
+        if( ( $doLogTopicSave ) && ( ! $doNotLogChanges ) )
         {
             # write log entry
-            $time = formatGmTime( $time );
-            $name = userToWikiName( $userName );
             $tmp  = userToWikiName( $user );
-            writeLog( "| $time | $name | save | $webName.$topic | repRev $rev $tmp $date |" );
+            writeLog( "save", "$webName.$topic", "repRev $rev $tmp $date" );
         }
     }
 
@@ -625,9 +723,7 @@ sub saveTopic
         if( $doLogTopicSave )
         {
             # write log entry
-            $time = formatGmTime( $time );
-            $name = userToWikiName( $userName );
-            writeLog( "| $time | $name | cmd | $webName.$topic | delRev $rev |" );
+            writeLog( "cmd", "$webName.$topic", "delRev $rev" );
         }
     }
 }
@@ -707,34 +803,51 @@ sub handleSearchWeb
 }
 
 # =========================
+sub handlePrefsValue
+{
+    my( $theIdx ) = @_;
+    # dummy sub needed because eval can't have multiple lines in s/../../go
+    return $prefsValues[$theIdx];
+}
+
+# =========================
 sub handleCommonTags
 {
     my( $text, $topic ) = @_;
-    $text=~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;
-    $text=~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;  # allow two level includes
+    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;
+    $text =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1)/geo;  # allow two level includes
 
     # Wiki extended rules
     $text = extendHandleCommonTags( $text, $topic );
 
-    $text=~ s/%TOPIC%/$topic/go;
-    $text=~ s/%WEB%/$webName/go;
-    $text=~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
-    $text=~ s/%SCRIPTURL%/$scriptUrl/go;
-    $text=~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
-    $text=~ s/%SCRIPTSUFFIX%/$scriptSuffix/go;
-    $text=~ s/%PUBURL%/$pubUrl/go;
-    $text=~ s/%ATTACHURL%/$pubUrl\/$webName\/$topic/go;
-    $text=~ s/%DATE%/&getLocaldate()/geo;
-    $text=~ s/%WIKIWEBMASTER%/$wikiwebmaster/go;
-    $text=~ s/%WIKIVERSION%/$wikiversion/go;
-    $text=~ s/%USERNAME%/$userName/go;
-    $text=~ s/%WIKIUSERNAME%/&userToWikiName($userName)/geo;
-    $text=~ s/%WIKITOOLNAME%/$wikiToolName/go;
-    $text=~ s/%MAINWEB%/$mainWebname/go;
-    $text=~ s/%HOMETOPIC%/$mainTopicname/go;
-    $text=~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
-    $text=~ s/%STATISTICSTOPIC%/$statisticsTopicname/go;
-    $text=~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
+    my $x;
+    my $cmd;
+    for( $x = 0; $x < @prefsKeys; $x++ ) {
+        $cmd = "\$text =~ s/%$prefsKeys[$x]%/&handlePrefsValue($x)/geo;";
+        eval( $cmd );
+    }
+
+    $text =~ s/%TOPIC%/$topic/go;
+    $text =~ s/%WEB%/$webName/go;
+    $text =~ s/%WIKIHOMEURL%/$wikiHomeUrl/go;
+    $text =~ s/%SCRIPTURL%/$scriptUrl/go;
+    $text =~ s/%SCRIPTURLPATH%/$scriptUrlPath/go;
+    $text =~ s/%SCRIPTSUFFIX%/$scriptSuffix/go;
+    $text =~ s/%PUBURL%/$pubUrl/go;
+    $text =~ s/%ATTACHURL%/$pubUrl\/$webName\/$topic/go;
+    $text =~ s/%DATE%/&getLocaldate()/geo;
+    $text =~ s/%WIKIVERSION%/$wikiversion/go;
+    $text =~ s/%USERNAME%/$userName/go;
+    $text =~ s/%WIKIUSERNAME%/&userToWikiName($userName)/geo;
+    $text =~ s/%WIKITOOLNAME%/$wikiToolName/go;
+    $text =~ s/%MAINWEB%/$mainWebname/go;
+    $text =~ s/%HOMETOPIC%/$mainTopicname/go;
+    $text =~ s/%WIKIUSERSTOPIC%/$wikiUsersTopicname/go;
+    $text =~ s/%WIKIPREFSTOPIC%/$wikiPrefsTopicname/go;
+    $text =~ s/%WEBPREFSTOPIC%/$webPrefsTopicname/go;
+    $text =~ s/%NOTIFYTOPIC%/$notifyTopicname/go;
+    $text =~ s/%STATISTICSTOPIC%/$statisticsTopicname/go;
+    $text =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
 
     return $text;
 }

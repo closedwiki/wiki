@@ -35,14 +35,16 @@
 #       %PUBURL%         public URL (root of attachment URL)
 #       %ATTACHURL%      attachment URL of current topic
 #       %DATE%           today's date
-#       %WIKIWEBMASTER%  webmaster email
 #       %WIKIVERSION%    tool version
 #       %USERNAME%       login user name
 #       %WIKIUSERNAME%   wiki user name
-#       %WIKITOOLNAME%   tool name
+#       %WIKITOOLNAME%   tool name (TWiki)
 #       %MAINWEB%        main web name (Main)
 #       %HOMETOPIC%      home topic name (WebHome)
 #       %NOTIFYTOPIC%    notify topic name (WebNotify)
+#       %WIKIUSERSTOPIC% user list topic name (TWikiUsers)
+#       %WIKIPREFSTOPIC% site-level preferences topic name (TWikiPreferences)
+#       %WEBPREFSTOPIC%  web preferences topic name (WebPreferences)
 #       %STATISTICSTOPIC statistics topic name (WebStatistics)
 #       %INCLUDE{...}%   server side include
 #       %SEARCH{...}%    inline search
@@ -55,15 +57,13 @@ $wikiHomeUrl      = "http://your.domain.com/twiki/";
 #                   %SCRIPTURL% : cgi-bin URL of TWiki :
 $defaultScriptUrl = "http://your.domain.com/twiki/bin";
 #                   %PUBURL% : path of public data URL (root of attachments) :
-$pubUrl           = "/crew/scharf/TWiki/distrib/pub";
+$pubUrl           = "http://your.domain.com/twiki/pub";
 #                   Public data directory (root of attachments), must match $pubUrl :
 $pubDir           = "/home/httpd/twiki/pub";
 #                   Template directory :
 $templateDir      = "/home/httpd/twiki/templates";
 #                   Data (topic files) root directory :
 $dataDir          = "/home/httpd/twiki/data";
-#                   %WIKIWEBMASTER% : webmaster ("From:" in email notification) :
-$wikiwebmaster    = "yourname\@your.domain.com";
 
 # variables that might need to be changed:
 # ==================================================================
@@ -99,31 +99,37 @@ $rmFileCmd        = "rm -f %FILENAME%";
 # variables that probably do not change:
 # ==================================================================
 #                   %WIKITOOLNAME% : TWiki tool name :
-$wikiToolName     = "TWikibeta";
-#                   Pathname of debug file :
-$debugFilename    = "$dataDir/debug.txt";
-#                   Pathname of user name/password file for authentication :
-$htpasswdFilename = "$dataDir/.htpasswd";
-#                   Pathname of log file :
-$logFilename      = "$dataDir/log%DATE%.txt";
-#                   Pathname of users topic, used to translate Intranet name to Wiki name :
-$userListFilename = "$dataDir/Main/TWikiUsers.txt";
+$wikiToolName       = "TWikibeta";
 #                   Default user name :
-$defaultUserName  = "guest";
+$defaultUserName    = "guest";
 #                   %MAINWEB% : Name of Main web :
-$mainWebname      = "Main";
+$mainWebname        = "Main";
+#                   Pathname of debug file :
+$debugFilename      = "$dataDir/debug.txt";
+#                   Pathname of user name/password file for authentication :
+$htpasswdFilename   = "$dataDir/.htpasswd";
+#                   Pathname of log file :
+$logFilename        = "$dataDir/log%DATE%.txt";
+#                   %WIKIUSERSTOPIC% : Name of users list topic :
+$wikiUsersTopicname = "TWikiUsers";
+#                   Pathname of users topic, used to translate Intranet name to Wiki name :
+$userListFilename   = "$dataDir/$mainWebname/$wikiUsersTopicname.txt";
 #                   %HOMETOPIC% : Name of main topic in a web :
-$mainTopicname    = "WebHome";
+$mainTopicname      = "WebHome";
 #                   %NOTIFYTOPIC% : Name of topic for email notifications :
-$notifyTopicname  = "WebNotify";
+$notifyTopicname    = "WebNotify";
+#                   %WIKIPREFSTOPIC% : Name of site-level preferences topic :
+$wikiPrefsTopicname = "TWikiPreferences";
+#                   %WEBPREFSTOPIC% : Name of preferences topic in a web :
+$webPrefsTopicname  = "WebPreferences";
 #                   %STATISTICSTOPIC% : Name of statistics topic :
 $statisticsTopicname = "WebStatistics";
 #                   Number of top viewed topics to show in statistics topic :
-$statsTopViews     = "10";
+$statsTopViews      = "10";
 #                   Number of top contributors to show in statistics topic :
-$statsTopContrib   = "10";
+$statsTopContrib    = "10";
 #                   Show how many number of revision links, "0" for all :
-$numberOfRevisions = "4";
+$numberOfRevisions  = "4";
 
 # flag variables that could change:
 # ==================================================================
