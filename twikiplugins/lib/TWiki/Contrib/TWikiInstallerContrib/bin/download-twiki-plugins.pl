@@ -89,7 +89,7 @@ sub getPluginsCatalogList
     # get plugins catalog page
     my $pluginsCatalogPage = LWP::Simple::get( qw( http://twiki.org/cgi-bin/search/Plugins/?scope=text&web=Plugins&order=topic&search=%5BT%5DopicClassification.*value%5C%3D%5C%22%5BP%5DluginPackage&casesensitive=on&regex=on&nosearch=on&nosummary=on&limit=all&skin=plain ) ) ||
 	LWP::Simple::get( "file:$Config->{local_cache}/TWikiPlugins.html" )
-	or die $!;
+	or die "Can't get plugins catalogue list: $!";
 
     # get list of plugins (from the links)
     my @plugins = qw();
