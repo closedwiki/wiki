@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1021679280" format="1.0" version="1.54"}%
+%META:TOPICINFO{author="PeterThoeny" date="1022256244" format="1.0" version="1.55"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -354,7 +354,7 @@ Additional variables are defined in the preferences ( site-level ( __SL__ ) in %
 #SettingPrefs
 ---++ Setting Preferences
 
-	* The syntax for Preferences Bariables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]<br /> __Examples:__ 
+	* The syntax for Preferences Variables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]<br /> __Examples:__ 
 	* ==<nop>Set VARIABLENAME = =value===
 		* ==<nop>Set VARIABLENAME = =value===
 
