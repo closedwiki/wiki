@@ -66,7 +66,6 @@ dd a:hover{ }
 #meta { text-align: center; }
 
 /* ----- menu ----- */
-* html #menu { /* for IE5 which doesn't do 'fixed' */ position: absolute; }
 #menu{ margin:0; width:100%; height: auto; position:fixed; top:0; left:0; border: none;
    border-bottom: thin groove ThreedShadow; color: MenuText; background-color: Menu; 
    line-height: 3ex;}
@@ -96,10 +95,13 @@ dd a:hover{ }
 
 /* ----- IE5.5/Win workarounds ----- */
 * html body { margin: 0; }
+* html #menu { /* IE doesn't do 'fixed' */ position: absolute; }
 * html #content table{ width: auto; }
 * html #content textarea { width: 40em; }
 * html #diffs {padding:0;}
-
+/* Fix IE AccessKey behaviour; leave commented out, is handled
+   by twiki.c3.tmpl */
+/* a { behavior: url(/twiki/pub/Plugins/SeeSkinToo/akey.htc) } */
 /* ----------------------- */
 
 
