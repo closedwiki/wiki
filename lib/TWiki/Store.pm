@@ -536,7 +536,7 @@ sub saveNew
 
             if( ! $dontNotify ) {
                 # update .changes
-                my( $fdate, $fuser, $frev ) = getRevisionInfo( $web, $topic, "", "", $topicHandler );
+                my( $fdate, $fuser, $frev ) = getRevisionInfo( $web, $topic, "", "", $attachment, $topicHandler );
                 $fdate = ""; # suppress warning
                 $fuser = ""; # suppress warning
 
