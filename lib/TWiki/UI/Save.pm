@@ -118,9 +118,6 @@ sub _save {
 	
     if( ! ( defined $newText ) ) {
         throw TWiki::UI::OopsException( $webName, $topic, "save" );
-    } elsif( ! $newText ) {
-        # empty topic not allowed
-        throw TWiki::UI::OopsException( $webName, $topic, "empty" );
     }
 
     $newText = TWiki::decodeSpecialChars( $newText );

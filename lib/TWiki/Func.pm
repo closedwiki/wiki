@@ -785,7 +785,6 @@ sub saveTopicText
     }
 
     return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopssave" )  unless( defined $text );
-    return $TWiki::Plugins::SESSION->getOopsUrl( $web, $topic, "oopsempty" ) unless( $text ); # empty topic not allowed
 
     # extract meta data and merge old attachment meta data
     my $meta = $TWiki::Plugins::SESSION->{store}->extractMetaData( $web, $topic, \$text );
