@@ -1,18 +1,43 @@
 %META:TOPICINFO{author="PeterThoeny" date="1092718938" format="1.0" version="1.2"}%
-	* *[[%WIKILOGOURL%][TWiki]]*
-
-	* *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
-	* *[[%TWIKIWEB%.TWikiRegistration][Register]]*
----
-	* <b>%INCLUDINGWEB% Web</b>
-	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
-	* [[WebChanges][Changes]] 
-	* [[WebTopicList][Topics]]
-	* [[WebIndex][Index]]
-	* [[WebSearch][Search]]
----
-%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-<div class="twikiLeftBarPersonal">
-%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate\">Create</a> personal sidebar"}%
+<div class="twikiLeftBarPersonal" style="margin-top:0;">
+<script type="text/javascript">
+//<![CDATA[
+writeToggle("+","-","twikiLeftBarPersonalContent")
+//]]>
+</script>%CALC{"$IF($EXACT(%USERNAME%,TWikiGuest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]] <font size=\"-1\">%BR%([[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%TWIKIWEB%/LogoutAndLogin][not me?]])</font>)"}%
+<div id="twikiLeftBarPersonalContent">
+%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create</a> personal sidebar"}%
+</div>
 </div>
 
+   * *[[%WIKILOGOURL%][TWiki.org]]*
+---
+   * *[[Sandbox.WebHome][%X% NOTE: Please use the Sandbox web for testing]]*
+---
+   * *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
+   * *[[%TWIKIWEB%.TWikiRegistration][Register]]*
+   * *[[Codev.TWikiSecurityAlerts][Security Alerts]]*
+----
+   * <b>%INCLUDINGWEB% Web</b>
+   * [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
+   * [[WebChanges][Changes]] 
+   * [[WebTopicList][Topics]]
+   * [[WebIndex][Index]]
+   * [[WebSearch][Search]]
+----
+   * <b>Reference</b>
+   * TWikiVariables
+   * TWikiDocGraphics
+   * TWikiSkinBrowser
+   * InstalledPlugins
+
+   * <b>Maintenance</b>
+   * AdminTools
+   * InterWikis
+   * ManagingWebs
+   * TWikiSiteTools
+   * TWikiAdminCookBook
+   * %WIKIPREFSTOPIC%
+   * %WEBPREFSTOPIC%
+---
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
