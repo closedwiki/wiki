@@ -35,6 +35,12 @@
 	.twikiToc ul {
 		list-style-image:url(%PUBURL%/%TWIKIWEB%/PatternSkin/i_arrow_down.gif);
 	}
+	.twikiLeftBarContents {
+		border-color:%WEBBGCOLOR%;
+	}
+	.twikiLeftBarPersonal {
+		background:url(%PUBURL%/%TWIKIWEB%/PatternSkin/i_back_ystripes_wood.gif);
+	}
 </style>%TMPL:END%
 
 
@@ -70,7 +76,7 @@
 
 
 %TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiLeftBarContents">
-%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div><div class="twikiLeftBarWebIndication"></div></div>%TMPL:END%
+%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
 
 
 
@@ -79,7 +85,7 @@
 
 
 %TMPL:DEF{"bodystart"}%
-<body onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+<body class="twikiNoViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
 
 
 
@@ -100,9 +106,9 @@
 
 
 
-%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">%TMPL:P{"toolbar"}%
+%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
 %TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div></div>%TMPL:P{"bottombar"}%%TMPL:END%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
 
 

@@ -50,7 +50,6 @@ function checkAll( theButton, theButtonOffset, theNum, theCheck )
   }
 }
 function launchWindow( theWeb, theTopic, theAnchor ) {
-alert("theWeb = " + theWeb);
   if( ! theAnchor ) {
     theAnchor = "";
   }
@@ -68,12 +67,6 @@ alert("theWeb = " + theWeb);
 
 %TMPL:DEF{"bodystart"}%
 <body class="twikiNoViewPage twikiEditPage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
-
-
-
-%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
-%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
 
 
@@ -121,17 +114,12 @@ alert("theWeb = " + theWeb);
 
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%;" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.</label><textarea id="topic" name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" onkeydown="if(window.event.keyCode==27) return false;">%TEXT%</textarea><br />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-<input type="hidden" name="cmd" value="%CMD%" /><span class="twikiGrayText">    
-See below for help in editing this page.</span>
-<table border="0" cellpadding="2" cellspacing="0">
- <tr>
-  <td><span class="twikiSig"><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></span></td>
-  <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
- </tr>
-</table>
+<input type="hidden" name="cmd" value="%CMD%" /><div></div>
+<div class="twikiSig">
+<label for="sig" class="twikiGrayText">Your signature for easy copy and paste:</label><input name="sig" type="text" readonly="readonly" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
 </form></div><div class="twikiHelp">

@@ -67,12 +67,11 @@
 <div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to %TOPIC% in the <nop>%WEB% Web:</div>%RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%</div>
 
 <div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to [[%WEB%.%TOPIC%]] in any Web:</div>%RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%</div>
-<div class="twikiTopicAction twikiSecondaryTopicAction">
+<div class="twikiTopicActionSecondary">
 <table>
 <tr>
 <td><input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" /><input type="button" class="twikiButton" value="Clear all" onclick="checkAll(false);" /> checkboxes of referenced topics</td>
 </tr></table></div>
-
 
 
 
@@ -87,10 +86,6 @@
 %TMPL:P{"hidden"}%
 </form>
 %TMPL:END%
-
-
-
-%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">%TMPL:P{"content"}%</div></div>%TMPL:END%
 
 
 

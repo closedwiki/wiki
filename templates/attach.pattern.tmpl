@@ -25,12 +25,6 @@
 
 
 
-%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
-%TMPL:P{"content"}%
-%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
-
-
-
 %TMPL:DEF{"titleaction"}%(attach) %TMPL:END%
 
 
@@ -41,10 +35,9 @@
 
 
 %TMPL:DEF{"notes"}%
-<div class="twikiNotes">
    * *Help:* Please see %TWIKIWEB%.FileAttachment for more information about attaching files.
    * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error" message when you upload a file, you need to try again. It should work the second time.
-</div>%TMPL:END%
+%TMPL:END%
 
 
 
@@ -101,7 +94,6 @@ Images will be displayed, for other attachments a link will be created.
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div></div>
 %TMPL:P{"topicaction"}%</form>
-%BR%
 ---++ Existing attachments for <span class="twikiTitle"><nop>%TOPIC%</span>
 %META{"attachments" all="on"}%
 %TMPL:P{"standardfooter"}%%TMPL:END%
