@@ -2206,7 +2206,7 @@ sub getRenderedVersion
             s/$TranslationToken(\!\-\-)/\<$1/go;
 
 # Handle embedded URLs
-            s!(^|[\-\*\s])($linkProtocolPattern\:(\S+[^\s\.,\!\?;:]))!&externalLink($1,$2)!geo;
+            s!(^|[\-\*\s\(])($linkProtocolPattern\:(\S+[^\s\.\,\!\?\;\:\)]))!&externalLink($1,$2)!geo;
 
 # Entities
             s/&(\w+?)\;/$TranslationToken$1\;/go;      # "&abc;"
