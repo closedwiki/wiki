@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1050383965" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+!! Regular Expressions
 
 %TOC%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092554455" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ Go Box
 The box at the top or sidebar of each page. 
 
@@ -13,5 +15,5 @@ Enter part of a topic name to get a list of similar topics, for example:
 
 __Note:__ The Go box is not a search box
 
--- TWiki:Main.PeterThoeny - 15 Aug 2004
+
 

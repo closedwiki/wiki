@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092981301" format="1.0" version="1.20"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%  
 %STARTINCLUDE%
@@ -192,11 +194,5 @@ Result (after some editing):
 |WEBFORMS | textarea |  |  | %TWIKIWEB%.TWikiForms: How to enable form(s) | S|
 |WEBTOPICLIST | textarea |  | [[WebHome]], [[WebChanges][Changes]], [[WebTopicList][Topics]], [[WebIndex][Index]], [[WebSearch][Search]], Go <input type="text" name="topic" size="16" /> | the main entry point topics for this web | S|
 
-
--- TWiki:Main.JohnTalintyre - 16 Aug 2001 %BR%
--- TWiki:Main.MikeMannix - 05 Jan 2002 %BR%
--- TWiki:Main.PeterThoeny - 25 Apr 2004 %BR%
--- TWiki:Main.MattWilkie - 27 Jul 2004 %BR%
 %STOPINCLUDE%
 
-%META:TOPICMOVED{by="MikeMannix" date="1000277489" from="TWiki.TWikiFormTemplate" to="TWiki.TWikiForms"}%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092470123" format="1.0" version="1.78"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -209,11 +211,11 @@ __Note:__ There are some more useful variables defined in the TWikiPreferences l
 		* ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
--- TWiki:Main.PeterThoeny - 14 Aug 2004 <br />
--- TWiki:Main.MikeMannix - 12 May 2002
+
+
 %STOPINCLUDE%
 
 Crawford split up this topic into included TWikiVariablesAtoM and TWikiVariablesNtoZ.
 
--- Main.PeterThoeny - 26 Jul 2004
+
 

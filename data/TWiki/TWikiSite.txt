@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071557760" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---++ TWiki is a Web-based collaboration platform
 	* A TWiki site is an easy-to-use, full-featured open communications environment:
 		* people anywhere on the Web or on an intranet can meet
@@ -46,5 +48,5 @@ TWiki<sup>TM</sup> is a trademark of PeterThoeny - originator and lead developer
 	* WelcomeGuest is a fast track guide to TWiki.
 	* This site is powered by TWiki version *%WIKIVERSION%*.
 
--- TWiki:Main.MikeMannix - 12 May 2002 %BR%
--- TWiki:Main.PeterThoeny - 16 Dec 2003
+
+

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092606530" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %STARTINCLUDE%
 	* <span style='background : %VAR{"WEBBGCOLOR" web=%INCLUDINGWEB%}%'>You are currently in the %INCLUDINGWEB% web. The color code for this web is this background, so you know where you are.</span>
 	* If you are not familiar with the %WIKITOOLNAME% collaboration platform, please visit %TWIKIWEB%.WelcomeGuest first.

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093850055" format="1.0" version="1.16"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -52,7 +54,7 @@ Perl CGI scripts. _Full file list:_
 | =edit=			 | Edit a topic |
 | =geturl=		  | Fetch URL data |
 | =installpasswd= | Install new password by admin |
-| =mailnotify=	 | Script called by cron job to notify users of changes |
+| =mailnotifier=	 | Script called by cron job to notify users of changes |
 | =manage=		  | Manage script to create new webs |
 | =oops=			 | Shows an OK or oops dialog |
 | =passwd=		  | Reset and change password |
@@ -199,47 +201,7 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 | =edit.tmpl= | Main edit window |
 | =mailnotify.tmpl= | Email notification |
 | =moveattachment.tmpl= | Move attachment control screen |
-| =oopsaccesschange.tmpl= | Error message |
-| =oopsaccessgroup.tmpl= | Error message |
-| =oopsaccessmanage.tmpl= | Error message |
-| =oopsaccessrename.tmpl= | Error message |
-| =oopsaccessview.tmpl= | Error message |
-| =oopsattachnotopic.tmpl= | Error message |
-| =oopsauth.tmpl= | Error message |
-| =oopsbadcharset.tmpl= | Error message |
-| =oopsbadpwformat.tmpl= | Error message |
-| =oopschangepasswd.tmpl= | Error message |
-| =oopscreatenewtopic.tmpl= | Error message |
-| =oopsempty.tmpl= | Error message |
-| =oopslocked.tmpl= | Error message |
-| =oopslockedrename.tmpl= | Error message |
-| =oopsmanage.tmpl= | Error message |
-| =oopsmissing.tmpl= | Error message |
-| =oopsmngcreateweb.tmpl= | Error message |
-| =oopsmore.tmpl= | More topic actions message |
-| =oopsmoveerr.tmpl= | Error message |
-| =oopsnoformdef.tmpl= | Error message |
-| =oopsnotwikiuser.tmpl= | Error message |
-| =oopsnoweb.tmpl= | Error message |
-| =oopspreview.tmpl= | Error message |
-| =oopsregemail.tmpl= | Error message |
-| =oopsregexist.tmpl= | Error message |
-| =oopsregpasswd.tmpl= | Error message |
-| =oopsregrequ.tmpl= | Error message |
-| =oopsregthanks.tmpl= | Error message |
-| =oopsregwiki.tmpl= | Error message |
-| =oopsremoveuserdone.tmpl= | Error message |
-| =oopsrenameerr.tmpl= | Error message |
-| =oopsrenamenotwikiword.tmpl= | Error message |
-| =oopsresetpasswd.tmpl= | Error message |
-| =oopsrev.tmpl= | Error message |
-| =oopssave.tmpl= | Error message |
-| =oopssaveerr.tmpl= | Error message |
-| =oopssendmailerr.tmpl= | Error message |
-| =oopstopicexists.tmpl= | Error message |
-| =oopsupload.tmpl= | Error message |
-| =oopsuploadlimit.tmpl= | Error message |
-| =oopswrongpassword.tmpl= | Error message |
+| =oops*.tmpl= | Message pages |
 | =preview.tmpl= | Preview Changes screen |
 | =rdiff.tmpl= | Displays text changes before &amp; after =Diffs= |
 | =registernotify.tmpl= | Registration notification |
@@ -526,10 +488,9 @@ drwxrwx--x	 8 nobody  nobody		 4096 Nov 18 12:31 ..
 -r--r--r--	 1 nobody  nobody			81 Aug 15 10:14 Smile.gif,v
 </pre>
 
--- TWiki:Main.PeterThoeny - 29 Aug 2004 <br />
--- TWiki:Main.MikeMannix - 16 May 2002 <br />
--- TWiki:Main.ArthurClemens - 08 Aug 2004
+
+
+
 
 %STOPINCLUDE%
 
-%META:TOPICMOVED{by="MikeMannix" date="1000524678" from="TWiki.DocsATWikiFileSystem" to="TWiki.AppendixFileSystem"}%

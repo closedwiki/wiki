@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071560493" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---++ FAQ:
 
 How do I delete or rename a topic?
@@ -17,5 +19,3 @@ Note for site administrators: To remove a topic permanently move it to the Trash
 
 __Back to:__ TWikiFAQ
 
--- Main.PeterThoeny - 09 May 2003
-%META:TOPICMOVED{by="MikeMannix" date="1000453233" from="TWiki.DeleteTopic" to="TWiki.DeleteOrRenameATopic"}%

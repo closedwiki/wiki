@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092610965" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="WindowsInstallCookbook"}%
 ---+!! Nutshell Summary of Windows Install Cookbook
 

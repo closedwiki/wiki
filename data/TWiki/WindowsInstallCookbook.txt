@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092632647" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 ---# Windows Install Cookbook 
@@ -10,7 +12,7 @@ This cookbook is intended to get you up and running with TWiki on Windows quickl
 	* __NOTE__: This cookbook is not 100% complete (e.g. it doesn't cover authentication setup described by existing documentation), but it has been used successfully for over a year now - it is quite accurate and should get you started if you follow the instructions.  Please provide feedback in TWiki:Codev.WindowsInstallCookbookComments.  
 	* __NOTE__: You will get the best results from following this cookbook *exactly*, using the same directories, etc - however, if you really do need to vary things, it should be fairly obvious what to do.
 
--- Main.RichardDonkin - 24 Feb 2002
+
 
 ---++ Summary
 
@@ -668,22 +670,22 @@ Material in this cookbook is heavily based on the enormous number of contributio
 
 People who've tested or reviewed this document and provided valuable feedback include:
 
--- TWiki:Main.BernardFarrell %BR%
--- TWiki:Main.BerndSchiffer %BR%
--- TWiki:Main.ChrisKeith %BR%
--- TWiki:Main.CrawfordCurrie %BR%
--- TWiki:Main.DavideBaroncelli %BR%
--- TWiki:Main.DavidLeBlanc %BR%
--- TWiki:Main.JerryWard %BR%
--- TWiki:Main.MartinWittmann %BR%
--- TWiki:Main.MaryDeMarco %BR%
--- TWiki:Main.MattWilkie %BR%
--- TWiki:Main.MikeBytnar %BR%
--- TWiki:Main.PeterThoeny %BR%
--- TWiki:Main.RossC %BR%
--- TWiki:Main.TorbenGB %BR%
--- TWiki:Main.VictorGoh %BR%
--- TWiki:Main.WolframJahn %BR%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 %X% Comments welcome at TWiki:Codev.WindowsInstallCookbookComments

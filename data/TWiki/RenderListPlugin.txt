@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079859121" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ Render List Plugin 
 
 Render bullet lists in a variety of formats
@@ -371,7 +373,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins/TreePlugin
 
--- TWiki:Main/PeterThoeny - 21 Mar 2004
+
 %META:FILEATTACHMENT{name="empty.gif" attr="h" comment="Empty 16x16 spacer" date="1070519327" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\empty.gif" size="100" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_udr.gif" attr="h" comment="Dot T-graph 16x16" date="1070519374" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_udr.gif" size="109" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="dot_ud.gif" attr="h" comment="Dot I-graph 16x16" date="1070519385" path="C:\Data\MyTWiki\Plugins\RenderListPlugin\pub\TWiki\RenderListPlugin\dot_ud.gif" size="108" user="PeterThoeny" version="1.1"}%

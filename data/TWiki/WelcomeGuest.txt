@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079600640" format="1.0" version="1.24"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---++ Welcome, %WIKIUSERNAME%!
 
 Welcome to %WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. %WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.

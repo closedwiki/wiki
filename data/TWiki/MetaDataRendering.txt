@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="MarioFrasca" date="1111002987" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="TWikiTemplates"}%
 %STARTINCLUDE%
 ---## Meta Data Rendering
@@ -26,4 +28,4 @@ Possible future additions:
 %STOPINCLUDE%
 
 -- JohnTalintyre - 29 Aug 2001 <br />
--- Main.PeterThoeny - 10 Jan 2002
+

@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
 Templates for CommentPlugin - See %TWIKIWEB%.CommentPlugin#Customisation for help
 
 *WARNING: THIS FILE WILL BE OVERWRITTEN WHEN YOU UPGRADE THE COMMENT PLUGIN*

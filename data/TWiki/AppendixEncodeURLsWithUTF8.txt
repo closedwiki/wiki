@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092468928" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 #EncodeURLsUTF8
@@ -59,8 +61,8 @@ Opera Browser on the P800 smartphone is working for page viewing but leads to co
 For up to date information see TWiki:Codev.EncodeURLsWithUTF8
 
 -- TWiki:Main.RichardDonkin - 7 Jan 2004 %BR%
--- TWiki:Main.MattWilkie - 10 Aug 2004 %BR%
--- TWiki:Main.PeterThoeny - 14 Aug 2004
+
+
 
 %STOPINCLUDE%
 

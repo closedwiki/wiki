@@ -1,3 +1,5 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
 This module is an add-on to the TWiki kernel that supports e-mail notification of changes.
 
 %TOC%

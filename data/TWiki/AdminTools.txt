@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092553106" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ Admin tools
 Manage whole <b>%WIKITOOLNAME%</b> site from one screen.
 
@@ -73,6 +75,6 @@ Legend:
 	* TWiki engine: %WIKIVERSION%
 	* Plugin API: %PLUGINVERSION{}%
 
--- TWiki:Main.PeterMasiar - 02 Jul 2003 %BR%
--- TWiki:Main.PeterThoeny - 15 Aug 2004
+
+
 

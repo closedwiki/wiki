@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="MikeMannix" date="999329582" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---## TWiki Upgrade Notes for Version 01 May 2000
 
 If you are coming from a version earlier than the 01 May 2000 production release, please see TWikiUpgradeTo01May2000 first. For the latest version read TWikiUpgradeGuide.
@@ -101,4 +103,4 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to th
 	* __Known Issues__
 		* Check http://TWiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki01Dec2000 for known issues of TWiki 01 Dec 2000 (production release) 
 
--- Main.PeterThoeny - 08 Nov 2000 <br>
+

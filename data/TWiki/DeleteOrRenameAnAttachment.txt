@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1052461140" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="TWikiFAQ"}%
 ---++ FAQ:
 
@@ -16,4 +18,4 @@ Note for system administrators: To remove an attachment permanently move it to t
 
 __Back to:__ TWikiFAQ
 
--- Main.PeterThoeny - 09 May 2003
+

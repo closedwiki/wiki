@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071561570" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ The 216 Standard Colors
 
 This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
@@ -166,5 +168,5 @@ __Related web sites:__
 	* http://the-light.com/colclick.html 
 	* http://www.triplecode.com/munsell/
 
--- TWiki:Main.PeterThoeny - 16 Dec 2003 %BR%
--- TWiki:Main.AndreaSterbini - 08 Sep 2003
+
+

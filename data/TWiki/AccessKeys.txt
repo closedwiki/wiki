@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093672399" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ Access Keys
 
 ---++ What are access keys?

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="TWikiGuest" date="1108479519" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="HomeTwikiDEVELOPLibTWikiDotPm"}%
 An ObjectMethod is a method that must be called relative to a previous constructed object of the class type. For example:
 

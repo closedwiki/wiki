@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1101030117" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+!! Slide Show Plugin
 
 This Plugin converts a topic with headings into a slide show.
@@ -166,7 +168,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.PeterThoeny - 21 Nov 2004
+
 
 %META:FILEATTACHMENT{name="next.gif" attr="" comment="Next button" date="1037510613" path="C:\Data\next.gif" size="993" user="PeterThoeny" version="1.2"}%
 %META:FILEATTACHMENT{name="prev.gif" attr="" comment="Prev button" date="1037510599" path="C:\Data\prev.gif" size="993" user="PeterThoeny" version="1.2"}%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091257849" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="DragonSkin"}%
 ---+!! <nop>DragonSkin installation
 This topic describes how to install !DragonSkin and perform some simple administrator-level (i.e. requiring the editing of template and CSS files) customizations. See the %TWIKIWEB%.DragonSkinCustomize topic for information on doing user-configurable customizations, such as configuring the left quicklinks submenu, and the %TWIKIWEB%.DragonSkin topic for some general information about the skin.
@@ -24,5 +26,5 @@ This topic describes how to install !DragonSkin and perform some simple administ
 ---+++ Adding site-specific CSS styles
 If you want to add a site-specific CSS style, add it to pub/%<nop>TWIKIWEB%/DragonSkin/typography.css, since that file is included in every theme.  Alternatively, add another import rule to the definition of dragoncss in templates/twiki.dragon.tmpl that imports a site-specific css file, and put all local styles in that file.  If your style makes use of TWiki variables, add it to templates/dragoncssvars.dragon.tmpl, so variables will get expanded.
 
--- TWiki:Main.ClaussStrauch - 27 Jul 2004
+
 

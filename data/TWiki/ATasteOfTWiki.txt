@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093211341" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 This is a short introduction training course for TWiki beginners (newbies).
 
 %SLIDESHOWSTART{template="ATasteOfTWikiTemplate"}%
@@ -329,8 +331,6 @@ There are many other plugins, see http://www.twiki.org/cgi-bin/view/Plugins
 %SLIDESHOWEND%
 
 __Related topics:__ WelcomeGuest, TWikiTutorial, ATasteOfTWikiTemplate
-
--- TWiki:Main.CrawfordCurrie - 17 Feb 2004
 
 %META:FILEATTACHMENT{name="hula.gif" attr="h" comment="" date="1079599072" path="C:\Data\Temp\hula.gif" size="8780" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="anarchy.gif" attr="h" comment="" date="1079598796" path="C:\Data\Temp\anarchy.gif" size="10363" user="PeterThoeny" version="1.1"}%

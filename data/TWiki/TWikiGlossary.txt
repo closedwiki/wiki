@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092563430" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -22,6 +24,6 @@ _Simple glossary of TWiki terms_
 | Variables: | Text-strings of the form =%VARIABLE%= that are expanded on the fly into text, image, or any other type of embedded content; there are system variables coded into the main TWiki package, _preferences_ settings, and Plugins variables. [[TWikiVariables][Details...]] |
 | Web: | A collection of _topics_ under a common name. Various features, like search, access privileges, Plugin availability, template design, can be controlled on a web-wide basis. [[ManagingWebs][Details...]] |
 
--- TWiki:Main.MikeMannix - 27 Aug 2001 %BR%
--- TWiki:Main.PeterThoeny - 27 Jan 2003
+
+
 

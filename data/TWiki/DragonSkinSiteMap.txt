@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091258022" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="DragonSkin"}%
 ---+ %WIKITOOLNAME% Site Map
 %STARTINCLUDE%
@@ -43,5 +45,5 @@ Legend of icons:
 </table>
 %STOPINCLUDE%
 
--- TWiki:Main/ClaussStrauch - 27 Jul 2004
+
 

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092607954" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 ---# Appendix B: TWiki CSS
@@ -71,6 +73,6 @@ See also: DragonSkin.
 
 Practical introduction to CSS: http://www.w3.org/Style/LieBos2e/enter/
 
--- TWiki:Main.ArthurClemens - 08 Aug 2004
+
 %STOPINCLUDE%
 

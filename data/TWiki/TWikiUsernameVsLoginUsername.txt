@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092605497" format="1.0" version="1.8"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---## TWiki Username vs. Login Username
 
 This section applies only if your TWiki is installed on a server that is both *authenticated* and on an *intranet*.
@@ -14,5 +16,5 @@ TWiki internally manages two usernames: Login username and TWiki username.
 __NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to specify the %MAINWEB% web in front of the Wiki username: write ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername==. This assures that the name will be linked automatically to the %MAINWEB% web, where user home pages are stored, even if the text is entered in a different web.
 </blockquote>
 
--- TWiki:Main.PeterThoeny - 30 Jan 2003
+
 

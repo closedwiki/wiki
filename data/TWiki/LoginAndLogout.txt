@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="RicardoLopez" date="1109091569" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 __%X% Note:__ This topic is TWiki.org specific and is not part of the TWiki distribution.
 
 ---+ Logout and Login
@@ -12,6 +14,6 @@ TWiki.org uses BasicAuthentication with IP address based session tracking. The a
 
 There is a drawback however. IP address based session tracking fails if people share an IP address, e.g. a whole company might expose just one IP address through a NAT. In this case TWiki.org might tell you that you are someone else in your organization.
 
--- Main.PeterThoeny - 12 Feb 2005
+
 
 Additional discussion at TWiki:TWiki.%TOPIC%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1079856725" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ Default TWiki Plugin
 
 This plugin supports some depreciated rendering of older TWiki versions and of <nop>JosWiki. Create a new [[%TWIKIWEB%.TWikiPlugins][TWikiPlugin]] based on EmptyPlugin if you plan to offer some other functionality.
@@ -51,5 +53,5 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>D
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
 
--- TWiki:Main.AndreaSterbini - 27 Feb 2001 %BR%
--- TWiki:Main.PeterThoeny - 21 Mar 2004
+
+

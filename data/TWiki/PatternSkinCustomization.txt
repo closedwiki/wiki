@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="ArthurClemens" date="1093733957" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+!! Customization of !PatternSkin
 
 This page describes ways to change the layout, fonts and colors of PatternSkin.
@@ -237,6 +239,6 @@ The appearance of the form table and the attachment table are set in style.css u
 
 Other templates than =view= use the style =.twikiVersatileTable= for, as the name says, tables with versatile functions. Versatile tables appear a little diffent in each template page (differences are created using multiple classes). Versatile tables are mostly used to format forms to highlight important parts and to dim less important parts. See =style.css= for specific settings for each template.
 
--- TWiki:Main.ArthurClemens - 28 Aug 2004
+
 
 %META:FILEATTACHMENT{name="LowRes.css" attr="" comment="CSS to put the left bar at the right, with horizontal scroll bar" date="1093734017" path="LowRes.css" size="287" user="ArthurClemens" version="1.1"}%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092605344" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 ---# TWiki User Authentication
@@ -75,11 +77,7 @@ Change and reset passwords using forms on regular pages. Use TWikiAccessControl 
 %INCLUDE{"ResetPassword"}%
 </blockquote>
 
--- TWiki:Main.MikeMannix - 19 May 2002 %BR%
--- TWiki:Main.PeterThoeny - 25 Apr 2004
+
+
 
 %STOPINCLUDE%
-
-
-
-%META:TOPICMOVED{by="MikeMannix" date="999320061" from="TWiki.TWikiAuthentication" to="TWiki.TWikiUserAuthentication"}%

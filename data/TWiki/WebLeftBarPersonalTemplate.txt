@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092634295" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 Customise this topic; samples and ideas available at TWiki:TWiki.WebLeftBarCookbook.
 
 %STARTINCLUDE%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092634220" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ !WebLeftBar Cookbook
 
 *Instructions and tips how to use WebLeftBarPersonalTemplate*.
@@ -32,5 +34,5 @@ By default the &lt;user&gt;LeftBar topic has an edit link. In case you loose the
 <div class="twikiSmall"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">edit</a></div>
 </verbatim>
  
--- Main.ArthurClemens - 15 Aug 2004
+
 

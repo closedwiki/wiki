@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1050386041" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---++ FAQ:
 
 How do you log off? Suppose I log in with the guest username but later I want to use another username, how do I log  off from the guest user name?
@@ -17,4 +19,4 @@ Most browsers do not give the user a way to "forget" the username and password. 
 
 __Back to:__ TWikiFAQ
 
--- TWiki:Main/CarlMikkelsen - 14 Apr 2003
+

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="TWikiContributor" date="0" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 3494$"}%
+
+
 %META:TOPICPARENT{name="TWikiVariables"}%
 __Note:__ This topic is included by TWikiVariables
 
@@ -327,5 +329,5 @@ __Note:__ TOC will generate links to the headings, so when a reader clicks on a 
 	* Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKITOOLNAME][WIKITOOLNAME]]
 %STOPINCLUDE%
 
--- TWiki:Main.PeterThoeny - 14 Aug 2004
+
 

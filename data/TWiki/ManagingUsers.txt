@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="MartinCleaver" date="1098102230" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 ---# Manage Users
@@ -32,6 +34,6 @@ To remove a user account (FredQuimby, who logs in as "fred"):
 
 __Note:__ Consider leaving the user topic file in place so their past signatures and revision author entries don't end up looking like AnUncreatedTopic. If you want to make it clear the user is inactive on your site (e.g. %MAINWEB%.PeterThoeny) or has been banished add a note to that effect and write protect the page (TWikiAccessControl). The existance of the <nop>UserName topic should also prevent that user name from being re-used, sealing the potential security hole regarding inherited permissions..
 
--- TWiki:Main.MattWilkie - 21 Jul 2003 %BR%
--- TWiki:Main.PeterThoeny - 15 Aug 2004
+
+
 

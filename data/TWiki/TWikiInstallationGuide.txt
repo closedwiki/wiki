@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093967374" format="1.0" version="1.62"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Installation Guide
@@ -204,8 +206,5 @@ At this time, TWiki does not ship with an "what you see is what you get" editor.
 
 See [[AppendixFileSystem][Appendix A: TWiki File System]] for an installed system snapshot and descriptions of all files in the TWiki 01-Sep-2004 distribution.
 
--- TWiki:Main/PeterThoeny - 29 Aug 2004 %BR%
--- TWiki:Main/MikeMannix - 16 May 2002
 %STOPINCLUDE%
 
-%META:TOPICMOVED{by="MikeMannix" date="999319650" from="TWiki.TWikiInstallationNotes" to="TWiki.TWikiInstallationGuide"}%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1040114770" format="1.0" version="1.31"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -308,10 +310,5 @@ In this step, you move the working 01-Dec-2001 installation to the old 01-Dec-20
 
 	* Check TWiki:Codev/KnownIssuesOfTWiki01Dec2001 for known issues of TWiki 01 Dec 2001 (production release)
 	* Check TWiki:Codev/KnownIssuesOfTWiki01Sep2001 for known issues of TWiki 01 Sep 2001 (production release)
-		
--- JohnTalintyre - 18 Jul 2001 <br />
--- PeterThoeny - 03 Dec 2001<br />
--- Main.MikeMannix - 05 May 2002
 
 
-%META:TOPICMOVED{by="PeterThoeny" date="1040114770" from="TWiki.TWikiUpgradeGuide" to="TWiki.TWikiUpgradeTo01Dec2001"}%

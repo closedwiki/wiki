@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="ArthurClemens" date="1092646906" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 	* <b>%INCLUDINGWEB% Web</b>
 	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
 	* [[WebChanges][Changes]] 

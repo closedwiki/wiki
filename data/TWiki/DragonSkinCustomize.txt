@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091257962" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="DragonSkin"}%
 ---+!!  <nop>DragonSkin customization
 This topic contains information on how to change user-configurable look-and-feel aspects of !Dragonskin. See DragonSkinInstall for installation instructions, and DragonSkin for some general information about the skin.
@@ -33,5 +35,5 @@ To use these classes, enclose your text in a div of that class.  For example:<br
 &lt;div class=&quot;ds-note&quot;&gt;<br />
 
 
--- TWiki:Main/ClaussStrauch - 27 Jul 2004
+
 

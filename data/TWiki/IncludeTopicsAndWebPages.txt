@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092555397" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+!! Include Topics and Web Pages Using ==%<nop>INCLUDE{...}%== Variable
 
 Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic or web page inside a %WIKITOOLNAME% topic. The whole content or only parts of a page can be included. If needed, set a proxy server in %WIKIPREFSTOPIC%.
@@ -47,5 +49,5 @@ __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUD
 
 See also other TWikiVariables.
 
--- TWiki:Main.PeterThoeny - 15 Aug 2004
+
 

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1090917279" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ Plain Skin
 
 The plain skin can be used to get the rendered topic text without any page decoration.
@@ -22,7 +24,7 @@ __Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIK
 
 __Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser
 
--- TWiki:Main/PeterThoeny - 27 Jul 2004
+
 
 %META:FILEATTACHMENT{name="screenshot.gif" attr="h" comment="" date="1090918243" path="C:\Data\Temp\screenshot.gif" size="4407" user="PeterThoeny" version="1.1"}%
 %META:FILEATTACHMENT{name="fullscreen.gif" attr="h" comment="" date="1090918257" path="C:\Data\Temp\fullscreen.gif" size="8915" user="PeterThoeny" version="1.1"}%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092552127" format="1.0" version="1.33"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+ TWiki Documentation Graphics
 
 This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
@@ -105,8 +107,8 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  />  | =dot_udl.gif= | Dot graph up-down-left |
 |  <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  />  | =dot_ulr.gif= | Dot graph up-left-right |
 
--- TWiki:Main.PeterThoeny - 06 Aug 2004 %BR%
--- TWiki:Main.MikeMannix - 16 May 2002
+
+
 
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="MikeMannix" version="1.1"}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" comment="Tip" date="1007360101" path="C:\02_TWikiDocs\tip.gif" size="123" user="MikeMannix" version="1.2"}%

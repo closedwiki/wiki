@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1093847178" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 
@@ -101,7 +103,3 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 
 	* Check TWiki:Codev/KnownIssuesOfTWiki01Feb2003 for known issues of TWiki 01-Feb-2003 production release
 
--- Main.PeterThoeny - 01 Feb 2002 %BR%
--- Main.MartinRaabe - 15 Jan 2003
-
-%META:TOPICMOVED{by="PeterThoeny" date="1093847178" from="TWiki.TWikiUpgradeGuide" to="TWiki.TWikiUpgradeTo01Feb2003"}%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1091357500" format="1.0" version="1.47"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting
@@ -546,6 +548,6 @@ TWiki formatting rules are fairly simple to use and quick to type. However, ther
 	* *Q:* Why is the ='&'= character sometimes not displayed?
 		* *A:* The ='&'= character has a special meaning in HTML, it starts a so called character entity, i.e. ='&amp;copy;'= is the =&copy;= copyright character. You need to escape ='&amp;'= to see it as it is, so write ='&amp;amp;'= instead of ='&amp;'=. <br /> Example: Type ='This &amp;amp; that'= to get ='This &amp; that'=.
 
--- TWiki:Main.MikeMannix - 02 Dec 2001 <br />
--- TWiki:Main.PeterThoeny - 01 Aug 2004
+
+
 

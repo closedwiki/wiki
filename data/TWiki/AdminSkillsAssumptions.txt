@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1071560891" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %META:TOPICPARENT{name="TWikiInstallationGuide"}%
 ---+ Administrator Skills Assumptions
 
@@ -17,6 +19,6 @@ There are many excellent resources for learning how to administer your OS and we
 
 One of the best training courses for Linux is *Basic Linux Training* at http://basiclinux.net/ - this is a 2 month distance-learning course (via email). The course operators are friendly, and all students are newbies. A nice tool for people migrating from Windows is http://www.MidnightCommander.org/. It is already installed on Linux systems: try ==mc -ac== and ==ESC 1== to get help.
 
--- TWiki:Main.RichardDonkin - 27 Apr 2002 %BR%
--- TWiki:Main.GrantBow - 15 Jan 2003 %BR%
+
+
 -- TWiki:Main.PeterMasiar - 28 May 2003 

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1090054171" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+!! TWiki Spreadsheet Plugin
 
 This Plugin adds speadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
@@ -591,5 +593,5 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main/PeterThoeny - 17 Jul 2004
+
 

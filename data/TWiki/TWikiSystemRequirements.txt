@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092632453" format="1.0" version="1.31"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 %TOC%
 %STARTINCLUDE%
 ---# TWiki System Requirements
@@ -40,7 +42,3 @@ You can easily add functionality, by customizing TWikiTemplates, for one, while 
 	* The TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
 		* %H% Plugins included in the TWiki distribution do not add requirements.
 
--- TWiki:Main.MikeMannix - 12 Jan 2002 %BR%
--- TWiki:Main.PeterThoeny - 15 Aug 2004
-
-%META:TOPICMOVED{by="PeterThoeny" date="1042701667" from="TWiki.TWikiImplementationNotes" to="TWiki.TWikiSystemRequirements"}%

@@ -1,4 +1,6 @@
-%META:TOPICINFO{author="PeterThoeny" date="1092608740" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---++ How to Find out What's New?
 
 There are three ways to find out what's new in each TWiki web:
@@ -63,5 +65,5 @@ Below part is included by each <nop>WebRss topic:
 
 __See also__: TWiki:Codev/RichSiteSummary, TWiki:Codev/TWikiSyndication 
 
--- TWiki:Main.PeterThoeny - 02 Sep 2003
+
 
