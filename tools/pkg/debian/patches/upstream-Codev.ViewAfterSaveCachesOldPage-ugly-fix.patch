@@ -1,0 +1,41 @@
+diff -urw lib/TWiki.pm lib/TWiki.pm
+--- lib/TWiki.pm	2004-11-11 15:30:17.000000000 -0500
++++ lib/TWiki.pm	2004-11-19 13:57:03.000000000 -0500
+@@ -527,6 +527,9 @@
+ 
+     $contentType .= "; charset=$siteCharset";
+ 
++    my $expireHours = 24;
++    my $expireSeconds = $expireHours * 60 * 60;
++    
+     if ($pageType eq 'edit') {
+ 	# Get time now in HTTP header format
+ 	my $lastModifiedString = formatGmTime(time, 'http');
+@@ -537,8 +540,6 @@
+ 	# browser Back button always works.  The next Edit on this page 
+ 	# will use another URL and therefore won't use any cached 
+ 	# version of this Edit page.
+-	my $expireHours = 24;
+-	my $expireSeconds = $expireHours * 60 * 60;
+ 
+ 	# Set content length, to enable HTTP/1.1 persistent connections 
+ 	# (aka HTTP keepalive), and cache control headers, to ensure edit page 
+@@ -551,8 +552,18 @@
+ 			    -cache_control => "max-age=$expireSeconds",
+ 			 );
+     } elsif ($pageType eq 'basic') {
++	# Set cache control to force unconditional reloading of this page
++	# to work around so the first view after an edit is never cached.
++	# See http://twiki.org/cgi-bin/view/Codev/ViewAfterSaveCachesOldPage
++	# for discussion of this bug.
++
++	my $expiresString = formatGmTime(time - 2 * $expireSeconds, 'http');
++	my $lastModifiedString = formatGmTime(time - $expireSeconds, 'http');
++
+ 	$coreHeaders = $query->header(
+ 	    		    -content_type => $contentType,
++			    -expires => $expiresString,
++			    -last_modified => $lastModifiedString,
+ 			 );
+     } else {
+ 	writeWarning( "===== invalid page type in TWiki.pm, writeHeaderFull(): $pageType" );
