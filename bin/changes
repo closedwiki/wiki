@@ -55,11 +55,13 @@ sub main
     my @bar = ();
     my $foo = "";
     my %exclude = ();
-    my $head = "";
+    my $summary = "";
     my $time = "";
     my $frev = "";
 
     $text = &TWiki::handleCommonTags( $text, $topic );
+    my( $head, $tag, $body ) = split( /(<body)/i, $text, 3 );
+    $text = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
 
     ( $before, $text, $after) = split( /%REPEAT%/, $text);
     print $before;
@@ -85,9 +87,9 @@ sub main
             $foo =~ s/%REVISION%/$frev/go;
             $foo = &TWiki::getRenderedVersion( $foo );
 
-            $head = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
-            $head = &TWiki::makeTopicSummary( $head, $bar[0], $webName );
-            $foo =~ s/%TEXTHEAD%/$head/go;
+            $summary = &TWiki::Store::readFileHead( "$dataDir\/$webName\/$bar[0].txt", 16 );
+            $summary = &TWiki::makeTopicSummary( $summary, $bar[0], $webName );
+            $foo =~ s/%TEXTHEAD%/$summary/go;
 
             print $foo;
             $exclude{ $bar[0] } = "1";

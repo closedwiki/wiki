@@ -27,6 +27,7 @@ TWiki::writeHeader( $query );
 
 &main();
 
+# =========================
 sub renderCellData
 {
     my( $data, $topic ) = @_;
@@ -35,21 +36,27 @@ sub renderCellData
         $data = &TWiki::getRenderedVersion( $data );
         if( $data =~ m/<\/?(th|td|table)/i )
         {
-            # data has <th> or <td>, check if need to add <table>
-            if( $data !~ m/<table/i )
-            {
-                $data = "\n<table>\n$data";
-            }
-            if( $data !~ m/<\/table/i )
-            {
-                $data .= "\n</table>";
+            # data has <th> or <td>, need to fix <table>
+            my $bTable = ( $data =~ s/(<table)/$1/gois ) || 0;
+            my $eTable = ( $data =~ s/(<\/table)/$1/gois ) || 0;
+            my $i = 0;
+            if( $bTable > $eTable ) {
+                for( $i = $eTable; $i < $bTable; $i++ ) {
+                   $data .= "</table>";
+                }
+            } elsif( $bTable < $eTable ) {
+                for( $i = $bTable; $i < $eTable; $i++ ) {
+                   $data = "\n<table>$data";
+                }
+            } elsif( ( $bTable == 0 ) && ( $eTable == 0 ) ) {
+                $data = "\n<table>$data\n</table>";
             }
         }
     }
     return $data;
 }
 
-
+# =========================
 sub renderRevisionDiff
 {
     my( $text, $topic ) = @_;
@@ -165,6 +172,8 @@ sub main
     $before =~ s/%REVTITLE1%/$revTitle1/go;
     $before =~ s/%REVTITLE2%/$revTitle2/go;
     $before = &TWiki::handleCommonTags( $before, $topic );
+    my( $head, $tag, $body ) = split( /(<body)/i, $before, 3 );
+    $before = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
     $before =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
     print $before;
 
@@ -239,6 +248,7 @@ sub main
     $after =~ s/%REVINFO2%/$revInfo2/go;
 
     $after = &TWiki::handleCommonTags( $after, $topic );
+    $after = &TWiki::getRenderedVersion( $after );
     $after =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
 
     print $after;

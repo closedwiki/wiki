@@ -327,6 +327,8 @@ sub main
     }
     $tmpl =~ s/%CMD%/$saveCmd/go;
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
+    my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
+    $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%TWIKICAT%/$tcat/go;

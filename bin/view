@@ -38,14 +38,14 @@ writeDebugTimes( "view:start" );
 sub writeDebug
 {
     my( $text ) = @_;
-    #TWiki::writeDebug( $text );
+#    TWiki::writeDebug( $text );
 }
 
 sub writeDebugTimes
 {
     my( $text ) = @_;
     
-    #TWiki::writeDebugTimes( $text );
+#    TWiki::writeDebugTimes( $text );
 }
 
 sub main
@@ -249,6 +249,9 @@ sub main
 
     $tmpl = &TWiki::handleCommonTags( $tmpl, $topic );
     writeDebugTimes( "view - handleCommonTags for template done" );
+    my( $head, $tag, $body ) = split( /(<body)/i, $tmpl, 3 );
+    $tmpl = join( "", $head,  &TWiki::getRenderedVersion( "$tag$body" ) );
+
     my $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
     $tmpl =~ s/%TEXT%/$text\n$metaText/go;
     $tmpl =~ s|</*nop/*>||goi;   # remove <nop> tags (PTh 06 Nov 2000)
