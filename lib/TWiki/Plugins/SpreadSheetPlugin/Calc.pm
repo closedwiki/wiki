@@ -1,7 +1,7 @@
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2001-2004 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2001-2005 Peter Thoeny, Peter@Thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,41 +14,69 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-# This is the spreadsheet TWiki plugin.
+# =========================
+#
+# This is part of TWiki's spreadsheet Plugin.
 #
 # The code below is kept out of the main plugin module for
 # performance reasons, so it doesn't get compiled until it
 # is actually used.
-#
+
+
 package TWiki::Plugins::SpreadSheetPlugin::Calc;
 
 use strict;
 use Time::Local;
 
-use vars qw( $skipInclude $dontSpaceRE
-             $renderingWeb @tableMatrix $cPos $rPos $escToken
-             %varStore @monArr @wdayArr %mon2num $debug );
+
+# =========================
+use vars qw(
+        $web $topic $debug $dontSpaceRE
+        $renderingWeb @tableMatrix $cPos $rPos $escToken
+        %varStore @monArr @wdayArr %mon2num
+    );
 
 $escToken = "\0";
 %varStore = ();
-$dontSpaceRE = '';
-@monArr = ( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
-@wdayArr = ( 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' );
+$dontSpaceRE = "";
+@monArr = ( "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );
+@wdayArr = ( "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" );
 { my $count = 0;
   %mon2num = map { $_ => $count++ } @monArr;
 }
 
-sub CALC {
+
+# =========================
+sub init
+{
+    ( $web, $topic, $debug ) = @_;
+
+    # initialize variables, once per page view
+    %varStore = ();
+    $dontSpaceRE = "";
+
+    # Module initialized
+    TWiki::Func::writeDebug( "- TWiki::Plugins::SpreadSheetPlugin::Calc::init( $web.$topic )" ) if $debug;
+    return 1;
+}
+
+# =========================
+sub CALC
+{
+### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+
+    TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::CALC( $_[2].$_[1] )" ) if $debug;
+
     @tableMatrix = ();
     $cPos = -1;
     $rPos = -1;
 
-    my $result = '';
+    my $result = "";
     my $insidePRE = 0;
     my $insideTABLE = 0;
-    my $line = '';
-    my $before = '';
-    my $cell = '';
+    my $line = "";
+    my $before = "";
+    my $cell = "";
     my @row = ();
 
     $_[0] =~ s/\r//go;
@@ -77,7 +105,7 @@ sub CALC {
                 @row  = split( /\|/o, $line, -1 );
                 push @tableMatrix, [ @row ];
                 $rPos++;
-                $line = $before;
+                $line = "$before";
                 for( $cPos = 0; $cPos < @row; $cPos++ ) {
                     $cell = $row[$cPos];
                     $cell =~ s/%CALC\{(.*?)\}%/&doCalc($1)/geo;
@@ -98,7 +126,9 @@ sub CALC {
     $_[0] = $result;
 }
 
-sub doCalc {
+# =========================
+sub doCalc
+{
     my( $theAttributes ) = @_;
     my $text = &TWiki::Func::extractNameValuePair( $theAttributes );
 
@@ -106,7 +136,7 @@ sub doCalc {
     # e.g. "A(B())" gets "A-esc-1(B-esc-2(-esc-2)-esc-1)"
     my $level = 0;
     $text =~ s/([\(\)])/addNestingLevel($1, \$level)/geo;
-    $text = doFunc( 'MAIN', $text );
+    $text = doFunc( "MAIN", $text );
 
     if( ( $rPos >= 0 ) && ( $cPos >= 0 ) ) {
         # update cell in table matrix
@@ -116,10 +146,12 @@ sub doCalc {
     return $text;
 }
 
-sub addNestingLevel {
+# =========================
+sub addNestingLevel
+{
   my( $theParen, $theLevelRef ) = @_;
 
-  my $result = '';
+  my $result = "";
   if( $theParen eq "(" ) {
     $$theLevelRef++;
     $result = "$escToken$$theLevelRef$theParen";
@@ -130,12 +162,13 @@ sub addNestingLevel {
   return $result;
 }
 
-sub doFunc {
+# =========================
+sub doFunc
+{
     my( $theFunc, $theAttr ) = @_;
 
-    &TWiki::Func::writeDebug( "- SpreadSheetPlugin::doFunc: $theFunc( $theAttr ) start" ) if $debug;
-
-    $theAttr ||= '';
+    $theAttr = "" unless( defined $theAttr );
+    TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::doFunc: $theFunc( $theAttr ) start" ) if $debug;
 
     unless( $theFunc =~ /^(IF|LISTIF|LISTMAP)$/ ) {
         # Handle functions recursively
@@ -146,31 +179,31 @@ sub doFunc {
     # else: delay the function handler to after parsing the parameters,
     # in which case handling functions and cleaning up needs to be done later
 
-    my $result = '';
+    my $result = "";
     my $i = 0;
-    if( $theFunc eq 'MAIN' ) {
+    if( $theFunc eq "MAIN" ) {
         $result = $theAttr;
 
-    } elsif( $theFunc eq 'T' ) {
-        $result = '';
+    } elsif( $theFunc eq "T" ) {
+        $result = "";
         my @arr = getTableRange( "$theAttr..$theAttr" );
         if( @arr ) {
             $result = $arr[0];
         }
 
-    } elsif( $theFunc eq 'TRIM' ) {
-        $result = $theAttr || '';
+    } elsif( $theFunc eq "TRIM" ) {
+        $result = $theAttr || "";
         $result =~ s/^\s*//o;
         $result =~ s/\s*$//o;
         $result =~ s/\s+/ /go;
 
-    } elsif( $theFunc eq 'FORMAT' ) {
+    } elsif( $theFunc eq "FORMAT" ) {
         # Format FORMAT(TYPE, precision, value) returns formatted value -- JimStraus - 05 Jan 2003
         my( $format, $res, $value )  = split( /,\s*/, $theAttr );
         $format =~ s/^\s*(.*?)\s*$/$1/; #Strip leading and trailing spaces
         $res =~ s/^\s*(.*?)\s*$/$1/;
         $value =~ s/^\s*(.*?)\s*$/$1/;
-        if( $format eq 'DOLLAR' ) {
+        if( $format eq "DOLLAR" ) {
             my $neg = 1 if $value < 0;
             $value = abs($value);
             $result = sprintf("%0.${res}f", $value);
@@ -178,25 +211,25 @@ sub doFunc {
             $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
             $result = "\$" . (scalar reverse $temp);
             $result = "(".$result.")" if $neg;
-        } elsif( $format eq 'COMMA' ) {
+        } elsif( $format eq "COMMA" ) {
             $result = sprintf("%0.${res}f", $value);
             my $temp = reverse $result;
             $temp =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
             $result = scalar reverse $temp;
-        } elsif( $format eq 'PERCENT' ) {
+        } elsif( $format eq "PERCENT" ) {
             $result = sprintf("%0.${res}f%%", $value * 100);
-        } elsif( $format eq 'NUMBER' ) {
+        } elsif( $format eq "NUMBER" ) {
             $result = sprintf("%0.${res}f", $value);
-        } elsif( $format eq 'K' ) {
+        } elsif( $format eq "K" ) {
             $result = sprintf("%0.${res}f K", $value / 1024);
-        } elsif( $format eq 'KB' ) {
+        } elsif( $format eq "KB" ) {
             $result = sprintf("%0.${res}f KB", $value / 1024);
-        } elsif ($format eq 'MB') {
+        } elsif ($format eq "MB") {
             $result = sprintf("%0.${res}f MB", $value / (1024 * 1024));
         } elsif( $format =~ /^KBMB/ ) {
             $value /= 1024;
-            my @lbls = ( 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB' );
-            my $lbl = 'KB';
+            my @lbls = ( "MB", "GB", "TB", "PB", "EB", "ZB" );
+            my $lbl = "KB";
             while( $value >= 1024 && @lbls ) {
                 $value /= 1024;
                 $lbl = shift @lbls;
@@ -207,30 +240,30 @@ sub doFunc {
             $result = $value;
         }
 
-    } elsif( $theFunc eq 'EXACT' ) {
+    } elsif( $theFunc eq "EXACT" ) {
         $result = 0;
         my( $str1, $str2 ) = split( /,\s*/, $theAttr, 2 );
-        $str1 = '' unless( $str1 );
-        $str2 = '' unless( $str2 );
+        $str1 = "" unless( $str1 );
+        $str2 = "" unless( $str2 );
         $str1 =~ s/^\s*(.*?)\s*$/$1/o; # cut leading and trailing spaces
         $str2 =~ s/^\s*(.*?)\s*$/$1/o;
         $result = 1 if( $str1 eq $str2 );
 
-    } elsif( $theFunc eq 'RAND' ) {
+    } elsif( $theFunc eq "RAND" ) {
         my $max = _getNumber( $theAttr );
         $max = 1 if( $max <= 0 );
         $result = rand( $max );
 
-    } elsif( $theFunc eq 'VALUE' ) {
+    } elsif( $theFunc eq "VALUE" ) {
         $result = _getNumber( $theAttr );
 
     } elsif( $theFunc =~ /^(EVAL|INT)$/ ) {
         $result = safeEvalPerl( $theAttr );
         unless( $result =~ /^ERROR/ ) {
-            $result = int( _getNumber( $result ) ) if( $theFunc eq 'INT' );
+            $result = int( _getNumber( $result ) ) if( $theFunc eq "INT" );
         }
 
-    } elsif( $theFunc eq 'ROUND' ) {
+    } elsif( $theFunc eq "ROUND" ) {
         # ROUND(num, digits)
         my( $num, $digits ) = split( /,\s*/, $theAttr, 2 );
         $result = safeEvalPerl( $num );
@@ -248,7 +281,7 @@ sub doFunc {
             }
         }
 
-    } elsif( $theFunc eq 'MOD' ) {
+    } elsif( $theFunc eq "MOD" ) {
         $result = 0;
         my( $num1, $num2 ) = split( /,\s*/, $theAttr, 2 );
         $num1 = _getNumber( $num1 );
@@ -257,13 +290,13 @@ sub doFunc {
             $result = $num1 % $num2;
         }
 
-    } elsif( $theFunc eq 'ODD' ) {
+    } elsif( $theFunc eq "ODD" ) {
         $result = _getNumber( $theAttr ) % 2;
 
-    } elsif( $theFunc eq 'EVEN' ) {
+    } elsif( $theFunc eq "EVEN" ) {
         $result = ( _getNumber( $theAttr ) + 1 ) % 2;
 
-    } elsif( $theFunc eq 'AND' ) {
+    } elsif( $theFunc eq "AND" ) {
         $result = 0;
         my @arr = getListAsInteger( $theAttr );
         foreach $i( @arr ) {
@@ -274,7 +307,7 @@ sub doFunc {
             $result = 1;
         }
 
-    } elsif( $theFunc eq 'OR' ) {
+    } elsif( $theFunc eq "OR" ) {
         $result = 0;
         my @arr = getListAsInteger( $theAttr );
         foreach $i( @arr ) {
@@ -284,20 +317,20 @@ sub doFunc {
             }
         }
 
-    } elsif( $theFunc eq 'NOT' ) {
+    } elsif( $theFunc eq "NOT" ) {
         $result = 1;
         $result = 0 if( _getNumber( $theAttr ) );
 
-    } elsif( $theFunc eq 'ABS' ) {
+    } elsif( $theFunc eq "ABS" ) {
         $result = abs( _getNumber( $theAttr ) );
 
-    } elsif( $theFunc eq 'SIGN' ) {
+    } elsif( $theFunc eq "SIGN" ) {
         $i = _getNumber( $theAttr );
         $result =  0;
         $result =  1 if( $i > 0 );
         $result = -1 if( $i < 0 );
 
-    } elsif( $theFunc eq 'IF' ) {
+    } elsif( $theFunc eq "IF" ) {
         # IF(condition, value if true, value if false)
         my( $condition, $str1, $str2 ) = _properSplit( $theAttr, 3 );
         # with delay, handle functions in condition recursively and clean up unbalanced parenthesis
@@ -311,67 +344,67 @@ sub doFunc {
             } else {
                 $result = $str2;
             }
-            $result = '' unless( defined( $result ) );
+            $result = "" unless( defined( $result ) );
             # with delay, handle functions in result recursively and clean up unbalanced parenthesis
             $result =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
             $result =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
 
         } # else return error message
 
-    } elsif( $theFunc eq 'UPPER' ) {
+    } elsif( $theFunc eq "UPPER" ) {
         $result = uc( $theAttr );
 
-    } elsif( $theFunc eq 'LOWER' ) {
+    } elsif( $theFunc eq "LOWER" ) {
         $result = lc( $theAttr );
 
-    } elsif( $theFunc eq 'PROPER' ) {
+    } elsif( $theFunc eq "PROPER" ) {
         # FIXME: I18N
         $result = lc( $theAttr );
         $result =~ s/(^|[^a-z])([a-z])/$1 . uc($2)/geo;
 
-    } elsif( $theFunc eq 'PROPERSPACE' ) {
+    } elsif( $theFunc eq "PROPERSPACE" ) {
         $result = _properSpace( $theAttr );
 
-    } elsif( $theFunc eq 'CHAR' ) {
+    } elsif( $theFunc eq "CHAR" ) {
         $theAttr =~ /([0-9]+)/;
         $i = $1 || 0;
         $i = 255 if $i > 255;
         $i = 0 if $i < 0;
         $result = chr( $i );
 
-    } elsif( $theFunc eq 'REPEAT' ) {
+    } elsif( $theFunc eq "REPEAT" ) {
         my( $str, $num ) = split( /,\s*/, $theAttr, 2 );
-        $str = '' unless( defined( $str ) );
+        $str = "" unless( defined( $str ) );
         $num = _getNumber( $num );
-        $result = $str x $num;
+        $result = "$str" x $num;
 
-    } elsif( $theFunc eq 'CODE' ) {
+    } elsif( $theFunc eq "CODE" ) {
         $result = ord( $theAttr );
 
-    } elsif( $theFunc eq 'LENGTH' ) {
+    } elsif( $theFunc eq "LENGTH" ) {
         $result = length( $theAttr );
 
-    } elsif( $theFunc eq 'ROW' ) {
+    } elsif( $theFunc eq "ROW" ) {
         $i = $theAttr || 0;
         $result = $rPos + $i + 1;
 
-    } elsif( $theFunc eq 'COLUMN' ) {
+    } elsif( $theFunc eq "COLUMN" ) {
         $i = $theAttr || 0;
         $result = $cPos + $i + 1;
 
-    } elsif( $theFunc eq 'LEFT' ) {
+    } elsif( $theFunc eq "LEFT" ) {
         $i = $rPos + 1;
         $result = "R$i:C0..R$i:C$cPos";
 
-    } elsif( $theFunc eq 'ABOVE' ) {
+    } elsif( $theFunc eq "ABOVE" ) {
         $i = $cPos + 1;
         $result = "R0:C$i..R$rPos:C$i";
 
-    } elsif( $theFunc eq 'RIGHT' ) {
+    } elsif( $theFunc eq "RIGHT" ) {
         $i = $rPos + 1;
         $result = "R$i:C$cPos..R$i:C32000";
 
-    } elsif( $theFunc eq 'DEF' ) {
+    } elsif( $theFunc eq "DEF" ) {
         # Format DEF(list) returns first defined cell
         # Added by MF 26/3/2002, fixed by PeterThoeny
         my @arr = getList( $theAttr );
@@ -385,28 +418,28 @@ sub doFunc {
             }
         }
 
-    } elsif( $theFunc eq 'MAX' ) {
+    } elsif( $theFunc eq "MAX" ) {
         my @arr = sort { $a <=> $b }
                   grep { /./ }
                   grep { defined $_ }
                   getListAsFloat( $theAttr );
         $result = $arr[$#arr];
 
-    } elsif( $theFunc eq 'MIN' ) {
+    } elsif( $theFunc eq "MIN" ) {
         my @arr = sort { $a <=> $b }
                   grep { /./ }
                   grep { defined $_ }
                   getListAsFloat( $theAttr );
         $result = $arr[0];
 
-    } elsif( $theFunc eq 'SUM' ) {
+    } elsif( $theFunc eq "SUM" ) {
         $result = 0;
         my @arr = getListAsFloat( $theAttr );
         foreach $i ( @arr ) {
             $result += $i  if defined $i;
         }
 
-    } elsif( $theFunc eq 'SUMPRODUCT' ) {
+    } elsif( $theFunc eq "SUMPRODUCT" ) {
         $result = 0;
         my @arr;
         my @lol = split( /,\s*/, $theAttr );
@@ -442,7 +475,7 @@ sub doFunc {
             $result += $i  if defined $i;
         }
 
-    } elsif( $theFunc eq 'WORKINGDAYS' ) {
+    } elsif( $theFunc eq "WORKINGDAYS" ) {
         my( $num1, $num2 ) = split( /,\s*/, $theAttr, 2 );
         $result = _workingDays( _getNumber( $num1 ), _getNumber( $num2 ) );
 
@@ -468,7 +501,7 @@ sub doFunc {
             $result = $result / $items;
         }
 
-    } elsif( $theFunc eq 'MEDIAN' ) {
+    } elsif( $theFunc eq "MEDIAN" ) {
         my @arr = sort { $a <=> $b } grep { defined $_ } getListAsFloat( $theAttr );
         $i = @arr;
         if( ( $i % 2 ) > 0 ) {
@@ -478,7 +511,7 @@ sub doFunc {
             $result = ( $arr[$i] + $arr[$i-1] ) / 2;
         }
 
-    } elsif( $theFunc eq 'PERCENTILE' ) {
+    } elsif( $theFunc eq "PERCENTILE" ) {
         my( $percentile, $set ) = split( /,\s*/, $theAttr, 2 );
         my @arr = sort { $a <=> $b } grep { defined $_ } getListAsFloat( $set );
         $result = 0;
@@ -503,11 +536,11 @@ sub doFunc {
             }
         }
 
-    } elsif( $theFunc eq 'COUNTSTR' ) {
+    } elsif( $theFunc eq "COUNTSTR" ) {
         $result = 0;  # count any string
         $i = 0;       # count string equal second attr
         my $list = $theAttr;
-        my $str = '';
+        my $str = "";
         if( $theAttr =~ /^(.*),\s*(.*?)$/ ) {  # greedy match for last comma
             $list = $1;
             $str = $2;
@@ -523,11 +556,11 @@ sub doFunc {
         }
         $result = $i if( $str );
 
-    } elsif( $theFunc eq 'COUNTITEMS' ) {
-        $result = '';
+    } elsif( $theFunc eq "COUNTITEMS" ) {
+        $result = "";
         my @arr = getList( $theAttr );
         my %items = ();
-        my $key = '';
+        my $key = "";
         foreach $key ( @arr ) {
             $key =~ s/^\s*(.*?)\s*$/$1/o if( $key );
             if( $key ) {
@@ -549,26 +582,26 @@ sub doFunc {
         $pos--;
         $pos = 0 if( $pos < 0 );
         pos( $string ) = $pos if( $pos );
-        $searchString = quotemeta( $searchString ) if( $theFunc eq 'FIND' );
+        $searchString = quotemeta( $searchString ) if( $theFunc eq "FIND" );
         # using zero width lookahead '(?=...)' to keep pos at the beginning of match
         if( eval '$string =~ m/(?=$searchString)/g' && $string ) {
             $result = pos( $string ) + 1;
         }
 
-    } elsif( $theFunc eq 'REPLACE' ) {
+    } elsif( $theFunc eq "REPLACE" ) {
         my( $string, $start, $num, $replace ) = split ( /,\s*/, $theAttr, 4 );
         $result = $string;
         $start-- unless ($start < 1);
         $num = 0 unless( $num );
-        $replace = '' unless( defined $replace );
+        $replace = "" unless( defined $replace );
         if( eval 'substr( $string, $start, $num, $replace )' && $string ) {
             $result = $string;
         }
 
-    } elsif( $theFunc eq 'SUBSTITUTE' ) {
+    } elsif( $theFunc eq "SUBSTITUTE" ) {
         my( $string, $from, $to, $inst, $options ) = split( /,\s*/, $theAttr );
         $result = $string;
-        $to = '' unless( defined $to );
+        $to = "" unless( defined $to );
         $from = quotemeta( $from ) unless( $options && $options =~ /r/i);
         if( $inst ) {
             # replace Nth instance
@@ -583,11 +616,11 @@ sub doFunc {
             }
         }
 
-    } elsif( $theFunc eq 'TRANSLATE' ) {
+    } elsif( $theFunc eq "TRANSLATE" ) {
         $result = $theAttr;
         # greedy match for comma separated parameters (in case first parameter has embedded commas)
         if( $theAttr =~ /^(.*)\,\s*(.+)\,\s*(.+)$/ ) {
-            my $string = $1 || '';
+            my $string = $1 || "";
             my $from = $2;
             my $to   = $3;
             $from =~ s/\$comma/,/g;  $from =~ s/\$sp/ /g;  $from = quotemeta( $from );
@@ -600,7 +633,7 @@ sub doFunc {
             }
        }
 
-    } elsif ( $theFunc eq 'TIME' ) {
+    } elsif ( $theFunc eq "TIME" ) {
        $result = $theAttr;
        $result =~ s/^\s+//o;
        $result =~ s/\s+$//o;
@@ -610,7 +643,7 @@ sub doFunc {
            $result = time();
        }
 
-    } elsif ( $theFunc eq 'TODAY' ) {
+    } elsif ( $theFunc eq "TODAY" ) {
        $result = _date2serial( _serial2date( time(), '$year/$month/$day GMT', 1 ) );
 
     } elsif( $theFunc =~ /^(FORMATTIME|FORMATGMTIME)$/ ) {
@@ -621,14 +654,14 @@ sub doFunc {
            $time = time();
        }
        my $isGmt = 0;
-       $isGmt = 1 if( ( $str =~ m/ gmt/i ) || ( $theFunc eq 'FORMATGMTIME' ) );
+       $isGmt = 1 if( ( $str =~ m/ gmt/i ) || ( $theFunc eq "FORMATGMTIME" ) );
        $result = _serial2date( $time, $str, $isGmt );
 
-    } elsif( $theFunc eq 'TIMEADD' ) {
+    } elsif( $theFunc eq "TIMEADD" ) {
        my( $time, $value, $scale ) = split( /,\s*/, $theAttr, 3 );
        $time = 0 unless( $time );
        $value = 0 unless( $value );
-       $scale = '' unless( $scale );
+       $scale = "" unless( $scale );
        $time =~ s/.*?([0-9]+).*/$1/o || 0;
        $value =~ s/.*?(\-?[0-9\.]+).*/$1/o || 0;
        $value *= 60            if( $scale =~ /^min/i );
@@ -639,7 +672,7 @@ sub doFunc {
        $value *= 3600*24*365   if( $scale =~ /^year/i ); # FIXME: exact calc
        $result = int( $time + $value );
 
-    } elsif( $theFunc eq 'TIMEDIFF' ) {
+    } elsif( $theFunc eq "TIMEDIFF" ) {
        my( $time1, $time2, $scale ) = split( /,\s*/, $theAttr, 3 );
        $time1 = 0 unless( $time1 );
        $time2 = 0 unless( $time2 );
@@ -653,7 +686,7 @@ sub doFunc {
        $result /= 3600*24*30.42 if( $scale =~ /^mon/i );  # FIXME: exact calc
        $result /= 3600*24*365   if( $scale =~ /^year/i ); # FIXME: exact calc
 
-    } elsif( $theFunc eq 'SET' ) {
+    } elsif( $theFunc eq "SET" ) {
        my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
        $name =~ s/[^a-zA-Z0-9\_]//go;
        if( $name && defined( $value ) ) {
@@ -661,30 +694,30 @@ sub doFunc {
            $varStore{ $name } = $value;
        }
 
-    } elsif( $theFunc eq 'SETM' ) {
+    } elsif( $theFunc eq "SETM" ) {
        my( $name, $value ) = split( /,\s*/, $theAttr, 2 );
        $name =~ s/[^a-zA-Z0-9\_]//go;
        if( $name ) {
            my $old = $varStore{ $name };
-           $old = '' unless( defined( $old ) );
+           $old = "" unless( defined( $old ) );
            $value = safeEvalPerl( "$old $value" );
            $varStore{ $name } = $value;
        }
 
-    } elsif( $theFunc eq 'GET' ) {
+    } elsif( $theFunc eq "GET" ) {
        my $name = $theAttr;
        $name =~ s/[^a-zA-Z0-9\_]//go;
        $result = $varStore{ $name } if( $name );
-       $result = '' unless( defined( $result ) );
+       $result = "" unless( defined( $result ) );
 
-    } elsif( $theFunc eq 'LIST' ) {
+    } elsif( $theFunc eq "LIST" ) {
         my @arr = getList( $theAttr );
         $result = _listToDelimitedString( @arr );
 
-    } elsif( $theFunc eq 'LISTITEM' ) {
+    } elsif( $theFunc eq "LISTITEM" ) {
         my( $index, $str ) = _properSplit( $theAttr, 2 );
         $index = _getNumber( $index );
-        $str = '' unless( defined( $str ) );
+        $str = "" unless( defined( $str ) );
         my @arr = getList( $str );
         my $size = scalar @arr;
         if( $index && $size ) {
@@ -693,21 +726,21 @@ sub doFunc {
             $result = $arr[$index] if( ( $index >= 0 ) && ( $index < $size ) );
         }
 
-    } elsif( $theFunc eq 'LISTJOIN' ) {
+    } elsif( $theFunc eq "LISTJOIN" ) {
         my( $sep, $str ) = _properSplit( $theAttr, 2 );
-        $str = '' unless( defined( $str ) );
+        $str = "" unless( defined( $str ) );
         $result = _listToDelimitedString( getList( $str ) );
-        $sep = ', ' unless( $sep );
+        $sep = ", " unless( $sep );
         $sep =~ s/\$comma/,/go;
         $sep =~ s/\$sp/ /go;
         $sep =~ s/\$n/\n/go;
         $result =~ s/, /$sep/go;
 
-    } elsif( $theFunc eq 'LISTSIZE' ) {
+    } elsif( $theFunc eq "LISTSIZE" ) {
         my @arr = getList( $theAttr );
         $result = scalar @arr;
 
-    } elsif( $theFunc eq 'LISTSORT' ) {
+    } elsif( $theFunc eq "LISTSORT" ) {
         my $isNumeric = 1;
         my @arr = map {
             s/^\s*//o;
@@ -722,24 +755,24 @@ sub doFunc {
         }
         $result = _listToDelimitedString( @arr );
 
-    } elsif( $theFunc eq 'LISTREVERSE' ) {
+    } elsif( $theFunc eq "LISTREVERSE" ) {
         my @arr = reverse getList( $theAttr );
         $result = _listToDelimitedString( @arr );
 
-    } elsif( $theFunc eq 'LISTUNIQUE' ) {
+    } elsif( $theFunc eq "LISTUNIQUE" ) {
         my %seen = ();
         my @arr = grep { ! $seen{$_} ++ } getList( $theAttr );
         $result = _listToDelimitedString( @arr );
 
-    } elsif( $theFunc eq 'LISTMAP' ) {
+    } elsif( $theFunc eq "LISTMAP" ) {
         # LISTMAP(action, item 1, item 2, ...)
         my( $action, $str ) = _properSplit( $theAttr, 2 );
-        $action = '' unless( defined( $action ) );
-        $str = '' unless( defined( $str ) );
+        $action = "" unless( defined( $action ) );
+        $str = "" unless( defined( $str ) );
         # with delay, handle functions in result recursively and clean up unbalanced parenthesis
         $str =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
         $str =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
-        my $item = '';
+        my $item = "";
         $i = 0;
         my @arr =
             map {
@@ -754,17 +787,17 @@ sub doFunc {
             } getList( $str );
         $result = _listToDelimitedString( @arr );
 
-    } elsif( $theFunc eq 'LISTIF' ) {
+    } elsif( $theFunc eq "LISTIF" ) {
         # LISTIF(cmd, item 1, item 2, ...)
         my( $cmd, $str ) = _properSplit( $theAttr, 2 );
-        $cmd = '' unless( defined( $cmd ) );
+        $cmd = "" unless( defined( $cmd ) );
         $cmd =~ s/^\s*(.*?)\s*$/$1/o;
-        $str = '' unless( defined( $str ) );
+        $str = "" unless( defined( $str ) );
         # with delay, handle functions in result recursively and clean up unbalanced parenthesis
         $str =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
         $str =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
-        my $item = '';
-        my $eval = '';
+        my $item = "";
+        my $eval = "";
         $i = 0;
         my @arr =
             grep { ! /^TWIKI_GREP_REMOVE$/ }
@@ -782,33 +815,37 @@ sub doFunc {
                 } elsif( $eval ) {
                     $_ = $item;
                 } else {
-                    $_ = 'TWIKI_GREP_REMOVE';
+                    $_ = "TWIKI_GREP_REMOVE";
                 }
             } getList( $str );
         $result = _listToDelimitedString( @arr );
 
-    } elsif ( $theFunc eq 'NOP' ) {
-       # pass everything through, this will allow plugins to defy plugin order
-       # for example the %SEARCH{}% variable
-       $theAttr =~ s/\$per/%/g;
-       $result = $theAttr;
+    } elsif ( $theFunc eq "NOP" ) {
+        # pass everything through, this will allow plugins to defy plugin order
+        # for example the %SEARCH{}% variable
+        $theAttr =~ s/\$per/%/g;
+        $result = $theAttr;
 
-    } elsif ( $theFunc eq 'EXISTS' ) {
-        $result = TWiki::Func::topicExists( '', $theAttr );
+    } elsif ( $theFunc eq "EXISTS" ) {
+        $result = TWiki::Func::topicExists( "", $theAttr );
         $result = 0 unless( $result );
     }
 
-    &TWiki::Func::writeDebug( "- SpreadSheetPlugin::doFunc: $theFunc( $theAttr ) returns: $result" ) if $debug;
+    TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::doFunc: $theFunc( $theAttr ) returns: $result" ) if $debug;
     return $result;
 }
 
-sub _listToDelimitedString {
+# =========================
+sub _listToDelimitedString
+{
     my @arr = map { s/^\s*//o; s/\s*$//o; $_ } @_;
-    my $text = join( ', ', @arr );
+    my $text = join( ", ", @arr );
     return $text;
 }
 
-sub _properSplit {
+# =========================
+sub _properSplit
+{
     my( $theAttr, $theLevel ) = @_;
 
     # escape commas inside functions
@@ -818,26 +855,32 @@ sub _properSplit {
     return @arr;
 }
 
-sub _escapeCommas {
+# =========================
+sub _escapeCommas
+{
     my( $theText ) = @_;
     $theText =~ s/\,/<$escToken>/go;
     return $theText;
 }
 
-sub _getNumber {
+# =========================
+sub _getNumber
+{
     my( $theText ) = @_;
     return 0 unless( $theText );
-    $theText =~ s/([0-9])\,(?=[0-9]{3})/$1/go;          # '1,234,567' ==> "1234567"
+    $theText =~ s/([0-9])\,(?=[0-9]{3})/$1/go;          # "1,234,567" ==> "1234567"
     unless( $theText =~ s/^.*?(\-?[0-9\.]+).*$/$1/o ) { # "xy-1.23zz" ==> "-1.23"
         $theText = 0;
     }
     $theText =~ s/^(\-?)0+([0-9])/$1$2/o;               # "-0009.12"  ==> "-9.12"
     $theText =~ s/^(\-?)\./${1}0\./o;                   # "-.25"      ==> "-0.25"
-    $theText =~ s/^\-0$/0/o;                            # '-0'        ==> "0"
+    $theText =~ s/^\-0$/0/o;                            # "-0"        ==> "0"
     return $theText;
 }
 
-sub safeEvalPerl {
+# =========================
+sub safeEvalPerl
+{
     my( $theText ) = @_;
 
     # Allow only simple math with operators - + * / % ( )
@@ -846,8 +889,9 @@ sub safeEvalPerl {
     $theText =~ s/[^\!\<\=\>\-\+\*\/\%0-9\.\(\)]*//go;
     $theText =~ /(.*)/;
     $theText = $1;  # untainted variable
-    return '' unless( $theText );
-    local $SIG{__DIE__} = sub { TWiki::Func::writeDebug($_[0]); warn $_[0] };     my $result = eval $theText;
+    return "" unless( $theText );
+    local $SIG{__DIE__} = sub { TWiki::Func::writeDebug($_[0]); warn $_[0] };
+    my $result = eval $theText;
     if( $@ ) {
         $result = $@;
         $result =~ s/[\n\r]//go;
@@ -856,17 +900,19 @@ sub safeEvalPerl {
         $result = "ERROR: $result";
 
     } else {
-        $result = 0 unless( $result );  # logical false is '0'
+        $result = 0 unless( $result );  # logical false is "0"
     }
     return $result;
 }
 
-sub getListAsInteger {
+# =========================
+sub getListAsInteger
+{
     my( $theAttr ) = @_;
 
     my $val = 0;
     my @list = getList( $theAttr );
-    (my $baz = 'foo') =~ s/foo//;  # reset search vars. defensive coding
+    (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
     for my $i (0 .. $#list ) {
         $val = $list[$i];
         # search first integer pattern, skip over HTML tags
@@ -879,14 +925,16 @@ sub getListAsInteger {
     return @list;
 }
 
-sub getListAsFloat {
+# =========================
+sub getListAsFloat
+{
     my( $theAttr ) = @_;
 
     my $val = 0;
     my @list = getList( $theAttr );
-    (my $baz = 'foo') =~ s/foo//;  # reset search vars. defensive coding
+    (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
     for my $i (0 .. $#list ) {
-        $val = $list[$i] || '';
+        $val = $list[$i] || "";
         # search first float pattern, skip over HTML tags
         if( $val =~ /^\s*(?:<[^>]*>)*\$?([\-\+]*[0-9\.]+).*/o ) {
             $list[$i] = $1;  # untainted variable, possibly undef
@@ -897,15 +945,17 @@ sub getListAsFloat {
     return @list;
 }
 
-sub getListAsDays {
+# =========================
+sub getListAsDays
+{
     my( $theAttr ) = @_;
 
     # contributed by by SvenDowideit - 07 Mar 2003; modified by PTh
     my $val = 0;
     my @arr = getList( $theAttr );
-    (my $baz = 'foo') =~ s/foo//;  # reset search vars. defensive coding
+    (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
     for my $i (0 .. $#arr ) {
-        $val = $arr[$i] || '';
+        $val = $arr[$i] || "";
         # search first float pattern
         if( $val =~ /^\s*([\-\+]*[0-9\.]+)\s*d/oi ) {
             $arr[$i] = $1;      # untainted variable, possibly undef
@@ -922,7 +972,9 @@ sub getListAsDays {
     return @arr;
 }
 
-sub getList {
+# =========================
+sub getList
+{
     my( $theAttr ) = @_;
 
     my @list = ();
@@ -938,7 +990,9 @@ sub getList {
     return @list;
 }
 
-sub getTableRange {
+# =========================
+sub getTableRange
+{
     my( $theAttr ) = @_;
 
     my @arr = ();
@@ -946,7 +1000,7 @@ sub getTableRange {
         return @arr;
     }
 
-    &TWiki::Func::writeDebug( "- SpreadSheetPlugin::getTableRange( $theAttr )" ) if $debug;
+    TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::getTableRange( $theAttr )" ) if $debug;
     unless( $theAttr =~ /\s*R([0-9]+)\:C([0-9]+)\s*\.\.+\s*R([0-9]+)\:C([0-9]+)/ ) {
         return @arr;
     }
@@ -974,11 +1028,13 @@ sub getTableRange {
             }
         }
     }
-    &TWiki::Func::writeDebug( "- SpreadSheetPlugin::getTableRange() returns @arr" ) if $debug;
+    TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::getTableRange() returns @arr" ) if $debug;
     return @arr;
 }
 
-sub _date2serial {
+# =========================
+sub _date2serial
+{
     my ( $theText ) = @_;
 
     my $sec = 0; my $min = 0; my $hour = 0; my $day = 1; my $mon = 0; my $year = 0;
@@ -989,8 +1045,8 @@ sub _date2serial {
     } elsif( $theText =~ m|([0-9]{1,2})[-\s/]+([A-Z][a-z][a-z])[-\s/]+([0-9]{2,4})| ) {
         # "31 Dec 2003", "31 Dec 03", "31-Dec-2003", "31/Dec/2003"
         $day = $1; $mon = $mon2num{$2} || 0; $year = $3;
-        $year += 100 if( $year < 80 );      # '05'   --> "105" (leave "99" as is)
-        $year -= 1900 if( $year >= 1900 );  # '2005' --> "105"
+        $year += 100 if( $year < 80 );      # "05"   --> "105" (leave "99" as is)
+        $year -= 1900 if( $year >= 1900 );  # "2005" --> "105"
     } elsif( $theText =~ m|([0-9]{4})[-/\.]([0-9]{1,2})[-/\.]([0-9]{1,2})[-/\.\,\s]+([0-9]{1,2})[-\:/\.]([0-9]{1,2})[-\:/\.]([0-9]{1,2})| ) {
         # "2003/12/31 23:59:59", "2003-12-31-23-59-59", "2003.12.31.23.59.59"
         $year = $1 - 1900; $mon = $2 - 1; $day = $3; $hour = $4; $min = $5; $sec = $6;
@@ -1004,8 +1060,8 @@ sub _date2serial {
         # "12/31/2003", "12/31/03", "12-31-2003"
         # (shh, don't tell anyone that we support ambiguous American dates, my boss asked me to)
         $year = $3; $mon = $1 - 1; $day = $2;
-        $year += 100 if( $year < 80 );      # '05'   --> "105" (leave "99" as is)
-        $year -= 1900 if( $year >= 1900 );  # '2005' --> "105"
+        $year += 100 if( $year < 80 );      # "05"   --> "105" (leave "99" as is)
+        $year -= 1900 if( $year >= 1900 );  # "2005" --> "105"
     } else {
         # unsupported format
         return 0;
@@ -1021,7 +1077,9 @@ sub _date2serial {
     }
 }
 
-sub _serial2date {
+# =========================
+sub _serial2date
+{
     my ( $theTime, $theStr, $isGmt ) = @_;
 
     my( $sec, $min, $hour, $day, $mon, $year, $wday, $yday ) = localtime( $theTime );
@@ -1043,27 +1101,31 @@ sub _serial2date {
     return $theStr;
 }
 
-sub _properSpace {
+# =========================
+sub _properSpace
+{
     my ( $theStr ) = @_;
 
     # FIXME: I18N
 
     unless( $dontSpaceRE ) {
-        $dontSpaceRE = &TWiki::Func::getPreferencesValue( 'DONTSPACE' ) ||
-                       &TWiki::Func::getPreferencesValue( 'SPREADSHEETPLUGIN_DONTSPACE' ) ||
-                       'UnlikelyGibberishWikiWord';
+        $dontSpaceRE = &TWiki::Func::getPreferencesValue( "DONTSPACE" ) ||
+                       &TWiki::Func::getPreferencesValue( "SPREADSHEETPLUGIN_DONTSPACE" ) ||
+                       "UnlikelyGibberishWikiWord";
         $dontSpaceRE =~ s/[^a-zA-Z0-9\,\s]//go;
         $dontSpaceRE = "(" . join( "|", split( /[\,\s]+/, $dontSpaceRE ) ) . ")";
         # Example: "(RedHat|McIntosh)"
     }
     $theStr =~ s/$dontSpaceRE/_spaceWikiWord( $1, "<DONT_SPACE>" )/geo;  # e.g. "Mc<DONT_SPACE>Intosh"
-    $theStr =~ s/(^|[\s\(]|\]\[)([a-zA-Z0-9]+)/$1 . _spaceWikiWord( $2, ' ' )/geo;
+    $theStr =~ s/(^|[\s\(]|\]\[)([a-zA-Z0-9]+)/$1 . _spaceWikiWord( $2, " " )/geo;
     $theStr =~ s/<DONT_SPACE>//go;  # remove "<DONT_SPACE>" marker
 
     return $theStr;
 }
 
-sub _spaceWikiWord {
+# =========================
+sub _spaceWikiWord
+{
     my ( $theStr, $theSpacer ) = @_;
 
     $theStr =~ s/([a-z])([A-Z0-9])/$1$theSpacer$2/go;
@@ -1072,7 +1134,9 @@ sub _spaceWikiWord {
     return $theStr;
 }
 
-sub _workingDays {
+# =========================
+sub _workingDays
+{
     my ( $start, $end ) = @_;
 
     # Contributed by CrawfordCurrie - 17 Jul 2004
@@ -1098,4 +1162,8 @@ sub _workingDays {
     return $whole_weeks * 5 + $extra_days;
 }
 
+# =========================
+
 1;
+
+# EOF
