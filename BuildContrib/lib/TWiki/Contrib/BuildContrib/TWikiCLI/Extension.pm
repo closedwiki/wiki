@@ -10,7 +10,17 @@ sub upload {
 
 }
 
-sub cvs
+# now this really ought to be in Extension::CVS, but that directory would clash
+sub cvsupdate {
+    my ($extension) = @_;
+
+    print "Doing cvs update for $extension\n\n";
+    my $libFrag = getLibFragmentForExtension($extension);
+
+   	my $dir = selectTWikiLibDir($libFrag);
+
+	$dir;
+}
 
 sub install {
     my ($extension) = @_;
@@ -18,9 +28,10 @@ sub install {
     print "Installing $extension\n\n";
     my $libFrag = getLibFragmentForExtension($extension);
 
-    my $buildDotPlDir = findBuildDotPlDir($libFrag);
     my $oldPwd = cwd();
     my $outputLog;
+
+    my $buildDotPlDir = selectTWikiLibDir($libFrag)."/TWiki/$libFrag/";
     if ($buildDotPlDir) {
 	chdir ($buildDotPlDir) || die "Couldn't cd to $buildDotPlDir - $!";
 	print "From $buildDotPlDir...\n";
@@ -46,18 +57,18 @@ sub getHomes {
 }
 
 
-sub findBuildDotPlDir {
-    my ($dir) = @_;
+sub selectTWikiLibDir {
+    my ($frag) = @_;
     unless ($ENV{"TWIKI_LIBS"}) {
 	die "No TWIKI_LIBS set?";
     }
     my $result;
     my $lookedIn;
     foreach my $libdir (split(/:/, $ENV{TWIKI_LIBS})) {
-	my $buildDotPlDir = "$libdir/TWiki/$dir";
-	if (-f $buildDotPlDir."/build.pl") {
+	my $buildDotPlDir = "$libdir";
+	if (-f $libDir."/TWiki/$frag/build.pl") {
 	    $lookedIn .= "\tFound it\n";
-	    return $buildDotPlDir;
+	    return $libDir;
 	} else {
 	    $lookedIn .= "\tNot $buildDotPlDir\n";
 	}
