@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1000798012" format="1.0" version="1.23"}%
+%META:TOPICINFO{author="PeterThoeny" date="1002073392" format="1.0" version="1.24"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -198,7 +198,9 @@ __NOTE:__ Skip this step if you did not customize your template files.
 	1. Form Templates replace the <nop>TWikiCategoryTables:
 		* Create a replacement =WebForm= topic based on =twikicatitems.tmpl= in each web that uses a Category Table. See details in TWikiForms and compare with the settings in the =Know2.<nop>WebPreferences= topic.
 		  <br /> __NOTE:__ Do not remove the =twikicatitems.tmpl= file, it is still used for topics that are of the old format.
-		* Searches need to be adjusted to deal with format change - if all topics are upgrades, a more specific search can be done.
+		* Searches need to be adjusted to deal with format change. It is possible to define a regular expression search that can deal at the same time with topics in the old format and new format.
+			* __Example:__ List all topics in the Know web that have a Know.TopicClassification of Know.PublicFAQ: <br /> <tt>%<nop>SEARCH{ "[T]opicClassification.*?(td..td|value\=).*?[P]ublicFAQ" casesensitive="on" regex="on" nosearch="on" web="Know"}%</tt> <br /> (The =[T]= and =[P]= is done so that search does not find the topic where this search string is located in!)
+			* __Example:__ Create a link that lists all topics in the Know web with a Know.TopicClassification of Know.PublicFAQ: <br /> <tt>[<nop>[%<nop>SCRIPTURL%/search%<nop>SCRIPTSUFFIX%/Know/?scope=text<br />&amp;search=%5BT%5DopicClassification.*%3F%28td..td%7C<br />value%5C%3D%29.*%3F%5BP%5DublicFAQ&amp;regex=on][All Public FAQ]<nop>]</tt> <br /> [[%SCRIPTURL%/search%SCRIPTSUFFIX%/Know/?scope=text&amp;search=%5BT%5DopicClassification.*%3F%28td..td%7Cvalue%5C%3D%29.*%3F%5BP%5DublicFAQ&amp;regex=on][All Public FAQ]]
 	1. For each web that has a custom ==notedited.tmpl== template, create an equivalent WebTopicEditTemplate to conform with the new [[%TWIKIWEB%.TWikiTemplates#TemplateTopics][TemplateTopics]]. The new format replaces the =notedited.tmpl=, =notext.tmpl= and =notwiki.tmpl= templates.
 
 ---+++ Step 10: Switch over to new installation
@@ -269,4 +271,4 @@ In this step, you move the working 01-Sep-2001 installation to the old 01-Dec-20
 		
 -- JohnTalintyre - 18 Jul 2001 <br />
 -- MikeMannix - 12 Sep 2001 <br />
--- PeterThoeny - 12 Sep 2001 <br />
+-- PeterThoeny - 02 Oct 2001 <br />
