@@ -3461,14 +3461,12 @@ sub makeAnchorHeading
     $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/ );
     $hasAnchor = 1 if( $text =~ m/(^|[\s\(])($regex{wikiWordRegex})/ );
 
-    # FIXME: '<h1><a name="atext"></a></h1> WikiName' has an
-    #        empty <a> tag, which is not HTML conform
-    my $prefix = "<nop><h$theLevel><a name=\"$compatAnchorName\"> </a> " .
-		 "<a name=\"$anchorName\"> ";
+    my $prefix = "<nop><h$theLevel><a name=\"$compatAnchorName\"></a> " .
+		 "<a name=\"$anchorName\"></a> ";
     if( $hasAnchor ) {
-        $text = "$prefix </a> $text </h$theLevel>";
+        $text = "$prefix $text </h$theLevel>";
     } else {
-        $text = "$prefix $text </a></h$theLevel>";
+        $text = "$prefix $text </h$theLevel>";
     }
 
     return $text;
