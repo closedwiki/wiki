@@ -178,32 +178,19 @@ sub main
     }
 
     if( $saveCmd ne "repRev" ) {
-        # normal case: Get latest attachment from file for preview
-        $text= &TWiki::Store::readTopic( $topic );
-        ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
+        ( $text, @meta ) = &TWiki::Store::readWebTopicNew( $webName, $topic );
         # get the edited text and combine text, category table and attachment for preview
+        my $metaText = &TWiki::renderMetaData( $webName, $topic, \@meta );
         $text = $query->param( "text" );
+        $text .= $metaText;
         $text .= $tcat;        # text to save
         $ptext = $text;        # text to preview
-        if( $atext ) { 
-           # FIXME naff to have to put TWikiAttachment back
-           $atext = &TWiki::handleCommonTags( "<!--TWikiAttachment-->$atext<!--TWikiAttachment-->", $topic );
-           $ptext .= $atext;
-        }
-
     } else {
-        # for debug: Extract attachment
+        # for debug: Don't include attachment FIXME is this correct?
         $text = $query->param( "text" );
-        ( $before, $atext, $after) = split( /<!--TWikiAttachment-->/, $text);
-        if( ! $after ) { $after = ""; }
-        # combine text, category table and attachment for preview
-        if( $atext ) {
-            $text = "$before$after$tcat<!--TWikiAttachment-->$atext<!--TWikiAttachment-->";
-            $ptext = "$before$after$tcat$atext";     # text to preview
-        } else {
-            $text = "$before$after$tcat";   # text to save
-            $ptext = $text;                 # text to preview
-        }
+        # combine text and category table
+        $text = "$before$after$tcat";   # text to save
+        $ptext = $text;                 # text to preview
     }
 
     $ptext =~ s/ {3}/\t/go;
