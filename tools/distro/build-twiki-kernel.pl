@@ -117,7 +117,7 @@ map { unlink "$installBase/$_" or die "$_: $!" }
 ( qw (
       pub-htaccess.txt root-htaccess.txt subdir-htaccess.txt robots.txt
       UpgradeTwiki
-      TWikiDocumentation.html TWikihistory.html
+      TWikiDocumentation.html TWikiHistory.html
       ) 
 );
 
