@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1044150120" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="PeterThoeny" date="1092467937" format="1.0" version="1.13"}%
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
@@ -32,12 +32,13 @@ A rundown of the individual files included in the current distribution, organize
 
 Application info and the current reference documentation. _Full file list:_
 
-| *File:*		 | *Used for:* |
+| *File* | *Used for* |
 | =index.html= | Links to launch TWiki after install and for files in this directory |
-| =license.txt=		  | GNU General Public License and TWiki-specific info |
-| =readme.txt=		  | General TWiki start-up info with relevant URLs |
-| =TWikiDocumentation.html=			 | All documentation packaged as a single page |
-| =TWikiHistory.html=		  | TWiki development timeline: versions, features, developers |
+| =license.txt= | GNU General Public License and TWiki-specific info |
+| =readme.txt= | General TWiki start-up info with relevant URLs |
+| =TWikiDocumentation.html= | All documentation packaged as a single page |
+| =TWikiHistory.html= | TWiki development timeline: versions, features, developers |
+| =TwikiUpgrade= | TWiki upgrade script (Beta state) |
 
 #BinFiles
 ---+++ Files in <code>twiki/bin</code>
@@ -47,6 +48,7 @@ Perl CGI scripts. _Full file list:_
 | *File:*		 | *Used for:* |
 | =.htaccess.txt= | Authentication. Rename to .htaccess and customize if used |
 | =attach=		  | Shows the attach file page (FileAttachment) |
+| =changes=		 | a simple WebChanges query |
 | =edit=			 | Edit a topic |
 | =geturl=		  | Fetch URL data |
 | =installpasswd= | Install new password by admin |
@@ -65,6 +67,7 @@ Perl CGI scripts. _Full file list:_
 | =testenv=		 | Test CGI environment variables |
 | =upload=		  | Does file upload (FileAttachment) |
 | =view=			 | View a topic ( *the* script ) |
+| =viewauth=		| View a topic (should be a softlink to view, but a copy works) the .htaccess file sets this as requireing authorisation |
 | =viewfile=		| View a file attachment |
 
 #LibFiles
@@ -75,6 +78,8 @@ The new =lib/TWiki/Plugins= directories contain configuration, library and funct
 | *File:*			  | *Used for:* |
 | =TWiki.cfg=	  | Main configuration, used by =TWiki.pm= |
 | =TWiki.pm=		| Main TWiki library |
+| =Algorithm/Diff.pm= | Diff library |
+| =Text/Diff.pm=		| Diff library, used by !TwikiUpgrade script |
 | =TWiki/Access.pm=	| Access control |
 | =TWiki/Attach.pm=	| Attachment handling |
 | =TWiki/Form.pm=	  | Form handling |
@@ -82,15 +87,45 @@ The new =lib/TWiki/Plugins= directories contain configuration, library and funct
 | =TWiki/Meta.pm=	  | Meta data in topics |
 | =TWiki/Net.pm=		| SMTP mail handling |
 | =TWiki/Plugins.pm=  | Plugin handling |
+| =TWiki/Plugins/CommentPlugin.pm= | Plugin handling a comment box |
+| =TWiki/Plugins/CommentPlugin/Attrs.pm= | Supporting module for Comment Plugin |
+| =TWiki/Plugins/CommentPlugin/Comment.pm= | Supporting module for Comment Plugin |
+| =TWiki/Plugins/CommentPlugin/Templates.pm= | Supporting module for Comment Plugin |
+| =TWiki/Plugins/DefaultPlugin.pm= | Handles some legacy rules |
+| =TWiki/Plugins/EditTablePlugin.pm= | Plugin to edit tables |
+| =TWiki/Plugins/EmptyPlugin.pm=	| Empty plugin, use to create your own |
+| =TWiki/Plugins/InterwikiPlugin.pm= | Use aliases as links for predefined URLs |
+| =TWiki/Plugins/RenderListPlugin.pm= | Plugin to render lists as nice trees |
+| =TWiki/Plugins/SlideShowPlugin.pm= | Plugin turning headings into slides |
+| =TWiki/Plugins/SmiliesPlugin.pm= | Plugin rendering smilies like =:-)= |
+| =TWiki/Plugins/SpreadSheetPlugin.pm= | Plugin resolving spreadsheet formulae |
+| =TWiki/Plugins/TablePlugin.pm= | Plugin to render tables nicely |
 | =TWiki/Prefs.pm=	 | Preferences handling |
-| =TWiki/Search.pm=	| Search engine, used by wiki.pm |
+| =TWiki/Render.pm=	| TWiki markup to HTML rendering |
+| =TWiki/Search.pm=	| Search engine, used by TWiki.pm |
 | =TWiki/Store.pm=	 | Back-end storage, =*.txt= text file and =*.txt,v= RCS repository file handling |
 | =TWiki/Store/RcsFile.pm= | Generic file handling code, a class |
 | =TWiki/Store/RcsWrap.pm= | Wrappers around RCS executables, a class that inherits from <nop>RcsFile |
 | =TWiki/Store/RcsLite.pm= | A Perl RCS implemention, a class that inherits from <nop>RcsFile |
-| =TWiki/Plugins/DefaultPlugin.pm= | Handles some legacy rules |
-| =TWiki/Plugins/EmptyPlugin.pm=	| Empty plugin, use to create your own |
-| =TWiki/Plugins/InterwikiPlugin.pm= | Use aliases as links for predefined URLs |
+| =TWiki/UI.pm= | User interface handling |
+| =TWiki/UI/Changes.pm= | Functionality of changes script |
+| =TWiki/UI/Edit.pm= | Functionality of edit script |
+| =TWiki/UI/Manage.pm= | Functionality of manage script |
+| =TWiki/UI/Oops.pm= | Functionality of oops script |
+| =TWiki/UI/Preview.pm= | Functionality of preview script |
+| =TWiki/UI/RDiff.pm= | Functionality of rdiff script |
+| =TWiki/UI/Save.pm= | Functionality of save script |
+| =TWiki/UI/Search.pm= | Functionality of search script |
+| =TWiki/UI/Statistics.pm= | Functionality of statistics script |
+| =TWiki/UI/Upload.pm= | Functionality of upload script |
+| =TWiki/UI/View.pm= | Functionality of view script |
+| =TWiki/UI/Viewfile.pm= | Functionality of viewfile script |
+| =TWiki/Upgrade/TWikiCfg.pm= | Supporting module of !TwikiUpgrade script |
+| =TWiki/Upgrade/UpdateTopics.pm= | Supporting module of !TwikiUpgrade script |
+| =TWiki/Upgrade/UpdateTopicsManualSymlinks.pm= | Supporting module of !TwikiUpgrade script |
+| =TWiki/User.pm= | Abstraction package to allow plugable user authentication systems |
+| =TWiki/User/HtPasswdUser.pm= | Apache Htpasswd file implementation (the default) |
+| =TWiki/User/NoPasswdUser.pm= | simple, no users authentication (totally wiki) |
 
 #PubFiles
 ---+++ Files under <code>twiki/pub</code>
@@ -103,7 +138,7 @@ The =pub= directory stores topic-related files, including images used by TWiki a
 | =icn/_filetypes.txt= | Lookup table to translate file extension to file type |
 | =icn/bat.gif= | GIF file for file type |
 | =icn/bmp.gif= | GIF file for file type |
-|  *...*  |  *...*  |
+|  ...  |  ...  |
 | =TWiki/FileAttachment/Sample.txt= | TEXT file: sample |
 | =TWiki/FileAttachment/Smile.gif= | GIF image: sample |
 | =TWiki/FileAttachment/Smile.gif,v= | RCS repository for GIF file |
@@ -112,15 +147,14 @@ The =pub= directory stores topic-related files, including images used by TWiki a
 | =TWiki/PreviewBackground/previewbg.gif= | GIF image: Preview view background |
 | =TWiki/PreviewBackground/preview2bg.gif= | GIF image: Alternate preview view background |
 | =TWiki/TWikiLogos/twikiRobot121x54.gif= | GIF image: TWiki logo |
-|  *...*  |  *...*  |
+|  ...  |  ...  |
 | =TWiki/TWikiTemplates/testscreen.gif= | GIF image: Screen shot |
 | =TWiki/WabiSabi/wabisabi.gif= | GIF image: illustration |
-| =Know/IncorrectDllVersionW32PTH10DLL/W32PTH10.DLL= | DLL file: sample |
 
 #DataFiles
 ---+++ Files under <code>twiki/data</code>
 
-TWiki topics: data stored as individual text files and rendered by TWiki for display as regular Web pages. Each active web has its own subdirectory. The TWiki distribution includes four start-up webs - ==Main==, ==TWiki==, ==Know==, ==Sandbox== - with documentation and demo content, a ==Trash== web for browser-based, recoverable topic deletion, and a ==_default== directory containing a core topic set required to start a new web. _Partial file list:_ 
+TWiki topics: data stored as individual text files and rendered by TWiki for display as regular Web pages. Each active web has its own subdirectory. The TWiki distribution includes a number of start-up webs - ==Main==, ==TWiki==, and ==Sandbox== - with documentation and demo content, a ==Trash== web for browser-based, recoverable topic deletion, and a ==_default== directory containing a core topic set required to start a new web. _Partial file list:_ 
 
 | *File:*			| *Used for:* |
 | =.htpasswd= | Basic Authentication (htaccess) users file with username and encrypted password pairs |
@@ -135,6 +169,8 @@ TWiki topics: data stored as individual text files and rendered by TWiki for dis
 | =_default/WebHome.txt,v= | Revisions history (RCS) |
 | =_default/WebIndex.txt= | Lists all topics in a web |
 | =_default/WebIndex.txt,v= | Revisions history (RCS) |
+| =_default/WebLeftBar.txt= | Left navigation bar for TWiki.PatternSkin |
+| =_default/WebLeftBar.txt,v= | Revisions history (RCS) |
 | =_default/WebNotify.txt= | Subscribe/unsubscribe to web changes email alert |
 | =_default/WebNotify.txt,v= | Revisions history (RCS) |
 | =_default/WebPreferences.txt= | Per web Preference Settings |
@@ -145,17 +181,18 @@ TWiki topics: data stored as individual text files and rendered by TWiki for dis
 | =_default/WebStatistics.txt,v= | Revisions history (RCS) |
 | =_default/WebTopicList.txt= | Lists all topics in a web in compact format |
 | =_default/WebTopicList.txt,v= | Revisions history (RCS) |
-|  *...*  |  *...*  |
+|  ...  |  ...  |
 
 #TemplatesFiles
 ---+++ Files in <code>twiki/templates</code>
 
-Templates and skins used to control appearance of topics rendered as Web pages. _Full file list:_
+Templates and skins used to control appearance of topics rendered as Web pages. _Partial file list:_
 
 | *File:*			| *Used for:* |
-| =attach.tmpl= | =Attach= (FileAttachments) control screen |
-| =attachagain.tmpl= | Attachment control screen |
-| =attachnew.tmpl= | Attachment control screen |
+| =attach.tmpl= | Attachment (FileAttachments) control screen |
+| =attachagain.tmpl= | Attachment control screen for updating an existing attachment |
+| =attachnew.tmpl= | Attachment control screen for adding a new attachment |
+| =attachtables.tmpl= | Macros for definition of attachment tables |
 | =changeform.tmpl= | Control screen to change the form in edit mode |
 | =changes.tmpl= | Displays list of recently changed topics |
 | =edit.iejs.tmpl= | Edit window with IE-specific <nop>JavaScript |
@@ -167,14 +204,18 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 | =oopsaccessgroup.tmpl= | Error message |
 | =oopsaccessrename.tmpl= | Error message |
 | =oopsaccessview.tmpl= | Error message |
+| =oopsattachnotopic.tmpl= | Error message |
 | =oopsauth.tmpl= | Error message |
+| =oopsbadcharset.tmpl= | Error message |
 | =oopsbadpwformat.tmpl= | Error message |
 | =oopschangepasswd.tmpl= | Error message |
+| =oopscreatenewtopic.tmpl= | Error message |
 | =oopsempty.tmpl= | Error message |
 | =oopslocked.tmpl= | Error message |
 | =oopslockedrename.tmpl= | Error message |
 | =oopsmanage.tmpl= | Error message |
 | =oopsmissing.tmpl= | Error message |
+| =oopsmngcreateweb.tmpl= | Error message |
 | =oopsmore.tmpl= | More topic actions message |
 | =oopsmoveerr.tmpl= | Error message |
 | =oopsnoformdef.tmpl= | Error message |
@@ -187,6 +228,7 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 | =oopsregrequ.tmpl= | Error message |
 | =oopsregthanks.tmpl= | Error message |
 | =oopsregwiki.tmpl= | Error message |
+| =oopsremoveuserdone.tmpl= | Error message |
 | =oopsrenameerr.tmpl= | Error message |
 | =oopsrenamenotwikiword.tmpl= | Error message |
 | =oopsresetpasswd.tmpl= | Error message |
@@ -196,6 +238,7 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 | =oopssendmailerr.tmpl= | Error message |
 | =oopstopicexists.tmpl= | Error message |
 | =oopsupload.tmpl= | Error message |
+| =oopsuploadlimit.tmpl= | Error message |
 | =oopswrongpassword.tmpl= | Error message |
 | =preview.tmpl= | Preview Changes screen |
 | =rdiff.tmpl= | Displays text changes before &amp; after =Diffs= |
@@ -203,6 +246,7 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 | =rename.tmpl= | =Rename/move= control screen (choose web &amp; new topic tile |
 | =renamebase.tmpl= | Used by other rename templates |
 | =renameconfirm.tmpl= | Confirms a pre-specified rename, ex: undoing a rename |
+| =renamedelete.tmpl= | Confirms a delete |
 | =renamerefs.tmpl= | Display if rename done, but some references not changed (topics were locked) |
 | =search.tmpl= | Search screen |
 | =searchbookview.tmpl= | Search results with full topic content |
@@ -210,9 +254,10 @@ Templates and skins used to control appearance of topics rendered as Web pages. 
 | =searchmeta.tmpl= | Search screen |
 | =searchrenameview.tmpl= | Used by =rename= to list references to topic being renamed |
 | =twiki.tmpl= | Master template: definitions are used by other templates |
-| =view.plain.tmpl= | Skin for bare bone topic view without header/footer |
+| =view.plain.tmpl= | Skin for bare bone topic view without header/footer but with HTML head and body tags |
 | =view.print.tmpl= | Skin for printable topic view with a simple header/footer |
 | =view.rss.tmpl= | Skin for topic view in RDF XML format |
+| =view.text.tmpl= | Skin for topic text only, without HTML head and body tags, and no form and attachments |
 | =view.tmpl= | Main topic view - the standard regular Web page |
 
 ---++ TWiki File System Snapshot
@@ -223,119 +268,170 @@ The following partial directory listings from a Linux installation show typical 
 Directory =twiki/bin=:
 
 <pre>
-drwxrwxr-x	 2 twiki  twiki		  4096 Jan  7 23:56 .
-drwxrwxr-x	 5 twiki  twiki		  4096 Nov 18 12:21 ..
--rw-rw-r--	 1 twiki  twiki			979 Aug  3 19:36 .htaccess
--rw-rw-r--	 1 twiki  twiki		  1598 Jun  1  2002 .htaccess.txt
--rwxrwxr-x	 1 twiki  twiki		  4986 Jan  4 17:27 attach
--rwxrwxr-x	 1 twiki  twiki		  3734 Jan  4 17:27 changes
--rwxrwxr-x	 1 twiki  twiki		  9362 Jan  4 18:04 edit
--rwxrwxr-x	 1 twiki  twiki		  1878 Jan  4 17:28 geturl
--rwxrwxr-x	 1 twiki  twiki		  4587 Jan  4 17:28 installpasswd
--rwxrwxr-x	 1 twiki  twiki		  7231 Jan  6 09:04 mailnotify
--rwxrwxr-x	 1 twiki  twiki		  6000 Dec 11 01:26 makedistrib
--rwxrwxr-x	 1 twiki  twiki		  8228 Jan  4 18:25 manage
--rwxrwxr-x	 1 twiki  twiki		  2445 Jan  4 18:08 oops
--rwxrwxr-x	 1 twiki  twiki		  6936 Jan  4 18:08 passwd
--rwxrwxr-x	 1 twiki  twiki		  5820 Jan  4 17:30 preview
--rwxrwxr-x	 1 twiki  twiki		  9235 Jan  4 17:31 rdiff
--rwxrwxr-x	 1 twiki  twiki		 10584 Jan  4 18:09 register
--rwxrwxr-x	 1 twiki  twiki		 14746 Jan  5 00:14 rename
--rwxrwxr-x	 1 twiki  twiki		  4800 Jan  4 18:09 save
--rwxrwxr-x	 1 twiki  twiki		  4729 Jan  4 17:32 search
--rw-rw-r--	 1 twiki  twiki		  1446 Jan  8 01:03 setlib.cfg
--rwxrwxr-x	 1 twiki  twiki		 19261 Jan  4 17:33 statistics
--rwxrwxr-x	 1 twiki  twiki		 30626 Jan  4 17:33 testenv
--rwxrwxr-x	 1 twiki  twiki		 14306 Jan  4 18:11 upload
--rwxrwxr-x	 1 twiki  twiki		 11414 Jan  5 01:12 view
--rwxrwxr-x	 1 twiki  twiki		  2944 Jan  5 00:36 viewfile
+drwxrwxr-x	 2 twiki	twiki		  4096 May  9 00:08 .
+drwxrwxr-x	 5 twiki	twiki		  4096 Nov 18  2002 ..
+-rw-rw-r--	 1 twiki	twiki		  3145 Jul 25 00:31 .htaccess.txt
+-rwxrwxr-x	 1 twiki	twiki		  1459 May 28 23:51 attach
+-rwxrwxr-x	 1 twiki	twiki		  1721 May 28 23:51 changes
+-rwxrwxr-x	 1 twiki	twiki		  1994 May 28 23:51 edit
+-rwxrwxr-x	 1 twiki	twiki		  1878 May 28 23:51 geturl
+-rwxrwxr-x	 1 twiki	twiki		  6689 May 28 23:51 installpasswd
+-rwxrwxr-x	 1 twiki	twiki		  7313 May 28 23:51 mailnotify
+-rwxrwxr-x	 1 twiki	twiki		  3557 Jul 25 15:00 manage
+-rwxrwxr-x	 1 twiki	twiki		  1448 May 28 23:51 oops
+-rwxrwxr-x	 1 twiki	twiki		  4062 May 28 23:51 passwd
+-rwxrwxr-x	 1 twiki	twiki		  1506 May 28 23:51 preview
+-rwxrwxr-x	 1 twiki	twiki		  1490 May 28 23:51 rdiff
+-rwxrwxr-x	 1 twiki	twiki		  7635 May 28 23:51 register
+-rwxrwxr-x	 1 twiki	twiki		  1774 May 28 23:51 rename
+-rwxrwxr-x	 1 twiki	twiki		  1654 Jul 25 00:31 save
+-rwxrwxr-x	 1 twiki	twiki		  1728 May 28 23:51 search
+-rw-rw-r--	 1 twiki	twiki		  2131 Aug  7 21:13 setlib.cfg
+-rwxrwxr-x	 1 twiki	twiki		  2596 May 28 23:51 statistics
+-rwxrwxr-x	 1 twiki	twiki		 39926 Jul 25 15:00 testenv
+-rwxrwxr-x	 1 twiki	twiki		  1478 May 28 23:51 upload
+-rwxrwxr-x	 2 twiki	twiki		  1689 May 28 23:51 view
+-rwxrwxr-x	 2 twiki	twiki		  1689 May 28 23:51 viewauth
+-rwxrwxr-x	 1 twiki	twiki		  1438 May 28 23:51 viewfile
 </pre>
 
 Directory =twiki/templates/=:
 
 <pre>
-drwxrwxr-x	 2 twiki  twiki		  4096 Dec 11 00:38 .
-drwxrwxr-x	 4 twiki  twiki		  4096 Jan  8 01:03 ..
--rw-rw-r--	 1 twiki  twiki		  2590 Jan  7 22:53 attach.tmpl
--rw-rw-r--	 1 twiki  twiki		  1604 Aug  3  2001 attachagain.tmpl
--rw-rw-r--	 1 twiki  twiki			449 Aug  3  2001 attachnew.tmpl
--rw-rw-r--	 1 twiki  twiki		  1276 Dec  9 21:48 changeform.tmpl
--rw-rw-r--	 1 twiki  twiki		  1620 Dec  9 21:48 changes.tmpl
--rw-rw-r--	 1 twiki  twiki		 12777 Jan  7 22:54 edit.iejs.tmpl
--rw-rw-r--	 1 twiki  twiki		  2801 Jan  7 22:54 edit.tmpl
--rw-rw-r--	 1 twiki  twiki			975 Dec  9 21:48 mailnotify.tmpl
--rw-rw-r--	 1 twiki  twiki		  1606 Jan  7 22:54 moveattachment.tmpl
--rw-rw-r--	 1 twiki  twiki			570 Aug  1  2001 oopsaccesschange.tmpl
--rw-rw-r--	 1 twiki  twiki			596 Apr 13  2002 oopsaccesscreateweb.tmpl
--rw-rw-r--	 1 twiki  twiki			586 Aug  1  2001 oopsaccessgroup.tmpl
--rw-rw-r--	 1 twiki  twiki			573 Aug  1  2001 oopsaccessrename.tmpl
--rw-rw-r--	 1 twiki  twiki			573 Aug  1  2001 oopsaccessview.tmpl
--rw-rw-r--	 1 twiki  twiki			997 Nov 11 22:21 oopsauth.tmpl
--rw-rw-r--	 1 twiki  twiki			405 Aug  1  2001 oopsbadpwformat.tmpl
--rw-rw-r--	 1 twiki  twiki			344 Jul 31  2001 oopschangepasswd.tmpl
--rw-rw-r--	 1 twiki  twiki			624 Jul 31  2001 oopsempty.tmpl
--rw-rw-r--	 1 twiki  twiki			891 Dec 30 15:51 oopslocked.tmpl
--rw-rw-r--	 1 twiki  twiki			589 Dec 30 15:55 oopslockedrename.tmpl
--rw-rw-r--	 1 twiki  twiki			678 Apr 12  2002 oopsmanage.tmpl
--rw-rw-r--	 1 twiki  twiki			328 Jul 31  2001 oopsmissing.tmpl
--rw-rw-r--	 1 twiki  twiki		  2352 Apr 13  2002 oopsmngcreateweb.tmpl
--rw-rw-r--	 1 twiki  twiki		  2322 Jan  7 22:55 oopsmore.tmpl
--rw-rw-r--	 1 twiki  twiki			407 Aug  1  2001 oopsmoveerr.tmpl
--rw-rw-r--	 1 twiki  twiki		  1132 Nov 30  2001 oopsnoformdef.tmpl
--rw-rw-r--	 1 twiki  twiki			520 Jan  4 18:21 oopsnotwikiuser.tmpl
--rw-rw-r--	 1 twiki  twiki		  1495 Apr  7  2002 oopsnoweb.tmpl
--rw-rw-r--	 1 twiki  twiki			393 Aug  1  2001 oopspreview.tmpl
--rw-rw-r--	 1 twiki  twiki			340 Dec 10 14:14 oopsregemail.tmpl
--rw-rw-r--	 1 twiki  twiki			475 Jun 10  2002 oopsregexist.tmpl
--rw-rw-r--	 1 twiki  twiki			345 Aug  1  2001 oopsregpasswd.tmpl
--rw-rw-r--	 1 twiki  twiki			356 Aug  1  2001 oopsregrequ.tmpl
--rw-rw-r--	 1 twiki  twiki			540 Aug  1  2001 oopsregthanks.tmpl
--rw-rw-r--	 1 twiki  twiki			679 Aug  1  2001 oopsregwiki.tmpl
--rw-rw-r--	 1 twiki  twiki			502 Mar 24  2002 oopsrenameerr.tmpl
--rw-rw-r--	 1 twiki  twiki			433 May 19  2002 oopsrenamenotwikiword.tmpl
--rw-rw-r--	 1 twiki  twiki			506 Jun 10  2002 oopsresetpasswd.tmpl
--rw-rw-r--	 1 twiki  twiki			957 Jan  7 22:55 oopsrev.tmpl
--rw-rw-r--	 1 twiki  twiki			774 Aug  1  2001 oopssave.tmpl
--rw-rw-r--	 1 twiki  twiki			477 Aug  1  2001 oopssaveerr.tmpl
--rw-rw-r--	 1 twiki  twiki			465 Jun 10  2002 oopssendmailerr.tmpl
--rw-rw-r--	 1 twiki  twiki			379 Aug  1  2001 oopstopicexists.tmpl
--rw-rw-r--	 1 twiki  twiki			342 Jul 31  2001 oopsupload.tmpl
--rw-rw-r--	 1 twiki  twiki			364 Aug  1  2001 oopswrongpassword.tmpl
--rw-rw-r--	 1 twiki  twiki		  2603 Jan  7 22:55 preview.tmpl
--rw-rw-r--	 1 twiki  twiki		  1719 Jan  7 22:56 rdiff.tmpl
--rw-rw-r--	 1 twiki  twiki		  1160 Dec  9 21:48 registernotify.tmpl
--rw-rw-r--	 1 twiki  twiki			993 Jun 23  2002 rename.tmpl
--rw-rw-r--	 1 twiki  twiki		  2369 Jan  7 22:56 renamebase.tmpl
--rw-rw-r--	 1 twiki  twiki			471 May 31  2002 renameconfirm.tmpl
--rw-rw-r--	 1 twiki  twiki			595 May 31  2002 renamerefs.tmpl
--rw-rw-r--	 1 twiki  twiki		  1818 Jan  7 22:56 search.tmpl
--rw-rw-r--	 1 twiki  twiki		  1676 Jan  7 22:57 searchbookview.tmpl
--rw-rw-r--	 1 twiki  twiki			980 Jan  7 22:57 searchformat.tmpl
--rw-rw-r--	 1 twiki  twiki			149 Sep 13  2001 searchmeta.tmpl
--rw-rw-r--	 1 twiki  twiki		  2071 Jan  7 22:57 searchrenameview.tmpl
--rw-rw-r--	 1 twiki  twiki		  2284 Dec  9 21:48 twiki.tmpl
--rw-rw-r--	 1 twiki  twiki			419 Dec  9 21:48 view.plain.tmpl
--rw-rw-r--	 1 twiki  twiki			827 Dec  9 21:48 view.print.tmpl
--rw-rw-r--	 1 twiki  twiki			300 Dec 14 17:16 view.rss.tmpl
--rw-rw-r--	 1 twiki  twiki		  1629 Jan  7 22:58 view.tmpl
+drwxrwxr-x	 2 twiki	twiki		  4096 Aug  7 19:09 .
+drwxrwxr-x	 4 twiki	twiki		  4096 Aug  7 21:13 ..
+-rw-rw-r--	 1 twiki	users		  2077 Aug 13 22:21 attachagain.pattern.tmpl
+-rw-rw-r--	 1 twiki	users		  1650 Aug 13 22:21 attachagain.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2556 Jul 27 10:47 attach.dragon.tmpl
+-rw-rw-r--	 1 twiki	users			567 Jul 28 19:52 attachnew.pattern.tmpl
+-rw-rw-r--	 1 twiki	users			470 Jul 28 19:52 attachnew.tmpl
+-rw-rw-r--	 1 twiki	users		  2855 Aug  8 03:40 attach.pattern.tmpl
+-rw-rw-r--	 1 twiki	users		  1991 Aug  3 13:09 attachtables.pattern.tmpl
+-rw-rw-r--	 1 twiki	users		  1869 Jul 27 22:03 attachtables.tmpl
+-rw-rw-r--	 1 twiki	users		  2355 Jul 28 19:52 attach.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1324 Jul 27 10:47 changeform.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1441 Aug  6 11:47 changeform.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1032 Jul 28 19:52 changeform.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1870 Jul 27 10:47 changes.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki			433 Jul 31 12:39 changes.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1196 May 28 23:51 changes.tmpl
+-rw-rw-r--	 1 twiki	twiki			 35 May 21 03:56 comments.tmpl
+-rw-rw-r--	 1 twiki	twiki			526 Jul 27 10:47 dragoncssvars.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1645 Jul 31 00:57 dragonmenu.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  4207 Jul 27 10:47 edit.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		 12608 Jul 28 19:52 edit.iejs.tmpl
+-rw-rw-r--	 1 twiki	twiki		  4904 Aug  7 17:48 edit.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  3975 Aug  8 03:40 edit.tmpl
+-rw-rw-r--	 1 twiki	twiki			993 May 28 23:51 mailnotify.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1640 Jul 27 10:47 moveattachment.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1968 Aug  7 17:48 moveattachment.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1342 Jul 28 19:52 moveattachment.tmpl
+-rw-rw-r--	 1 twiki	twiki			571 May 28 23:51 oopsaccesschange.tmpl
+-rw-rw-r--	 1 twiki	twiki			597 May 28 23:51 oopsaccesscreateweb.tmpl
+-rw-rw-r--	 1 twiki	twiki			587 May 28 23:51 oopsaccessgroup.tmpl
+-rw-rw-r--	 1 twiki	twiki			597 Aug  2 11:10 oopsaccessmanage.tmpl
+-rw-rw-r--	 1 twiki	twiki			572 May 28 23:51 oopsaccessrename.tmpl
+-rw-rw-r--	 1 twiki	twiki			574 May 28 23:51 oopsaccessview.tmpl
+-rw-rw-r--	 1 twiki	twiki			571 Aug  2 11:10 oopsattachnotopic.tmpl
+-rw-rw-r--	 1 twiki	twiki			998 May 28 23:51 oopsauth.tmpl
+-rw-rw-r--	 1 twiki	twiki			646 May 28 23:51 oopsbadcharset.tmpl
+-rw-rw-r--	 1 twiki	twiki			406 May 28 23:51 oopsbadpwformat.tmpl
+-rw-rw-r--	 1 twiki	twiki			345 May 28 23:51 oopschangepasswd.tmpl
+-rw-rw-r--	 1 twiki	twiki			382 May 28 23:51 oopscreatenewtopic.tmpl
+-rw-rw-r--	 1 twiki	twiki			627 Jul  7 23:11 oopsempty.tmpl
+-rw-rw-r--	 1 twiki	twiki			927 Aug  3 13:09 oopslocked.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			612 Aug  2 11:10 oopslockedrename.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			596 Aug  2 11:10 oopslockedrename.tmpl
+-rw-rw-r--	 1 twiki	twiki			910 Aug  3 13:09 oopslocked.tmpl
+-rw-rw-r--	 1 twiki	twiki			679 May 28 23:51 oopsmanage.tmpl
+-rw-rw-r--	 1 twiki	twiki			329 May 28 23:51 oopsmissing.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2353 May 28 23:51 oopsmngcreateweb.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2987 Aug  3 13:09 oopsmore.tmpl
+-rw-rw-r--	 1 twiki	twiki			418 May 28 23:51 oopsmoveerr.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1133 May 28 23:51 oopsnoformdef.tmpl
+-rw-rw-r--	 1 twiki	twiki			521 May 28 23:51 oopsnotwikiuser.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1516 Jul 28 19:52 oopsnoweb.tmpl
+-rw-rw-r--	 1 twiki	twiki			394 May 28 23:51 oopspreview.tmpl
+-rw-rw-r--	 1 twiki	twiki			341 May 28 23:51 oopsregemail.tmpl
+-rw-rw-r--	 1 twiki	twiki			411 May 28 23:51 oopsregerr.tmpl
+-rw-rw-r--	 1 twiki	twiki			476 May 28 23:51 oopsregexist.tmpl
+-rw-rw-r--	 1 twiki	twiki			346 May 28 23:51 oopsregpasswd.tmpl
+-rw-rw-r--	 1 twiki	twiki			357 May 28 23:51 oopsregrequ.tmpl
+-rw-rw-r--	 1 twiki	twiki			541 May 28 23:51 oopsregthanks.tmpl
+-rw-rw-r--	 1 twiki	twiki			680 May 28 23:51 oopsregwiki.tmpl
+-rw-rw-r--	 1 twiki	twiki			587 May 28 23:51 oopsremoveuserdone.tmpl
+-rw-rw-r--	 1 twiki	twiki			503 May 28 23:51 oopsrenameerr.tmpl
+-rw-rw-r--	 1 twiki	twiki			434 May 28 23:51 oopsrenamenotwikiword.tmpl
+-rw-rw-r--	 1 twiki	twiki			507 May 28 23:51 oopsresetpasswd.tmpl
+-rw-rw-r--	 1 twiki	twiki			962 Jul 28 19:52 oopsrev.tmpl
+-rw-rw-r--	 1 twiki	twiki			483 May 28 23:51 oopssaveerr.tmpl
+-rw-rw-r--	 1 twiki	twiki			777 Jul  7 23:11 oopssave.tmpl
+-rw-rw-r--	 1 twiki	twiki			466 May 28 23:51 oopssendmailerr.tmpl
+-rw-rw-r--	 1 twiki	twiki			385 May 28 23:51 oopstopicexists.tmpl
+-rw-rw-r--	 1 twiki	twiki			344 May 28 23:51 oopsuploadlimit.tmpl
+-rw-rw-r--	 1 twiki	twiki			343 May 28 23:51 oopsupload.tmpl
+-rw-rw-r--	 1 twiki	twiki			365 May 28 23:51 oopswrongpassword.tmpl
+-rw-rw-r--	 1 twiki	twiki		  3590 Jul 27 10:47 preview.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2855 Aug  6 11:47 preview.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2253 Aug  8 03:40 preview.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1739 Jul 27 10:47 rdiff.dragon.tmpl
+-rw-rw-r--	 1 twiki	users		  1529 Aug 13 22:21 rdiff.pattern.tmpl
+-rw-rw-r--	 1 twiki	users		  1299 May 28 23:51 rdiff.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1159 Jul 31 12:39 registernotify.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1160 May 28 23:51 registernotify.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2561 Jul 27 10:47 renamebase.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  3363 Aug  8 03:40 renamebase.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2279 Jul 28 20:54 renamebase.tmpl
+-rw-rw-r--	 1 twiki	twiki			718 Jul 31 12:39 renameconfirm.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			570 Jul 28 19:52 renameconfirm.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1046 Jul 31 12:39 renamedelete.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			932 Jul 28 19:52 renamedelete.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1147 Jul 31 12:39 rename.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			766 Jul 28 19:52 renamerefs.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			616 Jul 28 19:52 renamerefs.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1041 Jul 28 19:52 rename.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1397 Jul 27 10:47 searchbookview.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki			723 Jul 31 12:39 searchbookview.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1230 May 28 23:51 searchbookview.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1705 Jul 27 10:47 search.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki			722 Jul 27 10:47 searchformat.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki			157 Jul 31 12:39 searchformat.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			529 May 28 23:51 searchformat.tmpl
+-rw-rw-r--	 1 twiki	twiki			149 Jul  7 23:03 searchmeta.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			149 May 28 23:51 searchmeta.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1638 Aug  7 17:48 search.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1892 Jul 27 10:47 searchrenameview.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1208 Aug  3 13:09 searchrenameview.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1615 May 28 23:51 searchrenameview.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1364 May 28 23:51 search.tmpl
+-rw-rw-r--	 1 twiki	twiki		  3836 Jul 27 10:47 twiki.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  3175 Aug  7 17:48 twiki.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki		  2798 Jul 27 22:57 twiki.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1324 Jul 27 10:47 view.dragon.tmpl
+-rw-rw-r--	 1 twiki	twiki		  3577 Aug  8 03:40 view.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			425 May 28 23:51 view.plain.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1056 Jul 31 12:39 view.print.pattern.tmpl
+-rw-rw-r--	 1 twiki	twiki			845 May 28 23:51 view.print.tmpl
+-rw-rw-r--	 1 twiki	twiki			300 May 28 23:51 view.rss.tmpl
+-rw-rw-r--	 1 twiki	twiki			  8 May 28 23:51 view.text.tmpl
+-rw-rw-r--	 1 twiki	twiki		  1281 Jul 31 12:39 view.tmpl
 </pre>
 
 Directory =twiki/data/=:
 
 <pre>
-drwxrwxr-x	 8 nobody nobody		 4096 Jan  3 23:50 .
-drwxrwxr-x	 4 twiki  twiki		  4096 Jan  8 01:03 ..
--rw-rw-rw-	 1 twiki  twiki			210 Jan 11 15:58 .htpasswd
-drwxrwxr-x	 2 nobody nobody		 4096 Dec 11 02:15 Know
-drwxrwxr-x	 2 nobody nobody		 4096 Jan 11 17:45 Main
-drwxrwxr-x	 2 nobody nobody		 4096 Dec 11 02:15 Sandbox
-drwxrwxr-x	 2 nobody nobody		 8192 Jan 11 22:45 TWiki
-drwxrwxr-x	 2 nobody nobody		 4096 Dec 11 02:15 Trash
-drwxrwxr-x	 2 nobody nobody		 4096 Dec 11 01:01 _default
--rw-rw-rw-	 1 twiki twiki				0 Aug  2 14:16 debug.txt
--rw-rw-r--	 1 nobody nobody		36630 Jan 11 22:26 log200301.txt
--rw-rw-r--	 1 twiki twiki			3419 Aug 13  2001 mime.types
--rw-rw-rw-	 1 twiki twiki			1320 Dec 11 00:18 warning.txt
+drwxrwxr-x	 7 nobody  twiki		  4096 Aug  7 21:13 .
+drwxrwxr-x	 4 twiki	twiki		  4096 Aug  7 21:13 ..
+-rw-rw-rw-	 1 twiki	twiki			  0 Feb  1  2003 debug.txt
+drwxrwxr-x	 2 nobody  twiki		  4096 Jul 16 00:36 _default
+-rw-rw-r--	 1 twiki	twiki			 25 Dec 16  2003 .htpasswd.txt
+-rw-rw-r--	 1 nobody  nobody		11811 Aug 13 23:10 log200408.txt
+drwxrwxr-x	 2 nobody  twiki		  4096 Aug  4 21:03 Main
+-rw-rw-r--	 1 twiki	twiki		  3419 Aug 13  2001 mime.types
+drwxrwxr-x	 2 nobody  twiki		  4096 Aug  7 21:03 Sandbox
+drwxrwxr-x	 2 nobody  twiki		  4096 Jul 20 18:15 Trash
+drwxrwxr-x	 2 nobody  twiki		 12288 Aug 13 23:10 TWiki
+-rw-rw-rw-	 1 twiki	twiki			  0 Aug  7 18:03 warning.txt
 </pre>
 
 Partial file list for =twiki/data/Main=:
@@ -343,83 +439,98 @@ Partial file list for =twiki/data/Main=:
 	* %T% _Included files come with their RCS versions histories ==.txt,v==._
 
 <pre>
-drwxrwxr-x	 2 nobody nobody		 4096 Jan 11 17:45 .
-drwxrwxr-x	 8 nobody nobody		 4096 Jan  3 23:50 ..
--rw-rw-rw-	 1 twiki  twiki		  3662 Jan 11 16:29 .changes
--rw-rw-rw-	 1 twiki  twiki			  9 Oct 25  2001 .mailnotify
--rw-r--r--	 1 nobody nobody		  280 Dec 15  2000 TokyoOffice.txt
--rw-r--r--	 1 nobody nobody		  774 Dec 15  2000 TokyoOffice.txt,v
--rw-r--r--	 1 nobody nobody		  124 Aug 16  2001 WebChanges.txt
--r--r--r--	 1 nobody nobody		  526 Aug 16  2001 WebChanges.txt,v
--rw-r--r--	 1 nobody nobody		 1721 Jun 28  2002 WebHome.txt
--r--r--r--	 1 nobody nobody		11314 Jun 28  2002 WebHome.txt,v
--rw-r--r--	 1 nobody nobody		  176 Nov 24  2001 WebIndex.txt
--r--r--r--	 1 nobody nobody		  483 Nov 24  2001 WebIndex.txt,v
--rw-r--r--	 1 nobody nobody		  729 Mar 24  2001 WebNotify.txt
--r--r--r--	 1 nobody nobody		 2981 Mar 24  2001 WebNotify.txt,v
--rw-r--r--	 1 nobody nobody		 3670 Apr 12  2002 WebPreferences.txt
--r--r--r--	 1 nobody nobody		 8203 Apr 12  2002 WebPreferences.txt,v
--rw-r--r--	 1 nobody nobody		  158 Aug  7  2001 WebSearch.txt
--r--r--r--	 1 nobody nobody		18332 Aug  7  2001 WebSearch.txt,v
--rw-r--r--	 1 nobody nobody		  850 Dec 11 00:58 WebStatistics.txt
--r--r--r--	 1 nobody nobody		 1690 Dec 11 00:58 WebStatistics.txt,v
--rw-r--r--	 1 nobody nobody		  182 Nov 24  2001 WebTopicList.txt
--r--r--r--	 1 nobody nobody		  371 Nov 24  2001 WebTopicList.txt,v
+drwxrwxr-x	 2 nobody  twiki		  4096 Aug  4 21:03 .
+drwxrwxr-x	 7 nobody  twiki		  4096 Aug  7 21:13 ..
+-rw-rw-rw-	 1 twiki	twiki		  3743 Aug  4 21:03 .changes
+-rw-rw-rw-	 1 twiki	twiki			  9 Oct 25  2001 .mailnotify
+-rw-r--r--	 1 nobody  nobody		  518 Dec 16  2003 TWikiAdminGroup.txt
+-r--r--r--	 1 nobody  nobody		 2453 Dec 16  2003 TWikiAdminGroup.txt,v
+-rw-r--r--	 1 nobody  nobody		 1668 Aug  4 21:03 TWikiGroups.txt
+-r--r--r--	 1 nobody  nobody		 3421 Aug  4 21:03 TWikiGroups.txt,v
+-rw-r--r--	 1 nobody  nobody		  686 Dec 13  2000 TWikiGuest.txt
+-rw-r--r--	 1 nobody  nobody		 1995 Dec 13  2000 TWikiGuest.txt,v
+-rw-r--r--	 1 nobody  nobody		  319 Dec 20  2003 TWikiPreferences.txt
+-r--r--r--	 1 nobody  nobody		  508 Dec 20  2003 TWikiPreferences.txt,v
+-rw-r--r--	 1 nobody  nobody		 1812 Feb 20 13:54 TWikiUsers.txt
+-r--r--r--	 1 nobody  nobody		 9222 Feb 20 13:54 TWikiUsers.txt,v
+-rw-r--r--	 1 nobody  nobody		  119 Jan 11  2003 TWikiVariables.txt
+-r--r--r--	 1 nobody  nobody		  742 Jan 11  2003 TWikiVariables.txt,v
+-rw-r--r--	 1 nobody  nobody		  124 Aug 16  2001 WebChanges.txt
+-r--r--r--	 1 nobody  nobody		  526 Aug 16  2001 WebChanges.txt,v
+-rw-r--r--	 1 nobody  nobody		 1842 Feb  1  2003 WebHome.txt
+-r--r--r--	 1 nobody  nobody		11862 Feb  1  2003 WebHome.txt,v
+-rw-r--r--	 1 nobody  nobody		  176 Nov 24  2001 WebIndex.txt
+-r--r--r--	 1 nobody  nobody		  483 Nov 24  2001 WebIndex.txt,v
+-rw-r--r--	 1 nobody  nobody		  922 Feb  3  2003 WebNotify.txt
+-r--r--r--	 1 nobody  nobody		 4303 Feb  3  2003 WebNotify.txt,v
+-rw-r--r--	 1 nobody  nobody		 3738 Dec 25  2003 WebPreferences.txt
+-r--r--r--	 1 nobody  nobody		10697 Dec 25  2003 WebPreferences.txt,v
+-rw-r--r--	 1 nobody  nobody		  416 Jan 30  2003 WebRss.txt
+-r--r--r--	 1 nobody  nobody		  605 Jan 30  2003 WebRss.txt,v
+-rw-r--r--	 1 nobody  nobody		  164 Jan 18  2004 WebSearchAdvanced.txt
+-r--r--r--	 1 nobody  nobody		  353 Jan 18  2004 WebSearchAdvanced.txt,v
+-rw-r--r--	 1 nobody  nobody		  158 Aug  7  2001 WebSearch.txt
+-r--r--r--	 1 nobody  nobody		18332 Aug  7  2001 WebSearch.txt,v
+-rw-r--r--	 1 nobody  nobody		  825 Jul 16 00:32 WebStatistics.txt
+-r--r--r--	 1 nobody  nobody		 4226 Jul 16 00:32 WebStatistics.txt,v
+-rw-r--r--	 1 nobody  nobody		  182 Nov 24  2001 WebTopicList.txt
+-r--r--r--	 1 nobody  nobody		  371 Nov 24  2001 WebTopicList.txt,v
 </pre>
 
 Directory =twiki/pub/=:
 
 <pre>
-drwxrwxr-x	 8 nobody nobody		 4096 Nov 18 12:31 .
-drwxrwxr-x	 3 twiki  twiki		  4096 Nov 18 12:31 ..
-drwxrwxr-x	 3 nobody nobody		 4096 Nov 18 12:31 Know
-drwxrwxr-x	 2 nobody nobody		 4096 Apr  7  2002 Main
-drwxrwxr-x	 2 nobody nobody		 4096 Apr 20  2002 Sandbox
-drwxrwxr-x	 8 nobody nobody		 4096 Nov 18 12:31 TWiki
-drwxrwxr-x	 2 nobody nobody		 4096 Dec  3  2001 Trash
--rw-rw-r--	 1 twiki  twiki		  1078 Jan 14  2000 favicon.ico
-drwxrwxr-x	 2 twiki  twiki		  4096 Nov 18 12:31 icn
--rw-rw-r--	 1 twiki  twiki		  2877 Jun  7  1999 wikiHome.gif
+drwxrwxr-x	 8 nobody  nobody		 4096 Nov 18 12:31 .
+drwxrwxr-x	 3 twiki	twiki		  4096 Nov 18 12:31 ..
+drwxrwxr-x	 2 nobody  nobody		 4096 Apr  7  2002 Main
+drwxrwxr-x	 2 nobody  nobody		 4096 Apr 20  2002 Sandbox
+drwxrwxr-x	 8 nobody  nobody		 4096 Nov 18 12:31 TWiki
+drwxrwxr-x	 2 nobody  nobody		 4096 Dec  3  2001 Trash
+-rw-rw-r--	 1 twiki	twiki		  1078 Jan 14  2000 favicon.ico
+drwxrwxr-x	 2 twiki	twiki		  4096 Nov 18 12:31 icn
+-rw-rw-r--	 1 twiki	twiki		  2877 Jun  7  1999 wikiHome.gif
 </pre>
 
 Partial file list for =twiki/pub/icn/=:
 
 <pre>
-drwxrwxr-x	 2 twiki  twiki		  4096 Nov 18 12:31 .
-drwxrwxr-x	 8 nobody nobody		 4096 Nov 18 12:31 ..
--rw-rw-r--	 1 twiki  twiki			801 Mar 26  1999 _filetypes.txt
--rw-rw-r--	 1 twiki  twiki			143 Mar  9  1999 bat.gif
--rw-rw-r--	 1 twiki  twiki			926 Mar  9  1999 bmp.gif
--rw-rw-r--	 1 twiki  twiki			141 Mar 25  1999 c.gif
--rw-rw-r--	 1 twiki  twiki			144 Mar  9  1999 dll.gif
--rw-rw-r--	 1 twiki  twiki			152 Mar  9  1999 doc.gif
+drwxrwxr-x	 2 twiki	twiki		  4096 Nov 18 12:31 .
+drwxrwxr-x	 8 nobody  nobody		 4096 Nov 18 12:31 ..
+-rw-rw-r--	 1 twiki	twiki			801 Mar 26  1999 _filetypes.txt
+-rw-rw-r--	 1 twiki	twiki			143 Mar  9  1999 bat.gif
+-rw-rw-r--	 1 twiki	twiki			926 Mar  9  1999 bmp.gif
+-rw-rw-r--	 1 twiki	twiki			141 Mar 25  1999 c.gif
+-rw-rw-r--	 1 twiki	twiki			144 Mar  9  1999 dll.gif
+-rw-rw-r--	 1 twiki	twiki			152 Mar  9  1999 doc.gif
 </pre>
 
 Directory =twiki/pub/TWiki=:
 
 <pre>
-drwxrwx--x	 8 nobody nobody		 4096 Nov 18 12:31 .
-drwxrwxr-x	 8 nobody nobody		 4096 Nov 18 12:31 ..
-drwxrwxr-x	 2 nobody nobody		 4096 Nov 18 12:31 FileAttachment
-drwxrwxr-x	 2 nobody nobody		 4096 Nov 18 12:31 PreviewBackground
-drwxrwxr-x	 2 nobody nobody		 4096 Nov 18 12:31 TWikiDocGraphics
-drwxrwxr-x	 2 nobody nobody		 4096 Nov 18 12:31 TWikiLogos
-drwxrwxr-x	 2 nobody nobody		 4096 Nov 18 12:31 TWikiTemplates
-drwxrwxr-x	 2 nobody nobody		 4096 Nov 18 12:31 WabiSabi
+drwxrwx--x	 8 nobody  nobody		 4096 Nov 18 12:31 .
+drwxrwxr-x	 8 nobody  nobody		 4096 Nov 18 12:31 ..
+drwxrwxr-x	 2 nobody  nobody		 4096 Nov 18 12:31 FileAttachment
+drwxrwxr-x	 2 nobody  nobody		 4096 Nov 18 12:31 PreviewBackground
+drwxrwxr-x	 2 nobody  nobody		 4096 Nov 18 12:31 TWikiDocGraphics
+drwxrwxr-x	 2 nobody  nobody		 4096 Nov 18 12:31 TWikiLogos
+drwxrwxr-x	 2 nobody  nobody		 4096 Nov 18 12:31 TWikiTemplates
+drwxrwxr-x	 2 nobody  nobody		 4096 Nov 18 12:31 WabiSabi
 </pre>
 
 Directory =twiki/pub/TWiki/FileAttachment=:
 
 <pre>
-drwxrwxr-x	 2 nobody nobody		 4096 Nov 18 12:31 .
-drwxrwx--x	 8 nobody nobody		 4096 Nov 18 12:31 ..
--rw-rw-r--	 1 nobody nobody			30 Jul 22  1999 Sample.txt
--rw-rw-r--	 1 nobody nobody			94 Jun  7  1999 Smile.gif
--r--r--r--	 1 nobody nobody			81 Aug 15 10:14 Smile.gif,v
+drwxrwxr-x	 2 nobody  nobody		 4096 Nov 18 12:31 .
+drwxrwx--x	 8 nobody  nobody		 4096 Nov 18 12:31 ..
+-rw-rw-r--	 1 nobody  nobody			30 Jul 22  1999 Sample.txt
+-rw-rw-r--	 1 nobody  nobody			94 Jun  7  1999 Smile.gif
+-r--r--r--	 1 nobody  nobody			81 Aug 15 10:14 Smile.gif,v
 </pre>
 
--- Main.PeterThoeny - 11 Jan 2003 <br />
--- Main.MikeMannix - 16 May 2002
+-- TWiki:Main.PeterThoeny - 13 Aug 2004 <br />
+-- TWiki:Main.MikeMannix - 16 May 2002 <br />
+-- TWiki:Main.ArthurClemens - 08 Aug 2004
 
 %STOPINCLUDE%
+
 %META:TOPICMOVED{by="MikeMannix" date="1000524678" from="TWiki.DocsATWikiFileSystem" to="TWiki.AppendixFileSystem"}%
