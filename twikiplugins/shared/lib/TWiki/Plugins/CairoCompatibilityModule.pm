@@ -28,6 +28,11 @@ sub TWiki::Func::getRegularExpression {
   eval "return \$TWiki::$x";
 }
 
+sub TWiki::Func::formatTime {
+  # always return GM time
+  return TWiki::Func::formatGmTime( @_ );
+}
+
 =begin text
 
 ---++ TWiki::expandVariablesOnTopicCreation
@@ -38,7 +43,7 @@ See documentation in TWiki:Codev/TWikiDotPm
 sub TWiki::expandVariablesOnTopicCreation {
   my ( $theText, $theUser, $theWikiName, $theWikiUserName ) = @_;
 
-  my $today = TWiki::Func::formatTime(time(), "\$day \$mon \$year", "gmtime");
+  $today = TWiki::Func::formatTime(time(), "\$day \$mon \$year", "gmtime");
   $theUser         = $userName                     unless $theUser;
   $theWikiName     = TWiki::Func::userToWikiName( $theUser, 1 ) unless $theWikiName;
   $theWikiUserName = TWiki::Func::userToWikiName( $theUser )    unless $theWikiUserName;
@@ -67,7 +72,7 @@ use TWiki::Store;
 
 sub _loadFile {
   my( $theName, $theSkin ) = @_;
-  my $text = TWiki::Store::readTemplateFile( $theName, $theSkin,
+  my $text = TWiki::Store::_readTemplateFile( $theName, $theSkin,
 						$TWiki::webName );
   return $text unless ( $text eq "" );
   # wasn't a matched template, try topic
