@@ -1345,7 +1345,7 @@ sub readTemplateTopic
 }
 
 # =========================
-sub readTemplate
+sub _readTemplateFile
 {
     my( $theName, $theSkin ) = @_;
     $theSkin = "" unless $theSkin; # prevent 'uninitialized value' warnings
@@ -1396,15 +1396,85 @@ sub readTemplate
 
     # read the template file
     if( -e $tmplFile ) {
-        my $txt = &readFile( $tmplFile );
-        
-        $txt =~ s/%HEADER{([^}]*)}%/&TWiki::handleHeader( $1, $theSkin )/geo;
-        $txt =~ s/%(}?)FOOTER({?)%/&TWiki::handleFooter( $2, $1, $theSkin )/geo;
-        $txt =~ s/%SEP%/&TWiki::handleSep( $theSkin )/geo;
-
-        return $txt;
+        return &readFile( $tmplFile );
     }
     return "";
+}
+
+# FIXME: Move elsewhere?
+# template variable hash: (built from %TMPL:DEF{"key"}% ... %TMPL:END%)
+use vars qw( %templateVars );
+%templateVars = ();
+
+# =========================
+sub handleTmplP
+{
+    # Print template variable, called by %TMPL:P{"$theVar"}%
+    my( $theVar ) = @_;
+
+    my $val = "";
+    if( ( %templateVars ) && ( exists $templateVars{ $theVar } ) ) {
+        $val = $templateVars{ $theVar };
+        $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&handleTmplP($1)/geo;  # recursion
+    }
+    if( ( $theVar eq "sep" ) && ( ! $val ) ) {
+        # set separator explicitely if not set
+        $val = " | ";
+    }
+    return $val;
+}
+
+# =========================
+sub readTemplate
+{
+    my( $theName, $theSkin ) = @_;
+
+    # recursively read template file(s)
+    my $text = _readTemplateFile( $theName, $theSkin );
+    while( $text =~ /%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/s ) {
+        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/&_readTemplateFile( $1, $theSkin )/geo;
+    }
+
+    if( ! ( $text =~ /%TMPL\:/s ) ) {
+        # no template processing
+        $text =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
+        return $text;
+    }
+
+    my $result = "";
+    my $key  = "";
+    my $val  = "";
+    my $delim = "";
+    foreach( split( /(%TMPL\:)/, $text ) ) {
+        if( /^(%TMPL\:)$/ ) {
+            $delim = $1;
+        } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
+            # handle %TMPL:DEF{"key"}%
+            if( $key ) {
+                $templateVars{ $key } = $val;
+            }
+            $key = $1;
+            $val = $2 || "";
+
+        } elsif( /^END%[\n\r]*(.*)/s ) {
+            # handle %TMPL:END%
+            $templateVars{ $key } = $val;
+            $key = "";
+            $val = "";
+            $result .= $1 || "";
+
+        } elsif( $key ) {
+            $val    .= "$delim$_";
+
+        } else {
+            $result .= "$delim$_";
+        }
+    }
+
+    # handle %TMPL:P{"..."}% recursively
+    $result =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/&handleTmplP($1)/geo;
+    $result =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
+    return $result;
 }
 
 

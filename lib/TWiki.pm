@@ -77,11 +77,6 @@ use vars qw(
         $formatVersion
     );
 
-# Experimental persistent vars - modPerl issue?
-use vars qw (
-        %headerfooter
-    );
-
 # TWiki::Store config:
 use vars qw(
         $useRcsDir
@@ -98,7 +93,7 @@ use vars qw(
 
 # ===========================
 # TWiki version:
-$wikiversion      = "20 Jul 2001";
+$wikiversion      = "21 Jul 2001";
 
 # ===========================
 # read the configuration part
@@ -147,8 +142,6 @@ sub initialize
     ##writeDebug( "\n---------------------------------" );
     
     $cgiQuery = $theQuery;
-
-    %headerfooter = ();
 
     # Make %ENV safer for CGI
     if( $safeEnvPath ) {
@@ -1188,6 +1181,16 @@ sub handleEnvVariable
 }
 
 # =========================
+sub handleTmplP
+{
+    my( $theParam ) = @_;
+
+    $theParam = extractNameValuePair( $theParam );
+    my $value = &TWiki::Store::handleTmplP( $theParam );
+    return $value;
+}
+
+# =========================
 sub handleSpacedTopic
 {
     my( $theTopic ) = @_;
@@ -1204,6 +1207,8 @@ sub handleInternalTags
     # $_[1] is topic
     # $_[2] is web
 
+    $_[0] =~ s/%TMPL\:P{(.*?)}%/&handleTmplP($1)/geo;
+    $_[0] =~ s/%SEP%/&handleTmplP('"sep"')/geo;
     $_[0] =~ s/%HTTP_HOST%/&handleEnvVariable('HTTP_HOST')/geo;
     $_[0] =~ s/%REMOTE_ADDR%/&handleEnvVariable('REMOTE_ADDR')/geo;
     $_[0] =~ s/%REMOTE_PORT%/&handleEnvVariable('REMOTE_PORT')/geo;
@@ -1248,71 +1253,6 @@ sub handleInternalTags
     $_[0] =~ s/%STOPINCLUDE%//go;
     $_[0] =~ s/%SEARCH{(.*?)}%/&handleSearchWeb($1)/geo;
     $_[0] =~ s/%METASEARCH{(.*?)}%/&handleMetaSearch($1)/geo;
-}
-
-sub readHeaderFooter
-{
-    my( $theSkin ) = @_;
-    
-    if( ! %headerfooter ) {
-        my $tmpl = &TWiki::Store::readTemplate( "headerfooter", $theSkin );
-        # Might want to have generalised variable rather than just sep
-        my( $header, $footerstart, $footerend, $sep ) = split /%SPLIT%/, $tmpl;
-    
-        $headerfooter{"header"} = $header;
-        $headerfooter{"footerstart"} = $footerstart;
-        $headerfooter{"footerend"}   = $footerend;
-        $headerfooter{"sep"} = $sep;
-     }
-}
-
-# =========================
-# Experimental routine for header/footer
-sub handleHeader
-{
-    my( $args, $theSkin ) = @_;
-    
-    readHeaderFooter( $theSkin );
-    
-    my $action = extractNameValuePair( $args, "action" );
-    my $description = extractNameValuePair( $args, "description" );
-    
-    my $tmpl = $headerfooter{"header"}; #&TWiki::Store::readTemplate( "top" );
-    $tmpl =~ s/%ACTION%/$action/go;
-    $tmpl =~ s/%DESCRIPTION%/$description/go;
-    
-    return $tmpl;
-}
-
-# =========================
-# Experimental routine for header/footer
-sub handleFooter
-{
-    my( $start, $end, $theSkin  ) = @_;
-    
-    readHeaderFooter( $theSkin );
-    
-    my $ret = "";
-
-    if( ! $end ) {
-       $ret .= $headerfooter{"footerstart"};
-    }
-    
-    if( ! $start ) {
-       $ret .= $headerfooter{"footerend"};
-    }
-    
-    return $ret;
-}
-
-# =========================
-# Experimental routine for header/footer
-sub handleSep
-{
-    my( $theSkin ) = @_;
-    
-    readHeaderFooter( $theSkin );
-    return $headerfooter{"sep"};
 }
 
 # =========================
