@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="999393063" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="AndreaSterbini" date="999419674" format="1.0" version="1.11"}%
 %TOC%
 %STARTINCLUDE%
 ---## TWiki Plugins
@@ -117,7 +117,7 @@ To eliminate the incompatibility problems bound to arise from active open Plugin
 
 	* All modules require a ==$VERSION='0.000'== variable, beginning at ==1.000==.
 
-	* The ==initPlugin== handler checks all dependencies and returns TRUE if the initialization is OK or FALSE if something went wrong.
+	* The ==initPlugin== handler should check all dependencies and return TRUE if the initialization is OK or FALSE if something went wrong.
 		* The Plugin initialization code does not register a Plugin that returns FALSE (or that has no ==initPlugin== handler).
 
 	* ==$VERSION='1.000'== is the current setting in ==TWiki::Plugins.pm== and in the preinstalled system Plugins (DefaultPlugin, EmptyPlugin, InterwikiPlugin).
@@ -140,6 +140,7 @@ A basic TWiki Plugin consists of two elements:
 	* a documentation topic, ex: ==YourPlugin.txt==
 
 The Perl module can be a block of code that connects with TWiki alone, or it can include other elements, like other Perl modules (including other Plugins), graphics, TWiki templates, external applications (ex: a Java applet), or just about anything else it can call.
+In particular, files that should be web-accessible (graphics, Java applets ...) are best placed as attachments of the ==YourPlugin== topic. Other needed Perl code is best placed in a ==lib/TWiki/Plugins/YourPlugin/== directory.
 
 The Plugin API handles the details of connecting your Perl module with main TWiki code. When you're familiar with the [[#PluginAPI][Plugin API]], you're ready to develop Plugins.
 
