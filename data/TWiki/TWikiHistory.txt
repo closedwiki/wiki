@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MikeMannix" date="1007886120" format="1.0" version="1.56"}%
+%META:TOPICINFO{author="MikeMannix" date="1009510260" format="1.0" version="1.57"}%
 ---# Appendix B: TWiki Development Timeline
 %TOC%
 
@@ -256,8 +256,7 @@
 The typical TWiki development flow...
 
 	* TWiki:Codev/FeatureBrainstorming: open forum for new ideas  
-	* TWiki:Codev/TWikiEnhancementRequests: specific detailed request
-	* TWiki:Codev/TWikiPlannedFeatures: accepted for future development
+	* TWiki:Codev/FeatureEnhancementRequest: specific detailed request
 	* TWiki:Codev/FeatureToDo: prioritized to up-next dev status
 	* TWiki:Codev/FeatureUnderConstruction: currently in development
 	* TWiki:Codev/FeatureDone: completed and implemented
