@@ -52,6 +52,9 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
 		* Set EDITBOXSTYLE = width: 99%
 
+	* Default state of the __Force New Revision__ (ForceNewRevision) check box in preview. Check box is initially checked if =Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
+		* Set FORCENEWREVISIONCHECKBOX = 
+
 	* Default state of the __Minor Changes, Don't Notify__ (DontNotify) check box in preview. Check box is initially checked if =Set DONTNOTIFYCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
 		* Set DONTNOTIFYCHECKBOX = 
 
