@@ -8,21 +8,8 @@
 # Jul 2004 - written by Martin Gregory, martin@gregories.net
 # Changes copyright (C) 2005 Crawford Currie http://c-dot.co.uk
 #
-=begin twiki
 
----+ UpgradeTwiki
-
-Create an upgraded twiki installation from an existing one
-and a new distribution.
-
-This script expects '.' to be the root of a TWiki distribution when it is called.
-=cut
-
-BEGIN {
-(-d "lib" and -d "data") or 
-    die "I was expecting to see a ./lib and ./data directories: you need to run $0 in the directory where you extracted the new TWiki distribution!\n";
-unshift @INC, "./lib";  # have to find Text::Diff, UpdateTopics, TWikiCfg which are bundled with TWiki.
-}
+package TWiki::Upgrade::UpgradeToCairo;
 
 use strict;
 
@@ -32,6 +19,10 @@ use File::Copy;
 use Text::Diff;
 use File::Find;
 
+sub doAllCairoUpgrades {
+my ($newCfgFile, $oldCfgFile, $targetDir) = @_;
+
+
 print "Checklist: 
 \t- This script should be run in the directory where you unpacked the new distribtion
 \t- The argument to this script is the target directory where it will create a whole new installation 
@@ -40,11 +31,8 @@ print "Checklist:
 \t- The target directory does not have to be web-accessible.
 ";
 
-my $targetDir = shift or die "Usage: $0 <target directory to build merged new wiki...>\n";
-
 # not sure if a relative path will be safe... better safe than sorry...
 $targetDir =~ m|^[/~]| or die "Usage: $0 <full path to target directory for new wiki build>\n"; 
-
 $targetDir =~ s|/$||;  # avoid ugly double slashes.
 
 print "
@@ -56,25 +44,17 @@ Here's what's about to happen:
 2) I'm going to update the config files to match the existing TWiki config
 3) I'm going to merge the new TWiki data files from the release with all your existing information 
 4) I'm going to tell you what you need to do next!
-
-First, you need to tell me where I can get config info about your existing TWiki.
-
-Please tell me a path to either the setlib.cfg (preferred) or the TWiki.cfg...
 ";
 
 my ($configPath, $setlibPath, $libPath);
 
-do
-{
-    chomp ($configPath = <STDIN>) ;
-}
-until ((-f "$configPath/setlib.cfg" || -f "$configPath/TWiki.cfg") ? 1 :
-       (print("Hmmm - I can't see setlib.cfg or Twiki.cfg at $configPath ... please check and try again\n"), 0) 
-       );
-
-if (-f "$configPath/TWiki.cfg")
-{
-    $libPath = $configPath;
+if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
+    $libPath = "";
+    $setlibPath = $1;
+    $configPath = $1;
+} elsif ( $oldCfgFile =~ /(.*)TWiki.cfg/ ) {
+    $libPath = $1;
+    $configPath = $1;
 
     print "OK - found TWiki.cfg.  Now I need you to tell me where the existing TWiki bin directory is:\n";
 
@@ -82,16 +62,11 @@ if (-f "$configPath/TWiki.cfg")
     # should also be used to fix up bin scripts with $scriptSuffix: TBD!
     do
     {
-	chomp ($setlibPath = <STDIN>) ;
+		chomp ($setlibPath = <STDIN>) ;
     }
     until ((-d $setlibPath) ? 1 :
 	   (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
 	   );
-}
-else
-{
-    $libPath = "";
-    $setlibPath = $configPath;
 }
 
 # Now, should have finished asking the user questions...
@@ -99,11 +74,9 @@ else
 print "First, creating $targetDir structures...\n";
 
 opendir(HERE , ".");
-
 mkdir $targetDir or die "Couldn't create the target directory ($targetDir): $!\n";
 
 my $file;
-
 foreach $file (readdir(HERE))
 {
     next if ($file eq '.');
@@ -116,11 +89,9 @@ foreach $file (readdir(HERE))
 }
 
 print "Preparing to write new format configuration files for you...\n\n";
-
 TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 
 print "\n\nMerging your existing twiki data ($TWikiCfg::dataDir) with new release twiki data...\n";
-
 my $baseDir = `pwd`;
 chomp ($baseDir);
 
@@ -307,3 +278,5 @@ Now: you need to
 
 Goodluck... :-)
 ";
+
+}
