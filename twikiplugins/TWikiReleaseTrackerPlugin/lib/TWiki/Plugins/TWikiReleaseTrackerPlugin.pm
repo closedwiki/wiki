@@ -241,7 +241,7 @@ sub compareFile {
 	my $modeCallback = selectModeCallback($mode);
 
 	my $distString = join( ",", @distributions );
-    my $distStringNop = join( ",<nop>", @distributions );   
+    my $distStringNop = "<nop>".join( ",<nop>", @distributions );   
 	$ans .=
 	  browserCallback( "   <LI> Back to file listing", 'mode' => 'listing' )
 	  . "\n";
