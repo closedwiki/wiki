@@ -58,7 +58,7 @@ sub edit {
     my $topic = $session->{topicName};
     my $user = $session->{user};
 
-    my $saveCmd = $query->param( 'cmd' );
+    my $saveCmd = $query->param( 'cmd' ) || "";
     my $breakLock = $query->param( 'breaklock' ) || "";
     my $onlyWikiName = $query->param( 'onlywikiname' ) || "";
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || "";
