@@ -147,11 +147,11 @@ Example process to change your WebPreferences to use forms instead of ={3 spaces
 
 	1 create !WebPrefencesForm topic
 	2 fill it with a table like this: %BR%
-	  =| *Name*|*Type*|*Size*|*Value*|*Tooltip message*|*Attributes*|= %BR%
-	  =| WEBTOPICLIST |textarea| |	  | List of topics of the !%WEB% web |S|= %BR%
-	  =| SITEMAPLIST  |select  |3| on, | list this web in the Site Map  |S|= %BR%
-	  =| SITEMAPWHAT  |textarea| |	  | short web summary				 |S|= %BR%
-	  =| WEBBGCOLOR	|text	 |8|	  | Web specific background color |S|= %BR%
+	  =| *Name*       |*Type*  |*Size*|*Value*|*Tooltip message*                 |*Attributes*|= %BR%
+	  =| WEBTOPICLIST |textarea|      |	      | List of topics of the !%WEB% web |S|= %BR%
+	  =| SITEMAPLIST  |select  | 3    | on    | list this web in the Site Map    |S|= %BR%
+	  =| SITEMAPWHAT  |textarea|      |	      | short web summary				 |S|= %BR%
+	  =| WEBBGCOLOR	  |text    | 8    |       | Web specific background color    |S|= %BR%
 	  etc...
 	3 Edit WebPreferences and:
 		* Add or Change the form to !WebPrefencesForm
