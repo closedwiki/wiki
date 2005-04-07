@@ -1,0 +1,101 @@
+|*Name*|*Type*|*Size*|*Value*|*Tooltip message* |*Attributes*|
+| | label | | The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%). %BR% %T% You can lock individual settings at the site or web levels using User & Group Access Control. | | |
+|  | label | | | | |
+| | label | | <h1>Default Web Preferences</h1> Typically redefined in individual <nop>WebPreferences topics | | |
+| | label | | %H% The second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%) | |
+| WEBTOPICLIST | text | 110 | [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" /> | Usually a list of topics | S |
+| | label | | %H% Web specific background color: (is overwritten by web preferences | |
+| WEBBGCOLOR | text | 110 | #FFD8AA | HTML Color | S |
+| | label | | %H% [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences | |
+| FAVICON | text | 110 | %PUBURL%/%WEB%/WebPreferences/favicon.ico | URL of an icon image | S |
+| | label | | %H% Long form copyright, shown on every page | | |
+| WEBCOPYRIGHT | textarea | | Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a> | Long form copyright | S |
+| | label | | %H% Short form copyright for the WebRss feed (don't use any special characters, xml tags or WikiWords | |
+| WEBRSSCOPYRIGHT | text | 110 | Copyright %GMTIME{"$year"}% by contributing authors | Short form copyright | S |
+| | label | | %H% Set to =on= to stop webs being searched by default. | | |
+| NOSEARCHALL | select | 1 | off,on | Exclude web from a =web="all"= search| S |
+| | label | | %H% Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty). You can still use the =[<nop>[...][...]]= syntax to link topics if you disable <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text. | | |
+| NOAUTOLINK | select | 1 | off,on | Boolean | S |
+| | label | | %H% Warn if INCLUDE of topic fails: Fail silently if empty or =off=. If set to =on=, output the warning message defined in templates/oopsalerts.tmpl if an INCLUDE fails. Otherwise output this text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE= | |
+| INCLUDEWARNING | text | 110 | on, off | Boolean | S |
+|  | label | | | | |
+| | label | | <h1>User Preferences</h1> Typically redefined in topics of individual %MAINWEB%.TWikiUsers | | |
+| | label | | %H% Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%MAINWEB%.WikiName, $topic for the topic name, and $web for the web name. Example: $username - $date - $rev: $summary | | |
+| LINKTOOLTIPINFO | text | 110 | | Format of tooltip info | S |
+| | label | | %H% Configuration of text edit box. Width and height are columns and rows respectively. Set the style to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers.
+| EDITBOXWIDTH | text | 110 | 70 | Horizontal size of text edit box. | S |
+| EDITBOXHEIGHT | text | 110 | 15 | Vertical size of text edit box. | S |
+| EDITBOXSTYLE | text | 110 | width: 99% | CSS style | S |
+| PREVIEWBGIMAGE | text | 110 | %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif | Image URL | S |
+| | label | | %H% Set these to checked to tick those options by default | |
+| FORCENEWREVISIONCHECKBOX | select | 1 | , checked="checked" | Select checked to enable | S |
+| DONTNOTIFYCHECKBOX | select | 1 | ,checked="checked" | Select checked to enable | S |
+| ATTACHLINKBOX | select | 1 | ,checked="checked" | Select checked to enable | S |
+| | label | |  %H% Format of file link when the __link__ check box is checked. Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets). | | |
+| ATTACHEDFILELINKFORMAT | text | 110 | \t* [[%ATTACHURL%/$name][$name]]: $comment | Text | S |
+| | label | |  %H% Format of images when the __link__ check box is checked. Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab (3 spaces for bullets). | | |
+| ATTACHEDIMAGEFORMAT | textarea | | \t* $comment: <br /><img src="%ATTACHURLPATH%/$name" alt="$comment" $size /> | Text | S |
+|  | label | | | | |
+| | label | | <h1>Site Preferences</h1> You should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there. | | |
+| | label | | %H% Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there. | |
+| WIKITOOLNAME | text | 110 | TWiki | Site name | S |
+| WIKILOGOIMG | text | 110 | %PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWiki.gif | URL of a logo image | S |
+| WIKILOGOURL | text | 110 | http://TWiki.org/ | URL under the logo| S |
+| WIKILOGOALT | text | 110 | TWiki home | Logo tooltip text of the logo | S |
+| | label | | %H% List of %WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap). To automatically list all non-hidden webs in alphabetical order use the =%<nop>WEBLIST{} variable instead:<br />%<nop>WEBLIST{"[[$name.<nop>%HOMETOPIC<nop>%]<nop>[$name]]" separator=" %<nop>SEP% "}% | | |
+| WIKIWEBLIST | text | 110 | [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]] | | S |
+| | label | | %H% Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit | |
+| ATTACHFILESIZELIMIT | text | 110 | 11000 | Maximum size of attachments in KB, 0 for no limit | S |
+| | label | | %H% Broadcast message output at the top of every page. %X% IMPORTANT: Set to empty message if not used. | | |
+| BROADCASTMESSAGE | textarea| |  | Broadcast message on every page, for skins that support it. | S |
+| | label | | | | |
+| | label | | <h1>Search Preferences</h1> =keyword= for search engine like syntax, =regex= for RegularExpression search, or =literal= for verbatim search. The first setting is for the =search= script, and the second for =%SEARCH= tags. | | |
+| SEARCHDEFAULTTTYPE | select | 1 | keyword,literal,regex | Default type for search | S |
+| SEARCHVARDEFAULTTYPE | select | 1 | keyword,literal,regex | Default for =%<nop>SEARCH{}%= variable | S |
+| | label | | %H% Stop words, e.g., common words and characters to exclude from a keyword search | |
+| SEARCHSTOPWORDS | textarea | | a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z | Stop words, e.g., common words and characters to exclude from a keyword search | S |
+|  | label | | | | |
+| | label | | <h1>Email and Proxy Server Settings</h1> | | |
+| WIKIWEBMASTER | text | 110 | webmaster@your.company | TWiki webmaster email address | S |
+| WIKIWEBMASTERNAME | text | 110 | TWiki Administrator | TWiki webmaster name (first name and last name, e.g. =Fred Smith=) | S |
+| | label | | %H% This is used for WebChangesAlert if [[CPAN:Net::SMTP][Net::SMTP]] is installed and =SMTPMAILHOST= is set. Otherwise the external sendmail program is used instead (defined by the ==MailProgram== configuration setting; see ==TWiki.cfg==). Examples: ==mail.your.company== or ==localhost= | |
+| SMTPMAILHOST | text | 110 | | Mail host for outgoing SMTP mail. | S |
+| | label | | %H% SMTP requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. Ex: ==twiki.your.company= |
+| SMTPSENDERHOST | text | 110 |  | Mail domain sending SMTP mail | S |
+| | label | | %H% Some environments require outbound HTTP traffic to go through a proxy server. Set the host in PROXYHOST (example: ==proxy.your.company==), and the port number in PROXYPORT (example: ==110110==). No proxy is used if PROXYHOST or PROXYPORT is empty | |
+| PROXYHOST | text | 110 | | Proxy Server.  | S |
+| PROXYPORT | text | 110 | | Proxy Server.  | S |
+| | label | | %H% Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev/BackFromPreviewLosesText or TWiki:Codev/RefreshEditPage). These settings do not affect proxy caches. | | |
+| HTTP_EQUIV_ON_VIEW| textarea | 110x1 | <link rel='alternate' type='application/rss+xml' title='RSS Feed' href='%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&amp;contenttype=text/xml' /> | http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts | S |
+| HTTP_EQUIV_ON_EDIT| textarea | 110x1 | =  | http-equiv== meta tags for ==edit== script | S |
+| HTTP_EQUIV_ON_PREVIEW| textarea | 110x1 | =  | http-equiv== meta tags for ==preview== script | S |
+|  | label | | | | |
+| | label | | <h1>Skins</h1> See TWikiSkinBrowser for currently installed skins | | |
+| SKIN | text | 110 | pattern | Skin overriding the default TWiki templates. | S |
+| | label | | <h3> PatternSkin </h3> | | |
+| | label | | %H% Stylesheets are loaded in the following order. Make sure you specify a valid stylesheet for all entries (even if empty) or performance will suffer. | |
+| TWIKILAYOUTURL | text | 110 | %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css | URL of a CSS | S |
+| TWIKISTYLEURL | text | 110 | %PUBURL%/%TWIKIWEB%/PatternSkin/style.css | URL of a CSS | S |
+| USERLAYOUTURL | text | 110 | %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css | URL of a CSS | S |
+| USERSTYLEURL | text | 110 | %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css | URL of a CSS | S |
+| | label | | <h3> DragonSkin </h3> | | |
+| DS_THEME | text | 110 | gray | Theme: (gray, monochrome, tabstyle | S |
+| DS_QUICKLINKSHEADING | text | 110 |  | Quicklinks headings | S |
+| DS_QUICKLINKS | text | 110 |  | Quicklinks submenu | S |
+|  | label | | | | |
+| | label | | <h1>Plugins</h1> Currently activated plugins: %ACTIVATEDPLUGINS% | | |
+| | label | | %H% All plugins that have Perl modules (files with names ending in "Plugin.pm") in the =lib/TWiki/Plugins= directory are activated automatically unless listed in DISABLEDPLUGINS. |
+| DISABLEDPLUGINS | text | 110 | EmptyPlugin, DefaultPlugin, TestFixturePlugin | Comma-separated list | S |
+| | label | | %H% If you need to specify the plugin execution sequence then manually list the plugins in execution order in INSTALLEDPLUGINS. All handlers will be called in this order. | | |
+| INSTALLEDPLUGINS | text | 110 | | Plugin execution order, comma-separated list | S |
+| | label | | %H% You can enable/disable all plugins with the ==DisableAllPlugins== configuration flag; see ==TWiki.cfg==. You can also enable/disable selected plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin. | | |
+| | label | | | |
+
+| | label | | | |
+| | label | | <h1> Preferences Control Settings </h1> | |
+| | label | | %H%  Allow topic level preferences, on or off:  If set to =on=, topic preferences will be read, and will override any web- or site-level preferences not set as =FINALPREFERENCES=.  By default, user preferences will override topic preferences. | |
+| READTOPICPREFS | select | 1 | on,off | Boolean | S |
+| | label | | %H% Control whether topic level preferences override user level preferences, on or off: If set to =on=, topic preferences will override user preferences.  The user can in turn override this behavior by setting further =FINALPREFERENCES= in their user topic. | |
+| TOPICOVERRIDESUSER | select | 1 | on, off | Boolean | S |
+| | label | | %H% Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences: | |
+| FINALPREFERENCES | checkbox | 5 | ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER | Multiple select | S |

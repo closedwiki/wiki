@@ -146,13 +146,7 @@ The new Form Template system should work with old Category Table data with no sp
 Example process to change your WebPreferences to use forms instead of ={3 spaces}* Set= statements:
 
 	1 create !WebPrefencesForm topic
-	2 fill it with a table like this: %BR%
-	  =| *Name*       |*Type*  |*Size*|*Value*|*Tooltip message*                 |*Attributes*|= %BR%
-	  =| WEBTOPICLIST |textarea|      |	      | List of topics of the !%WEB% web |S|= %BR%
-	  =| SITEMAPLIST  |select  | 3    | on    | list this web in the Site Map    |S|= %BR%
-	  =| SITEMAPWHAT  |textarea|      |	      | short web summary				 |S|= %BR%
-	  =| WEBBGCOLOR	  |text    | 8    |       | Web specific background color    |S|= %BR%
-	  etc...
+	2 fill it with a table like this: %BR% =|*Name*        |*Type*  |*Size*|*Value*  |*Tooltip message*                |*Attributes*|= %BR% =| WEBTOPICLIST |textarea|      |	      | List of topics of the !%WEB% web |S|= %BR% =| SITEMAPLIST  |select  | 3    | on, off | list this web in the Site Map   |S|= %BR% =| SITEMAPWHAT  |textarea|      |	      | short web summary               |S|= %BR% =| WEBBGCOLOR   |text    | 8    |         | Web specific background color   |S|= %BR%etc...
 	3 Edit WebPreferences and:
 		* Add or Change the form to !WebPrefencesForm
 		* add !WebPrefencesForm to the =Set WEBFORMS= line
@@ -176,7 +170,7 @@ Another example, this one using !EditTablePlugin, source:
 Result (after some editing):
 
 %EDITTABLE{ header="|*Name*|*Type*|*Size*|*Values*|*Tooltip message*|*Attributes*|" format="|text,20|text,20|text,20|text,20|text,20|text,1|" }%
-|*Name* | *Type* | *Size* | *Values* | *tooltip message* | *Attributes*|
+|*Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes*|
 |ALLOWTOPICCHANGE | textarea |  |  | Users or groups __allowed__ to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup) | S|
 |ALLOWWEBCHANGE | textarea |  |  | Users or groups who __are__  allowed to  __change__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
 |ALLOWWEBRENAME | textarea |  | %MAINWEB%.TWikiAdminGroup | Users or groups who __are__  allowed to  __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
@@ -184,12 +178,12 @@ Result (after some editing):
 |DENYWEBCHANGE | textarea |  |  | Users or groups who __are not__  allowed to  __change__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
 |DENYWEBRENAME | textarea |  |  | Users or groups who __are not__  allowed to  __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
 |DENYWEBVIEW | textarea |  |  | Users or groups who __are not__  allowed to __view__  topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
-|FINALPREFERENCES | textarea |  | "NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME" | Web preferences that are *not* allowed to be overridden by user preferences | S|
-|NOSEARCHALL | text |  | ",on" | "Exclude web from a =web=""all""= search: (Set to =on= for hidden webs)" | S|
-|SITEMAPLIST | select |  | "on, ," | List this web in the %TWIKIWEB%.SiteMap | S|
+|FINALPREFERENCES | textarea |  | NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME | Web preferences that are *not* allowed to be overridden by user preferences | S|
+|NOSEARCHALL | text |  | on | "Exclude web from a =web=""all""= search: (Set to =on= for hidden webs)" | S|
+|SITEMAPLIST | select |  | on | List this web in the %TWIKIWEB%.SiteMap | S|
 |SITEMAPUSETO | textarea |  | ...to do something. | ...to do something. | S|
 |SITEMAPWHAT | textarea |  | Describe what this web does. | Describe what this web does. | |
-|SKIN | select |  | "twiki, free, gnu, koala, pattern, plain, tiger" | list of installed skins | S|
+|SKIN | select |  | twiki, free, gnu, koala, pattern, plain, tiger | list of installed skins | S|
 |WEBBGCOLOR | select |  | lightpink, pink, crimson, lavenderblush, palevioletred, hotpink, deeppink, mediumvioletred, orchid, thistle, plum, violet, fuchsia, fuchsia, darkmagenta, purple, mediumorchid, darkviolet, darkorchid, indigo, blueviolet, mediumpurple, mediumslateblue, slateblue, darkslateblue, ghostwhite, lavender, blue, mediumblue, darkblue, navy, midnightblue, royalblue, cornflowerblue, lightsteelblue, lightslategray, slategray, dodgerblue, aliceblue, steelblue, lightskyblue, skyblue, deepskyblue, lightblue, powderblue, cadetblue, darkturquoise, azure, lightcyan, paleturquoise, aqua, aqua, darkcyan, teal, darkslategray, mediumturquoise, lightseagreen, turquoise, aquamarine, mediumaquamarine, mediumspringgreen, mintcream, springgreen, mediumseagreen, seagreen, honeydew, darkseagreen, palegreen, lightgreen, limegreen, lime, forestgreen, green, darkgreen, lawngreen, chartreuse, greenyellow, darkolivegreen, yellowgreen, olivedrab, ivory, beige, lightyellow, lightgoldenrodyellow, yellow, olive, darkkhaki, palegoldenrod, lemonchiffon, khaki, gold, cornsilk, goldenrod, darkgoldenrod, floralwhite, oldlace, wheat, orange, moccasin, papayawhip, blanchedalmond, navajowhite, antiquewhite, tan, burlywood, darkorange, bisque, linen, peru, peachpuff, sandybrown, chocolate, saddlebrown, seashell, sienna, lightsalmon, coral, orangered, darksalmon, tomato, salmon, mistyrose, lightcoral, snow, rosybrown, indianred, red, brown, firebrick, darkred, maroon, white, whitesmoke, gainsboro, lightgrey, silver, darkgray, gray, dimgray, black | Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors) | S|
 |WEBFORMS | textarea |  |  | %TWIKIWEB%.TWikiForms: How to enable form(s) | S|
 |WEBTOPICLIST | textarea |  | [[WebHome]], [[WebChanges][Changes]], [[WebTopicList][Topics]], [[WebIndex][Index]], [[WebSearch][Search]], Go <input type="text" name="topic" size="16" /> | the main entry point topics for this web | S|
