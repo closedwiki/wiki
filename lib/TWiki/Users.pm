@@ -210,9 +210,6 @@ sub _createUser {
     my( $this, $name, $wikiname ) = @_;
 
     my $object = new TWiki::User( $this->{session}, $name, $wikiname );
-    ASSERT($object->login()) if DEBUG;
-    ASSERT($object->wikiName()) if DEBUG;
-    ASSERT($object->webDotWikiName()) if DEBUG;
     $this->{login}{$name} = $object;
     $this->{wikiname}{$object->webDotWikiName()} = $object;
 

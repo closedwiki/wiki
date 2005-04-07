@@ -198,22 +198,22 @@ sub getFormDef {
 
     # Get each field definition
     foreach my $fieldDefP ( @fieldDefs ) {
-        my @fieldDef = @$fieldDefP;
-        my( $name, $title, $type, $size, $posValuesS, $tooltip, $attributes ) = @fieldDef;
+        my( $name, $title, $type, $size, $values, $tooltip, $attributes ) = @$fieldDefP;
         my @posValues = ();
-        if( $posValuesS ) {
-           @posValues = split( /,\s*/, $posValuesS );
+        if( $values ) {
+           @posValues = split( /,\s*/, $values );
         }
 
-        if( ( ! @posValues ) && $store->topicExists( $webName, $name ) ) {
+        if( ! @posValues && $store->topicExists( $webName, $name ) ) {
+            # If no values are defined, see if we can get them from
+            # the topic of the same names as the field
             my( $meta, $text ) =
-              $store->readTopic( $this->{session}->{user}, $webName, $name, undef );
+              $store->readTopic( $this->{session}->{user}, $webName, $name,
+                                 undef );
             @posValues = getPossibleFieldValues( $text );
-            if( ! $type ) {
-                $type = 'select';  #FIXME keep?
-            }
+            $type ||= 'select';  #FIXME keep?
         } else {
-            # FIXME no list matters for some types
+            # FIXME no values matters for some types
         }
         push @fieldsInfo, [ ( $name, $title, $type, $size, $tooltip, $attributes, @posValues ) ];
     }
@@ -295,16 +295,18 @@ sub renderForEdit {
         my $size = shift @fieldInfo;
         my $tooltip = shift @fieldInfo;
         my $attributes = shift @fieldInfo;
-
         my $field = $meta->get( 'FIELD', $fieldName );
         my $value = $field->{value};
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
             $value = $prefs->getPreferencesValue($fieldName);
         }
-        if( !defined( $value ) && $type !~ /^checkbox/ &&
+        if( !defined( $value ) && $type !~ /^(checkbox|radio)/ &&
             $getValuesFromFormTopic ) {
 
+            # Try and get a sensible default value from the form
+            # definition. Doesn't make sense for checkboxes or
+            # radio buttons.
             $value = $fieldInfo[0];
             if( defined( $value )) {
                 $value = $this->{session}->handleCommonTags( $value,
@@ -352,80 +354,62 @@ sub renderForEdit {
             }
             $choices =~ s/selected=""/selected="selected"/ unless $matched;
             $value = CGI::Select({ -name=>$name, -size=>$size }, $choices );
-        } elsif( $type =~ "^checkbox" ) {
+        } elsif( $type =~ /^checkbox/ ) {
+            $value = '';
             if( $type eq 'checkbox+buttons' ) {
                 my $boxes = $#fieldInfo + 1;
-                $extra = CGI::br();
-                $extra .= CGI::button
-                  ( -class=>'twikiEditFormCheckboxButton twikiCheckbox',
-                    -value=>' Set ',
-                    -onClick=>"checkAll(this,2,$boxes,true)");
-                $extra .= '&nbsp;' . CGI::button
-                  ( -class=>'twikiEditFormCheckboxButton twikiCheckbox',
-                    -value=>'Clear',
-                    -onClick=>"checkAll(this,1,$boxes,false)");
+                $value .= CGI::button
+                  ( -class => 'twikiEditFormCheckboxButton',
+                    -value => 'Set',
+                    -onClick => 'checkAll(this,2,'.$boxes.',true)' );
+                $value .= '&nbsp;';
+                $value .= CGI::button
+                  ( -class => 'twikiEditFormCheckboxButton',
+                    -value => 'Clear',
+                    -onClick => 'checkAll(this,1,'.$boxes.',false)');
+                $value .= CGI::br();
             }
-
-            my $rows = '';
-            my $row = '';
-            my $lines = 0;
+            my %attrs;
+            my @values;
+            my @defaults;
             foreach my $item ( @fieldInfo ) {
-                my $checked = '';
-                $checked = 'checked' if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ );
-                my $data =
-                  CGI::checkbox(-class=>'twikiEditFormCheckboxField',
-                                -name=>$name,
-                                -value=>$item,
-                                -checked=>$checked,
-                                -label=>
-                                $this->{session}->handleCommonTags( $item,
-                                                                    $web,
-                                                                    $topic )).
-                                ' &nbsp;&nbsp;';
-                $row .= CGI::td( $data );
-                if( $size && ($lines % $size) == $size - 1 ) {
-                    $rows .= CGI::Tr( $row );
-                    $row = '';
+                push( @values, $item);
+                $attrs{$item} =
+                  { class=>'twikiEditFormCheckboxField',
+                    label=>$this->{session}->handleCommonTags( $item,
+                                                               $web,
+                                                               $topic ) };
+                if( $value =~ /(^|,\s*)$item(,|$)/ ) {
+                    $attrs{$item}{checked} = 'checked';
+                    push( @defaults, $item );
                 }
-                $lines++;
             }
-            $rows .= $row;
-
-            $value = CGI::table( { -cellspacing=>0, -cellpadding=>0 }, $rows );
+            $value .= CGI::checkbox_group( -name => $name,
+                                          -values => \@values,
+                                          -defaults => \@defaults,
+                                          -columns => $size,
+                                          -attributes => \%attrs );
         } elsif( $type eq 'radio' ) {
-            my $rows = '';
-            my $row = '';
-            my $matched = 0;
-            my $lines = 0;
-            # SMELL: radio buttons ought to be mutually exclusive
-            # checkboxes should be used otherwise.
+            my %attrs;
+            my @values;
+            my @defaults;
+            my $selected = '';
             foreach my $item ( @fieldInfo ) {
-                my $selected = '';
-                if( $item eq $value ) {
-                   $selected = 'checked';
-                   $matched = 1;
-                }
-                my $expandedItem = $this->{session}->handleCommonTags
-                  ( $item, $web, $topic );
-                my $data =
-                  CGI::input
-                      ({ -class => 'twikiEditFormRadioField twikiRadioButton',
-                         -name => $name,
-                         -value => $item,
-                         -checked => $selected,
-                         -label => $expandedItem });
-                $row .= CGI::td( $data );
-                if( $size > 0 && ($lines % $size == $size - 1 ) ) {
-                    $rows .= CGI::Tr( $row );
-                    $row = '';
-                }
-                $lines++;
+                push( @values, $item);
+                $attrs{$item} =
+                  { class=>'twikiEditFormRadioField twikiRadioButton',
+                    label=>$this->{session}->handleCommonTags( $item,
+                                                               $web,
+                                                               $topic ) };
+
+                $selected = $item if( $item eq $value );
             }
 
-            $rows .= $row;
-            $rows =~ s/checked=""/checked="checked"/ unless $matched;
-
-            $value = CGI::table( { -cellspacing=>0, -cellpadding=>0 }, $rows );
+            $value = CGI::radio_group( -name => $name,
+                                       -values => \@values,
+                                       -default => $selected,
+                                       -columns => $size,
+                                       -attributes => \%attrs );
         } else {
             # Treat like text, make it reasonably long
             # SMELL: Sven thinks this should be an error condition - so users
@@ -480,28 +464,18 @@ sub fieldVars2Meta {
        my $size      = shift @fieldInfo;
        my $tooltip   = shift @fieldInfo;
        my $attributes = shift @fieldInfo;
-       my $value     = $query->param( $fieldName );
+       my $value = $query->param( $fieldName );
 
-       my $cvalue    = '';
-
-       if( ! $value && $type =~ "^checkbox" ) {
-          foreach my $name ( @fieldInfo ) {
-             my $cleanName = $name;
-             $cleanName =~ s/<nop>//g;
-             $cvalue = $query->param( $fieldName . $cleanName );
-             if( defined( $cvalue ) ) {
-                 if( ! $value ) {
-                     $value = '';
-                 } else {
-                     $value .= ', ' if( $cvalue );
-                 }
-                 $value .= $name if( $cvalue );
-             }
-          }
+       if( defined $value ) {
+           if( $type =~ /^checkbox/ ) {
+               $value = join( ', ', $query->param( $fieldName ) );
+           } else {
+               $value = $query->param( $fieldName );
+           }
        }
 
        # Have title and name stored so that topic can be viewed without reading in form definition
-       $value = '' if( ! defined( $value ) && ! $justOverride );
+       $value = '' unless( defined( $value ) || $justOverride );
        if( defined( $value ) ) {
            my $args =
              {
