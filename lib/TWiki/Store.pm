@@ -680,9 +680,6 @@ sub _readKeyValues {
         $value =~ s/%_N_%/\n/g;
         $value =~ s/%_Q_%/\"/g;
         $value =~ s/%_P_%/%/g;
-        $value =~ s/&/&amp\;/go;
-        $value =~ s/</&lt\;/go;
-        $value =~ s/>/&gt\;/go;
         $res->{$key} = $value;
     }
 
@@ -1531,6 +1528,7 @@ sub _writeTypes {
             my $sep = '';
             $text .= "%META:$type\{";
             my $name = $item->{name};
+            ASSERT( $type ne "FIELD" || $name ) if DEBUG;
             if( $name ) {
                 # If there's a name field, put first to make regexp based searching easier
                 $text .= _writeKeyValue( 'name', $item->{name} );

@@ -54,8 +54,7 @@ sub new {
 # Returns array of arrays
 #   1st - list fields
 #   2nd - name, title, type, size, vals, tooltip, setting
-sub _parseFormDefinition
-{
+sub _parseFormDefinition {
     my( $this, $text ) = @_;
 
     my $store = $this->{session}->{store};
@@ -71,46 +70,64 @@ sub _parseFormDefinition
         } else {
             # Only insist on first field being present FIXME - use oops page instead?
             if( $inBlock && s/^\s*\|//o ) {
-                    my( $title, $type, $size, $vals, $tooltip, $attributes ) = split( /\|/ );
-                    $title =~ s/^\s*//go;
-                    $title =~ s/\s*$//go;
-                    my $name = _cleanField( $title );
-                    $type = lc $type;
-                    $attributes =~ s/\s*//go;
-                    $attributes = '' if( ! $attributes );
-                    $type =~ s/^\s*//go;
-                    $type =~ s/\s*$//go;
-                    $type = 'text' if( ! $type );
-                    $size = _cleanField( $size );
-                    if( ! $size ) {
-                        if( $type eq 'text' ) {
-                            $size = 20;
-                        } elsif( $type eq 'textarea' ) {
-                            $size = '40x5';
-                        } else {
-                            $size = 1;
-                        }
+                my( $title, $type, $size, $vals, $tooltip, $attributes ) = split( /\|/ );
+                $title ||= '';
+                $title =~ s/^\s*//go;
+                $title =~ s/\s*$//go;
+
+                $attributes ||= '';
+                $attributes =~ s/\s*//go;
+                $attributes = '' if( ! $attributes );
+
+                $type ||= '';
+                $type = lc $type;
+                $type =~ s/^\s*//go;
+                $type =~ s/\s*$//go;
+                $type = 'text' if( ! $type );
+
+                $size ||= '';
+                $size = _cleanField( $size );
+                unless( $size ) {
+                    if( $type eq 'text' ) {
+                        $size = 20;
+                    } elsif( $type eq 'textarea' ) {
+                        $size = '40x5';
+                    } else {
+                        $size = 1;
                     }
-                    $size = 1 if( ! $size );
-                    $vals =~ s/^\s*//go;
-                    $vals =~ s/\s*$//go;
-                    $vals =~ s/"//go; # " would break parsing of META variables
-                    if( $vals eq '$users' ) {
-                       $vals = $TWiki::cfg{UsersWebName} . '.' .
-                         join( ", ${TWiki::cfg{UsersWebName}}.",
-                               ( $store->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
-                    }
-                    $tooltip =~ s/^\s*//go;
-                    $tooltip =~ s/\s*$//go;
-                    # FIXME object if too short
-                    push @fields, [ $name, $title, $type, $size, $vals, $tooltip, $attributes ];
+                }
+
+                $vals ||= '';
+                $vals =~ s/^\s*//go;
+                $vals =~ s/\s*$//go;
+
+                # SMELL: WTF is this??? This looks like a really bad hack!
+                if( $vals eq '$users' ) {
+                    $vals = $TWiki::cfg{UsersWebName} . '.' .
+                      join( ", ${TWiki::cfg{UsersWebName}}.",
+                            ( $store->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
+                }
+
+                $tooltip ||= '';
+                $tooltip =~ s/^\s*//go;
+                $tooltip =~ s/\s*$//go;
+
+                push( @fields,
+                      { name => _cleanField( $title ),
+                        title => $title,
+                        type => $type,
+                        size => $size,
+                        value => $vals,
+                        tooltip => $tooltip,
+                        attributes => $attributes,
+                      } );
             } else {
                 $inBlock = 0;
             }
         }
     }
 
-    return @fields;
+    return \@fields;
 }
 
 
@@ -135,11 +152,8 @@ Possible field values for select, checkbox, radio from supplied topic text
 
 sub getPossibleFieldValues {
     my( $text ) = @_;
-    
     my @defn = ();
-    
     my $inBlock = 0;
-    
     foreach( split( /\n/, $text ) ) {
         if( /^\s*\|.*Name[^|]*\|/ ) {
             $inBlock = 1;
@@ -156,10 +170,8 @@ sub getPossibleFieldValues {
             }
         }
     }
-    
     return @defn;
 }
-
 
 =pod
 
@@ -179,46 +191,41 @@ sub getFormDef {
     ( $webName, $form ) =
       $this->{session}->normalizeWebTopicName( $webName, $form );
 
-    my @fieldDefs = ();
     my $store = $this->{session}->{store};
 
     # Read topic that defines the form
-    if( $store->topicExists( $webName, $form ) ) {
-        my( $meta, $text ) =
-          $store->readTopic( $this->{session}->{user}, $webName, $form, undef );
-        @fieldDefs = $this->_parseFormDefinition( $text );
-    } else {
+    unless( $store->topicExists( $webName, $form ) ) {
         throw TWiki::OopsException( 'noformdef',
                                     web => $this->{session}->{webName},
                                     topic => $this->{session}->{topicName},
                                     params => [ $webName, $form ] );
     }
+    my( $meta, $text ) =
+      $store->readTopic( $this->{session}->{user}, $webName, $form, undef );
 
-    my @fieldsInfo = ();
+    my $fieldsInfo = $this->_parseFormDefinition( $text );
 
-    # Get each field definition
-    foreach my $fieldDefP ( @fieldDefs ) {
-        my( $name, $title, $type, $size, $values, $tooltip, $attributes ) = @$fieldDefP;
+    # Expand out values arrays in the definition
+    foreach my $fieldDef ( @$fieldsInfo ) {
         my @posValues = ();
-        if( $values ) {
-           @posValues = split( /,\s*/, $values );
-        }
 
-        if( ! @posValues && $store->topicExists( $webName, $name ) ) {
-            # If no values are defined, see if we can get them from
-            # the topic of the same names as the field
-            my( $meta, $text ) =
-              $store->readTopic( $this->{session}->{user}, $webName, $name,
-                                 undef );
-            @posValues = getPossibleFieldValues( $text );
-            $type ||= 'select';  #FIXME keep?
-        } else {
-            # FIXME no values matters for some types
+        if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
+            @posValues = split( /[,\s]+/, $fieldDef->{value} );
+
+            if( !scalar( @posValues ) && $store->topicExists( $webName, $fieldDef->{name} ) ) {
+                # If no values are defined, see if we can get them from
+                # the topic of the same name as the field
+                my( $meta, $text ) =
+                  $store->readTopic( $this->{session}->{user}, $webName, $fieldDef->{name},
+                                     undef );
+                @posValues = getPossibleFieldValues( $text );
+                $fieldDef->{type} ||= 'select';  #FIXME keep?
+            }
+            $fieldDef->{value} = \@posValues;
         }
-        push @fieldsInfo, [ ( $name, $title, $type, $size, $tooltip, $attributes, @posValues ) ];
     }
 
-    return @fieldsInfo;
+    return $fieldsInfo;
 }
 
 sub _link {
@@ -272,9 +279,10 @@ e.g. FIXME could do with some of this being in template
 sub renderForEdit {
     my( $this, $web, $topic, $formWeb, $form, $meta, $getValuesFromFormTopic ) = @_;
     ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
+    my $session = $this->{session};
 
     my $chooseForm = '';
-    my $prefs = $this->{session}->{prefs};
+    my $prefs = $session->{prefs};
     if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
         $chooseForm =
           CGI::submit(-name => 'submitChangeForm',
@@ -285,49 +293,57 @@ sub renderForEdit {
     my $text = CGI::start_table(-border=>1, -cellspacing=>0, -cellpadding=>0 );
     $text .= CGI::Tr($this->_link( $web, $form, '', 1, '', 2, $chooseForm ));
 
-    my @fieldsInfo = $this->getFormDef( $formWeb, $form );
-    foreach my $c ( @fieldsInfo ) {
-        my @fieldInfo = @$c;
-        my $fieldName = shift @fieldInfo;
-        my $name = $fieldName;
-        my $title = shift @fieldInfo;
-        my $type = shift @fieldInfo;
-        my $size = shift @fieldInfo;
-        my $tooltip = shift @fieldInfo;
-        my $attributes = shift @fieldInfo;
-        my $field = $meta->get( 'FIELD', $fieldName );
-        my $value = $field->{value};
+    my $fieldsInfo = $this->getFormDef( $formWeb, $form );
+    foreach my $c ( @$fieldsInfo ) {
+        my $name = $c->{name};
+        my $title = $c->{title};
+        my $type = $c->{type};
+        my $size = $c->{size};
+        my $tooltip = $c->{tooltip};
+        my $attributes = $c->{attributes};
+
+        my $field;
+        my $value;
+        my $attributes;
+        if( $name ) {
+            $field = $meta->get( 'FIELD', $name );
+            $value = $field->{value};
+            $attributes = $field->{attributes};
+        }
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
-            $value = $prefs->getPreferencesValue($fieldName);
+            $value = $prefs->getPreferencesValue($name);
         }
-        if( !defined( $value ) && $type !~ /^(checkbox|radio)/ &&
-            $getValuesFromFormTopic ) {
+        if( $getValuesFromFormTopic && !defined( $value ) &&
+            $type !~ /^(checkbox|radio|select)/ ) {
 
             # Try and get a sensible default value from the form
-            # definition. Doesn't make sense for checkboxes or
-            # radio buttons.
-            $value = $fieldInfo[0];
+            # definition. Doesn't make sense for checkboxes,
+            # radio buttons or select.
+            $value = $c->{value};
             if( defined( $value )) {
-                $value = $this->{session}->handleCommonTags( $value,
-                                                             $web, $topic );
+                $value = $session->handleCommonTags( $value, $web, $topic );
             }
         }
         $value = '' unless defined $value;  # allow 0 values
         my $extra = '';
 
-        my $output = $this->{session}->{plugins}->renderFormFieldForEditHandler( $name, $type, $size, $value, $attributes, \@fieldInfo );
+        my $output = $session->{plugins}->renderFormFieldForEditHandler
+          ( $name, $type, $size, $value, $attributes, $c->{value} );
         if( $output ) {
             $value = $output;
+
         } elsif( $type eq 'text' ) {
             $value = CGI::textfield( -class => 'twikiEditFormTextField',
                                      -name => $name,
                                      -size => $size,
                                      -value => $value );
+
         } elsif( $type eq 'label' ) {
-            $value = CGI::hidden( -class => 'twikiEditFormLabelField',
-                                  -name => $name,
-                                  -value => $value );
+            $value = CGI::div( { class => 'twikiEditFormLabelField' },
+                               $session->{renderer}->getRenderedVersion
+                               ( $session->handleCommonTags( $c->{value}, $web, $topic )));
+
         } elsif( $type eq 'textarea' ) {
             my $cols = 40;
             my $rows = 5;
@@ -340,65 +356,68 @@ sub renderForEdit {
                                     -rows => $rows,
                                     -name => $name,
                                     -default => "\n".$value );
+
         } elsif( $type eq 'select' ) {
+            my $options = $c->{value};
+            ASSERT( ref( $options )) if DEBUG;
             my $choices = '';
-            my $matched = 0;
-            foreach my $item ( @fieldInfo ) {
-                my $selected = '';
-                if( $item eq $value ) {
-                    $selected = 'selected';
-                    $matched = 1;
-                }
+            foreach my $item ( @$options ) {
+                my $selected = ( $item eq $value );
                 $item =~ s/<nop/&lt\;nop/go;
-                $choices .= CGI::option({-selected=>$selected}, $item );
+                if( $selected ) {
+                    $choices .= CGI::option({ selected=>'selected' }, $item );
+                } else {
+                    $choices .= CGI::option( $item );
+                }
             }
-            $choices =~ s/selected=""/selected="selected"/ unless $matched;
-            $value = CGI::Select({ -name=>$name, -size=>$size }, $choices );
+            $value = CGI::Select( { name=>$name, size=>$size }, $choices );
+
         } elsif( $type =~ /^checkbox/ ) {
+            my $options = $c->{value};
+            ASSERT( ref( $options )) if DEBUG;
             $value = '';
             if( $type eq 'checkbox+buttons' ) {
-                my $boxes = $#fieldInfo + 1;
-                $value .= CGI::button
+                my $boxes = scalar( @$options );
+                $extra .= CGI::br();
+                $extra = CGI::button
                   ( -class => 'twikiEditFormCheckboxButton',
                     -value => 'Set',
                     -onClick => 'checkAll(this,2,'.$boxes.',true)' );
-                $value .= '&nbsp;';
-                $value .= CGI::button
+                $extra .= '&nbsp;';
+                $extra .= CGI::button
                   ( -class => 'twikiEditFormCheckboxButton',
                     -value => 'Clear',
                     -onClick => 'checkAll(this,1,'.$boxes.',false)');
-                $value .= CGI::br();
             }
             my %attrs;
-            my @values;
             my @defaults;
-            foreach my $item ( @fieldInfo ) {
-                push( @values, $item);
+            foreach my $item ( @$options ) {
                 $attrs{$item} =
                   { class=>'twikiEditFormCheckboxField',
-                    label=>$this->{session}->handleCommonTags( $item,
-                                                               $web,
-                                                               $topic ) };
+                    label=>$session->handleCommonTags( $item,
+                                                       $web,
+                                                       $topic ) };
                 if( $value =~ /(^|,\s*)$item(,|$)/ ) {
                     $attrs{$item}{checked} = 'checked';
                     push( @defaults, $item );
                 }
             }
             $value .= CGI::checkbox_group( -name => $name,
-                                          -values => \@values,
+                                          -values => $options,
                                           -defaults => \@defaults,
                                           -columns => $size,
                                           -attributes => \%attrs );
+
         } elsif( $type eq 'radio' ) {
+            my $options = $c->{value};
+            ASSERT( ref( $options )) if DEBUG;
             my %attrs;
-            my @values;
             my @defaults;
             my $selected = '';
-            foreach my $item ( @fieldInfo ) {
-                push( @values, $item);
+            foreach my $item ( @$options ) {
                 $attrs{$item} =
                   { class=>'twikiEditFormRadioField twikiRadioButton',
-                    label=>$this->{session}->handleCommonTags( $item,
+                    label=>$session->handleCommonTags( $item,
                                                                $web,
                                                                $topic ) };
 
@@ -406,10 +425,11 @@ sub renderForEdit {
             }
 
             $value = CGI::radio_group( -name => $name,
-                                       -values => \@values,
+                                       -values => $options,
                                        -default => $selected,
                                        -columns => $size,
                                        -attributes => \%attrs );
+
         } else {
             # Treat like text, make it reasonably long
             # SMELL: Sven thinks this should be an error condition - so users
@@ -418,6 +438,7 @@ sub renderForEdit {
                                      -name=>$name,
                                      -size=>80,
                                      -value=>$value );
+
         }
         $text .= CGI::Tr($this->_link( $web, $title, $tooltip, 1,
                                        'right', '', $extra ) .
@@ -450,39 +471,33 @@ sub fieldVars2Meta {
 
     #$this->{session}->writeDebug( "Form::fieldVars2Meta " . $query->query_string );
 
-    my @fieldsInfo = ();
     my $form = $meta->get( 'FORM' );
-    if( $form ) {
-        @fieldsInfo = $this->getFormDef( $webName, $form->{name} );
-    }
+    return $meta unless $form;
 
-   foreach my $fieldInfop ( @fieldsInfo ) {
-       my @fieldInfo = @$fieldInfop;
-       my $fieldName = shift @fieldInfo;
-       my $title     = shift @fieldInfo;
-       my $type      = shift @fieldInfo;
-       my $size      = shift @fieldInfo;
-       my $tooltip   = shift @fieldInfo;
-       my $attributes = shift @fieldInfo;
-       my $value = $query->param( $fieldName );
+    my $fieldsInfo = $this->getFormDef( $webName, $form->{name} );
 
+    foreach my $fieldDef ( @$fieldsInfo ) {
+       next unless $fieldDef->{name};
+
+       my $value = $query->param( $fieldDef->{name} );
        if( defined $value ) {
-           if( $type =~ /^checkbox/ ) {
-               $value = join( ', ', $query->param( $fieldName ) );
+           if( $fieldDef->{type} =~ /^checkbox/ ) {
+               $value = join( ', ', $query->param( $fieldDef->{name} ) );
            } else {
-               $value = $query->param( $fieldName );
+               $value = $query->param( $fieldDef->{name} );
            }
        }
 
-       # Have title and name stored so that topic can be viewed without reading in form definition
+       # title and name are stored so that topic can be viewed without
+       # reading in form definition
        $value = '' unless( defined( $value ) || $justOverride );
        if( defined( $value ) ) {
            my $args =
              {
-              name =>  $fieldName,
-              title => $title,
+              name =>  $fieldDef->{name},
+              title => $fieldDef->{title},
               value => $value,
-              attributes => $attributes,
+              attributes => $fieldDef->{attributes},
              };
            $meta->put( 'FIELD', $args );
        }
@@ -490,7 +505,6 @@ sub fieldVars2Meta {
 
    return $meta;
 }
-
 
 =pod
 
@@ -659,25 +673,22 @@ sub upgradeCategoryTable {
             return;
         }
 
-        my @fieldsInfo = $this->getFormDef( $web, $defaultFormTemplate );
+        my $fieldsInfo = $this->getFormDef( $web, $defaultFormTemplate );
         $meta->put( 'FORM', { name => $defaultFormTemplate } );
 
-        foreach my $catInfop ( @fieldsInfo ) {
-           my @catInfo = @$catInfop;
-           my $fieldName = shift @catInfo;
-           my $title = shift @catInfo;
+        foreach my $fieldDef ( @$fieldsInfo ) {
            my $value = '';
            foreach my $oldCatP ( @items ) {
                my @oldCat = @$oldCatP;
-               if( _cleanField( $oldCat[0] ) eq $fieldName ) {
+               if( _cleanField( $oldCat[0] ) eq $fieldDef->{name} ) {
                   $value = $oldCat[2];
                   last;
                }
            }
            $meta->put( 'FIELD',
                      {
-                      name => $fieldName,
-                      title => $title,
+                      name => $fieldDef->{name},
+                      title => $fieldDef->{title},
                       value => $value,
                      } );
         }

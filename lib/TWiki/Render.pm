@@ -190,24 +190,22 @@ sub _renderFormField {
 
 sub _renderFormData {
     my( $this, $web, $topic, $meta ) = @_;
-    my $metaText = '';
     my $form = $meta->get( 'FORM' );
 
-    if( $form ) {
-        my $name = $form->{name};
-        $metaText = CGI::p();
-        $metaText .= "\n|*[[$name]]*||\n"; # table header
-        my @fields = $meta->find( 'FIELD' );
-        foreach my $field ( @fields ) {
-            my $title = $field->{title};
-            my $value = $field->{value};
-            $value =~ s/\n/<br \/>/g;      # undo expansion
-            $metaText .= "|  $title:|$value  |\n";
-        }
-        return CGI::div( { -class=>'twikiForm' }, $metaText );
-    }
+    return '' unless( $form );
 
-    return $metaText;
+    my $name = $form->{name};
+    my $metaText = CGI::start_table( { border=>1, cellspacing=>0, cellpadding=>1,
+                                       cols => 2, class=>'twikiForm' });
+    $metaText .= CGI::th( { colspan => 2 }, "[[$name]]" );
+    my @fields = $meta->find( 'FIELD' );
+    foreach my $field ( @fields ) {
+        my $title = $field->{title};
+        my $value = $field->{value};
+        $value =~ s/\n/<br \/>/g;      # undo expansion
+        $metaText .= CGI::Tr( CGI::td( $title ) . CGI::td( "\n$value\n" ));
+    }
+    return $metaText.CGI::end_table();
 }
 
 # Add a list item, of the given type and indent depth. The list item may
