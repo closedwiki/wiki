@@ -1488,6 +1488,60 @@ sub searchInWebContent {
 
 =pod
 
+---++ Functions: Email
+
+---++ sendEmail ( $text, $retries ) -> $error
+   * =$text= - text of the mail, including MIME headers
+   * =$retries= - number of times to retry the send (default 1)
+Send an email specified as MIME format content. To specify MIME
+format mails, you create a string that contains a set of header
+lines that contain field definitions and a message body such as:
+<verbatim>
+To: liz@windsor.gov.uk
+From: serf@hovel.net
+CC: george@whitehouse.gov
+Subject: Revolution
+
+Dear Liz,
+
+Please abolish the monarchy (with King George's permission, of course)
+
+Thanks,
+
+A. Peasant
+</verbatim>
+Leave a blank line between the last header field and the message body.
+
+*Since:* TWiki::Plugins::VERSION 1.026
+
+=cut
+
+sub sendEmail {
+    #my( $text, $retries ) = @_;
+    return $TWiki::Plugins::SESSION->sendEmail( @_ );
+}
+
+=pod
+
+---+++ wikiToEmail( $wikiName ) -> $email
+   * =$wikiName= - wiki name of the user
+Get the email address(es) of the named user. If the user has multiple
+email addresses (for example, the user is a group), then the list will
+be comma-separated.
+
+*Since:* TWiki::Plugins::VERSION 1.026
+
+=cut
+
+sub wikiToEmail {
+    my( $wiki ) = @_;
+    my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
+    return '' unless $user;
+    return join( ',', @{$user->emails()} );
+}
+
+=pod
+
 ---++ Copyright and License
 
 Copyright (C) 2000-2004 Peter Thoeny, Peter@Thoeny.com

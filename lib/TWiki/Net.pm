@@ -38,9 +38,7 @@ sub new {
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
-
-    $this->{USENETSMTP} = 0;
-    $this->{MAILINITIALIZED} = 0;
+    $this->{mailHandler} = undef;
 
     return $this;
 }
@@ -113,6 +111,47 @@ sub getUrl {
     return $result;
 }
 
+# pick a default mail handler
+sub _installMailHandler {
+    my $this = shift;
+    my $useNetSMTP = 0;
+    my $prefs = $this->{session}->{prefs};
+
+    $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' );
+    $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' );
+    if( $this->{MAIL_HOST} ) {
+        # See Codev.RegisterFailureInsecureDependencyCygwin for why
+        # this must be untainted
+        $this->{MAIL_HOST} =
+          TWiki::Sandbox::untaintUnchecked( $this->{MAIL_HOST} );
+        eval {	# May fail if Net::SMTP not installed
+            $useNetSMTP = require Net::SMTP;
+        }
+    }
+    if( $useNetSMTP ) {
+        $this->setHandler( &_sendEmailByNetSMTP );
+    } else {
+        $this->setHandler( &_sendEmailBySendmail );
+    }
+}
+
+=pod
+
+---++ setHandler( \&fn )
+   * =\&fn= - reference to a function($) (see _sendEmailBySendmail for proto)
+Install a handler function to take over mail sending from the default
+SMTP or sendmail methods. This is provided mainly for tests that
+need to be told when a mail is sent, without actually sending it. It
+may also be useful in the event that someone needs to plug in an
+alternative mail handling method.
+
+=cut
+
+sub sethandler {
+    my( $this, $fnref ) = @_;
+    $this->{mailHandler} = $fnref;
+}
+
 =pod
 
 ---++ ObjectMethod sendEmail ( $theText, $retries ) -> $error
@@ -120,99 +159,27 @@ sub getUrl {
    * =$retries= - number of times to retry the send (default 1)
 
 Send an email specified as MIME format content.
+Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody...
 
 =cut
 
 sub sendEmail {
-    # $theText Format: "Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody..."
-
     my( $this, $theText, $retries ) = @_;
     ASSERT(ref($this) eq 'TWiki::Net') if DEBUG;
-    $retries = 1 unless $retries;
+    $retries ||= 1;
+
+    unless( defined $this->{mailHandler} ) {
+        $this->_installMailHandler();
+    }
 
     # Put in a Date header, mainly for Qmail
     my $dateStr = TWiki::Time::formatTime(time, '$email');
     $theText = "Date: " . $dateStr . "\n" . $theText;
 
-    # Check if Net::SMTP is available
-    unless( $this->{MAILINITIALIZED} ) {
-        $this->{MAILINITIALIZED} = 1;
-        my $prefs = $this->{session}->{prefs};
-        $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' );
-        $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' );
-        if( $this->{MAIL_HOST} ) {
-            # See Codev.RegisterFailureInsecureDependencyCygwin for why
-            # this must be untainted
-            $this->{MAIL_HOST} =
-              TWiki::Sandbox::untaintUnchecked( $this->{MAIL_HOST} );
-            eval {	# May fail if Net::SMTP not installed
-                $this->{USENETSMTP} = require Net::SMTP;
-            }
-        }
-    }
-
-    my $from = '';
-    my @to = ();
-    if( $this->{USENETSMTP} ) {
-        my ( $header, $body ) = split( "\n\n", $theText, 2 );
-        my @headerlines = split( /\n/, $header );
-        $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
-        $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
-        $theText = "$header\n\n$body";   # rebuild message
-
-        # extract 'From:'
-        my @arr = grep( /^From: /i, @headerlines );
-        if( scalar( @arr ) ) {
-            $from = $arr[0];
-            $from =~ s/^From:\s*//io;
-            $from =~ s/.*<(.*?)>.*/$1/o; # extract "user@host" out of "Name <user@host>"
-        }
-        if( ! ( $from ) ) {
-            return "ERROR: Can't send mail, missing 'From:'";
-        }
-
-        # extract @to from 'To:', 'CC:', 'BCC:'
-        @arr = grep( /^To: /i, @headerlines );
-        my $tmp = '';
-        if( scalar( @arr ) ) {
-            $tmp = $arr[0];
-            $tmp =~ s/^To:\s*//io;
-            @arr = split( /[,\s]+/, $tmp );
-            push( @to, @arr );
-        }
-        @arr = grep( /^CC: /i, @headerlines );
-        if( scalar( @arr ) ) {
-            $tmp = $arr[0];
-            $tmp =~ s/^CC:\s*//io;
-            @arr = split( /[,\s]+/, $tmp );
-            push( @to, @arr );
-        }
-        @arr = grep( /^BCC: /i, @headerlines );
-        if( scalar( @arr ) ) {
-            $tmp = $arr[0];
-            $tmp =~ s/^BCC:\s*//io;
-            @arr = split( /[,\s]+/, $tmp );
-            push( @to, @arr );
-        }
-        if( ! ( scalar( @to ) ) ) {
-            return "ERROR: Can't send mail, missing receipient";
-        }
-    } else {
-        # send with sendmail
-        my ( $header, $body ) = split( "\n\n", $theText, 2 );
-        $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
-        $theText = "$header\n\n$body";   # rebuild message
-    }
-
     my $errors = '';
     my $back_off = 1; # seconds, doubles on each retry
     while ( $retries ) {
-        my $error;
-        if( $this->{USENETSMTP} ) {
-            $error = $this->_sendEmailByNetSMTP( $from, \@to, $theText );
-        } else {
-            $error = $this->_sendEmailBySendmail( $theText );
-        }
+        my $error = &{$this->{mailHandler}}( $this, $theText );
         if( $error ) {
             $errors .= "$error\n";
             if ( --$retries ) {
@@ -241,23 +208,73 @@ sub _fixLineLength {
 sub _sendEmailBySendmail {
     my( $this, $theText ) = @_;
 
+    # send with sendmail
+    my ( $header, $body ) = split( "\n\n", $theText, 2 );
+    $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1.$2.$3._fixLineLength($4)/geois;
+    $theText = "$header\n\n$body";   # rebuild message
+
+    # SMELL: This should use the sandbox, shouldn't it?
     if( open( MAIL, "|-" ) || exec "$TWiki::cfg{MailProgram}" ) {
         print MAIL $theText;
         close( MAIL );
         return '';
     }
+    # SMELL: should be a TWiki::inlineAlert
     return "ERROR: Can't send mail using TWiki::cfg{MailProgram}";
 }
 
 sub _sendEmailByNetSMTP {
-    my( $this, $from, $toref, $data ) = @_;
+    my( $this, $theText ) = @_;
 
-    my @to;
-    # $to is not a reference then it must be a single email address
-    @to = ($toref) unless ref( $toref ); 
-    if ( ref( $toref ) =~ /ARRAY/ ) {
-        @to = @{$toref};
+    my $from = '';
+    my @to = ();
+
+    my ( $header, $body ) = split( "\n\n", $theText, 2 );
+    my @headerlines = split( /\n/, $header );
+    $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
+    $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
+    $theText = "$header\n\n$body";   # rebuild message
+
+    # extract 'From:'
+    my @arr = grep( /^From: /i, @headerlines );
+    if( scalar( @arr ) ) {
+        $from = $arr[0];
+        $from =~ s/^From:\s*//io;
+        $from =~ s/.*<(.*?)>.*/$1/o; # extract "user@host" out of "Name <user@host>"
     }
+    unless( $from ) {
+        # SMELL: should be a TWiki::inlineAlert
+        return "ERROR: Can't send mail, missing 'From:'";
+    }
+
+    # extract @to from 'To:', 'CC:', 'BCC:'
+    @arr = grep( /^To: /i, @headerlines );
+    my $tmp = '';
+    if( scalar( @arr ) ) {
+        $tmp = $arr[0];
+        $tmp =~ s/^To:\s*//io;
+        @arr = split( /[,\s]+/, $tmp );
+        push( @to, @arr );
+    }
+    @arr = grep( /^CC: /i, @headerlines );
+    if( scalar( @arr ) ) {
+        $tmp = $arr[0];
+        $tmp =~ s/^CC:\s*//io;
+        @arr = split( /[,\s]+/, $tmp );
+        push( @to, @arr );
+    }
+    @arr = grep( /^BCC: /i, @headerlines );
+    if( scalar( @arr ) ) {
+        $tmp = $arr[0];
+        $tmp =~ s/^BCC:\s*//io;
+        @arr = split( /[,\s]+/, $tmp );
+        push( @to, @arr );
+    }
+    if( ! ( scalar( @to ) ) ) {
+        # SMELL: should be a TWiki::inlineAlert
+        return "ERROR: Can't send mail, missing recipient";
+    }
+
     return undef unless( scalar @to );
 
     my $smtp = 0;
@@ -272,12 +289,14 @@ sub _sendEmailByNetSMTP {
         {
             $smtp->mail( $from ) or last;
             $smtp->to( @to, { SkipBad => 1 } ) or last;
-            $smtp->data( $data ) or last;
+            $smtp->data( $theText ) or last;
             $smtp->dataend() or last;
         }
+        # SMELL: should be a TWiki::inlineAlert
         $status = ($smtp->ok() ? '' : "ERROR: Can't send mail using Net::SMTP. " . $smtp->message );
         $smtp->quit();
     } else {
+        # SMELL: should be a TWiki::inlineAlert
         $status = "ERROR: Can't send mail using Net::SMTP (can't connect to '$this->{MAIL_HOST}')";
     }
     return $status;
