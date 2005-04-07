@@ -759,7 +759,7 @@ This handler is called before built-in types are considered. It generates the HT
    * =$size= - size of form field
    * =$value= - value held in the form field
    * =$attributes= - attributes of form field 
-   * =$possibleValues= - the values defined as options for form field, if any
+   * =$possibleValues= - the values defined as options for form field, if any. May be a scalar (one legal value) or an array (several legal values)
 Return HTML text that renders this field. If false, form rendering continues by considering the built-in types.
 
 Note that a common application would be to generate formatting of the
