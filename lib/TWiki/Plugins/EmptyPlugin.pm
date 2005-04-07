@@ -571,4 +571,22 @@ sub DISABLE_setSessionValueHandler {
     TWiki::Func::writeDebug( "- ${pluginName}::setSessionValueHandler( $_[0], $_[1] )" ) if $debug;
 }
 
+=pod
+
+---++ renderFormFieldForEditHandler($name, $type, $size, $value, $attributes, $possibleValues) -> $html
+
+This handler is called before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers.
+   * =$name= - name of form field
+   * =$type= - type of form field
+   * =$size= - size of form field
+   * =$value= - value held in the form field
+   * =$attributes= - attributes of form field 
+   * =$possibleValues= - the values defined as options for form field, if any. May be a scalar (one legal value) or a ref to an array (several legal values)
+Return HTML text that renders this field. If false, form rendering continues by considering the built-in types.
+
+=cut
+
+sub DISABLE_renderFormFieldForEditHandler {
+}
+
 1;
