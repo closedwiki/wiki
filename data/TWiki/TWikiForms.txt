@@ -6,37 +6,35 @@
 %STARTINCLUDE%
 ---# TWiki Forms
 
-_Form-based input in topics, with name/value pairs stored as Meta Data variables; choose one of multiple forms per web &amp; topic_
+_Structured data (key-value pairs) attached to topics, according to a specification given in another topic_
 
 ---++ Overview
 
-By adding form-based input to freeform content, you can structure topics with unlimited, easily searchable categories. When forms are enabled for a web and selected in a topic, a single form appears in edit mode, and the contents are rendered as a table when viewed on the display page. You can define unlimited forms per web. For each topic, you can select a template if more than one is defined, or remove forms entirely. Form input values are stored as TWikiMetaData; all data is saved. 
-
-Form Templates replace <nop>TWikiCategoryTables from the 01-Dec-2000 version of TWiki. - see [[#FormsVsCategoryTables]]
+When forms are enabled for a web and a form is selected in a topic, an editable form appears in edit mode, and the contents are rendered as a table when the topic is viewed. You can define an unlimited number of different forms, though you can only have one form per topic. 
 
 ---++ Defining a Form Template
 
-A Form Template is simply a page containing your form, defined as a table where each row is one form field.
+A Form Template is a specification of the fields in a form. A Form Template is simply a page containing a table, where each row of the table is one form field.
 
 ---+++ Form Template Elements
 
-	* *form template* - a set of fields defining a form (replaces _category table definition_)
+	* *form template* - a set of fields defining a form
 		* A web can use one or more form templates
-	* *form* - a topic containing additional meta data (besides the freeform TEXTAREA) that categorizes the content (replaces _category table_)
+	* *form* - additional meta data (besides the freeform TEXTAREA) attached to a topic
 		* Within a form-enabled web, individual topics can have a form or no form
-	* *form field* - a named item in a form (replaces _category item name_)
-	* *field type* - selects the INPUT type:
+	* *form field* - a named item in a form (also known as a _key_)
+	* *field type* - selects the field type:
 	  | *Input type* | *Type field* | *Size field* | *Value field* |
-	  | One or more checkboxes | =checkbox= | number of checkboxes per line | comma list of checkbox labels |
+	  | One or more checkboxes | =checkbox= | number of items per line | comma list of item labels |
 	  | One or more checkboxes, plus *Set* and *Clear* buttons | =checkbox+buttons= | (same) | (same) |
-	  | Read-only label text | =label= | =1= | (unused) |
-	  | One or more radio buttons | =radio= | number of radio buttons per line | comma list of checkbox labels |
-	  | Drop-down menu or scrollable box | =select= | =1= for drop down, =2= and up for scrollable box | comma list of options |
-	  | A one-line text field | =text= | text box width in number of characters | (unused) |
-	  | A text box; size is 40x10 (columns x rows) | =textarea= | columns x rows, e.g. =40x6= | (unused) |
-	* *field value* - one or more values from a fixed set (select, checkbox, radio type) or free-form (text). (replaces _category item value_)
+	  | One or more radio buttons (radio buttons are mutually exclusive; only one can be selected) | =radio= | (same) | (same) |
+	  | Read-only label text | =label= | _ignored_ | text |
+	  | Drop-down menu or scrollable box | =select= | =1= for drop down, =2= and up for scrollable box | comma-separated list of options |
+	  | A one-line text field | =text= | text box width in number of characters | initial text, if a new topic is created with a form template |
+	  | A text box | =textarea= | columns x rows, e.g. =80x6=; default size is 40x5 | initial text, if a new topic is created with a form template |
+	* *field value* - one or more values from a fixed set (select, checkbox, radio type) or free-form (text).
 
----+++ Defining a Form in One Topic
+---+++ Defining a Form
 
 	1. Create a new topic with your form name: ==<nop>YourForm==, ==<nop>ExpenseReport==, ==<nop>InfoCategory==, ==<nop>RecordReview==, whatever you need.
 	1. Create a TWiki table, with each column head representing one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, and ==Tooltip message== _(see sample below)_.
@@ -56,17 +54,12 @@ A Form Template is simply a page containing your form, defined as a table where 
 | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... |
 </blockquote>
 
----+++ Defining a Form with Multiple Topics
-
-Forms can also be defined by using form templates that retrieve field values from one or more separate topics:
-
-	* A ==FormTemplate== topic defines the Form, ex: ==<nop>YourFormTemplate==.
-	* For each field that has a value list - select, radio, checkbox - can use separate topic to define the available values.
+You can also retrieve possible values for select, checkbox or radio types from other topics:
 
 <blockquote style="background-color:#f0f0f0">
-*Example: <nop>WebFormTemplate*
+*Example: <nop>WebForm*
 
-	* <nop><nop>WebFormTemplate main definition:
+	* In the <nop>WebForm topic, define the form:
 	  <br /> &nbsp;
 	  | *Name* | *Type* | *Size* | *Values*  | *Tooltip message* |
 	  | <nop>TopicClassification | select | 1 |	 | blah blah... |
@@ -75,27 +68,35 @@ Forms can also be defined by using form templates that retrieve field values fro
 	  <br />
 	  %X% Leave the ==Values== field *blank*.
 
-	* <nop><nop>TopicClassification field value definition:
+	* Then in the <nop>TopicClassification topic, define the possible values:
 	  <br /> &nbsp;
 	  | *Name* | *Type* | *Tooltip message* |
 	  | <nop>NoDisclosure | option | blah blah... |
-	  | <nop>PublicSupported | option | blah blah... |
-	  | <nop>PublicFAQ | option | blah blah... |
+	  | Public Supported | option | blah blah... |
+	  | Public FAQ | option | blah blah... |
 </blockquote>
 
-	* *Implementation Notes:* This format allows you to define field items with or without TWiki.WikiNames, depending on your needs.
-		* Topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists.
-		* ==[<nop>[...]]== links can be used to force a link (at present, the ==[<nop>[...][...]]== format is not supported).
-		* The ==Tooltip message== column is used as a tooltip for the field name (only if field name is a %TWIKIWEB%.WikiName) - you only see the tooltip In edit.
-		* The first item in the list is the default item. Alternative initial values can be set in a topic template, like ==WebTopicEditTemplate==, with ==field=value==, or, for checkboxes, ==field<checkbox name>=1==.
-		* The topic definition is not read when a topic is viewed.
+*Notes:*
+	* The first item in the list for a select or radio type is the default item.
+	* The topic definition is not read when a topic is viewed.
+	* Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a select, checkbox or radio field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links.
+	* Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
+	* The ==Tooltip message== column is used as a tooltip for the field name (only if field name is a %TWIKIWEB%.WikiName) - you only see the tooltip in edit view.
+	* You can create a =label= field that is only visible in edit view by creating a label with no field name. Unlike for other field types, you can use TWiki formatting in the value of a =label= field.
+<blockquote style="background-color:#f0f0f0">
+*Example:*
+
+	=| | label | | Text <nop>*of* <nop>_the_ label | |=
+</blockquote>
 
 #EnablingForms
 ---++ Enabling Forms by Web
 
-Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreferences is optional and defines a list of possible form templates. Example:
-	* <nop>Set WEBFORMS = <nop>BugForm, <nop>FeatureForm, <nop>BookLoanForm
-
+Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreferences is optional and defines a list of possible form templates.
+<blockquote style="background-color:#f0f0f0">
+*Example:*
+	* <nop>Set WEBFORMS = <nop>BugForm, <nop>FeatureForm, Books.<nop>BookLoanForm
+</blockquote>
 	* With ==WEBFORMS== enabled, an extra button is added to the edit view. If the topic doesn't have a Form, an *Add Form* button appears at the end of the topic. If a Form is present, a *Change* button appears in the top row of the Form. The buttons open a screen that enables selection of a form specified in =WEBFORMS=, or the *No form* option.
 
 ---++ Including Forms in New Topics
@@ -115,53 +116,44 @@ Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreference
 	
 	* New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form.
 
----++ Form Data Storage
+---++ Changing a form
+	* You can change a form definition, and TWiki will try to make sure you don't lose any data from the topics that use that form. 
 
-The form topic name, fields and values are stored as TWikiMetaData - the order of the field/value pairs is the same as in the template.
+	* If you change the form definition, the changes will not take affect in a topic that uses that form until you edit and save it.
+
+	* If you add a new field to the form, then it will appear next time you edit a topic that uses the form.
+
+	* If you delete a field from the form, or change a field name, then the data will not be visible when you edit the topic (the changed form definition will be used). If you save the topic, the old data will be *lost* (though thanks to revision control, you can always see it in older versions of the topic)
 
 #UsingFormData
----++ Using Form Data
+---++ Searching for Form Data
 TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
 
-#FormsVsCategoryTables
----++ Main Changes from Category Tables
-
-The Form Template system is a more powerful, flexible replacement for the original <nop>TWikiCategoryTable. Data from existing category tables can be imported directly.
- 
-|  *Form Templates*  |  *Category Tables*  |
-|  defined in topics  |  defined in templates  |
-|  many forms per web  |  one table per web  |
-|  saved as Meta Data  |  saved as HTML  |
-|  *Change* &amp; *Add Form* buttons  |  *<nop>UseCategory* radio button  |
-
----+++ Importing Category Table Data
-
-On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable =WEBFORMS=. If missing, pages will display, but attempting to edit results in an error message.
-
-The new Form Template system should work with old Category Table data with no special conversion. Data is assigned to Meta variables the first time an imported topic is edited and saved in the new system.
-
-%T% *NOTE:* If things aren't working correctly, there may be useful entries in =data/warning.txt=.
-
+#SettingVars
 ---++ Using Forms For Settings
-Example process to change your WebPreferences to use forms instead of ={3 spaces}* Set= statements:
+Form fields can also be used for settings ( ={3 spaces}* Set= statements ). For example, to change your WebPreferences to use forms:
 
 	1 create !WebPrefencesForm topic
-	2 fill it with a table like this: %BR% =|*Name*        |*Type*  |*Size*|*Value*  |*Tooltip message*                |*Attributes*|= %BR% =| WEBTOPICLIST |textarea|      |	      | List of topics of the !%WEB% web |S|= %BR% =| SITEMAPLIST  |select  | 3    | on, off | list this web in the Site Map   |S|= %BR% =| SITEMAPWHAT  |textarea|      |	      | short web summary               |S|= %BR% =| WEBBGCOLOR   |text    | 8    |         | Web specific background color   |S|= %BR%etc...
+	2 fill it with a table like this:
+	<blockquote style="background-color:#f0f0f0">
+	=|*Name*        |*Type*    |*Size*|*Values* |*Tooltip message*                |*Attributes*|= %BR%
+	=| WEBTOPICLIST | textarea |      |	      | List of topics of the !%WEB% web | S          |= %BR%
+	=| SITEMAPLIST  | select   | 3    | on, off | list this web in the Site Map   | S          |= %BR%
+	=| SITEMAPWHAT  | textarea |      |	      | short web summary               | S          |= %BR%
+	=| WEBBGCOLOR   | text     | 8    |         | Web specific background color   | S          |= %BR%
+	etc...</blockquote>
 	3 Edit WebPreferences and:
 		* Add or Change the form to !WebPrefencesForm
 		* add !WebPrefencesForm to the =Set WEBFORMS= line
 		* Save
 	4 Edit WebPreferences, jump straight down to the form ignoring all the =textarea= stuff, and set as you like
-	5 if everything works as you like it, you can delete the Set statements (the form overrides set if they are both used).
+	5 if everything works as you like it, you can delete the Set statements (the form overrides Set if they are both used).
 
 __Notes:__
 
 If it isn't working, double check that the ==S== attribute has been specified (S for Setting).
-If you change the form, the changes will not take affect until you edit and save the preferences' topics again.
 
-Using the TWiki:Plugins.EditTablePlugin on !WebPreferencesForm makes adding new prefedrences a breeze.
-
-A possibly unwanted side effect for using forms for the SKINS setting in their personal user topic: because the User Preferences are final you can't have different skins for different webs as the user's setting always wins. A workaround is to simply omit SKIN in the form.
+Using the TWiki:Plugins.EditTablePlugin on !WebPreferencesForm makes adding new preferences a breeze.
 
 Another example, this one using !EditTablePlugin, source:
 
@@ -187,6 +179,17 @@ Result (after some editing):
 |WEBBGCOLOR | select |  | lightpink, pink, crimson, lavenderblush, palevioletred, hotpink, deeppink, mediumvioletred, orchid, thistle, plum, violet, fuchsia, fuchsia, darkmagenta, purple, mediumorchid, darkviolet, darkorchid, indigo, blueviolet, mediumpurple, mediumslateblue, slateblue, darkslateblue, ghostwhite, lavender, blue, mediumblue, darkblue, navy, midnightblue, royalblue, cornflowerblue, lightsteelblue, lightslategray, slategray, dodgerblue, aliceblue, steelblue, lightskyblue, skyblue, deepskyblue, lightblue, powderblue, cadetblue, darkturquoise, azure, lightcyan, paleturquoise, aqua, aqua, darkcyan, teal, darkslategray, mediumturquoise, lightseagreen, turquoise, aquamarine, mediumaquamarine, mediumspringgreen, mintcream, springgreen, mediumseagreen, seagreen, honeydew, darkseagreen, palegreen, lightgreen, limegreen, lime, forestgreen, green, darkgreen, lawngreen, chartreuse, greenyellow, darkolivegreen, yellowgreen, olivedrab, ivory, beige, lightyellow, lightgoldenrodyellow, yellow, olive, darkkhaki, palegoldenrod, lemonchiffon, khaki, gold, cornsilk, goldenrod, darkgoldenrod, floralwhite, oldlace, wheat, orange, moccasin, papayawhip, blanchedalmond, navajowhite, antiquewhite, tan, burlywood, darkorange, bisque, linen, peru, peachpuff, sandybrown, chocolate, saddlebrown, seashell, sienna, lightsalmon, coral, orangered, darksalmon, tomato, salmon, mistyrose, lightcoral, snow, rosybrown, indianred, red, brown, firebrick, darkred, maroon, white, whitesmoke, gainsboro, lightgrey, silver, darkgray, gray, dimgray, black | Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors) | S|
 |WEBFORMS | textarea |  |  | %TWIKIWEB%.TWikiForms: How to enable form(s) | S|
 |WEBTOPICLIST | textarea |  | [[WebHome]], [[WebChanges][Changes]], [[WebTopicList][Topics]], [[WebIndex][Index]], [[WebSearch][Search]], Go <input type="text" name="topic" size="16" /> | the main entry point topics for this web | S|
+
+#FormsVsCategoryTables
+---+++ Importing Category Table Data
+
+Very old TWiki releases used a system called the "TWikiCategoryTable". Later releases support automatic import of this data.
+
+On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable =WEBFORMS=. If missing, pages will display, but attempting to edit results in an error message.
+
+The new Form Template system should work with old Category Table data with no special conversion. Data is assigned to Meta variables the first time an imported topic is edited and saved in the new system.
+
+%T% If things aren't working correctly, there may be useful entries in =data/warning.txt=.
 
 %STOPINCLUDE%
 

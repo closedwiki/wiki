@@ -16,7 +16,7 @@ __Notes:__
 
 ---++ Predefined Variables
 
-Most predefined variables return values that were either set in the ==lib/twiki.cfg== file, when TWiki was installed, or taken from server info (like current username, or date and time). Many of the variables let you format the appearance of the display results.
+Most predefined variables return values that were either set in the configuration when TWiki was installed, or taken from server info (like current username, or date and time). Many of the variables let you format the appearance of the display results.
 
 	* %T% *Take the time to thoroughly read through ALL preference variables.* If you actively configure your site, review variables periodically. They cover a wide range of functions, and it can be easy to miss the one perfect variable for something you have in mind. For example, see ==%<nop>INCLUDINGTOPIC%==, ==%<nop>INCLUDE%==, and the mighty ==%<nop>SEARCH%==.
 
@@ -26,7 +26,6 @@ This version of TWiki - %WIKIVERSION% - expands the following variables (enclose
 %INCLUDE{"TWikiVariablesNtoZ"}%
 
 __Note:__ Above text is included from TWikiVariablesAtoM and TWikiVariablesNtoZ
-
 
 #PreferencesVariables
 ---++ Preferences Variables
@@ -195,27 +194,36 @@ Additional variables are defined in the preferences topics:
 __Note:__ There are some more useful variables defined in the TWikiPreferences like =%<nop>BR%= for line break, colors like =%<nop>RED%= for colored text and small icons like =%<nop>H%= for a %H% Help icon.
 
 #SettingPrefs
----++ Setting Preferences
+---++ Setting Variables
 
-	* The syntax for Preferences Variables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]<br /> __Examples:__ 
+	* The syntax for setting Variables is the same anywhere in TWiki (on its own TWiki bullet line, including nested bullets): <br />[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]
+<blockquote style="background-color:#f9f9f9">
+*Examples:*
 	* ==<nop>Set VARIABLENAME = value==
 		* ==<nop>Set VARIABLENAME = value==
+</blockquote>
+Spaces between the = sign and the value will be ignored. You can split a value over several lines by starting following lines with [multiple of 3 spaces] - as long as you don't try to use * as the first character on the following line.
+<blockquote style="background-color:#f9f9f9">
+*Example:*
+<pre>
+   * <nop>Set VARIABLENAME = value starts here
+   and continues here
+</pre>
+</blockquote>
+You can also set Variables in forms attached to topics. If a variable is set in a form, the value in the form will always override any value set in the topic. See TWikiForms#SettingVars for more details.
 
 ---++ Creating Custom Variables
 
-	* You can add your own Preference Variables for us across an entire site or a single web, using the standard [[#SettingPrefs][Preferences syntax]]. Whatever you include in your Variable will be expanded on display, exactly as if it had been entered directly. You can place formatted text, page links, image paths.
+	* You can add your own Variables for us across an entire site or a single web, using the standard [[#SettingPrefs][Variables syntax]]. Whatever you include in your Variable will be expanded on display, exactly as if it had been entered directly.
 
-<blockquote style="background-color:#ffffff">
-*Example: Create a custom logo variable the <nop>%WEB% web* <br />
+<blockquote style="background-color:#f9f9f9">
+*Example: Create a custom logo variable* <br />
 	* To place a logo anywhere in a web by typing ==%<nop>MYLOGO%==, define the Variable on the web's WebPreferences page, and upload a logo file, ex: =mylogo.gif=. You can upload by [[FileAttachment][attaching the file]] to WebPreferences, or, to avoid clutter, to any other topic in the same web, ex: =LogoTopic=:
 		* ==<nop>Set MYLOGO = %<nop>PUBURL%/<nop>TWiki/LogoTopic/mylogo.gif== 
 </blockquote>
 
-
-
 %STOPINCLUDE%
 
-Crawford split up this topic into included TWikiVariablesAtoM and TWikiVariablesNtoZ.
 
 
 
