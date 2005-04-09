@@ -2,9 +2,7 @@
 
 
 ---+ The 216 Standard Colors
-
-This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
-
+<pre>
 <table width="100%">
 <tr align="center">
 <td bgcolor="#000000"><font color="#FFFFFF"> #000000 </font></td><td bgcolor="#000033"><font color="#FFFFFF"> #000033 </font></td><td bgcolor="#000066"><font color="#FFFFFF"> #000066 </td><td bgcolor="#000099"><font color="#FFFFFF"> #000099 </font></td><td bgcolor="#0000CC"><font color="#FFFFFF"> #0000CC </td><td bgcolor="#0000FF"><font color="#FFFFFF"> #0000FF </font></td>
@@ -161,7 +159,7 @@ This table can be used to choose a color in %WEBPREFSTOPIC% of each web.
 </td><td bgcolor="#FFFFCC"> #FFFFCC </td><td bgcolor="#FFFFFF"> #FFFFFF </td>
 </tr>
 </table>
-
+</pre>
 __Related web sites:__
 	* http://www.cloford.com/resources/colours/websafe2.htm
 	* http://html-color-codes.com/

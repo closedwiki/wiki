@@ -2,12 +2,14 @@
 | | label | | The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%). %BR% %T% You can lock individual settings at the site or web levels using User & Group Access Control. | | |
 |  | label | | | | |
 | | label | | <h1>Default Web Preferences</h1> Typically redefined in individual <nop>WebPreferences topics | | |
-| | label | | %H% The second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%) | |
-| WEBTOPICLIST | text | 110 | [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" /> | Usually a list of topics | S |
-| | label | | %H% Web specific background color: (is overwritten by web preferences | |
-| WEBBGCOLOR | text | 110 | #FFD8AA | HTML Color | S |
-| | label | | %H% [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences | |
+| | label | | %H% Web specific background color (<a target="Colors" onclick="return launchWindow('%TWIKIWEB%','StandardColors')" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/StandardColors" rel='nofollow'>ColorChart </a>) | |
+| WEBBGCOLOR | text | 20 | #FFD8AA | HTML Color | S |
+| | label | | %H% [[http://www.favicon.co.uk/][favicon]]: Small icon shown in the address bar of capable browsers | |
 | FAVICON | text | 110 | %PUBURL%/%WEB%/WebPreferences/favicon.ico | URL of an icon image | S |
+| | label | | %H% Background color of a link to a non existing topic (<a target="Colors" onclick="return launchWindow('%TWIKIWEB%','StandardColors')" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/StandardColors" rel='nofollow'>ColorChart </a>) | |
+| NEWTOPICBGCOLOR | text | 20 | #FFFFCE | HTML Color | S |
+| | label | | %H% Font color of non existing topic (<a target="Colors" onclick="return launchWindow('%TWIKIWEB%','StandardColors')" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/StandardColors" rel='nofollow'>ColorChart </a>) | |
+| NEWTOPICFONTCOLOR | text | 20 | #0000FF | HTML Color | S |
 | | label | | %H% Long form copyright, shown on every page | | |
 | WEBCOPYRIGHT | textarea | | Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a> | Long form copyright | S |
 | | label | | %H% Short form copyright for the WebRss feed (don't use any special characters, xml tags or WikiWords | |
@@ -43,7 +45,7 @@
 | WIKILOGOURL | text | 110 | http://TWiki.org/ | URL under the logo| S |
 | WIKILOGOALT | text | 110 | TWiki home | Logo tooltip text of the logo | S |
 | | label | | %H% List of %WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap). To automatically list all non-hidden webs in alphabetical order use the =%<nop>WEBLIST{} variable instead:<br />%<nop>WEBLIST{"[[$name.<nop>%HOMETOPIC<nop>%]<nop>[$name]]" separator=" %<nop>SEP% "}% | | |
-| WIKIWEBLIST | text | 110 | [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]] | | S |
+| WIKIWEBLIST | textarea | | [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]] | | S |
 | | label | | %H% Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit | |
 | ATTACHFILESIZELIMIT | text | 110 | 11000 | Maximum size of attachments in KB, 0 for no limit | S |
 | | label | | %H% Broadcast message output at the top of every page. %X% IMPORTANT: Set to empty message if not used. | | |
@@ -72,6 +74,9 @@
 |  | label | | | | |
 | | label | | <h1>Skins</h1> See TWikiSkinBrowser for currently installed skins | | |
 | SKIN | text | 110 | pattern | Skin overriding the default TWiki templates. | S |
+| | label | | <h3> ClassicSkin </h3> | | |
+| | label | | %H% The second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%) | |
+| WEBTOPICLIST | text | 110 | [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" /> | Usually a list of topics | S |
 | | label | | <h3> PatternSkin </h3> | | |
 | | label | | %H% Stylesheets are loaded in the following order. Make sure you specify a valid stylesheet for all entries (even if empty) or performance will suffer. | |
 | TWIKILAYOUTURL | text | 110 | %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css | URL of a CSS | S |

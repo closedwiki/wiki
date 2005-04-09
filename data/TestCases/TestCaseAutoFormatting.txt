@@ -1,4 +1,9 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+LinkAtStart
+<!-- /actual -->
+<!-- expected expand LINKATSTART -->
+<span class="twikiNewLink" style="background : #FFFFCE;"><font color="#0000FF">LinkAtStart</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/LinkAtStart?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<!-- /expected -->
 
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
@@ -373,3 +378,8 @@ escaped:
 |^| six | six |
 
 <!-- /actual -->
+<!-- expected expand LINKATEND -->
+<span class="twikiNewLink" style="background : #FFFFCE;"><font color="#0000FF">LinkAtEnd</font><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
+<!-- /expected -->
+<!-- actual -->
+LinkAtEnd
