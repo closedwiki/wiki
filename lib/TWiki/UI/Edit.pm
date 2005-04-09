@@ -166,7 +166,7 @@ sub edit {
     } elsif( $theParent ) {
         my $parentWeb;
         ($parentWeb, $theParent) =
-          $session->normalizeWebTopicName( $theParent );
+          $session->normalizeWebTopicName( $webName, $theParent );
         if( $parentWeb ne $webName ) {
             $theParent = $parentWeb.'.'.$theParent;
         }

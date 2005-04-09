@@ -427,4 +427,25 @@ sub merge {
     }
 }
 
+=pod
+
+---++ ObjectMethod stringify() -> $string
+Mainly for debugging, this method will return a string version
+of the meta object. Uses \n to separate lines.
+
+=cut
+
+sub stringify {
+    my $this = shift;
+    my $s = '';
+    foreach my $type ( grep { /^[A-Z]+$/ } keys %$this ) {
+        foreach my $item ( @{$this->{$type}} ) {
+            $s .= "$type: " .
+              join(' ', map{ "$_='$item->{$_}'" } sort keys %$item ) .
+                "\n";
+        }
+    }
+    return $s;
+}
+
 1;
