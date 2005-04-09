@@ -50,7 +50,7 @@ my $SUMMARYLINES = 6;
 
 Creates a new renderer with initial state from preference values
 (NEWTOPICBGCOLOR, NEWTOPICFONTCOLOR NEWTOPICLINKSYMBOL
- LINKTOOLTIPINFO NOAUTOLINK)
+ LINKTOOLTIPINFO)
 
 =cut
 
@@ -66,7 +66,6 @@ sub new {
 
     $this->{session} = $session;
 
-    $this->{NOAUTOLINK} = 0;
     $this->{MODE} = 'html';		# Default is to render as HTML
     $this->{NEWTOPICBGCOLOR} =
       $session->{prefs}->getPreferencesValue('NEWTOPICBGCOLOR')
@@ -83,9 +82,6 @@ sub new {
         || '';
     $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
       if( $this->{LINKTOOLTIPINFO} =~ /^on$/ );
-    $this->{NOAUTOLINK} =
-      $session->{prefs}->getPreferencesValue('NOAUTOLINK')
-        || 0;
 
     return $this;
 }
@@ -815,6 +811,9 @@ sub getRenderedVersion {
 
     $theTopic ||= $this->{session}->{topicName};
     $theWeb ||= $this->{session}->{webName};
+    my $session = $this->{session};
+    my $plugins = $session->{plugins};
+    my $prefs = $session->{prefs};
 
     $head = '';
     $result = '';
@@ -843,20 +842,20 @@ sub getRenderedVersion {
     # DEPRECATED startRenderingHandler before PRE removed
     # SMELL: could parse more efficiently if this wasn't
     # here.
-    $this->{session}->{plugins}->startRenderingHandler( $text, $theWeb, $theTopic );
+    $plugins->startRenderingHandler( $text, $theWeb, $theTopic );
 
     $text = $this->takeOutBlocks( $text, 'pre', $removed );
 
-    $this->{session}->{plugins}->preRenderingHandler( $text, $removed );
+    $plugins->preRenderingHandler( $text, $removed );
 
-    if( $this->{session}->{plugins}->haveHandlerFor( 'insidePREHandler' )) {
+    if( $plugins->haveHandlerFor( 'insidePREHandler' )) {
         foreach my $region ( sort keys %$removed ) {
             next unless ( $region =~ /^pre\d+$/i );
             my @lines = split( /\n/, $removed->{$region}{text} );
             my $result = '';
             while ( scalar( @lines )) {
                 my $line = shift( @lines );
-                $this->{session}->{plugins}->insidePREHandler( $line );
+                $plugins->insidePREHandler( $line );
                 if ( $line =~ /\n/ ) {
                     unshift( @lines, split( /\n/, $line ));
                     next;
@@ -869,7 +868,7 @@ sub getRenderedVersion {
 
     $text =~ s/\\\n//gs;  # Join lines ending in '\'
 
-    if( $this->{session}->{plugins}->haveHandlerFor( 'outsidePREHandler' )) {
+    if( $plugins->haveHandlerFor( 'outsidePREHandler' )) {
         # DEPRECATED - this is the one call preventing
         # effective optimisation of the TWiki ML processing loop,
         # as it exposes the concept of a 'line loop' to plugins,
@@ -880,7 +879,7 @@ sub getRenderedVersion {
         my @result = ();
         while ( scalar( @lines ) ) {
             my $line = shift( @lines );
-            $this->{session}->{plugins}->outsidePREHandler( $line );
+            $plugins->outsidePREHandler( $line );
             if ( $line =~ /\n/ ) {
                 unshift( @lines, split( /\n/, $line ));
                 next;
@@ -916,10 +915,6 @@ sub getRenderedVersion {
     $text =~ s/>/&gt\;/g;
     $text =~ s/{$TWiki::TranslationToken/</go;
     $text =~ s/}$TWiki::TranslationToken/>/go;
-
-    if( $text =~ /reminded/ ) {
-        print STDERR "DURING $text\n";
-    }
 
     # standard URI
     $text =~ s/(^|[-*\s(])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_externalLink($1,$2)/geo;
@@ -1043,21 +1038,17 @@ sub getRenderedVersion {
     # i.e. [[$1][$3]]
     $text =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
 
-    $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
-    unless( $this->{NOAUTOLINK} ) {
-
-        # do normal WikiWord link if not disabled by <noautolink> or
-        # NOAUTOLINK preferences variable
-        # Handle WikiWords 
-        # ' WebName.TopicName#anchor' or (WebName.TopicName#anchor) -> currentWeb, explicit web, topic, anchor
+    unless( $prefs->getPreferencesValue('NOAUTOLINK') =~ /^on$/i ) {
+        # Handle WikiWords
+        $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
         $text =~ s/(^|[\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geom;
+        $this->putBackBlocks( $text, $removed, 'noautolink' );
     }
-    $this->putBackBlocks( $text, $removed, 'noautolink' );
 
     $this->putBackBlocks( $text, $removed, 'pre' );
 
     # DEPRECATED plugins hook after PRE re-inserted
-    $this->{session}->{plugins}->endRenderingHandler( $text );
+    $plugins->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
     $this->putBackBlocks( $text, $removed,
@@ -1069,7 +1060,7 @@ sub getRenderedVersion {
 
     $text = $doctype.$text;
 
-    $this->{session}->{plugins}->postRenderingHandler( $text );
+    $plugins->postRenderingHandler( $text );
 
     return $text;
 }
