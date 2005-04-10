@@ -304,11 +304,9 @@ sub renderForEdit {
 
         my $field;
         my $value;
-        my $attributes;
         if( $name ) {
             $field = $meta->get( 'FIELD', $name );
             $value = $field->{value};
-            $attributes = $field->{attributes};
         }
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
