@@ -1525,7 +1525,8 @@ sub inlineAlert {
     if( $text ) {
         $text =~ s/%INSTANTIATE%/%TMPL:P{"$def"}%/;
         # web and topic can be anything; they are not used
-        $text = $this->handleCommonTags( $text, '', '' );
+        $text = $this->handleCommonTags( $text, $this->{webName},
+                                         $this->{topicName} );
         my $n = 1;
         while( defined( my $param = shift )) {
             $text =~ s/%PARAM$n%/$param/g;
