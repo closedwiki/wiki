@@ -129,15 +129,15 @@ sub _installMailHandler {
         }
     }
     if( $useNetSMTP ) {
-        $this->setHandler( &_sendEmailByNetSMTP );
+        $this->setMailHandler( &_sendEmailByNetSMTP );
     } else {
-        $this->setHandler( &_sendEmailBySendmail );
+        $this->setMailHandler( &_sendEmailBySendmail );
     }
 }
 
 =pod
 
----++ setHandler( \&fn )
+---++ setMailHandler( \&fn )
    * =\&fn= - reference to a function($) (see _sendEmailBySendmail for proto)
 Install a handler function to take over mail sending from the default
 SMTP or sendmail methods. This is provided mainly for tests that
@@ -147,7 +147,7 @@ alternative mail handling method.
 
 =cut
 
-sub sethandler {
+sub setMailHandler {
     my( $this, $fnref ) = @_;
     $this->{mailHandler} = $fnref;
 }
