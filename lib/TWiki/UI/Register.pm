@@ -427,11 +427,10 @@ sub resetPassword {
                                     def => 'no_users_to_reset' );
     }
     my $introduction = $query->param( 'Introduction' ) || '';
-
     # need admin priv if resetting bulk, or resetting another user
-    my $needsAdmin = ( scalar( @userNames ) > 1 );
+    my $isBulk = ( scalar( @userNames ) > 1 );
 
-    if ( $needsAdmin ) {
+    if ( $isBulk ) {
         # Only admin is able to reset more than one password or
         # another user's password.
         unless( $session->{user}->isAdmin()) {
@@ -447,44 +446,56 @@ sub resetPassword {
 
     # Collect all messages into one string
     my $message = '';
+    my $good = 1;
     foreach my $userName (@userNames) {
-        $message .= _resetUsersPassword( $session, $userName, $introduction );
+        $good = $good &&
+          _resetUsersPassword( $session, $userName, $introduction, \$message );
     }
 
     my $action = '';
     # Redirect to a page that tells what happened
-    if( scalar( @userNames ) == 1 ) {
-        # one user; refine the change password link to include their
-        # username (can't use logged in user - by definition this won't be them!)
-        $action = '?username='. $userNames[0];
+    if( $good ) {
+        unless( $isBulk ) {
+            # one user; refine the change password link to include their
+            # username (can't use logged in user - by definition this won't
+            # be them!)
+            $action = '?username='. $userNames[0];
+        }
+        throw TWiki::OopsException( 'registerok',
+                                    topic => $user->wikiName(),
+                                    def => 'reset_ok',
+                                    params => $message );
+    } else {
+        throw TWiki::OopsException( 'registerbad',
+                                    topic => $user->wikiName(),
+                                    def => 'reset_bad',
+                                    params => $message );
     }
-    throw TWiki::OopsException( 'registerok',
-                                topic => $user->wikiName(),
-                                def => 'reset_ok',
-                                params => $message );
 }
 
-# return an HTML string of messages.
+# return status
 sub _resetUsersPassword {
-    my( $session, $userName, $introduction ) = @_;
+    my( $session, $userName, $introduction, $pMess ) = @_;
 
     my $user = $session->{users}->findUser( $userName, undef);
     unless( $user ) {
         # couldn't work out who they are, its neither loginName nor
         # wikiName.
-        return $session->inlineAlert( 'alerts', 'notwikiuser', $userName );
+        $$pMess .= $session->inlineAlert( 'alerts', 'notwikiuser', $userName );
+        return 0;
     }
     my @em = $user->emails();
     my $email = $em[0];
     unless ($email) {
-        return $session->inlineAlert( 'alerts', 'no_email_for',
-                                      $user->stringify());
+        $$pMess .= $session->inlineAlert( 'alerts', 'no_email_for',
+                                          $user->stringify());
+        return 0;
     }
 
     my $message = '';
     unless( $user->passwordExists() ) {
         # Not an error.
-        $message = $session->inlineAlert( 'alerts', 'missing_user',
+        $$pMess .= $session->inlineAlert( 'alerts', 'missing_user',
                                           $user->stringify());
     }
 
@@ -501,16 +512,16 @@ sub _resetUsersPassword {
                         );
 
     if( $err ) {
-        $message .= $session->inlineAlert( 'alerts', 'generic', $err );
-    } else {
-        $message .= $session->inlineAlert( 'alerts',
-                                           'new_sys_pass',
-                                           $user->login(),
-                                           $user->wikiName(),
-                                           $email );
+        $$pMess .= $session->inlineAlert( 'alerts', 'generic', $err );
+        return 0;
     }
+    $$pMess .= $session->inlineAlert( 'alerts',
+                                      'new_sys_pass',
+                                      $user->login(),
+                                      $user->wikiName(),
+                                      $email );
 
-    return $message;
+    return 1;
 }
 
 =pod
@@ -1033,7 +1044,6 @@ sub _sendEmail {
     $text =~ s/%VERIFICATIONCODE%/$p{VerificationCode}/go;
     $text =~ s/%PASSWORD%/$p{PasswordA}/go;
     $text = $session->handleCommonTags( $text, $p{webName}, $p{WikiName} );
-
     return $session->{net}->sendEmail($text);
 }
 
