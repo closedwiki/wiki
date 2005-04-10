@@ -30,7 +30,7 @@ use Carp;
 
 my $testUserWikiName = 'TestUser';
 my $testUserLoginName = 'testuser';
-my $testUserEmail = 'martin.cleaver@BCS.org.uk';
+my $testUserEmail = 'kakapo@ground.dwelling.parrot.net';
 
 my $guestLoginName = 'guest';
 
@@ -38,6 +38,8 @@ my $temporaryWeb = "Temporary";
 my $peopleWeb = "Main";
 my $mainweb = "$peopleWeb";
 my $twikiUsersFile;
+# SMELL: the sent mails are never checked in the tests
+my @mails;
 
 $TWiki::User::password = "foo";
 
@@ -94,6 +96,7 @@ sub set_up {
     setupUnregistered();
 
     $twikiUsersFile = "$TWiki::cfg{DataDir}/Main/TWikiUsers.txt";
+    @mails = ();
 }
 
 sub tear_down {
@@ -102,15 +105,20 @@ sub tear_down {
     $TWiki::cfg{DataDir} = $saveDD;
     $TWiki::cfg{PubDir} = $savePD;
     $TWiki::cfg{HtpasswdFileName} = $saveHP;
+    @mails = ();
 }
 
-sub j {
-    return join("\r\n",@_);
+# callback used by Net.pm
+sub sentMail {
+    my($net, $mess ) = @_;
+    push( @mails, $mess );
+    return undef;
 }
 
-sub finish {
+# fixture
+sub registerAccount {
     my $this = shift;
-    my $code = shift;
+    $this->test_registerVerifyOk();
 
     my $query = new CGI({
                          'code' => [
@@ -125,7 +133,6 @@ sub finish {
         TWiki::UI::Register::finish( $session, $approvalsDir );
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_matches(qr/$testUserEmail/, $e->stringify());
         $this->assert_str_equals("registerok", $e->{-template});
         $this->assert_str_equals("thanks", $e->{-def});
     } catch TWiki::AccessControlException with {
@@ -137,12 +144,7 @@ sub finish {
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     }
-}
-
-sub registerAccount {
-    my $this = shift;
-    $this->test_registerVerifyOk();
-    $this->finish();
+    $this->assert_equals(0, scalar(@mails));
 }
 
 #Register a user, and then verify it
@@ -181,6 +183,7 @@ sub test_registerVerifyOk {
 
     $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
 
     try {
         TWiki::UI::Register::register_cgi($session);
@@ -192,6 +195,8 @@ sub test_registerVerifyOk {
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     };
@@ -207,6 +212,7 @@ sub test_registerVerifyOk {
                       });
     $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
 
     try {
         TWiki::UI::Register::verifyEmailAddress($session, $approvalsDir);
@@ -216,8 +222,24 @@ sub test_registerVerifyOk {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        print STDERR "PUB DIR: ".`ls -lR $approvalsDir`;
         $this->assert( 0, $e->stringify );
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    };
+    $this->assert_equals(3, scalar(@mails));
+    my @done;
+    foreach my $mail ( @mails ) {
+        if( !$done[0] && $mail =~ /^Subject:.*Registration for/m &&
+          $mail =~ /^To: .*$testUserEmail/m ) {
+            $done[0] = 1;
+        } elsif( !$done[1] && $mail =~ /^Subject: .*Activation code/m ) {
+            $done[1] = 1;
+        } elsif( !$done[2] && $mail =~ /^Subject:.*Registration for/m &&
+               $mail =~ /To: %WIKIWEBMASTER%/ ) {
+            $done[2] = 1;
+        } else {
+            $this->assert(0, $mail);
+        }
     }
 }
 
@@ -255,6 +277,7 @@ sub test_registerBadVerify {
                          });
     $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
     try {
         TWiki::UI::Register::register_cgi($session);
     } catch TWiki::OopsException with {
@@ -265,6 +288,8 @@ sub test_registerBadVerify {
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
 
     } otherwise {
         $this->assert(0, "expected an oops redirect");
@@ -281,6 +306,7 @@ sub test_registerBadVerify {
                       });
     $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
 
     try {
         TWiki::UI::Register::verifyEmailAddress($session,$approvalsDir);
@@ -292,9 +318,17 @@ sub test_registerBadVerify {
         my $e = shift;
         $this->assert_str_equals("registerbad",$e->{-template});
         $this->assert_str_equals("no_ver_file",$e->{-def});
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
     } otherwise {
         $this->assert(0, "Expected a redirect" );
-    }
+    };
+    $this->assert_equals(1, scalar(@mails));
+    my $mess = $mails[0];
+    $this->assert_matches(qr/From: %WIKIWEBMASTER%/,$mess);
+    $this->assert_matches(qr/To: $testUserEmail/,$mess);
+    # check the verification code
+    $this->assert_matches(qr/'TestUser\.foo'/,$mess);
 }
 
 ################################################################################
@@ -324,20 +358,26 @@ sub test_resetPasswordOkay {
 
     $session = new TWiki("Main", $guestLoginName,
                          'ResetPassword', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($session);
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
-
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("registerok", $e->{-template});
         $this->assert_str_equals("reset_ok", $e->{-def});
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
     } otherwise {
         $this->assert(0, "expected an oops redirect");
-    }
+    };
+    $this->assert_equals(1, scalar(@mails));
+    my $mess = $mails[0];
+    $this->assert_matches(qr/From: %WIKIWEBMASTER%/,$mess);
+    $this->assert_matches(qr/To: $testUserEmail/,$mess);
 }
 
 sub test_resetPasswordNoSuchUser {
@@ -360,6 +400,7 @@ sub test_resetPasswordNoSuchUser {
 
     $session = new TWiki("Main", $guestLoginName,
                          'ResetPassword', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($session);
@@ -369,11 +410,14 @@ sub test_resetPasswordNoSuchUser {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("registerbad", $e->{-template});
-        $this->assert_str_equals("no_email_for", $e->{-def});
+        $this->assert_str_equals("registerbad", $e->{-template}, $e->stringify());
+        $this->assert_str_equals("reset_bad", $e->{-def});
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
     } otherwise {
         $this->assert(0, "expected an oops redirect");
-    }
+    };
+    $this->assert_equals(0, scalar(@mails));
 }
 
 
@@ -398,6 +442,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
     $session = new TWiki("Main", $guestLoginName,
                          'ResetPassword', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($session);
@@ -410,9 +455,12 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
         $this->assert_matches(qr/Main\.TWikiAdminGroup/, $e->stringify());
         $this->assert_str_equals('accessdenied', $e->{-template});
         $this->assert_str_equals('group', $e->{-def});
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
     } otherwise {
         $this->assert(0, "expected an oops redirect");
-    }
+    };
+    $this->assert_equals(0, scalar(@mails));
 }
 
 # This test is supposed to ensure that the system can reset passwords for a user
@@ -440,6 +488,7 @@ sub test_resetPasswordNoPassword {
 
     $session = new TWiki("Main", $guestLoginName,
                          'ResetPassword', $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
 
     try {
         TWiki::UI::Register::resetPassword($session);
@@ -451,13 +500,14 @@ sub test_resetPasswordNoPassword {
         my $e = shift;
         $this->assert_str_equals("registerok", $e->{-template});
         $this->assert_str_equals("reset_ok", $e->{-def});
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
     } otherwise {
         $this->assert(0, "expected an oops redirect");
-    }
+    };
+    $this->assert_equals(0, scalar(@mails));
 }
 
-
-################################################################################
 
 my $name;
 my $code;
@@ -491,17 +541,18 @@ sub test_UnregisteredUser {
     my %result2 = UnregisteredUser::reloadUserContext($code, $approvalsDir);
     $this->assert_deep_equals(\%result2, \%regSave);
 
-   try {
-    # this is a deliberate attempt to reload an already used token.
-    # this should fail!
-     UnregisteredUser::deleteUserContext( $code, $approvalsDir );
-   } catch TWiki::OopsException with {
-     my $e = shift;
-     $this->assert_matches(qr/has no file/, $e->stringify());
-   }
-
-
-#    $this->assert_null( UnregisteredUser::reloadUserContext($code));
+    try {
+        # this is a deliberate attempt to reload an already used token.
+        # this should fail!
+        UnregisteredUser::deleteUserContext( $code, $approvalsDir );
+    } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_matches(qr/has no file/, $e->stringify());
+    } catch Error::Simple with {
+        $this->assert(0, shift->stringify());
+    };
+    # $this->assert_null( UnregisteredUser::reloadUserContext($code));
+    $this->assert_equals(0, scalar(@mails));
 }
 
 sub test_missingElements {
@@ -549,6 +600,7 @@ EOM
 
     $session = new TWiki("Main", "testuser",
                          "", $query->url, $query);
+    $session->{net}->setMailHandler(\&sentMail);
     $session->{users}->findUser( "testuser" )->{isKnownAdmin} = 1;
     $session->{topicName} = $regTopic;
     $session->{webName} = $temporaryWeb;
@@ -570,6 +622,7 @@ EOM
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     };
+    $this->assert_equals(0, scalar(@mails));
 }
 
 sub test_buildRegistrationEmail {
@@ -641,6 +694,7 @@ Test User - $testUserWikiName - $testUserEmail
 EOM
 
     $session = new TWiki("Main", $TWiki::cfg{DefaultUserName});
+    $session->{net}->setMailHandler(\&sentMail);
 
     my $actual = TWiki::UI::Register::_buildConfirmationEmail
        ($session,
@@ -648,6 +702,7 @@ EOM
         "%FIRSTLASTNAME% - %WIKINAME% - %EMAILADDRESS%\n\n%FORMDATA%",0);
 
     $this->assert_equals( $expected, $actual );
+    $this->assert_equals(0, scalar(@mails));
 }
 
 
