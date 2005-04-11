@@ -1,7 +1,7 @@
 Source: twiki
 Section: web
 Priority: optional
-Maintainer: Sven Dowideit <svenud@ozemail.com.au>
+Maintainer: Sven Dowideit <SvenDowideit@home.org.au>
 Build-Depends-Indep: debhelper (>> 4.1.16), tarcust, po-debconf
 Standards-Version: 3.6.1
 

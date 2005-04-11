@@ -1,5 +1,4 @@
-twiki (20040902-2) unstable; urgency=emergency
-  * removed Text::Diff, added depends libtext-diff-perl (Closes #29522)
+twiki (20040902-2.1) unstable; urgency=high
   * set twikiLibPath to /usr/share/perl5 in setlib.cfg (Closes #296461)
   * applied robustness patch from Florian Weimer <fw@deneb.enyo.de>
     (Closes #296655)
@@ -7,7 +6,15 @@ twiki (20040902-2) unstable; urgency=emergency
   * default to use sendmail (Closes #252439)
   * updated fr.po file (Closes #296149, #298750)
 
- -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 20 Mar 2005 00:00:01 -1000
+ -- Sven Dowideit <SvenDowideit@home.org.au>  Mon, 11 Apr 2005 00:00:01 -1000
+
+twiki (20040902-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Urgency medium due to RC fix.
+  * Remove Text/Diff.pm and Algorithm/Diff.pm in debian/rules (Closes: #295221)
+
+ -- Paul Wise <pabs@zip.to>  Wed,  6 Apr 2005 23:56:57 +0800
 
 twiki (20040902-1) unstable; urgency=high
   * upgraded to 02-Sept-2004 release (Cairo) 
