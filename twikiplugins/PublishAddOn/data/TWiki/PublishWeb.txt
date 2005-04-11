@@ -1,0 +1,20 @@
+<i>This is a template topic for use with the PublishAddOn. It illustrates how
+to set up a topic in a web to simplify publishing. To use it, take a copy of the raw text of this topic, and paste it into a new topic in your own web.</i>
+
+---+ Publish topics from the %WEB% web
+	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *include* </td>
+		* Set INCLUSIONS = *
+	* Comma-separated list of [[PublishAddOn#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude*
+		* Set EXCLUSIONS = Web*,Publish*
+	* A [[#RegularExpression][regular expression]] that will cause a topic to be *excluded* if the RE matches the topic content
+		* Set TOPICSEARCH =
+	* Skin for published HTML
+		* Set PUBLISHSKIN = plain
+	* If set to on, then everyone in the WebNotify list in the web will be notified that the web has been published.
+		* Set NOTIFY = off
+<form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%">
+<input type="hidden" name="goAhead" value="yes" />
+<input type="hidden" name="configtopic" value="%TOPIC%" />
+<input type="hidden" name="ping" value="%SERVERTIME%" />
+<input type="submit" value="Publish" />
+</form>

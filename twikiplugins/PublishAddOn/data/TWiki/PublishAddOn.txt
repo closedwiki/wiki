@@ -1,54 +1,86 @@
-This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/CrawfordCurrie at Motorola. This version is a major rewrite from TWiki:Main/EricScouten.
+---+!! PublishAddOn
+%TOC%
 
----++ Usage
+---++ Summary
+
+Generates a ZIP file containing a static view of a web.
 
 When TWiki generates a view, it does so dynamically i.e. there's a CGI script that runs, processes some files, and generates HTML that is displayed by the browser. There are circumstances in which this may not be desirable or even possible. For example:
 	1 TWiki is used to create documentation which has to be bundled into a product release,
 	1 Published versions of TWiki pages must be read-only,
 	1 The TWiki server is inaccessible to the audience (e.g. on the other side of a corporate firewall).
 
-PublishAddOn provides support for the generation of stand-alone HTML from a TWiki web. It will generate a directory containing rendered versions of a set of TWiki pages together with any attached files.
+PublishAddOn provides support for the generation of stand-alone HTML from a TWiki web. It will generate a zip file containing rendered versions of a set of TWiki pages together with any attached files.
 
-*WARNING* This addon generates HTML output in the 'pub' directories of your twiki installation. For a large web, this can amount to a considerable amount of data!
+*WARNING* The zip files can get pretty big, and the process itself puts a heavy load on the server for large webs.
 
----+ Features
+---++ Features
 
----++ Tags
-	* All standard TWiki tags are interpreted, including Plugins
+	* All standard TWiki tags are interpreted
+	* Plugins are called
 	* UnresolvedLinks to non-existant topics are silently ignored
 	* Topic links internal to the web are translated to relative links
 	* External links (outside this web) are left untouched
 	* Any links to the 'pub' areas of topics in the web are automatically resolved and the referenced files copied into the 'images' subdirectory.
+	* Powerful support for choosing what content gets published
 
-	* A specific section of a template or page may be omitted from the rendered HTML by wrapping it in *&lt;nopublish&gt;* ... *&lt;/nopublish&gt;*. (*Hint:* Wrap the "control panel" of a template -- the portion that provides edit/attach/etc. in &lt;nopublish&gt;.)
+---++ Usage
 
----+ Using the Addon
-To generate HTML for a web, view any topic in the web. Edit the URL of the topic and change 'view' to 'publish'. (*Hint:* Create a <nop>WebPublish topic in your web that does this for you.) For example, if you are viewing the WebHome topic, the URL will be something like
-<pre>
-http://node.company.com/twiki/bin/view/Main/WebHome
-</pre>
-Modify this URL to read instead
-<pre>
-http://node.company.com/twiki/bin/publish/Main/WebHome
-</pre>
-(Your TWiki administrator may have already set up <a href="%SCRIPTURLPATH%/publish/%WEB%">a shortcut</a> in the view template; see your local site information for details)
-Then hit return to invoke the script.
+The easiest way to publish a web is from this topic, by filling in the following form.
 
-The first thing you see is a web form that allows you to control the HTML generation for the web. From this form you can change the web to generate documentation for, and list perl regular expressions to match topics that you wish to include (default: all) or exclude from generation. When you have set these parameters appropriately, hit the "Publish" button. *Note:* You can bypass this screen by adding the option *goAhead=yes* in the query string.
+The ZIP file is generated in a directory designated during installation. The progress messages printed during documentation generation tell you where this is.
 
-The HTML is generated in a designated directory for the web; the progress messages printed during documentation generation indicate where the generated HTML has been written.
+Ypu can also create a permanent topic in a web to help with the publishing process. See [[#PublishTopic][below]].
 
----++ Specialised templates
-This addon renders using existing skins. It will, by default, use the skin specified in WebPreferences for the published web. This can be overriden by adding the option *skin={skin name}* in the query string (same as the view script).
+<form method="POST" name="rename" action="%SCRIPTURLPATH%/publish%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<table>
+<tr>
+  <td valign="top"> Web to publish </td>
+  <td> <input type="text" name="web" value="%URLPARAM{"web" default="%WEB%"}%"></input></td>
+</tr>
+<tr>
+  <td valign="top"> Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match the names of topics to *include* </td>
+  <td> <input type="text" name="inclusions" value="%URLPARAM{"inclusions" default="*"}%" size="50"/></td>
+</tr>
+  <td valign="top"> Comma-separated list of [[#WildcardPattern][wildcard patterns]] that match the names of topics to *exclude* </td>
+  <td> <input type="text" name="exclusions" value="%URLPARAM{"exclusions" default=""}%" size="50"/></td>
+</tr>
+<tr>
+  <td valign="top"> A [[#RegularExpression][regular expression]] that will cause a topic to be *excluded* if the RE matches the topic content </td>
+  <td> <input type="text" name="topicsearch" value="%URLPARAM{"topicsearch" default=""}%" size="50" /></td>
+</tr>
+<tr>
+<tr>
+  <td valign="top">Select skin for published HTML :</td>
+  <td>
+   <input type="text" name="publishskin" size="20" value="%SKIN%" /><br />
+   You are recommended to pick =print.pattern= or =plain= or =print= skin. Your installation may also offer a special =export= skin.
+  </td>
+</tr>
+</table>
+
+<input type="hidden" name="goAhead" value="yes" />
+<input type="submit" value="Publish" />
+</form>
+#WildcardPattern
+---+++ Wildcard Patterns
+Wildcard patterns are well known to people who are used to command lines on computers, but may be unfamiliar to the Windows generation. A wildcard is a special string that you can put into a filename so that it matches a whole range of files:
+| *String* | *What  it does* | *Example* | *What the example matches* |
+| * | Matches any string, including the null string. | =*Cheese*= | Every topic with "Cheese" somewhere in the name (but _not_ "cheese") |
+| ? | Matches any single character. | Example1? | Example10 and Example 1X but _not_ example1 |
+| [...] | Matches any one of the enclosed characters.  A pair of characters separated by a hyphen denotes a range  expression; any  character that sorts between those two characters, inclusive, using the current locale's collating sequence and character set, is matched.  If the first character following the [ is a ^ then any character not enclosed is matched. A - may be matched by including it as the first or  last  character  in  the set.  A ] may be matched by including it as the first character in the set.<br /> Within  [  and ], character classes can be specified using the syntax [:class:], where class is one of the following classes defined in the POSIX.2 standard: =alnum=, =alpha=, =ascii=, =blank=, =cntrl=, =digit=, =graph=, =lower=, =print=, =punct=, =space=, =upper=, =word=, =xdigit=. A character class matches any character belonging to that class.  The =word= character class matches letters, digits, and the character _. | B[aeiou]g | Bag, Bog, Big, Beg, Bug |
+
+#RegularExpression
+---+++ Regular Expressions
+A perl regular expression. You can use a simple string here, which will be matched exactly, or you can read up on perl regular expressions on the web. 
+
+---+++ Using a Publish Topic
+You can create a publish topic in a web that contains all the details needed to publish that web. This is just a topic with a series of standard TWiki variable settings in it. You can use the PublishWeb topic in this web as a template for your own topics.
+
+---+++ Controlling what gets published
+You can control what gets published from a topic using the &lt;nopublish&gt; .. &lt;/nopublish&gt; tags (anything between the tags will not be published).
 
 ---+ Settings
-The next two settings should be in %TWIKIWEB%.TWikiPreferences or WebPreferences
-   * Root directory for static-published HTML
-   * Set  PUBLISH_DIR = /home/httpd/path/to/published/files/
-   * Root URL for static-published HTML (should point to the same dir as PUBLISH_DIR)
-   * Set PUBLISH_URL_PATH = /url/path/to/published/files/
-
-Local settings
    * Name of the perl package
       * Set STUB = %$STUB%
    * Short description
@@ -63,16 +95,19 @@ Local settings
    | *File:* | *Description:* |
 %$MANIFEST%
    * Unzip ==%TOPIC%.zip== in your twiki installation directory.
-   * =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
+   * =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on, and configure the plugin. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
    * Alternatively, manually make sure the dependencies listed in the table below are resolved.
 	%$DEPENDENCIES%
-   * Set the 'Settings' above in your %TWIKIWEB%.TWikiPreferences topic.
+   * Set the 'Settings' above in your %TWIKIWEB%.TWikiPreferences topic..
 
 ---+++ Info
+This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/CrawfordCurrie at Motorola. This version is a rewrite from TWiki:Main/EricScouten, subsequently fixed by TWiki:Main/CrawfordCurrie (http://c-dot.co.uk)
+
 | Author: | Main.EricScouten |
 | Dependencies: | %$DEPENDENCIES% |
 | Version: | %$VERSION% |
 | Change History: | |
+| 11 Apr 2005 | 1.3 Crawford Currie - reworked the interface and code to work better |
 | 13 October 2004 | 1.200 Crawford Currie - Cairo compatible |
 | 7 Jan 2003 | 1.1 Initial version |
 | Home: | TWiki:Plugins/%TOPIC% |
@@ -87,6 +122,8 @@ This code is a development of the Architectures and System Platforms group of Mo
 Further modifications were made by Eric Scouten and are copyright &copy; 2002-2003, Eric Scouten.
 
 The Cairo compatible version is Copyright &copy; 2004 Crawford Currie http://c-dot.co.uk
+
+The 2005 functionality improvements were made possible by the support of Wind River Systems (http://www.windriver.com)
 
 ---++++ License
 As required for the publication of all extensions to TWiki, the software is published under the terms of the GNU General Public License.
