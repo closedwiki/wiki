@@ -6,7 +6,7 @@ twiki (20040902-2.1) unstable; urgency=high
   * default to use sendmail (Closes #252439)
   * updated fr.po file (Closes #296149, #298750)
 
- -- Sven Dowideit <SvenDowideit@home.org.au>  Mon, 11 Apr 2005 00:00:01 -1000
+ -- Sven Dowideit <svenud@ozemail.com.au>  Mon, 11 Apr 2005 00:00:01 -1000
 
 twiki (20040902-1.1) unstable; urgency=medium
 
