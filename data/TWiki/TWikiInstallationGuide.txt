@@ -36,7 +36,8 @@ Download the TWiki 01-Sep-2004 distribution in Unix ZIP format from http://TWiki
 
 <blockquote style="background-color:#F5F5F5">
 *Example =httpd.conf= entries:*
- <pre> Script<nop>Alias /twiki/bin/ "/home/httpd/twiki/bin/"
+<pre>
+ Script<nop>Alias /twiki/bin/ "/home/httpd/twiki/bin/"
  Alias /twiki/ "/home/httpd/twiki/"
  &lt;Directory "/home/httpd/twiki/bin"&gt;
 	 Options +ExecCGI
@@ -53,7 +54,8 @@ Download the TWiki 01-Sep-2004 distribution in Unix ZIP format from http://TWiki
  &lt;/Directory&gt;
  &lt;Directory "/home/httpd/twiki/templates"&gt;
 	 deny from all
- &lt;/Directory&gt;</pre>
+ &lt;/Directory&gt;
+</pre>
 </blockquote>
 
 	* Restart Apache by =service httpd restart= (or as appropriate to your flavor of UNIX or Linux).
