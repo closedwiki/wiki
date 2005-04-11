@@ -1,4 +1,9 @@
-twiki (20040902-2.1) unstable; urgency=high
+twiki (20040902-3) unstable; urgency=high
+  * update to include Paul Wise's RC fix
+
+ -- Sven Dowideit <svenud@ozemail.com.au>  Mon, 11 Apr 2005 00:00:01 -1000
+
+twiki (20040902-2) unstable; urgency=high
   * set twikiLibPath to /usr/share/perl5 in setlib.cfg (Closes #296461)
   * applied robustness patch from Florian Weimer <fw@deneb.enyo.de>
     (Closes #296655)
@@ -6,7 +11,7 @@ twiki (20040902-2.1) unstable; urgency=high
   * default to use sendmail (Closes #252439)
   * updated fr.po file (Closes #296149, #298750)
 
- -- Sven Dowideit <svenud@ozemail.com.au>  Mon, 11 Apr 2005 00:00:01 -1000
+ -- Sven Dowideit <svenud@ozemail.com.au>  Sun, 10 Mar 2005 00:00:01 -1000
 
 twiki (20040902-1.1) unstable; urgency=medium
 
