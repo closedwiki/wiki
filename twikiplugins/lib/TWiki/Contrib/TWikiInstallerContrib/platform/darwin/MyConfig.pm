@@ -3,10 +3,11 @@
 sub mychomp { chomp $_[0]; $_[0] }
 
 # FIXME: darwin-specific
-my $cpan = "/Users/" . mychomp(`whoami`) . "/Sites/cgi-bin/lib/CPAN";
+my $home = "/Users/" . mychomp(`whoami`) . "/Sites";
+my $cpan = "$home/cgi-bin/lib/CPAN";
 
 $CPAN::Config = {
-  'build_cache' => q[10],
+  'build_cache' => q[0],
   'build_dir' => "$cpan/.cpan/build",
   'cache_metadata' => q[1],
   'cpan_home' => "$cpan/.cpan",
@@ -41,7 +42,7 @@ $CPAN::Config = {
   'tar' => q[/sw/bin/tar],
   'term_is_latin' => q[1],
   'unzip' => q[/sw/bin/unzip],
-  'urllist' => ["file:$cpan/MIRROR/TWIKI/"],
+  'urllist' => ["file:$home/cpan/MIRROR/TWIKI/", "file:$cpan/MIRROR/MINICPAN/"],
   'wget' => q[/sw/bin/wget],
 };
 1;
