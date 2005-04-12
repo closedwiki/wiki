@@ -54,7 +54,7 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = 0.2;
+$VERSION = 0.3;
 
 =pod
 
@@ -125,9 +125,9 @@ sub _extractPdfSections {
 
 =head2 _getHeaderFooterData($webName, $rhPrefs)
 
-If header/footer topic is present in $webName, gets it, expands tags, and returns
-the header and footer data. It currently just uses the raw text from the topic and
-does no rendering.
+If header/footer topic is present in $webName, gets it, expands local tags, renders the
+rest, and returns the data. "Local tags" (see _fixTags()) are expanded first to allow
+values passed in from the query to have precendence.
  
 =cut
 
@@ -147,7 +147,23 @@ sub _getHeaderFooterData {
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $text = _extractPdfSections($text);
    $text = _fixTags($text, $rhPrefs);
-   return $text;
+
+   my $output = "";
+   my $line = "";
+   # Expand common variables found between quotes. We have to jump through this loop hoop
+   # as the variables to expand occur inside html comments so just expanding variables in
+   # the full text doesn't do anything
+   while ($text =~ /(.*?")(.*?)"/sg) {
+      $output .= $1;
+      $line = $2;
+      # Expand common variables (full rendering causes problems)
+      $line = TWiki::Func::expandCommonVariables($line, $topic, $webName);
+      $output .= "$line\"";
+   }
+   $text =~ m|.*"(.*)|s;
+   $output .= $1;
+
+   return $output;
 }
 
 
@@ -155,16 +171,9 @@ sub _getHeaderFooterData {
 
 =head2 _createTitleFile($webName, $rhPrefs)
 
-If title page topic is present in $webName, gets it, expands tags, and returns
-the data. It currently just uses the raw text from the topic and
-does no rendering.
-
-This operation could maybe be changed to perform TWIKI rendering to add additional
-flexibility for creating a title page but I'm not sure how to allow URL params
-to have precedence for the _fixTags() logic. I wanted to be able to pass
-pdfbanner in from the URL and use it first. The same is true of the
-getHeaderFooterData() operation. For now, it just used the text of the topic (which
-is assumed to be in HTML format, not TWiki mark-up).
+If title page topic is present in $webName, gets it, expands local tags, renders the
+rest, and returns the data. "Local tags" (see _fixTags()) are expanded first to allow
+values passed in from the query to have precendence.
 
 =cut
 
@@ -184,6 +193,10 @@ sub _createTitleFile {
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $text = _extractPdfSections($text);
    $text = _fixTags($text, $rhPrefs);
+
+   # Now render the rest of the topic
+   $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
+   $text = TWiki::Func::renderText($text);
 
    # Save it to a file
    my ($fh, $file) = mkstemps('/tmp/fileXXXXXXXXXX', '.html');
