@@ -3,6 +3,8 @@
 use strict;
 use Data::Dumper qw( Dumper );
 use File::Basename qw( basename );
+use File::Path qw( mkpath );
+#use File::Copy qw( cp mv );
 
 # TODO notes:
 # * tighten up templates directory permissions (chmod -R o-w twiki/templates)
@@ -13,12 +15,13 @@ sub mychomp { chomp $_[0]; $_[0] }
 my $opts = {
     startupTopic => "",
     scriptSuffix => '',
+    htdocs => '.',
+    browser => 'open',
 };
 
 BEGIN {
     use Config;
     use FindBin;
-#    my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib/site_perl/" . $Config{version};
     my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib";
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
     # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
@@ -26,9 +29,11 @@ BEGIN {
 
 #use WWW::Mechanize::TWiki;
 
+my $HTDOCS = $opts->{htdocs};
+
 system( "mv cgi-bin/tmp/install/LocalSite.cfg cgi-bin/lib/" );
-system( "mkdir htdocs/" );
-system( "mv cgi-bin/tmp/twiki/pub htdocs/twiki/" );
+mkpath( $HTDOCS );
+system( "mv cgi-bin/tmp/twiki/pub $HTDOCS/twiki/" );
 system( "mv cgi-bin/tmp/twiki/templates twiki/" );
 system( "chmod -R o-w cgi-bin/twiki/ cgi-bin/lib/ cgi-bin/lib/CPAN/" );
 
@@ -39,7 +44,7 @@ print `find cgi-bin/lib/ -print | xargs chmod go-w`;
 
 ################################################################################
 
-open( INDEX_PHP, ">htdocs/index.php" ) or die $!;
+open( INDEX_PHP, ">$HTDOCS/index.php" ) or die $!;
 print INDEX_PHP <<"EOF";
 <?php 
 Header( "Location: http://" . \$_SERVER[HTTP_HOST] . "/cgi-bin/twiki/view$opts->{scriptSuffix}/" );
@@ -62,7 +67,7 @@ print STDERR "account=[$account]\n";
 chomp( my $hostname = $ENV{SERVER_NAME} || `hostname --long` || 'localhost' );
 die "hostname?" unless $hostname;
 
-my $BIN = "http://hostname/~$account/cgi-bin/twiki";
+my $BIN = "http://$hostname/~$account/cgi-bin/twiki";
 
 my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
@@ -108,7 +113,7 @@ if ( -e "TWikiInstallationReport.html" )
 ################################################################################
 
 my $START = "$BIN/view$opts->{scriptSuffix}/$opts->{startupTopic}";
-system( open => $START ) == 0 or print "start using your wiki at $START\n";
+system( $opts->{browser} => $START ) == 0 or print "start using your wiki at $START\n";
 
 ################################################################################
 ################################################################################
