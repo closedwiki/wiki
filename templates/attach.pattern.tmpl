@@ -41,10 +41,15 @@
 
 
 
+%TMPL:DEF{"existingattachments"}%
+%META{"attachments" all="on" title="<h2>Existing attachments</h2>"}%
+%TMPL:END%
+
+
+
 %TMPL:DEF{"content"}%
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 %TMPL:P{"simpleheader"}%
-
 <div>
 %TMPL:P{"previousdetails"}%
 <div class="twikiVersatileTable">
@@ -95,8 +100,7 @@ Images will be displayed, for other attachments a link will be created.
 <div class="twikiHelp twikiGrayText">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div></div>
----++ Existing attachments for <span class="twikiTitle"><nop>%TOPIC%</span>
-%META{"attachments" all="on"}%
+%TMPL:P{"existingattachments"}%
 %TMPL:P{"standardfooter"}%%TMPL:END%
 
 

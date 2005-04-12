@@ -77,8 +77,10 @@ sub renderMetaData {
     my $showAll = $attrs->{all};
     my $showAttr = $showAll ? 'h' : '';
 	my $a = ( $showAttr ) ? ':A' : '';
+    my $title = $attrs->{title} || '';
 
 	my @attachments = $meta->find( 'FILEATTACHMENT' );
+    return '' if (!@attachments);
 
 	my $rows = '';
 	my $row = $this->_getTemplate("ATTACH:files:row$a");
@@ -101,7 +103,7 @@ sub renderMetaData {
 
         $text = "$header$rows$footer";
     }
-    return $text;
+    return "$title$text";
 }
 
 # PRIVATE get a template, reading the attachment tables template
@@ -190,6 +192,11 @@ sub _expandAttrs {
     elsif ( $attr eq 'ICON' ) {
         my $fileIcon = $this->{session}->{renderer}->filenameToIcon( $file );
         return $fileIcon;
+    }
+    elsif ( $attr eq 'EXT' ) {
+	$file =~ m/\.(.*)$/;
+        my $fileExtension = $1;
+        return $fileExtension;
     }
     elsif ( $attr eq 'URL' ) {
         my $url;
