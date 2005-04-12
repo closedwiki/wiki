@@ -13,5 +13,6 @@ cd /tmp/twiki-20040902
 svn export http://ntwiki.ethermage.net:8181/svn/twiki/trunk/tools/pkg/debian > /tmp/svn_export.log
 
 fakeroot debian/rules patch
+fakeroot debian/rules checkpo
 
 debuild

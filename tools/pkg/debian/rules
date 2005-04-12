@@ -189,6 +189,12 @@ unpatch:
 	cat `tac $(patches)` | patch -Rp0
 	rm -f $(patches)
 
+checkpo:
+        for i in po/*.po; do \
+                echo \"Checking: $$i\"; \
+                msgmerge -U $$i po/templates.pot; \
+                msgfmt -o /dev/null -c --statistics $$i; \
+        done
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install configure patch unpatch
