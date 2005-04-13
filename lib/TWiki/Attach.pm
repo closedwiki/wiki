@@ -194,7 +194,8 @@ sub _expandAttrs {
         return $fileIcon;
     }
     elsif ( $attr eq 'EXT' ) {
-	$file =~ m/\.(.*)$/;
+	# $fileExtension is used to map the attachment to its MIME type
+	$file =~ m/\.([^.]*)$/;	# only grab the last extension in case of multiple extensions
         my $fileExtension = $1;
         return $fileExtension;
     }
