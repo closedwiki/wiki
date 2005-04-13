@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiGuest" date="1113382547" format="1.0" version="1.2"}%
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
@@ -178,6 +178,36 @@ class CatAnimal {
 	i. Sushi
 <!-- /actual -->
 </td></tr>
+
+<tr>
+<td>nested bullets & numbers lists </td>
+<td>
+<!-- expected -->
+<ol>
+<li>Things</li>
+<li>Stuff</li>
+<ul>
+<li>Banana Stuff</li>
+<li>Other</li>
+<li></li>
+</ul>
+<li>Something</li>
+<li>kello kitty</li>
+</ol>
+<!-- /expected -->
+</td>
+<td>
+<!-- actual -->
+   1 Things
+   2 Stuff
+      * Banana Stuff
+      * Other
+      * 
+   3 Something
+   4 kello kitty
+<!-- /actual -->
+</td>
+</tr>
 <tr><td> Definition List</td><td>
 <!-- expected DL -->
 <dl>
@@ -383,3 +413,4 @@ escaped:
 <!-- /expected -->
 <!-- actual -->
 LinkAtEnd
+
