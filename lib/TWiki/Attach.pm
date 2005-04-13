@@ -80,7 +80,7 @@ sub renderMetaData {
     my $title = $attrs->{title} || '';
 
 	my @attachments = $meta->find( 'FILEATTACHMENT' );
-    return '' if (!@attachments);
+    return '' unless @attachments;
 
 	my $rows = '';
 	my $row = $this->_getTemplate("ATTACH:files:row$a");
