@@ -1,4 +1,5 @@
 #! /usr/bin/perl -w
+# See http://twiki.org/cgi-bin/view/Codev/FixUpHtaccess
 
 my ($filePathToTwiki, $urlPathToTwiki) = getParams(@ARGV); 
 # e.g. ("/home/mrjc/wikiconsulting.com/twiki", "http://wikiconsulting.com/twiki");
