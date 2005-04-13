@@ -48,8 +48,8 @@ sub getParams {
   }
 
 
-  unless ($urlPathToTwiki =~ m/^http:/) {
-    die "The URL for urlPathToTwiki '$urlPathToTwiki' does not start with http:";
+  if ($urlPathToTwiki =~ m/^http/) {
+    die "The URL for urlPathToTwiki '$urlPathToTwiki' must not start with http";
   }
 
   return  ($filePathToTwiki, $urlPathToTwiki);
