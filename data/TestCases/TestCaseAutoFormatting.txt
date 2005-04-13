@@ -1,4 +1,3 @@
-%META:TOPICINFO{author="TWikiGuest" date="1113382547" format="1.0" version="1.2"}%
 LinkAtStart
 <!-- /actual -->
 <!-- expected expand LINKATSTART -->
@@ -85,6 +84,23 @@ __Bold italic__
 </td><td>
 <!-- actual -->
 ==Bold fixed==
+<!-- /actual -->
+</td></tr>
+<tr><td> Bold Fixed Font</td><td>
+<!-- expected MIXED -->
+<em>this</em> <em>should</em> <em>italicise</em> <em>each</em> <em>word</em>
+<p />
+<strong>and</strong> <strong>this</strong> <strong>should</strong> <strong>embolden</strong> <strong>each</strong> <strong>word</strong>
+<p />
+<em>mixing</em> <strong>them</strong> <em>should</em> <strong>work</strong>
+<!-- /expected -->
+</td><td>
+<!-- actual -->
+_this_ _should_ _italicise_ _each_ _word_
+
+*and* *this* *should* *embolden* *each* *word*
+
+_mixing_ *them* _should_ *work*
 <!-- /actual -->
 </td></tr>
 <tr><td> Verbatim Mode</td><td>
