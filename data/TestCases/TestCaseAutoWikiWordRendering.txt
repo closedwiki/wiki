@@ -1,0 +1,429 @@
+---+!! <nop>WikiWord test cases
+
+Description: Test case for checking the correct rendering of 'classic' wikiwords and underscore wikiwords, with variations for italic and code text.
+
+These tests only make sense if
+   * underscore wikiwords are implemented in TWiki.pm and Render.pm
+   * AUTOLINKTYPE in TWiki.TWikiPreferences has the value =wikiword, underscore=
+   * the topics [[Underscore_topic]] and [[H_]] and [[123_num]] have been created
+
+Arthur Clemens - 13 Apr 2005
+
+%TOC%
+
+---++ Classic !WikiWord
+
+Actual:
+<verbatim>
+WebHome
+</verbatim>
+
+<!-- expected expand 1 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebHome">WebHome</a>
+<!-- /expected -->
+
+<!-- actual -->
+WebHome
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[[WebHome]]
+</verbatim>
+
+<!-- expected expand 2 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebHome">WebHome</a>
+<!-- /expected -->
+
+<!-- actual -->
+[[WebHome]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[[TWiki.WebHome]]
+</verbatim>
+
+<!-- expected expand 3 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/WebHome">TWiki.WebHome</a>
+<!-- /expected -->
+
+<!-- actual -->
+[[TWiki.WebHome]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[[TWiki.WebHome][home]]
+</verbatim>
+
+<!-- expected expand 4 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/WebHome">home</a>
+<!-- /expected -->
+
+<!-- actual -->
+[[TWiki.WebHome][home]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+!WebHome
+</verbatim>
+
+<!-- expected expand 5 -->
+WebHome
+<!-- /expected -->
+
+<!-- actual -->
+!WebHome
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+![[TWiki.WebHome]]
+</verbatim>
+
+<!-- expected expand 6 -->
+<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/WebHome" class="twikiLink">TWiki.WebHome</a>
+<!-- /expected -->
+
+<!-- actual -->
+![[TWiki.WebHome]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[<nop>[TestCases.WebHome]]
+</verbatim>
+
+<!-- expected 7 -->
+[[TestCases.WebHome]]
+<!-- /expected -->
+
+<!-- actual -->
+[<nop>[TestCases.WebHome]]
+<!-- /actual -->
+
+---++ Underscore !wiki_word
+
+Actual:
+<verbatim>
+Underscore_topic
+</verbatim>
+
+<!-- expected expand 8 -->
+Underscore_topic
+<!-- /expected -->
+
+<!-- actual -->
+Underscore_topic
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[[Underscore_topic]]
+</verbatim>
+
+<!-- expected expand 9 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/Underscore_topic">Underscore_topic</a>
+<!-- /expected -->
+
+<!-- actual -->
+[[Underscore_topic]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[[TestCases.Underscore_topic]]
+</verbatim>
+
+<!-- expected expand 10 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/Underscore_topic">TestCases.Underscore_topic</a>
+<!-- /expected -->
+
+<!-- actual -->
+[[TestCases.Underscore_topic]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[[TestCases.Underscore_topic][topic]]
+</verbatim>
+
+<!-- expected expand 11 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/Underscore_topic">topic</a>
+<!-- /expected -->
+
+<!-- actual -->
+[[TestCases.Underscore_topic][topic]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+!Underscore_topic
+</verbatim>
+
+<!-- expected expand 12 -->
+<nop>Underscore<nop>_topic
+<!-- /expected -->
+
+<!-- actual -->
+!Underscore_topic
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+![[TestCases.Underscore_topic]]
+</verbatim>
+
+<!-- expected 13 -->
+[[TestCases.Underscore_topic]]
+<!-- /expected -->
+
+<!-- actual -->
+![[TestCases.Underscore_topic]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[<nop>[TestCases.Underscore_topic]]
+</verbatim>
+
+<!-- expected expand 14 -->
+[[TestCases.<nop>Underscore_topic]]
+<!-- /expected -->
+
+<!-- actual -->
+[<nop>[TestCases.Underscore_topic]]
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+123_num
+</verbatim>
+
+<!-- expected expand 15 -->
+123_num
+<!-- /expected -->
+
+<!-- actual -->
+123_num
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+H_
+</verbatim>
+
+<!-- expected expand 16 -->
+H_
+<!-- /expected -->
+
+<!-- actual -->
+H_
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+[[H_]]
+</verbatim>
+
+<!-- expected expand 17 -->
+<a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/H_">H_</a>
+<!-- /expected -->
+
+<!-- actual -->
+[[H_]]
+<!-- /actual -->
+
+---
+
+---++ Italic with !underscore_wiki_word
+
+Normal text:
+Actual:
+<verbatim>
+_your words_
+</verbatim>
+
+<!-- expected expand 18 -->
+<em>your words</em>
+<!-- /expected -->
+
+<!-- actual -->
+_your words_
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+__your words__
+</verbatim>
+
+<!-- expected expand 19 -->
+<strong><em>your words</em></strong>
+<!-- /expected -->
+
+<!-- actual -->
+__your words__
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+_text with H_ link_
+</verbatim>
+
+<!-- expected expand 20 -->
+<em>text with H</em> link_
+<!-- /expected -->
+
+(But this test should fail to create the correct link)
+
+<!-- actual -->
+_text with H_ link_
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+__text with H_ link__
+</verbatim>
+
+<!-- expected expand 21 -->
+<strong><em>text with H_ link</em></strong>
+<!-- /expected -->
+
+<!-- actual -->
+__text with H_ link__
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+_text with [[H_]] link_
+</verbatim>
+
+<!-- expected expand 22 -->
+<em>text with <a class="twikiLink" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TestCases/H_">H_</a> link</em>
+<!-- /expected -->
+
+<!-- actual -->
+_text with [[H_]] link_
+<!-- /actual -->
+
+---++ Code text with !underscore_wiki_word
+
+Actual:
+<verbatim>
+=_your words_=
+</verbatim>
+
+<!-- expected expand 23 -->
+<code>_your <nop>words_</code>
+<!-- /expected -->
+
+<!-- actual -->
+=_your words_=
+<!-- /actual -->
+
+---
+
+Actual:
+<verbatim>
+=your words_=
+</verbatim>
+
+<!-- expected expand 24 -->
+<code>your <nop>words_</code>
+<!-- /expected -->
+
+<!-- actual -->
+=your words_=
+<!-- /actual -->
+
+
+---++ Verbatim with !underscore_wiki_word
+
+Actual:
+<verbatim>
+your words
+</verbatim>
+
+<!-- expected expand 25 -->
+<pre>
+your words
+</pre>
+<!-- /expected -->
+
+<!-- actual -->
+<verbatim>
+your words
+</verbatim>
+<!-- /actual -->
+
+
+---++ Test with link in header
+
+Actual:
+<verbatim>
+---+++ Test with link in header: Underscore_topic
+</verbatim>
+
+<!-- expected expand 26 -->
+<h3><a name="Test_with_link_in_header_Undersc"></a>Test with link in header: Underscore_topic</h3>
+<!-- /expected -->
+
+<!-- actual -->
+---+++ Test with link in header: Underscore_topic
+<!-- /actual -->
+
+
+---++ Underscore wikiword as last word in topic text
+
+Actual:
+<verbatim>
+H_
+</verbatim>
+
+<!-- expected expand 27 -->
+H_
+<!-- /expected -->
+
+<!-- actual -->
+H_
+<!-- /actual -->
