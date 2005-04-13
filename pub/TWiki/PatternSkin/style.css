@@ -121,7 +121,7 @@ th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover {
 	text-decoration:none;
 	border-top:0;
-	border-bottom:1px solid #999;
+	border-bottom:1px dotted #999;
 }
 th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:visited,
@@ -133,7 +133,7 @@ th.twikiSortedDescendingCol a:hover,
 th.twikiSortedDescendingCol a:hover {
 	text-decoration:none;
 	border-bottom:0;
-	border-top:1px solid #999;
+	border-top:1px dotted #999;
 }
 
 /* Forms */
