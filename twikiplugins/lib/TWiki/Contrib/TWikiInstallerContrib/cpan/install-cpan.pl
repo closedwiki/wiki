@@ -63,9 +63,7 @@ print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # TODO: copied (and cropped) from install_twiki.cgi
 use Config;
-#my $localLibBase = "$optsConfig->{baselibdir}/lib/" . $Config{version};
-my $localLibBase = "$optsConfig->{baselibdir}/lib";
-my @localLibs = ( $localLibBase, "$localLibBase/$Config{archname}" );
+my @localLibs = ( $optsConfig->{baselibdir}, "$optsConfig->{baselibdir}/$Config{archname}" );
 unshift @INC, @localLibs;
 $ENV{PERL5LIB} = join( ':', @localLibs );
 print STDERR Dumper( \@INC ) if $optsConfig->{debug};
@@ -95,7 +93,7 @@ installLocalModules({
 #?	'GD' => [ qw( /usr/local/lib y y y ) ],
     },
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
-    modules => [ @ARGV || @defaultTWikiModules ],
+    modules => @ARGV ? [ @ARGV ] : [ @defaultTWikiModules ],
 });
 # Image::LibRSVG
 
