@@ -289,9 +289,6 @@ Notably the TWikiKernel does not include any TWikiExtensions (e.g. Plugins or Sk
 
 __END__
  
-================================================================================
-
-
 ################################################################################
 ################################################################################
 differences between output of build-twiki-kernel.pl vs. TWiki20040901.tar.gz
