@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # TWikiTopic2TestCase.pl - 
-# Copyright 2004 Will Norris.  All Rights Reserved.
+# Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
 use Data::Dumper qw( Dumper );
