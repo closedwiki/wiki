@@ -4,6 +4,7 @@
 use strict;
 use Data::Dumper qw( Dumper );
 
+use lib( "$ENV{TWIKIDEV}/CPAN/lib" );	# good enough because this only uses pure perl cpan modules
 # TODO:
 #   * (probably eliminate outputdir completely)
 #   * use svn export (but mirror it so 
