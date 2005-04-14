@@ -12,6 +12,7 @@ use Data::Dumper qw( Dumper );
 use CPAN;
 use File::Path qw( mkpath );
 use File::Spec qw( rel2abs );
+use File::Basename qw( dirname );
 use Getopt::Long;
 use FindBin;
 use Pod::Usage;
@@ -23,6 +24,10 @@ my $optsConfig = {
     baselibdir => $FindBin::Bin . "/../cgi-bin/lib/CPAN",
     mirror => "file:$FindBin::Bin/MIRROR/TWIKI",
 #
+    force => 0,
+#
+    config => "~/.cpan/CPAN/MyConfig.pm",
+#
     verbose => 0,
     debug => 0,
     help => 0,
@@ -30,8 +35,9 @@ my $optsConfig = {
 };
 
 GetOptions( $optsConfig,
-	    'baselibdir=s', 'mirror=s', 'user=s',
-#	    'baselibdir=s', 'mirror=s@', 'user=s',
+	    'baselibdir=s', 'mirror=s', 'config=s',
+#	    'mirror=s@',
+	    'force|f',
 # miscellaneous/generic options
 	    'help', 'man', 'debug', 'verbose|v',
 	    );
@@ -42,6 +48,7 @@ print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 # fix up relative paths
 $optsConfig->{baselibdir} = File::Spec->rel2abs( $optsConfig->{baselibdir} );
 $optsConfig->{mirror} = File::Spec->rel2abs( $optsConfig->{mirror} );
+$optsConfig->{config} = File::Spec->rel2abs( $optsConfig->{config} );
 
 # TODO: copied (and cropped) from install_twiki.cgi
 use Config;
@@ -89,7 +96,7 @@ sub installLocalModules
     my $parm = shift;
     my $cpan = $parm->{dir};
 
-    createMyConfigDotPm({ cpan => $cpan });
+    createMyConfigDotPm({ cpan => $cpan, config => $optsConfig->{config} });
     my @modules = @{$parm->{modules}};
     print "Installing the following modules: ", Dumper( \@modules ) if $optsConfig->{debug};
     foreach my $module ( @modules )
@@ -111,12 +118,12 @@ sub createMyConfigDotPm
     my $parm = shift;
     my $cpan = $parm->{dir};
 
-    my $cpanConfigDir = "~/.cpan/CPAN";
-    my $cpanConfig = "$cpanConfigDir/MyConfig.pm";
+    my $cpanConfig = $parm->{config} or die "no config file specified?";
 
     unless ( -e $cpanConfig )
     { 
-	mkpath( $cpanConfigDir );
+	mkpath( dirname( $cpanConfig ) );
+
 	open( FH, ">$cpanConfig" ) or die "$!: Can't create $cpanConfig";
 	print FH <<__MYCONFIG_PM__
 $CPAN::Config = {
@@ -216,6 +223,8 @@ Copyright 2004, 2005 Will Norris.  All Rights Reserved.
   Options:
    -baselibdir         where to install the CPAN modules
    -mirrordir          location of the (mini) CPAN mirror
+   -config             filename (~/.cpan/CPAN/MyConfig.pm)
+   -force|f            force overwrite of config file
    -verbose
    -debug
    -help               this documentation
@@ -228,6 +237,11 @@ Copyright 2004, 2005 Will Norris.  All Rights Reserved.
 =item B<-baselibdir>
 
 =item B<-mirrordir>
+
+=item B<-config>
+
+=item B<-force>
+=item B<-f>
 
 =back
 
