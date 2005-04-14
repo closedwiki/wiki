@@ -90,61 +90,6 @@ sub installLocalModules
     my $cpan = $parm->{dir};
 
     createMyConfigDotPm({ cpan => $cpan });
-
-    $CPAN::Config->{'make'} = q[/usr/bin/make];
-    # some modules refuse to work if PREFIX is set, and some refuse to work if it is not. ???
-    $CPAN::Config->{'makepl_arg'} = "PREFIX=$cpan";
-    $CPAN::Config->{'make_arg'} = "";
-    $CPAN::Config->{'make_install_arg'} = "";
-    $CPAN::Config->{'makepl_arg'} = "";
-    # TODO: try other setup of config if install fails?  PREFIX seems like the preferred method, so try that first
-#    $CPAN::Config->{'make_arg'} = "-I$cpan/";
-#    $CPAN::Config->{'make_install_arg'} = "-I$cpan/";
-#    $CPAN::Config->{'makepl_arg'} = "LIB=$cpan/lib INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3";
-
-    $CPAN::Config->{'build_dir'} = "$cpan/.cpan/build";
-    $CPAN::Config->{'cpan_home'} = "$cpan/.cpan";
-
-#    'histfile' => q[/Users/wbniv/Sites/twiki/.cpan/histfile],
-    $CPAN::Config->{'histsize'} = 0;
-
-    $CPAN::Config->{'keep_source_where'} = "$cpan/.cpan/sources";
-
-    $CPAN::Config->{'prerequisites_policy'} = 'follow';
-
-#    $CPAN::Config->{'urllist'} = [ "file:/Users/wbniv/twiki/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/cpan/MIRROR/MINICPAN/" ];
-#    $CPAN::Config->{'urllist'} = [ "file:/Users/$account/Sites/cpan/MIRROR/TWIKI/" ];
-    $CPAN::Config->{'urllist'} = [ $optsConfig->{mirror} ];
-    $CPAN::Config->{'build_cache'} = q[0];
-
-    $CPAN::Config->{'ftp'} = q[/usr/bin/ftp];
-    $CPAN::Config->{'gzip'} = q[/sw/bin/gzip];
-    $CPAN::Config->{'pager'} = q[/usr/bin/less];
-    $CPAN::Config->{'shell'} = q[/bin/bash];
-    $CPAN::Config->{'tar'} = q[/sw/bin/tar];
-    $CPAN::Config->{'unzip'} = q[/sw/bin/unzip];
-    $CPAN::Config->{'wget'} = q[/sw/bin/wget];
-
-#?  'cache_metadata' => q[1],
-#?  'dontload_hash' => {  },
-#  'ftp_proxy' => q[],
-#?  'getcwd' => q[cwd],
-#  'gpg' => q[],
-#  'http_proxy' => q[],
-#  'inactivity_timeout' => q[0],
-#?  'index_expire' => q[1],
-#  'inhibit_startup_message' => q[0],
-#  'lynx' => q[],
-#  'ncftp' => q[],
-#  'ncftpget' => q[],
-#  'no_proxy' => q[],
-#?  'scan_cache' => q[atstart],
-#?  'term_is_latin' => q[1],
-
-#    print Data::Dumper::Dumper( $CPAN::Config );
-#    CPAN::Shell->reload( qw( index ) ); # or die $!;
-#    print Data::Dumper::Dumper( $CPAN::Config );
-
     my @modules = @{$parm->{modules}};
     print "Installing the following modules: ", Dumper( \@modules ) if $optsConfig->{debug};
     foreach my $module ( @modules )
