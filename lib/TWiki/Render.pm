@@ -44,6 +44,10 @@ my $MINTRUNC = 16;
 # max number of lines in a summary (best to keep it even)
 my $SUMMARYLINES = 6;
 
+# limiting lookbehind and lookahead for wikiwords and emphasis
+my $before = qr/^|(?<=[\s\(])/m;
+my $after = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
+
 =pod
 
 ---++ ClassMethod new ($session)
@@ -287,7 +291,7 @@ sub _emitTR {
 }
 
 sub _fixedFontText {
-    my( $this, $theText, $theDoBold ) = @_;
+    my( $theText, $theDoBold ) = @_;
     # preserve white space, so replace it by '&nbsp; ' patterns
     $theText =~ s/\t/   /g;
     $theText =~ s|((?:[\s]{2})+)([^\s])|'&nbsp; ' x (length($1) / 2) . $2|eg;
@@ -430,7 +434,7 @@ sub internalLink {
     $theTopic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;	
 
     # Add <nop> before WikiWord inside link text to prevent double links
-    $theLinkText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
+    $theLinkText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
 
     return _renderWikiWord($this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb);
 }
@@ -635,7 +639,7 @@ sub _protocolLink {
         # inside link text, to prevent double links
         # SMELL - why regex{upperAlpha} here - surely this is a web
         # match, not a CAPWORD match?
-        $theText =~ s/([\s\(])([$TWiki::regex{upperAlpha}])/$1<nop>$2/go;
+        $theText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
     }
     return CGI::a( { href=>$url, target=>'_top' }, $theText );
 }
@@ -892,7 +896,7 @@ sub getRenderedVersion {
 
     # Escape rendering: Change ' !AnyWord' to ' <nop>AnyWord',
     # for final ' AnyWord' output
-    $text =~ s/(^|[\s\(])\!(?=[\w\*\=])/$1<nop>/gm;
+    $text =~ s/$before\!(?=[\w\*\=])/<nop>/gm;
 
     # Blockquoted email (indented with '> ')
     # Could be used to provide different colours for different numbers of '>'
@@ -1011,12 +1015,11 @@ sub getRenderedVersion {
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
 
-    # Emphasizing
-    $text =~ s/(^|[\s\(])==([^\s]+?|[^\s].*?[^\s])==([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 1 ) . $3/gem;
-    $text =~ s/(^|[\s\(])__([^\s]+?|[^\s].*?[^\s])__([\s\,\.\;\:\!\?\)])/$1<strong><em>$2<\/em><\/strong>$3/gm;
-    $text =~ s/(^|[\s\(])\*([^\s]+?|[^\s].*?[^\s])\*([\s\,\.\;\:\!\?\)])/$1<strong>$2<\/strong>$3/gm;
-    $text =~ s/(^|[\s\(])_([^\s]+?|[^\s].*?[^\s])_([\s\,\.\;\:\!\?\)])/$1<em>$2<\/em>$3/gm;
-    $text =~ s/(^|[\s\(])=([^\s]+?|[^\s].*?[^\s])=([\s\,\.\;\:\!\?\)])/$1 . $this->_fixedFontText( $2, 0 ) . $3/gem;
+    $text =~ s/${before}==([^\s]+?|[^\s].*?[^\s])==$after/_fixedFontText($1,1)/gem;
+    $text =~ s/${before}__([^\s]+?|[^\s].*?[^\s])__$after/<strong><em>$1<\/em><\/strong>/gm;
+    $text =~ s/${before}\*([^\s]+?|[^\s].*?[^\s])\*$after/<strong>$1<\/strong>/gm;
+    $text =~ s/${before}\_([^\s]+?|[^\s].*?[^\s])\_$after/<em>$1<\/em>/gm;
+    $text =~ s/${before}\=([^\s]+?|[^\s].*?[^\s])\=$after/_fixedFontText($1,0)/gem;
 
     # Mailto
     # Email addresses must always be 7-bit, even within I18N sites
@@ -1029,7 +1032,7 @@ sub getRenderedVersion {
 
     # Normal mailto:foo@example.com ('mailto:' part optional)
     # FIXME: Should be '?' after the 'mailto:'...
-    $text =~ s/(^|[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/gem;
+    $text =~ s/$before(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)$after/$this->_mailtoLink( $1, $2, $3 )/gem;
 
     # Handle [[][] and [[]] links
     # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
@@ -1041,7 +1044,7 @@ sub getRenderedVersion {
     unless( $prefs->getPreferencesValue('NOAUTOLINK') =~ /^on$/i ) {
         # Handle WikiWords
         $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
-        $text =~ s/(^|[\s\(])(($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$1.$this->_handleWikiWord($theWeb,$3,$4,$5)/geom;
+        $text =~ s/$before(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$this->_handleWikiWord($theWeb,$1,$2,$3)/geom;
         $this->putBackBlocks( $text, $removed, 'noautolink' );
     }
 
@@ -1173,7 +1176,7 @@ sub TML2PlainText {
     }
 
     # Format e-mail to add spam padding (HTML tags removed later)
-    $text =~ s/([\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . $this->_mailtoLink( $2, $3, $4 )/ge;
+    $text =~ s/(?<=[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$this->_mailtoLink( $1, $2, $3 )/ge;
     $text =~ s/<\!\-\-.*?\-\->//gs;     # remove all HTML comments
     $text =~ s/<[^>]*>//g;              # remove all HTML tags
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
@@ -1218,8 +1221,8 @@ sub protectPlainText {
 
     # prevent text from getting rendered in inline search and link tool
     # tip text by escaping links (external, internal, Interwiki)
-    $text =~ s/([\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/$1<nop>$2/g;
-    $text =~ s/([\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/$1<nop>$2/go;
+    $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
+    $text =~ s/(?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
     $text =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
 
     return $text;
