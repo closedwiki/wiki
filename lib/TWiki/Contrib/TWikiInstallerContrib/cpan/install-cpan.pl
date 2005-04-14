@@ -176,17 +176,17 @@ sub createMyConfigDotPm
 	    'wget' => q[/usr/bin/wget],
 	};
 	
-print FH "\$CPAN::Config = {\n";
-foreach my $key ( sort keys %$CPAN::Config )
-{
-    print FH qq{\t'$key' => q[$CPAN::Config->{$key}],\n};
-}
-print FH qq{\t'urllist' => [ q[$optsConfig->{mirror}] ],\n};
-print FH "};\n",
-    "1;\n",
-    "__END__\n";
-}
-
+	print FH "\$CPAN::Config = {\n";
+	foreach my $key ( sort keys %$CPAN::Config )
+	{
+	    print FH qq{\t'$key' => q[$CPAN::Config->{$key}],\n};
+	}
+	print FH qq{\t'urllist' => [ q[$optsConfig->{mirror}] ],\n};
+	print FH "};\n",
+	"1;\n",
+	"__END__\n";
+    }
+    
 close FH;
 }
 
