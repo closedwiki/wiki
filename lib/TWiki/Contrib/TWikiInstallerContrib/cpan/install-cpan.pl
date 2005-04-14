@@ -66,7 +66,7 @@ print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # TODO: copied (and cropped) from install_twiki.cgi
 use Config;
-my @localLibs = ( $optsConfig->{baselibdir}, "$optsConfig->{baselibdir}/$Config{archname}" );
+my @localLibs = ( "$optsConfig->{baselibdir}/lib", "$optsConfig->{baselibdir}/lib/$Config{archname}" );
 unshift @INC, @localLibs;
 $ENV{PERL5LIB} = join( ':', @localLibs );
 print STDERR Dumper( \@INC ) if $optsConfig->{debug};
@@ -116,7 +116,7 @@ sub installLocalModules
 	print "Installing $module\n" if $optsConfig->{verbose};
 	my $obj = CPAN::Shell->expand( Module => $module ) or warn "$module: $!";
 	next unless $obj;
-#	$obj->force( 'install' ); # or warn "Error installing $module\n"; 
+#???	$obj->force( $obj->install ); # or warn "Error installing $module\n"; 
 	$obj->install; # or warn "Error installing $module\n"; 
     }
 
