@@ -127,7 +127,7 @@ sub installLocalModules
 sub createMyConfigDotPm
 {
     my $parm = shift;
-    my $cpan = $parm->{dir};
+    my $cpan = $parm->{cpan} or die "no cpan directory?";
 
     my $cpanConfig = $parm->{config} or die "no config file specified?";
 
@@ -137,7 +137,7 @@ sub createMyConfigDotPm
 
 	open( FH, ">$cpanConfig" ) or die "$!: Can't create $cpanConfig";
 	print FH <<__MYCONFIG_PM__
-$CPAN::Config = {
+\$CPAN::Config = {
   'build_cache' => q[0],
   'build_dir' => "$cpan/.cpan/build",
   'cache_metadata' => q[1],
