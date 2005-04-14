@@ -129,9 +129,9 @@ sub _installMailHandler {
         }
     }
     if( $useNetSMTP ) {
-        $this->setMailHandler( &_sendEmailByNetSMTP );
+        $this->setMailHandler( \&_sendEmailByNetSMTP );
     } else {
-        $this->setMailHandler( &_sendEmailBySendmail );
+        $this->setMailHandler( \&_sendEmailBySendmail );
     }
 }
 
@@ -149,6 +149,7 @@ alternative mail handling method.
 
 sub setMailHandler {
     my( $this, $fnref ) = @_;
+    ASSERT( $fnref ) if DEBUG;
     $this->{mailHandler} = $fnref;
 }
 
