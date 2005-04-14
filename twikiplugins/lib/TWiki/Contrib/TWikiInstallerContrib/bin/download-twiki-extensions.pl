@@ -40,7 +40,7 @@ my $Config = {
 	twiki => {
 	    pub => 'http://twiki.org/p/pub',
 	},
-	searchTerm => '%5BT%5DopicClassification.*value%5C%3D%5C%22%5BC%5DontributedCode',
+	searchTerm => '%5BT%5DopicClassification.*value%5C%3D%5C%22%5BC%5DontribPackage',
 	ExtType => 'Contrib',
     },
     addons => {
