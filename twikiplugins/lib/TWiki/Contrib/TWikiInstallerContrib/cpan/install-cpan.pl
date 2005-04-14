@@ -46,7 +46,6 @@ print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # fix up relative paths
 foreach my $path qw( baselibdir mirror config )
-# mirror
 {
     # expand tildes in paths (from Perl Cookbook: 7.3. Expanding Tildes in Filenames)
     $optsConfig->{$path} =~ s{ ^ ~ ( [^/]* ) }
