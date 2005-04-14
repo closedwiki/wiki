@@ -160,12 +160,11 @@ sub getCatalogueList
     my $Config = $p->{Config};
 
     my $urlCatalogue = qw( http://twiki.org/cgi-bin/search/Plugins/?scope=text&web=Plugins&order=topic&search= ) . $Config->{searchTerm} . qw( &casesensitive=on&regex=on&nosearch=on&nosummary=on&limit=all&skin=plain );
-    my $local_catalogue = "file:$Config->{local_cache}/TWiki$Config->{ExtType}s.html";
+    my $local_catalogue = "$Config->{local_cache}/TWiki$Config->{ExtType}s.html";
 
     # get (plugins) catalogue page
     mirror( $urlCatalogue, $local_catalogue );
-    print STDERR "$urlCatalogue\n";
-    my $pluginsCataloguePage = LWP::Simple::get( $local_catalogue ) or die qq{Can't get plugins catalogue "$local_catalogue": $!};
+    my $pluginsCataloguePage = LWP::Simple::get( "file:$local_catalogue" ) or die qq{Can't get plugins catalogue "$local_catalogue": $!};
 
     # get list of plugins (from the links)
     my @plugins = qw();
