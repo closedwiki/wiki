@@ -92,7 +92,7 @@ installLocalModules({
 	'HTML::Parser' => [ qw( no ) ],
 	'XML::SAX' => [ qw( Y ) ],
 	'Data::UUID' => [ qw( /var/tmp 0007 ) ],
-	'GD' => [ qw( /sw/lib y y y ) ],
+#?	'GD' => [ qw( /usr/local/lib y y y ) ],
     },
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
     modules => [ @ARGV || @defaultTWikiModules ],
@@ -146,7 +146,7 @@ sub createMyConfigDotPm
   'ftp_proxy' => q[],
   'getcwd' => q[cwd],
   'gpg' => q[],
-  'gzip' => q[/sw/bin/gzip],
+  'gzip' => q[/usr/bin/gzip],
   'histfile' => "$cpan/.cpan/histfile",
   'histsize' => q[0],
   'http_proxy' => q[],
@@ -170,12 +170,12 @@ sub createMyConfigDotPm
   'prerequisites_policy' => q[follow],
   'scan_cache' => q[atstart],
   'shell' => q[/bin/bash],
-  'tar' => q[/sw/bin/tar],
+  'tar' => q[/usr/bin/tar],
   'term_is_latin' => q[1],
-  'unzip' => q[/sw/bin/unzip],
+  'unzip' => q[/usr/bin/unzip],
 #  ".../MIRROR/TWIKI/", ".../MIRROR/MINICPAN/",
   'urllist' => ["file:$optsConfig->{mirror}",],
-  'wget' => q[/sw/bin/wget],
+  'wget' => q[/usr/bin/wget],
 };
 1;
 __END__
