@@ -36,7 +36,6 @@ my $optsConfig = {
 
 GetOptions( $optsConfig,
 	    'baselibdir=s', 'mirror=s', 'config=s',
-#	    'mirror=s@',
 	    'force|f',
 # miscellaneous/generic options
 	    'help', 'man', 'debug', 'verbose|v',
@@ -47,6 +46,7 @@ print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # fix up relative paths
 foreach my $path qw( baselibdir mirror config )
+# mirror
 {
     # expand tildes in paths (from Perl Cookbook: 7.3. Expanding Tildes in Filenames)
     $optsConfig->{$path} =~ s{ ^ ~ ( [^/]* ) }
@@ -59,6 +59,10 @@ foreach my $path qw( baselibdir mirror config )
 
     $optsConfig->{$path} = File::Spec->rel2abs( $optsConfig->{$path} );
 }
+
+$optsConfig->{mirror} = "file:$optsConfig->{mirror}" 
+    unless $optsConfig->{mirror} =~ /^[^:]{2,}:/;
+
 print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # TODO: copied (and cropped) from install_twiki.cgi
@@ -116,7 +120,7 @@ sub installLocalModules
 #	$obj->force( 'install' ); # or warn "Error installing $module\n"; 
 	$obj->install; # or warn "Error installing $module\n"; 
     }
-    
+
 #    print Dumper( $CPAN::Config );
 }
 
@@ -134,50 +138,54 @@ sub createMyConfigDotPm
 	mkpath( dirname( $cpanConfig ) );
 
 	open( FH, ">$cpanConfig" ) or die "$!: Can't create $cpanConfig";
-	print FH <<__MYCONFIG_PM__
-\$CPAN::Config = {
-  'build_cache' => q[0],
-  'build_dir' => "$cpan/.cpan/build",
-  'cache_metadata' => q[1],
-  'cpan_home' => "$cpan/.cpan",
-  'ftp' => q[/usr/bin/ftp],
-  'ftp_proxy' => q[],
-  'getcwd' => q[cwd],
-  'gpg' => q[],
-  'gzip' => q[/usr/bin/gzip],
-  'histfile' => "$cpan/.cpan/histfile",
-  'histsize' => q[0],
-  'http_proxy' => q[],
-  'inactivity_timeout' => q[0],
-  'index_expire' => q[1],
-  'inhibit_startup_message' => q[0],
-  'keep_source_where' => "$cpan/.cpan/sources",
-  'lynx' => q[],
-  'make' => q[/usr/bin/make],
-  'make_arg' => "-I$cpan/",
+	$CPAN::Config = {
+	    'build_cache' => q[0],
+	    'build_dir' => "$cpan/.cpan/build",
+	    'cache_metadata' => q[1],
+	    'cpan_home' => "$cpan/.cpan",
+	    'ftp' => q[/usr/bin/ftp],
+	    'ftp_proxy' => q[],
+	    'getcwd' => q[cwd],
+	    'gpg' => q[],
+	    'gzip' => q[/usr/bin/gzip],
+	    'histfile' => "$cpan/.cpan/histfile",
+	    'histsize' => q[0],
+	    'http_proxy' => q[],
+	    'inactivity_timeout' => q[0],
+	    'index_expire' => q[1],
+	    'inhibit_startup_message' => q[0],
+	    'keep_source_where' => "$cpan/.cpan/sources",
+	    'lynx' => q[],
+	    'make' => q[/usr/bin/make],
+	    'make_arg' => "-I$cpan/",
 #  'make_arg' => q[],
-  'make_install_arg' => "-I$cpan/lib/",
+	    'make_install_arg' => "-I$cpan/lib/",
 #  'make_install_arg' => q[],
-  'makepl_arg' => "LIB=$cpan/lib INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
+	    'makepl_arg' => "LIB=$cpan/lib INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
 #???(sometimes?) $CPAN::Config->{'makepl_arg'} = "PREFIX=$cpan";
 #  'makepl_arg' => q[],
-  'ncftp' => q[],
-  'ncftpget' => q[],
-  'no_proxy' => q[],
-  'pager' => q[/usr/bin/less],
-  'prerequisites_policy' => q[follow],
-  'scan_cache' => q[atstart],
-  'shell' => q[/bin/bash],
-  'tar' => q[/usr/bin/tar],
-  'term_is_latin' => q[1],
-  'unzip' => q[/usr/bin/unzip],
-#  ".../MIRROR/TWIKI/", ".../MIRROR/MINICPAN/",
-  'urllist' => ["file:$optsConfig->{mirror}",],
-  'wget' => q[/usr/bin/wget],
-};
-1;
-__END__
-__MYCONFIG_PM__
+	    'ncftp' => q[],
+	    'ncftpget' => q[],
+	    'no_proxy' => q[],
+	    'pager' => q[/usr/bin/less],
+	    'prerequisites_policy' => q[follow],
+	    'scan_cache' => q[atstart],
+	    'shell' => q[/bin/bash],
+	    'tar' => q[/usr/bin/tar],
+	    'term_is_latin' => q[1],
+	    'unzip' => q[/usr/bin/unzip],
+	    'wget' => q[/usr/bin/wget],
+	};
+	
+print FH "\$CPAN::Config = {\n";
+foreach my $key ( sort keys %$CPAN::Config )
+{
+    print FH qq{\t'$key' => q[$CPAN::Config->{$key}],\n};
+}
+print FH qq{\t'urllist' => [ q[$optsConfig->{mirror}] ],\n};
+print FH "};\n",
+    "1;\n",
+    "__END__\n";
 }
 
 close FH;
