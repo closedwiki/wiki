@@ -317,18 +317,8 @@ sub generateChangeFormPage {
     ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     my $page = $session->{templates}->readTemplate( 'changeform' );
-    $page = $session->handleCommonTags( $page, $web, $topic );
-    $page = $session->{renderer}->getRenderedVersion( $page, $web, $topic );
     my $q = $session->{cgiQuery};
-    my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
-    $page =~ s/%TEXT%/$text/go;
 
-    my $prefs = $session->{prefs};
-    my $legalForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
-    $legalForms =~ s/^\s*//;
-    $legalForms =~ s/\s*$//;
-    my @forms = split( /[,\s]+/, $legalForms );
-    unshift @forms, ''; # for <none>
     my $store = $session->{store};
     my $formName = $q->param( 'formtemplate' ) || '';
     unless( $formName ) {
@@ -338,21 +328,34 @@ sub generateChangeFormPage {
     }
     $formName = '' if( !$formName || $formName eq 'none' );
 
+    my $prefs = $session->{prefs};
+    my $legalForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
+    $legalForms =~ s/^\s*//;
+    $legalForms =~ s/\s*$//;
+    my @forms = split( /[,\s]+/, $legalForms );
+    unshift @forms, 'none';
+
     my $formList = '';
     foreach my $form ( @forms ) {
-       my $selected = ( $form eq $formName ) ? 'checked' : '';
-       $formList .= CGI::br() if( $formList );
-       $formList .= CGI::input( {
-                                 type => 'radio',
-                                 name => 'formtemplate',
-                                 value => $form ? $form : 'none',
-                                 checked => $selected,
-                                } ). ( $form ? $form : '&lt;none&gt;' );
+        my $selected = ( $form eq $formName ) ? 'checked' : '';
+        $formList .= CGI::br() if( $formList );
+        $formList .= CGI::input( {
+                                  type => 'radio',
+                                  name => 'formtemplate',
+                                  value => $form,
+                                  checked => $selected,
+                                 }, ' '.$form.' ' );
     }
     $page =~ s/%FORMLIST%/$formList/go;
 
     my $parent = $q->param( 'topicparent' ) || '';
     $page =~ s/%TOPICPARENT%/$parent/go;
+
+    $page = $session->handleCommonTags( $page, $web, $topic );
+    $page = $session->{renderer}->getRenderedVersion( $page, $web, $topic );
+
+    my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
+    $page =~ s/%TEXT%/$text/go;
 
     return $page;
 }
