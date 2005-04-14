@@ -46,9 +46,10 @@ pod2usage({ -exitval => 1, -verbose => 2 }) if $optsConfig->{man};
 print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # fix up relative paths
-$optsConfig->{baselibdir} = File::Spec->rel2abs( $optsConfig->{baselibdir} );
-$optsConfig->{mirror} = File::Spec->rel2abs( $optsConfig->{mirror} );
-$optsConfig->{config} = File::Spec->rel2abs( $optsConfig->{config} );
+foreach my $path qw( baselibdir mirror config )
+{
+    $optsConfig->{$path} = File::Spec->rel2abs( $optsConfig->{$path} );
+}
 
 # TODO: copied (and cropped) from install_twiki.cgi
 use Config;
