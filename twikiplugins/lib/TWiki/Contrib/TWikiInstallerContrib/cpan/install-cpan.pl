@@ -48,8 +48,18 @@ print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 # fix up relative paths
 foreach my $path qw( baselibdir mirror config )
 {
+    # expand tildes in paths (from Perl Cookbook: 7.3. Expanding Tildes in Filenames)
+    $optsConfig->{$path} =~ s{ ^ ~ ( [^/]* ) }
+    { $1
+                    ? (getpwnam($1))[7]
+                    : ( $ENV{HOME} || $ENV{LOGDIR}
+                         || (getpwuid($>))[7]
+                       )
+		}ex;
+
     $optsConfig->{$path} = File::Spec->rel2abs( $optsConfig->{$path} );
 }
+print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 # TODO: copied (and cropped) from install_twiki.cgi
 use Config;
