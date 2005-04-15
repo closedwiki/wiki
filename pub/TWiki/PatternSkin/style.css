@@ -3,6 +3,14 @@
 	STYLE
 	Appearance: margins, fonts, colors
 	-----------------------------------------------------------	*/
+	
+
+/*	-----------------------------------------------------------
+	CONSTANTS
+	
+	C1		link color: #1559B3;
+	-----------------------------------------------------------	*/
+
 
 /*	-----------------------------------------------------------
 	General elements
@@ -97,13 +105,13 @@ h6 { font-size:95%; color:#900;}
 :visited:hover {
 	text-decoration:underline;
 	background-color:#b4d5ff;
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 }
-a:link img,
-a:visited img,
-a:hover img,
-a:active img {
-	background-color:transparent;
+a:link.noline,
+a:visited.noline,
+a:hover.noline,
+a:active.noline {
+	text-decoration:none;
 }
 th a:link,
 th a:visited {
@@ -209,7 +217,7 @@ label {
 }
 .twikiTopBar ul li a:hover {
 	background-color:#b4d5ff;
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 	text-decoration:underline;
 }
 .twikiTopBarContents {
@@ -224,6 +232,16 @@ label {
 	color:#800;
 	overflow:hidden;
 	line-height:1.3em;
+}
+.twikiLeftBar a:link,
+.twikiLeftBar a:visited {
+	text-decoration:none;
+	border-bottom:1px solid transparent;
+}
+.twikiLeftBar a:hover,
+.twikiLeftBar a:active {
+	text-decoration:none;
+	border-bottom:1px dotted #1559B3; /*C1*/
 }
 .twikiWebIndicator {
 	font-size:95%;
@@ -245,10 +263,6 @@ label {
 .twikiLeftBar ul {
 	padding:0;
 	margin:0;
-}
-.twikiLeftBar strong a:link,
-.twikiLeftBar strong a:visited {
-	font-weight:bold;
 }
 .twikiLeftBar li {
 	display:block;
@@ -324,12 +338,12 @@ html>body .twikiLeftBar li a {
 .twikiTopic h2 a:link,
 .twikiTopic h2 a:visited {
 	text-decoration:none;
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 	border:none;
 	font-weight:bold;
 }
 .twikiTopic a:hover {
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 }
 
 /**	----------------------------------
@@ -412,13 +426,13 @@ html>body .twikiLeftBar li a {
 .twikiAttachments th a:visited,
 .twikiForm th a:link,
 .twikiForm th a:visited {
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 	border-color:#345;
 	text-decoration:none;
 }
 .twikiAttachments th font,
 .twikiForm th font {
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 }
 .twikiAttachments th a:hover,
 .twikiForm th a:hover {
@@ -479,7 +493,7 @@ table.twikiTopicAction {
 	font-weight:bold;
 }
 .twikiTopicAction a:hover {
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 	border-bottom:1px solid #b4d5ff;
 }
 .twikiTopicAction tr {
@@ -522,7 +536,7 @@ table.twikiTopicAction {
 	width:20%;
 }
 .twikiTopicAction a:hover {
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 	border-bottom:1px solid #b4d5ff;
 }
 .twikiTopicActionSecondary {
@@ -691,7 +705,7 @@ html>body .twikiToc li a {
 }
 .twikiToolBar ul li a:hover {
 	background-color:#b4d5ff;
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 	text-decoration:none;
 }
 .twikiToolBar .twikiRevInfo {
@@ -843,7 +857,7 @@ html>body .twikiToc li a {
 }
 .twikiGrayText a:hover,
 .twikiHelpCol a:hover{
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 }
 .twikiSmall {
 	font-size:85%;
@@ -998,7 +1012,7 @@ html>body .twikiToc li a {
 .twikiDiffPage .twikiTopicAction a:hover {
 	text-decoration:none;
 	border-bottom:1px solid #b4d5ff;
-	color:#1559B3;
+	color:#1559B3; /*C1*/
 }
 .twikiViewPage .twikiTopicAction a:active,
 .twikiDiffPage .twikiTopicAction a:active {
