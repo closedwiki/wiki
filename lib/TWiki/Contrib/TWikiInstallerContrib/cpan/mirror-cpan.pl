@@ -4,6 +4,8 @@ use strict;
 # Copyright 2004 Will Norris.  All Rights Reserved.
 # License: GPL
 
+# TODO: just start using minicpan :)
+
 my $Config;	# forward declaration
 
 sub Usage
