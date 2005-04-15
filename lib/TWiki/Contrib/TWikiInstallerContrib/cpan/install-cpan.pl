@@ -116,7 +116,7 @@ sub installLocalModules
 	print "Installing $module\n" if $optsConfig->{verbose};
 	my $obj = CPAN::Shell->expand( Module => $module ) or warn "$module: $!";
 	next unless $obj;
-#???	$obj->force( $obj->install ); # or warn "Error installing $module\n"; 
+	$obj->force;
 	$obj->install; # or warn "Error installing $module\n"; 
     }
 
