@@ -774,14 +774,12 @@ sub searchWeb {
                 $out =~ s/%WEB%/$web/go;
                 $out =~ s/%TOPICNAME%/$topic/go;
                 $out =~ s/%TIME%/$revDate/o;
-                my $revNumText;
-                $revNum = 0 unless $revNum =~ /^\d+$/;
-                if( $revNum > 1 ) {
-                    $revNumText = 'r'.$revNum;
-                } else {
-                    $revNumText = CGI::span( { class=>'twikiNew' }, 'NEW');
+                
+                my $srev = 'r' . $revNum;
+                if( $revNum == 1 ) {
+                    $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
                 }
-                $out =~ s/%REVISION%/$revNumText/o;
+                $out =~ s/%REVISION%/$srev/o;
                 $out =~ s/%AUTHOR%/$revUser/o;
 
                 if( ( $inline || $theFormat ) && ( ! ( $forceRendering ) ) ) {

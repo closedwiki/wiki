@@ -59,10 +59,12 @@ sub changes {
     my @changes = split( /\r?\n/, $changeData );
     unless( $query->param( 'minor' )) {
         @changes = grep { !/\tminor$/ } @changes;
-        $page .= CGI::b( 'Note:' ).
-          'This page is showing major changes only. To see all changes '.
+        my $comment = CGI::b( 'Note: ' ).
+          'This page is showing major changes only. '.
             CGI::a( { href => $query->url()."/$webName?minor=1",
-                      rel => 'nofollow' }, 'click here' );
+                      rel => 'nofollow' }, 'View all changes' );
+        $comment = CGI::span( { class => 'twikiHelp' }, $comment );
+        $page .= $comment;
     }
     my %done = ();
     foreach my $change ( reverse @changes ) {
@@ -77,12 +79,12 @@ sub changes {
             $thisChange =~ s/%AUTHOR%/$wikiuser/go;
             $time = TWiki::Time::formatTime( $time );
             $rev = 1 unless $rev;
-            my $srev = $rev;
+            my $srev = 'r' . $rev;
             if( $rev == 1 ) {
                 $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
             }
             $thisChange =~ s/%TIME%/$time/go;
-            $thisChange =~ s/%REVISION%/$rev/go;
+            $thisChange =~ s/%REVISION%/$srev/go;
             $thisChange = $session->{renderer}->getRenderedVersion
               ( $thisChange, $webName, $changedTopic );
 

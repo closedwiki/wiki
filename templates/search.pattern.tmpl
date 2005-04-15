@@ -15,7 +15,7 @@
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%<div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Results from <nop>%WEB% web</div>%REPEAT%<div class="twikiSearchResults">
+%TMPL:DEF{"repeatedsearchblock"}%<div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">Results from <nop>%WEB% web</span><span class="twikiRight">retrieved at %DISPLAYTIME{"$hour:$min"}% GMT</span><br class="twikiClear" /></div>%REPEAT%<div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft">
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></div>
 <div class="twikiRight twikiSRAuthor">

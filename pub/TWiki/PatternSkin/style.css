@@ -136,6 +136,10 @@ th.twikiSortedDescendingCol a:hover {
 	border-top:1px dotted #999;
 }
 
+img {
+	vertical-align:text-bottom;
+}
+
 /* Forms */
 
 form { 
@@ -858,6 +862,7 @@ html>body .twikiToc li a {
 	styles and overridden styles used in search.pattern.tmpl
 	-----------------------------------------------------------	*/
 	
+.twikiSearchResultsPage {}
 .twikiSearchResults {}
 .twikiSearchResultsHeader,
 .twikiSearchString {
@@ -893,8 +898,23 @@ html>body .twikiToc li a {
 	color:#900;
 	font-weight:normal;
 }
-.twikiSearchResults .twikiNew b {
-	font-weight:normal;
+.twikiSearchResults .twikiNew {
+	background-color:green;
+	color:white;
+	font-size:85%;
+	padding:1px;
+	font-weight:bold;
+}
+.twikiSearchResultsPage .twikiHelp {
+	background-color:#FFCDD5;
+}
+.twikiSearchResults .twikiSRAuthor {
+	width:15%;
+	text-align:left;
+}
+.twikiSearchResults .twikiSRRev {
+	width:30%;
+	text-align:left;
 }
 .twikiSearchResultCount {
 	margin:0.5em 0 2em 0;
