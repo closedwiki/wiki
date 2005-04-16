@@ -112,8 +112,8 @@ BEGIN {
     $cfg{NoSpamPadding} ||= $noSpamPadding;
     $cfg{MimeTypesFileName} ||= $mimeTypesFilename;
     $cfg{StoreImpl} ||= $storeTopicImpl;
-    $cfg{EgrepCmd} ||= $egrepCmd;
-    $cfg{FgrepCmd} ||= $fgrepCmd;
+    $cfg{RCS}{EgrepCmd} ||= $cfg{EgrepCmd} || $egrepCmd;
+    $cfg{RCS}{FgrepCmd} ||= $cfg{FgrepCmd} || $fgrepCmd;
     $cfg{DisplayTimeValues} ||= $displayTimeValues;
     $cfg{UseLocale} ||= $useLocale;
     $cfg{SiteLocale} ||= $siteLocale;
@@ -690,9 +690,9 @@ RIGHT($n);
 
 # Check 'egrep'
 LEFT("EgrepCmd");
-$n = $cfg{EgrepCmd}.
+$n = $cfg{RCS}{EgrepCmd}.
   NOTE("This is a program TWiki uses for searching." );
-$val = $cfg{EgrepCmd} . $exeSuffix;
+$val = $cfg{RCS}{EgrepCmd} . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
     $n .= WARN("Search program <tt>$val</tt> not found. Check the path.");
@@ -700,10 +700,10 @@ if( ! ( -e $val ) ) {
 RIGHT($n);
 
 LEFT("FgrepCmd");
-$n = $cfg{FgrepCmd}.
+$n = $cfg{RCS}{FgrepCmd}.
   NOTE("This is a program TWiki uses for searching.");
-$cfg{FgrepCmd} =~ s/ .*//;   # Strip any options
-$val = $cfg{FgrepCmd} . $exeSuffix;
+$cfg{RCS}{FgrepCmd} =~ s/ .*//;   # Strip any options
+$val = $cfg{RCS}{FgrepCmd} . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
     $n = WARN("Search program <tt>$val</tt> not found. Check the path.");
@@ -786,10 +786,10 @@ NOTE("This is the actual PATH setting that will be used by Perl to run ",
 
 
 # Check that GNU egrep is found in PATH
-my $egrepOk = checkGnuVersion( $cfg{EgrepCmd}, "egrep", "used for regular expression searches" );
+my $egrepOk = checkGnuVersion( $cfg{RCS}{EgrepCmd}, "egrep", "used for regular expression searches" );
 
 # Check that GNU fgrep is found in PATH
-my $fgrepOk = checkGnuVersion( $cfg{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
+my $fgrepOk = checkGnuVersion( $cfg{RCS}{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
 
 unless ( $egrepOk && $fgrepOk )
 {
