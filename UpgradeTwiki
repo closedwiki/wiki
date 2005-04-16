@@ -86,6 +86,13 @@ EOUSAGE
 	eval 'use TWiki';
 print "\nLoaded TWiki version: $TWiki::VERSION\n";
 
+#Make absolute paths from parameters
+$oldDataDir = File::Spec->rel2abs( $oldDataDir ) ."/";
+$newDataDir = File::Spec->rel2abs( $newDataDir ) ."/" ;
+$outputDir = File::Spec->rel2abs( $outputDir ) ."/";
+$oldCfgFile = File::Spec->rel2abs( $oldCfgFile );
+$newCfgFile = File::Spec->rel2abs( $newCfgFile );
+
 
 print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile = ($newCfgFile), outputDir = ($outputDir)\n";
 
@@ -93,7 +100,7 @@ if ( $mode eq '' )
 {
 #RUN the old cairo upgrade code...
 } 
-elsif ( $mode eq '' ) 
+elsif ( $mode eq 'dakar' ) 
 {
 	eval 'use TWiki::Upgrade::UpgradeToDakar';
 	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($newCfgFile, $oldCfgFile, $outputDir);
@@ -105,15 +112,11 @@ elsif ( $mode eq 'cairo' )
 }
 elsif ( $mode eq 'upgradeTopics' ) 
 {
-		$oldDataDir = File::Spec->rel2abs( $oldDataDir ) ."/";
-		$newDataDir = File::Spec->rel2abs( $newDataDir ) ."/" ;
-		$outputDir = File::Spec->rel2abs( $outputDir ) ."/";
-		
-    	if ((! -d $oldDataDir ) || (! -d $newDataDir)) 
-		{
+	if ((! -d $oldDataDir ) || (! -d $newDataDir)) 
+	{
 		print "\nnewDataDir & oldDataDir must exist\n";
 		exit;
-    	}
+	}
 	eval 'use TWiki::Upgrade::UpdateTopics';
 	TWiki::Upgrade::UpdateTopics::UpdateTopics($newDataDir, $oldDataDir, $outputDir);
 }

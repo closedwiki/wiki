@@ -89,28 +89,23 @@ foreach $file (readdir(HERE))
 }
 
 print "Preparing to write new format configuration files for you...\n\n";
-TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
+TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 
 print "\n\nMerging your existing twiki data ($TWikiCfg::dataDir) with new release twiki data...\n";
 my $baseDir = `pwd`;
 chomp ($baseDir);
 
-UpdateTopics::UpdateTopics($TWikiCfg::dataDir, "$baseDir/data", "$targetDir/data"); # dies on error, without doing damage
-
+#TODO I think I want to do this last
+#TODO TWiki::Upgrade::UpdateTopics::UpdateTopics($TWikiCfg::dataDir, "$baseDir/data", "$targetDir/data"); # dies on error, without doing damage
 #make sure we're in the right place still
-chdir($baseDir);
-
-print "OK - the merge process completed successfully...\n";
-
+#TODO chdir($baseDir);
+#TODO print "OK - the merge process completed successfully...\n";
 # fix up permissions ... get them to a working state, if not ideal seurity-wise!
 # (we tell the user to check the permissions later anyhow)
-
-print "Now I'm giving write access to pub & data in the newly set up TWiki, so your web server can access them...\n";
-
-find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
+#TODO print "Now I'm giving write access to pub & data in the newly set up TWiki, so your web server can access them...\n";
+#TODO find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
 
 # set up .htaccess, if appropriate
-
 if (-f "$setlibPath/.htaccess")
 {
     if (copy("$setlibPath/.htaccess", "$targetDir/bin/.htaccess"))

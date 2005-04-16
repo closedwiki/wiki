@@ -3,7 +3,7 @@
 #
 # Jul 2004 - written by Martin "GreenAsJade" Gregory, martin@gregories.net
 
-package TWikiCfg;
+package TWiki::Upgrade::TWikiCfg;
 
 use strict; 
 
@@ -279,5 +279,3 @@ sub old2new {
 }
 
 1;
-
-

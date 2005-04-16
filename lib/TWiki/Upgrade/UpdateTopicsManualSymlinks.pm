@@ -14,7 +14,7 @@
 *** THIS IS SO UNTESTED THAT THESE COMMENTS ARE NOT COMMENTED, SO YOU
     CANT ACCIDENTALLY THINK IT SHOULD COMPLILE.
 
-package UpdateTopics;
+package TWiki::Upgrade::UpdateTopics;
 
 use strict;
 

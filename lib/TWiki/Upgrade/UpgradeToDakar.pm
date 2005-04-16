@@ -8,6 +8,9 @@
 # Jul 2004 - written by Martin Gregory, martin@gregories.net
 # Changes copyright (C) 2005 Crawford Currie http://c-dot.co.uk
 #
+
+package TWiki::Upgrade::UpgradeToDakar;
+
 =begin twiki
 
 ---+ UpgradeTwiki
@@ -18,11 +21,11 @@ and a new distribution.
 This script expects '.' to be the root of a TWiki distribution when it is called.
 =cut
 
-BEGIN {
-(-d "lib" and -d "data") or 
-    die "I was expecting to see a ./lib and ./data directories: you need to run $0 in the directory where you extracted the new TWiki distribution!\n";
-unshift @INC, "./lib";  # have to find Text::Diff, UpdateTopics, TWikiCfg which are bundled with TWiki.
-}
+#BEGIN {
+#(-d "lib" and -d "data") or 
+#    die "I was expecting to see a ./lib and ./data directories: you need to run $0 in the directory where you extracted the new TWiki distribution!\n";
+#unshift @INC, "./lib";  # have to find Text::Diff, UpdateTopics, TWikiCfg which are bundled with TWiki.
+#}
 
 use strict;
 
@@ -32,7 +35,8 @@ use File::Copy;
 use Text::Diff;
 use File::Find;
 
-my $targetDir = shift or die "Usage: $0 <target directory to build merged new wiki...>\n";
+sub doAllDakarUpgrades {
+my ($newCfgFile, $oldCfgFile, $targetDir) = @_;
 
 print "
 This script will help you upgrade an existing 'Cairo' (TWiki20040902)
@@ -96,14 +100,19 @@ Please tell me a path to either the setlib.cfg (preferred) or the TWiki.cfg...
 
 my ($configPath, $setlibPath, $libPath);
 
-do {
-    chomp ($configPath = <STDIN>) ;
-} until ((-f "$configPath/setlib.cfg" || -f "$configPath/TWiki.cfg") ? 1 :
-         (print("Hmmm - I can't see setlib.cfg or TWiki.cfg at $configPath ... please check and try again\n"), 0) 
-        );
+#do {
+#    chomp ($configPath = <STDIN>) ;
+#} until ((-f "$configPath/setlib.cfg" || -f "$configPath/TWiki.cfg") ? 1 :
+#         (print("Hmmm - I can't see setlib.cfg or TWiki.cfg at $configPath ... please check and try again\n"), 0) 
+#        );
 
-if (-f "$configPath/TWiki.cfg") {
-    $libPath = $configPath;
+if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
+    $libPath = "";
+    $setlibPath = $1;
+    $configPath = $1;
+} elsif ( $oldCfgFile =~ /(.*)TWiki.cfg/ ) {
+    $libPath = $1;
+    $configPath = $1;
 
     print "OK - found TWiki.cfg.  Now I need you to tell me where the existing TWiki bin directory is:\n";
 
@@ -111,15 +120,31 @@ if (-f "$configPath/TWiki.cfg") {
     # should also be used to fix up bin scripts with $scriptSuffix: TBD!
     do
     {
-        chomp ($setlibPath = <STDIN>) ;
+		chomp ($setlibPath = <STDIN>) ;
     }
     until ((-d $setlibPath) ? 1 :
-           (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
-          );
-} else {
-    $libPath = "";
-    $setlibPath = $configPath;
+	   (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
+	   );
 }
+
+#if (-f "$configPath/TWiki.cfg") {
+#    $libPath = $configPath;
+#
+#    print "OK - found TWiki.cfg.  Now I need you to tell me where the existing TWiki bin directory is:\n";
+#
+    # this will only be used to find .htaccess at this point.   
+    # should also be used to fix up bin scripts with $scriptSuffix: TBD!
+#    do
+#    {
+#        chomp ($setlibPath = <STDIN>) ;
+#    }
+#    until ((-d $setlibPath) ? 1 :
+#           (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
+#          );
+#} else {
+#    $libPath = "";
+#    $setlibPath = $configPath;
+#}
 
 # Now, should have finished asking the user questions...
 
@@ -139,30 +164,24 @@ foreach my $file (readdir(HERE)) {
 
 print "Preparing to write new format configuration files for you...\n\n";
 
-TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
+TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 
 print "\n\nMerging your existing twiki data ($TWiki::dataDir) with new release twiki data...\n";
 
 my $baseDir = `pwd`;
 chomp ($baseDir);
 
-UpdateTopics::UpdateTopics($TWiki::dataDir, "$baseDir/data", "$targetDir/data"); # dies on error, without doing damage
-
+#TWiki::Upgrade::UpdateTopics::UpdateTopics($TWiki::dataDir, "$baseDir/data", "$targetDir/data"); # dies on error, without doing damage
 #make sure we're in the right place still
-chdir($baseDir);
-
-print "OK - the merge process completed successfully.
-";
-
+#chdir($baseDir);
+#print "OK - the merge process completed successfully.";
 # fix up permissions ... get them to a working state, if not ideal seurity-wise!
 # (we tell the user to check the permissions later anyhow)
-
-print "
-Now I'm giving everyone write access to pub & data in the target
-area, so your web server user can access them.
-";
-
-find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
+#print "
+#Now I'm giving everyone write access to pub & data in the target
+#area, so your web server user can access them.
+#";
+#find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
 
 # set up .htaccess, if appropriate
 if (-f "$setlibPath/.htaccess") {
@@ -277,3 +296,5 @@ Now you need to
 
 12. Enjoy!
 ";
+
+}
