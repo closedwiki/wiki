@@ -161,9 +161,7 @@ sub createMyConfigDotPm
 #  'make_arg' => q[],
 	    'make_install_arg' => "-I$cpan/lib/",
 #  'make_install_arg' => q[],
-	    'makepl_arg' => "LIB=$cpan/lib INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
-#???(sometimes?) $CPAN::Config->{'makepl_arg'} = "PREFIX=$cpan";
-#  'makepl_arg' => q[],
+	    'makepl_arg' => "PREFIX=$cpan LIB=$cpan/lib INSTALLPRIVLIB=$cpan/lib INSTALLARCHLIB=$cpan/lib/$Config{archname} INSTALLSITELIB=$cpan/lib INSTALLSCRIPT=$cpan/bin INSTALLBIN=$cpan/bin INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
 	    'ncftp' => q[],
 	    'ncftpget' => q[],
 	    'no_proxy' => q[],
