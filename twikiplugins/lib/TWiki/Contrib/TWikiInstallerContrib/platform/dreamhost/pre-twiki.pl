@@ -5,17 +5,20 @@ use File::Path qw( mkpath rmtree );
 use File::Copy qw( cp mv );
 use File::Basename qw( dirname );
 use FindBin;
+use Config;
 
 sub mychomp { chomp $_[0]; $_[0] }
 
-print "TWiki Installation (Step 1/4)\n";
+print "TWiki Installation (Step 1/3)\n";
+
+$ENV{SERVER_NAME} = 'wbniv.wikihosting.com';
 
 my $opts = {
     whoami => mychomp( `whoami` ),
     cgibin => "$FindBin::Bin/cgi-bin",
     installcgi => 'install_twiki.cgi',
-    hostname => 'wbniv.wikihosting.com',
-    browser => 'links',
+    hostname => $ENV{SERVER_NAME} || mychomp( `hostname --long` ),
+    browser => 'links',				# platform-specific
 };
 
 #my $INSTALL = "http://$opts->{hostname}/~$opts->{whoami}/config/install.html";
@@ -52,9 +55,15 @@ mkpath $cpan;
 my $mirror = '/home/wikihosting/CPAN-live/MIRROR/MINICPAN/' || "$FindBin::Bin/cpan/MIRROR/TWIKI/";
 createMyConfigDotPm({ cpan => $cpan, config => '~/.cpan/CPAN/MyConfig.pm', mirror => "file:$mirror" });
 foreach my $module (
-		    qw( Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node ),
+		    qw( ExtUtils::MakeMaker Storable Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node 
+			Carp::Assert
+			Class::Data::Inheritable
+			Class::Virtually::Abstract 
+				Archive::Zip 
+			Archive::Any ),
 		    # Module::Build
-		    qw( Error URI HTML::Tagset HTML::Parser LWP XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
+		    qw( Error URI HTML::Tagset HTML::Parser LWP LWP::UserAgent XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
+#		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
 		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
 		    # Net::SSLeay IO::Socket::SSL
 		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
@@ -71,11 +80,11 @@ foreach my $module (
 # setup permissions for rest of install
 ################################################################################
 my $tmp = "$opts->{cgibin}/tmp";
-rmtree( $tmp );
-mkpath( $tmp, 0, 0777 );
+rmtree( $tmp ), mkpath( $tmp, 0, 0777 );
 chmod 0777, ".";
-chmod 0777, $opts->{cgibin};
+chmod 0755, $opts->{cgibin};
 chmod 0777, "$opts->{cgibin}/lib";
+chmod 0755, "$opts->{cgibin}/lib/CPAN";
 
 ################################################################################
 #system( $opts->{browser} => $INSTALL ) == 0 or print "continue installation at $INSTALL\n";
@@ -105,9 +114,7 @@ sub expandTilde
     $dir =~ s{ ^ ~ ( [^/]* ) }
     { $1
 	  ? (getpwnam($1))[7]
-	  : ( $ENV{HOME} || $ENV{LOGDIR}
-	      || (getpwuid($>))[7]
-	      )
+	  : ( $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7] )
       }ex;
 
     return $dir;
@@ -148,12 +155,9 @@ sub createMyConfigDotPm
             'lynx' => q[],
             'make' => findProgramOnPaths( 'make' ),
             'make_arg' => "-I$cpan/",
-#  'make_arg' => q[],
             'make_install_arg' => "-I$cpan/lib/",
-#  'make_install_arg' => q[],
-            'makepl_arg' => "LIB=$cpan/lib INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
-#???(sometimes?) $CPAN::Config->{'makepl_arg'} = "PREFIX=$cpan";
-#  'makepl_arg' => q[],
+	    # http://faqomatic.sourceforge.net/fom-serve/cache/437.html
+            'makepl_arg' => "PREFIX=$cpan LIB=$cpan/lib INSTALLPRIVLIB=$cpan/lib INSTALLARCHLIB=$cpan/lib/$Config{archname} INSTALLSITELIB=$cpan/lib INSTALLSCRIPT=$cpan/bin INSTALLBIN=$cpan/bin INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
             'ncftp' => q[],
             'ncftpget' => q[],
             'no_proxy' => q[],
