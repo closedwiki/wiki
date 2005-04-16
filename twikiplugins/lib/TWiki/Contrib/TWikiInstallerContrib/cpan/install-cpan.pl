@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/home/wbniv/bin/perl -w
 # $Id$
 # Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
@@ -15,6 +15,7 @@ use File::Spec qw( rel2abs );
 use File::Basename qw( dirname );
 use Getopt::Long;
 use FindBin;
+use Config;
 use Pod::Usage;
 use Cwd qw( cwd );
 sub mychomp { chomp $_[0]; $_[0] }
@@ -142,11 +143,11 @@ sub createMyConfigDotPm
 	    'build_dir' => "$cpan/.cpan/build",
 	    'cache_metadata' => q[1],
 	    'cpan_home' => "$cpan/.cpan",
-	    'ftp' => q[/usr/bin/ftp],
+	    'ftp' => q[/bin/ftp],
 	    'ftp_proxy' => q[],
 	    'getcwd' => q[cwd],
 	    'gpg' => q[],
-	    'gzip' => q[/usr/bin/gzip],
+	    'gzip' => q[/bin/gzip],
 	    'histfile' => "$cpan/.cpan/histfile",
 	    'histsize' => q[0],
 	    'http_proxy' => q[],
@@ -170,12 +171,11 @@ sub createMyConfigDotPm
 	    'prerequisites_policy' => q[follow],
 	    'scan_cache' => q[atstart],
 	    'shell' => q[/bin/bash],
-	    'tar' => q[/usr/bin/tar],
+	    'tar' => q[/bin/tar],
 	    'term_is_latin' => q[1],
 	    'unzip' => q[/usr/bin/unzip],
 	    'wget' => q[/usr/bin/wget],
 	};
-	
 	print FH "\$CPAN::Config = {\n";
 	foreach my $key ( sort keys %$CPAN::Config )
 	{
@@ -213,7 +213,7 @@ close FH;
 			  Time::ParseDate Date::Handler Date::Parse 
 			  HTML::CalendarMonthSimple 
 			  Test::Unit 
-			  LWP::Simple 
+			  LWP::Simple
 			  CGI::Session 
 			  Weather::Com
 			  GD Barcode::Code128
