@@ -8,9 +8,7 @@ package TWiki::Upgrade::TWikiCfg;
 use strict; 
 
 use vars '$twikiLibPath';   # read from setlib.cfg
-
 use vars '$localPerlLibPath';   # read from setlib.cfg
-
 use vars '@storeSettings';  # read from TWiki.cfg
 
 use Data::Dumper;
@@ -32,13 +30,9 @@ Dialogs with the user on STDIN/STDOUT.
 
 sub UpgradeTWikiConfig {
 
-    my $existingConfigInfo = shift or
-      die "UpgradeTWikiConfig not passed any arguments!\n";
-
+    my $existingConfigInfo = shift or die "UpgradeTWikiConfig not passed any arguments!\n";
     my $targetDir = (shift or '.');
-
     my $newConfigFile = "$targetDir/lib/LocalSite.cfg";
-
     my $twikiCfgFile;
 
     if (-f "$existingConfigInfo/setlib.cfg") {
@@ -107,7 +101,7 @@ sub upgradeConfig {
 
     if ($ss{dataDir} ne $dataDir || $ss{pubDir} ne $pubDir) {
         die "storeSettings dataDir ($ss{dataDir}) or pubDir ($ss{pubDir}) is different to TWiki dataDir ($dataDir) or pubDir ($pubDir); please manually resolve this in the old config file before trying again (they should be identical)";
-};
+	};
 
     print CFG "# This is LocalSite.cfg. It contains all the setups for your local\n";
     print CFG "# TWiki site.\n";
@@ -153,10 +147,8 @@ sub upgradeConfig {
                       "{SiteCharsetOverride}" );
     print CFG old2new($localeRegexes, "1",
                       "{LocaleRegexes}" );
-    print CFG old2new($upperNational, "",
-                      "{UpperNational}" );
-    print CFG old2new($lowerNational, "",
-                      "{LowerNational}" );
+    print CFG old2new($upperNational, "", "{UpperNational}" );
+    print CFG old2new($lowerNational, "", "{LowerNational}" );
     print CFG old2new($securityFilter, "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]",
                       "{NameFilter}" );
     print CFG old2new($defaultUserName, "guest", "{DefaultUserLogin}" );
@@ -166,14 +158,12 @@ sub upgradeConfig {
     print CFG old2new($debugFilename, "$logDir/debug.txt", "{DebugFileName}" );
     print CFG old2new($warningFilename, "$logDir/warning.txt", "{WarningFileName}" );
 
-    print CFG old2new($htpasswdFilename, "$dataDir/.htpasswd",
-                      "{Htpasswd}{FileName}" );
-    print CFG old2new($htpasswdEncoding, "crypt",
-                      "{Htpasswd}{Encoding}" );
+    print CFG old2new($htpasswdFilename, "$dataDir/.htpasswd", "{Htpasswd}{FileName}" );
+    print CFG old2new($htpasswdEncoding, "crypt", "{Htpasswd}{Encoding}" );
     if($htpasswdFormatFamily eq "ht(passwd|digest)") {
-        print CFG "\$cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser'\n";
+        print CFG "\$cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';\n";
     } else {
-        print CFG "\$cfg{PasswordManager} = 'TWiki::Users::NoPasswdUser'\n";
+        print CFG "\$cfg{PasswordManager} = 'TWiki::Users::NoPasswdUser';\n";
     }
     print CFG old2new($logFilename, "$logDir/log%DATE%.txt", "{LogFileName}" );
     print CFG old2new($remoteUserFilename, "$dataDir/remoteusers.txt", "{RemoteUserFileName}" );
