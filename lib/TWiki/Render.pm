@@ -445,9 +445,10 @@ sub _renderWikiWord {
     my $store = $this->{session}->{store};
     my $topicExists = $store->topicExists( $theWeb, $theTopic );
 
+    my $singular = '';
     unless( $topicExists ) {
         # topic not found - try to singularise
-        my $singular = TWiki::Plurals::singularForm($theWeb, $theTopic);
+        $singular = TWiki::Plurals::singularForm($theWeb, $theTopic);
         if( $singular ) {
             $topicExists = $store->topicExists( $theWeb, $singular );
             $theTopic = $singular if $topicExists;
@@ -459,8 +460,14 @@ sub _renderWikiWord {
                                        $theTopic, $theLinkText, $theAnchor);
     }
     if( $doLinkToMissingPages ) {
-        return _renderNonExistingWikiWord($this, $theWeb, $theTopic,
+        if ($singular && $singular ne $theTopic) {
+            my @topics = ($singular, $theTopic);
+            return _renderNonExistingWikiWord($this, $theWeb, \@topics,
                                           $theLinkText, $theAnchor);
+        } else {
+            return _renderNonExistingWikiWord($this, $theWeb, $theTopic,
+                                          $theLinkText, $theAnchor);
+        }
     }
     if( $doKeepWeb ) {
         return $theWeb.'.'.$theLinkText;
@@ -490,13 +497,30 @@ sub _renderNonExistingWikiWord {
     my $ans;
 
     $ans = CGI::font( { -color=>$this->{NEWTOPICFONTCOLOR} }, $theLinkText );
-    $ans .= CGI::a( { href=>$this->{session}->getScriptUrl
+
+    if (ref $theTopic && ref $theTopic eq 'ARRAY') {
+        my $num = 1;
+        foreach my $t(@{ $theTopic }) {
+            next if ! $t;
+            $ans .= CGI::a( { href=>$this->{session}->getScriptUrl
+                      ($theWeb, $t, 'edit',
+                       topicparent => $this->{session}->{webName}.'.'.
+                       $this->{session}->{topicName} ),
+                      rel => 'nofollow'
+                    },
+                    $this->{NEWLINKSYMBOL} x $num . " " );
+            $num++;
+        }
+    } else {
+        $ans .= CGI::a( { href=>$this->{session}->getScriptUrl
                       ($theWeb, $theTopic, 'edit',
                        topicparent => $this->{session}->{webName}.'.'.
                        $this->{session}->{topicName} ),
                       rel => 'nofollow'
                     },
                     $this->{NEWLINKSYMBOL} );
+    }
+
     return CGI::span( { class=>'twikiNewLink',
                         style=>'background : '.$this->{NEWTOPICBGCOLOR}.';' },
                       $ans );

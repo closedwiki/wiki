@@ -71,6 +71,8 @@ sub singularForm {
     my $singularForm = $pluralForm;
     $singularForm =~ s/ies$/y/;      # plurals like policy / policies
     $singularForm =~ s/sses$/ss/;    # plurals like address / addresses
+    $singularForm =~ s/ches$/ch/;    # plurals like search / searches
+    $singularForm =~ s/(oes|os)$/o/; # plurals like veto / vetoes
     $singularForm =~ s/([Xx])es$/$1/;# plurals like box / boxes
     $singularForm =~ s/([^s])s$/$1/; # others, excluding ss like address(es)
     return $singularForm
