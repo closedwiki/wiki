@@ -193,11 +193,13 @@ close FH;
 ################################################################################
 
 @defaultTWikiModules = qw(
+			  Storable
 			  XML::Parser XML::Simple 
 			  Algorithm::Diff Text::Diff HTML::Diff
 			  Text::Glob Number::Compare File::Find::Rule 
 			  File::Slurp File::Slurp::Tree
 			  List::Permutor File::Temp 
+			  URI MIME::Base64 Net::FTP Digest Digest::MD5 HTML::Parser LWP LWP::Simple 
 			  WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki LWP::UserAgent::TWiki::TWikiGuest
 			  Archive::Zip 
 			  IO::Zlib
@@ -213,7 +215,6 @@ close FH;
 			  Time::ParseDate Date::Handler Date::Parse 
 			  HTML::CalendarMonthSimple 
 			  Test::Unit 
-			  LWP::Simple
 			  CGI::Session 
 			  Weather::Com
 			  GD Barcode::Code128
