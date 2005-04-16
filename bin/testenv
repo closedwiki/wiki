@@ -786,10 +786,16 @@ NOTE("This is the actual PATH setting that will be used by Perl to run ",
 
 
 # Check that GNU egrep is found in PATH
-checkGnuVersion( $cfg{EgrepCmd}, "egrep", "used for regular expression searches" );
+my $egrepOk = checkGnuVersion( $cfg{EgrepCmd}, "egrep", "used for regular expression searches" );
 
 # Check that GNU fgrep is found in PATH
-checkGnuVersion( $cfg{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
+my $fgrepOk = checkGnuVersion( $cfg{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
+
+unless ( $egrepOk && $fgrepOk )
+{
+    LEFT();
+    RIGHT( NOTE( qq{<a href="http://www.gnu.org/software/grep/grep.html" >grep</a> can be downloaded from <a href="http://www.gnu.org/">GNU</a>'s <a href="ftp://ftp.gnu.org/pub/gnu/grep/" >FTP</a> site} ) );
+}
 
 # Check that GNU diff is found in PATH
 checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
@@ -1061,6 +1067,8 @@ sub deleteTestFile
 # diff, grep, patch, etc), we only check for these tools on Unix/Linux 
 # and Cygwin.  
 sub checkGnuVersion {
+    my $ok = 0;
+
     my ($progExecString, $progReadableName, $progUsage) = @_;        # Usage is 'used for...' string
 
     if( $cfg{OS} eq 'UNIX' or  ($cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
@@ -1080,10 +1088,13 @@ sub checkGnuVersion {
         } else {
             $n = "GNU $progReadableName was found on the PATH -".
                   "this is the recommended $progReadableName tool.";
+	    $ok = 1;
         }
 
         RIGHT($n, NOTE("The '$progReadableName' command is $progUsage."));
     }
+
+    return $ok;
 }
 
 # check we can create a file
