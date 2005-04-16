@@ -21,19 +21,9 @@ BEGIN {
 
     my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib";
     unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
-    # TODO: use setlib.cfg (along with TWiki:Codev.SetMultipleDirsInSetlibDotCfg)
 };
 
 #use WWW::Mechanize::TWiki;
-
-system( "mv cgi-bin/tmp/install/LocalSite.cfg cgi-bin/lib/" );
-system( "mkdir htdocs/" );
-system( "mv cgi-bin/tmp/twiki/pub htdocs/twiki/" );
-system( "mv cgi-bin/tmp/twiki/templates twiki/" );
-system( "chmod -R o-w cgi-bin/twiki/ cgi-bin/lib/ cgi-bin/lib/CPAN/" );
-
-print `find cgi-bin/twiki/ -print | xargs chmod go-w`;
-print `find cgi-bin/lib/ -print | xargs chmod go-w`;
 
 #system( "rm -rf cgi-bin/tmp" );
 
