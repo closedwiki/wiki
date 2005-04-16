@@ -47,7 +47,6 @@ Prolog
 ^Test::Unit$
 ^LWP::Simple$
 ^Weather::Com$
-^File::Slurp
 ^Barcode::Code128$
 WWW::Mechanize
 ^File::Find
