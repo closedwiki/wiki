@@ -32,6 +32,9 @@ my $Config = {
     outputdir => '.',
     outfile => undef,
     agent => "TWikiKernel Builder/v0.7.2",
+# output formats
+    tar => 1,
+    zip => 1,
 # documentation switches
     pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
     gendocs => 1,
@@ -44,6 +47,8 @@ my $Config = {
 
 my $result = GetOptions( $Config,
 			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s',
+# output formats
+			 'tar!', 'zip!',
 # documentation switches
 			'pdoc!', 'gendocs!',
 # miscellaneous/generic options
@@ -196,8 +201,8 @@ if ( $Config->{verbose} ) { print scalar File::Find::Rule->file->in( $installBas
 ################################################################################
 # create TWikiKernel distribution file
 my $newDistro = "$Config->{outputdir}/$Config->{outfile}";
-execute( "cd $Config->{tempdir} ; tar czf ${newDistro}.tar.gz twiki" ) or die $!;	# .tar.gz goes *here* because *z* is here
-print "${newDistro}.tar.gz\n";			# print name of generated file; other tools later in the chain use it
+if ( $Config->{tar} ) { execute( "cd $Config->{tempdir} ; tar czf ${newDistro}.tar.gz twiki" ) or warn $!; }
+if ( $Config->{zip} ) { execute( "cd $Config->{tempdir} ; zip -qr ${newDistro}.zip twiki" ) or warn $!; }
 
 exit 0;
 
@@ -247,6 +252,8 @@ Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
    -tempdir [.]		where all temporary files for this build are placed
    -outputdir [.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
    -outfile		.
+   -tar                 produce an .tar.gz output file (disable with -notar)
+   -zip                 produce a .zip output file (disable with -nozip)
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
    -pdoc		process source code using Pdoc to produce html in twiki/doc/ (autodetects if Pdoc installed)
    -gendocs		process source code using the equivalent of TWiki:Plugins.PerlPodPlugin 
