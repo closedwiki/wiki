@@ -128,7 +128,7 @@ sub createMyConfigDotPm
 
     if ( $optsConfig->{force} || ! -e $cpanConfig )
     { 
-	mkpath( dirname( $cpanConfig ) );
+	-d dirname( $cpanConfig ) or mkpath( dirname( $cpanConfig ) );
 
 	open( FH, ">$cpanConfig" ) or die "$!: Can't create $cpanConfig";
 	$CPAN::Config = {
