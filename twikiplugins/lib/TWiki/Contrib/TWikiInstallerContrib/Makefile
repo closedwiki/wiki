@@ -31,15 +31,12 @@ release :
 
 plugins :
 	bin/download-twiki-extensions.pl plugins
-	bin/zip2tgz.pl downloads/plugins/*.zip
 
 contribs :
 	bin/download-twiki-extensions.pl contribs
-	bin/zip2tgz.pl downloads/contribs/*.zip
 
 addons :
 	bin/download-twiki-extensions.pl addons
-	bin/zip2tgz.pl downloads/addons/*.zip
 
 ################################################################################
 
@@ -60,8 +57,8 @@ help : print
 	@echo make test-distro - download and bundle extensions + kernel
 	@echo make distro - test-distro + bzip2 compression
 	@echo 
-	@echo "make extensions - download and convert extensions (all of plugins, contribs, addons)"
-	@echo make plugins contribs addons - download and convert specific extensions types
+	@echo "make extensions - download extensions (all of plugins, contribs, addons)"
+	@echo make plugins contribs addons - download specific extensions types
 	@echo 
 	@echo make minicpan - mirror latest version of cpan
 	@echo make twiki-cpan - create twiki cpan repository
