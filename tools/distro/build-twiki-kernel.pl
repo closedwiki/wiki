@@ -6,10 +6,15 @@ use Data::Dumper qw( Dumper );
 
 use lib( "$ENV{TWIKIDEV}/CPAN/lib" );
 # TODO:
+#   * Documentation (of the process)
+#   * Documentation (of the changed CPAN requirements)
+#   * Automatic check/update the version #
+#   * Automatic generation of CHANGES from svn log
+#   * Build a zip file
 #   * (probably eliminate outputdir completely)
 #   * use svn export (but mirror it so 
 #   * readme.txt - needs editting, customising per build (type, etc.)
-#   * probably something else i can't remember now
+
 use Cwd qw( cwd );
 use File::Copy qw( cp );
 use File::Path qw( rmtree mkpath );
