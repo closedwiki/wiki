@@ -224,13 +224,13 @@ install-cpan.pl - ...
 
 =head1 SYNOPSIS
 
-install-cpan.pl [options] [-baselibdir] [-mirrordir]
+install-cpan.pl [options] [-baselibdir] [-mirror]
 
 Copyright 2004, 2005 Will Norris.  All Rights Reserved.
 
   Options:
    -baselibdir         where to install the CPAN modules
-   -mirrordir          location of the (mini) CPAN mirror
+   -mirror             location of the (mini) CPAN mirror
    -config             filename (~/.cpan/CPAN/MyConfig.pm)
    -force|f            force overwrite of config file
    -verbose
@@ -244,7 +244,7 @@ Copyright 2004, 2005 Will Norris.  All Rights Reserved.
 
 =item B<-baselibdir>
 
-=item B<-mirrordir>
+=item B<-mirror>
 
 =item B<-config>
 
