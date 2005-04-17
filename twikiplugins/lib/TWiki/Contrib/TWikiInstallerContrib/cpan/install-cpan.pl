@@ -60,10 +60,15 @@ foreach my $path qw( baselibdir mirror config )
     $optsConfig->{$path} = File::Spec->rel2abs( $optsConfig->{$path} );
 }
 
+# use file: unless some transport (eg, http:, ftp:, etc.) has already been specified
 $optsConfig->{mirror} = "file:$optsConfig->{mirror}" 
     unless $optsConfig->{mirror} =~ /^[^:]{2,}:/;
 
 print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
+
+my @localLibs = ( "$optsConfig->{baselibdir}/lib", "$optsConfig->{baselibdir}/lib/$Config{archname}" );
+unshift @INC, @localLibs;
+print STDERR Dumper( \@INC ) if $optsConfig->{debug};
 
 ################################################################################
 
@@ -176,7 +181,6 @@ sub createMyConfigDotPm
 	print FH "};\n",
 	"1;\n",
 	"__END__\n";
-
 	close FH;
     }
 }
