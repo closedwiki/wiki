@@ -1,4 +1,4 @@
-#!/home/wbniv/bin/perl -w
+#!/usr/bin/perl -w
 # $Id$
 # Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
