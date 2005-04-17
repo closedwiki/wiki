@@ -126,7 +126,7 @@ sub createMyConfigDotPm
 
     my $cpanConfig = $parm->{config} or die "no config file specified?";
 
-    unless ( -e $cpanConfig )
+    if ( $optsConfig->{force} || ! -e $cpanConfig )
     { 
 	mkpath( dirname( $cpanConfig ) );
 
