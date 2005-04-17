@@ -4,6 +4,7 @@
 Description: Manual trivial fast sanity checks for script functions. Do them in order, from the top down, as the save tests rely on eachother.
 
 | *Script* | *Description* | *Test* |
+| =testenv= | The most basic sanity check | <a href="%SCRIPTURLPATH%/testenv">click here</a> |
 | =changes= | Should redirect to changes | <a href="%SCRIPTURLPATH%/changes%SCRIPTSUFFIX%/%WEB%/TestCaseQuickScriptsChecks">click here</a> |
 | =edit= | Simple edit (don't save) | <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/TestCaseQuickScriptsChecks">click here</a> |
 | =manage= | | |
