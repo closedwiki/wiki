@@ -65,13 +65,6 @@ $optsConfig->{mirror} = "file:$optsConfig->{mirror}"
 
 print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
-# TODO: copied (and cropped) from install_twiki.cgi
-use Config;
-my @localLibs = ( "$optsConfig->{baselibdir}/lib", "$optsConfig->{baselibdir}/lib/$Config{archname}" );
-unshift @INC, @localLibs;
-$ENV{PERL5LIB} = join( ':', @localLibs );
-print STDERR Dumper( \@INC ) if $optsConfig->{debug};
-
 ################################################################################
 
 -d $optsConfig->{baselibdir} or mkpath $optsConfig->{baselibdir};
