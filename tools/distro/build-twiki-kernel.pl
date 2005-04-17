@@ -21,8 +21,6 @@ use Getopt::Long;
 use Pod::Usage;
 use LWP::UserAgent::TWiki::TWikiGuest;
 
-sub mychomp { chomp $_[0]; $_[0] }
-
 my $Config = {
 # 
     tempdir => '.',
