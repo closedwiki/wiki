@@ -10,7 +10,7 @@ twiki-$(PLATFORM).tar.bz2 : twiki-$(PLATFORM).tar
 	bzip2 twiki-$(PLATFORM).tar
 
 twiki-$(PLATFORM).tar : 
-	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform `cd platform; ls` --directory platform/$(PLATFORM) README
+	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform `cd platform; ls ` --directory $(PLATFORM) `cd platform/$(PLATFORM); ls` 
 	tar -r $(TAR_EXCLUDE) --exclude "downloads/*/*.zip" -f twiki-$(PLATFORM).tar bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
 	tar -r $(TAR_EXCLUDE) -f twiki-$(PLATFORM).tar 
 
