@@ -8,9 +8,7 @@ use lib( "$ENV{TWIKIDEV}/CPAN/lib" );
 # TODO:
 #   * Documentation (of the process)
 #   * Documentation (of the changed CPAN requirements)
-#   * Automatic check/update the version #
-#   * Automatic generation of CHANGES from svn log
-#   * Build a zip file
+#   * Automatic check/update the version # (what does this mean?)
 #   * (probably eliminate outputdir completely)
 #   * use svn export (but mirror it so 
 #   * readme.txt - needs editting, customising per build (type, etc.)
@@ -36,6 +34,7 @@ my $Config = {
     tar => 1,
     zip => 1,
 # documentation switches
+    changelog => 1,
     pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
     gendocs => 1,
 # 
@@ -48,7 +47,7 @@ my $Config = {
 my $result = GetOptions( $Config,
 			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s',
 # output formats
-			 'tar!', 'zip!',
+			 'changelog!', 'tar!', 'zip!',
 # documentation switches
 			'pdoc!', 'gendocs!',
 # miscellaneous/generic options
@@ -115,13 +114,24 @@ else {
 
 ###############################################################################
 # build source code docs
+if ( $Config->{changelog} )
+{
+    $Config->{verbose} && print "Generating CHANGELOG\n";
+    # test for xsltproc
+    `xsltproc --version` ?
+	execute( "svn log --xml --verbose | xsltproc tools/distro/svn2cl.xsl - > CHANGELOG" )
+	: die "xsltproc not found; can't generate CHANGELOG";
+}
+
 if ( $Config->{gendocs} )
 {
+    $Config->{verbose} && print "Generating docs\n";
     execute( "cd tools && perl gendocs.pl nosmells" ) or die $!;
 }
 
 if ( $Config->{pdoc} )
 {
+    $Config->{verbose} && print "Generating pdoc\n";
     execute( "rm -rf doc/ ; mkdir doc/ && cd tools && perl perlmod2www.pl -source ../lib/TWiki/ -target ../doc/" ) or die $!;
     my $dirDocs = "doc";
     spew_tree( "$installBase/doc" => slurp_tree( $dirDocs, rule => $ruleNormalFiles->start( $dirDocs ) ) );
@@ -170,6 +180,7 @@ qw (
       AUTHORS COPYING COPYRIGHT LICENSE readme.txt 
     );
 cp( "$installBase/AUTHORS", "$installBase/pub/TWiki/TWikiContributor/AUTHORS" );
+cp( "CHANGELOG", "$installBase/CHANGELOG" ) if -e 'CHANGELOG';
 
 my $ua = LWP::UserAgent::TWiki::TWikiGuest->new( agent => $Config->{agent} ) or die $!;
 foreach my $doc qw( TWikiDocumentation TWikiHistory )
@@ -254,6 +265,7 @@ Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
    -outfile		.
    -tar                 produce an .tar.gz output file (disable with -notar)
    -zip                 produce a .zip output file (disable with -nozip)
+   -changelog           automatically generate CHANGELOG from SVN (requires xsltproc)
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
    -pdoc		process source code using Pdoc to produce html in twiki/doc/ (autodetects if Pdoc installed)
    -gendocs		process source code using the equivalent of TWiki:Plugins.PerlPodPlugin 
@@ -271,6 +283,12 @@ Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
 =item B<-outputdir>
 
 =item B<-outfile>
+
+=item B<-tar>
+
+=item B<-zip>
+
+=item B<-changelog>
 
 =item B<-agent>
 
