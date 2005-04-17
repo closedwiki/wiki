@@ -7,7 +7,7 @@ all : help
 TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 
 twiki-$(PLATFORM).tar.bz2 : twiki-$(PLATFORM).tar
-	bzip2 twiki-$(PLATFORM).tar
+	bzip2 -f twiki-$(PLATFORM).tar
 
 twiki-$(PLATFORM).tar : 
 	tar -c $(TAR_EXCLUDE) --no-recursion -f twiki-$(PLATFORM).tar --directory platform `cd platform; ls ` --directory $(PLATFORM) `cd platform/$(PLATFORM); ls` 
