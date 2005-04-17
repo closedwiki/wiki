@@ -180,7 +180,7 @@ qw (
       AUTHORS COPYING COPYRIGHT LICENSE readme.txt 
     );
 cp( "$installBase/AUTHORS", "$installBase/pub/TWiki/TWikiContributor/AUTHORS" );
-cp( "CHANGELOG", "$installBase/CHANGELOG" ) if -e 'CHANGELOG';
+cp( "CHANGELOG", "$installBase/CHANGELOG" ) unless -z 'CHANGELOG';
 
 my $ua = LWP::UserAgent::TWiki::TWikiGuest->new( agent => $Config->{agent} ) or die $!;
 foreach my $doc qw( TWikiDocumentation TWikiHistory )
