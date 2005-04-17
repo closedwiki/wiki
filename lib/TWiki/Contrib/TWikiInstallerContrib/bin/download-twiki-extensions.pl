@@ -13,16 +13,11 @@ use diagnostics;
 ++$|;
 use Data::Dumper qw( Dumper );
 
+use lib( "$ENV{TWIKIDEV}/CPAN/lib" );	# good enough because this only uses pure perl cpan modules
+
 use LWP::Simple qw( mirror RC_OK RC_NOT_MODIFIED );
 use File::Path qw( mkpath );
 use HTML::TokeParser;
-
-BEGIN {
-    use FindBin;
-    use Config;
-    my $localLibBase = "$FindBin::Bin/lib/CPAN/lib/site_perl/" . $Config{version};
-    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
-}
 
 ################################################################################
 # config
