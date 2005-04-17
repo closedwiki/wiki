@@ -68,6 +68,7 @@ print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
 my @localLibs = ( "$optsConfig->{baselibdir}/lib", "$optsConfig->{baselibdir}/lib/$Config{archname}" );
 unshift @INC, @localLibs;
+$ENV{PERL5LIB} = join( ':', @localLibs );
 print STDERR Dumper( \@INC ) if $optsConfig->{debug};
 
 ################################################################################
