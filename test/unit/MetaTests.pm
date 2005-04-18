@@ -65,12 +65,11 @@ sub test_single {
     $this->assert_str_equals( $vals->{"name"}, "a" );
     $this->assert_str_equals( $vals->{"value"}, "1" );
     $this->assert( $meta->count( "TOPICINFO" ) == 1, "Should be one item" );
-    
     $meta->put( "TOPICINFO", $args1 );
     my $vals1 = $meta->get( "TOPICINFO" );
-    $this->assert_str_equals( $vals1->{"name"}, "a" );
-    $this->assert_str_equals( $vals1->{"value"}, "2" );
-    $this->assert( $meta->count( "TOPICINFO" ) == 1, "Should be one item" );
+    $this->assert_str_equals("a", $vals1->{"name"} );
+    $this->assert_equals(2, $vals1->{"value"} );
+    $this->assert_equals(1, $meta->count( "TOPICINFO" ), "Should be one item" );
 }
 
 sub test_multiple {

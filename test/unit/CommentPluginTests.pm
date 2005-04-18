@@ -54,7 +54,7 @@ sub tear_down {
 sub writeTopic {
     my( $web, $topic, $text ) = @_;
     my $meta = new TWiki::Meta($twiki, $web, $topic);
-    $twiki->{store}->saveTopic( $twiki->{user}, $baseweb, $basetopic, $text,
+    $twiki->{store}->saveTopic( $twiki->{user}, $web, $topic, $text,
                                 $meta );
 }
 
