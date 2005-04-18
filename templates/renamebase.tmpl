@@ -14,7 +14,7 @@
    // find button element index
    var j = 0;
    for( var i = 0; i < document.rename.length; i++ ) {
-     if( document.rename.elements[i].name.match( "RENAME" ) ) {
+     if( document.rename.elements[i].name.match( "_topics" ) ) {
        document.rename.elements[i].checked = theCheck;
      }
    }
@@ -37,11 +37,11 @@
 
 ---++ Change links in topics that refer to <nop>%TOPIC% in the <nop>%WEB% Web:
 
-%RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
+%LOCAL_SEARCH%
 
 ---++ Change links in topics that refer to <nop>%WEB%.<nop>%TOPIC% in any Web:
 
-%RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
+%GLOBAL_SEARCH%
 
 <input type="button" value="Select all" onclick="checkAll(true);" />
 <input type="button" value="Clear" onclick="checkAll(false);" /> checkboxes of referenced topics

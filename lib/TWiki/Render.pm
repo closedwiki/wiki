@@ -32,6 +32,9 @@ package TWiki::Render;
 
 use strict;
 use Assert;
+
+use CGI qw( :html4 );
+
 use TWiki::Plurals;
 use TWiki::Attach;
 use TWiki::Attrs;
@@ -45,8 +48,9 @@ my $MINTRUNC = 16;
 my $SUMMARYLINES = 6;
 
 # limiting lookbehind and lookahead for wikiwords and emphasis
-my $before = qr/^|(?<=[\s\(])/m;
-my $after = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
+# use like \b
+my $STARTWW = qr/^|(?<=[\s\(])/m;
+my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 =pod
 
@@ -920,7 +924,7 @@ sub getRenderedVersion {
 
     # Escape rendering: Change ' !AnyWord' to ' <nop>AnyWord',
     # for final ' AnyWord' output
-    $text =~ s/$before\!(?=[\w\*\=])/<nop>/gm;
+    $text =~ s/$STARTWW\!(?=[\w\*\=])/<nop>/gm;
 
     # Blockquoted email (indented with '> ')
     # Could be used to provide different colours for different numbers of '>'
@@ -1039,11 +1043,11 @@ sub getRenderedVersion {
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
 
-    $text =~ s/${before}==([^\s]+?|[^\s].*?[^\s])==$after/_fixedFontText($1,1)/gem;
-    $text =~ s/${before}__([^\s]+?|[^\s].*?[^\s])__$after/<strong><em>$1<\/em><\/strong>/gm;
-    $text =~ s/${before}\*([^\s]+?|[^\s].*?[^\s])\*$after/<strong>$1<\/strong>/gm;
-    $text =~ s/${before}\_([^\s]+?|[^\s].*?[^\s])\_$after/<em>$1<\/em>/gm;
-    $text =~ s/${before}\=([^\s]+?|[^\s].*?[^\s])\=$after/_fixedFontText($1,0)/gem;
+    $text =~ s/${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW/_fixedFontText($1,1)/gem;
+    $text =~ s/${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW/<strong><em>$1<\/em><\/strong>/gm;
+    $text =~ s/${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW/<strong>$1<\/strong>/gm;
+    $text =~ s/${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW/<em>$1<\/em>/gm;
+    $text =~ s/${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW/_fixedFontText($1,0)/gem;
 
     # Mailto
     # Email addresses must always be 7-bit, even within I18N sites
@@ -1056,7 +1060,7 @@ sub getRenderedVersion {
 
     # Normal mailto:foo@example.com ('mailto:' part optional)
     # FIXME: Should be '?' after the 'mailto:'...
-    $text =~ s/$before(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)$after/$this->_mailtoLink( $1, $2, $3 )/gem;
+    $text =~ s/$STARTWW(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)$ENDWW/$this->_mailtoLink( $1, $2, $3 )/gem;
 
     # Handle [[][] and [[]] links
     # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
@@ -1068,7 +1072,7 @@ sub getRenderedVersion {
     unless( $prefs->getPreferencesValue('NOAUTOLINK') =~ /^on$/i ) {
         # Handle WikiWords
         $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
-        $text =~ s/$before(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$this->_handleWikiWord($theWeb,$1,$2,$3)/geom;
+        $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$this->_handleWikiWord($theWeb,$1,$2,$3)/geom;
         $this->putBackBlocks( $text, $removed, 'noautolink' );
     }
 
@@ -1569,6 +1573,88 @@ sub summariseChanges {
         $summary = $this->protectPlainText( $summary );
     }
     return $summary;
+}
+
+=pod
+
+---++ ObjectMethod forEachLine( $text, \&fn, \%options ) -> $newText
+
+Iterate over each line, calling =\&fn= on each.
+\%options may contain:
+   * =pre= => true, will call fn for each line in pre blocks
+   * =verbatim= => true, will call fn for each line in verbatim blocks
+   * =noautolink= => true, will call fn for each line in =noautolink= blocks
+The spec of \&fn is sub fn( $line, \%options ) -> $newLine; the %options hash passed into this function is passed down to the sub, and the keys =in_pre=, =in_verbatim= and =in_noautolink= are set boolean TRUE if the line is from one (or more) of those block types.
+
+The return result replaces $line in $newText.
+
+=cut
+
+sub forEachLine {
+    my( $this, $text, $fn, $options ) = @_;
+
+    $options->{in_pre} = 0;
+    $options->{in_pre} = 0;
+    $options->{in_verbatim} = 0;
+    $options->{in_noautolink} = 0;
+    my $newText = '';
+    foreach my $line ( split( /([\r\n]+)/, $text ) ) {
+        if( $line =~ /[\r\n]/ ) {
+            $newText .= $line;
+            next;
+        }
+        $options->{in_verbatim}++   if( $line =~ m|<verbatim>|i );
+        $options->{in_verbatim}--   if( $line =~ m|</verbatim>|i );
+        unless( $options->{in_verbatim} > 0 ) {
+            $options->{in_pre}++        if( $line =~ m|<pre>|i );
+            $options->{in_pre}--        if( $line =~ m|</pre>|i );
+            $options->{in_noautolink}++ if( $line =~ m|<noautolink>|i );
+            $options->{in_noautolink}-- if( $line =~ m|</noautolink>|i );
+        }
+        unless( $options->{in_pre} > 0 && !$options->{pre} ||
+                $options->{in_verbatim} > 0 && !$options->{verbatim} ||
+                $options->{in_noautolink} > 0 && !$options->{noautolink} ) {
+
+            $line = &$fn( $line, $options );
+        }
+        $newText .= $line;
+    }
+    return $newText;
+}
+
+=pod
+
+---++ replaceTopicReferences( $text, \%options ) -> $text
+Callback designed for use with forEachLine, to replace topic references.
+\%options contains:
+   * =oldWeb= => Web of reference to replace
+   * =oldTopic= => Topic of reference to replace
+   * =spacedTopic= => RE matching spaced out oldTopic
+   * =newWeb= => Web of new reference
+   * =newTopic= => Topic of new reference
+   * =inWeb= => the web which the text we are presently processing resides in
+
+For a usage example see TWiki::UI::Manage.pm
+
+=cut
+
+sub replaceTopicReferences {
+    my( $text, $args ) = @_;
+
+    my $repl = $args->{newTopic};
+    if( $args->{inWeb} ne $args->{newWeb} ) {
+        $repl = $args->{newWeb}.'.'.$repl;
+    }
+
+    $text =~ s/$STARTWW$args->{oldWeb}\.$args->{oldTopic}$ENDWW/$repl/g;
+    $text =~ s/\[\[$args->{oldWeb}\.$args->{spacedTopic}(\](\[[^\]]+\])?\])/[[$repl$1/g;
+
+    return $text unless( $args->{inWeb} eq $args->{oldWeb} );
+
+    $text =~ s/$STARTWW$args->{oldTopic}$ENDWW/$repl/g;
+    $text =~ s/\[\[($args->{spacedTopic})(\](\[[^\]]+\])?\])/[[$repl$2/g;
+
+    return $text;
 }
 
 1;

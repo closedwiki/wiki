@@ -340,7 +340,7 @@ SMELL: If =format= is set, =template= will be ignored.
 
 SMELL: If =regex= is defined, it will force type='regex'
 
-SMELL: If =template= is defined neither =bookview= nor =renameview= will work
+SMELL: If =template= is defined =bookview= will not work
 
 =cut
 
@@ -369,7 +369,6 @@ sub searchWeb {
     my $newLine =       $params{newline} || '';
     my $theOrder =      $params{order} || '';
     my $theRegex =      $params{regex} || '';
-    my $doRenameView =  $params{renameview} || ''; # undocumented
     my $revSort =       $params{reverse} || '';
     my $theScope =      $params{scope} || '';
     my $theSearchVal =  $params{search} || $emptySearch;
@@ -464,30 +463,6 @@ sub searchWeb {
         # template definition overrides book and rename views
     } elsif( $doBookView ) {
         $theTemplate = 'searchbookview';
-    } elsif ($doRenameView ) {
-        # Rename view, showing where topics refer to topic being renamed.
-        # SMELL: this is really messy; it should be done a lot
-        # better than this.
-        $theTemplate = 'searchrenameview';
-
-        # Create full search string from topic name that is passed in
-        my $renameWeb = '';
-        my $renameTopic = $theSearchVal;
-        if( $renameTopic =~ /(.*)\\\.(.*)/o ) {
-            $renameWeb = $1;
-            $renameTopic = $2;
-        }
-        $spacedTopic = TWiki::spaceOutWikiWord( $renameTopic );
-        $spacedTopic =~ s/ / */g;
-        $spacedTopic = $renameWeb . '.' . $spacedTopic if( $renameWeb );
-
-        # I18N: match non-alpha before and after topic name in renameview searches
-        # This regex must work under grep, i.e. if using Perl 5.6 or higher
-        # the POSIX character classes will be used in grep as well.
-        my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
-        $theSearchVal = "(^|[^${mixedAlphaNum}_])$theSearchVal" . 
-          "([^${mixedAlphaNum}_]" . '|$)|' .
-            '(\[\[' . $spacedTopic . '\]\])';
     } else {
         $theTemplate = 'search';
     }
@@ -791,68 +766,7 @@ sub searchWeb {
                     $out = $renderer->getRenderedVersion( $out, $web, $topic );
                 }
 
-                if( $doRenameView ) {
-                    # Permission check done below, so force this read to succeed with 'internal' parameter
-                    my $rawText = $store->readTopicRaw
-                      ( undef, $web, $topic, undef );
-                    my $changeable = '';
-                    my $changeAccessOK =
-                      $session->{security}->checkAccessPermission
-                        ( 'change', $session->{user},
-                          $text, $topic, $web );
-                    if( ! $changeAccessOK ) {
-                        $changeable = '(NO CHANGE PERMISSION)';
-                        $out =~ s/%SELECTION%.*%SELECTION%//o;
-                    } else {
-                        $out =~ s/%SELECTION%//go;
-                    }
-                    $out =~ s/%CHANGEABLE%/$changeable/o;
-
-                    $out =~ s/%LABEL%/$doRenameView/go;
-                    my $reducedOutput = '';
-                    # Remove lines that don't contain the topic and highlight matched string
-                    # SMELL: this would be better done using the full power of Store::searchWebContent
-                    my $insidePRE = 0;
-                    my $insideVERBATIM = 0;
-                    my $noAutoLink = 0;
-                    foreach( split( /\n/, $rawText ) ) {
-                        next if( /^%META:TOPIC(INFO|MOVED)/ );
-                        s/</&lt;/go;
-                        s/>/&gt;/go;
-
-                        # This code is in far too many places
-                        m|<pre>|i  && ( $insidePRE = 1 );
-                        m|</pre>|i && ( $insidePRE = 0 );
-                        if( m|<verbatim>|i ) {
-                            $insideVERBATIM = 1;
-                        }
-                        if( m|</verbatim>|i ) {
-                            $insideVERBATIM = 0;
-                        }
-                        m|<noautolink>|i   && ( $noAutoLink = 1 );
-                        m|</noautolink>|i  && ( $noAutoLink = 0 );
-
-                        if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-                            # Case insensitive option is required to get [[spaced Word]] to match
-                            # I18N: match non-alpha before and after topic name in renameview searches
-                            my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
-                            my $match =  "(^|[^${mixedAlphaNum}_.])($originalSearch)(?=[^${mixedAlphaNum}]|\$)";
-                            # NOTE: Must *not* use /o here, since $match is based on
-                            # search string that will vary during lifetime of
-                            # compiled code with mod_perl.
-                            my $subs = s/$match/$1.$session->inlineAlert('alerts','generic',$2)/ge;
-                            $match = '(\[\[)('.$spacedTopic.')(?=\]\])';
-                            $subs += s/$match/$1.$session->inlineAlert('alerts','generic', $2)/gei;
-                            if( $subs ) {
-                                $topicCount++ if( ! $reducedOutput );
-                                $reducedOutput .= $_.CGI::br() if( $subs );
-                            }
-                        }
-                    }
-                    $out =~ s/%TOPIC_NUMBER%/$topicCount/go;
-                    $out =~ s/%TEXTHEAD%/$reducedOutput/go;
-                    next if ( ! $reducedOutput );
-                } elsif( $doBookView ) {
+                if( $doBookView ) {
                     # BookView
                     ( $meta, $text ) = $this->_getTextAndMeta( $topicInfo, $web, $topic ) unless $text;
                     if( $web eq $baseWeb && $topic eq $baseTopic ) {

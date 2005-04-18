@@ -454,107 +454,6 @@ sub renameTopic {
 
 =pod
 
----++ ObjectMethod updateReferringPages( $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs  ) -> ( $countoflockfailures, $resulttext)
-
-Update pages that refer to a page that is being renamed/moved. Return the
-number of updates that failed due to active locks and a message.
-
-SMELL: This breaks the encapsulation of the Render function quite horribly.
-It should really be done by asking the Renderer to render the topic with
-a bunch of simplified handlers plugged in, and just one handler (the
-handler for TWiki links) provided to change the link name.
-
-=cut
-
-sub updateReferringPages {
-    my ( $this, $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
-
-    my $result = '';
-
-    # SMELL: this is stinky; according to Render.pm this should be [\s\(] but that
-    # assumes that each line is protected by spaces either side. Then, this
-    # code does replacements in meta-data as well, so things like field names and
-    # data values all get munged (!!!!) - good grief, what a hack!
-    # SMELL: does not handle <nop> before the wikiword
-    my $preTopic = qr/^|[^!\w]/;    # Start of line or non-alphanumeric and not !
-    my $postTopic = qr/s?(?=$|\W)/;	# End of line or non-alphanumeric; s? for plurals
-    my $spacedTopic = TWiki::spaceOutWikiWord( $oldTopic );
-    $spacedTopic =~ s/ / */g;
-    my $lockFailures = 0;
-
-    while ( @refs ) {
-        my $type = shift @refs;
-        my $item = shift @refs;
-        my( $itemWeb, $itemTopic ) = $this->{session}->normalizeWebTopicName( '', $item );
-        my $insertWeb = ($itemWeb eq $newWeb) ? '' : "$newWeb.";
-
-        my $newItemText = '';
-        $result .= ":$item: , "; 
-        #open each file, replace $topic with $newTopic
-        if ( $this->topicExists($itemWeb, $itemTopic) ) {
-            $this->lockTopic( $user, $itemWeb, $itemTopic );
-            my $scantext =
-              $this->readTopicRaw( undef, $itemWeb, $itemTopic, undef );
-            if( $user &&
-                !$this->{session}->{security}->checkAccessPermission( 'change',
-                                                           $user,
-                                                           $scantext,
-                                                           $itemWeb,
-                                                           $itemTopic ) ) {
-                # This shouldn't happen, as search will not return, but
-                # check to be on the safe side
-                $this->{session}->writeWarning( "rename: attempt to change $itemWeb.$itemTopic without permission" );
-                $this->unlockTopic( $user, $itemWeb, $itemTopic );
-                next;
-            }
-            my $insidePRE = 0;
-            my $insideVERBATIM = 0;
-            my $noAutoLink = 0;
-            foreach my $line ( split( /\r?\n/, $scantext ) ) {
-                if( $line =~ /^%META:TOPIC(INFO|MOVED)/ ) {
-                    $newItemText .= "$line\n";
-                    next;
-                }
-                # SMELL: This code is in far too many places - also in Search.pm and Render.pm
-                $insidePRE      = 1 if( $line =~ m|<pre>|i );
-                $insidePRE      = 0 if( $line =~ m|</pre>|i );
-                $insideVERBATIM = 1 if( $line =~ m|<verbatim>|i );
-                $insideVERBATIM = 0 if( $line =~ m|</verbatim>|i );
-                $noAutoLink     = 1 if( $line =~ m|<noautolink>|i );
-                $noAutoLink     = 0 if( $line =~ m|</noautolink>|i );
-                # SMELL: this replaces within META!!
-                unless ( $insidePRE || $insideVERBATIM || $noAutoLink ) {
-                    $line =~ s/($preTopic)\Q$oldWeb.$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-                    # Only replace bare topic (i.e. not preceded by web) if
-                    # the web of the referring topic is the original web of
-                    # the topic that's being moved.
-                    if( $oldWeb eq $itemWeb ) {
-                        # SMELL: these searches are not consistent with
-                        # what is expanded in Render.pm
-                        $line =~ s/($preTopic)\Q$oldTopic\E(?=$postTopic)/$1$insertWeb$newTopic/g;
-                        $line =~ s/\[\[($spacedTopic)\]\]/[[$newTopic][$1]]/gi;
-                    }
-                }
-                $newItemText .= "$line\n";
-            }
-            my $meta = $this->extractMetaData( $itemWeb, $itemTopic,
-                                               \$newItemText );
-            $this->saveTopic( $user, $itemWeb, $itemTopic,
-                              $newItemText, $meta,
-                              { minor => 1 } );
-            $this->unlockTopic( $user, $itemWeb, $itemTopic );
-        } else {
-            $result .= ";$item does not exist;";
-        }
-    }
-    return $result;
-}
-
-
-=pod
-
 ---++ ObjectMethod readAttachment( $user, $theWeb, $theTopic, $theAttachment, $theRev  ) -> $text
 
 Read the given version of an attachment, returning the content.
@@ -1795,47 +1694,13 @@ sub searchInWebContent {
                                           FILES => \@set);
 
         foreach my $match ( @set ) {
-            if( $match =~ m/([^\/]*)\.txt(:?: (.*))?$/ ) {
-                push( @{$seen->{$1}}, $2 );
+            if( $match =~ m/([^\/]*)\.txt(:(.*))?$/ ) {
+                push( @{$seen->{$1}}, $3 );
             }
         }
         @set = splice( @take, 0, $maxTopicsInSet );
     }
     return $seen;
-}
-
-=pod
-
-getReferringTopics($oldWeb, $oldTopic);
-
-SMELL: this does not hide NONSEARCHABLE webs or do any of the security things at the moment.
-
-=cut
-sub getReferringTopics {
-    my ($this, $oldWeb, $oldTopic, $newWeb) = @_;
-    my @results;
-    my ($web, $topic);
-
-    foreach $web ($this->getListOfWebs()) {
-        my @topicList = $this->getTopicNames( $web );
-        my $searchString = $oldTopic;
-        $searchString = $web.'.'.$searchString unless $web eq $oldWeb;
-
-        my $matches = $this->searchInWebContent
-          ( $searchString, $web, \@topicList,
-            { casesensitive => 0, files_without_match => 1 } );
-
-        foreach $topic (keys %$matches) {
-            if ( $web eq $newWeb ) {
-                push (@results, 'global');
-            } else {
-                push (@results, 'stupid');
-            }
-            push (@results, $web.'.'.$topic);
-        }
-    }
-
-    return \@results;
 }
 
 =pod

@@ -54,7 +54,6 @@ Perform a search as dictated by CGI parameters:
 | =noheader= | |
 | =nototal= | |
 | =bookview= | |
-| =renameview= | |
 | =showlock= | |
 | =expandvariables= | |
 | =noempty= | |
@@ -129,7 +128,6 @@ sub search {
         'noheader'      => scalar $query->param( 'noheader' ),
         'nototal'       => scalar $query->param( 'nototal' ),
         'bookview'      => scalar $query->param( 'bookview' ),
-        'renameview'    => scalar $query->param( 'renameview' ),
         'showlock'      => scalar $query->param( 'showlock' ),
         'expandvariables' => scalar $query->param( 'expandvariables' ),
         'noempty'       => scalar $query->param( 'noempty' ),

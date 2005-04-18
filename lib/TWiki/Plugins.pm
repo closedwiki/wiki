@@ -55,11 +55,11 @@ my $pref = $TWiki::Plugins::SESSION->writeWarning($message);
 Methods in other modules such as Store must be accessed through
 the relevant TWiki sub-object, for example
 
-TWiki::Store::updateReferringPages(...)
+TWiki::Store::saveTopic(...)
 
 should be replaced with
 
-$TWiki::Plugins::SESSION->{store}->updateReferringPages(...)
+$TWiki::Plugins::SESSION->{store}->saveTopic(...)
 
 Note that calling TWiki internal methods is very very bad practice,
 and should be avoided wherever practical.

@@ -31,6 +31,7 @@ UI functions for web, topic and user management
 package TWiki::UI::Manage;
 
 use strict;
+use Assert;
 use TWiki;
 use TWiki::UI;
 use TWiki::User;
@@ -137,10 +138,8 @@ sub removeUser {
     #     }
     #
     #    # Update references in referring pages - not applicable to attachments.
-    #    my @refs = $session->{store}->findReferringPages( $oldWeb, $oldTopic );
-    #    my $problems;
-    #    ( $lockFailure, $problems ) = 
-    #       $session->{store}->updateReferringPages( $oldWeb, $oldTopic, $user, $newWeb, $newTopic, @refs );
+    #    my $refs = TWiki::UI::Manage::getReferringTopics( $session, $oldWeb, $oldTopic );
+    #    TWiki::UI::Manage::updateReferringTopics( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $refs );
 
     $user->remove();
 
@@ -387,12 +386,11 @@ sub rename {
 
     # Update references in referring pages - not applicable to attachments.
     if( ! $theAttachment ) {
-        my @refs = _getReferringTopicsListFromURL( $session, $oldWeb, $oldTopic, $newWeb, $newTopic );
+        my $refs = _getReferringTopicsListFromURL
+          ( $session, $oldWeb, $oldTopic, $newWeb, $newTopic );
 
-        my $problems =
-          $session->{store}->updateReferringPages( $oldWeb, $oldTopic,
-                                                   $session->{user},
-                                                   $newWeb, $newTopic, @refs );
+        updateReferringTopics( $session, $oldWeb, $oldTopic,
+                               $newWeb, $newTopic, $refs );
     }
     my $new_url = '';
     if ( $newWeb eq 'Trash' && $oldWeb ne 'Trash' ) {
@@ -426,41 +424,6 @@ sub rename {
     $session->redirect( $new_url );
 }
 
-#| Description:           | returns the list of topics that have been found that refer to the renamed topic |
-#| Parameter: =$oldWeb=   |   |
-#| Parameter: =$oldTopic= |   |
-#| Parameter: =$newWeb=   |   |
-#| Parameter: =$newTopic= |   |
-#| Return: =@refs=        |   |
-#| TODO: | docco what the return list means |
-sub _getReferringTopicsListFromURL {
-    my $session = shift;
-
-    my $query = $session->{cgiQuery};
-    my ( $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
-
-    my @result = ();
-
-    # Go through parameters finding all topics for change
-    my @types = qw\local global\;
-    foreach my $type ( @types ) {
-        my $count = 1;
-        while( $query->param( "TOPIC$type$count" ) ) {
-            my $checked = $query->param( "RENAME$type$count" );
-            if ($checked) {
-                push @result, $type;
-                my $topic = $query->param( "TOPIC$type$count" );
-                if ($topic =~ /^$oldWeb.$oldTopic$/ ) {
-                    $topic = $newWeb.'.'.$newTopic;
-                }
-                push @result, $topic;
-            }
-            $count++;
-        }
-    }
-    return @result;
-}
-
 # Display screen so user can decide on new web and topic.
 sub _newTopicScreen {
     my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
@@ -488,13 +451,63 @@ sub _newTopicScreen {
     }
 
     $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $oldTopic );
-    if( $currentWebOnly ) {
-        $tmpl =~ s/%RESEARCH\{.*?web=\"all\".*\}%/(skipped)/o; # Remove search all web search
-    }
-    $tmpl =~ s/%RESEARCH/%SEARCH/go; # Pre search result from being rendered
-    $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $oldTopic );
 
+    my $refs;
+    my %attributes;
+    my %labels;
+    my @keys;
+    my $search = '';
+    if( $currentWebOnly ) {
+        $search = '(skipped)';
+    } else {
+        $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 1 );
+        @keys = sort keys %$refs;
+        foreach my $entry ( @keys ) {
+            $search .= CGI::Tr
+              (CGI::td
+               ( { class => 'twikiTopRow' },
+                 CGI::input( { type => 'checkbox',
+                               class => 'twikiCheckBox',
+                               name => 'local_topics',
+                               value => $entry,
+                               checked => 'checked' },
+                             " $entry " ) ).
+               CGI::td( { class => 'twikiSummary twikiGrayText' },
+                        $refs->{$entry} ));
+        }
+        unless( $search ) {
+            $search = '(none)';
+        } else {
+            $search = CGI::start_table().$search.CGI::end_table();
+        }
+    }
+    $tmpl =~ s/%GLOBAL_SEARCH%/$search/o;
+
+    $refs = getReferringTopics( $session, $oldWeb, $oldTopic, 0 );
+    @keys = sort keys %$refs;
+    $search = '';;
+    foreach my $entry ( @keys ) {
+        $search .= CGI::Tr
+          (CGI::td
+           ( { class => 'twikiTopRow' },
+             CGI::input( { type => 'checkbox',
+                           class => 'twikiCheckBox',
+                           name => 'local_topics',
+                           value => $entry,
+                           checked => 'checked' },
+                         " $entry " ) ).
+           CGI::td( { class => 'twikiSummary twikiGrayText' },
+                    $refs->{$entry} ));
+    }
+    unless( $search ) {
+        $search = '(none)';
+    } else {
+        $search = CGI::start_table().$search.CGI::end_table();
+    }
+    $tmpl =~ s/%LOCAL_SEARCH%/$search/go;
+
+    $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $oldTopic );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $oldTopic );
     $session->writeCompletePage( $tmpl );
 }
 
@@ -504,6 +517,142 @@ sub _setVars {
     $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
     $tmpl =~ s/%NONWIKIWORDFLAG%/$nonWikiWordFlag/go;
     return $tmpl;
+}
+
+# Returns the list of topics that have been found that refer
+# to the renamed topic. Returns a list of topics.
+sub _getReferringTopicsListFromURL {
+    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
+
+    my $query = $session->{cgiQuery};
+    my @result;
+    foreach my $scope qw( local global ) {
+        foreach my $topic ( $query->param( $scope.'_topics' ) ) {
+            if ($topic eq $oldWeb.'.'.$oldTopic ) {
+                $topic = $newWeb.'.'.$newTopic;
+            }
+            push @result, $topic;
+        }
+    }
+    return \@result;
+}
+
+=pod
+
+---++ StaticMethod getReferringTopics($session, $oldWeb, $oldTopic, $allWebs) -> \%matches
+   * =$session= - the session
+   * =$oldWeb= - web to search for
+   * =$oldTopic= - topic to search for
+   * =$allWebs= - 1 if it's a global search, 0 to search $oldWeb only
+   * =$details= - if true, will return a list of matched lines with each key
+Returns a hash of web.topic names that each map to a list of lines in the topic that matched.
+
+SMELL: does not hide NOSEARCHALL webs.
+SMELL: does not necessarily return the same result as the %SEARCH used
+to generate the list of topics in the rename view, because that search
+is driven off a template where the parameters may be different. Ho hum.
+
+=cut
+
+sub getReferringTopics {
+    my( $session, $oldWeb, $oldTopic, $allWebs, $details ) = @_;
+    my $store = $session->{store};
+    my $renderer = $session->{renderer};
+    my @webs = ( $oldWeb );
+
+    if( $allWebs ) {
+        @webs = $store->getListOfWebs();
+    }
+
+    my %results;
+    foreach my $web ( @webs ) {
+        next if( $allWebs && $web eq $oldWeb );
+        my @topicList = $store->getTopicNames( $web );
+        my $searchString = $oldTopic;
+        $searchString = $oldWeb.'\.'.$searchString unless $web eq $oldWeb;
+
+        my $matches = $store->searchInWebContent
+          ( $searchString, $web, \@topicList,
+            { casesensitive => 0 } );
+
+        foreach my $key ( keys %$matches ) {
+            my $t = join( '...', @{$matches->{$key}});
+            $t =~ s/%META:/%/g;
+            $t = $renderer->TML2PlainText( $t, $web, $key, "showvar" );
+            $t =~ s/^\s+//;
+            if( length( $t ) > 100 ) {
+                $t =~ s/^(.{100}).*$/$1/;
+            }
+            $results{$web.'.'.$key} = $t;
+        };
+    }
+    return \%results;
+}
+
+=pod
+
+---++ StaticMethod updateReferringTopics( $session, $oldWeb, $oldTopic, $user, $newWeb, $newTopic, \@refs  )
+
+Update pages that refer to a page that is being renamed/moved.
+
+=cut
+
+sub updateReferringTopics {
+    my ( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $refs ) = @_;
+    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+
+    my $store = $session->{store};
+    my $renderer = $session->{renderer};
+    my $user = $session->{user};
+    my $options =
+      {
+       pre => 1, # process lines in PRE blocks
+       oldWeb => $oldWeb,
+       oldTopic => $oldTopic,
+       newWeb => $newWeb,
+       newTopic => $newTopic,
+       spacedTopic => TWiki::spaceOutWikiWord( $oldTopic )
+      };
+    $options->{spacedTopic} =~ s/ / */g;
+
+    foreach my $item ( @$refs ) {
+        my( $itemWeb, $itemTopic ) =
+          $session->normalizeWebTopicName( '', $item );
+
+        if ( $store->topicExists($itemWeb, $itemTopic) ) {
+            $store->lockTopic( $user, $itemWeb, $itemTopic );
+            try {
+                my( $meta, $text ) =
+                  $store->readTopic( undef, $itemWeb, $itemTopic, undef );
+
+                $options->{inWeb} = $itemWeb;
+
+                $text = $renderer->forEachLine
+                  ( $text, \&TWiki::Render::replaceTopicReferences, $options );
+
+                foreach my $mType qw( FIELD TOPICPARENT ) {
+                    my $data = $meta->{$mType};
+                    next unless $data;
+                    foreach my $datum ( @$data ) {
+                        foreach my $key ( keys %$datum ) {
+                            $datum->{$key} = $renderer->forEachLine
+                                  ( $datum->{$key},
+                                    \&TWiki::Render::replaceTopicReferences,
+                                    $options );
+                        }
+                    }
+                }
+                $store->saveTopic( $user, $itemWeb, $itemTopic,
+                                   $text, $meta,
+                                   { minor => 1 } );
+            } catch TWiki::AccessControlException with {
+                my $e = shift;
+                $session->writeWarning( $e->stringify() );
+            } otherwise {
+                $store->unlockTopic( $user, $itemWeb, $itemTopic );
+            };
+        }
+    }
 }
 
 1;

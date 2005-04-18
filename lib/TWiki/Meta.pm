@@ -49,9 +49,15 @@ use Error qw(:try);
 use Assert;
 use TWiki::Merge;
 
-use vars qw( $formatVersion );
+use vars qw( $formatVersion %KEYS );
 
 $formatVersion = "1.0";
+
+%KEYS =
+  (
+   FIELD => 'name',
+   FILEATTACHMENT => 'name'
+  );
 
 =pod
 
@@ -95,48 +101,27 @@ sub put {
     ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
     my $data = $this->{$type};
-    my $key = _key( $type );
-
+    my $key = $KEYS{$type} || 0;
     if( $data ) {
         if( $key ) {
-            my $found = '';
             my $keyName = $args->{$key};
-            my @data = @$data;
-            unless( $keyName ) {
-                $this->{_session}->writeWarning( "Meta: Required $key parameter is missing for META:$type" );
-                return;
-            }
-            for( my $i = 0; $i < scalar( @$data ); $i++ ) {
-                if( $data[$i]->{$key} eq $keyName ) {
+            ASSERT( $keyName ) if DEBUG;
+            my $i = scalar( @$data );
+            while( $i-- ) {
+                if( $data->[$i]->{$key} eq $keyName ) {
                     $data->[$i] = $args;
-                    $found = 1;
-                    last;
+                    return;
                 }
             }
-            unless( $found ) {
-                push @$data, $args;
-            }
         } else {
+            # overwrite old single value
             $data->[0] = $args;
+            return;
         }
-    } else {
-        my @data = ( $args );
-        $this->{$type} = \@data;
     }
+    push( @{$this->{$type}}, $args );
 }
 
-# ===========================
-# Give the key field for a type, '' if no key
-
-sub _key {
-    my $type = shift;
-
-    return 'name' if( $type eq 'FIELD' || $type eq 'FILEATTACHMENT' );
-
-    return undef;
-}
-
-# ===========================
 =pod
 
 ---++ ObjectMethod get( $type, $key ) -> \%hash
@@ -154,17 +139,12 @@ sub get {
     ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
     my $data = $this->{$type};
-    my $key = _key( $type );
-
     if( $data ) {
-        if( $key ) {
-            foreach my $item ( @$data ) {
-                if( $item->{$key} eq $keyValue ) {
-                    return $item;
-                }
-            }
-        } else {
-            return $data->[0];
+        my $key = $KEYS{$type};
+        return $data->[0] unless $key;
+
+        foreach my $item ( @$data ) {
+            return $item if( $item->{$key} eq $keyValue );
         }
     }
 
@@ -211,9 +191,7 @@ sub remove {
     my( $this, $type, $keyValue ) = @_;
     ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
-    my %args = ();
-    my $key = '';
-    $key = _key( $type ) if( $type );
+    my $key = $KEYS{$type};
 
     if( $keyValue && $key ) {
        my $data = $this->{$type};

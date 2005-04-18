@@ -287,13 +287,12 @@ sub moveTopic {
     my $renameError =
 	 $session->{store}->renameTopic( $oldWeb, $oldTopic, $newWeb,
 					$newTopic, 1, $session->{user} );
-	my $refs = $session->{store}->getReferringTopics($oldWeb, $oldTopic, $newWeb);
-    my $problems =
-	  $session->{store}->updateReferringPages( $oldWeb, $oldTopic,
-						   $session->{user},
-						   $newWeb, $newTopic, @{$refs} );
-
+	my $refs = TWiki::UI::Manage::getReferringTopics($session,
+                                                     $oldWeb, $oldTopic,
+                                                     $newWeb);
+    TWiki::UI::Manage::updateReferringTopics( $session,
+                                              $oldWeb, $oldTopic,
+                                              $newWeb, $newTopic, $refs );
 }
-
 
 1;
