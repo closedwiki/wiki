@@ -1,7 +1,7 @@
 #!/home/wikihosting/packages/perl5.8.4/bin/perl -w
 # $Id$
-#  Stages 2-3/4 of an automatic twiki install on macosx darwin
-# Copyright 2004 Will Norris.  All Rights Reserved.
+#  Stages 2-3/3 of an automatic twiki install on macosx darwin
+# Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
 
