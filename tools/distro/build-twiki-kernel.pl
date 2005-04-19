@@ -4,7 +4,12 @@
 use strict;
 use Data::Dumper qw( Dumper );
 
-use lib( "$ENV{TWIKIDEV}/CPAN/lib" );
+BEGIN {
+    my $dirHome = $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
+    $ENV{TWIKIDEV} ||= "$dirHome/twiki";
+    eval qq{ use lib( "$ENV{TWIKIDEV}/CPAN/lib" ) };
+}
+
 # TODO:
 #   * Documentation (of the process)
 #   * Documentation (of the changed CPAN requirements)
