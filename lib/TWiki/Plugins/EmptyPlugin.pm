@@ -23,30 +23,6 @@ This is an empty TWiki plugin. It is a fully defined plugin, but is
 disabled by default in a TWiki installation. Use it as a template
 for your own plugins; see TWiki.TWikiPlugins for details.
 
-Each plugin is a package that may contain these handlers:
-| *Handler*                   | *$TWiki::Plugins::VERSION* |
-| earlyInitPlugin             | 1.020 |
-| initPlugin                  | 1.000 |
-| initializeUserHandler       | 1.010 |
-| registrationHandler         | 1.010 |
-| beforeCommonTagsHandler     | 1.024 |
-| commonTagsHandler           | 1.000 |
-| afterCommonTagsHandler      | 1.024 |
-| preRenderingHandler         | 1.026 |
-| postRenderingHandler        | 1.026 |
-| beforeEditHandler           | 1.010 |
-| afterEditHandler            | 1.010 |
-| beforeSaveHandler           | 1.010 |
-| afterSaveHandler            | 1.020 |
-| beforeAttachmentSaveHandler | 1.023 |
-| afterAttachmentSaveHandler  | 1.023 |
-| writeHeaderHandler          | 1.010 |
-| redirectCgiQueryHandler     | 1.010 |
-| getSessionValueHandler      | 1.010 |
-| setSessionValueHandler      | 1.010 |
-
-=initPlugin= is REQUIRED, all other are OPTIONAL.
-
 __NOTE:__ To interact with TWiki use ONLY the official API functions
 in the TWiki::Func module. Do not reference any functions or
 variables elsewhere in TWiki, as these are subject to change
@@ -80,6 +56,8 @@ $pluginName = 'EmptyPlugin';  # Name of this Plugin
    * =$web= - the name of the web in the current CGI query
    * =$user= - the login name of the user
    * =$installWeb= - the name of the web the plugin is installed in
+
+REQUIRED
 
 Called to initialise the plugin. If everything is OK, should return
 a non-zero value. On non-fatal failure, should write a message

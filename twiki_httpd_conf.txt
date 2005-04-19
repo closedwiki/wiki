@@ -1,0 +1,55 @@
+# Example httpd.conf file for TWiki.
+#
+# You are recommended to take a copy of this file and edit
+# the paths to match your installation. Then add:
+# include "/home/httpd/twiki/twiki_httpd.conf"
+# to the end of your main httpd.conf file.
+#
+
+# The first parameter will be part of the URL to your installation e.g.
+# http://my.co.uk/twiki/bin/view/...
+# The second parameter must point to the physical path on your disc. Be
+# careful not to lose any trailing /'s.
+
+#### Change the _second_ path to match your local installation
+ScriptAlias /twiki/bin/ "/home/httpd/twiki/bin/"
+
+# This defines a url that points to the root of the twiki installation. It is
+# used to access files in the pub directory (attachments etc)
+# It must come _after_ the ScriptAlias.
+
+#### Change the path to match your local installation
+Alias /twiki/ "/home/httpd/twiki/"
+
+# This specifies the options on the TWiki scripts directory. The ExecCGI
+# and SetHandler tell apache that it contains scripts. "Allow from all"
+# lets any IP address access this URL.
+
+#### Change the path to match your local installation
+<Directory "/home/httpd/twiki/bin">
+	 Options +ExecCGI
+	 SetHandler cgi-script
+	 Allow from all
+</Directory>
+
+# This sets the options on the pub directory, which contains attachments and
+# other files like CSS stylesheets and icons. AllowOverride None stops a
+# user installing a .htaccess file that overrides these options.
+
+#### Change the path to match your local installation
+<Directory "/home/httpd/twiki/pub">
+	 Options FollowSymLinks +Includes
+	 AllowOverride None
+	 Allow from all
+</Directory>
+
+# The data and templates directories should be set so that they are
+# *not* visible as URLs, so we set them as =deny from all=.
+
+#### Change the paths to match your local installation
+<Directory "/home/httpd/twiki/data">
+	 deny from all
+</Directory>
+<Directory "/home/httpd/twiki/templates">
+	 deny from all
+</Directory>

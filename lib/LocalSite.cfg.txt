@@ -35,6 +35,11 @@ $cfg{PubUrlPath} = '/twiki/pub';
 # /usr/local/twiki/pub
 $cfg{PubDir} = '/home/httpd/twiki/pub';
 
+# SECURITY NOTE: Directories =twiki/data= , =twiki/templates= and all their
+# subdirectories should be set so that they are _not_ visible through
+# URLs. (Alternatively, move the directories to a place where they are
+# not visible, and set the paths here as appropriate)
+
 # Template directory e.g. /usr/local/twiki/templates
 $cfg{TemplateDir} = '/home/httpd/twiki/templates';
 
