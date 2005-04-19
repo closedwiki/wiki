@@ -218,10 +218,9 @@ sub getFormDef {
                 my( $meta, $text ) =
                   $store->readTopic( $this->{session}->{user}, $webName, $fieldDef->{name},
                                      undef );
+                # http://twiki.org/cgi-bin/view/Codev/DynamicFormOptionDefinitions
+                $text = $this->{session}->handleCommonTags( $text, $form, $webName );
                 @posValues = getPossibleFieldValues( $text );
-# This probably implements http://twiki.org/cgi-bin/view/Codev/DynamicFormOptionDefinitions
-# But I accidently deleted my test case :(
-#		$text = $this->{session}->handleCommonTags( $text, $form, $webName );
                 $fieldDef->{type} ||= 'select';  #FIXME keep?
             }
             $fieldDef->{value} = \@posValues;
