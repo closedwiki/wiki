@@ -25,7 +25,7 @@ mkpath( $outputDir, 1 );
 ################################################################################
 # build the twiki-kernel
 my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } `svn info .` )[0] ) =~ /(\d+)$/;
-execute ( "cd distro/ ; ./build-twiki-kernel.pl --tempdir=/tmp --outputdir=$outputDir --outfile=TWikiKernel-`head -n 1 branch`-$svnRev" ) or die $!;
+execute ( "cd distro/ ; ./build-twiki-kernel.pl --nozip --tempdir=/tmp --outputdir=$outputDir --outfile=TWikiKernel-`head -n 1 branch`-$svnRev" ) or die $!;
 
 print "</verbatim>\n";
 print "<HR />\n";
