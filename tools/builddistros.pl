@@ -15,9 +15,6 @@ if  ( $#ARGV == 0 ) {
 	exit(1);
 }
 
-print "DISABLED IN CASE IT IS WHAT IS KNACKERING ntwiki\n";
-exit 0;
-
 print "<HTML><TITLE>Building Kernels</TITLE><BODY>\n";
 print "<H2>building kernels</H2>\n";
 print "results will be in $outputDir\n";
