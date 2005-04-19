@@ -11,7 +11,7 @@ sub mychomp { chomp $_[0]; $_[0] }
 
 print "TWiki Installation (Step 1/3)\n";
 
-$ENV{SERVER_NAME} = 'wbniv.wikihosting.com';
+$ENV{SERVER_NAME} ||= 'wbniv.wikihosting.com';
 
 my $opts = {
     whoami => mychomp( `whoami` ),
@@ -87,7 +87,8 @@ chmod 0777, "$opts->{cgibin}/lib";
 chmod 0755, "$opts->{cgibin}/lib/CPAN";
 
 ################################################################################
-#system( $opts->{browser} => $INSTALL ) == 0 or print "continue installation at $INSTALL\n";
+#system( $opts->{browser} => $INSTALL ) == 0 or 
+print "continue installation at $INSTALL\n";
 
 ################################################################################
 ################################################################################
