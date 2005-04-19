@@ -11,7 +11,7 @@ use TWiki;
 use TWiki::Plugins;
 use TWiki::Store;
 use TWiki::Attrs;
-use CGI qw( :form );
+use CGI qw( -any );
 
 package TWiki::Plugins::CommentPlugin::Comment;
 

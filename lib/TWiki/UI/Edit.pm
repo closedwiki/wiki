@@ -37,7 +37,7 @@ use TWiki::Store;
 use TWiki::UI;
 use Error qw( :try );
 use TWiki::OopsException;
-use CGI qw( :form );
+use CGI qw( -any );
 
 =pod
 

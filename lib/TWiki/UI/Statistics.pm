@@ -534,22 +534,17 @@ sub _printMsg {
         $msg =~ s/&nbsp;/ /go;
     } else {
         if( $msg =~ s/^\!// ) {
-            $msg = CGI::h4
-              ( CGI::font
-                ( {color=>'red'},
-                  CGI::span( { class=>'twikiAlert' }, $msg )));
+            $msg = CGI::h4( CGI::span( { class=>'twikiAlert' }, $msg ));
         } elsif( $msg =~ /^[A-Z]/ ) {
             # SMELL: does not support internationalised script messages
             $msg =~ s/^([A-Z].*)/CGI::h3($1)/ge;
         } else {
-            $msg =~ s/(\*\*\*.*)/CGI::font({color=>'#FF0000',
-                                            class=>'twikiAlert'},$1)/ge;
+            $msg =~ s/(\*\*\*.*)/CGI::span( { class=>'twikiAlert' }, $1 )/ge;
             $msg =~ s/^\s\s/&nbsp;&nbsp;/go;
             $msg =~ s/^\s/&nbsp;/go;
             $msg .= CGI::br();
         }
-        $msg =~ s/==([A-Z]*)==/'=='.CGI::font({color=>'#FF0000',
-                                               class=>'twikiAlert'},$1).'=='/ge;
+        $msg =~ s/==([A-Z]*)==/'=='.CGI::span( { class=>'twikiAlert' }, $1 ).'=='/ge;
     }
     print $msg,"\n";
 }

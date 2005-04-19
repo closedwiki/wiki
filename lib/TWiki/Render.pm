@@ -33,7 +33,9 @@ package TWiki::Render;
 use strict;
 use Assert;
 
-use CGI qw( :html4 );
+# Use -any to force creation of functions for unrecognised tags, like del and ins,
+# on earlier releases of CGI.pm (pre 2.79)
+use CGI qw( -any );
 
 use TWiki::Plurals;
 use TWiki::Attach;
