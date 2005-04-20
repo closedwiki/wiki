@@ -308,79 +308,9 @@ sub attachmentExists {
     return -e $topicHandler->{file};
 }
 
-# PRIVATE
-# When moving a topic to another web, change within-web refs from
-# this topic so that they'll work when the topic is in the new web.
-# I have a feeling this shouldn't be in Store.pm.
-#
-# SMELL: It has to be - it knows about %META in topics. If you can
-# eliminate that dependency, then it could move somewhere else.
-sub _changeRefTo {
-   my( $this, $text, $oldWeb, $oldTopic ) = @_;
-
-   my $preTopic = '^|[\*\s\[][-\(\s]*';
-   # I18N: match non-alpha before/after topic names
-   my $alphaNum = $TWiki::regex{mixedAlphaNum};
-   my $postTopic = '$|' . "[^${alphaNum}_.]" . '|\.\s';
-   my $metaPreTopic = '"|[\s[,\(-]';
-   my $metaPostTopic = "[^${alphaNum}_.]" . '|\.\s';
-   
-   my $out = '';
-   
-   # Get list of topics in $oldWeb, replace local refs to these topics with full web.topic
-   # references
-   my @topics = $this->getTopicNames( $oldWeb );
-   
-   my $insidePRE = 0;
-   my $insideVERBATIM = 0;
-   my $noAutoLink = 0;
-   
-   foreach( split( /\n/, $text ) ) {
-       if( /^%META:TOPIC(INFO|MOVED)/ ) {
-           $out .= "$_\n";
-           next;
-       }
-
-       # change state:
-       m|<pre>|i  && ( $insidePRE = 1 );
-       m|</pre>|i && ( $insidePRE = 0 );
-       if( m|<verbatim>|i ) {
-           $insideVERBATIM = 1;
-       }
-       if( m|</verbatim>|i ) {
-           $insideVERBATIM = 0;
-       }
-       m|<noautolink>|i   && ( $noAutoLink = 1 );
-       m|</noautolink>|i  && ( $noAutoLink = 0 );
-   
-       if( ! ( $insidePRE || $insideVERBATIM || $noAutoLink ) ) {
-           # Fairly inefficient, time will tell if this should be changed.
-           foreach my $topic ( @topics ) {
-              if( $topic ne $oldTopic ) {
-                  if( /^%META:/ ) {
-                      s/^(%META:FILEATTACHMENT.*? user\=\")(\w)/$1$TWiki::TranslationToken$2/;
-                      s/^(%META:TOPICMOVED.*? by\=\")(\w)/$1$TWiki::TranslationToken$2/;
-                      s/($metaPreTopic)\Q$topic\E(?=$metaPostTopic)/$1$oldWeb.$topic/g;
-                      s/$TWiki::TranslationToken//;
-                  } else {
-                      s/($preTopic)\Q$topic\E(?=$postTopic)/$1$oldWeb.$topic/g;
-                  }
-              }
-           }
-       }
-       $out .= "$_\n";
-   }
-
-   return $out;
-}
-
 =pod
 
----++ ObjectMethod renameTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  $user ) -> $error
-
-Rename a topic, allowing for transfer between Webs. This method will change
-all references _from_ this topic to other topics _within the old web_
-so they still work after it has been moved to a new web.
+---++ ObjectMethod moveTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  $user ) -> $error
 
 It is the responsibility of the caller to check for existence of webs,
 topics & lock taken for topic
@@ -389,8 +319,8 @@ SMELL: $user must be the user login name, not their wiki name
 
 =cut
 
-sub renameTopic {
-    my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo, $user ) = @_;
+sub moveTopic {
+    my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $user ) = @_;
     ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
     ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
 
@@ -417,26 +347,6 @@ sub renameTopic {
 
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, '' );
     my $error = $topicHandler->moveMe( $newWeb, $newTopic );
-
-    if( ! $error ) {
-        my $time = time();
-        my $text = $this->readTopicRaw( undef, $newWeb, $newTopic, undef );
-        if( ( $oldWeb ne $newWeb ) && $doChangeRefTo ) {
-            $text = $this->_changeRefTo( $text, $oldWeb, $oldTopic );
-        }
-        my $meta = $this->extractMetaData( $newWeb, $newTopic, \$text );
-        $meta->put( 'TOPICMOVED',
-                    {
-                     from => $oldWeb.'.'.$oldTopic,
-                     to   => $newWeb.'.'.$newTopic,
-                     date => $time,
-                     # SMELL: surely this should be wikiUserName?
-                     by   => $user->wikiName(),
-                    } );
-
-        $this->_noHandlersSave( $user, $newWeb, $newTopic, $text, $meta,
-                                { comment => 'renamed' } );
-    }
 
     $this->unlockTopic( $user, $oldWeb, $oldTopic );
 
@@ -1427,7 +1337,6 @@ sub _writeTypes {
             my $sep = '';
             $text .= "%META:$type\{";
             my $name = $item->{name};
-            ASSERT( $type ne "FIELD" || $name ) if DEBUG;
             if( $name ) {
                 # If there's a name field, put first to make regexp based searching easier
                 $text .= _writeKeyValue( 'name', $item->{name} );
@@ -1659,8 +1568,6 @@ sub searchInWebContent {
     my( $this, $searchString, $web, $topics, $options ) = @_;
 
     my $type = $options->{type} || '';
-    my $caseSensitive = $options->{casesensitive} || 1;
-    my $justTopics = $options->{files_without_match} || 0;
 
     # I18N: 'grep' must use locales if needed,
     # for case-insensitive searching.  See TWiki::setupLocale.
@@ -1674,10 +1581,10 @@ sub searchInWebContent {
         $program = $TWiki::cfg{RCS}{FgrepCmd};
     }
 
-    my $args = '';
-    $args .= ' -i' unless $caseSensitive;
-    $args .= ' -l' if $justTopics;
-    $args .= ' -- %TOKEN|U% %FILES|F%';
+    $program =~ s/(\s.*)$//;
+    my $args = $1;
+    $args =~ s/%CS{(.*?)\|(.*?)}%/$options->{casesensitive}?$1:$2/ge;
+    $args =~ s/%DET{(.*?)\|(.*?)}%/$options->{files_without_match}?$2:$1/ge;
 
     my $sDir = "$TWiki::cfg{DataDir}/$web/";
     my $seen = {};
@@ -1688,12 +1595,12 @@ sub searchInWebContent {
     my $sandbox = $this->{session}->{sandbox};
     while( @set ) {
         @set = map { "$sDir/$_.txt" } @set;
-        @set =
+        my @matches =
           $sandbox->readFromProcessArray ($program, $args,
                                           TOKEN => $searchString,
                                           FILES => \@set);
 
-        foreach my $match ( @set ) {
+        foreach my $match ( @matches ) {
             if( $match =~ m/([^\/]*)\.txt(:(.*))?$/ ) {
                 push( @{$seen->{$1}}, $3 );
             }

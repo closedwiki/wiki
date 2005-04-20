@@ -749,9 +749,9 @@ sub searchWeb {
                 $out =~ s/%WEB%/$web/go;
                 $out =~ s/%TOPICNAME%/$topic/go;
                 $out =~ s/%TIME%/$revDate/o;
-                
+
                 my $srev = 'r' . $revNum;
-                if( $revNum == 1 ) {
+                if( $revNum eq '1' ) {
                     $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
                 }
                 $out =~ s/%REVISION%/$srev/o;

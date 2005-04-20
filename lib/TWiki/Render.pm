@@ -1180,6 +1180,7 @@ $opts:
    * showvar - shows !%VAR% names if not expanded
    * expandvar - expands !%VARS%
    * nohead - strips ---+ headings at the top of the text
+   * showmeta - does not filter meta-data
 
 =cut
 
@@ -1189,7 +1190,12 @@ sub TML2PlainText {
     $opts ||= '';
 
     $text =~ s/\r//g;  # SMELL, what about OS10?
-    $text =~ s/%META:[A-Z].*?}%//g;  # remove meta data SMELL
+
+    if( $opts =~ /showmeta/ ) {
+        $text =~ s/%META:/%<nop>META:/g;
+    } else {
+        $text =~ s/%META:[A-Z].*?}%//g;
+    }
 
     if( $opts =~ /expandvar/ ) {
         $text =~ s/(\%)(SEARCH){/$1<nop>$2/g; # prevent recursion
@@ -1340,7 +1346,7 @@ sub takeOutBlocks {
 
     return $intext unless ( $intext =~ m/<$tag>/ );
 
-    my $open = qr/^\s*<$tag(\s[^>]+)?>(.*)$/i;
+    my $open = qr/^\s*<$tag\b([^>]*)?>(.*)$/i;
     my $close = qr/^\s*<\/$tag>(.*)$/i;
     my $out = '';
     my $depth = 0;
@@ -1351,10 +1357,10 @@ sub takeOutBlocks {
     foreach my $line ( split/\r?\n/, $intext ) {
         if ( $line =~ m/$open/ ) {
             unless ( $depth++ ) {
+                $tagParams = $1;
                 $scoop = $2;
                 next;
             }
-            $tagParams = $1;
         }
         if ( $depth && $line =~ m/$close/ ) {
             my $rest = $1;
@@ -1362,6 +1368,7 @@ sub takeOutBlocks {
                 my $placeholder = $tag.$n;
                 $map->{$placeholder}{params} = $tagParams;
                 $map->{$placeholder}{text} = $scoop;
+
                 $line = '<!--'.$TWiki::TranslationToken.$placeholder.
                   $TWiki::TranslationToken.'-->'.$rest;
                 $n++;
@@ -1456,6 +1463,7 @@ Obtain and render revision info for a topic.
 
 sub renderRevisionInfo {
     my( $this, $web, $topic, $rev, $format ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
     my $store = $this->{session}->{store};
 
     if( $rev ) {
@@ -1513,6 +1521,7 @@ In plain, lines are truncated to 70 characters. Differences are shown using + an
 
 sub summariseChanges {
     my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
     my $summary = '';
     my $store = $this->{session}->{store};
 
@@ -1586,7 +1595,7 @@ Iterate over each line, calling =\&fn= on each.
    * =pre= => true, will call fn for each line in pre blocks
    * =verbatim= => true, will call fn for each line in verbatim blocks
    * =noautolink= => true, will call fn for each line in =noautolink= blocks
-The spec of \&fn is sub fn( $line, \%options ) -> $newLine; the %options hash passed into this function is passed down to the sub, and the keys =in_pre=, =in_verbatim= and =in_noautolink= are set boolean TRUE if the line is from one (or more) of those block types.
+The spec of \&fn is sub fn( \$line, \%options ) -> $newLine; the %options hash passed into this function is passed down to the sub, and the keys =in_pre=, =in_verbatim= and =in_noautolink= are set boolean TRUE if the line is from one (or more) of those block types.
 
 The return result replaces $line in $newText.
 
@@ -1594,6 +1603,7 @@ The return result replaces $line in $newText.
 
 sub forEachLine {
     my( $this, $text, $fn, $options ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
     $options->{in_pre} = 0;
     $options->{in_pre} = 0;
@@ -1605,13 +1615,13 @@ sub forEachLine {
             $newText .= $line;
             next;
         }
-        $options->{in_verbatim}++   if( $line =~ m|<verbatim>|i );
-        $options->{in_verbatim}--   if( $line =~ m|</verbatim>|i );
+        $options->{in_verbatim}++ if( $line =~ m|^\s*<verbatim\b[^>]*>\s*$|i );
+        $options->{in_verbatim}-- if( $line =~ m|^\s*</verbatim>\s*$|i );
         unless( $options->{in_verbatim} > 0 ) {
-            $options->{in_pre}++        if( $line =~ m|<pre>|i );
-            $options->{in_pre}--        if( $line =~ m|</pre>|i );
-            $options->{in_noautolink}++ if( $line =~ m|<noautolink>|i );
-            $options->{in_noautolink}-- if( $line =~ m|</noautolink>|i );
+            $options->{in_pre}++ if( $line =~ m|<pre\b|i );
+            $options->{in_pre}-- if( $line =~ m|</pre>|i );
+            $options->{in_noautolink}++ if( $line =~ m|^\s*<noautolink\b[^>]*>\s*$|i );
+            $options->{in_noautolink}-- if( $line =~ m|^\s*</noautolink>\s*|i );
         }
         unless( $options->{in_pre} > 0 && !$options->{pre} ||
                 $options->{in_verbatim} > 0 && !$options->{verbatim} ||
@@ -1626,7 +1636,7 @@ sub forEachLine {
 
 =pod
 
----++ replaceTopicReferences( $text, \%options ) -> $text
+---++ StaticMethod replaceTopicReferences( $text, \%options ) -> $text
 Callback designed for use with forEachLine, to replace topic references.
 \%options contains:
    * =oldWeb= => Web of reference to replace
@@ -1635,7 +1645,7 @@ Callback designed for use with forEachLine, to replace topic references.
    * =newWeb= => Web of new reference
    * =newTopic= => Topic of new reference
    * =inWeb= => the web which the text we are presently processing resides in
-
+   * =fullPaths= => optional, if set forces all links to full web.topic form
 For a usage example see TWiki::UI::Manage.pm
 
 =cut
@@ -1643,8 +1653,15 @@ For a usage example see TWiki::UI::Manage.pm
 sub replaceTopicReferences {
     my( $text, $args ) = @_;
 
+    ASSERT(defined $args->{oldWeb}) if DEBUG;
+    ASSERT(defined $args->{oldTopic}) if DEBUG;
+    ASSERT(defined $args->{spacedTopic}) if DEBUG;
+    ASSERT(defined $args->{newWeb}) if DEBUG;
+    ASSERT(defined $args->{newTopic}) if DEBUG;
+    ASSERT(defined $args->{inWeb}) if DEBUG;
+
     my $repl = $args->{newTopic};
-    if( $args->{inWeb} ne $args->{newWeb} ) {
+    if( $args->{inWeb} ne $args->{newWeb} || $args->{fullPaths} ) {
         $repl = $args->{newWeb}.'.'.$repl;
     }
 
@@ -1656,6 +1673,56 @@ sub replaceTopicReferences {
     $text =~ s/$STARTWW$args->{oldTopic}$ENDWW/$repl/g;
     $text =~ s/\[\[($args->{spacedTopic})(\](\[[^\]]+\])?\])/[[$repl$2/g;
 
+    return $text;
+}
+
+=pod
+
+---++ ObjectMethod replaceWebInternalReferences( \$text, \%meta, $oldWeb, $oldTopic )
+
+Change within-web wikiwords in $$text and $meta to full web.topic syntax.
+
+\%options must include topics => list of topics that must have references
+to them changed to include the web specifier.
+
+=cut
+
+sub replaceWebInternalReferences {
+    my( $this, $text, $meta, $oldWeb, $oldTopic ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+
+    my @topics = $this->{session}->{store}->getTopicNames( $oldWeb );
+    my $options =
+      {
+       # exclude this topic from the list
+       topics => [ grep { !/^$oldTopic$/ } @topics ],
+       inWeb => $oldWeb,
+       inTopic => $oldTopic,
+       oldWeb => $oldWeb,
+       newWeb => $oldWeb,
+      };
+
+    $$text = $this->forEachLine( $$text, \&_replaceInternalRefs, $options );
+
+    $meta->forEachSelectedValue( qw/^(FIELD|TOPICPARENT)$/, undef,
+                                 \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^TOPICMOVED$/, qw/^by$/,
+                                 \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^FILEATTACHMENT$/, qw/^user$/,
+                                 \&_replaceInternalRefs, $options );
+}
+
+# callback used by replaceWebInternalReferences
+sub _replaceInternalRefs {
+    my( $text, $args ) = @_;
+    foreach my $topic ( @{$args->{topics}} ) {
+        $args->{fullPaths} = ( $topic ne $args->{inTopic} );
+        $args->{oldTopic} = $topic;
+        $args->{newTopic} = $topic;
+        $args->{spacedTopic} = TWiki::spaceOutWikiWord( $topic );
+        $args->{spacedTopic} =~ s/ / */g;
+        $text = replaceTopicReferences( $text, $args );
+    }
     return $text;
 }
 

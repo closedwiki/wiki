@@ -125,4 +125,55 @@ sub test_removeMultiple {
     $this->assert( $meta->count( "FIELD" ) == 1, "Should be one FIELD items after partial remove" );
 }
 
+sub test_foreach {
+    my $this = shift;
+    my $meta = TWiki::Meta->new($session, $web, $topic);
+
+    $meta->put( "FIELD", { name => "a", value => "aval" } );
+    $meta->put( "FIELD", { name => "b", value => "bval" } );
+    $meta->put( "FINAGLE", { name => "a", value => "aval" } );
+    $meta->put( "FINAGLE", { name => "b", value => "bval" } );
+
+    my $fleegle;
+    my $d = {};
+    my $before = $meta->stringify();
+    $meta->forEachSelectedValue
+      (undef, undef, \&fleegle, $d);
+    $this->assert($d->{collected} =~ s/FINAGLE.name:b;//);
+    $this->assert($d->{collected} =~ s/FINAGLE.value:bval;//);
+    $this->assert($d->{collected} =~ s/FIELD.name:a;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:aval;//);
+    $this->assert($d->{collected} =~ s/FIELD.name:b;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:bval;//);
+    $this->assert_str_equals("", $d->{collected});
+    $this->assert_str_equals($before, $meta->stringify());
+
+    $meta->forEachSelectedValue
+      (qr/^FIELD$/, undef, \&fleegle, $d);
+    $this->assert($d->{collected} =~ s/FIELD.name:a;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:aval;//);
+    $this->assert($d->{collected} =~ s/FIELD.name:b;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:bval;//);
+    $this->assert_str_equals("", $d->{collected});
+
+    $meta->forEachSelectedValue
+      (qr/^FIELD$/, qr/^value$/, \&fleegle, $d);
+    $this->assert($d->{collected} =~ s/FIELD.value:aval;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:bval;//);
+    $this->assert_str_equals("", $d->{collected});
+
+    $meta->forEachSelectedValue
+      (undef, qr/^name$/, \&fleegle, $d);
+    $this->assert($d->{collected} =~ s/FINAGLE.name:b;//);
+    $this->assert($d->{collected} =~ s/FIELD.name:a;//);
+    $this->assert($d->{collected} =~ s/FIELD.name:b;//);
+    $this->assert_str_equals("", $d->{collected});
+}
+
+sub fleegle {
+    my( $t, $o ) = @_;
+    $o->{collected} .= "$o->{_type}.$o->{_key}:$t;";
+    return $t;
+}
+
 1;

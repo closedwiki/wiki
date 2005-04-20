@@ -1436,20 +1436,21 @@ sub _TOC {
     my $result  = '';
 
     # SMELL: this handling of <pre> is archaic.
+    # SMELL: use forEachLine
     foreach my $line ( split( /\r?\n/, $text ) ) {
-        if( $line =~ /^.*<pre>.*$/io ) {
+        if( $line =~ /^.*<pre\b/io ) {
             $insidePre++;
             next;
         }
-        if( $line =~ /^.*<\/pre>.*$/io ) {
+        if( $line =~ /^.*<\/pre>/io ) {
             $insidePre--;
             next;
         }
-        if( $line =~ /^<verbatim>.*$/io ) {
+        if( $line =~ /^<verbatim\b/io ) {
             $insideVerbatim++;
             next;
         }
-        if( $line =~ /^<\/verbatim>.*$/io ) {
+        if( $line =~ /^<\/verbatim>$/io ) {
             $insideVerbatim--;
             next;
         }

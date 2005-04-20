@@ -58,7 +58,6 @@ $oldweb.$oldtopic 2
 3 $oldweb.$oldtopic more
 $oldtopic 4
 5 $oldtopic
-6 $oldtopic
 7 ($oldtopic)
 8 [[$oldweb.$oldtopic]]
 9 [[$oldtopic]]
@@ -66,6 +65,9 @@ $oldtopic 4
 11 [[$oldtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
+14 OtherTopic
+15 $oldweb.OtherTopic
+16 $newweb.OtherTopic
 
 <verbatim>
 protected $oldweb.$oldtopic
@@ -76,6 +78,7 @@ pre $oldweb.$oldtopic
 <noautolink>
 protected $oldweb.$oldtopic
 </noautolink>
+
 THIS
 
     $twiki->{store}->saveTopic( $twiki->{user}, $oldweb, $oldtopic,
@@ -94,27 +97,35 @@ sub tear_down {
 }
 
 sub check {
-    my($this, $web, $topic, $emeta, $expected) = @_;
+    my($this, $web, $topic, $emeta, $expected, $num) = @_;
     my($meta,$actual) = $twiki->{store}->readTopic( undef, $web, $topic );
     my @old = split(/\n+/, $expected);
     my @new = split(/\n+/, $actual);
 
     while (scalar(@old)) {
-        $this->assert_str_equals(shift @old, shift @new);
+        $this->assert_str_equals("$num: ".shift(@old), "$num: ".shift(@new));
     }
 }
 
-sub notest_rename_search {
+sub test_referringtopics {
     my $this = shift;
-    my $query = new CGI({
-                         'action' => [ 'rename' ],
-                         currentwebonly => [ 1 ],
-                        });
+    my $refs = TWiki::UI::Manage::getReferringTopics($twiki,
+                                                     $oldweb, $oldtopic, 0);
+    $this->assert_str_equals("HASH", ref($refs));
+    my @expected = ( "$oldweb.OtherTopic" );
+    @expected = sort(@expected);
 
-    $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, $query->url,
-                        $query );
-    $TWiki::Plugins::SESSION = $twiki;
-    TWiki::UI::Manage::rename( $twiki );
+    my $i = scalar(keys %$refs);
+    $this->assert_equals( scalar(@expected), $i, join(",",keys %$refs));
+    $i = 0;
+    foreach my $r ( sort keys %$refs ) {
+        $this->assert_str_equals($expected[$i++], $r);
+    }
+    $refs = TWiki::UI::Manage::getReferringTopics($twiki,
+                                                  $oldweb, $oldtopic, 1);
+    $this->assert( $refs->{"$newweb.OtherTopic"});
+    $this->assert( !$refs->{"$oldweb.OtherTopic"});
+    $this->assert( !$refs->{"$newweb.$oldtopic"}) ;
 }
 
 sub test_rename_oldwebnewtopic {
@@ -123,9 +134,9 @@ sub test_rename_oldwebnewtopic {
                          action => [ 'rename' ],
                          newweb => [ $oldweb ],
                          newtopic => [ $newtopic ],
-                         local_topics => [ "$oldweb.$oldtopic",
-                                           "$oldweb.OtherTopic" ],
-                         global_topics => [ "$newweb.OtherTopic" ],
+                         referring_topics => [ "$oldweb.$newtopic",
+                                               "$oldweb.OtherTopic",
+                                               "$newweb.OtherTopic" ],
                         });
 
     $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, $query->url,
@@ -141,7 +152,6 @@ $newtopic 2
 3 $newtopic more
 $newtopic 4
 5 $newtopic
-6 $newtopic
 7 ($newtopic)
 8 [[$newtopic]]
 9 [[$newtopic]]
@@ -149,6 +159,9 @@ $newtopic 4
 11 [[$newtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
+14 OtherTopic
+15 $oldweb.OtherTopic
+16 $newweb.OtherTopic
 
 <verbatim>
 protected $oldweb.$oldtopic
@@ -160,15 +173,14 @@ pre $newtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($oldweb, $newtopic, undef, $expected);
-    $this->check($oldweb, 'OtherTopic', undef, $expected);
+    $this->check($oldweb, $newtopic, undef, $expected, 1);
+    $this->check($oldweb, 'OtherTopic', undef, $expected, 2);
     $expected = <<THIS;
 1 $oldweb.$newtopic
 $oldweb.$newtopic 2
 3 $oldweb.$newtopic more
 $oldtopic 4
 5 $oldtopic
-6 $oldtopic
 7 ($oldtopic)
 8 [[$oldweb.$newtopic]]
 9 [[$oldtopic]]
@@ -176,6 +188,9 @@ $oldtopic 4
 11 [[$oldtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
+14 OtherTopic
+15 $oldweb.OtherTopic
+16 $newweb.OtherTopic
 
 <verbatim>
 protected $oldweb.$oldtopic
@@ -187,7 +202,7 @@ pre $oldweb.$newtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($newweb, 'OtherTopic', undef, $expected);
+    $this->check($newweb, 'OtherTopic', undef, $expected, 3);
 }
 
 sub test_rename_newweboldtopic {
@@ -196,9 +211,9 @@ sub test_rename_newweboldtopic {
                          action => [ 'rename' ],
                          newweb => [ $newweb ],
                          newtopic => [ $oldtopic ],
-                         local_topics => [ "$oldweb.$oldtopic",
-                                           "$oldweb.OtherTopic" ],
-                         global_topics => [ "$newweb.OtherTopic" ],
+                         referring_topics => [ "$oldweb.OtherTopic",
+                                               "$newweb.$oldtopic",
+                                               "$newweb.OtherTopic" ],
                         });
 
     $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, $query->url,
@@ -215,7 +230,6 @@ $oldtopic 2
 3 $oldtopic more
 $oldtopic 4
 5 $oldtopic
-6 $oldtopic
 7 ($oldtopic)
 8 [[$oldtopic]]
 9 [[$oldtopic]]
@@ -223,6 +237,9 @@ $oldtopic 4
 11 [[$oldtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
+14 $oldweb.OtherTopic
+15 $oldweb.OtherTopic
+16 $newweb.OtherTopic
 
 <verbatim>
 protected $oldweb.$oldtopic
@@ -234,15 +251,41 @@ pre $oldtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($newweb, $oldtopic, undef, $expected);
-    $this->check($newweb, 'OtherTopic', undef, $expected);
-    my $expected = <<THIS;
+    $this->check($newweb, $oldtopic, undef, $expected, 4);
+    $expected = <<THIS;
+1 $oldtopic
+$oldtopic 2
+3 $oldtopic more
+$oldtopic 4
+5 $oldtopic
+7 ($oldtopic)
+8 [[$oldtopic]]
+9 [[$oldtopic]]
+10 [[$oldtopic][the text]]
+11 [[$oldtopic][the text]]
+12 $oldweb.$newtopic
+13 $newweb.$oldtopic
+14 OtherTopic
+15 $oldweb.OtherTopic
+16 $newweb.OtherTopic
+
+<verbatim>
+protected $oldweb.$oldtopic
+</verbatim>
+<pre>
+pre $oldtopic
+</pre>
+<noautolink>
+protected $oldweb.$oldtopic
+</noautolink>
+THIS
+    $this->check($newweb, 'OtherTopic', undef, $expected, 5);
+    $expected = <<THIS;
 1 $newweb.$oldtopic
 $newweb.$oldtopic 2
 3 $newweb.$oldtopic more
 $newweb.$oldtopic 4
 5 $newweb.$oldtopic
-6 $newweb.$oldtopic
 7 ($newweb.$oldtopic)
 8 [[$newweb.$oldtopic]]
 9 [[$newweb.$oldtopic]]
@@ -250,6 +293,9 @@ $newweb.$oldtopic 4
 11 [[$newweb.$oldtopic][the text]]
 12 $oldweb.$newtopic
 13 $newweb.$oldtopic
+14 OtherTopic
+15 $oldweb.OtherTopic
+16 $newweb.OtherTopic
 
 <verbatim>
 protected $oldweb.$oldtopic
@@ -261,7 +307,7 @@ pre $newweb.$oldtopic
 protected $oldweb.$oldtopic
 </noautolink>
 THIS
-    $this->check($oldweb, 'OtherTopic', undef, $expected);
+    $this->check($oldweb, 'OtherTopic', undef, $expected, 6);
 }
 
 1;

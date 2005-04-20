@@ -84,8 +84,8 @@ sub CALC
     foreach( split( /\n/, $_[0] ) ) {
 
         # change state:
-        m|<pre>|i       && ( $insidePRE = 1 );
-        m|<verbatim>|i  && ( $insidePRE = 1 );
+        m|<pre\b|i       && ( $insidePRE = 1 );
+        m|<verbatim\b|i  && ( $insidePRE = 1 );
         m|</pre>|i      && ( $insidePRE = 0 );
         m|</verbatim>|i && ( $insidePRE = 0 );
 

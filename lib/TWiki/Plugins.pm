@@ -352,8 +352,8 @@ sub _handleFAILEDPLUGINS {
     foreach my $plugin ( @{$this->{plugins}} ) {
         my $err = 'none';
         if ( $plugin->{disabled} && $plugin->{errors}) {
-            $err= "\n<verbatim>\n" .
-              join( "\n", @{$plugin->{errors}} ) . "\n</verbatim>";
+            $err= "\n<verbatim class='twikiAlert'>\n" .
+              join( "\n", @{$plugin->{errors}} ) . "\n</verbatim>\n";
         }
         $text .= CGI::Tr( { valign=>'top' },
                           CGI::td($plugin->{name}). CGI::td( $err ));

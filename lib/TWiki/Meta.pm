@@ -426,4 +426,40 @@ sub stringify {
     return $s;
 }
 
+=pod
+
+---++ ObjectMethod forEachSelectedValue( $types, $keys, \&fn, \%options )
+Iterate over the values selected by the regular expressions in $types and
+$keys.
+   * =$types= - regular expression matching the names of fields to be processed. Will default to qr/^[A-Z]+$/ if undef.
+   * =$keys= - regular expression matching the names of keys to be processed.  Will default to qr/^[a-z]+$/ if undef.
+
+Iterates over each value, calling =\&fn= on each, and replacing the value
+with the result of \&fn.
+
+\%options will be passed on to $fn, with the following additions:
+   * =_type= => the type name (e.g. "FILEATTACHMENT")
+   * =_key= => the key name (e.g. "user")
+
+=cut
+
+sub forEachSelectedValue {
+    my( $this, $types, $keys, $fn, $options ) = @_;
+
+    $types ||= qr/^[A-Z]+$/;
+    $keys ||= qr/^[a-z]+$/;
+
+    foreach my $type ( grep { /$types/ } keys %$this ) {
+        $options->{_type} = $type;
+        my $data = $this->{$type};
+        next unless $data;
+        foreach my $datum ( @$data ) {
+            foreach my $key ( grep { /$keys/ } keys %$datum ) {
+                $options->{_key} = $key;
+                $datum->{$key} = &$fn( $datum->{$key}, $options );
+            }
+        }
+    }
+}
+
 1;

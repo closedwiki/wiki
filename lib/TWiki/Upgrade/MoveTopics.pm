@@ -284,15 +284,14 @@ sub moveTopic {
 	my ($oldWeb, $oldTopic) = $session->normalizeWebTopicName("", $from);
 	my ($newWeb, $newTopic) = $session->normalizeWebTopicName("", $to);
 
-    my $renameError =
-	 $session->{store}->renameTopic( $oldWeb, $oldTopic, $newWeb,
-					$newTopic, 1, $session->{user} );
 	my $refs = TWiki::UI::Manage::getReferringTopics($session,
                                                      $oldWeb, $oldTopic,
                                                      $newWeb);
-    TWiki::UI::Manage::updateReferringTopics( $session,
-                                              $oldWeb, $oldTopic,
-                                              $newWeb, $newTopic, $refs );
+    # SMELL: this may throw a TWiki::OopsException if there is an error
+    TWiki::UI::Manage::move( $session,
+                             $oldWeb, $oldTopic,
+                             $newWeb, $newTopic,
+                             undef, $refs );
 }
 
 1;
