@@ -15,7 +15,7 @@ twiki.tar :
 	tar -f twiki.tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
 	tar -f twiki.tar -r $(TAR_EXCLUDE) 
 
-extensions : twiki-cpan plugins contribs addons release 
+extensions : twiki-cpan plugins contribs addons
 
 distro : extensions twiki-$(PLATFORM).tar.bz2 
 
@@ -26,9 +26,6 @@ minicpan :
 
 twiki-cpan : minicpan
 	cpan/mirror-cpan.pl --twiki `cpan/calc-twiki-deps.pl`
-
-release :
-	REL=TWiki20040902.tar.gz; OUT=downloads/releases/$$REL; [ -e $$OUT ] || wget -nc --http-user=TWikiGuest --http-passwd=guest -O $$OUT http://twiki.org/release/$$REL
 
 plugins :
 	bin/download-twiki-extensions.pl plugins
