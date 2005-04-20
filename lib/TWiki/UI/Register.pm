@@ -1223,14 +1223,16 @@ sub populateEntries {
                 $data{passwordA} = $value;
             } elsif ( $name eq 'Confirm' ) {
                 $data{passwordB} = $value;
+            } elsif( $name eq 'LoginName' ) {
+                # Sanitise login name
+                $value =~ s/[^\w]//g;
             }
-            #  $name eq 'Password'
-            #  $name eq 'Confirm'
 
+            # 'WikiName' omitted because they can't
+            # change it, and 'Confirm' is a duplicate
             push @orderedFields, {%formData}
-              unless (($name eq 'WikiName') or 
-                      ($name eq 'Confirm')
-                     );    # (1) omitted because they can't change it, and (2) is a duplicate
+              unless ($name eq 'WikiName' || $name eq 'Confirm');
+
             $data{$name} = $value;
         }
     }
