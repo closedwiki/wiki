@@ -116,7 +116,7 @@ use CPAN;
 my $q = CGI->new() or die $!;
 
 ################################################################################
-# alredy installed?
+# already installed?
 ################################################################################
 if ( -e "$FindBin::Bin/twiki" )
 {
@@ -333,7 +333,7 @@ sub installTWikiExtension
 	# filter out other miscellaneous crap that sometimes appear in plugins releases
 	next if $file =~ m/~$/;
 
-	print STDERR "$file\n";
+#	print STDERR "$file\n";
 
 	if ( my ($cd,$path,$base) = $file =~ m|^($cdinto)?([^/]+)/(.+)?$| )
 	# because path isn't optional, this skips over files in the (local) root directory
@@ -359,7 +359,7 @@ sub installTWikiExtension
 	    my $destFile = "$dirDest/$base";
 
 	    # KLUDGEy implementation to support scriptSuffix
-	    print STDERR "path=[$path] INSTALL=[$INSTALL] file=[$file] dirDest=[$dirDest] base=[$base] scriptSuffix=[$scriptSuffix]\n";
+#	    print STDERR "path=[$path] INSTALL=[$INSTALL] file=[$file] dirDest=[$dirDest] base=[$base] scriptSuffix=[$scriptSuffix]\n";
 	    if ( $path eq 'bin' && $base !~ /\./ )
 	    {
 		$destFile .= $scriptSuffix;
@@ -464,8 +464,12 @@ __HTML__
     releasesCatalogue({ %kernels, cgi => $q });
     $text .= catalogue({ %kernels, inputType => "radio", title => "TWikiKernel", cgi => $q });
 
+################################################################################
+# PRECONFIGURATIONS
     $text .= preconfigurations();
 
+################################################################################
+# EXTENSIONS
     $text .= catalogue({ dir => "../downloads/contribs/", xml => "contribs.xml", title => "Contribs", type => "contrib", cgi => $q });
     $text .= catalogue({ dir => "../downloads/plugins/", xml => "plugins.xml", title => "Plugins", type => "plugin", cgi => $q });
     $text .= catalogue({ dir => "../downloads/addons/", xml => "addons.xml", title => "AddOns", type => "addon", cgi => $q });
@@ -473,6 +477,8 @@ __HTML__
 #    $text .= catalogue({ dir => "../downloads/patches/", xml => "patches.xml", title => "Patches", type => "patch", cgi => $q });
 #    $text .= catalogue({ dir => "../downloads/webs/", xml => "webs.xml", title => "Web Templates", type => "web", cgi => $q });
 
+################################################################################
+# WEBS
     my %systemWikis = ( dir => "../downloads/webs/system/", xml => "systemwebs.xml", type => "systemweb" );
     wikiCatalogue({ %systemWikis, cgi => $q });
     $text .= catalogue({ %systemWikis, title => "System Wiki Webs (Updates)", cgi => $q });
@@ -693,17 +699,6 @@ sub catalogue
 ################################################################################
 
 __DATA__
-#================================================================================
-# check to run as root (need permissions--- grrr, fix that) (why, again? i forget..., oh yeah, for apache.conf)
-# TODO: try putting all setup in bin/.htaccess (sourceforge version does this)
-chomp( my $whoami = `whoami` );
-die "must run this as root (or sudo)\n" unless $whoami eq 'root';
-
-my $account = shift or die "Usage: install.pl <accountName>\n";
-# validate account exists -- how do you do that generally?  (eg, /etc/users doesn't exist on MacOsX)
-
-my $install = cwd();
-
 ################################################################################
 
 my $apacheConfig = "/private/etc/httpd/users/$account.conf";
