@@ -25,20 +25,20 @@ Download the TWiki distribution in Unix ZIP format from http://TWiki.org/downloa
 
 ---+++ Step 1: Create &amp; Configure the Directories
 
-%X% *NOTE:* _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account, or you don't have administrator privileges on your intranet server - use the [[#StepOneB][alternative Step 1]] instead._
-
 %X% This guide assumes you are going to install to the directory =/home/httpd/twiki=. You can, of course, install anywhere.
+
+%X% _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account, or you don't have administrator privileges on your intranet server - use the [[#StepOneB][alternative Step 1]] instead._
 
 	* Check that you have GNU =diff=, by typing =diff -v= - an error indicates you have a non-GNU diff, so install the GNU =diffutils= package and make sure that =diff= is on the PATH used by TWiki (configured in Step 3).
 
-	* Create directory =/home/httpd/twiki= and [[http://www.info-zip.org/pub/infozip/UnZip.html][unzip]] the TWiki distribution into this directory.
+	* Create directory =/home/httpd/twiki= and [[http://www.info-zip.org/pub/infozip/UnZip.html][unzip]] the TWiki distribution into this directory. We'll refer to this directory as =twiki= from now on.
 
 	* Create the file =twiki/twiki_httpd.conf=. There is a template for this file in =twiki/twiki_httpd_conf.txt= that you can simply copy. Edit it, and follow the instructions in that file for setting up your paths.
-	* Edit your web server configuration file. This is typically located in =/etc/httpd/=. Add the following line to the end (adjusting the patha s necessary)
+	* Edit your web server configuration file. This is typically located in =/etc/httpd/=. Add the following line to the end (adjusting the path as necessary)
 <verbatim>
 Include "/home/httpd/twiki/twiki_httpd.conf"
 </verbatim>
-	* Restart Apache using the command appropriate to your flavor of UNIX or Linux. You should be told if you made any syntax errors, though Apache will _not_ check the paths.
+	* Using the command(s) appropriate to your flavor of UNIX or Linux, check your webserver configuration files for errors and restart Apache.
 
 	* _Go directly to [[#StepTwo][Step 2]]..._
 
@@ -60,7 +60,7 @@ To install TWiki on a system where you don't have Unix/Linux root (administrator
 | =twiki/templates= | web templates | dir secure from public access | =/home/smith/twiki/templates= |
 </blockquote>
 
-__Note:__ Don't worry if you are not able to put the =twiki/lib= directory at the same level as the =twiki/bin= directory (e.g. because CGI =bin= directories can't be under your home directory and you don't have root access). You can create this directory somewhere else and configure the paths in =/twiki/bin/LocalLib.cfg= file (done in Step 3)
+%H% Don't worry if you are not able to put the =twiki/lib= directory at the same level as the =twiki/bin= directory (e.g. because CGI =bin= directories can't be under your home directory and you don't have root access). You can create this directory somewhere else and configure the paths in =/twiki/bin/LocalLib.cfg= file (done in Step 3)
 
 #StepTwo
 ---+++ Step 2: Set File Permissions
@@ -69,16 +69,14 @@ __Note:__ Don't worry if you are not able to put the =twiki/lib= directory at th
 		* %X% *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory, or create a symbolic link from =/usr/bin/perl=.
 		* %X% *Some systems require a =.cgi= extension on perl scripts*, for example some ISP-hosted accounts. Rename all files in =twiki/bin= if necessary (e.g. rename =view= to =view.pl= etc). Alternatively, you may be able to create a file =twiki/bin/.htaccess= that contains the single line =SetHandler cgi-script=, which tells Apache to treat all files in this directory as CGI scripts. If you rename the scripts, make sure you set the =ScriptSuffix= option in Step 3.
 
-	* This Guide assumes that user =nobody= runs the CGI scripts executed by the Web server. You can replace =nobody= with another user if your server executes scripts under a different name (ex: default for Debian is =www-data=).
-		* %T% Run the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts, a table listing all CGI environment variables, and a test of your =twiki/lib/LocalSite.cfg= configuration file (you'll configure that in a minute).
-
-	* Make sure the permissions will let TWiki operate:
-		* %H% If you are unsure how to set permissions, read the =man= pages for =chmod=.
+	* Make sure the permissions will let TWiki operate.
+		* This Guide assumes that user =nobody= runs the CGI scripts executed by the Web server. You can replace =nobody= with another user if your server executes scripts under a different name (e.g. default for Debian is =www-data=).
+			* %T% Run the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts, a table listing all CGI environment variables, and a test of your =twiki/lib/LocalSite.cfg= configuration file (you'll configure that in a minute).
 		* All files and directories in the installation tree must be *readable* by user =nobody=.
 		* All files in the =twiki/bin= directory must be *executable* by user =nobody=
 		* =twiki/data= and all files and directories below it must be *writable* by user =nobody=.
 		* =twiki/pub= and all files and directories below it must be *writable* by user =nobody=.
-
+		* %H% If you are unsure how to set permissions, read the =man= pages for =chmod=.
 ---+++ Step 3: Edit the Configuration Files
 
 	* Create the file =/twiki/bin/LocalLib.cfg=. There is a template for this file in =/twiki/bin/LocalLib.cfg.txt=. <br /> =LocalLib.cfg= must contain a setting for =$twikiLibPath=, which must point to the absolute file path of your =twiki/lib= e.g. =/home/httpd/twiki/lib=.
