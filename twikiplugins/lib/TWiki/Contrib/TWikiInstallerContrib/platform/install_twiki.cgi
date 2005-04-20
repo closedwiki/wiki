@@ -552,23 +552,21 @@ sub _dirCatalogue
 
 ################################################################################
 
-# dir ???
+# dir
 # xml
 # type
 # list
 sub SaveXML
 {
     my $p = shift;
-#    die unless $p->{dir} && $p->{xml} && $p->{list} && $p->{type};
-    die unless $p->{xml} && $p->{list} && $p->{type};
+    $p->{dir} ||= $tmp;
+    die unless $p->{dir} && $p->{xml} && $p->{list} && $p->{type};
 
     my $xs = new XML::Simple() or die $!;
-#    my $xml = "$p->{dir}/$p->{xml}";
-    my $xml = "$tmp/$p->{xml}";
+    my $xml = "$p->{dir}/$p->{xml}";
     open( XML, ">$xml" ) or die qq{$!: Can't write xml to "$xml"\n};
     print XML $xs->XMLout( { $p->{type} => $p->{list} }, NoAttr => 1 );
     close( XML ) or warn $!;
-
 }
 
 ################################################################################
@@ -578,6 +576,7 @@ sub wikiCatalogue
     my $p = shift;
     $p->{fileFilter} = qr/\.wiki\.tar\.gz$/;
     $p->{list} = _dirCatalogue( $p );
+    $p->{dir} = $tmp;
     SaveXML( $p ) if @{$p->{list}};
 }
 
@@ -622,7 +621,7 @@ sub releasesCatalogue
 	    }
 	}
 
-#	$p->{dir} = $tmp;
+	$p->{dir} = $tmp;
 	SaveXML( $p );
     }
 }
