@@ -55,7 +55,7 @@ mkpath $cpan;
 my $mirror = "$FindBin::Bin/cpan/MIRROR/TWIKI/" || '/home/wikihosting/CPAN-live/MIRROR/MINICPAN/';
 createMyConfigDotPm({ cpan => $cpan, config => '~/.cpan/CPAN/MyConfig.pm', mirror => "file:$mirror" });
 foreach my $module (
-		    qw( ExtUtils::MakeMaker Storable Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node 
+		    qw( ExtUtils::MakeMaker Storable Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node 
 			Carp::Assert
 			Class::Data::Inheritable
 			Class::Virtually::Abstract 
