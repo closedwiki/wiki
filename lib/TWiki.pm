@@ -138,6 +138,7 @@ BEGIN {
         $SIG{'__WARN__'} = sub { die @_ };
     }
 
+    # DO NOT CHANGE THE FORMAT OF $VERSION without updating tools/distro/build-twiki-kernel.pl !!!
     # automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
