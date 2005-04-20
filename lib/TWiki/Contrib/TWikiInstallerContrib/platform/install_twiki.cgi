@@ -9,7 +9,7 @@ use strict;
 # TODO: (soon)
 #    * permissions!
 #    * PATCHES!
-#    * get rid of =pre-wiki.sh= and =post-wiki.sh= and become a completely web-based install!
+#    * get rid of =pre-wiki.sh= and =post-wiki.sh= and become a completely web-based install! (oh so close!)
 #    * error checking is pretty good, but error recovery might not be?
 #    * ???
 # TODO: (long term)
@@ -44,7 +44,7 @@ BEGIN {
     use File::Path qw( mkpath );
 
     $cgibin = $FindBin::Bin;
-    ( $home = $cgibin ) =~ s|/cgi-bin||;
+    $home = (getpwuid($>))[7] or die "no home directory?";
 
     $tmp = "$cgibin/tmp";
     -e $tmp || mkpath $tmp, 0, 0777;
@@ -59,17 +59,16 @@ BEGIN {
 
     my $install_cgi = URI->new( $ENV{SCRIPT_URI} );
 
-    $localDirConfig = qq{
-\$cfg{DefaultUrlHost}   = "http://$hostname";
-\$cfg{ScriptUrlPath}    = "/cgi-bin/twiki";
-\$cfg{ScriptSuffix}     = q->param( 'scriptsuffix' ) || '',# || '.cgi',
-\$cfg{PubUrlPath}       = "/htdocs/twiki";
-\$cfg{PubDir}           = "$home/htdocs/twiki"; 
-\$cfg{TemplateDir}      = "$home/twiki/templates"; 
-\$cfg{DataDir}          = "$home/twiki/data"; 
-\$cfg{LogDir}           = "$home/twiki/data"; 
-};
-
+    $localDirConfig = {
+	DefaultUrlHost   => $install_cgi->scheme . "://" . $install_cgi->host . ( $install_cgi->port != $install_cgi->default_port && ':'.$install_cgi->port ),
+	ScriptUrlPath    => "/cgi-bin/twiki",
+	ScriptSuffix     => $q->param( 'scriptsuffix' ) || '',# || '.cgi',
+	PubUrlPath       => "/htdocs/twiki",
+	PubDir           => "$cgibin/../htdocs/twiki",
+	TemplateDir      => "$home/twiki/templates",
+	DataDir          => "$home/twiki/data",
+	LogDir           => "$home/twiki/data",
+    };
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
 
@@ -118,15 +117,12 @@ unless ( $q->param( 'kernel' ) && ($q->param('install') || '') =~ /install/i )
 # INSTALL
 ################################################################################
 
-# TODO: use $localDirConfig from above (but it's not in a very friendly format for actual code use atm)
 my $mapTWikiDirs = {
-    lib => { dest => "$cgibin/lib", },
-#    cpan => { dest => "$cgibin/lib/CPAN", },
-    pub => { dest => "$home/htdocs/twiki", },
-    data => { dest => "$home/twiki/data", },
-    templates => { dest => "$home/twiki/templates", },
+    lib => { dest => "$cgibin/lib" },
+    pub => { dest => $localDirConfig->{PubDir} },
+    data => { dest => $localDirConfig->{DataDir} },
+    templates => { dest => $localDirConfig->{TemplateDir} },
     bin => { dest => "$cgibin/twiki", perms => 0755, },
-#?    bin => { dest => "$cgibin/twiki", perms => 0755, install => sub {}, },
 };
 
 ################################################################################
@@ -156,12 +152,15 @@ if ( $tar =~ /^LATEST$/i ) {
 installTWikiExtension({ file => "../downloads/releases/$tar.zip", name => 'TWiki', dir => "downloads/releases", cdinto => 'twiki', mapDirs => $mapTWikiDirs });
 
 #--------------------------------------------------------------------------------
-# update TWiki.cfg (now LocalSite.cfg) for local directories configuration
+# update LocalSite.cfg for local directories configuration
 print $q->h2( 'LocalSite.cfg' );
 
 my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
 open(FH, ">$file") or die "Can't open $file: $!";
-print FH $localDirConfig;
+foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir ) )
+{
+    print FH qq{\$cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
+}
 close(FH) or die "Can't close $file: $! ???";
 
 ################################################################################
@@ -181,6 +180,7 @@ if ( 0 )
 	my $htaccess = join( "", <FH> );
 	close(FH) or warn "Can't close $file: $!";
 	
+	# change $home to $localConfigDir[...]
 	$htaccess =~ s|!FILE_path_to_TWiki!/data|$home/twiki/data|g;	# code smell: duplicated data from config file above
 	$htaccess =~ s|!URL_path_to_TWiki!/bin|/cgi-bin/twiki|g;	# ditto
 	# TODO: fix ErrorDocument 401 (what should it be set to?)
