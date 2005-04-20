@@ -7,7 +7,6 @@ use strict;
 
 ################################################################################
 # TODO: (soon)
-#    * finish handling scriptSuffix
 #    * permissions!
 #    * PATCHES!
 #    * get rid of =pre-wiki.sh= and =post-wiki.sh= and become a completely web-based install!
@@ -37,8 +36,7 @@ my $tmp;
 my $account;
 my $localDirConfig;
 my $hostname;
-my $scriptSuffix;
-my $BIN;
+my ( $VIEW, $TESTENV );
 my $PERL;
 
 BEGIN {
@@ -71,13 +69,10 @@ BEGIN {
     chomp( $hostname = $ENV{SERVER_NAME} || `hostname --long` || 'localhost' );
     die "hostname?" unless $hostname;
 
-    $scriptSuffix = '.cgi';
-    # platform/distro/whatever-specific !!!
-
     $localDirConfig = qq{
 \$cfg{DefaultUrlHost}   = "http://$hostname";
 \$cfg{ScriptUrlPath}    = "/cgi-bin/twiki";
-\$cfg{ScriptSuffix}     = "$scriptSuffix";
+\$cfg{ScriptSuffix}     = q->param( 'scriptsuffix' ) || '',# || '.cgi',
 \$cfg{PubUrlPath}       = "/htdocs/twiki";
 \$cfg{PubDir}           = "$home/htdocs/twiki"; 
 \$cfg{TemplateDir}      = "$home/twiki/templates"; 
@@ -85,11 +80,8 @@ BEGIN {
 \$cfg{LogDir}           = "$home/twiki/data"; 
 };
 
-    # platform-specific (currently, tho should be able to use "variables" above)
-    #\$cfg{DefaultUrlHost}   = "http://$hostname";
-    # etc...
-#   $BIN = "http://$hostname/~$account/cgi-bin/twiki";
-    $BIN = "http://$hostname/cgi-bin/twiki";
+    $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
+    $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
 
     $PERL = '/home/wikihosting/packages/perl5.8.4/bin/perl';
 
@@ -100,6 +92,7 @@ use Error qw( :try );
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 
 use FindBin;
+use URI;
 use CGI qw( :all );
 use CGI::Carp qw( fatalsToBrowser );
 use File::Copy qw( cp mv );
@@ -281,7 +274,6 @@ chmod 0755, "$cgibin/lib";
 
 # platform-specific (currently, tho should be able to use "variables" above)
 print qq{<hr><hr>\n};
-#print qq{do a <tt>./post-wiki.sh</tt> and then <a target="details" href="$BIN/view$scriptSuffix/TWiki/InstalledPlugins">continue to wiki</a><br/>\n};
 print continueToWikiText();
 print "you can perform this installation again using the following URL: <br/>";
 ( my $urlInstall = $q->self_url ) =~ s/install=install//;
@@ -294,12 +286,12 @@ exit 0;
 ################################################################################
 
 # a handy link to the place to go after the next step
-# uses globals: $BIN $scriptSuffix
+# uses globals: $VIEW $TESTENV
 sub continueToWikiText
 {
     my $text = '';
-    $text .= qq{<a target="details" href="$BIN/view$scriptSuffix/TWiki/InstalledPlugins">proceed to wiki</a><br/>\n};
-    $text .= qq{run <a target="details" href="$BIN/testenv$scriptSuffix/foo/bar" >testenv</a><br/>\n};
+    $text .= qq{<a target="details" href="$VIEW/TWiki/InstalledPlugins">proceed to wiki</a><br/>\n};
+    $text .= qq{run <a target="details" href="$TESTENV/foo/bar" >testenv</a><br/>\n};
     $text .= qq{<br/><br/>};
 }
 
@@ -359,10 +351,10 @@ sub installTWikiExtension
 	    my $destFile = "$dirDest/$base";
 
 	    # KLUDGEy implementation to support scriptSuffix
-#	    print STDERR "path=[$path] INSTALL=[$INSTALL] file=[$file] dirDest=[$dirDest] base=[$base] scriptSuffix=[$scriptSuffix]\n";
+#	    print STDERR "path=[$path] INSTALL=[$INSTALL] file=[$file] dirDest=[$dirDest] base=[$base] scriptSuffix=[$localDirConfig->{ScriptSuffix}]\n";
 	    if ( $path eq 'bin' && $base !~ /\./ )
 	    {
-		$destFile .= $scriptSuffix;
+		$destFile .= $localDirConfig->{ScriptSuffix};
 		mv( "$INSTALL/$file", $destFile ) or die "$file -> $destFile: $!";
 		# patch perl path for local installation
 		my $bin = read_file( $destFile ) or warn "unable to change perl path on $destFile: $!";
