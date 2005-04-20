@@ -90,7 +90,7 @@ BEGIN {
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
 
-    $PERL = $q->param( 'perl' ) || findProgramOnPaths( 'perl' ) || '/home/wikihosting/packages/perl5.8.4/bin/perl';
+    $PERL = $q->param( 'perl' ) || findProgramOnPaths( 'perl' );
 }
 use strict;
 use Error qw( :try );
