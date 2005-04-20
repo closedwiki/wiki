@@ -24,6 +24,7 @@ use File::Copy qw( cp );
 use File::Path qw( rmtree mkpath );
 use File::Spec::Functions qw( rel2abs );
 use File::Find::Rule;
+use File::Slurp;
 use File::Slurp::Tree qw( slurp_tree spew_tree );
 use LWP::UserAgent;
 use Getopt::Long;
@@ -63,19 +64,17 @@ pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 print STDERR Dumper( $Config ) if $Config->{debug};
 	 
+chomp( my @svnInfo = `svn info .` );
+my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
+my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
+
 # TODO: use Getopt to process these (learn how to do this), er, maybe not?
 map { checkdirs( $Config->{$_} = rel2abs( $Config->{$_} ) ) } qw( tempdir outputdir );
 
 $Config->{localcache} = $Config->{tempdir} . "/.cache";
 $Config->{svn_export} = $Config->{localcache} . "/twiki";
 $Config->{install_base} = $Config->{tempdir} . "/twiki";		# the directory the official release is untarred into
-unless ( $Config->{outfile} )
-{
-    chomp( my @svnInfo = `svn info .` );
-    my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
-    my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
-    $Config->{outfile} = "TWikiKernel-$branch-$svnRev";
-}
+$Config->{outfile} ||= "TWikiKernel-$branch-$svnRev";
 # make sure output directories exist
 map { ( mkpath $Config->{$_} or die $! ) unless -d $Config->{$_} } qw( localcache install_base );
 print STDERR Dumper( $Config ) if $Config->{debug};
@@ -150,6 +149,23 @@ foreach my $dir qw( lib templates data bin pub logs )
 {
     my $tree = slurp_tree( $dir, rule => $ruleNormalFiles->start( $dir ) );
     spew_tree( "$installBase/$dir" => $tree );
+}
+
+###############################################################################
+# timestamp version number in lib/TWiki.pm
+{
+    my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+    my @dow = qw( Sun Mon Tue Wed Thu Fri Sat );
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime(time);
+    my $VERSION = '$Date: ' . sprintf("%04d-%02d-%02d", 1900+$year, $mon+1, $mday )
+	. sprintf(" %02d:%02d:%02d +0000 ", $hour, $min, $sec )
+	. sprintf("(%s, %02d %s %04d", $dow[$wday], $mday, $months[$mon], 1900+$year) 
+	. ' $ $Rev: ' . $svnRev . ' $ ';
+
+    my $fileTWikiDotPm = "$installBase/lib/TWiki.pm";
+    my $twiki_pm = read_file( $fileTWikiDotPm ) or die "version update of $fileTWikiDotPm failed";
+    $twiki_pm =~ s/(\$VERSION = )('\$Date:.+?');/$1'$VERSION';/s;
+    write_file( $fileTWikiDotPm, $twiki_pm ) or die "version update of $fileTWikiDotPm failed";
 }
 
 sub filterDoc {
