@@ -6,9 +6,35 @@
 use strict;
 use File::Find;
 
+use Getopt::Long;
+use Pod::Usage;
+
+my $Config;
+
 my $root;
 
 BEGIN {
+
+    $Config = {
+#
+	smells => 1,
+# 
+	verbose => 0,
+	debug => 0,
+	help => 0,
+	man => 0,
+    };
+    
+    my $result = GetOptions( $Config,
+			     'smells!',
+# miscellaneous/generic options
+			     'agent=s', 'help', 'man', 'debug', 'verbose|v',
+			     );
+    pod2usage( 1 ) if $Config->{help};
+    pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
+    print STDERR Dumper( $Config ) if $Config->{debug};
+    
+
     $root = `pwd`;
     chomp($root);
     $root =~ s/\/[^\/]*$//;
@@ -18,8 +44,6 @@ BEGIN {
 };
 
 use TWiki;
-
-my $nosmells = ( join(",", @ARGV) =~ /nosmells/ );
 
 my $twiki = new TWiki("/TWiki", "BuildUser", "WebHome", "/save/TWiki");
 my $user = $twiki->{users}->findUser("admin", "TWikiAdminGroup");
@@ -31,7 +55,7 @@ find( \&eachfile, ( $root ));
 my $i = "---+ TWiki Source Code Packages\n";
 $i .= "Wherever you see a smell, your help is needed to get rid of it!\n";
 $i .= join("\n", sort @index);
-unless( $nosmells ) {
+if ( $Config->{smells} ) {
     $i .= "\n\n There were a total of *$smells* smells\n";
 }
 my $meta = new TWiki::Meta($twiki, "TWiki", "SourceCode");
@@ -96,7 +120,7 @@ sub eachfile {
             $addTo = \$text;
             $inPod = 0;
         } elsif ($inPod) {
-            return if ($nosmells && $line =~ /^---\+\s+UNPUBLISHED/);
+            return if (!$Config->{smells} && $line =~ /^---\+\s+UNPUBLISHED/);
             if( $line =~ /---\++\s*(?:UNPUBLISHED\s*)?package\s*(.*)$/) {
                 $packageName = $1;
                 $packageName =~ s/\s+//g;
@@ -131,7 +155,7 @@ sub eachfile {
     close(PMFILE);
 
     my $howSmelly = "";
-    unless( $nosmells ) {
+    if ( $Config->{smells} ) {
         $howSmelly = `egrep -c '(SMELL|FIXME|TODO)' $pmfile`;
         chomp($howSmelly);
         $smells += $howSmelly;
@@ -142,7 +166,7 @@ sub eachfile {
         }
     }
     my $meta = new TWiki::Meta($twiki, "TWiki", $topic);
-    print STDERR "$pmfile -> $topic\n";
+    $Config->{debug} && print STDERR "$pmfile -> $topic\n";
     push(@index, "---++ [[$topic][$packageName]] \n$packageSpec$howSmelly");
     $text = "---+ Package =$packageName=$extends\n$packageSpec\n%TOC%$text";
     foreach my $method ( sort keys %spec ) {
@@ -156,3 +180,38 @@ sub eachfile {
                                 comment => "created by build" } );
 }
 
+__DATA__
+=head1 NAME
+
+gendocs.pl - 
+
+=head1 SYNOPSIS
+
+gendocs.pl [options] 
+
+Copyright (C) 2005 Crawford Currie.  All Rights Reserved.
+
+ Options:
+   -smells
+   -verbose
+   -debug
+   -help			this documentation
+   -man				full docs
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-smells>
+
+=back
+
+=head1 DESCRIPTION
+
+B<gendocs.pl> ...
+
+=head2 SEE ALSO
+
+	http://twiki.org/cgi-bin/view/Codev/...
+
+=cut
