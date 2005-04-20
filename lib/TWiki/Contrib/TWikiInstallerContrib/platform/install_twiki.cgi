@@ -30,14 +30,13 @@ use strict;
 #    * other stuff i deleted...
 ################################################################################
 
+my $localDirConfig;
 my $cgibin;
 my $home;
 my $tmp;
-my $account;
-my $localDirConfig;
-my $hostname;
 my ( $VIEW, $TESTENV );
 my $PERL;
+my $q;	# CGI object
 
 BEGIN {
     use FindBin;
@@ -50,25 +49,15 @@ BEGIN {
     $tmp = "$cgibin/tmp";
     -e $tmp || mkpath $tmp, 0, 0777;
 
-    $account = 
-	# format: /Users/(account)/Sites/cgi-bin/...
-	# format: /home/(drive)/(account)/account.wikihosting.com/cgi-bin/...
-	[ split( '/', $cgibin ) ]->[-3]
-#	[ split( '/', $home ) ]->[-2]
-	or die "no account?";
-    print STDERR "account=[$account]\n";
-#    $ENV{SERVER_NAME} = "${account}.wikihosting.com";	# domain (wikihosting.com) -specific !!!
-    $ENV{SERVER_NAME} = 'wbniv.wikihosting.com';	# account-specific !!!
+    eval qq{ 
+	use lib( "$cgibin/lib/CPAN/lib" );
 
-    my $localLibBase = "$cgibin/lib/CPAN/lib";
-#    use lib( $localLibBase );
-    my @localLibs = ( $localLibBase, "$localLibBase/$Config{archname}" );
-#    print STDERR "@localLibs\n";
-    unshift @INC, @localLibs;
-#    $ENV{PERL5LIB} = join( ':', @localLibs );
+    	use URI;
+	use CGI qw( :standard );
+    };
+    $q = CGI->new() or die $!;
 
-    chomp( $hostname = $ENV{SERVER_NAME} || `hostname --long` || 'localhost' );
-    die "hostname?" unless $hostname;
+    my $install_cgi = URI->new( $ENV{SCRIPT_URI} );
 
     $localDirConfig = qq{
 \$cfg{DefaultUrlHost}   = "http://$hostname";
@@ -93,8 +82,6 @@ use Error qw( :try );
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 
 use FindBin;
-use URI;
-use CGI qw( :all );
 use CGI::Carp qw( fatalsToBrowser );
 use File::Copy qw( cp mv );
 use File::Path qw( mkpath rmtree );
@@ -106,8 +93,6 @@ use File::Slurp qw( read_file write_file );
 use CPAN;
 
 ################################################################################
-
-my $q = CGI->new() or die $!;
 
 ################################################################################
 # already installed?
