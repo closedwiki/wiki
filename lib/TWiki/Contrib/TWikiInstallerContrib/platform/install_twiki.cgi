@@ -46,6 +46,7 @@ BEGIN {
 
     $cgibin = $FindBin::Bin;
     ( $home = $cgibin ) =~ s|/cgi-bin||;
+
     $tmp = "$cgibin/tmp";
     -e $tmp || mkpath $tmp, 0, 0777;
 
@@ -311,7 +312,7 @@ sub installTWikiExtension
     print $q->h3( "Installing $name" );
     my $archive = Archive::Any->new( $file ) or die "Archive::Any new failed [$file]";
     
-    my $INSTALL = "$FindBin::Bin/tmp/INSTALL";
+    my $INSTALL = "$tmp/INSTALL";
     -d $INSTALL && rmtree $INSTALL;
     mkpath $INSTALL, 1;
     $archive->extract( $INSTALL ) or die $!;
