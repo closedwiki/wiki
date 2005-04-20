@@ -73,8 +73,7 @@ BEGIN {
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
 
-    $PERL = '/home/wikihosting/packages/perl5.8.4/bin/perl';
-
+    $PERL = $q->param( 'perl' ) || '/home/wikihosting/packages/perl5.8.4/bin/perl';
 }
 use strict;
 use Error qw( :try );
@@ -262,6 +261,7 @@ chmod 0755, "$cgibin/lib";
 print qq{<hr><hr>\n};
 print continueToWikiText();
 print "you can perform this installation again using the following URL: <br/>";
+# remove the install button so it won't actually start installing until you click "install"
 ( my $urlInstall = $q->self_url ) =~ s/install=install//;
 print qq{<a href="$urlInstall"><tt>$urlInstall</tt></a>\n};
 
@@ -429,6 +429,16 @@ function toggleHover( e )
 <input type="submit" name="install" value="install" /> <br/>
 </td>
 </table>
+__HTML__
+
+################################################################################
+# SERVER SETTINGS
+#<b>hostname</b>: <input type="text" size="25" name="hostname" value="$hostname" /><br />
+$text .= <<__HTML__;
+<h2>Server Settings</h2>
+<b>perl</b> (full path): <input type="text" size="25" name="PERL" value="$PERL" /><br />
+<small><small>may also be the name of a perl accelerator, e.g,. <a target="details" href="http://www.daemoninc.com/SpeedyCGI/">SpeedyCGI</a></small></small><br />
+<b>cgi extension</b>: <input type="text" size="6" name="scriptsuffix" value="$localDirConfig->{ScriptSuffix}" /><br />
 __HTML__
 
 ################################################################################
