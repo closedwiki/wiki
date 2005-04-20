@@ -63,9 +63,11 @@ WWW::Mechanize
 ^Archive::
 ^IO::String$
 ^File::AnySpec$
+^Math::BigInt$
 ^File::Package$
 ^Data::Startup$
 ^Tie::Gzip$
+^Tie::IxHash$
 ^File::Where$
 ^Class::Virtually::Abstract$
 ^Carp::Assert$
