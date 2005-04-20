@@ -3,7 +3,7 @@
 
 %TOC%
 %STARTINCLUDE%
----# Appendix D: TWiki Development Timeline
+---# TWiki Development Timeline
 
 ---++ 01-Sep-2004 Release (Cairo)
 

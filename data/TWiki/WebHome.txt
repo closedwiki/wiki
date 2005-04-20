@@ -83,10 +83,9 @@ _Documentation for webmasters, system administrators, project managers, team lea
 		1. [[ManagingWebs][Managing Webs]]
 		1. [[ManagingUsers][Managing Users]]
 		* *Appendices*
-			* [[AppendixFileSystem][A. TWiki File System]]
-			* [[TWikiCss][B. TWiki CSS]]
-			* [[AppendixEncodeURLsWithUTF8][C. Encode URLs With UTF8]]
-			* [[TWikiHistory][D. TWiki Development Timeline]]
+			* [[TWikiCss][TWiki CSS]]
+			* [[AppendixEncodeURLsWithUTF8][Encode URLs With UTF8]]
+			* [[TWikiHistory][TWiki Development Timeline]]
 
 	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
 		* TWikiAdminCookBook: Some tips that can be applied *before installation*

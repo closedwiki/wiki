@@ -3,7 +3,7 @@
 
 %TOC%
 %STARTINCLUDE%
----# Appendix B: TWiki CSS
+---# TWiki CSS
 
 _Listing of CSS class names emitted from TWiki core code and standard plugins, for the 01-Aug-2004 TWiki production release._
 

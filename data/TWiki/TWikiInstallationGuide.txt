@@ -137,7 +137,7 @@ That's it for the standard installation of TWiki. Read on for server-level custo
 With your new TWiki installation up and running, you can manage most aspects of your site from the browser interface. Only a few functions require access to the server file system.
 
 #AuthenticationOfUsers
----+++ Enabling Authentication of Users
+---+++ Step 7: Enabling Authentication of Users (optional)
 
 If TWiki is installed on a non-authenticated server and you'd like to authenticate users:
 	* TWiki supports several password file format/encoding methods for Apache. Once you know what method is used by your Apache server, you can configure TWiki to create compatible .htpasswd entries by adding the =$cfg{HtpasswdFormatFamily}=, =$cfg{HtpasswdEncoding}= and =$cfg{HtpasswdFilename}= options to the =LocalSite.cfg= file. See =TWiki.cfg= for guidance.
@@ -149,7 +149,7 @@ If TWiki is installed on a non-authenticated server and you'd like to authentica
 		* You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly.
 		* You can customize the default user home page in NewUserTemplate. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]
 	* Register yourself in the TWikiRegistration topic.
-		* %X% *NOTE:* When a user registers, a new line with the username and encrypted password is added to the =.htpasswd= file.
+		* %X% When a user registers, a new line with the username and encrypted password is added to the =.htpasswd= file.
 	* Create a new topic to check if authentication works.
 	* Edit the %MAINWEB%.TWikiAdminGroup topic in the TWiki:%MAINWEB% web to include users with system administrator status.
 	* Edit the TWikiPreferences topic in the TWiki:%TWIKIWEB% web to set access privileges.
@@ -160,10 +160,6 @@ If TWiki is installed on a non-authenticated server and you'd like to authentica
 At this time, TWiki does not ship with an "what you see is what you get" editor. TWiki:Codev/IntegrateHtmlAreaEditor describes how to integrate an HTML editor.
 
 %X% *NOTE:* User home topics are located in the %WIKITOOLNAME%.%MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %WIKITOOLNAME%.%MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line!)
-
----++ TWiki File System Info
-
-See [[AppendixFileSystem][Appendix A: TWiki File System]] for an installed system snapshot and descriptions of all files in the TWiki 01-Sep-2004 distribution.
 
 %STOPINCLUDE%
 
