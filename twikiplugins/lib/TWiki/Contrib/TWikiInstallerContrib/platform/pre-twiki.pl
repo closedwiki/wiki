@@ -52,7 +52,7 @@ chmod 0755, $opts->{cgibin};
 ################################################################################
 my $cpan = "$opts->{cgibin}/lib/CPAN/";
 mkpath $cpan;
-my $mirror = '/home/wikihosting/CPAN-live/MIRROR/MINICPAN/' || "$FindBin::Bin/cpan/MIRROR/TWIKI/";
+my $mirror = "$FindBin::Bin/cpan/MIRROR/TWIKI/" || '/home/wikihosting/CPAN-live/MIRROR/MINICPAN/';
 createMyConfigDotPm({ cpan => $cpan, config => '~/.cpan/CPAN/MyConfig.pm', mirror => "file:$mirror" });
 foreach my $module (
 		    qw( ExtUtils::MakeMaker Storable Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node 
