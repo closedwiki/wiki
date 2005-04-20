@@ -1,6 +1,6 @@
 #!/home/wikihosting/packages/perl5.8.4/bin/perl -w
 # $Id$
-#  Stages 2-3/3 of an automatic twiki install on macosx darwin
+#  Stages 2-3/3 of an automatic twiki install
 # Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
@@ -129,7 +129,7 @@ if ( -e "$FindBin::Bin/twiki" )
 ################################################################################
 # configuration page (in html) if the install button hasn't been clicked
 ################################################################################
-unless ( ($q->param('install') || '') =~ /install/i )
+unless ( $q->param( 'kernel' ) && ($q->param('install') || '') =~ /install/i )
 {
     print installationMenu( $q );
     exit 0;
@@ -168,16 +168,14 @@ print $q->h1( $title );
 
 #--------------------------------------------------------------------------------
 # install TWiki itself
-# TODO: change this to require a kernel parameter? (probably, but need to deal with creating the error "screens")
-my $tar = $q->param( 'kernel' ) || 'TWiki20040902.zip';
-# SMELL: not a proper choosing of the latest version (hm, is that still true? (except about the TWikiKernel-* hardcoded part))
+my $tar = $q->param( 'kernel' ) or die "kernel parameter required (how did you get here?)";
 if ( $tar =~ /^LATEST$/i ) { 
-    $tar = ( reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } <downloads/releases/TWikiKernel-*> )[0];
+    $tar = ( reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } <../downloads/releases/TWikiKernel-*> )[0];
+    # SMELL: kludge to strip the extension (and path) which gets added back in next step
+    ( $tar = basename( $tar ) ) =~ s/(\..*?)$//;
 }
-#$tar ||= "TWiki20040902.tar.gz";
-$tar ||= "TWiki20040902.zip";
 
-installTWikiExtension({ file => $tar, name => 'TWiki', dir => "downloads/releases", cdinto => 'twiki', mapDirs => $mapTWikiDirs });
+installTWikiExtension({ file => "../downloads/releases/$tar.zip", name => 'TWiki', dir => "downloads/releases", cdinto => 'twiki', mapDirs => $mapTWikiDirs });
 
 #--------------------------------------------------------------------------------
 # update TWiki.cfg (now LocalSite.cfg) for local directories configuration
@@ -255,7 +253,7 @@ foreach my $iType ( @types )
     {
 	my $ExtS = $hExt{$idExt} or warn "no entry for $idExt ?", next;
 	my $name = $ExtS->{name} or die "no extension name? wtf?";
-	$ExtS->{file} ||= "$name.zip";
+	$ExtS->{file} ||= "../$iType->{dir}/$name.zip";
 	
 	installTWikiExtension({ file => $ExtS->{file}, name => $name, dir => $iType->{dir}, mapDirs => $mapTWikiDirs });
     }
@@ -319,21 +317,7 @@ sub installTWikiExtension
     my $mapDirs = $p->{mapDirs} or die "no mapDirs?";
 
     print $q->h3( "Installing $name" );
-    (my $tarPackage = $file) .= '.zip';
-    # KLUDGE
-    print STDERR "checking for [$tarPackage]\n";
-    unless ( -e $tarPackage )
-    {
-	($tarPackage = "../$dir/$file.zip");
-	print STDERR "checking for [$tarPackage]\n";
-	unless ( -e "$tarPackage" )
-	{
-	    print "<br/>Skipping $name ($tarPackage not found)<br/>\n"; 
-	    return;
-	}
-    }
-
-    my $archive = Archive::Any->new( $tarPackage ) or die "Archive::Any new failed [$tarPackage]";
+    my $archive = Archive::Any->new( $file ) or die "Archive::Any new failed [$file]";
     
     my $INSTALL = "$FindBin::Bin/tmp/INSTALL";
     -d $INSTALL && rmtree $INSTALL;
@@ -428,7 +412,8 @@ td:hover { background:#bbbbff; } \
 th { background:pink; font:1.5em; padding:0.35em; text-align:right; } \
 th:hover { background:#ffdddd; } \
 #hdr td { padding:0.2em; background:#ffff66; border:0px; } \
-.disabled { background-color:#cccccc; }
+.disabled { background-color:#cccccc; } \
+.error { color:red; font-weight:bold; } \
 " },
 	);
     $text .= <<'__HTML__';
@@ -468,6 +453,13 @@ function toggleHover( e )
 </table>
 __HTML__
 
+################################################################################
+# KERNELS
+    if ( $q->param( 'install' ) ) {
+	$text .= $q->br() . q{<div class="error">} . $q->b( 'You need to select a ' . 
+		$q->a( { -href=>'http://twiki.org/cgi-bin/view/Codev/TWikiKernel?skin=print.pattern', -target=>'details' }, 'TWikiKernel' )) .
+		q{</div>};
+    }
     my %kernels = ( dir => "../downloads/releases/", xml => "releases.xml", type => "kernel" );
     releasesCatalogue({ %kernels, cgi => $q });
     $text .= catalogue({ %kernels, inputType => "radio", title => "TWikiKernel", cgi => $q });
