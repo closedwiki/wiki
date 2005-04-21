@@ -231,14 +231,9 @@ sub getFormDef {
 }
 
 sub _link {
-    my( $this, $web, $name, $tooltip, $heading, $align, $span, $extra ) = @_;
+    my( $this, $web, $name, $tooltip ) = @_;
 
     $name =~ s/[\[\]]//go;
-
-    my %attrs;
-
-    $attrs{-align} = $align if $align;
-    $attrs{-colspan} = $span if $span;
 
     my $link = $name;
 
@@ -256,15 +251,11 @@ sub _link {
                     rel => 'nofollow'
                   }, $name );
     } elsif ( $tooltip ) {
-        $link = CGI::span({ -title=>$tooltip }, $name );
+        $link = CGI::span( { -title=>$tooltip }, $name );
     }
 
-    if( $heading ) {
-        $attrs{-bgcolor} = '#99CCCC';
-        return CGI::th( \%attrs, $link, );
-    } else {
-        return CGI::td( \%attrs, $link );
-    }
+
+    return $link;
 }
 
 =pod
@@ -293,7 +284,10 @@ sub renderForEdit {
     }
 
     my $text = CGI::start_table(-border=>1, -cellspacing=>0, -cellpadding=>0 );
-    $text .= CGI::Tr($this->_link( $web, $form, '', 1, '', 2, $chooseForm ));
+    $text .= CGI::Tr( CGI::th( { colspan => 2,
+                                 bgcolor => '#99CCCC' },
+                               $this->_link( $web, $form, '' ).
+                               $chooseForm ));
 
     my $fieldsInfo = $this->getFormDef( $formWeb, $form );
     foreach my $c ( @$fieldsInfo ) {
@@ -310,6 +304,7 @@ sub renderForEdit {
             $field = $meta->get( 'FIELD', $name );
             $value = $field->{value};
         }
+
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
             $value = $prefs->getPreferencesValue($name);
@@ -375,11 +370,10 @@ sub renderForEdit {
         } elsif( $type =~ /^checkbox/ ) {
             my $options = $c->{value};
             ASSERT( ref( $options )) if DEBUG;
-            $value = '';
             if( $type eq 'checkbox+buttons' ) {
                 my $boxes = scalar( @$options );
-                $extra .= CGI::br();
-                $extra = CGI::button
+                $extra = CGI::br();
+                $extra .= CGI::button
                   ( -class => 'twikiEditFormCheckboxButton',
                     -value => 'Set',
                     -onClick => 'checkAll(this,2,'.$boxes.',true)' );
@@ -397,12 +391,12 @@ sub renderForEdit {
                     label=>$session->handleCommonTags( $item,
                                                        $web,
                                                        $topic ) };
-                if( $value =~ /(^|,\s*)$item(,|$)/ ) {
+                if( $value =~ /(^|,\s*)$item(\s*,|$)/ ) {
                     $attrs{$item}{checked} = 'checked';
                     push( @defaults, $item );
                 }
             }
-            $value .= CGI::checkbox_group( -name => $name,
+            $value = CGI::checkbox_group( -name => $name,
                                           -values => $options,
                                           -defaults => \@defaults,
                                           -columns => $size,
@@ -417,9 +411,7 @@ sub renderForEdit {
             foreach my $item ( @$options ) {
                 $attrs{$item} =
                   { class=>'twikiEditFormRadioField twikiRadioButton',
-                    label=>$session->handleCommonTags( $item,
-                                                               $web,
-                                                               $topic ) };
+                    label=>$session->handleCommonTags( $item, $web, $topic ) };
 
                 $selected = $item if( $item eq $value );
             }
@@ -440,8 +432,10 @@ sub renderForEdit {
                                      -value=>$value );
 
         }
-        $text .= CGI::Tr($this->_link( $web, $title, $tooltip, 1,
-                                       'right', '', $extra ) .
+        $text .= CGI::Tr(CGI::th( { align => 'right',
+                                    bgcolor=>'#99CCCC'},
+                                  $this->_link( $web, $title, $tooltip).
+                                  $extra ).
                          CGI::td( { -align=>'left' } , $value ));
     }
     $text .= CGI::end_table();
