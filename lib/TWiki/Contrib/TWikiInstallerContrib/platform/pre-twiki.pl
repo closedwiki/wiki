@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
-# pre-twiki.pl
+#  Stage 1/3 of an automatic twiki install
+# Copyright 2004,2005 Will Norris.  All Rights Reserved.
+# License: GPL
 use strict;
 use File::Path qw( mkpath rmtree );
 use File::Copy qw( cp mv );
@@ -11,7 +13,7 @@ sub mychomp { chomp $_[0]; $_[0] }
 
 print "TWiki Installation (Step 1/3)\n";
 
-$ENV{SERVER_NAME} ||= 'wbniv.wikihosting.com';
+$ENV{SERVER_NAME} or die "must specify SERVER_NAME environment variable";
 
 my $opts = {
     whoami => mychomp( `whoami` ),
