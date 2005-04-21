@@ -1119,8 +1119,8 @@ sub new {
     $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$TWiki::cfg{PubUrlPath};
     $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$TWiki::cfg{DispScriptUrlPath};
 
-    # initialize user preferences
-    $this->{prefs}->initializeUser();
+    $this->{prefs}->loadUserAndTopicPreferences( $web, $topic, $user );
+
     $this->{renderer} = new TWiki::Render( $this );
 
     # Finish plugin initialization - register handlers

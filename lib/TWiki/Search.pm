@@ -669,7 +669,7 @@ sub searchWeb {
             unless( exists( $topicInfo->{$topic} ) ) {
                 # not previously cached
                 $topicInfo->{$topic} =
-                  $this->_extractTopicInfo( $web, $topic, 1, 0, undef );
+                  $this->_extractTopicInfo( $web, $topic, 0, undef );
             }
             my $epochSecs = $topicInfo->{$topic}->{modified};
             my $revDate = TWiki::Time::formatTime( $epochSecs );
@@ -751,7 +751,7 @@ sub searchWeb {
                 $out =~ s/%TIME%/$revDate/o;
 
                 my $srev = 'r' . $revNum;
-                if( $revNum eq '1' ) {
+                if( $revNum eq '0' || $revNum eq '1' ) {
                     $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
                 }
                 $out =~ s/%REVISION%/$srev/o;
@@ -940,19 +940,17 @@ sub _sortTopics{
     my ( $this, $web, $topics, $sortfield, $revSort ) = @_;
 
     my $topicInfo = {};
-
     foreach my $topic ( @$topics ) {
         $topicInfo->{$topic} = $this->_extractTopicInfo( $web, $topic, $sortfield );
     }
-
     if( $revSort ) {
         @$topics = map { $_->[1] }
-          sort {$b->[0] <=> $a->[0] }
+          sort { _compare( $b->[0], $a->[0] ) }
             map { [ $topicInfo->{$_}->{$sortfield}, $_ ] }
               @$topics;
     } else {
         @$topics = map { $_->[1] }
-          sort {$b->[0] <=> $a->[0] }
+          sort { _compare( $a->[0], $b->[0] ) }
             map { [ $topicInfo->{$_}->{$sortfield}, $_ ] }
               @$topics;
     }
@@ -960,9 +958,21 @@ sub _sortTopics{
     return $topicInfo;
 }
 
+my $number = qr/^[-+]?[0-9]+(\.[0-9]*)?([Ee][-+]?[0-9]+)?$/;
+
+sub _compare {
+    if( $_[0] =~ /$number/ && $_[1] =~ /$number/ ) {
+        # when sorting numbers to largets first; this is just because
+        # this is what date comparisons need.
+        return $_[1] <=> $_[0];
+    } else {
+        return $_[0] cmp $_[1];
+    }
+}
+
 # extract topic info
 sub _extractTopicInfo {
-    my ( $this, $web, $topic, $cacheText, $sortfield ) = @_;
+    my ( $this, $web, $topic, $sortfield ) = @_;
     my $info = {};
     my $session = $this->{session};
     my $store = $session->{store};

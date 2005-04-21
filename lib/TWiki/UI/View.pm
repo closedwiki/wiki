@@ -153,11 +153,6 @@ sub view {
                     -default => "\n".$text
                   );
         }
-    } else {
-        $text = $session->handleCommonTags( $text, $webName, $topicName );
-        $text = $session->{renderer}->getRenderedVersion( $text,
-                                                          $webName,
-                                                          $topicName );
     }
 
     if( $TWiki::cfg{Log}{view} ) {

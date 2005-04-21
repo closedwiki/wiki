@@ -77,20 +77,16 @@ sub new {
 
 =pod
 
----++ ObjectMethod initializeUser()
+---++ ObjectMethod loadUserAndTopicPreferences()
 
 Reads preferences from the current user's personal topic, and
 read topic prefs if required.
 
 =cut
 
-sub initializeUser {
-    my $this = shift;
+sub loadUserAndTopicPreferences {
+    my( $this, $web, $topic, $user ) = @_;
     ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
-
-    my $web = $this->{session}->{webName};
-    my $topic = $this->{session}->{topicName};
-    my $user = $this->{session}->{user};
 
     my $req = new TWiki::Prefs::PrefsCache($this->{session}, $this->{WEB} );
 
