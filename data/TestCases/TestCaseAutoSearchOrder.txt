@@ -1,0 +1,123 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev: 3915 $"}%
+
+Description: Tests for the "order" parameter in SEARCH.
+
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Lynnwood Brown
+
+Topics created for test:
+   * SearchTestTopic1
+   * SearchTestTopic2
+   * SearchTestTopic3
+
+format="!$topic; Text Item; Number Item; modified date"
+
+---++ Test searches
+---+++ Search ordered by Topic Name
+_This search should be ordered by sequence of values in "Topic Name" field._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="topic" }%
+<!-- /actual -->
+
+---+++ Search ordered by Topic Name, reversed
+_This search should be ordered by *reversed* sequence of values in "Topic Name" field._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="topic" reverse="on" }%
+<!-- /actual -->
+
+---+++ Search ordered by "Text Item" formfield
+_This search should be ordered by sequence of values in "Text Item" field._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Text Item)" reverse="0" }%
+<!-- /actual -->
+
+---+++ Search ordered by "Text Item" formfield, reversed
+_This search should be ordered by *reversed* sequence of values in "Text Item" field._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Text Item)" reverse="on" }%
+<!-- /actual -->
+
+---+++ Search ordered by "Number Item" formfield
+_This search should be ordered by sequence of values in "Number Item" field._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" }%
+<!-- /actual -->
+
+---+++ Search ordered by "Number Item" formfield, reversed
+_This search should be ordered by *reversed* sequence of values in "Number Item" field._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" reverse="1"}%
+<!-- /actual -->
+
+---+++ Search ordered by date modified
+_This search should be ordered in sequence of values in "Modified" field (newest recently modified first)._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="modified" reverse="" }%
+<!-- /actual -->
+
+---+++ Search ordered by date modified, reversed
+_This search should be ordered in sequence of values in "Modified" field (oldest recently modified first)._ %BR%
+---++++ Expected
+<!-- expected rex -->
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="modified" reverse="on" }%
+<!-- /actual -->
+
+---+++ Search ordered by date created
+Would like to test this, but no way to guarantee it because the create date
+is taken from the filesystem.

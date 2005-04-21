@@ -1,0 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="31536000" format="1.0" version="$Rev: 3915 $"}%
+%META:FORM{name="SearchWebForm"}%
+%META:FIELD{name="Text Item" attributes="" title="Text Item" value="Value_1"}%
+%META:FIELD{name="Number Item" attributes="" title="Number Item" value="3"}%
