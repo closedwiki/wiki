@@ -8,8 +8,6 @@ TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 twiki.tar.bz2 : twiki.tar
 	bzip2 -f twiki.tar
 
-#	tar -f twiki.tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform; ls ` --directory $(PLATFORM) `cd platform/$(PLATFORM); ls` 
-
 twiki.tar : 
 	tar -f twiki.tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform; ls `
 	tar -f twiki.tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
@@ -17,9 +15,9 @@ twiki.tar :
 
 extensions : twiki-cpan plugins contribs addons
 
-distro : extensions twiki-$(PLATFORM).tar.bz2 
+distro : extensions twiki.tar.bz2 
 
-test-distro : extensions twiki-$(PLATFORM).tar
+test-distro : extensions twiki.tar
 
 minicpan :
 	cpan/mirror-cpan.pl
@@ -41,16 +39,13 @@ addons :
 print :
 	@echo Settings
 	@echo ================================================================================
-	@echo PLATFORM = $(PLATFORM)
 	@echo TWIKIDEV = $(TWIKIDEV)
 
-#	@echo "  [also] `ls -m platform/ | grep -v ^CVS$$`"
 help : print
 	@echo 
 	@echo Usage
 	@echo ================================================================================
-	@echo make twiki-$(PLATFORM).tar[.bz2] - bundle already-downloaded extensions + kernels into .tar[.bz2]
-	@echo "  [also] `ls -m platform/`"
+	@echo make twiki.tar[.bz2] - bundle already-downloaded extensions + kernels into .tar[.bz2]
 	@echo 
 	@echo make test-distro - download and bundle extensions + kernel
 	@echo make distro - test-distro + bzip2 compression
