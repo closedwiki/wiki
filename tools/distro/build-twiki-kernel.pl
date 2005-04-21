@@ -94,7 +94,7 @@ my $ruleDiscardRcsLock = File::Find::Rule->file->name("*.lock")->discard;
 my $ruleDiscardBackup = File::Find::Rule->file->name("*~")->discard;
 my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
 my $ruleDiscardOS = File::Find::Rule->file->name(".DS_Store")->discard;
-my $ruleDiscardLogFiles = File::Find::Rule->or( File::Find::Rule->file->name("data/log*.txt"), File::Find::Rule->file->name("data/debug*.txt"), File::Find::Rule->file->name("data/warn*.txt") )->discard;
+my $ruleDiscardLogFiles = File::Find::Rule->or( File::Find::Rule->file->name("log*.txt"), File::Find::Rule->file->name("debug*.txt"), File::Find::Rule->file->name("warn*.txt") )->discard;
 my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardOS, $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, $ruleDiscardLogFiles, File::Find::Rule->file );
 
 ################################################################################
