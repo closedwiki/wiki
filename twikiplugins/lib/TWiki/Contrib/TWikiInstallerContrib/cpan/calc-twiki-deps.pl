@@ -20,6 +20,7 @@ use strict;
 ^Data::Hierarchy$
 ^PerlIO::via::symlink$
 ^Time::ParseDate$
+^Test::Harness$
 ^Test::More$
 ^YAML
 ^Safe$
@@ -69,6 +70,7 @@ WWW::Mechanize
 ^Tie::Gzip$
 ^Tie::IxHash$
 ^File::Where$
+^Class::ISA$
 ^Class::Virtually::Abstract$
 ^Carp::Assert$
 ^Class::Data::Inheritable$
@@ -97,6 +99,7 @@ WWW::Mechanize
 ^Archive::Tar$
 ^ExtUtils::CBuilder$
 ^ExtUtils::ParserXS$
+^ExtUtils::MakeMaker$
 ^String::Interpolate$
 SVK
 TWiki
