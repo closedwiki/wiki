@@ -243,17 +243,8 @@ sub edit {
 
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
     my $p = $session->{prefs};
-    $text = CGI::textarea(
-                          -id => 'topic',
-                          -name => 'text',
-                          -wrap => 'virtual',
-                          -rows => $p->getPreferencesValue('EDITBOXHEIGHT')
-                          || 15,
-                          -cols => $p->getPreferencesValue('EDITBOXWIDTH')
-                          || 70,
-                          -style => $p->getPreferencesValue('EDITBOXSTYLE'),
-                          -onKeyDown => 'if(window.event.keyCode==27)return false;',
-                          -default=>"\n".$text );
+
+    $text = TWiki::entityEncode( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
     $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );

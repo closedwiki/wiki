@@ -146,8 +146,8 @@ sub preview {
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%TEXT%/$ptext/go;
 
-    my $ht = CGI::hidden({ name=>'text' }, $text );
-    $tmpl =~ s/%HIDDENTEXT%/$ht/go;
+    $text = TWiki::entityEncode( $text );
+    $tmpl =~ s/%HIDDENTEXT%/$text/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
 
     $session->writeCompletePage( $tmpl );
