@@ -118,6 +118,11 @@ if ( -e "$FindBin::Bin/twiki" )
     print $q->header();
     print $q->h1( "already installed" );
     print continueToWikiText();
+    if ( ($q->param('install') || '') =~ /install/i )
+    {
+	print $q->h2( 'Requested Configuration' );
+	print installationMenu( $q );
+    }
     exit 0;
 }
 
@@ -126,6 +131,7 @@ if ( -e "$FindBin::Bin/twiki" )
 ################################################################################
 unless ( $q->param( 'kernel' ) && ($q->param('install') || '') =~ /install/i )
 {
+    print $q->header();
     print installationMenu( $q );
     exit 0;
 }
@@ -279,9 +285,8 @@ chmod 0755, "$cgibin/lib";
 print qq{<hr><hr>\n};
 print continueToWikiText();
 print "you can perform this installation again using the following URL: <br/>";
-# remove the install button so it won't actually start installing until you click "install"
-( my $urlInstall = $q->self_url ) =~ s/install=install//;
-print qq{<a href="$urlInstall"><tt>$urlInstall</tt></a>\n};
+my $urlInstall = $q->self_url;
+print $q->a( { -href => $urlInstall }, "<tt>$urlInstall</tt>" );
 
 print end_html();
 
@@ -395,7 +400,6 @@ sub installationMenu
     my $text = '';
 
     my $title = "TWiki Installation (Step 2/3)";
-    $text .= $q->header();
     $text .= $q->start_html( 
 			     -title => $title,
 			     -style => { -code => "\
