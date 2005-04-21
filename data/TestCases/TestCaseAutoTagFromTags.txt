@@ -1,27 +1,33 @@
-%META:TOPICINFO{author="TWikiGuest" date="1108192994" format="1.0" version="1.3"}%
----+!! %TOPIC%
+%META:TOPICINFO{author="TWikiContributor" date="1108192994" format="1.0" version="$Rev$"}%
 
 Description: Tags composed from the expansion of other tags. Example: is * Set A=Some and * Set B=Tag, then <nop>%%A<nop>%<nop>%B<nop>%% must expand to whatever is the expansion of %SomeTag%
 
-	* Set EGGSAMPLE = Egg sample
-	* Set A = EGG
-	* Set B = SAMPLE
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
-	* Set C = %%A%
-	* Set D = %B%%
+Designed by: Crawford Currie
 
-	* Set E = %EGG
-	* Set F = SAMPLE%
+   * Set EGGSAMPLE = Egg sample
+   * Set A = EGG
+   * Set B = SAMPLE
+
+   * Set C = %%A%
+   * Set D = %B%%
+
+   * Set E = %EGG
+   * Set F = SAMPLE%
 	
-	* Set PA = A
-	* Set SB = B
+   * Set PA = A
+   * Set SB = B
 
-	* A: = %A%
-	* B: = %B%
-	* C: = %C%
-	* D: = %D%
-	* E: = %E%
-	* F: = %F%
+   * EGGSAMPLE: %EGGSAMPLE%
+   * A: %A%
+   * B: %B%
+   * C: %C%
+   * D: %D%
+   * E: %E%
+   * F: %F%
+   * PA: %PA%
+   * SB: %SB%
 
 ---++ <nop>%<nop>%A<nop>%<nop>%B<nop>%<nop>%
 Expected:

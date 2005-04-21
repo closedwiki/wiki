@@ -1,8 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
 
 Description: check the behaviour of the inside and outside PRE handlers
-This test is designed to be automatic; it cannot be performed manually. *DO NOT CHANGE THE NUMBER OF LINES IN THIS TOPIC AS THE TEST COUNTS CALLS TO THE HANDLERS!*
+This test is designed to be automatic; it cannot be performed manually.
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
 
 ---+ Actual
 <!-- actual -->
@@ -19,17 +22,17 @@ This test is designed to be automatic; it cannot be performed manually. *DO NOT 
 <!-- /actual -->
 ---+ Expected
 <!-- expected -->
-1OPH7_line1
-1OPH7_line2
-1OPH7_line3
+1OPH11_line1
+1OPH11_line2
+1OPH11_line3
 <pre>
 1IPH1_line1
 1IPH1_line2
 1IPH1_line3
 </pre>
-2OPH12_line1
-2OPH12_line2
-2OPH12_line3
+2OPH16_line1
+2OPH16_line2
+2OPH16_line3
 <pre>
 2IPH5_line1
 2IPH5_line2
@@ -40,7 +43,7 @@ This test is designed to be automatic; it cannot be performed manually. *DO NOT 
 3IPH9_line3
 
 </pre>
-3OPH17_line1
-3OPH17_line2
-3OPH17_line3
+3OPH21_line1
+3OPH21_line2
+3OPH21_line3
 <!-- /expected -->

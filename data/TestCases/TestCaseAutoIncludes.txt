@@ -2,13 +2,17 @@
 
 Description: Check for the correct detection and handling of recursive and repeated includes
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 ---+ Recursion detection and avoidance
 ---++ Expected
 <!-- expected -->
 <p />
 <pre>
 There was an old Man of the coast
-<span class='twikiAlert'>Warning: Can't INCLUDE TestCases.<nop>RecursiveInclude twice, topic is already included.</span>
+<span class='twikiAlert'> Warning: Can't INCLUDE TestCases.<nop>RecursiveInclude twice, topic is already included.</span>
 
 Who placidly sat on a post;
 But when it was cold
@@ -33,7 +37,7 @@ And called for some hot buttered toast.
 ---+ File not found
 ---++ Expected
 <!-- expected expand -->
-<span class='twikiAlert'>Warning: Can't find topic FileNotFound</span>
+<span class='twikiAlert'> Warning: Can't find topic FileNotFound</span>
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->

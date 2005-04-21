@@ -1,6 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
 
 Description: Tags embedded in the format option must expand correcly
+
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 <verbatim>
 %SEARCH{"%TOPIC%" format="$percntINCLUDE{ $topic }$nop%" nosearch="on" noheader="on" nosummary="on" nototal="on"}%
 </verbatim>

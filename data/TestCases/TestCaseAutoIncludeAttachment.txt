@@ -1,10 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
 
-
-%META:TOPICPARENT{name="WebHome"}%
----+!! %TOPIC%
-
 Description: Tests for inclusion of attachments
+
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
 
 ---+ Existing attachment
 ---++ Expected

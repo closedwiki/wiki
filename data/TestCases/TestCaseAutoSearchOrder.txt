@@ -63,37 +63,38 @@ SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 <!-- /expected -->
 ---++++ Actual
 <!-- actual -->
-%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Text Item)" reverse="on" }%
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Text Item)" reverse="off" }%
 <!-- /actual -->
+<!-- yes, reverse="off". That's what search does, it interprets "off" as "on" -->
 
 ---+++ Search ordered by "Number Item" formfield
 _This search should be ordered by sequence of values in "Number Item" field._ %BR%
 ---++++ Expected
 <!-- expected rex -->
-SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
-SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 <!-- /expected -->
 ---++++ Actual
 <!-- actual -->
-%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" }%
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Number Item)"  }%
 <!-- /actual -->
 
 ---+++ Search ordered by "Number Item" formfield, reversed
 _This search should be ordered by *reversed* sequence of values in "Number Item" field._ %BR%
 ---++++ Expected
 <!-- expected rex -->
-SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
-SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 <!-- /expected -->
 ---++++ Actual
 <!-- actual -->
-%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" reverse="1"}%
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Number Item)" reverse="1"}%
 <!-- /actual -->
 
 ---+++ Search ordered by date modified
-_This search should be ordered in sequence of values in "Modified" field (newest recently modified first)._ %BR%
+_This search should be ordered in sequence of values in "Modified" field (newest first)._ %BR%
 ---++++ Expected
 <!-- expected rex -->
 SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />

@@ -1,25 +1,26 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
 
-
 Description: verbatim tags should be nestable to at least two levels.
+
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
 
 	* Set EGG = font color="blue"
 	* Set BACON = font color="purple"
 	* Set ENDBREAKFAST = /font
 
-Manual test; THIS TESTCASE CANNOT BE AUTOMATED because the end rendering handler used by the !TestFixturePlugin is invoked before verbatim text is replaced in the output.
-
 <table>
-<tr><th>Expected (TWiki will munge this when viewing the topic, so view raw)</th><th>Actual</th></tr>
+<tr><th>Expected</th><th>Actual</th></tr>
 <tr><td>
 <!-- expected -->
 <font color="purple"> Before Verbatim </font>
 <pre>
-&lt;&#37;EGG%&gt; In outer verbatim &lt;%ENDBREAKFAST%&gt;
+&lt;%EGG%&gt; In outer verbatim &lt;%ENDBREAKFAST%&gt;
 &lt;verbatim&gt;
 In inner verbatim with &lt;text in angle braces&gt;
 &lt;/verbatim&gt;
-&lt;&#37;EGG%&gt; In outer verbatim again &lt;%ENDBREAKFAST%&gt;
+&lt;%EGG%&gt; In outer verbatim again &lt;%ENDBREAKFAST%&gt;
 </pre>
 <font color="purple"> After Verbatim </font>
 <!-- /expected -->
@@ -46,7 +47,7 @@ Admire the pretty fishes.
 Usage:
 &lt;verbatim&gt;
 	 my $fishes = _marine();
-	 if ( $fishes-&gt;{"big mouth rass"} ) {
+	 if ( $fishes-&gt;{&#34;big mouth rass&#34;} ) {
 &lt;/verbatim&gt;
 </pre>
 Lorem ipsum is pig latin for "that's my lorry, that is".

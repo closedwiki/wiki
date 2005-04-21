@@ -2,6 +2,10 @@
 
 Description: tests for TOCs included from other topics and with funny deprecated syntaxes.
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 <table><tr><th>Expected</th><th>Actual</th></tr>
 <tr><td>
 <!-- expected expand -->

@@ -2,6 +2,10 @@
 
 Description: Test the final prefs support.
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 Note that these tests will only provide a pass if run by TWikiGuest, or another user who has the following setting in their home topic:
    * <nop>Set USERFINALTESTPREF = Setting from user topic
 

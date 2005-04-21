@@ -2,6 +2,10 @@
 
 Description: Tag tests that can be automated
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 <table border="1"><tr><th> Tag </th><th>Expected</th><th>Actual</th></tr>
  <tr>
   <td>TOPIC</td>

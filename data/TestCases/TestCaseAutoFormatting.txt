@@ -6,6 +6,10 @@ LinkAtStart
 
 Description: Simple formatting, as described in TWiki.TextFormattingRules
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 <table cols=3 border=2>
 <tr><th>Feature</th><th>Expected</th><th>Actual</th></tr>
 <tr><td> Paragraphs</td><td>

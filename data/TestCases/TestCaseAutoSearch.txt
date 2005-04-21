@@ -4,11 +4,15 @@ Description: Automated search function tests.
 
 Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern" skin and standard search templates.
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 ---+ Search _default
 ---++ Expected
 <!-- expected expand rex DEFAULT -->
 <div class="twikiSearchString">Searched: <b>hit me with your rhythm stick</b></div><div class="twikiSearchResultsBegin"></div>
-<div class="twikiSearchResultsHeader" style="background-color:yellow">Results from TestCases web</div><div class="twikiSearchResults">
+<div class="twikiSearchResultsHeader" style="background-color:yellow"><span class="twikiLeft">Results from TestCases web</span><span class="twikiRight">retrieved at @TIME GMT</span><br class="twikiClear" /></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 @WIKINAME</div>
@@ -61,7 +65,7 @@ Same as last test
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WebPreferences"><b>WebPreferences</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 @WIKINAME</div>
-<div class="twikiRight twikiSRRev">r2 - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WebPreferences" rel='nofollow'>20 Nov 2004 - 18:14</a></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WebPreferences" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div>
 <!-- /expected -->
@@ -77,7 +81,7 @@ Same as last test
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 @WIKINAME</div>
-<div class="twikiRight twikiSRRev">r4 - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>

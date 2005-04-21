@@ -2,12 +2,14 @@
 
 Description: Test case for checking the correct rendering of 'classic' wikiwords and underscore wikiwords, with variations for italic and code text.
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Arthur Clemens
+
 These tests only make sense if
    * underscore wikiwords are implemented in TWiki.pm and Render.pm
    * AUTOLINKTYPE in TWiki.TWikiPreferences has the value =wikiword, underscore=
    * the topics [[Underscore_topic]] and [[H_]] and [[123_num]] have been created
-
-Arthur Clemens - 13 Apr 2005
 
 %TOC%
 
@@ -94,7 +96,7 @@ Actual:
 </verbatim>
 
 <!-- expected expand 6 -->
-<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki/WebHome" class="twikiLink">TWiki.WebHome</a>
+[[TWiki.WebHome]]
 <!-- /expected -->
 
 <!-- actual -->

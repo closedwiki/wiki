@@ -1,5 +1,9 @@
 Description: testcases for TWiki extension tags verbatim, noautolink and pre
 
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
 PRE is actually an HTML tag, but TWiki performs extra processing on it
 
 ---+ =verbatim=
