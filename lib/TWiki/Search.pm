@@ -962,7 +962,7 @@ my $number = qr/^[-+]?[0-9]+(\.[0-9]*)?([Ee][-+]?[0-9]+)?$/;
 
 sub _compare {
     if( $_[0] =~ /$number/ && $_[1] =~ /$number/ ) {
-        # when sorting numbers to largets first; this is just because
+        # when sorting numbers do it largest first; this is just because
         # this is what date comparisons need.
         return $_[1] <=> $_[0];
     } else {
