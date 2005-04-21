@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-#  Stage 1/3 of an automatic twiki install
+#  Stage 1/2 of an automated twiki install
 # Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
@@ -11,7 +11,7 @@ use Config;
 
 sub mychomp { chomp $_[0]; $_[0] }
 
-print "TWiki Installation (Step 1/3)\n";
+print "TWiki Installation (Step 1/2)\n";
 
 $ENV{SERVER_NAME} or die "must specify SERVER_NAME environment variable";
 
@@ -57,10 +57,10 @@ mkpath $cpan;
 my $mirror = "$FindBin::Bin/cpan/MIRROR/TWIKI/" || '/home/wikihosting/CPAN-live/MIRROR/MINICPAN/';
 createMyConfigDotPm({ cpan => $cpan, config => '~/.cpan/CPAN/MyConfig.pm', mirror => "file:$mirror" });
 foreach my $module (
-		    qw( ExtUtils::MakeMaker Storable Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node 
+		    qw( ExtUtils::MakeMaker Storable Test::Harness Test::More YAML Compress::Zlib IO::Zlib IO::String Archive::Tar Data::Startup Math::BigInt File::Package File::Where File::AnySpec Tie::Gzip Archive::TarGzip ExtUtils::CBuilder ExtUtils::ParserXS Tree::DAG_Node 
 			Carp::Assert
 			Class::Data::Inheritable
-			Class::Virtually::Abstract 
+			Class::ISA Class::Virtually::Abstract 
 				Archive::Zip 
 			Archive::Any ),
 		    # Module::Build
@@ -74,7 +74,7 @@ foreach my $module (
     print "Installing $module\n";
     print "-" x 80, "\n";
 #    next;	# for testing when i already know they're all already installed
-    print `~/bin/perl cpan/install-cpan.pl --mirror=$mirror --baselibdir=$cpan $module`;
+    print `perl cpan/install-cpan.pl --mirror=$mirror --baselibdir=$cpan $module`;
 #    last;
 }
 
@@ -160,7 +160,7 @@ sub createMyConfigDotPm
             'make_arg' => "-I$cpan/",
             'make_install_arg' => "-I$cpan/lib/",
 	    # http://faqomatic.sourceforge.net/fom-serve/cache/437.html
-            'makepl_arg' => "PREFIX=$cpan LIB=$cpan/lib INSTALLPRIVLIB=$cpan/lib INSTALLARCHLIB=$cpan/lib/$Config{archname} INSTALLSITEARCH=$cpan/lib/$Config{archname} INSTALLSITELIB=$cpan/lib INSTALLSCRIPT=$cpan/bin INSTALLBIN=$cpan/bin INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
+            'makepl_arg' => "PREFIX=$cpan LIB=$cpan/lib INSTALLPRIVLIB=$cpan/lib INSTALLARCHLIB=$cpan/lib/arch INSTALLSITEARCH=$cpan/lib/arch INSTALLSITELIB=$cpan/lib INSTALLSCRIPT=$cpan/bin INSTALLBIN=$cpan/bin INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
             'ncftp' => q[],
             'ncftpget' => q[],
             'no_proxy' => q[],
