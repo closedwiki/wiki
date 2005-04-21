@@ -1,6 +1,6 @@
-#!/home/wikihosting/packages/perl5.8.4/bin/perl -w
+#!/usr/bin/perl -w
 # $Id$
-#  Stages 2-3/3 of an automatic twiki install
+#  Stage 2/2 of an automatic twiki install
 # Copyright 2004,2005 Will Norris.  All Rights Reserved.
 # License: GPL
 use strict;
@@ -68,7 +68,7 @@ BEGIN {
     -e $tmp || mkpath $tmp, 0, 0777;
 
     eval qq{ 
-	use lib( "$cgibin/lib/CPAN/lib" );
+	use lib( "$cgibin/lib/CPAN/lib", "$cgibin/lib/CPAN/lib/arch" );
 
     	use URI;
 	use CGI qw( :standard );
