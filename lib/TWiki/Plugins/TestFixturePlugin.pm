@@ -45,6 +45,8 @@ use vars qw(
             $topic $web $user $installWeb
            );
 
+use CGI qw( :any );
+
 $VERSION = '1.000';
 $pluginName = 'TestFixturePlugin';
 
@@ -398,6 +400,7 @@ sub _compareResults {
     my $diffs = HTML::Diff::html_word_diff( $expected, $actual );
     my $failed = 0;
     my $rex = ( $opts =~ /\brex\b/ );
+    my $okset = "";
 
     foreach my $diff ( @$diffs ) {
         my $a = $diff->[1];
@@ -415,13 +418,28 @@ sub _compareResults {
         $a = _tidy( $a );
         $b = _tidy( $b );
         if ( $ok ) {
-            $result .= "<tr bgcolor='8fff8f'><td valign=top><pre>$a</pre></td><td><pre>$a</pre></td></td></tr>\n";
+            $okset .= "$a ";
         } else {
-            $result .= "<tr valign=top bgcolor='#ff8f8f'><td width=50%><pre>$a</pre></td><td width=50%><pre>$b</pre></td></tr>\n";
+            if( $okset ) {
+                $result .=
+                  CGI::Tr({}, CGI::td({valign=>'top', colspan=>2},
+                                      CGI::code($okset)));
+                $okset = "";
+            }
+            $result .= CGI::Tr({valign=>'top'},
+                               CGI::td({bgcolor=>'#99ffcc'},CGI::pre($a)).
+                               CGI::td({bgcolor=>'#ffccff'},CGI::pre($b)));
             $failed = 1;
         }
     }
-    return $failed ? "<table border=1><tr><th>Expected $opts</th><th>Actual</th></tr>$result</table>" : '';
+    return '' unless $failed;
+    if( $okset ) {
+        $result .= CGI::Tr({}, CGI::td({valign=>'top', colspan=>2},
+                                       CGI::code($okset)));
+    }
+    return CGI::table({border=>1},
+      CGI::Tr(CGI::th({}, 'Expected '.$opts).
+              CGI::th({}, 'Actual')).$result);
 }
 
 sub _rexeq {
@@ -437,8 +455,8 @@ sub _rexeq {
     $a =~ s/\@TIME/[012]\\d:[0-5]\\d/g;
     my $wikiword = "[A-Z]+[a-z]+[A-Z]+[a-z]+";
     $a =~ s/\@WIKIWORD/$wikiword/og;
-    my $satWord = "<a class=\"twikiLink\".*?\">$wikiword</a>";
-    my $unsatWord = "<span class=\"twikiNewLink\".*?><font color=\"#\\w+\">$wikiword</font><a href=\".*?\" rel='nofollow'><sup>\\?</sup></a></span>";
+    my $satWord = '<a [^>]*class="twikiLink"[^>]*>'.$wikiword.'</a>';
+    my $unsatWord = '<span [^>]*class="twikiNewLink"[^>]*>'.$wikiword.'<a [^>]*><sup>\?</sup></a></span>';
     $a =~ s/\@WIKINAME/($satWord|$unsatWord)/og;
     $a =~ s/!REX(\d+)!/$res[$1]/g;
     $a =~ s!/!\/!g;
