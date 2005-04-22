@@ -6,7 +6,7 @@ Welcome to the home of <b>%WIKITOOLNAME%.%WEB%</b>. This is a web-based collabor
 	* MeetingMinutes
 	* 
 
----++ Site Tools of the %WEB% Web
+---++ Site Tools of the <nop>%WEB% Web
 
 %INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
 

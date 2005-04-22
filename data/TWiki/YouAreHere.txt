@@ -2,7 +2,7 @@
 
 
 %STARTINCLUDE%
-	* <span style='background : %VAR{"WEBBGCOLOR" web=%INCLUDINGWEB%}%'>You are currently in the %INCLUDINGWEB% web. The color code for this web is this background, so you know where you are.</span>
+	* <span style='background : %VAR{"WEBBGCOLOR" web=%INCLUDINGWEB%}%'>You are currently in the <nop>%INCLUDINGWEB% web. The color code for this web is this background, so you know where you are.</span>
 	* If you are not familiar with the %WIKITOOLNAME% collaboration platform, please visit %TWIKIWEB%.WelcomeGuest first.
 %STOPINCLUDE%
 ---
