@@ -12,7 +12,7 @@
 
 %INCLUDE{"%TWIKIWEB%.SiteMap"}%
 
-*%WIKITOOLNAME%.%WEB% Web:*
+*<nop>%WEB% Web:*
 	* <b> %WIKIUSERSTOPIC%: </b> List of users of this %WIKITOOLNAME% web.
 	* TWikiGroups: List of groups.
 	* OfficeLocations: Corporate offices.

@@ -1,12 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111938186" format="1.0" version="$Rev$"}%
 
 
-The <b>%WIKITOOLNAME%.%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
+The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the %WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign & date it with your %TWIKIWEB%.WikiName.
 
 	* TestTopic1, TestTopic2, TestTopic3, TestTopic4 
 	* TestTopic5, TestTopic6, TestTopic7, TestTopic8
 
----++ Site Tools of the %WEB% Web
+---++ Site Tools of the <nop>%WEB% Web
 
 %INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
 
