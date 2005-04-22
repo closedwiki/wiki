@@ -6,6 +6,4 @@ This is the <b><nop>%WEB%</b>.  Here you can undelete topics; deleted attachment
 
 %SEARCH{ ".*" web="%INCLUDINGWEB%" regex="on" nototal="on" nosearch="on" order="modified" reverse="on" limit="35" format="[[$web.$topic][$pattern(.*TOPICMOVED.+?from=\"(.*?)\".*)]] <br />" }%
 
-sample text: TOPICMOVED{by="TWiki::User=HASH(0x950ecc)" date="1107842197" from="ThirdWaveWare.EuropeTrip2005" to="Trash.EuropeTrip2005"}% (works in topic text)
-
 -- Main.PeterThoeny - 28 Jan 2001
