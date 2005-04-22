@@ -11,6 +11,7 @@
 	C2	hover link background color 						#b4d5ff
 	C3	link label hover color								#0F47A3
 	C4	topic action background; left bar top thick border	#22638C
+	C5	color H2, code text									#900
 	-----------------------------------------------------------	*/
 
 
@@ -77,21 +78,36 @@ h1 {
 	color:#e24628;
 	margin:0 0 0.1em 0;
 }
+h2, h3, h4, h5, h6 {color:#900;} /*C5*/
 h2 {
 	font-size:145%;
 	display:block;
 	background-color:#F3EDE7;
-	color:#900;
 	padding:0.2em 0.7em;
 	margin:1em -0.7em 0.15em -0.7em;
 	height:auto;
 }
-h3 { font-size:140%; color:#900;}
-h4 { font-size:125%; color:#900;}
-h5 { font-size:110%; color:#900;}
-h6 { font-size:95%; color:#900;}
+h3 { font-size:140%;}
+h4 { font-size:125%;}
+h5 { font-size:110%;}
+h6 { font-size:95%;}
 
 /* Links */
+
+/* somehow the twikiNewLink style have to be before the general link styles */
+/* no good visual solution for twikiNewLink yet */ 
+.twikiNewLink a:link sup,
+.twikiNewLink a:visited sup {
+	vertical-align:baseline;
+	font-size:100%;
+	background-color:pink;
+	text-decoration:none;
+}
+.twikiNewLink a:hover sup,
+.twikiNewLink a:visited:hover sup {
+	color:#0F47A3; /*C3*/
+	background-color:#b4d5ff; /*C2*/
+}
 
 :link:focus,
 :visited:focus,
@@ -117,6 +133,7 @@ th a:hover font,
 th a:hover font {
 	color:#0F47A3; /*C3*/
 }
+
 
 /* sorting of table columns */
 /* not yet finalized for tables in topic text */
@@ -224,6 +241,9 @@ label {
 	margin:0;
 	padding:5px 2em 5px 1em; /* right padding same as .twikiViewPage .twikiMain */
 }
+.twikiTopBarContents p {
+	display:inline;
+}
 
 /* Left bar */
 
@@ -239,9 +259,11 @@ label {
 	border-bottom:1px solid transparent;
 }
 .twikiLeftBar a:hover,
+.twikiLeftBar a:visited:hover,
 .twikiLeftBar a:active {
 	text-decoration:none;
 	border-bottom:1px solid #1559B3; /*C1*/
+	color:#0F47A3; /*C3*/
 }
 .twikiWebIndicator {
 	font-size:95%;
@@ -884,7 +906,7 @@ html>body .twikiToc li a {
 	line-height:1.3em;
 }
 .twikiNewLink {
-	background-color:transparent;
+	border-bottom:1px solid pink; /* dotted red would be nicer, but not in Win/IE */
 }
 
 /*	-----------------------------------------------------------
@@ -925,7 +947,7 @@ html>body .twikiToc li a {
 	font-weight:bold;
 }
 .twikiSearchResults .twikiSummary .twikiAlert {
-	color:#900;
+	color:#900; /*C5*/
 	font-weight:normal;
 }
 .twikiSearchResults .twikiNew {
@@ -1073,7 +1095,7 @@ html>body .twikiToc li a {
 	border-top:1px solid #ccc;
 }
 .twikiEditPage .twikiHelp code {
-	color:#900;
+	color:#900; /*C5*/
 }
 .twikiEditPage table.twikiChangeFormButtonHolder {
 	margin-bottom:0.5em;
@@ -1339,7 +1361,7 @@ html>body .twikiToc li a {
 	padding-top:2em;
 }
 .twikiPrintPage h2 {
-	border-bottom:1px solid #900;
+	border-bottom:1px solid #900; /*C5*/
 }
 .twikiPrintPage .twikiAttachments,
 .twikiPrintPage .twikiForm {

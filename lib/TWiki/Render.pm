@@ -522,7 +522,8 @@ sub _renderNonExistingWikiWord {
                       ($theWeb, $theTopic, 'edit',
                        topicparent => $this->{session}->{webName}.'.'.
                        $this->{session}->{topicName} ),
-                      rel => 'nofollow'
+                      rel => 'nofollow',
+                      title=>'Create this topic'
                     },
                     $this->{NEWLINKSYMBOL} );
     }
