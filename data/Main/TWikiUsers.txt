@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
 
 
----+ List of %WIKITOOLNAME% users
+---+ List of <nop>%WIKITOOLNAME% users
 
 __Related topics:__ TWikiGroups
 

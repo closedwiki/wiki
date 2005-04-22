@@ -20,7 +20,7 @@ __Preferences:__
 	* List this web in the %TWIKIWEB%.SiteMap:
 		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
 		* Set SITEMAPLIST = on
-		* Set SITEMAPWHAT = Welcome to %WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]], [[%WEB%.OfficeLocations][Offices]] - tour this expandable virtual workspace.
+		* Set SITEMAPWHAT = Welcome to <nop>%WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]], [[%WEB%.OfficeLocations][Offices]] - tour this expandable virtual workspace.
 		* Set SITEMAPUSETO = ...get a first-hand feel for TWiki possibilities.
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)

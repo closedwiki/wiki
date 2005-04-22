@@ -54,13 +54,13 @@ Additional variables are defined in the preferences topics:
 <tr>
   <td> =%<nop>ALLOWWEBCHANGE%= </td>
   <td> __WL__ </td>
-  <td> List of users and groups who are *allowed* to change topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+  <td> List of users and groups who are *allowed* to change topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
   <td> %ALLOWWEBCHANGE% &nbsp;</td>
 </tr>
 <tr>
   <td> =%<nop>ALLOWWEBRENAME%= </td>
   <td> __WL__ </td>
-  <td> List of users and groups who are *allowed* to rename topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+  <td> List of users and groups who are *allowed* to rename topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
   <td> %ALLOWWEBRENAME% &nbsp;</td>
 </tr>
 <tr>
@@ -84,13 +84,13 @@ Additional variables are defined in the preferences topics:
 <tr>
   <td> =%<nop>DENYWEBCHANGE%= </td>
   <td> __WL__ </td>
-  <td> List of users and groups who are *not allowed* to change topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+  <td> List of users and groups who are *not allowed* to change topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
   <td> %DENYWEBCHANGE% &nbsp;</td>
 </tr>
 <tr>
   <td> =%<nop>DENYWEBRENAME%= </td>
   <td> __WL__ </td>
-  <td> List of users and groups who are *not allowed* to rename topics in the %WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
+  <td> List of users and groups who are *not allowed* to rename topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
   <td> %DENYWEBRENAME% &nbsp;</td>
 </tr>
 <tr>
@@ -180,7 +180,7 @@ Additional variables are defined in the preferences topics:
 <tr>
   <td> =%<nop>WIKIWEBLIST%= </td>
   <td> __SL__ </td>
-  <td> List of %WIKITOOLNAME% webs (in upper right corner of topics) </td>
+  <td> List of <nop>%WIKITOOLNAME% webs (in upper right corner of topics) </td>
   <td> %WIKIWEBLIST% &nbsp;</td>
 </tr>
 <tr>

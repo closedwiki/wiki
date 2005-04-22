@@ -120,7 +120,7 @@ Done on separate lines to test merging
 %META:FIELD{name="NEWTOPICBGCOLOR" title="NEWTOPICBGCOLOR" attributes="S" value="#FFFFCE"}%
 %META:FIELD{name="NEWTOPICFONTCOLOR" title="NEWTOPICFONTCOLOR" attributes="S" value="#0000FF"}%
 %META:FIELD{name="FAVICON" attributes="S" title="FAVICON" value="%_P_%PUBURL%_P_%/%_P_%WEB%_P_%/WebPreferences/favicon.ico"}%
-%META:FIELD{name="WEBCOPYRIGHT" attributes="S" title="WEBCOPYRIGHT" value="Copyright &copy; 1999-%_P_%GMTIME{%_Q_%$year%_Q_%}%_P_% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %_P_%WIKITOOLNAME%_P_%? <a  ref=%_Q_%mailto:%_P_%WIKIWEBMASTER%_P_%?subject=%_P_%WIKITOOLNAME%_P_%&#32;Feedback&#32;on&#32;%_P_%WEB%_P_%.%_P_%TOPIC%_P_%%_Q_%>Send feedback</a>"}%
+%META:FIELD{name="WEBCOPYRIGHT" attributes="S" title="WEBCOPYRIGHT" value="Copyright &copy; 1999-%_P_%GMTIME{%_Q_%$year%_Q_%}%_P_% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding <nop>%_P_%WIKITOOLNAME%_P_%? <a  ref=%_Q_%mailto:%_P_%WIKIWEBMASTER%_P_%?subject=%_P_%WIKITOOLNAME%_P_%&#32;Feedback&#32;on&#32;%_P_%WEB%_P_%.%_P_%TOPIC%_P_%%_Q_%>Send feedback</a>"}%
 %META:FIELD{name="WEBRSSCOPYRIGHT" attributes="S" title="WEBRSSCOPYRIGHT" value="Copyright %_P_%GMTIME{%_Q_%$year%_Q_%}%_P_% by contributing authors"}%
 %META:FIELD{name="NOSEARCHALL" attributes="S" title="NOSEARCHALL" value="off"}%
 %META:FIELD{name="NOAUTOLINK" attributes="S" title="NOAUTOLINK" value="off"}%

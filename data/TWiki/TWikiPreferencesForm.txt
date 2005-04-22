@@ -11,7 +11,7 @@
 | | label | | %H% Font color of non existing topic (<a target="Colors" onclick="return launchWindow('%TWIKIWEB%','StandardColors')" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/StandardColors" rel='nofollow'>ColorChart </a>) | |
 | NEWTOPICFONTCOLOR | text | 20 | #0000FF | HTML Color | S |
 | | label | | %H% Long form copyright, shown on every page | | |
-| WEBCOPYRIGHT | textarea | | Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding %WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a> | Long form copyright | S |
+| WEBCOPYRIGHT | textarea | | Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding <nop>%WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a> | Long form copyright | S |
 | | label | | %H% Short form copyright for the WebRss feed (don't use any special characters, xml tags or WikiWords | |
 | WEBRSSCOPYRIGHT | text | 110 | Copyright %GMTIME{"$year"}% by contributing authors | Short form copyright | S |
 | | label | | %H% Set to =on= to stop webs being searched by default. | | |
@@ -44,7 +44,7 @@
 | WIKILOGOIMG | text | 110 | %PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWiki.gif | URL of a logo image | S |
 | WIKILOGOURL | text | 110 | http://TWiki.org/ | URL under the logo| S |
 | WIKILOGOALT | text | 110 | TWiki home | Logo tooltip text of the logo | S |
-| | label | | %H% List of %WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap). To automatically list all non-hidden webs in alphabetical order use the =%<nop>WEBLIST{} variable instead:<br />%<nop>WEBLIST{"[[$name.<nop>%HOMETOPIC<nop>%]<nop>[$name]]" separator=" %<nop>SEP% "}% | | |
+| | label | | %H% List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap). To automatically list all non-hidden webs in alphabetical order use the =%<nop>WEBLIST{} variable instead:<br />%<nop>WEBLIST{"[[$name.<nop>%HOMETOPIC<nop>%]<nop>[$name]]" separator=" %<nop>SEP% "}% | | |
 | WIKIWEBLIST | textarea | | [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]] | | S |
 | | label | | %H% Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit | |
 | ATTACHFILESIZELIMIT | text | 110 | 11000 | Maximum size of attachments in KB, 0 for no limit | S |
