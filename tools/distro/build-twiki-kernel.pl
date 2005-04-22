@@ -132,7 +132,7 @@ if ( $Config->{changelog} )
 if ( $Config->{gendocs} )
 {
     $Config->{verbose} && print "Generating docs\n";
-    execute( "cd tools && perl gendocs.pl nosmells" ) or die $!;
+    execute( "cd tools && perl gendocs.pl --nosmells" ) or die $!;
 }
 
 if ( $Config->{pdoc} )
