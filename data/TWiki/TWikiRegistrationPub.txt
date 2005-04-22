@@ -198,8 +198,8 @@ To register as a new user, simply fill out this form:
 __Submitting the form will automatically:__ 
 
 	* Create an account for you, so that you can start editing pages using your WikiName.
-	* Create your personal %WIKITOOLNAME% topic using your WikiName as topic name, and add the data you submitted to the topic.
-	* Add your name to the list of users in the %MAINWEB%.%WIKIUSERSTOPIC% topic in the %WIKITOOLNAME%.%MAINWEB% web.
+	* Create your personal <nop>%WIKITOOLNAME% topic using your WikiName as topic name, and add the data you submitted to the topic.
+	* Add your name to the list of users in the %MAINWEB%.%WIKIUSERSTOPIC% topic in the %MAINWEB% web.
 	* Send you a confirmation of your registration by email.
 
 Once registered you can login using your LoginName and password.

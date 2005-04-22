@@ -22,7 +22,7 @@ You can also use =%<nop>MAINWEB%= instead of =Main=, but this is not necessary e
 
 ---+++ Configuring Outgoing Mail
 
-%WIKITOOLNAME% will use the ==Net::SMTP== module if it is installed on your system. Set this with the ==SMTPMAILHOST== variable in TWikiPreferences.
+<nop>%WIKITOOLNAME% will use the ==Net::SMTP== module if it is installed on your system. Set this with the ==SMTPMAILHOST== variable in TWikiPreferences.
 
 The notify e-mail uses the default =changes.tmpl= template, or a skin if activated in the TWikiPreferences.
 

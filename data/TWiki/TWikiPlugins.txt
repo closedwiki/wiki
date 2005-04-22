@@ -80,7 +80,7 @@ When you finish [[#InstallPlugin][installing a Plugin]], you should be able to r
 
 Installed Plugins can be *toggled on or off*, site-wide or by web, through <nop>TWikiPreferences and individual <nop>WebPreferences:
 
-	* All Plugin modules present in the =lib/TWiki/Plugins= directory are activated automatically unless disabled by the =DISABLEDPLUGINS= Preferences variable in <nop>TWikiPreferences. You can optionally list the installed Plugins in the =INSTALLEDPLUGINS= Preferences variable. This is useful to define the sequence of Plugin execution, or to specify other webs than the %WIKITOOLNAME% web for the Plugin topics. Settings in %TWIKIWEB%.TWikiPreferences are:
+	* All Plugin modules present in the =lib/TWiki/Plugins= directory are activated automatically unless disabled by the =DISABLEDPLUGINS= Preferences variable in <nop>TWikiPreferences. You can optionally list the installed Plugins in the =INSTALLEDPLUGINS= Preferences variable. This is useful to define the sequence of Plugin execution, or to specify other webs than the <nop>%WIKITOOLNAME% web for the Plugin topics. Settings in %TWIKIWEB%.TWikiPreferences are:
 		* =Set INSTALLEDPLUGINS = <nop>DefaultPlugin, ...= 
 		* =Set DISABLEDPLUGINS = <nop>EmptyPlugin, ...=
 

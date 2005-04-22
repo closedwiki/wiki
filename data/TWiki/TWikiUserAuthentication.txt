@@ -46,7 +46,7 @@ No special installation steps are required if the server is already authenticate
 
 This section applies only if your TWiki site is installed on a server that is both *authenticated* and on an *intranet*.
 
-%WIKITOOLNAME% internally manages two usernames: Login Username and TWiki Username.
+<nop>%WIKITOOLNAME% internally manages two usernames: Login Username and TWiki Username.
 
 	* *Login Username:* When you login to the intranet, you use your existing login username, ex: ==pthoeny==. This name is normally passed to TWiki by the ==REMOTE_USER== environment variable, and used internally. Login Usernames are maintained by your system administrator.
 
@@ -59,7 +59,7 @@ TWiki can automatically map an Intranet (Login) Username to a TWiki Username, pr
 <blockquote>
 __NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to include the %MAINWEB% web name in front of the Wiki username, followed by a period, and no spaces. Ex:
 <div align="center"> ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername== </div>
-This points ==<nop>WikiUser== to the %WIKITOOLNAME%.%MAINWEB% web, where user registration pages are stored, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %MAINWEB% web.
+This points ==<nop>WikiUser== to the %MAINWEB% web, where user registration pages are stored, no matter which web it's entered in. Without the web prefix, the name appears as a NewTopic everywhere but in the %MAINWEB% web.
 </blockquote>
 
 #ChangingPasswords

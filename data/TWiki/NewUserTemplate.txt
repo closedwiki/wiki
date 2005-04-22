@@ -25,7 +25,7 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 
 __Related topics__
 	* %TWIKIWEB%.ChangePassword
-	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
+	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of <nop>%WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users.
 %META:FORM{name="Main.UserForm"}%

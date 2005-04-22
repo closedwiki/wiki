@@ -2,7 +2,7 @@
 
 
 ---+ Admin tools
-Manage whole <b>%WIKITOOLNAME%</b> site from one screen.
+Manage whole <b><nop>%WIKITOOLNAME%</b> site from one screen.
 
 	* *[[%MAINWEB%.%WIKIUSERSTOPIC%][Users]]:* [[TWikiRegistration][Register]], NewUserTemplate, UserForm, ResetPassword, ChangePassword, MaintenanceGuide
 	* *[[TWikiSiteTools][Site Tools]]:*	%TWIKIWEB%.%WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]

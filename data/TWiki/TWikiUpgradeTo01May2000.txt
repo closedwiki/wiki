@@ -18,6 +18,6 @@ To upgrade an earlier TWiki version like =01 Sep 1999= to version =01 May 2000= 
 			* In case you are on a public server: Copy topic <nop>TWikiRegistrationPub to Main.<nop>TWikiRegistration. Customize if needed.
 		* Copy the Main. TWikiWebsTable topic (and =*,v= file) into your Main web and customize it. __Reason:__ The new release does not use the =*.inc= include files anymore.
 		* Optionally: Search for =%<nop>INCLUDE%'s= in all your webs and change them to the new =%<nop>INCLUDE{"file.ext"}%= syntax. __Note:__ Your old =%<nop>INCLUDE:"file.ext"%= syntax still works (the legacy rule is defined in =wikicfg.pm= .) 
-	* Add the <a href="http://TWiki.org/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> to your %WIKITOOLNAME% home page.
+	* Add the <a href="http://TWiki.org/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> to your <nop>%WIKITOOLNAME% home page.
 
 

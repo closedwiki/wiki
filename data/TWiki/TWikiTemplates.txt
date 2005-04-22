@@ -42,7 +42,7 @@ Where the old templates were each complete HTML documents, the new templates are
 There are three types of template:
 
 	* *Master Template*: Stores common parts; included by other templates
-	* *HTML Page Templates*: Defines the layout of %WIKITOOLNAME% pages
+	* *HTML Page Templates*: Defines the layout of <nop>%WIKITOOLNAME% pages
 	* *Template Topics*: Defines default text when you create a new topic
 
 ---+++ Master Templates

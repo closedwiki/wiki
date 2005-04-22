@@ -55,7 +55,7 @@ __Notes:__
 	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs. Example:
 		* When you write variable =%WEB<nop>BGCOLOR%= , it gets expanded to =%WEBBGCOLOR%= .
 	* The sequential order of the preference settings is significant. Define preferences that use other preferences first, i.e. set =<nop>WEBCOPYRIGHT= before =<nop>WIKIWEBMASTER= since =%<nop>WEBCOPYRIGHT%= uses the =%<nop>WIKIWEBMASTER%= variable.
-	* You can introduce new preferences variables and use them in your topics and templates. There is no need to change the %WIKITOOLNAME% engine (Perl scripts).
+	* You can introduce new preferences variables and use them in your topics and templates. There is no need to change the <nop>%WIKITOOLNAME% engine (Perl scripts).
 
 __Related Topics:__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences.

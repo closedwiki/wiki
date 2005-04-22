@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
 
----+ Frequently Asked Questions About %WIKITOOLNAME%
+---+ Frequently Asked Questions About <nop>%WIKITOOLNAME%
 
 This is a real FAQ, and also a demo of one easily implemented knowledge base solution. See how it's done, click ==[Edit]==.
 
@@ -26,7 +26,7 @@ New FAQ topic: &nbsp; (Use a name in TWiki.WikiNotation) <br />
 
 Other places where you can find answers to your questions:
 
-	* TWikiDocumentation: All you need to know to install and configure %WIKITOOLNAME%
+	* TWikiDocumentation: All you need to know to install and configure <nop>%WIKITOOLNAME%
 	* TWikiTutorial: Get a jump start on using TWiki 
 	* GoodStyle: Things to consider when changing text
 	* WikiSyntax, TextFormattingRules: A quick one-two guide to TWiki shorthand basics

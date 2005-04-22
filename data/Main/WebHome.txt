@@ -13,15 +13,15 @@
 %INCLUDE{"%TWIKIWEB%.SiteMap"}%
 
 *<nop>%WEB% Web:*
-	* <b> %WIKIUSERSTOPIC%: </b> List of users of this %WIKITOOLNAME% web.
+	* <b> %WIKIUSERSTOPIC%: </b> List of users of this <nop>%WIKITOOLNAME% web.
 	* TWikiGroups: List of groups.
 	* OfficeLocations: Corporate offices.
 
 %INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
 
-*%WIKITOOLNAME%.%TWIKIWEB% Web:*
-	* <b> %TWIKIWEB%.WelcomeGuest: </b> Look here first to get you rolling on %WIKITOOLNAME%.
-	* %TWIKIWEB%.TWikiSite: Explains what a %WIKITOOLNAME% site is.
+%TWIKIWEB% Web:*
+	* <b> %TWIKIWEB%.WelcomeGuest: </b> Look here first to get you rolling on <nop>%WIKITOOLNAME%.
+	* %TWIKIWEB%.TWikiSite: Explains what a <nop>%WIKITOOLNAME% site is.
 	* %TWIKIWEB%.TWikiRegistration: Create your account in order to edit topics.
 	* Documentation:
 		* %TWIKIWEB%.TWikiFAQ has a list of frequently asked questions.
@@ -31,7 +31,7 @@
 		* %TWIKIWEB%.GoodStyle: Things to consider when changing text.
 		* %TWIKIWEB%.TextFormattingRules: Easy to learn rules for editing text.
 		* %TWIKIWEB%.TextFormattingFAQ: Answers to frequently asked questions about text formatting.
-	* %TWIKIWEB%.%WIKIPREFSTOPIC%: %WIKITOOLNAME% site-level preferences 
+	* %TWIKIWEB%.%WIKIPREFSTOPIC%: <nop>%WIKITOOLNAME% site-level preferences 
 
 *Notes:*
 %INCLUDE{"%TWIKIWEB%.YouAreHere"}%

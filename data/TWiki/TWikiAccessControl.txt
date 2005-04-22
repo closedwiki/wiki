@@ -80,7 +80,7 @@ You can define who is allowed to read or write to a web or a topic. Note that so
 
 ---+++ Controlling access to a Web
 
-You can define restrictions of who is allowed to view a %WIKITOOLNAME% web. You can restrict access to certain webs to selected Users and Groups, by:
+You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web. You can restrict access to certain webs to selected Users and Groups, by:
 
 	* *authenticating all webs and restricting selected webs:* Topic access in all webs is authenticated, and selected webs have restricted access.
 	* *authenticating and restricting selected webs only:* Provide unrestricted viewing access to open webs, with authentication and restriction only on selected webs.
@@ -161,11 +161,11 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
 		* __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
 	1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
 		* ==Set <nop>NOSEARCHALL = on==
-	1. *Enable* the ==$doRememberRemoteUser== flag in ==lib/TWiki.cfg== as described in TWikiUserAuthentication. %WIKITOOLNAME% will now remember the IP address of an authenticated user. 
+	1. *Enable* the ==$doRememberRemoteUser== flag in ==lib/TWiki.cfg== as described in TWikiUserAuthentication. <nop>%WIKITOOLNAME% will now remember the IP address of an authenticated user. 
 	1. *Copy* the ==view== script to ==viewauth== (or better, create a symbolic link) 
 	1. *Add* ==viewauth== to the list of authenticated scripts in the =.htaccess= file. The ==view== script should not be listed in the =.htaccess= file.
 
-When a user accesses a web where you enabled view restriction, %WIKITOOLNAME% will redirect from the =view= script to the =viewauth= script once (this happens only if the user has never edited a topic). Doing so will ask for authentication. The =viewauth= script shows the requested topic if the user could log on and if the user is authorized to see that web.
+When a user accesses a web where you enabled view restriction, <nop>%WIKITOOLNAME% will redirect from the =view= script to the =viewauth= script once (this happens only if the user has never edited a topic). Doing so will ask for authentication. The =viewauth= script shows the requested topic if the user could log on and if the user is authorized to see that web.
 
 %X% *Authenticating webs is not very secure*, as there is a way to circumvent the read access restriction. It can be useful in certain situations - for example, to simplify site organization and clutter, by hiding low traffic webs - but is not recommended for securing sensitive content.
 

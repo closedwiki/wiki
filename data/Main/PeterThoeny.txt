@@ -18,7 +18,7 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 		* Set SKIN = classic
 
 __Related topics__
-	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of %WIKITOOLNAME%.
-	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
-	* %WIKIUSERSTOPIC% has a list of other %WIKITOOLNAME% users.
+	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of <nop>%WIKITOOLNAME%.
+	* %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
+	* %WIKIUSERSTOPIC% has a list of other <nop>%WIKITOOLNAME% users.
 

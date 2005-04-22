@@ -432,7 +432,7 @@ __Major New Features__
 	* *20 May 1999* - TWiki:Main.PeterThoeny
 		* Added meta tag so that robots index only /view/ of topics, not /edit/, /attach/ e.t.c. Tag &lt;META NAME="ROBOTS" CONTENT="NOINDEX"&gt; 
 	* *20 May 1999* - TWiki:Main.PeterThoeny
-		* New variables =%<nop>WIKIHOMEURL%= (link when pressing the icon on the upper left corner) and =%<nop>WIKITOOLNAME%= (the name of the wiki tool =%WIKITOOLNAME%= ). 
+		* New variables =%<nop>WIKIHOMEURL%= (link when pressing the icon on the upper left corner) and =%<nop>WIKITOOLNAME%= (the name of the wiki tool =<nop>%WIKITOOLNAME%= ). 
 	* *15 Apr 1999* - TWiki:Main.PeterThoeny
 		* Topic locking Warn user if a topic has been edited by an _other_ person within _one_ hour. This is to prevent contention, e.g. simultaneous topic updates. 
 	* *26 Mar 1999* - TWiki:Main.PeterThoeny

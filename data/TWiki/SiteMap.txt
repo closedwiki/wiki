@@ -1,14 +1,14 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
 
----+ %WIKITOOLNAME% Site Map
+---+ <nop>%WIKITOOLNAME% Site Map
 %STARTINCLUDE%
 <table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">
   <tr bgcolor="#eeeeee">
 	 <th>
 	  Web
 	 </th><th>
-	  %WIKITOOLNAME% Site Map
+	  <nop>%WIKITOOLNAME% Site Map
 	 </th><th>
 		Use to...
 	 </th>

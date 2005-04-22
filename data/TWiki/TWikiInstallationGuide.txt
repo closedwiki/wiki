@@ -159,7 +159,7 @@ If TWiki is installed on a non-authenticated server and you'd like to authentica
 
 At this time, TWiki does not ship with an "what you see is what you get" editor. TWiki:Codev/IntegrateHtmlAreaEditor describes how to integrate an HTML editor.
 
-%X% *NOTE:* User home topics are located in the %WIKITOOLNAME%.%MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %WIKITOOLNAME%.%MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line!)
+%X% *NOTE:* User home topics are located in the %MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line!)
 
 %STOPINCLUDE%
 

@@ -303,7 +303,7 @@ class CatAnimal {
 <tr bgcolor="#ffffff">
 <td valign="top">
  *<nop>WikiWord Links:* %BR%
- <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. %BR% __Note:__ In case you want to link to a topic in a different %WIKITOOLNAME% web write =Otherweb.TopicName=. (The link label is the the name of the web in case the is <nop>%HOMETOPIC%, else it is the topic name)
+ <nop>CapitalizedWordsStuckTogether (or WikiWords) will produce a link automatically. %BR% __Note:__ In case you want to link to a topic in a different <nop>%WIKITOOLNAME% web write =Otherweb.TopicName=. (The link label is the the name of the web in case the is <nop>%HOMETOPIC%, else it is the topic name)
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -373,7 +373,7 @@ escaped:
 <tr bgcolor="#ffffff">
 <td valign="top">
  *Anchors:* %BR%
- You can define a link reference inside a %WIKITOOLNAME% topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
+ You can define a link reference inside a <nop>%WIKITOOLNAME% topic (called an anchor name) and link to that. To __define__ an anchor write =#AnchorName= at the beginning of a line. The anchor name must be a WikiWord. To __link to__ an anchor name use the =[<nop>[MyTopic#MyAnchor]]= syntax. You can omit the topic name if you want to link within the same topic.
 </td><td valign="top">
 <span style='background : #FFFFCC;'><font color="#990000">
 <pre>
@@ -487,7 +487,7 @@ Being able to create links without any formatting required is a core TWiki featu
 
 ---+++ Internal Links
 
-	* GoodStyle is a WikiWord that links to the <nop>GoodStyle topic located in the current %WIKITOOLNAME% web.
+	* GoodStyle is a WikiWord that links to the <nop>GoodStyle topic located in the current <nop>%WIKITOOLNAME% web.
 
 	* NotExistingYet is a topic waiting to be written. Create the topic by clicking on the *?*. (Try clicking, but then, *Cancel* - creating the topic would wreck this example!)
 
@@ -514,7 +514,7 @@ Variables are names that are enclosed in percent signs =%= that are expanded on 
 
 	* =%<nop>ATTACHURL%= : The attachment URL of the current topic. Example usage: If you attach a file to a topic you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= to show the URL of the file or the image in your text.
 
-	* =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, includes another topic. The current %WIKITOOLNAME% web is the default web. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%</b>=
+	* =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, includes another topic. The current <nop>%WIKITOOLNAME% web is the default web. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%</b>=
 
 	* =%<nop>SEARCH{"sushi"}%= : Inline search showing the search result embedded in a topic. FormattedSearch gives you control over formatting, used to create web-based applications.
 
@@ -529,7 +529,7 @@ Variables are names that are enclosed in percent signs =%= that are expanded on 
 
 ---++ <nop>TWikiPlugin Formatting Extensions
 
-Plugins provide additional text formatting capabilities and can extend the functionality of %WIKITOOLNAME% into many other areas. For example, the optional [[http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPlugin][SpreadSheetPlugin]] lets you create a spreadsheet with the same basic notation used in TWiki tables.
+Plugins provide additional text formatting capabilities and can extend the functionality of <nop>%WIKITOOLNAME% into many other areas. For example, the optional [[http://twiki.org/cgi-bin/view/Plugins/SpreadSheetPlugin][SpreadSheetPlugin]] lets you create a spreadsheet with the same basic notation used in TWiki tables.
 
 Available Plugins are located in the [[http://twiki.org/cgi-bin/view/Plugins][Plugins]] web on TWiki.org. Currently enabled plugins on this TWiki installation, as listed by =%<nop>PLUGINDESCRIPTIONS%=:
 

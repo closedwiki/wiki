@@ -2,7 +2,7 @@
 
 
 <channel rdf:about="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%">
-  <title>%WIKITOOLNAME%'s <nop>%WEB% web</title>
+  <title><nop>%WIKITOOLNAME%'s <nop>%WEB% web</title>
   <link>%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%</link>
   <description>The web for users, groups and offices. TWiki is a Web-Based Collaboration Platform for the Corporate World.</description>
 %INCLUDE{"%TWIKIWEB%.WebRssBase"}%

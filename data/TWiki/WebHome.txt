@@ -97,7 +97,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
 	* TWikiSiteTools include utilities for navigation and for monitoring %TWIKIWEB% web and site-wide activity.
 
 %INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
-	* %WIKIPREFSTOPIC%: %WIKITOOLNAME% site-wide preferences
+	* %WIKIPREFSTOPIC%: <nop>%WIKITOOLNAME% site-wide preferences
 	* InstalledPlugins: currently available TWiki add-on features
 
 	* The %TWIKIWEB%.SiteMap: A color-coded directory of available webs that can be easily included on any page _(below)_

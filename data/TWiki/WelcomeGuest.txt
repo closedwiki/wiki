@@ -3,7 +3,7 @@
 
 ---++ Welcome, %WIKIUSERNAME%!
 
-Welcome to %WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. %WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
+Welcome to <nop>%WIKITOOLNAME%! This is a TWikiSite (pronounced _twee-kee site_), a meeting place to work on common interests. Anyone can contribute using any web browser. <nop>%WIKITOOLNAME% looks like a normal Web site... except that it encourages contribution and *editing* of pages, questions, answers, comments and updates.
 
 __Mission: &quot;TWiki is a leading-edge, web-based collaboration platform targeting the corporate intranet world. TWiki fosters information flow within an organization; lets distributed teams work together seamlessly and productively; and eliminates the one-webmaster syndrome of outdated intranet content.&quot;__
 
