@@ -9,6 +9,7 @@ package RegisterTests;
 		#test_bulkResetPassword
 		#test_registerIllegitimateBypassApprove
                 #test_registerVerifyAndFinish
+                #test_DoubleRegistration (loginname already used)
 
 #Uncomment to isolate 
 #our @TESTS = qw(test_registerVerifyOk); #test_UnregisteredUser);

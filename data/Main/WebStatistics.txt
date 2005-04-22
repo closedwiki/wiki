@@ -1,11 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="TWikiGuest" date="1112660125" format="1.0" version="1.2"}%
 %META:TOPICPARENT{name="WebHome"}%
+
+
 ---++ Statistics for <nop>%WEB% Web
 
 | *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
+| Apr 2005 |  0 |  0 |  0 |  |  |
 | Aug 2004 |  65 |  8 |  0 | &nbsp;&nbsp;8 [[TWikiGroups]]<br /> &nbsp;&nbsp;7 [[WebPreferences]]<br /> &nbsp;&nbsp;4 [[WebRss]]<br /> &nbsp;&nbsp;4 [[TWikiGroupTemplate]]<br /> &nbsp;&nbsp;3 [[WebStatistics]]<br /> &nbsp;&nbsp;3 [[WebHome]]<br /> &nbsp;&nbsp;3 [[WebNotify]]<br /> &nbsp;&nbsp;3 [[WebIndex]]<br /> &nbsp;&nbsp;3 [[WebChanges]]<br /> &nbsp;&nbsp;2 [[WebSearchAdvanced]]<br /> &nbsp;&nbsp;2 [[PeterThoeny]] | &nbsp;&nbsp;7 Main.PeterThoeny<br /> &nbsp;&nbsp;1 Main.ArthurClemens |
 
 __Notes:__

@@ -175,7 +175,7 @@ sub findUser {
     # if no wikiname is given, try and recover it from
     # TWikiUsers
     unless( $wikiname ) {
-        $wikiname = $this->_lookupLoginName( $name );
+        $wikiname = $this->lookupLoginName( $name );
     }
 
     if( !$wikiname &&
@@ -184,7 +184,7 @@ sub findUser {
         $t = "$TWiki::cfg{UsersWebName}.$t" unless $1;
         # not in TWiki users as a login name; see if it is
         # a WikiName
-        my $lUser = $this->_lookupWikiName( $t );
+        my $lUser = $this->lookupWikiName( $t );
         if( $lUser ) {
             # it's a wikiname
             $name = $lUser;
@@ -418,7 +418,7 @@ sub initializeRemoteUser {
 
 # Translates username (e.g. jsmith) to Web.WikiName
 # (e.g. Main.JaneSmith) by lookup in TWikiUsers.
-sub _lookupLoginName {
+sub lookupLoginName {
     my( $this, $loginUser ) = @_;
 
     return undef unless $loginUser;
@@ -431,7 +431,7 @@ sub _lookupLoginName {
 
 # Translates Web.WikiName (e.g. Main.JaneSmith) to
 # username (e.g. jsmith) to by lookup in TWikiUsers.
-sub _lookupWikiName {
+sub lookupWikiName {
     my( $this, $wikiName ) = @_;
 
     return undef unless $wikiName;

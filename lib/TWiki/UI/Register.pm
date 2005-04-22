@@ -944,6 +944,14 @@ sub _validateRegistration {
                                     params => $data{WikiName} );
     }
 
+    if ($session->{users}->lookupLoginName($data{LoginName})) {
+      throw TWiki::OopsException( 'registerbad',
+				  web => $data{webName},
+				  topic => $topic,
+				  def => 'already_exists',
+				  params => $data{LoginName} );
+    }
+
     my $user = $session->{users}->findUser( $data{LoginName}, undef, 1 );
     if ( $user && $user->passwordExists() ) {
         throw TWiki::OopsException( 'registerbad',
