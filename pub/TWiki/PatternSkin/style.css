@@ -95,7 +95,6 @@ h6 { font-size:95%;}
 /* Links */
 
 /* somehow the twikiNewLink style have to be before the general link styles */
-/* no good visual solution for twikiNewLink yet */ 
 .twikiNewLink a:link sup,
 .twikiNewLink a:visited sup {
 	vertical-align:baseline;
@@ -107,6 +106,13 @@ h6 { font-size:95%;}
 .twikiNewLink a:visited:hover sup {
 	color:#0F47A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
+}
+.twikiNewLink {
+	border-bottom:1px solid pink;
+}
+/* to override old Render.pm coded style */
+.twikiNewLink font {
+	color:inherit;
 }
 
 :link:focus,
@@ -904,9 +910,6 @@ html>body .twikiToc li a {
 .twikiSummary {
 	font-size:85%;
 	line-height:1.3em;
-}
-.twikiNewLink {
-	border-bottom:1px solid pink; /* dotted red would be nicer, but not in Win/IE */
 }
 
 /*	-----------------------------------------------------------
