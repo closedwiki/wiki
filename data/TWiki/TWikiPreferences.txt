@@ -100,7 +100,7 @@ You can introduce new VARIABLES and use them in your topics and templates. There
 
 ---++ Related Topics
 
-	* %WEBPREFSTOPIC% has preferences of the %WIKITOOLNAME%.%WEB% web.
+	* %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.

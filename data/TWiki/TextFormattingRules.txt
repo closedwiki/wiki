@@ -508,7 +508,7 @@ Variables are names that are enclosed in percent signs =%= that are expanded on 
 
 	* =%<nop>TOC%= : Automatically generates a table of contents based on headings in a topic - see the top of this page for an example.
 
-	* =%<nop>WEB%= : The current web, is <b>%WEB%</b>.
+	* =%<nop>WEB%= : The current web, is <b><nop>%WEB%</b>.
 
 	* =%<nop>TOPIC%= : The current topic name, is <b>%TOPIC%</b>.
 

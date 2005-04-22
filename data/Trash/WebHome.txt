@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="PeterThoeny" date="1025247318" format="1.0" version="1.5"}%
-This is the <b>%WEB%</b>.  Here you can undelete topics; deleted attachments are in TrashAttachment.
+This is the <b><nop>%WEB%</b>.  Here you can undelete topics; deleted attachments are in TrashAttachment.
 
 %SEARCH{".*" web="%INCLUDINGWEB%" regex="on" nototal="on" nosearch="on" order="modified" reverse="on" limit="15"}%
 [[WebChanges][more...]]

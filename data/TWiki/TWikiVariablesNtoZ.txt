@@ -283,7 +283,7 @@ __Note:__ This topic is included by TWikiVariables
 #VarWEB
 ---+++ WEB -- name of current web
 	* Syntax: =%<nop>WEB%=
-	* Expands to: =%WEB%=
+	* Expands to: =<nop>%WEB%=
 	* Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarTOPIC][TOPIC]]
 
 #VarWEBLIST
