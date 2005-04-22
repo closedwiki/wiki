@@ -21,7 +21,7 @@ writeToggle("show","hide","twikiLeftBarPersonalContent")
    * *[[%TWIKIWEB%.TWikiRegistration][Register]]*
    * *[[http://twiki.org/cgi-bin/view/Codev/TWikiSecurityAlerts][Security Alerts]]*
 ---
-   * <b>%INCLUDINGWEB% Web</b>
+   * <b><nop>%INCLUDINGWEB% Web</b>
    * [[%HOMETOPIC%][%WEB% Web Home]]
    * [[TWikiUsers][Users]]
    * [[TWikiGroups][Groups]]

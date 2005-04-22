@@ -20,7 +20,7 @@ writeToggle("+","-","twikiLeftBarPersonalContent")
    * *[[%TWIKIWEB%.TWikiRegistration][Register]]*
    * *[[http://twiki.org/cgi-bin/view/Codev/TWikiSecurityAlerts][Security Alerts]]*
 ----
-   * <b>%INCLUDINGWEB% Web</b>
+   * <b><nop>%INCLUDINGWEB% Web</b>
    * [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
    * [[WebChanges][Changes]] 
    * [[WebTopicList][Topics]]

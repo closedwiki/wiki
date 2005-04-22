@@ -12,7 +12,7 @@ writeToggle("+","-","twikiLeftBarPersonalContent")
 </div>
 </div>
 
-	* <b>%INCLUDINGWEB% Web</b>
+	* <b><nop>%INCLUDINGWEB% Web</b>
 	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
 	* [[WebChanges][Changes]]
 	* [[WebIndex][Index]]
