@@ -40,9 +40,13 @@
 
 
 
+%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}%%TOPIC% %TMPL:P{"titlesep"}% %WEB% %TMPL:P{"titlesep"}% %WIKITOOLNAME%</title>%TMPL:END%
+
+
+
 %TMPL:DEF{"head"}%
 <head>
-<title>%TMPL:P{"titleaction"}%%TOPIC% %TMPL:P{"titlesep"}% %WEB% %TMPL:P{"titlesep"}% %WIKITOOLNAME%</title>
+%TMPL:P{"windowtitle"}%
 <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
 <link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
 <meta name="robots" content="noindex" />

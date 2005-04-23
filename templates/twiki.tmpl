@@ -3,9 +3,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%"> %TMPL:END%
 %TMPL:DEF{"script"}%%TMPL:END%
+%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>%TMPL:END%
 %TMPL:DEF{"head"}%
 <head>
- <title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
+ %TMPL:P{"windowtitle"}%
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
  <style type="text/css">.twikiNewLink {color:%NEWTOPICFONTCOLOR%; background-color:%NEWTOPICBGCOLOR%;}</style>
  <link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />

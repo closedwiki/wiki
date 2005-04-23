@@ -6,6 +6,7 @@
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/">
 #PageTop
 %TMPL:DEF{"titleaction"}%(changes) %TMPL:END%
+%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% %WEB% &lt; %WIKITOOLNAME%</title>%TMPL:END%
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 %TMPL:P{"standardheader"}%
 </form>
