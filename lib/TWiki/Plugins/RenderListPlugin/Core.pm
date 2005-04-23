@@ -123,7 +123,7 @@ sub _renderIconList {
     $theParams =~ s/%PUBURL%/$attachUrl/go;
     $attachUrl .= "/$TWiki::Plugins::RenderListPlugin::installWeb/RenderListPlugin";
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
-    $theParams =~ s/%WEB%/$$TWiki::Plugins::RenderListPlugin::installWeb/go;
+    $theParams =~ s/%WEB%/$TWiki::Plugins::RenderListPlugin::installWeb/go;
     $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
     $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
     my ( $showLead, $width, $height, $iconSp, $iconT, $iconI, $iconL, $iconImg )
