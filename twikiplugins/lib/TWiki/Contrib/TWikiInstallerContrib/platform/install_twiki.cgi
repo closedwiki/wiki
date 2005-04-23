@@ -74,6 +74,7 @@ BEGIN {
 	use CGI qw( :standard );
     };
     $q = CGI->new() or die $!;
+    $cgibin = $q->param( 'cgibin' ) || $cgibin;
 
     my $install_cgi = URI->new( $ENV{SCRIPT_URI} );
 
@@ -458,9 +459,10 @@ __HTML__
 #<b>hostname</b>: <input type="text" size="25" name="hostname" value="$hostname" /><br />
 $text .= <<__HTML__;
 <h2>Server Settings</h2>
+<b>cgi extension</b>: <input type="text" size="6" name="scriptsuffix" value="$localDirConfig->{ScriptSuffix}" /><br />
 <b>perl</b> (full path): <input type="text" size="25" name="PERL" value="$PERL" /><br />
 <small><small>may also be the name of a perl accelerator, e.g,. <a target="details" href="http://www.daemoninc.com/SpeedyCGI/">SpeedyCGI</a></small></small><br />
-<b>cgi extension</b>: <input type="text" size="6" name="scriptsuffix" value="$localDirConfig->{ScriptSuffix}" /><br />
+<b>cgi-bin directory</b>: <input type="text" size="25" name="cgibin" value="$cgibin" /><br />
 __HTML__
 
 ################################################################################
