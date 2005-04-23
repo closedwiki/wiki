@@ -154,7 +154,7 @@ foreach my $dir qw( lib templates data bin pub logs )
     my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime(time);
     my $VERSION = '$Date: ' . sprintf("%04d-%02d-%02d", 1900+$year, $mon+1, $mday )
 	. sprintf(" %02d:%02d:%02d +0000 ", $hour, $min, $sec )
-	. sprintf("(%s, %02d %s %04d", $dow[$wday], $mday, $months[$mon], 1900+$year) 
+	. sprintf("(%s, %02d %s %04d)", $dow[$wday], $mday, $months[$mon], 1900+$year) 
 	. ' $ $Rev: ' . $svnRev . ' $ ';
 
     my $fileTWikiDotPm = "$installBase/lib/TWiki.pm";
