@@ -236,7 +236,7 @@ __LOCALSITE_CFG__
 
     execute( "cd tools && perl gendocs.pl --nosmells" ) or die $!;
 
-    # cleanup
+    # cleanup (this deletes the files _even if_ this program didn't create them, as they shouldn't be shipped anyway!)
     unlink "$gendocsLocalLibCfg" or warn "no delete LocalLib.cfg?";
     unlink "$gendocsLocalSiteCfg" or warn "no delete LocalLib.cfg?";
 }
