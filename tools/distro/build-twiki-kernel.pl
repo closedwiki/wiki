@@ -209,24 +209,30 @@ if ( $Config->{gendocs} )
     $Config->{verbose} && print "Generating docs\n";
 
     my $gendocsLocalLibCfg = "$installBase/bin/LocalLib.cfg";
-    open( LL_CFG, ">$gendocsLocalLibCfg" ) or die "can't write to LocalLib.cfg in order to run gendocs";
-    print LL_CFG <<__LOCALLIB_CFG__;
-	\$twikiLibPath = "$installBase/lib";
-	\$CPANBASE = "$installBase/lib/CPAN/lib";
-    1;
+    unless ( -e $gendocsLocalLibCfg )
+    {
+	open( LL_CFG, ">$gendocsLocalLibCfg" ) or die "can't write to LocalLib.cfg in order to run gendocs";
+	print LL_CFG <<__LOCALLIB_CFG__;
+\$twikiLibPath = "$installBase/lib";
+\$CPANBASE = "$installBase/lib/CPAN/lib";
+1;
 __LOCALLIB_CFG__
-    close( LL_CFG );
+	close( LL_CFG );
+    }
 
     my $gendocsLocalSiteCfg = "$installBase/lib/LocalSite.cfg";
-    open( LS_CFG, ">$gendocsLocalSiteCfg" ) or die "can't write to LocalSite.cfg in order to run gendocs";
-    print LS_CFG <<__LOCALSITE_CFG__;
-	\$cfg{PubDir} = "$installBase/pub";
-	\$cfg{TemplateDir} = "$installBase/templates";
-	\$cfg{DataDir} = "$installBase/data";
-	\$cfg{LogDir} = \$cfg{DataDir};
+    unless ( -e $gendocsLocalSiteCfg )
+    {
+	open( LS_CFG, ">$gendocsLocalSiteCfg" ) or die "can't write to LocalSite.cfg in order to run gendocs";
+	print LS_CFG <<__LOCALSITE_CFG__;
+\$cfg{PubDir} = "$installBase/pub";
+\$cfg{TemplateDir} = "$installBase/templates";
+\$cfg{DataDir} = "$installBase/data";
+\$cfg{LogDir} = \$cfg{DataDir};
 1;
 __LOCALSITE_CFG__
-    close( LS_CFG );
+	close( LS_CFG );
+    }
 
     execute( "cd tools && perl gendocs.pl --nosmells" ) or die $!;
 
