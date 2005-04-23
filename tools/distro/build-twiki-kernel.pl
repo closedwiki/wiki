@@ -219,8 +219,11 @@ __LOCALLIB_CFG__
     my $gendocsLocalSiteCfg = "$installBase/lib/LocalSite.cfg";
     open( LS_CFG, ">$gendocsLocalSiteCfg" ) or die "can't write to LocalSite.cfg in order to run gendocs";
     print LS_CFG <<__LOCALSITE_CFG__;
-
-    1;
+	\$cfg{PubDir} = "$installBase/pub";
+	\$cfg{TemplateDir} = "$installBase/templates";
+	\$cfg{DataDir} = "$installBase/data";
+	\$cfg{LogDir} = \$cfg{DataDir};
+1;
 __LOCALSITE_CFG__
     close( LS_CFG );
 
