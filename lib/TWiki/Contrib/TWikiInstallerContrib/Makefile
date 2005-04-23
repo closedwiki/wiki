@@ -36,10 +36,16 @@ addons :
 
 ################################################################################
 
+publish : twiki.tar.bz2
+	scp twiki.tar.bz2 $(PUBLISH_TO)
+
+################################################################################
+
 print :
 	@echo Settings
 	@echo ================================================================================
 	@echo TWIKIDEV = $(TWIKIDEV)
+	@echo PUBLISH_TO = $(PUBLISH_TO)
 
 help : print
 	@echo 
@@ -56,4 +62,4 @@ help : print
 	@echo make minicpan - mirror latest version of cpan modules
 	@echo make twiki-cpan - create twiki cpan repository
 	@echo 
-	@echo make publish - 
+	@echo make publish - upload distro
