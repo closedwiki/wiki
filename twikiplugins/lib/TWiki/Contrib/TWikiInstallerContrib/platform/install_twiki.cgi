@@ -152,7 +152,7 @@ my $mapTWikiDirs = {
 ################################################################################
 # start installation
 
-my $title = "TWiki Installation (Step 3/3)";
+my $title = "TWiki Installation (Step 2/2)";
 print header(), start_html( -title => $title );
 print $q->h1( $title );
 
@@ -399,7 +399,7 @@ sub installationMenu
     my $q = shift or die "no cgi?";
     my $text = '';
 
-    my $title = "TWiki Installation (Step 2/3)";
+    my $title = "TWiki Installation (Step 2/2)";
     $text .= $q->start_html( 
 			     -title => $title,
 			     -style => { -code => "\
@@ -446,7 +446,7 @@ function toggleHover( e )
 
 <form id="form">
 <table id="hdr"><tr>
-<td>Step 2/4 <span style="text-align:right;">[<a target="details" href="../config/instructions.html" >help</a>]</span></td>
+<td>Step 2/2 <span style="text-align:right;">[<a target="details" href="../config/instructions.html" >help</a>]</span></td>
 <td align="right" width="1%" nowrap >
 <input type="submit" name="install" value="install" /> <br/>
 </td>
