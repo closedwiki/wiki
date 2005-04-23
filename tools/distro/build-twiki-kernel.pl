@@ -42,7 +42,8 @@ my $Config = {
     zip => 1,
 # documentation switches
     changelog => 1,
-    pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
+    pdoc => 0,
+# AUTODETECT:   pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
     gendocs => 1,
 # 
     verbose => 0,
@@ -320,7 +321,7 @@ Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
    -zip                 produce a .zip output file (disable with -nozip)
    -changelog           automatically generate CHANGELOG from SVN (requires xsltproc)
    -agent [$Config->{agent}]	LWP::UserAgent name (used for downloading some documentation from wiki pages on twiki.org)
-   -pdoc		process source code using Pdoc to produce html in twiki/doc/ (autodetects if Pdoc installed)
+   -pdoc		process source code using Pdoc to produce html in twiki/doc/ (off)
    -gendocs		process source code using the equivalent of TWiki:Plugins.PerlPodPlugin 
    -verbose
    -debug
