@@ -13,11 +13,11 @@ twiki.tar :
 	tar -f twiki.tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
 	tar -f twiki.tar -r $(TAR_EXCLUDE) 
 
-extensions : twiki-cpan plugins contribs addons
+extensions : plugins contribs addons
 
-distro : extensions twiki.tar.bz2 
+distro : twiki-cpan extensions twiki.tar.bz2 
 
-test-distro : extensions twiki.tar
+test-distro : twiki-cpan extensions twiki.tar
 
 minicpan :
 	cpan/mirror-cpan.pl
@@ -53,6 +53,7 @@ help : print
 	@echo "make extensions - download extensions (all of plugins, contribs, addons)"
 	@echo make plugins contribs addons - download specific extensions types
 	@echo 
-	@echo make minicpan - mirror latest version of cpan
+	@echo make minicpan - mirror latest version of cpan modules
 	@echo make twiki-cpan - create twiki cpan repository
 	@echo 
+	@echo make publish - 
