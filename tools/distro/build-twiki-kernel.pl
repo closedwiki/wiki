@@ -129,12 +129,6 @@ if ( $Config->{changelog} )
 	: die "xsltproc not found; can't generate CHANGELOG";
 }
 
-if ( $Config->{gendocs} )
-{
-    $Config->{verbose} && print "Generating docs\n";
-    execute( "cd tools && perl gendocs.pl --nosmells" ) or die $!;
-}
-
 if ( $Config->{pdoc} )
 {
     $Config->{verbose} && print "Generating pdoc\n";
@@ -204,6 +198,39 @@ qw (
     );
 cp( "$installBase/AUTHORS", "$installBase/pub/TWiki/TWikiContributor/AUTHORS" );
 cp( "CHANGELOG", "$installBase/CHANGELOG" ) unless -z 'CHANGELOG';
+
+################################################################################
+# all files copied to $installBase now
+################################################################################
+
+if ( $Config->{gendocs} )
+{
+    $Config->{verbose} && print "Generating docs\n";
+
+    my $gendocsLocalLibCfg = "$installBase/bin/LocalLib.cfg";
+    open( LL_CFG, ">$gendocsLocalLibCfg" ) or die "can't write to LocalLib.cfg in order to run gendocs";
+    print LL_CFG <<__LOCALLIB_CFG__;
+	\$twikiLibPath = "$installBase/lib";
+	\$CPANBASE = "$installBase/lib/CPAN/lib";
+    1;
+__LOCALLIB_CFG__
+    close( LL_CFG );
+
+    my $gendocsLocalSiteCfg = "$installBase/lib/LocalSite.cfg";
+    open( LS_CFG, ">$gendocsLocalSiteCfg" ) or die "can't write to LocalSite.cfg in order to run gendocs";
+    print LS_CFG <<__LOCALSITE_CFG__;
+
+    1;
+__LOCALSITE_CFG__
+    close( LS_CFG );
+
+    execute( "cd tools && perl gendocs.pl --nosmells" ) or die $!;
+
+    # cleanup
+    unlink "$gendocsLocalLibCfg" or warn "no delete LocalLib.cfg?";
+    unlink "$gendocsLocalSiteCfg" or warn "no delete LocalLib.cfg?";
+}
+
 
 my $ua = LWP::UserAgent::TWiki::TWikiGuest->new( agent => $Config->{agent} ) or die $!;
 foreach my $doc qw( TWikiDocumentation TWikiHistory )
