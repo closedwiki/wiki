@@ -56,10 +56,13 @@ and a new distribution.
 
 usage: UpgradeTWiki 
 usage: UpgradeTWiki <newCfgFile> <oldCfgFile> <outputDirectory>
-this tries to figure out from the old & new cfg files, what it can do, an puts the resultant twiki files into the outputDir, ready for you to use
+will run the --dakar option and then the --upgradeTopics option
 
 usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
-does the CairoRelease upgrade (should end up incompatible with DakarRelease)
+does the CairoRelease upgrade (should end up incompatible with DakarRelease code)
+
+usage: UpgradeTWiki --dakar <newCfgFile> <oldCfgFile> <outputDirectory>
+does the DakarRelease upgrade
 
 usage: UpgradeTWiki --upgradeTopics <newCfgFile> <newDataDir> <oldDataDir> <outputDir>
 just tries to merge changes from newTopics (uses patch to merge with user changes)
@@ -98,7 +101,7 @@ print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile
 
 if ( $mode eq '' ) 
 {
-#RUN the old cairo upgrade code...
+#run --dakar then --upgradeTopics
 } 
 elsif ( $mode eq 'dakar' ) 
 {

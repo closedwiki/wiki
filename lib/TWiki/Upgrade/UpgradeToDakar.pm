@@ -21,12 +21,6 @@ and a new distribution.
 This script expects '.' to be the root of a TWiki distribution when it is called.
 =cut
 
-#BEGIN {
-#(-d "lib" and -d "data") or 
-#    die "I was expecting to see a ./lib and ./data directories: you need to run $0 in the directory where you extracted the new TWiki distribution!\n";
-#unshift @INC, "./lib";  # have to find Text::Diff, UpdateTopics, TWikiCfg which are bundled with TWiki.
-#}
-
 use strict;
 
 use TWiki::Upgrade::TWikiCfg;
@@ -126,25 +120,6 @@ if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
 	   (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
 	   );
 }
-
-#if (-f "$configPath/TWiki.cfg") {
-#    $libPath = $configPath;
-#
-#    print "OK - found TWiki.cfg.  Now I need you to tell me where the existing TWiki bin directory is:\n";
-#
-    # this will only be used to find .htaccess at this point.   
-    # should also be used to fix up bin scripts with $scriptSuffix: TBD!
-#    do
-#    {
-#        chomp ($setlibPath = <STDIN>) ;
-#    }
-#    until ((-d $setlibPath) ? 1 :
-#           (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
-#          );
-#} else {
-#    $libPath = "";
-#    $setlibPath = $configPath;
-#}
 
 # Now, should have finished asking the user questions...
 

@@ -41,9 +41,6 @@ sub UpgradeTWikiConfig {
         # Find out from there where TWiki.cfg is
         require "$setlibPath/setlib.cfg";
 	
-        print "\nGreat - found it OK, and it tells me that the rest of the config is in $twikiLibPath,\n";
-        print "so that's where I'll be looking!\n\n";
-
         print "Now generating new LocalLib.cfg from settings in old setlib.cfg...\n\n";
         my $newLibFile = "$targetDir/bin/LocalLib.cfg";
         open(NEW_CONFIG, ">$newLibFile") or die "Couldn't open $newLibFile to write it: $!\n";
@@ -123,8 +120,9 @@ sub upgradeConfig {
                       "{LogDir}" );
     print CFG old2new($scriptSuffix, "",
                       "{ScriptSuffix}" );
-    print CFG old2new($uploadFilter, "^(\.htaccess|.*\.(?:php[0-9s]?|phtm[l]?|pl|py|cgi))\$",
-                      "{UploadFilter}" );
+#I've removed this as it can create a non-compilable cfg
+#    print CFG old2new($uploadFilter, "^(\.htaccess|.*\.(?:php[0-9s]?|phtm[l]?|pl|py|cgi))\$",
+#                      "{UploadFilter}" );
     print CFG old2new($safeEnvPath, "/bin:/usr/bin",
                       "{SafeEnvPath}" );
     print CFG old2new($mailProgram, "/usr/sbin/sendmail -t -oi -oeq",
