@@ -1160,6 +1160,14 @@ sub writeLog {
     if(ref($user) eq 'TWiki::User') {
         $user = $user->wikiName();
     }
+
+    if ($user eq "TWikiGuest") {
+       my $cgiQuery = $this->{cgiQuery};
+       my $agent = $cgiQuery->user_agent();
+       $agent =~ m/([\w]+)/;
+       $extra .= $1;
+    }
+
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || '';
     my $text = "| $user | $action | $webTopic | $extra | $remoteAddr |";
 
