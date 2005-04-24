@@ -37,6 +37,7 @@ my $Config = {
     outputdir => '.',
     outfile => undef,
     agent => "TWikiKernel Builder/v0.7.2",
+    manifest => '-',
 # output formats
     tar => 1,
     zip => 1,
@@ -53,7 +54,7 @@ my $Config = {
 };
 
 my $result = GetOptions( $Config,
-			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s',
+			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s', 'manifest=s',
 # output formats
 			 'changelog!', 'tar!', 'zip!',
 # documentation switches
@@ -323,6 +324,7 @@ Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
    -tempdir [.]		where all temporary files for this build are placed
    -outputdir [.]	where the generated TWikiKernel-BRANCH-DATE.tar.gz is placed
    -outfile		.
+   -manifest            .
    -tar                 produce an .tar.gz output file (disable with -notar)
    -zip                 produce a .zip output file (disable with -nozip)
    -changelog           automatically generate CHANGELOG from SVN (requires xsltproc)
