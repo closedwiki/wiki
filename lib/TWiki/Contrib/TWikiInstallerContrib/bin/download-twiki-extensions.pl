@@ -13,7 +13,7 @@ use diagnostics;
 ++$|;
 use Data::Dumper qw( Dumper );
 
-use lib( "$ENV{TWIKIDEV}/CPAN/lib" );	# good enough because this only uses pure perl cpan modules
+use lib( "$ENV{TWIKIDEV}/CPAN/lib" ); # good enough because this only uses pure perl cpan modules
 
 use LWP::Simple qw( mirror RC_OK RC_NOT_MODIFIED );
 use File::Path qw( mkpath );
@@ -70,7 +70,7 @@ sub GenerateSummaryReport
     my $text = '';
 
     # print summary results (suitable for inclusion as a TWiki page)
-    $text .= "\n| *Plugins Processed* | $ext->{nDownloadedPlugins}/$ext->{nPlugins} |";
+    $text .= "| *Plugins Processed* | $ext->{nDownloadedPlugins}/$ext->{nPlugins} |";
     $text .= "\n\n";
     local $, = "\n   * TWiki:Plugins.";
     $text .= "Missing/Error plugin topics: @{ $ext->{errors} }";
@@ -129,7 +129,7 @@ sub DownloadTWikiExtension
 	    push @{ $self->{errors} }, $plugin;
 	} else {
 	    ++$self->{nDownloadedPlugins};
-	    print "| up-to-date |\r";
+	    print "| up-to-date |\n";
 #?	    $pluginS->{file} = $local_file;
 	}
 	
