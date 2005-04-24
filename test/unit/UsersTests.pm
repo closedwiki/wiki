@@ -94,7 +94,8 @@ sub testAddUsers {
     $twiki->{users}->addUserToTWikiUsersTopic($user3, $me);
     $text = `cat $ttpath`;
     $this->assert_matches(qr/Aaron.*George.*Zebediah/s, $text);
-    unlink($ttpath);
+#    unlink($ttpath);
+    print $ttpath."\n";
 }
 
 sub testLoad {
@@ -145,7 +146,7 @@ sub testLoad {
     $this->assert($k =~ s/^zuser//,$k);
     $this->assert_str_equals("", $k);
 
-    unlink($ttpath);
+#    unlink($ttpath);
 }
 
 1;
