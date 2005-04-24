@@ -11,34 +11,13 @@ BEGIN {
 }
 
 use Cwd qw( cwd );
-use File::Copy qw( cp );
-use File::Path qw( rmtree mkpath );
-use File::Spec::Functions qw( rel2abs );
 use File::Find::Rule;
-use File::Slurp;
-use File::Slurp::Tree qw( slurp_tree spew_tree );
-use LWP::UserAgent;
 use Getopt::Long;
 use Pod::Usage;
-use LWP::UserAgent::TWiki::TWikiGuest;
 
 my @files;		# files for the MANIFEST
 
 my $Config = {
-# 
-    tempdir => '.',
-    outputdir => '.',
-    outfile => undef,
-    agent => "TWikiKernel Builder/v0.7.2",
-    manifest => '-',
-# output formats
-    tar => 1,
-    zip => 1,
-# documentation switches
-    changelog => 1,
-    pdoc => 0,
-# AUTODETECT:   pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
-    gendocs => 1,
 # 
     verbose => 0,
     debug => 0,
@@ -47,11 +26,6 @@ my $Config = {
 };
 
 my $result = GetOptions( $Config,
-			'localcache=s', 'tempdir=s', 'outputdir=s', 'outfile=s', 'manifest=s',
-# output formats
-			 'changelog!', 'tar!', 'zip!',
-# documentation switches
-			'pdoc!', 'gendocs!',
 # miscellaneous/generic options
 			'agent=s', 'help', 'man', 'debug', 'verbose|v',
 			);
@@ -72,53 +46,39 @@ my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardOS, $ruleDiscardRcsHisto
 ################################################################################
 
 my $pwdStart = cwd();
+chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
 
-if ( 0 ) {	# SVN EXPORT concept on hold (i _want_ anonymous svn checkouts...)
-    my $svnExport = $Config->{svn_export} or die "no svn_export?";
-    ( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
-    execute( qq{svn export ../.. $svnExport} ) or die $!;
-#    die "no svn export output?" unless -d $svnExport;
-    chdir( $svnExport ) or die $!;
-}
-else {
-    chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
-}
-
-################################################################################
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
 foreach my $dir qw( lib templates data bin pub logs )
 {
     push @files, $ruleNormalFiles->in( $dir );
-#    my $tree = slurp_tree( $dir, rule => $ruleNormalFiles->start( $dir ) );
-#    spew_tree( "$installBase/$dir" => $tree );
 }
+# stop distributing cpan modules; get the latest versions from cpan itself
+#rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text", "$installBase/lib/Error.pm" ] ) or warn $!;
+chdir $pwdStart;
+
+################################################################################
 
 #-[docs]-------------------------------------------------------------------------------
-map { 
-    push @files, $_;
-#    my $doc = $_; 
-#    cp( $doc, "$installBase/$doc" ) or warn "$doc: $!" 
-    } qw (
-      pub-htaccess.txt root-htaccess.txt subdir-htaccess.txt robots.txt
-      index.html UpgradeTwiki
-      AUTHORS COPYING COPYRIGHT LICENSE readme.txt 
-    );
-push @files, 'pub/TWiki/TWikiContributor/AUTHORS', 'CHANGELOG';
-push @files, 'TWikiDocumentation.html', 'TWikiHistory.html';
+foreach my $file qw (
+		     pub-htaccess.txt root-htaccess.txt subdir-htaccess.txt robots.txt
+		     index.html UpgradeTwiki
+		     AUTHORS COPYING COPYRIGHT LICENSE readme.txt 
+		     pub/TWiki/TWikiContributor/AUTHORS
+		     TWikiDocumentation.html TWikiHistory.html
+		     CHANGELOG
+		     )
+{
+    push @files, $file;
+}
 
 # bin/ additional post processing: create authorization required version of some scripts
 foreach my $auth qw( rdiff view )
 {
-    push @files, "bin/${auth}auth";		#cp( $_ = "$installBase/bin/$auth", "${_}auth" ) or warn "$auth: $!";
+    push @files, "bin/${auth}auth";
 }
 
-# stop distributing cpan modules; get the latest versions from cpan itself
-#rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text", "$installBase/lib/Error.pm" ] ) or warn $!;
-
 ################################################################################
-
-chdir $pwdStart;
-#if ( $Config->{verbose} ) { print scalar File::Find::Rule->file->in( $installBase ), " new files\n" }
 
 
 foreach my $file ( @files )
@@ -126,20 +86,9 @@ foreach my $file ( @files )
     print "./$file\n";
 }
 
-
 exit 0;
 
 ################################################################################
-################################################################################
-
-sub execute 
-{
-    my ($cmd) = @_;
-    chomp( my @output = `$cmd` );
-    print "$?: $cmd\n", join( "\n", @output ) if $Config->{verbose};
-    return not $?;
-}
-
 ################################################################################
 
 __DATA__
@@ -167,17 +116,6 @@ Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
 
 =head1 DESCRIPTION
 
-B<build-twiki-kernel.pl> will build a TWikiKernel release file base suitable for creating a TWikiRelease/TWikiDistribution
-
-The TWikiKernel is comprised of several subsystems:
-    * CgiScripts - fulfils requests from the web. Primarily through the ViewCgiScript
-    * AuthenticationSubSystem - authenticates users and bestows privileges
-    * ParsePipeline - interprets what's typed in forms and topics and converts into Topics, Forms, MetaData and Attachments
-    * StorageSubSystem - arranges for data to be stored, currently in RcsFormat
-    * RenderingPipeline - displays WikiML Topics, Forms, MetaData and Attachments as HTML
-    * SearchSubsystem - fulfils searches
-
-Notably the TWikiKernel does not include any TWikiExtensions (e.g. Plugins or Skins); they are bundled into a particular TWikiRelease (or TWikiDistribution).
 
 =head2 SEE ALSO
 
