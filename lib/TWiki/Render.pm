@@ -408,7 +408,7 @@ sub _linkToolTipInfo {
 
 ---++ ObjectMethod internalLink ( $theWeb, $theTopic, $theLinkText, $theAnchor, $doLink, $doKeepWeb ) -> $html
 
-Generate a link.
+Generate a link. 
 
 SMELL: why can topic be spaced out? is this to support auto squishing of [[Spaced Topic Naming]]?
 and [[lowercase Spaced Topic Naming]]
@@ -420,6 +420,9 @@ and [[lowercase Spaced Topic Naming]]
    * =$doKeepWeb= - boolean: true to keep web prefix (for non existing Web.TOPIC)
 
 Called by _handleWikiWord and _handleSquareBracketedLink and by Func::internalLink
+
+Calls _renderWikiWord, which in turn will use Plurals.pm to match fold plurals to equivalency with their singular form 
+
 SMELL: why is this available to Func?
 
 =cut
