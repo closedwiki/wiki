@@ -24,7 +24,7 @@ To register as a new user, simply fill out this form:
   <td><input type="text" name="Twk1WikiName" size="40" value=""  onblur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if((ch=='&#224;')||(ch=='&#225;')||(ch=='&#226;')||(ch=='&#227;')||(ch=='&#229;') ) { ch = 'a'; } if( (ch=='&#232;')||(ch=='&#233;')||(ch=='&#234;') ) { ch = 'e'; } if( ch=='&#231;') { ch = 'c'; } if( ch=='&#241;') { ch = 'n'; } if( (ch=='&#242;')||(ch=='&#243;')||(ch=='&#244;') ) { ch = 'o'; } if( ch=='&#228;') { ch = 'a'; ch2 = 'e'; } if( ch=='&#246;') { ch = 'o'; ch2 = 'e'; } if( (ch=='&#249;')||(ch=='&#250;')||(ch=='&#251;') ) { ch = 'o'; } if( ch=='&#252;') { ch = 'u'; ch2 = 'e'; } if( ch=='&#196;') { ch = 'A'; ch2 = 'e'; } if( ch=='&#214;') { ch = 'O'; ch2 = 'e'; } if( ch=='&#220;') { ch = 'U'; ch2 = 'e'; } if( ch=='&#223;') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.Twk1WikiName.value=sOut;" /> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> (how you log in) LoginName: </td>
-  <td><input type="text" name="Twk1LoginName" size="40" value="%REMOTE_USER%" onfocus="if(this.form.Twk1LoginName.value=='')this.form.Twk1LoginName.value=this.form.Twk1WikiName.value.toLowerCase()" onblur="if(/[^A-Za-z0-9_]/.test(this.form.Twk1LoginName.value))alert('Invalid login name '+this.form.Twk1LoginName.value+' (name must contain only alphanumerics and _)')"/> =<font color="red">**</font>= </td>
+  <td><input type="text" name="Twk1LoginName" size="40" value="%REMOTE_USER%" onfocus="if(this.form.Twk1LoginName.value=='')this.form.Twk1LoginName.value=this.form.Twk1WikiName.value" onblur="if(/[^A-Za-z0-9_]/.test(this.form.Twk1LoginName.value))alert('Invalid login name '+this.form.Twk1LoginName.value+' (name must contain only alphanumerics and _)')"/> =<font color="red">**</font>= </td>
 </tr><tr>
   <td align="right"> Email address: </td>
   <td><input type="text" name="Twk1Email" size="40" value="" /> =<font color="red">**</font>= </td>
@@ -190,7 +190,7 @@ To register as a new user, simply fill out this form:
   <td valign="top" align="right"> Comments : <br /> (optional) &nbsp; </td>
   <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
 </tr><tr>
-  <td valign="top" align="right"> &nbsp; <input type="hidden" name="topic" value="%TOPIC%" /><input type="hidden" name="action" value="register" /></td>
+  <td valign="top" align="right"> &nbsp; <input type="hidden" name="topic" value="%TOPIC%" /></td>
   <td> <input type="submit" value=" Submit " /> &nbsp;&nbsp; (Fields marked =<Font color="red">**</font>= are required) </td>
 </tr>
 </table>

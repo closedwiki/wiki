@@ -76,12 +76,7 @@ sub register_cgi {
     my $action = $session->{cgiQuery}->param('action');
 
     if ($action eq 'register') {
-        register( $session );
-        if ($needVerification) {
-            _requireVerification($session, $tempUserDir);
-        } else {
-            finish($session);
-        }
+      registerAndNext($session, $tempUserDir, $needVerification);
     }
     elsif ($action eq 'verify') {
         verifyEmailAddress( $session, $tempUserDir );
@@ -98,8 +93,7 @@ sub register_cgi {
         finish($session, $tempUserDir );
     }
     else {
-        # SMELL: this should be an OopsException
-        throw Error::Simple("invalid action ($action) in register");
+      registerAndNext($session, $tempUserDir, $needVerification);
     }
 
     # Output of register:
@@ -336,6 +330,27 @@ sub _makeFormFieldOrderMatch {
 
 =pod
 
+---++ StaticMethod registerAndNext($session, $tempUserDir, $needVerification) 
+
+This is called when action = register or action = ""
+
+It calls register and either Verify or Finish.
+
+Hopefully we will get workflow integrated and rewrite this to be table driven
+
+=cut
+
+sub registerAndNext {
+  my ($session, $tempUserDir, $needVerification) = @_;
+  register( $session );
+  if ($needVerification) {
+     _requireVerification($session, $tempUserDir);
+  } else {
+     finish($session);
+  }
+}
+
+=pod
 ---++ StaticMethod register($session)
 
 This is called through: TWikiRegistration -> RegisterCgiScript -> here
