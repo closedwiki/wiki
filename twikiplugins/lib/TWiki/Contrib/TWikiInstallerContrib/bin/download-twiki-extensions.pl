@@ -126,7 +126,7 @@ sub DownloadTWikiExtension
 #	    $pluginS->{file} = $local_file;
 	} elsif ($status != RC_NOT_MODIFIED) {
 	    print "| $!: $remote_uri |\n";
-	    push @{ $self->{errors} }, $plugin;
+	    push @{ $self->{errors} }, "Plugins.$plugin";
 	} else {
 	    ++$self->{nDownloadedPlugins};
 	    print "| up-to-date |\n";
