@@ -502,7 +502,7 @@ sub _renderNonExistingWikiWord {
     my ($this, $theWeb, $theTopic, $theLinkText, $theAnchor) = @_;
     my $ans;
 
-    $ans = CGI::font( { -color=>$this->{NEWTOPICFONTCOLOR} }, $theLinkText );
+    $ans = $theLinkText;
 
     if (ref $theTopic && ref $theTopic eq 'ARRAY') {
         my $num = 1;
@@ -512,7 +512,8 @@ sub _renderNonExistingWikiWord {
                       ($theWeb, $t, 'edit',
                        topicparent => $this->{session}->{webName}.'.'.
                        $this->{session}->{topicName} ),
-                      rel => 'nofollow'
+                       rel=>'nofollow',
+                       title=>'Create this topic'
                     },
                     $this->{NEWLINKSYMBOL} x $num . " " );
             $num++;
@@ -522,14 +523,12 @@ sub _renderNonExistingWikiWord {
                       ($theWeb, $theTopic, 'edit',
                        topicparent => $this->{session}->{webName}.'.'.
                        $this->{session}->{topicName} ),
-                      rel => 'nofollow',
-                      title=>'Create this topic'
+                       rel=>'nofollow',
+                       title=>'Create this topic'
                     },
                     $this->{NEWLINKSYMBOL} );
     }
-
-    return CGI::span( { class=>'twikiNewLink',
-                        style=>'background : '.$this->{NEWTOPICBGCOLOR}.';' },
+    return CGI::span( { class=>'twikiNewLink' },
                       $ans );
 }
 

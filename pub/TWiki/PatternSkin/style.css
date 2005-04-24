@@ -266,14 +266,16 @@ label {
 .twikiLeftBar a:link,
 .twikiLeftBar a:visited {
 	text-decoration:none;
-	border-bottom:1px solid transparent;
+	padding-bottom:1px; /* to account for hover border */
+	border-bottom:0px;
 }
 .twikiLeftBar a:hover,
 .twikiLeftBar a:visited:hover,
 .twikiLeftBar a:active {
 	text-decoration:none;
-	border-bottom:1px solid #1559B3; /*C1*/
 	color:#0F47A3; /*C3*/
+	padding-bottom:0;
+	border-bottom:1px solid #1559B3; /*C1*/
 }
 .twikiWebIndicator {
 	font-size:95%;
@@ -718,6 +720,7 @@ html>body .twikiToc li a {
 	padding:0.3em 0 1em 0;
 	margin-left:-0.55em; /* same amount as button padding */
 	margin-bottom:0.5em;
+	height:1.3em; /* WIN/IE needs this, or a top border is drawn */
 }
 .twikiToolBar p {
 	clear:both;
@@ -735,7 +738,6 @@ html>body .twikiToc li a {
 	display:inline;
 	color:#8490A1; /*C6*/
 	font-weight:bold;
-	background-color:transparent;
 }
 .twikiToolBar ul li s,
 .twikiToolBar ul li strike {
@@ -747,12 +749,14 @@ html>body .twikiToc li a {
 	padding:0 0.55em;
 	float:left;
 	text-decoration:none;
+	padding-bottom:1px; /* to account for hover border */
 	color:#8490A1; /*C6*/
 	font-weight:bold;
 }
 .twikiToolBar ul li a:hover {
 	color:#0F47A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
+	padding-bottom:0;
 	border-bottom:1px solid #1559B3; /*C1*/
 	text-decoration:none;
 }
