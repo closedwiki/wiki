@@ -83,7 +83,28 @@ foreach my $auth qw( rdiff view )
 
 foreach my $file ( @files )
 {
-    print "./$file\n";
+    print "$file\n";
+    next;
+
+    # format from EPM: http://www.easysw.com/epm/epm-manual.html#4_1
+    #--------------------------------------------------------------------------------
+    # Each file in the distribution is listed on a line starting with a letter. The format of all lines is:
+    # type mode owner group destination source options
+    # Regular files use the letter f for the type field:
+    # f 755 root sys /usr/bin/foo foo
+    # Configuration files use the letter c for the type field:
+    # c 644 root sys /etc/foo.conf foo.conf
+    # Directories use the letter d for the type field and use a source path of "-":
+    # d 755 root sys /var/spool/foo -
+    # Finally, symbolic links use the letter l (lowercase L) for the type field:
+    # l 000 root sys /usr/bin/foobar foo
+    # The source field specifies the file to link to and can be a relative path.
+
+#    foreach my $field qw( type mode owner group destination source options )
+#    {
+#	print "";
+#    }
+#    print "\n";
 }
 
 exit 0;
