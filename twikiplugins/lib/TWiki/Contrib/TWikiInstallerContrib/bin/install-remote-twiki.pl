@@ -6,8 +6,7 @@ use Data::Dumper qw( Dumper );
 ++$|;
 
 # TODO:
-#  * rewrite extension2url() in terms of CGI's query_form() (used in TWikiTopic2TestCase.pl)
-#  * change ( install_account, install_host, install_dir ) into an URI (i think it's URI)
+#  * change ( install_account, install_host, install_dir ) into a URI
 #  * update man pod docs {grin}
 
 BEGIN {
@@ -21,6 +20,7 @@ use File::Basename qw( basename );
 use Getopt::Long qw( :config bundling auto_version );
 use Pod::Usage;
 use WWW::Mechanize::TWiki 0.05;
+use URI;
 
 sub mychomp { chomp $_[0]; $_[0] }
 
@@ -34,6 +34,10 @@ my $Config = {
 	install_account => mychomp( `whoami` ),
 	install_host => 'localhost',
 	install_dir => '~/Sites',
+#
+	scriptsuffix => '',
+	perl => '/usr/bin/perl',
+	cgibin => '',
 #	installurl = 'localhost/~twiki',
 	report => 1,
 #
@@ -48,6 +52,7 @@ my $Config = {
 Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
 			'distro=s', 'kernel=s', 'web=s@',
+			 'scriptsuffix=s', 'perl=s', 'cgibin=s',
 # plugin, addon, contrib
 			'plugin=s@', 'addon=s@', 'contrib=s@',
 # install_account, install_host, install_dir
@@ -58,6 +63,7 @@ my $result = GetOptions( $Config,
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
+$Config->{cgibin} ||= "/home/$Config->{install_account}/$Config->{install_host}";
 $Config->{plugin} ||= [ qw( TWikiReleaseTrackerPlugin ) ];
 $Config->{contrib} ||= [ qw( DistributionContrib ) ];
 $Config->{addon} ||= [ qw( GetAWebAddOn ) ];
@@ -71,6 +77,7 @@ die "no distro?" unless $Config->{distro};
 ################################################################################
 # install 
 PushRemoteTWikiInstall({ %$Config });
+# mark installation as successful/completed, so that the report is generated
 $Config->{isInstalled} = 1;
 
 END {
@@ -128,20 +135,23 @@ sub PushRemoteTWikiInstall
 	# install the actual wiki and extensions
 	$Config->{verbose} && print "Installing TWiki and TWikiExtensions\n";
 
-	my $twiki_config = extensions2uri({ 
+	use URI;
+	my $urlInstallWithConfig = URI->new( "http://$SERVER_NAME/cgi-bin/install_twiki.cgi" );
+	$urlInstallWithConfig->query_form({ 
 		plugin => $parms->{plugin}, 
 		addon => $parms->{addon}, 
 		contrib => $parms->{contrib}, 
 		localweb => $parms->{localweb},
 		kernel => $parms->{kernel},
+		scriptsuffix => $parms->{scriptsuffix},
+		PERL => $parms->{perl},
+		cgibin => $parms->{cgibin},
+		install => 'install',
 	});
-	print "twiki_config = [$twiki_config]\n" if $parms->{debug};
+	$Config->{debug} && print "\n$urlInstallWithConfig\n";
 
+	logSystem( qq{wget -O $SERVER_NAME-install.html "$urlInstallWithConfig"} );
 #	logSystem( qq{curl --silent --show-error "http://$parms->{install_host}/cgi-bin/install_twiki.cgi?${twiki_config};twiki=${kernel};install=install' -o 'TWikiInstallationReport.html"} );
-
-	logSystem( qq{wget -O $SERVER_NAME-install.html "http://$SERVER_NAME/cgi-bin/install_twiki.cgi?install=install;${twiki_config};scriptsuffix=.cgi;PERL=%2Fusr%2Flocal%2Fbin%2Fperl;cgibin=%2Fhome%2Fwbniv%2F$SERVER_NAME%2Fcgi-bin"} );
-
-#	logSystem( qq{wget -O $SERVER_NAME-install.html "http://$SERVER_NAME/cgi-bin/install_twiki.cgi?install=install;scriptsuffix=.cgi;PERL=%2Fusr%2Flocal%2Fbin%2Fperl;cgibin=%2Fhome%2Fwbniv%2F$SERVER_NAME%2Fcgi-bin;kernel=LATEST"} );
 }
 
 ################################################################################
@@ -153,7 +163,11 @@ sub extensions2uri
     my @config;
     foreach my $ext ( keys %$config )
     {
-		push @config, join( ';', map { "${ext}=$_" } @{$config->{$ext}} );
+	$Config->{debug} && print STDERR "$ext : ext=[$ext] : ", ref( $config->{$ext} ), "\n";
+	next unless $config->{$ext};	# don't include empty entries
+	push @config, ref( $config->{$ext} ) eq 'ARRAY'
+	    ? join( ';', map { "${ext}=$_" } @{$config->{$ext}} )
+	    : "${ext}=$config->{$ext}";
     }
     return join( ';', @config );
 }
@@ -188,7 +202,7 @@ install-remote-twiki.pl --distro -kernel [-web ...]* [-install_account [twiki]] 
 
 =item B<-install_dir [~/Sites]>				TWiki:Codev.TWikiRootDirectory
 
-=item B<-force|f>					Erase an existing TWiki installation CAUTION!
+=item B<-force|f>					Erase and overwrite an existing TWiki installation CAUTION!
 
 =item B<-plugin>					name of plugin to install (eg, SpreadSheetPlugin, FindElsewherePlugin)
 
