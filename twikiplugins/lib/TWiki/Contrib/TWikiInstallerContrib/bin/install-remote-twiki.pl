@@ -155,24 +155,6 @@ sub PushRemoteTWikiInstall
 }
 
 ################################################################################
-################################################################################
-sub extensions2uri
-{
-    my $config = shift or die;
-
-    my @config;
-    foreach my $ext ( keys %$config )
-    {
-	$Config->{debug} && print STDERR "$ext : ext=[$ext] : ", ref( $config->{$ext} ), "\n";
-	next unless $config->{$ext};	# don't include empty entries
-	push @config, ref( $config->{$ext} ) eq 'ARRAY'
-	    ? join( ';', map { "${ext}=$_" } @{$config->{$ext}} )
-	    : "${ext}=$config->{$ext}";
-    }
-    return join( ';', @config );
-}
-
-################################################################################
 ###############################################################################
 
 __DATA__
