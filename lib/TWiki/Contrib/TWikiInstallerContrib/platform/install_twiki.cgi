@@ -108,7 +108,7 @@ use XML::Simple;
 use Archive::Any;
 use File::Slurp qw( read_file write_file );
 use CPAN;
-use Cwd qw( realpath );
+use Cwd qw( abs_path );
 
 ################################################################################
 
@@ -142,12 +142,6 @@ unless ( $q->param( 'kernel' ) && ($q->param('install') || '') =~ /install/i )
 ################################################################################
 # INSTALL
 ################################################################################
-
-# normalise pathnames (Sandbox.pm doesn't like .. in pathnames!)
-foreach my $dir ( PubUrlPath PubDir TemplateDir DataDir LogDir )
-{
-    $localDirConfig->{ $dir } = realpath( $localDirConfig->{ $dir } );
-}
 
 my $mapTWikiDirs = {
     lib => { dest => "$cgibin/lib" },
@@ -186,6 +180,12 @@ installTWikiExtension({ file => "../downloads/releases/$tar.zip", name => 'TWiki
 #--------------------------------------------------------------------------------
 # update LocalSite.cfg for local directories configuration
 print $q->h2( 'LocalSite.cfg' );
+
+# normalise pathnames (Sandbox.pm doesn't like .. in pathnames!)
+foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
+{
+    $localDirConfig->{ $dir } = abs_path( $localDirConfig->{ $dir } );
+}
 
 my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
 open(FH, ">$file") or die "Can't open $file: $!";
