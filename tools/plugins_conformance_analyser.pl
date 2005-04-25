@@ -52,34 +52,34 @@ my $wgetOptions = "--http-user TWikiGuest --http-passwd guest";
 my $red      = "#FF9999";
 my $green    = "#99FF66";
 my @handlers = (
-"afterAttachmentSaveHandler",
-"afterEditHandler",
-"afterSaveHandler",
-"beforeAttachmentSaveHandler",
-"beforeEditHandler",
-"beforeSaveHandler",
-"commonTagsHandler",
-"earlyInitPlugin",
-"endRenderingHandler",
-"getSessionValueHandler",
-"initPlugin",
-"initializeUserHandler",
-"insidePREHandler",
-"modifyHeaderHandler",
-"outsidePREHandler",
-"postRenderingHandler",
-"preRenderingHandler",
-"redirectCgiQueryHandler",
-"registrationHandler",
-"renderFormFieldForEditHandler",
-"renderWikiWordHandler",
-"setSessionValueHandler",
-"startRenderingHandler",
-"writeHeaderHandler",
+                "afterAttachmentSaveHandler",
+                "afterEditHandler",
+                "afterSaveHandler",
+                "beforeAttachmentSaveHandler",
+                "beforeEditHandler",
+                "beforeSaveHandler",
+                "commonTagsHandler",
+                "earlyInitPlugin",
+                "endRenderingHandler",
+                "getSessionValueHandler",
+                "initPlugin",
+                "initializeUserHandler",
+                "insidePREHandler",
+                "modifyHeaderHandler",
+                "outsidePREHandler",
+                "postRenderingHandler",
+                "preRenderingHandler",
+                "redirectCgiQueryHandler",
+                "registrationHandler",
+                "renderFormFieldForEditHandler",
+                "renderWikiWordHandler",
+                "setSessionValueHandler",
+                "startRenderingHandler",
+                "writeHeaderHandler",
                );
 
 # Options
-my $update          = 1;
+my $download        = 1;
 my $interactivePick = 1;
 my $debug           = 0;
 
@@ -114,7 +114,7 @@ sub analyseConformance() {
     foreach $module ( sort @modules ) {
         print STDERR "--- Updating $module\n";
 
-        updateCVS($module) if ($update);
+        updateCVS($module) if ($download);
 
         my $zip = "__NO ZIP__";
         $zip = updateDownload($module);
@@ -358,7 +358,7 @@ sub analyseCode {
         my $text = `cd download/$module && find . -name '*.pm' -print`;
         if ($?) {
             print STDERR "Prob finding $?\n";
-            $data->{howbad}{$module} = 1000;
+            undef $data->{howbad}{$module};
             return;
         }
         $data->{howbad}{$module} = 0;
@@ -443,7 +443,7 @@ sub analyseCode {
         }
     } else {
         print STDERR "Failed to find download/$module\n";
-        $data->{howbad}{$module} = 1000;
+        undef $data->{howbad}{$module};
     }
 }
 
@@ -508,7 +508,7 @@ sub compareCVS2Download {
 sub getURL {
     my ( $url, $file ) = @_;
 
-    unlink($file) if ( $update && -f $file );
+    unlink($file) if ( $download && -f $file );
     if ( !-f $file ) {
         print STDERR "--- Getting $url\n";
         `wget -q $url`;
@@ -551,7 +551,7 @@ sub getAttachments {
 
     # get the list of attachments.
     my $text = "";
-    if ( !$update && -f "$web.$topic.index.html" ) {
+    if ( !$download && -f "$web.$topic.index.html" ) {
         $text = readFile("$web.$topic.index.html");
     }
     else {
@@ -689,7 +689,7 @@ sub updateDownload {
             }
         }
 
-        return $chosen if ( !$update && -f "download/$module/$chosen" );
+        return $chosen if ( !$download && -f "download/$module/$chosen" );
 
         unlink($chosen) if ( -f $chosen );
         my $url = "$TWikiOrg/p/pub/Plugins/$module/$chosen";
@@ -786,8 +786,8 @@ sub TABLE {
 # Analyse options
 foreach my $parm (@ARGV) {
     if ( $parm =~ m/^-nod/o ) {
-        # If -nod is chosen, will not download unles absolutely necessary
-        $update = 0;
+        # If -nod is chosen, will not download unless absolutely necessary
+        $download = 0;
     }
     elsif ( $parm =~ /^-used/o ) {
 
