@@ -200,9 +200,12 @@ sub view {
         $tmpl =~ s/%REVARG%/&rev=$rev/go;
     } else {
         $indexableView = 1;
-        my $editAction = $topicExists ? 'Edit' : 'Create';
+        my $editLinkText = CGI::span( { class=>'twikiAccessKey' }, 'E' ) . 'dit';
+        my $editAction = $topicExists ? $editLinkText : 'Create';
         my $ea = CGI::a( { href => '%EDITURL%',
-                           rel => 'nofollow' },
+                           rel => 'nofollow',
+                           title => 'Edit this topic text',
+                           accesskey => 'e'},
                          CGI::b($editAction));
         $tmpl =~ s/%EDITTOPIC%/$ea/g;
         $tmpl =~ s/%REVTITLE%//go;
