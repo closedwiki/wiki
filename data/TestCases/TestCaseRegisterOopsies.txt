@@ -1,0 +1,29 @@
+Description: Load all the oopsregister message templates for review
+---+ template =oopsregisterbad= def =no_users_to_reset=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=no_users_to_reset"}%
+---+ template =oopsregisterbad= def =missing_fields=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=missing_fields"}%
+---+ template =oopsregisterbad= def =password_mismatch=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=password_mismatch"}%
+---+ template =oopsregisterbad= def =problem_adding=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=problem_adding"}%
+---+ template =oopsregisterbad= def =send_mail_error=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=send_mail_error"}%
+---+ template =oopsregisterbad= def =confirm=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=confirm"}%
+---+ template =oopsregisterbad= def =already_exists=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=already_exists"}%
+---+ template =oopsregisterbad= def =bad_wikiname=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=bad_wikiname"}%
+---+ template =oopsregisterbad= def =bad_email=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=bad_email"}%
+---+ template =oopsregisterbad= def =no_ver_file=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=no_ver_file"}%
+---+ template =oopsregisterbad= def =bad_ver_code=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterbad&def=bad_ver_code"}%
+---+ template =oopsregisterok= def =reset_ok=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterok&def=reset_ok"}%
+---+ template =oopsregisterok= def =password_changed=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterok&def=password_changed"}%
+---+ template =oopsregisterok= def =thanks=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsregisterok&def=thanks"}%

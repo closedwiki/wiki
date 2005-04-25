@@ -1,0 +1,24 @@
+Description: Load all the other message templates for review
+
+---+ template =oopsupload= def =zero_sized=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsupload&def=zero_sized"}%
+---+ template =oopsupload= def =limit=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsupload&def=limit"}%
+---+ template =oopsaccessdenied= def =topic=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsaccessdenied&def=topic"}%
+---+ template =oopsaccessdenied= def =only_group=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsaccessdenied&def=only_group"}%
+---+ template =oopscreatenewtopic=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopscreatenewtopic"}%
+---+ template =oopsmoveerr=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmoveerr"}%
+---+ template =oopsnoformdef=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsnoformdef"}%
+---+ template =oopsnotopic=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsnotopic"}%
+---+ template =oopsnoweb=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsnoweb"}%
+---+ template =oopspreview=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopspreview"}%
+---+ template =oopssaveerr=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopssaveerr"}%

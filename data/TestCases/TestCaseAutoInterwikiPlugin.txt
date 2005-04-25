@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111924545" version="$Rev$"}%
+
+Description: Basic tests for Interwiki plugin
+
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin,InterwikiPlugin&skin=pattern][run this test]]
+
+Designed by: Crawford Currie
+
+Requires "TWiki" to be defined in InterWikis.
+
+---+ Expected
+<!-- expected -->
+<a href="http://twiki.org/cgi-bin/view/Codev_Target" title="'Codev_Target' on TWiki.org">TWiki:Codev_Target</a>
+<a href="http://twiki.org/cgi-bin/view/Codev/Target" title="'Codev/Target' on TWiki.org">TWiki:Codev/Target</a>
+<a href="http://twiki.org/cgi-bin/view/Codev/m./+_,;:!?%#-" title="'Codev/m./+_,;:!?%#-' on TWiki.org">TWiki:Codev/m./+_,;:!?%#-</a>
+<!-- /expected -->
+---+ Actual
+<!-- actual -->
+TWiki:Codev_Target
+TWiki:Codev/Target
+TWiki:Codev/m./+_,;:!?%#-
+<!-- /actual -->
