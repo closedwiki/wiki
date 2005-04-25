@@ -204,6 +204,13 @@ BEGIN {
         $TWiki::cfg{OS} = 'OS2';
     }
 
+    # Validate and untaint Apache's SERVER_NAME Environment variable
+    # for use in referencing virtualhost-based paths for separate data/ and templates/ instances, etc
+    if ( $ENV{SERVER_NAME} =~ /^(([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6})$/ ) {
+      # SMELL - I thought it would be a TWiki::Sandbox::untaintChecked?
+      $ENV{SERVER_NAME} = $1 ;
+    }
+
     # Get LocalSite first, to pick up definitions of things like
     # {RCS}{BinDir} and {LibDir} that are used in TWiki.cfg
     # do, not require, because we do it twice
