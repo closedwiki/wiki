@@ -223,10 +223,11 @@ sub test_rename() {
       $twiki->{store}->getRevisionNumber( $oldWeb, $oldTopic );
 
     $user =$twiki->{users}->findUser( "TestUser1" );
-    $twiki->{userName} = $user;
+    $twiki->{user} = $user;
 
     #$TWiki::Sandbox::_trace = 1;
-    $twiki->{store}->renameTopic($oldWeb, $oldTopic, $newWeb, $newTopic, 1, $user);
+    $twiki->{store}->moveTopic($oldWeb, $oldTopic, $newWeb,
+                               $newTopic, $user);
     #$TWiki::Sandbox::_trace = 0;
 
     my $newRevAtt =
@@ -235,11 +236,12 @@ sub test_rename() {
 
     # Topic is modified in move, because meta information is updated
     # to indicate move
-    my $newRevTop =
-      $twiki->{store}->getRevisionNumber( $newWeb, $newTopic );
-    $this->assert_matches(qr/^\d+$/, $newRevTop);
-    my $revTopShouldBe = $oldRevTop + 1;
-    $this->assert_num_equals($revTopShouldBe, $newRevTop );
+    # THIS IS NOW DONE IN UI::Manage
+#    my $newRevTop =
+#      $twiki->{store}->getRevisionNumber( $newWeb, $newTopic );
+#    $this->assert_matches(qr/^\d+$/, $newRevTop);
+#    my $revTopShouldBe = $oldRevTop + 1;
+#    $this->assert_num_equals($revTopShouldBe, $newRevTop );
 }
 
 sub test_releaselocksonsave {
