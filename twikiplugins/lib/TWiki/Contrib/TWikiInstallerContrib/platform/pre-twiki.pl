@@ -69,6 +69,7 @@ foreach my $module (
 		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
 		    # Net::SSLeay IO::Socket::SSL
 		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
+		    qw( CGI::Session ),
 		    )
 {
     print "Installing $module\n";
