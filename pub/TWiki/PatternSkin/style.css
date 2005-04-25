@@ -16,6 +16,7 @@
 	C7	page, legend background color												#f8f8f8
 	C8	h2 background color															#F3EDE7
 	C9	neutral table bg gray that should work on light and dark backgrounds		#999
+	C10	line-height																	1.45em
 	---------------------------------------------------------------------------------------	*/
 
 
@@ -26,7 +27,7 @@
 /* HTML elements */
 
 html body {
-	line-height:1.55em;
+	line-height:1.45em; /*C10*/
 	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
 	background-color:#f8f8f8; /*C7*/
 	margin:0;
@@ -50,6 +51,10 @@ p {
 table {
 	border-collapse:separate;
 }
+th {
+	line-height:1.15em;
+	padding:0.3em 0;
+}
 strong, b {
 	font-weight:bold;
 }
@@ -67,6 +72,12 @@ pre, code, tt {
 pre {
 	margin-top:1em;
 	margin-bottom:1em;
+}
+ol, ul {
+	margin-top:1.45em; /*C10*/
+}
+ol li, ul li {
+	line-height:1.45em; /*C10*/
 }
 
 /* Text */
@@ -118,7 +129,6 @@ h6 { font-size:95%;}
 .twikiNewLink font {
 	color:inherit;
 }
-
 :link:focus,
 :visited:focus,
 :link,
@@ -135,15 +145,13 @@ h6 { font-size:95%;}
 	color:#0F47A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
 }
-th a:link font,
-th a:visited font {
 
-}
+th a:link font,
+th a:visited font {}
 th a:hover font,
 th a:hover font {
 	color:#0F47A3; /*C3*/
 }
-
 
 /* sorting of table columns */
 /* not yet finalized for tables in topic text */
@@ -259,6 +267,8 @@ label {
 
 .twikiLeftBar {
 	border-top:1px solid #ddd;
+	border-right:1px solid #ddd;
+	border-bottom:1px solid #ddd;
 	color:#800;
 	overflow:hidden;
 	line-height:1.3em;
@@ -279,28 +289,30 @@ label {
 }
 .twikiWebIndicator {
 	font-size:95%;
-	line-height:2em;
-	height:2em;
 	background-color:#efefef; /* color variable WEBBGGCOLOR is set in twiki.pattern.tmpl */
 	color:black;
 	font-weight:bold;
 	text-align:center;
 	border-bottom:2px solid white;
+	padding:0.2em 0 0 0;
+	height:1.5em; /* or WIN/IE wont draw the backgound */
 }
 .twikiLeftBar .twikiWebIndicator a {
 	height:2em;
 }
 .twikiLeftBar .twikiWebIndicator a:link,
 .twikiLeftBar .twikiWebIndicator a:visited {
-	color:inherit;
+	color:black;
 	text-decoration:none;
+	border-bottom:0px;
 }
 .twikiLeftBar .twikiWebIndicator a:hover,
 .twikiLeftBar .twikiWebIndicator a:active {
 	color:black;
 	text-decoration:underline;
-	border:0;
-	background-color:#b4d5ff; /*C2*/
+	border-bottom:0px;
+	padding-bottom:1px;
+	background-color:transparent;
 }
 .twikiLeftBar .twikiLeftBarContents {
 	font-size:95%;
@@ -328,21 +340,20 @@ html>body .twikiLeftBar li a {
 	width:auto;
 }
 .twikiLeftBar hr {
-	color:#ccc;
-	background-color:#ccc;
+	color:#eee;
+	background-color:#ddd;
 	height:1px;
 	border:none;
 }
 .twikiLeftBarPersonal {
 	margin:-0.5em -1px -0.5em -1em;
-	margin-top:1.5em;
 	padding:0.25em 0 0.5em 1em;
 	background-color:#DFEDFD;
 	border-top:1px solid #ccc;
 	border-bottom:1px solid #ccc;
 }
 .twikiLeftBarPersonal p {
-	margin:0.5em 0 0 0;
+	margin:0;
 }
 .twikiLeftBarPersonal a:visited {
 	color:#666;
@@ -464,9 +475,13 @@ html>body .twikiLeftBar li a {
    white-space:nowrap;
 }
 */
+.twikiAttachments th.twikiFirstCol,
+.twikiForm th.twikiFirstCol,
 .twikiAttachments td.twikiFirstCol,
 .twikiForm td.twikiFirstCol {
 	border-left:none;
+	width:26px;
+	text-align:center;
 }
 .twikiAttachments p,
 .twikiForm p {
@@ -577,6 +592,7 @@ table.twikiTopicAction {
 	background-color:#D4E6FC;
 	border:1px solid #B6C6D9;
 	margin:0.25em 0;
+	text-align:center;
 }
 .twikiTopicAction td.twikiAddCol {
 	text-align:right;
@@ -919,6 +935,12 @@ html>body .twikiToc li a {
 	font-size:85%;
 	line-height:1.3em;
 }
+.twikiAccessKey {
+	text-decoration:underline;
+}
+a:hover .twikiAccessKey {
+	text-decoration:none;
+}
 
 /*	-----------------------------------------------------------
 	Search results
@@ -927,13 +949,16 @@ html>body .twikiToc li a {
 	
 .twikiSearchResultsPage {}
 .twikiSearchResults {}
+
 .twikiSearchResultsHeader,
 .twikiSearchString {
-	padding:0.2em 0.7em 0.2em 0.7em;
+	font-size:95%;
+	padding:0.2em 0.7em;
 	margin:0.15em -0.7em 0.25em -0.7em;
 	font-weight:bold;
 	background-color:#F3EDE7; /*C8*/
 	border-bottom:1px solid #ccc;
+	height:1.5em; /* or WIN/IE wont draw the backgound */
 }
 .twikiSearchString {
 	background-color:transparent;
@@ -994,7 +1019,7 @@ html>body .twikiToc li a {
 	margin-bottom:1em;
 }
 .twikiBookViewList .twikiTopRow {
-	padding:0.2em 0.7em 0.2em 0.7em;
+	padding:0.2em 0.7em;
 	margin:2.5em -0.7em 0.15em -0.7em;
 	background-color:#22638c; /*C4*/
 	color:#ccc;
@@ -1044,28 +1069,26 @@ html>body .twikiToc li a {
 	border:none;
 	font-size:95%;
 	line-height:1.5em;
-	color:white;
+	color:#ddd;
 	font-weight:normal;
-	background-color:#98A2B0;
+	background-color:#8C96A5;
+}
+.twikiViewPage .twikiTopicAction .twikiSeparator {
+	color:#ccc;
 }
 .twikiViewPage .twikiTopicAction a:link,
 .twikiViewPage .twikiTopicAction a:visited,
 .twikiDiffPage .twikiTopicAction a:link,
 .twikiDiffPage .twikiTopicAction a:visited {
-	border-bottom:1px solid #ccc;
+	border-bottom:0;
 	text-decoration:none;
-	font-weight:bold;
 	color:white;
 }
 .twikiViewPage .twikiTopicAction a:hover,
 .twikiDiffPage .twikiTopicAction a:hover {
 	text-decoration:none;
 	color:#0F47A3; /*C3*/
-	border-bottom:1px solid #b4d5ff; /*C2*/
-}
-.twikiViewPage .twikiTopicAction a:active,
-.twikiDiffPage .twikiTopicAction a:active {
-	color:white;
+	border-bottom:1px solid #1559B3; /*C1*/
 }
 
 /*	-----------------------------------------------------------

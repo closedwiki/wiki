@@ -21,15 +21,30 @@
 
 
 %TMPL:DEF{"twikistyle"}%
+<script type="text/javascript">
+<!-- 
+document.write("<style type='text/css'>");
+/* Default TWiki layout */
+if ("%TWIKILAYOUTURL%".split("?")[0].length) {
+	document.write("@import url(%TWIKILAYOUTURL%);"); 
+}
+/* Default TWiki style */
+if ("%TWIKISTYLEURL%".split("?")[0].length) {
+	document.write("@import url(%TWIKISTYLEURL%);"); 
+}
+/* Custom overriding layout per web or per topic */
+if ("%USERLAYOUTURL%".split("?")[0].length) {
+	document.write("@import url(%USERLAYOUTURL%);"); 
+}
+/* Custom overriding style per web or per topic */
+if ("%USERSTYLEURL%".split("?")[0].length) {
+	document.write("@import url(%USERSTYLEURL%);"); 
+}
+document.write("<\/style>"); 
+//-->
+</script>
 <style type="text/css" media="all">
-	/* Default TWiki layout */
-	@import url("%TWIKILAYOUTURL%");
-	/* Default TWiki style */
-	@import url("%TWIKISTYLEURL%");
-	/* Custom overriding layout per web or per topic */
-	@import url("%USERLAYOUTURL%");
-	/* Custom overriding style per web or per topic */
-	@import url("%USERSTYLEURL%");
+	/* Styles that are set using variables */
 	.twikiToc li {
 		list-style-image:url(%PUBURL%/%TWIKIWEB%/PatternSkin/i_arrow_down.gif);
 	}	        
