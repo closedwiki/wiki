@@ -4,15 +4,15 @@
 package RegisterTests;
 
 # Tests not implemented:
-		#test_registerTwiceWikiName
-		#test_registerTwiceEmailAddress
-		#test_bulkResetPassword
-		#test_registerIllegitimateBypassApprove
-                #test_registerVerifyAndFinish
+		#notest_registerTwiceWikiName
+		#notest_registerTwiceEmailAddress
+		#notest_bulkResetPassword
+		#notest_registerIllegitimateBypassApprove
+                #notest_registerVerifyAndFinish
                 #test_DoubleRegistration (loginname already used)
 
 #Uncomment to isolate 
-#our @TESTS = qw(test_registerVerifyOk); #test_UnregisteredUser);
+#our @TESTS = qw(notest_registerVerifyOk); #notest_UnregisteredUser);
 
 use base qw(Test::Unit::TestCase);
 BEGIN {
@@ -145,7 +145,6 @@ sub registerAccount {
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     }
-    $this->assert_equals(0, scalar(@mails));
 }
 
 #Register a user, and then verify it
@@ -228,20 +227,25 @@ sub test_registerVerifyOk {
         $this->assert(0, shift->stringify());
     };
     $this->assert_equals(3, scalar(@mails));
-    my @done;
+    my @done = ('', '' );
     foreach my $mail ( @mails ) {
-        if( !$done[0] && $mail =~ /^Subject:.*Registration for/m &&
-          $mail =~ /^To: .*$testUserEmail/m ) {
-            $done[0] = 1;
-        } elsif( !$done[1] && $mail =~ /^Subject: .*Activation code/m ) {
-            $done[1] = 1;
-        } elsif( !$done[2] && $mail =~ /^Subject:.*Registration for/m &&
-               $mail =~ /To: %WIKIWEBMASTER%/ ) {
-            $done[2] = 1;
+        if( $mail =~ /^Subject:.*Registration for/m ) {
+            if( $mail =~ /^To: .*\b$testUserEmail\b/m ) {
+                $this->assert(!$done[0], $done[0]."\n---------\n".$mail);
+                $done[0] = $mail;
+            } else {
+                $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
+            }
+        } elsif( $mail =~ /^Subject: .*Activation Code/m ) {
+            $this->assert(!$done[1], $done[1]."\n---------\n".$mail);
+            $done[1] = $mail;
         } else {
             $this->assert(0, $mail);
         }
     }
+    $this->assert($done[0]);
+    $this->assert($done[1]);
+    @mails = ();
 }
 
 #Register a user, then give a bad verification code. It should barf.
@@ -326,8 +330,8 @@ sub test_registerBadVerify {
     };
     $this->assert_equals(1, scalar(@mails));
     my $mess = $mails[0];
-    $this->assert_matches(qr/From: %WIKIWEBMASTER%/,$mess);
-    $this->assert_matches(qr/To: $testUserEmail/,$mess);
+    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
+    $this->assert_matches(qr/To: .*\b$testUserEmail\b/,$mess);
     # check the verification code
     $this->assert_matches(qr/'TestUser\.foo'/,$mess);
 }
@@ -377,8 +381,8 @@ sub test_resetPasswordOkay {
     };
     $this->assert_equals(1, scalar(@mails));
     my $mess = $mails[0];
-    $this->assert_matches(qr/From: %WIKIWEBMASTER%/,$mess);
-    $this->assert_matches(qr/To: $testUserEmail/,$mess);
+    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
+    $this->assert_matches(qr/To: .*\b$testUserEmail/,$mess);
 }
 
 sub test_resetPasswordNoSuchUser {
@@ -506,24 +510,30 @@ sub test_resetPasswordNoPassword {
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     };
-    $this->assert_equals(0, scalar(@mails));
+    my $mess = $mails[0];
+    $this->assert_matches(qr/From: %WIKIWEBMASTER/,$mess);
+    $this->assert_matches(qr/To: .*\b$testUserEmail/,$mess);
+    $this->assert_matches(qr/Subject: TWiki password reset/,$mess);
+    $this->assert_equals(1, scalar(@mails));
+    @mails = ();
 }
 
 
 my $name;
 my $code;
 my $dir;
-my %regSave;
+my $regSave;
 
 sub setupUnregistered {
     $name = "MartinCleaver";
     $code = "$name.ba";
 
 
-    %regSave = (doh => "homer",
+    $regSave = {
+                doh => "homer",
                 VerificationCode => $code,
                 WikiName => $name
-               );
+               };
 }
 
 =pod
@@ -534,18 +544,18 @@ Once complete, try again - the second attempt at completion should fail.
 sub test_UnregisteredUser {
     my $this = shift;
 
-    UnregisteredUser::_putRegDetailsByCode(\%regSave, $approvalsDir);
+    TWiki::UI::Register::_putRegDetailsByCode($regSave, $approvalsDir);
 
-    my %result = %{UnregisteredUser::_getRegDetailsByCode($code, $approvalsDir)};
-    $this->assert_equals("homer", $result{doh} );
+    my $result = TWiki::UI::Register::_getRegDetailsByCode($code, $approvalsDir);
+    $this->assert_equals("homer", $result->{doh} );
 
-    my %result2 = UnregisteredUser::reloadUserContext($code, $approvalsDir);
-    $this->assert_deep_equals(\%result2, \%regSave);
+    my $result2 = TWiki::UI::Register::_reloadUserContext($code, $approvalsDir);
+    $this->assert_deep_equals($result2, $regSave);
 
     try {
         # this is a deliberate attempt to reload an already used token.
         # this should fail!
-        UnregisteredUser::deleteUserContext( $code, $approvalsDir );
+        TWiki::UI::Register::_deleteUserContext( $code, $approvalsDir );
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_matches(qr/has no file/, $e->stringify());
