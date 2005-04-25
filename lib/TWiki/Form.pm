@@ -130,14 +130,15 @@ sub _parseFormDefinition {
     return \@fields;
 }
 
-
+# Chop out all except A-Za-z0-9_.
+# I'm sure there must have been a good reason for this once.
 sub _cleanField {
    my( $text ) = @_;
    $text = '' if( ! $text );
    # TODO: make this dependent on a 'character set includes non-alpha'
    # setting in TWiki.cfg - and do same in Render.pm re 8859 test.
    # I18N: don't get rid of non-ASCII characters
-   # $text =~ s/[^A-Za-z0-9_\.]//go; # Need do for web.topic
+   $text =~ s/[^A-Za-z0-9_\.]//go;
    return $text;
 }
 
