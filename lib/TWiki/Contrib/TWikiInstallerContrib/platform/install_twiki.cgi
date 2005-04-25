@@ -60,6 +60,7 @@ BEGIN {
     use FindBin;
     use Config;
     use File::Path qw( mkpath );
+    use Cwd qw( realpath );
 
     $cgibin = $FindBin::Bin;
     $home = (getpwuid($>))[7] or die "no home directory?";
@@ -83,7 +84,7 @@ BEGIN {
 	ScriptUrlPath    => "/cgi-bin/twiki",
 	ScriptSuffix     => $q->param( 'scriptsuffix' ) || '',# || '.cgi',
 	PubUrlPath       => "/htdocs/twiki",
-	PubDir           => "$cgibin/../htdocs/twiki",
+	PubDir           => realpath( "$cgibin/../htdocs/twiki" ),
 	TemplateDir      => "$home/twiki/templates",
 	DataDir          => "$home/twiki/data",
 	LogDir           => "$home/twiki/data",
