@@ -129,6 +129,8 @@ sub getTWikiLibDir {
 
 BEGIN {
 
+    use TWiki::Sandbox;   # system command sandbox
+
     $TRUE = 1;
     $FALSE = 0;
 
@@ -462,7 +464,6 @@ use TWiki::Net;       # SMTP, get URL
 use TWiki::Plugins;   # plugins handler
 use TWiki::Prefs;     # preferences
 use TWiki::Render;    # HTML generation
-use TWiki::Sandbox;   # system command sandbox
 use TWiki::Search;    # search engine
 use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Templates; # TWiki template language
