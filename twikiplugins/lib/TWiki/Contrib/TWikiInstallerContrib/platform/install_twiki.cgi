@@ -83,7 +83,7 @@ BEGIN {
 	ScriptUrlPath    => "/cgi-bin/twiki",
 	ScriptSuffix     => $q->param( 'scriptsuffix' ) || '',# || '.cgi',
 	PubUrlPath       => "/htdocs/twiki",
-	PubDir           => realpath( "$cgibin/../htdocs/twiki" ),
+	PubDir           => "$cgibin/../htdocs/twiki",
 	TemplateDir      => "$home/twiki/templates",
 	DataDir          => "$home/twiki/data",
 	LogDir           => "$home/twiki/data",
