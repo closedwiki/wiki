@@ -46,6 +46,8 @@ sub _set {
 
     open(F, ">$TWiki::cfg{DataDir}/$web/$topic.txt") || die;
     print F "\t* Set $pref = $val\n";
+    $text =~ s/Set $pref/Set #$pref/g;
+    $text =~ s/"$pref"/"#$pref"/g;
     print F "$text\n";
     close F;
 }
