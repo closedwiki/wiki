@@ -162,19 +162,20 @@ __DATA__
 
 install-remote-twiki.pl - fully automated network TWiki installation frontend
 
-Copyright 2004 Will Norris.  All Rights Reserved.
+Copyright 2004,2005 Will Norris.  All Rights Reserved.
 
 =head1 SYNOPSIS
 
-install-remote-twiki.pl --distro -kernel [-web ...]* [-install_account [twiki]] [-install_host [localhost]] [-install_dir=[~/Sites]] [-force|-f] [-plugin ...]* [-contrib ...]* [-addon ...]* [-report|-noreport] [-verbose] [-debug] [-help] [-man]
+install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -install_dir -force|-f [-plugin ...]* [-contrib ...]* [-addon ...]* [-report|-noreport] [-verbose] [-debug] [-help] [-man]
 
 =head1 OPTIONS
 
 =over 8
 
 =item B<-distro [distro]>				TWikiDistribution filename (in .tar or .tar.bz2 format)
+    (hardwrired to use the latest development version from twikiplugins.sourceforge.net)
 
-=item B<-kernel [kernel|LATEST]>			none currently, though perhaps it should be TWiki20040902.tar.gz
+=item B<-kernel [kernel|LATEST]>			
 
 =item B<-web [web]>					filename of web exported by TWiki:Codev.GetAWebAddOn
 
@@ -182,7 +183,7 @@ install-remote-twiki.pl --distro -kernel [-web ...]* [-install_account [twiki]] 
 
 =item B<-install_host [localhost]>			hostname to install wiki on
 
-=item B<-install_dir [~/Sites]>				TWiki:Codev.TWikiRootDirectory
+=item B<-install_dir [install_host]>			TWiki:Codev.TWikiRootDirectory
 
 =item B<-force|f>					Erase and overwrite an existing TWiki installation CAUTION!
 
