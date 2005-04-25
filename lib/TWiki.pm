@@ -1172,10 +1172,12 @@ sub writeLog {
 
     if ($user eq "TWikiGuest") {
        my $cgiQuery = $this->{cgiQuery};
-       my $agent = $cgiQuery->user_agent();
-       if( $agent ) {
-           $agent =~ m/([\w]+)/;
-           $extra .= ' '.$1;
+       if( $cgiQuery ) {
+           my $agent = $cgiQuery->user_agent();
+           if( $agent ) {
+               $agent =~ m/([\w]+)/;
+               $extra .= ' '.$1;
+           }
        }
     }
 
