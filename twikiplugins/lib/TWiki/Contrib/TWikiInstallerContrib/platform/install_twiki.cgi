@@ -60,7 +60,6 @@ BEGIN {
     use FindBin;
     use Config;
     use File::Path qw( mkpath );
-    use Cwd qw( realpath );
 
     $cgibin = $FindBin::Bin;
     $home = (getpwuid($>))[7] or die "no home directory?";
@@ -109,6 +108,7 @@ use XML::Simple;
 use Archive::Any;
 use File::Slurp qw( read_file write_file );
 use CPAN;
+use Cwd qw( realpath );
 
 ################################################################################
 
@@ -142,6 +142,12 @@ unless ( $q->param( 'kernel' ) && ($q->param('install') || '') =~ /install/i )
 ################################################################################
 # INSTALL
 ################################################################################
+
+# normalise pathnames (Sandbox.pm doesn't like .. in pathnames!)
+foreach my $dir ( PubUrlPath PubDir TemplateDir DataDir LogDir )
+{
+    $localDirConfig->{ $dir } = realpath( $localDirConfig->{ $dir } );
+}
 
 my $mapTWikiDirs = {
     lib => { dest => "$cgibin/lib" },
