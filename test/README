@@ -45,7 +45,7 @@ perl ../bin/TestRunner.pl viewScriptTest.pm
 
 If this is still too much information, open the testcase and disable all but one of the tests (the easiest way to do this it to change "sub test_..." to "sub notest_...".
 
-If you are now getting a diff all compressed onto a single line, you can tell the comparison not to fiddle with newlines by changing the last parameter of the "compare" to a 0 (which means, don;t strip newlines).
+If you are now getting a diff all compressed onto a single line, you can tell the comparison not to fiddle with newlines by changing the last parameter of the "compare" to a 0 (which means, don't strip newlines).
 
 If you are still getting diffs, it's probably because you have corrupted your data areas somehow (or the code is broken!)
 
