@@ -6,8 +6,9 @@ use Data::Dumper qw( Dumper );
 ++$|;
 
 # TODO:
-#  * change ( install_account, install_host, install_dir ) into a URI
+#  * convert command line parameters to URI's
 #  * update man pod docs {grin}
+#  * interactive/confirmation mode
 
 BEGIN {
     my $dirHome = $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
@@ -31,13 +32,13 @@ my $Config = {
     kernel => undef,
 #    web => '',
 	# TODO: change to use a URI (?)
-	install_account => mychomp( `whoami` ),
-	install_host => 'localhost',
-	install_dir => '~/Sites',
+	install_account => undef,
+	install_host => undef,
+	install_dir => undef,
+	cgiurl => undef,
 #
 	scriptsuffix => '',
 	perl => '/usr/bin/perl',
-	cgibin => '',
 #	installurl = 'localhost/~twiki',
 	report => 1,
 #
@@ -52,7 +53,7 @@ my $Config = {
 Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
 			'distro=s', 'kernel=s', 'web=s@',
-			 'scriptsuffix=s', 'perl=s', 'cgibin=s',
+			 'scriptsuffix=s', 'perl=s', 'cgiurl=s',
 # plugin, addon, contrib
 			'plugin=s@', 'addon=s@', 'contrib=s@',
 # install_account, install_host, install_dir
@@ -63,7 +64,11 @@ my $result = GetOptions( $Config,
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
-$Config->{cgibin} ||= "/home/$Config->{install_account}/$Config->{install_host}";
+# generated config variables
+$Config->{distro} = 'http://twikiplugins.sourceforge.net/twiki.tar.bz2';
+$Config->{cgibin} = $Config->{install_dir} . "/cgi-bin";
+
+# set defaults
 $Config->{plugin} ||= [ qw( TWikiReleaseTrackerPlugin ) ];
 $Config->{contrib} ||= [ qw( DistributionContrib ) ];
 $Config->{addon} ||= [ qw( GetAWebAddOn ) ];
@@ -71,8 +76,11 @@ $Config->{web} ||= [ qw() ];
 print Dumper( $Config ) if $Config->{debug};
 
 # check installation requirements
-$Config->{distro} = 'http://twikiplugins.sourceforge.net/twiki.tar.bz2';
-die "no distro?" unless $Config->{distro};
+#$Config->{cgiurl} =~ m|cgi-bin/?$| or die "cgiurl must end with 'cgi-bin' (feel free to send patches;-)";
+$Config->{install_account} or die "no install_account?";
+$Config->{install_host} or die "no install_host?";
+$Config->{install_dir} or die "no install_dir?";
+$Config->{distro} or die "no distro?";
 
 ################################################################################
 # install 
@@ -83,7 +91,7 @@ $Config->{isInstalled} = 1;
 END {
 	if ( $Config->{isInstalled} && $Config->{report} )
 	{ # final installation report
-		WebBrowser({ url => "http://$Config->{install_host}/~$Config->{install_account}/cgi-bin/twiki/view/TWiki/TWikiInstallationReport" })
+	    WebBrowser({ url => URI->new( "$Config->{cgiurl}/twiki/view/TWiki$Config->{scriptsuffix}/TWikiInstallationReport" ) });
 	}
 }
 
@@ -117,26 +125,24 @@ sub PushRemoteTWikiInstall
 	die "no install_host?" unless $parms->{install_host};
 	die "no install_dir?" unless $parms->{install_dir};
 
-	# no "funny" characters in SERVER_NAME (well, encode them if they're there)
 	my $SERVER_NAME = $Config->{install_host};
-	my $DHACCOUNT = $Config->{install_account};
 
 	if ( $Config->{force} )
 	{	    
 	    # CAUTION: erase an existing installation
-	    logSystem( qq{ssh $DHACCOUNT\@$SERVER_NAME "cd $SERVER_NAME && chmod -R a+rwx . && rm -rf *"} );
+	    logSystem(qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && chmod -R a+rwx . && rm -rf *"});
 	}
 
 	# untar the tarball from sourceforge.net, install prerequisite CPAN modules
 	$Config->{verbose} &&
 	    print "Downloading TWiki distribution and installing CPAN modules (this can take many minutes...)\n";
-	logSystem( qq{ssh $DHACCOUNT\@$SERVER_NAME "cd $SERVER_NAME && wget -q http://twikiplugins.sourceforge.net/twiki.tar.bz2 -O - | tar xj && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
+	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && wget -q http://twikiplugins.sourceforge.net/twiki.tar.bz2 -O - | tar xj && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
 
 	# install the actual wiki and extensions
 	$Config->{verbose} && print "Installing TWiki and TWikiExtensions\n";
 
 	use URI;
-	my $urlInstallWithConfig = URI->new( "http://$SERVER_NAME/cgi-bin/install_twiki.cgi" );
+	my $urlInstallWithConfig = URI->new( "$Config->{cgiurl}/install_twiki.cgi" );
 	$urlInstallWithConfig->query_form({ 
 		plugin => $parms->{plugin}, 
 		addon => $parms->{addon}, 
@@ -172,18 +178,20 @@ install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -inst
 
 =over 8
 
-=item B<-distro [distro]>				TWikiDistribution filename (in .tar or .tar.bz2 format)
+=item B<-distro [distro]>				TWikiDistribution filename (.tar.bz2)
     (hardwrired to use the latest development version from twikiplugins.sourceforge.net)
 
 =item B<-kernel [kernel|LATEST]>			
 
 =item B<-web [web]>					filename of web exported by TWiki:Codev.GetAWebAddOn
 
-=item B<-install_account [twiki]>			account name under which to install the wiki
+=item B<-install_account>				account name under which to install the wiki
 
-=item B<-install_host [localhost]>			hostname to install wiki on
+=item B<-install_host>					hostname to install wiki on
 
-=item B<-install_dir [install_host]>			TWiki:Codev.TWikiRootDirectory
+=item B<-install_dir>					TWiki:Codev.TWikiRootDirectory
+
+=item B<-cgiurl> 					.
 
 =item B<-force|f>					Erase and overwrite an existing TWiki installation CAUTION!
 
