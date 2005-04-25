@@ -143,15 +143,8 @@ sub _cleanField {
 }
 
 
-=pod
-
----++ StaticMethod getPossibleFieldValues (  $text  )
-
-Possible field values for select, checkbox, radio from supplied topic text
-
-=cut
-
-sub getPossibleFieldValues {
+# Possible field values for select, checkbox, radio from supplied topic text
+sub _getPossibleFieldValues {
     my( $text ) = @_;
     my @defn = ();
     my $inBlock = 0;
@@ -161,8 +154,6 @@ sub getPossibleFieldValues {
         } else {
             if( /^\s*\|\s*([^|]*)\s*\|/ ) {
                 my $item = $1;
-                $item =~ s/\s+$//go;
-                $item =~ s/^\s+//go;
                 if( $inBlock ) {
                     push @defn, $item;
                 }
@@ -211,7 +202,7 @@ sub getFormDef {
         my @posValues = ();
 
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
-            @posValues = split( /[,\s]+/, $fieldDef->{value} );
+            @posValues = split( /,/, $fieldDef->{value} );
 
             if( !scalar( @posValues ) && $store->topicExists( $webName, $fieldDef->{name} ) ) {
                 # If no values are defined, see if we can get them from
@@ -221,9 +212,10 @@ sub getFormDef {
                                      undef );
                 # http://twiki.org/cgi-bin/view/Codev/DynamicFormOptionDefinitions
                 $text = $this->{session}->handleCommonTags( $text, $form, $webName );
-                @posValues = getPossibleFieldValues( $text );
+                @posValues = _getPossibleFieldValues( $text );
                 $fieldDef->{type} ||= 'select';  #FIXME keep?
             }
+            @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
             $fieldDef->{value} = \@posValues;
         }
     }

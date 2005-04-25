@@ -310,7 +310,7 @@ sub attachmentExists {
 
 =pod
 
----++ ObjectMethod moveTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $doChangeRefTo  $user ) -> $error
+---++ ObjectMethod moveTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $user ) -> $error
 
 It is the responsibility of the caller to check for existence of webs,
 topics & lock taken for topic

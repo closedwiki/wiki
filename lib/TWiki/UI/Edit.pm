@@ -140,6 +140,7 @@ sub edit {
         unless( $text ) {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, 'WebTopicEditTemplate' );
         }
+
         $extra = "(not exist)";
 
         # If present, instantiate form
@@ -150,6 +151,9 @@ sub edit {
 
         $text = $session->expandVariablesOnTopicCreation( $text, $user );
     }
+
+    # override with parameter if set
+    $text = $ptext if defined $ptext;
 
     # Insert the rev number we are editing. This will be boolean false if
     # this is a new topic.
@@ -216,14 +220,15 @@ sub edit {
         # if there's a form template, and no text defined in the save, then
         # get form data values from the form topic.
         my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
-        $session->{form}->fieldVars2Meta( $webName,  $session->{cgiQuery}, $meta,
-                               'override' );
+        $session->{form}->fieldVars2Meta( $webName,  $session->{cgiQuery},
+                                          $meta,
+                                          'override' );
         $formText = $session->{form}->renderForEdit
           ( $webName, $topic, $templateWeb, $form, $meta,
             $getValuesFromFormTopic );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
-        # follows a hybrid html monster to let the 'choose form button' align at
+        # follows a html monster to let the 'choose form button' align at
         # the right of the page in all browsers
         $form = CGI::submit(-name => 'submitChangeForm',
                             -value => 'Add form',
