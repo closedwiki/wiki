@@ -39,7 +39,6 @@ my $Config = {
 #
 	scriptsuffix => '',
 	perl => '/usr/bin/perl',
-#	installurl = 'localhost/~twiki',
 	report => 1,
 #
 	force => 0,
@@ -76,7 +75,7 @@ $Config->{web} ||= [ qw() ];
 print Dumper( $Config ) if $Config->{debug};
 
 # check installation requirements
-#$Config->{cgiurl} =~ m|cgi-bin/?$| or die "cgiurl must end with 'cgi-bin' (feel free to send patches;-)";
+$Config->{cgiurl} =~ m|cgi-bin/?$| or die "cgiurl must end with 'cgi-bin' (feel free to send patches;-)";
 $Config->{install_account} or die "no install_account?";
 $Config->{install_host} or die "no install_host?";
 $Config->{install_dir} or die "no install_dir?";
@@ -108,7 +107,7 @@ sub WebBrowser
 	print STDERR "WebBrowser: ", Dumper( $parms ) if $parms->{debug};
 	my $url = $parms->{url} or die "url?";
 	
-	logSystem( open => $url );
+	logSystem( firefox => $url );
 }
 ################################################################################
 ################################################################################
