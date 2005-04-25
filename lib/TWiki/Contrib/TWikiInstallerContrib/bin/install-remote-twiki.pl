@@ -38,7 +38,7 @@ my $Config = {
 	cgiurl => undef,
 #
 	scriptsuffix => '',
-	perl => '/usr/bin/perl',
+	perl => undef,
 	report => 1,
 #
 	force => 0,
@@ -68,10 +68,10 @@ $Config->{distro} = 'http://twikiplugins.sourceforge.net/twiki.tar.bz2';
 $Config->{cgibin} = $Config->{install_dir} . "/cgi-bin";
 
 # set defaults
-$Config->{plugin} ||= [ qw( TWikiReleaseTrackerPlugin ) ];
-$Config->{contrib} ||= [ qw( DistributionContrib ) ];
-$Config->{addon} ||= [ qw( GetAWebAddOn ) ];
-$Config->{web} ||= [ qw() ];
+$Config->{plugin} ||= [];	# qw( TWikiReleaseTrackerPlugin ) ];
+$Config->{contrib} ||= [];	# qw( DistributionContrib ) ];
+$Config->{addon} ||= [];	# qw( GetAWebAddOn ) ];
+$Config->{web} ||= [];
 print Dumper( $Config ) if $Config->{debug};
 
 # check installation requirements
