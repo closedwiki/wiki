@@ -149,7 +149,7 @@ sub PushRemoteTWikiInstall
 		localweb => $parms->{localweb},
 		kernel => $parms->{kernel},
 		scriptsuffix => $parms->{scriptsuffix},
-		PERL => $parms->{perl},
+		perl => $parms->{perl},
 		cgibin => $parms->{cgibin},
 		install => 'install',
 	});
