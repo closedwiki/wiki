@@ -692,6 +692,7 @@ RIGHT($n);
 LEFT("EgrepCmd");
 $n = $cfg{RCS}{EgrepCmd}.
   NOTE("This is a program TWiki uses for searching." );
+$cfg{RCS}{EgrepCmd} =~ s/ .*//;   # Strip any options
 $val = $cfg{RCS}{EgrepCmd} . $exeSuffix;
 $val =~ s/([^\s]*).*/$1/go;
 if( ! ( -e $val ) ) {
