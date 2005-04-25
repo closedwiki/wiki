@@ -206,9 +206,10 @@ BEGIN {
 
     # Validate and untaint Apache's SERVER_NAME Environment variable
     # for use in referencing virtualhost-based paths for separate data/ and templates/ instances, etc
-    if ( $ENV{SERVER_NAME} =~ /^(([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6})$/ ) {
-      # SMELL - I thought it would be a TWiki::Sandbox::untaintChecked?
-      $ENV{SERVER_NAME} = $1 ;
+    if ( $ENV{SERVER_NAME} &&
+         $ENV{SERVER_NAME} =~ /^(([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6})$/ ) {
+        $ENV{SERVER_NAME} =
+          TWiki::Sandbox::untaintUnchecked( $ENV{SERVER_NAME} );
     }
 
     # Get LocalSite first, to pick up definitions of things like
@@ -1171,8 +1172,10 @@ sub writeLog {
     if ($user eq "TWikiGuest") {
        my $cgiQuery = $this->{cgiQuery};
        my $agent = $cgiQuery->user_agent();
-       $agent =~ m/([\w]+)/;
-       $extra .= $1;
+       if( $agent ) {
+           $agent =~ m/([\w]+)/;
+           $extra .= ' '.$1;
+       }
     }
 
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || '';
