@@ -36,6 +36,7 @@ my $home;
 my $tmp;
 my ( $VIEW, $TESTENV );
 my $PERL;
+my $administrator;
 my $q;	# CGI object
 
 ################################################################################
@@ -92,6 +93,8 @@ BEGIN {
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
 
     $PERL = $q->param( 'perl' ) || findProgramOnPaths( 'perl' );
+
+    $administrator = $q->param( 'administrator' ) || '';
 }
 use strict;
 use Error qw( :try );
@@ -470,6 +473,9 @@ $text .= <<__HTML__;
 <b>perl</b> (full path): <input type="text" size="25" name="PERL" value="$PERL" /><br />
 <small><small>may also be the name of a perl accelerator, e.g,. <a target="details" href="http://www.daemoninc.com/SpeedyCGI/">SpeedyCGI</a></small></small><br />
 <b>cgi-bin directory</b>: <input type="text" size="25" name="cgibin" value="$cgibin" /><br />
+
+<h2>TWiki Settings</h2>
+<b>TWikiAdmin</b>: <input type="text" size="20" name="administrator" value="$administrator" /><br />
 __HTML__
 
 ################################################################################
