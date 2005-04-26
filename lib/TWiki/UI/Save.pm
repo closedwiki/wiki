@@ -175,7 +175,7 @@ sub _save {
     }
 
     # Expand field variables.
-    $session->{form}->fieldVars2Meta( $webName, $query, $newMeta );
+    $session->{form}->fieldVars2Meta( $webName, $query, $newMeta, 0, 1 ) unless $templatetopic;
     $newMeta->updateSets( \$newText );
 
     # assumes rev numbers start at 1

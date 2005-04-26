@@ -191,6 +191,12 @@ sub edit {
         $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
     }
 
+    #TW: Why did this get removed?
+    if( defined $ptext ) {
+      $text = $ptext;
+      #$text = &TWiki::Render::decodeSpecialChars( $text );
+    }
+
     if( $saveCmd ) {
         $text = $session->{store}->readTopicRaw( $session->{user}, $webName,
                                                  $topic, undef );
@@ -230,22 +236,21 @@ sub edit {
     } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
         # follows a html monster to let the 'choose form button' align at
         # the right of the page in all browsers
-        $form = CGI::submit(-name => 'submitChangeForm',
-                            -value => 'Add form',
-                            -class => "twikiChangeFormButton twikiSubmit");
-        $form = CGI::Tr(CGI::td( { align=>'right' }, $form ));
-        $form = CGI::table( { width=>'100%',
-                              border=>0,
-                              cellspacing=>0,
-                              cellpadding=>0,
-                              class=>'twikiChangeFormButtonHolder' }, $form );
-        $form = CGI::div( { style=>'text-align:right;' }, $form );
+        my $formText = CGI::submit(-name => 'submitChangeForm',
+				   -value => 'Add form',
+				   -class => "twikiChangeFormButton twikiSubmit");
+        $formText = CGI::Tr(CGI::td( { align=>'right' }, $formText ));
+        $formText = CGI::table( { width=>'100%',
+				  border=>0,
+				  cellspacing=>0,
+				  cellpadding=>0,
+				  class=>'twikiChangeFormButtonHolder' }, $formText );
+        $formText = CGI::div( { style=>'text-align:right;' }, $formText );
 
-        $tmpl =~ s/%FORMFIELDS%/$form/go;
+        $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } else {
         $tmpl =~ s/%FORMFIELDS%//go;
     }
-
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
     my $p = $session->{prefs};
 

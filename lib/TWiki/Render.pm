@@ -201,17 +201,22 @@ sub _renderFormData {
     return '' unless( $form );
 
     my $name = $form->{name};
-    my $metaText = CGI::start_table( { border=>1, cellspacing=>0, cellpadding=>1,
-                                       cols => 2, class=>'twikiForm' });
+    my $metaText = CGI::start_table( { border=>1, cellspacing=>0, cellpadding=>1, cols => 2 });
     $metaText .= CGI::th( { colspan => 2 }, "[[$name]]" );
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
         my $title = $field->{title};
         my $value = $field->{value};
-        $value =~ s/\n/<br \/>/g;      # undo expansion
+	# change any new line character sequences to <br />
+        #$value =~ s/\n/<br \/>/g;      # undo expansion
+	$value =~ s/(\n\r?)|(\r\n?)+/<br \/>/gos;
+	# escape "|" to HTML entity
+	$value =~ s/\|/\&\#124;/gos;
         $metaText .= CGI::Tr( CGI::td( $title ) . CGI::td( "\n$value\n" ));
     }
-    return $metaText.CGI::end_table();
+    #return $metaText.CGI::end_table();
+    $metaText .= CGI::end_table();
+    return CGI::div( { class => 'twikiForm' }, $metaText );
 }
 
 # Add a list item, of the given type and indent depth. The list item may
@@ -1160,7 +1165,7 @@ sub renderMetaTags {
     }
 
     $text =~ s/%META{\s*"form"\s*}%/$this->_renderFormData( $theWeb, $theTopic, $meta )/ge;    #this renders META:FORM and META:FIELD
-    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/$this->_renderFormField( $meta, $1 )/ge;                 #TODO: what does this do? (is this the old forms system, and so can be deleted)
+    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/$this->_renderFormField( $meta, $1 )/ge;         #renders a formfield from within topic text
     $text =~ s/%META{\s*"attachments"\s*(.*)}%/$this->{session}->{attach}->renderMetaData( $theWeb, $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
     $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information

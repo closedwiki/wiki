@@ -53,7 +53,8 @@ sub new {
 # Get definition from supplied topic text
 # Returns array of arrays
 #   1st - list fields
-#   2nd - name, title, type, size, vals, tooltip, setting
+#   2nd - name, title, type, size, vals, tooltip, attributes
+#   Possible attributes are "S" (field used as setting), "M" (mandatory field)
 sub _parseFormDefinition {
     my( $this, $text ) = @_;
 
@@ -98,6 +99,7 @@ sub _parseFormDefinition {
                 }
 
                 $vals ||= '';
+		$vals =~ s/%SEARCH{(.*?)}%/&TWiki::_SEARCH($this->{session}, new TWiki::Attrs($1), $this->{session}->{webName}, $this->{session}->{topicName})/geo;
                 $vals =~ s/^\s*//go;
                 $vals =~ s/\s*$//go;
 
@@ -112,6 +114,12 @@ sub _parseFormDefinition {
                 $tooltip =~ s/^\s*//go;
                 $tooltip =~ s/\s*$//go;
 
+		my $referenced = "";
+		if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
+		  $referenced = _cleanField( $1 );        # topics with diff.
+		  $title = $2;                            # field titles
+		}
+
                 push( @fields,
                       { name => _cleanField( $title ),
                         title => $title,
@@ -120,6 +128,7 @@ sub _parseFormDefinition {
                         value => $vals,
                         tooltip => $tooltip,
                         attributes => $attributes,
+			referenced => $referenced
                       } );
             } else {
                 $inBlock = 0;
@@ -138,6 +147,9 @@ sub _cleanField {
    # TODO: make this dependent on a 'character set includes non-alpha'
    # setting in TWiki.cfg - and do same in Render.pm re 8859 test.
    # I18N: don't get rid of non-ASCII characters
+   # TW: this is applied to the key in the field; it is not obvious
+   # why we need I18N in the key (albeit there could be collisions due
+   # to the filtering... but all the current topics are keyed on _cleanField
    $text =~ s/[^A-Za-z0-9_\.]//go;
    return $text;
 }
@@ -154,6 +166,8 @@ sub _getPossibleFieldValues {
         } else {
             if( /^\s*\|\s*([^|]*)\s*\|/ ) {
                 my $item = $1;
+                $item =~ s/\s+$//go;
+                $item =~ s/^\s+//go;
                 if( $inBlock ) {
                     push @defn, $item;
                 }
@@ -203,18 +217,18 @@ sub getFormDef {
 
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
             @posValues = split( /,/, $fieldDef->{value} );
-
-            if( !scalar( @posValues ) && $store->topicExists( $webName, $fieldDef->{name} ) ) {
+	    my $topic = $fieldDef->{referenced} || $fieldDef->{name};
+            if( !scalar( @posValues ) && $store->topicExists( $webName, $topic ) ) {
                 # If no values are defined, see if we can get them from
                 # the topic of the same name as the field
                 my( $meta, $text ) =
-                  $store->readTopic( $this->{session}->{user}, $webName, $fieldDef->{name},
-                                     undef );
-                # http://twiki.org/cgi-bin/view/Codev/DynamicFormOptionDefinitions
-                $text = $this->{session}->handleCommonTags( $text, $form, $webName );
+                  $store->readTopic( $this->{session}->{user}, $webName, $topic, undef );
+		# Add processing of SEARCHES for Lists
+		$text =~ s/%SEARCH{(.*?)}%/&TWiki::_SEARCH($this->{session}, new TWiki::Attrs($1), $this->{session}->{webName}, $this->{session}->{topicName})/geo;
                 @posValues = _getPossibleFieldValues( $text );
                 $fieldDef->{type} ||= 'select';  #FIXME keep?
             }
+	    #FIXME duplicates code in _getPossibleFieldValues?
             @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
             $fieldDef->{value} = \@posValues;
         }
@@ -224,29 +238,29 @@ sub getFormDef {
 }
 
 sub _link {
-    my( $this, $web, $name, $tooltip ) = @_;
+    my( $this, $web, $name, $tooltip, $target ) = @_;
 
     $name =~ s/[\[\]]//go;
 
     my $link = $name;
+    $target = $name unless $target;
 
     my $store = $this->{session}->{store};
-    if( $store->topicExists( $web, $name ) ) {
-        ( $web, $name ) = $this->{session}->normalizeWebTopicName( $web, $name );
+    if( $store->topicExists( $web, $target ) ) {
+        ( $web, $target ) = $this->{session}->normalizeWebTopicName( $web, $target );
         if( ! $tooltip ) {
             $tooltip = 'Click to see details in separate window';
         }
         $link =
-          CGI::a( { target => $name,
+          CGI::a( { target => $target,
                     onclick => 'return launchWindow("'.$web.'","'.$name.'")',
                     title => $tooltip,
-                    href =>$this->{session}->getScriptUrl($web, $name, 'view'),
+                    href =>$this->{session}->getScriptUrl($web, $target, 'view'),
                     rel => 'nofollow'
                   }, $name );
     } elsif ( $tooltip ) {
         $link = CGI::span( { -title=>$tooltip }, $name );
     }
-
 
     return $link;
 }
@@ -267,6 +281,7 @@ sub renderForEdit {
     ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
     my $session = $this->{session};
 
+    my $mandatoryFieldsPresent = 0;
     my $chooseForm = '';
     my $prefs = $session->{prefs};
     if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
@@ -290,6 +305,8 @@ sub renderForEdit {
         my $size = $c->{size};
         my $tooltip = $c->{tooltip};
         my $attributes = $c->{attributes};
+	my $referenced = $c->{referenced};
+	$mandatoryFieldsPresent = 1 if $attributes =~ /M/;
 
         my $field;
         my $value;
@@ -303,7 +320,8 @@ sub renderForEdit {
             $value = $prefs->getPreferencesValue($name);
         }
         if( $getValuesFromFormTopic && !defined( $value ) &&
-            $type !~ /^(checkbox|radio|select)/ ) {
+	    #TW: was (checkbox|radio|select)
+            $type !~ /^checkbox/ ) {
 
             # Try and get a sensible default value from the form
             # definition. Doesn't make sense for checkboxes,
@@ -314,7 +332,8 @@ sub renderForEdit {
             }
         }
         $value = '' unless defined $value;  # allow 0 values
-        my $extra = '';
+	#TW: should use style
+	my $extra = ($attributes =~ /M/) ? "<font color=\"red\">*</font>" : "";
 
         my $output = $session->{plugins}->renderFormFieldForEditHandler
           ( $name, $type, $size, $value, $attributes, $c->{value} );
@@ -328,9 +347,18 @@ sub renderForEdit {
                                      -value => $value );
 
         } elsif( $type eq 'label' ) {
-            $value = CGI::div( { class => 'twikiEditFormLabelField' },
-                               $session->{renderer}->getRenderedVersion
-                               ( $session->handleCommonTags( $c->{value}, $web, $topic )));
+	    # Interesting question: if something is defined as "label",
+	    # could it be changed by applications or is the value 
+	    # necessarily identical to what is in the form? If we can
+	    # take it from the text, we must be sure it cannot be
+	    # changed through the URL?
+	    my $renderedValue = $session->{renderer}->getRenderedVersion
+                               ( $session->handleCommonTags( $value, $web, $topic ));
+	    $value = CGI::hidden( -name => $name,
+				  -class => 'twikiEditFormLabelField',
+				  -value => $renderedValue );
+            $value .= CGI::div( { class => 'twikiEditFormLabelField' },
+				$renderedValue );
 
         } elsif( $type eq 'textarea' ) {
             my $cols = 40;
@@ -379,6 +407,7 @@ sub renderForEdit {
             my %attrs;
             my @defaults;
             foreach my $item ( @$options ) {
+	        #NOTE: Does not expand $item in label
                 $attrs{$item} =
                   { class=>'twikiEditFormCheckboxField',
                     label=>$session->handleCommonTags( $item,
@@ -427,19 +456,27 @@ sub renderForEdit {
         }
         $text .= CGI::Tr(CGI::th( { align => 'right',
                                     bgcolor=>'#99CCCC'},
-                                  $this->_link( $web, $title, $tooltip).
+				  # TW: Maybe do not link field headings
+				  #$title .
+                                  $this->_link( $web, $title, $tooltip, $referenced).
                                   $extra ).
                          CGI::td( { -align=>'left' } , $value ));
     }
     $text .= CGI::end_table();
 
-    return CGI::div({-class=>'twikiForm twikiEditForm'}, $text );
+    $text = CGI::div({-class=>'twikiForm twikiEditForm'}, $text);
+
+    # TW should add stye
+    $text .= "<font color=\"red\">* indicates mandatory fields</font>\n" if $mandatoryFieldsPresent;
+
+    return $text;
+
 }
 
 
 =pod
 
----++ ObjectMethod fieldVars2Meta($webName, $query, $metaObject, $justOverride) -> $metaObject
+---++ ObjectMethod fieldVars2Meta($webName, $query, $metaObject, $justOverride, $handleMandatory) -> $metaObject
 
 Extract new values of form fields from a query.
 
@@ -450,7 +487,7 @@ May throw TWiki::OopsException
 =cut
 
 sub fieldVars2Meta {
-    my( $this, $webName, $query, $meta, $justOverride ) = @_;
+    my( $this, $webName, $query, $meta, $justOverride, $handleMandatory ) = @_;
     ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
     ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
 
@@ -467,17 +504,26 @@ sub fieldVars2Meta {
        next unless $fieldDef->{name};
 
        my $value = $query->param( $fieldDef->{name} );
-       if( defined $value ) {
-           if( $fieldDef->{type} =~ /^checkbox/ ) {
-               $value = join( ', ', $query->param( $fieldDef->{name} ) );
-           } else {
-               $value = $query->param( $fieldDef->{name} );
-           }
+       if( $fieldDef->{type} =~ /^checkbox/ ) {
+	 my @checked = $query->param ( $fieldDef->{name} );
+	 $value = shift @checked;
+	 foreach my $val (@checked) {
+	   $value .= ", $val";
+	 }
        }
 
        # title and name are stored so that topic can be viewed without
        # reading in form definition
        $value = '' unless( defined( $value ) || $justOverride );
+       my $mandatory = ($fieldDef->{attributes} =~ /M/)?1:0;
+       if ( ($value eq "") && $handleMandatory && $mandatory ) {
+	 # Create own oops, find topic instead of "" requires passing it 
+	 # in from caller as $query->param('topic') has been changed.
+	 throw TWiki::OopsException( 'fielderr',
+				     web => $this->{session}->{webName},
+				     topic => $this->{session}->{topicName},
+				     params => [ $fieldDef->{title} ] );
+       }
        if( defined( $value ) ) {
            my $args =
              {

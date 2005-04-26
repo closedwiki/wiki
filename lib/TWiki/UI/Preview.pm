@@ -109,7 +109,7 @@ sub preview {
         }
 
         # get the edited text and combine text, form and attachments for preview
-        $session->{form}->fieldVars2Meta( $webName, $query, $meta );
+        $session->{form}->fieldVars2Meta( $webName, $query, $meta, 0, 1 );
         $text = $textparam;
         $session->{plugins}->afterEditHandler( $text, $topic, $webName );
         $ptext = $text;
