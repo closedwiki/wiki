@@ -21,7 +21,7 @@ These installation steps are based on the *Apache* web server on *Linux*. TWiki 
 #StandardInstallation
 ---++ Standard Installation
 
-Download the TWiki distribution in Unix ZIP format from http://TWiki.org/download.html. Please review the AdminSkillsAssumptions before you install TWiki.
+Download the TWiki distribution in ZIP format from http://TWiki.org/download.html. Please review the AdminSkillsAssumptions before you install TWiki.
 
 ---+++ Step 1: Create &amp; Configure the Directories
 
