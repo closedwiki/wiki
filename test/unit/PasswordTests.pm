@@ -12,7 +12,6 @@ BEGIN {
 use TWiki;
 use TWiki::Users::HtPasswdUser;
 use TWiki::Users::NoPasswdUser;
-use TWiki::Users::ApacheHtpasswdUser;
 my $saveenc;
 my $savefile;
 my $saveman;
@@ -383,6 +382,13 @@ sub test_htpasswd_plain {
 
 sub test_htpasswd_apache {
     my $this = shift;
+
+    eval 'use TWiki::Users::ApacheHtpasswdUser';
+    if( $@ ) {
+        print STDERR "SKIPPED APACHE HTPASSWD TESTS: $@";
+        return;
+    }
+
     my $impl = new TWiki::Users::ApacheHtpasswdUser();
     # apache doesn't create the file, so need to init it
     `touch $TWiki::cfg{Htpasswd}{FileName}`;
