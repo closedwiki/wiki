@@ -90,7 +90,7 @@ $Config->{isInstalled} = 1;
 END {
 	if ( $Config->{isInstalled} && $Config->{report} )
 	{ # final installation report
-	    WebBrowser({ url => URI->new( "$Config->{cgiurl}/twiki/view/TWiki$Config->{scriptsuffix}/TWikiInstallationReport" ) });
+	    WebBrowser({ url => URI->new( "$Config->{cgiurl}/twiki/view$Config->{scriptsuffix}/TWiki/TWikiInstallationReport" ) });
 	}
 }
 
