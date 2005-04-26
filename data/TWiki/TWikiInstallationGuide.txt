@@ -66,7 +66,7 @@ To install TWiki on a system where you don't have Unix/Linux root (administrator
 ---+++ Step 2: Set File Permissions
 
 	* Make sure Perl 5 and the Perl CGI library are installed on your system. The default location of Perl is =/usr/bin/perl=.
-		* %X% *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory, or create a symbolic link from =/usr/bin/perl=.
+		* %X% *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory.  If you have root access, you can create a symbolic link from =/usr/bin/perl=.
 		* %X% *Some systems require a =.cgi= extension on perl scripts*, for example some ISP-hosted accounts. Rename all files in =twiki/bin= if necessary (e.g. rename =view= to =view.pl= etc). Alternatively, you may be able to create a file =twiki/bin/.htaccess= that contains the single line =SetHandler cgi-script=, which tells Apache to treat all files in this directory as CGI scripts. If you rename the scripts, make sure you set the =ScriptSuffix= option in Step 3.
 
 	* Make sure the permissions will let TWiki operate.
