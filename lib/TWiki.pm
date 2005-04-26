@@ -397,9 +397,13 @@ BEGIN {
     # Multi-character alpha-based regexes
     $regex{mixedAlphaNumRegex} = qr/[$regex{mixedAlphaNum}]*/o;
 
+    # %TAG% name
+    $regex{tagNameRegex} = qr/[$regex{upperAlpha}][$regex{upperAlphaNum}_:]*/o;
+
     # Set statement in a topic
     $regex{bulletRegex} = qr/^(?:\t|   )+\*/;
     $regex{setRegex} = qr/$regex{bulletRegex}\s+Set\s+/o;
+    # SMELL: this ought to use $regex{tagNameRegex}
     $regex{setVarRegex} = qr/$regex{setRegex}(\w+)\s*=\s*(.*)$/o;
 
     # Character encoding regexes
@@ -1832,12 +1836,16 @@ sub _expandAllTags {
     $this->{SESSION_TAGS}{EDITURL} =
       $this->getUniqueScriptUrl( $web, $topic, 'edit' );
 
+    # Escape ' !%VARIABLE%'
+    $$text =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
+
     # SMELL: why is this done every time, and not statically during
     # template loading?
     $$text =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
     $$text =~ s/%NOP%/<nop>/g;
 
-    # SMELL: this is crap, a hack, and should go.
+    # SMELL: this is crap, a hack, and should go. It should be handled with
+    # %TMPL:P{"sep"}% or a built-in.
     my $sep = $this->{templates}->expandTemplate('"sep"');
     $$text =~ s/%SEP%/$sep/g;
 
@@ -1903,13 +1911,13 @@ sub _processTags {
             # in tag parameters into account.
             if ( $stackTop =~ /}$/ ) {
                 while ( scalar( @stack) &&
-                        $stackTop !~ /^%([A-Z][A-Z0-9_:]*){.*}$/ ) {
+                        $stackTop !~ /^%($regex{tagNameRegex}){.*}$/o ) {
                     my $top = $stackTop;
                     #print ' ' x $tell,"COLLAPSE $top \n" if $tell;
                     $stackTop = pop( @stack ) . $top;
                 }
             }
-            if ( $stackTop =~ m/^%([A-Z][A-Z0-9_:]*)(?:{(.*)})?$/ ) {
+            if ( $stackTop =~ m/^%($regex{tagNameRegex})(?:{(.*)})?$/o ) {
                 my( $tag, $args ) = ( $1, $2 );
                 #print ' ' x $tell,"POP $tag\n" if $tell;
                 my $e;
@@ -2016,13 +2024,9 @@ sub handleCommonTags {
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
-    # remember the block for when we handle includes
     my $verbatims = {};
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                               $verbatims );
-
-    # Escape rendering: Change ' !%VARIABLE%' to ' %<nop>VARIABLE%', for final ' %VARIABLE%' output
-    $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
 
     my $memW = $this->{SESSION_TAGS}{INCLUDINGWEB};
     my $memT = $this->{SESSION_TAGS}{INCLUDINGTOPIC};
@@ -2115,7 +2119,7 @@ sub _VAR {
     my( $this, $params, $topic, $inweb ) = @_;
     my $key = $params->{_DEFAULT};
     my $web = $params->{web} || $inweb;
-    if( $web =~ /%[A-Z]+%/ ) { # handle %MAINWEB%-type cases 
+    if( $web =~ m/%$regex{tagNameRegex}%/o ) { # handle %MAINWEB%-type cases 
         handleInternalTags( $web, $inweb, $topic );
     }
     return $this->{prefs}->getPreferencesValue( $key, $web );
@@ -2231,9 +2235,6 @@ sub _INCLUDE {
     # the end they are all there
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                               $this->{_verbatims} );
-
-    # Escape rendering: Change ' !%VARIABLE%' to ' %<nop>VARIABLE%', for final ' %VARIABLE%' output
-    $text =~ s/(\s)\!\%([A-Z])/$1%<nop>$2/g;
 
     $this->_expandAllTags( \$text, $theTopic, $theWeb );
 

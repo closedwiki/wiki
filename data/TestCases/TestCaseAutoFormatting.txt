@@ -398,6 +398,28 @@ escaped:
 #MyAnchor To here
 <!-- /actual -->
 </td></tr>
+<tr><td>
+Escaped variables 1
+</td><td>
+<!-- expected ESCAPEDVAR1 -->
+&#37;MAINWEB%nowt
+<!-- /expected -->
+</td><td>
+<!-- actual -->
+!%MAINWEB%nowt
+<!-- /actual -->
+</td></tr>
+<tr><td>
+Escaped variables 2
+</td><td>
+<!-- expected expand ESCAPEDVAR2 -->
+nowt!%MAINWEB%
+<!-- /expected -->
+</td><td>
+<!-- actual -->
+nowt!%MAINWEB%
+<!-- /actual -->
+</td></tr>
 </table>
 <!-- expected -->
 <p />
@@ -429,6 +451,7 @@ escaped:
 |^| six | six |
 
 <!-- /actual -->
+
 <!-- expected expand LINKATEND -->
 <span class="twikiNewLink">LinkAtEnd<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->

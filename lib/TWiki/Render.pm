@@ -1210,7 +1210,7 @@ sub TML2PlainText {
         if( $opts =~ /showvar/ ) {
             $text =~ s/%(\w+({.*?}))%/\%$1/g; # defuse
         } else {
-            $text =~ s/%[A-Z_]+({.*?})?%//g;  # remove
+            $text =~ s/%$TWiki::regex{tagNameRegex}({.*?})?%//g;  # remove
         }
     }
 

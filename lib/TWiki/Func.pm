@@ -947,7 +947,7 @@ sub getTopicList {
 
 ---+++ registerTagHandler( $tag, \&fn )
 Register a function to handle a simple tag. Should only be called from initPlugin.
-   * =$tag= - The name of the tag i.e. the 'MYTAG' part of %<nop>MYTAG%
+   * =$tag= - The name of the tag i.e. the 'MYTAG' part of %<nop>MYTAG%. The tag name *must* match /^[A-Z][A-Z0-9_]*$/ or it won't work.
    * =\&fn= - Reference to the handler function.
 
 *Since:* TWiki::Plugins::VERSION 1.026
@@ -1258,6 +1258,7 @@ Those expressions marked type 'RE' are precompiled regular expressions that can 
 | anchorRegex    | #AnchorNames                     | RE |
 | abbrevRegex    | Abbreviations e.g. GOV, IRS      | RE |
 | emailAddrRegex | email@address.com                | RE |
+| tagNameRegex   | Standard tag names e.g. %<nop>THIS_BIT% (THIS_BIT only) | RE |
 
 =cut
 
