@@ -106,6 +106,8 @@ TWiki
 ^Number::Compare$
 ^Text::Glob$
 ^File::Find::Rule$
+^IPC::Run$
+^GraphViz
 __MODULES__
 
 print $deps, "\n";
