@@ -5,8 +5,8 @@ This module is an add-on to the TWiki kernel that supports e-mail notification o
 %TOC%
 
 ---+ Summary of Contents
----++ <code>bin/mailnotifier</code>
-The main part of the mailer module is a script, =bin/mailnotifier=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard <nop>%NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
+---++ <code>bin/mailnotify</code>
+The main part of the mailer module is a script, =bin/mailnotify=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard <nop>%NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
 
 %STARTINCLUDE%
 Subscribers are listed <nop>%NOTIFYTOPIC% in "bullet lists" following one of the following formats:
@@ -36,35 +36,35 @@ A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user ha
 If a _TWiki group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
 %STOPINCLUDE%
 
-In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =bin/mailnotifier= script.
+In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =bin/mailnotify= script.
 
-%RED% __Note__ the =mailnotifier= ignores permissions in webs. It is entirely possible for a user to get added to a <nop>%NOTIFYTOPIC% topic in a web, when they are not authorised to view the topics in that web. This could result in them having limited access to sensitive information (the topic summaries). %ENDCOLOR%
+%RED% __Note__ =mailnotify= ignores permissions in webs. It is entirely possible for a user to get added to a <nop>%NOTIFYTOPIC% topic in a web, when they are not authorised to view the topics in that web. This could result in them having limited access to sensitive information (the topic summaries). %ENDCOLOR%
 
 ---++ <code>TWiki/Contrib/MailerContrib</code> code library
 The second part of the module is a code library that provides the services for other applications to modify <nop>%NOTIFYTOPIC% through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for notification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
 
 ---++ <code>bin/remove_obsolete_locks</code>
-The old =mailnotify= script had a side-effect; it would remove obsolete topic locks as it ran. This has not been implemented in =mailnotifier=. Instead, a separate side script is provided in this module that performs this function, called =bin/remove_obsolete_locks. For full compatibility with =mailnotify= this script should be run (from =bin=) on the same schedule as =mailnotifier=.
+The old =mailnotify= script had a side-effect; it would remove obsolete topic locks as it ran. This has not been implemented in =mailnotify=, as it is not required in the Dakar release of TWiki.
 
 ---+ Installation Instructions
 This Contrib is pre-installed as part of the TWiki release package, and should only have to be re-installed if an upgrade is required.
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
 	* Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
-	* To make sure the installation was successful, run the	=bin/mailnotifier= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
+	* To make sure the installation was successful, run the	=bin/mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
 
 ---+ Setting up your cron job
-You need to set up a =cron= (or equivalent) job to run =bin/mailnotifier=.
+You need to set up a =cron= (or equivalent) job to run =bin/mailnotify=.
 
-<code>Usage: bin/mailnotifier [-q] [-m] [ <i>web1 web2 ... webN</i> ]</code>
+<code>Usage: bin/mailnotify [-q] [-d] [ <i>web1 web2 ... webN</i> ]</code>
 | =-q= | Don't print progress information |
-| =-m= | Send mail. Default behaviour is to print out plain text of mails that would be sent to STDOUT |
+| =-d= | Don't send mail. Print out plain text of mails that would be sent to STDOUT instead. |
 | <code><i>web1 web2 ... webN</i></code> | List of webs to process, separated by spaces or commas. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
 
 The script can also be used from the browser. The following CGI parameters are supported:
 
 | =verbose= | set to 0 to get the same effect as -q |
-| =sendmail= | Set to 1 to actually send mail |
+| =sendmail= | Set to 1 to actually send mail; default is 0 |
 | =webs= | Space or comma-separated list of webs to process |
 
 ---+ Settings
