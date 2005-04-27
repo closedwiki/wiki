@@ -119,6 +119,8 @@ There are also four position tags that are used to indicate where the comment sh
 	 | =%<nop>POS:AFTER%= | If present, comments will be inserted <b>immediately after the =%<nop>COMMENT%= tag</b> |
 Note that these position tags are obviously mutually exclusive. If you define more than one, the result is undefined. If none is present, the default is taken from the plugin setting =DEFAULT_TYPE=
 
+All the usual TWikiVariables that can be used in a topic template can also be used in an =OUTPUT= template, with the addition of the =%<nop>TIME%= variable that expands to the server time (hours:minutes).
+
 #HandlingPageLock
 ---+ Important Note regarding Locks
 

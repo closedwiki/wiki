@@ -16,6 +16,8 @@ sub initPlugin {
         TWiki::Func::writeWarning( "Version mismatch between CommentPlugin $VERSION and Plugins.pm $TWiki::Plugins::VERSION. Plugins.pm >= 1.026 required." );
     }
 
+    TWiki::Func::registerTagHandler( "TIME", \&_TIME );
+
     return 1;
 }
 
@@ -68,6 +70,10 @@ sub beforeSaveHandler {
 
     return unless( defined( $action ) && $action eq 'save' );
     TWiki::Plugins::CommentPlugin::Comment::save( @_ );
+}
+
+sub _TIME {
+    return TWiki::Time::formatTime( time(), '$hour:$min' );
 }
 
 1;
