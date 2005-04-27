@@ -136,6 +136,18 @@ sub test_htpasswd_crypt {
 
 sub test_htpasswd_sha1 {
     my $this = shift;
+
+    eval 'use MIME::Bas64';
+    if( $@ ) {
+        print STDERR "SKIPPED SHA1 TESTS: $@";
+        return;
+    }
+    eval 'use Digest::SHA1';
+    if( $@ ) {
+        print STDERR "SKIPPED SHA1 TESTS: $@";
+        return;
+    }
+
     $TWiki::cfg{Htpasswd}{Encoding} = 'sha1';
     my $impl = new TWiki::Users::HtPasswdUser();
     # add them all
@@ -218,6 +230,12 @@ sub test_htpasswd_sha1 {
 
 sub test_htpasswd_md5 {
     my $this = shift;
+    eval 'use Digest::MD5';
+    if( $@ ) {
+        print STDERR "SKIPPED SHA1 TESTS: $@";
+        return;
+    }
+
     $TWiki::cfg{Htpasswd}{Encoding} = 'md5';
     my $impl = new TWiki::Users::HtPasswdUser();
     # add them all
