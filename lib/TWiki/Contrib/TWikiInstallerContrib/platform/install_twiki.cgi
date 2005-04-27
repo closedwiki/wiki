@@ -35,6 +35,7 @@ my $cgibin;
 my $home;
 my $tmp;
 my ( $VIEW, $TESTENV );
+my $MECHBIN;
 my $PERL;
 my $administrator;
 my $q;	# CGI object
@@ -91,6 +92,7 @@ BEGIN {
     };
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
+    $MECHBIN = URI->new( "twiki", $install_cgi->scheme )->abs( $install_cgi );
 
     $PERL = $q->param( 'perl' ) || findProgramOnPaths( 'perl' );
 
@@ -112,6 +114,7 @@ use Archive::Any;
 use File::Slurp qw( read_file write_file );
 use CPAN;
 use Cwd qw( abs_path );
+use WWW::Mechanize::TWiki 0.08;
 
 ################################################################################
 
@@ -273,6 +276,41 @@ foreach my $iType ( @types )
 }
 
 ################################################################################
+
+my $agent = "TWikiInstaller: " . basename( $0 );
+my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
+$mech->cgibin( $MECHBIN, { scriptSuffix => $localDirConfig->{ScriptSuffix} } );
+
+################################################################################
+# more authentication stuff (/lock down the wiki)
+if ( $administrator )
+{
+    # setup Main.TWikiAdminGroup
+    $mech->edit( "Main.TWikiAdminGroup" );
+    my $text = $mech->value( "text", 1 );
+
+    my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+    my ($mday,$mon,$year) = (gmtime(time))[3..5];
+    my $date = sprintf( "%02d %3s %04d", $mday, $months[$mon], 1900+$year );
+
+    my $text = <<__TOPIC__;
+*TWiki Administrator Group*
+
+   * Set GROUP = $administrator
+   * Set ALLOWTOPICCHANGE = TWikiAdminGroup
+
+__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+
+-- %MAINWEB%.PeterThoeny - 28 Oct 2000, TWiki:Codev.TWikiInstaller - $date
+__TOPIC__
+
+    $mech->field( text => $text );
+    $mech->click_button( value => 'Save' );
+
+    # 
+}
+
+################################################################################
 # TODO: install plugins dependencies (and/or optional core dependencies)
 # MathModePlugin: sudo fink install latex2html (tetex, ...), gd, librsvg
 # ImageGalleryPlugin: sudo fink install ImageMagick (...)
@@ -310,6 +348,8 @@ exit 0;
 sub continueToWikiText
 {
     my $text = '';
+    $text .= qq{<a target="details" href="$VIEW/TWiki/TWikiRegistration" >register TWikiAdmin</a> $administrator<br/>\n}
+	    if ( $administrator );
     $text .= qq{<a target="details" href="$VIEW/TWiki/InstalledPlugins">proceed to wiki</a><br/>\n};
     $text .= qq{run <a target="details" href="$TESTENV/foo/bar" >testenv</a><br/>\n};
     $text .= qq{<br/><br/>};
