@@ -191,12 +191,6 @@ sub edit {
         $tmpl =~ s/%FORMTEMPLATE%/$formTemplate/go;
     }
 
-    #TW: Why did this get removed?
-    if( defined $ptext ) {
-      $text = $ptext;
-      #$text = &TWiki::Render::decodeSpecialChars( $text );
-    }
-
     if( $saveCmd ) {
         $text = $session->{store}->readTopicRaw( $session->{user}, $webName,
                                                  $topic, undef );

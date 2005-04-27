@@ -99,7 +99,8 @@ sub _parseFormDefinition {
                 }
 
                 $vals ||= '';
-		$vals =~ s/%SEARCH{(.*?)}%/&TWiki::_SEARCH($this->{session}, new TWiki::Attrs($1), $this->{session}->{webName}, $this->{session}->{topicName})/geo;
+                # SMELL: why isn't this just handleCommonTags?
+                $vals =~ s/%SEARCH{(.*?)}%/TWiki::_SEARCH($this->{session}, new TWiki::Attrs($1), $this->{session}->{webName}, $this->{session}->{topicName})/geo;
                 $vals =~ s/^\s*//go;
                 $vals =~ s/\s*$//go;
 
@@ -114,11 +115,11 @@ sub _parseFormDefinition {
                 $tooltip =~ s/^\s*//go;
                 $tooltip =~ s/\s*$//go;
 
-		my $referenced = "";
-		if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
-		  $referenced = _cleanField( $1 );        # topics with diff.
-		  $title = $2;                            # field titles
-		}
+                my $referenced = "";
+                if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
+                    $referenced = _cleanField( $1 );      # topics with diff.
+                    $title = $2;                          # field titles
+                }
 
                 push( @fields,
                       { name => _cleanField( $title ),
@@ -194,20 +195,22 @@ sub getFormDef {
     my( $this, $webName, $form ) = @_;
     ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
 
-    ( $webName, $form ) =
-      $this->{session}->normalizeWebTopicName( $webName, $form );
+   my $session = $this->{session};
 
-    my $store = $this->{session}->{store};
+    ( $webName, $form ) =
+      $session->normalizeWebTopicName( $webName, $form );
+
+    my $store = $session->{store};
 
     # Read topic that defines the form
     unless( $store->topicExists( $webName, $form ) ) {
         throw TWiki::OopsException( 'noformdef',
-                                    web => $this->{session}->{webName},
-                                    topic => $this->{session}->{topicName},
+                                    web => $session->{webName},
+                                    topic => $session->{topicName},
                                     params => [ $webName, $form ] );
     }
     my( $meta, $text ) =
-      $store->readTopic( $this->{session}->{user}, $webName, $form, undef );
+      $store->readTopic( $session->{user}, $webName, $form, undef );
 
     my $fieldsInfo = $this->_parseFormDefinition( $text );
 
@@ -222,9 +225,10 @@ sub getFormDef {
                 # If no values are defined, see if we can get them from
                 # the topic of the same name as the field
                 my( $meta, $text ) =
-                  $store->readTopic( $this->{session}->{user}, $webName, $topic, undef );
-		# Add processing of SEARCHES for Lists
-		$text =~ s/%SEARCH{(.*?)}%/&TWiki::_SEARCH($this->{session}, new TWiki::Attrs($1), $this->{session}->{webName}, $this->{session}->{topicName})/geo;
+                  $store->readTopic( $session->{user}, $webName, $topic, undef );
+                # Add processing of SEARCHES for Lists
+                # SMELL: why isn't this just handleCommonTags?
+                $text =~ s/%SEARCH{(.*?)}%/TWiki::_SEARCH($session, new TWiki::Attrs($1), $session->{webName}, $session->{topicName})/geo;
                 @posValues = _getPossibleFieldValues( $text );
                 $fieldDef->{type} ||= 'select';  #FIXME keep?
             }
