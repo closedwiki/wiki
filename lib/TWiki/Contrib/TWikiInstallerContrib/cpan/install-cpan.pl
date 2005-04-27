@@ -10,7 +10,7 @@ use Data::Dumper qw( Dumper );
 ++$|;
 #open(STDERR,'>&STDOUT'); # redirect error to browser
 use CPAN;
-use File::Path qw( mkpath );
+use File::Path qw( mkpath rmtree );
 use File::Spec qw( rel2abs );
 use File::Basename qw( dirname );
 use Getopt::Long;
@@ -109,11 +109,16 @@ sub installLocalModules
     my $cpan = $parm->{dir};
 
     createMyConfigDotPm({ cpan => $cpan, config => $optsConfig->{config} });
+
     my @modules = @{$parm->{modules}};
     print "Installing the following modules: ", Dumper( \@modules ) if $optsConfig->{debug};
     foreach my $module ( @modules )
     {
 	print "Installing $module\n" if $optsConfig->{verbose};
+
+	# SMELL: want to do: rmtree( $CPAN::Config->{build_dir}; )
+	rmtree( "$cpan/.cpan/build" );
+
 	my $obj = CPAN::Shell->expand( Module => $module ) or warn "$module: $!";
 	next unless $obj;
 	$obj->force;
