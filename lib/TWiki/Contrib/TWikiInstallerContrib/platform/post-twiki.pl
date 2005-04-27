@@ -6,7 +6,6 @@ use File::Basename qw( basename );
 
 # TODO notes:
 # * tighten up templates directory permissions (chmod -R o-w twiki/templates)
-# * use WWW::Mechanize::TWiki;
 
 sub mychomp { chomp $_[0]; $_[0] }
 
@@ -20,10 +19,10 @@ BEGIN {
     use FindBin;
 
     my $localLibBase = "$FindBin::Bin/cgi-bin/lib/CPAN/lib";
-    unshift @INC, ( $localLibBase, "$localLibBase/$Config{archname}" );
+    unshift @INC, ( $localLibBase, "$localLibBase/arch" );
 };
 
-#use WWW::Mechanize::TWiki;
+use WWW::Mechanize::TWiki;
 
 #system( "rm -rf cgi-bin/tmp" );
 
@@ -101,50 +100,4 @@ my $START = "$BIN/view$opts->{scriptSuffix}/$opts->{startupTopic}";
 system( links => $START ) == 0 or print "start using your wiki at $START\n";
 
 ################################################################################
-################################################################################
-
-package WWW::Mechanize::TWiki;
-
-use strict;
-use warnings FATAL => 'all';
-our $VERSION = '0.02';
-
-use base qw( WWW::Mechanize );
-
-sub new {
-    my $class = shift;
-    my %args = @_;
-    my $self = $class->SUPER::new( %args );
-    return $self;
-}
-
-sub cgibin {
-    my $self = shift;
-    my $cgibin = shift;
-    my $args = shift;
-
-    $self->{cgibin} = $cgibin;
-    $self->{scriptSuffix} = $args->{scriptSuffix};
-
-    return $self;
-}
-
-# pub (that's all the directories, right?)
-# config (query on page text or bin script for cgibin and pub (and anything else))
-# page list?
-# web exists?
-
-# maps function calls into twiki urls
-sub AUTOLOAD {
-    our ($AUTOLOAD);
-    no strict 'refs';
-    (my $action = $AUTOLOAD) =~ s/.*:://;
-    *$AUTOLOAD = sub {
-        my ($self, $topic, $args) = @_;
-        (my $url = URI->new( "$self->{cgibin}/$action$self->{scriptSuffix}/$topic" ))->query_form( $args );
-        return $self->get( $url );
-    };
-    goto &$AUTOLOAD;
-}
-
 ################################################################################
