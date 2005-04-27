@@ -287,9 +287,9 @@ my $topicInstall = 'TWikiInstallationReport';
 my $fileInstallationReport = "$FindBin::Bin/$topicInstall.html";
 if ( -e $fileInstallationReport )
 {
-    $mech->edit( "TWiki.$topic" );
+    $mech->edit( "TWiki.$topicInstall" );
 
-    $mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/$topic.html"}%\n] );
+    $mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/$topicInstall.html"}%\n] );
     $mech->click_button( value => 'Save' );
 
     $mech->follow_link( text => 'Attach' );
