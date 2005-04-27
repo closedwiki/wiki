@@ -57,13 +57,6 @@ my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
 $mech->cgibin( $BIN, { scriptSuffix => $opts->{scriptSuffix} } );
 
-# open up the system (could be locked down at the end)
-$mech->edit( "Main.TWikiAdminGroup" );
-my $text = $mech->value( "text", 1 );
-$text =~ s/(\* Set GROUP = )PeterThoeny/$1TWikiGuest/;
-$mech->field( text => $text );
-$mech->click_button( value => 'Save' );
-
 ################################################################################
 
 #rm -rf cgi-bin/install_twiki$opts->{scriptSuffix} cgi-bin/tmp/
