@@ -3,21 +3,23 @@
 # Generate TWiki code documentation topics in the current
 # checkout area
 # This script must be run from the 'tools' directory.
+# !!! is that still true?  i changed the path chomping code to use FindBin instead
+# !!! are there other places that are affected?  (dunno, still haven't got it working for me :( )
 use strict;
 use File::Find;
 use Cwd;
+use FindBin;
 use Getopt::Long;
 use Pod::Usage;
 
 my $Config;
-
-my $root;
 
 BEGIN {
 
     $Config = {
 #
 	smells => 1,
+	root => Cwd::abs_path( "$FindBin::Bin/../" ),
 # 
 	verbose => 0,
 	debug => 0,
@@ -34,10 +36,7 @@ BEGIN {
     pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
     print STDERR Dumper( $Config ) if $Config->{debug};
     
-
-    $root = Cwd::abs_path( '..' );
-
-    unshift @INC, "$root/bin";
+    unshift @INC, "$Config->{root}/bin";
     do 'setlib.cfg';
 };
 
@@ -48,7 +47,7 @@ my $user = $twiki->{users}->findUser("admin", "TWikiAdminGroup");
 my @index;
 my $smells = 0;
 
-find( \&eachfile, ( $root ));
+find( \&eachfile, ( $Config->{root} ));
 
 my $i = "---+ TWiki Source Code Packages\n";
 $i .= "Wherever you see a smell, your help is needed to get rid of it!\n";
@@ -191,6 +190,7 @@ Copyright (C) 2005 Crawford Currie.  All Rights Reserved.
 
  Options:
    -smells
+   -root
    -verbose
    -debug
    -help			this documentation
