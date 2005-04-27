@@ -193,13 +193,15 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
     $localDirConfig->{ $dir } = abs_path( $localDirConfig->{ $dir } );
 }
 
-my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
-open(FH, ">$file") or die "Can't open $file: $!";
-foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir ) )
-{
-    print FH qq{\$cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
+{ # write LocalSite.cfg
+    my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
+    open(FH, ">$file") or die "Can't open $file: $!";
+    foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir ) )
+    {
+	print FH qq{\$cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
+    }
+    close( FH ) or die "Can't close $file: $! ???";
 }
-close(FH) or die "Can't close $file: $! ???";
 
 ################################################################################
 # authentication
