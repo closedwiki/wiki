@@ -5,7 +5,7 @@
 # This script must be run from the 'tools' directory.
 use strict;
 use File::Find;
-
+use Cwd;
 use Getopt::Long;
 use Pod::Usage;
 
@@ -35,9 +35,7 @@ BEGIN {
     print STDERR Dumper( $Config ) if $Config->{debug};
     
 
-    $root = `pwd`;
-    chomp($root);
-    $root =~ s/\/[^\/]*$//;
+    $root = Cwd::abs_path( '..' );
 
     unshift @INC, "$root/bin";
     do 'setlib.cfg';
