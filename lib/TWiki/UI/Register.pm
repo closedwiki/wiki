@@ -1063,7 +1063,6 @@ sub _putRegDetailsByCode {
     my ($data, $tmpDir) = @_;
 
     my $file = _verificationCodeFilename( $data->{VerificationCode}, $tmpDir );
-    $file = TWiki::Sandbox::untaintUnchecked( $file );
     unless( -d $tmpDir ) {
         mkpath( $tmpDir ) || throw Error::Simple( $! );
     }
@@ -1077,6 +1076,7 @@ sub _verificationCodeFilename {
     my ( $code, $tmpDir ) = @_;
     ASSERT( $code ) if DEBUG;
     my $file = $tmpDir . "/$code";
+    $file = TWiki::Sandbox::untaintUnchecked( $file );
     return $file;
 }
 
