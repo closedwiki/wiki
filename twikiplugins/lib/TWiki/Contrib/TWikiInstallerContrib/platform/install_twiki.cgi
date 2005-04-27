@@ -310,7 +310,6 @@ if ( $administrator )
 {
     # setup Main.TWikiAdminGroup
     $mech->edit( "Main.TWikiAdminGroup" );
-    my $text = $mech->value( "text", 1 );
 
     my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
     my ($mday,$mon,$year) = (gmtime(time))[3..5];
@@ -329,8 +328,6 @@ __TOPIC__
 
     $mech->field( text => $text );
     $mech->click_button( value => 'Save' );
-
-    # 
 }
 
 ################################################################################
