@@ -38,6 +38,14 @@ __Note:__ This topic is included by TWikiVariables
 	* Syntax: =%<nop>BASEWEB%=
 	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
+#VarDATE
+---+++ DATE - signature format date
+	* Syntax: =%<nop>DATE%=
+	* Expands to: =%DATE%=
+	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
+
+%X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
+
 #VarDISPLAYTIME
 ---+++ DISPLAYTIME -- display time
 	* Syntax: =%<nop>DISPLAYTIME%=

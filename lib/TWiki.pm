@@ -1,4 +1,4 @@
-# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+ TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
@@ -1580,7 +1580,6 @@ expected in templates that must be statically expanded in new content.
 
 The expanded variables are:
 | =%<nop>DATE%= | Signature-format date |
-| =%<nop>TIME%= | Server time (deprecated) |
 | =%<nop>SERVERTIME%= | Server time |
 | =%<nop>GMTIME%= | GM time |
 | =%<nop>USERNAME%= | Base login name |
@@ -1600,7 +1599,7 @@ sub expandVariablesOnTopicCreation {
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
     ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
 
-    $text =~ s/%DATE%/$this->_DATE()/ge; # deprecated
+    $text =~ s/%DATE%/$this->_DATE()/ge;
     $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;
     $text =~ s/%GMTIME(?:{(.*?)})?%/$this->_GMTIME(new TWiki::Attrs($1))/ge;
 
@@ -2295,7 +2294,6 @@ sub _METASEARCH {
     return $this->{store}->searchMetaData( $params );
 }
 
-# Deprecated, but used in signatures
 sub _DATE {
     my $this = shift;
     return TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');

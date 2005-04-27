@@ -114,6 +114,7 @@ The following variables get expanded when a user creates a new topic based on a 
 
 <blockquote>
 | *Variable:* | *Description:* |
+| =%<nop>DATE%= | Signature format date. See TWikiVariables#VarDATE |
 | =%<nop>GMTIME%= | Date/time. See TWikiVariables#VarGMTIME |
 | =%<nop>GMTIME{...}%= | Formatted date/time. See TWikiVariables#VarGMTIME2 |
 | =%<nop>NOP%= | A no-operation variable that gets removed. Useful to prevent a SEARCH from hitting an edit template topic; also useful to escape a variable like =%<nop>URLPARAM%<nop>NOP%{...}%= |

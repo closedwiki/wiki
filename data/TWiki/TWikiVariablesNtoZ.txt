@@ -191,10 +191,6 @@ __Note:__ This topic is included by TWikiVariables
 	* Syntax: =%<nop>STOPINCLUDE%=
 	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
 
-#VarTIME
----+++ TIME - time a template topic was expanded
-   * %X% Only available in template topics. When used in a template topic, this variable will be expanded to the current time when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details. See also [[TWikiVariables#VarDATE][%<nop>DATE%]]
-
 #VarTOC
 ---+++ TOC -- table of contents of current topic
 	* Syntax: =%<nop>TOC%=
