@@ -282,6 +282,29 @@ my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or di
 $mech->cgibin( $MECHBIN, { scriptSuffix => $localDirConfig->{ScriptSuffix} } );
 
 ################################################################################
+# attach TWikiInstallationReport
+my $topicInstall = 'TWikiInstallationReport';
+my $fileInstallationReport = "$FindBin::Bin/$topicInstall.html";
+if ( -e $fileInstallationReport )
+{
+    $mech->edit( "TWiki.$topic" );
+
+    $mech->field( text => qq[%TOC%\n\n%INCLUDE{"%ATTACHURL%/$topic.html"}%\n] );
+    $mech->click_button( value => 'Save' );
+
+    $mech->follow_link( text => 'Attach' );
+    if ( $mech->submit_form(
+                            fields    => {
+                                        filepath => $fileInstallationReport,
+                                        filecomment => `date`,
+                                        hidefile => undef,
+				    },
+			    ) ) { 
+	#unlink "${topic}.html"
+    }
+}
+
+################################################################################
 # more authentication stuff (/lock down the wiki)
 if ( $administrator )
 {
