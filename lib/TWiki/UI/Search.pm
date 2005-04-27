@@ -23,7 +23,7 @@
 
 ---+ package TWiki::UI::Search
 
-UI functions for searchng.
+UI functions for searching.
 
 =cut
 
