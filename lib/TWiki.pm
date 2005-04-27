@@ -1,4 +1,4 @@
- TWiki Enterprise Collaboration Platform, http://TWiki.org/
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
 # Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
 # and TWiki Contributors. All Rights Reserved. TWiki Contributors
