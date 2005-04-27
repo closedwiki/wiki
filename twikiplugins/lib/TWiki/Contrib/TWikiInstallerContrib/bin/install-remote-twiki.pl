@@ -37,6 +37,8 @@ my $Config = {
 	install_dir => undef,
 	cgiurl => undef,
 #
+	administrator => '',
+#
 	scriptsuffix => '',
 	perl => undef,
 	report => 1,
@@ -52,6 +54,7 @@ my $Config = {
 Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
 			'distro=s', 'kernel=s', 'web=s@',
+			 'administrator=s',
 			 'scriptsuffix=s', 'perl=s', 'cgiurl=s',
 # plugin, addon, contrib
 			'plugin=s@', 'addon=s@', 'contrib=s@',
@@ -152,6 +155,7 @@ sub PushRemoteTWikiInstall
 		perl => $parms->{perl},
 		cgibin => $parms->{cgibin},
 		install => 'install',
+		administrator => $parms->{administrator},
 	});
 	$Config->{debug} && print "\n$urlInstallWithConfig\n";
 
