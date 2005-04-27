@@ -203,6 +203,23 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
     close( FH ) or die "Can't close $file: $! ???";
 }
 
+{ # write LocalLib.cfg
+    my $file = "$mapTWikiDirs->{bin}->{dest}/LocalLib.cfg";
+    open( FH, ">$file" ) or die "Can't open $file: $!";
+    print FH <<'__LOCALLIB_CFG__';
+    use vars qw( $twikiLibPath $CPANBASE );
+
+    use Cwd qw( abs_path );
+( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( "../lib" )) =~ /(.*)/;
+
+$CPANBASE = "$twikiLibPath/CPAN/lib/";
+@localPerlLibPath = ( "$CPANBASE/", "$CPANBASE/arch/" );
+
+1;
+__LOCALLIB_CFG__
+    close( FH ) or die "Can't close $file: $! ???";
+}
+
 ################################################################################
 # authentication
 
