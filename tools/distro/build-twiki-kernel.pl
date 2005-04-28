@@ -265,6 +265,11 @@ foreach my $auth qw( rdiff view )
 # stop distributing cpan modules; get the latest versions from cpan itself
 #rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text", "$installBase/lib/Error.pm" ] ) or warn $!;
 
+# create TWikiGuest entry in .htpasswd
+my $htpasswd = "$installBase/data/.htpasswd";
+execute( qq{htpasswd -bcd "$htpasswd" TWikiGuest guest} );
+chmod 0640, $htpasswd or die "$htpasswd: $!";
+
 ################################################################################
 
 chdir $pwdStart;
