@@ -26,7 +26,7 @@ writeToggle("show","hide","twikiLeftBarPersonalContent")
    * [[TWikiUsers][Users]]
    * [[TWikiGroups][Groups]]
    * [[OfficeLocations][Offices]]
-   * [[%SCRIPTURL%/changes/%WEB%][Changes]]
+   * [[%SCRIPTURL%/changes%SCRIPTSUFFIX%/%WEB%][Changes]]
    * [[WebChanges][Changes detailed]]
    * [[WebIndex][Topic list]]
    * [[%INCLUDINGWEB%.WebSearch][Search]]
