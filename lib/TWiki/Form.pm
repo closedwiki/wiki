@@ -465,13 +465,25 @@ sub renderForEdit {
                                      -value=>$value );
 
         }
-        $text .= CGI::Tr(CGI::th( { align => 'right',
-                                    bgcolor=>'#99CCCC'},
-				  # TW: Maybe do not link field headings
-				  #$title .
-                                  $this->_link( $web, $title, $tooltip, $referenced).
-                                  $extra ).
-                         CGI::td( { -align=>'left' } , $value ));
+
+	if (! $title && $type eq "label") {
+	  # Special handling for untitled labels
+	  $text .= CGI::Tr(CGI::th( { align => 'left',
+				      colspan => '2',
+				      bgcolor => '#99CCCC'},
+				    CGI::Div
+				    ( { class => 'twikiChangeFormButton' },
+				      $session->{renderer}->getRenderedVersion
+				      ( $session->handleCommonTags( $c->{value}, $web, $topic ))) ));
+	} else {
+	  $text .= CGI::Tr(CGI::th( { align => 'right',
+				      bgcolor=>'#99CCCC'},
+				    # TW: Maybe do not link field headings
+				    #$title .
+				    $this->_link( $web, $title, $tooltip, $referenced).
+				    $extra ).
+			   CGI::td( { -align=>'left' } , $value ));
+	}
     }
     $text .= CGI::end_table();
 
