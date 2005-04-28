@@ -1,8 +1,5 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"focus"}%
-  document.main.text.focus();
-%TMPL:END%
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 <!--HIDE
@@ -14,7 +11,7 @@ toShow=new Array();
 toHide=new Array();
 
 function initForm() {
-  %TMPL:P{"focus"}%
+  document.main.text.focus();
   for (i = 0; i < toShow.length; i++) {
      if(dom) {
         document.getElementById(toShow[i]).style.display="inline";
@@ -110,8 +107,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"content"}%
-<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:P{"simpleheader"}%<label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
 %TEXT%
 </textarea><br />

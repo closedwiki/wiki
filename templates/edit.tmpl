@@ -1,7 +1,4 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"focus"}%
-  document.main.text.focus();
-%TMPL:END%
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 <!--HIDE
@@ -13,7 +10,7 @@ toShow=new Array();
 toHide=new Array();
 
 function initForm() {
-  %TMPL:P{"focus"}%
+  document.main.text.focus();
   for (i = 0; i < toShow.length; i++) {
      if(dom) {
         document.getElementById(toShow[i]).style.display="inline";
@@ -75,10 +72,22 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 %INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
 </font>
  </div>%TMPL:END%
-
-
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+ 
+%TMPL:DEF{"topicaction"}%
+	<input type="submit" class="twikiSubmit" name="action" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
+	<input type="submit" class="twikiSubmit" name="action" value="Checkpoint" id="checkpoint" />
+	<input type="submit" class="twikiSubmit" name="action" value="QuietSave" id="quietsave" />
+    <input type="submit" class="twikiSubmit" name="action" value="Save" id="save" />%TMPL:P{"sep"}% 
+	<input type="submit" class="twikiSubmit" name="action" value="Preview" id="preview" />%TMPL:END%
+%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+<body bgcolor="#ffffff" onload="initForm()">
+#PageTop
+<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%TMPL:P{"simpleheader"}%
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
 %TEXT%
 </textarea><br />
@@ -94,23 +103,8 @@ See below for help in editing this page.
  </tr>
 </table>
 %FORMFIELDS%
-%TMPL:P{"standardfooter"}%</form>%TMPL:END%
-
- 
-%TMPL:DEF{"topicaction"}%
-	<input type="submit" class="twikiSubmit" name="action" value="Cancel" id="cancel" />%TMPL:P{"sep"}%
-	<input type="submit" class="twikiSubmit" name="action" value="Checkpoint" id="checkpoint" />
-	<input type="submit" class="twikiSubmit" name="action" value="QuietSave" id="quietsave" />
-    <input type="submit" class="twikiSubmit" name="action" value="Save" id="save" />%TMPL:P{"sep"}% 
-	<input type="submit" class="twikiSubmit" name="action" value="Preview" id="preview" />%TMPL:END%
-%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
-%TMPL:DEF{"titlehelp"}% %TMPL:END%
-%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-<body bgcolor="#ffffff" onload="initForm()">
-#PageTop
-%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%
+</form>
 #PageBottom
 </body>
 </html>

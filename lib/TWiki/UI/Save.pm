@@ -99,6 +99,13 @@ sub _save {
         return 1;
     }
 
+    if( $query->param( 'submitChangeForm' )) {
+        $session->writeCompletePage
+          ( TWiki::UI::generateChangeFormPage( $session, $webName, $topic ) );
+        # return 0 to prevent extra redirect
+        return 0;
+    }
+
     my ( $newText, $newMeta );   # new topic info being saved
     my ( $currText, $currMeta ); # current head (if any)
     my $originalrev; # rev edit started on
@@ -236,15 +243,12 @@ sub save {
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
     my $saveaction = lc($query->param( 'action' ));
-    my $editaction = lc($query->param( 'editaction' )) || '';
-$session->writeDebug("in save params=" . $query->query_string);
 
     if ( $saveaction eq 'checkpoint' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );
         my $randompart = randomURL();
         $redirecturl = $editURL.'|'.$randompart;
-	$redirecturl .= "?action=$editaction" if $editaction;
     } elsif ( $saveaction eq 'quietsave' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
     } elsif ( $saveaction eq 'cancel' ) {
@@ -256,17 +260,7 @@ $session->writeDebug("in save params=" . $query->query_string);
         return;
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
         $query->param( -name => 'cmd', -value => $saveaction );
-    } elsif( $saveaction eq 'add form' ) {
-        $session->writeCompletePage
-          ( TWiki::UI::generateChangeFormPage( $session, $webName, $topic, $editaction ) );
-        return;
-    } elsif( $saveaction eq 'replace form...' ) {
-        $session->writeCompletePage
-          ( TWiki::UI::generateChangeFormPage( $session, $webName, $topic, $editaction ) );
-        return;
     }
-
-
 
     if ( _save( $session )) {
         $session->redirect( $redirecturl );
