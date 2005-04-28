@@ -127,7 +127,6 @@ If international characters in WikiWords aren't working, and you are on Perl 5.0
 	* Edit the WebPreferences topic in each web, if necessary: set individual =WEBCOPYRIGHT= messages, and other preferences.
 	* Enable email notification of topic changes - TWikiSiteTools has more. 
 	* Edit the WebNotify topic in all webs and add the users you want to notify.
-	* Add the TWiki:Main/PoweredByTWikiLogo to your [[%MAINWEB%.%HOMETOPIC%]] topic.
 	* You can add new =%<nop>VARIABLES%=. Define site-level variables in the TWikiPreferences topic. See also: TWikiVariables.
 
 That's it for the standard installation of TWiki. Read on for server-level customization options.
