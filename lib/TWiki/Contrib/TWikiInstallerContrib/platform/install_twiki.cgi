@@ -38,7 +38,9 @@ my ( $VIEW, $TESTENV );
 my $MECHBIN;
 my $PERL;
 my $administrator;
+my $WIKIWEBMASTER;
 my $q;	# CGI object
+my $install_cgi;
 
 ################################################################################
 
@@ -78,7 +80,7 @@ BEGIN {
     $q = CGI->new() or die $!;
     $cgibin = $q->param( 'cgibin' ) || $cgibin;
 
-    my $install_cgi = URI->new( $ENV{SCRIPT_URI} );
+    $install_cgi = URI->new( $ENV{SCRIPT_URI} );
 
     $localDirConfig = {
 	DefaultUrlHost   => $install_cgi->scheme . "://" . $install_cgi->host . ( $install_cgi->port != $install_cgi->default_port && ':'.$install_cgi->port ),
@@ -97,6 +99,7 @@ BEGIN {
     $PERL = $q->param( 'perl' ) || findProgramOnPaths( 'perl' );
 
     $administrator = $q->param( 'administrator' ) || '';
+    $WIKIWEBMASTER = $q->param( 'WIKIWEBMASTER' ) || 'webmaster@'.$install_cgi->host;
 }
 use strict;
 use Error qw( :try );
@@ -321,6 +324,14 @@ if ( -e $fileInstallationReport )
 			    ) ) { 
 	#unlink "${topic}.html"
     }
+}
+
+# WIKIWEBMASTER
+{
+    my $topicTWiki_TWikiPreferences = 'TWiki.TWikiPreferences';
+    $mech->edit( $topicTWiki_TWikiPreferences );
+    $mech->field( WIKIWEBMASTER => $WIKIWEBMASTER );
+    $mech->click_button( value => 'Save' );
 }
 
 ################################################################################
@@ -555,6 +566,7 @@ $text .= <<__HTML__;
 
 <h2>TWiki Settings</h2>
 <b>TWikiAdmin</b>: <input type="text" size="20" name="administrator" value="$administrator" /><br />
+<b>WIKIWEBMASTER</b>: <input type="text" size="20" name="WIKIWEBMASTER" value="$WIKIWEBMASTER" /><br />
 __HTML__
 
 ################################################################################
