@@ -22,6 +22,7 @@ use TWiki;
 use TWiki::Store;
 use TWiki::Store::RcsLite;
 use TWiki::Store::RcsWrap;
+use File::Path;
 
 my $web = "TestRcsWebTests";
 my $topic = "TestRcsTopic";
@@ -44,14 +45,14 @@ sub set_up {
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     die unless $twiki;
     die unless $twiki->{prefs};
-    mkdir("$TWiki::cfg{DataDir}/$web",0777);
-    mkdir("$TWiki::cfg{PubDir}/$web",0777);
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$web");
+    File::Path::mkpath("$TWiki::cfg{PubDir}/$web");
 }
 
 sub tear_down {
     $TWiki::cfg{WarningFileName} = $saveWF;
-    `rm -rf $TWiki::cfg{DataDir}/$web`;
-    `rm -rf $TWiki::cfg{PubDir}/$web`;
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$web");
+    File::Path::rmtree("$TWiki::cfg{PubDir}/$web");
 }
 
 # Get rid a topic and its attachments completely
@@ -156,6 +157,13 @@ sub verifyLite {
     return $rcs;
 }
 
+sub test_mktmp {
+    # this is only used on WINDOWS so needs a special test
+    my $this = shift;
+    my $tmpfile = TWiki::Store::RcsFile::_mkTmpFilename();
+    $this->assert(!-e $tmpfile);
+}
+
 sub test_repRevRcs {
     my $this = shift;
     my $topic = "RcsRepRev";
@@ -216,6 +224,9 @@ sub refDelta {
     print "Old:\n\"$old\"\n";
     print "New:\n\"$new\"\n";
     print "Delta new->old:\n\"$delta\"\n\n"; 
+}
+
+sub test_mktemp {
 }
 
 sub test_wt1Lite {
@@ -1151,8 +1162,7 @@ sub genTest {
 
 sub test_ciLocked {
     my $this = shift;
-    my $topic = "CiLocked";
-
+    my $topic = "CiTestLockedTempDeleteMeItsOk";
     # create the fixture
     my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
     $rcs->addRevision( "Shooby Dooby", "original", "BungditDin" );
@@ -1161,6 +1171,7 @@ sub test_ciLocked {
     chop($user);
     my $vfile = $rcs->{file}.",v";
     `co -f -q -l $vfile`;
+    unlink("$topic.txt");
 
     # file is now locked by blocker_socker, save some new text
     $rcs->_saveFile( $rcs->{file}, "Shimmy Dimmy" );

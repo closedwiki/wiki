@@ -13,6 +13,7 @@ use strict;
 use TWiki;
 use TWiki::UI::Manage;
 use CGI;
+use File::Path;
 
 my $oldweb = "UnitTestRenameOldWeb";
 my $newweb = "UnitTestRenameNewWeb";
@@ -32,10 +33,8 @@ sub set_up {
     my $this = shift;
 
 
-    mkdir("$TWiki::cfg{DataDir}/$oldweb",0777) ||
-      die "$TWiki::cfg{DataDir}/$oldweb fixture setup failed: $!";
-    mkdir("$TWiki::cfg{DataDir}/$newweb",0777) ||
-      die "$TWiki::cfg{DataDir}/$newweb fixture setup failed: $!";
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$oldweb");
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$newweb");
 
     $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, "" );
     $TWiki::Plugins::SESSION = $twiki;
@@ -90,10 +89,8 @@ THIS
 }
 
 sub tear_down {
-    `rm -rf $TWiki::cfg{DataDir}/$oldweb`;
-    print STDERR "tear_down $TWiki::cfg{DataDir}/$oldweb failed: $!\n" if $!;
-    `rm -rf $TWiki::cfg{DataDir}/$newweb`;
-    print STDERR "tear_down $TWiki::cfg{DataDir}/$newweb failed: $!\n" if $!;
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$oldweb");
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$newweb");
 }
 
 sub check {

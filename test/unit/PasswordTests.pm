@@ -137,7 +137,7 @@ sub test_htpasswd_crypt {
 sub test_htpasswd_sha1 {
     my $this = shift;
 
-    eval 'use MIME::Bas64';
+    eval 'use MIME::Base64';
     if( $@ ) {
         print STDERR "SKIPPED SHA1 TESTS: $@";
         return;
@@ -409,7 +409,9 @@ sub test_htpasswd_apache {
 
     my $impl = new TWiki::Users::ApacheHtpasswdUser();
     # apache doesn't create the file, so need to init it
-    `touch $TWiki::cfg{Htpasswd}{FileName}`;
+    open(F,">$TWiki::cfg{Htpasswd}{FileName}");
+    close(F);
+
     # otherwise it should work the same as htpasswd
 
     # add them all

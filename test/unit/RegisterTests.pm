@@ -28,6 +28,8 @@ use CGI;
 use Error qw( :try );
 use File::Copy;
 use Carp;
+use File::Path;
+use Cwd;
 
 my $testUserWikiName = 'TestUser';
 my $testUserLoginName = 'testuser';
@@ -60,8 +62,7 @@ my $session;
 
 sub set_up {
     my $this = shift;
-    my $here = `pwd`;
-    $here =~ s/\s//g;; #SMELL: yuck!
+    my $here = Cwd::cwd();
     $myDataDir = "$here/tmpRegisterTestData";
     $myPubDir =  "$here/tmpRegisterTestPub";
 
@@ -77,20 +78,11 @@ sub set_up {
     $approvalsDir = $TWiki::cfg{PubDir}.'/TWiki/RegistrationApprovals';
     $SIG{__DIE__} = sub { confess $_[0] };
 
-    mkdir $myDataDir;
-    chmod 0777, $myDataDir;
-
-    mkdir "$myDataDir/$temporaryWeb";
-    chmod 0777, "$myDataDir/$temporaryWeb";
-
-    mkdir "$myDataDir/$TWiki::cfg{UsersWebName}";
-    chmod 0777, "$myDataDir/$TWiki::cfg{UsersWebName}";
-
-    mkdir $myPubDir;
-    chmod 0777, $myPubDir;
-
-    mkdir "$myPubDir/$temporaryWeb";
-    chmod 0777, "$myPubDir/$temporaryWeb";
+    File::Path::mkpath($myDataDir);
+    File::Path::mkpath("$myDataDir/$temporaryWeb");
+    File::Path::mkpath("$myDataDir/$TWiki::cfg{UsersWebName}");
+    File::Path::mkpath($myPubDir);
+    File::Path::mkpath("$myPubDir/$temporaryWeb");
 
     $Error::Debug = 1;
 
@@ -102,7 +94,8 @@ sub set_up {
 
 sub tear_down {
     # clean up after test
-    `rm -rf $myDataDir $myPubDir`;
+    File::Path::rmtree($myDataDir);
+    File::Path::rmtree($myPubDir);
     $TWiki::cfg{DataDir} = $saveDD;
     $TWiki::cfg{PubDir} = $savePD;
     $TWiki::cfg{HtpasswdFileName} = $saveHP;

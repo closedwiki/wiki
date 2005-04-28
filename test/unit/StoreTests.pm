@@ -19,7 +19,7 @@ use Error qw( :try );
 use CGI;
 use TWiki::UI::Save;
 use TWiki::OopsException;
-
+use File::Path;
 
 my $testweb = "StoreTestsTestWeb";
 
@@ -36,10 +36,8 @@ my $saveLF;
 # Set up the test fixture
 sub set_up {
     my $this = shift;
-    mkdir "$TWiki::cfg{DataDir}/$testweb";
-    chmod 0777, "$TWiki::cfg{DataDir}/$testweb";
-    mkdir "$TWiki::cfg{PubDir}/$testweb";
-    chmod 0777, "$TWiki::cfg{PubDir}/$testweb";
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$testweb");
+    File::Path::mkpath("$TWiki::cfg{PubDir}/$testweb");
     $saveWF = $TWiki::cfg{WarningFileName};
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     $saveLF = $TWiki::cfg{LogFileName};
@@ -67,10 +65,8 @@ sub set_up {
 }
 
 sub tear_down {
-    my $s = `rm -rf $TWiki::cfg{DataDir}/$testweb`;
-    die "Could not clean fixture $?: $s" if $?;
-    $s = `rm -rf $TWiki::cfg{PubDir}/$testweb`;
-    die "Could not clean fixture $?: $s" if $?;
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$testweb");
+    File::Path::rmtree("$TWiki::cfg{PubDir}/$testweb");
     $TWiki::cfg{WarningFileName} = $saveWF;
     $TWiki::cfg{LogFileName} = $saveLF;
 }
@@ -307,7 +303,10 @@ sub test_releaselocksonsave {
     } catch Error::Simple with {
     };
 
-    my $text =  `cat $TWiki::cfg{DataDir}/$web/$topic.txt`;
+    open(F,"<$TWiki::cfg{DataDir}/$web/$topic.txt");
+    undef $/;
+    my $text = <F>;
+    close(F);
     $this->assert_matches(qr/%META:TOPICINFO{author="TestUser2"/, $text);
     $this->assert_matches(qr/version="1.3"/, $text);
     $this->assert_matches(qr/<del>Changed<\/del><ins>Sausage<\/ins>/, $text);

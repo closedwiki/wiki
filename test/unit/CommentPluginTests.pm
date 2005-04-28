@@ -15,6 +15,7 @@ use TWiki::UI::Save;
 use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
 use CGI;
+use File::Path;
 
 my $baseweb = "TestCommentPluginTestWeb";
 my $targetweb = "TestCommentPluginTargetWeb";
@@ -35,20 +36,16 @@ sub set_up {
 
     $twiki = new TWiki( $thePathInfo, "TestUser1", $basetopic, "" );
 
-    mkdir("$TWiki::cfg{DataDir}/$baseweb",0777) ||
-      die "$TWiki::cfg{DataDir}/$baseweb fixture setup failed: $!";
-    mkdir("$TWiki::cfg{DataDir}/$targetweb",0777) ||
-      die "$TWiki::cfg{DataDir}/$targetweb fixture setup failed: $!";
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$baseweb");
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$targetweb");
 
     TWiki::Plugins::CommentPlugin::initPlugin();
     $TWiki::Plugins::SESSION = $twiki;
 }
 
 sub tear_down {
-    `rm -rf $TWiki::cfg{DataDir}/$baseweb`;
-    print STDERR "tear_down $TWiki::cfg{DataDir}/$baseweb failed: $!\n" if $!;
-    `rm -rf $TWiki::cfg{DataDir}/$targetweb`;
-    print STDERR "tear_down $TWiki::cfg{DataDir}/$targetweb failed: $!\n" if $!;
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$baseweb");
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$targetweb");
 }
 
 sub writeTopic {

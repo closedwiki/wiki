@@ -86,13 +86,22 @@ sub testAddUsers {
     my $user2 = $twiki->{users}->findUser("guser", "GeorgeUser");
     my $user3 = $twiki->{users}->findUser("zuser", "ZebediahUser");
     $twiki->{users}->addUserToTWikiUsersTopic($user2, $me);
-    my $text = `cat $ttpath`;
+    open(F,"<$ttpath");
+    undef $/;
+    my $text = <F>;
+    close(F);
     $this->assert_matches(qr/\n\s+\* GeorgeUser - guser - \d\d \w\w\w \d\d\d\d\n/s, $text);
     $twiki->{users}->addUserToTWikiUsersTopic($user1, $me);
-    $text = `cat $ttpath`;
+    open(F,"<$ttpath");
+    undef $/;
+    $text = <F>;
+    close(F);
     $this->assert_matches(qr/AaronUser.*GeorgeUser/s, $text);
     $twiki->{users}->addUserToTWikiUsersTopic($user3, $me);
-    $text = `cat $ttpath`;
+    open(F,"<$ttpath");
+    undef $/;
+    $text = <F>;
+    close(F);
     $this->assert_matches(qr/Aaron.*George.*Zebediah/s, $text);
 #    unlink($ttpath);
     print $ttpath."\n";
@@ -109,7 +118,6 @@ sub testLoad {
     open(F,">$ttpath") || $this->assert(0,  "open $ttpath failed");
     print F $initial;
     close(F);
-    `chmod 777 $ttpath`;
 
     my $user1 = $twiki->{users}->findUser("auser", "AaronUser");
     my $user2 = $twiki->{users}->findUser("guser","GeorgeUser");

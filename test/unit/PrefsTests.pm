@@ -13,6 +13,7 @@ use TWiki;
 use TWiki::Prefs;
 use strict;
 use Assert;
+use File::Path;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -86,12 +87,18 @@ sub set_up {
     $this->{TWIKIPREFSBACKUP} = "$prefs.bak";
     copy($this->{TWIKIPREFS}, $this->{TWIKIPREFSBACKUP});
 
-    mkdir "$TWiki::cfg{DataDir}/$web";
-    `cp $TWiki::cfg{DataDir}/_default/*.txt* $TWiki::cfg{DataDir}/$web`;
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$web");
 
-    mkdir "$TWiki::cfg{PubDir}/$web" || die "Can't create fixture $!";
-    chmod 0777, "$TWiki::cfg{DataDir}/$web" || die "Can't create fixture $!";;
-    chmod 0777, "$TWiki::cfg{PubDir}/$web" || die "Can't create fixture $!";
+    opendir(D,"$TWiki::cfg{DataDir}/_default");
+    foreach my $file ( grep{ /\.txt$/ } readdir D ) {
+        open(F,"<$TWiki::cfg{DataDir}/_default/$file");
+        open(G,">$TWiki::cfg{DataDir}/$web/$file");
+        undef $/;
+        print G <F>;
+        close(F); close(G);
+    }
+    closedir(D);
+    File::Path::mkpath("$TWiki::cfg{PubDir}/$web");
     open(F, ">$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/TestUser1.txt") ||
       die "Can't create user $! $TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}";
     print F "silly user page!!!";
@@ -112,11 +119,8 @@ sub tear_down {
             close F;
         }
     }
-    die unless $web eq "TestPrefsWeb";
-    my $s = `rm -r $TWiki::cfg{DataDir}/$web`;
-    die "Could not clean fixture $s: $?" if $?;
-    $s = `rm -r $TWiki::cfg{PubDir}/$web`;
-    die "Could not clean fixture $s: $?" if $?;
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$web");
+    File::Path::rmtree("$TWiki::cfg{PubDir}/$web");
 }
 
 sub test_system {

@@ -10,6 +10,7 @@ BEGIN {
 };
 
 use TWiki::Contrib::Mailer;
+use File::Path;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
@@ -130,7 +131,8 @@ sub set_up {
   my $user = $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
   my $text;
 
-  $twiki->{store}->createWeb( $testweb, "_default", {} );
+  # need to use mkpath to ensure 777 perms
+  File::Path::mkpath("$TWiki::cfg{DataDir}/$testweb");
 
   my $s = "";
   foreach my $spec (@specs) {
@@ -273,15 +275,16 @@ sub set_up {
                               { forcenewrevision=>1 });
 
   # OK, we should have a bunch of changes
-  #print "MN: ",`cat $TWiki::cfg{DataDir}/$testweb/.mailnotify`;
-  #print `cat $TWiki::cfg{DataDir}/$testweb/.changes`;
+  #print "MN: ",cat $TWiki::cfg{DataDir}/$testweb/.mailnotify;
+  #print cat $TWiki::cfg{DataDir}/$testweb/.changes;
 }
 
 sub tear_down {
-    `rm -rf $TWiki::cfg{DataDir}/$testweb`;
-    `rm -f $TWiki::cfg{DataDir}/Main/WikiName1.txt*`;
-    `rm -f $TWiki::cfg{DataDir}/Main/WikiName2.txt*`;
-    print STDERR "tear_down $TWiki::cfg{DataDir}/$testweb failed: $!\n" if $!;
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$testweb");
+    unlink("TWiki::cfg{DataDir}/Main/WikiName1.txt");
+    unlink("TWiki::cfg{DataDir}/Main/WikiName2.txt");
+    unlink("TWiki::cfg{DataDir}/Main/WikiName1.txt,v");
+    unlink("TWiki::cfg{DataDir}/Main/WikiName2.txt,v");
 }
 
 sub testSimple {

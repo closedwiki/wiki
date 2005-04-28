@@ -16,6 +16,7 @@ sub new {
 
 use TWiki;
 use TWiki::Access;
+use File::Path;
 
 my $peopleWeb = "AccessControlPeopleTestWeb";
 my $testWeb = "AccessControlTestsWeb";
@@ -26,14 +27,14 @@ my $savePeople;
 sub make_web {
     my $web = shift;
     die $TWiki::cfg{DataDir} unless -d $TWiki::cfg{DataDir};
-    mkdir "$TWiki::cfg{DataDir}/$web";
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$web");
 }
 
 sub unmake_web {
     my $web = shift;
     die unless $web;
     die unless -d $TWiki::cfg{DataDir};
-    `rm -rf $TWiki::cfg{DataDir}/$web`;
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$web");
 }
 
 sub create_user {
