@@ -531,7 +531,7 @@ sub _mktemp {
     ($template,$dir,$ext) = @_;
     @template = split //, $template;
 
-    ASSERT(substr($template, -6, 6) ne 'XXXXXX') if DEBUG;
+    ASSERT($template =~ /XXXXXX$/) if DEBUG;
 
     if ($dir){
         ASSERT(-e $dir) if DEBUG;

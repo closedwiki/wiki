@@ -691,9 +691,9 @@ sub _externalLink {
     if( $url =~ /\.(gif|jpg|jpeg|png)$/i ) {
         my $filename = $url;
         $filename =~ s@.*/([^/]*)@$1@go;
-        return $pre.CGI::img( src => $url, alt => $filename );
+        return $pre.CGI::img( { src => $url, alt => $filename } );
     }
-    return $pre.CGI::a( {href => $url, target => '_top' }, $url );
+    return $pre.CGI::a( { href => $url, target => '_top' }, $url );
 }
 
 sub _mailtoLink {
@@ -985,6 +985,7 @@ sub getRenderedVersion {
     my $isList = 0;		# True when within a list
     my $insideTABLE = 0;
     my @result = ();
+
     foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
