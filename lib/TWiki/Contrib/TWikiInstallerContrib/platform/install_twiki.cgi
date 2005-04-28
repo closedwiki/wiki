@@ -231,7 +231,7 @@ if ( 0 )
     my $bin = $mapTWikiDirs->{bin}->{dest} or die "no bin dest?";
     mv( "$bin/.htaccess.txt $bin/.htaccess" );
 
-    $file = "$bin/.htaccess";
+    my $file = "$bin/.htaccess";
     if ( open(FH, "<$file") )
     {
 	my $htaccess = join( "", <FH> );
