@@ -80,10 +80,6 @@ The most common preferences are edited through the form attached to this topic. 
 
 ---++ Access Control Settings
 
-	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (ex: %MAINWEB%.TWikiAdminGroup)
-		* #Set ALLOWTOPICCHANGE = 
-		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
-
 	* Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
 		* #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
