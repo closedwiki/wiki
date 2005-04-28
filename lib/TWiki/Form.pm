@@ -100,7 +100,7 @@ sub _parseFormDefinition {
 
                 $vals ||= '';
                 # SMELL: why isn't this just handleCommonTags?
-                $vals =~ s/%SEARCH{(.*?)}%/TWiki::_SEARCH($this->{session}, new TWiki::Attrs($1), $this->{session}->{webName}, $this->{session}->{topicName})/geo;
+		$vals =~ s/%SEARCH{(.*?)}%/_searchVals($this->{session}, $1)/geo;
                 $vals =~ s/^\s*//go;
                 $vals =~ s/\s*$//go;
 
@@ -138,6 +138,12 @@ sub _parseFormDefinition {
     }
 
     return \@fields;
+}
+
+sub _searchVals {
+  my ( $session, $arg ) = @_;
+  $arg =~ s/%WEB%/$session->{webName}/go;
+  return $session->_SEARCH(new TWiki::Attrs($arg), $session->{topicName}, $session->{webName});
 }
 
 # Chop out all except A-Za-z0-9_.
@@ -228,7 +234,7 @@ sub getFormDef {
                   $store->readTopic( $session->{user}, $webName, $topic, undef );
                 # Add processing of SEARCHES for Lists
                 # SMELL: why isn't this just handleCommonTags?
-                $text =~ s/%SEARCH{(.*?)}%/TWiki::_SEARCH($session, new TWiki::Attrs($1), $session->{webName}, $session->{topicName})/geo;
+		$text =~ s/%SEARCH{(.*?)}%/_searchVals($session, $1)/geo;
                 @posValues = _getPossibleFieldValues( $text );
                 $fieldDef->{type} ||= 'select';  #FIXME keep?
             }
