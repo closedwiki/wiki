@@ -1,0 +1,18 @@
+%TMPL:INCLUDE{"edit"}%
+
+%TMPL:DEF{"focus"}%%TMPL:END%
+%TMPL:DEF{"simpleheader"}%
+<input type="hidden" name="editaction" value="form" />
+---+ <nop>%TOPIC% (edit form)
+%BR%%TMPL:END%
+
+%TMPL:DEF{"content"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%TMPL:P{"simpleheader"}%
+<input type="hidden" id="topic" name="text" value="%TEXT%" />
+<input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<input type="hidden" name="editaction" value="form" />
+<input type="hidden" name="cmd" value="%CMD%" /><div></div>
+%FORMFIELDS%
+%TMPL:P{"topicaction"}%
+</form></div>%TMPL:END%

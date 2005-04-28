@@ -306,14 +306,14 @@ sub readTemplateTopic {
 
 =pod
 
----++ ObjectMethod generateChangeFormPage ( $session, $theWeb, $theTopic )
+---++ ObjectMethod generateChangeFormPage ( $session, $theWeb, $theTopic, $editaction )
 
 Generate the page that supports selection of the form.
 
 =cut
 
 sub generateChangeFormPage {
-    my( $session, $web, $topic ) = @_;
+    my( $session, $web, $topic, $editaction ) = @_;
     ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     my $page = $session->{templates}->readTemplate( 'changeform' );
@@ -337,14 +337,21 @@ sub generateChangeFormPage {
 
     my $formList = '';
     foreach my $form ( @forms ) {
-        my $selected = ( $form eq $formName ) ? 'checked' : '';
         $formList .= CGI::br() if( $formList );
-        $formList .= CGI::input( {
-                                  type => 'radio',
-                                  name => 'formtemplate',
-                                  value => $form,
-                                  checked => $selected,
-                                 }, ' '.$form.' ' );
+	if ( $form eq $formName ) {
+	  $formList .= CGI::input( {
+				    type => 'radio',
+				    name => 'formtemplate',
+				    value => $form,
+				    checked => 'checked',
+				   }, ' '.$form.' ' );
+	} else {
+	  $formList .= CGI::input( {
+				    type => 'radio',
+				    name => 'formtemplate',
+				    value => $form,
+				   }, ' '.$form.' ' );
+	}
     }
     $page =~ s/%FORMLIST%/$formList/go;
 
@@ -356,6 +363,13 @@ sub generateChangeFormPage {
 
     my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
     $page =~ s/%TEXT%/$text/go;
+    if ( $editaction ) {
+      #$text = CGI::hidden( -name => 'action', -value => $editaction );
+      $text = "<input type=\"hidden\" name=\"action\" value=\"$editaction\" />";
+    } else {
+      $text = '';
+    }
+    $page =~ s/%EDITACTION%/$text/go;
 
     return $page;
 }

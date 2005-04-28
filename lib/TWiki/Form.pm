@@ -236,6 +236,7 @@ sub getFormDef {
             @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
             $fieldDef->{value} = \@posValues;
         }
+
     }
 
     return $fieldsInfo;
@@ -290,7 +291,7 @@ sub renderForEdit {
     my $prefs = $session->{prefs};
     if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
         $chooseForm =
-          CGI::submit(-name => 'submitChangeForm',
+          CGI::submit(-name => 'action',
                       -value => 'Replace form...',
                       -class => "twikiChangeFormButton twikiSubmit");
     }
@@ -477,6 +478,46 @@ sub renderForEdit {
 
 }
 
+=pod
+
+---++ ObjectMethod passForEdit (  $web, $topic, $formWeb, $form, $meta ) -> $html
+
+Pass form fields through to save unchanged during an edit session
+
+=cut
+
+sub passForEdit {
+
+    my( $this, $web, $topic, $formWeb, $form, $meta ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
+    my $session = $this->{session};
+
+    my $text = "";
+
+    my $fieldsInfo = $this->getFormDef( $formWeb, $form );
+    foreach my $c ( @$fieldsInfo ) {
+        my $name = $c->{name};
+        my $title = $c->{title};
+        my $type = $c->{type};
+        my $size = $c->{size};
+
+        my $field;
+        my $value;
+        if( $name ) {
+            $field = $meta->get( 'FIELD', $name );
+            $value = $field->{value};
+        }
+
+        $value = '' unless defined $value;  # allow 0 values
+	$text .= CGI::hidden( -name => $name,
+			      -size => $size,
+			      -value => $value );
+
+    }
+
+    return $text;
+
+}
 
 =pod
 

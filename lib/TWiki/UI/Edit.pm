@@ -59,6 +59,7 @@ Most parameters are in the CGI query:
 | =contenttype= | optional parameter that defines the application type to write into the CGI header. Defaults to text/html. |
 
 =cut
+
 sub edit {
     my $session = shift;
 
@@ -66,6 +67,10 @@ sub edit {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};
+
+    # empty means edit both form and text, "form" means edit form only,
+    # "text" means edit text only
+    my $editaction = lc($query->param( 'action' )) || "";
 
     my $saveCmd = $query->param( 'cmd' ) || '';
     my $breakLock = $query->param( 'breaklock' ) || '';
@@ -127,7 +132,7 @@ sub edit {
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    $tmpl = $session->{templates}->readTemplate( 'edit', $skin );
+    $tmpl = $session->{templates}->readTemplate( "edit$editaction", $skin );
     unless( $topicExists ) {
         if( $templateTopic ) {
             ( $templateWeb, $templateTopic ) =
@@ -223,14 +228,19 @@ sub edit {
         $session->{form}->fieldVars2Meta( $webName,  $session->{cgiQuery},
                                           $meta,
                                           'override' );
-        $formText = $session->{form}->renderForEdit
-          ( $webName, $topic, $templateWeb, $form, $meta,
-            $getValuesFromFormTopic );
+	if ( $editaction eq "text" ) {
+	  $formText = $session->{form}->passForEdit
+	    ( $webName, $topic, $templateWeb, $form, $meta );
+	} else {
+	  $formText = $session->{form}->renderForEdit
+	    ( $webName, $topic, $templateWeb, $form, $meta,
+	      $getValuesFromFormTopic );
+	}
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
         # follows a html monster to let the 'choose form button' align at
         # the right of the page in all browsers
-        my $formText = CGI::submit(-name => 'submitChangeForm',
+        my $formText = CGI::submit(-name => 'action',
 				   -value => 'Add form',
 				   -class => "twikiChangeFormButton twikiSubmit");
         $formText = CGI::Tr(CGI::td( { align=>'right' }, $formText ));
