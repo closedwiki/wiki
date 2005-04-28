@@ -72,6 +72,7 @@ sub _parseFormDefinition {
             # Only insist on first field being present FIXME - use oops page instead?
             if( $inBlock && s/^\s*\|//o ) {
                 my( $title, $type, $size, $vals, $tooltip, $attributes ) = split( /\|/ );
+$this->{session}->writeDebug("title=$title, type=$type, vals=$vals");
                 $title ||= '';
                 $title =~ s/^\s*//go;
                 $title =~ s/\s*$//go;
@@ -121,6 +122,7 @@ sub _parseFormDefinition {
                     $title = $2;                          # field titles
                 }
 
+$this->{session}->writeDebug("name=" . _cleanField($title) . "title=$title, type=$type, vals=$vals");
                 push( @fields,
                       { name => _cleanField( $title ),
                         title => $title,
@@ -236,6 +238,7 @@ sub getFormDef {
             @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
             $fieldDef->{value} = \@posValues;
         }
+$this->{session}->writeDebug("in getformdef title=$fieldDef->{title}, type=$fieldDef->{type}, vals=$fieldDef->{value}");
     }
 
     return $fieldsInfo;
@@ -290,7 +293,7 @@ sub renderForEdit {
     my $prefs = $session->{prefs};
     if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
         $chooseForm =
-          CGI::submit(-name => 'submitChangeForm',
+          CGI::submit(-name => 'action',
                       -value => 'Replace form...',
                       -class => "twikiChangeFormButton twikiSubmit");
     }
@@ -314,14 +317,17 @@ sub renderForEdit {
 
         my $field;
         my $value;
+$this->{session}->writeDebug("4a. name=$name, title=$title, value=$value");
         if( $name ) {
             $field = $meta->get( 'FIELD', $name );
             $value = $field->{value};
+$this->{session}->writeDebug("4. name=$name, title=$title, referenced=$referenced, value=$value");
         }
 
         if( ! defined( $value ) && $attributes =~ /S/ ) {
             # Allow initialisation based on a preference
             $value = $prefs->getPreferencesValue($name);
+$this->{session}->writeDebug("5. value=$value");
         }
         if( $getValuesFromFormTopic && !defined( $value ) &&
 	    #TW: was (checkbox|radio|select)
@@ -333,6 +339,7 @@ sub renderForEdit {
             $value = $c->{value};
             if( defined( $value )) {
                 $value = $session->handleCommonTags( $value, $web, $topic );
+$this->{session}->writeDebug("5. value=$value");
             }
         }
         $value = '' unless defined $value;  # allow 0 values
@@ -383,6 +390,7 @@ sub renderForEdit {
             my $choices = '';
             foreach my $item ( @$options ) {
                 my $selected = ( $item eq $value );
+$session->writeDebug("select: item=$item, value=$value, selected=$selected");
                 $item =~ s/<nop/&lt\;nop/go;
                 if( $selected ) {
                     $choices .= CGI::option({ selected=>'selected' }, $item );
@@ -411,12 +419,14 @@ sub renderForEdit {
             my %attrs;
             my @defaults;
             foreach my $item ( @$options ) {
-	        #NOTE: Does not expand $item in label
+$session->writeDebug("item=$item");
+#NOTE: Does not expand $item in label
                 $attrs{$item} =
                   { class=>'twikiEditFormCheckboxField',
                     label=>$session->handleCommonTags( $item,
                                                        $web,
                                                        $topic ) };
+$session->writeDebug("value=$value");
                 if( $value =~ /(^|,\s*)$item(\s*,|$)/ ) {
                     $attrs{$item}{checked} = 'checked';
                     push( @defaults, $item );
@@ -477,6 +487,47 @@ sub renderForEdit {
 
 }
 
+=pod
+
+---++ ObjectMethod passForEdit (  $web, $topic, $formWeb, $form, $meta ) -> $html
+
+Pass form fields through to save unchanged during an edit session
+
+=cut
+
+sub passForEdit {
+
+    my( $this, $web, $topic, $formWeb, $form, $meta ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
+    my $session = $this->{session};
+
+    my $text = "";
+
+    my $fieldsInfo = $this->getFormDef( $formWeb, $form );
+    foreach my $c ( @$fieldsInfo ) {
+        my $name = $c->{name};
+        my $title = $c->{title};
+        my $type = $c->{type};
+        my $size = $c->{size};
+
+        my $field;
+        my $value;
+        if( $name ) {
+            $field = $meta->get( 'FIELD', $name );
+            $value = $field->{value};
+        }
+
+$this->{session}->writeDebug("passforedit. name=$name, title=$title, value=$value");
+        $value = '' unless defined $value;  # allow 0 values
+	$text .= CGI::hidden( -name => $name,
+			      -size => $size,
+			      -value => $value );
+
+    }
+
+    return $text;
+
+}
 
 =pod
 

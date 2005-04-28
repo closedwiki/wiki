@@ -59,6 +59,7 @@ Most parameters are in the CGI query:
 | =contenttype= | optional parameter that defines the application type to write into the CGI header. Defaults to text/html. |
 
 =cut
+
 sub edit {
     my $session = shift;
 
@@ -66,6 +67,11 @@ sub edit {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};
+
+$session->writeDebug("begin of edit query=" . $query->query_string);
+    # empty means edit both form and text, "form" means edit form only,
+    # "text" means edit text only
+    my $editaction = lc($query->param( 'action' )) || "";
 
     my $saveCmd = $query->param( 'cmd' ) || '';
     my $breakLock = $query->param( 'breaklock' ) || '';
@@ -112,6 +118,7 @@ sub edit {
                                     $topic, undef );
     }
 
+$session->writeDebug("edit 2. editaction=$editaction, text=$text");
     # If you want to edit, you have to be able to view and change.
     TWiki::UI::checkAccess( $session, $webName, $topic,
                             'view', $session->{user} );
@@ -127,7 +134,7 @@ sub edit {
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    $tmpl = $session->{templates}->readTemplate( 'edit', $skin );
+    $tmpl = $session->{templates}->readTemplate( "edit$editaction", $skin );
     unless( $topicExists ) {
         if( $templateTopic ) {
             ( $templateWeb, $templateTopic ) =
@@ -137,11 +144,14 @@ sub edit {
               $session->{store}->readTopic( $session->{user}, $templateWeb,
                                         $templateTopic, undef );
         }
+$session->writeDebug("after template text=$text");
         unless( $text ) {
             ( $meta, $text ) = TWiki::UI::readTemplateTopic( $session, 'WebTopicEditTemplate' );
         }
+$session->writeDebug("after webtopic edit text=$text");
 
         $extra = "(not exist)";
+$session->writeDebug("middle of edit text=$text");
 
         # If present, instantiate form
         if( ! $formTemplate ) {
@@ -151,6 +161,7 @@ sub edit {
 
         $text = $session->expandVariablesOnTopicCreation( $text, $user );
     }
+$session->writeDebug("after expand text=$text");
 
     # override with parameter if set
     $text = $ptext if defined $ptext;
@@ -197,6 +208,7 @@ sub edit {
     }
 
     $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd );
+$session->writeDebug("after plugin edit text=$text");
 
     if( $TWiki::cfg{Log}{edit} ) {
         # write log entry
@@ -223,14 +235,19 @@ sub edit {
         $session->{form}->fieldVars2Meta( $webName,  $session->{cgiQuery},
                                           $meta,
                                           'override' );
-        $formText = $session->{form}->renderForEdit
-          ( $webName, $topic, $templateWeb, $form, $meta,
-            $getValuesFromFormTopic );
+	if ( $editaction eq "text" ) {
+	  $formText = $session->{form}->passForEdit
+	    ( $webName, $topic, $templateWeb, $form, $meta );
+	} else {
+	  $formText = $session->{form}->renderForEdit
+	    ( $webName, $topic, $templateWeb, $form, $meta,
+	      $getValuesFromFormTopic );
+	}
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
         # follows a html monster to let the 'choose form button' align at
         # the right of the page in all browsers
-        my $formText = CGI::submit(-name => 'submitChangeForm',
+        my $formText = CGI::submit(-name => 'action',
 				   -value => 'Add form',
 				   -class => "twikiChangeFormButton twikiSubmit");
         $formText = CGI::Tr(CGI::td( { align=>'right' }, $formText ));
@@ -248,6 +265,7 @@ sub edit {
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
     my $p = $session->{prefs};
 
+$session->writeDebug("end of edit text=$text");
     $text = TWiki::entityEncode( $text );
     $tmpl =~ s/%TEXT%/$text/go;
 
