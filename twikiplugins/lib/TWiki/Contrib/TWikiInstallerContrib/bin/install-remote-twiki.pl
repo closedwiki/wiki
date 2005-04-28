@@ -38,6 +38,7 @@ my $Config = {
 	cgiurl => undef,
 #
 	administrator => '',
+	WIKIWEBMASTER => '',
 #
 	scriptsuffix => '',
 	perl => undef,
@@ -54,7 +55,7 @@ my $Config = {
 Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
 			'distro=s', 'kernel=s', 'web=s@',
-			 'administrator=s',
+			 'administrator=s', 'WIKIWEBMASTER=s',
 			 'scriptsuffix=s', 'perl=s', 'cgiurl=s',
 # plugin, addon, contrib
 			'plugin=s@', 'addon=s@', 'contrib=s@',
@@ -156,6 +157,7 @@ sub PushRemoteTWikiInstall
 		cgibin => $parms->{cgibin},
 		install => 'install',
 		administrator => $parms->{administrator},
+		WIKIWEBMASTER => $parms->{WIKIWEBMASTER},
 	});
 	$Config->{debug} && print "\n$urlInstallWithConfig\n";
 
