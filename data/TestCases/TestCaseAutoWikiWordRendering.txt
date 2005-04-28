@@ -1,10 +1,10 @@
 ---+!! <nop>WikiWord test cases
 
-Description: Test case for checking the correct rendering of 'classic' wikiwords and underscore wikiwords, with variations for italic and code text.
+Description: Test case for checking the correct rendering of 'classic' wikiwords and underscore wikiwords, with variations for italic and code text, and square-bracket links.
 
 [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
-Designed by: Arthur Clemens
+Designed by: Arthur Clemens, Lynnwood Brown
 
 These tests only make sense if
    * underscore wikiwords are implemented in TWiki.pm and Render.pm
@@ -428,4 +428,24 @@ H_
 
 <!-- actual -->
 H_
+<!-- /actual -->
+
+
+<!-- expected expand 28 -->
+<a href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=http://skyloom.com/frame/frameoptions.html">Click here</a>
+<!-- /expected -->
+
+Actual:
+<!-- actual -->
+[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=http://skyloom.com/frame/frameoptions.html][Click here]]
+<!-- /actual -->
+
+Expected:
+<!-- expected expand 29 -->
+<a href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion">Discuss this topic</a>
+<!-- /expected -->
+
+Actual:
+<!-- actual -->
+[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion#DisCuss][Discuss this topic]]
 <!-- /actual -->

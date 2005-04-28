@@ -427,7 +427,8 @@ sub _compareResults {
                 $okset = "";
             }
             $result .= CGI::Tr({valign=>'top'},
-                               CGI::td({bgcolor=>'#99ffcc'},CGI::pre($a)).
+                               CGI::td({bgcolor=>'#99ffcc'},CGI::pre($a))).
+                       CGI::Tr({valign=>'top'},
                                CGI::td({bgcolor=>'#ffccff'},CGI::pre($b)));
             $failed = 1;
         }
@@ -438,8 +439,7 @@ sub _compareResults {
                                        CGI::code($okset)));
     }
     return CGI::table({border=>1},
-      CGI::Tr(CGI::th({}, 'Expected '.$opts).
-              CGI::th({}, 'Actual')).$result);
+      CGI::Tr(CGI::th({}, 'Expected '.$opts).$result));
 }
 
 sub _rexeq {
