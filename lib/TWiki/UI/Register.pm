@@ -1076,7 +1076,7 @@ sub _verificationCodeFilename {
     my ( $code, $tmpDir ) = @_;
     ASSERT( $code ) if DEBUG;
     my $file = $tmpDir . "/$code";
-    $file = TWiki::Sandbox::untaintUnchecked( $file );
+    $file = TWiki::Sandbox::normalizeFileName( $file );
     return $file;
 }
 
