@@ -13,7 +13,6 @@ BEGIN {
 # TODO:
 #   * Documentation (of the process)
 #   * Documentation (of the changed CPAN requirements)
-#   * Automatic check/update the version # (what does this mean?)
 #   * separate file selection from packaging (use separate step to create MANIFEST)
 #   * (probably eliminate outputdir completely)
 #   * use svn export (but mirror it so 
