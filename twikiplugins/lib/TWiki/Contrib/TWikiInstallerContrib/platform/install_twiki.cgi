@@ -257,14 +257,6 @@ if ( 0 )
     }
 }
 
-#my $data = $mapTWikiDirs->{data}->{dest} or die "no data dir?";
-#unlink "$data/TWiki/TWikiRegistration.txt" or warn $!;
-#my $reg = "$data/TWiki/TWikiRegistration.txt,v";
-#if ( -e $reg ) { unlink $reg or warn $!; }
-#mv( "$data/TWiki/TWikiRegistrationPub.txt", "$data/TWiki/TWikiRegistration.txt" ) or warn $!;
-#my $pubreg = "$data/TWiki/TWikiRegistrationPub.txt,v";
-#if ( -e $pubreg ) { mv( $pubreg, $reg ) or warn $!; }
-
 # TODO: setup data/.htpasswd (default file contains TWikiGuest/guest)
 
 ################################################################################
