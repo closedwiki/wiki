@@ -80,14 +80,6 @@ BEGIN {
     # Read the configuration file now in order to set locale;
     # includes checking for broken syntax etc.  Need 'require'
     # to get the $!/$@ to work.
-    $brokenLocalSiteCfg = 0;
-    unless( eval 'require "LocalSite.cfg" ' ) {
-        # Capture the Perl error(s)
-        $brokenLocalSiteCfg = 1;	
-        $brokenLocalSiteError = 
-          ( $! ? "$!\n" : '') .	# $! if not readable,
-			( $@ ? "$@\n" : '');	# $@ if not compileable
-    }
     $brokenTWikiCfg = 0;
     unless( eval 'require "TWiki.cfg" ' ) {
         # Capture the Perl error(s)
@@ -97,6 +89,14 @@ BEGIN {
 			( $@ ? "$@\n" : '');	# $@ if not compileable
     }
 
+    $brokenLocalSiteCfg = 0;
+    unless( eval 'require "LocalSite.cfg" ' ) {
+        # Capture the Perl error(s)
+        $brokenLocalSiteCfg = 1;	
+        $brokenLocalSiteError = 
+          ( $! ? "$!\n" : '') .	# $! if not readable,
+			( $@ ? "$@\n" : '');	# $@ if not compileable
+    }
     # upgrade cfg from old twiki version
     $cfg{DefaultUrlHost} ||= $defaultUrlHost;
     $cfg{ScriptUrlPath} ||= $scriptUrlPath;
