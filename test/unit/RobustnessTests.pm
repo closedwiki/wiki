@@ -36,10 +36,10 @@ sub set_up {
 
 sub test_env {
     my $this = shift;
-    if ( $TWiki::cfg{OS} eq "UNIX" ) {
-        $this->assert( $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} );
+    if( $this->assert( $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} ) {
+        print STDERR "\nTEST RUN USING REAL SAFE PIPES\n";
     } else {
-        $this->assert( $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} );
+        print STDERR "\nTEST RUN USING EMULATED SAFE PIPES\n";
     }
 }
 
