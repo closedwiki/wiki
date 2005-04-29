@@ -322,7 +322,7 @@ print <<EOM;
 EOM
 #print $query->start_html("TWiki Diagnostic Environment"),
 print "<h1>TWiki Test Environment</h1>\n<small>Please read the <a href='http://TWiki.org/cgi-bin/view/TWiki/TWikiInstallationGuide'>TWikiInstallationGuide</a> for more information on TWiki installation.</small><br />
-If your TWiki site is working, the front page should be <a href='view'>right here</a>.";
+If your TWiki site is working, the front page should be <a href='$cfg{ScriptUrlPath}/view$cfg{ScriptSuffix}'>right here</a>.";
 
 # TWiki.cfg was read earlier, in BEGIN block.
 # Check for broken TWiki.cfg and report any Perl error(s)
