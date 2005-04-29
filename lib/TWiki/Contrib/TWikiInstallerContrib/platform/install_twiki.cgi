@@ -226,40 +226,6 @@ __LOCALLIB_CFG__
 }
 
 ################################################################################
-# authentication
-
-print $q->h2( 'Authentication' );
-
-##### UNTESTED!!!!!
-if ( 0 ) 
-{
-    my $bin = $mapTWikiDirs->{bin}->{dest} or die "no bin dest?";
-    mv( "$bin/.htaccess.txt $bin/.htaccess" );
-
-    my $file = "$bin/.htaccess";
-    if ( open(FH, "<$file") )
-    {
-	my $htaccess = join( "", <FH> );
-	close(FH) or warn "Can't close $file: $!";
-	
-	# change $home to $localConfigDir[...]
-	$htaccess =~ s|!FILE_path_to_TWiki!/data|$home/twiki/data|g;	# code smell: duplicated data from config file above
-	$htaccess =~ s|!URL_path_to_TWiki!/bin|/cgi-bin/twiki|g;	# ditto
-	# TODO: fix ErrorDocument 401 (what should it be set to?)
-	
-	open( FH, ">$file" ) or die $!;
-	print FH $htaccess;
-	close( FH ) or die $!;
-    }
-    else
-    {
-	warn ".htaccess !!!";
-    }
-}
-
-# TODO: setup data/.htpasswd (default file contains TWikiGuest/guest)
-
-################################################################################
 # install contrib plugin addon
 ################################################################################
 my @types = (
@@ -297,11 +263,13 @@ my $agent = "TWikiInstaller: " . basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
 $mech->cgibin( $MECHBIN, { scriptSuffix => $localDirConfig->{ScriptSuffix} } );
 
+print $q->h2( 'TWiki Settings' );
+
 ################################################################################
 # attach TWikiInstallationReport
 my $topicInstall = 'TWikiInstallationReport';
 my $fileInstallationReport = "$FindBin::Bin/$topicInstall.html";
-if ( -e $fileInstallationReport )
+if ( 0 ) #-e $fileInstallationReport )
 {
     $mech->edit( "TWiki.$topicInstall" );
 
@@ -327,6 +295,11 @@ if ( -e $fileInstallationReport )
     $mech->field( WIKIWEBMASTER => $WIKIWEBMASTER );
     $mech->click_button( value => 'Save' );
 }
+
+################################################################################
+# authentication
+
+print $q->h2( 'Authentication' );
 
 ################################################################################
 # more authentication stuff (/lock down the wiki)
@@ -360,6 +333,21 @@ __TOPIC__
 # ImageGalleryPlugin: sudo fink install ImageMagick (...)
 # ChartPlugin: sudo fink install gd2 librsvg
 
+
+# turn on TWikiUserAuthentication
+{
+    my $bin = $mapTWikiDirs->{bin}->{dest} or die "no bin dest?";
+    my $data = $mapTWikiDirs->{data}->{dest} or die "no data dest?";
+
+    my $text = File::Slurp::read_file( "$bin/.htaccess.txt" ) or die "$bin/.htaccess.txt: $!";
+    print STDERR "[before] text =[$text]\n";
+    $text =~ s|!FILE_path_to_TWiki!/data|$data|g;
+    $text =~ s|!URL_path_to_TWiki!/bin/oops|$localDirConfig->{ScriptUrlPath}/oops$localDirConfig->{ScriptSuffix}|g;
+    $text =~ s|(<Files ")([^"\*\.]+?)(">)|$1$2$localDirConfig->{ScriptSuffix}$3|g;
+print STDERR "[after] text =[$text]\n";
+print STDERR "$bin/.htaccess\n";
+    File::Slurp::write_file( "$bin/.htaccess", $text ) or die "cannot write .htaccess: $!";
+}
 
 ################################################################################
 #  cleanup / continue links
