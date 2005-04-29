@@ -133,7 +133,7 @@ sub PushRemoteTWikiInstall
 	if ( $Config->{force} )
 	{	    
 	    # CAUTION: erase an existing installation
-	    logSystem(qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && chmod -R a+rwx . && rm -rf *"});
+	    logSystem(qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && chmod -R a+rwx cgi-bin/twiki/ && rm -rf cgi-bin/twiki/"});
 	}
 
 	# untar the tarball from sourceforge.net, install prerequisite CPAN modules
