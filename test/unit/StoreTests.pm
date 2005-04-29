@@ -1,6 +1,6 @@
 # Copyright (C) 2005 Sven Dowideit
 require 5.006;
-package StoreTest;
+package StoreTests;
 
 use base qw(Test::Unit::TestCase);
 
