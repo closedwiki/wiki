@@ -203,6 +203,8 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
     {
 	print FH qq{\$cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
     }
+#    print FH qq{\$cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
+
     close( FH ) or die "Can't close $file: $! ???";
 }
 
@@ -210,9 +212,9 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
     my $file = "$mapTWikiDirs->{bin}->{dest}/LocalLib.cfg";
     open( FH, ">$file" ) or die "Can't open $file: $!";
     print FH <<'__LOCALLIB_CFG__';
-    use vars qw( $twikiLibPath $CPANBASE );
+use vars qw( $twikiLibPath $CPANBASE );
 
-    use Cwd qw( abs_path );
+use Cwd qw( abs_path );
 ( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( "../lib" )) =~ /(.*)/;
 
 $CPANBASE = "$twikiLibPath/CPAN/lib/";
