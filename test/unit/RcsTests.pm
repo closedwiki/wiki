@@ -145,7 +145,7 @@ sub verifyLite {
     my( $this, $topic, $attachment, @vals ) = @_;
     my $numRevs = $#vals + 1;
 
-    my $rcs = new TWiki::Store::RcsWrap( $twiki, $web, $topic, $attachment );
+    my $rcs = new TWiki::Store::RcsLite( $twiki, $web, $topic, $attachment );
     for( my $i=0; $i<$numRevs; $i++ ) {
         addRevision( $rcs, $attachment, $vals[$i], "comment " . $i, "JohnTalintyre" );
     }
