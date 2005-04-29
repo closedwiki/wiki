@@ -36,7 +36,7 @@ sub set_up {
 
 sub test_env {
     my $this = shift;
-    if( $this->assert( $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} ) {
+    if( $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} ) {
         print STDERR "\nTEST RUN USING REAL SAFE PIPES\n";
     } else {
         print STDERR "\nTEST RUN USING EMULATED SAFE PIPES\n";
