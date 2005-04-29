@@ -340,12 +340,9 @@ __TOPIC__
     my $data = $mapTWikiDirs->{data}->{dest} or die "no data dest?";
 
     my $text = File::Slurp::read_file( "$bin/.htaccess.txt" ) or die "$bin/.htaccess.txt: $!";
-    print STDERR "[before] text =[$text]\n";
     $text =~ s|!FILE_path_to_TWiki!/data|$data|g;
     $text =~ s|!URL_path_to_TWiki!/bin/oops|$localDirConfig->{ScriptUrlPath}/oops$localDirConfig->{ScriptSuffix}|g;
     $text =~ s|(<Files ")([^"\*\.]+?)(">)|$1$2$localDirConfig->{ScriptSuffix}$3|g;
-print STDERR "[after] text =[$text]\n";
-print STDERR "$bin/.htaccess\n";
     File::Slurp::write_file( "$bin/.htaccess", $text ) or die "cannot write .htaccess: $!";
 }
 
