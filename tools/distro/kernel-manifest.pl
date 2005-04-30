@@ -99,6 +99,9 @@ sub new
     my $parms = shift || {};
     my $self = bless( $parms, $class );
 
+    die unless $self->{source};
+    $source =~ s/\$/\$\$/g;
+
     unless ( $self->{type} )
     {
 	$self->{type} = -l $self->{source} && 'l'
@@ -112,9 +115,8 @@ sub new
 
     unless ( $self->{destination} )
     {
-	$self->{destination} = $self->{source};
 	# if filename starts with one of the standard twiki points, remap it to a variable name
-	$self->{destination} =~ s#^((templates|lib|bin|pub|data)/)#\$$1#;
+	( $self->{destination} = $self->{source} ) =~ s#^((templates|lib|bin|pub|data)/)#\$$1#;
     }
 
     return $self;
