@@ -22,7 +22,7 @@ use Assert;
 # lists of topics & webs
 # locking
 # streams
-# web creation with baseweb..
+# web creation with options for WebPreferences
 # search
 
 sub new {
@@ -66,11 +66,36 @@ sub test_CreateEmptyWeb {
 	$this->assert_not_null( $twiki->{store} );
 	
 	#create an empty web
-	$twiki->{store}->createWeb($web);		#TODO: how can this succeed without a user? to check perms?
+	$this->assert( ! $twiki->{store}->createWeb($web));		#TODO: how can this succeed without a user? to check perms?
 	$this->assert( $twiki->{store}->webExists($web) );
 	my @topics = $twiki->{store}->getTopicNames($web);
 	$this->assert( $#topics == -1 );
 }
+
+sub test_CreateWeb {
+    my $this = shift;
+
+	$this->assert_not_null( $twiki->{store} );
+	
+	#create a web using _default 
+	#TODO how should this fail if we are testing a store impl that does not have a _deault web ?
+	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));		#TODO: how can this succeed without a user? to check perms?
+	$this->assert( $twiki->{store}->webExists($web) );
+	my @topics = $twiki->{store}->getTopicNames($web);
+	my @defaultTopics = $twiki->{store}->getTopicNames('_default');
+	$this->assert( $#topics == $#defaultTopics );
+}
+
+sub test_CreateWebWithNonExistantBaseWeb {
+    my $this = shift;
+
+	$this->assert_not_null( $twiki->{store} );
+	
+	#create a web using non-exsisatant Web 
+	$this->assert( defined $twiki->{store}->createWeb($web, 'DoesNotExists'));
+	$this->assert( ! $twiki->{store}->webExists($web) );
+}
+
 
 sub test_CreateSimpleTopic {
     my $this = shift;
