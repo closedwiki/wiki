@@ -28,7 +28,7 @@ mkpath( $outputDir, 1 );
 chomp( my @svnInfo = `svn info .` );
 my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
 my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
-execute ( "cd distro/ ; ./build-twiki-kernel.pl --nozip --tempdir=/tmp --outputdir=$outputDir --outfile=TWikiKernel-$branch-$svnRev" ) or die $!;
+execute ( "cd distro/ ; ./build-twiki-kernel.pl --nogendocs --nozip --tempdir=/tmp --outputdir=$outputDir --outfile=TWikiKernel-$branch-$svnRev" ) or die $!;
 
 print "</verbatim>\n";
 print "<HR />\n";
