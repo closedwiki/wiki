@@ -100,7 +100,7 @@ sub test_CreateWebWithNonExistantBaseWeb {
 sub test_CreateSimpleTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($web);
+	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
 	$this->assert( $twiki->{store}->webExists($web) );
 	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
 	
@@ -118,7 +118,7 @@ sub test_CreateSimpleTopic {
 sub test_CreateSimpleMetaTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($web);
+	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
 	$this->assert( $twiki->{store}->webExists($web) );
 	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
 	
@@ -135,7 +135,7 @@ sub test_CreateSimpleMetaTopic {
 sub test_CreateSimpleCompoundTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($web);
+	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
 	$this->assert( $twiki->{store}->webExists($web) );
 	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
 	
@@ -152,7 +152,7 @@ sub test_CreateSimpleCompoundTopic {
 sub test_getRevisionInfo {
     my $this = shift;
 
-	$twiki->{store}->createWeb($web);
+	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
 	my $meta = new TWiki::Meta($twiki, $web, $topic);
 	$this->assert_equals('', $twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta ));
@@ -171,7 +171,7 @@ sub test_getRevisionInfo {
 sub test_moveTopic {
     my $this = shift;
 
-	$twiki->{store}->createWeb($web);
+	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
 	my $meta = new TWiki::Meta($twiki, $web, $topic);
 	$this->assert_equals('', $twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta ));
