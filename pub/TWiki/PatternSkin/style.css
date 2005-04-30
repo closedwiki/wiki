@@ -143,16 +143,18 @@ h6 { font-size:95%;}
 	color:#0F47A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
 }
-th a:link font,
-th a:visited font,
-th font a:link,
-th font a:visited {
-	color:#1559B3; /*C1*/;
+th a:link.twikiLink {
+	color:#648ACA; /* 30% white */
+}
+th a:visited.twikiLink {
+	color:#949494; /* 30% white */
+}
+th a:hover.twikiLink {
+	color:#0F47A3; /*C3*/
 }
 
 /* sorting of table columns */
 /* not yet finalized for tables in topic text */
-
 th.twikiSortedAscendingCol a:link,
 th.twikiSortedAscendingCol a:visited {
 	border-top:1px solid #999; /*C9*/
