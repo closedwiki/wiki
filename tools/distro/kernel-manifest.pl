@@ -15,7 +15,7 @@ use File::Find::Rule;
 use Getopt::Long;
 use Pod::Usage;
 
-my @files;		# files for the MANIFEST
+my @manifestEntries;
 
 my $Config = {
 # 
@@ -51,7 +51,11 @@ chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, tru
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
 foreach my $dir qw( lib templates data bin pub logs )
 {
-    push @files, $ruleNormalFiles->in( $dir );
+    my @fileList = $ruleNormalFiles->in( $dir );
+    foreach ( @fileList ) 
+    { 
+	push @manifestEntries, ManifestEntry->new({ source => $_ });
+    }
 }
 # stop distributing cpan modules; get the latest versions from cpan itself
 #rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text", "$installBase/lib/Error.pm" ] ) or warn $!;
@@ -69,45 +73,80 @@ foreach my $file qw (
 		     CHANGELOG
 		     )
 {
-    push @files, $file;
+    push @manifestEntries, ManifestEntry->new({ source => $file });
 }
 
 # bin/ additional post processing: create authorization required version of some scripts
 foreach my $auth qw( rdiff view )
 {
-    push @files, "bin/${auth}auth";
+    push @manifestEntries, ManifestEntry->new({ source => "bin/${auth}auth" });
 }
 
 ################################################################################
 
-
-foreach my $file ( @files )
-{
-    print "$file\n";
-    next;
-
-    # format from EPM: http://www.easysw.com/epm/epm-manual.html#4_1
-    #--------------------------------------------------------------------------------
-    # Each file in the distribution is listed on a line starting with a letter. The format of all lines is:
-    # type mode owner group destination source options
-    # Regular files use the letter f for the type field:
-    # f 755 root sys /usr/bin/foo foo
-    # Configuration files use the letter c for the type field:
-    # c 644 root sys /etc/foo.conf foo.conf
-    # Directories use the letter d for the type field and use a source path of "-":
-    # d 755 root sys /var/spool/foo -
-    # Finally, symbolic links use the letter l (lowercase L) for the type field:
-    # l 000 root sys /usr/bin/foobar foo
-    # The source field specifies the file to link to and can be a relative path.
-
-#    foreach my $field qw( type mode owner group destination source options )
-#    {
-#	print "";
-#    }
-#    print "\n";
-}
+map { print "$_\n" } @manifestEntries;
 
 exit 0;
+
+################################################################################
+################################################################################
+
+package ManifestEntry;
+
+sub new
+{
+    my $class = shift;
+    my $parms = shift || {};
+    my $self = bless( $parms, $class );
+
+    unless ( $self->{type} )
+    {
+	$self->{type} = -l $self->{source} && 'l'
+	    || -d $self->{source} && 'd'
+	    || 'f';
+    }
+    $self->{mode} ||= '755';
+    $self->{owner} ||= 'root';	#?
+#?    $self->{group} ||= 'twiki';
+    $self->{options} ||= '';
+
+    unless ( $self->{destination} )
+    {
+	$self->{destination} = $self->{source};
+	# if filename starts with one of the standard twiki points, remap it to a variable name
+	$self->{destination} =~ s#^((templates|lib|bin|pub|data)/)#\$$1#;
+    }
+
+    return $self;
+}
+
+use overload ( '""' => \&stringify );
+
+# format from EPM: http://www.easysw.com/epm/epm-manual.html#4_1
+#--------------------------------------------------------------------------------
+# Each file in the distribution is listed on a line starting with a letter. The format of all lines is:
+# type mode owner group destination source options
+# Regular files use the letter f for the type field:
+# f 755 root sys /usr/bin/foo foo
+# Configuration files use the letter c for the type field:
+# c 644 root sys /etc/foo.conf foo.conf
+# Directories use the letter d for the type field and use a source path of "-":
+# d 755 root sys /var/spool/foo -
+# Finally, symbolic links use the letter l (lowercase L) for the type field:
+# l 000 root sys /usr/bin/foobar foo
+# The source field specifies the file to link to and can be a relative path.
+
+sub stringify {
+    my $self = shift;
+    my $text;
+    foreach my $field qw( type mode owner group destination source options )
+    {
+	my $f = $self->{ $field };
+	$f = '?' unless defined $f;
+	$text .= "$f ";
+    }
+    return $text;
+}
 
 ################################################################################
 ################################################################################
