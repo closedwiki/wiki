@@ -11,7 +11,7 @@ Unit tests are held in the subdirectory "unit", and are written using Test::Unit
 
 All TWiki unit tests are run from that directory with the command:
 
-../bin/TestRunner.pl TWikiUnitTestSuite
+perl ../bin/TestRunner.pl TWikiUnitTestSuite
 
 Golden Tests
 ============
