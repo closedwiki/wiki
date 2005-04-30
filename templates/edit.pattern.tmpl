@@ -1,8 +1,5 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:DEF{"focus"}%
-  document.main.text.focus();
-%TMPL:END%
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 <!--HIDE
@@ -14,7 +11,7 @@ toShow=new Array();
 toHide=new Array();
 
 function initForm() {
-  %TMPL:P{"focus"}%
+  document.main.text.focus();
   for (i = 0; i < toShow.length; i++) {
      if(dom) {
         document.getElementById(toShow[i]).style.display="inline";
@@ -101,7 +98,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 </tr>
 <tr class="twikiTopicAction">
 <td class="twikiCancelCol"><a id="cancel" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="Cancel editing" accesskey="c" rel='nofollow'>Cancel</a></td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" title="Save and immediately resume editing"  /><label accesskey="k" for="checkpoint"></label><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="QuietSave" title="Save changes, don't notify" /><label accesskey="q" for="quietsave"></label><input type="submit" class="twikiSubmit" name="action" id="save" value="Save" title="Save topic" /><label accesskey="s" for="save"></label></td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" title="Save and immediately resume editing"  /><label accesskey="k" for="checkpoint"></label><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="Save quietly" title="Save changes, don't notify" /><label accesskey="q" for="quietsave"></label><input type="submit" class="twikiSubmit" name="action" id="save" value="Save" title="Save topic" /><label accesskey="s" for="save"></label></td>
 <td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="action" id="preview" value="Preview" title="Preview topic" /><label accesskey="p" for="preview"></label></td>
 </tr>
 </table>
@@ -110,8 +107,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"content"}%
-<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:P{"simpleheader"}%<label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
 %TEXT%
 </textarea><br />
