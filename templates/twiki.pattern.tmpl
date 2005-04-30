@@ -21,8 +21,22 @@
 
 
 %TMPL:DEF{"twikistyle"}%
+<!-- START fallback in case javascript is off -->
+<!-- no check on TWIKILAYOUTURL and TWIKISTYLEURL; these are added regardlessly -->
+<!-- USERLAYOUTURL and USERSTYLEURL are not supported with javascript off -->
 <script type="text/javascript">
-<!-- 
+<!-- document.write("<!--"); //-->
+</script>
+<style type='text/css'>
+	@import url("%TWIKILAYOUTURL%");
+	@import url("%TWIKISTYLEURL%");
+</style>
+<script type="text/javascript">
+<!-- document.write("-->"); //-->
+</script>
+<!-- END fallback in case javascript is off -->
+<script type="text/javascript">
+<!--
 document.write("<style type='text/css'>");
 /* Default TWiki layout */
 if ("%TWIKILAYOUTURL%".split("?")[0].length) {
@@ -40,7 +54,7 @@ if ("%USERLAYOUTURL%".split("?")[0].length) {
 if ("%USERSTYLEURL%".split("?")[0].length) {
 	document.write("@import url(%USERSTYLEURL%);"); 
 }
-document.write("<\/style>"); 
+document.write("<\/style>");
 //-->
 </script>
 <style type="text/css" media="all">
@@ -90,11 +104,8 @@ document.write("<\/style>");
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiWebIndicator">
-   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a>
-</div>
-<div class="twikiLeftBarContents">
-%INCLUDE{"WebLeftBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiWebIndicator"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a></div>
+<div class="twikiLeftBarContents">%INCLUDE{"%TWIKIWEB%.WebLeftBar"}%</div></div>%TMPL:END%
 
 
 
