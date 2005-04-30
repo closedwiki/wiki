@@ -43,11 +43,7 @@ sub set_up {
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
 	
 	#TODO: we should share common set up and tear down code
-    # Make sure we have a TestUser1 and TestUser1 topic
-    unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, 'TestUser1')) {
-        saveTopic1($TWiki::cfg{UsersWebName}, 'TestUser1',
-                   'silly user page!!!', '' );
-    }
+    # we need to make sure we have a TestUser topic
 	
 	$twiki->{user} = $twiki->{users}->findUser('TestUser');
 	$user = $twiki->{user};
@@ -69,7 +65,7 @@ sub test_CreateEmptyWeb {
 	$this->assert( ! $twiki->{store}->createWeb($web));		#TODO: how can this succeed without a user? to check perms?
 	$this->assert( $twiki->{store}->webExists($web) );
 	my @topics = $twiki->{store}->getTopicNames($web);
-	$this->assert( $#topics == -1 );
+	$this->assert( $#topics == -1 );#we expect there to be no topics
 }
 
 sub test_CreateWeb {
@@ -106,7 +102,6 @@ sub test_CreateSimpleTopic {
 	
 	my $meta = undef;
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
-#	print ">". $twiki->{store}->saveTopic( $user, $web, $topic, $text ) ."<";
 	$this->assert_equals('', $twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta ));
 	$this->assert( $twiki->{store}->topicExists($web, $topic) );
 	
