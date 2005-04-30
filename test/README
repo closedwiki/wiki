@@ -1,8 +1,7 @@
 This file documents the various automatic TWiki test suites.
 
    1. Unit Tests
-   2. Golden Tests
-   3. TestCases Tests
+   2. TestCases Tests
 
 Unit Tests
 ==========
