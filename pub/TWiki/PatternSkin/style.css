@@ -143,15 +143,6 @@ h6 { font-size:95%;}
 	color:#0F47A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
 }
-th a:link.twikiLink {
-	color:#648ACA; /* 30% white */
-}
-th a:visited.twikiLink {
-	color:#949494; /* 30% white */
-}
-th a:hover.twikiLink {
-	color:#0F47A3; /*C3*/
-}
 
 /* sorting of table columns */
 /* not yet finalized for tables in topic text */
@@ -285,6 +276,7 @@ label {
 	border-bottom:1px solid #1559B3; /*C1*/
 }
 .twikiWebIndicator {
+	color:black;
 	font-size:95%;
 	font-weight:bold;
 	text-align:center;
@@ -384,6 +376,18 @@ html>body .twikiLeftBar li a {
 .twikiTopic table th a:link,
 .twikiTopic table th a:visited {
 	text-decoration:none;
+}
+.twikiTopic table th a:link.twikiLink,
+.twikiTopic table th a:link font {
+	color:#5292CA; /* 50% white overlay (PSD) */
+}
+.twikiTopic table th a:visited.twikiLink,
+.twikiTopic table th a:visited font {
+	color:#A7AAAA; /* 50% white overlay (PSD) */
+}
+.twikiTopic table th a:hover.twikiLink,
+.twikiTopic table th a:hover font {
+	color:#0F47A3; /*C3*/
 }
 .twikiTopic ul {
 	margin-top:0;
@@ -1200,6 +1204,13 @@ a:hover .twikiAccessKey {
 }
 .twikiEditPage .twikiTopicAction {
 	margin-top:0;
+}
+.twikiEditPage .twikiTopicActionHelp a:link,
+.twikiEditPage .twikiTopicActionHelp a:visited  {
+	color:#8490A1; /*C6*/
+}
+.twikiEditPage .twikiTopicActionHelp a:hover  {
+	color:#0F47A3; /*C3*/
 }
 
 /*	-----------------------------------------------------------
