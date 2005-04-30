@@ -16,7 +16,7 @@
 	C7	page, legend background color												#f8f8f8
 	C8	h2 background color															#F3EDE7
 	C9	neutral table bg gray that should work on light and dark backgrounds		#999
-	C10	line-height																	1.45em
+	C10	line-height																	1.4em
 	---------------------------------------------------------------------------------------	*/
 
 
@@ -25,9 +25,8 @@
 	-----------------------------------------------------------	*/
 	
 /* HTML elements */
-
 html body {
-	line-height:1.45em; /*C10*/
+	line-height:1.4em; /*C10*/
 	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
 	background-color:#f8f8f8; /*C7*/
 	margin:0;
@@ -53,7 +52,8 @@ table {
 }
 th {
 	line-height:1.15em;
-	padding:0.3em 0;
+	padding:0.3em;
+	/* don't define more or you'll override TablePlugin settings */
 }
 strong, b {
 	font-weight:bold;
@@ -74,14 +74,13 @@ pre {
 	margin-bottom:1em;
 }
 ol, ul {
-	margin-top:1.45em; /*C10*/
+	margin-top:1.4em; /*C10*/
 }
 ol li, ul li {
-	line-height:1.45em; /*C10*/
+	line-height:1.4em; /*C10*/
 }
-
+	
 /* Text */
-
 h1, h2, h3, h4, h5, h6 {
 	font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
 	line-height:104%;
@@ -108,13 +107,12 @@ h5 { font-size:110%;}
 h6 { font-size:95%;}
 
 /* Links */
-
 /* somehow the twikiNewLink style have to be before the general link styles */
 .twikiNewLink a:link sup,
 .twikiNewLink a:visited sup {
 	vertical-align:baseline;
 	font-size:100%;
-	background-color:pink;
+	background-color:#FFC0CB;
 	text-decoration:none;
 }
 .twikiNewLink a:hover sup,
@@ -123,7 +121,7 @@ h6 { font-size:95%;}
 	background-color:#b4d5ff; /*C2*/
 }
 .twikiNewLink {
-	border-bottom:1px solid pink;
+	border-bottom:1px solid #FFC0CB;
 }
 /* to override old Render.pm coded font color style */
 .twikiNewLink font {
@@ -145,12 +143,11 @@ h6 { font-size:95%;}
 	color:#0F47A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
 }
-
 th a:link font,
-th a:visited font {}
-th a:hover font,
-th a:hover font {
-	color:#0F47A3; /*C3*/
+th a:visited font,
+th font a:link,
+th font a:visited {
+	color:#1559B3; /*C1*/;
 }
 
 /* sorting of table columns */
@@ -184,7 +181,6 @@ img {
 }
 
 /* Forms */
-
 form { 
 	display:inline;
 	margin:0;
@@ -264,14 +260,13 @@ label {
 }
 
 /* Left bar */
-
 .twikiLeftBar {
 	border-top:1px solid #ddd;
 	border-right:1px solid #ddd;
 	border-bottom:1px solid #ddd;
 	color:#800;
 	overflow:hidden;
-	line-height:1.3em;
+	line-height:1.5em;
 }
 .twikiLeftBar a:link,
 .twikiLeftBar a:visited {
@@ -289,13 +284,20 @@ label {
 }
 .twikiWebIndicator {
 	font-size:95%;
-	background-color:#efefef; /* color variable WEBBGGCOLOR is set in twiki.pattern.tmpl */
-	color:black;
 	font-weight:bold;
 	text-align:center;
-	border-bottom:2px solid white;
-	padding:0.2em 0 0 0;
-	height:1.5em; /* or WIN/IE wont draw the backgound */
+	line-height:104%;
+	padding:0;
+	margin:1em 0 0.1em 0;
+	display:block;
+	background-color:#efefef; /* color variable WEBBGGCOLOR is set in twiki.pattern.tmpl */
+	padding:0.7em 0;
+	margin:0;
+}
+.twikiWebIndicator ul,
+.twikiWebIndicator li {
+	margin:0;
+	padding:0;
 }
 .twikiLeftBar .twikiWebIndicator a {
 	height:2em;
@@ -360,7 +362,6 @@ html>body .twikiLeftBar li a {
 }
 
 /* Bottom bar */
-
 .twikiBottomBar {
 	padding-bottom:1em;
 }
@@ -371,7 +372,6 @@ html>body .twikiLeftBar li a {
 }
 
 /* Topic text */
-
 .twikiTopic {
 	padding-bottom:1.5em;
 	background-color:transparent;
@@ -475,10 +475,12 @@ html>body .twikiLeftBar li a {
    white-space:nowrap;
 }
 */
-.twikiAttachments th.twikiFirstCol,
 .twikiForm th.twikiFirstCol,
-.twikiAttachments td.twikiFirstCol,
 .twikiForm td.twikiFirstCol {
+	border-left:none;
+}
+.twikiAttachments th.twikiFirstCol,
+.twikiAttachments td.twikiFirstCol {
 	border-left:none;
 	width:26px;
 	text-align:center;
@@ -695,16 +697,23 @@ html>body .twikiToc li a {
 }
 
 /* Topic info */
-
 .twikiTopicInfo {
 	margin:0.5em 0 0 0;
 }
 
 /* Revision info */
-
 .twikiRevInfo {
 	display:block;
 	font-size:95%;
+}
+.twikiRevInfo a {
+	color:#8490A1; /*C6*/
+	text-decoration:none;
+	font-weight:bold;
+}
+.twikiRevInfo .twikiPageNav {
+	/* this is ugly, I know */
+	font-size:100%;
 }
 .twikiRevInfo em,
 .twikiRevInfo i {
@@ -713,7 +722,6 @@ html>body .twikiToc li a {
 .twikiRevision {}
 
 /* Footer */
-
 .twikiTopicFooter {
 	display:block;
 	margin-top:1em;
@@ -721,7 +729,6 @@ html>body .twikiToc li a {
 }
 
 /* Homepath */
-
 .twikiHomePath {
 	font-size:90%;
 }
@@ -730,7 +737,6 @@ html>body .twikiToc li a {
 }
 
 /* Tool bar at top of topic */
-
 .twikiToolBar {
 	display:block;
 	padding:0.3em 0 1em 0;
@@ -781,23 +787,30 @@ html>body .twikiToc li a {
 }
 .twikiToolbarElem {
 	margin-left:0.7em;
+	color:#8490A1; /*C6*/
 }
 
 /* page nav:top to, to bottom */
-
 .twikiPageNav {
 	font-size:95%;
 	font-weight:bold;
 	margin-left:1em;
 	margin-bottom:1em;
 }
+.twikiPageNav a:link,
+.twikiPageNav a:visited {
+	text-decoration:none;
+	color:#8490A1; /*C6*/
+}
+.twikiPageNav a:hover {
+	text-decoration:underline;
+	color:#0F47A3; /*C3*/
+}
 
 /* Moved message */
-
 .twikiMoved {}
 
 /* search box */
-
 .twikiSearchBox {
 	color:#8490A1; /*C6*/
 }
@@ -812,7 +825,6 @@ html>body .twikiToc li a {
 }
 
 /* table used in various places */
-
 .twikiVersatileTable table {
 	width:auto;
 	padding:0px;
@@ -916,15 +928,12 @@ html>body .twikiToc li a {
 .twikiHelpCol {
 	color:#8490A1; /*C6*/
 }
-.twikiGrayText a:link,
-.twikiGrayText a:visited,
 .twikiHelpCol a:link,
 .twikiHelpCol a:visited {
 	color:#8490A1; /*C6*/
 	text-decoration:underline;
 }
-.twikiGrayText a:hover,
-.twikiHelpCol a:hover{
+.twikiHelpCol a:hover {
 	color:#0F47A3; /*C3*/
 }
 .twikiSmall {
@@ -936,10 +945,12 @@ html>body .twikiToc li a {
 	line-height:1.3em;
 }
 .twikiAccessKey {
-	text-decoration:underline;
+	text-decoration:none;
+	border-bottom:1px solid #8490A1; /*C6*/
 }
 a:hover .twikiAccessKey {
 	text-decoration:none;
+	border-bottom:none;
 }
 
 /*	-----------------------------------------------------------
@@ -952,7 +963,6 @@ a:hover .twikiAccessKey {
 
 .twikiSearchResultsHeader,
 .twikiSearchString {
-	font-size:95%;
 	padding:0.2em 0.7em;
 	margin:0.15em -0.7em 0.25em -0.7em;
 	font-weight:bold;
@@ -994,7 +1004,7 @@ a:hover .twikiAccessKey {
 	font-weight:bold;
 }
 .twikiSearchResultsPage .twikiHelp {
-	background-color:pink;
+	background-color:#FFC0CB;
 }
 .twikiSearchResults .twikiSRAuthor {
 	width:15%;
@@ -1005,7 +1015,7 @@ a:hover .twikiAccessKey {
 	text-align:left;
 }
 .twikiSearchResultCount {
-	margin:0.5em 0 2em 0;
+	margin:0 0 2.5em 0;
 	font-size:95%;
 }
 .twikiViewPage .twikiSearchResultsBegin { /* for changes template with noheader="on" */
@@ -1075,6 +1085,9 @@ a:hover .twikiAccessKey {
 }
 .twikiViewPage .twikiTopicAction .twikiSeparator {
 	color:#ccc;
+}
+.twikiViewPage .twikiTopicAction .twikiAccessKey {
+	border-color:white;
 }
 .twikiViewPage .twikiTopicAction a:link,
 .twikiViewPage .twikiTopicAction a:visited,
@@ -1337,7 +1350,6 @@ a:hover .twikiAccessKey {
 }
 
 /* Deleted */
-
 .twikiDiffPage .twikiDiffDeletedHeader {
 	background-color:#FF3000;
 	color:white;
@@ -1351,7 +1363,6 @@ a:hover .twikiAccessKey {
 }
 
 /* Added */
-
 .twikiDiffPage .twikiDiffAddedHeader {
 	background-color:#3DB234;
 	color:white;
@@ -1365,7 +1376,6 @@ a:hover .twikiAccessKey {
 }
 
 /* Changed */
-
 .twikiDiffPage th.twikiDiffChangedHeader,
 .twikiDiffPage td.twikiDiffChangedHeader {
 	background-color:#98A2B0;
@@ -1376,7 +1386,6 @@ a:hover .twikiAccessKey {
 .twikiDiffPage .twikiDiffChangedText {}
 
 /* Unchanged */
-
 .twikiDiffPage .twikiDiffUnchangedText {}
 .twikiDiffPage .twikiDiffUnchangedTextContents { }
 .twikiDiffPage .twikiDiffLineNumberHeader {
