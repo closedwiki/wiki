@@ -1265,7 +1265,7 @@ sub createWeb {
 
     # copy topics from base web
     my @topicList = $this->getTopicNames( $baseWeb );
-    unless( $baseWeb =~ /^_/ ) {
+    unless ((defined $baseWeb) && ( $baseWeb =~ /^_/ )) {
         # not a system web, so filter for only Web* topics
         @topicList = grep { /^Web/ } @topicList;
     }
