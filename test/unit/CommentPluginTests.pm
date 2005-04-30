@@ -85,7 +85,7 @@ sub inputTest {
         $sattrs .= "\"";
     }
 
-    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/save/$web/$topic";
+    my $url = "$TWiki::cfg{DefaultUrlHost}$TWiki::cfg{ScriptUrlPath}/save$TWiki::cfg{ScriptSuffix}/$web/$topic";
 
     if ( $location ) {
         $sattrs .= " location=\"$location\"";
