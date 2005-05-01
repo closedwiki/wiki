@@ -784,7 +784,7 @@ sub searchWeb {
                     $out =~ s/\$summary/$renderer->makeTopicSummary( $text, $topic, $web )/geos;
                     $out =~ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/geos;
                     $out =~ s/\$parent/$meta->getParent()/geos;
-                    $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderDollarFormField( $meta, $1 )/geos;
+                    $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/geos;
                     $out =~ s/\$formname/$meta->getFormName()/geos;
                     # FIXME: Allow all regex characters but escape them
                     $out =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
@@ -1000,7 +1000,7 @@ sub _extractTopicInfo {
     if ( $sortfield =~ /^creat/ ) {
         ( $info->{$sortfield} ) = $store->getRevisionInfo( $web, $topic, 1 );
     } elsif ( !defined( $info->{$sortfield} )) {
-        $info->{$sortfield} = TWiki::Render::renderDollarFormField( $meta, $sortfield );
+        $info->{$sortfield} = TWiki::Render::renderFormFieldArg( $meta, $sortfield );
     }
 
     return $info;
