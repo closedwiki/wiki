@@ -16,9 +16,9 @@
       * <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?currentwebonly=on" rel='nofollow'>Rename/move topic...</a>,
         looking for references in _%WEB% web_ only
 
-   * *Backlinks (Ref-by):*
-      * Find topics <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&amp;regex=on&amp;excludetopic=%TOPIC%&amp;search=%WEB%.%SPACEDTOPIC%%28%5B%5EA-Za-z0-9%5D%7C%24%29">in <nop>%WEB% web</a> that link to <nop>%TOPIC%
-      * Find topics <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?web=all&amp;scope=text&amp;regex=on&amp;excludetopic=%TOPIC%&amp;search=%WEB%.%SPACEDTOPIC%%28%5B%5EA-Za-z0-9%5D%7C%24%29">in all public webs</a> that link to <nop>%TOPIC%
+   * *Backlinks:*
+      * Find topics <a href="%SCRIPTURLPATH%/backlinks%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=web" title="Search all webs for topics that link to here" accesskey="w">in <nop>%WEB% <span class="twikiAccessKey">w</span>eb</a> that link to <nop>%TOPIC%
+      * Find topics <a href="%SCRIPTURLPATH%/backlinks%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=allwebs" title="Search the <nop>%WEB% Web for topics that link to here" accesskey="l">in a<span class="twikiAccessKey">ll</span> public webs</a> that link to <nop>%TOPIC%
 
    * *Child topics in <nop>%WEB% web:*
       * %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" default="No child topics"}%
@@ -48,5 +48,5 @@
       * Newer revision: <input type="text" name="rev1" size="6" value="%PARAM1%" />
         <input type="submit" class="twikiSubmit" value="View difference" />
 </form> %TMPL:END%
-%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:DEF{"topicaction"}%%TMPL:P{"canceltopicaction"}%%TMPL:END%
 %TMPL:P{"oops"}%
