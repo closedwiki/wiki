@@ -1002,11 +1002,6 @@ sub new {
     $topic ||= '';
     $url ||= '';
 
-    if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
-        # bail out if authentication failed
-        return undef;
-    }
-
     my $this = bless( {}, $class );
 
     # create the various sub-objects

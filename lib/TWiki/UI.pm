@@ -121,6 +121,15 @@ sub run {
         # }
     }
 
+    my $script = $ENV{'SCRIPT_FILENAME'};
+    if( $ENV{'REDIRECT_STATUS'} &&
+        $ENV{'REDIRECT_STATUS'} eq '401'
+        && $script !~/\boops\b/ ) {
+        # bail out if authentication failed and this isn't an
+        # oops script. The redirect is probably bogus.
+        die "Trying to redirect to $script on authentication failure; this is not permitted. The target must be an oops.";
+    }
+
     my $session = new TWiki( $pathInfo, $user, $topic, $url,
                              $query, $scripted );
 
@@ -136,7 +145,6 @@ sub run {
         # Had an access control violation. See if there is an 'auth' version
         # of this script, may be a result of not being logged in.
         my $url;
-        my $script = $ENV{'SCRIPT_FILENAME'};
         $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/;
         my $scriptPath = $1;
         my $scriptName = $2;
