@@ -579,13 +579,13 @@ sub fieldVars2Meta {
        # reading in form definition
        $value = '' unless( defined( $value ) || $justOverride );
        my $mandatory = ($fieldDef->{attributes} =~ /M/)?1:0;
-       if ( ($value eq "") && $handleMandatory && $mandatory ) {
-	 # Create own oops, find topic instead of "" requires passing it 
-	 # in from caller as $query->param('topic') has been changed.
-	 throw TWiki::OopsException( 'fielderr',
-				     web => $this->{session}->{webName},
-				     topic => $this->{session}->{topicName},
-				     params => [ $fieldDef->{title} ] );
+       if ( $handleMandatory && $mandatory && !$value ) {
+           # Create own oops, find topic instead of "" requires passing it 
+           # in from caller as $query->param('topic') has been changed.
+           throw TWiki::OopsException( 'fielderr',
+                                       web => $this->{session}->{webName},
+                                       topic => $this->{session}->{topicName},
+                                       params => [ $fieldDef->{title} ] );
        }
        if( defined( $value ) ) {
            my $args =
