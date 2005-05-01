@@ -14,6 +14,7 @@ use Cwd qw( cwd );
 use File::Find::Rule;
 use Getopt::Long;
 use Pod::Usage;
+use ManifestEntry;
 
 my @manifestEntries;
 
@@ -87,68 +88,6 @@ foreach my $auth qw( rdiff view )
 map { print "$_\n" } @manifestEntries;
 
 exit 0;
-
-################################################################################
-################################################################################
-
-package ManifestEntry;
-
-sub new
-{
-    my $class = shift;
-    my $parms = shift || {};
-    my $self = bless( $parms, $class );
-
-    die unless $self->{source};
-    $source =~ s/\$/\$\$/g;
-
-    unless ( $self->{type} )
-    {
-	$self->{type} = -l $self->{source} && 'l'
-	    || -d $self->{source} && 'd'
-	    || 'f';
-    }
-    $self->{mode} ||= '755';
-    $self->{owner} ||= 'root';	#?
-#?    $self->{group} ||= 'twiki';
-    $self->{options} ||= '';
-
-    unless ( $self->{destination} )
-    {
-	# if filename starts with one of the standard twiki points, remap it to a variable name
-	( $self->{destination} = $self->{source} ) =~ s#^((templates|lib|bin|pub|data)/)#\$$1#;
-    }
-
-    return $self;
-}
-
-use overload ( '""' => \&stringify );
-
-# format from EPM: http://www.easysw.com/epm/epm-manual.html#4_1
-#--------------------------------------------------------------------------------
-# Each file in the distribution is listed on a line starting with a letter. The format of all lines is:
-# type mode owner group destination source options
-# Regular files use the letter f for the type field:
-# f 755 root sys /usr/bin/foo foo
-# Configuration files use the letter c for the type field:
-# c 644 root sys /etc/foo.conf foo.conf
-# Directories use the letter d for the type field and use a source path of "-":
-# d 755 root sys /var/spool/foo -
-# Finally, symbolic links use the letter l (lowercase L) for the type field:
-# l 000 root sys /usr/bin/foobar foo
-# The source field specifies the file to link to and can be a relative path.
-
-sub stringify {
-    my $self = shift;
-    my $text;
-    foreach my $field qw( type mode owner group destination source options )
-    {
-	my $f = $self->{ $field };
-	$f = '?' unless defined $f;
-	$text .= "$f ";
-    }
-    return $text;
-}
 
 ################################################################################
 ################################################################################
