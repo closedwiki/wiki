@@ -319,14 +319,19 @@ sub getRevisionInfo {
         $date = $topicinfo->{date} ;
         $author = $this->{_session}->{users}->findUser($topicinfo->{author});
         $rev = $topicinfo->{version};
+$this->{_session}->writeDebug("rev=$rev, date=$date");
         $rev =~ s/^\$Rev(:\s*\d+\s*)?\$$/0/;
         $rev =~ s/^\d+\.//;
         $comment = '';
     } else {
         # Get data from Store
+        shift;
+	shift;
+        my $version = shift;
         my $store = $this->{_session}->{store};
         ( $date, $author, $rev, $comment ) =
-          $store->getRevisionInfo( $this->{_web}, $this->{_topic}, 0 );
+          $store->getRevisionInfo( $this->{_web}, $this->{_topic}, $version );
+$this->{_session}->writeDebug("from store: rev=$rev, date=$date");
     }
 
     return( $date, $author, $rev, $comment );

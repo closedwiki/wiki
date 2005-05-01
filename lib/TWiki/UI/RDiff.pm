@@ -188,6 +188,8 @@ sub _sequentialRow {
                         valign=>'top',
                         width=>"1%"},
                        $char.CGI::br().$char);
+    } else {
+      $row = CGI::td( "&nbsp;" );
     }
     $row .= CGI::td({class=>"twikiDiff${bodycls}Text"}, $data);
     $row = CGI::Tr( $row );
@@ -370,7 +372,7 @@ sub diff {
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
 
     my( $before, $difftmpl, $after, $tail) = split( /%REPEAT%/, $tmpl);
-
+$session->writeDebug("before=$before, tmpl=$difftmpl, after=$after, tail=$tail");
     my $maxrev = $session->{store}->getRevisionNumber( $webName, $topic );
     $maxrev =~ s/r?1\.//go;  # cut 'r' and major
 

@@ -103,8 +103,6 @@ sub view {
             $rev = 1;
         }
         if( $rev < $showRev ) {
-            # Note: the most recent topic read in even if earlier rev
-            # requested.
             ( $meta, $text ) = $session->{store}->readTopic
               ( $session->{user}, $webName, $topicName, $rev );
 

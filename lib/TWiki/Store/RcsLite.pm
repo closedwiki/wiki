@@ -548,7 +548,7 @@ sub getRevisionInfo {
     my @result;
 
     if( $this->{where} && $this->{where} ne 'nofile' ) {
-        @result = ( '', $version, $this->_date( $version ), $this->author( $version ), $this->_comment() );
+        @result = ( '', $version, $this->_date( $version ), $this->_author( $version ), $this->_comment() );
     } else {
         @result = $this->_getRevisionInfoDefault();
     }
