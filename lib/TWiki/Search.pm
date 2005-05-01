@@ -721,7 +721,7 @@ sub searchWeb {
                 if( $theFormat ) {
                     $out = $theFormat;
                     $out =~ s/\$web/$web/gos;
-                    $out =~ s/\$topic\(([^\)]*)\)/_breakName( $topic, $1 )/geos;
+                    $out =~ s/\$topic\(([^\)]*)\)/TWiki::Render::breakName( $topic, $1 )/geos;
                     $out =~ s/\$topic/$topic/gos;
                     $out =~ s/\$date/$revDate/gos;
                     $out =~ s/\$isodate/$isoDate/gs;
@@ -782,10 +782,10 @@ sub searchWeb {
                 } elsif( $theFormat ) {
                     $out =~ s/\$summary\(([^\)]*)\)/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/geos;
                     $out =~ s/\$summary/$renderer->makeTopicSummary( $text, $topic, $web )/geos;
-                    $out =~ s/\$parent\(([^\)]*)\)/_breakName( _getMetaParent( $meta ), $1 )/geos;
-                    $out =~ s/\$parent/_getMetaParent( $meta )/geos;
-                    $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/getMetaFormField( $meta, $1 )/geos;
-                    $out =~ s/\$formname/_getMetaFormName( $meta )/geos;
+                    $out =~ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/geos;
+                    $out =~ s/\$parent/$meta->getParent()/geos;
+                    $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderDollarFormField( $meta, $1 )/geos;
+                    $out =~ s/\$formname/$meta->getFormName()/geos;
                     # FIXME: Allow all regex characters but escape them
                     $out =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/geos;
                     $out =~ s/\r?\n/$newLine/gos if( $newLine );
@@ -1000,7 +1000,7 @@ sub _extractTopicInfo {
     if ( $sortfield =~ /^creat/ ) {
         ( $info->{$sortfield} ) = $store->getRevisionInfo( $web, $topic, 1 );
     } elsif ( !defined( $info->{$sortfield} )) {
-        $info->{$sortfield} = getMetaFormField( $meta, $sortfield );
+        $info->{$sortfield} = TWiki::Render::renderDollarFormField( $meta, $sortfield );
     }
 
     return $info;
@@ -1057,88 +1057,6 @@ sub _getRev1Info {
 
     return 1;
 }
-
-sub _getMetaParent
-{
-    my( $theMeta ) = @_;
-
-    my $value = '';
-    my $parent = $theMeta->get( 'TOPICPARENT' );
-    $value = $parent->{'name'} if( $parent );
-    return $value;
-}
-
-#=========================
-=pod
-
----++ StaticMethod getMetaFormField (  $theMeta, $theParams  )
-
-Not yet documented, though used by Render.pm!
-
-=cut
-
-sub getMetaFormField
-{
-    my( $theMeta, $theParams ) = @_;
-
-    my $name = $theParams;
-    my $break = '';
-    my @params = split( /\,\s*/, $theParams, 2 );
-    if( @params > 1 ) {
-        $name = $params[0] || '';
-        $break = $params[1] || 1;
-    }
-    my $value = '';
-    my @fields = $theMeta->find( 'FIELD' );
-    foreach my $field ( @fields ) {
-        $value = $field->{value};
-        $value =~ s/^\s*(.*?)\s*$/$1/go;
-        if( $name =~ /^($field->{name}|$field->{title})$/ ) {
-            $value = _breakName( $value, $break );
-            return $value;
-        }
-    }
-    return '';
-}
-
-# Returns the name of the form attached to the topic
-sub _getMetaFormName
-{
-    my( $theMeta ) = @_;
-
-    my $aForm = $theMeta->get( 'FORM' );
-    if( $aForm ) {
-        return $aForm->{name};
-    }
-    return '';
-}
-
-sub _breakName
-{
-    my( $theText, $theParams ) = @_;
-
-    my @params = split( /[\,\s]+/, $theParams, 2 );
-    if( @params ) {
-        my $len = $params[0] || 1;
-        $len = 1 if( $len < 1 );
-        my $sep = '- ';
-        $sep = $params[1] if( @params > 1 );
-        if( $sep =~ /^\.\.\./i ) {
-            # make name shorter like 'ThisIsALongTop...'
-            $theText =~ s/(.{$len})(.+)/$1.../s;
-
-        } else {
-            # split and hyphenate the topic like 'ThisIsALo- ngTopic'
-            $theText =~ s/(.{$len})/$1$sep/gs;
-            $theText =~ s/$sep$//;
-        }
-    }
-    return $theText;
-}
-
-
-
-#=========================
 
 1;
 

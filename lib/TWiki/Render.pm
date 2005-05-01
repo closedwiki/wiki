@@ -189,7 +189,7 @@ sub _renderFormField {
     if( $args ) {
         my $attrs = new TWiki::Attrs( $args );
         my $name = $attrs->{name};
-        $text = TWiki::Search::getMetaFormField( $meta, $name ) if( $name );
+        $text = renderFormFieldArg( $meta, $name ) if( $name );
     }
     return $text;
 }
@@ -201,22 +201,17 @@ sub _renderFormData {
     return '' unless( $form );
 
     my $name = $form->{name};
-    my $metaText = CGI::start_table( { border=>1, cellspacing=>0, cellpadding=>1, cols => 2 });
-    $metaText .= CGI::th( { colspan => 2 }, "[[$name]]" );  # was bgcolor => '#99CCCC'
+    my $metaText = "\n|*[[".$name."]]*||\n";
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
         my $title = $field->{title};
-        my $value = $field->{value};
-	# change any new line character sequences to <br />
-        #$value =~ s/\n/<br \/>/g;      # undo expansion
-	$value =~ s/(\n\r?)|(\r\n?)+/<br \/>/gos;
-	# escape "|" to HTML entity
-	# SMELL: Is this still required when using HTML tables to render forms?
-	$value =~ s/\|/\&\#124;/gos;
-	$value = "&nbsp;" unless $value;
-        $metaText .= CGI::Tr( CGI::td( $title ) . CGI::td( "\n$value\n" ));
+        my $value = $field->{value} || '&nbsp;';
+        # change any new line character sequences to <br />
+        $value =~ s!\r?\n!<br />!gs;
+        # escape "|" to HTML entity
+        $value =~ s/\|/&#124;/gs;
+        $metaText .= "|  $title:|$value |\n";
     }
-    $metaText .= CGI::end_table();
     return CGI::div( { class => 'twikiForm' }, $metaText );
 }
 
@@ -1104,7 +1099,6 @@ sub getRenderedVersion {
     $text = $doctype.$text;
 
     $plugins->postRenderingHandler( $text );
-
     return $text;
 }
 
@@ -1354,7 +1348,7 @@ sub takeOutBlocks {
     my( $this, $intext, $tag, $map ) = @_;
     ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
 
-    return $intext unless ( $intext =~ m/<$tag>/ );
+    return $intext unless ( $intext =~ m/<$tag\b/ );
 
     my $open = qr/^\s*<$tag\b([^>]*)?>(.*)$/i;
     my $close = qr/^\s*<\/$tag>(.*)$/i;
@@ -1732,6 +1726,74 @@ sub _replaceInternalRefs {
         $args->{spacedTopic} = TWiki::spaceOutWikiWord( $topic );
         $args->{spacedTopic} =~ s/ / */g;
         $text = replaceTopicReferences( $text, $args );
+    }
+    return $text;
+}
+
+=pod
+
+---++ StaticMethod renderFormFieldArg( $meta, $args ) -> $text
+
+Parse the arguments to a $formfield specification and extract
+the relevant formfield from the given meta data.
+
+=cut
+
+sub renderFormFieldArg {
+    my( $meta, $args ) = @_;
+
+    my $name = $args;
+    my $breakArgs = '';
+    my @params = split( /\,\s*/, $args, 2 );
+    if( @params > 1 ) {
+        $name = $params[0] || '';
+        $breakArgs = $params[1] || 1;
+    }
+    my $value = '';
+    my @fields = $meta->find( 'FIELD' );
+    foreach my $field ( @fields ) {
+        $value = $field->{value};
+        $value =~ s/^\s*(.*?)\s*$/$1/go;
+        if( $name =~ /^($field->{name}|$field->{title})$/ ) {
+            $value = breakName( $value, $breakArgs );
+            return $value;
+        }
+    }
+    return '';
+}
+
+=pod
+
+---++ StaticMethod breakName( $text, $args) -> $text
+   * =$text= - text to "break"
+   * =$args= - string of format (\d+)([,\s*]\.\.\.)?)
+Hyphenates $text every $1 characters, or if $2 is "..." then shortens to
+$1 characters and appends "..." (making the final string $1+3 characters
+long)
+
+_Moved from Search.pm because it was obviously unhappy there,
+as it is a rendering function_
+
+=cut
+
+sub breakName {
+    my( $text, $args ) = @_;
+
+    my @params = split( /[\,\s]+/, $args, 2 );
+    if( @params ) {
+        my $len = $params[0] || 1;
+        $len = 1 if( $len < 1 );
+        my $sep = '- ';
+        $sep = $params[1] if( @params > 1 );
+        if( $sep =~ /^\.\.\./i ) {
+            # make name shorter like 'ThisIsALongTop...'
+            $text =~ s/(.{$len})(.+)/$1.../s;
+
+        } else {
+            # split and hyphenate the topic like 'ThisIsALo- ngTopic'
+            $text =~ s/(.{$len})/$1$sep/gs;
+            $text =~ s/$sep$//;
+        }
     }
     return $text;
 }

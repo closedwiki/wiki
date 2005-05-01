@@ -465,4 +465,38 @@ sub forEachSelectedValue {
     }
 }
 
+=pod
+
+---++ ObjectMethod getParent() -> $parent
+Gets the TOPICPARENT name.
+
+=cut
+
+sub getParent {
+    my( $this ) = @_;
+
+    my $value = '';
+    my $parent = $this->get( 'TOPICPARENT' );
+    $value = $parent->{name} if( $parent );
+    return $value;
+}
+
+=pod
+
+---++ ObjectMethod getFormName() -> $formname
+
+Returns the name of the FORM, or '' if none.
+
+=cut
+
+sub getFormName {
+    my( $this ) = @_;
+
+    my $aForm = $this->get( 'FORM' );
+    if( $aForm ) {
+        return $aForm->{name};
+    }
+    return '';
+}
+
 1;
