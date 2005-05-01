@@ -1,11 +1,11 @@
 %TMPL:INCLUDE{"twiki"}%
 
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-<body bgcolor="#ffffff">
-#PageTop
+%TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" name="submit" class="twikiSubmit" value=" &nbsp; Change form &nbsp; " /> %TMPL:END%
+
 %TMPL:DEF{"titleaction"}%(change form) %TMPL:END%
 %TMPL:DEF{"webaction"}% *Action* %TMPL:END%
+
+%TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
 <form name="main" action="%EDITURL%" method="post">
 ---++ Choose a new form template
@@ -28,9 +28,10 @@
 %TEXT%
 %EDITACTION%
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-%TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" name="submit" class="twikiSubmit" value=" &nbsp; Change form &nbsp; " /> %TMPL:END%
-%TMPL:P{"standardfooter"}%
-</form>
-#PageBottom
-</body>
-</html>
+%TMPL:P{"topicinfo"}%</form>%TMPL:END%
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

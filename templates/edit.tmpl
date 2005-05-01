@@ -63,12 +63,18 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 //STOP HIDING-->
 </script>%TMPL:END%
 
+%TMPL:DEF{"bodystart"}%
+<body bgcolor="#ffffff" onload="initForm()">
+#PageTop
+%TMPL:END%
+
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
 &nbsp; &nbsp;
 </td><td valign="top">
 &nbsp; &nbsp;
 <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify <br />
+&nbsp; &nbsp;
 <input type="checkbox" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /> Force new revision 
 <font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>help</a>)</font>
 <font color="#333333" size="-1">
@@ -78,7 +84,8 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%TMPL:P{"simpleheader"}%
+<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
 %TEXT%
 </textarea><br />
@@ -94,7 +101,7 @@ See below for help in editing this page.
  </tr>
 </table>
 %FORMFIELDS%
-%TMPL:P{"standardfooter"}%</form>%TMPL:END%
+%TMPL:P{"topicinfo"}%</form>%TMPL:END%
 
  
 %TMPL:DEF{"topicaction"}%
@@ -108,9 +115,6 @@ See below for help in editing this page.
 %TMPL:DEF{"webaction"}%Change topic%TMPL:END%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
-<body bgcolor="#ffffff" onload="initForm()">
-#PageTop
-%TMPL:P{"content"}%
-#PageBottom
-</body>
-</html>
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

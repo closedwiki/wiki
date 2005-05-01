@@ -17,13 +17,16 @@ function launchWindow( theWeb, theTopic ) {
   </td><td valign="top">
    &nbsp; &nbsp;
    <input type="checkbox" name="dontnotify" %DONTNOTIFYCHECKBOX% /> Minor changes, don't notify <br />
+   &nbsp; &nbsp;
    <input type="checkbox" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /> Force new revision
    <font size="-1">(<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>help</a>)</font>
    </div>%TMPL:END%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
+
+%TMPL:DEF{"bodystart"}%
 <body bgcolor="#ffffff" background="%PREVIEWBGIMAGE%">
 #PageTop
+%TMPL:END%
+
 %TMPL:DEF{"titleaction"}%(preview) %TMPL:END%
 %TMPL:DEF{"headerhelp"}% <font size="-2">
   <ul>
@@ -35,6 +38,10 @@ function launchWindow( theWeb, theTopic ) {
 %TMPL:DEF{"webaction"}%
   <b><font color="#FF0000">Note:</font></b>
   This is a preview. <b><font color="#FF0000">Do not forget</font></b> to save your changes. %TMPL:END%
+
+%TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" value=" Save Changes " /> %FORMFIELDS% %TMPL:END%
+
+%TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
 <br />
 %TEXT%
@@ -46,9 +53,10 @@ function launchWindow( theWeb, theTopic ) {
 <input type="hidden" name="cmd" value="%CMD%" />
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-%TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" value=" Save Changes " /> %FORMFIELDS% %TMPL:END%
-%TMPL:P{"standardfooter"}%
-</form>
-#PageBottom
-</body>
-</html>
+%TMPL:P{"topicinfo"}%</form>%TMPL:END%
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

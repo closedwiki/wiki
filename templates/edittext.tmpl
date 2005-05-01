@@ -1,6 +1,24 @@
 %TMPL:INCLUDE{"edit"}%
 
-%TMPL:DEF{"simpleheader"}%
+%TMPL:DEF{"titleaction"}%(edit text)%TMPL:END%
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+<form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
+%TEXT%
+</textarea><br />
 <input type="hidden" name="editaction" value="text" />
----+ <nop>%TOPIC% (edit text)
-%BR%%TMPL:END%
+<input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+<input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<input type="hidden" name="cmd" value="%CMD%" />
+See below for help in editing this page.
+<table border="0" cellpadding="2" cellspacing="0">
+ <tr>
+  <td><b>-- <nop>%WIKIUSERNAME% - %DATE%</b></td>
+  <td> &nbsp;&nbsp; <code>&lt;==</code> Your signature for easy copy and paste (triple click to select)</td>
+ </tr>
+</table>
+%FORMFIELDS%
+%TMPL:P{"topicinfo"}%</form>%TMPL:END%

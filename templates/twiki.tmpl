@@ -1,9 +1,65 @@
 %TMPL:DEF{"sep"}% | %TMPL:END%
+
+
+
+
+
+
+
 %TMPL:DEF{"htmldoctype"}%
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="%LANG%" lang="%LANG%"> %TMPL:END%
+
+
 %TMPL:DEF{"script"}%%TMPL:END%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>%TMPL:END%
+
+
+
 %TMPL:DEF{"head"}%
 <head>
  %TMPL:P{"windowtitle"}%
@@ -13,6 +69,52 @@
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
  %TMPL:P{"script"}%
 </head>%TMPL:END%
+
+
+
+
+
+
+
+
+
+%TMPL:DEF{"titleaction"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%%TMPL:END%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body bgcolor="#ffffff">
+#PageTop
+%TMPL:END%
+
+
+%TMPL:DEF{"attachments"}%%TMPL:END%
+
+
+
 %TMPL:DEF{"standardheader"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr>
@@ -58,8 +160,22 @@
 <div class="TWikiCopyright">
 <font size="-2">%WEBCOPYRIGHT%</font>
 </div>%TMPL:END%
-%TMPL:DEF{"footernote"}%%TMPL:END%
+%TMPL:DEF{"footernote"}% %TMPL:END%
 %TMPL:DEF{"standardfooter"}%
+#PageBottom %TMPL:END%
+
+%TMPL:DEF{"bodyend"}%</body></html> %TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"topicinfo"}%
+%BR%
 <br clear="all" />
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
  <tr bgcolor="%WEBBGCOLOR%">
@@ -79,16 +195,21 @@
   </td>
  </tr>
 </table>%TMPL:END%
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+---+ %TMPL:P{"heading"}%
+%BR%
+%TMPL:P{"message"}%
+%TMPL:P{"topicinfo"}%%TMPL:END%
+
+
+
+
 %TMPL:DEF{"oops"}%
 %TMPL:P{"htmldoctype"}%
 %TMPL:P{"head"}%
-<body bgcolor="#ffffff">
-#PageTop
-%TMPL:P{"simpleheader"}%
----+ %TMPL:P{"heading"}%
-%TMPL:P{"message"}%
-<p />
-%TMPL:P{"standardfooter"}%
-#PageBottom
-</body>
-</html>%TMPL:END%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%
+%TMPL:END%

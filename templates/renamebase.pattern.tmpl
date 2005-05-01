@@ -34,11 +34,13 @@
 
 %TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">Allow non <nop>WikiWord for the new topic name</label>%TMPL:END%
 
+%TMPL:DEF{"simpleheader"}%
+---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
 
 
 %TMPL:DEF{"content"}%
 <form method="post" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
----+ %TMPL:P{"webaction"}% %TOPIC%
+%TMPL:P{"simpleheader"}%
 <div class="twikiVersatileTable">
 <table>
 <tr>

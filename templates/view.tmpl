@@ -1,5 +1,17 @@
 %TMPL:INCLUDE{"twiki"}%
 
+%TMPL:DEF{"bodystart"}%
+<body bgcolor="#ffffff">
+#PageTop
+%TMPL:END%
+
+%TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
+%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
+%TMPL:DEF{"form"}%
+%META{"form"}%%TMPL:END%
+
+%TMPL:DEF{"attachments"}%
+%META{"attachments"}%%TMPL:END%
 
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
@@ -8,19 +20,19 @@
  </div>
 %TMPL:END%
 
-
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-<body bgcolor="#ffffff">
-#PageTop
+%TMPL:DEF{"main"}%
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> %BROADCASTMESSAGE%
-%TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
-%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
 %TMPL:P{"standardheader"}%
 </form>
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%%TMPL:END%
+
+%TMPL:DEF{"content"}%
 %TEXT%
-%META{"form"}%
-%META{"attachments"}%
+#TopicEnd
+%TMPL:P{"form"}%%TMPL:P{"attachments"}%
+%TMPL:P{"topicinfo"}%%TMPL:END%
+
 %TMPL:DEF{"topicaction"}%
   %EDITTOPIC%
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel='nofollow'>Attach</a>
@@ -28,7 +40,9 @@
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%" rel='nofollow'>Printable</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" rel='nofollow'>Diffs</a> %REVISIONS%
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>More</a> %TMPL:END%
-%TMPL:P{"standardfooter"}%
-#PageBottom
-</body>
-</html>
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}% 

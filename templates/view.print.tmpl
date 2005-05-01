@@ -1,12 +1,14 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:P{"htmldoctype"}%
+
+%TMPL:DEF{"head"}%
 <head>
  <title> %TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
-</head>
-<body bgcolor="#ffffff">
-#PageTop
+</head>%TMPL:END%
+
+
+%TMPL:DEF{"main"}%
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
   <tr bgcolor="%WEBBGCOLOR%">
     <td>
@@ -14,7 +16,10 @@
     </td>
   </tr>
 </table>
-<p />
+<p />%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%%TMPL:END%
+
+%TMPL:DEF{"content"}%
 %TEXT%
 %META{"form"}%
 %META{"attachments"}%
@@ -27,6 +32,10 @@
   </tr>
 </table>
 %TMPL:P{"copyright"}%
-#PageBottom
-</body>
-</html>
+%TMPL:END%
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

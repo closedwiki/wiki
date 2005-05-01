@@ -1,18 +1,16 @@
-%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"view"}%
 
-
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-<body bgcolor="#ffffff">
-#PageTop
-<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 %TMPL:DEF{"titleaction"}%(search result) %TMPL:END%
 %TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
-%TMPL:P{"standardheader"}%
-</form>
-%SPLIT%Search: <b> %SEARCHSTRING% </b>
-<p />
-%SPLIT%<table width="100%" border="0" cellpadding="0" cellspacing="4">
+
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+
+%TMPL:DEF{"footernote"}% %TMPL:END%
+
+%TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%
+<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>%TMPL:END%
+
+%TMPL:DEF{"repeatedsearchblock"}%<table width="100%" border="0" cellpadding="0" cellspacing="4">
 <tr bgcolor="%WEBBGCOLOR%">
   <td width="50%">
     <b>Topics in <nop>%WEB% web:</b>
@@ -41,11 +39,17 @@
     &nbsp;
   </td>
 </tr></table>
-%REPEAT%<br clear="all" />
-<p />%SPLIT%Number of topics: <b>%NTOPICS%</b>
+%REPEAT%<br clear="all" />%TMPL:END%
+
+
+%TMPL:DEF{"content"}%
+%SPLIT%Search: <b> %SEARCHSTRING% </b>
+<p />%TMPL:P{"searchbody"}%
 <p />%SPLIT%
-%TMPL:DEF{"topicaction"}% %TMPL:END%
-%TMPL:P{"standardfooter"}%
-#PageBottom
-</body>
-</html>
+%TMPL:P{"topicinfo"}%%TMPL:END%
+
+%TMPL:DEF{"main"}%
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+%TMPL:P{"standardheader"}%
+</form>
+%TMPL:P{"content"}%%TMPL:END%

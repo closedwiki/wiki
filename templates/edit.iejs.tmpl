@@ -1,17 +1,8 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" value=" &nbsp; Preview Changes &nbsp; " />
-  %SEP% <a class="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
-  %TMPL:DEF{"footernote"}%
-<div class="TWikiFooterNote">
-<font color="#333333" size="-1">
-%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
-</font>
- </div>%TMPL:END%
-%TMPL:P{"htmldoctype"}%
-<head>
- <title> %TMPL:P{"titleaction"}%%TOPIC% &lt; %WEB% &lt; %WIKITOOLNAME%</title>
- <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
- <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_EDIT%
+%TMPL:DEF{"focus"}%
+  document.main.text.focus();
+%TMPL:END%
+%TMPL:DEF{"script"}%
 <style>
 A.editButton:link {
   text-decoration:none;
@@ -41,7 +32,7 @@ A.editButton:visited {
 // =================
 function initForm()
 {
-  document.main.text.focus();
+  %TMPL:P{"focus"}%
 }
 // =================
 function checkAll( theButton, theButtonOffset, theNum, theCheck )
@@ -331,19 +322,20 @@ function writeJavaScriptNote()
 }
 // =================
 //STOP HIDING-->
-</script>
-</head>
+</script>%TMPL:END%
+%TMPL:DEF{"bodystart"}%
 <body bgcolor="#ffffff" onLoad="initForm()">
 #PageTop
-<form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
-%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:END%
+
+%TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
 <script type="text/javascript">
 <!--HIDE
 writeToolbar("top");
 //STOP HIDING-->
 </script>
+<form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <textarea name="text" id="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onclick="storeCaret(this)" onKeyDown="if(window.event.keyCode==27) return false;" onKeyUp="storeCaret(this)" onselect="storeCaret(this)" >%TEXT%</textarea>
 <script type="text/javascript">
 <!--HIDE
@@ -368,8 +360,20 @@ See below for help in editing this page.
  </tr>
 </table>
 %FORMFIELDS%
-%TMPL:P{"standardfooter"}%
-</form>
-#PageBottom
-</body>
-</html>
+%TMPL:P{"topicinfo"}%</form>%TMPL:END%
+%TMPL:DEF{"footernote"}%
+<div class="TWikiFooterNote">
+<font color="#333333" size="-1">
+%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%
+</font>
+</div>%TMPL:END%
+%TMPL:DEF{"topicaction"}% <input type="submit" class="twikiSubmit" value=" &nbsp; Preview Changes &nbsp; " />
+  %SEP% <a class="footerlink" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a> edit %TMPL:END%
+%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
+%TMPL:DEF{"titlehelp"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

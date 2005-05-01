@@ -1,8 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:DEF{"footernote"}%
-<div class="TWikiFooterNote">
-%META{"moved"}%
-</div>%TMPL:END%
+
+
+
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 <!--HIDE
@@ -18,15 +17,33 @@ function launchWindow( theWeb, theTopic ) {
 }
 //STOP HIDING-->
 </script>%TMPL:END%
-%TMPL:DEF{"attach"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
+
+%TMPL:DEF{"bodystart"}%
 <body bgcolor="#ffffff" onload="initForm()" >
 #PageTop
-<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-%TMPL:P{"simpleheader"}%
+%TMPL:END%
+
+%TMPL:DEF{"notes"}%
+__Notes:__
+
+   * *Help:* Please see %TWIKIWEB%.FileAttachment for more information about attaching files.
+   * *File size:* You can upload files up to %ATTACHFILESIZELIMIT% KB in size.
+   * *Link checkbox:* If the attached file is a JPG, GIF or PNG image and you check the box, 
+     it will create an inline image (e.g. show the image) at the end of the topic.  For other
+     file types a simple link will be created.
+   * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error"
+     message when you upload a file, you need to try again. It should work the second time.
+%TMPL:END%
+
+%TMPL:DEF{"existingattachments"}%
 ---++ Existing attachments for <nop>%TOPIC%
 %META{"attachments" all="on"}%
+%TMPL:END%
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%TMPL:P{"existingattachments"}%
 %TMPL:P{"previousdetails"}%
 <table width="100%">
    %TMPL:P{"previous"}%
@@ -60,19 +77,14 @@ function launchWindow( theWeb, theTopic ) {
   </td>
  </tr>
 </table>
-
-__Notes:__
-
-   * *Help:* Please see %TWIKIWEB%.FileAttachment for more information about attaching files.
-   * *File size:* You can upload files up to %ATTACHFILESIZELIMIT% KB in size.
-   * *Link checkbox:* If the attached file is a JPG, GIF or PNG image and you check the box, 
-     it will create an inline image (e.g. show the image) at the end of the topic.  For other
-     file types a simple link will be created.
-   * *Bug:* Internet Explorer 4.0 or earlier: If you get an "Internal Server Error"
-     message when you upload a file, you need to try again. It should work the second time.
+%TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%
-%TMPL:P{"standardfooter"}%
-</form>
-#PageBottom
-</body>
-</html>%TMPL:END%
+%TMPL:P{"topicinfo"}%</form>%TMPL:END%
+
+%TMPL:DEF{"attach"}%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%
+%TMPL:END%

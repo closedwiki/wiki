@@ -1,12 +1,19 @@
 %TMPL:INCLUDE{"twiki"}%
-%TMPL:P{"htmldoctype"}%
-%TMPL:P{"head"}%
-<body bgcolor="#ffffff">
-#PageTop
-<form name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+%TMPL:INCLUDE{"rename"}%
 %TMPL:DEF{"titleaction"}%(move attachment) %TMPL:END%
+
+
+
 %TMPL:DEF{"webaction"}% *Move file attachment* %TMPL:END%
+
+%TMPL:DEF{"topicaction"}%
+ <input type="submit" class="twikiSubmit" value=" Move " />
+ %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+
+
+%TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
+<form method="post" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 ---+ Move or Delete File <code>%FILENAME%</code>
 
 | |  *Web:* | *&nbsp;Topic:* |
@@ -21,12 +28,4 @@ __Note:__
    * An error page will be shown if either of the topics are locked by another user.
    * The new topic chosen must already exist.
    * Note that any URLs that refer to the attachment will be broken after this move.
-
-%TMPL:DEF{"topicaction"}%
- <input type="submit" class="twikiSubmit" value=" Move " />
- %TMPL:P{"sep"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
-%TMPL:P{"standardfooter"}%
-</form>
-#PageBottom
-</body>
-</html>
+%TMPL:P{"topicinfo"}%</form>%TMPL:END%
