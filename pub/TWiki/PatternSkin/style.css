@@ -561,7 +561,6 @@ table.twikiTopicAction {
 .twikiTopicAction a:link,
 .twikiTopicAction a:visited {
 	color:white;
-	border-bottom:1px solid #698FA8;
 	text-decoration:none;
 	font-weight:bold;
 }
@@ -652,6 +651,9 @@ table.twikiTopicAction {
 .twikiTopicAction input,
 .twikiTopicAction label {
 	font-size:100%;
+}
+.twikiTopicAction .twikiAccessKey {
+	border-color:white;
 }
 
 /**	----------------------------------
