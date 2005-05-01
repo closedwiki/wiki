@@ -192,7 +192,9 @@ sub view {
         # disable edit of previous revisions - FIXME consider change
         # to use two templates
         # SMELL: won't work with non-default skins, see %EDITURL%
+        # SMELL: does not handle more actions, as well as attachment through "manage"
         $tmpl =~ s/%EDITTOPIC%/CGI::strike('Edit')/ge;
+        $tmpl =~ s/<a\s[^>]*href="%EDITURL%"[^>]*>(.*?)<\/a>/CGI::strike($1)/gei;
         $tmpl =~ s/<a\s[^>]*href="[^"]*\/(attach|rename)\b[^>]*>(.*?)<\/a>/CGI::strike($2)/gei;
         $tmpl =~ s/%REVTITLE%/(r$rev)/go;
         $tmpl =~ s/%REVARG%/&rev=$rev/go;
