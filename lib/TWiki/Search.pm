@@ -415,7 +415,8 @@ sub searchWeb {
     my $store = $session->{store};
 
     my @webList = ();
-
+    my @excludedWebList = (); # temporary stores the webs to be excluded from search
+    
     # A value of 'all' or 'on' by itself gets all webs,
     # otherwise ignored (unless there is a web called 'All'.)
     my $searchAllFlag = ( $theWebName =~ /(^|[\,\s])(all|on)([\,\s]|$)/i );
@@ -427,7 +428,14 @@ sub searchWeb {
         foreach my $web ( split( /[\,\s]+/, $theWebName ) ) {
             # the web processing loop filters for valid web names,
             # so don't do it here.
-
+            
+            # check if web is excluded - store and remove it later from the webs list 
+            if ( $web =~ /^-/i ) {
+               $web =~ s/^-//; # removes minus character from name
+                push ( @excludedWebList, $web );
+                next;
+            }
+            
             if( $web =~ /^(all|on)$/i  ) {
                 # Get list of all webs
                 my @tmpList = $store->getListOfWebs( 'user' );
@@ -445,6 +453,20 @@ sub searchWeb {
     } else {
         #default to current web
         push @webList, $session->{webName};
+    }
+    
+    # Remove exluded webs from the web list
+    if ( @excludedWebList ) {        
+        foreach my $excludeWeb ( @excludedWebList ) {
+            my $i = 0;
+            foreach my $web ( @webList ) {
+                if( $web eq $excludeWeb ) {
+                    splice (@webList, $i, 1);
+                    next;
+                }
+                $i++;
+            }
+        }
     }
 
     $theTopic   = _makeTopicPattern( $theTopic );    # E.g. "Bug*, *Patch" ==> "^(Bug.*|.*Patch)$"
