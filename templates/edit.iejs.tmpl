@@ -336,7 +336,9 @@ writeToolbar("top");
 //STOP HIDING-->
 </script>
 <form name="main" action="%SCRIPTURLPATH%/preview%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<div class"twikiEditTextarea">
 <textarea name="text" id="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%" onclick="storeCaret(this)" onKeyDown="if(window.event.keyCode==27) return false;" onKeyUp="storeCaret(this)" onselect="storeCaret(this)" >%TEXT%</textarea>
+</div>
 <script type="text/javascript">
 <!--HIDE
 writeToolbar("bottom");
