@@ -202,7 +202,7 @@ sub _renderFormData {
 
     my $name = $form->{name};
     my $metaText = CGI::start_table( { border=>1, cellspacing=>0, cellpadding=>1, cols => 2 });
-    $metaText .= CGI::th( { colspan => 2 }, "[[$name]]" );
+    $metaText .= CGI::th( { colspan => 2 }, "[[$name]]" );  # was bgcolor => '#99CCCC'
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
         my $title = $field->{title};
@@ -211,10 +211,11 @@ sub _renderFormData {
         #$value =~ s/\n/<br \/>/g;      # undo expansion
 	$value =~ s/(\n\r?)|(\r\n?)+/<br \/>/gos;
 	# escape "|" to HTML entity
+	# SMELL: Is this still required when using HTML tables to render forms?
 	$value =~ s/\|/\&\#124;/gos;
+	$value = "&nbsp;" unless $value;
         $metaText .= CGI::Tr( CGI::td( $title ) . CGI::td( "\n$value\n" ));
     }
-    #return $metaText.CGI::end_table();
     $metaText .= CGI::end_table();
     return CGI::div( { class => 'twikiForm' }, $metaText );
 }

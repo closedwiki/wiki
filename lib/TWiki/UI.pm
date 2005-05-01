@@ -326,7 +326,7 @@ sub generateChangeFormPage {
         my $form = $meta->get( 'FORM' );
         $formName = $form->{name} if $form;
     }
-    $formName = '' if( !$formName || $formName eq 'none' );
+    $formName = 'none' if( !$formName );
 
     my $prefs = $session->{prefs};
     my $legalForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
