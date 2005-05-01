@@ -372,7 +372,6 @@ sub diff {
     $tmpl =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
 
     my( $before, $difftmpl, $after, $tail) = split( /%REPEAT%/, $tmpl);
-$session->writeDebug("before=$before, tmpl=$difftmpl, after=$after, tail=$tail");
     my $maxrev = $session->{store}->getRevisionNumber( $webName, $topic );
     $maxrev =~ s/r?1\.//go;  # cut 'r' and major
 
