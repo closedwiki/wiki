@@ -116,9 +116,6 @@ sub installLocalModules
     {
 	print "Installing $module\n" if $optsConfig->{verbose};
 
-	# SMELL: want to do: rmtree( $CPAN::Config->{build_dir}; )
-	rmtree( "$cpan/.cpan/build" );
-
 	my $obj = CPAN::Shell->expand( Module => $module ) or warn "$module: $!";
 	next unless $obj;
 	$obj->force;
