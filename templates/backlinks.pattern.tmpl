@@ -1,0 +1,14 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:INCLUDE{"search"}%
+
+
+
+%TMPL:DEF{"windowtitle"}%<title>%TMPL:P{"titleaction"}% %TOPIC% %TMPL:P{"titlesep"}% %WEB% %TMPL:P{"titlesep"}% %WIKITOOLNAME%</title>%TMPL:END%
+
+
+
+%TMPL:DEF{"searchweb"}%%SEARCH{ search="%SPACEDTOPIC%([^A-Za-z0-9]|$)|%WEB%.%TOPIC%([^A-Za-z0-9]|$)" type="regex" scope="text" excludetopic="%TOPIC%" nosearch="on" web="%WEB%" }%%TMPL:END%
+
+
+
+%TMPL:DEF{"searchallwebs"}%%SEARCH{ search="%WEB%.%SPACEDTOPIC%([^A-Za-z0-9]|$)|%WEB%.%TOPIC%([^A-Za-z0-9]|$)" type="regex" scope="text" excludetopic="%TOPIC%" nosearch="on" web="all,-%WEB%" }%%TMPL:END%
