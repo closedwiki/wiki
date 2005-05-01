@@ -379,11 +379,11 @@ html>body .twikiLeftBar li a {
 }
 .twikiTopic table th a:link.twikiLink,
 .twikiTopic table th a:link font {
-	color:#5292CA; /* 50% white overlay (PSD) */
+	color:#b4d5ff; /*C2*/
 }
 .twikiTopic table th a:visited.twikiLink,
 .twikiTopic table th a:visited font {
-	color:#A7AAAA; /* 50% white overlay (PSD) */
+	color:#aaa;
 }
 .twikiTopic table th a:hover.twikiLink,
 .twikiTopic table th a:hover font {
