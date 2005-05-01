@@ -208,7 +208,7 @@ sub _expandAttrs {
             # through viewfile.
             # If using %PUBURL%, must URL-encode explicitly to site
             # character set.
-            $url = TWiki::nativeUrlEncode( "%PUBURLPATH%/$web/$topic/$file" );
+            $url = TWiki::nativeUrlEncode( "$TWiki::cfg{PubUrlPath}/$web/$topic/$file" );
         } else {
             $url = $this->{session}->getScriptUrl
               ( $web, $topic, 'viewfile',
