@@ -176,7 +176,8 @@ sub getRevision {
     my $tmpRevFile = '';
     my $coCmd = $TWiki::cfg{RCS}{coCmd};
     my $file = $this->{file};
-    if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
+    #SMELL: Why is this code here? The checkout works fine without this.
+    if( 0 && $TWiki::cfg{OS} eq 'WINDOWS' ) {
         # Need to take temporary copy of topic, check it out to file,
         # then read that
         # Need to put RCS into binary mode to avoid extra \r appearing and
@@ -190,7 +191,7 @@ sub getRevision {
             ( $TWiki::cfg{RCS}{tmpBinaryCmd},
               FILENAME => $tmpRevFile );
         $file = $tmpfile;
-        $coCmd =~ s/-p%REVISION%/-r%REVISION%/;
+        $coCmd =~ s/-p%REVISION/-r%REVISION/;
     }
     my ($text) = $this->{session}->{sandbox}->readFromProcess
       ( $coCmd,
