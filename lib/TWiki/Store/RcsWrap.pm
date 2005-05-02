@@ -176,8 +176,7 @@ sub getRevision {
     my $tmpRevFile = '';
     my $coCmd = $TWiki::cfg{RCS}{coCmd};
     my $file = $this->{file};
-    #SMELL: Why is this code here? The checkout works fine without this.
-    if( 0 && $TWiki::cfg{OS} eq 'WINDOWS' ) {
+    if( $TWiki::cfg{RCS}{coMustCopy} ) {
         # Need to take temporary copy of topic, check it out to file,
         # then read that
         # Need to put RCS into binary mode to avoid extra \r appearing and
