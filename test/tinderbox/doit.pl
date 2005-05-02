@@ -39,6 +39,27 @@ pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 print STDERR Dumper( $Config ) if $Config->{debug};
 
+# check for prerequisites
+my $prereq = {
+    'WWW::Mechanize::TWiki' => { version => '0.09' },
+    'LWP::UserAgent' => { },
+    'WWW::Mechanize' => { },
+};
+
+if ( $Config->{debug} )
+{
+    print "Installed  Required  CPAN Module\n";
+    while ( my ( $module, $value ) = each %$prereq )
+    {
+	eval "require $module" or die $!;
+	my $minVersion = $value->{version} || 0;
+	my $moduleVersion = $module->VERSION;
+	print sprintf("%-9s  %-8s  %s", $moduleVersion, ( $minVersion || '' ), $module );
+	print "\tERROR!" if $moduleVersion < $minVersion;
+	print "\n";
+    }
+}
+
 my $TWIKIDEV = $ENV{TWIKIDEV};
 die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
 	 
