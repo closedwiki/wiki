@@ -1,0 +1,11 @@
+%META:TOPICINFO{author="TWikiContributor" date="1115018737" format="1.0" version="1.1"}%
+Normally, if you make subsequent edits within a one hour period (=$editLockTime= in =lib/TWiki.cfg=), <nop>%WIKITOOLNAME% will fold together your changes.  This is often the "right thing to do", as it can reduce the visual clutter of diffs.
+
+The "Force New Revision" checkbox is a way to force it to create a separate revision each time you save.
+
+The [[%TWIKIWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls whether this is checked by default or not.
+
+You can force __every__ save to be a new revision number by editing =lib/TWiki.cfg= and setting ==$doKeepRevIfEditLock=0== 
+
+-- Main.JeffreyLaughlin, Main.WillNorris, Main.MattWilkie, Main.SamHasler
+
