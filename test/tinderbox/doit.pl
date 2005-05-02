@@ -51,11 +51,11 @@ if ( $Config->{debug} )
     print "Installed  Required  CPAN Module\n";
     while ( my ( $module, $value ) = each %$prereq )
     {
-	eval "require $module" or die $!;
+	eval "require $module";
 	my $minVersion = $value->{version} || 0;
-	my $moduleVersion = $module->VERSION;
+	my $moduleVersion = $module->VERSION || '';
 	print sprintf("%-9s  %-8s  %s", $moduleVersion, ( $minVersion || '' ), $module );
-	print "\tERROR!" if $moduleVersion < $minVersion;
+	print "\tERROR!" unless ( $moduleVersion && $moduleVersion >= $minVersion );
 	print "\n";
     }
 }
