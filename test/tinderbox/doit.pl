@@ -41,8 +41,20 @@ print STDERR Dumper( $Config ) if $Config->{debug};
 
 # check for prerequisites
 my $prereq = {
-    'WWW::Mechanize::TWiki' => { version => '0.09' },
+    # build-twiki-kernel.pl dependencies
+    'Cwd' => { },
+    'File::Copy' => { },
+    'File::Path' => { },
+    'File::Spec::Functions' => { },
+    'File::Find::Rule' => { },
+    'File::Slurp' => { },
+    'File::Slurp::Tree' => { },
     'LWP::UserAgent' => { },
+    'Getopt::Long' => { },
+    'Pod::Usage' => { },
+    'LWP::UserAgent::TWiki::TWikiGuest' => { },
+
+    'WWW::Mechanize::TWiki' => { version => '0.08' },
     'WWW::Mechanize' => { },
 };
 
