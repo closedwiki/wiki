@@ -41,6 +41,20 @@ print STDERR Dumper( $Config ) if $Config->{debug};
 	 
 ################################################################################
 
+my $svnRev = 4000;
+
+# build a new twiki kernel
+
+# build a new distribution
+
+# install the distribution
+
+# run the tests
+`cp doit.pl report.txt`;	# for testing
+
+# post the tests to tinderbox.wbniv.wikihosting.com
+my $report = 'report.txt';
+system( './report-test.pl','--svn' => $svnRev, '--report' => $report );
 
 exit 0;
 
