@@ -157,8 +157,10 @@ sub view {
         $session->writeLog( 'view', $webName.'.'.$topicName, $logEntry );
     }
 
+    my $template = $query->param( 'template' ) || 'view';
+
     # get view template, standard view or a view with a different skin
-    my $tmpl = $session->{templates}->readTemplate( 'view', $skin );
+    my $tmpl = $session->{templates}->readTemplate( $template, $skin );
     if( ! $tmpl ) {
         my $mess = CGI::start_html().
           CGI::h1('TWiki Installation Error').

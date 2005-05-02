@@ -1355,16 +1355,20 @@ Return: expanded template text (what's left after removal of all %TMPL:DEF% stat
 Reads a template and extracts template definitions, adding them to the
 list of loaded templates, overwriting any previous definition.
 
-This function constructs a candidate name for the template thus:
-   * look for a file =$name.$skin.tmpl=
-      * first in templates/$web 
-      * then if that fails in templates/.
-   * If a template is not found, tries:
-      * to parse $name into a web name and a topic name, and
-      * read topic $Web.${Skin}Skin${Topic}Template. 
-   * If $name does not contain a web specifier, $Web defaults to
-     TWiki::cfg{SystemWebName}.
-   * If no skin is specified, topic is ${Topic}Template.
+Reads a template, constructing a candidate name for the template thus
+   0 in =templates/$web=, look for
+      0 file =$name.$skin.tmpl=
+      0 file =$name.tmpl=
+   0 in =$web=, look for
+      0 file =$name.$skin.tmpl=
+      0 file =$name.tmpl=
+   0 if a template is not found, tries in this order
+      0 parse =$name= into a web name and a topic name and looks for this topic
+      0 looks for topic =$name= in =$web=
+      0 looks for topic =${skin}Skin${topic}Template= in $web
+      0 looks for topic =${topic}Template= in $web
+      0 looks for =topic ${skin}Skin${topic}Template= in =TWiki::cfg{SystemWebName}=.
+      0 looks for topic =${topic}Template= in =TWiki::cfg{SystemWebName}=.
 In the event that the read fails (template not found, access permissions fail)
 returns the empty string ''.
 
