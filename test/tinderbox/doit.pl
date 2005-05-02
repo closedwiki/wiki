@@ -55,6 +55,13 @@ system( 'bash' => '-c' => "cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInst
 
 # install the distribution
 
+my $SERVER_NAME = 'tinderbox.wbniv.wikihosting.com';
+my $DHACCOUNT = 'wbniv';
+my $ADMIN = 'WillNorris';
+
+# TODO: need to install from local build, not the version at twikiplugins.sourceforge.net
+system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --plugin=SessionPlugin --plugin=FindElsewherePlugin --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
+
 # run the tests
 `cp doit.pl report.txt`;	# for testing
 
