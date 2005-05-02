@@ -10,13 +10,21 @@ use Data::Dumper qw( Dumper );
 # run the tests
 # post the tests to tinderbox.wbniv.wikihosting.com
 
+my $TWIKIDEV;
+	 
 BEGIN {
+    $TWIKIDEV = $ENV{TWIKIDEV};
+    die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
+
+#    my $cpan = "$TWIKIDEV/CPAN/";
     my $cpan = '/home/wbniv/tinderbox.wbniv.wikihosting.com/cgi-bin/lib/CPAN/';
+    die "no cpan directory [$cpan]" unless -d $cpan;
     my @localLibs = ( "$cpan/lib", "$cpan/lib/arch" );
     unshift @INC, @localLibs;
+
+#    eval qq{ use lib( "$ENV{TWIKIDEV}/CPAN/lib", "$ENV{TWIKIDEV}/CPAN/lib/arch" ) };
 }
 
-#use Cwd qw( cwd );
 use Getopt::Long;
 use Pod::Usage;
 use File::Basename;
@@ -41,6 +49,9 @@ print STDERR Dumper( $Config ) if $Config->{debug};
 
 # check for prerequisites
 my $prereq = {
+    # base cpan requirements
+    'ExtUtils::MakeMaker' => { },
+    'Storable' => { },
     # build-twiki-kernel.pl dependencies
     'Cwd' => { },
     'File::Copy' => { },
@@ -72,9 +83,6 @@ if ( $Config->{debug} )
     }
 }
 
-my $TWIKIDEV = $ENV{TWIKIDEV};
-die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
-	 
 ################################################################################
 
 my $svnRev = 4000;
