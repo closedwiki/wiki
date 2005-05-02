@@ -176,6 +176,7 @@ Return: =$url=      URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNo
 
 sub getViewUrl {
     my( $web, $topic ) = @_;
+    $web ||= $TWiki::Plugins::SESSION->{webName} || $TWiki::cfg{UsersWebName};
     return $TWiki::Plugins::SESSION->getScriptUrl( $web, $topic, 'view' );
 }
 
