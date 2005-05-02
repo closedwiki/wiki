@@ -38,12 +38,17 @@ my $result = GetOptions( $Config,
 pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 print STDERR Dumper( $Config ) if $Config->{debug};
+
+my $TWIKIDEV = $ENV{TWIKIDEV};
+die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
 	 
 ################################################################################
 
 my $svnRev = 4000;
 
 # build a new twiki kernel
+system( 'bash' => '-c' => "cd ../.. && svn update" ) == 0 or die $!;
+system( '../../tools/distro/build-twiki-kernel.pl', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/releases/" ) == 0 or die $!;
 
 # build a new distribution
 
