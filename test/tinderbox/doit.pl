@@ -105,7 +105,7 @@ my $ADMIN = 'WillNorris';
 
 # TODO: need to install from local build, not the version at twikiplugins.sourceforge.net
 # TODO: look into usefulness of --plugin=TWikiReleaseTrackerPlugin --contrib=DistributionContrib for testing purposes
-system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --plugin=SessionPlugin --plugin=FindElsewherePlugin --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
+system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
 
 ################################################################################
 
