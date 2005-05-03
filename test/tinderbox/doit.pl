@@ -109,7 +109,10 @@ system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInsta
 
 # post the tests to tinderbox.wbniv.wikihosting.com
 my $report = 'report.txt';
-system( './report-test.pl','--svn' => $svnRev, '--report' => $report );
+system( './report-test.pl','--svn' => $svnRev, '--report' => $report, 
+	'--attachment' => "$SERVER_NAME-install.html",
+#	'--attachment' => "",
+);
 
 exit 0;
 
