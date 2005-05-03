@@ -206,9 +206,9 @@ sub _renderFormData {
     foreach my $field ( @fields ) {
         my $title = $field->{title};
         my $value = $field->{value} || '&nbsp;';
-	# avoid formatting bolded text as header cell
-	if ( $value =~ m/^(\s*)\*(.*)\*(\s*)$/ ) {
-	  $value = "$1<b>$2</b>$3";
+        if ( $value =~ m/^(\s*)(\*.*\*\s*)$/ ) {
+            # avoid formatting bolded text as header cell
+            $value = $1.'<nop> '.$2;
         }
         # change any new line character sequences to <br />
         $value =~ s!\r?\n!<br />!gs;
