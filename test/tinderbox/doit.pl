@@ -89,7 +89,8 @@ my $svnRev = 4000;
 
 # build a new twiki kernel
 system( 'bash' => '-c' => "cd ../.. && svn update" ) == 0 or die $!;
-system( '../../tools/distro/build-twiki-kernel.pl', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/releases/" ) == 0 or die $!;
+system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/releases/" ) == 0 or die $!;
+
 
 # build a new distribution
 system( 'bash' => '-c' => "cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/ && make distro" );
