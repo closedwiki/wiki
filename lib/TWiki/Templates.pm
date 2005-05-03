@@ -145,7 +145,7 @@ Reads a template, constructing a candidate name for the template thus
    0 in =templates/$web=, look for
       0 file =$name.$skin.tmpl=
       0 file =$name.tmpl=
-   0 in =$web=, look for
+   0 in =templates=, look for
       0 file =$name.$skin.tmpl=
       0 file =$name.tmpl=
    0 if a template is not found, tries in this order
