@@ -20,6 +20,7 @@ use WWW::Mechanize::TWiki 0.08;
 my $Config = {
     svn => undef,
     report => undef,
+    attachment => [],
 # 
     verbose => 0,
     debug => 0,
@@ -29,7 +30,7 @@ my $Config = {
 
 my $result = GetOptions( $Config,
 #
-			 'svn=i', 'report=s',
+			 'svn=i', 'report=s', 'attachment=s@',
 # miscellaneous/generic options
 			'agent=s', 'help', 'man', 'debug', 'verbose|v',
 			);
@@ -50,7 +51,7 @@ $mech->cgibin( 'http://ntwiki.ethermage.net/~develop/cgi-bin' );
 my $topic = "Tinderbox.TestsReportSvn$Config->{svn}";
 
 $mech->edit( "$topic", { 
-    topicparent => 'Tinderbox.WebHome', 
+    topicparent => 'WebHome', 
     templatetopic => 'TestReportTemplate',
     formtemplate => 'TestReportForm',
 } );
@@ -62,6 +63,18 @@ $mech->submit_form( fields => {
     filecomment => `date`,
     hidefile => undef,
 } );
+
+foreach my $attachment ( @{$Config->{attachment}} )
+{
+    print $attachment, "\n";
+#    print Dumper( $attachment ), "\n";
+    $mech->follow_link( text => 'Attach' );
+    $mech->submit_form( fields => {
+	filepath => $attachment,
+	filecomment => `date`,
+	hidefile => undef,
+    } );
+}
 
 exit 0;
 
