@@ -157,7 +157,7 @@ sub view {
         $session->writeLog( 'view', $webName.'.'.$topicName, $logEntry );
     }
 
-    my $template = $query->param( 'template' ) || 'view';
+    my $template = $query->param( 'template' ) || $session->{prefs}->getPreferencesValue("VIEW_TEMPLATE") || 'view';
 
     # get view template, standard view or a view with a different skin
     my $tmpl = $session->{templates}->readTemplate( $template, $skin );
