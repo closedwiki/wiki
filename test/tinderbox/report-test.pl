@@ -57,6 +57,7 @@ $mech->edit( "$topic", {
 } );
 $mech->click_button( value => 'Save' );
 
+$Config->{verbose} && print "Attaching installation report\n";
 $mech->follow_link( text => 'Attach' );
 $mech->submit_form( fields => {
     filepath => $Config->{report},
@@ -66,8 +67,7 @@ $mech->submit_form( fields => {
 
 foreach my $attachment ( @{$Config->{attachment}} )
 {
-    print $attachment, "\n";
-#    print Dumper( $attachment ), "\n";
+    $Config->{verbose} && print "$attachment\n";
     $mech->follow_link( text => 'Attach' );
     $mech->submit_form( fields => {
 	filepath => $attachment,
@@ -88,13 +88,14 @@ report-test.pl - Codev.
 
 =head1 SYNOPSIS
 
-kernel-manifest.pl [options]
+report-test.pl [options]
 
 Copyright 2004, 2005 Will Norris and Sven Dowideit.  All Rights Reserved.
 
  Options:
    -svn
    -report
+   -attachment
    -verbose
    -debug
    -help			this documentation
