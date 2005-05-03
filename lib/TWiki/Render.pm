@@ -214,6 +214,8 @@ sub _renderFormData {
         $value =~ s!\r?\n!<br />!gs;
         # escape "|" to HTML entity
         $value =~ s/\|/&#124;/gs;
+        # and %SEP%....
+        $value =~ s/%SEP%/&#124;/gs;
         $metaText .= "|  $title:|$value |\n";
     }
     return CGI::div( { class => 'twikiForm' }, $metaText );
