@@ -64,6 +64,8 @@ my $prereq = {
 
     'WWW::Mechanize::TWiki' => { version => '0.08' },
     'WWW::Mechanize' => { },
+
+    'Apache::Htpasswd' => { },
 };
 
 if ( $Config->{debug} )
