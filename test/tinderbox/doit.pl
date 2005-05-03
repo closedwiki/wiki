@@ -16,13 +16,10 @@ BEGIN {
     $TWIKIDEV = $ENV{TWIKIDEV};
     die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
 
-#    my $cpan = "$TWIKIDEV/CPAN/";
-    my $cpan = '/home/wbniv/tinderbox.wbniv.wikihosting.com/cgi-bin/lib/CPAN/';
+    my $cpan = "$TWIKIDEV/CPAN/";
     die "no cpan directory [$cpan]" unless -d $cpan;
     my @localLibs = ( "$cpan/lib", "$cpan/lib/arch" );
     unshift @INC, @localLibs;
-
-#    eval qq{ use lib( "$ENV{TWIKIDEV}/CPAN/lib", "$ENV{TWIKIDEV}/CPAN/lib/arch" ) };
 }
 
 use Getopt::Long;
