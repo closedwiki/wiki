@@ -85,7 +85,10 @@ if ( $Config->{debug} )
 
 ################################################################################
 
-my $svnRev = 4000;
+chomp( my @svnInfo = `/home/wbniv/bin/svn/svn info .` );
+die "no svn info?" unless @svnInfo;
+my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
+#my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
 
 # build a new twiki kernel
 system( 'bash' => '-c' => "cd ../.. && svn update" ) == 0 or die $!;
