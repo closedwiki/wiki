@@ -6,8 +6,8 @@
 
 
 
-%TMPL:DEF{"searchweb"}%%SEARCH{ search="%SPACEDTOPIC%([^A-Za-z0-9]|$)|%WEB%.%TOPIC%([^A-Za-z0-9]|$)" type="regex" scope="text" excludetopic="%TOPIC%" nosearch="on" web="%WEB%" }%%TMPL:END%
+%TMPL:DEF{"searchweb"}%%SEARCH{ search="%TOPIC%([^A-Za-z0-9]|$)|%SPACEOUT{%TOPIC%}%([^A-Za-z0-9]|$)|%WEB%.%TOPIC%([^A-Za-z0-9]|$)" type="regex" scope="text" nosearch="on" excludetopic="%TOPIC%" web="%WEB%" }%%TMPL:END%
 
 
 
-%TMPL:DEF{"searchallwebs"}%%SEARCH{ search="%WEB%.%SPACEDTOPIC%([^A-Za-z0-9]|$)|%WEB%.%TOPIC%([^A-Za-z0-9]|$)" type="regex" scope="text" excludetopic="%TOPIC%" nosearch="on" web="all,-%WEB%" }%%TMPL:END%
+%TMPL:DEF{"searchallwebs"}%%SEARCH{ search="%WEB%.%SPACEOUT{%TOPIC%}%([^A-Za-z0-9]|$)|%WEB%.%TOPIC%([^A-Za-z0-9]|$)" type="regex" scope="text" nosearch="on" excludetopic="%TOPIC%" web="all,-%WEB%" }%%TMPL:END%
