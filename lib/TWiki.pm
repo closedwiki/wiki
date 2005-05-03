@@ -167,7 +167,8 @@ BEGIN {
                      SCRIPTNAME        => \&_SCRIPTNAME,
                      SEARCH            => \&_SEARCH,
                      SERVERTIME        => \&_SERVERTIME,
-                     SPACEDTOPIC       => \&_SPACEDTOPIC,
+                     SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
+                     SPACEOUT	       => \&_SPACEOUT,
                      'TMPL:P'          => \&_TMPLP,
                      TOPICLIST         => \&_TOPICLIST,
                      URLENCODE         => \&_ENCODE,
@@ -1797,8 +1798,9 @@ Space out a wiki word by inserting spaces before each word component
 
 sub spaceOutWikiWord {
     my $word = shift;
-    $word =~ s/([$regex{lowerAlpha}])([$regex{upperAlpha}$regex{numeric}]+)/$1 $2/go;
-    $word =~ s/([$regex{numeric}])([$regex{upperAlpha}])/$1 $2/go;
+    my $separator = ' ';
+    $word =~ s/([$regex{lowerAlpha}])([$regex{upperAlpha}$regex{numeric}]+)/$1$separator$2/go;
+    $word =~ s/([$regex{numeric}])([$regex{upperAlpha}])/$1$separator$2/go;
     return $word;
 }
 
@@ -2416,11 +2418,26 @@ sub _INTURLENCODE {
     return $params->{_DEFAULT} || '';
 }
 
+# This routine is deprecated as of DakarRelease,
+# and is maintained only for backward compatibility.
+# Spacing of WikiWords is now down with SPACEOUT
+# (and the private routine _SPACEOUT).
 sub _SPACEDTOPIC {
     my ( $this, $params, $theTopic ) = @_;
     my $topic = spaceOutWikiWord( $theTopic );
     $topic =~ s/ / */g;
     return urlEncode( $topic );
+}
+
+# Returns a topic name with spaces in between each word component.
+# Inserts a '*' after each space, so that a search matches any number of spaces.
+# Calls spaceOutWikiWord.
+sub _SPACEOUT {
+	my ( $this, $params, $theTopic ) = @_;
+	my $spaceOutTopic = $params->{_DEFAULT};
+    $spaceOutTopic = spaceOutWikiWord( $spaceOutTopic );
+    $spaceOutTopic =~ s/ / */g;
+    return $spaceOutTopic;
 }
 
 sub _ICON {
