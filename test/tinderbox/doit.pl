@@ -112,7 +112,7 @@ system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInsta
 my $report = 'report.txt';
 
 # run the tests
-`cp doit.pl $report`;	# for testing
+system( 'bash' => '-c' => qq{cd ../unit && perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm >&../tinderbox/$report} );
 
 ################################################################################
 # post the tests to tinderbox.wbniv.wikihosting.com
