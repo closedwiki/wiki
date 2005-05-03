@@ -9,6 +9,7 @@ use Data::Dumper qw( Dumper );
 #  * convert command line parameters to URI's
 #  * update man pod docs {grin}
 #  * interactive/confirmation mode
+#  * convert "rm -rf" intto running the uninstall script
 
 BEGIN {
     my $dirHome = $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
@@ -20,7 +21,7 @@ use File::Copy qw( cp mv );
 use File::Basename qw( basename );
 use Getopt::Long qw( :config bundling auto_version );
 use Pod::Usage;
-use WWW::Mechanize::TWiki 0.05;
+use WWW::Mechanize::TWiki 0.08;
 use URI;
 
 sub mychomp { chomp $_[0]; $_[0] }
@@ -29,7 +30,8 @@ $main::VERSION = '0.50';
 my $Config = {
 # INSTALL OPTIONS
 	distro => undef,
-    kernel => undef,
+	kernel => undef,
+	browser => undef,
 #    web => '',
 	# TODO: change to use a URI (?)
 	install_account => undef,
@@ -55,6 +57,7 @@ my $Config = {
 Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
 			'distro=s', 'kernel=s', 'web=s@',
+			 'browser=s',
 			 'administrator=s', 'WIKIWEBMASTER=s',
 			 'scriptsuffix=s', 'perl=s', 'cgiurl=s',
 # plugin, addon, contrib
@@ -111,7 +114,8 @@ sub WebBrowser
 	print STDERR "WebBrowser: ", Dumper( $parms ) if $parms->{debug};
 	my $url = $parms->{url} or die "url?";
 	
-	logSystem( firefox => $url );
+	my $browser = $Config->{browser};
+	$browser && logSystem( $browser => $url );
 }
 ################################################################################
 ################################################################################
@@ -177,7 +181,7 @@ Copyright 2004,2005 Will Norris.  All Rights Reserved.
 
 =head1 SYNOPSIS
 
-install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -install_dir -force|-f [-plugin ...]* [-contrib ...]* [-addon ...]* [-report|-noreport] [-verbose] [-debug] [-help] [-man]
+install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -install_dir -force|-f [-plugin ...]* [-contrib ...]* [-addon ...]* [-report|-noreport] [-browser programName] [-verbose] [-debug] [-help] [-man]
 
 =head1 OPTIONS
 
@@ -207,6 +211,8 @@ install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -inst
 =item B<-addon>						name of addon to install (eg, GetAWebAddOn)
 
 =item B<-(no-)report>					control creation of TWiki.TWikiInstallationReport on the installed wiki
+
+=item B<-browser>					upon successful installation, program to run to launch the wiki
 
 =item B<-verbose>					show the babblings of the machine
 
