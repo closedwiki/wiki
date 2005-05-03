@@ -474,14 +474,13 @@ sub _renderWikiWord {
                                        $theTopic, $theLinkText, $theAnchor);
     }
     if( $doLinkToMissingPages ) {
-        if ($singular && $singular ne $theTopic) {
-            my @topics = ($singular, $theTopic);
-            return _renderNonExistingWikiWord($this, $theWeb, \@topics,
+        my @topics = ( $theTopic );
+        # CDot: disabled until SuggestSingularNotPlural is resolved
+        # if ($singular && $singular ne $theTopic) {
+        #     #unshift( @topics, $singular);
+        # }
+        return _renderNonExistingWikiWord($this, $theWeb, \@topics,
                                           $theLinkText, $theAnchor);
-        } else {
-            return _renderNonExistingWikiWord($this, $theWeb, $theTopic,
-                                          $theLinkText, $theAnchor);
-        }
     }
     if( $doKeepWeb ) {
         return $theWeb.'.'.$theLinkText;
