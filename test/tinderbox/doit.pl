@@ -88,15 +88,17 @@ if ( $Config->{debug} )
 chomp( my @svnInfo = `/home/wbniv/bin/svn/svn info .` );
 die "no svn info?" unless @svnInfo;
 my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
-#my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
 
+################################################################################
 # build a new twiki kernel
 system( 'bash' => '-c' => "cd ../.. && svn update" ) == 0 or die $!;
 system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/releases/" ) == 0 or die $!;
 
+################################################################################
 # build a new distribution
 system( 'bash' => '-c' => "cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/ && make distro && scp twiki.tar.bz2 wbniv\@twikiplugins.sourceforge.net:/home/groups/t/tw/twikiplugins/htdocs/" );
 
+################################################################################
 # install the distribution
 
 my $SERVER_NAME = 'tinderbox.wbniv.wikihosting.com';
@@ -111,6 +113,7 @@ system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInsta
 
 my $report = 'report.txt';
 
+################################################################################
 # run the tests
 system( 'bash' => '-c' => qq{cd ../unit && perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm >&../tinderbox/$report} );
 
