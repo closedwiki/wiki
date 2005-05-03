@@ -32,7 +32,7 @@ sub test_getViewUrl {
     $result = TWiki::Func::getViewUrl ( "", "WebHome" );
     $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
 
-    $TWiki::Plugins::SESSION = new TWiki("/view/Sausages/AndMash");
+    $TWiki::Plugins::SESSION = new TWiki("/view.php/Sausages/AndMash");
 
     $result = TWiki::Func::getViewUrl ( "Sausages", "AndMash" );
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
@@ -45,21 +45,21 @@ sub test_getViewUrl {
 sub test_getScriptUrl {
     my $this = shift;
 
-    $TWiki::Plugins::SESSION = new TWiki();;
+    $TWiki::Plugins::SESSION = new TWiki();
     my $ss = "wibble$TWiki::cfg{ScriptSuffix}";
     my $result = TWiki::Func::getScriptUrl ( "Main", "WebHome", 'wibble' );
-    $this->assert_matches(qr!/Main/WebHome!, $result );
+    $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
 
     $result = TWiki::Func::getViewUrl ( "", "WebHome", 'wibble' );
-    $this->assert_matches(qr!/Main/WebHome!, $result );
+    $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
 
-    $TWiki::Plugins::SESSION = new TWiki("/wibble/Sausages/AndMash");
+    $TWiki::Plugins::SESSION = new TWiki("/view.cgi/Sausages/AndMash");
 
     $result = TWiki::Func::getViewUrl ( "Sausages", "AndMash", 'wibble' );
-    $this->assert_matches(qr!/Sausages/AndMash!, $result );
+    $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
 
     $result = TWiki::Func::getViewUrl ( "", "AndMash", 'wibble' );
-    $this->assert_matches(qr!/Sausages/AndMash!, $result );
+    $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
 }
 
 1;
