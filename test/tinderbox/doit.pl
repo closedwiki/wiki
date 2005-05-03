@@ -108,14 +108,17 @@ my $ADMIN = 'WillNorris';
 # TODO: look into usefulness of --plugin=TWikiReleaseTrackerPlugin --contrib=DistributionContrib for testing purposes
 system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --plugin=SessionPlugin --plugin=FindElsewherePlugin --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
 
-# run the tests
-`cp doit.pl report.txt`;	# for testing
+################################################################################
 
-# post the tests to tinderbox.wbniv.wikihosting.com
 my $report = 'report.txt';
+
+# run the tests
+`cp doit.pl $report`;	# for testing
+
+################################################################################
+# post the tests to tinderbox.wbniv.wikihosting.com
 system( './report-test.pl','--svn' => $svnRev, '--report' => $report, 
 	'--attachment' => "$SERVER_NAME-install.html",
-#	'--attachment' => "",
 );
 
 exit 0;
