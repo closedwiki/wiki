@@ -365,6 +365,7 @@ sub searchWeb {
     my $noHeader =      $params{noheader} || '';
     my $noSearch =      $params{nosearch} || '';
     my $noSummary =     $params{nosummary} || '';
+    my $noZeroResults = $params{nozeroresults} || '';
     my $noTotal =       $params{nototal} || '';
     my $newLine =       $params{newline} || '';
     my $theOrder =      $params{order} || '';
@@ -474,7 +475,7 @@ sub searchWeb {
 
     my $output = '';
     my $tmpl = '';
-    my $topicCount = 0;
+    #my $topicCount = 0; # SMELL: not used??
 
     my $originalSearch = $theSearchVal;
     my $spacedTopic;
@@ -918,6 +919,8 @@ sub searchWeb {
                 }
             }
         }
+        
+        return '' if ( $ntopics == 0 && $noZeroResults );
     }
 
     if( $theFormat ) {
