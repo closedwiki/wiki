@@ -233,6 +233,26 @@ sub save {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
+#
+# Allow for dynamic topic creation if it contains a string of 10 x's XXXXXX
+# http://twiki.org/cgi-bin/view/Codev/AllowDynamicTopicNameCreation
+#
+    if ( $topic =~ /XXXXXXXXXX/o ) {
+		my ($bugCount) = 0;
+		my ($tempTopic) = $topic;
+		$topic =~ s|X{10}X*|$bugCount|e;
+
+		while ($session->{store}->topicExists( $webName, $topic )) {
+			$bugCount = $bugCount + 1;
+			$topic = $tempTopic;
+			$topic =~ s|X{10}X*|$bugCount|e;
+			#writeDebug($webName . "." . $topic);
+        }
+        #TODO: could record the last used topic name and number as web metadata
+        $session->{topicName} = $topic;
+    }
+
+
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
     my $saveaction = lc($query->param( 'action' ));
