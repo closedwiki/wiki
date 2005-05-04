@@ -3,8 +3,10 @@ use strict;
 
 use File::Path qw( rmtree );
 
-rmtree( [ qw( bin/ cpan/ downloads/ config/ cgi-bin/twiki/ cgi-bin/lib/ ) ], 1 );
+print `chmod -f -R a+rwx cgi-bin/lib/CPAN`;
+rmtree( [ qw( bin/ cpan/ downloads/ config/ cgi-bin/twiki/ cgi-bin/lib/ cgi-bin/tmp/ htdocs/twiki/ ) ], 1 );
 unlink qw( install_twiki.cgi cgi-bin/install_twiki.cgi pre-twiki.pl post-twiki.pl un-twiki.pl );
+unlink qw( pre-twiki.log );
 unlink qw( README );
 unlink qw( TWikiInstallationReport.html );
 unlink qw( uninstall.pl );
