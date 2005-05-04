@@ -10,6 +10,8 @@ BEGIN {
     unshift @INC, @localLibs;
 }
 
+sub mychomp { chomp $_[0]; $_[0] }
+
 use Cwd qw( cwd );
 use Getopt::Long;
 use Pod::Usage;
@@ -71,7 +73,7 @@ foreach my $attachment ( @{$Config->{attachment}} )
     $mech->follow_link( text => 'Attach' );
     $mech->submit_form( fields => {
 	filepath => $attachment,
-	filecomment => `date`,
+	filecomment => mychomp( `date` ),
 	hidefile => undef,
     } );
 }
