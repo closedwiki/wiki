@@ -22,6 +22,7 @@ BEGIN {
     unshift @INC, @localLibs;
 }
 
+use FindBin;
 use Getopt::Long;
 use Pod::Usage;
 use File::Basename;
@@ -83,6 +84,8 @@ if ( $Config->{debug} )
 }
 
 ################################################################################
+
+chdir $FindBin::Bin;
 
 chomp( my @svnInfo = `/home/wbniv/bin/svn/svn info .` );
 die "no svn info?" unless @svnInfo;
