@@ -9,7 +9,7 @@ use Data::Dumper qw( Dumper );
 #  * convert command line parameters to URI's
 #  * update man pod docs {grin}
 #  * interactive/confirmation mode
-#  * convert "rm -rf" intto running the uninstall script
+#  * convert "rm -rf" into running the uninstall script
 
 BEGIN {
     my $dirHome = $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
@@ -137,7 +137,7 @@ sub PushRemoteTWikiInstall
 	if ( $Config->{force} )
 	{	    
 	    # CAUTION: erase an existing installation
-	    logSystem(qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && chmod -R a+rwx cgi-bin/twiki/ && rm -rf cgi-bin/twiki/"});
+	    logSystem(qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && [ -e uninstall.pl ] && perl ./uninstall.pl"});
 	}
 
 	# untar the tarball from sourceforge.net, install prerequisite CPAN modules
