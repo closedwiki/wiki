@@ -408,6 +408,10 @@ html>body .twikiLeftBar li a {
 .twikiTopic a:hover {
 	color:#0F47A3; /*C3*/
 }
+.twikiTopic ul,
+.twikiTopic ol {
+	margin-top:0;
+}
 
 /**	----------------------------------
 *	Attachments table, form
