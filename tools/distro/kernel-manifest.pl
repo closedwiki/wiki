@@ -7,7 +7,7 @@ use Data::Dumper qw( Dumper );
 BEGIN {
     my $dirHome = $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
     $ENV{TWIKIDEV} ||= "$dirHome/twiki";
-    eval qq{ use lib( "$ENV{TWIKIDEV}/CPAN/lib" ) };
+    eval qq{ use lib( "$ENV{TWIKIDEV}/CPAN/lib/", "$ENV{TWIKIDEV}/CPAN/lib/arch/" ) };
 }
 
 use Cwd qw( cwd );
