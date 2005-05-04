@@ -7,7 +7,7 @@ use Data::Dumper qw( Dumper );
 BEGIN {
     my $dirHome = $ENV{HOME} || $ENV{LOGDIR} || (getpwuid($>))[7];
     $ENV{TWIKIDEV} ||= "$dirHome/twiki";
-    eval qq{ use lib( "$ENV{TWIKIDEV}/CPAN/lib" ) };
+    eval qq{ use lib( "$ENV{TWIKIDEV}/CPAN/lib", "$ENV{TWIKIDEV}/CPAN/lib/arch" ) };
 }
 
 # TODO:
@@ -65,7 +65,9 @@ pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 print STDERR Dumper( $Config ) if $Config->{debug};
 	 
+#chomp( my @svnInfo = `/home/wbniv/bin/svn/svn info .` );
 chomp( my @svnInfo = `svn info .` );
+die "no svn info?" unless @svnInfo;
 my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
 my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/]+)\/.+?$/;
 
