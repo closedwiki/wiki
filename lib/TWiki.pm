@@ -1790,17 +1790,18 @@ sub nativeUrlEncode {
 
 =pod
 
----++ StaticMethod spaceOutWikiWord( $word ) -> $string
+---++ StaticMethod spaceOutWikiWord( $word, $sep ) -> $string
 
-Space out a wiki word by inserting spaces before each word component
+Spaces out a wiki word by inserting a string (default: one space) between each word component.
+With parameter 'sep' any string may be used as separator between the word components; if 'sep' is undefined it defaults to a space.
 
 =cut
 
 sub spaceOutWikiWord {
     my $word = shift;
-    my $separator = ' ';
-    $word =~ s/([$regex{lowerAlpha}])([$regex{upperAlpha}$regex{numeric}]+)/$1$separator$2/go;
-    $word =~ s/([$regex{numeric}])([$regex{upperAlpha}])/$1$separator$2/go;
+    my $sep = shift || ' ';
+    $word =~ s/([$regex{lowerAlpha}])([$regex{upperAlpha}$regex{numeric}]+)/$1$sep$2/go;
+    $word =~ s/([$regex{numeric}])([$regex{upperAlpha}])/$1$sep$2/go;
     return $word;
 }
 
@@ -2429,14 +2430,16 @@ sub _SPACEDTOPIC {
     return urlEncode( $topic );
 }
 
-# Returns a topic name with spaces in between each word component.
-# Inserts a '*' after each space, so that a search matches any number of spaces.
-# Calls spaceOutWikiWord.
+# ---++ routine _SPACEOUT( $topic, $sep ) -> $string
+# Returns a topic name with spaces (or another separator string) in between each word component.
+# Parameter 'topic' is the topic name to space out.
+# Parameter 'sep' is the string to separate the word components.
+# Calls spaceOutWikiWord; if no 'sep' is passed, spaceOutWikiWord assumes a space as separator.
 sub _SPACEOUT {
-	my ( $this, $params, $theTopic ) = @_;
-	my $spaceOutTopic = $params->{_DEFAULT};
-    $spaceOutTopic = spaceOutWikiWord( $spaceOutTopic );
-    $spaceOutTopic =~ s/ / */g;
+    my ( $this, $params ) = @_;
+    my $spaceOutTopic = $params->{_DEFAULT};
+    my $sep = $params->{'sep'};
+    $spaceOutTopic = spaceOutWikiWord( $spaceOutTopic, $sep );
     return $spaceOutTopic;
 }
 

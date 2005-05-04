@@ -389,10 +389,6 @@ html>body .twikiLeftBar li a {
 .twikiTopic table th a:hover font {
 	color:#0F47A3; /*C3*/
 }
-.twikiTopic ul {
-	margin-top:0;
-	line-height:130%;
-}
 .twikiTopic a:link {
 	text-decoration:underline;
 }
