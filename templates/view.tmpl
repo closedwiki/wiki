@@ -15,10 +15,9 @@
 
 %TMPL:DEF{"footernote"}%
 <div class="TWikiFooterNote">
-   Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
- %META{"moved"}%
- </div>
-%TMPL:END%
+Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
+%META{"moved"}%
+</div>%TMPL:END%
 
 %TMPL:DEF{"main"}%
 <form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%"> %BROADCASTMESSAGE%
@@ -36,7 +35,7 @@
 %TMPL:DEF{"topicaction"}%
   %EDITTOPIC%
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel='nofollow'>Attach</a>
-  %TMPL:P{"sep"}% Ref-By: <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&amp;regex=on&amp;excludetopic=%TOPIC%&amp;search=%SPACEDTOPIC%(%5B%5EA-Za-z0-9%5D%7C%24)|%WEB%.%TOPIC%(%5B%5EA-Za-z0-9%5D%7C%24)">Web</a> <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/?scope=text&amp;regex=on&amp;excludetopic=%TOPIC%&amp;web=all&amp;search=%WEB%.%SPACEDTOPIC%(%5B%5EA-Za-z0-9%5D%7C%24)|%WEB%.%TOPIC%(%5B%5EA-Za-z0-9%5D%7C%24)">Other webs</a>
+  %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here">Web</a> <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here">All webs</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print%REVARG%" rel='nofollow'>Printable</a>
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?type=history" rel='nofollow'>Diffs</a> %REVISIONS%
   %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>More</a> %TMPL:END%
