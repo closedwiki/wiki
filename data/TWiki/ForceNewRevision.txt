@@ -7,5 +7,5 @@ The [[%TWIKIWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls
 
 You can force __every__ save to be a new revision number by editing =lib/TWiki.cfg= and setting ==$doKeepRevIfEditLock=0== 
 
--- Main.JeffreyLaughlin, Main.WillNorris, Main.MattWilkie, Main.SamHasler
+-- TWiki:Main.JeffreyLaughlin, TWiki:Main.WillNorris, TWiki:Main.MattWilkie, TWiki:Main.SamHasler
 
