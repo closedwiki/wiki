@@ -1,0 +1,9 @@
+
+<verbatim>
+    Hello first Line
+<HR/>
+coucou    second line
+bold: <b>here</b>   .
+Last line.       
+</verbatim>
+
