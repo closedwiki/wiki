@@ -51,8 +51,8 @@ sub set_up {
 
     $m1 = TWiki::Meta->new($session, $web, $topic);
     $m1->put( "TOPICINFO", $args );
-    $m1->put( "FIELD", $args );
-    $m1->put( "FIELD", $args2 );
+    $m1->putKeyed( "FIELD", $args );
+    $m1->putKeyed( "FIELD", $args2 );
 }
 
 # Field that can only have one copy
@@ -76,19 +76,19 @@ sub test_multiple {
     my $this = shift;
     my $meta = TWiki::Meta->new($session, $web, $topic);
     
-    $meta->put( "FIELD", $args );
+    $meta->putKeyed( "FIELD", $args );
     my $vals = $meta->get( "FIELD", "a" );
     $this->assert_str_equals( $vals->{"name"}, "a" );
     $this->assert_str_equals( $vals->{"value"}, "1" );
     $this->assert( $meta->count( "FIELD" ) == 1, "Should be one item" );
 
-    $meta->put( "FIELD", $args1 );
+    $meta->putKeyed( "FIELD", $args1 );
     my $vals1 = $meta->get( "FIELD", "a" );
     $this->assert_str_equals( $vals1->{"name"}, "a" );
     $this->assert_str_equals( $vals1->{"value"}, "2" );
     $this->assert( $meta->count( "FIELD" ) == 1, "Should be one item" );
     
-    $meta->put( "FIELD", $args2 );
+    $meta->putKeyed( "FIELD", $args2 );
     $this->assert( $meta->count( "FIELD" ) == 2, "Should be two items" );
     my $vals2 = $meta->get( "FIELD", "b" );
     $this->assert_str_equals( $vals2->{"name"}, "b" );
@@ -109,8 +109,8 @@ sub test_removeMultiple {
     my $this = shift;
     my $meta = TWiki::Meta->new($session, $web, $topic);
     
-    $meta->put( "FIELD", $args );
-    $meta->put( "FIELD", $args2 );
+    $meta->putKeyed( "FIELD", $args );
+    $meta->putKeyed( "FIELD", $args2 );
     $meta->put( "TOPICINFO", $args );
     $this->assert( $meta->count( "FIELD" ) == 2, "Should be two items" );
     
@@ -119,8 +119,8 @@ sub test_removeMultiple {
     $this->assert( $meta->count( "FIELD" ) == 0, "Should be no FIELD items after remove" );
     $this->assert( $meta->count( "TOPICINFO" ) == 1, "Should be one item" );
     
-    $meta->put( "FIELD", $args );
-    $meta->put( "FIELD", $args2 );
+    $meta->putKeyed( "FIELD", $args );
+    $meta->putKeyed( "FIELD", $args2 );
     $meta->remove( "FIELD", "b" );
     $this->assert( $meta->count( "FIELD" ) == 1, "Should be one FIELD items after partial remove" );
 }
@@ -129,8 +129,8 @@ sub test_foreach {
     my $this = shift;
     my $meta = TWiki::Meta->new($session, $web, $topic);
 
-    $meta->put( "FIELD", { name => "a", value => "aval" } );
-    $meta->put( "FIELD", { name => "b", value => "bval" } );
+    $meta->putKeyed( "FIELD", { name => "a", value => "aval" } );
+    $meta->putKeyed( "FIELD", { name => "b", value => "bval" } );
     $meta->put( "FINAGLE", { name => "a", value => "aval" } );
     $meta->put( "FINAGLE", { name => "b", value => "bval" } );
 

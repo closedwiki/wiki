@@ -237,7 +237,7 @@ sub moveAttachment {
     $fileAttachment->{moveby}   = $user->webDotWikiName();
     $fileAttachment->{movedto}  = $newWeb.'.'.$newTopic;
     $fileAttachment->{movedwhen} = time();
-    $nmeta->put( 'FILEATTACHMENT', $fileAttachment );
+    $nmeta->putKeyed( 'FILEATTACHMENT', $fileAttachment );
 
     $error = $this->_noHandlersSave( $user, $newWeb, $newTopic, $ntext,
                                       $nmeta, { notify => 0,
@@ -633,12 +633,12 @@ sub saveAttachment {
         $attrs->{date} = $opts->{filedate};
         $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
 
-        $meta->put( 'FILEATTACHMENT', $attrs );
+        $meta->putKeyed( 'FILEATTACHMENT', $attrs );
     } else {
         my $attrs = $meta->get( 'FILEATTACHMENT', $attachment );
         $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
         $attrs->{comment} = $opts->{comment};
-        $meta->put( 'FILEATTACHMENT', $attrs );
+        $meta->putKeyed( 'FILEATTACHMENT', $attrs );
     }
 
     if( $opts->{createlink} ) {
@@ -965,7 +965,7 @@ sub topicExists {
 # PRIVATE parse and add a meta-datum. Returns '' so it can be used in s///e
 sub _addMetaDatum {
     #my ( $meta, $type, $args ) = @_;
-    $_[0]->put( $_[1], _readKeyValues( $_[2] ));
+    $_[0]->putKeyed( $_[1], _readKeyValues( $_[2] ));
     return ''; # so it can be used in s///e
 }
 

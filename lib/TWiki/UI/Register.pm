@@ -815,7 +815,7 @@ sub _getKeyValuePairsAsTopicForm {
 
         #### SMELL I want to write:
         #     if (field is on form) {
-        #	$meta->put('FIELD',
+        #	$meta->putKeyed('FIELD',
         # { 'name' => $name, 'value' => $value, 'title' =>$title});
         #     } else {
         # accumulate it in $leftoverText
@@ -826,7 +826,7 @@ sub _getKeyValuePairsAsTopicForm {
         if ( $name eq 'Comment' ) {
             $leftoverText .= "\t* $name: $value\n"; #SMELL - tab not 3 spaces
         } else {
-            $meta->put( 'FIELD',
+            $meta->putKeyed( 'FIELD',
                         { name => $name, value => $value, title => $title } );
         }
         #### end workaround SMELL

@@ -39,15 +39,15 @@ sub set_up {
     $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, "" );
     $TWiki::Plugins::SESSION = $twiki;
     my $meta = new TWiki::Meta($twiki, $oldweb, $oldtopic);
-    $meta->put( "FIELD", {name=>"$oldweb",
+    $meta->putKeyed( "FIELD", {name=>"$oldweb",
                           value=>"$oldweb"} );
-    $meta->put( "FIELD", {name=>"$oldweb.$oldtopic",
+    $meta->putKeyed( "FIELD", {name=>"$oldweb.$oldtopic",
                           value=>"$oldweb.$oldtopic"} );
-    $meta->put( "FIELD", {name=>"$oldtopic",
+    $meta->putKeyed( "FIELD", {name=>"$oldtopic",
                           value=>"$oldtopic"} );
-    $meta->put( "FIELD", {name=>"OLD",
+    $meta->putKeyed( "FIELD", {name=>"OLD",
                           value=>"$oldweb.$oldtopic"} );
-    $meta->put( "FIELD", {name=>"NEW",
+    $meta->putKeyed( "FIELD", {name=>"NEW",
                           value=>"$newweb.$newtopic"} );
     $meta->put( "TOPICPARENT", {name=> "$oldweb.$oldtopic"} );
 

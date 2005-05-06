@@ -601,7 +601,7 @@ sub migrateToFileAttachmentMacro {
               $this->_getOldAttachAttr( $line );
 
             if( $fileName ) {
-                $meta->put( 'FILEATTACHMENT',
+                $meta->putKeyed( 'FILEATTACHMENT',
                             {
                              name    => $fileName,
                              version => '',
@@ -622,7 +622,7 @@ sub migrateToFileAttachmentMacro {
                 my $name = $1;
                 my $values = new TWiki::Attrs( $2 );
                 $values->{name} = $name;
-                $meta->put( 'FILEATTACHMENT', $values );
+                $meta->putKeyed( 'FILEATTACHMENT', $values );
             }
         }
     }

@@ -31,8 +31,10 @@ contains another hash of the key=value pairs, corresponding to a
 single meta-datum.
 
 If there may be multiple entries of the same top-level type (i.e. for FIELD
-and FILEATTACHMENT) then the array hash multiple entries. Otherwise
-the array has only one entry.
+and FILEATTACHMENT) then the array hash multiple entries. In this case,
+the entries are keyed with 'name'. Otherwise, the array has only one entry.
+(When entries are keyed, they must be inserted into meta using the 'putKeyed'
+method.)
 
 The module knows nothing about how meta-data is stored. That is entirely the
 responsibility of the Store module.
@@ -49,15 +51,9 @@ use Error qw(:try);
 use Assert;
 use TWiki::Merge;
 
-use vars qw( $formatVersion %KEYS );
+use vars qw( $formatVersion );
 
 $formatVersion = "1.0";
-
-%KEYS =
-  (
-   FIELD => 'name',
-   FILEATTACHMENT => 'name'
-  );
 
 =pod
 
@@ -101,33 +97,53 @@ sub put {
     ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
     my $data = $this->{$type};
-    my $key = $KEYS{$type} || 0;
     if( $data ) {
-        if( $key ) {
-            my $keyName = $args->{$key};
+      # overwrite old single value
+      $data->[0] = $args;
+    } else {
+      push( @{$this->{$type}}, $args );
+    }
+}
+
+=pod
+
+---++ ObjectMethod putKeyed($type, \%args)
+
+Put a hash of key=value pairs into the given type set in this meta. The
+entries are keyed by 'name'.
+
+See the main comment for this package to understand how meta-data is
+represented.
+
+=cut
+
+sub putKeyed {
+    my( $this, $type, $args ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+
+    my $data = $this->{$type};
+    if( $data ) {
+            my $keyName = $args->{'name'};
             ASSERT( $keyName ) if DEBUG;
             my $i = scalar( @$data );
             while( $i-- ) {
-                if( $data->[$i]->{$key} eq $keyName ) {
+                if( $data->[$i]->{'name'} eq $keyName ) {
                     $data->[$i] = $args;
                     return;
                 }
             }
-        } else {
-            # overwrite old single value
-            $data->[0] = $args;
-            return;
-        }
+	    push @$data, $args;
+    } else {
+      push( @{$this->{$type}}, $args );
     }
-    push( @{$this->{$type}}, $args );
 }
 
 =pod
 
 ---++ ObjectMethod get( $type, $key ) -> \%hash
 
-Find the value of a meta-datum in the map. If the type is FIELD or
-FILEATTACHMENT, the $key parameter is required to say _which_
+Find the value of a meta-datum in the map. If the type is 
+keyed, the $key parameter is required to say _which_
 entry you want. Otherwise it can be undef.
 
 The result is a reference to the hash for the item.
@@ -140,12 +156,13 @@ sub get {
 
     my $data = $this->{$type};
     if( $data ) {
-        my $key = $KEYS{$type};
-        return $data->[0] unless $key;
-
+      if( defined $keyValue ) {
         foreach my $item ( @$data ) {
-            return $item if( $item->{$key} eq $keyValue );
-        }
+	  return $item if( $item->{'name'} eq $keyValue );
+	  }
+      } else {
+        return $data->[0];
+      }
     }
 
     return undef;
@@ -191,13 +208,11 @@ sub remove {
     my( $this, $type, $keyValue ) = @_;
     ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
 
-    my $key = $KEYS{$type};
-
-    if( $keyValue && $key ) {
+    if( $keyValue ) {
        my $data = $this->{$type};
        my @newData = ();
        foreach my $item ( @$data ) {
-           if( $item->{$key} ne $keyValue ) {
+           if( $item->{'name'} ne $keyValue ) {
                push @newData, $item;
            }
        }
@@ -392,7 +407,7 @@ sub merge {
                 # SMELL: we don't merge attributes or title
                 $thisD->{value} = $merged;
             } elsif ( !$thisD ) {
-                $this->put('FIELD', $otherD );
+                $this->putKeyed('FIELD', $otherD );
             }
         }
     }
@@ -402,7 +417,7 @@ sub merge {
         foreach my $otherD ( @$data ) {
             my $thisD = $this->get( 'FILEATTACHMENT', $otherD->{name} );
             if ( !$thisD ) {
-                $this->put('FILEATTACHMENT', $otherD );
+                $this->putKeyed('FILEATTACHMENT', $otherD );
             }
         }
     }

@@ -595,7 +595,7 @@ sub fieldVars2Meta {
               value => $value,
               attributes => $fieldDef->{attributes},
              };
-           $meta->put( 'FIELD', $args );
+           $meta->putKeyed( 'FIELD', $args );
        }
    }
 
@@ -760,7 +760,7 @@ sub upgradeCategoryTable {
                 my $name = $oldCat->[0];
                 my $value = $oldCat->[2];
                 $meta->put( 'FORM', { name => '' } );
-                $meta->put( 'FIELD',
+                $meta->putKeyed( 'FIELD',
                             { name => $name,
                               title => $name,
                               value => $value
@@ -781,7 +781,7 @@ sub upgradeCategoryTable {
                   last;
                }
            }
-           $meta->put( 'FIELD',
+           $meta->putKeyed( 'FIELD',
                      {
                       name => $fieldDef->{name},
                       title => $fieldDef->{title},
