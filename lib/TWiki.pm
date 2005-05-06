@@ -804,7 +804,7 @@ sub readOnlyMirrorWeb {
 
 ---++ ObjectMethod getSkin () -> $string
 
-Get the name of the currently requested skin
+Get the currently requested skin path
 
 =cut
 

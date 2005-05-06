@@ -53,7 +53,7 @@ The view is controlled by CGI parameters as follows:
 
 | =rev= | topic revision to view |
 | =raw= | no format body text if set |
-| =skin= | name of skin to use |
+| =skin= | comma-separated list of skin(s) to use |
 | =contenttype= | Allows you to specify an alternate content type |
 
 =cut
@@ -77,7 +77,8 @@ sub view {
     my $skin = $session->getSkin();
 
     # Set page generation mode to RSS if using an RSS skin
-    if( $skin =~ /^rss/ ) {
+    # SMELL: this is dodgy
+    if( $skin =~ /\brss/ ) {
         $session->{renderer}->setRenderMode( 'rss' );
     }
 
@@ -131,15 +132,14 @@ sub view {
         if( $viewRaw =~ /debug/i ) {
             $text = $session->{store}->getDebugText( $meta, $text );
         }
-        # a skin name starting with the word 'text' is intended to be
-        # used like this:
+        # If the _only_ skin is 'text' it is used like this:
         # http://.../view/Codev/MyTopic?skin=text&contenttype=text/plain&raw=on
         # which shows the topic as plain text; useful for those who want
         # to download plain text for the topic.
         # SMELL: this is not documented anywhere that I can find, and the
         # poor slob who creates 'texture_skin' is going to get a hell of
         # a shock! This should be done with "raw=text", not with a skin.
-        if( $skin !~ /^text\b/ ) {
+        if( $skin eq 'text' ) {
             my $p = $session->{prefs};
             $text =
               CGI::textarea
@@ -159,7 +159,6 @@ sub view {
 
     my $template = $query->param( 'template' ) || $session->{prefs}->getPreferencesValue("VIEW_TEMPLATE") || 'view';
 
-    # get view template, standard view or a view with a different skin
     my $tmpl = $session->{templates}->readTemplate( $template, $skin );
     if( ! $tmpl ) {
         my $mess = CGI::start_html().
@@ -267,8 +266,8 @@ sub view {
     my $end = $2;
     my $strip = 0;
     if( $contentType ) {
-        $strip = ( $skin =~ /^rss/ );
-    } elsif( $skin =~ /^rss/ ) {
+        $strip = ( $skin =~ /\brss/ );
+    } elsif( $skin =~ /\brss/ ) {
         $contentType = 'text/xml';
         $strip = 1;
     } else {

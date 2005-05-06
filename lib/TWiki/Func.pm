@@ -101,8 +101,8 @@ sub setSessionValue {
 
 ---+++ getSkin( ) -> $skin
 
-Get the name of the skin, set by the =SKIN= preferences variable or the =skin= CGI parameter
-Return: =$skin= Name of skin, e.g. ='gnu'=. Empty string if none
+Get the skin path, set by the =SKIN= preferences variable or the =skin= CGI parameter
+Return: =$skin= Comma-separated list of skins, e.g. ='gnu,tartan'=. Empty string if none
 
 *Since:* TWiki::Plugins::VERSION 1.000 (29 Jul 2001)
 
@@ -1130,9 +1130,9 @@ sub getPubDir {
 
 ---+++ readTemplate( $name, $skin ) -> $text
 
-Read a template or skin file. Embedded [[%TWIKIWEB%.TWikiTemplates][template directives]] get expanded
+Read a template or skin. Embedded [[%TWIKIWEB%.TWikiTemplates][template directives]] get expanded
    * =$name= - Template name, e.g. ='view'=
-   * =$skin= - Skin name, optional, e.g. ='print'=
+   * =$skin= - Comma-separated list of skin names, optional, e.g. ='print'=
 Return: =$text=    Template text
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
@@ -1347,7 +1347,7 @@ sub checkDependencies {
 ---+++ loadTemplate ( $theName, $theSkin, $theWeb ) -> $text
 
    * =$theName= - template file name
-   * =$theSkin= - the skin to use (default: current skin)
+   * =$theSkin= - comma-separated list of skins to use (default: current skin)
    * =$theWeb= - the web to look in for topics that contain templates (default: current web)
 Return: expanded template text (what's left after removal of all %TMPL:DEF% statements)
 
@@ -1356,25 +1356,7 @@ Return: expanded template text (what's left after removal of all %TMPL:DEF% stat
 Reads a template and extracts template definitions, adding them to the
 list of loaded templates, overwriting any previous definition.
 
-Reads a template, constructing a candidate name for the template thus
-   0 in =templates/$web=, look for
-      0 file =$name.$skin.tmpl=
-      0 file =$name.tmpl=
-   0 in =$web=, look for
-      0 file =$name.$skin.tmpl=
-      0 file =$name.tmpl=
-   0 if a template is not found, tries in this order
-      0 parse =$name= into a web name and a topic name and looks for this topic
-      0 looks for topic =$name= in =$web=
-      0 looks for topic =${skin}Skin${topic}Template= in $web
-      0 looks for topic =${topic}Template= in $web
-      0 looks for =topic ${skin}Skin${topic}Template= in =TWiki::cfg{SystemWebName}=.
-      0 looks for topic =${topic}Template= in =TWiki::cfg{SystemWebName}=.
-In the event that the read fails (template not found, access permissions fail)
-returns the empty string ''.
-
-skin, web and topic names are forced to an upper-case first character
-when composing user topic names.
+How TWiki searches for templates is described in TWikiTemplates.
 
 If template text is found, extracts include statements and fully expands them.
 

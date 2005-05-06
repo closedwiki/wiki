@@ -337,7 +337,7 @@ Renders the differences between version of a TwikiTopic
 | render | the rendering style {sequential, sidebyside, raw, debug} |
 | type | history, diff, last} history diff, version to version, last version to previous |
 | context | number of lines of context |
-| skin | the skin to use to display the diff |
+| skin | the skin(s) to use to display the diff |
 TODO:
    * add a {word} render style
    * move the common CGI param handling to one place

@@ -53,7 +53,7 @@ Most parameters are in the CGI query:
 | =onlynewtopic= | if defined, and the topic exists, then moans |
 | =formtemplate= | name of the form for the topic; will replace existing form |
 | =templatetopic= | name of the topic to copy if creating a new topic |
-| =skin= | skin to use |
+| =skin= | skin(s) to use |
 | =topicparent= | what to put in the topic prent meta data |
 | =text= | text that will replace the old topic text if a formtemplate is defined (what the heck is this for?) |
 | =contenttype= | optional parameter that defines the application type to write into the CGI header. Defaults to text/html. |

@@ -45,7 +45,7 @@ invoked via the =TWiki::UI::run= method.
 Attach a file to a topic. CGI parameters are:
 
 | =filename= | Name of attachment |
-| =skin= | Skin to use in presenting pages |
+| =skin= | Skin(s) to use in presenting pages |
 
 =cut
 sub attach {

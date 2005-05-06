@@ -13,9 +13,11 @@ Skins are customized TWikiTemplates files. You can use skins to change the look 
 
 ---++ Defining Skins
 
-Skin files are located in the =twiki/templates= directory and are named with the syntax: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. For example, the *Printable* skin for the =view= template is =view.print.tmpl=.
+Skin files are located in the =twiki/templates= directory and are named with the syntax: ==&lt;scriptname&gt;.&lt;skin&gt;.tmpl==. For example, the *Printable* skin for the =view= template is =view.print.tmpl=. Skin files may also be defined in TWiki topics - see TWikiTemplates for details. 
 
 Use the existing TWikiTemplates (like =view.tmpl=) or skin files as a base for your own skin, name it for example =view.myskin.tmpl=.
+
+%X% Two skin names have _reserved_ meanings; =text= skin, and skin names starting with =rss= have _hard-coded meanings. [[HardCodedSkins][See below]].
 
 ---++ Variables in Skins
 
@@ -65,7 +67,7 @@ Bare bones header for demo only
 %WEBTOPICLIST%
 </td></tr></table>
 </form> 
-
+ 
 ---++ Using Cascading Style Sheets
 
 Although work is underway at TWiki:Codev.CssClassNames, the regular templates files currently do not use style sheets.  Many skin developers, however, choose to use them; it helps in separating style from content.
@@ -132,14 +134,29 @@ You can try all installed skins in TWikiSkinBrowser.
 A skin can be activated in two ways:
 
 	* Define the =SKIN= Preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or in a user - %WIKIUSERNAME% - topic.
-		* =Set SKIN = print=
+		* =Set SKIN = mine,pattern=
 
-	* Add =?skin=name= to the URL, for this example:
+	* Add =?skin=path= to the URL, for example:
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print (for the print view skin)
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=plain (for the plain view skin that has no header and footer)
 
-The ==?skin=name== URL parameter overrides the SKIN Preference value.
+The ==?skin=path== URL parameter overrides the SKIN Preference value.
 
+TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. When you define the =SKIN= path, each skin on the path is searched for in turn. For example, if you have set =SKIN= to =local,pattern= then =view.local.tmpl= will be searched for before =view.pattern.tmpl=.
 
+---++ Hard Coded Skins
 
+The =text= skin is reserved for TWiki internal use. It is used with the =raw= URL parameter to create a URL that allows the recovery of the plain text of the topic. For example, the URL:
+<verbatim>
+http://myhost.com/twiki/bin/view/Codev/MyTopic?skin=text&contenttype=text/plain&raw=on
+</verbatim>
+will recover the plain text of the topic as presented to =edit=, s MIME type =text/plain=.
+<verabtim>
+http://myhost.com/twiki/bin/view/Codev/MyTopic?skin=text&contenttype=application/x-rabbit&raw=debug
+</verbatim>
+will recover the plain text of the topic as presented to =edit=, as MIME type =application/x-rabbit= (whatever that might be!
+
+=text= must be the _only_ skin in the skin path.
+
+Skin names starting with =rss= also have a special meaning; if one or more of the skins in the skin path starts with 'rss' then 8-bit characters will be encoded as XML entities in the output, and the =content-type= header will be forced to =text/xml=.
 

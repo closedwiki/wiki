@@ -235,7 +235,7 @@ invoked via the =TWiki::UI::run= method.
 Rename the given topic. Details of the new topic name are passed in CGI
 parameters:
 
-| =skin= | skin to use for derivative topics |
+| =skin= | skin(s) to use |
 | =newweb= | new web name |
 | =newtopic= | new topic name |
 | =breaklock= | |

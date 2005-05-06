@@ -56,9 +56,10 @@ use Assert;
 
 =pod
 
----++ ClassMethod new ()
+---++ ClassMethod new ( $session )
 
 Constructor. Creates a new template database object.
+   * $session - session (TWiki) object
 
 =cut
 
@@ -90,7 +91,7 @@ sub haveTemplate {
 
 =pod
 
----++ ObjectMethod expandTemplate( $theParam  ) -> $string
+---++ ObjectMethod expandTemplate( $param  ) -> $string
 
 Expand the template named in the parameter after recursive expansion
 of any TMPL:P tags it contains. Note that all other template tags
@@ -107,28 +108,28 @@ to do this in the MacrosPlugin.
 =cut
 
 sub expandTemplate {
-    my( $this, $theParam ) = @_;
+    my( $this, $param ) = @_;
     ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
 
-    my $attrs = new TWiki::Attrs( $theParam );
+    my $attrs = new TWiki::Attrs( $param );
     my $value = $this->_tmplP( $attrs->{_DEFAULT} );
     return $value;
 }
 
 # Return value: expanded text of the named template, as found from looking
 # in the register of template definitions.
-# If $theVar is the name of a previously defined template, returns the text of
+# If $var is the name of a previously defined template, returns the text of
 # that template after recursive expansion of any TMPL:P tags it contains.
 sub _tmplP {
-    # Print template variable, called by %TMPL:P{$theVar}%
-    my( $this, $theVar ) = @_;
+    # Print template variable, called by %TMPL:P{$var}%
+    my( $this, $var ) = @_;
 
     my $val = '';
-    if( exists($this->{VARS}{ $theVar } )) {
-        $val = $this->{VARS}{ $theVar };
+    if( exists($this->{VARS}{ $var } )) {
+        $val = $this->{VARS}{ $var };
         $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/$this->_tmplP($1)/geo;  # recursion
     }
-    if( ( $theVar eq 'sep' ) && ( ! $val ) ) {
+    if( ( $var eq 'sep' ) && ( ! $val ) ) {
         # set separator explicitly if not set
         $val = " | ";
     }
@@ -137,28 +138,28 @@ sub _tmplP {
 
 =pod
 
----++ ObjectMethod readTemplate ( $theName, $theSkin, $theWeb ) -> $text
+---++ ObjectMethod readTemplate ( $name, $skins, $web ) -> $text
 
 Return value: expanded template text
 
 Reads a template, constructing a candidate name for the template thus
    0 in =templates/$web=, look for
-      0 file =$name.$skin.tmpl=
+      0 file =$name.$skin.tmpl= (for each skin)
       0 file =$name.tmpl=
    0 in =templates=, look for
-      0 file =$name.$skin.tmpl=
+      0 file =$name.$skin.tmpl= (for each skin)
       0 file =$name.tmpl=
    0 if a template is not found, tries in this order
       0 parse =$name= into a web name and a topic name and looks for this topic
       0 looks for topic =$name= in =$web=
-      0 looks for topic =${skin}Skin${topic}Template= in $web
-      0 looks for topic =${topic}Template= in $web
-      0 looks for =topic ${skin}Skin${topic}Template= in =TWiki::cfg{SystemWebName}=.
-      0 looks for topic =${topic}Template= in =TWiki::cfg{SystemWebName}=.
+      0 looks for topic =${skin}Skin${name}Template= in $web (for each skin)
+      0 looks for topic =${name}Template= in $web
+      0 looks for =topic ${skin}Skin${name}Template= in =TWiki::cfg{SystemWebName}= (for each skin).
+      0 looks for topic =${name}Template= in =TWiki::cfg{SystemWebName}=.
 In the event that the read fails (template not found, access permissions fail)
 returns the empty string ''.
 
-skin, web and topic names are forced to an upper-case first character
+=$skin=, =$web= and =$name= are forced to an upper-case first character
 when composing user topic names.
 
 If template text is found, extracts include statements and fully expands them.
@@ -168,21 +169,13 @@ list of loaded templates, overwriting any previous definition.
 =cut
 
 sub readTemplate {
-    my( $this, $theName, $theSkin, $theWeb ) = @_;
+    my( $this, $name, $skins, $web ) = @_;
     ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
 
-    if( ! defined($theSkin) ) {
-        $theSkin = $this->{session}->getSkin();
-    }
-
-    if( ! defined( $theWeb ) ) {
-      $theWeb = $this->{session}->{webName};
-    }
-
     # recursively read template file(s)
-    my $text = $this->_readTemplateFile( $theName, $theSkin, $theWeb );
+    my $text = $this->_readTemplateFile( $name, $skins, $web );
     while( $text =~ /%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/s ) {
-        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/$this->_readTemplateFile( $1, $theSkin, $theWeb )/geo;
+        $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/$this->_readTemplateFile( $1, $skins, $web )/geo;
     }
 
     if( ! ( $text =~ /%TMPL\:/s ) ) {
@@ -229,96 +222,91 @@ sub readTemplate {
 
 # STATIC: Return value: raw template text, or '' if read fails
 sub _readTemplateFile {
-    my( $this, $theName, $theSkin, $theWeb ) = @_;
-    $theSkin = '' unless $theSkin; # prevent 'uninitialized value' warnings
-
-    $theName =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
-    $theName =~ s/\.+/\./g;                      # Filter out ".." from filename
-    $theSkin =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
-    $theSkin =~ s/\.+/\./g;                      # Filter out ".." from filename
-
-    my $tmplFile = '';
-
-    # search first in twiki/templates/Web dir
-    # for file script(.skin).tmpl
-    my $tmplDir = "$TWiki::cfg{TemplateDir}/$theWeb";
-    if( opendir( DIR, $tmplDir ) ) {
-        # for performance use readdir, not a row of ( -e file )
-        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
-        closedir DIR;
-        $tmplFile = "$theName.$theSkin.tmpl";
-        if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.tmpl";
-            if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = '';
-            }
-        }
-        if( $tmplFile ) {
-            $tmplFile = "$tmplDir/$tmplFile";
-        }
-    }
-
-    # if not found, search in twiki/templates dir
-    $tmplDir = $TWiki::cfg{TemplateDir};
-    if( ( ! $tmplFile ) && ( opendir( DIR, $tmplDir ) ) ) {
-        my @filelist = grep /^$theName\..*tmpl$/, readdir DIR;
-        closedir DIR;
-        $tmplFile = "$theName.$theSkin.tmpl";
-        if( ! grep { /^$tmplFile$/ } @filelist ) {
-            $tmplFile = "$theName.tmpl";
-            if( ! grep { /^$tmplFile$/ } @filelist ) {
-                $tmplFile = '';
-            }
-        }
-        if( $tmplFile ) {
-            $tmplFile = "$tmplDir/$tmplFile";
-        }
-    }
-
+    my( $this, $name, $skins, $web ) = @_;
     my $store = $this->{session}->{store};
-    # read the template file
-    if( $tmplFile && -e $tmplFile ) {
+
+    $skins = $this->{session}->getSkin() unless defined( $skins );
+    $web ||= $this->{session}->{webName};
+    $name ||= '';
+
+    if ( $name =~ /^(\w+)\.(\w+)$/ ) {
+        my $web = $1;
+        my $topic = $2;
+        if ( $store->topicExists( $web, $topic ) &&
+             $this->{session}->{security}->checkAccessPermission
+             ( 'view', $this->{session}->{user}, '', $topic, $web )) {
+            my ( $meta, $text ) =
+              $store->readTopic( undef, $web, $topic, undef );
+            return $text;
+        }
+    }
+
+    # zap anything suspicious
+    $name =~ s/[^A-Za-z0-9_,]//go;
+    $skins =~ s/[^A-Za-z0-9_,]//go;
+
+    my $tmplFile;
+    my @skinList = split( /,+/, $skins );
+
+  DIR:
+    foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
+                          $TWiki::cfg{TemplateDir} ) {
+
+        if( opendir( DIR, $tmplDir ) ) {
+            # for performance use readdir, not a row of ( -e file )
+            my @files = grep { /^$name.*\.tmpl/ } readdir DIR;
+            closedir( DIR );
+            foreach my $skin ( @skinList ) {
+                foreach my $file ( @files ) {
+                    if ( $file =~ /^$name.$skin.tmpl$/ ) {
+                        $tmplFile = $tmplDir.'/'.$file;
+                        last DIR;
+                    }
+                }
+            }
+            foreach my $file ( @files ) {
+                if ( $file =~ /^$name.tmpl$/ ) {
+                    $tmplFile = $tmplDir.'/'.$file;
+                    last DIR;
+                }
+            }
+        }
+    }
+
+    if( $tmplFile && -r $tmplFile ) {
         return $store->readFile( $tmplFile );
     }
 
-    # See if it is a user topic. Search first in current web
-    # twiki web. Note that neither web nor topic may be variables
-    # when used in a template name.
-    if ( $theSkin ne '' ) {
-        $theSkin = ucfirst( $theSkin ) . 'Skin';
+    # See if it is a user topic. Search first in current web, then
+    # twiki web.
+    # See if we can parse $name into $web.$topic
+    $web = ucfirst( $web );
+    my $topic = ucfirst( $name );
+
+  WEB:
+    foreach my $lookWeb ( $web, $TWiki::cfg{SystemWebName} ) {
+        foreach my $skin ( @skinList ) {
+            my $skintopic = ucfirst( $skin ).'Skin'.$topic.'Template';
+            if( $store->topicExists( $lookWeb, $skintopic ) &&
+                $this->{session}->{security}->checkAccessPermission
+                ( 'view', $this->{session}->{user}, '', $skintopic,
+                  $lookWeb )) {
+                $web = $lookWeb;
+                $topic = $skintopic;
+                last WEB;
+            }
+        }
+        my $ttopic = $topic.'Template';
+        if ( $store->topicExists( $lookWeb, $ttopic )) {
+            $web = $lookWeb;
+            $topic = $ttopic;
+            last WEB;
+        }
     }
 
-    my $theTopic;
-
-    if ( $theName =~ /^(\w+)\.(\w+)$/ ) {
-        $theWeb = ucfirst( $1 );
-        $theTopic = ucfirst( $2 );
-    } else {
-        $theWeb = $theWeb = $this->{session}->{webName};
-	$theName = ucfirst( $theName );
-	$theTopic = $theName;
-    }
-    if ( !$store->topicExists( $theWeb, $theTopic )) {
-        $theName = $theName . 'Template';
-        $theTopic = $theSkin . $theName;
-    }
-    if ( !$store->topicExists( $theWeb, $theTopic )) {
-        $theTopic = $theName;
-    }
-    if ( !$store->topicExists( $theWeb, $theTopic )) {
-        $theWeb = $TWiki::cfg{SystemWebName};
-        $theTopic = $theSkin . $theName;
-    }
-    if ( !$store->topicExists( $theWeb, $theTopic )) {
-        $theTopic = $theName;
-    }
-    if ( $store->topicExists( $theWeb, $theTopic ) &&
-         $this->{session}->{security}->checkAccessPermission( 'view',
-                                                   $this->{session}->{user},
-                                                   '',
-                                                   $theTopic, $theWeb )) {
+    if ( $store->topicExists( $web, $topic )) {
         my ( $meta, $text ) =
-          $store->readTopic( undef, $theWeb, $theTopic, undef );
+          $store->readTopic( undef, $web, $topic, undef );
         return $text;
     }
 
