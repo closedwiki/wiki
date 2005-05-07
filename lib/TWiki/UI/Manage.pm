@@ -636,7 +636,7 @@ sub _updateReferringTopics {
                 $text = $renderer->forEachLine
                   ( $text, \&TWiki::Render::replaceTopicReferences, $options );
                 $meta->forEachSelectedValue
-                  ( qw/^(FIELD|TOPICPARENT)$/, undef,
+                  ( qw/^(FIELD|FORM|TOPICPARENT)$/, undef,
                     \&TWiki::Render::replaceTopicReferences, $options );
 
                 $store->saveTopic( $user, $itemWeb, $itemTopic,
