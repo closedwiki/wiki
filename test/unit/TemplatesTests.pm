@@ -55,13 +55,14 @@ sub tear_down {
 }
 
 sub write_template {
-    my $tmpl = shift;
+    my( $tmpl, $content ) = @_;
 
+    $content ||= $tmpl;
     if( $tmpl =~ m!^(.*)/[^/]*$! ) {
         File::Path::mkpath( "$test_tmpls/$1" ) unless -d "$test_tmpls/$1";
     }
     open(F, ">$test_tmpls/$tmpl.tmpl") || die;
-    print F $tmpl;
+    print F $content;
     close(F);
 }
 
@@ -240,10 +241,50 @@ sub test_webTopics {
     $this->assert_str_equals("Web/Script", $data );
 }
 
-=pod
+sub language_setup {
+    write_template( 'strings', '
+%TMPL:DEF{"Question"}%Do you see?%TMPL:END%
+%TMPL:DEF{"Yes"}%Yes%TMPL:END%
+%TMPL:DEF{"No"}%No%TMPL:END%
+' );
+    write_template( 'strings.gaelic', '
+%TMPL:DEF{"Question"}%An faca sibh?%TMPL:END%
+%TMPL:DEF{"Yes"}%Chunnaic%TMPL:END%
+%TMPL:DEF{"No"}%Chan fhaca%TMPL:END%
+' );
+    write_template("pattern", '%TMPL:INCLUDE{"strings"}%SKIN=pattern ');
 
-Also need to test: correct functioning of template macros, esp. include.
 
-=cut
+    write_template( 'example', '%TMPL:INCLUDE{"pattern"}%%TMPL:P{"Question"}%
+<input type="button" value="%TMPL:P{"No"}%">
+<input type="button" value="%TMPL:P{"Yes"}%">
+');
+}
+
+sub test_languageEnglish {
+    my $this = shift;
+    my $data;
+
+    language_setup();
+    $data = $tmpls->readTemplate('example', 'pattern', '' );
+    $this->assert_str_equals('
+SKIN=pattern Do you see?
+<input type="button" value="No">
+<input type="button" value="Yes">
+', $data );
+}
+
+sub test_languageGaelic {
+    my $this = shift;
+    my $data;
+
+    language_setup();
+    $data = $tmpls->readTemplate('example', 'gaelic,pattern', '' );
+    $this->assert_str_equals('
+SKIN=pattern An faca sibh?
+<input type="button" value="Chan fhaca">
+<input type="button" value="Chunnaic">
+', $data );
+}
 
 1;
