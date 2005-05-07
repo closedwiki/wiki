@@ -48,8 +48,8 @@ TWiki uses the following search order to determine which template file or topic 
 <tr><th> *If a skin path is specified* </th><th> *If no skin path is specified* </th></tr>
 <tr valign="top"><td>
    1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl
-   1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.tmpl 
    1 templates/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl 
+   1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.tmpl 
    1 templates/%RED%script%ENDCOLOR%.tmpl 
    1 %RED%web%ENDCOLOR%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template
    1 %TWIKIWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template

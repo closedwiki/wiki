@@ -145,9 +145,11 @@ Return value: expanded template text
 Reads a template, constructing a candidate name for the template thus
    0 in =templates/$web=, look for
       0 file =$name.$skin.tmpl= (for each skin)
-      0 file =$name.tmpl=
    0 in =templates=, look for
       0 file =$name.$skin.tmpl= (for each skin)
+   0 in =templates/$web=, look for
+      0 file =$name.tmpl=
+   0 in =templates=, look for
       0 file =$name.tmpl=
    0 if a template is not found, tries in this order
       0 parse =$name= into a web name and a topic name and looks for this topic
@@ -171,6 +173,8 @@ list of loaded templates, overwriting any previous definition.
 sub readTemplate {
     my( $this, $name, $skins, $web ) = @_;
     ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
+
+    $this->{files} = ();
 
     # recursively read template file(s)
     my $text = $this->_readTemplateFile( $name, $skins, $web );
@@ -245,36 +249,37 @@ sub _readTemplateFile {
     $name =~ s/[^A-Za-z0-9_,]//go;
     $skins =~ s/[^A-Za-z0-9_,]//go;
 
-    my $tmplFile;
     my @skinList = split( /,+/, $skins );
 
-  DIR:
-    foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
-                          $TWiki::cfg{TemplateDir} ) {
+    unless( defined( $this->{files} )) {
+        @{$this->{files}} = ();
+        foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
+                              $TWiki::cfg{TemplateDir} ) {
 
-        if( opendir( DIR, $tmplDir ) ) {
-            # for performance use readdir, not a row of ( -e file )
-            my @files = grep { /^$name.*\.tmpl/ } readdir DIR;
-            closedir( DIR );
-            foreach my $skin ( @skinList ) {
-                foreach my $file ( @files ) {
-                    if ( $file =~ /^$name.$skin.tmpl$/ ) {
-                        $tmplFile = $tmplDir.'/'.$file;
-                        last DIR;
-                    }
-                }
-            }
-            foreach my $file ( @files ) {
-                if ( $file =~ /^$name.tmpl$/ ) {
-                    $tmplFile = $tmplDir.'/'.$file;
-                    last DIR;
-                }
+            if( opendir( DIR, $tmplDir ) ) {
+                push( @{$this->{files}},
+                      map { $tmplDir.'/'.$_ }
+                      grep { /\.tmpl$/ }
+                      readdir DIR );
+                closedir( DIR );
             }
         }
     }
 
-    if( $tmplFile && -r $tmplFile ) {
-        return $store->readFile( $tmplFile );
+    # Search the web dir and the root dir for the skinned version first
+    foreach my $skin ( @skinList ) {
+        foreach my $file ( @{$this->{files}} ) {
+            if ( $file =~ /\/$name.$skin.tmpl$/ ) {
+                return $store->readFile( $file );
+            }
+        }
+    }
+
+    # now search the web dir and the root dir for the unskinned version
+    foreach my $file ( @{$this->{files}} ) {
+        if ( $file =~ /\/$name.tmpl$/ ) {
+            return $store->readFile( $file );
+        }
     }
 
     # See if it is a user topic. Search first in current web, then
@@ -282,8 +287,8 @@ sub _readTemplateFile {
     # See if we can parse $name into $web.$topic
     $web = ucfirst( $web );
     my $topic = ucfirst( $name );
+    my $ttopic = $topic.'Template';
 
-  WEB:
     foreach my $lookWeb ( $web, $TWiki::cfg{SystemWebName} ) {
         foreach my $skin ( @skinList ) {
             my $skintopic = ucfirst( $skin ).'Skin'.$topic.'Template';
@@ -291,25 +296,22 @@ sub _readTemplateFile {
                 $this->{session}->{security}->checkAccessPermission
                 ( 'view', $this->{session}->{user}, '', $skintopic,
                   $lookWeb )) {
-                $web = $lookWeb;
-                $topic = $skintopic;
-                last WEB;
+                my ( $meta, $text ) =
+                  $store->readTopic( undef, $lookWeb, $skintopic, undef );
+                return $text;
             }
         }
-        my $ttopic = $topic.'Template';
-        if ( $store->topicExists( $lookWeb, $ttopic )) {
-            $web = $lookWeb;
-            $topic = $ttopic;
-            last WEB;
+        if ( $store->topicExists( $lookWeb, $ttopic ) &&
+             $this->{session}->{security}->checkAccessPermission
+             ( 'view', $this->{session}->{user}, '', $ttopic,
+               $lookWeb )) {
+            my ( $meta, $text ) =
+              $store->readTopic( undef, $lookWeb, $ttopic, undef );
+            return $text;
         }
     }
 
-    if ( $store->topicExists( $web, $topic )) {
-        my ( $meta, $text ) =
-          $store->readTopic( undef, $web, $topic, undef );
-        return $text;
-    }
-
+    # SMELL: surely this should be an error?
     return '';
 }
 

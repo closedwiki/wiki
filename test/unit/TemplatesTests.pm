@@ -103,7 +103,7 @@ sub test_skinPathWeb {
     write_template( 'web/script' );
 
     $data = $tmpls->readTemplate('script', 'skin', 'web' );
-    $this->assert_str_equals('web/script', $data );
+    $this->assert_str_equals('script.skin', $data );
 
     $data = $tmpls->readTemplate('script', '', 'web' );
     $this->assert_str_equals('web/script', $data );
