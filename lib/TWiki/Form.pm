@@ -316,11 +316,16 @@ sub renderForEdit {
         my $size = $c->{size};
         my $tooltip = $c->{tooltip};
         my $attributes = $c->{attributes};
-	my $referenced = $c->{referenced};
-	$mandatoryFieldsPresent = 1 if $attributes =~ /M/;
-
+        my $referenced = $c->{referenced};
+        my $extra = '';
         my $field;
         my $value;
+
+        if( $attributes =~ /M/ ) {
+            $extra = CGI::span( { class => 'twikiAlert' }, ' *' );
+            $mandatoryFieldsPresent = 1;
+        }
+
         if( $name ) {
             $field = $meta->get( 'FIELD', $name );
             $value = $field->{value};
@@ -331,7 +336,7 @@ sub renderForEdit {
             $value = $prefs->getPreferencesValue($name);
         }
         if( $getValuesFromFormTopic && !defined( $value ) &&
-	    #TW: was (checkbox|radio|select)
+            #TW: was (checkbox|radio|select)
             $type !~ /^checkbox/ ) {
 
             # Try and get a sensible default value from the form
@@ -343,8 +348,12 @@ sub renderForEdit {
             }
         }
         $value = '' unless defined $value;  # allow 0 values
-	#TW: should use style
-	my $extra = ($attributes =~ /M/) ? "<font color=\"red\">*</font>" : "";
+
+        my $options;
+        my $item;
+        my %attrs;
+        my @defaults;
+        my $selected;
 
         my $output = $session->{plugins}->renderFormFieldForEditHandler
           ( $name, $type, $size, $value, $attributes, $c->{value} );
@@ -358,25 +367,25 @@ sub renderForEdit {
                                      -value => $value );
 
         } elsif( $type eq 'label' ) {
-	    # Interesting question: if something is defined as "label",
-	    # could it be changed by applications or is the value 
-	    # necessarily identical to what is in the form? If we can
-	    # take it from the text, we must be sure it cannot be
-	    # changed through the URL?
-	    my $renderedValue = $session->{renderer}->getRenderedVersion
-                               ( $session->handleCommonTags( $value, $web, $topic ));
-	    $value = CGI::hidden( -name => $name,
-				  -class => 'twikiEditFormLabelField',
-				  -value => $renderedValue );
+            # Interesting question: if something is defined as "label",
+            # could it be changed by applications or is the value
+            # necessarily identical to what is in the form? If we can
+            # take it from the text, we must be sure it cannot be
+            # changed through the URL?
+            my $renderedValue = $session->{renderer}->getRenderedVersion
+              ( $session->handleCommonTags( $value, $web, $topic ));
+            $value = CGI::hidden( -name => $name,
+                                  -class => 'twikiEditFormLabelField',
+                                  -value => $renderedValue );
             $value .= CGI::div( { class => 'twikiEditFormLabelField' },
-				$renderedValue );
+                                $renderedValue );
 
         } elsif( $type eq 'textarea' ) {
             my $cols = 40;
             my $rows = 5;
             if( $size =~ /([0-9]+)x([0-9]+)/ ) {
-               $cols = $1;
-               $rows = $2;
+                $cols = $1;
+                $rows = $2;
             }
             $value = CGI::textarea( -class => 'twikiEditFormTextAreaField',
                                     -cols => $cols,
@@ -385,11 +394,11 @@ sub renderForEdit {
                                     -default => "\n".$value );
 
         } elsif( $type eq 'select' ) {
-            my $options = $c->{value};
+            $options = $c->{value};
             ASSERT( ref( $options )) if DEBUG;
             my $choices = '';
-            foreach my $item ( @$options ) {
-                my $selected = ( $item eq $value );
+            foreach $item ( @$options ) {
+                $selected = ( $item eq $value );
                 $item =~ s/<nop/&lt\;nop/go;
                 if( $selected ) {
                     $choices .= CGI::option({ selected=>'selected' }, $item );
@@ -400,7 +409,7 @@ sub renderForEdit {
             $value = CGI::Select( { name=>$name, size=>$size }, $choices );
 
         } elsif( $type =~ /^checkbox/ ) {
-            my $options = $c->{value};
+            $options = $c->{value};
             ASSERT( ref( $options )) if DEBUG;
             if( $type eq 'checkbox+buttons' ) {
                 my $boxes = scalar( @$options );
@@ -415,10 +424,8 @@ sub renderForEdit {
                     -value => 'Clear',
                     -onClick => 'checkAll(this,1,'.$boxes.',false)');
             }
-            my %attrs;
-            my @defaults;
-            foreach my $item ( @$options ) {
-	        #NOTE: Does not expand $item in label
+            foreach $item ( @$options ) {
+                #NOTE: Does not expand $item in label
                 $attrs{$item} =
                   { class=>'twikiEditFormCheckboxField',
                     label=>$session->handleCommonTags( $item,
@@ -436,12 +443,10 @@ sub renderForEdit {
                                           -attributes => \%attrs );
 
         } elsif( $type eq 'radio' ) {
-            my $options = $c->{value};
+            $options = $c->{value};
             ASSERT( ref( $options )) if DEBUG;
-            my %attrs;
-            my @defaults;
-            my $selected = '';
-            foreach my $item ( @$options ) {
+            $selected = '';
+            foreach $item ( @$options ) {
                 $attrs{$item} =
                   { class=>'twikiEditFormRadioField twikiRadioButton',
                     label=>$session->handleCommonTags( $item, $web, $topic ) };
@@ -466,32 +471,33 @@ sub renderForEdit {
 
         }
 
-	if (! $title && $type eq "label") {
-	  # Special handling for untitled labels
-	  $text .= CGI::Tr(CGI::th( { align => 'left',
-				      colspan => '2',
-				      bgcolor => '#99CCCC'},
-				    CGI::Div
-				    ( { class => 'twikiChangeFormButton' },
-				      $session->{renderer}->getRenderedVersion
-				      ( $session->handleCommonTags( $c->{value}, $web, $topic ))) ));
-	} else {
-	  $text .= CGI::Tr(CGI::th( { align => 'right',
-				      bgcolor=>'#99CCCC'},
-				    # TW: Maybe do not link field headings
-				    #$title .
-				    $this->_link( $web, $title, $tooltip, $referenced).
-				    $extra ).
-			   CGI::td( { -align=>'left' } , $value ));
-	}
+        if (! $title && $type eq "label") {
+            # Special handling for untitled labels
+            $text .= CGI::Tr(CGI::th( { align => 'left',
+                                        colspan => '2',
+                                        bgcolor => '#99CCCC'},
+                                      CGI::Div
+                                      ( { class => 'twikiChangeFormButton' },
+                                        $session->{renderer}->getRenderedVersion
+                                        ( $session->handleCommonTags( $c->{value}, $web, $topic ))) ));
+        } else {
+            $text .= CGI::Tr(CGI::th( { align => 'right',
+                                        bgcolor=>'#99CCCC' },
+                                      # TW: Maybe do not link field headings
+                                      #$title .
+                                      $this->_link( $web, $title, $tooltip, $referenced).
+                                      $extra ).
+                             CGI::td( { -align=>'left' } , $value ));
+        }
     }
     $text .= CGI::end_table();
 
     $text = CGI::div({-class=>'twikiForm twikiEditForm'}, $text);
 
-    # TW should add stye
-    $text .= "<font color=\"red\">* indicates mandatory fields</font>\n" if $mandatoryFieldsPresent;
-
+    if( $mandatoryFieldsPresent ) {
+        $text .= CGI::span( { class => 'twikiAlert' }, '*' ).
+          ' indicates mandatory fields';
+    }
     return $text;
 
 }
@@ -669,7 +675,7 @@ sub _upgradeCategoryItem {
         my $size = $cmd[2];
         for( $i = 3; $i < $len; $i++ ) {
             my $value = $cmd[$i];
-            my $svalue = $value;
+            $svalue = $value;
             if( $src =~ /$value/ ) {
                $catvalue = $svalue;
             }
@@ -686,7 +692,7 @@ sub _upgradeCategoryItem {
         $itemsPerLine = $cmd[3];
         for( $i = 4; $i < $len; $i++ ) {
             my $value = $cmd[$i];
-            my $svalue = $value;
+            $svalue = $value;
             # I18N: FIXME - need to look at this, but since it's upgrading
             # old forms that probably didn't use I18N, it's not a high
             # priority.
@@ -773,20 +779,20 @@ sub upgradeCategoryTable {
         $meta->put( 'FORM', { name => $defaultFormTemplate } );
 
         foreach my $fieldDef ( @$fieldsInfo ) {
-           my $value = '';
-           foreach my $oldCatP ( @items ) {
-               my @oldCat = @$oldCatP;
-               if( _cleanField( $oldCat[0] ) eq $fieldDef->{name} ) {
-                  $value = $oldCat[2];
-                  last;
-               }
-           }
-           $meta->putKeyed( 'FIELD',
-                     {
-                      name => $fieldDef->{name},
-                      title => $fieldDef->{title},
-                      value => $value,
-                     } );
+            my $value = '';
+            foreach my $oldCatP ( @items ) {
+                my @oldCat = @$oldCatP;
+                if( _cleanField( $oldCat[0] ) eq $fieldDef->{name} ) {
+                    $value = $oldCat[2];
+                    last;
+                }
+            }
+            $meta->putKeyed( 'FIELD',
+                             {
+                              name => $fieldDef->{name},
+                              title => $fieldDef->{title},
+                              value => $value,
+                             } );
         }
 
     } else {

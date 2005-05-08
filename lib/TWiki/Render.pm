@@ -201,24 +201,20 @@ sub _renderFormData {
     return '' unless( $form );
 
     my $name = $form->{name};
-    my $metaText = "\n|*[[".$name."]]*||\n";
+    my $metaText = CGI::Tr( CGI::Th( { class => 'twikiFirstCol',
+                                       colspan => 2 },
+                                     '[['.$name.']]' ));
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
-        my $title = $field->{title};
         my $value = $field->{value} || '&nbsp;';
-        if ( $value =~ m/^(\s*)(\*.*\*\s*)$/ ) {
-            # avoid formatting bolded text as header cell
-            $value = $1.'<nop> '.$2;
-        }
-        # change any new line character sequences to <br />
-        $value =~ s!\r?\n!<br />!gs;
-        # escape "|" to HTML entity
-        $value =~ s/\|/&#124;/gs;
-        # and %SEP%....
-        $value =~ s/%SEP%/&#124;/gs;
-        $metaText .= "|  $title:|$value |\n";
+        $metaText .= CGI::Tr( { valign => 'top' },
+                              CGI::Td( { class => 'twikiFirstCol',
+                                         align => 'right' },
+                                       ' '.$field->{title}.':' ).
+                              CGI::Td( ' '.$value.' ' ));
     }
-    return CGI::div( { class => 'twikiForm' }, $metaText );
+    return CGI::div( { class => 'twikiForm' },
+                     CGI::table( { border => 1 }, $metaText ));
 }
 
 # Add a list item, of the given type and indent depth. The list item may
