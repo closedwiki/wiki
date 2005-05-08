@@ -624,7 +624,6 @@ sub getFieldParams {
 
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
-       my $args = $2;
        my $name  = $field->{name};
        my $value = $field->{value};
        #$this->{session}->writeDebug( "Form::getFieldParams " . $name . ", " . $value );

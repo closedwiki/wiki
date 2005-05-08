@@ -143,21 +143,20 @@ sub _tmplP {
 Return value: expanded template text
 
 Reads a template, constructing a candidate name for the template thus
-   0 in =templates/$web=, look for
-      0 file =$name.$skin.tmpl= (for each skin)
-   0 in =templates=, look for
-      0 file =$name.$skin.tmpl= (for each skin)
-   0 in =templates/$web=, look for
-      0 file =$name.tmpl=
-   0 in =templates=, look for
-      0 file =$name.tmpl=
+   0 looks for file =$name.$skin.tmpl= (for each skin)
+      0 in =templates/$web=
+      0 in =templates=, look for
+   0 looks for file =$name.tmpl=
+      0 in =templates/$web=
+      0 in =templates=, look for
    0 if a template is not found, tries in this order
-      0 parse =$name= into a web name and a topic name and looks for this topic
-      0 looks for topic =$name= in =$web=
-      0 looks for topic =${skin}Skin${name}Template= in $web (for each skin)
-      0 looks for topic =${name}Template= in $web
-      0 looks for =topic ${skin}Skin${name}Template= in =TWiki::cfg{SystemWebName}= (for each skin).
-      0 looks for topic =${name}Template= in =TWiki::cfg{SystemWebName}=.
+      0 parse =$name= into a web name (default to $web) and a topic name and looks for this topic
+      0 looks for topic =${skin}Skin${name}Template= 
+         0 in $web (for each skin)
+         0 in =TWiki::cfg{SystemWebName}= (for each skin)
+      0 looks for topic =${name}Template=
+         0 in $web (for each skin)
+         0 in =TWiki::cfg{SystemWebName}= (for each skin)
 In the event that the read fails (template not found, access permissions fail)
 returns the empty string ''.
 
