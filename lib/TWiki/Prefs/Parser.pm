@@ -39,7 +39,7 @@ package TWiki::Prefs::Parser;
 
 use Assert;
 
-my $formPrefPrefix = 'FORM_';
+my $settingPrefPrefix = 'SETTING_';
 
 =pod
 
@@ -95,10 +95,10 @@ sub parseText {
 
 ---++ ObjectMethod parseMeta( $metaObject, $prefs )
 
-Traverses through all FIELD attributes of the meta object, creating one setting
-named with $formPrefPrefix . $fieldTitle for each.  If the
-field's attribute list includes a 'S', it also creates an entry named with the
-field 'name', which is a cleaned-up, space-removed version of the title.
+Traverses through all SETTING attributes of the meta object, creating one 
+setting named with $settingPrefPrefix . 'title' for each.  It also 
+creates an entry named with the field 'name', which is a cleaned-up, 
+space-removed version of the title.
 
 Settings are added to the $prefs passed.
 
@@ -107,20 +107,16 @@ Settings are added to the $prefs passed.
 sub parseMeta {
     my( $this, $meta, $prefs ) = @_;
 
-    if( $meta->get( 'FORM' ) ) {
-        my @fields = $meta->find( 'FIELD' );
+        my @fields = $meta->find( 'SETTING' );
         foreach my $field( @fields ) {
             my $title = $field->{title};
-            my $prefixedTitle = $formPrefPrefix . $title;
+            my $prefixedTitle = $settingPrefPrefix . $title;
             my $value = $field->{value};
             $prefs->insertPrefsValue( $prefixedTitle, $value );
-            my $attributes = $field->{attributes};
-            if( $attributes && $attributes =~ /[S]/o ) {
-                my $name = $field->{name};
-                $prefs->insertPrefsValue( $name, $value );
-            }
+	    #SMELL: Why do we insert both based on title and name?
+	    my $name = $field->{name};
+	    $prefs->insertPrefsValue( $name, $value );
         }
-    }
 }
 
 1;

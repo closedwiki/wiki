@@ -124,6 +124,7 @@ sub beforeCommonTagsHandler
 	 TWiki::Func::setTopicEditLock( $web, $topic, 0 );  # unlock Topic
 	 my $url = &TWiki::Func::getViewUrl( $web, $topic );
 	 &TWiki::Func::redirectCgiQuery( $query, $url );
+	 return 0;
 	
       } elsif ( $action eq 'save' ) {
 
@@ -137,7 +138,7 @@ sub beforeCommonTagsHandler
 	  $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopssaveerr", $error );
 	}
 	&TWiki::Func::redirectCgiQuery( $query, $url );
-	return;
+	return 0;
 
       } else {
 	$_[0] =~ s/%EDITPREFERENCES.*%/&handleEditButton($_[2], $_[1], 1)/ge;

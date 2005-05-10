@@ -652,4 +652,108 @@ sub _updateReferringTopics {
     }
 }
 
+=pod
+
+---++ StaticMethod editSettings( $session )
+=settings= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+Rename the given topic. Details of the new topic name are passed in CGI
+parameters, if any:
+
+=cut
+
+sub editSettings {
+    my $session = shift;
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
+
+    my( $meta, $text ) =
+      $session->{store}->readTopic( $session->{user}, $web, $topic, undef );
+    my ( $orgDate, $orgAuth, $orgRev ) = $meta->getRevisionInfo();
+
+    my $settings = "";
+
+    my @fields = $meta->find( 'SETTING' );
+    foreach my $field ( @fields ) {
+       my $name  = $field->{name};
+       my $value = $field->{value};
+       $settings .= "\t* Set $name = $value\n";
+    }
+
+    my $skin = $session->getSkin();
+    my $tmpl = $session->{templates}->readTemplate( 'settings', $skin );
+    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
+
+    $tmpl =~ s/%TEXT%/$settings/o;
+    $tmpl =~ s/%ORIGINALREV%/$orgRev/g;
+
+    $session->writeCompletePage( $tmpl );
+
+}
+
+sub saveSettings {
+    my $session = shift;
+    my $topic = $session->{topicName};
+    my $web = $session->{webName};
+    my $user = $session->{user};
+
+    # set up editing session
+    my ( $currMeta, $currText ) =
+      $session->{store}->readTopic( undef, $web, $topic, undef );
+    my $newMeta = new TWiki::Meta( $session, $web, $topic );
+    $newMeta->copyFrom( $currMeta );
+
+    my $query = $session->{cgiQuery};
+    my $newText = $query->param( 'text' );
+    my $originalrev = $query->param( 'originalrev' );
+
+    # Should use $TWiki::regex{setRegex}
+    $newText =~ s/^\t+\*\sSet\s(\w+)\s\=(.*)$/&handleSave($web, $topic, $1, $2, $newMeta)/mgeo;
+
+    my $saveOpts = {};
+    $saveOpts->{minor} = 1;            # don't notify
+    $saveOpts->{forcenewrevision} = 1; # always new revision
+
+    # Merge changes in meta data
+    if ( $originalrev ) {
+        my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
+        # If the last save was by me, don't merge
+        if ( $rev ne $originalrev && !$author->equals( $user )) {
+            $newMeta->merge( $currMeta );
+        }
+    }
+
+    my $error =
+      $session->{store}->saveTopic( $user, $web, $topic,
+                                    $newText, $newMeta, $saveOpts );
+
+    if( $error ) {
+        throw TWiki::OopsException( 'saveerr',
+                                    web => $web, topic => $topic,
+                                    params => $error );
+    }
+    my $viewURL = $session->getScriptUrl( $web, $topic, 'view' );
+    $session->redirect( $viewURL );
+    return;
+
+}
+
+sub handleSave {
+  my( $web, $topic, $name, $value ) = @_;
+
+  $value =~ s/^\s*(.*?)\s*$/$1/ge;
+
+  my $args =
+    {
+     name =>  $name,
+     title => $name,
+     value => $value
+    };
+  $_[4]->putKeyed( 'SETTING', $args );
+  return "";
+
+}
+
 1;

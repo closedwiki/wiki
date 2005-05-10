@@ -132,7 +132,6 @@ sub preview {
     my $verbatim = {};
     $ptext = $session->{renderer}->takeOutBlocks( $ptext, 'verbatim',
                                                   $verbatim );
-    $meta->updateSets( \$ptext );
     $ptext = $session->handleCommonTags( $ptext, $webName, $topic );
     $ptext = $session->{renderer}->getRenderedVersion( $ptext, $webName, $topic );
 

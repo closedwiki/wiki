@@ -54,7 +54,7 @@ sub new {
 # Returns array of arrays
 #   1st - list fields
 #   2nd - name, title, type, size, vals, tooltip, attributes
-#   Possible attributes are "S" (field used as setting), "M" (mandatory field)
+#   Possible attributes are "M" (mandatory field)
 sub _parseFormDefinition {
     my( $this, $text ) = @_;
 
@@ -331,10 +331,6 @@ sub renderForEdit {
             $value = $field->{value};
         }
 
-        if( ! defined( $value ) && $attributes =~ /S/ ) {
-            # Allow initialisation based on a preference
-            $value = $prefs->getPreferencesValue($name);
-        }
         if( $getValuesFromFormTopic && !defined( $value ) &&
             #TW: was (checkbox|radio|select)
             $type !~ /^checkbox/ ) {
