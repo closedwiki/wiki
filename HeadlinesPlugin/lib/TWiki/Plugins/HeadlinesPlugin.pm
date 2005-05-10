@@ -125,7 +125,12 @@ sub _readRssFeed
     unless( $path ) {
         return "ERROR: invalid format of the href parameter";
     }
-    my $text = TWiki::Net::getUrl( $host, $port, $path );
+    # figure out how to get to TWiki::Net which is wide open in Cairo and before,
+    # but Dakar uses the session object.  
+    my $text = $TWiki::Plugins::SESSION->{net}
+	? $TWiki::Plugins::SESSION->{net}->getUrl( $host, $port, $path )
+	: TWiki::Net::getUrl( $host, $port, $path );
+
     if( $text =~ /text\/plain\s*ERROR\: (.*)/s ) {
         my $msg = $1;
         $msg =~ s/[\n\r]/ /gos;
