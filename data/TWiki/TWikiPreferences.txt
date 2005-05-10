@@ -1,10 +1,207 @@
-%META:TOPICINFO{author="TWikiContributor" date="1112898823" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
 The following are __site-level__ settings that affect all users in all webs on this TWikiSite. They can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (the topic being rendered), and on the __user level__ (create preferences in your user account topic in the %MAINWEB% web, ex: %WIKIUSERNAME%).
 	* %X% *NOTE:* You can lock individual settings at the site or web levels using User & Group Access Control - see section below.
+%TOC%
 
-The most common preferences are edited through the form attached to this topic. Preferences that are set less often are shown in the text body rather than in the form.
+
+---++ Default Web Preferences
+
+%X% *NOTE:* They are typically redefined in individual <nop>WebPreferences topics
+
+	* List of selected topics in a web - the second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%):
+		* Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
+
+	* Web specific background color: (is overwritten by web preferences)
+		* Set WEBBGCOLOR = #FFD8AA
+
+	* [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences
+		* Set FAVICON = %PUBURL%/%WEB%/WebPreferences/favicon.ico
+
+	* Copyright notice:
+		* Set WEBCOPYRIGHT = Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding <nop>%WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%WEB%.%TOPIC%">Send feedback</a>
+
+	* Simplified Copyright notice for the WebRss feed (don't use any special characters, xml tags or WikiWords)
+		* Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
+
+	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
+		* Set NOSEARCHALL =
+
+	* Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
+		* Set NOAUTOLINK = 
+		* __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
+
+	* Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently if empty or =off=. Output warning message (defined in templates/oopsalerts.tmpl) if set to =on=. Otherwise output specific text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE{}%= :
+		* Set INCLUDEWARNING = on
+
+
+---++ Default User Settings
+
+%X% *NOTE:* They are typically redefined in topics of individual %MAINWEB%.TWikiUsers
+
+	* Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%MAINWEB%.WikiName, $topic for the topic name, and $web for the web name
+		* Set LINKTOOLTIPINFO = off
+		* #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
+
+	* Horizontal size of text edit box: (can be overwritten by user preferences)
+		* Set EDITBOXWIDTH = 70
+
+	* Vertical size of text edit box: (can be overwritten by user preferences)
+		* Set EDITBOXHEIGHT = 15
+
+	* Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
+		* Set EDITBOXSTYLE = width: 99%
+
+	* Default state of the __Force New Revision__ (ForceNewRevision) check box in preview. Check box is initially checked if =Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
+		* Set FORCENEWREVISIONCHECKBOX = 
+
+	* Default state of the __Minor Changes, Don't Notify__ (DontNotify) check box in preview. Check box is initially checked if =Set DONTNOTIFYCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
+		* Set DONTNOTIFYCHECKBOX = 
+
+	* Default state of the __link__ check box in the attach file page. Checkbox is initially checked if =Set ATTACHLINKBOX = checked="checked"=, or unchecked if empty (=Set ATTACHLINKBOX ==). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
+		* Set ATTACHLINKBOX = 
+
+	* Format of file link when the __link__ check box is checked: (can be overwritten by user preferences)
+		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
+		* Set ATTACHEDFILELINKFORMAT = \t* [[%ATTACHURL%/$name][$name]]: $comment
+
+	* Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
+		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab (3 spaces for bullets).
+<verbatim>
+		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br />
+		  <img src="%ATTACHURLPATH%/$name" alt="$comment" $size />
+</verbatim>
+
+
+---++ TWiki Platform Settings
+
+	* TWiki site name:
+		* Set WIKITOOLNAME = TWiki
+
+	* Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
+		* Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWiki.gif
+		* Set WIKILOGOURL = http://TWiki.org/
+		* Set WIKILOGOALT = TWiki home
+
+	* List of %WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
+		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
+		* %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use the =%<nop>WEBLIST{}%= variable instead: <br />
+		  %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
+
+	* Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
+		* Set ATTACHFILESIZELIMIT = 10000
+
+	* Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
+		* Set BROADCASTMESSAGE = 
+		* #Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow"><font color="red"><strong>NOTE:</strong></font><font size="-1">
+		  Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.
+		  </font></td></tr></table>
+		* If you use PatternSkin:
+		* #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.</div>
+
+---+++ Search Settings
+
+	* Default type for search, one of: keyword (for search engine like syntax), regex (for RegularExpression search), or literal (for verbatim search)
+		* Set SEARCHDEFAULTTTYPE = keyword
+	* Default for =%<nop>SEARCH{}%= variable, one of: keyword, regex, or literal
+		* Set SEARCHVARDEFAULTTYPE = literal
+	* Stop words, e.g., common words and characters to exclude from a keyword search:
+		* Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
+
+---+++ Email and Proxy Server Settings
+
+	* TWiki webmaster email address:
+		* Set WIKIWEBMASTER = webmaster@your.company
+
+	* TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
+		* Set WIKIWEBMASTERNAME = TWiki Administrator
+
+	* Mail host for outgoing mail. This is used for WebChangesAlert if [[CPAN:Net::SMTP][Net::SMTP]] is installed and =SMTPMAILHOST= is set. Otherwise the external sendmail program is used instead (defined by the ==MailProgram== configuration setting; see ==TWiki.cfg==). Examples: ==mail.your.company== or ==localhost==
+		* Set SMTPMAILHOST =
+
+	* Mail domain sending mail, required if you are using ==Net::SMTP==. SMTP requires that you identify the TWiki server sending mail. If not set, ==Net::SMTP== will guess it for you. Ex: ==twiki.your.company==
+		* Set SMTPSENDERHOST = 
+
+	* Proxy Server. Some environments require outbound HTTP traffic to go through a proxy server. Set the host in PROXYHOST (example: ==proxy.your.company==), and the port number in PROXYPORT (example: ==8080==). No proxy is used if PROXYHOST or PROXYPORT is empty.
+		* Set PROXYHOST = 
+		* Set PROXYPORT = 
+
+
+---+++ Email Link Settings
+
+	* 'Mail this topic' mailto: link - can be included in topics, templates or skins
+		* Set MAILTHISTOPIC = [[mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL% %MAILTHISTOPICTEXT%]]
+
+	* 'Mail this topic' link text
+		* Set MAILTHISTOPICTEXT = Send a link to this page
+
+	* URL for current topic
+		* Set TOPICURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%
+
+
+---+++ HTTP-<nop>EQUIV Settings
+
+	* %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev/BackFromPreviewLosesText or TWiki:Codev/RefreshEditPage). These settings do not affect proxy caches.
+
+	* ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
+<verbatim>
+		* #Set HTTP_EQUIV_ON_VIEW = 
+		* Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&amp;contenttype=text/xml" />
+</verbatim>
+
+	* ==http-equiv== meta tags for ==edit== script:
+<verbatim>
+		* Set HTTP_EQUIV_ON_EDIT = 
+</verbatim>
+
+	* ==http-equiv== meta tags for ==preview== script:
+<verbatim>
+		* Set HTTP_EQUIV_ON_PREVIEW = 
+</verbatim>
+
+
+---++ Skin Settings
+
+	* Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
+		* Set SKIN = pattern
+
+	* __Note:__ See TWikiSkinBrowser for currently installed skins
+
+---+++ PatternSkin
+
+	* Using attachments for styles 
+		* Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
+		* Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
+		* Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+		* Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+
+
+
+---+++ DragonSkin
+
+	* Theme: (gray, monochrome, tabstyle)
+		* Set DS_THEME = gray
+	* Quicklinks headings:
+		* Set DS_QUICKLINKSHEADING = 
+	* Quicklinks submenu:
+		* Set DS_QUICKLINKS = 
+
+
+---++ Plugins Settings
+
+Currently activated plugins: %ACTIVATEDPLUGINS%
+
+All plugins that have Perl modules (files with names ending in "Plugin.pm") in the =lib/TWiki/Plugins= directory are activated automatically unless listed in DISABLEDPLUGINS. This should be a comma separated list of plugin names.
+	* Set DISABLEDPLUGINS = EmptyPlugin, DefaultPlugin, TestFixturePlugin
+If you need to specify the plugin execution sequence, then manually list the plugins in execution order in INSTALLEDPLUGINS. All handlers will be called in this order. This should be a comma separated list of plugin names.
+	* Set INSTALLEDPLUGINS =
+	* %T% *NOTE:* You can enable/disable all plugins with the ==DisableAllPlugins== configuration flag; see ==TWiki.cfg==. You can also enable/disable selected plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
+
+
+---++ Miscellaneous Settings
 
 	* Line break:
 		* Set BR = <br />
@@ -78,10 +275,32 @@ The most common preferences are edited through the form attached to this topic. 
 		* Set X = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" />
 		* Set Y = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" border="0" alt="DONE" width="16" height="16" />
 
+	* Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
+		* Set NEWTOPICBGCOLOR = #FFFFCE
+
+	* Font color of non existing topic: ( default =#0000FF= )
+		* Set NEWTOPICFONTCOLOR = #0000FF
+
+	* %TWIKIWEB%.PreviewBackground image:
+		* Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
+
+
 ---++ Access Control Settings
 
 	* Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
 		* #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
+
+---++ Preferences Control Settings
+
+	*  Allow topic level preferences, on or off:  If set to =on=, topic preferences will be read, and will override any web- or site-level preferences not set as =FINALPREFERENCES=.  By default, user preferences will override topic preferences.
+		* Set READTOPICPREFS = on
+
+	* Topic level overrides user level preferences, on or off: If set to =on=, topic preferences will override user preferences.  The user can in turn override this behavior by setting further =FINALPREFERENCES= in his or her user topic.
+		* Set TOPICOVERRIDESUSER = off
+
+	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER
+
 
 ---++ Creating New Preference Variables
  
@@ -101,6 +320,8 @@ You can introduce new VARIABLES and use them in your topics and templates. There
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
 
+__Note__: Can't edit?
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw topic]]
 <!-- Test code, used in TWiki testing
    * Set GLOBALFINALTESTPREF1 = global final test pref 1
    * Set GLOBALFINALTESTPREF2 = global final test pref 2
@@ -110,57 +331,3 @@ Done on separate lines to test merging
    * Set FINALPREFERENCES = GLOBALFINALTESTPREF1
    * Set FINALPREFERENCES = GLOBALFINALTESTPREF2
 -->
-
-%META:FORM{name="TWikiPreferencesForm"}%
-%META:FIELD{name="WEBBGCOLOR" attributes="S" title="WEBBGCOLOR" value="#FFD8AA"}%
-%META:FIELD{name="NEWTOPICBGCOLOR" title="NEWTOPICBGCOLOR" attributes="S" value="#FFFFCE"}%
-%META:FIELD{name="NEWTOPICFONTCOLOR" title="NEWTOPICFONTCOLOR" attributes="S" value="#0000FF"}%
-%META:FIELD{name="FAVICON" attributes="S" title="FAVICON" value="%_P_%PUBURL%_P_%/%_P_%WEB%_P_%/WebPreferences/favicon.ico"}%
-%META:FIELD{name="WEBCOPYRIGHT" attributes="S" title="WEBCOPYRIGHT" value="Copyright &copy; 1999-%_P_%GMTIME{%_Q_%$year%_Q_%}%_P_% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding <nop>%_P_%WIKITOOLNAME%_P_%? <a href=%_Q_%mailto:%_P_%WIKIWEBMASTER%_P_%?subject=%_P_%WIKITOOLNAME%_P_%&#32;Feedback&#32;on&#32;%_P_%WEB%_P_%.%_P_%TOPIC%_P_%%_Q_%>Send feedback</a>"}%
-%META:FIELD{name="WEBRSSCOPYRIGHT" attributes="S" title="WEBRSSCOPYRIGHT" value="Copyright %_P_%GMTIME{%_Q_%$year%_Q_%}%_P_% by contributing authors"}%
-%META:FIELD{name="NOSEARCHALL" attributes="S" title="NOSEARCHALL" value="off"}%
-%META:FIELD{name="NOAUTOLINK" attributes="S" title="NOAUTOLINK" value="off"}%
-%META:FIELD{name="INCLUDEWARNING" attributes="S" title="INCLUDEWARNING" value="on"}%
-%META:FIELD{name="LINKTOOLTIPINFO" attributes="S" title="LINKTOOLTIPINFO" value=""}%
-%META:FIELD{name="EDITBOXWIDTH" attributes="S" title="EDITBOXWIDTH" value="70"}%
-%META:FIELD{name="EDITBOXHEIGHT" attributes="S" title="EDITBOXHEIGHT" value="15"}%
-%META:FIELD{name="EDITBOXSTYLE" attributes="S" title="EDITBOXSTYLE" value="width: 99%_P_%"}%
-%META:FIELD{name="PREVIEWBGIMAGE" attributes="S" title="PREVIEWBGIMAGE" value="%_P_%PUBURLPATH%_P_%/%_P_%TWIKIWEB%_P_%/PreviewBackground/preview2bg.gif"}%
-%META:FIELD{name="FORCENEWREVISIONCHECKBOX" attributes="S" title="FORCENEWREVISIONCHECKBOX" value=""}%
-%META:FIELD{name="DONTNOTIFYCHECKBOX" attributes="S" title="DONTNOTIFYCHECKBOX" value=""}%
-%META:FIELD{name="ATTACHLINKBOX" attributes="S" title="ATTACHLINKBOX" value=""}%
-%META:FIELD{name="ATTACHEDFILELINKFORMAT" attributes="S" title="ATTACHEDFILELINKFORMAT" value="\t* [[%_P_%ATTACHURL%_P_%/$name][$name]]: $comment"}%
-%META:FIELD{name="ATTACHEDIMAGEFORMAT" attributes="S" title="ATTACHEDIMAGEFORMAT" value="\t* $comment: <br /><img src=%_Q_%%_P_%ATTACHURLPATH%_P_%/$name%_Q_% alt=%_Q_%$comment%_Q_% $size />"}%
-%META:FIELD{name="WIKITOOLNAME" attributes="S" title="WIKITOOLNAME" value="TWiki"}%
-%META:FIELD{name="WIKILOGOIMG" attributes="S" title="WIKILOGOIMG" value="%_P_%PUBURL%_P_%/%_P_%TWIKIWEB%_P_%/TWikiLogos/horzTWiki.gif"}%
-%META:FIELD{name="WIKILOGOURL" attributes="S" title="WIKILOGOURL" value="http://TWiki.org/"}%
-%META:FIELD{name="WIKILOGOALT" attributes="S" title="WIKILOGOALT" value="Site Home"}%
-%META:FIELD{name="WIKIWEBLIST" attributes="S" title="WIKIWEBLIST" value="[[%_P_%MAINWEB%_P_%.%_P_%HOMETOPIC%_P_%][%_P_%MAINWEB%_P_%]] %_P_%SEP%_P_% [[%_P_%TWIKIWEB%_P_%.%_P_%HOMETOPIC%_P_%][%_P_%TWIKIWEB%_P_%]] %_P_%SEP%_P_% [[Sandbox.%_P_%HOMETOPIC%_P_%][Sandbox]]"}%
-%META:FIELD{name="ATTACHFILESIZELIMIT" attributes="S" title="ATTACHFILESIZELIMIT" value="10000"}%
-%META:FIELD{name="BROADCASTMESSAGE" attributes="S" title="BROADCASTMESSAGE" value=""}%
-%META:FIELD{name="SEARCHDEFAULTTTYPE" attributes="S" title="SEARCHDEFAULTTTYPE" value="keyword"}%
-%META:FIELD{name="SEARCHVARDEFAULTTYPE" attributes="S" title="SEARCHVARDEFAULTTYPE" value="literal"}%
-%META:FIELD{name="SEARCHSTOPWORDS" attributes="S" title="SEARCHSTOPWORDS" value="a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z"}%
-%META:FIELD{name="WIKIWEBMASTER" attributes="S" title="WIKIWEBMASTER" value="webmaster@your.company"}%
-%META:FIELD{name="WIKIWEBMASTERNAME" attributes="S" title="WIKIWEBMASTERNAME" value="TWiki Administrator"}%
-%META:FIELD{name="SMTPMAILHOST" attributes="S" title="SMTPMAILHOST" value=""}%
-%META:FIELD{name="SMTPSENDERHOST" attributes="S" title="SMTPSENDERHOST" value=""}%
-%META:FIELD{name="PROXYHOST" attributes="S" title="PROXYHOST" value=""}%
-%META:FIELD{name="PROXYPORT" attributes="S" title="PROXYPORT" value=""}%
-%META:FIELD{name="HTTP_EQUIV_ON_VIEW" attributes="S" title="HTTP_EQUIV_ON_VIEW" value="<link rel=%_Q_%alternate%_Q_% type=%_Q_%application/rss+xml%_Q_% title=%_Q_%RSS Feed%_Q_% href=%_Q_%%_P_%SCRIPTURL%_P_%/view%_P_%SCRIPTSUFFIX%_P_%/%_P_%WEB%_P_%/WebRss?skin=rss&amp;contenttype=text/xml%_Q_% />"}%
-%META:FIELD{name="HTTP_EQUIV_ON_EDIT" attributes="S" title="HTTP_EQUIV_ON_EDIT" value=""}%
-%META:FIELD{name="HTTP_EQUIV_ON_PREVIEW" attributes="S" title="HTTP_EQUIV_ON_PREVIEW" value=""}%
-%META:FIELD{name="SKIN" attributes="S" title="SKIN" value="pattern"}%
-%META:FIELD{name="WEBTOPICLIST" attributes="S" title="WEBTOPICLIST" value="[[WebChanges][Changes]] %_P_%SEP%_P_% [[WebIndex][Index]] %_P_%SEP%_P_% [[WebSearch][Search]] %_P_%SEP%_P_% Go <input type=%_Q_%text%_Q_% name=%_Q_%topic%_Q_% size=%_Q_%16%_Q_% />"}%
-%META:FIELD{name="TWIKILAYOUTURL" attributes="S" title="TWIKILAYOUTURL" value="%_P_%PUBURL%_P_%/%_P_%TWIKIWEB%_P_%/PatternSkin/layout.css"}%
-%META:FIELD{name="TWIKISTYLEURL" attributes="S" title="TWIKISTYLEURL" value="%_P_%PUBURL%_P_%/%_P_%TWIKIWEB%_P_%/PatternSkin/style.css"}%
-%META:FIELD{name="USERLAYOUTURL" attributes="S" title="USERLAYOUTURL" value="%_P_%PUBURL%_P_%/%_P_%TWIKIWEB%_P_%/PatternSkin/empty.css"}%
-%META:FIELD{name="USERSTYLEURL" attributes="S" title="USERSTYLEURL" value="%_P_%PUBURL%_P_%/%_P_%TWIKIWEB%_P_%/PatternSkin/empty.css"}%
-%META:FIELD{name="DS_THEME" attributes="S" title="DS_THEME" value="gray"}%
-%META:FIELD{name="DS_QUICKLINKSHEADING" attributes="S" title="DS_QUICKLINKSHEADING" value=""}%
-%META:FIELD{name="DS_QUICKLINKS" attributes="S" title="DS_QUICKLINKS" value=""}%
-%META:FIELD{name="DISABLEDPLUGINS" attributes="S" title="DISABLEDPLUGINS" value="EmptyPlugin, DefaultPlugin, TestFixturePlugin"}%
-%META:FIELD{name="INSTALLEDPLUGINS" attributes="S" title="INSTALLEDPLUGINS" value=""}%
-%META:FIELD{name="READTOPICPREFS" attributes="S" title="READTOPICPREFS" value="on"}%
-%META:FIELD{name="TOPICOVERRIDESUSER" attributes="S" title="TOPICOVERRIDESUSER" value="off"}%
-%META:FIELD{name="FINALPREFERENCES" attributes="S" title="FINALPREFERENCES" value="ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER"}%
