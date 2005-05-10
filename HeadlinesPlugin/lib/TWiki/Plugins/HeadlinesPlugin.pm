@@ -1,8 +1,6 @@
-
+# Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# TWiki WikiClone ($wikiversion has version info)
-#
-# Copyright (C) 2002 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2002-2004 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -43,10 +41,10 @@ package TWiki::Plugins::HeadlinesPlugin;
 use vars qw(
         $web $topic $user $installWeb $VERSION $debug
         $defaultRefresh $defaultLimit $defaultHeader $defaultFormat
-        $perlDigestMD5Found 
+        $perlDigestMD5Found
     );
 
-$VERSION = '1.000';
+$VERSION = '1.003';
 $perlDigestMD5Found = 0;
 
 # =========================
@@ -100,18 +98,16 @@ sub _readRssFeed
 {
     my( $theUrl, $theRefresh ) = @_;
 
-    my $cacheFilename = "";
-    if( $theRefresh ) {    
-        $cacheFilename = TWiki::Func::getPubDir() . '/' . $installWeb . '/HeadlinesPlugin';
-        unless( -e $cacheFilename ) {
-            # create the cache directory in the pub dir of the HeadlinesPlugin
-            umask( 002 );
-            mkdir( $cacheFilename, 0775 );
-        }
-        $cacheFilename .= '/_rss-' . Digest::MD5::md5_hex( $theUrl );
-        if( ( -e $cacheFilename ) && ( -C $cacheFilename <= ( $theRefresh/1440 ) ) ) {
+    my $cacheDir = "";
+    my $cacheFile = "";
+    if( $theRefresh ) {
+        $cacheDir  = TWiki::Func::getPubDir() . '/' . $installWeb . '/HeadlinesPlugin';
+        $cacheDir  =~ /(.*)/;  $cacheDir  = $1; # untaint (save because only internal variables)
+        $cacheFile = $cacheDir . '/_rss-' . Digest::MD5::md5_hex( $theUrl );
+        $cacheFile =~ /(.*)/;  $cacheFile = $1; # untaint
+        if( ( -e $cacheFile ) && ( ( time() - (stat(_))[9] ) <= ( $theRefresh * 60 ) ) ) {
             # return cached version if it exists and isn't too old. 1440 = 24h * 60min
-            return TWiki::Func::readFile( $cacheFilename );
+            return TWiki::Func::readFile( $cacheFile );
         }
     }
 
@@ -146,9 +142,14 @@ sub _readRssFeed
     $text =~ s/\n/ /gos;            # new line to space
     $text =~ s/ +/ /gos;
 
-    if( $theRefresh ) {    
+    if( $theRefresh ) {
+        unless( -e $cacheDir ) {
+            # create the cache directory in the pub dir of the HeadlinesPlugin
+            umask( 002 );
+            mkdir( $cacheDir, 0775 );
+        }
         # save text in cache file before returning it
-        TWiki::Func::saveFile( $cacheFilename, $text );
+        TWiki::Func::saveFile( $cacheFile, $text );
     }
 
     return $text;
@@ -169,11 +170,11 @@ sub _handleHeadlinesTag
         return _errorMsg( $thePre, "ERROR: Cannot locate Perl module Digest::MD5" );
     }
 
-    my $href    = &TWiki::Func::extractNameValuePair( $theArgs, "href" );
-    my $refresh = &TWiki::Func::extractNameValuePair( $theArgs, "refresh" ) || $defaultRefresh;
-    my $limit   = &TWiki::Func::extractNameValuePair( $theArgs, "limit" )   || $defaultLimit;
-    my $header  = &TWiki::Func::extractNameValuePair( $theArgs, "header" )  || $defaultHeader;
-    my $format  = &TWiki::Func::extractNameValuePair( $theArgs, "format" )  || $defaultFormat;
+    my $href    = TWiki::Func::extractNameValuePair( $theArgs, "href" ) || TWiki::Func::extractNameValuePair( $theArgs );
+    my $refresh = TWiki::Func::extractNameValuePair( $theArgs, "refresh" ) || $defaultRefresh;
+    my $limit   = TWiki::Func::extractNameValuePair( $theArgs, "limit" )   || $defaultLimit;
+    my $header  = TWiki::Func::extractNameValuePair( $theArgs, "header" )  || $defaultHeader;
+    my $format  = TWiki::Func::extractNameValuePair( $theArgs, "format" )  || $defaultFormat;
 
     $header =~ s/\$n([^a-zA-Z])/\n$1/gos; # expand "$n" to new line
     $header =~ s/([^\n])$/$1\n/os;        # append new line if needed
@@ -226,6 +227,11 @@ sub _handleHeadlinesTag
             $header =~ s/\$imagedescription/$val/gos;
         }
     }
+    # Clean-up in case tags are not defined
+    $header =~ s/\$imagetitle/ /gos;
+    $header =~ s/\$imageurl/ /gos;
+    $header =~ s/\$imagelink/ /gos;
+    $header =~ s/\$imagedescription/ /gos;
     $text .= "$thePre$header";
 
     $raw =~ s/.*?(<item[^a-z])/$1/os;  # cut stuff above all <item>s
