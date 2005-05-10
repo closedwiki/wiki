@@ -276,16 +276,16 @@ sub view {
     $session->{SESSION_TAGS}{MAXREV} = $showRev;
     $session->{SESSION_TAGS}{CURRREV} = $rev;
 
-    $session->writePageHeader( undef, undef, $contentType, 0 );
-
-    # output in three chunks in case the text takes a long time to render.
-    # the client can keep busy fetching the stylesheet, if it's smart.
     my $isTop = ( $rev == $showRev );
-    _bungOut($start, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
+    my $result = "";
+    $result .= _bungOut($start, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
 
-    _bungOut( $text, $session, $webName, $topicName,$meta, $isTop, $viewRaw, $strip, 1);
+    $result .= _bungOut( $text, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 1);
 
-    _bungOut($end, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
+    $result .= _bungOut($end, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
+
+    $session->writePageHeader( undef, undef, $contentType, 0 );
+    print $result;
 }
 
 sub _bungOut {
@@ -310,7 +310,7 @@ sub _bungOut {
             TWiki::spamProof( $text );
         }
     }
-    print $text;
+    return $text;
 }
 
 =pod
