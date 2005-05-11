@@ -1,0 +1,103 @@
+/**
+ *
+ * TWiki KupuEditorAddOn add-on for TWiki
+ * Copyright (C) 2004 Damien Mandrioli and Romain Raugi
+ * Copyright (C) 2005 ILOG
+ *
+ * Additional styles for TWiki editing. Assumes basic kupustyles.css -
+ * only additional styles are defined here; none of the basic styles
+ * are overridden.
+ *
+ */
+
+/********** Icons button ********************/
+.twiki-icons-button {  background: url("smiley.gif"); }
+
+/********** Icons pop-up panel **************/
+div#twiki-icons {
+  position: absolute;
+  display: none;
+  background-color: #EEEEEE;
+  padding: 0.2em;
+  font-size: small;
+  border-width: 2px;
+  border-style: solid;
+  cursor: default;
+  width: 350px;
+}
+
+div#twiki-icons img {
+  background-color: #EEEEEE;
+  cursor: hand;
+  cursor: pointer;
+}
+
+div#twiki-icons img:hover {
+  background-color: #CCCCCC;
+}
+
+div#twiki-icons img:active {
+  border: 1px solid;
+  border-color: #FFFFFF;
+}
+
+/************** Permissions panel *************/
+div#kupu-perms-selector {
+  position: absolute;
+  display: none;
+  left: 30%;
+  top: 30%;
+  width: 300px;
+  background-color: #EEEEEE;
+  padding: 0.2em;
+  font-size: small;
+  text-align: center;
+}
+
+#kupu-toolbox-twikiperms {
+}
+
+#kupu-toolbox-twikiperms #kupu-perms-selector {
+  border: 1px solid;
+  border-color: #EEEEEE #888888 #888888 #EEEEEE;
+}
+
+/*************** Attachments panel ************/
+#kupu-toolbox-attachments {
+}
+
+.kupu-toolbox-attachments-framecontent {
+  background-color: #EEEEEE;
+}
+
+.kupu-toolbox-attachments-framecontent button, input.submit {
+  cursor: default;
+  color: black;
+  border: 1px solid #CCCCCC;
+}
+
+div.attachments-list {
+  width: 100%;
+  height: 60px;
+  overflow: auto;
+}
+
+div.attachments-list button {
+  cursor: hand;
+  cursor: pointer;
+  width: 100%;
+  color: black;
+  border: 1px solid #CCCCCC;
+  background-color: #CCCCCC;
+}
+
+div.attachments-list button:hover {
+  border: 1px solid;
+  border-color: #EEEEEE #888888 #888888 #EEEEEE;
+}
+
+div.attachments-list button:active {
+  border: 1px solid;
+  border-color: #888888 #EEEEEE #EEEEEE #888888;
+  background-color: #EEEEEE;
+}

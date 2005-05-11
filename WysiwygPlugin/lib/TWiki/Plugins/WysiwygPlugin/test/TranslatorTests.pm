@@ -51,7 +51,7 @@ BEGIN {
         exec => 1,
         name => 0,
         tml => 'LinkAtStart',
-        html => '<span class="TMLWikiWord">LinkAtStart</span>'
+        html => '<a class="TMLWikiWord" href="LinkAtStart">LinkAtStart</a>'
        },
        {
         exec => 1,
@@ -78,7 +78,7 @@ BEGIN {
        {
         exec => 1,
         name => 4,
-        html => '<span class="TMLb">reminded about<span class="TMLExternalLink">http://www.koders.com</span></span>',
+        html => '<span class="TMLb">reminded about<a class="TMLExternalLink" href="http://www.koders.com">http://www.koders.com</a></span>',
         tml => '*reminded about http://www.koders.com*',
         finaltml => '*reminded about http://www.koders.com*',
        },
@@ -242,7 +242,7 @@ class CatAnimal {
        {
         exec => 1,
         name => 18,
-        html => '<span class="TMLWikiWord">!SunOS</span>',
+        html => '!SunOS',
         tml => '!SunOS',
        },
        {
@@ -264,7 +264,7 @@ RedHat & SuSE
        {
         exec => 1,
         name => 21,
-        html => '<span class="TMLWikiWord">WebPreferences</span><p /><span class="TMLVariable">MAINWEB</span>.TWikiUsers<p /><span class="TMLWikiWord">CompleteAndUtterNothing</span><p /><span class="TMLWikiWord">LinkBox</span><span class="TMLWikiWord">LinkBoxs</span><span class="TMLWikiWord">LinkBoxies</span><span class="TMLWikiWord">LinkBoxess</span><span class="TMLWikiWord">LinkBoxesses</span><span class="TMLWikiWord">LinkBoxes</span>',
+        html => '<a class="TMLWikiWord" href="WebPreferences">WebPreferences</a><p /><span class="TMLVariable">MAINWEB</span>.TWikiUsers<p /><a class="TMLWikiWord" href="CompleteAndUtterNothing">CompleteAndUtterNothing</a><p /><a class="TMLWikiWord" href="LinkBox">LinkBox</a><a class="TMLWikiWord" href="LinkBoxs">LinkBoxs</a><a class="TMLWikiWord" href="LinkBoxies">LinkBoxies</a><a class="TMLWikiWord" href="LinkBoxess">LinkBoxess</a><a class="TMLWikiWord" href="LinkBoxesses">LinkBoxesses</a><a class="TMLWikiWord" href="LinkBoxes">LinkBoxes</a>',
         tml => 'WebPreferences
 
 %MAINWEB%.TWikiUsers
@@ -304,7 +304,7 @@ escaped:
        {
         exec => 1,
         name => 24,
-        html => '<span class="TMLWikiWord">FleegleHorn#TrumpetHack</span>',
+        html => '<a class="TMLWikiWord" href="FleegleHorn#TrumpetHack">FleegleHorn#TrumpetHack</a>',
         tml => 'FleegleHorn#TrumpetHack'
        },
        {
@@ -588,7 +588,7 @@ Outside
        {
         exec => 1,
         name => 63,
-        html => '<h3 class="TML">Test with<span class="TMLWikiWord">LinkInHeader</span></h3>',
+        html => '<h3 class="TML">Test with<a class="TMLWikiWord" href="LinkInHeader">LinkInHeader</a></h3>',
         tml => '---+++ Test with LinkInHeader
 ',
        }

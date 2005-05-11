@@ -81,7 +81,8 @@ sub _liftOut {
 sub _dropBack {
     my( $this, $text) = @_;
     # Restore everything that was lifted out
-    $text =~ s/$TT1([0-9]+)$TT1/$this->{refs}->[$1]/gi;
+    while( $text =~ s/$TT1([0-9]+)$TT1/$this->{refs}->[$1]/gi ) {
+    }
     $this->{refs} = [];
     return $text;
 }
@@ -129,6 +130,14 @@ sub _processTags {
     return $stackTop;
 }
 
+sub _makeLink {
+    my( $this, $class, $url, $text ) = @_;
+    $text = $this->_liftOut($text) if ( $text );
+    $url = $this->_liftOut($url);
+    $text ||= $url;
+    return CGI::a( { class => $class, href => $url }, $text );
+}
+
 # Lifted straight out of DevelopBranch Render.pm
 sub _getRenderedVersion {
     my( $this, $text, $refs ) = @_;
@@ -172,7 +181,8 @@ sub _getRenderedVersion {
     $text =~ s/}$TT0/>/go;
 
     # standard URI
-    $text =~ s/(^|[-*\s(])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$1.CGI::span({class => 'TMLExternalLink'},$this->_liftOut($2, $refs))/geo;
+    my $x;
+    $text =~ s/(^|(?<=[-*\s(]))($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink('TMLExternalLink',$1)/geo;
 
     # other entities
     $text =~ s/&(\w+);/$TT0$1;/g;      # "&abc;"
@@ -213,18 +223,20 @@ sub _getRenderedVersion {
             $isList = 0;
         }
         elsif ( $line =~ m/^(\t|   )+\S/ ) {
-            $isList = 1;
             if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o ) {
                 # Definition list
                 $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
+                $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
                 # Definition list
                 $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
+                $isList = 1;
             }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
                 # Unnumbered list
                 $this->_addListItem( \@result, 'ul', 'li', $1, '' );
+                $isList = 1;
             }
             elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
                 # Numbered list
@@ -237,10 +249,10 @@ sub _getRenderedVersion {
                 }
                 $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
                 $this->_addListItem( \@result, 'ol', 'li', $1, $ot );
+                $isList = 1;
             }
-            else {
-                $isList = 0;
-            }
+        } else {
+            $isList = 0;
         }
 
         # Finish the list
@@ -269,10 +281,10 @@ sub _getRenderedVersion {
     # Email addresses must always be 7-bit, even within I18N sites
 
     # [[mailto:string display text]]
-    $text =~ s/\[\[(mailto:\S+?)\s+(.+?)\]\]/CGI::a({href=>$1,class=>'TMLsquab'},$2||$1)/ge;
+    $text =~ s/\[\[(mailto:\S+?)\s+(.+?)\]\]/$this->_makeLink('TMLsquab',$1,$2)/ge;
 
     # Inline mailto:foo@example.com ('mailto:' part optional)
-    $text =~ s/$STARTWW((mailto:)?[a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/CGI::span({class => 'TMLmailto'},$this->_liftOut($1))/gem;
+    $text =~ s/$STARTWW((?:mailto:)?[a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/$this->_makeLink('TMLmailto',$1)/gem;
 
     # Handle [[][] and [[]] links
 
@@ -280,11 +292,11 @@ sub _getRenderedVersion {
 
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
-    $text =~ s/\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/CGI::a({href=>$1,class=>'TMLsquab'},$2 || $1)/ge;
+    $text =~ s/\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/$this->_makeLink('TMLsquab',$1,$2)/ge;
 
     # Handle WikiWords
     $text = _takeOutBlocks( $text, 'noautolink', $removed );
-    $text =~ s/$STARTWW(!?($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?)$ENDWW/CGI::span({class=>'TMLWikiWord'},$this->_liftOut($1))/geom;
+    $text =~ s/$STARTWW(!?($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?)$ENDWW/$this->_makeLink('TMLWikiWord',$1)/geom;
 
     foreach my $placeholder ( keys %$removed ) {
         my $pm = $removed->{$placeholder}{params}->{class};
@@ -316,10 +328,6 @@ sub _getRenderedVersion {
     $text = $this->_processTags( $text );
 
     $text = $this->_dropBack( $text );
-
-    $text =~ s/\n/ /g;
-    $text =~ s/\s+</</g;
-    $text =~ s/>\s+/>/g;
 
     # replace verbatim with pre in the final output
     _putBackBlocks( $text, $removed, 'verbatim', 'pre',
