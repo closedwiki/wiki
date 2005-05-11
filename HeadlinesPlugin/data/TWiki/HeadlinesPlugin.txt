@@ -71,7 +71,6 @@ Write =%<nop>HEADLINES{ href="http://www.moreover.com/cgi-local/page?o=rss&c=Aer
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* Test if the plugin is correctly installed:
 		* Check if above example shows a news feed instead of variable.
@@ -79,8 +78,11 @@ Write =%<nop>HEADLINES{ href="http://www.moreover.com/cgi-local/page?o=rss&c=Aer
 ---++ Plugin Info
 
 |  Plugin Author: | %TWIKIWEB%.PeterThoeny |
-|  Plugin Version: | 02 Aug 2002 (V1.001) |
+|  Plugin Version: | 11 May 2005 (V1.004) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  11 May 2005: | added DevelopBranch compatability (TWiki:Main.WillNorris) |
+|  31 Oct 2004: | Fixed taint issue by TWiki:Main.AdrianWeiler; small performance improvement |
+|  29 Oct 2004: | Fixed issue of eternal caching if mod_perl or <nop>SpeedyCGI is used |
 |  02 Aug 2002: | Implemented caching of feeds, thanks to TWiki:Main/RobDuarte |
 |  11 Jun 2002: | Initial version (V1.000) |
 |  CPAN Dependencies: | none |
