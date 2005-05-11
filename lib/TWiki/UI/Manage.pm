@@ -709,6 +709,7 @@ sub saveSettings {
     my $settings = $query->param( 'text' );
     my $originalrev = $query->param( 'originalrev' );
 
+    $newMeta->remove( 'SETTING' );        # delete previous settings
     $settings =~ s/$TWiki::regex{setVarRegex}/&handleSave($web, $topic, $1, $2, $newMeta)/mgeo;
 
     my $saveOpts = {};
