@@ -678,7 +678,7 @@ sub editSettings {
     foreach my $field ( @fields ) {
        my $name  = $field->{name};
        my $value = $field->{value};
-       $settings .= "\t* Set $name = $value\n";
+       $settings .= "   * Set $name = $value\n";
     }
 
     my $skin = $session->getSkin();
@@ -709,8 +709,7 @@ sub saveSettings {
     my $newText = $query->param( 'text' );
     my $originalrev = $query->param( 'originalrev' );
 
-    # Should use $TWiki::regex{setRegex}
-    $newText =~ s/^\t+\*\sSet\s(\w+)\s\=(.*)$/&handleSave($web, $topic, $1, $2, $newMeta)/mgeo;
+    $newText =~ s/$TWiki::regex{setVarRegex}/&handleSave($web, $topic, $1, $2, $newMeta)/mgeo;
 
     my $saveOpts = {};
     $saveOpts->{minor} = 1;            # don't notify
