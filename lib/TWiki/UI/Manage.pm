@@ -674,7 +674,7 @@ sub editSettings {
 
     my $settings = "";
 
-    my @fields = $meta->find( 'SETTING' );
+    my @fields = $meta->find( 'PREFERENCE' );
     foreach my $field ( @fields ) {
        my $name  = $field->{name};
        my $value = $field->{value};
@@ -709,7 +709,7 @@ sub saveSettings {
     my $settings = $query->param( 'text' );
     my $originalrev = $query->param( 'originalrev' );
 
-    $newMeta->remove( 'SETTING' );        # delete previous settings
+    $newMeta->remove( 'PREFERENCE' );  # delete previous settings
     $settings =~ s/$TWiki::regex{setVarRegex}/&handleSave($web, $topic, $1, $2, $newMeta)/mgeo;
 
     my $saveOpts = {};
@@ -751,7 +751,7 @@ sub handleSave {
      title => $name,
      value => $value
     };
-  $_[4]->putKeyed( 'SETTING', $args );
+  $_[4]->putKeyed( 'PREFERENCE', $args );
   return "";
 
 }

@@ -39,7 +39,7 @@ package TWiki::Prefs::Parser;
 
 use Assert;
 
-my $settingPrefPrefix = 'SETTING_';
+my $settingPrefPrefix = 'PREFERENCE_';
 
 =pod
 
@@ -95,7 +95,7 @@ sub parseText {
 
 ---++ ObjectMethod parseMeta( $metaObject, $prefs )
 
-Traverses through all SETTING attributes of the meta object, creating one 
+Traverses through all PREFERENCE attributes of the meta object, creating one 
 setting named with $settingPrefPrefix . 'title' for each.  It also 
 creates an entry named with the field 'name', which is a cleaned-up, 
 space-removed version of the title.
@@ -107,7 +107,7 @@ Settings are added to the $prefs passed.
 sub parseMeta {
     my( $this, $meta, $prefs ) = @_;
 
-        my @fields = $meta->find( 'SETTING' );
+        my @fields = $meta->find( 'PREFERENCE' );
         foreach my $field( @fields ) {
             my $title = $field->{title};
             my $prefixedTitle = $settingPrefPrefix . $title;
