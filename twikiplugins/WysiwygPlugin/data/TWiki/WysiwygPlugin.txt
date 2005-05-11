@@ -1,0 +1,143 @@
+---+!! Wysiwyg Plugin
+
+_Italic_ *Bold* __Bold Italic__ =plain= ==bold plain== %VARIABLE%
+ATasteOfTWiki ClassicSkin
+
+Add the following link to your view template to invoke the Kupu editor:
+
+<code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code>
+
+Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1">Kupu</a>
+
+---++ Settings
+	* The name of the skin that when seen by the WysiwygPlugin will trigger translation of TML into HTML
+		* Set CONVERT_SKIN = kupu
+	* List of icons that will be available in the editor
+		* Set ICONS =
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt=":)" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/cool.gif" alt="8-)" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/indifferent.gif" alt=":-I" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/frown.gif" alt=":(" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/redface.gif" alt=":o" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/biggrin.gif" alt=":D" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/wink.gif" alt=";)" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/tongue.gif" alt=":p" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/rolleyes.gif" alt=":rolleyes:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/mad.gif" alt=":mad:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/eek.gif" alt=":eek:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/confused.gif" alt=":confused:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/devil.gif" alt=":devil:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/devilwink.gif" alt=":devilish:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/sealed.gif" alt=":-X" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/thumbs.gif" alt=":ok:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/yes.gif" alt=":yes:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/no.gif" alt=":no:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/love.gif" alt=":love:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/scull.gif" alt=":scull:" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/note.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/bubble.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="%T%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="%I%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="%X%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stop.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/target.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/gear.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/wrench.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="%P%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" alt="%Y%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-no.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-cancel.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" alt="%U%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="%H%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="%Q%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="%N%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="%S%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stargold.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/hand.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowleft.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="%M%" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowup.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdown.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbleft.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbright.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbup.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbdown.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdot.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_start.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_fb.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_back.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_forward.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_ff.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_end.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/wip.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/rfc.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/days.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/hourglass.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/watch.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/globe.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/home.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/group.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/person.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/persons.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/lock.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/folder.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/lockfolder.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/lockfoldergray.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/locktopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/locktopicgray.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/refreshtopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/viewtopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/edittopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/topicdiffs.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/topicbacklinks.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/newtopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/searchtopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/cachetopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/printtopic.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/attachfile.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/recentchanges.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/changes.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/notify.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/mail.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/trash.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/rss-feed.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/xml-feed.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/empty.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ud.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_lr.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_udlr.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ur.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_rd.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ld.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ul.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_udr.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_lrd.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_udl.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/line_ulr.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ud.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_lr.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udlr.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ur.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_rd.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ld.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_ul.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udr.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_lrd.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udl.gif" alt="" />
+	* List of variables that will be available to the editor
+		* Set VARS =
+		<option value="TOPIC">Current Topic</option>
+		<option value="WEB">Current Web</option>
+		<option value="DATE"> Today's Date</option>
+		<option value="WIKIVERSION"> Wiki Version</option>
+		<option value="USERNAME"> Login User Name</option>
+		<option value="WIKIUSERNAME"> Wiki User Name</option>
+		<option value="MAINWEB"> Main Web</option>
+		<option value="TWIKIWEB"> TWiki Web</option>
+		<option value="HOMETOPIC"> Home Topic Name</option>
+		<option value="NOTIFYTOPIC"> Notify Topic Name</option>
+		<option value="WIKIUSERSTOPIC"> User List Topic Name</option>
+		<option value="STATISTICSTOPIC"> Statistics Topic Name</option>
+		<option value="INCLUDE{...}"> Server Side Include</option>
+		<option value="SEARCH{...}"> Inline Search</option>
+		<option value="TOC"> Table of Contents</option>
