@@ -706,10 +706,10 @@ sub saveSettings {
     $newMeta->copyFrom( $currMeta );
 
     my $query = $session->{cgiQuery};
-    my $newText = $query->param( 'text' );
+    my $settings = $query->param( 'text' );
     my $originalrev = $query->param( 'originalrev' );
 
-    $newText =~ s/$TWiki::regex{setVarRegex}/&handleSave($web, $topic, $1, $2, $newMeta)/mgeo;
+    $settings =~ s/$TWiki::regex{setVarRegex}/&handleSave($web, $topic, $1, $2, $newMeta)/mgeo;
 
     my $saveOpts = {};
     $saveOpts->{minor} = 1;            # don't notify
@@ -726,7 +726,7 @@ sub saveSettings {
 
     my $error =
       $session->{store}->saveTopic( $user, $web, $topic,
-                                    $newText, $newMeta, $saveOpts );
+                                    $currText, $newMeta, $saveOpts );
 
     if( $error ) {
         throw TWiki::OopsException( 'saveerr',
