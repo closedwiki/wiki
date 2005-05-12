@@ -7,7 +7,7 @@ Add the following link to your view template to invoke the Kupu editor:
 
 <code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code>
 
-Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1">Kupu</a>
+Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>
 
 ---++ Settings
 	* The name of the skin that when seen by the WysiwygPlugin will trigger translation of TML into HTML
@@ -126,6 +126,7 @@ Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TO
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udl.gif" alt="" />
 	* List of variables that will be available to the editor
 		* Set VARS =
+		<select id='twiki-var-select' style="width: 19.2em;">
 		<option value="TOPIC">Current Topic</option>
 		<option value="WEB">Current Web</option>
 		<option value="DATE"> Today's Date</option>
@@ -141,3 +142,15 @@ Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TO
 		<option value="INCLUDE{...}"> Server Side Include</option>
 		<option value="SEARCH{...}"> Inline Search</option>
 		<option value="TOC"> Table of Contents</option>
+		</select>
+
+	* Colour chart. The class is overloaded to store the TWiki variable name.
+		* Set COLOURS =
+		<table id="twiki-colours" class="twiki-colour-table">
+		<tr>
+        <td bgcolor="red" class="RED">&nbsp;</td>
+        <td bgcolor="green" class="GREEN">&nbsp;</td>
+        <td bgcolor="blue" class="BLUE">&nbsp;</td>
+        <td bgcolor="yellow" class="YELLOW">&nbsp;</td>
+		</tr>
+		</table>

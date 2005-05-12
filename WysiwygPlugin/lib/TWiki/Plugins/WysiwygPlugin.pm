@@ -6,10 +6,10 @@ This plugin is responsible for translating TML to HTML before an edit starts
 and translating the resultant HTML back into TML.
 The flow of control is as follows:
    1 User hits "edit"
-   2 The kupu 'edit' template is instantiated with all the js and css and a 'view' url that specifies =wysiwyg_edit=
-   3 kupu editor invokes view URL to obtain document
+   2 The kupu 'edit' template is instantiated with all the js and css
+   3 kupu editor invokes view URL with the 'wysiwyg_edit=1' parameter to obtain clean document
    4 commonTagsHandler here performs the necessary translation
-   5 editor saves by posting back with a "convert=html2tml" parameter
+   5 editor saves by posting to 'save' with the 'wysiwyg_edit=1' parameter
    6 the beforeSaveHandler sees this and converts the HTML back to tml
 
 =cut
@@ -40,8 +40,9 @@ sub commonTagsHandler {
     my $query = TWiki::Func::getCgiQuery();
     return unless defined( $query->param( 'wysiwyg_edit' ));
 
-    # stop it from processing the template (grr; we need a better
-    # way to tell where we are in the processing pipeline)
+    # stop it from processing the template without expanded
+    # %TEXT% (grr; we need a better way to tell where we
+    # are in the processing pipeline)
     return if( $_[0] =~ /^<!-- WysiwygPlugin Template/ );
 
     # Translate the topic text to pure HTML.

@@ -3,7 +3,7 @@
 function initKupu(iframe) {
 
     // first we create a logger
-    var l = new PlainLogger('kupu-toolbox-debuglog', 5);
+    var l = new PlainLogger('kupu-toolbox-debuglog', 20);
     
     // now some config values
     var conf = loadDictFromXML(document, 'kupuconfig');
@@ -62,33 +62,10 @@ function initKupu(iframe) {
                                               'kupu-underline-pressed');
     kupu.registerTool('underlinebutton', underlinebutton);
 
-    //var subscriptchecker = ParentWithStyleChecker(new Array('sub'));
-    //var subscriptbutton = new KupuStateButton('kupu-subscript-button',
-    //                                          execCommand('subscript'),
-    //                                          subscriptchecker,
-    //                                          'kupu-subscript',
-    //                                          'kupu-subscript-pressed');
-    //kupu.registerTool('subscriptbutton', subscriptbutton);
-
-    //var superscriptchecker = ParentWithStyleChecker(new Array('super', 'sup'));
-    //var superscriptbutton = new KupuStateButton('kupu-superscript-button', 
-    //                                            execCommand('superscript'),
-    //                                            superscriptchecker,
-    //                                            'kupu-superscript', 
-    //                                            'kupu-superscript-pressed');
-    //kupu.registerTool('superscriptbutton', superscriptbutton);
-
-    var justifyleftbutton = new KupuButton('kupu-justifyleft-button',
-                                           execCommand('justifyleft'));
-    // TWiki: kupu.registerTool('justifyleftbutton', justifyleftbutton);
-
-    var justifycenterbutton = new KupuButton('kupu-justifycenter-button',
-                                             execCommand('justifycenter'));
-    // TWiki: kupu.registerTool('justifycenterbutton', justifycenterbutton);
-
-    var justifyrightbutton = new KupuButton('kupu-justifyright-button',
-                                            execCommand('justifyright'));
-    // TWiki: kupu.registerTool('justifyrightbutton', justifyrightbutton);
+    // Icons tool
+    var twikiiconstool = new TWikiIconsTool('twiki-icons-button', 
+                                            'twiki-icons');
+    kupu.registerTool('twikiicons', twikiiconstool);
 
     var outdentbutton = new KupuButton('kupu-outdent-button', execCommand('outdent'));
     kupu.registerTool('outdentbutton', outdentbutton);
@@ -102,10 +79,6 @@ function initKupu(iframe) {
     var redobutton = new KupuButton('kupu-redo-button', execCommand('redo'));
     kupu.registerTool('redobutton', redobutton);
 
-    //var removeimagebutton = new KupuRemoveElementButton('kupu-removeimage-button',
-	//						'img',
-	//						'kupu-removeimage');
-    //kupu.registerTool('removeimagebutton', removeimagebutton);
     var removelinkbutton = new KupuRemoveElementButton('kupu-removelink-button',
 						       'a',
 						       'kupu-removelink');
@@ -114,7 +87,7 @@ function initKupu(iframe) {
     // add some tools
     // XXX would it be better to pass along elements instead of ids?
     var colorchoosertool = new ColorchooserTool('kupu-forecolor-button',
-                                                'kupu-hilitecolor-button',
+                                                'kupu-forecolor-button',
                                                 'kupu-colorchooser');
     kupu.registerTool('colorchooser', colorchoosertool);
 
@@ -126,28 +99,51 @@ function initKupu(iframe) {
     var definitionlisttool = new DefinitionListTool('kupu-list-dl-addbutton');
     kupu.registerTool('definitionlisttool', definitionlisttool);
     
-    // TWIKI: There is no properties UI
-    //var proptool = new PropertyTool('kupu-properties-title', 'kupu-properties-description');
-    //kupu.registerTool('proptool', proptool);
-
-    var linktool = new LinkTool();
-    kupu.registerTool('linktool', linktool);
-    var linkUI = new LinkToolBox("kupu-link-input", "kupu-link-button", 'kupu-toolbox-links', 'kupu-toolbox', 'kupu-toolbox-active');
-    linktool.registerToolBox('linktoolbox', linkUI);
-
     var zoom = new KupuZoomTool('kupu-zoom-button');
     kupu.registerTool('zoomtool', zoom);
 
-    var imagetool = new ImageTool();
-    kupu.registerTool('imagetool', imagetool);
-    var imageUI = new ImageToolBox('kupu-image-input', 'kupu-image-addbutton', 
-                                        'kupu-image-float-select', 'kupu-toolbox-images', 
-                                          'kupu-toolbox', 'kupu-toolbox-active');
-    // TWIKI: there is no image toolbox
-    // imagetool.registerToolBox('imagetoolbox', imageUI);
+    var showpathtool = new ShowPathTool();
+    kupu.registerTool('showpathtool', showpathtool);
 
+    var newAttachmentTool = new TWikiNewAttachmentTool('twiki-attach-button');
+    kupu.registerTool('newattachmenttool', newAttachmentTool);
+
+    var sourceedittool = new SourceEditTool('kupu-source-button',
+                                            'kupu-editor-textarea');
+    kupu.registerTool('sourceedittool', sourceedittool);
+
+    // register some cleanup filter
+    // remove tags that aren't in the XHTML DTD
+    var nonxhtmltagfilter = new NonXHTMLTagFilter();
+    kupu.registerFilter(nonxhtmltagfilter);
+
+    // Tools with Drawers...
+
+    var drawertool = new DrawerTool();
+    kupu.registerTool('drawertool', drawertool);
+
+    // Function that returns function to open a drawer
+    var opendrawer = function(drawerid) {
+        return function(button, editor) {
+            drawertool.openDrawer(drawerid);
+        };
+    };
+
+    // Link drawer
+    var linktool = new LinkTool();
+    kupu.registerTool('linktool', linktool);
+
+    var linkdrawerbutton = new KupuButton('kupu-linkdrawer-button',
+                                          opendrawer('linkdrawer'));
+    kupu.registerTool('linkdrawerbutton', linkdrawerbutton);
+
+    var linkdrawer = new LinkDrawer('kupu-linkdrawer', linktool);
+    drawertool.registerDrawer('linkdrawer', linkdrawer);
+
+    // Table drawer
     var tabletool = new TableTool();
     kupu.registerTool('tabletool', tabletool);
+    /*
     var tableUI = new TableToolBox('kupu-toolbox-addtable', 
         'kupu-toolbox-edittable', 'kupu-table-newrows', 'kupu-table-newcols',
         'kupu-table-makeheader', 'kupu-table-classchooser', 'kupu-table-alignchooser',
@@ -157,101 +153,53 @@ function initKupu(iframe) {
         'kupu-toolbox', 'kupu-toolbox-active'
         );
     tabletool.registerToolBox('tabletoolbox', tableUI);
-
-    var showpathtool = new ShowPathTool();
-    kupu.registerTool('showpathtool', showpathtool);
-
-    var sourceedittool = new SourceEditTool('kupu-source-button',
-                                            'kupu-editor-textarea');
-    kupu.registerTool('sourceedittool', sourceedittool);
-
-    // Drawers...
-
-    // Function that returns function to open a drawer
-    var opendrawer = function(drawerid) {
-        return function(button, editor) {
-            drawertool.openDrawer(drawerid);
-        };
-    };
-
-    //var imagelibdrawerbutton = new KupuButton('kupu-imagelibdrawer-button',
-    //                                          opendrawer('imagelibdrawer'));
-    //kupu.registerTool('imagelibdrawerbutton', imagelibdrawerbutton);
-
-    var linklibdrawerbutton = new KupuButton('kupu-linklibdrawer-button',
-                                             opendrawer('linklibdrawer'));
-    kupu.registerTool('linklibdrawerbutton', linklibdrawerbutton);
-
-    var linkdrawerbutton = new KupuButton('kupu-linkdrawer-button',
-                                          opendrawer('linkdrawer'));
-    kupu.registerTool('linkdrawerbutton', linkdrawerbutton);
+    */
 
     var tabledrawerbutton = new KupuButton('kupu-tabledrawer-button',
                                            opendrawer('tabledrawer'));
     kupu.registerTool('tabledrawerbutton', tabledrawerbutton);
 
-    // create some drawers, drawers are some sort of popups that appear when a 
-    // toolbar button is clicked
-    var drawertool = new DrawerTool();
-    kupu.registerTool('drawertool', drawertool);
-
-    try {
-        var linklibdrawer = new LinkLibraryDrawer(linktool, 
-                                                  conf['link_xsl_uri'],
-                                                  conf['link_libraries_uri'],
-                                                  conf['link_images_uri']);
-        drawertool.registerDrawer('linklibdrawer', linklibdrawer);
-
-        var imagelibdrawer = new ImageLibraryDrawer(imagetool, 
-                                                    conf['image_xsl_uri'],
-                                                    conf['image_libraries_uri'],
-                                                    conf['search_images_uri']);
-        drawertool.registerDrawer('imagelibdrawer', imagelibdrawer);
-    } catch(e) {
-        alert('There was a problem initializing the drawers. Most likely the ' +
-                'XSLT or XML files aren\'t available. If this is not the ' +
-                'Kupu demo version, check your files or the service that ' +
-                'provide them (error: ' + (e.message || e.toString()) + ').');
-    };
-
-    var linkdrawer = new LinkDrawer('kupu-linkdrawer', linktool);
-    drawertool.registerDrawer('linkdrawer', linkdrawer);
-
     var tabledrawer = new TableDrawer('kupu-tabledrawer', tabletool);
     drawertool.registerDrawer('tabledrawer', tabledrawer);
 
-    //var cleanupexpressions = new CleanupExpressionsTool(
-    //        'kupucleanupexpressionselect', 'kupucleanupexpressionbutton');
-    //kupu.registerTool('cleanupexpressions', cleanupexpressions);
-
-    // register some cleanup filter
-    // remove tags that aren't in the XHTML DTD
-    var nonxhtmltagfilter = new NonXHTMLTagFilter();
-    kupu.registerFilter(nonxhtmltagfilter);
-
-    // TWiki specific tools
-
-    var twikiiconstool = new TWikiIconsTool('twiki-icons-button', 
-                                             'twiki-icons');
-    kupu.registerTool('twikiicons', twikiiconstool);
-
-    var twikivartool = new TWikiVarTool();
-    kupu.registerTool('twikivartool', twikivartool);
-    var twikivarUI = new TWikiVarUI('twiki-var-select', 'twiki-var-button', 
-                                    'kupu-toolbox', 'kupu-toolbox-active');
-    twikivartool.registerToolBox('twikivarUI', twikivarUI);
-
+    // WikiWord drawer
     var wikiwordtool = new TWikiWikiWordTool();
     kupu.registerTool('wikiwordtool', wikiwordtool);
 
-    var wikiwordUI = new TWikiWikiWordUI('wiki-word-select', 'wiki-word-button');
-    wikiwordtool.registerToolBox('wikiwordUI', wikiwordUI);
+    var wikiworddrawerbutton = new KupuButton('twiki-wikiworddrawer-button',
+                                              opendrawer('wikiworddrawer'));
+    kupu.registerTool('wikiworddrawerbutton', wikiworddrawerbutton);
 
-    var attachtool = new TWikiAttachTool();
-    kupu.registerTool('attachtool', attachtool);
+    var wikiworddrawer = new TWikiPickListDrawer('twiki-wikiworddrawer',
+                                                 'twiki-wikiword-select',
+                                                 wikiwordtool);
+    drawertool.registerDrawer('wikiworddrawer', wikiworddrawer);
 
-    var attachUI = new TWikiAttachUI('twiki-attach-file', 'twiki-attach-button');
-    attachtool.registerToolBox('attachUI', attachUI);
+    // Variables drawer
+    var twikivartool = new TWikiVarTool();
+    kupu.registerTool('twikivartool', twikivartool);
+
+    var twikivardrawerbutton = new KupuButton('twiki-vardrawer-button',
+                                              opendrawer('twikivardrawer'));
+    kupu.registerTool('twikivardrawerbutton', twikivardrawerbutton);
+
+    var twikivardrawer = new TWikiPickListDrawer('twiki-vardrawer',
+                                                 'twiki-var-select',
+                                                 twikivartool);
+    drawertool.registerDrawer('twikivardrawer', twikivardrawer);
+
+    // Attachments drawer
+    var twikiattachmenttool = new TWikiInsertAttachmentTool();
+    kupu.registerTool('attachmentlisttool', twikiattachmenttool);
+
+    var attachdrawerbutton = new KupuButton('twiki-attachdrawer-button',
+                                            opendrawer('attachdrawer'));
+    kupu.registerTool('attachdrawerbutton', attachdrawerbutton);
+
+    var attachdrawer = new TWikiPickListDrawer('twiki-attachdrawer',
+                                               'twiki-attach-select',
+                                               twikiattachmenttool);
+    drawertool.registerDrawer('attachdrawer', attachdrawer);
 
     return kupu;
 };

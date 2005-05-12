@@ -16,72 +16,78 @@
  *  
  *****************************************************************************/
 
-/* Tool for attaching files. Attaching a file is a complex process; it
- * involves dispatching the TWiki upload script, and optionally inserting
- * a reference in the document itself. */
+/* Shared drawer spec used for all picklist drawers */
+function TWikiPickListDrawer(elementid, selector_id, tool) {
+  this.varSelect = document.getElementById(selector_id);
+  this.element = document.getElementById(elementid);
+  this.tool = tool;
 
-function TWikiAttachTool(){
+  this.createContent = function() {
+    this.element.style.display = 'block';
+    if (this.editor.getBrowserName() == 'IE') {
+      this.element.focus();
+    }
+  };
+
+  this.save = function() {
+    this.tool.pick(this.varSelect.options[this.varSelect.selectedIndex].value);
+  };
+};
+
+TWikiPickListDrawer.prototype = new Drawer;
+
+/* Tool for inserting the url of an attachment into the document. */
+function TWikiInsertAttachmentTool() {
   this.initialize = function(editor) {
     this.editor = editor;
-    this.editor.logMessage('Attachments tool initialized');
-  };
-
-  this.attach = function(file) {
-    /* We want to fire a post off to the server, but we're not that
-     * interested in what comes back. */
-    /* The path is going to be .../WEB/TOPIC/file. We can work it out... */
-    alert("Path was " + file);
-  }
-};
-
-function insertRefToAttachment(path, filename) {
-  if (filename.toLowerCase().match(".*\.jpg$") ||
-      filename.toLowerCase().match(".*\.gif$") ||
-      filename.toLowerCase().match(".*\.jpeg$")||
-      filename.toLowerCase().match(".*\.png$")) {
-              
-    var elem = this.kupu.document.document.createElement("img");
-    elem.setAttribute('src', path);
-    try {
-      if ( this.kupu.getSelection() ) {
-        this.kupu.getSelection().replaceWithNode(elem);
-      } else {
-        this.kupu.getSelection().insertNodeAtSelection(elem);
-      };
-    } catch( exception ) {};
-  } else {
-    var elem = this.kupu.document.document.createElement("a");
-    elem.setAttribute('href', path);
-    elem.appendChild(this.kupu.document.document.createTextNode(filename));
-    try {
-      if ( this.kupu.getSelection() ) {
-        this.kupu.getSelection().replaceWithNode(elem);
-      } else {
-        this.kupu.getSelection().insertNodeAtSelection(elem);
-      };
-    } catch(exception) {};
-  }
-}
-
-TWikiAttachTool.prototype = new KupuTool;
-
-function TWikiAttachUI(file_id, button_id) {
-  this.varFile = document.getElementById(file_id);
-  this.varButton = document.getElementById(button_id);
-    
-  this.initialize = function(tool, editor) {
-    /* tool initialization */
-    this.tool = tool;
-    this.editor = editor;
-    addEventHandler(this.varButton, "click", this.attach, this);          
+    this.editor.logMessage('InsertAttachmentmentTool initialized');
   };
   
-  this.attach = function() {
-    this.tool.attach(this.varFile.value);
-  };
-};
+  this.pick = function(filename) {
+    var url = this.editor.config.attachment_url_path + '/' + filename;
+    var tmp = filename.lastIndexOf(".");
+    if (tmp >= 0)
+      tmp = filename.substring(tmp + 1, filename.length);
 
-TWikiAttachUI.prototype = new KupuToolBox;
+    var doc = this.editor.getInnerDocument();
+    var elem;
+    if (tmp == "jpg" || tmp == "gif" || tmp == "jpeg" ||
+        tmp == "png") {
+      elem = doc.createElement("img");
+      elem.setAttribute('src', url);
+      elem.setAttribute('alt', filename);
+    } else {
+      elem = doc.createElement("a");
+      elem.setAttribute('href', url);
+      elem.appendChild(this.editor.document.document.createTextNode(filename));
+    }
+    try {
+      if (this.editor.getSelection()) {
+        this.editor.getSelection().replaceWithNode(elem);
+      } else {
+        this.editor.getSelection().insertNodeAtSelection(elem);
+      }
+    } catch(exception) {
+      alert("Something unexpected happened");
+    }
+  };
+}
+
+TWikiInsertAttachmentTool.prototype = new KupuTool;
+
+/* Tool for invoking the attachment screen for adding an attachment */
+function TWikiNewAttachmentTool() {
+  this.initialize = function(editor) {
+    this.editor = editor;
+    this.editor.logMessage('NewAttachmentmentTool initialized');
+  };
+  
+  this.invoke = function() {
+    window.open(this.editor.config.upload_url, 'twikiattach' );
+  };
+}
+
+TWikiNewAttachmentTool.prototype = new KupuTool;
 
 /* Tool for inserting TWiki variables. The variables are
  * in a <select> */
@@ -91,8 +97,7 @@ function TWikiVarTool(){
     this.editor = editor;
   };
  
-  this.createVar = function(name){
-    /* create span classed variable */
+  this.pick = function(name){
     var doc = this.editor.getInnerDocument();
     var span = doc.createElement('span');
     span.className = "TMLVariable";
@@ -130,29 +135,10 @@ function TWikiVarTool(){
       selection.selectAllChildren(selNode.nextSibling);
     };
   };
-};
+}
 
 TWikiVarTool.prototype = new KupuTool;
-
-function TWikiVarUI(myselect, mybutton, topicbutton, plainclass, activeclass){
-  this.varSelect = document.getElementById(myselect);
-  this.varButton = document.getElementById(mybutton);
   
-  this.initialize = function(tool, editor) {
-    this.tool = tool;
-    this.editor = editor;
-    this.plainclass = plainclass;
-    this.activeclass = activeclass;
-    addEventHandler(this.varButton, "click", this.createVar, this);          
-  };
-
-  this.createVar = function(){
-    this.tool.createVar(this.varSelect.options[this.varSelect.selectedIndex].value);
-  }
-}
-  
-TWikiVarUI.prototype = new KupuToolBox;
-
 /* Tool for inserting smilies. The smilies are in a div, which is shown and
  * hidden as required to give the effect of a pupup panel  */
 function TWikiIconsTool(buttonid, popupid){
@@ -213,27 +199,27 @@ function TWikiIconsTool(buttonid, popupid){
 TWikiIconsTool.prototype = new KupuTool;
 
 /* Tool for inserting wikiwords */
-function TWikiWikiWordTool(selector_id) {
+function TWikiWikiWordTool() {
   
   this.initialize = function(editor) {
     this.editor = editor;
     this.editor.logMessage('WikiWord tool initialized');
   };
 
-  this.wikiWord = function(wikiword) {
-    var no_selection;
-    // test selection (insert or replace ?)
+  this.pick = function(wikiword) {
+    var no_selection = testSelection(this.editor);
     if (this.editor.getBrowserName() == 'IE') {
       no_selection = ( this.editor.getInnerDocument().selection.type == "None" );
     } else {
       no_selection = ( this.editor.getSelection() == "" );
     };
-    // put focus on editor
+    // put focus on this.editor
     if (this.editor.getBrowserName() == "IE") {
       this.editor._restoreSelection();
     } else {
       this.editor.getDocument().getWindow().focus();
     };
+
     // test if we are in <a> node
     var linkel = this.editor.getNearestParentOfType(currnode, 'A');
     if (linkel) {
@@ -267,22 +253,3 @@ function TWikiWikiWordTool(selector_id) {
 };
 
 TWikiWikiWordTool.prototype = new KupuTool;
-
-function TWikiWikiWordUI(selector_id, button_id){
-  this.varSelect = document.getElementById(selector_id);
-  this.varButton = document.getElementById(button_id);
-  
-  this.initialize = function(tool, editor) {
-    /* attach the event handlers */
-    this.tool = tool;
-    this.editor = editor;
-    addEventHandler(this.varButton, "click", this.onClick, this);          
-  };
-
-  this.onClick = function(){
-    /* Call the tool to create a wikiword */
-    this.tool.wikiWord(this.varSelect.options[this.varSelect.selectedIndex].value);
-  }
-}
-  
-TWikiWikiWordUI.prototype = new KupuToolBox;

@@ -54,6 +54,8 @@
      <src>/%WEB%/%TOPIC%?wysywyg_edit=1</src>
      <dst>/%WEB%/%TOPIC%?wysywyg_edit=1</src>
      <redirect>%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%</redirect>
+     <attachment_url_path>%ATTACHURL%</attachment_url_path>
+     <upload_url>%SCRIPTURL%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%</upload_url>
      <current_web>%WEB%</current_web>
      <current_topic>%TOPIC%</current_topic>
      <use_css>1</use_css>
@@ -67,10 +69,6 @@
       <class>grid</class>
       <class>data</class>
      </table_classes>
-     <image_xsl_uri>%PUBURL%/_kupu/common/kupudrawers/drawer.xsl</image_xsl_uri>
-     <link_xsl_uri>%PUBURL%/_kupu/common/kupudrawers/drawer.xsl</link_xsl_uri>
-     <image_libraries_uri>%PUBURL%/_kupu/common/kupudrawers/imagelibrary.xml</image_libraries_uri>
-     <link_libraries_uri>%PUBURL%/_kupu/common/kupudrawers/linklibrary.xml</link_libraries_uri>
      <search_images_uri> </search_images_uri>
      <search_links_uri> </search_links_uri>
     </kupuconfig>
@@ -84,6 +82,10 @@
      </span>
      <span class="kupu-tb-buttongroup" style="float: right" id="kupu-zoom">
       <button type="button" class="kupu-zoom" id="kupu-zoom-button" title="zoom: alt-x" accesskey="x"></button>
+     </span>
+     <span class="kupu-tb-buttongroup" id="kupu-bg-undo">
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-undo" id="kupu-undo-button" title="undo: alt-z" i18n:attributes="title" accesskey="z"></button>
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-redo" id="kupu-redo-button" title="redo: alt-y" i18n:attributes="title" accesskey="y"></button>
      </span>
      <select id="kupu-tb-styles">
       <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="P" i18n:translate="paragraph-normal">
@@ -121,7 +123,6 @@
      </span>
      <span class="kupu-tb-buttongroup">
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-forecolor" id="kupu-forecolor-button" title="text color: alt-f" i18n:attributes="title" accesskey="f"></button>
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-hilitecolor" id="kupu-hilitecolor-button" title="background color: alt-h" i18n:attributes="title" accesskey="h"></button>
      </span>
      <span class="kupu-tb-buttongroup" id="kupu-bg-list">
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-insertorderedlist" title="numbered list: alt-#" id="kupu-list-ol-addbutton" i18n:attributes="title" accesskey="#"></button>
@@ -138,18 +139,14 @@
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" id="twiki-icons-button" class="twiki-icons-button" title="TWiki Icons: alt-k" i18n:attributes="title" accesskey="k"></button>
      </span>
      <span class="kupu-tb-buttongroup">
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-image" id="kupu-imagelibdrawer-button" title="image" i18n:attributes="title"></button>
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-inthyperlink" id="kupu-linklibdrawer-button" title="internal link" i18n:attributes="title"></button>
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-exthyperlink" id="kupu-linkdrawer-button" title="external link" i18n:attributes="title"></button>
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-table" id="kupu-tabledrawer-button" title="table" i18n:attributes="title"></button>
-     </span>
-     <span class="kupu-tb-buttongroup" id="kupu-bg-remove">
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-exthyperlink" id="kupu-linkdrawer-button" title="Insert external hyperlink" i18n:attributes="title"></button>
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-inthyperlink" id="twiki-wikiworddrawer-button" title="Insert wikiword link" i18n:attributes="title"></button>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-removeimage invisible" id="kupu-removeimage-button" title="Remove image" i18n:attributes="title"></button>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-removelink invisible" id="kupu-removelink-button" title="Remove link" i18n:attributes="title"></button>
-     </span>
-     <span class="kupu-tb-buttongroup" id="kupu-bg-undo">
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-undo" id="kupu-undo-button" title="undo: alt-z" i18n:attributes="title" accesskey="z"></button>
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-redo" id="kupu-redo-button" title="redo: alt-y" i18n:attributes="title" accesskey="y"></button>
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-attach-button" id="twiki-attach-button" title="Add new attachment to topic" i18n:attributes="title"></button> 
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-attachdrawer-button" id="twiki-attachdrawer-button" title="Insert a link to an attachment" i18n:attributes="title"></button> 
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-vardrawer-button" id="twiki-vardrawer-button" title="Insert a TWiki tag" i18n:attributes="title"></button> 
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Create/Edit a table" i18n:attributes="title"></button>
      </span>
      <span class="kupu-tb-buttongroup" id="kupu-source">
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-source" id="kupu-source-button" title="edit HTML code" i18n:attributes="title"></button>
@@ -168,41 +165,73 @@
      <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="upper-alpha" i18n:translate="list-upperalpha">A</option>
      <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="lower-alpha" i18n:translate="list-loweralpha">a</option>
     </select>
-    <div style="display:block;">
-     <div id="kupu-librarydrawer" class="kupu-drawer">
+   </div>
+   <div style="display:block;">
+    <div id="kupu-librarydrawer" class="kupu-drawer">
+    </div>
+   </div>
+   <div id="kupu-linkdrawer" class="kupu-drawer">
+    <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="">External Link</h1>
+    <div id="kupu-linkdrawer-addlink" class="kupu-panels">
+     <table>
+      <tr>
+       <td>
+        <div class="kupu-toolbox-label">
+         <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="items-matching-keyword">
+          Link the highlighted text to this URL
+         </span>:
+        </div>
+        <input id="kupu-linkdrawer-input" class="kupu-toolbox-st" type="text"/>
+       </td>
+       <td class="kupu-preview-button">
+        <button type="button" onclick="drawertool.current_drawer.preview()">Preview</button>
+       </td>
+      </tr>
+      <tr>
+       <td colspan="2" align="center">
+        <iframe frameborder="1" scrolling="auto" width="440" height="198" id="kupu-linkdrawer-preview" src="_kupu/common/kupublank.html">
+        </iframe>
+       </td>
+      </tr>
+     </table>
+     <div class="kupu-dialogbuttons">
+      <button type="button" onclick="drawertool.current_drawer.save()">Ok</button>
+      <button type="button" onclick="drawertool.closeDrawer()">Cancel</button>
      </div>
     </div>
-    <div id="kupu-linkdrawer" class="kupu-drawer">
-     <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="">External Link</h1>
-     <div id="kupu-linkdrawer-addlink" class="kupu-panels">
-      <table>
-       <tr>
-        <td>
-         <div class="kupu-toolbox-label">
-          <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="items-matching-keyword">
-           Link the highlighted text to this URL
-          </span>:
-         </div>
-         <input id="kupu-linkdrawer-input" class="kupu-toolbox-st" type="text"/>
-        </td>
-        <td class="kupu-preview-button">
-         <button type="button" onclick="drawertool.current_drawer.preview()">Preview</button>
-        </td>
-       </tr>
-       <tr>
-        <td colspan="2" align="center">
-         <iframe frameborder="1" scrolling="auto" width="440" height="198" id="kupu-linkdrawer-preview" src="_kupu/common/kupublank.html">
-         </iframe>
-        </td>
-       </tr>
-      </table>
-      <div class="kupu-dialogbuttons">
-       <button type="button" onclick="drawertool.current_drawer.save()">Ok</button>
-       <button type="button" onclick="drawertool.closeDrawer()">Cancel</button>
-      </div>
-     </div>
+   </div>
+   <div id="twiki-wikiworddrawer" class="kupu-drawer">
+    <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="">WikiWord Link</h1>
+    Link highlighted text to topic<br />%WEB%.
+    <select id='twiki-wikiword-select' class="kupu-toolbox-action"">
+     %TOPICLIST{"<option>$name</option>"}%
+    </select>
+    <div class="kupu-dialogbuttons">
+     <button type="button" onclick="drawertool.current_drawer.save()">Ok</button>
+     <button type="button" onclick="drawertool.closeDrawer()">Cancel</button>
     </div>
-    <div id="kupu-tabledrawer" class="kupu-drawer">
+   </div>
+   <div id="twiki-attachdrawer" class="kupu-drawer">
+    <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="">Attachments</h1>
+    Insert reference to attachment:
+    <select id="twiki-attach-select">
+     %META{"attachments" all="on"}%
+    </select>
+    <div class="kupu-dialogbuttons">
+     <button type="button" onclick="drawertool.current_drawer.save()">Ok</button>
+     <button type="button" onclick="drawertool.closeDrawer()">Cancel</button>
+    </div>
+   </div>
+   <div id="twiki-vardrawer" class="kupu-drawer">
+    <h1 id="variables-title" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="">TWiki Variables</h1>
+    %WYSIWYGPLUGIN_VARS%
+    <button type="button" id='twiki-var-button' class="kupu-toolbox-action">Insert Variable</button>
+    <div class="kupu-dialogbuttons">
+     <button type="button" onclick="drawertool.current_drawer.save()">Ok</button>
+     <button type="button" onclick="drawertool.closeDrawer()">Cancel</button>
+    </div>
+   </div>
+   <div id="kupu-tabledrawer" class="kupu-drawer">
     <h1>Table</h1>
     <div class="kupu-panels">
      <table width="99%">
@@ -297,102 +326,21 @@
     </div>
    </div>
   </div>
+  <div id="twiki-icons">%WYSIWYGPLUGIN_ICONS%</div>
+  <table id="kupu-colorchooser" cellpadding="0" cellspacing="0" style="position: fixed; border-style: solid; border-color: black; border-width: 1px;">
+  </table>
+  <div class="kupu-editorframe">
+   <form>
+    <iframe id="kupu-editor" frameborder="0" src="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1" scrolling="auto">
+    </iframe>
+    <textarea class="kupu-editor-textarea" id="kupu-editor-textarea"> </textarea>
+   </form>
+  </div>
   <div xmlns="" class="kupu-toolboxes">
-   <div class="kupu-toolbox" id="kupu-toolbox-links">
-    <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="links">Links</h1>
-    <div id="kupu-toolbox-addlink">
-     <div class="kupu-toolbox-label">
-      <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="items-matching-keyword">
-       Link highlighted text to url:
-      </span>
-     </div>
-     <input id="kupu-link-input" class="wide" type="text"/>
-     <span class="kupu-toolbox-buttons">
-      <button type="button" id="kupu-link-button" class="kupu-toolbox-action">OK</button>
-     </span>
+   <div class="kupu-toolbox" id="kupu-toolbox-debug">
+    <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="debug-log">Debug Log</h1>
+    <div id="kupu-toolbox-debuglog" class="kupu-toolbox-label">
     </div>
-    <hr />
-    <div id="kupu-toolbox-insert-wikiword">
-     Link highlighted text to <br />%WEB%.
-     <select id='wiki-word-select' class="kupu-toolbox-action"">
-      %TOPICLIST{"<option>$name</option>"}%
-     </select>
-     <span class="kupu-toolbox-buttons">
-      <button type="button" id="wiki-word-button" class="kupu-toolbox-action">OK</button>
-     </span>
-    </div>
-   </div>
-   <div class="kupu-toolbox" id="kupu-toolbox-twikivar">
-    <h1 id="variables-title" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="links">TWiki Variables</h1>
-    <div style="text-align: center">
-     <select id='twiki-var-select' style="width: 19.2em;">
-      %WYSIWYGPLUGIN_VARS%
-     </select>
-     <button type="button" id='twiki-var-button' class="kupu-toolbox-action">Insert Variable</button>
-    </div>
-   </div>
-   <div class="kupu-toolbox" id="kupu-toolbox-attachments">
-    <h1 id="attachments-title" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="attachments">Attachments</h1>
-    <input type="file" id="twiki-attach-file" size="30" />
-    <div class="kupu-toolbox-buttons">
-     <button type="button" id="twiki-attach-button">Insert</button> 
-    </div>
-   </div>
-   <div class="kupu-toolbox" id="kupu-toolbox-tables">
-    <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="table-inspector">Tables</h1>
-    <div class="kupu-toolbox-label">Table Class:
-     <select class="wide" id="kupu-table-classchooser"> </select>
-    </div>
-    <div id="kupu-toolbox-addtable">
-     <div class="kupu-toolbox-label">Rows:</div>
-      <input class="wide" type="text" id="kupu-table-newrows"/>
-      <div class="kupu-toolbox-label">Columns:</div>
-      <input class="wide" type="text" id="kupu-table-newcols"/>
-      <div class="kupu-toolbox-label">
-       Headings:
-       <input name="kupu-table-makeheader" id="kupu-table-makeheader" type="checkbox"/>
-       <label for="kupu-table-makeheader">Create</label>
-      </div>
-      <div class="kupu-toolbox-buttons">
-       <button type="button" id="kupu-table-fixall-button">Fix Table</button> 
-       <button type="button" id="kupu-table-addtable-button">Add Table</button> 
-      </div>
-     </div>
-     <div id="kupu-toolbox-edittable">
-      <div class="kupu-toolbox-label">Col Align:
-       <select class="wide" id="kupu-table-alignchooser">
-        <option value="left">Left</option>
-        <option value="center">Center</option>
-        <option value="right">Right</option>
-       </select>
-      </div>
-      <div class="kupu-toolbox-buttons">
-       <br/>
-       <button type="button" id="kupu-table-addcolumn-button">Add Column</button>
-       <button type="button" id="kupu-table-delcolumn-button">Remove Column</button>
-        <br/>
-        <button type="button" id="kupu-table-addrow-button">Add Row</button>
-        <button type="button" id="kupu-table-delrow-button">Remove Row</button>
-        <button type="button" id="kupu-table-fix-button">Fix</button>
-       </div>
-      </div>
-    </div>
-    <div class="kupu-toolbox" id="kupu-toolbox-debug">
-      <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="debug-log">Debug Log</h1>
-      <div id="kupu-toolbox-debuglog" class="kupu-toolbox-label">
-      </div>
-    </div>
-   </div>
-   <table id="kupu-colorchooser" cellpadding="0" cellspacing="0" style="position: fixed; border-style: solid; border-color: black; border-width: 1px;">
-   </table>
-   <div id="twiki-icons">%WYSIWYGPLUGIN_ICONS%</div>
-   <div class="kupu-editorframe">
-    <form>
-     <iframe id="kupu-editor" frameborder="0" src="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1" scrolling="auto">
-     </iframe>
-        
-     <textarea class="kupu-editor-textarea" id="kupu-editor-textarea"> </textarea>
-    </form>
    </div>
   </div>
  </body>
