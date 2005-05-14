@@ -296,6 +296,7 @@ sub renderForEdit {
     my $chooseForm = '';
     my $prefs = $session->{prefs};
     if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
+        # SMELL: localisation - this should be from a template
         $chooseForm =
           CGI::submit(-name => 'action',
                       -value => 'Replace form...',
@@ -410,11 +411,13 @@ sub renderForEdit {
             if( $type eq 'checkbox+buttons' ) {
                 my $boxes = scalar( @$options );
                 $extra = CGI::br();
+                # SMELL: localisation - this should be from a template
                 $extra .= CGI::button
                   ( -class => 'twikiEditFormCheckboxButton',
                     -value => 'Set',
                     -onClick => 'checkAll(this,2,'.$boxes.',true)' );
                 $extra .= '&nbsp;';
+                # SMELL: localisation - this should be from a template
                 $extra .= CGI::button
                   ( -class => 'twikiEditFormCheckboxButton',
                     -value => 'Clear',
@@ -491,6 +494,7 @@ sub renderForEdit {
     $text = CGI::div({-class=>'twikiForm twikiEditForm'}, $text);
 
     if( $mandatoryFieldsPresent ) {
+        # SMELL: localisation - this should be from a template
         $text .= CGI::span( { class => 'twikiAlert' }, '*' ).
           ' indicates mandatory fields';
     }
