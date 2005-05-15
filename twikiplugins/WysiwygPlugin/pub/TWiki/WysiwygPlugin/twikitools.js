@@ -22,13 +22,6 @@ function TWikiPickListDrawer(elementid, selector_id, tool) {
   this.element = document.getElementById(elementid);
   this.tool = tool;
 
-  this.createContent = function() {
-    this.element.style.display = 'block';
-    if (this.editor.getBrowserName() == 'IE') {
-      this.element.focus();
-    }
-  };
-
   this.save = function() {
     this.tool.pick(this.varSelect.options[this.varSelect.selectedIndex].value);
   };
@@ -52,14 +45,15 @@ function TWikiInsertAttachmentTool() {
     var doc = this.editor.getInnerDocument();
     var elem;
     if (tmp == "jpg" || tmp == "gif" || tmp == "jpeg" ||
-        tmp == "png") {
+        tmp == "png" || tmp == "bmp") {
       elem = doc.createElement("img");
       elem.setAttribute('src', url);
       elem.setAttribute('alt', filename);
     } else {
       elem = doc.createElement("a");
       elem.setAttribute('href', url);
-      elem.appendChild(this.editor.document.document.createTextNode(filename));
+      var text = this.editor.getInnerDocument().createTextNode(filename);
+      elem.appendChild(text);
     }
     try {
       if (this.editor.getSelection()) {
@@ -70,6 +64,7 @@ function TWikiInsertAttachmentTool() {
     } catch(exception) {
       alert("Something unexpected happened");
     }
+    this.editor.updateState();
   };
 }
 
@@ -82,12 +77,24 @@ function TWikiNewAttachmentTool() {
     this.editor.logMessage('NewAttachmentmentTool initialized');
   };
   
-  this.invoke = function() {
-    window.open(this.editor.config.upload_url, 'twikiattach' );
+  this.invoke = function(element) {
+    alert("Picked save");
+    //window.open(this.editor.config.upload_url, 'twikiattach' );
   };
 }
 
 TWikiNewAttachmentTool.prototype = new KupuTool;
+
+function TWikiNewAttachmentDrawer(elementid, tool) {
+  this.element = document.getElementById(elementid);
+  this.tool = tool;
+
+  this.save = function() {
+    this.tool.invoke(this.element);
+  };
+};
+
+TWikiNewAttachmentDrawer.prototype = new Drawer;
 
 /* Tool for inserting TWiki variables. The variables are
  * in a <select> */
@@ -97,50 +104,23 @@ function TWikiVarTool(){
     this.editor = editor;
   };
  
-  this.pick = function(name){
+  this.pick = function(name) {
     var doc = this.editor.getInnerDocument();
-    var span = doc.createElement('span');
-    span.className = "TMLVariable";
-    this.editor.insertNodeAtSelection(span, 1);
-    var tex = doc.createTextNode(name);
-    span.appendChild(tex);
-  };
-    
-  this.completeState = function( selNode, evt ) {
-    /* cancel EOL effect when pressed in variable span */
-    var keyCode = 0;
-    if (evt) keyCode = evt.keyCode;
-    // EOL special treatment in Mozilla-like browsers
-    if (this.editor.getBrowserName() == 'Mozilla' &&
-        keyCode == 13 && selNode.className == 'TMLVariable') {
-      // Put EOL at the end of the span block
-      var nodes = selNode.childNodes;
-      var toAdd = new Array(nodes.length);
-      var k = 0;
-      var i = 0;
-      while ( i < nodes.length ) {
-        if (nodes[i].nodeType == 3 || nodes[i].className == 'TMLVariable') 
-          toAdd[k++] = nodes[i];
-        selNode.removeChild(nodes[i]);
-      };
-      var j = 0;
-      while (j < k) {
-        selNode.appendChild(toAdd[j++]);
-      };
-      var selection = this.editor.getDocument().getWindow().getSelection();
-      // Create and select text after variable
-      var afterNode = selNode.nextSibling;
-      var newTextNode = this.editor.getInnerDocument().createTextNode("");
-      selNode.parentNode.insertBefore(newTextNode, afterNode);
-      selection.selectAllChildren(selNode.nextSibling);
-    };
+    var elem = doc.createElement('span');
+    elem.className = 'TMLvariable';
+    elem.appendChild(doc.createTextNode(name));
+    // stomp anything already selected
+    this.editor.insertNodeAtSelection(elem);
+    this.editor.updateState();
   };
 }
 
 TWikiVarTool.prototype = new KupuTool;
-  
-/* Tool for inserting smilies. The smilies are in a div, which is shown and
- * hidden as required to give the effect of a pupup panel  */
+
+/* Tool for inserting smilies. The smilies are collected in a div, which
+ * is shown and hidden as required to give the effect of a popup panel.
+ * The reson this is not a drawer is that it was implemented before
+ * drawers existed (I think)  */
 function TWikiIconsTool(buttonid, popupid){
   this.imgbutton = document.getElementById(buttonid);
   this.imwindow = document.getElementById(popupid);
@@ -163,12 +143,12 @@ function TWikiIconsTool(buttonid, popupid){
     /* open the chooser pane */
     this.show();
   };
-    
+  
   this.chooseImage = function(evt) {
     /* insert chosen image (delegate to createImage) */
     // event handler for choosing the color
     var target = _SARISSA_IS_MOZ ? evt.target : evt.srcElement;
-    this.createImage(target.getAttribute('src'));
+    this.createImage(target);
     this.hide();
     this.editor.logMessage('TWiki Image chosen');
   };
@@ -183,73 +163,119 @@ function TWikiIconsTool(buttonid, popupid){
     this.imwindow.style.display = "none";
   };
 
-  this.createImage = function(url) {
-    /* insert image in document */
+  this.createImage = function(template) {
     var doc = this.editor.getInnerDocument();
-    if ( url ) {
-      var img = doc.createElement('img');
-      img.setAttribute('src', url);
-      try {
-        img = this.editor.insertNodeAtSelection(img);
-      } catch( exception ) { this.imwindow.style.display = "none"; };
-    }
-  }
+    var img = doc.createElement('img');
+    img.setAttribute('src', template.getAttribute('src'));
+    img.setAttribute('alt', template.getAttribute('alt'));
+    img.classname = template.classname;
+    try {
+      img = this.editor.insertNodeAtSelection(img);
+    } catch( exception ) {
+      this.imwindow.style.display = "none";
+    };
+  };
 }
 
 TWikiIconsTool.prototype = new KupuTool;
 
 /* Tool for inserting wikiwords */
 function TWikiWikiWordTool() {
-  
-  this.initialize = function(editor) {
-    this.editor = editor;
-    this.editor.logMessage('WikiWord tool initialized');
-  };
-
   this.pick = function(wikiword) {
-    var no_selection = testSelection(this.editor);
-    if (this.editor.getBrowserName() == 'IE') {
-      no_selection = ( this.editor.getInnerDocument().selection.type == "None" );
-    } else {
-      no_selection = ( this.editor.getSelection() == "" );
-    };
-    // put focus on this.editor
-    if (this.editor.getBrowserName() == "IE") {
-      this.editor._restoreSelection();
-    } else {
-      this.editor.getDocument().getWindow().focus();
-    };
-
-    // test if we are in <a> node
-    var linkel = this.editor.getNearestParentOfType(currnode, 'A');
-    if (linkel) {
-      alert("Can't insert a link here; already linked somewhere else");
-      return;
+    var editor = this.editor;
+    var url = editor.config.view_url+editor.config.current_web+'/'+wikiword;
+    var doc = editor.getInnerDocument();
+    var elem = doc.createElement('a');
+    elem.setAttribute('href', url);
+    selection = editor.getSelection();
+    var startoffset = selection.startOffset();
+    var endoffset = selection.endOffset(); 
+    if (endoffset == startoffset) {
+      // nothing selected, just an insertion point
+      elem.appendChild(doc.createTextNode(wikiword));
     }
-    var link;
-
-    if (no_selection) {
-      /* No selection, create a new <A> */
-      var doc = this.editor.getInnerDocument();
-      link = doc.createElement('A');
-      link.setAttribute('href', wikiword);
-      link.className = 'TMLWikiWord';
-      this.editor.insertNodeAtSelection(link, 1);
-      link.appendChild(doc.createTextNode(wikiword));
-    } else {
-      /* selection, create an <A> spanning the selection */
-      this.editor.execCommand("CreateLink", wikiword);
-      var currnode = this.editor.getSelectedNode();
-      if (this.editor.getBrowserName() == 'IE') {
-        link = this.editor.getNearestParentOfType(currnode, 'A');
-      } else {
-        link = currnode.nextSibling;
-      };
-      link.className = 'TMLsquab';
-    }
-    this.editor.logMessage('Link added');
-    this.editor.updateState();
-  }; 
+    TWikiInsertNode(editor, elem);
+    editor.updateState();
+  };
 };
 
 TWikiWikiWordTool.prototype = new KupuTool;
+
+/*
+ * A submit can come from several places; from links inside the form
+ * (replace form and add form) and from the Kupu save button, which is
+ * redirected to the form. We need to create the 'text'
+ * field for all these operations. The Kupu save button is handled by
+ * the 'submitForm' function declared in kupuinit.js, but the links
+ * have to be handled through the following onSubmit handler.
+ */
+function TWikiHandleSubmit() {
+  alert("Called TWikiHandleSubmit");
+  var form = document.getElementById('twiki-main-form');
+  
+  // don't know how else to get the kupu singleton
+  var kupu = window.drawertool.editor;
+
+  // use prepareForm to create the 'text' field
+  kupu.prepareForm(form, 'text');
+};
+
+/*
+ * Replace the standard saveOnPart to suppress the confirmation
+ * prompt.
+ */
+function saveOnPart() {
+  if (kupu.content_changed) {
+    kupu.config.reload_src = 0;
+  };
+};
+
+function TWikiToggleTag(button, editor, tag) {
+  if (button.pressed) {
+    var currnode = editor.getSelectedNode();
+    var dead = editor.getNearestParentOfType(currnode, tag);
+    if (!dead) {
+      alert('Not inside a tag of type '+tag);
+      return;
+    };
+    while (dead.childNodes.length) {
+      dead.parentNode.insertBefore(dead.childNodes[0], dead);
+    };
+    dead.parentNode.removeChild(dead);
+  } else {
+    var doc = editor.getInnerDocument();
+    var elem = doc.createElement(tag);
+    TWikiInsertNode(editor,elem);
+  }
+  editor.updateState();
+};
+
+function stringify(node) {
+  var str = node.nodeName + "{";
+  if (node.nodeName == '#text') {
+    str = str + '"' + node.nodeValue + '"';
+  } else {
+    var currnode = node.firstChild;
+    var n = 0;
+    while (currnode) {
+      if (n) str = str + ",";
+      str = str + stringify(currnode);
+      n++;
+      currnode = currnode.nextSibling;
+    }
+  }
+  return str + "}";
+}
+
+/* Move the contents of the selection into the node, and insert the
+ * node in place of the selection.
+ * I can't understand why this isn't a standard Kupu method! */
+function TWikiInsertNode(editor,elem) {
+  var selection = editor.getSelection();
+  var cloned = selection.cloneContents();
+  editor.insertNodeAtSelection(elem);
+  while (cloned.hasChildNodes()) {
+    elem.appendChild(cloned.firstChild);
+  };
+  selection.selectNodeContents(elem);
+};

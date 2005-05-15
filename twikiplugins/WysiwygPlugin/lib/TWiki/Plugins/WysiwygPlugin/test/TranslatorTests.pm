@@ -17,6 +17,8 @@ BEGIN {
 use TWiki;
 use TWiki::Plugins::WysiwygPlugin::TML2HTML;
 use TWiki::Plugins::WysiwygPlugin::HTML2TML;
+use Carp;
+$SIG{__DIE__} = sub { Carp::confess $_[0] };
 
 my $unsafe;
 BEGIN {
@@ -37,7 +39,8 @@ BEGIN {
     # testcase, so they get picked up and run by TestRunner.
 
     # Each testcase is a subhash with fields as follows:
-    # exec => 1 to execute the test, anything else disables the test
+    # exec => 1 to test TML -> HTML, 2 to test HTML -> TML, 3 to
+    # test both, anything else to skin the test.
     # name => identifier (used to compose the testcase function name)
     # tml => source TWiki meta-language
     # html => expected html from expanding tml
@@ -48,13 +51,26 @@ BEGIN {
     my $data =
       [
        {
-        exec => 1,
+        exec => 3,
         name => 0,
         tml => 'LinkAtStart',
-        html => '<a class="TMLWikiWord" href="LinkAtStart">LinkAtStart</a>'
+        html => '<a href="page:/Current/LinkAtStart">LinkAtStart</a>'
        },
        {
-        exec => 1,
+        exec => 3,
+        name => 191,
+        tml => 'OtherWeb.LinkAtStart',
+        html => '<a href="page:/OtherWeb/LinkAtStart">LinkAtStart</a>',
+       },
+       {
+        exec => 3,
+        name => 192,
+        tml => 'Current.LinkAtStart',
+        html => '<a href="page:/Current/LinkAtStart">LinkAtStart</a>',
+        finaltml => 'LinkAtStart'
+       },
+       {
+        exec => 3,
         name => 1,
         html => '1st paragraph<p />2nd paragraph',
         tml => '1st paragraph
@@ -62,54 +78,54 @@ BEGIN {
 2nd paragraph'
        },
        {
-        exec => 1,
-        name => 2,
-        html => '<h2 class="TML">Sushi</h2><h3 class="TML">Maguro</h3>',
+        exec => 3,
+        name => 1,
+        html => '<h2 class="TML"> Sushi</h2><h3 class="TML"> Maguro</h3>',
         tml => '---++ Sushi
 ---+++ Maguro'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 3,
-        html => '<span class="TMLb">Bold</span>',
+        html => '<strong>Bold</strong>',
         tml => '*Bold*
 '
        },
        {
-        exec => 1,
+        exec => 3,
         name => 4,
-        html => '<span class="TMLb">reminded about<a class="TMLExternalLink" href="http://www.koders.com">http://www.koders.com</a></span>',
+        html => '<strong>reminded about<a href="http://www.koders.com">http://www.koders.com</a></strong>',
         tml => '*reminded about http://www.koders.com*',
         finaltml => '*reminded about http://www.koders.com*',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 5,
-        html => '<span class="TMLi">Italic</span>',
+        html => '<em>Italic</em>',
         tml => '_Italic_',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 6,
-        html => '<span class="TMLbi">Bold italic</span>',
+        html => '<strong><em>Bold italic</em></strong>',
         tml => '__Bold italic__',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 7,
-        html => '<span class="TMLtt">Fixed font</span>',
-        tml => '=Fixed font='
+        html => '<code>Code</code>',
+        tml => '=Code='
        },
        {
-        exec => 1,
+        exec => 3,
         name => 8,
-        html => '<span class="TMLtti">Bold fixed</span>',
-        tml => '==Bold fixed=='
+        html => '<strong><code>Bold Code</code></strong>',
+        tml => '==Bold Code=='
        },
        {
-        exec => 1,
+        exec => 3,
         name => 9,
-        html => '<span class="TMLi">this</span><span class="TMLi">should</span><span class="TMLi">italicise</span><span class="TMLi">each</span><span class="TMLi">word</span><p /><span class="TMLb">and</span><span class="TMLb">this</span><span class="TMLb">should</span><span class="TMLb">embolden</span><span class="TMLb">each</span><span class="TMLb">word</span><p /><span class="TMLi">mixing</span><span class="TMLb">them</span><span class="TMLi">should</span><span class="TMLb">work</span>',
+        html => '<em>this</em><em>should</em><em>italicise</em><em>each</em><em>word</em><p /><strong>and</strong><strong>this</strong><strong>should</strong><strong>embolden</strong><strong>each</strong><strong>word</strong><p /><em>mixing</em><strong>them</strong><em>should</em><strong>work</strong>',
         tml => '_this_ _should_ _italicise_ _each_ _word_
 
 *and* *this* *should* *embolden* *each* *word*
@@ -118,7 +134,7 @@ _mixing_ *them* _should_ *work*
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 10,
         html => '<pre class="TMLverbatim">
 &#60;verbatim&#62;
@@ -143,9 +159,9 @@ class CatAnimal {
 '
        },
        {
-        exec => 1,
+        exec => 3,
         name => 11,
-        html => '<hr class="TMLHr" /><hr class="TMLHr" />--',
+        html => '<hr /><hr />--',
         tml => '---
 -------
 --
@@ -156,28 +172,33 @@ class CatAnimal {
 '
        },
        {
-        exec => 1,
+        exec => 3,
         name => 12,
         html => '<ul><li>bullet item</li></ul>',
         tml => '	* bullet item
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 13,
-        html => 'X<ul><li>level 1<ul><li>level 2</li></ul></li></ul>',
+        html => 'X
+<ul><li>level 1
+<ul><li>level 2</li></ul></li></ul>',
         tml => 'X
 	* level 1
 		* level 2
 ',
         finaltml => 'X
-   * level 1
-      * level 2',
+   * level 1 
+      * level 2 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 14,
-        html => '<ol><li>Sushi</li></ol><p /><ol><li type="A">Sushi</li></ol><p /><ol><li type="i">Sushi</li></ol><p /><ol><li>Sushi</li><li type="A">Sushi</li><li type="i">Sushi</li></ol>',
+        html => '<ol><li>Sushi</li></ol><p /><ol>
+<li type="A">Sushi</li></ol><p />
+<ol><li type="i">Sushi</li></ol><p />
+<ol><li>Sushi</li><li type="A">Sushi</li><li type="i">Sushi</li></ol>',
         tml => '	1 Sushi
 
    A. Sushi
@@ -190,11 +211,12 @@ class CatAnimal {
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 15,
-        html => '<ol><li>Things</li><li>Stuff<ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello<br />kitty</li></ol>',
+        html => '<ol><li>Things</li><li>Stuff
+<ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello<br />kitty</li></ol>',
         tml => '   1 Things
-   1 Stuff
+   1 Stuff 
       * Banana Stuff
       * Other
       * 
@@ -203,7 +225,7 @@ class CatAnimal {
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 16,
         html => '<dl><dt>Sushi</dt><dd>Japan</dd><dt>Dim Sum</dt><dd>S. F.</dd><dt>Sauerkraut</dt><dd>Germany</dd></dl>',
         tml => '   $ Sushi: Japan
@@ -216,9 +238,9 @@ class CatAnimal {
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 17,
-        html => '<p /><table class="TMLTable"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table class="TMLTable"><tr><td>^</td><td>six</td><td>six</td></tr></table>',
+        html => '<p /><table><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table><tr><td>^</td><td>six</td><td>six</td></tr></table>',
         tml => '
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
@@ -240,13 +262,13 @@ class CatAnimal {
 |^|six|six|'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 18,
         html => '!SunOS',
         tml => '!SunOS',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 19,
         html => '<div class="TMLnoautolink">RedHat & SuSE</div>
 ',
@@ -255,16 +277,16 @@ RedHat & SuSE
 </noautolink>'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 20,
-        html => '<a class="TMLsquab" href="mailto:a@z.com">Mail</a><a class="TMLsquab" href="mailto:?subject=Hi">Hi</a>',
+        html => '<a href="mailto:a@z.com">Mail</a><a href="mailto:?subject=Hi">Hi</a>',
         tml => '[[mailto:a@z.com Mail]] [[mailto:?subject=Hi Hi]]',
         finaltml => '[[mailto:a@z.com][Mail]] [[mailto:?subject=Hi][Hi]]',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 21,
-        html => '<a class="TMLWikiWord" href="WebPreferences">WebPreferences</a><p /><span class="TMLVariable">MAINWEB</span>.TWikiUsers<p /><a class="TMLWikiWord" href="CompleteAndUtterNothing">CompleteAndUtterNothing</a><p /><a class="TMLWikiWord" href="LinkBox">LinkBox</a><a class="TMLWikiWord" href="LinkBoxs">LinkBoxs</a><a class="TMLWikiWord" href="LinkBoxies">LinkBoxies</a><a class="TMLWikiWord" href="LinkBoxess">LinkBoxess</a><a class="TMLWikiWord" href="LinkBoxesses">LinkBoxesses</a><a class="TMLWikiWord" href="LinkBoxes">LinkBoxes</a>',
+        html => '<a href="page:/Current/WebPreferences">WebPreferences</a><p /><span class="TMLvariable">MAINWEB</span>.TWikiUsers<p /><a href="page:/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a><p /><a href="page:/Current/LinkBox">LinkBox</a><a href="page:/Current/LinkBoxs">LinkBoxs</a><a href="page:/Current/LinkBoxies">LinkBoxies</a><a href="page:/Current/LinkBoxess">LinkBoxess</a><a href="page:/Current/LinkBoxesses">LinkBoxesses</a><a href="page:/Current/LinkBoxes">LinkBoxes</a>',
         tml => 'WebPreferences
 
 %MAINWEB%.TWikiUsers
@@ -287,196 +309,196 @@ CompleteAndUtterNothing
 LinkBox LinkBoxs LinkBoxies LinkBoxess LinkBoxesses LinkBoxes',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 22,
-        html => '<a class="TMLsquab" href="wiki syntax">wiki syntax</a><a class="TMLsquab" href="%MAINWEB%.TWiki users"><span class="TMLVariable">MAINWEB</span>.TWiki users</a>escaped: !<a class="TMLsquab" href="wiki syntax">wiki syntax</a>',
+        html => '<a href="page:/Current/WikiSyntax">wiki syntax</a><a href="%MAINWEB%.TWikiUsers"><span class="TMLvariable">MAINWEB</span>.TWiki users</a>escaped: ![[wiki syntax]]',
         tml => '[[wiki syntax]] [[%MAINWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]',
-        finaltml => '[[wiki syntax]] [[%MAINWEB%.TWiki users]] escaped: ![[wiki syntax]]'
+        finaltml => '[[WikiSyntax][wiki syntax]] [[%MAINWEB%.TWikiUsers][%MAINWEB%.TWiki users]] escaped: ![[wiki syntax]]'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 23,
-        html => '<a class="TMLsquab" href="WikiSyntax">syntax</a><a class="TMLsquab" href="http://gnu.org">GNU</a><a class="TMLsquab" href="http://xml.org">XML</a>',
+        html => '<a href="page:/Current/WikiSyntax">syntax</a><a href="http://gnu.org">GNU</a><a href="http://xml.org">XML</a>',
         tml => '[[WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 24,
-        html => '<a class="TMLWikiWord" href="FleegleHorn#TrumpetHack">FleegleHorn#TrumpetHack</a>',
+        html => '<a href="page:/Current/FleegleHorn#TrumpetHack">FleegleHorn#TrumpetHack</a>',
         tml => 'FleegleHorn#TrumpetHack'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 25,
-        html => '!<span class="TMLVariable">MAINWEB</span>nowt',
+        html => '!<span class="TMLvariable">MAINWEB</span>nowt',
         tml => '!%MAINWEB%nowt',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 26,
-        html => 'nowt!<span class="TMLVariable">MAINWEB</span>',
+        html => 'nowt!<span class="TMLvariable">MAINWEB</span>',
         tml => 'nowt!%MAINWEB%',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 28,
-        html => '<span class="TMLVariable">WEB</span>',
+        html => '<span class="TMLvariable">WEB</span>',
         tml => '%WEB%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 29,
-        html => '<span class="TMLVariable">ICON{}</span>',
+        html => '<span class="TMLvariable">ICON{}</span>',
         tml => '%ICON{}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 30,
-        html => '<span class="TMLVariable">ICON{""}</span>',
+        html => '<span class="TMLvariable">ICON{""}</span>',
         tml => '%ICON{""}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 31,
-        html => '<span class="TMLVariable">ICON{"Fleegle"}</span>',
+        html => '<span class="TMLvariable">ICON{"Fleegle"}</span>',
         tml => '%ICON{"Fleegle"}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 32,
-        html => '<span class="TMLVariable">URLENCODE{""}</span>',
+        html => '<span class="TMLvariable">URLENCODE{""}</span>',
         tml => '%URLENCODE{""}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 33,
-        html => '<span class="TMLVariable">ENCODE{""}</span>',
+        html => '<span class="TMLvariable">ENCODE{""}</span>',
         tml => '%ENCODE{""}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 34,
-        html => '<span class="TMLVariable">INTURLENCODE{""}</span>',
+        html => '<span class="TMLvariable">INTURLENCODE{""}</span>',
         tml => '%INTURLENCODE{""}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 35,
-        html => '<span class="TMLVariable">MAINWEB</span>',
+        html => '<span class="TMLvariable">MAINWEB</span>',
         tml => '%MAINWEB%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 36,
-        html => '<span class="TMLVariable">TWIKIWEB</span>',
+        html => '<span class="TMLvariable">TWIKIWEB</span>',
         tml => '%TWIKIWEB%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 37,
-        html => '<span class="TMLVariable">HOMETOPIC</span>',
+        html => '<span class="TMLvariable">HOMETOPIC</span>',
         tml => '%HOMETOPIC%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 38,
-        html => '<span class="TMLVariable">WIKIUSERSTOPIC</span>',
+        html => '<span class="TMLvariable">WIKIUSERSTOPIC</span>',
         tml => '%WIKIUSERSTOPIC%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 39,
-        html => '<span class="TMLVariable">WIKIPREFSTOPIC</span>',
+        html => '<span class="TMLvariable">WIKIPREFSTOPIC</span>',
         tml => '%WIKIPREFSTOPIC%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 40,
-        html => '<span class="TMLVariable">WEBPREFSTOPIC</span>',
+        html => '<span class="TMLvariable">WEBPREFSTOPIC</span>',
         tml => '%WEBPREFSTOPIC%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 41,
-        html => '<span class="TMLVariable">NOTIFYTOPIC</span>',
+        html => '<span class="TMLvariable">NOTIFYTOPIC</span>',
         tml => '%NOTIFYTOPIC%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 42,
-        html => '<span class="TMLVariable">STATISTICSTOPIC</span>',
+        html => '<span class="TMLvariable">STATISTICSTOPIC</span>',
         tml => '%STATISTICSTOPIC%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 43,
-        html => '<span class="TMLVariable">STARTINCLUDE</span>',
+        html => '<span class="TMLvariable">STARTINCLUDE</span>',
         tml => '%STARTINCLUDE%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 44,
-        html => '<span class="TMLVariable">STOPINCLUDE</span>',
+        html => '<span class="TMLvariable">STOPINCLUDE</span>',
         tml => '%STOPINCLUDE%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 45,
-        html => '<span class="TMLVariable">SECTION{""}</span>',
+        html => '<span class="TMLvariable">SECTION{""}</span>',
         tml => '%SECTION{""}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 46,
-        html => '<span class="TMLVariable">ENDSECTION</span>',
+        html => '<span class="TMLvariable">ENDSECTION</span>',
         tml => '%ENDSECTION%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 47,
-        html => '<span class="TMLVariable">FORMFIELD{"" topic="" alttext="" default="" format="$value"}</span>',
+        html => '<span class="TMLvariable">FORMFIELD{"" topic="" alttext="" default="" format="$value"}</span>',
         tml => '%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 48,
-        html => '<span class="TMLVariable">FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}</span>',
+        html => '<span class="TMLvariable">FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}</span>',
         tml => '%FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 49,
-        html => '<span class="TMLVariable">SPACEDTOPIC</span>',
+        html => '<span class="TMLvariable">SPACEDTOPIC</span>',
         tml => '%SPACEDTOPIC%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 50,
-        html => '<span class="TMLVariable">RELATIVETOPICPATH{}</span>',
+        html => '<span class="TMLvariable">RELATIVETOPICPATH{}</span>',
         tml => '%RELATIVETOPICPATH{}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 51,
-        html => '<span class="TMLVariable">RELATIVETOPICPATH{Sausage}</span>',
+        html => '<span class="TMLvariable">RELATIVETOPICPATH{Sausage}</span>',
         tml => '%RELATIVETOPICPATH{Sausage}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 52,
-        html => '<span class="TMLVariable">RELATIVETOPICPATH{"Chips"}</span>',
+        html => '<span class="TMLvariable">RELATIVETOPICPATH{"Chips"}</span>',
         tml => '%RELATIVETOPICPATH{"Chips"}%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 53,
-        html => '<span class="TMLVariable">SCRIPTNAME</span>',
+        html => '<span class="TMLvariable">SCRIPTNAME</span>',
         tml => '%SCRIPTNAME%'
        },
        {
-        exec => 1,
+        exec => 3,
         name => 54,
         html => 'Outside<pre class="TMLverbatim">Inside</pre>Outside',
         tml => 'Outside
@@ -486,7 +508,7 @@ Inside
 Outside',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 55,
         html => 'Outside<pre class="twikiAlert TMLverbatim">Inside</pre>Outside',
         tml => 'Outside
@@ -497,7 +519,7 @@ Outside
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 56,
         html => 'Outside<pre class="TMLverbatim">Inside</pre>Outside',
         tml => 'Outside
@@ -514,7 +536,7 @@ Outside
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 57,
         html => 'Outside<pre>Inside</pre>Outside',
         tml => 'Outside
@@ -524,7 +546,7 @@ Inside
 Outside',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 58,
         html => 'Outside<pre class="twikiAlert">Inside</pre>Outside',
         tml => 'Outside
@@ -534,7 +556,7 @@ Inside
 Outside',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 59,
         html => 'Outside<pre>Inside</pre>Outside',
         tml => 'Outside
@@ -549,7 +571,7 @@ Inside
 Outside',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 60,
         html => 'Outside<div class="TMLnoautolink">Inside</div>Outside',
         tml => 'Outside
@@ -559,7 +581,7 @@ Inside
 Outside',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 61,
         html => 'Outside<div class="twikiAlert TMLnoautolink">Inside</div>Outside',
         tml => 'Outside
@@ -569,7 +591,7 @@ Inside
 Outside',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 62,
         html => 'Outside<div class="TMLnoautolink">Inside</div>Outside',
         tml => 'Outside
@@ -586,16 +608,35 @@ Outside
 ',
        },
        {
-        exec => 1,
+        exec => 3,
         name => 63,
-        html => '<h3 class="TML">Test with<a class="TMLWikiWord" href="LinkInHeader">LinkInHeader</a></h3>',
+        html => '<h3 class="TML"> Test with<a href="page:/Current/LinkInHeader">LinkInHeader</a></h3>',
         tml => '---+++ Test with LinkInHeader
 ',
-       }
+       },
+       {
+        exec => 2,
+        name => 64,
+        html => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+        tml => '',
+       },
+       {
+        exec => 2,
+        name => 65,
+        html => '<head> ignore me </head>',
+        tml => '',
+       },
+       {
+        exec => 2,
+        name => 66,
+        html => '<html> good <body>good </body></html>',
+        tml => 'good good',
+       },
       ];
 
+
     foreach my $datum ( @$data ) {
-        next unless $datum->{exec} eq 1;
+        next unless( $datum->{exec} & 1 );
         my $fn = 'TranslatorTests::test_TML2HTML_'.$datum->{name};
         no strict 'refs';
         *$fn = sub { shift->compareTML_HTML( $datum ) };
@@ -603,12 +644,14 @@ Outside
     }
 
     foreach my $datum ( @$data ) {
-        next unless $datum->{exec} eq 1;
+        next unless( $datum->{exec} & 2 );
         my $fn = 'TranslatorTests::test_HTML2TML_'.$datum->{name};
         no strict 'refs';
         *$fn = sub { shift->compareHTML_TML( $datum ) };
         use strict 'refs';
     }
+
+=pod
 
     opendir( D, "test_html" ) or die;
     foreach my $file (grep { /^.*\.html$/i } readdir D ) {
@@ -628,6 +671,9 @@ Outside
         *$fn = sub { shift->compareHTML_TML( $test ) };
         use strict 'refs';
     }
+
+=cut
+
 }
 
 use HTML::Diff;
@@ -711,10 +757,16 @@ sub _compareHTML {
     $expected =~ s/ +/ /gs;
     $expected =~ s/^\s+//s;
     $expected =~ s/\s+$//s;
+    $expected =~ s/\s+</</g;
+    $expected =~ s/>\s+/>/g;
+
     $actual =~ s/&(\w+);/&#$entMap{$1};/g;
     $actual =~ s/ +/ /gs;
     $actual =~ s/^\s+//s;
     $actual =~ s/\s+$//s;
+    $actual =~ s/\s+</</g;
+    $actual =~ s/>\s+/>/g;
+
     my $diffs = HTML::Diff::html_word_diff( $expected, $actual );
     my $failed = 0;
     my $okset = "";
@@ -776,14 +828,14 @@ sub _paramsSame {
 
 sub compareTML_HTML {
     my ( $this, $args ) = @_;
-    my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
+    my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&getViewUrl);
     my $tx = $txer->convert( $args->{tml} );
     $this->_compareHTML($args->{html}, $tx, 1);
 }
 
 sub compareHTML_TML {
     my ( $this, $args ) = @_;
-    my $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
+    my $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML({}, \&parseWikiUrl);
     my $tx = $txer->convert( $args->{html} );
     if( $args->{finaltml} ) {
         $this->_compareTML($args->{finaltml}, $tx, $args->{name});
@@ -823,6 +875,25 @@ sub _compareTML {
         }
         $this->assert(0, $expl."\n");
     }
+}
+
+sub getViewUrl {
+    my( $web, $topic ) = @_;
+    $web ||= "Current";
+    return "page:/$web/$topic";
+}
+
+sub parseWikiUrl {
+    my $url = shift;
+    if( $url =~ m!^page:/(\w+)/(\w+(#\w+)?)$! ) {
+        my($web,$topic)=($1,$2);
+        if( $web eq 'Current' ) {
+          return $topic;
+      } else {
+          return "$web.$topic";
+      }
+    }
+    return undef;
 }
 
 1;

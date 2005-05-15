@@ -24,11 +24,6 @@ function initKupu(iframe) {
     // of state changes
     kupu.registerTool('ui', ui); // XXX Should this be a different method?
 
-    // add the buttons to the toolbar
-    var savebuttonfunc = function(button, editor) {editor.saveDocument()};
-    var savebutton = new KupuButton('kupu-save-button', savebuttonfunc);
-    kupu.registerTool('savebutton', savebutton);
-
     // function that returns a function to execute a button command
     var execCommand = function(cmd) {
         return function(button, editor) {
@@ -54,13 +49,17 @@ function initKupu(iframe) {
                                            'kupu-italic-pressed');
     kupu.registerTool('italicsbutton', italicsbutton);
 
-    var underlinechecker = ParentWithStyleChecker(new Array('u'));
-    var underlinebutton = new KupuStateButton('kupu-underline-button', 
-                                              execCommand('underline'),
-                                              underlinechecker,
-                                              'kupu-underline', 
-                                              'kupu-underline-pressed');
-    kupu.registerTool('underlinebutton', underlinebutton);
+    var codechecker = ParentWithStyleChecker(new Array('tt', 'code'),
+						'font-family', 'monospaced');
+    var codebutton = new KupuStateButton('twiki-code-button', 
+                                         function (button,editor) {
+                                           TWikiToggleTag(button, editor,
+                                                          'code');
+                                         },
+                                         codechecker,
+                                         'twiki-code-button', 
+                                         'twiki-code-button-pressed');
+    kupu.registerTool('codebutton', codebutton);
 
     // Icons tool
     var twikiiconstool = new TWikiIconsTool('twiki-icons-button', 
@@ -79,15 +78,15 @@ function initKupu(iframe) {
     var redobutton = new KupuButton('kupu-redo-button', execCommand('redo'));
     kupu.registerTool('redobutton', redobutton);
 
-    var removelinkbutton = new KupuRemoveElementButton('kupu-removelink-button',
-						       'a',
-						       'kupu-removelink');
+    var removelinkbutton =
+      new KupuRemoveElementButton('kupu-removelink-button',
+                                  'a',
+                                  'kupu-removelink');
     kupu.registerTool('removelinkbutton', removelinkbutton);
 
     // add some tools
-    // XXX would it be better to pass along elements instead of ids?
     var colorchoosertool = new ColorchooserTool('kupu-forecolor-button',
-                                                'kupu-forecolor-button',
+                                                'kupu-hilitecolor-button',
                                                 'kupu-colorchooser');
     kupu.registerTool('colorchooser', colorchoosertool);
 
@@ -99,23 +98,36 @@ function initKupu(iframe) {
     var definitionlisttool = new DefinitionListTool('kupu-list-dl-addbutton');
     kupu.registerTool('definitionlisttool', definitionlisttool);
     
-    var zoom = new KupuZoomTool('kupu-zoom-button');
-    kupu.registerTool('zoomtool', zoom);
-
+    // shows the path to the current element in the status bar
     var showpathtool = new ShowPathTool();
     kupu.registerTool('showpathtool', showpathtool);
-
-    var newAttachmentTool = new TWikiNewAttachmentTool('twiki-attach-button');
-    kupu.registerTool('newattachmenttool', newAttachmentTool);
 
     var sourceedittool = new SourceEditTool('kupu-source-button',
                                             'kupu-editor-textarea');
     kupu.registerTool('sourceedittool', sourceedittool);
 
-    // register some cleanup filter
     // remove tags that aren't in the XHTML DTD
     var nonxhtmltagfilter = new NonXHTMLTagFilter();
     kupu.registerFilter(nonxhtmltagfilter);
+
+    // Save button
+    var savebutton = document.getElementById('kupu-save-button');
+    function submitForm() {
+      // can't use the TWikiHandleSubmit handler, because it doesn't
+      // get called when submit() is used.
+      var form = document.getElementById('twiki-main-form');
+      // use prepareForm to create the 'text' field
+      kupu.prepareForm(form, 'text');
+      form.submit();
+    };
+    addEventHandler(savebutton, 'click', submitForm, kupu);
+
+    var cancelbutton = document.getElementById('twiki-cancel-button');
+    function cancelEdit() {
+      var url = conf.cancel;
+      window.document.location = conf.cancel;
+    }
+    addEventHandler(cancelbutton, 'click', cancelEdit, kupu);
 
     // Tools with Drawers...
 
@@ -143,17 +155,6 @@ function initKupu(iframe) {
     // Table drawer
     var tabletool = new TableTool();
     kupu.registerTool('tabletool', tabletool);
-    /*
-    var tableUI = new TableToolBox('kupu-toolbox-addtable', 
-        'kupu-toolbox-edittable', 'kupu-table-newrows', 'kupu-table-newcols',
-        'kupu-table-makeheader', 'kupu-table-classchooser', 'kupu-table-alignchooser',
-        'kupu-table-addtable-button', 'kupu-table-addrow-button', 'kupu-table-delrow-button', 
-        'kupu-table-addcolumn-button', 'kupu-table-delcolumn-button', 
-        'kupu-table-fix-button', 'kupu-table-fixall-button', 'kupu-toolbox-tables',
-        'kupu-toolbox', 'kupu-toolbox-active'
-        );
-    tabletool.registerToolBox('tabletoolbox', tableUI);
-    */
 
     var tabledrawerbutton = new KupuButton('kupu-tabledrawer-button',
                                            opendrawer('tabledrawer'));
@@ -163,7 +164,7 @@ function initKupu(iframe) {
     drawertool.registerDrawer('tabledrawer', tabledrawer);
 
     // WikiWord drawer
-    var wikiwordtool = new TWikiWikiWordTool();
+    var wikiwordtool = new TWikiWikiWordTool(linktool);
     kupu.registerTool('wikiwordtool', wikiwordtool);
 
     var wikiworddrawerbutton = new KupuButton('twiki-wikiworddrawer-button',
@@ -189,17 +190,31 @@ function initKupu(iframe) {
     drawertool.registerDrawer('twikivardrawer', twikivardrawer);
 
     // Attachments drawer
-    var twikiattachmenttool = new TWikiInsertAttachmentTool();
-    kupu.registerTool('attachmentlisttool', twikiattachmenttool);
+    var insertAttLinkTool = new TWikiInsertAttachmentTool();
+    kupu.registerTool('insertattlink', insertAttLinkTool);
 
-    var attachdrawerbutton = new KupuButton('twiki-attachdrawer-button',
-                                            opendrawer('attachdrawer'));
-    kupu.registerTool('attachdrawerbutton', attachdrawerbutton);
+    var insertAttButton = new KupuButton('twiki-insert-attachment',
+                                         opendrawer('insertAttDrawer'));
+    kupu.registerTool('insertAttButton', insertAttButton);
 
-    var attachdrawer = new TWikiPickListDrawer('twiki-attachdrawer',
-                                               'twiki-attach-select',
-                                               twikiattachmenttool);
-    drawertool.registerDrawer('attachdrawer', attachdrawer);
+    var insertAttDrawer = new TWikiPickListDrawer('twiki-insertatt-drawer',
+                                               'twiki-insertatt-select',
+                                               insertAttLinkTool);
+    drawertool.registerDrawer('insertAttDrawer', insertAttDrawer);
+
+    // New attachment drawer
+    var newAttachmentTool = new TWikiNewAttachmentTool();
+    kupu.registerTool('newAttachmentTool', newAttachmentTool);
+
+    var newAttButton = new KupuButton('twiki-attach-button',
+                                      opendrawer('newAttDrawer'));
+    kupu.registerTool('newAttButton', newAttButton);
+
+    var newAttDrawer =
+      new TWikiNewAttachmentDrawer('twiki-new-attachment-drawer',
+                                   newAttachmentTool);
+
+    drawertool.registerDrawer('newAttDrawer', newAttDrawer);
 
     return kupu;
 };
