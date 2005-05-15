@@ -4,6 +4,7 @@
    * Attach doesn't work
    * Change form doesn't work
    * Add form doesn't work
+   * TWiki tags in URLs don't work very well
 Feedback is very welcome - please add to the WysiwygPluginDev topic.
 %ENDCOLOR%
 

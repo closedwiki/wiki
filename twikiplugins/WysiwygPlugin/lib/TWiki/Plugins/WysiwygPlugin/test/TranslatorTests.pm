@@ -185,12 +185,12 @@ class CatAnimal {
 <ul><li>level 1
 <ul><li>level 2</li></ul></li></ul>',
         tml => 'X
-	* level 1
-		* level 2
+   * level 1
+      * level 2
 ',
         finaltml => 'X
-   * level 1 
-      * level 2 ',
+	* level 1 
+		* level 2 ',
        },
        {
         exec => 3,
@@ -201,13 +201,13 @@ class CatAnimal {
 <ol><li>Sushi</li><li type="A">Sushi</li><li type="i">Sushi</li></ol>',
         tml => '	1 Sushi
 
-   A. Sushi
+	A. Sushi
 
-   i. Sushi
+	i. Sushi
 
-   1 Sushi
-   A. Sushi
-   i. Sushi
+	1 Sushi
+	A. Sushi
+	i. Sushi
 ',
        },
        {
@@ -215,13 +215,13 @@ class CatAnimal {
         name => 15,
         html => '<ol><li>Things</li><li>Stuff
 <ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello<br />kitty</li></ol>',
-        tml => '   1 Things
-   1 Stuff 
-      * Banana Stuff
-      * Other
-      * 
-   1 Something
-   1 kello<br />kitty
+        tml => '	1 Things
+	1 Stuff 
+		* Banana Stuff
+		* Other
+		* 
+	1 Something
+	1 kello<br />kitty
 ',
        },
        {
@@ -229,12 +229,12 @@ class CatAnimal {
         name => 16,
         html => '<dl><dt>Sushi</dt><dd>Japan</dd><dt>Dim Sum</dt><dd>S. F.</dd><dt>Sauerkraut</dt><dd>Germany</dd></dl>',
         tml => '   $ Sushi: Japan
-   $ Dim Sum: S. F.
-   Sauerkraut: Germany
+	$ Dim Sum: S. F.
+	Sauerkraut: Germany
 ',
         finaltml => '   Sushi: Japan
-   $ Dim Sum: S. F.
-   Sauerkraut: Germany
+	$ Dim Sum: S. F.
+	Sauerkraut: Germany
 ',
        },
        {
