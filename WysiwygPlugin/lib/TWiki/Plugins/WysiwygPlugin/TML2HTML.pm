@@ -38,12 +38,15 @@ my $ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 Construct a new TML to HTML convertor.
 
+$getViewUrl is a reference to a method:
+   * getViewUrl($web,$topic) -> $url (where $topic may include an anchor)
+
 =cut
 
 sub new {
-    my( $class ) = @_;
+    my( $class, $getViewUrl ) = @_;
     my $this = {};
-
+    $this->{getViewUrl} = $getViewUrl;
     return bless( $this, $class );
 }
 
@@ -110,7 +113,7 @@ sub _processTags {
             if( $stackTop =~ m/^%([A-Z0-9_:]+)(?:({.*}))?$/o ) {
                 my( $tag, $args ) = ( $1, $2 || '' );
                 $stackTop = pop( @stack ).
-                  CGI::span({class => 'TMLVariable'}, $tag.$args);
+                  CGI::span({class => 'TMLvariable'}, $tag.$args);
             } else {
                 push( @stack, $stackTop );
                 $stackTop = '%'; # push a new context
@@ -131,11 +134,34 @@ sub _processTags {
 }
 
 sub _makeLink {
-    my( $this, $class, $url, $text ) = @_;
+    my( $this, $url, $text ) = @_;
     $text = $this->_liftOut($text) if ( $text );
     $url = $this->_liftOut($url);
     $text ||= $url;
-    return CGI::a( { class => $class, href => $url }, $text );
+    return CGI::a( { href => $url }, $text );
+}
+
+sub _makeWikiWord {
+    my( $this, $web, $topic ) = @_;
+    my $url = &{$this->{getViewUrl}}( $web, $topic );
+    return $this->_makeLink( $url, $topic );
+}
+
+sub _makeSquab {
+    my( $this, $url, $text ) = @_;
+    unless( $url =~ /^$TWiki::regex{linkProtocolPattern}/ ) {
+        $text ||= $url;
+        my($web,$topic);
+        if( $url =~ /^(?:(\w+)\.)?(\w+)$/ ) {
+            ($web,$topic) = ($1,$2);
+        } else {
+            $web = '';
+            $topic = $url;
+            $topic =~ s/(^|\W)(\w)/uc($2)/ge;
+        }
+        $url = &{$this->{getViewUrl}}( $web, $topic );
+    }
+    return $this->_makeLink($url, $text);
 }
 
 # Lifted straight out of DevelopBranch Render.pm
@@ -160,7 +186,7 @@ sub _getRenderedVersion {
 
     # Blockquoted email (indented with '> ')
     # Could be used to provide different colours for different numbers of '>'
-    $text =~ s/^>(.*?)$/'&gt;'.CGI::cite( { class => 'TMLCite' }, $1 ).CGI::br()/gem;
+    $text =~ s/^>(.*?)$/'&gt;'.CGI::cite( { class => 'TMLcite' }, $1 ).CGI::br()/gem;
 
     # locate isolated < and > and translate to entities
     # Protect isolated <!-- and -->
@@ -182,7 +208,7 @@ sub _getRenderedVersion {
 
     # standard URI
     my $x;
-    $text =~ s/(^|(?<=[-*\s(]))($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink('TMLExternalLink',$1)/geo;
+    $text =~ s/(?:^|(?<=[-*\s(]))($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink($1,$1)/geo;
 
     # other entities
     $text =~ s/&(\w+);/$TT0$1;/g;      # "&abc;"
@@ -196,7 +222,7 @@ sub _getRenderedVersion {
     $text =~ s/$TWiki::regex{headerPatternDa}/_makeHeading($2,length($1))/geom;
 
     # Horizontal rule
-    my $hr = CGI::hr({class => 'TMLHr'});
+    my $hr = CGI::hr({class => 'TMLhr'});
     $text =~ s/^---+/$hr/gm;
 
     # Now we really _do_ need a line loop, to process TML
@@ -271,20 +297,20 @@ sub _getRenderedVersion {
 
     $text = join("\n", @result );
 
-    $text =~ s/${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW/CGI::span({class=>"TMLtti"},$1)/gem;
-    $text =~ s/${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW/CGI::span({class=>"TMLbi"},$1)/gem;
-    $text =~ s/${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW/CGI::span({class=>"TMLb"},$1)/gem;
-    $text =~ s/${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW/CGI::span({class=>"TMLi"},$1)/gem;
-    $text =~ s/${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW/CGI::span({class=>"TMLtt"},$1)/gem;
+    $text =~ s/${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW/CGI::strong(CGI::code($1))/gem;
+    $text =~ s/${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW/CGI::strong(CGI::em($1))/gem;
+    $text =~ s/${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW/CGI::strong($1)/gem;
+    $text =~ s/${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW/CGI::em($1)/gem;
+    $text =~ s/${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW/CGI::code($1)/gem;
 
     # Mailto
     # Email addresses must always be 7-bit, even within I18N sites
 
     # [[mailto:string display text]]
-    $text =~ s/\[\[(mailto:\S+?)\s+(.+?)\]\]/$this->_makeLink('TMLsquab',$1,$2)/ge;
+    $text =~ s/\[\[(mailto:\S+?)\s+(.+?)\]\]/$this->_makeLink($1,$2)/ge;
 
     # Inline mailto:foo@example.com ('mailto:' part optional)
-    $text =~ s/$STARTWW((?:mailto:)?[a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/$this->_makeLink('TMLmailto',$1)/gem;
+    $text =~ s/$STARTWW((?:mailto:)?[a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/$this->_makeLink($1,$1)/gem;
 
     # Handle [[][] and [[]] links
 
@@ -292,11 +318,11 @@ sub _getRenderedVersion {
 
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
-    $text =~ s/\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/$this->_makeLink('TMLsquab',$1,$2)/ge;
+    $text =~ s/(?<!!)\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/$this->_makeSquab($1,$2)/ge;
 
     # Handle WikiWords
     $text = _takeOutBlocks( $text, 'noautolink', $removed );
-    $text =~ s/$STARTWW(!?($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})($TWiki::regex{anchorRegex})?)$ENDWW/$this->_makeLink('TMLWikiWord',$1)/geom;
+    $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)$ENDWW/$this->_makeWikiWord($1,$2)/geom;
 
     foreach my $placeholder ( keys %$removed ) {
         my $pm = $removed->{$placeholder}{params}->{class};
@@ -483,7 +509,7 @@ sub _emitTR {
 
     unless( $insideTABLE ) {
         $thePre .=
-          CGI::start_table({ class => 'TMLTable' });
+          CGI::start_table();
     }
 
     $theRow =~ s/\t/   /g;  # change tabs to space
@@ -491,11 +517,11 @@ sub _emitTR {
     $theRow =~ s/(\|\|+)/$TT0.length($1).'|'/ge;  # calc COLSPAN
     my $cells = '';
     foreach( split( /\|/, $theRow ) ) {
-        my @attr;
+        my $attr = {};
 
         # Avoid matching single columns
         if ( s/$TT0([0-9]+)//o ) {
-            push( @attr, colspan => $1 );
+            $attr->{colspan} = $1;
         }
         s/^\s+$/ &nbsp; /;
         my( $left, $right ) = ( 0, 0 );
@@ -504,16 +530,16 @@ sub _emitTR {
             $right = length( $2 );
         }
         if( $left > $right ) {
-            push( @attr, align => 'right' );
+            $attr->{align} = 'right';
         } elsif( $left < $right ) {
-            push( @attr, align => 'left' );
+            $attr->{align} = 'left';
         } elsif( $left > 1 ) {
-            push( @attr, align => 'center' );
+            $attr->{align} = 'center';
         }
         if( /^\s*\*(.*)\*\s*$/ ) {
-            $cells .= CGI::th( { @attr }, $1 );
+            $cells .= CGI::th( $attr, $1 );
         } else {
-            $cells .= CGI::td( { @attr }, $_ );
+            $cells .= CGI::td( $attr, $_ );
         }
     }
     return $thePre.CGI::Tr( $cells );

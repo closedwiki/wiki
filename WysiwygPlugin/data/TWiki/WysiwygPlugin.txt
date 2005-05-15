@@ -1,18 +1,72 @@
 ---+!! Wysiwyg Plugin
 
-_Italic_ *Bold* __Bold Italic__ =plain= ==bold plain== %VARIABLE%
-ATasteOfTWiki ClassicSkin
+%RED% WARNING: this is a prototype, pre-alpha, what-yo-see-is-what-you-get release with the following known problems:
+   * Attach doesn't work
+   * Change form doesn't work
+   * Add form doesn't work
+Feedback is very welcome - please add to the WysiwygPluginDev topic.
+%ENDCOLOR%
 
-Add the following link to your view template to invoke the Kupu editor:
+A generic framework that supports editing of TWiki topics using an HTML editor in the browser, usually a Javascript editor, and the import of HTML from external sources such as existing web pages.
 
-<code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code>
+%TOC%
 
-Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>
+---++ Features
+	* Editor agnostic
+	* Supports the input of malformed HTML
+	* Full round-trip (TWiki syntax -> XHTML -> TWiki syntax)
+	* Customised [[http://kupu.osqom.org][Kupu]] editor included
+
+---++ Details
+---+++ What's in the package
+The package includes the following pieces:
+	* TML (TWiki syntax) to HTML translator
+	* HTML to TML translator
+	* Generic TWiki plugin for automating the translation during editing
+	* Kupu editor integration, implemented as a TWiki skin
+---+++ How it works
+The plugin works by translating the topic text into HTML, which is then fed to the editor. The edited HTML is then run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic.
+
+The default rendering that TWiki uses to generate HTML for browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this the plugin instead uses its own translation of TWiki syntax to pure XHTML i.e. all information in the TWiki syntax is retained in the output. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
+
+_(before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken directly from the implementation of the rendering pipeline for the TWiki 'Dakar' release)_
+
+Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content, but CPAN:HTML::Parser is tolerant of malformed syntax. There is also the advantage that the translator solution can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the complexity of HTML, this translation is lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
+
+---+++ Using the translators from Perl scripts
+
+Both translators can be used directly from Perl scripts, for example to build your own stand-alone translators. For example
+<verbatim>
+# We require a pointer to a TWiki installation, so we can use parts of
+# TWiki. Substitute your own path.
+unshift(@INC,'/home/twiki/cairo/lib');
+
+use TWiki::Plugins::WysiwygPlugin::TML2HTML;
+use TWiki::Plugins::WysiwygPlugin::HTML2TML;
+
+my $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
+my $html = $txer->convert( "---++ TML text\n   Some TWiki syntax" );
+
+my $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
+my $tml = $html2tml->convert( $html );
+</verbatim>
+
+---++ Plugin Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually. The core plugin has the following dependencies.
+	%$DEPENDENCIES%
+	* The installer script will offer to install the 'Kupu' Javascript editor. The script simply follows the steps described in the Kupu installation documentation. The Kupu package in this install (in =pub/_kupu=) is a one-for-one copy of the Kupu 1.2.1 release package.
+	* To enable the editor in one of you skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br />
+	<code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />
+	As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
 ---++ Settings
 	* The name of the skin that when seen by the WysiwygPlugin will trigger translation of TML into HTML
 		* Set CONVERT_SKIN = kupu
-	* List of icons that will be available in the editor
+	* Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
 		* Set ICONS =
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt=":)" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/cool.gif" alt="8-)" />
@@ -33,40 +87,57 @@ Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TO
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/yes.gif" alt=":yes:" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/no.gif" alt=":no:" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/love.gif" alt=":love:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/scull.gif" alt=":scull:" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/note.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/bubble.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="%T%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="%I%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="%X%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stop.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/target.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/gear.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/wrench.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="%P%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" alt="%Y%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-no.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-cancel.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" alt="%U%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="%H%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="%Q%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="%N%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="%S%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stargold.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/hand.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowleft.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="%M%" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowup.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdown.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbleft.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbright.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbup.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbdown.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdot.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_start.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_fb.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_back.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_forward.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/scull.gif" alt=":skull:" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="%I" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="%X" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="%P" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" alt="%Y" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" alt="%U" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="%H" />
+		<img src="%PUBURL%TWiki/TWikiDocGraphics/new.gif" alt="%N" />
+		<img src="%PUBURL%TWiki/TWikiDocGraphics/starred.gif" alt="%S" />
+		<img src="%PUBURL%TWiki/TWikiDocGraphics/arrowright.gif" alt="%M" />
+	* List of TWiki tags that will be available to the Kupu editor. This has to be a valid HTML &lt;select&gt; with the id =twiki-var-select=.
+		* Set TAGS =
+		<select id='twiki-var-select'>
+		<option value="TOPIC">Current Topic</option>
+		<option value="WEB">Current Web</option>
+		<option value="DATE"> Today's Date</option>
+		<option value="WIKIVERSION"> Wiki Version</option>
+		<option value="USERNAME"> Login User Name</option>
+		<option value="WIKIUSERNAME"> Wiki User Name</option>
+		<option value="MAINWEB"> Main Web</option>
+		<option value="TWIKIWEB"> TWiki Web</option>
+		<option value="HOMETOPIC"> Home Topic Name</option>
+		<option value="NOTIFYTOPIC"> Notify Topic Name</option>
+		<option value="WIKIUSERSTOPIC"> User List Topic Name</option>
+		<option value="STATISTICSTOPIC"> Statistics Topic Name</option>
+		<option value="INCLUDE{...}"> Server Side Include</option>
+		<option value="SEARCH{...}"> Inline Search</option>
+		<option value="TOC"> Table of Contents</option>
+		</select>
+
+---++ Plugin Info
+
+This plugin is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the authors of that add-on are therefore also credited as authors of this plugin.
+
+|  Plugin Authors: | TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk (from original work by TWiki:Main.RomainRaugi, TWiki:Main.DamienMandrioli, TWiki:Main.FredericLuddeni, and TWiki:Main.ColasNahaboo)  |
+| Copyright | &copy; ILOG 2005 http://www.ilog.fr |
+|  Plugin Version: | %$VERSION% |
+| Change History: <!-- Most recent first --> ||
+| 13 May 2005 | 1.000 First version |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%
+
+<!-- Other icons, not supported because they don't have a corresponding
+     shortcut
+
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_ff.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_end.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/wip.gif" alt="" />
@@ -124,33 +195,26 @@ Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TO
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udr.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_lrd.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/dot_udl.gif" alt="" />
-	* List of variables that will be available to the editor
-		* Set VARS =
-		<select id='twiki-var-select' style="width: 19.2em;">
-		<option value="TOPIC">Current Topic</option>
-		<option value="WEB">Current Web</option>
-		<option value="DATE"> Today's Date</option>
-		<option value="WIKIVERSION"> Wiki Version</option>
-		<option value="USERNAME"> Login User Name</option>
-		<option value="WIKIUSERNAME"> Wiki User Name</option>
-		<option value="MAINWEB"> Main Web</option>
-		<option value="TWIKIWEB"> TWiki Web</option>
-		<option value="HOMETOPIC"> Home Topic Name</option>
-		<option value="NOTIFYTOPIC"> Notify Topic Name</option>
-		<option value="WIKIUSERSTOPIC"> User List Topic Name</option>
-		<option value="STATISTICSTOPIC"> Statistics Topic Name</option>
-		<option value="INCLUDE{...}"> Server Side Include</option>
-		<option value="SEARCH{...}"> Inline Search</option>
-		<option value="TOC"> Table of Contents</option>
-		</select>
-
-	* Colour chart. The class is overloaded to store the TWiki variable name.
-		* Set COLOURS =
-		<table id="twiki-colours" class="twiki-colour-table">
-		<tr>
-        <td bgcolor="red" class="RED">&nbsp;</td>
-        <td bgcolor="green" class="GREEN">&nbsp;</td>
-        <td bgcolor="blue" class="BLUE">&nbsp;</td>
-        <td bgcolor="yellow" class="YELLOW">&nbsp;</td>
-		</tr>
-		</table>
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/note.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/bubble.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stop.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/target.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/gear.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/wrench.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-no.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-cancel.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/stargold.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/hand.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowleft.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowup.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdown.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbleft.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbright.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbup.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowbdown.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowdot.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_start.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_fb.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_back.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_forward.gif" alt="" />
+-->

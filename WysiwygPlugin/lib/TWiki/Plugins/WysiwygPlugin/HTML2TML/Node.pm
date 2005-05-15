@@ -30,23 +30,28 @@ my $NO_BLOCK_TML = 2;
 #     than one line was generated
 my $BLOCK_TML = 1;
 
+# The generator works by expanding to "decorated" text, where the decorators
+# are non-printable characters. These characters act express format
+# requirements - for example, the need to have a newline before some text,
+# or the need for a space. Whitespace is collapsed down to the minimum that
+# satisfies the format requirements.
 BEGIN {
     # Markers that get inserted in text in spaces where there must be
     # whitespace of certain types.
-    $CHECKn = "\001"; # Assertion that there is an adjacent newline
-    $CHECKs = "\002"; # Assertion that there is an adjacent space
+    $CHECKn = "\001"; # Assertion that there must be an adjacent newline
+    $CHECKs = "\002"; # Assertion that there must be adjacent whitespace
     $NBSP   = "\003"; # Non-breaking space, never gets deleted
-    $NBBR   = "\004"; # Non-breaking break; never gets deleted
+    $NBBR   = "\004"; # Non-breaking linebreak; never gets deleted
 }
 
 # REs for matching delimiters of wikiwords
-# must be consistent with TML.pm (and Render.pm of course)
+# must be consistent with TML2HTML.pm (and Render.pm of course)
 my $STARTWW = qr/^|(?<=[ \t\n\(\!])/om;
 my $ENDWW = qr/$|(?=[ \t\n\,\.\;\:\!\?\)])/om;
 
 =pod
 
----++ ObjectMethod new( $tag, \%attrs )
+---++ ObjectMethod new( $context, $tag, \%attrs )
 
 Construct a new HTML tag node using the given tag name
 and attribute hash.
@@ -54,10 +59,11 @@ and attribute hash.
 =cut
 
 sub new {
-    my( $class, $tag, $attrs ) = @_;
+    my( $class, $context, $tag, $attrs ) = @_;
 
     my $this = {};
 
+    $this->{context} = $context;
     $this->{tag} = $tag;
     $this->{attrs} = {};
     if( $attrs ) {
@@ -173,7 +179,9 @@ sub _generate {
     }
 
     # make the names of the function versions
-    my $cgiFn = _cgiFnName( $this->{tag} );
+    my $tag = $this->{tag};
+    $tag =~ s/!//; # DOCTYPE
+    my $cgiFn = _cgiFnName( $tag );
     my $tmlFn = '_handle'.uc( $this->{tag} );
 
     # See if we have a TML translation function for this tag
@@ -186,7 +194,7 @@ sub _generate {
         use strict 'refs';
         # if the function returns undef, drop through
         # to the CGI version
-        return ( $flags, $text ) if $text;
+        return ( $flags, $text ) if defined $text;
     }
 
     # No translation, so we need the text of the children
@@ -260,13 +268,14 @@ sub _handleUL { return _handleLIST( @_ ); }
 sub _handleB  { return _handleSTRONG( @_ ); }
 sub _handleI  { return _handleEM( @_ ); }
 
+# Ignored tags
+sub _handleHEAD { return (0, '' ); }
+sub _handleDOCTYPE { return (0, '' ); }
+
+# tags where we just expand the content
 sub _handleHTML {
     my( $this, $options ) = @_;
     return $this->_flatKids( $options );
-}
-
-sub _handleHEAD {
-    return (0, '' );
 }
 
 sub _handleBODY {
@@ -345,51 +354,36 @@ sub _handleP {
 sub _handleA {
     my( $this, $options ) = @_;
 
-    if( $this->{attrs}->{class} &&
-        $this->{attrs}->{class} =~ /\bTMLsquab\b/ ) {
-
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return ( 0, undef ) if( $flags & $BLOCK_TML );
+    my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
+    if( defined $text ) {
+        # text can be flattened; try various wikiword constructs
         my $href = $this->{attrs}->{href};
-        if( $href eq $text ) {
-            return (0, $CHECKs.'[['.$text.']]'.$CHECKs );
+        my $topic = $this->{context}->parseWikiUrl( $href );
+        if( $topic ) {
+            # the href targets a wiki page
+            if ( $text eq $topic ||
+                 $topic =~ /^\w+\.$text$/ ) {
+                return (0, $CHECKs.$topic.$CHECKs);
+            } else {
+                return (0, $CHECKs.'[['.$topic.']['.$text.']]'.$CHECKs );
+            }
+        } elsif ($text eq $href &&
+                 $href =~ /(?:^|(?<=[-*\s(]))$TWiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<]/ ) {
+            return (0, $CHECKs.$text.$CHECKs);
         } else {
             return (0, $CHECKs.'[['.$href.']['.$text.']]'.$CHECKs );
         }
     }
-    # SMELL: handle simple URLs even when not squabbed
     return (0, undef);
 }
 
 sub _handleSPAN {
     my( $this, $options ) = @_;
-    if( $this->{attrs}->{class} =~ s/\bTMLVariable\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
+    if( $this->{attrs}->{class} =~ s/\bTMLvariable\b// ) {
+        my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
         return (0, '%'._trim($text).'%');
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLi\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.'_'._trim($text).'_'.$CHECKs);
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLb\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.'*'._trim($text).'*'.$CHECKs);
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLtti\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.'=='._trim($text).'=='.$CHECKs);
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLWikiWord\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.$text.$CHECKs);
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLtt\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.'='._trim($text).'='.$CHECKs);
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLbi\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.'__'._trim($text).'__'.$CHECKs);
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLExternalLink\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.$text.$CHECKs);
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLsquab\b// ) {
-        my( $flags, $text ) = $this->_flatKids( $options );
-        return (0, $CHECKs.$text.$CHECKs);
+    } elsif( $this->{attrs}->{class} =~ s/\bTMLwikiword\b// ) {
+        return $this->_flatKids( $options );
     }
     return (0, undef);
 }
@@ -434,7 +428,7 @@ sub _handleLIST {
         !$this->_isConvertableList( $options | $NO_BLOCK_TML )) {
         return ( 0, undef );
     }
-    return ( $BLOCK_TML, $this->_convertList( '   ' ));
+    return ( $BLOCK_TML, $this->_convertList( "\t" ));
 }
 
 sub _convertList {
@@ -456,7 +450,7 @@ sub _convertList {
     foreach my $kid ( @{$this->{children}} ) {
         # be tolerant of dl, ol and ul with no li
         if( $kid->{tag} =~ m/^[dou]l$/i ) {
-            $text .= $kid->_convertList( $indent.'   ' );
+            $text .= $kid->_convertList( $indent."\t" );
             next;
         }
         next unless $kid->{tag} =~ m/^(dt|dd|li)$/i;
@@ -478,7 +472,7 @@ sub _convertList {
         foreach my $grandkid ( @{$kid->{children}} ) {
             my $t;
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
-                $t = $grandkid->_convertList( $indent.'   ' );
+                $t = $grandkid->_convertList( $indent."\t" );
             } else {
                 ( $f, $t ) = $grandkid->_generate( $NO_BLOCK_TML );
                 $t =~ s/$CHECKn/ /g;
@@ -634,6 +628,15 @@ sub _isConvertableTableRow {
         push( @row, $text );
     }
     return \@row;
+}
+
+sub _handleIMG {
+    my( $this, $options ) = @_;
+    my $alt = $this->{context}->convertImage( $this->{attrs}->{src} );
+    if( $alt ) {
+        return (0, $alt);
+    }
+    return(0, undef);
 }
 
 1;

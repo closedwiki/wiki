@@ -39,15 +39,20 @@ Constructs a new HTML to TML convertor.
 =cut
 
 sub new {
-    my $class = shift;
+    my( $class, $imgMap, $parseWikiUrl ) = @_;
 
     my $this = new HTML::Parser( start_h => [\&_openTag, 'self,tagname,attr' ],
-                        end_h => [\&_closeTag, 'self,tagname'],
-                        default_h => [\&_text, 'self,text'] );
+                                 end_h => [\&_closeTag, 'self,tagname'],
+                                 declaration_h => [\&_ignore, 'self'],
+                                 default_h => [\&_text, 'self,text']);
 
-    $this->{stackTop} = new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( '' );
+    $this->{stackTop} =
+      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, '' );
     $this->{stack} = ();
     $this->xml_mode( 1 );
+    $this->{image_map} = $imgMap;
+
+    $this->{parseWikiUrl} = $parseWikiUrl;
 
     return bless( $this, $class );
 }
@@ -78,7 +83,8 @@ sub convert {
 sub _openTag {
     my( $this, $tag, $attrs ) = @_;
     push( @{$this->{stack}}, $this->{stackTop} ) if $this->{stackTop};
-    $this->{stackTop} = new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $tag, $attrs );
+    $this->{stackTop} =
+      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, $tag, $attrs );
 }
 
 sub _closeTag {
@@ -93,10 +99,13 @@ sub _text {
     $this->{stackTop}->addChild( new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text ) );
 }
 
+sub _ignore {
+}
+
 sub _apply {
     my( $this, $tag ) = @_;
 
-    while( scalar( @{$this->{stack}} )) {
+    while( $this->{stack} && scalar( @{$this->{stack}} )) {
         my $top = $this->{stackTop};
         $this->{stackTop} = pop( @{$this->{stack}} );
         die unless $this->{stackTop};
@@ -171,6 +180,16 @@ sub convertUtf8toSiteCharset {
         }
     }
     return $text;
+}
+
+sub convertImage {
+    my( $this, $url ) = @_;
+    return $this->{image_map}->{$url};
+}
+
+sub parseWikiUrl {
+    my( $this, $ref ) = @_;
+    return &{$this->{parseWikiUrl}}($ref);
 }
 
 1;

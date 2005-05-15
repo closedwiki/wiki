@@ -1,22 +1,35 @@
 /**
- *
- * TWiki KupuEditorAddOn add-on for TWiki
- * Copyright (C) 2004 Damien Mandrioli and Romain Raugi
+ * Styles used for editing TWiki content using Kupu
  * Copyright (C) 2005 ILOG
  *
  * Additional styles for TWiki editing. Assumes basic kupustyles.css -
  * only additional styles are defined here; none of the basic styles
  * are overridden.
  *
+ * There are two sets of styles here; the first set relates to the
+ * editor itself (toolbars etc). The second set relates to the content
+ * being edited (the styles inserted by the TML2HTML translator)
  */
 
-/********** Buttons ********************/
-.twiki-icons-button { background: url("smiley.gif"); }
-.twiki-attach-button { background: url("attach.gif"); }
-.twiki-attachdrawer-button { background: url("attachment.gif"); }
-.twiki-vardrawer-button { background: url("vars.gif"); }
+/**************************************************
+ * Styles used in the editor, but not the content *
+ **************************************************/
 
-/********** Icons pop-up panel **************/
+/* Adjustments to kupu classes */
+div.kupu-fulleditor .kupu-editorframe {
+  margin-right: 0em;
+}
+
+/* toolbar buttons */
+.twiki-icons-button { background: url("smiley.png"); }
+.twiki-new-attachment { background: url("attach.png"); }
+.twiki-insert-attachment { background: url("attachment.png"); }
+.twiki-vardrawer-button { background: url("vars.png"); }
+.twiki-cancel-button { background: url("cancel.png"); }
+.twiki-code-button { background: url("code.png"); }
+.twiki-code-button-pressed { background: url("code.png"); background-color: white; }
+
+/* icons pop-up */
 div#twiki-icons {
   position: absolute;
   display: none;
@@ -44,7 +57,7 @@ div#twiki-icons img:active {
   border-color: #FFFFFF;
 }
 
-/************** Permissions panel *************/
+/* Permissions panel */
 div#kupu-perms-selector {
   position: absolute;
   display: none;
@@ -65,10 +78,18 @@ div#kupu-perms-selector {
   border-color: #EEEEEE #888888 #888888 #EEEEEE;
 }
 
-.twiki-colour-table { 
-  borderWidth: 2px;
-  borderStyle: solid;
-  position: absolute;
-  cursor: default;
-  display: none;
+/******************************
+ * Styles used in the content *
+ ******************************/
+
+.TML { }
+.TMLvariable {
+  font-family: monospace;
+  font-weight: bold;
+  color: black;
+  background: light_green;
 }
+.TMLcite { }
+.TMLmailto { background: cyan; color: black; }
+.TMLnoautolink { color: #CCCCFF; }
+.TMLverbatim { }

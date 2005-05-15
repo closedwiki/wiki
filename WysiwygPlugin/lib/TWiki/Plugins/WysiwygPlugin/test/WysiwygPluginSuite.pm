@@ -7,7 +7,7 @@ use base qw(Test::Unit::TestSuite);
 sub name { 'WysiwygPluginTests' };
 
 sub include_tests {
-    qw(TranslatorTests);
+    qw(TranslatorTests WysiwygPluginTests);
 };
 
 1;
