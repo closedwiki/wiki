@@ -636,6 +636,7 @@ sub saveAttachment {
         $meta->putKeyed( 'FILEATTACHMENT', $attrs );
     } else {
         my $attrs = $meta->get( 'FILEATTACHMENT', $attachment );
+        $attrs->{name} = $attachment;
         $attrs->{attr} = ( $opts->{hide} ) ? 'h' : '';
         $attrs->{comment} = $opts->{comment};
         $meta->putKeyed( 'FILEATTACHMENT', $attrs );
