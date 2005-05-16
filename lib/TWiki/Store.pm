@@ -626,7 +626,7 @@ sub saveAttachment {
 
         return "attachment save failed: $error" if $error;
 
-        $attrs->{name} = $attachment;
+        $attrs->{name} ||= $attachment;
         $attrs->{version} = $fileVersion;
         $attrs->{path} = $opts->{filepath},;
         $attrs->{size} = $opts->{filesize};
