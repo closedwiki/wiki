@@ -24,7 +24,6 @@ package TWiki::Plugins::WysiwygPlugin::TML2HTML;
 use strict;
 use TWiki;
 use CGI qw( -any );
-use Error qw( :try );
 use HTML::Entities;
 
 my $TT0 = "\a";
@@ -135,7 +134,6 @@ sub _processTags {
 
 sub _makeLink {
     my( $this, $url, $text ) = @_;
-    $text = $this->_liftOut($text) if ( $text );
     $url = $this->_liftOut($url);
     $text ||= $url;
     return CGI::a( { href => $url }, $text );
@@ -149,7 +147,8 @@ sub _makeWikiWord {
 
 sub _makeSquab {
     my( $this, $url, $text ) = @_;
-    unless( $url =~ /^$TWiki::regex{linkProtocolPattern}/ ) {
+    unless( $url =~ /^$TWiki::regex{linkProtocolPattern}/ ||
+          $url =~ /[^\w\s]/ ) {
         $text ||= $url;
         my($web,$topic);
         if( $url =~ /^(?:(\w+)\.)?(\w+)$/ ) {
@@ -157,7 +156,7 @@ sub _makeSquab {
         } else {
             $web = '';
             $topic = $url;
-            $topic =~ s/(^|\W)(\w)/uc($2)/ge;
+            $topic =~ s/(^|\W)(\w)/uc($2)/ge
         }
         $url = &{$this->{getViewUrl}}( $web, $topic );
     }
@@ -183,6 +182,11 @@ sub _getRenderedVersion {
     $text = _takeOutBlocks( $text, 'pre', $removed );
 
     $text =~ s/\\\n//gs;  # Join lines ending in '\'
+
+    # Change ' !AnyWord' to ' <nop>AnyWord',
+    $text =~ s/$STARTWW!(?=[\w\*\=])/<nop>/gm;
+    # and !%XXX to %<nop>XXX
+    $text =~ s/$STARTWW!%(?=[A-Z]+({|%))/%<nop>/gm;
 
     # Blockquoted email (indented with '> ')
     # Could be used to provide different colours for different numbers of '>'
@@ -314,6 +318,9 @@ sub _getRenderedVersion {
 
     # Handle [[][] and [[]] links
 
+    # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
+    $text =~ s/(^|\s)\!\[\[/$1\[<nop>\[/gm;
+
     # We _not_ support [[http://link text]] syntax
 
     # Spaced-out Wiki words with alternative link text
@@ -326,14 +333,14 @@ sub _getRenderedVersion {
 
     foreach my $placeholder ( keys %$removed ) {
         my $pm = $removed->{$placeholder}{params}->{class};
-        if( $placeholder =~ /^noautolink/ ) {
+        if( $placeholder =~ /^noautolink/i ) {
             if( $pm ) {
                 $pm = join(' ', ( split( /\s+/, $pm ), 'TMLnoautolink' ));
             } else {
                 $pm = 'TMLnoautolink';
             }
             $removed->{$placeholder}{params}->{class} = $pm;
-        } elsif( $placeholder =~ /^verbatim/ ) {
+        } elsif( $placeholder =~ /^verbatim/i ) {
             if( $pm ) {
                 $pm = join(' ', ( split( /\s+/, $pm ), 'TMLverbatim' ));
             } else {
@@ -347,6 +354,8 @@ sub _getRenderedVersion {
 
     _putBackBlocks( $text, $removed, 'pre' );
 
+    $text = $this->_dropBack( $text );
+
     # protect HTML parameters by pulling them out
     $text =~ s/(<[a-z]+ )([^>]+)>/$1.$this->_liftOut($2).'>'/gei;
 
@@ -355,11 +364,23 @@ sub _getRenderedVersion {
 
     $text = $this->_dropBack( $text );
 
+    # convert embedded <nop>'s to %NOP%
+    $text =~ s/<nop>/CGI::span({class => 'TMLnop'}, 'X')/ge;
+
     # replace verbatim with pre in the final output
     _putBackBlocks( $text, $removed, 'verbatim', 'pre',
-                    \&HTML::Entities::encode_entities );
+                    \&_encodeEntities );
+
+    # protect % from being used in further variable expansions
+    $text =~ s/%/&#37;/g;
 
     return $text;
+}
+
+sub _encodeEntities {
+    my $text = shift;
+
+    return HTML::Entities::encode_entities( $text );
 }
 
 # Make the html for a heading

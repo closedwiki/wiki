@@ -1,0 +1,2 @@
+HTML::Parser,>=3.28,perl,Required. Available from [[http://cpan.uwinnipeg.ca/search?query=HTML%3A%3AParser&mode=dist][CPAN]].
+HTML::Entities,>=10000,perl,Required. Available from [[http://cpan.uwinnipeg.ca/search?query=HTML%3A%3AEntities&mode=dist][CPAN]].

@@ -66,6 +66,9 @@ function initKupu(iframe) {
                                             'twiki-icons');
     kupu.registerTool('twikiicons', twikiiconstool);
 
+    var twikinoptool = new TWikiNOPTool('twiki-nop-button');
+    kupu.registerTool('twikinop', twikinoptool);
+
     var outdentbutton = new KupuButton('kupu-outdent-button', execCommand('outdent'));
     kupu.registerTool('outdentbutton', outdentbutton);
 
@@ -203,17 +206,14 @@ function initKupu(iframe) {
     drawertool.registerDrawer('insertAttDrawer', insertAttDrawer);
 
     // New attachment drawer
-    var newAttachmentTool = new TWikiNewAttachmentTool();
-    kupu.registerTool('newAttachmentTool', newAttachmentTool);
-
     var newAttButton = new KupuButton('twiki-attach-button',
                                       opendrawer('newAttDrawer'));
     kupu.registerTool('newAttButton', newAttButton);
 
     var newAttDrawer =
       new TWikiNewAttachmentDrawer('twiki-new-attachment-drawer',
-                                   newAttachmentTool);
-
+                                   'twiki-upload-form',
+                                   'twiki-insertatt-select');
     drawertool.registerDrawer('newAttDrawer', newAttDrawer);
 
     return kupu;
