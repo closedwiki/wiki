@@ -1,0 +1,91 @@
+
+---+ Installation
+
+INSTALLATION PREREQUISITES
+   * make (to install local CPAN modules)
+
+   * gcc (opt, for installing non-pure perl modules)
+      * TODO: look into packaging those for distributions?
+         * eg, will have to use the compile farm to enable support for sourceforge for arbitrary CPAN modules
+         * hosted environments 
+
+
+cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/cpan
+INSTALL_REMOTE_TWIKI_LIBS="WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki"
+./install-cpan.pl -f -mirror=./MIRROR/MINICPAN -baselibdir=$TWIKIDEV/CPAN $INSTALL_REMOTE_TWIKI_LIBS </dev/null
+
+
+
+
+---++ dreamhost
+
+change username, hostname/servername
+
+ssh wbniv@wbniv.wikihosting.com
+cd wbniv.wikihosting.com
+wget http://twikiplugins.sourceforge.net/twiki.tar.bz2 ; tar xjf twiki.tar.bz2
+# or, if you have a wikihosting.com subdomain: tar xjf ~wikihosting/packages/twiki.tar.bz2
+# change this to match *your* server name
+# NOTE: setting SERVER_NAME will go away in the next revision
+export SERVER_NAME=wbniv.wikihosting.com
+export SERVER_NAME=tenetti.org
+export SERVER_NAME=kupu.skyloom.com
+time perl pre-twiki.pl >&pre-twiki.log </dev/null
+# a variation of above, without the export
+# time SERVER_NAME=wbniv.wikihosting.com perl >&pre-twiki.log pre-twiki.pl </dev/null
+# dreamhost times:
+# real    7m52.423s
+# user    3m0.870s
+# sys     0m36.050s
+tail pre-twiki.log
+# open up a browser with the url provided at the end of pre-twiki.pl
+choose options
+click on install button
+
+
+---++ network installation
+
+cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib
+# no "funny" characters in SERVER_NAME (well, encode them if they're there)
+SERVER_NAME=tinderbox.wbniv.wikihosting.com
+DHACCOUNT=wbniv
+# CAUTION: erase an existing installation
+time ssh $DHACCOUNT@$SERVER_NAME "cd $SERVER_NAME && chmod -R a+rwx . && rm -rf *"
+# untar the tarball from sourceforge.net, install prerequisite CPAN modules
+time ssh $DHACCOUNT@$SERVER_NAME "cd $SERVER_NAME && wget -q http://twikiplugins.sourceforge.net/twiki.tar.bz2 -O - | tar xj && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"
+wget -O $SERVER_NAME-install.html  "http://$SERVER_NAME/cgi-bin/install_twiki.cgi?install=install;scriptsuffix=.cgi;PERL=%2Fusr%2Flocal%2Fbin%2Fperl;cgibin=%2Fhome%2Fwbniv%2F$SERVER_NAME%2Fcgi-bin;kernel=LATEST"
+wget -O InstalledPlugins.html http://$SERVER_NAME/cgi-bin/twiki/view.cgi/TWiki/InstalledPlugins
+
+
+---++ scripted installation
+
+SERVER_NAME=tinderbox.wbniv.wikihosting.com
+DHACCOUNT=wbniv
+ADMIN=WillNorris
+
+cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib
+bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --plugin=SessionPlugin --plugin=FindElsewherePlugin --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin
+
+# perl 5.8.4
+cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib
+bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --WIKIWEBMASTER=$DHACCOUNT@$SERVER_NAME --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --plugin=SessionPlugin --plugin=FindElsewherePlugin --addon=GetAWebAddOn --scriptsuffix=.cgi --perl=/home/wikihosting/packages/perl5.8.4/bin/perl --cgiurl=http://$SERVER_NAME/cgi-bin
+
+
+---++ kupu testing on skyloom.com
+SERVER_NAME=kupu.skyloom.com
+DHACCOUNT=twikizen
+ADMIN=TWikiGuest
+
+cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib
+bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --plugin=WysiwygPlugin --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin
+
+
+##### tools
+TWIKITOOLS_LIBS="ExtUtils::MakeMaker Storable Number::Compare Text::Glob File::Slurp File::Find::Rule File::Slurp::Tree File::Spec::Functions Getopt::Long Pod::Parser HTML::Tagset HTML::Parser LWP::UserAgent LWP::UserAgent::TWiki::TWikiGuest XML::Simple HTML::TokeParser HTML::Form URI WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki Apache::Htpasswd"
+
+# for wikihosting accounts, it is recommended to create a symbolic link to MIRROR
+ln -s ~wikihosting/CPAN-live/MIRROR $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/cpan/MIRROR
+
+cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/cpan
+./install-cpan.pl -f -mirror=./MIRROR/MINICPAN/ -baselibdir=$TWIKIDEV/CPAN $TWIKITOOLS_LIBS </dev/null
+
