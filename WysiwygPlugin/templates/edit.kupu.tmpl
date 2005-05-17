@@ -39,8 +39,6 @@
   </script>
   <script type="text/javascript" src="_kupu/common/kupucontextmenu.js">
   </script>
-  <script type="text/javascript" src="_kupu/common/kupustart.js">
-  </script>
   <script type="text/javascript" src="_kupu/common/kupusourceedit.js">
   </script>
   <script type="text/javascript" src="_kupu/common/kupudrawers.js">
@@ -48,6 +46,8 @@
   <script type="text/javascript" src="%TWIKIWEB%/WysiwygPlugin/twikitools.js">
   </script>
   <script type="text/javascript" src="%TWIKIWEB%/WysiwygPlugin/kupuinit.js">
+  </script>
+  <script type="text/javascript" src="%TWIKIWEB%/WysiwygPlugin/kupustart.js">
   </script>
  </head>
  <body onload="kupu = startKupu()">
@@ -145,7 +145,8 @@
      </span>
      <span class="kupu-tb-buttongroup">
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" id="twiki-icons-button" class="twiki-icons-button" title="Insert a TWiki Icon" i18n:attributes="title"></button>
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Insert a new table" i18n:attributes="title"></button>      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-image" id="twiki-attach-button" title="Add a new attachment" i18n:attributes="title"></button> 
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" id="twiki-nop-button" class="twiki-nop-button" title="Insert No-Op" i18n:attributes="title"></button>
+      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Insert / Edit a table" i18n:attributes="title"></button>      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-image" id="twiki-attach-button" title="Add a new attachment" i18n:attributes="title"></button> 
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-vardrawer-button" id="twiki-vardrawer-button" title="Insert a TWiki tag" i18n:attributes="title"></button> 
      </span>
      <span class="kupu-tb-buttongroup" id="kupu-source">
@@ -230,14 +231,15 @@
    <div id="twiki-new-attachment-drawer" class="kupu-drawer">
     <h1>Attach new file</h1>
     <div class="twikiVersatileTable">
-     <form name="upload" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" target="_new">
+     <form name="upload" id="twiki-upload-form" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post" target="_new" onsubmit="drawertool.current_drawer.save()">
+      <input type="hidden" id="createlink" name="createlink" />
+      <input type="hidden" name="filename" value="" />
       <table width="100%"> 
        <tr>
         <th>
          Local file 
         </th>
         <td class="twikiMainCol">
-         <input type="hidden" name="filename" value="" />
          <input type="file" name="filepath" value="" size="30" /> 
         </td>
        </tr>
@@ -247,14 +249,6 @@
         </th>
         <td>
          <input class="comment" type="text" name="filecomment" value="" maxlength="256" size="30" /> 
-        </td>
-       </tr>
-       <tr>
-        <th>
-         Link 
-        </th>
-        <td>
-         <input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink"  /><label for="createlink">Create a link to the attached file</label>
         </td>
        </tr>
        <tr>
@@ -281,17 +275,6 @@
        <td class="kupu-panel">
         <table width="100%">
          <tr>
-          <td class="kupu-toolbox-label">Table Class</td>
-          <td width="50%">
-           <select id="kupu-tabledrawer-classchooser" onchange="drawertool.current_drawer.tool.setTableClass(this.options[this.selectedIndex].value)">
-            <option value="plain">Plain</option>
-            <option value="listing">Listing</option>
-            <option value="grid">Grid</option>
-            <option value="data">Data</option>
-           </select>
-          </td>
-         </tr>
-         <tr>
           <td colspan="2" class="">
            <div id="kupu-tabledrawer-addtable">
             <table width="100%">
@@ -312,12 +295,12 @@
              </tr>
              <tr>
               <td colspan="2" style="text-align: center">
-               <button type="button" onclick="drawertool.current_drawer.createTable()">Add Table</button>
+               <button type="button" onclick="drawertool.current_drawer.createTable()" title="Add new table at the cursor">Add Table</button>
               </td>
              </tr>
              <tr>
               <td colspan="2" style="text-align: center">
-               <button type="button" onclick="drawertool.current_drawer.tool.fixAllTables()">Fix All Tables</button>
+               <button type="button" onclick="drawertool.current_drawer.tool.fixAllTables()" title="Restructure all tables so they can be edited in Kupu">Fix All Tables</button>
               </td>
              </tr>
             </table>
@@ -367,14 +350,23 @@
      </div>
     </div>
    </div>
-   <div id="twiki-icons">%WYSIWYGPLUGIN_ICONS%</div>
+   <div id="twiki-icons">
+    %WYSIWYGPLUGIN_ICONS%
+   </div>
    <table id="kupu-colorchooser" cellpadding="0" cellspacing="0" style="position: fixed; border-style: solid; border-color: black; border-width: 1px;">
    </table>
+   <select id="kupu-tabledrawer-classchooser" style="display: none">
+    <option value="plain">Plain</option>
+    <option value="listing">Listing</option>
+    <option value="grid">Grid</option>
+    <option value="data">Data</option>
+   </select>
    <div class="kupu-editorframe">
+    <iframe id="kupu-editor" frameborder="1" src="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1" scrolling="auto">
+    </iframe>
+    <textarea class="kupu-editor-textarea" id="kupu-editor-textarea">
+    </textarea>
     <form id="twiki-main-form" name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post" onSubmit="TWikiHandleSubmit()">
-     <iframe id="kupu-editor" frameborder="1" src="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu;wysiwyg_edit=1" scrolling="auto">
-     </iframe>
-     <textarea class="kupu-editor-textarea" id="kupu-editor-textarea"></textarea>
      <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
      <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
      <input type="hidden" name="skin" value="%URLPARAM{"skin" default="%SKIN%"}%" />

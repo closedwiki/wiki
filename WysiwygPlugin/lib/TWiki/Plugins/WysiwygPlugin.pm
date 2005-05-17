@@ -20,14 +20,15 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $convertSkin $html2tml $tml2html );
+use vars qw( $VERSION $convertSkin $html2tml $tml2html $inSave $imgMap $calledThisSession );
 
-$VERSION = '0.01';
+$VERSION = '0.03';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
     $convertSkin = TWiki::Func::getPreferencesValue("WYSIWYGPLUGIN_SKIN_NAME");
+    $calledThisSession = 0;
 
     # Plugin correctly initialized
     return 1;
@@ -39,25 +40,28 @@ sub beforeSaveHandler {
     #my( $text, $topic, $web ) = @_;
     my $query = TWiki::Func::getCgiQuery();
 
+    return unless $query;
+
     return unless defined( $query->param( 'wysiwyg_edit' ));
 
     unless( $html2tml ) {
         require TWiki::Plugins::WysiwygPlugin::HTML2TML;
 
-        my $imgMap = {};
+        $imgMap = {};
         my $imgs = TWiki::Func::getPreferencesValue( "WYSIWYGPLUGIN_ICONS" );
         if( $imgs ) {
-            $imgs = TWiki::Func::expandCommonVariables( $imgs );
+            $inSave = 1;
             while( $imgs =~ s/src="(.*?)" alt="(.*?)"// ) {
                 my( $src, $alt ) = ( $1, $2 );
+                $src = TWiki::Func::expandCommonVariables( $src,$_[1],$_[2] );
                 $alt .= '%' if $alt =~ /^%/;
                 $imgMap->{$src} = $alt;
             }
+            $inSave = 0;
         }
-
-        $html2tml =
-          new TWiki::Plugins::WysiwygPlugin::HTML2TML($imgMap,
-                                                      \&parseWikiUrl);
+        $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML
+          ( { convertImage => sub { my $x = shift; return $imgMap->{$x}; },
+              parseWikiUrl => \&parseWikiUrl } );
     }
 
     my @rescue;
@@ -67,13 +71,20 @@ sub beforeSaveHandler {
 
     $_[0] = $html2tml->convert( $_[0] );
 
-print STDERR "POST CONVERSION $_[0]\n";
     $_[0] =~ s/^<!--\007(\d+)-->$/$rescue[$1]/g;
 }
 
 # Invoked when the selected skin is in use to convert the text to HTML
+# We can't use the beforeEditHandler, because the editor loads up and then
+# uses a URL to fetch the text to be edited. This handler is designed to
+# provide the text for that request. It's a realy struggle, because the
+# commonTagsHandler is called so many times that getting the right
+# call is a struggle, and then preventing a repeat call is another
+# struggle!.
 sub commonTagsHandler {
     #my ( $text, $topic, $web )
+
+    return if ( $inSave || $calledThisSession );
 
     my $query = TWiki::Func::getCgiQuery();
     return unless defined( $query->param( 'wysiwyg_edit' ));
@@ -91,10 +102,11 @@ sub commonTagsHandler {
 
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
     $_[0] = $tml2html->convert( $text );
+    $calledThisSession = 1;
 }
 
 sub parseWikiUrl {
-    my( $url ) = @_;
+    my $url = shift;
 
     my $aurl = TWiki::Func::getViewUrl('WEB', 'TOPIC');
     $aurl =~ s!WEB/TOPIC.*$!!;

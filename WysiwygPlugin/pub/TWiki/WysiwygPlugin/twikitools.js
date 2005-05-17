@@ -70,27 +70,40 @@ function TWikiInsertAttachmentTool() {
 
 TWikiInsertAttachmentTool.prototype = new KupuTool;
 
-/* Tool for invoking the attachment screen for adding an attachment */
-function TWikiNewAttachmentTool() {
-  this.initialize = function(editor) {
-    this.editor = editor;
-    this.editor.logMessage('NewAttachmentmentTool initialized');
-  };
-  
-  this.invoke = function(element) {
-    alert("Picked save");
-    //window.open(this.editor.config.upload_url, 'twikiattach' );
-  };
-}
-
-TWikiNewAttachmentTool.prototype = new KupuTool;
-
-function TWikiNewAttachmentDrawer(elementid, tool) {
-  this.element = document.getElementById(elementid);
-  this.tool = tool;
+/* UI for adding an attachment to the select */
+function TWikiNewAttachmentDrawer(drawerid, formid, selectid) {
+  this.element = document.getElementById(drawerid);
+  this.select = document.getElementById(selectid);
+  this.form = document.getElementById(formid);
 
   this.save = function() {
-    this.tool.invoke(this.element);
+    var path = this.form.filepath.value;
+    var last = path.lastIndexOf('/');
+    if (last < 0)
+      last = path.lastIndexOf('\\');
+    last++;
+    var filename = path.substring(last);
+
+    // Add the new filename to the select list for attachments
+    var currnode = this.select.firstChild;
+    var alreadyThere = false;
+    while (currnode) {
+      var name = currnode.name;
+      if (name == filename) {
+        alreadyThere = true;
+        break;
+      }
+      currnode = currnode.nextSibling;
+    }
+
+    if (!alreadyThere) {
+      var elem = document.createElement("option");
+      elem.name = filename;
+      elem.appendChild(document.createTextNode(filename));
+      this.select.appendChild(elem);
+    }
+
+    this.editor.updateState();
   };
 };
 
@@ -144,15 +157,6 @@ function TWikiIconsTool(buttonid, popupid){
     this.show();
   };
   
-  this.chooseImage = function(evt) {
-    /* insert chosen image (delegate to createImage) */
-    // event handler for choosing the color
-    var target = _SARISSA_IS_MOZ ? evt.target : evt.srcElement;
-    this.createImage(target);
-    this.hide();
-    this.editor.logMessage('TWiki Image chosen');
-  };
-
   this.show = function() {
     /* show the chooser */
     this.imwindow.style.display = "block";
@@ -161,6 +165,15 @@ function TWikiIconsTool(buttonid, popupid){
   this.hide = function() {
     /* hide the chooser */
     this.imwindow.style.display = "none";
+  };
+
+  this.chooseImage = function(evt) {
+    /* insert chosen image (delegate to createImage) */
+    // event handler for choosing the color
+    var target = _SARISSA_IS_MOZ ? evt.target : evt.srcElement;
+    this.createImage(target);
+    this.hide();
+    this.editor.logMessage('TWiki Image chosen');
   };
 
   this.createImage = function(template) {
@@ -178,6 +191,28 @@ function TWikiIconsTool(buttonid, popupid){
 }
 
 TWikiIconsTool.prototype = new KupuTool;
+ 
+/* Tool for inserting NOP */
+function TWikiNOPTool(buttonid){
+  this.imgbutton = document.getElementById(buttonid);
+  
+  this.initialize = function(editor) {
+    /* attach events handlers and hide images' panel */
+    this.editor = editor;
+    addEventHandler(this.imgbutton, "click", this.insertNOP, this);
+    this.editor.logMessage('NOP tool initialized');
+  };
+
+  this.insertNOP = function(evt) {
+    var doc = this.editor.getInnerDocument();
+    var nop = doc.createElement('span');
+    nop.setAttribute('class', 'TMLnop');
+    nop.appendChild(doc.createTextNode('X'));
+    this.editor.insertNodeAtSelection(nop);
+  };
+}
+
+TWikiNOPTool.prototype = new KupuTool;
 
 /* Tool for inserting wikiwords */
 function TWikiWikiWordTool() {
@@ -187,10 +222,17 @@ function TWikiWikiWordTool() {
     var doc = editor.getInnerDocument();
     var elem = doc.createElement('a');
     elem.setAttribute('href', url);
-    selection = editor.getSelection();
-    var startoffset = selection.startOffset();
-    var endoffset = selection.endOffset(); 
-    if (endoffset == startoffset) {
+    var selection = editor.getSelection();
+    if (selection) {
+      if ( selection.startNode() == selection.endNode()) {
+        var startoffset = selection.startOffset();
+        var endoffset = selection.endOffset();
+        if (endoffset == startoffset) {
+          // nothing selected, just an insertion point
+          elem.appendChild(doc.createTextNode(wikiword));
+        }
+      }
+    } else {
       // nothing selected, just an insertion point
       elem.appendChild(doc.createTextNode(wikiword));
     }
@@ -218,16 +260,6 @@ function TWikiHandleSubmit() {
 
   // use prepareForm to create the 'text' field
   kupu.prepareForm(form, 'text');
-};
-
-/*
- * Replace the standard saveOnPart to suppress the confirmation
- * prompt.
- */
-function saveOnPart() {
-  if (kupu.content_changed) {
-    kupu.config.reload_src = 0;
-  };
 };
 
 function TWikiToggleTag(button, editor, tag) {
@@ -279,3 +311,57 @@ function TWikiInsertNode(editor,elem) {
   };
   selection.selectNodeContents(elem);
 };
+
+/* Derivate of KupuRemoveELementButton, checks the class as well */
+function TWikiRemoveElementButton(buttonid, element_name, deadclass, offclass) {
+    this.button = window.document.getElementById(buttonid);
+    this.onclass = 'invisible';
+    this.offclass = offclass;
+    this.pressed = false;
+
+    this.commandfunc = function(button, editor) {
+      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
+      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
+        elem = this.editor.getNearestParentOfType(elem, element_name);
+      }
+      if (elem ) {
+        elem.removeNode(true);
+      } else {
+        alert("Not inside a variable span");
+      }
+    };
+
+    this.checkfunc = function(currnode, button, editor, event) {
+      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
+      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
+        elem = this.editor.getNearestParentOfType(elem, element_name);
+      }
+      return (elem ? false : true );
+    };
+};
+
+TWikiRemoveElementButton.prototype = new KupuStateButton;
+
+/* Tool for inserting Textarea */
+function TWikiTextareaTool(){
+  this.initialize = function(editor) {
+    this.editor = editor;
+    this.handling = false;
+    var doc = editor.getInnerDocument();
+    this.elem = doc.getElementById('textarea-test');
+    var handler = function (evt) {
+      evt.cancelBubble = true;
+      // but how to get it handled by this object? If I call the
+      // click handler will I just come back here?
+      //this.elem.onClick(evt);//focus();
+    };
+
+    addEventHandler(this.elem, "click", handler, this);
+    addEventHandler(this.elem, "dblclick", handler, this);
+    addEventHandler(this.elem, "keyup", handler, this);
+    addEventHandler(this.elem, "keyup", handler, this);
+    addEventHandler(this.elem, "mouseup", handler, this);
+  };
+};
+
+TWikiTextareaTool.prototype = new KupuTool;

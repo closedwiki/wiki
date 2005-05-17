@@ -39,7 +39,7 @@ Constructs a new HTML to TML convertor.
 =cut
 
 sub new {
-    my( $class, $imgMap, $parseWikiUrl ) = @_;
+    my( $class, $options ) = @_;
 
     my $this = new HTML::Parser( start_h => [\&_openTag, 'self,tagname,attr' ],
                                  end_h => [\&_closeTag, 'self,tagname'],
@@ -50,9 +50,9 @@ sub new {
       new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, '' );
     $this->{stack} = ();
     $this->xml_mode( 1 );
-    $this->{image_map} = $imgMap;
+    $this->unbroken_text( 1 );
 
-    $this->{parseWikiUrl} = $parseWikiUrl;
+    map { $this->{$_} = $options->{$_} } keys %$options;
 
     return bless( $this, $class );
 }
@@ -96,7 +96,12 @@ sub _closeTag {
 sub _text {
     my( $this, $text ) = @_;
 
-    $this->{stackTop}->addChild( new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text ) );
+    # special hack for handling %, which is pre-escaped to avoid
+    # expansion as a variable during TML -> HTML conversion
+    $text =~ s/&#37;/%/g;
+
+    my $l = new TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf( $text );
+    $this->{stackTop}->addChild( $l );
 }
 
 sub _ignore {
@@ -180,16 +185,6 @@ sub convertUtf8toSiteCharset {
         }
     }
     return $text;
-}
-
-sub convertImage {
-    my( $this, $url ) = @_;
-    return $this->{image_map}->{$url};
-}
-
-sub parseWikiUrl {
-    my( $this, $ref ) = @_;
-    return &{$this->{parseWikiUrl}}($ref);
 }
 
 1;

@@ -10,8 +10,8 @@ package TranslatorTests;
 use base qw(Test::Unit::TestCase);
 
 BEGIN {
-    unshift(@INC,'../../../..');
     unshift(@INC,'/home/twiki/cairo/lib');
+    unshift(@INC,'../../../..');
 }
 
 use TWiki;
@@ -52,26 +52,26 @@ BEGIN {
       [
        {
         exec => 3,
-        name => 0,
+        name => 'linkAtStart',
         tml => 'LinkAtStart',
         html => '<a href="page:/Current/LinkAtStart">LinkAtStart</a>'
        },
        {
         exec => 3,
-        name => 191,
+        name => 'otherWebLinkAtStart',
         tml => 'OtherWeb.LinkAtStart',
         html => '<a href="page:/OtherWeb/LinkAtStart">LinkAtStart</a>',
        },
        {
         exec => 3,
-        name => 192,
+        name => 'currentWebLinkAtStart',
         tml => 'Current.LinkAtStart',
         html => '<a href="page:/Current/LinkAtStart">LinkAtStart</a>',
         finaltml => 'LinkAtStart'
        },
        {
         exec => 3,
-        name => 1,
+        name => 'simpleParas',
         html => '1st paragraph<p />2nd paragraph',
         tml => '1st paragraph
 
@@ -79,52 +79,52 @@ BEGIN {
        },
        {
         exec => 3,
-        name => 1,
+        name => 'headings',
         html => '<h2 class="TML"> Sushi</h2><h3 class="TML"> Maguro</h3>',
         tml => '---++ Sushi
 ---+++ Maguro'
        },
        {
         exec => 3,
-        name => 3,
+        name => 'simpleStrong',
         html => '<strong>Bold</strong>',
         tml => '*Bold*
 '
        },
        {
         exec => 3,
-        name => 4,
+        name => 'strongLink',
         html => '<strong>reminded about<a href="http://www.koders.com">http://www.koders.com</a></strong>',
         tml => '*reminded about http://www.koders.com*',
         finaltml => '*reminded about http://www.koders.com*',
        },
        {
         exec => 3,
-        name => 5,
+        name => 'simpleItalic',
         html => '<em>Italic</em>',
         tml => '_Italic_',
        },
        {
         exec => 3,
-        name => 6,
+        name => 'boldItalic',
         html => '<strong><em>Bold italic</em></strong>',
         tml => '__Bold italic__',
        },
        {
         exec => 3,
-        name => 7,
+        name => 'simpleCode',
         html => '<code>Code</code>',
         tml => '=Code='
        },
        {
         exec => 3,
-        name => 8,
+        name => 'strongCode',
         html => '<strong><code>Bold Code</code></strong>',
         tml => '==Bold Code=='
        },
        {
         exec => 3,
-        name => 9,
+        name => 'mixtureOfFormats',
         html => '<em>this</em><em>should</em><em>italicise</em><em>each</em><em>word</em><p /><strong>and</strong><strong>this</strong><strong>should</strong><strong>embolden</strong><strong>each</strong><strong>word</strong><p /><em>mixing</em><strong>them</strong><em>should</em><strong>work</strong>',
         tml => '_this_ _should_ _italicise_ _each_ _word_
 
@@ -135,7 +135,7 @@ _mixing_ *them* _should_ *work*
        },
        {
         exec => 3,
-        name => 10,
+        name => 'simpleVerbatim',
         html => '<pre class="TMLverbatim">
 &#60;verbatim&#62;
 Description
@@ -160,7 +160,7 @@ class CatAnimal {
        },
        {
         exec => 3,
-        name => 11,
+        name => 'simpleHR',
         html => '<hr /><hr />--',
         tml => '---
 -------
@@ -173,14 +173,14 @@ class CatAnimal {
        },
        {
         exec => 3,
-        name => 12,
+        name => 'simpleBullList',
         html => '<ul><li>bullet item</li></ul>',
         tml => '	* bullet item
 ',
        },
        {
         exec => 3,
-        name => 13,
+        name => 'multiLevelBullList',
         html => 'X
 <ul><li>level 1
 <ul><li>level 2</li></ul></li></ul>',
@@ -194,7 +194,7 @@ class CatAnimal {
        },
        {
         exec => 3,
-        name => 14,
+        name => 'orderedList',
         html => '<ol><li>Sushi</li></ol><p /><ol>
 <li type="A">Sushi</li></ol><p />
 <ol><li type="i">Sushi</li></ol><p />
@@ -212,7 +212,7 @@ class CatAnimal {
        },
        {
         exec => 3,
-        name => 15,
+        name => 'mixedList',
         html => '<ol><li>Things</li><li>Stuff
 <ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello<br />kitty</li></ol>',
         tml => '	1 Things
@@ -226,7 +226,7 @@ class CatAnimal {
        },
        {
         exec => 3,
-        name => 16,
+        name => 'definitionList',
         html => '<dl><dt>Sushi</dt><dd>Japan</dd><dt>Dim Sum</dt><dd>S. F.</dd><dt>Sauerkraut</dt><dd>Germany</dd></dl>',
         tml => '   $ Sushi: Japan
 	$ Dim Sum: S. F.
@@ -239,7 +239,7 @@ class CatAnimal {
        },
        {
         exec => 3,
-        name => 17,
+        name => 'simpleTable',
         html => '<p /><table><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table><tr><td>^</td><td>six</td><td>six</td></tr></table>',
         tml => '
 | *L* | *C* | *R* |
@@ -263,13 +263,14 @@ class CatAnimal {
        },
        {
         exec => 3,
-        name => 18,
-        html => '!SunOS',
+        name => 'noppedWikiword',
+        html => '<span class="TMLnop">X</span>SunOS',
         tml => '!SunOS',
+        finaltml => '<nop>SunOS',
        },
        {
         exec => 3,
-        name => 19,
+        name => 'noAutoLunk',
         html => '<div class="TMLnoautolink">RedHat & SuSE</div>
 ',
         tml => '<noautolink>
@@ -278,14 +279,14 @@ RedHat & SuSE
        },
        {
         exec => 3,
-        name => 20,
+        name => 'mailtoLink',
         html => '<a href="mailto:a@z.com">Mail</a><a href="mailto:?subject=Hi">Hi</a>',
         tml => '[[mailto:a@z.com Mail]] [[mailto:?subject=Hi Hi]]',
         finaltml => '[[mailto:a@z.com][Mail]] [[mailto:?subject=Hi][Hi]]',
        },
        {
         exec => 3,
-        name => 21,
+        name => 'variousWikiWords',
         html => '<a href="page:/Current/WebPreferences">WebPreferences</a><p /><span class="TMLvariable">MAINWEB</span>.TWikiUsers<p /><a href="page:/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a><p /><a href="page:/Current/LinkBox">LinkBox</a><a href="page:/Current/LinkBoxs">LinkBoxs</a><a href="page:/Current/LinkBoxies">LinkBoxies</a><a href="page:/Current/LinkBoxess">LinkBoxess</a><a href="page:/Current/LinkBoxesses">LinkBoxesses</a><a href="page:/Current/LinkBoxes">LinkBoxes</a>',
         tml => 'WebPreferences
 
@@ -310,196 +311,197 @@ LinkBox LinkBoxs LinkBoxies LinkBoxess LinkBoxesses LinkBoxes',
        },
        {
         exec => 3,
-        name => 22,
-        html => '<a href="page:/Current/WikiSyntax">wiki syntax</a><a href="%MAINWEB%.TWikiUsers"><span class="TMLvariable">MAINWEB</span>.TWiki users</a>escaped: ![[wiki syntax]]',
+        name => 'squabsWithVars',
+        html => '<a href="page:/Current/WikiSyntax">wiki syntax</a><a href="&#37;MAINWEB&#37;.TWiki users"><span class="TMLvariable">MAINWEB</span>.TWiki users</a>escaped: [<span class="TMLnop">X</span>[wiki syntax]]',
         tml => '[[wiki syntax]] [[%MAINWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]',
-        finaltml => '[[WikiSyntax][wiki syntax]] [[%MAINWEB%.TWikiUsers][%MAINWEB%.TWiki users]] escaped: ![[wiki syntax]]'
+        finaltml => '[[WikiSyntax][wiki syntax]] <a href="%MAINWEB%.TWiki users">%MAINWEB%.TWiki users</a>escaped: [<nop>[wiki syntax]]'
        },
        {
         exec => 3,
-        name => 23,
+        name => 'squabsWithWikiWordsAndLink',
         html => '<a href="page:/Current/WikiSyntax">syntax</a><a href="http://gnu.org">GNU</a><a href="http://xml.org">XML</a>',
         tml => '[[WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]',
        },
        {
         exec => 3,
-        name => 24,
+        name => 'squabWithAnchor',
         html => '<a href="page:/Current/FleegleHorn#TrumpetHack">FleegleHorn#TrumpetHack</a>',
         tml => 'FleegleHorn#TrumpetHack'
        },
        {
         exec => 3,
-        name => 25,
-        html => '!<span class="TMLvariable">MAINWEB</span>nowt',
+        name => 'plingedVarOne',
+        html => '&#37;<span class="TMLnop">X</span>MAINWEB&#37;nowt',
         tml => '!%MAINWEB%nowt',
+        finaltml => '%<nop>MAINWEB%nowt'
        },
        {
         exec => 3,
-        name => 26,
+        name => 'plingedVarTwo',
         html => 'nowt!<span class="TMLvariable">MAINWEB</span>',
         tml => 'nowt!%MAINWEB%',
        },
        {
         exec => 3,
-        name => 28,
+        name => 'WEBvar',
         html => '<span class="TMLvariable">WEB</span>',
         tml => '%WEB%'
        },
        {
         exec => 3,
-        name => 29,
+        name => 'ICONvar1',
         html => '<span class="TMLvariable">ICON{}</span>',
         tml => '%ICON{}%'
        },
        {
         exec => 3,
-        name => 30,
+        name => 'ICONvar2',
         html => '<span class="TMLvariable">ICON{""}</span>',
         tml => '%ICON{""}%'
        },
        {
         exec => 3,
-        name => 31,
+        name => 'ICONvar3',
         html => '<span class="TMLvariable">ICON{"Fleegle"}</span>',
         tml => '%ICON{"Fleegle"}%'
        },
        {
         exec => 3,
-        name => 32,
+        name => 'URLENCODEvar',
         html => '<span class="TMLvariable">URLENCODE{""}</span>',
         tml => '%URLENCODE{""}%'
        },
        {
         exec => 3,
-        name => 33,
+        name => 'ENCODEvar',
         html => '<span class="TMLvariable">ENCODE{""}</span>',
         tml => '%ENCODE{""}%'
        },
        {
         exec => 3,
-        name => 34,
+        name => 'INTURLENCODEvar',
         html => '<span class="TMLvariable">INTURLENCODE{""}</span>',
         tml => '%INTURLENCODE{""}%'
        },
        {
         exec => 3,
-        name => 35,
+        name => 'MAINWEBvar',
         html => '<span class="TMLvariable">MAINWEB</span>',
         tml => '%MAINWEB%'
        },
        {
         exec => 3,
-        name => 36,
+        name => 'TWIKIWEBvar',
         html => '<span class="TMLvariable">TWIKIWEB</span>',
         tml => '%TWIKIWEB%'
        },
        {
         exec => 3,
-        name => 37,
+        name => 'HOMETOPICvar',
         html => '<span class="TMLvariable">HOMETOPIC</span>',
         tml => '%HOMETOPIC%'
        },
        {
         exec => 3,
-        name => 38,
+        name => 'WIKIUSERSTOPICvar',
         html => '<span class="TMLvariable">WIKIUSERSTOPIC</span>',
         tml => '%WIKIUSERSTOPIC%'
        },
        {
         exec => 3,
-        name => 39,
+        name => 'WIKIPREFSTOPICvar',
         html => '<span class="TMLvariable">WIKIPREFSTOPIC</span>',
         tml => '%WIKIPREFSTOPIC%'
        },
        {
         exec => 3,
-        name => 40,
+        name => 'WEBPREFSTOPICvar',
         html => '<span class="TMLvariable">WEBPREFSTOPIC</span>',
         tml => '%WEBPREFSTOPIC%'
        },
        {
         exec => 3,
-        name => 41,
+        name => 'NOTIFYTOPICvar',
         html => '<span class="TMLvariable">NOTIFYTOPIC</span>',
         tml => '%NOTIFYTOPIC%'
        },
        {
         exec => 3,
-        name => 42,
+        name => 'STATISTICSTOPICvar',
         html => '<span class="TMLvariable">STATISTICSTOPIC</span>',
         tml => '%STATISTICSTOPIC%'
        },
        {
         exec => 3,
-        name => 43,
+        name => 'STARTINCLUDEvar',
         html => '<span class="TMLvariable">STARTINCLUDE</span>',
         tml => '%STARTINCLUDE%'
        },
        {
         exec => 3,
-        name => 44,
+        name => 'STOPINCLUDEvar',
         html => '<span class="TMLvariable">STOPINCLUDE</span>',
         tml => '%STOPINCLUDE%'
        },
        {
         exec => 3,
-        name => 45,
+        name => 'SECTIONvar',
         html => '<span class="TMLvariable">SECTION{""}</span>',
         tml => '%SECTION{""}%'
        },
        {
         exec => 3,
-        name => 46,
+        name => 'ENDSECTIONvar',
         html => '<span class="TMLvariable">ENDSECTION</span>',
         tml => '%ENDSECTION%'
        },
        {
         exec => 3,
-        name => 47,
+        name => 'FORMFIELDvar1',
         html => '<span class="TMLvariable">FORMFIELD{"" topic="" alttext="" default="" format="$value"}</span>',
         tml => '%FORMFIELD{"" topic="" alttext="" default="" format="$value"}%'
        },
        {
         exec => 3,
-        name => 48,
+        name => 'FORMFIELDvar2',
         html => '<span class="TMLvariable">FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}</span>',
         tml => '%FORMFIELD{"TopicClassification" topic="" alttext="" default="" format="$value"}%'
        },
        {
         exec => 3,
-        name => 49,
+        name => 'SPACEDTOPICvar',
         html => '<span class="TMLvariable">SPACEDTOPIC</span>',
         tml => '%SPACEDTOPIC%'
        },
        {
         exec => 3,
-        name => 50,
+        name => 'RELATIVETOPICPATHvar1',
         html => '<span class="TMLvariable">RELATIVETOPICPATH{}</span>',
         tml => '%RELATIVETOPICPATH{}%'
        },
        {
         exec => 3,
-        name => 51,
+        name => 'RELATIVETOPICPATHvar2',
         html => '<span class="TMLvariable">RELATIVETOPICPATH{Sausage}</span>',
         tml => '%RELATIVETOPICPATH{Sausage}%'
        },
        {
         exec => 3,
-        name => 52,
+        name => 'RELATIVETOPICPATHvar3',
         html => '<span class="TMLvariable">RELATIVETOPICPATH{"Chips"}</span>',
         tml => '%RELATIVETOPICPATH{"Chips"}%'
        },
        {
         exec => 3,
-        name => 53,
+        name => 'SCRIPTNAMEvar',
         html => '<span class="TMLvariable">SCRIPTNAME</span>',
         tml => '%SCRIPTNAME%'
        },
        {
         exec => 3,
-        name => 54,
+        name => 'nestedVerbatim',
         html => 'Outside<pre class="TMLverbatim">Inside</pre>Outside',
         tml => 'Outside
 <verbatim>
@@ -509,7 +511,7 @@ Outside',
        },
        {
         exec => 3,
-        name => 55,
+        name => 'nestedPre',
         html => 'Outside<pre class="twikiAlert TMLverbatim">Inside</pre>Outside',
         tml => 'Outside
 <verbatim class="twikiAlert">
@@ -520,7 +522,7 @@ Outside
        },
        {
         exec => 3,
-        name => 56,
+        name => 'nestedIndentedVerbatim',
         html => 'Outside<pre class="TMLverbatim">Inside</pre>Outside',
         tml => 'Outside
    <verbatim>
@@ -537,7 +539,7 @@ Outside
        },
        {
         exec => 3,
-        name => 57,
+        name => 'nestedIndentedPre',
         html => 'Outside<pre>Inside</pre>Outside',
         tml => 'Outside
 <pre>
@@ -547,7 +549,7 @@ Outside',
        },
        {
         exec => 3,
-        name => 58,
+        name => 'classifiedPre',
         html => 'Outside<pre class="twikiAlert">Inside</pre>Outside',
         tml => 'Outside
 <pre class="twikiAlert">
@@ -557,7 +559,7 @@ Outside',
        },
        {
         exec => 3,
-        name => 59,
+        name => 'indentedPre',
         html => 'Outside<pre>Inside</pre>Outside',
         tml => 'Outside
    <pre>
@@ -572,7 +574,7 @@ Outside',
        },
        {
         exec => 3,
-        name => 60,
+        name => 'NAL',
         html => 'Outside<div class="TMLnoautolink">Inside</div>Outside',
         tml => 'Outside
 <noautolink>
@@ -582,7 +584,7 @@ Outside',
        },
        {
         exec => 3,
-        name => 61,
+        name => 'classifiedNAL',
         html => 'Outside<div class="twikiAlert TMLnoautolink">Inside</div>Outside',
         tml => 'Outside
 <noautolink class="twikiAlert">
@@ -592,7 +594,7 @@ Outside',
        },
        {
         exec => 3,
-        name => 62,
+        name => 'indentedNAL',
         html => 'Outside<div class="TMLnoautolink">Inside</div>Outside',
         tml => 'Outside
    <noautolink>
@@ -609,29 +611,69 @@ Outside
        },
        {
         exec => 3,
-        name => 63,
+        name => 'linkInHeader',
         html => '<h3 class="TML"> Test with<a href="page:/Current/LinkInHeader">LinkInHeader</a></h3>',
         tml => '---+++ Test with LinkInHeader
 ',
        },
        {
         exec => 2,
-        name => 64,
+        name => 'doctype',
         html => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
         tml => '',
        },
        {
         exec => 2,
-        name => 65,
+        name => 'head',
         html => '<head> ignore me </head>',
         tml => '',
        },
        {
         exec => 2,
-        name => 66,
+        name => 'htmlAndBody',
         html => '<html> good <body>good </body></html>',
         tml => 'good good',
        },
+       {
+        exec => 2,
+        name => 'kupuTable',
+        html => '<table cellspacing="0" cellpadding="8" border="1" class="plain" _moz_resizing="true">
+<tbody>
+<tr>a0<td>a1</td><td>a2</td><td>a3</td></tr>
+<tr>b0<td>b1</td><td>b2</td><td>b3</td></tr>
+<tr>c0<td>c1</td><td>c2</td><td>c3</td></tr>
+</tbody>
+</table>',
+        tml => '|a1|a2|a3|
+|b1|b2|b3|
+|c1|c2|c3|
+',
+       },
+       {
+        exec => 3,
+        name => 'NOP',
+        html => '<span class="TMLnop">X</span>WysiwygEditor',
+        tml => '<nop>WysiwygEditor',
+       },
+
+       {
+        exec => 2,
+        name=>"images",
+        html=>'<img src="test_image" />',
+        tml => 'egami_tset'
+       },
+
+       {
+        exec => 3,
+        name=>"TWikiTagsInHTMLParam",
+        html=>'<a href="&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;"></a>'.
+        "<a href='&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;'></a>",
+        tml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%"></a>'.
+        "<a href='%SCRIPTURL%/view%SCRIPTSUFFIX%'></a>",
+        finaltml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%"></a>'.
+        '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%"></a>',
+       },
+
       ];
 
 
@@ -650,8 +692,6 @@ Outside
         *$fn = sub { shift->compareHTML_TML( $datum ) };
         use strict 'refs';
     }
-
-=pod
 
     opendir( D, "test_html" ) or die;
     foreach my $file (grep { /^.*\.html$/i } readdir D ) {
@@ -672,95 +712,37 @@ Outside
         use strict 'refs';
     }
 
-=cut
-
 }
 
 use HTML::Diff;
-
-my %entMap =
-  (
-   nbsp => 160,   iexcl => 161,   cent => 162,   pound => 163,   curren => 164,
-   yen => 165,   brvbar => 166,   sect => 167,   uml => 168,   copy => 169,
-   ordf => 170,   laquo => 171,   not => 172,   shy => 173,   reg => 174,
-   macr => 175,   deg => 176,   plusmn => 177,   sup2 => 178,   sup3 => 179,
-   acute => 180,   micro => 181,   para => 182,   middot => 183,
-   cedil => 184,   sup1 => 185,   ordm => 186,   raquo => 187,
-   frac14 => 188,   frac12 => 189,   frac34 => 190,   iquest => 191,
-   Agrave => 192,   Aacute => 193,   Acirc => 194,   Atilde => 195,
-   Auml => 196,   Aring => 197,   AElig => 198,   Ccedil => 199,
-   Egrave => 200,   Eacute => 201,   Ecirc => 202,   Euml => 203,
-   Igrave => 204,   Iacute => 205,   Icirc => 206,   Iuml => 207,
-   ETH => 208,   Ntilde => 209,   Ograve => 210,   Oacute => 211,
-   Ocirc => 212,   Otilde => 213,   Ouml => 214,   times => 215,
-   Oslash => 216,   Ugrave => 217,   Uacute => 218,   Ucirc => 219,
-   Uuml => 220,   Yacute => 221,   THORN => 222,   szlig => 223,
-   agrave => 224,   aacute => 225,   acirc => 226,   atilde => 227,
-   auml => 228,   aring => 229,   aelig => 230,   ccedil => 231,
-   egrave => 232,   eacute => 233,   ecirc => 234,   euml => 235,
-   igrave => 236,   iacute => 237,   icirc => 238,   iuml => 239,
-   eth => 240,   ntilde => 241,   ograve => 242,   oacute => 243,
-   ocirc => 244,   otilde => 245,   ouml => 246,   divide => 247,
-   oslash => 248,   ugrave => 249,   uacute => 250,   ucirc => 251,
-   uuml => 252,   yacute => 253,   thorn => 254,   yuml => 255,
-   fnof => 402,   Alpha => 913,   Beta => 914,   Gamma => 915,
-   Delta => 916,   Epsilon => 917,   Zeta => 918,   Eta => 919,
-   Theta => 920,   Iota => 921,   Kappa => 922,   Lambda => 923,
-   Mu => 924,   Nu => 925,   Xi => 926,   Omicron => 927,
-   Pi => 928,   Rho => 929,   Sigma => 931,   Tau => 932,
-   Upsilon => 933,   Phi => 934,   Chi => 935,   Psi => 936,   Omega => 937,
-   alpha => 945,   beta => 946,   gamma => 947,   delta => 948,
-   epsilon => 949,   zeta => 950,   eta => 951,   theta => 952,
-   iota => 953,   kappa => 954,   lambda => 955,   mu => 956,
-   nu => 957,   xi => 958,   omicron => 959,   pi => 960,
-   rho => 961,   sigmaf => 962,   sigma => 963,   tau => 964,
-   upsilon => 965,   phi => 966,   chi => 967,   psi => 968,
-   omega => 969,   thetasym => 977,   upsih => 978,   piv => 982,
-   bull => 8226,   hellip => 8230,   prime => 8242,   Prime => 8243,
-   oline => 8254,   frasl => 8260,   weierp => 8472,   image => 8465,
-   real => 8476,   trade => 8482,   alefsym => 8501,   larr => 8592,
-   uarr => 8593,   rarr => 8594,   darr => 8595,   harr => 8596,
-   crarr => 8629,   lArr => 8656,   uArr => 8657,   rArr => 8658,
-   dArr => 8659,   hArr => 8660,   forall => 8704,   part => 8706,
-   exist => 8707,   empty => 8709,   nabla => 8711,   isin => 8712,
-   notin => 8713,   ni => 8715,   prod => 8719,   sum => 8721,
-   minus => 8722,   lowast => 8727,   radic => 8730,   prop => 8733,
-   infin => 8734,   ang => 8736,   and => 8743,   or => 8744,
-   cap => 8745,   cup => 8746,   int => 8747,   there4 => 8756,
-   sim => 8764,   cong => 8773,   asymp => 8776,   ne => 8800,
-   equiv => 8801,   le => 8804,   ge => 8805,   sub => 8834,
-   sup => 8835,   nsub => 8836,   sube => 8838,   supe => 8839,
-   oplus => 8853,   otimes => 8855,   perp => 8869,   sdot => 8901,
-   lceil => 8968,   rceil => 8969,   lfloor => 8970,   rfloor => 8971,
-   lang => 9001,   rang => 9002,   loz => 9674,   spades => 9824,
-   clubs => 9827,   hearts => 9829,   diams => 9830,   quot => 34,
-   amp => 38,   lt => 60,   gt => 62,   OElig => 338,   oelig => 339,
-   Scaron => 352,   scaron => 353,   Yuml => 376,   circ => 710,
-   tilde => 732,   ensp => 8194,   emsp => 8195,   thinsp => 8201,
-   zwnj => 8204,   zwj => 8205,   lrm => 8206,   rlm => 8207,
-   ndash => 8211,   mdash => 8212,   lsquo => 8216,   rsquo => 8217,
-   sbquo => 8218,   ldquo => 8220,   rdquo => 8221,   bdquo => 8222,
-   dagger => 8224,   Dagger => 8225,   permil => 8240,   lsaquo => 8249,
-   rsaquo => 8250,   euro => 8364,
-  );
 
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
 }
 
+sub normaliseEntities {
+    my $text = shift;
+    $text = HTML::Entities::decode_entities($text);
+    $text = HTML::Entities::encode_entities
+      ($text, "\000\001\002\003\004\005\006\007\010\013\014\015");
+    $text = HTML::Entities::encode_entities($text,"\016-\037");
+    $text = HTML::Entities::encode_entities($text,"\200-\377");
+    return $text;
+}
+
 sub _compareHTML {
     my ( $this, $expected, $actual ) = @_;
 
     my $result = '';
-    $expected =~ s/&(\w+);/&#$entMap{$1};/g;
+    $expected = normaliseEntities($expected);
     $expected =~ s/ +/ /gs;
     $expected =~ s/^\s+//s;
     $expected =~ s/\s+$//s;
     $expected =~ s/\s+</</g;
     $expected =~ s/>\s+/>/g;
 
-    $actual =~ s/&(\w+);/&#$entMap{$1};/g;
+    $actual = normaliseEntities($expected);
     $actual =~ s/ +/ /gs;
     $actual =~ s/^\s+//s;
     $actual =~ s/\s+$//s;
@@ -835,7 +817,9 @@ sub compareTML_HTML {
 
 sub compareHTML_TML {
     my ( $this, $args ) = @_;
-    my $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML({}, \&parseWikiUrl);
+    my $txer = new TWiki::Plugins::WysiwygPlugin::HTML2TML
+      ( { parseWikiUrl => \&parseWikiUrl,
+          convertImage => \&convertImage } );
     my $tx = $txer->convert( $args->{html} );
     if( $args->{finaltml} ) {
         $this->_compareTML($args->{finaltml}, $tx, $args->{name});
@@ -894,6 +878,14 @@ sub parseWikiUrl {
       }
     }
     return undef;
+}
+
+sub convertImage {
+    my $url = shift;
+
+    if ($url eq "test_image") {
+        return "egami_tset";
+    }
 }
 
 1;

@@ -1,21 +1,23 @@
 ---+!! Wysiwyg Plugin
 
-%RED% WARNING: this is a prototype, pre-alpha, what-yo-see-is-what-you-get release with the following known problems:
-   * Attach doesn't work
-   * Change form doesn't work
-   * Add form doesn't work
-   * TWiki tags in URLs don't work very well
+A WYSIWYG (What-You-See-Is-What-You-Get) editor.
+
+The editor is built on a generic framework that supports editing of TWiki topics using any browser-based HTML editor and the import of HTML from external sources such as existing web pages.
+
+%RED% WARNING: this is a prototype, pre-alpha, what-you-see-is-all-you-get release with the following known problems:
+	* Change form doesn't work
+	* Add form doesn't work
+	* Tables lose formatting when loaded into Kupu
+	* Currently no way to create verbatim blocks (though they can be loaded and edited)
 Feedback is very welcome - please add to the WysiwygPluginDev topic.
 %ENDCOLOR%
-
-A generic framework that supports editing of TWiki topics using an HTML editor in the browser, usually a Javascript editor, and the import of HTML from external sources such as existing web pages.
 
 %TOC%
 
 ---++ Features
-	* Editor agnostic
 	* Supports the input of malformed HTML
 	* Full round-trip (TWiki syntax -> XHTML -> TWiki syntax)
+	* Framework is editor agnostic
 	* Customised [[http://kupu.osqom.org][Kupu]] editor included
 
 ---++ Details
@@ -24,15 +26,21 @@ The package includes the following pieces:
 	* TML (TWiki syntax) to HTML translator
 	* HTML to TML translator
 	* Generic TWiki plugin for automating the translation during editing
-	* Kupu editor integration, implemented as a TWiki skin
+	* [[http://kupu.osqom.org][Kupu]] editor integration, implemented as a TWiki skin
+---+++ How to use it
+The Kupu editor is customised for use with TWiki. Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
+Two functions require a bit more explanation:
+   * "Insert No-Op" (the red X) inserts a TWiki &lt;nop>. You should put a nop into any bumpy-case word that you do _not_ want treated as a wiki word. WikiWords are automatically linked to other topics.
+   * "Insert a TWiki Tag" will give you a menu of TWiki tags that can be inserted. Any of these tags can be edited after they have been placed in the text, for example to add parameters.
+
 ---+++ How it works
 The plugin works by translating the topic text into HTML, which is then fed to the editor. The edited HTML is then run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic.
 
-The default rendering that TWiki uses to generate HTML for browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this the plugin instead uses its own translation of TWiki syntax to pure XHTML i.e. all information in the TWiki syntax is retained in the output. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
+The default rendering that TWiki uses to generate HTML for browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this the plugin instead uses its own translation of TWiki syntax to pure XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
 
 _(before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken directly from the implementation of the rendering pipeline for the TWiki 'Dakar' release)_
 
-Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content, but CPAN:HTML::Parser is tolerant of malformed syntax. There is also the advantage that the translator solution can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the complexity of HTML, this translation is lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
+Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed syntax. There is also the advantage that the translator can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the complexity of HTML, this translation is lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
 
 ---+++ Using the translators from Perl scripts
 
@@ -57,9 +65,10 @@ my $tml = $html2tml->convert( $html );
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
 %$MANIFEST%
-	* Run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually. The core plugin has the following dependencies.
+	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
 	%$DEPENDENCIES%
-	* The installer script will offer to install the 'Kupu' Javascript editor. The script simply follows the steps described in the Kupu installation documentation. The Kupu package in this install (in =pub/_kupu=) is a one-for-one copy of the Kupu 1.2.1 release package.
+	* The installer script will try to install the [[http://kupu.osqom.org][Kupu]] editor. The script simply follows the steps described in the Kupu installation documentation. The Kupu package in this install (in =pub/_kupu=) is a one-for-one copy of the Kupu 1.2.1 release package.
+		* Kupu install requires an XSLT processor with XInclude support, such as xsltproc from Gnome's libxml/libxslt.<p /> Windows users: You can get libxml/libxslt binaries at http://www.zlatkovic.com/pub/libxml/. As a minimum you need to download the zipfiles for libxslt, libxml2, iconv and zlib. Extracting all of the .dll and .exe files into c:\libxslt is sufficient for make.bat to work (ignore subdirectories in the zipfiles).
 	* To enable the editor in one of you skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br />
 	<code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />
 	As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
@@ -95,9 +104,9 @@ my $tml = $html2tml->convert( $html );
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" alt="%Y" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" alt="%U" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="%H" />
-		<img src="%PUBURL%TWiki/TWikiDocGraphics/new.gif" alt="%N" />
-		<img src="%PUBURL%TWiki/TWikiDocGraphics/starred.gif" alt="%S" />
-		<img src="%PUBURL%TWiki/TWikiDocGraphics/arrowright.gif" alt="%M" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="%N" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="%S" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="%M" />
 	* List of TWiki tags that will be available to the Kupu editor. This has to be a valid HTML &lt;select&gt; with the id =twiki-var-select=.
 		* Set TAGS =
 		<select id='twiki-var-select'>
@@ -126,7 +135,7 @@ This plugin is heavily based on the TWiki::Plugins.KupuEditorAddOn, and the auth
 | Copyright | &copy; ILOG 2005 http://www.ilog.fr |
 |  Plugin Version: | %$VERSION% |
 | Change History: <!-- Most recent first --> ||
-| 13 May 2005 | 1.000 First version |
+| 17 May 2005 | 0.03 Pre-alpha 'unofficial' release |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Perl Version: | 5.0 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |

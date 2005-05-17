@@ -228,16 +228,19 @@ sub _flatKids {
     return ( $flags, $text );
 }
 
+# $cutClasses is an RE matching class names to cut
 sub _htmlParams {
-    my $attrs = shift;
+    my ( $attrs, $cutClasses ) = @_;
     my @params;
 
     foreach my $key ( keys %$attrs ) {
         next unless $key;
-        if( $key eq 'class' ) {
+        if( $key eq 'class' && $cutClasses ) {
             $attrs->{$key} ||= '';
             # tidy up the list of class names
-            $attrs->{$key} = join(' ',split(/\s+/, $attrs->{$key} ));
+            my @classes = grep { !/^($cutClasses)$/ }
+              split(/\s+/, $attrs->{$key} );
+            $attrs->{$key} = join(' ', @classes);
             next unless( $attrs->{$key} =~ /\S/);
         }
         my $q = $attrs->{$key} =~ /"/ ? "'" : '"';
@@ -338,27 +341,26 @@ sub _handleBR {
 
 sub _handleHR {
     my( $this, $options ) = @_;
-    return (0, "$CHECKn---$CHECKn");
+    return '<hr />' if( $options & $NO_BLOCK_TML );
+    return ( $BLOCK_TML, "$CHECKn---$CHECKn");
 }
 
 sub _handleP {
     my( $this, $options ) = @_;
 
     my( $f, $kids ) = $this->_flatKids( $options );
-    if( $options & $NO_BLOCK_TML ) {
-        return ($f, '<p />'.$kids);
-    }
-    return ($f, $NBBR.$NBBR.$kids);
+    return ($f, '<p />'.$kids) if( $options & $NO_BLOCK_TML );
+    return ($f | $BLOCK_TML, $NBBR.$NBBR.$kids);
 }
 
 sub _handleA {
     my( $this, $options ) = @_;
 
     my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
-    if( defined $text ) {
+    if( $text ) {
         # text can be flattened; try various wikiword constructs
         my $href = $this->{attrs}->{href};
-        my $topic = $this->{context}->parseWikiUrl( $href );
+        my $topic = &{$this->{context}->{parseWikiUrl}}( $href );
         if( $topic ) {
             # the href targets a wiki page
             if ( $text eq $topic ||
@@ -370,7 +372,8 @@ sub _handleA {
         } elsif ($text eq $href &&
                  $href =~ /(?:^|(?<=[-*\s(]))$TWiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<]/ ) {
             return (0, $CHECKs.$text.$CHECKs);
-        } else {
+        } elsif ( $text =~ /^[\w ]+$/ ) {
+            # plain text links without protocol specifiers can go in [[][]]
             return (0, $CHECKs.'[['.$href.']['.$text.']]'.$CHECKs );
         }
     }
@@ -379,25 +382,35 @@ sub _handleA {
 
 sub _handleSPAN {
     my( $this, $options ) = @_;
-    if( $this->{attrs}->{class} =~ s/\bTMLvariable\b// ) {
+    if( $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
         my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
-        return (0, '%'._trim($text).'%');
-    } elsif( $this->{attrs}->{class} =~ s/\bTMLwikiword\b// ) {
-        return $this->_flatKids( $options );
+        my $var = _trim($text);
+        # don't create unnamed variables
+        $var = '%'.$var.'%' if( $var );
+        return (0, $var);
+    } elsif ($this->{attrs}->{class} =~ /\bTMLnop\b/) {
+        return ( 0, '<nop>');
     }
     return (0, undef);
 }
 
 sub _handlePRE {
     my( $this, $options ) = @_;
+
     if( $this->{attrs}->{class} &&
-        $this->{attrs}->{class} =~ s/\bTMLverbatim\b// ) {
+        $this->{attrs}->{class} =~ /\bTMLverbatim\b/ ) {
         return $this->_handleVERBATIM( $options );
     }
-    # can't use CGI::pre because it won't put the right newlines in
-    my( $flags, $text ) = $this->_flatKids( $options );
-    my $p = _htmlParams( $this->{attrs} );
-    return (0, "$CHECKn<pre$p>$CHECKn$text$CHECKn</pre>$CHECKn");
+
+    # can't use CGI::pre because it wont put the newlines that
+    # twiki needs in
+    unless( $options & $NO_BLOCK_TML ) {
+        my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
+        my $p = _htmlParams( $this->{attrs} );
+        return ($BLOCK_TML, "$CHECKn<pre$p>$CHECKn".$text.
+                "$CHECKn</pre>$CHECKn");
+    }
+    return ( 0, undef );
 }
 
 sub _handleVERBATIM {
@@ -406,16 +419,16 @@ sub _handleVERBATIM {
     $text = HTML::Entities::decode_entities( $text );
     $text =~ s/ /$NBSP/g;
     $text =~ s/$CHECKn/$NBBR/g;
-    my $p = _htmlParams( $this->{attrs} );
+    my $p = _htmlParams( $this->{attrs}, 'TMLverbatim' );
     return ( $BLOCK_TML,
              "$CHECKn<verbatim$p>$CHECKn".$text."$CHECKn</verbatim>$CHECKn" );
 }
 
 sub _handleDIV {
     my( $this, $options ) = @_;
-    if( $this->{attrs}->{class} =~ s/\bTMLnoautolink\b// ) {
+    if( $this->{attrs}->{class} =~ /\bTMLnoautolink\b/ ) {
         my( $flags, $text ) = $this->_flatKids( $options );
-        my $p = _htmlParams( $this->{attrs} );
+        my $p = _htmlParams( $this->{attrs}, 'TMLnoautolink' );
         return ($BLOCK_TML, "$CHECKn<noautolink$p>$CHECKn".$text.
                 "$CHECKn</noautolink>$CHECKn");
     }
@@ -576,7 +589,7 @@ sub _isConvertableTable {
     my @process = ( @{$this->{children}} );
     foreach my $kid ( @{$this->{children}} ) {
         if( $kid->{tag} =~ /^(colgroup|thead|tbody|tfoot|col)$/ ) {
-            return 0 unless( $this->_isConvertableTable( $options, $table ));
+            return 0 unless( $kid->_isConvertableTable( $options, $table ));
         } elsif( !$kid->{tag} ) {
             next;
         } else {
@@ -632,9 +645,9 @@ sub _isConvertableTableRow {
 
 sub _handleIMG {
     my( $this, $options ) = @_;
-    my $alt = $this->{context}->convertImage( $this->{attrs}->{src} );
+    my $alt = &{$this->{context}->{convertImage}}( $this->{attrs}->{src} );
     if( $alt ) {
-        return (0, $alt);
+        return (0, " $alt ");
     }
     return(0, undef);
 }

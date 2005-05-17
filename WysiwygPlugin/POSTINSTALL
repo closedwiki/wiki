@@ -1,8 +1,14 @@
-unless( -f "pub/_kupu/kupucnf.html" ) {
+unless( -f "pub/_kupu/common/kupucnf.html" ) {
 
 chdir('pub/_kupu');
+print "Unzipping Kupu...\n";
+my $result = `unzip kupu.zip`;
+if( $! ) {
+    print STDERR "Error $! running 'unzip kupu'\n$result\nKupu installation failed. See the Kupu documentation in pub/_kupu/doc/INSTALL.txt for details of how to complete installation of Kupu\n";
+}
+
 print "Running Kupu installer...\n";
-my $result = `make`;
+$result = `make`;
 if( $! ) {
     print STDERR "Error $! running 'make'\n$result\nKupu installation failed. See the Kupu documentation in pub/_kupu/doc/INSTALL.txt for details of how to complete installation of Kupu\n";
 }

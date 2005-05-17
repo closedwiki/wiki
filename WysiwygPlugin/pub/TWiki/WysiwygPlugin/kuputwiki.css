@@ -22,12 +22,14 @@ div.kupu-fulleditor .kupu-editorframe {
 
 /* toolbar buttons */
 .twiki-icons-button { background: url("smiley.png"); }
+.twiki-nop-button { background: url("nop.png"); }
 .twiki-new-attachment { background: url("attach.png"); }
 .twiki-insert-attachment { background: url("attachment.png"); }
 .twiki-vardrawer-button { background: url("vars.png"); }
 .twiki-cancel-button { background: url("cancel.png"); }
 .twiki-code-button { background: url("code.png"); }
 .twiki-code-button-pressed { background: url("code.png"); background-color: white; }
+.twiki-remove-var-button {  background: url("remove.png"); }
 
 /* icons pop-up */
 div#twiki-icons {
@@ -57,39 +59,25 @@ div#twiki-icons img:active {
   border-color: #FFFFFF;
 }
 
-/* Permissions panel */
-div#kupu-perms-selector {
-  position: absolute;
-  display: none;
-  left: 30%;
-  top: 30%;
-  width: 300px;
-  background-color: #EEEEEE;
-  padding: 0.2em;
-  font-size: small;
-  text-align: center;
-}
-
-#kupu-toolbox-twikiperms {
-}
-
-#kupu-toolbox-twikiperms #kupu-perms-selector {
-  border: 1px solid;
-  border-color: #EEEEEE #888888 #888888 #EEEEEE;
-}
-
 /******************************
  * Styles used in the content *
  ******************************/
 
 .TML { }
 .TMLvariable {
-  font-family: monospace;
   font-weight: bold;
-  color: black;
-  background: light_green;
+  border: thin solid black;
+  color: white;
+  background: #00CC00;
 }
 .TMLcite { }
 .TMLmailto { background: cyan; color: black; }
 .TMLnoautolink { color: #CCCCFF; }
-.TMLverbatim { }
+.TMLverbatim {
+  border: thin solid black;
+  background: url('verbatim.png')
+}
+.TMLnop {
+  color: red;
+  background: #CFCFCF;
+}
