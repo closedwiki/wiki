@@ -61,6 +61,9 @@ function initKupu(iframe) {
                                          'twiki-code-button-pressed');
     kupu.registerTool('codebutton', codebutton);
 
+    var verbbutton = new TWikiVerbatimTool('twiki-verbatim-button');
+    kupu.registerTool('verbbutton', verbbutton);
+
     // Icons tool
     var twikiiconstool = new TWikiIconsTool('twiki-icons-button', 
                                             'twiki-icons');

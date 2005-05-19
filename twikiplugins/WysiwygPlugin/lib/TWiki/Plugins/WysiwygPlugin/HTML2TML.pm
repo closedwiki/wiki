@@ -74,6 +74,7 @@ sub convert {
     $text =~ s/\r//g;
     $text =~ s/\t/ /g;
 
+print STDERR "BEFORE $text\n";
     $this->parse( $text );
     $this->eof();
     $this->_apply( undef );

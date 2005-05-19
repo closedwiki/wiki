@@ -16,7 +16,8 @@ pub/TWiki/WysiwygPlugin/code.png Button image
 pub/TWiki/WysiwygPlugin/vars.png Button image
 pub/TWiki/WysiwygPlugin/remove.png Button image
 pub/TWiki/WysiwygPlugin/smiley.png Button image
-pub/TWiki/WysiwygPlugin/verbatim.png Button image
+pub/TWiki/WysiwygPlugin/verbatim.png Watermark
+pub/TWiki/WysiwygPlugin/vbutton.png Button image
 templates/edit.kupu.tmpl Template for an edit using kupu
 templates/view.kupu.tmpl Template for a kupu skin view, used by the editor
 pub/_kupu/kupu.zip Kupu 1.2.1 distribution

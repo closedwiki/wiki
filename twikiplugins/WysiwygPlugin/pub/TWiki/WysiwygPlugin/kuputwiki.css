@@ -30,6 +30,8 @@ div.kupu-fulleditor .kupu-editorframe {
 .twiki-code-button { background: url("code.png"); }
 .twiki-code-button-pressed { background: url("code.png"); background-color: white; }
 .twiki-remove-var-button {  background: url("remove.png"); }
+.twiki-verbatim-button { background: url("vbutton.png"); }
+.twiki-verbatim-button-presssed { background: url("vbutton.png"); background-color: white }
 
 /* icons pop-up */
 div#twiki-icons {
