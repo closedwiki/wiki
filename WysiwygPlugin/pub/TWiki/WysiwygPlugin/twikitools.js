@@ -16,7 +16,80 @@
  *  
  *****************************************************************************/
 
-/* Shared drawer spec used for all picklist drawers */
+/*
+ * generic toggler tags. Will add a new tag of the given type,
+ * or delete an enclosing tag if the burron is pressed (as
+ * established by the associated checker)
+ */
+function TWikiToggleTag(button, editor, tag) {
+  if (button.pressed) {
+    var currnode = editor.getSelectedNode();
+
+    var dead = editor.getNearestParentOfType(currnode, tag);
+    if (!dead) {
+      alert('Not inside a tag of type '+tag);
+      return;
+    };
+    while (dead.childNodes.length) {
+      dead.parentNode.insertBefore(dead.childNodes[0], dead);
+    };
+    dead.parentNode.removeChild(dead);
+  } else {
+    var doc = editor.getInnerDocument();
+    var elem = doc.createElement(tag);
+    TWikiInsertNode(editor,elem);
+  }
+  editor.updateState();
+};
+
+/* Move the contents of the selection into the node, and insert the
+ * node in place of the selection.
+ * I can't understand why this isn't a standard Kupu method!
+ */
+function TWikiInsertNode(editor,elem) {
+  var selection = editor.getSelection();
+  var cloned = selection.cloneContents();
+  editor.insertNodeAtSelection(elem);
+  while (cloned.hasChildNodes()) {
+    elem.appendChild(cloned.firstChild);
+  };
+  selection.selectNodeContents(elem);
+};
+
+/* Generic derivative of KupuRemoveELementButton, checks the class as well
+ */
+function TWikiRemoveElementButton(buttonid, element_name, deadclass, offclass) {
+    this.button = window.document.getElementById(buttonid);
+    this.onclass = 'invisible';
+    this.offclass = offclass;
+    this.pressed = false;
+
+    this.commandfunc = function(button, editor) {
+      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
+      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
+        elem = this.editor.getNearestParentOfType(elem, element_name);
+      }
+      if (elem ) {
+        elem.removeNode(true);
+      } else {
+        alert("Not inside a variable span");
+      }
+    };
+
+    this.checkfunc = function(currnode, button, editor, event) {
+      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
+      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
+        elem = this.editor.getNearestParentOfType(elem, element_name);
+      }
+      return (elem ? false : true );
+    };
+};
+
+TWikiRemoveElementButton.prototype = new KupuStateButton;
+
+/* Shared drawer spec used for all picklist drawers (drawers that just
+ * contain a single pre-populated select
+ */
 function TWikiPickListDrawer(elementid, selector_id, tool) {
   this.varSelect = document.getElementById(selector_id);
   this.element = document.getElementById(elementid);
@@ -29,7 +102,8 @@ function TWikiPickListDrawer(elementid, selector_id, tool) {
 
 TWikiPickListDrawer.prototype = new Drawer;
 
-/* Tool for inserting the url of an attachment into the document. */
+/* Tool for inserting the url of an attachment into the document.
+ */
 function TWikiInsertAttachmentTool() {
   this.initialize = function(editor) {
     this.editor = editor;
@@ -70,7 +144,7 @@ function TWikiInsertAttachmentTool() {
 
 TWikiInsertAttachmentTool.prototype = new KupuTool;
 
-/* UI for adding an attachment to the select */
+/* UI for adding an attachment to the select in the attachment insert drawer */
 function TWikiNewAttachmentDrawer(drawerid, formid, selectid) {
   this.element = document.getElementById(drawerid);
   this.select = document.getElementById(selectid);
@@ -109,8 +183,7 @@ function TWikiNewAttachmentDrawer(drawerid, formid, selectid) {
 
 TWikiNewAttachmentDrawer.prototype = new Drawer;
 
-/* Tool for inserting TWiki variables. The variables are
- * in a <select> */
+/* Tool for inserting TWiki variables. The variables are in a select */
 function TWikiVarTool(){
   this.initialize = function(editor) {
     /* tool initialization : nothing */
@@ -120,7 +193,7 @@ function TWikiVarTool(){
   this.pick = function(name) {
     var doc = this.editor.getInnerDocument();
     var elem = doc.createElement('span');
-    elem.className = 'TMLvariable';
+    elem.setAttribute('class', 'TMLvariable');
     elem.appendChild(doc.createTextNode(name));
     // stomp anything already selected
     this.editor.insertNodeAtSelection(elem);
@@ -129,6 +202,28 @@ function TWikiVarTool(){
 }
 
 TWikiVarTool.prototype = new KupuTool;
+
+/* Tool for inserting a new verbatim region, around whatever is selected */
+function TWikiVerbatimTool(buttonid){
+  this.button = document.getElementById(buttonid);
+
+  this.initialize = function(editor) {
+    /* tool initialization : nothing */
+    this.editor = editor;
+    addEventHandler(this.button, "click", this.insert, this);
+    this.editor.logMessage('Verbatim tool initialized');
+  };
+ 
+  this.insert = function() {
+    var doc = this.editor.getInnerDocument();
+    var elem = doc.createElement('pre');
+    elem.setAttribute('class', 'TMLverbatim');
+    TWikiInsertNode(this.editor, elem);
+    this.editor.updateState();
+  };
+}
+
+TWikiVerbatimTool.prototype = new KupuTool;
 
 /* Tool for inserting smilies. The smilies are collected in a div, which
  * is shown and hidden as required to give the effect of a popup panel.
@@ -262,26 +357,6 @@ function TWikiHandleSubmit() {
   kupu.prepareForm(form, 'text');
 };
 
-function TWikiToggleTag(button, editor, tag) {
-  if (button.pressed) {
-    var currnode = editor.getSelectedNode();
-    var dead = editor.getNearestParentOfType(currnode, tag);
-    if (!dead) {
-      alert('Not inside a tag of type '+tag);
-      return;
-    };
-    while (dead.childNodes.length) {
-      dead.parentNode.insertBefore(dead.childNodes[0], dead);
-    };
-    dead.parentNode.removeChild(dead);
-  } else {
-    var doc = editor.getInnerDocument();
-    var elem = doc.createElement(tag);
-    TWikiInsertNode(editor,elem);
-  }
-  editor.updateState();
-};
-
 function stringify(node) {
   var str = node.nodeName + "{";
   if (node.nodeName == '#text') {
@@ -299,69 +374,14 @@ function stringify(node) {
   return str + "}";
 }
 
-/* Move the contents of the selection into the node, and insert the
- * node in place of the selection.
- * I can't understand why this isn't a standard Kupu method! */
-function TWikiInsertNode(editor,elem) {
-  var selection = editor.getSelection();
-  var cloned = selection.cloneContents();
-  editor.insertNodeAtSelection(elem);
-  while (cloned.hasChildNodes()) {
-    elem.appendChild(cloned.firstChild);
-  };
-  selection.selectNodeContents(elem);
-};
-
-/* Derivate of KupuRemoveELementButton, checks the class as well */
-function TWikiRemoveElementButton(buttonid, element_name, deadclass, offclass) {
-    this.button = window.document.getElementById(buttonid);
-    this.onclass = 'invisible';
-    this.offclass = offclass;
-    this.pressed = false;
-
-    this.commandfunc = function(button, editor) {
-      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
-      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
-        elem = this.editor.getNearestParentOfType(elem, element_name);
-      }
-      if (elem ) {
-        elem.removeNode(true);
-      } else {
-        alert("Not inside a variable span");
-      }
-    };
-
-    this.checkfunc = function(currnode, button, editor, event) {
-      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
-      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
-        elem = this.editor.getNearestParentOfType(elem, element_name);
-      }
-      return (elem ? false : true );
-    };
-};
-
-TWikiRemoveElementButton.prototype = new KupuStateButton;
-
-/* Tool for inserting Textarea */
-function TWikiTextareaTool(){
-  this.initialize = function(editor) {
-    this.editor = editor;
-    this.handling = false;
-    var doc = editor.getInnerDocument();
-    this.elem = doc.getElementById('textarea-test');
-    var handler = function (evt) {
-      evt.cancelBubble = true;
-      // but how to get it handled by this object? If I call the
-      // click handler will I just come back here?
-      //this.elem.onClick(evt);//focus();
-    };
-
-    addEventHandler(this.elem, "click", handler, this);
-    addEventHandler(this.elem, "dblclick", handler, this);
-    addEventHandler(this.elem, "keyup", handler, this);
-    addEventHandler(this.elem, "keyup", handler, this);
-    addEventHandler(this.elem, "mouseup", handler, this);
-  };
-};
-
-TWikiTextareaTool.prototype = new KupuTool;
+/* Hack bad buttons off the form */
+function TWikiCleanForm() {
+  var elems = document.getElementsByName('submitChangeForm');
+  for (var i = 0; i < elems.length; i++) {
+    if (elems[i].nodeName.toLowerCase() == 'input' &&
+        elems[i].type.toLowerCase() == 'submit' ) {
+      elems[i].parentNode.removeChild(elems[i]);
+      // should replace with _nice_ button?
+    }
+  }
+}

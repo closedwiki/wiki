@@ -13,5 +13,7 @@ function startKupu() {
     // and now we can initialize...
     kupu.initialize();
 
+    TWikiCleanForm();
+
     return kupu;
 };

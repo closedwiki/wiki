@@ -529,8 +529,9 @@ sub _emitTR {
     my ( $thePre, $theRow, $insideTABLE ) = @_;
 
     unless( $insideTABLE ) {
-        $thePre .=
-          CGI::start_table();
+        $thePre .= CGI::start_table({ cellspacing => 1,
+                                      cellpadding => 0,
+                                      border => 1 });
     }
 
     $theRow =~ s/\t/   /g;  # change tabs to space

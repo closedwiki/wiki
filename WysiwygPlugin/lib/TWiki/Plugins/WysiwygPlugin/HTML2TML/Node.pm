@@ -145,6 +145,10 @@ sub rootGenerate {
 
     $tml =~ s/($CHECKn)+/$NBBR/gos;
 
+    $tml =~ s/$NBBR\n+/$NBBR/gs;
+    $tml =~ s/\n+$NBBR\n+/$NBBR/gs;
+    $tml =~ s/\n\n+/\n/gs;
+
     $tml =~ s/$NBBR/\n/go;
 
     # ignore $CHECKs if there is a \s next to it, otherwise insert a
@@ -372,9 +376,6 @@ sub _handleA {
         } elsif ($text eq $href &&
                  $href =~ /(?:^|(?<=[-*\s(]))$TWiki::regex{linkProtocolPattern}:[^\s<>"]+[^\s*.,!?;:)<]/ ) {
             return (0, $CHECKs.$text.$CHECKs);
-        } elsif ( $text =~ /^[\w ]+$/ ) {
-            # plain text links without protocol specifiers can go in [[][]]
-            return (0, $CHECKs.'[['.$href.']['.$text.']]'.$CHECKs );
         }
     }
     return (0, undef);
@@ -415,7 +416,11 @@ sub _handlePRE {
 
 sub _handleVERBATIM {
     my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatKids( $NO_TML );
+    my( $flags, $text ) = $this->_flatKids( 0 );
+
+    $text =~ s!<br( /)?>!$NBBR!gi;
+    $text =~ s!<p( /)?>!$NBBR!gi;
+    $text =~ s!</(p|br)>!!gi;
     $text = HTML::Entities::decode_entities( $text );
     $text =~ s/ /$NBSP/g;
     $text =~ s/$CHECKn/$NBBR/g;
@@ -492,7 +497,7 @@ sub _convertList {
             }
             $spawn .= $t;
         }
-        $text .= $CHECKn.$indent.$bullet.' '.$spawn.$CHECKn;
+        $text .= $CHECKn.$indent.$bullet.$CHECKs.$spawn.$CHECKn;
         $pendingDT = 0;
         $basebullet = '' if $isdl;
     }

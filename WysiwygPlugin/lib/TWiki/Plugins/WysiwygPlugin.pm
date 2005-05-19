@@ -20,13 +20,14 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $convertSkin $html2tml $tml2html $inSave $imgMap $calledThisSession );
+use vars qw( $VERSION $convertSkin $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
 
-$VERSION = '0.03';
+$VERSION = '0.05';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
+    $currentWeb = $web;
     $convertSkin = TWiki::Func::getPreferencesValue("WYSIWYGPLUGIN_SKIN_NAME");
     $calledThisSession = 0;
 
@@ -65,9 +66,13 @@ sub beforeSaveHandler {
     }
 
     my @rescue;
+
     # SMELL: really, really bad smell; bloody core should NOT pass text
     # with embedded meta to plugins! It is VERY BAD DESIGN!!!
-    $_[0] =~ s/^(%META:[A-Z]+{.*?}%)$/push(@rescue,$1);"<!--\007@#rescue-->"/ge;
+    $_[0] =~ s/^(%META:[A-Z]+{.*?}%)\s*$/push(@rescue,$1);"<!--\007@#rescue-->"/gem;
+
+    # undo the munging that has already been done (grrrrrrrrrr!!!!)
+    $_[0] =~ s/\t/   /g;
 
     $_[0] = $html2tml->convert( $_[0] );
 
@@ -97,12 +102,20 @@ sub commonTagsHandler {
     # Translate the topic text to pure HTML.
     unless( $tml2html ) {
         require TWiki::Plugins::WysiwygPlugin::TML2HTML;
-        $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&TWiki::Func::getViewUrl);
+        $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&getViewUrl);
     }
 
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
     $_[0] = $tml2html->convert( $text );
     $calledThisSession = 1;
+}
+
+sub getViewUrl {
+    my( $web, $topic ) = @_;
+
+    # the documentation says getViewUrl defaults the web. It doesn't.
+    $web ||= $currentWeb;
+    return TWiki::Func::getViewUrl( $web, $topic );
 }
 
 sub parseWikiUrl {
@@ -111,13 +124,13 @@ sub parseWikiUrl {
     my $aurl = TWiki::Func::getViewUrl('WEB', 'TOPIC');
     $aurl =~ s!WEB/TOPIC.*$!!;
 
-    return (undef, undef) unless length($url) >= length($aurl);
+    return undef unless length($url) >= length($aurl);
 
-    return (undef, undef) unless substr($url, 0, length($aurl)) eq $aurl;
+    return undef unless substr($url, 0, length($aurl)) eq $aurl;
     $url = substr($url,length($aurl),length($url));
-    return (undef, undef) unless $url =~ /^(\w+)[.\/](\w+)$/;
+    return undef unless $url =~ /^(\w+)[.\/](\w+)$/;
 
-    return( $1, $2 );
+    return "$1.$2";
 }
 
 1;
