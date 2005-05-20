@@ -64,7 +64,7 @@ sub view {
     my $webName = $session->{webName};
     my $topicName = $session->{topicName};
 
-    my $viewRaw = $query->param( 'raw' ) || '';
+    my $raw = $query->param( 'raw' ) || '';
     my $contentType = $query->param( 'contenttype' );
 
     my $showRev = 1;
@@ -75,12 +75,6 @@ sub view {
     TWiki::UI::checkWebExists( $session, $webName, $topicName, 'view' );
 
     my $skin = $session->getSkin();
-
-    # Set page generation mode to RSS if using an RSS skin
-    # SMELL: this is dodgy
-    if( $skin =~ /\brss/ ) {
-        $session->{renderer}->setRenderMode( 'rss' );
-    }
 
     my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ));
 
@@ -127,29 +121,10 @@ sub view {
         $logEntry .= ' (not exist)';
     }
 
-    if( $viewRaw ) {
-        $logEntry .= ' raw='.$viewRaw;
-        if( $viewRaw =~ /debug/i ) {
+    if( $raw ) {
+        $logEntry .= ' raw='.$raw;
+        if( $raw eq 'debug' ) {
             $text = $session->{store}->getDebugText( $meta, $text );
-        }
-        # If the _only_ skin is 'text' it is used like this:
-        # http://.../view/Codev/MyTopic?skin=text&contenttype=text/plain&raw=on
-        # which shows the topic as plain text; useful for those who want
-        # to download plain text for the topic.
-        # SMELL: this is not documented anywhere that I can find, and the
-        # poor slob who creates 'texture_skin' is going to get a hell of
-        # a shock! This should be done with "raw=text", not with a skin.
-        if( $skin eq 'text' ) {
-            my $p = $session->{prefs};
-            $text =
-              CGI::textarea
-                  ( -readonly => 'readonly',
-                    -wrap => 'virtual',
-                    -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
-                    -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
-                    -style => $p->getPreferencesValue('EDITBOXSTYLE'),
-                    -default => "\n".$text
-                  );
         }
     }
 
@@ -264,12 +239,15 @@ sub view {
 
     my $start = $1;
     my $end = $2;
-    my $strip = 0;
+    # If minimalist is set, images and anchors will be stripped from text
+    my $minimalist = 0;
     if( $contentType ) {
-        $strip = ( $skin =~ /\brss/ );
+        $minimalist = ( $skin =~ /\brss/ );
     } elsif( $skin =~ /\brss/ ) {
         $contentType = 'text/xml';
-        $strip = 1;
+        $minimalist = 1;
+    } elsif( $raw eq 'text' ) {
+        $contentType = 'text/plain';
     } else {
         $contentType = 'text/html'
     }
@@ -277,39 +255,63 @@ sub view {
     $session->{SESSION_TAGS}{CURRREV} = $rev;
 
     my $isTop = ( $rev == $showRev );
-    my $result = "";
-    $result .= _bungOut($start, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
 
-    $result .= _bungOut( $text, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 1);
+    # Set page generation mode to RSS if using an RSS skin
+    # SMELL: this is dodgy
+    if( $skin =~ /\brss/ ) {
+        $session->{renderer}->setRenderMode( 'rss' );
+    }
 
-    $result .= _bungOut($end, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, 0);
+    # Legacy: if the _only_ skin is 'text' it is used like this:
+    # http://.../view/Codev/MyTopic?skin=text&contenttype=text/plain&raw=on
+    # which shows the topic as plain text; useful for those who want
+    # to download plain text for the topic. So when the skin is 'text'
+    # we do _not_ want to create a textarea.
+    # skin=text is deprecated; use raw=text instead.
+    if( $raw eq 'text' || $skin eq 'text' ) {
+        # use raw text
+    } else {
+        my @args = ( $session, $webName, $topicName, $meta,
+                     $isTop, $minimalist );
+        if( $raw ) {
+            my $p = $session->{prefs};
+            $text =
+              CGI::textarea( -readonly => 'readonly',
+                             -wrap => 'virtual',
+                             -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
+                             -cols => $p->getPreferencesValue('EDITBOXWIDTH'),
+                             -style => $p->getPreferencesValue('EDITBOXSTYLE'),
+                             -default => $text
+                           );
+        } else {
+            $text = _prepare($text, @args);
+        }
 
-    $session->writePageHeader( undef, undef, $contentType, 0 );
-    print $result;
+        $text = _prepare($start, @args) . $text . _prepare($end, @args);
+
+    }
+    # Output has to be done in one go, because if we generate the header and
+    # then redirect because of some later constraint, some browsers fall over
+    $session->writeCompletePage( $text, 'view', $contentType )
 }
 
-sub _bungOut {
-    my ($text, $session, $webName, $topicName, $meta, $isTop, $viewRaw, $strip, $isText) = @_;
-    my $renderer = $session->{renderer};
+sub _prepare {
+    my( $text, $session, $webName, $topicName, $meta,
+        $isTop, $minimalist) = @_;
 
-    unless( $viewRaw && $isText ) {
-        $text = $renderer->renderMetaTags
-          ( $webName, $topicName, $text, $meta, $isTop, $viewRaw );
+    $text = $session->{renderer}->renderMetaTags
+      ( $webName, $topicName, $text, $meta, $isTop, 0 );
 
-        $text = $session->handleCommonTags( $text, $webName, $topicName );
-        $text = $renderer->getRenderedVersion( $text, $webName, $topicName );
-        $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
+    $text = $session->handleCommonTags( $text, $webName, $topicName );
+    $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topicName );
+    $text =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        # Write header based on 'contenttype' parameter, used to produce
-        # MIME types like text/plain or text/xml, e.g. for RSS feeds.
-        if( $strip ) {
-            $text =~ s/<img [^>]*>//gi;  # remove image tags
-            $text =~ s/<a [^>]*>//gi;    # remove anchor tags
-            $text =~ s/<\/a>//gi;        # remove anchor tags
-        } else {
-            TWiki::spamProof( $text );
-        }
+    if( $minimalist ) {
+        $text =~ s/<img [^>]*>//gi;  # remove image tags
+        $text =~ s/<a [^>]*>//gi;    # remove anchor tags
+        $text =~ s/<\/a>//gi;        # remove anchor tags
     }
+
     return $text;
 }
 

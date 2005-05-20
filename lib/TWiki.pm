@@ -577,15 +577,17 @@ sub writeCompletePage {
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
-    # Remove <nop> and <noautolink> tags
-    $text =~ s/([\t ]?)[ \t]*<\/?(nop|noautolink)\/?>/$1/gis;
-    $text .= "\n" unless $text =~ /\n$/s;
+    if( $contentType ne 'text/plain' ) {
+        # Remove <nop> and <noautolink> tags
+        $text =~ s/([\t ]?)[ \t]*<\/?(nop|noautolink)\/?>/$1/gis;
+        $text .= "\n" unless $text =~ /\n$/s;
+        spamProof( $text );
+    }
 
     # can't use simple length() in case we have UNICODE
     # see perldoc -f length
     my $len = do { use bytes; length( $text ); };
     $this->writePageHeader( undef, $pageType, $contentType, $len );
-    spamProof( $text );
     print $text;
 }
 
@@ -620,9 +622,12 @@ sub writePageHeader {
 
     my @hopts = ();
 
-    $contentType = 'text/html' unless $contentType;
-    $contentType .= '; charset='.$siteCharset;
-    push( @hopts, -content_type => $contentType );
+    # Add a content-length if one has been provided. HTTP1.1 says a
+    # content-length should _not_ be specified unless the length is
+    # known. There is a bug in Netscape such that it interprets a
+    # 0 content-length as "download until disconnect" but that is
+    # a bug. The correct way is to not set a content-length.
+    push( @hopts, '-Content_length' => $contentLength ) if $contentLength;
 
     if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
@@ -645,17 +650,8 @@ sub writePageHeader {
         push( @hopts, -cache_control => "max-age=$expireSeconds" );
     }
 
-    # Add a content-length if one has been provided. HTTP1.1 says a
-    # content-length should _not_ be specified unless the length is
-    # known. There is a bug in Netscape such that it interprets a
-    # 0 content-length as "download until disconnect" but that is
-    # a bug. The correct way is to not set a content-length.
-    push( @hopts, -content_length => $contentLength ) if $contentLength;
-
-    # Wiki Plugin Hook - get additional headers from plugin
-    # SMELL: it would be far better to pass down the hopts array
-    # for the plugin to add to/remove from, rather than parsing the
-    # string this way.
+    # DEPRECATED plugins header handler. Plugins should use
+    # modifyHeaderHandler instead.
     $pluginHeaders = $this->{plugins}->writeHeaderHandler( $query ) || '';
     if( $pluginHeaders ) {
         foreach ( split /\r\n/, $pluginHeaders ) {
@@ -665,9 +661,18 @@ sub writePageHeader {
         }
     }
 
+    $contentType = 'text/html' unless $contentType;
+    $contentType .= '; charset='.$siteCharset;
+
+    # use our version of the content type
+    push( @hopts, '-Content-type' => $contentType );
+
+    # New (since 1.026
     $this->{plugins}->modifyHeaderHandler();
 
-    print $query->header( @hopts );
+    my $hdr = CGI::header( @hopts );
+
+    print $hdr;
 }
 
 =pod
