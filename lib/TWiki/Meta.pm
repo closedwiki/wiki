@@ -123,15 +123,15 @@ sub putKeyed {
 
     my $data = $this->{$type};
     if( $data ) {
-            my $keyName = $args->{'name'};
-            ASSERT( $keyName ) if DEBUG;
-            my $i = scalar( @$data );
-            while( $i-- ) {
-                if( $data->[$i]->{'name'} eq $keyName ) {
-                    $data->[$i] = $args;
-                    return;
-                }
+        my $keyName = $args->{'name'};
+        ASSERT( $keyName ) if DEBUG;
+        my $i = scalar( @$data );
+        while( $i-- ) {
+            if( $data->[$i]->{'name'} eq $keyName ) {
+                $data->[$i] = $args;
+                return;
             }
+        }
 	    push @$data, $args;
     } else {
       push( @{$this->{$type}}, $args );
