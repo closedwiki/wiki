@@ -152,53 +152,53 @@ sub createMyConfigDotPm
 	};
     }
 
-	-d dirname( $cpanConfig ) or mkpath( dirname( $cpanConfig ) );
+    -d dirname( $cpanConfig ) or mkpath( dirname( $cpanConfig ) );
 
-	open( FH, ">$cpanConfig" ) or die "$!: Can't create $cpanConfig";
-	$CPAN::Config = {
-	    'build_cache' => q[0],
-	    'build_dir' => "$cpan/.cpan/build",
-	    'cache_metadata' => q[1],
-	    'cpan_home' => "$cpan/.cpan",
-	    'ftp' => q[/bin/ftp],
-	    'ftp_proxy' => q[],
-	    'getcwd' => q[cwd],
-	    'gpg' => q[],
-	    'gzip' => q[/bin/gzip],
-	    'histfile' => "$cpan/.cpan/histfile",
-	    'histsize' => q[0],
-	    'http_proxy' => q[],
-	    'inactivity_timeout' => q[0],
-	    'index_expire' => q[1],
-	    'inhibit_startup_message' => q[1],
-	    'keep_source_where' => "$cpan/.cpan/sources",
-	    'lynx' => q[],
-	    'make' => q[/usr/bin/make],
-	    'make_arg' => "-I$cpan/",
-	    'make_install_arg' => "-I$cpan/lib/",
-	    'makepl_arg' => "PREFIX=$cpan LIB=$cpan/lib INSTALLPRIVLIB=$cpan/lib INSTALLARCHLIB=$cpan/lib/arch INSTALLSITEARCH=$cpan/lib/arch INSTALLSITELIB=$cpan/lib INSTALLSCRIPT=$cpan/bin INSTALLBIN=$cpan/bin INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
-	    'ncftp' => q[],
-	    'ncftpget' => q[],
-	    'no_proxy' => q[],
-	    'pager' => q[],
-	    'prerequisites_policy' => q[follow],
-	    'scan_cache' => q[atstart],
-	    'shell' => q[/bin/bash],
-	    'tar' => q[/bin/tar],
-	    'term_is_latin' => q[1],
-	    'unzip' => q[/usr/bin/unzip],
-	    'wget' => q[/usr/bin/wget],
-	};
-	print FH "\$CPAN::Config = {\n";
-	foreach my $key ( sort keys %$CPAN::Config )
-	{
-	    print FH qq{\t'$key' => q[$CPAN::Config->{$key}],\n};
-	}
-	print FH qq{\t'urllist' => [ q[$optsConfig->{mirror}] ],\n};
-	print FH "};\n",
-	"1;\n",
-	"__END__\n";
-	close FH;
+    open( FH, ">$cpanConfig" ) or die "$!: Can't create $cpanConfig";
+    $CPAN::Config = {
+	'build_cache' => q[0],
+	'build_dir' => "$cpan/.cpan/build",
+	'cache_metadata' => q[1],
+	'cpan_home' => "$cpan/.cpan",
+	'ftp' => q[/bin/ftp],
+	'ftp_proxy' => q[],
+	'getcwd' => q[cwd],
+	'gpg' => q[],
+	'gzip' => q[/bin/gzip],
+	'histfile' => "$cpan/.cpan/histfile",
+	'histsize' => q[0],
+	'http_proxy' => q[],
+	'inactivity_timeout' => q[0],
+	'index_expire' => q[1],
+	'inhibit_startup_message' => q[1],
+	'keep_source_where' => "$cpan/.cpan/sources",
+	'lynx' => q[],
+	'make' => q[/usr/bin/make],
+	'make_arg' => "-I$cpan/",
+	'make_install_arg' => "-I$cpan/lib/",
+	'makepl_arg' => "PREFIX=$cpan LIB=$cpan/lib INSTALLPRIVLIB=$cpan/lib INSTALLARCHLIB=$cpan/lib/arch INSTALLSITEARCH=$cpan/lib/arch INSTALLSITELIB=$cpan/lib INSTALLSCRIPT=$cpan/bin INSTALLBIN=$cpan/bin INSTALLMAN1DIR=$cpan/man/man1 INSTALLMAN3DIR=$cpan/man/man3",
+	'ncftp' => q[],
+	'ncftpget' => q[],
+	'no_proxy' => q[],
+	'pager' => q[],
+	'prerequisites_policy' => q[follow],
+	'scan_cache' => q[atstart],
+	'shell' => q[/bin/bash],
+	'tar' => q[/bin/tar],
+	'term_is_latin' => q[1],
+	'unzip' => q[/usr/bin/unzip],
+	'wget' => q[/usr/bin/wget],
+    };
+    print FH "\$CPAN::Config = {\n";
+    foreach my $key ( sort keys %$CPAN::Config )
+    {
+	print FH qq{\t'$key' => q[$CPAN::Config->{$key}],\n};
+    }
+    print FH qq{\t'urllist' => [ q[$optsConfig->{mirror}] ],\n};
+    print FH "};\n",
+    "1;\n",
+    "__END__\n";
+    close FH;
 }
 
 ################################################################################
