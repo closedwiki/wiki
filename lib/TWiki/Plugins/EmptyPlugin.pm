@@ -446,6 +446,7 @@ in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
 the others will be ignored.
 
 *DEPRECATED* since TWiki::Plugins::VERSION = '1.026' - *DO NOT USE*
+Use =modifyHeaderHandler= instead.
 
 =cut
 
@@ -458,14 +459,15 @@ sub DISABLE_writeHeaderHandler {
 
 =pod
 
----++ modifyHeaderHandler( \@headers, $query )
-   * =\@headers= - reference to an array of existing header-value pairs
+---++ modifyHeaderHandler( \%headers, $query )
+   * =\%headers= - reference to a hash of existing header values
    * =$query= - reference to CGI query object
-Lets the plugin modify the HTTP headers that will be emitted when an HTML page is written to the browser. The =\@headers= array will contain
-the headers proposed by the core, plus any modifications made by other plugins that also implement this method that come earlier in the plugins
-list. You can add key-value pairs to the array simply by pushing them on; for example:
+Lets the plugin modify the HTTP headers that will be emitted when an HTML
+page is written to the browser. \%headers= will contain the headers
+proposed by the core, plus any modifications made by other plugins that also
+implement this method that come earlier in the plugins list.
 <verbatim>
-push( @$headers, expires => '+1h' );
+$headers->{expires} = '+1h';
 </verbatim>
 
 __Since:__ TWiki::Plugins::VERSION 1.026
@@ -473,7 +475,7 @@ __Since:__ TWiki::Plugins::VERSION 1.026
 =cut
 
 sub DISABLE_modifyHeaderHandler {
-    my ( \@headers, $query ) = @_;
+    my ( $headers, $query ) = @_;
 
     TWiki::Func::writeDebug( "- ${pluginName}::modifyHeaderHandler()" ) if $debug;
 }

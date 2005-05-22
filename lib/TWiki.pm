@@ -620,14 +620,14 @@ sub writePageHeader {
     # of other types of page, with expiry time driven by page type.
     my( $pluginHeaders, $coreHeaders );
 
-    my @hopts = ();
+    my $hopts = {};
 
     # Add a content-length if one has been provided. HTTP1.1 says a
     # content-length should _not_ be specified unless the length is
     # known. There is a bug in Netscape such that it interprets a
     # 0 content-length as "download until disconnect" but that is
     # a bug. The correct way is to not set a content-length.
-    push( @hopts, '-Content_length' => $contentLength ) if $contentLength;
+    $hopts->{'Content-Length'} = $contentLength if $contentLength;
 
     if ($pageType && $pageType eq 'edit') {
         # Get time now in HTTP header format
@@ -645,9 +645,9 @@ sub writePageHeader {
 
         # and cache control headers, to ensure edit page 
         # is cached until required expiry time.
-        push( @hopts, -last_modified => $lastModifiedString );
-        push( @hopts, -expires => "+${expireHours}h" );
-        push( @hopts, -cache_control => "max-age=$expireSeconds" );
+        $hopts->{'last-modified'} = $lastModifiedString;
+        $hopts->{expires} = "+${expireHours}h";
+        $hopts->{'cache-control'} = "max-age=$expireSeconds";
     }
 
     # DEPRECATED plugins header handler. Plugins should use
@@ -656,7 +656,7 @@ sub writePageHeader {
     if( $pluginHeaders ) {
         foreach ( split /\r\n/, $pluginHeaders ) {
             if ( m/^([\-a-z]+): (.*)$/i ) {
-                push( @hopts, $1 => $2 );
+                $hopts->{$1} = $2;
             }
         }
     }
@@ -665,12 +665,11 @@ sub writePageHeader {
     $contentType .= '; charset='.$siteCharset;
 
     # use our version of the content type
-    push( @hopts, '-Content-type' => $contentType );
+    $hopts->{'Content-Type'} = $contentType;
 
-    # New (since 1.026
-    $this->{plugins}->modifyHeaderHandler();
-
-    my $hdr = CGI::header( @hopts );
+    # New (since 1.026)
+    $this->{plugins}->modifyHeaderHandler($hopts);
+    my $hdr = CGI::header( $hopts );
 
     print $hdr;
 }
