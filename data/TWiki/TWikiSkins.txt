@@ -137,9 +137,9 @@ A skin is activated by putting it on the skin search path. Either:
 		* =Set SKIN = mine,pattern=
 
 	* _Replace_ the default skin path by adding =?skin=path= to the URL, for example:
-		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern (for the print view skin)
+		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern (for the PatternSkin print view)
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=plain (for the plain view skin that has no header and footer)
-	* _Add_ a "screen" on top of the existing skins by adding =?screen=name= to the URL, for example:
+	* _Add_ a "cover" over the top of the existing skins by adding =?cover=path= to the URL, for example:
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?cover=myview (to add a skin called myview to the _start_ of the skin path)
 
 TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. Each skin on the path is searched for in turn. For example, if you have set =SKIN= to =local,pattern= and =?skin=mine= then =view.mine.tmpl= will be searched for first, then =view.local.tmpl= and finally =view.pattern.tmpl=.
