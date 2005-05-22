@@ -86,7 +86,6 @@ print STDERR Dumper( \@INC ) if $optsConfig->{debug};
 #    modules => [ qw( XML::SAX ) ],
 #});
 
-my @defaultTWikiModules;	# forward declaration
 installLocalModules({
     dir => $optsConfig->{baselibdir},
     config => {
@@ -96,7 +95,7 @@ installLocalModules({
 #?	'GD' => [ qw( /usr/local/lib y y y ) ],
     },
     # TODO: update to use same output as =cpan/calc-twiki-deps.pl=
-    modules => @ARGV ? [ @ARGV ] : [ @defaultTWikiModules ],
+    modules => [ @ARGV ],
 });
 # Image::LibRSVG
 
@@ -188,38 +187,6 @@ sub createMyConfigDotPm
 
 ################################################################################
 
-@defaultTWikiModules = qw(
-			  Storable
-			  XML::Parser XML::Simple 
-			  Algorithm::Diff Text::Diff HTML::Diff
-			  Text::Glob Number::Compare File::Find::Rule 
-			  File::Slurp File::Slurp::Tree
-			  List::Permutor File::Temp 
-			  URI MIME::Base64 Net::FTP Digest Digest::MD5 HTML::Parser LWP LWP::Simple 
-			  WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki LWP::UserAgent::TWiki::TWikiGuest
-			  Archive::Zip 
-			  IO::Zlib
-			  IO::String Archive::Tar 
-			  File::AnySpec File::Package Data::Startup Tie::Gzip File::Where Archive::TarGzip
-			  Class::Virtually::Abstract Carp::Assert Class::Data::Inheritable Archive::Any
-			  Time::HiRes
-			  Carp::Clan Bit::Vector Date::Calc 
-			  Error Class::Inner Devel::Symdump
-			  URI HTML::Parser HTML::Tagset
-			  Digest::MD5 Storable
-			  SOAP::Lite 
-			  Time::ParseDate Date::Handler Date::Parse 
-			  HTML::CalendarMonthSimple 
-			  Test::Unit 
-			  CGI::Session 
-			  Weather::Com
-			  GD Barcode::Code128
-			  XML::NamespaceSupport XML::SAX XML::LibXML::Common XML::LibXML 
-			  XML::LibXSLT Cache::Cache String::CRC
-			  Data::UUID Safe Language::Prolog XMLRPC::Transport::HTTP
-			  );
-
-################################################################################
 ################################################################################
 
 __DATA__
