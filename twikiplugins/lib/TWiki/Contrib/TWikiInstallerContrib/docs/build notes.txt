@@ -3,7 +3,6 @@
 this document describes the build process
 
 CAVEATS: 
-   * these scripts will overwrite your ~/.cpan/CPAN/MyConfig.pm !!! (if you have one)
    * a $TWIKIDEV/CPAN directory is created (lib, man, bin)
 
 TWikiKernel build requirements
