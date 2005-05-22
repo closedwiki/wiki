@@ -41,27 +41,22 @@ Templates are stored either in the ==twiki/templates== directory, or can also be
 
 TWiki uses the following search order to determine which template file or topic to use for a particular script. The _skin path_ is set as described in TWikiSkins.
 
-%H% Templates may be overloaded by setting a skin path, by settings in the preferences of individual webs, or by settings chosen by individual users.
-
 <blockquote>
-<table class="twikiTable">
-<tr><th> *If a skin path is specified* </th><th> *If no skin path is specified* </th></tr>
-<tr valign="top"><td>
-   1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl
-   1 templates/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl 
-   1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.tmpl 
-   1 templates/%RED%script%ENDCOLOR%.tmpl 
-   1 %RED%web%ENDCOLOR%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template
-   1 %TWIKIWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template
-</td><td>
+   1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl for each %RED%skin%ENDCOLOR% on the skin path
+   1 templates/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl for each %RED%skin%ENDCOLOR% on the skin path
    1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.tmpl
    1 templates/%RED%script%ENDCOLOR%.tmpl
+   1 %RED%pweb%ENDCOLOR%.%RED%ptopic%ENDCOLOR% if the template name can be parsed into %RED%pweb%ENDCOLOR%.%RED%ptopic%ENDCOLOR% (e.g. "Myweb.MyTemplate")
+   1 %RED%web%ENDCOLOR%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
    1 %RED%web%ENDCOLOR%.%RED%Script%ENDCOLOR%Template
+   1 %TWIKIWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
    1 %TWIKIWEB%.%RED%Script%ENDCOLOR%Template
-</td></tr>
-<tr><td colspan="2">
-*Legend:* %BB% %RED%script%ENDCOLOR% refers to the script name, e.g =view=, =edit= %BB% %RED%Script%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =View= %BB% %RED%skin%ENDCOLOR% refers to a skin name, e.g =dragon=, =pattern=. All skins are checked at each stage, in the order they appear in the skin path. %BB% %RED%Skin%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =Dragon= %BB% %RED%web%ENDCOLOR% refers to the current web ||
-</td></tr></table>
+*Legend:*
+   * %RED%script%ENDCOLOR% refers to the script name, e.g =view=, =edit=
+   * %RED%Script%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =View=
+   * %RED%skin%ENDCOLOR% refers to a skin name, e.g =dragon=, =pattern=. All skins are checked at each stage, in the order they appear in the skin path.
+   * %RED%Skin%ENDCOLOR% refers to the same, but with the first character capitalized, e.g =Dragon=
+   * %RED%web%ENDCOLOR% refers to the current web
 </blockquote>
 
 The template name may also be a full =%RED%Web%ENDCOLOR%.%RED%Topic%ENDCOLOR%= name, in which case the search is:

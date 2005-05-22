@@ -818,9 +818,11 @@ sub getSkin {
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
-    my $skin = '';
-    $skin = $this->{cgiQuery}->param( 'skin' ) if( $this->{cgiQuery} );
-    $skin = $this->{prefs}->getPreferencesValue( 'SKIN' ) unless( $skin );
+    my $skin = $this->{prefs}->getPreferencesValue( 'SKIN' ) || '';
+    if( $this->{cgiQuery} ) {
+        my $epidermis = $this->{cgiQuery}->param( 'skin' );
+        $skin = $epidermis.','.$skin if $epidermis;
+    }
     return $skin;
 }
 

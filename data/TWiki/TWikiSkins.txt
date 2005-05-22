@@ -131,18 +131,18 @@ You can try all installed skins in TWikiSkinBrowser.
 
 ---++ Activating Skins
 
-A skin can be activated in two ways:
+A skin is activated by putting it on the skin search path. Either:
 
-	* Define the =SKIN= Preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or in a user - %WIKIUSERNAME% - topic.
+	* Prepend the skin name to the =SKIN= Preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or in a user - %WIKIUSERNAME% - topic. For example,
 		* =Set SKIN = mine,pattern=
 
 	* Add =?skin=path= to the URL, for example:
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print (for the print view skin)
 		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=plain (for the plain view skin that has no header and footer)
 
-The ==?skin=path== URL parameter overrides the SKIN Preference value.
+The ==?skin=path== URL parameter is _prepended_ to the value of SKIN Preference value to make the full skin search path.
 
-TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. When you define the =SKIN= path, each skin on the path is searched for in turn. For example, if you have set =SKIN= to =local,pattern= then =view.local.tmpl= will be searched for before =view.pattern.tmpl=.
+TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. Each skin on the path is searched for in turn. For example, if you have set =SKIN= to =local,pattern= and =?skin=mine= then =view.mine.tmpl= will be searched for first, then =view.local.tmpl= and finally =view.pattern.tmpl=.
 
 ---++ Hard Coded Skins
 

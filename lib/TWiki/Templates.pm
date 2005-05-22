@@ -229,24 +229,13 @@ sub _readTemplateFile {
     my $store = $this->{session}->{store};
 
     $skins = $this->{session}->getSkin() unless defined( $skins );
+    #print STDERR "SKIN path is $skins\n";
     $web ||= $this->{session}->{webName};
     $name ||= '';
 
-    if ( $name =~ /^(\w+)\.(\w+)$/ ) {
-        my $web = $1;
-        my $topic = $2;
-        if ( $store->topicExists( $web, $topic ) &&
-             $this->{session}->{security}->checkAccessPermission
-             ( 'view', $this->{session}->{user}, '', $topic, $web )) {
-            my ( $meta, $text ) =
-              $store->readTopic( undef, $web, $topic, undef );
-            return $text;
-        }
-    }
-
     # zap anything suspicious
-    $name =~ s/[^A-Za-z0-9_,]//go;
-    $skins =~ s/[^A-Za-z0-9_,]//go;
+    $name =~ s/[^A-Za-z0-9_,.]//go;
+    $skins =~ s/[^A-Za-z0-9_,.]//go;
 
     my @skinList = split( /,+/, $skins );
 
@@ -269,6 +258,7 @@ sub _readTemplateFile {
     foreach my $skin ( @skinList ) {
         foreach my $file ( @{$this->{files}} ) {
             if ( $file =~ /\/$name.$skin.tmpl$/ ) {
+                #print STDERR "Template $name comes from $file\n";
                 return $store->readFile( $file );
             }
         }
@@ -277,7 +267,22 @@ sub _readTemplateFile {
     # now search the web dir and the root dir for the unskinned version
     foreach my $file ( @{$this->{files}} ) {
         if ( $file =~ /\/$name.tmpl$/ ) {
+            #print STDERR "Template $name comes from $file\n";
             return $store->readFile( $file );
+        }
+    }
+
+    # See if it is web.topic
+    if ( $name =~ /^(\w+)\.(\w+)$/ ) {
+        my $web = $1;
+        my $topic = $2;
+        if ( $store->topicExists( $web, $topic ) &&
+             $this->{session}->{security}->checkAccessPermission
+             ( 'view', $this->{session}->{user}, '', $topic, $web )) {
+            #print STDERR "Template $name comes from $web.$topic\n";
+            my ( $meta, $text ) =
+              $store->readTopic( undef, $web, $topic, undef );
+            return $text;
         }
     }
 
@@ -297,6 +302,7 @@ sub _readTemplateFile {
                   $lookWeb )) {
                 my ( $meta, $text ) =
                   $store->readTopic( undef, $lookWeb, $skintopic, undef );
+                #print STDERR "Template $name comes from $lookWeb.$skintopic\n";
                 return $text;
             }
         }
@@ -306,11 +312,13 @@ sub _readTemplateFile {
                $lookWeb )) {
             my ( $meta, $text ) =
               $store->readTopic( undef, $lookWeb, $ttopic, undef );
+            #print STDERR "Template $name comes from $lookWeb.$ttopic\n";
             return $text;
         }
     }
 
     # SMELL: surely this should be an error?
+    #print STDERR "Template $name was not found\n";
     return '';
 }
 
