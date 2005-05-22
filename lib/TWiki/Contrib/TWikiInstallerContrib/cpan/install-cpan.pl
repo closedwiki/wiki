@@ -25,8 +25,6 @@ my $optsConfig = {
     baselibdir => $FindBin::Bin . "/../cgi-bin/lib/CPAN",
     mirror => "file:$FindBin::Bin/MIRROR/TWIKI",
 #
-    force => 0,
-#
     config => "~/.cpan/CPAN/MyConfig.pm",
 #
     verbose => 0,
@@ -99,6 +97,9 @@ installLocalModules({
 });
 # Image::LibRSVG
 
+# explicity call cleanup code (puts back MyConfig.pm)
+$SIG{INT}();
+
 ################################################################################
 ################################################################################
 
@@ -133,8 +134,24 @@ sub createMyConfigDotPm
 
     my $cpanConfig = $parm->{config} or die "no config file specified?";
 
-    if ( $optsConfig->{force} || ! -e $cpanConfig )
-    { 
+    print STDERR "$cpanConfig\n";
+
+    # save the existing config file
+    # install a sig handler to restore it
+    if ( -e $cpanConfig )
+    {
+	open( CONFIG, "<$cpanConfig" ) or die $!;
+	local $/ = undef;
+	my $OLD_CONFIG = <CONFIG>;
+	close( CONFIG );
+
+	$SIG{INT} = sub {
+	    open( CONFIG, ">$cpanConfig" ) or die $!;
+	    print CONFIG $OLD_CONFIG;
+	    close( CONFIG );
+	};
+    }
+
 	-d dirname( $cpanConfig ) or mkpath( dirname( $cpanConfig ) );
 
 	open( FH, ">$cpanConfig" ) or die "$!: Can't create $cpanConfig";
@@ -182,11 +199,9 @@ sub createMyConfigDotPm
 	"1;\n",
 	"__END__\n";
 	close FH;
-    }
 }
 
 ################################################################################
-
 ################################################################################
 
 __DATA__
@@ -204,7 +219,6 @@ Copyright 2004, 2005 Will Norris.  All Rights Reserved.
    -baselibdir         where to install the CPAN modules
    -mirror             location of the (mini) CPAN mirror
    -config             filename (~/.cpan/CPAN/MyConfig.pm)
-   -force|f            force overwrite of config file
    -verbose
    -debug
    -help               this documentation
@@ -219,9 +233,6 @@ Copyright 2004, 2005 Will Norris.  All Rights Reserved.
 =item B<-mirror>
 
 =item B<-config>
-
-=item B<-force>
-=item B<-f>
 
 =back
 
