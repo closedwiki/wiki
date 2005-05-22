@@ -501,9 +501,9 @@ sub searchWeb {
 
     # Invalid template?
     if( ! $tmplTail ) {
-        my $mess = CGI::start_html() .
+        my $mess =
           CGI::h1('TWiki Installation Error') .
-              'Incorrect format of '.$theTemplate.' template (missing sections? There should be 4 %SPLIT% tags)' . CGI::end_html();
+              'Incorrect format of '.$theTemplate.' template (missing sections? There should be 4 %SPLIT% tags)';
         if ( defined $callback ) {
             &$callback( $cbdata, $mess );
             return undef;
