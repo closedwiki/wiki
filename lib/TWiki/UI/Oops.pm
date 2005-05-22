@@ -53,6 +53,8 @@ sub oops_cgi {
     my $web = $session->{webName};
     my $query = $session->{cgiQuery};
 
+    $session->enterContext( 'oops' );
+
     my $tmplName = $query->param( 'template' ) || 'oops';
     my $skin = $session->getSkin();
 

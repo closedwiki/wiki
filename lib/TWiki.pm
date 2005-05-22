@@ -458,7 +458,6 @@ BEGIN {
 
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
-
 };
 
 use TWiki::Access;    # access control
@@ -817,12 +816,16 @@ sub getSkin {
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
-    my $skin = $this->{prefs}->getPreferencesValue( 'SKIN' ) || '';
+    my $skinpath = $this->{prefs}->getPreferencesValue( 'SKIN' ) || '';
     if( $this->{cgiQuery} ) {
-        my $epidermis = $this->{cgiQuery}->param( 'skin' );
-        $skin = $epidermis.','.$skin if $epidermis;
+        # Replace existing skin path
+        my $resurface = $this->{cgiQuery}->param( 'skin' );
+        $skinpath = $resurface if $resurface;
+        # add to skin path
+        my $epidermis = $this->{cgiQuery}->param( 'cover' );
+        $skinpath = $epidermis.','.$skinpath if $epidermis;
     }
-    return $skin;
+    return $skinpath;
 }
 
 =pod
@@ -1029,6 +1032,8 @@ sub new {
     $this->{url} = $url;
 
     @{$this->{publicWebList}} = ();
+
+    $this->{context} = {};
 
     $this->{users} = new TWiki::Users( $this );
 
@@ -1849,7 +1854,7 @@ sub _expandAllTags {
 
     # SMELL: this is crap, a hack, and should go. It should be handled with
     # %TMPL:P{"sep"}% or a built-in.
-    my $sep = $this->{templates}->expandTemplate('"sep"');
+    my $sep = $this->{templates}->expandTemplate('sep');
     $$text =~ s/%SEP%/$sep/g;
 
     # NOTE TO DEBUGGERS
@@ -1993,6 +1998,51 @@ sub _expandTag {
 
 =pod
 
+---++ ObjectMethod enterContext( $id, $val )
+
+Add the context id $id into the set of active contexts. The $val
+can be anything you like, but should always evaluate to boolean
+TRUE.
+
+An example of the use of contexts is in the use of tag
+expansion. The commonTagsHandler in plugins is called every
+time tags need to be expanded, and the context of that expansion
+is signalled by the expanding module using a context id. So the
+forms module adds the context id "form" before invoking common
+tags expansion.
+
+Contexts are not just useful for tag expansion; they are also
+relevant when rendering.
+
+Contexts are intended for use mainly by plugins. Core modules can
+use $session->{context}->{$id} to determine if a context is active.
+
+=cut
+
+sub enterContext {
+    my( $this, $id, $val ) = @_;
+    $val ||= 1;
+    $this->{context}->{$id} = $val;
+}
+
+=pod
+
+---++ ObjectMethod leaveContext( $id )
+
+Remove the context id $id from the set of active contexts.
+(see =enterContext= for more information on contexts)
+
+=cut
+
+sub leaveContext {
+    my( $this, $id ) = @_;
+    my $res = $this->{context}->{$id};
+    delete $this->{context}->{$id};
+    return $res;
+}
+
+=pod
+
 ---++ StaticMethod registerTagHandler( $fnref )
 
 STATIC Add a tag handler to the function tag handlers.
@@ -2115,7 +2165,7 @@ sub _FORMFIELD {
 
 sub _TMPLP {
     my( $this, $params ) = @_;
-    return $this->{templates}->expandTemplate( $params->{_DEFAULT} );
+    return $this->{templates}->expandTemplate( $params );
 }
 
 sub _VAR {

@@ -271,6 +271,28 @@ sub redirectCgiQuery {
 
 =pod
 
+---+++ getContext() -> \%hash
+Get a hash of context identifiers representing the currently active
+context. The hash *must not* be changed.
+
+The context is a set of identifiers that are set
+during specific phases of TWiki processing. For example, each of
+the standard scripts in the 'bin' directory each has a context
+identifier - the view script has 'view', the edit script has 'edit'
+etc. So you can easily tell what 'type' of script your plugin is
+being called within. The available context identifiers are listed
+in the %TWIKIWEB%.TWikiTemplates topic.
+
+*Since:* TWiki::Plugins::VERSION 1.026
+
+=cut
+
+sub getContext {
+    return $TWiki::Plugins::SESSION->{context};
+}
+
+=pod
+
 ---++ Functions: Preferences
 
    * $attr ) -> %params

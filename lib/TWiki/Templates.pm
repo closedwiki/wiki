@@ -91,7 +91,7 @@ sub haveTemplate {
 
 =pod
 
----++ ObjectMethod expandTemplate( $param  ) -> $string
+---++ ObjectMethod expandTemplate( $params  ) -> $string
 
 Expand the template named in the parameter after recursive expansion
 of any TMPL:P tags it contains. Note that all other template tags
@@ -108,11 +108,11 @@ to do this in the MacrosPlugin.
 =cut
 
 sub expandTemplate {
-    my( $this, $param ) = @_;
+    my( $this, $params ) = @_;
     ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
 
-    my $attrs = new TWiki::Attrs( $param );
-    my $value = $this->_tmplP( $attrs->{_DEFAULT} );
+    my $attrs = new TWiki::Attrs( $params );
+    my $value = $this->_tmplP( $attrs );
     return $value;
 }
 
@@ -121,15 +121,26 @@ sub expandTemplate {
 # If $var is the name of a previously defined template, returns the text of
 # that template after recursive expansion of any TMPL:P tags it contains.
 sub _tmplP {
-    # Print template variable, called by %TMPL:P{$var}%
-    my( $this, $var ) = @_;
+    my( $this, $params ) = @_;
+
+    my $template = $params->{_DEFAULT};
+
+    if( $params->{context} ) {
+        $template = $params->{then} || $params->{_DEFAULT};
+        foreach my $id ( split( /, */, $params->{context} )) {
+            unless( $this->{session}->{context}->{$id} ) {
+                $template = $params->{else} || '';
+                last;
+            }
+        }
+    }
 
     my $val = '';
-    if( exists($this->{VARS}{ $var } )) {
-        $val = $this->{VARS}{ $var };
-        $val =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/$this->_tmplP($1)/geo;  # recursion
+    if( exists($this->{VARS}{ $template } )) {
+        $val = $this->{VARS}{ $template };
+        $val =~ s/%TMPL\:P{(.*?)}%/$this->expandTemplate($1)/geo;
     }
-    if( ( $var eq 'sep' ) && ( ! $val ) ) {
+    if( ( $template eq 'sep' ) && ( ! $val ) ) {
         # set separator explicitly if not set
         $val = " | ";
     }
@@ -218,7 +229,8 @@ sub readTemplate {
     }
 
     # handle %TMPL:P{"..."}% recursively
-    $result =~ s/%TMPL\:P{[\s\"]*(.*?)[\"\s]*}%/$this->_tmplP($1)/geo;
+    $result =~ s/%TMPL\:P{(.*?)}%/$this->expandTemplate($1)/geo;
+
     $result =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
     return $result;
 }

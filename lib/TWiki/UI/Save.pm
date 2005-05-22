@@ -48,6 +48,8 @@ use Assert;
 sub _save {
     my $session = shift;
 
+    $session->enterContext( 'save' );
+
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};

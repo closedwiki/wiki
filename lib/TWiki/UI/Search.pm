@@ -68,6 +68,8 @@ See the documentation on %SEARCH for a full description of parameters.
 sub search {
     my $session = shift;
 
+    $session->enterContext( 'search' );
+
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};

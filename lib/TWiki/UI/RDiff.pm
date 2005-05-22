@@ -348,6 +348,8 @@ TODO:
 sub diff {
     my $session = shift;
 
+    $session->enterContext( 'diff' );
+
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};

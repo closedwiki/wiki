@@ -72,6 +72,8 @@ sub view {
     my $revdate = '';
     my $revuser = '';
 
+    $session->enterContext( 'view' );
+
     TWiki::UI::checkWebExists( $session, $webName, $topicName, 'view' );
 
     my $skin = $session->getSkin();
@@ -109,6 +111,7 @@ sub view {
             ( $text, $meta ) = ( $currText, $currMeta );
         }
     } else { # Topic does not exist yet
+        $session->enterContext( 'new_topic' );
         $rev = 1;
         if( TWiki::isValidTopicName( $topicName )) {
             ( $currMeta, $currText ) =
@@ -132,7 +135,35 @@ sub view {
         $session->writeLog( 'view', $webName.'.'.$topicName, $logEntry );
     }
 
-    my $template = $query->param( 'template' ) || $session->{prefs}->getPreferencesValue("VIEW_TEMPLATE") || 'view';
+    my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) =
+      $session->readOnlyMirrorWeb( $webName );
+
+    # is this view indexable by search engines?
+    my $indexableView = 1;
+
+    # Note; must enter all contexts before the template is read, as
+    # TMPL:P is expanded on the fly in the template reader. :-(
+    my( $revTitle, $revArg ) = ( '', '' );
+    if( $mirrorSiteName ) {
+        $session->enterContext( 'inactive' );
+        if( $topicExists ) {
+            # allow view to be indexed
+            $indexableView = 1;
+        } else {
+            $text = '';
+        }
+    } elsif( $rev < $showRev ) {
+        $session->enterContext( 'inactive' );
+        # disable edit of previous revisions
+        $revTitle = '(r'.$rev.')';
+        $revArg = '&rev='.$rev;
+    } else {
+        $indexableView = 1;
+    }
+
+    my $template = $query->param( 'template' ) ||
+      $session->{prefs}->getPreferencesValue("VIEW_TEMPLATE") ||
+        'view';
 
     my $tmpl = $session->{templates}->readTemplate( $template, $skin );
     if( ! $tmpl ) {
@@ -146,47 +177,8 @@ sub view {
         return;
     }
 
-    my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) =
-      $session->readOnlyMirrorWeb( $webName );
-
-    # is this view indexable by search engines?
-    my $indexableView = 1;
-
-    if( $mirrorSiteName ) {
-        # disable edit and attach
-        # FIXME: won't work with non-default skins, see %EDITURL%
-        $tmpl =~ s/%EDITTOPIC%/$mirrorLink.' | '.CGI::strike('Edit')/ge;
-        $tmpl =~ s/<a\s[^>]*href="[^"]*\/(attach|rename)\b[^>]*>(.*?)<\/a>/CGI::strike($2)/gei;
-        if( $topicExists ) {
-            # allow view to be indexed
-            $indexableView = 1;
-        } else {
-            $text = '';
-        }
-        $tmpl =~ s/%REVTITLE%//go;
-    } elsif( $rev < $showRev ) {
-        # disable edit of previous revisions - FIXME consider change
-        # to use two templates
-        # SMELL: won't work with non-default skins, see %EDITURL%
-        # SMELL: does not handle more actions, as well as attachment through "manage"
-        $tmpl =~ s/%EDITTOPIC%/CGI::strike('Edit')/ge;
-        $tmpl =~ s/<a\s[^>]*href="%EDITURL%"[^>]*>(.*?)<\/a>/CGI::strike($1)/gei;
-        $tmpl =~ s/<a\s[^>]*href="[^"]*\/(attach|rename)\b[^>]*>(.*?)<\/a>/CGI::strike($2)/gei;
-        $tmpl =~ s/%REVTITLE%/(r$rev)/go;
-        $tmpl =~ s/%REVARG%/&rev=$rev/go;
-    } else {
-        $indexableView = 1;
-        my $editLinkText = CGI::span( { class=>'twikiAccessKey' }, 'E' ) . 'dit';
-        my $editAction = $topicExists ? $editLinkText : 'Create';
-        my $ea = CGI::a( { href => '%EDITURL%',
-                           rel => 'nofollow',
-                           title => 'Edit this topic text',
-                           accesskey => 'e'},
-                         CGI::b($editAction));
-        $tmpl =~ s/%EDITTOPIC%/$ea/g;
-        $tmpl =~ s/%REVTITLE%//go;
-        $tmpl =~ s/%REVARG%//go;
-    }
+    $tmpl =~ s/%REVTITLE%/$revTitle/g;
+    $tmpl =~ s/%REVARG%/$revArg/g;
 
     if( $indexableView && ! keys %{$query->Vars()} ) {
         # it's an indexable view type and there are no parameters
@@ -254,6 +246,8 @@ sub view {
     $session->{SESSION_TAGS}{MAXREV} = $showRev;
     $session->{SESSION_TAGS}{CURRREV} = $rev;
 
+    $session->enterContext( 'rss' ) if $skin =~ /\brss/;
+
     my $isTop = ( $rev == $showRev );
 
     # Set page generation mode to RSS if using an RSS skin
@@ -273,6 +267,11 @@ sub view {
     } else {
         my @args = ( $session, $webName, $topicName, $meta,
                      $isTop, $minimalist );
+
+        $session->enterContext( 'header_text' );
+        $text = _prepare($start, @args) . $text . _prepare($end, @args);
+        $session->leaveContext( 'header_text' );
+
         if( $raw ) {
             my $p = $session->{prefs};
             $text =
@@ -284,11 +283,14 @@ sub view {
                              -default => $text
                            );
         } else {
+            $session->enterContext( 'body_text' );
             $text = _prepare($text, @args);
+            $session->leaveContext( 'view' );
         }
 
-        $text = _prepare($start, @args) . $text . _prepare($end, @args);
-
+        $session->enterContext( 'footer_text' );
+        $text .= _prepare($end, @args);
+        $session->leaveContext( 'footer_text' );
     }
     # Output has to be done in one go, because if we generate the header and
     # then redirect because of some later constraint, some browsers fall over

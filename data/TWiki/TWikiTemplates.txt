@@ -35,6 +35,32 @@ _Templates_ are plain text with embedded _template directives_ that tell TWiki h
 	* %H% Use of template directives is optional: templates work without them.
 	* %X% *NOTE:* Template directives work only for templates: they do not get processed in normal topic text.
 
+TMPL:P also supports a limited form of "if" condition, that you can use to select which of two templates to use, based on a _context identifier_:
+<verbatim>
+%TMPL:DEF{"link_inactive"}%<input type="button" disabled value="Link>%TMPL:END%
+%TMPL:DEF{"link_active"}%<input type="button" onclick="link()" value="Link" />%TMPL:END%
+%TMPL:P{context="inactive" then="inactive_link" else="active_link"}% for %CONTEXT%
+</verbatim>
+When the "inactive" context is set, then this will expand the "link_inactive" template; otherwise it will expand the "link_active" template.
+
+The following context identifiers are available:
+| *id* | *context* |
+| changes | in changes script |
+| diff | in diff script |
+| edit | in edit script |
+| view | in view script |
+| search | in search script |
+| preview | in preview script |
+| save | in save script |
+| new_topic | if the topic doesn't already exist |
+| mirror | if this is a mirror |
+| inactive | if active links such as 'edit' and 'attach' should be disabled |
+| rss | if this is an rss skin rendering |
+| header_text | when the header text is being processed in a view |
+| body_text  | when the body text is being processed in a view |
+| footer_text | when the footer text is being processed in a view |
+| oops | in oops script |
+
 ---+++ Finding Templates
 
 Templates are stored either in the ==twiki/templates== directory, or can also be read from user topics. As an example, ==twiki/templates/view.tmpl== is the default template file for the ==twiki/bin/view== script.
