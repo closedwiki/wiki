@@ -262,19 +262,21 @@ sub view {
     # to download plain text for the topic. So when the skin is 'text'
     # we do _not_ want to create a textarea.
     # skin=text is deprecated; use raw=text instead.
+    my $page;
     if( $raw eq 'text' || $skin eq 'text' ) {
         # use raw text
+        $page = $text;
     } else {
         my @args = ( $session, $webName, $topicName, $meta,
                      $isTop, $minimalist );
 
         $session->enterContext( 'header_text' );
-        $text = _prepare($start, @args) . $text . _prepare($end, @args);
+        $page = _prepare($start, @args);
         $session->leaveContext( 'header_text' );
 
         if( $raw ) {
             my $p = $session->{prefs};
-            $text =
+            $page .=
               CGI::textarea( -readonly => 'readonly',
                              -wrap => 'virtual',
                              -rows => $p->getPreferencesValue('EDITBOXHEIGHT'),
@@ -284,17 +286,17 @@ sub view {
                            );
         } else {
             $session->enterContext( 'body_text' );
-            $text = _prepare($text, @args);
+            $page .= _prepare($text, @args);
             $session->leaveContext( 'view' );
         }
 
         $session->enterContext( 'footer_text' );
-        $text .= _prepare($end, @args);
+        $page .= _prepare($end, @args);
         $session->leaveContext( 'footer_text' );
     }
     # Output has to be done in one go, because if we generate the header and
     # then redirect because of some later constraint, some browsers fall over
-    $session->writeCompletePage( $text, 'view', $contentType )
+    $session->writeCompletePage( $page, 'view', $contentType )
 }
 
 sub _prepare {
