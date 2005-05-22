@@ -134,8 +134,6 @@ sub createMyConfigDotPm
 
     my $cpanConfig = $parm->{config} or die "no config file specified?";
 
-    print STDERR "$cpanConfig\n";
-
     # save the existing config file
     # install a sig handler to restore it
     if ( -e $cpanConfig )
