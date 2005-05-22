@@ -855,8 +855,7 @@ sub _getRegFormAsTopicContent {
 sub _emailRegistrationConfirmations {
     my ( $session, $data ) = @_;
 
-    my $skin = $session->{cgiQuery}->param('skin') ||
-      $session->{prefs}->getPreferencesValue('SKIN');
+    my $skin = $session->getSkin();
     my $template =
       $session->{templates}->readTemplate( 'registernotify', $skin );
     my $email =
