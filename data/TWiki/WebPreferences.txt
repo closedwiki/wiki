@@ -15,7 +15,7 @@ __Preferences:__
 		* Set WEBBGCOLOR = #FFD8AA
 
 	* Image, URL and alternate tooltip text of TWiki logo: (can be overwritten by web preferences)
-		* Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/twikiRobot46x50.gif
+		* Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWiki.gif
 		* Set WIKILOGOURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%HOMETOPIC%
 		* Set WIKILOGOALT = %SEARCH{ "\* Set SITEMAPLIST \= on" regex="on" web="%BASEWEB%" topic="%WEBPREFSTOPIC%" nototal="on" nosearch="on" format=" $pattern(.*?\* Set SITEMAPUSETO\s*=([^\n\r]*).*) " }%
 
