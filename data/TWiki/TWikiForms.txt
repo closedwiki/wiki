@@ -163,7 +163,7 @@ Result (after some editing):
 
 %EDITTABLE{ header="|*Name*|*Type*|*Size*|*Values*|*Tooltip message*|*Attributes*|" format="|text,20|text,20|text,20|text,20|text,20|text,1|" }%
 |*Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes*|
-|ALLOWTOPICCHANGE | textarea |  |  | Users or groups __allowed__ to change or rename this <nop>%TOPIC% topic: (I.e. %MAINWEB%.TWikiAdminGroup) | S|
+|ALLOWTOPICCHANGE | textarea |  |  | Users or groups __allowed__ to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup) | S|
 |ALLOWWEBCHANGE | textarea |  |  | Users or groups who __are__  allowed to  __change__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
 |ALLOWWEBRENAME | textarea |  | %MAINWEB%.TWikiAdminGroup | Users or groups who __are__  allowed to  __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
 |ALLOWWEBVIEW | textarea |  |  | Users or groups who __are__  allowed to __view__  topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
