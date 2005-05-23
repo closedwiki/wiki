@@ -19,7 +19,7 @@
 
 %INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
 
-%TWIKIWEB% Web:*
+*%TWIKIWEB% Web:*
 	* <b> %TWIKIWEB%.WelcomeGuest: </b> Look here first to get you rolling on <nop>%WIKITOOLNAME%.
 	* %TWIKIWEB%.TWikiSite: Explains what a <nop>%WIKITOOLNAME% site is.
 	* %TWIKIWEB%.TWikiRegistration: Create your account in order to edit topics.
