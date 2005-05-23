@@ -969,7 +969,9 @@ sub getTopicList {
 ---++ Functions: Rendering
 
 ---+++ registerTagHandler( $tag, \&fn )
-Register a function to handle a simple tag. Should only be called from initPlugin.
+Should only be called from initPlugin.
+
+Register a function to handle a simple tag. Handles both %<nop>TAG% and %<nop>TAG{...}%. Registered tags are treated the same as TWiki internal tags, and are expanded at the same time. This is a _lot_ more efficient than using the =commonTagsHandler=.
    * =$tag= - The name of the tag i.e. the 'MYTAG' part of %<nop>MYTAG%. The tag name *must* match /^[A-Z][A-Z0-9_]*$/ or it won't work.
    * =\&fn= - Reference to the handler function.
 
@@ -984,6 +986,25 @@ where:
    * =\%params= - a reference to a TWiki::Attrs object containing parameters. This can be used as a simple hash that maps parameter names to values, with _DEFAULT being the name for the default parameter.
    * =$theTopic= - name of the topic in the query
    * =$theWeb= - name of the web in the query
+for example, to execute an arbitrary command on the server, you might do this:
+<verbatim>
+sub initPlugin{
+   TWiki::Func::registerTagHandler('EXEC', \&boo);
+}
+
+sub boo {
+    my( $session, $params, $topic, $web ) = @_;
+    my $cmd = $params->{_DEFAULT};
+
+    return "NO COMMAND SPECIFIED" unless $cmd;
+
+    my $result = `$cmd 2>&1`;
+    return $params->{silent} ? '' : $result;
+}
+}
+</verbatim>
+would let you do this:
+=%EXEC{"ps -Af" silent="on"}%=
 
 =cut
 
