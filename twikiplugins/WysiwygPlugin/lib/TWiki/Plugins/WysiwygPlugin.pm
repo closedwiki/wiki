@@ -1,3 +1,20 @@
+# Copyright (C) 2005 ILOG http://www.ilog.fr
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of the TWiki distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
+
 =pod
 
 ---+ package WysiwygPlugin
@@ -20,15 +37,14 @@ use CGI qw( -any );
 use strict;
 use TWiki::Func;
 
-use vars qw( $VERSION $convertSkin $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
+use vars qw( $VERSION $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
 
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
 
     $currentWeb = $web;
-    $convertSkin = TWiki::Func::getPreferencesValue("WYSIWYGPLUGIN_SKIN_NAME");
     $calledThisSession = 0;
 
     # Plugin correctly initialized
@@ -40,7 +56,6 @@ sub initPlugin {
 sub beforeSaveHandler {
     #my( $text, $topic, $web ) = @_;
     my $query = TWiki::Func::getCgiQuery();
-
     return unless $query;
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
@@ -69,29 +84,31 @@ sub beforeSaveHandler {
 
     # SMELL: really, really bad smell; bloody core should NOT pass text
     # with embedded meta to plugins! It is VERY BAD DESIGN!!!
-    $_[0] =~ s/^(%META:[A-Z]+{.*?}%)\s*$/push(@rescue,$1);"<!--\007@#rescue-->"/gem;
+    $_[0] =~ s/^(%META:[A-Z]+{.*?}%)\s*$/push(@rescue,$1);'<!--META_'.
+      scalar(@rescue).'_META-->'/gem;
 
     # undo the munging that has already been done (grrrrrrrrrr!!!!)
     $_[0] =~ s/\t/   /g;
 
     $_[0] = $html2tml->convert( $_[0] );
 
-    $_[0] =~ s/^<!--\007(\d+)-->$/$rescue[$1]/g;
+    $_[0] =~ s/<!--META_(\d+)_META-->/$rescue[$1-1]/g;
 }
 
 # Invoked when the selected skin is in use to convert the text to HTML
 # We can't use the beforeEditHandler, because the editor loads up and then
 # uses a URL to fetch the text to be edited. This handler is designed to
-# provide the text for that request. It's a realy struggle, because the
+# provide the text for that request. It's a real struggle, because the
 # commonTagsHandler is called so many times that getting the right
-# call is a struggle, and then preventing a repeat call is another
-# struggle!.
+# call is hard, and then preventing a repeat call is harder!
 sub commonTagsHandler {
     #my ( $text, $topic, $web )
 
     return if ( $inSave || $calledThisSession );
 
     my $query = TWiki::Func::getCgiQuery();
+    return unless $query;
+
     return unless defined( $query->param( 'wysiwyg_edit' ));
 
     # stop it from processing the template without expanded
@@ -105,19 +122,26 @@ sub commonTagsHandler {
         $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&getViewUrl);
     }
 
+    # Have to re-read the topic because verbatim blocks have already been
+    # lifted out, and we need them. We really need a hook that lets
+    # us intercept raw=text.
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
-    $_[0] = $tml2html->convert( $text );
+    $_[0] = $tml2html->convert( $_[0] );
     $calledThisSession = 1;
 }
 
+# callback passed down to TML2HTML generator
 sub getViewUrl {
     my( $web, $topic ) = @_;
 
     # the documentation says getViewUrl defaults the web. It doesn't.
     $web ||= $currentWeb;
+
     return TWiki::Func::getViewUrl( $web, $topic );
 }
 
+# callback used in TML generation to parse a URL and see if it
+# can be recognised as an internal wiki link.
 sub parseWikiUrl {
     my $url = shift;
 

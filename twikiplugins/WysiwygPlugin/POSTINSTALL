@@ -1,16 +1,17 @@
 unless( -f "pub/_kupu/common/kupucnf.html" ) {
+my $kuperror = 0;
 
 chdir('pub/_kupu');
 print "Unzipping Kupu...\n";
 my $result = `unzip kupu.zip`;
-if( $! ) {
-    print STDERR "Error $! running 'unzip kupu'\n$result\nKupu installation failed. See the Kupu documentation in pub/_kupu/doc/INSTALL.txt for details of how to complete installation of Kupu\n";
-}
+$kuperror = $!;
 
 print "Running Kupu installer...\n";
 $result = `make`;
-if( $! ) {
-    print STDERR "Error $! running 'make'\n$result\nKupu installation failed. See the Kupu documentation in pub/_kupu/doc/INSTALL.txt for details of how to complete installation of Kupu\n";
+$kuperror ||= $!;
+
+if( $kuperror ) {
+    print STDERR "Error $kuperror running 'make'\n$result\nKupu installation returned an error. However it will probably work with TWiki anyway (the installation builds non-TWiki related functionality). See the Kupu documentation in pub/_kupu/doc/INSTALL.txt for details of how to complete installation of Kupu\n";
 }
 
 }
