@@ -1,4 +1,26 @@
-// Override of initKupu for TWiki editing
+/*
+   Copyright (C) 2005 ILOG http://www.ilog.fr
+   and TWiki Contributors. All Rights Reserved. TWiki Contributors
+   are listed in the AUTHORS file in the root of this distribution.
+   NOTE: Please extend that file, not this notice.
+
+   Portions Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+  
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  
+   As per the GPL, removal of this notice is prohibited.
+*/
+
+/*
+ * TWiki-specific customisation of kupuinit.js
+ */
 
 function initKupu(iframe) {
 
@@ -112,10 +134,6 @@ function initKupu(iframe) {
                                             'kupu-editor-textarea');
     kupu.registerTool('sourceedittool', sourceedittool);
 
-    // remove tags that aren't in the XHTML DTD
-    var nonxhtmltagfilter = new NonXHTMLTagFilter();
-    kupu.registerFilter(nonxhtmltagfilter);
-
     // Save button
     var savebutton = document.getElementById('kupu-save-button');
     function submitForm() {
@@ -218,6 +236,11 @@ function initKupu(iframe) {
                                    'twiki-upload-form',
                                    'twiki-insertatt-select');
     drawertool.registerDrawer('newAttDrawer', newAttDrawer);
+
+    /* Note: the XHTML filter is disabled, so that any non-XHTML
+     * tags imported from the source are passed back out of the
+     * editor. The expectationis that the post-processing will
+     * deal with any unrecognised tags. */
 
     return kupu;
 };

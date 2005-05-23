@@ -1,8 +1,7 @@
-/*****************************************************************************
- * 
- * Copyright (C) 2005 ILOG
+/*
+ * Copyright (C) 2005 ILOG http://www.ilog.fr
  * Portions Copyright (C) 2004 Damien Mandrioli and Romain Raugi
- * Portions Copyright (c) 2003-2004 Kupu Contributors. All rights reserved.
+ * Portions Copyright (C) 2003-2004 Kupu Contributors. All rights reserved.
  *  
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -14,11 +13,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *  
- *****************************************************************************/
+ */
 
 /*
- * generic toggler tags. Will add a new tag of the given type,
- * or delete an enclosing tag if the burron is pressed (as
+ * Generic tag toggler. Will add a new tag of the given type,
+ * or delete an enclosing tag if the button is pressed (as
  * established by the associated checker)
  */
 function TWikiToggleTag(button, editor, tag) {
@@ -374,7 +373,7 @@ function stringify(node) {
   return str + "}";
 }
 
-/* Hack bad buttons off the form */
+/* Hack bad buttons off the form on startup */
 function TWikiCleanForm() {
   var elems = document.getElementsByName('submitChangeForm');
   for (var i = 0; i < elems.length; i++) {
