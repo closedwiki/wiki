@@ -323,7 +323,7 @@ __Major New Features__
 	* *03 Nov 2000* - TWiki:Main.PeterThoeny
 		* Flag =$doHidePasswdInRegistration= in =wikicfg.pm= to hide plain text password in registration email. 
 	* *01 Nov 2000* - TWiki:Main.PeterThoeny
-		* New variable =%<nop>VAR{"NAME" web="Web"}%= to get web specific preferences. More in TWikiVariables. 
+		* New variable =%<nop>VAR{"NAME" web="Web"}%= to get web-specific preferences. More in TWikiVariables. 
 	* *01 Nov 2000* - TWiki:Main.PeterThoeny
 		* Added a "Cancel" link in edit that releases the edit lock. 
 	* *23 Oct 2000* - TWiki:Main.PeterThoeny

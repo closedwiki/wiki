@@ -13,7 +13,7 @@ Custom rendering rules of the default plugin:
 
 	* Allow old include syntax ( ==%<nop>INCLUDE:"TopicName"%== ) if Plugin Preferences variable ==OLDINCLUDE== is set to ==1==
 	* Render deprecated ==*_text_*== as __bold italic__ text. Test if installed: *_This is bold italic_*
-	* Enable <nop>JosWiki rules if <nop>JosWiki specific code is uncommented
+	* Enable <nop>JosWiki rules if <nop>JosWiki-specific code is uncommented
     * Rewrite certain attachment URLs according to legacy usage
 
 Modify file ==TWiki/Plugins/DefaultPlugin.pm== to add your own rules or to enable <nop>JosWiki rules.

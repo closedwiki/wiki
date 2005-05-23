@@ -15,7 +15,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* List of selected topics in a web - the second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%):
 		* Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
-	* Web specific background color: (is overwritten by web preferences)
+	* Web-specific background color: (is overwritten by web preferences)
 		* Set WEBBGCOLOR = #FFD8AA
 
 	* [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences

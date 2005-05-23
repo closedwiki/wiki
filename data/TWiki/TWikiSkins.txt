@@ -27,7 +27,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 | =%<nop>WIKILOGOURL%= | Link of page logo |
 | =%<nop>WIKILOGOIMG%= | Image URL of page logo |
 | =%<nop>WIKILOGOALT%= | Alt text of page logo |
-| =%<nop>WEBBGCOLOR%= | Web specific background color, defined in the WebPreferences |
+| =%<nop>WEBBGCOLOR%= | Web-specific background color, defined in the WebPreferences |
 | =%<nop>WIKITOOLNAME%= | The name of your TWiki site |
 | =%<nop>SCRIPTURL%= | The script URL of TWiki |
 | =%<nop>SCRIPTSUFFIX%= | The script suffix, ex: =.pl=, =.cgi= |

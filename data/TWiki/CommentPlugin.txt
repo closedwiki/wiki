@@ -155,7 +155,7 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 | 16 Aug 2004 | 3.005 Cairo readiness; dependency checking; added =threadmode= template. |
 | 11 Apr 2004 | 3.004 Minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
 | 6 April 2004 | 3.003 Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
-| 13 March 2004 | 3.002 Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site-specifics, support %<nop>COMMENT%, internationalisation fixes |
+| 13 March 2004 | 3.002 Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site specifics, support %<nop>COMMENT%, internationalisation fixes |
 | 18 Feb 2004 | 3.001 TWiki:Main/CrawfordCurrie rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
 | 7 Feb 2004 | TWiki:Main/CrawfordCurrie rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
 | 23 Sep 2003 | 2.000 TWiki:Main/PeterMasiar: 80% rewrite/refactor, adding templates |
