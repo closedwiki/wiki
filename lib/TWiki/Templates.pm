@@ -89,6 +89,19 @@ sub haveTemplate {
     return exists( $this->{VARS}{ $template } );
 }
 
+# Expand only simple templates that can be expanded statically.
+# Templates with conditions can only be expanded after the
+# context is fully known.
+sub _expandTrivialTemplate {
+    my( $this, $text ) = @_;
+
+    $text =~ /%TMPL\:P{(.*)}%/;
+    my $attrs = new TWiki::Attrs( $1 );
+    # Can't expand context-dependant templates
+    return $text if ( $attrs->{context} );
+    return $this->_tmplP( $attrs );
+}
+
 =pod
 
 ---++ ObjectMethod expandTemplate( $params  ) -> $string
@@ -229,7 +242,7 @@ sub readTemplate {
     }
 
     # handle %TMPL:P{"..."}% recursively
-    $result =~ s/%TMPL\:P{(.*?)}%/$this->expandTemplate($1)/geo;
+    $result =~ s/(%TMPL\:P{.*?}%)/$this->_expandTrivialTemplate($1)/geo;
 
     $result =~ s|^(( {3})+)|"\t" x (length($1)/3)|geom;  # leading spaces to tabs
     return $result;
