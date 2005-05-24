@@ -5,7 +5,7 @@ The "Force New Revision" checkbox is a way to force it to create a separate revi
 
 The [[%TWIKIWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls whether this is checked by default or not.
 
-You can force __every__ save to be a new revision number by editing =lib/TWiki.cfg= and setting ==$doKeepRevIfEditLock=0== 
+On a related note, you can force __every__ save to be a new revision number by editing =lib/TWiki.cfg= and setting ==$doKeepRevIfEditLock=0== 
 
 -- TWiki:Main.JeffreyLaughlin, TWiki:Main.WillNorris, TWiki:Main.MattWilkie, TWiki:Main.SamHasler
 
