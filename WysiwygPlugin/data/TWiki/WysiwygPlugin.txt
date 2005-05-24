@@ -66,7 +66,7 @@ my $tml = $html2tml->convert( $html );
 %$MANIFEST%
 	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
 	%$DEPENDENCIES%
-	* The installer script will try to install the [[http://kupu.osqom.org][Kupu]] editor. The script simply follows the steps described in the Kupu installation documentation. The Kupu package in this install (in =pub/_kupu=) is a one-for-one copy of the Kupu 1.2.1 release package.
+	* The installer script will try to install the [[http://kupu.osqom.org][Kupu]] editor. The script simply unzips the kupu.zip package and then follows the steps described in the Kupu installation documentation. The Kupu package in this install (in =pub/_kupu=) is a one-for-one copy of the Kupu 1.2.1 release package. If you don't run the installer script, you need to do this manually.
 		* Kupu install requires an XSLT processor with XInclude support, such as xsltproc from Gnome's libxml/libxslt.<p /> Windows users: You can get libxml/libxslt binaries at http://www.zlatkovic.com/pub/libxml/. As a minimum you need to download the zipfiles for libxslt, libxml2, iconv and zlib. Extracting all of the .dll and .exe files into c:\libxslt is sufficient for make.bat to work (ignore subdirectories in the zipfiles).
 	* To enable the editor in one of you skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br />
 	<code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />
