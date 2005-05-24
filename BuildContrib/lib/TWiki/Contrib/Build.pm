@@ -14,7 +14,7 @@
 #
 package TWiki::Contrib::Build;
 
-=begin text
+=pod
 
 ---++ Package TWiki::Contrib::Build
 Base class of build objects for TWiki packages. Creates a build environment
@@ -94,7 +94,9 @@ use POSIX;
 use diagnostics;
 use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
 
-$VERSION = 1.006;
+$VERSION = 1.007;
+
+my $NL = "\n";
 
 BEGIN {
     use File::Spec;
@@ -103,12 +105,12 @@ BEGIN {
     $basedir = $buildpldir;
     # Find the lib root
     unless ($basedir =~ s/^(.*)[\\\/](lib[\\\/]TWiki[\\\/].*)$/$1/) {
-        die "Couldn't find lib/TWiki in $basedir";
+        die 'Could not find lib/TWiki in '.$basedir;
     }
     $libpath = $2;
     $libpath =~ s/[\\\/][^\\\/]*$//;
 
-    $twiki_home = $ENV{"TWIKI_HOME"};
+    $twiki_home = $ENV{'TWIKI_HOME'};
     if ($ENV{TWIKI_LIBS}) {
         foreach my $pc (split(/:/,$ENV{TWIKI_LIBS})) {
             unless(grep(/$pc/,@INC)) {
@@ -117,11 +119,11 @@ BEGIN {
         }
     }
     unless(grep(/$basedir\/lib/,@INC)) {
-        unshift(@INC, "$basedir/lib");
+        unshift(@INC, $basedir.'/lib');
     }
 }
 
-=begin text
+=pod
 
 ---++++ new($project)
 | $project | Name of plugin, addon, contrib or skin |
@@ -137,7 +139,7 @@ sub new {
     my $this = {};
 
     $this->{project} = $project;
-    $this->{target} = "test";
+    $this->{target} = 'test';
 
     my $n = 0;
     my $done = 0;
@@ -150,9 +152,9 @@ sub new {
         $n++;
     }
     if ($this->{-v}) {
-        print "Building in $buildpldir\n";
-        print "Basedir is $basedir\nComponent dir is $libpath\n";
-        print "Using path ".join(":",@INC)."\n";
+        print 'Building in ',$buildpldir,$NL;
+        print 'Basedir is ',$basedir,$NL,'Component dir is ',$libpath,$NL;
+        print 'Using path '.join(':',@INC).$NL;
     }
 
     chdir($basedir);
@@ -168,9 +170,9 @@ sub new {
 
     # the .pm module
     if ($rootModule) {
-        $this->{pm} = "$libpath/$rootModule.pm";
+        $this->{pm} = $libpath.'/'.$rootModule.'.pm';
     } else {
-        $this->{pm} = "$libpath/$project.pm";
+        $this->{pm} = $libpath.'/'.$project.'.pm';
     }
 
     my $stubpath = $this->{pm};
@@ -179,18 +181,18 @@ sub new {
     $this->{STUB} = $stubpath;
 
     # where data files live
-    $this->{data_twiki} = "data/TWiki";
+    $this->{data_twiki} = 'data/TWiki';
 
     # the root of the name of data files
-    $this->{data_twiki_module} = "$this->{data_twiki}/$this->{project}";
+    $this->{data_twiki_module} = $this->{data_twiki}.'/'.$this->{project};
 
     # read the manifest
-    my $manifest = "$basedir/$libpath/$project/MANIFEST";
+    my $manifest = $basedir.'/'.$libpath.'/'.$project.'/MANIFEST';
     unless( -f $manifest) {
-        $manifest = "$basedir/MANIFEST";
+        $manifest = $basedir.'/MANIFEST';
     }
-    unless (open(PF, "<$manifest")) {
-        print STDERR "NO MANIFEST FILE\n";
+    unless (open(PF, '<'.$manifest)) {
+        print STDERR 'NO MANIFEST FILE',$NL;
         target_manifest(); #CodeSmell - calling package sub not object method
         exit(1);
     }
@@ -198,46 +200,46 @@ sub new {
     while ($line = <PF>) {
         if ( $line =~ /^(\S+)(\s+(\S.*))?\s*$/o ) {
             push(@{$this->{files}},
-                 { name => $1, description => ($3 || "") });
+                 { name => $1, description => ($3 || '') });
         }
     }
     close(PF);
 
-    my $deps = "$basedir/$libpath/$project/DEPENDENCIES";
-    $deps = "$basedir/DEPENDENCIES" unless -f $deps;
-    die "Failed to find DEPENDENCIES" unless -f $deps;
-    my $condition = "";
+    my $deps = $basedir.'/'.$libpath.'/'.$project.'/DEPENDENCIES';
+    $deps = $basedir.'/DEPENDENCIES' unless -f $deps;
+    die 'Failed to find DEPENDENCIES' unless -f $deps;
+    my $condition = '';
     if (-f $deps) {
-        open(PF, "<$deps") ||
-          die "Failed to open $deps";
+        open(PF, '<'.$deps) ||
+          die 'Failed to open '.$deps;
         while ($line = <PF>) {
             if ($line =~ /^ONLYIF\s*(\(.*\))\s*$/) {
                 $condition = $1;
             } elsif ($line =~ m/^(\w+)\s+(\w*)\s*(.*)$/o) {
                 push(@{$this->{dependencies}},
-                     { name=>$1, type=>$2, version=>"",
+                     { name=>$1, type=>$2, version=>'',
                        description=>$3, trigger=>$condition});
-                $condition="";
+                $condition='';
             } elsif ($line =~ m/^([^,]+),([^,]*),\s*(\w*)\s*,\s*(.+)$/o) {
                 push(@{$this->{dependencies}},
                      { name=>$1, version=>$2, type=>$3, description=>$4,
                        trigger=>$condition });
-                $condition="";
+                $condition='';
             } elsif ($line !~ /^\s*$/ && $line !~ /^\s*#/) {
-                warn "WARNING: LINE $line IN $deps IGNORED\n";
+                warn 'WARNING: LINE '.$line.' IN '.$deps.' IGNORED';
             }
         }
     } else {
-        warn "WARNING: no $deps; dependencies will only be extracted from code\n";
+        warn 'WARNING: no '.$deps.'; dependencies will only be extracted from code';
     }
     close(PF);
 
-    my $version = "Unknown";
-    if (open(PF,"<$basedir/$this->{pm}")) {
-        my $text = "";
+    my $version = 'Unknown';
+    if (open(PF,'<'.$basedir.'/'.$this->{pm})) {
+        my $text = '';
         while ($line = <PF>) {
             $line =~ s/\s+//g;
-            $text .= "$line\n";
+            $text .= $line.$NL;
         }
         if ($text =~ /^\$VERSION=(.*?);$/m) {
             $version = $1;
@@ -254,16 +256,17 @@ sub new {
                             last;
                         }
                     }
-                    unless ($found || $name eq "TWiki::Plugins") {
+                    unless ($found || $name eq 'TWiki::Plugins') {
                         push(@{$this->{dependencies}},
                              { name=>$name, version=>$ver, type=>'perl',
-                               description=>$name, trigger=>"" });
+                               description=>$name, trigger=>'' });
                     }
                 }
             }
         }
     } else {
-        warn "WARNING: $this->{pm} not found; cannot extract VERSION or in-code dependencies\n";
+        warn 'WARNING: '.$this->{pm}.
+          ' not found; cannot extract VERSION or in-code dependencies';
     }
     close(PF);
 
@@ -271,55 +274,57 @@ sub new {
     unless( grep(/^$this->{project}_installer.pl$/,
                  map {$_->{name}} @{$this->{files}})) {
         push(@{$this->{files}},
-             { name => "$this->{project}_installer.pl",
-               description => "Install script" });
-        print "Auto-adding install script to manifest\n";
+             { name => $this->{project}.'_installer.pl',
+               description => 'Install script' });
+        print 'Auto-adding install script to manifest',$NL;
     }
 
-    my $mantable = "";
+    my $mantable = '';
     foreach my $file (@{$this->{files}}) {
-        $mantable .= "\t| ==" . $file->{name} . "== | " .
-          $file->{description} . " |\n";
+        $mantable .= "\t| ==" . $file->{name} . '== | ' .
+          $file->{description} . ' |'.$NL;
     }
     $this->{MANIFEST} = $mantable;
 
-    my $deptable = "";
-    my $a = " align=\"left\"";
+    my $deptable = '';
+    my $a = ' align="left"';
     foreach my $dep (@{$this->{dependencies}}) {
         my $v = $dep->{version};
         $v =~ s/&/&amp;/go;
         $v =~ s/>/&gt;/go;
         $v =~ s/</&lt;/go;
-        $deptable .= "<tr><td$a>" .
-          $dep->{name} . "</td><td$a>" .
-            $v . "</td><td$a>" .
-              $dep->{description} . "</td></tr>";
+        $deptable .= '<tr><td'.$a.'>' .
+          $dep->{name} . '</td><td['.$a.'>' .
+            $v . '</td><td'.$a.'>' .
+              $dep->{description} . '</td></tr>';
     }
-    $this->{DEPENDENCIES} = "None";
-    if ($deptable ne "") {
-        $this->{DEPENDENCIES} = "<table border=1><tr><th$a>Name</th><th$a>Version</th><th$a>Description</th></tr>$deptable</table>";
+    $this->{DEPENDENCIES} = 'None';
+    if ($deptable ne '') {
+        $this->{DEPENDENCIES} = '<table border="1"><tr><th'.$a.
+          '>Name</th><th'.$a.'>Version</th><th'.$a.
+            '>Description</th></tr>'.$deptable.'</table>';
     }
     $this->{VERSION} = $version;
-    $this->{DATE} = POSIX::strftime("%T %d %B %Y", localtime);
+    $this->{DATE} = POSIX::strftime('%T %d %B %Y', localtime);
 
     undef $/;
-    foreach my $stage ( "PREINSTALL", "POSTINSTALL", "PREUNINSTALL", "POSTUNINSTALL" ) {
-        $this->{$stage} = "# No $stage script";
-        my $file = "$basedir/$stage";
+    foreach my $stage ( 'PREINSTALL', 'POSTINSTALL', 'PREUNINSTALL', 'POSTUNINSTALL' ) {
+        $this->{$stage} = '# No '.$stage.' script';
+        my $file = $basedir.'/'.$stage;
         if (-f $file) {
-            open(PF, "<$file") ||
-              die "$file open failed";
+            open(PF, '<'.$file) ||
+              die $file.' open failed: ',$!;
             $this->{$stage} = <PF>;
         }
     }
-    $/ = "\n";
+    $/ = $NL;
 
     $this->{MODULE} = $this->{project};
 
     return bless( $this, $class );
 }
 
-=begin text
+=pod
 
 ---++++ cd($dir)
   Change to the given directory
@@ -329,10 +334,10 @@ sub cd {
     my ($this, $file) = @_;
 
     if ($this->{-v} || $this->{-n}) {
-        print "cd $file\n";
+        print 'cd '.$file.$NL;
     }
     if (!$this->{-n}) {
-        chdir($file) || die "Failed to cd to $file";
+        chdir($file) || die 'Failed to cd to '.$file;
     }
 }
 
@@ -340,14 +345,14 @@ sub rm {
     my ($this, $file) = @_;
 
     if ($this->{-v} || $this->{-n}) {
-        print "rm $file\n";
+        print 'rm '.$file.$NL;
     }
     if (-e $file && !$this->{-n}) {
-        unlink($file) || warn "WARNING: Failed to delete $file";
+        unlink($file) || warn 'WARNING: Failed to delete '.$file;
     }
 }
 
-=begin text
+=pod
 
 ---++++ makepath($to)
 Make a directory and all directories leading to it.
@@ -365,17 +370,17 @@ sub makepath {
     if (! -e $to) {
         $this->makepath(`dirname $to`);
         if ($this->{-v} || $this->{-n}) {
-            print "mkdir $to\n";
+            print 'mkdir '.$to.$NL;
         }
         unless ($this->{-n}) {
-            mkdir($to) || warn "Warning: Failed to make $to: $!";
+            mkdir($to) || warn 'Warning: Failed to make '.$to.': '.$!;
         }
     } else {
-        warn "Warning: $to exists and is not a directory; cannot create a dir over it";
+        warn 'Warning: '.$to.' exists and is not a directory; cannot create a dir over it';
     }
 }
 
-=begin text
+=pod
 
 ---++++ cp($from, $to)
 Copy a single file from - to. Will automatically make intervening
@@ -386,24 +391,24 @@ directories in the target. Also works for target directories.
 sub cp {
     my ($this, $from, $to) = @_;
 
-    die "Source file $from does not exist " unless ( $this->{-n} || -e $from);
+    die 'Source file '.$from.' does not exist ' unless ( $this->{-n} || -e $from);
 
     $this->makepath(`dirname $to`);
 
     if ($this->{-v} || $this->{-n}) {
-        print "cp $from $to\n";
+        print 'cp '.$from.' '.$to.$NL;
     }
     unless ($this->{-n}) {
         if ( -d $from ) {
-            mkdir($to) || warn "Warning: Failed to make $to: $!";;
+            mkdir($to) || warn 'Warning: Failed to make '.$to.': '.$!;
         } else {
             File::Copy::copy($from, $to) ||
-                warn "Warning: Failed to copy $from to $to: $!";
+                warn 'Warning: Failed to copy '.$from.' to '.$to.': '.$!;
         }
     }
 }
 
-=begin text
+=pod
 
 ---++++ prot($perms, $file)
 Set permissions on a file. Permissions should be expressed using POSIX
@@ -414,10 +419,10 @@ chmod notation.
 sub prot {
     my ($this, $perms, $file) = @_;
 
-    $this->sys_action("chmod $perms $file");
+    $this->sys_action('chmod '.$perms.' '.$file);
 }
 
-=begin text
+=pod
 
 ---++++ sys_action($cmd)
 Perform a "system" command.
@@ -428,15 +433,15 @@ sub sys_action {
     my ($this, $cmd) = @_;
 
     if ($this->{-v} || $this->{-n}) {
-        print "$cmd\n";
+        print $cmd.$NL;
     }
     unless ($this->{-n}) {
         system($cmd);
-        die "Failed to $cmd\n" if ($?);
+        die 'Failed to '.$cmd.': '.$? if ($?);
     }
 }
 
-=begin text
+=pod
 
 ---++++ target_build
 Basic build target. By default does nothing, but subclasses may want to
@@ -449,7 +454,7 @@ sub target_build {
     # does nothing
 }
 
-=begin text
+=pod
 
 ---++++ target_test
 Basic Test::Unit test target, runs <project>Suite.
@@ -458,36 +463,36 @@ Basic Test::Unit test target, runs <project>Suite.
 
 sub target_test {
     my $this = shift;
-    $this->build("build");
+    $this->build('build');
     my $testrunner;
 
     # find testrunner
     foreach my $d ( @INC ) {
         my $dir = `dirname $d`;
         chop($dir);
-        $dir .= "/contrib";
-        if (-f "$dir/TestRunner.pl") {
-            $testrunner = "-I $dir/fixtures $dir/TestRunner.pl";
+        $dir .= '/contrib';
+        if (-f $dir.'/TestRunner.pl') {
+            $testrunner = '-I '.$dir.'/fixtures '.$dir.'/TestRunner.pl';
             last;
         }
     }
 
-    my $testdir = "$basedir/$this->{libdir}/$this->{project}/test";
-    my $testsuite = $this->{project}."Suite";
-    if (!-f "$testdir/$testsuite.pm") {
-        warn "WARNING: COULD NOT FIND ANY TESTS FOR '$this->{project}' IN $testdir/$testsuite.pm\n";
+    my $testdir = $basedir.'/'.$this->{libdir}.'/'.$this->{project}.'/test';
+    my $testsuite = $this->{project}.'Suite';
+    if (!-f $testdir.'/'.$testsuite.'.pm') {
+        warn 'WARNING: COULD NOT FIND ANY TESTS FOR '.$this->{project}.' IN '.$testdir.'/'.$testsuite.'.pm';
         return;
     }
     unless($testrunner) {
-        warn "WARNING: CANNOT RUN TESTS; ../contrib/TestRunner.pl not found in path\n";
+        warn 'WARNING: CANNOT RUN TESTS; ../contrib/TestRunner.pl not found in path';
         return;
     }
     $this->cd($testdir);
-    my $inc = join(" -I", @INC);
-    $this->sys_action("perl -w -I$inc $testrunner $testsuite");
+    my $inc = join(' -I', @INC);
+    $this->sys_action('perl -w -I'.$inc.' '.$testrunner.' '.$testsuite);
 }
 
-=begin text
+=pod
 
 ---++++ filter
 Expands tokens. The following tokens are supported:
@@ -503,6 +508,7 @@ Expands tokens. The following tokens are supported:
 Three spaces is automatically translated to tab.
 
 The filter is used in the generation of documentation topics and the installer
+
 =cut
 
 sub filter {
@@ -510,38 +516,38 @@ sub filter {
     
     return unless (-f $from);
     
-    open(IF, "<$from") || die "No source topic $from for filter";
+    open(IF, '<'.$from) || die 'No source topic '.$from.' for filter';
     undef $/;
     my $text = <IF>;
     close(IF);
-    $/ = "\n";
+    $/ = $NL;
     $text =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
     $text =~ s/ {3}/\t/g;
 
     unless ($this->{-n}) {
-        open(OF, ">$to") || die "No dest topic $to for filter";
+        open(OF, '>'.$to) || die 'No dest topic '.$to.' for filter';
     }
     print OF $text unless ($this->{-n});
-    print OF "<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->\n";
+    print OF '<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->',$NL;
     close(OF) unless ($this->{-n});
 }
 
 sub _expand {
     my ($this, $tok) = @_;
-    if (!$this->{$tok} && $tok eq "POD") {
-        $this->build("pod");
+    if (!$this->{$tok} && $tok eq 'POD') {
+        $this->build('pod');
     }
     if (defined($this->{$tok})) {
         if ($this->{-v} || $this->{-n}) {
-            print "expand %\$$tok% to ".$this->{$tok}."\n";
+            print 'expand %$'.$tok.'% to '.$this->{$tok}.$NL;
         }
         return $this->{$tok};
     } else {
-        return "%\$".$tok."%";
+        return '%$'.$tok.'%';
     }
 }
 
-=begin text
+=pod
 
 ---++++ target_release
 Release target, builds release zip by creating a full release directory
@@ -554,30 +560,31 @@ sub target_release {
     my $this = shift;
     my $project = $this->{project};
 
-    $this->build("tests_zip");
-    $this->build("installer");
+    $this->build('tests_zip');
+    $this->build('installer');
 
-    my $tmpdir = "/tmp/$$";
+    my $tmpdir = '/tmp/'.$$;
     $this->makepath($tmpdir);
 
     $this->copy_fileset($this->{files}, $basedir, $tmpdir);
     foreach my $file (@{$this->{files}}) {
         if ($file->{name} =~ /\.txt$/) {
             my $txt = $file->{name};
-            $this->filter("$basedir/$txt", "$tmpdir/$txt");
+            $this->filter($basedir.'/'.$txt, $tmpdir.'/'.$txt);
         }
     }
-    $this->cp("$tmpdir/".$this->{data_twiki_module}.".txt",
-              "$basedir/$project.txt");
+    $this->cp($tmpdir.'/'.$this->{data_twiki_module}.'.txt',
+              $basedir.'/'.$project.'.txt');
     $this->cd($tmpdir);
-    $this->sys_action("zip -r -q $project.zip *");
-    $this->sys_action("mv $tmpdir/$project.zip $basedir/$project.zip");
-    print "Release ZIP is $basedir/$project.zip\n";
-    print "Release TOPIC is $basedir/$project.txt\n";
-    $this->sys_action("rm -rf $tmpdir");
+    $this->sys_action('zip -r -q '.$project.'.zip *');
+    $this->sys_action('mv '.$tmpdir.'/'.$project.'.zip '.$basedir.'/'.
+                      $project.'.zip');
+    print 'Release ZIP is '.$basedir.'/'.$project.'.zip',$NL;
+    print 'Release TOPIC is '.$basedir.'/'.$project.'.txt',$NL;
+    $this->sys_action('rm -rf '.$tmpdir);
 }
 
-=begin text
+=pod
 
 ---++++ copy_fileset
 Copy all files in a file set from on directory root to another.
@@ -588,21 +595,21 @@ sub copy_fileset {
     
     my $uncopied = scalar(@$set);
     if ($this->{-v} || $this->{-n}) {
-        print "Copying $uncopied files to $to\n";
+        print 'Copying '.$uncopied.' files to '.$to.$NL;
     }
     foreach my $file (@$set) {
         my $name = $file->{name};
-        if (! -e "$from/$name") {
-            die "$from/$name does not exist - cannot copy\n";
+        if (! -e $from.'/'.$name) {
+            die $from.'/'.$name.' does not exist - cannot copy';
         }
-        $this->cp("$from/$name", "$to/$name");
-        #$this->prot("a+rx,u+w", "$to/$name");
+        $this->cp($from.'/'.$name, $to.'/'.$name);
+        #$this->prot('a+rx,u+w', $to.'/'.$name);
         $uncopied--;
     }
-    die "Files left uncopied" if ($uncopied);
+    die 'Files left uncopied' if ($uncopied);
 }
 
-=begin text
+=pod
 
 ---++++ target_install
 Install target, installs to local twiki pointed at by TWIKI_HOME.
@@ -612,16 +619,16 @@ Uses the installer script written by target_installer
 =cut
 sub target_install {
     my $this = shift;
-    $this->build("release");
+    $this->build('release');
     
     my $twiki = $ENV{TWIKI_HOME};
-    die "TWIKI_HOME not set" unless $twiki;
+    die 'TWIKI_HOME not set' unless $twiki;
     $this->cd($twiki);
-    $this->sys_action("unzip -u -o $basedir/$this->{project}.zip");
-    $this->sys_action("perl $this->{project}_installer.pl install");
+    $this->sys_action('unzip -u -o '.$basedir.'/'.$this->{project}.'.zip');
+    $this->sys_action('perl '.$this->{project}.'_installer.pl install');
 }
 
-=begin text
+=pod
 
 ---++++ target_uninstall
 Uninstall target, uninstall from local twiki pointed at by TWIKI_HOME.
@@ -632,12 +639,12 @@ Uses the installer script written by target_installer
 sub target_uninstall {
     my $this = shift;
     my $twiki = $ENV{TWIKI_HOME};
-    die "TWIKI_HOME not set" unless $twiki;
+    die 'TWIKI_HOME not set' unless $twiki;
     $this->cd($twiki);
-    $this->sys_action("perl $this->{project}_installer.pl uninstall");
+    $this->sys_action('perl '.$this->{project}.'_installer.pl uninstall');
 }
 
-=begin text
+=pod
 
 ---++++ target_test_zip
 Make the tests zip file for inclusion in the release package.
@@ -645,13 +652,13 @@ Make the tests zip file for inclusion in the release package.
 =cut
 sub target_tests_zip {
     my $this = shift;
-    my $where = "$basedir/$this->{libdir}/$this->{project}";
-    $this->rm("$where/test.zip");
+    my $where = $basedir.'/'.$this->{libdir}.'/'.$this->{project};
+    $this->rm($where.'/test.zip');
     $this->cd($where);
     if (-d 'test') {
         $this->sys_action("zip -r -q test.zip test -x '*~' -x '*/CVS*' -x '*/testdata*'");
     } else {
-        warn "WARNING: no test subdirectory of $where\n";
+        warn 'WARNING: no test subdirectory of '.$where;
     }
 }
 
@@ -663,23 +670,23 @@ sub target_tests_zip {
     sub get_basic_credentials {
         my($self, $realm, $uri) = @_;
         unless ( $knownUser ) {
-            print "Logon to ",$uri->host_port,"\n";
-            print "Enter $realm: ";
+            print 'Logon to ',$uri->host_port,$NL;
+            print 'Enter ',$realm,': ';
             $knownUser = <STDIN>;
             chomp($knownUser);
             return (undef, undef) unless length $knownUser;
-            print "Password on ",$uri->host_port,": ";
-            system("stty -echo");
+            print 'Password on ',$uri->host_port,': ';
+            system('stty -echo');
             $knownPass = <STDIN>;
-            system("stty echo");
-            print "\n";  # because we disabled echo
+            system('stty echo');
+            print $NL;  # because we disabled echo
             chomp($knownPass);
         }
         return ($knownUser, $knownPass);
     }
 }
 
-=begin text
+=pod
 
 ---++++ target_upload
 Upload to twiki.org. Prompts for username and password. Uploads the zip and
@@ -690,63 +697,63 @@ necessary.
 
 sub target_upload {
     my $this = shift;
-    $this->build("release");
+    $this->build('release');
 
-    eval 'use LWP';
+    require LWP;
     if ( $@ ) {
-        print STDERR "LWP is not installed; cannot upload\n";
+        print STDERR 'LWP is not installed; cannot upload',$NL;
         return 0;
     }
 
     my $userAgent = TWiki::Contrib::Build::UserAgent->new();
-    $userAgent->agent( "TWikiContribBuild/$VERSION " );
+    $userAgent->agent( 'TWikiContribBuild/'.$VERSION.' ' );
 
     my $to = $this->{project};
 
     # Get the old form data and attach it to the update
-    print "Downloading old topic to recover form\n";
-    my $response = $userAgent->get( "http://twiki.org/cgi-bin/view/Plugins/$to?raw=debug" );
+    print 'Downloading old topic to recover form',$NL;
+    my $response = $userAgent->get( 'http://twiki.org/cgi-bin/view/Plugins/'.$to.'?raw=debug' );
 
-    die "Failed to GET old plugins topic ", $response->request->uri,
-      " -- ", $response->status_line, "\nAborting"
+    die 'Failed to GET old plugins topic ', $response->request->uri,
+      ' -- ', $response->status_line, $NL.'Aborting'
         unless $response->is_success;
     my %newform;
     foreach my $line ( split(/\n/, $response->content() )) {
-        if ( $line =~ m/META:FIELD{name=\"(.*?)\".*?value=\"(.*?)\"}/ ) {
+        if ( $line =~ m/META:FIELD{name="(.*?)".*?value="(.*?)"}/ ) {
             my $val = $2;
-            if ($val && $val ne "") {
+            if ($val && $val ne '') {
                 $newform{$1} = $val;
             }
         }
     }
     undef $/; # set to read to EOF
-    open( IN_FILE, "<$basedir/$to.txt" ) or
-      die "Failed to reopen topic: $@";
+    open( IN_FILE, '<'.$basedir.'/'.$to.'.txt' ) or
+      die 'Failed to reopen topic: '.$@;
     $newform{'text'} = <IN_FILE>;
-    $/ = "\n";
+    $/ = $NL;
     close( IN_FILE );
 
-    print "Uploading new topic\n";
-    $response = $userAgent->post( "http://twiki.org/cgi-bin/save/Plugins/$to",
+    print 'Uploading new topic',$NL;
+    $response = $userAgent->post( 'http://twiki.org/cgi-bin/save/Plugins/'.$to,
                                   \%newform );
 
-    die "Update of topic failed ", $response->request->uri,
-      " -- ", $response->status_line, "\nAborting"
+    die 'Update of topic failed ', $response->request->uri,
+      ' -- ', $response->status_line, 'Aborting'
         unless $response->is_redirect &&
           $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
 
-    print "Uploading zip\n";
+    print 'Uploading zip',$NL;
     $response =
-      $userAgent->post( "http://twiki.org/cgi-bin/upload/Plugins/$to",
+      $userAgent->post( 'http://twiki.org/cgi-bin/upload/Plugins/'.$to,
                         [
-                         'filename' => "$to.zip",
-                         'filepath' => [ "$basedir/$to.zip" ],
-                         'filecomment' => "Unzip in the root directory of your TWiki installation"
+                         'filename' => $to.'.zip',
+                         'filepath' => [ $basedir.'/'.$to,'.zip' ],
+                         'filecomment' => 'Unzip in the root directory of your TWiki installation'
                         ],
-                        'Content_Type' => "form-data" );
+                        'Content_Type' => 'form-data' );
 
-    die "Update of zip failed ", $response->request->uri,
-      " -- ", $response->status_line, "\nAborting\n", $response->as_string
+    die 'Update of zip failed ', $response->request->uri,
+      ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
         unless $response->is_redirect &&
           $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
 }
@@ -761,7 +768,7 @@ sub _unhtml {
     return $html;
 }
 
-=begin text
+=pod
 
 ---++++ target_pod
 
@@ -779,13 +786,13 @@ by the module.
 
 sub target_pod {
     my $this = shift;
-    my $tmpfile = "/tmp/buildpod";
-    $this->{POD} = "";
+    my $tmpfile = '/tmp/buildpod';
+    $this->{POD} = '';
     
     foreach my $file (@{$this->{files}}) {
         my $pmfile = $file->{name};
         if ($pmfile =~ /\.pm$/o) {
-            $pmfile = "$basedir/$pmfile";
+            $pmfile = $basedir.'/'.$pmfile;
             my $parser = new Pod::Text(indent => 0);
             $parser->parse_from_file($pmfile, $tmpfile);
             open(TMP, $tmpfile);
@@ -798,7 +805,7 @@ sub target_pod {
     unlink($tmpfile);
 }
 
-=begin text
+=pod
 
 ---++++ target_installer
 
@@ -839,18 +846,18 @@ sub target_installer {
     foreach my $d ( @INC ) {
         my $dir = `dirname $d`;
         chop($dir);
-        if ( -f "$dir/TEMPLATE_installer.pl" ) {
-            $template = "$dir/TEMPLATE_installer.pl";
+        if ( -f $dir.'/TEMPLATE_installer.pl' ) {
+            $template = $dir.'/TEMPLATE_installer.pl';
             last;
         }
-        $dir .= "/contrib";
-        if ( -f "$dir/TEMPLATE_installer.pl" ) {
-            $template = "$dir/TEMPLATE_installer.pl";
+        $dir .= '/contrib';
+        if ( -f $dir.'/TEMPLATE_installer.pl' ) {
+            $template = $dir.'/TEMPLATE_installer.pl';
             last;
         }
     }
     unless($template) {
-        die "COULD NOT LOCATE TEMPLATE_installer.pl - required for install script generation";
+        die 'COULD NOT LOCATE TEMPLATE_installer.pl - required for install script generation';
     }
 
     my @sats;
@@ -862,18 +869,18 @@ sub target_installer {
         $descr =~ s/\%/\\\%/g;
         my $trig = $dep->{trigger};
         $trig = 1 unless ( $trig );
-        push(@sats, "{ name=>\"$dep->{name}\", type=>\"$dep->{type}\",version=>\"$dep->{version}\",description=>\"$descr\", trigger=>$trig }");
+        push(@sats, "{ name=>'$dep->{name}', type=>'$dep->{type}',version=>'$dep->{version}',description=>'$descr', trigger=>$trig }");
     }
     my $satisfies = join("\n,", @sats);
 
-    my $mantable = "";
+    my $mantable = '';
     foreach my $file (@{$this->{files}}) {
-        $mantable .= "\t\"$file->{name}\", # $file->{description}\n";
+        $mantable .= "\t'$file->{name}', # $file->{description}\n";
     }
 
-    my $installScript = "$basedir/$this->{project}_installer.pl";
+    my $installScript = $basedir.'/'.$this->{project}.'_installer.pl';
     if ($this->{-v} || $this->{-n}) {
-        print "Generating installer in $installScript\n";
+        print 'Generating installer in ',$installScript,$NL;
     }
 
     # override the default filter expansions
@@ -887,10 +894,10 @@ sub target_installer {
     $this->{DEPENDENCIES} = $t1;
     $this->{MANIFEST} = $t2;
 
-    $this->prot("a+rx,u+w", $installScript);
+    $this->prot('a+rx,u+w', $installScript);
 }
 
-=begin text
+=pod
 
 ---++++ build($target)
 Build the given target
@@ -901,21 +908,21 @@ sub build {
     my $this = shift;
     my $target = shift;
     if ($this->{-v}) {
-        print "Building $target\n";
+        print 'Building $target',$NL;
     }
+    my $fn = 'target_'.$target;
     no strict "refs";
-    eval "\$this->target_$target()";
+    &$fn($this);
     use strict "refs";
     if ($@) {
-        print "Failed to build $target: $@\n";
-        die $@;
+        die 'Failed to build ',$target,': ',$@;
     }
     if ($this->{-v}) {
-        print "Built $target\n";
+        print 'Built ',$target,$NL;
     }
 }
 
-=begin text
+=pod
 
 ---++++ target_manifest
 Generate and print to STDOUT a rough guess at the MANIFEST listing
@@ -926,26 +933,26 @@ my %manilist;
 sub target_manifest {
     my $this = shift;
 
-    my $manifest = "$basedir/MANIFEST";
+    my $manifest = $basedir.'/MANIFEST';
     if( -e $manifest ) {
-        open(F, "<$manifest") || die "Could not open existing $manifest";
+        open(F, '<'.$manifest) || die 'Could not open existing '.$manifest;
         undef $/;
-        %manilist = map{ /^(.*?)(\s+.*)?$/; $1 => ($2||"") } split(/\r?\n/, <F> );
+        %manilist = map{ /^(.*?)(\s+.*)?$/; $1 => ($2||'') } split(/\r?\n/, <F> );
         close(F);
     }
     require File::Find;
     File::Find::find(\&_manicollect, $basedir);
-    print "DRAFT $manifest follows:\n";
-    print "################################################\n";
+    print 'DRAFT ',$manifest,' follows:',$NL;
+    print '################################################',$NL;
     for (keys %manilist) {
-        print "$_ $manilist{$_}\n";
+        print $_.' '.$manilist{$_}.$NL;
     }
-    print "################################################\n";
-    print "Copy and paste the text between the ###### lines into the file\n";
-    print "$manifest\n";
-    print "to create an initial manifest. Don't forget to remove any files\n";
-    print "that should _not_ be released (such as build.pl!), and add a\n";
-    print "description of each file in place of NEW.\n";
+    print '################################################',$NL;
+    print 'Copy and paste the text between the ###### lines into the file',$NL;
+    print $manifest,$NL;
+    print 'to create an initial manifest. Remove any files',$NL;
+    print 'that should _not_ be released (such as build.pl!), and add a',$NL;
+    print 'description of each file in place of NEW.',$NL;
 }
 
 sub _manicollect {
@@ -954,7 +961,7 @@ sub _manicollect {
     } elsif ( !-d && /^\w.*\w$/ && !/^DEPENDENCIES$/ && !/^MANIFEST$/ ) {
         my $n = $File::Find::name;
         $n =~ s/$basedir\/?//;
-        $manilist{$n} = "NEW" unless exists $manilist{$n};
+        $manilist{$n} = 'NEW' unless exists $manilist{$n};
     }
 }
 

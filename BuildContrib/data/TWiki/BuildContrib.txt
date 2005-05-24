@@ -1,5 +1,7 @@
 ---+!! TWiki Developer Environment
 
+Automates build process, including installer generation, for Pugins, Add-ons and Contrib modules.
+
 %TOC%
 
 ---+ Summary of Contents
@@ -9,6 +11,8 @@ The Build.pm module can be used by developers to create a really simple build pr
 
 The module also automatically generates an installer script that manages dependencies in the user installation.
 
+#DevelopmentModel
+---+++ Development Model
 The build module assumes:
    * that you are *not* developing your plugin in a live TWiki installation (which is usually a really bad idea), but are instead doing the sensible thing and developing in a separate directory tree, usually - but not always - a CVS checkout area.
    * that your module follows the standards for plugins and contribs i.e. that it
@@ -28,9 +32,9 @@ The idea is that your module is built using a perl script =build.pl= that is kep
 | =manifest= | print a best-guess _draft_ MANIFEST file |
 The default target is =test=.
 
-The module is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets and add extra behaviours.
+The module is designed so that most common behaviour is catered for. It is also easy to _override_ any of the default targets in your =build.pl= and add extra behaviours.
 
-The result of the build process is a ZIP file, that will contain the following:
+The result of the 'release' target is a ZIP file, that will contain the following:
    1 All the files listed in the MANIFEST
    1 A generated documentation topic
    1 An install/uninstall script, that is run after the module is unzipped
@@ -45,6 +49,10 @@ __Notes__
    * This topic and all the embedded POD documentation are generated using this build module.
    * The build environment does _not_ assume the use of CVS, though it is highly recommended.
    * The =test= target assumes you are using Test::Unit. =Build.pm= has only been tested on Linux, but should work with cygwin OK.
+---+++ Install support
+The installer script shipped with the package is very simple. By default all it does is to check the dependencies you list, and if necessary download and install any missing TWiki modules. Other dependencies are simply checked. In Dakar and later releases, TWiki topics shipped with the module are automatically merged into any existing local copies, ensuring histories are preserved.
+
+If you want your installer to do anything else - for example, optionally install submodules shipped with the module - then you will need to write a POSTINSTALL script. A good example of a POSTINSTALL can be found in the CVS tree for TWiki:Plugins/WysiwygPlugin.
 
 ---++ Test Fixtures
 The are a number of test fixtures in the repository that can be used for testing plugins with =Test::Unit=. The fixtures replace the =TWiki::Func=, =TWiki::Store= and TWiki modules, allowing a stand-alone unit test suite to be built for the plugin. The easiest way to use the fixtures is to copy the tests from an existing plugin that uses them - for example, CommentPlugin, ActionTrackerPlugin, WebDAVPlugin or FormQueryPlugin - and modify the tests appropriately for your plugin.
@@ -56,28 +64,30 @@ The fixtures do not replace _all_ of the TWiki core functionality, just those pi
 ---+ Detailed Documentation
 %$POD%
 
----++ Settings
+---+ Settings
 	* Name of the perl package
 		* Set STUB = %$STUB%
+	* One line description:
+		* Set SHORTDESCRIPTION = Automate build process for Pugins, Add-ons and Contrib modules
 
----++ Installation Instructions
-
+---+ Installation Instructions
+You are strongly recommended to use this Contrib to help split your code development away from your live TWiki environment, as described [[#DevelopmentModel][above].
 	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Unzip ==%TOPIC%.zip== in your development ($TWIKI_DEV) directory. Content:
 	| *File:* | *Description:* |
 %$MANIFEST%
 	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 	%$DEPENDENCIES%
 
----++ Contrib Info
+---+ Contrib Info
 
 | Authors: | TWiki:Main.CrawfordCurrie |
 | Copyright &copy;: | 2004, Crawford Currie http://www.c-dot.co.uk |
-| License: | GPL |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
 | Dependencies: | %$DEPENDENCIES% |
 | 24/03/05 | 1.006 Crawford Currie  made it look in the same directory as build.pl for MANIFEST and DEPENDENCIES and the INSTALL files, first |
-| 15/03/05 | 1.005 Crawford Currie made the installer script check in files in Dakar installs, and fixed bugs highlighted by ThomasWeigert |
+| 15/03/05 | 1.005 Crawford Currie made the installer script check in files in Dakar installs, and fixed bugs highlighted by Thomas Weigert |
 | 04/12/04 | 1.004 Martin Cleaver removed twikicli - now in TWiki:Plugins.TWikiShellContrib |
 | 12/10/04 | 1.003 Crawford Currie added ONLYIF control to DEPENDENCIES. Added optional PREINSTALL and POSTINSTALL scripts (used to e.g. remove dead code). |
 | 1/10/04 | 1.002 Crawford Currie added topic updating reminder to installer |
@@ -86,6 +96,7 @@ The fixtures do not replace _all_ of the TWiki core functionality, just those pi
 | 14/08/04 | 1.000 Crawford Currie made the initial implementation, separated out from the old SharedCode module |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/BuildContribAppraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
