@@ -39,7 +39,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
 
-$VERSION = '0.06';
+$VERSION = '0.10';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -126,7 +126,7 @@ sub commonTagsHandler {
     # lifted out, and we need them. We really need a hook that lets
     # us intercept raw=text.
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
-    $_[0] = $tml2html->convert( $_[0] );
+    $_[0] = $tml2html->convert( $text );
     $calledThisSession = 1;
 }
 

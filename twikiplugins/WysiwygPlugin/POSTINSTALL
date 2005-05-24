@@ -1,17 +1,26 @@
-unless( -f "pub/_kupu/common/kupucnf.html" ) {
-my $kuperror = 0;
+print <<DONE;
 
-chdir('pub/_kupu');
-print "Unzipping Kupu...\n";
-my $result = `unzip kupu.zip`;
-$kuperror = $!;
+##########################################################
+This package includes the Kupu WYSIWYG editor. This is a powerful
+cross-browser editor that works in IE and Mozilla-based browsers.
 
-print "Running Kupu installer...\n";
-$result = `make`;
-$kuperror ||= $!;
+DONE
+my $ok = ask('Would you like me to install the Kupu WYSIWYG editor?');
+if( $ok ) {
+    chdir('pub/_kupu');
+    print "\n\nUnzipping Kupu...\n";
+    if( unzip( 'kupu.zip' )) {
+        print <<'DONE1';
 
-if( $kuperror ) {
-    print STDERR "Error $kuperror running 'make'\n$result\nKupu installation returned an error. However it will probably work with TWiki anyway (the installation builds non-TWiki related functionality). See the Kupu documentation in pub/_kupu/doc/INSTALL.txt for details of how to complete installation of Kupu\n";
-}
+### Kupu for TWiki installed ###
 
+Full installation of Kupu requires that you run the Kupu makefile.
+This is not required for TWiki, but is required if you want a full
+installation of Kupu for other reasons. For further details, read
+the documentation in the pub/_kupu/doc directory in your installation.
+
+DONE1
+    } else {
+        warn "Failed to unzip Kupu package";
+    }
 }
