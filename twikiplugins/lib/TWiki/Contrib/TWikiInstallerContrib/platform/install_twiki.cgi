@@ -292,7 +292,9 @@ if ( 0 ) #-e $fileInstallationReport )
 {
     my $topicTWiki_TWikiPreferences = 'TWiki.TWikiPreferences';
     $mech->edit( $topicTWiki_TWikiPreferences );
-    $mech->field( WIKIWEBMASTER => $WIKIWEBMASTER );
+    my $topic = $mech->field( 'text' );
+    $topic =~ s/(Set WIKIWEBMASTER = ).+/$1$WIKIWEBMASTER/;
+    $mech->field( text => $topic );
     $mech->click_button( value => 'Save' );
 }
 
