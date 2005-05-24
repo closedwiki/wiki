@@ -747,7 +747,7 @@ sub target_upload {
       $userAgent->post( 'http://twiki.org/cgi-bin/upload/Plugins/'.$to,
                         [
                          'filename' => $to.'.zip',
-                         'filepath' => [ $basedir.'/'.$to,'.zip' ],
+                         'filepath' => [ $basedir.'/'.$to.'.zip' ],
                          'filecomment' => 'Unzip in the root directory of your TWiki installation'
                         ],
                         'Content_Type' => 'form-data' );
