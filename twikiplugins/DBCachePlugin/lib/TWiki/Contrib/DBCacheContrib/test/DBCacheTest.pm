@@ -191,8 +191,8 @@ sub checkSameAs {
 sub checkSameAsMap {
   my ( $this, $first, $second, $cmping, $checked ) = @_;
 
-  $this->assert_equals($first->size(), $second->size(), $cmping);
   foreach my $k ($first->getKeys()) {
+      next if $k eq "_up";
     my $a = $first->fastget( $k ) || "";
     my $b = $second->fastget( $k ) || "";
     my $c = "$cmping.$k";
