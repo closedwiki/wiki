@@ -26,7 +26,7 @@ Typical usage:
 
   # the DB is a hash of topics keyed on their name
   foreach my $topic ($db->getKeys()) {
-     my $attachments = $topic->get("attachments");
+     my $attachments = $db->get($topic)->get("attachments");
      # attachments is an array
      foreach my $val ($attachments->getValues()) {
        my $aname = $attachments->get("name");
@@ -49,7 +49,7 @@ As topics are loaded, the readTopicLine method gives subclasses an opportunity t
   use vars qw( $initialised $storable $VERSION );
 
   $initialised = 0; # Not initialised until the first new
-  $VERSION = 1.000;
+  $VERSION = 1.001;
   $storable = 1;
 
 =begin text
@@ -171,7 +171,6 @@ Construct a new DBCache object.
 		  $meta->set( $name, $form );
 		} elsif ( $line =~ m/%META:TOPICPARENT{name=\"([^\"]*)\"}%/o ) {
 		  $meta->set( "parent", $1 );
-		  $meta->set( "_up", $this->get( $1 ));
 		} elsif ( $line =~ m/%META:TOPICINFO{(.*)}%/o ) {
 		  my $att = new TWiki::Contrib::Map($1);
 		  $att->set( "_up", $meta );
@@ -237,6 +236,20 @@ read from disc rather than from the cache. Passed a list of topic names that hav
 	#my ( $this, $@topics) = @_;
   }
 
+  sub _onReload {
+      my ( $this ) = @_;
+
+      # Fill in parent relations
+      foreach my $topic ( $this->getValues() ) {
+          unless ( $topic->get( "_up" )) {
+              my $parent = $topic->get( "parent" );
+              $topic->set( "_up", $this->get( $parent ));
+          }
+      }
+
+      $this->onReload( @_ );
+  }
+
 =begin text
 
 ---+++ load()
@@ -290,7 +303,7 @@ cached topics that have been removed.
 		$readFromFile++;
 		push( @readTopic, $topic );
       }
-      $this->onReload( \@readTopic );
+      $this->_onReload( \@readTopic );
       $writeCache = 1;
     }
 
