@@ -351,7 +351,8 @@ sub generateChangeFormPage {
 				    name => 'formtemplate',
 				    value => $form,
 				    checked => $form eq $formName ? 'checked' : '',
-				}, ' '.$form.' ' );
+				}, 
+                                 $store->topicExists( $form ) ? " [[$form]]" : " $form"
 				 );
     }
     $page =~ s/%FORMLIST%/$formList/go;
