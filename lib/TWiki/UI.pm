@@ -346,20 +346,13 @@ sub generateChangeFormPage {
     my $formList = '';
     foreach my $form ( @forms ) {
         $formList .= CGI::br() if( $formList );
-	if ( $form eq $formName ) {
-	  $formList .= CGI::input( {
+	$formList .= CGI::input( {
 				    type => 'radio',
 				    name => 'formtemplate',
 				    value => $form,
-				    checked => 'checked',
-				   }, ' '.$form.' ' );
-	} else {
-	  $formList .= CGI::input( {
-				    type => 'radio',
-				    name => 'formtemplate',
-				    value => $form,
-				   }, ' '.$form.' ' );
-	}
+				    checked => $form eq $formName ? 'checked' : '',
+				}, ' '.$form.' ' );
+				 );
     }
     $page =~ s/%FORMLIST%/$formList/go;
 
