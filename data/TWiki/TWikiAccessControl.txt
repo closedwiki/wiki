@@ -105,6 +105,23 @@ You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web.
 
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
 
+---+++ Controlling access to Attachments
+
+Attachments are referred to directly, and are not normally indirected via TWiki scripts. This means that the above instructions for access control will _not_ apply to attachments. It is possible that someone may inadvertently publicise a URL that they expected to be access-controlled.
+
+The easiest way to apply the same access control rules for attachments as apply to topics is to use the Apache =mod_rewrite= module, and configure your webserver to redirect accesses to attachments to the TWiki =viewfile= script. For example,
+
+<verbatim>
+  ScriptAlias /twiki/bin/ /filesystem/path/to/twiki/bin/
+  Alias /twiki/pub/       /filesystem/path/to/twiki/pub/
+
+  RewriteEngine on
+  RewriteRule ^/twiki/pub/TWiki/(.*)$ /twiki/pub/TWiki/$1 [L,PT]
+  RewriteRule ^/twiki/pub/([^\/]+)/([^\/]+)/([^\/]+)$ /twiki/bin/viewfile/$1/$2?filename=$3 [L,PT]
+</verbatim>
+
+That way all the controls that apply to the topi also apply to attachments to the topic.
+
 ---+++ How TWiki evaluates ALLOW/DENY settings
 
 When deciding whether to grant access, TWiki evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
