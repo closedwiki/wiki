@@ -12,7 +12,7 @@ __Preferences:__
 	* List of topics of the <nop>%WEB% web:
 		* Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
-	* Web specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
+	* Web-specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFFED5
 
 	* List this web in the %TWIKIWEB%.SiteMap:
