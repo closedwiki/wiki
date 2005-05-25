@@ -94,7 +94,17 @@ sub test_writeDuringRead {
   $a1 = new TWiki::Contrib::Archive("data.dat", "r");
   # should now have a LOCK_SH, so a LOCK_EX should be blocked.
   # This open for write should block.
-  my $pid = open SUB, "| perl -e 'use lib \"../..\";use TWiki::Contrib::Archive;\$a = new TWiki::Contrib::Archive(\"data.dat\", \"w\");\$a->writeByte(\"X\");\$a->close();1;'";
+  my $inc = join(" ",@INC);
+  my $cmd = <<DONE;
+| perl -e 'BEGIN{ \@INC=qw($inc); };
+require TWiki::Contrib::Archive;
+\$a = new TWiki::Contrib::Archive(\"data.dat\",
+\"w\");\$a->writeByte(\"X\");
+\$a->close();
+1;'
+DONE
+  $cmd =~ s/\n//go;
+  my $pid = open SUB, $cmd;
   sleep(1);
   # OK, the child process has had plenty of time to wake up and should be
   # waiting to get LOCK_EX, because we have it open for read.
@@ -120,9 +130,11 @@ sub test_multipleReads {
   $a1->writeByte('Z');
   $a1->close();
 
-  my $cmd = "| perl -e '
-use lib \"../..\";
-use TWiki::Contrib::Archive;
+  my $inc = join(" ",@INC);
+  my $cmd = <<DONE;
+| perl -e '
+BEGIN{ \@INC=qw($inc); }
+require TWiki::Contrib::Archive;
 \$a = new TWiki::Contrib::Archive(\"data.dat\", \"r\");
 die unless(\$a->readByte() eq \"X\");
 sleep(1);
@@ -130,7 +142,8 @@ die unless(\$a->readByte() eq \"Y\");
 sleep(1);
 die unless(\$a->readByte() eq \"Z\");
 \$a->close();
-1;'";
+1;'
+DONE
   $cmd =~ s/\n//go;
   my $p1 = open P1, $cmd;
   my $p2 = open P2, $cmd;
@@ -161,7 +174,15 @@ sub test_writeLock {
   $a1->writeByte('Y');
 
   # Spawn a subprocess that tries to write
-  my $pid = open SUB, "| perl -e 'use lib \"../..\";use TWiki::Contrib::Archive;\$a = new TWiki::Contrib::Archive(\"data.dat\", \"w\");\$a->writeByte(\"X\");\$a->close();1;'";
+  my $inc = join(" ",@INC);
+  my $cmd = <<DONE;
+| perl -e 'BEGIN{ \@INC=qw($inc); };
+require TWiki::Contrib::Archive;
+\$a = new TWiki::Contrib::Archive("data.dat", "w");
+\$a->writeByte("X");\$a->close(); 1;'
+DONE
+  $cmd =~ s/\n//go;
+  my $pid = open SUB, $cmd;
   sleep(1);
   # OK, the child process has had plenty of time to wake up and should be
   # blocking on the exclusive LOCK_EX, because we have it open for write.
