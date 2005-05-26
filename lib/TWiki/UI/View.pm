@@ -367,7 +367,7 @@ sub viewfile {
     # (.doc, .xls... to .html) and show the html file.
     # Convert only if html file does not yet exist
     # for now, show the original document:
-;
+
     my $host = $session->{urlHost};
     $session->redirect( $host.$TWiki::cfg{PubUrlPath}.
                         "/$webName/$topic/$fileName" );
