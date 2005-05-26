@@ -251,7 +251,7 @@ sub handleSet {
     my $ifFormat = TWiki::Func::getPreferencesValue("JSCALENDARDATEFORMAT", "$web") || "%d %b %Y";
     my $ifOptions = TWiki::Func::getPreferencesValue("JSCALENDAROPTIONS", "$web") || "";
     my $size = 10 if ($size < 1);
-    $text .= "<input type=\"text\" name=\"$name\" id=\"id$name\"size=\"$size\" value=\"$value\" /><button type=\"reset\" id=\"trigger$name\">...</button><script type=\"text/javascript\">Calendar.setup({inputField : \"id$name\", ifFormat : \"$ifFormat\", button : \"trigger$name\", singleClick : true $ifOptions });</script>";
+    $text .= qq{<input type="text" name="$name" id="id$name" size="$size" value="$value" /><button type="reset" id="trigger$name">...</button><script type="text/javascript">Calendar.setup({inputField : "id$name", ifFormat : "$ifFormat", button : "trigger$name", singleClick : true $ifOptions });</script>};
     $query->{'jscalendar'} = 1;
   } else {
     # Treat like text, make it reasonably long
