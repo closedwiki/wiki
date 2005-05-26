@@ -12,7 +12,6 @@ BEGIN {
 
 # TODO:
 #   * Documentation (of the process)
-#   * Documentation (of the changed CPAN requirements)
 #   * separate file selection from packaging (use separate step to create MANIFEST)
 #   * (probably eliminate outputdir completely)
 #   * use svn export (but mirror it so 
@@ -264,7 +263,7 @@ foreach my $auth qw( rdiff view )
 #my @bin = qw( attach changes edit geturl installpasswd mailnotify manage oops passwd preview rdiff rdiffauth register rename save search setlib.cfg statistics testenv upload view viewauth viewfile );
 
 # stop distributing cpan modules; get the latest versions from cpan itself
-#rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text", "$installBase/lib/Error.pm" ] ) or warn $!;
+rmtree( [ "$installBase/lib/Algorithm", "$installBase/lib/Text", "$installBase/lib/Error.pm" ] ) or warn $!;
 
 # create TWikiGuest entry in .htpasswd
 my $htpasswd = "$installBase/data/.htpasswd";
