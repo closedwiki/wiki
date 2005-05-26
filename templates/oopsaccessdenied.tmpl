@@ -4,7 +4,7 @@
 %TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
 %TMPL:DEF{"heading"}%Access Denied%TMPL:END%
 %TMPL:DEF{"topicaction"}% [[%MAINWEB%.%HOMETOPIC%][OK]] %TMPL:END%
-%TMPL:DEF{"topic"}%
+%TMPL:DEF{"topic_access"}%
 Access check on <nop>%WEB%.<nop>%TOPIC% failed;
 %PARAM1% %PARAM2%.
 
@@ -21,6 +21,31 @@ Contact
 if you have any questions.
 
 __Related topics:__ %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+%TMPL:END%
+%TMPL:DEF{"no_such_web"}%
+---++ The "%WEB%" web does not exist
+A %TWIKIWEB%.TWikiSite is divided into webs; each one represents one
+subject, one area of collaboration. You are trying to '%PARAM1%' in a web
+that does not exist.
+
+---+++ If you came here by clicking on a question mark link
+<blockquote>
+A link to a topic located in another web is written like *Otherweb.<nop>TopicName*.
+Make sure that the name of the web is not spelt wrongly on the previous page; fix the link if necessary.
+</blockquote>
+
+---+++ If you would like to create this web
+You can [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs?newweb=%WEB%&amp;newtopic=%TOPIC%#CreateNewWeb][create a new web]] if you have permission. Contact %WIKIWEBMASTER% if you have any questions.
+%TMPL:END%
+%TMPL:DEF{"no_such_topic"}%
+---++ "%WEB%.%TOPIC%" topic does not exist
+You are trying to '%PARAM1%' a topic that does not exist.
+
+---++ If you want to create the topic
+[[%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$s
+ec"}%][Click here]].
+
+Contact %WIKIWEBMASTER% if you have any questions.
 %TMPL:END%
 %TMPL:DEF{"message"}%
 %INSTANTIATE%

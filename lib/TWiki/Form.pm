@@ -55,7 +55,8 @@ sub new {
 
     # Read topic that defines the form
     unless( $store->topicExists( $web, $form ) ) {
-        throw TWiki::OopsException( 'noformdef',
+        throw TWiki::OopsException( 'attention',
+                                    def => 'no_form_def',
                                     web => $session->{webName},
                                     topic => $session->{topicName},
                                     params => [ $web, $form ] );
@@ -574,9 +575,8 @@ sub getFieldValuesFromQuery {
         $value = '' unless( defined( $value ) || $justOverride );
         my $mandatory = ($fieldDef->{attributes} =~ /M/)?1:0;
         if ( $handleMandatory && $mandatory && !$value ) {
-            # Create own oops, find topic instead of "" requires passing it
-            # in from caller as $query->param('topic') has been changed.
-            throw TWiki::OopsException( 'fielderr',
+            throw TWiki::OopsException( 'attention',
+                                        def=>'mandatory_field',
                                         web => $this->{session}->{webName},
                                         topic => $this->{session}->{topicName},
                                         params => [ $fieldDef->{title} ] );

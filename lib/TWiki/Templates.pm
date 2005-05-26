@@ -344,7 +344,7 @@ sub _readTemplateFile {
     }
 
     # SMELL: surely this should be an error?
-    #print STDERR "Template $name was not found\n";
+    #die "Template $name was not found\n";
     return '';
 }
 

@@ -62,8 +62,10 @@ sub _save {
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        throw TWiki::OopsException( 'createnewtopic',
-                                    web => $webName, topic => $topic );
+        throw TWiki::OopsException( 'attention',
+                                    def => 'topic_exists',
+                                    web => $webName,
+                                    topic => $topic );
     }
 
     # prevent non-Wiki names?
@@ -83,7 +85,7 @@ sub _save {
 
     my $saveCmd = $query->param( 'cmd' ) || 0;
     if ( $saveCmd && ! $session->{user}->isAdmin()) {
-        throw TWiki::OopsException( 'accessdenied', def => 'group',
+        throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $webName, topic => $topic,
                                     params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
@@ -93,8 +95,10 @@ sub _save {
         my $error =
           $session->{store}->delRev( $user, $webName, $topic );
         if( $error ) {
-            throw TWiki::OopsException( 'saveerr',
-                                        web => $webName, topic => $topic,
+            throw TWiki::OopsException( 'attention',
+                                        def => 'save_error',
+                                        web => $webName,
+                                        topic => $topic,
                                         params => $error );
         }
 
@@ -139,8 +143,10 @@ sub _save {
           $session->{store}->repRev( $user, $webName, $topic,
                                      $newText, $newMeta, $saveOpts );
         if( $error ) {
-            throw TWiki::OopsException( 'saveerr',
-                                        web => $webName, topic => $topic,
+            throw TWiki::OopsException( 'attention',
+                                        def => 'save_error',
+                                        web => $webName,
+                                        topic => $topic,
                                         params => $error );
         }
 
@@ -205,13 +211,16 @@ sub _save {
                                     $newText, $newMeta, $saveOpts );
 
     if( $error ) {
-        throw TWiki::OopsException( 'saveerr',
-                                    web => $webName, topic => $topic,
+        throw TWiki::OopsException( 'attention',
+                                    def => 'save_error',
+                                    web => $webName,
+                                    topic => $topic,
                                     params => $error );
     }
 
     if( $merged ) {
-        throw TWiki::OopsException( 'manageok', def => 'merge_notice',
+        throw TWiki::OopsException( 'attention',
+                                    def => 'merge_notice',
                                     web => $webName, topic => $topic,
                                     params => $merged );
     }

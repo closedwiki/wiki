@@ -198,10 +198,10 @@ sub upload {
         $fileDate = $stats[9];
 
         if( ! $fileSize ) {
-            throw TWiki::OopsException( 'upload',
+            throw TWiki::OopsException( 'attention',
+                                        def => 'zero_size_upload',
                                         web => $webName,
                                         topic => $topic,
-                                        def => 'zero_size',
                                         params => $fileName );
         }
 
@@ -209,10 +209,10 @@ sub upload {
         $maxSize = 0 unless ( $maxSize =~ /([0-9]+)/o );
 
         if( $maxSize && $fileSize > $maxSize * 1024 ) {
-            throw TWiki::OopsException( 'upload',
+            throw TWiki::OopsException( 'attention',
+                                        def => 'oversized_upload',
                                         web => $webName,
                                         topic => $topic,
-                                        def => 'limit',
                                         params => [ $fileName, $maxSize ] );
         }
     }
@@ -231,7 +231,8 @@ sub upload {
                                     } );
 
     if( $error ) {
-        throw TWiki::OopsException( 'saveerr',
+        throw TWiki::OopsException( 'attention',
+                                    def => 'save_error',
                                     web => $webName,
                                     topic => $topic,
                                     params => $error );

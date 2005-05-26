@@ -131,7 +131,7 @@ sub passwd_cgi {
         resetPassword( $session );
     }
     else {
-        throw TWiki::OopsException( 'managebad',
+        throw TWiki::OopsException( 'attention',
                                     web => $session->{webName},
                                     topic => $session->{topicName},
                                     def => 'missing_action' );
@@ -192,7 +192,7 @@ sub bulkRegister {
       $query->param('EmailUsersWithDetails') || 0;
 
     unless( $session->{user}->isAdmin() ) {
-        throw TWiki::OopsException( 'accessdenied', def => 'group',
+        throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $web, topic => $topic,
                                     params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
@@ -403,16 +403,16 @@ sub _requireVerification {
     my $err = _sendEmail( $session, 'registerconfirm', $data );
 
     if ( $err ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
+                                    def => 'send_mail_error',
                                     web => $data->{webName},
                                     topic => $topic,
-                                    def => 'send_mail_error',
                                     params => $data->{Email}.' - '.$err);
     }
-    throw TWiki::OopsException( 'registerok',
+    throw TWiki::OopsException( 'attention',
+                                def => 'confirm',
                                 web => $data->{webName},
                                 topic => $topic,
-                                def => 'confirm',
                                 params => $data->{Email} );
 }
 
@@ -434,7 +434,7 @@ sub resetPassword {
 
     my @userNames = $query->param( 'LoginName' ) ;
     unless( @userNames ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     def => 'no_users_to_reset' );
     }
     my $introduction = $query->param( 'Introduction' ) || '';
@@ -446,7 +446,7 @@ sub resetPassword {
         # another user's password.
         unless( $session->{user}->isAdmin()) {
             throw TWiki::OopsException
-              ( 'accessdenied', def => 'group',
+              ( 'accessdenied', def => 'only_group',
                 web => $web, topic => $topic,
                 params => $TWiki::cfg{UsersWebName}.'.'.
                 $TWiki::cfg{SuperAdminGroup} );
@@ -473,12 +473,12 @@ sub resetPassword {
             # be them!)
             $action = '?username='. $userNames[0];
         }
-        throw TWiki::OopsException( 'registerok',
+        throw TWiki::OopsException( 'attention',
                                     topic => $user->wikiName(),
                                     def => 'reset_ok',
                                     params => $message );
     } else {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     topic => $user->wikiName(),
                                     def => 'reset_bad',
                                     params => $message );
@@ -569,7 +569,7 @@ sub changePassword {
 
     # check if required fields are filled in
     if( ! $username || ! $passwordA ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'missing_fields' );
@@ -578,7 +578,7 @@ sub changePassword {
     my $user = $session->{users}->findUser( $username );
 
     unless ($user) {
-        throw TWiki::OopsException( 'managebad',
+        throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'notwikiuser',
@@ -587,7 +587,7 @@ sub changePassword {
 
     # check if passwords are identical
     if( $passwordA ne $passwordB ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'password_mismatch' );
@@ -598,14 +598,14 @@ sub changePassword {
 
     # check if required fields are filled in
     if( ! $oldpassword ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'missing_fields' );
     }
 
     unless( $user->checkPassword( $oldpassword )) {
-        throw TWiki::OopsException( 'managebad',
+        throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
                                     def => 'wrong_password');
@@ -618,7 +618,7 @@ sub changePassword {
     #recording the email would be nice
 
     # OK - password changed
-    throw TWiki::OopsException( 'registerok',
+    throw TWiki::OopsException( 'attention',
                                 web => $webName, topic => $topic,
                                 def => 'password_changed' );
 }
@@ -698,7 +698,7 @@ sub finish {
     my $success = _addUserToPasswordSystem( $session, $data );
     # SMELL - error condition? surely need a way to flag an error?
     unless ( $success ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'problem_adding',
@@ -729,7 +729,7 @@ sub finish {
     
 
     # and finally display thank you page
-    throw TWiki::OopsException( 'registerok',
+    throw TWiki::OopsException( 'attention',
                                 web => $data->{webName},
                                 topic => $data->{WikiName},
                                 def => 'thanks',
@@ -870,7 +870,7 @@ sub _emailRegistrationConfirmations {
 
     # SMELL: This needs to log to tell the admin.
     if ( $err ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $data->{WikiName},
                                     def => 'send_mail_error',
@@ -889,7 +889,7 @@ sub _emailRegistrationConfirmations {
 
     $err = $session->{net}->sendEmail( $email );
     if ( $err ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     def => 'send_mail_error',
                                     web => $data->{webName},
                                     topic => $data->{WikiName},
@@ -932,14 +932,14 @@ sub _validateRegistration {
     # DELETED CHECK: check for wikiName field.
 
     unless ( $data->{form} && ( $#{ $data->{form} } > 1 ) ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'missing_fields' );
     }
 
     if($session->{store}->topicExists( $data->{webName}, $data->{WikiName} )) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'already_exists',
@@ -947,7 +947,7 @@ sub _validateRegistration {
     }
 
     if ($session->{users}->lookupLoginName($data->{LoginName})) {
-      throw TWiki::OopsException( 'registerbad',
+      throw TWiki::OopsException( 'attention',
 				  web => $data->{webName},
 				  topic => $topic,
 				  def => 'already_exists',
@@ -956,7 +956,7 @@ sub _validateRegistration {
 
     my $user = $session->{users}->findUser( $data->{LoginName}, undef, 1 );
     if ( $user && $user->passwordExists() ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'already_exists',
@@ -967,7 +967,7 @@ sub _validateRegistration {
     foreach my $fd ( @{ $data->{form} } ) {
         if ( ( $fd->{required} ) && ( !$fd->{value} ) ) {
             # TODO - add all fields that are missing their values
-            throw TWiki::OopsException( 'registerbad',
+            throw TWiki::OopsException( 'attention',
                                         web => $data->{webName},
                                         topic => $topic,
                                         def => 'missing_fields' );
@@ -976,7 +976,7 @@ sub _validateRegistration {
 
     # check if WikiName is a WikiName
     if ( !TWiki::isValidWikiWord( $data->{WikiName} ) ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'bad_wikiname' );
@@ -985,7 +985,7 @@ sub _validateRegistration {
     if (exists $data->{PasswordA}) {
         # check if passwords are identical
         if ( $data->{passwordA} ne $data->{passwordB} ) {
-            throw TWiki::OopsException( 'registerbad',
+            throw TWiki::OopsException( 'attention',
                                         web => $data->{webName},
                                         topic => $topic,
                                         def => 'password_mismatch' );
@@ -994,7 +994,7 @@ sub _validateRegistration {
 
     # check valid email address
     if ( $data->{Email} !~ $TWiki::regex{emailAddrRegex} ) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
                                     def => 'bad_email',
@@ -1102,7 +1102,7 @@ sub _reloadUserContext {
 
     my $verificationFilename = _verificationCodeFilename( $code, $tmpDir );
     unless (-f $verificationFilename){
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     def => 'no_ver_file',
                                     params => [ $code,
                                                 $verificationFilename ] );
@@ -1112,7 +1112,7 @@ sub _reloadUserContext {
     my $error = _validateUserContext($code, $tmpDir);
 
     if ($error) {
-        throw TWiki::OopsException( 'registerbad',
+        throw TWiki::OopsException( 'attention',
                                     def => 'bad_ver_code',
                                     params => [ $code,
                                                 $error ] );

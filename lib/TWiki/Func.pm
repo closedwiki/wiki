@@ -782,7 +782,7 @@ sub readTopicText {
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $text = $TWiki::Plugins::SESSION->getOopsUrl
-          ( 'accessdenied', def=>'topic', web => $web, topic => $topic,
+          ( 'accessdenied', def=>'topic_access', web => $web, topic => $topic,
             params => [ $e->{-mode}, $e->{-reason} ] );
     };
 
@@ -870,10 +870,17 @@ sub saveTopicText {
                                                      $TWiki::Plugins::SESSION->{user}, '',
                                                      $topic, $web )
           ) {
-        return $TWiki::Plugins::SESSION->getOopsUrl( 'accessdenied', def => 'topic', web => $web, topic => $topic );
+        return $TWiki::Plugins::SESSION->getOopsUrl( 'accessdenied',
+                                                     def => 'topic_access',
+                                                     web => $web,
+                                                     topic => $topic );
     }
 
-    return $TWiki::Plugins::SESSION->getOopsUrl( 'saveerr', web => $web, topic => $topic )  unless( defined $text );
+    return $TWiki::Plugins::SESSION->getOopsUrl( 'attention',
+                                                 def => 'save_error',
+                                                 web => $web,
+                                                 topic => $topic )
+      unless( defined $text );
 
     # extract meta data and merge old attachment meta data
     my $meta = $TWiki::Plugins::SESSION->{store}->extractMetaData( $web, $topic, \$text );
@@ -887,7 +894,8 @@ sub saveTopicText {
         ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
           { notify => $dontNotify } );
     return $TWiki::Plugins::SESSION->getOopsUrl
-      ( 'saveerr', web => $web, topic => $topic, params => $error ) if( $error );
+      ( 'attention', def => 'save_error',
+        web => $web, topic => $topic, params => $error ) if( $error );
     return '';
 }
 

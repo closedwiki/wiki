@@ -79,7 +79,7 @@ sub preview {
     }
     if( $saveCmd ) {
         unless( $user->isAdmin()) {
-            throw TWiki::OopsException( 'accessdenied', def => 'group',
+            throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                         web => $webName,
                                         topic => $topic,
                                         params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );

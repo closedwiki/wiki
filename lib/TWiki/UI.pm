@@ -180,7 +180,7 @@ sub run {
             $session->redirect( $url );
         } else {
             $url = $session->getOopsUrl( 'accessdenied',
-                                         def => 'topic',
+                                         def => 'topic_access',
                                          web => $e->{-web},
                                          topic => $e->{-topic},
                                          params => [ $e->{-mode},
@@ -200,7 +200,7 @@ sub run {
 
 =pod twiki
 
----++ StaticMethod checkWebExists( $web, $topic, $op )
+---++ StaticMethod checkWebExists( $session, $web, $topic, $op )
 
 Check if the web exists. If it doesn't, will throw an oops exception.
  $op is the user operation being performed.
@@ -213,7 +213,8 @@ sub checkWebExists {
 
     unless ( $session->{store}->webExists( $webName ) ) {
         throw
-          TWiki::OopsException( 'noweb',
+          TWiki::OopsException( 'accessdenied',
+                                def => 'no_such_web',
                                 web => $webName,
                                 topic => $topic,
                                 params => $op );
@@ -233,7 +234,8 @@ sub checkTopicExists {
     ASSERT(ref($session) eq 'TWiki') if DEBUG;
 
     unless( $session->{store}->topicExists( $webName, $topic )) {
-        throw TWiki::OopsException( 'notopic',
+        throw TWiki::OopsException( 'accessdenied',
+                                    def => 'no_such_topic',
                                     web => $webName,
                                     topic => $topic,
                                     params => $op );
@@ -279,7 +281,7 @@ sub checkAccess {
     unless( $session->{security}->checkAccessPermission( $mode, $user, '',
                                                          $topic, $web )) {
         throw TWiki::OopsException( 'accessdenied',
-                                    def => 'topic',
+                                    def => 'topic_access',
                                     web => $web,
                                     topic => $topic,
                                     params =>

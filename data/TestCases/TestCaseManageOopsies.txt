@@ -1,38 +1,38 @@
 Description: Load all the oopsmanage message templates for review
 
----+ template =oopsmanagebad= def =missing_action=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=missing_action"}%
----+ template =oopsmanagebad= def =unrecognized_action=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=unrecognized_action"}%
----+ template =oopsmanagebad= def =notwikiuser=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=notwikiuser"}%
----+ template =oopsmanagebad= def =in_a_group=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=in_a_group"}%
----+ template =oopsmanagebad= def =move_err=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=move_err"}%
----+ template =oopsmanagebad= def =topic_exists=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=topic_exists"}%
----+ template =oopsmanagebad= def =rename_not_wikiword=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=rename_not_wikiword"}%
----+ template =oopsmanagebad= def =rename_err=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=rename_err"}%
----+ template =oopsmanagebad= def =wrong_password=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=wrong_password"}%
----+ template =oopsmanagebad= def =web_missing=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=web_missing"}%
----+ template =oopsmanagebad= def =invalid_web_name=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=invalid_web_name"}%
----+ template =oopsmanagebad= def =web_exists=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=web_exists"}%
----+ template =oopsmanagebad= def =base_web_missing=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=base_web_missing"}%
----+ template =oopsmanagebad= def =invalid_web_color=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=invalid_web_color"}%
----+ template =oopsmanagebad= def =web_creation_error=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanagebad&def=web_creation_error"}%
----+ template =oopsmanageok= def =remove_user_done=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanageok&def=remove_user_done"}%
----+ template =oopsmanageok= def =created_web=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanageok&def=created_web"}%
----+ template =oopsmanageok= def =merge_notice=
-%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanageok&def=merge_notice"}%
+---+ template =oopsattention= def =missing_action=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=missing_action"}%
+---+ template =oopsattention= def =unrecognized_action=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=unrecognized_action"}%
+---+ template =oopsattention= def =notwikiuser=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=notwikiuser"}%
+---+ template =oopsattention= def =in_a_group=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=in_a_group"}%
+---+ template =oopsattention= def =move_err=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=move_err"}%
+---+ template =oopsattention= def =topic_exists=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=topic_exists"}%
+---+ template =oopsattention= def =rename_not_wikiword=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=rename_not_wikiword"}%
+---+ template =oopsattention= def =rename_err=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=rename_err"}%
+---+ template =oopsattention= def =wrong_password=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=wrong_password"}%
+---+ template =oopsattention= def =web_missing=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=web_missing"}%
+---+ template =oopsattention= def =invalid_web_name=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=invalid_web_name"}%
+---+ template =oopsattention= def =web_exists=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=web_exists"}%
+---+ template =oopsattention= def =base_web_missing=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=base_web_missing"}%
+---+ template =oopsattention= def =invalid_web_color=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=invalid_web_color"}%
+---+ template =oopsattention= def =web_creation_error=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=web_creation_error"}%
+---+ template =oopsattention= def =remove_user_done=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=remove_user_done"}%
+---+ template =oopsattention= def =created_web=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=created_web"}%
+---+ template =oopsattention= def =merge_notice=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsattention&def=merge_notice"}%

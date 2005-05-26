@@ -650,7 +650,7 @@ sub doEnableEdit {
     if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $theTopic, $theWeb ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException( 'accessdenied',
-                                    def => 'topic',
+                                    def => 'topic_access',
                                     web => $_[2], topic => $_[1] );
     }
 

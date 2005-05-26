@@ -24,7 +24,7 @@ sub save {
 											  $_[1], $_[2] ) ) {
         # user has no permission to change the topic
         throw TWiki::OopsException( 'accessdenied',
-                                    def => 'topic',
+                                    def => 'topic_access',
                                     web => $_[2],
                                     topic => $_[1] );
     } else {

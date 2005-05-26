@@ -99,8 +99,10 @@ sub edit {
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
         # Topic exists and user requested oops if it exists
-        throw TWiki::OopsException( 'createnewtopic',
-                                    web => $webName, tpoic => $topic );
+        throw TWiki::OopsException( 'attention',
+                                    def => 'topic_exists',
+                                    web => $webName,
+                                    topic => $topic );
     }
 
     # prevent non-Wiki names?
@@ -126,7 +128,7 @@ sub edit {
                             'change', $session->{user} );
 
     if( $saveCmd && ! $session->{user}->isAdmin()) {
-        throw TWiki::OopsException( 'accessdenied', def=>'group',
+        throw TWiki::OopsException( 'accessdenied', def=>'only_group',
                                     web => $webName, topic => $topic,
                                     params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
     }
