@@ -9,7 +9,7 @@ twiki.tar.bz2 : twiki.tar
 	bzip2 -f twiki.tar
 
 twiki.tar : 
-	tar -f twiki.tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform; ls `
+	tar -f twiki.tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform && find -maxdepth 1 -type f`
 	tar -f twiki.tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
 	tar -f twiki.tar -r $(TAR_EXCLUDE) 
 
