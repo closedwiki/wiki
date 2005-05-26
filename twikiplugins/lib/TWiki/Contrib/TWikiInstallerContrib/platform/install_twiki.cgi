@@ -90,7 +90,6 @@ BEGIN {
 	PubDir           => "$cgibin/../htdocs/twiki",
 	TemplateDir      => "$home/twiki/templates",
 	DataDir          => "$home/twiki/data",
-	LogDir           => "$home/twiki/data",
     };
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
