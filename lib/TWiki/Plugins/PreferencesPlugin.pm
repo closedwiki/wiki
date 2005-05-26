@@ -70,7 +70,7 @@ sub preRenderingHandler {
 
             TWiki::Func::setTopicEditLock( $web, $topic, 1 );
 
-            $_[0] =~ s/^(\t+\*\sSet\s)(\w+)\s\=(.*)$/$1.handleSet($web, $topic, $2, $3, $formDef)/gem;
+            $_[0] =~ s/^(\t+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*)/$1.handleSet($web, $topic, $2, $3, $formDef)/gem;
             $_[0] =~ s/%EDITPREFERENCES.*%/handleEditButton($web, $topic, 0)/eo;
         } elsif ( $action eq 'cancel' ) {
             TWiki::Func::setTopicEditLock( $web, $topic, 0 );
