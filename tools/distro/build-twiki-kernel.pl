@@ -11,7 +11,6 @@ BEGIN {
 }
 
 # TODO:
-#   * Documentation (of the process)
 #   * separate file selection from packaging (use separate step to create MANIFEST)
 #   * (probably eliminate outputdir completely)
 #   * use svn export (but mirror it so 
