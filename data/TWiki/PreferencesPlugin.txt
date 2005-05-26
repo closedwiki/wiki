@@ -27,18 +27,6 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
 		* Set SHORTDESCRIPTION = Allows editing of preferences using fields predefined in a form
 
-	* Length of the default input box
-		* Set DEFAULTLENGTH = 30
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
----++ Known shortcomings
-
-While the TWiki reference specifies that preferences are defined in a single line, the preference parser in =TWiki::Prefs::parseText= supports continuation lines, which are not yet supported in this plugin. Thus, all preferences should be defined in a single line.
-
-When preferences are put inside a =&lt;verbatim&gt;= environment, they must be lifted out of this environment for editing. Thus it is advisable to only put a sequence of preference set instructions into such environment, without any accompanying subsequent or interspersed text.
-
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
@@ -57,9 +45,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.ThomasWeigert |
 |  Plugin Version: | 08 May 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 May 2005: | Crawford Currie recoded to use code from Form.pm to render form fields. |
 |  08 May 2005: | Add plugin preference to define default input length  |
 |  07 May 2005: | Initial version |
-|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.026 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |

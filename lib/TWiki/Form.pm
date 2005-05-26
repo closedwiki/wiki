@@ -94,6 +94,9 @@ sub new {
             $fieldDef->{value} = \@posValues;
         }
 
+        if( $fieldDef->{attributes} =~ /M/ ) {
+            $this->{mandatoryFieldsPresent} = 1;
+        }
     }
 
     return $this;
@@ -275,9 +278,6 @@ sub _link {
 Render the form fields for entry during an edit session, using data values
 from $meta
 
-SMELL: this method is a horrible hack. It badly wants cleaning up.
-e.g. FIXME could do with some of this being in template
-
 =cut
 
 sub renderForEdit {
@@ -305,173 +305,46 @@ sub renderForEdit {
                                $chooseForm ));
 
     foreach my $fieldDef ( @{$this->{fields}} ) {
-        my $name = $fieldDef->{name};
-        my $title = $fieldDef->{title};
-        my $type = $fieldDef->{type};
-        my $size = $fieldDef->{size};
+
         my $tooltip = $fieldDef->{tooltip};
-        my $attributes = $fieldDef->{attributes};
         my $referenced = $fieldDef->{referenced};
-        my $extra = '';
-        my $field;
-        my $value;
+        my $title = $fieldDef->{title};
 
-        if( $attributes =~ /M/ ) {
-            $extra = CGI::span( { class => 'twikiAlert' }, ' *' );
-            $mandatoryFieldsPresent = 1;
-        }
-
-        if( $name ) {
-            $field = $meta->get( 'FIELD', $name );
-            $value = $field->{value};
-        }
-
-        if( $useDefaults && !defined( $value ) &&
-            $type !~ /^checkbox/ ) {
-
-            # Try and get a sensible default value from the form
-            # definition. Doesn't make sense for checkboxes.
-            $value = $fieldDef->{value};
-            if( defined( $value )) {
-                $value = $session->handleCommonTags( $value, $web, $topic );
-            }
-        }
-        $value = '' unless defined $value;  # allow 0 values
-
-        my $options;
-        my $item;
-        my %attrs;
-        my @defaults;
-        my $selected;
-
-        my $output = $session->{plugins}->renderFormFieldForEditHandler
-          ( $name, $type, $size, $value, $attributes, $fieldDef->{value} );
-        if( $output ) {
-            $value = $output;
-
-        } elsif( $type eq 'text' ) {
-            $value = CGI::textfield( -class => 'twikiEditFormTextField',
-                                     -name => $name,
-                                     -size => $size,
-                                     -value => $value );
-
-        } elsif( $type eq 'label' ) {
-            # Interesting question: if something is defined as "label",
-            # could it be changed by applications or is the value
-            # necessarily identical to what is in the form? If we can
-            # take it from the text, we must be sure it cannot be
-            # changed through the URL?
-            my $renderedValue = $session->{renderer}->getRenderedVersion
-              ( $session->handleCommonTags( $value, $web, $topic ));
-            $value = CGI::hidden( -name => $name,
-                                  -class => 'twikiEditFormLabelField',
-                                  -value => $renderedValue );
-            $value .= CGI::div( { class => 'twikiEditFormLabelField' },
-                                $renderedValue );
-
-        } elsif( $type eq 'textarea' ) {
-            my $cols = 40;
-            my $rows = 5;
-            if( $size =~ /([0-9]+)x([0-9]+)/ ) {
-                $cols = $1;
-                $rows = $2;
-            }
-            $value = CGI::textarea( -class => 'twikiEditFormTextAreaField',
-                                    -cols => $cols,
-                                    -rows => $rows,
-                                    -name => $name,
-                                    -default => "\n".$value );
-
-        } elsif( $type eq 'select' ) {
-            $options = $fieldDef->{value};
-            ASSERT( ref( $options )) if DEBUG;
-            my $choices = '';
-            foreach $item ( @$options ) {
-                $selected = ( $item eq $value );
-                $item =~ s/<nop/&lt\;nop/go;
-                if( $selected ) {
-                    $choices .= CGI::option({ selected=>'selected' }, $item );
-                } else {
-                    $choices .= CGI::option( $item );
-                }
-            }
-            $value = CGI::Select( { name=>$name, size=>$size }, $choices );
-
-        } elsif( $type =~ /^checkbox/ ) {
-            $options = $fieldDef->{value};
-            ASSERT( ref( $options )) if DEBUG;
-            if( $type eq 'checkbox+buttons' ) {
-                my $boxes = scalar( @$options );
-                $extra = CGI::br();
-                # SMELL: localisation - this should be from a template
-                $extra .= CGI::button
-                  ( -class => 'twikiEditFormCheckboxButton',
-                    -value => 'Set',
-                    -onClick => 'checkAll(this,2,'.$boxes.',true)' );
-                $extra .= '&nbsp;';
-                # SMELL: localisation - this should be from a template
-                $extra .= CGI::button
-                  ( -class => 'twikiEditFormCheckboxButton',
-                    -value => 'Clear',
-                    -onClick => 'checkAll(this,1,'.$boxes.',false)');
-            }
-            foreach $item ( @$options ) {
-                #NOTE: Does not expand $item in label
-                $attrs{$item} =
-                  { class=>'twikiEditFormCheckboxField',
-                    label=>$session->handleCommonTags( $item,
-                                                       $web,
-                                                       $topic ) };
-                if( $value =~ /(^|,\s*)$item(\s*,|$)/ ) {
-                    $attrs{$item}{checked} = 'checked';
-                    push( @defaults, $item );
-                }
-            }
-            $value = CGI::checkbox_group( -name => $name,
-                                          -values => $options,
-                                          -defaults => \@defaults,
-                                          -columns => $size,
-                                          -attributes => \%attrs );
-
-        } elsif( $type eq 'radio' ) {
-            $options = $fieldDef->{value};
-            ASSERT( ref( $options )) if DEBUG;
-            $selected = '';
-            foreach $item ( @$options ) {
-                $attrs{$item} =
-                  { class=>'twikiEditFormRadioField twikiRadioButton',
-                    label=>$session->handleCommonTags( $item, $web, $topic ) };
-
-                $selected = $item if( $item eq $value );
-            }
-
-            $value = CGI::radio_group( -name => $name,
-                                       -values => $options,
-                                       -default => $selected,
-                                       -columns => $size,
-                                       -attributes => \%attrs );
-
-        } else {
-            # Treat like text, make it reasonably long
-            # SMELL: Sven thinks this should be an error condition - so users
-            # know about typo's, and don't lose data when the typo is fixed
-            $value = CGI::textfield( -class=>'twikiEditFormError',
-                                     -name=>$name,
-                                     -size=>80,
-                                     -value=>$value );
-
-        }
-
-        if (! $title && $type eq "label") {
+        if (! $title && $fieldDef->{type} eq 'label') {
             # Special handling for untitled labels
-            $text .= CGI::Tr(CGI::th( { align => 'left',
-                                        colspan => '2',
-                                        bgcolor => '#99CCCC'},
-                                      CGI::Div
-                                      ( { class => 'twikiChangeFormButton' },
-                                        $session->{renderer}->getRenderedVersion
-                                        ( $session->handleCommonTags( $fieldDef->{value}, $web, $topic ))) ));
+            $text .= CGI::Tr
+              (CGI::th
+               ( { align => 'left',
+                   colspan => '2',
+                   bgcolor => '#99CCCC'},
+                 CGI::Div
+                 ( { class => 'twikiChangeFormButton' },
+                   $session->{renderer}->getRenderedVersion
+                   ( $session->handleCommonTags( $fieldDef->{value},
+                                                 $web, $topic ))) ));
         } else {
+            my( $extra, $value );
+            my $name = $fieldDef->{name};
+            if( $name ) {
+                my $field = $meta->get( 'FIELD', $name );
+                $value = $field->{value};
+            }
+            if( $useDefaults && !defined( $value ) &&
+                $fieldDef->{type} !~ /^checkbox/ ) {
+
+                # Try and get a sensible default value from the form
+                # definition. Doesn't make sense for checkboxes.
+                $value = $fieldDef->{value};
+                if( defined( $value )) {
+                    $value = $session->handleCommonTags( $value, $web,
+                                                         $topic );
+                }
+            }
+            $value = '' unless defined $value;  # allow 0 values
+
+            ( $extra, $value ) =
+              $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
+
             $text .= CGI::Tr(CGI::th( { align => 'right',
                                         bgcolor=>'#99CCCC' },
                                       # TW: Maybe do not link field headings
@@ -486,12 +359,170 @@ sub renderForEdit {
 
     $text = CGI::div({-class=>'twikiForm twikiEditForm'}, $text);
 
-    if( $mandatoryFieldsPresent ) {
+    if( $this->{mandatoryFieldsPresent} ) {
         # SMELL: localisation - this should be from a template
         $text .= CGI::span( { class => 'twikiAlert' }, '*' ).
           ' indicates mandatory fields';
     }
     return $text;
+}
+
+=pod
+
+---++ ObjectMethod renderFieldForEdit( $fieldDef, $web, $topic, $value) -> $html
+   * =$fieldDef= the field being rendered
+   * =$web= the web of the topic being rendered
+   * =$topic= the topic being rendered
+   * =$value= the current value of the field
+
+Render a single form field for entry during an edit session, using data values
+from $meta. Plugins can provide a handler that extends the set of supported
+types
+
+SMELL: this should be a method on a field class
+SMELL: JSCalendarContrib ought to provide a 'date' handler.
+
+=cut
+
+sub renderFieldForEdit {
+    my( $this, $fieldDef, $web, $topic, $value ) = @_;
+
+    my $name = $fieldDef->{name};
+    my $type = $fieldDef->{type} || '';
+    my $size = $fieldDef->{size};
+    my $attributes = $fieldDef->{attributes} || '';
+    my $extra = '';
+    my $session = $this->{session};
+
+    if( $attributes =~ /M/ ) {
+        $extra = CGI::span( { class => 'twikiAlert' }, ' *' );
+    }
+
+    my $options;
+    my $item;
+    my %attrs;
+    my @defaults;
+    my $selected;
+
+    my $output = $session->{plugins}->renderFormFieldForEditHandler
+      ( $name, $type, $size, $value, $attributes, $fieldDef->{value} );
+
+    if( $output ) {
+        $value = $output;
+
+    } elsif( $type eq 'text' ) {
+        $value = CGI::textfield( -class => 'twikiEditFormTextField',
+                                 -name => $name,
+                                 -size => $size,
+                                 -value => $value );
+
+    } elsif( $type eq 'label' ) {
+        # Interesting question: if something is defined as "label",
+        # could it be changed by applications or is the value
+        # necessarily identical to what is in the form? If we can
+        # take it from the text, we must be sure it cannot be
+        # changed through the URL?
+        my $renderedValue = $session->{renderer}->getRenderedVersion
+          ( $session->handleCommonTags( $value, $web, $topic ));
+        $value = CGI::hidden( -name => $name,
+                              -class => 'twikiEditFormLabelField',
+                              -value => $renderedValue );
+        $value .= CGI::div( { class => 'twikiEditFormLabelField' },
+                            $renderedValue );
+
+    } elsif( $type eq 'textarea' ) {
+        my $cols = 40;
+        my $rows = 5;
+        if( $size =~ /([0-9]+)x([0-9]+)/ ) {
+            $cols = $1;
+            $rows = $2;
+        }
+        $value = CGI::textarea( -class => 'twikiEditFormTextAreaField',
+                                -cols => $cols,
+                                -rows => $rows,
+                                -name => $name,
+                                -default => "\n".$value );
+
+    } elsif( $type eq 'select' ) {
+        $options = $fieldDef->{value};
+        ASSERT( ref( $options )) if DEBUG;
+        my $choices = '';
+        foreach $item ( @$options ) {
+            $selected = ( $item eq $value );
+            $item =~ s/<nop/&lt\;nop/go;
+            if( $selected ) {
+                $choices .= CGI::option({ selected=>'selected' }, $item );
+            } else {
+                $choices .= CGI::option( $item );
+            }
+        }
+        $value = CGI::Select( { name=>$name, size=>$size }, $choices );
+
+    } elsif( $type =~ /^checkbox/ ) {
+        $options = $fieldDef->{value};
+        ASSERT( ref( $options )) if DEBUG;
+        if( $type eq 'checkbox+buttons' ) {
+            my $boxes = scalar( @$options );
+            $extra = CGI::br();
+            # SMELL: localisation - this should be from a template
+            $extra .= CGI::button
+              ( -class => 'twikiEditFormCheckboxButton',
+                -value => 'Set',
+                -onClick => 'checkAll(this,2,'.$boxes.',true)' );
+            $extra .= '&nbsp;';
+            # SMELL: localisation - this should be from a template
+            $extra .= CGI::button
+              ( -class => 'twikiEditFormCheckboxButton',
+                -value => 'Clear',
+                -onClick => 'checkAll(this,1,'.$boxes.',false)');
+        }
+        foreach $item ( @$options ) {
+            #NOTE: Does not expand $item in label
+            $attrs{$item} =
+              { class=>'twikiEditFormCheckboxField',
+                label=>$session->handleCommonTags( $item,
+                                                   $web,
+                                                   $topic ) };
+            if( $value =~ /(^|,\s*)$item(\s*,|$)/ ) {
+                $attrs{$item}{checked} = 'checked';
+                push( @defaults, $item );
+            }
+        }
+        $value = CGI::checkbox_group( -name => $name,
+                                      -values => $options,
+                                      -defaults => \@defaults,
+                                      -columns => $size,
+                                      -attributes => \%attrs );
+
+    } elsif( $type eq 'radio' ) {
+        $options = $fieldDef->{value};
+        ASSERT( ref( $options )) if DEBUG;
+        $selected = '';
+        foreach $item ( @$options ) {
+            $attrs{$item} =
+              { class=>'twikiEditFormRadioField twikiRadioButton',
+                label=>$session->handleCommonTags( $item, $web, $topic ) };
+
+            $selected = $item if( $item eq $value );
+        }
+
+        $value = CGI::radio_group( -name => $name,
+                                   -values => $options,
+                                   -default => $selected,
+                                   -columns => $size,
+                                   -attributes => \%attrs );
+
+    } else {
+        # Treat like text, make it reasonably long
+        # SMELL: Sven thinks this should be an error condition - so users
+        # know about typo's, and don't lose data when the typo is fixed
+        $value = CGI::textfield( -class=>'twikiEditFormError',
+                                 -name=>$name,
+                                 -size=>80,
+                                 -value=>$value );
+
+    }
+    return ( $extra, $value );
 }
 
 =pod
