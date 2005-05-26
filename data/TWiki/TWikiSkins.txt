@@ -24,6 +24,10 @@ Use the existing TWikiTemplates (like =view.tmpl=) or skin files as a base for y
 You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVariables, and other predefined variables to compose your skins. Some commonly used variables in skins:
 
 | *Variable:* | *Expanded to:* |
+| =%<nop>WEBLOGONAME%= | Filename of web logo |
+| =%<nop>WEBLOGOIMG%= | Image URL of web logo |
+| =%<nop>WEBLOGOURL%= | Link of web logo |
+| =%<nop>WEBLOGOALT%= | Alt text of web logo |
 | =%<nop>WIKILOGOURL%= | Link of page logo |
 | =%<nop>WIKILOGOIMG%= | Image URL of page logo |
 | =%<nop>WIKILOGOALT%= | Alt text of page logo |

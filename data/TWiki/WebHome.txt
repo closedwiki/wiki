@@ -6,7 +6,7 @@
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
 </td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
-<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/vertTWikiPowered.gif" alt="Powered by TWiki" border="0" /></a><br />
+<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a><br />
 The official TWiki<sup>TM</sup><br /> site is http://twiki.org/
 </td></tr>
 </table>
@@ -109,5 +109,4 @@ _Documentation for webmasters, system administrators, project managers, team lea
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
 	* This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
 	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br />
-	  <img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWikiPowered.gif" alt="" />
-
+	  <a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a>
