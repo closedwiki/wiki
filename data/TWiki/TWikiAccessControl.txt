@@ -120,7 +120,7 @@ The easiest way to apply the same access control rules for attachments as apply 
   RewriteRule ^/twiki/pub/([^\/]+)/([^\/]+)/([^\/]+)$ /twiki/bin/viewfile/$1/$2?filename=$3 [L,PT]
 </verbatim>
 
-That way all the controls that apply to the top also apply to attachments to the topic.
+That way all the controls that apply to the topic also apply to attachments to the topic.
 
 ---+++ How TWiki evaluates ALLOW/DENY settings
 
