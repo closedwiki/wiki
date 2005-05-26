@@ -304,14 +304,14 @@ sub renderForEdit {
                                              $this->{topic}, '' ).
                                $chooseForm ));
 
-    foreach my $c ( @{$this->{fields}} ) {
-        my $name = $c->{name};
-        my $title = $c->{title};
-        my $type = $c->{type};
-        my $size = $c->{size};
-        my $tooltip = $c->{tooltip};
-        my $attributes = $c->{attributes};
-        my $referenced = $c->{referenced};
+    foreach my $fieldDef ( @{$this->{fields}} ) {
+        my $name = $fieldDef->{name};
+        my $title = $fieldDef->{title};
+        my $type = $fieldDef->{type};
+        my $size = $fieldDef->{size};
+        my $tooltip = $fieldDef->{tooltip};
+        my $attributes = $fieldDef->{attributes};
+        my $referenced = $fieldDef->{referenced};
         my $extra = '';
         my $field;
         my $value;
@@ -331,7 +331,7 @@ sub renderForEdit {
 
             # Try and get a sensible default value from the form
             # definition. Doesn't make sense for checkboxes.
-            $value = $c->{value};
+            $value = $fieldDef->{value};
             if( defined( $value )) {
                 $value = $session->handleCommonTags( $value, $web, $topic );
             }
@@ -345,7 +345,7 @@ sub renderForEdit {
         my $selected;
 
         my $output = $session->{plugins}->renderFormFieldForEditHandler
-          ( $name, $type, $size, $value, $attributes, $c->{value} );
+          ( $name, $type, $size, $value, $attributes, $fieldDef->{value} );
         if( $output ) {
             $value = $output;
 
@@ -383,7 +383,7 @@ sub renderForEdit {
                                     -default => "\n".$value );
 
         } elsif( $type eq 'select' ) {
-            $options = $c->{value};
+            $options = $fieldDef->{value};
             ASSERT( ref( $options )) if DEBUG;
             my $choices = '';
             foreach $item ( @$options ) {
@@ -398,7 +398,7 @@ sub renderForEdit {
             $value = CGI::Select( { name=>$name, size=>$size }, $choices );
 
         } elsif( $type =~ /^checkbox/ ) {
-            $options = $c->{value};
+            $options = $fieldDef->{value};
             ASSERT( ref( $options )) if DEBUG;
             if( $type eq 'checkbox+buttons' ) {
                 my $boxes = scalar( @$options );
@@ -434,7 +434,7 @@ sub renderForEdit {
                                           -attributes => \%attrs );
 
         } elsif( $type eq 'radio' ) {
-            $options = $c->{value};
+            $options = $fieldDef->{value};
             ASSERT( ref( $options )) if DEBUG;
             $selected = '';
             foreach $item ( @$options ) {
@@ -470,7 +470,7 @@ sub renderForEdit {
                                       CGI::Div
                                       ( { class => 'twikiChangeFormButton' },
                                         $session->{renderer}->getRenderedVersion
-                                        ( $session->handleCommonTags( $c->{value}, $web, $topic ))) ));
+                                        ( $session->handleCommonTags( $fieldDef->{value}, $web, $topic ))) ));
         } else {
             $text .= CGI::Tr(CGI::th( { align => 'right',
                                         bgcolor=>'#99CCCC' },
