@@ -20,6 +20,15 @@ Would you like to go to:
 	* %TWIKIWEB%.ManagingWebs to create another web
 	* [[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] home
 %TMPL:END%
+%TMPL:DEF{"merge_notice"}%
+---++ Topic was merged
+Rev %PARAM1% was saved by %PARAM2%, while you were still editing.
+
+Those changes have been merged with yours to create Rev %PARAM3%. Text fields will have been merged, but other data such as form fields may have overwritten the other users changes. Please inspect the topic to make sure it is OK, especially if you made any changes to form fields.
+
+You can see the differences
+[[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev1=%PARAM1%;rev2=%PARAM3%][here]].
+%TMPL:END%
 %TMPL:DEF{"message"}%
 %INSTANTIATE%
 %TMPL:END%

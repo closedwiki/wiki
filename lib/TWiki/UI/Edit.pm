@@ -222,22 +222,20 @@ sub edit {
     my $form = '';
     $form = $formMeta->{name} if( $formMeta );
     if( $form && !$saveCmd ) {
-        my @fieldDefs;
         my $formText;
-        # if there's a form template, and no text defined in the save, then
-        # get form data values from the form topic.
         my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
-        $session->{form}->fieldVars2Meta( $webName,  $session->{cgiQuery},
-                                          $meta,
-                                          'override' );
-	if ( $editaction eq "text" ) {
-	  $formText = $session->{form}->passForEdit
-	    ( $webName, $topic, $templateWeb, $form, $meta );
-	} else {
-	  $formText = $session->{form}->renderForEdit
-	    ( $webName, $topic, $templateWeb, $form, $meta,
-	      $getValuesFromFormTopic );
-	}
+        # if there's a form template, and no text defined in the save, then
+        # pull whatever values exist in the query into the meta.
+        my $formDef = new TWiki::Form( $session, $templateWeb, $form );
+        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 1 );
+        # and render them for editing
+        if ( $editaction eq "text" ) {
+            $formText = $formDef->renderHidden( $meta,
+                                                $getValuesFromFormTopic );
+        } else {
+            $formText = $formDef->renderForEdit( $webName, $topic, $meta,
+                                                 $getValuesFromFormTopic );
+        }
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
         # follows a html monster to let the 'choose form button' align at

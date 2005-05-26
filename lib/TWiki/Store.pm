@@ -994,7 +994,8 @@ sub extractMetaData {
         }
 
         if ( $$rtext =~ /<!--TWikiCat-->/ ) {
-            $$rtext = $this->{session}->{form}->upgradeCategoryTable( $web, $topic,
+            require TWiki::Compatibility;
+            $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $web, $topic,
                                                          $meta, $$rtext );
         }
     } else {
@@ -1002,7 +1003,8 @@ sub extractMetaData {
         if( $topicinfo->{format} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
             if( $$rtext =~ /<!--TWikiCat-->/ ) {
-                $$rtext = $this->{session}->{form}->upgradeCategoryTable( $web, $topic,
+                require TWiki::Compatibility;
+                $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $web, $topic,
                                                                $meta,
                                                                $$rtext );
             }

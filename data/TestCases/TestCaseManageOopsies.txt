@@ -34,3 +34,5 @@ Description: Load all the oopsmanage message templates for review
 %INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanageok&def=remove_user_done"}%
 ---+ template =oopsmanageok= def =created_web=
 %INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanageok&def=created_web"}%
+---+ template =oopsmanageok= def =merge_notice=
+%INCLUDE{"%SCRIPTURL%/oops%SCRIPTSUFFIX%/TheWeb/TheTopic?template=oopsmanageok&def=merge_notice"}%

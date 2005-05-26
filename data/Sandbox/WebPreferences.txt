@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111938186" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1116781293" format="1.0" version="1.5"}%
 
 ---++ <nop>%WEB% Web Preferences
 
@@ -27,13 +27,13 @@ __Preferences:__
 
 	* Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
 		* Set NOAUTOLINK = 
-		* __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
+		* __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =<noautolink> ... </noautolink>= syntax can be used to prevents links within a block of text.
 
 	* Default template for new topics and form(s) for this web:
 		* WebTopicEditTemplate: Default template for new topics in this web. (Site-level is used if topic does not exist)
 		* [[%TWIKIWEB%.WebTopicEditTemplate]]: Site-level default template
 		* %TWIKIWEB%.TWikiForms: How to enable form(s)
-		* Set WEBFORMS = 
+		* Set WEBFORMS = TestForm1 TestForm2
 
 	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
 		* Set DENYWEBVIEW = 
@@ -63,4 +63,5 @@ __Related Topics:__
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
+
 

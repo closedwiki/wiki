@@ -21,9 +21,7 @@
 
 ---+ package TWiki::Form
 
-This module handles the encoding and decoding of %TWIKIWEB%.TWikiForms,
-including upgrade of older format topics using the 'Category Table'
-approach, an earlier type of form.
+Object representing a single form definition.
 
 =cut
 
@@ -37,16 +35,66 @@ use CGI qw( -any );
 
 =pod
 
----++ ClassMethod new ( $session )
-Constructor
+---++ ClassMethod new ( $web, $form )
+
+   * $web - default web to recover form from, if $form doesn't specify a web
+   * =$form= - topic name to read form definition from
+
+May throw TWiki::OopsException
 
 =cut
 
 sub new {
-    my ( $class, $session ) = @_;
+    my( $class, $session, $web, $form ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+
+    ( $web, $form ) =
+      $session->normalizeWebTopicName( $web, $form );
+
+    my $store = $session->{store};
+
+    # Read topic that defines the form
+    unless( $store->topicExists( $web, $form ) ) {
+        throw TWiki::OopsException( 'noformdef',
+                                    web => $session->{webName},
+                                    topic => $session->{topicName},
+                                    params => [ $web, $form ] );
+    }
+    my( $meta, $text ) =
+      $store->readTopic( $session->{user}, $web, $form, undef );
+
     $this->{session} = $session;
+    $this->{web} = $web;
+    $this->{topic} = $form;
+    $this->{fields} = $this->_parseFormDefinition( $text );
+
+    # Expand out values arrays in the definition
+    # SMELL: this should be done lazily
+    foreach my $fieldDef ( @{$this->{fields}} ) {
+        my @posValues = ();
+
+        if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
+            @posValues = split( /,/, $fieldDef->{value} );
+            my $topic = $fieldDef->{referenced} || $fieldDef->{name};
+            if( !scalar( @posValues ) &&
+                $store->topicExists( $web, $topic ) ) {
+                # If no values are defined, see if we can get them from
+                # the topic of the same name as the field
+                my( $meta, $text ) =
+                  $store->readTopic( $session->{user}, $web, $topic, undef );
+                # Add processing of SEARCHES for Lists
+                # SMELL: why isn't this just handleCommonTags?
+                $text =~ s/%SEARCH{(.*?)}%/_searchVals($session, $1)/geo;
+                @posValues = _getPossibleFieldValues( $text );
+                $fieldDef->{type} ||= 'select';  #FIXME keep?
+            }
+            #FIXME duplicates code in _getPossibleFieldValues?
+            @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
+            $fieldDef->{value} = \@posValues;
+        }
+
+    }
+
     return $this;
 }
 
@@ -100,7 +148,7 @@ sub _parseFormDefinition {
 
                 $vals ||= '';
                 # SMELL: why isn't this just handleCommonTags?
-		$vals =~ s/%SEARCH{(.*?)}%/_searchVals($this->{session}, $1)/geo;
+                $vals =~ s/%SEARCH{(.*?)}%/_searchVals($this->{session}, $1)/geo;
                 $vals =~ s/^\s*//go;
                 $vals =~ s/\s*$//go;
 
@@ -186,70 +234,9 @@ sub _getPossibleFieldValues {
     return @defn;
 }
 
-=pod
-
----++ ObjectMethod getFormDef (  $webName, $form  ) -> @fields
-
-Get array of field definition, given form name
-If form contains Web this overrides webName
-
-May throw TWiki::OopsException
-
-=cut
-
-sub getFormDef {
-    my( $this, $webName, $form ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
-
-   my $session = $this->{session};
-
-    ( $webName, $form ) =
-      $session->normalizeWebTopicName( $webName, $form );
-
-    my $store = $session->{store};
-
-    # Read topic that defines the form
-    unless( $store->topicExists( $webName, $form ) ) {
-        throw TWiki::OopsException( 'noformdef',
-                                    web => $session->{webName},
-                                    topic => $session->{topicName},
-                                    params => [ $webName, $form ] );
-    }
-    my( $meta, $text ) =
-      $store->readTopic( $session->{user}, $webName, $form, undef );
-
-    my $fieldsInfo = $this->_parseFormDefinition( $text );
-
-    # Expand out values arrays in the definition
-    foreach my $fieldDef ( @$fieldsInfo ) {
-        my @posValues = ();
-
-        if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
-            @posValues = split( /,/, $fieldDef->{value} );
-	    my $topic = $fieldDef->{referenced} || $fieldDef->{name};
-            if( !scalar( @posValues ) && $store->topicExists( $webName, $topic ) ) {
-                # If no values are defined, see if we can get them from
-                # the topic of the same name as the field
-                my( $meta, $text ) =
-                  $store->readTopic( $session->{user}, $webName, $topic, undef );
-                # Add processing of SEARCHES for Lists
-                # SMELL: why isn't this just handleCommonTags?
-		$text =~ s/%SEARCH{(.*?)}%/_searchVals($session, $1)/geo;
-                @posValues = _getPossibleFieldValues( $text );
-                $fieldDef->{type} ||= 'select';  #FIXME keep?
-            }
-	    #FIXME duplicates code in _getPossibleFieldValues?
-            @posValues = map { $_ =~ s/^\s*(.*)\s*$/$1/; $_; } @posValues;
-            $fieldDef->{value} = \@posValues;
-        }
-
-    }
-
-    return $fieldsInfo;
-}
-
+# Generate a link to the given topic in the same web as this form def came from
 sub _link {
-    my( $this, $web, $name, $tooltip, $target ) = @_;
+    my( $this, $name, $tooltip, $target ) = @_;
 
     $name =~ s/[\[\]]//go;
 
@@ -257,16 +244,16 @@ sub _link {
     $target = $name unless $target;
 
     my $store = $this->{session}->{store};
-    if( $store->topicExists( $web, $target ) ) {
-        ( $web, $target ) = $this->{session}->normalizeWebTopicName( $web, $target );
+    if( $store->topicExists( $this->{web}, $target ) ) {
+        ( $this->{web}, $target ) = $this->{session}->normalizeWebTopicName( $this->{web}, $target );
         if( ! $tooltip ) {
             $tooltip = 'Click to see details in separate window';
         }
         $link =
           CGI::a( { target => $target,
-                    onclick => 'return launchWindow("'.$web.'","'.$name.'")',
+                    onclick => 'return launchWindow("'.$this->{web}.'","'.$name.'")',
                     title => $tooltip,
-                    href =>$this->{session}->getScriptUrl($web, $target, 'view'),
+                    href =>$this->{session}->getScriptUrl($this->{web}, $target, 'view'),
                     rel => 'nofollow'
                   }, $name );
     } elsif ( $tooltip ) {
@@ -278,9 +265,14 @@ sub _link {
 
 =pod
 
----++ ObjectMethod renderForEdit (  $web, $topic, $formWeb, $form, $meta, $getValuesFromFormTopic ) -> $html
+---++ ObjectMethod renderForEdit( $web, $topic, $meta, $useDefaults ) -> $html
+   * =$web= the web of the topic being rendered
+   * =$topic= the topic being rendered
+   * =$meta= the meta data for the form
+   * =$useDefaults= if true, will use default values from the form definition if no other value is given
 
-Render form fields for entry during an edit session
+Render the form fields for entry during an edit session, using data values
+from $meta
 
 SMELL: this method is a horrible hack. It badly wants cleaning up.
 e.g. FIXME could do with some of this being in template
@@ -288,8 +280,9 @@ e.g. FIXME could do with some of this being in template
 =cut
 
 sub renderForEdit {
-    my( $this, $web, $topic, $formWeb, $form, $meta, $getValuesFromFormTopic ) = @_;
+    my( $this, $web, $topic, $meta, $useDefaults ) = @_;
     ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
+    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
     my $session = $this->{session};
 
     my $mandatoryFieldsPresent = 0;
@@ -306,11 +299,11 @@ sub renderForEdit {
     my $text = CGI::start_table(-border=>1, -cellspacing=>0, -cellpadding=>0 );
     $text .= CGI::Tr( CGI::th( { colspan => 2,
                                  bgcolor => '#99CCCC' },
-                               $this->_link( $web, $form, '' ).
+                               $this->_link( $this->{web},
+                                             $this->{topic}, '' ).
                                $chooseForm ));
 
-    my $fieldsInfo = $this->getFormDef( $formWeb, $form );
-    foreach my $c ( @$fieldsInfo ) {
+    foreach my $c ( @{$this->{fields}} ) {
         my $name = $c->{name};
         my $title = $c->{title};
         my $type = $c->{type};
@@ -332,13 +325,11 @@ sub renderForEdit {
             $value = $field->{value};
         }
 
-        if( $getValuesFromFormTopic && !defined( $value ) &&
-            #TW: was (checkbox|radio|select)
+        if( $useDefaults && !defined( $value ) &&
             $type !~ /^checkbox/ ) {
 
             # Try and get a sensible default value from the form
-            # definition. Doesn't make sense for checkboxes,
-            # radio buttons or select.
+            # definition. Doesn't make sense for checkboxes.
             $value = $c->{value};
             if( defined( $value )) {
                 $value = $session->handleCommonTags( $value, $web, $topic );
@@ -484,7 +475,8 @@ sub renderForEdit {
                                         bgcolor=>'#99CCCC' },
                                       # TW: Maybe do not link field headings
                                       #$title .
-                                      $this->_link( $web, $title, $tooltip, $referenced).
+                                      $this->_link( $title, $tooltip,
+                                                    $referenced).
                                       $extra ).
                              CGI::td( { -align=>'left' } , $value ));
         }
@@ -499,305 +491,130 @@ sub renderForEdit {
           ' indicates mandatory fields';
     }
     return $text;
-
 }
 
 =pod
 
----++ ObjectMethod passForEdit (  $web, $topic, $formWeb, $form, $meta ) -> $html
+---++ ObjectMethod renderHidden( $meta, $useDefaults ) -> $html
+   * =$useDefaults= if true, will use default values from the form definition if no other value is given
 
-Pass form fields through to save unchanged during an edit session
+Render form fields found in the meta as hidden inputs, so they pass
+through edits untouched.
 
 =cut
 
-sub passForEdit {
-
-    my( $this, $web, $topic, $formWeb, $form, $meta ) = @_;
+sub renderHidden {
+    my( $this, $meta, $useDefaults ) = @_;
     ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
+    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
     my $session = $this->{session};
 
     my $text = "";
 
-    my $fieldsInfo = $this->getFormDef( $formWeb, $form );
-    foreach my $c ( @$fieldsInfo ) {
-        my $name = $c->{name};
-        my $title = $c->{title};
-        my $type = $c->{type};
-        my $size = $c->{size};
+    foreach my $fieldDef ( @{$this->{fields}} ) {
+        my $name = $fieldDef->{name};
 
-        my $field;
         my $value;
         if( $name ) {
-            $field = $meta->get( 'FIELD', $name );
+            my $field = $meta->get( 'FIELD', $name );
             $value = $field->{value};
         }
 
+        if( $useDefaults && !defined( $value ) &&
+            $fieldDef->{type} !~ /^checkbox/ ) {
+
+            $value = $fieldDef->{value};
+        }
+
         $value = '' unless defined $value;  # allow 0 values
-	$text .= CGI::hidden( -name => $name,
-			      -size => $size,
-			      -value => $value );
-
+        $text .= CGI::hidden( -name => $name,
+                              -value => $value );
     }
 
     return $text;
-
 }
 
 =pod
 
----++ ObjectMethod fieldVars2Meta($webName, $query, $metaObject, $justOverride, $handleMandatory) -> $metaObject
+---++ ObjectMethod getFieldValuesFromQuery($query, $metaObject, $justOverride, $handleMandatory) -> $metaObject
 
-Extract new values of form fields from a query.
+Extract new values of form fields from a query. and put them into the
+meta-data object passed in.
 
-Note that existing meta information for fields is removed unless $justOverride is true
+Note that existing meta information for fields is removed unless
+$justOverride is true
 
 May throw TWiki::OopsException
 
 =cut
 
-sub fieldVars2Meta {
-    my( $this, $webName, $query, $meta, $justOverride, $handleMandatory ) = @_;
+sub getFieldValuesFromQuery {
+    my( $this, $query, $meta, $justOverride, $handleMandatory ) = @_;
     ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
     ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
 
-    $meta->remove( 'FIELD' ) if( ! $justOverride );
+    # Kill the old form data unless we have been asked to override
+    # existing data
+    $meta->remove( 'FIELD' ) unless( $justOverride );
 
-    #$this->{session}->writeDebug( "Form::fieldVars2Meta " . $query->query_string );
+    foreach my $fieldDef ( @{$this->{fields}} ) {
+        next unless $fieldDef->{name};
 
-    my $form = $meta->get( 'FORM' );
-    return $meta unless $form;
+        my $value = $query->param( $fieldDef->{name} );
+        if( $fieldDef->{type} =~ /^checkbox/ ) {
+            my @checked = $query->param ( $fieldDef->{name} );
+            $value = shift @checked;
+            foreach my $val (@checked) {
+                $value .= ", $val";
+            }
+        }
 
-    my $fieldsInfo = $this->getFormDef( $webName, $form->{name} );
+        # title and name are stored so that topic can be viewed without
+        # reading in form definition
+        $value = '' unless( defined( $value ) || $justOverride );
+        my $mandatory = ($fieldDef->{attributes} =~ /M/)?1:0;
+        if ( $handleMandatory && $mandatory && !$value ) {
+            # Create own oops, find topic instead of "" requires passing it
+            # in from caller as $query->param('topic') has been changed.
+            throw TWiki::OopsException( 'fielderr',
+                                        web => $this->{session}->{webName},
+                                        topic => $this->{session}->{topicName},
+                                        params => [ $fieldDef->{title} ] );
+        }
+        if( defined( $value ) ) {
+            my $args =
+              {
+               name =>  $fieldDef->{name},
+               title => $fieldDef->{title},
+               value => $value,
+               attributes => $fieldDef->{attributes},
+              };
+            $meta->putKeyed( 'FIELD', $args );
+        }
+    }
 
-    foreach my $fieldDef ( @$fieldsInfo ) {
-       next unless $fieldDef->{name};
-
-       my $value = $query->param( $fieldDef->{name} );
-       if( $fieldDef->{type} =~ /^checkbox/ ) {
-	 my @checked = $query->param ( $fieldDef->{name} );
-	 $value = shift @checked;
-	 foreach my $val (@checked) {
-	   $value .= ", $val";
-	 }
-       }
-
-       # title and name are stored so that topic can be viewed without
-       # reading in form definition
-       $value = '' unless( defined( $value ) || $justOverride );
-       my $mandatory = ($fieldDef->{attributes} =~ /M/)?1:0;
-       if ( $handleMandatory && $mandatory && !$value ) {
-           # Create own oops, find topic instead of "" requires passing it 
-           # in from caller as $query->param('topic') has been changed.
-           throw TWiki::OopsException( 'fielderr',
-                                       web => $this->{session}->{webName},
-                                       topic => $this->{session}->{topicName},
-                                       params => [ $fieldDef->{title} ] );
-       }
-       if( defined( $value ) ) {
-           my $args =
-             {
-              name =>  $fieldDef->{name},
-              title => $fieldDef->{title},
-              value => $value,
-              attributes => $fieldDef->{attributes},
-             };
-           $meta->putKeyed( 'FIELD', $args );
-       }
-   }
-
-   return $meta;
+    return $meta;
 }
 
 =pod
 
----++ StaticMethod getFieldParams (  $meta  )
+---++ ObjectMethod isTextMergeable( $name ) -> $boolean
 
-Not yet documented.
+Returns true if the type of the named field allows it to be text-merged.
 
-=cut
-
-sub getFieldParams {
-    my( $meta ) = @_;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
-
-    my $params = '';
-
-    my @fields = $meta->find( 'FIELD' );
-    foreach my $field ( @fields ) {
-       my $name  = $field->{name};
-       my $value = $field->{value};
-       #$this->{session}->writeDebug( "Form::getFieldParams " . $name . ", " . $value );
-       $params .= CGI::hidden( -name => $name,
-                               -default => $value );
-    }
-    return $params;
-
-}
-
-#Upgrade old style category table item
-sub _upgradeCategoryItem {
-    my ( $catitems, $ctext ) = @_;
-    my $catname = '';
-    my $scatname = '';
-    my $catmodifier = '';
-    my $catvalue = '';
-    my @cmd = split( /\|/, $catitems );
-    my $src = '';
-    my $len = @cmd;
-    if( $len < '2' ) {
-        # FIXME
-        return ( $catname, $catmodifier, $catvalue )
-    }
-    my $svalue = '';
-
-    my $i;
-    my $itemsPerLine;
-
-    # check for CategoryName=CategoryValue parameter
-    my $paramCmd = '';
-    my $cvalue = ''; # was$query->param( $cmd[1] );
-    if( $cvalue ) {
-        $src = "<!---->$cvalue<!---->";
-    } elsif( $ctext ) {
-        foreach( split( /\n/, $ctext ) ) {
-            if( /$cmd[1]/ ) {
-                $src = $_;
-                last;
-            }
-        }
-    }
-
-    if( $cmd[0] eq 'select' || $cmd[0] eq 'radio') {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        #$scatname =~ s/[^a-zA-Z0-9]//g;
-        my $size = $cmd[2];
-        for( $i = 3; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            $svalue = $value;
-            if( $src =~ /$value/ ) {
-               $catvalue = $svalue;
-            }
-        }
-
-    } elsif( $cmd[0] eq 'checkbox' ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        #$scatname =~ s/[^a-zA-Z0-9]//g;
-        if( $cmd[2] eq 'true' || $cmd[2] eq '1' ) {
-            $i = $len - 4;
-            $catmodifier = 1;
-        }
-        $itemsPerLine = $cmd[3];
-        for( $i = 4; $i < $len; $i++ ) {
-            my $value = $cmd[$i];
-            $svalue = $value;
-            # I18N: FIXME - need to look at this, but since it's upgrading
-            # old forms that probably didn't use I18N, it's not a high
-            # priority.
-            if( $src =~ /$value[^a-zA-Z0-9\.]/ ) {
-                $catvalue .= ", " if( $catvalue );
-                $catvalue .= $svalue;
-            }
-        }
-
-    } elsif( $cmd[0] eq 'text' ) {
-        $catname = $cmd[1];
-        $scatname = $catname;
-        #$scatname =~ s/[^a-zA-Z0-9]//g;
-        $src =~ /<!---->(.*)<!---->/;
-        if( $1 ) {
-            $src = $1;
-        } else {
-            $src = '';
-        }
-        $catvalue = $src;
-    }
-
-    return ( $catname, $catmodifier, $catvalue )
-}
-
-=pod
-
----++ ObjectMethod upgradeCategoryTable (  $web, $topic, $meta, $text  ) -> $text
-
-Upgrade old style category table
-
-May throw TWiki::OopsException
+If the form does not define the field, it is assumed to be mergeable.
 
 =cut
 
-sub upgradeCategoryTable {
-    my( $this, $web, $topic, $meta, $text ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
+sub isTextMergeable {
+    my( $this, $name ) = @_;
 
-    my $icat = $this->{session}->{templates}->readTemplate( 'twikicatitems' );
-
-    if( $icat ) {
-        my @items = ();
-        # extract category section and build category form elements
-        my( $before, $ctext, $after) = split( /<!--TWikiCat-->/, $text );
-        # cut TWikiCat part
-        $text = $before || '';
-        $text .= $after if( $after );
-        $ctext = '' if( ! $ctext );
-
-        my $ttext = '';
-        foreach( split( /\n/, $icat ) ) {
-            my( $catname, $catmod, $catvalue ) = _upgradeCategoryItem( $_, $ctext );
-            #$this->{session}->writeDebug( "Form: name, mod, value: $catname, $catmod, $catvalue" );
-            if( $catname ) {
-                push @items, ( [$catname, $catmod, $catvalue] );
-            }
-        }
-        my $prefs = $this->{session}->{prefs};
-        my $listForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
-        $listForms =~ s/^\s*//go;
-        $listForms =~ s/\s*$//go;
-        my @formTemplates = split( /\s*,\s*/, $listForms );
-        my $defaultFormTemplate = '';
-        $defaultFormTemplate = $formTemplates[0] if ( @formTemplates );
-
-        if( ! $defaultFormTemplate ) {
-            $this->{session}->writeWarning( "Form: can't get form definition to convert category table " .
-                                  " for topic $web.$topic" );
-            foreach my $oldCat ( @items ) {
-                my $name = $oldCat->[0];
-                my $value = $oldCat->[2];
-                $meta->put( 'FORM', { name => '' } );
-                $meta->putKeyed( 'FIELD',
-                            { name => $name,
-                              title => $name,
-                              value => $value
-                            } );
-            }
-            return;
-        }
-
-        my $fieldsInfo = $this->getFormDef( $web, $defaultFormTemplate );
-        $meta->put( 'FORM', { name => $defaultFormTemplate } );
-
-        foreach my $fieldDef ( @$fieldsInfo ) {
-            my $value = '';
-            foreach my $oldCatP ( @items ) {
-                my @oldCat = @$oldCatP;
-                if( _cleanField( $oldCat[0] ) eq $fieldDef->{name} ) {
-                    $value = $oldCat[2];
-                    last;
-                }
-            }
-            $meta->putKeyed( 'FIELD',
-                             {
-                              name => $fieldDef->{name},
-                              title => $fieldDef->{title},
-                              value => $value,
-                             } );
-        }
-
-    } else {
-        $this->{session}->writeWarning( "Form: get find category template twikicatitems for Web $web" );
+    foreach my $fieldDef ( @{$this->{fields}} ) {
+        next unless( $fieldDef->{name} && $fieldDef->{name} eq $name);
+        return( $fieldDef->{type} !~ /^(checkbox|radio|select)/ );
     }
-    return $text;
+    # Field not found - assume it is mergeable
+    return 1;
 }
 
 1;

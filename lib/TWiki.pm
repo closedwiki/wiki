@@ -1024,7 +1024,6 @@ sub new {
     $this->{search} = new TWiki::Search( $this );
     $this->{templates} = new TWiki::Templates( $this );
     $this->{attach} = new TWiki::Attach( $this );
-    $this->{form} = new TWiki::Form( $this );
 
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
@@ -1557,7 +1556,8 @@ sub inlineAlert {
     my $text = $this->{templates}->readTemplate( 'oops'.$template,
                                                  $this->getSkin() );
     if( $text ) {
-        $text =~ s/%INSTANTIATE%/%TMPL:P{"$def"}%/;
+        my $blah = $this->{templates}->expandTemplate( $def );
+        $text =~ s/%INSTANTIATE%/$blah/;
         # web and topic can be anything; they are not used
         $text = $this->handleCommonTags( $text, $this->{webName},
                                          $this->{topicName} );

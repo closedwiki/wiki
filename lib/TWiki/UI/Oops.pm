@@ -72,7 +72,8 @@ sub oops_cgi {
         my $def = $query->param( 'def' );
         if( defined $def ) {
             # if a def is specified, instantiate that def
-            $tmplData =~ s/%INSTANTIATE%/%TMPL:P{"$def"}%/;
+            my $blah = $session->{templates}->expandTemplate( $def );
+            $tmplData =~ s/%INSTANTIATE%/$blah/;
         }
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
         my $param;

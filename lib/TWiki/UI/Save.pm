@@ -169,8 +169,18 @@ sub _save {
         $newMeta->put( 'FORM', { name => $formTemplate } ) if( $formTemplate ne 'none' );
     }
 
-    # Expand field variables.
-    $session->{form}->fieldVars2Meta( $webName, $query, $newMeta, 0, 1 ) unless $templatetopic;
+    my $form = $newMeta->get( 'FORM' );
+    my $formDef;
+
+    if( $form && !$templatetopic )  {
+        # Expand field variables.
+        unless( $formDef ) {
+            $formDef = new TWiki::Form( $session, $webName, $form->{name} );
+        }
+        $formDef->getFieldValuesFromQuery( $query, $newMeta, 0, 1 );
+    }
+
+    my $merged;
 
     # assumes rev numbers start at 1
     if ( $originalrev ) {
@@ -178,9 +188,15 @@ sub _save {
         # If the last save was by me, don't merge
         if ( $rev ne $originalrev && !$author->equals( $user )) {
             $newText = TWiki::Merge::insDelMerge( $currText, $newText, "\\r?\\n" );
-            $newMeta->merge( $currMeta );
-            $newText .= "\n\nMERGED " . $author->stringify() .
-              ' and ' . $user->stringify() . " original $originalrev current $rev\n";
+            if( $form ) {
+                unless( $formDef ) {
+                    $formDef = new TWiki::FormDefinition( $session, $webName,
+                                                          $form->{name} );
+                }
+                $newMeta->merge( $currMeta, $formDef );
+            }
+
+            $merged = [ $originalrev, $author->stringify(), $rev ];
         }
     }
 
@@ -192,6 +208,12 @@ sub _save {
         throw TWiki::OopsException( 'saveerr',
                                     web => $webName, topic => $topic,
                                     params => $error );
+    }
+
+    if( $merged ) {
+        throw TWiki::OopsException( 'manageok', def => 'merge_notice',
+                                    web => $webName, topic => $topic,
+                                    params => $merged );
     }
 
     return 1;

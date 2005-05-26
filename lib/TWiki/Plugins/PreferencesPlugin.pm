@@ -76,9 +76,9 @@ sub beforeCommonTagsHandler
       $_[0] = &handlePrefsStart( $_[2], $_[1] ) . $_[0] . &handlePrefsEnd();
       my $action = lc $query->param( 'prefsaction' );
 
-      my $fieldsInfo = $session->{form}->getFormDef( $formWeb, $form );
+      my $formDef = new TWiki::Form( $session, $formWeb, $form );
       my %fields = ();
-      foreach my $c ( @$fieldsInfo ) {
+      foreach my $c ( @{$formDef->{fields}} ) {
 	$fields{$c->{name}} = $c;
       }
 

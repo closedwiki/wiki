@@ -110,14 +110,24 @@ sub preview {
             $tmpl =~ s/%FORMTEMPLATE%//go;
         }
 
-        # get the edited text and combine text, form and attachments for preview
-        $session->{form}->fieldVars2Meta( $webName, $query, $meta, 0, 1 );
+        # get the edited text and combine text, form and attachments
+        my $form = $meta->get( 'FORM' );
+        my $formDef;
+        if( $form ) {
+            my $fn = $form->{name};
+            $formDef = new TWiki::Form( $session, $webName, $fn );
+        }
+
+        if( $formDef ) {
+            $formDef->getFieldValuesFromQuery( $query, $meta, 0, 1 );
+        }
+
         $text = $textparam;
         $session->{plugins}->afterEditHandler( $text, $topic, $webName );
         $ptext = $text;
 
-        if( $meta->count( 'FORM' ) ) {
-            $formFields = &TWiki::Form::getFieldParams( $meta );
+        if( $formDef ) {
+            $formFields = $formDef->renderHidden( $meta, 0 );
         }
     } else {
         # undocumented 'repRev' mode

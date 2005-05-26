@@ -352,7 +352,9 @@ sub getRevisionInfo {
 
 =pod
 
----++ ObjectMethod merge( $otherMeta )
+---++ ObjectMethod merge( $otherMeta, $formDef )
+   * =$otherMeta= - a block of meta-data to merge with $this
+   * =$formDef= reference to a TWiki::Form that gives the types of the fields in $this
 
 Merge the data in the other meta block.
    * File attachments that only appear in one set are preserved.
@@ -360,22 +362,25 @@ Merge the data in the other meta block.
    * Form field values that are different in each set are text-merged
    * We don't merge for field attributes or title
    * Topic info is not touched
+   * The =mergeable= method on the form def is used to determine if that fields is mergeable. if it isn't, the value currently in meta will _not_ be changed.
 
 =cut
 
 sub merge {
-    my ( $this, $other ) = @_;
+    my ( $this, $other, $formDef ) = @_;
 
     my $data = $other->{FIELD};
     if( $data ) {
         foreach my $otherD ( @$data ) {
             my $thisD = $this->get( 'FIELD', $otherD->{name} );
             if ( $thisD && $thisD->{value} ne $otherD->{value} ) {
-                my $merged = TWiki::Merge::insDelMerge( $otherD->{value},
-                                                        $thisD->{value},
-                                                        qr/(\s+)/ );
-                # SMELL: we don't merge attributes or title
-                $thisD->{value} = $merged;
+                if( $formDef->isTextMergeable( $thisD->{name} )) {
+                    my $merged = TWiki::Merge::insDelMerge( $otherD->{value},
+                                                            $thisD->{value},
+                                                            qr/(\s+)/ );
+                    # SMELL: we don't merge attributes or title
+                    $thisD->{value} = $merged;
+                }
             } elsif ( !$thisD ) {
                 $this->putKeyed('FIELD', $otherD );
             }
