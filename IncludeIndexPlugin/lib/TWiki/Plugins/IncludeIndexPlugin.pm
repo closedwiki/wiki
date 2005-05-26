@@ -52,9 +52,8 @@ sub linkToInclude	  # instead of handling %INCLUDE, return link to it
 	$linktext =~ s/\$page/$incfile/;
 
 	if ( $linktext =~ /\$/ ) {	# delegate complex formats to %SEARCH:
-	    $linktext = '%SEARCH{"^' . $incfile . '\.txt"'
-		. ' regex="on" nosearch="on"'
-		. ' scope="topic" nototal="on" format="' . $format . '"}%'; 
+            $linktext = '%SEARCH{topic="'.$incfile.'" "." regex="on" nosearch="on"'
+             . ' scope="topic" nototal="on" format="' . $format . '"}%';
 	}
     }
     return $linktext;
