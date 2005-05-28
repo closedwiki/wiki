@@ -576,7 +576,7 @@ sub writeCompletePage {
 
     ASSERT(ref($this) eq 'TWiki') if DEBUG;
 
-    if( $contentType ne 'text/plain' ) {
+    if( ($contentType||'') ne 'text/plain' ) {
         # Remove <nop> and <noautolink> tags
         $text =~ s/([\t ]?)[ \t]*<\/?(nop|noautolink)\/?>/$1/gis;
         $text .= "\n" unless $text =~ /\n$/s;
