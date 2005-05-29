@@ -354,7 +354,8 @@ sub rename {
               $store->readTopic( undef, $newWeb, $newTopic, undef );
             my $parent = $meta->get( 'TOPICPARENT' );
             if( $parent && $parent->{name} &&
-                $parent->{name} ne $oldTopic ) {
+                $parent->{name} ne $oldTopic &&
+                $store->topicExists( $session->normalizeWebTopicName( '', $parent->{name} ) ) ) {
                 if ( $parent->{name} =~ /([^.]+)[.]([^.]+)/ ) {
                     $new_url = $session->getScriptUrl( $1, $2, 'view' );
                 } else {
