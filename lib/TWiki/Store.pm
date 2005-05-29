@@ -999,7 +999,7 @@ sub extractMetaData {
                                                          $meta, $$rtext );
         }
     } else {
-        my $topicinfo = $meta->get( 'TOPICINFO' );
+        my $topicinfo = $meta->get( 'TOPICINFO' ) || {};
         if( $topicinfo->{format} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
             if( $$rtext =~ /<!--TWikiCat-->/ ) {
