@@ -356,6 +356,7 @@ sub rename {
             if( $parent && $parent->{name} &&
                 $parent->{name} ne $oldTopic &&
                 $store->topicExists( $session->normalizeWebTopicName( '', $parent->{name} ) ) ) {
+		# SMELL: probably would prefer some sort of normalizeWebTopicName() call here instead
                 if ( $parent->{name} =~ /([^.]+)[.]([^.]+)/ ) {
                     $new_url = $session->getScriptUrl( $1, $2, 'view' );
                 } else {
