@@ -252,12 +252,18 @@ sub addUserToTWikiUsersTopic {
     foreach my $line ( split( /\r?\n/, $text) ) {
         # TODO: I18N fix here once basic auth problem with 8-bit user names is
         # solved
-        if ( $entry &&
-             $line =~ /^\s+\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*\w+\s*)?-\s*(.*)/ ) {
-            my $web = $1 || $TWiki::cfg{UsersWebName};
-            my $name = $2;
-            my $odate = $3;
-            if( $user->wikiName() le $name ) {
+        if ( $entry )
+	{
+	    my ( $web, $name, $odate ) = ( '', '', '' );
+	    if ( $line =~ /^\s+\*\s($TWiki::regex{webNameRegex}\.)?($TWiki::regex{wikiWordRegex})\s*(?:-\s*\w+\s*)?-\s*(.*)/ ) {
+		$web = $1 || $TWiki::cfg{UsersWebName};
+		$name = $2;
+		$odate = $3;
+	    } elsif ( $line =~ /^\s+\*\s([A-Z]) - / ) {
+		#	* A - <a name="A">- - - -</a>^M
+		$name = $1;
+	    }
+            if( $name && ( $user->wikiName() le $name ) ) {
                 # found alphabetical position
                 if( $user->wikiName() eq $name ) {
                     # adjusting existing user - keep original registration date
