@@ -1194,6 +1194,7 @@ sub getListOfWebs {
 
     opendir DIR, "$TWiki::cfg{DataDir}" ;
     my @webList = grep { -e "$TWiki::cfg{DataDir}/$_/WebHome.txt" } readdir( DIR );
+#    my @webList = grep { -e "$TWiki::cfg{DataDir}/$_/$TWiki::cfg{HOMETOPIC}" } readdir( DIR );
     closedir( DIR );
 
     if ( $filter =~ /\buser\b/ ) {
