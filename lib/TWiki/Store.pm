@@ -1193,8 +1193,7 @@ sub getListOfWebs {
     $filter ||= '';
 
     opendir DIR, "$TWiki::cfg{DataDir}" ;
-    my @webList = grep { !/^\./ &&
-                           -d "$TWiki::cfg{DataDir}/$_" } readdir( DIR );
+    my @webList = grep { -e "$TWiki::cfg{DataDir}/$_/WebHome.txt" } readdir( DIR );
     closedir( DIR );
 
     if ( $filter =~ /\buser\b/ ) {
