@@ -127,8 +127,8 @@ sub registerAccount {
         TWiki::UI::Register::finish( $session, $approvalsDir );
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{-template});
-        $this->assert_str_equals("thanks", $e->{-def});
+        $this->assert_str_equals("attention", $e->{template});
+        $this->assert_str_equals("thanks", $e->{def});
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -182,8 +182,8 @@ sub test_registerVerifyOk {
         TWiki::UI::Register::register_cgi($session);
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{-template},$e->stringify());
-        $this->assert_str_equals("confirm", $e->{-def});
+        $this->assert_str_equals("attention", $e->{template},$e->stringify());
+        $this->assert_str_equals("confirm", $e->{def});
         $this->assert_matches(qr/$testUserEmail/, $e->stringify());
     } catch TWiki::AccessControlException with {
         my $e = shift;
@@ -281,8 +281,8 @@ sub test_registerBadVerify {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_matches(qr/$testUserEmail/, $e->stringify());
-        $this->assert_str_equals("attention", $e->{-template});
-        $this->assert_str_equals("confirm", $e->{-def});
+        $this->assert_str_equals("attention", $e->{template});
+        $this->assert_str_equals("confirm", $e->{def});
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -314,8 +314,8 @@ sub test_registerBadVerify {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention",$e->{-template});
-        $this->assert_str_equals("no_ver_file",$e->{-def});
+        $this->assert_str_equals("attention",$e->{template});
+        $this->assert_str_equals("no_ver_file",$e->{def});
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -365,8 +365,8 @@ sub test_resetPasswordOkay {
         $this->assert(0, $e->stringify);
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{-template});
-        $this->assert_str_equals("reset_ok", $e->{-def});
+        $this->assert_str_equals("attention", $e->{template});
+        $this->assert_str_equals("reset_ok", $e->{def});
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -408,8 +408,8 @@ sub test_resetPasswordNoSuchUser {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{-template}, $e->stringify());
-        $this->assert_str_equals("reset_bad", $e->{-def});
+        $this->assert_str_equals("attention", $e->{template}, $e->stringify());
+        $this->assert_str_equals("reset_bad", $e->{def});
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -451,8 +451,8 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_matches(qr/Main\.TWikiAdminGroup/, $e->stringify());
-        $this->assert_str_equals('accessdenied', $e->{-template});
-        $this->assert_str_equals('only_group', $e->{-def});
+        $this->assert_str_equals('accessdenied', $e->{template});
+        $this->assert_str_equals('only_group', $e->{def});
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {
@@ -496,8 +496,8 @@ sub test_resetPasswordNoPassword {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_str_equals("attention", $e->{-template});
-        $this->assert_str_equals("reset_ok", $e->{-def});
+        $this->assert_str_equals("attention", $e->{template});
+        $this->assert_str_equals("reset_ok", $e->{def});
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {

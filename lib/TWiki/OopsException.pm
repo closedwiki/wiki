@@ -47,6 +47,7 @@ The remaining parameters are interpreted as key-value pairs. The following keys 
    * =web= will be used as the web for the oops
    * =topic= will be used as the topic for the oops
    * =def= - is the (optional) name of a TMPL:DEF within the template
+   * =keep= - if set, the exception handler should try it's damndest to retain parameter values from the query.
    * =params= is a reference to an array of parameters. These will be substituted for !%PARAM1%, !%PARAM2% ... !%PARAMn% in the template.
 
 =cut
@@ -54,11 +55,10 @@ The remaining parameters are interpreted as key-value pairs. The following keys 
 sub new {
     my( $class, $template ) = @_;
     my $this = bless( $class->SUPER::new(), $class );
-    $this->{-template} = $template;
+    $this->{template} = $template;
     ASSERT( scalar( @_ ) % 2 == 0 ) if DEBUG;
     while ( my $key = shift @_ ) {
         my $val = shift @_;
-        $key = "-$key" unless( $key =~ m/^-/ );
         $this->{$key} = $val;
     }
     return $this;
@@ -75,13 +75,14 @@ Generates a string representation for the object, mainly for debugging.
 sub stringify {
     my $this = shift;
     my $s = 'OopsException(';
-    $s .= $this->{-template};
-    $s .= '/'.$this->{-def} if $this->{-def};
-    $s .= ' web=>'.$this->{-web} if $this->{-web};
-    $s .= ' topic=>'.$this->{-topic} if $this->{-topic};
-    if( defined $this->{-params} ) {
-        if( ref($this->{-params}) eq 'ARRAY' ) {
-            $s .= ' params=>['.join( ",", @{$this->{-params}} ).']';
+    $s .= $this->{template};
+    $s .= '/'.$this->{def} if $this->{def};
+    $s .= ' web=>'.$this->{web} if $this->{web};
+    $s .= ' topic=>'.$this->{topic} if $this->{topic};
+    $s .= ' keep=>1' if $this->{keep};
+    if( defined $this->{params} ) {
+        if( ref($this->{params}) eq 'ARRAY' ) {
+            $s .= ' params=>['.join( ",", @{$this->{params}} ).']';
         } else {
             $s .= ' params=>'.$this->{-params};
         }

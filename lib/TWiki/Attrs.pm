@@ -160,7 +160,7 @@ Return false if attribute set is not empty.
 sub isEmpty {
   my $this = shift;
 
-  ASSERT( ref( $this ) eq 'TWiki::Attrs' ) if DEBUG;
+  ASSERT( $this->isa( 'TWiki::Attrs' )) if DEBUG;
 
   return !scalar(%$this);
 }
@@ -176,7 +176,7 @@ Remove an attr value from the map, return old value. After a call to
 
 sub remove {
   my ( $this, $attr ) = @_;
-  ASSERT( ref( $this ) eq 'TWiki::Attrs' ) if DEBUG;
+  ASSERT($this->isa( 'TWiki::Attrs' )) if DEBUG;
   my $val = $this->{$attr};
   delete( $this->{$attr} ) if ( exists $this->{$attr} );
   return $val;
@@ -193,7 +193,7 @@ syntax observed (no {} brackets, though).
 
 sub stringify {
   my $this = shift;
-  ASSERT( ref( $this ) eq 'TWiki::Attrs' ) if DEBUG;
+  ASSERT($this->isa( 'TWiki::Attrs')) if DEBUG;
   my $key;
   my @ss;
   foreach $key ( sort keys %$this ) {

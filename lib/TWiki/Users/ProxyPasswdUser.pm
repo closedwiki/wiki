@@ -13,7 +13,7 @@ my $self;
 
 sub new {
     my( $class, $session ) = @_;
-#    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+#    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
     $this->{proxy} = new $delegate ($session); # needed?

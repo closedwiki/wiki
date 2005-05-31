@@ -227,6 +227,46 @@ sub _weekNumber {
     return sprintf('%.0f', ($nextThursday - $firstFourth) / ( 7 * 86400 )) + 1;
 }
 
+=pod
+
+---++ StaticMethod formatDelta( $s ) -> $string
+
+Format a time in seconds as a string. For example,
+"1 day, 3 hours, 2 minutes, 6 seconds"
+
+=cut
+
+sub formatDelta {
+    my $secs = shift;
+
+    my $rem = $secs % (60 * 60 * 24);
+    my $days = ($secs - $rem) / (60 * 60 * 24);
+    $secs = $rem;
+
+    $rem = $secs % (60 * 60);
+    my $hours = ($secs - $rem) / (60 * 60);
+    $secs = $rem;
+
+    $rem = $secs % 60;
+    my $mins = ($secs - $rem) / 60;
+    $secs = $rem;
+
+    my $str = '';
+    if( $days ) {
+        $str .= $days . ' day' .( $days > 1 ? 's ' : ' ' );
+    }
+    if( $hours ) {
+        $str .= $hours . ' hour' .( $hours > 1 ? 's ' : ' ' );
+    }
+    if( $mins ) {
+        $str .= $mins . ' minute' .( $mins > 1 ? 's ' : ' ' );
+    }
+    if( $secs ) {
+        $str .= $secs . ' second' .( $secs > 1 ? 's ' : ' ' );
+    }
+    chomp( $str );
+    return $str;
+}
 
 =pod
 

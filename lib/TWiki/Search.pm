@@ -57,7 +57,7 @@ sub new {
         require locale;
     }
 
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
 
     return $this;
@@ -346,7 +346,7 @@ SMELL: If =template= is defined =bookview= will not work
 
 sub searchWeb {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Search') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Search')) if DEBUG;
     my %params = @_;
     my $callback =      $params{_callback};
     my $cbdata =        $params{_cbdata};

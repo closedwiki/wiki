@@ -75,17 +75,17 @@ sub edit {
     my $editaction = lc($query->param( 'action' )) || "";
 
     my $saveCmd = $query->param( 'cmd' ) || '';
-    my $breakLock = $query->param( 'breaklock' ) || '';
     my $onlyWikiName = $query->param( 'onlywikiname' ) || '';
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
     my $formTemplate  = $query->param( 'formtemplate' ) || '';
     my $templateTopic = $query->param( 'templatetopic' ) || '';
     # apptype is undocumented legacy
     my $cgiAppType = $query->param( 'contenttype' ) ||
-      $query->param( 'apptype' ) || "text/html";
+      $query->param( 'apptype' ) || 'text/html';
     my $skin = $session->getSkin();
     my $theParent = $query->param( 'topicparent' ) || '';
     my $ptext = $query->param( 'text' );
+    my $store = $session->{store};
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'edit' );
     TWiki::UI::checkMirror( $session, $webName, $topic );
@@ -94,7 +94,40 @@ sub edit {
     my $text = '';
     my $meta = '';
     my $extra = '';
-    my $topicExists  = $session->{store}->topicExists( $webName, $topic );
+    my $topicExists  = $store->topicExists( $webName, $topic );
+
+    # Check lease, unless we have been instructed to ignore it
+    my $breakLock = $query->param( 'breaklock' ) || '';
+    unless( $breakLock ) {
+        my $lease = $store->getLease( $webName, $topic );
+        if( $lease ) {
+            my $who = $lease->{user}->webDotWikiName();
+
+            if( $who ne $user->webDotWikiName() ) {
+                # redirect; we are trying to break someone else's lease
+                my( $future, $past );
+                my $why = $lease->{message};
+                my $def = 'active';
+                if( time() > $lease->{expires} ) {
+                    $def = 'old';
+                    $past = TWiki::Time::formatDelta(time()-$lease->{expires});
+                    $future = '';
+                }
+                else {
+                    $past = TWiki::Time::formatDelta(time()-$lease->{taken});
+                    $future = TWiki::Time::formatDelta($lease->{expires}-time());
+                }
+                # use a 'keep' redirect to ensure we pass parameter
+                # values in the query on to the oops script
+                throw TWiki::OopsException( 'leaseconflict',
+                                            keep => 1,
+                                            def => $def,
+                                            web => $webName,
+                                            topic => $topic,
+                                            params => [ $who, $past, $future ] );
+            }
+        }
+    }
 
     # Prevent editing existing topic?
     if( $onlyNewTopic && $topicExists ) {
@@ -117,8 +150,7 @@ sub edit {
 
     if( $topicExists ) {
         ( $meta, $text ) =
-          $session->{store}->readTopic( undef, $webName,
-                                    $topic, undef );
+          $store->readTopic( undef, $webName, $topic, undef );
     }
 
     # If you want to edit, you have to be able to view and change.
@@ -130,7 +162,8 @@ sub edit {
     if( $saveCmd && ! $session->{user}->isAdmin()) {
         throw TWiki::OopsException( 'accessdenied', def=>'only_group',
                                     web => $webName, topic => $topic,
-                                    params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
+                                    params => $TWiki::cfg{UsersWebName}.
+                                    '.'.$TWiki::cfg{SuperAdminGroup} );
     }
 
     my $templateWeb = $webName;
@@ -143,7 +176,7 @@ sub edit {
               $session->normalizeWebTopicName( $templateWeb, $templateTopic );
 
             ( $meta, $text ) =
-              $session->{store}->readTopic( $session->{user}, $templateWeb,
+              $store->readTopic( $session->{user}, $templateWeb,
                                         $templateTopic, undef );
         }
         unless( $text ) {
@@ -201,7 +234,7 @@ sub edit {
     }
 
     if( $saveCmd ) {
-        $text = $session->{store}->readTopicRaw( $session->{user}, $webName,
+        $text = $store->readTopicRaw( $session->{user}, $webName,
                                                  $topic, undef );
     }
 
@@ -262,6 +295,8 @@ sub edit {
 
     $text = TWiki::entityEncode( $text );
     $tmpl =~ s/%TEXT%/$text/go;
+
+    $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
 
     $session->writeCompletePage( $tmpl, 'edit', $cgiAppType );
 }

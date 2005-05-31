@@ -52,7 +52,7 @@ Construct a Store module, linking in the chosen sub-implementation.
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa('TWiki')) if DEBUG;
 
     # Do a dynamic 'use locale' for this module
     if( $TWiki::cfg{UseLocale} ) {
@@ -110,7 +110,7 @@ TWiki::Meta object.  (The topic text is, as usual, just a string.)
 
 sub readTopic {
     my( $this, $user, $theWeb, $theTopic, $version ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     my $text = $this->readTopicRaw( $user, $theWeb, $theTopic, $version );
     my $meta = $this->extractMetaData( $theWeb, $theTopic, \$text );
@@ -142,7 +142,7 @@ correct operation of View raw=debug and the 'repRev' mode of Edit.
 
 sub readTopicRaw {
     my( $this, $user, $theWeb, $theTopic, $version ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     # test if theTopic contains a webName to override $theWeb
     ( $theWeb, $theTopic ) =
@@ -185,8 +185,8 @@ SMELL: $user must be the user login name, not their wiki name
 sub moveAttachment {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic,
         $theAttachment, $user ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     $this->lockTopic( $user, $oldWeb, $oldTopic );
 
@@ -274,7 +274,7 @@ name passed in.
 
 sub getAttachmentStream {
     my ( $this, $user, $web, $topic, $att ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     if( $user &&
         !$this->{session}->{security}->checkAccessPermission
@@ -303,7 +303,7 @@ sub attachmentExists {
     my $this = shift;
     #my ( $web, $topic, $att ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     my $topicHandler = $this->_getTopicHandler( @_ );
     return -e $topicHandler->{file};
 }
@@ -321,8 +321,8 @@ SMELL: $user must be the user login name, not their wiki name
 
 sub moveTopic {
     my( $this, $oldWeb, $oldTopic, $newWeb, $newTopic, $user ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     # will block
     $this->lockTopic( $user, $oldWeb, $oldTopic );
@@ -378,7 +378,7 @@ name passed in.
 sub readAttachment {
     my ( $this, $user, $theWeb, $theTopic, $theAttachment, $theRev ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     if( $user &&
         !$this->{session}->{security}->checkAccessPermission
@@ -405,7 +405,7 @@ WORKS FOR ATTACHMENTS AS WELL AS TOPICS
 
 sub getRevisionNumber {
     my( $this, $theWebName, $theTopic, $attachment ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $attachment = '' unless $attachment;
 
@@ -430,7 +430,7 @@ Return reference to an array of [ diffType, $right, $left ]
 
 sub getRevisionDiff {
     my( $this, $web, $topic, $rev1, $rev2, $contextLines ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($contextLines)) if DEBUG;
 
     my $rcs = $this->_getTopicHandler( $web, $topic );
@@ -459,7 +459,7 @@ Return list with: ( last update date, login name of last user, integer revision 
 
 sub getRevisionInfo {
     my( $this, $web, $topic, $theRev, $attachment, $topicHandler ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $theRev = 0 unless( $theRev );
 
@@ -520,8 +520,8 @@ Save a new revision of the topic, calling plugins handlers as appropriate.
 
 sub saveTopic {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     $options = {} unless defined( $options );
 
@@ -583,8 +583,8 @@ If file is not set, this is a properties-only save.
 
 sub saveAttachment {
     my( $this, $web, $topic, $attachment, $user, $opts ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT($user->isa('TWiki::User')) if DEBUG;
     ASSERT(defined($opts)) if DEBUG;
     my $action;
     my $plugins = $this->{session}->{plugins};
@@ -664,7 +664,7 @@ sub saveAttachment {
 sub _noHandlersSave {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
 
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
     my $currentRev = $topicHandler->numRevisions() || 0;
@@ -852,7 +852,7 @@ in another store implementation. Use =saveTopic*= and =saveMetaData= instead.
 
 sub saveFile {
     my( $this, $name, $text ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $name = TWiki::Sandbox::normalizeFileName( $name );
 
@@ -875,12 +875,16 @@ must be completed within that time. You cannot rely on the
 lock timeout clearing the lock, though; that should always
 be done by calling unlockTopic.
 
+Topic locks are used to make store operations atomic. They are
+_note_ the locks used when a topic is edited; those are Leases
+(see =getLease=)
+
 =cut
 
 sub lockTopic {
     my ( $this, $locker, $web, $topic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
-    ASSERT(ref($locker) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT($locker->isa('TWiki::User')) if DEBUG;
     ASSERT($web && $topic) if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
@@ -914,12 +918,16 @@ Release the topic lock on the given topic. A topic lock will cause other
 processes that also try to claim a lock to block. It is important to
 release a topic lock after a guard section is complete.
 
+Topic locks are used to make store operations atomic. They are
+_note_ the locks used when a topic is edited; those are Leases
+(see =getLease=)
+
 =cut
 
 sub unlockTopic {
     my ( $this, $user, $web, $topic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT($user->isa('TWiki::User')) if DEBUG;
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
     $topicHandler->setLock( 0, $user->wikiName() );
@@ -941,7 +949,7 @@ sub webExists {
     my( $this, $theWeb ) = @_;
     ASSERT(defined($theWeb)) if DEBUG;
 
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     return -e "$TWiki::cfg{DataDir}/$theWeb";
 }
 
@@ -957,7 +965,7 @@ Test if topic exists
 
 sub topicExists {
     my( $this, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($theTopic)) if DEBUG;
 
     return -e "$TWiki::cfg{DataDir}/$theWeb/$theTopic.txt";
@@ -981,7 +989,7 @@ sub _addMetaDatum {
 #
 sub extractMetaData {
     my( $this, $web, $topic, $rtext ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
     $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2)/gem;
@@ -1000,7 +1008,7 @@ sub extractMetaData {
         }
     } else {
         my $topicinfo = $meta->get( 'TOPICINFO' ) || {};
-        if( $topicinfo->{format} eq "1.0beta" ) {
+        if( $topicinfo->{format} && $topicinfo->{format} eq "1.0beta" ) {
             # This format used live at DrKW for a few months
             if( $$rtext =~ /<!--TWikiCat-->/ ) {
                 require TWiki::Compatibility;
@@ -1034,7 +1042,7 @@ of use by Render.pm.
 
 sub getTopicParent {
     my( $this, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($theWeb)) if DEBUG;
     ASSERT(defined($theTopic)) if DEBUG;
 
@@ -1097,7 +1105,7 @@ in another store implementation. Use =readTopic*= and =readMetaData= instead.
 
 sub readFile {
     my( $this, $name ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $name = TWiki::Sandbox::normalizeFileName( $name );
     my $data = '';
     open( IN_FILE, "<$name" ) || return '';
@@ -1122,7 +1130,7 @@ given, the meta-data is assumed to be globally unique.
 
 sub readMetaData {
     my ( $this, $web, $name ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     my $file = "$TWiki::cfg{DataDir}/";
     $file .= "$web/" if $web;
@@ -1143,7 +1151,7 @@ given, the meta-data is assumed to be globally unique.
 
 sub saveMetaData {
     my ( $this, $web, $name, $text ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     my $file = "$TWiki::cfg{DataDir}/";
     $file .= "$web/" if $web;
@@ -1164,7 +1172,7 @@ Return a topic list, e.g. =( 'WebChanges',  'WebHome', 'WebIndex', 'WebNotify' )
 
 sub getTopicNames {
     my( $this, $web ) = @_ ;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     $web = '' unless( defined $web );
 
@@ -1189,7 +1197,7 @@ webs on whether NOSEARCHALL is specified for them or not.
 
 sub getListOfWebs {
     my( $this, $filter ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $filter ||= '';
 
     opendir DIR, "$TWiki::cfg{DataDir}" ;
@@ -1227,7 +1235,7 @@ that the web actually has a home topic.
 
 sub isKnownWeb {
     my( $this, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT( $web ) if DEBUG;
     return -e "$TWiki::cfg{DataDir}/$web/$TWiki::cfg{HomeTopicName}.txt";
 }
@@ -1252,7 +1260,7 @@ the web preferences topic in the new web.
 
 sub createWeb {
     my ( $this, $newWeb, $baseWeb, $opts ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     my $dir = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$newWeb");
     umask( 0 );
@@ -1319,7 +1327,7 @@ sub _writeKeyValue {
 # Write all the key=value pairs for the types listed
 sub _writeTypes {
     my( $meta, @types ) = @_;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($meta->isa('TWiki::Meta')) if DEBUG;
 
     my $text = '';
 
@@ -1379,7 +1387,7 @@ sub _writeEnd {
 # STATIC Prepend/append meta data to topic
 sub _writeMeta {
     my( $meta, $text ) = @_;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($meta->isa('TWiki::Meta')) if DEBUG;
 
     my $start = _writeStart( $meta );
     my $end = _writeEnd( $meta );
@@ -1401,7 +1409,7 @@ by annotating the text with meta informtion.
 
 sub getDebugText {
     my ( $this, $meta, $text ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     return _writeMeta( $meta, $text );
 }
@@ -1419,7 +1427,7 @@ This method should be used to sanitise user-provided revision IDs.
 
 sub cleanUpRevID {
     my ( $this, $rev ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     return 0 unless $rev;
 
@@ -1433,7 +1441,7 @@ sub cleanUpRevID {
 # Returns an error string if it fails.
 sub _copyTopicBetweenWebs {
     my ( $this, $theFromWeb, $theTopic, $theToWeb ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Store') if DEBUG;
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     # copy topic file
     my $from = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$theFromWeb/$theTopic.txt");
@@ -1631,6 +1639,82 @@ sub getRevisionAtTime {
 
     my $topicHandler = $this->_getTopicHandler( $theWeb, $theTopic );
     return $topicHandler->getRevisionAtTime( $time );
+}
+
+=pod
+
+---++ ObjectMethod getLease( $web, $topic ) -> $lease
+   * =$web= - web for topic
+   * =$topic= - topic
+
+If there is an lease on the topic, return the lease, otherwise undef.
+A lease is a block of meta-information about a topic that can be
+recovered (this is a hash containing =user=, =taken= and =expires=).
+Leases are taken out when a topic is edited. Only one lease
+can be active on a topic at a time. Leases are used to warn if
+another user is already editing a topic.
+
+=cut
+
+sub getLease {
+    my( $this, $web, $topic ) = @_;
+
+    my $topicHandler = $this->_getTopicHandler( $web, $topic );
+    my $lease = $topicHandler->getLease();
+    if( $lease ) {
+        $lease->{user} =
+          $this->{session}->{users}->findUser( $lease->{user} );
+    }
+    return $lease;
+}
+
+=pod
+
+---++ ObjectMethod setLease( $web, $topic, $user, $length )
+
+Take out an lease on the given topic for this user for $length seconds.
+
+See =getLease= for more details about Leases.
+
+=cut
+
+sub setLease {
+    my( $this, $web, $topic, $user, $length ) = @_;
+    ASSERT( $user->isa( 'TWiki::User') ) if DEBUG;
+
+    my $topicHandler = $this->_getTopicHandler( $web, $topic );
+    my $lease;
+    if( $user ) {
+        my $t = time();
+        $lease = { user => $user->webDotWikiName(),
+                   expires => $t + $length,
+                   taken => $t };
+    }
+
+    return $topicHandler->setLease( $lease );
+}
+
+=pod
+
+---++ ObjectMethod clearLease( $web, $topic, $user )
+
+Cancel the current lease, if and only if it belongs to the user.
+
+See =getLease= for more details about Leases.
+
+=cut
+
+sub clearLease {
+    my( $this, $web, $topic, $user ) = @_;
+
+    my $lease = $this->getLease( $web, $topic );
+    if( $lease ) {
+        my $who = $lease->{user}->webDotWikiName();
+        if( $who eq $user->webDotWikiName() ) {
+            my $topicHandler = $this->_getTopicHandler( $web, $topic );
+            $topicHandler->setLease( undef );
+        }
+    }
 }
 
 1;

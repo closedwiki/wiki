@@ -51,6 +51,7 @@ use vars qw( @registrableHandlers %deprecated );
    'initializeUserHandler',        # 1.010
    'insidePREHandler',             # 1.000 DEPRECATED
    'modifyHeaderHandler',          # 1.026
+   'mergeHandler',                 # 1.026
    'outsidePREHandler',            # 1.000 DEPRECATED
    'postRenderingHandler',         # 1.026
    'preRenderingHandler',          # 1.026
@@ -74,7 +75,7 @@ use vars qw( @registrableHandlers %deprecated );
 
 sub new {
     my ( $class, $session, $name ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
 
     $name = TWiki::Sandbox::untaintUnchecked( $name );
@@ -95,7 +96,7 @@ sub new {
 # handlers. Return the user resulting from the user handler call.
 sub load {
     my ( $this ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     return if $this->{disabled};
 
@@ -172,7 +173,7 @@ sub load {
 # invoke plugin initialisation and register handlers.
 sub registerHandlers {
     my ( $this, $plugins ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     return if $this->{disabled};
 
@@ -217,7 +218,7 @@ sub registerHandlers {
 # SMELL: may die if the plugin doesn't compile
 sub getVersion {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     no strict 'refs';
     return ${"TWiki::Plugins::$this->{name}::VERSION"};
@@ -227,7 +228,7 @@ sub getVersion {
 # Get the description string for the given plugin
 sub getDescription {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Plugin') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     unless( $this->{description} ) {
         my $pref = uc( $this->{name} ) . '_SHORTDESCRIPTION';

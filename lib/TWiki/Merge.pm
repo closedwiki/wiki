@@ -32,7 +32,7 @@ package TWiki::Merge;
 
 =pod
 
----++ StaticMethod insDelerge( $a, $b, $sep )
+---++ StaticMethod insDelMerge( $a, $b, $sep, $info )
 
 Perform a merge of two versions of the same text, using
 HTML tags to mark conflicts.
@@ -47,10 +47,12 @@ marks content from $b.
 Non-conflicting content (insertions from either set) are not
 marked.
 
+The plugins mergeHandler is called for each merge.
+
 =cut
 
 sub insDelMerge {
-    my ( $ia, $ib, $sep ) = @_;
+    my ( $ia, $ib, $sep, $session, $info ) = @_;
 
     my @a = split( /($sep)/, $ia );
     my @b = split( /($sep)/, $ib );
@@ -66,43 +68,78 @@ sub insDelMerge {
                                         undef,
                                         \@out,
                                         \@a,
-                                        \@b );
+                                        \@b,
+                                        $session,
+                                        $info );
     return join( '', @out);
 }
 
 sub _acceptA {
-    my ( $a, $b, $out, $ai, $bi ) = @_;
+    my ( $a, $b, $out, $ai, $bi, $session, $info ) = @_;
 
+    # accept text from the old version without asking for resolution
+    my $merged = $session->{plugins}->mergeHandler( ' ',  $ai->[$a], undef, $info );
+    if( defined $merged ) {
+        push( @$out, $merged );
+    } else {
+        push( @$out, $bi->[$b] );
+    }
     push( @$out, $ai->[$a] );
 }
 
 sub _acceptB {
-    my ( $a, $b, $out, $ai, $bi ) = @_;
+    my ( $a, $b, $out, $ai, $bi, $session, $info ) = @_;
 
-    push( @$out, $bi->[$b] );
+    my $merged = $session->{plugins}->mergeHandler( ' ',  $bi->[$b], undef, $info );
+    if( defined $merged ) {
+        push( @$out, $merged );
+    } else {
+        push( @$out, $bi->[$b] );
+    }
 }
 
 sub _change {
-    my ( $a, $b, $out, $ai, $bi ) = @_;
-    my $simpleInsert = 0;
+    my ( $a, $b, $out, $ai, $bi, $session, $info ) = @_;
+    my $merged;
 
     # Diff isn't terribly smart sometimes; it will generate changes
     # with a or b empty, which I would have thought should have
     # been accepts.
     if( $ai->[$a] =~ /\S/ ) {
         # there is some non-white text to delete
-        push( @$out, CGI::del( $ai->[$a] ) );
+        if( $bi->[$b] =~ /\S/ ) {
+            # this insert is replacing something with something
+            $merged = $session->{plugins}->mergeHandler( 'c',  $ai->[$a], $bi->[$b], $info );
+            if( defined $merged ) {
+                push( @$out, $merged );
+            } else {
+                push( @$out, CGI::del( $ai->[$a] ) );
+                push( @$out, CGI::ins( $bi->[$b] ) );
+            }
+        } else {
+            $merged = $session->{plugins}->mergeHandler( '-',  $ai->[$a], $bi->[$b], $info );
+            if( defined $merged ) {
+                push( @$out, $merged );
+            } else {
+                push( @$out, CGI::del( $ai->[$a] ) );
+            }
+        }
+    } elsif ( $bi->[$b] =~ /\S/ ) {
+        # inserting new
+        $merged = $session->{plugins}->mergeHandler( '+',  $ai->[$a], $bi->[$b], $info );
+        if( defined $merged ) {
+            push( @$out, $merged );
+        } else {
+            push( @$out, $bi->[$b] );
+        }
     } else {
         # otherwise this insert is not replacing anything
-        $simpleInsert = 1;
-    }
-
-    if( !$simpleInsert && $bi->[$b] =~ /\S/ ) {
-        # this insert is replacing something with something
-        push( @$out, CGI::ins( $bi->[$b] ) );
-    } else {
-        # otherwise it is replacing nothing, or is whitespace or null
-        push( @$out, $bi->[$b] );
+        $merged = $session->{plugins}->mergeHandler( ' ',  $ai->[$a], $bi->[$b], $info );
+        if( defined $merged ) {
+            push( @$out, $merged );
+        } else {
+            push( @$out, $bi->[$b] );
+        }
     }
 }
 
@@ -148,13 +185,13 @@ sub simpleMerge {
 sub _sAcceptA {
     my ( $a, $b, $out, $ai, $bi ) = @_;
 
-    push( @$out, " $ai->[$a]" );
+    push( @$out, ' '.$ai->[$a] );
 }
 
 sub _sAcceptB {
     my ( $a, $b, $out, $ai, $bi ) = @_;
 
-    push( @$out, " $bi->[$b]" );
+    push( @$out, ' '.$bi->[$b] );
 }
 
 sub _sChange {
@@ -163,7 +200,7 @@ sub _sChange {
 
     if( $ai->[$a] =~ /\S/ ) {
         # there is some non-white text to delete
-        push( @$out, "-$ai->[$a]" );
+        push( @$out, '-'.$ai->[$a] );
     } else {
         # otherwise this insert is not replacing anything
         $simpleInsert = 1;
@@ -171,10 +208,10 @@ sub _sChange {
 
     if( !$simpleInsert && $bi->[$b] =~ /\S/ ) {
         # this insert is replacing something with something
-        push( @$out, "+$bi->[$b]" );
+        push( @$out, '+'.$bi->[$b] );
     } else {
         # otherwise it is replacing nothing, or is whitespace or null
-        push( @$out, " $bi->[$b]" );
+        push( @$out, ' '.$bi->[$b] );
     }
 }
 

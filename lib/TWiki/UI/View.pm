@@ -57,6 +57,7 @@ The view is controlled by CGI parameters as follows:
 | =contenttype= | Allows you to specify an alternate content type |
 
 =cut
+
 sub view {
     my $session = shift;
 
@@ -71,6 +72,7 @@ sub view {
     my $logEntry = '';
     my $revdate = '';
     my $revuser = '';
+    my $store = $session->{store};
 
     $session->enterContext( 'view' );
 
@@ -78,16 +80,17 @@ sub view {
 
     my $skin = $session->getSkin();
 
-    my $rev = $session->{store}->cleanUpRevID( $query->param( 'rev' ));
+    my $rev = $store->cleanUpRevID( $query->param( 'rev' ));
 
     my $topicExists =
-      $session->{store}->topicExists( $webName, $topicName );
+      $store->topicExists( $webName, $topicName );
+
     # text and meta of the _latest_ rev of the topic
     my( $currText, $currMeta );
     # text and meta of the chosen rev of the topic
     my( $meta, $text );
     if( $topicExists ) {
-        ( $currMeta, $currText ) = $session->{store}->readTopic
+        ( $currMeta, $currText ) = $store->readTopic
           ( $session->{user}, $webName, $topicName, undef );
         ( $revdate, $revuser, $showRev ) =
           $currMeta->getRevisionInfo( $webName, $topicName );
@@ -100,7 +103,7 @@ sub view {
             $rev = 1;
         }
         if( $rev < $showRev ) {
-            ( $meta, $text ) = $session->{store}->readTopic
+            ( $meta, $text ) = $store->readTopic
               ( $session->{user}, $webName, $topicName, $rev );
 
             ( $revdate, $revuser ) = $meta->getRevisionInfo();
@@ -127,7 +130,7 @@ sub view {
     if( $raw ) {
         $logEntry .= ' raw='.$raw;
         if( $raw eq 'debug' ) {
-            $text = $session->{store}->getDebugText( $meta, $text );
+            $text = $store->getDebugText( $meta, $text );
         }
     }
 

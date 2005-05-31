@@ -65,7 +65,7 @@ Constructor. Creates a new template database object.
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
@@ -84,7 +84,7 @@ Return true if the template exists and is loaded into the cache
 
 sub haveTemplate {
     my ( $this, $template ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
     return exists( $this->{VARS}{ $template } );
 }
@@ -122,7 +122,7 @@ to do this in the MacrosPlugin.
 
 sub expandTemplate {
     my( $this, $params ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
     my $attrs = new TWiki::Attrs( $params );
     my $value = $this->_tmplP( $attrs );
@@ -195,7 +195,7 @@ list of loaded templates, overwriting any previous definition.
 
 sub readTemplate {
     my( $this, $name, $skins, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Templates') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
     $this->{files} = ();
 

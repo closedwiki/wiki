@@ -54,7 +54,7 @@ sub new {
     my ( $class, $session, $os, $realOS ) = @_;
     my $this = bless( {}, $class );
 
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki' )) if DEBUG;
     ASSERT( defined $os ) if DEBUG;
     ASSERT( defined $realOS ) if DEBUG;
 
@@ -193,7 +193,7 @@ single character flag.  Permitted flags are
 
 sub buildCommandLine {
     my ($this, $template, %params) = @_;
-    ASSERT(ref($this) eq 'TWiki::Sandbox') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Sandbox' )) if DEBUG;
     my @arguments;
 
     for my $tmplarg (split /\s+/, $template) {
@@ -293,7 +293,7 @@ ensures that the shell does not interpret any of the passed arguments.
 
 sub readFromProcessArray {
     my ($this, $path, $template, %params) = @_;
-    ASSERT(ref($this) eq 'TWiki::Sandbox') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Sandbox')) if DEBUG;
 
     my $data = '';                     # Output
     my $processFileHandle;             # Holds filehandle to read from process
@@ -444,7 +444,7 @@ error is redirected to standard input.
 # FIXME: need to upgrade as per the Array variant
 sub readFromProcess {
     my ($this, $template, %params) = @_;
-    ASSERT(ref($this) eq 'TWiki::Sandbox') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Sandbox')) if DEBUG;
 
     my @args = $this->buildCommandLine( $template, %params );
     my $data;

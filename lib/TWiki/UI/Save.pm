@@ -53,11 +53,12 @@ sub _save {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
+    my $store = $session->{store};
 
     TWiki::UI::checkMirror( $session, $webName, $topic );
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'save' );
 
-    my $topicExists  = $session->{store}->topicExists( $webName, $topic );
+    my $topicExists  = $store->topicExists( $webName, $topic );
     # Prevent saving existing topic?
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
     if( $onlyNewTopic && $topicExists ) {
@@ -93,7 +94,7 @@ sub _save {
     if( $saveCmd eq 'delRev' ) {
         # delete top revision
         my $error =
-          $session->{store}->delRev( $user, $webName, $topic );
+          $store->delRev( $user, $webName, $topic );
         if( $error ) {
             throw TWiki::OopsException( 'attention',
                                         def => 'save_error',
@@ -114,7 +115,7 @@ sub _save {
     my $templatetopic = $query->param( 'templatetopic');
     if ($templatetopic) {
         ( $newMeta, $newText ) =
-          $session->{store}->readTopic( $session->{user}, $webName,
+          $store->readTopic( $session->{user}, $webName,
                                         $templatetopic, undef );
         $newText = $session->expandVariablesOnTopicCreation( $newText );
         # topic creation, make sure there is no original rev
@@ -135,12 +136,12 @@ sub _save {
 
     if( $saveCmd eq 'repRev' ) {
         $newText =~ s/%__(.)__%/%_$1_%/go;
-        $newMeta = $session->{store}->extractMetaData( $webName, $topic, \$newText );
+        $newMeta = $store->extractMetaData( $webName, $topic, \$newText );
         # replace top revision with this text, trying to make it look as
         # much like the original as possible
         $saveOpts->{timetravel} = 1;
         my $error =
-          $session->{store}->repRev( $user, $webName, $topic,
+          $store->repRev( $user, $webName, $topic,
                                      $newText, $newMeta, $saveOpts );
         if( $error ) {
             throw TWiki::OopsException( 'attention',
@@ -155,7 +156,7 @@ sub _save {
 
     if ( ! $templatetopic ) {
         ( $currMeta, $currText ) =
-          $session->{store}->readTopic( undef, $webName, $topic, undef );
+          $store->readTopic( undef, $webName, $topic, undef );
         $newMeta = new TWiki::Meta( $session, $webName, $topic );
         $newMeta->copyFrom( $currMeta );
     }
@@ -193,7 +194,8 @@ sub _save {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
         # If the last save was by me, don't merge
         if ( $rev ne $originalrev && !$author->equals( $user )) {
-            $newText = TWiki::Merge::insDelMerge( $currText, $newText, "\\r?\\n" );
+            $newText = TWiki::Merge::insDelMerge( $currText, $newText,
+                                                  '\r?\n', undef );
             if( $form ) {
                 unless( $formDef ) {
                     $formDef = new TWiki::FormDefinition( $session, $webName,
@@ -207,7 +209,7 @@ sub _save {
     }
 
     my $error =
-      $session->{store}->saveTopic( $user, $webName, $topic,
+      $store->saveTopic( $user, $webName, $topic,
                                     $newText, $newMeta, $saveOpts );
 
     if( $error ) {
@@ -217,6 +219,8 @@ sub _save {
                                     topic => $topic,
                                     params => $error );
     }
+
+    $store->clearLease( $webName, $topic, $user );
 
     if( $merged ) {
         throw TWiki::OopsException( 'attention',
@@ -265,10 +269,10 @@ sub save {
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
 
-#
-# Allow for dynamic topic creation if it contains a string of 10 x's XXXXXX
-# http://twiki.org/cgi-bin/view/Codev/AllowDynamicTopicNameCreation
-#
+    #
+    # Allow for dynamic topic creation if it contains a string of 10 x's XXXXXX
+    # http://twiki.org/cgi-bin/view/Codev/AllowDynamicTopicNameCreation
+    #
     if ( $topic =~ /XXXXXXXXXX/o ) {
 		my ($bugCount) = 0;
 		my ($tempTopic) = $topic;

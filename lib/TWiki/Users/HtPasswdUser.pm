@@ -109,7 +109,7 @@ salt will be used. Set this if you are generating a new password.
 
 sub encrypt {
     my ( $this, $user, $passwd, $fresh ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Users::HtPasswdUser') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     if( $TWiki::cfg{Htpasswd}{Encoding} eq 'sha1') {
         my $encodedPassword = '{SHA}'.
@@ -155,7 +155,7 @@ Returns undef otherwise.
 
 sub fetchPass {
     my ( $this, $user ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Users::HtPasswdUser') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     if( $user ) {
         try {
@@ -197,7 +197,7 @@ Otherwise returns 1 if succeeds. Returns undef on failure.
 
 sub passwd {
     my ( $this, $user, $newUserPassword, $oldUserPassword ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Users::HtPasswdUser') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     if( defined( $oldUserPassword )) {
         unless( $oldUserPassword eq '1') {
@@ -237,7 +237,7 @@ Returns 1 on success Returns undef on failure.
 
 sub deleteUser {
     my ( $this, $user ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Users::HtPasswdUser') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
     my $result = undef;
     $this->{error} = undef;
 
@@ -266,7 +266,7 @@ Returns 1 if passes.  Returns 0 if fails.
 
 sub checkPassword {
     my ( $this, $user, $password ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Users::HtPasswdUser') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
 
     my $encryptedPassword = $this->encrypt( $user, $password );
 

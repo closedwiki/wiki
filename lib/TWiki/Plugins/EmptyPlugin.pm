@@ -431,6 +431,35 @@ sub DISABLE_afterAttachmentSaveHandler {
 
 =pod
 
+---++ mergeHandler( $diff, $old, $new, \%info ) -> $text
+Try to resolve a difference encountered during merge. The =differences= array is an array of hash references, where each hash contains the following fields:
+   * =$diff= => one of the characters '+', '-', 'c' or ' '.
+      * '+' - =new= contains text inserted in the new version
+      * '-' - =old= contains text deleted from the old version
+      * 'c' - =old= contains text from the old version, and =new= text from the version being saved
+      * ' ' - =new= contains text common to both versions, or the change only involved whitespace
+   * =$old= => text from version currently saved
+   * =$new= => text from version being saved
+   * =\%info= is a reference to the form field description { name, title, type, size, value, tooltip, attributes, referenced }. It must _not_ be wrtten to. This parameter will be undef when merging the body text of the topic.
+
+Plugins should try to resolve differences and return the merged text. For example, a radio button field where we have ={ diff=>'c', old=>'Leafy', new=>'Barky' }= might be resolved as ='Treelike'=. If the plugin cannot resolve a difference it should return undef.
+
+The merge handler will be called several times during a save; once for each difference that needs resolution.
+
+If any merges are left unresolved after all plugins have been given a chance to intercede, the following algorithm is used to decide how to merge the data:
+   1 =new= is taken for all =radio=, =checkbox= and =select= fields to resolve 'c' conflicts
+   1 '+' and '-' text is always included in the the body text and text fields
+   1 <del>conflict</del> <ins>markers</ins> are used to mark 'c' merges in text fields
+
+The merge handler is called whenever a merge is required to resolve concurrent edits on a topic.
+
+=cut
+
+sub DISABLE_mergeHandler {
+}
+
+=pod
+
 ---++ writeHeaderHandler($query )
    * =$query= - the CGI query
 

@@ -48,7 +48,7 @@ use Assert;
 # implements RcsFile
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this =
       bless(new TWiki::Store::RcsFile( $session, $web, $topic, $attachment ),
             $class );

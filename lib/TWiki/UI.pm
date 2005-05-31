@@ -153,7 +153,7 @@ sub run {
             $url = $ENV{REQUEST_URI};
             if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
                 # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
-                $url = "$session->{urlHost}$url";
+                $url = $session->{urlHost}.$url;
             } else {
                 # If REQUEST_URI is rewritten and does not contain the script
                 # name, try looking at the CGI environment variable
@@ -169,28 +169,41 @@ sub run {
                 $pathInfo    = '/' . $pathInfo    if ($pathInfo);
                 $queryString = '?' . $queryString if ($queryString);
                 if( $scriptPath && $scriptPath =~ s/\/$scriptName/\/${scriptName}auth/ ) {
-                    $url = "$session->{urlHost}$scriptPath$pathInfo$queryString";
+                    $url = $session->{urlHost}.$scriptPath;
                 } else {
                     # If SCRIPT_NAME does not contain the script name
                     # the last hope is to try building up the URL using
                     # the SCRIPT_FILENAME.
-                    $url = "$session->{urlhost}$session->{scriptUrlPath}/${scriptName}$TWiki::cfg{ScriptSuffix}$pathInfo$queryString";
+                    $url = $session->{urlhost}.$session->{scriptUrlPath}.'/'.
+                      ${scriptName}.$TWiki::cfg{ScriptSuffix};
                 }
+                $url .= $pathInfo.$queryString;
             }
             $session->redirect( $url );
         } else {
             $url = $session->getOopsUrl( 'accessdenied',
                                          def => 'topic_access',
-                                         web => $e->{-web},
-                                         topic => $e->{-topic},
-                                         params => [ $e->{-mode},
-                                                     $e->{-reason} ] );
+                                         web => $e->{web},
+                                         topic => $e->{topic},
+                                         params => [ $e->{mode},
+                                                     $e->{reason} ] );
         }
         $session->redirect( $url );
+
     } catch TWiki::OopsException with {
         my $e = shift;
-        my $url = $session->getOopsUrl( $e );
-        $session->redirect( $url );
+        if( $e->{keep} ) {
+            # must keep params from the query, so can't use redirect
+            require TWiki::UI::Oops;
+            $e->{template} = 'oops'.$e->{template};
+            TWiki::UI::Oops::oops( $session, $e->{web}, $e->{topic},
+                                   $session->{cgiQuery}, $e );
+        } else {
+            # no need to keep params, so can use a redirect
+            my $url = $session->getOopsUrl( $e );
+            $session->redirect( $url );
+        }
+
     } catch Error::Simple with {
         my $e = shift;
         print "Content-type: text/plain\n\n";
@@ -209,7 +222,7 @@ Check if the web exists. If it doesn't, will throw an oops exception.
 
 sub checkWebExists {
     my ( $session, $webName, $topic, $op ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     unless ( $session->{store}->webExists( $webName ) ) {
         throw
@@ -231,7 +244,7 @@ if it doesn't. $op is the user operation being performed.
 
 sub checkTopicExists {
     my ( $session, $webName, $topic, $op ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     unless( $session->{store}->topicExists( $webName, $topic )) {
         throw TWiki::OopsException( 'accessdenied',
@@ -252,7 +265,7 @@ if it is.
 
 sub checkMirror {
     my ( $session, $webName, $topic ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     my( $mirrorSiteName, $mirrorViewURL ) =
       $session->readOnlyMirrorWeb( $webName );
@@ -276,7 +289,7 @@ web.topic is permissible, throwing a TWiki::OopsException if not.
 
 sub checkAccess {
     my ( $session, $web, $topic, $mode, $user ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     unless( $session->{security}->checkAccessPermission( $mode, $user, '',
                                                          $topic, $web )) {
@@ -301,7 +314,7 @@ web.
 
 sub readTemplateTopic {
     my( $session, $theTopicName ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     $theTopicName =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
 
@@ -324,7 +337,7 @@ Generate the page that supports selection of the form.
 
 sub generateChangeFormPage {
     my( $session, $web, $topic, $editaction ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     my $page = $session->{templates}->readTemplate( 'changeform' );
     my $q = $session->{cgiQuery};

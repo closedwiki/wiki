@@ -53,9 +53,54 @@ sub oops_cgi {
     my $web = $session->{webName};
     my $query = $session->{cgiQuery};
 
-    $session->enterContext( 'oops' );
+    oops( $session, $web, $topic, $query, 0 );
+}
 
-    my $tmplName = $query->param( 'template' ) || 'oops';
+=pod
+
+---++ StaticMethod oops($session, $web, $topic, $query, $keep)
+
+The body of an oops script call, abstracted out so it can be called for
+the case where an oops is required, but all the parameters in the query
+must be saved for passing on to another URL invoked from a form in
+the template. If $keep is defined, it must be a reference to a hash
+(usually an oopsexception) that defines the parameters to the
+script (template, def etc). In this case, all the parameters in
+the =$query= are added as hiddens into the expanded template.
+
+=cut
+
+sub oops {
+    my( $session, $web, $topic, $query, $keep ) = @_;
+
+    $session->enterContext( 'oops' );
+    my $tmplName;
+    my $def;
+    my @params;
+    my $n = 1;
+
+    if( $keep ) {
+        # Use oops parameters from the keep hash instead
+        $tmplName = $keep->{template};
+        $def = $keep->{def};
+        if( ref($keep->{params}) eq "ARRAY" ) {
+            foreach my $p ( @{$keep->{params}} ) {
+                push( @params, $p );
+                $n++;
+            }
+        } elsif( defined $keep->{params} ) {
+            push( @params, param1 => $keep->{params} );
+        }
+    } else {
+        $tmplName = $query->param( 'template' );
+        $def = $query->param( 'def' );
+        while( my $param = $query->param( 'param'.$n ) ) {
+            push( @params, $param );
+            $n++;
+        }
+    }
+    $tmplName ||= 'oops';
+
     my $skin = $session->getSkin();
 
     my $tmplData = $session->{templates}->readTemplate( $tmplName, $skin );
@@ -69,20 +114,29 @@ sub oops_cgi {
                    . 'Check the configuration setting for TemplateDir.'
                      .CGI::end_html();
     } else {
-        my $def = $query->param( 'def' );
         if( defined $def ) {
             # if a def is specified, instantiate that def
             my $blah = $session->{templates}->expandTemplate( $def );
             $tmplData =~ s/%INSTANTIATE%/$blah/;
         }
         $tmplData = $session->handleCommonTags( $tmplData, $web, $topic );
-        my $param;
-        my $n = 1;
-        while( $param = $query->param( 'param'.$n ) ) {
+        $n = 1;
+        foreach my $param ( @params ) {
             $tmplData =~ s/%PARAM$n%/$param/g;
             $n++;
         }
-        $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web, $topic );
+        $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web,
+                                                              $topic );
+        if( $keep ) {
+            my $qp = '';
+            foreach my $p ( $query->param() ) {
+                # SMELL: what about multi-valued parameters? Do we
+                # ever use them?
+                $qp .= CGI::hidden( -name=>$p,
+                                    -default=>$query->param( $p ) );
+            }
+            $tmplData =~ s/%QUERYPARAMS%/$qp/g;
+        }
     }
 
     $session->writeCompletePage( $tmplData );

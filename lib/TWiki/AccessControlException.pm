@@ -44,7 +44,7 @@ use Error;
    * =$reason= - string reason for failure
 
 All the above fields are accessible from the object in a catch clause
-in the usual way e.g. =$e->{-web}= and =$e->{-reason}=
+in the usual way e.g. =$e->{web}= and =$e->{reason}=
 
 =cut
 
@@ -52,11 +52,11 @@ sub new {
     my ( $class, $mode, $user, $web, $topic, $reason ) = @_;
 
     return $class->SUPER::new(
-                              -web => $web,
-                              -topic => $topic,
-                              -user => $user->wikiName(),
-                              -mode => $mode,
-                              -reason => $reason,
+                              web => $web,
+                              topic => $topic,
+                              user => $user->wikiName(),
+                              mode => $mode,
+                              reason => $reason,
                              );
 }
 
@@ -70,7 +70,7 @@ Generate a summary string
 
 sub stringify {
     my $this = shift;
-    return "AccessControlException: Access to $this->{-mode} $this->{-web}.$this->{-topic} for $this->{-user} is denied. $this->{-reason}";
+    return "AccessControlException: Access to $this->{mode} $this->{web}.$this->{topic} for $this->{user} is denied. $this->{reason}";
 }
 
 1;

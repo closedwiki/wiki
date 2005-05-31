@@ -74,8 +74,8 @@ record is a reflection of both changes.
 
 sub merge {
     my( $this, $other ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Contrib::MailerContrib::Change' );
-    ASSERT(ref($other) eq 'TWiki::Contrib::MailerContrib::Change' );
+    ASSERT($this->isa( 'TWiki::Contrib::MailerContrib::Change' ));
+    ASSERT($other->isa( 'TWiki::Contrib::MailerContrib::Change' ));
 
     if( $other->{CURR_REV} > $this->{CURR_REV} ) {
         $this->{CURR_REV} = $other->{CURR_REV};

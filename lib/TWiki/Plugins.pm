@@ -126,7 +126,7 @@ sub new {
 
     my $this = bless( {}, $class );
 
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
 
     unless( $inited ) {
@@ -158,7 +158,7 @@ If allDisabled is set, no plugin handlers will be called.
 
 sub load {
     my ( $this, $allDisabled ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
     my %disabledPlugins;
     my %lookup;
@@ -265,7 +265,7 @@ Initialisation that is done after the user is known.
 
 sub enable {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
     # Set the session for this call stack
     local $TWiki::Plugins::SESSION = $this->{session};
@@ -291,7 +291,7 @@ be found or is not active, 0 is returned.
 
 sub getPluginVersion {
     my ( $this, $thePlugin ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
     return $VERSION unless $thePlugin;
 
@@ -307,7 +307,7 @@ sub getPluginVersion {
 sub _applyHandlers {
     # must be shifted to clear parameter vector
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     my $handlerName = shift;
 
     my $status;
@@ -409,7 +409,7 @@ Called by the register script
 
 sub registrationHandler {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Plugins') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     #my( $web, $wikiName, $loginName ) = @_;
     $this->_applyHandlers( 'registrationHandler', @_ );
 }
@@ -622,6 +622,19 @@ sub afterSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
     $this->_applyHandlers( 'afterSaveHandler', @_ );
+}
+
+=pod
+
+---++ ObjectMethod mergeHandler ()
+
+Called to handle text merge.
+
+=cut
+
+sub mergeHandler {
+    my $this = shift;
+    $this->_applyHandlers( 'mergeHandler', @_ );
 }
 
 =pod

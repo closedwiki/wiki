@@ -67,7 +67,7 @@ Creates a new renderer with initial state from preference values
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     # Do a dynamic 'use locale' for this module
     if( $TWiki::cfg{UseLocale} ) {
@@ -322,8 +322,8 @@ sub _makeAnchorHeading {
     # filter '!!', '%NOTOC%'
     $theHeading =~ s/$TWiki::regex{headerPatternNoTOC}//o;
     my $text = "<nop><h$theLevel>";
-    $text .= CGI::a({ -name=>$anchorName }, "" );
-    $text .= CGI::a({-name=>$compatAnchorName}, "") if( $compatAnchorName ne $anchorName );
+    $text .= CGI::a( { name=>$anchorName }, "" );
+    $text .= CGI::a( { name=>$compatAnchorName }, "") if( $compatAnchorName ne $anchorName );
     $text .= " $theHeading </h$theLevel>";
 
     return $text;
@@ -342,7 +342,7 @@ Build a valid HTML anchor name
 
 sub makeAnchorName {
     my( $this, $anchorName, $compatibilityMode ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     if ( ! $compatibilityMode && $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
 	# accept, already valid -- just remove leading #
@@ -432,7 +432,7 @@ SMELL: why is this available to Func?
 
 sub internalLink {
     my( $this, $theWeb, $theTopic, $theLinkText, $theAnchor, $doLinkToMissingPages, $doKeepWeb ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     # SMELL - shouldn't it be callable by TWiki::Func as well?
 
     # Get rid of leading/trailing spaces in topic name
@@ -730,7 +730,7 @@ used in TWiki::handleIcon
 
 sub filenameToIcon {
     my( $this, $fileName ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     my @bits = ( split( /\./, $fileName ) );
     my $fileExt = lc $bits[$#bits];
@@ -762,7 +762,7 @@ Returns the fully rendered expansion of a %FORMFIELD{}% tag.
 
 sub renderFormField {
     my ( $this, $params, $topic, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     my $formField = $params->{_DEFAULT};
     my $formTopic = $params->{topic};
@@ -843,7 +843,7 @@ The main rendering function.
 
 sub getRenderedVersion {
     my( $this, $text, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my( $head, $result, $insideNoAutoLink );
 
     return '' unless $text;  # nothing to do
@@ -1154,7 +1154,7 @@ Used to render %META{}% tags in templates for non-active views
 
 sub renderMetaTags {
     my( $this, $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     if ( $noexpand ) {
         $text =~ s/%META{[^}]*}%//go;
@@ -1191,7 +1191,7 @@ $opts:
 
 sub TML2PlainText {
     my( $this, $text, $web, $topic, $opts ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     $opts ||= '';
 
     $text =~ s/\r//g;  # SMELL, what about OS10?
@@ -1281,7 +1281,7 @@ to that length.
 
 sub makeTopicSummary {
     my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     $theFlags ||= '';
     # called by search, mailnotify & changes after calling readFile
 
@@ -1347,7 +1347,7 @@ Parameters to the open tag are recorded.
 
 sub takeOutBlocks {
     my( $this, $intext, $tag, $map ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     return $intext unless ( $intext =~ m/<$tag\b/ );
 
@@ -1429,7 +1429,7 @@ Cool, eh what? Jolly good show.
 
 sub putBackBlocks {
     my( $this, $text, $map, $tag, $newtag, $callback ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     $newtag ||= $tag;
     my @k = keys %$map;
@@ -1468,7 +1468,7 @@ Obtain and render revision info for a topic.
 
 sub renderRevisionInfo {
     my( $this, $web, $topic, $rev, $format ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my $store = $this->{session}->{store};
 
     if( $rev ) {
@@ -1526,7 +1526,7 @@ In plain, lines are truncated to 70 characters. Differences are shown using + an
 
 sub summariseChanges {
     my( $this, $user, $web, $topic, $orev, $nrev, $tml ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my $summary = '';
     my $store = $this->{session}->{store};
 
@@ -1608,7 +1608,7 @@ The return result replaces $line in $newText.
 
 sub forEachLine {
     my( $this, $text, $fn, $options ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     $options->{in_pre} = 0;
     $options->{in_pre} = 0;
@@ -1694,7 +1694,7 @@ to them changed to include the web specifier.
 
 sub replaceWebInternalReferences {
     my( $this, $text, $meta, $oldWeb, $oldTopic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     my @topics = $this->{session}->{store}->getTopicNames( $oldWeb );
     my $options =

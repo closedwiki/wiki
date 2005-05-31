@@ -53,7 +53,7 @@ user is initialised using =initializeUser=.
 sub new {
     my( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
 
     my $web = $session->{webName};
@@ -86,7 +86,7 @@ read topic prefs if required.
 
 sub loadUserAndTopicPreferences {
     my( $this, $web, $topic, $user ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     my $req = new TWiki::Prefs::PrefsCache($this->{session}, $this->{WEB} );
 
@@ -124,7 +124,7 @@ subject to finalisation, and may be overridden by =getSessionValueHandler=.
 
 sub getPrefsFromTopic {
     my( $this, $web, $topic, $keyPrefix ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
     $this->{REQUEST}->setKeyPrefix( $keyPrefix ) if $keyPrefix;
     $this->{REQUEST}->loadPrefsFromTopic( $web, $topic );
     $this->{REQUEST}->setKeyPrefix( '' ) if $keyPrefix;
@@ -140,7 +140,7 @@ hash, in order to accelerate substitutions.
 
 sub loadHash {
     my ( $this, $hash ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     foreach my $set qw( REQUEST WEB GLOBAL ) {
         foreach my $key ( keys %{$this->{$set}->{prefs}} ) {
@@ -187,7 +187,7 @@ Always returns a string value, never undef.
 
 sub getPreferencesValue {
     my( $this, $key, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     my $val = $this->{session}->{plugins}->getSessionValueHandler( $key );
     return $val if defined( $val );
@@ -236,7 +236,7 @@ prior to this conversion.
 
 sub getPreferencesFlag {
     my( $this, $key, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     my $value = $this->getPreferencesValue( $key, $web );
     return _flag( $value );
@@ -263,7 +263,7 @@ will always return zero for these, rather than 'undef'.*
 
 sub getPreferencesNumber {
     my( $this, $key, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     my $value = $this->getPreferencesValue( $key, $web );
 
@@ -281,7 +281,7 @@ sub getPreferencesNumber {
 
 #sub stringify {
 #    my $this = shift;
-#    ASSERT(ref($this) eq 'TWiki::Prefs') if DEBUG;
+#    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 #    my $res = '';
 #
 #    foreach my $set qw( REQUEST WEB GLOBAL ) {

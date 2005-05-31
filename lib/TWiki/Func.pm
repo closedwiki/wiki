@@ -541,6 +541,7 @@ Return: =$loginName=   Login name of user, e.g. ='jdoe'=
 
 sub wikiToUserName {
     my( $wiki ) = @_;
+    return '' unless $wiki;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
     return $wiki unless $user;
     return $user->login();
@@ -561,6 +562,7 @@ Return: =$wikiName=      Wiki name of user, e.g. ='Main.JohnDoe'= or ='JohnDoe'=
 
 sub userToWikiName {
     my( $login, $dontAddWeb ) = @_;
+    return '' unless $login;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $login );
     return '' unless $user;
     return $user->wikiName() if $dontAddWeb;
@@ -617,6 +619,7 @@ Return: =$flag=        ="1"= if access may be granted, ="0"= if not
 
 sub checkAccessPermission {
     my( $type, $user, $text, $topic, $web ) = @_;
+    return 1 unless ( $user );
     $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
       ( $type, $user, $text, $topic, $web );
@@ -701,26 +704,64 @@ sub getRevisionAtTime {
 =pod
 
 ---+++ checkTopicEditLock( $web, $topic ) -> ( $oopsUrl, $loginName, $unlockTime )
-*DEPRECATED* since TWiki::Plugins::VERSION 1.026
-
-Does nothing, always returns ( '', '', 0 )
+Check if a lease has been taken by some other user.
+   * =$web= Web name, e.g. ="Main"=, or empty
+   * =$topic= Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"=
+Return =( $oopsUrl, $loginName, $unlockTime )= | The =$oopsUrl= for calling redirectCgiQuery(), user's =$loginName=, and estimated =$unlockTime= in minutes, or ( '', '', 0 ) if no lease exists.
 
 =cut
 
 sub checkTopicEditLock {
-    return( '', '', 0 );
+    my( $web, $topic ) = @_;
+
+    ( $web, $topic ) = normalizeWebTopicName( $web, $topic );
+
+    my $lease = $TWiki::Plugins::SESSION->{store}->getLease( $web, $topic );
+    if( $lease ) {
+        my $who = $lease->{user}->webDotWikiName();
+        my $remain = $lease->{expires} - time();
+        my $session = $TWiki::Plugins::SESSION;
+
+        if( $remain > 0 &&
+            $who ne $session->{user}->webDotWikiName() ) {
+            my $past = TWiki::Time::formatDelta(time()-$lease->{taken});
+            my $future = TWiki::Time::formatDelta($lease->{expires}-time());
+            return( $session->getOopsUrl( 'leaseconflict',
+                                          def => 'active',
+                                          web => $web,
+                                          topic => $topic,
+                                          params => [ $who, $past, $future ] ),
+                                          $lease->{user}->login(),
+                                          $remain / 60 );
+        }
+    }
+    return ('', '', 0);
 }
 
 =pod
 
----+++ setTopicEditLock( $web, $topic, $lock ) -> $oopsUrl
-*DEPRECATED* since TWiki::Plugins::VERSION 1.026
+---+++ setTopicEditLock( $web, $topic, $lock )
 
-Does nothing, always returns ''
+Takes out a "lease" on the topic. The lease doesn't prevent
+anyone from editing and changing the topic, but it does redirect them
+to a warning screen, so this provides some protection. The =edit= script
+always takes out a lease.
+
+It is *impossible* to fully lock a topic. Concurrent changes will be
+merged.
 
 =cut
 
 sub setTopicEditLock {
+    my( $web, $topic, $lock ) = @_;
+    my $session = $TWiki::Plugins::SESSION;
+    my $store = $session->{store};
+    if( $lock ) {
+        $store->setLease( $web, $topic, $session->{user},
+                          $TWiki::cfg{LeaseLength} );
+    } else {
+        $store->clearLease( $web, $topic );
+    }
     return '';
 }
 
@@ -783,7 +824,7 @@ sub readTopicText {
         my $e = shift;
         $text = $TWiki::Plugins::SESSION->getOopsUrl
           ( 'accessdenied', def=>'topic_access', web => $web, topic => $topic,
-            params => [ $e->{-mode}, $e->{-reason} ] );
+            params => [ $e->{mode}, $e->{reason} ] );
     };
 
     return $text;
@@ -1574,6 +1615,7 @@ be comma-separated.
 
 sub wikiToEmail {
     my( $wiki ) = @_;
+    return '' unless $wiki;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
     return '' unless $user;
     return join( ',', @{$user->emails()} );

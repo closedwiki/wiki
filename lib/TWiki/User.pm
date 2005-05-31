@@ -70,7 +70,7 @@ $TWiki::cfg{UsersWebName} web.
 
 sub new {
     my( $class, $session, $name, $wikiname ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     ASSERT($name) if DEBUG;
     ASSERT($wikiname) if DEBUG;
 
@@ -95,7 +95,7 @@ Return the wikiname of the user (without the web!)
 
 sub wikiName {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
     return $this->{wikiname};
 }
 
@@ -109,7 +109,7 @@ Return the fully qualified wikiname of the user
 
 sub webDotWikiName {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
     return "$this->{web}.$this->{wikiname}";
 }
 
@@ -123,7 +123,7 @@ Return the login name of the user
 
 sub login {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
     return $this->{login};
 }
 
@@ -137,7 +137,7 @@ Return the registration web of the user
 
 sub web {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
     return $this->{web};
 }
 
@@ -151,8 +151,8 @@ Test is this is the same user as another user object
 
 sub equals {
     my( $this, $other ) = @_;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
-    ASSERT(ref($other) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
+    ASSERT($other->isa( 'TWiki::User')) if DEBUG;
 
     return ( $this->{login} eq $other->{login} );
 }
@@ -167,7 +167,7 @@ Generate a string representation of this object, suitable for debugging
 
 sub stringify {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     return "$this->{login}/$this->{web}.$this->{wikiname}";
 }
@@ -183,7 +183,7 @@ Return '1' if true, '' if not
 
 sub passwordExists {
     my $this  = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
     return $passwordHandler->fetchPass($this->{login});
@@ -205,7 +205,7 @@ TODO: need to improve the error mechanism so TWikiAdmins know what failed
 
 sub checkPassword {
     my ( $this, $password ) = @_;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
     return $passwordHandler->checkPassword($this->{login}, $password);
@@ -224,7 +224,7 @@ Returns true if success
 # SMELL - should this not also delete the user topic?
 sub removePassword {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
     return $passwordHandler->deleteUser( $this->{login} );
@@ -244,7 +244,7 @@ used to change the user's password
 # TODO: need to improve the error mechanism so TWikiAdmins know what failed |
 sub changePassword {
     my ( $this, $oldUserPassword, $newUserPassword ) = @_;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
     return $passwordHandler->passwd($this->{login}, $newUserPassword, $oldUserPassword);
@@ -262,7 +262,7 @@ TODO: need to improve the error mechanism so TWikiAdmins know what failed
 
 sub addPassword {
     my ( $this, $newUserPassword ) = @_;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
     return $passwordHandler->passwd($this->{login}, $newUserPassword);
@@ -278,7 +278,7 @@ Reset the users password, returning the new generated password.
 
 sub resetPassword {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     my $password = randomPassword();
 
@@ -306,7 +306,7 @@ return the addresses of everyone in the group.
 
 sub emails {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     unless( defined $this->{emails} ) {
         if ( $this->isGroup() ) {
@@ -352,11 +352,11 @@ True if the user is an admin (is a member of the $TWiki::cfg{SuperAdminGroup})
 
 sub isAdmin {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     unless( $this->{isKnownAdmin} ) {
         my $sag = $this->{session}->{users}->findUser( $TWiki::cfg{SuperAdminGroup} );
-        ASSERT(ref($sag) eq 'TWiki::User') if DEBUG;
+        ASSERT($sag->isa( 'TWiki::User')) if DEBUG;
         $this->{isKnownAdmin} = $this->isInList( $sag->groupMembers());
     }
     return $this->{isKnownAdmin};
@@ -372,7 +372,7 @@ Get a list of user objects for the groups a user is in
 
 sub getGroups {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     return @{$this->{groups}};
 }
@@ -387,7 +387,7 @@ Return true we are in the list of user objects passed.
 
 sub isInList {
     my( $this, $userlist ) = @_;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     unless( ref( $userlist )) {
         # string parameter
@@ -417,7 +417,7 @@ Test if this is a group user or not
 
 sub isGroup {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     return $this->wikiName() =~ /Group$/;
 }
@@ -433,7 +433,7 @@ called on groups.
 
 sub groupMembers {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::User')) if DEBUG;
     ASSERT( $this->isGroup()) if DEBUG;
     my $store = $this->{session}->{store};
 

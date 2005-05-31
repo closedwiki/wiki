@@ -56,7 +56,7 @@ Constructor. There is one object per stored file.
 
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
     $this->{web} = $web;
@@ -311,12 +311,15 @@ sub isAsciiDefault {
 
 =pod
 
----++ ObjectMethod setLock (   $lock, $user  )
+---++ ObjectMethod setLock($lock, $user)
 
-Set a twiki lock on the topic, if $lock, otherwise clear it.
+Set a lock on the topic, if $lock, otherwise clear it.
 $user is a wikiname.
 
 Return an error message on failure.
+
+SMELL: there is a tremendous amount of potential for race
+conditions using this locking approach.
 
 =cut
 
@@ -325,13 +328,13 @@ sub setLock {
 
     $user = $this->{session}->{user} unless $user;
 
-    my $lockFilename = $this->_makeFileName( ".lock" );
+    my $filename = $this->_makeFileName( '.lock' );
     if( $lock ) {
         my $lockTime = time();
-        return $this->_saveFile( $lockFilename, "$user\n$lockTime" );
+        return $this->_saveFile( $filename, "$user\n$lockTime" );
     } else {
-        unlink $lockFilename
-          or return "Failed to delete $lockFilename: $!";
+        unlink $filename
+          or return "Failed to delete $filename: $!";
     }
     return undef;
 }
@@ -347,12 +350,55 @@ See if a twiki lock exists. Return the lock user and lock time if it does.
 sub isLocked {
     my( $this ) = @_;
 
-    my $lockFilename = $this->_makeFileName( ".lock" );
-    if ( -e $lockFilename ) {
-        my $t = $this->{session}->{store}->readFile( $lockFilename );
+    my $filename = $this->_makeFileName('.lock');
+    if ( -e $filename ) {
+        my $t = $this->{session}->{store}->readFile( $filename );
         return split( /\s+/, $t, 2 );
     }
     return ( undef, undef );
+}
+
+=pod
+
+---++ ObjectMethod setLease( $lease )
+
+   * =$lease= reference to lease hash, or undef if the existing lease is to be cleared.
+
+Set an lease on the topic.
+
+=cut
+
+sub setLease {
+    my( $this, $lease ) = @_;
+
+    my $filename = $this->_makeFileName( '.lease' );
+    if( $lease ) {
+        return $this->_saveFile( $filename, join( "\n", %$lease ) );
+    } else {
+        unlink $filename
+          or throw Error::Simple "Failed to delete $filename: $!";
+    }
+}
+
+=pod
+
+---++ ObjectMethod getLease() -> $lease
+
+Get the current lease on the topic.
+
+=cut
+
+sub getLease {
+    my( $this ) = @_;
+
+    my $filename = $this->_makeFileName( '.lease' );
+    if ( -e $filename ) {
+        my $t = $this->{session}->{store}->readFile( $filename );
+        my $lease = { split( /\n/, $t ) };
+print STDERR "LEASE ",$lease->{user},"\n";
+        return $lease;
+    }
+    return undef;
 }
 
 sub _saveAttachment {

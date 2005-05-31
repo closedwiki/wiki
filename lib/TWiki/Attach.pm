@@ -50,7 +50,7 @@ Constructor
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
     return $this;
 }
@@ -71,7 +71,7 @@ view, using templates for the header, footer and each row.
 
 sub renderMetaData {
     my( $this, $web, $topic, $meta, $attrs, $isTopTopicRev ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     $attrs = new TWiki::Attrs( $attrs );
     my $showAll = $attrs->{all};
@@ -130,7 +130,7 @@ Generate a version history table for a single attachment
 
 sub formatVersions {
     my( $this, $web, $topic, %attrs ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     my $store = $this->{session}->{store};
     my $latestRev =
@@ -263,7 +263,7 @@ Build a link to the attachment, suitable for insertion in the topic.
 
 sub getAttachmentLink {
     my ( $this, $user, $web, $topic, $attName, $meta ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     my $att = $meta->get( 'FILEATTACHMENT', $attName );
     my $fileComment = $att->{comment};
@@ -586,8 +586,8 @@ Migrate old HTML format
 
 sub migrateToFileAttachmentMacro {
     my ( $this, $meta, $text ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
+    ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
 
     my ( $before, $atext, $after ) = split( /<!--TWikiAttachment-->/, $text );
     $text = $before || '';
@@ -640,7 +640,7 @@ CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
 
 sub upgradeFrom1v0beta {
     my( $this, $meta ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Attach') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
     my @attach = $meta->find( 'FILEATTACHMENT' );
     foreach my $att ( @attach ) {

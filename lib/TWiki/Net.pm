@@ -34,7 +34,7 @@ use TWiki::Sandbox;
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
 
     $this->{session} = $session;
@@ -53,7 +53,7 @@ Get the text at the other end of a URL
 
 sub getUrl {
     my ( $this, $theHost, $thePort, $theUrl, $theUser, $thePass, $theHeader ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Net') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Net')) if DEBUG;
 
     # Run-time use of Socket module when needed
     require Socket;
@@ -166,7 +166,7 @@ Date: ...\nFrom: ...\nTo: ...\nCC: ...\nSubject: ...\n\nMailBody...
 
 sub sendEmail {
     my( $this, $theText, $retries ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Net') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Net')) if DEBUG;
     $retries ||= 1;
 
     unless( defined $this->{mailHandler} ) {

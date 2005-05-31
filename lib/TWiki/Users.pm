@@ -44,7 +44,7 @@ Construct the user management object
 
 sub new {
     my ( $class, $session ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
 
     # Do a dynamic 'use locale' for this module
@@ -71,7 +71,7 @@ sub new {
 # get a list of groups defined in this TWiki 
 sub _getListOfGroups {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
 
     my @list;
     $this->{session}->{search}->searchWeb
@@ -106,7 +106,7 @@ sub _collateGroups {
 # list of user names. Used by User.pm
 sub expandUserList {
     my( $this, $names, $expand ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
 
     $names ||= '';
     # comma delimited list of users or groups
@@ -145,8 +145,8 @@ If =$nocreate= is false, and no =$wikiname= is given, then the
 
 sub findUser {
     my( $this, $name, $wikiname, $dontCreate ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
-    ASSERT($name) if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
+    $name ||= $TWiki::cfg{DefaultUserLogin};
     my $object;
 
     #$this->{session}->writeDebug("Looking for $name / $wikiname / $dontCreate");
@@ -229,9 +229,9 @@ Register.pm, or manually outside TWiki.
 sub addUserToTWikiUsersTopic {
     my ( $this, $user, $me ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
-    ASSERT(ref($me) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
+    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
+    ASSERT($me->isa( 'TWiki::User')) if DEBUG;
 
     my $store = $this->{session}->{store};
     my( $meta, $text ) =
@@ -297,7 +297,7 @@ sub addUserToTWikiUsersTopic {
 # via TWiki's .htpasswd mechanism.
 sub _cacheTWikiUsersTopic {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Users') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Users')) if DEBUG;
 
     return if $this->{CACHED};
     $this->{CACHED} = 1;

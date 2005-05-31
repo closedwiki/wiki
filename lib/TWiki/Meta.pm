@@ -65,7 +65,7 @@ Construct a new, empty Meta collection.
 
 sub new {
     my ( $class, $session, $web, $topic ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
 
     # Note: internal fields must be prepended with _. All other
@@ -94,7 +94,7 @@ represented.
 
 sub put {
     my( $this, $type, $args ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $data = $this->{$type};
     if( $data ) {
@@ -119,7 +119,7 @@ represented.
 
 sub putKeyed {
     my( $this, $type, $args ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $data = $this->{$type};
     if( $data ) {
@@ -152,7 +152,7 @@ The result is a reference to the hash for the item.
 
 sub get {
     my( $this, $type, $keyValue ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $data = $this->{$type};
     if( $data ) {
@@ -180,7 +180,7 @@ if there are no entries.
 
 sub find {
     my( $this, $type ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $itemsr = $this->{$type};
     my @items = ();
@@ -206,7 +206,7 @@ With a $type and a $key it will remove only the specific item.
 
 sub remove {
     my( $this, $type, $keyValue ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     if( $keyValue ) {
        my $data = $this->{$type};
@@ -243,8 +243,8 @@ SMELL: this is a shallow copy
 
 sub copyFrom {
     my( $this, $otherMeta, $type ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
-    ASSERT(ref($otherMeta) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
+    ASSERT($otherMeta->isa( 'TWiki::Meta')) if DEBUG;
 
     if( $type ) {
         my $data = $otherMeta->{$type};
@@ -268,7 +268,7 @@ Return the number of entries of the given type that are in this meta set
 
 sub count {
     my( $this, $type ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
     my $data = $this->{$type};
 
     return scalar @$data if( defined( $data ));
@@ -291,7 +291,7 @@ Add TOPICINFO type data to the object, as specified by the parameters.
 
 sub addTOPICINFO {
     my( $this, $web, $topic, $rev, $time, $user ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     $time ||= time();
     $user ||= $this->{_session}->{user};
@@ -325,7 +325,7 @@ $rev is an integer revision number.
 
 sub getRevisionInfo {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $topicinfo = $this->get( 'TOPICINFO' );
 
@@ -377,7 +377,8 @@ sub merge {
                 if( $formDef->isTextMergeable( $thisD->{name} )) {
                     my $merged = TWiki::Merge::insDelMerge( $otherD->{value},
                                                             $thisD->{value},
-                                                            qr/(\s+)/ );
+                                                            qr/(\s+)/,
+                                                            $formDef );
                     # SMELL: we don't merge attributes or title
                     $thisD->{value} = $merged;
                 }

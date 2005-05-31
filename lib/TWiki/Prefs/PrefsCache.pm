@@ -48,7 +48,7 @@ Creates a new Prefs object.
 
 sub new {
     my( $class, $session, $parent ) = @_;
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
 
     my $this = bless( {}, $class );
     $this->{session} = $session;
@@ -58,7 +58,7 @@ sub new {
     # overwritten when loading prefs at this level. The final hash
     # will be rewritten when the prefs have been loaded.
     if( $parent ) {
-        ASSERT(ref($parent) eq 'TWiki::Prefs::PrefsCache') if DEBUG;
+        ASSERT($parent->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
         $this->{final} = $parent->{final};
         $this->{prefs}{FINALPREFERENCES} =
           join(', ', keys( %{$this->{final}} ));
@@ -80,7 +80,7 @@ with the key prefix set in setKeyPrefix (default '').
 
 sub loadPrefsFromTopic {
     my( $this, $theWeb, $theTopic ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Prefs::PrefsCache') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
 
     my $session = $this->{session};
     if( $session->{store}->topicExists( $theWeb, $theTopic )) {

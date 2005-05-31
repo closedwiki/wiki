@@ -574,7 +574,7 @@ This method removes noautolink and no tags before outputting the page.
 sub writeCompletePage {
     my ( $this, $text, $pageType, $contentType ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     if( ($contentType||'') ne 'text/plain' ) {
         # Remove <nop> and <noautolink> tags
@@ -611,7 +611,7 @@ core settings.
 sub writePageHeader {
     my( $this, $query, $pageType, $contentType, $contentLength ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $query = $this->{cgiQuery} unless $query;
 
@@ -693,7 +693,7 @@ sub redirect {
     my $this = shift;
     my $url = shift;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $query = $this->{cgiQuery};
 
@@ -778,7 +778,7 @@ is returned in a quadruple:
 sub readOnlyMirrorWeb {
     my( $this, $theWeb ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my @mirrorInfo = ( '', '', '', '' );
     if( $TWiki::cfg{SiteWebTopicName} ) {
@@ -814,7 +814,7 @@ Get the currently requested skin path
 sub getSkin {
     my $this = shift;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $skinpath = $this->{prefs}->getPreferencesValue( 'SKIN' ) || '';
     if( $this->{cgiQuery} ) {
@@ -841,7 +841,7 @@ Returns the absolute URL to a TWiki script, providing the web and topic as
 sub getScriptUrl {
     my( $this, $theWeb, $theTopic, $theScript, @params ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     $theTopic ||= '';
     $theWeb ||= '';
@@ -915,18 +915,18 @@ sub getOopsUrl {
     my $template = shift;
     my $params;
 
-    if( ref($template) eq "TWiki::OopsException" ) {
+    if( $template->isa('TWiki::OopsException') ) {
         $params = $template;
-        $template = $params->{-template};
+        $template = $params->{template};
     } else {
         $params = { @_ };
     }
-    my $web = $params->{web} || $params->{-web} || $this->{webName};
-    my $topic = $params->{topic} || $params->{-topic} || $this->{topicName};
-    my $def = $params->{def} || $params->{-def};
-    my $PARAMS = $params->{params} || $params->{-params};
+    my $web = $params->{web} || $this->{webName};
+    my $topic = $params->{topic} || $this->{topicName};
+    my $def = $params->{def};
+    my $PARAMS = $params->{params};
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my @urlParams = ( template => 'oops'.$template );
 
@@ -972,7 +972,7 @@ Be very careful where you use it!
 sub normalizeWebTopicName {
     my( $this, $theWeb, $theTopic ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT(defined $theTopic) if DEBUG;
 
     if( $theTopic =~ m|^([^.]+)[\.\/](.*)$| ) {
@@ -1169,18 +1169,18 @@ Write the log for an event to the logfile
 
 sub writeLog {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
     my $action = shift || '';
     my $webTopic = shift || '';
     my $extra = shift || '';
     my $user = shift;
 
     $user = $this->{user} unless $user;
-    if(ref($user) eq 'TWiki::User') {
+    if( ref($user) && $user->isa('TWiki::User')) {
         $user = $user->wikiName();
     }
 
-    if ($user eq "TWikiGuest") {
+    if ($user eq 'TWikiGuest') {
        my $cgiQuery = $this->{cgiQuery};
        if( $cgiQuery ) {
            my $agent = $cgiQuery->user_agent();
@@ -1209,7 +1209,7 @@ intervention. Use this for defensive programming warnings (e.g. assertions).
 
 sub writeWarning {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
     $this->_writeReport( $TWiki::cfg{WarningFileName}, @_ );
 }
 
@@ -1224,7 +1224,7 @@ Prints date, time, and contents of $text to $TWiki::cfg{DebugFileName}, typicall
 
 sub writeDebug {
     my $this = shift;
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
     $this->_writeReport( $TWiki::cfg{DebugFileName}, @_ );
 }
 
@@ -1448,7 +1448,7 @@ sub _TOC {
 
     # get the title attribute
     my $title = $params->{title} || '';
-    $title = CGI::span( { -class => 'twikiTocTitle' }, $title ) if( $title );
+    $title = CGI::span( { class => 'twikiTocTitle' }, $title ) if( $title );
 
     if( $web ne $defaultWeb || $topic ne $defaultTopic ) {
         unless( $this->{security}->checkAccessPermission
@@ -1523,7 +1523,7 @@ sub _TOC {
             $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
             # create linked bullet item, using a relative link to anchor
             $line = $tabs.'* '.
-              CGI::a( { -href=>$urlPath.'#'.$anchor }, $line );
+              CGI::a( { href=>$urlPath.'#'.$anchor }, $line );
             $result .= "\n".$line;
         }
     }
@@ -1533,7 +1533,7 @@ sub _TOC {
             $highest--;
             $result =~ s/^\t{$highest}//gm;
         }
-        return CGI::div( { -class=>'twikiToc' }, "$title$result\n" );
+        return CGI::div( { class=>'twikiToc' }, "$title$result\n" );
     } else {
         return '';
     }
@@ -1603,8 +1603,8 @@ a subset of the substitutions.
 sub expandVariablesOnTopicCreation {
     my ( $this, $text, $user ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
+    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     $text =~ s/%DATE%/$this->_DATE()/ge;
     $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;
@@ -2070,7 +2070,7 @@ table-of-contents generation, and any plugin changes from commonTagsHandler.
 sub handleCommonTags {
     my( $this, $text, $theWeb, $theTopic ) = @_;
 
-    ASSERT(ref($this) eq 'TWiki') if DEBUG;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT($theWeb) if DEBUG;
     ASSERT($theTopic) if DEBUG;
 

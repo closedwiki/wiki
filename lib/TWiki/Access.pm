@@ -43,7 +43,7 @@ database.
 sub new {
     my ( $class, $session ) = @_;
     my $this = bless( {}, $class );
-    ASSERT(ref($session) eq 'TWiki') if DEBUG;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
 
     %{$this->{GROUPS}} = ();
@@ -62,7 +62,7 @@ Are there any security restrictions for this Web
 
 sub permissionsSet {
     my( $this, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Access') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
 
     my $permSet = 0;
 
@@ -115,8 +115,8 @@ If the check fails, the reason can be recoveered using getReason
 sub checkAccessPermission {
     my( $this, $mode, $user,
         $theTopicText, $topic, $web ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Access') if DEBUG;
-    ASSERT(ref($user) eq 'TWiki::User') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Access')) if DEBUG;
+    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     undef $this->{failure};
 

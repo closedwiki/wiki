@@ -181,7 +181,7 @@ sub _parseFormDefinition {
                         value => $vals,
                         tooltip => $tooltip,
                         attributes => $attributes,
-			referenced => $referenced
+                        referenced => $referenced
                       } );
             } else {
                 $inBlock = 0;
@@ -261,7 +261,7 @@ sub _link {
                     rel => 'nofollow'
                   }, $name );
     } elsif ( $tooltip ) {
-        $link = CGI::span( { -title=>$tooltip }, $name );
+        $link = CGI::span( { title=>$tooltip }, $name );
     }
 
     return $link;
@@ -282,8 +282,8 @@ from $meta
 
 sub renderForEdit {
     my( $this, $web, $topic, $meta, $useDefaults ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
+    ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my $session = $this->{session};
 
     my $mandatoryFieldsPresent = 0;
@@ -352,12 +352,12 @@ sub renderForEdit {
                                       $this->_link( $title, $tooltip,
                                                     $referenced).
                                       $extra ).
-                             CGI::td( { -align=>'left' } , $value ));
+                             CGI::td( { align=>'left' } , $value ));
         }
     }
     $text .= CGI::end_table();
 
-    $text = CGI::div({-class=>'twikiForm twikiEditForm'}, $text);
+    $text = CGI::div( { class=>'twikiForm twikiEditForm' }, $text);
 
     if( $this->{mandatoryFieldsPresent} ) {
         # SMELL: localisation - this should be from a template
@@ -537,8 +537,8 @@ through edits untouched.
 
 sub renderHidden {
     my( $this, $meta, $useDefaults ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
+    ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my $session = $this->{session};
 
     my $text = "";
@@ -582,8 +582,8 @@ May throw TWiki::OopsException
 
 sub getFieldValuesFromQuery {
     my( $this, $query, $meta, $justOverride, $handleMandatory ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Form') if DEBUG;
-    ASSERT(ref($meta) eq 'TWiki::Meta') if DEBUG;
+    ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
+    ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
 
     # Kill the old form data unless we have been asked to override
     # existing data
