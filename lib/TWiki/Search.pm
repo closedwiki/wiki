@@ -379,6 +379,7 @@ sub searchWeb {
     my $theType =       $params{type} || '';
     my $theWebName =    $params{web} || '';
     my $theDate =       $params{date} || "";
+    my $finalTerm =     ($inline)?($params{"nofinalnewline"} || 0):0;
 
     my $session = $this->{session};
     my $renderer = $session->{renderer};
@@ -923,7 +924,7 @@ sub searchWeb {
         return '' if ( $ntopics == 0 && $noZeroResults );
     }
 
-    if( $theFormat ) {
+    if( $theFormat  && ! $finalTerm ) {
         if( $theSeparator ) {
             $searchResult =~ s/$theSeparator$//s;  # remove separator at end
         } else {
