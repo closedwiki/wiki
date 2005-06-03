@@ -1801,6 +1801,33 @@ sub nativeUrlEncode {
 
 =pod
 
+---++ StaticMethod isTrue( $value, $default ) -> $boolean
+
+Returns 1 if =$value= is true, and 0 otherwise. "true" means set to
+something with a Perl true value, with the special cases that "off",
+"false" and "no" (case insensitive) are forced to false. Leading and
+trailing spaces in =$value= are ignored.
+
+If the value is undef, then =$default= is returned. If =$default= is
+not specified it is taken as 0.
+
+=cut
+
+sub isTrue {
+    my( $value, $default ) = @_;
+
+    $default ||= 0;
+
+    return $default unless defined( $value );
+
+    $value =~ s/^\s*(.*?)\s*$/$1/gi;
+    $value =~ s/off//gi;
+    $value =~ s/no//gi;
+    return ( $value ) ? 1 : 0;
+}
+
+=pod
+
 ---++ StaticMethod spaceOutWikiWord( $word, $sep ) -> $string
 
 Spaces out a wiki word by inserting a string (default: one space) between each word component.
@@ -2192,7 +2219,8 @@ sub _INCLUDE {
     my $path = $params->remove('_DEFAULT') || '';
     my $pattern = $params->remove('pattern');
     my $rev     = $params->remove('rev');
-    my $warn    = $params->remove('warn');
+    my $warn    = isTrue( $params->remove('warn'),
+                          $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ));
 
     if( $path =~ /^https?\:/ ) {
         # include web page
@@ -2229,11 +2257,9 @@ sub _INCLUDE {
 
     # See Codev.FailedIncludeWarning for the history.
     unless( $this->{store}->topicExists($incweb, $inctopic)) {
-        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ) ||
-          '';
-        if( lc( $warn ) eq 'on' ) {
+        if( $warn ) {
             return $this->inlineAlert( 'alerts', 'no_such_topic', $inctopic );
-        } elsif( $warn !~ /^(off|no)$/i ) {
+        } else {
             $inctopic =~ s/\//\./go;
             $warn =~ s/\$topic/$inctopic/go;
             return $warn;
@@ -2430,9 +2456,10 @@ sub _URLPARAM {
 
     my $value = '';
     if( $this->{cgiQuery} ) {
-        if( $multiple ) {
+        if( TWiki::isTrue( $multiple )) {
             my @valueArray = $this->{cgiQuery}->param( $param );
             if( @valueArray ) {
+                # SMELL: this is pretty foul
                 unless( $multiple =~ m/^on$/i ) {
                     my $item = '';
                     @valueArray = map {

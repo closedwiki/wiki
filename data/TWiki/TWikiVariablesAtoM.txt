@@ -153,7 +153,7 @@ __Note:__ This topic is included by TWikiVariables
 	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
 	| =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
 	| =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
-	| =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDE- WARNING%= [[TWikiPreferences][preferences]] setting |
+	| =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
 Any other parameters will be defined as variables within the scope of the included topic. For example,
 <verbatim>
 %INCLUDE{"AnotherTopic" PONE="val 1" PTWO="val 2"}%

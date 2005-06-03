@@ -152,24 +152,6 @@ sub loadHash {
     }
 }
 
-# PACKAGE PRIVATE
-# Returns 1 if the =$prefValue= is 'on', and 0 otherwise.  'On' means set to
-# something with a true Perl-truth-value, with the special cases that 'off' and
-# 'no' are forced to false.  (Both of the latter are case-insensitive.)  Note
-# also that leading and trailing whitespace on =$prefValue= will be stripped
-# prior to this conversion.
-
-sub _flag {
-    my( $value ) = @_;
-
-    return 0 unless ( defined( $value ));
-    return 1 if ( $value =~ m/^\s*(on|1|true|yes)\s*$/i );
-    return 0 if ( $value =~ m/^\s*(off|0|false|no)\s*$/i );
-
-    $value =~ s/^\s*(.*?)\s*$/$1/i;
-    return ( $value ? 1 : 0 );
-}
-
 =pod
 
 ---++ ObjectMethod getPreferencesValue( $key, $web ) -> $value
@@ -239,7 +221,7 @@ sub getPreferencesFlag {
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     my $value = $this->getPreferencesValue( $key, $web );
-    return _flag( $value );
+    return TWiki::isTrue( $value );
 }
 
 =pod

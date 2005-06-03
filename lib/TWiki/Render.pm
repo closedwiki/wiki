@@ -91,7 +91,7 @@ sub new {
       $session->{prefs}->getPreferencesValue('LINKTOOLTIPINFO')
         || '';
     $this->{LINKTOOLTIPINFO} = '$username - $date - r$rev: $summary'
-      if( $this->{LINKTOOLTIPINFO} =~ /^on$/ );
+      if( TWiki::isTrue( $this->{LINKTOOLTIPINFO} ));
 
     return $this;
 }
@@ -1077,7 +1077,7 @@ sub getRenderedVersion {
     # i.e. [[$1][$3]]
     $text =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
 
-    unless( $prefs->getPreferencesValue('NOAUTOLINK') =~ /^on$/i ) {
+    unless( $prefs->getPreferencesFlag('NOAUTOLINK') ) {
         # Handle WikiWords
         $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
         $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$this->_handleWikiWord($theWeb,$1,$2,$3)/geom;
