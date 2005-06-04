@@ -206,12 +206,14 @@ sub _renderFormData {
                                      '[['.$name.']]' ));
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
+      unless ( $field->{attributes} =~ /H/ ) {
         my $value = $field->{value} || '&nbsp;';
         $metaText .= CGI::Tr( { valign => 'top' },
                               CGI::Td( { class => 'twikiFirstCol',
                                          align => 'right' },
                                        ' '.$field->{title}.':' ).
                               CGI::Td( ' '.$value.' ' ));
+      }
     }
     return CGI::div( { class => 'twikiForm' },
                      CGI::table( { border => 1 }, $metaText ));

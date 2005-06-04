@@ -37,21 +37,21 @@ A Form Template is a specification of the fields in a form. A Form Template is s
 ---+++ Defining a Form
 
 	1. Create a new topic with your form name: ==<nop>YourForm==, ==<nop>ExpenseReport==, ==<nop>InfoCategory==, ==<nop>RecordReview==, whatever you need.
-	1. Create a TWiki table, with each column head representing one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, and ==Tooltip message== _(see sample below)_.
+	1. Create a TWiki table, with each column head representing one element of an entry field: ==Name==, ==Type==, ==Size==, ==Values==, ==Tooltip message==, and ==Attributes== _(see sample below)_.
 	1. For each field, fill in a new line; for the type of field, select from the list.
 	1. Save the topic _(you can later choose to [[#EnablingForms][enable/disable]] individual forms)_.
 
 <blockquote style="background-color:#f0f0f0">
 *Example:* ==<nop>WebForm== %BR%
-=| <nop>*Name* | <nop>*Type* | <nop>*Size* | <nop>*Values* | <nop>*Tooltip message* |= %BR%
-=| !TopicClassification | select | 1 | !NoDisclosure, !PublicSupported, !PublicFAQ | blah blah... |= %BR%
-=| !OperatingSystem | checkbox | 3 | !OsHPUX, !OsLinux, !OsSolaris, !OsWin | blah blah... |= %BR%
-=| !OsVersion | text | 16 | | blah blah... |=
+=| <nop>*Name* | <nop>*Type* | <nop>*Size* | <nop>*Values* | <nop>*Tooltip message* | <nop>*Attributes* |= %BR%
+=| !TopicClassification | select | 1 | !NoDisclosure, !PublicSupported, !PublicFAQ | blah blah... | &nbsp; |= %BR%
+=| !OperatingSystem | checkbox | 3 | !OsHPUX, !OsLinux, !OsSolaris, !OsWin | blah blah... | &nbsp; |= %BR%
+=| !OsVersion | text | 16 | | blah blah... | &nbsp; |=
 
-| *Name* | *Type* | *Size* | *Values* | *Tooltip message* |
-| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/TopicClassification"><nop>TopicClassification</a> | select |  1  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/NoDisclosure"><nop>NoDisclosure</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicSupported"><nop>PublicSupported</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicFAQ"><nop>PublicFAQ</a> | blah blah... |
-| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OperatingSystem"><nop>OperatingSystem</a> | checkbox |  3  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsHPUX"><nop>OsHPUX</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsLinux"><nop>OsLinux</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsSolaris"><nop>OsSolaris</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsWin"><nop>OsWin</a> | blah blah... |
-| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... |
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/TopicClassification"><nop>TopicClassification</a> | select |  1  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/NoDisclosure"><nop>NoDisclosure</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicSupported"><nop>PublicSupported</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/PublicFAQ"><nop>PublicFAQ</a> | blah blah... | &nbsp; |
+| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OperatingSystem"><nop>OperatingSystem</a> | checkbox |  3  | <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsHPUX"><nop>OsHPUX</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsLinux"><nop>OsLinux</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsSolaris"><nop>OsSolaris</a>, <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsWin"><nop>OsWin</a> | blah blah... | &nbsp; |
+| <a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/OsVersion"><nop>OsVersion</a> | text |  16  | | blah blah... | &nbsp; |
 </blockquote>
 
 You can also retrieve possible values for select, checkbox or radio types from other topics:
@@ -60,16 +60,16 @@ You can also retrieve possible values for select, checkbox or radio types from o
 *Example: <nop>WebForm*
 
 	* In the <nop>WebForm topic, define the form:
-	  <br /> &nbsp;
-	  | *Name* | *Type* | *Size* | *Values*  | *Tooltip message* |
-	  | <nop>TopicClassification | select | 1 |	 | blah blah... |
-	  | <nop>OperatingSystem | checkbox | 3 |	 | blah blah... |
-	  | <nop>OsVersion | text | 16 |	 | blah blah... |
+	  <br />  
+	  | *Name* | *Type* | *Size* | *Values*  | *Tooltip message* | *Attributes* |
+	  | <nop>TopicClassification | select | 1 |	 | blah blah... | &nbsp; |
+	  | <nop>OperatingSystem | checkbox | 3 |	 | blah blah... | &nbsp; |
+	  | <nop>OsVersion | text | 16 |	 | blah blah... | &nbsp; |
 	  <br />
 	  %X% Leave the ==Values== field *blank*.
 
 	* Then in the <nop>TopicClassification topic, define the possible values:
-	  <br /> &nbsp;
+	  <br />  
 	  | *Name* | *Type* | *Tooltip message* |
 	  | <nop>NoDisclosure | option | blah blah... |
 	  | Public Supported | option | blah blah... |
@@ -82,11 +82,13 @@ You can also retrieve possible values for select, checkbox or radio types from o
 	* Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a select, checkbox or radio field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links.
 	* Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
 	* The ==Tooltip message== column is used as a tooltip for the field name (only if field name is a %TWIKIWEB%.WikiName) - you only see the tooltip in edit view.
+	* The ==Attributes== column is used to define special behavior for that form field (multiple attributes can be entered, with or without separators):
+		* An attribute =H= indicates that this field should not be shown in view mode. However, the field is available for editing and storing information.
 	* You can create a =label= field that is only visible in edit view by creating a label with no field name. Unlike for other field types, you can use TWiki formatting in the value of a =label= field.
 <blockquote style="background-color:#f0f0f0">
 *Example:*
 
-	=| | label | | Text <nop>*of* <nop>_the_ label | |=
+	=| | label | | Text <nop>*of* <nop>_the_ label | | |=
 </blockquote>
 
 #EnablingForms
