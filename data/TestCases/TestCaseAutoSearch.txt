@@ -1,10 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111930902" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1117992408" format="1.0" version="$Rev$"}%
 
 Description: Automated search function tests.
 
 Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern" skin and standard search templates.
 
-[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&amp;debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
+[[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?test=compare&debugenableplugins=TestFixturePlugin&skin=pattern][run this test]]
 
 Designed by: Crawford Currie
 
@@ -258,6 +258,23 @@ Same as last test
 %SEARCH{ "Rhythm" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" casesensitive="on" }%
 <!-- /actual -->
 
+<!-- expected rex -->
+NOOPED vars shouldn't expand in search results %DATE%
+<div class="twikiSearchResults">
+<div class="twikiTopRow"><div class="twikiLeft">
+<a href="/DEVELOP/bin/view/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a></div>
+<div class="twikiRight twikiSRAuthor">
+@WIKINAME
+</div>
+<div class="twikiRight twikiSRRev">
+<span class="twikiNew">NEW</span> - <a href="/DEVELOP/bin/rdiff/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
+<div class="twikiBottomRow">
+<div class="twikiSummary twikiGrayText"></div></div></div><!-- /expected -->
+<!-- actual -->
+NOOPED vars shouldn't expand in search results %<nop>DATE%
+%SEARCH{"[N]OOPED vars shouldn" type="regex" nonoise="on"}%
+<!-- /actual -->
+
 ---+ format="..." (very incomplete)
 ---++ Expected
 <!-- expected expand rex FORMAT -->
@@ -282,3 +299,4 @@ Same as last test
 
 ---+ separator=", " (default newline)
 ---+ newline="%BR%" 	Line separator within a search hit, effective only in FormattedSearch.
+

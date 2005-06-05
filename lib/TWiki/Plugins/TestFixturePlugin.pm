@@ -126,9 +126,13 @@ sub _compareExpectedWithActual {
                        reporter => \&_processDiff,
                        result => ''
                       };
-        TWiki::Plugins::TestFixturePlugin::HTMLDiffer::diff
-            ( $et, $at, $control );
-        if( $errors ) {
+
+        if( TWiki::Plugins::TestFixturePlugin::HTMLDiffer::diff
+            ( $et, $at, $control )) {
+
+        if($at =~ /BOLLOCKS/) {
+            print STDERR "Compare\nt$at\nwith\n$et\nerrors $errors\n";
+        }
             $errors .= CGI::table({border=>1},
                                   CGI::Tr(CGI::th({},
                                                   'Expected '.$e->{options}).

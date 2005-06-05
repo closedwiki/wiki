@@ -1266,7 +1266,8 @@ sub protectPlainText {
     # tip text by escaping links (external, internal, Interwiki)
     $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
     $text =~ s/(?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
-    $text =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/g;	# email address
+    $text =~ s/@/@<nop>$1/g;	# email address
+    $text =~ s/%/%<nop>$1/g;	# %
 
     return $text;
 }
