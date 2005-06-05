@@ -152,7 +152,11 @@ sub verifyLite {
     $this->assert_equals($numRevs, $rcs->numRevisions());
     for( my $i=$numRevs; $i>0; $i-- ) {
         my $text = $rcs->getRevision( $i );
-        $this->assert_equals( $vals[$i-1], $text );
+        # ignore trailing whitespace
+        my $e = $vals[$i-1];
+        $e =~ s/\s*$//s;
+        $text =~ s/\s*$//s;
+        $this->assert_equals( $e, $text );
     }
     return $rcs;
 }

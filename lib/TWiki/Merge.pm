@@ -30,6 +30,8 @@ Support for merging strings
 
 package TWiki::Merge;
 
+use Assert;
+
 =pod
 
 ---++ StaticMethod insDelMerge( $a, $b, $sep, $info )
@@ -57,6 +59,8 @@ sub insDelMerge {
     my @a = split( /($sep)/, $ia );
     my @b = split( /($sep)/, $ib );
 
+    ASSERT($session->isa('TWiki')) if DEBUG;
+
     my @out;
     Algorithm::Diff::traverse_balanced( \@a, \@b,
                                         {
@@ -77,6 +81,8 @@ sub insDelMerge {
 sub _acceptA {
     my ( $a, $b, $out, $ai, $bi, $session, $info ) = @_;
 
+    ASSERT($session->isa('TWiki')) if DEBUG;
+
     # accept text from the old version without asking for resolution
     my $merged = $session->{plugins}->mergeHandler( ' ',  $ai->[$a], undef, $info );
     if( defined $merged ) {
@@ -90,6 +96,8 @@ sub _acceptA {
 sub _acceptB {
     my ( $a, $b, $out, $ai, $bi, $session, $info ) = @_;
 
+    ASSERT($session->isa('TWiki')) if DEBUG;
+
     my $merged = $session->{plugins}->mergeHandler( ' ',  $bi->[$b], undef, $info );
     if( defined $merged ) {
         push( @$out, $merged );
@@ -101,6 +109,7 @@ sub _acceptB {
 sub _change {
     my ( $a, $b, $out, $ai, $bi, $session, $info ) = @_;
     my $merged;
+    ASSERT($session->isa('TWiki')) if DEBUG;
 
     # Diff isn't terribly smart sometimes; it will generate changes
     # with a or b empty, which I would have thought should have

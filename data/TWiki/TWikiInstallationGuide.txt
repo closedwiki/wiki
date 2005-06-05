@@ -5,7 +5,7 @@
 %STARTINCLUDE%
 ---# TWiki Installation Guide
 
-_Installation instructions for the TWiki 01-Sep-2004 production release._
+_Installation instructions for the TWiki Dakar production release._
 
 _If you are reading this on your own TWiki installation, please get the latest installation guide (TWiki:TWiki.TWikiInstallationGuide), as this often has important updates to resolve installation issues._
 

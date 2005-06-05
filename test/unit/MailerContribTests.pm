@@ -131,8 +131,7 @@ sub set_up {
   my $user = $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
   my $text;
 
-  # need to use mkpath to ensure 777 perms
-  File::Path::mkpath("$TWiki::cfg{DataDir}/$testweb");
+  $twiki->{store}->createWeb($user, $testweb);
 
   my $s = "";
   foreach my $spec (@specs) {

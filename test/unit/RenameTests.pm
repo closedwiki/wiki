@@ -32,11 +32,11 @@ sub new {
 sub set_up {
     my $this = shift;
 
-
-    File::Path::mkpath("$TWiki::cfg{DataDir}/$oldweb");
-    File::Path::mkpath("$TWiki::cfg{DataDir}/$newweb");
-
     $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, "" );
+
+    $twiki->{store}->createWeb($twiki->{user}, $oldweb);
+    $twiki->{store}->createWeb($twiki->{user}, $newweb);
+
     $TWiki::Plugins::SESSION = $twiki;
     my $meta = new TWiki::Meta($twiki, $oldweb, $oldtopic);
     $meta->putKeyed( "FIELD", {name=>"$oldweb",
@@ -86,6 +86,9 @@ THIS
                                 $originaltext, $meta );
     $twiki->{store}->saveTopic( $twiki->{user}, $newweb, "OtherTopic",
                                 $originaltext, $meta );
+    $twiki->{store}->saveTopic( $twiki->{user}, $newweb,
+                                $TWiki::cfg{HomeTopicName},
+                                "junk", $meta );
 }
 
 sub tear_down {

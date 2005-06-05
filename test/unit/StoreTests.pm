@@ -62,10 +62,10 @@ sub test_CreateEmptyWeb {
 	$this->assert_not_null( $twiki->{store} );
 	
 	#create an empty web
-	$this->assert( ! $twiki->{store}->createWeb($web));		#TODO: how can this succeed without a user? to check perms?
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user},$web));		#TODO: how can this succeed without a user? to check perms?
 	$this->assert( $twiki->{store}->webExists($web) );
 	my @topics = $twiki->{store}->getTopicNames($web);
-	$this->assert( $#topics == -1 );#we expect there to be no topics
+	$this->assert_equals( 1, scalar(@topics), join(" ",@topics) );#we expect there to be only the home topic
 }
 
 sub test_CreateWeb {
@@ -75,11 +75,11 @@ sub test_CreateWeb {
 	
 	#create a web using _default 
 	#TODO how should this fail if we are testing a store impl that does not have a _deault web ?
-	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));		#TODO: how can this succeed without a user? to check perms?
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user}, $web, '_default'));		#TODO: how can this succeed without a user? to check perms?
 	$this->assert( $twiki->{store}->webExists($web) );
 	my @topics = $twiki->{store}->getTopicNames($web);
 	my @defaultTopics = $twiki->{store}->getTopicNames('_default');
-	$this->assert( $#topics == $#defaultTopics );
+	$this->assert_equals( $#topics, $#defaultTopics );
 }
 
 sub test_CreateWebWithNonExistantBaseWeb {
@@ -88,7 +88,7 @@ sub test_CreateWebWithNonExistantBaseWeb {
 	$this->assert_not_null( $twiki->{store} );
 	
 	#create a web using non-exsisatant Web 
-	$this->assert( defined $twiki->{store}->createWeb($web, 'DoesNotExists'));
+	$this->assert( defined $twiki->{store}->createWeb($twiki->{user}, $web, 'DoesNotExists'));
 	$this->assert( ! $twiki->{store}->webExists($web) );
 }
 
@@ -96,7 +96,7 @@ sub test_CreateWebWithNonExistantBaseWeb {
 sub test_CreateSimpleTopic {
     my $this = shift;
 
-	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user}, $web, '_default'));
 	$this->assert( $twiki->{store}->webExists($web) );
 	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
 	
@@ -106,14 +106,17 @@ sub test_CreateSimpleTopic {
 	$this->assert( $twiki->{store}->topicExists($web, $topic) );
 	
 	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+
+    # ignore whitspace at end of data
+    $readText =~ s/\s*$//s;
+
 	$this->assert_equals($text, $readText);
-	$this->assert_equals($meta, $readMeta);
 }
 
 sub test_CreateSimpleMetaTopic {
     my $this = shift;
 
-	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user}, $web, '_default'));
 	$this->assert( $twiki->{store}->webExists($web) );
 	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
 	
@@ -123,14 +126,17 @@ sub test_CreateSimpleMetaTopic {
 	$this->assert( $twiki->{store}->topicExists($web, $topic) );
 	
 	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+    # ignore whitspace at end of data
+    $readText =~ s/\s*$//s;
+
 	$this->assert_equals($text, $readText);
-	$this->assert_equals($meta, $readMeta);
+	$this->assert_deep_equals($meta, $readMeta);
 }
 
 sub test_CreateSimpleCompoundTopic {
     my $this = shift;
 
-	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user}, $web, '_default'));
 	$this->assert( $twiki->{store}->webExists($web) );
 	$this->assert( ! $twiki->{store}->topicExists($web, $topic) );
 	
@@ -140,20 +146,32 @@ sub test_CreateSimpleCompoundTopic {
 	$this->assert( $twiki->{store}->topicExists($web, $topic) );
 	
 	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+
+    # ignore whitspace at end of data
+    $readText =~ s/\s*$//s;
+
 	$this->assert_equals($text, $readText);
-	$this->assert_equals($meta, $readMeta);
+	$this->assert_deep_equals($meta, $readMeta);
 }
 
 sub test_getRevisionInfo {
     my $this = shift;
 
-	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user}, $web, '_default'));
+	$this->assert( $twiki->{store}->webExists($web) );
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
 	my $meta = new TWiki::Meta($twiki, $web, $topic);
 	$this->assert_equals('', $twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta ));
 
 	$this->assert_equals(1, $twiki->{store}->getRevisionNumber($web, $topic));
-	$this->assert_equals('', $twiki->{store}->saveTopic( $user, $web, $topic, $text."\nnewline\n", $meta ));
+
+    $text .= "\nnewline";
+	$this->assert_equals('', $twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta, { forcenewrevision => 1 } ));
+
+	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
+    # ignore whitspace at end of data
+    $readText =~ s/\s*$//s;
+	$this->assert_equals($text, $readText);
 	$this->assert_equals(2, $twiki->{store}->getRevisionNumber($web, $topic));
 	my ( $infodate, $infouser, $inforev, $infocomment ) = $twiki->{store}->getRevisionInfo($web, $topic);
 	$this->assert_equals($user, $infouser);
@@ -166,7 +184,8 @@ sub test_getRevisionInfo {
 sub test_moveTopic {
     my $this = shift;
 
-	$this->assert( ! $twiki->{store}->createWeb($web, '_default'));
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user}, $web, '_default'));
+	$this->assert( $twiki->{store}->webExists($web) );
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
 	my $meta = new TWiki::Meta($twiki, $web, $topic);
 	$this->assert_equals('', $twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta ));

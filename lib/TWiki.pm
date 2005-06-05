@@ -843,7 +843,8 @@ sub getScriptUrl {
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
-    $theTopic ||= '';
+    ( $theWeb, $theTopic ) =
+      $this->normalizeWebTopicName( $theWeb, $theTopic );
     $theWeb ||= '';
 
     # SMELL: topics and webs that contain spaces?
@@ -859,16 +860,13 @@ sub getScriptUrl {
         if( $p eq '#' ) {
             $url .= '#' . shift( @params );
         } else {
-            $ps .= '&' . $p.'='.urlEncode( shift( @params ));
+            $ps .= ';' . $p.'='.urlEncode( shift( @params ));
         }
     }
     if( $ps ) {
-        $ps =~ s/&/?/;
+        $ps =~ s/^;/?/;
         $url .= $ps;
     }
-
-    # FIXME consider a plugin call here - useful for certificated
-    # logon environment
 
     return $url;
 }

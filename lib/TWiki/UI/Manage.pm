@@ -159,6 +159,7 @@ sub createWeb {
     my $topicName = $session->{topicName};
     my $webName = $session->{webName};
     my $query = $session->{cgiQuery};
+    my $user = $session->{user};
 
     my $newWeb = $query->param( 'newweb' ) || '';
     my $newTopic = $query->param( 'newtopic' ) || '';
@@ -182,7 +183,7 @@ sub createWeb {
           ( 'attention', def =>'invalid_web_name', params => $newWeb );
     }
 
-    if( $session->{store}->isKnownWeb( $newWeb )) {
+    if( $session->{store}->webExists( $newWeb )) {
         throw TWiki::OopsException
           ( 'attention', def => 'web_exists', params => $newWeb );
     }
@@ -190,7 +191,7 @@ sub createWeb {
     $baseWeb =~ s/$TWiki::cfg{NameFilter}//go;
     $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
-    unless( $session->{store}->isKnownWeb( $baseWeb )) {
+    unless( $session->{store}->webExists( $baseWeb )) {
         throw TWiki::OopsException
           ( 'attention', def => 'base_web_missing',
             params => $baseWeb );
@@ -211,7 +212,7 @@ sub createWeb {
       };
     $opts->{SITEMAPLIST} = 'on' if( $siteMapWhat );
 
-    my $err = $session->{store}->createWeb( $newWeb, $baseWeb, $opts );
+    my $err = $session->{store}->createWeb( $user, $newWeb, $baseWeb, $opts );
     if( $err ) {
         throw TWiki::OopsException
           ( 'attention', def => 'web_creation_error',

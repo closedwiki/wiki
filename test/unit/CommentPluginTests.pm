@@ -36,8 +36,8 @@ sub set_up {
 
     $twiki = new TWiki( $thePathInfo, "TestUser1", $basetopic, "" );
 
-    File::Path::mkpath("$TWiki::cfg{DataDir}/$baseweb");
-    File::Path::mkpath("$TWiki::cfg{DataDir}/$targetweb");
+    $twiki->{store}->createWeb($twiki->{user}, $baseweb);
+    $twiki->{store}->createWeb($twiki->{user}, $targetweb);
 
     TWiki::Plugins::CommentPlugin::initPlugin();
     $TWiki::Plugins::SESSION = $twiki;

@@ -36,8 +36,7 @@ my $saveLF;
 # Set up the test fixture
 sub set_up {
     my $this = shift;
-    File::Path::mkpath("$TWiki::cfg{DataDir}/$testweb");
-    File::Path::mkpath("$TWiki::cfg{PubDir}/$testweb");
+
     $saveWF = $TWiki::cfg{WarningFileName};
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     $saveLF = $TWiki::cfg{LogFileName};
@@ -50,6 +49,8 @@ sub set_up {
     my $theUrl = "/save/$web/$topic";
 
     $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
+
+    $twiki->{store}->createWeb( $twiki->{user}, $testweb);
 
     $this->assert($TWiki::cfg{StoreImpl});
 
@@ -246,18 +247,17 @@ sub test_releaselocksonsave {
     my $topic = "MultiEditTopic";
     my $meta = new TWiki::Meta($twiki, $web, $topic);
 
-    # create rev 1
+    # create rev 1 as TestUser1
     my $query = new CGI ({
                           '.path_info' => "/$web/$topic",
                           originalrev => [ 0 ],
                           'action' => [ 'save' ],
                           text => [ "Baseline\nText\n" ],
                          });
-    my $user = "TestUser1";
     my $thePathInfo = "/$web/$topic";
     my $theUrl = "/save/$web/$topic";
 
-    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
+    $twiki = new TWiki( $thePathInfo, "TestUser1", $topic, $theUrl, $query );
     try {
         TWiki::UI::Save::save( $twiki );
     } catch TWiki::OopsException with {
@@ -268,7 +268,7 @@ sub test_releaselocksonsave {
         print $e->stringify();
     };
 
-    # create rev 2
+    # create rev 2 as TestUser1
     $query = new CGI ({
                        '.path_info' => "/$web/$topic",
                        originalrev => [ 1 ],
@@ -276,7 +276,7 @@ sub test_releaselocksonsave {
                        text => [ "Changed\nLines\n" ],
                        forcenewrevision => [ 1 ],
                       });
-    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
+    $twiki = new TWiki( $thePathInfo, "TestUser1", $topic, $theUrl, $query );
     try {
         TWiki::UI::Save::save( $twiki );
     } catch TWiki::OopsException with {
@@ -287,7 +287,7 @@ sub test_releaselocksonsave {
         print $e->stringify();
     };
 
-    # now testuser2 has a go, based on rev 1
+    # now TestUser2 has a go, based on rev 1
     $query = new CGI ({
                        '.path_info' => "/$web/$topic",
                        originalrev => [ 1 ],
@@ -295,22 +295,26 @@ sub test_releaselocksonsave {
                        text => [ "Sausage\nChips\n" ],
                        forcenewrevision => [ 1 ],
                       });
-    $user = "TestUser2";
-    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl, $query );
+
+    $twiki = new TWiki( $thePathInfo, "TestUser2", $topic, $theUrl, $query );
     try {
         TWiki::UI::Save::save( $twiki );
     } catch TWiki::OopsException with {
+        my $e = shift;
+        $this->assert_equals('attention', $e->{template});
+        $this->assert_equals('merge_notice', $e->{def});
     } catch Error::Simple with {
+        $this->assert(0,shift->{-text});
     };
 
     open(F,"<$TWiki::cfg{DataDir}/$web/$topic.txt");
     undef $/;
     my $text = <F>;
     close(F);
-    $this->assert_matches(qr/%META:TOPICINFO{author="TestUser2"/, $text);
     $this->assert_matches(qr/version="1.3"/, $text);
     $this->assert_matches(qr/<del>Changed<\/del><ins>Sausage<\/ins>/, $text);
     $this->assert_matches(qr/<del>Lines<\/del><ins>Chips<\/ins>/, $text);
+    $this->assert_matches(qr/%META:TOPICINFO{author="TestUser2"/, $text);
 
 }
 

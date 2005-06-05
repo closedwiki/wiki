@@ -940,17 +940,16 @@ sub unlockTopic {
 Test if web exists
    * =$web= - Web name, required, e.g. ='Sandbox'=
 
-Note: see isKnownWeb to test for whether the web is actually a usable
-web or not (it has to have a home topic if it is)
+A web _has_ to have a home topic to be a web.
 
 =cut
 
 sub webExists {
-    my( $this, $theWeb ) = @_;
-    ASSERT(defined($theWeb)) if DEBUG;
+    my( $this, $web ) = @_;
+    ASSERT(defined($web)) if DEBUG;
 
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    return -e "$TWiki::cfg{DataDir}/$theWeb";
+    return -e "$TWiki::cfg{DataDir}/$web/$TWiki::cfg{HomeTopicName}.txt";
 }
 
 =pod
@@ -1200,9 +1199,9 @@ sub getListOfWebs {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $filter ||= '';
 
+    # A web is not a web unless it has a hometopic
     opendir DIR, "$TWiki::cfg{DataDir}" ;
-    my @webList = grep { -e "$TWiki::cfg{DataDir}/$_/WebHome.txt" } readdir( DIR );
-#    my @webList = grep { -e "$TWiki::cfg{DataDir}/$_/$TWiki::cfg{HOMETOPIC}" } readdir( DIR );
+    my @webList = grep { $this->webExists( $_ ) } readdir( DIR );
     closedir( DIR );
 
     if ( $filter =~ /\buser\b/ ) {
@@ -1225,24 +1224,7 @@ sub getListOfWebs {
 
 =pod
 
----++ ObjectMethod isKnownWeb( $webName ) -> $boolean
-
-Check if the given name refers to a web known to the store system
-(including system webs). Differs from webExists because it checks
-that the web actually has a home topic.
-
-=cut
-
-sub isKnownWeb {
-    my( $this, $web ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT( $web ) if DEBUG;
-    return -e "$TWiki::cfg{DataDir}/$web/$TWiki::cfg{HomeTopicName}.txt";
-}
-
-=pod
-
----++ ObjectMethod createWeb( $newWeb, $baseWeb, $opts ) -> $error
+---++ ObjectMethod createWeb( $user, $newWeb, $baseWeb, $opts ) -> $error
 
 Create a new web. Returns an error string if it fails, undef if alles gut.
 
@@ -1251,7 +1233,9 @@ $newWeb is the name of the new web.
 $baseWeb is the name of an existing web (a template web). If the
 base web is a system web, all topics in it
 will be copied into the new web. If it is a normal web, only topics starting
-with 'Web' will be copied.
+with 'Web' will be copied. If no base web is specified, an empty web
+(with no topics) will be created. If it is specified but does not exist,
+an error will be returned.
 
 $opts is a ref to a hash that contains settings to be modified in
 the web preferences topic in the new web.
@@ -1259,8 +1243,12 @@ the web preferences topic in the new web.
 =cut
 
 sub createWeb {
-    my ( $this, $newWeb, $baseWeb, $opts ) = @_;
+    my ( $this, $user, $newWeb, $baseWeb, $opts ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT($user->isa('TWiki::User')) if DEBUG;
+
+    return 'Base web does not exist' if( defined( $baseWeb ) &&
+                                         !$this->webExists( $baseWeb ));
 
     my $dir = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$newWeb");
     umask( 0 );
@@ -1274,6 +1262,15 @@ sub createWeb {
         }
     }
 
+    unless ($baseWeb) {
+        # For a web to be a web, it has to have at least one topic
+        my $meta = new TWiki::Meta( $this->{session}, $newWeb,
+                                    $TWiki::cfg{HomeTopicName} );
+        $this->saveTopic( $user, $newWeb, $TWiki::cfg{HomeTopicName},
+                          "Home", $meta );
+        return;
+    }
+
     # copy topics from base web
     my @topicList = $this->getTopicNames( $baseWeb );
     unless ((defined $baseWeb) && ( $baseWeb =~ /^_/ )) {
@@ -1283,7 +1280,7 @@ sub createWeb {
     my $err;
     foreach my $topic ( @topicList ) {
         $topic =~ s/$TWiki::cfg{NameFilter}//go;
-        $err = $this->_copyTopicBetweenWebs( $baseWeb,
+        $err = $this->_copyTopicBetweenWebs( $user, $baseWeb,
                                              $topic, $newWeb );
         return( $err ) if( $err );
     }
@@ -1294,14 +1291,15 @@ sub createWeb {
 
     # patch WebPreferences in new web
     my $wpt = $TWiki::cfg{WebPrefsTopicName};
+
+    return undef unless $this->topicExists( $newWeb, $wpt );
     my( $meta, $text ) =
       $this->readTopic( undef, $newWeb, $wpt, undef );
 
     foreach my $key ( %$opts ) {
         $text =~ s/($TWiki::regex{setRegex}$key\s*=).*?$/$1 $opts->{$key}/gm;
     }
-    return $this->saveTopic( $this->{session}->{user}, $newWeb, $wpt,
-                             $text, $meta );
+    return $this->saveTopic( $user, $newWeb, $wpt, $text, $meta );
 }
 
 # STATIC Write a meta-data key=value pair
@@ -1440,7 +1438,7 @@ sub cleanUpRevID {
 # Copy a topic and all it's attendant data from one web to another.
 # Returns an error string if it fails.
 sub _copyTopicBetweenWebs {
-    my ( $this, $theFromWeb, $theTopic, $theToWeb ) = @_;
+    my ( $this, $user, $theFromWeb, $theTopic, $theToWeb ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     # copy topic file

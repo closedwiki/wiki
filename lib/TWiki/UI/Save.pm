@@ -195,7 +195,7 @@ sub _save {
         # If the last save was by me, don't merge
         if ( $rev ne $originalrev && !$author->equals( $user )) {
             $newText = TWiki::Merge::insDelMerge( $currText, $newText,
-                                                  '\r?\n', undef );
+                                                  '\r?\n', $session, undef );
             if( $form ) {
                 unless( $formDef ) {
                     $formDef = new TWiki::FormDefinition( $session, $webName,

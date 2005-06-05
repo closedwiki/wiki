@@ -84,7 +84,7 @@ sub stringify {
         if( ref($this->{params}) eq 'ARRAY' ) {
             $s .= ' params=>['.join( ",", @{$this->{params}} ).']';
         } else {
-            $s .= ' params=>'.$this->{-params};
+            $s .= ' params=>'.$this->{params};
         }
     }
     return $s.')';

@@ -148,20 +148,16 @@ sub statistics {
     }
     my $firstTime = 1;
     foreach my $web ( @weblist ) {
-        if( $session->{store}->webExists( $web ) ) {
-            $destWeb = _processWeb( $session,
-                                    "/$web",
-                                    $logMonthYear,
-                                    $viewRef,
-                                    $contribRef,
-                                    $statViewsRef,
-                                    $statSavesRef,
-                                    $statUploadsRef,
-                                    $firstTime );
-            $firstTime = 0;
-        } else {
-            _printMsg( "!Error: $web does not exist", $session );
-        }
+        $destWeb = _processWeb( $session,
+                                "/$web",
+                                $logMonthYear,
+                                $viewRef,
+                                $contribRef,
+                                $statViewsRef,
+                                $statSavesRef,
+                                $statUploadsRef,
+                                $firstTime );
+        $firstTime = 0;
     }
 
     close $TMPFILE;		# Shouldn't be necessary with 'my'
@@ -379,11 +375,6 @@ sub _processWeb {
     }
 
     _printMsg( "* Reporting on TWiki.$webName web", $session );
-
-    if( ! $session->{store}->webExists( $webName ) ) {
-        _printMsg( "! Error: Web $webName does not exist", $session );
-        return $TWiki::cfg{UsersWebName};
-    }
 
     # Handle null values, print summary message to browser/stdout
     my $statViews = $statViewsRef->{$webName};

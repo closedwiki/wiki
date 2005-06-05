@@ -16,7 +16,9 @@ my ( $session ) = @_;
 			NOSEARCHALL => '',
 		};
 		$opts->{SITEMAPLIST} = "on" if( $opts->{SITEMAPWHAT} );
-	    my $err = $session->{store}->createWeb( 'TWikiConfiguration', '_default', $opts);
+	    my $err = $session->{store}->createWeb( $session->{user},
+                                                'TWikiConfiguration',
+                                                '_default', $opts);
 	}
 	if (! $session->{store}->webExists('TWikiDocumentation') ) {
 		my $opts =
@@ -27,7 +29,9 @@ my ( $session ) = @_;
 			NOSEARCHALL => '',
 		};
 		$opts->{SITEMAPLIST} = "on" if( $opts->{SITEMAPWHAT} );
-	    my $err = $session->{store}->createWeb( 'TWikiDocumentation', '_default', $opts );
+	    my $err = $session->{store}->createWeb( $session->{user},
+                                                'TWikiDocumentation',
+                                                '_default', $opts );
 	}
 	if (! $session->{store}->webExists('TWikiUsers') ) {
 		my $opts =
@@ -38,7 +42,9 @@ my ( $session ) = @_;
 			NOSEARCHALL => '',
 		};
 		$opts->{SITEMAPLIST} = "on" if( $opts->{SITEMAPWHAT} );
-	    my $err = $session->{store}->createWeb( 'TWikiUsers', '_default', $opts );
+	    my $err = $session->{store}->createWeb( $session->{user},
+                                                'TWikiUsers',
+                                                '_default', $opts );
 	}
 
 	my %moveTopicsHash;
