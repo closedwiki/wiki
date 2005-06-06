@@ -312,7 +312,7 @@ sub addTOPICINFO {
 
 =pod
 
----++ ObjectMethod getRevisionInfo ( ) -> ( $date, $author, $rev, $comment )
+---++ ObjectMethod getRevisionInfo($fromrev) -> ( $date, $author, $rev, $comment )
 
 Try and get revision info from the meta information, or, if it is not
 present, kick down to the Store module for the same information.
@@ -324,13 +324,13 @@ $rev is an integer revision number.
 =cut
 
 sub getRevisionInfo {
-    my $this = shift;
+    my( $this, $fromrev ) = @_;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $topicinfo = $this->get( 'TOPICINFO' );
 
     my( $date, $author, $rev, $comment );
-    if( $topicinfo ) {
+    if( $topicinfo && !defined($fromrev)) {
         $date = $topicinfo->{date} ;
         $author = $this->{_session}->{users}->findUser($topicinfo->{author});
         $rev = $topicinfo->{version};
@@ -339,12 +339,9 @@ sub getRevisionInfo {
         $comment = '';
     } else {
         # Get data from Store
-        shift;
-	shift;
-        my $version = shift;
         my $store = $this->{_session}->{store};
         ( $date, $author, $rev, $comment ) =
-          $store->getRevisionInfo( $this->{_web}, $this->{_topic}, $version );
+          $store->getRevisionInfo( $this->{_web}, $this->{_topic}, $fromrev );
     }
 
     return( $date, $author, $rev, $comment );

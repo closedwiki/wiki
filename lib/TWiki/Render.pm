@@ -390,7 +390,9 @@ sub _linkToolTipInfo {
 
     # FIXME: This is slow, it can be improved by caching topic rev info and summary
     my $store = $this->{session}->{store};
-    my( $date, $user, $rev ) = $store->getRevisionInfo( $theWeb, $theTopic );
+    # SMELL: we ought not to have to fake this. Topic object model, please!!
+    my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
+    my( $date, $user, $rev ) = $meta->getRevisionInfo();
     my $text = $this->{LINKTOOLTIPINFO};
     $text =~ s/\$web/<nop>$theWeb/g;
     $text =~ s/\$topic/<nop>$theTopic/g;
@@ -1470,20 +1472,16 @@ Obtain and render revision info for a topic.
 =cut
 
 sub renderRevisionInfo {
-    my( $this, $web, $topic, $rev, $format ) = @_;
+    my( $this, $web, $topic, $rrev, $format ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my $store = $this->{session}->{store};
 
-    if( $rev ) {
-        $rev = $store->cleanUpRevID( $rev );
+    if( $rrev ) {
+        $rrev = $store->cleanUpRevID( $rrev );
     }
 
-    my( $meta, $text ) =
-      $store->readTopic( undef, $web, $topic, $rev );
-
-    my( $date, $user, $comment );
-    ( $date, $user, $rev, $comment ) =
-      $meta->getRevisionInfo( $web, $topic, $rev );
+    my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
+    my( $date, $user, $rev, $comment ) = $meta->getRevisionInfo( $rrev );
 
     my $wun = '';
     my $wn = '';
@@ -1494,7 +1492,7 @@ sub renderRevisionInfo {
         $un = $user->login();
     }
 
-    my $value = $format || "\$rev - \$time - \$wikiusername";
+    my $value = $format || '$rev - $time - $wikiusername';
     $value =~ s/\$web/$web/gi;
     $value =~ s/\$topic/$topic/gi;
     $value =~ s/\$rev/r$rev/gi;

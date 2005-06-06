@@ -93,7 +93,7 @@ sub view {
         ( $currMeta, $currText ) = $store->readTopic
           ( $session->{user}, $webName, $topicName, undef );
         ( $revdate, $revuser, $showRev ) =
-          $currMeta->getRevisionInfo( $webName, $topicName );
+          $currMeta->getRevisionInfo();
 
         $revdate = TWiki::Time::formatTime( $revdate );
 

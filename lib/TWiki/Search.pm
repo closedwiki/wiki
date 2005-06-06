@@ -1009,8 +1009,7 @@ sub _extractTopicInfo {
     $info->{text} = $text;
     $info->{meta} = $meta;
 
-    my ( $revdate, $revuser, $revnum ) =
-      $meta->getRevisionInfo( $web, $topic );
+    my ( $revdate, $revuser, $revnum ) = $meta->getRevisionInfo();
     $info->{editby}     = $revuser ? $revuser->webDotWikiName() : '';
     $info->{modified}   = $revdate;
     $info->{revNum}     = $revnum;
@@ -1025,7 +1024,7 @@ sub _extractTopicInfo {
     return $info unless $sortfield;
 
     if ( $sortfield =~ /^creat/ ) {
-        ( $info->{$sortfield} ) = $store->getRevisionInfo( $web, $topic, 1 );
+        ( $info->{$sortfield} ) = $meta->getRevisionInfo( 1 );
     } elsif ( !defined( $info->{$sortfield} )) {
         $info->{$sortfield} = TWiki::Render::renderFormFieldArg( $meta, $sortfield );
     }
@@ -1064,8 +1063,8 @@ sub _getRev1Info {
     my $store = $this->{session}->{store};
 
     unless( $info->{webTopic} eq $key ) {
-        my ( $d, $u ) =
-          $store->getRevisionInfo( $theWeb, $theTopic, 1 );
+        my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
+        my ( $d, $u ) = $meta->getRevisionInfo( 1 );
         $info->{date} = $d;
         $info->{user} = $u;
     }

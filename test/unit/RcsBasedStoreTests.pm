@@ -105,11 +105,10 @@ sub test_checkin {
     $this->assert_str_equals( $text, $text1 );
 
     # Check revision number from meta data
-    my( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo( $web, $topic );
+    my( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo();
     $this->assert_num_equals( 1, $revMeta, "Rev from meta data should be 1 when first created" );
     $meta = new TWiki::Meta($twiki, $web, $topic);
-    my( $dateMeta0, $authorMeta0, $revMeta0 ) =
-      $meta->getRevisionInfo( $web, $topic );
+    my( $dateMeta0, $authorMeta0, $revMeta0 ) = $meta->getRevisionInfo();
     $this->assert_num_equals( $revMeta0, $revMeta );
     # Check-in with different text, under different user (to force change)
     $user = $twiki->{users}->findUser("TestUser2");
@@ -120,8 +119,7 @@ sub test_checkin {
     $rev = $twiki->{store}->getRevisionNumber( $web, $topic );
     $this->assert_num_equals(2, $rev );
     ( $meta, $text1 ) = $twiki->{store}->readTopic( $user, $web, $topic, undef, 0 );
-    ( $dateMeta, $authorMeta, $revMeta ) =
-      $meta->getRevisionInfo( $web, $topic );
+    ( $dateMeta, $authorMeta, $revMeta ) = $meta->getRevisionInfo();
     $this->assert_num_equals(2, $revMeta, "Rev from meta should be 2 after one change" );
 }
 

@@ -443,7 +443,7 @@ sub getRevisionDiff {
 =pod
 
 ---++ ObjectMethod getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) -> ( $date, $user, $rev, $comment )
-Get revision info of a topic
+Get revision info of a topic.
    * =$theWebName= Web name, optional, e.g. ='Main'=
    * =$theTopic= Topic name, required, e.g. ='TokyoOffice'=
    * =$theRev= revision number
@@ -454,6 +454,13 @@ Return list with: ( last update date, login name of last user, integer revision 
 | $user | user *object* |
 | $rev | the revision number |
 | $comment | WHAT COMMENT? |
+
+NOTE NOTE NOTE if you are working within the TWiki code DO NOT USE THIS
+FUNCTION FOR GETTING REVISION INFO OF TOPICS - use
+TWiki::Meta::getRevisionInfo instead. This is essential to allow clean
+transition to a topic object model later, and avoids the risk of confusion
+coming from meta and Store revision information being out of step.
+(it's OK to use it for attachments)
 
 =cut
 
@@ -681,6 +688,7 @@ sub _noHandlersSave {
         if( abs( $mtime2 - $mtime1 ) <
             $TWiki::cfg{ReplaceIfEditedAgainWithin} ) {
 
+            # SMELL: why can't we get this from $meta?
             my( $date, $revuser ) =
               $this->getRevisionInfo( $web, $topic, $currentRev,
                                undef, $topicHandler );
@@ -754,8 +762,7 @@ sub repRev {
 
     $this->lockTopic( $user, $web, $topic );
 
-    my( $revdate, $revuser, $rev ) =
-      $meta->getRevisionInfo( $web, $topic, '', undef );
+    my( $revdate, $revuser, $rev ) = $meta->getRevisionInfo();
 
     # RCS requires a newline for the last line,
     $text =~ s/([^\n\r])$/$1\n/os;

@@ -676,6 +676,10 @@ Return: =( $date, $user, $rev, $comment )= List with: ( last update date, login 
 | $rev |  |
 | $comment | WHAT COMMENT? |
 
+NOTE if you are trying to get revision info for a topic, use
+$meta->getRevisionInfo instead if you can - it is significantly
+more efficient.
+
 *Since:* TWiki::Plugins::VERSION 1.000 (29 Jul 2001)
 
 =cut
