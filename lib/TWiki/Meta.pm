@@ -53,7 +53,7 @@ use TWiki::Merge;
 
 use vars qw( $formatVersion );
 
-$formatVersion = "1.0";
+$formatVersion = '1.1';
 
 =pod
 

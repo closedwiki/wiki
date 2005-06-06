@@ -481,21 +481,44 @@ sub getRevisionInfo {
     return ( $date, $user, $rev, $comment );
 }
 
+# Encode meta-data fields. The encoding is chosen to avoid problems
+# with parsing the attribute values, while minimising the number of
+# characters encoded so searches can still work (fairly) sensibly
+sub _dataEncode {
+    my $datum = shift;
+
+    $datum =~ s/([%"\r\n{}])/'%'.sprintf('%02x',ord($1))/ge;
+    return $datum;
+}
+
+sub _dataDecode {
+    my $datum = shift;
+
+    $datum =~ s/%([\da-f]{2})/chr(hex($1))/gei;
+    return $datum;
+}
+
 # STATIC Build a hash by parsing name=value comma separated pairs
 # SMELL: duplication of TWiki::Attrs, using a different
 # system of escapes :-(
 sub _readKeyValues {
-    my( $args ) = @_;
+    my( $args, $format ) = @_;
     my $res = {};
 
     # Format of data is name='value' name1='value1' [...]
     while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
         my $key = $1;
         my $value = $2;
-        # reverse the encoding in _writeKeyValue
-        $value =~ s/%_N_%/\n/g;
-        $value =~ s/%_Q_%/\"/g;
-        $value =~ s/%_P_%/%/g;
+        if( $format && $format < 1.1 ) {
+            # Old decoding retained for backward compatibility
+            # (this encoding is badly broken)
+            $value =~ s/%_N_%/\n/g;
+            $value =~ s/%_Q_%/\"/g;
+            $value =~ s/%_P_%/%/g;
+        } else {
+            $value = _dataDecode( $value );
+        }
+
         $res->{$key} = $value;
     }
 
@@ -982,8 +1005,8 @@ sub topicExists {
 
 # PRIVATE parse and add a meta-datum. Returns '' so it can be used in s///e
 sub _addMetaDatum {
-    #my ( $meta, $type, $args ) = @_;
-    $_[0]->putKeyed( $_[1], _readKeyValues( $_[2] ));
+    my( $meta, $type, $args, $format ) = @_;
+    $meta->putKeyed( $type, _readKeyValues( $args, $format ));
     return ''; # so it can be used in s///e
 }
 
@@ -999,9 +1022,16 @@ sub _addMetaDatum {
 sub extractMetaData {
     my( $this, $web, $topic, $rtext ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    my $format;
 
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
-    $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2)/gem;
+    $$rtext =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
+      (&_addMetaDatum($meta,$1,$2))gem;
+
+    my $ti = $meta->get( 'TOPICINFO' );
+    $format = $ti->{format} if $ti;
+
+    $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2,$format)/gem;
 
     # If there is no meta data then convert from old format
     if( ! $meta->count( 'TOPICINFO' ) ) {
@@ -1016,8 +1046,7 @@ sub extractMetaData {
                                                          $meta, $$rtext );
         }
     } else {
-        my $topicinfo = $meta->get( 'TOPICINFO' ) || {};
-        if( $topicinfo->{format} && $topicinfo->{format} eq "1.0beta" ) {
+        if( $format eq "1.0beta" ) {
             # This format used live at DrKW for a few months
             if( $$rtext =~ /<!--TWikiCat-->/ ) {
                 require TWiki::Compatibility;
@@ -1379,9 +1408,7 @@ sub _writeKeyValue {
     my( $key, $value ) = @_;
 
     if( defined( $value )) {
-        $value =~ s/\%/%_P_%/g;
-        $value =~ s/\"/%_Q_%/g;
-        $value =~ s/\r*\n\r*/%_N_%/g;
+        $value = _dataEncode( $value );
     } else {
         $value = '';
     }

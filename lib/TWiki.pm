@@ -1759,7 +1759,7 @@ Reverses the encoding done in urlEncode.
 sub urlDecode {
     my $text = shift;
 
-    $text =~ s/%(\d\d)/chr($1)/ge;
+    $text =~ s/%([\da-f]{2})/chr(hex($1))/gei;
 
     return $text;
 }
