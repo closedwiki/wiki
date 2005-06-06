@@ -1,4 +1,4 @@
-# Copyright (C) 2005 Sven Dowideit
+# Copyright (C) 2005 Sven Dowideit & Crawford Currie
 require 5.006;
 package StoreTests;
 
@@ -51,7 +51,9 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
-	$this->removeWeb($web);
+	if( $twiki->{store}->webExists($web)) {
+        $twiki->{store}->removeWeb($twiki->{user}, $web);
+    }
 }
 
 #===============================================================================
@@ -204,21 +206,31 @@ sub test_moveTopic {
 	
 }
 
-#===============================================================================
-# utilities
-
-# clean up after a test
-sub removeWeb {
+sub test_leases {
     my $this = shift;
 
-	#TODO: also want a way to turn this off when looking for bugs
-	
-	#TODO: Store needs a way to remove Webs!!
-	use File::Path;
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$web");
-    File::Path::rmtree("$TWiki::cfg{PubDir}/$web");
+	$this->assert( ! $twiki->{store}->createWeb($twiki->{user}, $web,
+                                                '_default'));
+    my $testtopic = $TWiki::cfg{HomeTopicName};
 
-	#$this->assert( ! $twiki->{store}->webExists($web.'Empty') );
+    my $lease = $twiki->{store}->getLease($web, $testtopic);
+    $this->assert_null($lease);
+
+    my $locker = $twiki->{user};
+    my $set = time();
+    $twiki->{store}->setLease($web, $testtopic, $locker, 10);
+
+    # check the lease
+    $lease = $twiki->{store}->getLease($web, $testtopic);
+    $this->assert_not_null($lease);
+    $this->assert_deep_equals($locker, $lease->{user});
+    $this->assert($set, $lease->{taken});
+    $this->assert($lease->{taken}+10, $lease->{expires});
+
+    # clear the lease
+    $twiki->{store}->clearLease( $web, $testtopic );
+    $lease = $twiki->{store}->getLease($web, $testtopic);
+    $this->assert_null($lease);
 }
 
 1;

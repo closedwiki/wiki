@@ -13,10 +13,9 @@ use strict;
 use TWiki;
 use TWiki::UI::Manage;
 use CGI;
-use File::Path;
 
-my $oldweb = "UnitTestRenameOldWeb";
-my $newweb = "UnitTestRenameNewWeb";
+my $oldweb = "TemporaryRenameOldWeb";
+my $newweb = "TemporaryRenameNewWeb";
 my $oldtopic = "OldTopic";
 my $newtopic = "NewTopic";
 my $thePathInfo = "/$oldweb/$oldtopic";
@@ -92,8 +91,8 @@ THIS
 }
 
 sub tear_down {
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$oldweb");
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$newweb");
+    $twiki->{store}->removeWeb($twiki->{user},$oldweb);
+    $twiki->{store}->removeWeb($twiki->{user},$newweb);
 }
 
 sub check {

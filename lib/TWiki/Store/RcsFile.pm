@@ -395,7 +395,6 @@ sub getLease {
     if ( -e $filename ) {
         my $t = $this->{session}->{store}->readFile( $filename );
         my $lease = { split( /\n/, $t ) };
-print STDERR "LEASE ",$lease->{user},"\n";
         return $lease;
     }
     return undef;

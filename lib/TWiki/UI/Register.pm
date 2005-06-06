@@ -49,7 +49,6 @@ use Error qw( :try );
 use TWiki::UI;
 use TWiki::OopsException;
 use Assert;
-use File::Path qw( mkpath );
 
 my $twikiRegistrationAgent = 'TWikiRegistrationAgent';
 
@@ -65,7 +64,7 @@ invoked via the =TWiki::UI::run= method.
 sub register_cgi {
     my $session = shift;
 
-    my $tempUserDir = $TWiki::cfg{PubDir}."/TWiki/RegistrationApprovals";
+    my $tempUserDir = $TWiki::cfg{RegistrationApprovals};
     # SMELL hacked name, and stores in binary format!
     my $needVerification = 1; # NB. No test harness for needVerification = 0.
     my $needApproval = 0;
@@ -1053,8 +1052,6 @@ sub _sendEmail {
     return $session->{net}->sendEmail($text);
 }
 
-#SMELL - writes directly to filespace, should go via attachments.
-
 # | In | reference to the users data structure |
 # | Out | none |
 # dies if fails to store
@@ -1063,7 +1060,8 @@ sub _putRegDetailsByCode {
 
     my $file = _verificationCodeFilename( $data->{VerificationCode}, $tmpDir );
     unless( -d $tmpDir ) {
-        mkpath( $tmpDir ) || throw Error::Simple( $! );
+        require File::Path;
+        File::Path::mkpath( $tmpDir ) || throw Error::Simple( $! );
     }
     open( F, ">$file" ) or throw Error::Simple( "$file: $!" );
     print F "# Verification code\n";

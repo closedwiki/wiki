@@ -15,7 +15,6 @@ use TWiki::UI::Save;
 use TWiki::Plugins::CommentPlugin;
 use TWiki::Plugins::CommentPlugin::Comment;
 use CGI;
-use File::Path;
 
 my $baseweb = "TestCommentPluginTestWeb";
 my $targetweb = "TestCommentPluginTargetWeb";
@@ -44,8 +43,8 @@ sub set_up {
 }
 
 sub tear_down {
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$baseweb");
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$targetweb");
+    $twiki->{store}->removeWeb($twiki->{user}, $baseweb);
+    $twiki->{store}->removeWeb($twiki->{user}, $targetweb);
 }
 
 sub writeTopic {

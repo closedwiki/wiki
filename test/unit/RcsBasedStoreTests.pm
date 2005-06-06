@@ -1,5 +1,8 @@
 # Smoke tests for TWiki::Store
 
+# SMELL: there is nothing specific to RCS about these tests; they
+# are general version-controlled store tests
+
 require 5.006;
 
 use strict;
@@ -19,7 +22,6 @@ use Error qw( :try );
 use CGI;
 use TWiki::UI::Save;
 use TWiki::OopsException;
-use File::Path;
 
 my $testweb = "StoreTestsTestWeb";
 
@@ -56,18 +58,21 @@ sub set_up {
 
     # Make sure we have a TestUser1 and TestUser1 topic
     unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, "TestUser1")) {
-        saveTopic1($TWiki::cfg{UsersWebName}, "TestUser1",
-                   "silly user page!!!", "" );
+        $this->assert(!$twiki->{store}->saveTopic
+                      ($twiki->{user},
+                       $TWiki::cfg{UsersWebName}, "TestUser1",
+                       "silly user page!!!"));
     }
     unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, "TestUser2")) {
-        saveTopic1($TWiki::cfg{UsersWebName}, "TestUser2",
-                   "silly user page!!!", "");
+        $this->assert(!$twiki->{store}->saveTopic
+                      ($twiki->{user},
+                       $TWiki::cfg{UsersWebName}, "TestUser2",
+                       "silly user page!!!"));
     }
 }
 
 sub tear_down {
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$testweb");
-    File::Path::rmtree("$TWiki::cfg{PubDir}/$testweb");
+    $twiki->{store}->removeWeb($twiki->{user},$testweb);
     $TWiki::cfg{WarningFileName} = $saveWF;
     $TWiki::cfg{LogFileName} = $saveLF;
 }
@@ -82,42 +87,14 @@ sub test_notopic {
     $this->assert_num_equals(0, $rev);
 }
 
-sub saveTopic1 {
-   my ($web, $topic, $text, $user, $meta ) = @_;
-
-   my $saveCmd = "";
-   my $doNotLogChanges = 0;
-   my $doUnlock = 1;
-
-   unless (ref($user) eq "TWiki::User") {
-       if( $user ) {
-           $user = $twiki->{users}->findUser($user);
-           $twiki->{user} = $user;
-       } else {
-           $user = $twiki->{user};
-       }
-   }
-
-   $meta = new TWiki::Meta($twiki, $web, $topic) unless $meta;
-   my $error =
-     $twiki->{store}->saveTopic( $user, $web, $topic, $text,
-                                 $meta,
-                                 { savecmd => $saveCmd,
-                                   dontlog => $doNotLogChanges,
-                                   unlock => $doUnlock } );
-
-   die $error if $error;
-}
-
-sub test_checkin
-{
+sub test_checkin {
     my $this = shift;
     my $topic = "UnitTest1";
     my $text = "hi";
     my $web = $testweb;
     my $user = $twiki->{users}->findUser("TestUser1");
 
-    saveTopic1( $web, $topic, $text, $user );
+    $this->assert(!$twiki->{store}->saveTopic( $user, $web, $topic, $text ));
 
     my $rev = $twiki->{store}->getRevisionNumber( $web, $topic );
     $this->assert_num_equals(1, $rev);
@@ -138,7 +115,7 @@ sub test_checkin
     $user = $twiki->{users}->findUser("TestUser2");
     $text = "bye";
 
-    saveTopic1($web, $topic, $text, $user, $meta );
+    $this->assert(!$twiki->{store}->saveTopic($user, $web, $topic, $text, $meta ));
 
     $rev = $twiki->{store}->getRevisionNumber( $web, $topic );
     $this->assert_num_equals(2, $rev );
@@ -157,7 +134,7 @@ sub test_checkin_attachment {
     my $web = $testweb;
     my $user = $twiki->{users}->findUser("TestUser1");
 
-    saveTopic1($web, $topic, $text, $user );
+    $this->assert(!$twiki->{store}->saveTopic($user, $web, $topic, $text ));
 
     # directly put file in pub directory (where attachments go)
     my $dir = $TWiki::cfg{PubDir};
@@ -204,7 +181,7 @@ sub test_rename() {
     my $newTopic = "UnitTest2Moved";
     my $user = $twiki->{users}->findUser("TestUser1");
 
-    saveTopic1($oldWeb, $oldTopic, "Elucidate the goose", $user );
+    $this->assert(!$twiki->{store}->saveTopic($user, $oldWeb, $oldTopic, "Elucidate the goose" ));
     my $attachment = "afile.txt";
     open( FILE, ">/tmp/$attachment" );
     print FILE "Test her attachment to me\n";

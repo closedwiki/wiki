@@ -10,25 +10,26 @@ BEGIN {
 };
 
 use TWiki::Contrib::Mailer;
-use File::Path;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
   return $self;
 }
 
-my $testweb = "MailerContribTestWeb";
+my $testweb = "TemporaryMailerContribTestWeb";
+my $peopleWeb = "TemporaryMailerContribPeopleWeb";
+my $savePeople;
 
 my @specs =
   (
    # traditional subscriptions
    {
-    entry => "Main.TWikiGuest - example\@test.email",
+    entry => "$peopleWeb.TWikiGuest - example\@test.email",
     email => "example\@test.email",
     topicsout => ""
    },
    {
-    entry => "Main.NonPerson - nonperson\@test.email",
+    entry => "$peopleWeb.NonPerson - nonperson\@test.email",
     email => "nonperson\@test.email",
     topicsout => "*"
    },
@@ -122,16 +123,22 @@ my %finalText =
    TestTopic21 => "smoke me a kipper, I'll be back for breakfast",
   );
 
+my $twiki;
+
 sub set_up {
   my $this = shift;
   $this->SUPER::set_up();
 
-  my $twiki =
+  $twiki =
       new TWiki( "", $TWiki::cfg{DefaultUserLogin}, "", "" );
+  $savePeople = $TWiki::cfg{UsersWebName};
+  $TWiki::cfg{UsersWebName} = $peopleWeb;
+
   my $user = $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
   my $text;
 
   $twiki->{store}->createWeb($user, $testweb);
+  $twiki->{store}->createWeb($user, $peopleWeb);
 
   my $s = "";
   foreach my $spec (@specs) {
@@ -202,11 +209,11 @@ sub set_up {
   # stamp the baseline
   $twiki->{store}->saveMetaData($testweb, "mailnotify", time());
 
-  $meta = new TWiki::Meta($twiki,"Main","WikiName1");
-  $twiki->{store}->saveTopic( $user, "Main", "WikiName1",
+  $meta = new TWiki::Meta($twiki,$peopleWeb,"WikiName1");
+  $twiki->{store}->saveTopic( $user, $peopleWeb, "WikiName1",
                               "   * email: WikiName1\@test.email\n",
                               $meta);
-  $twiki->{store}->saveTopic( $user, "Main", "WikiName2",
+  $twiki->{store}->saveTopic( $user, $peopleWeb, "WikiName2",
                               "   * email: WikiName2\@test.email\n",
                               $meta);
 
@@ -279,11 +286,9 @@ sub set_up {
 }
 
 sub tear_down {
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$testweb");
-    unlink("TWiki::cfg{DataDir}/Main/WikiName1.txt");
-    unlink("TWiki::cfg{DataDir}/Main/WikiName2.txt");
-    unlink("TWiki::cfg{DataDir}/Main/WikiName1.txt,v");
-    unlink("TWiki::cfg{DataDir}/Main/WikiName2.txt,v");
+    $TWiki::cfg{UsersWebName} = $savePeople;
+    $twiki->{store}->removeWeb($twiki->{user}, $testweb);
+    $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
 }
 
 sub testSimple {

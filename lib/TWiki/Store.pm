@@ -666,6 +666,8 @@ sub _noHandlersSave {
 
     ASSERT($user->isa('TWiki::User')) if DEBUG;
 
+    $meta ||= new TWiki::Meta( $this->{session}, $web, $topic );
+
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
     my $currentRev = $topicHandler->numRevisions() || 0;
 
@@ -684,7 +686,7 @@ sub _noHandlersSave {
                                undef, $topicHandler );
             # same user?
             if(  $revuser->equals( $user )) {
-                return repRev( @_ );
+                return $this->repRev( $user, $web, $topic, $text, $meta, $options );
             }
         }
     }
@@ -747,6 +749,8 @@ to a normal save or not.
 
 sub repRev {
     my( $this, $user, $web, $topic, $text, $meta, $options ) = @_;
+
+    ASSERT($meta && $meta->isa('TWiki::Meta')) if DEBUG;
 
     $this->lockTopic( $user, $web, $topic );
 
@@ -946,9 +950,8 @@ A web _has_ to have a home topic to be a web.
 
 sub webExists {
     my( $this, $web ) = @_;
-    ASSERT(defined($web)) if DEBUG;
-
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    ASSERT( $web ) if DEBUG;
     return -e "$TWiki::cfg{DataDir}/$web/$TWiki::cfg{HomeTopicName}.txt";
 }
 
@@ -1280,8 +1283,7 @@ sub createWeb {
     my $err;
     foreach my $topic ( @topicList ) {
         $topic =~ s/$TWiki::cfg{NameFilter}//go;
-        $err = $this->_copyTopicBetweenWebs( $user, $baseWeb,
-                                             $topic, $newWeb );
+        $err = $this->copyTopic( $user, $baseWeb, $topic, $newWeb, $topic );
         return( $err ) if( $err );
     }
 
@@ -1300,6 +1302,64 @@ sub createWeb {
         $text =~ s/($TWiki::regex{setRegex}$key\s*=).*?$/$1 $opts->{$key}/gm;
     }
     return $this->saveTopic( $user, $newWeb, $wpt, $text, $meta );
+}
+
+=pod
+
+---++ ObjectMethod createWeb( $user, $web ) -> $error
+   * =$user= - user doing the removing (for the history)
+   * =$web= - web being removed
+
+Destroy a web, utterly. Removed the data and attachments in the web.
+
+Use with great care! No backup is taken!
+
+The web must be a known web to be removed this way.
+
+=cut
+
+sub removeWeb {
+    my( $this, $user, $web ) = @_;
+    ASSERT( $web ) if DEBUG;
+
+    return 'No such web '.$web unless( $this->webExists( $web ));
+
+    return _rmtree( $TWiki::cfg{DataDir}.'/'.$web ) .
+      _rmtree( $TWiki::cfg{PubDir}.'/'.$web );
+}
+
+# remove a directory and all subdirectories. Return empty string or error.
+sub _rmtree {
+    my $root = shift;
+
+    return '' unless -d $root;
+
+    my $e = '';
+    if( opendir( D, $root ) ) {
+        foreach my $entry ( grep { !/^\.+$/ } readdir( D ) ) {
+            $entry = $root.'/'.$entry;
+            if( -d $entry ) {
+                $e = _rmtree( $entry );
+                last if $e;
+            } else {
+                unless( unlink( $entry ) ) {
+                    $e = 'Failed to delete '.$entry;
+                    last;
+                }
+            }
+        }
+        closedir(D);
+    } else {
+        $e = 'Failed to open '.$root.' for read';
+    }
+
+    unless( $e ) {
+        unless( rmdir( $root )) {
+            $e = $!;
+        }
+    }
+
+    return $e;
 }
 
 # STATIC Write a meta-data key=value pair
@@ -1435,15 +1495,25 @@ sub cleanUpRevID {
     return $rev;
 }
 
-# Copy a topic and all it's attendant data from one web to another.
-# Returns an error string if it fails.
-sub _copyTopicBetweenWebs {
-    my ( $this, $user, $theFromWeb, $theTopic, $theToWeb ) = @_;
+=pod
+
+---++ ObjectMethod copyTopic($user, $fromweb, $fromtopic, $toweb, $totopic) -> $error
+Copy a topic and all it's attendant data from one web to another.
+Returns an error string if it fails.
+
+SMELL: Does not copy attachments!
+SMELL: Does not fix up meta-data!
+
+=cut
+
+sub copyTopic {
+    my ( $this, $user, $fromWeb, $fromTopic, $toWeb, $toTopic ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
     # copy topic file
-    my $from = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$theFromWeb/$theTopic.txt");
-    my $to = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$theToWeb/$theTopic.txt");
+    my $from = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$fromWeb/$fromTopic.txt");
+    my $to = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$toWeb/$toTopic.txt");
+
     unless( copy( $from, $to ) ) {
         return( "Copy file ( $from, $to ) failed, error: $!" );
     }
@@ -1660,8 +1730,9 @@ sub getLease {
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
     my $lease = $topicHandler->getLease();
     if( $lease ) {
-        $lease->{user} =
-          $this->{session}->{users}->findUser( $lease->{user} );
+        my $user = $this->{session}->{users}->findUser( $lease->{user} );
+        ASSERT( $user->isa('TWiki::User'));
+        $lease->{user} = $user;
     }
     return $lease;
 }
@@ -1684,7 +1755,7 @@ sub setLease {
     my $lease;
     if( $user ) {
         my $t = time();
-        $lease = { user => $user->webDotWikiName(),
+        $lease = { user => $user->login(),
                    expires => $t + $length,
                    taken => $t };
     }
@@ -1694,25 +1765,19 @@ sub setLease {
 
 =pod
 
----++ ObjectMethod clearLease( $web, $topic, $user )
+---++ ObjectMethod clearLease( $web, $topic )
 
-Cancel the current lease, if and only if it belongs to the user.
+Cancel the current lease.
 
 See =getLease= for more details about Leases.
 
 =cut
 
 sub clearLease {
-    my( $this, $web, $topic, $user ) = @_;
+    my( $this, $web, $topic ) = @_;
 
-    my $lease = $this->getLease( $web, $topic );
-    if( $lease ) {
-        my $who = $lease->{user}->webDotWikiName();
-        if( $who eq $user->webDotWikiName() ) {
-            my $topicHandler = $this->_getTopicHandler( $web, $topic );
-            $topicHandler->setLease( undef );
-        }
-    }
+    my $topicHandler = $this->_getTopicHandler( $web, $topic );
+    $topicHandler->setLease( undef );
 }
 
 1;

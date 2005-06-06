@@ -28,7 +28,6 @@ use CGI;
 use Error qw( :try );
 use File::Copy;
 use Carp;
-use File::Path;
 use Cwd;
 
 my $testUserWikiName = 'TestUser';
@@ -37,10 +36,10 @@ my $testUserEmail = 'kakapo@ground.dwelling.parrot.net';
 
 my $guestLoginName = 'guest';
 
-my $temporaryWeb = "Temporary";
-my $peopleWeb = "Main";
-my $mainweb = "$peopleWeb";
-my $twikiUsersFile;
+my $testWeb = "TemporaryRegisterTestsTestWeb";
+my $peopleWeb = "TemporaryRegisterTestsPeopleWeb";
+my $systemWeb = "TemporaryRegisterTestsSystemWeb";
+
 # SMELL: the sent mails are never checked in the tests
 my @mails;
 
@@ -52,53 +51,46 @@ sub new {
     return $this;
 }
 
-my $myDataDir;
-my $approvalsDir;
-my $myPubDir;
-my $saveDD;
-my $savePD;
-my $saveHP;
 my $session;
+my $save;
 
 sub set_up {
     my $this = shift;
-    my $here = Cwd::cwd();
-    $myDataDir = "$here/tmpRegisterTestData";
-    $myPubDir =  "$here/tmpRegisterTestPub";
 
-    # SMELL: should be a better way to do this. Copy deeply?
-    $saveDD = $TWiki::cfg{DataDir};
-    $savePD = $TWiki::cfg{PubDir};
-    $saveHP = $TWiki::cfg{HtpasswdFileName};
+    $session = new TWiki();
 
-    $TWiki::cfg{DataDir} = $myDataDir;
-    $TWiki::cfg{PubDir} = $myPubDir;
-    $TWiki::cfg{HtpasswdFileName} = "$myDataDir/htpasswd";
-
-    $approvalsDir = $TWiki::cfg{PubDir}.'/TWiki/RegistrationApprovals';
     $SIG{__DIE__} = sub { confess $_[0] };
 
-    File::Path::mkpath($myDataDir);
-    File::Path::mkpath("$myDataDir/$temporaryWeb");
-    File::Path::mkpath("$myDataDir/$TWiki::cfg{UsersWebName}");
-    File::Path::mkpath($myPubDir);
-    File::Path::mkpath("$myPubDir/$temporaryWeb");
+    $session->{store}->createWeb($session->{user}, $testWeb);
+    $session->{store}->createWeb($session->{user}, $peopleWeb,
+                        $TWiki::cfg{UsersWebName});
+    $session->{store}->createWeb($session->{user}, $systemWeb,
+                        $TWiki::cfg{SystemWebName});
+
+    foreach my $n qw(SystemWebName UsersWebName HtpasswdFileName RegistrationApprovals) {
+        $save->{$n} = $TWiki::cfg{$n};
+    }
+
+    $TWiki::cfg{HtpasswdFileName} = "/tmp/htpasswd";
+    $TWiki::cfg{UsersWebName} = $peopleWeb;
+    $TWiki::cfg{SystemWebName} = $systemWeb;
+    $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
 
     $Error::Debug = 1;
 
     setupUnregistered();
 
-    $twikiUsersFile = "$TWiki::cfg{DataDir}/Main/TWikiUsers.txt";
     @mails = ();
 }
 
 sub tear_down {
     # clean up after test
-    File::Path::rmtree($myDataDir);
-    File::Path::rmtree($myPubDir);
-    $TWiki::cfg{DataDir} = $saveDD;
-    $TWiki::cfg{PubDir} = $savePD;
-    $TWiki::cfg{HtpasswdFileName} = $saveHP;
+    $session->{store}->removeWeb($session->{user},$testWeb);
+    $session->{store}->removeWeb($session->{user},$peopleWeb);
+    $session->{store}->removeWeb($session->{user},$systemWeb);
+    foreach my $n (keys %$save) {
+        $TWiki::cfg{$n} = $save->{$n};
+    }
     @mails = ();
 }
 
@@ -124,7 +116,7 @@ sub registerAccount {
                         });
 
     try {
-        TWiki::UI::Register::finish( $session, $approvalsDir );
+        TWiki::UI::Register::finish( $session, $TWiki::cfg{RegistrationApprovals} );
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention", $e->{template});
@@ -174,7 +166,7 @@ sub test_registerVerifyOk {
                                       ]
                          });
 
-    $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
+    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -203,12 +195,12 @@ sub test_registerVerifyOk {
                                     'verify'
                                    ]
                       });
-    $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
+    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
-        TWiki::UI::Register::verifyEmailAddress($session, $approvalsDir);
+        TWiki::UI::Register::verifyEmailAddress($session, $TWiki::cfg{RegistrationApprovals});
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -273,7 +265,7 @@ sub test_registerBadVerify {
                                        'register'
                                       ]
                          });
-    $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
+    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
     try {
@@ -302,12 +294,12 @@ sub test_registerBadVerify {
                                     'verify'
                                    ]
                       });
-    $session = new TWiki("Main", $TWiki::cfg{DefaultUserName},
+    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
                          'TWikiRegistration', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
-        TWiki::UI::Register::verifyEmailAddress($session,$approvalsDir);
+        TWiki::UI::Register::verifyEmailAddress($session,$TWiki::cfg{RegistrationApprovals});
     } catch TWiki::AccessControlException with {
         my $e = shift;
         $this->assert(0, $e->stringify);
@@ -354,7 +346,7 @@ sub test_resetPasswordOkay {
                                       ]
                          });
 
-    $session = new TWiki("Main", $guestLoginName,
+    $session = new TWiki($peopleWeb, $guestLoginName,
                          'ResetPassword', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -396,7 +388,7 @@ sub test_resetPasswordNoSuchUser {
                                       ]
                          });
 
-    $session = new TWiki("Main", $guestLoginName,
+    $session = new TWiki($peopleWeb, $guestLoginName,
                          'ResetPassword', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -438,7 +430,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
                                       ]
                          });
 
-    $session = new TWiki("Main", $guestLoginName,
+    $session = new TWiki($peopleWeb, $guestLoginName,
                          'ResetPassword', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -450,7 +442,7 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
     } catch TWiki::OopsException with {
         my $e = shift;
-        $this->assert_matches(qr/Main\.TWikiAdminGroup/, $e->stringify());
+        $this->assert_matches(qr/$peopleWeb\.TWikiAdminGroup/, $e->stringify());
         $this->assert_str_equals('accessdenied', $e->{template});
         $this->assert_str_equals('only_group', $e->{def});
     } catch Error::Simple with {
@@ -484,7 +476,7 @@ sub test_resetPasswordNoPassword {
 
     unlink $TWiki::cfg{HtpasswdFileName};
 
-    $session = new TWiki("Main", $guestLoginName,
+    $session = new TWiki($peopleWeb, $guestLoginName,
                          'ResetPassword', $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
@@ -537,18 +529,18 @@ Once complete, try again - the second attempt at completion should fail.
 sub test_UnregisteredUser {
     my $this = shift;
 
-    TWiki::UI::Register::_putRegDetailsByCode($regSave, $approvalsDir);
+    TWiki::UI::Register::_putRegDetailsByCode($regSave, $TWiki::cfg{RegistrationApprovals});
 
-    my $result = TWiki::UI::Register::_getRegDetailsByCode($code, $approvalsDir);
+    my $result = TWiki::UI::Register::_getRegDetailsByCode($code, $TWiki::cfg{RegistrationApprovals});
     $this->assert_equals("homer", $result->{doh} );
 
-    my $result2 = TWiki::UI::Register::_reloadUserContext($code, $approvalsDir);
+    my $result2 = TWiki::UI::Register::_reloadUserContext($code, $TWiki::cfg{RegistrationApprovals});
     $this->assert_deep_equals($result2, $regSave);
 
     try {
         # this is a deliberate attempt to reload an already used token.
         # this should fail!
-        TWiki::UI::Register::_deleteUserContext( $code, $approvalsDir );
+        TWiki::UI::Register::_deleteUserContext( $code, $TWiki::cfg{RegistrationApprovals} );
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_matches(qr/has no file/, $e->stringify());
@@ -582,7 +574,7 @@ EOM
     my $regTopic = 'UnprocessedRegistrations2';
     
     my $logTopic = 'UnprocessedRegistrations2Log';
-    my $file = $TWiki::cfg{DataDir}.'/'.$temporaryWeb.'/'.$regTopic.'.txt';
+    my $file = $TWiki::cfg{DataDir}.'/'.$testWeb.'/'.$regTopic.'.txt';
     my $fh = new FileHandle;
     
     die "Can't write $file" unless ($fh->open(">$file"));
@@ -599,15 +591,15 @@ EOM
                           'OverwriteHomeTopics' => [
                                                     '1'
                                                    ],
-                          '.path_info' => "/$temporaryWeb/$regTopic",
+                          '.path_info' => "/$testWeb/$regTopic",
                          });
 
-    $session = new TWiki("Main", "testuser",
+    $session = new TWiki($peopleWeb, "testuser",
                          "", $query->url, $query);
     $session->{net}->setMailHandler(\&sentMail);
     $session->{users}->findUser( "testuser" )->{isKnownAdmin} = 1;
     $session->{topicName} = $regTopic;
-    $session->{webName} = $temporaryWeb;
+    $session->{webName} = $testWeb;
     try {
         TWiki::UI::Register::bulkRegister($session)
 
@@ -697,7 +689,7 @@ Test User - $testUserWikiName - $testUserEmail
    * Password: mypassword
 EOM
 
-    $session = new TWiki("Main", $TWiki::cfg{DefaultUserName});
+    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName});
     $session->{net}->setMailHandler(\&sentMail);
 
     my $actual = TWiki::UI::Register::_buildConfirmationEmail

@@ -220,7 +220,11 @@ sub _save {
                                     params => $error );
     }
 
-    $store->clearLease( $webName, $topic, $user );
+    my $lease = $store->getLease( $webName, $topic );
+    # clear the lease, if (and only if) we own it
+    if( $lease && $lease->{user}->equals( $user )) {
+        $store->clearLease( $webName, $topic );
+    }
 
     if( $merged ) {
         throw TWiki::OopsException( 'attention',

@@ -718,21 +718,20 @@ sub checkTopicEditLock {
 
     my $lease = $TWiki::Plugins::SESSION->{store}->getLease( $web, $topic );
     if( $lease ) {
-        my $who = $lease->{user}->webDotWikiName();
         my $remain = $lease->{expires} - time();
         my $session = $TWiki::Plugins::SESSION;
 
-        if( $remain > 0 &&
-            $who ne $session->{user}->webDotWikiName() ) {
+        if( $remain > 0 ) {
+            my $who = $lease->{user}->login();
+            my $wn = $lease->{user}->webDotWikiName();
             my $past = TWiki::Time::formatDelta(time()-$lease->{taken});
             my $future = TWiki::Time::formatDelta($lease->{expires}-time());
             return( $session->getOopsUrl( 'leaseconflict',
                                           def => 'active',
                                           web => $web,
                                           topic => $topic,
-                                          params => [ $who, $past, $future ] ),
-                                          $lease->{user}->login(),
-                                          $remain / 60 );
+                                          params => [ $wn, $past, $future ] ),
+                                          $who, $remain / 60 );
         }
     }
     return ('', '', 0);

@@ -16,26 +16,12 @@ sub new {
 
 use TWiki;
 use TWiki::Access;
-use File::Path;
 
-my $peopleWeb = "AccessControlPeopleTestWeb";
-my $testWeb = "AccessControlTestsWeb";
+my $peopleWeb = "TemporaryAccessControlPeopleTestWeb";
+my $testWeb = "TemporaryAccessControlTestsWeb";
 my $twiki;
 my $currUser;
 my $savePeople;
-
-sub make_web {
-    my $web = shift;
-    die $TWiki::cfg{DataDir} unless -d $TWiki::cfg{DataDir};
-    File::Path::mkpath("$TWiki::cfg{DataDir}/$web");
-}
-
-sub unmake_web {
-    my $web = shift;
-    die unless $web;
-    die unless -d $TWiki::cfg{DataDir};
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$web");
-}
 
 sub create_user {
     my $name = shift;
@@ -47,8 +33,8 @@ sub create_user {
 sub set_up {
     $twiki = new TWiki();
 
-    make_web($peopleWeb);
-    make_web($testWeb);
+    $twiki->{store}->createWeb($twiki->{user}, $peopleWeb);
+    $twiki->{store}->createWeb($twiki->{user}, $testWeb);
 
     $savePeople = $TWiki::cfg{UsersWebName};
     $TWiki::cfg{UsersWebName} = $peopleWeb;
@@ -68,8 +54,8 @@ THIS
 
 sub tear_down {
     $TWiki::cfg{UsersWebName} = $savePeople;
-    unmake_web($peopleWeb);
-    unmake_web($testWeb);
+    $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
+    $twiki->{store}->removeWeb($twiki->{user}, $testWeb);
 }
 
 sub DENIED {
