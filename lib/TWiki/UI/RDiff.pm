@@ -65,7 +65,6 @@ my %format =
 #TODO: ***URGENT*** the diff rendering dies badly when you have table cell changes and context
 #TODO: ?type={history|diff} so that you can do a normal diff between r1.3 and r1.32 (rather than a history) (and when doing a history, we maybe should not expand %SEARCH...
 
-
 #| Description: | twiki render a cell of data from a Diff |
 #| Parameter: =$data= |  |
 #| Parameter: =$topic= |  |
@@ -74,12 +73,10 @@ my %format =
 sub _renderCellData {
     my( $session, $data, $web, $topic ) = @_;
     if ( $data ){
-        $data =~ s(^%META:TOPICPARENT.*="([^"]+).*$)
-          (|*META TOPICPARENT*|$1 ||)gm;
-        $data =~ s(^%META:FIELD.name="(.*?)".title="(.*?)".value="(.*?)".*$)
-          (|*META FIELD $2*|$1 |$3 |)gm;
-        $data =~ s(^%META:([A-Z]+).\w+="([^"]+)"(.*).%$)
-          (|*META $1*|$2 |$3 |)gm;
+        $data =~ s(^%META:FIELD{(.*)}%.*$)
+          (_renderAttrs($1,'|*FORM FIELD $title*|$name|$value|'))gem;
+        $data =~ s(^%META:([A-Z]+){(.*)}%$)
+          ('|*META '.$1.'*|'._renderAttrs($2).'|')gem;
 
         $data = $session->handleCommonTags( $data, $web, $topic );
         $data = $session->{renderer}->getRenderedVersion( $data, $web, $topic );
@@ -104,6 +101,20 @@ sub _renderCellData {
         #$data =~ s/<!/&lt!/go;
     }
     return $data;
+}
+
+# Simple method to expand attribute values in a format string
+sub _renderAttrs {
+    my( $p, $f) = @_;
+    my $attrs = new TWiki::Attrs( $p );
+    if( $f ) {
+        for my $key ( keys %$attrs ) {
+            $f =~ s/\$$key\b/$attrs->{$key}/g;
+        }
+    } else {
+        $f = $attrs->stringify();
+    }
+    return $f;
 }
 
 sub _sideBySideRow {
@@ -414,7 +425,7 @@ sub diff {
     do {
         my $diff = $difftmpl;
         $diff =~ s/%REVTITLE1%/$r1/go;
-        my $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $r1, "\$date - \$wikiusername" );
+        my $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $r1, '$date - $wikiusername' );
         # eliminate white space to prevent wrap around in HR table:
         $rInfo =~ s/\s+/&nbsp;/g;
         $diff =~ s/%REVINFO1%/$rInfo/go;
