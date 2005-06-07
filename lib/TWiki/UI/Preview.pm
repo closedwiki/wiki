@@ -134,8 +134,6 @@ sub preview {
         $text = $textparam; # text to save
         $ptext = $text;
         $meta = $session->{store}->extractMetaData( $webName, $topic, \$ptext );
-        # SMELL: what the heck is this supposed to do?????
-        $text =~ s/%_(.)_%/%__$1__%/go;
     }
 
     # SMELL: this is horrible, it only handles verbatim. It should be

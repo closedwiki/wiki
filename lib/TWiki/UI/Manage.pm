@@ -273,7 +273,6 @@ sub rename {
 
     TWiki::UI::checkWebExists( $session, $oldWeb, $oldTopic, 'rename' );
     TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
-    TWiki::UI::checkWebExists( $session, $newWeb, $newTopic, 'rename' );
 
     if( $newTopic && !TWiki::isValidWikiWord( $newTopic ) ) {
         unless( $doAllowNonWikiWord ) {
@@ -310,6 +309,9 @@ sub rename {
         }
         # SMELL: what about if the target topic doesn't exist?
     } elsif( $newTopic ) {
+        ( $newWeb, $newTopic ) =
+          $session->normalizeWebTopicName( $newWeb, $newTopic );
+        TWiki::UI::checkWebExists( $session, $newWeb, $newTopic, 'rename' );
         if( $store->topicExists( $newWeb, $newTopic)) {
             throw TWiki::OopsException( 'attention',
                                         def => 'rename_topic_exists',

@@ -981,7 +981,8 @@ A web _has_ to have a home topic to be a web.
 sub webExists {
     my( $this, $web ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT( $web ) if DEBUG;
+
+    return 0 unless defined $web;
     return -e "$TWiki::cfg{DataDir}/$web/$TWiki::cfg{HomeTopicName}.txt";
 }
 

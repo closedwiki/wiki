@@ -135,7 +135,6 @@ sub _save {
     $newText ||= '';
 
     if( $saveCmd eq 'repRev' ) {
-        $newText =~ s/%__(.)__%/%_$1_%/go;
         $newMeta = $store->extractMetaData( $webName, $topic, \$newText );
         # replace top revision with this text, trying to make it look as
         # much like the original as possible
