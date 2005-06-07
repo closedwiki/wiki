@@ -3,8 +3,10 @@
 
 The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the <nop>%WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign and date it with your %TWIKIWEB%.WikiName.
 
-	* TestTopic1, TestTopic2, TestTopic3, TestTopic4 
-	* TestTopic5, TestTopic6, TestTopic7, TestTopic8
+---++ Test Topics
+
+%SEARCH{ "TestTopic*" regex="on" scope="topic" nototal="on" nosearch="on" noheader="on" format="[[$web.$topic][$topic]] &middot; " }%
+
 
 ---++ Site Tools of the <nop>%WEB% Web
 
