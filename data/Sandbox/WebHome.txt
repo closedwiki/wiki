@@ -7,6 +7,10 @@ The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is w
 
 %SEARCH{ "TestTopic*" regex="on" scope="topic" nototal="on" nosearch="on" noheader="on" format="[[$web.$topic][$topic]] &middot; " }%
 
+</form>
+<form name="createNewTestTopic" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%BASEWEB%/TestTopicXXXXXXXXXX">
+<input type="submit" value=" Create new <nop>TestTopic " >
+
 
 ---++ Site Tools of the <nop>%WEB% Web
 
