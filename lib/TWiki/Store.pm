@@ -1027,7 +1027,7 @@ sub extractMetaData {
 
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
     $$rtext =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
-      (&_addMetaDatum($meta,$1,$2))gem;
+      (&_addMetaDatum($meta,'TOPICINFO',$1))gem;
 
     my $ti = $meta->get( 'TOPICINFO' );
     $format = $ti->{format} if $ti;
