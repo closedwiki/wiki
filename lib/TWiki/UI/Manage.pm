@@ -313,20 +313,11 @@ sub rename {
           $session->normalizeWebTopicName( $newWeb, $newTopic );
         TWiki::UI::checkWebExists( $session, $newWeb, $newTopic, 'rename' );
         if( $store->topicExists( $newWeb, $newTopic)) {
-            if( $newWeb eq $TWiki::cfg{TrashWebName} ) {
-                my $n = 1;
-                my $base = $newTopic.'Another';
-                while( $store->topicExists( $newWeb, $newTopic)) {
-                    $newTopic = $base.$n;
-                    $n++;
-                }
-            } else {
-                throw TWiki::OopsException( 'attention',
-                                            def => 'rename_topic_exists',
-                                            web => $oldWeb,
-                                            topic => $oldTopic,
-                                            params => [ $newWeb, $newTopic ] );
-            }
+            throw TWiki::OopsException( 'attention',
+                                        def => 'rename_topic_exists',
+                                        web => $oldWeb,
+                                        topic => $oldTopic,
+                                        params => [ $newWeb, $newTopic ] );
         }
     }
 
@@ -494,7 +485,20 @@ sub _newTopicScreen {
         $tmpl = $session->{templates}->readTemplate( 'rename', $skin );
     }
 
-    $tmpl = _setVars( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag );
+    # Trashing a topic; look for a non-conflicting name
+    if( $newWeb eq $TWiki::cfg{TrashWebName} ) {
+        $newTopic = $oldWeb.$newTopic;
+        my $n = 1;
+        my $base = $newTopic;
+        while( $session->{store}->topicExists( $newWeb, $newTopic)) {
+            $newTopic = $base.$n;
+            $n++;
+        }
+    }
+
+    $tmpl =~ s/%NEW_WEB%/$newWeb/go;
+    $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
+    $tmpl =~ s/%NONWIKIWORDFLAG%/$nonWikiWordFlag/go;
 
     my $refs;
     my %attributes;
@@ -553,14 +557,6 @@ sub _newTopicScreen {
     $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $oldTopic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $oldTopic );
     $session->writeCompletePage( $tmpl );
-}
-
-sub _setVars {
-    my( $tmpl, $oldTopic, $newWeb, $newTopic, $nonWikiWordFlag ) = @_;
-    $tmpl =~ s/%NEW_WEB%/$newWeb/go;
-    $tmpl =~ s/%NEW_TOPIC%/$newTopic/go;
-    $tmpl =~ s/%NONWIKIWORDFLAG%/$nonWikiWordFlag/go;
-    return $tmpl;
 }
 
 # Returns the list of topics that have been found that refer
