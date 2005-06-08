@@ -313,11 +313,20 @@ sub rename {
           $session->normalizeWebTopicName( $newWeb, $newTopic );
         TWiki::UI::checkWebExists( $session, $newWeb, $newTopic, 'rename' );
         if( $store->topicExists( $newWeb, $newTopic)) {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'rename_topic_exists',
-                                        web => $oldWeb,
-                                        topic => $oldTopic,
-                                        params => [ $newWeb, $newTopic ] );
+            if( $newWeb eq $TWiki::cfg{TrashWebName} ) {
+                my $n = 1;
+                my $base = $newTopic.'Another';
+                while( $store->topicExists( $newWeb, $newTopic)) {
+                    $newTopic = $base.$n;
+                    $n++;
+                }
+            } else {
+                throw TWiki::OopsException( 'attention',
+                                            def => 'rename_topic_exists',
+                                            web => $oldWeb,
+                                            topic => $oldTopic,
+                                            params => [ $newWeb, $newTopic ] );
+            }
         }
     }
 
@@ -345,7 +354,8 @@ sub rename {
           $theAttachment, $refs );
 
     my $new_url = '';
-    if ( $newWeb eq 'Trash' && $oldWeb ne 'Trash' ) {
+    if ( $newWeb eq $TWiki::cfg{TrashWebName} &&
+         $oldWeb ne $TWiki::cfg{TrashWebName} ) {
         if( $theAttachment ) {
             # go back to old topic after deleting an attachment
             $new_url = $session->getScriptUrl( $oldWeb, $oldTopic, 'view' );
@@ -478,7 +488,7 @@ sub _newTopicScreen {
         $tmpl =~ s/%FILENAME%/$theAttachment/go;
     } elsif( $confirm ) {
         $tmpl = $session->{templates}->readTemplate( 'renameconfirm', $skin );
-    } elsif( $newWeb eq 'Trash' ) {
+    } elsif( $newWeb eq $TWiki::cfg{TrashWebName} ) {
         $tmpl = $session->{templates}->readTemplate( 'renamedelete', $skin );
     } else {
         $tmpl = $session->{templates}->readTemplate( 'rename', $skin );
