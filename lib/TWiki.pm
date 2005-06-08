@@ -243,6 +243,7 @@ BEGIN {
     # Constant tags dependent on the config
     $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
     $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
+    $constantTags{TRASHWEB}        = $TWiki::cfg{TrashWebName};
     $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
     $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
     $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};

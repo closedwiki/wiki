@@ -1,7 +1,7 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:DEF{"titleaction"}% %TMPL:END%
-%TMPL:DEF{"webaction"}% *Attention* %TMPL:END%
-%TMPL:DEF{"heading"}% Attention %TMPL:END%
+%TMPL:DEF{"webaction"}% <div class="twikiAlert"> *Attention* </div>%TMPL:END%
+%TMPL:DEF{"heading"}% %TMPL:END%
 %TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][OK]] %TMPL:END%
 %TMPL:DEF{"remove_user_done"}%
 ---++ User Account %PARAM1% Deleted
@@ -258,7 +258,7 @@ Go back in your browser and insert information for all mandatory fields.
 %TMPL:END%
 %TMPL:DEF{"no_form_def"}%
 ---++ Form Definition %PARAM1%.<nop>%PARAM2% missing
-ee %TWIKIWEB%.TWikiForms for information about Form Definitions.
+See %TWIKIWEB%.TWikiForms for information about Form Definitions.
 
 This could be for several reasons:
 
@@ -269,10 +269,8 @@ This could be for several reasons:
 
 ---++ 2. The topic is in an old format
 
-   * Click on [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug][Debug to
-pic text]].
-      * There should be a line that includes =META:FORM=, look for name="%PARAM1
-%.%PARAM2%" (or name="%PARAM2%")
+   * Click on [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug][Debug topic text]].
+      * There should be a line that includes =META:FORM=, look for name="%PARAM1%.%PARAM2%" (or name="%PARAM2%")
       * If this line isn't present see _upgrade_ section below
 
 ---++ 3. Topic can not be upgraded from old style category table

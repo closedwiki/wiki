@@ -23,7 +23,7 @@
 
 
 
-%TMPL:DEF{"movewebhelp"}%To delete an attachment move it to web *Trash*, topic *TrashAttachment*.%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%To delete an attachment move it to web *%TRASHWEB%*, topic *TrashAttachment*.%TMPL:END%
 
 
 
@@ -43,7 +43,7 @@
 </tr>
 <tr>
 <th>To web:</th>
-<td class="twikiMainCol"><select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select></td>
+<td class="twikiMainCol"><select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%WEB%" separator=" "}% </select></td>
 <td class="twikiMainCol twikiHelpCol">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr>

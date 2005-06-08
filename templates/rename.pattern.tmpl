@@ -14,7 +14,7 @@
 
 
 
-%TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
+%TMPL:DEF{"newweb"}%<select name="newweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_WEB%" separator=" "}%</select>%TMPL:END%
 
 
 
