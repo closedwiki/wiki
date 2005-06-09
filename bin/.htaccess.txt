@@ -58,6 +58,10 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
        require valid-user
 </Files>
 
+<Files "configure">
+       require valid-user
+</Files>
+
 <Files "changes">
        require valid-user
 </Files>
