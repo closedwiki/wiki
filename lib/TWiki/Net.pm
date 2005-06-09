@@ -117,8 +117,10 @@ sub _installMailHandler {
     my $useNetSMTP = 0;
     my $prefs = $this->{session}->{prefs};
 
-    $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' );
-    $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' );
+    $this->{MAIL_HOST}  = $prefs->getPreferencesValue( 'SMTPMAILHOST' ) ||
+      $TWiki::cfg{SMTP}{MAILHOST};
+    $this->{HELLO_HOST} = $prefs->getPreferencesValue( 'SMTPSENDERHOST' ) ||
+      $TWiki::cfg{SMTP}{SENDERHOST};
     if( $this->{MAIL_HOST} ) {
         # See Codev.RegisterFailureInsecureDependencyCygwin for why
         # this must be untainted
