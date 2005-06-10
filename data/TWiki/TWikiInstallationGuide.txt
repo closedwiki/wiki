@@ -5,137 +5,48 @@
 %STARTINCLUDE%
 ---# TWiki Installation Guide
 
-_Installation instructions for the TWiki Dakar production release._
+_Installation instructions for the TWiki Dakar production release_
 
-_If you are reading this on your own TWiki installation, please get the latest installation guide (TWiki:TWiki.TWikiInstallationGuide), as this often has important updates to resolve installation issues._
+Please review the AdminSkillsAssumptions before you install TWiki.
 
-These installation steps are based on the *Apache* web server on *Linux*. TWiki runs on other web servers and Unix systems, and should be fine with any web server and OS that meet the [[TWikiSystemRequirements][system requirements]].  Official documentation for platforms other than Linux is somewhat limited, so _please check_ the topics listed below, they include some important tips for HP-UX, Solaris, OS/390, and many other platforms.
-
-	* For Unix or Linux, check TWiki:Codev/TWikiOnUnix (install your own RCS, =diff= and =grep= tools if in doubt!) and TWiki:Codev/TWikiOnLinux.
+TWiki should be fine with any web server and OS that meet the [[TWikiSystemRequirements][system requirements]].  Documentation for platforms other than Linux is somewhat limited, so please check the topics listed below, they include some important tips for HP-UX, Solaris, OS/390, and many other platforms.
+	* For Unix or Linux, check TWiki:Codev/TWikiOnUnix and TWiki:Codev/TWikiOnLinux.
 	* For Windows, check the WindowsInstallCookbook. 
 	* For <nop>MacOS X, check TWiki:Codev/TWikiOnMacOSX. 
 	* To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/TWikiOnSourceForge
 	* For other platforms, see TWiki:Codev/TWikiOn, and search the TWiki:Codev and TWiki:Support webs for other installation notes.
-	* If you need help, ask a question in the TWiki:Support web
+
+If you need help, ask a question in the TWiki:Support web or on IRC (irc.freenode.net, channel #twiki)
 
 #StandardInstallation
----++ Standard Installation
+---+ Standard Installation
 
-Download the TWiki distribution in ZIP format from http://TWiki.org/download.html. Please review the AdminSkillsAssumptions before you install TWiki.
-
----+++ Step 1: Create &amp; Configure the Directories
-
-%X% This guide assumes you are going to install to the directory =/home/httpd/twiki=. You can, of course, install anywhere.
-
-%X% _If you don't have access to your Web server configuration files - for example, if you're installing on an ISP-hosted account, or you don't have administrator privileges on your intranet server - use the [[#StepOneB][alternative Step 1]] instead._
-
-	* Check that you have GNU =diff=, by typing =diff -v= - an error indicates you have a non-GNU diff, so install the GNU =diffutils= package and make sure that =diff= is on the PATH used by TWiki (configured in Step 3).
-
-	* Create directory =/home/httpd/twiki= and [[http://www.info-zip.org/pub/infozip/UnZip.html][unzip]] the TWiki distribution into this directory. We'll refer to this directory as =twiki= from now on.
-
-	* Create the file =twiki/twiki_httpd.conf=. There is a template for this file in =twiki/twiki_httpd_conf.txt= that you can simply copy. Edit it, and follow the instructions in that file for setting up your paths.
-	* Edit your web server configuration file. This is typically located in =/etc/httpd/=. Add the following line to the end (adjusting the path as necessary)
-<verbatim>
-Include "/home/httpd/twiki/twiki_httpd.conf"
-</verbatim>
-	* Using the command(s) appropriate to your flavor of UNIX or Linux, check your webserver configuration files for errors and restart Apache.
-
-	* _Go directly to [[#StepTwo][Step 2]]..._
-
-#StepOneB		  
----++++ Alternative Step 1: Create &amp; Configure the Directories for Non-Root Accounts
-
-To install TWiki on a system where you don't have Unix/Linux root (administrator) privileges, for example, on a hosted Web account or an intranet server administered by someone else: 
-
-	* Download and unzip TWiki on your local PC
-	* Using the table below, create a directory structure on your host server
-	* Upload the TWiki files by FTP (transfer as _text_ except for the image files in =pub=)
-<blockquote>
-| *TWiki dir:* | *What it is:* | *Where to copy:* | *Example:* |
-| =twiki= | start-up pages | root TWiki dir | =/home/smith/twiki/= |
-| =twiki/bin= | CGI bin | CGI-enabled dir | =/home/smith/twiki/bin= |
-| =twiki/lib= | library files | same level as =twiki/bin= | =/home/smith/twiki/lib= |
-| =twiki/pub= | public files | htdoc enabled dir | =/home/smith/twiki/pub= |
-| =twiki/data= | topic data | dir secure from public access | =/home/smith/twiki/data= |
-| =twiki/templates= | web templates | dir secure from public access | =/home/smith/twiki/templates= |
-</blockquote>
-
-%H% Don't worry if you are not able to put the =twiki/lib= directory at the same level as the =twiki/bin= directory (e.g. because CGI =bin= directories can't be under your home directory and you don't have root access). You can create this directory somewhere else and configure the paths in =/twiki/bin/LocalLib.cfg= file (done in Step 3)
-
-#StepTwo
----+++ Step 2: Set File Permissions
-
-	* Make sure Perl 5 and the Perl CGI library are installed on your system. The default location of Perl is =/usr/bin/perl=.
-		* %X% *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory.  If you have root access, you can create a symbolic link from =/usr/bin/perl=.
+   * Download the TWiki distribution from http://TWiki.org/download.html.
+   * Unpack the distribution.
+   * Make sure the user that runs CGI scripts on your system can read and write all files in the distribution.
+   * Make sure Perl 5 and the Perl CGI library are installed on your system. The default location of Perl is =/usr/bin/perl=.
+		* %X% *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory.
 		* %X% *Some systems require a =.cgi= extension on perl scripts*, for example some ISP-hosted accounts. Rename all files in =twiki/bin= if necessary (e.g. rename =view= to =view.pl= etc). Alternatively, you may be able to create a file =twiki/bin/.htaccess= that contains the single line =SetHandler cgi-script=, which tells Apache to treat all files in this directory as CGI scripts. If you rename the scripts, make sure you set the =ScriptSuffix= option in Step 3.
-
-	* Make sure the permissions will let TWiki operate.
-		* This Guide assumes that user =nobody= runs the CGI scripts executed by the Web server. You can replace =nobody= with another user if your server executes scripts under a different name (e.g. default for Debian is =www-data=).
-			* %T% Run the =configure= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts, a table listing all CGI environment variables, and a test of your =twiki/lib/LocalSite.cfg= configuration file (you'll configure that in a minute).
-		* All files and directories in the installation tree must be *readable* by user =nobody=.
-		* All files in the =twiki/bin= directory must be *executable* by user =nobody=
-		* =twiki/data= and all files and directories below it must be *writable* by user =nobody=.
-		* =twiki/pub= and all files and directories below it must be *writable* by user =nobody=.
-		* %H% If you are unsure how to set permissions, read the =man= pages for =chmod=.
----+++ Step 3: Configure TWiki
-
 	* Create the file =/twiki/bin/LocalLib.cfg=. There is a template for this file in =/twiki/bin/LocalLib.cfg.txt=. <br /> =LocalLib.cfg= must contain a setting for =$twikiLibPath=, which must point to the absolute file path of your =twiki/lib= e.g. =/home/httpd/twiki/lib=.
-		* %H% You can also set =$CPANBASE= if you need to install additional CPAN modules, but can't update the main Perl installation files on the server. Just set this variable to the full pathname to your local lib directory. 
-		* %X% If you are running TWiki on Apache 2.0 on Unix you might experience a problem where CGI scripts seem to hang forever. This may be caused by a known Apache 2.0 bug; see details and workaround described in the =setlib.cfg= file (copy and paste the 2 open statements into <nop>LocalLib.cfg, without the leading #'s).
-
-	* Run the =configure= CGI script, fill in the form, and hit Update.
-	* To enable the WebChangesAlerts (email notifications) you need to read about cron in the topic TWiki.TWikiSiteTools.
-
----+++ Step 6: Finish Up from Your Browser
-
+		* %H% If you need to install additional CPAN modules, but can't update the main Perl installation files on the server, you can set =$CPANBASE= to point to your personal CPAN install. Don't forget that the webserver user has to be able to read those files as well.
+   * Configure the webserver so you can execute the =bin/configure= script from your browser. Run the =configure= script from your browser, and resolve any errors or warnings it tells you about.
+      * %X% Don't forget to restrict access to the =configure= script so only admins can run it.
 	* Point your Web browser at =http://yourdomain.com/twiki/bin/view= and start TWiki-ing away!
-		* %T% Or, point to =http://yourdomain.com/twiki/= to get the pre-TWiki =index.html= page, with a link to the =view= script. Customize this page if you want a public intro screen with a login link, instead of immediately calling up the .htaccess login dialog by going directly to =view=.
+
+---+ Next Steps
 	* Edit the WebPreferences topic in each web, if necessary: set individual =WEBCOPYRIGHT= messages, and other preferences.
-	* Enable email notification of topic changes - TWikiSiteTools has more. 
-	* Edit the WebNotify topic in all webs and add the users you want to notify.
+	* To enable the WebChangesAlerts (email notifications) you need to read about cron in the topic TWiki.TWikiSiteTools.
 	* You can add new =%<nop>VARIABLES%=. Define site-level variables in the TWikiPreferences topic. See also: TWikiVariables.
 
-That's it for the standard installation of TWiki. Read on for server-level customization options.
-
----++ Troubleshooting
-
----+++ Internationalisation Setup (Optional)
-
-By default, TWiki is configured to support US ASCII letters (no accents) in WikiWords, and ISO-8859-1 (Western European) characters in page contents.  If that's OK for you, skip this step.
-
-If your Wiki will be used by non-English speakers, TWiki can be configured for Internationalisation ('I' followed by 18 letters, then 'N', or _I18N_).  Specifically, TWiki will support suitable accented characters in WikiWords (as well as languages such as Japanese or Chinese in which WikiWords do not apply), and will support virtually any character set in the contents of pages.  __NOTE:__ TWiki does not currently support UTF-8, so you are advised *not* to use this - however, improved UTF-8 support is under development, see TWiki:Codev/ProposedUTF8SupportForI18N.
-
-To configure internationalisation suppport:
-	1 Set  =$cfg{UseLocale}= to =1= in =LocalSite.cfg=.  TWiki will now use the I18N parameters set in the rest of this section.
-	1 Type the Unix/Linux command =locale -a= to find a suitable 'locale' for your use of TWiki.  A locale that includes a dot followed by a character set is recommended, e.g. =pl_PL.ISO-8859-2= for Poland.  Consult your system administrator if you are not sure which locale to use.
-	1 Set =$cfg{siteLocale}= to your chosen locale, e.g. =pl_PL.ISO-8859-2= for Poland, in =LocalSite.cfg.
-	1 Check your setup using =testenv= (download the latest =testenv= from TWiki:Support/SupportGuidelines if possible) - this provides some diagnostics for I18N setup, and in particular checks that your locale can be used successfully.
-	1 _(For upgrade of TWiki I18N sites only:)_ If you were using TWiki:Codev.TWikiRelease01Feb2003 support for I18N, and are using Internet Explorer or Opera, you should re-configure your browser so that it sends URLs encoded with UTF-8 (supported since TWiki:Codev.TWikiRelease01Sep2004).  If you are doing a new installation of TWiki, you can ignore this step - no browser reconfiguration is needed for TWiki Release 01-Sep-2004).
-		* Internet Explorer 5.0 or higher: in  _Tools | Options | Advanced_, check 'always send URLs as UTF-8', then close all IE windows and restart IE. 
-		* Opera 6.x or higher: in _Preferences | Network | International Web Addresses_, check 'encode all addresses with UTF-8'.
-		* __NOTE:__ This does not mean that TWiki supports UTF-8 as a site character set.
-	1 Try out your TWiki by creating pages in the Sandbox web that use international characters in WikiWords and checking that searching, WebIndex, Ref-By and other features are working OK.
-
----++++ Trouble with I18N? 
-
-If international characters in WikiWords do not seem to work, and you are on Perl 5.6 or higher, you may need to set the =$cfg{LocaleRegexes}= to 0 in =LocalSite.cfg - this disables some features but enables TWiki to work even if your system has locales that do not work.  Then, set the =$upperNational= and =$lowerNational= parameters to the valid upper and lower case accented letters for your locale. 
-	* __NOTE:__ You will need to do the above workaround for Windows based servers (whether using Cygwin or <nop>ActiveState Perl), since Perl locales are not working on Windows as of Feb 2004.
-
-If international characters in WikiWords aren't working, and you are on Perl 5.005 with working locales, keep =$cfg{UseLocale}= set to 1 and set =$cfg{LocaleRegexes}= to 0, then set =$cfg{UpperNational}= and =$cfg{LowerNational}= - if =testenv= generates the lists of characters for you, your locales are working so there is no need to set =$cfg{LocaleRegexes}= to 0 in this case.  See the comments in =TWiki.cfg= for more information.
-
----++ Additional Server-Level Options
-
-With your new TWiki installation up and running, you can manage most aspects of your site from the browser interface. Only a few functions require access to the server file system.
-
 #AuthenticationOfUsers
----+++ Enabling Authentication of Users (optional)
+---+ Enabling Authentication of Users
 
 If TWiki is installed on a non-authenticated server and you'd like to authenticate users:
-	* TWiki supports several password file format/encoding methods for Apache. Once you know what method is used by your Apache server, you can configure TWiki to create compatible .htpasswd entries by adding the =$cfg{HtpasswdFormatFamily}=, =$cfg{HtpasswdEncoding}= and =$cfg{HtpasswdFilename}= options to the =LocalSite.cfg= file. See =TWiki.cfg= for guidance.
+	* TWiki supports several password file format/encoding methods for Apache. Once you know what method is used by your Apache server, you can configure TWiki to create compatible .htpasswd entries using the ={HtpasswdFormatFamily}=, ={HtpasswdEncoding}= and ={HtpasswdFilename}= fields in =configure=.
 		* %H% You can use the =htpasswd= program from Apache to create a new =.htpasswd= file in these different formats.
 	* *Rename* file =.htaccess.txt= in the =twiki/bin= directory to =.htaccess= and change it to your needs. The comment at the top of the file explains what need to be done. _For the details of how this file works, consult the HTTP server documentation (for Apache server: <a href="http://www.apache.org/docs/mod/directives.html">[1]</a>, <a href="http://systems.mcs.kent.edu/info/web_help/htaccess/">[2]</a>)_.
 		* %X% *NOTE:* If you had to add a =.cgi= or =.pl= file extension to the =bin= scripts, make sure you do the same in =.htaccess=.
-	* %H% The browser should now ask for login name and password when you click on the <u>Edit</u> link. If =.htaccess= does not have the desired effect, you may need to enable it: Add "AllowOverride All" to the Directory <a href=http://httpd.apache.org/docs/mod/core.html#directory>[3]</a> section of =access.conf= for your =twiki/bin= directory. (*This applies only if you have root access:* on hosted accounts, you shouldn't have this problem - otherwise, email tech support)
+	* %H% The browser should now ask for login name and password when you click on the <u>Edit</u> link. If =.htaccess= does not have the desired effect, you may need to enable it: Add "AllowOverride All" to the Directory <a href=http://httpd.apache.org/docs/mod/core.html#directory>[3]</a> section of =httpd.conf= for your =twiki/bin= directory. (*This applies only if you have root access:* on hosted accounts, you shouldn't have this problem - otherwise, email tech support)
 	* In TWiki, *edit* the TWikiRegistrationPub topic, *copy* the contents, then *edit* TWikiRegistration and *paste*, deleting the old contents and replacing them with the contents of TWikiRegistrationPub.
 		* You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly.
 		* You can customize the default user home page in NewUserTemplate. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]
@@ -146,11 +57,18 @@ If TWiki is installed on a non-authenticated server and you'd like to authentica
 	* Edit the TWikiPreferences topic in the TWiki:%TWIKIWEB% web to set access privileges.
 	* Edit the WebPreferences topic in each web, if necessary: set access priviliges.
 
----+++ WYSIWYG Editor
+---+ Plugins
+TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. Installation instructions for the other plugins can be found in the plugin topics on [[TWiki:Plugins][TWiki.org]].
 
-At this time, TWiki does not ship with an integrated "what you see is what you get" editor. TWiki:Plugins/WysiwygPlugin describes the support for optional WYSIWYG editors. TWiki:Codev/IntegrateHtmlAreaEditor describes how to integrate an HTML editor. 
+---+ Troubleshooting
+The first step is to re-run the =configure= script and make sure you have resolved all errors, and are happy about any warnings.
 
-%X% *NOTE:* User home topics are located in the %MAINWEB% web - don't try to move them or create them in other webs. From any other web, user signatures have to point to %MAINWEB% web, using a =%MAINWEB%.<nop>UserName= or =%<nop>MAINWEB%.<nop>UserName= format. (The =%<nop>MAINWEB%= variable is an advantage if you ever change the %MAINWEB% web name, but the standard =%MAINWEB%.<nop>UserName= is easier for users to enter, which is the bottom line!)
+Faliing that, please check the topics listed below, they include some important tips for HP-UX, Solaris, OS/390, and many other platforms.
+	* For Unix or Linux, check TWiki:Codev/TWikiOnUnix and TWiki:Codev/TWikiOnLinux.
+	* For Windows, check the WindowsInstallCookbook. 
+	* For <nop>MacOS X, check TWiki:Codev/TWikiOnMacOSX. 
+	* To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/TWikiOnSourceForge
+	* For other platforms, see TWiki:Codev/TWikiOn, and search the TWiki:Codev and TWiki:Support webs for other installation notes.
 
 %STOPINCLUDE%
 

@@ -53,6 +53,7 @@ my $cygwinRcsVerNum;
 my $perlverRequired = 5.00503;		# Oldest supported version of Perl
 my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
+my $perlVerPreferred = 5.006;	# 5.6 or higher has [:lower:] etc
 my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
 
 # CGI.pm version, on some platforms - actually need CGI 2.93 for mod_perl
@@ -171,6 +172,9 @@ BEGIN {
     }
 }
 
+my $errors = 0;
+my $warnings = 0;
+
 my $query = new CGI;
 my $url = $query->url();
 my $update = $query->param('update');
@@ -182,13 +186,13 @@ print CGI::header('text/html'),
 		html body {
 			line-height:1.55em;
 			font-family:Avenir, "Lucida Grande", "Bitstream Vera Sans", lucida, arial, verdana, sans-serif;
-			background-color:#C3C3C3;
+			background-color: white;
 			margin:0;
 			padding:0;
 		}
 		h1 {
 		    font-size:210%;
-		    background-color:#C3C3C3;
+		    background-color:#DFDFDF;
 		    padding:0.2em 0.7em;
 		    color:#C90000;
 		    margin:1em -0.7em 0.15em -0.7em;
@@ -211,29 +215,20 @@ print CGI::header('text/html'),
             font-weight: bold;
         }
         .mandatory {
-			color:red;
+			color: blue;
             font-weight: bold;
         }
-		.twikiMain {
-			padding:0em 3.5em 2em;
-			margin-top:2.5em;
-			margin-right:2.5em;
-			margin-left:2.5em;
-			margin-bottom:2.5em;
-			background-color:white;
-			border-width:4px;
-			border-style:ridge;
-			border-color:#484848 #dddddd #818181 #A6A6A6;
-		}
         .docdata {
+            vertical-align: top;
             padding-top: 1ex;
         }
         .keydata {
+            vertical-align: top;
             font-weight: bold;
 			background-color:#FOFOFO;
         }
 HERE
-            ), '<div class="twikiMain">';
+            );
 
 if( $update ) {
     print CGI::h1('Updating configuration');
@@ -325,27 +320,26 @@ import CGI qw( -any );
 require CGI::Carp;
 import CGI::Carp qw( fatalsToBrowser );
 
-
 print  <<HERE;
-<h1> TWiki Test Environment </h2>
+<h1> TWiki Configuration </h1>
 This page is used to set up the configuration options for TWiki. Settings
 marked <span class='mandatory'>like this</span> are required (they must
 have a value). Fill in the settings, and then select 'Update'.
 TWiki will be reconfigured and you will be returned to this page. Any
-errors in your configuration will be <font color="red">highlighted</font>.
+<span class='error'>errors</span> in your configuration will be highlighted. <span class='warn'>Warnings</span> are non-fatal but are often an indicator of something that is wrong.
 <p />
-If you are installing TWiki for the first time, and you are on a
-Unix or Linux platform and behind a firewall, the only section you
-should need to worry about below is "General path settings".
+If you are installing TWiki for the first time, and you just want to get up
+and running, the only section you need to worry about below is
+<a href="#GeneralPathSettings">General path settings</a>. You can always come
+back and configure other settings later.
 <p />
 If you are on a public site, you will need to consider carefully
 how you are going to manage authentication and access control.
 <p />
 There are a number of documentation topics describing how to
 configure TWiki for different platforms, and a lot of support
-available at TWiki.org. The configuration settings currently in
-use can be managed using the 'configure' script.
-
+available on IRC (irc.freenode.net, channel #twiki) and at TWiki.org.
+<p />
 If your TWiki site is working, the front page should be
 <a href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>
 HERE
@@ -355,12 +349,12 @@ print CGI::start_form({ action=>'configure',method=>"post" }),
 
 print CGI::hidden(-name=>'update',-value=>'1');
 
-print H2('Environment variables');
+print H2('Environment variables (read only)');
 for my $key ( sort keys %ENV ) {
     print CGI::Tr( CGI::th($key).CGI::td($ENV{$key}));
 }
 
-print H2('CGI Setup');
+print H2('CGI Setup (read only)');
 # Make %ENV safer for CGI (should reflect TWiki.pm)
 my $originalPath = $ENV{'PATH'} || '';
 if( $TWiki::cfg{SafeEnvPath} ) {
@@ -482,6 +476,10 @@ third-party modules used by some plugins, and Perl built-in modules.
 HERE
          ));
 
+my $binerrs = _checkTreePerms( '.', 'x');
+if( $binerrs ) {
+    print ROW('CGI bin directory', 'All cgi scripts need to be executable<br />'.WARN($binerrs));
+}
 
 # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
 # browser in some environments.  
@@ -506,15 +504,6 @@ if ($@) {
     $mess = "OK, $mod.pm found (Version: <strong>$mod_version</strong>)";
 }
 print ROW('TWiki module in @INC path', $mess);
-
-# Do locale settings if TWiki.pm was found
-my $showLocales = 0;
-if ($twikiFound) {
-    if( eval 'TWiki::_setupLocale()' ){	# Not in older TWiki.pm versions
-        # Ignore errors silently
-        $showLocales = 1;
-    }
-}
 
 if ( defined $TWiki::cfg{DetailedOS} and ($TWiki::cfg{DetailedOS} =~ /darwin/i or $TWiki::cfg{OS} ne 'UNIX') ) {
     map { $requiredMods{$_} = $requiredModsNonUnix{$_} }
@@ -579,8 +568,8 @@ foreach $mod (keys %optionalMods) {
 # All module checks done, OK to enable fatalsToBrowser
 import CGI::Carp qw( fatalsToBrowser );
 
-# PATH_INFO 
-print ROW('PATH_INFO', $query->path_info(),
+# PATH_INFO
+print ROW(CGI::a({name=>'PATH_INFO'},'PATH_INFO'), $query->path_info(),
           NOTE(<<HERE
 For a URL such as <strong>$url/foo/bar</strong>,
 the correct PATH_INFO is <strong>/foo/bar</strong>, without any prefixed path
@@ -656,10 +645,6 @@ if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
 } else {
     $n .= "Bourne shell or 'bash'.";
 }
-if( !$TWiki::cfg{SafeEnvPath} ) {
-    $n .= WARN("Security issue: <strong>SafeEnvPath</strong> set to empty string.");
-}
-print ROW("SafeEnvPath", $TWiki::cfg{SafeEnvPath}, NOTE($n));
 
 # Generate a separate table about specific environment variables
 H2("Path and Shell Environment");
@@ -677,9 +662,10 @@ HERE
 my $currentPath = $ENV{'PATH'} || ''; 	# As re-set earlier in this routine
 print ROW("Current PATH", $currentPath,
           NOTE(<<HERE
-This is the actual PATH setting that will be used by Perl to run 
-programs. It is normally identical to <strong>SafeEnvPath</strong>, unless
-that variable is empty.
+This is the actual PATH setting that will be used by Perl to run
+programs. It is normally identical to {SafeEnvPath}, unless
+that variable is empty, in which case this will be the webserver users
+standard path..
 HERE
               ));
 
@@ -708,23 +694,20 @@ if( $TWiki::cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
     # using ActivePerl
     my $perl5shell = $ENV{'PERL5SHELL'} || '';
     $n = $perl5shell.
-    NOTE("This environment variable is used by ActiveState and other",
-         "Win32 Perls to run \n",
-         "commands from TWiki scripts - it determines which shell\n",
-         "program is used to run commands that use 'pipes'.  Examples",
-         "of shell programs are \n",
-         "cmd.exe, command.com (aka 'DOS Prompt'), and Cygwin's 'bash'\n",
-         "(<strong>recommended</strong> if Cygwin is installed).\n",
-         "<p>\n",
-         "To use 'bash' with ActiveState or other Win32 Perls,",
-         "you should set the \n",
-         "PERL5SHELL environment variable to something like ",
-         "<tt><strong>c:/YOURCYGWINDIR/bin/bash.exe -c</strong></tt>.",
-         "This should be set in the System Environment, and ideally set \n",
-         "directly in the web server (e.g. using the Apache <tt>SetEnv</tt>",
-         "command, followed by an Apache restart). Once this is done, you",
-         "should re-run <strong>testenv</strong>\n",
-         "to check that PERL5SHELL is set properly.\n");
+      NOTE(<<HERE
+This environment variable is used by ActiveState and other Win32 Perls to run
+commands from TWiki scripts - it determines which shell program is used to run
+commands that use 'pipes'.  Examples of shell programs are cmd.exe,
+command.com (aka 'DOS Prompt'), and Cygwin's 'bash'
+(<strong>recommended</strong> if Cygwin is installed).
+<p>
+To use 'bash' with ActiveState or other Win32 Perl you should set the
+PERL5SHELL environment variable to something like
+<tt><strong>c:/YOURCYGWINDIR/bin/bash.exe -c</strong></tt>
+This should be set in the System Environment, and ideally set directly in the
+web server (e.g. using the Apache <tt>SetEnv</tt> directive).
+HERE
+          );
     if ($perltype eq 'ActiveState' and 
 	    Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
     	$n .= WARN("ActiveState Perl must be upgraded to build <strong>",
@@ -733,158 +716,6 @@ if( $TWiki::cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
              "in earlier builds.");
     }
     print ROW("PERL5SHELL", $n);
-}
-
-# User authentication and password handling (only if TWiki::User loaded)
-if( defined $TWiki::cfg{HtpasswdFormatFamily} ) {
-    H2("User Authentication");
-
-    $TWiki::htpasswdEncoding = $TWiki::cfg{HtpasswdEncoding};
-    print "</td></tr>\n";
-    print ROW("htpasswd Format Family", $TWiki::cfg{HtpasswdFormatFamily});
-    print ROW("htpasswd Encoding", $TWiki::cfg{HtpasswdEncoding});
-    print ROW("htpasswd Filename", $TWiki::cfg{HtpasswdFilename});
-    H3(NOTE("Only some combinations of Format, Encoding and Filename are",
-         " valid, and fewer are tested"));
-}
-
-# Generate a separate table for locale setup
-if ( $showLocales ) {		# Only if TWiki.pm found
-    H2("Internationalisation and Locale Setup");
-
-    # $TWiki::cfg{UseLocale}
-    $n = $TWiki::cfg{UseLocale}.
-     NOTE("This setting controls whether locales are used by Perl and 'grep'");
-
-    if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
-        # Warn re known broken locale setup
-        $n .= WARN("Using Perl on Windows, which may have missing or",
-                   "incorrect locales (in Cygwin or ActiveState Perl,",
-                   "respectively) - use of <strong>LocaleRegexes</strong> = 0",
-                   "(see below) is recommended unless you know your",
-                   "version of Perl has working locale support.");
-    }
-
-    # Check for d_setlocale in Config (same as 'perl -V:d_setlocale')
-    eval "use Config"; 
-    if ( not ( exists $Config::Config{d_setlocale} and $Config::Config{d_setlocale} eq 'define' ) ) {
-        $n .= WARN("This version of Perl was not compiled with locale",
-                   "support ('d_setlocale' not set in Config.pm)",
-                   "- re-compilation of Perl will be required before",
-                   "it can be used to support TWiki internationalisation.");
-    }
-    print ROW("UseLocale", $n);
-
-    $n = $TWiki::cfg{SiteLocale}.
-    NOTE("This sets the site-wide locale - for example,",
-         "<strong>de_AT.ISO-8859-1</strong> where 'de' is the language code,",
-         "'AT' the country code and 'ISO-8859-1' is the character set.",
-         "Use the <code>locale -a</code> command on your system to",
-         "determine available locales.");
-
-    # Try to see if required locale was correctly set earlier
-    my $currentLocale = setlocale(&LC_CTYPE);
-    if ( $currentLocale ne $TWiki::cfg{SiteLocale} ) {
-        $n .= WARN("Unable to set locale to '$TWiki::cfg{SiteLocale}'. The",
-                   "actual locale is '$currentLocale'",
-                   "- please test your locale settings. This warning can",
-                   "be ignored if you are not planning to use locales (e.g.",
-                   "your site uses English only) - or you can set ",
-                   "<strong>SiteLocale</strong> to <code>C</code>, which should",
-                   "always work.");
-    }
-    print ROW("SiteLocale", $n);
-
-    # $siteCharset (computed in TWiki::setupLocale from TWiki.cfg settings)
-    if (not defined $TWiki::cfg{SiteCharsetOverride} ) {
-        $TWiki::cfg{SiteCharsetOverride} = '';
-    }
-
-    $n = $TWiki::cfg{SiteCharsetOverride}.
-      NOTE(<<HERE
-This only needs to be set if the calculated charset, which is derived from
-the site-wide locale setting, is wrong. This setting is used in HTML pages
-and HTTP headers, so it must be acceptable to web browsers
-even if it is different to the locale-derived setting
-(e.g. 'euc-jp' instead of 'eucjp')
-HERE
-          );
-
-	# Warn against Perl 5.6 or lower for UTF-8
-	if ( $perlvernum < 5.008 ) {
-        $n .= WARN("Perl 5.8 is required if you are using TWiki's",
-                   "experimental UTF-8 support\n");
-    }
-
-    # Check for 'useperlio' in Config on Perl 5.8 or higher - required
-    # for use of ':utf8' layer.
-    if ( $perlvernum >= 5.008 and 
-         not ( exists $Config::Config{useperlio} and
-               $Config::Config{useperlio} eq 'define' ) ) {
-        $n .= WARN("This version of Perl was not compiled to use PerlIO",
-                   "by default ('useperlio' not set in Config.pm, see",
-                   "<i>Perl's Unicode Model</i> in 'perldoc perluniintro')",
-                   "- re-compilation of Perl will be required before it",
-                   "can be used to enable TWiki's experimental UTF-8",
-                   "support.");
-    }
-    print ROW("SiteCharsetOverride", $n);
-
-    $n = $TWiki::cfg{LocaleRegexes}.
-    NOTE("This setting (default: 1) controls whether\n",
-         "locale-dependent regular expressions (e.g. <code>[:upper:]</code>) are\n",
-         "used by Perl and 'grep'. It is used in environments where locales are\n",
-         "broken, to allow use of internationalised WikiWords.  You should\n",
-         "configure <strong>UseLocale</strong> to 1, and set a reasonable\n",
-         "<strong>SiteLocale</strong>, since this enables correct setting of the\n",
-         "site charset for use by web browsers. Don't change this\n",
-         "setting unless your locales are not working for whatever reason\n");
-    print ROW("LocaleRegexes", $n);
-
-    # Locales are off/broken, or using pre-5.6 Perl, so have to 
-    # explicitly list the accented characters (but not if using UTF-8)
-    my $perlVerPreferred = 5.006;	# 5.6 or higher has [:lower:] etc
-    if ( !$TWiki::cfg{UseLocale} || $perlvernum < $perlVerPreferred
-         || !$TWiki::cfg{LocaleRegexes} ) {
-
-        # Can't use locales, so generate upper and lower case character
-        # classes to avoid doing this at run-time in TWiki.
-        my $forUpperNat;
-        my $forLowerNat;
-        if ( $perlvernum < $perlVerPreferred ) {
-            # Get strings with the non-ASCII alphabetic characters only, upper and lower case
-            $forUpperNat = join '', grep { lc($_) ne $_ and m/[^A-Z]/ } map { chr($_) } 1..255;
-            $forLowerNat = join '', grep { uc($_) ne $_ and m/[^a-z]/ } map { chr($_) } 1..255;
-        }
-
-        unless( $TWiki::cfg{UseLocale} && $TWiki::cfg{LocaleRegexes} ) {
-            $n = $TWiki::cfg{UpperNational}.
-              NOTE("This setting is used when <strong>UseLocale</strong> is 0 or",
-                   "<strong>LocaleRegexes</strong> is 0, to work around missing or",
-                   "non-working locales.\n",
-                   "It is also used with Perl 5.005 for efficiency reasons",
-                   "- upgrading to Perl 5.6.1 with working locales is",
-                   "recommended, and removes the need for this. \n",
-                   "If required, it should be set to the upper case accented",
-                   "characters you require in your locale.");
-            if ( $forUpperNat ) {
-                $n .= NOTE("The following upper case accented characters have",
-                           "been found in this locale and should be considered",
-                           "for use in this parameter: <strong>$forUpperNat</strong>");
-            }
-            print ROW("UpperNational", $n);
-            $n = $TWiki::cfg{LowerNational}.
-              NOTE("This setting is used whenever <strong>UpperNational</strong> is used.",
-                   "It should be set to the lower case accented characters you",
-                   "require in your locale.");
-            if ( $forLowerNat ) {
-                $n = NOTE("The following lower case accented characters have",
-                          "been found in this locale and should be considered",
-                          "for use in this parameter: <strong>$forLowerNat</strong>");
-            }
-            print ROW("LowerNational", $n);
-        }
-    }
 }
 
 # "Parse" TWiki.cfg
@@ -916,21 +747,31 @@ foreach (split(/\r?\n/, $text)) {
         $type = '';
         $descr = '';
     } elsif( m/^##+(.*?)#+$/ ) {
-        print CGI::Tr(CGI::td({ colspan => 2 },CGI::h2( $1 )));
+        print CGI::Tr(CGI::td({ colspan => 2 },
+                              CGI::a({name=>_makeAnchor( $1 )},
+                                     CGI::h2( $1 ))));
         $type = '_HELP';
     } elsif( $type ) {
         $descr .= "$_ ";
     }
 }
-print CGI::end_table(),
-  CGI::submit(-onclick=>'verify_mandatory()', -value=>'Update'),
+print CGI::end_table();
+print CGI::span({class=>'error'},$errors.' errors') if $errors;
+print CGI::span({class=>'warn'},$warnings.' warnings') if $warnings;
+print CGI::p(CGI::submit(-onclick=>'verify_mandatory()', -value=>'Update')),
   CGI::end_form();
-
-print '</div>';
 
 print CGI::end_html();
 
 # End of code
+
+sub _makeAnchor {
+    my $str = shift;
+
+    $str =~ s/\s(\w)/uc($1)/ge;
+    $str =~ s/\W//g;
+    return $str;
+}
 
 # Generates the appropriate HTML for getting a value to configure the
 # entry. The opts are additional parameters, and by convention may
@@ -1027,10 +868,15 @@ sub _promptSELECT {
     my( $id, $opts, $value, $keys ) = @_;
     $opts =~ s/^\s+//;
     $opts =~ s/\s.*$//;
-    $opts = '<option>'.
-      join("</option><option>", split( /\s*,\s*/, $opts)).
-        '</option>';
-    return CGI::Select({ name => $id, size=>1, value=>$value }, $opts);
+    my $sopts = '';
+    foreach my $opt (split( /\s*,\s*/, $opts)) {
+        if( $opt eq $value ) {
+            $sopts .= '<option selected="selected">'.$opt.'</option>';
+        } else {
+            $sopts .= '<option>'.$opt.'</option>';
+        }
+    }
+    return CGI::Select({ name => $id, size=>1, default=>$value }, $sopts);
 }
 
 sub _checkDefaultUrlHost {
@@ -1055,20 +901,27 @@ HERE
     }
 }
 
-sub _checkPubDir {
+sub _checkPubUrlPath {
     return 'This is not set correctly if the link below is broken:<br />'.
-      '<a href="'.$TWiki::cfg{PubUrlPath}.'">click here</a>'.
-        checkdir( "PubDir", $TWiki::cfg{PubDir}, undef, "w" );
+      '<a href="'.$TWiki::cfg{PubUrlPath}.'">click here</a>';
+}
+
+sub _checkPubDir {
+    my $e = _checkTreePerms( $TWiki::cfg{PubDir}, 'rw' );
+    $e = WARN($e) if $e;
+    return $e;
 }
 
 sub _checkTemplateDir {
-    return checkdir( "TemplateDir", $TWiki::cfg{TemplateDir},
-          "view.tmpl", "r" );
+    my $e = _checkTreePerms( $TWiki::cfg{TemplateDir}, 'r' );
+    $e = ERROR($e) if $e;
+    return $e;
 }
 
 sub _checkDataDir {
-    return checkdir( "DataDir", $TWiki::cfg{DataDir}, undef, "w" );
-
+    my $e = _checkTreePerms( shift, "rw" );
+    $e = WARN($e) if $e;
+    return $e;
 }
 
 sub _checkMailProgram {
@@ -1089,60 +942,150 @@ sub _checkMailProgram {
 
 sub _checkLogFileName {
     my $logFile = $TWiki::cfg{LogFileName} || "";
-    my $logDir = $logFile;
-    $logDir =~ s/\/[^\/]*$//;
-    checkdir( "LogFileName", $logDir, undef, "w" );
+    $logFile =~ s/%DATE%/DATE/;
+    my $e = _checkCanCreateFile( $logFile );
+    $e = ERROR($e) if $e;
+    return $e;
 }
 
 sub _checkWarningFileName {
     my $logFile = $TWiki::cfg{WarningFileName} || "";
-    my $logDir = $logFile;
-    $logDir =~ s/\/[^\/]*$//;
-    checkdir( "WarningFileName", $logDir, undef, "w" );
+    $logFile =~ s/%DATE%/DATE/;
+    my $e = _checkCanCreateFile( $logFile );
+    $e = ERROR($e) if $e;
+    return $e;
 }
 
 sub _checkDebugFileName {
     my $logFile = $TWiki::cfg{DebugFileName} || "";
-    my $logDir = $logFile;
-    $logDir =~ s/\/[^\/]*$//;
-    checkdir( "DebugFileName", $logDir, undef, "w" );
+    $logFile =~ s/%DATE%/DATE/;
+    my $e = _checkCanCreateFile( $logFile );
+    $e = ERROR($e) if $e;
+    return $e;
 }
 
-sub testFileIsWritable {
-    my( $name ) = @_;
-    my $txt1 = "test 1 2 3";
-    deleteTestFile( $name );
-    writeTestFile( $name, $txt1 );
-    my $txt2 = readTestFile( $name );
-    deleteTestFile( $name );
-    my $identical = ( $txt2 eq $txt1 );
-    return $identical;
+sub _checkMimeTypesFileName {
+    my $e = _checkTreePerms(shift, 'r');
+    $e = ERROR($e) if $e;
+    return $e;
 }
 
-sub readTestFile {
-    my( $name ) = @_;
-    my $data = "";
-    undef $/; # set to read to EOF
-    open( IN_FILE, "<$name" ) || return "";
-    $data = <IN_FILE>;
-    $/ = "\n";
-    close( IN_FILE );
-    return $data;
+sub _checkHtpasswd_FileName {
+    my $e = _checkTreePerms(shift, 'r');
+    $e = ERROR($e) if $e;
+    return $e;
 }
 
-sub writeTestFile {
-    my( $name, $text ) = @_;
-    if( open( FILE, ">$name" ) ) {
-        print FILE $text;
-        close( FILE);
+sub _checkRemoteUserFileName {
+    my $file = shift;
+    my $e = _checkCanCreateFile( $file );
+    $e = WARN($e) if $e;
+    return $e;
+}
+
+sub _checkRegistrationApprovals {
+    my $file = shift;
+    my $e = _checkTreePerms( $file, 'rw' );
+    $e = WARN($e) if $e;
+    return $e;
+}
+
+sub _checkUseLocale {
+    my $on = shift;
+    my $n = '';
+    if( $on && $TWiki::cfg{OS} eq 'WINDOWS' ) {
+        # Warn re known broken locale setup
+        $n .= WARN(<<HERE
+Using Perl on Windows, which may have missing or incorrect locales (in Cygwin
+or ActiveState Perl, respectively) - turning off {LocaleRegexes} is
+recommended unless you know your version of Perl has working locale support.
+HERE
+                  );
     }
+
+	# Warn against Perl 5.6 or lower for UTF-8
+	if ( $on && $perlvernum < 5.008 ) {
+        $n .= WARN("Perl 5.8 is required if you are using TWiki's",
+                   "experimental UTF-8 support\n");
+    }
+
+    # Check for 'useperlio' in Config on Perl 5.8 or higher - required
+    # for use of ':utf8' layer.
+    if ( $on && $perlvernum >= 5.008 and 
+         not ( exists $Config::Config{useperlio} and
+               $Config::Config{useperlio} eq 'define' ) ) {
+        $n .= WARN("This version of Perl was not compiled to use PerlIO",
+                   "by default ('useperlio' not set in Config.pm, see",
+                   "<i>Perl's Unicode Model</i> in 'perldoc perluniintro')",
+                   "- re-compilation of Perl will be required before it",
+                   "can be used to enable TWiki's experimental UTF-8",
+                   "support.");
+    }
+
+    # Check for d_setlocale in Config (same as 'perl -V:d_setlocale')
+    eval "use Config";
+    if ( $on && !( exists $Config::Config{d_setlocale} &&
+            $Config::Config{d_setlocale} eq 'define' ) ) {
+        $n .= WARN(<<HERE
+This version of Perl was not compiled with locale support ('d_setlocale' not
+set in Config.pm) - re-compilation of Perl will be required before it can be
+used to support TWiki internationalisation.
+HERE
+                  );
+    }
+    return $n;
 }
 
-sub deleteTestFile {
-    my( $name ) = @_;
-    if( -e $name ) {
-        unlink $name;
+sub _checkUpperNational {
+    if( $perlvernum < $perlVerPreferred || 1) {
+        # Locales are off/broken, or using pre-5.6 Perl, so have to 
+        # explicitly list the accented characters (but not if using UTF-8)
+        my $forUpperNat = join '', grep { uc($_) ne $_ and m/[^a-z]/ } map { chr($_) } 1..255;
+
+        if ($forUpperNat) {
+            return WARN( <<HERE
+The following upper case accented characters have been found in this locale
+and should be considered for use in this parameter:
+<strong>$forUpperNat</strong>
+HERE
+                       );
+        }
     }
+    return '';
+}
+
+sub _checkLowerNational {
+    if( $perlvernum < $perlVerPreferred || 1) {
+        # Locales are off/broken, or using pre-5.6 Perl, so have to 
+        # explicitly list the accented characters (but not if using UTF-8)
+        my $forLowerNat = join '', grep { uc($_) ne $_ and m/[^a-z]/ } map { chr($_) } 1..255;
+
+        if ($forLowerNat) {
+            return WARN( <<HERE
+The following lower case accented characters have been found in this locale
+and should be considered for use in this parameter:
+<strong>$forLowerNat</strong>
+HERE
+                       );
+        }
+    }
+    return '';
+}
+
+sub _checkSiteLocale {
+    my $locale = shift;
+    # Try to see if required locale was correctly set earlier
+    my $currentLocale = setlocale(&LC_CTYPE);
+    if ( $currentLocale ne $locale ) {
+        return WARN(<<HERE
+Unable to set locale to '$locale'. The actual locale is '$currentLocale'
+- please test your locale settings. This warning can be ignored if you are
+not planning to use locales (e.g. your site uses English only) - or you can
+set  <strong>SiteLocale</strong> to <code>C</code>, which should always work.
+HERE
+                );
+    }
+    return '';
 }
 
 # Since Windows (without Cygwin) makes it hard to capture stderr
@@ -1180,24 +1123,59 @@ sub checkGnuVersion {
     return $ok;
 }
 
-# check we can create a file
-sub checkdir {
-    my( $id, $dir, $file, $perms ) = @_;
+sub _checkCanCreateFile {
+    my $name = shift;
+    if (-e $name) {
+        return _checkTreePerms($name,'rw');
+    }
+    my $txt1 = "test 1 2 3";
+    unlink $name if( -e $name );
+    open( FILE, ">$name" ) ||
+      return 'Could not create test file ', $name;
+    print FILE $txt1;
+    close( FILE);
+    open( IN_FILE, "<$name" ) ||
+      return 'Could not read test file ', $name;
+    my $txt2 = <IN_FILE>;
+    close( IN_FILE );
+    unlink $name if( -e $name );
+    unless ( $txt2 eq $txt1 ) {
+        return 'Could not write and then read '.$name;
+    }
+    return '';
+}
 
-    if (! defined $dir) {
-      $file =~ /(.*)\/(.*?)/;
-      $dir = $1;
-      $file = $2;
+sub _checkTreePerms {
+    my( $path, $perms ) = @_;
+    my $errs = '';
+
+    return $path. ' cannot be found<br />' unless( -e $path );
+
+    if( $perms =~ /r/ && !-r $path) {
+        $errs .= ' readable';
     }
-    my $n = $dir;
-    if( defined $file && !-e "$dir/$file" ) {
-        $n .= ERROR("Directory $dir does not exist or file <tt>$file</tt> does not exist in this directory.");
-    } elsif( $perms =~ /w/ && ! testFileIsWritable( "$dir/testenv.test" ) ) {
-        $n .= ERROR("The directory $dir must exist and be writable by the <strong>$usr</strong> user.");
-    } elsif( $perms !~ /w/ && testFileIsWritable( "$dir/testenv.test" ) ) {
-        $n .= WARN("Security issue: The directory $dir should not be writable by the <strong>$usr</strong> user.");
+
+    if( !-d $path && $perms =~ /w/ && !-w $path) {
+        $errs .= ' writable';
     }
-    return $n;
+
+    if( $perms =~ /x/ && !-x $path) {
+        $errs .= ' executable';
+    }
+
+    return $path.' is not '.$errs.'<br />' if $errs;
+
+    return '' unless -d $path;
+
+    opendir(D, $path) ||
+      return 'Directory '.$path.' is not readable.<br />';
+
+    foreach my $e ( grep { !/^\./ } readdir( D )) {
+        my $p = $path.'/'.$e;
+        $errs .= _checkTreePerms( $p, $perms );
+    }
+    closedir(D);
+    return $errs;
 }
 
 sub _checkScriptSuffix {
@@ -1260,17 +1238,19 @@ sub ROW {
 
 # a note
 sub NOTE {
-    return CGI::p({class=>"info"},CGI::strong('Note:').join("\n",@_));
+    return CGI::p({class=>"info"}, join("\n",@_));
 }
 
 # a warning
 sub WARN {
-    return CGI::p({class=>'warn'},CGI::strong('Warning:').join("\n",@_));
+    $warnings++;
+    return CGI::p({class=>'warn'}, CGI::strong('Warning: ').join("\n",@_));
 }
 
 # an error
 sub ERROR {
-    return CGI::p({class=>'error'},CGI::strong('Error:').join("\n",@_));
+    $errors++;
+    return CGI::p({class=>'error'}, CGI::strong('Error: ').join("\n",@_));
 }
 
 sub findFileOnPath {
