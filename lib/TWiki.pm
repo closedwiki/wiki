@@ -2215,11 +2215,11 @@ sub _PLUGINVERSION {
 # include hierarchy. Works for both URLs and absolute server paths.
 sub _INCLUDE {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
+    # Remove params, so they don't get expanded in the included page
     my $path = $params->remove('_DEFAULT') || '';
     my $pattern = $params->remove('pattern');
-    my $rev     = $params->remove('rev');
-    my $warn    = isTrue( $params->remove('warn'),
-                          $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ));
+    my $rev = $params->remove('rev');
+    my $warn = $params->remove('warn');
 
     if( $path =~ /^https?\:/ ) {
         # include web page
@@ -2256,9 +2256,10 @@ sub _INCLUDE {
 
     # See Codev.FailedIncludeWarning for the history.
     unless( $this->{store}->topicExists($incweb, $inctopic)) {
-        if( $warn ) {
+        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
+        if( $warn eq 'on' ) {
             return $this->inlineAlert( 'alerts', 'no_such_topic', $inctopic );
-        } else {
+        } elsif( $warn ne 'off' ) {
             $inctopic =~ s/\//\./go;
             $warn =~ s/\$topic/$inctopic/go;
             return $warn;
@@ -2271,15 +2272,18 @@ sub _INCLUDE {
     # itself is not blocked; however subsequent attempts to include the
     # topic will fail.
     if( grep( /^$path$/, @{$this->{includeStack}} )) {
-        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' ) ||
-          '';
-        if( $warn !~ /^(off|no)$/i ) {
+        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
+        if( $warn eq 'on' ) {
             my $more = '';
             if( $#{$this->{includeStack}} ) {
                 $more .= join( '/', @{$this->{includeStack}} );
             }
             return $this->inlineAlert( 'alerts', 'already_included',
                                        $incweb, $inctopic, $more );
+        } elsif( $warn ne 'off' ) {
+            $inctopic =~ s/\//\./go;
+            $warn =~ s/\$topic/$inctopic/go;
+            return $warn;
         } # else fail silently
         return '';
     }
