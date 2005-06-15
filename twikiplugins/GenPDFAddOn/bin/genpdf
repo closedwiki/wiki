@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -wI.
+#!/usr/bin/perl -wI.
 #
 # pdf (converts TWiki page to PDF using HTMLDOC)
 #    (based on PRintUsingPDF pdf script)

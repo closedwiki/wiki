@@ -54,7 +54,7 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = 0.3;
+$VERSION = 0.4;
 
 =pod
 
@@ -68,9 +68,9 @@ returns modified $text.
 sub _fixTags {
    my ($text, $rhPrefs) = @_;
 
-   $text =~ s|%PDFBANNER%|$rhPrefs->{'banner'}|g;
-   $text =~ s|%PDFTITLE%|$rhPrefs->{'title'}|g;
-   $text =~ s|%PDFSUBTITLE%|$rhPrefs->{'subtitle'}|g;
+   $text =~ s|%GENPDFADDON_BANNER%|$rhPrefs->{'banner'}|g;
+   $text =~ s|%GENPDFADDON_TITLE%|$rhPrefs->{'title'}|g;
+   $text =~ s|%GENPDFADDON_SUBTITLE%|$rhPrefs->{'subtitle'}|g;
    
    return $text;
 }
@@ -89,6 +89,7 @@ sub _getRenderedView {
    my ($webName, $topic) = @_;
 
    my $text = TWiki::Func::readTopicText($webName, $topic);
+   $text =~ s/\%TOC({.*?})?\%//g; # remove TWiki TOC
    $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
    $text = TWiki::Func::renderText($text);
 
@@ -149,19 +150,26 @@ sub _getHeaderFooterData {
    $text = _fixTags($text, $rhPrefs);
 
    my $output = "";
-   my $line = "";
    # Expand common variables found between quotes. We have to jump through this loop hoop
    # as the variables to expand occur inside html comments so just expanding variables in
    # the full text doesn't do anything
-   while ($text =~ /(.*?")(.*?)"/sg) {
-      $output .= $1;
-      $line = $2;
-      # Expand common variables (full rendering causes problems)
-      $line = TWiki::Func::expandCommonVariables($line, $topic, $webName);
-      $output .= "$line\"";
+   for my $line (split(/(?=<)/, $text)) {
+      if ($line =~ /([^"]*")(.*)("[^"]*)/g) {
+         my $start = $1;
+         my $var = $2;
+         my $end = $3;
+         # Expand common variables and render
+         #print STDERR "var = '$var'\n"; #DEBUG
+         $var = TWiki::Func::expandCommonVariables($var, $topic, $webName);
+         $var = TWiki::Func::renderText($var);
+         $var =~ s/<.*?>//g; # htmldoc can't use HTML tags in headers/footers
+         #print STDERR "var = '$var'\n"; #DEBUG
+         $output .= $start . $var . $end;
+      }
+      else {
+         $output .= $line;
+      }
    }
-   $text =~ m|.*"(.*)|s;
-   $output .= $1;
 
    return $output;
 }
@@ -180,13 +188,13 @@ values passed in from the query to have precendence.
 sub _createTitleFile {
    my ($webName, $rhPrefs) = @_;
 
-   # Get the title data (if it exists)
-   my $text = "";
+   my $text = '';
    my $topic = $rhPrefs->{'titletopic'};
    # Get a topic name without any whitespace
    $topic =~ s|\s||g;
+   # Get the title topic (if it exists)
    if ($rhPrefs->{'titletopic'}) {
-      $text = TWiki::Func::readTopicText($webName, $topic);
+      $text .= TWiki::Func::readTopicText($webName, $topic);
    }
    # TBD: Should probably check for valid text (e.g. topic actually found, no oops URL, etc.).
 
@@ -197,9 +205,10 @@ sub _createTitleFile {
    # Now render the rest of the topic
    $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
    $text = TWiki::Func::renderText($text);
+# FIXME - send to _fixHtml
 
    # Save it to a file
-   my ($fh, $file) = mkstemps('/tmp/fileXXXXXXXXXX', '.html');
+   my ($fh, $file) = mkstemps('/tmp/GenPDFAddOnXXXXXXXXXX', '.html');
    print $fh $text;
 
    return $file;
@@ -210,8 +219,7 @@ sub _createTitleFile {
 
 =head2 _shiftHeaders($html, $rhPrefs)
 
-Functionality from original PDF script. It currently doesn't work (maybe a porting
-problem on my part).
+Functionality from original PDF script.
 
 =cut
 
@@ -224,7 +232,8 @@ sub _shiftHeaders{
       # I leave for example all header that contain a digit folowed by a point.
       # Look like this:
       # $html =~ s&<h(\d)>((?:(?!(<h\d>|\d\.)).)*)</h\d>&'<h'.($newHead = ($1+$sh)>6?6:($1+$sh)<1?1:($1+$sh)).'>'.$2.'</h'.($newHead).'>'&gse;
-      $html =~ s|<h(\d)>((?:(?!<h\d>).)*)</h\d>|'<h'.($newHead = ($1+$rhPrefs->{'shift'})>6?6:($1+$rhPrefs-{'shift'})<1?1:($1+$rhPrefs->{'shift'})).'>'.$2.'</h'.($newHead).'>'|gse;
+      # NOTE - htmldoc allows headers up to <h15>
+      $html =~ s|<h(\d)>((?:(?!<h\d>).)*)</h\d>|'<h'.($newHead = ($1+$rhPrefs->{'shift'})>15?15:($1+$rhPrefs->{'shift'})<1?1:($1+$rhPrefs->{'shift'})).'>'.$2.'</h'.($newHead).'>'|gsei;
    }
 
    return $html;
@@ -236,32 +245,70 @@ sub _shiftHeaders{
 
 Cleans up the HTML as needed before htmldoc processing. This currently includes fixing
 img links as needed, removing page breaks, META stuff, and inserting an h1 header if one
-isn't present. Returns the modifies html.
+isn't present. Returns the modified html.
 
 =cut
 
 sub _fixHtml {
-   my ($html, $rhPrefs) = @_;
-
-   # Insert an <h1> header if one isn't present
-   if ($html !~ /<h1>/i) {
-      $html =~ s|^(.)|<h1>$rhPrefs->{'title'}</h1>$1|;
-   }
+   my ($html, $rhPrefs, $topic, $webName) = @_;
+   my $title = TWiki::Func::expandCommonVariables($rhPrefs->{'title'}, $topic, $webName);
+   $title = TWiki::Func::renderText($title);
+   $title =~ s/<.*?>//g;
+   #print STDERR "title: '$title'\n"; # DEBUG
 
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $html = _extractPdfSections($html);
 
-   # Fix the image tags for links relative to web server root
-   my $url = TWiki::Func::getUrlHost();
-   $html =~ s|<img src=\"/|<img src=\"$url/|sgi;
-
    # remove all page breaks
-   $html =~ s|<p style=\"page-break-before:always\"\/>||g;
+   # FIXME - why remove a forced page break? Instead insert a <!-- PAGE BREAK -->
+   #         otherwise dangling </p> is not cleaned up
+   $html =~ s/(<p(.*) style="page-break-before:always")/<!-- PAGE BREAK -->$1/gis;
 
    # remove %META stuff
-   $html =~ s|%META:\w*{.*?}%||gs;
+   $html =~ s/%META:\w+{.*?}%//gs;
 
-#   $html = _shiftHeaders($html, $rhPrefs);
+   # Prepend META tags for PDF meta info - may be redefined later by topic text
+   my $meta = '<META NAME="AUTHOR" CONTENT="%REVINFO{format="$wikiusername"}%"/>'; # Specifies the document author.
+   $meta .= '<META NAME="COPYRIGHT" CONTENT="%WEBCOPYRIGHT%"/>'; # Specifies the document copyright.
+   $meta .= '<META NAME="DOCNUMBER" CONTENT="%REVINFO{format="r1.$rev - $date"}%"/>'; # Specifies the document number.
+   $meta .= '<META NAME="GENERATOR" CONTENT="%WIKITOOLNAME% %WIKIVERSION%"/>'; # Specifies the application that generated the HTML file.
+   $meta .= '<META NAME="KEYWORDS" CONTENT="'. $rhPrefs->{'keywords'} .'"/>'; # Specifies document search keywords.
+   $meta .= '<META NAME="SUBJECT" CONTENT="'. $rhPrefs->{'subject'} .'"/>'; # Specifies document subject.
+   $meta = TWiki::Func::expandCommonVariables($meta, $topic, $webName);
+   $meta =~ s/<(?!META).*?>//g; # remove any tags from inside the <META />
+   $meta = TWiki::Func::renderText($meta);
+   $meta =~ s/<(?!META).*?>//g; # remove any tags from inside the <META />
+   # FIXME - renderText converts the <META> tags to &lt;META&gt;
+   # if the CONTENT contains anchor tags (trying to be XHTML compliant)
+   $meta =~ s/&lt;/</g;
+   $meta =~ s/&gt;/>/g;
+   #print STDERR "meta: '$meta'\n"; # DEBUG
+
+   $html = _shiftHeaders($html, $rhPrefs);
+
+   # Insert an <h1> header if one isn't present
+   if ($html !~ /<h1>/is) {
+      $html = "<h1>$title</h1>$html";
+   }
+   # htmldoc reads <title> for PDF Title meta-info
+   $html = "<head><title>$title</title>\n$meta</head>\n<body>$html</body>";
+
+   # As of HtmlDoc 1.8.24, it only handles HTML3.2 elements so
+   # convert some common HTML4.x elements to similar HTML3.2 elements
+   $html =~ s/&ndash;/&shy;/g;
+   $html =~ s/&[lr]dquo;/"/g;
+   $html =~ s/&[lr]squo;/'/g;
+   $html =~ s/&brvbar;/|/g;
+
+   # convert twikiNewLinks to normal text
+   # FIXME - should this be a preference?
+   $html =~ s/<span class="twikiNewLink".*?>($TWiki::regex{wikiWordRegex}).*?\/span>/$1/gs;
+
+   # Fix the image tags for links relative to web server root and
+   # fully qualify any unqualified URLs (to make it portable to another host)
+   my $url = TWiki::Func::getUrlHost();
+   $html =~ s/<img(.*?) src="\//<img$1 src="$url\//sgi;
+   $html =~ s/<a(.*?) href="\//<a$1 href="$url\//sgi;
 
    return $html;
 }
@@ -272,7 +319,7 @@ sub _fixHtml {
 
 Creates a hash with the various preference values. For each preference key, it will set the
 value first to the one supplied in the URL query. If that is not present, it will use the TWiki
-preference value, and if that is not present and a value is needed, it will usr a default.
+preference value, and if that is not present and a value is needed, it will use a default.
 
 See the GenPDFAddOn topic for a description of the possible preference values and defaults.
 
@@ -284,44 +331,67 @@ sub _getPrefsHashRef {
    my %prefs = ();
 
    # HTMLDOC location
-   $prefs{'htmldoc'} = TWiki::Func::getPreferencesValue("HTMLDOCLOC") || "/usr/bin/htmldoc";
+   # FIXME - Using a preference is insecure as sessions take precedence over preferences. See
+   # http://twiki.org/cgi-bin/view/Plugins/SessionPlugin#Getting_Setting_and_Clearing_Ses
+   # $prefs{'htmldoc'} = TWiki::Func::getPreferencesValue("HTMLDOCLOC") || "/usr/bin/htmldoc";
+   # $TWiki::htmldocCmd must be set in TWiki.cfg instead
+
    # header/footer topic
-   $prefs{'hftopic'} = $query->param('pdfheadertopic') || TWiki::Func::getPreferencesValue("PDFHEADERTOPIC");
+   $prefs{'hftopic'} = $query->param('pdfheadertopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERTOPIC");
    # title topic
-   $prefs{'titletopic'} = $query->param('pdftitletopic') || TWiki::Func::getPreferencesValue("PDFTITLETOPIC");
+   $prefs{'titletopic'} = $query->param('pdftitletopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_TITLETOPIC");
 
-   $prefs{'banner'} = $query->param('pdfbanner') || TWiki::Func::getPreferencesValue("PDFBANNER");
-   $prefs{'title'} = $query->param('pdftitle') || TWiki::Func::getPreferencesValue("PDFTITLE");
-   $prefs{'subtitle'} = $query->param('pdfsubtitle') || TWiki::Func::getPreferencesValue("PDFSUBTITLE");
+   $prefs{'banner'} = $query->param('pdfbanner') || TWiki::Func::getPreferencesValue("GENPDFADDON_BANNER");
+   $prefs{'title'} = $query->param('pdftitle') || TWiki::Func::getPreferencesValue("GENPDFADDON_TITLE");
+   $prefs{'subtitle'} = $query->param('pdfsubtitle') || TWiki::Func::getPreferencesValue("GENPDFADDON_SUBTITLE");
+   $prefs{'keywords'} = $query->param('pdfkeywords') || TWiki::Func::getPreferencesValue("GENPDFADDON_KEYWORDS")
+                        || '%FORMFIELD{"KeyWords"}%';
+   $prefs{'subject'} = $query->param('pdfsubject') || TWiki::Func::getPreferencesValue("GENPDFADDON_SUBJECT")
+                        || '%FORMFIELD{"TopicHeadline"}%';
 
-   
-   $prefs{'skin'} = $query->param('skin') || TWiki::Func::getPreferencesValue("PDFSKIN");
+   $prefs{'skin'} = $query->param('skin') || TWiki::Func::getPreferencesValue("GENPDFADDON_SKIN");
    # Force a skin if the current value if the user didn't supply one (note that supplying a null one if OK)
-   $prefs{'skin'} = "print.pattern" if (!defined($query->param('skin'))
-                                        && TWiki::Func::getPreferencesValue("PDFSKIN") eq "");
+   $prefs{'skin'} = "print.pattern" unless (defined $prefs{'skin'} || !defined $query->param('skin'));
 
    # Get TOC header/footer. Set to default if nothing useful given
-   $prefs{'tocheader'} = $query->param('pdftocheader') || TWiki::Func::getPreferencesValue("PDFTOCHEADER");
-   $prefs{'tocheader'} = "..." if ($prefs{'tocheader'} =~ /\s*/);
-   $prefs{'tocfooter'} = $query->param('pdftocfooter') || TWiki::Func::getPreferencesValue("PDFTOCFOOTER");
-   $prefs{'tocfooter'} = "..i" if ($prefs{'tocfooter'} =~ /\s*/);
+   $prefs{'tocheader'} = $query->param('pdftocheader') || TWiki::Func::getPreferencesValue("GENPDFADDON_TOCHEADER");
+   $prefs{'tocheader'} = "..." unless ($prefs{'tocheader'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
+   $prefs{'tocfooter'} = $query->param('pdftocfooter') || TWiki::Func::getPreferencesValue("GENPDFADDON_TOCFOOTER");
+   $prefs{'tocfooter'} = "..i" unless ($prefs{'tocfooter'} =~ /^[\.\/:1aAcCdDhiIltT]{3}$/);
 
-   # Get some other parameters and set reasonable defaults if not supplied
-   $prefs{'format'} = $query->param('pdfformat') || TWiki::Func::getPreferencesValue("PDFFORMAT");
-   $prefs{'format'} = "pdf14" if ($prefs{'format'} =~ /\s*/);
-   # note that 0 for toclevels with turn off the TOC
-   $prefs{'toclevels'} = $query->param('pdftoclevels');
-   $prefs{'toclevels'} = TWiki::Func::getPreferencesValue("PDFTOCLEVELS") if (!defined($query->param('pdftoclevels')));
-   $prefs{'toclevels'} = "5" if ((!defined($query->param('pdftoclevels'))) && (TWiki::Func::getPreferencesValue("PDFTOCLEVELS") eq ""));
-   $prefs{'size'} = $query->param('pdfpagesize') || TWiki::Func::getPreferencesValue("PDFPAGESIZE");
-   $prefs{'size'} = "a4" if ($prefs{'size'} =~ /\s*/);
-   $prefs{'orientation'} = $query->param('pdforientation') || TWiki::Func::getPreferencesValue("PDFORIENTATION");
-   $prefs{'orientation'} = "portrait" if ($prefs{'orientation'} =~ /\s*/);
-   $prefs{'width'} = $query->param('pdfwidth') || TWiki::Func::getPreferencesValue("PDFWIDTH");
-   $prefs{'width'} = "860" if ($prefs{'width'} =~ /\s*/);
-   $prefs{'shift'} = $query->param('pdfheadershit') || TWiki::Func::getPreferencesValue("PDFHEADERSHIFT");
-   $prefs{'shift'} = "2" if ($prefs{'shift'} =~ /\s*/);
-   $prefs{'shift'} =~ s/\s//g;
+   # Get some other parameters and set reasonable defaults unless not supplied
+   $prefs{'format'} = $query->param('pdfformat') || TWiki::Func::getPreferencesValue("GENPDFADDON_FORMAT");
+   $prefs{'format'} = "pdf14" unless ($prefs{'format'} =~ /^(html(sep)?|ps([123])?|pdf(1[1234])?)$/);
+   $prefs{'size'} = $query->param('pdfpagesize') || TWiki::Func::getPreferencesValue("GENPDFADDON_PAGESIZE");
+   $prefs{'size'} = "a4" unless ($prefs{'size'} =~ /^(letter|legal|a4|universal|(\d+x\d+)(pt|mm|cm|in))$/);
+   $prefs{'orientation'} = $query->param('pdforientation') || TWiki::Func::getPreferencesValue("GENPDFADDON_ORIENTATION");
+   $prefs{'orientation'} = "portrait" unless ($prefs{'orientation'} =~ /^(landscape|portrait)$/);
+   $prefs{'headfootfont'} = $query->param('pdfheadfootfont') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADFOOTFONT");
+   $prefs{'headfootfont'} = undef unless ($prefs{'headfootfont'} =~
+      /^(times(-roman|-bold|-italic|bolditalic)?|(courier|helvetica)(-bold|-oblique|-boldoblique)?)$/);
+   $prefs{'width'} = $query->param('pdfwidth') || TWiki::Func::getPreferencesValue("GENPDFADDON_WIDTH");
+   $prefs{'width'} = 860 unless ($prefs{'width'} =~ /^\d+$/);
+   $prefs{'toclevels'} = $query->param('pdftoclevels') || TWiki::Func::getPreferencesValue("GENPDFADDON_TOCLEVELS");
+   $prefs{'toclevels'} = 5 unless ($prefs{'toclevels'} =~ /^\d+$/);
+   $prefs{'bodycolor'} = $query->param('pdfbodycolor') || TWiki::Func::getPreferencesValue("GENPDFADDON_BODYCOLOR");
+   $prefs{'bodycolor'} = undef unless ($prefs{'bodycolor'} =~ /^[0-9a-fA-F]{6}$/);
+
+   # Anything results in true (use 0 to turn these off or override the preference)
+   $prefs{'bodyimage'} = $query->param('pdfbodyimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_BODYIMAGE");
+   $prefs{'logoimage'} = $query->param('pdflogoimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_LOGOIMAGE");
+   $prefs{'numbered'} = $query->param('pdfnumberedtoc') || TWiki::Func::getPreferencesValue("GENPDFADDON_NUMBEREDTOC");
+   $prefs{'duplex'} = $query->param('pdfduplex') || TWiki::Func::getPreferencesValue("GENPDFADDON_DUPLEX");
+   $prefs{'shift'} = $query->param('pdfheadershift') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERSHIFT");
+   $prefs{'shift'} = 0 unless ($prefs{'shift'} =~ /^[+-]?(\d+)?$/);
+   $prefs{'permissions'} = $query->param('pdfpermissions') || TWiki::Func::getPreferencesValue("GENPDFADDON_PERMISSIONS");
+   $prefs{'permissions'} = join(',', grep(/^(all|annotate|copy|modify|print|no-annotate|no-copy|no-modify|no-print|none)$/,
+      split(/,/, $prefs{'permissions'})));
+   my @margins = grep(/^(top|bottom|left|right):\d+(\.\d+)?(cm|mm|in|pt)?$/, split(',', ($query->param('pdfmargins') || TWiki::Func::getPreferencesValue("GENPDFADDON_MARGINS"))));
+   for (@margins) {
+      my ($key,$val) = split(/:/);
+      $prefs{$key} = $val;
+   }
+   #print STDERR %prefs; #DEBUG
 
    return \%prefs;
 }
@@ -355,7 +425,7 @@ sub viewPDF {
    # Get ready to display HTML topic
    my $htmlData = _getRenderedView($webName, $topic);
    # Fix topic text (i.e. correct any problems with the HTML that htmldoc might not like
-   $htmlData = _fixHtml($htmlData, $rhPrefs);
+   $htmlData = _fixHtml($htmlData, $rhPrefs, $topic, $webName);
 
    # The data returned also incluides the header. Remove it.
    $htmlData =~ s|.*(<!DOCTYPE)|$1|s;
@@ -364,46 +434,82 @@ sub viewPDF {
    my $hfData = _getHeaderFooterData($webName, $rhPrefs);
 
    # Save this to a temp file for htmldoc processing
-   my ($tf, $tmpFile) = mkstemps('/tmp/fileXXXXXXXXXX', '.html');
+   my ($tf, $tmpFile) = mkstemps('/tmp/GenPDFAddOnXXXXXXXXXX', '.html');
    print $tf $hfData . $htmlData;
    close($tf);
 
    # Create a file holding the title data
    my $titleFile = _createTitleFile($webName, $rhPrefs);
 
+   # Create a temp file for output
+   my ($ofh, $outFile) = mkstemps('/tmp/GenPDFAddOnXXXXXXXXXX', '.pdf');
+
    # Convert tmpFile to PDF using HTMLDOC
-   my $callHtmldoc = "$rhPrefs->{'htmldoc'} --book --links --linkstyle plain";
-   $callHtmldoc   .= " -t $rhPrefs->{'format'}";
-   $callHtmldoc   .= " --$rhPrefs->{'orientation'}";
+   my @htmldocArgs;
+   push @htmldocArgs, "--book",
+                      "--quiet",
+                      "--links",
+                      "--linkstyle", "plain",
+                      "--outfile", "$outFile",
+                      "--format", "$rhPrefs->{'format'}",
+                      "--$rhPrefs->{'orientation'}",
+                      "--size", "$rhPrefs->{'size'}",
+                      "--browserwidth", "$rhPrefs->{'width'}",
+                      "--titlefile", "$titleFile";
    if ($rhPrefs->{'toclevels'} eq '0' ) {
-      $callHtmldoc .= " --no-toc --firstpage p1";
+      push @htmldocArgs, "--no-toc",
+                         "--firstpage", "p1";
    }
    else
    {
-      $callHtmldoc .= " --toclevels $rhPrefs->{'toclevels'} --firstpage toc";
+      push @htmldocArgs, "--numbered" if $rhPrefs->{'numbered'};
+      push @htmldocArgs, "--toclevels", "$rhPrefs->{'toclevels'}",
+                         "--tocheader", "$rhPrefs->{'tocheader'}",
+                         "--tocfooter", "$rhPrefs->{'tocfooter'}",
+                         "--firstpage", "toc";
    }
-   $callHtmldoc .= " --size $rhPrefs->{'size'}";
-   $callHtmldoc .= " --browserwidth $rhPrefs->{'width'}";
-   $callHtmldoc .= " --tocheader $rhPrefs->{'tocheader'}";
-   $callHtmldoc .= " --tocfooter $rhPrefs->{'tocfooter'}";
-   
-   $callHtmldoc .= " --titlefile $titleFile $tmpFile";
+   push @htmldocArgs, "--duplex" if $rhPrefs->{'duplex'};
+   push @htmldocArgs, "--bodyimage", "$rhPrefs->{'bodyimage'}" if $rhPrefs->{'bodyimage'};
+   push @htmldocArgs, "--logoimage", "$rhPrefs->{'logoimage'}" if $rhPrefs->{'logoimage'};
+   push @htmldocArgs, "--headfootfont", "$rhPrefs->{'headfootfont'}" if $rhPrefs->{'headfootfont'};
+   push @htmldocArgs, "--permissions", "$rhPrefs->{'permissions'}" if $rhPrefs->{'permissions'};
+   push @htmldocArgs, "--bodycolor", "$rhPrefs->{'bodycolor'}" if $rhPrefs->{'bodycolor'};
+   push @htmldocArgs, "--top", "$rhPrefs->{'top'}" if $rhPrefs->{'top'};
+   push @htmldocArgs, "--bottom", "$rhPrefs->{'bottom'}" if $rhPrefs->{'bottom'};
+   push @htmldocArgs, "--left", "$rhPrefs->{'left'}" if $rhPrefs->{'left'};
+   push @htmldocArgs, "--right", "$rhPrefs->{'right'}" if $rhPrefs->{'right'};
 
-   print STDERR "Calling htmldoc: $callHtmldoc\n";
+   push @htmldocArgs, "$tmpFile";
+
+   print STDERR "Calling htmldoc with args: @htmldocArgs\n";
 
    # Disable CGI feature of newer versions of htmldoc
    # (thanks to Brent Roberts for this fix)
    $ENV{HTMLDOC_NOCGI} = "yes";
-   my $pid = open(PDF,"$callHtmldoc |") or die "Failed to fork: $!\n";
+   system($TWiki::htmldocCmd, @htmldocArgs);
+   if ($? == -1) {
+      croak "Failed to start htmldoc ($TWiki::htmldocCmd): $!\n";
+   }
+   elsif ($? & 127) {
+      printf STDERR "child died with signal %d, %s coredump\n",
+         ($? & 127),  ($? & 128) ? 'with' : 'without';
+      croak "Conversion failed: '$!'";
+   }
+   else {
+      printf STDERR "child exited with value %d\n", $? >> 8 unless $? >> 8 == 0;
+   }
 
    #  output the HTML header and the output of HTMLDOC
    print CGI::header( -TYPE => "application/pdf" );
-   while(<PDF>){
+   while(<$ofh>){
       print;
    }
+   close $ofh;
 
    # dump the temporary files
-   unlink("$tmpFile") or die "Failed to unlink $tmpFile : $!";
+   #unlink("$tmpFile") or die "Failed to unlink $tmpFile : $!";
    unlink("$titleFile") or die "Failed to unlink $titleFile : $!";
+   unlink("$outFile") or die "Failed to unlink $outFile : $!";
 }
+
 
