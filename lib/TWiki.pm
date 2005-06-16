@@ -1696,7 +1696,7 @@ using numeric entities.
 sub entityEncode {
     my $text = shift;
 
-    $text =~ s/([^ -~\n\r]|["<>])/'&#'.ord( $1 ).';'/ge;
+    $text =~ s/([^ -~\n\r]|["<>&])/'&#'.ord( $1 ).';'/ge;
     return $text;
 }
 
@@ -1744,7 +1744,7 @@ character codes.
 sub urlEncode {
     my $text = shift;
 
-    $text =~ s/([^0-9a-zA-Z-_.!*'()\/])/'%'.sprintf('%02x',ord($1))/ge;
+    $text =~ s/([^0-9a-zA-Z-_.!*'()\/%])/'%'.sprintf('%02x',ord($1))/ge;
 
     return $text;
 }
