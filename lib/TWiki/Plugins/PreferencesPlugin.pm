@@ -30,6 +30,8 @@ use vars qw(
 
 $VERSION = '1.025';
 
+my $MARKER = "\007";
+
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
@@ -48,65 +50,77 @@ sub initPlugin {
 sub preRenderingHandler {
     ### my ( $text, $map ) = @_;
 
-    if ( $_[0] =~ m/%EDITPREFERENCES{\s*\"(.*?)\"\s*}%/ ) {
-        my $insideVerbatim = 0;
-        my $formWeb = $web;
-        my $form = $1;
-        $form = TWiki::Func::expandCommonVariables( $form, $topic, $web );
-        if( $form =~ m/(.*?)\.(.*)/ ) {
-            $formWeb = $1;
-            $form = $2;
-        }
-        $query = TWiki::Func::getCgiQuery();
-
-        $_[0] = handlePrefsStart( $web, $topic ) . $_[0] . handlePrefsEnd();
-        my $action = lc $query->param( 'prefsaction' );
-
-        # SMELL: Unpublished API. No choice, though :-(
-        my $formDef = new TWiki::Form( $TWiki::Plugins::SESSION,
-                                       $formWeb, $form );
-
-        if ( $action eq 'edit' ) {
-
-            TWiki::Func::setTopicEditLock( $web, $topic, 1 );
-
-            $_[0] =~ s/^(\t+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*)/$1.handleSet($web, $topic, $2, $3, $formDef)/gem;
-            $_[0] =~ s/%EDITPREFERENCES.*%/handleEditButton($web, $topic, 0)/eo;
-        } elsif ( $action eq 'cancel' ) {
-            TWiki::Func::setTopicEditLock( $web, $topic, 0 );
-            my $url = TWiki::Func::getViewUrl( $web, $topic );
-            TWiki::Func::redirectCgiQuery( $query, $url );
-            return 0;
-
-        } elsif ( $action eq 'save' ) {
-
-            my $text = TWiki::Func::readTopicText( $web, $topic );
-            $text =~ s/^(\t+\*\sSet\s)(\w+)\s\=(.*)$/$1.handleSave($web, $topic, $2, $3, $formDef)/mgeo;
-
-            my $error = TWiki::Func::saveTopicText( $web, $topic, $text, '' );
-            TWiki::Func::setTopicEditLock( $web, $topic, 0 );
-            my $url = TWiki::Func::getViewUrl( $web, $topic );
-            if( $error ) {
-                $url = TWiki::Func::getOopsUrl( $web, $topic, 'oopssaveerr', $error );
-            }
-            TWiki::Func::redirectCgiQuery( $query, $url );
-            return 0;
-
-        } else {
-            $_[0] =~ s/%EDITPREFERENCES.*%/handleEditButton($web, $topic, 1)/ge;
-        }
+    return unless ( $_[0] =~ m/%EDITPREFERENCES{\s*\"(.*?)\"\s*}%/ );
+    my $form = $1;
+    my $insideVerbatim = 0;
+    my $formWeb = $web;
+    $form = TWiki::Func::expandCommonVariables( $form, $topic, $web );
+    if( $form =~ m/(.*?)\.(.*)/ ) {
+        $formWeb = $1;
+        $form = $2;
     }
+    $query = TWiki::Func::getCgiQuery();
+
+    my $action = lc $query->param( 'prefsaction' );
+
+    # SMELL: Unpublished API. No choice, though :-(
+    my $formDef = new TWiki::Form( $TWiki::Plugins::SESSION,
+                                   $formWeb, $form );
+
+    if ( $action eq 'edit' ) {
+        TWiki::Func::setTopicEditLock( $web, $topic, 1 );
+
+        $_[0] =~ s(^(\t+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*))
+          ($1._generateEditField($web, $topic, $2, $3, $formDef))gem;
+        $_[0] =~ s(%EDITPREFERENCES.*%)
+          (_generateButtons($web, $topic, 0))eo;
+
+    } elsif ( $action eq 'cancel' ) {
+        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+        my $url = TWiki::Func::getViewUrl( $web, $topic );
+        TWiki::Func::redirectCgiQuery( $query, $url );
+        return 0;
+
+    } elsif ( $action eq 'save' ) {
+
+        my $text = TWiki::Func::readTopicText( $web, $topic );
+        $text =~ s(^(\t+\*\sSet\s)(\w+)\s\=(.*)$)
+          ($1._saveSet($web, $topic, $2, $3, $formDef))mgeo;
+
+        my $error = TWiki::Func::saveTopicText( $web, $topic, $text, '' );
+        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+        my $url;
+        if( $error ) {
+            $url = $error;
+        } else {
+            $url = TWiki::Func::getViewUrl( $web, $topic );
+        }
+        TWiki::Func::redirectCgiQuery( $query, $url );
+        return 0;
+
+    } else {
+        # implicit action="view"
+        $_[0] =~ s(%EDITPREFERENCES.*%)
+          (_generateButtons($web, $topic, 1))ge;
+    }
+
+    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth' );
+    $_[0] = CGI::start_form(-name => 'editpreferences', -method => 'post',
+                            -action => $viewUrl ).
+                              $_[0].
+                                CGI::end_form();
 }
 
-# Use the post-rendering handler to plug our pre-formatted editor units
+# Use the post-rendering handler to plug our formatted editor units
 # into the text
 sub postRenderingHandler {
     ### my ( $text ) = @_;
 
-    $_[0] =~ s/SHELTER\007(\d+)/$shelter[$1]/g;
+    $_[0] =~ s/SHELTER$MARKER(\d+)/$shelter[$1]/g;
 }
 
-sub getField {
+# Pluck the default value of a named field from a form definition
+sub _getField {
     my( $formDef, $name ) = @_;
     foreach my $f ( @{$formDef->{fields}} ) {
         if( $f->{name} eq $name ) {
@@ -116,11 +130,14 @@ sub getField {
     return undef;
 }
 
-sub handleSet {
+# Generate a field suitable for editing this type. Use of the core
+# function 'renderFieldForEdit' ensures that we will pick up
+# extra edit types defined in other plugins.
+sub _generateEditField {
     my( $web, $topic, $name, $value, $formDef ) = @_;
     $value =~ s/^\s*(.*?)\s*$/$1/ge;
 
-    my $fieldDef = getField( $formDef, $name );
+    my $fieldDef = _getField( $formDef, $name );
 
     my $extras;
 
@@ -130,23 +147,13 @@ sub handleSet {
 
     push( @shelter, $value );
 
-    return $name.' = SHELTER'."\007$#shelter\n";
+    return CGI::span({class=>'twikiAlert'},
+                    $name.' = SHELTER'.$MARKER.$#shelter);
 }
 
-sub handlePrefsStart {
-    my( $web, $topic ) = @_;
-
-    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth' );
-
-    return CGI::start_form(-name=>'editpreferences', -method=>'post',
-                           -action=>$viewUrl );
-}
-
-sub handlePrefsEnd {
-    return '</form>';
-}
-
-sub handleEditButton {
+# Generate the buttons that replace the EDITPREFERENCES tag, depending
+# on the mode
+sub _generateButtons {
     my( $web, $topic, $doEdit ) = @_;
 
     my $text = '';
@@ -160,18 +167,20 @@ sub handleEditButton {
     return $text;
 }
 
-sub handleSave {
+# Given a Set in the topic being saved, look in the query to see
+# if there is a new value for the Set and generate a new
+# Set statement.
+sub _saveSet {
     my( $web, $topic, $name, $value, $formDef ) = @_;
 
-    my $newValue = $query->param( $name );
+    my $newValue = $query->param( $name ) || $value;
 
-    my $fieldDef = getField( $formDef, $name );
-    my $type = $fieldDef->{type};
-    my $size = $fieldDef->{size};
-    my $vals = $fieldDef->{value};
+    my $fieldDef = _getField( $formDef, $name );
+    my $type = $fieldDef->{type} || '';
 
-    if( $type =~ /^checkbox/ ) {
+    if( $type && $type =~ /^checkbox/ ) {
         $value = '';
+        my $vals = $fieldDef->{value};
         foreach my $item ( @$vals ) {
             my $cvalue = $query->param( $name.$item );
             if( defined( $cvalue ) ) {
@@ -184,8 +193,6 @@ sub handleSave {
             }
         }
         $newValue = $value;
-    } elsif ( $type eq 'textarea' ) {
-        $newValue =~ s/\r*\n/ /geo;
     }
 
     return $name.' = '.$newValue;

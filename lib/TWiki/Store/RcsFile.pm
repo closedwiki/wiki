@@ -374,7 +374,7 @@ sub setLease {
     my $filename = $this->_makeFileName( '.lease' );
     if( $lease ) {
         return $this->_saveFile( $filename, join( "\n", %$lease ) );
-    } else {
+    } elsif( -e $filename ) {
         unlink $filename
           or throw Error::Simple "Failed to delete $filename: $!";
     }
