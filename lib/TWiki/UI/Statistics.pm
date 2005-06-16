@@ -197,7 +197,6 @@ sub _debugPrintHash {
 }
 
 
-# =========================
 # Process the whole log file and collect information in hash tables.
 # Must build stats for all webs, to handle case of renames into web
 # requested for a single-web statistics run.
@@ -207,20 +206,20 @@ sub _debugPrintHash {
 #   $view{$web}{$TopicName} == number of views, by topic
 #   $contrib{$web}{"Main.".$WikiName} == number of saves/uploads, by user
 
-sub _collectLogData
-{
+sub _collectLogData {
     my( $session, $TMPFILE, $theLogMonthYear ) = @_;
 
-    # Examples of log file format:
-    # | 03 Feb 2000 - 02:43 | Main.PeterThoeny | view | Know.WebHome |  |
-    # | 03 Feb 2000 - 02:43 | Main.PeterThoeny | save | Know.WebHome |  |
-    # | 03 Feb 2000 - 02:53 | Main.PeterThoeny | save | Know.WebHome | repRev 1.7 Main.PeterThoeny 2000/02/03 02:43:22 |
-    # | 23 Feb 2002 - 11:07 | Main.TWikiGuest | search | Main | Office *Locations[^A-Za-z] | 127.0.0.1 |
-    #   	Note: there's no topic name on search log entry
-    # | 23 Feb 2002 - 11:07 | Main.guest | search | Main | Office *Locations[^A-Za-z] | 127.0.0.1 |
-    # | 28 Mar 2002 - 07:11 | Main.FredBloggs | rename | Test.TestTopic7 | moved to Test.TestTopic7New  | 127.0.0.1 |
+    # Log file format:
+    # | date | user | op | web.topic | notes | ip |
+    # date = e.g. 03 Feb 2000 - 02:43
+    # user = e.g. Main.PeterThoeny
+    # user = e.g. PeterThoeny
+    # user = e.g. peter (intranet login)
+    # web.topic = e.g MyWeb.MyTopic
+    # notes = e.g. minor
+    # notes = e.g. not on thursdays
+    # ip = e.g. 127.0.0.5
 
-    
     my %view;		# Hash of hashes, counts topic views by (web, topic)
     my %contrib;	# Hash of hashes, counts uploads/saves by (web, user)
 
@@ -236,58 +235,41 @@ sub _collectLogData
 
     # Script regexes
     my $intranetUserRegex = qr/[a-z0-9]+/;	# FIXME: should centralise this
-    my $userRegex = qr/(?:$intranetUserRegex|$wikiWordRegex)/; 
+    my $userRegex = qr/(?:$intranetUserRegex|$wikiWordRegex)/o;
     my $opRegex = qr/[a-z0-9]+/;        	# Operation, no i18n needed
     # my $topicRegex = qr/(?:$wikiWordRegex|$abbrevRegex)/; 	# Strict topic names only
     my $topicRegex = qr/[^ ]+/; 	# Relaxed topic names - any non-space OK
     # but won't be auto-linked in WebStatistics
     my $errorRegex = qr/\(not exist\)/; 	# Match '(not exist)' flag
 
-    my ($webName, $opName, $topicName, $userName, $newTopicName, $newTopicWeb);
     binmode $TMPFILE;
     while ( my $line = <$TMPFILE> ) {
-        $line =~ s/\r*\n$//;		# Clean out line endings
+        my @fields = split( /\s*\|\s*/, $line );
+
+        my( $date, $userName );
+        while( !$date && scalar( @fields )) {
+            $date = shift @fields;
+        }
+        while( !$userName && scalar( @fields )) {
+            $userName = shift @fields;
+        }
+        my( $opName, $webTopic, $notes, $ip ) = @fields;
+
+        next unless $opName; # malformed log line?
 
         # ignore minor changes - not statistically helpful
-        next if( $line =~ / (minor|dontNotify) / );
+        next if( $notes =~ / (minor|dontNotify) / );
 
-        if( $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)[. ]/o ) {
-            $userName = $1;		# Main.FredBloggs
-            $opName = $2;
-            $webName = $3;
-        } else {
-            if( $debug ) {
-                $session->writeDebug("Invalid log file line = '$line'");
-                $session->writeDebug("userName = '$userName'");
-                $session->writeDebug("opName = '$opName'");
-                $session->writeDebug("webName = '$webName'");
-            }
-            next;
-        }
+        $webTopic =~ /($webNameRegex)\.($wikiWordRegex)/;
+        my $webName = $1;
+        my $topicName = $2;
 
         my $logContrib = 0;
         if ($opName eq 'view' ) {
             $statViews{$webName}++;
-            # Pick up the topic name and any error string
-            if( $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) \| +(${errorRegex}?) */o ) {
-                $topicName = $4;
-                my $noSuchTopic = $5;		# Set if '(not exist)' matched
-
-                unless( $noSuchTopic ) {
-                    # Count this topic access
-                    $view{$webName}{$topicName}++;
-                }
-            } else {
-                if( $debug ) {
-                    $session->writeDebug("Invalid log file line = '$line'");
-                    $session->writeDebug("userName = '$userName'");
-                    $session->writeDebug("opName = '$opName'");
-                    $session->writeDebug("webName = '$webName'");
-                    $session->writeDebug("topicName = '$topicName'");
-                }
-                next;
+            unless( $notes =~ /\(not exist\)/ ) {
+                $view{$webName}{$topicName}++;
             }
-
 
         } elsif ($opName eq 'save' ) {
             $statSaves{$webName}++;
@@ -299,23 +281,10 @@ sub _collectLogData
 
         } elsif ($opName eq 'rename' ) {
             # Pick up the old and new topic names
-            if( $line =~ /^\|[^\|]*\| ($webNameRegex\.$userRegex) \| ($opRegex) \| ($webNameRegex)\.($topicRegex) \| moved to ($webNameRegex)\.($topicRegex) /o ) {
-                $topicName = $4;
-                $newTopicWeb = $5;
-                $newTopicName = $6;
-                ## session->writeDebug("$topicName renamed to $newTopicWeb.$newTopicName");
-            } else {
-                if( $debug ) {
-                    $session->writeDebug("Invalid log file line (rename) = '$line'");
-                    $session->writeDebug("userName = '$userName'");
-                    $session->writeDebug("opName = '$opName'");
-                    $session->writeDebug("webName = '$webName'");
-                    $session->writeDebug("topicName= '$topicName'");
-                    $session->writeDebug("newTopicWeb= '$newTopicWeb'");
-                    $session->writeDebug("newTopicName = '$newTopicName'");
-                }
-                next;
-            }
+            $notes =~/moved to ($webNameRegex)\.($topicRegex)/o;
+            my $newTopicWeb = $1;
+            my $newTopicName = $2;
+
             # Get number of views for old topic this month (may be zero)
             my $oldViews = $view{$webName}{$topicName} || 0;
 
@@ -334,28 +303,12 @@ sub _collectLogData
             # Record the contribution by user name
             $contrib{$webName}{$userName}++;
         }
-=pod
-        # DEBUG
-        $. <= 5 && print $line,"\n";
-        print $line,"\n";
-        print $..': ',$userName,' did ',$opName,' on ',$webName;
-        print '.'.$topicName if (defined $topicName);
-        print "\n";
-=cut
 
-}
+    }
 
-=pod
-
-    print "Main.WebHome views = " . $view{'Main'}{'WebHome'}."\n";
-    print "Main web's contribs = " . $contrib{'Main'}{'Main.RichardDonkin'}."\n";
-    _debugPrintHash(\%view);
-    _debugPrintHash(\%contrib);
-=cut
     return \%view, \%contrib, \%statViews, \%statSaves, \%statUploads;
 }
 
-# =========================
 sub _processWeb {
     my( $session, $thePathInfo, $theLogMonthYear, $viewRef, $contribRef,
         $statViewsRef, $statSavesRef, $statUploadsRef, $isFirstTime ) = @_;
@@ -465,7 +418,6 @@ sub _processWeb {
     return $webName;
 }
 
-# =========================
 # Get the items with top N frequency counts
 # Items can be topics (for view hash) or users (for contrib hash)
 sub _getTopList
