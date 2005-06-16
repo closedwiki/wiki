@@ -15,76 +15,264 @@
  *  
  */
 
-/*
- * Generic tag toggler. Will add a new tag of the given type,
- * or delete an enclosing tag if the button is pressed (as
- * established by the associated checker)
- */
-function TWikiToggleTag(button, editor, tag) {
-  if (button.pressed) {
-    var currnode = editor.getSelectedNode();
+function TWiki3StateButton(buttonid, check, command,
+                           clazz) {
+    /* A button that can have two states (e.g. pressed and
+       not-pressed) based on CSS classes */
+    this.button = window.document.getElementById(buttonid);
+    this.command = command;
+    this.parentcheck = parentFinder(check);
+    this.childcheck = childFinder(check);
+    this.clazz = clazz;
+    this.state = 0;
 
-    var dead = editor.getNearestParentOfType(currnode, tag);
-    if (!dead) {
-      alert('Not inside a tag of type '+tag);
-      return;
+    this.execCommand = function() {
+      this.command(this, this.editor);
+      this.editor.updateState();
+      this.editor.focusDocument();
     };
-    while (dead.childNodes.length) {
-      dead.parentNode.insertBefore(dead.childNodes[0], dead);
+
+    this.updateState = function(selNode, event) {
+      var state = this.state;
+      if (this.parentcheck(selNode, this, this.editor, event)) {
+        state = 2;
+      } else if (this.childcheck(selNode, this, this.editor, event)) {
+        state = 1;
+      } else {
+        state = 0;
+      }
+      if (state != this.state) {
+        this.button.className = this.clazz + state;
+        this.state = state;
+      }
     };
-    dead.parentNode.removeChild(dead);
-  } else {
+};
+
+TWiki3StateButton.prototype = new KupuButton;
+
+/* Exec function for formatting using a TWiki3StateButton.
+ * checker - checks if a node matches criteria
+ * creator - manipulates the selection so it meets the criteria
+ * cleaner - manipulates a node so it doesn't meet the criteria,
+ * removing the node if appropriate.
+ */
+function TWiki3StateToggler(checker, creator, cleaner) {
+  var parentfn = parentFinder(checker);
+  var childfn = childFinder(checker);
+
+  return function (button, editor) {
+    var node = editor.getSelectedNode();
+    node = parentfn(node, button, editor, null);
+
+    if (node) {
+      cleaner(node);
+    } else {
+      node = editor.getSelectedNode();
+      var c = childfn(node, button, editor, null);
+      if (c) {
+        for (var i = 0; i < c.length; i++) {
+          cleaner(c[i]);
+        }
+      } else {
+        creator(this.editor);
+      }
+    }
+    editor.updateState();
+  }
+};
+
+/* get a function that returns the boolean inverse of the result from the
+   function passed. Used to allow parentFinder and childFinder to be used with
+   KupuStateButton */
+function notted(fn) {
+  return function(selNode, button, editor, event) {
+    return !fn(selNode, button, editor, event);
+  };
+}
+
+/* Used to combine "has" functions together */
+function hasOne(fn1,fn2) {
+  return function(node) {
+    return fn1(node) || fn2(node);
+  };
+}
+
+/* get a function to find the first parent that triggers the check function */
+function parentFinder(check) {
+    return function(selNode, button, editor, event) {
+      var node = selNode;
+      if (!node) return null;
+      while (node) {
+        if (check(node))
+          return node;
+        node = node.parentNode;
+      }
+      return null;
+    };
+}
+
+/* Get a method to check if a node has one of the specified tag names */
+function hasTag(tagnames) {
+  return function (node) {
+    if (node.tagName) {
+      var name = node.tagName.toLowerCase();
+      for (var i = 0; i < tagnames.length; i++) {
+        if (name == tagnames[i])
+          return true;
+      }
+    }
+    return false;
+  };
+}
+
+/* Get a method that returns true if a node has a certain class */
+function hasClass(clazz) {
+  return function (node) {
+    if (node.nodeType != 3 && node.className) {
+      var c = node.className.split(' ');
+      for (var i = 0; i < c.length; i++ ) {
+        if (clazz == c[i]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+}
+
+/* get a function to check if a node has the given style. */
+function hasStyle(style, stylevalue) {
+  return function(node) {
+    return (style && node.style && node.style[style] == stylevalue);
+  };
+};
+
+/* get a function to create a new node over the selection,
+   simply to add class */
+function coverSelection(tag, clazz) {
+  return function (editor) {
     var doc = editor.getInnerDocument();
     var elem = doc.createElement(tag);
-    TWikiInsertNode(editor,elem);
+    if (clazz)
+      elem.className = clazz;
+    _insertNode(editor, elem);
+  };
+}
+
+function classCleaner(clazz) {
+  return function (n) {
+    _removeClass(n, clazz);
+  };
+}
+
+function tagCleaner() {
+  return function (n) {
+    _removeNode(n);
+  };
+}
+
+/* Get a function to iterate depth-first over non-text nodes below the
+ * selection, and return an array of those that the "check" function
+ * returned true for. */
+function childFinder(check) {
+  return function(selNode, button, editor, event) {
+    var c = null;
+    var sel = editor.getSelection();
+    if (!selNode) return null;
+    var nodeQueue = new Array(selNode);
+    while (nodeQueue.length > 0) {
+      var node = nodeQueue.pop();
+      if (check(node)) {
+        if (!c) c = new Array();
+        c.push(node);
+      }
+      for (var i = 0; i < node.childNodes.length; i++) {
+        var kid = node.childNodes[i];
+        if (kid.nodeType != 3 && sel.containsNode(kid)) {
+          nodeQueue.push(node.childNodes[i]);
+        }
+      }
+    }
+    return c;
   }
-  editor.updateState();
+}
+
+// remove a class, and if the tag the class is removed from matches
+// and has no other class, remove the tag as well.
+function TWikiRemoveClassButton(buttonid, checker, tag, clazz, cssclass) {
+    this.button = window.document.getElementById(buttonid);
+    this.onclass = cssclass;
+    this.offclass = 'invisible';
+    this.pressed = false;
+    this.checkfunc = checker;
+
+    this.commandfunc = function(button, editor) {
+      var node = this.checkfunc(editor.getSelectedNode(), this.button,
+                              editor, null);
+      if (node) _removeClass(node, clazz);
+    };
 };
+
+TWikiRemoveClassButton.prototype = new KupuStateButton;
+
+// exec function that adds a tag/class over the current selection
+function TWikiTagToggler(tag, clazz, checker) {
+  return function (button, editor) {
+    var sel = editor.getSelectedNode();
+    var node = checker(sel, button, editor, null);
+    if (node) {
+      _removeClass(node, clazz);
+    } else if (!button.pressed) {
+      var doc = this.editor.getInnerDocument();
+      var elem = doc.createElement(tag);
+      elem.className = clazz;
+      _insertNode(editor, elem);
+    }
+    editor.updateState();
+  }
+}
 
 /* Move the contents of the selection into the node, and insert the
  * node in place of the selection.
  * I can't understand why this isn't a standard Kupu method!
  */
-function TWikiInsertNode(editor,elem) {
+function _insertNode(editor,elem) {
   var selection = editor.getSelection();
   var cloned = selection.cloneContents();
-  editor.insertNodeAtSelection(elem);
   while (cloned.hasChildNodes()) {
     elem.appendChild(cloned.firstChild);
   };
-  selection.selectNodeContents(elem);
+  selection.replaceWithNode(elem, true);
 };
 
-/* Generic derivative of KupuRemoveELementButton, checks the class as well
- */
-function TWikiRemoveElementButton(buttonid, element_name, deadclass, offclass) {
-    this.button = window.document.getElementById(buttonid);
-    this.onclass = 'invisible';
-    this.offclass = offclass;
-    this.pressed = false;
-
-    this.commandfunc = function(button, editor) {
-      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
-      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
-        elem = this.editor.getNearestParentOfType(elem, element_name);
-      }
-      if (elem ) {
-        elem.removeNode(true);
-      } else {
-        alert("Not inside a variable span");
-      }
+/* Remove a node completely */
+function _removeNode(node) {
+    var parent = node.parentNode;
+    while (node.childNodes.length) {
+      var child = node.firstChild;
+      child = node.removeChild(child);
+      parent.insertBefore(child, node);
     };
+    parent.removeChild(node);
+}
 
-    this.checkfunc = function(currnode, button, editor, event) {
-      var elem = this.editor.getNearestParentOfType(currnode, deadclass);
-      while (elem && elem.className.indexOf(this.deadclass) >= 0) {
-        elem = this.editor.getNearestParentOfType(elem, element_name);
-      }
-      return (elem ? false : true );
-    };
-};
-
-TWikiRemoveElementButton.prototype = new KupuStateButton;
+/* remove the class from the node, and if the node is the given type and
+ is left with no class, remove the node as well */
+function _removeClass(node, clazz) {
+  var c = node.className.split(' ');
+  for (var i = 0; i < c.length; i++) {
+    if (c[i] == clazz) {
+      c.splice(i, 1);
+      break;
+    }
+  }
+  // if the node has no class, kill it completely
+  if (c.length == 0) {
+    _removeNode(node);
+  } else {
+    node.className = join(' ', c);
+  }
+}
 
 /* Shared drawer spec used for all picklist drawers (drawers that just
  * contain a single pre-populated select
@@ -129,10 +317,11 @@ function TWikiInsertAttachmentTool() {
       elem.appendChild(text);
     }
     try {
-      if (this.editor.getSelection()) {
-        this.editor.getSelection().replaceWithNode(elem);
+      var sel = this.editor.getSelection();
+      if (sel) {
+        sel.replaceWithNode(elem);
       } else {
-        this.editor.getSelection().insertNodeAtSelection(elem);
+        sel.insertNodeAtSelection(elem);
       }
     } catch(exception) {
       alert("Something unexpected happened");
@@ -158,15 +347,15 @@ function TWikiNewAttachmentDrawer(drawerid, formid, selectid) {
     var filename = path.substring(last);
 
     // Add the new filename to the select list for attachments
-    var currnode = this.select.firstChild;
+    var node = this.select.firstChild;
     var alreadyThere = false;
-    while (currnode) {
-      var name = currnode.name;
+    while (node) {
+      var name = node.name;
       if (name == filename) {
         alreadyThere = true;
         break;
       }
-      currnode = currnode.nextSibling;
+      node = node.nextSibling;
     }
 
     if (!alreadyThere) {
@@ -201,28 +390,6 @@ function TWikiVarTool(){
 }
 
 TWikiVarTool.prototype = new KupuTool;
-
-/* Tool for inserting a new verbatim region, around whatever is selected */
-function TWikiVerbatimTool(buttonid){
-  this.button = document.getElementById(buttonid);
-
-  this.initialize = function(editor) {
-    /* tool initialization : nothing */
-    this.editor = editor;
-    addEventHandler(this.button, "click", this.insert, this);
-    this.editor.logMessage('Verbatim tool initialized');
-  };
- 
-  this.insert = function() {
-    var doc = this.editor.getInnerDocument();
-    var elem = doc.createElement('pre');
-    elem.setAttribute('class', 'TMLverbatim');
-    TWikiInsertNode(this.editor, elem);
-    this.editor.updateState();
-  };
-}
-
-TWikiVerbatimTool.prototype = new KupuTool;
 
 /* Tool for inserting smilies. The smilies are collected in a div, which
  * is shown and hidden as required to give the effect of a popup panel.
@@ -286,25 +453,27 @@ function TWikiIconsTool(buttonid, popupid){
 
 TWikiIconsTool.prototype = new KupuTool;
  
-/* Tool for inserting NOP */
+/* Tool for inserting a new NOP region, around whatever is selected */
+/* if already in a region of that type, remove the region */
 function TWikiNOPTool(buttonid){
-  this.imgbutton = document.getElementById(buttonid);
-  
+  this.button = document.getElementById(buttonid);
+
   this.initialize = function(editor) {
-    /* attach events handlers and hide images' panel */
+    /* tool initialization : nothing */
     this.editor = editor;
-    addEventHandler(this.imgbutton, "click", this.insertNOP, this);
+    addEventHandler(this.button, "click", this.insert, this);
     this.editor.logMessage('NOP tool initialized');
   };
-
-  this.insertNOP = function(evt) {
+ 
+  this.insert = function() {
     var doc = this.editor.getInnerDocument();
-    var nop = doc.createElement('span');
-    nop.setAttribute('class', 'TMLnop');
-    nop.appendChild(doc.createTextNode('X'));
-    this.editor.insertNodeAtSelection(nop);
+    var elem = doc.createElement('span');
+    elem.setAttribute('class', 'TMLnop');
+    _insertNode(this.editor, elem);
+    this.editor.updateState();
   };
 }
+
 
 TWikiNOPTool.prototype = new KupuTool;
 
@@ -330,7 +499,7 @@ function TWikiWikiWordTool() {
       // nothing selected, just an insertion point
       elem.appendChild(doc.createTextNode(wikiword));
     }
-    TWikiInsertNode(editor, elem);
+    _insertNode(editor, elem);
     editor.updateState();
   };
 };
@@ -346,7 +515,6 @@ TWikiWikiWordTool.prototype = new KupuTool;
  * have to be handled through the following onSubmit handler.
  */
 function TWikiHandleSubmit() {
-  alert("Called TWikiHandleSubmit");
   var form = document.getElementById('twiki-main-form');
   
   // don't know how else to get the kupu singleton
@@ -357,17 +525,19 @@ function TWikiHandleSubmit() {
 };
 
 function stringify(node) {
+  if (!node)
+    return "NULL";
   var str = node.nodeName + "{";
   if (node.nodeName == '#text') {
     str = str + '"' + node.nodeValue + '"';
   } else {
-    var currnode = node.firstChild;
+    var node = node.firstChild;
     var n = 0;
-    while (currnode) {
+    while (node) {
       if (n) str = str + ",";
-      str = str + stringify(currnode);
+      str = str + stringify(node);
       n++;
-      currnode = currnode.nextSibling;
+      node = node.nextSibling;
     }
   }
   return str + "}";
@@ -384,3 +554,4 @@ function TWikiCleanForm() {
     }
   }
 }
+

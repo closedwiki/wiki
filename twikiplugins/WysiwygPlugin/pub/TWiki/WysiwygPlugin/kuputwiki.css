@@ -22,16 +22,74 @@ div.kupu-fulleditor .kupu-editorframe {
 
 /* toolbar buttons */
 .twiki-icons-button { background: url("smiley.png"); }
-.twiki-nop-button { background: url("nop.png"); }
 .twiki-new-attachment { background: url("attach.png"); }
 .twiki-insert-attachment { background: url("attachment.png"); }
 .twiki-vardrawer-button { background: url("vars.png"); }
 .twiki-cancel-button { background: url("cancel.png"); }
-.twiki-code-button { background: url("code.png"); }
-.twiki-code-button-pressed { background: url("code.png"); background-color: white; }
-.twiki-remove-var-button {  background: url("remove.png"); }
-.twiki-verbatim-button { background: url("vbutton.png"); }
-.twiki-verbatim-button-presssed { background: url("vbutton.png"); background-color: white }
+.twiki-remove-var-button {
+  background-color: white;
+  background: url("remove.png");
+}
+.twiki-remove-verb-button {
+  background-color:white;
+  background: url("remove.png");
+}
+.twiki-code-button0 {
+  background: url("code.png");
+  background-color: #D9D9D9;
+}
+.twiki-code-button1 {
+  background: url("code.png");
+  background-color: #ECECEC;
+}
+.twiki-code-button2 {
+  background: url("code.png");
+  background-color: white;
+}
+.twiki-nop-button0 {
+  background: url("nop.png");
+  background-color: #D9D9D9;
+}
+.twiki-nop-button1 {
+  background: url("nop.png");
+  background-color: #ECECEC;
+}
+.twiki-nop-button2 {
+  background: url("nop.png");
+  background-color: white;
+}
+.twiki-bold-button0 {
+  background: url("bold.png");
+  background-color: #D9D9D9;
+}
+.twiki-bold-button1 {
+  background: url("bold.png");
+  background-color: #ECECEC;
+}
+.twiki-bold-button2 {
+  background: url("bold.png");
+  background-color: white;
+}
+.twiki-italic-button0 {
+  background: url("italic.png");
+  background-color: #D9D9D9;
+}
+.twiki-italic-button1 {
+  background: url("italic.png");
+  background-color: #ECECEC;
+}
+.twiki-italic-button2 {
+  background: url("italic.png");
+  background-color: white;
+}
+.twiki-verbatim-button {
+  background: url("vbutton.png");
+  background-color: #D9D9D9;
+}
+.twiki-verbatim-button-pressed {
+  background: url("vbutton.png");
+  background-color: white;
+}
 
 /* icons pop-up */
 div#twiki-icons {
@@ -80,6 +138,5 @@ div#twiki-icons img:active {
   background: url('verbatim.png')
 }
 .TMLnop {
-  color: red;
-  background: #CFCFCF;
+  border: thick solid red;
 }

@@ -30,6 +30,7 @@ See also TWiki::Plugins::WysiwygPlugin::TML2HTML::Node
 package TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
 
 use strict;
+use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
 
 sub new {
     my( $class, $text ) = @_;
@@ -42,9 +43,14 @@ sub new {
 }
 
 sub _generate {
-    my $this = shift;
+    my( $this, $options ) = @_;
     my $t = $this->{text};
-    $t =~ s/\n/$TWiki::Plugins::WysiwygPlugin::HTML2TML::Node::CHECKn/g;
+    $t =~ s/\n/$WC::CHECKn/g;
+    if( $options & $WC::NOP_ALL ) {
+        # escape all embedded wikiwords
+        $t =~ s/$WC::STARTWW($TWiki::regex{wikiWordRegex})$WC::ENDWW/<nop>$1/go;
+        $t =~ s/\[/<nop>[/g;
+    }
     return (0, $t);
 }
 
