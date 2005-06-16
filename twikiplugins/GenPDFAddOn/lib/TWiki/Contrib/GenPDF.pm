@@ -54,7 +54,10 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = 0.4;
+$VERSION = 0.5;
+$| = 1; # Autoflush buffers
+
+our $query = new CGI;
 
 =pod
 
@@ -89,6 +92,10 @@ sub _getRenderedView {
    my ($webName, $topic) = @_;
 
    my $text = TWiki::Func::readTopicText($webName, $topic);
+   # FIXME - must be a better way?
+   if ($text =~ /^http.*\/.*\/oops\/.*oopsaccessview$/) {
+      TWiki::Func::redirectCgiQuery($query, $text);
+   }
    $text =~ s/\%TOC({.*?})?\%//g; # remove TWiki TOC
    $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
    $text = TWiki::Func::renderText($text);
@@ -143,7 +150,10 @@ sub _getHeaderFooterData {
    if ($rhPrefs->{'hftopic'}) {
       $text = TWiki::Func::readTopicText($webName, $topic);
    }
-   # TBD: Should probably check for valid text (e.g. topic actually found, no oops URL, etc.).
+   # FIXME - must be a better way?
+   if ($text =~ /^http.*\/.*\/oops\/.*oopsaccessview$/) {
+      TWiki::Func::redirectCgiQuery($query, $text);
+   }
 
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $text = _extractPdfSections($text);
@@ -188,7 +198,7 @@ values passed in from the query to have precendence.
 sub _createTitleFile {
    my ($webName, $rhPrefs) = @_;
 
-   my $text = '';
+   my $text = undef;
    my $topic = $rhPrefs->{'titletopic'};
    # Get a topic name without any whitespace
    $topic =~ s|\s||g;
@@ -196,7 +206,10 @@ sub _createTitleFile {
    if ($rhPrefs->{'titletopic'}) {
       $text .= TWiki::Func::readTopicText($webName, $topic);
    }
-   # TBD: Should probably check for valid text (e.g. topic actually found, no oops URL, etc.).
+   # FIXME - must be a better way?
+   if ($text =~ /^http.*\/.*\/oops\/.*oopsaccessview$/) {
+      TWiki::Func::redirectCgiQuery($query, $text);
+   }
 
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $text = _extractPdfSections($text);
@@ -205,13 +218,31 @@ sub _createTitleFile {
    # Now render the rest of the topic
    $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
    $text = TWiki::Func::renderText($text);
-# FIXME - send to _fixHtml
+
+   # FIXME - send to _fixHtml
+   # As of HtmlDoc 1.8.24, it only handles HTML3.2 elements so
+   # convert some common HTML4.x elements to similar HTML3.2 elements
+   $text =~ s/&ndash;/&shy;/g;
+   $text =~ s/&[lr]dquo;/"/g;
+   $text =~ s/&[lr]squo;/'/g;
+   $text =~ s/&brvbar;/|/g;
+
+   # convert twikiNewLinks to normal text
+   # FIXME - should this be a preference?
+   $text =~ s/<span class="twikiNewLink".*?>($TWiki::regex{wikiWordRegex}).*?\/span>/$1/gs;
+
+   # Fix the image tags for links relative to web server root and
+   # fully qualify any unqualified URLs (to make it portable to another host)
+   my $url = TWiki::Func::getUrlHost();
+   $text =~ s/<img(.*?) src="\//<img$1 src="$url\//sgi;
+   $text =~ s/<a(.*?) href="\//<a$1 href="$url\//sgi;
 
    # Save it to a file
-   my ($fh, $file) = mkstemps('/tmp/GenPDFAddOnXXXXXXXXXX', '.html');
+   my $fh = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
+                           SUFFIX => '.html');
    print $fh $text;
 
-   return $file;
+   return $fh;
 }
 
 
@@ -326,15 +357,10 @@ See the GenPDFAddOn topic for a description of the possible preference values an
 =cut
 
 sub _getPrefsHashRef {
-   my ($query) = @_;
-
    my %prefs = ();
 
    # HTMLDOC location
-   # FIXME - Using a preference is insecure as sessions take precedence over preferences. See
-   # http://twiki.org/cgi-bin/view/Plugins/SessionPlugin#Getting_Setting_and_Clearing_Ses
-   # $prefs{'htmldoc'} = TWiki::Func::getPreferencesValue("HTMLDOCLOC") || "/usr/bin/htmldoc";
-   # $TWiki::htmldocCmd must be set in TWiki.cfg instead
+   # $TWiki::htmldocCmd must be set in TWiki.cfg
 
    # header/footer topic
    $prefs{'hftopic'} = $query->param('pdfheadertopic') || TWiki::Func::getPreferencesValue("GENPDFADDON_HEADERTOPIC");
@@ -407,7 +433,6 @@ This is the core method to convert the current page into PDF format.
 sub viewPDF {
 
    # Initialize TWiki
-   my $query = new CGI;
    my $thePathInfo = $query->path_info(); 
    my $theRemoteUser = $query->remote_user();
    my $theTopic = $query->param('topic');
@@ -422,8 +447,20 @@ sub viewPDF {
    # Set a default skin in the query
    $query->param('skin', $rhPrefs->{'skin'});
 
+   # Check for existence
+   TWiki::Func::redirectCgiQuery($query,
+         TWiki::Func::getOopsUrl($webName, $topic, "oopsmissing"))
+      unless TWiki::Func::topicExists($webName, $topic);
+   TWiki::Func::redirectCgiQuery($query,
+         TWiki::Func::getOopsUrl($webName, $rhPrefs->{'hftopic'}, "oopscreatenewtopic"))
+      unless TWiki::Func::topicExists($webName, $rhPrefs->{'hftopic'});
+   TWiki::Func::redirectCgiQuery($query,
+         TWiki::Func::getOopsUrl($webName, $rhPrefs->{'titletopic'}, "oopscreatenewtopic"))
+      unless TWiki::Func::topicExists($webName, $rhPrefs->{'titletopic'});
+
    # Get ready to display HTML topic
    my $htmlData = _getRenderedView($webName, $topic);
+
    # Fix topic text (i.e. correct any problems with the HTML that htmldoc might not like
    $htmlData = _fixHtml($htmlData, $rhPrefs, $topic, $webName);
 
@@ -434,23 +471,24 @@ sub viewPDF {
    my $hfData = _getHeaderFooterData($webName, $rhPrefs);
 
    # Save this to a temp file for htmldoc processing
-   my ($tf, $tmpFile) = mkstemps('/tmp/GenPDFAddOnXXXXXXXXXX', '.html');
-   print $tf $hfData . $htmlData;
-   close($tf);
+   my $contentFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
+                                    SUFFIX => '.html');
+   print $contentFile $hfData . $htmlData;
 
    # Create a file holding the title data
    my $titleFile = _createTitleFile($webName, $rhPrefs);
 
    # Create a temp file for output
-   my ($ofh, $outFile) = mkstemps('/tmp/GenPDFAddOnXXXXXXXXXX', '.pdf');
+   my $outputFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
+                                   SUFFIX => '.pdf');
 
-   # Convert tmpFile to PDF using HTMLDOC
+   # Convert contentFile to PDF using HTMLDOC
    my @htmldocArgs;
    push @htmldocArgs, "--book",
                       "--quiet",
                       "--links",
                       "--linkstyle", "plain",
-                      "--outfile", "$outFile",
+                      "--outfile", "$outputFile",
                       "--format", "$rhPrefs->{'format'}",
                       "--$rhPrefs->{'orientation'}",
                       "--size", "$rhPrefs->{'size'}",
@@ -479,7 +517,7 @@ sub viewPDF {
    push @htmldocArgs, "--left", "$rhPrefs->{'left'}" if $rhPrefs->{'left'};
    push @htmldocArgs, "--right", "$rhPrefs->{'right'}" if $rhPrefs->{'right'};
 
-   push @htmldocArgs, "$tmpFile";
+   push @htmldocArgs, "$contentFile";
 
    print STDERR "Calling htmldoc with args: @htmldocArgs\n";
 
@@ -501,23 +539,18 @@ sub viewPDF {
 
    #  output the HTML header and the output of HTMLDOC
    if ($rhPrefs->{'format'} =~ /pdf/) {
-      print CGI::header( -TYPE => "application/pdf" );
+      print $query->header( -TYPE => "application/pdf" );
    }
-   elsif if ($rhPrefs->{'format'} =~ /ps/) {
-      print CGI::header( -TYPE => "application/postscript" );
+   elsif ($rhPrefs->{'format'} =~ /ps/) {
+      print $query->header( -TYPE => "application/postscript" );
    }
    else {
-      print CGI::header( -TYPE => "text/html" );
+      print $query->header( -TYPE => "text/html" );
    }
-   while(<$ofh>){
+   while(<$outputFile>){
       print;
    }
-   close $ofh;
-
-   # dump the temporary files
-   unlink("$tmpFile") or die "Failed to unlink $tmpFile : $!";
-   unlink("$titleFile") or die "Failed to unlink $titleFile : $!";
-   unlink("$outFile") or die "Failed to unlink $outFile : $!";
+   close $outputFile;
 }
 
 
