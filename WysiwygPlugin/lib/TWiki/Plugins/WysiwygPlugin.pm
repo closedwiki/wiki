@@ -39,7 +39,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
 
-$VERSION = '0.10';
+$VERSION = '0.11';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -154,7 +154,7 @@ sub parseWikiUrl {
     $url = substr($url,length($aurl),length($url));
     return undef unless $url =~ /^(\w+)[.\/](\w+)$/;
 
-    return "$1.$2";
+    return $1.'.'.$2;
 }
 
 1;

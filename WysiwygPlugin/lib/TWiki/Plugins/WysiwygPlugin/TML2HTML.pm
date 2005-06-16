@@ -126,10 +126,13 @@ sub _processTags {
                     $stackTop = pop( @stack ) . $top;
                 }
             }
-            if( $stackTop =~ m/^%([A-Z0-9_:]+)(?:({.*}))?$/o ) {
-                my( $tag, $args ) = ( $1, $2 || '' );
-                $stackTop = pop( @stack ).
-                  CGI::span({class => 'TMLvariable'}, $tag.$args);
+            if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)(?:({.*}))?$/o ) {
+                my( $tag, $args ) = ( $2, $3 || '' );
+                $tag = CGI::span({class => 'TMLvariable'}, $tag.$args);
+                if( $1 && $1 eq '<nop>' ) {
+                    $tag = CGI::span({class => 'TMLnop'}, $tag);
+                }
+                $stackTop = pop( @stack ).$tag;
             } else {
                 push( @stack, $stackTop );
                 $stackTop = '%'; # push a new context
@@ -318,20 +321,16 @@ sub _getRenderedVersion {
 
     $text = join("\n", @result );
 
-    $text =~ s/${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW/CGI::strong(CGI::code($1))/gem;
-    $text =~ s/${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW/CGI::strong(CGI::em($1))/gem;
-    $text =~ s/${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW/CGI::strong($1)/gem;
-    $text =~ s/${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW/CGI::em($1)/gem;
-    $text =~ s/${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW/CGI::code($1)/gem;
-
-    # Mailto
-    # Email addresses must always be 7-bit, even within I18N sites
-
-    # [[mailto:string display text]]
-    $text =~ s/\[\[(mailto:\S+?)\s+(.+?)\]\]/$this->_makeLink($1,$2)/ge;
-
-    # Inline mailto:foo@example.com ('mailto:' part optional)
-    $text =~ s/$STARTWW((?:mailto:)?[a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/$this->_makeLink($1,$1)/gem;
+    $text =~ s(${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW)
+      (CGI::strong(CGI::code($1)))gem;
+    $text =~ s(${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW)
+      (CGI::strong(CGI::em($1)))gem;
+    $text =~ s(${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW)
+      (CGI::strong($1))gem;
+    $text =~ s(${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW)
+      (CGI::em($1))gem;
+    $text =~ s(${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW)
+      (CGI::code($1))gem;
 
     # Handle [[][] and [[]] links
 
@@ -340,12 +339,22 @@ sub _getRenderedVersion {
 
     # We _not_ support [[http://link text]] syntax
 
+    # detect and escape nopped [[][]]
+    $text =~ s(\[<nop>(\[.*?\](?:\[.*?\])?)\])
+      ([<span class="TMLnop">$1</span>])g;
+    $text =~ s(!\[(\[.*?\])(\[.*?\])?\])
+      ([<span class="TMLnop">$1$2</span>])g;
+
     # Spaced-out Wiki words with alternative link text
     # i.e. [[$1][$3]]
-    $text =~ s/(?<!!)\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/$this->_makeSquab($1,$2)/ge;
+    $text =~ s/\[\[([^\]]*)\](?:\[([^\]]+)\])?\]/$this->_makeSquab($1,$2)/ge;
 
     # Handle WikiWords
     $text = _takeOutBlocks( $text, 'noautolink', $removed );
+
+    $text =~ s(<nop>($TWiki::regex{wikiWordRegex})$ENDWW)
+      (<span class="TMLnop">$1</span>)gom;
+
     $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)$ENDWW/$this->_makeWikiWord($1,$2)/geom;
 
     foreach my $placeholder ( keys %$removed ) {
@@ -380,9 +389,6 @@ sub _getRenderedVersion {
     $text = $this->_processTags( $text );
 
     $text = $this->_dropBack( $text );
-
-    # convert embedded <nop>'s to %NOP%
-    $text =~ s/<nop>/CGI::span({class => 'TMLnop'}, 'X')/ge;
 
     # replace verbatim with pre in the final output
     _putBackBlocks( $text, $removed, 'verbatim', 'pre',

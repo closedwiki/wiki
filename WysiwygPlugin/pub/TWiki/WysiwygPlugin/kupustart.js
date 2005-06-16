@@ -29,7 +29,30 @@ function startKupu() {
 
     kupu.registerContentChanger(document.getElementById('kupu-editor-textarea'));
 
-    // Note: no registration of saveOnPart
+    var navigatingAway = function () {
+      if (kupu.content_changed && 
+          confirm('You have unsaved changes. Do you want to save before leaving the page? (OK to save, Cancel to discard your changes)')) {
+        kupu.config.reload_src = 0;
+        var form = document.getElementById('twiki-main-form');
+        TWikiHandleSubmit();
+        form.submit();
+      };
+    }
+
+    if (kupu.getBrowserName() == 'IE') {
+        // IE supports onbeforeunload, so let's use that
+        addEventHandler(window, 'beforeunload', navigatingAway);
+    } else {
+        // some versions of Mozilla support onbeforeunload (starting with 1.7)
+        // so let's try to register and if it fails fall back on onunload
+        var re = /rv:([0-9\.]+)/
+        var match = re.exec(navigator.userAgent)
+        if (match[1] && parseFloat(match[1]) > 1.6) {
+            addEventHandler(window, 'beforeunload', navigatingAway);
+        } else {
+            addEventHandler(window, 'unload', navigatingAway);
+        };
+    };
 
     // and now we can initialize...
     kupu.initialize();

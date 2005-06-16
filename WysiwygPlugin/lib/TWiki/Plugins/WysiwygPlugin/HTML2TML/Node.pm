@@ -15,6 +15,12 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
+# The generator works by expanding to "decorated" text, where the decorators
+# are non-printable characters. These characters act express format
+# requirements - for example, the need to have a newline before some text,
+# or the need for a space. Whitespace is collapsed down to the minimum that
+# satisfies the format requirements.
+
 =pod
 
 ---+ package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
@@ -30,41 +36,8 @@ package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
 
 use strict;
 
+use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
 use HTML::Entities;
-
-# Constants
-use vars qw( $CHECKn $CHECKs $NBSP $NBBR );
-
-# flags that get passed down into generator functions
-my $NO_TML = 1;
-my $NO_BLOCK_TML = 2;
-
-# Flags that get passed _up_ from generator functions
-# The $flags indicate what sort of output is in $text. They
-# are a combination of the package constants:
-#   * $LIST_TML - indicates that TML syntax spread over more
-#     than one line was generated
-my $BLOCK_TML = 1;
-
-# The generator works by expanding to "decorated" text, where the decorators
-# are non-printable characters. These characters act express format
-# requirements - for example, the need to have a newline before some text,
-# or the need for a space. Whitespace is collapsed down to the minimum that
-# satisfies the format requirements.
-BEGIN {
-    # Markers that get inserted in text in spaces where there must be
-    # whitespace of certain types.
-    $CHECKn = "\001"; # Assertion that there must be an adjacent newline
-    $CHECKs = "\002"; # Assertion that there must be adjacent whitespace
-    $NBSP   = "\003"; # Non-breaking space, never gets deleted
-    $NBBR   = "\004"; # Non-breaking linebreak; never gets deleted
-}
-
-# REs for matching delimiters of wikiwords
-# must be consistent with TML2HTML.pm (and Render.pm of course)
-my $STARTWW = qr/^|(?<=[ \t\n\(\!])/om;
-my $ENDWW = qr/$|(?=[ \t\n\,\.\;\:\!\?\)])/om;
-my $PROTOCOL = qr/^(file|ftp|gopher|http|https|irc|news|nntp|telnet|mailto):/;
 
 =pod
 
@@ -131,8 +104,8 @@ sub addChild {
 sub _trim {
     my $s = shift;
 
-    $s =~ s/^[ \t\n$CHECKn$CHECKs]+//o;
-    $s =~ s/[ \t\n$CHECKn$CHECKs]+$//o;
+    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKs]+//o;
+    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKs]+$//o;
     return $s;
 }
 
@@ -154,31 +127,31 @@ sub rootGenerate {
 
    # return $tml;
 
-    # ignore $CHECKn if there is a \n next to it, otherwise insert a
+    # ignore $WC::CHECKn if there is a \n next to it, otherwise insert a
     # \n.
-    $tml =~ s/^($CHECKn)+//gom;
-    $tml =~ s/($CHECKn)+$//gom;
+    $tml =~ s/^($WC::CHECKn)+//gom;
+    $tml =~ s/($WC::CHECKn)+$//gom;
 
-    $tml =~ s/(?<=$NBBR)($CHECKn)+//gom;
-    $tml =~ s/($CHECKn)+(?=$NBBR)//gom;
+    $tml =~ s/(?<=$WC::NBBR)($WC::CHECKn)+//gom;
+    $tml =~ s/($WC::CHECKn)+(?=$WC::NBBR)//gom;
 
-    $tml =~ s/($CHECKn)+/$NBBR/gos;
+    $tml =~ s/($WC::CHECKn)+/$WC::NBBR/gos;
 
-    $tml =~ s/$NBBR\n+/$NBBR/gs;
-    $tml =~ s/\n+$NBBR\n+/$NBBR/gs;
+    $tml =~ s/$WC::NBBR\n+/$WC::NBBR/gs;
+    $tml =~ s/\n+$WC::NBBR\n+/$WC::NBBR/gs;
     $tml =~ s/\n\n+/\n/gs;
 
-    $tml =~ s/$NBBR/\n/go;
+    $tml =~ s/$WC::NBBR/\n/go;
 
-    # ignore $CHECKs if there is a \s next to it, otherwise insert a
+    # ignore $WC::CHECKs if there is a \s next to it, otherwise insert a
     # space.
-    $tml =~ s/(?<=$STARTWW)($CHECKs)+//gos;
-    $tml =~ s/($CHECKs)+(?=$ENDWW)//gos;
-    $tml =~ s/(?<=$NBSP)($CHECKs)+//gos;
-    $tml =~ s/($CHECKs)+(?=$NBSP)//gos;
-    $tml =~ s/($CHECKs)+/ /gos;
+    $tml =~ s/(?<=$WC::STARTWW)($WC::CHECKs)+//gos;
+    $tml =~ s/($WC::CHECKs)+(?=$WC::ENDWW)//gos;
+    $tml =~ s/(?<=$WC::NBSP)($WC::CHECKs)+//gos;
+    $tml =~ s/($WC::CHECKs)+(?=$WC::NBSP)//gos;
+    $tml =~ s/($WC::CHECKs)+/ /gos;
 
-    $tml =~ s/$NBSP/ /go;
+    $tml =~ s/$WC::NBSP/ /go;
 
     return $tml;
 }
@@ -190,7 +163,7 @@ sub _generate {
     my $flags;
     my $text;
 
-    if( $options & $NO_TML ) {
+    if( $options & $WC::NO_TML ) {
         return ( 0, $this->stringify() );
     }
 
@@ -298,9 +271,9 @@ sub _convertList {
         next unless $kid->{tag} =~ m/^(dt|dd|li)$/i;
         if( $isdl && ( lc( $kid->{tag} ) eq 'dt' )) {
             # DT, set the bullet type for subsequent DT
-            $basebullet = $kid->_flatKids( $NO_BLOCK_TML ).':';
-            $basebullet =~ s/$CHECKn/ /g;
-            if( $basebullet =~ /[$CHECKs ]/ ) {
+            $basebullet = $kid->_flatKids( $WC::NO_BLOCK_TML ).':';
+            $basebullet =~ s/$WC::CHECKn/ /g;
+            if( $basebullet =~ /[$WC::CHECKs ]/ ) {
                 $basebullet = "\$ $basebullet";
             }
             $pendingDT = 1; # remember in case there is no DD
@@ -316,18 +289,18 @@ sub _convertList {
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
                 $t = $grandkid->_convertList( $indent."\t" );
             } else {
-                ( $f, $t ) = $grandkid->_generate( $NO_BLOCK_TML );
-                $t =~ s/$CHECKn/ /g;
+                ( $f, $t ) = $grandkid->_generate( $WC::NO_BLOCK_TML );
+                $t =~ s/$WC::CHECKn/ /g;
             }
             $spawn .= $t;
         }
-        $text .= $CHECKn.$indent.$bullet.$CHECKs.$spawn.$CHECKn;
+        $text .= $WC::CHECKn.$indent.$bullet.$WC::NBSP.$spawn.$WC::CHECKn;
         $pendingDT = 0;
         $basebullet = '' if $isdl;
     }
     if( $pendingDT ) {
         # DT with no corresponding DD
-        $text .= $CHECKn.$indent.$basebullet.$CHECKn;
+        $text .= $WC::CHECKn.$indent.$basebullet.$WC::CHECKn;
     }
     return $text;
 }
@@ -371,7 +344,7 @@ sub _isConvertableListItem {
             }
         } else {
             ( $flags, $text ) = $kid->_generate( $options );
-            if( $flags & $BLOCK_TML ) {
+            if( $flags & $WC::BLOCK_TML ) {
                 return 0;
             }
         }
@@ -420,7 +393,7 @@ sub _isConvertableTableRow {
             # some other sort of (unexpected) tag
             return 0;
         }
-        return 0 if( $flags & $BLOCK_TML );
+        return 0 if( $flags & $WC::BLOCK_TML );
         if( $kid->{attrs} ) {
             if( $kid->{attrs}->{align} ) {
                 if( $kid->{attrs}->{align} eq 'left' ) {
@@ -444,18 +417,19 @@ sub _isConvertableTableRow {
 sub _H {
     my( $this, $options, $depth ) = @_;
     my( $flags, $contents ) = $this->_flatKids( $options );
-    return ( 0, undef ) if( $flags & $BLOCK_TML );
-    return ( $flags | $BLOCK_TML,
-             $CHECKn.'---'.('+' x $depth).$CHECKs.$contents.$CHECKn );
+    return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
+    return ( $flags | $WC::BLOCK_TML,
+             $WC::CHECKn.'---'.('+' x $depth).$WC::CHECKs.$contents.$WC::CHECKn );
 }
 
 # generate an emphasis
 sub _emphasis {
     my( $this, $options, $ch ) = @_;
-    my( $flags, $contents ) = $this->_flatKids( $options | $NO_BLOCK_TML );
-    return ( 0, undef ) if( !defined( $contents ) || ( $flags & $BLOCK_TML ));
+    my( $flags, $contents ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+    return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
     $contents = _trim( $contents );
-    return ( $flags, $CHECKs.$ch.$contents.$ch.$CHECKs );
+    return (0, '') unless( $contents =~ /\S/ );
+    return ( $flags, $WC::CHECKs.$ch.$contents.$ch.$WC::CHECKs );
 }
 
 ######################################################
@@ -522,63 +496,86 @@ sub _handleCODE {
 sub _handleBR {
     my( $this, $options ) = @_;
     my($f, $kids ) = $this->_flatKids( $options );
-    return ($f, '<br />'.$kids) if( $options & $NO_BLOCK_TML );
-    return ($f | $BLOCK_TML, $NBBR.$kids);
+    return ($f, '<br />'.$kids) if( $options & $WC::NO_BLOCK_TML );
+    return ($f | $WC::BLOCK_TML, $WC::NBBR.$kids);
 }
 
 sub _handleHR {
     my( $this, $options ) = @_;
-    return '<hr />' if( $options & $NO_BLOCK_TML );
-    return ( $BLOCK_TML, "$CHECKn---$CHECKn");
+    return '<hr />' if( $options & $WC::NO_BLOCK_TML );
+    return ( $WC::BLOCK_TML, "$WC::CHECKn---$WC::CHECKn");
 }
 
 sub _handleP {
     my( $this, $options ) = @_;
 
     my( $f, $kids ) = $this->_flatKids( $options );
-    return ($f, '<p />'.$kids) if( $options & $NO_BLOCK_TML );
-    return ($f | $BLOCK_TML, $NBBR.$NBBR.$kids);
+    return ($f, '<p />'.$kids) if( $options & $WC::NO_BLOCK_TML );
+    return ($f | $WC::BLOCK_TML, $WC::NBBR.$WC::NBBR.$kids);
 }
 
 sub _handleA {
     my( $this, $options ) = @_;
 
-    my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
-    if( $text ) {
-        # text can be flattened; try various wikiword constructs
+    my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
+    if( $text && $text =~ /\S/ && $this->{attrs}->{href}) {
+        # there's text and an href
         my $href = $this->{attrs}->{href};
         my $topic = &{$this->{context}->{parseWikiUrl}}( $href );
+        my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
+
         if( $topic ) {
+            my $cleantext = $text;
+            $cleantext =~ s/<nop>//g;
+            # Use the topic if it has more info than the text (the web)
+            $cleantext = $topic if( $topic =~ /^(\w)+\.$cleantext$/ );
+
             # the href targets a wiki page
-            if ( $text eq $topic || $topic =~ /^\w+\.$text$/ ) {
+            if( $cleantext eq $topic ||
+                $cleantext =~ /^(\w+\.|<nop>)?$topic$/ ) {
                 # wikiword or web.wikiword
-                return (0, $CHECKs.$topic.$CHECKs);
+                # don't need $nop because it's already there
+                return (0, $WC::CHECKs.$text.$WC::CHECKs);
             } else {
                 # text and link differ
-                return (0, $CHECKs.'[['.$topic.']['.$text.']]'.$CHECKs );
+                return (0, $WC::CHECKs.'['.$nop.'['.$topic.']['.$text.
+                        ']]'.$WC::CHECKs );
             }
-        } elsif ( $href =~ $PROTOCOL ) {
+        } elsif ( $href =~ $WC::PROTOCOL ) {
             # normal link
             if( $text eq $href ) {
-                return (0, $CHECKs.$text.$CHECKs);
+                return (0, $WC::CHECKs.$nop.$text.$WC::CHECKs);
             } else {
-                return (0, $CHECKs.'[['.$href.']['.$text.']]'.$CHECKs );
+                return (0, $WC::CHECKs.'['.$nop.'['.$href.']['.$text.
+                        ']]'.$WC::CHECKs );
             }
         }
+        return (0, undef);
+    } elsif( $this->{attrs}->{name} ) {
+        # allow anchors to be expanded normally. This won't generate
+        # wiki anchors, but it's a small price to pay - it would
+        # be too complex to generate wiki anchors, given their
+        # line-oriented nature.
+        return (0, undef);
     }
-    return (0, undef);
+    # Otherwise generate nothing
+    return (0, '');
 }
 
 sub _handleSPAN {
     my( $this, $options ) = @_;
     if( $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
-        my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
+        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
         my $var = _trim($text);
+        my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
         # don't create unnamed variables
-        $var = '%'.$var.'%' if( $var );
+        $var = '%'.$nop.$var.'%' if( $var );
         return (0, $var);
     } elsif ($this->{attrs}->{class} =~ /\bTMLnop\b/) {
-        return ( 0, '<nop>');
+        return $this->_flatKids( $options | $WC::NOP_ALL );
+    } elsif  ($this->{attrs}->{class} =~ /\bTMLcode\b/) {
+        $this->{tag} = 'CODE';
+        return $this->_generate( $options );
     }
     return (0, undef);
 }
@@ -593,28 +590,28 @@ sub _handlePRE {
 
     # can't use CGI::pre because it wont put the newlines that
     # twiki needs in
-    unless( $options & $NO_BLOCK_TML ) {
-        my( $flags, $text ) = $this->_flatKids( $options | $NO_BLOCK_TML );
+    unless( $options & $WC::NO_BLOCK_TML ) {
+        my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
         my $p = _htmlParams( $this->{attrs} );
-        return ($BLOCK_TML, "$CHECKn<pre$p>$CHECKn".$text.
-                "$CHECKn</pre>$CHECKn");
+        return ($WC::BLOCK_TML, "$WC::CHECKn<pre$p>$WC::CHECKn".$text.
+                "$WC::CHECKn</pre>$WC::CHECKn");
     }
     return ( 0, undef );
 }
 
 sub _handleVERBATIM {
     my( $this, $options ) = @_;
-    my( $flags, $text ) = $this->_flatKids( $NO_TML );
+    my( $flags, $text ) = $this->_flatKids( $WC::NO_TML );
 
-    $text =~ s!<br( /)?>!$NBBR!gi;
-    $text =~ s!<p( /)?>!$NBBR!gi;
+    $text =~ s!<br( /)?>!$WC::NBBR!gi;
+    $text =~ s!<p( /)?>!$WC::NBBR!gi;
     $text =~ s!</(p|br)>!!gi;
     $text = HTML::Entities::decode_entities( $text );
-    $text =~ s/ /$NBSP/g;
-    $text =~ s/$CHECKn/$NBBR/g;
+    $text =~ s/ /$WC::NBSP/g;
+    $text =~ s/$WC::CHECKn/$WC::NBBR/g;
     my $p = _htmlParams( $this->{attrs}, 'TMLverbatim' );
-    return ( $BLOCK_TML,
-             "$CHECKn<verbatim$p>$CHECKn".$text."$CHECKn</verbatim>$CHECKn" );
+    return ( $WC::BLOCK_TML,
+             "$WC::CHECKn<verbatim$p>$WC::CHECKn".$text."$WC::CHECKn</verbatim>$WC::CHECKn" );
 }
 
 sub _handleDIV {
@@ -622,32 +619,32 @@ sub _handleDIV {
     if( $this->{attrs}->{class} =~ /\bTMLnoautolink\b/ ) {
         my( $flags, $text ) = $this->_flatKids( $options );
         my $p = _htmlParams( $this->{attrs}, 'TMLnoautolink' );
-        return ($BLOCK_TML, "$CHECKn<noautolink$p>$CHECKn".$text.
-                "$CHECKn</noautolink>$CHECKn");
+        return ($WC::BLOCK_TML, "$WC::CHECKn<noautolink$p>$WC::CHECKn".$text.
+                "$WC::CHECKn</noautolink>$WC::CHECKn");
     }
     return (0, undef);
 }
 
 sub _handleLIST {
     my( $this, $options ) = @_;
-    if( ( $options & $NO_BLOCK_TML ) ||
-        !$this->_isConvertableList( $options | $NO_BLOCK_TML )) {
+    if( ( $options & $WC::NO_BLOCK_TML ) ||
+        !$this->_isConvertableList( $options | $WC::NO_BLOCK_TML )) {
         return ( 0, undef );
     }
-    return ( $BLOCK_TML, $this->_convertList( "\t" ));
+    return ( $WC::BLOCK_TML, $this->_convertList( "\t" ));
 }
 
 sub _handleTABLE {
     my( $this, $options ) = @_;
-    return ( 0, undef) if( $options & $NO_BLOCK_TML );
+    return ( 0, undef) if( $options & $WC::NO_BLOCK_TML );
 
     # Should really look at the table attrs, but to heck with it
 
-    return ( 0, undef ) if( $options & $NO_BLOCK_TML );
+    return ( 0, undef ) if( $options & $WC::NO_BLOCK_TML );
 
     my @table;
     return ( 0, undef ) unless
-      $this->_isConvertableTable( $options | $NO_BLOCK_TML, \@table );
+      $this->_isConvertableTable( $options | $WC::NO_BLOCK_TML, \@table );
 
     my $maxrow = 0;
     my $row;
@@ -660,13 +657,13 @@ sub _handleTABLE {
             push( @$row, '' );
         }
     }
-    my $text = $CHECKn;
+    my $text = $WC::CHECKn;
     foreach $row ( @table ) {
         # isConvertableTableRow has already formatted the cell
-        $text .= $CHECKn.'|'.join('|', @$row).'|'.$CHECKn;
+        $text .= $WC::CHECKn.'|'.join('|', @$row).'|'.$WC::CHECKn;
     }
 
-    return ( $BLOCK_TML, $text );
+    return ( $WC::BLOCK_TML, $text );
 }
 
 sub _handleIMG {

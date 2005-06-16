@@ -4,7 +4,7 @@ A WYSIWYG (What-You-See-Is-What-You-Get) editor.
 
 The editor is built on a generic framework that supports editing of TWiki topics using any browser-based HTML editor and the import of HTML from external sources such as existing web pages.
 
-%RED% WARNING: this is a prototype, pre-alpha, what-you-see-is-all-you-get release with the following known problems:
+%RED% WARNING: this is a prototype, what-you-see-is-all-you-get, release with the following known problems:
 	* No way to add form or change form
 	* No way to force a new revision on save
 
@@ -28,9 +28,14 @@ The package includes the following pieces:
 	* [[http://kupu.osqom.org][Kupu]] editor integration, implemented as a TWiki skin
 ---+++ How to use it
 The Kupu editor is customised for use with TWiki. Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
-Two functions require a bit more explanation:
-   * "Insert No-Op" (the red X) inserts a TWiki &lt;nop>. You should put a nop into any bumpy-case word that you do _not_ want treated as a wiki word. WikiWords are automatically linked to other topics.
+Some functions require a bit more explanation:
+   * "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
    * "Insert a TWiki Tag" will give you a menu of TWiki tags that can be inserted. Any of these tags can be edited after they have been placed in the text, for example to add parameters.
+   * "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
+
+---++++ Kupu Notes
+The version of Kupu shipped with this plugin is a customised version of the basic Kupu release. All the customisation is done as plugins and extensions to Kupu - the basic kupu code is shipped intact. Kupu has a number of limitations that are worth mentioning:
+   * Undo does not work in all cases. Undo is implemented using the browser undo support, and only a limited number of functions can be undone. Nothing done while editing HTML source can be undone.
 
 ---+++ How it works
 The plugin works by translating the topic text into HTML, which is then fed to the editor. The edited HTML is then run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic.
@@ -77,26 +82,26 @@ my $tml = $html2tml->convert( $html );
 		* Set CONVERT_SKIN = kupu
 	* Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
 		* Set ICONS =
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt=":)" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/cool.gif" alt="8-)" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/indifferent.gif" alt=":-I" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/frown.gif" alt=":(" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/redface.gif" alt=":o" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/biggrin.gif" alt=":D" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/wink.gif" alt=";)" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/tongue.gif" alt=":p" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/rolleyes.gif" alt=":rolleyes:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/mad.gif" alt=":mad:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/eek.gif" alt=":eek:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/confused.gif" alt=":confused:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/devil.gif" alt=":devil:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/devilwink.gif" alt=":devilish:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/sealed.gif" alt=":-X" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/thumbs.gif" alt=":ok:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/yes.gif" alt=":yes:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/no.gif" alt=":no:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/love.gif" alt=":love:" />
-		<img src="%PUBURL%/TWiki/SmiliesPlugin/scull.gif" alt=":skull:" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/cool.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/indifferent.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/frown.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/redface.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/biggrin.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/wink.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/tongue.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/rolleyes.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/mad.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/eek.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/confused.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/devil.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/devilwink.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/sealed.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/thumbs.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/yes.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/no.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/love.gif" alt="" />
+		<img src="%PUBURL%/TWiki/SmiliesPlugin/scull.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="%I" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="%X" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="%P" />

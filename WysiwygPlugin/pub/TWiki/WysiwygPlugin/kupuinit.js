@@ -46,44 +46,56 @@ function initKupu(iframe) {
     // of state changes
     kupu.registerTool('ui', ui); // XXX Should this be a different method?
 
-    // function that returns a function to execute a button command
-    var execCommand = function(cmd) {
-        return function(button, editor) {
-            editor.execCommand(cmd);
-        };
-    };
 
-    var boldchecker = ParentWithStyleChecker(new Array('b', 'strong'),
-					     'font-weight', 'bold');
-    var boldbutton = new KupuStateButton('kupu-bold-button', 
-                                         execCommand('bold'),
-                                         boldchecker,
-                                         'kupu-bold',
-                                         'kupu-bold-pressed');
+    // var boldcheck = hasOne(hasTag(new Array('b', 'strong')),
+    //                    hasStyle('font-weight', 'bold'));
+    var boldcheck = hasTag(new Array('b', 'strong'));
+    var boldexec = function(button, editor) {
+      editor.execCommand('bold');
+    };
+    var boldbutton = new TWiki3StateButton('twiki-bold-button', 
+                                           boldcheck,
+                                           boldexec,
+                                           'twiki-bold-button');
     kupu.registerTool('boldbutton', boldbutton);
 
-    var italicschecker = ParentWithStyleChecker(new Array('i', 'em'),
-						'font-style', 'italic');
-    var italicsbutton = new KupuStateButton('kupu-italic-button', 
-                                           execCommand('italic'),
-                                           italicschecker, 
-                                           'kupu-italic', 
-                                           'kupu-italic-pressed');
+    //var italicscheck = hasOne(hasTag(new Array('i', 'em')),
+    //hasStyle('font-style', 'italic'));
+    var italicscheck = hasTag(new Array('i', 'em'));
+    var italicsexec = function(button, editor) {
+      editor.execCommand('italic');
+    };
+    var italicsbutton = new TWiki3StateButton('twiki-italic-button', 
+                                              italicscheck, 
+                                              italicsexec,
+                                              'twiki-italic-button');
     kupu.registerTool('italicsbutton', italicsbutton);
 
-    var codechecker = ParentWithStyleChecker(new Array('tt', 'code'),
-						'font-family', 'monospaced');
-    var codebutton = new KupuStateButton('twiki-code-button', 
-                                         function (button,editor) {
-                                           TWikiToggleTag(button, editor,
-                                                          'code');
-                                         },
-                                         codechecker,
-                                         'twiki-code-button', 
-                                         'twiki-code-button-pressed');
+    var codetags = new Array('tt', 'code');
+    var codecheck = hasTag(codetags);
+    var codecreate = coverSelection('code');
+    var codeclean = tagCleaner('code');
+    var codeexec = TWiki3StateToggler(codecheck, codecreate, codeclean );
+    var codebutton = new TWiki3StateButton('twiki-code-button', 
+                                           codecheck, codeexec,
+                                           'twiki-code-button');
     kupu.registerTool('codebutton', codebutton);
 
-    var verbbutton = new TWikiVerbatimTool('twiki-verbatim-button');
+    var nopcheck = hasClass('TMLnop');
+    var nopcreator = coverSelection('span', 'TMLnop');
+    var nopcleaner = classCleaner('TMLnop');
+    var nopexec = TWiki3StateToggler(nopcheck, nopcreator, nopcleaner);
+    var nopbutton = new TWiki3StateButton('twiki-nop-button', 
+                                          nopcheck, nopexec,
+                                          'twiki-nop-button');
+    kupu.registerTool('nopbutton', nopbutton);
+
+    var verbcheck = parentFinder(hasClass('TMLverbatim'));
+    var verbexec = TWikiTagToggler('pre', 'TMLverbatim', verbcheck);
+    var verbbutton = new KupuStateButton('twiki-verbatim-button', 
+                                         verbexec, verbcheck,
+                                         'twiki-verbatim-button',
+                                         'twiki-verbatim-button-pressed');
     kupu.registerTool('verbbutton', verbbutton);
 
     // Icons tool
@@ -91,16 +103,22 @@ function initKupu(iframe) {
                                             'twiki-icons');
     kupu.registerTool('twikiicons', twikiiconstool);
 
-    var twikinoptool = new TWikiNOPTool('twiki-nop-button');
-    kupu.registerTool('twikinop', twikinoptool);
 
-    var outdentbutton = new KupuButton('kupu-outdent-button', execCommand('outdent'));
+    var execCommand = function(c) {
+      return function(button, editor) {
+        editor.execCommand(c);
+      };
+    };
+    var outdentbutton = new KupuButton('kupu-outdent-button',
+                                       execCommand('outdent'));
     kupu.registerTool('outdentbutton', outdentbutton);
 
-    var indentbutton = new KupuButton('kupu-indent-button', execCommand('indent'));
+    var indentbutton = new KupuButton('kupu-indent-button',
+                                      execCommand('indent'));
     kupu.registerTool('indentbutton', indentbutton);
 
-    var undobutton = new KupuButton('kupu-undo-button', execCommand('undo'));
+    var undobutton = new KupuButton('kupu-undo-button',
+                                    execCommand('undo'));
     kupu.registerTool('undobutton', undobutton);
 
     var redobutton = new KupuButton('kupu-redo-button', execCommand('redo'));
@@ -142,6 +160,7 @@ function initKupu(iframe) {
       var form = document.getElementById('twiki-main-form');
       // use prepareForm to create the 'text' field
       kupu.prepareForm(form, 'text');
+      kupu.content_changed = 0; // choke the unload handler
       form.submit();
     };
     addEventHandler(savebutton, 'click', submitForm, kupu);
@@ -166,7 +185,12 @@ function initKupu(iframe) {
     };
 
     // Link drawer
+
     var linktool = new LinkTool();
+    // Override default additions
+    linktool.createContextMenuElements = function(s, e) {
+      return new Array();
+    }
     kupu.registerTool('linktool', linktool);
 
     var linkdrawerbutton = new KupuButton('kupu-linkdrawer-button',

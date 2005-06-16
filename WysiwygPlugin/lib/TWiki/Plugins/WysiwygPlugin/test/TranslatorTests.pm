@@ -46,8 +46,9 @@ BEGIN {
         $unsafe .= chr($i) unless $i == 10;
     }
 
-    if( defined &TWiki::setupRegexes ) {
-        TWiki::setupRegexes();
+    if( defined &TWiki::basicInitialize ) {
+        TWiki::basicInitialize();
+        die "ARGH" unless defined $TWiki::regex{headerPatternNoTOC};
     } else {
         print STDERR "Warning: running on DEVELOP?\n";
     }
@@ -239,7 +240,7 @@ class CatAnimal {
 	1 Stuff 
 		* Banana Stuff
 		* Other
-		*
+		* 
 	1 Something
 	1 kello<br />kitty
 ',
@@ -260,7 +261,7 @@ class CatAnimal {
        {
         exec => 3,
         name => 'simpleTable',
-        html => '<p /><table><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table><tr><td>^</td><td>six</td><td>six</td></tr></table>',
+        html => '<p /><table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>',
         tml => '
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
@@ -284,9 +285,21 @@ class CatAnimal {
        {
         exec => 3,
         name => 'noppedWikiword',
-        html => '<span class="TMLnop">X</span>SunOS',
+        html => '<span class="TMLnop">SunOS</span>',
         tml => '!SunOS',
         finaltml => '<nop>SunOS',
+       },
+       {
+        exec => 2,
+        name => 'noppedPara',
+        html => '<span class="TMLnop">BeFore SunOS AfTer</span>',
+        tml => '<nop>BeFore <nop>SunOS <nop>AfTer',
+       },
+       {
+        exec => 2,
+        name => 'noppedVariable',
+        html => '<span class="TMLnop"><span class="TMLvariable">MAINWEB</span></nop>',
+        tml => '%<nop>MAINWEB%'
        },
        {
         exec => 3,
@@ -301,7 +314,7 @@ RedHat & SuSE
         exec => 3,
         name => 'mailtoLink',
         html => '<a href="mailto:a@z.com">Mail</a><a href="mailto:?subject=Hi">Hi</a>',
-        tml => '[[mailto:a@z.com Mail]] [[mailto:?subject=Hi Hi]]',
+        tml => '[[mailto:a@z.com][Mail]] [[mailto:?subject=Hi][Hi]]',
         finaltml => '[[mailto:a@z.com][Mail]] [[mailto:?subject=Hi][Hi]]',
        },
        {
@@ -330,9 +343,15 @@ CompleteAndUtterNothing
 LinkBox LinkBoxs LinkBoxies LinkBoxess LinkBoxesses LinkBoxes',
        },
        {
+        exec => 2,
+        name => 'variousWikiWordsNopped',
+        html => '<span class="TMLnop"><a href="page:/Current/WebPreferences">WebPreferences</a> <span class="TMLvariable">MAINWEB</span>.TWikiUsers <a href="page:/Current/CompleteAndUtterNothing">CompleteAndUtterNothing</a>',
+        tml => '<nop>WebPreferences %<nop>MAINWEB%.TWikiUsers <nop>CompleteAndUtterNothing',
+       },
+       {
         exec => 3,
         name => 'squabsWithVars',
-        html => '<a href="page:/Current/WikiSyntax">wiki syntax</a><a href="&#37;MAINWEB&#37;.TWiki users"><span class="TMLvariable">MAINWEB</span>.TWiki users</a>escaped: [<span class="TMLnop">X</span>[wiki syntax]]',
+        html => '<a href="page:/Current/WikiSyntax">wiki syntax</a><a href="&#37;MAINWEB&#37;.TWiki users"><span class="TMLvariable">MAINWEB</span>.TWiki users</a>escaped: [<span class="TMLnop">[wiki syntax]</span>]',
         tml => '[[wiki syntax]] [[%MAINWEB%.TWiki users]]
 escaped:
 ![[wiki syntax]]',
@@ -353,7 +372,7 @@ escaped:
        {
         exec => 3,
         name => 'plingedVarOne',
-        html => '&#37;<span class="TMLnop">X</span>MAINWEB&#37;nowt',
+        html => '<span class="TMLnop"><span class="TMLvariable">MAINWEB</span></span>nowt',
         tml => '!%MAINWEB%nowt',
         finaltml => '%<nop>MAINWEB%nowt'
        },
@@ -670,13 +689,6 @@ Outside
 ',
        },
        {
-        exec => 3,
-        name => 'NOP',
-        html => '<span class="TMLnop">X</span>WysiwygEditor',
-        tml => '<nop>WysiwygEditor',
-       },
-
-       {
         exec => 2,
         name=>"images",
         html=>'<img src="test_image" />',
@@ -686,12 +698,12 @@ Outside
        {
         exec => 3,
         name=>"TWikiTagsInHTMLParam",
-        html=>'<a href="&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;"></a>'.
-        "<a href='&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;'></a>",
-        tml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%"></a>'.
-        "<a href='%SCRIPTURL%/view%SCRIPTSUFFIX%'></a>",
-        finaltml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%"></a>'.
-        '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%"></a>',
+        html=>'<a href="&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;">Burble</a>'.
+        "<a href='&#37;SCRIPTURL&#37;/view&#37;SCRIPTSUFFIX&#37;'>Burble</a>",
+        tml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
+        "<a href='%SCRIPTURL%/view%SCRIPTSUFFIX%'>Burble</a>",
+        finaltml => '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>'.
+        '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>',
        },
 
       ];
@@ -731,7 +743,6 @@ Outside
         *$fn = sub { shift->compareHTML_TML( $test ) };
         use strict 'refs';
     }
-
 }
 
 use HTML::Diff;
@@ -762,7 +773,7 @@ sub _compareHTML {
     $expected =~ s/\s+</</g;
     $expected =~ s/>\s+/>/g;
 
-    $actual = normaliseEntities($expected);
+    $actual = normaliseEntities($actual);
     $actual =~ s/ +/ /gs;
     $actual =~ s/^\s+//s;
     $actual =~ s/\s+$//s;
@@ -781,7 +792,7 @@ sub _compareHTML {
         $b =~ s/^\s+//;
         $b =~ s/\s+$//s;
         my $ok = 0;
-
+        #print "$diff->[0] | $diff->[1] | $diff->[2]\n";
         if ( $diff->[0] eq 'u' || $a eq $b || _tagSame($a, $b)) {
             $ok = 1;
         }
