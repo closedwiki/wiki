@@ -162,7 +162,7 @@ sub _getHeaderFooterData {
          #print STDERR "var = '$var'\n"; #DEBUG
          $var = TWiki::Func::expandCommonVariables($var, $topic, $webName);
          $var = TWiki::Func::renderText($var);
-         $var =~ s/<.*?>//g; # htmldoc can't use HTML tags in headers/footers
+         $var =~ s/<.*?>|\n|\r//gs; # htmldoc can't use HTML tags in headers/footers
          #print STDERR "var = '$var'\n"; #DEBUG
          $output .= $start . $var . $end;
       }
@@ -253,7 +253,7 @@ sub _fixHtml {
    my ($html, $rhPrefs, $topic, $webName) = @_;
    my $title = TWiki::Func::expandCommonVariables($rhPrefs->{'title'}, $topic, $webName);
    $title = TWiki::Func::renderText($title);
-   $title =~ s/<.*?>//g;
+   $title =~ s/<.*?>//gs;
    #print STDERR "title: '$title'\n"; # DEBUG
 
    # Extract the content between the PDFSTART and PDFSTOP comment markers
@@ -262,7 +262,7 @@ sub _fixHtml {
    # remove all page breaks
    # FIXME - why remove a forced page break? Instead insert a <!-- PAGE BREAK -->
    #         otherwise dangling </p> is not cleaned up
-   $html =~ s/(<p(.*) style="page-break-before:always")/<!-- PAGE BREAK -->$1/gis;
+   $html =~ s/(<p(.*) style="page-break-before:always")/\n<!-- PAGE BREAK -->\n<p$1/gis;
 
    # remove %META stuff
    $html =~ s/%META:\w+{.*?}%//gs;
@@ -500,14 +500,22 @@ sub viewPDF {
    }
 
    #  output the HTML header and the output of HTMLDOC
-   print CGI::header( -TYPE => "application/pdf" );
+   if ($rhPrefs->{'format'} =~ /pdf/) {
+      print CGI::header( -TYPE => "application/pdf" );
+   }
+   elsif if ($rhPrefs->{'format'} =~ /ps/) {
+      print CGI::header( -TYPE => "application/postscript" );
+   }
+   else {
+      print CGI::header( -TYPE => "text/html" );
+   }
    while(<$ofh>){
       print;
    }
    close $ofh;
 
    # dump the temporary files
-   #unlink("$tmpFile") or die "Failed to unlink $tmpFile : $!";
+   unlink("$tmpFile") or die "Failed to unlink $tmpFile : $!";
    unlink("$titleFile") or die "Failed to unlink $titleFile : $!";
    unlink("$outFile") or die "Failed to unlink $outFile : $!";
 }
