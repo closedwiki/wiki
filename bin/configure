@@ -76,100 +76,103 @@ BEGIN {
     if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
         chdir $1;
     }
+}
 
-    # Required for testenv to work
-    my %basicMods =
-      (
-       'CGI'       => "basic TWiki",
-       'CGI::Carp' => "basic TWiki"
-      );
+# Required for testenv to work
+my %basicMods =
+  (
+   'CGI'       => "basic TWiki",
+   'CGI::Carp' => "basic TWiki"
+  );
 
-    $| = 1;                  # no buffering - FIXME: mod_perl issue?
+$| = 1;                  # no buffering - FIXME: mod_perl issue?
 
-    # Check whether basic CGI modules exist (some broken installations of
-    # Perl don't have this, even though they are standard modules), and warn user
-    my $modMissing = 0;
-    foreach my $mod (keys %basicMods) {
-        eval "use $mod";
-        if ($@) {
-            unless ($modMissing) {
-                print 'Content-Type: text/plain'."\n\n";
-                print 'Perl Module(s) missing';
-            }
-            $modMissing = 1;
-            print 'Warning: Essential module ',$mod;
-            print 'not installed - please check your Perl installation, ',
-              'including the setting of @INC, and re-install Perl if necessary.';
+# Check whether basic CGI modules exist (some broken installations of
+# Perl don't have this, even though they are standard modules), and warn user
+my $modMissing = 0;
+foreach my $mod (keys %basicMods) {
+    eval "use $mod";
+    if ($@) {
+        unless ($modMissing) {
+            print 'Content-Type: text/plain'."\n\n";
+            print 'Perl Module(s) missing';
         }
+        $modMissing = 1;
+        print 'Warning: Essential module ',$mod;
+        print 'not installed - please check your Perl installation, ',
+          'including the setting of @INC, and re-install Perl if necessary.';
     }
+}
 
-    # If any critical modules missing, display @INC and give up 
-    if ($modMissing) {
-        print '@INC setting:', join(' ', @INC);
-        exit;
-    }
+# If any critical modules missing, display @INC and give up 
+if ($modMissing) {
+    print '@INC setting:', join(' ', @INC);
+    exit;
+}
 
-    # Set library paths in @INC, read TWiki.cfg and set locale, at compile time
-    # Try to use setlib.cfg, use default path if missing
-    if ( -r './setlib.cfg' ) {
-        require './setlib.cfg'; 
-        $setlibAvail = 1;
-    } else {
-        unshift @INC, '../lib';
-        $setlibAvail = 0;
+eval "use CGI::Carp qw( fatalsToBrowser )";
+
+# Set library paths in @INC, read TWiki.cfg and set locale, at compile time
+# Try to use setlib.cfg, use default path if missing
+if ( -r './setlib.cfg' ) {
+    require './setlib.cfg'; 
+    $setlibAvail = 1;
+} else {
+    unshift @INC, '../lib';
+    $setlibAvail = 0;
+}
+
+if( $OS ) {
+    $TWiki::cfg{DetailedOS} = $detailedOS;
+    $TWiki::cfg{OS} = $OS;
+} else {
+    # SMELL: duplicates code in TWiki.pm
+    unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
+        require Config;
+        $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
     }
-    if( $OS ) {
-        $TWiki::cfg{DetailedOS} = $detailedOS;
-        $TWiki::cfg{OS} = $OS;
-    } else {
-        # SMELL: duplicates code in TWiki.pm
-        unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
-            require Config;
-            $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
-        }
+    $TWiki::cfg{OS} = 'UNIX';
+    if ($TWiki::cfg{DetailedOS} =~ /darwin/i) { # MacOS X
         $TWiki::cfg{OS} = 'UNIX';
-        if ($TWiki::cfg{DetailedOS} =~ /darwin/i) { # MacOS X
-            $TWiki::cfg{OS} = 'UNIX';
-        } elsif ($TWiki::cfg{DetailedOS} =~ /Win/i) {
-            $TWiki::cfg{OS} = 'WINDOWS';
-        } elsif ($TWiki::cfg{DetailedOS} =~ /vms/i) {
-            $TWiki::cfg{OS} = 'VMS';
-        } elsif ($TWiki::cfg{DetailedOS} =~ /bsdos/i) {
-            $TWiki::cfg{OS} = 'UNIX';
-        } elsif ($TWiki::cfg{DetailedOS} =~ /dos/i) {
-            $TWiki::cfg{OS} = 'DOS';
-        } elsif ($TWiki::cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
-            $TWiki::cfg{OS} = 'MACINTOSH';
-        } elsif ($TWiki::cfg{DetailedOS} =~ /os2/i) {
-            $TWiki::cfg{OS} = 'OS2';
-        }
+    } elsif ($TWiki::cfg{DetailedOS} =~ /Win/i) {
+        $TWiki::cfg{OS} = 'WINDOWS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /vms/i) {
+        $TWiki::cfg{OS} = 'VMS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /bsdos/i) {
+        $TWiki::cfg{OS} = 'UNIX';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /dos/i) {
+        $TWiki::cfg{OS} = 'DOS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
+        $TWiki::cfg{OS} = 'MACINTOSH';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /os2/i) {
+        $TWiki::cfg{OS} = 'OS2';
     }
+}
 
-    # if this fails, ignore the problem, but we have to do it
-    unless( eval 'do "LocalSite.cfg"' ) {
-        # Capture the Perl error(s)
-        $brokenLocalSiteError = 'require failed: '.
-          ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
-    }
+# if this fails, ignore the problem, but we have to do it
+unless( eval 'do "LocalSite.cfg"' ) {
+    # Capture the Perl error(s)
+    $brokenLocalSiteError = 'require failed: '.
+      ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
+}
 
-    # Read the configuration file now in order to set locale;
-    # includes checking for broken syntax etc.  Need 'require'
-    # to get the $!/$@ to work.
-    $brokenTWikiCfg = 0;
-    unless( eval 'require "TWiki.cfg" ' ) {
-        # Capture the Perl error(s)
-        $brokenTWikiCfgError = 'require failed: '.
-          ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
-    }
+# Read the configuration file now in order to set locale;
+# includes checking for broken syntax etc.  Need 'require'
+# to get the $!/$@ to work.
+$brokenTWikiCfg = 0;
+unless( eval 'require "TWiki.cfg" ' ) {
+    # Capture the Perl error(s)
+    $brokenTWikiCfgError = 'require failed: '.
+      ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
+}
 
-    # and again
-    eval 'do LocalSite.cfg';
+# and again
+eval 'do "LocalSite.cfg"';
 
-    # Do a dynamic 'use locale' for this script
-    if( $TWiki::cfg{UseLocale} ) {
-        require locale;
-        import locale ();
-    }
+# Do a dynamic 'use locale' for this script
+if( $TWiki::cfg{UseLocale} ) {
+    require locale;
+    import locale ();
 }
 
 my $errors = 0;
@@ -180,8 +183,7 @@ my $url = $query->url();
 my $update = $query->param('update');
 
 print CGI::header('text/html'),
-  CGI::start_html(),
-  CGI::title('TWiki Configuration'),
+  CGI::start_html('TWiki Configuration'),
   CGI::style( { type=>'text/css', media=>'all' }, <<'HERE'
 		html body {
 			line-height:1.55em;
@@ -238,28 +240,27 @@ if( $update ) {
         my $basevar = $param;
         $basevar =~ s/_/}{/g;
         my $var = '$TWiki::cfg{'.$basevar.'}';
+        my $val = $query->param( $param );
+        my $type = $query->param('TYPEOF:'.$param);
         my $def;
         eval "\$def = defined( $var );";
         if( $def ) {
             eval "\$def = $var;";
-            my $val = $query->param( $param );
             if( $val eq $def) {
-                #print CGI::br($var.' is unchanged');
+                print CGI::br($var.'='.$val.' is unchanged ('.$def.')');
                 next;
-            } else {
-                my $type = $query->param('TYPEOF:'.$param);
-                print CGI::h2($var),
-                  CGI::b('old ').CGI::code($def).
-                      CGI::br(CGI::b('new  ').CGI::code($val));
-                $updates{$basevar} = perlifyType($val,$type);
-                $changed++;
             }
+            print CGI::h2($var),
+              CGI::b('old ').CGI::code($def).
+                  CGI::br(CGI::b('new  ').CGI::code($val));
+            $updates{$basevar} = perlifyType($val,$type);
+            $changed++;
         }
     }
     print CGI::p();
     setConfig(\%updates);
     print $changed.' configuration items changed. ';
-    print CGI::a({ href=>$url }, 'Click here to return to configuration');
+    print CGI::a({ href=>$url.'?t='.time() }, 'Click here to return to configuration');
     exit 1;
 }
 
@@ -347,7 +348,8 @@ HERE
 print CGI::start_form({ action=>'configure',method=>"post" }),
   CGI::start_table();
 
-print CGI::hidden(-name=>'update',-value=>'1');
+# use time to make sure we never allow cacheing
+print CGI::hidden(-name=>'update',-value=>time());
 
 print H2('Environment variables (read only)');
 for my $key ( sort keys %ENV ) {
@@ -951,6 +953,14 @@ sub _checkLogFileName {
     return $e;
 }
 
+sub _checkConfigurationLogName {
+    my $logFile = $TWiki::cfg{ConfigurationLogName} || "";
+    $logFile =~ s/%DATE%/DATE/;
+    my $e = _checkCanCreateFile( $logFile );
+    $e = ERROR($e) if $e;
+    return $e;
+}
+
 sub _checkWarningFileName {
     my $logFile = $TWiki::cfg{WarningFileName} || "";
     $logFile =~ s/%DATE%/DATE/;
@@ -1291,10 +1301,20 @@ sub setConfig {
       die "Failed to open $lsc for write";
     print F $txt if $txt;
     foreach my $config ( keys %$updates ) {
-        # kill the old settings if any are there
         print F '$TWiki::cfg{',$config,'} = ',$updates->{$config},";\n";
     }
     close(F);
+
+    if( defined( $TWiki::cfg{ConfigurationLogName} ) &&
+        open(F, '>>'.$TWiki::cfg{ConfigurationLogName} )) {
+        my $date = gmtime();
+        my $user = $query->remote_user() || 'guest';
+        foreach my $config ( keys %$updates ) {
+            print F '| ',$date,' | ',$user,' | ',$config,' | ',
+              $updates->{$config}," |\n";
+        }
+        close(F);
+    }
 }
 
 sub perlifyType {
@@ -1311,4 +1331,5 @@ sub perlifyType {
         return "'$val'";
     }
 }
+
 1;
