@@ -792,6 +792,7 @@ sub __checkAndBuildValueGrabber {
     my $id = $keys;
     $id =~ s/}{/_/g;
     $id =~ s/[{}\[\]]//g;
+    my $anchor = CGI::a({name=>$id},'');
     print CGI::hidden(-name => 'TYPEOF:'.$id, -value=>$type);
     my $value = eval '$TWiki::cfg'.$keys;
     my $prompter = '_prompt'.$type;
@@ -808,6 +809,8 @@ sub __checkAndBuildValueGrabber {
         use strict 'refs';
     }
 
+    $desc = $anchor."\n".$desc;
+
     my $docrow =
       CGI::Tr( CGI::td( { colspan => 2, class=>'docdata info' }, $desc ));
 
@@ -816,7 +819,7 @@ sub __checkAndBuildValueGrabber {
       CGI::Tr( { class => 'keydata' },
                CGI::td( $keys ).CGI::td( $prompter ));
 
-    return $docrow.$keyrow;
+    return $docrow."\n".$keyrow."\n";
 }
 
 sub _promptSTRING {
@@ -1283,15 +1286,15 @@ sub setConfig {
         # kill the old settings if any are there
         $txt =~ s/\$TWiki::cfg\{$config\}\s*=.*?;//s;
     }
-# Currently disabled, as could screw over ntwiki
-#    open(F, ">$lsc") ||
-#      die "Failed to open $lsc for write";
-#    print F $txt if $txt;
-#    foreach my $config ( keys %$updates ) {
-#        # kill the old settings if any are there
-#        print F '$TWiki::cfg{',$config,'} = ',$updates->{$config},";\n";
-#    }
-#    close(F);
+
+    open(F, ">$lsc") ||
+      die "Failed to open $lsc for write";
+    print F $txt if $txt;
+    foreach my $config ( keys %$updates ) {
+        # kill the old settings if any are there
+        print F '$TWiki::cfg{',$config,'} = ',$updates->{$config},";\n";
+    }
+    close(F);
 }
 
 sub perlifyType {

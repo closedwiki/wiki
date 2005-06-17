@@ -78,8 +78,10 @@ sub getUrl {
     }
 
     my $prefs = $this->{session}->{prefs};
-    my $proxyHost = $prefs->getPreferencesValue('PROXYHOST');
-    my $proxyPort = $prefs->getPreferencesValue('PROXYPORT');
+    my $proxyHost = $prefs->getPreferencesValue('PROXYHOST') ||
+      $TWiki::cfg{PROXY}{HOST};
+    my $proxyPort = $prefs->getPreferencesValue('PROXYPORT') ||
+      $TWiki::cfg{PROXY}{PORT};
     if($proxyHost && $proxyPort) {
         $req = "GET http://$theHost:$thePort$theUrl HTTP/1.0\r\n";
         $theHost = $proxyHost;

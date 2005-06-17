@@ -124,10 +124,6 @@ The following are __site-level__ settings that affect all users in all webs on t
 	* TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
 		* Set WIKIWEBMASTERNAME = TWiki Administrator
 
-	* Proxy Server. Some environments require outbound HTTP traffic to go through a proxy server. Set the host in PROXYHOST (example: ==proxy.your.company==), and the port number in PROXYPORT (example: ==8080==). No proxy is used if PROXYHOST or PROXYPORT is empty.
-		* Set PROXYHOST = 
-		* Set PROXYPORT = 
-
 
 ---+++ Email Link Settings
 
@@ -299,7 +295,7 @@ If you need to specify the plugin execution sequence, then manually list the plu
 		* Set TOPICOVERRIDESUSER = off
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER, PROXYHOST, PROXYPORT
 
 
 ---++ Creating New Preference Variables
