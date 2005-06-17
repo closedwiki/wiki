@@ -2410,7 +2410,8 @@ sub _REVINFO {
     $cgiRev = $cgiQuery->param('rev') if( $cgiQuery );
     my $rev = $cgiRev || $params->{rev} || '';
 
-    return $this->{renderer}->renderRevisionInfo( $web, $topic, $rev, $format );
+    return $this->{renderer}->renderRevisionInfo( $web, $topic, undef,
+                                                  $rev, $format );
 }
 
 sub _ENCODE {

@@ -92,9 +92,7 @@ sub view {
     if( $topicExists ) {
         ( $currMeta, $currText ) = $store->readTopic
           ( $session->{user}, $webName, $topicName, undef );
-        ( $revdate, $revuser, $showRev ) =
-          $currMeta->getRevisionInfo();
-
+        ( $revdate, $revuser, $showRev ) = $currMeta->getRevisionInfo();
         $revdate = TWiki::Time::formatTime( $revdate );
 
         if ( !$rev || $rev > $showRev ) {
@@ -180,6 +178,7 @@ sub view {
         return;
     }
 
+    $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
     $tmpl =~ s/%REVTITLE%/$revTitle/g;
     $tmpl =~ s/%REVARG%/$revArg/g;
 
@@ -228,8 +227,12 @@ sub view {
         }
         $doingRev--;
     }
+
+    my $ri = $session->{renderer}->renderRevisionInfo( $webName,
+                                                       $topicName,
+                                                       $meta );
+    $tmpl =~ s/%REVINFO%/$ri/go;
     $tmpl =~ s/%REVISIONS%/$revs/go;
-    $tmpl =~ s/%REVINFO%/%REVINFO%$mirrorNote/go;
     $tmpl =~ m/^(.*)%TEXT%(.*$)/s;
 
     my $start = $1;

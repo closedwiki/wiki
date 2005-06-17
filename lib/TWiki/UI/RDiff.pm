@@ -425,7 +425,7 @@ sub diff {
     do {
         my $diff = $difftmpl;
         $diff =~ s/%REVTITLE1%/$r1/go;
-        my $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $r1, '$date - $wikiusername' );
+        my $rInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, undef, $r1, '$date - $wikiusername' );
         # eliminate white space to prevent wrap around in HR table:
         $rInfo =~ s/\s+/&nbsp;/g;
         $diff =~ s/%REVINFO1%/$rInfo/go;
@@ -492,7 +492,7 @@ sub diff {
                                                            rev => $i ),
                               rel => 'nofollow' },
                             $i);
-        my $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, $i, undef );
+        my $revInfo = $session->{renderer}->renderRevisionInfo( $webName, $topic, undef, $i );
         $tailResult .= $tail;
         $tailResult =~ s/%REVTITLE%/$revTitle/go;
         $tailResult =~ s/%REVINFO%/$revInfo/go;

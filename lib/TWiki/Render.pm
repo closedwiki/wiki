@@ -1451,11 +1451,12 @@ sub putBackBlocks {
 
 =pod
 
----++ ObjectMethod renderRevisionInfo($web, $topic, $rev, $format) -> $string
+---++ ObjectMethod renderRevisionInfo($web, $topic, $meta, $rev, $format) -> $string
 
 Obtain and render revision info for a topic.
    * =$web= - the web of the topic
    * =$topic= - the topic
+   * =$meta= if specified, get rev info from here. If not specified, or meta contains rev info for a different version than the one requested, will reload the topic
    * =$rev= - the rev number, defaults to latest rev
    * =$format= - the render format, defaults to =$rev - $time - $wikiusername=
 =$format= can contain the following keys for expansion:
@@ -1472,7 +1473,7 @@ Obtain and render revision info for a topic.
 =cut
 
 sub renderRevisionInfo {
-    my( $this, $web, $topic, $rrev, $format ) = @_;
+    my( $this, $web, $topic, $meta, $rrev, $format ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     my $store = $this->{session}->{store};
 
@@ -1480,7 +1481,10 @@ sub renderRevisionInfo {
         $rrev = $store->cleanUpRevID( $rrev );
     }
 
-    my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
+    unless( $meta ) {
+        my $text;
+        ( $meta, $text ) = $store->readTopic( undef, $web, $topic, $rrev );
+    }
     my( $date, $user, $rev, $comment ) = $meta->getRevisionInfo( $rrev );
 
     my $wun = '';

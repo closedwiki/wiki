@@ -326,24 +326,25 @@ $rev is an integer revision number.
 sub getRevisionInfo {
     my( $this, $fromrev ) = @_;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
+    my $store = $this->{_session}->{store};
 
     my $topicinfo = $this->get( 'TOPICINFO' );
 
     my( $date, $author, $rev, $comment );
-    if( $topicinfo && !defined($fromrev)) {
+    if( $topicinfo ) {
         $date = $topicinfo->{date} ;
         $author = $this->{_session}->{users}->findUser($topicinfo->{author});
         $rev = $topicinfo->{version};
-        $rev =~ s/^\$Rev(:\s*\d+\s*)?\$$/0/;
+        $rev =~ s/^\$Rev(:\s*\d+\s*)?\$$/0/; # parse out SVN keywords in doc
         $rev =~ s/^\d+\.//;
         $comment = '';
-    } else {
-        # Get data from Store
-        my $store = $this->{_session}->{store};
-        ( $date, $author, $rev, $comment ) =
-          $store->getRevisionInfo( $this->{_web}, $this->{_topic}, $fromrev );
+        if ( !$fromrev || $rev eq $fromrev ) {
+            return( $date, $author, $rev, $comment );
+        }
     }
-
+    # Different rev, or no topic info, delegate to Store
+    ( $date, $author, $rev, $comment ) =
+      $store->getRevisionInfo( $this->{_web}, $this->{_topic}, $fromrev );
     return( $date, $author, $rev, $comment );
 }
 

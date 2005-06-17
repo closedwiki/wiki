@@ -1063,7 +1063,7 @@ sub _getRev1Info {
     my $store = $this->{session}->{store};
 
     unless( $info->{webTopic} eq $key ) {
-        my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
+        my $meta = new TWiki::Meta( $theWeb, $theTopic );
         my ( $d, $u ) = $meta->getRevisionInfo( 1 );
         $info->{date} = $d;
         $info->{user} = $u;

@@ -63,7 +63,7 @@ SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
 <!-- /expected -->
 ---++++ Actual
 <!-- actual -->
-%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Text Item)" reverse="off" }%
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="formfield(Text Item)" reverse="on" }%
 <!-- /actual -->
 <!-- yes, reverse="off". That's what search does, it interprets "off" as "on" -->
 
@@ -120,5 +120,12 @@ SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
 <!-- /actual -->
 
 ---+++ Search ordered by date created
-Would like to test this, but no way to guarantee it because the create date
-is taken from the filesystem.
+<!-- expected rex -->
+SearchTestTopic3; Value_3; 1; @DATE - @TIME<br />
+SearchTestTopic1; Value_1; 3; @DATE - @TIME<br />
+SearchTestTopic2; Value_2; 2; @DATE - @TIME<br />
+<!-- /expected -->
+---++++ Actual
+<!-- actual -->
+%SEARCH{ "SearchTestTopic" scope="topic" scope="topic" nototal="on" nosearch="on" header="" format="!$topic; $formfield(Text Item); $formfield(Number Item); $date<br />" order="created" }%
+<!-- /actual -->

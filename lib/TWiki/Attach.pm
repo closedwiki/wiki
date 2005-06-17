@@ -143,7 +143,6 @@ sub formatVersions {
     my $rows ='';
 
     for( my $rev = $latestRev; $rev >= 1; $rev-- ) {
-        # SMELL: should get revision info from meta
         my( $date, $user, $minorRev, $comment ) =
           $store->getRevisionInfo( $web, $topic, $rev, $attrs{name} );
         $user = $user->webDotWikiName() if( $user );
