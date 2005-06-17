@@ -255,55 +255,49 @@ sub _collectLogData {
         }
         my( $opName, $webTopic, $notes, $ip ) = @fields;
 
-        next unless $opName; # malformed log line?
-
         # ignore minor changes - not statistically helpful
-        next if( $notes =~ / (minor|dontNotify) / );
+        next if( $notes && $notes =~ /(minor|dontNotify)/ );
 
-        $webTopic =~ /($webNameRegex)\.($wikiWordRegex)/;
-        my $webName = $1;
-        my $topicName = $2;
+        if( $opName && $webTopic =~ /($webNameRegex)\.($wikiWordRegex)/ ) {
+            my $webName = $1;
+            my $topicName = $2;
 
-        my $logContrib = 0;
-        if ($opName eq 'view' ) {
-            $statViews{$webName}++;
-            unless( $notes =~ /\(not exist\)/ ) {
-                $view{$webName}{$topicName}++;
+            if( $opName eq 'view' ) {
+                $statViews{$webName}++;
+                unless( $notes =~ /\(not exist\)/ ) {
+                    $view{$webName}{$topicName}++;
+                }
+
+            } elsif( $opName eq 'save' ) {
+                $statSaves{$webName}++;
+                $contrib{$webName}{$userName}++;
+
+            } elsif( $opName eq 'upload' ) {
+                $statUploads{$webName}++;
+                $contrib{$webName}{$userName}++;
+
+            } elsif( $opName eq 'rename' ) {
+                # Pick up the old and new topic names
+                $notes =~/moved to ($webNameRegex)\.($topicRegex)/o;
+                my $newTopicWeb = $1;
+                my $newTopicName = $2;
+
+                # Get number of views for old topic this month (may be zero)
+                my $oldViews = $view{$webName}{$topicName} || 0;
+
+                # Transfer views from old to new topic
+                $view{$newTopicWeb}{$newTopicName} = $oldViews;
+                delete $view{$webName}{$topicName};
+
+                # Transfer views from old to new web
+                if ( $newTopicWeb ne $webName ) {
+                    $statViews{$webName} -= $oldViews;
+                    $statViews{$newTopicWeb} += $oldViews;
+                }
             }
-
-        } elsif ($opName eq 'save' ) {
-            $statSaves{$webName}++;
-            $logContrib = 1;
-
-        } elsif ($opName eq 'upload' ) {
-            $statUploads{$webName}++;
-            $logContrib = 1;
-
-        } elsif ($opName eq 'rename' ) {
-            # Pick up the old and new topic names
-            $notes =~/moved to ($webNameRegex)\.($topicRegex)/o;
-            my $newTopicWeb = $1;
-            my $newTopicName = $2;
-
-            # Get number of views for old topic this month (may be zero)
-            my $oldViews = $view{$webName}{$topicName} || 0;
-
-            # Transfer views from old to new topic
-            $view{$newTopicWeb}{$newTopicName} = $oldViews;
-            delete $view{$webName}{$topicName};
-
-            # Transfer views from old to new web
-            if ( $newTopicWeb ne $webName ) {
-                $statViews{$webName} -= $oldViews;
-                $statViews{$newTopicWeb} += $oldViews;
-            }
+        } else {
+            $session->writeDebug('Bad logfile line '.$line);
         }
-        # Record saves and uploads
-        if ($logContrib) {
-            # Record the contribution by user name
-            $contrib{$webName}{$userName}++;
-        }
-
     }
 
     return \%view, \%contrib, \%statViews, \%statSaves, \%statUploads;
