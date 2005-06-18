@@ -42,6 +42,10 @@ use Error qw( :try );
 
 use strict;
 
+use vars qw( $STORE_FORMAT_VERSION );
+
+$STORE_FORMAT_VERSION = '1.1';
+
 =pod
 
 ---++ ClassMethod new()
@@ -1034,7 +1038,11 @@ sub extractMetaData {
       (&_addMetaDatum($meta,'TOPICINFO',$1))gem;
 
     my $ti = $meta->get( 'TOPICINFO' );
-    $format = $ti->{format} if $ti;
+    if( $ti ) {
+        $format = $ti->{format};
+        # Make sure we update the topic format
+        $ti->{format} = $STORE_FORMAT_VERSION;
+    }
 
     $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2,$format)/gem;
 

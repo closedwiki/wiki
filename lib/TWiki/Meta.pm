@@ -52,10 +52,6 @@ use Error qw(:try);
 use Assert;
 use TWiki::Merge;
 
-use vars qw( $formatVersion );
-
-$formatVersion = '1.1';
-
 =pod
 
 ---++ ClassMethod new($session, $web, $topic)
@@ -327,7 +323,7 @@ sub addTOPICINFO {
                  version => '1.'.$rev,
                  date    => $time,
                  author  => $user->wikiName(),
-                 format  => $formatVersion
+                 format  => $TWiki::Store::STORE_FORMAT_VERSION
                 } );
 }
 
