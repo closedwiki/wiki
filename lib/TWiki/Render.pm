@@ -1758,9 +1758,9 @@ sub renderFormFieldArg {
     my $value = '';
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
-        $value = $field->{value};
-        $value =~ s/^\s*(.*?)\s*$/$1/go;
         if( $name =~ /^($field->{name}|$field->{title})$/ ) {
+            $value = $field->{value};
+            $value =~ s/^\s*(.*?)\s*$/$1/go;
             $value = breakName( $value, $breakArgs );
             return $value;
         }

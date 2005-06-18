@@ -569,14 +569,11 @@ sub renderHidden {
 =pod
 
 ---++ ObjectMethod getFieldValuesFromQuery($query, $metaObject, $justOverride, $handleMandatory) -> $metaObject
-
-Extract new values of form fields from a query. and put them into the
-meta-data object passed in.
-
-Note that existing meta information for fields is removed unless
-$justOverride is true
-
-May throw TWiki::OopsException
+Extract new values for form fields from a query.
+   * =$query= - the query
+   * =$metaObject= - the meta object that is storing the form values
+   * =$justOverride= - if set, the existing form values will be retained and only _changed_ values in the query will be pushed into the form. If clear, the existing form will be removed, and the form completely repopulated from the query.
+   * =$handleMandatory= - if set, will throw an OopsException if any mandatory fields are absent from the query.
 
 =cut
 
@@ -630,7 +627,7 @@ sub getFieldValuesFromQuery {
 =pod
 
 ---++ ObjectMethod isTextMergeable( $name ) -> $boolean
-
+   * =$name= - name of a form field (value of the =name= attribute)
 Returns true if the type of the named field allows it to be text-merged.
 
 If the form does not define the field, it is assumed to be mergeable.

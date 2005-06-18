@@ -133,7 +133,7 @@ sub preview {
         # undocumented 'repRev' mode
         $text = $textparam; # text to save
         $ptext = $text;
-        $meta = $session->{store}->extractMetaData( $webName, $topic, \$ptext );
+        $session->{store}->extractMetaData( $meta, \$ptext );
     }
 
     # SMELL: this is horrible, it only handles verbatim. It should be

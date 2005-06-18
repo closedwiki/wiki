@@ -902,42 +902,43 @@ This method is inherently less efficient and more dangerous than =saveTopic=.
 
 sub saveTopicText {
     my( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
-
-    my( $mirrorSite, $mirrorViewURL ) = $TWiki::Plugins::SESSION->readOnlyMirrorWeb( $web );
-    return $TWiki::Plugins::SESSION->getOopsUrl
+    my $session = $TWiki::Plugins::SESSION;
+    my( $mirrorSite, $mirrorViewURL ) = $session->readOnlyMirrorWeb( $web );
+    return $session->getOopsUrl
       ( 'mirror', web => $web, topic => $topic,
         params => [ $mirrorSite, $mirrorViewURL ] ) if( $mirrorSite );
 
     # check access permission
     unless( $ignorePermissions ||
-            $TWiki::Plugins::SESSION->{security}->checkAccessPermission( 'change',
-                                                     $TWiki::Plugins::SESSION->{user}, '',
+            $session->{security}->checkAccessPermission( 'change',
+                                                     $session->{user}, '',
                                                      $topic, $web )
           ) {
-        return $TWiki::Plugins::SESSION->getOopsUrl( 'accessdenied',
+        return $session->getOopsUrl( 'accessdenied',
                                                      def => 'topic_access',
                                                      web => $web,
                                                      topic => $topic );
     }
 
-    return $TWiki::Plugins::SESSION->getOopsUrl( 'attention',
+    return $session->getOopsUrl( 'attention',
                                                  def => 'save_error',
                                                  web => $web,
                                                  topic => $topic )
       unless( defined $text );
 
     # extract meta data and merge old attachment meta data
-    my $meta = $TWiki::Plugins::SESSION->{store}->extractMetaData( $web, $topic, \$text );
+    my $meta = new TWiki::Meta( $session, $web, $topic );
+    $session->{store}->extractMetaData( $meta, \$text );
     my( $oldMeta, $oldText ) =
-      $TWiki::Plugins::SESSION->{store}->readTopic( undef, $web, $topic, undef );
+      $session->{store}->readTopic( undef, $web, $topic, undef );
     $meta->copyFrom( $oldMeta, 'FILEATTACHMENT' );
 
     # save topic
     my $error =
-      $TWiki::Plugins::SESSION->{store}->saveTopic
-        ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
+      $session->{store}->saveTopic
+        ( $session->{user}, $web, $topic, $text, $meta,
           { notify => $dontNotify } );
-    return $TWiki::Plugins::SESSION->getOopsUrl
+    return $session->getOopsUrl
       ( 'attention', def => 'save_error',
         web => $web, topic => $topic, params => $error ) if( $error );
     return '';

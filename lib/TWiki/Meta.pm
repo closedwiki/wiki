@@ -31,10 +31,11 @@ contains another hash of the key=value pairs, corresponding to a
 single meta-datum.
 
 If there may be multiple entries of the same top-level type (i.e. for FIELD
-and FILEATTACHMENT) then the array hash multiple entries. In this case,
-the entries are keyed with 'name'. Otherwise, the array has only one entry.
-(When entries are keyed, they must be inserted into meta using the 'putKeyed'
-method.)
+and FILEATTACHMENT) then the array hash multiple entries. These types
+are referred to as "keyed" types. The array entries are keyed with the
+attribute 'name' which must be in each entry in the array.
+
+For unkeyed types, the array has only one entry.
 
 The module knows nothing about how meta-data is stored. That is entirely the
 responsibility of the Store module.
@@ -83,6 +84,28 @@ sub new {
 
 =pod
 
+---++ ClassMethod web()
+Get the web name
+
+=cut
+
+sub web {
+    return $_[0]->{_web};
+}
+
+=pod
+
+---++ ClassMethod topic()
+Get the topic name
+
+=cut
+
+sub topic {
+    return $_[0]->{_topic};
+}
+
+=pod
+
 ---++ ObjectMethod put($type, \%args)
 
 Put a hash of key=value pairs into the given type set in this meta.
@@ -123,11 +146,11 @@ sub putKeyed {
 
     my $data = $this->{$type};
     if( $data ) {
-        my $keyName = $args->{'name'};
+        my $keyName = $args->{name};
         ASSERT( $keyName ) if DEBUG;
         my $i = scalar( @$data );
         while( $i-- ) {
-            if( $data->[$i]->{'name'} eq $keyName ) {
+            if( $data->[$i]->{name} eq $keyName ) {
                 $data->[$i] = $args;
                 return;
             }
@@ -158,7 +181,7 @@ sub get {
     if( $data ) {
       if( defined $keyValue ) {
         foreach my $item ( @$data ) {
-	  return $item if( $item->{'name'} eq $keyValue );
+	  return $item if( $item->{name} eq $keyValue );
 	  }
       } else {
         return $data->[0];
@@ -212,7 +235,7 @@ sub remove {
        my $data = $this->{$type};
        my @newData = ();
        foreach my $item ( @$data ) {
-           if( $item->{'name'} ne $keyValue ) {
+           if( $item->{name} ne $keyValue ) {
                push @newData, $item;
            }
        }
@@ -220,8 +243,11 @@ sub remove {
     } elsif( $type ) {
        delete $this->{$type};
     } else {
-       $this = {};
-       bless $this;
+        foreach my $entry ( keys %$this ) {
+            unless( $entry =~ /^_/ ) {
+                $this->remove( $entry );
+            }
+        }
     }
 }
 
@@ -278,25 +304,20 @@ sub count {
 
 =pod
 
----++ ObjectMethod addTOPICINFO (  $web, $topic, $rev, $time, $user )
-   * =$web= - the web
-   * =$topic= - the topic
-   * =$rev= - the revision number (defaults to 1)
-   * =$time= - the time stamp, defaults to time()
-   * =$user= - the user object, defaults to the current session user
+---++ ObjectMethod addTOPICINFO( $rev, $time, $user )
+   * =$rev= - the revision number
+   * =$time= - the time stamp
+   * =$user= - the user object
 
 Add TOPICINFO type data to the object, as specified by the parameters.
 
 =cut
 
 sub addTOPICINFO {
-    my( $this, $web, $topic, $rev, $time, $user ) = @_;
+    my( $this, $rev, $time, $user ) = @_;
+    $rev = 1 if $rev < 1;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
-
-    $time ||= time();
-    $user ||= $this->{_session}->{user};
-
-    $rev = 1 unless $rev;
+    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     $this->put( 'TOPICINFO',
                 {

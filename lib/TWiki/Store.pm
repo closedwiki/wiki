@@ -109,11 +109,12 @@ TWiki::Meta object.  (The topic text is, as usual, just a string.)
 =cut
 
 sub readTopic {
-    my( $this, $user, $theWeb, $theTopic, $version ) = @_;
+    my( $this, $user, $web, $topic, $version ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
-    my $text = $this->readTopicRaw( $user, $theWeb, $theTopic, $version );
-    my $meta = $this->extractMetaData( $theWeb, $theTopic, \$text );
+    my $text = $this->readTopicRaw( $user, $web, $topic, $version );
+    my $meta = new TWiki::Meta( $this->{session}, $web, $topic);
+    $this->extractMetaData( $meta, \$text );
     return( $meta, $text );
 }
 
@@ -566,18 +567,22 @@ sub saveTopic {
     my $plugins = $this->{session}->{plugins};
 
     if( $plugins->haveHandlerFor( 'beforeSaveHandler' )) {
+        # SMELL: Staggeringly inefficient code that adds meta-data for
+        # Plugin callback. Why not simply pass the meta in? It would be far
+        # more sensible.
         if( $meta ) {
-            # SMELL: Staggeringly inefficient code that adds meta-data for
-            # Plugin callback. Why not simply pass the meta in? It would be far
-            # more sensible.
             $text = _writeMeta( $meta, $text );
         }
 
         $plugins->beforeSaveHandler( $text, $topic, $web );
 
-        # remove meta data again, and throw any new meta data
-        # away!!!! That's CRAP.
-        $this->extractMetaData( $web, $topic, \$text );
+        # Need to clear out meta-data before repopulating, as otherwise
+        # there is a clash when it tries to add non-keyed values back in,
+        # and it might duplicate values as well.
+        if( $meta ) {
+            $meta->remove();
+            $this->extractMetaData( $meta, \$text );
+        }
     }
 
     my $error =
@@ -723,7 +728,7 @@ sub _noHandlersSave {
     }
 
     if( $meta ) {
-        $meta->addTOPICINFO( $web, $topic, $nextRev );
+        $meta->addTOPICINFO( $nextRev, time(), $user );
         $text = _writeMeta( $meta, $text );
     }
 
@@ -803,7 +808,7 @@ sub repRev {
         $revdate = time();
         $revuser = $user;
     }
-    $meta->addTOPICINFO( $web, $topic, $rev, $revdate, $revuser );
+    $meta->addTOPICINFO( $rev, $revdate, $revuser );
     $text = _writeMeta( $meta, $text );
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic );
@@ -1021,11 +1026,10 @@ sub _addMetaDatum {
 # meta-data is embedded in text.
 #
 sub extractMetaData {
-    my( $this, $web, $topic, $rtext ) = @_;
+    my( $this, $meta, $rtext ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     my $format;
 
-    my $meta = new TWiki::Meta( $this->{session}, $web, $topic );
     $$rtext =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
       (&_addMetaDatum($meta,'TOPICINFO',$1))gem;
 
@@ -1043,7 +1047,7 @@ sub extractMetaData {
 
         if ( $$rtext =~ /<!--TWikiCat-->/ ) {
             require TWiki::Compatibility;
-            $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $web, $topic,
+            $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
                                                          $meta, $$rtext );
         }
     } else {
@@ -1051,7 +1055,7 @@ sub extractMetaData {
             # This format used live at DrKW for a few months
             if( $$rtext =~ /<!--TWikiCat-->/ ) {
                 require TWiki::Compatibility;
-                $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $web, $topic,
+                $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
                                                                $meta,
                                                                $$rtext );
             }
@@ -1103,7 +1107,8 @@ sub getTopicParent {
     }
     close( IN_FILE );
 
-    my $meta = $this->extractMetaData( $theWeb, $theTopic, \$data );
+    my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
+    $this->extractMetaData( $meta, \$data );
     my $parentMeta = $meta->get( 'TOPICPARENT' );
     return $parentMeta->{name} if $parentMeta;
     return undef;

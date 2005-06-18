@@ -135,7 +135,8 @@ sub _save {
     $newText ||= '';
 
     if( $saveCmd eq 'repRev' ) {
-        $newMeta = $store->extractMetaData( $webName, $topic, \$newText );
+        $newMeta = new TWiki::Meta( $session, $webName, $topic );
+        $store->extractMetaData( $newMeta, \$newText );
         # replace top revision with this text, trying to make it look as
         # much like the original as possible
         $saveOpts->{timetravel} = 1;
@@ -206,7 +207,6 @@ sub _save {
             $merged = [ $originalrev, $author->stringify(), $rev ];
         }
     }
-
     my $error =
       $store->saveTopic( $user, $webName, $topic,
                                     $newText, $newMeta, $saveOpts );
