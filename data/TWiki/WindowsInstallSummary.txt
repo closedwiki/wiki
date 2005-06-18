@@ -79,51 +79,21 @@ Add an !AddHandler line to the ==&lt;IfModule mod_mime.c>== section of httpd.con
 
 ---++ Install TWiki
 
-Download the latest TWiki release and save it in the c:/twiki directory. Unzip in place.
-
----+++ Configure TWiki
-
-Edit =c:/twiki/lib/TWiki.cfg= and adapt to local environment. Pay attention to the section "# variables that need to be changed when installing on a new server:". Example values (assumes cygwin-perl is being used. !ActiveState users need a different syntax. Read the real cookbook for details,):
+Follow the TWikiInstallationGuide to install TWiki. The webserver should already be configured to run =configure=, but *before you do so you will have to edit the "shebang" lines* in the scripts in =bin= and change them *all* to
 <verbatim>
-$wikiHomeUrl		= "http://yourdomain.com/bin/view";
-$defaultUrlHost	= "http://yourdomain.com";
-$scriptUrlPath	 = "/bin";
-$pubUrlPath		 = "/pub";
-$pubDir			  = "/twiki/pub";
-$templateDir		= "/twiki/templates";
-$dataDir			 = "/twiki/data";
-$safeEnvPath		= "/bin";
-$rcsDir			  = "c:/cygwin/bin";
-$egrepCmd			= "/bin/grep -E";
-$fgrepCmd			= "/bin/grep -F";
+#!c:/cygwin/bin/perl -wT
 </verbatim>
 
----+++ Edit the CGI Scripts
+---++ Perl module installation
 
-You must use the Cygwin shell to do this (unless you are a Perl expert) - don't use the Windows command shell, cmd.exe (aka DOS Prompt).  Change =#!/usr/bin/perl -wT=  _to_  =#!c:/cygwin/bin/perl -wT= . Example script to do this ([[WindowsInstallCookbook#Editing_the_CGI_scripts][explanation]]):
-	* =$ perl -pi~ -e 's;#!/usr/bin/perl;#!c:/cygwin/bin/perl;' *[a-z]=
-
----+++ Perl module installation
-
-From the Cygwin shell, type =export TEMP=/c/temp= (add it to =~/.profile), then fire up ==cpan== (will ask a schwack configuration questions if it hasn't been run before) and install =Net::SMTP, Digest::SHA1, MIME::Base64= 
-
----+++ Re-lock RCS files
-
-Go to http://yourdomain.com/bin/testenv - this provides a lot of detail, including warnings. Write down the Apache server's userid that is given by this script - typically either 'system' or 'administrator' - I'll assume 'system' from now on.
-	* backup all the twiki data files: <code>cd /twiki/data && tar czvf all-files.tar.gz */*</code>
-	* Edit all the RCS files at once: <code>perl -pi~~~ -e 'NR &lt;= 10 && s/nobody:/system:/' <nop>*/*,v </code>
+You may see errors that indicate you have to install additional Perl modules. From the Cygwin shell, type =export TEMP=/c/temp= (add it to =~/.profile), then fire up ==cpan== (will ask a schwack configuration questions if it hasn't been run before) and install =Net::SMTP, Digest::SHA1, MIME::Base64= 
 
 If something goes wrong: to restore your existing files from the backup, just type =tar xzvf all-files.tar.gz= and all your files, both .txt and .txt,v, will be back as they were before the edits.
 
 After a few days of everything working well come back and delete the files which end with ~~~.
 
----+++ Email Setup
-
-Set the =SMTPMAILHOST= variable in TWiki.TWikiPreferences to an SMTP email host that is reachable and currently working. In the same place, you also want to change =WIKIWEBMASTER= and =SMTPSENDERHOST=.
-
 ---++ Testing your TWiki Installation
 
-	* testenv - use http://yourdomain.com/bin/testenv and check for warnings
 	* Page viewing (view script) - click around a few pages and make sure the links are OK
 	* RCS diffs (rdiff script) - click on the Diffs link and on the '>' links at bottom of page
 	* Edit a page, and register as a new user - tests page creation, use of register script to create a new user entry in /twiki/data/.htpasswd (the Apache password file), ability to send email via Net::SMTP, and whether SMTPMAILHOST was set correctly in TWikiPreferences.

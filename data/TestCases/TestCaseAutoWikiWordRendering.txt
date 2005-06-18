@@ -432,20 +432,20 @@ H_
 
 
 <!-- expected expand 28 -->
-<a href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=http://skyloom.com/frame/frameoptions.html">Click here</a>
+<a target="_top" href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=http://skyloom.com/frame/frameoptions.html">Click here</a>
 <!-- /expected -->
 
 Actual:
 <!-- actual -->
-[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=http://skyloom.com/frame/frameoptions.html][Click here]]
+[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=http://skyloom.com/frame/frameoptions.html][Click here]]
 <!-- /actual -->
 
 Expected:
 <!-- expected expand 29 -->
-<a href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion">Discuss this topic</a>
+<a href="http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion#DisCuss" target="_top">Discuss this topic</a>
 <!-- /expected -->
 
 Actual:
 <!-- actual -->
-[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%&url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion#DisCuss][Discuss this topic]]
+[[http://skyloom.com/frame/frame.html?url1=%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%;url2=%SCRIPTURL%/view%SCRIPTSUFFIX%/Sandbox/%BASETOPIC%Discussion#DisCuss][Discuss this topic]]
 <!-- /actual -->

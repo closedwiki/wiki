@@ -12,28 +12,13 @@ This cookbook is intended to get you up and running with TWiki on Windows quickl
    * __NOTE__: You will get the best results from following this cookbook *exactly*, using the same directories, etc - however, if you really do need to vary things, it should be fairly obvious what to do.
 
 
-
 ---++ Summary
 
 %N% - See *[[WindowsInstallSummary]]* for a concise summary of the whole cookbook.
 
----++ Recent updates
-
-   * 04 Mar 2005 - updated for TWikiRelease02Sep2004 and Windows permissions settings, by Main.JuditMays 
-   * 10 Dec 2004 - updated to remove warning on Perl 5.8, updated most package versions, mentioned XP more, removed TWiki 2001 release specifics, added pointer to TWiki:Codev.ApacheTwoBreaksNonUTF8EncodedURLsOnWindows
-   * 01 Nov 2004 - updated to reflect absence of perl 5.6.1 in many cygwin mirrors
-   * 28 Jun 2004 - updated to reflect experiences installing beta20040507 on Windows NT
-   * 2 Jun 2003 - updated to include setting =HOME= since this is not always picked up by Cygwin
-   * 30 Apr 2003 - New issue with Perl 5.8 found, added warning not to use Perl 5.8
-   * 02 Mar 2003 - updated to restrict =register= script edits to Dec 2001 release
-   * 30 Nov 2002 - added =binutils= to list of Cygwin packages, and added warning not to use Apache 2.0
-   * 20 Nov 2002 - update to avoid TWiki:Support.InstallDigestSHA1Fails when installing Digest::SHA1 on Windows 2000
-   * 12 Nov 2002 - setting =SMTPMAILHOST= for user registration and notification
-   * Older changes are in TWiki:TWiki.WindowsInstallCookbookHistory
-
 ---++ Scope
 
-This document covers installation of the TWiki *02-Sep-2004* production release (TWiki:Codev/TWikiRelease02Sep2004) in the following environment - if you want to use a different environment, feel free to use this as a guideline only.
+This document covers installation of the TWiki *Dakar* production release on the following environment - if you want to use a different environment, feel free to use this as a guideline only.
 
 | *Component* | *Name, version* | *Comment* |
 | Operating System | Windows 2000 or XP | Should also work for Windows NT |
@@ -42,7 +27,7 @@ This document covers installation of the TWiki *02-Sep-2004* production release 
 | Perl| Cygwin perl-5.8.5-3 | Comes with Cygwin, Perl 5.8 is now fine |
 | RCS | Cygwin rcs-5.7-3 | Comes with Cygwin |
 
-Why this choice of packages?  Because I've tried them, and they work well, without requiring a complicated setup... In particular, Apache is the commonest choice for TWiki on Unix/Linux, Cygwin Perl is very close to Unix Perl, and the Cygwin RCS is regularly updated.   Cygwin also lets you install the Unix tools, Perl and RCS in a single step, saving quite a lot of time.
+Why this choice of packages?  Because we've tried them, and they work well, without requiring a complicated setup... In particular, Apache is the commonest choice for TWiki on Unix/Linux, Cygwin Perl is very close to Unix Perl, and the Cygwin RCS is regularly updated.   Cygwin also lets you install the Unix tools, Perl and RCS in a single step, saving quite a lot of time.
 
 More recent minor versions should be OK, but they can introduce bugs.  
 
@@ -117,14 +102,17 @@ If you need to use spaces in file names (not recommended), you _may_ be able to 
 
 Enough background, let's get on with the installation.
  
----+++ TWiki (part 1)
+Before we start, it's worth highlighting that:
 
-Head to http://twiki.org, click the download link, and fill in the form to request a URL for download. You'll get an automated email, which should arrive by the time you need it.
+   * When working with Apache, Cygwin and Cygwin Perl, you should use UNIX format paths i.e. forward slashes. For example, =c:/twiki/pub=
+   * Other perl implementations, such as Active State Perl, may have other requirements, though in most cases forward slashes are likely to work best.
 
----+++ Apache
-_Steps 1 and 2 can be shortcut by opening the self-installing executable on the Apache website that installs Apache 1.3.x. The painful details below are mainly helpful when detecting where things are going wrong....._
+---+++ Install Apache
+Apache 1.3.x is recommended. Apache 2 really doesn't work very well on the Windows platform.
 
-*1. Download Apache*
+_The first couple of steps can be shortcut by opening the self-installing executable on the Apache website that installs Apache 1.3.x. The painful details below are mainly helpful when detecting where things are going wrong._
+
+---++++ Download Apache
    * Check at http://httpd.apache.org/ for any security announcements
    * Check the latest 1.3.x version number on [[http://www.apache.org/dist/httpd/Announcement.html][this page]]
    * Find a local mirror using http://www.apache.org/dyn/closer.cgi - choose httpd, then binaries, then win32
@@ -134,13 +122,13 @@ _Steps 1 and 2 can be shortcut by opening the self-installing executable on the 
    * __NOTE__: If you are using Windows NT, download the .MSI installer (==instmsi.exe==) from the [[http://httpd.apache.org/dist/httpd/binaries/win32/][Apache Win32 download page]] - this enables you to install .MSI files.  You may need to update the .MSI Installer if you have an old version under NT.
    * __NOTE__: The Apache package itself requires a download of around 2 MB, and up to 10 MB of free disk space once installed
 
-*2. Install Apache*
+---++++ Install Apache
    * Double-click the .MSI file to run the installer
    * Specify ==c:\== as the installation directory - this actually installs Apache into ==c:\apache== (if you specify =c:\apache=, it installs into =c:\apache\Apache=).  _Putting Apache into =c:\Program Files= is not recommended for easy editing of Apache config files from Cygwin._  
    * On Windows NT/2000/XP you can choose to run Apache as a service or as a normal program - see the Apache docs for details.  
       * __NOTE__: Needs a bit more detail here... See the excellent documents about [[http://httpd.apache.org/docs/windows.html][Installing Apache on Windows]] and [[http://httpd.apache.org/docs/win_service.html][Running Apache as a Windows NT/2000/XP service]].
 
-*3. Test Apache*
+---++++ Test Apache
    * If necessary, start apache, by selecting 'Start' from the 'Start->Programs->Apache...->Control Apache Server' menu.
    * Point your browser at http://yourdomain.com/ to see the Apache intro page.
 
@@ -153,9 +141,7 @@ To restart Apache after changing its config, type:
 
 Another useful command is =apache -k stop=.
 
----+++ Cygwin, Unix tools, Perl and RCS
-
-*4. Install Cygwin*
+---+++ Install Cygwin
 
 Head to http://cygwin.com, and click the <img src="%ATTACHURLPATH%/cygwin-icon.gif" alt="cygwin-icon.gif"  width="21" height="21"  /> __Install or update now!__ link.  Save the =setup.exe= in a directory, e.g.  =c:\download\cygwin-dist=. 
 
@@ -200,7 +186,7 @@ Environment setup:
    * You can also  set =TEMP= to =c:\temp= at this point, if you prefer this to editing the Cygwin =~/.profile= file.  (=HOME= can't be set in the =~/.profile= file.)
    * Create the =c:\cygwin\home\YOURUSER= directory
 
-*5. Test Cygwin*
+---++++ Test Cygwin
    * Launch the desktop icon - this runs the =bash= shell, which has command line editing features
       * Use the cursor up key to recall previous commands - normal PC editing keys can then be used to edit a command
       * TIP: When typing a directory or file name, hit the TAB key after the first few letters of the name - =bash= will 'complete' the name.  If =bash= beeps at you, hit TAB again to see the files/directories that match the name so far, and type a bit more before hitting TAB.  This saves a lot of time!
@@ -210,7 +196,7 @@ Environment setup:
 
 The [[http://cygwin.com/cygwin-ug-net/cygwin-ug-net.html][Cygwin User Guide]] is well worth reading for some background on how Cygwin works.
 
-*6. Configure Cygwin for binary mode*
+---++++ Configure Cygwin for binary mode
    * __This is very important - omitting this step leads to a partially working system that corrupts RCS files__ - without this, Cygwin tools (including Perl and RCS) will add unwanted carriage returns (Ctrl/M, '\r') to files in an attempt to translate between the Windows and Unix text file formats (Unix text files only use line feeds ('\n').
       * This has been a great time sink, causing numerous subtle problems - see TWiki:Codev.CookbookLineEndingProblems
    * Stay in the Cygwin (bash) shell, and type the following (use only forward slashes, i.e. '/'):
@@ -241,31 +227,9 @@ The [[http://cygwin.com/cygwin-ug-net/cygwin-ug-net.html][Cygwin User Guide]] is
 
 This setup is written to the Windows registry, so there's no need to put these commands into a =.profile= file.  For more information on binary vs text mode, see this [[http://cygwin.com/cygwin-ug-net/using-textbinary.html][User Guide section]] and this [[http://cygwin.com/faq/faq.html#SEC54][FAQ entry]].
 
----+++ TWiki (part 2)
-
-*7. Download TWiki*
-
-Download the latest TWiki release from http://twiki.org/ and save it in the =c:/twiki= directory.
-
-*8. Install TWiki*
-
-Unzip the downloaded ZIP file under =c:/twiki= using [[http://www.winzip.com/][<nop>WinZip]], or by going into Cygwin and doing the following - you can hit the =TAB= key to complete filenames after you've typed the first part:
-<pre>
-   $ <b>cd /twiki</b>
-   $ <b>unzip TWiki20040209.zip</b>
-</pre>
-
----++ Configuring components
-
-Now that all the components are installed, you need to configure them.
-
----+++ Configuring Apache
+---+++ Configure Apache
 
 The setup given here is fairly simple, in that it allows only TWiki to be served by the web server.  For more complex setups, you can investigate the Alias and <nop>ScriptAlias commands that are left commented out in this configuration. 
-
-   * __NOTE__: This needs reviewing for security holes and to ensure nothing is missed, though this config does work.
-
-*1. Configure Apache (part 1)*
 
 Using a suitable text editor (see #TextEditing, above) edit =c:/apache/conf/httpd.conf= as follows - this tells Apache where TWiki lives, and removes the need to tinker with the Windows environment settings.
    * Note the trailing '/' characters in various places - they are important!
@@ -291,7 +255,6 @@ DocumentRoot "C:/twiki"
 # Alias /twiki/ "C:/twiki/"
 # ScriptAlias /twiki/bin/ "C:/twiki/bin/"
 <Directory  "C:/twiki/bin/">
-    # RD: Changed None to All in next line, to enable .htaccess
     AllowOverride All
     Allow From All
     Options  ExecCGI
@@ -314,8 +277,6 @@ DocumentRoot "C:/twiki"
 </IfModule>
 </verbatim>
 
-*2. Configure Apache (part 2)*
-
 Add an <nop>AddHandler line to the ==&lt;IfModule mod_mime.c>== section of =httpd.conf= - this removes the need to rename all the TWiki CGI scripts later in the installation.  
    * Note the trailing '.' on the <nop>AddHandler line.
 <verbatim>
@@ -328,9 +289,7 @@ Add an <nop>AddHandler line to the ==&lt;IfModule mod_mime.c>== section of =http
 ...
 </verbatim>
 
----+++ Configuring Cygwin
-
-*3. Configure Cygwin*
+---+++ Configure Cygwin
 
 Open the windows explorer, right click your cygwin directory (c:/path/to/cygwin) and choose "Properties".
 Select the "Security" flag and set the permissions as follows:
@@ -340,141 +299,7 @@ Select the "Security" flag and set the permissions as follows:
    1 Add the groups CREATOR OWNER, SYSTEM and give them Full Control
    1 Add the users Administrator, Your_Name and give them Full Control
 
----+++ Configuring TWiki
-
-*4. Configure TWiki*
-
-Edit the TWiki config file, =c:/twiki/lib/TWiki.cfg= (or in Cygwin terms, =/twiki/lib/TWiki.cfg=) as follows:
-
-   * __NOTE__: It should be possible to use =c:/twiki= format pathnames for Cygwin, given the above binmode setup, but I have not tested this fully - a Cygwin Perl test script does generate binary mode files in this configuration, so it should work with RCS as well (really need a small RCS file corruption test case).  Watch out for RCS file corruption carefully if you do try =c:/twiki= pathnames with Cygwin, and do report your experiences... 
-   * __NOTE__: Some recent versions of Cygwin (e.g. 1.3.10) seem to create 'symbolic links' from =fgrep= and =egrep= to =grep=, requiring the settings for these commands to point directly to =grep= (with suitable flags to provide =fgrep= and =egrep= behaviour).
-
-<pre>
-# variables that need to be changed when installing on a new server:
-# ==================================================================
-#                   %WIKIHOMEURL% : link of TWiki icon in upper left corner :
-$wikiHomeUrl      = <b>"http://yourdomain.com/bin/view"</b>;
-#                   Host of TWiki URL :    (Example "http://myhost.com:123")
-$defaultUrlHost   = <b>"http://yourdomain.com"</b>;
-#                   %SCRIPTURLPATH% : cgi-bin path of TWiki URL:
-$scriptUrlPath    = <b>"/bin"</b>;
-#                   %PUBURLPATH% : Public data path of TWiki URL (root of attachments) :
-$pubUrlPath       = <b>"/pub"</b>;
-
-# NOTE: Next three settings should be valid absolute pathnames using Cygwin; if using
-# TWiki:Codev.ActiveState Perl, use z:/twiki format pathnames if your TWiki directory is not on C:.
-
-#                   Public data directory, must match $pubUrlPath :
-$pubDir           = <b>"/twiki/pub"</b>;
-#                   Template directory :
-$templateDir      = <b>"/twiki/templates"</b>;
-#                   Data (topic files) root directory :
-$dataDir          = <b>"/twiki/data"</b>;
-
-....
-
-#                   Set ENV{'PATH'} explicitly for taint checks ( #!perl -T option ) :
-#                   (Note: PATH environment variable is not changed if set to "")
-
-# On Windows, $safeEnvPath needs only one component, the directory where RCS is installed
-# - used by 'rcsdiff' to run 'co' program, so PATH must be correct.
-
-# Unix/Linux setting:
-# $safeEnvPath      = "/bin:/usr/bin";
-
-# Using Cygwin perl, so can use Unix-like paths, with ':' as separator.
-# Note that /usr/bin and /bin are identical due to default /usr/bin mount
-# in Cygwin.  Must NOT use 'c:/foo' type paths, as ':' is taken as separator
-# meaning that 'c' is interpreted as a pathname, giving Perl taint error.
-$safeEnvPath      = <b>"/bin"</b>;
-
-# If using ActiveState perl, use Windows paths instead
-# $safeEnvPath      = "c:/cygwin/bin";
-
-...
-
-#                   RCS directory (find out by 'which rcs') :
-$rcsDir           = <b>"c:/cygwin/bin"</b>;
-
-...
-
-#                   Unix egrep command :
-$egrepCmd         = <b>"/bin/grep -E"</b>;
-#                   Unix fgrep command :
-$fgrepCmd         = <b>"/bin/grep -F"</b>;
-</pre>
-
-For the cookbook install using Cygwin Perl, there's no more =TWiki.cfg= editing to be done, so you can get onto the next section.  
-
-   * For TWiki:Codev.ActiveState Perl, you need to make these additional edits further down the file - this is the only place where backslashes are needed.  (See TWiki:Codev.CookbookActivePerlSetup for some extra Perl setup that should remove the need for these edits.)
-
-<verbatim>
-#                   NOTE: When using ActiveState Perl, you must specify
-#                   a full Windows-style pathname, using '\\' for backslashes,
-#                   for the ls, egrep and fgrep commands, because Cygwin's shell
-#                   is not used - forward slashes are OK in Windows everywhere
-#                   except in the cmd.exe shell. Drive letters are OK - e.g.
-#                   'c:\\foo\\ls' will work.  When using Cygwin perl, just
-#                   use the default '/bin/ls' type settings.
-#
-#                   Unix ls command :
-$lsCmd            = "c:\\cygwin\\bin\\ls";
-#                   Unix egrep command :
-$egrepCmd         = "c:\\cygwin\\bin\\grep";
-#                   Unix fgrep command :
-$fgrepCmd         = "c:\\cygwin\\bin\\grep";
-</verbatim>
-
----++ Editing the CGI scripts
-
-*5. Editing the Shebang lines*
-
-Now to edit the curiously named 'shebang lines' at the top of the TWiki CGI scripts. This is required so the Apache server knows what interpreter (perl) to use with the scripts.
-   * You *must* use the Cygwin shell to do this (unless you are a Perl expert) - *don't use* the Windows command shell, cmd.exe (aka DOS Prompt)      
-   * Then do the following, which quickly edits the 19 or so files, using Perl - the important lines are in bold.
-   * Type the Perl line *very carefully*
-      * If you do mis-type the ==perl== line, you can restore from the =.backup= directory and re-run the command, as it will only edit the original files, not the backups with '~' suffixes.
-
-<pre>
-$ <b>cd /twiki/bin</b>
-
-$ ls
-attach   geturl         oops     rdiff     save        testenv  viewfile
-changes  installpasswd  passwd   register  search      upload
-edit     mailnotify     preview  rename    statistics  view
-
-$ <b>mkdir .backup </b>
-$ <b>cp * .backup</b>
-
-$ head -1 view
-#!/usr/bin/perl -wT
-
-$ <b>perl -pi~ -e 's;#!/usr/bin/perl;#!c:/cygwin/bin/perl;' *[a-z]</b>
-
-$ <b>head -1 view</b>
-#!c:/cygwin/bin/perl -wT
-
-$ ls
-attach    geturl          oops      rdiff      save         testenv   viewfile~
-attach~   geturl~         oops~     rdiff~     save~        testenv~  view~
-changes   installpasswd   passwd    register   search       upload
-changes~  installpasswd~  passwd~   register~  search~      upload~
-edit      mailnotify      preview   rename     statistics   view
-edit~     mailnotify~     preview~  rename~    statistics~  viewfile
-
-</pre>
-
-If for some reason the edit goes wrong, just type =cp .backup/* .= (while within the =bin= directory) to restore the original distribution files.  Use =ls -a= to see the =.backup= directory, and =ls -a .backup= to view its contents. 
-
-Optional step: you can do ='rm <nop>*~'= to clean out the backups made by Perl, but that's not essential as all the original files cannot be executed.  If you do this, *type the command very carefully*, as a space after the '*' will wipe out all files in this directory!
-
-*6. Minor changes to TWiki scripts*
-
-   * If you are using TWiki:Codev.ActiveState Perl, you need to update =testenv=, see TWiki:Codev.CookbookActivePerlTestenv
-
----+++ Perl module installation
-
-*7. Installing required Perl modules*
+---+++ Install Perl modules
 
 Some additional Perl modules are needed, above and beyond the standard modules installed with Cygwin.  Fortunately, there is an automated tool that makes it easy to do this - it's called =cpan=, and goes to the Perl module archive site, http://www.cpan.org/, to download all required modules, and then build and install them.
 
@@ -553,91 +378,45 @@ $ make install
 </verbatim>
 The =make test= step should *not* be skipped - for example, one known problem is with the =Digest::SHA1= module on Windows NT, which does not pass its tests and does not work. This causes problems with password encoding. In this event you can use another encoding scheme or switch to unencoded passwords. There may be other problems on the various Windows configurations, and you can save yourself a lot of time by running the tests.
 
----+++ Re-locking RCS files
+---+++ Install TWiki
 
-*8. Re-locking files*
-
-First, some testing: in your browser, go to http://yourdomain.com/bin/testenv - this provides a lot of detail, including warnings.  Write down the Apache server's userid that is given by this script - typically either 'system' or 'administrator' - I'll assume 'system' from now on.
-   * If the =testenv= script doesn't work, go back and check the configuration of the Apache =httpd.conf= file, and =TWiki.cfg=.  Have a look at the Apache error log, =c:/apache/logs/error_log=, and the TWiki error log, =/twiki/data/log*.txt=.
-
-This 'system' user must own the locks on the RCS files, which are shipped with the lock held by 'nobody'.  The reason this matters is that no revisions will be tracked by RCS unless the Apache userid matches that of the RCS file locks.
-
-You can re-lock files using =rcs -u= and =rcs -l=, but it's a painfully manual process.  Instead, just use Perl again to mass-edit all the RCS files, as follows:
-   * __NOTE__: The 'NR <= 10' part of the Perl command ensures that it only operates on the first 10 lines, to avoid editing the body of RCS files for topics that happen to include the text 'nobody:' (like this one...)
+Finally you are ready to install TWiki! Do this by following the instructions in TWikiInstallationGuide. The webserver should already be configured to run =configure=, but *before you do so you will have to edit the "shebang" lines* in the scripts in =bin=. This is required so the Apache server knows what interpreter (perl) to use with the scripts.
+   * You *must* use the Cygwin shell to do this (unless you are a Perl expert) - *don't use* the Windows command shell, cmd.exe (aka DOS Prompt)      
+   * Then do the following, which quickly edits the 19 or so files, using Perl - the important lines are in bold.
+   * Type the Perl line *very carefully*
 
 <pre>
-$ <b>cd /twiki/data</b>
+$ <b>cd /twiki/bin</b>
 
-$ : Make a backup of all files
-$ <b>tar czvf all-files.tar.gz */*</b>
+$ ls
+attach   geturl         oops     rdiff     save        testenv  viewfile
+changes  installpasswd  passwd   register  search      upload
+edit     mailnotify     preview  rename    statistics  view
 
-$ : Test edit a single file to check your typing
-$ <b>perl -pi~~~ -e 'NR <= 10 && s/nobody:/system:/ ' Main/WebIndex.txt,v</b>
+$ <b>mkdir .backup </b>
+$ <b>cp * .backup</b>
 
-$ <b>diff Main/WebIndex.txt,v Main/WebIndex.txt,v~~~</b>
-5c5
-<       system:1.2; strict<nop>;
----
->       nobody:1.2; strict<nop>;
+$ head -1 view
+#!/usr/bin/perl -wT
 
-$ : Now edit all the RCS files at once - use cursor-up to recall previous command
-$ <b>perl -pi~~~ -e 'NR <= 10 && s/nobody:/system:/ ' */*,v</b>
+$ <b>perl -pi~ -e 's;#!/usr/bin/perl;#!c:/cygwin/bin/perl;' *[a-z]</b>
 
-$ : Check for any remaining files not edited
-$ <b>grep 'strict;$' */*,v | grep -v system</b>
+$ <b>head -1 view</b>
+#!c:/cygwin/bin/perl -wT
 
-$ : Clean up - type this <b>very carefully</b> 
-$ <b>rm */*~~~</b>
+$ ls
+attach    geturl          oops      rdiff      save         testenv   viewfile~
+attach~   geturl~         oops~     rdiff~     save~        testenv~  view~
+changes   installpasswd   passwd    register   search       upload
+changes~  installpasswd~  passwd~   register~  search~      upload~
+edit      mailnotify      preview   rename     statistics   view
+edit~     mailnotify~     preview~  rename~    statistics~  viewfile
+
 </pre>
-
-   * *If something goes wrong:* to restore your existing files from the backup, just type =tar xzvf all-files.tar.gz= and all your files, both .txt and .txt,v, will be back as they were before the edits.
-
-You have now re-locked all the RCS files and are almost ready to start using TWiki!
-
----++ Edit Configuration Files and Set File Permissions
-
-*9. Edit Configuration Files*
-
-Note - you may need to change the permissions on the configuration files so that you can edit them. Do that in the most convenient way: we're going to set their permissions correctly for operation in a subsequent step, so don't worry about exactly what permissions you give them just for editing purposes.
-
-   * Edit the file =/twiki/bin/setlib.cfg=
-      * Set =$twikiLibPath= to the absolute file path of your =/twiki/lib= as seen by the web server. This means: change the ='../lib'= entry to ='c:/path/to/twiki/lib'=.
-      * %X% *Attention*: Do *not* leave it as a relative ="../lib"= path or Plugins might fail to initialize properly
-      * You can also edit =$localPerlLibPath= if you are not root and need to install additional !CPAN modules, but can't update the main Perl installation files on the server. Just set this variable to the full pathname to your local lib directory, typically under your home directory.
-
-   * *Security setup:* Secure your TWiki data, lib and templates directories.
-      * Directories =twiki/data=, =twiki/lib=, =twiki/templates= and all their subdirectories should be configured in your Apache server so that they are _*not*_ visible through URLs.
-      * There is =subdir-htaccess.txt= under twiki installation directory. Copy it into the =data=, =lib= and =templates= subdirectories, naming it =.htaccess= to have Apache recognize it. Or you may edit the Apache =http.conf= file to set the =deny from all= there (this is recommended by Apache.org)
-      * Alternatively, move the directories to a place where they are not visible, and change the variables in =twiki/lib/TWiki.cfg= accordingly.
-
-*10. Set File Permissions*
-
-For the following configuration use the cygwin shell.
- 
-   * Set the file permission of all Perl scripts in the =twiki/bin= directory as executable to =-rwxr-xr-x= (755). Use the chmod command (that is: =chmod 755 directoryname= ).
-   * To be able to edit the Perl scripts and =.tmpl= files it is necessary to =chown= and =chgrp -R twiki= so all the files have the owner you want (that is: =chown newowner file= and =chgrp newgroup file= ).
-   * %H% This Guide assumes user =SYSTEM= ownership for all files manipulated by the CGI scripts (executed by the Web server), and user =twiki= for all other files. You can:
-      * replace =SYSTEM= with another user if your web server executes scripts under a different name.
-      * %T% *HINT*: Run the =testenv= script from your browser: =http://yourdomain.com/twiki/bin/testenv=. It will show you the user name of the CGI scripts ("LOGNAME: ..."), a table listing all CGI environment variables, and a test of your =twiki/lib/TWiki.cfg= configuration file.
-      * replace user =twiki= with your own username
-
-   * Set permissions manually.
-      * Set the permission of all *files* below =twiki/data= so that they are writable by user =SYSTEM=. A simple way is to =chmod= them to =-rw-rw-r--= (that is: =chmod 664 filename= ) and to =chown= them to =SYSTEM=.
-      * Set the permission of the =twiki/data= *directory* and its *subdirectories* so that files in there are writable by user =SYSTEM=. A simple way is to =chmod= them to =drwxrwxr-x= (775) and to =chown= them to =SYSTEM=.
-      * Set the permission of the =twiki/pub= *directory* and all its *subdirectories* so that files in there are writable by user =SYSTEM=. A simple way is to =chmod= them to =drwxrwxr-x= (775) and to =chown= them to =SYSTEM=.
-
-
----++ Email setup
-
-*11. Email setup for notification and registration*
-
-You need to set the =SMTPMAILHOST= in TWiki.TWikiPreferences to an SMTP email host that is reachable and currently working.  Otherwise you may get a confusing message from TWiki (fixed in TWiki:Codev.TWikiRelease01Feb2003) when registering new users or running =mailnotify= (for WebNotify), along the lines of:
-
-<pre>
-   Software Error: Can't call method "mail" on an undefined value at ../lib/TWiki/Net.pm line 187.
-</pre>
-
-There are other settings to be made in TWikiPreferences, e.g. the =WIKIWEBMASTER= and (probably) the =SMTPSENDERHOST= (normally your mail server or TWiki server).  See the TWikiInstallationGuide for more details, what's listed here is just enough to let you run the basic tests.
+Note also that to set file permissions you have to use the cygwin 'chmod' command; for example,
+<verbatim>
+$ chmod -R twiki/775 *
+</verbatim>
 
 ---++ Testing your TWiki installation
 
@@ -645,8 +424,6 @@ It is important to test your TWiki installation before you release it to other u
 
 Here are the main things to test:
 
-   * testenv - use =<nop>http://yourdomain.com/bin/testenv= and check for warnings
-      * If you are having installation trouble, download the latest =testenv= from TWiki:Codev/TWikiAlphaRelease and install it in =c:/twiki/bin=. (From TWiki.org, just click CVSget:bin/testenv to get this script)
    * Page viewing (=view= script) - click around a few pages and make sure the links are OK
    * RCS diffs (=rdiff= script) - click on the Diffs link and on the '>' links at bottom of page
    * Edit a page, and register as a new user - tests page creation, use of =register= script to create a new user entry in =/twiki/data/.htpasswd= (the Apache password file), ability to send email via Net::SMTP, and whether =SMTPMAILHOST= was set correctly in TWikiPreferences (if it is unset it will not use Net::SMTP and will almost inevitably fail silently).
@@ -691,39 +468,5 @@ As of the TWiki:Codev.TWikiRelease01Sep2004, there is built in support for sever
 ---+++ Improved performance
 
 See TWiki:Codev.WindowsModPerlInstallCookbook and TWiki:Codev.ModPerl for information on installing TWiki under Apache's =mod_perl= - this is somewhat more complex and follows a different model, so it's best to get some experience with TWiki, Apache and Perl first.
-
----++ Format of filenames
-
-In your TWiki on Windows installation, it's worth remembering that:
-
-   * Apache configuration files (e.g. the ==.htaccess== file and ==c:/apache/conf/httpd.conf==) always use Windows format paths, with forward slashes, e.g. ==c:/twiki==
-   * The same is true for the first line of the TWiki Perl scripts (since this line is interpreted by Apache), e.g. ==c:/cygwin/bin/perl==
-   * All other lines in the Perl scripts use Unix format paths, e.g. ==/twiki== (using Cygwin Perl as per this cookbook)
-      * If you are using TWiki:Codev.ActivePerl, that will use Windows format paths, e.g. ==c:/twiki==   
-   * Depending on the Perl version used (Cygwin or TWiki:Codev.ActivePerl), the TWiki.cfg file uses a mixture of Unix and Cygwin format paths - stick to the format used in the installation step for TWiki.cfg
-   * RCS always uses Unix format paths, e.g. ==/twiki==
-
----++ Credits
-
-Material in this cookbook is heavily based on the enormous number of contributions in TWiki:Codev.TWikiOnWindowsArchive and related topics - too many people to thank, but have a look at the contributor list to TWiki:Codev.TWikiOnWindowsArchive to get an idea!  
-
-People who've tested or reviewed this document and provided valuable feedback include:
-
--- TWiki:Main.BernardFarrell %BR%
--- TWiki:Main.BerndSchiffer %BR%
--- TWiki:Main.ChrisKeith %BR%
--- TWiki:Main.CrawfordCurrie %BR%
--- TWiki:Main.DavideBaroncelli %BR%
--- TWiki:Main.DavidLeBlanc %BR%
--- TWiki:Main.JerryWard %BR%
--- TWiki:Main.MartinWittmann %BR%
--- TWiki:Main.MaryDeMarco %BR%
--- TWiki:Main.MattWilkie %BR%
--- TWiki:Main.MikeBytnar %BR%
--- TWiki:Main.PeterThoeny %BR%
--- TWiki:Main.RossC %BR%
--- TWiki:Main.TorbenGB %BR%
--- TWiki:Main.VictorGoh %BR%
--- TWiki:Main.WolframJahn %BR%
 
 %META:FILEATTACHMENT{name="cygwin-icon.gif" attr="h" comment="Cygwin icon" date="1092612100" path="C:\Data\Temp\cygwin-icon.gif" size="132" user="TWikiContributor" version="1.1"}%

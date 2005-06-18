@@ -117,12 +117,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 		* Restore the configuration values from the backup. You typically need to configure just the ones in the section "variables that need to be changed when installing on a new server"
 		* Overwrite the =TWiki.pm= library in =$TWIKIROOT/lib= with the new one
 		* Copy and overwrite all subdirectories below =$TWIKIROOT/lib= with the new ones. Make sure to preserve any extra Plugins you might have in =$TWIKIROOT/lib/TWiki/Plugins= 
-		* Pay attention to the file and directory permissions, the library files should not be executable but the directory files should be, e.g. =chmod 664 `find -type f $TWIKIROOT/lib`= (for files) and =chmod 775 `find -type d $TWIKIROOT/lib`= (for directories)
 	1. *Update data files*:
-		* Run the =bin/testenv= script from the browser (e.g. =http://localhost/bin/testenv=) to verify if the cgi-scripts are running as user =nobody=. In case not:
-			* The =*,v= RCS repository files delivered with the installation package are locked by user =nobody= and need to be changed to the user of your cgi-scripts, for example =www-data=
-			* Run the =testenv= script from your browser; in the %BROWN% *Fix* %ENDCOLOR% line you can <u>relock</u> all the rcs files *(recommended)*
-			* Alternatively, execute the shell script commands described in [[TWikiInstallationGuide#StepTwo]]
 		* In the temporary =twiki/data/TWiki= directory where you unzipped the installation package:
 			* Remove the files you do *not* want to upgrade: =InterWikis.*=, =TWikiRegistration.*=, =TWikiRegistrationPub.*=, =WebPreferences.*=, =WebStatistics.*= and all =WebTopic*= files
 		* Rename in the temporary directory the file =$TWIKIROOT/data/TWiki/TWikiPreferences.*= to =TWikiPreferencesSave.*=.
@@ -148,7 +143,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 		* Make sure that the directories and files below =$TWIKIROOT/pub/TWiki= are writable by your cgi-script user
 		* Move all files in =pub/icn= directory from the temporary location to your =$TWIKIROOT/pub/icn= directory
 	1. *Verify installation*:
-		* Execute the =$TWIKIROOT/bin/testenv= script from your browser (e.g. =http://localhost/bin/testenv=) to see if it reports any issues; address any potential problems
+		* Execute the =$TWIKIROOT/bin/configure= script from your browser (e.g. =http://localhost/bin/configure=) to see if it reports any issues; address any potential problems
 		* Test your updated TWiki installation to see if you can view, create, edit and rename topics; upload and move attachments; register users
 		* Test if the installed Plugins work as expected. You should see the list of installed Plugins in [[%TWIKIWEB%.WebHome]]
 
