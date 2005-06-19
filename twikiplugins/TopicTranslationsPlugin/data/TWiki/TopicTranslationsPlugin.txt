@@ -1,0 +1,129 @@
+%META:TOPICINFO{author="AntonioTerceiro" date="1119144069" format="1.0" version="1.5"}%
+---+!! !TopicTranslationsPlugin
+
+TopicTranslationsPlugin manages topics translations into several languages, by assigning suffixes
+to topic names corresponding to known languages.
+
+%TOC%
+
+------
+
+---++ Syntax Rules
+
+Each web that is going to use TopicTranslationsPlugin must define a variable named
+=%<nop/>TOPICTRANSLATIONS%=, which must contains a comma-delimited list of language
+code. =%<nop/>TOPICTRANSLATIONS%= can be defined TWiki-wide, which means that those
+languages will be used for the entire TWiki installation. It can also be defined
+per user. If none of th above is set, the plugin setting for TopicTranslationsPlugin
+with the same name (=%<nop/>TOPICTRANSLATIONS%=) will be used as a default.
+
+For example:
+
+<code>&nbsp;&nbsp;&nbsp;* Set TOPICTRANSLATIONS = pt-br, en, fr</code>
+
+TopicTranslationsPlugin will then use suffixes in the topic names to "recognize"
+each topic's translations. In the example above, the translations for, say,
+=<nop/>SomeTopic=, will be the following:
+
+	* =<nop/>SomeTopic= will be the original version (assumed to be written in =pt-br=)
+	* =<nop/>SomeTopicEn= will be the 1<sup>st</sup> translation (in =en=)
+	* =<nop/>SomeTopicFr= will be the 2<sup>nd</sup> translation (in =fr=)  
+
+__Important:__ we'll assume that the first language listed in =%<nop/>TOPICTRANSLATIONS%=
+is the default one. Thus, the topics with no language suffixes are assumed to be written in
+that language.
+
+Follows the plugin's available tags, along with examples of their usage.
+
+---+++ =%<nop/>TRANSLATIONS{}%= 
+
+List current topic's translations, even if they don't exist yet (so we can create them!)
+
+Parameters for =%<nop/>TRANSLATIONS{}%= :
+
+	* <code>format="..."</code> : provides a custom formatting for the list of available translations.
+	  This format will be used for each avaiable language.
+	  The following variables will be expanded in the format:
+	  | =$language= | The language code for the current language. |
+	  | =$topic= | The topic whose translations we are listing. |
+	  | =$translation= | the topic corresponding to the current translation. |
+	  Defaults to ="[[$translation]<nop/>[$language]]"=
+	* <code>separator="..."</code> : text that will separate the items in the listing.
+	  Defaults to =" "= (a space)
+  
+
+---+++ =%<nop/>CURRENTLANGUAGE%=
+
+The language detected for the current topic (based on the current topic's name suffix).
+
+---+++=%<nop/>DEFAULTLANGUAGE%= 
+
+The default language (i.e., the first of the listed in =%<nop/>TOPICTRANSLATIONS%=)
+
+---+++ =%<nop/>INCLUDETRANSLATION{<nop/>SomeTopic}%=
+
+Includes the version of =<nop/>SomeTopic= in the current language (as detected based on current topic's name suffix)
+
+Parameters =%<nop/>INCLUDETRANSLATION{}%= :
+
+	* ="<nop/>SomeTopic"= : include the suitable =<nop/>SomeTopic= translation.
+	* <code>rev="1.2"</code> : include the topic's revision =1.2= (for example).
+	  Defaults to the current revision.
+
+The initial motivation for this tag is to include a suitable menu, for example, based on
+current topic's language.
+
+---++ Examples
+
+| *Test* | *Actual test(work if the plugin is installed)* |
+| %<nop/>TRANSLATIONS% | %TRANSLATIONS% |
+| %<nop/>TRANSLATIONS{format="[[$translation]<nop/>[$language translation]]" separator=", "}% | %TRANSLATIONS{format="[[$translation][$language translation]]" separator=", "}% |
+| %<nop/>CURRENTLANGUAGE% | %CURRENTLANGUAGE% |
+| %<nop/>DEFAULTLANGUAGE% | %DEFAULTLANGUAGE% |
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = manages a topic's translations into several languages. 
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+	* My own setting:
+		* Set TOPICTRANSLATIONS = en, pt-br
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the installation was successful:
+		* see the examples [[#Examples][above]]
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.AntonioTerceiro |
+|  Plugin Version: | 18 Jun 2005 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Jun 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main.AntonioTerceiro - 19 Jun 2005
+
