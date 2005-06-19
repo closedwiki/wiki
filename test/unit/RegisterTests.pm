@@ -221,7 +221,7 @@ sub test_registerVerifyOk {
             } else {
                 $this->assert_matches(qr/To: %WIKIWEBMASTER/, $mail );
             }
-        } elsif( $mail =~ /^Subject: .*Activation Code/m ) {
+        } elsif( $mail =~ /Your verification code is /m ) {
             $this->assert(!$done[1], $done[1]."\n---------\n".$mail);
             $done[1] = $mail;
         } else {
