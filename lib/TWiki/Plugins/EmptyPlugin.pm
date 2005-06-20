@@ -344,13 +344,16 @@ sub DISABLE_afterEditHandler {
 
 =pod
 
----++ beforeSaveHandler($text, $topic, $web )
+---++ beforeSaveHandler($text, $topic, $web, $meta )
    * =$text= - text _with embedded meta-data tags_
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
-This handler is called just before the save action. The text is populated
-with 'meta-data tags' before this method is called. If you modify any of
-these tags, or their contents, you may break meta-data. You have been warned!
+   * =$meta= - the metadata of the topic being saved, represented by a TWiki::Meta object 
+   
+This handler is called just before the save action. For compatibility with older plugins, 
+the text is populated with 'meta-data tags' before this method is called. Any change to this
+embedded metadata is discarded after the method completition. To modify the metadata in a
+permament way, use the $meta object.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
@@ -365,13 +368,16 @@ sub DISABLE_beforeSaveHandler {
 
 =pod
 
----++ afterSaveHandler($text, $topic, $web, $error )
+---++ afterSaveHandler($text, $topic, $web, $error , $meta)
    * =$text= - the text of the topic _excluding meta-data tags_
      (see beforeSaveHandler)
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
    * =$error= - any error string returned by the save.
+   * =$meta= - the metadata of the saved topic, represented by a TWiki::Meta object 
+   
 This handler is called just after the save action.
+
 
 __Since:__ TWiki::Plugins::VERSION = '1.020'
 
