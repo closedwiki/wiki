@@ -52,20 +52,39 @@
 
 
 # =========================
-package TWiki::Plugins::HolidaylistPlugin;    # change the package name and $pluginName!!!
-use POSIX;
+package TWiki::Plugins::HolidaylistPlugin;    
+
+# =========================
+
 use Date::Calc qw(:all);
 
+# not really required:
+eval { 
+	use HTML::Entities 'encode_entities';
+}; 
 
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
-        $debug $exampleCfgVar 
-	@Days @names $min_timestamp $max_timestamp,$daystoprint,$tablecaption
+        $debug 
+	%defaults @renderedOptions %options $refText %months 
+	$months_rx $date_rx $daterange_rx $bullet_rx $bulletdate_rx $bulletdaterange_rx
+	$defaultsInitialized
     );
 
-$VERSION = '1.021';
+$VERSION = '1.008'; #dro# new attributes (nwidth,tcwidth,removeatwork); performance fixes
+#$VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
+#$VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
+#$VERSION = '1.005'; #dro# added new features (startdate support; weekendbgcolor); fixed documentation bugs
+#$VERSION = '1.004'; #dro# some performance improvements; code cleanup; documentation
+#$VERSION = '1.003'; #dro# fix plugin preferences handling; format column name; rename some subroutines
+#$VERSION = '1.002'; #dro# renders some options; fixes: white space bug, documentation bugs; 
+#$VERSION = '1.001'; #dro# complete reimplementation of HolidaylistPlugin
+#$VERSION = '1.021'; #pj# initial version
+
 $pluginName = 'HolidaylistPlugin';  # Name of this Plugin
+
+$defaultsInitialized = 0;
 
 # =========================
 sub initPlugin
@@ -81,250 +100,386 @@ sub initPlugin
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
 
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
-
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
+
     return 1;
 }
-
-# =========================
 
 # =========================
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-  $_[0] =~ s/%HOLIDAYLIST%/&_handleMyScript("", $_[1], $_[2])/ge;
-  $_[0] =~ s/%HOLIDAYLIST{(.*?)}%/&_handleMyScript( $1, $_[1], $_[2] )/ge;
-
-    #TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
     # This is the place to define customized tags and variables
     # Called by TWiki::handleCommonTags, after %INCLUDE:"..."%
 
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
+    $_[0] =~ s/%HOLIDAYLIST%/&handleHolidaylist("", $_[0], $_[1], $_[2])/ge;
+    $_[0] =~ s/%HOLIDAYLIST{(.*?)}%/&handleHolidaylist($1, $_[0], $_[1], $_[2])/ge;
+
+
 }
 # =========================
-sub _handleMyScript
-{
-    my($attributes, $theTopic, $theWeb ) = @_;
-    my $tmp;
-    my @days = ("Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sun");
-    # collect attributes if they exist
-    $daystoprint = 30;
-    $tmp = scalar TWiki::Func::extractNameValuePair( $attributes, "daystoprint" );
-    $daystoprint = $tmp if( $tmp );
-    $tablecaption = "&nbsp;";
-    $tmp = scalar TWiki::Func::extractNameValuePair( $attributes, "tablecaption" );
-    $tablecaption = $tmp if( $tmp );
+sub initDefaults() {
+	my $webbgcolor = &TWiki::Func::getPreferencesValue("WEBBGCOLOR", $web) || 'white';
+	%defaults = (
+		days		=> 30,		# days to show
+		lang		=> 'English',	# language
+		tablecaption	=> '&nbsp;',	# table caption
+		cellpadding     => 1,		# table cellpadding 
+		cellspacing	=> 0,		# table cellspacing
+		border		=> 1,		# table border
+		topic		=> "$web.$topic",	# topic with calendar entries
+		tableheadercolor=>  $webbgcolor,	# table header color
+		tablebgcolor	=> 'white',	# table background color
+		workicon => '&nbsp;',		# on work icon (old behavior: ':mad:')
+		holidayicon => '8-)',		# on holiday icon
+		adayofficon => ':ok:',		# a day off icon
+		showweekends	=> 0,		# show weekends with month day and weekday in header and icons in cells
+		name 		=> 'Name',	# first cell entry
+		weekendbgcolor	=> $webbgcolor, # background color of weekend cells
+		startdate	=> undef,	# start date or a day offset
+		notatworkicon	=> ':-I',	# not at work icon
+		todaybgcolor	=> undef,	# background color for today cells (usefull for a defined startdate)
+		todayfgcolor	=> undef,	# foreground color for today cells (usefull for a dark todaybgcolor)
+		month		=> undef,	# the month or a offset
+		year		=> undef,	# the year or a offset
+		tcwidth		=> undef,	# width of the smily cells
+		nwidth		=> undef,	# width of the first column
+		removeatwork	=> 0		# removes names without calendar entries from  table if set to "1"
+	);
 
-    @Days = ();
-    @names = ();
-    my ($sec1,$min1,$hour1,$mday1,$mon1,$year1,$wday1,$yday1,$isdst1) = localtime(time);
-    $min_timestamp = mktime(0,0,0,$mday1,$mon1,$year1);
-    my ($sec2,$min2,$hour2,$mday2,$mon2,$year2,$wday2,$yday2,$isdst2) = localtime(time() +(86400 * $daystoprint));
-    $max_timestamp = mktime(59,59,23,$mday2,$mon2,$year2);
-    #Get the names of the people from a topic. By default the current topic.
-    @names = get_names($theTopic, $theWeb);
-    #Create an initial table, which assumes that nobody is away. Use the global @names list for this.
-    create_empty_list();
-    #Open the vac document. By default the current topic. Replace associative array entries with real values.
-    get_vac_list($theTopic, $theWeb);
-    my $result;
-    #First line of the vacation result. Result will be sent back to the commonHandler.
-    $result .= "<table border=1 bgcolor='#EEFFFA' link='#CC0000' alink='#FF3300' ><tr>\n";
-    $result .= qq(<caption ALIGN="top">$tablecaption</caption>\n);
-    #The vacation table will start from today. Give the header: days, dates etc.
-    $result .= qq(<tr bgcolor="#507493"><th valign="bottom">Name</th>);
-    foreach my $t_timestamp (@Days){
-	my ($sec3,$min3,$hour3,$mday3,$mon3,$year3,$wday3,$yday3,$isdst3) = localtime($t_timestamp);
-	my $mmonth = Month_to_Text($mon3+1);
-	$mmonth = substr($mmonth,0,3);
-	my ($mweek,$myear) = Week_of_Year(($year3+1900),($mon3+1),($mday3)); 
-        if ($days[$wday3] =~/Sat/){ 
-	    $result .= qq(<td bgcolor="#FFFFFF">&nbsp;</td>);
-	}
-	elsif($days[$wday3] =~/Sun/){ 
-	    $result .= qq(<td bgcolor="#FFFFFF">&nbsp;</td>);
-	}
-	else{
-	    $small_day = substr($days[$wday3],0,1);
-	    $result .= qq(<th><span style="font-size: 10px;">$mmonth<br>$small_day<br>$mday3</span></th>);
-	}
-    }
-    $result .= "\n";
+	@renderedOptions = ( 'tablecaption', 'name', 'holidayicon', 'adayofficon', 'workicon', 'notatworkicon' );
 
-   #print the table
-    foreach my $n (@names){
-	chomp($n);	
-	$result .= "<tr><th>$n </th>";
-	foreach $d (@Days){
-	    if(!is_wkend($d) ){
-		$result .= qq(<td align="center">${$d}{$n}</td>);
-	    }
-	    else{
-		$result .= qq(<td bgcolor="#FFFFFF">&nbsp;</td>);
-	    }
-	}
-	$result .= "\n";
-    }   
-    $result .= "\n</table>\n"; 
-    return $result;
-}
+	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
+	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
 
-# =========================
+	# some regular expressions:
+	$months_rx = join('|', keys %months);
+	$date_rx = "[0-3]?[0-9]\\s+($months_rx)\\s+[12][0-9]{3}";
+	$daterange_rx = "$date_rx\\s*-\\s*$date_rx";
+	$bullet_rx = "^\\s+\\*\\s*";
+	$bulletdate_rx = "$bullet_rx$date_rx\\s*-";
+	$bulletdaterange_rx = "$bulletdate_rx\\s*$date_rx\\s*-";
 
-# =========================
-
-
-#sub routines for this Plugin
-sub create_empty_list{
-    foreach my $n (@names){
-	my $myday = 0;
-	@Days = ();
-	while ($myday <$daystoprint){
-	    my $theday = time + (86400 * $myday); 
-	    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($theday);	    
-	    my $timestamp = mktime(0,0,1,$mday,$mon,$year);
-            push(@Days,$timestamp);
-	    ${$timestamp}{$n} = qq(<img src="%PUBURL%/$installWeb/SmiliesPlugin/mad.gif">);
-	    $myday = $myday +1;
-	}
-    }
+	$defaultsInitialized = 1;
 }
 # =========================
-sub get_names{
-    my($theTopic, $theWeb ) = @_;
-    my @names=();
-    my ($line, @fielddates, @dates, $person);
-    open(PEOPLE,"$TWiki::dataDir/$theWeb/$theTopic.txt") || die "can't open names list to read";
-    while (defined($line = <PEOPLE>)){
-	chomp($line); 
-	if ($line =~/^\s+\* [0-9]/){
-	    @fielddates = split(/\*/,$line);
-	    @dates = split(/\-/,$fielddates[1]);
-	    if (defined($dates[2])){
-		($person      = $dates[2]) =~s/^\s*(.*?)\s*$/$1/;
-	    }
-	    else{
-		($person      = $dates[1]) =~s/^\s*(.*?)\s*$/$1/;
-	    }
-	    if (grep(/$person/i, @names) < 1) {
-		push(@names,$person);
-	    }
+sub initOptions() {
+	my ($attributes) = @_;
+
+	# Setup options (attributes>plugin preferences>defaults) and render some options:
+	foreach $option (keys %defaults) {
+		$v = &TWiki::Func::extractNameValuePair($attributes,$option) || undef;
+		if (defined $v) {
+			$options{$option} = $v;
+		} else {
+			$v = TWiki::Func::getPluginPreferencesValue("\U$option\E") || undef;
+			$options{$option}=(defined $v)? $v : $defaults{$option};
+		}
+
+		if (grep(/^\Q$option\E$/, @renderedOptions)) {
+		 	$options{$option}=&TWiki::Func::renderText($options{$option}, $web);
+		}
 	}
-    }
-    close(PEOPLE);
-    return sort(@names);
+
 }
 # =========================
-sub get_vac_list{
-    my( $theTopic, $theWeb ) = @_;
-    my ($line, @fielddates, @dates, $person, $second_date, $first_date, $timestamp1, $now, $timestamp2, $tomorrow, $ts_tom);
-    # open the vac list from the wiki document.
-    open(VAC,"<$TWiki::dataDir/$theWeb/$theTopic.txt") || die "can't open vac db to read";
-        while (defined($line = <VAC>)){
-            chomp($line); 
-	    if ($line =~/^\s+\* [0-9]/){
-		@fielddates = split(/\*/,$line);
-		@dates = split(/\-/,$fielddates[1]);
-                if (defined($dates[2])){
-		    ($person      = $dates[2]) =~s/^\s*(.*?)\s*$/$1/;
-		    ($second_date = $dates[1]) =~s/^\s*(.*?)\s*$/$1/;
-		    ($first_date  = $dates[0]) =~s/^\s*(.*?)\s*$/$1/;
-		    $timestamp1 = get_timestamp($first_date);		    
-		    $now = time();
-		    if ($timestamp1 >= $now){
-			${$timestamp1}{$person} = qq(<img src="%PUBURL%/$installWeb/SmiliesPlugin/cool.gif">);
-		    }
-		    $timestamp2 = get_timestamp($second_date);
-                    $tomorrow =  add_a_day($first_date);	
-		    $ts_tom   =  get_timestamp($tomorrow);
-		    while( $ts_tom <= $timestamp2 ){
-		        #print "$tomorrow $ts_tom $timestamp2 $min_timestamp $max_timestamp\n";
-			if (($ts_tom > $min_timestamp) && ($ts_tom < $max_timestamp)){
-			    ${$ts_tom}{$person} = qq(<img src="%PUBURL%/$installWeb/SmiliesPlugin/cool.gif">);
+sub handleHolidaylist() {
+	($attributes, $refText, $theTopic, $theWeb) = @_;
+
+	&initDefaults() unless $defaultsInitialized;
+
+	&initOptions($attributes);
+
+	return &renderHolidaylist(&fetchHolidaylist(&getTopicText()));
+}
+# =========================
+sub getStartDate() {
+	my ($sec,$min,$hour,$dd,$mm,$yy,$wday,$yday,$isdst) = localtime(time);
+	$yy+=1900;
+	$mm++;
+
+	if (defined $options{startdate}) {
+		my $sd = $options{startdate};
+		$sd =~ s/^\s*(.*?)\s*$/$1/; # cut whitespaces
+		if ($sd =~ /^$date_rx$/) {
+			my ($d,$m,$y);
+			eval {
+				($d,$m,$y) = split(/\s+/, $sd);
+				Date_to_Days($y,$months{$m},$d); # fails if startdate is a illegal date
+			};
+			($dd,$mm,$yy)=($d,$months{$m},$y) unless $@;
+		} elsif ($sd =~ /^([\+\-]?\d+)$/) {
+			($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $1);
+		}
+	} 
+	if (defined $options{year}) {
+		my $year = $options{year};
+		if ($year =~ /^(\d{4})$/) {
+			$yy=$year;
+		} elsif ($year =~ /^([\+\-]?\d+)$/) {
+			($yy,$mm,$dd) = Add_Delta_YM($yy,$mm,$dd, $1, 0);
+		}
+	}
+	if (defined $options{month}) {
+		my $month = $options{month};
+		if ($month=~/^($months_rx)$/) {
+			$mm=$months{$1};
+			$dd=1;
+			$options{days}=31;
+			$options{days}-- while (!check_date($yy,$mm,$options{days}));
+		} elsif (($month=~/^([\+\-]?\d+)$/)&&($month!=0)) {
+			$dd=1;
+			($yy,$mm,$dd) = Add_Delta_YM($yy,$mm,$dd, 0, $1);
+			$options{days}=31;
+			$options{days}-- while (!check_date($yy,$mm,$options{days}));
+		}
+	}
+
+	return ($dd,$mm,$yy);
+}
+# =========================
+sub getTodayDays() {
+	my ($yy,$mm,$dd) = Today();
+	return Date_to_Days($yy,$mm,$dd);
+}
+# =========================
+sub fetchHolidaylist() {
+	my ($text) = @_;
+	my %table = ( );
+	my %locationtable = ( );
+	my %icontable = ( );
+
+	my ($dd,$mm,$yy) = &getStartDate();
+	
+	foreach my $line (grep(/$bullet_rx/, split(/\r?\n/, $text))) {
+		my $matched = 1;
+		my ($person, $start, $end, $location, $icon);
+
+		$line =~s /$bullet_rx//g; 
+
+		if ($line =~ m/^$daterange_rx/) {
+			my ($sdate, $edate);
+
+			($sdate,$edate,$person,$location,$icon) = split /\s+\-\s+/, $line, 5;
+
+			my ($dd1, $mon1, $yy1) = split(/\s+/, $sdate);
+			my ($dd2, $mon2, $yy2) = split(/\s+/, $edate);
+			my $mm1 = $months{$mon1};
+			my $mm2 = $months{$mon2};
+
+			eval { $start=Date_to_Days($yy1,$mm1,$dd1); };
+			next if $@;
+
+			eval { $end=Date_to_Days($yy2,$mm2,$dd2); };
+			next if $@;
+
+		} elsif ($line =~ m/^$date_rx/) {
+			my $date;
+
+			($date, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
+
+			my ($dd1, $mon1, $yy1 ) = split (/\s+/, $date);
+			my $mm1 = $months{$mon1};
+
+			eval { $start=Date_to_Days($yy1,$mm1,$dd1); };
+			next if $@;
+
+			$end=$start;
+
+		} else {
+			$matched = 0;
+		}
+
+		if ($matched) {
+			# cut whitespaces
+			$person=~s/\s+$//;
+
+			my $ptableref = $table{$person};
+			my $ltableref = $locationtable{$person};
+			my $itableref = $icontable{$person};
+
+			if (!defined $ptableref) {
+				my @ptable = ();
+				$ptableref=\@ptable;
+				$table{$person}=$ptableref;
+				my @ltable = ();
+				$ltableref=\@ltable;
+				$locationtable{$person}=$ltableref;
+				my @itable = ();
+				$itableref=\@itable;
+				$icontable{$person}=$itableref;
 			}
-			$tomorrow =  add_a_day($tomorrow);
-			$ts_tom   =  get_timestamp($tomorrow);
-		    }
 
+			for (my $i=0; $i < $options{days}; $i++) {
+				my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$i);
+				my ($date)= Date_to_Days($y,$m,$d);
+				
+				if (($date>=$start) && ($date<=$end)) {
+					$$ltableref[$i]=$line;
+					if (defined $icon) {
+						$$ptableref[$i]=4;
+						$$itableref[$i]=$icon;
+					} elsif (defined $location) {
+						$$ptableref[$i]=3;
+					} else {
+						$$ptableref[$i]= ($start!=$end) ? 1 : 2;
+					}
+				}
+			}
 		}
-		else{
-		    ($person      = $dates[1]) =~s/^\s*(.*?)\s*$/$1/;
-		    ($first_date  = $dates[0]) =~s/^\s*(.*?)\s*$/$1/;
-		    $timestamp1 = get_timestamp($first_date);		    
-		    $now = time();
-		    if ($timestamp1 > $now){
-			${$timestamp1}{$person} = qq(<img src="%PUBURL%/$installWeb/SmiliesPlugin/thumbs.gif">);
-		    }
-		}
-	    }
-	    
 	}
-    close(VAC);
+	return (\%table, \%locationtable, \%icontable);
 }
 # =========================
-sub get_timestamp(){
-    my $t = $_[0];
-    my @mt_fields = split(/\s+/,$t);
-    my $mday  = $mt_fields[0]; 
-    my $the_month = $mt_fields[1];
-    my $mmon  = get_month_as_number($the_month);  
-    my $myear = $mt_fields[2] - 1900; 
-    my $timestamp = mktime(0,0,1,$mday,$mmon,$myear);
-    return $timestamp;
+sub renderHolidaylist() {
+	my ($tableRef, $locationTableRef, $iconTableRef) = @_;
+	my $text = "";
+
+	Date::Calc::Language(Date::Calc::Decode_Language($options{lang}));
+
+	my $today = getTodayDays();
+
+	# create table header:
+	
+	$text .= '<table border="'.$options{border}.'"'
+               . ' cellpadding="'.$options{cellpadding}.'"'
+               . ' cellspacing="'.$options{cellspacing}.'"'
+	       . ' bgcolor="'.$options{tablebgcolor}.'"'
+	       .  '>' 
+	       . "\n" ;
+
+	$text .= '<caption align="top">'.$options{tablecaption}.'</caption>'."\n";
+
+	$text .= '<tr bgcolor="'.$options{tableheadercolor}.'">';
+	$text .= '<th align="left"'.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'').'>'.$options{name}.'</th>';
+
+	my ($dd,$mm,$yy) = getStartDate();
+
+	for (my $i=0; $i< $options{days}; $i++) {
+		my ($yy1,$mm1,$dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
+		my $dow = Day_of_Week($yy1,$mm1,$dd1);
+		my $date = Date_to_Days($yy1, $mm1, $dd1);
+
+		my $bgcolor = $options{tableheadercolor};
+		$bgcolor=$options{weekendbgcolor} unless $dow < 6;
+		$bgcolor=$options{todaybgcolor} if (defined $options{todaybgcolor})&&($today == $date);
+		
+		$text.='<th align="center" bgcolor="'.$bgcolor.'"'
+			. (((defined $options{tcwidth})&&(($dow<6)||$options{showweekends}))?' width="'.$options{tcwidth}.'"':'')
+		        .((($today==$date)&&(defined $options{todayfgcolor}))?' style="color:' . $options{todayfgcolor} . '"' : '') .'>';
+		if (($dow < 6)|| $options{showweekends}) { 
+			$text .= '<font size="-2">'
+                              .substr(Month_to_Text($mm1),0,3)
+			      .'<br>'.substr(Day_of_Week_to_Text(Day_of_Week($yy1,$mm1,$dd1)),0,2)
+			      .'<br>'.$dd1 
+			      .'</font>';
+		} else {
+			$text .= '&nbsp;';
+		}
+		$text.='</th>';
+	}
+
+	$text .= "</tr>\n";
+
+	# create table with names and dates:
+
+	my %iconstates = ( 0 => $options{workicon},
+                           1 => $options{holidayicon},
+			   2 => $options{adayofficon},
+			   3 => $options{notatworkicon},
+			   4 => $options{notatworkicon} );
+
+
+	foreach my $person (sort keys %{$tableRef}) {
+		my $ptableref=$$tableRef{$person};
+		my $ltableref=$$locationTableRef{$person};
+		my $itableref=$$iconTableRef{$person};
+
+		if ($options{removeatwork}) {
+			next unless grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
+		}
+		$text .= '<tr><th align="left">'.$person.'</th>';
+		for (my $i=0; $i<$options{days}; $i++) {
+			my ($yy1, $mm1, $dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
+			my $dow = Day_of_Week($yy1, $mm1, $dd1);
+
+			my $bgcolor = $options{tablebgcolor};
+			$bgcolor = $options{weekendbgcolor} unless $dow < 6;
+			$bgcolor = $options{todaybgcolor} if (defined $options{todaybgcolor}) && ($today == Date_to_Days($yy1, $mm1, $dd1));
+
+			$text.= '<td align="center" bgcolor="'.$bgcolor.'">';
+
+                        if (($dow < 6)||$options{showweekends}) { 
+				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
+				if (defined $$itableref[$i]) {
+					$icon = $$itableref[$i];
+					$icon = TWiki::Func::renderText($icon, $web);
+				}
+				eval { 
+					my $location = $$ltableref[$i] if defined $ltableref;
+					if (defined $location) {
+						# could fail if HTML::Entities is not installed:
+						$location=encode_entities($location); # quote special characters like "<>
+						$icon=~s/(<img[^>]+?alt=")[^">]+("[^>]*>)/$1$location$2/is;
+						$icon=~s/(<img[^>]+?title=")[^">]+("[^>]*>)/$1$location$2/is;
+					}
+				};
+				$text.= $icon;
+			} else {
+				$text.= '&nbsp;';
+			}
+                        $text.= '</td>';
+		}
+		$text .= "</tr>\n";
+	}
+	$text .= '</table>';
+
+	return $text;
 }
 # =========================
-sub add_a_day(){
-    my $t = $_[0];
-    my @months = ( "Jan", "Feb", "Mar", "Apr",
-                   "May", "Jun", "Jul", "Aug", "Sep",
-                   "Oct", "Nov", "Dec" );
-    my @days = ("Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sun");
+sub getTopicText() {
 
-    my @mt_fields = split(/\s+/,$t);
-    my $myday  = $mt_fields[0]; 
-    my $the_month = $mt_fields[1];
-    my $mmon  = get_month_as_number($the_month);  
-    my $myear = $mt_fields[2] - 1900; 
-    my $timestamp = mktime(0,0,0,$myday,$mmon,$myear);
-    $timestamp = $timestamp + 86400;
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($timestamp);
-    my $theyear =  1900 + $year;   
-    my $new_date = "$mday $months[$mon] $theyear";
-    return $new_date;
+	my ($web, $topic);
+
+	my $topics = $options{topic};
+	my @topics = split /,\s*/, $topics;
+
+	my $text = "";
+	foreach my $topicpair (@topics) {
+		if ($topicpair =~ m/([^\.]+)\.([^\.]+)/) {
+			($web, $topic) = ($1, $2);
+		} else {
+			$web = $theWeb;
+			$topic = $topicpair;
+		}
+
+		if (($topic eq $theTopic) && ($web eq $theWeb)) {
+			# use current text so that preview can show unsaved events
+			$text .= $refText;
+		} else {
+			$text .= &readTopicText($web, $topic);
+		}
+	}
+	return $text;
+	
 }
 
-sub get_month_as_number(){
-    my $month1;
-    my $themonth = $_[0];
-    if($themonth eq  'Jan') { $month1 = 0} 
-    elsif($themonth eq  'Feb') { $month1 = 1} 
-    elsif($themonth eq  'Mar') { $month1 = 2} 
-    elsif($themonth eq  'Apr') { $month1 = 3}
-    elsif($themonth eq  "May") { $month1 = 4}
-    elsif($themonth eq  'Jun') { $month1 = 5} 
-    elsif($themonth eq  'Jul') { $month1 = 6} 
-    elsif($themonth eq  'Aug') { $month1 = 7}
-    elsif($themonth eq  'Sep') { $month1 = 8}
-    elsif($themonth eq  'Oct') { $month1 = 9} 
-    elsif($themonth eq  'Nov') { $month1 = 10} 
-    elsif($themonth eq  'Dec') { $month1 = 11}
- 
-    return $month1;
-}
-
-sub is_wkend(){
-    my $t = $_[0];
-    my @days = ("Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sun");
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($t);
-    return 1 if(($days[$wday] eq "Sat") || ($days[$wday] eq "Sun"));
-    return 0;
-}
 # =========================
+sub readTopicText
+{
+	my( $theWeb, $theTopic ) = @_;
+	my $text = '';
+	if( $TWiki::Plugins::VERSION >= 1.010 ) {
+		$text = &TWiki::Func::readTopicText( $theWeb, $theTopic, '', 1 );
+	} else {
+		$text = &TWiki::Func::readTopic( $theWeb, $theTopic );
+	}
+	# return raw topic text, including meta data
+	return $text;
+}
+
 1;
