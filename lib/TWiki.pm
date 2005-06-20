@@ -137,6 +137,9 @@ BEGIN {
     if( DEBUG ) {
         # If ASSERTs are on, then warnings are errors. Paranoid,
         # but the only way to be sure we eliminate them all.
+        # Look out also for $cfg{WarningsAreErrors}, below, which
+        # is another way to install this handler without enabling
+        # ASSERTs
         $SIG{'__WARN__'} = sub { die @_ };
     }
 
@@ -232,6 +235,11 @@ BEGIN {
     # read localsite again to ensure local definitions override TWiki.cfg
     do 'LocalSite.cfg';
     die "Bad configuration: $@" if $@;
+
+    if( $TWiki::cfg{WarningsAreErrors} ) {
+        # Note: Warnings are always errors if ASSERTs are enabled
+        $SIG{'__WARN__'} = sub { die @_ };
+    }
 
     if( $TWiki::cfg{UseLocale} ) {
         require locale;
