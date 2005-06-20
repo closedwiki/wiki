@@ -1,0 +1,213 @@
+head	1.3;
+access;
+symbols;
+locks
+	webserv:1.3; strict;
+comment	@# @;
+
+
+1.3
+date	2005.06.14.14.41.27;	author rohdedan;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2005.06.13.15.13.55;	author rohdedan;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2005.06.10.16.12.52;	author rohdedan;	state Exp;
+branches;
+next	;
+
+
+desc
+@none
+@
+
+
+1.3
+log
+@none
+@
+text
+@%META:TOPICINFO{author="rohdedan" date="1118760087" format="1.0" version="1.3"}%
+---+!! <nop>HolidaylistPlugin</nop>
+
+%TOC%
+
+The !HolidaylistPlugin handles the tag %<nop>HOLIDAYLIST</nop>% that inserts a vacation list on the current page. Smilies are used to indicate if a person is in work or on holiday. 
+
+The plugin creates a table filled with Smilies and today's date will always be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: ( a day off) or 8-) (absent for some time).
+
+---++ Syntax Rules
+The sytax follows that of the !CalendarPlugin. Note adding the %<nop>CALENDAR</nop>% tag to the page will also create a Calendar with the listed vacations. See TWiki:Plugins.CalendarPlugin for more details.
+
+To insert vacations into the table, create a bullet list. Three spaces and then a *.
+
+Example1: To list that John will be away on 1-July-2005
+
+	!* 01 Jul 2005 - John
+	 
+Example2: To list that Mary will be away from 3-Sep - 9-Sep 2005
+
+	!* 03 Sep 2005 - 09 Sep 2005 - Mary 
+
+
+There are 2 possible arguments =days= (defaults to 30days) and =tablecaption= (defaults to null).
+
+Example3 :
+
+=%<nop>HOLIDAYLIST{days="90" tablecaption="Planned Holidays"}</nop>%=
+
+---++ Table Attributes
+*Note:* Every table attribute of %<nop>HOLIDAYLIST% can be used as plugin setting. You only have to use capital letters.
+
+| *Attribute* | *Comment* | *Default / Example* |
+| adayofficon |a day off icon | adayofficon=":ok:" |
+| border | table border | border="1" |
+| cellpadding | table cell padding | cellpadding="1" |
+| cellspacing | tabel cell spacing | cellspacing="0" |
+| days | number of days to show |days="30" |
+| holidayicon | holiday icon | holidayicon="8-)" |
+| lang | language | lang="English" |
+| name | header content of the first cell header |name="Name" |
+| showweekends | show weekends if set to 1 | showweekends="0" |
+| tablebgcolor | table background color | tablebgcolor="white" |
+| tablecaption | table caption | tablecaption="&amp;nbsp;" |
+| tableheadercolor | color of the table header | tableheadercolor="%<nop>WEBBGCOLOR%" |
+| topic | a comma separated list of source topics | topic="%<nop>TOPIC%" |
+| workicon | in work icon | workicon="&amp;nbsp;" |
+
+---++ Example
+
+%HOLIDAYLIST%
+
+	* 02 Jan 2005 - 30 Feb 2005 - Bill
+	* 27 Mar 2005 - 20 Apr 2005 - Bob
+	* 10 May 2005 - 01 Jun 2005 - Mary
+	* 13 Jun 2005 - 12 Jun 2006 - Jill's Motherhood 
+	* 08 Jun 2005 - Bill
+	* 10 Jun 2005 - 15 Jun 2005 - Bob
+	* 10 Jul 2005 - Mary
+	* 20 Jul 2005 - 02 Sep 2005 - Bob
+	* 15 Sep 2005 - 15 Oct 2005 - Mary
+	* 30 Oct 2005 - Jane
+	* 19 Nov 2005 - Bob
+	* 29 Nov 2005 - 20 Dec 2005 - Bill
+	* 25 Dec 2005 - Bob
+
+---++ Plugin Settings
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Create a table with a list of people on holidays
+
+
+	* Language (*see manuale page of Date::Calc perl module, e.g: English, Deutsch, Franais, Espaol, Nederlands, Dansk, suomi, ...). 
+		* # Set LANG = Deutsch
+
+	* Name of the first cell:
+		* # Set NAME = Name
+  
+*Note:* Every table attribute of %<nop>HOLIDAYLIST% can be used as plugin setting. You only have to use capital letters.
+
+---++ Plugin Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the plugin is correctly installed: Copy the example above into a new topic and change
+	  the year number to the current year.
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
+|  Plugin Version: | 14 Jun 2005 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  14 Jun 2005: | some performance improvements; code cleanup; documentation (TWiki:Main.DanielRohde) |
+|  13 Jun 2005 A: | fix plugin preference handling; rename some subroutines (TWiki:Main.DanielRohde) |
+|  13 Jun 2005: | renders some options; fixes some documentation bugs and a white space bug (TWiki:Main.DanielRohde) |
+|  10 Jun 2005: | A complete reimplementation with many bug fixes and some new features. (TWiki:Main.DanielRohde) |
+|  01 Jun 2005: | Initial version (TWiki:Main.PeterJones) |
+|  CPAN Dependencies: | CPAN:Date::Calc |
+|  Other Dependencies: | %TWIKIWEB%.SmiliesPlugin, TWiki:Plugins.CalendarPlugin |
+|  Perl Version: | 5.0 and up|
+|  TWiki:Plugins/Benchmark: |  |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.SmiliesPlugin, %TWIKIWEB%.TWikiPlugins, TWiki:Plugins.CalendarPlugin
+ 
+-- TWiki:Main.PeterJones - 01 Jun 2005
+%BR% -- TWiki:Main.DanielRohde - 10 Jun 2005
+
+@
+
+
+1.2
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="rohdedan" date="1118675635" format="1.0" version="1.2"}%
+d38 1
+a38 1
+| days | Number of days to show |days="30" |
+d40 1
+a40 1
+| lang | Language | lang="English" |
+d46 1
+a46 1
+| topic | A comma separated list of source topics. | topic="%<nop>TOPIC%" |
+d73 1
+a73 1
+	* Language (*see manuale page of Date::Calc module). 
+d94 2
+a95 2
+|  Plugin Author: | TWiki:Main.PeterJones |
+|  Plugin Version: | 13 Jun 2005 A |
+d97 1
+@
+
+
+1.1
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="rohdedan" date="1118419972" format="1.0" version="1.1"}%
+d31 1
+d34 1
+a34 1
+| adayofficon |a day off icon | adayofficon="&lt;img src=%<nop>PUBURL%/TWiki/SmiliesPlugin/thumbs.gif&gt;" |
+d39 1
+a39 1
+| holidayicon | holiday icon | holidayicon="&lt;img src=%<nop>PUBURL%/TWiki/SmiliesPlugin/cool.gif&gt;" |
+d44 1
+a44 1
+| tablecaption | table caption | tablecaption="&nbsp;" |
+d47 1
+a47 1
+| workicon | in work icon | workicon="&nbsp;" |
+d56 1
+d74 1
+a74 1
+		* # Set LANG = English
+d79 1
+a79 1
+*Note:* Every table attribute of %<nop>HOLIDAYLIST% can be used as plugin setting. You only have to use captial letters.
+d94 2
+a95 2
+|  Plugin Author: | Main.PeterJones |
+|  Plugin Version: | 10 Jun 2005 |
+d97 2
+@
