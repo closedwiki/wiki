@@ -142,7 +142,7 @@ sub handleTranslations
   my $norm;
 
   
-  my $format = TWiki::Func::extractNameValuePair($params, "format") || "[[\$translation][\$language]]";
+  my $format = TWiki::Func::extractNameValuePair($params, "format") || "[[\$web.\$translation][\$language]]";
   my $userSeparator = TWiki::Func::extractNameValuePair($params, "separator") || " ";
 
   my $baseTopicName = findBaseTopicName();
@@ -163,6 +163,7 @@ sub formatTranslationEntry
   my ($format, $translationTopic, $lang) = @_;
   my $result = $format;
 
+  $result =~ s/\$web/$web/g;
   $result =~ s/\$topic/$topic/g;
   $result =~ s/\$translation/$translationTopic/g;
   $result =~ s/\$language/$lang/g;
