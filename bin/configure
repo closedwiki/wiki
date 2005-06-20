@@ -478,10 +478,7 @@ third-party modules used by some plugins, and Perl built-in modules.
 HERE
          ));
 
-my $binerrs = _checkTreePerms( '.', 'x');
-if( $binerrs ) {
-    print ROW('CGI bin directory', 'All cgi scripts need to be executable<br />'.WARN($binerrs));
-}
+print ROW('CGI bin directory', _checkBinDir());
 
 # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
 # browser in some environments.  
@@ -796,20 +793,21 @@ sub __checkAndBuildValueGrabber {
     $id =~ s/[{}\[\]]//g;
     my $anchor = CGI::a({name=>$id},'');
     print CGI::hidden(-name => 'TYPEOF:'.$id, -value=>$type);
-    my $value = eval '$TWiki::cfg'.$keys;
+    my $checker = '_check'.$id;
+    if( defined &$checker ) {
+        no strict 'refs';
+        $desc .= &$checker();
+        use strict 'refs';
+    }
+
     my $prompter = '_prompt'.$type;
+    my $value = eval '$TWiki::cfg'.$keys;
     no strict 'refs';
     $prompter = &$prompter($id, $opts, $value, $keys, $mandatory);
     my $class = $type;
     $class .= ' mandatory' if $mandatory;
     $prompter = CGI::span({class=>$class}, $prompter) if $mandatory;
     use strict 'refs';
-    my $checker = '_check'.$id;
-    if( defined &$checker ) {
-        no strict 'refs';
-        $desc .= &$checker($value, $keys);
-        use strict 'refs';
-    }
 
     $desc = $anchor."\n".$desc;
 
@@ -884,48 +882,113 @@ sub _promptSELECT {
     return CGI::Select({ name => $id, size=>1, default=>$value }, $sopts);
 }
 
+sub _checkBinDir {
+    my $dir = $ENV{SCRIPT_FILENAME} || '.';
+    $dir =~ s(/+configure[^/]*$)();
+    my $ext = $TWiki::cfg{ScriptSuffix} || '';
+    my $errs = '';
+    opendir(D, $dir) or return ERROR("Can't open $dir for read");
+    foreach my $script (grep { !/(^\.|\.cfg|\.txt)/ } readdir D) {
+        next if( $ext && $script !~ /\.$ext$/ );
+        if( !-x "$dir/$script" ) {
+            $errs .= WARN($script . ' is not executable');
+        }
+    }
+    closedir(D);
+    return $dir.'<br />'.$errs;
+}
+
 sub _checkDefaultUrlHost {
-    my $val = $ENV{"HTTP_HOST"} || '';
-    if( $TWiki::cfg{DefaultUrlHost} !~ /$val/ ) {
-        return WARN('Current setting does not match HTTP_HOST (which is ',$val,')');
+    my $keys = shift;
+
+    if( $TWiki::cfg{DefaultUrlHost} ) {
+        if( $TWiki::cfg{DefaultUrlHost} !~ /$ENV{HTTP_HOST}/ ) {
+            return WARN('Current setting does not match HTTP_HOST ',
+                        $ENV{HTTP_HOST});
+        }
+    } else {
+        my $protocol = $url || 'http://'.$ENV{HTTP_HOST};
+        $protocol =~ s(^(.*?://.*?)/.*$)($1);
+        $TWiki::cfg{DefaultUrlHost} = $protocol;
+        return WARN('I guessed this setting');
     }
 }
 
 sub _checkScriptUrlPath {
     # Check Script URL Path against REQUEST_URI
     my $n;
-    my $val = $ENV{"REQUEST_URI"} || '';
-    if( not $val ) {			# REQUEST_URI not set by IIS
-        return WARN(<<HERE
-This web server does not set <strong>REQUEST_URI</strong>,
+    my $val = $TWiki::cfg{ScriptUrlPath};
+    my $guess = $ENV{REQUEST_URI} || $ENV{SCRIPT_NAME} || '';
+    $guess =~ s(/+configure[^/]*$)();
+
+    if( $val ) {
+        unless( $guess ) {
+            return WARN(<<HERE
+This web server does not set REQUEST_URI or SCRIPT_NAME
 so it isn't possible to check the correctness of this setting.
 HERE
-                  );
-    } elsif ( $val !~ /^$TWiki::cfg{ScriptUrlPath}/ ) {
-        return WARN('Current setting does not match <strong>REQUEST_URI</strong> ('.$val.')');
+                       );
+        };
+        if ( $guess !~ /^$val/ ) {
+            return WARN('I expected this to look like "'.$guess.'"');
+        }
+    } else {
+        unless( $guess ) {
+            return WARN(<<HERE
+This web server does not set REQUEST_URI or SCRIPT_NAME
+so it isn't possible to guess this setting.
+HERE
+                       );
+        };
+        $TWiki::cfg{ScriptUrlPath} = $guess;
+        return WARN('I guessed this setting');
     }
 }
 
 sub _checkPubUrlPath {
+    unless( $TWiki::cfg{PubUrlPath} ) {
+        my $guess = $TWiki::cfg{ScriptUrlPath};
+        $guess =~ s/bin$/pub/;
+        $TWiki::cfg{PubUrlPath} = $guess;
+        return WARN('I guessed this setting');
+    }
     return 'This is not set correctly if the link below is broken:<br />'.
       '<a href="'.$TWiki::cfg{PubUrlPath}.'">click here</a>';
 }
 
+sub _findMajorDir {
+    my( $cfg, $dir ) = @_;
+    return '' if( $TWiki::cfg{$cfg} );
+    my $guess = $ENV{SCRIPT_FILENAME};
+    unless( $guess ) {
+        return WARN("This web server does not set SCRIPT_FILENAME so I can't guess a value for this");
+    }
+    $guess =~ s(bin/*configure$)();
+    $guess .= $dir;
+    $TWiki::cfg{$cfg} = $guess;
+    return WARN('I guessed this setting');
+}
+
 sub _checkPubDir {
-    my $e = _checkTreePerms( $TWiki::cfg{PubDir}, 'rw' );
-    $e = WARN($e) if $e;
+    my $e = _findMajorDir('PubDir', 'pub');
+    my $e2 = _checkTreePerms( $TWiki::cfg{PubDir}, 'rw' );
+    $e = WARN($e2) if $e2;
     return $e;
 }
 
 sub _checkTemplateDir {
-    my $e = _checkTreePerms( $TWiki::cfg{TemplateDir}, 'r' );
-    $e = ERROR($e) if $e;
+    my $e = _findMajorDir('TemplateDir', 'templates');
+    my $e2 = _checkTreePerms( $TWiki::cfg{TemplateDir}, 'r' );
+    $e .= ERROR($e2) if $e2;
     return $e;
 }
 
 sub _checkDataDir {
-    my $e = _checkTreePerms( shift, "rw" );
-    $e = WARN($e) if $e;
+    my $e = _findMajorDir('DataDir', 'data');
+    my $e2 = _checkTreePerms( $TWiki::cfg{DataDir}, "r" );
+    $e2 = _checkTreePerms( $TWiki::cfg{DataDir}, "w", qr/\.txt$/ )
+      unless $e2;
+    $e .= WARN($e2) if $e2;
     return $e;
 }
 
@@ -978,33 +1041,33 @@ sub _checkDebugFileName {
 }
 
 sub _checkMimeTypesFileName {
-    my $e = _checkTreePerms(shift, 'r');
+    my $e = _checkTreePerms($TWiki::cfg{MimeTypesFileName}, 'r');
     $e = ERROR($e) if $e;
     return $e;
 }
 
 sub _checkHtpasswd_FileName {
-    my $e = _checkTreePerms(shift, 'r');
+    my $e = _checkTreePerms($TWiki::cfg{Htpasswd}{FileName}, 'r');
     $e = ERROR($e) if $e;
     return $e;
 }
 
 sub _checkRemoteUserFileName {
-    my $file = shift;
+    my $file = $TWiki::cfg{RemoteUserFileName};;
     my $e = _checkCanCreateFile( $file );
     $e = WARN($e) if $e;
     return $e;
 }
 
 sub _checkRegistrationApprovals {
-    my $file = shift;
+    my $file = $TWiki::cfg{RegistrationApprovals};
     my $e = _checkTreePerms( $file, 'rw' );
     $e = WARN($e) if $e;
     return $e;
 }
 
 sub _checkUseLocale {
-    my $on = shift;
+    my $on = $TWiki::cfg{UseLocale};
     my $n = '';
     if( $on && $TWiki::cfg{OS} eq 'WINDOWS' ) {
         # Warn re known broken locale setup
@@ -1086,7 +1149,7 @@ HERE
 }
 
 sub _checkSiteLocale {
-    my $locale = shift;
+    my $locale = $TWiki::cfg{SiteLocale};
     # Try to see if required locale was correctly set earlier
     my $currentLocale = setlocale(&LC_CTYPE);
     if ( $currentLocale ne $locale ) {
@@ -1159,7 +1222,10 @@ sub _checkCanCreateFile {
 }
 
 sub _checkTreePerms {
-    my( $path, $perms ) = @_;
+    my( $path, $perms, $filter ) = @_;
+
+    return '' if( defined($filter) && $path !~ $filter && !-d $path);
+
     my $errs = '';
 
     return $path. ' cannot be found<br />' unless( -e $path );
@@ -1168,7 +1234,7 @@ sub _checkTreePerms {
         $errs .= ' readable';
     }
 
-    if( !-d $path && $perms =~ /w/ && !-w $path) {
+    if( $perms =~ /w/ && !-d $path && !-w $path) {
         $errs .= ' writable';
     }
 
@@ -1185,7 +1251,7 @@ sub _checkTreePerms {
 
     foreach my $e ( grep { !/^\./ } readdir( D )) {
         my $p = $path.'/'.$e;
-        $errs .= _checkTreePerms( $p, $perms );
+        $errs .= _checkTreePerms( $p, $perms, $filter );
     }
     closedir(D);
     return $errs;
