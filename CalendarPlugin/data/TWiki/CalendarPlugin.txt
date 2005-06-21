@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="DavidBright" date="1110605958" format="1.0" version="1.5"}%
----++!! Calendar Plugin (version 1.016)
+%META:TOPICINFO{author="rohdedan" date="1119365812" format="1.0" version="1.6"}%
+---++!! Calendar Plugin (version 1.017)
 
 The <nop>CalendarPlugin handles the tag *%<nop>CALENDAR%* that inserts a monthly calendar in the page. Multiple topics can be specified as the source of the events, and these can be in any web.
 
@@ -167,7 +167,7 @@ A list of Events is just a bullet list like this:
 | ==month="mm"==			| The month | Current month |
 | ==month="+mm"== or =="-mm"== | relative month | Current month |
 | ==gmtoffset="+/-hh"== | Timezone expressed as number of hours offset from GMT | Server timezone |
-| ==topic="TopicName"==  | Topic containig events | The topic containing the tag |
+| ==topic="TopicName"==  | Topic containing events | The topic containing the tag |
 | ==topic="Web.TopicName1, <nop>Web.TopicName2"==  | Topics containig events | The topics containing the tags |
 | ==web="Webname"==		| Web containing the event topic | The current web |
 | ==lang="language"==	 | Language: First few characters of "English", "Français", "Deutsch", "Español", "Português", "Nederlands", "Italiano", "Norsk", "Svenska", "Dansk", "suomi", "Magyar", "Polski | "English" |
@@ -217,6 +217,7 @@ Events are defined by bullets with the following syntax:
 | ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - description== | E Wed 27 Jan 2005 - Every Wednesday Starting 27 Jan 2005 |
 | ^ | ==&nbsp;&nbsp; * E DDD dd MMM yyyy - dd MMM yyyy - description== | E Wed 1 Jan 2005 - 27 Jan 2005 - Every Wednesday from 1 Jan 2005 through 27 Jan 2005 (inclusive) |
 | *Periodic*: | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - description== </nobr> | E3 02 Dec 2002 - Every three days starting 02 Dec 2002 |
+| ^ | <nobr> ==&nbsp;&nbsp; * En dd MMM yyyy - dd MMM yyyy - description== </nobr> | E3 12 Apr 2005 - 31 Dec 2005 - Every three days from 12 Apr 2005 through 31 Dec 2005 (inclusive) |
 | *Exception*: | Insert the following between the above syntax and the description:<br /> ==X { dd MMM yyyy, dd MMM yyyy - dd MMM yyyy }== | 1 Fri X { 01 Dec 2002, 06 Dec 2002 - 14 Dec 2002 } - Every first Friday except on the 01 Dec 2002 and between 06 Dec 2002 and 14 Dec 2002 |
 
 If an event falls in the selected month then the corresponding day is (by default):
@@ -267,8 +268,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/AndreaSterbini |
-|  Plugin Version: | V1.016 (11 Mar 2005) |
+|  Plugin Version: | V1.017 (21 Jun 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  V1.017: | TWiki:Main.DanielRohde: Added start and end date support for periodic repeaters; Added initlang patch by TWiki:Main.JensKloecker; Changed 'my' to 'local' so exceptions working again; Removed fetchxmap debug message; Fixed illegal date bug; Allowed month abbreviations in month attribute |
 |  V1.016: | TWiki:Main/DavidBright: Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0 |
 |  V1.015: | TWiki:Main.PatriceFournier: Added back support for preview showing unsaved events; Two loop fixes from TWiki:Main.DanielRohde |
 |  V1.014: | TWiki:Main.NathanKerr: Added start and end date support for weekly repeaters |
@@ -298,5 +300,7 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 -- TWiki:Main/PeterThoeny - 15 Jan 2004 <br />
 -- TWiki:Main.NathanKerr - 28 Jan 2005 <br />
 -- TWiki:Main/DavidBright - 11 Mar 2005 <br />
+-- TWiki:Main.DanielRohde - 21 Jun 2005 <br />	 
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
 
 %META:FILEATTACHMENT{name="exclam.gif" attr="" comment="Image of exclamation point" date="1073090410" path="exclam.gif" size="79" user="PeterThoeny" version="1.1"}%

@@ -21,12 +21,14 @@
 # =========================
 package TWiki::Plugins::CalendarPlugin;
 
+
 # use strict;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION
+use vars qw( $web $topic $user $installWeb $VERSION $pluginName $debug
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
-$VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
+$VERSION   = '1.017';  #dro# Added start and end date support for periodic repeaters; Added initlang patch by TWiki:Main.JensKloecker; Changed 'my' to 'local' so exceptions working again; Removed fetchxmap debug message; Fixed illegal date bug; Allowed month abbreviations in month attribute
+#$VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
 #$VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
 #$VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
 #$VERSION   = '1.013';  #mrjc# Added support for multiple sources in topic=
@@ -43,6 +45,11 @@ $VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our"
 #$VERSION   = '1.002';  #cs# debug, relative month/year, highlight today
 #$VERSION   = '1.001';  #as# delayed load
 #$VERSION   = '1.000';  #as# initial release
+
+$pluginName="CalendarPlugin";
+
+$debug=0;
+
 
 $libsLoaded = 0;
 $libsError  = 0;
@@ -106,6 +113,7 @@ sub initDefaults
         weekstartsonmonday              => '0',
 	# other options not belonging to HTML::CalendarMonthSimple
 	daynames			=> undef, # order is: Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday
+	lang			=> 'English',
 	topic			=> $topic,
 	web			=> $web,
 	format			=> "<a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/\$web/\$topic\"><font size=\"+2\">"
@@ -230,7 +238,6 @@ sub fetchxmap {
 			}
 		}
 	}
-	&TWiki::Func::writeDebug($ret{06});
 	return @ret;
 }
 
@@ -270,7 +277,10 @@ sub handleCalendar
 
     # read and set the desired language
     my $lang = scalar &TWiki::Func::extractNameValuePair( $attributes, "lang" );
-    Date::Calc::Language(Date::Calc::Decode_Language($lang)) if $lang;
+    $lang = $lang ? $lang : $defaults{lang};
+    #Date::Calc::Language(Date::Calc::Decode_Language($lang)) if $lang;
+    Date::Calc::Language(Date::Calc::Decode_Language($lang));
+
     
     # get GMT offset
     my ($currentYear, $currentMonth, $currentDay, $currentHour, $currentMinute, $currentSecond) = Today_and_Now(1);
@@ -280,6 +290,9 @@ sub handleCalendar
     	($currentYear, $currentMonth, $currentDay, $currentHour, $currentMinute, $currentSecond) = Add_Delta_YMDHMS($currentYear, $currentMonth, $currentDay, $currentHour, $currentMinute, $currentSecond, 0, 0, 0, $gmtoff, 0, 0);
     }
 	
+    local %months = (  Jan=>1, Feb=>2, Mar=>3, Apr=>4,  May=>5,  Jun=>6,
+		    Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12);
+
     # handle relative dates, too  #cs#
     $y = 0 if $y eq "";  # to avoid warnings in +=
     $y += $currentYear if $y =~ /^[-+]|^0?$/;  # must come before $m !
@@ -288,17 +301,20 @@ sub handleCalendar
         $m += $currentMonth;
         ($m += 12, --$y) while $m <= 0;
         ($m -= 12, ++$y) while $m > 12;
-    }
+    } elsif ( $m=~ /^(\w{3})$/) {
+	$m = $months{$1} if defined $months{$1};
+    } 
     
     my $cal = new HTML::CalendarMonthSimple(month => $m, year => $y, today_year => $currentYear, today_month => $currentMonth, today_date => $currentDay);
 
     # set the day names in the desired language
-    if ($lang) {
+#    if ($lang) {
        $cal->saturday(Date::Calc::Day_of_Week_to_Text(6));
        $cal->sunday(Date::Calc::Day_of_Week_to_Text(7));
        $cal->weekdays(map { Date::Calc::Day_of_Week_to_Text $_ } (1..5));
-    }
+#    }
 
+    
     my $p = "";
     while (($k,$v) = each %options) {
 	$p = "HTML::CalendarMonthSimple::$k";
@@ -335,20 +351,18 @@ sub handleCalendar
     my @days = ();
     my ($descr, $d, $dd, $mm, $yy, $text) =
        ('',     '', '',  '',  '',  ''   );
-    my %months = (  Jan=>1, Feb=>2, Mar=>3, Apr=>4,  May=>5,  Jun=>6,
-		    Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12);
-    my %wdays = ( Sun=>7, Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6);
-    my $days_rx = '[0-9]?[0-9]';
-    my $months_rx = join ('|', keys %months);
-    my $wdays_rx = join ('|', keys %wdays);
-    my $years_rx = '[12][0-9][0-9][0-9]';
-    my $date_rx = "($days_rx)\\s+($months_rx)";
-    my $monthly_rx = "([1-6])\\s+($wdays_rx)";
-    my $full_date_rx = "$date_rx\\s+($years_rx)";
-    my $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
-    my $weekly_rx = "E\\s+($wdays_rx)";
-    my $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
-    my $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
+    local %wdays = ( Sun=>7, Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6);
+    local $days_rx = '[0-9]?[0-9]';
+    local $months_rx = join ('|', keys %months);
+    local $wdays_rx = join ('|', keys %wdays);
+    local $years_rx = '[12][0-9][0-9][0-9]';
+    local $date_rx = "($days_rx)\\s+($months_rx)";
+    local $monthly_rx = "([1-6])\\s+($wdays_rx)";
+    local $full_date_rx = "$date_rx\\s+($years_rx)";
+    local $anniversary_date_rx = "A\\s+$date_rx\\s+($years_rx)";
+    local $weekly_rx = "E\\s+($wdays_rx)";
+    local $periodic_rx = "E([0-9]+)\\s+$full_date_rx";
+    local $numdaymon_rx = "([0-9L])\\s+($wdays_rx)\\s+($months_rx)";
     $text = getTopicText($theTopic, $theWeb, $refText, %options);
 
     # recursively expand includes
@@ -367,39 +381,45 @@ sub handleCalendar
     @days = fetchDays( "$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
     foreach $d (@days) {
         my ($dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-	    	@xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-	    	@xmap = &emptyxmap($y, $m);
-        }
-        my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
-        my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
-        for my $d (1 .. Days_in_Month ($y, $m)) {
-            my $date = Date_to_Days ($y, $m, $d);
-            if ($date1 <= $date && $date <= $date2) {
-                if ($xmap[$d]) {
-                    &highlightDay( $cal, $d, $descr, %options);
-                }
-            }
-        }
+	eval {
+		if (length($xcstr) > 9) {
+			@xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+			@xmap = &emptyxmap($y, $m);
+		}
+		my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
+		my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
+		for my $d (1 .. Days_in_Month ($y, $m)) {
+		    my $date = Date_to_Days ($y, $m, $d);
+		    if ($date1 <= $date && $date <= $date2) {
+			if ($xmap[$d]) {
+			    &highlightDay( $cal, $d, $descr, %options);
+			}
+		    }
+		}
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
     # then collect all intervals without year
     @days = fetchDays( "$date_rx\\s+-\\s+$date_rx", \@bullets );
     foreach $d (@days) {
         my ($dd1, $mm1, $dd2, $mm2, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        my $date1 = Date_to_Days ($y, $months{$mm1}, $dd1);
-        my $date2 = Date_to_Days ($y, $months{$mm2}, $dd2);
-        for my $d (1 .. Days_in_Month ($y, $m)) {
-            my $date = Date_to_Days ($y, $m, $d);
-            if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
-                &highlightDay( $cal, $d, $descr, %options);
-            }
-        }
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		my $date1 = Date_to_Days ($y, $months{$mm1}, $dd1);
+		my $date2 = Date_to_Days ($y, $months{$mm2}, $dd2);
+		for my $d (1 .. Days_in_Month ($y, $m)) {
+		    my $date = Date_to_Days ($y, $m, $d);
+		    if ($date1 <= $date && $date <= $date2 && $xmap[$d]) {
+			&highlightDay( $cal, $d, $descr, %options);
+		    }
+		}
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
     # first collect all dates with year
     @days = fetchDays( "$full_date_rx", \@bullets );
@@ -433,151 +453,202 @@ sub handleCalendar
     @days = fetchDays( "$date_rx", \@bullets );
     foreach $d (@days) {
         ($dd, $mm, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        if ($months{$mm} == $m && $xmap[$dd]) {
-            &highlightDay( $cal, $dd, $descr, %options );
-        }
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		if ($months{$mm} == $m && $xmap[$dd]) {
+		    &highlightDay( $cal, $dd, $descr, %options );
+		}
+	};
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 
     # collect monthly repeaters
     @days = fetchDays( "$monthly_rx", \@bullets );
     foreach $d (@days) {
         ($nn, $dd, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, $nn);
-        if ($hd <= Days_in_Month($y, $m) && $xmap[$hd]) {
-            &highlightDay( $cal, $hd, $descr, %options );
-        }
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		$hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, $nn);
+		if ($hd <= Days_in_Month($y, $m) && $xmap[$hd]) {
+		    &highlightDay( $cal, $hd, $descr, %options );
+		}
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 
     # collect weekly repeaters with start and end dates
     @days = fetchDays( "$weekly_rx\\s+$full_date_rx\\s+-\\s+$full_date_rx", \@bullets );
     foreach $d (@days) {
         ($dd, $dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
-        my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
-        $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
-        do {
-            my $date = Date_to_Days ($y, $m, $hd);
-            if ($xmap[$hd] && $date1 <= $date && $date <= $date2) {
-                &highlightDay( $cal, $hd, $descr, %options );
-            }
-            ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
-        } while ($ny == $y && $nm == $m);
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
+		my $date2 = Date_to_Days ($yy2, $months{$mm2}, $dd2);
+		$hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
+		do {
+		    my $date = Date_to_Days ($y, $m, $hd);
+		    if ($xmap[$hd] && $date1 <= $date && $date <= $date2) {
+			&highlightDay( $cal, $hd, $descr, %options );
+		    }
+		    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
+		    
+		} while ($ny == $y && $nm == $m);
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 
     # collect weekly repeaters with start dates
     @days = fetchDays( "$weekly_rx\\s+$full_date_rx", \@bullets );
     foreach $d (@days) {
         ($dd, $dd1, $mm1, $yy1, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
-        $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
-        do {
-            my $date = Date_to_Days ($y, $m, $hd);
-            if ($xmap[$hd] && $date1 <= $date) {
-                &highlightDay( $cal, $hd, $descr, %options );
-            }
-            ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
-        } while ($ny == $y && $nm == $m);
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		my $date1 = Date_to_Days ($yy1, $months{$mm1}, $dd1);
+		$hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
+		do {
+		    my $date = Date_to_Days ($y, $m, $hd);
+		    if ($xmap[$hd] && $date1 <= $date) {
+			&highlightDay( $cal, $hd, $descr, %options );
+		    }
+		    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
+		} while ($ny == $y && $nm == $m);
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 
     # collect weekly repeaters
     @days = fetchDays( "$weekly_rx", \@bullets );
     foreach $d (@days) {
         ($dd, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
-        do {
-            if ($xmap[$hd]) {
-                &highlightDay( $cal, $hd, $descr, %options );
-            }
-            ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
-        } while ($ny == $y && $nm == $m);
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		$hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dd}, 1);
+		do {
+		    if ($xmap[$hd]) {
+			&highlightDay( $cal, $hd, $descr, %options );
+		    }
+		    ($ny, $nm, $hd) = Add_Delta_Days($y, $m, $hd, 7);
+		} while ($ny == $y && $nm == $m);
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 
     # collect num-day-mon repeaters
     @days = fetchDays( "$numdaymon_rx", \@bullets );
     foreach $d (@days) {
         ($dd, $dy, $mn, $xs, $xcstr, $descr) = split( /\|/, $d);
-        $mn = $months{$mn};
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        if ( $mn == $m ) {
-            if ($dd == "L") {
-                $dd = 6;
-                do {
-                    $dd--;
-                    $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dy}, $dd);
-                } until ($hd);
-            } else {
-                $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dy}, $dd);
-            }
-            if ($xmap[$hd]) {
-                &highlightDay( $cal, $hd, $descr, %options );
-            }
-        }
+	eval {
+		$mn = $months{$mn};
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		if ( $mn == $m ) {
+		    if ($dd == "L") {
+			$dd = 6;
+			do {
+			    $dd--;
+			    $hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dy}, $dd);
+			} until ($hd);
+		    } else {
+			$hd = Nth_Weekday_of_Month_Year($y, $m, $wdays{$dy}, $dd);
+		    }
+		    if ($xmap[$hd]) {
+			&highlightDay( $cal, $hd, $descr, %options );
+		    }
+		}
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
+    }
+
+    # collect periodic repeaters with start and end dates
+    @days = fetchDays( "$periodic_rx\\s+-\\s+$full_date_rx", \@bullets );
+    foreach $d (@days) {
+        my ($p, $dd1, $mm1, $yy1, $dd2, $mm2, $yy2, $xs, $xcstr, $descr) = split( /\|/, $d);
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		$mm1= $months{$mm1};
+		while (  $yy1 < $y  || ( $yy1==$y  &&  $mm1 < $m )) {
+			($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
+		}
+		my $ldate = Date_to_Days ($yy2, $months{$mm2}, $dd2);
+		while ( ($yy1 == $y) && ($mm1 == $m) ) {
+			my $date = Date_to_Days($yy1, $mm1, $dd1);
+			if ($xmap[$dd1] && ($date <=$ldate)) {
+			    &highlightDay( $cal, $dd1, $descr, %options );
+			}
+			($yy1, $mm1, $dd1) = Add_Delta_Days($yy1, $mm1, $dd1, $p);
+		}
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 	
-    # collect periodic repeaters
+    # collect periodic repeaters with start dates
     @days = fetchDays( "$periodic_rx", \@bullets );
     foreach $d (@days) {
         ($p, $dd, $mm, $yy, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        $mm = $months{$mm};
-        if (($mm <= $m && $yy == $y) || ($yy < $y)) {
-            while ($yy < $y || ($yy == $y && $mm < $m)) {
-                ($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
-            }
-            while ($yy == $y && $mm == $m) {
-                if ($xmap[$dd]) {
-                    &highlightDay( $cal, $dd, $descr, %options );
-                }
-                ($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
-            }
-        }
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		$mm = $months{$mm};
+		if (($mm <= $m && $yy == $y) || ($yy < $y)) {
+		    while ($yy < $y || ($yy == $y && $mm < $m)) {
+			($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
+		    }
+		    while ($yy == $y && $mm == $m) {
+			if ($xmap[$dd]) {
+			    &highlightDay( $cal, $dd, $descr, %options );
+			}
+			($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $p);
+		    }
+		}
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 	
     # collect date monthly repeaters
     @days = fetchDays( "($days_rx)", \@bullets );
     foreach $d (@days) {
         ($dd, $xs, $xcstr, $descr) = split( /\|/, $d);
-        if (length($xcstr) > 9) {
-            @xmap = &fetchxmap($xcstr, $y, $m);
-        } else {
-            @xmap = &emptyxmap($y, $m);
-        }
-        if ($dd > 0 && $dd <= Days_in_Month($y, $m) && $xmap[$dd]) {
-            &highlightDay( $cal, $dd, $descr, %options );
-        }
+	eval {
+		if (length($xcstr) > 9) {
+		    @xmap = &fetchxmap($xcstr, $y, $m);
+		} else {
+		    @xmap = &emptyxmap($y, $m);
+		}
+		if ($dd > 0 && $dd <= Days_in_Month($y, $m) && $xmap[$dd]) {
+		    &highlightDay( $cal, $dd, $descr, %options );
+		}
+	};	
+        TWiki::Func::writeWarning( "$pluginName: $@ " ) if $@ && $debug;
     }
 
     return $cal->as_HTML;
@@ -616,7 +687,7 @@ sub highlightDay
 	$format =~ s/\$web/$options{web}/g ;
 	$format =~ s/\$topic/$options{topic}/g ;
 	$format =~ s/\$day/$day/g ;
-	$format =~ s/\$old/$old/g ;
+	$format =~ s/\$old/$old/g if defined $old;
 	$format =~ s/\$installWeb/$installWeb/g ;
 	$format =~ s/\$n/\n/g ;
 
