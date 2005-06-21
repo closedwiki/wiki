@@ -350,12 +350,11 @@ sub DISABLE_afterEditHandler {
    * =$web= - the name of the web in the current CGI query
    * =$meta= - the metadata of the topic being saved, represented by a TWiki::Meta object 
    
-This handler is called just before the save action. For compatibility with older plugins, 
-the text is populated with 'meta-data tags' before this method is called. Any change to this
-embedded metadata is discarded after the method completition. To modify the metadata in a
-permament way, use the $meta object.
+This handler is called just before the save action.
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
+
+*NOTE* since TWiki::Plugins::VERSION = '1.026' the =$text= _no longer contains embedded %META: tags_. Please use the =$meta= object instead.
 
 =cut
 
