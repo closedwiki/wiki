@@ -570,24 +570,10 @@ sub saveTopic {
 
     my $plugins = $this->{session}->{plugins};
 
-#    if( $plugins->haveHandlerFor( 'beforeSaveHandler' )) {
-            # SMELL: Staggeringly inefficient code that adds meta-data for
-            # Plugin callback. 
-            # Used to maintain compatibility with older plugins
-        if( $meta ) {
-            $text = _writeMeta( $meta, $text );
-        }
-
-        $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
-
-        # remove meta data again, and throw any new meta data
-        # away!!!! That's CRAP.
-        #$this->extractMetaData( $web, $topic, \$text );
-
-        # This is a little more efficient... needed to maintain compatibility.
-        # (And to prevent a mess with the metadata)
-        $text =~ s/^%META:([^{]+){(.*)}%\r?\n/''/gem;
-#    }
+    # Note the changed semantics. pre-Dakar TWiki would write meta back into
+    # the topic text, and then extract it again. See
+    # TWiki:Codev.BugBeforeSaveHandlerBroken
+    $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
 
     my $error =
       $this->_noHandlersSave( $user, $web, $topic, $text, $meta,
