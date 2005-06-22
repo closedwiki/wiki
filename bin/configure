@@ -55,6 +55,9 @@ my $perlverRequiredString = '5.005_03';
 my $perlverRecommended = '5.6.1';
 my $perlVerPreferred = 5.006;	# 5.6 or higher has [:lower:] etc
 my $ActivePerlRecommendedBuild = 631;	# Fixes PERL5SHELL bugs
+my $GUESSED = <<'HERE';
+I guessed this setting. You are advised to confirm this setting (and any other guessed settings) and 'Save' before changing any other settings.
+HERE
 
 # CGI.pm version, on some platforms - actually need CGI 2.93 for mod_perl
 # 2.0 and CGI 2.90 for Cygwin Perl 5.8.0.  See 
@@ -210,7 +213,7 @@ print CGI::header('text/html'),
             color: green;
         }
         .warn {
-			color:orange;
+			color:#FF8800;;
         }
         .error {
 			color:red;
@@ -232,7 +235,28 @@ print CGI::header('text/html'),
 HERE
             );
 
+print CGI::h1('TWiki Configuration');
+
+# Check if LocalSite.cfg is writable
+my $update_enabled = 0;
+my $path_to_localsite_cfg = findFileOnPath('LocalSite.cfg');
+unless( $path_to_localsite_cfg ) {
+    $path_to_localsite_cfg = findFileOnPath('TWiki.cfg') || '';
+    $path_to_localsite_cfg =~ s/TWiki\.cfg/LocalSite.cfg/;
+}
+my $errs;
+if( !$path_to_localsite_cfg ||
+    ( $errs = _checkCanCreateFile( $path_to_localsite_cfg ))) {
+    $errs ||= 'Cannot locate LocalSite.cfg';
+    print CGI::p(WARN('Save is disabled; '.$errs));
+} else {
+    $update_enabled = 1;
+}
+
 if( $update ) {
+    unless( $update_enabled ) {
+        exit;
+    }
     print CGI::h1('Updating configuration');
     my $changed = 0;
     my %updates;
@@ -244,10 +268,10 @@ if( $update ) {
         my $type = $query->param('TYPEOF:'.$param);
         my $def;
         eval "\$def = defined( $var );";
-        if( $def ) {
-            eval "\$def = $var;";
+        if( $type ) {
+            eval "\$def = $var;" if $def;
             if( $val eq $def) {
-                print CGI::br($var.'='.$val.' is unchanged ('.$def.')');
+                #print CGI::br($var.'='.$val.' is unchanged ('.$def.')');
                 next;
             }
             print CGI::h2($var),
@@ -258,7 +282,7 @@ if( $update ) {
         }
     }
     print CGI::p();
-    setConfig(\%updates);
+    setConfig($path_to_localsite_cfg, \%updates);
     print $changed.' configuration items changed. ';
     print CGI::a({ href=>$url.'?t='.time() }, 'Click here to return to configuration');
     exit 1;
@@ -269,9 +293,8 @@ if( $update ) {
 # use diagnostics;	# Debug only
 
 if ($brokenTWikiCfgError) {
-    print CGI::h3("Configuration error");
-    print CGI::h2('WARNING:');
-    print 'TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.<p />';
+    print CGI::h2('WARNING:'),
+      'TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.<p />';
     print $brokenTWikiCfgError;
 
     # EARLY EXIT
@@ -280,11 +303,11 @@ if ($brokenTWikiCfgError) {
 }
 
 if ($brokenLocalSiteError) {
-    print CGI::h3('Configuration error'),
-      CGI::h2('WARNING:'),
-          'LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.<p />',
-            $brokenLocalSiteError, CGI::end_html();
-    exit;
+    print CGI::h2('WARNING:'),
+      WARN('LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) was generated.',
+           CGI::pre($brokenLocalSiteError),
+           'The @INC path is ',CGI::pre(join(":", @INC)),
+           'This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a href="#GeneralPathSettings">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.<p />');
 }
 
 my %requiredMods =
@@ -322,12 +345,11 @@ require CGI::Carp;
 import CGI::Carp qw( fatalsToBrowser );
 
 print  <<HERE;
-<h1> TWiki Configuration </h1>
 This page is used to set up the configuration options for TWiki. Settings
 marked <span class='mandatory'>like this</span> are required (they must
-have a value). Fill in the settings, and then select 'Update'.
-TWiki will be reconfigured and you will be returned to this page. Any
-<span class='error'>errors</span> in your configuration will be highlighted. <span class='warn'>Warnings</span> are non-fatal but are often an indicator of something that is wrong.
+have a value). Fill in the settings, and then select 'Save'.
+TWiki will be reconfigured and you can return to this page. Any
+remaining <span class='error'>errors</span> in your configuration will then be highlighted. <span class='warn'>Warnings</span> are non-fatal, but are often a good indicator that something that is wrong.
 <p />
 If you are installing TWiki for the first time, and you just want to get up
 and running, the only section you need to worry about below is
@@ -345,8 +367,10 @@ If your TWiki site is working, the front page should be
 <a href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>
 HERE
 
-print CGI::start_form({ action=>'configure',method=>"post" }),
-  CGI::start_table();
+if( $update_enabled ) {
+    print CGI::start_form({ action=>'configure',method=>"post" });
+}
+print CGI::start_table(),"\n";
 
 # use time to make sure we never allow cacheing
 print CGI::hidden(-name=>'update',-value=>time());
@@ -489,18 +513,18 @@ $CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
 $TWiki::cfg{DetailedOS} ||= $TWiki::cfg{DetailedOS};
 
 # Check that the TWiki.pm module can be found
-my $mod = 'TWiki';
-eval "require $mod";
+eval "require TWiki";
 my $twikiFound = 0;
 my $mess = '';
 if ($@) {
-    $mess = WARN("'$mod.pm' not found - check path to <code>twiki/lib</code>",
-         "and edit <code>twiki/bin/LocalLib.cfg</code> if necessary");
+    $mess = ERROR("'TWiki.pm' not be loaded. Error was",
+                  CGI::pre($@),
+                  'Check path to <code>twiki/lib</code> and check that LocalSite.cfg is present and readable');
 } else {
     $twikiFound = 1;
     my $mod_version = eval '$TWiki::wikiversion || $TWiki::VERSION';
     $mod_version ||= 'unknown';
-    $mess = "OK, $mod.pm found (Version: <strong>$mod_version</strong>)";
+    $mess = 'OK, TWiki.pm found (Version: <strong>'.$mod_version.'</strong>)';
 }
 print ROW('TWiki module in @INC path', $mess);
 
@@ -549,7 +573,7 @@ foreach my $mod (keys %requiredMods) {
 # Check that each of the optional Perl modules can be loaded, and
 # print its version number.
 print H3("Optional Perl modules");
-foreach $mod (keys %optionalMods) {
+foreach my $mod (keys %optionalMods) {
     eval "use $mod";
     if ($@) {
         $n = WARN('not installed. May be required for ',
@@ -757,8 +781,10 @@ foreach (split(/\r?\n/, $text)) {
 print CGI::end_table();
 print CGI::span({class=>'error'},$errors.' errors') if $errors;
 print CGI::span({class=>'warn'},$warnings.' warnings') if $warnings;
-print CGI::p(CGI::submit(-onclick=>'verify_mandatory()', -value=>'Update')),
-  CGI::end_form();
+
+if( $update_enabled) {
+    print CGI::p(CGI::submit(-value=>'Save')),CGI::end_form();
+}
 
 print CGI::end_html();
 
@@ -910,7 +936,7 @@ sub _checkDefaultUrlHost {
         my $protocol = $url || 'http://'.$ENV{HTTP_HOST};
         $protocol =~ s(^(.*?://.*?)/.*$)($1);
         $TWiki::cfg{DefaultUrlHost} = $protocol;
-        return WARN('I guessed this setting');
+        return WARN($GUESSED);
     }
 }
 
@@ -941,7 +967,7 @@ HERE
                        );
         };
         $TWiki::cfg{ScriptUrlPath} = $guess;
-        return WARN('I guessed this setting');
+        return WARN($GUESSED);
     }
 }
 
@@ -950,7 +976,7 @@ sub _checkPubUrlPath {
         my $guess = $TWiki::cfg{ScriptUrlPath};
         $guess =~ s/bin$/pub/;
         $TWiki::cfg{PubUrlPath} = $guess;
-        return WARN('I guessed this setting');
+        return WARN($GUESSED);
     }
     return 'This is not set correctly if the link below is broken:<br />'.
       '<a href="'.$TWiki::cfg{PubUrlPath}.'">click here</a>';
@@ -966,7 +992,7 @@ sub _findMajorDir {
     $guess =~ s(bin/*configure$)();
     $guess .= $dir;
     $TWiki::cfg{$cfg} = $guess;
-    return WARN('I guessed this setting');
+    return WARN($GUESSED);
 }
 
 sub _checkPubDir {
@@ -1323,13 +1349,13 @@ sub NOTE {
 # a warning
 sub WARN {
     $warnings++;
-    return CGI::p({class=>'warn'}, CGI::strong('Warning: ').join("\n",@_));
+    return CGI::div({class=>'warn'}, CGI::strong('Warning: ').join("\n",@_));
 }
 
 # an error
 sub ERROR {
     $errors++;
-    return CGI::p({class=>'error'}, CGI::strong('Error: ').join("\n",@_));
+    return CGI::div({class=>'error'}, CGI::strong('Error: ').join("\n",@_));
 }
 
 sub findFileOnPath {
@@ -1345,26 +1371,21 @@ sub findFileOnPath {
 }
 
 sub setConfig {
-    my $updates = shift;
-    my $lsc = findFileOnPath('LocalSite.cfg');
-    unless( $lsc ) {
-        $lsc = findFileOnPath('TWiki.cfg');
-        die "Can't find key twiki components" unless $lsc;
-        $lsc =~ s/TWiki\.cfg/LocalSite.cfg/;
+    my ($path_to_localsite_cfg, $updates) = @_;
+    my $txt = '';
+    if( open(F, "<$path_to_localsite_cfg")) {
+        undef $/;
+        $txt = <F>;
+        close(F);
     }
-    open(F, "<$lsc") ||
-      die "Failed to open $lsc for read";
-    undef $/;
-    my $txt = <F>;
-    close(F);
 
     foreach my $config ( keys %$updates ) {
         # kill the old settings if any are there
         $txt =~ s/\$TWiki::cfg\{$config\}\s*=.*?;//s;
     }
 
-    open(F, ">$lsc") ||
-      die "Failed to open $lsc for write";
+    open(F, ">$path_to_localsite_cfg") ||
+      die "Failed to open $path_to_localsite_cfg for write";
     print F $txt if $txt;
     foreach my $config ( keys %$updates ) {
         print F '$TWiki::cfg{',$config,'} = ',$updates->{$config},";\n";
