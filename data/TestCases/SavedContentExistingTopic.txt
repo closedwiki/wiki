@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="CharlesBrown" date="1118862504" format="1.1" version="1.4"}%
+This topic is used by TestCaseSaveContentWithoutEdit
+
+Rubaduba form field should say %GMTIME% (after running test).
+
+The other form fields should be unchanged. i.e.:
+   * Squeegle =  Hugh Pugh Barney McGrew
+   * Smomble = unchecked
+   * Slash Slash Escape = One
+
+
+
+%META:FORM{name="ThisForm"}%
+%META:FIELD{name="Squeegle" attributes="" title="Squeegle" value="Hugh Pugh Barney McGrew"}%
+%META:FIELD{name="Smomble" attributes="" title="Smomble" value=""}%
+%META:FIELD{name="Rubaduba" attributes="" title="Rubaduba" value=""}%
+%META:FIELD{name="SlashSlashEscape" attributes="" title="Slash Slash Escape" value="One"}%
+
