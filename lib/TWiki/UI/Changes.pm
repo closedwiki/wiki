@@ -53,8 +53,6 @@ sub changes {
 
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
 
-    $text =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
-
     my $changeData = $session->{store}->readMetaData( $webName, 'changes' );
     my @changes = split( /\r?\n/, $changeData );
     unless( $query->param( 'minor' )) {
@@ -103,6 +101,8 @@ sub changes {
     }
 
     $page .= $after;
+    # remove META tags rather than rendering them
+    $page =~ s/\%META{.*?}\%//go;
     $page = $session->handleCommonTags( $page, $webName, $topic );
     $page = $session->{renderer}->getRenderedVersion($page, $webName, $topic );
 
