@@ -59,7 +59,7 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 # configure should be restricted to a small number of users
 <FilesMatch "configure.*">
        require !ADMIN_users!
-</Files>
+</FilesMatch>
 
 # These are scripts that might change content. The regular expression uses ".*"
 # at the end so it matches the scripts even if you had to add a .cgi or .pl
@@ -71,4 +71,4 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 
 <FilesMatch "*">
        allow from all
-</Files>
+</FilesMatch>
