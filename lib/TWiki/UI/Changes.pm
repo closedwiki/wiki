@@ -51,11 +51,9 @@ sub changes {
 
     my $text = $session->{templates}->readTemplate( 'changes', $skin );
 
-    $text = $session->handleCommonTags( $text, $webName, $topic );
-    $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topic );
-    $text =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
-
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
+
+    $text =~ s/\%META{.*?}\%/WTFISTHISANDWHY?????/go;  # remove %META{'parent'}%
 
     my $changeData = $session->{store}->readMetaData( $webName, 'changes' );
     my @changes = split( /\r?\n/, $changeData );
@@ -85,7 +83,8 @@ sub changes {
             if( $rev == 1 ) {
                 $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
             }
-            $thisChange =~ s/%TIME%/$time/go;
+$thisChange =~ s/Snot/WankBits/g;
+            $thisChange =~ s/%TIME%/$time/g;
             $thisChange =~ s/%REVISION%/$srev/go;
             $thisChange = $session->{renderer}->getRenderedVersion
               ( $thisChange, $webName, $changedTopic );
@@ -95,7 +94,6 @@ sub changes {
                                                       $webName, $changedTopic,
                                                       $rev - 1, $rev, 1 );
             $thisChange =~ s/%TEXTHEAD%/$summary/go;
-
             $page .= $thisChange;
             $done{$changedTopic} = 1;
         }
@@ -104,7 +102,10 @@ sub changes {
         # write log entry
         $session->writeLog( 'changes', $webName, '' );
     }
+
     $page .= $after;
+    $page = $session->handleCommonTags( $page, $webName, $topic );
+    $page = $session->{renderer}->getRenderedVersion($page, $webName, $topic );
 
     $session->writeCompletePage( $page );
 }
