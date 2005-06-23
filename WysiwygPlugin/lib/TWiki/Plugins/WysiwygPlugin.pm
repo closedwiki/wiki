@@ -39,7 +39,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
 
-$VERSION = '0.11';
+$VERSION = '0.12';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -141,7 +141,8 @@ sub getViewUrl {
 }
 
 # callback used in TML generation to parse a URL and see if it
-# can be recognised as an internal wiki link.
+# can be recognised as an internal wiki link. If the url is in
+# the current web, only return the topic
 sub parseWikiUrl {
     my $url = shift;
 
@@ -153,8 +154,10 @@ sub parseWikiUrl {
     return undef unless substr($url, 0, length($aurl)) eq $aurl;
     $url = substr($url,length($aurl),length($url));
     return undef unless $url =~ /^(\w+)[.\/](\w+)$/;
+    my( $web, $topic) = ($1, $2);
 
-    return $1.'.'.$2;
+    return $topic if( $web eq $currentWeb);
+    return $web.'.'.$topic;
 }
 
 1;

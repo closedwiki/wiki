@@ -202,6 +202,10 @@ function initKupu(iframe) {
 
     // Table drawer
     var tabletool = new TableTool();
+    // Override default additions
+    tabletool.createContextMenuElements = function(s, e) {
+      return new Array();
+    }
     kupu.registerTool('tabletool', tabletool);
 
     var tabledrawerbutton = new KupuButton('kupu-tabledrawer-button',

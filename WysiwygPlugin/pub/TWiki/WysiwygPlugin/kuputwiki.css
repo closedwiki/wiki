@@ -20,6 +20,12 @@ div.kupu-fulleditor .kupu-editorframe {
   margin-right: 0em;
 }
 
+div.kupu-drawer {
+  left: 100%;
+  margin-left: -520px;
+  
+}
+
 /* toolbar buttons */
 .twiki-icons-button { background: url("smiley.png"); }
 .twiki-new-attachment { background: url("attach.png"); }

@@ -19,7 +19,12 @@
 
 ---+ package WC
 
-Constants, used by Node and Leaf packages
+Base class of Node and Leaf
+
+_generate
+_cleanAttrs
+addChild
+stringify
 
 =cut
 
@@ -58,11 +63,12 @@ satisfies the format requirements.
 
 =cut
 
-use vars qw( $CHECKn $CHECKs $NBSP $NBBR );
-$CHECKn = "\001";
-$CHECKs = "\002";
-$NBSP   = "\003";
-$NBBR   = "\004";
+use vars qw( $CHECKn $CHECKw $CHECKs $NBSP $NBBR );
+$CHECKn = "\001"; # require adjacent newline (\n or $NBBR)
+$CHECKs = "\002"; # require adjacent space character (' ' or $NBSP)
+$CHECKw = "\003"; # require adjacent whitespace (\s|$NBBR|$NBSP)
+$NBSP   = "\004"; # unbreakable space
+$NBBR   = "\005"; # unbreakable newline
 
 =pod
 
@@ -81,5 +87,38 @@ use vars qw( $STARTWW $ENDWW $PROTOCOL );
 $STARTWW = qr/^|(?<=[ \t\n\(\!])/om;
 $ENDWW = qr/$|(?=[ \t\n\,\.\;\:\!\?\)])/om;
 $PROTOCOL = qr/^(file|ftp|gopher|http|https|irc|news|nntp|telnet|mailto):/;
+
+# pure virtual
+sub generate {
+    die "coding error";
+}
+
+# pure virtual
+sub addChild {
+    die "coding error";
+}
+
+sub cleanNode {
+}
+
+sub cleanParseTree {
+    my $this = shift;
+
+    $this->cleanNode();
+
+    # thread siblings within a node
+    my $prev;
+    foreach my $kid (@{$this->{children}}) {
+        $kid->{parent} = $this;
+        $kid->{prev} = $prev;
+        $prev->{next} = $kid if $prev;
+        $kid->cleanParseTree($this);
+        $prev = $kid;
+    }
+}
+
+sub stringify {
+    return '';
+}
 
 1;

@@ -30,7 +30,9 @@ See also TWiki::Plugins::WysiwygPlugin::TML2HTML::Node
 package TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf;
 
 use strict;
+
 use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
+@TWiki::Plugins::WysiwygPlugin::HTML2TML::Leaf::ISA = qw( WC );
 
 sub new {
     my( $class, $text ) = @_;
@@ -42,7 +44,7 @@ sub new {
     return bless( $this, $class );
 }
 
-sub _generate {
+sub generate {
     my( $this, $options ) = @_;
     my $t = $this->{text};
     $t =~ s/\n/$WC::CHECKn/g;
@@ -52,10 +54,6 @@ sub _generate {
         $t =~ s/\[/<nop>[/g;
     }
     return (0, $t);
-}
-
-sub addChild {
-    die "Illegal";
 }
 
 sub stringify {

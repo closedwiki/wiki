@@ -37,6 +37,8 @@ package TWiki::Plugins::WysiwygPlugin::HTML2TML::Node;
 use strict;
 
 use TWiki::Plugins::WysiwygPlugin::HTML2TML::WC;
+@TWiki::Plugins::WysiwygPlugin::HTML2TML::Node::ISA = qw( WC );
+
 use HTML::Entities;
 
 =pod
@@ -104,8 +106,8 @@ sub addChild {
 sub _trim {
     my $s = shift;
 
-    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKs]+//o;
-    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKs]+$//o;
+    $s =~ s/^[ \t\n$WC::CHECKn$WC::CHECKw]+//o;
+    $s =~ s/[ \t\n$WC::CHECKn$WC::CHECKw]+$//o;
     return $s;
 }
 
@@ -123,41 +125,51 @@ nodes.
 
 sub rootGenerate {
     my $this = shift;
-    my( $f, $tml ) = $this->_generate(0);
 
-   # return $tml;
+    $this->cleanParseTree();
 
-    # ignore $WC::CHECKn if there is a \n next to it, otherwise insert a
-    # \n.
-    $tml =~ s/^($WC::CHECKn)+//gom;
-    $tml =~ s/($WC::CHECKn)+$//gom;
+    my( $f, $tml ) = $this->generate(0);
 
-    $tml =~ s/(?<=$WC::NBBR)($WC::CHECKn)+//gom;
-    $tml =~ s/($WC::CHECKn)+(?=$WC::NBBR)//gom;
+    # isolate whitespace checks and convert to $NBSP
+    $tml =~ s/$WC::CHECKw$WC::CHECKw+/$WC::CHECKw/go;
+    $tml =~ s/([$WC::CHECKn$WC::CHECKs$WC::NBSP$WC::NBBR\s])$WC::CHECKw/$1/go;
+    $tml =~ s/$WC::CHECKw([$WC::CHECKn$WC::CHECKs$WC::NBSP$WC::NBBR\s])/$1/go;
+    $tml =~ s/$WC::CHECKw/$WC::NBSP/go;
 
+    # isolate $CHECKs and convert to $NBSP
+    $tml =~ s/$WC::CHECKs$WC::CHECKs+/$WC::CHECKs/go;
+    $tml =~ s/([ $WC::NBSP])$WC::CHECKs/$1/go;
+    $tml =~ s/$WC::CHECKs( |$WC::NBSP)/$1/go;
+    $tml =~ s/$WC::CHECKs/$WC::NBSP/go;
+
+    # isolate $CHECKn and convert to $NBBR
+    $tml =~ s/$WC::CHECKn$WC::CHECKn+/$WC::CHECKn/go;
+    $tml =~ s/^$WC::CHECKn//gom;
+    $tml =~ s/$WC::CHECKn$//gom;
+    $tml =~ s/(?<=$WC::NBBR)$WC::CHECKn//gom;
+    $tml =~ s/$WC::CHECKn(?=$WC::NBBR)//gom;
     $tml =~ s/($WC::CHECKn)+/$WC::NBBR/gos;
 
+    # isolate $NBBR and convert to \n
     $tml =~ s/$WC::NBBR\n+/$WC::NBBR/gs;
     $tml =~ s/\n+$WC::NBBR\n+/$WC::NBBR/gs;
     $tml =~ s/\n\n+/\n/gs;
-
     $tml =~ s/$WC::NBBR/\n/go;
 
-    # ignore $WC::CHECKs if there is a \s next to it, otherwise insert a
-    # space.
-    $tml =~ s/(?<=$WC::STARTWW)($WC::CHECKs)+//gos;
-    $tml =~ s/($WC::CHECKs)+(?=$WC::ENDWW)//gos;
-    $tml =~ s/(?<=$WC::NBSP)($WC::CHECKs)+//gos;
-    $tml =~ s/($WC::CHECKs)+(?=$WC::NBSP)//gos;
-    $tml =~ s/($WC::CHECKs)+/ /gos;
-
+    # isolate $NBSP and convert to space
+    $tml =~ s/ +$WC::NBSP/$WC::NBSP/go;
+    $tml =~ s/$WC::NBSP +/$WC::NBSP/go;
     $tml =~ s/$WC::NBSP/ /go;
+
+    # Top and tail, and terminate with a single newline
+    $tml =~ s/^\s*//s;
+    $tml =~ s/\s*$/\n/s;
 
     return $tml;
 }
 
 # the actual generate function. rootGenerate is only applied to the root node.
-sub _generate {
+sub generate {
     my( $this, $options ) = @_;
     my $fn;
     my $flags;
@@ -199,7 +211,7 @@ sub _flatKids {
     my $flags = 0;
 
     foreach my $kid ( @{$this->{children}} ) {
-        my( $f, $t ) = $kid->_generate( $options );
+        my( $f, $t ) = $kid->generate( $options );
         if( $text && $text =~ /\w$/ && $t =~ /^\w/ ) {
             $text .= ' ';
         }
@@ -273,7 +285,7 @@ sub _convertList {
             # DT, set the bullet type for subsequent DT
             $basebullet = $kid->_flatKids( $WC::NO_BLOCK_TML ).':';
             $basebullet =~ s/$WC::CHECKn/ /g;
-            if( $basebullet =~ /[$WC::CHECKs ]/ ) {
+            if( $basebullet =~ /[$WC::CHECKw ]/ ) {
                 $basebullet = "\$ $basebullet";
             }
             $pendingDT = 1; # remember in case there is no DD
@@ -289,12 +301,12 @@ sub _convertList {
             if( $grandkid->{tag} =~ /^[dou]l$/i ) {
                 $t = $grandkid->_convertList( $indent."\t" );
             } else {
-                ( $f, $t ) = $grandkid->_generate( $WC::NO_BLOCK_TML );
+                ( $f, $t ) = $grandkid->generate( $WC::NO_BLOCK_TML );
                 $t =~ s/$WC::CHECKn/ /g;
             }
             $spawn .= $t;
         }
-        $text .= $WC::CHECKn.$indent.$bullet.$WC::NBSP.$spawn.$WC::CHECKn;
+        $text .= $WC::CHECKn.$indent.$bullet.$WC::CHECKs.$spawn.$WC::CHECKn;
         $pendingDT = 0;
         $basebullet = '' if $isdl;
     }
@@ -343,7 +355,7 @@ sub _isConvertableListItem {
                 return 0;
             }
         } else {
-            ( $flags, $text ) = $kid->_generate( $options );
+            ( $flags, $text ) = $kid->generate( $options );
             if( $flags & $WC::BLOCK_TML ) {
                 return 0;
             }
@@ -419,7 +431,7 @@ sub _H {
     my( $flags, $contents ) = $this->_flatKids( $options );
     return ( 0, undef ) if( $flags & $WC::BLOCK_TML );
     return ( $flags | $WC::BLOCK_TML,
-             $WC::CHECKn.'---'.('+' x $depth).$WC::CHECKs.$contents.$WC::CHECKn );
+             $WC::CHECKn.'---'.('+' x $depth).$WC::CHECKw.$contents.$WC::CHECKn );
 }
 
 # generate an emphasis
@@ -429,7 +441,25 @@ sub _emphasis {
     return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
     $contents = _trim( $contents );
     return (0, '') unless( $contents =~ /\S/ );
-    return ( $flags, $WC::CHECKs.$ch.$contents.$ch.$WC::CHECKs );
+    return ( $flags, $WC::CHECKw.$ch.$contents.$ch.$WC::CHECKw );
+}
+
+# Performs initial cleanup of the parse tree before generation. Walks the
+# tree, making parent links and removing attributes that don't add value.
+# This simplifies determining
+# whether a node is to be kept, or flattened out.
+# Attributes that don't add value are:
+# lang
+# class with an empty value
+sub cleanNode {
+    my $this = shift;
+    if( defined( $this->{attrs}->{lang} )) {
+        delete $this->{attrs}->{lang};
+    }
+    if( defined( $this->{attrs}->{class} ) &&
+        $this->{attrs}->{class} !~ /\S/ ) {
+        delete $this->{attrs}->{class};
+    }
 }
 
 ######################################################
@@ -496,8 +526,22 @@ sub _handleCODE {
 sub _handleBR {
     my( $this, $options ) = @_;
     my($f, $kids ) = $this->_flatKids( $options );
-    return ($f, '<br />'.$kids) if( $options & $WC::NO_BLOCK_TML );
-    return ($f | $WC::BLOCK_TML, $WC::NBBR.$kids);
+    if( ( $options & $WC::NO_BLOCK_TML ) ||
+        $this->{prev} && !$this->{prev}->{tag} &&
+        $this->{prev}->{text} =~ /\S/ &&
+        $this->{next} && !$this->{next}->{tag} &&
+        $this->{prev}->{text} =~ /\S/ ) {
+        my $reason = '';
+#        if ( $options & $WC::NO_BLOCK_TML ) {
+#            $reason = 'A';
+#        } else {
+#            $reason = 'B'.$this->{prev}->{text}.';'.$this->{next}->{text};
+#        }
+        # Special case; if the immediately siblings are text
+        # nodes, then we have to use a <br>
+        return (0, '<br '.$reason.'/>'.$kids);
+    }
+    return ($f, $WC::NBBR.$kids);
 }
 
 sub _handleHR {
@@ -526,28 +570,23 @@ sub _handleA {
 
         if( $topic ) {
             my $cleantext = $text;
-            $cleantext =~ s/<nop>//g;
-            # Use the topic if it has more info than the text (the web)
-            $cleantext = $topic if( $topic =~ /^(\w)+\.$cleantext$/ );
-
-            # the href targets a wiki page
-            if( $cleantext eq $topic ||
-                $cleantext =~ /^(\w+\.|<nop>)?$topic$/ ) {
+            $cleantext =~ s/(<nop>)//g;
+            # if the clean text is the known topic we can ignore it
+            if( $cleantext eq $topic || $topic =~ /\.$cleantext$/ ) {
                 # wikiword or web.wikiword
-                # don't need $nop because it's already there
-                return (0, $WC::CHECKs.$text.$WC::CHECKs);
+                return (0, $WC::CHECKw.$nop.$topic.$WC::CHECKw);
             } else {
                 # text and link differ
-                return (0, $WC::CHECKs.'['.$nop.'['.$topic.']['.$text.
-                        ']]'.$WC::CHECKs );
+                return (0, $WC::CHECKw.'['.$nop.'['.$topic.']['.$text.
+                        ']]'.$WC::CHECKw );
             }
         } elsif ( $href =~ $WC::PROTOCOL ) {
             # normal link
             if( $text eq $href ) {
-                return (0, $WC::CHECKs.$nop.$text.$WC::CHECKs);
+                return (0, $WC::CHECKw.$nop.$text.$WC::CHECKw);
             } else {
-                return (0, $WC::CHECKs.'['.$nop.'['.$href.']['.$text.
-                        ']]'.$WC::CHECKs );
+                return (0, $WC::CHECKw.'['.$nop.'['.$href.']['.$text.
+                        ']]'.$WC::CHECKw );
             }
         }
         return (0, undef);
@@ -564,18 +603,20 @@ sub _handleA {
 
 sub _handleSPAN {
     my( $this, $options ) = @_;
-    if( $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
+    if( defined( $this->{attrs}->{class} ) &&
+        $this->{attrs}->{class} =~ /\bTMLvariable\b/ ) {
         my( $flags, $text ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
         my $var = _trim($text);
         my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
         # don't create unnamed variables
         $var = '%'.$nop.$var.'%' if( $var );
         return (0, $var);
-    } elsif ($this->{attrs}->{class} =~ /\bTMLnop\b/) {
+    } elsif (defined( $this->{attrs}->{class} ) &&
+             $this->{attrs}->{class} =~ /\bTMLnop\b/) {
         return $this->_flatKids( $options | $WC::NOP_ALL );
-    } elsif  ($this->{attrs}->{class} =~ /\bTMLcode\b/) {
-        $this->{tag} = 'CODE';
-        return $this->_generate( $options );
+    } elsif( !scalar( %{$this->{attrs}} )) {
+        # ignore the span if there are no attrs
+        return $this->_flatKids( $options );
     }
     return (0, undef);
 }
