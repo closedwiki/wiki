@@ -51,10 +51,10 @@ AuthType Basic
 # match the $scriptUrlPath in TWiki.cfg
 ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=oopsauth
 
-<Files ~ "[^/]*\.html$">
+<FilesMatch "[^/]*\.html$">
        SetHandler blabla
        allow from all
-</Files>
+</FilesMatch>
 
 # configure should be restricted to a small number of users
 <FilesMatch "configure.*">
@@ -67,7 +67,7 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 # regular expression below as appropriate.
 <FilesMatch "(attach|edit|manage|rename|save|upload|mail|.*passwd|.*auth).*">
        require valid-user
-</Files>
+</FilesMatch>
 
 <FilesMatch "*">
        allow from all
