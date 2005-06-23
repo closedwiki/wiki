@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1119259107" format="1.0" version="1.12"}%
+%META:TOPICINFO{author="rohdedan" date="1119524891" format="1.0" version="1.15"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -51,7 +51,6 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 
 #AttriButes
 ---++ Attributes
-*Note:* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
 | *Attribute* | *Comment* | *Default / Example* |
 | adayofficon |a day off icon | adayofficon=":ok:" |
@@ -59,9 +58,10 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 | cellpadding | table cell padding | cellpadding="1" |
 | cellspacing | tabel cell spacing | cellspacing="0" |
 | days | number of days to show |days="30" |
+| headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
 | holidayicon | holiday icon | holidayicon="8-)" |
 | lang | language | lang="English" |
-| month | set a month (e.g. Jan, Feb ...) or a month offset (e.g. +1, -2,...) *Note:* If you use this month attribute the days attribute will be ignored (days will be set to the duration of the month). | month="0" |
+| month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +1, -2,...) *Note:* If you use this month attribute the days attribute will be ignored (days will be set to the duration of the month). | month="+1" |
 | name | header content of the first cell header |name="Name" |
 | notatworkicon | not at work icon (only used if you type a location) | notatworkicon=":-I" |
 | nwidth | cell width of the first column | nwidth="120px" |
@@ -70,6 +70,7 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 | startdate | a start date (e.g. '1 Oct 2005') or a day offset (e.g. '10', '+30' or '-30') | startdate="+0" |
 | tablebgcolor | table background color | tablebgcolor="white" |
 | tablecaption | table caption | tablecaption="&amp;nbsp;" |
+| tablecaptionalign | table caption alignment (top, bottom, left, right) | tablecaptionalign="top" |
 | tableheadercolor | color of the table header | tableheadercolor="%<nop>WEBBGCOLOR%" |
 | tcwidth | width of the icon table cells | tcwidth="33px" |
 | todaybgcolor | background color for today cells (usefull if you use startdate attribute) | todaybgcolor="white" |
@@ -78,6 +79,10 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 | weekendbgcolor | background color of weekend header and data table cells | weekendbgcolor="%<nop>WEBBGCOLOR%" |
 | workicon | in work icon | workicon="&amp;nbsp;" |
 | year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +1, -1, ...) | year="0" |
+
+*Hints:* 
+	* You can use TWiki.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon
+	* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
 ---++ Example
 
@@ -133,9 +138,9 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.008 (beta) |
+|  Plugin Version: | v1.008 (23 Jun 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.008 (beta): | new attributes (nwidth,tcwidth,removeatwork); performance fixes (TWiki:Main.DanielRohde) |
+|  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes (TWiki:Main.DanielRohde); allowed digits in month attribute |
 |  v1.007 (17 Jun 2005):  | personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug (TWiki:Main.DanielRohde) |
 |  v1.006 (16 Jun 2005): | added new features (location support; today(fg/bg)color) (TWiki:Main.DanielRohde) |
 |  v1.005 (16 Jun 2005): | added new features (start date support; weekendbgcolor); fixed documentation bugs; (TWiki:Main.DanielRohde) |
