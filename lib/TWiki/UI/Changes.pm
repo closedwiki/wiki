@@ -53,7 +53,7 @@ sub changes {
 
     my( $page, $eachChange, $after) = split( /%REPEAT%/, $text );
 
-    $text =~ s/\%META{.*?}\%/WTFISTHISANDWHY?????/go;  # remove %META{'parent'}%
+    $text =~ s/\%META{.*?}\%//go;  # remove %META{'parent'}%
 
     my $changeData = $session->{store}->readMetaData( $webName, 'changes' );
     my @changes = split( /\r?\n/, $changeData );
@@ -83,7 +83,6 @@ sub changes {
             if( $rev == 1 ) {
                 $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
             }
-$thisChange =~ s/Snot/WankBits/g;
             $thisChange =~ s/%TIME%/$time/g;
             $thisChange =~ s/%REVISION%/$srev/go;
             $thisChange = $session->{renderer}->getRenderedVersion
