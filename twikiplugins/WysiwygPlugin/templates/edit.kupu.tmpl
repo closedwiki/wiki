@@ -14,7 +14,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
  <head>
   <title>Kupu Edit %WEB%.%TOPIC%</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%"/>
   <style>
    @import url("%TWIKILAYOUTURL%");
    @import url("%TWIKISTYLEURL%");
@@ -80,7 +80,7 @@
    <div class="kupu-tb" id="toolbar">
     <span id="kupu-tb-buttons">
      <span class="kupu-tb-buttongroup" style="float: right" id="kupu-logo">
-      <button type="button" class="kupu-logo" title="Kupu 1.2.1" accesskey="k" onclick="window.open('http://kupu.oscom.org');"></button>
+      <button type="button" class="kupu-logo" title="Help" accesskey="k" onclick="window.open('%SCRIPTURL%/view%SCRIPTSUFFIX%/%WYSIWYGPLUGIN_HELPPAGE%');"></button>
      </span>
      <span class="kupu-tb-buttongroup">
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-save" id="kupu-save-button" title="save: alt-s" i18n:attributes="title" accesskey="s"></button>

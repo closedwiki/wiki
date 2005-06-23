@@ -5,7 +5,7 @@ A twiki table with a colspan:
 |  A  |B  |  C|
 |Et 1|Et 2|Et 3|
 |  La ligne de 3 cases.  |||
-A no twiki table (rowspan>1):
+A no twiki table (rowspan>1):<br />
 <table border="1">
  <tr>
      <td align="center">A</td>

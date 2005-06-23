@@ -74,7 +74,7 @@ sub test_save {
 
     TWiki::Plugins::WysiwygPlugin::beforeSaveHandler( $text, "WysiwygPluginTest", "Sandbox" );
 
-    $this->assert_equals("[[Sandbox.WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]", $text);
+    $this->assert_equals("[[WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]\n", $text);
 }
 
 

@@ -4,10 +4,12 @@ A WYSIWYG (What-You-See-Is-What-You-Get) editor.
 
 The editor is built on a generic framework that supports editing of TWiki topics using any browser-based HTML editor and the import of HTML from external sources such as existing web pages.
 
-%RED% WARNING: this is a prototype, what-you-see-is-all-you-get, release with the following known problems:
+%RED% WARNING: this is a what-you-see-is-all-you-get, Beta release with the following known problems:
 	* No way to add form or change form
 	* No way to force a new revision on save
-
+	* Images cannot be resized
+	* Overlapping TWiki styles don't work very well
+	* No help information
 Feedback is very welcome - please add to the WysiwygPluginDev topic.
 %ENDCOLOR%
 
@@ -78,6 +80,9 @@ my $tml = $html2tml->convert( $html );
 	As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
 ---++ Settings
+	* Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
+	* Set HELPPAGE = TWiki/WysiwygPlugin
+
 	* The name of the skin that when seen by the WysiwygPlugin will trigger translation of TML into HTML
 		* Set CONVERT_SKIN = kupu
 	* Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
@@ -102,15 +107,15 @@ my $tml = $html2tml->convert( $html );
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/no.gif" alt="" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/love.gif" alt="" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/scull.gif" alt="" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="%I" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="%X" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="%P" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" alt="%Y" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" alt="%U" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="%H" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="%N" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="%S" />
-		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="%M" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/tip.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/warning.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/pencil.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/choice-yes.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/updated.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/help.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="" />
+		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="" />
 	* List of TWiki tags that will be available to the Kupu editor. This has to be a valid HTML &lt;select&gt; with the id =twiki-var-select=.
 		* Set TAGS =
 		<select id='twiki-var-select'>

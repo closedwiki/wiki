@@ -194,6 +194,8 @@ sub _getRenderedVersion {
 
     # Initial cleanup
     $text =~ s/\r//g;
+    $text =~ s/^\n*//s;
+    $text =~ s/\n*$//s;
 
     my $removed = {}; # Map of placeholders to tag parameters and text
     $text = _takeOutBlocks( $text, 'verbatim', $removed );
@@ -559,14 +561,14 @@ sub _emitTR {
 
     $theRow =~ s/\t/   /g;  # change tabs to space
     $theRow =~ s/\s*$//;    # remove trailing spaces
-    $theRow =~ s/(\|\|+)/$TT0.length($1).'|'/ge;  # calc COLSPAN
+#    $theRow =~ s/(\|\|+)/$TT0.length($1).'|'/ge;  # calc COLSPAN
     my $cells = '';
     foreach( split( /\|/, $theRow ) ) {
+        my $colspan = 1;
         my $attr = {};
 
-        # Avoid matching single columns
         if ( s/$TT0([0-9]+)//o ) {
-            $attr->{colspan} = $1;
+            $colspan = $1;
         }
         s/^\s+$/ &nbsp; /;
         my( $left, $right ) = ( 0, 0 );
@@ -581,6 +583,7 @@ sub _emitTR {
         } elsif( $left > 1 ) {
             $attr->{align} = 'center';
         }
+        $attr->{colspan} = $colspan if $colspan > 1;
         if( /^\s*\*(.*)\*\s*$/ ) {
             $cells .= CGI::th( $attr, $1 );
         } else {

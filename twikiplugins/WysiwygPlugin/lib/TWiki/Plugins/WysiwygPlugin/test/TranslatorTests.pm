@@ -39,9 +39,16 @@ use TWiki::Plugins::WysiwygPlugin::TML2HTML;
 use TWiki::Plugins::WysiwygPlugin::HTML2TML;
 use Carp;
 $SIG{__DIE__} = sub { Carp::confess $_[0] };
+$SIG{__WARN__} = sub { die @_ };
 
-my $unsafe;
+use vars qw( $nofiles $notml2html $nohtml2tml $unsafe);
+
 BEGIN {
+    # hacky way to narrow down set of tests run
+    $nofiles = 0;
+    $notml2html = 0;
+    $nohtml2tml = 0;
+
     for( my $i = 0; $i < 32; $i++) {
         $unsafe .= chr($i) unless $i == 10;
     }
@@ -261,7 +268,29 @@ class CatAnimal {
        {
         exec => 3,
         name => 'simpleTable',
-        html => '<p /><table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>',
+        html => '<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>',
+        tml => '
+| *L* | *C* | *R* |
+| A2 |  2  |  2 |
+| A3 |  3  | 3  |
+| A4-6 | four | four |
+|^| five | five |
+
+|^| six | six |
+',
+        finaltml => '
+|*L*|*C*|*R*|
+|A2|  2  |  2|
+|A3|  3  |3  |
+|A4-6|four|four|
+|^|five|five|
+
+|^|six|six|'
+       },
+       {
+        exec => 0,# disabled because of Kupu problems handling colspans
+        name => 'tableWithSpans',
+        html => '<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>',
         tml => '
 | *L* | *C* | *R* |
 | A2 |  2  |  2 |
@@ -657,6 +686,12 @@ Outside
        },
        {
         exec => 2,
+        name => 'inlineNewlines',
+        html => 'Zadoc<br />The<br />Priest',
+        tml => 'Zadoc<br />The<br />Priest',
+       },
+       {
+        exec => 2,
         name => 'doctype',
         html => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
         tml => '',
@@ -706,42 +741,67 @@ Outside
         '<a href="%SCRIPTURL%/view%SCRIPTSUFFIX%">Burble</a>',
        },
 
+       {
+        exec => 2,
+        name=>"emptySpans",
+        html=> <<HERE,
+1 <span class="arfle"></span>
+2 <span lang="jp"></span>
+3 <span></span>
+4 <span lang="fr">francais</span>
+5 <span class="arfle" lang="fr">francais</span>
+HERE
+        tml => <<HERE
+1 <span class="arfle"></span>
+2 
+3 
+4 francais
+5 <span class="arfle">francais</span>
+HERE
+       },
+
       ];
 
 
-    foreach my $datum ( @$data ) {
-        next unless( $datum->{exec} & 1 );
-        my $fn = 'TranslatorTests::test_TML2HTML_'.$datum->{name};
-        no strict 'refs';
-        *$fn = sub { shift->compareTML_HTML( $datum ) };
-        use strict 'refs';
+    unless($notml2html) {
+        foreach my $datum ( @$data ) {
+            next unless( $datum->{exec} & 1 );
+            my $fn = 'TranslatorTests::test_TML2HTML_'.$datum->{name};
+            no strict 'refs';
+            *$fn = sub { shift->compareTML_HTML( $datum ) };
+            use strict 'refs';
+        }
     }
 
-    foreach my $datum ( @$data ) {
-        next unless( $datum->{exec} & 2 );
-        my $fn = 'TranslatorTests::test_HTML2TML_'.$datum->{name};
-        no strict 'refs';
-        *$fn = sub { shift->compareHTML_TML( $datum ) };
-        use strict 'refs';
+    unless( $nohtml2tml) {
+        foreach my $datum ( @$data ) {
+            next unless( $datum->{exec} & 2 );
+            my $fn = 'TranslatorTests::test_HTML2TML_'.$datum->{name};
+            no strict 'refs';
+            *$fn = sub { shift->compareHTML_TML( $datum ) };
+            use strict 'refs';
+        }
     }
 
-    opendir( D, "test_html" ) or die;
-    foreach my $file (grep { /^.*\.html$/i } readdir D ) {
-        $file =~ s/\.html$//;
-        next unless -e "result_tml/$file.txt";
-        my $test = { name => $file };
-        open(F, "<test_html/$file.html");
-        undef $/;
-        $test->{html} = <F>;
-        close(F);
-        open(F, "<result_tml/$file.txt");
-        undef $/;
-        $test->{finaltml} = <F>;
-        close(F);
-        my $fn = 'TranslatorTests::test_HTML2TML_FILE_'.$test->{name};
-        no strict 'refs';
-        *$fn = sub { shift->compareHTML_TML( $test ) };
-        use strict 'refs';
+    unless($nofiles) {
+        opendir( D, "test_html" ) or die;
+        foreach my $file (grep { /^.*\.html$/i } readdir D ) {
+            $file =~ s/\.html$//;
+            next unless -e "result_tml/$file.txt";
+            my $test = { name => $file };
+            open(F, "<test_html/$file.html");
+            undef $/;
+            $test->{html} = <F>;
+            close(F);
+            open(F, "<result_tml/$file.txt");
+            undef $/;
+            $test->{finaltml} = <F>;
+            close(F);
+            my $fn = 'TranslatorTests::test_HTML2TML_FILE_'.$test->{name};
+            no strict 'refs';
+            *$fn = sub { shift->compareHTML_TML( $test ) };
+            use strict 'refs';
+        }
     }
 }
 
@@ -881,8 +941,8 @@ sub _compareTML {
             my $e = substr($expected,$i,1);
             my $a = substr($actual,$i,1);
             if( $a ne $e) {
-                $expl .= "<<==== HERE ";
-                $expl .= ord($a)."!=".ord($e)."\n";
+                $expl .= "<<==== HERE actual ";
+                $expl .= ord($a)." != expected ".ord($e)."\n";
                 last;
             }
             $expl .= $a;
