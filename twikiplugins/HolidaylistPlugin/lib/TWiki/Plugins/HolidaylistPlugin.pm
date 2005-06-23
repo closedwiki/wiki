@@ -72,7 +72,7 @@ use vars qw(
 	$defaultsInitialized
     );
 
-$VERSION = '1.008'; #dro# new attributes (nwidth,tcwidth,removeatwork); performance fixes
+$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
 #$VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
 #$VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
 #$VERSION = '1.005'; #dro# added new features (startdate support; weekendbgcolor); fixed documentation bugs
@@ -148,9 +148,12 @@ sub initDefaults() {
 		year		=> undef,	# the year or a offset
 		tcwidth		=> undef,	# width of the smily cells
 		nwidth		=> undef,	# width of the first column
-		removeatwork	=> 0		# removes names without calendar entries from  table if set to "1"
+		removeatwork	=> 0,		# removes names without calendar entries from table if set to "1"
+		tablecaptionalign=> 'top',	# table caption alignment (top|bottom|left|right)
+		headerformat	=> '<font size="-2">%b<br/>%a<br/>%e</font>'	# format of the header
 	);
 
+	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
 	@renderedOptions = ( 'tablecaption', 'name', 'holidayicon', 'adayofficon', 'workicon', 'notatworkicon' );
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
@@ -180,7 +183,7 @@ sub initOptions() {
 			$options{$option}=(defined $v)? $v : $defaults{$option};
 		}
 
-		if (grep(/^\Q$option\E$/, @renderedOptions)) {
+		if (grep(/^\Q$option\E$/, @renderedOptions) && ( $options{$option} !~ /^(\s|\&nbsp\;)*$/ )) {
 		 	$options{$option}=&TWiki::Func::renderText($options{$option}, $web);
 		}
 	}
@@ -222,18 +225,22 @@ sub getStartDate() {
 			$yy=$year;
 		} elsif ($year =~ /^([\+\-]?\d+)$/) {
 			($yy,$mm,$dd) = Add_Delta_YM($yy,$mm,$dd, $1, 0);
-		}
+		} 
 	}
 	if (defined $options{month}) {
 		my $month = $options{month};
+		my $matched = 1;
 		if ($month=~/^($months_rx)$/) {
 			$mm=$months{$1};
-			$dd=1;
-			$options{days}=31;
-			$options{days}-- while (!check_date($yy,$mm,$options{days}));
-		} elsif (($month=~/^([\+\-]?\d+)$/)&&($month!=0)) {
-			$dd=1;
+		} elsif ($month=~/^([\+\-]\d+)$/) {
 			($yy,$mm,$dd) = Add_Delta_YM($yy,$mm,$dd, 0, $1);
+		} elsif (($month=~/^\d?\d$/)&&($month>0)&&($month<13)) {
+			$mm=$month;
+		} else {
+			$matched = 0;
+		}
+		if ($matched) {
+			$dd=1;
 			$options{days}=31;
 			$options{days}-- while (!check_date($yy,$mm,$options{days}));
 		}
@@ -335,6 +342,46 @@ sub fetchHolidaylist() {
 	return (\%table, \%locationtable, \%icontable);
 }
 # =========================
+sub mystrftime($$$) {
+	my ($yy,$mm,$dd) = @_;
+	my $text = $options{headerformat};
+
+	my $dow = Day_of_Week($yy,$mm,$dd);
+	my $t_dow=  Day_of_Week_to_Text($dow);
+	my $t_mm = Month_to_Text($mm);
+	my $doy = Day_of_Year($yy,$mm,$dd);
+	my $wn = Week_Number($yy,$mm,$dd);
+	my $t_wn = $wn<10?"0$wn":$wn;
+
+	my $y = substr("$yy",-2,2);
+
+	my %tmap = (
+			'%a'	=> substr($t_dow, 0, 2), '%A'	=> $t_dow,
+			'%b'	=> substr($t_mm,0,3), '%B'	=> $t_mm,
+			'%c'	=> Date_to_Text_Long($yy,$mm,$dd), '%C'	=> This_Year(),
+			'%d'	=> $dd<10?"0$dd":$dd, '%D' => "$mm/$dd/$yy",
+			'%e'	=> $dd,
+			'%F'	=> "$yy-$mm-$dd",
+			'%g'	=> $y, '%G' => $yy,
+			'%h'	=> substr($t_mm,0,3),
+			'%j'	=> ($doy<100)? (($doy<10)?"00$doy":"0$doy") : $doy,
+			'%m'	=> ($mm<10)?"0$mm":$mm,
+			'%n'	=> '<br/>',
+			'%t'	=> "<code>\t</code>",
+			'%u'	=> $dow, '%U' => $t_wn,
+			'%V'	=> $t_wn,
+			'%w'	=> $dow-1, '%W'	=> $t_wn,
+			'%x'	=> Date_to_Text($yy,$mm,$dd),
+			'%y'	=> $y,	'%Y' => $yy,
+			'%%'	=> '%'
+		);
+	
+	# replace all known conversion specifiers:
+	$text =~ s/(%[a-z\%\+]?)/(defined $tmap{$1})?$tmap{$1}:$1/ieg;
+
+	return $text;
+}
+# =========================
 sub renderHolidaylist() {
 	my ($tableRef, $locationTableRef, $iconTableRef) = @_;
 	my $text = "";
@@ -352,7 +399,7 @@ sub renderHolidaylist() {
 	       .  '>' 
 	       . "\n" ;
 
-	$text .= '<caption align="top">'.$options{tablecaption}.'</caption>'."\n";
+	$text .= '<caption align="'.$options{tablecaptionalign}.'">'.$options{tablecaption}.'</caption>'."\n";
 
 	$text .= '<tr bgcolor="'.$options{tableheadercolor}.'">';
 	$text .= '<th align="left"'.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'').'>'.$options{name}.'</th>';
@@ -372,11 +419,7 @@ sub renderHolidaylist() {
 			. (((defined $options{tcwidth})&&(($dow<6)||$options{showweekends}))?' width="'.$options{tcwidth}.'"':'')
 		        .((($today==$date)&&(defined $options{todayfgcolor}))?' style="color:' . $options{todayfgcolor} . '"' : '') .'>';
 		if (($dow < 6)|| $options{showweekends}) { 
-			$text .= '<font size="-2">'
-                              .substr(Month_to_Text($mm1),0,3)
-			      .'<br>'.substr(Day_of_Week_to_Text(Day_of_Week($yy1,$mm1,$dd1)),0,2)
-			      .'<br>'.$dd1 
-			      .'</font>';
+			$text .= &mystrftime($yy1,$mm1,$dd1);
 		} else {
 			$text .= '&nbsp;';
 		}
@@ -399,9 +442,9 @@ sub renderHolidaylist() {
 		my $ltableref=$$locationTableRef{$person};
 		my $itableref=$$iconTableRef{$person};
 
-		if ($options{removeatwork}) {
-			next unless grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
-		}
+		# ignore table rows without a entry if removeatwork == 1
+		next if $options{removeatwork} && !grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
+
 		$text .= '<tr><th align="left">'.$person.'</th>';
 		for (my $i=0; $i<$options{days}; $i++) {
 			my ($yy1, $mm1, $dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
@@ -417,12 +460,12 @@ sub renderHolidaylist() {
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
 				if (defined $$itableref[$i]) {
 					$icon = $$itableref[$i];
-					$icon = TWiki::Func::renderText($icon, $web);
+					$icon = TWiki::Func::renderText($icon, $web) if $icon !~ /^(\s|\&nbsp\;)*$/;
 				}
+				# could fail if HTML::Entities is not installed:
 				eval { 
 					my $location = $$ltableref[$i] if defined $ltableref;
 					if (defined $location) {
-						# could fail if HTML::Entities is not installed:
 						$location=encode_entities($location); # quote special characters like "<>
 						$icon=~s/(<img[^>]+?alt=")[^">]+("[^>]*>)/$1$location$2/is;
 						$icon=~s/(<img[^>]+?title=")[^">]+("[^>]*>)/$1$location$2/is;
