@@ -56,6 +56,12 @@ sub run {
     # Use unbuffered IO
     $| = 1;
 
+    if( DEBUG || $TWiki::cfg{WarningsAreErrors} ) {
+        # For some mysterious reason if this handler is defined
+        # in 'new TWiki' it gets lost again before we get here
+        $SIG{__WARN__} = sub { die @_; };
+    }
+
     if( $ENV{'DOCUMENT_ROOT'} ) {
         # script is called by browser
         $query = new CGI;

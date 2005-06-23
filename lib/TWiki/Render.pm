@@ -206,14 +206,15 @@ sub _renderFormData {
                                      '[['.$name.']]' ));
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
-      unless ( $field->{attributes} =~ /H/ ) {
-        my $value = $field->{value} || '&nbsp;';
-        $metaText .= CGI::Tr( { valign => 'top' },
-                              CGI::Td( { class => 'twikiFirstCol',
-                                         align => 'right' },
-                                       ' '.$field->{title}.':' ).
-                              CGI::Td( ' '.$value.' ' ));
-      }
+        my $fa = $field->{attributes} || '';
+        unless ( $fa =~ /H/ ) {
+            my $value = $field->{value} || '&nbsp;';
+            $metaText .= CGI::Tr( { valign => 'top' },
+                                  CGI::Td( { class => 'twikiFirstCol',
+                                             align => 'right' },
+                                           ' '.$field->{title}.':' ).
+                                  CGI::Td( ' '.$value.' ' ));
+        }
     }
     return CGI::div( { class => 'twikiForm' },
                      CGI::table( { border => 1 }, $metaText ));
@@ -1268,8 +1269,7 @@ sub protectPlainText {
     # tip text by escaping links (external, internal, Interwiki)
     $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
     $text =~ s/(?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
-    $text =~ s/@/@<nop>$1/g;	# email address
-    $text =~ s/%/%<nop>$1/g;	# %
+    $text =~ s/([@%])/@<nop>$1/g;	# email address, variable
 
     return $text;
 }
