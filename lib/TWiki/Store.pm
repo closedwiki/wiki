@@ -570,16 +570,29 @@ sub saveTopic {
 
     my $plugins = $this->{session}->{plugins};
 
-    # Note the changed semantics. pre-Dakar TWiki would write meta back into
-    # the topic text, and then extract it again. See
+    # Semantics inherited from Cairo. See
     # TWiki:Codev.BugBeforeSaveHandlerBroken
-    $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
+    if( $plugins->haveHandlerFor( 'beforeSaveHandler' )) {
+        if( $meta ) {
+            $text = _writeMeta( $meta, $text );
+        }
+        $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
+        # remove meta again and throw it away (!)
+        $text =~ s/^%META:([^{]+){(.*)}%\r?\n/''/gem;
+    }
 
     my $error =
       $this->_noHandlersSave( $user, $web, $topic, $text, $meta,
                               $options );
 
-    $plugins->afterSaveHandler( $text, $topic, $web, $error,$meta );
+    # Semantics inherited from Cairo. See
+    # TWiki:Codev.BugBeforeSaveHandlerBroken
+    if( $plugins->haveHandlerFor( 'afterSaveHandler' )) {
+        if( $meta ) {
+            $text = _writeMeta( $meta, $text );
+        }
+        $plugins->afterSaveHandler( $text, $topic, $web, $error, $meta );
+    }
 
     return $error;
 }
@@ -999,13 +1012,6 @@ sub topicExists {
     return -e "$TWiki::cfg{DataDir}/$theWeb/$theTopic.txt";
 }
 
-# PRIVATE parse and add a meta-datum. Returns '' so it can be used in s///e
-sub _addMetaDatum {
-    my( $meta, $type, $args, $format ) = @_;
-    $meta->putKeyed( $type, _readKeyValues( $args, $format ));
-    return ''; # so it can be used in s///e
-}
-
 # Expect meta data at top of file, but willing to accept it anywhere.
 # If we have an old file format without meta data, then convert.
 #
@@ -1018,19 +1024,20 @@ sub _addMetaDatum {
 sub extractMetaData {
     my( $this, $meta, $rtext ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    my $format;
+    my $format = $STORE_FORMAT_VERSION;
 
     $$rtext =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
-      (&_addMetaDatum($meta,'TOPICINFO',$1))gem;
+      ($meta->put( 'TOPICINFO', _readKeyValues( $1 ));'')gem;
 
     my $ti = $meta->get( 'TOPICINFO' );
     if( $ti ) {
-        $format = $ti->{format};
+        $format = $ti->{format} || $STORE_FORMAT_VERSION;
         # Make sure we update the topic format
         $ti->{format} = $STORE_FORMAT_VERSION;
     }
 
-    $$rtext =~ s/^%META:([^{]+){(.*)}%\r?\n/&_addMetaDatum($meta,$1,$2,$format)/gem;
+    $$rtext =~ s(^%META:([^{]+){(.*)}%\r?\n)
+      ($meta->putKeyed( $1, _readKeyValues( $2, $format )),'')gem;
 
     # If there is no meta data then convert from old format
     if( ! $meta->count( 'TOPICINFO' ) ) {
@@ -1044,22 +1051,20 @@ sub extractMetaData {
             $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
                                                          $meta, $$rtext );
         }
-    } else {
-        if( $format eq "1.0beta" ) {
-            # This format used live at DrKW for a few months
-            if( $$rtext =~ /<!--TWikiCat-->/ ) {
-                require TWiki::Compatibility;
-                $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
-                                                               $meta,
-                                                               $$rtext );
-            }
-            $this->{session}->{attach}->upgradeFrom1v0beta( $meta );
-            if( $meta->count( 'TOPICMOVED' ) ) {
-                 my $moved = $meta->get( 'TOPICMOVED' );
-                 my $u = $this->{session}->{users}->findUser( $moved->{by} );
-                 $moved->{by} = $u->login() if $u;
-                 $meta->put( 'TOPICMOVED', $moved );
-            }
+    } elsif( $format eq '1.0beta' ) {
+        # This format used live at DrKW for a few months
+        if( $$rtext =~ /<!--TWikiCat-->/ ) {
+            require TWiki::Compatibility;
+            $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
+                                                                  $meta,
+                                                                  $$rtext );
+        }
+        $this->{session}->{attach}->upgradeFrom1v0beta( $meta );
+        if( $meta->count( 'TOPICMOVED' ) ) {
+            my $moved = $meta->get( 'TOPICMOVED' );
+            my $u = $this->{session}->{users}->findUser( $moved->{by} );
+            $moved->{by} = $u->login() if $u;
+            $meta->put( 'TOPICMOVED', $moved );
         }
     }
 
