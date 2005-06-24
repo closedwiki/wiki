@@ -72,6 +72,9 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 %INCLUDE{"FuncDotPm"}%
 
 ------
+%INCLUDE{"TWikiScripts"}%
+
+------
 %INCLUDE{"TWikiSiteTools"}%
 
 ----

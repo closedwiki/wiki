@@ -97,18 +97,20 @@ sub run {
         # script is called by cron job or user
         $query = new CGI( '' );
         $scripted = 1;
-        # Interactive script name
-        $user = 'guest';
+        $user = '';
         $url = '';
         $topic = '';
         $pathInfo = '';
-        foreach my $arg ( @ARGV ) {
-            if ( $arg =~ /^-user=(.*)$/o ) {
-                $user = $1;
-            }
-            # parse name=value parameter pairs
-            if ( $arg =~ /^-?([A-Za-z0-9_]+)=(.*)$/o ) {
-                $query->param( $1=>$2 );
+        while( scalar( @ARGV )) {
+            my $arg = shift( @ARGV );
+            if ( $arg =~ /^-?([A-Za-z0-9_]+)$/o ) {
+                my $name = $1;
+                my $arg = shift( @ARGV );
+                if( $name eq 'user' ) {
+                    $user = $arg;
+                } else {
+                    $query->param( $name => $arg );
+                }
             } else {
                 $pathInfo = $arg;
             }
@@ -136,8 +138,7 @@ sub run {
         die "Trying to redirect to $script on authentication failure; this is not permitted. The target must be an oops.";
     }
 
-    my $session = new TWiki( $pathInfo, $user, $topic, $url,
-                             $query, $scripted );
+    my $session = new TWiki( $pathInfo, $user, $topic, $url, $query );
 
     # comment out in production version
     $Error::Debug = 1;
@@ -331,72 +332,6 @@ sub readTemplateTopic {
         $web = $session->{webName};
     }
     return $session->{store}->readTopic( $session->{user}, $web, $theTopicName, undef );
-}
-
-=pod
-
----++ ObjectMethod generateChangeFormPage ( $session, $theWeb, $theTopic, $editaction )
-
-Generate the page that supports selection of the form.
-
-=cut
-
-sub generateChangeFormPage {
-    my( $session, $web, $topic, $editaction ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-
-    my $page = $session->{templates}->readTemplate( 'changeform' );
-    my $q = $session->{cgiQuery};
-
-    my $store = $session->{store};
-    my $formName = $q->param( 'formtemplate' ) || '';
-    unless( $formName ) {
-        my( $meta, $tmp ) = $store->readTopic( undef, $web, $topic, undef );
-        my $form = $meta->get( 'FORM' );
-        $formName = $form->{name} if $form;
-    }
-    $formName = 'none' if( !$formName );
-
-    my $prefs = $session->{prefs};
-    my $legalForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
-    $legalForms =~ s/^\s*//;
-    $legalForms =~ s/\s*$//;
-    my @forms = split( /[,\s]+/, $legalForms );
-    unshift @forms, 'none';
-
-    my $formList = '';
-    foreach my $form ( @forms ) {
-        $formList .= CGI::br() if( $formList );
-	$formList .=
-      CGI::input( {
-                   type => 'radio',
-                   name => 'formtemplate',
-                   value => $form,
-                   checked => $form eq $formName ? 'checked' : '',
-                  },
-                  ' '.( $store->topicExists( $web, $form ) ?
-                        '[['.$form.']]' : $form )
-                );
-    }
-    $page =~ s/%FORMLIST%/$formList/go;
-
-    my $parent = $q->param( 'topicparent' ) || '';
-    $page =~ s/%TOPICPARENT%/$parent/go;
-
-    $page = $session->handleCommonTags( $page, $web, $topic );
-    $page = $session->{renderer}->getRenderedVersion( $page, $web, $topic );
-
-    my $text = CGI::hidden( -name => 'text', -value => $q->param( 'text' ) );
-    $page =~ s/%TEXT%/$text/go;
-    if ( $editaction ) {
-      #$text = CGI::hidden( -name => 'action', -value => $editaction );
-      $text = "<input type=\"hidden\" name=\"action\" value=\"$editaction\" />";
-    } else {
-      $text = '';
-    }
-    $page =~ s/%EDITACTION%/$text/go;
-
-    return $page;
 }
 
 1;

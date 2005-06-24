@@ -1611,7 +1611,7 @@ sub expandVariablesOnTopicCreation {
     my ( $this, $text, $user ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
-    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
+    ASSERT(!$user || $user->isa( 'TWiki::User')) if DEBUG;
 
     $text =~ s/%DATE%/$this->_DATE()/ge;
     $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;

@@ -36,19 +36,14 @@ package TWiki::UI::Save;
 use strict;
 use TWiki;
 use TWiki::UI;
-use TWiki::UI::Preview;
 use Error qw( :try );
 use TWiki::OopsException;
 use TWiki::Merge;
 use Assert;
 
-# Private - do not call outside this module!
-# Returns 1 if caller should redirect to view when done
-# 0 otherwise (redirect has already been handled)
-sub _save {
+# Used by save and preview
+sub buildNewTopic {
     my $session = shift;
-
-    $session->enterContext( 'save' );
 
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
@@ -59,6 +54,7 @@ sub _save {
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'save' );
 
     my $topicExists  = $store->topicExists( $webName, $topic );
+
     # Prevent saving existing topic?
     my $onlyNewTopic = $query->param( 'onlynewtopic' ) || '';
     if( $onlyNewTopic && $topicExists ) {
@@ -84,12 +80,136 @@ sub _save {
     TWiki::UI::checkAccess( $session, $webName, $topic,
                             'change', $user );
 
+    my $saveOpts = {};
+    $saveOpts->{minor} = 1 if $query->param( 'dontnotify' );
+    my $originalrev = $query->param( 'originalrev' ); # rev edit started on
+
+    my ( $templateText, $templateMeta );
+
+    my $templatetopic = $query->param( 'templatetopic');
+    if ($templatetopic) {
+        ( $templateMeta, $templateText ) =
+          $store->readTopic( $session->{user}, $webName,
+                                        $templatetopic, undef );
+        $templateText =
+          $session->expandVariablesOnTopicCreation( $templateText );
+        # topic creation, there is no original rev
+        $originalrev = 0;
+    }
+
+    my ( $prevMeta, $prevText );
+    if( $topicExists ) {
+        ( $prevMeta, $prevText ) =
+          $store->readTopic( undef, $webName, $topic, undef );
+    }
+
+    # Determine the new text
+    my $newText = $query->param( 'text' );
+    if( defined( $newText) ) {
+        # text from the query
+    } elsif( defined $templateText ) {
+        $newText = $templateText;
+        $originalrev = 0; # disable merge
+    } elsif( defined $prevText ) {
+        $newText = $prevText;
+        $originalrev = 0; # disable merge
+    } else {
+        $newText = '';
+    }
+
+    # note: always force a new rev if the topic is empty, in case this
+    # is a mistake.
+    $saveOpts->{forcenewrevision} = 1
+      if( $query->param( 'forcenewrevision' ) || !$newText );
+
+    # Populate the new meta data
+    my $newMeta = new TWiki::Meta( $session, $webName, $topic );
+
+    my $newParent = $query->param( 'topicparent' ) || '';
+    my $mum;
+    if( $newParent ) {
+        if( $newParent ne 'none' ) {
+            $mum = { 'name' => $newParent };
+        }
+    } elsif( $templateMeta ) {
+        $mum = $templateMeta->get( 'TOPICPARENT' );
+    } elsif( $prevMeta ) {
+        $mum = $prevMeta->get( 'TOPICPARENT' );
+    }
+    $newMeta->put( 'TOPICPARENT', $mum ) if $mum;
+
+    my $formName = $query->param( 'formtemplate' );
+    my $formDef;
+    my $copyMeta;
+
+    if( $formName ) {
+        # new form, default field values will be null
+        $formName = '' if( $formName eq 'none' );
+    } elsif( $templateMeta ) {
+        # populate the meta-data with field values from the template
+        $formName = $templateMeta->get( 'FORM' );
+        $formName = $formName->{name} if $formName;;
+        $copyMeta = $templateMeta;
+    } elsif( $prevMeta ) {
+        # populate the meta-data with field values from the existing topic
+        $formName = $prevMeta->get( 'FORM' );
+        $formName = $formName->{name} if $formName;;
+        $copyMeta = $prevMeta;
+    }
+
+    if( $formName ) {
+        $formDef = new TWiki::Form( $session, $webName, $formName );
+        $newMeta->put( 'FORM', { name => $formName });
+    }
+    if( $copyMeta ) {
+        $newMeta->copyFrom( $copyMeta, 'FIELD' );
+    }
+    if( $formDef ) {
+        # override with values from the query
+        $formDef->getFieldValuesFromQuery( $query, $newMeta, 1 );
+    }
+
+    my $merged;
+    # assumes rev numbers start at 1
+    if ( $originalrev ) {
+        my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
+        # If the last save was by me, don't merge
+        if ( $rev ne $originalrev && !$author->equals( $user )) {
+            $newText = TWiki::Merge::insDelMerge( $prevText, $newText,
+                                                  '\r?\n', $session, undef );
+            if( $formDef && $prevMeta ) {
+                $newMeta->merge( $prevMeta, $formDef );
+            }
+
+            $merged = [ $originalrev, $author->stringify(), $rev ];
+        }
+    }
+
+    return( $newMeta, $newText, $saveOpts, $merged );
+}
+
+# Private - do not call outside this module!
+# Returns 1 if caller should redirect to view when done
+# 0 otherwise (redirect has already been handled)
+sub _save {
+    my $session = shift;
+
+    $session->enterContext( 'save' );
+
+    my $query = $session->{cgiQuery};
+    my $webName = $session->{webName};
+    my $topic = $session->{topicName};
+    my $store = $session->{store};
+
     my $saveCmd = $query->param( 'cmd' ) || 0;
     if ( $saveCmd && ! $session->{user}->isAdmin()) {
         throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $webName, topic => $topic,
-                                    params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
+                                    params => $TWiki::cfg{UsersWebName}.
+                                    '.'.$TWiki::cfg{SuperAdminGroup} );
     }
+
+    my $user = $session->{user};
 
     if( $saveCmd eq 'delRev' ) {
         # delete top revision
@@ -106,43 +226,18 @@ sub _save {
         return 1;
     }
 
-    my ( $newText, $newMeta );   # new topic info being saved
-    my ( $currText, $currMeta ); # current head (if any)
-    my $originalrev; # rev edit started on
-
-    # A template was requested; read it, and expand URLPARAMs within the
-    # template using our CGI record
-    my $templatetopic = $query->param( 'templatetopic');
-    if ($templatetopic) {
-        ( $newMeta, $newText ) =
-          $store->readTopic( $session->{user}, $webName,
-                                        $templatetopic, undef );
-        $newText = $session->expandVariablesOnTopicCreation( $newText );
-        # topic creation, make sure there is no original rev
-        $originalrev = 0;
-    } else {
-        $originalrev = $query->param( 'originalrev' );
-        $newText = $query->param( 'text' );
-    }
-
-    my $saveOpts = {};
-    $saveOpts->{minor} = 1 if $query->param( 'dontnotify' );
-    # note: always force a new rev if the topic is empty, in case this
-    # is a mistake.
-    $saveOpts->{forcenewrevision} = 1
-      if( $query->param( 'forcenewrevision' ) || !$newText );
-
-    $newText ||= '';
+    my $textQueryParam = $query->param( 'text' );
 
     if( $saveCmd eq 'repRev' ) {
-        $newMeta = new TWiki::Meta( $session, $webName, $topic );
-        $store->extractMetaData( $newMeta, \$newText );
-        # replace top revision with this text, trying to make it look as
-        # much like the original as possible
-        $saveOpts->{timetravel} = 1;
+        # replace top revision with the text from the query, trying to
+        # make it look as much like the original as possible. The query
+        # text is expected to contain %META as well as text.
+        my $meta = new TWiki::Meta( $session, $webName, $topic );
+        $store->extractMetaData( $meta, \$textQueryParam );
+        my $saveOpts = { timetravel => 1 };
         my $error =
           $store->repRev( $user, $webName, $topic,
-                                     $newText, $newMeta, $saveOpts );
+                          $textQueryParam, $meta, $saveOpts );
         if( $error ) {
             throw TWiki::OopsException( 'attention',
                                         def => 'save_error',
@@ -154,62 +249,12 @@ sub _save {
         return 1;
     }
 
-    if ( ! $templatetopic ) {
-        ( $currMeta, $currText ) =
-          $store->readTopic( undef, $webName, $topic, undef );
-        $newMeta = new TWiki::Meta( $session, $webName, $topic );
-        $newMeta->copyFrom( $currMeta );
-    }
+    my( $newMeta, $newText, $saveOpts, $merged ) =
+      TWiki::UI::Save::buildNewTopic($session);
 
-    my $theParent = $query->param( 'topicparent' ) || '';
-
-    # parent setting
-    if( $theParent eq 'none' ) {
-        $newMeta->remove( 'TOPICPARENT' );
-    } elsif( $theParent ) {
-        $newMeta->put( 'TOPICPARENT', { 'name' => $theParent } );
-    }
-
-    my $formTemplate = $query->param( 'formtemplate' );
-    if( $formTemplate ) {
-        $newMeta->remove( 'FORM' );
-        $newMeta->put( 'FORM', { name => $formTemplate } ) if( $formTemplate ne 'none' );
-    }
-
-    my $form = $newMeta->get( 'FORM' );
-    my $formDef;
-
-    if( $form && !$templatetopic )  {
-        # Expand field variables.
-        unless( $formDef ) {
-            $formDef = new TWiki::Form( $session, $webName, $form->{name} );
-        }
-        $formDef->getFieldValuesFromQuery( $query, $newMeta, 0, 1 );
-    }
-
-    my $merged;
-
-    # assumes rev numbers start at 1
-    if ( $originalrev ) {
-        my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
-        # If the last save was by me, don't merge
-        if ( $rev ne $originalrev && !$author->equals( $user )) {
-            $newText = TWiki::Merge::insDelMerge( $currText, $newText,
-                                                  '\r?\n', $session, undef );
-            if( $form ) {
-                unless( $formDef ) {
-                    $formDef = new TWiki::FormDefinition( $session, $webName,
-                                                          $form->{name} );
-                }
-                $newMeta->merge( $currMeta, $formDef );
-            }
-
-            $merged = [ $originalrev, $author->stringify(), $rev ];
-        }
-    }
     my $error =
       $store->saveTopic( $user, $webName, $topic,
-                                    $newText, $newMeta, $saveOpts );
+                         $newText, $newMeta, $saveOpts );
 
     if( $error ) {
         throw TWiki::OopsException( 'attention',
@@ -243,24 +288,9 @@ Command handler for =save= command.
 This method is designed to be
 invoked via the =TWiki::UI::run= method.
 
-Some parameters are passed in CGI:
+See TWiki.TWikiScripts for details of parameters.
 
-| =cmd= | DEPRECATED optionally delRev or repRev, which trigger those actions. |
-| =dontnotify= | if defined, suppress change notification |
-| =submitChangeForm= | |
-| =topicparent= | |
-| =formtemplate= | if defined, use the named template for the form |
-| =action= | savemulti overrides, everything else is passed on the normal =save= |
-
-action values are:
-
-| =save= | save, return to view, dontnotify is OFF |
-| =quietsave= | save, return to view, dontnotify is ON |
-| =checkpoint= | save and continue editing, dontnotify is ON |
-| =cancel= | exit without save, return to view (does _not_ undo Checkpoint saves) |
-| =preview= | preview edit text; same as before |
-
-=cmd= has been deprecated in favour of =action=. It will be deleted at
+Note: =cmd= has been deprecated in favour of =action=. It will be deleted at
 some point.
 
 =cut
@@ -273,58 +303,53 @@ sub save {
     my $topic = $session->{topicName};
 
     #
-    # Allow for dynamic topic creation if it contains a string of 10 x's XXXXXX
+    # Allow for dynamic topic creation by replacing strings of at least
+    # 10 x's XXXXXX with a next-in-sequence number.
     # http://twiki.org/cgi-bin/view/Codev/AllowDynamicTopicNameCreation
     #
-    if ( $topic =~ /XXXXXXXXXX/o ) {
-		my ($bugCount) = 0;
-		my ($tempTopic) = $topic;
-		$topic =~ s|X{10}X*|$bugCount|e;
-
-		while ($session->{store}->topicExists( $webName, $topic )) {
-			$bugCount = $bugCount + 1;
-			$topic = $tempTopic;
-			$topic =~ s|X{10}X*|$bugCount|e;
-			#writeDebug($webName . "." . $topic);
-        }
-        #TODO: could record the last used topic name and number as web metadata
+    if ( $topic =~ /X{10}/ ) {
+		my $n = 0;
+		my $baseTopic = $topic;
+		do {
+			$topic = $baseTopic;
+			$topic =~ s/X{10}X*/$n/e;
+			$n++;
+        } while( $session->{store}->topicExists( $webName, $topic ));
         $session->{topicName} = $topic;
     }
-
 
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
     my $saveaction = lc($query->param( 'action' ));
     my $editaction = lc($query->param( 'editaction' )) || '';
 
-    if ( $saveaction eq 'checkpoint' ) {
+    if( $saveaction eq 'checkpoint' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );
         my $randompart = randomURL();
         $redirecturl = $editURL.'|'.$randompart;
-	$redirecturl .= "?action=$editaction" if $editaction;
-    } elsif ( $saveaction eq 'quietsave' ) {
+        $redirecturl .= "?action=$editaction" if $editaction;
+    } elsif( $saveaction eq 'quietsave' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
-    } elsif ( $saveaction eq 'cancel' ) {
+    } elsif( $saveaction eq 'cancel' ) {
         my $viewURL = $session->getScriptUrl( $webName, $topic, 'view' );
         $session->redirect( $viewURL );
         return;
-    } elsif( $saveaction eq 'preview' ) {
-        TWiki::UI::Preview::preview( $session );
-        return;
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
         $query->param( -name => 'cmd', -value => $saveaction );
-    } elsif( $saveaction eq 'add form' ) {
+    } elsif( $saveaction eq 'add form' ||
+             $saveaction eq 'replace form...' ||
+             $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
+        require TWiki::UI::ChangeForm;
         $session->writeCompletePage
-          ( TWiki::UI::generateChangeFormPage( $session, $webName, $topic, $editaction ) );
+          ( TWiki::UI::ChangeForm::generate( $session, $webName,
+                                             $topic, $editaction ) );
         return;
-    } elsif( $saveaction eq 'replace form...' ) {
-        $session->writeCompletePage
-          ( TWiki::UI::generateChangeFormPage( $session, $webName, $topic, $editaction ) );
+    } elsif( $saveaction eq 'preview' ) {
+        require TWiki::UI::Preview;
+        TWiki::UI::Preview::preview( $session );
         return;
     }
-
-
 
     if ( _save( $session )) {
         $session->redirect( $redirecturl );

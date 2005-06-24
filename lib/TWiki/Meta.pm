@@ -145,13 +145,13 @@ sub putKeyed {
         my $keyName = $args->{name};
         ASSERT( $keyName ) if DEBUG;
         my $i = scalar( @$data );
-        while( $i-- ) {
+        while( $keyName && $i-- ) {
             if( $data->[$i]->{name} eq $keyName ) {
                 $data->[$i] = $args;
                 return;
             }
         }
-	    push @$data, $args;
+        push @$data, $args;
     } else {
       push( @{$this->{$type}}, $args );
     }
@@ -175,13 +175,13 @@ sub get {
 
     my $data = $this->{$type};
     if( $data ) {
-      if( defined $keyValue ) {
-        foreach my $item ( @$data ) {
-	  return $item if( $item->{name} eq $keyValue );
-	  }
-      } else {
-        return $data->[0];
-      }
+        if( defined $keyValue ) {
+            foreach my $item ( @$data ) {
+                return $item if( $item->{name} eq $keyValue );
+            }
+        } else {
+            return $data->[0];
+        }
     }
 
     return undef;

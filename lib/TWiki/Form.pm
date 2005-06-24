@@ -404,6 +404,8 @@ sub renderFieldForEdit {
     my @defaults;
     my $selected;
 
+    $name = $this->cgiName( $name );
+
     my $output = $session->{plugins}->renderFormFieldForEditHandler
       ( $name, $type, $size, $value, $attributes, $fieldDef->{value} );
 
@@ -559,7 +561,7 @@ sub renderHidden {
         }
 
         $value = '' unless defined $value;  # allow 0 values
-        $text .= CGI::hidden( -name => $name,
+        $text .= CGI::hidden( -name => $this->cgiName( $name ),
                               -value => $value );
     }
 
@@ -568,39 +570,63 @@ sub renderHidden {
 
 =pod
 
----++ ObjectMethod getFieldValuesFromQuery($query, $metaObject, $justOverride, $handleMandatory) -> $metaObject
+---++ ObjectMethod cgiName( $field ) -> $string
+Generate the unique name of a field for use in CGI name= parameters. These
+names are constructed so they don't conflict with ordinary CGI script
+parameters.
+
+=cut
+
+# Note that naming the parameters for the form they are in won't work,
+# because if the form changes we want to retain as many form values as we can.
+sub cgiName {
+    my( $this, $fieldName ) = @_;
+
+    return 'FIELD:'.$fieldName;
+}
+
+=pod
+
+---++ ObjectMethod getFieldValuesFromQuery($query, $metaObject, $handleMandatory) -> $metaObject
 Extract new values for form fields from a query.
    * =$query= - the query
    * =$metaObject= - the meta object that is storing the form values
-   * =$justOverride= - if set, the existing form values will be retained and only _changed_ values in the query will be pushed into the form. If clear, the existing form will be removed, and the form completely repopulated from the query.
    * =$handleMandatory= - if set, will throw an OopsException if any mandatory fields are absent from the query.
+
+For each field, if there is a value in the query, use it.
+Otherwise if there is already entry for the field in the meta, keep it.
+Otherwise, initialise the field to '' and set it in the meta.
 
 =cut
 
 sub getFieldValuesFromQuery {
-    my( $this, $query, $meta, $justOverride, $handleMandatory ) = @_;
+    my( $this, $query, $meta, $handleMandatory ) = @_;
     ASSERT($this->isa( 'TWiki::Form')) if DEBUG;
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
-
-    # Kill the old form data unless we have been asked to override
-    # existing data
-    $meta->remove( 'FIELD' ) unless( $justOverride );
 
     foreach my $fieldDef ( @{$this->{fields}} ) {
         next unless $fieldDef->{name};
 
-        my $value = $query->param( $fieldDef->{name} );
+        my $param = $this->cgiName( $fieldDef->{name} );
+
+        my $value = $query->param( $param );
         if( $fieldDef->{type} =~ /^checkbox/ ) {
-            my @checked = $query->param ( $fieldDef->{name} );
+            my @checked = $query->param ( $param );
             $value = shift @checked;
             foreach my $val (@checked) {
                 $value .= ", $val";
             }
         }
 
-        # title and name are stored so that topic can be viewed without
-        # reading in form definition
-        $value = '' unless( defined( $value ) || $justOverride );
+        unless( defined( $value )) {
+            unless( defined( $meta->get( 'FIELD', $fieldDef->{name} ))) {
+                $value = '';
+            }
+        }
+
+        # NOTE: title and name are stored in the topic so that it can be
+        # viewed without reading in the form definition
+
         my $mandatory = ($fieldDef->{attributes} =~ /M/)?1:0;
         if ( $handleMandatory && $mandatory && !$value ) {
             throw TWiki::OopsException( 'attention',
@@ -609,6 +635,7 @@ sub getFieldValuesFromQuery {
                                         topic => $this->{session}->{topicName},
                                         params => [ $fieldDef->{title} ] );
         }
+
         if( defined( $value ) ) {
             my $args =
               {

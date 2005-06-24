@@ -1,0 +1,151 @@
+---+ TWiki CGI Scripts
+
+TWiki uses a set of scripts in the =bin= directory. This topic describes the interfaces to some of those scripts.
+
+All the scripts can be called from the CGI environment or from the command-line.
+
+%TOC%
+
+---++ General Information
+---+++ CGI environment
+In the CGI environment parameters are passed to the scripts via the URL and URL parameters. Environment variables are also used to determine the user performing the action. If the environment is not set up, the default TWiki user is used (usually =guest=).
+---+++ Command-line
+You *must* be cd'd to the =twiki/bin= directory to run the scripts from the command line.
+
+Parameters are passed using '-name' - for example,
+<verbatim>
+$ cd /usr/local/twiki/bin
+$ save -topic MyWeb.MyTopic -user admin -action save -text "New text of the topic"
+</verbatim>
+All parameters require a value.
+
+---+++ Default parameters
+All the scripts accept a number of common parameters. The first two components of the URL after the script name are taken as the web and the topic, respectively. Standard URL parameters are:
+| =topic= | If this is set to a URL, TWiki will immediately redirect to that URL. Otherwise it overrides the URL and is taken as the topic name (you can pass Web.<nop>TopicName) |
+| =user= | Command-line only; set the name of the user performing the action. Note: this usage is inherently insecure, as it bypasses webserver login constraints. For this reason only authorised users should be allowed to execute scripts from the command line. |
+| =skin= | Overrides the default skin path (see TWikiSkins) |
+| =cover= | Specifies temporary skin path to prepend to the skin path for this script only (see TWikiSkins) |
+
+---++ =save=
+The =save= script performs a range of save-related functions, as selected by the =action= parameter.
+
+| =action=save= | *default*; save, return to view, dontnotify is OFF |
+| =action=quietsave= | save, and return to view, =dontnotify= is ON |
+| =action=checkpoint= | save and redirect to the edit script, =dontnotify= is ON |
+| =action=cancel= | exit without save, return to view |
+| =action=preview= | preview edited text |
+| =action=add form= | Redirect to the "change form" page. |
+| =action=replace form...= | Redirect to the "change form" page. |
+| =action=delRev= | *Administrators only* delete the most recent revision of the topic - all other parameters are ignored |
+| =action=repRev= | Replace the text of the most recent revision of the topic with the text in the =text= parameter. =text= must included embedded meta-data tags. All other parameters are ignored. |
+| =onlynewtopic= | If set, error if topic already exists |
+| =onlywikiname= | If set, error if topic name is not a WikiWord |
+| =dontnotify= | if defined, suppress change notification |
+| =templatetopic= | Name of a topic to use as a template for the text and form |
+| =text= | New text of the topic |
+| =forcenewrevision= | if set, forces a revision even if TWiki thinks one isn't needed |
+| =topicparent= | If 'none' remove any current topic parent. If the name of a topic, set the topic parent to this. |
+| =formtemplate= | if defined, use the named template for the form |
+| =editaction= | When action is =checkpoint=, =add form= or =replace form...=, this is used as the =action= parameter to the =edit= script that is redirected to after the save is complete. |
+| =originalrev= | Revision on which the edit started. |
+
+Any errors will cause a redirect to an =oops= page.
+
+The parameters are interpreted in according to the following rules.
+
+   1 The first sequence of ten or more =X= characters in the topic name will be converted to a number such that the resulting topic name is unique in the target web.
+   1 When the action is =save=, =checkpoint=, =quietsave=, or =preview=:
+      1 The new text is taken from the =text= parameter, if it is defined,
+         * otherwise it is taken from the =templatetopic=, if it is defined,
+         * otherwise it is taken from the previous version of the topic, if it exists,
+         * otherwise it is assumed to be empty, and =forcenewrevision= is set.
+      1 The name of the new form is taken from the =formtemplate=, if defined
+         * otherwise it is taken from the =templatetopic=, if defined,
+         * otherwise it is taken from the previous version of the topic, if any,
+         * otherwise no form is attached.
+      1 The value for each field in the form is taken from the query, if it is defined
+         * otherwise it is taken from the =templatetopic=, if defined,
+         * otherwise it is taken from the previous version of the topic, if any,
+         * otherwise it defaults to the empty string.
+
+Merging is only enabled if the topic text comes from =text= and =originalrev= is &gt; 0 and is not the same as the revision number of the most recent revision. If merging is enabled both the topic and the meta-data are merged.
+
+Form field values are passed in parameters named 'FIELD:Field' - for example, if I have a field =Status= the parameter name is =FIELD:Status=.
+
+%X% This specification has changed since earlier versions of TWiki to avoid conflicts between field names and other parameters to the =save= script.
+
+---++ =oops=
+
+This script is mainly used for rendering pages containing error messages, though it is also used for some functional actions such as manage pages (move topic etc).
+
+=oops= templates are used with the =oops= script to generate system messages. This is done to make internationalisation or other local customisations simple. 
+
+The =oops= script supports the following parameters:
+
+| =template= | Name of the template file to display |
+| =def= | Optional, can be set to the name of a single definition within =template=. This definition will be instantiated in the =template= wherever !%INSTANTIATE% is seen. This lets you use a single template file for many messages. For an example, see =oopsmanagebad.tmpl=. |
+| =paramN= | Where N is an integer from 1 upwards. These values will be substituted into =template= for %<nop>PARAM1% etc. |
+
+---++ =edit=
+The =edit= scipt understands the following parameters, typically supplied by HTML input fields:
+
+| =action= | Optional. Use the <code>edit<i>action</i></code> template instead of the standard =edit=, and if =action=text=, then hide the form |
+| =onlynewtopic= | If set, error if topic already exists |
+| =onlywikiname= | If set, error if topic name is not a WikiWord |
+| =templatetopic= | The name of the template topic, copied to get the initial content |
+| =text= | Initial text for the topic |
+| =topicparent= | The parent topic |
+| =formtemplate= | Name of the form to instantiate in the topic. Overrides the form set in the =templatetopic= if defined. |
+| =contenttype= | Optional parameter that defines the application type to write into the CGI header. Defaults to =text/html=. May be used to invoke alternative client applications |
+| =anyname= | Any parameter can passed to the new topic; if the template topic contains =%<nop>URLPARAM{"anyname"}%=, it will be replaced by its value |
+| =breaklock= | If set, any lease conflicts will be ignored, and the edit will proceed even if someone is already editing the topic. |
+
+Form field values can passed in parameters named 'FIELD:Field' - for example, if I have a field =Status= the parameter name is =FIELD:Status=.
+
+---++ =view=
+Used for viewing topics.
+
+| =raw=text= | View the raw, unprocessed source of the topic |
+| =raw=on= | View the source of the topic |
+| =raw=debug= | As =raw=on=, except that it shows meta-data as embedded tags |
+| =contenttype= | Allows you to specify a different content type |
+| =rev= | Revision to view |
+| =template= | Allows you to specify a different base template. The default template is =view=. For example, you could specify [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=edit][%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=edit]] to view the rendered HTML of the topic. |
+%W% The view script has a special interpretation of the =text= skin. If the =skin=text= parameter is given, it is used like this:
+http<nop>://.../view/MyWeb/MyTopic?skin=text&contenttype=text/plain&raw=on
+which shows the topic as plain text; useful for those who want
+to download plain text for the topic.
+skin=text is deprecated; use raw=text instead.
+
+
+---++ =viewfile=
+
+Used for viewing attachments. Normally, a site will publish the attachments (=pub=) directory using a URL. However if it contains sensitive information, you will want to protect attachments using TWikiAccessControls. In this case, you can use the =viewfile= script to give access to attachments while still checking access controls.
+
+| =filename= | name of attachment |
+| =rev= | Revision to view |
+
+---++ =preview=
+This script is _deprecated_. Its functions are covered by the =save= script.
+
+---++ =rdiff=
+
+---++ =register=
+
+---++ =rename=
+
+---++ =attach=
+
+---++ =upload=
+
+---++ =search=
+
+---++ =changes=
+
+---++ =manage=
+
+---++ =mailnotify=
+
+---++ =passwd=
+
+---++ =resetpasswd=

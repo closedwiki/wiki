@@ -220,9 +220,6 @@ sub edit {
     }
     $tmpl =~ s/%TOPICPARENT%/$theParent/;
 
-    # Processing of formtemplate - comes directly from query parameter formtemplate , 
-    # or indirectly from webtopictemplate parameter.
-    my $oldargsr;
     if( $formTemplate ) {
         $meta->remove( 'FORM' );
         if( $formTemplate ne 'none' ) {
@@ -259,10 +256,10 @@ sub edit {
     if( $form && !$saveCmd ) {
         my $formText;
         my $getValuesFromFormTopic = ( $formTemplate && !$ptext );
-        # if there's a form template, and no text defined in the save, then
-        # pull whatever values exist in the query into the meta.
+        # if there's a form template, then pull whatever values exist in
+        # the query into the meta, overriding the values in the topic.
         my $formDef = new TWiki::Form( $session, $templateWeb, $form );
-        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 1 );
+        $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 0 );
         # and render them for editing
         if ( $editaction eq "text" ) {
             $formText = $formDef->renderHidden( $meta,
