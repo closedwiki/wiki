@@ -185,7 +185,8 @@ sub DISABLE_registrationHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
 This handler is called by the code that expands %TAGS% syntax in
-the topic body and in form fields.
+the topic body and in form fields. It may be called many times while
+a topic is being rendered.
 
 Plugins that want to implement their own %TAGS% with non-trivial
 additional syntax should implement this function. Internal TWiki
@@ -196,9 +197,12 @@ to ensure all %TAGS% are expanded.
 For tags with trivial syntax it is far more efficient to use
 =TWiki::Func::registerTagHandler= (see =initPlugin=).
 
-Note that when this handler is called, &lt;verbatim> blocks have been
+__NOTE:__ when this handler is called, &lt;verbatim> blocks have been
 removed from the text (though all other HTML such as &lt;pre> blocks is
 still present).
+
+__NOTE:__ meta-data is _not_ embedded in the text passed to this
+handler.
 
 =cut
 
@@ -224,6 +228,13 @@ internal tags. It is designed for use by cache plugins. Note that
 when this handler is called, &lt;verbatim> blocks are still present
 in the text.
 
+__NOTE__: This handler is called once for each call to
+=commonTagsHandler= i.e. it may be called many times during the
+rendering of a topic.
+
+__NOTE:__ meta-data is _not_ embedded in the text passed to this
+handler.
+
 =cut
 
 sub DISABLE_beforeCommonTagsHandler {
@@ -243,6 +254,13 @@ This handler is after TWiki has completed expansion of %TAGS%.
 It is designed for use by cache plugins. Note that when this handler
 is called, &lt;verbatim> blocks are present in the text.
 
+__NOTE__: This handler is called once for each call to
+=commonTagsHandler= i.e. it may be called many times during the
+rendering of a topic.
+
+__NOTE:__ meta-data is _not_ embedded in the text passed to this
+handler.
+
 =cut
 
 sub DISABLE_afterCommonTagsHandler {
@@ -255,7 +273,7 @@ sub DISABLE_afterCommonTagsHandler {
 =pod
 
 ---++ preRenderingHandler( $text, \%map )
-   * =$text= - the text, with the head, verbatim and pre blocks replaced with placeholders
+   * =$text= - text, with the head, verbatim and pre blocks replaced with placeholders
    * =\%removed= - reference to a hash that maps the placeholders to the removed blocks.
 
 Handler called immediately before TWiki syntax structures (such as lists) are
@@ -282,6 +300,12 @@ foreach my $placeholder ( keys %$map ) {
     }
 }
 </verbatim>
+
+__NOTE__: This handler is called once for each rendered block of text i.e. it may be called several times during the rendering of a topic.
+
+__NOTE:__ meta-data is _not_ embedded in the text passed to this
+handler.
+
 Since TWiki::Plugins::VERSION = '1.026'
 
 =cut
@@ -293,7 +317,14 @@ sub DISABLE_preRenderingHandler {
 =pod
 
 ---++ postRenderingHandler( $text )
-   * =\$text= - a reference to the entire rendered HTML page (not including HTTP headers). May be modified in place.
+   * =\$text= - a reference to text that has just been rendered. May be modified in place.
+
+__NOTE__: This handler is called once for each rendered block of text i.e. it may be called several times during the rendering of a topic.
+
+__NOTE:__ meta-data is _not_ embedded in the text passed to this
+handler.
+
+Since TWiki::Plugins::VERSION = '1.026'
 
 =cut
 
@@ -308,7 +339,9 @@ sub DISABLE_postRenderingHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
 This handler is called by the edit script just before presenting the edit text
-in the edit box. Use it to process the text before editing.
+in the edit box.
+
+__NOTE__: meta-data may be embedded in the text passed to this handler (using %META: tags)
 
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
@@ -331,6 +364,9 @@ This handler is called by the preview script just before presenting the text.
 
 __NOTE:__ this handler is _not_ called unless the text is previewed.
 
+__NOTE:__ meta-data is _not_ embedded in the text passed to this
+handler.
+
 __Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
@@ -349,12 +385,12 @@ sub DISABLE_afterEditHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
    * =$meta= - the metadata of the topic being saved, represented by a TWiki::Meta object 
-   
+
 This handler is called just before the save action.
 
-__Since:__ TWiki::Plugins::VERSION = '1.010'
+__NOTE:__ meta-data is embedded in $text (using %META: tags)
 
-*NOTE* since TWiki::Plugins::VERSION = '1.026' the =$text= _no longer contains embedded %META: tags_. Please use the =$meta= object instead.
+__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 
@@ -377,6 +413,7 @@ sub DISABLE_beforeSaveHandler {
    
 This handler is called just after the save action.
 
+__NOTE:__ meta-data is embedded in $text (using %META: tags)
 
 __Since:__ TWiki::Plugins::VERSION = '1.020'
 
