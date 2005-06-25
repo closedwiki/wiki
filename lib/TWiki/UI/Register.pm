@@ -612,15 +612,19 @@ sub changePassword {
     }
 
     # OK - password may be changed
-    $user->changePassword( $passwordA );
+    if ($user->changePassword( $passwordA )) {
 
-    $session->writeLog('changepasswd', $user->stringify());
-    #recording the email would be nice
+      $session->writeLog('changepasswd', $user->stringify());
+      #recording the email would be nice
 
-    # OK - password changed
-    throw TWiki::OopsException( 'attention',
-                                web => $webName, topic => $topic,
-                                def => 'password_changed' );
+      # OK - password changed
+      throw TWiki::OopsException( 'attention',
+				  web => $webName, topic => $topic,
+				  def => 'password_changed' );
+    } else {
+      $session->writeLog('changepasswd', $user->stringify(), "FAILED");
+      die "Problem resetting password";
+    }
 }
 
 =pod

@@ -247,7 +247,10 @@ sub changePassword {
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
-    return $passwordHandler->passwd($this->{login}, $newUserPassword, $oldUserPassword);
+    my $success = $passwordHandler->passwd($this->{login}, $newUserPassword, $oldUserPassword);
+    if ($success) {return $success};
+
+    die $passwordHandler->{error};
 }
 
 =pod
