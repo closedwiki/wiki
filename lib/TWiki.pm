@@ -2140,7 +2140,7 @@ sub handleCommonTags {
     # SMELL: is this a hack? Looks like it....
     $text =~ s/^<nop>\r?\n//gm;
 
-    $this->{renderer}->putBackBlocks( $text, $verbatims, 'verbatim' );
+    $this->{renderer}->putBackBlocks( \$text, $verbatims, 'verbatim' );
 
     # TWiki Plugin Hook (for cache Plugins only)
     $this->{plugins}->afterCommonTagsHandler( $text, $theTopic, $theWeb );

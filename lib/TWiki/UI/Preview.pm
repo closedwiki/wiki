@@ -34,42 +34,38 @@ sub preview {
     $session->enterContext( 'preview' );
 
     my $query = $session->{cgiQuery};
-    my $webName = $session->{webName};
+    my $web = $session->{webName};
     my $topic = $session->{topicName};
     my $user = $session->{user};
 
-    my $theParent = $query->param( 'topicparent' ) || '';
-    my $formTemplate = $query->param( 'formtemplate' );
-    my $textparam = $query->param( 'text' );
+    my( $meta, $text, $saveOpts, $merged ) =
+      TWiki::UI::Save::buildNewTopic($session);
 
-    # get view template, standard view or a view with a different skin
+    # Note: param(formtemplate) has already been decoded by buildNewTopic
+    # so the $meta entry reflects if it was used.
+    my $formFields = '';
+    my $form = $meta->get('FORM');
+    if( $form ) {
+        my $formDef = new TWiki::Form( $session, $web, $form->{name} );
+        $formFields = $formDef->renderHidden( $meta );
+    }
+
+    $session->{plugins}->afterEditHandler( $text, $topic, $web );
+
     my $skin = $session->getSkin();
     my $tmpl = $session->{templates}->readTemplate( 'preview', $skin );
-    if( $query->param( 'dontnotify' ) ) {
+    if( $saveOpts->{minor} ) {
         $tmpl =~ s/%DONTNOTIFYCHECKBOX%/checked="checked"/go;
     } else {
         $tmpl =~ s/%DONTNOTIFYCHECKBOX%//go;
     }
-    if( $query->param( 'forcenewrevision' ) ) {
+    if( $saveOpts->{forcenewrevision} ) {
         $tmpl =~ s/%FORCENEWREVISIONCHECKBOX%/checked="checked"/go;
     } else {
         $tmpl =~ s/%FORCENEWREVISIONCHECKBOX%//go;
     }
     my $saveCmd = $query->param( 'cmd' ) || '';
     $tmpl =~ s/%CMD%/$saveCmd/go;
-
-    my( $meta, $text, $saveOpts, $merged ) =
-      TWiki::UI::Save::buildNewTopic($session);
-
-    my $formFields = '';
-    my $form = $meta->get('FORM') || '';
-    if( $form ) {
-        $form = $form->{name};
-        my $formDef = new TWiki::Form( $session, $webName, $form );
-        $formFields = $formDef->renderHidden( $meta );
-    }
-
-    $session->{plugins}->afterEditHandler( $text, $topic, $webName );
 
     $tmpl =~ s/%FORMTEMPLATE%/$form/g;
 
@@ -81,32 +77,30 @@ sub preview {
     # SMELL: this is horrible, it only handles verbatim. It should be
     # done by getRenderedVersion with an override for the wikiword
     # handling.
-    my $verbatim = {};
-    $text = $session->{renderer}->takeOutBlocks( $text, 'verbatim',
-                                                  $verbatim );
-    $text = $session->handleCommonTags( $text, $webName, $topic );
-    $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topic );
+    $text = $session->{renderer}->renderMetaTags
+      ( $web, $topic, $text, $meta, 0, 0 );
+    $text = $session->handleCommonTags( $text, $web, $topic );
+    $text = $session->{renderer}->getRenderedVersion( $text, $web, $topic );
 
-    # Disable links and inputs
+    # Disable links and inputs in the text
     $text =~ s(<a\s[^>]*>(.*?)</a>)
       (<span style="text-decoration:underline;color:blue">$1</span>)gis;
     $text =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
     $text =~ s(</?form(|\s.*?)>)()gis;
     $text =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
 
-    $session->{renderer}->putBackBlocks( $text, $verbatim,
-                                         'verbatim', 'pre',
-                                         \&TWiki::Render::verbatimCallBack );
-
-    $tmpl = $session->{renderer}->renderMetaTags( $webName, $topic, $tmpl, $meta, 0, 0 );
-    $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
-    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
-
+    $tmpl = $session->{renderer}->renderMetaTags
+      ( $web, $topic, $tmpl, $meta, 0, 0 );
+    $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
     $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s/%FORMFIELDS%/$formFields/go;
 
+    # SMELL: this should be done using CGI::hidden
     $text = TWiki::entityEncode( $text );
     $tmpl =~ s/%HIDDENTEXT%/$text/go;
-    $tmpl =~ s/%FORMFIELDS%/$formFields/go;
+
+    $tmpl =~ s/<\/?(nop|noautolink)\/?>//gis;
 
     $session->writeCompletePage( $tmpl );
 }

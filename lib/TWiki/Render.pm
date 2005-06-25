@@ -871,6 +871,9 @@ sub getRenderedVersion {
     $text =~ s/(\n?)$/\n<nop>\n/s;
     # Convert any occurrences of token (very unlikely - details in
     # Codev.NationalCharTokenClash)
+    # WARNING: since the token is used as a marker in takeOutBlocks,
+    # be careful never to call this method on text which has already had
+    # embedded blocks removed!
     $text =~ s/$TWiki::TranslationToken/!/go;	
 
     my $removed = {};    # Map of placeholders to tag parameters and text
@@ -1086,21 +1089,21 @@ sub getRenderedVersion {
         # Handle WikiWords
         $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
         $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$this->_handleWikiWord($theWeb,$1,$2,$3)/geom;
-        $this->putBackBlocks( $text, $removed, 'noautolink' );
+        $this->putBackBlocks( \$text, $removed, 'noautolink' );
     }
 
-    $this->putBackBlocks( $text, $removed, 'pre' );
+    $this->putBackBlocks( \$text, $removed, 'pre' );
 
     # DEPRECATED plugins hook after PRE re-inserted
     $plugins->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
-    $this->putBackBlocks( $text, $removed,
+    $this->putBackBlocks( \$text, $removed,
                           'verbatim', 'pre', \&verbatimCallBack );
 
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
-    $this->putBackBlocks( $text, $removed, 'head' );
+    $this->putBackBlocks( \$text, $removed, 'head' );
 
     $text = $doctype.$text;
 
@@ -1408,10 +1411,10 @@ sub takeOutBlocks {
 
 =pod
 
----++ ObjectMethod putBackBlocks( $text, \%map, $tag, $newtag, $callBack ) -> $text
+---++ ObjectMethod putBackBlocks( \$text, \%map, $tag, $newtag, $callBack ) -> $text
 
 Return value: $text with blocks added back
-   * =$text= - text to process
+   * =\$text= - reference to text to process
    * =\%map= - map placeholders to blocks removed by takeOutBlocks
    * =$tag= - Tag name processed by takeOutBlocks
    * =$newtag= - Tag name to use in output, in place of $tag. If undefined, uses $tag.
@@ -1437,13 +1440,14 @@ sub putBackBlocks {
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     $newtag ||= $tag;
-    my @k = keys %$map;
-    foreach my $placeholder ( @k ) {
+
+    foreach my $placeholder ( keys %$map ) {
         if( $placeholder =~ /^$tag\d+$/ ) {
             my $params = $map->{$placeholder}{params} || '';
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
-            $_[1] =~ s|<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->|<$newtag$params>\n$val</$newtag>|;
+            $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
+              (<$newtag$params>\n$val</$newtag>);
             delete( $map->{$placeholder} );
         }
     }
