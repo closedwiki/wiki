@@ -58,7 +58,7 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 
 # configure should be restricted to a small number of users
 <FilesMatch "configure.*">
-       require !ADMIN_users!
+       require user "!ADMIN_users!"
 </FilesMatch>
 
 # These are scripts that might change content. The regular expression uses ".*"
