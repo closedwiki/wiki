@@ -44,9 +44,10 @@ sub preview {
     # Note: param(formtemplate) has already been decoded by buildNewTopic
     # so the $meta entry reflects if it was used.
     my $formFields = '';
-    my $form = $meta->get('FORM');
+    my $form = $meta->get('FORM') || '';
     if( $form ) {
-        my $formDef = new TWiki::Form( $session, $web, $form->{name} );
+        $form = $form->{name}; # used later on as well
+        my $formDef = new TWiki::Form( $session, $web, $form );
         $formFields = $formDef->renderHidden( $meta );
     }
 
@@ -74,26 +75,24 @@ sub preview {
     $parent ||= '';
     $tmpl =~ s/%TOPICPARENT%/$parent/g;
 
-    # SMELL: this is horrible, it only handles verbatim. It should be
-    # done by getRenderedVersion with an override for the wikiword
-    # handling.
-    $text = $session->{renderer}->renderMetaTags
-      ( $web, $topic, $text, $meta, 0, 0 );
-    $text = $session->handleCommonTags( $text, $web, $topic );
-    $text = $session->{renderer}->getRenderedVersion( $text, $web, $topic );
+    my $dispText = $text;
+    $dispText = $session->{renderer}->renderMetaTags
+      ( $web, $topic, $dispText, $meta, 0, 0 );
+    $dispText = $session->handleCommonTags( $dispText, $web, $topic );
+    $dispText = $session->{renderer}->getRenderedVersion( $dispText, $web, $topic );
 
     # Disable links and inputs in the text
-    $text =~ s(<a\s[^>]*>(.*?)</a>)
+    $dispText =~ s(<a\s[^>]*>(.*?)</a>)
       (<span style="text-decoration:underline;color:blue">$1</span>)gis;
-    $text =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
-    $text =~ s(</?form(|\s.*?)>)()gis;
-    $text =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
+    $dispText =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
+    $dispText =~ s(</?form(|\s.*?)>)()gis;
+    $dispText =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
 
     $tmpl = $session->{renderer}->renderMetaTags
       ( $web, $topic, $tmpl, $meta, 0, 0 );
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
-    $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s/%TEXT%/$dispText/go;
     $tmpl =~ s/%FORMFIELDS%/$formFields/go;
 
     # SMELL: this should be done using CGI::hidden
