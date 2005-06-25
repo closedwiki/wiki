@@ -453,6 +453,7 @@ sub resetPassword {
     } else {
         # Anyone can reset a single password - important because by definition
         # the user cannot authenticate
+        # Note that the passwd script must NOT authenticate!
     }
 
     # Collect all messages into one string
@@ -473,12 +474,12 @@ sub resetPassword {
             $action = '?username='. $userNames[0];
         }
         throw TWiki::OopsException( 'attention',
-                                    topic => $user->wikiName(),
+                                    topic => $TWiki::cfg{UsersTopicName},
                                     def => 'reset_ok',
                                     params => $message );
     } else {
         throw TWiki::OopsException( 'attention',
-                                    topic => $user->wikiName(),
+                                    topic => $TWiki::cfg{UsersTopicName},
                                     def => 'reset_bad',
                                     params => $message );
     }

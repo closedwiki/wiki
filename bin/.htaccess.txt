@@ -65,7 +65,12 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 # at the end so it matches the scripts even if you had to add a .cgi or .pl
 # extension. If you want to require login for any other scripts, modify the
 # regular expression below as appropriate.
-<FilesMatch "(attach|edit|manage|rename|save|upload|mail|.*passwd|.*auth).*">
+
+# NB. The resetpasswd & passwd scripts are used to reset and change passwords.
+# They do their own validation of the user and therefore
+# should not use "require valid-user"
+
+<FilesMatch "(attach|edit|manage|rename|save|upload|mail|.*auth).*">
        require valid-user
 </FilesMatch>
 
