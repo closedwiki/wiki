@@ -11,10 +11,10 @@ The main part of the mailer module is a script, =bin/mailnotify=. This script is
 %STARTINCLUDE%
 Subscribers are listed <nop>%NOTIFYTOPIC% in "bullet lists" following one of the following formats:
 
-_three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ %BR%
-_three spaces_ * [ _webName_ . ] _wikiName_ %BR%
-_three spaces_ * _SMTP mail address_ %BR%
-_three spaces_ * _SMTP mail address_ : _topics_ %BR%
+_three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ <br />
+_three spaces_ * [ _webName_ . ] _wikiName_ <br />
+_three spaces_ * _SMTP mail address_ <br />
+_three spaces_ * _SMTP mail address_ : _topics_ <br />
 _three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
 
 where _topics_ is a space-separated list of topic names.
