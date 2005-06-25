@@ -97,14 +97,13 @@ sub initText {
 }
 
 # implements RcsFile
-# $date is ignored
 sub addRevision {
     my( $this, $text, $comment, $user, $date ) = @_;
     my $error = $this->_lock();
     return $error if $error;
     $error = $this->_save( $this->{file}, \$text );
     return $error if $error;
-    return $this->_ci( $comment, $user );
+    return $this->_ci( $comment, $user, $date );
 }
 
 # implements RcsFile
@@ -277,7 +276,7 @@ sub revisionDiff {
            $tmp = "$tmp> $_\n";
         }
     } else {
-        $contextLines = '' unless defined($contextLines);
+        $contextLines = 3 unless defined($contextLines);
         ( $tmp, $exit ) =
           $this->{session}->{sandbox}->readFromProcess
             ( $TWiki::cfg{RCS}{diffCmd},
@@ -309,60 +308,68 @@ sub parseRevisionDiff {
     my ( $diffFormat ) = 'normal'; #or rcs, unified...
     my ( @diffArray ) = ();
 
-    $diffFormat = 'unified' if ( $text =~ /^---/ );
+    $diffFormat = 'unified' if ( $text =~ /^---/s );
 
     $text =~ s/\r//go;  # cut CR
 
     my $lineNumber=1;
     if ( $diffFormat eq 'unified' ) {
         foreach( split( /\n/, $text ) ) {
-	    if ( $lineNumber > 3 ) {   #skip the first 2 lines (filenames)
- 	   	    if ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
+            if ( $lineNumber > 2 ) {   #skip the first 2 lines (filenames)
+                if ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
 	    	        #line number
-		        push @diffArray, ['l', $1, $3];
-		    } elsif ( /^\-/ ) {
-		        s/^\-//go;
-		        push @diffArray, ['-', $_, ''];
-		    } elsif ( /^\+/ ) {
-		        s/^\+//go;
-		        push @diffArray, ['+', '', $_];
-		    } else {
-	  		s/^ (.*)$/$1/go;
-			push @diffArray, ['u', $_, $_];
-		    }
-	    }
-	    $lineNumber = $lineNumber + 1;
-       	 }
+                    push @diffArray, ['l', $1, $3];
+                } elsif( /^\-(.*)$/ ) {
+                    push @diffArray, ['-', $1, ''];
+                } elsif( /^\+(.*)$/ ) {
+                    push @diffArray, ['+', '', $1];
+                } else {
+                    s/^ (.*)$/$1/go;
+                    push @diffArray, ['u', $_, $_];
+                }
+            }
+            $lineNumber++;
+        }
     } else {
-        #'normal' rcsdiff output 
+        #'normal' rcsdiff output
         foreach( split( /\n/, $text ) ) {
     	    if ( /^([0-9]+)[0-9\,]*([acd])([0-9]+)/ ) {
     	        #line number
-	        push @diffArray, ['l', $1, $3];
-	    } elsif ( /^</ ) {
-	        s/^< //go;
-	            push @diffArray, ['-', $_, ''];
-	    } elsif ( /^>/ ) {
-	        s/^> //go;
-	            push @diffArray, ['+', '', $_];
-	    } else {
-	        #empty lines and the --- selerator in the diff
-	        #push @diffArray, ['u', $_, $_];
-	    }
+                push @diffArray, ['l', $1, $3];
+            } elsif( /^< (.*)$/ ) {
+	            push @diffArray, ['-', $1, ''];
+            } elsif( /^> (.*)$/ ) {
+	            push @diffArray, ['+', '', $1];
+            } else {
+                #push @diffArray, ['u', '', ''];
+            }
         }
     }
     return \@diffArray;
 }
 
 sub _ci {
-    my( $this, $comment, $user ) = @_;
+    my( $this, $comment, $user, $date ) = @_;
 
-    $comment = 'none' unless( $comment );
-    my ($rcsOutput, $exit) = $this->{session}->{sandbox}->readFromProcess
-      ( $TWiki::cfg{RCS}{ciCmd},
-        USERNAME => $user,
-        FILENAME => $this->{file},
-        COMMENT => $comment );
+    $comment ||= 'none';
+
+    my ($rcsOutput, $exit);
+
+    if( defined( $date )) {
+        $date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
+        ($rcsOutput, $exit)= $this->{session}->{sandbox}->readFromProcess
+          ( $TWiki::cfg{RCS}{ciDateCmd},
+            USERNAME => $user,
+            FILENAME => $this->{file},
+            COMMENT => $comment,
+            DATE => $date );
+    } else {
+        ($rcsOutput, $exit)= $this->{session}->{sandbox}->readFromProcess
+          ( $TWiki::cfg{RCS}{ciCmd},
+            USERNAME => $user,
+            FILENAME => $this->{file},
+            COMMENT => $comment );
+    }
 
     if( $exit && $rcsOutput ) {
         $rcsOutput = "$TWiki::cfg{RCS}{ciCmd}\n$rcsOutput";
@@ -402,13 +409,14 @@ sub getRevisionAtTime {
     }
 	$date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
     my ($rcsOutput, $exit) = $this->{session}->{sandbox}->readFromProcess
-      ( $TWiki::cfg{RCS}{rlogDateCmd}, DATE => $date, FILENAME => $this->{file} );
+      ( $TWiki::cfg{RCS}{rlogDateCmd},
+        DATE => $date,
+        FILENAME => $this->{file} );
 
     if ( $rcsOutput =~ m/revision \d+\.(\d+)/ ) {
         return $1;
-    } else {
-        return undef;
     }
+    return undef;
 }
 
 1;

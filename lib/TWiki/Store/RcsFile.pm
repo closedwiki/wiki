@@ -61,7 +61,7 @@ sub new {
     $this->{session} = $session;
     $this->{web} = $web;
     $this->{topic} = $topic;
-    $this->{attachment} = $attachment || '';
+    $this->{attachment} = $attachment;
     $this->{file} = $this->_makeFileName();
     $this->{rcsFile} = $this->_makeFileName( ",v" );
 
