@@ -221,37 +221,37 @@ sub buildCommandLine {
                 }
 
                 for my $param (@params) {
-                    if ($flag) {
-                        if ($flag =~ /U/) {
-                            push @targs, untaintUnchecked $param;
-                        } elsif ($flag =~ /F/) {
-                            push @targs, normalizeFileName $param;
-                        } elsif ($flag =~ /N/) {
-                            # Generalized number.
-                            if ( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {
-                                push @targs, $1;
-                            } else {
-                                throw Error::Simple( "invalid number argument '$param'" );
-                            }
-                        } elsif ($flag =~ /S/) {
-                            # Harmless string.
-                            if ( $param =~ /^([0-9A-Za-z.+_\-]{0,30})$/ ) {
-                                push @targs, $1;
-                            } else {
-                                throw Error::Simple( "invalid string argument '$param'" );
-                            }
-                        } elsif ($flag =~ /D/) {
-                            # RCS date.
-                            if ( $param =~ m|^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$| ) {
-                                push @targs, $1;
-                            } else {
-                                throw Error::Simple( "invalid date argument '$param'" );
-                            }
+                    unless ($flag) {
+                        push @targs, $param;
+                        next;
+                    }
+                    if ($flag =~ /U/) {
+                        push @targs, untaintUnchecked $param;
+                    } elsif ($flag =~ /F/) {
+                        push @targs, normalizeFileName $param;
+                    } elsif ($flag =~ /N/) {
+                        # Generalized number.
+                        if ( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {
+                            push @targs, $1;
                         } else {
-                            throw Error::Simple( "illegal flag in $t" );
+                            throw Error::Simple( "invalid number argument '$param' $t" );
+                        }
+                    } elsif ($flag =~ /S/) {
+                        # Harmless string.
+                        if ( $param =~ /^([0-9A-Za-z.+_\-]{0,30})$/ ) {
+                            push @targs, $1;
+                        } else {
+                            throw Error::Simple( "invalid string argument '$param' $t" );
+                        }
+                    } elsif ($flag =~ /D/) {
+                        # RCS date.
+                        if ( $param =~ m|^(\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d)$| ) {
+                            push @targs, $1;
+                        } else {
+                            throw Error::Simple( "invalid date argument '$param' $t" );
                         }
                     } else {
-                        push @targs, $param;
+                        throw Error::Simple( "illegal flag in $t" );
                     }
                 }
             } else {
