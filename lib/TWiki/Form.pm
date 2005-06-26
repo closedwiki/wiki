@@ -33,24 +33,28 @@ use Error qw( :try );
 use TWiki::OopsException;
 use CGI qw( -any );
 
-# The following are reserved as URL parameters to scripts and may not be
-# used as field names in forms.
-my $reservedFieldNames =
-  {
-   action => 1,
-   breaklock => 1,
-   contenttype => 1,
-   dontnotify => 1,
-   editaction => 1,
-   forcenewrevision => 1,
-   formtemplate => 1,
-   onlynewtopic => 1,
-   onlywikiname => 1,
-   originalrev => 1,
-   templatetopic => 1,
-   text => 1,
-   topicparent => 1,
-  };
+use vars qw( $reservedFieldNames );
+
+BEGIN {
+    # The following are reserved as URL parameters to scripts and may not be
+    # used as field names in forms.
+    $reservedFieldNames =
+      {
+       action => 1,
+       breaklock => 1,
+       contenttype => 1,
+       dontnotify => 1,
+       editaction => 1,
+       forcenewrevision => 1,
+       formtemplate => 1,
+       onlynewtopic => 1,
+       onlywikiname => 1,
+       originalrev => 1,
+       templatetopic => 1,
+       text => 1,
+       topicparent => 1,
+      };
+};
 
 =pod
 
