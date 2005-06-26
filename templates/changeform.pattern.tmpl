@@ -46,7 +46,9 @@
 </div>
 %TEXT%
 %EDITACTION%
-<input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+<input type="hidden" name="topicparent" value="%URLPARAM{"topicparent"}%" />
+<input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
+<input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
 <div class="twikiTopicAction">
 <table>
 <tr>
