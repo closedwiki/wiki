@@ -327,8 +327,10 @@ sub save {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );
         my $randompart = randomURL();
-        $redirecturl = $editURL.'|'.$randompart;
-        $redirecturl .= "?action=$editaction" if $editaction;
+        $redirecturl = $editURL.'|'.$randompart.'?';
+        $redirecturl .= 'action='.$editaction.';' if $editaction;
+        $redirecturl .= 'skin='.$query->param('skin').';' if $query->param('skin');
+        $redirecturl .= 'cover='.$query->param('cover').';' if $query->param('cover');
     } elsif( $saveaction eq 'quietsave' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
     } elsif( $saveaction eq 'cancel' ) {
