@@ -112,6 +112,8 @@ sub replaceRevision {
 
     my $rev = $this->numRevisions();
 
+    $comment ||= 'none';
+
     # update repository with same userName and date
     if( $rev == 1 ) {
         # initial revision, so delete repository file and start again
@@ -129,12 +131,13 @@ sub replaceRevision {
       ( $TWiki::cfg{RCS}{ciDateCmd},
         DATE => $date,
         USERNAME => $user,
-        FILENAME => $this->{file} );
+        FILENAME => $this->{file},
+        COMMENT => $comment );
     if( $exit ) {
         $rcsOut = "$TWiki::cfg{RCS}{ciDateCmd}\n$rcsOut";
         return $rcsOut;
     }
-    chmod( 0644, $this->{file} );
+    chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 
     return undef;
 }
@@ -155,7 +158,7 @@ sub _deleteRevision {
       ( $TWiki::cfg{RCS}{unlockCmd},
         FILENAME => $this->{file} );
 
-    chmod( 0644, $this->{file} );
+    chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 
     my ($rcsOut, $exit) = $this->{session}->{sandbox}->readFromProcess
       ( $TWiki::cfg{RCS}{delRevCmd},
@@ -210,7 +213,7 @@ sub numRevisions {
     my( $this ) = @_;
 
     if( ! -e $this->{rcsFile} ) {
-       return 0;
+        return 0;
     }
 
     my ($rcsOutput) =
@@ -229,42 +232,36 @@ sub numRevisions {
 sub getRevisionInfo {
     my( $this, $version ) = @_;
 
-    my $rcsError = '';
-    my( $dummy, $rev, $date, $user, $comment );
-    if ( -e $this->{rcsFile} ) {
-        $version = $this->numRevisions() unless $version;
+    if( -e $this->{rcsFile} ) {
+        if( !$version || $version > $this->numRevisions()) {
+            $version = $this->numRevisions();
+        }
         my $cmd = $TWiki::cfg{RCS}{infoCmd};
-        my ( $rcsOut, $exit ) = $this->{session}->{sandbox}->readFromProcess
+        my( $rcsOut, $exit ) = $this->{session}->{sandbox}->readFromProcess
           ( $cmd,
             REVISION => "1.$version",
             FILENAME => $this->{rcsFile} );
-       $rcsError = "Error with $cmd, output: $rcsOut" if( $exit );
-       if( ! $rcsError ) {
-            if( $rcsOut =~ /date: (.*?);  author: (.*?);.*\n(.*)\n/ ) {
-                $date = $1;
-                $user = $2;
-                $comment = $3;
-                $date = TWiki::Time::parseTime( $date );
+        if( ! $exit ) {
+            if( $rcsOut =~ /date: ([^;]+);  author: ([^;]*);[^\n]*\n([^\n]*)\n/s ) {
+                my $user = $2;
+                my $comment = $3;
+                my $date = TWiki::Time::parseTime( $1 );
+                my $rev = $version;
                 if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
                     $rev = $1;
+                    return( $rev, $date, $user, $comment );
                 }
             }
-            $rcsError = "Rev info missing from revision file $this->{rcsFile}" unless( $rev );
-       }
-    } else {
-       $rcsError = "Revision file $this->{rcsFile} is missing";
+        }
     }
 
-    ( $dummy, $rev, $date, $user, $comment ) =
-      $this->_getRevisionInfoDefault() if( $rcsError );
-
-    return( $rcsError, $rev, $date, $user, $comment );
+    return $this->SUPER::getRevisionInfo( $version );
 }
 
 # implements RcsFile
 sub revisionDiff {
     my( $this, $rev1, $rev2, $contextLines ) = @_;
-    
+
     my $error = '';
 
     my $tmp = '';
@@ -273,7 +270,7 @@ sub revisionDiff {
         my $text = $this->getRevision(1);
         $tmp = "1a1\n";
         foreach( split( /\n/, $text ) ) {
-           $tmp = "$tmp> $_\n";
+            $tmp = "$tmp> $_\n";
         }
     } else {
         $contextLines = 3 unless defined($contextLines);
@@ -351,10 +348,9 @@ sub parseRevisionDiff {
 sub _ci {
     my( $this, $comment, $user, $date ) = @_;
 
-    $comment ||= 'none';
+    $comment = 'none' unless $comment;
 
     my ($rcsOutput, $exit);
-
     if( defined( $date )) {
         $date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
         ($rcsOutput, $exit)= $this->{session}->{sandbox}->readFromProcess
@@ -375,10 +371,7 @@ sub _ci {
         $rcsOutput = "$TWiki::cfg{RCS}{ciCmd}\n$rcsOutput";
     }
 
-    # A ci -u leaves the file unwriteable, so fix that. We are still
-    # rather mean with the permissions, but at least the webserver user
-    # can write!
-    chmod( 0644, $this->{file} );
+    chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 
     return $rcsOutput;
 }
@@ -396,7 +389,7 @@ sub _lock {
         $rcsOutput = "$TWiki::cfg{RCS}{lockCmd}\n$rcsOutput";
         return $rcsOutput;
     }
-    chmod( 0644, $this->{file} );
+    chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 
     return undef;
 }
@@ -416,7 +409,7 @@ sub getRevisionAtTime {
     if ( $rcsOutput =~ m/revision \d+\.(\d+)/ ) {
         return $1;
     }
-    return undef;
+    return 1;
 }
 
 1;

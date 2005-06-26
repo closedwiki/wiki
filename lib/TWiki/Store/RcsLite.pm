@@ -136,10 +136,8 @@ my $T = "\t";
 # delta   - ref to array of deltas indexed by version
 # where   - 'nofile' if there is no file, or a text string
 #           representing the parse state when the parse finished.
-#           If the parse was successful this will be 'done'.
+#           If the parse was successful this will be 'parsed'.
 #
-# These fields will not necessarily have been populated unless
-# ensureProcessed has been called.
 
 # implements RcsFile
 sub new {
@@ -166,54 +164,54 @@ sub _readTo {
     my $string = '';
     my $state = '';
     while( read( $file, $ch, 1 ) ) {
-       if( $ch eq '@' ) {
-          if( $state eq '@' ) {
-             $state = 'e';
-             next;
-          } elsif( $state eq 'e' ) {
-             $state = '@';
-             $string .= '@';
-             next;
-          } else {
-             $state = '@';
-             next;
-          }
-       } else {
-          if( $state eq 'e' ) {
-             $state = '';
-             if( $char eq '@' ) {
-                last;
-             }
-             # End of string
-          } elsif ( $state eq '@' ) {
-             $string .= $ch;
-             next;
-          }
-       }
-       if( $ch =~ /\s/ ) {
-          if( length( $buf ) == 0 ) {
-              next;
-          } elsif( $space ) {
-              next;
-          } else {
-              $space = 1;
-              $ch = ' ';
-          }
-       } else {
-          $space = 0;
-       }
-       $buf .= $ch;
-       if( $ch eq $char ) {
-           last;
-       }
+        if( $ch eq '@' ) {
+            if( $state eq '@' ) {
+                $state = 'e';
+                next;
+            } elsif( $state eq 'e' ) {
+                $state = '@';
+                $string .= '@';
+                next;
+            } else {
+                $state = '@';
+                next;
+            }
+        } else {
+            if( $state eq 'e' ) {
+                $state = '';
+                if( $char eq '@' ) {
+                    last;
+                }
+                # End of string
+            } elsif ( $state eq '@' ) {
+                $string .= $ch;
+                next;
+            }
+        }
+        if( $ch =~ /\s/ ) {
+            if( length( $buf ) == 0 ) {
+                next;
+            } elsif( $space ) {
+                next;
+            } else {
+                $space = 1;
+                $ch = ' ';
+            }
+        } else {
+            $space = 0;
+        }
+        $buf .= $ch;
+        if( $ch eq $char ) {
+            last;
+        }
     }
     return( $buf, $string );
 }
 
-# Make sure RCS file has been read in
+# Make sure RCS file has been read in and there is history
 sub _ensureProcessed {
     my( $this ) = @_;
-    if( ! $this->{where} ) {
+    if( ! $this->{state} ) {
         $this->_process();
     }
 }
@@ -223,112 +221,120 @@ sub _process {
     my( $this ) = @_;
     my $rcsFile = TWiki::Sandbox::normalizeFileName( $this->{rcsFile} );
     if( ! -e $rcsFile ) {
-        $this->{where} = 'nofile';
+        $this->{state} = 'nofile';
         return;
     }
     my $fh = new FileHandle;
     if( ! $fh->open( $rcsFile ) ) {
         $this->{session}->writeWarning( 'Failed to open '.$rcsFile );
-        $this->{where} = 'nofile';
+        $this->{state} = 'nofile';
         return;
     }
-    my $where = 'admin.head';
     binmode( $fh );
-    my $lastWhere = '';
-    my $going = 1;
+    my $state = 'admin.head';
     my $term = ';';
     my $string = '';
     my $num = '';
-    my $headNum = '';
+    my $headNum = 0;
     my @revs = ();
     my $dnum = '';
-    while( $going ) {
-       ($_, $string) = _readTo( $fh, $term );
-       last if( ! $_ );
+    while( 1 ) {
+        ($_, $string) = _readTo( $fh, $term );
+        last if( ! $_ );
 
-       my $lastWhere = $where;
-       if( $where eq 'admin.head' ) {
-          if( /^head\s+([0-9]+)\.([0-9]+);$/o ) {
-             die( 'Only support start of version being 1' ) if( $1 ne '1' );
-             $headNum = $2;
-             $where = 'admin.access'; # Don't support branches
-          } else {
-             last;
-          }
-       } elsif( $where eq 'admin.access' ) {
-          if( /^access\s*(.*);$/o ) {
-             $where = 'admin.symbols';
-             $this->{access} = $1;
-          } else {
-             last;
-          }
-       } elsif( $where eq 'admin.symbols' ) {
-          if( /^symbols(.*);$/o ) {
-             $where = 'admin.locks';
-             $this->{symbols} = $1;
-          } else {
-             last;
-          }
-       } elsif( $where eq 'admin.locks' ) {
-          if( /^locks.*;$/o ) {
-             $where = 'admin.postLocks';
-          } else {
-             last;
-          }
-       } elsif( $where eq 'admin.postLocks' ) {
-          if( /^strict\s*;/o ) {
-             $where = 'admin.postStrict';
-          }
-       } elsif( $where eq 'admin.postStrict' &&
-                /^comment\s.*$/o ) {
-             $where = 'admin.postComment';
-             $this->{comment} = $string;
-       } elsif( ( $where eq 'admin.postStrict' || $where eq 'admin.postComment' )  &&
-                /^expand\s/o ) {
-             $where = 'admin.postExpand';
-             $this->{expand} = $string;
-       } elsif( $where eq 'admin.postStrict' || $where eq 'admin.postComment' || 
-                $where eq 'admin.postExpand' || $where eq 'delta.date') {
-          if( /^([0-9]+)\.([0-9]+)\s+date\s+(\d\d(\d\d)?(\.\d\d){5}?);$/o ) {
-             $where = 'delta.author';
-             $num = $2;
-             $revs[$num]->{date} = TWiki::Time::parseTime($3);
-          }
-       } elsif( $where eq 'delta.author' ) {
-          if( /^author\s+(.*);$/o ) {
-             $revs[$num]->{author} = $1;
-             if( $num == 1 ) {
-                $where = 'desc';
-                $term = '@';
-             } else {
-                $where = 'delta.date';
-             }
-          }
-       } elsif( $where eq 'desc' ) {
-          if( /desc\s*$/o ) {
-             $this->{desc} = $string;
-             $where = 'deltatext.log';
-          }
-       } elsif( $where eq 'deltatext.log' ) {
-          if( /\d+\.(\d+)\s+log\s+$/o ) {
-             $dnum = $1;
-             $revs[$dnum]->{log} = $string;
-             $where = 'deltatext.text';
-          }
-       } elsif( $where eq 'deltatext.text' ) {
-          if( /text\s*$/o ) {
-             $where = 'deltatext.log';
-             $revs[$dnum]->{text} = $string;
-             if( $dnum == 1 ) {
-                $where = 'done';
+        if( $state eq 'admin.head' ) {
+            if( /^head\s+([0-9]+)\.([0-9]+);$/o ) {
+                ASSERT( $1 eq 1 ) if DEBUG;
+                $headNum = $2;
+                $state = 'admin.access'; # Don't support branches
+            } else {
                 last;
-             }
-          }
-       }
+            }
+        } elsif( $state eq 'admin.access' ) {
+            if( /^access\s*(.*);$/o ) {
+                $state = 'admin.symbols';
+                $this->{access} = $1;
+            } else {
+                last;
+            }
+        } elsif( $state eq 'admin.symbols' ) {
+            if( /^symbols(.*);$/o ) {
+                $state = 'admin.locks';
+                $this->{symbols} = $1;
+            } else {
+                last;
+            }
+        } elsif( $state eq 'admin.locks' ) {
+            if( /^locks.*;$/o ) {
+                $state = 'admin.postLocks';
+            } else {
+                last;
+            }
+        } elsif( $state eq 'admin.postLocks' ) {
+            if( /^strict\s*;/o ) {
+                $state = 'admin.postStrict';
+            }
+        } elsif( $state eq 'admin.postStrict' &&
+                 /^comment\s.*$/o ) {
+            $state = 'admin.postComment';
+            $this->{comment} = $string;
+        } elsif( ( $state eq 'admin.postStrict' ||
+                   $state eq 'admin.postComment' )  &&
+                 /^expand\s/o ) {
+            $state = 'admin.postExpand';
+            $this->{expand} = $string;
+        } elsif( $state eq 'admin.postStrict' ||
+                 $state eq 'admin.postComment' ||
+                 $state eq 'admin.postExpand' ||
+                 $state eq 'delta.date') {
+            if( /^([0-9]+)\.([0-9]+)\s+date\s+(\d\d(\d\d)?(\.\d\d){5}?);$/o ) {
+                $state = 'delta.author';
+                $num = $2;
+                $revs[$num]->{date} = TWiki::Time::parseTime($3);
+            }
+        } elsif( $state eq 'delta.author' ) {
+            if( /^author\s+(.*);$/o ) {
+                $revs[$num]->{author} = $1;
+                if( $num == 1 ) {
+                    $state = 'desc';
+                    $term = '@';
+                } else {
+                    $state = 'delta.date';
+                }
+            }
+        } elsif( $state eq 'desc' ) {
+            if( /desc\s*$/o ) {
+                $this->{desc} = $string;
+                $state = 'deltatext.log';
+            }
+        } elsif( $state eq 'deltatext.log' ) {
+            if( /\d+\.(\d+)\s+log\s+$/o ) {
+                $dnum = $1;
+                $revs[$dnum]->{log} = $string;
+                $state = 'deltatext.text';
+            }
+        } elsif( $state eq 'deltatext.text' ) {
+            if( /text\s*$/o ) {
+                $state = 'deltatext.log';
+                $revs[$dnum]->{text} = $string;
+                if( $dnum == 1 ) {
+                    $state = 'parsed';
+                    last;
+                }
+            }
+        }
+    }
+
+    unless( $state eq 'parsed' ) {
+        my $error = $this->{rcsFile}.' is corrupt; parsed up to '.$state;
+        $this->{session}->writeWarning( $error );
+        #ASSERT(0) if DEBUG;
+        $headNum = 0;
+        $state = 'nofile'; # ignore the RCS file; graceful recovery
     }
 
     $this->{head} = $headNum;
-    $this->{where} = $where;
+    $this->{state} = $state;
     $this->{revs} = \@revs;
 
     close( $fh );
@@ -344,9 +350,8 @@ sub _formatString {
 sub _write {
     my( $this, $file ) = @_;
 
-    $this->_ensureProcessed();
     # admin
-    my $nr = $this->{head};
+    my $nr = $this->{head} || 1;
     print $file <<HERE;
 head	1.$nr;
 access	$this->{access};
@@ -381,22 +386,23 @@ HERE
           'log',$N,_formatString( $this->{revs}[$i]->{log} ),
             $N,'text',$N,_formatString( $this->{revs}[$i]->{text} ),$N,$N;
     }
+    $this->{state} = 'parsed'; # now known clean
 }
 
 # implements RcsFile
 sub initBinary {
-   my( $this ) = @_;
-   # Nothing to be done but note for re-writing
-   $this->{expand} = 'b';
-   return undef;
+    my( $this ) = @_;
+    # Nothing to be done but note for re-writing
+    $this->{expand} = 'b';
+    return undef;
 }
 
 # implements RcsFile
 sub initText {
-   my( $this ) = @_;
-   # Nothing to be done but note for re-writing
-   $this->{expand} = '';
-   return undef;
+    my( $this ) = @_;
+    # Nothing to be done but note for re-writing
+    $this->{expand} = '';
+    return undef;
 }
 
 # implements RcsFile
@@ -409,10 +415,12 @@ sub numRevisions {
 # implements RcsFile
 sub addRevision {
     my( $this, $text, $log, $author, $date ) = @_;
-    $this->_ensureProcessed();
 
     $this->_save( $this->{file}, \$text );
     $text = $this->_readFile( $this->{file} ) if( $this->{attachment} );
+
+    $this->_ensureProcessed();
+
     my $head = $this->{head};
     if( $head ) {
         my $lNew = _split( $text );
@@ -437,9 +445,8 @@ sub _writeMe {
     my $dataError = '';
     my $out = new FileHandle();
 
-    # FIXME move permission to config or similar
-    chmod( 0644, $this->{rcsFile} );
-    if( ! $out->open( '> ' . TWiki::Sandbox::normalizeFileName( $this->{rcsFile} ))) {
+    chmod( $TWiki::cfg{RCS}{filePermission}, $this->{rcsFile} );
+    if( !$out->open( '>'.TWiki::Sandbox::normalizeFileName( $this->{rcsFile} ))) {
         throw Error::Simple('Cannot open '.$this->{rcsFile}.
                             ' for write: '.$! );
     } else {
@@ -447,7 +454,8 @@ sub _writeMe {
         $this->_write( $out );
         close( $out );
     }
-    chmod( 0444, $this->{rcsFile} ); # FIXME as above
+    chmod( $TWiki::cfg{RCS}{filePermission}, $this->{rcsFile} );
+
     return $dataError;
 }
 
@@ -463,7 +471,6 @@ sub replaceRevision {
 sub deleteRevision {
     my( $this ) = @_;
     $this->_ensureProcessed();
-    return undef if( $this->{head} <= 1 );
     $this->_delLastRevision();
     return $this->_writeMe();
 }
@@ -472,14 +479,11 @@ sub _delLastRevision {
     my( $this ) = @_;
     my $numRevisions = $this->{head};
     if( $numRevisions > 1 ) {
-        # Need to recover text for new last revision
+        # can't delete revision 1
         my $lastText = $this->getRevision( $numRevisions - 1 );
-        $numRevisions--;
-        $this->{revs}[$numRevisions]->{text} = $lastText;
-    } else {
-        $numRevisions--;
+        $this->{revs}[$numRevisions - 1]->{text} = $lastText;
     }
-    $this->{head} = $numRevisions;
+    $this->{head} = $numRevisions - 1;
 }
 
 
@@ -488,74 +492,74 @@ sub _delLastRevision {
 # this operation.
 sub revisionDiff {
     my( $this, $rev1, $rev2, $contextLines ) = @_;
+    my @list;
     $this->_ensureProcessed();
     my $text1 = $this->getRevision( $rev1 );
     my $text2 = $this->getRevision( $rev2 );
 	
     my $lNew = _split( $text1 );
     my $lOld = _split( $text2 );
-	my $diff = Algorithm::Diff::sdiff( $lNew, $lOld );
+    my $diff = Algorithm::Diff::sdiff( $lNew, $lOld );
 
-	my @list;
-	foreach my $ele ( @$diff ) {
-		push @list, $ele;
-	}
+    foreach my $ele ( @$diff ) {
+        push @list, $ele;
+    }
 	return ('', \@list);	
 }
 
 # implements RcsFile
 sub getRevisionInfo {
     my( $this, $version ) = @_;
+
     $this->_ensureProcessed();
-    $version = $this->{head} if( ! $version );
 
-    my @result;
-
-    if( $this->{where} && $this->{where} ne 'nofile' ) {
-        $this->ensureProcessed();
-        @result = ( '', $version, $this->{revs}[$version]->{date},
-                    $this->{revs}[$version]->{author}, $this->{comment} );
-    } else {
-        @result = $this->_getRevisionInfoDefault();
+    if( $this->{state} ne 'nofile' ) {
+        if( !$version || $version > $this->{head} ) {
+            $version = $this->{head} || 1;
+        }
+        return ( $version,
+                 $this->{revs}[$version]->{date},
+                 $this->{revs}[$version]->{author},
+                 $this->{revs}[$version]->{log} );
     }
-
-    return @result;
+    return $this->SUPER::getRevisionInfo( $version );
 }
 
 # Apply delta (patch) to text.  Note that RCS stores reverse deltas,
 # so the text for revision x is patched to produce text for revision x-1.
 sub _patch {
-   # Both params are references to arrays
-   my( $text, $delta ) = @_;
-   my $adj = 0;
-   my $pos = 0;
-   my $max = $#$delta;
-   while( $pos <= $max ) {
-       my $d = $delta->[$pos];
-       if( $d =~ /^([ad])(\d+)\s(\d+)$/ ) {
-           my $act = $1;
-           my $offset = $2;
-           my $length = $3;
-           if( $act eq 'd' ) {
-               my $start = $offset + $adj - 1;
-               my @removed = splice( @$text, $start, $length );
-               $adj -= $length;
-               $pos++;
-           } elsif( $act eq 'a' ) {
-               my @toAdd = @$delta[$pos+1..$pos+$length];
-               splice( @$text, $offset + $adj, 0, @toAdd );
-               $adj += $length;
-               $pos += $length + 1;
-           }
-       } else {
-           last;
-       }
-   }
+    # Both params are references to arrays
+    my( $text, $delta ) = @_;
+    my $adj = 0;
+    my $pos = 0;
+    my $max = $#$delta;
+    while( $pos <= $max ) {
+        my $d = $delta->[$pos];
+        if( $d =~ /^([ad])(\d+)\s(\d+)$/ ) {
+            my $act = $1;
+            my $offset = $2;
+            my $length = $3;
+            if( $act eq 'd' ) {
+                my $start = $offset + $adj - 1;
+                my @removed = splice( @$text, $start, $length );
+                $adj -= $length;
+                $pos++;
+            } elsif( $act eq 'a' ) {
+                my @toAdd = @$delta[$pos+1..$pos+$length];
+                splice( @$text, $offset + $adj, 0, @toAdd );
+                $adj += $length;
+                $pos += $length + 1;
+            }
+        } else {
+            last;
+        }
+    }
 }
 
 # implements RcsFile
 sub getRevision {
     my( $this, $version ) = @_;
+
     $this->_ensureProcessed();
     my $head = $this->{head};
     if( $version == $head ) {
@@ -565,6 +569,7 @@ sub getRevision {
         my $text = _split( $headText );
         return $this->_patchN( $text, $head-1, $version );
     }
+    return $this->SUPER::getRevision($version);
 }
 
 # Apply reverse diffs until we reach our target rev
@@ -661,9 +666,11 @@ sub _addChunk {
 sub getRevisionAtTime {
     my( $this, $date ) = @_;
 
+    my $version = 1;
+
     $this->_ensureProcessed();
 
-    my $version = $this->{head};
+    $version = $this->{head};
 
     while( $version > 1 && $this->{revs}[$version]->{date} > $date) {
         $version--;
@@ -675,19 +682,19 @@ sub getRevisionAtTime {
 sub stringify {
     my $this = shift;
 
-    $this->_ensureProcessed();
-
-    my $s = '{';
+    my $s = '{'.$this->{web}.'.'.$this->{topic};
     $s .= " access=$this->{access}" if $this->{access};
     $s .= " symbols=$this->{symbols}" if $this->{symbols};
     $s .= " comment=$this->{comment}" if $this->{comment};
     $s .= " expand=$this->{expand}" if $this->{expand};
     $s .= " [";
-    for( my $i = $this->{head}; $i > 0; $i--) {
-        $s .= "$i : {t=$this->{revs}[$i]->{date}";
-        $s .= " l=$this->{revs}[$i]->{log}";
-        $s .= " a=$this->{revs}[$i]->{text}";
-        $s .= " d=$this->{revs}[$i]->{text}}";
+    if( $this->{head} ) {
+        for( my $i = $this->{head}; $i > 0; $i--) {
+            $s .= "$i : {t=$this->{revs}[$i]->{date}";
+            $s .= " l=$this->{revs}[$i]->{log}";
+            $s .= " a=$this->{revs}[$i]->{text}";
+            $s .= " d=$this->{revs}[$i]->{text}}";
+        }
     }
     return $s.'}'."\n";
 }

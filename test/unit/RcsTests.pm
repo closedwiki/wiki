@@ -148,6 +148,7 @@ BEGIN {
         my $fn = 'RcsTests::test_'.$impl;
         my $sfn;
         my $i;
+
         for $i ( 0..$#simpleTests ) {
             $sfn = $fn.'_getRevision'.$i;
             *$sfn = sub { shift->verifyGetRevision( $class,
@@ -171,6 +172,9 @@ BEGIN {
 
         $sfn = $fn.'_revAtTime';
         *$sfn = sub { shift->verifyRevAtTime( $class ) };
+
+        $sfn = $fn.'_revInfo';
+        *$sfn = sub { shift->verifyRevInfo( $class ) };
     }
 }
 
@@ -184,6 +188,9 @@ sub verifyGetRevision {
         my $text = $revs->[$i];
         $rcs->addRevision( $text, "rev".($i+1), "UserForRev".($i+1) );
     }
+
+    $rcs = $class->new( $twiki, $web, $topic );
+
     $this->assert_equals(scalar(@$revs), $rcs->numRevisions());
     for( my $i = 1; $i <= scalar(@$revs); $i++ ) {
         my $text = $rcs->getRevision( $i );
@@ -211,6 +218,7 @@ sub verifyGetBinaryRevision {
     unlink("tmp.tmp");
 
     $rcs = $class->new( $twiki, $web, $topic, $attachment );
+
     my $text = $rcs->getRevision( 1 );
     $this->assert_str_equals( $atttext1, $text );
     $text = $rcs->getRevision( 2 );
@@ -238,6 +246,8 @@ sub verifyDifferences {
 
     $rcs->addRevision( $from, "num 0", "RcsWrapper" );
     $rcs->addRevision( $to, "num 1", "RcsWrapper" );
+
+    $rcs = $class->new( $twiki, $web, $topic, "" );
 
     my $diff = $rcs->revisionDiff( 1, 2 );
 
@@ -281,6 +291,7 @@ sub verifyRevAtTime {
     $rcs->addRevision( "Rev0\n", '', "RcsWrapper", 0 );
     $rcs->addRevision( "Rev1\n", '', "RcsWrapper", 1000 );
     $rcs->addRevision( "Rev2\n", '', "RcsWrapper", 2000 );
+    $rcs = $class->new( $twiki, $web, 'AtTime', "" );
 
     my $r = $rcs->getRevisionAtTime(500);
     $this->assert_equals(1, $r);
@@ -288,6 +299,56 @@ sub verifyRevAtTime {
     $this->assert_equals(2, $r);
     $r = $rcs->getRevisionAtTime(2500);
     $this->assert_equals(3, $r);
+}
+
+sub verifyRevInfo {
+    my( $this, $class ) = @_;
+
+    my $rcs = $class->new( $twiki, $web, 'RevInfo', "" );
+    $rcs->addRevision( "Rev1\n", 'FirstComment', "FirstUser", 0 );
+    $rcs->addRevision( "Rev2\n", 'SecondComment', "SecondUser", 1000 );
+    $rcs->addRevision( "Rev3\n", 'ThirdComment', "ThirdUser", 2000 );
+
+    $rcs = $class->new( $twiki, $web, 'RevInfo', "" );
+
+    my ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(1);
+    $this->assert_equals(1, $rev);
+    $this->assert_equals(0, $date);
+    $this->assert_str_equals('FirstUser', $user);
+    $this->assert_str_equals('FirstComment', $comment);
+
+    ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(2);
+    $this->assert_equals(2, $rev);
+    $this->assert_equals(1000, $date);
+    $this->assert_str_equals('SecondUser', $user);
+    $this->assert_str_equals('SecondComment', $comment);
+
+    ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(3);
+    $this->assert_equals(3, $rev);
+    $this->assert_equals(2000, $date);
+    $this->assert_str_equals('ThirdUser', $user);
+    $this->assert_str_equals('ThirdComment', $comment);
+
+    ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(0);
+    $this->assert_equals(3, $rev);
+    $this->assert_equals(2000, $date);
+    $this->assert_str_equals('ThirdUser', $user);
+    $this->assert_str_equals('ThirdComment', $comment);
+
+    ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(4);
+    $this->assert_equals(3, $rev);
+    $this->assert_equals(2000, $date);
+    $this->assert_str_equals('ThirdUser', $user);
+    $this->assert_str_equals('ThirdComment', $comment);
+
+    unlink($rcs->{rcsFile});
+
+    $rcs = $class->new( $twiki, $web, 'RevInfo', "" );
+
+    ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(3);
+    $this->assert_equals(1, $rev);
+    $this->assert_str_equals('guest', $user);
+    $this->assert_str_equals('Default revision information', $comment);
 }
 
 # not tested:

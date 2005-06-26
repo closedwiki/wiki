@@ -101,12 +101,40 @@ sub init {
     }
 }
 
-# Pseudo revision information - used when there is no revision file
-sub _getRevisionInfoDefault {
+=pod
+
+---++ ObjectMethod getRevisionInfo($version) -> ($rev, $date, $user, $comment)
+   * =$version= if 0 or undef, or out of range (version number > number of revs) will return info about the latest revision.
+
+Returns (rev, date, user, comment) where rev is the number of the rev for which the info was recovered, date is the date of that rev (epoch s), user is the login name of the user who saved that rev, and comment is the comment asscoaietd with the rev.
+
+Designed to be overridden by subclasses, which can call up to this method
+if file-based rev info is required.
+
+=cut
+
+sub getRevisionInfo {
     my( $this ) = @_;
     my $fileDate = $this->getTimestamp();
-    return ( '', 1, $fileDate, $TWiki::cfg{DefaultUserLogin},
-             "Default revision information - no revision file" );
+    return ( 1, $fileDate, $TWiki::cfg{DefaultUserLogin},
+             "Default revision information" );
+}
+
+=pod
+
+---++ ObjectMethod getRevision($version) -> $text
+   * =$version= if 0 or undef, or out of range (version number > number of revs) will return the latest revision.
+
+Get the text of the given revision.
+
+Designed to be overridden by subclasses, which can call up to this method
+if the main file revision is required.
+
+=cut
+
+sub getRevision {
+    my( $this ) = @_;
+    return $this->_readFile( $this->{file} );
 }
 
 =pod
@@ -172,47 +200,47 @@ sub moveMe {
 #
 # Return error message or undef
 sub _moveTopic {
-   my( $this, $newWeb, $newTopic ) = @_;
+    my( $this, $newWeb, $newTopic ) = @_;
 
-   my $oldWeb = $this->{web};
-   my $oldTopic = $this->{topic};
+    my $oldWeb = $this->{web};
+    my $oldTopic = $this->{topic};
 
-   # Change data file
-   my $new = new TWiki::Store::RcsFile( $this->{session},
-                                        $newWeb, $newTopic, '' );
-   unless( move( $this->{file}, $new->{file} ) ) {
-       return "data file move failed.";
-   }
+    # Change data file
+    my $new = new TWiki::Store::RcsFile( $this->{session},
+                                         $newWeb, $newTopic, '' );
+    unless( move( $this->{file}, $new->{file} ) ) {
+        return "data file move failed.";
+    }
 
-   # Change data file history
-   if( -e $this->{rcsFile} ) {
-       unless( move( $this->{rcsFile}, $new->{rcsFile} )) {
-           return "history file move failed.";
-       }
-   }
+    # Change data file history
+    if( -e $this->{rcsFile} ) {
+        unless( move( $this->{rcsFile}, $new->{rcsFile} )) {
+            return "history file move failed.";
+        }
+    }
 
-   # Make sure pub directory exists for newWeb
-   my $newPubWebDir = $new->_makePubWebDir( $newWeb );
-   unless( -e $newPubWebDir ) {
-       umask( 0 );
-       mkdir( $newPubWebDir,
-              $TWiki::cfg{RCS}{dirPermission} )
-         or return "mkdir $newPubWebDir failed";;
-   }
+    # Make sure pub directory exists for newWeb
+    my $newPubWebDir = $new->_makePubWebDir( $newWeb );
+    unless( -e $newPubWebDir ) {
+        umask( 0 );
+        mkdir( $newPubWebDir,
+               $TWiki::cfg{RCS}{dirPermission} )
+          or return "mkdir $newPubWebDir failed";;
+    }
 
-   # Rename the attachment directory if there is one
-   my $oldAttachDir = $this->_makeFileDir( 1, '' );
-   my $newAttachDir = $new->_makeFileDir( 1, '');
-   if( -e $oldAttachDir ) {
-       unless( move(
-                    $oldAttachDir,
-                    $newAttachDir
-                   ) ) {
-           return 'attach move failed';
-       }
-   }
+    # Rename the attachment directory if there is one
+    my $oldAttachDir = $this->_makeFileDir( 1, '' );
+    my $newAttachDir = $new->_makeFileDir( 1, '');
+    if( -e $oldAttachDir ) {
+        unless( move(
+                     $oldAttachDir,
+                     $newAttachDir
+                    ) ) {
+            return 'attach move failed';
+        }
+    }
 
-   return undef;
+    return undef;
 }
 
 # Move an attachment from one topic to another.
@@ -283,12 +311,12 @@ sub _moveAttachment {
 
 # SMELL: this should use TWiki::Time
 sub _epochToRcsDateTime {
-   my( $dateTime ) = @_;
-   # TODO: should this be gmtime or local time?
-   my( $sec,$min,$hour,$mday,$mon,$year,$wday,$yday ) = gmtime( $dateTime );
-   $year += 1900 if( $year > 99 );
-   my $rcsDateTime = sprintf "%d.%02d.%02d.%02d.%02d.%02d", ( $year, $mon + 1, $mday, $hour, $min, $sec );
-   return $rcsDateTime;
+    my( $dateTime ) = @_;
+    # TODO: should this be gmtime or local time?
+    my( $sec,$min,$hour,$mday,$mon,$year,$wday,$yday ) = gmtime( $dateTime );
+    $year += 1900 if( $year > 99 );
+    my $rcsDateTime = sprintf "%d.%02d.%02d.%02d.%02d.%02d", ( $year, $mon + 1, $mday, $hour, $min, $sec );
+    return $rcsDateTime;
 }
 
 =pod
@@ -300,13 +328,13 @@ Check if this file type is known to be an ascii type file.
 =cut
 
 sub isAsciiDefault {
-   my( $this ) = @_;
+    my( $this ) = @_;
 
-   if( $this->{attachment} =~ /$TWiki::cfg{RCS}{asciiFileSuffixes}/ ) {
-      return 'ascii';
-   } else {
-      return '';
-   }
+    if( $this->{attachment} =~ /$TWiki::cfg{RCS}{asciiFileSuffixes}/ ) {
+        return 'ascii';
+    } else {
+        return '';
+    }
 }
 
 =pod
@@ -740,21 +768,6 @@ Return reference to an array of [ diffType, $right, $left ]
 ---++ ObjectMethod getRevision($version) -> $text
 
 Get the text for a given revision. The version number must be an integer.
-
-*Virtual method* - must be implemented by subclasses
-
-=cut
-
-=pod
-
----++ ObjectMethod getRevisionInfo($version) -> ($rcsError, $rev, $date, $user, $comment)
-
-A version number of 0 or undef will return info on the _latest_ revision.
-
-If revision file is missing, information based on actual file is returned.
-
-Date return in epoch seconds. Revision returned as a number.
-User returned as a wikiname.
 
 *Virtual method* - must be implemented by subclasses
 

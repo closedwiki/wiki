@@ -183,8 +183,6 @@ If there is a problem an error string is returned, or may throw an exception.
 
 The caller to this routine should check that all topics are valid.
 
-SMELL: $user must be the user login name, not their wiki name
-
 =cut
 
 sub moveAttachment {
@@ -320,8 +318,6 @@ sub attachmentExists {
 It is the responsibility of the caller to check for existence of webs,
 topics & lock taken for topic
 
-SMELL: $user must be the user login name, not their wiki name
-
 =cut
 
 sub moveTopic {
@@ -447,18 +443,18 @@ sub getRevisionDiff {
 
 =pod
 
----++ ObjectMethod getRevisionInfo($theWebName, $theTopic, $theRev, $attachment, $topicHandler) -> ( $date, $user, $rev, $comment )
+---++ ObjectMethod getRevisionInfo($web, $topic, $rev, $attachment) -> ( $date, $user, $rev, $comment )
 Get revision info of a topic.
-   * =$theWebName= Web name, optional, e.g. ='Main'=
-   * =$theTopic= Topic name, required, e.g. ='TokyoOffice'=
-   * =$theRev= revision number
-   * =$attachment= ttachment filename
-   * =$topicHandler= internal store use only
-Return list with: ( last update date, login name of last user, integer revision number ), e.g. =( 1234561, 'phoeny', '5' )=
+   * =$web= Web name, optional, e.g. ='Main'=
+   * =$topic= Topic name, required, e.g. ='TokyoOffice'=
+   * =$rev= revision number. If 0, undef, or out-of-range, will get info about the most recent revision.
+   * =$attachment= attachment filename; undef for a topic
+Return list with: ( last update date, last user object, =
 | $date | in epochSec |
 | $user | user *object* |
 | $rev | the revision number |
 | $comment | WHAT COMMENT? |
+e.g. =( 1234561, 'phoeny', 5, 'no comment' )
 
 NOTE NOTE NOTE if you are working within the TWiki code DO NOT USE THIS
 FUNCTION FOR GETTING REVISION INFO OF TOPICS - use
@@ -470,17 +466,16 @@ coming from meta and Store revision information being out of step.
 =cut
 
 sub getRevisionInfo {
-    my( $this, $web, $topic, $theRev, $attachment, $topicHandler ) = @_;
+    my( $this, $web, $topic, $rev, $attachment ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
 
-    $theRev = 0 unless( $theRev );
+    $rev ||= 0;
 
-    unless( $topicHandler ) {
-        $topicHandler =
-          $this->_getTopicHandler( $web, $topic, $attachment );
-    }
-    my( $rcsOut, $rev, $date, $user, $comment ) =
-      $topicHandler->getRevisionInfo( $theRev );
+    my $topicHandler =
+      $this->_getTopicHandler( $web, $topic, $attachment );
+
+    my( $rrev, $date, $user, $comment ) =
+      $topicHandler->getRevisionInfo( $rev );
     $user = $this->{session}->{users}->findUser( $user ) if $user;
 
     return ( $date, $user, $rev, $comment );
@@ -533,7 +528,7 @@ sub _readKeyValues {
 =pod
 
 ---++ ObjectMethod saveTopic (  $user, $web, $topic, $text, $meta, $options  ) -> $error
-   * =$user= - login name of user doing the saving
+   * =$user= - user doing the saving (object)
    * =$web= - web for topic
    * =$topic= - topic to atach to
    * =$text= - topic text
@@ -719,13 +714,13 @@ sub _noHandlersSave {
         if( abs( $mtime2 - $mtime1 ) <
             $TWiki::cfg{ReplaceIfEditedAgainWithin} ) {
 
-            # SMELL: why can't we get this from $meta?
-            my( $date, $revuser ) =
-              $this->getRevisionInfo( $web, $topic, $currentRev,
-                               undef, $topicHandler );
+            my( $rev, $date, $revuser, $comment ) =
+              $topicHandler->getRevisionInfo( $currentRev );
+
             # same user?
-            if(  $revuser->equals( $user )) {
-                return $this->repRev( $user, $web, $topic, $text, $meta, $options );
+            if(  $revuser eq $user->wikiName() ) {
+                return $this->repRev( $user, $web, $topic, $text,
+                                      $meta, $options );
             }
         }
     }
@@ -1063,7 +1058,7 @@ sub extractMetaData {
         if( $meta->count( 'TOPICMOVED' ) ) {
             my $moved = $meta->get( 'TOPICMOVED' );
             my $u = $this->{session}->{users}->findUser( $moved->{by} );
-            $moved->{by} = $u->login() if $u;
+            $moved->{by} = $u->wikiName() if $u;
             $meta->put( 'TOPICMOVED', $moved );
         }
     }
@@ -1794,7 +1789,7 @@ sub setLease {
     my $lease;
     if( $user ) {
         my $t = time();
-        $lease = { user => $user->login(),
+        $lease = { user => $user->wikiName(),
                    expires => $t + $length,
                    taken => $t };
     }
