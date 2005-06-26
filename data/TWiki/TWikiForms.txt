@@ -77,6 +77,7 @@ You can also retrieve possible values for select, checkbox or radio types from o
 </blockquote>
 
 *Notes:*
+   * A very few field names are reserved. if you try to use one of these names, TWiki will autoamtically append an underscore to the name when the form is used.
 	* The first item in the list for a select or radio type is the default item.
 	* The topic definition is not read when a topic is viewed.
 	* Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a select, checkbox or radio field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links.

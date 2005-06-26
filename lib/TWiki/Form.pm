@@ -62,7 +62,7 @@ BEGIN {
 
 =pod
 
----++ ClassMethod new ( $web, $form )
+---++ ClassMethod new ( $session, $web, $form )
 
    * $web - default web to recover form from, if $form doesn't specify a web
    * =$form= - topic name to read form definition from
@@ -72,7 +72,7 @@ May throw TWiki::OopsException
 =cut
 
 sub new {
-    my( $class, $session, $web, $form ) = @_;
+    my( $class, $session, $web, $form, $noNameCheck ) = @_;
     my $this = bless( {}, $class );
 
     ( $web, $form ) =
@@ -101,13 +101,6 @@ sub new {
     foreach my $fieldDef ( @{$this->{fields}} ) {
         my @posValues = ();
 
-        if( $reservedFieldNames->{$fieldDef->{name}} ) {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'illegal_field_name',
-                                        web => $web,
-                                        topic => $form,
-                                        params => [ $fieldDef->{name} ] );
-        }
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
             @posValues = split( /,/, $fieldDef->{value} );
             my $topic = $fieldDef->{referenced} || $fieldDef->{name};
@@ -154,72 +147,80 @@ sub _parseFormDefinition {
     foreach( split( /\n/, $text ) ) {
         if( /^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|/ ) {
             $inBlock = 1;
-        } else {
-            # Only insist on first field being present FIXME - use oops page instead?
-            if( $inBlock && s/^\s*\|//o ) {
-                my( $title, $type, $size, $vals, $tooltip, $attributes ) = split( /\|/ );
-                $title ||= '';
-                $title =~ s/^\s*//go;
-                $title =~ s/\s*$//go;
+            next;
+        }
+        # Only insist on first field being present FIXME - use oops page instead?
+        if( $inBlock && s/^\s*\|//o ) {
+            my( $title, $type, $size, $vals, $tooltip, $attributes ) = split( /\|/ );
+            $title ||= '';
+            $title =~ s/^\s*//go;
+            $title =~ s/\s*$//go;
 
-                $attributes ||= '';
-                $attributes =~ s/\s*//go;
-                $attributes = '' if( ! $attributes );
+            $attributes ||= '';
+            $attributes =~ s/\s*//go;
+            $attributes = '' if( ! $attributes );
 
-                $type ||= '';
-                $type = lc $type;
-                $type =~ s/^\s*//go;
-                $type =~ s/\s*$//go;
-                $type = 'text' if( ! $type );
+            $type ||= '';
+            $type = lc $type;
+            $type =~ s/^\s*//go;
+            $type =~ s/\s*$//go;
+            $type = 'text' if( ! $type );
 
-                $size ||= '';
-                $size = _cleanField( $size );
-                unless( $size ) {
-                    if( $type eq 'text' ) {
-                        $size = 20;
-                    } elsif( $type eq 'textarea' ) {
-                        $size = '40x5';
-                    } else {
-                        $size = 1;
-                    }
+            $size ||= '';
+            $size = _cleanField( $size );
+            unless( $size ) {
+                if( $type eq 'text' ) {
+                    $size = 20;
+                } elsif( $type eq 'textarea' ) {
+                    $size = '40x5';
+                } else {
+                    $size = 1;
                 }
-
-                $vals ||= '';
-                # SMELL: why isn't this just handleCommonTags?
-                $vals =~ s/%SEARCH{(.*?)}%/_searchVals($this->{session}, $1)/geo;
-                $vals =~ s/^\s*//go;
-                $vals =~ s/\s*$//go;
-
-                # SMELL: WTF is this??? This looks like a really bad hack!
-                if( $vals eq '$users' ) {
-                    $vals = $TWiki::cfg{UsersWebName} . '.' .
-                      join( ", ${TWiki::cfg{UsersWebName}}.",
-                            ( $store->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
-                }
-
-                $tooltip ||= '';
-                $tooltip =~ s/^\s*//go;
-                $tooltip =~ s/\s*$//go;
-
-                my $referenced = "";
-                if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
-                    $referenced = _cleanField( $1 );      # topics with diff.
-                    $title = $2;                          # field titles
-                }
-
-                push( @fields,
-                      { name => _cleanField( $title ),
-                        title => $title,
-                        type => $type,
-                        size => $size,
-                        value => $vals,
-                        tooltip => $tooltip,
-                        attributes => $attributes,
-                        referenced => $referenced
-                      } );
-            } else {
-                $inBlock = 0;
             }
+
+            $vals ||= '';
+            # SMELL: why isn't this just handleCommonTags?
+            $vals =~ s/%SEARCH{(.*?)}%/_searchVals($this->{session}, $1)/geo;
+            $vals =~ s/^\s*//go;
+            $vals =~ s/\s*$//go;
+
+            # SMELL: WTF is this??? This looks like a really bad hack!
+            if( $vals eq '$users' ) {
+                $vals = $TWiki::cfg{UsersWebName} . '.' .
+                  join( ", ${TWiki::cfg{UsersWebName}}.",
+                        ( $store->getTopicNames( $TWiki::cfg{UsersWebName} ) ) );
+            }
+
+            $tooltip ||= '';
+            $tooltip =~ s/^\s*//go;
+            $tooltip =~ s/\s*$//go;
+
+            my $referenced = "";
+            if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
+                $referenced = _cleanField( $1 );      # topics with diff.
+                $title = $2;                          # field titles
+            }
+
+            my $name = _cleanField( $title );
+
+            # Rename fields with reserved names
+            if( $reservedFieldNames->{$name} ) {
+                $name .= '_';
+                $title .= '_';
+            }
+
+            push( @fields,
+                  { name => $name,
+                    title => $title,
+                    type => $type,
+                    size => $size,
+                    value => $vals,
+                    tooltip => $tooltip,
+                    attributes => $attributes,
+                    referenced => $referenced
+                  } );
+        } else {
+            $inBlock = 0;
         }
     }
 
@@ -637,6 +638,8 @@ sub getFieldValuesFromQuery {
 
     foreach my $fieldDef ( @{$this->{fields}} ) {
         next unless $fieldDef->{name};
+
+        next if( $reservedFieldNames->{$fieldDef->{name}} );
 
         my $param = $this->cgiName( $fieldDef->{name} );
 
