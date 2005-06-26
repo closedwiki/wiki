@@ -33,6 +33,25 @@ use Error qw( :try );
 use TWiki::OopsException;
 use CGI qw( -any );
 
+# The following are reserved as URL parameters to scripts and may not be
+# used as field names in forms.
+my $reservedFieldNames =
+  {
+   action => 1,
+   breaklock => 1,
+   contenttype => 1,
+   dontnotify => 1,
+   editaction => 1,
+   forcenewrevision => 1,
+   formtemplate => 1,
+   onlynewtopic => 1,
+   onlywikiname => 1,
+   originalrev => 1,
+   templatetopic => 1,
+   text => 1,
+   topicparent => 1,
+  };
+
 =pod
 
 ---++ ClassMethod new ( $web, $form )
@@ -74,6 +93,13 @@ sub new {
     foreach my $fieldDef ( @{$this->{fields}} ) {
         my @posValues = ();
 
+        if( $reservedFieldNames->{$fieldDef->{name}} ) {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'illegal_field_name',
+                                        web => $web,
+                                        topic => $form,
+                                        params => [ $fieldDef->{name} ] );
+        }
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
             @posValues = split( /,/, $fieldDef->{value} );
             my $topic = $fieldDef->{referenced} || $fieldDef->{name};
@@ -571,18 +597,15 @@ sub renderHidden {
 =pod
 
 ---++ ObjectMethod cgiName( $field ) -> $string
-Generate the unique name of a field for use in CGI name= parameters. These
-names are constructed so they don't conflict with ordinary CGI script
-parameters.
+Generate the 'name' of the CGI parameter used to represent a field.
 
 =cut
 
-# Note that naming the parameters for the form they are in won't work,
-# because if the form changes we want to retain as many form values as we can.
 sub cgiName {
     my( $this, $fieldName ) = @_;
 
-    return 'FIELD:'.$fieldName;
+    # See Codev.FormFieldsNamedSameAsParameters
+    return $fieldName;
 }
 
 =pod

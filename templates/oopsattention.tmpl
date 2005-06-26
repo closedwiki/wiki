@@ -302,6 +302,12 @@ administrator.
 
 Go back in your browser and save your changes locally.
 %TMPL:END%
+%TMPL:DEF{"illegal_field_name"}%
+---++ Illegal field name
+%PARAM1% may not be used as the name of a field in a form.
+
+Please correct the %WEB%.%TOPIC% form defintion.
+%TMPL:END%
 %TMPL:DEF{"message"}%
 %INSTANTIATE%
 %TMPL:END%

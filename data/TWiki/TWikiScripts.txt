@@ -35,9 +35,9 @@ The =save= script performs a range of save-related functions, as selected by the
 | =action=cancel= | exit without save, return to view |
 | =action=preview= | preview edited text |
 | =action=add form= | Redirect to the "change form" page. |
-| =action=replace form...= | Redirect to the "change form" page. |
+| =action=replace&nbsp;form...= | Redirect to the "change form" page. |
 | =action=delRev= | *Administrators only* delete the most recent revision of the topic - all other parameters are ignored |
-| =action=repRev= | Replace the text of the most recent revision of the topic with the text in the =text= parameter. =text= must included embedded meta-data tags. All other parameters are ignored. |
+| =action=repRev= | *Administrators only* replace the text of the most recent revision of the topic with the text in the =text= parameter. =text= must included embedded meta-data tags. All other parameters are ignored. |
 | =onlynewtopic= | If set, error if topic already exists |
 | =onlywikiname= | If set, error if topic name is not a WikiWord |
 | =dontnotify= | if defined, suppress change notification |
@@ -70,9 +70,7 @@ The parameters are interpreted in according to the following rules.
 
 Merging is only enabled if the topic text comes from =text= and =originalrev= is &gt; 0 and is not the same as the revision number of the most recent revision. If merging is enabled both the topic and the meta-data are merged.
 
-Form field values are passed in parameters named 'FIELD:Field' - for example, if I have a field =Status= the parameter name is =FIELD:Status=.
-
-%X% This specification has changed since earlier versions of TWiki to avoid conflicts between field names and other parameters to the =save= script.
+Form field values are passed in parameters named 'field' - for example, if I have a field =Status= the parameter name is =Status=.
 
 ---++ =oops=
 
@@ -100,7 +98,7 @@ The =edit= scipt understands the following parameters, typically supplied by HTM
 | =anyname= | Any parameter can passed to the new topic; if the template topic contains =%<nop>URLPARAM{"anyname"}%=, it will be replaced by its value |
 | =breaklock= | If set, any lease conflicts will be ignored, and the edit will proceed even if someone is already editing the topic. |
 
-Form field values can passed in parameters named 'FIELD:Field' - for example, if I have a field =Status= the parameter name is =FIELD:Status=.
+Form field values are passed in parameters named 'field' - for example, if I have a field =Status= the parameter name is =Status=.
 
 ---++ =view=
 Used for viewing topics.
