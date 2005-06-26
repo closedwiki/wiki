@@ -342,6 +342,7 @@ sub _process {
 
 sub _formatString {
     my( $str ) = @_;
+    $str ||= '';
     $str =~ s/@/@@/go;
     return '@'.$str.'@';
 }
