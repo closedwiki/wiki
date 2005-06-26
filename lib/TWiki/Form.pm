@@ -43,6 +43,7 @@ BEGIN {
        action => 1,
        breaklock => 1,
        contenttype => 1,
+       cover => 1,
        dontnotify => 1,
        editaction => 1,
        forcenewrevision => 1,
@@ -50,9 +51,12 @@ BEGIN {
        onlynewtopic => 1,
        onlywikiname => 1,
        originalrev => 1,
+       skin => 1,
        templatetopic => 1,
        text => 1,
+       topic => 1,
        topicparent => 1,
+       user => 1,
       };
 };
 
