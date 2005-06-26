@@ -277,7 +277,7 @@ if( $update ) {
             print CGI::h2($var),
               CGI::b('old ').CGI::code($def).
                   CGI::br(CGI::b('new  ').CGI::code($val));
-            $updates{$basevar} = perlifyType($val,$type);
+            $updates{$basevar} = perlifyType($val, $type);
             $changed++;
         }
     }
@@ -893,6 +893,12 @@ sub _promptNUMBER {
     return CGI::textfield( -name => $id, -size=>20, -default=>$value );
 }
 
+sub _promptOCTAL {
+    my( $id, $opts, $value, $keys ) = @_;
+    return CGI::textfield( -name => $id, -size=>20,
+                           -default=>sprintf('0%o',$value) );
+}
+
 sub _promptSELECT {
     my( $id, $opts, $value, $keys ) = @_;
     $opts =~ s/^\s+//;
@@ -1413,6 +1419,8 @@ sub perlifyType {
         return ($val ? 1 : 0);
     } elsif ($type eq 'NUMBER') {
         return 0+$val;
+    } elsif ($type eq 'OCTAL') {
+        return '0'.$val;
     } else {
         $val =~ s/'/\\'/g;
         return "'$val'";
