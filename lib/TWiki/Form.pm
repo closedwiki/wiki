@@ -639,8 +639,6 @@ sub getFieldValuesFromQuery {
     foreach my $fieldDef ( @{$this->{fields}} ) {
         next unless $fieldDef->{name};
 
-        next if( $reservedFieldNames->{$fieldDef->{name}} );
-
         my $param = $this->cgiName( $fieldDef->{name} );
 
         my $value = $query->param( $param );
