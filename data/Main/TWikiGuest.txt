@@ -23,7 +23,7 @@ __Related topics__
 %META:FIELD{name="FirstName" attributes="" title="FirstName" value="TWiki"}%
 %META:FIELD{name="LastName" attributes="" title="LastName" value="Guest"}%
 %META:FIELD{name="Organization" attributes="" title="Organization" value=""}%
-%META:FIELD{name="Email" attributes="" title="Email" value="%_P_%WIKIWEBMASTER%_P_%"}%
+%META:FIELD{name="Email" attributes="" title="Email" value=""}%
 %META:FIELD{name="Profession" attributes="" title="Profession" value=""}%
 %META:FIELD{name="Address" attributes="" title="Address" value=""}%
 %META:FIELD{name="Location" attributes="" title="Location" value=""}%
