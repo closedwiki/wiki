@@ -1,0 +1,230 @@
+#!/usr/bin/perl -wT
+#
+#
+# This script was modified from the original attach code to add a growing
+# modifiable verification table to the page.
+#
+# Shawn Bradford 20011010 Initial design
+#
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
+#
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+# Modified to support Table editing support
+# Shawn Bradford 2001-11-12
+
+BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
+
+use strict;
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use TWiki;
+
+&main();
+
+sub doEnableEdit
+{
+    my ( $theWeb, $theTopic, $userName, $query ) = @_;
+
+    if( ! &TWiki::Func::checkAccessPermission( "change", $userName, "", $theTopic, $theWeb ) ) {
+        # user has not permission to change the topic
+        my $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopsaccesschange" );
+        &TWiki::Func::redirectCgiQuery( $query, $url );
+        return 0;
+    }
+
+    my( $oopsUrl, $lockUser ) = &TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
+    if( $lockUser ) {
+        # warn user that other person is editing this topic
+        &TWiki::Func::redirectCgiQuery( $query, $oopsUrl );
+        return 0;
+    }
+    TWiki::Func::setTopicEditLock( $theWeb, $theTopic, 1 );
+
+    return 1;
+}
+
+sub main
+{
+
+    my $query = new CGI;
+
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theUrl = $query->url;
+    my $theTopic = $query->param( 'topic' ) || "";
+
+    my( $topic, $webName, $dummy, $userName ) = 
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = "";  # to suppress warning
+
+    return unless ( &doEnableEdit ($webName, $topic, $userName, $query) );
+
+    return unless ($query);
+    $query->{'jscalendar'} = 0;
+    my ( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+
+    my $template = $query->param( 'template' ) || "";
+    my $tableNr = $query->param( 'tablename' ) || "";
+    my $rowNr = $query->param( 'sec' ) || "0";
+    my $changerows = $query->param( 'changerows' ) || "";
+    my $showtable = $query->param( 'showtable' ) || "";
+    my $helptopic = $query->param( 'helptopic' ) || "";
+
+    #my $tmpl = &TWiki::Store::readTemplate( ($rowNr)?"editTableRow":"addTableRow" );
+    my $tmpl = &TWiki::Store::readTemplate( "editTableRow" );
+
+    # This loads the table that you want
+    $tmpl =~ s/%TEMPLATE%/$template/go;
+    $tmpl =~ s/%TABLENAME%/$tableNr/go;
+
+    # This renders the editable fields
+    my @fieldDefs = &TWiki::Form::getFormDef( $webName, $template );
+
+    # Get rid of CRs (we only want to deal with LFs)
+    $text =~ s/\r//g;
+
+    # Need to determine table row
+    if ( $text =~ m/%EDITTABLEROW/i ) { 
+	my @sections = split(/\s*%EDITTABLEROW{.*}%/i, $text);
+	my $table = @sections[$tableNr];
+	my @rows = split (/\n/, $table);
+	my $rowidx = -1;
+	my $row = "";
+	foreach $row (@rows) {
+	  # skip non-table lines
+	  if($row =~ m/^\s*\|/){ last; }
+	  $rowidx++;
+	}
+	
+	if ($showtable eq "on") {
+	  my $oldTable = "";
+	  my $foundOldTable = 0;
+	  foreach my $oldrow (@rows) {
+	    # skip non-table lines
+	    if ($oldrow =~ m/^\s*\|/) { 
+	      $oldTable .= $oldrow . "\n";
+	      $foundOldTable = 1; 
+	    } else {
+	      last if $foundOldTable;
+	      $oldTable .= $oldrow . "\n";
+	    }
+	  }
+	  $tmpl =~ s/%SHOWTABLE%/---++ Current Table Entries\n%BR%$oldTable\n/go;
+	} else {
+	  $tmpl =~ s/%SHOWTABLE%//go;
+	}
+
+	$row = @rows[$rowNr + $rowidx];
+	my @fields = split (/\|/, $row);
+
+	# If we are editing an existing Form add meta fields
+	my $idx = 0;
+	if ($rowNr != 0) {
+	  foreach my $fieldDefP ( @fieldDefs ) {
+	    $idx++;
+	    my @fieldDef = @$fieldDefP;
+	    my $entryName = shift @fieldDef;
+	    my $value = @fields[$idx];
+	    #$value = "" if ($value eq "&nbsp;");
+	    my @tmpArgs = (
+			   "name" => $entryName,
+			   "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $value )
+			  );
+	    $meta->put("FIELD",@tmpArgs);
+	  }
+	  #$entry = TWiki::Plugins::EditTablerowPlugin::stringConvert($entry);
+	  $tmpl =~ s/%ENTRY%/$rowNr/go;
+	} else {
+	  my $id = time;
+	  foreach my $fieldDefP ( @fieldDefs ) {
+	    my @fieldDef = @$fieldDefP;
+	    my $entryName = shift @fieldDef;
+	    my @tmpArgs = (
+			   "name" => $entryName,
+			   "value" => TWiki::Plugins::EditTablerowPlugin::carriageReturnConvert( $fieldDef[5] )
+			  );
+	    $meta->put("FIELD",@tmpArgs);
+	  }
+	  $tmpl =~ s/%ENTRY%/$id/go;
+	}
+    }
+
+    my $helpText = "";
+    if( $helptopic ) {
+      # read help topic and show below the table
+      my $theWeb = $webName;
+      if( $helptopic =~ /^([^\.]+)\.(.*)$/o ) {
+	$theWeb = $1;
+	$helptopic = $2;
+      }
+      $helpText = &TWiki::Func::readTopicText( $theWeb, $helptopic );
+      #Strip out the meta data so it won't be displayed.
+      $helpText =~ s/%META:[A-Za-z0-9]+{.*?}%//g;
+      if( $helpText ) {
+	$helpText =~ s/.*?%STARTINCLUDE%//os;
+	$helpText =~ s/%STOPINCLUDE%.*//os;
+      }
+    }
+    $tmpl =~ s/%HELPTEXT%/$helpText/go;
+
+    # Add action buttons
+    my $actions = "";
+    $actions .= "<input type=\"submit\" class=\"twikiSubmit twikiSecondary\" name=\"addElement\" id=\"addElement\" value=\"" . (($rowNr)?"Update":"Add") . "\" /><label accesskey=\"s\" for=\"addElement\"></label>&nbsp;";
+    $actions .= "<input type=\"submit\" class=\"twikiSubmit twikiSecondary\" name=\"deleteElement\" id=\"deleteElement\" value=\"Delete\" /><label accesskey=\"d\" for=\"deleteElement\"></label>&nbsp;" if ($rowNr && $changerows && ($changerows ne "add"));
+    $actions .= "<input type=\"submit\" class=\"twikiSubmit\" name=\"copyElement\" id=\"copyElement\" value=\"Copy\" /><label accesskey=\"a\" for=\"copyElement\"></label>" if ($rowNr && $changerows);
+    $tmpl =~ s/%ACTIONBUTTONS%/$actions/go;
+
+    if ($rowNr) {
+      $tmpl =~ s/%HEADERTEXT%/Update Table Row/go;
+    } else {
+      $tmpl =~ s/%HEADERTEXT%/Add Table Row/go;
+    }
+
+    my $formText = "";
+    if( $TWiki::Plugins::VERSION < 1.025 ) {
+      $formText = &TWiki::Form::renderForEdit( $webName, $topic, $template, $meta, $query, @fieldDefs );
+    } else {
+      $formText = &TWiki::Form::renderForEdit( $webName, $topic, $template, $meta, $query, "", @fieldDefs );
+    }
+    $tmpl = &TWiki::Func::expandCommonVariables( $tmpl, $topic );
+    $tmpl = &TWiki::handleMetaTags( $webName, $topic, $tmpl, $meta );
+    $tmpl = &TWiki::Func::renderText( $tmpl );
+    $tmpl =~ s/%TABLEFIELDS%/$formText/go; #Moved after getRenderedVersion so that TWiki Syntax does not expand
+
+    if ($query->{'jscalendar'}) {
+      # add header data for jscalendar if used. Use header in jscalendar.tmpl
+      my $dir = &TWiki::Func::getUrlHost . &TWiki::Func::getPubUrlPath . "/" . &TWiki::Func::getTwikiWebname . "/JSCalendarContrib";
+      my $calhead = "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"$dir/calendar-blue.css\" />\n";
+      $calhead .= "<script type=\"text/javascript\" src=\"$dir/calendar.js\"></script>\n";
+      $calhead .= "<script type=\"text/javascript\" src=\"$dir/lang/calendar-"
+	. (TWiki::Func::getPreferencesValue("JSCALENDARLANGUAGE", "$webName") || "en")
+	  . ".js\"></script>\n";
+      $calhead .= "<script type=\"text/javascript\" src=\"$dir/calendar-setup.js\"></script>\n";
+      $tmpl =~ s/<\/head>/$calhead<\/head>/i;
+    }
+
+    TWiki::Func::writeHeader( $query );
+    print $tmpl;
+}
+
+# EOF

@@ -1,0 +1,137 @@
+#!/usr/bin/perl -wT
+#
+# TWiki WikiClone (see TWiki.pm for $wikiversion and other info)
+#
+# Copyright (C) 1999-2001 Peter Thoeny, peter@thoeny.com
+# Shawn Bradford 20011010 Initial design
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
+
+use strict;
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use TWiki;
+
+&main();
+
+sub main
+{
+
+    my $query = new CGI;
+
+    my $thePathInfo = $query->path_info(); 
+    my $theRemoteUser = $query->remote_user();
+    my $theUrl = $query->url;
+    my $theTopic = $query->param( 'topic' ) || "";
+
+    my( $topic, $webName, $dummy, $userName ) = 
+	&TWiki::initialize( $thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query );
+    $dummy = "";  # to suppress warning
+
+    return unless ($query);
+	
+    my $template = $query->param( 'template' || "");
+    my $tableNr = $query->param( 'tableName' || "");
+    my $rowNr = $query->param( 'name' || "");
+    my $deleteElement = $query->param( 'deleteElement' );
+    my $copyElement = $query->param( 'copyElement' );
+    my $filePath = $query->param( 'filepath' ) || "";
+    my $fileName = $query->param( 'filename' ) || "";
+    if ( $filePath && ! $fileName ) {
+        $filePath =~ m|([^/\\]*$)|;
+		$fileName = $1;
+	}
+
+    # Need to cycle through the fieldDefs and query the parameters to fill the
+    # the associative array
+    my @fieldsInfo = &TWiki::Form::getFormDef( $webName, $template );
+
+    # Name is name based upon a unique time-stamp. This is based to the 
+    # editTable.tmpl and is transparent to the user. This removes the 
+    # constraint of unique first columns.
+    my $sortName = $rowNr;
+
+    if ( $copyElement ) { #Give unique table element keys for copied elements
+      $sortName = time;
+    }
+
+    my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
+		
+    # update topic
+    my $text = &TWiki::Func::readTopicText( $webName, $topic, "", 1 );
+
+    # Get rid of CRs (we only want to deal with LFs)
+    #$text =~ s/\r//g;
+
+    my $result = "";
+    my $done = 0;
+    my $insideTable = 0;
+    my $enableForm = 0;
+
+#### Note: Probably need to preserve leader before table (see in EditTablerowPlugin.pm)
+
+    # Need to determine table row
+    foreach( split( /\r?\n/, "$text\n<nop>\n" ) ) {
+      my $line = "$_\n";
+
+      if ( $done ) { $result .= $line; next; }
+      if ( $line =~ m/\s*%EDITTABLEROW{.*}%/i ) {
+	$tableNr--; 
+	$enableForm = 1 unless $tableNr;
+      }
+      if ( $enableForm ) {
+	if ( $line =~ m/^\s*\|.*\|\s*$/ ) {
+	  $insideTable = 1;
+	  $rowNr--;
+          if (! $rowNr) {
+	    $line = &TWiki::Plugins::EditTablerowPlugin::updateTableRow($line, $deleteElement, $copyElement, \@fieldsInfo);
+	    $done = 1;
+            $enableForm = 0;
+	  }
+        } elsif ( $insideTable ) {
+	  $insideTable = 0;
+	  $line = TWiki::Plugins::EditTablerowPlugin::appendToTable($line, $rowNr, $deleteElement, $copyElement, \@fieldsInfo);
+	  $enableForm = 0;
+	}
+	if ( $line =~ m/^\s*$/ ) {
+          if ( $enableForm ) {
+	    $line = TWiki::Plugins::EditTablerowPlugin::appendToTable($line, $rowNr, $deleteElement, $copyElement, \@fieldsInfo);
+	    $enableForm = 0;
+	  }
+        }
+      }
+      $result .= "$line";
+    }
+    $result =~ s|\n?<nop>\n$||o; # clean up hack that handles EDITTABLE correctly if at end
+
+    my $error = &TWiki::Func::saveTopicText( $webName, $topic, $result, 1 );
+    TWiki::Func::setTopicEditLock( $webName, $topic, 0 );  # unlock Topic
+    if( $error ) {
+      TWiki::UI::oops( $webName, $topic, "saveerr", $error );
+      return 0;
+    } else {
+      # and finally display topic
+      TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $webName, $topic ) );
+    }
+}
+	
+# EOF

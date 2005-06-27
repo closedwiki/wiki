@@ -1,0 +1,88 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"script"}%
+<script type="text/javascript">
+<!--HIDE
+ns4 = (document.layers)? true:false;
+ie4 = (document.all)? true:false;
+dom = (document.getElementById)?true:false;
+
+toShow=new Array();
+toHide=new Array();
+
+function initForm() {
+  document.main.text.focus();
+  for (i = 0; i < toShow.length; i++) {
+     if(dom) {
+        document.getElementById(toShow[i]).style.display="inline";
+     } else if( ie4 ) {
+        document.all[toShow[i]].style.display="inline";
+     } else if( ns4 ) {
+        document.layers[toShow[i]].style.display="inline";
+     }
+  }
+  for ( i = 0; i < toHide.length; i++) {
+    if(dom) {
+        document.getElementById(toHide[i]).style.display="none";
+    } else if( ie4 ) {
+        document.all[toHide[i]].style.display="none";
+    } else if( ns4 ) {
+        document.layers[toHide[i]].style.display="none";
+    }
+  }
+}
+function checkAll( theButton, theButtonOffset, theNum, theCheck )
+{
+  // find button element index
+  var j = 0;
+  for( var i = 0; i <= document.main.length; i++ ) {
+    if( theButton == document.main.elements[i] ) {
+      j = i;
+      break;
+    }
+  }
+  // set/clear all checkboxes
+  var last = j+theButtonOffset+theNum;
+  for( i = last-theNum; i < last; i++ ) {
+    document.main.elements[i].checked = theCheck;
+  }
+}
+function launchWindow( theWeb, theTopic, theAnchor ) {
+  if( ! theAnchor ) {
+    theAnchor = "";
+  }
+  win = open( "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain" + theAnchor,
+              theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+  if( win ) {
+    win.focus();
+  }
+  return false;
+}
+//STOP HIDING-->
+</script>%TMPL:END%
+
+%TMPL:DEF{"simpleheader"}%
+---++ %HEADERTEXT%
+%TMPL:END%
+
+%TMPL:DEF{"titleaction"}%(add)%TMPL:END%
+%TMPL:DEF{"headerhelp"}% %TMPL:END%
+%TMPL:DEF{"webaction"}% Add Table Element to <nop>%TABLENAME% for topic : <b>%TOPIC%</b> %TMPL:END%
+%TMPL:DEF{"topicaction"}%
+   <a id="cancel" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on">Cancel</a>%TMPL:P{"sep"}% %ACTIONBUTTONS%  %TMPL:END%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+<body bgcolor="#ffffff" onload="initForm()">
+#PageTop
+%SHOWTABLE%
+%TMPL:P{"simpleheader"}%
+<form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/uploadTableRow%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<input type="hidden" name="template" value="%TEMPLATE%">
+<input type="hidden" name="tableName" value="%TABLENAME%">
+<input type="hidden" name="name" value="%ENTRY%">
+%TABLEFIELDS%
+%HELPTEXT%
+%TMPL:P{"standardfooter"}%
+</form>
+#PageBottom
+</body>
+</html>
