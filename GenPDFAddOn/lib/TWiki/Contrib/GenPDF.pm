@@ -54,10 +54,11 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = 0.5;
+$VERSION = 0.6;
 $| = 1; # Autoflush buffers
 
 our $query = new CGI;
+our %tree;
 
 =pod
 
@@ -229,7 +230,7 @@ sub _createTitleFile {
 
    # convert twikiNewLinks to normal text
    # FIXME - should this be a preference?
-   $text =~ s/<span class="twikiNewLink".*?>($TWiki::regex{wikiWordRegex}).*?\/span>/$1/gs;
+   $text =~ s/<span class="twikiNewLink".*?>([\w\s]+)<.*?\/span>/$1/gs;
 
    # Fix the image tags for links relative to web server root and
    # fully qualify any unqualified URLs (to make it portable to another host)
@@ -239,6 +240,7 @@ sub _createTitleFile {
 
    # Save it to a file
    my $fh = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
+                           DIR => File::Spec->tmpdir(),
                            SUFFIX => '.html');
    print $fh $text;
 
@@ -319,7 +321,7 @@ sub _fixHtml {
 
    # Insert an <h1> header if one isn't present
    if ($html !~ /<h1>/is) {
-      $html = "<h1>$title</h1>$html";
+      $html = "<h1>$topic</h1>$html";
    }
    # htmldoc reads <title> for PDF Title meta-info
    $html = "<head><title>$title</title>\n$meta</head>\n<body>$html</body>";
@@ -333,7 +335,7 @@ sub _fixHtml {
 
    # convert twikiNewLinks to normal text
    # FIXME - should this be a preference?
-   $html =~ s/<span class="twikiNewLink".*?>($TWiki::regex{wikiWordRegex}).*?\/span>/$1/gs;
+   $html =~ s/<span class="twikiNewLink".*?>([\w\s]+)<.*?\/span>/$1/gs;
 
    # Fix the image tags for links relative to web server root and
    # fully qualify any unqualified URLs (to make it portable to another host)
@@ -403,6 +405,7 @@ sub _getPrefsHashRef {
    $prefs{'bodycolor'} = undef unless ($prefs{'bodycolor'} =~ /^[0-9a-fA-F]{6}$/);
 
    # Anything results in true (use 0 to turn these off or override the preference)
+   $prefs{'recursive'} = $query->param('pdfrecursive') || TWiki::Func::getPreferencesValue("GENPDFADDON_RECURSIVE");
    $prefs{'bodyimage'} = $query->param('pdfbodyimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_BODYIMAGE");
    $prefs{'logoimage'} = $query->param('pdflogoimage') || TWiki::Func::getPreferencesValue("GENPDFADDON_LOGOIMAGE");
    $prefs{'numbered'} = $query->param('pdfnumberedtoc') || TWiki::Func::getPreferencesValue("GENPDFADDON_NUMBEREDTOC");
@@ -458,28 +461,105 @@ sub viewPDF {
          TWiki::Func::getOopsUrl($webName, $rhPrefs->{'titletopic'}, "oopscreatenewtopic"))
       unless TWiki::Func::topicExists($webName, $rhPrefs->{'titletopic'});
 
-   # Get ready to display HTML topic
-   my $htmlData = _getRenderedView($webName, $topic);
-
-   # Fix topic text (i.e. correct any problems with the HTML that htmldoc might not like
-   $htmlData = _fixHtml($htmlData, $rhPrefs, $topic, $webName);
-
-   # The data returned also incluides the header. Remove it.
-   $htmlData =~ s|.*(<!DOCTYPE)|$1|s;
-
    # Get header/footer data
    my $hfData = _getHeaderFooterData($webName, $rhPrefs);
 
-   # Save this to a temp file for htmldoc processing
-   my $contentFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
-                                    SUFFIX => '.html');
-   print $contentFile $hfData . $htmlData;
+   if ($rhPrefs->{'recursive'}) {
+      # Include all descendents of this topic
+      use Cwd 'cwd';
+      my $cwd = cwd; # we need to chdir back after searching
+
+      # Get a list of possibilities (all files in the web)
+      chdir("$TWiki::dataDir/$webName");
+      opendir(DIR, ".") or carp "$!";
+      my @files = grep { /\.txt$/ && -f "$_" } readdir(DIR);
+      closedir DIR;
+      #for (@files) { print STDERR "file: '$_'\n"; } # DEBUG
+      #print STDERR scalar @files," files found\n"; # DEBUG
+
+      # Now build a hash of arrays mapping children to parents
+      # Eg. $tree{$parent} = @children
+      my $path = $TWiki::fgrepCmd;
+      while (@files) {
+         my @search = splice(@files, 0, 512); # only search 512 files at a time
+         unshift @search, '%META:TOPICPARENT{'; #}
+         # this is basically ripped straight out of TWiki::readFromProcessArray
+         # This code follows the safe pipe construct found in perlipc(1).
+         my $pipe;
+         my $pid = open $pipe, '-|';
+         my @data;
+         if ($pid) {			# parent
+            @data = map { chomp $_; $_ } <$pipe>; # remove newline characters.
+            close $pipe;
+         } else {
+            exec { $path } $path, @search;
+            # Usually not reached.
+            exit 127;
+         }
+         #print STDERR scalar @data, " files have parent topics\n"; # DEBUG
+         for (@data) {
+            #print STDERR "data: '$_'\n"; # DEBUG
+            my ($child,$parent) = split(/:.*?name=\"/);
+            $child =~ s/\.txt$//o;
+            $parent =~ s/(.*?)\".*/$1/o;
+            push @{ $tree{$parent} }, $child;
+         }
+      }
+      chdir($cwd); # return to previous working dir
+   }
+
+   # Do a recursive depth first walk through the ancestors in the tree
+   # sub is defined here for clarity
+   # FIXME - should be using references for this
+   sub _depthFirst {
+      my $parent = shift;
+      my @topics = @_;
+      # the grep gets around a perl dereferencing bug when using strict refs
+      my @children = grep { $_; } @{ $tree{$parent} };
+      for ( sort @children ) {
+         #print STDERR "new child of $parent: '$_'\n"; # DEBUG
+         push @topics, $_;
+         if (defined $tree{$_}) {
+            # this child is also a parent so bring them in too
+            @topics = _depthFirst($_, @topics);
+         }
+      }
+      return @topics;
+   }
+   my @topics;
+   push @topics, $topic;
+   @topics = _depthFirst($topic, @topics);
+
+   # We shift headers here so every topic gets its own <h1>$topic</h1>
+   $rhPrefs->{'shift'} += 1 if (scalar @topics > 1);
+
+   my @contentFiles;
+   for $topic (@topics) {
+      #print STDERR "preparing $topic\n"; # DEBUG
+      # Get ready to display HTML topic
+      my $htmlData = _getRenderedView($webName, $topic);
+
+      # Fix topic text (i.e. correct any problems with the HTML that htmldoc might not like
+      $htmlData = _fixHtml($htmlData, $rhPrefs, $topic, $webName);
+
+      # The data returned also incluides the header. Remove it.
+      $htmlData =~ s|.*(<!DOCTYPE)|$1|s;
+
+      # Save this to a temp file for htmldoc processing
+      my $contentFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
+                                       DIR => File::Spec->tmpdir(),
+                                       SUFFIX => '.html');
+      print $contentFile $hfData . $htmlData;
+      push @contentFiles, $contentFile;
+   }
 
    # Create a file holding the title data
    my $titleFile = _createTitleFile($webName, $rhPrefs);
 
    # Create a temp file for output
    my $outputFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
+                                   DIR => File::Spec->tmpdir(),
+                                   #UNLINK => 0, # DEBUG
                                    SUFFIX => '.pdf');
 
    # Convert contentFile to PDF using HTMLDOC
@@ -517,7 +597,7 @@ sub viewPDF {
    push @htmldocArgs, "--left", "$rhPrefs->{'left'}" if $rhPrefs->{'left'};
    push @htmldocArgs, "--right", "$rhPrefs->{'right'}" if $rhPrefs->{'right'};
 
-   push @htmldocArgs, "$contentFile";
+   push @htmldocArgs, @contentFiles;
 
    print STDERR "Calling htmldoc with args: @htmldocArgs\n";
 
@@ -553,4 +633,4 @@ sub viewPDF {
    close $outputFile;
 }
 
-
+1;
