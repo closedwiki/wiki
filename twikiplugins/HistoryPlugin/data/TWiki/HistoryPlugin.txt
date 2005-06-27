@@ -1,0 +1,97 @@
+%META:TOPICINFO{author="jcf" date="1108649599" format="1.0" version="1.4"}%
+---+ <nop>%TOPIC%
+This plugin shows a complete or partial history of a document. The output can arbitrarily be formatted. An example for a Wikimedia-like history is included.
+
+---++ Syntax Rules
+
+	* %<nop>HISTORY%
+	* %<nop>HISTORY{parameters}%BR%
+	  Supported parameters: %BR%
+	  |*Parameter* | *Description* | *Default* |
+	  |"format" _or_ format="format" |Format of one line, may include any variable which is supported by %<nop>REVINFO% |"r1.$rev - $date - $wikiusername" |
+	  |topic="topic" |Topic name |Current topic |
+	  |web="web" |Web name |Current web |
+	  |nrev="nrev" |Number of revisions to show. Ignored, if both rev1 and rev2 are specified | Plugin preference variable NREV |
+	  |rev2="rev2" |Newest revision to show | rev1+nrev, if rev1 is specified, latest revision otherwise |
+	  |rev1="rev1" |Oldest revision to show | rev2-nrev |
+	  |reverse="on/off" |Show newest revisions first, if _on_ |"on" |
+	  |header="text" |Text to print before the list. May contain the variables $next and $previous (see below) |"$next" |
+	  |footer="text" |Text to print after the list. May contain the variables $next and $previous (see below) |"$previous" |
+
+	  The parameters _header_ and _footer_ may contain the variables $next and $previous, which will only be evaluated, if there are newer or older revisions available for the topic which are not listed according to _rev1_, _rev2_, _nrev_. These variables take the syntax =$next{'text' url='url'}= (analog for $previous). _text_ is the text which should be printed, _url_ is the url for a corresponding link. The variables $rev1, $rev2, $nrev in _text_ or _url_ will be replaced by appropriate values for the next or previous block of revisions. See the attached =oopshistory.tmpl= for an example of how to use this.
+
+The following variables are replaced only, if there is a corresponding %<nop>HISTORY% on the page. If more than
+one %<nop>HISTORY% is used on the same page, the values from the last one  will be used.
+
+	* %<nop>HISTORY_REV1%: Oldest revision from the printed history
+	* %<nop>HISTORY_REV2%: Latest revision from the printed history
+	* %<nop>HISTORY_NREV%: Number of the printed revisions
+	* %<nop>HISTORY_MAXREV%: Latest available revision of the document
+	
+---++ Examples
+
+The call %<nop>HISTORY% shows a simple list of available revisions like%BR%
+<pre>
+r1.3 - 17 Feb 2005 - 09:56 - AnUser
+r1.2 - 31 Dec 2004 - 10:22 - AnotherUser
+r1.1 - 15 Nov 2003 - 01:23 - YetAnotherUser
+</pre>
+
+For a more complex example see the attached =oopshistory.tmpl= which also allows the comparison of two selected revisions. 
+Example screenshot from oopshistory.tmpl: <br />
+	 <img src="%ATTACHURLPATH%/screenshot.png" alt="Example screenshot from oopshistory.tmpl"  width="407" height="432"  />
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Shows a complete history of a document
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 1
+
+	* Default number of printed revisions:
+		* Set NREV = 10
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==templates/oopshistory.tmpl== | Template for history page |
+	* Test if the installation was successful:
+		* Here should appear the history of this document inline: 
+		  %HISTORY{"		r1.$rev - $date - $wikiusername%BR%"}%
+		* Show the history of Main.TWikiUsers :%BR%
+		  %SCRIPTURL%/oops%SCRIPTSUFFIX%/Main/TWikiUsers?template=oopshistory
+	* I found it useful to replace the links "Diff" or "Total page history" in the
+	  =view...tmpl= templates by %<nop>SCRIPTURL%/oops%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?template=oopshistory
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/JChristophFuchs |
+|  Plugin Version: | 17 Feb 2005 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  17 Feb 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 97% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- TWiki:Main/JChristophFuchs - 17 Feb 2005
+
+
+%META:FILEATTACHMENT{name="screenshot.png" attr="" comment="Example screenshot from oopshistory.tmpl" date="1108637975" path="screenshot.png" size="7087" user="jcf" version="1.1"}%
