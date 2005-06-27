@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1119144129" format="1.0" version="1.5"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1119839216" format="1.0" version="1.7"}%
 ---+!! !TopicTranslationsPlugin
 
 TopicTranslationsPlugin manages topics translations into several languages, by assigning suffixes
@@ -37,20 +37,30 @@ Follows the plugin's available tags, along with examples of their usage.
 
 ---+++ =%<nop/>TRANSLATIONS{}%= 
 
-List current topic's translations, even if they don't exist yet (so we can create them!)
+List a topic's translations, even if they don't exist yet (so we can create them!)
 
 Parameters for =%<nop/>TRANSLATIONS{}%= :
 
+	* <code>"MyTopic"</code> or <code>topic="MyTopic"</code>: indicates the topic that must
+	  have translations listed. Can be ="MyTopic"= or ="Web.MyTopic"=.
+	  Defaults to the current topic.
 	* <code>format="..."</code> : provides a custom formatting for the list of available translations.
 	  This format will be used for each avaiable language.
 	  The following variables will be expanded in the format:
 	  | =$language= | The language code for the current language. |
 	  | =$topic= | The topic whose translations we are listing. |
 	  | =$translation= | the topic corresponding to the current translation. |
-	  Defaults to ="[[$translation]<nop/>[$language]]"=
+	  | =$web= | the web containing the translations |
+	  Defaults to ="[[$web.$translation]<nop/>[$language]]"=
+	* =missingformat=: like =format=, but used for translations that were not writen yet.
+	  Supports the sama variables as =format= and defaults to the same value of =format=.
 	* <code>separator="..."</code> : text that will separate the items in the listing.
 	  Defaults to =" "= (a space)
-  
+	* <code>which="..."</code>: controls which translations must be listed. Possible values are:
+	  | =available= | lists only the available translations (i.e., those who *were already written*). |
+	  | =missing= | lists only the missing translations (i.e., those who *weren't written yet*). |
+	  | =all= | lists all the translations |
+	  The default value is ="all"=.
 
 ---+++ =%<nop/>CURRENTLANGUAGE%=
 
@@ -62,16 +72,18 @@ The default language (i.e., the first of the listed in =%<nop/>TOPICTRANSLATIONS
 
 ---+++ =%<nop/>INCLUDETRANSLATION{<nop/>SomeTopic}%=
 
-Includes the version of =<nop/>SomeTopic= in the current language (as detected based on current topic's name suffix)
+Includes the translation of =<nop/>SomeTopic= that is in the same language as the current topic
+(as detected based on current topic's name suffix)
 
 Parameters =%<nop/>INCLUDETRANSLATION{}%= :
 
-	* ="<nop/>SomeTopic"= : include the suitable =<nop/>SomeTopic= translation.
+	* ="<nop/>MyTopic"= : include the suitable =<nop/>MyTopic= translation. Can be
+	  ="<nop/>MyTopic"= or ="<nop/>Web.MyTopic"=.
 	* <code>rev="1.2"</code> : include the topic's revision =1.2= (for example).
 	  Defaults to the current revision.
 
 The initial motivation for this tag is to include a suitable menu, for example, based on
-current topic's language.
+current topic's language. But there are several other possibilities.
 
 ---++ Examples
 
@@ -112,9 +124,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AntonioTerceiro |
 |  Plugin Version: | 18 Jun 2005 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 Jun 2005 | Version =1.002=: major rewrite; documented all (or almost all :)) the code; added selection of available/missing translations; added =missingformat=; added support for custom topics (and webs) in <code>%<nop/>TRANSLATIONS%</code>; added "best" language detection via =I18N::AcceptLanguage=.  |
 |  19 Jun 2005: | Initial version: =1.001= |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
-|  CPAN Dependencies: | none |
+|  CPAN Dependencies: | =I18N::AcceptLanguage= |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |

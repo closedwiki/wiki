@@ -14,7 +14,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 
 # =========================
-package TWiki::Plugins::TopicTranslationsPlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::TopicTranslationsPlugin;
 
 # =========================
 use vars qw(
@@ -22,9 +22,12 @@ use vars qw(
         $debug
         @translations
         $defaultLanguage
+        $acceptor
     );
 
-$VERSION = '1.001';
+use I18N::AcceptLanguage;
+
+$VERSION = '1.002';
 $pluginName = 'TopicTranslationsPlugin';  # Name of this Plugin
 
 # =========================
@@ -49,32 +52,17 @@ sub initPlugin
     # first listed language is the default one:
     $defaultLanguage = $translations[0];
 
+    # create a language acceptor for later use:
+    $acceptor = I18N::AcceptLanguage->new(
+      strict => 0,
+      defaultLanguage => $defaultLanguage
+      );
+
+    checkRedirection();
+
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
-}
-
-# =========================
-sub DISABLE_earlyInitPlugin
-{
-### Remove DISABLE_ for a plugin that requires early initialization, that is expects to have
-### initializeUserHandler called before initPlugin, giving the plugin a chance to set the user
-### See SessionPlugin for an example of this.
-    return 1;
-}
-
-
-# =========================
-sub DISABLE_initializeUserHandler
-{
-### my ( $loginName, $url, $pathInfo ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
-
-    # Allows a plugin to set the username based on cookies. Called by TWiki::initialize.
-    # Return the user name, or "guest" if not logged in.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
 }
 
 # =========================
@@ -83,6 +71,13 @@ sub beforeCommonTagsHandler
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+
+    # redirect to the best translation for the user:
+    # dummy code for testing for a while:
+    $_[0] =~ s/%BESTTRANSLATION%/&findBestTranslation()/ge;
+    # TODO: replace the above line to a redirect-to-the-right-language
+    # TODO: look for a better place to put this (i.e., if we gonna redirect to
+    #       another topic, no content processing is needed at all)
 
     # handle all INCLUDETRANSLATION tags:
     $_[0] =~ s/%INCLUDETRANSLATION{(.*?)}%/&handleIncludeTranslation($1)/ge;
@@ -101,6 +96,12 @@ sub commonTagsHandler
     $_[0] =~ s/%DEFAULTLANGUAGE%/$defaultLanguage/ge;
 }
 
+# transform a language code into a suitable suffix for TWiki topics,
+# by capitalizing the first letter and all the others lowercase.
+# Examples:
+#   pt-br -> Ptbr     EN -> En
+#   pt_BR -> Ptbr     Pt -> Pt
+#   EN-US -> Enus     pt -> Pt
 sub normalizeLanguageName
 {
   my $lang = shift;
@@ -109,6 +110,9 @@ sub normalizeLanguageName
   return $lang;
 }
 
+# finds the base topic name, i.e., the topic name without any language suffix.
+# If no topic is passed as argument, uses $topic (the topic from which the
+# plugin is being called).
 sub findBaseTopicName
 {
   my $base = shift || $topic;
@@ -121,6 +125,8 @@ sub findBaseTopicName
   return $base;
 }
 
+# finds the language that must be used for anything within the current topic,
+# based on its suffix
 sub currentLanguage
 {
   my $norm;
@@ -133,6 +139,9 @@ sub currentLanguage
   return $defaultLanguage;
 }
 
+# list the translations of the current topic (or to that one passed as an
+# argument). Depending on the arguments to the %TRANSLATIONS% tag, many options
+# can apply.
 sub handleTranslations
 {
   my $params = shift;
@@ -141,36 +150,66 @@ sub handleTranslations
   my $separator = "";
   my $norm;
 
-  
+  # format for the items:
   my $format = TWiki::Func::extractNameValuePair($params, "format") || "[[\$web.\$translation][\$language]]";
+  my $missingFormat = TWiki::Func::extractNameValuePair($params, "missingformat") || $format;
+  
+  # other stuff:
   my $userSeparator = TWiki::Func::extractNameValuePair($params, "separator") || " ";
 
-  my $baseTopicName = findBaseTopicName();
+  # 
+  my $theTopic = TWiki::Func::extractNameValuePair($params) || TWiki::Func::extractNameValuePair($params,"topic") || $topic;
+  my $theWeb;
+  if ($theTopic =~ m/^([^.]+)\.([^.]+)/) {
+    # topic="Web.MyTopic"
+    $theWeb = $1;
+    $theTopic = $2;
+  } else {
+    $theWeb = $web;
+  }
+  my $baseTopicName = findBaseTopicName($theTopic);
+
+  # find out which translations we must list:
+  my $which = TWiki::Func::extractNameValuePair($params, "which") || "all";
+  my @whichTranslations;
+  if ($which eq "available") {
+    @whichTranslations = findAvailableTranslations($theTopic);
+  } elsif ($which eq "missing") {
+    @whichTranslations = findMissingTranslations($theTopic);
+  } else {
+    @whichTranslations = @translations;
+  }
  
   # list translations
-  foreach $lang (@translations) {
+  foreach $lang (@whichTranslations) {
     $norm = ($lang eq $defaultLanguage)?'':normalizeLanguageName($lang);
     $result .= $separator;
     $separator = $userSeparator;
-    $result .= formatTranslationEntry($format, "$baseTopicName$norm", $lang);
+    $result .= formatTranslationEntry($baseTopicName, $theWeb, $baseTopicName . $norm, $lang, $format, $missingFormat);
   }
 
   return $result;
 }
 
+# shows the item using the given format
 sub formatTranslationEntry
 {
-  my ($format, $translationTopic, $lang) = @_;
-  my $result = $format;
+  my ($theTopic, $theWeb, $translationTopic, $lang, $format, $missingFormat) = @_;
 
-  $result =~ s/\$web/$web/g;
-  $result =~ s/\$topic/$topic/g;
+  # wheter to use the format for available translations or for missing ones:
+  my $result = (TWiki::Func::topicExists($web, $translationTopic))?($format):($missingFormat);
+
+  # substitute the variables:
+  $result =~ s/\$web/$theWeb/g;
+  $result =~ s/\$topic/$theTopic/g;
   $result =~ s/\$translation/$translationTopic/g;
   $result =~ s/\$language/$lang/g;
 
   return $result;
 }
 
+# include the translation of the given topic that corresponds to our current
+# language
 sub handleIncludeTranslation
 {
   my $params = shift;
@@ -178,7 +217,16 @@ sub handleIncludeTranslation
   my $theLang = currentLanguage();
   
   my $theTopic = TWiki::Func::extractNameValuePair($params);
+  my $theWeb;
+  if ($theTopic =~ m/^([^.]+)\.([^.]+)/) {
+    # topic="Web.MyTopic"
+    $theWeb = $1;
+    $theTopic = $2;
+  } else {
+    $theWeb = $web;
+  }
   $theTopic = findBaseTopicName($theTopic);
+
   if ($theLang ne $defaultLanguage) {
     $theTopic .= normalizeLanguageName($theLang);
   }
@@ -186,71 +234,79 @@ sub handleIncludeTranslation
   # undef is ok, meaning current revision:
   my $theRev = TWiki::Func::extractNameValuePair($params, "rev");
 
-  my $args = "\"$theTopic\"";
+  my $args = "\"$theWeb.$theTopic\"";
   $args .= " rev=\"$theRev\"" if $theRev;
 
   return '%INCLUDE{' . $args . '}%';
-
 }
 
-# =========================
-sub DISABLE_writeHeaderHandler
+# finds the best suitable translation to the current topic (or, alternatively,
+# to the topic passsed as the first parameter)
+sub findBestTranslation
 {
-### my ( $query ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::writeHeaderHandler( query )" ) if $debug;
-
-    # This handler is called by TWiki::writeHeader, just prior to writing header. 
-    # Return a single result: A string containing HTTP headers, delimited by CR/LF
-    # and with no blank lines. Plugin generated headers may be modified by core
-    # code before they are output, to fix bugs or manage caching. Plugins should no
-    # longer write headers to standard output.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
+  my $theTopic = shift || $topic;
+  my @alternatives = findAvailableTranslations($theTopic);
+  return $acceptor->accepts($ENV{HTTP_ACCEPT_LANGUAGE}, \@alternatives);
 }
 
-# =========================
-sub DISABLE_redirectCgiQueryHandler
+# check if a redirection is needed, possible, and do that if it's the case
+sub checkRedirection
 {
-### my ( $query, $url ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::redirect. Use it to overload TWiki's internal redirect.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-    if ($topic =~ /"TestTopic"/) {
-      $_[1] = 'http://boipeba.homeip.net:8080/';
+  # we don't wan't to redirect on preview:
+  if (!($ENV{SCRIPT_NAME} =~ m/preview/)) {
+    my $current = currentLanguage();
+    my $best = findBestTranslation(); # for the current topic, indeed
+    if (($current ne $best)) {
+      my $query = TWiki::Func::getCgiQuery();
+      my $bestTranslationTopic = findBaseTopicName() . (($best eq $defaultLanguage)?'':(normalizeLanguageName($best)));
+      my $url = TWiki::Func::getViewUrl($web,$bestTranslationTopic);
+      TWiki::Func::redirectCgiQuery($query, $url);
     }
-    return 1;
+  }
 }
 
-# =========================
-sub DISABLE_getSessionValueHandler
+# find the translations that already exist for the given topic, if any,
+# or for $topic, if no topic is informed.
+sub findAvailableTranslations
 {
-### my ( $key ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::getSessionValueHandler( $_[0] )" ) if $debug;
-
-    # This handler is called by TWiki::getSessionValue. Return the value of a key.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
+  return findTranslations(1, (shift || $topic));
 }
 
-# =========================
-sub DISABLE_setSessionValueHandler
+# find the translations that doesnt' exist yet for the given topic, if any, or
+# for $topic, if no topic is informed.
+sub findMissingTranslations
 {
-### my ( $key, $value ) = @_;   # do not uncomment, use $_[0], $_[1] instead
+  return findTranslations(0, (shift || $topic));
+}
 
-    TWiki::Func::writeDebug( "- ${pluginName}::setSessionValueHandler( $_[0], $_[1] )" ) if $debug;
+# find translations that exists or are missing, depending on the first
+# parameter (call it $existance):
+# * if $existance evaluates to TRUE, find translations that do exist
+# * if $existance evaluates to FALSE, find translations that DON'T exit
+sub findTranslations
+{
+  my $existance = shift;
 
-    # This handler is called by TWiki::setSessionValue. 
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
+  $theTopic = shift || $topic;
+  $theTopic = findBaseTopicName($theTopic);
 
+  my $norm,$exists;
+  my @items;
+
+  foreach $lang (@translations) {
+    # the suffix is empty in the case of the default language:
+    $norm = ($lang eq $defaultLanguage)?(""):(normalizeLanguageName($lang));
+    
+    # is that translation available?
+    $exists = TWiki::Func::topicExists($web, $theTopic . $norm);
+
+    # what kind (available or not) are we looking for?
+    if (($existance and $exists) or ((!$existance) and (!$exists))) {
+      push(@items, $lang);
+    }
+  }
+  
+  return @items;
 }
 
 # =========================
