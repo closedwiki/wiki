@@ -1,0 +1,32 @@
+
+
+---++ Preferences
+
+   * Set APPROVALNOTICE = This topic is under document control. Last approval on %APPROVALLASTTIME_APPROVED%: %APPROVALLASTVERSION_APPROVED%
+
+   * Set APPROVALBUTTON =  <table border="0" cellspacing="0" cellpadding="0"> <tr><td>You are permitted to change the status of this document:</td><td>%APPROVALTRANSITION%</TD></tr></table>
+
+
+
+---++ States
+
+| State | Allow Edit | Message |
+| UNDERREVISION | Main.ThomasHartkens | <H1>This document is under revision. DO NOT USE!</H1> <BR><P><BR> <HR>|
+| APPROVED | nobody | |
+| WAITINGFORQM | nobody | <H1>This document is waiting for approval by the Quality Manager. DO NOT USE! </H1> <BR><P><BR><HR>|
+| WAITINGFORCEO | nobody | <H1>This document is waiting for approval by the CEO. DO NOT USE! </H1><BR><P><BR><HR>|
+
+
+
+
+---++ Transitions
+
+| State | Action | Next State | Allowed |
+| APPROVED | revise | UNDERREVISION | Main.ThomasHartkens |
+| UNDERREVISION | send to Quality Manager for approval | WAITINGFORQM | Main.ThomasHartkens |
+| WAITINGFORQM | approve and send to CEO for approval| WAITINGFORCEO | Main.ThomasHartkens |
+| WAITINGFORQM | reject and keep revising| UNDERREVISION | Main.ThomasHartkens |
+| WAITINGFORCEO | approve | APPROVED | Main.ThomasHartkens |
+| WAITINGFORCEO | reject and keep revising | UNDERREVISION | Main.ThomasHartkens |
+
+
