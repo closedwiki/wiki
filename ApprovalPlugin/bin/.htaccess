@@ -1,0 +1,103 @@
+# bin/.htaccess.txt
+#
+# Controls access to TWiki scripts - to make Apache use it, rename this
+# file to '.htaccess' and REPLACE THE FOLLOWING STRINGS WITH PATHS
+# SPECIFIC TO YOUR INSTALLATION:
+#
+# /srv/www/twiki
+#    This is the absolute path to the directory where
+#    you installed TWiki (where you unzipped the installation). The first
+#    part should match the $dataDir setting in TWiki.cfg
+# http://localhost/twiki
+#    This is the URL path you put into the webserver for users to use to
+#    access TWiki.
+#
+
+# Use CGI & Perl to handle all files in 'bin' directory, i.e. run as scripts
+# - this should remove the need to rename files to end in '.pl' etc,
+# if your web hosting provider permits this.  Remove if using mod_perl.
+SetHandler cgi-script
+
+# Password file for TWiki users
+#
+
+# Authentication type (htpasswd file) (comment out this if you configure htpasswd / LDAP support)
+AuthUserFile /srv/www/twiki/data/.htpasswd
+AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
+AuthType Basic
+
+#for htdigest password suport uncomment the following
+#AuthDigestDomain http://localhost/twiki/bin/viewauth http://localhost/twiki/bin/edit http://localhost/twiki/bin/preview http://localhost/twiki/bin/save http://localhost/twiki/bin/attach http://localhost/twiki/bin/upload http://localhost/twiki/bin/rename http://localhost/twiki/bin/manage http://localhost/twiki/bin/installpasswd http://localhost/twiki/bin/passwd
+#AuthDigestFile /srv/www/twiki/data/.htdigest
+# For "Digest" authentication to work properly, this string must match
+# the value of configuration variable $authRealm
+#AuthName 'Enter your WikiName. (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
+#AuthType Digest
+
+#for LDAP password support uncomment the following (and fix up the paths)
+#AuthLDAPURL ldap://yourldapserver/dc=yourldapserver,dc=com?uid?sub?(objectClass=posixAccount)
+#AuthLDAPGroupAttribute memberUid
+#AuthLDAPGroupAttributeIsDN off
+#<Limit GET POST PUT>
+#    require group cn=mygroup,ou=groups,dc=yourldapserver,dc=com
+#</Limit>
+#AuthName ByPassword
+#AuthType Basic
+
+# File to return on access control error (e.g. wrong password)
+# The path here must be a URL path, not a file pathname - first part should 
+# match the $scriptUrlPath in TWiki.cfg
+ErrorDocument 401 http://localhost/twiki/bin/oops/TWiki/TWikiRegistration?template=oopsauth
+
+<Files ~ "[^/]*\.html$">
+       SetHandler blabla
+       allow from all
+</Files>
+
+<Files "viewauth">
+       require valid-user
+</Files>
+
+<Files "view">
+       require valid-user
+</Files>
+
+<Files "edit">
+       require valid-user
+</Files>
+
+<Files "preview">
+       require valid-user
+</Files>
+
+<Files "save">
+       require valid-user
+</Files>
+
+<Files "attach">
+       require valid-user
+</Files>
+
+<Files "upload">
+       require valid-user
+</Files>
+
+<Files "rename">
+       require valid-user
+</Files>
+
+<Files "rdiffauth">
+       require valid-user
+</Files>
+
+<Files "manage">
+       require valid-user
+</Files>
+
+<Files "installpasswd">
+       require valid-user
+</Files>
+
+<Files "*">
+       allow from all
+</Files>
