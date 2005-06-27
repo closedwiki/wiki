@@ -1,0 +1,117 @@
+%TMPL:INCLUDE{"twiki"}%
+
+%TMPL:DEF{"templatecustomstyle"}%<style type="text/css" media="all">
+.twikiCompareAdd {
+    background-color:#ccffcc;
+}
+.twikiCompareChange2 {
+    background-color:#ccffcc;
+}
+.twikiCompareDelete {
+    background-color:#ffcccc;
+    text-decoration:line-through;
+}
+.twikiCompareChange1 {
+    background-color:#ffcccc;
+    text-decoration:line-through;
+}
+</style>%TMPL:END%
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"titleaction"}% %REVTITLE2% vs %REVTITLE1% %TMPL:END%
+
+
+
+%TMPL:DEF{"form"}%
+<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
+%META{"form"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"attachments"}%
+<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
+%META{"attachments"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"toolbar"}%<div class="twikiToolBar"><div>
+</div><div class="twikiRevInfo"><span class="twikiGrayText"><span class="twikiToolbarElem"><nop>%WEB%.%TOPIC%</span><span class="twikiToolbarElem">%REVTITLE2% vs %REVTITLE1%</span><span class="twikiToolbarElem"><a href="#TopicEnd">topic&nbsp;end</a></span></span></div></div>%TMPL:END%
+
+
+
+%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:P{"bottombar"}%%TMPL:END%
+
+
+
+%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></div>
+<div class="twikiTopic">
+<table style="border:0px; cellspacing:0px; cellpadding:5px">
+<tr>
+    <th style="width:10px; background-color:#ffffff; border-width:0px; padding:0px; margin:0px; "></th>
+    <th style="width:50%; border-bottom:solid black 2px; border-right:solid black 1px; padding:0em 0em; margin:0px"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE2%">%REVTITLE2%</a> - %REVINFO2%</th>
+    <th style="width:50%; border-bottom:solid black 2px; border-left:solid black 1px;"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%REVTITLE1%</a> - %REVINFO1%</th>
+</tr>
+%REPEAT%
+<tr><td style="border-style:hidden;"></td>
+    <td valign="top" width="50%" style="border-top-width:0px; border-bottom-width:0px; border-right:1px black solid; border-left:0px; padding:5px 0px;"><div style="border-bottom:2px black dashed"></div> </td>
+    <td valign="top" width="50%" style="border:0px; padding:5px 0px; "><div style="border-bottom:2px black dashed"></div></td>
+</tr>
+%REPEAT%
+<tr>
+    <td style="width:5px; background-color:#ffffff; border-width:0px; padding:0px;"></td>
+    <td valign="top" width="50%" style="border-top-width:0px; border-bottom-width:0px; border-right:1px black solid; border-left:0px; padding:0px 5px;">%TEXT2%</td>
+    <td valign="top" width="50%" style="border:0px; padding:0px 5px; ">%TEXT1%</td>
+</tr>
+%REPEAT%
+<tr>
+    <td style="background-color:#999999; border-width:0px 5px; border-color:#ffffff; padding:0px 5px;"></td>
+    <td valign="top" width="50%" style="border-top-width:0px; border-bottom-width:0px; border-right:1px black solid; border-left:0px; padding:0px 5px;">%TEXT2%</td>
+    <td valign="top" width="50%" style="border:0px; padding:0px 5px;">%TEXT1%</td>
+</tr>
+%REPEAT%
+%REPEAT%
+%REPEAT%
+<tr>
+    <th style="width:10px; background-color:#ffffff; border-width:0px; padding:0px; spacing-left:10px"></th>
+    <th style="width:50%; border-top:solid black 2px; border-right:solid black 1px; padding:0em 0em; margin:0px"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE2%">%REVTITLE2%</a> - %REVINFO2%</th>
+    <th style="width:50%; border-top:solid black 2px; border-left:solid black 1px;"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%REVTITLE1%</a> - %REVINFO1%</th>
+</tr>
+</table>
+<br class="twikiClear" />
+#TopicEnd
+<span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" />
+</div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back&nbsp;to&nbsp;top</a><hr /></div>
+%TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
+%TMPL:P{"topicinfo"}%%TMPL:END%
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">View topic</a>
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a> %REVISIONS%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a>
+</div>%TMPL:END%
+
+
+
+
+%TMPL:DEF{"topicinfo"}%<div class="twikiTopicInfo twikiRevInfo twikiGrayText twikiMoved">%META{"moved"}%</div>%TMPL:END%
+
+
+
+%TMPL:DEF{"standardfooter"}%
+<div class="twikiTopicFooter"><span class="twikiLeft"><span class="twikiHomePath">You are here: [[%WEB%.WebHome][%WEB%]] %META{"parent" nowebhome="on" prefix=" <span class='twikiSeparator'>&gt;</span> " suffix=""}% <span class='twikiSeparator'>&gt;</span> <nop>%TOPIC% </span></span><span class="twikiHidden"><br /><br /></span><span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop">to&nbsp;top</a></span><br class="twikiClear" /><span class="twikiHidden"><br /></span></div>
+#PageBottom %TMPL:END%
+
+
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

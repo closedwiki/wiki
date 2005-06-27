@@ -1,0 +1,30 @@
+#!/usr/gnu/bin/perl -T 
+use strict;
+
+BEGIN {
+    # Set default current working directory (needed for mod_perl)
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
+
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use TWiki;
+use TWiki::UI::Compare;
+
+my $query = new CGI;
+
+my $thePathInfo = $query->path_info(); 
+
+my $theRemoteUser = $query->remote_user();
+my $theTopic = $query->param('topic');
+my $theUrl = $query->url;
+my ( $topic, $webName, $scriptUrlPath, $userName ) = 
+  TWiki::initialize( $thePathInfo, $theRemoteUser,
+                     $theTopic, $theUrl, $query );
+
+TWiki::UI::Compare::compare( $webName, $topic, $userName, $query );

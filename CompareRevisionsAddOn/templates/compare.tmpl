@@ -1,0 +1,84 @@
+%TMPL:INCLUDE{"twiki"}%
+
+%TMPL:DEF{"footernote"}%
+    Revision %REVTITLE2% - %REVINFO2%<br />
+    Revision %REVTITLE1% - %REVINFO1%
+%TMPL:END%
+
+%TMPL:DEF{"script"}%<style type="text/css" media="all">
+.twikiCompareAdd {
+    background-color:#ccffcc;
+}
+.twikiCompareChange2 {
+    background-color:#ccffcc;
+}
+.twikiCompareDelete {
+    background-color:#ffcccc;
+    text-decoration:line-through;
+}
+.twikiCompareChange1 {
+    background-color:#ffcccc;
+    text-decoration:line-through;
+}
+</style>%TMPL:END%
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+<body bgcolor="#ffffff">
+#PageTop
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+%TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%) %TMPL:END%
+%TMPL:DEF{"webaction"}% %WEBTOPICLIST% %TMPL:END%
+%TMPL:P{"standardheader"}%
+</form>
+<table cellspacing="0" cellpadding="1">
+<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
+<tr><th></th>
+    <th width="1" bgcolor="#000000"></th>
+    <th width="50%">%REVTITLE2% - %REVINFO2%</th>
+    <th width="1" bgcolor="#000000"></th>
+    <th width="50%">%REVTITLE1% - %REVINFO1%</th>
+    <th width="1" bgcolor="#000000"></th>
+</tr>
+<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
+%REPEAT%
+<tr><td></td><td colspan="5" height="1" bgcolor="#000000"></td></tr>
+%REPEAT%
+<tr><td></td>
+    <td width="1" bgcolor="#000000"></td>
+    <td valign="top" width="50%">%TEXT2%</td>
+    <td width="1" bgcolor="#000000"></td>
+    <td valign="top" width="50%">%TEXT1%</td>
+    <td width="1" bgcolor="#000000"></td>
+</tr>
+%REPEAT%
+<tr><td bgcolor="#cccccc">&nbsp;&nbsp;</td>
+    <td width="1" bgcolor="#000000"></td>
+    <td valign="top" width="50%">%TEXT2%</td>
+    <td width="1" bgcolor="#000000"></td>
+    <td valign="top" width="50%">%TEXT1%</td>
+    <td width="1" bgcolor="#000000"></td>
+</tr>
+%REPEAT%
+%REPEAT%
+%REPEAT%
+<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
+<tr><th></th>
+    <th width="1" bgcolor="#000000"></th>
+    <th width="50%">%REVTITLE2% - %REVINFO2%</th>
+    <th width="1" bgcolor="#000000"></th>
+    <th width="50%">%REVTITLE1% - %REVINFO1%</th>
+    <th width="1" bgcolor="#000000"></th>
+</tr>
+<tr><td></td><td colspan="5" height="2" bgcolor="#000000"></td></tr>
+</table>
+%TMPL:DEF{"topicaction"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">View</a>
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%">Diffs</a> %REVISIONS%
+ %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%">More</a> %TMPL:END%
+%TMPL:P{"standardfooter"}%
+#PageBottom
+</body>
+</html>
+%REPEAT%
+background-color:#ccffcc
+background-color:#ffcccc; text-decoration:line-through
