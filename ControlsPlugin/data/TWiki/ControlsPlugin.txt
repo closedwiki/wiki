@@ -1,0 +1,87 @@
+%META:TOPICINFO{author="ThomasWeigert" date="1108957019" format="1.0" version="1.4"}%
+---+ Controls Plugin
+
+This plugin creates controls that can be used to define HTML forms from possible values defined in a topic.
+
+TWiki.TWikiForms allow possible values for a form field to be defined in a topic (see Section "Defining a Form with Multiple Topics"). The same set of values are often used as the values of HTML form controls (e.g., when defining a search where these values are selectable parameters). Using this plugin, these lists of values can be kept synchronized by having the form controls generated based on the topic that defined the values in the first place.
+
+Background: I often found myself defining the possible values for a field of a TWiki.TWikiForms in a TWiki:Codev/TWikiApplication, and then had to manually define the same possible values for a drop down selection or similar in an HTML form. Keeping these consistent was a nuisance. This plugin automates that process.
+
+
+---++ Syntax Rules
+
+	* Syntax: =%<nop>CONTROLS{"name" ...}%=
+	* Supported parameters:
+	| *Parameter:* | *Description:* | *Default:* |
+	| ="name"= | The name of the control to be generated, i.e. =%<nop>CONTROL{"address"}%= | required |
+	| =topic="..."= | The topic defining the field values  | Current topic |
+	| =web="..."= | The web from which the topic is taken | Current web |
+	| =type="..."= | The control to be rendered. Possible values are =select=, =radio=, or =checkbox= | =select= |
+	| =size="..."= | The size parameter for the control. | =1= |
+	| =urlparam="..."= | Generates a select option to be passed as URL parameter (valid only with =type="select"= ). Possible values are =on=, =off=  | =off= |
+
+---++ Example
+
+Below is the definition of the field values for <nop>TopicClassifications from TWiki.TWikiForms:
+	  | *Name* | *Type* | *Tooltip message* |
+	  | <nop>NoDisclosure | option | blah blah... |
+	  | <nop>PublicSupported | option | blah blah... |
+	  | <nop>PublicFAQ | option | blah blah... |
+
+If this plugins is installed, the variable
+<verbatim>
+%<nop>CONTROL{"firstInput" type="checkbox" size="1"}%
+</verbatim>
+
+will expand as follows:
+<table border="0"><tr><td> *Output* </td><td> *Expected* </tr>
+<tr><td>%CONTROL{"firstInput" type="checkbox" size="1"}%</tc><td><table  cellspacing="0" cellpadding="0"><tr>
+<td><input class="twikiEditFormCheckboxField" type="checkbox" name="firstInputNoDisclosure" />NoDisclosure &nbsp;&nbsp;</td>
+</tr><tr>
+<td><input class="twikiEditFormCheckboxField" type="checkbox" name="firstInputPublicSupported" />PublicSupported &nbsp;&nbsp;</td>
+</tr><tr>
+<td><input class="twikiEditFormCheckboxField" type="checkbox" name="firstInputPublicFAQ" />PublicFAQ &nbsp;&nbsp;</td>
+</tr></table></td></tr>
+</table>
+
+
+---++ Plugin Settings
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin renders a control (typically used in an HTML form) based on values defined in a topic.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 1
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Test if the installation was successful:
+		* See if above example rendered correctly
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/ThomasWeigert |
+|  Plugin Version: | 20 Feb 2005 (V1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  20 Feb 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ TWiki.TWikiForms
+
+-- TWiki:Main/ThomasWeigert - 20 Feb 2005
+
