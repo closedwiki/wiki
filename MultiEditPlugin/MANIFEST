@@ -1,0 +1,7 @@
+bin/editonesection
+data/TWiki/MultiEditPlugin.txt
+data/TWiki/MultiEditPlugin.txt,v
+lib/TWiki/Plugins/MultiEditPlugin.pm
+pub/TWiki/MultiEditPlugin/multieditplugin_example.jgp
+lib/TWiki/Plugins/MultiEditPlugin/build.pl
+MANIFEST

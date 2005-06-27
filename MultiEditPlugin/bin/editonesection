@@ -1,0 +1,77 @@
+#!/usr/bin/perl -wT
+#
+# TWiki Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 1999-2004 Peter Thoeny, peter@thoeny.com
+#
+# Based on parts of Ward Cunninghams original Wiki and JosWiki.
+# Copyright (C) 1998 Markus Peter - SPiN GmbH (warpi@spin.de)
+# Some changes by Dave Harris (drh@bhresearch.co.uk) incorporated
+#
+# For licensing info read license.txt file in the TWiki root.
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details, published at 
+# http://www.gnu.org/copyleft/gpl.html
+
+BEGIN {
+    # Set default current working directory
+    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+        chdir $1;
+    }
+    # Set library paths in @INC at compile time
+    unshift @INC, '.';
+    require 'setlib.cfg';
+}
+
+use strict;
+use CGI::Carp qw(fatalsToBrowser);
+use CGI;
+use TWiki;
+use TWiki::Contrib::EditContrib;
+
+&main();
+
+sub main
+{
+    my ($query, $topic, $webName, $text, $tmpl ) = &TWiki::Contrib::EditContrib::edit( );
+
+    my $theSec = int($query->param('sec')) || 0;
+    my $editUrl = &TWiki::getScriptUrl( $webName, $topic, "editonesection" );
+    my $editUrlParams = "&sec=$theSec#SECEDITBOX";
+    $tmpl =~ s/%EDIT%/$editUrl/go;
+    $tmpl =~ s/%EDITPARAMS%/$editUrlParams/go;
+    my $sectxt = "";
+    my $pretxt = "";
+    my $postxt = "";
+    my $pos = 1;
+
+    # Get rid of CRs (we only want to deal with LFs)
+    $text =~ s/\r//g;
+
+    if ( $text =~ m/<\/?section>/i ) { 
+	my @sections = split(/(<\/?section>)/i, $text); 
+	foreach my $s (@sections) {
+	    if ($pos < $theSec) {
+		if ( $s =~ m/<(\/?)section>/ ) { $pretxt .= "<$1section>"; next; }
+		$pretxt .= $s;
+	    } elsif ($pos > $theSec) {
+		if ( $s =~ m/<(\/?)section>/ ) { $postxt .= "<$1section>"; next; }
+		$postxt .= $s;
+	    } else {
+		if ( $s =~ m/<(\/?)section>/ ) { $pretxt .= "<$1section>"; next; }
+		$sectxt = $s;
+	    }
+	    $pos++;
+	}
+    }
+    
+    TWiki::Contrib::EditContrib::finalize_edit ($query, $topic, $webName, $pretxt, $sectxt, $postxt, "", "", $tmpl);
+
+}
