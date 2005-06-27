@@ -1,0 +1,5 @@
+%META:TOPICINFO{author="dbourget" date="1103841797" format="1.0" version="1.1"}%
+
+Some say that water is defined as H2O. H2O is itself defined as follows:
+%EmbedTopic{H2ODef}%
+
