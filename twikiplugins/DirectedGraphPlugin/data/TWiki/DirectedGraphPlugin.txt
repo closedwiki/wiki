@@ -1,0 +1,144 @@
+%META:TOPICINFO{author="ColeBeck" date="1113414050" format="1.0" version="1.11"}%
+---+ Directed Graph Plugin
+This plugin accepts valid input to create a .dot file.  [[http://www.graphviz.org/][Graphviz's]] dot application is then used to create a .png of the directed graph.
+
+---++ Syntax Rules
+Enclose the rules for your directed graph within =&lt;dot&gt;= ... =&lt;/dot&gt;= tags.
+
+You may create a clientside map of the graph by setting map to 1 within the dot tags: =&lt;dot map=1&gt;= ... =&lt;/dot&gt;=.
+
+---++ Examples
+
+__You type:__
+<verbatim>
+<dot>
+digraph G {
+	 subgraph cluster_c0 {a0 -> a1 -> a2 -> a3}
+	 subgraph cluster_c1 {
+		  b0 -> b1 -> b2 -> b3;
+		  label="Group B";
+	 }
+	 x -> a0;
+	 x -> b0;
+	 a1 -> a3 [style=bold, label="a1 to a3"];
+	 a3 -> a0;
+	 a0 [shape=box, fontname=Courier, fontsize=11];
+	 a1 [color=red];
+	 a3 [label="Label\nfor a3"];
+	 label="Cole's Example";
+}
+</dot>
+</verbatim>
+
+<table><tr><td valign="top" width="50%">
+__You get: (simulated)__ <br />
+<img src="%ATTACHURLPATH%/graphsample.png" alt="graphsample.png"  width="344" height="570"  />
+</td><td valign="top" width="50%">
+__You get: (if installed)__ <br />
+<dot>
+digraph G {
+	 subgraph cluster_c0 {a0 -> a1 -> a2 -> a3}
+	 subgraph cluster_c1 {
+		  b0 -> b1 -> b2 -> b3;
+		  label="Group B";
+	 }
+	 x -> a0 [style=dotted];
+	 x -> b0;
+	 a1 -> a3 [style=bold, label="a1 to a3"];
+	 a3 -> a0;
+	 a0 [shape=box, fontname=Courier, fontsize=11];
+	 a1 [color=red];
+	 a3 [label="Label\nfor a3"];
+	 label="Cole's Example";
+}
+</dot>
+</td></tr></table>
+
+__You type:__
+<verbatim>
+<dot map=1>
+digraph G {
+	 URL="http://www.twiki.org";
+	 Plugins [URL="http://twiki.org/cgi-bin/view/Plugins/PluginPackage"];
+	 DirectedGraphPlugin [URL="http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin"];
+	 Plugins -> DirectedGraphPlugin;
+}
+</dot>
+</verbatim>
+
+<table><tr><td valign="top" width="50%">
+__You get: (simulated)__ <br />
+<map id="sample" name="sample">
+<area shape="rect" href="http://twiki.org/cgi&#45;bin/view/Plugins/PluginPackage" title="Plugins" alt="" coords="60,8,150,56" />
+<area shape="rect" href="http://twiki.org/cgi&#45;bin/view/Plugins/DirectedGraphPlugin" title="DirectedGraphPlugin" alt="" coords="8,104,202,152" />
+<area shape="rect" href="http://www.twiki.org" alt="" coords="8,8,202,152" />
+</map>
+<img usemap="#sample" src="%ATTACHURLPATH%/graphsample2.png"/>
+</td><td valign="top" width="50%">
+__You get: (if installed)__ <br />
+<dot map=1>
+digraph G {
+	 URL="http://www.twiki.org";
+	 Plugins [URL="http://twiki.org/cgi-bin/view/Plugins/PluginPackage"];
+	 DirectedGraphPlugin [URL="http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin"];
+	 Plugins -> DirectedGraphPlugin;
+}
+</dot>
+</td></tr></table>
+
+---++ <nop>%TOPIC% Global Settings
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Embed directed graphs in TWiki topics
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+	* Install the Graphviz package
+	* Install required web fonts
+	* Install the Perl module Digest::MD5
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. 
+Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==pub/TWiki/%TOPIC%/graphsample.png== | sample image |
+	  | ==pub/TWiki/%TOPIC%/graphsample2.png== | sample image |
+
+Dependencies:
+	  | *Package:* | *Description:* |
+	  | Graphviz dot | Preprocessor for drawing directed graphs |
+	  | Digest::MD5 | MD5 Perl module |
+	  | Web fonts | Fonts required for dot's png creations |
+
+To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm* (Red Hat only).
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/ColeBeck |
+|  Plugin Version: | 13 Apr 2005 (V1.200) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  13 Apr 2005: | Added clientside maps functionality; correctly finds pub directory |
+|  25 Mar 2005: | Cleaner code |
+|  01 Jul 2004: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | Digest::MD5 |
+|  Other Dependencies: | [[http://www.graphviz.org/][Graphviz]] |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 100%, %TWIKIWEB%.FormattedSearch 100%, %TOPIC% 100% |
+|  Plugin Home: | http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPlugin |
+|  Feedback: | http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPluginDev |
+|  Appraisal: | http://twiki.org/cgi-bin/view/Plugins/DirectedGraphPluginAppraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
+-- Main.ColeBeck - 01 Jul 2004
+
+%META:FILEATTACHMENT{name="webfonts-1.0-5.noarch.rpm" attr="" comment="" date="1089131375" path="webfonts-1.0-5.noarch.rpm" size="1541639" user="ColeBeck" version="1.1"}%
+%META:FILEATTACHMENT{name="graphsample.png" attr="h" comment="" date="1112024711" path="graphsample.png" size="5197" user="ColeBeck" version="1.1"}%
+%META:FILEATTACHMENT{name="graphsample2.png" attr="h" comment="" date="1113414543" path="graphsample2.png" size="1364" user="ColeBeck" version="1.1"}%
