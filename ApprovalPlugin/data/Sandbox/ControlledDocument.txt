@@ -1,0 +1,55 @@
+%APPROVALNOTICE%
+
+%APPROVALSTATEMESSAGE%
+
+---+ Quality Manual
+
+
+   1. [[QualityManualScope][Scope]]
+      i. General
+      i. Application
+   2. [[QualityManualNormativeReference][Normative reference]]
+   3. [[QualityManualTermsAndDefinitions][Terms and definitions]]
+   4. [[QualityManagementSystem][Quality management system]] Conformance with ISO 9001:2000
+      i. General requirements
+      i. Documentation requirements
+   5. [[ManagementResponsibility][Management responsibility]]
+      i. Management commitment
+      i. Customer focus
+      i. Quality policy
+      i. Planning
+      i. Responsibility, authority and communication
+      i. Management review
+   6. [[QualityManualResourceManagement][Resource management]]
+      i. Provision of resources
+      i. Human resources
+      i. Infrastructure
+      i. Work environment
+   7. [[QualityManualProductRealization][Product realization]]
+      i. Planning of product realization
+      i. Customer-related processes
+      i. Design and development
+      i. Purchasing
+      i. Production and service provision
+      i. Control of monitoring and measuring devices
+   8. [[QualityManualMeasurementAnalysisAndImprovement][Measurement, analysis and improvement]]
+      i. General
+      i. Monitoring and measurement
+      i. Control of nonconforming product
+      i. Analysis of data
+      i. Improvement
+
+
+
+   * Set APPROVALWORKFLOW = DocumentApprocalWorkflow
+
+
+%APPROVALBUTTON% 
+
+
+PS: Note, that the tags %<nop>APPROVALBUTTON%, %<nop>APPROVALNOTICE%, and
+%<nop>APPROVALSTATEMESSAGE% could be placed in the footer or header, as
+well.
+
+
+
