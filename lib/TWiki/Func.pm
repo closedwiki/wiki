@@ -1493,12 +1493,14 @@ Expands only the variables expected in templates that must be statically
 expanded in new content.
 
 The expanded variables are:
-| =%<nop>DATE%= | Signature-format date |
-| =%<nop>USERNAME%= | Base login name |
-| =%<nop>WIKINAME%= | Wiki name |
-| =%<nop>WIKIUSERNAME%= | Wiki name with prepended web |
-   * RLPARAM{...}%= - Parameters to the current CGI query
-| =%<nop>NOP%= | No-op |
+   * =%<nop>DATE%= Signature-format date
+   * =%<nop>SERVERTIME%= See TWikiVariables
+   * =%<nop>GMTIME%= See TWikiVariables
+   * =%<nop>USERNAME%= Base login name
+   * =%<nop>WIKINAME%= Wiki name
+   * =%<nop>WIKIUSERNAME%= Wiki name with prepended web
+   * =%<nop>URLPARAM{...}%= - Parameters to the current CGI query
+   * =%<nop>NOP%= No-op
 
 See also: expandVariables
 

@@ -191,20 +191,28 @@ sub _buildNewTopic {
     # tags.
     $output = TWiki::Func::expandVariablesOnTopicCreation($output);
 
-    my $bloody_hell = TWiki::Func::readTopicText( $web, $topic, undef, 1 );
+    # SMELL: Reverse the process that inserts meta-data just performed
+    # by the TWiki core, but this time without the support of the
+    # methods in the core. Firtunately this will work even if there is
+    # no embedded meta-data.
+    # Note: because this is Dakar, and has sensible semantics for handling
+    # the =text= parameter to =save=, there is no longer any need to re-read
+    # the topic. The text is automatically defaulted to the existing topic
+    # text if the =text= parameter isn't specified - which for comments,
+    # it isn't.
     my $premeta = '';
     my $postmeta = '';
     my $inpost = 0;
     my $text = '';
-    foreach my $line ( split( /\n/, $bloody_hell )) {
-        if( $line =~ /^(%META:[^{]+{[^}]*}%)/ ) {
+    foreach my $line ( split( /\r?\n/, $_[0] )) {
+        if( $line =~ /^%META:[^{]+{[^}]*}%/ ) {
             if ( $inpost) {
-                $postmeta .= "$1\n";
+                $postmeta .= $line."\n";
             } else {
-                $premeta .= "$1\n";
+                $premeta .= $line."\n";
             }
         } else {
-            $text .= "$line\n";
+            $text .= $line."\n";
             $inpost = 1;
         }
     }
@@ -237,7 +245,8 @@ sub _buildNewTopic {
         } else {
             # Position relative to index'th comment
             my $idx = 0;
-            unless( $text =~ s/(%COMMENT({.*?})?%.*\n)/&_nth($1,\$idx,$position,$index,$output)/eg ) {
+            unless( $text =~ s((%COMMENT({.*?})?%.*\n))
+                    (&_nth($1,\$idx,$position,$index,$output))eg ) {
                 # If there was a problem adding relative to the comment,
                 # add to the end of the topic
                 $text .= $output;

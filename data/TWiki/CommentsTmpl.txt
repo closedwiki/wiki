@@ -19,7 +19,7 @@ Generic prompt box used by other templates
 </verbatim>
 Short comment, signed and dated
 <verbatim>
-%TMPL:DEF{outputoneliner}%	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %DATE% %TIME%%TMPL:END%
+%TMPL:DEF{outputoneliner}%	* %URLPARAM{"comment"}% -- %WIKIUSERNAME% - %DATE% %SERVERTIME%%TMPL:END%
 </verbatim>
 ---------------------------------------------------------------------------
 ---++ User templates

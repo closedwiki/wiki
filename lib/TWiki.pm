@@ -1613,18 +1613,23 @@ sub expandVariablesOnTopicCreation {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
     ASSERT(!$user || $user->isa( 'TWiki::User')) if DEBUG;
 
-    $text =~ s/%DATE%/$this->_DATE()/ge;
-    $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;
-    $text =~ s/%GMTIME(?:{(.*?)})?%/$this->_GMTIME(new TWiki::Attrs($1))/ge;
+    # Must do URLPARAM first
+    $text =~ s(%URLPARAM{(.*?)}%)
+      ($this->_URLPARAM(new TWiki::Attrs($1)))ge;
 
-    $text =~ s/%((USER|WIKI|WIKIUSER)NAME)%/$this->{SESSION_TAGS}{$1}/g;
-    $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(new TWiki::Attrs($1))/ge;
+    $text =~ s(%DATE%)
+      ($this->_DATE())ge;
+    $text =~ s(%SERVERTIME(?:{(.*?)})?%)
+      ($this->_SERVERTIME(new TWiki::Attrs($1)))ge;
+    $text =~ s(%GMTIME(?:{(.*?)})?%)
+      ($this->_GMTIME(new TWiki::Attrs($1)))ge;
+    $text =~ s(%((USER|WIKI|WIKIUSER)NAME)%)
+      ($this->{SESSION_TAGS}{$1})g;
 
     # Remove template-only text and variable protection markers.
     # See TWiki.TWikiTemplates for details.
     $text =~ s/%NOP{.*?}%//gos;
     $text =~ s/%NOP%//go;
-
     return $text;
 }
 
