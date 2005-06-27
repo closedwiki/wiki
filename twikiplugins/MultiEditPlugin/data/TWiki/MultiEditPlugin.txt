@@ -1,0 +1,94 @@
+%META:TOPICINFO{author="guest" date="1115095343" format="1.0" version="1.8"}%
+---+ <nop>%TOPIC%
+
+This plugin allows the user to break a topic into sections which can be edited individually.
+
+This plugin leverages from TWiki:Plugins/SectionalEditPlugin and TWiki:Plugins/RecursiveRenderPlugin. From the former, it inherits the ability to edit sections of a topic individually; from the latter the ability to place these sections into arbitrary contexts, even if the inserted text could not ordinarily be placed in that context per TWiki ML.
+
+The motivation behind this plugin was to allow the separation of a topic into several [[TWiki:Codev/TWikiApplications][TWikiApplications]], or, at least, into several independently editable sections. The creator of a topic might define the overall layout of a topic, and identify the sections that should be editable individually. (One might even disable the topic actions for other users, such these users would interact with the topic via the editable sections only.
+
+---++ Syntax Rules
+
+	* Enclose a portion of your topic by =&lt;section&gt;= and =&lt;/section&gt;= tags.
+	* Sections to be editable cannot be nested, but may appear anywhere within the topic.
+
+---++ Examples
+
+The following topic
+
+<verbatim>
+<table borderwidth="0"><tr valign="top"><td rowspan="2">
+<section>*Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.</section>
+</td><td align="center" bgcolor="#8490A1"><b>Available webs</b></td></tr><tr>
+<td bgcolor="#b4d5ff">
+<section>%WEBLIST{"	* $web"}%</section>
+</td></tr><tr><td colspan="2">
+<section>*Activated plugins:* %ACTIVATEDPLUGINS%</section>
+</td></tr></table>
+</verbatim> 
+
+will render as shown in the picture below and allow each section to be edited individually, when the edit button is clicked.
+
+<img src="%ATTACHURL%/multieditplugin_example.jgp">
+
+---++ <nop>%TOPIC% Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = This plugin allows arbitrary section of a topic to be edited individually
+
+	* Debug plugin: (See output in =$logDir/debug.txt=)
+		* Set DEBUG = 0
+
+	* Edit label (may also be an &lt;img&gt; tag):
+		* Set LABEL = Edit
+			* Example image tag: ="&lt;br&gt;&lt;img src=\"". &TWiki::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\"&gt;"=
+
+	* A comma separated list of skins *NOT* to allow editing(you'll probably want the print skin here):
+		* Set SKIPSKIN = print, plain
+
+	* Placement of edit button =before= or =after= editable section
+		* Set PLACEMENT = after
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==pub/TWiki/%TOPIC%/multieditplugin_example.jgp== |  |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==bin/editonesection== |  |
+	* Verify access and ownership settings for the new scripts.
+	* Edit your .htaccess file to require a valid user for the editonesection script (if needed).
+	* Test if the installation was successful:
+		* Try out above example
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/ThomasWeigert |
+|  Plugin Version: | 2 May 2005 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2 May 2005:  | Fixed caching problem when using Speedy CGI	|
+|  21 Mar 2005: | Utilize 21 Mar version of TWiki:Plugins/EditContrib |
+|  12 Mar 2005: | Abstract additional functionality into TWiki:Plugins/EditContrib  |
+|  08 Mar 2005: | Rely on shared files in TWiki:Plugins/EditContrib |
+|  02 Mar 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | TWiki:Plugins/EditContrib |
+|  Perl Version: | 5.005 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ TWiki:Plugins/SectionalEditPlugin, TWiki:Plugins/RecursiveRenderPlugin
+
+-- TWiki:Main/ThomasWeigert - 2 May 2005
+
+<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->
