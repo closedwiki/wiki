@@ -1,0 +1,152 @@
+%META:TOPICINFO{author="ThomasHartkens" date="1108548331" format="1.0" version="1.3"}%
+---+ Approval Plugin for ISO 9000 compliant quality systems
+
+TWiki benefits from the fact that every user can modify a topic instantly without restrictions. However, sometimes it is desirable that one can control the content of the TWiki. In particular, if TWiki is used in a Quality System as a document server complaint with ISO 9000 (e.g. for the quality manual), it is essential that these documents are approved by the management before they can be applied by the employees. 
+
+This plugin enables you to establish a complex document approval process for single topics or for the entire web in order to control the content in your TWiki. If a topic is under such document control, you can define a set of _states_ for this topic (e.g. "under revision", "waiting for approval", "approved") and _transitions_ (e.g. "revise", "approve") between these states. Furthermore, you can define users or user groups which are permitted to perform specific transistions. In this way, you can control, for instance, who is allowed to "approve" a topic and who is not. 
+
+This plugin is motivated by the WorkFlowAddOn plugin. It differs from the WorkFlowAddOn plugin in following points:
+
+	* it does not require any patch of the TWiki source code; you just need to install the plugin,
+	* the state of a topic is not stored as a form, that means you can _not_ define a different form for each state (but you can define one form which is kept through all states), 
+	* for each state you can define whether a user is permitted to edit the text of the topic,
+	* changing the state does not require editing the topic,
+	* messages can be displayed in the topic indicating the current state of the document, and
+	* the plugin keeps track when the document was in a specific state last time (e.g. which version is the last "approved" version).
+
+This plugin works already for most cases but is still under development. Please see comments under _Bugs_.
+
+---++ Requirements
+
+Since the plugin needs to know who is looking at the controlled document/topic at all time you need to set up the TWiki in such way that the user has to log-in even if she just displays a page. *Note:* the installation archive below contains a =.htaccess= file to accomplish this setting.
+ 
+
+---++ Usage
+
+A topic is under document control if the preference variable
+
+	* Set APPROVALWORKFLOW = YourDocumentApprocalWorkflow
+
+appears on its page while the topic _YourDocumentApprocalWorkflow_ describes your specific approval workflow.
+
+
+
+---++++ Settings in the workflow description topic 
+
+ Basically, the topic _YourDocumentApprocalWorkflow_ contains one state and one transition table. The state table could look like this, for example:
+
+| State | Allow Edit | Message |
+| UNDERREVISION | Main.User1, Main.QualityGroup | This document is under revision. |
+| APPROVED | nobody | |
+| WAITINGFORQM | nobody | This document is waiting for approval by the Quality Manager. |
+| WAITINGFORCEO | nobody | This document is waiting for approval by the CEO.|
+
+Each row in this table defines a state whereby 
+
+	* the _State_ column contains an unique identifier for the state, 
+	* the _Allow Edit_ column specifies the user(s) which are permitted to edit the topic in the state, and 
+	* the _Message_ column defines a message which can be  displayed on the document page when the document is in this state.
+
+In this example, we have defined four states and only the users =Main.User1= and =Main.QualityGroup= 
+are permitted to make
+changes to the document in the state =UNDERREVISION=. In all other states the document can not be edited by any user. Note, that the first state in this table defines always the initial/default state.
+
+The transition table consists of 4 columns. For example:
+
+| State | Action | Next State | Allowed |
+| APPROVED | revise | UNDERREVISION | Main.QualityGroup |
+| UNDERREVISION | send to Quality Manager for approval | WAITINGFORQM | Main.QualityGroup |
+| WAITINGFORQM | approve and send to CEO for approval| WAITINGFORCEO | Main.QualityManager |
+| WAITINGFORQM | reject and keep revising| UNDERREVISION | Main.QualityManager |
+| WAITINGFORCEO | approve | APPROVED | Main.TechnicalDirector |
+| WAITINGFORCEO | reject and keep revising | UNDERREVISION | Main.TechnicalDirector |
+
+Each row in this table defines a transition from one state to another state whereby
+
+	* the _State_ column contains the identifier of the current state of the document (of course, this must correspond to a state in the state table!), 
+	* the _Action_ column defines a possible action for this current state,
+	* the _Next State_ column defines the resulting state after the specified action is performed, and
+	* the _Allowed_ column specifies the user(s) which are allowed to perform the corresponding action. 
+
+Thus, in our example the Quality Group is allowed to revise the document. After finishing the revision, first, the document is approved by the Quality Manager and after that by the Technical Director. Even though they can't edit the document by themself (see state table above), they _can_ reject the revision and put the document back into the =UNDERREVISION= state. 
+
+
+*NOTE:* The state table needs to be defined *before* the transition table!
+
+Besides these both tables you can define any kind of variable staring with %APPROVAL ...% in this file, e.g. 
+
+	* Set <nop>APPROVALNOTICE = This topic is under document control. Last approval on %<nop>APPROVALLASTTIME_APPROVED%
+	* Set APPROVALBUTTON =  You are permitted to change the status of this document: %<nop>APPROVALTRANSITION%
+
+which can be used then in the controlled document. 
+
+---++++ Settings in your controlled document/topic
+
+As described above the topic needs to contain the variable 
+
+	* Set APPROVALWORKFLOW = YourDocumentApprocalWorkflow
+
+to be under the approval workflow.
+
+Now you can place the tag =%<nop>APPROVALTRANSITION%= in your document which will be expanded to either (a) a pull-down menu if the user can perform more than one transition, (b) a button if the current user can only perform one transition, or (c) empty space if the current user is not allowed to perform any action.
+
+Additionally, you can place the tag =%<nop>APPROVALMESSAGE%= in your document which will be replaced by the corresponding message in the state table. 
+
+The approval keeps track when the document was in a specific state last time. The tag 
+	* =%<nop>APPROVALLASTTIME_State%= will be replaced by the timestamp when the document was in the state _State_ last time and
+	* =%<nop>APPROVALLASTVERSION_State%= will be replaced by the version when the document was in the state _State_ last time.
+
+For instance, in our example above the tag =%<nop>APPROVALLASTTIME_APPROVED% is replaced by the timestamp when the document was in the state APPROVED last time. 
+
+Furthermore, the plugin replaces any variable starting with =%APPROVAL ... %= defined in the workflow file. 
+Finally, it removes all other tags in the document which start with =%APPROVAL ... %=. (You can use this behaviour 
+to place these tags in the header or footer. They appear only if the currently displayed document is controlled! Otherwise, these tags are just removed and do not disturb the layout)
+
+Remark: If you replace the tag =%<nop>EDITTOPIC%= with =%<nop>APPROVALEDITTOPIC%= in your templates, then the _Edit_ link is crossed out when the user is not allowed to edit the page in a state (Note, that the topic is still write protected even if you don't replace the tag).  
+
+---++ Bugs
+
+This plugin is still under development. Even though it works fine for the purposes in our company, it might not work in all cases. Currently, I am aware of the following bug:
+
+	* You can attach a file to a contolled topic even if the state of the topic does not allow the user to edit it. In general, the plugin should prevent any changes to the topic in such case. (suggestions to solve this bug are appreciated). 
+
+
+---++ Plugin Settings
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>APPROVALPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Plugin to establish complex approval workflows
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+__Note:__ The ZIP file contains a =.htaccess= file to restrict the access to your TWiki. If you don't want to install this file, unzip the archive in a separate directory and copy the files by hand. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==bin/.htaccess== | configuration to restrict access to view script |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* Download example.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ThomasHartkens|
+|  Plugin Version: | 0.1 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  16 Feb 2005: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.0 |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 99% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
+
