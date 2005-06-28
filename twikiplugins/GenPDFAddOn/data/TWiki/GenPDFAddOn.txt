@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="WadeTurland" date="1118703895" format="1.0" version="1.18"}%
+%META:TOPICINFO{author="WadeTurland" date="1119916176" format="1.0" version="1.19"}%
 <!-- PDFSTART -->
 ---+!! Generate PDF Add-On
 <!-- PDFSTOP -->
@@ -20,6 +20,16 @@ This add-on has only been tried with the Cairo version of TWiki. We've made no a
 <verbatim>
 [[%SCRIPTURL%/genpdf/%WEB%/%TOPIC%][Printable]]
 </verbatim>
+	* %N% You can now generate a PDF document containing all of the descendents of the base topic as separate chapters. For example, if you create a !ParentTopic, then create !FirstChild and !SecondChild with !ParentTopic as their parent topic, then create !GrandChildOne with !FirstChild as its parent (and so on), you get a tree like this:
+<verbatim>
+ParentTopic
+	- FirstChild
+		- GrandChildOne
+		- GrandChildTwo
+	- SecondChild
+		- GrandChildThree
+</verbatim>
+	If you add ='?pdfrecursive=on'= to the URL parameters, all of the topics will be rolled into the PDF.
 
 ---++ Configuring the Script
 
@@ -37,6 +47,7 @@ The following table shows the various configuration variables and their meaning.
 | =pdfheadertopic= | GENPDFADDON_HEADERTOPIC | | !GenPDFHeaderFooterTopic | The name of a topic that defines headers and footers using &lt;-- HEADER LEFT "foobar" --> syntax |
 | =pdftitletopic= | GENPDFADDON_TITLETOPIC | | !GenPDFTitleTopic | The name of a topic that defines the layout of the title page |
 | =skin= | GENPDFADDON_SKIN | =print.pattern= | =print.nat= | Default skin to use for PDF generation |
+| =pdfrecursive= | GENPDFADDON_RECURSIVE | undef | =on= | Include children of the base topic in the PDF |
 | =pdfformat= | GENPDFADDON_FORMAT | =pdf14= | =pdf12= | HTMLDOC output format |
 | =pdftoclevels= |GENPDFADDON_TOCLEVELS | =5= | =3= | Number of levels to include in the PDF table of contents (use 0 to disable the generation of a table of contents). Note that HTMLDOC generates a table of contents based on HTML headers in the page. |
 | =pdfpagesize= | GENPDFADDON_PAGESIZE | =a4= | =letter= | The page size for PDF output |
@@ -83,6 +94,10 @@ The add-on also allows the user to configure header and footer formats for both 
 
 See the HTMLDOC documentation at http://www.htmldoc.org for details of the format of the header and footers. In addition, the =genpdf= script will perform variable substition for the %<nop>GENPDFADDON _BANNER%, %<nop>GENPDFADDON _TITLE%, and %<nop>GENPDFADDON _SUBTITLE% variables as it does for the title page. Finally, the PDFSTART and PDFSTOP HTML comments should be placed at the beginning and end of header/footer topic. An example header/footer page can be found at GenPDFExampleHeaderFooterTopic.
 
+---++ Frequently Asked Questions
+	$ *How do I stop the table of contents from being generated?* : For some topics, like User topics, it doesn't make any sense to have a table of contents generated so add ='pdftoclevels=0'= as a URL parameter.
+	$ *When I do a recursive PDF of !WebHome it doesn't include all topics* : That's because some topics distributed with !TWiki don't have a parent association. If you _really_ want to include every topic in the web, you should reparent them all with !WebHome as the parent.
+
 ---++ Add-On Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
@@ -103,13 +118,12 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	* Make sure the script is executable (e.g =chmod 755 genpdf=).
 	* *Adjust the perl path in the genpdf script to match your perl installation location.*
 	* %X% Add the variable =$htmldocCmd = /path/to/htmldoc;= to your =lib/TWiki.cfg= file so TWiki can find the location of the htmldoc executable. Look for $fgrepCmd.
-   * %T% Copy the preferences from above and paste them into either %TWIKIWEB%.TWikiPreferences, or %WEB%.WebPreferences
+	* %T% Copy the preferences from above and paste them into either %TWIKIWEB%.TWikiPreferences, or %WEB%.WebPreferences
 	* Test if the installation was successful:
-      * Try loading [[%SCRIPTURL%/genpdf/%WEB%/%TOPIC%][this page]]
+		* Try loading [[%SCRIPTURL%/genpdf/%WEB%/%TOPIC%][this page]]
 		* If it doesn't work, check your webserver logs for any problems. The most common issue is probably an htmldoc installation problem.
 
 ---++ Known Bugs
-	* Comments in the header/footer topic must be separated by newlines.
 	* *Verbatim text runs off the page.* This is a limitation of HTMLDOC. Preformatted text may run off the edge of the page and be truncated.
 	* *HTMLDOC crashes with segmentation faults.* Eg it fails to generate TWiki.TWikiDocumentation. I managed to get it to work a few times, but it generally fails. The error returned is =Conversion failed: 'Inappropriate ioctl for device' at /var/www/twiki/lib/TWiki/Contrib/GenPDF.pm line XXX=
 	* *Some pages don't have a header.* HTMLDOC breaks the page for every level 1 heading (Eg. &lt;h1&gt;) but it doesn't write a header for the new page, so topics with lots of level 1 headings and not much content don't seem to have any headers. Therefore I patched htmldoc-1.8.24 to force a header for every new page:
@@ -137,6 +151,15 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 </verbatim>
 
 ---++ Add-On History
+	* Version 0.6 (28 Jun 2005)
+		* Less aggressive regex for removing twikiNewLink spans so it doesn't break when using the TWiki:Plugins.SpacedWikiWordPlugin
+		* %T% Added 'recursive' preference to include chapters for all descendents of the base topic
+		* Use File::Spec->tmpdir to specify the default directory for temporary files
+	* Version 0.5 (16 Jun 2005)
+		* Redirect to 'oops' URLs if permission denied or topic does not exist.
+		* Removed twikiNewLink spans from title page so they render as normal text (without the blue ? mark).
+		* Fully qualify image/href URLs on the title page.
+		* Changed temp files to use OO style 'new File::Temp;' for better code portability.
 	* Version 0.4 (13 Jun 2005)
 		* Better security (now calls =system($TWiki::htmldocCmd, @htmldocArgs)= )
 		* Checks return code of htmldoc and returns an error on failure
@@ -167,7 +190,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 ---++ Add-On Info
 
 |  Add-on Author: | TWiki:Main/BrianSpinar, TWiki:Main/WadeTurland |
-|  Add-on Version: | 13 Jun 2005 (v0.4) |
+|  Add-on Version: | 28 Jun 2005 (v0.6) |
 |  Change History: | See Add-On History section above |
 |  CPAN Dependencies: | File::Temp (if for some reason you don't already have it installed ) |
 |  Other Dependencies: | HTMLDOC (http://www.htmldoc.org) |
@@ -181,6 +204,9 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 __Related Topic:__ %TWIKIWEB%.TWikiAddOns
 <!-- PDFSTOP -->
 
--- TWiki:Main/WadeTurland - 13 Jun 2005%BR%
+-- TWiki:Main/WadeTurland - 28 Jun 2005%BR%
 -- TWiki:Main/BrianSpinar - 12 Apr 2005
+
+<!-- vim:noet:sw=3:ts=3:tw=0
+-->
 
