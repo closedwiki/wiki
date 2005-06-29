@@ -2,6 +2,11 @@
 
 require 5.006;
 
+BEGIN {
+    unshift @INC, '../../bin';
+    require 'setlib.cfg';
+};
+
 use strict;
 
 use Test::Unit::Debug qw(debug_pkgs);
