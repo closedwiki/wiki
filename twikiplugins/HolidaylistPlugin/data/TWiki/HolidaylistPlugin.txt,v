@@ -1,13 +1,23 @@
-head	1.15;
+head	1.17;
 access;
 symbols;
 locks
-	webserv:1.15; strict;
+	webserv:1.17; strict;
 comment	@# @;
 
 
+1.17
+date	2005.06.29.11.14.59;	author rohdedan;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2005.06.27.11.46.11;	author rohdedan;	state Exp;
+branches;
+next	1.15;
+
 1.15
-date	2005.06.23.11.08.11;	author rohdedan;	state Exp;
+date	2005.06.23.11.09.11;	author rohdedan;	state Exp;
 branches;
 next	1.14;
 
@@ -87,12 +97,12 @@ desc
 @
 
 
-1.15
+1.17
 log
 @none
 @
 text
-@%META:TOPICINFO{author="rohdedan" date="1119524891" format="1.0" version="1.15"}%
+@%META:TOPICINFO{author="rohdedan" date="1120043699" format="1.0" version="1.17"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -225,6 +235,7 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==pub/TWiki/%TOPIC%/example.gif== | Example image |
 	* Test if the plugin is correctly installed: Copy the example above into a new topic and change
 	  the year number to the current year.
 
@@ -232,9 +243,10 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.008 (23 Jun 2005) |
+|  Plugin Version: | v1.009 (29 Jun 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes (TWiki:Main.DanielRohde); allowed digits in month attribute |
+|  v1.009 (29 Jun 2005): | fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering (TWiki:Main.DanielRohde) |
+|  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute (TWiki:Main.DanielRohde) |
 |  v1.007 (17 Jun 2005):  | personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug (TWiki:Main.DanielRohde) |
 |  v1.006 (16 Jun 2005): | added new features (location support; today(fg/bg)color) (TWiki:Main.DanielRohde) |
 |  v1.005 (16 Jun 2005): | added new features (start date support; weekendbgcolor); fixed documentation bugs; (TWiki:Main.DanielRohde) |
@@ -258,6 +270,39 @@ __Related Topics:__ %TWIKIWEB%.SmiliesPlugin, %TWIKIWEB%.TWikiPlugins, TWiki:Plu
  
 
 %META:FILEATTACHMENT{name="example.gif" attr="h" comment="Example" date="1119006048" path="example.gif" size="15447" user="rohdedan" version="1.1"}%
+@
+
+
+1.16
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="rohdedan" date="1119872771" format="1.0" version="1.16"}%
+d142 1
+a142 1
+|  Plugin Version: | v1.009 (beta) |
+d144 1
+a144 1
+|  v1.009 (beta): | fixed documentation bugs (TWiki:Main.DanielRohde) |
+@
+
+
+1.15
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="rohdedan" date="1119524951" format="1.0" version="1.15"}%
+d134 1
+d142 1
+a142 1
+|  Plugin Version: | v1.008 (23 Jun 2005) |
+d144 1
 @
 
 

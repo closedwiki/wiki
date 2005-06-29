@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1119524891" format="1.0" version="1.15"}%
+%META:TOPICINFO{author="rohdedan" date="1120043699" format="1.0" version="1.17"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -131,6 +131,7 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==pub/TWiki/%TOPIC%/example.gif== | Example image |
 	* Test if the plugin is correctly installed: Copy the example above into a new topic and change
 	  the year number to the current year.
 
@@ -138,9 +139,10 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.008 (23 Jun 2005) |
+|  Plugin Version: | v1.009 (29 Jun 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes (TWiki:Main.DanielRohde); allowed digits in month attribute |
+|  v1.009 (29 Jun 2005): | fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering (TWiki:Main.DanielRohde) |
+|  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute (TWiki:Main.DanielRohde) |
 |  v1.007 (17 Jun 2005):  | personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug (TWiki:Main.DanielRohde) |
 |  v1.006 (16 Jun 2005): | added new features (location support; today(fg/bg)color) (TWiki:Main.DanielRohde) |
 |  v1.005 (16 Jun 2005): | added new features (start date support; weekendbgcolor); fixed documentation bugs; (TWiki:Main.DanielRohde) |
