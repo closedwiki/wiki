@@ -1604,7 +1604,7 @@ Leave a blank line between the last header field and the message body.
 
 sub sendEmail {
     #my( $text, $retries ) = @_;
-    return $TWiki::Plugins::SESSION->sendEmail( @_ );
+    return $TWiki::Plugins::SESSION->{net}->sendEmail( @_ );
 }
 
 =pod
