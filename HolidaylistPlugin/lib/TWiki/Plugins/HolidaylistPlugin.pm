@@ -72,7 +72,8 @@ use vars qw(
 	$defaultsInitialized
     );
 
-$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
+$VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
+#$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
 #$VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
 #$VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
 #$VERSION = '1.005'; #dro# added new features (startdate support; weekendbgcolor); fixed documentation bugs
@@ -83,8 +84,6 @@ $VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tabl
 #$VERSION = '1.021'; #pj# initial version
 
 $pluginName = 'HolidaylistPlugin';  # Name of this Plugin
-
-$defaultsInitialized = 0;
 
 # =========================
 sub initPlugin
@@ -99,6 +98,8 @@ sub initPlugin
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPluginPreferencesFlag( "DEBUG" );
+
+    $defaultsInitialized = 0;
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -392,17 +393,21 @@ sub renderHolidaylist() {
 
 	# create table header:
 	
-	$text .= '<table border="'.$options{border}.'"'
+	$text .= '<noautolink><table border="'.$options{border}.'"'
                . ' cellpadding="'.$options{cellpadding}.'"'
                . ' cellspacing="'.$options{cellspacing}.'"'
 	       . ' bgcolor="'.$options{tablebgcolor}.'"'
 	       .  '>' 
 	       . "\n" ;
 
-	$text .= '<caption align="'.$options{tablecaptionalign}.'">'.$options{tablecaption}.'</caption>'."\n";
+	$text .= '<caption align="'.$options{tablecaptionalign}.'"><noautolink>'.$options{tablecaption}.'</noautolink></caption>'."\n";
 
 	$text .= '<tr bgcolor="'.$options{tableheadercolor}.'">';
-	$text .= '<th align="left"'.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'').'>'.$options{name}.'</th>';
+	$text .= '<th align="left"'.(defined $options{nwidth}?' width="'.$options{nwidth}.'"':'').'>'
+			.'<noautolink>'
+			.$options{name}
+			.'</noautolink>'
+			.'</th>';
 
 	my ($dd,$mm,$yy) = getStartDate();
 
@@ -418,11 +423,13 @@ sub renderHolidaylist() {
 		$text.='<th align="center" bgcolor="'.$bgcolor.'"'
 			. (((defined $options{tcwidth})&&(($dow<6)||$options{showweekends}))?' width="'.$options{tcwidth}.'"':'')
 		        .((($today==$date)&&(defined $options{todayfgcolor}))?' style="color:' . $options{todayfgcolor} . '"' : '') .'>';
+		$text.='<noautolink>';
 		if (($dow < 6)|| $options{showweekends}) { 
 			$text .= &mystrftime($yy1,$mm1,$dd1);
 		} else {
 			$text .= '&nbsp;';
 		}
+		$text.='</noautolink>';
 		$text.='</th>';
 	}
 
@@ -445,7 +452,7 @@ sub renderHolidaylist() {
 		# ignore table rows without a entry if removeatwork == 1
 		next if $options{removeatwork} && !grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
 
-		$text .= '<tr><th align="left">'.$person.'</th>';
+		$text .= '<tr><th align="left"><noautolink>'.TWiki::Func::renderText($person,$web).'</noautolink></th>';
 		for (my $i=0; $i<$options{days}; $i++) {
 			my ($yy1, $mm1, $dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
 			my $dow = Day_of_Week($yy1, $mm1, $dd1);
@@ -454,7 +461,7 @@ sub renderHolidaylist() {
 			$bgcolor = $options{weekendbgcolor} unless $dow < 6;
 			$bgcolor = $options{todaybgcolor} if (defined $options{todaybgcolor}) && ($today == Date_to_Days($yy1, $mm1, $dd1));
 
-			$text.= '<td align="center" bgcolor="'.$bgcolor.'">';
+			$text.= '<td align="center" bgcolor="'.$bgcolor.'"><noautolink>';
 
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
@@ -466,23 +473,30 @@ sub renderHolidaylist() {
 				eval { 
 					my $location = $$ltableref[$i] if defined $ltableref;
 					if (defined $location) {
+
 						$location=encode_entities($location); # quote special characters like "<>
-						$icon=~s/(<img[^>]+?alt=")[^">]+("[^>]*>)/$1$location$2/is;
-						$icon=~s/(<img[^>]+?title=")[^">]+("[^>]*>)/$1$location$2/is;
+
+						$location=~s/\[\[/!\[\[/g; # quote forced links
+						$location=~s/[A-Z][a-z0-9]+[\.\/]([A-Z])/$1/g; # delete Web names
+						$location=~s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/!$1/g; # quote WikiNames
+
+						$icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
+						$icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
 					}
 				};
 				$text.= $icon;
 			} else {
 				$text.= '&nbsp;';
 			}
-                        $text.= '</td>';
+                        $text.= '</noautolink></td>';
 		}
 		$text .= "</tr>\n";
 	}
-	$text .= '</table>';
+	$text .= '</table></noautolink>';
 
 	return $text;
 }
+### dro: following code is derived from TWiki:Plugins.CalendarPlugin:
 # =========================
 sub getTopicText() {
 
@@ -490,6 +504,8 @@ sub getTopicText() {
 
 	my $topics = $options{topic};
 	my @topics = split /,\s*/, $topics;
+
+	my @processedTopics = ( );
 
 	my $text = "";
 	foreach my $topicpair (@topics) {
@@ -500,6 +516,11 @@ sub getTopicText() {
 			$topic = $topicpair;
 		}
 
+		# ignore processed topics;
+		grep( /^\Q$web.$topic\E$/, @processedTopics ) && next;
+
+		push(@processedTopics, "$web.$topic");
+
 		if (($topic eq $theTopic) && ($web eq $theWeb)) {
 			# use current text so that preview can show unsaved events
 			$text .= $refText;
@@ -507,6 +528,9 @@ sub getTopicText() {
 			$text .= &readTopicText($web, $topic);
 		}
 	}
+
+	$text =~ s/%INCLUDE{([^}%]+)}%/&expandIncludedEvents($1, \@processedTopics)/ges;
+	
 	return $text;
 	
 }
@@ -522,6 +546,38 @@ sub readTopicText
 		$text = &TWiki::Func::readTopic( $theWeb, $theTopic );
 	}
 	# return raw topic text, including meta data
+	return $text;
+}
+# =========================
+sub expandIncludedEvents
+{
+	my( $theAttributes, $theProcessedTopicsRef ) = @_;
+
+	my ($theWeb, $theTopic) = ($web, $topic);
+
+	my $webTopic = &TWiki::Func::extractNameValuePair( $theAttributes );
+	if( $webTopic =~ /^([^\.]+)[\.\/](.*)$/ ) {
+		$theWeb = $1;
+		$theTopic = $2;
+	} else {
+		$theTopic = $webTopic;
+	}
+
+	# prevent recursive loop
+	grep (/^\Q$theWeb.$theTopic\E$/, @{$theProcessedTopicsRef}) and return "";
+
+	push( @{$theProcessedTopicsRef}, "$theWeb.$theTopic" );
+
+	my $text = &readTopicText( $theWeb, $theTopic );
+
+	$text =~ s/.*?%STARTINCLUDE%//s;
+	$text =~ s/%STOPINCLUDE%.*//s;
+
+	# recursively expand includes
+	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
+
+	$text = TWiki::Func::expandCommonVariables($text, $theTopic, $theWeb);
+
 	return $text;
 }
 
