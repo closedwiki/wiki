@@ -10,7 +10,7 @@ _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
 
 ---+ Features
 
-	* Action tags may be embedded in TWiki topics and will be displayed formatted in-line.
+	* Actions may be embedded in TWiki topics.
 	* Actions can be listed using searches.
 	* A script is provided for automatic action notification.
 	* Actions can be assigned to individuals, or to predefined groups of individuals.
@@ -50,10 +50,46 @@ The delimiter must be a sequence of alphanumeric characters, and the closing del
 
 The fields with an entry in the 'Auto-completed' column are automatically filled in, if they are missing, whenever someone saves the topic containing the action. The default values are as indicated in the table. You can override this behaviour by providing values for any of these attributes when you type the action. __Note:__ you are __not__ recommended to provide a value for the =uid= (see [[#UiDs][UIDs]]) field!
 
+---++ Action searches
+
+Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki topic. Standard attributes are
+	| *Name* | *Value* | *Description* |
+	| =who= | See [[#PeopleAnchor][People]] | Person responsible for closing the action. |
+	| =notify= | See [[#PeopleAnchor][People]] | Persons who want to be notified of a change |
+	| =state= | =late=, or any legal state value | Set to =late= to search for late actions; set to any any legal state value to search for actions in that state. See [[#SettingsAnchor][Settings]] for details on how to extend the state set. |
+	| =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. Works in both directions, so you can use this to search for actions which _are going to fall due_ within a certain number of days, or a negative number for actions that _fell due_ between a time in the past and now. |
+	| =web= | Perl regular expression | A regular expression that matches the names of all the webs to search. If this attribute is omitted, the default is to search only the current web. Searching many webs is much slower, especially in a large installation. Webs marked NOSEARCHALL will not be searched. | 
+	| =topic= | Perl regular expression | A regular expression that matches the names of all the topics to search. If this attribute is omitted, the default is to search all the topics in the selected webs. | 
+	| =due= | Absolute or relative date expression. See [[#DateFormats][Date Formats]] | Due date for the action. |
+	| =creator= | See [[#PeopleAnchor][People]] | Who created the action. |
+	| =created= | Absolute or relative date expression. See [[#DateFormats][Date Formats]] | Date the action was created. |
+	| =closed= | Absolute or relative date expression. See [[#DateFormats][Date Formats]] | Date the action was closed, if ever. |
+	| =closer= | See [[#PeopleAnchor][People]] | Who closed the action. |
+	| =uid= | 6 digit number | Unique ID of the action. |
+	| =format= | Presentation format | See [[#CustomIsation][Formatting tables]] |
+	| =header= | Presentation format | See [[#CustomIsation][Formatting tables]] |
+	| =orient= | Presentation format | See [[#CustomIsation][Formatting tables]] |
+	| =sort= | Comma-separated list of field names | Fields to sort the matched actions by. For example, <code>sort="$who,$due"</code> will sort by who first and then due. This field is optional; by default the table will be sorted by due date. |
+For example,
+<pre>
+%<nop>ACTIONSEARCH{ who="me" state="late" }%
+%<nop>ACTIONSEARCH{ who="me" open late }%
+%<nop>ACTIONSEARCH{ who="TWikiGuest" state="open" within="7" }%
+%<nop>ACTIONSEARCH{ web=".*" who="Genghis.Khan@mongol.empire.org" state="open" within="7" }%
+</pre>
+
+When you are searching for fields containing dates (such as =closed=, =created= and =due=) you can prepend one of the conditions <code>&gt;, &lt;, &gt;= and &lt;=</code> to the date. For example, <code>closed=">1-Jan-1999"</code> will match all actions that have been closed at any time since 1-Jan-1999, and <code>created=">= 1-Jan-2000"</code> will match all actions created this century. You can also specify dates relative to the current date and time. See [[#DateFormats][Date Formats]] for details of how to specify relative dates.
+For example,
+<pre>
+%<nop>ACTIONSEARCH{ state="closed" closed="> 7 days ago"}%
+</pre>
+will search for all actions closed in the last 7 days.
+
 #DateFormats
 ---+++ Date formats
 
-Date formats must be as recognised by =Time::Parse<nop>Date=.
+---++++ Absolute date formats
+Absolute dates are required in action specifications. Date formats must be as recognised by =Time::Parse<nop>Date=.
 The following absolute date formats are recognised. Dates containing spaces must be enclosed in double-quotes.
 	* Dow, dd Month yy
 	* Dow, dd Month yyyy
@@ -72,7 +108,23 @@ The following absolute date formats are recognised. Dates containing spaces must
 
 You are *strongly* recommended never to use the 'mm/dd/yyyy or mm/dd/yyyy' formats, to avoid confusing users in Europe (like me). Note that due to limitations in the Time::Parsedate module, dates before 1970 will not work as expected.
 
-When you are searching for fields containing dates (such as =closed=, =created= and =due=) you can prepend one of the conditions <code>&gt;, &lt;, &gt;= and &lt;=</code> to the date. For example, <code>closed=">1-Jan-1999"</code> will match all actions that have been closed at any time since 1-Jan-1999, and <code>created=">= 1-Jan-2000"</code> will match all actions created this century.
+---++++ Relative date formats
+When you are searching for fields containing dates (such as =closed=, =created= and =due=) you can specify dates relative to the current date and time. For example:
+| *Syntax* | *Example* | *Notes* |
+| _Dow_ =after next=        | =Tuesday after next= | |
+| _Dow_                     | =Tuesday=            | _last_ Tuesday |
+| =next= _Dow_              | =next Thursday=      | |
+| =tomorrow=                | =tomorrow=       | |
+| =today=                   | =today=          | |
+| =yesterday=               | =yesterday=      | |
+| =last= _dow_              | =last wednesday= | |
+| =last week=               | =last week=      | 7 days ago |
+| =now=                     | =now=            | |
+| =now= =+= _count_ _units_ | =now + 2 years=  | |
+| =now= =-= _count_ _units_ | =now - 3 weeks   | |
+| =+= _count_ _units_       | =+ 31 days=      | |
+| =-= _count_ _units_       | =- 2 months=     | |
+| _count_ _units_ =ago=     | =10 days ago=    | |
 
 #PeopleAnchor
 ---+++ People
@@ -99,51 +151,6 @@ __Note__ in general you should *not* use these mechanisms for assigning actions,
 _For administrators only_:
 Each action is assigned a Unique Identifier (UID) when it is created. This UID is a six-digit number, and is generated when the action is first saved by incrementing a number in a special file (<code>data/atUidReg</code> under the TWiki installation). If this file is accidentally deleted, or is not writable, then you will have problems and you may get duplicate UIDs. Normally this won't matter a hoot, as UIDs only _have_ to be unique within a single topic, but if you are using UIDs for something else you will need to take care.
 
----++ Action searches
-
-Write the command =%<nop>ACTIONSEARCH{= _attributes_ =}%= anywhere in a TWiki topic. Standard attributes are
-	| *Name* | *Value* | *Description* |
-	| =who= | See [[#PeopleAnchor][People]] | Person responsible for closing the action. |
-	| =notify= | See [[#PeopleAnchor][People]] | Persons who want to be notified of a change |
-	| =state= | =late=, or any legal state value | Set to =late= to search for late actions; set to any any legal state value to search for actions in that state. See [[#SettingsAnchor][Settings]] for details on how to extend the state set. |
-	| =within= | a number of days | Search for actions that are within a number of days of their due date. Usually used in conjunction with other attributes, such as <code>state="open"</code>. Works in both directions, so you can use this to search for actions which _are going to fall due_ within a certain number of days, or a negative number for actions that _fell due_ between a time in the past and now. |
-	| =web= | Perl regular expression | A regular expression that matches the names of all the webs to search. If this attribute is omitted, the default is to search only the current web. Searching many webs is much slower, especially in a large installation. Webs marked NOSEARCHALL will not be searched. | 
-	| =topic= | Perl regular expression | A regular expression that matches the names of all the topics to search. If this attribute is omitted, the default is to search all the topics in the selected webs. | 
-	| =due= | See [[#DateFormats][Date Formats]] | Due date for the action. |
-	| =creator= | See [[#PeopleAnchor][People]] | Who created the action. |
-	| =created= | See [[#DateFormats][Date Formats]] | Date the action was created. |
-	| =closed= | See [[#DateFormats][Date Formats]] | Date the action was closed, if ever. |
-	| =closer= | See [[#PeopleAnchor][People]] | Who closed the action. |
-	| =uid= | 6 digit number | Unique ID of the action. |
-	| =format= | Presentation format | See [[#CustomIsation][Formatting tables]] |
-	| =header= | Presentation format | See [[#CustomIsation][Formatting tables]] |
-	| =orient= | Presentation format | See [[#CustomIsation][Formatting tables]] |
-	| =sort= | Comma-separated list of field names | Fields to sort the matched actions by. For example, <code>sort="$who,$due"</code> will sort by who first and then due. This field is optional; by default the table will be sorted by due date. |
-For example,
-<pre>
-%<nop>ACTIONSEARCH{ who="me" state="late" }%
-%<nop>ACTIONSEARCH{ who="me" open late }%
-%<nop>ACTIONSEARCH{ who="TWikiGuest" state="open" within="7" }%
-%<nop>ACTIONSEARCH{ web=".*" who="Genghis.Khan@mongol.empire.org" state="open" within="7" }%
-</pre>
-
-#QueryByExample
----+++ Query-by-example action search
-_You should see values in all of the fields below; if they are all empty, your version of TWiki doesn't support the 'default' attribute on URLPARAM. In this case you can enter the string ".*" for empty fields (and '365' for 'Within')_
-
-<form name="searchaction" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%#QueryByExample">
-|  Who: | <input type="text" name="qwho" value="%URLPARAM{"qwho" default=".*"}%" size="20" /> |
-|  Notify: | <input type="text" name="qnotify" value="%URLPARAM{"qnotify" default=".*"}%" size="20" /> |
-|  State: | <select name="qstate"> <option>%URLPARAM{"qstate" default=".*"}%</option> <option>open</option> <option>late</option> <option>closed</option> <option></option> </select> |
-|  Within: | <input type="text" name="qwithin" value="%URLPARAM{"qwithin" default="365" }%" size="3" /> days |
-|  Web: | <input type="text" name="qweb" value="%URLPARAM{"qweb" default=".*"}%" size="20" /> |
-|  Topic: | <input type="text" name="qtopic" value="%URLPARAM{"qtopic" default=".*"}%" size="20" /> |
-| | <input type="submit" value="Go" /> |
-</form>
-Result:
-%ACTIONSEARCH{ who="%URLPARAM{"qwho"}%" notify="%URLPARAM{"qnotify"}%" state="%URLPARAM{"qstate"}%" within="%URLPARAM{"qwithin"}%" web="%URLPARAM{"qweb"}%" topic="%URLPARAM{"qtopic"}%" }%
-
----
 #NotiFication
 ---+ Notification
 
@@ -352,7 +359,6 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 %$DEPENDENCIES%
 
-	* Configure lib/TWiki/Plugins/ActionTrackerPlugin/ActionTrackerConfig.pm appropriately for your installation. Several of the configuration items are the same as in lib/TWiki.cfg - you can copy your local values from there if you're not sure what you're doing. If you are using Rcs<nop>Lite, just ignore the rlogCmd; you can't use the changedsince feature with Rcs<nop>Lite anyway.
 	* If the plugin is installed and enabled correctly you should see a formatted action below:
 %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action
 	* ... and the result of a formatted search below:
@@ -403,7 +409,8 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 |  Plugin Author: | TWiki:Main/CrawfordCurrie |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| 26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. |
+| 30 May 2005 | 2.023 Dakar version. Removed config module. |
+| 26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. Added relative date specs to searches. |
 | 8 Feb 2005 | 2.021 Documentation fixes. |
 | 19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
 | 13 Oct 2004 | 2.013 If a user cuts and pastes an action with a uid in it, the action editor would get confused. This update ensures all action UIDs are unique within a topic when it is saved. |

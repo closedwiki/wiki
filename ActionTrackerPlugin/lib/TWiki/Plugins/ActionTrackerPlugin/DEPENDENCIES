@@ -1,5 +1,3 @@
-Time::ParseDate,>=2003.0211,perl,Required. Available from the CPAN:Time::ParseDate archive.
-TWiki::Contrib::Attrs,>=1.000,perl,Required. Download and install the TWiki:Plugins/AttrsContrib code library.
-ONLYIF ($TWiki::Plugins::VERSION < 1.025)
-TWiki::Contrib::CairoContrib,>=1.000,perl,Optional, required if plugin is to be run with versions of TWiki before Cairo (1 Sep 2004). Available from the TWiki:Plugins/CairoContrib repository.
+Time::ParseDate,>=2003.0211,cpan,Required. Available from the CPAN:Time::ParseDate archive.
+TWiki::Plugins,>=1.026,perl,TWiki 'Dakar' release.
 TWiki::Contrib::JSCalendarContrib,>=0.96,perl,Optional, used if installed. Used to display a neat calendar popup when editing actions. Available from the TWiki:Plugins/JSCalendarContrib repository.
