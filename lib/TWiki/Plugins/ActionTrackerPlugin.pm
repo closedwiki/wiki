@@ -50,6 +50,9 @@ my @dependencies =
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
+    # Temporarily diabled
+    return 0;
+
     # check for Plugins.pm versions
     # COVERAGE OFF standard plugin code
 
