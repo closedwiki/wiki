@@ -1,0 +1,6 @@
+Test::Unit,>=0.24,cpan,Optional, required for unit testing
+Pod::Text,>=2.21,cpan, POD documentation extracter
+File::Spec,>=0.86,cpan,Used to convert relative paths to absolute
+File::Find,>=1.05,cpan,Used to find file components
+File::Copy,>=2.06,cpan,Used to copy files
+File::Path,>1000000,cpan,Used to build paths
