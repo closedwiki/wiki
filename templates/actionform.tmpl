@@ -1,0 +1,10 @@
+<form method="post" action="%SCRIPTURLPATH%/%SUBMITCOMMAND%%SCRIPTSUFFIX%/%WEB%/%TOPIC%%SUBMITCMDOPT%" enctype="application/x-www-form-urlencoded">
+<h1>Action %UID% in %WEB%.%TOPIC%</h1>
+%EDITFIELDS%
+<textarea name="text" wrap="virtual" rows="%EBH%" cols="%EBW%">%TEXT%</textarea>
+%HIDDENFIELDS%
+This is your signature for easy copy & paste operation
+<br />
+<input type="submit" value=" &nbsp; %SUBMITCMDNAME% Changes &nbsp; " %SUBMITSCRIPT% />
+<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" %CANCELSCRIPT%>Cancel</a> edit
+</form>

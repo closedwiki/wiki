@@ -1,0 +1,14 @@
+---+ Query-by-example action search
+_You should see values in all of the fields below; if they are all empty, your version of TWiki doesn't support the 'default' attribute on URLPARAM. In this case you can enter the string ".*" for empty fields (and '365' for 'Within')_
+
+<form name="searchaction" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%#QueryByExample">
+|  Who: | <input type="text" name="qwho" value="%URLPARAM{"qwho" default=".*"}%" size="20" /> |
+|  Notify: | <input type="text" name="qnotify" value="%URLPARAM{"qnotify" default=".*"}%" size="20" /> |
+|  State: | <select name="qstate"> <option>%URLPARAM{"qstate" default=".*"}%</option> <option>open</option> <option>late</option> <option>closed</option> <option></option> </select> |
+|  Within: | <input type="text" name="qwithin" value="%URLPARAM{"qwithin" default="365" }%" size="3" /> days |
+|  Web: | <input type="text" name="qweb" value="%URLPARAM{"qweb" default=".*"}%" size="20" /> |
+|  Topic: | <input type="text" name="qtopic" value="%URLPARAM{"qtopic" default=".*"}%" size="20" /> |
+| | <input type="submit" value="Go" /> |
+</form>
+Result:
+%ACTIONSEARCH{ who="%URLPARAM{"qwho"}%" notify="%URLPARAM{"qnotify"}%" state="%URLPARAM{"qstate"}%" within="%URLPARAM{"qwithin"}%" web="%URLPARAM{"qweb"}%" topic="%URLPARAM{"qtopic"}%" }%

@@ -1,0 +1,4 @@
+cat > LocalSite.cfg <<THIS
+# Config for ActionTrackerPlugin
+$cfg{RCS}{logAtDate} = '/usr/bin/rlog -d'%DATE|D%' %FILENAME|F%';
+THIS

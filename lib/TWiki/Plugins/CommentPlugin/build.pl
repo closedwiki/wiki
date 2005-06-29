@@ -2,7 +2,10 @@
 #
 package CommentPluginBuild;
 
-require '../../../../bin/setlib.cfg';
+BEGIN {
+    unshift(@INC, '../../../../bin');
+    do 'setlib.cfg';
+}
 use TWiki::Contrib::Build;
 
 @CommentPluginBuild::ISA = ( "TWiki::Contrib::Build" );
