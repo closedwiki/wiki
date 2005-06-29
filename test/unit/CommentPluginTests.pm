@@ -2,12 +2,7 @@ use strict;
 
 package CommentPluginTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use strict;
 use TWiki;
