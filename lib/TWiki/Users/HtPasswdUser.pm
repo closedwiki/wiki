@@ -98,7 +98,6 @@ sub _savePasswd {
 =pod
 
 ---++ encrypt( $user, $passwordU, $fresh ) -> $passwordE
-
 Will return an encrypted password. Repeated calls
 to encrypt with the same user/passU will return the same passE.
 
@@ -146,8 +145,6 @@ sub encrypt {
 =pod
 
 ---++ ObjectMethod fetchPass( $login ) -> $pass
-Implements TWiki::Users::Password
-
 Returns encrypted password if succeeds.  Returns 0 if login is invalid. 
 Returns undef otherwise.
 
@@ -178,8 +175,6 @@ sub fetchPass {
 =pod
 
 ---++ ObjectMethod passwd( $user, $newPassU, $oldPassU ) -> $boolean
-Implements TWiki::Users::Password
-
 If the $oldPassU is undef, it will try to add the user, returning 0
 if they are already there.
 
