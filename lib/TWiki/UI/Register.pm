@@ -612,7 +612,7 @@ sub changePassword {
     }
 
     # OK - password may be changed
-    if ($user->changePassword( $passwordA )) {
+    if ($user->changePassword( $oldpassword, $passwordA )) {
 
       $session->writeLog('changepasswd', $user->stringify());
       #recording the email would be nice
