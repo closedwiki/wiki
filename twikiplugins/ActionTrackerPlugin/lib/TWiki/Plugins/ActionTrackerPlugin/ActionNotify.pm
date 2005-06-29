@@ -25,15 +25,12 @@ use integer;
 # Added by NKO to fix problem with non danish names
 use locale;
 
-use TWiki;# for unpublished functions
-
 use TWiki::Net;
 
-use TWiki::Contrib::Attrs;
+use TWiki::Attrs;
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
-use TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig;
 use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # This module contains the functionality of the bin/actionnotify script
@@ -48,18 +45,17 @@ my $wikiWordRE;
 #
 sub actionNotify {
     my $expr = shift;
-    # Initialise TWiki in the main web
-    my ( $topic, $webName, $dummy, $userName, $dataDir) = 
-	  &TWiki::initialize( "/Main", "nobody" );
-    $dummy = "";  # to suppress warning
 
-    # COVERAGE OFF debug only
+    my $twiki = new TWiki();
+    # Assign SESSION so that Func methods work
+    $TWiki::Plugins::SESSION = $twiki;
+
     if ( $expr =~ s/DEBUG//o ) {
-        print doNotifications( $webName, $expr, 1 ),"\n";
+        print doNotifications( $twiki->{webName}, $expr, 1 ),"\n";
         return;
     }
-    # COVERAGE ON
-    doNotifications( $webName, $expr, 0 );
+
+    doNotifications( $twiki->{webName}, $expr, 0 );
 }
 
 # Entry point separated from main entry point, because we may want
@@ -67,7 +63,7 @@ sub actionNotify {
 sub doNotifications {
     my ( $webName, $expr, $debugMailer ) = @_;
 
-    my $attrs = new TWiki::Contrib::Attrs( $expr );
+    my $attrs = new TWiki::Attrs( $expr, 1 );
     my $hdr =
       TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" );
     my $bdy =
@@ -143,7 +139,7 @@ sub doNotifications {
         # find all the actions for this wikiname
         my $myActions;
         if ( $actions ) {
-            my $ats = new TWiki::Contrib::Attrs( "who=\"$wikiname\"" );
+            my $ats = new TWiki::Attrs( "who=\"$wikiname\"", 1 );
             $myActions = $actions->search( $ats );
         }
 
@@ -198,7 +194,7 @@ sub doNotifications {
         if ( $debugMailer ) {
             $result .= $message;
         } else {
-            my $error = TWiki::Net::sendEmail( $message );
+            my $error = TWiki::Func::sendEmail( $message );
             if ( $error ) {
                 $error = "ActionTrackerPlugin:ActionNotify: $error";
                 TWiki::Func::writeWarning( $error );
@@ -214,15 +210,8 @@ sub doNotifications {
 sub _loadWebNotifies {
     my ( $mailAddress ) = @_;
 
-    my $dataDir = TWiki::Func::getDataDir();
-    opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
-    my @weblist = grep /^[^._].*$/, readdir DIR;
-    closedir DIR;
-    my $web;
-    foreach $web ( @weblist ) {
-        if ( -d "$dataDir/$web" ) {
-            _loadWebNotify( $web, $mailAddress );
-        }
+    foreach my $web ( TWiki::Func::getListOfWebs( 'user' )) {
+        _loadWebNotify( $web, $mailAddress );
     }
 }
 
@@ -387,38 +376,11 @@ sub _composeActionsMail {
     return $text;
 }
 
-# Get the revision number of a topic at a specific date
-# $date is a date string, not an integer date value
-# SMELL: This is dependent on RCS. Store should provide
-# this functionality.
-sub _getRevAtDate {
-    my ( $theWeb, $theTopic, $date ) = @_;
-    my $dataDir = TWiki::Func::getDataDir();
-    my $fname = "$dataDir\/$theWeb\/$theTopic.txt";
-    # COVERAGE OFF safety net
-    if ( !-e "$fname,v") {
-        return undef;
-    }
-    # COVERAGE ON
-    my $tmp = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::rlogCmd;
-    $tmp =~ s/%DATE%/$date/o;
-    $tmp =~ s/%FILENAME%/$fname/o;
-    $tmp =~ /(.*)/;
-    $tmp = $1;
-    my $rlog = `$tmp`;
-
-    if ( $rlog =~ s/.*revision (\d+\.\d+).*/$1/so ) {
-        return $rlog;
-    } else {
-        return undef;
-    }
-}
-
 # PRIVATE STATIC get the "real" date from a relative date.
 sub _getRelativeDate {
     my $ago = shift;
     my $triggerTime = Time::ParseDate::parsedate( "$ago", PREFER_PAST => 1 );
-    return gmtime( $triggerTime );
+    return $triggerTime;
 }
 
 # PRIVATE STATIC
@@ -426,10 +388,10 @@ sub _getRelativeDate {
 # in the given web and topic
 sub _findChangesInTopic {
     my ( $theWeb, $theTopic, $theDate, $format, $notifications ) = @_;
-    my $filename = TWiki::Func::getDataDir() . "\/$theWeb\/$theTopic.txt";
 
     # Recover the rev at the previous date
-    my $oldrev = _getRevAtDate( $theWeb, $theTopic, $theDate );
+    my $oldrev =
+      TWiki::Func::getRevisionAtTime( $theWeb, $theTopic, $theDate );
     return unless defined( $oldrev );
     $oldrev =~ s/\d+\.(\d+)/$1/o;
 
@@ -456,64 +418,19 @@ sub _findChangesInTopic {
 # given web, since the given date.
 # $theDate is a string, not an integer
 sub _findChangesInWeb {
-    my ( $theWeb, $topics, $theDate, $format, $notifications ) = @_;
+    my ( $web, $topics, $theDate, $format, $notifications ) = @_;
     my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
-    my $dd = TWiki::Func::getDataDir() || "..";
 
-    # Known problem; if there's only one file in the web matching
-    # *.txt then the file name won't be printed, at least with GNU
-    # grep. The GNU -H switch, which would solve the problem, is
-    # non-standard. This problem is ignored because such a web
-    # isn't very useful in TWiki.
-    # Also assumed: the output of the egrepCmd must be of the form
-    # file.txt: ...matched text...
-    my $cmd = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::egrepCmd;
-    my $q = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::cmdQuote;
-    # This grep is only used to find the files containing actions.
-    # The output is thrown away. So we could use fgrep instead, but
-    # since this is run as a cron there's not much benefit. If Search
-	# had a halfway-decent interface we could use that instead.
-	my $topic;
-	my @groups;
-	my $group = "";
-	my $cnt = 512;
-	my @tops = TWiki::Func::getTopicList( $theWeb );
-	@tops = grep( /$topics/, @tops ) if ( $topics );
+	my @tops = TWiki::Func::getTopicList( $web );
+    my $grep =
+      TWiki::Func::searchInWebContent( '%ACTION{.*}%', $web, \@tops,
+                                       { type => 'regex',
+                                         casesensitive => 1,
+                                         files_without_match => 1 } );
 
-	foreach $topic ( @tops ) {
-        unless ( $cnt ) {
-            push( @groups, $group );
-            $group = "";
-            $cnt = 512;
-        }
-        $cnt--;
-        $group .= " $dd/$theWeb/$topic.txt";
-	}
-	push( @groups, $group ) if ( $group );
-
-    my $grep = "";
-	foreach $group ( @groups ) {
-        my $c = "$cmd -H -c $q%ACTION\\{.*\\}%$q $group";
-        $c =~ /^(.*)$/;
-        $grep .= `$1`;
-	}
-
-    my $number = 0;
-    my $processed = "";
-	my $date = Time::ParseDate::parsedate( $theDate );
-
-    foreach my $line ( split( /\r?\n/, $grep )) {
-        if ( $line =~ m/^.*\/([^\/\.\n]+)\.txt:/o ) {
-            my $topic = $1;
-            my @st = stat( "$dd/$theWeb/$topic.txt" );
-            my $mtime = $st[9];
-            # There can be no changes if the file date on the topic file
-            # is earlier than theDate, so don't bother looking.
-            if ( $mtime >= $date ) {
-                _findChangesInTopic( $theWeb, $topic, $theDate, $format,
-                                     $notifications );
-            }
-        }
+    foreach my $topic ( keys %$grep ) {
+        _findChangesInTopic( $web, $topic, $theDate, $format,
+                             $notifications );
     }
 }
 
@@ -527,20 +444,10 @@ sub _findChangesInWeb {
 sub _findChangesInWebs {
     my ( $webs, $topics, $date, $format, $notifications ) = @_;
 
-    my $dataDir = TWiki::Func::getDataDir();
-    opendir( DIR, "$dataDir" ) or die "could not open $dataDir";
-    my @weblist = grep /^[^._].*$/, readdir DIR;
-    closedir DIR;
-    #debug
-    #$notifications->{$dataDir} = "Searching";
-    my $web;
-    foreach $web ( @weblist ) {
-        if ( -d "$dataDir/$web" && $web =~ /^$webs$/ ) {
-            $web =~ /(.*)/; # untaint
-            my $theWeb = $1;
-            _findChangesInWeb( $theWeb, $topics, $date,
-                               $format, $notifications );
-        }
+    my @weblist = grep { /^$webs$/ } TWiki::Func::getListOfWebs( 'user' );
+    foreach my $web ( @weblist ) {
+        _findChangesInWeb( $web, $topics, $date,
+                           $format, $notifications );
     }
 }
 

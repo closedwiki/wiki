@@ -17,9 +17,9 @@
 use strict;
 use integer;
 
-{ package TWiki::Plugins::ActionTrackerPlugin::AttrDef;
+package TWiki::Plugins::ActionTrackerPlugin::AttrDef;
 
-  sub new {
+sub new {
     my ( $class, $type, $size, $match, $candef, $values ) = @_;
     my $this = ();
 
@@ -30,35 +30,32 @@ use integer;
     $this->{values} = $values;
 
     return bless( $this, $class );
-  }
+}
 
-  # COVERAGE OFF Debug only
-  sub toString {
+sub stringify {
     my $this = shift;
-    my $text = "type=" . $this->{type} . " size=" . $this->{size};
-    $text .= " redefinable" if ( $this->{definable} );
-    $text .= " matchable" if ( $this->{match} );
+    my $text = 'type=' . $this->{type} . ' size=' . $this->{size};
+    $text .= ' redefinable' if ( $this->{definable} );
+    $text .= ' matchable' if ( $this->{match} );
     if ( defined( $this->{values} )) {
-      $text .= " values=" . join( ",", @{$this->{values}} );
+        $text .= ' values=' . join( ',', @{$this->{values}} );
     }
-    return "AttrDef($text)"
-  }
-  # COVERAGE ON
+    return 'AttrDef('.$text.')';
+}
 
-  # PUBLIC return the first value in the select set, or undef
-  sub firstSelect {
+# PUBLIC return the first value in the select set, or undef
+sub firstSelect {
     my $this = shift;
     if ( defined( $this->{values} )) {
-      return @{$this->{values}}[0];
+        return @{$this->{values}}[0];
     }
     return undef;
-  }
+}
 
-  sub isRedefinable {
+sub isRedefinable {
     my $this = shift;
 
     return $this->{defineable} == 1;
-  }
 }
 
 1;
