@@ -40,45 +40,37 @@ function initForm() {
 		}
 		return false;
 	}
-	function checkAll( theCheck ) {
-		// find button element index
-		var j = 0;
-		for( var i = 0; i < document.rename.length; i++ ) {
-			if( document.rename.elements[i].name.match( "referring_topics" ) ) {
-				document.rename.elements[i].checked = theCheck;
-			}
-		}
-	}
 //STOP HIDING-->
-</script>%TMPL:END%
+</script> %TMPL:END%
 
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiRenamePage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
+<body class="twikiNoViewPage" onload="initForm()"><a name="PageTop"></a>%TMPL:END%
 
 %TMPL:DEF{"titleaction"}%(set preferences) %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%Preferences for %TMPL:END%
-
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
-<table>
-<tr>
-<td class="twikiCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Update" /></td>
-<td class="twikiAddCol"></td>
-</tr></table></div>%TMPL:END%
+%TMPL:DEF{"webaction"}%Preferences for%TMPL:END%
 
 
 %TMPL:DEF{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
 
 
+%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
+<tr>
+<td class="twikiCancelCol">%TMPL:P{"canceltopicaction"}%</td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Update" /></td>
+<td class="twikiAddCol"></td>
+</tr></table>
+%TMPL:END%
+
+
 %TMPL:DEF{"content"}%
-<form method="post" name="saveSettings" action="%SCRIPTURLPATH%/manage/%WEB%/%TOPIC%">
-%TMPL:P{"simpleheader"}%
+%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form method="post" name="saveSettings" action="%SCRIPTURLPATH%/manage/%WEB%/%TOPIC%">
+
 <div class="twikiEditTextarea">
 <input type="hidden" name="action" value="saveSettings" />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
@@ -94,7 +86,7 @@ function initForm() {
 </div>
 %TMPL:P{"topicaction"}%
 %TMPL:P{"hidden"}%
-</form>
+</form></div>
 %TMPL:END%
 
 
