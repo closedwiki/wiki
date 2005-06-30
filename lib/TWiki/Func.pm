@@ -75,7 +75,7 @@ Return: =$value=  Value associated with key; empty string if not set; undef if s
 sub getSessionValue {
 #   my( $theKey ) = @_;
 
-    return TWiki::Plugins::getSessionValueHandler( @_ );
+    return $TWiki::Plugins::SESSION->{plugins}->getSessionValueHandler( @_ );
 }
 
 
@@ -94,7 +94,7 @@ Return: =$result=   ="1"= if success; undef if session plugin is not installed
 
 sub setSessionValue {
 #   my( $theKey, $theValue ) = @_;
-    TWiki::Plugins::setSessionValueHandler( @_ );
+    $TWiki::Plugins::SESSION->{plugins}->setSessionValueHandler( @_ );
 }
 
 =pod
