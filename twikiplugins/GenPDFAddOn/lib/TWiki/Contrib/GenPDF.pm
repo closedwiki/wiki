@@ -54,7 +54,7 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = 0.7;
+$VERSION = 0.8;
 $| = 1; # Autoflush buffers
 
 our $query = new CGI;
@@ -96,6 +96,8 @@ sub _getRenderedView {
    my $text = TWiki::Func::readTopicText($webName, $topic);
    # FIXME - must be a better way?
    if ($text =~ /^http.*\/.*\/oops\/.*oopsaccessview$/) {
+      return "Sorry, this topic is not accessible at this time."
+         if $prefs{'recursive'}; # no point spoiling _everything_
       TWiki::Func::redirectCgiQuery($query, $text);
    }
    $text =~ s/\%TOC({.*?})?\%//g; # remove TWiki TOC
@@ -321,8 +323,11 @@ sub _fixHtml {
    $html = _shiftHeaders($html);
 
    # Insert an <h1> header if one isn't present
+   # and a target (after the <h1>) for this topic so it gets a bookmark
    if ($html !~ /<h1>/is) {
-      $html = "<h1>$topic</h1>$html";
+      $html = "<h1>$topic</h1><a name=\"$topic\"> </a>$html";
+   } else {
+      $html = "<a name=\"$topic\"> </a>$html";
    }
    # htmldoc reads <title> for PDF Title meta-info
    $html = "<head><title>$title</title>\n$meta</head>\n<body>$html</body>";
@@ -343,6 +348,12 @@ sub _fixHtml {
    my $url = TWiki::Func::getUrlHost();
    $html =~ s/<img(.*?) src="\//<img$1 src="$url\//sgi;
    $html =~ s/<a(.*?) href="\//<a$1 href="$url\//sgi;
+   # link internally if we include the topic
+   for my $wikiword (@$refTopics) {
+      $url = TWiki::Func::getScriptUrl($webName, $wikiword, 'view');
+      $html =~ s/$url(?!#)/#$wikiword/g; # not anchored
+      $html =~ s/$url(#\w*)/$1/g; # anchored
+   }
 
    return $html;
 }
