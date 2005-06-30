@@ -245,6 +245,7 @@ used to change the user's password
 sub changePassword {
     my ( $this, $oldUserPassword, $newUserPassword ) = @_;
     ASSERT($this->isa( 'TWiki::User')) if DEBUG;
+    ASSERT($newUserPassword) if DEBUG;
 
     my $passwordHandler = $this->{session}->{users}->{passwords};
     my $success = $passwordHandler->passwd($this->{login}, $newUserPassword, $oldUserPassword);
