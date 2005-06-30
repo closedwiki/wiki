@@ -77,9 +77,10 @@ function initForm() {
 
 
 %TMPL:DEF{"content"}%
-<form method="post" name="savesettings" action="%SCRIPTURLPATH%/savesettings/%WEB%/%TOPIC%">
+<form method="post" name="saveSettings" action="%SCRIPTURLPATH%/manage/%WEB%/%TOPIC%">
 %TMPL:P{"simpleheader"}%
 <div class="twikiEditTextarea">
+<input type="hidden" name="action" value="saveSettings" />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
 %TEXT%

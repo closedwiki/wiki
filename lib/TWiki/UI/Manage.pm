@@ -62,6 +62,10 @@ sub manage {
         TWiki::UI::Register::bulkRegister( $session );
     } elsif( $action eq 'deleteUserAccount' ) {
         TWiki::UI::Manage::removeUser( $session );
+    } elsif( $action eq 'editSettings' ) {
+        TWiki::UI::Manage::editSettings( $session );
+    } elsif( $action eq 'saveSettings' ) {
+        TWiki::UI::Manage::saveSettings( $session );
     } elsif( $action ) {
         throw TWiki::OopsException( 'attention',
                                     def => 'unrecognized_action',
