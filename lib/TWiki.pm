@@ -1199,7 +1199,7 @@ sub writeLog {
     }
 
     my $remoteAddr = $ENV{'REMOTE_ADDR'} || '';
-    my $text = "| $user | $action | $webTopic | $extra | $remoteAddr |";
+    my $text = "$user | $action | $webTopic | $extra | $remoteAddr |";
 
     $this->_writeReport( $TWiki::cfg{LogFileName}, $text );
 }
