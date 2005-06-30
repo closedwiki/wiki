@@ -54,15 +54,16 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = 0.6;
+$VERSION = 0.7;
 $| = 1; # Autoflush buffers
 
 our $query = new CGI;
 our %tree;
+our %prefs;
 
 =pod
 
-=head2 _fixTags($text, $rhPrefs)
+=head2 _fixTags($text)
 
 Expands tags in the passed in text to the appropriate value in the preferences hash and
 returns modified $text.
@@ -70,11 +71,11 @@ returns modified $text.
 =cut
 
 sub _fixTags {
-   my ($text, $rhPrefs) = @_;
+   my ($text) = @_;
 
-   $text =~ s|%GENPDFADDON_BANNER%|$rhPrefs->{'banner'}|g;
-   $text =~ s|%GENPDFADDON_TITLE%|$rhPrefs->{'title'}|g;
-   $text =~ s|%GENPDFADDON_SUBTITLE%|$rhPrefs->{'subtitle'}|g;
+   $text =~ s|%GENPDFADDON_BANNER%|$prefs{'banner'}|g;
+   $text =~ s|%GENPDFADDON_TITLE%|$prefs{'title'}|g;
+   $text =~ s|%GENPDFADDON_SUBTITLE%|$prefs{'subtitle'}|g;
    
    return $text;
 }
@@ -132,7 +133,7 @@ sub _extractPdfSections {
 
 =pod
 
-=head2 _getHeaderFooterData($webName, $rhPrefs)
+=head2 _getHeaderFooterData($webName)
 
 If header/footer topic is present in $webName, gets it, expands local tags, renders the
 rest, and returns the data. "Local tags" (see _fixTags()) are expanded first to allow
@@ -141,14 +142,14 @@ values passed in from the query to have precendence.
 =cut
 
 sub _getHeaderFooterData {
-   my ($webName, $rhPrefs) = @_;
+   my ($webName) = @_;
 
    # Get the header/footer data (if it exists)
    my $text = "";
-   my $topic = $rhPrefs->{'hftopic'};
+   my $topic = $prefs{'hftopic'};
    # Get a topic name without any whitespace
    $topic =~ s|\s||g;
-   if ($rhPrefs->{'hftopic'}) {
+   if ($prefs{'hftopic'}) {
       $text = TWiki::Func::readTopicText($webName, $topic);
    }
    # FIXME - must be a better way?
@@ -158,7 +159,7 @@ sub _getHeaderFooterData {
 
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $text = _extractPdfSections($text);
-   $text = _fixTags($text, $rhPrefs);
+   $text = _fixTags($text);
 
    my $output = "";
    # Expand common variables found between quotes. We have to jump through this loop hoop
@@ -188,7 +189,7 @@ sub _getHeaderFooterData {
 
 =pod
 
-=head2 _createTitleFile($webName, $rhPrefs)
+=head2 _createTitleFile($webName)
 
 If title page topic is present in $webName, gets it, expands local tags, renders the
 rest, and returns the data. "Local tags" (see _fixTags()) are expanded first to allow
@@ -197,14 +198,14 @@ values passed in from the query to have precendence.
 =cut
 
 sub _createTitleFile {
-   my ($webName, $rhPrefs) = @_;
+   my ($webName) = @_;
 
    my $text = undef;
-   my $topic = $rhPrefs->{'titletopic'};
+   my $topic = $prefs{'titletopic'};
    # Get a topic name without any whitespace
    $topic =~ s|\s||g;
    # Get the title topic (if it exists)
-   if ($rhPrefs->{'titletopic'}) {
+   if ($prefs{'titletopic'}) {
       $text .= TWiki::Func::readTopicText($webName, $topic);
    }
    # FIXME - must be a better way?
@@ -214,7 +215,7 @@ sub _createTitleFile {
 
    # Extract the content between the PDFSTART and PDFSTOP comment markers
    $text = _extractPdfSections($text);
-   $text = _fixTags($text, $rhPrefs);
+   $text = _fixTags($text);
 
    # Now render the rest of the topic
    $text = TWiki::Func::expandCommonVariables($text, $topic, $webName);
@@ -236,7 +237,7 @@ sub _createTitleFile {
    # fully qualify any unqualified URLs (to make it portable to another host)
    my $url = TWiki::Func::getUrlHost();
    $text =~ s/<img(.*?) src="\//<img$1 src="$url\//sgi;
-   $text =~ s/<a(.*?) href="\//<a$1 href="$url\//sgi;
+   $text =~ s/<a(.*?) href="(?!#)\//<a$1 href="$url\//sgi;
 
    # Save it to a file
    my $fh = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
@@ -250,23 +251,23 @@ sub _createTitleFile {
 
 =pod
 
-=head2 _shiftHeaders($html, $rhPrefs)
+=head2 _shiftHeaders($html)
 
 Functionality from original PDF script.
 
 =cut
 
 sub _shiftHeaders{
-   my ($html, $rhPrefs) = @_;
+   my ($html) = @_;
 
-   if ($rhPrefs->{'shift'} =~ /^[+-]?\d+$/) {
+   if ($prefs{'shift'} =~ /^[+-]?\d+$/) {
       my $newHead;
       # You may want to modify next line if you do not want to shift _all_ headers.
       # I leave for example all header that contain a digit folowed by a point.
       # Look like this:
       # $html =~ s&<h(\d)>((?:(?!(<h\d>|\d\.)).)*)</h\d>&'<h'.($newHead = ($1+$sh)>6?6:($1+$sh)<1?1:($1+$sh)).'>'.$2.'</h'.($newHead).'>'&gse;
       # NOTE - htmldoc allows headers up to <h15>
-      $html =~ s|<h(\d)>((?:(?!<h\d>).)*)</h\d>|'<h'.($newHead = ($1+$rhPrefs->{'shift'})>15?15:($1+$rhPrefs->{'shift'})<1?1:($1+$rhPrefs->{'shift'})).'>'.$2.'</h'.($newHead).'>'|gsei;
+      $html =~ s|<h(\d)>((?:(?!<h\d>).)*)</h\d>|'<h'.($newHead = ($1+$prefs{'shift'})>15?15:($1+$prefs{'shift'})<1?1:($1+$prefs{'shift'})).'>'.$2.'</h'.($newHead).'>'|gsei;
    }
 
    return $html;
@@ -274,7 +275,7 @@ sub _shiftHeaders{
 
 =pod
 
-=head2 _fixHtml($html, $rhPrefs)
+=head2 _fixHtml($html)
 
 Cleans up the HTML as needed before htmldoc processing. This currently includes fixing
 img links as needed, removing page breaks, META stuff, and inserting an h1 header if one
@@ -283,8 +284,8 @@ isn't present. Returns the modified html.
 =cut
 
 sub _fixHtml {
-   my ($html, $rhPrefs, $topic, $webName) = @_;
-   my $title = TWiki::Func::expandCommonVariables($rhPrefs->{'title'}, $topic, $webName);
+   my ($html, $topic, $webName, $refTopics) = @_;
+   my $title = TWiki::Func::expandCommonVariables($prefs{'title'}, $topic, $webName);
    $title = TWiki::Func::renderText($title);
    $title =~ s/<.*?>//gs;
    #print STDERR "title: '$title'\n"; # DEBUG
@@ -305,8 +306,8 @@ sub _fixHtml {
    $meta .= '<META NAME="COPYRIGHT" CONTENT="%WEBCOPYRIGHT%"/>'; # Specifies the document copyright.
    $meta .= '<META NAME="DOCNUMBER" CONTENT="%REVINFO{format="r1.$rev - $date"}%"/>'; # Specifies the document number.
    $meta .= '<META NAME="GENERATOR" CONTENT="%WIKITOOLNAME% %WIKIVERSION%"/>'; # Specifies the application that generated the HTML file.
-   $meta .= '<META NAME="KEYWORDS" CONTENT="'. $rhPrefs->{'keywords'} .'"/>'; # Specifies document search keywords.
-   $meta .= '<META NAME="SUBJECT" CONTENT="'. $rhPrefs->{'subject'} .'"/>'; # Specifies document subject.
+   $meta .= '<META NAME="KEYWORDS" CONTENT="'. $prefs{'keywords'} .'"/>'; # Specifies document search keywords.
+   $meta .= '<META NAME="SUBJECT" CONTENT="'. $prefs{'subject'} .'"/>'; # Specifies document subject.
    $meta = TWiki::Func::expandCommonVariables($meta, $topic, $webName);
    $meta =~ s/<(?!META).*?>//g; # remove any tags from inside the <META />
    $meta = TWiki::Func::renderText($meta);
@@ -317,7 +318,7 @@ sub _fixHtml {
    $meta =~ s/&gt;/>/g;
    #print STDERR "meta: '$meta'\n"; # DEBUG
 
-   $html = _shiftHeaders($html, $rhPrefs);
+   $html = _shiftHeaders($html);
 
    # Insert an <h1> header if one isn't present
    if ($html !~ /<h1>/is) {
@@ -348,7 +349,7 @@ sub _fixHtml {
 
 =pod
 
-=head2 _getPrefsHashRef($query)
+=head2 _getPrefs($query)
 
 Creates a hash with the various preference values. For each preference key, it will set the
 value first to the one supplied in the URL query. If that is not present, it will use the TWiki
@@ -358,9 +359,7 @@ See the GenPDFAddOn topic for a description of the possible preference values an
 
 =cut
 
-sub _getPrefsHashRef {
-   my %prefs = ();
-
+sub _getPrefs {
    # HTMLDOC location
    # $TWiki::htmldocCmd must be set in TWiki.cfg
 
@@ -421,8 +420,6 @@ sub _getPrefsHashRef {
       $prefs{$key} = $val;
    }
    #print STDERR %prefs; #DEBUG
-
-   return \%prefs;
 }
 
 =pod
@@ -445,26 +442,26 @@ sub viewPDF {
       TWiki::initialize($thePathInfo, $theRemoteUser, $theTopic, $theUrl, $query);
 
    # Get preferences
-   my $rhPrefs = _getPrefsHashRef($query);
+   _getPrefs($query);
 
    # Set a default skin in the query
-   $query->param('skin', $rhPrefs->{'skin'});
+   $query->param('skin', $prefs{'skin'});
 
    # Check for existence
    TWiki::Func::redirectCgiQuery($query,
          TWiki::Func::getOopsUrl($webName, $topic, "oopsmissing"))
       unless TWiki::Func::topicExists($webName, $topic);
    TWiki::Func::redirectCgiQuery($query,
-         TWiki::Func::getOopsUrl($webName, $rhPrefs->{'hftopic'}, "oopscreatenewtopic"))
-      unless TWiki::Func::topicExists($webName, $rhPrefs->{'hftopic'});
+         TWiki::Func::getOopsUrl($webName, $prefs{'hftopic'}, "oopscreatenewtopic"))
+      unless TWiki::Func::topicExists($webName, $prefs{'hftopic'});
    TWiki::Func::redirectCgiQuery($query,
-         TWiki::Func::getOopsUrl($webName, $rhPrefs->{'titletopic'}, "oopscreatenewtopic"))
-      unless TWiki::Func::topicExists($webName, $rhPrefs->{'titletopic'});
+         TWiki::Func::getOopsUrl($webName, $prefs{'titletopic'}, "oopscreatenewtopic"))
+      unless TWiki::Func::topicExists($webName, $prefs{'titletopic'});
 
    # Get header/footer data
-   my $hfData = _getHeaderFooterData($webName, $rhPrefs);
+   my $hfData = _getHeaderFooterData($webName);
 
-   if ($rhPrefs->{'recursive'}) {
+   if ($prefs{'recursive'}) {
       # Include all descendents of this topic
       use Cwd 'cwd';
       my $cwd = cwd; # we need to chdir back after searching
@@ -488,7 +485,7 @@ sub viewPDF {
          my $pipe;
          my $pid = open $pipe, '-|';
          my @data;
-         if ($pid) {			# parent
+         if ($pid) {       # parent
             @data = map { chomp $_; $_ } <$pipe>; # remove newline characters.
             close $pipe;
          } else {
@@ -510,28 +507,26 @@ sub viewPDF {
 
    # Do a recursive depth first walk through the ancestors in the tree
    # sub is defined here for clarity
-   # FIXME - should be using references for this
    sub _depthFirst {
       my $parent = shift;
-      my @topics = @_;
+      my $topics = shift; # ref to @topics
       # the grep gets around a perl dereferencing bug when using strict refs
       my @children = grep { $_; } @{ $tree{$parent} };
       for ( sort @children ) {
          #print STDERR "new child of $parent: '$_'\n"; # DEBUG
-         push @topics, $_;
+         push @$topics, $_;
          if (defined $tree{$_}) {
             # this child is also a parent so bring them in too
-            @topics = _depthFirst($_, @topics);
+            _depthFirst($_, $topics);
          }
       }
-      return @topics;
    }
    my @topics;
    push @topics, $topic;
-   @topics = _depthFirst($topic, @topics);
+   _depthFirst($topic, \@topics);
 
    # We shift headers here so every topic gets its own <h1>$topic</h1>
-   $rhPrefs->{'shift'} += 1 if (scalar @topics > 1);
+   $prefs{'shift'} += 1 if (scalar @topics > 1);
 
    my @contentFiles;
    for $topic (@topics) {
@@ -540,7 +535,7 @@ sub viewPDF {
       my $htmlData = _getRenderedView($webName, $topic);
 
       # Fix topic text (i.e. correct any problems with the HTML that htmldoc might not like
-      $htmlData = _fixHtml($htmlData, $rhPrefs, $topic, $webName);
+      $htmlData = _fixHtml($htmlData, $topic, $webName, \@topics);
 
       # The data returned also incluides the header. Remove it.
       $htmlData =~ s|.*(<!DOCTYPE)|$1|s;
@@ -548,13 +543,14 @@ sub viewPDF {
       # Save this to a temp file for htmldoc processing
       my $contentFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
                                        DIR => File::Spec->tmpdir(),
+                                       #UNLINK => 0, # DEBUG
                                        SUFFIX => '.html');
       print $contentFile $hfData . $htmlData;
       push @contentFiles, $contentFile;
    }
 
    # Create a file holding the title data
-   my $titleFile = _createTitleFile($webName, $rhPrefs);
+   my $titleFile = _createTitleFile($webName);
 
    # Create a temp file for output
    my $outputFile = new File::Temp(TEMPLATE => 'GenPDFAddOnXXXXXXXXXX',
@@ -569,33 +565,33 @@ sub viewPDF {
                       "--links",
                       "--linkstyle", "plain",
                       "--outfile", "$outputFile",
-                      "--format", "$rhPrefs->{'format'}",
-                      "--$rhPrefs->{'orientation'}",
-                      "--size", "$rhPrefs->{'size'}",
-                      "--browserwidth", "$rhPrefs->{'width'}",
+                      "--format", "$prefs{'format'}",
+                      "--$prefs{'orientation'}",
+                      "--size", "$prefs{'size'}",
+                      "--browserwidth", "$prefs{'width'}",
                       "--titlefile", "$titleFile";
-   if ($rhPrefs->{'toclevels'} eq '0' ) {
+   if ($prefs{'toclevels'} eq '0' ) {
       push @htmldocArgs, "--no-toc",
                          "--firstpage", "p1";
    }
    else
    {
-      push @htmldocArgs, "--numbered" if $rhPrefs->{'numbered'};
-      push @htmldocArgs, "--toclevels", "$rhPrefs->{'toclevels'}",
-                         "--tocheader", "$rhPrefs->{'tocheader'}",
-                         "--tocfooter", "$rhPrefs->{'tocfooter'}",
+      push @htmldocArgs, "--numbered" if $prefs{'numbered'};
+      push @htmldocArgs, "--toclevels", "$prefs{'toclevels'}",
+                         "--tocheader", "$prefs{'tocheader'}",
+                         "--tocfooter", "$prefs{'tocfooter'}",
                          "--firstpage", "toc";
    }
-   push @htmldocArgs, "--duplex" if $rhPrefs->{'duplex'};
-   push @htmldocArgs, "--bodyimage", "$rhPrefs->{'bodyimage'}" if $rhPrefs->{'bodyimage'};
-   push @htmldocArgs, "--logoimage", "$rhPrefs->{'logoimage'}" if $rhPrefs->{'logoimage'};
-   push @htmldocArgs, "--headfootfont", "$rhPrefs->{'headfootfont'}" if $rhPrefs->{'headfootfont'};
-   push @htmldocArgs, "--permissions", "$rhPrefs->{'permissions'}" if $rhPrefs->{'permissions'};
-   push @htmldocArgs, "--bodycolor", "$rhPrefs->{'bodycolor'}" if $rhPrefs->{'bodycolor'};
-   push @htmldocArgs, "--top", "$rhPrefs->{'top'}" if $rhPrefs->{'top'};
-   push @htmldocArgs, "--bottom", "$rhPrefs->{'bottom'}" if $rhPrefs->{'bottom'};
-   push @htmldocArgs, "--left", "$rhPrefs->{'left'}" if $rhPrefs->{'left'};
-   push @htmldocArgs, "--right", "$rhPrefs->{'right'}" if $rhPrefs->{'right'};
+   push @htmldocArgs, "--duplex" if $prefs{'duplex'};
+   push @htmldocArgs, "--bodyimage", "$prefs{'bodyimage'}" if $prefs{'bodyimage'};
+   push @htmldocArgs, "--logoimage", "$prefs{'logoimage'}" if $prefs{'logoimage'};
+   push @htmldocArgs, "--headfootfont", "$prefs{'headfootfont'}" if $prefs{'headfootfont'};
+   push @htmldocArgs, "--permissions", "$prefs{'permissions'}" if $prefs{'permissions'};
+   push @htmldocArgs, "--bodycolor", "$prefs{'bodycolor'}" if $prefs{'bodycolor'};
+   push @htmldocArgs, "--top", "$prefs{'top'}" if $prefs{'top'};
+   push @htmldocArgs, "--bottom", "$prefs{'bottom'}" if $prefs{'bottom'};
+   push @htmldocArgs, "--left", "$prefs{'left'}" if $prefs{'left'};
+   push @htmldocArgs, "--right", "$prefs{'right'}" if $prefs{'right'};
 
    push @htmldocArgs, @contentFiles;
 
@@ -618,10 +614,10 @@ sub viewPDF {
    }
 
    #  output the HTML header and the output of HTMLDOC
-   if ($rhPrefs->{'format'} =~ /pdf/) {
+   if ($prefs{'format'} =~ /pdf/) {
       print $query->header( -TYPE => "application/pdf" );
    }
-   elsif ($rhPrefs->{'format'} =~ /ps/) {
+   elsif ($prefs{'format'} =~ /ps/) {
       print $query->header( -TYPE => "application/postscript" );
    }
    else {
@@ -634,3 +630,4 @@ sub viewPDF {
 }
 
 1;
+# vim:et:sw=3:ts=3:tw=0
