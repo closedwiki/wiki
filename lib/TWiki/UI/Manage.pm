@@ -603,9 +603,11 @@ sub getReferringTopics {
         my @topicList = $store->getTopicNames( $searchWeb );
         my $searchString = $topic;
         $searchString = $web.'.'.$topic unless $searchWeb eq $web;
+        # Note use of \< and \> to match the empty string at the edges of a word.
         my $matches = $store->searchInWebContent
-          ( $searchString, $searchWeb, \@topicList,
-            { casesensitive => 0 } );
+          ( '\<'.$searchString.'\>',
+            $searchWeb, \@topicList,
+            { casesensitive => 0, type => 'regex' } );
 
         foreach my $searchTopic ( keys %$matches ) {
             next if( $searchWeb eq $web && $searchTopic eq $topic );
