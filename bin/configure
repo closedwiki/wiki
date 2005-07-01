@@ -186,52 +186,52 @@ my $url = $query->url();
 my $update = $query->param('update');
 
 print CGI::header('text/html'),
-  CGI::start_html('TWiki Configuration'),
+  CGI::start_html( -title => 'TWiki Configuration' ),
   CGI::style( { type=>'text/css', media=>'all' }, <<'HERE'
-		html body {
-			line-height:1.55em;
-			font-family:Avenir, "Lucida Grande", "Bitstream Vera Sans", lucida, arial, verdana, sans-serif;
-			background-color: white;
-			margin:0;
-			padding:0;
-		}
-		h1 {
-		    font-size:210%;
-		    background-color:#DFDFDF;
-		    padding:0.2em 0.7em;
-		    color:#C90000;
-		    margin:1em -0.7em 0.15em -0.7em;
-		}
-		h2 {
-		    background-color:#F0F0F0;
-		    padding:2ex 0.7em 0.2em 0.7em;
-		}
-		h3 {
-		    padding:0.2em 0.7em;
-		}
-        .info {
-            color: green;
-        }
-        .warn {
-			color:#FF8800;;
-        }
-        .error {
-			color:red;
-            font-weight: bold;
-        }
-        .mandatory {
-			color: blue;
-            font-weight: bold;
-        }
-        .docdata {
-            vertical-align: top;
-            padding-top: 1ex;
-        }
-        .keydata {
-            vertical-align: top;
-            font-weight: bold;
-			background-color:#FOFOFO;
-        }
+html body {
+  line-height:1.55em;
+  font-family:Avenir, "Lucida Grande", "Bitstream Vera Sans", lucida, arial, verdana, sans-serif;
+  background-color: white;
+  margin:0;
+  padding:0;
+}
+h1 {
+  font-size:210%;
+  background-color:#DFDFDF;
+  padding:0.2em 0.7em;
+  color:#C90000;
+  margin:1em -0.7em 0.15em -0.7em;
+}
+h2 {
+  background-color:#F0F0F0;
+  padding:2ex 0.7em 0.2em 0.7em;
+}
+h3 {
+  padding:0.2em 0.7em;
+}
+.info {
+  color: green;
+}
+.warn {
+  color:#FF8800;;
+}
+.error {
+  color:red;
+  font-weight: bold;
+}
+.mandatory {
+  color: blue;
+  font-weight: bold;
+}
+.docdata {
+  vertical-align: top;
+  padding-top: 1ex;
+}
+.keydata {
+  vertical-align: top;
+  font-weight: bold;
+  background-color:#FOFOFO;
+}
 HERE
             );
 
@@ -239,9 +239,9 @@ print CGI::h1('TWiki Configuration');
 
 # Check if LocalSite.cfg is writable
 my $update_enabled = 0;
-my $path_to_localsite_cfg = findFileOnPath('LocalSite.cfg');
+my $path_to_localsite_cfg = _findFileOnPath('LocalSite.cfg');
 unless( $path_to_localsite_cfg ) {
-    $path_to_localsite_cfg = findFileOnPath('TWiki.cfg') || '';
+    $path_to_localsite_cfg = _findFileOnPath('TWiki.cfg') || '';
     $path_to_localsite_cfg =~ s/TWiki\.cfg/LocalSite.cfg/;
 }
 my $errs;
@@ -257,9 +257,66 @@ if( $update ) {
     unless( $update_enabled ) {
         exit;
     }
-    print CGI::h1('Updating configuration');
+
+    my $pass = $query->param( 'cfgAccess' );
+    unless( defined( $pass )) {
+        print CGI::start_form({ action=>'configure',method=>"post" });
+        # Pass all URL params through
+        foreach my $param ( $query->param ) {
+            print CGI::hidden(-name=>$param,
+                              -value=>$query->param( $param ));
+        }
+        # and add a few more
+        print "You need to enter the configuration password. If this is the first time you have configured TWiki, this will be null, and you should set a new password.",
+          CGI::start_table(),
+          CGI::Tr(
+            CGI::td( "Enter Password:" ),
+            CGI::td(CGI::password_field( 'cfgAccess', '', 20, 80 ))),
+          CGI::Tr(
+            CGI::td( {colspan => 2 },
+                     "If you also want to change the password, enter new details below")),
+          CGI::Tr(
+            CGI::td("New password:"),
+            CGI::td(CGI::password_field( 'newCfgP', '', 20, 80 ))),
+          CGI::Tr(
+            CGI::td("Confirm new password:"),
+            CGI::td(CGI::password_field( 'confCfgP', '', 20, 80 ))),
+          CGI::end_table(),
+          CGI::submit(-value=>'Commit'),
+          CGI::end_form(),
+          CGI::end_html();
+        exit;
+    }
+
+    unless( crypt( $pass, $TWiki::cfg{Password}) eq
+            $TWiki::cfg{Password} ) {
+        print CGI::span( {class => 'error' }, "Incorrect password" ),
+          CGI::end_html();
+        exit;
+    }
+
     my $changed = 0;
     my %updates;
+
+    if( $query->param( 'newCfgP' )) {
+        if( $query->param( 'newCfgP' ) eq
+                $query->param( 'confCfgP' )) {
+            my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
+            my $salt = $saltchars[int(rand($#saltchars+1))] .
+              $saltchars[int(rand($#saltchars+1)) ];
+            $updates{Password} =
+              _perlifyType(
+                           crypt( $query->param( 'newCfgP' ), $salt ),
+                           'STRING' );
+            $changed++;
+            print "Password changed";
+        } else {
+            print "New password and confirmation do not match";
+            exit;
+        }
+    }
+
+    print CGI::h1('Updating configuration');
     foreach my $param ( $query->param ) {
         my $basevar = $param;
         $basevar =~ s/_/}{/g;
@@ -270,14 +327,16 @@ if( $update ) {
         eval "\$def = defined( $var );";
         if( $type ) {
             eval "\$def = $var;" if $def;
-            if( $val eq $def) {
+            if( ( $type eq 'OCTAL' &&
+                  sprintf('0%o', $def) =~ /^0*$val$/ ) ||
+                ( $type eq 'NUMBER' && $val + 1 == $def + 1 ) ||
+                $val eq $def ) {
                 #print CGI::br($var.'='.$val.' is unchanged ('.$def.')');
                 next;
             }
-            print CGI::h2($var),
-              CGI::b('old ').CGI::code($def).
-                  CGI::br(CGI::b('new  ').CGI::code($val));
-            $updates{$basevar} = perlifyType($val, $type);
+            print CGI::h2($var),CGI::b('old '),CGI::code($def),
+              CGI::br().CGI::b('new  '),CGI::code($val);
+            $updates{$basevar} = _perlifyType($val, $type);
             $changed++;
         }
     }
@@ -739,43 +798,45 @@ HERE
              "in earlier builds.");
     }
     print ROW("PERL5SHELL", $n);
-}
+};
 
-# "Parse" TWiki.cfg
-my $cfgfile = findFileOnPath("TWiki.cfg");
-open(F, $cfgfile);
-undef $/;
-my $text = <F>;
-close(F);
-$text =~ s/^# //gm;
+# "Parse" TWiki.cfg and LocalSite.cfg
+for my $file ( 'TWiki.cfg', 'LocalSite.cfg' ) {
+    my $cfgfile = _findFileOnPath($file);
+    open(F, $cfgfile) || next;
+    undef $/;
+    my $text = <F>;
+    close(F);
+    $text =~ s/^# //gm;
 
-my $type;
-my $descr;
-my $opts;
-foreach (split(/\r?\n/, $text)) {
-    if( m/^\*\*([A-Z]+)(\s*.*?)\*\*/ ) {
-        if( $type eq '_HELP' ) {
-            print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
+    my $type;
+    my $descr;
+    my $opts;
+    foreach (split(/\r?\n/, $text)) {
+        if( m/^\*\*([A-Z]+)(\s*.*?)\*\*/ ) {
+            if( $type eq '_HELP' ) {
+                print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
+            }
+            $type = $1;
+            $opts = $2 || '';
+            $opts .= ' '; # to simplify parsing
+            $descr = '';
+        } elsif ($type && /\$(TWiki::)?cfg(.*?)\s*=/) {
+            if( $type eq '_HELP' ) {
+                print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
+            } else {
+                print _checkAndBuildValueGrabber($type, $opts, $descr, $2);
+            }
+            $type = '';
+            $descr = '';
+        } elsif( m/^##+(.*?)#+$/ ) {
+            print CGI::Tr(CGI::td({ colspan => 2 },
+                                  CGI::a({name=>_makeAnchor( $1 )},
+                                         CGI::h2( $1 ))));
+            $type = '_HELP';
+        } elsif( $type ) {
+            $descr .= "$_ ";
         }
-        $type = $1;
-        $opts = $2 || '';
-        $opts .= ' '; # to simplify parsing
-        $descr = '';
-    } elsif ($type && /\$(TWiki::)?cfg(.*?)\s*=/) {
-        if( $type eq '_HELP' ) {
-            print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
-        } else {
-            print __checkAndBuildValueGrabber($type, $opts, $descr, $2);
-        }
-        $type = '';
-        $descr = '';
-    } elsif( m/^##+(.*?)#+$/ ) {
-        print CGI::Tr(CGI::td({ colspan => 2 },
-                              CGI::a({name=>_makeAnchor( $1 )},
-                                     CGI::h2( $1 ))));
-        $type = '_HELP';
-    } elsif( $type ) {
-        $descr .= "$_ ";
     }
 }
 print CGI::end_table();
@@ -796,56 +857,6 @@ sub _makeAnchor {
     $str =~ s/\s(\w)/uc($1)/ge;
     $str =~ s/\W//g;
     return $str;
-}
-
-# Generates the appropriate HTML for getting a value to configure the
-# entry. The opts are additional parameters, and by convention may
-# be a number (for a string length), a comma separated list of values
-# (for a select) and may also have an M for mandatory. The actual
-# input field is decided by the type, which is used to compose a function
-# name by prepending _prompt.
-#.
-# The method also builds a function name by prepending _check to the
-# field name, and calls it if it exists to perform additional checking
-# for that specific field (see _checkDataDir as an example)
-#
-sub __checkAndBuildValueGrabber {
-    my( $type, $opts, $desc, $keys) = @_;
-
-    my $mandatory = ($opts =~ /\sM\s/);
-    # field id
-    my $id = $keys;
-    $id =~ s/}{/_/g;
-    $id =~ s/[{}\[\]]//g;
-    my $anchor = CGI::a({name=>$id},'');
-    print CGI::hidden(-name => 'TYPEOF:'.$id, -value=>$type);
-    my $checker = '_check'.$id;
-    if( defined &$checker ) {
-        no strict 'refs';
-        $desc .= &$checker();
-        use strict 'refs';
-    }
-
-    my $prompter = '_prompt'.$type;
-    my $value = eval '$TWiki::cfg'.$keys;
-    no strict 'refs';
-    $prompter = &$prompter($id, $opts, $value, $keys, $mandatory);
-    my $class = $type;
-    $class .= ' mandatory' if $mandatory;
-    $prompter = CGI::span({class=>$class}, $prompter) if $mandatory;
-    use strict 'refs';
-
-    $desc = $anchor."\n".$desc;
-
-    my $docrow =
-      CGI::Tr( CGI::td( { colspan => 2, class=>'docdata info' }, $desc ));
-
-    $keys = CGI::span({class=>'mandatory'}, $keys) if $mandatory;
-    my $keyrow =
-      CGI::Tr( { class => 'keydata' },
-               CGI::td( $keys ).CGI::td( $prompter ));
-
-    return $docrow."\n".$keyrow."\n";
 }
 
 sub _promptSTRING {
@@ -1364,7 +1375,7 @@ sub ERROR {
     return CGI::div({class=>'error'}, CGI::strong('Error: ').join("\n",@_));
 }
 
-sub findFileOnPath {
+sub _findFileOnPath {
     my $file = shift;
     $file =~ s(::)(/)g;
 
@@ -1374,6 +1385,56 @@ sub findFileOnPath {
         }
     }
     return undef;
+}
+
+# Generates the appropriate HTML for getting a value to configure the
+# entry. The opts are additional parameters, and by convention may
+# be a number (for a string length), a comma separated list of values
+# (for a select) and may also have an M for mandatory. The actual
+# input field is decided by the type, which is used to compose a function
+# name by prepending _prompt.
+#.
+# The method also builds a function name by prepending _check to the
+# field name, and calls it if it exists to perform additional checking
+# for that specific field (see _checkDataDir as an example)
+#
+sub _checkAndBuildValueGrabber {
+    my( $type, $opts, $desc, $keys) = @_;
+
+    my $mandatory = ($opts =~ /\sM\s/);
+    # field id
+    my $id = $keys;
+    $id =~ s/}{/_/g;
+    $id =~ s/[{}\[\]]//g;
+    my $anchor = CGI::a({name=>$id},'');
+    print CGI::hidden(-name => 'TYPEOF:'.$id, -value=>$type);
+    my $checker = '_check'.$id;
+    if( defined &$checker ) {
+        no strict 'refs';
+        $desc .= &$checker();
+        use strict 'refs';
+    }
+
+    my $prompter = '_prompt'.$type;
+    my $value = eval '$TWiki::cfg'.$keys;
+    no strict 'refs';
+    $prompter = &$prompter($id, $opts, $value, $keys, $mandatory);
+    my $class = $type;
+    $class .= ' mandatory' if $mandatory;
+    $prompter = CGI::span({class=>$class}, $prompter) if $mandatory;
+    use strict 'refs';
+
+    $desc = $anchor."\n".$desc;
+
+    my $docrow =
+      CGI::Tr( CGI::td( { colspan => 2, class=>'docdata info' }, $desc ));
+
+    $keys = CGI::span({class=>'mandatory'}, $keys) if $mandatory;
+    my $keyrow =
+      CGI::Tr( { class => 'keydata' },
+               CGI::td( $keys ).CGI::td( $prompter ));
+
+    return $docrow."\n".$keyrow."\n";
 }
 
 sub setConfig {
@@ -1410,7 +1471,7 @@ sub setConfig {
     }
 }
 
-sub perlifyType {
+sub _perlifyType {
     my ($val,$type) = @_;
 
     if ($type eq 'REGEX') {
@@ -1420,7 +1481,8 @@ sub perlifyType {
     } elsif ($type eq 'NUMBER') {
         return 0+$val;
     } elsif ($type eq 'OCTAL') {
-        return '0'.$val;
+        $val = '0'.$val unless $val =~ /^0/;
+        return $val;
     } else {
         $val =~ s/'/\\'/g;
         return "'$val'";
