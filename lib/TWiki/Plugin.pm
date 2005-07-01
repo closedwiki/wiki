@@ -205,13 +205,24 @@ sub registerHandlers {
     foreach my $h ( @registrableHandlers ) {
         my $sub = $p.'::'.$h;
         if( defined( &$sub )) {
-            push( @{$plugins->{registeredHandlers}{$h}}, $sub );
+            push( @{$plugins->{registeredHandlers}{$h}}, $this );
             if( $deprecated{$h} ) {
                 $this->{session}->writeWarning
                   ( $this->{name}.' defines deprecated '.$h );
             }
         }
     }
+}
+
+# Invoke a handler
+sub invoke {  
+	my $this=shift;
+    my $handlerName=shift;
+	my $handler = 'TWiki::Plugins::' . $this->{name}.'::'.$handlerName;
+	no strict 'refs';
+	my $status=&$handler;
+	use strict 'refs';
+	return $status;
 }
 
 # Get the version number of the specified plugin.

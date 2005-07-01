@@ -311,12 +311,12 @@ sub _applyHandlers {
     my $handlerName = shift;
 
     my $status;
-    foreach my $handler ( @{$this->{registeredHandlers}{$handlerName}} ) {
+    foreach my $plugin ( @{$this->{registeredHandlers}{$handlerName}} ) {
         # Set the value of $SESSION for this call stack
         local $SESSION = $this->{session};
         # apply handler on the remaining list of args
         no strict 'refs';
-        $status = &$handler;
+        my $status=$plugin->invoke($handlerName,@_);
         use strict 'refs';
         if( $status && $onlyOnceHandlers{$handlerName} ) {
             return $status;
