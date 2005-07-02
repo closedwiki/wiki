@@ -1,8 +1,11 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1119839216" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1120341742" format="1.0" version="1.9"}%
 ---+!! !TopicTranslationsPlugin
 
 TopicTranslationsPlugin manages topics translations into several languages, by assigning suffixes
-to topic names corresponding to known languages.
+to topic names corresponding to known languages. TopicTranslationsPlugin also automatically
+redirects users to the best available translation, based on the languages available and the
+languages informed as acceptable by the user.
+
 
 %TOC%
 
@@ -45,15 +48,15 @@ Parameters for =%<nop/>TRANSLATIONS{}%= :
 	  have translations listed. Can be ="MyTopic"= or ="Web.MyTopic"=.
 	  Defaults to the current topic.
 	* <code>format="..."</code> : provides a custom formatting for the list of available translations.
-	  This format will be used for each avaiable language.
+	  This format will be used for each available language.
 	  The following variables will be expanded in the format:
 	  | =$language= | The language code for the current language. |
 	  | =$topic= | The topic whose translations we are listing. |
 	  | =$translation= | the topic corresponding to the current translation. |
 	  | =$web= | the web containing the translations |
 	  Defaults to ="[[$web.$translation]<nop/>[$language]]"=
-	* =missingformat=: like =format=, but used for translations that were not writen yet.
-	  Supports the sama variables as =format= and defaults to the same value of =format=.
+	* =missingformat=: like =format=, but used for translations that were not written yet.
+	  Supports the same variables as =format= and defaults to the same value of =format=.
 	* <code>separator="..."</code> : text that will separate the items in the listing.
 	  Defaults to =" "= (a space)
 	* <code>which="..."</code>: controls which translations must be listed. Possible values are:
@@ -85,6 +88,46 @@ Parameters =%<nop/>INCLUDETRANSLATION{}%= :
 The initial motivation for this tag is to include a suitable menu, for example, based on
 current topic's language. But there are several other possibilities.
 
+---++ Automatic Redirection
+
+TopicTranslationsPlugin is capable of automatically redirecting to the available
+translation best suited to the user's language. Once TopicTranslationsPlugin is
+installed, this will happen by default.
+
+	* User's language is detected by the =Accept-Language= header sent by the user agent
+	  (the browser, most of the times), using the  =I18N::AcceptLanguage= Perl module.
+	* The user *won't* be redirected:
+		* in the =preview= mode (off course)
+		* if the user came from a link in another translation of the same topic.
+		* if the user came from an =edit= script.
+		* __Note:__ the two later cases are detected by the =Referer= header sent by the user agent.
+
+---+++ Disabling automatic redirection
+
+The automatic redirection can be disabled by setting the TopicTranslationsPlugin's
+preference flag =DISABLE_AUTOMATIC_REDIRECTION= (i.e., setting its value to something different
+from =no=, =off= and =0=).
+
+__Note:__ in TWiki:Codev/CairoRelease, to make this work you'll have to apply the
+following patch to =TWiki/Func.pm= module (got from TWiki's Subversion repository): 
+
+<verbatim>
+--- /var/lib/twiki/lib/TWiki/Func.pm	 2005-07-02 13:33:46.893777128 -0300
++++ Func.pm	  2005-07-02 13:37:22.187047576 -0300
+@@ -407,8 +407,9 @@
+ sub getPluginPreferencesFlag
+ {
+	  my( $theKey ) = @_;
+-	 my $value = getPluginPreferencesValue( $theKey );
+-	 return TWiki::Prefs::formatAsFlag($value);
++	 my $package = caller;
++	 $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
++	 return TWiki::Prefs::getPreferencesFlag( "\U$package\E_$theKey" );
+ }
+
+ # =========================
+</verbatim>
+
 ---++ Examples
 
 | *Test* | *Actual test(work if the plugin is installed)* |
@@ -102,6 +145,9 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
+
+	* Whether automatic redirection must be disabled or not. Set to =yes= to disable.
+		* Set DISABLE_AUTOMATIC_REDIRECTION = no
 
 	* My own setting:
 		* Set TOPICTRANSLATIONS = en, pt-br
@@ -124,7 +170,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Author: | TWiki:Main.AntonioTerceiro |
 |  Plugin Version: | 18 Jun 2005 (V1.000) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  27 Jun 2005 | Version =1.002=: major rewrite; documented all (or almost all :)) the code; added selection of available/missing translations; added =missingformat=; added support for custom topics (and webs) in <code>%<nop/>TRANSLATIONS%</code>; added "best" language detection via =I18N::AcceptLanguage=.  |
+|  27 Jun 2005 | Version =1.002=: major rewrite; documented all (or almost all :)) the code; added selection of available/missing translations; added =missingformat=; added support for custom topics (and webs) in <code>%<nop/>TRANSLATIONS%</code>; added automatic redirection for the "best" translation (detection via =I18N::AcceptLanguage=).  |
 |  19 Jun 2005: | Initial version: =1.001= |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | =I18N::AcceptLanguage= |
