@@ -168,18 +168,21 @@ sub load {
     my $session = $this->{session};
     my $query = $session->{cgiQuery};
 
-    my $pluginList = $TWiki::cfg{PluginsOrder} ||
-      join(',', sort keys %{$TWiki::cfg{Plugins}});
+    my @pluginList = ();
 
-    if ( $query && defined( $query->param( 'debugenableplugins' ))) {
-        $pluginList = $query->param( 'debugenableplugins' );
+    unless( $allDisabled ) {
+        if( $TWiki::cfg{PluginsOrder} ) {
+            @pluginList = split( /[,\s]+/, $TWiki::cfg{PluginsOrder} );
+        }
+        push( @pluginList, sort keys %{$TWiki::cfg{Plugins}} );
+        if ( $query && defined( $query->param( 'debugenableplugins' ))) {
+            @pluginList = split( /[,\s]+/, $query->param( 'debugenableplugins' ));
+        }
     }
-
-    $pluginList = '' if( $allDisabled );
 
     my $user; # the user login name
     my $userDefiner; # the plugin that is defining the user
-    foreach my $pn ( split( /[,\s]+/, $pluginList )) {
+    foreach my $pn ( @pluginList ) {
         my $p;
         if( $TWiki::cfg{Plugins}{$pn}{Enabled} ) {
             unless( $p = $lookup{$pn} ) {
@@ -340,6 +343,7 @@ sub _handleFAILEDPLUGINS {
         my $h = '';
         if ( defined( $this->{registeredHandlers}{$handler} ) ) {
             $h = join( CGI::br(),
+                       map{ $_->{name} }
                        @{$this->{registeredHandlers}{$handler}} );
         }
         $text .= CGI::Tr( { valign=>'top' },
