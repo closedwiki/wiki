@@ -317,10 +317,10 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* The alternative text format of an action, as seen by a mail recipient who doesn't accept HTML in mail. Used when mailing action or change notifications.
 		* Set TEXTFORMAT = Action for $who, due $due, $state$n$text$n
 
-	* The colours for late actions, errors and the table headers. Accepts standard HTML colours.
-		* Set LATECOL = yellow
-		* Set BADDATECOL = red
-		* Set HEADERCOL = orange
+	* Important changes since the last release: Colours are now defined in the  stylesheet attached to this topic. The following settings are ignored:
+		* #Set LATECOL = yellow
+		* #Set BADDATECOL = red
+		* #Set HEADERCOL = orange
 
 	* The format of the fields in the action editor. You can also set EDITBOXWIDTH and EDITBOXHEIGHT to override the defaults (which are %EDITBOXWIDTH%x%EDITBOXHEIGHT%) just for the action editor.
 		* Set EDITHEADER = | Assigned to | Due date | State | Notify |
