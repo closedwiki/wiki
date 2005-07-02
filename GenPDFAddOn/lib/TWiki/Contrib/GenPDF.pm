@@ -202,7 +202,7 @@ values passed in from the query to have precendence.
 sub _createTitleFile {
    my ($webName) = @_;
 
-   my $text = undef;
+   my $text = '';
    my $topic = $prefs{'titletopic'};
    # Get a topic name without any whitespace
    $topic =~ s|\s||g;
