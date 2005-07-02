@@ -72,7 +72,9 @@ my $rcsverRequired = 5.7;
 my $update_enabled = 0;
 my $path_to_localsite_cfg = _findFileOnPath('LocalSite.cfg');
 my $errors = 0;
+my $toterrors = 0;
 my $warnings = 0;
+my $totwarnings = 0;
 
 use CGI qw( :any );
 my $query = new CGI;
@@ -516,10 +518,11 @@ sub checkGnuVersion {
             $ok = 1;
         }
 
-        ROW($progReadableName, $n, NOTE("The '$progReadableName' command is $progUsage."));
+        return _setting($progReadableName, $n,
+                        NOTE("The '$progReadableName' command is $progUsage."));
     }
 
-    return $ok;
+    return '';
 }
 
 sub _checkCanCreateFile {
@@ -622,24 +625,6 @@ HERE
     return '';
 };
 
-sub H3 {
-    my $text = join("\n",@_);
-    return CGI::Tr(CGI::th({align=>'left', valign=>'top', colspan=>'2'},
-                           CGI::h3($text)));
-}
-
-sub H2 {
-    my $text = join("\n",@_);
-    return CGI::Tr(CGI::th({align=>'left', valign=>'top', colspan=>'2'},
-                           CGI::h2($text)));
-}
-
-sub ROW {
-    my $left = shift;
-    my $right = join("\n", @_);
-    return CGI::Tr(CGI::th({ class => 'keydata' },$left), CGI::td($right));
-}
-
 # a note
 sub NOTE {
     return CGI::p({class=>"info"}, join("\n",@_));
@@ -648,12 +633,14 @@ sub NOTE {
 # a warning
 sub WARN {
     $warnings++;
+    $totwarnings++;
     return CGI::div({class=>'warn'}, CGI::strong('Warning: ').join("\n",@_));
 }
 
 # an error
 sub ERROR {
     $errors++;
+    $toterrors++;
     return CGI::div({class=>'error'}, CGI::strong('Error: ').join("\n",@_));
 }
 
@@ -708,15 +695,9 @@ sub _checkAndBuildValueGrabber {
 
     $desc = $anchor."\n".$desc;
 
-    my $docrow =
-      CGI::Tr( CGI::td( { colspan => 2, class=>'docdata info' }, $desc ));
-
     $keys = CGI::span({class=>'mandatory'}, $keys) if $mandatory;
-    my $keyrow =
-      CGI::Tr( { class => 'keydata' },
-               CGI::td( $keys ).CGI::td( $prompter ));
 
-    return $docrow."\n".$keyrow."\n";
+    return _docBlock( $desc )._setting( $keys, $prompter );
 }
 
 sub setConfig {
@@ -773,8 +754,49 @@ sub _perlifyType {
     }
 }
 
+sub _setting {
+    my( $key, $data ) = @_;
+    return CGI::Tr(CGI::td({class=>'firstCol'}, $key).
+                   CGI::td({class=>'secondCol'}, $data));
+}
+
+my $nextid;
+
+sub _foldableBlock {
+    my( $head, $body ) = @_;
+
+    $body = CGI::a( {name => _makeAnchor( $head )}, '').
+      CGI::start_table().$body.CGI::end_table();
+    my $mess = '&nbsp;';
+    $mess .= CGI::span({class=>'error'}, $errors.' error(s)') if $errors;
+    $mess .= CGI::span({class=>'warn'}, $warnings.' warning(s)') if $warnings;
+    $errors = $warnings = 0;
+
+    my $id = $nextid++;
+    return CGI::button( -name => 'but'.$id,
+                        -onClick => 'foldBlock("BLOCK'.$id.'")',
+                        -value => $head ).
+                          $mess.'<br />'.
+           CGI::div( { id => 'BLOCK'.$id, class=> 'foldableBlock' },
+                     $body ).
+                       "\n";
+    }
+
+sub _subHead {
+    my $text = shift;
+    return CGI::Tr(CGI::Td({colspan=>2}, CGI::h3($text))).
+      "\n";
+}
+
+sub _docBlock {
+    my $desc = shift;
+
+    return CGI::Tr( CGI::td( { colspan => 2, class=>'docdata info' }, $desc )).
+      "\n";
+}
+
 sub handlePlugins {
-    my %modules;
+    my $block = '';
     foreach my $libDir ( @INC ) {
         if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
             foreach my $file (grep { /^[A-Za-z0-9_]+Plugin\.pm$/ } readdir DIR ) {
@@ -782,14 +804,14 @@ sub handlePlugins {
                 $module =~ s/\.pm$//;
                 my $discovered = $libDir.'/'.$file;
                 $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
-                print _checkAndBuildValueGrabber
+                $block .= _checkAndBuildValueGrabber
                   ( 'BOOLEAN', '', '',
                     '{Plugins}{'.$module.'}{Enabled}');
                 closedir( DIR );
             }
         }
     }
-    return \%modules;
+    print _foldableBlock( 'Plugins', $block );
 }
 
 sub handleUpdate {
@@ -798,10 +820,12 @@ sub handleUpdate {
     }
 
     my $pass = $query->param( 'cfgAccess' );
+    my $param;
+
     unless( defined( $pass )) {
         print CGI::start_form({ action=>'configure',method=>"post" });
         # Pass all URL params through
-        foreach my $param ( $query->param ) {
+        foreach $param ( $query->param ) {
             print CGI::hidden( $param, $query->param( $param )),"\n";
         }
         # and add a few more
@@ -855,7 +879,7 @@ sub handleUpdate {
     }
 
     print CGI::h1('Updating configuration');
-    foreach my $param ( $query->param ) {
+    foreach $param ( $query->param ) {
         next unless $param =~ /^^TYPEOF:(.*)/;
         my $type = $query->param( $param );
         $param =~ s/^TYPEOF://;
@@ -939,12 +963,14 @@ sub presentReadOnlyInfo {
     require CGI::Carp;
     import CGI::Carp qw( fatalsToBrowser );
 
-    print H2('Environment variables (read only)');
+    my $block = '';
     for my $key ( sort keys %ENV ) {
-        print CGI::Tr( CGI::th($key).CGI::td($ENV{$key}));
+        $block .= _setting($key, $ENV{$key});
     }
+    print _foldableBlock('Environment variables (read only)', $block);
 
-    print H2('CGI Setup (read only)');
+    $block = '';
+
     # Make %ENV safer for CGI (should reflect TWiki.pm)
     my $originalPath = $ENV{'PATH'} || '';
     if( $TWiki::cfg{SafeEnvPath} ) {
@@ -1041,29 +1067,31 @@ sub presentReadOnlyInfo {
     my $n = ucfirst(lc($TWiki::cfg{OS}));
     $n .= " ($TWiki::cfg{DetailedOS})" if ( $TWiki::cfg{DetailedOS} ne '' );
     # OS
-    print ROW("Operating system", $n);
+    $block .= _setting("Operating system", $n);
 
     # Perl version and type
     $perlverMsg .= " ($perltype)" if $perltype ne 'generic';
-    print ROW("Perl version", $perlverMsg);
+    $block .= _setting("Perl version", $perlverMsg);
 
     if ( $perlvernum < $perlverRequired ) {
-        print ROW('', WARN(<<HERE
+        $block .= _setting('',
+                           WARN(<<HERE
 This version of Perl is too old for use with TWiki -
 upgrade to at least Perl $perlverRequiredString
 and preferably to Perl $perlverRecommended.
 HERE
-                          ));
+                               ));
     }
 
     # Perl @INC (lib path)
-    print ROW('@INC library path', join('<br />', @INC ), NOTE(<<HERE
+    $block .= _setting('@INC library path', join('<br />', @INC ),
+                       NOTE(<<HERE
 This is the Perl library path, used to load TWiki modules,
 third-party modules used by some plugins, and Perl built-in modules.
 HERE
-                                                              ));
+                           ));
 
-    print ROW('CGI bin directory', _checkBinDir());
+    $block .= _setting('CGI bin directory', _checkBinDir());
 
     # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
     # browser in some environments.  
@@ -1087,7 +1115,7 @@ HERE
         $mod_version ||= 'unknown';
         $mess = 'OK, TWiki.pm found (Version: <strong>'.$mod_version.'</strong>)';
     }
-    print ROW('TWiki module in @INC path', $mess);
+    $block .= _setting('TWiki module in @INC path', $mess);
 
     if ( defined $TWiki::cfg{DetailedOS} and ($TWiki::cfg{DetailedOS} =~ /darwin/i or $TWiki::cfg{OS} ne 'UNIX') ) {
         map { $requiredMods{$_} = $requiredModsNonUnix{$_} }
@@ -1100,11 +1128,11 @@ HERE
 
     # Check that each of the required Perl modules can be loaded, and
     # print its version number.
-    print H3("Required Perl modules");
+    $block .= _subHead("Required Perl modules");
     foreach my $mod (keys %requiredMods) {
         eval "use $mod";
         if ($@) {
-            print ROW($mod, ERROR("not installed. Required for ",
+            $block .= _setting($mod, ERROR("not installed. Required for ",
                                   $requiredMods{$mod}));
         } else {
             my $mod_version;
@@ -1127,13 +1155,13 @@ HERE
                                "$modPerlVersion on Apache 2.0 or higher.");
                 }
             }
-            print ROW($mod, $n);
+            $block .= _setting($mod, $n);
         }
     }
 
     # Check that each of the optional Perl modules can be loaded, and
     # print its version number.
-    print H3("Optional Perl modules");
+    $block .= _subHead("Optional Perl modules");
     foreach my $mod (keys %optionalMods) {
         eval "use $mod";
         if ($@) {
@@ -1146,14 +1174,14 @@ HERE
             use strict 'refs';
             $n = $mod_version || 'unknown';
         }
-        print ROW($mod, $n);
+        $block .= _setting($mod, $n);
     }
 
     # All module checks done, OK to enable fatalsToBrowser
     import CGI::Carp qw( fatalsToBrowser );
 
     # PATH_INFO
-    print ROW(CGI::a({name=>'PATH_INFO'},'PATH_INFO'), $query->path_info(),
+    $block .= _setting(CGI::a({name=>'PATH_INFO'},'PATH_INFO'), $query->path_info(),
               NOTE(<<HERE
 For a URL such as <strong>$url/foo/bar</strong>,
 the correct PATH_INFO is <strong>/foo/bar</strong>, without any prefixed path
@@ -1174,14 +1202,14 @@ HERE
     if ( $modPerlVersion ) {
         $n .= "- mod_perl version $modPerlVersion\n";
     }
-    print ROW('mod_perl', $n);
+    $block .= _setting('mod_perl', $n);
 
     # Check for a broken version of mod_perl 2.0
     if ( $usingModPerl and $modPerlVersion >= 1.99 
          and $modPerlVersion eq '1.99_11' ) {
         # Recommend mod_perl upgrade if using a mod_perl 2.0 version
         # with PATH_INFO bug (see Support.RegistryCookerBadFileDescriptor)
-        print ROW('', WARN(<<HERE
+        $block .= _setting('', WARN(<<HERE
 mod_perl version $modPerlVersionRecommended or higher,
 is strongly recommended to avoid 'internal system error'
 bugs with PATH_INFO when using mod_perl $modPerlVersion
@@ -1190,7 +1218,6 @@ HERE
                           ));
     }
 
-    
     # Get web server's user and group info
     my $usr = "";
     my $grp = "";
@@ -1209,33 +1236,15 @@ HERE
         }
     }
 
-    print ROW('CGI user', 'userid = <strong>'.$usr.'</strong> groups = <strong>'.
+    $block .= _setting('CGI user', 'userid = <strong>'.$usr.'</strong> groups = <strong>'.
               $grp.'</strong>'.
               NOTE('Your CGI scripts are executing as this user.'));
 
-    H2("Configuration");
-
-    $n = "This is used to initialise the PATH variable, and is used to run the".
-      " 'diff' program used by RCS, as well as to run shell programs such as ";
-    if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
-        $n .= " cmd.exe or Cygwin's 'bash'.<p>";
-        if( $perltype eq 'Cygwin' ) {
-            $n .= "Since you are using Cygwin Perl, 'bash' will be used without any special setup.";
-        } elsif( $perltype eq 'ActiveState' ) {
-            $n .= "To use 'bash' with ActiveState Perl, see the PERL5SHELL section below\n";
-            $n .= "- this is recommended if Cygwin is installed.\n";
-        }
-        $n .= "</p>";
-    } else {
-        $n .= "Bourne shell or 'bash'.";
-    }
-
-    # Generate a separate table about specific environment variables
-    H2("Path and Shell Environment");
-
     # Check PATH
+    # Generate a separate table about specific environment variables
+    $block .= _subHead("Shell and Path");
 
-    print ROW("Original PATH", $originalPath,
+    $block .= _setting("Original PATH", $originalPath,
               NOTE(<<HERE
 This is the PATH value passed in from the web server to this
 script - it is reset by TWiki scripts to the PATH below, and
@@ -1244,7 +1253,7 @@ HERE
                   ));
 
     my $currentPath = $ENV{'PATH'} || ''; 	# As re-set earlier in this routine
-    print ROW("Current PATH", $currentPath,
+    $block .= _setting("Current PATH", $currentPath,
               NOTE(<<HERE
 This is the actual PATH setting that will be used by Perl to run
 programs. It is normally identical to {SafeEnvPath}, unless
@@ -1255,20 +1264,21 @@ HERE
 
     
     # Check that GNU egrep is found in PATH
-    my $egrepOk = checkGnuVersion( $TWiki::cfg{RCS}{EgrepCmd}, "egrep", "used for regular expression searches" );
+    my $egrepBad = checkGnuVersion( $TWiki::cfg{RCS}{EgrepCmd}, "egrep", "used for regular expression searches" );
 
     # Check that GNU fgrep is found in PATH
-    my $fgrepOk = checkGnuVersion( $TWiki::cfg{RCS}{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
+    my $fgrepBad = checkGnuVersion( $TWiki::cfg{RCS}{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
 
-    unless ( $egrepOk && $fgrepOk ) {
-        print ROW('',  NOTE( qq{<a href="http://www.gnu.org/software/grep/grep.html" >grep</a> can be downloaded from <a href="http://www.gnu.org/">GNU</a>'s <a href="ftp://ftp.gnu.org/pub/gnu/grep/" >FTP</a> site} ));
+    if( $egrepBad || $fgrepBad ) {
+        $block .= $egrepBad . $fgrepBad;
+        $block .= _setting('',  NOTE( qq{<a href="http://www.gnu.org/software/grep/grep.html" >grep</a> can be downloaded from <a href="http://www.gnu.org/">GNU</a>'s <a href="ftp://ftp.gnu.org/pub/gnu/grep/" >FTP</a> site} ));
     }
 
     # Check that GNU diff is found in PATH
-    checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
+    $block .= checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
 
     # Check that GNU patch is found in PATH 
-    checkGnuVersion( "patch", "patch", "used by the UpgradeTwiki script to upgrade an existing TWiki installation" );
+    $block .= checkGnuVersion( "patch", "patch", "used by the UpgradeTwiki script to upgrade an existing TWiki installation" );
 
     # PERL5SHELL check for non-Cygwin Perl on Windows only
     if( $TWiki::cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
@@ -1299,13 +1309,16 @@ HERE
                        "</strong> if you are going to use PERL5SHELL, which was broken",
                        "in earlier builds.");
         }
-        print ROW("PERL5SHELL", $n);
+        $block .= _setting("PERL5SHELL", $n);
     };
+    print _foldableBlock('CGI Setup (read only)', $block);
 
 };
 
 sub presentEditableInfo {
     # "Parse" TWiki.cfg and LocalSite.cfg
+    my $block = '';
+    my $head = '';
     for my $file ( 'TWiki.cfg', 'LocalSite.cfg' ) {
         my $cfgfile = _findFileOnPath($file);
         open(F, $cfgfile) || next;
@@ -1320,7 +1333,7 @@ sub presentEditableInfo {
         foreach (split(/\r?\n/, $text)) {
             if( m/^\*\*([A-Z]+)(\s*.*?)\*\*/ ) {
                 if( $type eq '_HELP' ) {
-                    print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
+                    $block .= _docBlock( $descr );
                 }
                 $type = $1;
                 $opts = $2 || '';
@@ -1328,21 +1341,26 @@ sub presentEditableInfo {
                 $descr = '';
             } elsif ($type && /\$(TWiki::)?cfg(.*?)\s*=/) {
                 if( $type eq '_HELP' ) {
-                    print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
+                    $block .= _docBlock( $descr );
                 } else {
-                    print _checkAndBuildValueGrabber($type, $opts, $descr, $2);
+                    $block .= _checkAndBuildValueGrabber($type, $opts, $descr, $2);
                 }
                 $type = '';
                 $descr = '';
             } elsif( m/^##+(.*?)#+$/ ) {
-                print CGI::Tr(CGI::td({ colspan => 2 },
-                                      CGI::a({name=>_makeAnchor( $1 )},
-                                             CGI::h2( $1 ))));
+                if( $block ) {
+                    print _foldableBlock( $head, $block );
+                }
+                $head = $1;
+                $block = '';
                 $type = '_HELP';
             } elsif( $type ) {
                 $descr .= "$_ ";
             }
         }
+    }
+    if( $head || $block ) {
+        print _foldableBlock( $head, $block );
     }
 }
 
@@ -1461,12 +1479,30 @@ h3 {
   padding-top: 1ex;
 }
 .keydata {
-  vertical-align: top;
   font-weight: bold;
   background-color:#FOFOFO;
 }
+.foldableBlock{
+  display: none;
+}
+.firstCol {
+   font-weight: bold;
+}
+.secondCol {
+}
 HERE
-            );
+            ),
+  CGI::script( { language => 'JavaScript' }, <<'HERE'
+function foldBlock(id) {
+    var element = document.getElementById(id);
+    if( element.style.display == 'block' ) {
+        element.style.display = 'none';
+    } else {
+        element.style.display = 'block';
+    }
+}
+HERE
+             );
 
 print CGI::h1('TWiki Configuration');
 
@@ -1511,6 +1547,8 @@ available on IRC (irc.freenode.net, channel #twiki) and at TWiki.org.
 <p />
 If your TWiki site is working, the front page should be
 <a href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>
+
+Click on the buttons below to open each section.
 HERE
 
     if( $update_enabled ) {
@@ -1520,16 +1558,15 @@ HERE
         print CGI::hidden(-name=>'time',-value=>time());
 
     }
-    print CGI::start_table(),"\n";
 
     presentReadOnlyInfo();
     presentEditableInfo();
 
     handlePlugins();
 
-    print CGI::end_table();
-    print CGI::span({class=>'error'},$errors.' errors') if $errors;
-    print CGI::span({class=>'warn'},$warnings.' warnings') if $warnings;
+    print CGI::end_table().'<br />';
+    print CGI::span({class=>'error'},$toterrors.' errors') if $toterrors;
+    print CGI::span({class=>'warn'},$totwarnings.' warnings') if $totwarnings;
 
     if( $update_enabled) {
         print CGI::p(CGI::submit(-value=>'Save')),CGI::end_form();
