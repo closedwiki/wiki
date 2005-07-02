@@ -483,17 +483,41 @@ sub getRevisionInfo {
     return ( $date, $user, $rev, $comment );
 }
 
-# Encode meta-data fields. The encoding is chosen to avoid problems
-# with parsing the attribute values, while minimising the number of
-# characters encoded so searches can still work (fairly) sensibly
-sub _dataEncode {
+=pod
+
+---++ StaticMethod dataEncode( $uncoded ) -> $coded
+Encode meta-data fields, escaping out selected characters. The encoding
+is chosen to avoid problems with parsing the attribute values, while
+minimising the number of characters encoded so searches can still work
+(fairly) sensibly.
+
+The encoding has to be exported because TWiki (and plugins) use
+encoded field data in other places e.g. RDiff, mainly as a shorthand
+for the properly parsed meta object. Some day we may be able to
+eliminate that....
+
+=cut
+
+sub dataEncode {
     my $datum = shift;
 
     $datum =~ s/([%"\r\n{}])/'%'.sprintf('%02x',ord($1))/ge;
     return $datum;
 }
 
-sub _dataDecode {
+=pod
+
+---++ StaticMethod dataDecode( $encoded ) -> $decoded
+Decode escapes in a string that was encoded using dataEncode
+
+The encoding has to be exported because TWiki (and plugins) use
+encoded field data in other places e.g. RDiff, mainly as a shorthand
+for the properly parsed meta object. Some day we may be able to
+eliminate that....
+
+=cut
+
+sub dataDecode {
     my $datum = shift;
 
     $datum =~ s/%([\da-f]{2})/chr(hex($1))/gei;
@@ -518,7 +542,7 @@ sub _readKeyValues {
             $value =~ s/%_Q_%/\"/g;
             $value =~ s/%_P_%/%/g;
         } else {
-            $value = _dataDecode( $value );
+            $value = dataDecode( $value );
         }
 
         $res->{$key} = $value;
@@ -1410,7 +1434,7 @@ sub _writeKeyValue {
     my( $key, $value ) = @_;
 
     if( defined( $value )) {
-        $value = _dataEncode( $value );
+        $value = dataEncode( $value );
     } else {
         $value = '';
     }

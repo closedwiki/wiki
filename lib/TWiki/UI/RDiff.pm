@@ -109,7 +109,8 @@ sub _renderAttrs {
     my $attrs = new TWiki::Attrs( $p );
     if( $f ) {
         for my $key ( keys %$attrs ) {
-            $f =~ s/\$$key\b/$attrs->{$key}/g;
+            my $av = TWiki::Store::dataDecode( $attrs->{$key} );
+            $f =~ s/\$$key\b/$av/g;
         }
     } else {
         $f = $attrs->stringify();
