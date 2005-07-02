@@ -25,8 +25,15 @@ To edit the topic anyway, hit 'Edit Anyway'.
 %TMPL:END%
 %TMPL:DEF{"topicaction"}%
 [[%WEB%.%TOPIC%][View topic]] %TMPL:P{"sep"}%
-<form name="edit_anyway" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
-<input type="hidden" name="breaklock" value="" />%QUERYPARAMS% 
-<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" class="twikiLink" onclick="document.edit_anyway.submit()"> Try Again </a>%TMPL:P{"sep"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" class="twikiLink" onclick="document.edit_anyway.breaklock.value='on';document.edit_anyway.submit()"> Edit Anyway </a></form> %TMPL:END%
+<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%QUERYPARAMS% 
+<input type="submit" value="Try Again" />
+</form>
+%TMPL:P{"sep"}%
+<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<input type="hidden" name="breaklock" value="on" />
+%QUERYPARAMS% 
+<input type="submit" value="Edit Anyway" />
+</form> %TMPL:END%
 
 %TMPL:P{"oops"}%
