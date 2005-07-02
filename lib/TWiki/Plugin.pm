@@ -73,21 +73,24 @@ use vars qw( @registrableHandlers %deprecated );
    endRenderingHandler => 1,
   );
 
-sub new {
-    my ( $class, $session, $name ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
+=pod
 
+---++ ClassMethod new( $session, $name, $module )
+   * =$session= - TWiki object
+   * =$name= - name of the plugin e.g. MyPlugin
+   * =$module= - (options) name of the plugin class. Default is TWiki::Plugins::$name
+
+=cut
+
+sub new {
+    my ( $class, $session, $name, $module ) = @_;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
+
+    my $this = bless( {}, $class );
     $name = TWiki::Sandbox::untaintUnchecked( $name );
     $this->{name} = $name;
-    $this->{disabled} = 0;
-
-    unless ( $name =~ m/^[A-Za-z0-9_]+Plugin$/ ) {
-        push( @{$this->{errors}}, $name.' - invalid name for plugin' );
-        $this->{disabled} = 1;
-    }
-
     $this->{session} = $session;
+    $this->{module} = $module || 'TWiki::Plugins::'.$name;
 
     return $this;
 }
@@ -97,8 +100,6 @@ sub new {
 sub load {
     my ( $this ) = @_;
     ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
-
-    return if $this->{disabled};
 
     # look for the plugin installation web (needed for attached files)
     # in the order:
@@ -130,7 +131,8 @@ sub load {
 
     $this->{web} = $web;
 
-    my $p = 'TWiki::Plugins::'.$this->{name};
+    my $p = $this->{module};
+
     #use Benchmark qw(:all :hireswallclock);
     #my $begin = new Benchmark;
     eval "use $p;";
@@ -177,7 +179,7 @@ sub registerHandlers {
 
     return if $this->{disabled};
 
-    my $p = 'TWiki::Plugins::' . $this->{name};
+    my $p = $this->{module};
     my $sub = $p . "::initPlugin";
     if( ! defined( &$sub ) ) {
         push( @{$this->{errors}}, $sub.' is not defined');
@@ -205,7 +207,7 @@ sub registerHandlers {
     foreach my $h ( @registrableHandlers ) {
         my $sub = $p.'::'.$h;
         if( defined( &$sub )) {
-            push( @{$plugins->{registeredHandlers}{$h}}, $this );
+            $plugins->addListener( $h, $this );
             if( $deprecated{$h} ) {
                 $this->{session}->writeWarning
                   ( $this->{name}.' defines deprecated '.$h );
@@ -215,14 +217,13 @@ sub registerHandlers {
 }
 
 # Invoke a handler
-sub invoke {  
-	my $this=shift;
-    my $handlerName=shift;
-	my $handler = 'TWiki::Plugins::' . $this->{name}.'::'.$handlerName;
-	no strict 'refs';
-	my $status=&$handler;
-	use strict 'refs';
-	return $status;
+sub invoke {
+    my $this = shift; # remove from parameter vector
+    my $handlerName = shift;
+    my $handler = $this->{module}.'::'.$handlerName;
+    no strict 'refs';
+    return &$handler( @_ );;
+    use strict 'refs';
 }
 
 # Get the version number of the specified plugin.
@@ -232,7 +233,7 @@ sub getVersion {
     ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     no strict 'refs';
-    return ${"TWiki::Plugins::$this->{name}::VERSION"};
+    return ${$this->{module}.'::VERSION'};
     use strict 'refs';
 }
 

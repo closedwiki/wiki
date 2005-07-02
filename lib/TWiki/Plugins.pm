@@ -28,6 +28,9 @@
 This module defines the singleton object that handles Plugins
 loading, initialization and execution.
 
+This class uses Chain of Responsibility (GOF) pattern to dispatch
+handler calls to registered plugins.
+
 =cut
 
 =pod
@@ -115,9 +118,9 @@ my %onlyOnceHandlers =
 
 ---++ ClassMethod new( $session )
 
-Construct new singleton plugins engine object. The object is a contained for
-a list of plugins and a set of handlers registered by each plugin. The plugins
-and the handlers are carefully ordered.
+Construct new singleton plugins collection object. The object is a
+container for a list of plugins and the handlers registered by the plugins.
+The plugins and the handlers are carefully ordered.
 
 =cut
 
@@ -160,74 +163,39 @@ sub load {
     my ( $this, $allDisabled ) = @_;
     ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
 
-    my %disabledPlugins;
     my %lookup;
-    my $p;
 
-    my $query = $this->{session}->{cgiQuery};
-
-    my $debugEnablePlugins;
     my $session = $this->{session};
+    my $query = $session->{cgiQuery};
 
-    if ( $query ) {
-        $debugEnablePlugins = $query->param( 'debugenableplugins' );
+    my $pluginList = $TWiki::cfg{PluginsOrder} ||
+      join(',', sort keys %{$TWiki::cfg{Plugins}});
+
+    if ( $query && defined( $query->param( 'debugenableplugins' ))) {
+        $pluginList = $query->param( 'debugenableplugins' );
     }
 
-    if ( defined( $debugEnablePlugins )) {
-        # enable only specific plugins, for test and benchmarking
-        foreach $p ( split( /[,\s]+/, $debugEnablePlugins )) {
-            unless( $lookup{$p} ) {
-                $lookup{$p} = new TWiki::Plugin( $session, $p );
-            }
-            push( @{$this->{plugins}}, $lookup{$p} );
-        }
+    $pluginList = '' if( $allDisabled );
 
-    } else {
-        # explicitly requested plugins
-        my $prefs = $this->{session}->{prefs};
-        my $installed = $prefs->getPreferencesValue( 'INSTALLEDPLUGINS' ) || '';
-        foreach $p ( split( /[,\s]+/ , $installed )) {
-            unless( $lookup{$p} ) {
-                $lookup{$p} = new TWiki::Plugin( $session, $p )
+    my $user; # the user login name
+    my $userDefiner; # the plugin that is defining the user
+    foreach my $pn ( split( /[,\s]+/, $pluginList )) {
+        my $p;
+        if( $TWiki::cfg{Plugins}{$pn}{Enabled} ) {
+            unless( $p = $lookup{$pn} ) {
+                $p = new TWiki::Plugin( $session, $pn,
+                                        $TWiki::cfg{Plugins}{$pn}{Module} )
             }
             # Note this allows the same plugin to be listed
             # multiple times! Thus their handlers can be called
             # more than once.
-            push( @{$this->{plugins}}, $lookup{$p} );
-        }
-
-        # implicitly requested plugins
-        foreach $p ( split( /[,\s]+/ ,_discoverPluginPerlModules()) ) {
-            unless( $lookup{$p} ) {
-                push( @{$this->{plugins}}, $lookup{$p} =
-                      new TWiki::Plugin( $session, $p ) );
-            }
-        }
-
-        # differently challenged plugins
-        my $disabled = $prefs->getPreferencesValue( 'DISABLEDPLUGINS' ) || '';
-        foreach $p ( split( /[,\s]+/ , $disabled )) {
-            push( @{$this->{errors}}, 'Disabled in DISABLEDPLUGINS' );
-            $lookup{$p}->{disabled} = 1 if $lookup{$p};
-        }
-    }
-
-    my $user; # the user login name
-    my $userDefiner; # the plugin that is defining the user
-    foreach my $p ( @{$this->{plugins}} ) {
-        if ( $allDisabled ) {
-            # all plugins are disabled
-            push( @{$this->{errors}}, 'all plugins are disabled' );
-            $p->{disabled} = 1;
-
-        } else {
+            push( @{$this->{plugins}}, $p );
             my $anotherUser = $p->load();
             if( $anotherUser ) {
                 if( $userDefiner ) {
                     die 'Two plugins - '. $userDefiner->{name} . ' and ' .
                       $p->{name} .
                         ' are both trying to define the user login name.';
-
                 } else {
                     $userDefiner = $p;
                     $user = $anotherUser;
@@ -237,22 +205,11 @@ sub load {
             if( $p->{errors} ) {
                 $this->{session}->writeWarning( join( "\n", $p->{errors} ));
             }
+            $lookup{$pn} = $p;
         }
     }
 
     return $user;
-}
-
-sub _discoverPluginPerlModules {
-    my $libDir = TWiki::getTWikiLibDir();
-    my @modules = ();
-    if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
-        @modules = map{ s/\.pm$//i; $_ }
-                   sort # for consistency
-                   grep /^[A-Za-z0-9_]+Plugin\.pm$/, readdir DIR;
-        closedir( DIR );
-    }
-    return join(",", @modules);
 }
 
 =pod
@@ -303,20 +260,37 @@ sub getPluginVersion {
     return 0;
 }
 
-# apply named handler
-sub _applyHandlers {
+=pod
+
+---++ ObjectMethod addListener( $command, $handler )
+   * =$command* - name of the event
+   * =$handler= - the handler object.
+
+Add a listener to the end of the list of registered listeners for this event.
+The listener must implement =invoke($command,...)=, which will be triggered
+when the event is to be processed.
+
+=cut
+
+sub addListener {
+    my( $this, $c, $h ) = @_;
+    ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
+
+    push( @{$this->{registeredHandlers}{$c}}, $h );
+}
+
+sub _dispatch {
     # must be shifted to clear parameter vector
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     my $handlerName = shift;
 
-    my $status;
     foreach my $plugin ( @{$this->{registeredHandlers}{$handlerName}} ) {
         # Set the value of $SESSION for this call stack
         local $SESSION = $this->{session};
         # apply handler on the remaining list of args
         no strict 'refs';
-        my $status=$plugin->invoke($handlerName,@_);
+        my $status = $plugin->invoke( $handlerName, @_ );
         use strict 'refs';
         if( $status && $onlyOnceHandlers{$handlerName} ) {
             return $status;
@@ -411,7 +385,7 @@ sub registrationHandler {
     my $this = shift;
     ASSERT($this->isa( 'TWiki::Plugins')) if DEBUG;
     #my( $web, $wikiName, $loginName ) = @_;
-    $this->_applyHandlers( 'registrationHandler', @_ );
+    $this->_dispatch( 'registrationHandler', @_ );
 }
 
 =pod
@@ -425,7 +399,7 @@ Called at the beginning (for cache Plugins only)
 sub beforeCommonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb ) = @_;
-    $this->_applyHandlers( 'beforeCommonTagsHandler', @_ );
+    $this->_dispatch( 'beforeCommonTagsHandler', @_ );
 }
 
 =pod
@@ -439,7 +413,7 @@ Called after %INCLUDE:"..."%
 sub commonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb ) = @_;
-    $this->_applyHandlers( 'commonTagsHandler', @_ );
+    $this->_dispatch( 'commonTagsHandler', @_ );
 }
 
 =pod
@@ -453,7 +427,7 @@ Called at the end (for cache Plugins only)
 sub afterCommonTagsHandler {
     my $this = shift;
     #my( $text, $topic, $theWeb ) = @_;
-    $this->_applyHandlers( 'afterCommonTagsHandler', @_ );
+    $this->_dispatch( 'afterCommonTagsHandler', @_ );
 }
 
 =pod
@@ -489,7 +463,7 @@ foreach my $placeholder ( keys %$map ) {
 
 sub preRenderingHandler {
     my $this = shift;
-    $this->_applyHandlers( 'preRenderingHandler', @_ );
+    $this->_dispatch( 'preRenderingHandler', @_ );
     # Apply the startRenderingHandler if any are defined
 }
 
@@ -503,7 +477,7 @@ sub preRenderingHandler {
 
 sub postRenderingHandler {
     my $this = shift;
-    $this->_applyHandlers( 'postRenderingHandler', @_ );
+    $this->_dispatch( 'postRenderingHandler', @_ );
 }
 
 =pod
@@ -519,7 +493,7 @@ Called just before the line loop
 sub startRenderingHandler {
     my $this = shift;
     #my ( $text, $web, $topic ) = @_;
-    $this->_applyHandlers( 'startRenderingHandler', @_ );
+    $this->_dispatch( 'startRenderingHandler', @_ );
 }
 
 =pod
@@ -535,7 +509,7 @@ Called in line loop outside of &lt;PRE&gt; tag
 sub outsidePREHandler {
     my $this = shift;
     #my( $text ) = @_;
-    $this->_applyHandlers( 'outsidePREHandler', @_ );
+    $this->_dispatch( 'outsidePREHandler', @_ );
 }
 
 =pod
@@ -551,7 +525,7 @@ Called in line loop inside of &lt;PRE&gt; tag
 sub insidePREHandler {
     my $this = shift;
     #my( $text ) = @_;
-    $this->_applyHandlers( 'insidePREHandler', @_ );
+    $this->_dispatch( 'insidePREHandler', @_ );
 }
 
 =pod
@@ -565,7 +539,7 @@ Called just after the line loop
 sub endRenderingHandler {
     my $this = shift;
     #my ( $text ) = @_;
-    $this->_applyHandlers( 'endRenderingHandler', @_ );
+    $this->_dispatch( 'endRenderingHandler', @_ );
 }
 
 =pod
@@ -579,7 +553,7 @@ Called by edit
 sub beforeEditHandler {
     my $this = shift;
     #my( $text, $topic, $web ) = @_;
-    $this->_applyHandlers( 'beforeEditHandler', @_ );
+    $this->_dispatch( 'beforeEditHandler', @_ );
 }
 
 =pod
@@ -593,7 +567,7 @@ Called by edit
 sub afterEditHandler {
     my $this = shift;
     #my( $text, $topic, $web ) = @_;
-    $this->_applyHandlers( 'afterEditHandler', @_ );
+    $this->_dispatch( 'afterEditHandler', @_ );
 }
 
 =pod
@@ -607,7 +581,7 @@ Called just before the save action
 sub beforeSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
-    $this->_applyHandlers( 'beforeSaveHandler', @_ );
+    $this->_dispatch( 'beforeSaveHandler', @_ );
 }
 
 =pod
@@ -621,7 +595,7 @@ Called just after the save action
 sub afterSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
-    $this->_applyHandlers( 'afterSaveHandler', @_ );
+    $this->_dispatch( 'afterSaveHandler', @_ );
 }
 
 =pod
@@ -634,7 +608,7 @@ Called to handle text merge.
 
 sub mergeHandler {
     my $this = shift;
-    $this->_applyHandlers( 'mergeHandler', @_ );
+    $this->_dispatch( 'mergeHandler', @_ );
 }
 
 =pod
@@ -667,7 +641,7 @@ Example usage:
 sub beforeAttachmentSaveHandler {
     my $this = shift;
     #my ( $theAttrHash, $theTopic, $theWeb ) = @_;
-    $this->_applyHandlers( 'beforeAttachmentSaveHandler', @_ );
+    $this->_dispatch( 'beforeAttachmentSaveHandler', @_ );
 }
 
 =pod
@@ -695,7 +669,7 @@ Note: The hash is *read-only*
 sub afterAttachmentSaveHandler {
     my $this = shift;
     #my ( $theText, $theTopic, $theWeb ) = @_;
-    $this->_applyHandlers( 'afterAttachmentSaveHandler', @_ );
+    $this->_dispatch( 'afterAttachmentSaveHandler', @_ );
 }
 
 
@@ -709,7 +683,7 @@ Called by TWiki::writePageHeader. *DEPRECATED* do not use!
 
 sub writeHeaderHandler {
     my $this = shift;
-    return $this->_applyHandlers( 'writeHeaderHandler', @_ );
+    return $this->_dispatch( 'writeHeaderHandler', @_ );
 }
 
 =pod
@@ -720,7 +694,7 @@ sub writeHeaderHandler {
 
 sub modifyHeaderHandler {
     my $this = shift;
-    return $this->_applyHandlers( 'modifyHeaderHandler', @_ );
+    return $this->_dispatch( 'modifyHeaderHandler', @_ );
 }
 
 =pod
@@ -733,7 +707,7 @@ Called by TWiki::redirect
 
 sub redirectCgiQueryHandler {
     my $this = shift;
-    return $this->_applyHandlers( 'redirectCgiQueryHandler', @_ );
+    return $this->_dispatch( 'redirectCgiQueryHandler', @_ );
 }
 
 =pod
@@ -746,7 +720,7 @@ Called by TWiki::getSessionValue
 
 sub getSessionValueHandler {
     my $this = shift;
-    return $this->_applyHandlers( 'getSessionValueHandler', @_ );
+    return $this->_dispatch( 'getSessionValueHandler', @_ );
 }
 
 =pod
@@ -759,7 +733,7 @@ Called by TWiki::setSessionValue
 
 sub setSessionValueHandler {
     my $this = shift;
-    return $this->_applyHandlers( 'setSessionValueHandler', @_ );
+    return $this->_dispatch( 'setSessionValueHandler', @_ );
 }
 
 =pod
@@ -787,7 +761,7 @@ times throughout the page.
 
 sub renderFormFieldForEditHandler {
     my $this = shift;
-    return $this->_applyHandlers( 'renderFormFieldForEditHandler', @_ );
+    return $this->_dispatch( 'renderFormFieldForEditHandler', @_ );
 }
 
 =pod
@@ -802,7 +776,7 @@ Originated from the TWiki:Plugins.SpacedWikiWordPlugin hack
 
 sub renderWikiWordHandler {
     my $this = shift;
-    return $this->_applyHandlers( 'renderWikiWordHandler', @_ );
+    return $this->_dispatch( 'renderWikiWordHandler', @_ );
 }
 
 1;
