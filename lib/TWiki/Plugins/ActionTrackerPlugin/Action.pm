@@ -253,6 +253,13 @@ sub getNewUID {
     # and mostly works.
     # COVERAGE OFF lock file wait
     while ( -f $lockFile ) {
+        # if it's more than 10 mins old something is wrong, so just ignore
+        # it.
+        my @s = stat( $lockFile );
+        if( time() - $s[9] > 10 * 60 ) {
+            TWiki::Func::writeWarning("Action Tracker Plugin: Warning: broke $lockFile");
+            last;
+        }
         sleep(1);
     }
     # COVERAGE ON

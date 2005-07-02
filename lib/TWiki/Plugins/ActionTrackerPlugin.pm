@@ -50,9 +50,6 @@ my @dependencies =
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-    # Temporarily diabled
-    return 0;
-
     # check for Plugins.pm versions
     # COVERAGE OFF standard plugin code
 
@@ -178,7 +175,6 @@ THIS
     # COVERAGE OFF debug only
     if ( $debug ) {
         $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
-        $_[0] =~ s/%ACTIONTRACKERPREFS%/&_dumpPrefs()/geo;
     }
     # COVERAGE ON
 }
@@ -510,21 +506,6 @@ sub _loadPrefsOverrides {
     }
 }
 
-# PRIVATE Generate plugin prefs in HTML for debugging
-# COVERAGE OFF debug only
-sub _dumpPrefs {
-    my $text = "";
-    foreach my $key ( "TABLEHEADER","TABLEFORMAT","TABLEORIENT","TEXTFORMAT","LATECOL","BADDATECOL","HEADERCOL","EDITHEADER","EDITFORMAT","EDITORIENT","USENEWWINDOW","NOPREVIEW","EXTRAS","EDITBOXHEIGHT","EDITBOXWIDTH" ) {
-        $text .= "\t* $key\n<verbatim>\n";
-        if ( defined( _getPref($key))) {
-            $text .= _getPref( $key );
-        }
-        $text .= "\n</verbatim>\n";
-    }
-    return $text;
-}
-# COVERAGE ON
-
 # =========================
 # Perform filtered search for all actions
 sub _handleActionSearch {
@@ -576,13 +557,6 @@ sub _lazyInit {
     _loadPrefsOverrides( $web );
 
     $useNewWindow = _getPref( "USENEWWINDOW", 0 );
-
-    # Colour for warning of late actions
-    $TWiki::Plugins::ActionTrackerPlugin::Format::latecol = _getPref( "LATECOL", "yellow" );
-    # Colour for an unparseable date
-    $TWiki::Plugins::ActionTrackerPlugin::Format::badcol = _getPref( "BADDATECOL", "red" );
-    # Colour for table header rows
-    $TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol = _getPref( "HEADERCOL", "#FFCC66" );
 
     my $hdr      = _getPref( "TABLEHEADER" );
     my $bdy      = _getPref( "TABLEFORMAT" );
