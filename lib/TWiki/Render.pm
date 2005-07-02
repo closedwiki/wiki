@@ -868,7 +868,7 @@ sub getRenderedVersion {
     # Initial cleanup
     $text =~ s/\r//g;
     # clutch to enforce correct rendering at end of doc
-    $text =~ s/(\n?)$/\n<nop>\n/s;
+    $text =~ s/\n?$/\n<nop>\n/s;
     # Convert any occurrences of token (very unlikely - details in
     # Codev.NationalCharTokenClash)
     # WARNING: since the token is used as a marker in takeOutBlocks,
@@ -893,6 +893,9 @@ sub getRenderedVersion {
 
     $text = $this->takeOutBlocks( $text, 'pre', $removed );
 
+    # Join lines ending in '\'
+    $text =~ s/\\\n//gs;
+
     $plugins->preRenderingHandler( $text, $removed );
 
     if( $plugins->haveHandlerFor( 'insidePREHandler' )) {
@@ -912,8 +915,6 @@ sub getRenderedVersion {
             $removed->{$region}{text} = $result;
         }
     }
-
-    $text =~ s/\\\n//gs;  # Join lines ending in '\'
 
     if( $plugins->haveHandlerFor( 'outsidePREHandler' )) {
         # DEPRECATED - this is the one call preventing
