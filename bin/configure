@@ -68,9 +68,21 @@ my $cgiModVerRecommended = '2.93';
 my $modPerlVersionRecommended = '1.99_12';	
 
 my $rcsverRequired = 5.7;
-use vars qw( $TRUE $FALSE);
 
-#local $SIG{__DIE__} = sub { Carp::confess $_[0] };
+my $update_enabled = 0;
+my $path_to_localsite_cfg = _findFileOnPath('LocalSite.cfg');
+my $errors = 0;
+my $warnings = 0;
+
+use CGI qw( :any );
+my $query = new CGI;
+my $url = $query->url();
+my $action = $query->param('action') || '';
+my $perlvernum = $];
+my $perlver;
+my $perlverMsg;
+
+use vars qw( $perltype $TRUE $FALSE );
 
 BEGIN {
     $TRUE = 1;
@@ -87,287 +99,6 @@ my %basicMods =
    'CGI'       => "basic TWiki",
    'CGI::Carp' => "basic TWiki"
   );
-
-$| = 1;                  # no buffering - FIXME: mod_perl issue?
-
-# Check whether basic CGI modules exist (some broken installations of
-# Perl don't have this, even though they are standard modules), and warn user
-my $modMissing = 0;
-foreach my $mod (keys %basicMods) {
-    eval "use $mod";
-    if ($@) {
-        unless ($modMissing) {
-            print 'Content-Type: text/plain'."\n\n";
-            print 'Perl Module(s) missing';
-        }
-        $modMissing = 1;
-        print 'Warning: Essential module ',$mod;
-        print 'not installed - please check your Perl installation, ',
-          'including the setting of @INC, and re-install Perl if necessary.';
-    }
-}
-
-# If any critical modules missing, display @INC and give up 
-if ($modMissing) {
-    print '@INC setting:', join(' ', @INC);
-    exit;
-}
-
-eval "use CGI::Carp qw( fatalsToBrowser )";
-
-# Set library paths in @INC, read TWiki.cfg and set locale, at compile time
-# Try to use setlib.cfg, use default path if missing
-if ( -r './setlib.cfg' ) {
-    require './setlib.cfg'; 
-    $setlibAvail = 1;
-} else {
-    unshift @INC, '../lib';
-    $setlibAvail = 0;
-}
-
-if( $OS ) {
-    $TWiki::cfg{DetailedOS} = $detailedOS;
-    $TWiki::cfg{OS} = $OS;
-} else {
-    # SMELL: duplicates code in TWiki.pm
-    unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
-        require Config;
-        $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
-    }
-    $TWiki::cfg{OS} = 'UNIX';
-    if ($TWiki::cfg{DetailedOS} =~ /darwin/i) { # MacOS X
-        $TWiki::cfg{OS} = 'UNIX';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /Win/i) {
-        $TWiki::cfg{OS} = 'WINDOWS';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /vms/i) {
-        $TWiki::cfg{OS} = 'VMS';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /bsdos/i) {
-        $TWiki::cfg{OS} = 'UNIX';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /dos/i) {
-        $TWiki::cfg{OS} = 'DOS';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
-        $TWiki::cfg{OS} = 'MACINTOSH';
-    } elsif ($TWiki::cfg{DetailedOS} =~ /os2/i) {
-        $TWiki::cfg{OS} = 'OS2';
-    }
-}
-
-# if this fails, ignore the problem, but we have to do it
-unless( eval 'do "LocalSite.cfg"' ) {
-    # Capture the Perl error(s)
-    $brokenLocalSiteError = 'require failed: '.
-      ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
-}
-
-# Read the configuration file now in order to set locale;
-# includes checking for broken syntax etc.  Need 'require'
-# to get the $!/$@ to work.
-$brokenTWikiCfg = 0;
-unless( eval 'require "TWiki.cfg" ' ) {
-    # Capture the Perl error(s)
-    $brokenTWikiCfgError = 'require failed: '.
-      ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
-}
-
-# and again
-eval 'do "LocalSite.cfg"';
-
-# Do a dynamic 'use locale' for this script
-if( $TWiki::cfg{UseLocale} ) {
-    require locale;
-    import locale ();
-}
-
-my $errors = 0;
-my $warnings = 0;
-
-my $query = new CGI;
-my $url = $query->url();
-my $update = $query->param('update');
-
-print CGI::header('text/html'),
-  CGI::start_html( -title => 'TWiki Configuration' ),
-  CGI::style( { type=>'text/css', media=>'all' }, <<'HERE'
-html body {
-  line-height:1.55em;
-  font-family:Avenir, "Lucida Grande", "Bitstream Vera Sans", lucida, arial, verdana, sans-serif;
-  background-color: white;
-  margin:0;
-  padding:0;
-}
-h1 {
-  font-size:210%;
-  background-color:#DFDFDF;
-  padding:0.2em 0.7em;
-  color:#C90000;
-  margin:1em -0.7em 0.15em -0.7em;
-}
-h2 {
-  background-color:#F0F0F0;
-  padding:2ex 0.7em 0.2em 0.7em;
-}
-h3 {
-  padding:0.2em 0.7em;
-}
-.info {
-  color: green;
-}
-.warn {
-  color:#FF8800;;
-}
-.error {
-  color:red;
-  font-weight: bold;
-}
-.mandatory {
-  color: blue;
-  font-weight: bold;
-}
-.docdata {
-  vertical-align: top;
-  padding-top: 1ex;
-}
-.keydata {
-  vertical-align: top;
-  font-weight: bold;
-  background-color:#FOFOFO;
-}
-HERE
-            );
-
-print CGI::h1('TWiki Configuration');
-
-# Check if LocalSite.cfg is writable
-my $update_enabled = 0;
-my $path_to_localsite_cfg = _findFileOnPath('LocalSite.cfg');
-unless( $path_to_localsite_cfg ) {
-    $path_to_localsite_cfg = _findFileOnPath('TWiki.cfg') || '';
-    $path_to_localsite_cfg =~ s/TWiki\.cfg/LocalSite.cfg/;
-}
-my $errs;
-if( !$path_to_localsite_cfg ||
-    ( $errs = _checkCanCreateFile( $path_to_localsite_cfg ))) {
-    $errs ||= 'Cannot locate LocalSite.cfg';
-    print CGI::p(WARN('Save is disabled; '.$errs));
-} else {
-    $update_enabled = 1;
-}
-
-if( $update ) {
-    unless( $update_enabled ) {
-        exit;
-    }
-
-    my $pass = $query->param( 'cfgAccess' );
-    unless( defined( $pass )) {
-        print CGI::start_form({ action=>'configure',method=>"post" });
-        # Pass all URL params through
-        foreach my $param ( $query->param ) {
-            print CGI::hidden(-name=>$param,
-                              -value=>$query->param( $param ));
-        }
-        # and add a few more
-        print "You need to enter the configuration password. If this is the first time you have configured TWiki, this will be null, and you should set a new password.",
-          CGI::start_table(),
-          CGI::Tr(
-            CGI::td( "Enter Password:" ),
-            CGI::td(CGI::password_field( 'cfgAccess', '', 20, 80 ))),
-          CGI::Tr(
-            CGI::td( {colspan => 2 },
-                     "If you also want to change the password, enter new details below")),
-          CGI::Tr(
-            CGI::td("New password:"),
-            CGI::td(CGI::password_field( 'newCfgP', '', 20, 80 ))),
-          CGI::Tr(
-            CGI::td("Confirm new password:"),
-            CGI::td(CGI::password_field( 'confCfgP', '', 20, 80 ))),
-          CGI::end_table(),
-          CGI::submit(-value=>'Commit'),
-          CGI::end_form(),
-          CGI::end_html();
-        exit;
-    }
-
-    unless( crypt( $pass, $TWiki::cfg{Password}) eq
-            $TWiki::cfg{Password} ) {
-        print CGI::span( {class => 'error' }, "Incorrect password" ),
-          CGI::end_html();
-        exit;
-    }
-
-    my $changed = 0;
-    my %updates;
-
-    if( $query->param( 'newCfgP' )) {
-        if( $query->param( 'newCfgP' ) eq
-                $query->param( 'confCfgP' )) {
-            my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
-            my $salt = $saltchars[int(rand($#saltchars+1))] .
-              $saltchars[int(rand($#saltchars+1)) ];
-            $updates{Password} =
-              _perlifyType(
-                           crypt( $query->param( 'newCfgP' ), $salt ),
-                           'STRING' );
-            $changed++;
-            print "Password changed";
-        } else {
-            print "New password and confirmation do not match";
-            exit;
-        }
-    }
-
-    print CGI::h1('Updating configuration');
-    foreach my $param ( $query->param ) {
-        my $basevar = $param;
-        $basevar =~ s/_/}{/g;
-        my $var = '$TWiki::cfg{'.$basevar.'}';
-        my $val = $query->param( $param );
-        my $type = $query->param('TYPEOF:'.$param);
-        my $def;
-        eval "\$def = defined( $var );";
-        if( $type ) {
-            eval "\$def = $var;" if $def;
-            if( ( $type eq 'OCTAL' &&
-                  sprintf('0%o', $def) =~ /^0*$val$/ ) ||
-                ( $type eq 'NUMBER' && $val + 1 == $def + 1 ) ||
-                $val eq $def ) {
-                #print CGI::br($var.'='.$val.' is unchanged ('.$def.')');
-                next;
-            }
-            print CGI::h2($var),CGI::b('old '),CGI::code($def),
-              CGI::br().CGI::b('new  '),CGI::code($val);
-            $updates{$basevar} = _perlifyType($val, $type);
-            $changed++;
-        }
-    }
-    print CGI::p();
-    setConfig($path_to_localsite_cfg, \%updates);
-    print $changed.' configuration items changed. ';
-    print CGI::a({ href=>$url.'?t='.time() }, 'Click here to return to configuration');
-    exit 1;
-}
-
-# use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
-# Doesn't work well here, due to 'do "TWiki.cfg"'
-# use diagnostics;	# Debug only
-
-if ($brokenTWikiCfgError) {
-    print CGI::h2('WARNING:'),
-      'TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.<p />';
-    print $brokenTWikiCfgError;
-
-    # EARLY EXIT
-    print CGI::end_html();
-    exit;
-}
-
-if ($brokenLocalSiteError) {
-    print CGI::h2('WARNING:'),
-      WARN('LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) was generated.',
-           CGI::pre($brokenLocalSiteError),
-           'The @INC path is ',CGI::pre(join(":", @INC)),
-           'This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a href="#GeneralPathSettings">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.<p />');
-}
 
 my %requiredMods =
   (
@@ -396,460 +127,6 @@ my %optionalMods =
    'Unicode::Map8'    => "I18N conversions (CPAN)",
    'Jcode'            => "I18N conversions (CPAN)",
   );
-
-# Load CGI modules (run-time, after checking they are accessible)
-require CGI;
-import CGI qw( -any );
-require CGI::Carp;
-import CGI::Carp qw( fatalsToBrowser );
-
-print  <<HERE;
-This page is used to set up the configuration options for TWiki. Settings
-marked <span class='mandatory'>like this</span> are required (they must
-have a value). Fill in the settings, and then select 'Save'.
-TWiki will be reconfigured and you can return to this page. Any
-remaining <span class='error'>errors</span> in your configuration will then be highlighted. <span class='warn'>Warnings</span> are non-fatal, but are often a good indicator that something that is wrong.
-<p />
-If you are installing TWiki for the first time, and you just want to get up
-and running, the only section you need to worry about below is
-<a href="#GeneralPathSettings">General path settings</a>. You can always come
-back and configure other settings later.
-<p />
-If you are on a public site, you will need to consider carefully
-how you are going to manage authentication and access control.
-<p />
-There are a number of documentation topics describing how to
-configure TWiki for different platforms, and a lot of support
-available on IRC (irc.freenode.net, channel #twiki) and at TWiki.org.
-<p />
-If your TWiki site is working, the front page should be
-<a href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>
-HERE
-
-if( $update_enabled ) {
-    print CGI::start_form({ action=>'configure',method=>"post" });
-}
-print CGI::start_table(),"\n";
-
-# use time to make sure we never allow cacheing
-print CGI::hidden(-name=>'update',-value=>time());
-
-print H2('Environment variables (read only)');
-for my $key ( sort keys %ENV ) {
-    print CGI::Tr( CGI::th($key).CGI::td($ENV{$key}));
-}
-
-print H2('CGI Setup (read only)');
-# Make %ENV safer for CGI (should reflect TWiki.pm)
-my $originalPath = $ENV{'PATH'} || '';
-if( $TWiki::cfg{SafeEnvPath} ) {
-    $ENV{'PATH'} = $TWiki::cfg{SafeEnvPath};
-}
-delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
-
-# Get Perl version - output looks neater with new variable
-my $perlvernum = $];
-my $perlver;
-if (defined $^V) {
-    $perlver = $^V;             # New in Perl 5.6.1, one byte per part
-    $perlver = ord(substr($perlver,0)) . "." . ord(substr($perlver,1))
-                                       . "." . ord(substr($perlver,2));
-} else {
-    $perlver = $perlvernum
-}
-my $perlverMsg = $perlver;		# Default version message
-
-# Load Config module - used here and elsewhere
-require Config;
-
-# Set $TWiki::cfg{DetailedOS} if not using later versions of TWiki.cfg for BeijingRelease
-# - this code enables the latest testenv to be used with Dec 2001 and 
-# earlier releases.
-if ( !defined $TWiki::cfg{DetailedOS} ) {
-    $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
-}
-
-# Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
-use vars qw($perltype);
-
-if ($TWiki::cfg{DetailedOS} eq 'cygwin') {
-    $perltype = 'Cygwin';				# Cygwin Perl only
-    my ($pkg, $pkgName);
-
-    # Get Cygwin perl's package version number
-    $pkgName = 'perl';
-    $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
-    if ($?) { 
-        $pkg = " [Can't identify package - cygcheck or grep not installed]";
-	$perlverMsg = $perlver . $pkg
-    } else {
-	$pkg = (split ' ', $pkg)[1];	# Package version
-	$perlverMsg = $pkg;
-    }
-	
-    # Get Cygwin RCS's package version number
-    $pkgName = 'rcs';
-    $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
-    if ($?) { 
-        $pkg = " [Can't identify package - cygcheck or grep not installed]";
-	$cygwinRcsVerNum = $pkg;	
-    } else {
-	$pkg = (split ' ', $pkg)[1];	# Package version
-	$cygwinRcsVerNum = $pkg;	
-    }
-} elsif ($TWiki::cfg{DetailedOS} =~ /win/i && $TWiki::cfg{DetailedOS} !~ /darwin/i ) {
-    # Windows Perl - try ActivePerl-only function: returns number if
-    # successful, otherwise treated as a literal (bareword).
-    my $isActivePerl= eval 'Win32::BuildNumber !~ /Win32/';
-    if( $isActivePerl ) {
-	$perltype = 'ActiveState';
-        $perlverMsg = $perlver . ", build " . Win32::BuildNumber();
-    } else {
-	# Could be SiePerl or some other Win32 port of Perl
-	$perltype = 'SiePerl or other Windows Perl';
-    }
-} else {
-    $perltype = 'generic';
-}
-
-# Detect executable name suffix, e.g. .exe on Windows or '' on Unix
-# Avoid testing for .exe suffixes on Cygwin, since the built-in
-# grep and ls don't end in '.exe', even though Perl's '_exe' setting
-# indicates they should.
-my $exeSuffix='';
-if ( $Config::Config{'_exe'} and ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype ne 'Cygwin') ) { 
-    if ( ! $ENV{'INTERIX_ROOT'} ) { #this is set is we are using UnixServicesForWindows (or INTERIX funnily enough) and they don't use .exe either
-        $exeSuffix = $Config::Config{'_exe'};
-    }
-}
-
-# Detect whether mod_perl was loaded into Apache
-my $modPerlLoaded = ( exists $ENV{'SERVER_SOFTWARE'} && 
-			  ( $ENV{'SERVER_SOFTWARE'} =~ /mod_perl/ ));
-# Detect whether we are actually running under mod_perl
-# - test for MOD_PERL alone, which is enough.
-my $usingModPerl = ( exists $ENV{'MOD_PERL'} );
-my $modPerlVersion;
-
-# Get the version of mod_perl if it's being used
-if ( $usingModPerl ) {
-    $modPerlVersion = eval 'use mod_perl; return $mod_perl::VERSION';
-}
-
-my $n = ucfirst(lc($TWiki::cfg{OS}));
-$n .= " ($TWiki::cfg{DetailedOS})" if ( $TWiki::cfg{DetailedOS} ne '' );
-# OS
-print ROW("Operating system", $n);
-
-# Perl version and type
-$perlverMsg .= " ($perltype)" if $perltype ne 'generic';
-print ROW("Perl version", $perlverMsg);
-
-if ( $perlvernum < $perlverRequired ) {
-    print ROW('', WARN(<<HERE
-This version of Perl is too old for use with TWiki -
-upgrade to at least Perl $perlverRequiredString
-and preferably to Perl $perlverRecommended.
-HERE
-                      ));
-}
-
-# Perl @INC (lib path)
-print ROW('@INC library path', join('<br />', @INC ), NOTE(<<HERE
-This is the Perl library path, used to load TWiki modules,
-third-party modules used by some plugins, and Perl built-in modules.
-HERE
-         ));
-
-print ROW('CGI bin directory', _checkBinDir());
-
-# Turn off fatalsToBrowser while checking module loads, to avoid load errors in
-# browser in some environments.  
-$CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
-
-# Add to list of required modules if non-Unix, or MacOS X (detected by
-# Perl as 'Darwin') - $TWiki::cfg{DetailedOS} is set in TWiki.cfg.
-$TWiki::cfg{DetailedOS} ||= $TWiki::cfg{DetailedOS};
-
-# Check that the TWiki.pm module can be found
-eval "require TWiki";
-my $twikiFound = 0;
-my $mess = '';
-if ($@) {
-    $mess = ERROR("'TWiki.pm' not be loaded. Error was",
-                  CGI::pre($@),
-                  'Check path to <code>twiki/lib</code> and check that LocalSite.cfg is present and readable');
-} else {
-    $twikiFound = 1;
-    my $mod_version = eval '$TWiki::wikiversion || $TWiki::VERSION';
-    $mod_version ||= 'unknown';
-    $mess = 'OK, TWiki.pm found (Version: <strong>'.$mod_version.'</strong>)';
-}
-print ROW('TWiki module in @INC path', $mess);
-
-if ( defined $TWiki::cfg{DetailedOS} and ($TWiki::cfg{DetailedOS} =~ /darwin/i or $TWiki::cfg{OS} ne 'UNIX') ) {
-    map { $requiredMods{$_} = $requiredModsNonUnix{$_} }
-      keys %requiredModsNonUnix;
-} else {
-    # these are optional on Unix
-    map { $optionalMods{$_} = $requiredModsNonUnix{$_} }
-      keys %requiredModsNonUnix;
-}
-
-# Check that each of the required Perl modules can be loaded, and
-# print its version number.
-print H3("Required Perl modules");
-foreach my $mod (keys %requiredMods) {
-    eval "use $mod";
-    if ($@) {
-        print ROW($mod, ERROR("not installed. Required for ",
-                              $requiredMods{$mod}));
-    } else {
-        my $mod_version;
-        no strict 'refs';
-        eval '$mod_version = ${'.$mod.'::VERSION}';
-        use strict 'refs';
-        $n = $mod_version || 'unknown';
-        # Check for potential CGI.pm module upgrade 
-        if( $mod eq 'CGI' and $mod_version < $cgiModVerRecommended ) {
-            if ( $perltype eq 'Cygwin' and $perlver eq '5.8.0' ) {
-                # Recommend CGI.pm upgrade if using Cygwin Perl 5.8.0 
-                $n .= WARN( "CGI.pm version $cgiModVerRecommended or higher",
-                            "is recommended to avoid problems with attachment",
-                            "uploads on Cygwin Perl $perlver.");
-            } elsif ( $usingModPerl and $modPerlVersion >= 1.99 ) {
-                # Recommend CGI.pm upgrade if using mod_perl 2.0, which
-                # is reported as version 1.99 and implies Apache 2.0
-                $n .= WARN("CGI.pm version $cgiModVerRecommended or higher is",
-                           "recommended to avoid problems with mod_perl version",
-                           "$modPerlVersion on Apache 2.0 or higher.");
-            }
-        }
-        print ROW($mod, $n);
-    }
-}
-
-# Check that each of the optional Perl modules can be loaded, and
-# print its version number.
-print H3("Optional Perl modules");
-foreach my $mod (keys %optionalMods) {
-    eval "use $mod";
-    if ($@) {
-        $n = WARN('not installed. May be required for ',
-                  $optionalMods{$mod});
-    } else {
-        my $mod_version;
-        no strict 'refs';
-        eval '$mod_version = ${'.$mod.'::VERSION}';
-        use strict 'refs';
-        $n = $mod_version || 'unknown';
-    }
-    print ROW($mod, $n);
-}
-
-# All module checks done, OK to enable fatalsToBrowser
-import CGI::Carp qw( fatalsToBrowser );
-
-# PATH_INFO
-print ROW(CGI::a({name=>'PATH_INFO'},'PATH_INFO'), $query->path_info(),
-          NOTE(<<HERE
-For a URL such as <strong>$url/foo/bar</strong>,
-the correct PATH_INFO is <strong>/foo/bar</strong>, without any prefixed path
-components. <a href="$url/foo/bar#PATH_INFO">
-<strong>Test this now</strong></a>
-- particularly if you are using mod_perl, Apache or IIS, or are using
-a web hosting provider.
-The page resulting from the test link should have a PATH_INFO of
-<strong>/foo/bar</strong>
-HERE
-                        ));
-
-# mod_perl 
-my $usingModPerlText = $usingModPerl ? "Used" : "Not used";
-my $modPerlLoadedText = ( $modPerlLoaded ? "loaded" : "not loaded" );
-
-$n = "$usingModPerlText for this script (mod_perl $modPerlLoadedText into Apache)\n";
-if ( $modPerlVersion ) {
-    $n .= "- mod_perl version $modPerlVersion\n";
-}
-print ROW('mod_perl', $n);
-
-# Check for a broken version of mod_perl 2.0
-if ( $usingModPerl and $modPerlVersion >= 1.99 
-        and $modPerlVersion eq '1.99_11' ) {
-    # Recommend mod_perl upgrade if using a mod_perl 2.0 version
-    # with PATH_INFO bug (see Support.RegistryCookerBadFileDescriptor)
-    print ROW('', WARN(<<HERE
-mod_perl version $modPerlVersionRecommended or higher,
-is strongly recommended to avoid 'internal system error'
-bugs with PATH_INFO when using mod_perl $modPerlVersion
-and Apache 2.0 or higher.
-HERE
-                      ));
-}
-
-
-# Get web server's user and group info
-my $usr = "";
-my $grp = "";
-if( $TWiki::cfg{OS} eq 'UNIX' or  ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
-    $usr = lc( getpwuid($>) );		# Unix/Cygwin Perl - effective UID
-    $grp = join(',', map { lc(getgrgid( $_ )) } split( " ", $( ) );
-} else {				# ActiveState or other Win32 Perl
-    $usr = lc( getlogin );
-    # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
-    # is probably installed to supply ls, egrep, etc - if it isn't, give up.
-    # Run command without stderr output, to avoid CGI giving error.
-    # Get names of primary and other groups.
-    $grp = lc(qx(sh -c '( id -un ; id -gn) 2>/dev/null' 2>nul ));
-    if ($?) { 
-        $grp = "[Can't identify groups - no Cygwin 'id' or 'sh' command on path]";
-    }
-}
-
-print ROW('CGI user', 'userid = <strong>'.$usr.'</strong> groups = <strong>'.
-          $grp.'</strong>'.
-          NOTE('Your CGI scripts are executing as this user.'));
-
-H2("Configuration");
-
-$n = "This is used to initialise the PATH variable, and is used to run the".
-  " 'diff' program used by RCS, as well as to run shell programs such as ";
-if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
-    $n .= " cmd.exe or Cygwin's 'bash'.<p>";
-    if( $perltype eq 'Cygwin' ) {
-        $n .= "Since you are using Cygwin Perl, 'bash' will be used without any special setup.";
-    } elsif( $perltype eq 'ActiveState' ) {
-        $n .= "To use 'bash' with ActiveState Perl, see the PERL5SHELL section below\n";
-        $n .= "- this is recommended if Cygwin is installed.\n";
-    }
-    $n .= "</p>";
-} else {
-    $n .= "Bourne shell or 'bash'.";
-}
-
-# Generate a separate table about specific environment variables
-H2("Path and Shell Environment");
-
-# Check PATH
-
-print ROW("Original PATH", $originalPath,
-          NOTE(<<HERE
-This is the PATH value passed in from the web server to this
-script - it is reset by TWiki scripts to the PATH below, and
-is provided here for comparison purposes only.
-HERE
-              ));
-
-my $currentPath = $ENV{'PATH'} || ''; 	# As re-set earlier in this routine
-print ROW("Current PATH", $currentPath,
-          NOTE(<<HERE
-This is the actual PATH setting that will be used by Perl to run
-programs. It is normally identical to {SafeEnvPath}, unless
-that variable is empty, in which case this will be the webserver users
-standard path..
-HERE
-              ));
-
-
-# Check that GNU egrep is found in PATH
-my $egrepOk = checkGnuVersion( $TWiki::cfg{RCS}{EgrepCmd}, "egrep", "used for regular expression searches" );
-
-# Check that GNU fgrep is found in PATH
-my $fgrepOk = checkGnuVersion( $TWiki::cfg{RCS}{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
-
-unless ( $egrepOk && $fgrepOk ) {
-    print ROW('',  NOTE( qq{<a href="http://www.gnu.org/software/grep/grep.html" >grep</a> can be downloaded from <a href="http://www.gnu.org/">GNU</a>'s <a href="ftp://ftp.gnu.org/pub/gnu/grep/" >FTP</a> site} ));
-}
-
-# Check that GNU diff is found in PATH
-checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
-
-# Check that GNU patch is found in PATH 
-checkGnuVersion( "patch", "patch", "used by the UpgradeTwiki script to upgrade an existing TWiki installation" );
-
-# PERL5SHELL check for non-Cygwin Perl on Windows only
-if( $TWiki::cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
-
-    # ActiveState or SiePerl/other
-    # FIXME: Advice in this section should be reviewed and tested by people
-    # using ActivePerl
-    my $perl5shell = $ENV{'PERL5SHELL'} || '';
-    $n = $perl5shell.
-      NOTE(<<HERE
-This environment variable is used by ActiveState and other Win32 Perls to run
-commands from TWiki scripts - it determines which shell program is used to run
-commands that use 'pipes'.  Examples of shell programs are cmd.exe,
-command.com (aka 'DOS Prompt'), and Cygwin's 'bash'
-(<strong>recommended</strong> if Cygwin is installed).
-<p>
-To use 'bash' with ActiveState or other Win32 Perl you should set the
-PERL5SHELL environment variable to something like
-<tt><strong>c:/YOURCYGWINDIR/bin/bash.exe -c</strong></tt>
-This should be set in the System Environment, and ideally set directly in the
-web server (e.g. using the Apache <tt>SetEnv</tt> directive).
-HERE
-          );
-    if ($perltype eq 'ActiveState' and 
-	    Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
-    	$n .= WARN("ActiveState Perl must be upgraded to build <strong>",
-             $ActivePerlRecommendedBuild,
-             "</strong> if you are going to use PERL5SHELL, which was broken",
-             "in earlier builds.");
-    }
-    print ROW("PERL5SHELL", $n);
-};
-
-# "Parse" TWiki.cfg and LocalSite.cfg
-for my $file ( 'TWiki.cfg', 'LocalSite.cfg' ) {
-    my $cfgfile = _findFileOnPath($file);
-    open(F, $cfgfile) || next;
-    undef $/;
-    my $text = <F>;
-    close(F);
-    $text =~ s/^# //gm;
-
-    my $type;
-    my $descr;
-    my $opts;
-    foreach (split(/\r?\n/, $text)) {
-        if( m/^\*\*([A-Z]+)(\s*.*?)\*\*/ ) {
-            if( $type eq '_HELP' ) {
-                print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
-            }
-            $type = $1;
-            $opts = $2 || '';
-            $opts .= ' '; # to simplify parsing
-            $descr = '';
-        } elsif ($type && /\$(TWiki::)?cfg(.*?)\s*=/) {
-            if( $type eq '_HELP' ) {
-                print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
-            } else {
-                print _checkAndBuildValueGrabber($type, $opts, $descr, $2);
-            }
-            $type = '';
-            $descr = '';
-        } elsif( m/^##+(.*?)#+$/ ) {
-            print CGI::Tr(CGI::td({ colspan => 2 },
-                                  CGI::a({name=>_makeAnchor( $1 )},
-                                         CGI::h2( $1 ))));
-            $type = '_HELP';
-        } elsif( $type ) {
-            $descr .= "$_ ";
-        }
-    }
-}
-print CGI::end_table();
-print CGI::span({class=>'error'},$errors.' errors') if $errors;
-print CGI::span({class=>'warn'},$warnings.' warnings') if $warnings;
-
-if( $update_enabled) {
-    print CGI::p(CGI::submit(-value=>'Save')),CGI::end_form();
-}
-
-print CGI::end_html();
-
-# End of code
 
 sub _makeAnchor {
     my $str = shift;
@@ -945,7 +222,8 @@ sub _checkDefaultUrlHost {
     my $keys = shift;
 
     if( $TWiki::cfg{DefaultUrlHost} ) {
-        if( $TWiki::cfg{DefaultUrlHost} !~ /$ENV{HTTP_HOST}/ ) {
+        my $host = $ENV{HTTP_HOST};
+        if( $host && $TWiki::cfg{DefaultUrlHost} !~ /$host/ ) {
             return WARN('Current setting does not match HTTP_HOST ',
                         $ENV{HTTP_HOST});
         }
@@ -955,6 +233,7 @@ sub _checkDefaultUrlHost {
         $TWiki::cfg{DefaultUrlHost} = $protocol;
         return WARN($GUESSED);
     }
+    return '';
 }
 
 sub _checkScriptUrlPath {
@@ -986,6 +265,7 @@ HERE
         $TWiki::cfg{ScriptUrlPath} = $guess;
         return WARN($GUESSED);
     }
+    return '';
 }
 
 sub _checkPubUrlPath {
@@ -1144,7 +424,7 @@ HERE
     # Check for d_setlocale in Config (same as 'perl -V:d_setlocale')
     eval "use Config";
     if ( $on && !( exists $Config::Config{d_setlocale} &&
-            $Config::Config{d_setlocale} eq 'define' ) ) {
+                   $Config::Config{d_setlocale} eq 'define' ) ) {
         $n .= WARN(<<HERE
 This version of Perl was not compiled with locale support ('d_setlocale' not
 set in Config.pm) - re-compilation of Perl will be required before it can be
@@ -1202,7 +482,7 @@ Unable to set locale to '$locale'. The actual locale is '$currentLocale'
 not planning to use locales (e.g. your site uses English only) - or you can
 set  <strong>SiteLocale</strong> to <code>C</code>, which should always work.
 HERE
-                );
+                   );
     }
     return '';
 }
@@ -1224,16 +504,16 @@ sub checkGnuVersion {
         my $n;
         if( $notFound ) {
             $n = WARN("'$progReadableName' program was not found on the",
-                       "current PATH.");
+                      "current PATH.");
         } elsif ( $diffOut !~ /\bGNU\b/ ) {
             # Program found on path, complain if no GNU in version output
             $n = WARN("'$progReadableName' program was found on the PATH",
-                       "but is not GNU $progReadableName - this may cause",
-                       "problems. $diffOut");
+                      "but is not GNU $progReadableName - this may cause",
+                      "problems. $diffOut");
         } else {
             $n = "GNU $progReadableName was found on the PATH -".
-                  " this is the recommended $progReadableName tool.";
-	    $ok = 1;
+              " this is the recommended $progReadableName tool.";
+            $ok = 1;
         }
 
         ROW($progReadableName, $n, NOTE("The '$progReadableName' command is $progUsage."));
@@ -1318,7 +598,9 @@ sub _checkStoreImpl {
                     $version =~ /(\d+(\.\d+)+)/;
                     $version = $1;
                     $proggy .= " (version $version)";
-                    $proggy .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)" if defined($cygwinRcsVerNum);
+                    if( defined( $cygwinRcsVerNum )) {
+                        $proggy .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)";
+                    }
                     if( $proggy =~ /\/(rcs|rlog|rcsdiff|co)\b$/ &&
                         $version && $version < $rcsverRequired ) {
                         # RCS too old
@@ -1338,7 +620,7 @@ HERE
         return $bad;
     }
     return '';
-}
+};
 
 sub H3 {
     my $text = join("\n",@_);
@@ -1450,6 +732,7 @@ sub setConfig {
         # kill the old settings if any are there
         $txt =~ s/\$TWiki::cfg\{$config\}\s*=.*?;//s;
     }
+    $txt =~ s/^1;$//gm;
 
     open(F, ">$path_to_localsite_cfg") ||
       die "Failed to open $path_to_localsite_cfg for write";
@@ -1457,6 +740,7 @@ sub setConfig {
     foreach my $config ( keys %$updates ) {
         print F '$TWiki::cfg{',$config,'} = ',$updates->{$config},";\n";
     }
+    print F "1;\n";
     close(F);
 
     if( defined( $TWiki::cfg{ConfigurationLogName} ) &&
@@ -1488,5 +772,770 @@ sub _perlifyType {
         return "'$val'";
     }
 }
+
+sub handlePlugins {
+    my %modules;
+    foreach my $libDir ( @INC ) {
+        if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
+            foreach my $file (grep { /^[A-Za-z0-9_]+Plugin\.pm$/ } readdir DIR ) {
+                my $module = $file;
+                $module =~ s/\.pm$//;
+                my $discovered = $libDir.'/'.$file;
+                $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
+                print _checkAndBuildValueGrabber
+                  ( 'BOOLEAN', '', '',
+                    '{Plugins}{'.$module.'}{Enabled}');
+                closedir( DIR );
+            }
+        }
+    }
+    return \%modules;
+}
+
+sub handleUpdate {
+    unless( $update_enabled ) {
+        exit;
+    }
+
+    my $pass = $query->param( 'cfgAccess' );
+    unless( defined( $pass )) {
+        print CGI::start_form({ action=>'configure',method=>"post" });
+        # Pass all URL params through
+        foreach my $param ( $query->param ) {
+            print CGI::hidden( $param, $query->param( $param )),"\n";
+        }
+        # and add a few more
+        print "You need to enter the configuration password. If this is the first time you have configured TWiki, this will be null, and you should set a new password.",
+          CGI::start_table(),
+          CGI::Tr(
+            CGI::td( "Enter Password:" ),
+            CGI::td(CGI::password_field( 'cfgAccess', '', 20, 80 ))),
+          CGI::Tr(
+           CGI::td( {colspan => 2 },
+                     "If you also want to change the password, enter new details below")),
+          CGI::Tr(
+            CGI::td("New password:"),
+            CGI::td(CGI::password_field( 'newCfgP', '', 20, 80 ))),
+          CGI::Tr(
+            CGI::td("Confirm new password:"),
+            CGI::td(CGI::password_field( 'confCfgP', '', 20, 80 ))),
+          CGI::end_table(),
+          CGI::submit(-value=>'Commit'),
+          CGI::end_form(),
+          CGI::end_html();
+        exit;
+    }
+
+    unless( crypt( $pass, $TWiki::cfg{Password}) eq
+            $TWiki::cfg{Password} ) {
+        print CGI::span( {class => 'error' }, "Incorrect password" ),
+          CGI::end_html();
+        exit;
+    }
+
+    my $changed = 0;
+    my %updates;
+
+    if( $query->param( 'newCfgP' )) {
+        if( $query->param( 'newCfgP' ) eq
+                $query->param( 'confCfgP' )) {
+            my @saltchars = ( 'a'..'z', 'A'..'Z', '0'..'9', '.', '/' );
+            my $salt = $saltchars[int(rand($#saltchars+1))] .
+              $saltchars[int(rand($#saltchars+1)) ];
+            $updates{Password} =
+              _perlifyType(
+                           crypt( $query->param( 'newCfgP' ), $salt ),
+                           'STRING' );
+            $changed++;
+            print "Password changed";
+        } else {
+            print "New password and confirmation do not match";
+            exit;
+        }
+    }
+
+    print CGI::h1('Updating configuration');
+    foreach my $param ( $query->param ) {
+        next unless $param =~ /^^TYPEOF:(.*)/;
+        my $type = $query->param( $param );
+        $param =~ s/^TYPEOF://;
+        my $basevar = $param;
+        $basevar =~ s/_/}{/g;
+        my $var = '$TWiki::cfg{'.$basevar.'}';
+        my $val = $query->param( $param );
+        my $def;
+        eval "\$def = defined( $var );";
+        if( $type ) {
+            eval "\$def = $var;" if $def;
+            next if( $type eq 'OCTAL' && sprintf('0%o', $def) =~ /^0*$val$/ );
+            next if( $type eq 'NUMBER' && $val + 1 == $def + 1 );
+            next if( $type eq 'BOOLEAN' && ($val && $def || !$val && !$def));
+            next if( $val eq $def );
+            print CGI::h2($var),CGI::b('old '),CGI::code($def),
+              CGI::br().CGI::b('new  '),CGI::code($val);
+            $updates{$basevar} = _perlifyType($val, $type);
+            $changed++;
+        }
+    }
+    print CGI::p();
+    setConfig($path_to_localsite_cfg, \%updates);
+    print $changed.' configuration items changed. ';
+    print CGI::a({ href=>$url.'?t='.time() }, 'Click here to return to configuration');
+    exit 1;
+}
+
+sub performSanityChecks {
+
+    if ($brokenTWikiCfgError) {
+        print CGI::h2('WARNING:'),
+          'TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.<p />';
+        print $brokenTWikiCfgError;
+
+        # EARLY EXIT
+        print CGI::end_html();
+        exit;
+    }
+
+    if ($brokenLocalSiteError) {
+        print CGI::h2('WARNING:'),
+          WARN('LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) was generated.',
+               CGI::pre($brokenLocalSiteError),
+               'The @INC path is ',CGI::pre(join(":", @INC)),
+               'This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a href="#GeneralPathSettings">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.<p />');
+    }
+
+    # Check whether basic CGI modules exist (some broken installations of
+    # Perl don't have this, even though they are standard modules), and warn user
+    my $modMissing = 0;
+    foreach my $mod (keys %basicMods) {
+        eval "use $mod";
+        if ($@) {
+            unless ($modMissing) {
+                print 'Content-Type: text/plain'."\n\n";
+                print 'Perl Module(s) missing';
+            }
+            $modMissing = 1;
+            print 'Warning: Essential module ',$mod;
+            print 'not installed - please check your Perl installation, ',
+              'including the setting of @INC, and re-install Perl if necessary.';
+        }
+    }
+
+    # If any critical modules missing, display @INC and give up 
+    if ($modMissing) {
+        print '@INC setting:', join(' ', @INC);
+        exit;
+    }
+}
+
+sub presentReadOnlyInfo {
+    # use strict;		# Recommended for mod_perl, enable for Perl 5.6.1 only
+    # Doesn't work well here, due to 'do "TWiki.cfg"'
+    # use diagnostics;	# Debug only
+
+    # Load CGI modules (run-time, after checking they are accessible)
+    require CGI;
+    import CGI qw( -any );
+    require CGI::Carp;
+    import CGI::Carp qw( fatalsToBrowser );
+
+    print H2('Environment variables (read only)');
+    for my $key ( sort keys %ENV ) {
+        print CGI::Tr( CGI::th($key).CGI::td($ENV{$key}));
+    }
+
+    print H2('CGI Setup (read only)');
+    # Make %ENV safer for CGI (should reflect TWiki.pm)
+    my $originalPath = $ENV{'PATH'} || '';
+    if( $TWiki::cfg{SafeEnvPath} ) {
+        $ENV{'PATH'} = $TWiki::cfg{SafeEnvPath};
+    }
+    delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
+
+    # Get Perl version - output looks neater with new variable
+    if (defined $^V) {
+        $perlver = $^V;             # New in Perl 5.6.1, one byte per part
+        $perlver = ord(substr($perlver,0)) . "." . ord(substr($perlver,1))
+          . "." . ord(substr($perlver,2));
+    } else {
+        $perlver = $perlvernum
+    }
+    $perlverMsg = $perlver;		# Default version message
+
+    # Load Config module - used here and elsewhere
+    require Config;
+
+    # Set $TWiki::cfg{DetailedOS} if not using later versions of TWiki.cfg for BeijingRelease
+    # - this code enables the latest testenv to be used with Dec 2001 and 
+    # earlier releases.
+    if ( !defined $TWiki::cfg{DetailedOS} ) {
+        $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
+    }
+
+    # Detect Perl flavour on Windows, and Cygwin Perl/RCS package versions
+
+    if ($TWiki::cfg{DetailedOS} eq 'cygwin') {
+        $perltype = 'Cygwin';				# Cygwin Perl only
+        my ($pkg, $pkgName);
+
+        # Get Cygwin perl's package version number
+        $pkgName = 'perl';
+        $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
+        if ($?) { 
+            $pkg = " [Can't identify package - cygcheck or grep not installed]";
+            $perlverMsg = $perlver . $pkg
+        } else {
+            $pkg = (split ' ', $pkg)[1];	# Package version
+            $perlverMsg = $pkg;
+        }
+
+        # Get Cygwin RCS's package version number
+        $pkgName = 'rcs';
+        $pkg = `/bin/cygcheck -c $pkgName | /bin/grep $pkgName 2>/dev/null`; 
+        if ($?) { 
+            $pkg = " [Can't identify package - cygcheck or grep not installed]";
+            $cygwinRcsVerNum = $pkg;	
+        } else {
+            $pkg = (split ' ', $pkg)[1];	# Package version
+            $cygwinRcsVerNum = $pkg;	
+        }
+    } elsif ($TWiki::cfg{DetailedOS} =~ /win/i && $TWiki::cfg{DetailedOS} !~ /darwin/i ) {
+        # Windows Perl - try ActivePerl-only function: returns number if
+        # successful, otherwise treated as a literal (bareword).
+        my $isActivePerl= eval 'Win32::BuildNumber !~ /Win32/';
+        if( $isActivePerl ) {
+            $perltype = 'ActiveState';
+            $perlverMsg = $perlver . ", build " . Win32::BuildNumber();
+        } else {
+            # Could be SiePerl or some other Win32 port of Perl
+            $perltype = 'SiePerl or other Windows Perl';
+        }
+    } else {
+        $perltype = 'generic';
+    }
+
+    # Detect executable name suffix, e.g. .exe on Windows or '' on Unix
+    # Avoid testing for .exe suffixes on Cygwin, since the built-in
+    # grep and ls don't end in '.exe', even though Perl's '_exe' setting
+    # indicates they should.
+    my $exeSuffix='';
+    if ( $Config::Config{'_exe'} and ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype ne 'Cygwin') ) { 
+        if ( ! $ENV{'INTERIX_ROOT'} ) { #this is set is we are using UnixServicesForWindows (or INTERIX funnily enough) and they don't use .exe either
+            $exeSuffix = $Config::Config{'_exe'};
+        }
+    }
+
+    # Detect whether mod_perl was loaded into Apache
+    my $modPerlLoaded = ( exists $ENV{'SERVER_SOFTWARE'} && 
+                          ( $ENV{'SERVER_SOFTWARE'} =~ /mod_perl/ ));
+    # Detect whether we are actually running under mod_perl
+    # - test for MOD_PERL alone, which is enough.
+    my $usingModPerl = ( exists $ENV{'MOD_PERL'} );
+    my $modPerlVersion;
+
+    # Get the version of mod_perl if it's being used
+    if ( $usingModPerl ) {
+        $modPerlVersion = eval 'use mod_perl; return $mod_perl::VERSION';
+    }
+
+    my $n = ucfirst(lc($TWiki::cfg{OS}));
+    $n .= " ($TWiki::cfg{DetailedOS})" if ( $TWiki::cfg{DetailedOS} ne '' );
+    # OS
+    print ROW("Operating system", $n);
+
+    # Perl version and type
+    $perlverMsg .= " ($perltype)" if $perltype ne 'generic';
+    print ROW("Perl version", $perlverMsg);
+
+    if ( $perlvernum < $perlverRequired ) {
+        print ROW('', WARN(<<HERE
+This version of Perl is too old for use with TWiki -
+upgrade to at least Perl $perlverRequiredString
+and preferably to Perl $perlverRecommended.
+HERE
+                          ));
+    }
+
+    # Perl @INC (lib path)
+    print ROW('@INC library path', join('<br />', @INC ), NOTE(<<HERE
+This is the Perl library path, used to load TWiki modules,
+third-party modules used by some plugins, and Perl built-in modules.
+HERE
+                                                              ));
+
+    print ROW('CGI bin directory', _checkBinDir());
+
+    # Turn off fatalsToBrowser while checking module loads, to avoid load errors in
+    # browser in some environments.  
+    $CGI::Carp::WRAP = $CGI::Carp::WRAP = 0;	# Avoid warnings...
+
+    # Add to list of required modules if non-Unix, or MacOS X (detected by
+    # Perl as 'Darwin') - $TWiki::cfg{DetailedOS} is set in TWiki.cfg.
+    $TWiki::cfg{DetailedOS} ||= $TWiki::cfg{DetailedOS};
+
+    # Check that the TWiki.pm module can be found
+    eval "require TWiki";
+    my $twikiFound = 0;
+    my $mess = '';
+    if ($@) {
+        $mess = ERROR("'TWiki.pm' not be loaded. Error was",
+                      CGI::pre($@),
+                      'Check path to <code>twiki/lib</code> and check that LocalSite.cfg is present and readable');
+    } else {
+        $twikiFound = 1;
+        my $mod_version = eval '$TWiki::wikiversion || $TWiki::VERSION';
+        $mod_version ||= 'unknown';
+        $mess = 'OK, TWiki.pm found (Version: <strong>'.$mod_version.'</strong>)';
+    }
+    print ROW('TWiki module in @INC path', $mess);
+
+    if ( defined $TWiki::cfg{DetailedOS} and ($TWiki::cfg{DetailedOS} =~ /darwin/i or $TWiki::cfg{OS} ne 'UNIX') ) {
+        map { $requiredMods{$_} = $requiredModsNonUnix{$_} }
+          keys %requiredModsNonUnix;
+    } else {
+        # these are optional on Unix
+        map { $optionalMods{$_} = $requiredModsNonUnix{$_} }
+          keys %requiredModsNonUnix;
+    }
+
+    # Check that each of the required Perl modules can be loaded, and
+    # print its version number.
+    print H3("Required Perl modules");
+    foreach my $mod (keys %requiredMods) {
+        eval "use $mod";
+        if ($@) {
+            print ROW($mod, ERROR("not installed. Required for ",
+                                  $requiredMods{$mod}));
+        } else {
+            my $mod_version;
+            no strict 'refs';
+            eval '$mod_version = ${'.$mod.'::VERSION}';
+            use strict 'refs';
+            $n = $mod_version || 'unknown';
+            # Check for potential CGI.pm module upgrade 
+            if( $mod eq 'CGI' and $mod_version < $cgiModVerRecommended ) {
+                if ( $perltype eq 'Cygwin' and $perlver eq '5.8.0' ) {
+                    # Recommend CGI.pm upgrade if using Cygwin Perl 5.8.0 
+                    $n .= WARN( "CGI.pm version $cgiModVerRecommended or higher",
+                                "is recommended to avoid problems with attachment",
+                                "uploads on Cygwin Perl $perlver.");
+                } elsif ( $usingModPerl and $modPerlVersion >= 1.99 ) {
+                    # Recommend CGI.pm upgrade if using mod_perl 2.0, which
+                    # is reported as version 1.99 and implies Apache 2.0
+                    $n .= WARN("CGI.pm version $cgiModVerRecommended or higher is",
+                               "recommended to avoid problems with mod_perl version",
+                               "$modPerlVersion on Apache 2.0 or higher.");
+                }
+            }
+            print ROW($mod, $n);
+        }
+    }
+
+    # Check that each of the optional Perl modules can be loaded, and
+    # print its version number.
+    print H3("Optional Perl modules");
+    foreach my $mod (keys %optionalMods) {
+        eval "use $mod";
+        if ($@) {
+            $n = WARN('not installed. May be required for ',
+                      $optionalMods{$mod});
+        } else {
+            my $mod_version;
+            no strict 'refs';
+            eval '$mod_version = ${'.$mod.'::VERSION}';
+            use strict 'refs';
+            $n = $mod_version || 'unknown';
+        }
+        print ROW($mod, $n);
+    }
+
+    # All module checks done, OK to enable fatalsToBrowser
+    import CGI::Carp qw( fatalsToBrowser );
+
+    # PATH_INFO
+    print ROW(CGI::a({name=>'PATH_INFO'},'PATH_INFO'), $query->path_info(),
+              NOTE(<<HERE
+For a URL such as <strong>$url/foo/bar</strong>,
+the correct PATH_INFO is <strong>/foo/bar</strong>, without any prefixed path
+components. <a href="$url/foo/bar#PATH_INFO">
+<strong>Test this now</strong></a>
+- particularly if you are using mod_perl, Apache or IIS, or are using
+a web hosting provider.
+The page resulting from the test link should have a PATH_INFO of
+<strong>/foo/bar</strong>
+HERE
+                  ));
+
+    # mod_perl 
+    my $usingModPerlText = $usingModPerl ? "Used" : "Not used";
+    my $modPerlLoadedText = ( $modPerlLoaded ? "loaded" : "not loaded" );
+
+    $n = "$usingModPerlText for this script (mod_perl $modPerlLoadedText into Apache)\n";
+    if ( $modPerlVersion ) {
+        $n .= "- mod_perl version $modPerlVersion\n";
+    }
+    print ROW('mod_perl', $n);
+
+    # Check for a broken version of mod_perl 2.0
+    if ( $usingModPerl and $modPerlVersion >= 1.99 
+         and $modPerlVersion eq '1.99_11' ) {
+        # Recommend mod_perl upgrade if using a mod_perl 2.0 version
+        # with PATH_INFO bug (see Support.RegistryCookerBadFileDescriptor)
+        print ROW('', WARN(<<HERE
+mod_perl version $modPerlVersionRecommended or higher,
+is strongly recommended to avoid 'internal system error'
+bugs with PATH_INFO when using mod_perl $modPerlVersion
+and Apache 2.0 or higher.
+HERE
+                          ));
+    }
+
+    
+    # Get web server's user and group info
+    my $usr = "";
+    my $grp = "";
+    if( $TWiki::cfg{OS} eq 'UNIX' or  ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
+        $usr = lc( getpwuid($>) );		# Unix/Cygwin Perl - effective UID
+        $grp = join(',', map { lc(getgrgid( $_ )) } split( " ", $( ) );
+    } else {				# ActiveState or other Win32 Perl
+        $usr = lc( getlogin );
+        # Try to use Cygwin's 'id' command - may be on the path, since Cygwin
+        # is probably installed to supply ls, egrep, etc - if it isn't, give up.
+        # Run command without stderr output, to avoid CGI giving error.
+        # Get names of primary and other groups.
+        $grp = lc(qx(sh -c '( id -un ; id -gn) 2>/dev/null' 2>nul ));
+        if ($?) { 
+            $grp = "[Can't identify groups - no Cygwin 'id' or 'sh' command on path]";
+        }
+    }
+
+    print ROW('CGI user', 'userid = <strong>'.$usr.'</strong> groups = <strong>'.
+              $grp.'</strong>'.
+              NOTE('Your CGI scripts are executing as this user.'));
+
+    H2("Configuration");
+
+    $n = "This is used to initialise the PATH variable, and is used to run the".
+      " 'diff' program used by RCS, as well as to run shell programs such as ";
+    if( $TWiki::cfg{OS} eq 'WINDOWS' ) {
+        $n .= " cmd.exe or Cygwin's 'bash'.<p>";
+        if( $perltype eq 'Cygwin' ) {
+            $n .= "Since you are using Cygwin Perl, 'bash' will be used without any special setup.";
+        } elsif( $perltype eq 'ActiveState' ) {
+            $n .= "To use 'bash' with ActiveState Perl, see the PERL5SHELL section below\n";
+            $n .= "- this is recommended if Cygwin is installed.\n";
+        }
+        $n .= "</p>";
+    } else {
+        $n .= "Bourne shell or 'bash'.";
+    }
+
+    # Generate a separate table about specific environment variables
+    H2("Path and Shell Environment");
+
+    # Check PATH
+
+    print ROW("Original PATH", $originalPath,
+              NOTE(<<HERE
+This is the PATH value passed in from the web server to this
+script - it is reset by TWiki scripts to the PATH below, and
+is provided here for comparison purposes only.
+HERE
+                  ));
+
+    my $currentPath = $ENV{'PATH'} || ''; 	# As re-set earlier in this routine
+    print ROW("Current PATH", $currentPath,
+              NOTE(<<HERE
+This is the actual PATH setting that will be used by Perl to run
+programs. It is normally identical to {SafeEnvPath}, unless
+that variable is empty, in which case this will be the webserver users
+standard path..
+HERE
+                  ));
+
+    
+    # Check that GNU egrep is found in PATH
+    my $egrepOk = checkGnuVersion( $TWiki::cfg{RCS}{EgrepCmd}, "egrep", "used for regular expression searches" );
+
+    # Check that GNU fgrep is found in PATH
+    my $fgrepOk = checkGnuVersion( $TWiki::cfg{RCS}{FgrepCmd}, "fgrep", "used for non-regular expression searches" );
+
+    unless ( $egrepOk && $fgrepOk ) {
+        print ROW('',  NOTE( qq{<a href="http://www.gnu.org/software/grep/grep.html" >grep</a> can be downloaded from <a href="http://www.gnu.org/">GNU</a>'s <a href="ftp://ftp.gnu.org/pub/gnu/grep/" >FTP</a> site} ));
+    }
+
+    # Check that GNU diff is found in PATH
+    checkGnuVersion( "diff", "diff", "used by RCS to compare files" );
+
+    # Check that GNU patch is found in PATH 
+    checkGnuVersion( "patch", "patch", "used by the UpgradeTwiki script to upgrade an existing TWiki installation" );
+
+    # PERL5SHELL check for non-Cygwin Perl on Windows only
+    if( $TWiki::cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
+
+        # ActiveState or SiePerl/other
+        # FIXME: Advice in this section should be reviewed and tested by people
+        # using ActivePerl
+        my $perl5shell = $ENV{'PERL5SHELL'} || '';
+        $n = $perl5shell.
+          NOTE(<<HERE
+This environment variable is used by ActiveState and other Win32 Perls to run
+commands from TWiki scripts - it determines which shell program is used to run
+commands that use 'pipes'.  Examples of shell programs are cmd.exe,
+command.com (aka 'DOS Prompt'), and Cygwin's 'bash'
+(<strong>recommended</strong> if Cygwin is installed).
+<p>
+To use 'bash' with ActiveState or other Win32 Perl you should set the
+PERL5SHELL environment variable to something like
+<tt><strong>c:/YOURCYGWINDIR/bin/bash.exe -c</strong></tt>
+This should be set in the System Environment, and ideally set directly in the
+web server (e.g. using the Apache <tt>SetEnv</tt> directive).
+HERE
+              );
+        if ($perltype eq 'ActiveState' and 
+            Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
+            $n .= WARN("ActiveState Perl must be upgraded to build <strong>",
+                       $ActivePerlRecommendedBuild,
+                       "</strong> if you are going to use PERL5SHELL, which was broken",
+                       "in earlier builds.");
+        }
+        print ROW("PERL5SHELL", $n);
+    };
+
+};
+
+sub presentEditableInfo {
+    # "Parse" TWiki.cfg and LocalSite.cfg
+    for my $file ( 'TWiki.cfg', 'LocalSite.cfg' ) {
+        my $cfgfile = _findFileOnPath($file);
+        open(F, $cfgfile) || next;
+        undef $/;
+        my $text = <F>;
+        close(F);
+        $text =~ s/^# //gm;
+
+        my $type;
+        my $descr;
+        my $opts;
+        foreach (split(/\r?\n/, $text)) {
+            if( m/^\*\*([A-Z]+)(\s*.*?)\*\*/ ) {
+                if( $type eq '_HELP' ) {
+                    print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
+                }
+                $type = $1;
+                $opts = $2 || '';
+                $opts .= ' '; # to simplify parsing
+                $descr = '';
+            } elsif ($type && /\$(TWiki::)?cfg(.*?)\s*=/) {
+                if( $type eq '_HELP' ) {
+                    print CGI::Tr(CGI::td({ colspan => 2 }, $descr));
+                } else {
+                    print _checkAndBuildValueGrabber($type, $opts, $descr, $2);
+                }
+                $type = '';
+                $descr = '';
+            } elsif( m/^##+(.*?)#+$/ ) {
+                print CGI::Tr(CGI::td({ colspan => 2 },
+                                      CGI::a({name=>_makeAnchor( $1 )},
+                                             CGI::h2( $1 ))));
+                $type = '_HELP';
+            } elsif( $type ) {
+                $descr .= "$_ ";
+            }
+        }
+    }
+}
+
+######################################################################
+################# MAIN PROGRAM #######################################
+######################################################################
+
+$| = 1;                  # no buffering - FIXME: mod_perl issue?
+
+
+eval "use CGI::Carp qw( fatalsToBrowser )";
+
+# Set library paths in @INC, read TWiki.cfg and set locale, at compile time
+# Try to use setlib.cfg, use default path if missing
+if ( -r './setlib.cfg' ) {
+    require './setlib.cfg'; 
+    $setlibAvail = 1;
+} else {
+    unshift @INC, '../lib';
+    $setlibAvail = 0;
+}
+
+if( $OS ) {
+    $TWiki::cfg{DetailedOS} = $detailedOS;
+    $TWiki::cfg{OS} = $OS;
+} else {
+    # SMELL: duplicates code in TWiki.pm
+    unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
+        require Config;
+        $TWiki::cfg{DetailedOS} = $Config::Config{'osname'};
+    }
+    $TWiki::cfg{OS} = 'UNIX';
+    if ($TWiki::cfg{DetailedOS} =~ /darwin/i) { # MacOS X
+        $TWiki::cfg{OS} = 'UNIX';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /Win/i) {
+        $TWiki::cfg{OS} = 'WINDOWS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /vms/i) {
+        $TWiki::cfg{OS} = 'VMS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /bsdos/i) {
+        $TWiki::cfg{OS} = 'UNIX';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /dos/i) {
+        $TWiki::cfg{OS} = 'DOS';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /^MacOS$/i) { # MacOS 9 or earlier
+        $TWiki::cfg{OS} = 'MACINTOSH';
+    } elsif ($TWiki::cfg{DetailedOS} =~ /os2/i) {
+        $TWiki::cfg{OS} = 'OS2';
+    }
+}
+
+# if this fails, ignore the problem, but we have to do it
+unless( eval 'do "LocalSite.cfg"' ) {
+    # Capture the Perl error(s)
+    $brokenLocalSiteError = 'require failed: '.
+      ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
+}
+
+# Read the configuration file now in order to set locale;
+# includes checking for broken syntax etc.  Need 'require'
+# to get the $!/$@ to work.
+$brokenTWikiCfg = 0;
+unless( eval 'require "TWiki.cfg" ' ) {
+    # Capture the Perl error(s)
+    $brokenTWikiCfgError = 'require failed: '.
+      ( $! ? $!.'<br />' : '') . ( $@ ? $@.'<br />' : '');
+}
+
+# and again
+eval 'do "LocalSite.cfg"';
+
+# Do a dynamic 'use locale' for this script
+if( $TWiki::cfg{UseLocale} ) {
+    require locale;
+    import locale ();
+}
+
+print CGI::header('text/html'),
+  CGI::start_html( -title => 'TWiki Configuration' ),
+  CGI::style( { type=>'text/css', media=>'all' }, <<'HERE'
+html body {
+  line-height:1.55em;
+  font-family:Avenir, "Lucida Grande", "Bitstream Vera Sans", lucida, arial, verdana, sans-serif;
+  background-color: white;
+  margin:0;
+  padding:0;
+}
+h1 {
+  font-size:210%;
+  background-color:#DFDFDF;
+  padding:0.2em 0.7em;
+  color:#C90000;
+  margin:1em -0.7em 0.15em -0.7em;
+}
+h2 {
+  background-color:#F0F0F0;
+  padding:2ex 0.7em 0.2em 0.7em;
+}
+h3 {
+  padding:0.2em 0.7em;
+}
+.info {
+  color: green;
+}
+.warn {
+  color:#FF8800;;
+}
+.error {
+  color:red;
+  font-weight: bold;
+}
+.mandatory {
+  color: blue;
+  font-weight: bold;
+}
+.docdata {
+  vertical-align: top;
+  padding-top: 1ex;
+}
+.keydata {
+  vertical-align: top;
+  font-weight: bold;
+  background-color:#FOFOFO;
+}
+HERE
+            );
+
+print CGI::h1('TWiki Configuration');
+
+# Check if LocalSite.cfg is writable
+$path_to_localsite_cfg = _findFileOnPath('LocalSite.cfg');
+unless( $path_to_localsite_cfg ) {
+    $path_to_localsite_cfg = _findFileOnPath('TWiki.cfg') || '';
+    $path_to_localsite_cfg =~ s/TWiki\.cfg/LocalSite.cfg/;
+}
+my $errs;
+if( !$path_to_localsite_cfg ||
+    ( $errs = _checkCanCreateFile( $path_to_localsite_cfg ))) {
+    $errs ||= 'Cannot locate LocalSite.cfg';
+    print CGI::p(WARN('Save is disabled; '.$errs));
+} else {
+    $update_enabled = 1;
+}
+
+performSanityChecks();
+
+if( $action eq 'update' ) {
+    handleUpdate();
+} else {
+    print  <<HERE;
+This page is used to set up the configuration options for TWiki. Settings
+marked <span class='mandatory'>like this</span> are required (they must
+have a value). Fill in the settings, and then select 'Save'.
+TWiki will be reconfigured and you can return to this page. Any
+remaining <span class='error'>errors</span> in your configuration will then be highlighted. <span class='warn'>Warnings</span> are non-fatal, but are often a good indicator that something that is wrong.
+<p />
+If you are installing TWiki for the first time, and you just want to get up
+and running, the only section you need to worry about below is
+<a href="#GeneralPathSettings">General path settings</a>. You can always come
+back and configure other settings later.
+<p />
+If you are on a public site, you will need to consider carefully
+how you are going to manage authentication and access control.
+<p />
+There are a number of documentation topics describing how to
+configure TWiki for different platforms, and a lot of support
+available on IRC (irc.freenode.net, channel #twiki) and at TWiki.org.
+<p />
+If your TWiki site is working, the front page should be
+<a href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>
+HERE
+
+    if( $update_enabled ) {
+        print CGI::start_form({ action=>'configure',method=>"post" });
+        # use time to make sure we never allow cacheing
+        print CGI::hidden(-name=>'action',-value=>'update');
+        print CGI::hidden(-name=>'time',-value=>time());
+
+    }
+    print CGI::start_table(),"\n";
+
+    presentReadOnlyInfo();
+    presentEditableInfo();
+
+    handlePlugins();
+
+    print CGI::end_table();
+    print CGI::span({class=>'error'},$errors.' errors') if $errors;
+    print CGI::span({class=>'warn'},$warnings.' warnings') if $warnings;
+
+    if( $update_enabled) {
+        print CGI::p(CGI::submit(-value=>'Save')),CGI::end_form();
+    }
+}
+
+print CGI::end_html();
 
 1;
