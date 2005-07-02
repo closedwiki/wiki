@@ -796,7 +796,7 @@ sub _docBlock {
 }
 
 sub handlePlugins {
-    my $block = '';
+    my @modules;
     foreach my $libDir ( @INC ) {
         if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
             foreach my $file (grep { /^[A-Za-z0-9_]+Plugin\.pm$/ } readdir DIR ) {
@@ -804,14 +804,18 @@ sub handlePlugins {
                 $module =~ s/\.pm$//;
                 my $discovered = $libDir.'/'.$file;
                 $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
-                $block .= _checkAndBuildValueGrabber
-                  ( 'BOOLEAN', '', '',
-                    '{Plugins}{'.$module.'}{Enabled}');
+                push( @modules, $module );
                 closedir( DIR );
             }
         }
     }
-    print _foldableBlock( 'Plugins', $block );
+    my $block = '';
+    foreach my $m ( sort @modules ) {
+        $block .= _checkAndBuildValueGrabber
+          ( 'BOOLEAN', '', '',
+            '{Plugins}{'.$m.'}{Enabled}');
+    }
+    return $block;
 }
 
 sub handleUpdate {
@@ -1354,6 +1358,12 @@ sub presentEditableInfo {
                 $head = $1;
                 $block = '';
                 $type = '_HELP';
+            } elsif( m/^\*PLUGINS\*/ ) {
+                if( $type eq '_HELP' ) {
+                    $block .= _docBlock( $descr );
+                    $descr = '';
+                }
+                $block .= handlePlugins();
             } elsif( $type ) {
                 $descr .= "$_ ";
             }
@@ -1561,8 +1571,6 @@ HERE
 
     presentReadOnlyInfo();
     presentEditableInfo();
-
-    handlePlugins();
 
     print CGI::end_table().'<br />';
     print CGI::span({class=>'error'},$toterrors.' errors') if $toterrors;
