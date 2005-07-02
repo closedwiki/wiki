@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1120341742" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1120341802" format="1.0" version="1.9"}%
 ---+!! !TopicTranslationsPlugin
 
 TopicTranslationsPlugin manages topics translations into several languages, by assigning suffixes
@@ -184,5 +184,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.AntonioTerceiro - 19 Jun 2005
+-- TWiki:Main.AntonioTerceiro - 02 Jul 2005
 
