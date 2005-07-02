@@ -46,7 +46,7 @@ sub initPlugin
 
     # those should be preferably set in a per web basis. Defaults to the
     # corresponding plugin setting (or "en" if someone messes with it)
-    my $trans = TWiki::Func::getPreferencesValue("TOPICTRANSLATIONS") || TWiki::Func::getPluginPreferencesFlag("TOPICTRANSLATIONS") || "en";
+    my $trans = TWiki::Func::getPreferencesValue("TOPICTRANSLATIONS") || TWiki::Func::getPluginPreferencesValue("TOPICTRANSLATIONS") || "en";
     @translations = split(/,\s*/,$trans);
 
     # first listed language is the default one:
@@ -58,7 +58,9 @@ sub initPlugin
       defaultLanguage => $defaultLanguage
       );
 
-    checkRedirection();
+    # must I redirect to the best available translation?
+    my $mustRedirect = (! TWiki::Func::getPluginPreferencesFlag("DISABLE_AUTOMATIC_REDIRECTION"));
+    checkRedirection() if $mustRedirect;
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -71,13 +73,6 @@ sub beforeCommonTagsHandler
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
     TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # redirect to the best translation for the user:
-    # dummy code for testing for a while:
-    $_[0] =~ s/%BESTTRANSLATION%/&findBestTranslation()/ge;
-    # TODO: replace the above line to a redirect-to-the-right-language
-    # TODO: look for a better place to put this (i.e., if we gonna redirect to
-    #       another topic, no content processing is needed at all)
 
     # handle all INCLUDETRANSLATION tags:
     $_[0] =~ s/%INCLUDETRANSLATION{(.*?)}%/&handleIncludeTranslation($1)/ge;
@@ -254,13 +249,29 @@ sub checkRedirection
 {
   # we don't wan't to redirect on preview:
   if (!($ENV{SCRIPT_NAME} =~ m/preview/)) {
-    my $current = currentLanguage();
-    my $best = findBestTranslation(); # for the current topic, indeed
-    if (($current ne $best)) {
-      my $query = TWiki::Func::getCgiQuery();
-      my $bestTranslationTopic = findBaseTopicName() . (($best eq $defaultLanguage)?'':(normalizeLanguageName($best)));
-      my $url = TWiki::Func::getViewUrl($web,$bestTranslationTopic);
-      TWiki::Func::redirectCgiQuery($query, $url);
+    my $query = TWiki::Func::getCgiQuery();
+  
+    # several checks
+    my $baseTopicName = findBaseTopicName();
+    my $baseUrl = TWiki::Func::getViewUrl($web, $baseTopicName);
+    my $editUrl = TWiki::Func::getScriptUrl($web, $baseTopicName, 'edit');
+    my $origin = $query->referer();
+    
+    # we don't want to redirect if the user came from another translation of
+    # this same topic, or from an edit
+    if ( (!($origin =~ /^$baseUrl/)) and (!($origin =~ /^$editUrl/))) {
+
+      # check where we are:
+      my $current = currentLanguage();
+      my $best = findBestTranslation(); # for the current topic, indeed
+
+      # we don't need to redirect if we are already in the best translation:
+      if (($current ne $best)) {
+        # actually do the redirect:
+        my $bestTranslationTopic = findBaseTopicName() . (($best eq $defaultLanguage)?'':(normalizeLanguageName($best)));
+        my $url = TWiki::Func::getViewUrl($web,$bestTranslationTopic);
+        TWiki::Func::redirectCgiQuery($query, $url);
+      }
     }
   }
 }
