@@ -201,7 +201,7 @@ sub _renderFormData {
     return '' unless( $form );
 
     my $name = $form->{name};
-    my $metaText = CGI::Tr( CGI::Th( { class => 'twikiFirstCol',
+    my $metaText = CGI::Tr( CGI::th( { class => 'twikiFirstCol',
                                        colspan => 2 },
                                      '[['.$name.']]' ));
     my @fields = $meta->find( 'FIELD' );
@@ -210,10 +210,10 @@ sub _renderFormData {
         unless ( $fa =~ /H/ ) {
             my $value = $field->{value} || '&nbsp;';
             $metaText .= CGI::Tr( { valign => 'top' },
-                                  CGI::Td( { class => 'twikiFirstCol',
+                                  CGI::td( { class => 'twikiFirstCol',
                                              align => 'right' },
                                            ' '.$field->{title}.':' ).
-                                  CGI::Td( ' '.$value.' ' ));
+                                  CGI::td( ' '.$value.' ' ));
         }
     }
     return CGI::div( { class => 'twikiForm' },
