@@ -476,6 +476,8 @@ sub getRevisionInfo {
 
     my( $rrev, $date, $user, $comment ) =
       $topicHandler->getRevisionInfo( $rev );
+    $rev = $rrev;
+
     $user = $this->{session}->{users}->findUser( $user ) if $user;
 
     return ( $date, $user, $rev, $comment );
