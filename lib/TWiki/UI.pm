@@ -62,7 +62,7 @@ sub run {
         $SIG{__WARN__} = sub { die @_; };
     }
 
-    if( $ENV{'DOCUMENT_ROOT'} ) {
+    if( $ENV{'GATEWAY_INTERFACE'} ) {
         # script is called by browser
         $query = new CGI;
         # SMELL: The Microsoft Internet Information Server is broken with
