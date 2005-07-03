@@ -27,7 +27,7 @@ use vars qw(
 
 use I18N::AcceptLanguage;
 
-$VERSION = '1.002';
+$VERSION = '1.003';
 $pluginName = 'TopicTranslationsPlugin';  # Name of this Plugin
 
 # =========================
@@ -247,8 +247,9 @@ sub findBestTranslation
 # check if a redirection is needed, possible, and do that if it's the case
 sub checkRedirection
 {
-  # we only want to be redirected in view or viewauth:
-  if ($ENV{SCRIPT_NAME} =~ m#/view(auth)?$#) {
+  # we only want to be redirected in view or viewauth, and when there is no
+  # extra parameters to the request:
+  if (($ENV{SCRIPT_NAME} =~ m#/view(auth)?$#) and $ENV{QUERY_STRING}) {
     my $query = TWiki::Func::getCgiQuery();
   
     # several checks
