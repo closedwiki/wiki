@@ -247,8 +247,8 @@ sub findBestTranslation
 # check if a redirection is needed, possible, and do that if it's the case
 sub checkRedirection
 {
-  # we don't wan't to redirect on preview:
-  if (!($ENV{SCRIPT_NAME} =~ m/preview/)) {
+  # we only want to be redirected in view or viewauth:
+  if ($ENV{SCRIPT_NAME} =~ m#/view(auth)?$#) {
     my $query = TWiki::Func::getCgiQuery();
   
     # several checks
