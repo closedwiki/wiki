@@ -808,6 +808,8 @@ sub handlePlugins {
                 $module =~ s/\.pm$//;
                 my $discovered = $libDir.'/'.$file;
                 $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
+    		$module =~ /^(.*)$/;	#CRAP untaint - SMELL - CDot - am i supposed to use Sandbox from here?
+		$module = $1;
                 push( @modules, $module );
                 closedir( DIR );
             }
@@ -817,7 +819,7 @@ sub handlePlugins {
     foreach my $m ( sort @modules ) {
         $block .= _checkAndBuildValueGrabber
           ( 'BOOLEAN', '', '',
-            '{Plugins}{'.$m.'}{Enabled}');
+          '{Plugins}{'.$m.'}{Enabled}');
     }
     return $block;
 }
