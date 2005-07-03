@@ -535,6 +535,7 @@ sub checkGnuVersion {
     return '';
 }
 
+#SMELL - I think this will unlink your log files if they already exist...
 sub _checkCanCreateFile {
     my $name = shift;
     if (-e $name) {
@@ -543,11 +544,11 @@ sub _checkCanCreateFile {
     my $txt1 = "test 1 2 3";
     unlink $name if( -e $name );
     open( FILE, ">$name" ) ||
-      return 'Could not create test file ', $name;
+      return 'Could not create test file '. $name;
     print FILE $txt1;
     close( FILE);
     open( IN_FILE, "<$name" ) ||
-      return 'Could not read test file ', $name;
+      return 'Could not read test file '. $name;
     my $txt2 = <IN_FILE>;
     close( IN_FILE );
     unlink $name if( -e $name );
