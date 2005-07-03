@@ -1464,7 +1464,7 @@ html body {
   line-height:1.55em;
   font-family:Avenir, "Lucida Grande", "Bitstream Vera Sans", lucida, arial, verdana, sans-serif;
   background-color: white;
-  margin:0;
+  margin:1em;
   padding:0;
 }
 h1 {
@@ -1514,13 +1514,25 @@ h3 {
 HERE
             ),
   CGI::script( { language => 'JavaScript' }, <<'HERE'
+var last_id = '';
 function foldBlock(id) {
-    var element = document.getElementById(id);
-    if( element.style.display == 'block' ) {
-        element.style.display = 'none';
-    } else {
-        element.style.display = 'block';
+    //close the last block viewed
+    if ((last_id != '' ) && (last_id != id)) {
+        var element = document.getElementById(last_id);
+    	if( element.style.display == 'block' ) {
+        	element.style.display = 'none';
+    	}
     }
+
+    {
+    	var element = document.getElementById(id);
+    	if( element.style.display == 'block' ) {
+        	element.style.display = 'none';
+    	} else {
+        	element.style.display = 'block';
+    	}
+    }
+    last_id = id;
 }
 HERE
              );
