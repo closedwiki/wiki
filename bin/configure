@@ -596,11 +596,15 @@ sub _checkStoreImpl {
             if ( $key && $key =~ /Cmd$/ ) {
                 my $proggy = $TWiki::cfg{RCS}{$key} || "";
                 $proggy =~ s/\s.*$//;
-                if( $proggy) {
+                if( $proggy ) {
                     my $version = `$proggy -V` || '';
-                    $version =~ /(\d+(\.\d+)+)/;
-                    $version = $1;
-                    $proggy .= " (version $version)";
+		    if ( $version ne '' ) {
+                        $version =~ /(\d+(\.\d+)+)/;
+                        $version = $1;
+                        $proggy .= " (version $version)";
+		    } else {
+			$bad .= ERROR($proggy.' did not return a version number. (or might not exist..)');
+		    }
                     if( defined( $cygwinRcsVerNum )) {
                         $proggy .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)";
                     }
