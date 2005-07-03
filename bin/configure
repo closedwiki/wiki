@@ -600,7 +600,7 @@ sub _checkTreePerms {
 sub _checkScriptSuffix {
     # SMELL: should check to see what the extension on _this_ script
     # is, and generate a helpful message
-    if ( defined $TWiki::cfg{ScriptSuffix} ) {
+    if ( defined $TWiki::cfg{ScriptSuffix} && $TWiki::cfg{ScriptSuffix} ne '' ) {
 	if ( ! $query->path_info() =~ /$TWiki::cfg{ScriptSuffix}$/ ) {
 	    return ERROR('this script ('.$query->pather_info().') called with different ScriptSuffix setting'.$TWiki::cfg{ScriptSuffix});
 	}
