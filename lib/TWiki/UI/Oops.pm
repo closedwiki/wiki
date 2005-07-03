@@ -94,7 +94,7 @@ sub oops {
     } else {
         $tmplName = $query->param( 'template' );
         $def = $query->param( 'def' );
-        while( my $param = $query->param( 'param'.$n ) ) {
+        while( defined( my $param = $query->param( 'param'.$n ) )) {
             push( @params, $param );
             $n++;
         }
