@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1120341802" format="1.0" version="1.9"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1120422474" format="1.0" version="1.10"}%
 ---+!! !TopicTranslationsPlugin
 
 TopicTranslationsPlugin manages topics translations into several languages, by assigning suffixes
@@ -97,7 +97,7 @@ installed, this will happen by default.
 	* User's language is detected by the =Accept-Language= header sent by the user agent
 	  (the browser, most of the times), using the  =I18N::AcceptLanguage= Perl module.
 	* The user *won't* be redirected:
-		* in the =preview= mode (off course)
+		* during an action other than =view= and =viewauth= (off course)
 		* if the user came from a link in another translation of the same topic.
 		* if the user came from an =edit= script.
 		* __Note:__ the two later cases are detected by the =Referer= header sent by the user agent.
@@ -168,9 +168,10 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.AntonioTerceiro |
-|  Plugin Version: | 18 Jun 2005 (V1.000) |
+|  Plugin Version: | 03 Jul 2005 (V1.003) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  27 Jun 2005 | Version =1.002=: major rewrite; documented all (or almost all :)) the code; added selection of available/missing translations; added =missingformat=; added support for custom topics (and webs) in <code>%<nop/>TRANSLATIONS%</code>; added automatic redirection for the "best" translation (detection via =I18N::AcceptLanguage=).  |
+|  03 Jul 2005 | Version =1.003=: fixed to redirect only during =view=/=viewauth= |
+|  02 Jul 2005 | Version =1.002=: major rewrite; documented all (or almost all :)) the code; added selection of available/missing translations; added =missingformat=; added support for custom topics (and webs) in <code>%<nop/>TRANSLATIONS%</code>; added automatic redirection for the "best" translation (detection via =I18N::AcceptLanguage=).  |
 |  19 Jun 2005: | Initial version: =1.001= |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | =I18N::AcceptLanguage= |
@@ -184,5 +185,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
--- TWiki:Main.AntonioTerceiro - 02 Jul 2005
+-- TWiki:Main.AntonioTerceiro - 03 Jul 2005
 
