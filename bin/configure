@@ -294,15 +294,24 @@ sub _findMajorDir {
     return WARN($GUESSED);
 }
 
+sub _warnAboutWindowsBackSlashes {
+   my ( $path ) = @_;
+   if ( $path =~ /\\/ ) {
+      return WARN('please use c:/path slashes, not c:\\path ('.$path.')');
+   }
+}
+
 sub _checkPubDir {
     my $e = _findMajorDir('PubDir', 'pub');
+    $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{PubDir});
     my $e2 = _checkTreePerms( $TWiki::cfg{PubDir}, 'rw' );
-    $e = WARN($e2) if $e2;
+    $e .= WARN($e2) if $e2;
     return $e;
 }
 
 sub _checkTemplateDir {
     my $e = _findMajorDir('TemplateDir', 'templates');
+    $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{TemplateDir});
     my $e2 = _checkTreePerms( $TWiki::cfg{TemplateDir}, 'r' );
     $e .= ERROR($e2) if $e2;
     return $e;
@@ -311,6 +320,7 @@ sub _checkTemplateDir {
 sub _checkDataDir {
     my $e = _findMajorDir('DataDir', 'data');
     my $e2 = _checkTreePerms( $TWiki::cfg{DataDir}, "r" );
+    $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{DataDir});
     $e2 = _checkTreePerms( $TWiki::cfg{DataDir}, "w", qr/\.txt$/ )
       unless $e2;
     $e .= WARN($e2) if $e2;
@@ -551,6 +561,10 @@ sub _checkTreePerms {
     my( $path, $perms, $filter ) = @_;
 
     return '' if( defined($filter) && $path !~ $filter && !-d $path);
+
+    #lets ignore Subversion directories
+    return '' if( $path !~ /_svn/ );
+    return '' if( $path !~ /.svn/ );
 
     my $errs = '';
 
