@@ -201,7 +201,7 @@ sub _promptSELECT {
             $sopts .= '<option>'.$opt.'</option>';
         }
     }
-    return CGI::Select({ name => $id, size=>1, default=>$value }, $sopts);
+    return CGI::Select({ name => $id, size=>1 }, $sopts);
 }
 
 sub _checkBinDir {
@@ -535,10 +535,10 @@ sub checkGnuVersion {
     return '';
 }
 
-#SMELL - I think this will unlink your log files if they already exist...
 sub _checkCanCreateFile {
     my $name = shift;
     if (-e $name) {
+        # if the file exists just check perms and return
         return _checkTreePerms($name,'rw');
     }
     my $txt1 = "test 1 2 3";
@@ -700,7 +700,7 @@ sub _checkAndBuildValueGrabber {
     $id =~ s/}{/_/g;
     $id =~ s/[{}\[\]]//g;
     my $anchor = CGI::a({name=>$id},'');
-    print CGI::hidden(-name => 'TYPEOF:'.$id, -value=>$type);
+    print CGI::hidden( 'TYPEOF:'.$id, $type ), "\n";
     my $checker = '_check'.$id;
     if( defined &$checker ) {
         no strict 'refs';
@@ -1473,8 +1473,9 @@ if( $TWiki::cfg{UseLocale} ) {
 }
 
 print CGI::header('text/html'),
-  CGI::start_html( -title => 'TWiki Configuration' ),
-  CGI::style( { type=>'text/css', media=>'all' }, <<'HERE'
+  CGI::start_html( -title => 'TWiki Configuration',
+                   -head => [
+                             CGI::style( { -type=>'text/css' }, <<'HERE'
 html body {
   line-height:1.55em;
   font-family:Avenir, "Lucida Grande", "Bitstream Vera Sans", lucida, arial, verdana, sans-serif;
@@ -1527,8 +1528,11 @@ h3 {
 .secondCol {
 }
 HERE
-            ),
-  CGI::script( { language => 'JavaScript' }, <<'HERE'
+                 ),
+                             CGI::script( { language => 'JavaScript',
+                                            type => 'text/javascript' },
+                                          <<'HERE'
+//<!--
 var last_id = '';
 function foldBlock(id) {
     //close the last block viewed
@@ -1549,8 +1553,10 @@ function foldBlock(id) {
     }
     last_id = id;
 }
+//-->
 HERE
-             );
+             )
+                            ]);
 
 print CGI::h1('TWiki Configuration');
 
@@ -1602,15 +1608,15 @@ HERE
     if( $update_enabled ) {
         print CGI::start_form({ action=>$query->path_info(),method=>"post" });
         # use time to make sure we never allow cacheing
-        print CGI::hidden(-name=>'action',-value=>'update');
-        print CGI::hidden(-name=>'time',-value=>time());
+        print CGI::hidden( 'action', 'update' );
+        print CGI::hidden( 'time', time() );
 
     }
 
     presentReadOnlyInfo();
     presentEditableInfo();
 
-    print CGI::end_table().'<br />';
+    print '<br />';
     print CGI::span({class=>'error'},$toterrors.' errors') if $toterrors;
     print CGI::span({class=>'warn'},$totwarnings.' warnings') if $totwarnings;
 
