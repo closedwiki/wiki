@@ -832,9 +832,9 @@ HERE
 # input field is decided by the type, which is used to compose a function
 # name by prepending _PROMPT_FOR_.
 #.
-# The method also builds a function name by prepending _check to the
+# The method also builds a function name by prepending _CHECK_VAR_ to the
 # field name, and calls it if it exists to perform additional checking
-# for that specific field (see _checkDataDir as an example)
+# for that specific field (see _CHECK_VAR_DataDir as an example)
 #
 sub _checkAndBuildValueGrabber {
     my( $type, $opts, $desc, $keys) = @_;
