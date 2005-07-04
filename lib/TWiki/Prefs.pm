@@ -65,12 +65,17 @@ sub new {
                                 $TWiki::cfg{SitePrefsTopicName} );
     $this->{GLOBAL} = $globs;
 
-    my $webs = new TWiki::Prefs::PrefsCache( $session, $globs );
-    $webs->loadPrefsFromTopic( $web, $TWiki::cfg{WebPrefsTopicName} );
-    $this->{WEB} = $webs;
 
-    # cache for later getPreferencesValue relative to this web
-    $this->{WEBS}{$web} = $webs;
+    my @webPath=split(/[\/\.]/,$web);
+    my $tmpWebPath="";
+    my $prevWebPrefs=$globs;
+    foreach my $tmp (@webPath) {
+      $tmpWebPath = ($tmpWebPath ne "") ? "$tmpWebPath/$tmp" : $tmp;
+      $this->{WEBS}{$tmpWebPath}=TWiki::Prefs::PrefsCache->new($session, $prevWebPrefs);
+      $this->{WEBS}{$tmpWebPath}->loadPrefsFromTopic( $tmpWebPath, $TWiki::cfg{WebPrefsTopicName} );
+      $prevWebPrefs=$this->{WEBS}{$tmpWebPath};
+    }
+    $this->{WEB} = $this->{WEBS}{$web};
 
     return $this;
 }

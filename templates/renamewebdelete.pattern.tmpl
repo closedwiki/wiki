@@ -1,0 +1,50 @@
+%TMPL:INCLUDE{"renamewebbase"}%
+
+
+
+%TMPL:DEF{"titleaction"}%(delete) %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%Delete%TMPL:END%
+
+
+
+%TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="36" />%TMPL:END%
+
+
+
+%TMPL:DEF{"newparentweb"}%<select name="newparentweb">%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%NEW_PARENTWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
+
+
+
+%TMPL:DEF{"namehelp"}%
+This name has been chosen so it doesn't conflict with any other topics already in the %NEW_WEB% web.
+%TMPL:END%
+
+
+
+%TMPL:DEF{"movewebhelp"}%Deleted topics will be moved to the %NEW_WEB% web%TMPL:END%
+
+
+
+%TMPL:DEF{"hidden"}% 
+<script type="text/javascript">
+<!-- hide
+checkAll(false)
+// stop hiding -->
+</script> %TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
+<table>
+<tr>
+<td class="twikiCancelCol">%TMPL:P{"canceltopicaction"}%</td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Delete" /></td>
+<td class="twikiAddCol"></td>
+</tr></table></div>%TMPL:END%
+
+
+
+%TMPL:P{"renameweb"}%

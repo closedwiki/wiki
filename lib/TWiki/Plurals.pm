@@ -57,6 +57,7 @@ on a per-installation basis.
 
 sub singularForm {
     my( $web, $pluralForm ) = @_;
+    $web =~ s#\.#/#go;
 
     # SMELL Plural processing should be set per web
     # SMELL Lang settings should be set per web

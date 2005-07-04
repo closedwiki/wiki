@@ -341,7 +341,8 @@ BEGIN {
 
     # TWiki concept regexes
     $regex{wikiWordRegex} = qr/[$regex{upperAlpha}]+[$regex{lowerAlpha}]+[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
-    $regex{webNameRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}]*/o;
+    $regex{webNameBaseRegex} = qr/[$regex{upperAlpha}]+[$regex{mixedAlphaNum}_]*/o;
+    $regex{webNameRegex} = qr/$regex{webNameBaseRegex}(?:(?:[\.\/]$regex{webNameBaseRegex})+)*/o;
     $regex{defaultWebNameRegex} = qr/_[$regex{mixedAlphaNum}_]+/o;
     $regex{anchorRegex} = qr/\#[$regex{mixedAlphaNum}_]+/o;
     $regex{abbrevRegex} = qr/[$regex{upperAlpha}]{3,}s?\b/o;
@@ -935,6 +936,7 @@ sub normalizeWebTopicName {
     $web ||= $cfg{UsersWebName};
     $topic ||= $cfg{HomeTopicName};
     $web =~ s/^%((MAIN|TWIKI)WEB)%$/$this->_expandTag( $1 )/e;
+    $web =~ s#\.#/#go;
     return( $web, $topic );
 }
 
@@ -1005,10 +1007,12 @@ sub new {
             # redirect to URI
             print $this->redirect( $topic );
             return;
-        } elsif( $topic =~ /(.*)[\.\/](.*)/ ) {
+        } elsif( $topic =~ /((?:.*[\.\/])+)(.*)/ ) {
             # is 'bin/script?topic=Webname.SomeTopic'
             $web   = $1;
             $topic = $2;
+	    $web =~ s/\./\//go;
+	    $web =~ s/\/$//o;
             # jump to WebHome if 'bin/script?topic=Webname.'
             $topic = $TWiki::cfg{HomeTopicName} if( $web && ! $topic );
         }
@@ -1024,13 +1028,21 @@ sub new {
     $pathInfo =~ s!$cgiScriptName/!/!i;
 
     # Get the web and topic names from PATH_INFO
-    if( $pathInfo =~ /\/+(.*)[\.\/](.*)/ ) {
+    if( $pathInfo =~ /\/((?:.*[\.\/])+)(.*)/ ) {
         # is 'bin/script/Webname/SomeTopic' or 'bin/script/Webname/'
         $web   = $1 unless $web;
         $topic = $2 unless $topic;
+	$web =~ s/\./\//go;
+	$web =~ s/\/$//o;
     } elsif( $pathInfo =~ /\/(.*)/ ) {
         # is 'bin/script/Webname' or 'bin/script/'
         $web   = $1 unless $web;
+    }
+
+    # Check to see if we just dissected a web path missing its WebHome
+    if($topic ne "" && $this->{store}->webExists("$web/$topic")) {
+      $web.="/$topic";
+      $topic="";
     }
 
     # All roads lead to WebHome
@@ -1595,6 +1607,7 @@ sub _webOrTopicList {
     $selection =~ s/\,/ /g;
     $selection = ' '.$selection.' ';
     my $marker    = $params->{marker} || 'selected="selected"';
+    $web =~ s#\.#/#go;
 
     my @list = ();
     if( $isWeb ) {
@@ -1622,8 +1635,19 @@ sub _webOrTopicList {
     my $mark = '';
     foreach $item ( @list ) {
         $line = $format;
-        $line =~ s/\$web/$web/goi;
-        $line =~ s/\$name/$item/goi;
+        $line =~ s/\$web\b/$web/goi;
+        $line =~ s/\$name\b/$item/goi;
+	if($isWeb) {
+	  my $webindent=$item;
+	  $webindent=~s/\/$//go;
+	  $webindent =~ s/\w+\//\&nbsp;\&nbsp;/go;
+	  $webindent =~ s/[A-Z]+.*//go;
+	  my $indenteditem=$item;
+	  $indenteditem=~s/\/$//go;
+	  $indenteditem =~ s/\w+\///go;
+	  $line =~ s/\$webindent/$webindent/goi;
+	  $line =~ s/\$indentedname/$indenteditem/goi;
+	}
         $line =~ s/\$qname/"$item"/goi;
         $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
         $line =~ s/\$marker/$mark/goi;
@@ -1823,6 +1847,7 @@ sub _expandAllTags {
     my $this = shift;
     my $text = shift; # reference
     my ( $topic, $web ) = @_;
+    $web =~ s#\.#/#go;
 
     # push current context
     my $memTopic = $this->{SESSION_TAGS}{TOPIC};
@@ -2395,8 +2420,8 @@ sub _SEARCH {
     # pass on all attrs, and add some more
     #$params->{_callback} = undef;
     $params->{inline} = 1;
-    $params->{baseweb} = $theTopic;
-    $params->{basetopic} = $theWeb;
+    $params->{baseweb} = $theWeb;
+    $params->{basetopic} = $theTopic;
     $params->{search} = $params->{_DEFAULT} if( $params->{_DEFAULT} );
     $params->{type} = $this->{prefs}->getPreferencesValue( 'SEARCHVARDEFAULTTYPE' ) unless( $params->{type} );
 
@@ -2549,5 +2574,17 @@ sub _SCRIPTNAME {
     # no joy
     return '';
 }
+
+sub sysCmd {
+  my @cmd=@_;
+  my $tmp="@_";
+  $tmp =~ /(.*)/;
+  $tmp = $1;
+  open(CMD,"$tmp |");
+  my @results = <CMD>;
+  close(CMD);
+  return @results;
+}
+
 
 1;

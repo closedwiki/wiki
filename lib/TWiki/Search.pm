@@ -380,7 +380,9 @@ sub searchWeb {
     my $theType =       $params{type} || '';
     my $theWebName =    $params{web} || '';
     my $theDate =       $params{date} || "";
+    my $subWeb =        $params{"subweb"} || "";
     my $finalTerm =     ($inline)?($params{"nofinalnewline"} || 0):0;
+    $baseWeb =~ s/\./\//go;
 
     my $session = $this->{session};
     my $renderer = $session->{renderer};
@@ -427,6 +429,7 @@ sub searchWeb {
     # webs to be searched in @webList.
     if( $theWebName ) {
         foreach my $web ( split( /[\,\s]+/, $theWebName ) ) {
+            $web =~ s#\.#/#go;
             # the web processing loop filters for valid web names,
             # so don't do it here.
             
@@ -437,28 +440,27 @@ sub searchWeb {
                 next;
             }
             
-            if( $web =~ /^(all|on)$/i  ) {
-                # Get list of all webs
-                my @tmpList = $store->getListOfWebs( 'user' );
-
-                # Build list of webs, without duplicates
-                foreach my $aweb ( @tmpList ) {
-                    push( @webList, $aweb ) unless( grep { /^$aweb$/ } @webList );
-                }
-
-            } else {
-                push( @webList, $web ) unless( grep { /^$web$/ } @webList );
-            }
+	    if($subWeb eq "on" || $web =~ /^(all|on)$/i) {
+		my $webarg = ($web =~/^(all|on)$/i) ? undef : $web;
+		my @tmpList=($web,$store->getListOfWebs("user" , $webarg));
+		foreach my $aweb ( @tmpList ) {
+		    push( @webList, $aweb ) unless( grep { /^$aweb$/ } @webList );
+		}
+	    } else {
+		push( @webList, $web ) unless( grep { /^$web$/ } @webList );
+	    }
         }
 
     } else {
         #default to current web
-        push @webList, $session->{webName};
+	push @webList, $session->{webName};
+        push @webList, $store->getListOfWebs("user" , $session->{webName}) if ($subWeb eq "on");
     }
     
     # Remove exluded webs from the web list
     if ( @excludedWebList ) {        
         foreach my $excludeWeb ( @excludedWebList ) {
+	    $excludeWeb=~s/\./\//go;
             my $i = 0;
             foreach my $web ( @webList ) {
                 if( $web eq $excludeWeb ) {
@@ -469,6 +471,8 @@ sub searchWeb {
             }
         }
     }
+
+
 
     $theTopic   = _makeTopicPattern( $theTopic );    # E.g. "Bug*, *Patch" ==> "^(Bug.*|.*Patch)$"
     $theExclude = _makeTopicPattern( $theExclude );  # E.g. "Web*, FooBar" ==> "^(Web.*|FooBar)$"
@@ -586,6 +590,7 @@ sub searchWeb {
         next if ( $searchAllFlag
                   && ( $thisWebNoSearchAll =~ /on/i || $web =~ /^[\.\_]/ )
                   && $web ne $session->{webName} );
+
 
         # Run the search on topics in this web
         my @topicList = $this->_searchTopicsInWeb( $web, $theTopic, $theScope, $theType, $caseSensitive, @tokens );
@@ -707,6 +712,7 @@ sub searchWeb {
             # coming from search script?
             my $allowView = $topicInfo->{$topic}->{allowView};
             next unless $allowView;
+
 
             my ( $meta, $text );
 

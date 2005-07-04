@@ -43,16 +43,8 @@ __Notes:__
 
 ---++ Renaming or Deleting a Web
 
-Renaming or deleting a web requires direct access to the installation files on the host server. There are currently no browser-based equivalents of the Rename/move/delete topic tools for working with webs.
+Rename a web by using the "More topic actions" link at the bottom of each page.  You may delete a web by renaming it into the Trash web.  
 
-	1. Prepare your site: Search each web for links to the target web, searching topic text for =Oldwebname.=, including the dot so you'll find references like =Oldwebname.SomeTopic=
-		* Make changes as required, to =Newwebname.SomeTopic= or better yet, to =%<nop>MAINWEB%.<nop>SomeTopic=
-	1. Edit the %WIKIPREFSTOPIC% topic: Rename or delete the web from the =WIKIWEBLIST= variable
-	1. Login to the <nop>%WIKITOOLNAME% server, via Telnet or FTP
-	1. Go to =twiki/data= and rename or remove the web directory
-	1. Go to =twiki/templates= and rename or remove the web directory if present
-		* __Note:__ See TWiki:Codev.RenameWebs for some complications
-	1. Go to =twiki/pub= and rename or remove the web directory if present
 
 ---+++ Renaming the webs in the distribution
 

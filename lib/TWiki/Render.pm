@@ -151,6 +151,7 @@ sub _renderMoved {
     my( $this, $web, $topic, $meta ) = @_;
     my $text = '';
     my $moved = $meta->get( 'TOPICMOVED' );
+    $web =~ s#\.#/#go;
 
     if( $moved ) {
         my( $fromWeb, $fromTopic ) =
@@ -440,9 +441,19 @@ sub internalLink {
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     # SMELL - shouldn't it be callable by TWiki::Func as well?
 
+    #PN: Webname.Subweb -> Webname/Subweb
+    $theWeb =~ s/\./\//go;
+    #PN: Webname/Subweb/ -> Webname/Subweb
+    $theWeb =~ s/\/\Z//o;
+
+    if($theLinkText eq $theWeb) {
+      $theLinkText =~ s/\//\./go;
+    }
+
+
     # Get rid of leading/trailing spaces in topic name
-    $theTopic =~ s/^\s*//;
-    $theTopic =~ s/\s*$//;
+    $theTopic =~ s/^\s*//o;
+    $theTopic =~ s/\s*$//o;
 
     # Turn spaced-out names into WikiWords - upper case first letter of
     # whole link, and first of each word. TODO: Try to turn this off,
@@ -1676,17 +1687,56 @@ sub replaceTopicReferences {
     ASSERT(defined $args->{inWeb}) if DEBUG;
 
     my $repl = $args->{newTopic};
+
+    $args->{inWeb}=~s/\//./go;
+    $args->{newWeb}=~s/\//./go;
+    $args->{oldWeb}=~s/\//./go;
+    my $oldWebRegex=$args->{oldWeb};
+
+    $oldWebRegex=~s#\.#[.\\/]#go;
+
     if( $args->{inWeb} ne $args->{newWeb} || $args->{fullPaths} ) {
         $repl = $args->{newWeb}.'.'.$repl;
     }
 
-    $text =~ s/$STARTWW$args->{oldWeb}\.$args->{oldTopic}$ENDWW/$repl/g;
-    $text =~ s/\[\[$args->{oldWeb}\.$args->{spacedTopic}(\](\[[^\]]+\])?\])/[[$repl$1/g;
+    $text =~ s/$STARTWW$oldWebRegex\.$args->{oldTopic}$ENDWW/$repl/g;
+    $text =~ s/\[\[$oldWebRegex\.$args->{spacedTopic}(\](\[[^\]]+\])?\])/[[$repl$1/g;
 
     return $text unless( $args->{inWeb} eq $args->{oldWeb} );
 
     $text =~ s/$STARTWW$args->{oldTopic}$ENDWW/$repl/g;
     $text =~ s/\[\[($args->{spacedTopic})(\](\[[^\]]+\])?\])/[[$repl$2/g;
+
+    return $text;
+}
+
+
+=pod
+
+---++ StaticMethod replaceWebReferences( $text, \%options ) -> $text
+Callback designed for use with forEachLine, to replace web references.
+\%options contains:
+   * =oldWeb= => Web of reference to replace
+   * =newWeb= => Web of new reference
+For a usage example see TWiki::UI::Manage.pm
+
+=cut
+
+sub replaceWebReferences {
+    my( $text, $args ) = @_;
+
+    ASSERT(defined $args->{oldWeb}) if DEBUG;
+    ASSERT(defined $args->{newWeb}) if DEBUG;
+
+    my $repl = $args->{newWeb};
+
+    $args->{newWeb}=~s/\//./go;
+    $args->{oldWeb}=~s/\//./go;
+    my $oldWebRegex=$args->{oldWeb};
+
+    $oldWebRegex=~s#\.#[.\\/]#go;
+
+    $text =~ s/\b$oldWebRegex\b/$repl/g;
 
     return $text;
 }
@@ -1703,7 +1753,7 @@ to them changed to include the web specifier.
 =cut
 
 sub replaceWebInternalReferences {
-    my( $this, $text, $meta, $oldWeb, $oldTopic ) = @_;
+    my( $this, $text, $meta, $oldWeb, $oldTopic, $newWeb, $newTopic ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     my @topics = $this->{session}->{store}->getTopicNames( $oldWeb );
@@ -1725,13 +1775,36 @@ sub replaceWebInternalReferences {
                                  \&_replaceInternalRefs, $options );
     $meta->forEachSelectedValue( qw/^FILEATTACHMENT$/, qw/^user$/,
                                  \&_replaceInternalRefs, $options );
+
+    ## Ok, let's do it again, but look for links to topics in the new web and remove their full paths
+    @topics = $this->{session}->{store}->getTopicNames( $newWeb );
+    $options =
+      {
+       # exclude this topic from the list
+       topics => [ @topics ],
+       fullPaths => 0,
+       inWeb => $newWeb,
+       inTopic => $oldTopic,
+       oldWeb => $newWeb,
+       newWeb => $newWeb,
+      };
+
+    $$text = $this->forEachLine( $$text, \&_replaceInternalRefs, $options );
+
+    $meta->forEachSelectedValue( qw/^(FIELD|TOPICPARENT)$/, undef,
+                                 \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^TOPICMOVED$/, qw/^by$/,
+                                 \&_replaceInternalRefs, $options );
+    $meta->forEachSelectedValue( qw/^FILEATTACHMENT$/, qw/^user$/,
+                                 \&_replaceInternalRefs, $options );
+
 }
 
 # callback used by replaceWebInternalReferences
 sub _replaceInternalRefs {
     my( $text, $args ) = @_;
     foreach my $topic ( @{$args->{topics}} ) {
-        $args->{fullPaths} = ( $topic ne $args->{inTopic} );
+        $args->{fullPaths} =  ( $topic ne $args->{inTopic} ) if (!defined($args->{fullPaths}));
         $args->{oldTopic} = $topic;
         $args->{newTopic} = $topic;
         $args->{spacedTopic} = TWiki::spaceOutWikiWord( $topic );

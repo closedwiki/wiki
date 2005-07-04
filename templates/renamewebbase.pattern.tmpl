@@ -1,0 +1,88 @@
+%TMPL:INCLUDE{"twiki"}%
+
+
+
+%TMPL:DEF{"script"}%
+<script type="text/javascript">
+<!--HIDE
+	function initPage() { }
+	function launchWindow( theWeb, theTopic ) {
+		win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+		if( win ) {
+			win.focus();
+		}
+		return false;
+	}
+	function checkAll( theCheck ) {
+		// find button element index
+		var j = 0;
+		for( var i = 0; i < document.renameweb.length; i++ ) {
+			if( document.renameweb.elements[i].name.match( "referring_topics" ) ) {
+				document.renameweb.elements[i].checked = theCheck;
+			}
+		}
+	}
+//STOP HIDING-->
+</script>%TMPL:END%
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiNoViewPage twikiRenamePage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+
+
+
+%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">Allow non <nop>WikiWord for the new topic name</label>%TMPL:END%
+
+%TMPL:DEF{"simpleheader"}%
+---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
+
+
+%TMPL:DEF{"content"}%
+<form method="post" name="renameweb" action="%SCRIPTURLPATH%/renameweb%SCRIPTSUFFIX%/%WEB%">
+%TMPL:P{"simpleheader"}%
+<div class="twikiVersatileTable">
+<table>
+<tr>
+<th>Change from:</th>
+<td class="twikiOldCol"><b><nop>%WEB%</b></td>
+<td class="twikiOldCol twikiHelpCol"></td>
+</tr>
+<tr>
+<th>To web:</th>
+<td class="twikiMainCol">%TMPL:P{"newparentweb"}%</td>
+<td class="twikiMainCol">%TMPL:P{"newsubweb"}%</td>
+<td class="twikiMainCol twikiHelpCol">%TMPL:P{"movewebhelp"}%</td>
+</tr>
+</table>
+</div>
+
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to %WEB% in the <nop>%WEB% Web:</div>%LOCAL_SEARCH%</div>
+
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to %WEB% in any Web:</div>%GLOBAL_SEARCH%</div>
+<div class="twikiTopicActionSecondary">
+<table>
+<tr>
+<td><input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" /><input type="button" class="twikiButton" value="Clear all" onclick="checkAll(false);" /> checkboxes of referenced topics</td>
+</tr></table></div>
+<div class="twikiHelp">
+*Note:*
+   * Get help on
+     <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Renaming and moving webs</a>.
+   * Select the %TRASHWEB% Web to delete the web.
+   * The checkmarked topics will be updated 
+</div>
+%TMPL:P{"topicaction"}%
+%TMPL:P{"hidden"}%
+</form>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"renameweb"}%
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%
+%TMPL:END%

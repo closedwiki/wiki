@@ -385,6 +385,108 @@ sub rename {
 
 =pod
 
+---++ StaticMethod renameweb( $session )
+=rename= command handler.
+This method is designed to be
+invoked via the =TWiki::UI::run= method.
+Rename the given web. Details of the new web name are passed in CGI
+parameters:
+
+| =skin= | skin(s) to use |
+| =newsubweb= | new web name |
+| =newparentweb= | new parent web name |
+| =breaklock= | |
+| =confirm= | if defined, requires a second level of confirmation |
+| =nonwikiword= | if defined, a non-wikiword is acceptable for the new web name (not currently used) |
+
+=cut
+
+
+sub renameweb {
+    my $session = shift;
+
+    my $oldWeb = $session->{webName};
+    my $oldTopic = $TWiki::cfg{HomeTopicName};
+    my $query = $session->{cgiQuery};
+
+    my $newParentWeb = $query->param( 'newparentweb' ) || '';
+    my $newSubWeb = $query->param( 'newsubweb' ) || '';;
+    my $newWeb;
+    if($newSubWeb) {
+      if($newParentWeb) {
+	$newWeb="$newParentWeb/$newSubWeb";
+      } else {
+	$newWeb=$newSubWeb;
+      }
+    }
+    my (@tmp)=split(/[\/\.]/,$oldWeb);
+    pop(@tmp);
+    my $oldParentWeb=join("/",@tmp);
+    my $newTopic;
+    my $theUrl = $query->url;
+    my $lockFailure = '';
+    my $breakLock = $query->param( 'breaklock' );
+    my $confirm = $query->param( 'confirm' );
+    my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || '';
+    my $store = $session->{store};
+
+    TWiki::UI::checkWebExists( $session, $oldWeb, $TWiki::cfg{WebPrefsTopicName}, 'renameweb' );
+
+
+    if( $newWeb ) {
+        ( $newWeb, $newTopic ) =
+          $session->normalizeWebTopicName( $newWeb, $TWiki::cfg{WebPrefsTopicName} );
+	if($newParentWeb) {
+	  TWiki::UI::checkWebExists( $session, $newParentWeb, $TWiki::cfg{WebPrefsTopicName}, 'rename' );
+	}
+        if( $store->topicExists( $newWeb, $TWiki::cfg{WebPrefsTopicName})) {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'rename_web_exists',
+                                        web => $oldWeb,
+                                        topic => $TWiki::cfg{WebPrefsTopicName},
+                                        params => [ $newWeb, $TWiki::cfg{WebPrefsTopicName} ] );
+        }
+    }
+
+    TWiki::UI::checkAccess( $session, $oldWeb, $TWiki::cfg{WebPrefsTopicName},
+                            'rename', $session->{user} );
+
+    # Has user selected new name yet?
+    if( ! $newWeb || $confirm ) {
+        _newWebScreen( $session,
+                         $oldWeb,
+                         $newWeb,
+                         $confirm );
+        return;
+    }
+
+    # Update references in referring pages 
+    my $refs = _getReferringTopicsListFromURL
+          ( $session, $oldWeb, $TWiki::cfg{HomeTopicName},  $newWeb, $TWiki::cfg{HomeTopicName} );
+
+    moveWeb( $session, $oldWeb, $newWeb, $refs );
+
+    my $new_url = '';
+    if ( $newWeb =~ /^$TWiki::cfg{TrashWebName}\// &&
+         $oldWeb !~ /^$TWiki::cfg{TrashWebName}\// ) {
+	# redirect to parent: ending in Trash is not the expected way
+        if($oldParentWeb) {
+	    $new_url = $session->getScriptUrl( $oldParentWeb, $TWiki::cfg{HomeTopicName}, 'view' );
+	} else {
+	    $new_url = $session->getScriptUrl( $TWiki::cfg{UsersWebName}, $TWiki::cfg{HomeTopicName}, 'view' );
+	}
+
+
+    } else {
+        #redirect to new topic
+        $new_url = $session->getScriptUrl( $newWeb, $TWiki::cfg{HomeTopicName}, 'view' );
+    }
+
+    $session->redirect( $new_url );
+}
+
+=pod
+
 ---++ StaticMethod move($session, $oldWeb, $oldTopic, $newWeb, $newTopic, $attachment, \@refs )
 
 Move the given topic, or an attachment in the topic, correcting refs to the topic in the topic itself, and
@@ -443,8 +545,24 @@ sub move {
         # they still work.
         my $renderer = $session->{renderer};
         $renderer->replaceWebInternalReferences( \$text, $meta,
-                                                 $oldWeb, $oldTopic );
-    }
+                                                 $oldWeb, $oldTopic, $newWeb, $newTopic );
+    } 
+    # Ok, now let's replace all self-referential links:
+    my $options =
+      {
+       oldWeb => $newWeb,
+       oldTopic => $oldTopic,
+       newTopic => $newTopic,
+       newWeb => $newWeb,
+       inWeb => $newWeb,
+       fullPaths => 0,
+       spacedTopic => TWiki::spaceOutWikiWord( $oldTopic )
+      };
+    $options->{spacedTopic} =~ s/ / */g;
+    $text = $session->{renderer}->forEachLine( $text, \&TWiki::Render::replaceTopicReferences, $options );
+
+
+
 
     $meta->put( 'TOPICMOVED',
                 {
@@ -563,6 +681,153 @@ sub _newTopicScreen {
     $session->writeCompletePage( $tmpl );
 }
 
+
+=pod
+
+---++ StaticMethod moveWeb($session, $oldWeb,  $newWeb, \@refs )
+
+Move the given web, correcting refs to the web in the web itself, and
+in the list of topics (specified as web.topic pairs) in the \@refs array.
+
+   * =$session= - reference to session object
+   * =$oldWeb= - name of old web
+   * =$newWeb= - name of new web
+   * =\@refs= - array of webg.topics that must have refs to this topic converted
+Will throw TWiki::OopsException on an error.
+
+=cut
+
+sub moveWeb {
+    my( $session, $oldWeb,
+        $newWeb, $refs ) = @_;
+    my $store = $session->{store};
+
+    my $error = $store->canMoveWeb( $oldWeb, $newWeb,
+                                       $session->{user} );
+
+    if( $error ) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $oldWeb,
+                                    topic => '',
+                                    def => 'rename_err',
+                                    params => [ $error, $newWeb, '' ] );
+    }
+
+    # update referrers.  We need to do this before moving, 
+    # because there might be topics inside the newWeb which need updating. 
+    _updateWebReferringTopics( $session, $oldWeb,
+                            $newWeb, $refs );
+
+    $error = $store->moveWeb( $oldWeb, $newWeb,
+                                       $session->{user} );
+
+    if( $error ) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $oldWeb,
+                                    topic => '',
+                                    def => 'rename_err',
+                                    params => [ $error, $newWeb, '' ] );
+    }
+
+
+}
+
+# Display screen so user can decide on new web.
+sub _newWebScreen {
+    my( $session, $oldWeb, $newWeb,
+        $confirm ) = @_;
+
+    my $query = $session->{cgiQuery};
+    my $tmpl = '';
+    my $skin = $session->getSkin();
+
+    $newWeb = $oldWeb unless ( $newWeb );
+
+    my @newParentPath=split(/\//,$newWeb);
+    my $newSubWeb=pop(@newParentPath);
+    my $newParent=join("/",@newParentPath);
+    my $accessCheckWeb=$newParent;
+    my $accessCheckTopic=$TWiki::cfg{WebPrefsTopicName};
+
+    if( $confirm ) {
+        $tmpl = $session->{templates}->readTemplate( 'renamewebconfirm', $skin );
+    } elsif( $newWeb eq $TWiki::cfg{TrashWebName} ) {
+        $tmpl = $session->{templates}->readTemplate( 'renamewebdelete', $skin );
+    } else {
+        $tmpl = $session->{templates}->readTemplate( 'renameweb', $skin );
+    }
+
+    # Trashing a web; look for a non-conflicting name
+    if( $newWeb eq $TWiki::cfg{TrashWebName} ) {
+        $newWeb = "$TWiki::cfg{TrashWebName}/$oldWeb";
+        my $n = 1;
+        my $base = $newWeb;
+        while( $session->{store}->webExists( $newWeb )) {
+            $newWeb = $base.$n;
+            $n++;
+        }
+    }
+
+    $tmpl =~ s/%NEW_PARENTWEB%/$newParent/go;
+    $tmpl =~ s/%NEW_SUBWEB%/$newSubWeb/go;
+    $tmpl =~ s/%TOPIC%/$TWiki::cfg{HomeTopicName}/go;
+
+    my $refs;
+    my %attributes;
+    my %labels;
+    my @keys;
+    my $search = '';
+
+    $refs = getReferringTopics( $session, $oldWeb, undef, 1 );
+    @keys = sort keys %$refs;
+    foreach my $entry ( @keys ) {
+	$search .= CGI::Tr
+	  (CGI::td
+	   ( { class => 'twikiTopRow' },
+	     CGI::input( { type => 'checkbox',
+			   class => 'twikiCheckBox',
+			   name => 'referring_topics',
+			   value => $entry,
+			   checked => 'checked' },
+			 " $entry " ) ).
+	   CGI::td( { class => 'twikiSummary twikiGrayText' },
+		    $refs->{$entry} ));
+    }
+    unless( $search ) {
+	$search = '(none)';
+    } else {
+	$search = CGI::start_table().$search.CGI::end_table();
+    }
+    $tmpl =~ s/%GLOBAL_SEARCH%/$search/o;
+
+    $refs = getReferringTopics( $session, $oldWeb, undef, 0 );
+    @keys = sort keys %$refs;
+    $search = '';;
+    foreach my $entry ( @keys ) {
+        $search .= CGI::Tr
+          (CGI::td
+           ( { class => 'twikiTopRow' },
+             CGI::input( { type => 'checkbox',
+                           class => 'twikiCheckBox',
+                           name => 'referring_topics',
+                           value => $entry,
+                           checked => 'checked' },
+                         " $entry " ) ).
+           CGI::td( { class => 'twikiSummary twikiGrayText' },
+                    $refs->{$entry} ));
+    }
+    unless( $search ) {
+        $search = '(none)';
+    } else {
+        $search = CGI::start_table().$search.CGI::end_table();
+    }
+    $tmpl =~ s/%LOCAL_SEARCH%/$search/go;
+
+    $tmpl = $session->handleCommonTags( $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
+    $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $oldWeb, $TWiki::cfg{HomeTopicName} );
+    $session->writeCompletePage( $tmpl );
+}
+
 # Returns the list of topics that have been found that refer
 # to the renamed topic. Returns a list of topics.
 sub _getReferringTopicsListFromURL {
@@ -591,6 +856,7 @@ sub getReferringTopics {
     my( $session, $web, $topic, $allWebs, $details ) = @_;
     my $store = $session->{store};
     my $renderer = $session->{renderer};
+    $web =~ s#\.#/#go;
     my @webs = ( $web );
 
     if( $allWebs ) {
@@ -602,7 +868,15 @@ sub getReferringTopics {
         next if( $allWebs && $searchWeb eq $web );
         my @topicList = $store->getTopicNames( $searchWeb );
         my $searchString = $topic;
-        $searchString = $web.'.'.$topic unless $searchWeb eq $web;
+
+ 	my $webString=$web;
+ 	$webString =~ s#[\./]#[\\.\\/]#go;
+ 
+ 	if(defined($topic)) {
+ 	  $searchString = $webString.'.'.$topic unless ( $searchWeb eq $web );
+ 	} else {
+ 	  $searchString = $webString;
+ 	}
         # Note use of \< and \> to match the empty string at the edges of a word.
         my $matches = $store->searchInWebContent
           ( '\<'.$searchString.'\>',
@@ -657,6 +931,49 @@ sub _updateReferringTopics {
                 $meta->forEachSelectedValue
                   ( qw/^(FIELD|FORM|TOPICPARENT)$/, undef,
                     \&TWiki::Render::replaceTopicReferences, $options );
+
+                $store->saveTopic( $user, $itemWeb, $itemTopic,
+                                   $text, $meta,
+                                   { minor => 1 } );
+            } catch TWiki::AccessControlException with {
+                my $e = shift;
+                $session->writeWarning( $e->stringify() );
+            } otherwise {
+                $store->unlockTopic( $user, $itemWeb, $itemTopic );
+            };
+        }
+    }
+}
+
+# Update pages that refer to a web that is being renamed/moved.
+sub _updateWebReferringTopics {
+    my ( $session, $oldWeb, $newWeb, $refs ) = @_;
+    my $store = $session->{store};
+    my $renderer = $session->{renderer};
+    my $user = $session->{user};
+    my $options =
+      {
+       oldWeb => $oldWeb,
+       newWeb => $newWeb
+      };
+    $options->{spacedTopic} =~ s/ / */g;
+
+    foreach my $item ( @$refs ) {
+        my( $itemWeb, $itemTopic ) =
+          $session->normalizeWebTopicName( '', $item );
+
+        if ( $store->topicExists($itemWeb, $itemTopic) ) {
+            $store->lockTopic( $user, $itemWeb, $itemTopic );
+            try {
+                my( $meta, $text ) =
+                  $store->readTopic( undef, $itemWeb, $itemTopic, undef );
+                $options->{inWeb} = $itemWeb;
+
+                $text = $renderer->forEachLine
+                  ( $text, \&TWiki::Render::replaceWebReferences, $options );
+                $meta->forEachSelectedValue
+                  ( qw/^(FIELD|FORM|TOPICPARENT)$/, undef,
+                    \&TWiki::Render::replaceWebReferences, $options );
 
                 $store->saveTopic( $user, $itemWeb, $itemTopic,
                                    $text, $meta,

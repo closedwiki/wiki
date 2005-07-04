@@ -138,6 +138,7 @@ sub search {
         'format'        => scalar $query->param( 'format' ),
         'multiple'      => scalar $query->param( 'multiple' ),
         'separator'     => scalar $query->param( 'separator' ),
+        'subweb'     => scalar $query->param( 'subweb' )
     );
 }
 

@@ -1,0 +1,41 @@
+%TMPL:INCLUDE{"renamewebbase"}%
+
+
+
+%TMPL:DEF{"titleaction"}%(rename) %TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}%Rename%TMPL:END%
+
+
+%TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="36" />%TMPL:END%
+
+
+%TMPL:DEF{"newparentweb"}%<select name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
+
+
+
+%TMPL:DEF{"namehelp"}%
+It's usually best to choose a 
+<a target="WikiWord" onclick="return launchWindow('%TWIKIWEB%','WikiWord')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WikiWord" rel='nofollow'>WikiWord</a> 
+for the new web name, otherwise automatic linking may not work. Characters not allowed in web names, such as spaces will automatically be removed.
+%TMPL:END%
+
+
+
+%TMPL:DEF{"movewebhelp"}%You can move this web to a different web name.%TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
+<table>
+<tr>
+<td class="twikiCancelCol">%TMPL:P{"canceltopicaction"}%</td>
+<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Rename/Move" /></td>
+<td class="twikiAddCol"></td>
+</tr></table></div>%TMPL:END%
+
+
+
+%TMPL:P{"renameweb"}%
