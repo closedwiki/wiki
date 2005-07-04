@@ -43,7 +43,7 @@ __Notes:__
 
 ---++ Renaming or Deleting a Web
 
-Rename a web by using the "More topic actions" link at the bottom of each page.  You may delete a web by renaming it into the Trash web.  
+Rename a web via the Tools section in each web's WebPreferences topic.  You may delete a web by renaming it into a Trash web.  
 
 
 ---+++ Renaming the webs in the distribution
