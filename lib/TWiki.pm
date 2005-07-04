@@ -432,84 +432,86 @@ use TWiki::Templates; # TWiki template language
 use TWiki::Time;      # date/time conversions
 use TWiki::Users;     # user handler
 
-# Auto-detect UTF-8 vs. site charset in URL, and convert UTF-8 into site charset.
-# TODO: remove dependence on webname and topicname.
-sub _convertUtf8URLtoSiteCharset {
-    my $this = shift;
+=pod
 
-    my $fullTopicName = $this->{webName}.'.'.$this->{topicName};
-    my $charEncoding;
+---++ ObjectMethod UTF82SiteCharSet( $utf8 ) -> $ascii
+Auto-detect UTF-8 vs. site charset in string, and convert UTF-8 into site
+charset.
+
+=cut
+
+sub UTF82SiteCharSet {
+    my( $this, $text ) = @_;
 
     # Detect character encoding of the full topic name from URL
-    if ( $fullTopicName =~ $regex{validAsciiStringRegex} ) {
-    } elsif ( $fullTopicName =~ $regex{validUtf8StringRegex} ) {
-        # Convert into ISO-8859-1 if it is the site charset
-        if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
-            # ISO-8859-1 maps onto first 256 codepoints of Unicode
-            # (conversion from 'perldoc perluniintro')
-            $fullTopicName =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
-              chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
-                /egx;
-        } elsif ( $TWiki::cfg{Site}{CharSet} eq 'utf-8' ) {
-            # Convert into internal Unicode characters if on Perl 5.8 or higher.
-            if( $] >= 5.008 ) {
-                require Encode;			# Perl 5.8 or higher only
-                $fullTopicName = Encode::decode('utf8', $fullTopicName);	# 'decode' into UTF-8
-            } else {
-                $this->writeWarning( 'UTF-8 not supported on Perl '.$].
-                                     ' - use Perl 5.8 or higher..' );
-            }
-            $this->writeWarning( 'UTF-8 not yet supported as site charset - TWiki is likely to have problems' );
-        } else {
-            # Convert from UTF-8 into some other site charset
-            $this->writeDebug( "Converting from UTF-8 to $TWiki::cfg{Site}{CharSet}" );
+    return undef if( $text =~ $regex{validAsciiStringRegex} );
 
-            # Use conversion modules depending on Perl version
-            if( $] >= 5.008 ) {
-                require Encode;			# Perl 5.8 or higher only
-                import Encode qw(:fallbacks);
-                # Map $TWiki::cfg{Site}{CharSet} into real encoding name
-                $charEncoding = Encode::resolve_alias( $TWiki::cfg{Site}{CharSet} );
-                if( not $charEncoding ) {
-                    $this->writeWarning
-                      ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
-                        '" not supported, or name not recognised - check "perldoc Encode::Supported"' );
-                } else {
-                    ##$this->writeDebug "Converting with Encode, valid 'to' encoding is '$charEncoding'";
-                    # Convert text using Encode:
-                    # - first, convert from UTF8 bytes into internal (UTF-8) characters
-                    $fullTopicName = Encode::decode('utf8', $fullTopicName);	
-                    # - then convert into site charset from internal UTF-8,
-                    # inserting \x{NNNN} for characters that can't be converted
-                    $fullTopicName = Encode::encode( $charEncoding, $fullTopicName, &FB_PERLQQ() );
-                    ##$this->writeDebug "Encode result is $fullTopicName";
-                }
+    # If not UTF-8 - assume in site character set, no conversion required
+    return undef unless( $text =~ $regex{validUtf8StringRegex} );
+
+    # Convert into ISO-8859-1 if it is the site charset
+    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
+        # ISO-8859-1 maps onto first 256 codepoints of Unicode
+        # (conversion from 'perldoc perluniintro')
+        $text =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
+          chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
+            /egx;
+    } elsif ( $TWiki::cfg{Site}{CharSet} eq 'utf-8' ) {
+        # Convert into internal Unicode characters if on Perl 5.8 or higher.
+        if( $] >= 5.008 ) {
+            require Encode;			# Perl 5.8 or higher only
+            # 'decode' into UTF-8
+            $text = Encode::decode('utf8', $text);
+        } else {
+            $this->writeWarning( 'UTF-8 not supported on Perl '.$].
+                                 ' - use Perl 5.8 or higher..' );
+        }
+        $this->writeWarning( 'UTF-8 not yet supported as site charset -'.
+                             'TWiki is likely to have problems' );
+    } else {
+        # Convert from UTF-8 into some other site charset
+        if( $] >= 5.008 ) {
+            require Encode;
+            import Encode qw(:fallbacks);
+            # Map $TWiki::cfg{Site}{CharSet} into real encoding name
+            my $charEncoding =
+              Encode::resolve_alias( $TWiki::cfg{Site}{CharSet} );
+            if( not $charEncoding ) {
+                $this->writeWarning
+                  ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
+                    '" not supported, or name not recognised - check '.
+                    '"perldoc Encode::Supported"' );
             } else {
-                require Unicode::MapUTF8;	# Pre-5.8 Perl versions
-                $charEncoding = $TWiki::cfg{Site}{CharSet};
-                if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
-                    $this->writeWarning
-                      ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
-                        '" not supported, or name not recognised - check "perldoc Unicode::MapUTF8"' );
-                } else {
-                    # Convert text
-                    ##$this->writeDebug "Converting with Unicode::MapUTF8, valid encoding is '$charEncoding'";
-                    $fullTopicName =
-                      Unicode::MapUTF8::from_utf8({
-                                                   -string => $fullTopicName,
-                                                   -charset => $charEncoding
-                                                  });
-                    # FIXME: Check for failed conversion?
-                }
+                # Convert text using Encode:
+                # - first, convert from UTF8 bytes into internal
+                # (UTF-8) characters
+                $text = Encode::decode('utf8', $text);	
+                # - then convert into site charset from internal UTF-8,
+                # inserting \x{NNNN} for characters that can't be converted
+                $text =
+                  Encode::encode( $charEncoding, $text,
+                                  &FB_PERLQQ() );
+            }
+        } else {
+            require Unicode::MapUTF8;	# Pre-5.8 Perl versions
+            my $charEncoding = $TWiki::cfg{Site}{CharSet};
+            if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
+                $this->writeWarning
+                  ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
+                    '" not supported, or name not recognised - check '.
+                    '"perldoc Unicode::MapUTF8"' );
+            } else {
+                # Convert text
+                $text =
+                  Unicode::MapUTF8::from_utf8({
+                                               -string => $text,
+                                               -charset => $charEncoding
+                                              });
+                # FIXME: Check for failed conversion?
             }
         }
-        $fullTopicName =~ /^(.*?)\.([^.]*)$/;
-        $this->{webName} = $1;
-        $this->{topicName} = $2;
-    } else {
-        # Non-ASCII and non-UTF-8 - assume in site character set, 
-        # no conversion required
     }
+    return $text;
 }
 
 =pod
@@ -1040,9 +1042,15 @@ sub new {
     $web = $TWiki::cfg{UsersWebName} unless $web;
     $this->{webName} = $web;
 
-    # Convert UTF-8 web and topic name from URL into site charset 
+    # Convert UTF-8 web and topic name from URL into site charset
     # if necessary - no effect if URL is not in UTF-8
-    $this->_convertUtf8URLtoSiteCharset();
+    my $newt = $this->UTF82SiteCharSet( $this->{webName}.'.'.
+                                        $this->{topicName} );
+    if( $newt ) {
+        $newt =~ /^(.*?)\.([^.]*)$/;
+        $this->{webName} = $1;
+        $this->{topicName} = $2;
+    }
 
     $this->{scriptUrlPath} = $TWiki::cfg{ScriptUrlPath};
 
@@ -2464,7 +2472,7 @@ sub _INTURLENCODE {
 
 # This routine is deprecated as of DakarRelease,
 # and is maintained only for backward compatibility.
-# Spacing of WikiWords is now down with SPACEOUT
+# Spacing of WikiWords is now done with %SPACEOUT%
 # (and the private routine _SPACEOUT).
 sub _SPACEDTOPIC {
     my ( $this, $params, $theTopic ) = @_;
