@@ -365,7 +365,7 @@ sub makeAnchorName {
     $anchorName =~ s/$TWiki::regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
 
     # For most common alphabetic-only character encodings (i.e. iso-8859-*), remove non-alpha characters 
-    if( $TWiki::siteCharset =~ /^iso-?8859-?/i ) {
+    if( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?/i ) {
         $anchorName =~ s/[^$TWiki::regex{mixedAlphaNum}]+/_/g;
     }
     $anchorName =~ s/__+/_/g;               # remove excessive '_' chars

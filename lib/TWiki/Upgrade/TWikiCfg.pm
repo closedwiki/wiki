@@ -137,14 +137,10 @@ sub upgradeConfig {
                       , "{StoreImpl}" );
     print CFG old2new($displayTimeValues, "gmtime",
                       "{DisplayTimeValues}" );
-    print CFG old2new($useLocale, 0,
-                      "{UseLocale}" );
-    print CFG old2new($siteLocale, "en_US.ISO-8859-1",
-                      "{SiteLocale}" );
-    print CFG old2new($siteCharsetOverride, "",
-                      "{SiteCharsetOverride}" );
-    print CFG old2new($localeRegexes, "1",
-                      "{LocaleRegexes}" );
+    print CFG old2new($useLocale, 0, "{UseLocale}" );
+    print CFG old2new($siteLocale, "en_US.ISO-8859-1", "{Site}{Locale}" );
+    print CFG old2new($siteCharsetOverride, "", "{Site}{CharSet}" );
+    print CFG old2new($localeRegexes, "1", "{Site}{LocaleRegexes}" );
     print CFG old2new($upperNational, "", "{UpperNational}" );
     print CFG old2new($lowerNational, "", "{LowerNational}" );
     print CFG old2new($securityFilter, "[\\\*\?\~\^\$\@\%\`\"\'\&\;\|\<\>\x00-\x1F]",

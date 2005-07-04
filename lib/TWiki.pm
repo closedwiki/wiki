@@ -59,11 +59,6 @@ use vars qw(
             %regex
             %constantTags
             %functionTags
-            $siteCharset
-            $siteLang
-            $siteFullLang
-            $urlCharEncoding
-            $langAlphabetic
             $VERSION
             $TRUE
             $FALSE
@@ -271,75 +266,29 @@ BEGIN {
 
     # locale setup
     #
-    # SMELL: mod_perl compatibility note: If TWiki is running under Apache,
-    # won't this play with the Apache process's locale settings too?
-    # What effects would this have?
     #
     # Note that 'use locale' must be done in BEGIN block for regexes and
     # sorting to
     # work properly, although regexes can still work without this in
     # 'non-locale regexes' mode.
-    $siteCharset = 'ISO-8859-1';	# Default values if locale mis-configured
-    $siteLang = 'en';
-    $siteFullLang = 'en-us';
-
-    # Language assumed alphabetic unless otherwise configured - used to 
-    # turn on filtering-in of valid characters in user input 
-    $langAlphabetic = 1 if not defined $langAlphabetic;      # Default is 1 if not configured
 
     if ( $TWiki::cfg{UseLocale} ) {
-        if ( ! defined $TWiki::cfg{SiteLocale} ||
-             $TWiki::cfg{SiteLocale} !~ /[a-z]/i ) {
-
-            die "UseLocale set but SiteLocale $TWiki::cfg{SiteLocale} unset or has no alphabetic characters";
-        }
-        # Extract the character set from locale and use in HTML templates
-        # and HTTP headers
-        $TWiki::cfg{SiteLocale} =~ m/\.([a-z0-9_-]+)$/i;
-        $siteCharset = $1 if defined $1;
-        $siteCharset =~ s/^utf8$/utf-8/i;	# For convenience, avoid overrides
-        $siteCharset =~ s/^eucjp$/euc-jp/i;
-
-        # Override charset - used when locale charset not supported by Perl
-        # conversion modules
-        $siteCharset = $TWiki::cfg{SiteCharsetOverride} || $siteCharset;
-        $siteCharset = lc $siteCharset;
-
-        # Extract the default site language - ignores '@euro' part of
-        # 'fr_BE@euro' type locales.
-        $TWiki::cfg{SiteLocale} =~ m/^([a-z]+)_([a-z]+)/i;
-        $siteLang = (lc $1) if defined $1;	# Not including country part
-        $siteFullLang = (lc "$1-$2" ) 		# Including country part
-          if defined $1 and defined $2;
-
         # Set environment variables for grep 
-        $ENV{'LC_CTYPE'}= $TWiki::cfg{SiteLocale};
+        $ENV{LC_CTYPE} = $TWiki::cfg{Site}{Locale};
 
         # Load POSIX for I18N support.
         require POSIX;
         import POSIX qw( locale_h LC_CTYPE );
 
-        # Set new locale - deliberately not checked since tested
-        # in testenv
-        my $locale = setlocale(&LC_CTYPE, $TWiki::cfg{SiteLocale});
+        # SMELL: mod_perl compatibility note: If TWiki is running under Apache,
+        # won't this play with the Apache process's locale settings too?
+        # What effects would this have?
+        setlocale(&LC_CTYPE, $TWiki::cfg{Site}{Locale});
     }
 
-    # Check for unusable multi-byte encodings as site character set
-    # - anything that enables a single ASCII character such as '[' to be
-    # matched within a multi-byte character cannot be used for TWiki.
-
-    # Refuse to work with character sets that allow TWiki syntax
-    # to be recognised within multi-byte characters.
-
-    # FIXME: match other problematic multi-byte character sets
-    if( $siteCharset =~ /^(?:iso-?2022-?|hz-?|gb2312|gbk|gb18030|.*big5|.*shift_?jis|ms.kanji|johab|uhc)/i ) {
-
-        die "Cannot use this multi-byte encoding ('$siteCharset') as site character encoding\nPlease set a different character encoding in the SiteLocale setting.";
-    }
-
-    $constantTags{CHARSET} = $siteCharset;
-    $constantTags{SHORTLANG} = $siteLang;
-    $constantTags{LANG} = $siteFullLang;
+    $constantTags{CHARSET} = $TWiki::cfg{Site}{CharSet};
+    $constantTags{SHORTLANG} = $Wiki::cfg{Site}{Lang};
+    $constantTags{LANG} = $TWiki::cfg{Site}{FullLang};
 
     # Set up pre-compiled regexes for use in rendering.  All regexes with
     # unchanging variables in match should use the '/o' option.
@@ -352,7 +301,7 @@ BEGIN {
     # Depends on locale mode and Perl version, and finally on
     # whether locale-based regexes are turned off.
     if ( not $TWiki::cfg{UseLocale} or $] < 5.006
-         or not $TWiki::cfg{LocaleRegexes} ) {
+         or not $TWiki::cfg{Site}{LocaleRegexes} ) {
 
         # No locales needed/working, or Perl 5.005, so just use
         # any additional national characters defined in TWiki.cfg
@@ -493,18 +442,15 @@ sub _convertUtf8URLtoSiteCharset {
 
     # Detect character encoding of the full topic name from URL
     if ( $fullTopicName =~ $regex{validAsciiStringRegex} ) {
-        $urlCharEncoding = 'ASCII';
     } elsif ( $fullTopicName =~ $regex{validUtf8StringRegex} ) {
-        $urlCharEncoding = 'UTF-8';
-
         # Convert into ISO-8859-1 if it is the site charset
-        if ( $siteCharset =~ /^iso-?8859-?1$/i ) {
+        if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
             # ISO-8859-1 maps onto first 256 codepoints of Unicode
             # (conversion from 'perldoc perluniintro')
             $fullTopicName =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
               chr( ord($1) << 6 & 0xC0 | ord($2) & 0x3F )
                 /egx;
-        } elsif ( $siteCharset eq 'utf-8' ) {
+        } elsif ( $TWiki::cfg{Site}{CharSet} eq 'utf-8' ) {
             # Convert into internal Unicode characters if on Perl 5.8 or higher.
             if( $] >= 5.008 ) {
                 require Encode;			# Perl 5.8 or higher only
@@ -516,17 +462,17 @@ sub _convertUtf8URLtoSiteCharset {
             $this->writeWarning( 'UTF-8 not yet supported as site charset - TWiki is likely to have problems' );
         } else {
             # Convert from UTF-8 into some other site charset
-            $this->writeDebug( "Converting from UTF-8 to $siteCharset" );
+            $this->writeDebug( "Converting from UTF-8 to $TWiki::cfg{Site}{CharSet}" );
 
             # Use conversion modules depending on Perl version
             if( $] >= 5.008 ) {
                 require Encode;			# Perl 5.8 or higher only
                 import Encode qw(:fallbacks);
-                # Map $siteCharset into real encoding name
-                $charEncoding = Encode::resolve_alias( $siteCharset );
+                # Map $TWiki::cfg{Site}{CharSet} into real encoding name
+                $charEncoding = Encode::resolve_alias( $TWiki::cfg{Site}{CharSet} );
                 if( not $charEncoding ) {
                     $this->writeWarning
-                      ( 'Conversion to $siteCharset "'.$siteCharset.
+                      ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
                         '" not supported, or name not recognised - check "perldoc Encode::Supported"' );
                 } else {
                     ##$this->writeDebug "Converting with Encode, valid 'to' encoding is '$charEncoding'";
@@ -540,10 +486,10 @@ sub _convertUtf8URLtoSiteCharset {
                 }
             } else {
                 require Unicode::MapUTF8;	# Pre-5.8 Perl versions
-                $charEncoding = $siteCharset;
+                $charEncoding = $TWiki::cfg{Site}{CharSet};
                 if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
                     $this->writeWarning
-                      ( 'Conversion to $siteCharset "'.$siteCharset.
+                      ( 'Conversion to "'.$TWiki::cfg{Site}{CharSet}.
                         '" not supported, or name not recognised - check "perldoc Unicode::MapUTF8"' );
                 } else {
                     # Convert text
@@ -563,10 +509,7 @@ sub _convertUtf8URLtoSiteCharset {
     } else {
         # Non-ASCII and non-UTF-8 - assume in site character set, 
         # no conversion required
-        $urlCharEncoding = 'Native';
-        $charEncoding = $siteCharset;
     }
-    ##$this->writeDebug "Final web and topic are $this->{webName} $this->{topicName} ($urlCharEncoding URL -> $siteCharset)";
 }
 
 =pod
@@ -670,7 +613,7 @@ sub writePageHeader {
     }
 
     $contentType = 'text/html' unless $contentType;
-    $contentType .= '; charset='.$siteCharset;
+    $contentType .= '; charset='.$TWiki::cfg{Site}{CharSet};
 
     # use our version of the content type
     $hopts->{'Content-Type'} = $contentType;
@@ -1748,7 +1691,7 @@ reserved purposes may be used unencoded within a URL.
 Reserved characters are $&+,/:;=?@ - these are _also_ encoded by
 this method.
 
-SMELL: For non-ISO-8859-1 $siteCharset, need to convert to
+SMELL: For non-ISO-8859-1 $TWiki::cfg{Site}{CharSet}, need to convert to
 UTF-8 before URL encoding. This encoding only supports 8-bit
 character codes.
 
@@ -1782,7 +1725,7 @@ sub urlDecode {
 
 ---++ StaticMethod nativeUrlEncode ( $theStr, $doExtract ) -> encoded string
 
-Perform URL encoding into native charset ($siteCharset) - for use when
+Perform URL encoding into native charset ($TWiki::cfg{Site}{CharSet}) - for use when
 viewing attachments via browsers that generate UTF-8 URLs, on sites running
 with non-UTF-8 (Native) character sets.  Aim is to prevent UTF-8 URL
 encoding.  For mainframes, we assume that UTF-8 URLs will be translated
@@ -1798,12 +1741,12 @@ sub nativeUrlEncode {
 
     my $isEbcdic = ( 'A' eq chr(193) ); 	# True if Perl is using EBCDIC
 
-    if( $siteCharset eq 'utf-8' or $isEbcdic ) {
+    if( $TWiki::cfg{Site}{CharSet} eq 'utf-8' or $isEbcdic ) {
         # SMELL: does this really work? What if non RFC-1738 characters
         # are in the string?
 
         # Just strip double quotes, no URL encoding - let browser encode to
-        # UTF-8 or EBCDIC based $siteCharset as appropriate
+        # UTF-8 or EBCDIC based $TWiki::cfg{Site}{CharSet} as appropriate
         $theStr =~ s/^"(.*)"$/$1/;	
         return $theStr;
     } else {

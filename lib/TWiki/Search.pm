@@ -385,8 +385,6 @@ sub searchWeb {
     my $session = $this->{session};
     my $renderer = $session->{renderer};
 
-    ##$session->writeDebug "Search locale is $TWiki::cfg{SiteLocale}";
-
     # Limit search results
     if ($theLimit =~ /(^\d+$)/o) { # only digits, all else is the same as
         $theLimit = $1;            # an empty string.  "+10" won't work.
