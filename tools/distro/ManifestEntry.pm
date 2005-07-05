@@ -71,6 +71,7 @@ sub stringify {
     {
 	my $f = $self->{ $field };
 	$f = '?' unless defined $f;
+	$f =~ s/ /\\ /g;		# escape spaces
 	$text .= "$f ";
     }
     return $text;
