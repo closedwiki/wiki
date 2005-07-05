@@ -2525,7 +2525,7 @@ sub _ICON {
 
     $file = '' unless $file;
 
-    my $value = $this->{renderer}->filenameToIcon( 'file.'.$file );
+    my $value = $this->{renderer}->getDocGraphic( $file );
     return $value;
 }
 

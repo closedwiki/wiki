@@ -370,6 +370,17 @@ html>body .twikiLeftBar li a {
 	padding-bottom:1.5em;
 	background-color:transparent;
 }
+.twikiTopic pre {
+	overflow-x:auto;
+    overflow-y:visible;
+    padding-bottom:1.5em;
+    width:100%;
+}
+.twikiTopic>pre { /* hide from IE */
+	padding-bottom:0.25em;
+	/*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
+}
+
 .twikiTopic table {
 	width:auto;
 }
