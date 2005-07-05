@@ -109,7 +109,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 
 
 
-
+%META:FILEATTACHMENT{name="_filetypes.txt" attr="" comment="File types" date="1001637645" path="C:\02_TWikiDocs\_filetypes.txt" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="help.gif" attr="" comment="Help" date="1001637645" path="C:\02_TWikiDocs\help.gif" size="130" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="tip.gif" attr="" comment="Tip" date="1007360101" path="C:\02_TWikiDocs\tip.gif" size="123" user="TWikiContributor" version="1.2"}%
 %META:FILEATTACHMENT{name="warning.gif" attr="" comment="Warning" date="1001637707" path="C:\02_TWikiDocs\warning.gif" size="138" user="TWikiContributor" version="1.1"}%
