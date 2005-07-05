@@ -246,7 +246,7 @@ sub moveAttachment {
     $nmeta->putKeyed( 'FILEATTACHMENT', $fileAttachment );
 
     $error = $this->_noHandlersSave( $user, $newWeb, $newTopic, $ntext,
-                                      $nmeta, { notify => 0,
+                                     $nmeta, { notify => 0,
                                                comment => 'moved' } );
 
     $this->unlockTopic( $user, $newWeb, $newTopic );
@@ -254,8 +254,8 @@ sub moveAttachment {
     return $error if( $error );
 
     $this->{session}->writeLog( 'move', $oldWeb.'.'.$oldTopic,
-                     "Attachment $theAttachment moved to $newWeb.$newTopic" );
-
+                                'Attachment '.$theAttachment.' moved to '.
+                                $newWeb.'.'.$newTopic );
 
     return $error;
 }
@@ -286,7 +286,7 @@ sub getAttachmentStream {
         !$this->{session}->{security}->checkAccessPermission
         ( 'view', $user, undef, $topic, $web )) {
         throw TWiki::AccessControlException( 'VIEW', $user, $web, $topic,
-                                           $this->{session}->{security}->getReason());
+                                             $this->{session}->{security}->getReason());
     }
 
     my $topicHandler = $this->_getTopicHandler( $web, $topic, $att );
@@ -346,7 +346,7 @@ sub moveTopic {
         ( 'change', $user, $ntext, $newTopic, $newWeb )) {
         throw TWiki::AccessControlException( 'CHANGE', $user,
                                              $newWeb, $newTopic,
-                                           $this->{session}->{security}->getReason());
+                                             $this->{session}->{security}->getReason());
     }
 
     my $topicHandler = $this->_getTopicHandler( $oldWeb, $oldTopic, '' );
@@ -370,8 +370,8 @@ sub moveTopic {
 
 ---++ ObjectMethod moveWeb(  $oldWeb, $newWeb, $user ) -> $error
 
-It is the responsibility of the caller to check for existence of webs,
-& lock taken for web
+Move a web. Return an error message if the move failed, or undef otherwise.
+it is up to the caller to check access permissions etc before calling.
 
 =cut
 
@@ -379,49 +379,41 @@ sub moveWeb {
     my( $this, $oldWeb, $newWeb, $user ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user->isa('TWiki::User')) if DEBUG;
-    my $error='';
+
+    my $error = '';
 
     $oldWeb =~ s/\./\//go;
     $newWeb =~ s/\./\//go;
 
     # will block
+    # SMELL: surely this should lock every topic in the web?
     $this->lockTopic( $user, $oldWeb, $TWiki::cfg{WebPrefsTopicName} );
 
-    my $otext = $this->readTopicRaw( undef, $oldWeb, $TWiki::cfg{WebPrefsTopicName} );
-    if( $user &&
-        !$this->{session}->{security}->checkAccessPermission
-        ( 'change', $user, $otext, $TWiki::cfg{WebPrefsTopicName}, $oldWeb )) {
-        throw TWiki::AccessControlException( 'CHANGE', $user,
-                                             $oldWeb, $TWiki::cfg{WebPrefsTopicName},
-                                             $this->{session}->{security}->getReason());
-    }
+    my @newParentPath = split(/\//,$newWeb);
+    pop( @newParentPath );
+    my $newParent = join( '/', @newParentPath );
 
-    my @newParentPath=split(/\//,$newWeb);
-    pop(@newParentPath);
-    my $newParent=join("/",@newParentPath);
-    my $accessCheckWeb=$newParent;
-    my $accessCheckTopic=$TWiki::cfg{WebPrefsTopicName};
-
-    if( $newParent ne "" ) {
-      if(!$this->webExists($newParent)) {
-	return 1;
-      }
-    
-      my ( $nmeta, $ntext ) = $this->readTopic( undef, $accessCheckWeb, $accessCheckTopic );
-      if( $user &&
-	  !$this->{session}->{security}->checkAccessPermission
-	  ( 'change', $user, $ntext, $accessCheckWeb, $accessCheckTopic )) {
-	  throw TWiki::AccessControlException( 'CHANGE', $user,
-					       $newParent, $accessCheckTopic,
-					     $this->{session}->{security}->getReason());
-      }
-    }
-
-    # Should whole webs have handlers?
-    TWiki::sysCmd("/bin/mkdir -p $TWiki::cfg{DataDir}/$newParent");
-    TWiki::sysCmd("/bin/mv -f $TWiki::cfg{DataDir}/$oldWeb $TWiki::cfg{DataDir}/$newWeb");
-    TWiki::sysCmd("/bin/mkdir -p $TWiki::cfg{PubDir}/$newParent");
-    TWiki::sysCmd("/bin/mv -f $TWiki::cfg{PubDir}/$oldWeb $TWiki::cfg{PubDir}/$newWeb");
+    my $sandbox = $this->{session}->{sandbox};
+    # SMELL: absolute path names to commands! Must move to $TWiki::cfg!
+    # SMELL: no checks for return status
+    # SMELL: this should be done using a handler in RcsFile
+    $sandbox->readFromProcess( '/bin/mkdir -p %PARENT%',
+                               PARENT => $TWiki::cfg{DataDir}.'/'.
+                               $newParent );
+    $sandbox->readFromProcess(
+        '/bin/mv -f %OLDWEB% %NEWWEB%',
+        OLDWEB => $TWiki::cfg{DataDir}.'/'.$oldWeb,
+        NEWWEB => $TWiki::cfg{DataDir}.'/'.$newWeb );
+    $sandbox->readFromProcess(
+        '/bin/mkdir -p %NEWWEB%',
+        NEWWEB => $TWiki::cfg{PubDir}.'/'.
+        $newParent );
+    $sandbox->readFromProcessArray(
+        '/bin/mv -f %OLDWEB% %NEWWEB%',
+        OLDWEB => $TWiki::cfg{PubDir}.'/'.
+        $oldWeb,
+        NEWWEB => $TWiki::cfg{PubDir}.'/'.
+        $newWeb );
 
     $this->unlockTopic( $user, $newWeb, $TWiki::cfg{WebPrefsTopicName} );
 
@@ -429,60 +421,10 @@ sub moveWeb {
     if( $TWiki::cfg{Log}{rename} ) {
         my $old = $oldWeb;
         my $new = $newWeb;
-        $error ||= '';
         $this->{session}->writeLog( 'renameweb', $old,
                                     "moved to $new $error" );
     }
 
-    return $error;
-}
-
-=pod
-
----++ ObjectMethod canMoveWeb(  $oldWeb, $newWeb, $user ) -> $error
-
-
-=cut
-
-sub canMoveWeb {
-    my( $this, $oldWeb, $newWeb, $user ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    ASSERT($user->isa('TWiki::User')) if DEBUG;
-    my $error='';
-
-    $oldWeb =~ s/\./\//go;
-    $newWeb =~ s/\./\//go;
-
-    my $otext = $this->readTopicRaw( undef, $oldWeb, $TWiki::cfg{WebPrefsTopicName} );
-    if( $user &&
-        !$this->{session}->{security}->checkAccessPermission
-        ( 'change', $user, $otext, $TWiki::cfg{WebPrefsTopicName}, $oldWeb )) {
-        throw TWiki::AccessControlException( 'CHANGE', $user,
-                                             $oldWeb, $TWiki::cfg{WebPrefsTopicName},
-                                             $this->{session}->{security}->getReason());
-    }
-
-    my @newParentPath=split(/\//,$newWeb);
-    pop(@newParentPath);
-    my $newParent=join("/",@newParentPath);
-    my $accessCheckWeb=$newParent;
-    my $accessCheckTopic=$TWiki::cfg{WebPrefsTopicName};
-
-    if( $newParent ne "" ) {
-      if(!$this->webExists($newParent)) {
-	$error=1;
-	return $error;
-      }
-      my ( $nmeta, $ntext ) = $this->readTopic( undef, $accessCheckWeb, $accessCheckTopic );
-      if( $user &&
-	  !$this->{session}->{security}->checkAccessPermission
-	  ( 'change', $user, $ntext, $accessCheckWeb, $accessCheckTopic )) {
-	  throw TWiki::AccessControlException( 'CHANGE', $user,
-					       $newParent, $accessCheckTopic,
-					     $this->{session}->{security}->getReason());
-      }
-    }
-    
     return $error;
 }
 
@@ -782,7 +724,7 @@ sub saveAttachment {
         ( 'change', $user, $text, $topic, $web )) {
 
         throw TWiki::AccessControlException( 'CHANGE', $user, $web, $topic,
-                                           $this->{session}->{security}->getReason());
+                                             $this->{session}->{security}->getReason());
     }
 
     if ( $opts->{file} ) {
@@ -827,7 +769,7 @@ sub saveAttachment {
 
     if( $opts->{createlink} ) {
         $text .= $this->{session}->{attach}->getAttachmentLink( $user, $web, $topic,
-                                                   $attachment, $meta );
+                                                                $attachment, $meta );
     }
 
     my $error = $this->saveTopic( $user, $web, $topic, $text, $meta, {} );
@@ -1190,13 +1132,13 @@ sub extractMetaData {
     if( ! $meta->count( 'TOPICINFO' ) ) {
         if ( $$rtext =~ /<!--TWikiAttachment-->/ ) {
             $$rtext = $this->{session}->{attach}->migrateToFileAttachmentMacro( $meta,
-                                                                   $$rtext );
+                                                                                $$rtext );
         }
 
         if ( $$rtext =~ /<!--TWikiCat-->/ ) {
             require TWiki::Compatibility;
             $$rtext = TWiki::Compatibility::upgradeCategoryTable( $this->{session}, $meta->web(), $meta->topic(),
-                                                         $meta, $$rtext );
+                                                                  $meta, $$rtext );
         }
     } elsif( $format eq '1.0beta' ) {
         # This format used live at DrKW for a few months
@@ -1246,9 +1188,9 @@ sub getTopicParent {
     open( IN_FILE, "<$filename" ) || return '';
     while( ( $line = <IN_FILE> ) ) {
         if( $line !~ /^%META:/ ) {
-           last;
+            last;
         } else {
-           $data .= $line;
+            $data .= $line;
         }
     }
     close( IN_FILE );
@@ -1387,29 +1329,19 @@ which may include one of:
 $filter may also contain the word 'public' which will further filter
 webs on whether NOSEARCHALL is specified for them or not.
 
+If $TWiki::cfg{EnableHierarchicalWebs} is set, will also list
+sub-webs recursively.
+
 =cut
 
 sub getListOfWebs {
     my( $this, $filter, $web ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     $filter ||= '';
+    $web ||= '';
+    $web =~ s#\.#/#g;
 
-    if( !defined $web ) {
-	$web="";
-    }
-
-    # A web is not a web unless it has a hometopic
-    my @webList = grep { $this->webExists( "$_" ) } 
-		    map { s/^\///o; $_ }
-		    map { "$web/$_" }
-		    $this->getSubWebs($web);
-    if($TWiki::cfg{enableHierarchicalWebs}==1) {
-        my @subWebs = @webList;
-	foreach my $subWeb ( @webList ) {
-	    push @subWebs, $this->getListOfWebs( $filter, "$subWeb" );
-	}
-	@webList=@subWebs;
-    }
+    my @webList = $this->_getSubWebs( $web );
 
     if ( $filter =~ /\buser\b/ ) {
         @webList = grep { !/(?:^_|\/_)/, } @webList;
@@ -1422,38 +1354,45 @@ sub getListOfWebs {
         @webList =
           grep {
               $_ eq $this->{session}->{webName} ||
-              !$prefs->getPreferencesValue( 'NOSEARCHALL', $_ )
-          } @webList;
+                !$prefs->getPreferencesValue( 'NOSEARCHALL', $_ )
+            } @webList;
     }
 
     return sort @webList;
 }
 
-sub getSubWebs {
-    my($this, $web) = @_ ;
-    
-    if( !defined $web ) {
-	$web="";
-    }
-    $web =~ s#\.#/#go;
+# get a list of directories within the named web directory. If hierarchical
+# webs are enabled, returns a deep list e.g. web, web/subweb,
+# web/subweb/subsubweb
+sub _getSubWebs {
+    my( $this, $web ) = @_ ;
 
-    #FIXME untaint web name?
-
-    # get list of all subwebs by scanning $dataDir
     opendir DIR, "$TWiki::cfg{DataDir}/$web" ;
     my @tmpList = readdir( DIR );
     closedir( DIR );
 
-    # this is not magic, it just looks like it.
-    my @webList = sort
-        grep { s#^.+/([^/]+)$#$1# }
-        grep { -d }
-        map  { "$TWiki::cfg{DataDir}/$web/$_" }
-        grep { ! /^\.\.?$/ } @tmpList;
+    my @webList;
+    if( $web ) {
+        # sub-web
+        @webList = sort
+          grep { $this->webExists( $_ ) } # filter dirs with no WebHome
+            map { $web.'/'.$_ }           # add hierarchical path
+              grep { ! /^\./ } @tmpList;  # remove all names starting with .
+    } else {
+        # root level (no parent web)
+        @webList = sort
+          grep { $this->webExists( $_ ) } # filter dirs with no WebHome
+            grep { ! /^\./ } @tmpList;  # remove all names starting with .
+    }
 
-    return @webList ;
+    if( $TWiki::cfg{EnableHierarchicalWebs} ) {
+        foreach my $subWeb ( @webList ) {
+            push( @webList, $this->_getSubWebs( $subWeb ));
+        }
+    }
+
+    return @webList;
 }
-#/AS
 
 =pod
 
@@ -1479,11 +1418,12 @@ sub createWeb {
     my ( $this, $user, $newWeb, $baseWeb, $opts ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user->isa('TWiki::User')) if DEBUG;
-    $newWeb =~ s#\.#/#go;
-    $baseWeb =~ s#\.#/#go;
 
     return 'Base web does not exist' if( defined( $baseWeb ) &&
                                          !$this->webExists( $baseWeb ));
+
+    $newWeb =~ s#\.#/#go;
+    $baseWeb =~ s#\.#/#go if $baseWeb;
 
     my $dir = TWiki::Sandbox::untaintUnchecked("$TWiki::cfg{DataDir}/$newWeb");
     umask( 0 );
@@ -1803,7 +1743,7 @@ sub searchMetaData {
     if ( $attrType eq 'parent' ) {
         my $attrTopic = $params->{topic} || '';
         $searchVal = "%META:TOPICPARENT[{].*name=\\\"($attrWeb\\.)?$attrTopic\\\".*[}]%";
-   } elsif ( $attrType eq 'topicmoved' ) {
+    } elsif ( $attrType eq 'topicmoved' ) {
         my $attrTopic = $params->{topic} || '';
         $searchVal = "%META:TOPICMOVED[{].*from=\\\"$attrWeb\.$attrTopic\\\".*[}]%";
     } else {

@@ -52,8 +52,4 @@ $cfg{DataDir} = '/home/httpd/twiki/data';
 # you override individual paths here.
 $cfg{LogDir} = $cfg{DataDir};
 
-# TWiki::Store will use this to determine if getListOfWebs will return 
-# subWeb names.
-$cfg{enableHierarchicalWebs}=1;
-
 1;

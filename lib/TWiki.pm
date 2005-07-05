@@ -2575,16 +2575,4 @@ sub _SCRIPTNAME {
     return '';
 }
 
-sub sysCmd {
-  my @cmd=@_;
-  my $tmp="@_";
-  $tmp =~ /(.*)/;
-  $tmp = $1;
-  open(CMD,"$tmp |");
-  my @results = <CMD>;
-  close(CMD);
-  return @results;
-}
-
-
 1;
