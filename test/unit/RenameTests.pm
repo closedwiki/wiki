@@ -102,7 +102,9 @@ sub check {
     my @new = split(/\n+/, $actual);
 
     while (scalar(@old)) {
-        $this->assert_str_equals("$num: ".shift(@old), "$num: ".shift(@new));
+        my $o = "$num: ".shift(@old);
+        my $n = "$num: ".shift(@new);
+        $this->assert_str_equals($o, $n, "$o $n ".join(",",caller));
     }
 }
 
@@ -235,10 +237,10 @@ $oldtopic 4
 10 [[$oldtopic][the text]]
 11 [[$oldtopic][the text]]
 12 $oldweb.$newtopic
-13 $newweb.$oldtopic
+13 $oldtopic
 14 $oldweb.OtherTopic
 15 $oldweb.OtherTopic
-16 $newweb.OtherTopic
+16 OtherTopic
 
 <verbatim>
 protected $oldweb.$oldtopic
