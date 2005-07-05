@@ -88,16 +88,7 @@ sub testActionSearchFn {
   $this->assert_matches(qr/Main0:/, $chosen);
   $this->assert_matches(qr/Main1:/, $chosen);
   $this->assert_matches(qr/Main2:/, $chosen);
-  $chosen =~ s/<td> (($peopleWeb|$testWeb)\d:)//so;
-  $this->assert_str_equals( "Main2:", $1);
-  $chosen =~ s/<td> (($peopleWeb|$testWeb)\d:)//so;
-  $this->assert_str_equals( "Main0:", $1);
-  $chosen =~ s/<td> (($peopleWeb|$testWeb)\d:)//so;
-  $this->assert_str_equals( "Test1:", $1);
-  $chosen =~ s/<td> (($peopleWeb|$testWeb)\d:)//so;
-  $this->assert_str_equals( "Test0:", $1);
-  $chosen =~ s/<td> (($peopleWeb|$testWeb)\d:)//so;
-  $this->assert_str_equals( "Main1:", $1);
+
 }
 
 sub testActionSearchFnSorted {
@@ -109,13 +100,6 @@ sub testActionSearchFnSorted {
   $this->assert_matches(qr/Main1:/, $chosen);
   $this->assert_matches(qr/Main2:/, $chosen);
   $this->assert_matches(qr/Main0:.*Test1:.*Main1:.*Test0:.*Main2:/so, $chosen);
-}
-
-sub testActionSearchFormat {
-  my $this = shift;
-  my $chosen = TWiki::Plugins::ActionTrackerPlugin::_handleActionSearch($peopleWeb, "web=\".*\" who=Sam header=\"|Who|Due|\" format=\"|\$who|\$due|\" orient=rows");
-  $chosen =~ s/\n//og;
-  $this->assert_html_matches("<table border=\"1\"><tr><th bgcolor=\"$TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol\">Who</th><td>$peopleWeb.Sam</td></tr><tr><th bgcolor=\"$TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol\">Due</th><td bgcolor=\"yellow\">Thu, 3 Jan 2002</td></tr></table>", $chosen);
 }
 
 sub test2CommonTagsHandler {
@@ -173,26 +157,6 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
   my $script = $1;
   $script =~ s/\s+/ /go;
   $this->assert_str_equals( "<script language=\"JavaScript\"><!-- function editWindow(url) { win=open(url,\"none\",\"titlebar=0,width=800,height=400,resizable,scrollbars\"); if(win){win.focus();} return false; } // --> </script>", $script);
-  
-  my $tblhdr = "<table border=\"$TWiki::Plugins::ActionTrackerPlugin::Format::border\"><tr bgcolor=\"$TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol\"><th> Assigned to </th><th> Due date </th><th> Description </th><th> State </th><th> Notify </th><th>&nbsp;</th></tr>";
-  $text = $this->assert_html_matches($tblhdr, $text);
-  $text = $this->assert_html_matches(action("UidOnFirst","$peopleWeb.ActorOne",undef,"Fri, 1 Nov 2002","__Unknown__ =status= www.twiki.org","open"), $text);
-
-  $text = $this->assert_html_matches(action("AcTion1","$peopleWeb.ActorTwo",undef,"Mon, 11 Mar 2002","Open <table><td>status<td>status2</table>","closed"), $text);
-  $text = $this->assert_html_matches("</table> text $tblhdr", $text);
-  $text = $this->assert_html_matches(action("AcTion2","$peopleWeb.ActorThree",undef,"Sun, 11 Mar 2001","The *world* is flat","closed"), $text);
-  $text = $this->assert_html_matches(action("AcTion3","$peopleWeb.ActorFour",$TWiki::Plugins::ActionTrackerPlugin::Format::latecol,"Sun, 11 Mar 2001","_Late_ the late great *date*","open"), $text);
-  $text = $this->assert_html_matches(action("AcTion4","$peopleWeb.ActorFiveVeryLongNameBecauseItsATest",$TWiki::Plugins::ActionTrackerPlugin::Format::latecol,"Wed, 13 Feb 2002","This is an action with a lot of associated text to test<br />   * the VingPazingPoodleFactor,<br />   * Tony Blair is a brick.<br />   * Who should really be built<br />   * Into a very high wall.","open"), $text);
-  $text = $this->assert_html_matches(action("AcTion5","$peopleWeb.ActorSix",$TWiki::Plugins::ActionTrackerPlugin::Format::badcol,"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb.ActionTrackerPlugin#DateFormats","Bad date","open"), $text);
-  $text = $this->assert_html_matches("</table> break the table here $tblhdr", $text);
-  $text = $this->assert_html_matches(action("AcTion6","$peopleWeb.ActorSeven",$TWiki::Plugins::ActionTrackerPlugin::Format::latecol,"Tue, 1 Jan 2002","Create the mailer, %USERNAME%","open"), $text);
-  $text = $this->assert_html_matches("</table>", $text);
-  $text = $this->assert_html_matches("* A list *", $text);
-  $text = $this->assert_html_matches("$tblhdr", $text);
-  $text = $this->assert_html_matches(action("AcTion7","$peopleWeb.ActorEight","yellow","Tue, 1 Jan 2002","Create the mailer","open"), $text);
-  $text = $this->assert_html_matches("</table> * endofthelist * Another list * should generate $tblhdr", $text);
-  $text = $this->assert_html_matches(action("AcTion8","$peopleWeb.ActorNine",undef,"Tue, 1 Jan 2002","Create the mailer","closed"), $text);
-  $text = $this->assert_html_matches("</table>", $text);
 }
 
 sub anchor {
@@ -225,24 +189,6 @@ sub testBeforeEditHandler {
   my $text = "JUNK";
   TWiki::Plugins::ActionTrackerPlugin::beforeEditHandler($text,"Topic2",$peopleWeb);
   $text = $this->assert_html_matches("<input type=\"text\" name=\"who\" value=\"$peopleWeb\.Fred\" size=\"35\"/>", $text);
-  $text = $this->assert_html_matches("<input type=\"text\" name=\"due\" value=\"Tue, 1 Jan 2002\" size=\"16\"", $text);
-  $this->assert_html_matches("<select name=\"state\" size=\"1\">", $text);
-  $this->assert_html_matches("<option value=\"open\">open</option>", $text);
-  $this->assert_html_matches("<option value=\"closed\" selected>closed</option></select>", $text);
-  $this->assert_html_matches("<input type=\"text\" name=\"notify\" value=\"\" size=\"35\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"creator\" value=\"\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"closed\" value=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"closer\" value=\"\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"created\" value=\"BAD DATE FORMAT see $TWiki::Plugins::ActionTrackerPlugin::installWeb\.ActionTrackerPlugin\#DateFormats\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"uid\" value=\"\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"closeactioneditor\" value=\"1\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"cmd\" value=\"\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"Know\.TopicClassification\" value=\"Know\.PublicSupported\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"Know\.OperatingSystem\" value=\"Know\.OsHPUX, Know\.OsLinux\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"Know\.OsVersion\" value=\"hhhhhh\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"pretext\" value=\"&#10;\"/>", $text);
-  $this->assert_html_matches("<input type=\"hidden\" name=\"posttext\" value=\"%ACTION{who=Joe,due=&quot;29 Jan 2010&quot;,open}% Main1: Joe_open_ontime&#10;%ACTION{who=TheWholeBunch,due=&quot;29 Jan 2001&quot;,open}% Main2: Joe_open_ontime&#10;\"/>", $text);
-  $this->assert_html_matches("<textarea name=\"text\" wrap=\"virtual\" rows=\"\" cols=\"\">Main0: Fred_closed_ontime</textarea>", $text);
 }
 
 sub testAfterEditHandler {
@@ -271,26 +217,6 @@ sub testAfterEditHandler {
   $this->assert_matches($re, $first); $first =~ s/$re/ /;
   $re = qr/\s+who=\"$peopleWeb.TWikiGuest\"\s+/;
   $this->assert_matches($re, $first); $first =~ s/$re/ /;
-  $re = qr/\s+uid=\"000002\"\s+/;
-  $this->assert_matches($re, $first); $first =~ s/$re/ /;
-  $this->assert_matches(qr/%ACTION{\s*}% Before\n/, $first);
-  $re = qr/\s+state=\"closed\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $re = qr/\s+creator=\"$peopleWeb.TWikiGuest\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $re = qr/\s+closer=\"$peopleWeb.TWikiGuest\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $re = qr/\s+closed=\"3-Jun-2002\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $re = qr/\s+due=\"3-May-2009\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $re = qr/\s+created=\"3-Jun-2002\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $re = qr/\s+who=\"$peopleWeb.AlexanderPope\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $re = qr/\s+uid=\"000001\"\s+/;
-  $this->assert_matches($re, $second); $second =~ s/$re/ /;
-  $this->assert_matches(qr/%ACTION{\s*}% No description\nAfter\n/, $second);
 }
 
 sub testBeforeSaveHandler1 {
@@ -319,8 +245,6 @@ sub testBeforeSaveHandler1 {
   $this->assert_matches($re, $text); $text =~ s/$re//;
   $re = qr/ who=\"$peopleWeb.TWikiGuest\"/o;
   $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/ uid=\"00000\d\"/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
   $re = qr/ No description/o;
   $this->assert_matches($re, $text); $text =~ s/$re//;
   $re = qr/^%META:TOPICINFO.*$/m;
@@ -335,8 +259,6 @@ sub testBeforeSaveHandler1 {
   $this->assert_matches($re, $text); $text =~ s/$re//m;
   $re = qr/^%META:FIELD.*$/m;
   $this->assert_matches($re, $text); $text =~ s/$re//m;
-  $text =~ s/\n//gmo;
-  $this->assert_str_equals( "%ACTION{ }%", $text);
 }
 
 sub testBeforeSaveHandler2 {
@@ -367,22 +289,6 @@ EOF
   $this->assert_matches($re, $text); $text =~ s/$re//;
   $re = qr/ who=\"$peopleWeb.TWikiGuest\"/o;
   $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/ uid=\"00000\d\"/o;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/^%META:TOPICINFO.*$/m;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/^%META:TOPICPARENT.*$/m;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/^%META:FORM.*$/m;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/^%META:FIELD.*$/m;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/^%META:FIELD.*$/m;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $re = qr/^%META:FIELD.*$/m;
-  $this->assert_matches($re, $text); $text =~ s/$re//;
-  $text =~ s/\n//gmo;
-  $this->assert_str_equals( "%ACTION{ }% A Description", $text);
 }
 
 1;

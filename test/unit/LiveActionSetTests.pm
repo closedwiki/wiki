@@ -10,8 +10,9 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 use Time::ParseDate;
 use CGI;
 
-my $usersWeb = "TemporaryActionTrackerTestUsersWeb";
-my $testWeb = "TemporaryActionTrackerTestTopicsWeb";
+my $bit = time();
+my $usersWeb = "TemporaryActionTrackerTest${bit}Users";
+my $testWeb = "TemporaryActionTracker${bit}TestTopicsWeb";
 my $twiki;
 
 sub new {
@@ -32,7 +33,7 @@ sub set_up {
     $twiki->{store}->createWeb($twiki->{user},$usersWeb);
     $twiki->{store}->createWeb($twiki->{user},$testWeb);
 
-    TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");
+    TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("3 Jan 2002");
 
     my $meta = new TWiki::Meta($twiki,$testWeb,"WhoCares");
 
@@ -41,7 +42,7 @@ sub set_up {
                                 $meta, { forcenewrevision=>1 });
 
     $twiki->{store}->saveTopic( $user, $testWeb, "Topic2","
-%ACTION{who=A,due=\"1 Jan 02\",open}% Test_Topic2_A_open_late
+%ACTION{who=A,due=\"2 Jan 02\",open}% Test_Topic2_A_open_late
 ", $meta, { forcenewrevision=>1 });
 
     $twiki->{store}->saveTopic( $user, $testWeb, "WebNotify","
@@ -100,10 +101,10 @@ sub test_GetAllInTest {
 
 sub test_GetAllInAllWebs {
   my $this = shift;
-  my $attrs = TWiki::Attrs->new("web=\".*\"");
-  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("$usersWeb", $attrs);
+  my $attrs = TWiki::Attrs->new('web=".*"', 1);
+  my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs($usersWeb, $attrs);
   $actions->sort();
-  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", '$text');
   my $chosen = $actions->formatAsString($fmt);
   
   $this->assert_matches(qr/Test_Topic1_C_open_ontime/o, $chosen);
@@ -111,7 +112,7 @@ sub test_GetAllInAllWebs {
   $this->assert_matches(qr/Main_Topic2_A_closed_ontime/o, $chosen);
   $this->assert_matches(qr/Main_Topic2_B_open_ontime/o, $chosen);
   $this->assert_matches(qr/Main_Topic2_E_open_ontime/o, $chosen);
-  
+
   # Make sure they are sorted correctly
   #%ACTION{who=E,due=\"29 Jan 2001\",open}% Main_Topic2_E_open_ontime");
   #%ACTION{who=A,due=\"1 Jan 02\",open}% Test_Topic2_A_open_late");
@@ -127,14 +128,14 @@ sub test_SortAllWebs {
   my $attrs = TWiki::Attrs->new("web=\".*\"");
   my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("$usersWeb", $attrs);
   $actions->sort("who,state");
-  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
+  my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", '$who $state $text');
   my $chosen = $actions->formatAsString($fmt);
-  $this->assert_matches(qr/Main_Topic2_A_closed_ontime.*Test_Topic2_A_open_late.*Main_Topic2_B_open_ontime.*Test_Topic1_C_open_ontime.*Main_Topic2_E_open_ontime/so, $chosen);
+  $this->assert_matches(qr/Test_Topic2_A_open_late.*Main_Topic2_B_open_ontime.*Main_Topic2_E_open_ontime.*Main_Topic2_A_closed_ontime.*Test_Topic1_C_open_ontime/so, $chosen);
 }
 
 sub test_AllInTestWebRE {
   my $this = shift;
-  my $attrs = TWiki::Attrs->new("web=\"T.*\"");
+  my $attrs = TWiki::Attrs->new('web=".*'.$testWeb.'.*"',1);
   my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("$usersWeb", $attrs);
   my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -148,7 +149,8 @@ sub test_AllInTestWebRE {
 
 sub test_AllInMainWebRE {
   my $this = shift;
-  my $attrs = TWiki::Attrs->new("web=\".*ain\"");
+
+  my $attrs = TWiki::Attrs->new('web=".*'.$bit.'Users"');
   my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("$usersWeb", $attrs);
   my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -162,7 +164,7 @@ sub test_AllInMainWebRE {
 
 sub test_AllTopicRE {
   my $this = shift;
-  my $attrs = TWiki::Attrs->new("web=$testWeb topic=\".*2\"");
+  my $attrs = TWiki::Attrs->new("web=$testWeb topic=\".*2\"",1);
   my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("$testWeb", $attrs);
   my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
@@ -175,7 +177,7 @@ sub test_AllTopicRE {
 
 sub test_AllWebsTopicRE {
   my $this = shift;
-  my $attrs = TWiki::Attrs->new("web=\".*\",topic=\".*2\"");
+  my $attrs = TWiki::Attrs->new("web=\".*\",topic=\".*2\"",1);
   my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs("$usersWeb", $attrs);
   my $fmt = new TWiki::Plugins::ActionTrackerPlugin::Format("", "", "", "\$text");
   my $chosen = $actions->formatAsString($fmt);
