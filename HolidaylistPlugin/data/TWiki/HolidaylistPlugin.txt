@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1120579319" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="rohdedan" date="1120579379" format="1.0" version="1.19"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -170,9 +170,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.010 (beta) |
+|  Plugin Version: | v1.010 (5 Jul 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.010 (beta): | added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation (TWiki:Main.DanielRohde) |
+|  v1.010 (5 Jul 2005): | added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation (TWiki:Main.DanielRohde) |
 |  v1.009 (29 Jun 2005): | fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering (TWiki:Main.DanielRohde) |
 |  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute (TWiki:Main.DanielRohde) |
 |  v1.007 (17 Jun 2005):  | personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug (TWiki:Main.DanielRohde) |
