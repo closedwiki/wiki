@@ -14,15 +14,15 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
-use strict;
-use integer;
-
-use TWiki::Func;
-
-use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # Perl object that represents a set of actions.
 package TWiki::Plugins::ActionTrackerPlugin::ActionSet;
+
+use strict;
+use integer;
+use TWiki::Func;
+
+use TWiki::Plugins::ActionTrackerPlugin::Format;
 
 # PUBLIC constructor
 sub new {
@@ -107,12 +107,16 @@ sub sort {
                 # COVERAGE ON
             }
             # default to sorting on due
-            ($a->{due}||0) <=> ($b->{due}||0);
+            $a->{due} ||= 0;
+            $b->{due} ||= 0;
+            $a->{due} <=> $b->{due};
         } @{$this->{ACTIONS}};
     } else {
         @{$this->{ACTIONS}} =
           sort {
-              ($a->{due}||0) <=> ($b->{due}||0)
+              $a->{due} ||= 0;
+              $b->{due} ||= 0;
+              $a->{due} <=> $b->{due}
           } @{$this->{ACTIONS}};
     }
 }
@@ -253,6 +257,7 @@ sub allActionsInWeb {
     my $actions = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
 	my @tops = TWiki::Func::getTopicList( $web );
 	my $topics = $attrs->{topic};
+
 	@tops = grep( /^$topics$/, @tops ) if ( $topics );
 
     my $grep =
@@ -264,8 +269,8 @@ sub allActionsInWeb {
 
     foreach my $topic ( keys %$grep ) {
         my $text = TWiki::Func::readTopicText( $web, $topic, undef, $internal );
-        my $tacts = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load
-          ( $web, $topic, $text );
+        my $tacts = TWiki::Plugins::ActionTrackerPlugin::ActionSet::load(
+            $web, $topic, $text );
         $tacts = $tacts->search( $attrs );
         $actions->concat( $tacts );
     }

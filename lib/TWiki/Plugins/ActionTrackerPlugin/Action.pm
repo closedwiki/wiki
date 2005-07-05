@@ -395,7 +395,7 @@ sub getAnchor {
 sub formatTime {
     my ( $time, $format ) = @_;
     my $stime;
-    if ( defined $time ) {
+    if ( $time ) {
         if ( $format eq 'attr' ) {
             $stime = localtime( $time );
             $stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$3-$2-$5/o;

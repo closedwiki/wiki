@@ -353,7 +353,12 @@ sub _composeActionsMail {
         $text =~ s/%ACTIONS%.*?%END%//gso;
     }
 
-    $since = '' unless ( $since );
+    if( $since ) {
+        $since = TWiki::Func::formatTime( $since );
+    } else {
+        $since = '';
+    }
+
     $text =~ s/%SINCE%/$since/go;
     if ( $changesString ne '' ) {
         $text =~ s/%CHANGES_AS_STRING%/$changesString/go;
@@ -405,7 +410,6 @@ sub _findChangesInTopic {
     my $currentActions =
       TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $theWeb,
                                                             $theTopic, $text );
-
     # find actions that have changed between the two dates. These
     # are added as text to a hash keyed on the names of people
     # interested in notification of that action.
