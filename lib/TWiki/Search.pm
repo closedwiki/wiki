@@ -85,7 +85,7 @@ sub _filterSearchString {
     #$this->{session}->writeDebug("useFilterIn = $useFilterIn");
 
     ########################################################################
-    # SMELL: commented out useless condition; $langAlphabetic was alway 1, #
+    # SMELL: commented out useless condition; $langAlphabetic was always 1,#
     # and is now removed from TWiki.pm. What was this supposed to do?      #
     ########################################################################
     # Non-alphabetic language sites (e.g. Japanese and Chinese) cannot use
