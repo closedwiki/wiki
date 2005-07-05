@@ -181,6 +181,11 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set DS_QUICKLINKSHEADING = 
 	* Quicklinks submenu:
 		* Set DS_QUICKLINKS = 
+		
+---+++ Skin icons
+
+	* #Set ICONTOPIC = TWiki.TWikiDocGraphics
+	* Set ICONTOPIC = TWiki.TWikiDocGraphicsPattern
 
 ---+++ Legacy support
    * Support for legacy "EDITTOPIC", now replaced by TMPL:P conditional instantiation
@@ -258,18 +263,18 @@ If you need to specify the plugin execution sequence, then manually list the plu
 </verbatim>
 
 #DocGraphics
-	* Graphics used in TWiki documentation - view all images in %TWIKIWEB%.TWikiDocGraphics. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
-		* Set H = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="HELP" width="16" height="16" />
-		* Set I = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="IDEA!" width="16" height="16" />
-		* Set M = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/arrowright.gif" border="0" alt="MOVED TO..." width="16" height="16" />
-		* Set N = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/new.gif" border="0" alt="NEW" width="28" height="8" />
-		* Set P = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/pencil.gif" border="0" alt="REFACTOR" width="16" height="16" />
-		* Set Q = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif" border="0" alt="QUESTION?" width="16" height="16" />
-		* Set S = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/starred.gif" border="0" alt="PICK" width="16" height="16" />
-		* Set T = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/tip.gif" border="0" alt="TIP" width="16" height="16" />
-		* Set U = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/updated.gif" border="0" alt="UPDATED" width="56" height="8" />
-		* Set X = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/warning.gif" border="0" alt="ALERT!" width="16" height="16" />
-		* Set Y = <img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/choice-yes.gif" border="0" alt="DONE" width="16" height="16" />
+	* Graphics used in TWiki documentation - view all images in %ICONTOPIC%. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
+		* Set H = %ICON{"help"}%
+		* Set I = %ICON{"tip"}%
+		* Set M = %ICON{"arrowright"}%
+		* Set N = %ICON{"new"}%
+		* Set P = %ICON{"pencil"}%
+		* Set Q = %ICON{"help"}%
+		* Set S = %ICON{"starred"}%
+		* Set T = %ICON{"tip"}%
+		* Set U = %ICON{"updated"}%
+		* Set X = %ICON{"warning"}%
+		* Set Y = %ICON{"choice-yes"}%
 
 	* Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
 		* Set NEWTOPICBGCOLOR = #FFFFCE
