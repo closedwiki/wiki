@@ -84,15 +84,19 @@ sub _filterSearchString {
     #$this->{session}->writeDebug("unsafePlatform = $unsafePlatform");
     #$this->{session}->writeDebug("useFilterIn = $useFilterIn");
 
+    ########################################################################
+    # SMELL: commented out useless condition; $langAlphabetic was alway 1, #
+    # and is now removed from TWiki.pm. What was this supposed to do?      #
+    ########################################################################
     # Non-alphabetic language sites (e.g. Japanese and Chinese) cannot use
     # filtering-in and must use safe pipes, since TWiki does not currently
     # support Unicode, required for filtering-in.  Alphabetic languages such
     # as English, French, Russian, Greek and most European languages are
     # handled by filtering-in.
-    if ( not $TWiki::langAlphabetic and $unsafePlatform ) {
-        # Best option is to upgrade Perl.
-        die "You are using a non-alphabetic language on a non-safe-pipes platform.  This is a serious SECURITY RISK,\nso TWiki cannot be used as it is currently installed - please\nread TWiki:Codev/SafePipes for options to avoid or remove this risk.";
-    }
+    #if ( not $TWiki::langAlphabetic and $unsafePlatform ) {
+    #    # Best option is to upgrade Perl.
+    #    die "You are using a non-alphabetic language on a non-safe-pipes platform.  This is a serious SECURITY RISK,\nso TWiki cannot be used as it is currently installed - please\nread TWiki:Codev/SafePipes for options to avoid or remove this risk.";
+    #}
 
     my $mixedAlphaNum = $TWiki::regex{mixedAlphaNum};
 
