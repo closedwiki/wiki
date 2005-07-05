@@ -1,10 +1,20 @@
-head	1.17;
+head	1.19;
 access;
 symbols;
 locks
-	webserv:1.17; strict;
+	webserv:1.19; strict;
 comment	@# @;
 
+
+1.19
+date	2005.07.05.16.01.59;	author rohdedan;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2005.07.01.09.00.02;	author rohdedan;	state Exp;
+branches;
+next	1.17;
 
 1.17
 date	2005.06.29.11.14.59;	author rohdedan;	state Exp;
@@ -97,29 +107,29 @@ desc
 @
 
 
-1.17
+1.19
 log
 @none
 @
 text
-@%META:TOPICINFO{author="rohdedan" date="1120043699" format="1.0" version="1.17"}%
+@%META:TOPICINFO{author="rohdedan" date="1120579319" format="1.0" version="1.19"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
 
 The !HolidaylistPlugin handles the tag %<nop>HOLIDAYLIST</nop>% that inserts a vacation list on the current page. Smilies are used to indicate if a person is in work or on holiday. 
 
-The plugin creates a table filled with Smilies and today's date will be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: ( a day off) or 8-) (absent for some time), :-I (not at work; used if you type a location). You can also use other smilies (like :skull:).
+The plugin creates a table filled with Smilies and today's date will be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: (a day off) or 8-) (absent for some time), :-I (not at work; used if you type a location). You can also use other smilies (like :skull:).
 
 *Example (image):*
 
 <img src="%ATTACHURLPATH%/example.gif" alt="Example" title="Example" width="779" height="172"  />
 
----++ Syntax Rules
-The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin for more details.
+---++ Usage Examples
 
 To insert vacations into the table, create a bullet list. Three spaces and then a *.
 
+The syntax is described below ([[#SyntaX][Syntax]]).
 
 Example1: To list that John will be away on 1-July-2005
 <verbatim>
@@ -139,18 +149,43 @@ Example4: To list that Eve will be ill from 12-Sep - 20-Sep 2005  with her's own
 <verbatim>
 	* 12 Sep 2005 - 20 Sep 2005 - Eve - is ill - :scull:
 </verbatim>
+Example5: To list that Lisa will by not at work from April to June and the complete December 2005:
+<verbatim>
+	* Apr 2005 - Jun 2005 - Lisa
+	* Dec 2005 - Lisa
+</verbatim>
 
-Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =days= (defaults to 30days) and =tablecaption= (defaults to null). 
+Example6: There are several attributes (see [[#AttriButes][Attributes]]) like =days= (defaults to 30days) and =tablecaption= (defaults to null). 
 
 =%<nop>HOLIDAYLIST{days="90" tablecaption="Planned Holidays"}</nop>%=
 
+#SyntaX
+---++ Syntax
+The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin for more details.
+
+
+
+| *Entry type* | *Syntax* | *Example* |
+| Single entry | ==&nbsp;* dd MMM yyyy - name== | ==&nbsp;* 01 Jul 2005 - Jane== |
+|^| ==&nbsp;* dd MMM yyyy - name - location== | ==&nbsp;* 01 Jul 2005 - Sarah - in Paris== |
+|^| ==&nbsp;* dd MMM yyyy - name - location - icon== | ==&nbsp;* 01 Jul 2005 - Eve - ill - :scull:== |
+| Interval entry | ==&nbsp;* dd MMM yyyy - dd MMM yyyy - name== | ==&nbsp;* 01 Aug 2005 - 22 Aug 2005 - !EvaMaria== |
+|^| ==&nbsp;* dd MMM yyyy - dd MMM yyyy - name - location== | ==&nbsp;* 02 Sep 2005 - 10 Sep 2005 - !JohnDo - in London== |
+|^| ==&nbsp;* dd MMM yyyy - dd MMM yyyy - name - location - icon== | ==&nbsp;* 02 Oct 2005 - 22 Oct 2005 - Fred - is ill - :scull:== |
+|^| ==&nbsp;* MMM yyyy - name== | ==&nbsp;* May 2005 - Carl== |
+|^| ==&nbsp;* MMM yyyy - name - location== | ==&nbsp;* Jun 2005 - Sam - in Sidney== | 
+|^| ==&nbsp;* MMM yyyy - name - location - icon== | ==&nbsp;* Nov 2005 - Lisa - is ill for a complete month - :scull:== |
+|^| ==&nbsp;* MMM yyyy - MMM yyyy - name== | ==&nbsp;* Jun 2005 - Jul 2005 - Lily== |
+|^| ==&nbsp;* MMM yyyy - MMM yyyy - name -location== | ==&nbsp;* Feb 2005 - Apr 2005 - Lisa - is not at work==|
+|^| ==&nbsp;* MMM yyyy - MMM yyyy - name - location - icon==| ==&nbsp;* Nov 2005 - Dec 2005 - Lola - is 2 month not at work - :yes:== |
+| Exception | insert the following before the name field and after a date (range): \
+  ==&nbsp;X { dd MMM yyyy, dd MMM yyy - dd MMM yyyy }== | ==&nbsp;* Dec 2005 X { 5 Dec 2005 - 7 Dec 2005, 12 Dec 2005 } - Sarah - will be away for the complete december except between 5 Dec and 7 Dec and on 12 Dec 2005== |
 
 
 *Note:*
 	* At least one space character have to stay before and after a seperator ('-'). This allows you to use a '-' in names, locations or icons,
 	  e.g. if you have a composite name like Eva-Maria.
-
-
+	* If you enable the compatmode (see [[#AttriButes][Attributes]]) you can use all event types of the TWiki:Plugins.CalendarPlugin
 
 
 #AttriButes
@@ -161,6 +196,8 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 | border | table border | border="1" |
 | cellpadding | table cell padding | cellpadding="1" |
 | cellspacing | tabel cell spacing | cellspacing="0" |
+| compatmode  | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported | compatmode="0" |
+| compatmodeicon | icon used for TWiki:Plugins.CalendarPlugin event types (only used if compatmode is enabled) | compatmodeicon="8-)" |
 | days | number of days to show |days="30" |
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
 | holidayicon | holiday icon | holidayicon="8-)" |
@@ -185,7 +222,7 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 | year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +1, -1, ...) | year="0" |
 
 *Hints:* 
-	* You can use TWiki.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon
+	* You can use TWiki.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon, compatmodeicon
 	* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
 ---++ Example
@@ -224,6 +261,10 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 
 	* Set work icon (default: &amp;nbsp; - old behavior: <verbatim>:mad:</verbatim>):
 		* # Set WORKICON = :mad:
+
+	* Set compatibility mode (default: 0; disables all TWiki:Plugins.CalendarPlugin event types) and icon (default: <verbatim>8-)</verbatim>)
+		* # Set COMPATMODE = 1
+		* # Set COMPATMODEICON = 8-)
   
 *Note:* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
@@ -243,8 +284,9 @@ Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =d
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.009 (29 Jun 2005) |
+|  Plugin Version: | v1.010 (beta) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.010 (beta): | added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation (TWiki:Main.DanielRohde) |
 |  v1.009 (29 Jun 2005): | fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering (TWiki:Main.DanielRohde) |
 |  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute (TWiki:Main.DanielRohde) |
 |  v1.007 (17 Jun 2005):  | personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug (TWiki:Main.DanielRohde) |
@@ -270,6 +312,59 @@ __Related Topics:__ %TWIKIWEB%.SmiliesPlugin, %TWIKIWEB%.TWikiPlugins, TWiki:Plu
  
 
 %META:FILEATTACHMENT{name="example.gif" attr="h" comment="Example" date="1119006048" path="example.gif" size="15447" user="rohdedan" version="1.1"}%
+@
+
+
+1.18
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="rohdedan" date="1120208402" format="1.0" version="1.18"}%
+d67 2
+d74 1
+a74 1
+
+d85 2
+d111 1
+a111 1
+	* You can use TWiki.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon
+d150 4
+d175 1
+a175 1
+|  v1.010 (beta): | documentation (TWiki:Main.DanielRohde) |
+@
+
+
+1.17
+log
+@none
+@
+text
+@d1 1
+a1 1
+%META:TOPICINFO{author="rohdedan" date="1120043699" format="1.0" version="1.17"}%
+d8 1
+a8 1
+The plugin creates a table filled with Smilies and today's date will be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: ( a day off) or 8-) (absent for some time), :-I (not at work; used if you type a location). You can also use other smilies (like :skull:).
+d14 1
+a14 2
+---++ Syntax Rules
+The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin for more details.
+d18 1
+d38 5
+d44 1
+a44 1
+Example5: There are several attributes (see [[#AttriButes][Attributes]]) like =days= (defaults to 30days) and =tablecaption= (defaults to null). 
+d48 19
+a74 1
+
+d165 1
+a165 1
+|  Plugin Version: | v1.009 (29 Jun 2005) |
+d167 1
 @
 
 
