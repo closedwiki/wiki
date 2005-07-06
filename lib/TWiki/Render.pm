@@ -353,6 +353,9 @@ sub makeAnchorName {
 	return substr($anchorName, 1);
     }
 
+    $anchorName =~ s/\s*\[\s*\[.*?\]\s*\[(.*?)\]\s*\]/$1/og; # remove double bracket link 
+    $anchorName =~ s/\s*\[\s*\[\s*(.*?)\s*\]\s*\]/$1/og; # remove double bracket link
+
     if ( $compatibilityMode ) {
 	# remove leading/trailing underscores first, allowing them to be
 	# reintroduced
