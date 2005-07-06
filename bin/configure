@@ -228,35 +228,72 @@ sub _makeAnchor {
 # GNU tools in any case (installed for TWiki since there's no built-in
 # diff, grep, patch, etc), we only check for these tools on Unix/Linux
 # and Cygwin.
-sub _checkGnuVersion {
-    my $ok = 0;
+sub _checkGnuProgram {
+    my $prog = shift;
+    my $n = '';
 
-    my ($progExecString, $progReadableName, $progUsage) = @_;        # Usage is 'used for...' string
-
-    if( $TWiki::cfg{OS} eq 'UNIX' or  ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {		
-        $progExecString =~ s/\s.*$//;
-        my $diffOut = `$progExecString --version 2>&1` || "";
+    if( $TWiki::cfg{OS} eq 'UNIX' ||
+          $TWiki::cfg{OS} eq 'WINDOWS' && $perltype eq 'Cygwin' ) {
+        $prog =~ s/^\s*(\S+)\s.*$/$1/;
+        my $diffOut = `$prog --version 2>&1` || "";
         my $notFound = ( $? == -1 );
-        my $n;
         if( $notFound ) {
-            $n = WARN("'$progReadableName' program was not found on the",
+            $n = WARN("'$prog' program was not found on the",
                       "current PATH.");
         } elsif ( $diffOut !~ /\bGNU\b/ ) {
             # Program found on path, complain if no GNU in version output
-            $n = WARN("'$progReadableName' program was found on the PATH",
-                      "but is not GNU $progReadableName - this may cause",
+            $n = WARN("'$prog' program was found on the PATH",
+                      "but is not GNU $prog - this may cause",
                       "problems. $diffOut");
         } else {
-            $n = "GNU $progReadableName was found on the PATH -".
-              " this is the recommended $progReadableName tool.";
-            $ok = 1;
+            $diffOut =~ /(\d+(\.\d+)+)/;
+            $n = "($prog is version $1).";
         }
-
-        return _setting($progReadableName, $n,
-                        NOTE("The '$progReadableName' command is $progUsage."));
     }
 
-    return '';
+    return $n;
+}
+
+sub _checkRCSProgram {
+    my $key = shift;
+
+    return 'Not used in this configuration.'
+      unless $TWiki::cfg{StoreImpl} eq 'RcsWrap';
+    my $mess = '';
+    my $err = '';
+    my $prog = $TWiki::cfg{RCS}{$key} || '';
+    $prog =~ s/^\s*(\S+)\s.*$/$1/;
+    if( !$prog ) {
+        $err .= $key.' is not set';
+    } else {
+        my $version = `$prog -V` || '';
+        if( $@ ) {
+            $err .= ERROR($prog.' returned an error: '.$@ );
+        } elsif ( $version ne '' ) {
+            $version =~ /(\d+(\.\d+)+)/;
+            $version = $1;
+            $mess .= " ($prog is version $version)";
+        } else {
+            $err .= ERROR($prog.' did not return a version number (or might not exist..)');
+        }
+        if( defined( $cygwinRcsVerNum )) {
+            $mess .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)";
+        }
+        if( $version && $version < $rcsverRequired ) {
+            # RCS too old
+            $err .= $prog.' is too old, upgrade to version '.
+              $rcsverRequired.' or higher.';
+        }
+    }
+    if( $err ) {
+        $mess .= ERROR( $err .<<HERE
+TWiki will probably not work with this RCS setup. Either correct the setup, or
+switch to RcsLite. To enable RCSLite you need to change the setting of
+{StoreImpl} to 'RcsLite'.
+HERE
+                       );
+    }
+    return $mess;
 }
 
 sub _checkBinDir {
@@ -785,44 +822,31 @@ sub _CHECKVAR_ScriptSuffix {
     return '';
 }
 
+sub _CHECKVAR_RCS_EgrepCmd { return _checkGnuProgram($TWiki::cfg{RCS}{EgrepCmd}); }
+sub _CHECKVAR_RCS_FgrepCmd { return _checkGnuProgram($TWiki::cfg{RCS}{FgrepCmd}); }
+sub _CHECKVAR_RCS_initTextCmd { return _checkRCSProgram('initTextCmd'); }
+sub _CHECKVAR_RCS_initBinaryCmd { return _checkRCSProgram('initBinaryCmd'); }
+sub _CHECKVAR_RCS_tmpBinaryCmd { return _checkRCSProgram('tmpBinaryCmd'); }
+sub _CHECKVAR_RCS_ciCmd { return _checkRCSProgram('ciCmd'); }
+sub _CHECKVAR_RCS_ciDateCmd { return _checkRCSProgram('ciDateCmd'); }
+sub _CHECKVAR_RCS_coCmd { return _checkRCSProgram('coCmd'); }
+sub _CHECKVAR_RCS_histCmd { return _checkRCSProgram('histCmd'); }
+sub _CHECKVAR_RCS_infoCmd { return _checkRCSProgram('infoCmd'); }
+sub _CHECKVAR_RCS_rlogDateCmd { return _checkRCSProgram('rlogDateCmd'); }
+sub _CHECKVAR_RCS_diffCmd { return _checkRCSProgram('diffCmd'); }
+sub _CHECKVAR_RCS_lockCmd { return _checkRCSProgram('lockCmd'); }
+sub _CHECKVAR_RCS_unlockCmd { return _checkRCSProgram('unlockCmd'); }
+sub _CHECKVAR_RCS_delRevCmd { return _checkRCSProgram('delRevCmd'); }
+
 sub _CHECKVAR_StoreImpl {
-    my $bad = '';
+    my $mess = '';
     if( $TWiki::cfg{StoreImpl} eq 'RcsWrap') {
-        foreach my $key( %{$TWiki::cfg{RCS}} ) {
-            if ( $key && $key =~ /Cmd$/ ) {
-                my $proggy = $TWiki::cfg{RCS}{$key} || "";
-                $proggy =~ s/\s.*$//;
-                if( $proggy ) {
-                    my $version = `$proggy -V` || '';
-		    if ( $version ne '' ) {
-                        $version =~ /(\d+(\.\d+)+)/;
-                        $version = $1;
-                        $proggy .= " (version $version)";
-		    } else {
-			$bad .= ERROR($proggy.' did not return a version number. (or might not exist..)');
-		    }
-                    if( defined( $cygwinRcsVerNum )) {
-                        $proggy .= " (Cygwin package <tt>rcs-$cygwinRcsVerNum</tt>)";
-                    }
-                    if( $proggy =~ /\/(rcs|rlog|rcsdiff|co)\b$/ &&
-                        $version && $version < $rcsverRequired ) {
-                        # RCS too old
-                        $bad .= ERROR($proggy.' is too old, upgrade to version $rcsverRequired or higher.');
-                    }
-                }
-            }
-        }
+        # Check that GNU diff is found in PATH; used by rcsdiff
+        $mess .= NOTE( "Note: The 'diff' program found on the path is used by RcsWrap to compare revisions ".
+                         _checkGnuProgram( "diff"));
     }
 
-    if( $bad ) {
-        $bad .= <<HERE;
-TWiki will not work with this RCS setup. Either correct the setup, or
-switch to RcsLite. To enable RCSLite you need to change the setting of
-{StoreImpl} to 'RcsLite'.
-HERE
-        return $bad;
-    }
-    return '';
+    return $mess;
 };
 
 # Generates the appropriate HTML for getting a value to configure the
@@ -1413,32 +1437,10 @@ standard path..
 HERE
                   ));
 
-    
-    # Check that GNU egrep is found in PATH
-    my $egrepBad = _checkGnuVersion( $TWiki::cfg{RCS}{EgrepCmd}, "egrep",
-                                     "used for regular expression searches" );
-
-    # Check that GNU fgrep is found in PATH
-    my $fgrepBad = _checkGnuVersion( $TWiki::cfg{RCS}{FgrepCmd}, "fgrep",
-                                     "used for non-regular expression searches" );
-
-    if( $egrepBad || $fgrepBad ) {
-        $block .= $egrepBad . $fgrepBad;
-        $block .= _setting('',  NOTE( <<'HERE'
-<a href="http://www.gnu.org/software/grep/grep.html" >grep</a> can be
-downloaded from <a href="http://www.gnu.org/">GNU</a>s
-<a href="ftp://ftp.gnu.org/pub/gnu/grep/" >FTP</a> site
-HERE
-                                    ));
-    }
-
-    # Check that GNU diff is found in PATH
-    $block .= _checkGnuVersion( "diff", "diff",
-                                "used by RCS to compare files" );
-
     # Check that GNU patch is found in PATH 
-    $block .= _checkGnuVersion( "patch", "patch",
-                                "used by the UpgradeTwiki script to upgrade an existing TWiki installation" );
+    $block .= _setting(
+        "patch", _checkGnuProgram( "patch" ).
+          NOTE('It is used by the UpgradeTwiki script to upgrade an existing TWiki installation' ));
 
     # PERL5SHELL check for non-Cygwin Perl on Windows only
     if( $TWiki::cfg{OS} eq 'WINDOWS' && $perltype ne 'Cygwin' ) {
