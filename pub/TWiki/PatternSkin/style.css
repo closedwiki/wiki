@@ -98,7 +98,7 @@ h2 {
 	display:block;
 	background-color:#F3EDE7; /*C8*/
 	padding:0.2em 0.7em;
-	margin:1em -0.7em 0.15em -0.7em;
+	margin:1em -0.7em 0.35em -0.7em;
 	height:auto;
 }
 h3 { font-size:140%;}
@@ -503,11 +503,9 @@ html>body .twikiLeftBar li a {
 	text-align:center;
 }
 .twikiAttachments p,
-/* Commented out because it shrinks form data fields to one line! See Item17
 .twikiForm p {
 	display:none;
 }
-*/
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
 .twikiForm th a:link,
