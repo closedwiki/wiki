@@ -154,8 +154,8 @@ sub diff {
 sub _rexeq {
     my ( $a, $b ) = @_;
 
-    my @res;
-    while ( $a =~ s/\@REX\((.*?)\)/!REX@res!/ ) {
+    my @res = ();
+    while ( $a =~ s/\@REX\((.*?)\)/"!REX".scalar(@res)."!"/e ) {
         push( @res, $1 );
     }
     # escape regular expression chars
@@ -169,7 +169,6 @@ sub _rexeq {
     $a =~ s/\@WIKINAME/($satWord|$unsatWord)/og;
     $a =~ s/!REX(\d+)!/$res[$1]/g;
     $a =~ s!/!\/!g;
-
     return $b =~ /^$a$/;
 }
 

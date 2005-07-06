@@ -59,7 +59,7 @@ Same as last test
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WebPreferences"><b>WebPreferences</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 @WIKINAME</div>
-<div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="/DEVELOP/bin/rdiff/TestCases/WebPreferences" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
+<div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WebPreferences" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WebPreferences"><b>WebPreferences</b></a> </div>
@@ -258,16 +258,16 @@ Same as last test
 %SEARCH{ "Rhythm" web="TestCases" nosummary="on" nosearch="on" noheader="on" nototal="on" casesensitive="on" }%
 <!-- /actual -->
 
-<!-- expected rex -->
+<!-- expected rex NOOPED -->
 NOOPED vars shouldn't expand in search results %DATE%
 <div class="twikiSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft">
-<a href="/DEVELOP/bin/view/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a></div>
+<a href="@REX(.*?)view@REX(.*?)/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a></div>
 <div class="twikiRight twikiSRAuthor">
 @WIKINAME
 </div>
 <div class="twikiRight twikiSRRev">
-<span class="twikiNew">NEW</span> - <a href="/DEVELOP/bin/rdiff/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
+<span class="twikiNew">NEW</span> - <a href="@REX(.*?)rdiff@REX(.*?)/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText"></div></div></div><!-- /expected -->
 <!-- actual -->
