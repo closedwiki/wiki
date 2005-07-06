@@ -262,14 +262,14 @@ sub view {
         $session->{renderer}->setRenderMode( 'rss' );
     }
 
-    # Legacy: if the _only_ skin is 'text' it is used like this:
+    my $page;
+    # Legacy: If the _only_ skin is 'text' it is used like this:
     # http://.../view/Codev/MyTopic?skin=text&contenttype=text/plain&raw=on
     # which shows the topic as plain text; useful for those who want
     # to download plain text for the topic. So when the skin is 'text'
     # we do _not_ want to create a textarea.
-    # skin=text is deprecated; use raw=text instead.
-    my $page;
-    if( $raw eq 'text' || $skin eq 'text' ) {
+    # raw=on&skin=text is deprecated; use raw=text instead.
+    if( $raw eq 'text' || ( $raw && $skin eq 'text' )) {
         # use raw text
         $page = $text;
     } else {
