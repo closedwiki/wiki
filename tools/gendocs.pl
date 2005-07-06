@@ -49,8 +49,16 @@ my $smells = 0;
 
 find( \&eachfile, ( $Config->{root} ));
 
-my $i = "---+ TWiki Source Code Packages\n";
-$i .= "Wherever you see a smell, your help is needed to get rid of it!\n";
+my $i = <<__TOPIC__;
+---+!! TWiki Source Code Packages
+
+%X% This documentation is automatically generated from the =pod=, so always matches the code running on develop.twiki.org (which is the latest code to the nearest 5 minutes)
+
+Wherever you see a smell, your help is needed to get rid of it!
+
+%TOC%
+
+__TOPIC__
 $i .= join("\n", sort @index);
 if ( $Config->{smells} ) {
     $i .= "\n\n There were a total of *$smells* smells\n";
