@@ -25,7 +25,7 @@ my $Config = {
     plugins => {
 	local_cache => 'downloads/plugins/',
 	twiki => {
-	    pub => 'http://twiki.org/~twiki/pub/',
+	    pub => 'http://twiki.org/p/pub/',
 	},
 	searchTerm => '%5BT%5DopicClassification.*value%5C%3D%5C%22%5BP%5DluginPackage',
 	ExtType => 'Plugin',
@@ -33,7 +33,7 @@ my $Config = {
     contribs => {
 	local_cache => 'downloads/contribs/',
 	twiki => {
-	    pub => 'http://twiki.org/~twiki/pub/',
+	    pub => 'http://twiki.org/p/pub/',
 	},
 	searchTerm => '%5BT%5DopicClassification.*value%5C%3D%5C%22%5BC%5DontribPackage',
 	ExtType => 'Contrib',
@@ -41,7 +41,7 @@ my $Config = {
     addons => {
         local_cache => 'downloads/addons/',
 	twiki => {
-	    pub => 'http://twiki.org/~twiki/pub/',
+	    pub => 'http://twiki.org/p/pub/',
 	},
 	searchTerm => '%5BT%5DopicClassification.*value%5C%3D%5C%22%5BA%5DddOnPackage',
 	ExtType => 'AddOn',
