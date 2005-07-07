@@ -1,8 +1,7 @@
 #
 # TWiki WikiClone ($wikiversion has version info)
 #
-# Copyright (C) 2000-2001 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2005 Alex alex-kane@usres.sourceforge.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,8 +16,8 @@
 #
 # =========================
 #
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
+# This is a CategoryPlugin TWiki plugin. Use it as a template
+# for your own plugins; see Plugins.CategoryPlugin for details.
 #
 # Each plugin is a package that contains the subs:
 #
