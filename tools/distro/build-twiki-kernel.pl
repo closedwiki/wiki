@@ -93,10 +93,10 @@ if ( $Config->{verbose} )
 my $ruleDiscardRcsHistory = File::Find::Rule->file->name("*,v")->discard;
 my $ruleDiscardRcsLock = File::Find::Rule->file->name("*.lock")->discard;
 my $ruleDiscardBackup = File::Find::Rule->file->name("*~")->discard;
-my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
 my $ruleDiscardOS = File::Find::Rule->file->name(".DS_Store")->discard;
 my $ruleDiscardLogFiles = File::Find::Rule->or( File::Find::Rule->file->name("log*.txt"), File::Find::Rule->file->name("debug*.txt"), File::Find::Rule->file->name("warn*.txt") )->discard;
-my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardOS, $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, $ruleDiscardLogFiles, File::Find::Rule->file );
+
+my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardOS, $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardBackup, $ruleDiscardLogFiles, File::Find::Rule->directory, File::Find::Rule->file );
 
 ################################################################################
 
@@ -253,7 +253,7 @@ foreach my $doc qw( TWikiDocumentation TWikiHistory )
 
 
 #[ POST ]-------------------------------------------------------------------------------
-# bin/ additional post processing: create authorization required version of some scripts
+# bin/ additional post processing: create "authorisation required" version of some scripts
 foreach my $auth qw( rdiff view )
 {
     cp( $_ = "$installBase/bin/$auth", "${_}auth" ) or warn "$auth: $!";

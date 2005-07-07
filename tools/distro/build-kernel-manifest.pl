@@ -39,10 +39,10 @@ print STDERR Dumper( $Config ) if $Config->{debug};
 my $ruleDiscardRcsHistory = File::Find::Rule->file->name("*,v")->discard;
 my $ruleDiscardRcsLock = File::Find::Rule->file->name("*.lock")->discard;
 my $ruleDiscardBackup = File::Find::Rule->file->name("*~")->discard;
-my $ruleDiscardSVN = File::Find::Rule->directory->name(".svn")->prune->discard;
 my $ruleDiscardOS = File::Find::Rule->file->name(".DS_Store")->discard;
 my $ruleDiscardLogFiles = File::Find::Rule->or( File::Find::Rule->file->name("log*.txt"), File::Find::Rule->file->name("debug*.txt"), File::Find::Rule->file->name("warn*.txt") )->discard;
-my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardOS, $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardSVN, $ruleDiscardBackup, $ruleDiscardLogFiles, File::Find::Rule->file );
+
+my $ruleNormalFiles = File::Find::Rule->or( $ruleDiscardOS, $ruleDiscardRcsHistory, $ruleDiscardRcsLock, $ruleDiscardBackup, $ruleDiscardLogFiles, File::Find::Rule->directory, File::Find::Rule->file );
 
 ################################################################################
 
@@ -77,7 +77,7 @@ foreach my $file qw (
     push @manifestEntries, ManifestEntry->new({ source => $file });
 }
 
-# bin/ additional post processing: create authorization required version of some scripts
+# bin/ additional post processing: create "authorisation required" version of some scripts
 foreach my $auth qw( rdiff view )
 {
     push @manifestEntries, ManifestEntry->new({ source => "bin/${auth}auth" });
