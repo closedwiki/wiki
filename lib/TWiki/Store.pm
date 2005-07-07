@@ -1386,9 +1386,11 @@ sub _getSubWebs {
     }
 
     if( $TWiki::cfg{EnableHierarchicalWebs} ) {
+	my @subWebList=();
         foreach my $subWeb ( @webList ) {
-            push( @webList, $this->_getSubWebs( $subWeb ));
+            push( @subWebList, $this->_getSubWebs( $subWeb ));
         }
+	push(@webList,@subWebList);
     }
 
     return @webList;

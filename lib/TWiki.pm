@@ -616,7 +616,9 @@ sub writePageHeader {
     }
 
     $contentType = 'text/html' unless $contentType;
-    $contentType .= '; charset='.$TWiki::cfg{Site}{CharSet};
+    if(defined($TWiki::cfg{Site}{CharSet})) {
+      $contentType .= '; charset='.$TWiki::cfg{Site}{CharSet};
+    }
 
     # use our version of the content type
     $hopts->{'Content-Type'} = $contentType;
