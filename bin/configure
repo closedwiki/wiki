@@ -1039,7 +1039,7 @@ sub handleUpdate {
     }
 
     unless( crypt( $pass, $TWiki::cfg{Password}) eq
-            $TWiki::cfg{Password} ) {
+            $TWiki::cfg{Password} || $TWiki::cfg{Password} eq '') {
         print CGI::span( {class => 'error' }, "Incorrect password" ),
           CGI::end_html();
         exit;
