@@ -502,10 +502,11 @@ html>body .twikiLeftBar li a {
 	width:26px;
 	text-align:center;
 }
+/* don't do this; it makes multi-row table data disappear
 .twikiAttachments p,
 .twikiForm p {
-	display:none;
-}
+   display:none;
+}*/
 .twikiAttachments th a:link,
 .twikiAttachments th a:visited,
 .twikiForm th a:link,
