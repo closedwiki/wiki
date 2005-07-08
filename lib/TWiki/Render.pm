@@ -353,8 +353,10 @@ sub makeAnchorName {
 	return substr($anchorName, 1);
     }
 
-    $anchorName =~ s/\s*\[\s*\[.*?\]\s*\[(.*?)\]\s*\]/$1/og; # remove double bracket link 
-    $anchorName =~ s/\s*\[\s*\[\s*(.*?)\s*\]\s*\]/$1/og; # remove double bracket link
+    # strip out potential links so they don't get rendered.  Screws up header rendering.
+    $anchorName =~ s/\s*\[\s*\[.*?\]\s*\[(.*?)\]\s*\]/$1/go; # remove double bracket link 
+    $anchorName =~ s/\s*\[\s*\[\s*(.*?)\s*\]\s*\]/$1/go; # remove double bracket link
+    $anchorName =~ s/($TWiki::regex{wikiWordRegex})/_$1/go; # add an _ before bare WikiWords
 
     if ( $compatibilityMode ) {
 	# remove leading/trailing underscores first, allowing them to be
@@ -362,7 +364,7 @@ sub makeAnchorName {
 	$anchorName =~ s/^[\s\#\_]*//;
         $anchorName =~ s/[\s\_]*$//;
     }
-    $anchorName =~ s/<\w[^>]*>//gi;         # remove HTML tags
+    $anchorName =~ s/<[\/]?\w[^>]*>//gi;         # remove HTML tags
     $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
     $anchorName =~ s/\&//g;                 # remove &
     $anchorName =~ s/^(.+?)\s*$TWiki::regex{headerPatternNoTOC}.*/$1/o; # filter TOC excludes if not at beginning
