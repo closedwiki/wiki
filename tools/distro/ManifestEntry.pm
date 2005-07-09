@@ -41,6 +41,7 @@ sub new
 
     unless ( $self->{destination} )
     {
+	$self->{source} .= '/' if $self->{type} eq 'd';
 	# if filename starts with one of the standard twiki points, remap it to a variable name
 	( $self->{destination} = $self->{source} ) =~ s#^((templates|lib|bin|pub|data)/)#\$$1#;
     }
