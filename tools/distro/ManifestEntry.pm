@@ -2,10 +2,17 @@
 
 package ManifestEntry;
 
+use File::Copy qw( cp );
+use File::Path qw( mkpath );
+
+################################################################################
+
 sub fields
 {
     return qw( type mode owner group destination source options );
 }
+
+################################################################################
 
 sub parseEntry
 {
@@ -17,6 +24,8 @@ sub parseEntry
 
     return $parms;
 }
+
+################################################################################
 
 sub new
 {
@@ -48,6 +57,42 @@ sub new
 
     return $self;
 }
+
+################################################################################
+
+sub install
+{
+    my ( $self, $p ) = @_;
+    $p->{basedir} ||= './';
+
+    $self->{destination} =~ s#(\$([A-Za-z_]+)/)#$p->{paths}->{$2}/#g;
+    # cleanup double slashes (not really necessary, just being pedantic)
+    $self->{destination} =~ s#//#/#g;
+
+    $self->{source} = "$p->{basedir}/$self->{source}";
+
+    warn qq{source and destination files are the same "$self->{source}"\n}, return
+	if $self->{source} eq $self->{destination};
+    
+    if ( $self->{type} eq 'd' )
+    {
+#	mkdir $self->{destination};
+	mkpath $self->{destination}, 0, oct( $self->{mode} );
+    }
+    elsif ( $self->{type} eq 'f' )
+    {
+	print $self, "\n";
+	cp( $self->{source}, $self->{destination} );
+	chmod oct($self->{mode}), $self->{destination};
+    }
+    else
+    {
+	warn "unknown file type for $self\n";
+    }
+
+}
+
+################################################################################
 
 use overload ( '""' => \&stringify );
 
