@@ -87,18 +87,21 @@ BEGIN {
     }
 }
 
-# Required for testenv to work
+# Required for configure to work
 my $basicMods =
   {
-   'CGI'       => "basic TWiki",
-   'CGI::Carp' => "basic TWiki"
+   'CGI'             => "basic TWiki",
+   'CGI::Carp'       => "basic TWiki",
+   'Error'           => 'basic TWiki',
   };
 
 my $requiredMods =
   {
-   'File::Copy' => 'basic TWiki',
-   'File::Spec' => 'basic TWiki',
-   'FileHandle' => 'basic TWiki',
+   'File::Copy'      => 'basic TWiki',
+   'File::Spec'      => 'basic TWiki',
+   'FileHandle'      => 'basic TWiki',
+   'Algorithm::Diff' => 'basic TWiki',
+   'Text::Diff'      => 'basic TWiki',
   };
 
 # Required on non-Unix platforms (mainly Windows)
@@ -1124,19 +1127,18 @@ sub performSanityChecks {
         eval "use $mod";
         if ($@) {
             unless ($modMissing) {
-                print 'Content-Type: text/plain'."\n\n";
-                print 'Perl Module(s) missing';
+                print ERROR( 'Perl Module(s) missing');
             }
             $modMissing = 1;
-            print 'Warning: Essential module ',$mod;
-            print 'not installed - please check your Perl installation, ',
-              'including the setting of @INC, and re-install Perl if necessary.';
+            print ERROR( 'Essential module ',$mod,
+                         ' not installed - please check the setting ',
+                         'of @INC.' );
         }
     }
 
     # If any critical modules missing, display @INC and give up 
     if ($modMissing) {
-        print '@INC setting:', join(' ', @INC);
+        print NOTE( '@INC = ', join( ' ', @INC ));
         exit;
     }
 }
