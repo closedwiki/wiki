@@ -32,7 +32,7 @@ A Form Template is a specification of the fields in a form. A Form Template is s
 	  | Drop-down menu or scrollable box | =select= | =1= for drop down, =2= and up for scrollable box | comma-separated list of options |
 	  | A one-line text field | =text= | text box width in number of characters | initial text, if a new topic is created with a form template |
 	  | A text box | =textarea= | columns x rows, e.g. =80x6=; default size is 40x5 | initial text, if a new topic is created with a form template |
-	* *field value* - one or more values from a fixed set (select, checkbox, radio type) or free-form (text).
+	* *field value* - one or more values from a fixed set (select, checkbox, radio type) or free-form (label, text, text area).
 
 ---+++ Defining a Form
 
@@ -42,7 +42,7 @@ A Form Template is a specification of the fields in a form. A Form Template is s
 	1. Save the topic _(you can later choose to [[#EnablingForms][enable/disable]] individual forms)_.
 
 <blockquote style="background-color:#f0f0f0">
-*Example:* ==<nop>WebForm== %BR%
+*Example: <nop>WebForm* %BR%
 =| <nop>*Name* | <nop>*Type* | <nop>*Size* | <nop>*Values* | <nop>*Tooltip message* | <nop>*Attributes* |= %BR%
 =| !TopicClassification | select | 1 | !NoDisclosure, !PublicSupported, !PublicFAQ | blah blah... | &nbsp; |= %BR%
 =| !OperatingSystem | checkbox | 3 | !OsHPUX, !OsLinux, !OsSolaris, !OsWin | blah blah... | &nbsp; |= %BR%
@@ -76,20 +76,27 @@ You can also retrieve possible values for select, checkbox or radio types from o
 	  | Public FAQ | option | blah blah... |
 </blockquote>
 
+Field values can also be obtained as the result of a TWiki.FormattedSearch. For example,
+
+<blockquote style="background-color:#f0f0f0">
+=%<nop>SEARCH{"Office$" scope="topic" web="Main" nototal="on" nosummary="on" nosearch="on" regex="on" format="Main.$topic" separator=", " }%=
+</blockquote>
+
+when used in the value field of the form definition, will take the set of field values to be all topic names in the Main web which end in "Office".
+
+
 *Notes:*
-   * A very few field names are reserved. if you try to use one of these names, TWiki will autoamtically append an underscore to the name when the form is used.
-	* The first item in the list for a select or radio type is the default item.
+   * A very few field names are reserved. if you try to use one of these names, TWiki will automatically append an underscore to the name when the form is used.
+	* The field value will be used to initialize a field when a form is created, unless specific values are given by the topic template or query parameters. The first item in the list for a select or radio type is the default item. For label, text, and text area fields that value may also contain commas. Checkbox fields cannot be initialized through the form template.
 	* The topic definition is not read when a topic is viewed.
-	* Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a select, checkbox or radio field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links.
+	* Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a select, checkbox or radio field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links. This notation can also be used when referencing another topic to obtain field values, but one wants to use a name other than the topic name as the name of the field. 
+	* Field names have to be unique. If the same name is necessary (as when the field values for several fields are obtained from the same topic), an alternative name must be assigned using the ==[<nop>[...]]== notation.
+	* The topic defining field values can also be generated through a TWiki.FormattedSearch, which must yield a suitable table as the result.
 	* Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
 	* The ==Tooltip message== column is used as a tooltip for the field name (only if field name is a %TWIKIWEB%.WikiName) - you only see the tooltip in edit view.
 	* The ==Attributes== column is used to define special behavior for that form field (multiple attributes can be entered, with or without separators):
 		* An attribute =H= indicates that this field should not be shown in view mode. However, the field is available for editing and storing information.
-	* You can create a =label= field that is only visible in edit view by creating a label with no field name. Unlike for other field types, you can use TWiki formatting in the value of a =label= field.
-<blockquote style="background-color:#f0f0f0">
-*Example:*
-
-	=| | label | | Text <nop>*of* <nop>_the_ label | | |=
+		* An attribute =M= indicates that this field is mandatory. The topic cannot be saved unless a value is provided for this field. If the field is found empty during topic save, an error is raised and the user is redirected to an oops page. Mandatory fields are indicated by an asteriks next to the field name. 
 </blockquote>
 
 #EnablingForms
