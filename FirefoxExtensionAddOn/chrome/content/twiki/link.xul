@@ -9,6 +9,7 @@ function onLoad()
 	var params = window.arguments[1];
 	document.getElementById('link-target').value = params[0];
 	document.getElementById('link-label').value = params[1];
+	document.getElementById('link-headlevel').value = params[2];
 }
 
 function qnAccept()
@@ -17,6 +18,7 @@ function qnAccept()
 	var params = window.arguments[1];
 	params[0] = document.getElementById('link-target').value;
 	params[1] = document.getElementById('link-label').value;
+	params[2] = document.getElementById('link-headlevel').selectedIndex;
 	ok[0] = true;
 	return true;
 }
@@ -41,6 +43,20 @@ function onCancel()
 			<row>
 				<label value="&twiki.link.label;" control="link-label"/>
 				<textbox id="link-label" value=""/>
+			</row>
+			<row>
+				<label value="&twiki.link.headlevel;" control="link-headlevel"/>
+				<menulist id="link-headlevel">
+					<menupopup>
+						<menuitem label="&twiki.link.headlevel.zero;" selected="true"/>
+						<menuitem label="&twiki.link.headlevel.one;"/>
+						<menuitem label="&twiki.link.headlevel.two;"/>
+						<menuitem label="&twiki.link.headlevel.three;"/>
+						<menuitem label="&twiki.link.headlevel.four;"/>
+						<menuitem label="&twiki.link.headlevel.five;"/>
+						<menuitem label="&twiki.link.headlevel.six;"/>
+					</menupopup>
+				</menulist>
 			</row>
 		</rows>
 	</grid>

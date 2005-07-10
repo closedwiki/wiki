@@ -42,9 +42,16 @@ var twiki = {
 	if (activate) {
 	    generateMenuTemplates();
 	}
+//	document.getElementById('context-twiki').hidden = document.getElementById('context-undo').hidden || !activate;
+//  if the option to make the toolbar context sensitive has been selected, then the following line will make the toolbar appear/disappear according to context when the right-hand
+// mouse button is clicked, i.e. when the context menu is triggered. original line is above.
+//	document.getElementById('context-twiki').hidden = document.getElementById('twiki-toolbar').collapsed = document.getElementById('context-undo').hidden || !activate;
 	document.getElementById('context-twiki').hidden = document.getElementById('context-undo').hidden || !activate;
+	document.getElementById('twiki-toolbar').collapsed = !activate;
+// the above pair of lines functions like the single line which precedes them.
     },
-	
+
+// getClipboard does not seem to be referenced anywhere in this app - left over from wikipedia?
     getClipboard: function() {
 	var clip = Components.classes["@mozilla.org/widget/clipboard;1"].createInstance(Components.interfaces.nsIClipboard);
 	if (!clip){
@@ -76,13 +83,53 @@ var twiki = {
 	currentBox = document.commandDispatcher.focusedElement;
 	scrollTop = currentBox.scrollTop;
 	scrollHeight = currentBox.scrollHeight;
-
 	//Get Selected text (if selected)
 	var selStartPos = currentBox.selectionStart;
 	var selEndPos = currentBox.selectionEnd;
 	str = currentBox.value.substring(selStartPos, selEndPos);
-		
 	return str;
+    },
+
+// the following function is not yet implemented - it is intended for future use
+    getSelectionOrLine: function() {
+	currentBox = document.commandDispatcher.focusedElement;
+	scrollTop = currentBox.scrollTop;
+	scrollHeight = currentBox.scrollHeight;
+//alert( "scrollTop="+scrollTop+", scrollHeight="+scrollHeight );
+
+	//Get Selected text (if selected)
+	var selStartPos = currentBox.selectionStart;
+	var selEndPos = currentBox.selectionEnd;
+//alert( "selStartPos="+selStartPos+", selEndPos="+selEndPos );
+//var next=currentBox.value.substr(selStartPos, 1);
+//alert( "next letter="+next );
+	// if text selected, return it...
+	if (selStartPos!=selEndPos) {
+		selected = currentBox.value.substring(selStartPos, selEndPos);	
+		return selected;
+	}
+	// if no text selected, return all of current line...
+	var start=selStartPos;
+	if (currentBox.value.substr(start, 1)=='\n') {
+		start--;		// special treatment if cursor is at end of line - this will probably give problems if current line is empty
+					// in that case, shld probably return nothing, then perhaps do forced selection, or put up alert (options?)
+		if (currentBox.value.substr(start, 1)=='\n') {
+			empty = "";	
+			return empty;	// special treatment if line is empty - return nothing
+		}
+	}
+	while ((start>=0) && (currentBox.value.substr(start, 1)!='\n')) {
+		start --;
+	}
+	var end=selEndPos;
+	while ((end>=0) && (currentBox.value.substr(end, 1)!='\n')) {
+		end ++;
+	}
+//alert( "start="+start+", end="+end );
+	var currentLine=currentBox.value.substring(start+1, end);
+//alert( "current line="+line );
+	return currentLine;
+// probably need to reset values of currentBox.selectionStart, currentBox.selectionEnd, so as to reinsert processed text in right place
     },
 
     getSelectionAll: function() {
@@ -102,20 +149,50 @@ var twiki = {
 	twiki.getSelection();
 	twiki.insertAtCursor(someText);
     },
-	
-    surround: function(format, left,right) {
-	var str=twiki.getForcedSelection(format);
+    	
+    surroundBlock: function(format, left, right) {
+	var target=twiki.getForcedSelection(format);
+	target=left+target+right
+	twiki.insertAtCursor(target);
+    },
+    	
+    surround: function(format, left, right) {
+	var rightStr=twiki.getForcedSelection(format);
+	var leftStr="";
+	var str="";
+	var n=0;
 	var leftTrim="";
-	while ((str.length>0) && (str.substring(0,1) == ' ')) {
-	    leftTrim=leftTrim+" ";
-	    str=str.substring(1,str.length);
+	var rightTrim=""
+	while (rightStr.length>0) {
+	    n=0;
+	    while (rightStr.substring(0,1) == '\n') {
+		leftStr=leftStr+'\n';
+		rightStr=rightStr.substring(1,rightStr.length);
+	    }
+	    while ((n<rightStr.length) && (rightStr.substring(n,n+1) != '\n')) {
+		n++;
+	    }
+	    str=rightStr.substring(0,n);
+	    rightStr=rightStr.substring(n,rightStr.length);
+	    leftTrim="";
+	    while ((str.length>0) && (str.substring(0,1) == ' ')) {
+		leftTrim=leftTrim+" ";
+		str=str.substring(1,str.length);
+	    }
+	    rightTrim="";
+	    while ((str.length>0) && (str.substring(str.length-1,str.length) == ' ')) {
+		rightTrim=rightTrim+" ";
+		str=str.substring(0,str.length-1);
+	    }
+
+	    if (str.length>0) {
+		leftStr=leftStr+leftTrim+left+str+right+rightTrim;
+	    }
+	    else {
+		leftStr=leftStr+leftTrim+rightTrim;
+	    }
 	}
-	var rightTrim="";
-	while ((str.length>0) && (str.substring(str.length-1,str.length) == ' ') ) {
-	    rightTrim=rightTrim+" ";
-	    str=str.substring(0,str.length-1);
-	}
-	twiki.insertAtCursor(leftTrim+left+str+right+rightTrim);
+	twiki.insertAtCursor(leftStr);
     },
 	
     bold: function() {
@@ -123,23 +200,19 @@ var twiki = {
     },
 
     bolditalic: function() {
-	twiki.surround('bold', '__', '__');
+	twiki.surround('bolditalic', '__', '__');
     },
 
     italic: function() {
 	twiki.surround('italic', '_', '_');
     },
 
-    strike: function() {
-	twiki.surround('strike','<strike>','</strike>');
-    },
-
     underline: function() {
 	twiki.surround('underline','<u>','</u>');
     },
 
-    pre: function() {
-	twiki.surround('pre','\n<pre>\n','\n</pre>\n');
+    strike: function() {
+	twiki.surround('strike','<strike>','</strike>');
     },
 
     fixed: function() {
@@ -150,10 +223,105 @@ var twiki = {
 	twiki.surround('boldfixed','==','==');
     },
 
+    pre: function() {
+	twiki.surroundBlock('pre','\n<pre>\n','\n</pre>\n');
+    },
+    
     verbatim: function() {
-	twiki.surround('verbatim','\n<verbatim>\n','\n</verbatim>\n');
+	twiki.surroundBlock('verbatim','\n<verbatim>\n','\n</verbatim>\n');
+    },
+	
+    red: function() {
+	twiki.surround('red', '%RED% ', ' %ENDCOLOR%');
     },
 
+    blue: function() {
+	twiki.surround('blue', '%BLUE% ', ' %ENDCOLOR%');
+    },
+
+    green: function() {
+	twiki.surround('green', '%GREEN% ', ' %ENDCOLOR%');
+    },
+
+    wikify: function( str ) {
+	apostrophe=/\'/g;		// apostrophe
+	nonWord=/\W/g;		        // not alphanumeric
+	str=str.replace(apostrophe,"");	// remove apstrophes
+	str=str.replace(nonWord," ");	// replace non-word chars
+	var words=str.split( " " ) ;
+	var wikiword="";
+	for (var i=0; i < words.length; i++) {
+	    var firstChar=words[i].substr(0,1);
+	    firstChar=firstChar.toUpperCase();
+	    var rest=words[i].substr(1);
+	    rest=rest.toLowerCase();
+	    wikiword=wikiword+firstChar+rest;
+        }
+	if (wikiword.length==0) {
+	    wikiword="Garbage in, garbage out!";
+	    return wikiword;
+	} 
+	if (words.length==1) {
+	    wikiword=wikiword+"Page";
+	} 
+	return wikiword;
+    },
+    
+    insertAnchor: function(borderLeft, borderRight, separator) {
+	var str=twiki.getForcedSelection('anchor');
+        var ok = [false];
+        var left=blankLeft(str);
+        var right=blankRight(str);
+	str=twiki.trim(str);
+	if (str.length==0) {
+	    return;		// nothing to do
+	}
+	var wikiword=twiki.wikify( str ) ;
+	var params = [wikiword,str,0,0,0,0,0,0];
+	var prefix="";
+        window.openDialog("chrome://twiki/content/anchor.xul", "WikiAnchor","chrome,modal,centerscreen",ok,params);
+        if (ok[0]){
+	    var target=twiki.trim(params[0]);
+	    var label=twiki.trim(params[1]);
+	    if (target.length==0) {
+	        return;		// nothing to do
+	    }
+	    var headlevel=params[2];
+	    var prefix="";
+	    if (headlevel>0) {
+	    	var prefix="---";
+	    }		
+	    while (headlevel>0) {
+	        prefix=prefix+"+";
+		headlevel--;
+            }
+//    	    prefix=prefix+" ";    
+
+	    var link=borderLeft+target;
+	    if (label!="") {
+		link=link+separator+prefix+label;
+	    }
+	    link=link+borderRight;
+	    twiki.insertAtCursor(left+link+right);
+        }
+    },
+
+    anchor: function() {
+	twiki.insertAnchor("\n#", "", "\n");
+    },
+
+    makeWikiWord: function() {
+	var str=twiki.getForcedSelection('makeWikiWord');
+        var left=blankLeft(str);
+        var right=blankRight(str);
+	str=twiki.trim(str);
+	if (str.length==0) {
+	    return;		// nothing to do
+	}
+	var wikiword=twiki.wikify(str);
+	twiki.insertAtCursor(left+wikiword+right);
+    },
+    
     paragraph: function(format,markup) {
 	var str=twiki.trim(twiki.getForcedSelection(format));
 	twiki.insertAtCursor("\n" + markup + " " + str + "\n");
@@ -183,7 +351,7 @@ var twiki = {
 	}
 	twiki.insertAtCursor(insert);
     },
-	
+
     insertSignature: function() {
 	var trailing="";
 	twiki.getSelection();
@@ -217,7 +385,91 @@ var twiki = {
 	    dump(e+"\n")
 	}
     },
-  
+
+// insert heading using heading.xul based on list.xul
+    insertHeadingFancy: function() {
+        var ok = [false];
+//        var params = ["",listSign,0,0,0,0,0,0];
+//        window.openDialog("chrome://twiki/content/link.xul", "WikiLink","chrome,modal,centerscreen",ok,params);
+//        var params = [imageName,imageDesc,true,false,false,false,0,false,false,false,0,0,0,0,0,0,0,0,0];
+///        var params = ["",listSign,true,false,false,false,false,0,false];
+///        window.openDialog("chrome://twiki/content/list.xul", "WikiList","chrome,modal,centerscreen",ok,params);
+//        var params = [false,0,0,false,false,false,0,0,0,0,0,0,0,0,0];
+        var params = ["",false,false,false,false,false,false,0,0,false,false,false,0,0,0,0,0,0,0,0,0];
+        window.openDialog("chrome://twiki/content/heading.xul", "WikiHeading","chrome,modal,centerscreen",ok,params);
+        if (ok[0]){
+	    var headinglevel=params[0]+1;	
+	    var prefix="---";
+	    while (headinglevel>0) {
+	        prefix=prefix+"+";
+		headinglevel--;
+            }
+    	    prefix=prefix+" ";
+	    twiki.surround('heading', prefix, '');
+	}
+    },
+
+// insertlist using list.xul based on image.xul
+    insertListFancy: function(listSign) {
+        var ok = [false];
+//        var params = ["",listSign,0,0,0,0,0,0];
+//        window.openDialog("chrome://twiki/content/link.xul", "WikiLink","chrome,modal,centerscreen",ok,params);
+//        var params = [imageName,imageDesc,true,false,false,false,0,false,false,false,0,0,0,0,0,0,0,0,0];
+///        var params = ["",listSign,true,false,false,false,false,0,false];
+///        window.openDialog("chrome://twiki/content/list.xul", "WikiList","chrome,modal,centerscreen",ok,params);
+        var params = ["",false,false,false,false,false,false,0,0,false,false,false,0,0,0,0,0,0,0,0,0];
+        window.openDialog("chrome://twiki/content/list.xul", "WikiList","chrome,modal,centerscreen",ok,params);
+        if (ok[0]){
+	    var file=twiki.trim(params[0]);
+	    var bulleted=params[1];		// asterisk
+	    var arabic=params[2];		// 1.
+	    var letterA=params[3];		// A.
+	    var lettera=params[4];		//a.
+	    var romanI=params[5];		//I.
+	    var romani=params[6];		//i.
+	    var pixels=params[7];
+	    var alignment=params[8];
+////	    var pixels=params[6];
+////	    var alignment=params[7];
+
+	    if (bulleted) {
+		listType="*";
+	    }
+	    else if (arabic) {
+		listType="1.";
+	    }
+	    else if (letterA) {
+		listType="A.";
+	    }
+	    else if (lettera) {
+		listType="a.";
+	    }
+	    else if (romanI) {
+		listType="I.";
+	    }
+	    else if (romani) {
+		listType="i.";
+	    }
+	    var nestlevel=alignment+1;
+	    var prefix="";
+	    while (nestlevel>0) {
+	        prefix=prefix+"   ";
+		nestlevel--;
+            }
+    	    prefix=prefix + listType + " ";
+	    twiki.surround('list', prefix, '');
+	}
+    },
+
+// basic insert list
+// this works well enough, but wld be better if it (a) extended start of selection to start of relevant line, (b) wld work on empty selections
+    insertList: function(listSign) {
+    	var prefix="   " + listSign + " ";
+	twiki.surround('list', prefix, '');
+    },
+
+/*
+// original insert list
     insertList: function(listSign) {
 	var str=twiki.getSelection();
 	var lines=str.split("\n");
@@ -235,14 +487,56 @@ var twiki = {
 	}
 	twiki.insertAtCursor(insert);
     },
-	
+*/
+
     insertDefinitionList: function() {
 	var topic=twiki.getString("twiki.default.definitiontopic");
 	var definition=twiki.getString("twiki.default.definitiondescription");
 	var def = "   $ " + topic + ": " + definition + "\n";
 	twiki.insertAtCursor(def+def);
     },
-	
+
+    indentMore: function() {
+	var target=twiki.getSelection();
+	target="\n"+target;					// eliminate special case of 1st line
+	indent=/\n   /g;
+	target=target.replace(indent, "\n      ");		// increase 3 leading spaces to 6
+	overIndent=/(\n {18}) +/g;
+	target=target.replace(overIndent, "$1");		// reduce super-maximal indents to permissable maximum of 6 indents (18 spaces)
+	target=target.substr(1);				// reinstate 1st line
+	twiki.insertAtCursor(target);
+    },
+    
+    indentLess: function() {
+	var target=twiki.getSelection();
+	target="\n"+target;					// eliminate special case of 1st line
+	indent=/\n      /g;
+	target=target.replace(indent, "\n   ");			// reduce 6 leading spaces to 3
+	target=target.substr(1);				// reinstate 1st line
+	twiki.insertAtCursor(target);
+    },
+        	
+    removeList: function() {
+	var target=twiki.getSelection();
+	target="\n"+target;					// eliminate special case of 1st line
+	bullet=/\n  *\* /g;
+	arabic=/\n  *1\. /g;
+	letterA=/\n  *A\. /g;
+	lettera=/\n  *a\. /g;
+	romanI=/\n  *I\. /g;
+	romani=/\n  *i\. /g;
+	target=target.replace(bullet, "\n");
+	target=target.replace(arabic, "\n");
+	target=target.replace(letterA, "\n");
+	target=target.replace(lettera, "\n");
+	target=target.replace(romanI, "\n");
+	target=target.replace(romani, "\n");
+	target=target.substr(1);				// reinstate 1st line
+	twiki.insertAtCursor(target);
+    },
+
+/*  
+// original remove list	
     removeList: function() {
 	var lines=twiki.getSelection().split("\n");
 	for (i=0;i<lines.length;i=i+1) {
@@ -260,6 +554,7 @@ var twiki = {
 	}
 	twiki.insertAtCursor(insert);
     },
+*/
 	
     insertTable: function() {
 	var str=twiki.getSelection();
@@ -282,7 +577,7 @@ var twiki = {
 	    }
 	    var table="";
 	    if (usePlugin) {
-		// TODO: The TablePlugin attributes need to be implemented.
+		// TODO: The TablePlugin attributes need to be implemented. (usePlugin is disabled in twikiOverlay.xul)
         	if (border) {
 		    table=table+" border=1";
         	}
@@ -330,7 +625,9 @@ var twiki = {
 	    imageDesc=str;
         }
         // call dialog
-        var params = [imageName,imageDesc,true,false,false,false,0,false,false,false,0,0,0,0,0,0,0,0,0];
+//        var params = [imageName,imageDesc,true,false,false,false,0,false,false,false,0,0,0,0,0,0,0,0,0];
+// following is an experiment to see if the dialog works just as well with only the 8 params which are actually referenced in the code. previopus line is the original
+        var params = [imageName,imageDesc,true,false,false,false,0,false];
         window.openDialog("chrome://twiki/content/image.xul", "WikiImage","chrome,modal,centerscreen",ok,params);
         if (ok[0]){
 	    var file=twiki.trim(params[0]);
@@ -382,11 +679,26 @@ var twiki = {
         if (ok[0]){
 	    var target=twiki.trim(params[0]);
 	    var label=twiki.trim(params[1]);
+	    if (target.length==0) {
+	        return;		// nothing to do
+	    }
 	    var link=borderLeft+target;
 	    if (label!="") {
 		link=link+separator+label;
 	    }
 	    link=link+borderRight;
+	    var headlevel=params[2];
+	    var prefix="";
+	    if (headlevel>0) {
+	    	var prefix="---";
+	    }		
+	    while (headlevel>0) {
+	        prefix=prefix+"+";
+		headlevel--;
+            }
+//    	    prefix=prefix+" ";
+	    left=prefix+left;
+
 	    twiki.insertAtCursor(left+link+right);
         }
     },
@@ -408,6 +720,7 @@ var twiki = {
 	twiki.insertLink("[[", "]]", "][");
     },
 	
+// // checkLabelVisibility is inactivated - see init - presumably left over from wikipedia toolbar
     checkLabelVisibility: function() {
 	/*	
 	  var element = document.getElementById("LabelsButtonItem");
@@ -422,6 +735,7 @@ var twiki = {
 	*/
     },
 	
+// toolbarLabelsOn is inactivated - see checkLabelVisibility
     toolbarLabelsOn: function()
     {
 	var container = document.getElementById("twiki-buttons");
@@ -432,6 +746,7 @@ var twiki = {
 	}
     },
 	
+// toolbarLabelsOff is inactivated - see checkLabelVisibility
     toolbarLabelsOff: function()
     {
 	var container = document.getElementById("twiki-buttons");
@@ -441,7 +756,8 @@ var twiki = {
 	    updateElementClass(containerButtons[i], 0, containerButtons[i].getAttribute("buttonclass"));
 	}
     },
-	
+
+// getUsername is not referenced in this application - presumably left over from wikipedia toolbar
     getUsername: function() {
 	var username="";
 	try {
@@ -456,6 +772,7 @@ var twiki = {
 	return getPreferences().getCharPref("username");		
     },
 	
+// setLocation is not referenced in this script, but is referenced in twikiOverlay.xul. The case 'twiki' seems to be unused - presumably left over from wikipedia toolbar
     setLocation: function(name) {
 	var url="";
 	switch (name) {
@@ -470,6 +787,7 @@ var twiki = {
 	    window._content.document.location='http://'+url;
 	}
     },
+
 	
     toolbarOptions: function() {
 	var ok = [false];
