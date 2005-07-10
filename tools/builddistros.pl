@@ -49,8 +49,8 @@ foreach my $kernel ( reverse sort @dirReleases )
     warn "Skipping $kernel\n" unless $revInfo;
     # CODE_SMELL: hardcoded to twiki.org (would need some sort of super project configuration file)
     my $homepage = "http://develop.twiki.org/~develop/cgi-bin/view/Bugs/TWikiKernel$branch$revInfo";
-    # CODE_SMELL: hardcoded to ntwiki (can be fixed using hostname and ...?)
-    my $download = "http://ntwiki.ethermage.net/users/develop/pub/BuildDistros/$kernel";
+    # CODE_SMELL: hardcoded to develop.twiki.org (can be fixed using hostname and ...?)
+    my $download = "http://develop.twiki.org/users/develop/pub/BuildDistros/$kernel";
     print qq{<b>$rel</b> };
     print qq{<a href="$download" >download</a>\n};
     print qq{<a href="$homepage" >discussion</a>\n};
