@@ -48,7 +48,7 @@ foreach my $kernel ( reverse sort @dirReleases )
     $branch ||= '';
     warn "Skipping $kernel\n" unless $revInfo;
     # CODE_SMELL: hardcoded to twiki.org (would need some sort of super project configuration file)
-    my $homepage = "http://twiki.org/cgi-bin/view/Codev/TWikiKernel$branch$revInfo";
+    my $homepage = "http://develop.twiki.org/~develop/cgi-bin/view/Bugs/TWikiKernel$branch$revInfo";
     # CODE_SMELL: hardcoded to ntwiki (can be fixed using hostname and ...?)
     my $download = "http://ntwiki.ethermage.net/users/develop/pub/BuildDistros/$kernel";
     print qq{<b>$rel</b> };
