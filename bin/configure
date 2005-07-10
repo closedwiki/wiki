@@ -101,7 +101,6 @@ my $requiredMods =
    'File::Spec'      => 'basic TWiki',
    'FileHandle'      => 'basic TWiki',
    'Algorithm::Diff' => 'basic TWiki',
-   'Text::Diff'      => 'basic TWiki',
   };
 
 # Required on non-Unix platforms (mainly Windows)
@@ -118,6 +117,7 @@ my $optionalMods =
    'MIME::Base64'     => "HTTP Authentication to proxies",
    'POSIX'            => "I18N (core module) and Security",
    'Digest::MD5'      => "MD5 encoded passwords",
+   'Text::Diff'       => 'UpgradeTWiki',
   };
 
 my $I18Mods =
