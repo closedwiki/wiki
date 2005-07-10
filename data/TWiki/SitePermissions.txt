@@ -6,9 +6,13 @@
 
 See TWikiAccessControl for details 
 
-Main.TWikiGuest is the guest account - used by unautheticated users.
+__Please Note:__
 
-The TWiki web must not be denied view to %MAINWEB%.TWikiGuest - otherwise people will not be able to register.
+   * A blank in the the above table may mean _either_ the corresponding control is absent or commented out _or_ that it has been set to a null value.  The two conditions have dramaticallydifferent and possibly opposed semantics.
+
+   * Main.TWikiGuest is the guest account - used by unautheticated users.
+
+   * The TWiki web must not be denied view to %MAINWEB%.TWikiGuest - otherwise people will not be able to register.
 
 -- Main.MartinCleaver - 10 Jan 2005
 
