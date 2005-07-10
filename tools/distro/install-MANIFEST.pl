@@ -19,7 +19,7 @@ use ManifestEntry;
 
 my $Config = {
     manifest => undef,
-    basedir => './',
+    basedir => '',
 #
     templates => undef,
     lib => undef,

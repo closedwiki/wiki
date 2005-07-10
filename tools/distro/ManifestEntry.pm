@@ -63,7 +63,7 @@ sub new
 sub install
 {
     my ( $self, $p ) = @_;
-    $p->{basedir} ||= './';
+    $p->{basedir} ||= '';
 
     $self->{destination} =~ s#(\$([A-Za-z_]+)/)#$p->{paths}->{$2}/#g;
     # cleanup double slashes (not really necessary, just being pedantic)
