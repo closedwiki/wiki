@@ -90,7 +90,7 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
 	font-size:210%;
 	color:#e24628;
-	margin:0 0 0.1em 0;
+	margin:0 0 0.5em 0;
 }
 h2, h3, h4, h5, h6 {color:#900;} /*C5*/
 h2 {
