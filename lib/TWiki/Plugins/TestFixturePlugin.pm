@@ -87,7 +87,7 @@ sub _parse {
     return \@list;
 }
 
-# use HTML::Diff to compare the expected and actual contents
+# compare the expected and actual contents
 sub _compareExpectedWithActual {
     my ( $expected, $actual, $topic, $web ) = @_;
     my $errors = '';

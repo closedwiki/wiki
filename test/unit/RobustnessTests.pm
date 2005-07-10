@@ -1,46 +1,38 @@
 # Copyright (C) 2004 Florian Weimer
-require 5.006;
-use strict;
-
 package RobustnessTests;
 
 use base qw(Test::Unit::TestCase);
+require 5.008;
 
 BEGIN {
     unshift @INC, '../../bin';
     require 'setlib.cfg';
 };
 
-require '../../bin/setlib.cfg';
+
 use TWiki;
 use TWiki::Sandbox;
 use TWiki::Time;
-use strict;
 
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
 }
 
-my $web = "TestRcsWeb";
-my $topic = "TestRcsTopic";
-my $user = "TestUser1";
-my $thePathInfo = "/$web/$topic";
-my $theUrl = "/save/$web/$topic";
-
+my @safe;
 my $twiki;
 
 sub set_up {
-    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
+    $twiki = new TWiki();
+    @safe = (
+        $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN},
+        $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN}
+       );
 }
 
-sub test_env {
-    my $this = shift;
-    if( $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} ) {
-        print STDERR "\nTEST RUN USING REAL SAFE PIPES\n";
-    } else {
-        print STDERR "\nTEST RUN USING EMULATED SAFE PIPES\n";
-    }
+sub tear_down {
+    $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = $safe[0];
+    $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = $safe[1];
 }
 
 sub test_untaint {
@@ -128,19 +120,45 @@ sub test_buildCommandLine {
     $this->assert_not_null($@, '');
 }
 
-sub test_execute {
+sub verify {
     my $this = shift;
-    $this->assert_deep_equals([" 1 2 "],
-                              [$twiki->{sandbox}->readFromProcessArray('echo',
-                                                           ' %A%  %B% ',
-                                                           (A => " 1", B => "2 "))]);
+    my($out, $exit) = $twiki->{sandbox}->sysCommand(
+        'sh -c %A%', A => 'echo OK; echo BOSS');
+    $this->assert_str_equals("OK\nBOSS\n", $out);
+    $this->assert_equals(0, $exit);
+    ($out, $exit) = $twiki->{sandbox}->sysCommand(
+        'sh -c %A%', A => 'echo JUNK ON STDERR 1>&2');
+    $this->assert_equals(0, $exit);
+    $this->assert_str_equals("JUNK ON STDERR\n", $out);
+    ($out, $exit) = $twiki->{sandbox}->sysCommand(
+        'test %A% %B% %C%', A => '1', B=>'-eq', C=>'2');
+    $this->assert_equals(1, $exit, $exit.' '.$out);
+    $this->assert_str_equals("", $out);
+    ( $out, $exit) = $twiki->{sandbox}->sysCommand(
+        'sh -c %A%', A => 'echo urmf; exit 7');
+    $this->assert($exit != 0);
+    $this->assert_str_equals("urmf\n", $out);
+}
 
-    $this->assert_deep_equals(['', 7],
-                              [$twiki->{sandbox}->readFromProcess('sh -c %A%', A => 'exit 7')]);
-    $this->assert_deep_equals(["1\n2\n", 0],
-                              [$twiki->{sandbox}->readFromProcess ('sh -c %A%', A => 'echo 1; echo 2')]);
-    $this->assert_deep_equals(["1\n2\n", 0],
-                              [$twiki->{sandbox}->readFromProcess ('sh -c %A%', A => 'echo 1; echo 2 1>&2')]);
+sub test_executeRSP {
+    my $this = shift;
+    $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 1;
+    $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
+    $this->verify();
+}
+
+sub test_executeESP {
+    my $this = shift;
+    $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
+    $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 1;
+    $this->verify();
+}
+
+sub test_executeNSP {
+    my $this = shift;
+    $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = 0;
+    $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = 0;
+    $this->verify();
 }
 
 1;

@@ -290,6 +290,7 @@ sub getAttachmentLink {
             push( @attrs, width=>$nx, height=>$ny );
             $imgSize = "width='$nx' height='$ny'";
         }
+
         $fileLink = $prefs->getPreferencesValue( 'ATTACHEDIMAGEFORMAT' );
         unless( $fileLink ) {
             push( @attrs, src=>"%ATTACHURLPATH%/$attName" );

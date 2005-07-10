@@ -144,7 +144,7 @@ sub search {
 
 sub _contentCallback {
     TWiki::spamProof( $_[1] );
-    print @_[1];
+    print $_[1];
 }
 
 1;

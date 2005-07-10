@@ -104,7 +104,6 @@ sub _processWeb {
 sub _processChanges {
     my ( $twiki, $web, $notify, $db ) = @_;
 
-    my $wroot =  $TWiki::cfg{DataDir} . "/$web";
     my $timeOfLastNotify =
       $twiki->{store}->readMetaData( $web, 'mailnotify' ) || 0;
     my $timeOfLastChange = '';

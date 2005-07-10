@@ -136,7 +136,11 @@ sub checkAccessPermission {
         # read is 'Raw' just to hint to store that we want the
         # data _fast_.
         my $store = $this->{session}->{store};
-        $theTopicText = $store->readTopicRaw( undef, $web, $topic, undef );
+        if( $store->topicExists( $web, $topic )) {
+            $theTopicText = $store->readTopicRaw( undef, $web, $topic, undef );
+        } else {
+            $theTopicText = '';
+        }
     }
 
     my $allowText;

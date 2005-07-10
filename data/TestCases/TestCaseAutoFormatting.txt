@@ -136,8 +136,8 @@ class CatAnimal {
 </td></tr>
 <tr><td> Separator</td><td>
 <!-- expected HR -->
-<hr>
-<hr>
+<hr></hr>
+<hr></hr>
 --
 <!-- /expected -->
 </td><td>
@@ -471,6 +471,25 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 |^ |  B3:C3 span 2 cols right||D3|E3:E4 span 2 rows |
 | ^|B4:B5 span 2 rows |C4:D4 span 2 cols|| ^ |
 |^|^|C5|D5:E5 span 2 cols||
+<!-- /actual -->
+
+---+++ Expected
+<!-- expected -->
+<table border="1" cellspacing="1" cellpadding="0">
+ <tr>
+  <td class="twikiFirstCol" bgcolor="#FFFFCC">
+   <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
+ </tr>
+ <tr>
+  <td class="twikiFirstCol" bgcolor="#FFFFFF">
+   <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
+ </tr>
+</table>
+<!-- /expected -->
+---+++ Actual
+<!-- actual -->
+|http://www.google.co.uk|
+| http://www.google.co.uk |
 <!-- /actual -->
 
 <!-- expected expand LINKATEND -->

@@ -152,7 +152,6 @@ sub new {
     $this->{symbols} = '';
     $this->{comment} = '';
     $this->{desc} = '';
-    $this->init();
     return $this;
 }
 
@@ -395,7 +394,6 @@ sub initBinary {
     my( $this ) = @_;
     # Nothing to be done but note for re-writing
     $this->{expand} = 'b';
-    return undef;
 }
 
 # implements RcsFile
@@ -403,7 +401,6 @@ sub initText {
     my( $this ) = @_;
     # Nothing to be done but note for re-writing
     $this->{expand} = '';
-    return undef;
 }
 
 # implements RcsFile
@@ -417,7 +414,11 @@ sub numRevisions {
 sub addRevision {
     my( $this, $text, $log, $author, $date ) = @_;
 
-    $this->_save( $this->{file}, \$text );
+    if( $this->{attachment} ) {
+        $this->_saveAttachment( $text );
+    } else {
+        $this->_saveFile( $this->{file}, $text );
+    }
     $text = $this->_readFile( $this->{file} ) if( $this->{attachment} );
 
     $this->_ensureProcessed();
@@ -505,7 +506,7 @@ sub revisionDiff {
     foreach my $ele ( @$diff ) {
         push @list, $ele;
     }
-	return ('', \@list);	
+	return \@list;	
 }
 
 # implements RcsFile
@@ -561,16 +562,17 @@ sub _patch {
 sub getRevision {
     my( $this, $version ) = @_;
 
+    return $this->SUPER::getRevision($version) unless $version;
+
     $this->_ensureProcessed();
     my $head = $this->{head};
+    $this->SUPER::getRevision($version) unless $head;
     if( $version == $head ) {
         return $this->{revs}[$version]->{text};
-    } else {
-        my $headText = $this->{revs}[$head]->{text};
-        my $text = _split( $headText );
-        return $this->_patchN( $text, $head-1, $version );
     }
-    return $this->SUPER::getRevision($version);
+    my $headText = $this->{revs}[$head]->{text};
+    my $text = _split( $headText );
+    return $this->_patchN( $text, $head-1, $version );
 }
 
 # Apply reverse diffs until we reach our target rev

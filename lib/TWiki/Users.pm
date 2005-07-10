@@ -305,8 +305,11 @@ sub _cacheTWikiUsersTopic {
     %{$this->{W2U}} = ();
     my $text;
     my $store = $this->{session}->{store};
-    if( $TWiki::cfg{MapUserToWikiName} ) {
-        $text = $store->readTopicRaw( undef, $TWiki::cfg{UsersWebName},
+    if( $TWiki::cfg{MapUserToWikiName} &&
+       $store->topicExists($TWiki::cfg{UsersWebName},
+                           $TWiki::cfg{UsersTopicName} )) {
+        $text = $store->readTopicRaw( undef,
+                                      $TWiki::cfg{UsersWebName},
                                       $TWiki::cfg{UsersTopicName},
                                       undef );
     } else {

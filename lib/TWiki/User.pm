@@ -441,7 +441,8 @@ sub groupMembers {
     ASSERT( $this->isGroup()) if DEBUG;
     my $store = $this->{session}->{store};
 
-    unless( defined $this->{members} ) {
+    if( !defined $this->{members} &&
+          $store->topicExists( $this->{web}, $this->{wikiname} )) {
         my $text =
           $store->readTopicRaw( undef,
                                 $this->{web}, $this->{wikiname},

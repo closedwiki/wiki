@@ -343,8 +343,9 @@ sub _readTemplateFile {
         }
     }
 
-    # SMELL: surely this should be an error?
-    #die "Template $name was not found\n";
+    # SMELL: should really
+    #throw Error::Simple( 'Template '.$name.' was not found' );
+    # instead of
     return '';
 }
 

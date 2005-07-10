@@ -179,7 +179,6 @@ sub load {
             @pluginList = split( /[,\s]+/, $query->param( 'debugenableplugins' ));
         }
     }
-
     my $user; # the user login name
     my $userDefiner; # the plugin that is defining the user
     foreach my $pn ( @pluginList ) {

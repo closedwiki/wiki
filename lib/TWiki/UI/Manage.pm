@@ -239,12 +239,17 @@ sub rename {
     my $oldWeb = $session->{webName};
     my $query = $session->{cgiQuery};
 
+    # SMELL: should apply name filter fo web and topic names?
     my $newWeb = $query->param( 'newweb' ) || '';
+    $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
     my $newTopic = $query->param( 'newtopic' ) || '';
+    $newTopic = TWiki::Sandbox::untaintUnchecked( $newTopic );
+
     my $theUrl = $query->url;
     my $lockFailure = '';
     my $breakLock = $query->param( 'breaklock' );
-    my $theAttachment = $query->param( 'attachment' );
+    my $attachment = $query->param( 'attachment' );
+    $attachment = TWiki::Sandbox::untaintUnchecked( $attachment );
     my $confirm = $query->param( 'confirm' );
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || '';
     my $store = $session->{store};
@@ -252,7 +257,7 @@ sub rename {
     $newTopic =~ s/\s//go;
     $newTopic =~ s/$TWiki::cfg{NameFilter}//go;
 
-    $theAttachment ||= '';
+    $attachment ||= '';
 
     TWiki::UI::checkWebExists( $session, $oldWeb, $oldTopic, 'rename' );
     TWiki::UI::checkTopicExists( $session, $oldWeb, $oldTopic, 'rename');
@@ -271,24 +276,24 @@ sub rename {
         $newTopic =~ s/($TWiki::cfg{NameFilter})//go;
     }
 
-    if ( $theAttachment) {
+    if ( $attachment) {
         # Does old attachment exist?
         unless( $store->attachmentExists( $oldWeb, $oldTopic,
-                                          $theAttachment )) {
+                                          $attachment )) {
             throw TWiki::OopsException( 'attention',
                                         web => $oldWeb,
                                         topic => $oldTopic,
                                         def => 'move_err',
-                                        params => $theAttachment );
+                                        params => $attachment );
         }
         # does new attachment already exist?
         if( $store->attachmentExists( $newWeb, $newTopic,
-                                      $theAttachment )) {
+                                      $attachment )) {
             throw TWiki::OopsException( 'attention',
                                         def => 'move_err',
                                         web => $newWeb,
                                         topic => $newTopic,
-                                        params => $theAttachment );
+                                        params => $attachment );
         }
         # SMELL: what about if the target topic doesn't exist?
     } elsif( $newTopic ) {
@@ -312,25 +317,24 @@ sub rename {
         _newTopicScreen( $session,
                          $oldWeb, $oldTopic,
                          $newWeb, $newTopic,
-                         $theAttachment,
+                         $attachment,
                          $confirm, $doAllowNonWikiWord );
         return;
     }
 
     # Update references in referring pages - not applicable to attachments.
     my $refs;
-    unless( $theAttachment ) {
+    unless( $attachment ) {
         $refs = _getReferringTopicsListFromURL
           ( $session, $oldWeb, $oldTopic, $newWeb, $newTopic );
     }
-
     move( $session, $oldWeb, $oldTopic, $newWeb, $newTopic,
-          $theAttachment, $refs );
+          $attachment, $refs );
 
     my $new_url = '';
     if ( $newWeb eq $TWiki::cfg{TrashWebName} &&
          $oldWeb ne $TWiki::cfg{TrashWebName} ) {
-        if( $theAttachment ) {
+        if( $attachment ) {
             # go back to old topic after deleting an attachment
             $new_url = $session->getScriptUrl( $oldWeb, $oldTopic, 'view' );
         } else {
@@ -478,11 +482,11 @@ Move the given topic, or an attachment in the topic, correcting refs to the topi
 in the list of topics (specified as web.topic pairs) in the \@refs array.
 
    * =$session= - reference to session object
-   * =$oldWeb= - name of old web
-   * =$oldTopic= - name of old topic
-   * =$newWeb= - name of new web
-   * =$newTopic= - name of new topic
-   * =$attachment= - name of the attachment to move (from oldtopic to newtopic) (undef to move the topic)
+   * =$oldWeb= - name of old web - must be untained
+   * =$oldTopic= - name of old topic - must be untained
+   * =$newWeb= - name of new web - must be untained
+   * =$newTopic= - name of new topic - must be untained
+   * =$attachment= - name of the attachment to move (from oldtopic to newtopic) (undef to move the topic) - must be untaineted
    * =\@refs= - array of webg.topics that must have refs to this topic converted
 Will throw TWiki::OopsException on an error.
 
@@ -494,33 +498,33 @@ sub move {
     my $store = $session->{store};
 
     if( $attachment ) {
-        my $error =
-          $store->moveAttachment( $oldWeb, $oldTopic, $newWeb, $newTopic,
-                                  $attachment, $session->{user} );
-
-        if( $error ) {
+        try {
+            $store->moveAttachment( $oldWeb, $oldTopic, $newWeb, $newTopic,
+                                    $attachment, $session->{user} );
+        } catch Error::Simple with {
             throw TWiki::OopsException( 'attention',
                                         web => $oldWeb,
                                         topic => $oldTopic,
                                         def => 'move_err',
                                         params => [ $newWeb, $newTopic,
                                                     $attachment,
-                                                    $error ] );
-        }
+                                                    shift->{-text} ] );
+        };
         return;
     }
 
-    my $error = $store->moveTopic( $oldWeb, $oldTopic, $newWeb, $newTopic,
-                                       $session->{user} );
-
-    if( $error ) {
+    try {
+        $store->moveTopic( $oldWeb, $oldTopic, $newWeb, $newTopic,
+                           $session->{user} );
+    } catch Error::Simple with {
         throw TWiki::OopsException( 'attention',
                                     web => $oldWeb,
                                     topic => $oldTopic,
                                     def => 'rename_err',
-                                    params => [ $error, $newWeb,
+                                    params => [ shift->{-text},
+                                                $newWeb,
                                                 $newTopic ] );
-    }
+    };
 
     my( $meta, $text ) = $store->readTopic( undef, $newWeb, $newTopic );
 
@@ -567,7 +571,7 @@ sub move {
 
 # Display screen so user can decide on new web and topic.
 sub _newTopicScreen {
-    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $theAttachment,
+    my( $session, $oldWeb, $oldTopic, $newWeb, $newTopic, $attachment,
         $confirm, $doAllowNonWikiWord ) = @_;
 
     my $query = $session->{cgiQuery};
@@ -580,9 +584,9 @@ sub _newTopicScreen {
     my $nonWikiWordFlag = '';
     $nonWikiWordFlag = 'checked="checked"' if( $doAllowNonWikiWord );
 
-    if( $theAttachment ) {
+    if( $attachment ) {
         $tmpl = $session->{templates}->readTemplate( 'moveattachment', $skin );
-        $tmpl =~ s/%FILENAME%/$theAttachment/go;
+        $tmpl =~ s/%FILENAME%/$attachment/go;
     } elsif( $confirm ) {
         $tmpl = $session->{templates}->readTemplate( 'renameconfirm', $skin );
     } elsif( $newWeb eq $TWiki::cfg{TrashWebName} ) {
@@ -712,14 +716,15 @@ sub moveWeb {
     # because there might be topics inside the newWeb which need updating.
     _updateWebReferringTopics( $session, $oldWeb, $newWeb, $refs );
 
-    my $error = $store->moveWeb( $oldWeb, $newWeb, $user );
-
-    if( $error ) {
+    try {
+        $store->moveWeb( $oldWeb, $newWeb, $user );
+    } catch Error::Simple  with {
+        my $e = shift;
         throw TWiki::OopsException( 'attention',
                                     web => $oldWeb,
                                     topic => '',
                                     def => 'rename_err',
-                                    params => [ $error, $newWeb ] );
+                                    params => [ $e->{-text}, $newWeb ] );
     }
 }
 
@@ -864,15 +869,16 @@ sub getReferringTopics {
         next if( $allWebs && $searchWeb eq $web );
         my @topicList = $store->getTopicNames( $searchWeb );
         my $searchString = $topic;
+        my $webString=$web;
+        $webString =~ s#[\./]#[\\.\\/]#go;
 
- 	my $webString=$web;
- 	$webString =~ s#[\./]#[\\.\\/]#go;
- 
- 	if(defined($topic)) {
- 	  $searchString = $webString.'.'.$topic unless ( $searchWeb eq $web );
- 	} else {
- 	  $searchString = $webString;
- 	}
+        if(defined($topic)) {
+             unless( $searchWeb eq $web ) {
+                 $searchString = $webString.'.'.$topic
+             }
+        } else {
+            $searchString = $webString;
+        }
         # Note use of \< and \> to match the empty string at the edges of a word.
         my $matches = $store->searchInWebContent
           ( '\<'.$searchString.'\>',
@@ -881,6 +887,7 @@ sub getReferringTopics {
 
         foreach my $searchTopic ( keys %$matches ) {
             next if( $searchWeb eq $web && $searchTopic eq $topic );
+
             my $t = join( '...', @{$matches->{$searchTopic}});
             $t = $renderer->TML2PlainText( $t, $searchWeb, $searchTopic,
                                            "showvar;showmeta" );
@@ -936,7 +943,7 @@ sub _updateReferringTopics {
             } catch TWiki::AccessControlException with {
                 my $e = shift;
                 $session->writeWarning( $e->stringify() );
-            } otherwise {
+            } finally {
                 $store->unlockTopic( $user, $itemWeb, $itemTopic );
             };
         }
@@ -979,7 +986,7 @@ sub _updateWebReferringTopics {
             } catch TWiki::AccessControlException with {
                 my $e = shift;
                 $session->writeWarning( $e->stringify() );
-            } otherwise {
+            } finally {
                 $store->unlockTopic( $user, $itemWeb, $itemTopic );
             };
         }
@@ -1049,17 +1056,16 @@ sub _saveSettings {
         }
     }
 
-    my $error =
-      $session->{store}->saveTopic( $user, $web, $topic,
+    try {
+        $session->{store}->saveTopic( $user, $web, $topic,
                                     $currText, $newMeta, $saveOpts );
-
-    if( $error ) {
+    } catch Error::Simple with {
         throw TWiki::OopsException( 'attention',
                                     def => 'save_error',
                                     web => $web,
                                     topic => $topic,
-                                    params => $error );
-    }
+                                    params => shift->{-text} );
+    };
     my $viewURL = $session->getScriptUrl( $web, $topic, 'view' );
     $session->redirect( $viewURL );
     return;

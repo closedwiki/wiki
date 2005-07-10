@@ -217,26 +217,26 @@ sub upload {
         }
     }
 
-    my $error =
-      $session->{store}->saveAttachment( $webName, $topic, $fileName, $user,
-                                    { dontlog => !$TWiki::cfg{Log}{upload},
-                                      comment => $fileComment,
-                                      hide => $hideFile,
-                                      createlink => $createLink,
-                                      # Undocumented CGI call
-                                      file => $tmpFileName,
-                                      filepath => $filePath,
-                                      filesize => $fileSize,
-                                      filedate => $fileDate,
-                                    } );
-
-    if( $error ) {
+    try {
+        $session->{store}->saveAttachment(
+            $webName, $topic, $fileName, $user,
+            { dontlog => !$TWiki::cfg{Log}{upload},
+              comment => $fileComment,
+              hide => $hideFile,
+              createlink => $createLink,
+              # Undocumented CGI call
+              file => $tmpFileName,
+              filepath => $filePath,
+              filesize => $fileSize,
+              filedate => $fileDate,
+          } );
+    } catch Error::Simple with {
         throw TWiki::OopsException( 'attention',
                                     def => 'save_error',
                                     web => $webName,
                                     topic => $topic,
-                                    params => $error );
-    }
+                                    params => shift->{-text} );
+    };
 
     $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
 

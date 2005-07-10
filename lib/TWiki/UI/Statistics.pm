@@ -264,7 +264,7 @@ sub _collectLogData {
 
             if( $opName eq 'view' ) {
                 $statViews{$webName}++;
-                unless( $notes =~ /\(not exist\)/ ) {
+                unless( $notes && $notes =~ /\(not exist\)/ ) {
                     $view{$webName}{$topicName}++;
                 }
 

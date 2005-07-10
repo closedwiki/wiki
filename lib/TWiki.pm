@@ -973,14 +973,12 @@ sub new {
     # create the various sub-objects
     $this->{sandbox} = new TWiki::Sandbox
       ( $this, $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
-
     $this->{plugins} = new TWiki::Plugins( $this );
     $this->{net} = new TWiki::Net( $this );
     $this->{store} = new TWiki::Store( $this );
     $this->{search} = new TWiki::Search( $this );
     $this->{templates} = new TWiki::Templates( $this );
     $this->{attach} = new TWiki::Attach( $this );
-
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
@@ -1314,24 +1312,24 @@ sub _includeUrl {
     if( $theUrl =~ /^$this->{urlHost}$TWiki::cfg{PubUrlPath}\/([^\/\.]+)\/([^\/\.]+)\/([^\/]+)$/ ) {
         my $web = $1;
         my $topic = $2;
-        my $fileName = "$TWiki::cfg{PubDir}/$web/$topic/$3";
+        my $attname = $3;
         # FIXME: Check for MIME type, not file suffix
-        if( $fileName =~ m/\.(txt|html?)$/i ) {
-            unless( -e $fileName ) {
+        if( $attname =~ m/\.(txt|html?)$/i ) {
+            unless( $this->{store}->attachmentExists( $web, $topic,
+                                                      $attname )) {
                 return $this->inlineAlert( 'alerts', 'no_such_attachment',
                                            $theUrl );
             }
             if( $web ne $theWeb || $topic ne $theTopic ) {
                 # CODE_SMELL: Does not account for not yet authenticated user
-                unless( $this->{security}->checkAccessPermission( 'view',
-                                                                 $this->{user},
-                                                                 '', $topic,
-                                                                 $web ) ) {
+                unless( $this->{security}->checkAccessPermission(
+                    'view', $this->{user}, '', $topic, $web ) ) {
                     return $this->inlineAlert( 'alerts', 'access_denied',
                                                $web, $topic );
                 }
             }
-            $text = $this->{store}->readFile( $fileName );
+            $text = $this->{store}->readAttachment( undef, $web, $topic,
+                                                    $attname );
             $text = _cleanupIncludedHTML( $text, $this->{urlHost},
                                           $TWiki::cfg{PubUrlPath} );
             $text = applyPatternToIncludedText( $text, $thePattern )
@@ -2168,9 +2166,10 @@ This method is *DEPRECATED* but is maintained for script compatibility.
 sub initialize {
     my ( $pathInfo, $theRemoteUser, $topic, $theUrl, $theQuery ) = @_;
 
-    my $twiki = new TWiki( $pathInfo, $theRemoteUser, $topic, $theUrl, $theQuery );
+    my $twiki = new TWiki( $pathInfo, $theRemoteUser, $topic,
+                           $theUrl, $theQuery );
 
-    # Attempt to force the new session into the plugins context. This may not work.
+    # Force the new session into the plugins context.
     $TWiki::Plugins::SESSION = $twiki;
 
     return ( $twiki->{topicName}, $twiki->{webName}, $twiki->{scriptUrlPath},

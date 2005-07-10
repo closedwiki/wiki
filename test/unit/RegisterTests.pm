@@ -14,7 +14,7 @@ package RegisterTests;
 #Uncomment to isolate 
 #our @TESTS = qw(notest_registerVerifyOk); #notest_UnregisteredUser);
 
-use base qw(Test::Unit::TestCase);
+use base qw(TWikiTestCase);
 BEGIN {
     unshift @INC, '../../bin';
     require 'setlib.cfg';
@@ -61,18 +61,26 @@ sub set_up {
 
     $SIG{__DIE__} = sub { confess $_[0] };
 
-    $session->{store}->createWeb($session->{user}, $testWeb);
-    $session->{store}->createWeb($session->{user}, $peopleWeb,
-                        $TWiki::cfg{UsersWebName});
-    $session->{store}->createWeb($session->{user}, $systemWeb,
-                        $TWiki::cfg{SystemWebName});
+    $this->protectCFG();
 
-    foreach my $n qw(SystemWebName UsersWebName HtpasswdFileName RegistrationApprovals) {
-        $save->{$n} = $TWiki::cfg{$n};
-    }
+    try {
+        $session->{store}->createWeb($session->{user}, $testWeb);
+        $session->{store}->createWeb($session->{user}, $peopleWeb,
+                                     $TWiki::cfg{UsersWebName});
+        $session->{store}->saveTopic($session->{user}, $peopleWeb,
+                                     'TWikiAdminGroup',
+                                     "   * Set GROUP = TestAdmin\n");
+        $TWiki::cfg{UsersWebName} = $peopleWeb;
+        my $user = $session->{users}->findUser("TestAdmin", "TestAdmin");
+        $session->{store}->createWeb($user, $systemWeb,
+                                     $TWiki::cfg{SystemWebName});
+    } catch TWiki::AccessControlException with {
+        $this->assert(0,shift->stringify());
+    } catch Error::Simple with {
+        $this->assert(0,shift->stringify());
+    };
 
     $TWiki::cfg{HtpasswdFileName} = "/tmp/htpasswd";
-    $TWiki::cfg{UsersWebName} = $peopleWeb;
     $TWiki::cfg{SystemWebName} = $systemWeb;
     $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
 
@@ -84,13 +92,12 @@ sub set_up {
 }
 
 sub tear_down {
+    my $this = shift;
     # clean up after test
     $session->{store}->removeWeb($session->{user},$testWeb);
     $session->{store}->removeWeb($session->{user},$peopleWeb);
     $session->{store}->removeWeb($session->{user},$systemWeb);
-    foreach my $n (keys %$save) {
-        $TWiki::cfg{$n} = $save->{$n};
-    }
+    $this->restoreCFG();
     @mails = ();
 }
 

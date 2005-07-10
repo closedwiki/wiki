@@ -9,7 +9,23 @@ BEGIN {
 
 use base qw(Test::Unit::TestCase);
 
+use TWiki;
 use TWiki::Plugins::TestFixturePlugin::HTMLDiffer;
+use strict;
+
+sub protectCFG() {
+    my $this = shift;
+    foreach my $i (keys %TWiki::cfg ) {
+        $this->{__TWikiSafe}{$i} = $TWiki::cfg{$i};
+    }
+}
+
+sub restoreCFG {
+    my $this = shift;
+    for my $i (keys %{$this->{__TWikiSafe}} ) {
+        $TWiki::cfg{$i} = $this->{__TWikiSafe}{$i};
+    }
+}
 
 sub new {
     my $self = shift()->SUPER::new(@_);

@@ -122,8 +122,8 @@ sub test_referringtopics {
     foreach my $r ( sort keys %$refs ) {
         $this->assert_str_equals($expected[$i++], $r);
     }
-    $refs = TWiki::UI::Manage::getReferringTopics($twiki,
-                                                  $oldweb, $oldtopic, 1);
+    $refs = TWiki::UI::Manage::getReferringTopics(
+        $twiki, $oldweb, $oldtopic, 1);
     $this->assert( $refs->{"$newweb.OtherTopic"});
     $this->assert( !$refs->{"$oldweb.OtherTopic"});
     $this->assert( !$refs->{"$newweb.$oldtopic"}) ;

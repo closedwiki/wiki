@@ -2,7 +2,7 @@
 require 5.006;
 package PrefsTests;
 
-use base qw(Test::Unit::TestCase);
+use base qw(TWikiTestCase);
 
 BEGIN {
     unshift @INC, '../../bin';
@@ -13,6 +13,7 @@ use TWiki;
 use TWiki::Prefs;
 use strict;
 use Assert;
+use Error qw( :try );
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -23,21 +24,14 @@ use File::Copy;
 
 my $testsysweb = 'TemporaryTestPrefsSystemWeb';
 my $testWeb = "TestPrefsWeb";
+my $testUsersWeb = "TestPrefsUsersWeb";
 my $testTopic = "TestPrefsTopic";
-my $user = "TestUser1";
 my $thePathInfo = "/$testWeb/$testTopic";
 my $theUrl = "/save/$testWeb/$testTopic";
-my %safe;;
+my %safe;
+my $user;
 
 my $twiki;
-my $default_sys_web;
-my $default_sys_topic;
-
-BEGIN {
-    $twiki = new TWiki( $thePathInfo, $user, $testTopic, $theUrl );
-    $default_sys_web = $TWiki::cfg{SystemWebName};
-    $default_sys_topic = $TWiki::cfg{SitePrefsTopicName};
-}
 
 sub _set {
     my ( $this, $web, $topic, $pref, $val ) = @_;
@@ -55,7 +49,7 @@ sub _set {
 
 sub _setTWikiPref {
    my ( $this, $pref, $val ) = @_;
-   $this->_set($testsysweb, $default_sys_topic, $pref, $val);
+   $this->_set($testsysweb, $TWiki::cfg{SitePrefsTopicName}, $pref, $val);
 }
 
 sub _setWebPref {
@@ -72,29 +66,48 @@ sub _setUserPref {
    my ( $this, $pref, $val ) = @_;
    $this->_set($TWiki::cfg{UsersWebName}, $user, $pref, $val);
 }
+my $original;
 
 sub set_up {
     my $this = shift;
 
-    $this->assert_equals('TWiki',$TWiki::cfg{SystemWebName});
+    $original = $TWiki::cfg{SystemWebName};
+    $this->protectCFG();
 
-    $twiki = new TWiki( $thePathInfo, $user, $testTopic, $theUrl );
+    $this->assert_str_equals("TWiki",$original);
+    $TWiki::cfg{UsersWebName} = $testUsersWeb;
+    $TWiki::cfg{SystemWebName} = $testsysweb;
 
-    $twiki->{store}->createWeb($twiki->{user}, $testsysweb, $default_sys_web);
-    $twiki->{store}->copyTopic( $user, $default_sys_web, $default_sys_topic,
-                      $testsysweb, $default_sys_topic );
-    $twiki->{store}->createWeb($twiki->{user}, $testWeb, '_default');
-    $twiki->{store}->saveTopic($twiki->{user}, $TWiki::cfg{UsersWebName},
-                               'TestUser1', "silly user page!!!");
+    $twiki = new TWiki( $thePathInfo, "TestUser1", $testTopic, $theUrl );
+    $user = $twiki->{user};
+    try {
+        $twiki->{store}->createWeb($user, $testUsersWeb);
+        $twiki->{store}->saveTopic($twiki->{user}, $testUsersWeb,
+                                   'TWikiAdminGroup',
+                                   "   * Set GROUP = TestUser1\n");
+        $twiki->{store}->createWeb($user, $testsysweb, $original);
+        $twiki->{store}->copyTopic( $user, $original,
+                                    $TWiki::cfg{SitePrefsTopicName},
+                                    $testsysweb,
+                                    $TWiki::cfg{SitePrefsTopicName} );
+        $twiki->{store}->createWeb($twiki->{user}, $testWeb, '_default');
+        $twiki->{store}->saveTopic($twiki->{user}, $testUsersWeb,
+                                   'TestUser1', "silly user page!!!");
+    } catch TWiki::AccessControlException with {
+        $this->assert(0,shift->stringify());
+    } catch Error::Simple with {
+        $this->assert(0,shift->stringify()||'');
+    };
 }
 
 sub tear_down {
     my $this = shift;
 
-    $TWiki::cfg{SystemWebName} = $default_sys_web;
+    $this->restoreCFG();
 
     $twiki->{store}->removeWeb($twiki->{user}, $testsysweb);
     $twiki->{store}->removeWeb($twiki->{user}, $testWeb);
+    $this->assert_str_equals($original, $TWiki::cfg{SystemWebName});
 }
 
 sub test_system {

@@ -749,7 +749,7 @@ Prerequisites:
     - The file _filetypes.txts hould be in the same directory as the image attachments
     
 used in: Attach::_expandAttrs
-    
+
 =cut
 
 sub filenameToIcon {
@@ -760,7 +760,9 @@ sub filenameToIcon {
     my $fileExt = lc $bits[$#bits];
 
     my $iconUrl = $TWiki::cfg{PubUrlPath}.'/'.$this->_getSkinIconTopicPath();
+    # SMELL: use of direct access to PubDir violates store encapsulation
     my $iconDir = $TWiki::cfg{PubDir}.'/'.$this->_getSkinIconTopicPath();
+
     my $store = $this->{session}->{store};
     # The file _filetypes.txt should be in the same directory as the image attachments
     my $iconList = $store->readFile( $iconDir.'/_filetypes.txt' );

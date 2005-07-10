@@ -19,22 +19,22 @@ Designed by: Crawford Currie
  </tr>
   <tr>
   <td>ICON{}</td>
-  <td><!-- expected -->ICON <img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" /><!-- /expected --></td>
   <td><!-- actual -->ICON %ICON{}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{""}</td>
-  <td><!-- expected -->ICON <img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" /><!-- /expected --></td>
   <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{"Fleegle"}</td>
-  <td><!-- expected -->ICON <img src="%PUBURL%/icn/else.gif" width="16" height="16" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" /><!-- /expected --></td>
   <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{"sniff.sniff"}</td>
-  <td><!-- expected -->ICON <img src="%PUBURL%/icn/sniff.gif"/><!-- /expected --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/sniff.gif"/><!-- /expected --></td>
   <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
  </tr>
  <tr>

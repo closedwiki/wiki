@@ -213,15 +213,15 @@ sub _save {
 
     if( $saveCmd eq 'delRev' ) {
         # delete top revision
-        my $error =
-          $store->delRev( $user, $webName, $topic );
-        if( $error ) {
+        try {
+            $store->delRev( $user, $webName, $topic );
+        } catch Error::Simple with {
             throw TWiki::OopsException( 'attention',
                                         def => 'save_error',
                                         web => $webName,
                                         topic => $topic,
-                                        params => $error );
-        }
+                                        params => shift->{-text} );
+        };
 
         return 1;
     }
@@ -235,16 +235,16 @@ sub _save {
         my $meta = new TWiki::Meta( $session, $webName, $topic );
         $store->extractMetaData( $meta, \$textQueryParam );
         my $saveOpts = { timetravel => 1 };
-        my $error =
-          $store->repRev( $user, $webName, $topic,
-                          $textQueryParam, $meta, $saveOpts );
-        if( $error ) {
+        try {
+            $store->repRev( $user, $webName, $topic,
+                            $textQueryParam, $meta, $saveOpts );
+        } catch Error::Simple with {
             throw TWiki::OopsException( 'attention',
                                         def => 'save_error',
                                         web => $webName,
                                         topic => $topic,
-                                        params => $error );
-        }
+                                        params => shift->{-text} );
+        };
 
         return 1;
     }
@@ -252,17 +252,16 @@ sub _save {
     my( $newMeta, $newText, $saveOpts, $merged ) =
       TWiki::UI::Save::buildNewTopic($session);
 
-    my $error =
-      $store->saveTopic( $user, $webName, $topic,
-                         $newText, $newMeta, $saveOpts );
-
-    if( $error ) {
+    try {
+        $store->saveTopic( $user, $webName, $topic,
+                           $newText, $newMeta, $saveOpts );
+    } catch Error::Simple with {
         throw TWiki::OopsException( 'attention',
                                     def => 'save_error',
                                     web => $webName,
                                     topic => $topic,
-                                    params => $error );
-    }
+                                    params => shift->{-text} );
+    };
 
     my $lease = $store->getLease( $webName, $topic );
     # clear the lease, if (and only if) we own it

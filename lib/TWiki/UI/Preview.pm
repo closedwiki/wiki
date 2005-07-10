@@ -24,6 +24,7 @@ package TWiki::UI::Preview;
 use strict;
 use TWiki;
 use TWiki::UI;
+use TWiki::UI::Save;
 use TWiki::Form;
 use Error qw( :try );
 use TWiki::OopsException;

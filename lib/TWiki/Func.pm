@@ -1195,8 +1195,9 @@ Return: =$dir= Data directory, e.g. ='/twiki/data'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
-SMELL: this function violates store encapsulation and should be avoided
-wherever possible!
+*Deprecated:* TWiki::Plugins::VERSION 1.026
+
+This function violates store encapsulation and is therefore *deprecated*.
 
 =cut
 
@@ -1213,8 +1214,9 @@ Return: =$dir= Pub directory, e.g. ='/htdocs/twiki/pub'=
 
 *Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
 
-SMELL: this function violates store encapsulation and should be avoided
-wherever possible!
+*Deprecated:* TWiki::Plugins::VERSION 1.026
+
+This function violates store encapsulation and is therefore *deprecated*.
 
 =cut
 
