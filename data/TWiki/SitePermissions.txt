@@ -8,7 +8,7 @@ See TWikiAccessControl for details
 
 __Please Note:__
 
-   * A blank in the the above table may mean _either_ the corresponding control is absent or commented out _or_ that it has been set to a null value.  The two conditions have dramaticallydifferent and possibly opposed semantics.
+   * A blank in the the above table may mean _either_ the corresponding control is absent or commented out _or_ that it has been set to a null value.  The two conditions have dramatically different and possibly opposed semantics.
 
    * Main.TWikiGuest is the guest account - used by unautheticated users.
 
