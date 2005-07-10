@@ -8,6 +8,7 @@ package Assert;
 #  1. ASSERT instead of assert
 #  2. has to be _explicitly enabled_ using the $ENV{ASSERT}
 #  3. should and shouldnt have been removed
+#  4. Added UNTAINTED
 #
 # Usage is as for Carp::Assert except that you have to explicitly
 # enable asserts using the environment variable "TWIKI_ASSERTS"
@@ -24,7 +25,7 @@ BEGIN {
     @ISA = qw(Exporter);
 
     %EXPORT_TAGS = (
-                    NDEBUG => [qw(ASSERT affirm DEBUG)],
+                    NDEBUG => [qw(ASSERT UNTAINTED affirm DEBUG)],
                    );
     $EXPORT_TAGS{DEBUG} = $EXPORT_TAGS{NDEBUG};
     Exporter::export_tags(qw(NDEBUG DEBUG));
@@ -90,6 +91,12 @@ sub ASSERT ($;$) {
         Carp::confess( _fail_msg($_[1]) );
     }
     return undef;
+}
+
+sub UNTAINTED($) {
+    local(@_, $@, $^W) = @_;
+    my $x;
+    return( eval { $x = $_[0], kill 0; 1 } );
 }
 
 sub affirm (&;$) {
