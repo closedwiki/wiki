@@ -195,11 +195,10 @@ The following are __site-level__ settings that affect all users in all webs on t
 
 Currently activated plugins: %ACTIVATEDPLUGINS%
 
-All plugins that have Perl modules (files with names ending in "Plugin.pm") in the =lib/TWiki/Plugins= directory are activated automatically unless listed in DISABLEDPLUGINS. This should be a comma separated list of plugin names.
-	* Set DISABLEDPLUGINS = EmptyPlugin, DefaultPlugin, TestFixturePlugin
-If you need to specify the plugin execution sequence, then manually list the plugins in execution order in INSTALLEDPLUGINS. All handlers will be called in this order. This should be a comma separated list of plugin names.
-	* Set INSTALLEDPLUGINS =
-	* %T% *NOTE:* You can enable/disable all plugins with the ==DisableAllPlugins== configuration flag; see ==TWiki.cfg==. You can also enable/disable selected plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
+You can enable/disable plugins using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface.
+	* Set DISABLEDPLUGINS = This variable is no longer supported
+	* Set INSTALLEDPLUGINS = This variable is no longer supported. You can set the plugins execution order using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface.
+	* %T% *NOTE:* You can enable/disable plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
 
 
 ---++ Miscellaneous Settings
