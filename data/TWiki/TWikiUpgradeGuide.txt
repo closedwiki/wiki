@@ -70,8 +70,7 @@ There are a few points worth noting:
 	* =UpgradeTwiki= creates the new installation in a new directory tree. It makes a complete copy of all your existing data, so:
 		* Clearly you need to point it to a location where there is enough space
 		* If you have symlinks under your =data/= directory in your existing installation, these are reproduced as actual directories in the new structure.	It is up to you to pull these sub-directories out again and re-symlink as needed
-	* =UpgradeTwiki= doesn't deal with custom templates or Plugins, you will have to reinstall these in the new installation
-	* If you have done tricky stuff with $OS in your existing =TWiki.cfg= file, then you will need to manually examine the new =TWiki.cfg= file and possibly put your tricky changes in there manually
+	* =UpgradeTwiki= doesn't deal with custom templates or Plugins, you will have to reinstall these in the new installation.
 
 If you use it, and would be kind enough to add your experiences to TWiki:Codev.UpgradeTwiki, it would be much appreciated.  The report of your experience will help to make =UpgradeTwiki= more robust.
 
@@ -114,7 +113,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 		* For Windows hosts, make sure the correct path to the perl interpreter is changed in the first line of every script file. See also [[WindowsInstallCookbook#Editing_the_CGI_scripts][WindowsInstallCookbook]]
 	1. *Update library files*:
 		* Overwrite the =TWiki.cfg= configuration file in =$TWIKIROOT/lib= with the new one
-		* Restore the configuration values from the backup. You typically need to configure just the ones in the section "variables that need to be changed when installing on a new server"
+		* Add the unique local configuration values from the backup. You can do this manually if you have to, but you are highly recommended to use the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]] interface. If you choose to do it manually, add the local settings to =LocalSite.cfg= and _not_ to TWiki.cfg. *Do not edit the new TWiki.cfg*.
 		* Overwrite the =TWiki.pm= library in =$TWIKIROOT/lib= with the new one
 		* Copy and overwrite all subdirectories below =$TWIKIROOT/lib= with the new ones. Make sure to preserve any extra Plugins you might have in =$TWIKIROOT/lib/TWiki/Plugins= 
 	1. *Update data files*:
@@ -147,7 +146,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 		* Test your updated TWiki installation to see if you can view, create, edit and rename topics; upload and move attachments; register users
 		* Test if the installed Plugins work as expected. You should see the list of installed Plugins in [[%TWIKIWEB%.WebHome]]
 
-*Note:* These steps assume a downtime during the time of upgrade. You could install the new version in parallel to the existing one and switch over in an instant without affecting the users. As a guideline, install the new version into =$TWIKIROOT/bin1=, =$TWIKIROOT/lib1=, =$TWIKIROOT/templates1=, =$TWIKIROOT/data/TWiki1= (from =data/TWiki=), =$TWIKIROOT/pub/TWiki1= (from =pub/TWiki=), and configure =TWiki.cfg= to point to the same data and pub directory like the existing installation. Once tested and ready to go, reconfigure =$TWIKIROOT/bin1/setlib.cfg= and =$TWIKIROOT/lib1/TWiki.cfg=, then rename =$TWIKIROOT/bin= to =$TWIKIROOT/bin2=, =$TWIKIROOT/bin1= to =$TWIKIROOT/bin=. Do the same with the =lib=, =templates= and =data/TWiki= directories.
+*Note:* These steps assume a downtime during the time of upgrade. You could install the new version in parallel to the existing one and switch over in an instant without affecting the users. As a guideline, install the new version into =$TWIKIROOT/bin1=, =$TWIKIROOT/lib1=, =$TWIKIROOT/templates1=, =$TWIKIROOT/data/TWiki1= (from =data/TWiki=), =$TWIKIROOT/pub/TWiki1= (from =pub/TWiki=), and configure =LocalSite.cfg= to point to the same data and pub directory like the existing installation. Once tested and ready to go, reconfigure =$TWIKIROOT/bin1/setlib.cfg= and =$TWIKIROOT/lib1/LocalSite.cfg=, then rename =$TWIKIROOT/bin= to =$TWIKIROOT/bin2=, =$TWIKIROOT/bin1= to =$TWIKIROOT/bin=. Do the same with the =lib=, =templates= and =data/TWiki= directories.
 
 ---++ Known Issues
 

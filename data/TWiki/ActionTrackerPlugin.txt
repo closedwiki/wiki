@@ -388,16 +388,6 @@ $TWiki::wikiWordRegex
 $TWiki::webNameRegex
 </verbatim>
 
----++ Behaviour of egrep
-The output of the =$egrepCmd= in TWiki.cfg (with no switches) must be of the form:
-	<pre>
-	filename.txt: ...matched text...
-	</pre>
-	While this is true for all UNIX grep implementations, it may be a potential issue for other operating systems.
-
----++ Limitations of Rcs<nop>Lite
-The changedsince feature of the notificationscript requires you to be using RCS as your CM tool. changedsince will not work with Rcs<nop>Lite, though all other features should be OK.
-
 ---++ Dates before 1970
 Due to limitations in the Time::Parsedate module, dates before January 1, 1970 may be parsed incorrectly.
 

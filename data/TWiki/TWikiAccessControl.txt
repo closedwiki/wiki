@@ -178,7 +178,7 @@ Use the following setup to provide unrestricted viewing access to open webs, wit
 		* __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
 	1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
 		* ==Set <nop>NOSEARCHALL = on==
-	1. *Enable* the ==$doRememberRemoteUser== flag in ==lib/TWiki.cfg== as described in TWikiUserAuthentication. <nop>%WIKITOOLNAME% will now remember the IP address of an authenticated user. 
+	1. *Enable* =={RememberUserIPAddress}== in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]] as described in TWikiUserAuthentication. <nop>%WIKITOOLNAME% will now remember the IP address of an authenticated user. 
 	1. *Copy* the ==view== script to ==viewauth== (or better, create a symbolic link) 
 	1. *Add* ==viewauth== to the list of authenticated scripts in the =.htaccess= file. The ==view== script should not be listed in the =.htaccess= file.
 

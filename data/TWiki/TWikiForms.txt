@@ -79,7 +79,7 @@ You can also retrieve possible values for select, checkbox or radio types from o
 Field values can also be obtained as the result of a TWiki.FormattedSearch. For example,
 
 <blockquote style="background-color:#f0f0f0">
-=%<nop>SEARCH{"Office$" scope="topic" web="Main" nototal="on" nosummary="on" nosearch="on" regex="on" format="Main.$topic" separator=", " }%=
+=%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nototal="on" nosummary="on" nosearch="on" regex="on" format="Main.$topic" separator=", " }%=
 </blockquote>
 
 when used in the value field of the form definition, will take the set of field values to be all topic names in the Main web which end in "Office".

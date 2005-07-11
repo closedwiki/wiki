@@ -39,7 +39,7 @@ The following Windows operating systems have been tested following the instructi
    * Windows XP works but please report any XP installations on TWiki:Codev.TWikiOnWindowsKnownConfigurations, and comment at TWiki:Codev.WindowsInstallCookbookComments.
 
 There are doubtless other combinations of components that may work - in particular:
-   * TWiki:Codev.ActiveState Perl involves only minor changes to =TWiki.cfg=, and is probably a simpler choice if you need an easy way to install mod_perl (see TWiki:Codev.ModPerl).  TWiki:Codev.ActiveState Perl can be substituted without too much hassle, and in fact the same =TWiki.cfg= can be used for both TWiki:Codev.ActiveState and Cygwin Perl.  
+   * TWiki:Codev.ActiveState Perl involves only minor changes in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]], and is probably a simpler choice if you need an easy way to install mod_perl (see TWiki:Codev.ModPerl)..  
    * Using a different web server is certainly possible, but the setup required for each webserver varies greatly (see TWiki:Codev.TWikiOnWindows for pages about specific web servers).  You may find it easiest to get a working system with Apache and then switch over to another web server.
 
 Covering the whole range of additional possibilities, particularly web servers, would make this cookbook too complex, and is best handled as a separate activity.  
@@ -96,7 +96,7 @@ If you need to use spaces in file names (not recommended), put double quotes aro
 
 Once Perl has been launched by Apache, it is in Cygwin mode, and so is everything it launches, including =ls=, =egrep=, and the RCS tools that it (typically) launches with the =bash= shell.
 
-If you need to use spaces in file names (not recommended), you _may_ be able to put double quotes around the file name in the =TWiki.cfg= file - however, it's not clear whether all the TWiki code would work with this.
+You _cannot_ use spaces in file names.
 
 ---++ Installing Components
 
@@ -440,7 +440,7 @@ Here are the main things to test:
 
 ---+++ Troubleshooting 
 
-If anything doesn't work, go back and check the configuration of the Apache =httpd.conf= file, and =TWiki.cfg=.  Have a look at the Apache error log, =c:/apache/logs/error_log=, and the TWiki error log, =/twiki/data/log*.txt=, and if necessary enable debugging on selected scripts (the commands are right at the top of each script) - the results go into =/twiki/data/debug.txt=.  There is also a =/twiki/data/warning.txt= file that contains less serious messages.
+If anything doesn't work, go back and check the configuration of the Apache =httpd.conf= file, and =[[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]=.  Have a look at the Apache error log, =c:/apache/logs/error_log=, and the TWiki error log, =/twiki/data/log*.txt=, and if necessary enable debugging on selected scripts (the commands are right at the top of each script) - the results go into =/twiki/data/debug.txt=.  There is also a =/twiki/data/warning.txt= file that contains less serious messages.
 
 See TWiki:Codev.TWikiPatches in case there are patches (i.e. specific code changes) for particular problems that may affect you (e.g. TWiki:Codev.ChangePasswordOnWin2K).
 

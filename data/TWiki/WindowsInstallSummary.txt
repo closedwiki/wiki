@@ -109,5 +109,5 @@ After a few days of everything working well come back and delete the files which
 		* Try a binary attachment upload and check the number of bytes in the file has not changed - if it has, see the Install Cygwin section's note on the default text file type.
 	* Check the Apache error_log file again
 
-If anything doesn't work, go back and check the configuration of the Apache httpd.conf file, and TWiki.cfg. Have a look at the Apache error log, =c:/apache/logs/error_log= ,and the TWiki error log, =/twiki/data/log*.txt= ,and if necessary enable debugging on selected scripts (the commands are right at the top of each script) - the results go into =/twiki/data/debug.txt= .There is also a =/twiki/data/warning.txt= file that contains less serious messages.
+If anything doesn't work, go back and check the configuration of the Apache httpd.conf file, and examine [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. Have a look at the Apache error log, =c:/apache/logs/error_log= ,and the TWiki error log, =/twiki/data/log*.txt= ,and if necessary enable debugging on selected scripts (the commands are right at the top of each script) - the results go into =/twiki/data/debug.txt= .There is also a =/twiki/data/warning.txt= file that contains less serious messages.
 
