@@ -1180,10 +1180,10 @@ sub performSanityChecks {
         eval "use $mod";
         if ($@) {
             unless ($modMissing) {
-                output .= ERROR( 'Perl Module(s) missing');
+                $output .= ERROR( 'Perl Module(s) missing');
             }
             $modMissing = 1;
-            output .= ERROR( 'Essential module ',$mod,
+            $output .= ERROR( 'Essential module ',$mod,
                          ' not installed - please check the setting ',
                          'of @INC.' );
         }
@@ -1191,10 +1191,10 @@ sub performSanityChecks {
 
     # If any critical modules missing, display @INC and give up 
     if ($modMissing) {
-        output .= NOTE( '@INC = ', join( ' ', @INC ));
+        $output .= NOTE( '@INC = ', join( ' ', @INC ));
         return $output;
     }
-    
+ 
     return $output;
 }
 
