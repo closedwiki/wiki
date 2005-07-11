@@ -192,6 +192,10 @@ sub _renderFormField {
         my $name = $attrs->{name};
         $text = renderFormFieldArg( $meta, $name ) if( $name );
     }
+    # change any new line character sequences to <br />
+    $text =~ s/(\n\r?)|(\r\n?)+/ <br \/> /gos;
+    # escape "|" to HTML entity
+    $text =~ s/\|/\&\#124;/gos;
     return $text;
 }
 

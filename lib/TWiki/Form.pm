@@ -244,6 +244,7 @@ sub _cleanField {
    # TW: this is applied to the key in the field; it is not obvious
    # why we need I18N in the key (albeit there could be collisions due
    # to the filtering... but all the current topics are keyed on _cleanField
+   $text =~ s/<nop>//go;    # support <nop> character in title
    $text =~ s/[^A-Za-z0-9_\.]//go;
    return $text;
 }

@@ -13,9 +13,8 @@
 | Country | text | 40 | | |
 | Telephone | text | 40 | | |
 | Fax | text | 40 | | |
-| YahooMessenger | text | 40 | | |
-| MsnMessenger | text | 40 | | |
-| SpecialInterests | checkbox | 4 | | |
+| <nop>YahooMessenger | text | 40 | | |
+| <nop>MsnMessenger | text | 40 | | |
 
 
 -- %MAINWEB%.TWikiGuest - 03 Oct 2004

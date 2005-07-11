@@ -31,7 +31,5 @@ __Related topics__
 %META:FIELD{name="Country" attributes="" title="Country" value=""}%
 %META:FIELD{name="Telephone" attributes="" title="Telephone" value=""}%
 %META:FIELD{name="Fax" attributes="" title="Fax" value=""}%
-%META:FIELD{name="YahooMessenger" attributes="" title="YahooMessenger" value=""}%
-%META:FIELD{name="MsnMessenger" attributes="" title="MsnMessenger" value=""}%
-%META:FIELD{name="SpecialInterests" attributes="" title="SpecialInterests" value=""}%
-
+%META:FIELD{name="YahooMessenger" attributes="" title="<nop>YahooMessenger" value=""}%
+%META:FIELD{name="MsnMessenger" attributes="" title="<nop>MsnMessenger" value=""}%
