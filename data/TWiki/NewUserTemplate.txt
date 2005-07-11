@@ -29,4 +29,5 @@ __Related topics__
 	* %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users.
 %META:FORM{name="Main.UserForm"}%
+%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" value="UserTopic"}%
 
