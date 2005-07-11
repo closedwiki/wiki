@@ -102,7 +102,6 @@ sub buildNewTopic {
         ( $prevMeta, $prevText ) =
           $store->readTopic( undef, $webName, $topic, undef );
     }
-        $prevMeta->get( 'TOPICPARENT' ) if $prevMeta;
 
     # Determine the new text
     my $newText = $query->param( 'text' );
