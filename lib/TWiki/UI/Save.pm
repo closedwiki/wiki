@@ -124,7 +124,11 @@ sub buildNewTopic {
 
     # Populate the new meta data
     my $newMeta = new TWiki::Meta( $session, $webName, $topic );
-    $newMeta->copyFrom( $prevMeta );
+    foreach my $k ( keys %$prevMeta ) {
+      unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' || $k eq 'FIELD' ) {
+	$newMeta->copyFrom( $prevMeta, $k );
+      }
+    }
 
     my $newParent = $query->param( 'topicparent' ) || '';
     my $mum;
@@ -162,8 +166,20 @@ sub buildNewTopic {
         $formDef = new TWiki::Form( $session, $webName, $formName );
         $newMeta->put( 'FORM', { name => $formName });
     }
-    if( $copyMeta ) {
-        $newMeta->copyFrom( $copyMeta, 'FIELD' );
+    if( $copyMeta && $formName ) {
+        # Copy existing fields into new form
+        my $formDef = new TWiki::Form( $session, $webName, $formName );
+	foreach my $fieldDef ( @{$formDef->{fields}} ) {
+	  next unless $fieldDef->{name};
+	  my $args =
+	    {
+	     name =>  $fieldDef->{name},
+	     title => $fieldDef->{title},
+	     value => $fieldDef->{value},
+	     attributes => $fieldDef->{attributes},
+	    };
+	  $newMeta->putKeyed( 'FIELD', $args );
+	}
     }
     if( $formDef ) {
         # override with values from the query
