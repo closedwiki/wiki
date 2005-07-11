@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="rohdedan" date="1120579379" format="1.0" version="1.19"}%
+%META:TOPICINFO{author="rohdedan" date="1121092319" format="1.0" version="1.25"}%
 ---+!! <nop>HolidaylistPlugin</nop>
 
 %TOC%
@@ -68,11 +68,14 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
   ==&nbsp;X { dd MMM yyyy, dd MMM yyy - dd MMM yyyy }== | ==&nbsp;* Dec 2005 X { 5 Dec 2005 - 7 Dec 2005, 12 Dec 2005 } - Sarah - will be away for the complete december except between 5 Dec and 7 Dec and on 12 Dec 2005== |
 
 
-*Note:*
+*Notes and Hints:*
 	* At least one space character have to stay before and after a seperator ('-'). This allows you to use a '-' in names, locations or icons,
 	  e.g. if you have a composite name like Eva-Maria.
 	* If you enable the compatmode (see [[#AttriButes][Attributes]]) you can use all event types of the TWiki:Plugins.CalendarPlugin
-
+	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbriviations for any entry type (including TWiki:Plugins.CalendarPlugin event types).
+	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can
+	  use it for your entries (including TWiki:Plugins.CalendarPlugin event types).
+	  
 
 #AttriButes
 ---++ Attributes
@@ -84,11 +87,13 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | cellspacing | tabel cell spacing | cellspacing="0" |
 | compatmode  | if set to "1" all TWiki:Plugins.CalendarPlugin event types are supported | compatmode="0" |
 | compatmodeicon | icon used for TWiki:Plugins.CalendarPlugin event types (only used if compatmode is enabled) | compatmodeicon="8-)" |
+| daynames | costum daynames (a list separated by a '&brvbar;' and starting on Monday) | daynames="M&brvbar;T&brvbar;W&brvbar;T&brvbar;F&brvbar;S&brvbar;S" |
 | days | number of days to show |days="30" |
 | headerformat | table header format of a day; a subset of strftime conversion specifiers is supported (only date not time specificiers; see manual page or TWiki:Codev.ConvergeDateTimeFormattingModels) | headerformat="&lt;font&nbsp;size=\"-2\">%b&lt;br/&gt;%a&lt;br/&gt;%e&lt;/font&gt;" |
 | holidayicon | holiday icon | holidayicon="8-)" |
 | lang | language | lang="English" |
 | month | set a month (e.g. Jan, Feb ... or 01, 02, ... 12 ) or a month offset (e.g. +1, -2,...) *Note:* If you use this month attribute the days attribute will be ignored (days will be set to the duration of the month). | month="+1" |
+| monthnames | costum month names (a list separated by '&brvbar;' and starting on January) | monthnames="J&brvbar;F&brvbar;M&brvbar;A&brvbar;M&brvbar;J&brvbar;J&brvbar;A&brvbar;S&brvbar;O&brvbar;N&brvbar;D" |
 | name | header content of the first cell header |name="Name" |
 | notatworkicon | not at work icon (only used if you type a location) | notatworkicon=":-I" |
 | nwidth | cell width of the first column | nwidth="120px" |
@@ -104,6 +109,7 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 | todayfgcolor | foreground color for today cells (usefull for a dark todaybgcolor) | todayfgcolor="black" |
 | topic | a comma separated list of source topics | topic="%<nop>TOPIC%" |
 | weekendbgcolor | background color of weekend header and data table cells | weekendbgcolor="%<nop>WEBBGCOLOR%" |
+| width | width of table in pixels or percent | width="100%" |
 | workicon | in work icon | workicon="&amp;nbsp;" |
 | year | set a year (e.g. 2005, 2006 ...) or a year offset (e.g. +1, -1, ...) | year="0" |
 
@@ -151,6 +157,9 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 	* Set compatibility mode (default: 0; disables all TWiki:Plugins.CalendarPlugin event types) and icon (default: <verbatim>8-)</verbatim>)
 		* # Set COMPATMODE = 1
 		* # Set COMPATMODEICON = 8-)
+
+	* Set unknown parameter message (default: <verbatim>%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% &lt;br/&gt; Allowed parameters are (see TWiki.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%</verbatim>)
+		* # Set UNKNOWNPARAMSMSG = %RED% Following parameter(s) is/are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR%
   
 *Note:* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
@@ -170,10 +179,11 @@ The syntax follows that of the !CalendarPlugin. See TWiki:Plugins.CalendarPlugin
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  Plugin Version: | v1.010 (5 Jul 2005) |
+|  Plugin Version: | v1.011 (11 Jul 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  v1.011 (11 Jul 2005) | improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg (TWiki:Main.DanielRohde) |
 |  v1.010 (5 Jul 2005): | added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation (TWiki:Main.DanielRohde) |
-|  v1.009 (29 Jun 2005): | fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering (TWiki:Main.DanielRohde) |
+|  v1.009 (29 Jun 2005): | fixed major bug (!WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering (TWiki:Main.DanielRohde) |
 |  v1.008 (23 Jun 2005): | added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute (TWiki:Main.DanielRohde) |
 |  v1.007 (17 Jun 2005):  | personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug (TWiki:Main.DanielRohde) |
 |  v1.006 (16 Jun 2005): | added new features (location support; today(fg/bg)color) (TWiki:Main.DanielRohde) |
