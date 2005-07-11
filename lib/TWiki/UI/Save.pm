@@ -124,6 +124,7 @@ sub buildNewTopic {
 
     # Populate the new meta data
     my $newMeta = new TWiki::Meta( $session, $webName, $topic );
+    $newMeta->copyFrom( $prevMeta );
 
     my $newParent = $query->param( 'topicparent' ) || '';
     my $mum;
