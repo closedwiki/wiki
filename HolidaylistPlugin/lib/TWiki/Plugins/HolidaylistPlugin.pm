@@ -67,14 +67,16 @@ eval {
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
         $debug 
-	%defaults @renderedOptions %options $refText %months %daysofweek
+	%defaults @renderedOptions @flagOptions $refText 
+	%months %daysofweek
 	$months_rx $date_rx $daterange_rx $bullet_rx $bulletdate_rx $bulletdaterange_rx $dow_rx $day_rx
 	$year_rx $monthyear_rx $monthyearrange_rx
 	$defaultsInitialized
 	$theWeb $theTopic
     );
 
-$VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
+$VERSION = '1.011'; #dro# improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg;
+#$VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
 #$VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
 #$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
 #$VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
@@ -159,82 +161,163 @@ sub initDefaults() {
 		tablecaptionalign=> 'top',	# table caption alignment (top|bottom|left|right)
 		headerformat	=> '<font size="-2">%b<br/>%a<br/>%e</font>',	# format of the header
 		compatmode	=> 0,		# compatibility mode (allows all CalendarPlugin event types)
-		compatmodeicon	=> ':-)' 	# compatibility mode icon
+		compatmodeicon	=> ':-)', 	# compatibility mode icon
+		daynames	=> undef,	# day names (overwrites lang attribute)
+		monthnames	=> undef,	# month names (overwrites lang attribute)
+		width		=> undef,	# table width
+		unknownparamsmsg=> '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%'
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
 	@renderedOptions = ( 'tablecaption', 'name', 'holidayicon', 'adayofficon', 'workicon', 'notatworkicon', 'compatmodeicon' );
 
-	
+	# options to turn or switch things on (1) or off (0)
+	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode' );
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
 
 	%daysofweek = ( Mon=>1, Tue=>2, Wed=>3, Thu=>4, Fri=>5, Sat=>6, Sun=>7 );
 
+	$defaultsInitialized = 1;
+}
+
+# =========================
+sub initRegexs {
 	# some regular expressions:
-	$months_rx = join('|', keys %months);
-	$dow_rx = join('|', keys %daysofweek);
+	$months_rx = join('|', map(quotemeta($_), keys(%months)));
+	$dow_rx = join('|', map(quotemeta($_), keys(%daysofweek)));
 	$year_rx = "[12][0-9]{3}";
 	$monthyear_rx = "($months_rx)\\s+$year_rx";
 	$monthyearrange_rx = "$monthyear_rx\\s+\\-\\s+$monthyear_rx";
-	$day_rx = "[0-3]?[0-9]";
+	$day_rx = "[0-3]?[0-9](\.|th)?";
 	$date_rx = "$day_rx\\s+($months_rx)\\s+$year_rx";
 	$daterange_rx = "$date_rx\\s*-\\s*$date_rx";
 	$bullet_rx = "^\\s+\\*\\s*";
 	$bulletdate_rx = "$bullet_rx$date_rx\\s*-";
 	$bulletdaterange_rx = "$bulletdate_rx\\s*$date_rx\\s*-";
-
-	$defaultsInitialized = 1;
 }
 # =========================
 sub initOptions() {
 	my ($attributes) = @_;
 
-	# Setup options (attributes>plugin preferences>defaults) and render some options:
-	foreach $option (keys %defaults) {
-		$v = &TWiki::Func::extractNameValuePair($attributes,$option) || undef;
+	my %params = &TWiki::Func::extractParameters($attributes);
+
+	my @allOptions = keys %defaults;
+
+	# Check attributes:
+	@unknownParams= ( );
+	foreach my $option (keys %params) {
+		push (@unknownParams, $option) unless grep(/^\Q$option\E$/, @allOptions);
+	}
+	return 0 if $#unknownParams != -1; 
+
+	# Setup options (attributes>plugin preferences>defaults):
+	foreach my $option (@allOptions) {
+		$v = $params{$option};
 		if (defined $v) {
-			$options{$option} = $v;
+			if (grep /^\Q$option\E$/, @flagOptions) {
+				$options{$option} = ($v!=0)&&($v!~/no/i)&&($v!~/off/i);
+			} else {
+				$options{$option} = $v;
+			}
 		} else {
-			$v = TWiki::Func::getPluginPreferencesValue("\U$option\E") || undef;
+			if (grep /^\Q$option\E$/, @flagOptions) {
+				$v = TWiki::Func::getPluginPreferencesFlag("\U$option\E") || undef;
+			} else {
+				$v = TWiki::Func::getPluginPreferencesValue("\U$option\E") || undef;
+			}
 			$options{$option}=(defined $v)? $v : $defaults{$option};
 		}
 
-		if (grep(/^\Q$option\E$/, @renderedOptions) && ( $options{$option} !~ /^(\s|\&nbsp\;)*$/ )) {
+	}
+	# Render some options:
+	foreach my $option (@renderedOptions) {
+		if ($options{$option} !~ /^(\s|\&nbsp\;)*$/) {
 		 	$options{$option}=&TWiki::Func::renderText($options{$option}, $web);
 		}
 	}
+
+	Date::Calc::Language(Date::Calc::Decode_Language($options{lang}));
+
+	# Setup language specific month and day names:
+	for (my $i=1; $i < 13; $i++) {
+		if ($i < 8) {
+			my $dt = Day_of_Week_to_Text($i);
+			$daysofweek{$dt} = $i;
+			$daysofweek{Day_of_Week_Abbreviation($i)} = $i;
+			$daysofweek{substr($dt, 0, 2)} = $i;
+		}
+		my $mt = Month_to_Text($i);
+		$months{$mt} = $i;
+		$months{substr($mt,0,3)} = $i;
+	}
+
+	# Setup user defined daynames:
+	if ((defined $options{daynames}) && (defined $defaults{daynames}) && ($options{daynames} ne $defaults{daynames})) {
+		my @dn = split /\s*\|\s*/, $options{daynames};
+		if ($#dn == 6) {
+			for (my $i=1; $i<8; $i++) {
+				$daysofweek{$dn[$i-1]}=$i;
+			}
+		}
+	}
+	# Setup user defined monthnames:
+	if ((defined $options{monthnames}) && (defined $defaults{monthnames}) && ($options{monthnames} ne $defaults{monthnames})) {
+		my @mn = split /\s*\|\s*/, $options{monthnames};
+		if ($#mn == 11) {
+			for (my $i=1; $i<13; $i++) {
+				$months{$mn[$i-1]} = $i;
+			}	
+		}
+	}
+
+	return 1;
 
 }
 # =========================
 sub handleHolidaylist() {
 	($attributes, $refText, $theTopic, $theWeb) = @_;
 
+	local(%options, @unknownParams);
+
+	# order of &init... calls is important
+
 	&initDefaults() unless $defaultsInitialized;
 
-	&initOptions($attributes);
+	return &createUnknownParamsMessage() unless &initOptions($attributes);
+
+	&initRegexs(); 
 
 	return &renderHolidaylist(&fetchHolidaylist(&getTopicText()));
+}
+# =========================
+sub createUnknownParamsMessage {
+	my $msg;
+	$msg = TWiki::Func::getPreferencesValue("UNKNOWNPARAMSMSG") || undef;
+	$msg = $defaults{unknownparamsmsg} unless defined $msg;
+	$msg =~ s/\%UNKNOWNPARAMSLIST\%/join(', ', sort @unknownParams)/eg;
+	$msg =~ s/\%KNOWNPARAMSLIST\%/join(', ', sort keys %defaults)/eg;
+	return $msg;
 }
 # =========================
 sub getStartDate() {
 	my ($yy,$mm,$dd) = Today();
 
+	# handle startdate (absolute or offset)
 	if (defined $options{startdate}) {
 		my $sd = $options{startdate};
 		$sd =~ s/^\s*(.*?)\s*$/$1/; # cut whitespaces
 		if ($sd =~ /^$date_rx$/) {
 			my ($d,$m,$y);
-			eval {
-				($d,$m,$y) = split(/\s+/, $sd);
-				Date_to_Days($y,$months{$m},$d); # fails if startdate is a illegal date
-			};
-			($dd,$mm,$yy)=($d,$months{$m},$y) unless $@;
+			($d,$m,$y) = split(/\s+/, $sd);
+			($dd, $mm, $yy) = ($d, $months{$m},$y) if check_date($y, $months{$m},$d);
 		} elsif ($sd =~ /^([\+\-]?\d+)$/) {
 			($yy, $mm, $dd) = Add_Delta_Days($yy, $mm, $dd, $1);
 		}
 	} 
+	# handle year (absolute or offset)
 	if (defined $options{year}) {
 		my $year = $options{year};
 		if ($year =~ /^(\d{4})$/) {
@@ -243,6 +326,7 @@ sub getStartDate() {
 			($yy,$mm,$dd) = Add_Delta_YM($yy,$mm,$dd, $1, 0);
 		} 
 	}
+	# handle month (absolute or offset)
 	if (defined $options{month}) {
 		my $month = $options{month};
 		my $matched = 1;
@@ -268,6 +352,9 @@ sub getDays {
 	my ($date,$ldom) = @_;
 	my $days = undef;
 
+	$date=~s/^\s*//;
+	$date=~s/\s*$//;
+
 	my ($yy,$mm,$dd);
 	if ($date =~ /^$date_rx$/) {
 		($dd,$mm,$yy) = split /\s+/, $date;
@@ -279,6 +366,8 @@ sub getDays {
 	} else {
 		return undef;
 	}
+	$dd=~/(\d+)/;
+	$dd=$1;
 	$days = check_date($yy,$mm,$dd) ? Date_to_Days($yy,$mm,$dd) : undef;
 
 	return $days;
@@ -294,14 +383,11 @@ sub getTableRefs {
 	my $itableref = $icontable{$person};
 
 	if (!defined $ptableref) {
-		my @ptable = ();
-		$ptableref=\@ptable;
+		$ptableref=[];
 		$table{$person}=$ptableref;
-		my @ltable = ();
-		$ltableref=\@ltable;
+		$ltableref=[];
 		$locationtable{$person}=$ltableref;
-		my @itable = ();
-		$itableref=\@itable;
+		$itableref=[];
 		$icontable{$person}=$itableref;
 	}
 
@@ -314,9 +400,9 @@ sub handleDateRange {
 	my ($ptableref,$ltableref,$itableref) = getTableRefs();
 
 	my  $date = $startDays;
-	for (my $i=0; $i < $options{days}; $i++) {
+	for (my $i=0; ($i < $options{days}) && (($date+$i)<=$end); $i++) {
 		next if $$excref[$i];
-		if ((($date+$i)>=$start) && (($date+$i)<=$end)) {
+		if (($date+$i)>=$start) {
 			$$ltableref[$i]=$descr;
 			if (defined $icon) {
 				$$ptableref[$i]=4;
@@ -351,29 +437,40 @@ sub fetchHolidaylist {
 
 		$descr = $line;
 
+		&replaceSpecialDateNotations() if $options{compatmode}; 
+
 		local $excref = &fetchExceptions();
 
 		if ( ($line =~ m/^$daterange_rx/) || ($line =~ m/^$monthyearrange_rx/) ) {
 			my ($sdate, $edate);
 			($sdate,$edate,$person,$location,$icon) = split /\s+\-\s+/, $line, 5;
-			($start, $end ) = ( getDays($sdate, 0), getDays($edate, 1) );
+			($start, $end ) = ( &getDays($sdate, 0), &getDays($edate, 1) );
 			next unless (defined $start) && (defined $end);
 
-			handleDateRange(); 
+			&handleDateRange(); 
 
 		} elsif ( ($line =~ m/^$date_rx/) || ($line =~ m/^$monthyear_rx/) ) {
 			my $date;
 			($date, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
-			($start, $end) = ( getDays($date,0), getDays($date,1) );
+			($start, $end) = ( &getDays($date,0), &getDays($date,1) );
 			next unless (defined $start) && (defined $end);
 
-			handleDateRange();
+			&handleDateRange();
 		} elsif ($options{compatmode}) {
 			&handleCalendarEvents();
 		}
 
 	}
 	return (\%table, \%locationtable, \%icontable);
+}
+sub replaceSpecialDateNotations {
+	# replace special (business) notations:
+	### DDD Wn yyyy
+	### DDD Week n yyyy
+	$line =~s /($dow_rx)\s+W(eek)?\s*([0-9]?[0-9])\s+($year_rx)/getFullDateFromBusinessDate($1,$3,$4)/egi;
+	### Wn yyyy
+	### Week n yyyy
+	$line =~s /W(eek)?\s*([0-9]?[0-9])\s+($year_rx)/getFullDateFromBusinessDate('Mon',$2,$3)/egi;
 }
 sub fetchExceptions {
 
@@ -385,30 +482,34 @@ sub fetchExceptions {
 
 	for $x ( split /\s*\,\s*/, $ex ) {
 		my ($start, $end) = (undef, undef);
-		if ($x =~ m/^$daterange_rx$/) {
+		if (($x =~ m/^$daterange_rx$/)||($x =~ m/^$monthyearrange_rx/)) {
 			my ($sdate,$edate) = split /\s*\-\s*/, $x;
-			my ($dd1,$mm1,$yy1) = split /\s+/, $sdate;
-			my ($dd2,$mm2,$yy2) = split /\s+/, $edate;
-			$mm1 = $months{$mm1};
-			$mm2 = $months{$mm2};
-			$start = Date_to_Days($yy1,$mm1,$dd1) if check_date($yy1,$mm1,$dd1);
-			$end = Date_to_Days($yy2,$mm2,$dd2) if check_date($yy2,$mm2,$dd2);
+			$start = &getDays($sdate,0);
+			$end = &getDays($edate,1);
 
-		} elsif ($x =~ m/$date_rx/) {
-			my ($dd1,$mm1,$yy1) = split /\s+/, $x;
-			$mm1 = $months{$mm1};
-			$start = Date_to_Days($yy1,$mm1,$dd1) if check_date($yy1,$mm1,$dd1);
-			$end = $start;
+		} elsif (($x =~ m/^$date_rx/)||($x =~ m/^$monthyear_rx/)) {
+			$start = &getDays($x,0);
+			$end = &getDays($x, 1);
 		}
 		next unless defined $start && ($start <= $endDays);
 		next unless defined $end &&   ($end >= $startDays);
 
-		for (my $i=0; $i<$options{days}; $i++) {
+		for (my $i=0; ($i<$options{days})&&(($startDays+$i)<=$end); $i++) {
 			$exceptions[$i] = 1 if ( (($startDays+$i)>=$start) && (($startDays+$i)<=$end) );
 		}
 	}
 
 	return \@exceptions;
+}
+sub getFullDateFromBusinessDate {
+	my($t_dow, $week, $year) = @_;
+
+	my ($y1,$m1,$d1);
+	if (check_business_date($year, $week, $daysofweek{$t_dow})) {
+		($y1, $m1, $d1) = Business_to_Standard($year,$week,$daysofweek{$t_dow});
+		$ret = "$d1 ".Month_to_Text($m1)." $y1";
+	}
+	return $ret;
 }
 sub handleCalendarEvents {
 	my ($strdate);
@@ -434,11 +535,12 @@ sub handleCalendarEvents {
 			}
 		}
 	} elsif ($line =~ m/^$day_rx\s+($months_rx)/) {
-		## Interval: dd MMM
+		### Interval: dd MMM
 		($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
 		my ($ptableref,$ltableref,$itableref) = getTableRefs();
 		my ($dd1, $mm1) = split /\s+/, $strdate;
 		$mm1 = $months{$mm1};
+		return if $dd1>31;
 
 		for (my $i=0; $i < $options{days}; $i++) {
 			next if $$excref[$i];
@@ -449,7 +551,7 @@ sub handleCalendarEvents {
 				$$itableref[$i] = $icon;
 			}
 		}
-	} elsif ($line =~ m/^[0-9L]\s+($dow_rx)(\s+($months_rx))?/) {
+	} elsif ($line =~ m/^[0-9L](\.|th)?\s+($dow_rx)(\s+($months_rx))?/) {
 		### Interval: w DDD MMM 
 		### Interval: L DDD MMM 
 		### Monthly: w DDD
@@ -466,7 +568,7 @@ sub handleCalendarEvents {
 			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$i);
 			if ((! defined $mm1) || ($m == $mm1)) {
 				my ($yy2,$mm2,$dd2);
-				if ($n1 == 'L') {
+				if ($n1 eq 'L') {
 					$n1 = 6;
 					do {
 						$n1--;
@@ -490,6 +592,7 @@ sub handleCalendarEvents {
 		### Monthly: dd
 		($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
 		my ($ptableref,$ltableref,$itableref) = getTableRefs();
+		return if $strdate > 31;
 		for (my $i=0; $i < $options{days}; $i++) {
 			next if $$excref[$i];
 			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$i);
@@ -510,27 +613,28 @@ sub handleCalendarEvents {
 		} else {
 			($strdate, $person, $location, $icon) = split /\s+\-\s+/, $line, 4;
 		}
+		my ($ptableref,$ltableref,$itableref) = getTableRefs();	
+
 		$strdate=~s/^E\s+//;
 		my ($dow1) = split /\s+/, $strdate;
 		$dow1=$daysofweek{$dow1};
 
-		$strdate=~s/^($dow_rx)\s+//g;
+		$strdate=~s/^\S+\s*//;
 
 		my ($start, $end) = (undef, undef);
-		if ((defined $strdate)&&($strdate != "")) {
-			$start = getDays($strdate);
+		if ((defined $strdate)&&($strdate ne "")) {
+			$start = &getDays($strdate);
 			return unless defined $start;
 		}
 
 		if (defined $strdate2) {
-			$end = getDays($strdate2);
+			$end = &getDays($strdate2);
 			return unless defined $end;
 		}
 
 		return if (defined $start) && ($start > $endDays);
 		return if (defined $end) && ($end < $startDays);
 
-		my ($ptableref,$ltableref,$itableref) = getTableRefs();	
 		for (my $i=0; $i < $options{days}; $i++) {
 			next if $$excref[$i];
 			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$i);
@@ -568,10 +672,10 @@ sub handleCalendarEvents {
 		my ($dd1, $mm1, $yy1) = split /\s+/, $strdate;
 		$mm1 = $months{$mm1};
 
-		$start = getDays($strdate);
+		$start = &getDays($strdate);
 		return unless defined $start;
 
-		$end = getDays($strdate2) if defined $strdate2;
+		$end = &getDays($strdate2) if defined $strdate2;
 		return if (defined $strdate2)&&(!defined $end);
 
 		return if (defined $start) && ($start > $endDays);
@@ -582,16 +686,12 @@ sub handleCalendarEvents {
 		$start = Date_to_Days($yy1, $mm1, $dd1);
 
 		# start at first occurence and increment by repeating count ($n1)
-		for (my $i=(abs($startDays-$start) % $n1); $i < $options{days}; $i+=$n1) {
+		for (my $i=(abs($startDays-$start) % $n1); (($i < $options{days})&&((!defined $end) || ( ($startDays+$i) <= $end)) ); $i+=$n1) {
 			next if $$excref[$i];
-			if ((!defined $end) || ( ($startDays+$i) <= $end) ) {
+			if (($startDays+$i) >= $start) {
 				$$ptableref[$i] = 5;
 				$$ltableref[$i] = $descr;
 				$$itableref[$i] = $icon;
-
-				$start += $n1;
-			} else {
-				last;
 			}
 		} # for
 	} # if
@@ -603,8 +703,20 @@ sub mystrftime($$$) {
 	my $text = $options{headerformat};
 
 	my $dow = Day_of_Week($yy,$mm,$dd);
-	my $t_dow=  Day_of_Week_to_Text($dow);
-	my $t_mm = Month_to_Text($mm);
+	my $t_dow =  undef;
+	if (defined $options{daynames}) {
+		my @dn = split  /\|/, $options{daynames};
+		$t_dow = $dn[$dow-1] if $#dn == 6;
+	}
+	$t_dow = Day_of_Week_to_Text($dow) unless defined $t_dow;
+
+	my $t_mm = undef;; 
+	if (defined $options{monthnames}) {
+		my @mn = split /\|/, $options{monthnames};
+		$t_mm = $mn[$mm-1] if $#mn == 11;
+	}
+	$t_mm = Month_to_Text($mm) unless defined $t_mm;
+
 	my $doy = Day_of_Year($yy,$mm,$dd);
 	my $wn = Week_Number($yy,$mm,$dd);
 	my $t_wn = $wn<10?"0$wn":$wn;
@@ -642,8 +754,6 @@ sub renderHolidaylist() {
 	my ($tableRef, $locationTableRef, $iconTableRef) = @_;
 	my $text = "";
 
-	Date::Calc::Language(Date::Calc::Decode_Language($options{lang}));
-
 	my ($ty,$tm,$td) = Today();
 	my $today = Date_to_Days($ty,$tm,$td);
 
@@ -653,6 +763,7 @@ sub renderHolidaylist() {
                . ' cellpadding="'.$options{cellpadding}.'"'
                . ' cellspacing="'.$options{cellspacing}.'"'
 	       . ' bgcolor="'.$options{tablebgcolor}.'"'
+	       . ((defined $options{width})?(' width="'.$options{width}.'"'):'')
 	       .  '>' 
 	       . "\n" ;
 
