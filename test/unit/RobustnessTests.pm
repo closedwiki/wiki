@@ -1,14 +1,8 @@
 # Copyright (C) 2004 Florian Weimer
 package RobustnessTests;
 
-use base qw(Test::Unit::TestCase);
+use base qw(TWikiTestCase);
 require 5.008;
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
-
 
 use TWiki;
 use TWiki::Sandbox;
@@ -23,6 +17,10 @@ my @safe;
 my $twiki;
 
 sub set_up {
+    my $this = shift;
+
+    $this->SUPER::set_up();
+
     $twiki = new TWiki();
     @safe = (
         $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN},
@@ -31,6 +29,8 @@ sub set_up {
 }
 
 sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{sandbox}->{REAL_SAFE_PIPE_OPEN} = $safe[0];
     $twiki->{sandbox}->{EMULATED_SAFE_PIPE_OPEN} = $safe[1];
 }

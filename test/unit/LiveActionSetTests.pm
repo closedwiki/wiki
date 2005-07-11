@@ -2,7 +2,7 @@ use strict;
 
 package LiveActionSetTests;
 
-use base qw(Test::Unit::TestCase);
+use base qw(TWikiTestCase);
 
 use TWiki::Plugins::ActionTrackerPlugin::Action;
 use TWiki::Plugins::ActionTrackerPlugin::ActionSet;
@@ -25,8 +25,7 @@ sub set_up {
 
     $this->SUPER::set_up();
 
-    $twiki =
-      new TWiki( "", $TWiki::cfg{DefaultUserLogin}, "", "" );
+    $twiki = new TWiki( $TWiki::cfg{DefaultUserLogin} );
     $TWiki::Plugins::SESSION = $twiki;
     my $user = $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
 
@@ -69,6 +68,8 @@ sub set_up {
 }
 
 sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $testWeb);
     $twiki->{store}->removeWeb($twiki->{user}, $usersWeb);
 }

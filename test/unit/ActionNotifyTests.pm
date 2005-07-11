@@ -163,7 +163,8 @@ HERE
 }
 
 sub tear_down {
-    $TWiki::cfg{UsersWebName} = $savePeople;
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $testweb);
     $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
 }

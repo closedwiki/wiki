@@ -6,12 +6,7 @@ use strict;
 
 package TemplatesTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Templates;
@@ -23,14 +18,15 @@ sub new {
 }
 
 my $test_tmpls;
-my $save_tmpls;
 my $test_data;
-my $save_data;
 
 my $session;
 my $tmpls;
 
 sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up();
+
     my $here = Cwd::cwd();
     $test_tmpls = $here.'/fake_templates';
     $test_data = $here.'/fake_data';
@@ -41,16 +37,14 @@ sub set_up {
     $session = new TWiki();
     $tmpls = $session->{templates};
 
-    $save_tmpls = $TWiki::cfg{TemplateDir};
     $TWiki::cfg{TemplateDir} = $test_tmpls;
-    $save_data = $TWiki::cfg{DataDir};
     $TWiki::cfg{DataDir} = $test_data;
 }
 
 sub tear_down {
-    $TWiki::cfg{TemplateDir} = $save_tmpls;
+    my $this = shift;
+    $this->SUPER::tear_down();
     File::Path::rmtree( $test_tmpls );
-    $TWiki::cfg{DataDir} = $save_data;
     File::Path::rmtree( $test_data );
 }
 

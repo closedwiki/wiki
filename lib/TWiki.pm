@@ -944,29 +944,19 @@ sub normalizeWebTopicName {
 
 =pod
 
----++ ClassMethod new( $pathInfo, $remoteUser, $topic, $url, $query )
-Constructs a new TWiki object.
+---++ ClassMethod new( $remoteUser, $query )
+Constructs a new TWiki object. Parameters are taken from the query object.
 
-Initializes the Store, User, Access, and Prefs modules.
-
-Also parses $theTopic to determine whether it's a URI, a 'Web.Topic'
-pair, a 'Web.' WebHome shorthand, or just a topic name.  Note that
-if $pathInfo is set, this overrides $theTopic.
-
-   * =$pathInfo= .pathinfo from query
    * =$remoteUser= the logged-in user (login name)
-   * =$topic= topic from 'topic' parameter to url (overrides pathinfo if present )
-   * =$url= the full url used
    * =$query= the query
 
 =cut
 
 sub new {
-    my( $class, $pathInfo, $remoteUser, $topic, $url, $query ) = @_;
-    $pathInfo ||= '';
-    $remoteUser ||= $TWiki::cfg{DefaultUserLogin};
-    $topic ||= '';
-    $url ||= '';
+    my( $class, $remoteUser, $query, $d ) = @_;
+    ASSERT(!defined($d)) if DEBUG; # upgrade check
+    $query ||= new CGI( {} );
+    $remoteUser ||= $query->remote_user() || $TWiki::cfg{DefaultUserLogin};
 
     my $this = bless( {}, $class );
 
@@ -982,7 +972,6 @@ sub new {
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
-    $this->{url} = $url;
 
     @{$this->{publicWebList}} = ();
 
@@ -1001,6 +990,7 @@ sub new {
     $this->{security} = new TWiki::Access( $this );
 
     my $web = '';
+    my $topic = $query->param( 'topic' );
     if( $topic ) {
         if( $topic =~ /^$regex{linkProtocolPattern}\:\/\//o &&
             $this->{cgiQuery} ) {
@@ -1011,8 +1001,8 @@ sub new {
             # is 'bin/script?topic=Webname.SomeTopic'
             $web   = $1;
             $topic = $2;
-	    $web =~ s/\./\//go;
-	    $web =~ s/\/$//o;
+            $web =~ s/\./\//go;
+            $web =~ s/\/$//o;
             # jump to WebHome if 'bin/script?topic=Webname.'
             $topic = $TWiki::cfg{HomeTopicName} if( $web && ! $topic );
         }
@@ -1021,9 +1011,18 @@ sub new {
         $topic = '';
     }
 
+    # SMELL: "The Microsoft Internet Information Server is broken with
+    # respect to additional path information. If you use the Perl DLL
+    # library, the IIS server will attempt to execute the additional
+    # path information as a Perl script. If you use the ordinary file
+    # associations mapping, the path information will be present in the
+    # environment, but incorrect. The best thing to do is to avoid using
+    # additional path information."
+
     # Clean up PATH_INFO problems, e.g.  Support.CobaltRaqInstall.  A valid
     # PATH_INFO is '/Main/WebHome', i.e. the text after the script name;
     # invalid PATH_INFO is often a full path starting with '/cgi-bin/...'.
+    my $pathInfo = $query->path_info();
     my $cgiScriptName = $ENV{'SCRIPT_NAME'} || '';
     $pathInfo =~ s!$cgiScriptName/!/!i;
 
@@ -1032,19 +1031,18 @@ sub new {
         # is 'bin/script/Webname/SomeTopic' or 'bin/script/Webname/'
         $web   = $1 unless $web;
         $topic = $2 unless $topic;
-	$web =~ s/\./\//go;
-	$web =~ s/\/$//o;
+        $web =~ s/\./\//go;
+        $web =~ s/\/$//o;
     } elsif( $pathInfo =~ /\/(.*)/ ) {
         # is 'bin/script/Webname' or 'bin/script/'
-        $web   = $1 unless $web;
+        $web = $1 unless $web;
     }
 
     # Check to see if we just dissected a web path missing its WebHome
     if($topic ne "" && $this->{store}->webExists("$web/$topic")) {
-      $web.="/$topic";
-      $topic="";
+        $web .= '/'.$topic;
+        $topic = "";
     }
-
     # All roads lead to WebHome
     $topic = $TWiki::cfg{HomeTopicName} if ( $topic =~ /\.\./ );
     $topic =~ s/$TWiki::cfg{NameFilter}//go;
@@ -1066,13 +1064,15 @@ sub new {
 
     $this->{scriptUrlPath} = $TWiki::cfg{ScriptUrlPath};
 
+    my $url = $query->url();
     if( $url && $url =~ m!^([^:]*://[^/]*)(.*)/.*$! && $2 ) {
+        $this->{urlHost} = $1;
         if( $TWiki::cfg{GetScriptUrlFromCgi} ) {
             # SMELL: this is a really dangerous hack. It will fail
             # spectacularly with mod_perl.
+            # SMELL: why not just use $query->script_name?
             $this->{scriptUrlPath} = $2;
         }
-        $this->{urlHost} = $1;
         if( $TWiki::cfg{RemovePortNumber} ) {
             $this->{urlHost} =~ s/\:[0-9]+$//;
         }
@@ -1229,9 +1229,8 @@ sub _fixN {
 
 # Convert relative URLs to absolute URIs
 sub _fixURL {
-    my( $theHost, $theAbsPath, $theUrl ) = @_;
+    my( $theHost, $theAbsPath, $url ) = @_;
 
-    my $url = $theUrl;
     if( $url =~ /^\// ) {
         # fix absolute URL
         $url = $theHost.$url;
@@ -2161,13 +2160,29 @@ point to it, so that TWiki::Func methods will work.
 
 This method is *DEPRECATED* but is maintained for script compatibility.
 
+Note that $theUrl, if specified, must be identical to $query->url()
+
 =cut
 
 sub initialize {
-    my ( $pathInfo, $theRemoteUser, $topic, $theUrl, $theQuery ) = @_;
+    my ( $pathInfo, $theRemoteUser, $topic, $theUrl, $query ) = @_;
 
-    my $twiki = new TWiki( $pathInfo, $theRemoteUser, $topic,
-                           $theUrl, $theQuery );
+    if( !$query ) {
+        $query = new CGI( {} );
+    }
+    if( $query->path_info() ne $pathInfo ) {
+        $query->path_info( $pathInfo );
+    }
+    if( $topic ) {
+        $query->param( -name => 'topic', -value => '' );
+    }
+    # can't do much if $theUrl is specified and it is inconsistent with
+    # the query. We are trying to get to all parameters passed in the
+    # query.
+    if( $theUrl && $theUrl ne $query->url()) {
+        die 'Sorry, this version of TWiki does not support the url parameter to TWiki::initialize being different to the url in the query';
+    }
+    my $twiki = new TWiki( $theRemoteUser, $query );
 
     # Force the new session into the plugins context.
     $TWiki::Plugins::SESSION = $twiki;

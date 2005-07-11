@@ -65,42 +65,12 @@ sub run {
     if( $ENV{'GATEWAY_INTERFACE'} ) {
         # script is called by browser
         $query = new CGI;
-        # SMELL: The Microsoft Internet Information Server is broken with
-        # respect to additional path information. If you use the Perl DLL
-        # library, the IIS server will attempt to execute the additional
-        # path information as a Perl script. If you use the ordinary file
-        # associations mapping, the path information will be present in the
-        # environment, but incorrect. The best thing to do is to avoid using
-        # additional path information.
-        $pathInfo = $query->path_info();
         $user = $query->remote_user();
-        $url = $query->url;
-        $topic = $query->param( 'topic' );
-        # If the 'benchmark' parameter is set in the browser, save the
-        # query and other info to the given file on the server.
-        # To benchmark a script, put the following lines into
-        # the top level CGI script.
-        # use Benchmark qw(:all :hireswallclock);
-        # use vars qw( $begin );
-        # BEGIN{$begin=new Benchmark;}
-        # END{print STDERR 'Total '.timestr(timediff(new Benchmark,$begin))."\n";}
-        #
-        # and uncomment the following lines and the lines at ****:
-        # my $bm = $query->param( 'benchmark' );
-        # if ( $bm ) {
-        #     eval 'use Data::Dumper;';
-        #     open(OF, ">$bm") || throw Error::Simple( 'Store failed' );
-        #     print OF Dumper(\$query, $pathInfo, $user, $url);
-        #     close(OF);
-        # }
     } else {
         # script is called by cron job or user
-        $query = new CGI( '' );
         $scripted = 1;
         $user = '';
-        $url = '';
-        $topic = '';
-        $pathInfo = '';
+        $query = new CGI( "" );
         while( scalar( @ARGV )) {
             my $arg = shift( @ARGV );
             if ( $arg =~ /^-?([A-Za-z0-9_]+)$/o ) {
@@ -109,24 +79,12 @@ sub run {
                 if( $name eq 'user' ) {
                     $user = $arg;
                 } else {
-                    $query->param( $name => $arg );
+                    $query->param( -name => $name, -value => $arg );
                 }
             } else {
-                $pathInfo = $arg;
+                $query->path_info( $arg );
             }
         }
-        # Benchmark code ****
-        # my $bm = $query->param( 'benchmark' );
-        # if( $bm ) {
-        #     open(IF, "<$bm") || die "Benchmark query $bm retrieve failed";
-        #     undef $/;
-        #     my $dump = <IF>;
-        #     close(IF);
-        #     my ( $VAR1, $VAR2, $VAR3, $VAR4 );
-        #     eval $dump;
-        #     ( $query, $pathInfo, $user, $url ) =
-        #         ( $$VAR1, $VAR2, $VAR3, $VAR4 );
-        # }
     }
 
     my $script = $ENV{'SCRIPT_FILENAME'};
@@ -138,7 +96,7 @@ sub run {
         die "Trying to redirect to $script on authentication failure; this is not permitted. The target must be an oops.";
     }
 
-    my $session = new TWiki( $pathInfo, $user, $topic, $url, $query );
+    my $session = new TWiki( $user, $query );
 
     # comment out in production version
     $Error::Debug = 1;

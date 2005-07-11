@@ -2,12 +2,7 @@ use strict;
 
 package SaveScriptTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use strict;
 use TWiki;
@@ -29,7 +24,7 @@ my $testform1 = <<'HERE';
 | Radio | radio | 3 | 1, 2, 3 | |
 | Checkbox | checkbox | 3 | red,blue,green | |
 | Checkbox and Buttons | checkbox+buttons | 3 | dog,cat,bird,hamster,goat,horse | |
-| Textfield | text | 60 | test | |
+| Textfield | text | 60 | detest | |
 HERE
 
 my $testform2 = $testform1 . <<'HERE';
@@ -42,9 +37,10 @@ sub new {
     return $self;
 }
 
-# Set up the test fixture
+# Set up the detest fixture
 sub set_up {
     my $this = shift;
+    $this->SUPER::set_up();
 
     $twiki = new TWiki();
     $user = $twiki->{user};
@@ -57,7 +53,7 @@ sub set_up {
 	$twiki->{store}->saveTopic( $user, $testweb, 'TestForm2',
                                 $testform2, undef );
 
-	$twiki->{store}->saveTopic( $user, $testweb, 'WebPreferences',
+	$twiki->{store}->saveTopic( $user, $testweb, $TWiki::cfg{WebPrefsTopicName},
                                 '
    * Set WEBFORMS = TestForm1,TestForm2
 ', undef );
@@ -66,16 +62,19 @@ sub set_up {
 }
 
 sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $testweb);
 }
 
 # 10X
-sub test_XXXXXXXXXX {
+sub detest_XXXXXXXXXX {
     my $this = shift;
     my $query = new CGI({
-                         action => [ 'save' ],
-                        });
-    $twiki = new TWiki('', $testuser1, $testweb.'.TestTopicXXXXXXXXXX', '', $query);
+        action => [ 'save' ],
+    });
+    $query->path_info( $testweb.'.TestTopicXXXXXXXXXX' );
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     my $seen = 0;
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
@@ -86,7 +85,7 @@ sub test_XXXXXXXXXX {
         }
     }
     $this->assert($seen);
-    $twiki = new TWiki('', $testuser1, $testweb.'.TestTopicXXXXXXXXXX', '', $query);
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     $seen = 0;
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
@@ -105,8 +104,12 @@ sub test_XXXXXXXXX {
     my $query = new CGI({
                          action => [ 'save' ],
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.TestTopicXXXXXXXXX', '', $query);
+    $query->path_info("$testweb/TestTopicXXXXXXXXX");
+    $this->assert(
+        !$twiki->{store}->topicExists($testweb,'TestTopic0'));
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
+    $this->assert(!$twiki->{store}->topicExists($testweb,'TestTopic0'));
     my $seen = 0;
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t eq 'TestTopicXXXXXXXXX') {
@@ -124,7 +127,8 @@ sub test_XXXXXXXXXXX {
     my $query = new CGI({
                          action => [ 'save' ],
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.TestTopicXXXXXXXXXXXX', '', $query);
+    $query->path_info("/$testweb/TestTopicXXXXXXXXXXX");
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     my $seen = 0;
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
@@ -137,44 +141,48 @@ sub test_XXXXXXXXXXX {
     $this->assert($seen);
 }
 
-sub test_emptySave {
+sub detest_emptySave {
     my $this = shift;
     my $query = new CGI({
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     $this->assert_matches(qr/^\s*$/, $text);
     $this->assert_null($meta->get('FORM'));
 }
 
-sub test_simpleTextSave {
+sub detest_simpleTextSave {
     my $this = shift;
     my $query = new CGI({
                          text => [ 'CORRECT' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     $this->assert_matches(qr/CORRECT/, $text);
     $this->assert_null($meta->get('FORM'));
 }
 
-sub test_templateTopicTextSave {
+sub detest_templateTopicTextSave {
     my $this = shift;
     my $query = new CGI({
                          text => [ 'Template Topic' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.TemplateTopic' ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.TemplateTopic', '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     $query = new CGI({
                          templatetopic => [ 'TemplateTopic' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     $this->assert_matches(qr/Template Topic/, $text);
@@ -182,19 +190,21 @@ sub test_templateTopicTextSave {
 }
 
 # Save over existing topic
-sub test_prevTopicTextSave {
+sub detest_prevTopicTextSave {
     my $this = shift;
     my $query = new CGI({
                          text => [ 'WRONG' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     $query = new CGI({
                          text => [ 'CORRECT' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     $this->assert_matches(qr/CORRECT/, $text);
@@ -202,25 +212,27 @@ sub test_prevTopicTextSave {
 }
 
 # Save over existing topic with no text (get defult from prev topic)
-sub test_prevTopicEmptyTextSave {
+sub detest_prevTopicEmptyTextSave {
     my $this = shift;
     my $query = new CGI({
                          text => [ 'CORRECT' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     $query = new CGI({
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     $this->assert_matches(qr/^CORRECT\s*$/, $text);
     $this->assert_null($meta->get('FORM'));
 }
 
-sub test_simpleFormSave {
+sub detest_simpleFormSave {
     my $this = shift;
     my $query = new CGI({
                          text => [ 'CORRECT' ],
@@ -228,8 +240,9 @@ sub test_simpleFormSave {
                          action => [ 'save' ],
                          TWiki::Form::cgiName(undef,'Textfield') =>
                          [ 'Flintstone' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     $this->assert($twiki->{store}->topicExists($testweb, $testtopic));
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
@@ -239,7 +252,7 @@ sub test_simpleFormSave {
     $this->assert_str_equals('Flintstone', $meta->get('FIELD', 'Textfield' )->{value});
 }
 
-sub test_templateTopicFormSave {
+sub detest_templateTopicFormSave {
     my $this = shift;
     my $query = new CGI({
                          text => [ 'Template Topic' ],
@@ -249,16 +262,18 @@ sub test_templateTopicFormSave {
                          TWiki::Form::cgiName(undef,'Textfield') =>
                          [ 'Fred' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.TemplateTopic' ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.TemplateTopic', '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
 
     my($xmeta, $xtext) = $twiki->{store}->readTopic(undef, $testweb, 'TemplateTopic');
     $query = new CGI({
                          templatetopic => [ 'TemplateTopic' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     $this->assert_matches(qr/Template Topic/, $text);
@@ -268,7 +283,7 @@ sub test_templateTopicFormSave {
     $this->assert_str_equals('Fred', $meta->get('FIELD', 'Textfield' )->{value});
 }
 
-sub test_prevTopicFormSave {
+sub detest_prevTopicFormSave {
     my $this = shift;
     my $query = new CGI({
                          text => [ 'Template Topic' ],
@@ -278,15 +293,17 @@ sub test_prevTopicFormSave {
                          TWiki::Form::cgiName(undef,'Textfield') =>
                          [ 'Rubble' ],
                          action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
                         });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query);
     TWiki::UI::Save::save($twiki);
     $query = new CGI({
                       action => [ 'save' ],
                       TWiki::Form::cgiName(undef,'Textfield') =>
                       [ 'Barney' ],
+                      topic => [ $testweb.'.'.$testtopic ]
                      });
-    $twiki = new TWiki('', $testuser1, $testweb.'.'.$testtopic, '', $query);
+    $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     $this->assert_matches(qr/Template Topic/, $text);

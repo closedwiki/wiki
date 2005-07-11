@@ -2,12 +2,7 @@ use strict;
 
 package AccessControlTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-}
+use base qw(TWikiTestCase);
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -19,41 +14,44 @@ use TWiki::Access;
 
 my $peopleWeb = "TemporaryAccessControlPeopleTestWeb";
 my $testWeb = "TemporaryAccessControlTestsWeb";
+my $testTopic = "TemporaryTestTopic";
 my $twiki;
 my $currUser;
 my $savePeople;
-
-sub create_user {
-    my $name = shift;
-    my $meta = new TWiki::Meta($twiki, $peopleWeb, $name);
-    $meta->put( "TOPICPARENT", { name => "$peopleWeb.WebHome" } );
-    $twiki->{store}->saveTopic( $currUser, $peopleWeb, $name, "", $meta);
-}
+my $MrWhite;
+my $MrBlue;
+my $MrOrange;
+my $MrGreen;
+my $MrYellow;
 
 sub set_up {
+    my $this = shift;
+    $this->SUPER::set_up();
     $twiki = new TWiki();
 
     $twiki->{store}->createWeb($twiki->{user}, $peopleWeb);
     $twiki->{store}->createWeb($twiki->{user}, $testWeb);
 
-    $savePeople = $TWiki::cfg{UsersWebName};
     $TWiki::cfg{UsersWebName} = $peopleWeb;
     $currUser = $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
-    create_user($TWiki::cfg{DefaultUserWikiName});
-    create_user("MrWhite");
-    create_user("MrBlue");
-    create_user("MrOrange");
-    create_user("MrGreen");
-    create_user("MrOrange");
+    $twiki->{store}->saveTopic($twiki->{user},
+                               $TWiki::cfg{UsersWebName},
+                               $TWiki::cfg{DefaultUserWikiName},'');
+    $MrWhite = $this->createFakeUser($twiki);
+    $MrBlue = $this->createFakeUser($twiki);
+    $MrOrange = $this->createFakeUser($twiki);
+    $MrGreen = $this->createFakeUser($twiki);
+    $MrYellow = $this->createFakeUser($twiki);
     $twiki->{store}->saveTopic( $currUser, $peopleWeb, "ReservoirDogsGroup",
                                 <<THIS
-   * Set GROUP=MrWhite,$peopleWeb.MrBlue
+   * Set GROUP=$MrWhite,$peopleWeb.$MrBlue
 THIS
                                 , undef);
 }
 
 sub tear_down {
-    $TWiki::cfg{UsersWebName} = $savePeople;
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
     $twiki->{store}->removeWeb($twiki->{user}, $testWeb);
 }
@@ -74,95 +72,95 @@ sub PERMITTED {
 
 sub test_denytopic {
     my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, "TestTopic",
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
                                 <<THIS
 If DENYTOPIC is set to a list of wikinames
     * people in the list will be DENIED.
-\t* Set DENYTOPICVIEW=MrGreen
-   * Set DENYTOPICVIEW=MrYellow,$peopleWeb.MrOrange,%MAINWEB%.ReservoirDogsGroup
+\t* Set DENYTOPICVIEW=$MrGreen
+   * Set DENYTOPICVIEW=$MrYellow,$peopleWeb.$MrOrange,%MAINWEB%.ReservoirDogsGroup
 THIS
                                 , undef);
 
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrGreen");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrYellow");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrOrange");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrWhite");
-    $this->DENIED($testWeb,"TestTopic","view","MrBlue");
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 
 }
 
 sub test_empty_denytopic {
     my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, "TestTopic",
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
                                 <<THIS
 If DENYTOPIC is set to empty ( i.e. Set DENYTOPIC = )
     * access is PERMITTED _i.e _ no-one is denied access to this topic
    * Set DENYTOPICVIEW=
 THIS
                                 , undef);
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrGreen");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrYellow");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrOrange");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrWhite");
-    $this->PERMITTED($testWeb,"TestTopic","view","MrBlue");
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $this->PERMITTED($testWeb,$testTopic,"view",$MrBlue);
 }
 
 sub test_allowtopic {
     my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, "TestTopic",
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
                                 <<THIS
 If ALLOWTOPIC is set
    1. people in the list are PERMITTED
    2. everyone else is DENIED
-\t* Set ALLOWTOPICVIEW = %MAINWEB%.MrOrange
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
 THIS
                                 , undef);
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrOrange");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrGreen");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrYellow");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrWhite");
-    $this->DENIED($testWeb,"TestTopic","view","MrBlue");
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 
 sub test_denyweb {
     my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, "WebPreferences",
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $TWiki::cfg{WebPrefsTopicName},
                                 <<THIS
 If DENYWEB is set to a list of wikiname
     * people in the list are DENIED access
-\t* Set DENYWEBVIEW = $peopleWeb.MrOrange %MAINWEB%.MrBlue
+\t* Set DENYWEBVIEW = $peopleWeb.$MrOrange %MAINWEB%.$MrBlue
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
     $twiki = new TWiki();
-    $twiki->{store}->saveTopic( $currUser, $testWeb, "TestTopic",
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
                                 "Null points");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrOrange");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrGreen");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrYellow");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrWhite");
-    $this->DENIED($testWeb,"TestTopic","view","MrBlue");
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 
 sub test_allow_web {
     my $this = shift;
-    $twiki->{store}->saveTopic( $currUser, $testWeb, "WebPreferences",
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $TWiki::cfg{WebPrefsTopicName},
                                 <<THIS
 If ALLOWWEB is set to a list of wikinames
     * people in the list will be PERMITTED
     * everyone else will be DENIED
-\t* Set ALLOWWEBVIEW = MrGreen MrYellow MrWhite
+\t* Set ALLOWWEBVIEW = $MrGreen $MrYellow $MrWhite
 THIS
                                 , undef);
     # renew TWiki, so WebPreferences gets re-read
     $twiki = new TWiki();
-    $twiki->{store}->saveTopic( $currUser, $testWeb, "TestTopic",
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
                                 "Null points");
-    $this->DENIED($testWeb,"TestTopic","VIEW","MrOrange");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrGreen");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrYellow");
-    $this->PERMITTED($testWeb,"TestTopic","VIEW","MrWhite");
-    $this->DENIED($testWeb,"TestTopic","view","MrBlue");
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 
 1;

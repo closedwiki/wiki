@@ -66,7 +66,7 @@ sub mailNotify {
     $webstr =~ s/\*/\.\*/g;
 
     my $twiki =
-      new TWiki( '', $TWiki::cfg{DefaultUserLogin}, '', '' );
+      new TWiki( $TWiki::cfg{DefaultUserLogin} );
 
     my $report = '';
     foreach my $web ( grep( /$webstr/o,

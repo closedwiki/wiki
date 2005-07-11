@@ -149,7 +149,7 @@ sub statistics {
     my $firstTime = 1;
     foreach my $web ( @weblist ) {
         $destWeb = _processWeb( $session,
-                                "/$web",
+                                $web,
                                 $logMonthYear,
                                 $viewRef,
                                 $contribRef,
@@ -304,29 +304,21 @@ sub _collectLogData {
 }
 
 sub _processWeb {
-    my( $session, $thePathInfo, $theLogMonthYear, $viewRef, $contribRef,
+    my( $session, $web, $theLogMonthYear, $viewRef, $contribRef,
         $statViewsRef, $statSavesRef, $statUploadsRef, $isFirstTime ) = @_;
 
-    # We create a new session object to parse the path info
-    $session =
-      new TWiki( $thePathInfo, $session->{user}->login(),
-                 $session->{topicName}, '', $session->{cgiQuery} );
-
-    my ( $topic, $webName, $user ) =
-      ( $session->{topicName}, $session->{webName}, $session->{user} );
+    my( $topic, $user ) = ( $session->{topicName}, $session->{user} );
 
     if( $isFirstTime ) {
-        my $tmp = $user->wikiName();
-        $tmp .= ' as shell script' unless( $session );
-        _printMsg( "* Executed by $tmp", $session );
+        _printMsg( '* Executed by '.$user->wikiName(), $session );
     }
 
-    _printMsg( "* Reporting on TWiki.$webName web", $session );
+    _printMsg( "* Reporting on TWiki.$web web", $session );
 
     # Handle null values, print summary message to browser/stdout
-    my $statViews = $statViewsRef->{$webName};
-    my $statSaves = $statSavesRef->{$webName};
-    my $statUploads = $statUploadsRef->{$webName};
+    my $statViews = $statViewsRef->{$web};
+    my $statSaves = $statSavesRef->{$web};
+    my $statUploads = $statUploadsRef->{$web};
     $statViews ||= 0;
     $statSaves ||= 0;
     $statUploads ||= 0;
@@ -334,8 +326,8 @@ sub _processWeb {
 
     
     # Get the top N views and contribs in this web
-    my (@topViews) = _getTopList( $TWiki::cfg{Stats}{TopViews}, $webName, $viewRef );
-    my (@topContribs) = _getTopList( $TWiki::cfg{Stats}{TopContrib}, $webName, $contribRef );
+    my (@topViews) = _getTopList( $TWiki::cfg{Stats}{TopViews}, $web, $viewRef );
+    my (@topContribs) = _getTopList( $TWiki::cfg{Stats}{TopContrib}, $web, $contribRef );
 
     # Print information to stdout
     my $statTopViews = '';
@@ -356,9 +348,9 @@ sub _processWeb {
     my $statsTopic = $TWiki::cfg{Stats}{TopicName};
     # DEBUG
     # $statsTopic = 'TestStatistics';		# Create this by hand
-    if( $session->{store}->topicExists( $webName, $statsTopic ) ) {
+    if( $session->{store}->topicExists( $web, $statsTopic ) ) {
         my( $meta, $text ) =
-          $session->{store}->readTopic( undef, $webName, $statsTopic, undef );
+          $session->{store}->readTopic( undef, $web, $statsTopic, undef );
         my @lines = split( /\n/, $text );
         my $statLine;
         my $idxStat = -1;
@@ -398,7 +390,7 @@ sub _processWeb {
         $text = join( "\n", @lines );
         $text .= "\n";
 
-        $session->{store}->saveTopic( $user, $webName, $statsTopic,
+        $session->{store}->saveTopic( $user, $web, $statsTopic,
                                       $text, $meta,
                                       { minor => 1,
                                         dontlog => 1 } );
@@ -406,10 +398,10 @@ sub _processWeb {
         _printMsg( "  - Topic $statsTopic updated", $session );
 
     } else {
-        _printMsg( "! Warning: No updates done, topic $webName.$statsTopic does not exist", $session );
+        _printMsg( "! Warning: No updates done, topic $web.$statsTopic does not exist", $session );
     }
 
-    return $webName;
+    return $web;
 }
 
 # Get the items with top N frequency counts

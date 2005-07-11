@@ -2,13 +2,8 @@ require 5.006;
 
 package RcsTests;
 
-use base qw(Test::Unit::TestCase);
+use base qw(TWikiTestCase);
 use strict 'vars';
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
-
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
@@ -20,7 +15,7 @@ use TWiki::Store::RcsLite;
 use TWiki::Store::RcsWrap;
 use File::Path;
 
-my $web = "TestRcsWebTests";
+my $testWeb = "TestRcsWebTests";
 my $user = "TestUser1";
 
 my $rTopic = "TestTopic";
@@ -29,6 +24,7 @@ my $saveWF;
 
 sub set_up {
     my $this = shift;
+    $this->SUPER::set_up();
     die unless (defined $TWiki::cfg{PubUrlPath});
     die unless (defined $TWiki::cfg{ScriptSuffix});
     $twiki = new TWiki();
@@ -36,14 +32,15 @@ sub set_up {
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
     die unless $twiki;
     die unless $twiki->{prefs};
-    File::Path::mkpath("$TWiki::cfg{DataDir}/$web");
-    File::Path::mkpath("$TWiki::cfg{PubDir}/$web");
+    File::Path::mkpath("$TWiki::cfg{DataDir}/$testWeb");
+    File::Path::mkpath("$TWiki::cfg{PubDir}/$testWeb");
 }
 
 sub tear_down {
-    $TWiki::cfg{WarningFileName} = $saveWF;
-    File::Path::rmtree("$TWiki::cfg{DataDir}/$web");
-    File::Path::rmtree("$TWiki::cfg{PubDir}/$web");
+    my $this = shift;
+    $this->SUPER::tear_down();
+    File::Path::rmtree("$TWiki::cfg{DataDir}/$testWeb");
+    File::Path::rmtree("$TWiki::cfg{PubDir}/$testWeb");
 }
 
 # Tests temp file creation in RcsFile
@@ -59,7 +56,7 @@ sub verifyRepRev {
     my ($this, $class) = @_;
     my $topic = "RcsRepRev";
 
-    my $rcs = $class->new( $twiki, $web, $topic, "" );
+    my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
     $rcs->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
     $this->assert_equals( "there was a man\n\n", $rcs->getRevision(1) );
     $this->assert_equals( 1, $rcs->numRevisions() );
@@ -84,7 +81,7 @@ sub test_RcsWrapOnly_ciLocked {
     my $this = shift;
     my $topic = "CiTestLockedTempDeleteMeItsOk";
     # create the fixture
-    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $web, $topic, "" );
+    my $rcs = TWiki::Store::RcsWrap->new( $twiki, $testWeb, $topic, "" );
     $rcs->addRevision( "Shooby Dooby", "original", "BungditDin" );
     # hack the lock so someone else has it
     my $user = `whoami`;
@@ -182,14 +179,14 @@ sub verifyGetRevision {
     my( $this, $class, $revs ) = @_;
     my $topic = "TestRcsTopic";
 
-    my $rcs = $class->new( $twiki, $web, $topic );
+    my $rcs = $class->new( $twiki, $testWeb, $topic );
 
     for( my $i = 0; $i < scalar(@$revs); $i++ ) {
         my $text = $revs->[$i];
         $rcs->addRevision( $text, "rev".($i+1), "UserForRev".($i+1) );
     }
 
-    $rcs = $class->new( $twiki, $web, $topic );
+    $rcs = $class->new( $twiki, $testWeb, $topic );
 
     $this->assert_equals(scalar(@$revs), $rcs->numRevisions());
     for( my $i = 1; $i <= scalar(@$revs); $i++ ) {
@@ -207,7 +204,7 @@ sub verifyGetBinaryRevision {
     my $atttext1 = "\000123\003\n";
     my $atttext2 = "\003test test test\000\n";
     my $attachment = "file.binary";
-    my $rcs = $class->new( $twiki, $web, $topic, $attachment );
+    my $rcs = $class->new( $twiki, $testWeb, $topic, $attachment );
     $rcs->_saveFile("tmp.tmp", $atttext1) && die;
     $rcs->addRevision( "tmp.tmp", "comment attachment",
                        "UserForRev" );
@@ -217,7 +214,7 @@ sub verifyGetBinaryRevision {
                        "UserForRev" );
     unlink("tmp.tmp");
 
-    $rcs = $class->new( $twiki, $web, $topic, $attachment );
+    $rcs = $class->new( $twiki, $testWeb, $topic, $attachment );
 
     my $text = $rcs->getRevision( 1 );
     $this->assert_str_equals( $atttext1, $text );
@@ -230,7 +227,7 @@ sub verifyKeywords {
     my( $this, $class ) = @_;
     my $topic = "TestRcsTopic";
     my $check = '$Author$ $Date$ $Header$ $Id$ $Locker$ $Log$ $Name$ $RCSfile$ $Revision$ $Source$ $State$';
-    my $rcs = $class->new( $twiki, $web, $topic, undef );
+    my $rcs = $class->new( $twiki, $testWeb, $topic, undef );
     $rcs->addRevision( $check, "comment", "UserForRev0" );
     open(F,"<$rcs->{file}") || die "Failed to open $rcs->{file}";
     undef $/;
@@ -242,12 +239,12 @@ sub verifyDifferences {
     my( $this, $class, $set ) = @_;
     my($from, $to) = @$set;
     my $topic = "RcsDiffTest";
-    my $rcs = $class->new( $twiki, $web, $topic, "" );
+    my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
 
     $rcs->addRevision( $from, "num 0", "RcsWrapper" );
     $rcs->addRevision( $to, "num 1", "RcsWrapper" );
 
-    $rcs = $class->new( $twiki, $web, $topic, "" );
+    $rcs = $class->new( $twiki, $testWeb, $topic, "" );
 
     my $diff = $rcs->revisionDiff( 1, 2 );
 
@@ -287,11 +284,11 @@ sub verifyDifferences {
 sub verifyRevAtTime {
     my( $this, $class ) = @_;
 
-    my $rcs = $class->new( $twiki, $web, 'AtTime', "" );
+    my $rcs = $class->new( $twiki, $testWeb, 'AtTime', "" );
     $rcs->addRevision( "Rev0\n", '', "RcsWrapper", 0 );
     $rcs->addRevision( "Rev1\n", '', "RcsWrapper", 1000 );
     $rcs->addRevision( "Rev2\n", '', "RcsWrapper", 2000 );
-    $rcs = $class->new( $twiki, $web, 'AtTime', "" );
+    $rcs = $class->new( $twiki, $testWeb, 'AtTime', "" );
 
     my $r = $rcs->getRevisionAtTime(500);
     $this->assert_equals(1, $r);
@@ -304,12 +301,12 @@ sub verifyRevAtTime {
 sub verifyRevInfo {
     my( $this, $class ) = @_;
 
-    my $rcs = $class->new( $twiki, $web, 'RevInfo', "" );
+    my $rcs = $class->new( $twiki, $testWeb, 'RevInfo', "" );
     $rcs->addRevision( "Rev1\n", 'FirstComment', "FirstUser", 0 );
     $rcs->addRevision( "Rev2\n", 'SecondComment', "SecondUser", 1000 );
     $rcs->addRevision( "Rev3\n", 'ThirdComment', "ThirdUser", 2000 );
 
-    $rcs = $class->new( $twiki, $web, 'RevInfo', "" );
+    $rcs = $class->new( $twiki, $testWeb, 'RevInfo', "" );
 
     my ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(1);
     $this->assert_equals(1, $rev);
@@ -343,7 +340,7 @@ sub verifyRevInfo {
 
     unlink($rcs->{rcsFile});
 
-    $rcs = $class->new( $twiki, $web, 'RevInfo', "" );
+    $rcs = $class->new( $twiki, $testWeb, 'RevInfo', "" );
 
     ($rev, $date, $user, $comment) = $rcs->getRevisionInfo(3);
     $this->assert_equals(1, $rev);

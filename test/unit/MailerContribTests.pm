@@ -2,12 +2,7 @@ use strict;
 
 package MailerContribTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use TWiki::Contrib::Mailer;
 
@@ -129,12 +124,10 @@ sub set_up {
   my $this = shift;
   $this->SUPER::set_up();
 
-  $twiki =
-      new TWiki( "", $TWiki::cfg{DefaultUserLogin}, "", "" );
-  $savePeople = $TWiki::cfg{UsersWebName};
+  $twiki = new TWiki();
   $TWiki::cfg{UsersWebName} = $peopleWeb;
 
-  my $user = $twiki->{users}->findUser($TWiki::cfg{DefaultUserLogin});
+  my $user = $twiki->{user};
   my $text;
 
   $twiki->{store}->createWeb($user, $testweb);
@@ -286,7 +279,8 @@ sub set_up {
 }
 
 sub tear_down {
-    $TWiki::cfg{UsersWebName} = $savePeople;
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $testweb);
     $twiki->{store}->removeWeb($twiki->{user}, $peopleWeb);
 }

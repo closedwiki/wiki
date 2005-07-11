@@ -5,12 +5,7 @@ use strict;
 
 package MetaTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Meta;
@@ -47,7 +42,9 @@ my $m1;
 my $session;
 
 sub set_up {
-    $session = new TWiki( "/$web/$topic", "", $topic, "" );
+    my $this = shift;
+    $this->SUPER::set_up();
+    $session = new TWiki();
 
     $m1 = TWiki::Meta->new($session, $web, $topic);
     $m1->put( "TOPICINFO", $args );

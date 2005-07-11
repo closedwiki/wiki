@@ -28,7 +28,9 @@ sub new {
 sub set_up {
     my $this = shift;
 
-    $twiki = new TWiki( $thePathInfo, "TestUser1", $basetopic, "" );
+    $this->SUPER::set_up();
+
+    $twiki = new TWiki( "TestUser1" );
 
     $twiki->{store}->createWeb($twiki->{user}, $baseweb);
     $twiki->{store}->createWeb($twiki->{user}, $targetweb);
@@ -38,6 +40,8 @@ sub set_up {
 }
 
 sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $baseweb);
     $twiki->{store}->removeWeb($twiki->{user}, $targetweb);
 }
@@ -183,8 +187,8 @@ sub inputTest {
                          'comment_action' => 'save',
                          'comment_type' => $type,
                          'comment' => $comm,
-                         '.path_info' => "/$web/$topic",
                         });
+    $query->path_info("/$web/$topic");
     if ( $anchor ) {
         $query->param(-name=>'comment_anchor', -value=>$anchor);
     } elsif ( $location) {
@@ -193,7 +197,7 @@ sub inputTest {
         $query->param(-name=>'comment_index', -value=>$eidx);
     }
 
-    my $session = new TWiki("/$web/$topic", "guest", "", "/$web/$topic", $query);
+    my $session = new TWiki( $TWiki::cfg{DefaultUserLoginName}, $query);
     my $text = "Ignore this text";
 
     # invoke the save handler

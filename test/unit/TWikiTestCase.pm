@@ -3,35 +3,113 @@ package TWikiTestCase;
 # Base class of all TWiki tests. Establishes base paths and adds
 # some useful functionality such as comparing HTML
 #
-BEGIN {
-    push( @INC, "$ENV{TWIKI_HOME}/lib" );
-};
-
+# The basic strategy in all unit tests is to never write to normal
+# TWiki data areas; only ever write to temporary test areas. If you
+# have to create a test fixture that duplicates an existing area,
+# you can always create a new web based on that web.
+#
 use base qw(Test::Unit::TestCase);
 
 use TWiki;
 use TWiki::Plugins::TestFixturePlugin::HTMLDiffer;
 use strict;
 
-sub protectCFG() {
-    my $this = shift;
-    foreach my $i (keys %TWiki::cfg ) {
-        $this->{__TWikiSafe}{$i} = $TWiki::cfg{$i};
-    }
-}
-
-sub restoreCFG {
-    my $this = shift;
-    for my $i (keys %{$this->{__TWikiSafe}} ) {
-        $TWiki::cfg{$i} = $this->{__TWikiSafe}{$i};
-    }
-}
+BEGIN {
+    push( @INC, "$ENV{TWIKI_HOME}/lib" );
+    unshift @INC, '../../bin';
+    require 'setlib.cfg';
+};
 
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
 }
 
+# Use this to save the TWiki cfg to a backing store during start_up
+# so it can be temporarily changed during tests.
+sub set_up {
+    my $this = shift;
+
+    $this->SUPER::set_up();
+
+    # force a read of $TWiki::cfg
+    my $tmp = new TWiki();
+    # This needs to be a deep copy
+    $this->{__TWikiSafe} = _copy( \%TWiki::cfg );
+}
+
+# Restores TWiki::cfg from backup and deletes any fake users created
+sub tear_down {
+    my $this = shift;
+    %TWiki::cfg = %{$this->{__TWikiSafe}};
+    if(defined($this->{fake_users})) {
+        for my $i (@{$this->{fake_users}}) {
+            unlink("$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$i.txt");
+            unlink("$TWiki::cfg{DataDir}/$TWiki::cfg{UsersWebName}/$i.txt,v");
+        }
+    }
+}
+
+sub _copy {
+    my $n = shift;
+
+    return undef unless defined( $n );
+
+    if (UNIVERSAL::isa($n, 'ARRAY')) {
+        my @new;
+        for ( @$n ) {
+            push(@new, _copy( $n->[$_] ));
+        }
+        return \@new;
+    }
+    elsif (UNIVERSAL::isa($n, 'HASH')) {
+        my %new;
+        for ( keys %$n ) {
+            $new{$_} = _copy( $n->{$_} );
+        }
+        return \%new;
+    }
+    elsif (UNIVERSAL::isa($n, 'REF') || UNIVERSAL::isa($n, 'SCALAR')) {
+        $n = _copy($$n);
+        return \$n;
+    }
+    else {
+        return $n;
+    }
+}
+
+# Like it says on the tin; creates a fake user, that is guaranteed not to
+# conflict with any existing user. Fake users will be killed during tear_down.
+# Be aware that if you fail to call tear-down, for example if you ctrl-C the
+# tests, you may leave fake users around, so it is better to change
+# $TWiki::cfg{UsersWebName} to a test-specific web first.
+# The first parameter is a TWiki object and is required.
+# The optional parameter is the text to put in the user topic.
+# Only the user topic is created; the user is _not_ added to TWikiUsers.
+# The wikiname of the new user topic is returned.
+sub createFakeUser {
+    my( $this, $twiki, $text ) = @_;
+    $this->assert($twiki->{store}->webExists($TWiki::cfg{UsersWebName}));
+    my $base = "TemporaryTestUser";
+    my $i = 0;
+    while($twiki->{store}->topicExists($TWiki::cfg{UsersWebName},$base.$i)) {
+        $i++;
+    }
+    $text ||= '';
+    my $meta = new TWiki::Meta($twiki, $TWiki::cfg{UsersWebName}, $base.$i);
+    $meta->put( "TOPICPARENT", {
+        name => $TWiki::cfg{UsersWebName}.'.'.$TWiki::cfg{HomeTopicName} } );
+    $twiki->{store}->saveTopic($twiki->{user},
+                               $TWiki::cfg{UsersWebName},
+                               $base.$i,
+                               $text, $meta);
+    push( @{$this->{fake_users}}, $base.$i);
+    return $base.$i;
+}
+
+# 1:1 HTML comparison. Correctly compares attributes in tags. Uses HTML::Parser
+# which is tolerant of unbalanced tags, so the actual may have unbalanced
+# tags which will _not_ be detected.
 sub assert_html_equals {
     my( $this, $e, $a, $mess ) = @_;
     my ($package, $filename, $line) = caller(0);
@@ -51,6 +129,8 @@ sub assert_html_equals {
     }
 }
 
+# Uses a regular-expression match to try to match a block of HTML in a larger
+# block of HTML. Not too clever about tag attributes.
 sub assert_html_matches {
     my ($this, $e, $a, $mess ) = @_;
     $mess ||= "$a\ndoes not match\n$e";

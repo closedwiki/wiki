@@ -163,7 +163,7 @@ sub load {
     if( defined( &$sub ) ) {
         no strict 'refs';
         $user = &$sub( $this->{session}->{remoteUser},
-                       $this->{session}->{url},
+                       $this->{session}->{cgiQuery}->url(),
                        $this->{session}->{pathInfo} );
         use strict 'refs';
     }

@@ -2,12 +2,7 @@ use strict;
 
 package RenameTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use strict;
 use TWiki;
@@ -18,7 +13,6 @@ my $oldweb = "TemporaryRenameOldWeb";
 my $newweb = "TemporaryRenameNewWeb";
 my $oldtopic = "OldTopic";
 my $newtopic = "NewTopic";
-my $thePathInfo = "/$oldweb/$oldtopic";
 my $twiki;
 my $originaltext;
 
@@ -31,7 +25,9 @@ sub new {
 sub set_up {
     my $this = shift;
 
-    $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, "" );
+    $this->SUPER::set_up();
+
+    $twiki = new TWiki( "TestUser1", new CGI({topic=>"/$oldweb/$oldtopic"}));
 
     $twiki->{store}->createWeb($twiki->{user}, $oldweb);
     $twiki->{store}->createWeb($twiki->{user}, $newweb);
@@ -91,6 +87,8 @@ THIS
 }
 
 sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user},$oldweb);
     $twiki->{store}->removeWeb($twiki->{user},$newweb);
 }
@@ -138,10 +136,11 @@ sub test_rename_oldwebnewtopic {
                          referring_topics => [ "$oldweb.$newtopic",
                                                "$oldweb.OtherTopic",
                                                "$newweb.OtherTopic" ],
+                         topic => $oldtopic
                         });
 
-    $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, $query->url,
-                        $query );
+    $query->path_info( "/$oldweb/SanityCheck" );
+    $twiki = new TWiki( "TestUser1", $query );
     $TWiki::Plugins::SESSION = $twiki;
     TWiki::UI::Manage::rename( $twiki );
 
@@ -215,10 +214,11 @@ sub test_rename_newweboldtopic {
                          referring_topics => [ "$oldweb.OtherTopic",
                                                "$newweb.$oldtopic",
                                                "$newweb.OtherTopic" ],
+                         topic => $oldtopic
                         });
 
-    $twiki = new TWiki( $thePathInfo, "TestUser1", $oldtopic, $query->url,
-                        $query );
+    $query->path_info("/$oldweb" );
+    $twiki = new TWiki( "TestUser1", $query );
     $TWiki::Plugins::SESSION = $twiki;
     TWiki::UI::Manage::rename( $twiki );
 

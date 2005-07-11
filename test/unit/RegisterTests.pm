@@ -19,6 +19,7 @@ BEGIN {
     unshift @INC, '../../bin';
     require 'setlib.cfg';
 };
+
 use strict;
 use diagnostics;
 use TWiki::UI::Register;
@@ -56,12 +57,11 @@ my $save;
 
 sub set_up {
     my $this = shift;
+    $this->SUPER::set_up();
 
     $session = new TWiki();
 
     $SIG{__DIE__} = sub { confess $_[0] };
-
-    $this->protectCFG();
 
     try {
         $session->{store}->createWeb($session->{user}, $testWeb);
@@ -93,11 +93,11 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    $this->SUPER::tear_down();
     # clean up after test
     $session->{store}->removeWeb($session->{user},$testWeb);
     $session->{store}->removeWeb($session->{user},$peopleWeb);
     $session->{store}->removeWeb($session->{user},$systemWeb);
-    $this->restoreCFG();
     @mails = ();
 }
 
@@ -173,8 +173,8 @@ sub test_registerVerifyOk {
                                       ]
                          });
 
-    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
-                         'TWikiRegistration', $query->url, $query);
+    $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
@@ -202,8 +202,8 @@ sub test_registerVerifyOk {
                                     'verify'
                                    ]
                       });
-    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
-                         'TWikiRegistration', $query->url, $query);
+    $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session = new TWiki( $TWiki::cfg{DefaultUserName},$query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
@@ -272,8 +272,8 @@ sub test_registerBadVerify {
                                        'register'
                                       ]
                          });
-    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
-                         'TWikiRegistration', $query->url, $query);
+    $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
     try {
         TWiki::UI::Register::register_cgi($session);
@@ -294,15 +294,15 @@ sub test_registerBadVerify {
 
     my $code = $testUserWikiName.'.bad.foo';
     $query = new CGI ({
-                       'code' => [
-                                  $code
-                                 ],
-                       'action' => [
-                                    'verify'
-                                   ]
-                      });
-    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName},
-                         'TWikiRegistration', $query->url, $query);
+        'code' => [
+            $code
+           ],
+        'action' => [
+            'verify'
+           ]
+    });
+    $query->path_info( "/$peopleWeb/TWikiRegistration" );
+    $session = new TWiki( $TWiki::cfg{DefaultUserName}, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
@@ -341,7 +341,6 @@ sub test_resetPasswordOkay {
 
     my $query = new CGI (
                          {
-                          '.path_info' => '/'.$peopleWeb.'/WebHome',
                           'LoginName' => [
                                           "testuser"
                                          ],
@@ -353,8 +352,8 @@ sub test_resetPasswordOkay {
                                       ]
                          });
 
-    $session = new TWiki($peopleWeb, $guestLoginName,
-                         'ResetPassword', $query->url, $query);
+    $query->path_info( '/'.$peopleWeb.'/WebHome' );
+    $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
@@ -383,7 +382,6 @@ sub test_resetPasswordNoSuchUser {
 
     my $query = new CGI (
                          {
-                          '.path_info' => '/.'.$peopleWeb.'/WebHome',
                           'LoginName' => [
                                           $testUserWikiName
                                          ],
@@ -395,8 +393,8 @@ sub test_resetPasswordNoSuchUser {
                                       ]
                          });
 
-    $session = new TWiki($peopleWeb, $guestLoginName,
-                         'ResetPassword', $query->url, $query);
+    $query->path_info( '/.'.$peopleWeb.'/WebHome' );
+    $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
@@ -424,7 +422,6 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
 
     my $query = new CGI (
                          {
-                          '.path_info' => '/.'.$peopleWeb.'/WebHome',
                           'LoginName' => [
                                           $testUserWikiName,
                                           $testUserWikiName
@@ -437,8 +434,8 @@ sub test_resetPasswordNeedPrivilegeForMultipleReset {
                                       ]
                          });
 
-    $session = new TWiki($peopleWeb, $guestLoginName,
-                         'ResetPassword', $query->url, $query);
+    $query->path_info( '/.'.$peopleWeb.'/WebHome' );
+    $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
@@ -469,7 +466,6 @@ sub test_resetPasswordNoPassword {
 
     my $query = new CGI (
                          {
-                          '.path_info' => '/'.$peopleWeb.'/WebHome',
                           'LoginName' => [
                                           $testUserWikiName
                                          ],
@@ -481,10 +477,10 @@ sub test_resetPasswordNoPassword {
                                       ]
                          });
 
+    $query->path_info( '/'.$peopleWeb.'/WebHome' );
     unlink $TWiki::cfg{HtpasswdFileName};
 
-    $session = new TWiki($peopleWeb, $guestLoginName,
-                         'ResetPassword', $query->url, $query);
+    $session = new TWiki( $guestLoginName, $query);
     $session->{net}->setMailHandler(\&sentMail);
 
     try {
@@ -598,11 +594,10 @@ EOM
                           'OverwriteHomeTopics' => [
                                                     '1'
                                                    ],
-                          '.path_info' => "/$testWeb/$regTopic",
                          });
 
-    $session = new TWiki($peopleWeb, "testuser",
-                         "", $query->url, $query);
+    $query->path_info( "/$testWeb/$regTopic" );
+    $session = new TWiki( "testuser", $query);
     $session->{net}->setMailHandler(\&sentMail);
     $session->{users}->findUser( "testuser" )->{isKnownAdmin} = 1;
     $session->{topicName} = $regTopic;
@@ -696,7 +691,7 @@ Test User - $testUserWikiName - $testUserEmail
    * Password: mypassword
 EOM
 
-    $session = new TWiki($peopleWeb, $TWiki::cfg{DefaultUserName});
+    $session = new TWiki( $TWiki::cfg{DefaultUserName});
     $session->{net}->setMailHandler(\&sentMail);
 
     my $actual = TWiki::UI::Register::_buildConfirmationEmail

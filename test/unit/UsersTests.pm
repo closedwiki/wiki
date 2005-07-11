@@ -5,12 +5,7 @@ package UsersTests;
 # Some basic tests for adding/removing users in the TWiki users topic,
 # and finding them again.
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Users;
@@ -24,16 +19,6 @@ my $ttpath;
 sub new {
   my $self = shift()->SUPER::new(@_);
   return $self;
-}
-
-sub set_up {
-    my $this = shift;
-    $this->SUPER::set_up();
-    $saveTopic = $TWiki::cfg{UsersTopicName};
-}
-
-sub tear_down {
-    $TWiki::cfg{UsersTopicName} = $saveTopic;
 }
 
 my $initial = <<'THIS';

@@ -63,6 +63,8 @@ HERE
 }
 
 sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user}, $testweb1);
     $twiki->{store}->removeWeb($twiki->{user}, $testweb2);
 }

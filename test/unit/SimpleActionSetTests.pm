@@ -23,8 +23,7 @@ sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
 
-    my $twiki =
-      new TWiki( "", "TestRunner", "", "" );
+    my $twiki = new TWiki( "TestRunner" );
     $TWiki::Plugins::SESSION = $twiki;
 
     TWiki::Plugins::ActionTrackerPlugin::Action::forceTime("2 Jan 2002");

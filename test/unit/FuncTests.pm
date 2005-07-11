@@ -6,12 +6,7 @@ use strict;
 
 package FuncTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Func;
@@ -26,6 +21,7 @@ my $testweb = "TemporaryFuncModuleTestWeb";
 
 sub set_up {
     my $this = shift;
+    $this->SUPER::set_up();
     $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
     $this->assert_null($twiki->{store}->createWeb($twiki->{user}, $testweb));
@@ -34,6 +30,7 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
+    $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user},$testweb);
 }
 
@@ -48,7 +45,9 @@ sub test_getViewUrl {
     $result = TWiki::Func::getViewUrl ( "", "WebHome" );
     $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
 
-    $TWiki::Plugins::SESSION = new TWiki("/Sausages/AndMash");
+    $TWiki::Plugins::SESSION = new TWiki(
+        undef,
+        new CGI( { topic=>"Sausages.AndMash" } ));
 
     $result = TWiki::Func::getViewUrl ( "Sausages", "AndMash" );
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );
@@ -69,7 +68,9 @@ sub test_getScriptUrl {
     $result = TWiki::Func::getScriptUrl ( "", "WebHome", 'wibble' );
     $this->assert_matches(qr!/$ss/Main/WebHome!, $result );
 
-    $TWiki::Plugins::SESSION = new TWiki("/Sausages/AndMash");
+    my $q = new CGI( {} );
+    $q->path_info( '/Sausages/AndMash' );
+    $TWiki::Plugins::SESSION = new TWiki(undef, $q);
 
     $result = TWiki::Func::getScriptUrl ( "Sausages", "AndMash", 'wibble' );
     $this->assert_matches(qr!/$ss/Sausages/AndMash!, $result );

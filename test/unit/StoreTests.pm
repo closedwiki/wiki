@@ -2,12 +2,7 @@
 require 5.006;
 package StoreTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use TWiki;
 use strict;
@@ -31,17 +26,17 @@ sub new {
     return $self;
 }
 
-my $web = "TestStoreWeb";
+my $web = "TemporaryTestStoreWeb";
 my $topic = "TestStoreTopic";
-my $thePathInfo = "/$web/$topic";
-my $theUrl = "/save/$web/$topic";
+
 my $twiki;
 my $user;
 
 sub set_up {
     my $this = shift;
 
-    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
+    $this->SUPER::set_up();
+    $twiki = new TWiki();
 	
 	#TODO: we should share common set up and tear down code
     # we need to make sure we have a TestUser topic
@@ -52,9 +47,11 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
-	if( $twiki->{store}->webExists($web)) {
+    $this->SUPER::tear_down();
+    try {
         $twiki->{store}->removeWeb($twiki->{user}, $web);
-    }
+    } catch Error::Simple with {
+    };
 }
 
 #===============================================================================

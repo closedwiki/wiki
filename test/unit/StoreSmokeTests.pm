@@ -1,20 +1,8 @@
 # Smoke tests for TWiki::Store
+package StoreSmokeTests;
 
-# SMELL: there is nothing specific to RCS about these tests; they
-# are general version-controlled store tests
+use base qw(TWikiTestCase);
 
-require 5.006;
-
-use strict;
-
-package RcsBasedStoreTests;
-
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
 use strict;
 use TWiki;
 use TWiki::Meta;
@@ -24,7 +12,7 @@ use TWiki::UI::Save;
 use TWiki::OopsException;
 use Devel::Symdump;
 
-my $testweb = "StoreTestsTestWeb";
+my $testweb = "TemporaryStoreSmokeTestsTestWeb";
 
 sub new {
     my $self = shift()->SUPER::new(@_);
@@ -33,29 +21,25 @@ sub new {
 
 my $twiki;
 
-my $saveWF;
-my $saveLF;
-my $saveIMPL;
+my $testUser1;
+my $testUser2;
 
 sub list_tests {
     my $this = shift;
     my @set = $this->SUPER::list_tests();
 
-    my $clz = new Devel::Symdump(qw(RcsBasedStoreTests));
+    my $clz = new Devel::Symdump(qw(StoreSmokeTests));
     for my $i ($clz->functions()) {
         next unless $i =~ /::verify_/;
-        foreach my $impl qw(  RcsWrap ) {
+        foreach my $impl qw(  RcsWrap RcsLite ) {
             my $fn = $i;
             $fn =~ s/\W/_/g;
             my $sfn = 'RcsBasedStoreTests::test_'.$fn.$impl;
             no strict 'refs';
             *$sfn = sub {
                 my $this = shift;
-                $saveIMPL = $TWiki::cfg{StoreImpl};
                 $TWiki::cfg{StoreImpl} = $impl;
-                $this->my_set_up();
                 &$i($this);
-                $TWiki::cfg{StoreImpl} = $saveIMPL;
             };
             use strict 'refs';
             push(@set, $sfn);
@@ -65,43 +49,27 @@ sub list_tests {
 }
 
 # Set up the test fixture
-sub my_set_up {
+sub set_up {
     my $this = shift;
 
-    $saveWF = $TWiki::cfg{WarningFileName};
+    $this->SUPER::set_up();
     $TWiki::cfg{WarningFileName} = "/tmp/junk";
-    $saveLF = $TWiki::cfg{LogFileName};
     $TWiki::cfg{LogFileName} = "/tmp/junk";
 
-    my $topic = "";
-    my $user = "TestUser1";
-    my $thePathInfo = "/$testweb/$topic";
-    my $theUrl = "/save/$testweb/$topic";
+    $twiki = new TWiki();
 
-    $twiki = new TWiki( $thePathInfo, $user, $topic, $theUrl );
-
+    $testUser1 = $this->createFakeUser($twiki);
+    $testUser2 = $this->createFakeUser($twiki);
     $twiki->{store}->createWeb( $twiki->{user}, $testweb);
-
-    # Make sure we have a TestUser1 and TestUser1 topic
-    unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, "TestUser1")) {
-        $twiki->{store}->saveTopic
-          ($twiki->{user},
-           $TWiki::cfg{UsersWebName}, "TestUser1",
-           "silly user page!!!");
-    }
-    unless( $twiki->{store}->topicExists($TWiki::cfg{UsersWebName}, "TestUser2")) {
-        $twiki->{store}->saveTopic
-          ($twiki->{user},
-           $TWiki::cfg{UsersWebName}, "TestUser2",
-           "silly user page!!!");
-    }
 }
 
 sub tear_down {
-    $twiki->{store}->removeWeb(undef, $testweb);
-    $TWiki::cfg{WarningFileName} = $saveWF;
-    $TWiki::cfg{LogFileName} = $saveLF;
-    $TWiki::cfg{StoreImpl} = $saveIMPL;
+    my $this = shift;
+    $this->SUPER::tear_down();
+    $twiki->{store}->removeWeb($twiki->{user}, $testweb);
+}
+
+sub test_noise {
 }
 
 sub verify_notopic {
@@ -116,7 +84,7 @@ sub verify_checkin {
     my $this = shift;
     my $topic = "UnitTest1";
     my $text = "hi";
-    my $user = $twiki->{users}->findUser("TestUser1");
+    my $user = $twiki->{users}->findUser($testUser1);
 
     $this->assert(!$twiki->{store}->topicExists($testweb,$topic));
     $twiki->{store}->saveTopic( $user, $testweb, $topic, $text );
@@ -138,7 +106,7 @@ sub verify_checkin {
     my( $dateMeta0, $authorMeta0, $revMeta0 ) = $meta->getRevisionInfo();
     $this->assert_num_equals( $revMeta0, $revMeta );
     # Check-in with different text, under different user (to force change)
-    $user = $twiki->{users}->findUser("TestUser2");
+    $user = $twiki->{users}->findUser($testUser2);
     $text = "bye";
 
     $twiki->{store}->saveTopic($user, $testweb, $topic, $text, $meta );
@@ -156,7 +124,7 @@ sub verify_checkin_attachment {
     # Create topic
     my $topic = "UnitTest2";
     my $text = "hi";
-    my $user = $twiki->{users}->findUser("TestUser1");
+    my $user = $twiki->{users}->findUser($testUser1);
 
     $twiki->{store}->saveTopic($user, $testweb, $topic, $text );
 
@@ -203,7 +171,7 @@ sub verify_rename() {
     my $oldTopic = "UnitTest2";
     my $newWeb = $oldWeb;
     my $newTopic = "UnitTest2Moved";
-    my $user = $twiki->{users}->findUser("TestUser1");
+    my $user = $twiki->{users}->findUser($testUser1);
 
     $twiki->{store}->saveTopic($user, $oldWeb, $oldTopic, "Elucidate the goose" );
     $this->assert(!$twiki->{store}->topicExists($newWeb, $newTopic));
@@ -212,7 +180,7 @@ sub verify_rename() {
     open( FILE, ">/tmp/$attachment" );
     print FILE "Test her attachment to me\n";
     close(FILE);
-    $user = $twiki->{users}->findUser( "TestUser2" );
+    $user = $twiki->{users}->findUser( $testUser2 );
     $twiki->{userName} = $user;
     $twiki->{store}->saveAttachment($oldWeb, $oldTopic, $attachment, $user,
                                 { file => "/tmp/$attachment" } );
@@ -222,7 +190,7 @@ sub verify_rename() {
     my $oldRevTop =
       $twiki->{store}->getRevisionNumber( $oldWeb, $oldTopic );
 
-    $user =$twiki->{users}->findUser( "TestUser1" );
+    $user =$twiki->{users}->findUser( $testUser1 );
     $twiki->{user} = $user;
 
     #$TWiki::Sandbox::_trace = 1;
@@ -258,15 +226,13 @@ sub verify_releaselocksonsave {
 
     # create rev 1 as TestUser1
     my $query = new CGI ({
-                          '.path_info' => "/$testweb/$topic",
                           originalrev => [ 0 ],
                           'action' => [ 'save' ],
                           text => [ "Baseline\nText\n" ],
                          });
-    my $thePathInfo = "/$testweb/$topic";
-    my $theUrl = "/save/$testweb/$topic";
+    $query->path_info( "/$testweb/$topic" );
 
-    $twiki = new TWiki( $thePathInfo, "TestUser1", $topic, $theUrl, $query );
+    $twiki = new TWiki( $testUser1, $query );
     try {
         TWiki::UI::Save::save( $twiki );
     } catch TWiki::OopsException with {
@@ -279,13 +245,13 @@ sub verify_releaselocksonsave {
 
     # create rev 2 as TestUser1
     $query = new CGI ({
-                       '.path_info' => "/$testweb/$topic",
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
                        text => [ "Changed\nLines\n" ],
                        forcenewrevision => [ 1 ],
                       });
-    $twiki = new TWiki( $thePathInfo, "TestUser1", $topic, $theUrl, $query );
+    $query->path_info( "/$testweb/$topic" );
+    $twiki = new TWiki( $testUser1, $query );
     try {
         TWiki::UI::Save::save( $twiki );
     } catch TWiki::OopsException with {
@@ -298,16 +264,17 @@ sub verify_releaselocksonsave {
 
     # now TestUser2 has a go, based on rev 1
     $query = new CGI ({
-                       '.path_info' => "/$testweb/$topic",
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
                        text => [ "Sausage\nChips\n" ],
                        forcenewrevision => [ 1 ],
                       });
 
-    $twiki = new TWiki( $thePathInfo, "TestUser2", $topic, $theUrl, $query );
+    $query->path_info( "/$testweb/$topic" );
+    $twiki = new TWiki( $testUser2, $query );
     try {
         TWiki::UI::Save::save( $twiki );
+        $this->assert(0);
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_equals('attention', $e->{template});
@@ -323,7 +290,7 @@ sub verify_releaselocksonsave {
     $this->assert_matches(qr/version="1.3"/, $text);
     $this->assert_matches(qr/<del>Changed<\/del><ins>Sausage<\/ins>/, $text);
     $this->assert_matches(qr/<del>Lines<\/del><ins>Chips<\/ins>/, $text);
-    $this->assert_matches(qr/%META:TOPICINFO{author="TestUser2"/, $text);
+    $this->assert_matches(qr/%META:TOPICINFO{author="$testUser2"/, $text);
 
 }
 

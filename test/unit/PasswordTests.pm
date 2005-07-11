@@ -2,19 +2,11 @@ use strict;
 
 package PasswordTests;
 
-use base qw(Test::Unit::TestCase);
-
-BEGIN {
-    unshift @INC, '../../bin';
-    require 'setlib.cfg';
-};
+use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Users::HtPasswdUser;
 use TWiki::Users::NoPasswdUser;
-my $saveenc;
-my $savefile;
-my $saveman;
 
 sub new {
 	my $self = shift()->SUPER::new(@_);
@@ -22,19 +14,17 @@ sub new {
 }
 
 sub set_up {
-    my $twiki = new TWiki();
+    my $this = shift();
 
-    $saveman = $TWiki::cfg{PasswordManager};
-    $saveenc = $TWiki::cfg{Htpasswd}{Encoding};
-    $savefile = $TWiki::cfg{Htpasswd}{FileName};
+    $this->SUPER::set_up();
+
     $TWiki::cfg{Htpasswd}{FileName} = '/tmp/junkpasswd';
 }
 
 sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
     unlink('/tmp/junkpasswd');
-    $TWiki::cfg{Htpasswd}{Encoding} = $saveenc;
-    $TWiki::cfg{Htpasswd}{FileName} = $savefile;
-    $TWiki::cfg{PasswordManager} = $saveman;
 }
 
 my $userpass1 =
