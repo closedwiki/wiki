@@ -1,7 +1,8 @@
 # Example site-specific configuration file for TWiki, held in 'lib' directory. 
 #
-# This is distributed as LocalSite.cfg.txt - copy this file to LocalSite.cfg
-# And edit your LocalSite.cfg  instead of changing TWiki.cfg.
+# This is distributed as LocalSite.cfg.txt - if for some reason you can't,
+# or don't want to, use =configure= to manage your site configuration, you can
+# copy this file to LocalSite.cfg edit it manually.
 #
 # LocalSite.cfg overrides TWiki.cfg, so there is no risk of your settings 
 # being overwritten when you upgrade.
@@ -13,7 +14,6 @@
 # locations for the 'lib' directory or Perl modules.
 #
 
-######## General path settings #######################################
 # NOTE: If your server is running Microsoft Windows, paths should
 # normally be written as "c:/foo" not "c:\foo" (which doesn't do what
 # you may think it does). You can use '\' without problems inside
