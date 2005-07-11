@@ -57,6 +57,8 @@ Most parameters are in the CGI query:
 | =topicparent= | what to put in the topic prent meta data |
 | =text= | text that will replace the old topic text if a formtemplate is defined (what the heck is this for?) |
 | =contenttype= | optional parameter that defines the application type to write into the CGI header. Defaults to text/html. |
+| =action= | Optional. If supplied, use the edit${action} template instead of the standard edit template. An empty value means edit both form and text, "form" means edit form only, "text" means edit text only |
+
 
 =cut
 
