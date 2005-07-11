@@ -73,9 +73,6 @@ pre {
 	margin-top:1em;
 	margin-bottom:1em;
 }
-ol, ul {
-	margin-top:1.4em; /*C10*/
-}
 ol li, ul li {
 	line-height:1.4em; /*C10*/
 }
