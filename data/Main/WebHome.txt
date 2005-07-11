@@ -1,37 +1,23 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="MichaelDaum" date="1120846368" format="1.1" version="1.2"}%
+<div style="float:right;margin:10px; width:220px;>
+<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0"/></a>
+</div>
 
+---+!! Welcome to the <nop>%WIKITOOLNAME%
+TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet. You can edit any TWiki page.
 
-<table><tr><td>
-*<font size="+1"> %TWIKIWEB%.WelcomeGuest: </font>* TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet. You can edit any TWiki page.
-</td><td>
-<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a>
-</td><td>
-<b>The TWiki&trade; home is at http://TWiki.org/ </b>
-</td></tr>
-</table>
+---++ Available Information
+   * %TWIKIWEB%.WelcomeGuest: for first time visitors
+   * [[%TWIKIWEB%.TWikiRegistration][Registration]]: become a <nop>%WIKITOOLNAME% user
+   * %WIKIUSERSTOPIC%: List of users of this <nop>%WIKITOOLNAME% web.
+   * TWikiGroups: List of groups.
+ 
+<blockquote>
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<input type="text" name="search" size="22" />
+<input type="submit" value="Search">
+<br/>
+([[WebSearchAdvanced][advanced search]])
+</form>	
+</blockquote>
 
-%INCLUDE{"%TWIKIWEB%.SiteMap"}%
-
-*<nop>%WEB% Web:*
-	* <b> %WIKIUSERSTOPIC%: </b> List of users of this <nop>%WIKITOOLNAME% web.
-	* TWikiGroups: List of groups.
-	* OfficeLocations: Corporate offices.
-
-%INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
-
-*%TWIKIWEB% Web:*
-	* <b> %TWIKIWEB%.WelcomeGuest: </b> Look here first to get you rolling on <nop>%WIKITOOLNAME%.
-	* %TWIKIWEB%.TWikiSite: Explains what a <nop>%WIKITOOLNAME% site is.
-	* %TWIKIWEB%.TWikiRegistration: Create your account in order to edit topics.
-	* Documentation:
-		* %TWIKIWEB%.TWikiFAQ has a list of frequently asked questions.
-		* %TWIKIWEB%.TWikiDocumentation is the implementation documentation of TWiki. 
-		* %TWIKIWEB%.TWikiHistory shows TWiki's implementation history. 
-	* How to edit text:
-		* %TWIKIWEB%.GoodStyle: Things to consider when changing text.
-		* %TWIKIWEB%.TextFormattingRules: Easy to learn rules for editing text.
-		* %TWIKIWEB%.TextFormattingFAQ: Answers to frequently asked questions about text formatting.
-	* %TWIKIWEB%.%WIKIPREFSTOPIC%: <nop>%WIKITOOLNAME% site-level preferences 
-
-*Notes:*
-%INCLUDE{"%TWIKIWEB%.YouAreHere"}%

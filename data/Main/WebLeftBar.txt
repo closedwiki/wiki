@@ -1,6 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="MichaelDaum" date="1121074087" format="1.1" version="1.2"}%
 <div class="twikiLeftBarPersonal" style="margin-top:0;">
 %CALC{"$IF($EXACT(%WIKINAME%,TWikiGuest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]]<!-- <br /><small>[[Sandbox.LogoutAndLogin][Not me?]]</small> -->)"}%
 <script type="text/javascript">
@@ -13,22 +11,17 @@ writeToggle("show","hide","twikiLeftBarPersonalContent")
 </div>
 </div>
 
-   * *[[%WIKILOGOURL%][TWiki.org]]*
----
-   * *[[Sandbox.WebHome][%X% NOTE: Please use the Sandbox web for testing]]*
----
-   * *[[%TWIKIWEB%.WelcomeGuest][Welcome]]*
-   * *[[%TWIKIWEB%.TWikiRegistration][Register]]*
-   * *[[http://twiki.org/cgi-bin/view/Codev/TWikiSecurityAlerts][Security Alerts]]*
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
+
 ---
    * <b><nop>%INCLUDINGWEB% Web</b>
-   * [[%HOMETOPIC%][%WEB% Web Home]]
+   * [[%HOMETOPIC%][Home]]
    * [[TWikiUsers][Users]]
    * [[TWikiGroups][Groups]]
-   * [[OfficeLocations][Offices]]
-   * [[%SCRIPTURL%/changes%SCRIPTSUFFIX%/%WEB%][Changes]]
-   * [[WebChanges][Changes detailed]]
-   * [[WebIndex][Topic list]]
-   * [[%INCLUDINGWEB%.WebSearch][Search]]
+   * [[WebTopicList][Index]]
+   * [[%INCLUDINGWEB%.WebSearchAdvanced][Search]]
+   * [[WebChanges][Changes]]
+   * [[WebNotify][Notifications]]
+   * [[WebStatistics][Statistics]]
+   * [[WebPreferences][Preferences]]
 
-%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%

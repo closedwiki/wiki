@@ -1,113 +1,35 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="MichaelDaum" date="1120846334" format="1.1" version="1.1"}%
+<div style="float:right;margin:10px; width:220px;>
+<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0"/></a><br />
+The official TWiki<sup>TM</sup><br /> site is 
+http://twiki.org/
+</div>
 
+---+!! Welcome to the %WEB% Web
 
-<table><tr><td valign="top">
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
-</td><td width="25">&nbsp;</td><td width="200" align="center" valign="top">
-<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a><br />
-The official TWiki<sup>TM</sup><br /> site is http://twiki.org/
-</td></tr>
-</table>
-%TOC{depth="2"}%
-<table><tr valign="top"><td>
-#UsersGuide
----++ TWiki User's Guide
 
-_Documentation for TWiki users._
+---++ Available Information
+   * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
+   * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial
+   * [[TWikiFAQ][Frequenty Asked Questions]]: about TWiki
+   * [[TWikiReferenceManual][Reference Manual]]: Documentation for webmasters, system administrators
+   * [[Admin Tools]]: manage the <nop>%WIKITOOLNAME% site
 
-	* *TWiki Quick Start* - the fast track approach
-		* WelcomeGuest: A fast track intro covering all the basics
-		* ATasteOfTWiki: A short introduction training course for beginners
-		* TWikiRegistration: Sign up so you can edit pages and select options
-
-	* *One-Page Primers* cover TWiki basics
-		* TWikiTutorial: A compact, 20-minute TWiki primer
-		* TWikiSite: Instant overview - first, there was Wiki
-		* TWikiTopics: Customize, rename, move, or delete TWiki topics
-		* SearchHelp: Tips and help on search
-		* GoodStyle: Working tips for an open collaboration environment
-		* TWikiShorthand: All of the TWiki shorthand basics
-		* TextFormattingRules: Scan all TWiki text formatting rules on one page
-		* TWikiVariables: How to easily embed text, graphics, dynamic content
-		* FileAttachments: Browser-upload files for distribution or display
-		* WebChangesAlert: Get email alerts linking to the latest page changes
-		* TWikiGlossary: A simple glossary of TWiki terms
-
-	* *TWiki Help FAQs*
-		* TWikiFAQ: The first things people ask about TWiki
-		* TextFormattingFAQ: Common how-to questions about posting in TWiki  
-		* Frequent users should also browse the full [[#ReferenceManual][Reference Manual]]!
-
-</td><td width="25">&nbsp;</td>
-<td width="200" align="left" valign="top">
-<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
-<input type="text" name="search" size="22" /><br /><input type="submit" value="Search Docs" /><br /> 
-<font size="-2">More options in WebSearch</font>
-</form>
-</td></tr></table>
-
-	* *Help on Installed Plugins*
 <blockquote>
-%PLUGINDESCRIPTIONS%
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<input type="text" name="search" size="22" />
+<input type="submit" value="Search" /><br/>
+([[WebSearchAdvanced][advanced search]])
+</form>
 </blockquote>
 
+---++ Disclaimer
+   * TWiki<sup>TM</sup> is a trademark of PeterThoeny
+   * __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers<sup>TM</sup> in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
+   * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
+   * This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
+   * Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]]
 
-#ReferenceManual
----++ TWiki Reference Manual
-
-_Documentation for webmasters, system administrators, project managers, team leaders, and all other users of the TWiki advanced online collaboration platform._
-
-	* All manual sections in one big page:
-		* [[TWikiDocumentation][TWiki Documentation]] (560k)
-	* Manual sections in separate pages:
-		1. [[TWikiSystemRequirements][TWiki System Requirements]]
-		1. [[TWikiInstallationGuide][TWiki Installation Guide]]
-		1. [[WindowsInstallCookbook][Windows Install Cookbook]]
-		1. [[TWikiUpgradeGuide][TWiki Upgrade Guide]]
-		1. [[TWikiUserAuthentication][TWiki User Authentication]]
-		1. [[TWikiAccessControl][TWiki Access Control]]
-		1. [[TextFormattingRules][Text Formatting Rules]]
-		1. [[TWikiVariables][TWiki Variables]]
-		1. [[FileAttachment][File Attachment]]
-		1. [[TWikiForms][TWiki Forms]]
-		1. [[TWikiTemplates][TWiki Templates]]
-		1. [[TWikiSkins][TWiki Skins]]
-		1. [[FormattedSearch][Formatted Search]]
-		1. [[TWikiMetaData][TWiki MetaData]]
-		1. [[TWikiPlugins][TWiki Plugins]]
-		1. [[FuncDotPm][TWiki::Func Module]]
-		1. [[TWikiScripts][CGI Scripts]]
-		1. [[TWikiSiteTools][TWiki Site Tools]] 
-		1. [[ManagingTopics][Managing Topics]] 
-		1. [[ManagingWebs][Managing Webs]]
-		1. [[ManagingUsers][Managing Users]]
-		* *Appendices*
-			* [[TWikiCss][TWiki CSS]]
-			* [[AppendixEncodeURLsWithUTF8][Encode URLs With UTF8]]
-			* [[TWikiHistory][TWiki Development Timeline]]
-
-	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[#UsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
-		* TWikiAdminCookBook: Some tips that can be applied *before installation*
-		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
-		* AdminTools: Topics an admin typically needs, all in one page
-
----++ <nop>TWikiSiteTools
-
-	* TWikiSiteTools include utilities for navigation and for monitoring %TWIKIWEB% web and site-wide activity.
-
-%INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
-	* %WIKIPREFSTOPIC%: <nop>%WIKITOOLNAME% site-wide preferences
-	* InstalledPlugins: currently available TWiki add-on features
-
-	* The %TWIKIWEB%.SiteMap: A color-coded directory of available webs that can be easily included on any page _(below)_
-%INCLUDE{"%TWIKIWEB%.YouAreHere"}%
-%INCLUDE{"%TWIKIWEB%.SiteMap"}%
-
-	* TWiki<sup>TM</sup> is a trademark of PeterThoeny
-		* __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers<sup>TM</sup> in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
-	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
-	* This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
-	* Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]] <br />
-	  <a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a>

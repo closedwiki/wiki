@@ -1,6 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111938186" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="MichaelDaum" date="1121074130" format="1.1" version="1.2"}%
 <div class="twikiLeftBarPersonal" style="margin-top:0;">
 <script type="text/javascript">
 //<![CDATA[
@@ -12,10 +10,16 @@ writeToggle("+","-","twikiLeftBarPersonalContent")
 </div>
 </div>
 
-	* <b><nop>%INCLUDINGWEB% Web</b>
-	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
-	* [[WebChanges][Changes]]
-	* [[WebIndex][Index]]
-	* [[WebSearch][Search]]
-----
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
+
+---
+
+	* <b><nop>%INCLUDINGWEB% Web</b>
+	* [[%HOMETOPIC%][Home]]
+	* [[WebTopicList][Index]]
+	* [[WebSearchAdvanced][Search]]
+	* [[WebChanges][Changes]]
+	* [[WebNotify][Notifications]]
+	* [[WebStatistics][Statistics]]
+	* [[WebPreferences][Preferences]]
+

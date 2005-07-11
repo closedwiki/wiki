@@ -1,5 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111938186" format="1.0" version="$Rev$"}%
-
+%META:TOPICINFO{author="MichaelDaum" date="1120843468" format="1.1" version="1.2"}%
+---+!! Welcome to the %WEB% web
 
 The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the <nop>%WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign and date it with your %TWIKIWEB%.WikiName.
 
@@ -7,16 +7,7 @@ The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is w
 
 %SEARCH{ "TestTopic*" regex="on" scope="topic" nototal="on" nosearch="on" noheader="on" format="[[$web.$topic][$topic]] &middot; " }%
 
-</form>
 <form name="createNewTestTopic" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%BASEWEB%/TestTopicXXXXXXXXXX">
 <input type="submit" value=" Create new <nop>TestTopic " >
+</form>
 
-
----++ Site Tools of the <nop>%WEB% Web
-
-%INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
-
-*Notes:*
-%INCLUDE{"%TWIKIWEB%.YouAreHere"}%
-
-%INCLUDE{"%TWIKIWEB%.SiteMap"}%
