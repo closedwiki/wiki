@@ -102,6 +102,7 @@ sub buildNewTopic {
         ( $prevMeta, $prevText ) =
           $store->readTopic( undef, $webName, $topic, undef );
     }
+        $prevMeta->get( 'TOPICPARENT' ) if $prevMeta;
 
     # Determine the new text
     my $newText = $query->param( 'text' );
@@ -124,10 +125,13 @@ sub buildNewTopic {
 
     # Populate the new meta data
     my $newMeta = new TWiki::Meta( $session, $webName, $topic );
-    foreach my $k ( keys %$prevMeta ) {
-      unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' || $k eq 'FIELD' ) {
-	$newMeta->copyFrom( $prevMeta, $k );
-      }
+    if( $prevMeta ) {
+        foreach my $k ( keys %$prevMeta ) {
+            unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
+                      $k eq 'FIELD' ) {
+                $newMeta->copyFrom( $prevMeta, $k );
+            }
+        }
     }
 
     my $newParent = $query->param( 'topicparent' ) || '';
@@ -169,17 +173,17 @@ sub buildNewTopic {
     if( $copyMeta && $formName ) {
         # Copy existing fields into new form
         my $formDef = new TWiki::Form( $session, $webName, $formName );
-	foreach my $fieldDef ( @{$formDef->{fields}} ) {
-	  next unless $fieldDef->{name};
-	  my $args =
-	    {
-	     name =>  $fieldDef->{name},
-	     title => $fieldDef->{title},
-	     value => $fieldDef->{value},
-	     attributes => $fieldDef->{attributes},
-	    };
-	  $newMeta->putKeyed( 'FIELD', $args );
-	}
+        foreach my $fieldDef ( @{$formDef->{fields}} ) {
+            next unless $fieldDef->{name};
+            my $args =
+              {
+                  name =>  $fieldDef->{name},
+                  title => $fieldDef->{title},
+                  value => $fieldDef->{value},
+                  attributes => $fieldDef->{attributes},
+              };
+            $newMeta->putKeyed( 'FIELD', $args );
+        }
     }
     if( $formDef ) {
         # override with values from the query
