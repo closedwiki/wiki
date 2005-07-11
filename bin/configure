@@ -1194,7 +1194,7 @@ sub performSanityChecks {
         $output .= NOTE( '@INC = ', join( ' ', @INC ));
         return $output;
     }
- 
+    
     return $output;
 }
 
@@ -1668,7 +1668,112 @@ if( $TWiki::cfg{UseLocale} ) {
 print CGI::header('text/html'),
     CGI::start_html( -title => 'TWiki Configuration',
                    -head => [
+CGI::script( { language => 'JavaScript',
+               type => 'text/javascript' }, <<'HERE'
+//<!--
+
+var lastOpenBlock;
+var lastOpenBlockLink;
+var allBlocks; // array of all foldable blocks
+var allBlockLinks; // array of all foldable block links (headers)
+
+function foldBlock(id) {
+    var shouldClose = false;
+    if (lastOpenBlock == undefined) {
+        var block = document.getElementById(id);
+        if (block.open) {
+            shouldClose = true;
+        }
+    }
+    if (shouldClose) {
+        closeBlock(id);
+    } else {
+        var o = openBlock(id);
+        if (lastOpenBlock != undefined) {
+            closeBlockElement(lastOpenBlock, lastOpenBlockLink);
+        }
+    }
+    lastOpenBlock = (lastOpenBlock == o.block) ? undefined : o.block;
+    lastOpenBlockLink = (lastOpenBlockLink == o.blockLink) ? undefined : o.blockLink;
+
+}
+
+function openBlock(id) {
+    var block = document.getElementById(id);
+    var blockLink = document.getElementById('blockLink' + id);
+    openBlockElement(block, blockLink);
+    return {block:block, blockLink:blockLink};
+}
+
+function openBlockElement(block, blockLink) {
+    block.className = 'foldableBlock foldableBlockOpen';
+    block.open = true;
+    blockLink.className = 'blockLink blockLinkOn';
+}
+
+function closeBlock(id) {
+    var block = document.getElementById(id);
+    var blockLink = document.getElementById('blockLink' + id);
+    closeBlockElement(block, blockLink);
+    return {block:block, blockLink:blockLink};
+}
+
+function closeBlockElement(block, blockLink) {
+    block.className = 'foldableBlock foldableBlockClosed';
+    block.open = false;
+    blockLink.className = 'blockLink blockLinkOff';
+}
+
+function toggleAllOptions(open) {
+    if (allBlocks == undefined) {
+        allBlocks = getElementsByClassName('foldableBlock');
+    }
+    if (allBlockLinks == undefined) {
+        allBlockLinks = getElementsByClassName('blockLink');
+    }
+    var i, ilen=allBlocks.length;
+    if (open) {
+        for (i=0; i<ilen; ++i) {
+            openBlockElement(allBlocks[i], allBlockLinks[i]);
+        }
+    } else {
+        for (i=0; i<ilen; ++i) {
+            closeBlockElement(allBlocks[i], allBlockLinks[i]);
+        }
+    }
+    lastOpenBlock = undefined;
+    lastOpenBlockLink = undefined;
+}
+
+function getElementsByClassName(class_name)
+{
+    var all_obj, ret_obj = new Array();
+    if (document.all)
+        all_obj=document.all;
+     else if (document.getElementsByTagName && !document.all)
+        all_obj=document.getElementsByTagName("*");
+    var len = all_obj.length;
+    for (i=0;i<len;++i) {
+        var myClass = all_obj[i].className;
+         if (myClass == class_name) {
+            ret_obj.push(all_obj[i]);
+        } else {
+            var classElems = myClass.split(" ");
+            var elemLen = classElems.length;
+            for (ii=0; ii<elemLen; ++ii) {
+                if (classElems[ii] == class_name) {
+                    ret_obj.push(all_obj[i]);
+                }
+            }    
+        }
+    }
+    return ret_obj;
+}
+//-->
+HERE
+),
     CGI::style( { -type=>'text/css' }, <<'HERE'
+    
 html body {
     line-height:1.4em; /*C10*/
     font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
@@ -1885,7 +1990,7 @@ div.foldableBlock {
     display:block;
 }
 .foldableBlockClosed {
-    /* value set with javascript, see below */
+    display:block;
 }
 div.foldableBlock table {
     margin-bottom:1em;
@@ -1945,119 +2050,10 @@ CGI::script( { language => 'JavaScript',
                type => 'text/javascript' }, <<'HERE'
 //<!--
 
-var lastOpenBlock;
-var lastOpenBlockLink;
-var allBlocks; // array of all foldable blocks
-var allBlockLinks; // array of all foldable block links (headers)
-
-function foldBlock(id) {
-    var shouldClose = false;
-    if (lastOpenBlock == undefined) {
-        var block = document.getElementById(id);
-        if (block.open) {
-            shouldClose = true;
-        }
-    }
-    if (shouldClose) {
-        closeBlock(id);
-    } else {
-        var o = openBlock(id);
-        if (lastOpenBlock != undefined) {
-            closeBlockElement(lastOpenBlock, lastOpenBlockLink);
-        }
-    }
-    lastOpenBlock = (lastOpenBlock == o.block) ? undefined : o.block;
-    lastOpenBlockLink = (lastOpenBlockLink == o.blockLink) ? undefined : o.blockLink;
-
-}
-
-function openBlock(id) {
-    var block = document.getElementById(id);
-    var blockLink = document.getElementById('blockLink' + id);
-    openBlockElement(block, blockLink);
-    return {block:block, blockLink:blockLink};
-}
-
-function openBlockElement(block, blockLink) {
-    block.className = 'foldableBlock foldableBlockOpen';
-    block.open = true;
-    blockLink.className = 'blockLink blockLinkOn';
-}
-
-function closeBlock(id) {
-    var block = document.getElementById(id);
-    var blockLink = document.getElementById('blockLink' + id);
-    closeBlockElement(block, blockLink);
-    return {block:block, blockLink:blockLink};
-}
-
-function closeBlockElement(block, blockLink) {
-    block.className = 'foldableBlock foldableBlockClosed';
-    block.open = false;
-    blockLink.className = 'blockLink blockLinkOff';
-}
-
-function toggleAllOptions(open) {
-    if (allBlocks == undefined) {
-        allBlocks = getElementsByClassName('foldableBlock');
-    }
-    if (allBlockLinks == undefined) {
-        allBlockLinks = getElementsByClassName('blockLink');
-    }
-    var i, ilen=allBlocks.length;
-    if (open) {
-        for (i=0; i<ilen; ++i) {
-            openBlockElement(allBlocks[i], allBlockLinks[i]);
-        }
-    } else {
-        for (i=0; i<ilen; ++i) {
-            closeBlockElement(allBlocks[i], allBlockLinks[i]);
-        }
-    }
-    lastOpenBlock = undefined;
-    lastOpenBlockLink = undefined;
-}
-
-function getElementsByClassName(class_name)
-{
-    var all_obj, ret_obj = new Array();
-    if (document.all)
-        all_obj=document.all;
-     else if (document.getElementsByTagName && !document.all)
-        all_obj=document.getElementsByTagName("*");
-    var len = all_obj.length;
-    for (i=0;i<len;++i) {
-        var myClass = all_obj[i].className;
-         if (myClass == class_name) {
-            ret_obj.push(all_obj[i]);
-        } else {
-            var classElems = myClass.split(" ");
-            var elemLen = classElems.length;
-            for (ii=0; ii<elemLen; ++ii) {
-                if (classElems[ii] == class_name) {
-                    ret_obj.push(all_obj[i]);
-                }
-            }    
-        }
-    }
-    return ret_obj;
-}
-//-->
-HERE
-),
-CGI::style( { -type=>'text/css' }, <<'HERE'
-.foldableBlockClosed {
-    display:block;
-}
-HERE
-),
-CGI::script( { language => 'JavaScript',
-               type => 'text/javascript' }, <<'HERE'
-
-<!-- document.write("-->"); //-->
 document.write("<style type='text/css'>");
 document.write(".foldableBlockClosed {display:none;}"); 
 document.write("<\/style>");
+//-->
 HERE
 )
 ]);
