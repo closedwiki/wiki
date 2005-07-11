@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1120843468" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1120843468" format="1.1" version="1.2"}%
 ---+!! Welcome to the %WEB% web
 
 The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the <nop>%WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign and date it with your %TWIKIWEB%.WikiName.
