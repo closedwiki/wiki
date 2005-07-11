@@ -16,10 +16,11 @@
 
 
 %TMPL:DEF{"script"}%
-<script type="text/javascript">
-<!-- HIDE
+<script type="text/javascript"><![CDATA[
+<!--
 	function initPage() { }
--->
+//-->
+]]>
 </script>%TMPL:END%
 
 
@@ -28,38 +29,45 @@
 <!-- START fallback in case javascript is off -->
 <!-- no check on TWIKILAYOUTURL and TWIKISTYLEURL; these are added regardlessly -->
 <!-- USERLAYOUTURL and USERSTYLEURL are not supported with javascript off -->
-<script type="text/javascript">
-<!-- document.write("<!--"); //-->
+<script type="text/javascript"><![CDATA[
+<!--
+document.write("<!--");
+//-->
+]]>
 </script>
 <style type='text/css'>
 	@import url("%TWIKILAYOUTURL%");
 	@import url("%TWIKISTYLEURL%");
 </style>
-<script type="text/javascript">
-<!-- document.write("-->"); //-->
+<script type="text/javascript"><![CDATA[
+<!--
+document.write("-->");
+//-->
+]]>
 </script>
 <!-- END fallback in case javascript is off -->
-<script type="text/javascript">
+<script type="text/javascript"><![CDATA[
 <!--
 document.write("<style type='text/css'>");
 /* Default TWiki layout */
-if ("%TWIKILAYOUTURL%".split("?")[0].length) {
+if ("%TWIKILAYOUTURL%".split("?")[0].length && "%TWIKILAYOUTURL%".split("TWIKILAYOUTURL")[0].length) {
 	document.write("@import url(%TWIKILAYOUTURL%);"); 
 }
 /* Default TWiki style */
-if ("%TWIKISTYLEURL%".split("?")[0].length) {
+if ("%TWIKISTYLEURL%".split("?")[0].length && "%TWIKISTYLEURL%".split("TWIKISTYLEURL")[0].length) {
 	document.write("@import url(%TWIKISTYLEURL%);"); 
 }
 /* Custom overriding layout per web or per topic */
-if ("%USERLAYOUTURL%".split("?")[0].length) {
+if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
 	document.write("@import url(%USERLAYOUTURL%);"); 
 }
 /* Custom overriding style per web or per topic */
-if ("%USERSTYLEURL%".split("?")[0].length) {
+if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
 	document.write("@import url(%USERSTYLEURL%);"); 
 }
 document.write("<\/style>");
 //-->
+]]>
 </script>
 <style type="text/css" media="all">
 	/* Styles that are set using variables */
