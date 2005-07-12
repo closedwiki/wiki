@@ -11,7 +11,7 @@ _Definition of the templates used to render all HTML pages displayed in TWiki_
 ---++ Overview
 
 There are three types of template:
-    * *Master Templates*: Define blocks of text for use in other templates
+	* *Master Templates*: Define blocks of text for use in other templates
 	* *HTML Page Templates*: Define the layout of <nop>%WIKITOOLNAME% pages
 	* *Template Topics*: Define default text when you create a new topic
 
