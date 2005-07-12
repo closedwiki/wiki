@@ -1936,6 +1936,9 @@ a.blockLink {
     border-bottom:1px solid #aaa;
     text-decoration:none;   
 }
+a:link:hover.blockLink {
+    text-decoration:none;   
+}
 .blockLinkOff {
     background-color:#F3EDE7;
     color:#333;
