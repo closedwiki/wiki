@@ -256,6 +256,7 @@ label {
 	color:#800;
 	overflow:hidden;
 	line-height:1.5em;
+	background-color:#FBFAF8;
 }
 .twikiLeftBar a:link,
 .twikiLeftBar a:visited {
