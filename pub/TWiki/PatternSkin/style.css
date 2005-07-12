@@ -59,8 +59,8 @@ strong, b {
 	font-weight:bold;
 }
 hr {
-	color:#9E9E70;
-	background-color:#9E9E70;
+	color:#999;
+	background-color:#999;
 	height:1px;
 	border:none;
 }
@@ -349,7 +349,7 @@ html>body .twikiLeftBar li a {
 	margin:0;
 }
 .twikiLeftBarPersonal a:visited {
-	color:#666;
+	color:#555;
 }
 
 /* Bottom bar */
@@ -402,7 +402,7 @@ html>body .twikiLeftBar li a {
 }
 .twikiTopic a:visited {
 	text-decoration:underline;
-	color:#444;
+	color:#595959;
 }
 .twikiTopic h1 a:link,
 .twikiTopic h1 a:visited,
@@ -437,7 +437,7 @@ html>body .twikiLeftBar li a {
 	empty-cells:show;
 	border:0px;
 	font-size:90%;
-	color:#888e9c;
+	color:#666;
 	background-color:white;
 	border-top:1px solid #ccc;
 	border-right:1px solid #ccc;
@@ -1083,7 +1083,7 @@ a:hover .twikiAccessKey {
 .twikiViewPage .twikiForm,
 .twikiPreviewPage .twikiAttachments,
 .twikiPreviewPage .twikiForm {
-	background-color:#f1f1f1;
+	background-color:#eaeaea;
 	padding:2em;
 	border-top:1px solid #bbb;
 	margin-top:0;
