@@ -32,6 +32,28 @@ my $testform2 = $testform1 . <<'HERE';
 | Field not in TestForm1 | text | 60 | text |
 HERE
 
+my $testform3 = <<'HERE';
+| *Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes* |
+| Select | select | 1 | Value_1, Value_2, *Value_3* |  |
+| Radio | radio | 3 | 1, 2, 3 | |
+| Checkbox | checkbox | 3 | red,blue,green | |
+| Textfield | text | 60 | detest | |
+HERE
+
+my $testtext1 = <<'HERE';
+%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev: 4579 $"}%
+
+A guest of this TWiki web, not unlike yourself. You can leave your trace behind you, just add your name in %TWIKIWEB%.TWikiRegistration and create your own page.
+
+%META:FORM{name="TestForm1"}%
+%META:FIELD{name="Select" attributes="" title="Select" value="Value_2"}%
+%META:FIELD{name="Radio" attributes="" title="Radio" value="3"}%
+%META:FIELD{name="Checkbox" attributes="" title="Checkbox" value="red"}%
+%META:FIELD{name="Textfield" attributes="" title="Textfield" value="Test"}%
+%META:FIELD{name="CheckboxandButtons" attributes="" title="CheckboxandButtons" value=""}%
+%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" value="UserTopic"}%
+HERE
+
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
@@ -53,9 +75,12 @@ sub set_up {
 	$twiki->{store}->saveTopic( $user, $testweb, 'TestForm2',
                                 $testform2, undef );
 
+	$twiki->{store}->saveTopic( $user, $testweb, 'TestForm3',
+                                $testform3, undef );
+
 	$twiki->{store}->saveTopic( $user, $testweb, $TWiki::cfg{WebPrefsTopicName},
                                 '
-   * Set WEBFORMS = TestForm1,TestForm2
+   * Set WEBFORMS = TestForm1,TestForm2,TestForm3
 ', undef );
 
     $TWiki::Plugins::SESSION = $twiki;
@@ -91,7 +116,7 @@ sub detest_XXXXXXXXXX {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t =~ /^TestTopic[01]$/) {
             $seen++;
-        } elsif( $t !~ /^(Web.*|TestForm[12])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
             $this->assert(0, $t);
         }
     }
@@ -114,7 +139,7 @@ sub test_XXXXXXXXX {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t eq 'TestTopicXXXXXXXXX') {
             $seen = 1;
-        } elsif( $t !~ /^(Web.*|TestForm[12])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
             $this->assert(0, $t);
         }
     }
@@ -134,7 +159,7 @@ sub test_XXXXXXXXXXX {
     foreach my $t ($twiki->{store}->getTopicNames( $testweb)) {
         if($t eq 'TestTopic0') {
             $seen = 1;
-        } elsif( $t !~ /^(Web.*|TestForm[12])$/) {
+        } elsif( $t !~ /^(Web.*|TestForm[123])$/) {
             $this->assert(0, $t);
         }
     }
@@ -313,5 +338,89 @@ sub detest_prevTopicFormSave {
 }
 
 #Mergeing is only enabled if the topic text comes from =text= and =originalrev= is &gt; 0 and is not the same as the revision number of the most recent revision. If mergeing is enabled both the topic and the meta-data are merged.
+
+sub test_simpleFormSave1 {
+    my $this = shift;
+    my $query = new CGI({
+                         action => [ 'save' ],
+			 text   => [ $testtext1 ],
+                         formtemplate => [ 'TestForm1' ],
+                         TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
+                         TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
+                         TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
+                         TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
+                         TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+			 topic  => [ $testweb.'.'.$testtopic ]
+                        });
+    $twiki = new TWiki( $testuser1, $query);
+    TWiki::UI::Save::save($twiki);
+    $this->assert($twiki->{store}->topicExists($testweb, $testtopic));
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
+    $this->assert_str_equals('TestForm1', $meta->get('FORM')->{name});
+    $this->assert_str_equals('Test', $meta->get('FIELD', 'Textfield' )->{value});
+
+}
+
+# Field values that do not have a corresponding definition in form
+# are deleted.
+sub test_simpleFormSave2 {
+    my $this = shift;
+    $twiki = new TWiki();
+    $user = $twiki->{user};
+    my $oldmeta = new TWiki::Meta( $twiki, $testweb, $testtopic);
+    my $oldtext = $testtext1;
+    $twiki->{store}->extractMetaData( $oldmeta, \$oldtext );
+    $twiki->{store}->saveTopic( $user, $testweb, $testtopic,
+                                $testform1, $oldmeta );
+    my $query = new CGI({
+                         action => [ 'save' ],
+			 text   => [ $testtext1 ],
+                         formtemplate => [ 'TestForm3' ],
+                         TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
+                         TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
+                         TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
+                         TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
+                         TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+			 topic  => [ $testweb.'.'.$testtopic ]
+                        });
+    $twiki = new TWiki( $testuser1, $query);
+    TWiki::UI::Save::save($twiki);
+    $this->assert($twiki->{store}->topicExists($testweb, $testtopic));
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
+    $this->assert_str_equals('TestForm3', $meta->get('FORM')->{name});
+    $this->assert_str_equals('Test', $meta->get('FIELD', 'Textfield' )->{value});
+    $this->assert_null($meta->get('FIELD', 'CheckboxandButtons' ));
+}
+
+# meta data (other than FORM, FIELD, TOPICPARENT, etc., is preserved
+# during saves.
+sub test_simpleFormSave3 {
+    my $this = shift;
+    $twiki = new TWiki();
+    $user = $twiki->{user};
+    my $oldmeta = new TWiki::Meta( $twiki, $testweb, $testtopic);
+    my $oldtext = $testtext1;
+    $twiki->{store}->extractMetaData( $oldmeta, \$oldtext );
+    $twiki->{store}->saveTopic( $user, $testweb, $testtopic,
+                                $testform1, $oldmeta );
+    my $query = new CGI({
+                         action => [ 'save' ],
+			 text   => [ $testtext1 ],
+                         formtemplate => [ 'TestForm1' ],
+                         TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
+                         TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
+                         TWiki::Form::cgiName(undef,'Checkbox') => [ 'red' ],
+                         TWiki::Form::cgiName(undef,'CheckboxandButtons') => [ 'hamster' ],
+                         TWiki::Form::cgiName(undef,'Textfield') => [ 'Test' ],
+			 topic  => [ $testweb.'.'.$testtopic ]
+                        });
+    $twiki = new TWiki( $testuser1, $query);
+    TWiki::UI::Save::save($twiki);
+    $this->assert($twiki->{store}->topicExists($testweb, $testtopic));
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
+    $this->assert_str_equals('UserTopic', $meta->get('PREFERENCE', 'VIEW_TEMPLATE' )->{value});
+
+}
+
 
 1;
