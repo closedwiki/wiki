@@ -4,14 +4,14 @@
 
 _Documentation for TWiki users._
 
-	* *TWiki Quick Start* - the fast track approach
+	* *TWiki Quick Start*
 		* WelcomeGuest: A fast track intro covering all the basics
 		* ATasteOfTWiki: A short introduction training course for beginners
 		* TWikiRegistration: Sign up so you can edit pages and select options
 
-	* *One-Page Primers* cover TWiki basics
-		* TWikiTutorial: A compact, 20-minute TWiki primer
-		* TWikiSite: Instant overview - first, there was Wiki
+	* *One-Page Primers*
+		* TWikiSite: Ultra-compact, 2-minute TWiki primer
+		* TWikiTutorial: A compact, 20-minute TWiki primer<p />
 		* TWikiTopics: Customize, rename, move, or delete TWiki topics
 		* SearchHelp: Tips and help on search
 		* GoodStyle: Working tips for an open collaboration environment

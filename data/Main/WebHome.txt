@@ -3,8 +3,8 @@
 <a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0"/></a>
 </div>
 
----+!! Welcome to the <nop>%WIKITOOLNAME%
-TWiki is a flexible, powerful, secure, yet simple web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either on an intranet or on the Internet. You can edit any TWiki page.
+---+!! Welcome to <nop>%WIKITOOLNAME%
+TWiki is a flexible, powerful, secure, yet simple-to-use web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or virtually any other groupware function on either on an intranet or on the internet!
 
 ---++ Available Information
    * %TWIKIWEB%.WelcomeGuest: for first time visitors
