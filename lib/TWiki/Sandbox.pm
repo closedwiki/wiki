@@ -62,13 +62,16 @@ sub new {
     $this->{REAL_SAFE_PIPE_OPEN} = 1;     # supports open(FH, '-|")
     $this->{EMULATED_SAFE_PIPE_OPEN} = 1; # supports pipe() and fork()
 
+
     # filter the support based on what platforms are proven
     # not to work.
-    if( defined( &Win32::BuildNumber )) {
-        my $isActivePerl = (Win32::BuildNumber() !~ /Win32/);
-        if ( $isActivePerl and $] < 5.008 ) {
+    #from the Activestate Docco this is _only_ defined on ActiveState Perl
+    if( defined( &Win32::BuildNumber )) {	
+#        if ( $isActivePerl and $] < 5.008 ) {
+#           # Sven has not found either to work (yet?)
             $this->{REAL_SAFE_PIPE_OPEN} = 0;
-        }
+            $this->{EMULATED_SAFE_PIPE_OPEN} = 0;
+#        }
     }
 
     # 'Safe' means no need to filter in on this platform - check 
@@ -80,7 +83,7 @@ sub new {
     if ($os eq 'UNIX' or ($os eq 'WINDOWS' and $realOS eq 'cygwin'  ) ) {
         $this->{CMDQUOTE} = '\'';
     } else {
-        $this->{CMDQUOTE} = '\"';
+        $this->{CMDQUOTE} = '"';
     }
 
     # Set to 1 to trace all command executions to STDERR
@@ -372,13 +375,16 @@ sub sysCommand {
 
         # This really is last ditch. It would be amazing if a platform
         # had to rely on this. In fact, I question why we have it at all.
+	# Sven: as of 11-July-2005 this is the only way to get ActiveStatePerl 
+	# & IIS working (no cygwin)
 
-        my $cq = $this->{CMDQUOTE};
+	my $cq = $this->{CMDQUOTE};
         my $cmd = $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
         my $stderr = \*STDERR; # can't rely on 2>&1 working
-        # 2>&1 probably won't work on Windies
-        $data = `$cmd 2>&1`;
-        $exit = ( $? >> 8 );
+        # 2>&1 doesn't work on Windies 
+	#$data = `$cmd 2>&1`;
+        $data = `$cmd`;
+	$exit = ( $? >> 8 );
     }
 
     if( $this->{TRACE} ) {
