@@ -8,7 +8,7 @@
 /*	---------------------------------------------------------------------------------------
 	CONSTANTS
 	C1	link color	 																#0054C0
-	C2	hover link background color 												#1559B3
+	C2	hover link background color 												#b4d5ff
 	C3	link label hover color														#0029A3
 	C4	topic action background; left bar top thick border							#666
 	C5	color H2, code text															#900
@@ -115,7 +115,7 @@ h6 { font-size:95%;}
 .twikiNewLink a:hover sup,
 .twikiNewLink a:visited:hover sup {
 	color:#0029A3; /*C3*/
-	background-color:#1559B3; /*C2*/
+	background-color:#b4d5ff; /*C2*/
 }
 .twikiNewLink {
 	border-bottom:1px solid #FFC0CB;
@@ -137,8 +137,8 @@ h6 { font-size:95%;}
 :link:hover,
 :visited:hover {
 	text-decoration:underline;
-	color:#fff;
-	background-color:#1559B3; /*C2*/
+	color:#0029A3; /*C3*/
+	background-color:#b4d5ff; /*C2*/
 }
 
 /* sorting of table columns */
@@ -238,7 +238,7 @@ label {
 }
 .twikiTopBar ul li a:hover {
 	color:#0029A3; /*C3*/
-	background-color:#1559B3; /*C2*/
+	background-color:#b4d5ff; /*C2*/
 	text-decoration:underline;
 }
 .twikiTopBarContents {
@@ -387,7 +387,7 @@ html>body .twikiLeftBar li a {
 }
 .twikiTopic table th a:link.twikiLink,
 .twikiTopic table th a:link font {
-	color:#1559B3; /*C2*/
+	color:#b4d5ff; /*C2*/
 }
 .twikiTopic table th a:visited.twikiLink,
 .twikiTopic table th a:visited font {
@@ -646,7 +646,7 @@ table.twikiTopicAction {
 }
 .twikiTopicActionSecondary a:hover {
 	color:#0054C0; /*C1*/
-	border-bottom:1px solid #1559B3; /*C2*/
+	border-bottom:1px solid #b4d5ff; /*C2*/
 }
 .twikiTopicActionHelp a:link,
 .twikiTopicActionHelp a:visited  {
@@ -793,7 +793,7 @@ html>body .twikiToc li a {
 }
 .twikiToolBar ul li a:hover {
 	color:#0029A3; /*C3*/
-	background-color:#1559B3; /*C2*/
+	background-color:#b4d5ff; /*C2*/
 	padding-bottom:0;
 	border-bottom:1px solid #0054C0; /*C1*/
 	text-decoration:none;
