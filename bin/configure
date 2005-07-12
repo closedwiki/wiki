@@ -1895,7 +1895,8 @@ select {
     display:block;
 }
 .twikiMain {
-    margin:0 4em;
+	margin-left:8em;
+	margin-right:8em;
     padding:1em 3.5em;
     background-color:white;
     border-width:1px;
