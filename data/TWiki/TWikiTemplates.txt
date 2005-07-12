@@ -30,6 +30,7 @@ _Templates_ are plain text with embedded _template directives_ that tell TWiki h
 		* ==%<nop>TMPL:DEF{"block"}%==: Define a block. Text between this and the =%<nop>TMPL:END%= directive is not used in-place, but is saved for later use with =%<nop>TMPL:P=. Leading and trailing whitespace is ignored.
 		* ==%<nop>TMPL:END%==: Ends a block definition.
 		* ==%<nop>TMPL:P{"var"}%==: Includes a previously defined block.
+		* ==%<nop>{...}%==: is a comment.
 	* Two-pass processing lets you use a variable before or after declaring it.
 	* Templates and TWikiSkins work transparently and interchangeably. For example, you can create a skin that overloads only the =twiki.tmpl= master template, like =twiki.print.tmpl=, that redefines the header and footer.
 	* %H% Use of template directives is optional: templates work without them.
