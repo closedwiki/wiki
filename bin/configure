@@ -1156,7 +1156,7 @@ sub performSanityChecks {
     
     if ($brokenTWikiCfgError) {
         $output .= CGI::h2('WARNING:').
-          'TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.<p />';
+          CGI::p('TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.');
         $output .= $brokenTWikiCfgError;
 
         # EARLY EXIT
@@ -1166,11 +1166,11 @@ sub performSanityChecks {
 
     if ($brokenLocalSiteError) {
         $output .= CGI::h2('WARNING:').
-          WARN('LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) was generated.'.
+          WARN('LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) was generated:').
           CGI::pre($brokenLocalSiteError).
           'The @INC path is '.
           CGI::pre(join(":", @INC)).
-          'This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a href="#GeneralPathSettings">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.<p />');
+          WARN('This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a href="#" onclick="foldBlock(\'GeneralPathSettings\'); return false;">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.');
     }
 
     # Check whether basic CGI modules exist (some broken installations of
@@ -1214,7 +1214,7 @@ sub presentReadOnlyInfo {
     for my $key ( sort keys %ENV ) {
         $block .= _setting($key, $ENV{$key});
     }
-    $output .= _foldableBlock('Environment variables', '(read only)', $block);
+    $output .= _foldableBlock('Environment variables', '(read only) ', $block);
 
     $block = '';
 
@@ -1345,9 +1345,9 @@ HERE
     my $twikiFound = 0;
     my $mess = '';
     if ($@) {
-        $mess = ERROR("'TWiki.pm' not be loaded. Error was",
-                      CGI::pre($@),
-                      'Check path to <code>twiki/lib</code> and check that LocalSite.cfg is present and readable');
+        $mess = ERROR("'TWiki.pm' could not be loaded. The error was:").
+                CGI::pre($@).
+                ERROR("Check path to <code>twiki/lib</code> and check that LocalSite.cfg is present and readable");
     } else {
         $twikiFound = 1;
         my $mod_version = eval '$TWiki::wikiversion || $TWiki::VERSION';
@@ -1531,7 +1531,7 @@ HERE
         }
         $block .= _setting("PERL5SHELL", $n);
     };
-    $output .= _foldableBlock('CGI Setup', '(read only)', $block);
+    $output .= _foldableBlock('CGI Setup', '(read only) ', $block);
     return $output;
 };
 
@@ -1643,7 +1643,7 @@ my $brokenLocalSiteError;
 unless( eval 'do "LocalSite.cfg"' ) {
     # Capture the Perl error(s)
     $brokenLocalSiteError = 'require failed: '.
-      ( $! ? $!.CGI::br() : '') . ( $@ ? $@.CGI::br() : '');
+      ( $! ? $! : '') . ( $@ ? $@ : '');
 }
 
 # Read the configuration file now in order to set locale;
@@ -1653,7 +1653,7 @@ my $brokenTWikiCfgError;
 unless( eval 'require "TWiki.cfg" ' ) {
     # Capture the Perl error(s)
     $brokenTWikiCfgError = 'require failed: '.
-      ( $! ? $!.CGI::br() : '') . ( $@ ? $@.CGI::br() : '');
+      ( $! ? $! : '') . ( $@ ? $@ : '');
 }
 
 # and again
@@ -1815,8 +1815,15 @@ pre, code, tt {
 }
 pre {
     margin-top:1em;
-    margin-bottom:1em;
+    overflow-x:auto;
+    overflow-y:visible;
+    width:100%;
 }
+>pre { /* hide from IE */
+    padding-bottom:0.25em;
+    /*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
     line-height:104%;
@@ -1855,24 +1862,24 @@ h6 { font-size:95%;}
     background-color:#b4d5ff; /*C2*/
 }
 form { 
-	display:inline;
-	margin:0;
-	padding:0;
+    display:inline;
+    margin:0;
+    padding:0;
 }
 textarea {
-	font-family:monospace;
-	font-size:100%;
-	margin:0.25em 0;
-	width:auto;
+    font-family:monospace;
+    font-size:100%;
+    margin:0.25em 0;
+    width:auto;
 }
 input, select {
-	font-family:verdana,arial,sans-serif;
-	padding:1px;
-	/*background-color:#E8F1F9;*/
+    font-family:verdana,arial,sans-serif;
+    padding:1px;
+    /*background-color:#E8F1F9;*/
 }
 select {
-	padding:0;
-	font-size:100%;
+    padding:0;
+    font-size:100%;
 }
 .twikiLeft {
     float:left;
@@ -1895,8 +1902,8 @@ select {
     display:block;
 }
 .twikiMain {
-	margin-left:8em;
-	margin-right:8em;
+    margin-left:8em;
+    margin-right:8em;
     padding:1em 3.5em;
     background-color:white;
     border-width:1px;
@@ -1983,8 +1990,8 @@ div.foldableBlock {
     border-left:1px solid #ddd;
     border-right:1px solid #ddd;
     height:300px;
-	width:auto;
-	overflow:auto;
+    width:auto;
+    overflow:auto;
     padding:0.25em 0 2em 0;
 }
 .foldableBlockOpen {
@@ -1997,8 +2004,8 @@ div.foldableBlock table {
     margin-bottom:1em;
 }
 div.foldableBlock td {
-	padding:0.15em 1em;
-	border-top:1px solid #ddd;
+    padding:0.15em 1em;
+    border-top:1px solid #ddd;
 }
 .info {
     color:#008000;
@@ -2007,19 +2014,19 @@ div.foldableBlock td {
     padding:0.25em 0;
 }
 .warn {
-    color:#ff8800;
-    border-bottom:1px dashed #ff8800;
+    color:#f60;
+    border-bottom:1px dotted #f60;
 }
 .error {
     color:red;
     border-bottom:1px solid red;
 }
-.mandatory {
-    background-color:#fcc;
+.mandatory,
+.mandatory input {
+    background-color:#DFEDFD;
     font-weight: bold;
 }
 .mandatory input {
-    background-color:#fcc;
     font-weight:normal;
 }
 .docdata {
@@ -2077,8 +2084,6 @@ if( !$path_to_localsite_cfg ||
     $update_enabled = 1;
 }
 
-$body .= performSanityChecks( $brokenTWikiCfgError, $brokenLocalSiteError );
-
 if( $action eq 'update' ) {
     unless( $update_enabled ) {
         die "Update is disabled";
@@ -2108,6 +2113,8 @@ have a value).</li>
 </ul></div>
 HERE
 
+    $body .= performSanityChecks( $brokenTWikiCfgError, $brokenLocalSiteError );
+
     my $options = '';
     if( $update_enabled ) {
         $body .= CGI::start_form({ action=>$ENV{SCRIPT_NAME},method=>"post" });
@@ -2128,9 +2135,9 @@ HERE
 
     $body .= CGI::div({class=>'options', id=>'options'}, $options);
     my $totwarningsMess = ($totwarnings > 1) ? ' warnings' : ' warning';
-    $body .= 'Total: ' . CGI::span({class=>'warn'}, $totwarnings . $totwarningsMess) if $totwarnings;
+    $body .= CGI::div('Total: ' . CGI::span({class=>'warn'}, $totwarnings . $totwarningsMess)) if $totwarnings;
     my $toterrorsMess = ($toterrors > 1) ? ' errors' : ' error';
-    $body .= 'Total: ' . CGI::span({class=>'error'}, $toterrors . $toterrorsMess) if $toterrors;    
+    $body .= CGI::div('Total: ' . CGI::span({class=>'error'}, $toterrors . $toterrorsMess)) if $toterrors;    
 
     if( $update_enabled) {
         $body .= CGI::p(CGI::submit(-value=>'Next'));
