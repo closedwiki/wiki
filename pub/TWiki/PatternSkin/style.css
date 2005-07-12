@@ -429,6 +429,9 @@ html>body .twikiLeftBar li a {
 .twikiForm {
 	margin:2em 0;
 }
+.twikiAttachments p { /* fix for extra <p> */
+	display:none;
+}
 .twikiAttachments table,
 .twikiForm table {
 	border-collapse:collapse;
@@ -1083,7 +1086,7 @@ a:hover .twikiAccessKey {
 .twikiViewPage .twikiForm,
 .twikiPreviewPage .twikiAttachments,
 .twikiPreviewPage .twikiForm {
-	background-color:#eaeaea;
+	background-color:#f1f1f1;
 	padding:2em;
 	border-top:1px solid #bbb;
 	margin-top:0;
