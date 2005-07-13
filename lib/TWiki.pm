@@ -1047,10 +1047,11 @@ sub new {
     $topic = $TWiki::cfg{HomeTopicName} if ( $topic =~ /\.\./ );
     $topic =~ s/$TWiki::cfg{NameFilter}//go;
     $topic = $TWiki::cfg{HomeTopicName} unless $topic;
-    $this->{topicName} = $topic;
+    $this->{topicName} = TWiki::Sandbox::untaintUnchecked( $topic );
+
     $web   =~ s/$TWiki::cfg{NameFilter}//go;
     $web = $TWiki::cfg{UsersWebName} unless $web;
-    $this->{webName} = $web;
+    $this->{webName} = TWiki::Sandbox::untaintUnchecked( $web );
 
     # Convert UTF-8 web and topic name from URL into site charset
     # if necessary - no effect if URL is not in UTF-8
@@ -1108,7 +1109,8 @@ sub new {
     $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$TWiki::cfg{PubUrlPath};
     $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$TWiki::cfg{DispScriptUrlPath};
 
-    $this->{prefs}->loadUserAndTopicPreferences( $web, $topic, $user );
+    $this->{prefs}->loadUserAndTopicPreferences(
+        $this->{webName}, $this->{topicName}, $user );
 
     $this->{renderer} = new TWiki::Render( $this );
 
