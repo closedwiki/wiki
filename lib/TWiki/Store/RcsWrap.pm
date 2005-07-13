@@ -159,7 +159,7 @@ sub replaceRevision {
 sub deleteRevision {
     my( $this ) = @_;
     my $rev = $this->numRevisions();
-    return undef if( $rev == 1 );
+    return undef if( $rev <= 1 );
     return $this->_deleteRevision( $rev );
 }
 
@@ -188,7 +188,9 @@ sub _deleteRevision {
 sub getRevision {
     my( $this, $version ) = @_;
 
-    return $this->SUPER::getRevision($version) unless $version;
+    unless( $version && -e $this->{rcsFile} ) {
+        return $this->SUPER::getRevision( $version );
+    }
 
     my $tmpfile = '';
     my $tmpRevFile = '';
@@ -257,17 +259,17 @@ sub getRevisionInfo {
         if( !$version || $version > $this->numRevisions()) {
             $version = $this->numRevisions();
         }
-        my $cmd = $TWiki::cfg{RCS}{infoCmd};
         my( $rcsOut, $exit ) = $this->{session}->{sandbox}->sysCommand
-          ( $cmd,
+          ( $TWiki::cfg{RCS}{infoCmd},
             REVISION => '1.'.$version,
             FILENAME => $this->{rcsFile} );
         if( ! $exit ) {
-            if( $rcsOut =~ /date: ([^;]+);  author: ([^;]*);[^\n]*\n([^\n]*)\n/s ) {
+            if( $rcsOut =~ /^.*?date: ([^;]+);  author: ([^;]*);[^\n]*\n([^\n]*)\n/s ) {
                 my $user = $2;
                 my $comment = $3;
                 my $date = TWiki::Time::parseTime( $1 );
                 my $rev = $version;
+print STDERR "$this->{file} $1\n";
                 if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
                     $rev = $1;
                     return( $rev, $date, $user, $comment );

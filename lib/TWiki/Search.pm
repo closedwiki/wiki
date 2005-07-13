@@ -1070,11 +1070,12 @@ sub _getRev1Info {
     my $key = $theWeb.'.'.$theTopic;
     my $store = $this->{session}->{store};
 
-    unless( $info->{webTopic} eq $key ) {
+    unless( $info->{webTopic} && $info->{webTopic} eq $key ) {
         my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
         my ( $d, $u ) = $meta->getRevisionInfo( 1 );
         $info->{date} = $d;
         $info->{user} = $u;
+        $info->{webTopic} = $key;
     }
     if( $theAttr eq 'username' ) {
         return $info->{user}->login();

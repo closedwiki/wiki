@@ -34,6 +34,7 @@ package TWiki::Sandbox;
 use strict;
 use Assert;
 use Error qw( :try );
+use File::Spec;
 
 # TODO: Sandbox module should probably use custom 'die' handler so that
 # output goes only to web server error log - otherwise it might give
@@ -269,7 +270,7 @@ sub buildCommandLine {
 
 Invokes the program described by $template
 and @params, and returns the output of the program and an exit code.
-STDOUT and STDERR are both returned (interleaved, potentially)
+STDOUT is returned. STDERR is THROWN AWAY.
 
 $template is interpreted by buildCommandLine.
 
@@ -318,7 +319,7 @@ sub sysCommand {
             $/ = $mem;
         } else {
             # Child - run the command
-            open ( STDERR, '>&STDOUT' ) or die "can't redirect STDERR: $!\n";
+            open (STDERR, '>'.File::Spec->devnull()) || die "Fuck";
             exec( $path, @args ) ||
               throw Error::Simple( 'exec of '.$path.' '.
                                      join(',',@args).' failed: '.$! );
@@ -339,7 +340,7 @@ sub sysCommand {
         throw Error::Simple( "fork() failed: $!" ) unless defined( $pid );
 
         if ( $pid ) {
-            # Parent - read data from process filehandle and remove newlines 
+            # Parent - read data from process filehandle and remove newlines
 
             close( $writeHandle ) or die;
 
@@ -361,8 +362,7 @@ sub sysCommand {
             # STDOUT first makes the subsequent open useless. So don't.
             open(STDOUT, ">&=".fileno( $writeHandle )) or die;
 
-            open ( STDERR, '>&STDOUT' ) or die;
-
+            open (STDERR, '>'.File::Spec->devnull());
             exec( $path, @args ) ||
               throw Error::Simple( 'exec of '.$path.' '.
                                      join(',',@args).' failed: '.$! );
@@ -375,16 +375,18 @@ sub sysCommand {
 
         # This really is last ditch. It would be amazing if a platform
         # had to rely on this. In fact, I question why we have it at all.
-	# Sven: as of 11-July-2005 this is the only way to get ActiveStatePerl 
-	# & IIS working (no cygwin)
+        # Sven: as of 11-July-2005 this is the only way to get ActiveStatePerl 
+        # & IIS working (no cygwin)
 
-	my $cq = $this->{CMDQUOTE};
+        my $cq = $this->{CMDQUOTE};
         my $cmd = $path.' '.$cq.join($cq.' '.$cq, @args).$cq;
-        my $stderr = \*STDERR; # can't rely on 2>&1 working
-        # 2>&1 doesn't work on Windies 
-	#$data = `$cmd 2>&1`;
+        open( OLDERR, '>&', \*STDERR ) || die "Can't steal STDERR: $!";
+        open( STDERR, '>'.File::Spec->devnull());
         $data = `$cmd`;
-	$exit = ( $? >> 8 );
+        # restore STDERR
+        close( STDERR );
+        open( STDERR, '>&OLDERR' ) || die "Can't restore STDERR";;
+        $exit = ( $? >> 8 );
     }
 
     if( $this->{TRACE} ) {

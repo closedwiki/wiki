@@ -129,7 +129,7 @@ sub verify {
     ($out, $exit) = $twiki->{sandbox}->sysCommand(
         'sh -c %A%', A => 'echo JUNK ON STDERR 1>&2');
     $this->assert_equals(0, $exit);
-    $this->assert_str_equals("JUNK ON STDERR\n", $out);
+    $this->assert_str_equals("", $out);
     ($out, $exit) = $twiki->{sandbox}->sysCommand(
         'test %A% %B% %C%', A => '1', B=>'-eq', C=>'2');
     $this->assert_equals(1, $exit, $exit.' '.$out);
