@@ -972,6 +972,17 @@ a:hover .twikiAccessKey {
 	color:#0054C0; /*C1*/
 	text-decoration:underline;
 }
+.twikiPageForm {
+	margin:0.5em 0 1.5em 0;
+	padding:0.5em 1em;
+	border:1px solid #aaa;
+	background-color:#EBEDF2;
+}
+.twikiPageForm table,
+.twikiPageForm th,
+.twikiPageForm td {
+	border:0;
+}
 
 /*	-----------------------------------------------------------
 	Search results
