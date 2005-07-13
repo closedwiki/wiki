@@ -1,12 +1,8 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="martincleaver" date="1104759349" format="1.0" version="1.1"}%
 ---+ Sorted by date joined / updated
 
 Also available:
-
-	* UserListByLocation
-	* UserListByOrganization
+%INCLUDE{UserListHeader}%
  
 Click the Last Updated column heading to see when people updated.
 

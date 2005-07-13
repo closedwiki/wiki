@@ -1,5 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="martincleaver" date="1104628989" format="1.0" version="1.1"}%
 
+Also available:
+%INCLUDE{UserListHeader}%
 
 %TABLE{initsort="1"}%
 %SEARCH{"%META:FORM.*[U]serForm" regex="on" header="| *Organization* | *Country* | *State* | *!FirstName* | *!LastName* |" format="| $formfield(Organization) | $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | " excludetopic="Web*" nosearch="on" order="formfield(Country)"}%
