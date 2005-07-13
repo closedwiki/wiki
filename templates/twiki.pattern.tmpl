@@ -20,6 +20,7 @@
 //<![CDATA[
 <!--
 function initPage() { }
+%TMPL:INCLUDE{"inpactprojectsscripts"}%
 //-->
 //]]>
 </script>%TMPL:END%
@@ -159,8 +160,8 @@ document.write("<\/style>");
 
 
 %TMPL:DEF{"content"}%<div class="twikiTopic">
-%TMPL:P{"heading"}%
-%TMPL:P{"webaction"}%
+---+ %TMPL:P{"heading"}%
+---+++ <span class="twikiAlert">%TMPL:P{"webaction"}%</span>
 %BR%
 %TMPL:P{"message"}%
 </div>
