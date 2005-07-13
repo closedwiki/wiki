@@ -5,6 +5,9 @@
 
 __Related topics:__ TWikiGroups
 
+Also available:
+%INCLUDE{UserListHeader}%
+
 <!--
 	* Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
 -->
