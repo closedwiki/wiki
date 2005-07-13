@@ -16,11 +16,12 @@
 
 
 %TMPL:DEF{"script"}%
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">
+//<![CDATA[
 <!--
-	function initPage() { }
+function initPage() { }
 //-->
-]]>
+//]]>
 </script>%TMPL:END%
 
 
@@ -29,24 +30,27 @@
 <!-- START fallback in case javascript is off -->
 <!-- no check on TWIKILAYOUTURL and TWIKISTYLEURL; these are added regardlessly -->
 <!-- USERLAYOUTURL and USERSTYLEURL are not supported with javascript off -->
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">
+//<![CDATA[
 <!--
 document.write("<!--");
 //-->
-]]>
+//]]>
 </script>
 <style type='text/css'>
 	@import url("%TWIKILAYOUTURL%");
 	@import url("%TWIKISTYLEURL%");
 </style>
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">
+//<![CDATA[
 <!--
 document.write("-->");
 //-->
-]]>
+//]]>
 </script>
 <!-- END fallback in case javascript is off -->
-<script type="text/javascript"><![CDATA[
+<script type="text/javascript">
+//<![CDATA[
 <!--
 document.write("<style type='text/css'>");
 /* Default TWiki layout */
@@ -67,7 +71,7 @@ if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEUR
 }
 document.write("<\/style>");
 //-->
-]]>
+//]]>
 </script>
 <style type="text/css" media="all">
 	/* Styles that are set using variables */
@@ -93,9 +97,9 @@ document.write("<\/style>");
 <meta name="robots" content="noindex" />
 %HTTP_EQUIV_ON_VIEW%
 <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
+%TMPL:P{"script"}%
 %TMPL:P{"twikistyle"}%
 %TMPL:P{"templatecustomstyle"}%
-%TMPL:P{"script"}%
 </head>%TMPL:END%
 
 
