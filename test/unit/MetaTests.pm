@@ -173,4 +173,41 @@ sub fleegle {
     return $t;
 }
 
+sub test_copyFrom {
+    my $this = shift;
+    my $meta = TWiki::Meta->new($session, $web, $topic);
+
+    $meta->putKeyed( "FIELD", { name => "a", value => "aval" } );
+    $meta->putKeyed( "FIELD", { name => "b", value => "bval" } );
+    $meta->putKeyed( "FIELD", { name => "c", value => "cval" } );
+    $meta->put( "FINAGLE", { name => "a", value => "aval" } );
+
+    my $new = new TWiki::Meta( $session, $web, $topic );
+    $new->copyFrom($meta);
+
+    my $d = {};
+    $new->forEachSelectedValue(qr/^F.*$/, qr/^value$/, \&fleegle, $d);
+    $this->assert($d->{collected} =~ s/FIELD.value:aval;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:bval;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:cval;//);
+    $this->assert($d->{collected} =~ s/FINAGLE.value:aval;//);
+    $this->assert_str_equals("", $d->{collected});
+
+    $new = new TWiki::Meta( $session, $web, $topic );
+    $new->copyFrom($meta, 'FIELD');
+
+    $new->forEachSelectedValue(qr/^FIELD$/, qr/^value$/, \&fleegle, $d);
+    $this->assert($d->{collected} =~ s/FIELD.value:aval;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:bval;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:cval;//);
+    $this->assert_str_equals("", $d->{collected});
+
+    $new = new TWiki::Meta( $session, $web, $topic );
+    $new->copyFrom($meta, 'FIELD', qr/^(a|b)$/);
+    $new->forEachSelectedValue(qr/^FIELD$/, qr/^value$/, \&fleegle, $d);
+    $this->assert($d->{collected} =~ s/FIELD.value:aval;//);
+    $this->assert($d->{collected} =~ s/FIELD.value:bval;//);
+    $this->assert_str_equals("", $d->{collected});
+}
+
 1;

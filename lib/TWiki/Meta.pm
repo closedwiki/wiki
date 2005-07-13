@@ -249,7 +249,7 @@ sub remove {
 
 =pod
 
----++ ObjectMethod copyFrom ( $otherMeta, $type  )
+---++ ObjectMethod copyFrom( $otherMeta, $type, $nameFilter )
 
 Copy all entries of a type from another meta data set. This
 will destroy the old values for that type, unless the
@@ -258,19 +258,29 @@ case it will retain the old values.
 
 If $type is undef, will copy ALL TYPES.
 
+If $nameFilter is defined (an RE), it will copy only data where
+{name} matches $nameFilter.
+
 SMELL: That spec absolutely _STINKS_ !!
 SMELL: this is a shallow copy
 
 =cut
 
 sub copyFrom {
-    my( $this, $otherMeta, $type ) = @_;
+    my( $this, $otherMeta, $type, $filter ) = @_;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
     ASSERT($otherMeta->isa( 'TWiki::Meta')) if DEBUG;
 
     if( $type ) {
-        my $data = $otherMeta->{$type};
-        $this->{$type} = $data if $data;
+        foreach my $item ( @{$otherMeta->{$type}} ) {
+            if( !$filter || ( $item->{name} && $item->{name} =~ /$filter/ )) {
+                my %data;
+                foreach my $k ( keys %$item ) {
+                    $data{$k} = $item->{$k};
+                }
+                push( @{$this->{$type}}, \%data );
+            }
+        }
     } else {
         foreach my $k ( keys %$otherMeta ) {
             unless( $k =~ /^_/ ) {

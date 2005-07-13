@@ -170,19 +170,15 @@ sub buildNewTopic {
         $newMeta->put( 'FORM', { name => $formName });
     }
     if( $copyMeta && $formName ) {
-        # Copy existing fields into new form
+        # Copy existing fields into new form, filtering on the
+        # known field names so we don't copy dead data. Though we
+        # really should, of course. That comes later.
         my $formDef = new TWiki::Form( $session, $webName, $formName );
-        foreach my $fieldDef ( @{$formDef->{fields}} ) {
-            next unless $fieldDef->{name};
-            my $args =
-              {
-                  name =>  $fieldDef->{name},
-                  title => $fieldDef->{title},
-                  value => $fieldDef->{value},
-                  attributes => $fieldDef->{attributes},
-              };
-            $newMeta->putKeyed( 'FIELD', $args );
-        }
+        my $filter = join(
+            '|',
+            map { $_->{name} }
+              grep { $_->{name} } @{$formDef->{fields}} );
+        $newMeta->copyFrom( $copyMeta, 'FIELD', qr/^($filter)$/ );
     }
     if( $formDef ) {
         # override with values from the query
