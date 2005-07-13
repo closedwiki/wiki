@@ -14,6 +14,9 @@ To register as a new user, simply fill out this form:
 <form action="%SCRIPTURL%/register%SCRIPTSUFFIX%/%MAINWEB%/%HOMETOPIC%" method="post">
 <table border="1">
 <tr>
+  <th colspan="2" align="left"> Registration form </th>
+</tr>
+<tr>
   <td align="right"> First Name: </td>
   <td><input type="text" name="Twk1FirstName" size="40" value="" /> =<font color="red">**</font>= </td>
 </tr>
@@ -187,12 +190,18 @@ To register as a new user, simply fill out this form:
   <option value="Other Country">Other Country</option>
   </select> =<font color="red">**</font>=
   </td>
-</tr><tr>
+</tr>
+<tr>
   <td valign="top" align="right"> Comments : <br /> (optional) &nbsp; </td>
   <td><textarea name="Twk0Comment" wrap="virtual" rows="4" cols="38"></textarea></td>
-</tr><tr>
+</tr>
+<tr>
+  <td></td>
+  <td><span class="twikiSmall">Fields marked =<font color="red">**</font>= are required</span></td>
+</tr>
+<tr>
   <td valign="top" align="right"> &nbsp; <input type="hidden" name="topic" value="%TOPIC%" /></td>
-  <td> <input type="submit" value=" Submit " /> &nbsp;&nbsp; (Fields marked =<Font color="red">**</font>= are required) </td>
+  <td> <input type="submit" value=" Submit " /></td>
 </tr>
 </table>
 </form>
