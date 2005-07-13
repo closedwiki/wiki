@@ -144,41 +144,41 @@ sub _createWeb {
     my $query = $session->{cgiQuery};
     my $user = $session->{user};
 
-    my $newWeb = $query->param( 'newweb' ) || '';
-    my $newTopic = $query->param( 'newtopic' ) || '';
-    my $baseWeb = $query->param( 'baseweb' ) || '';
     my $webBGColor = $query->param( 'webbgcolor' ) || '';
     my $siteMapWhat = $query->param( 'sitemapwhat' ) || '';
     my $siteMapUseTo = $query->param( 'sitemapuseto' ) || '';
     my $noSearchAll = $query->param( 'nosearchall' ) || '';
-    my $theUrl = $query->url;
 
     # check permission, user authorized to create webs?
     TWiki::UI::checkAccess( $session, $webName, $topicName,
                             'changewebs', $session->{user} );
 
+    my $newWeb = $query->param( 'newweb' ) || '';
     unless( $newWeb ) {
         throw TWiki::OopsException( 'attention', def => 'web_missing' );
     }
-
     unless ( TWiki::isValidWebName( $newWeb, 1 )) {
         throw TWiki::OopsException
           ( 'attention', def =>'invalid_web_name', params => $newWeb );
     }
+    $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
+
+    my $baseWeb = $query->param( 'baseweb' ) || '';
+    unless( $session->{store}->webExists( $baseWeb )) {
+        throw TWiki::OopsException
+          ( 'attention', def => 'base_web_missing', params => $baseWeb );
+    }
+    $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
+
+    my $newTopic = $query->param( 'newtopic' ) || '';
+    # SMELL: check that it is a valid topic name?
+    $newTopic = TWiki::Sandbox::untaintUnchecked( $newTopic );
 
     if( $session->{store}->webExists( $newWeb )) {
         throw TWiki::OopsException
           ( 'attention', def => 'web_exists', params => $newWeb );
     }
 
-    $baseWeb =~ s/$TWiki::cfg{NameFilter}//go;
-    $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
-
-    unless( $session->{store}->webExists( $baseWeb )) {
-        throw TWiki::OopsException
-          ( 'attention', def => 'base_web_missing',
-            params => $baseWeb );
-    }
     unless( _isValidHTMLColor( $webBGColor )) {
         throw TWiki::OopsException
           ( 'attention', def => 'invalid_web_color',
@@ -239,17 +239,23 @@ sub rename {
     my $oldWeb = $session->{webName};
     my $query = $session->{cgiQuery};
 
-    # SMELL: should apply name filter fo web and topic names?
     my $newWeb = $query->param( 'newweb' ) || '';
+    unless ( TWiki::isValidWebName( $newWeb, 1 )) {
+        throw TWiki::OopsException
+          ( 'attention', def =>'invalid_web_name', params => $newWeb );
+    }
     $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
+
     my $newTopic = $query->param( 'newtopic' ) || '';
     $newTopic = TWiki::Sandbox::untaintUnchecked( $newTopic );
 
-    my $theUrl = $query->url;
+    my $attachment = $query->param( 'attachment' );
+    # SMELL: test for valid attachment name?
+    $attachment = TWiki::Sandbox::untaintUnchecked( $attachment );
+
     my $lockFailure = '';
     my $breakLock = $query->param( 'breaklock' );
-    my $attachment = $query->param( 'attachment' );
-    $attachment = TWiki::Sandbox::untaintUnchecked( $attachment );
+
     my $confirm = $query->param( 'confirm' );
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || '';
     my $store = $session->{store};
@@ -392,7 +398,19 @@ sub renameweb {
     my $query = $session->{cgiQuery};
 
     my $newParentWeb = $query->param( 'newparentweb' ) || '';
+    unless ( TWiki::isValidWebName( $newParentWeb, 1 )) {
+        throw TWiki::OopsException
+          ( 'attention', def =>'invalid_web_name', params => $newParentWeb );
+    }
+    $newParentWeb = TWiki::Sandbox::untaintUnchecked( $newParentWeb );
+
     my $newSubWeb = $query->param( 'newsubweb' ) || '';;
+    unless ( TWiki::isValidWebName( $newSubWeb, 1 )) {
+        throw TWiki::OopsException
+          ( 'attention', def =>'invalid_web_name', params => $newSubWeb );
+    }
+    $newSubWeb = TWiki::Sandbox::untaintUnchecked( $newSubWeb );
+
     my $newWeb;
     if( $newSubWeb ) {
         if( $newParentWeb ) {
@@ -405,7 +423,6 @@ sub renameweb {
     pop( @tmp );
     my $oldParentWeb = join( '/', @tmp );
     my $newTopic;
-    my $theUrl = $query->url;
     my $lockFailure = '';
     my $breakLock = $query->param( 'breaklock' );
     my $confirm = $query->param( 'confirm' );

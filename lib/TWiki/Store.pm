@@ -1395,7 +1395,6 @@ sub createWeb {
     }
 
     foreach my $topic ( @topicList ) {
-        $topic =~ s/$TWiki::cfg{NameFilter}//go;
         $this->copyTopic( $user, $baseWeb, $topic, $newWeb, $topic );
     }
 

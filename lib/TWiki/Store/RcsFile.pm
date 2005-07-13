@@ -235,7 +235,10 @@ sub getTopicNames {
     my $this = shift;
 
     opendir DIR, $TWiki::cfg{DataDir}.'/'.$this->{web};
-    my @topicList = sort grep { s/\.txt$// } readdir( DIR );
+    my @topicList;
+    foreach my $topic ( sort grep { s/\.txt$// } readdir( DIR )) {
+        push(@topicList, TWiki::Sandbox::untaintUnchecked( $topic ));
+    }
     closedir( DIR );
     return @topicList;
 }
