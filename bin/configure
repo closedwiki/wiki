@@ -1541,6 +1541,7 @@ sub presentEditableInfo {
     my $head = '';
     for my $file ( 'TWiki.cfg', 'LocalSite.cfg' ) {
         my $cfgfile = _findFileOnPath($file);
+        next unless $cfgfile;
         open(F, $cfgfile) || next;
         undef $/;
         my $text = <F>;
