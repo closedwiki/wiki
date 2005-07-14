@@ -6,7 +6,6 @@
 
 | *Month:* | *Topic <br /> views:* | *Topic <br /> saves:* | *File <br /> uploads:* | *Most popular <br /> topic views:* | *Top contributors for <br /> topic save and uploads:* |
 | <!--statDate--> | <!--statViews--> | <!--statSaves--> | <!--statUploads--> | <!--statTopViews--> | <!--statTopContributors--> |
-| Apr 2005 |  0 |  0 |  0 |  |  |
 
 __Notes:__
 	* Do not edit this topic, it is updated automatically. (You can also <a href="%SCRIPTURLPATH%/statistics%SCRIPTSUFFIX%/%WEB%">force</a> an update)
