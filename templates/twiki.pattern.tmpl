@@ -17,12 +17,9 @@
 
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
-//<![CDATA[
 <!--
 function initPage() { }
-%TMPL:INCLUDE{"inpactprojectsscripts"}%
 //-->
-//]]>
 </script>%TMPL:END%
 
 
@@ -31,27 +28,16 @@ function initPage() { }
 <!-- START fallback in case javascript is off -->
 <!-- no check on TWIKILAYOUTURL and TWIKISTYLEURL; these are added regardlessly -->
 <!-- USERLAYOUTURL and USERSTYLEURL are not supported with javascript off -->
+<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%TWIKILAYOUTURL%" media="all" />
+<link id="twikiStyleCss" rel="stylesheet" type="text/css" href="%TWIKISTYLEURL%" media="all" />
 <script type="text/javascript">
-//<![CDATA[
-<!--
-document.write("<!--");
-//-->
-//]]>
-</script>
-<style type='text/css'>
-	@import url("%TWIKILAYOUTURL%");
-	@import url("%TWIKISTYLEURL%");
-</style>
-<script type="text/javascript">
-//<![CDATA[
-<!--
-document.write("-->");
-//-->
-//]]>
+	if (document.getElementById) {
+		document.getElementById("twikiLayoutCss").disabled = true;
+		document.getElementById("twikiStyleCss").disabled = true;
+	}
 </script>
 <!-- END fallback in case javascript is off -->
 <script type="text/javascript">
-//<![CDATA[
 <!--
 document.write("<style type='text/css'>");
 /* Default TWiki layout */
@@ -72,7 +58,6 @@ if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEUR
 }
 document.write("<\/style>");
 //-->
-//]]>
 </script>
 <style type="text/css" media="all">
 	/* Styles that are set using variables */
