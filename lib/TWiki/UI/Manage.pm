@@ -240,7 +240,7 @@ sub rename {
     my $query = $session->{cgiQuery};
 
     my $newWeb = $query->param( 'newweb' ) || '';
-    unless ( TWiki::isValidWebName( $newWeb, 1 )) {
+    unless( !$newWeb || TWiki::isValidWebName( $newWeb, 1 )) {
         throw TWiki::OopsException
           ( 'attention', def =>'invalid_web_name', params => $newWeb );
     }
