@@ -1,118 +1,38 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 3920 $"}%
 
-
----+ TWiki Documentation Graphics
-
-This is one way to create a library of common icons, accessible through user-defined TWikiVariables set in WebPreferences, or in TWikiPreferences for site-wide use. 
-
-There are other approaches as well:
-	* In any topic, write =%<nop>PUBURL%/%<nop>TWIKIWEB%/%TOPIC%/help.gif= to show the %PUBURL%/%TWIKIWEB%/%TOPIC%/help.gif icon
-	* The TWiki:Plugins/TopicVarsPlugin lets you set variables in any topic, not just in WebPreferences, for use in the same topic
-	* The TWiki:Plugins/SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
-	* __Related:__ TWiki's FileAttachments show their own icons for many different file types. As documented in TWikiVariables, write =%<nop>ICON{"pdf"}%= to show the %ICON{"pdf"}% icon
-
-In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics are uploaded and displayed. Then, the paths are set in [[TWiki.TWikiPreferences#DocGraphics]] for site-wide access. You can also create individual library pages in each web. And you don't have to restrict yourself to graphics: Preferences Variables can include text and links to any type of file.
-
-| *Icon* | *File Name* | *Comment* |
-|  <img src="%ATTACHURLPATH%/help.gif" alt="help.gif"  width="16" height="16"  />  | =help.gif= | Help |
-|  <img src="%ATTACHURLPATH%/note.gif" alt="note.gif"  width="16" height="16"  />  | =note.gif= | Note |
-|  <img src="%ATTACHURLPATH%/bubble.gif" alt="bubble.gif"  width="16" height="16"  />  | =bubble.gif= | Speech bubble |
-|  <img src="%ATTACHURLPATH%/tip.gif" alt="tip.gif"  width="16" height="16"  />  | =tip.gif= | Tip / Idea |
-|  <img src="%ATTACHURLPATH%/warning.gif" alt="warning.gif"  width="16" height="16" />  | =warning.gif= | Warning / Important |
-|  <img src="%ATTACHURLPATH%/stop.gif" alt="stop.gif"  width="16" height="16"  />  | =stop.gif= | Stop |
-|  <img src="%ATTACHURLPATH%/target.gif" alt="target.gif"  width="16" height="16"  />  | =target.gif= | Blue target |
-|  <img src="%ATTACHURLPATH%/gear.gif" alt="gear.gif"  width="16" height="16"  />  | =gear.gif= | Gear |
-|  <img src="%ATTACHURLPATH%/wrench.gif" alt="wrench.gif"  width="16" height="16"  />  | =wrench.gif= | Wrench |
-|  <img src="%ATTACHURLPATH%/pencil.gif" alt="pencil.gif"  width="16" height="16"  />  | =pencil.gif= | Refactor / Edit |
-|  <img src="%ATTACHURLPATH%/choice-yes.gif" alt="choice-yes.gif"  width="16" height="16"  />  | =choice-yes.gif= | Yes / Done |
-|  <img src="%ATTACHURLPATH%/choice-no.gif" alt="choice-no.gif"  width="16" height="16"  />  | =choice-no.gif= | No |
-|  <img src="%ATTACHURLPATH%/choice-cancel.gif" alt="choice-cancel.gif"  width="16" height="16"  />  | =choice-cancel.gif= | Cancel |
-|  <img src="%ATTACHURLPATH%/updated.gif" alt="updated.gif"  width="56" height="8"  />  | =updated.gif= | Updated |
-|  <img src="%ATTACHURLPATH%/new.gif" alt="new.gif"  width="28" height="8"  />  | =new.gif= | New |
-|  <img src="%ATTACHURLPATH%/starred.gif" alt="starred.gif"  width="16" height="16"  />  | =starred.gif= | Highlight (positive) |
-|  <img src="%ATTACHURLPATH%/stargold.gif" alt="stargold.gif"  width="16" height="16"  />  | =stargold.gif= | Favorites (gold star) |
-|  <img src="%ATTACHURLPATH%/hand.gif" alt="hand.gif"  width="16" height="16"  />  | =hand.gif= | Pointing hand |
-|  <img src="%ATTACHURLPATH%/arrowleft.gif" alt="arrowleft.gif"  width="16" height="16"  />  | =arrowleft.gif= | Arrow red left |
-|  <img src="%ATTACHURLPATH%/arrowright.gif" alt="arrowright.gif"  width="16" height="16"  />  | =arrowright.gif= | Arrow red right |
-|  <img src="%ATTACHURLPATH%/arrowup.gif" alt="arrowup.gif"  width="16" height="16"  />  | =arrowup.gif= | Arrow red up |
-|  <img src="%ATTACHURLPATH%/arrowdown.gif" alt="arrowdown.gif"  width="16" height="16"  />  | =arrowdown.gif= | Arrow red down |
-|  <img src="%ATTACHURLPATH%/arrowbleft.gif" alt="arrowbleft.gif"  width="16" height="16"  />  | =arrowbleft.gif= | Arrow blue left |
-|  <img src="%ATTACHURLPATH%/arrowbright.gif" alt="arrowbright.gif"  width="16" height="16"  />  | =arrowbright.gif= | Arrow blue right |
-|  <img src="%ATTACHURLPATH%/arrowbup.gif" alt="arrowbup.gif"  width="16" height="16"  />  | =arrowbup.gif= | Arrow blue up |
-|  <img src="%ATTACHURLPATH%/arrowbdown.gif" alt="arrowbdown.gif"  width="16" height="16"  />  | =arrowbdown.gif= | Arrow blue down |
-|  <img src="%ATTACHURLPATH%/arrowdot.gif" alt="arrowdot.gif"  width="16" height="16"  />  | =arrowdot.gif= | Meet here (arrows to red dot) |
-|  <img src="%ATTACHURLPATH%/go_start.gif" alt="go_start.gif"  width="16" height="16"  />  | =go_start.gif= | Go start |
-|  <img src="%ATTACHURLPATH%/go_fb.gif" alt="go_fb.gif"  width="16" height="16"  />  | =go_fb.gif= | Go fast back |
-|  <img src="%ATTACHURLPATH%/go_back.gif" alt="go_back.gif"  width="16" height="16"  />  | =go_back.gif= | Go back |
-|  <img src="%ATTACHURLPATH%/go_forward.gif" alt="go_forward.gif"  width="16" height="16"  />  | =go_forward.gif= | Go forward |
-|  <img src="%ATTACHURLPATH%/go_ff.gif" alt="go_ff.gif"  width="16" height="16"  />  | =go_ff.gif= | Go fast forward |
-|  <img src="%ATTACHURLPATH%/go_end.gif" alt="go_end.gif"  width="16" height="16"  />  | =go_end.gif= | Go end |
-|  <img src="%ATTACHURLPATH%/wip.gif" alt="wip.gif"  width="16" height="16"  />  | =wip.gif= | Work in progress |
-|  <img src="%ATTACHURLPATH%/rfc.gif" alt="rfc.gif"  width="16" height="16"  />  | =rfc.gif= | Request for comments |
-|  <img src="%ATTACHURLPATH%/days.gif" alt="days.gif"  width="16" height="16"  />  | =days.gif= | Days |
-|  <img src="%ATTACHURLPATH%/hourglass.gif" alt="hourglass.gif"  width="16" height="16"  />  | =hourglass.gif= | Hour glass |
-|  <img src="%ATTACHURLPATH%/watch.gif" alt="watch.gif"  width="16" height="16"  />  | =watch.gif= | Watch |
-|  <img src="%ATTACHURLPATH%/globe.gif" alt="globe.gif"  width="16" height="16"  />  | =globe.gif= | Globe |
-|  <img src="%ATTACHURLPATH%/home.gif" alt="home.gif"  width="16" height="16"  />  | =home.gif= | Home |
-|  <img src="%ATTACHURLPATH%/group.gif" alt="group.gif"  width="16" height="16"  />  | =group.gif= | Group |
-|  <img src="%ATTACHURLPATH%/person.gif" alt="person.gif"  width="16" height="16"  />  | =person.gif= | Person |
-|  <img src="%ATTACHURLPATH%/persons.gif" alt="persons.gif"  width="16" height="16"  />  | =persons.gif= | Persons |
-|  <img src="%ATTACHURLPATH%/lock.gif" alt="lock.gif"  width="16" height="16"  />  | =lock.gif= | Lock |
-|  <img src="%ATTACHURLPATH%/folder.gif" alt="folder.gif"  width="16" height="16"  />  | =folder.gif= | Folder |
-|  <img src="%ATTACHURLPATH%/lockfolder.gif" alt="lockfolder.gif"  width="16" height="16"  />  | =lockfolder.gif= | Locked folder |
-|  <img src="%ATTACHURLPATH%/lockfoldergray.gif" alt="lockfoldergray.gif"  width="16" height="16"  />  | =lockfoldergray.gif= | Locked folder, gray |
-|  <img src="%ATTACHURLPATH%/locktopic.gif" alt="locktopic.gif"  width="16" height="16"  />  | =locktopic.gif= | Locked topic |
-|  <img src="%ATTACHURLPATH%/locktopicgray.gif" alt="locktopicgray.gif"  width="16" height="16"  />  | =locktopicgray.gif= | Locked topic, gray |
-|  <img src="%ATTACHURLPATH%/refreshtopic.gif" alt="refreshtopic.gif"  width="16" height="16"  />  | =refreshtopic.gif= | Refresh topic |
-|  <img src="%ATTACHURLPATH%/viewtopic.gif" alt="viewtopic.gif"  width="16" height="16"  />  | =viewtopic.gif= | View topic |
-|  <img src="%ATTACHURLPATH%/edittopic.gif" alt="edittopic.gif"  width="16" height="16"  />  | =edittopic.gif= | Edit topic |
-|  <img src="%ATTACHURLPATH%/topicdiffs.gif" alt="topicdiffs.gif"  width="16" height="16"  />  | =topicdiffs.gif= | Topic difference |
-|  <img src="%ATTACHURLPATH%/topicbacklinks.gif" alt="topicbacklinks.gif"  width="16" height="16"  />  | =topicbacklinks.gif= | Topic back-links |
-|  <img src="%ATTACHURLPATH%/newtopic.gif" alt="newtopic.gif"  width="16" height="16"  />  | =newtopic.gif= | New topic |
-|  <img src="%ATTACHURLPATH%/searchtopic.gif" alt="searchtopic.gif"  width="16" height="16"  />  | =searchtopic.gif= | Search topic |
-|  <img src="%ATTACHURLPATH%/statistics.gif" alt="statistics.gif"  width="16" height="16"  />  | =statistics.gif= | Statistics |
-|  <img src="%ATTACHURLPATH%/index.gif" alt="index.gif"  width="16" height="16"  />  | =index.gif= | Index |
-|  <img src="%ATTACHURLPATH%/indexlist.gif" alt="indexlist.gif"  width="16" height="16"  />  | =indexlist.gif= | Index list |
-|  <img src="%ATTACHURLPATH%/cachetopic.gif" alt="cachetopic.gif"  width="16" height="16"  />  | =cachetopic.gif= | Cache topic |
-|  <img src="%ATTACHURLPATH%/printtopic.gif" alt="printtopic.gif"  width="16" height="16"  />  | =printtopic.gif= | Print topic |
-|  <img src="%ATTACHURLPATH%/attachfile.gif" alt="attachfile.gif"  width="16" height="16"  />  | =attachfile.gif= | Attach file |
-|  <img src="%ATTACHURLPATH%/recentchanges.gif" alt="recentchanges.gif"  width="16" height="16"  />  | =recentchanges.gif= | Recent changes |
-|  <img src="%ATTACHURLPATH%/changes.gif" alt="changes.gif"  width="16" height="16"  />  | =changes.gif= | Changes |
-|  <img src="%ATTACHURLPATH%/notify.gif" alt="notify.gif"  width="16" height="16"  />  | =notify.gif= | Notify |
-|  <img src="%ATTACHURLPATH%/mail.gif" alt="mail.gif"  width="16" height="16"  />  | =mail.gif= | Mail |
-|  <img src="%ATTACHURLPATH%/trash.gif" alt="trash.gif"  width="16" height="16"  />  | =trash.gif= | Trash |
-|  <img src="%ATTACHURLPATH%/rss-feed.gif" alt="rss-feed.gif"  width="36" height="14"  />  | =rss-feed.gif= | RSS feed 36x14 |
-|  <img src="%ATTACHURLPATH%/xml-feed.gif" alt="xml-feed.gif"  width="36" height="14"  />  | =xml-feed.gif= | RSS feed 36x14 |
-|  <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif"  width="16" height="16"  />  | =empty.gif= | Empty transparent 16x16 spacer |
-|  <img src="%ATTACHURLPATH%/line_ud.gif" alt="line_ud.gif"  width="16" height="16"  />  | =line_ud.gif= | Line graph up-down |
-|  <img src="%ATTACHURLPATH%/line_lr.gif" alt="line_lr.gif"  width="16" height="16"  />  | =line_lr.gif= | Line graph left-right |
-|  <img src="%ATTACHURLPATH%/line_udlr.gif" alt="line_udlr.gif"  width="16" height="16"  />  | =line_udlr.gif= | Line graph up-down-left-right |
-|  <img src="%ATTACHURLPATH%/line_ur.gif" alt="line_ur.gif"  width="16" height="16"  />  | =line_ur.gif= | Line graph up-right |
-|  <img src="%ATTACHURLPATH%/line_rd.gif" alt="line_rd.gif"  width="16" height="16"  />  | =line_rd.gif= | Line graph right-down |
-|  <img src="%ATTACHURLPATH%/line_ld.gif" alt="line_ld.gif"  width="16" height="16"  />  | =line_ld.gif= | Line graph left-down |
-|  <img src="%ATTACHURLPATH%/line_ul.gif" alt="line_ul.gif"  width="16" height="16"  />  | =line_ul.gif= | Line graph up-left |
-|  <img src="%ATTACHURLPATH%/line_udr.gif" alt="line_udr.gif"  width="16" height="16"  />  | =line_udr.gif= | Line graph up-down-right |
-|  <img src="%ATTACHURLPATH%/line_lrd.gif" alt="line_lrd.gif"  width="16" height="16"  />  | =line_lrd.gif= | Line graph left-right-down |
-|  <img src="%ATTACHURLPATH%/line_udl.gif" alt="line_udl.gif"  width="16" height="16"  />  | =line_udl.gif= | Line graph up-down-left |
-|  <img src="%ATTACHURLPATH%/line_ulr.gif" alt="line_ulr.gif"  width="16" height="16"  />  | =line_ulr.gif= | Line graph up-left-right |
-|  <img src="%ATTACHURLPATH%/dot_ud.gif" alt="dot_ud.gif"  width="16" height="16"  />  | =dot_ud.gif= | Dot graph up-down |
-|  <img src="%ATTACHURLPATH%/dot_lr.gif" alt="dot_lr.gif"  width="16" height="16"  />  | =dot_lr.gif= | Dot graph left-right |
-|  <img src="%ATTACHURLPATH%/dot_udlr.gif" alt="dot_udlr.gif"  width="16" height="16"  />  | =dot_udlr.gif= | Dot graph up-down-left-right |
-|  <img src="%ATTACHURLPATH%/dot_ur.gif" alt="dot_ur.gif"  width="16" height="16"  />  | =dot_ur.gif= | Dot graph up-right |
-|  <img src="%ATTACHURLPATH%/dot_rd.gif" alt="dot_rd.gif"  width="16" height="16"  />  | =dot_rd.gif= | Dot graph right-down |
-|  <img src="%ATTACHURLPATH%/dot_ld.gif" alt="dot_ld.gif"  width="16" height="16"  />  | =dot_ld.gif= | Dot graph left-down |
-|  <img src="%ATTACHURLPATH%/dot_ul.gif" alt="dot_ul.gif"  width="16" height="16"  />  | =dot_ul.gif= | Dot graph up-left |
-|  <img src="%ATTACHURLPATH%/dot_udr.gif" alt="dot_udr.gif"  width="16" height="16"  />  | =dot_udr.gif= | Dot graph up-down-right |
-|  <img src="%ATTACHURLPATH%/dot_lrd.gif" alt="dot_lrd.gif"  width="16" height="16"  />  | =dot_lrd.gif= | Dot graph left-right-down |
-|  <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif"  width="16" height="16"  />  | =dot_udl.gif= | Dot graph up-down-left |
-|  <img src="%ATTACHURLPATH%/dot_ulr.gif" alt="dot_ulr.gif"  width="16" height="16"  />  | =dot_ulr.gif= | Dot graph up-left-right |
-
-
-
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 3920 $"}%
-
-
 ---+ Skins and icons with PatternSkin
+
+Graphics from this topic are used when in TWiki.TWikiPreferences, variable ==ICONTOPIC== is set to the current topic.
+
+---++ Usage
+
+To create an image in a topic, write:
+<verbatim>
+%ICON{"help"}%
+</verbatim>
+... to get: %ICON{"help"}%
+---
+Another way is to refer to the graphics topic directly.
+<verbatim>
+%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif
+</verbatim>
+gets: %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/help.gif
+
+or
+<verbatim>
+%PUBURL%/%TWIKIWEB%/TWikiDocGraphicsPattern/help.gif
+</verbatim>
+gets: %PUBURL%/%TWIKIWEB%/TWikiDocGraphicsPattern/help.gif
+---
+To get the full path, call =ICONPATH=:
+<verbatim>
+%ICONPATH{"toggleopen"}%
+</verbatim>
+gets: %ICONPATH{"toggleopen"}% (!%ICONPATH{"toggleopen"}%)
+---
+__See also: TWikiDocGraphics__
+
+---++ File icon table
 
 | *Filetype Icons* | *File Name* | *Comment* |
 |  <img src="%ATTACHURLPATH%/as.gif" alt="as.gif" />  | =as.gif= | as |
@@ -155,6 +75,7 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/sniff.gif" alt="sniff.gif" />  | =sniff.gif= | sniff |
 |  <img src="%ATTACHURLPATH%/bmp.gif" alt="bmp.gif" />  | =bmp.gif= | bmp |
 
+---++ Graphics table
 
 | *Graphics* | *File Name* | *Comment* |
 |  <img src="%ATTACHURLPATH%/dot_rd.gif" alt="dot_rd.gif" />  | =dot_rd.gif= | dot_rd |
@@ -253,6 +174,16 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 |  <img src="%ATTACHURLPATH%/dot_udl.gif" alt="dot_udl.gif" />  | =dot_udl.gif= | dot_udl |
 |  <img src="%ATTACHURLPATH%/dot_ld.gif" alt="dot_ld.gif" />  | =dot_ld.gif= | dot_ld |
 |  <img src="%ATTACHURLPATH%/empty.gif" alt="empty.gif" />  | =empty.gif= | empty |
+|  <img src="%ATTACHURLPATH%/toggleclose.gif" alt="toggleclose.gif" />  | =toggleclose.gif= | toggleopen |
+|  <img src="%ATTACHURLPATH%/toggleopen.gif" alt="toggleopen.gif" />  | =toggleopen.gif= | toggleclose |
+
+
+
+
+
+
+
+
 
 
 
@@ -349,3 +280,6 @@ In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics 
 %META:FILEATTACHMENT{name="statistics.gif" attr="" comment="Statistics" date="1092551978" path="C:\Data\Temp\statistics.gif" size="899" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="index.gif" attr="" comment="Index" date="1092551993" path="C:\Data\Temp\index.gif" size="895" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="indexlist.gif" attr="" comment="Index list" date="1092552006" path="C:\Data\Temp\indexlist.gif" size="894" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="toggleclose.gif" attachment="toggleclose.gif" attr="" comment="Toggle close" date="1121284773" path="toggleclose.gif" size="143" tmpFilename="/var/tmp/CGItemp21863" user="Main.TWikiContributor" version="0"}%
+%META:FILEATTACHMENT{name="toggleopen.gif" attachment="toggleopen.gif" attr="" comment="Toggle open" date="1121284798" path="toggleopen.gif" size="148" tmpFilename="/var/tmp/CGItemp21861" user="Main.TWikiContributor" version="0"}%
+
