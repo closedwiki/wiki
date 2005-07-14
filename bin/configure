@@ -181,6 +181,9 @@ sub _foldableBlock {
     my $errorsMess = ($errors > 1) ? ' errors' : ' error';
     my $warningsMess = ($warnings > 1) ? ' warnings' : ' warning';
     $mess .= CGI::span({class=>'error'}, $errors . $errorsMess) if $errors;
+    if ($errors && $warnings) {
+    	$mess .= '&nbsp;';
+    }
     $mess .= CGI::span({class=>'warn'}, $warnings . $warningsMess) if $warnings;
     $errors = $warnings = 0;
 
