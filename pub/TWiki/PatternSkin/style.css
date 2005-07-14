@@ -968,7 +968,7 @@ a:hover .twikiAccessKey {
 	text-decoration:none;
 	border-bottom:none;
 }
-.twikiDisabledLink {
+.twikiEmulatedLink {
 	color:#0054C0; /*C1*/
 	text-decoration:underline;
 }
