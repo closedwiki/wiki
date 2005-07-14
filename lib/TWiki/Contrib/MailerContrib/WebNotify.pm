@@ -68,12 +68,13 @@ it will return undef.
 
 sub writeWebNotify {
     my $this = shift;
-    return TWiki::Store::saveTopic( $this->{web},
-                                    $this->{topic_name},
-                                    $this->{text} . $this->stringify(),
-                                    undef,
-                                    1,  # unlock
-                                    1); # dontNotify
+    return $this->{session}->{store}->saveTopic(
+        $this->{session}->{user},
+        $this->{web},
+        $this->{topic_name},
+        $this->{text} . $this->stringify(),
+        undef, # meta
+        { dontlog => 1, unlock => 1 });
 }
 
 =pod

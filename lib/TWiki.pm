@@ -1070,14 +1070,20 @@ sub new {
     my $url = $query->url();
     if( $url && $url =~ m!^([^:]*://[^/]*)(.*)/.*$! && $2 ) {
         $this->{urlHost} = $1;
+        # If the urlHost in the url is localhost, this is a lot less
+        # useful than the default url host. This is because new CGI("")
+        # assigns this host by default - it's a default setting, used
+        # when there is nothing better available.
+        if( $this->{urlHost} eq 'http://localhost' ) {
+            $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
+        } elsif( $TWiki::cfg{RemovePortNumber} ) {
+            $this->{urlHost} =~ s/\:[0-9]+$//;
+        }
         if( $TWiki::cfg{GetScriptUrlFromCgi} ) {
             # SMELL: this is a really dangerous hack. It will fail
             # spectacularly with mod_perl.
             # SMELL: why not just use $query->script_name?
             $this->{scriptUrlPath} = $2;
-        }
-        if( $TWiki::cfg{RemovePortNumber} ) {
-            $this->{urlHost} =~ s/\:[0-9]+$//;
         }
     } else {
         $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
