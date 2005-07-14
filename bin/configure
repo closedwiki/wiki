@@ -1670,11 +1670,7 @@ if( $TWiki::cfg{UseLocale} ) {
     import locale ();
 }
 
-print CGI::header('text/html'),
-    CGI::start_html( -title => 'TWiki Configuration',
-                   -head => [
-CGI::script( { language => 'JavaScript',
-               type => 'text/javascript' }, <<'HERE'
+my $js1 = <<'HERE';
 //<!--
 
 var lastOpenBlock;
@@ -1776,9 +1772,8 @@ function getElementsByClassName(class_name)
 }
 //-->
 HERE
-),
-    CGI::style( { -type=>'text/css' }, <<'HERE'
-    
+
+my $css = <<'HERE';
 html body {
     line-height:1.4em; /*C10*/
     font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
@@ -2061,18 +2056,28 @@ div.foldableBlock td {
     display:none;
 }
 HERE
-),
-CGI::script( { language => 'JavaScript',
-               type => 'text/javascript' }, <<'HERE'
+
+my $js2 = <<'HERE';
 //<!--
 
 document.write("<style type='text/css'>");
-document.write(".foldableBlockClosed {display:none;}"); 
+document.write(".foldableBlockClosed {display:none;}");
 document.write("<\/style>");
 //-->
 HERE
-)
-]);
+
+my $hdr = CGI::start_html(
+    -title => 'TWiki Configuration',
+    -head => [
+        CGI::script( { language => 'JavaScript',
+                       type => 'text/javascript' }, $js1 ),
+        CGI::style( { -type=>'text/css' }, $css),
+        CGI::script( { language => 'JavaScript',
+                       type => 'text/javascript' }, $js2 ) ]);
+
+# XML confuses IE, so strip it out. This is fixed in CGI.pm 3.06.
+$hdr =~ s/^<\?xml.*?>//s;
+print CGI::header('text/html'), $hdr;
 
 my $body = "";
 $body .= CGI::h1('TWiki Configuration');
