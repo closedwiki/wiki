@@ -1,0 +1,14 @@
+%META:TOPICINFO{author="MartinCleaver" date="1121218644" format="1.1" version="1.1"}%
+---+ Showing all photographs
+
+Also available:
+%INCLUDE{UserListHeader}%
+
+%IMAGEGALLERY{ thumbtitle="[[People.$topic][$topic]]" topics="%TOPICLIST{separator=","}%" size="large" title="[[People.$topic][$topic]]" }%
+
+If TWiki:Plugins.ImageGalleryPlugin is installed this page will show photos and names of all registered users. 
+
+
+
+%META:TOPICMOVED{by="martincleaver" date="1117021135" from="People.UserListByPicture" to="People.UserListByPhotograph"}%
+

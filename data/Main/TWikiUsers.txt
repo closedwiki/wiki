@@ -1,7 +1,9 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="MartinCleaver" date="1121256319" format="1.1" version="1.6"}%
 ---+ List of <nop>%WIKITOOLNAME% users
+
+Below is a list of users with accounts. If you want to edit topics or see protected areas of the site then add yourself to the list by registering: fill out the form in %TWIKIWEB%.TWikiRegistration. 
+
+If you forget your password, TWiki.ResetPassword will get a new one sent to you.
 
 __Related topics:__ TWikiGroups
 
@@ -12,7 +14,6 @@ Also available:
 	* Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
 -->
 
-Please take the time and add yourself to the list. To do that fill out the form in %TWIKIWEB%.TWikiRegistration. This will create an account for you which allows you to edit topics. 
 
 The format of these lines is TWiki.WikiName - TWiki.LoginName - Date registered
 
@@ -46,4 +47,7 @@ The format of these lines is TWiki.WikiName - TWiki.LoginName - Date registered
 	* X - <a name="X">- - - -</a>
 	* Y - <a name="Y">- - - -</a>
 	* Z - <a name="Z">- - - -</a>
+
+
+
 
