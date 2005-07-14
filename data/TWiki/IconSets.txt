@@ -23,6 +23,8 @@ To set ICONTOPIC, write in TWiki.TWikiPreferences:
 Graphics (smilies for instance) can be placed in a topic by using =%<nop>ICON{"icon name"}%=. You can use =%<nop>ICON{"help"}%= to get the image %ICON{"help"}%.%BR%
 Previously, =%<nop>ICON{}%= would only retrieve file type icons. Now you can get any image that is in the icon topic attachment folder.
 
+Image attachments that are used with =%<nop>ICON{}%= are always =gif= images.
+
 ---++ File icons
 
 File type icons are retrieved automatically, for instance when an attachment table is drawn.%BR%
@@ -39,6 +41,6 @@ a.toggleIcon { background:url(%ICONPATH{"toggleclose"}%) no-repeat; }
 This will get the path of the file =toggleclose.gif=.
 
 
-
+__Related topics:__ TWiki.TWikiDocGraphics, TWiki.TWikiDocGraphicsPattern, TWiki.FileAttachment
 
 
