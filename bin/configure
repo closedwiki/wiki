@@ -159,14 +159,14 @@ sub NOTE {
 sub WARN {
     $warnings++;
     $totwarnings++;
-    return CGI::span({class=>'warn'}, CGI::strong('Warning: ').join("\n",@_));
+    return CGI::div(CGI::span({class=>'warn'}, CGI::strong('Warning: ').join("\n",@_)));
 }
 
 # an error
 sub ERROR {
     $errors++;
     $toterrors++;
-    return CGI::span({class=>'error'}, CGI::strong('Error: ').join("\n",@_));
+    return CGI::div(CGI::span({class=>'error'}, CGI::strong('Error: ').join("\n",@_)));
 }
 
 # Generate a foldable block (twisty). This is a DIV with a table in it
@@ -1044,9 +1044,10 @@ sub handleUpdate {
           CGI::p(CGI::strong("Your Password:").CGI::br()).
             CGI::span({class => 'twikiSmall'}, "If this is the first time you are configuring TWiki, leave this field empty and create a new password below at New Password.".CGI::br()).
           CGI::password_field( 'cfgAccess', '', 20, 80 ).
+          CGI::submit(-value=>'Save changes').
           CGI::br().
           CGI::div({ class => 'explanation'},
-          CGI::span({class => 'twikiSmall'}, CGI::strong("Forgot password?") . CGI::br() .  "Your password is stored in <code>/bin/LocalSite.cfg</code>. The administrator can log in to the server and manually edit the password.")).
+          CGI::span({class => 'twikiSmall'}, CGI::strong("Forgot password?") . CGI::br() .  "Your password is stored in <code>/lib/LocalSite.cfg</code>. The administrator can log in to the server and manually edit the password.")).
           CGI::p("Set your password for the first time, or optionally change your password here:").
           CGI::div({ class => 'formElem'},
             CGI::strong("New Password:").
@@ -1054,8 +1055,9 @@ sub handleUpdate {
             CGI::password_field( 'newCfgP', '', 20, 80 ).
             CGI::br().
             CGI::strong("Confirm Password:").CGI::br().
-            CGI::password_field( 'confCfgP', '', 20, 80 )).
-          CGI::submit(-value=>'Save changes').
+            CGI::password_field( 'confCfgP', '', 20, 80 ).
+            CGI::br().
+            CGI::submit(-value=>'Save changes')).
           CGI::end_form().
           CGI::end_html();
         return $output;
@@ -1854,7 +1856,7 @@ h6 { font-size:95%;}
 :visited,
 :link:active,
 :visited:active {
-	text-decoration:none;
+	text-decoration:underline;
 	color:#0054C0; /*C1*/;
 	background-color:transparent;
 }
