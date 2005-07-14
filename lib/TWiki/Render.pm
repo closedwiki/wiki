@@ -76,7 +76,7 @@ sub new {
 
     $this->{session} = $session;
 
-    $this->{MODE} = 'html';		# Default is to render as HTML
+    $this->{MODE} = 'html';        # Default is to render as HTML
     $this->{NEWTOPICBGCOLOR} =
       $session->{prefs}->getPreferencesValue('NEWTOPICBGCOLOR')
         || '#FFFFCE';
@@ -353,8 +353,8 @@ sub makeAnchorName {
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
     if ( ! $compatibilityMode && $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
-	# accept, already valid -- just remove leading #
-	return substr($anchorName, 1);
+    # accept, already valid -- just remove leading #
+    return substr($anchorName, 1);
     }
 
     # strip out potential links so they don't get rendered.  Screws up header rendering.
@@ -363,9 +363,9 @@ sub makeAnchorName {
     $anchorName =~ s/($TWiki::regex{wikiWordRegex})/_$1/go; # add an _ before bare WikiWords
 
     if ( $compatibilityMode ) {
-	# remove leading/trailing underscores first, allowing them to be
-	# reintroduced
-	$anchorName =~ s/^[\s\#\_]*//;
+    # remove leading/trailing underscores first, allowing them to be
+    # reintroduced
+    $anchorName =~ s/^[\s\#\_]*//;
         $anchorName =~ s/[\s\_]*$//;
     }
     $anchorName =~ s/<[\/]?\w[^>]*>//gi;         # remove HTML tags
@@ -405,22 +405,20 @@ sub _linkToolTipInfo {
     my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
     my( $date, $user, $rev ) = $meta->getRevisionInfo();
     my $text = $this->{LINKTOOLTIPINFO};
-    $text =~ s/\$web/$theWeb/g;
-    $text =~ s/\$topic/$theTopic/g;
+    $text =~ s/\$web/<nop>$theWeb/g;
+    $text =~ s/\$topic/<nop>$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::Time::formatTime( $date )/ge;
-    $text =~ s/\$username/$user->login()/ge;
-    $text =~ s/\$wikiname/$user->wikiName()/ge;
-    $text =~ s/\$wikiusername/$user->webDotWikiName()/ge;
+    $text =~ s/\$username/<nop>$user/g;                                     # 'jsmith'
+    $text =~ s/\$wikiname/'<nop>' . $user->wikiName()/ge;  # 'JohnSmith'
+    $text =~ s/\$wikiusername/'<nop>' . $user->webDotWikiName()/ge; # 'Main.JohnSmith'
     if( $text =~ /\$summary/ ) {
         my $summary = $store->readTopicRaw
           ( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
+        $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
     }
-    $text = $this->protectPlainText( $text );
-    $text =~ s/[^\w<>]/ /g;
-    $text =~ s/<nop>/?/g;
     return $text;
 }
 
@@ -470,7 +468,7 @@ sub internalLink {
     # whole link, and first of each word. TODO: Try to turn this off,
     # avoiding spaces being stripped elsewhere
     $theTopic =~ s/^(.)/\U$1/;
-    $theTopic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;	
+    $theTopic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;    
 
     # Add <nop> before WikiWord inside link text to prevent double links
     $theLinkText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
@@ -667,7 +665,7 @@ sub _handleSquareBracketedLink {
     my $topic = $theLink || $theTopic;  # remaining is topic
     # Capitalise
     $topic =~ s/^(.)/\U$1/;
-    $topic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;	
+    $topic =~ s/\s([$TWiki::regex{mixedAlphaNum}])/\U$1/go;    
     # filter out &any; entities
     $topic =~ s/\&[a-z]+\;//gi;
     # filter out &#123; entities
@@ -691,7 +689,7 @@ sub _protocolLink {
 
     if ( $url =~ /^(\S+)\s+(.*)$/ ) {
         # '[[URL#anchor display text]]' link:
-	    $url = $1;
+        $url = $1;
         $theText = $2;
 
     } else {
@@ -736,10 +734,10 @@ sub _mailtoLinkFull {
 
 sub _mailtoLinkSimple {
     # Does not do any anti-spam padding, because address will not include '@'
-    my( $this, $theMailtoString, $theLinkText ) = @_;	
+    my( $this, $theMailtoString, $theLinkText ) = @_;    
 
     if ($theMailtoString =~ s/@//g ) {
-    	writeWarning("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
+        writeWarning("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
     }
     return CGI::a( { href=>'mailto:'.$theMailtoString }, $theLinkText );
 }
@@ -787,9 +785,9 @@ sub filenameToIcon {
 
 =pod
 
----++ ObjectMethod getDocGraphic (  $fileName  ) -> $html
+---++ ObjectMethod getDocGraphic (  $iconName  ) -> $html
 
-Fetches an image file from a topic attachment directory. Calls _getSkinIconTopicPath to get the attachment topic path from preference variable ICONTOPIC.
+Creates an image tag from an icon name. Calls getDocGraphicFilePath to get the attachment topic path from preference variable ICONTOPIC.
 
 Prerequisites:
     - ICONTOPIC must be defined, as Web.TopicName or as TopicName (then %WEB%.TopicName is used)
@@ -799,12 +797,31 @@ used in: TWiki::_ICON
 =cut
 
 sub getDocGraphic {
-    my( $this, $fileName ) = @_;
-    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
-
-       my $iconUrl = $TWiki::cfg{PubUrlPath}.'/'.$this->_getSkinIconTopicPath();
-    return CGI::img( { src => $iconUrl.'/'.$fileName.'.gif',
+    my( $this, $iconName ) = @_;
+    my $docGraphicFilePath = $this->getDocGraphicFilePath( $iconName );
+    return CGI::img( { src => $docGraphicFilePath,
                        align => 'top', alt => '', border => 0 } );
+}
+
+=pod
+
+---++ ObjectMethod getDocGraphicFilePath (  $iconName  ) -> $iconFilePath
+
+Creates an image file path from an icon name. Calls _getSkinIconTopicPath to get the attachment topic path from preference variable ICONTOPIC.
+
+Prerequisites:
+    - ICONTOPIC must be defined, as Web.TopicName or as TopicName (then %WEB%.TopicName is used)
+    
+used in: getDocGraphic, TWiki::_ICONPATH
+    
+=cut
+
+sub getDocGraphicFilePath {
+    my( $this, $iconName ) = @_;
+    ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
+    my $iconUrl = $TWiki::cfg{PubUrlPath}.'/'.$this->_getSkinIconTopicPath();
+    my $iconFilePath = $iconUrl.'/'.$iconName.'.gif';
+    return $iconFilePath;
 }
 
 =pod
@@ -949,7 +966,7 @@ sub getRenderedVersion {
     # WARNING: since the token is used as a marker in takeOutBlocks,
     # be careful never to call this method on text which has already had
     # embedded blocks removed!
-    $text =~ s/$TWiki::TranslationToken/!/go;	
+    $text =~ s/$TWiki::TranslationToken/!/go;    
 
     my $removed = {};    # Map of placeholders to tag parameters and text
 
@@ -1063,7 +1080,7 @@ sub getRenderedVersion {
 
     # Now we really _do_ need a line loop, to process TML
     # line-oriented stuff.
-    my $isList = 0;		# True when within a list
+    my $isList = 0;        # True when within a list
     my $insideTABLE = 0;
     my @result = ();
 
@@ -1346,11 +1363,9 @@ sub protectPlainText {
 
     # prevent text from getting rendered in inline search and link tool
     # tip text by escaping links (external, internal, Interwiki)
-    $text =~ s((?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})))
-      (<nop>$1)go;
-    $text =~ s((?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:))
-      (<nop>$1)go;
-    $text =~ s/([@%])/<nop>$1/g;	# email address, variable
+    $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
+    $text =~ s/(?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
+    $text =~ s/([@%])/@<nop>$1/g;    # email address, variable
 
     return $text;
 }
@@ -1373,7 +1388,7 @@ sub makeTopicSummary {
 
     my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
     $htext =~ s/\n+/ /g;
-
+ 
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
     # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
     # This avoids splitting within a Unicode codepoint (or a UTF-16

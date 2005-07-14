@@ -41,7 +41,7 @@ package TWiki;
 use strict;
 use Assert;
 
-require 5.005;		# For regex objects and internationalisation
+require 5.005;        # For regex objects and internationalisation
 
 # Site configuration constants
 use vars qw( %cfg );
@@ -66,7 +66,7 @@ use vars qw(
 
 # Token character that must not occur in any normal text - converted
 # to a flag character if it ever does occur (very unlikely)
-$TranslationToken= "\0";	# Null not allowed in charsets used with TWiki
+$TranslationToken= "\0";    # Null not allowed in charsets used with TWiki
 
 =pod
 
@@ -153,6 +153,7 @@ BEGIN {
                      GMTIME            => \&_GMTIME,
                      HTTP_HOST         => \&_HTTP_HOST,
                      ICON              => \&_ICON,
+                     ICONPATH          => \&_ICONPATH,
                      INCLUDE           => \&_INCLUDE,
                      INTURLENCODE      => \&_INTURLENCODE,
                      METASEARCH        => \&_METASEARCH,
@@ -166,7 +167,7 @@ BEGIN {
                      SEARCH            => \&_SEARCH,
                      SERVERTIME        => \&_SERVERTIME,
                      SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
-                     SPACEOUT	       => \&_SPACEOUT,
+                     SPACEOUT           => \&_SPACEOUT,
                      'TMPL:P'          => \&_TMPLP,
                      TOPICLIST         => \&_TOPICLIST,
                      URLENCODE         => \&_ENCODE,
@@ -254,6 +255,7 @@ BEGIN {
     $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
     $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
     $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
+    $constantTags{DEFAULTURLHOST}  = $TWiki::cfg{DefaultUrlHost};
     $constantTags{WIKIHOMEURL}     =
       $TWiki::cfg{DefaultUrlHost} .
         '/' . $TWiki::cfg{ScriptUrlPath} . '/view' .
@@ -377,36 +379,36 @@ BEGIN {
     # Encodings section.  Tested against Markus Kuhn's UTF-8 test file
     # at http://www.cl.cam.ac.uk/~mgk25/ucs/examples/UTF-8-test.txt.
     $regex{validUtf8CharRegex} = qr{
-				# Single byte - ASCII
-				[\x00-\x7F] 
-				|
+                # Single byte - ASCII
+                [\x00-\x7F] 
+                |
 
-				# 2 bytes
-				[\xC2-\xDF][\x80-\xBF] 
-				|
+                # 2 bytes
+                [\xC2-\xDF][\x80-\xBF] 
+                |
 
-				# 3 bytes
+                # 3 bytes
 
-				    # Avoid illegal codepoints - negative lookahead
-				    (?!\xEF\xBF[\xBE\xBF])	
+                    # Avoid illegal codepoints - negative lookahead
+                    (?!\xEF\xBF[\xBE\xBF])    
 
-				    # Match valid codepoints
-				    (?:
-					([\xE0][\xA0-\xBF])|
-					([\xE1-\xEC\xEE-\xEF][\x80-\xBF])|
-					([\xED][\x80-\x9F])
-				    )
-				    [\x80-\xBF]
-				|
+                    # Match valid codepoints
+                    (?:
+                    ([\xE0][\xA0-\xBF])|
+                    ([\xE1-\xEC\xEE-\xEF][\x80-\xBF])|
+                    ([\xED][\x80-\x9F])
+                    )
+                    [\x80-\xBF]
+                |
 
-				# 4 bytes 
-				    (?:
-					([\xF0][\x90-\xBF])|
-					([\xF1-\xF3][\x80-\xBF])|
-					([\xF4][\x80-\x8F])
-				    )
-				    [\x80-\xBF][\x80-\xBF]
-			    }xo;
+                # 4 bytes 
+                    (?:
+                    ([\xF0][\x90-\xBF])|
+                    ([\xF1-\xF3][\x80-\xBF])|
+                    ([\xF4][\x80-\x8F])
+                    )
+                    [\x80-\xBF][\x80-\xBF]
+                }xo;
 
     $regex{validUtf8StringRegex} =
       qr/^ (?: $regex{validUtf8CharRegex} )+ $/xo;
@@ -460,7 +462,7 @@ sub UTF82SiteCharSet {
     } elsif ( $TWiki::cfg{Site}{CharSet} eq 'utf-8' ) {
         # Convert into internal Unicode characters if on Perl 5.8 or higher.
         if( $] >= 5.008 ) {
-            require Encode;			# Perl 5.8 or higher only
+            require Encode;            # Perl 5.8 or higher only
             # 'decode' into UTF-8
             $text = Encode::decode('utf8', $text);
         } else {
@@ -486,7 +488,7 @@ sub UTF82SiteCharSet {
                 # Convert text using Encode:
                 # - first, convert from UTF8 bytes into internal
                 # (UTF-8) characters
-                $text = Encode::decode('utf8', $text);	
+                $text = Encode::decode('utf8', $text);    
                 # - then convert into site charset from internal UTF-8,
                 # inserting \x{NNNN} for characters that can't be converted
                 $text =
@@ -494,7 +496,7 @@ sub UTF82SiteCharSet {
                                   &FB_PERLQQ() );
             }
         } else {
-            require Unicode::MapUTF8;	# Pre-5.8 Perl versions
+            require Unicode::MapUTF8;    # Pre-5.8 Perl versions
             my $charEncoding = $TWiki::cfg{Site}{CharSet};
             if( not Unicode::MapUTF8::utf8_supported_charset($charEncoding) ) {
                 $this->writeWarning
@@ -1492,8 +1494,8 @@ sub _TOC {
             $line =~ s/([\s\(])($regex{webNameRegex})\.($regex{wikiWordRegex})/$1<nop>$3/go;  # 'Web.TopicName'
             $line =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;  # 'TopicName'
             $line =~ s/([\s\(])($regex{abbrevRegex})/$1<nop>$2/go;    # 'TLA'
-	    # Prevent manual links
-	    $line =~ s/<[\/]?a\b[^>]*>//gi;   
+        # Prevent manual links
+        $line =~ s/<[\/]?a\b[^>]*>//gi;   
             # create linked bullet item, using a relative link to anchor
             $line = $tabs.'* '.
               CGI::a( { href=>$urlPath.'#'.$anchor }, $line );
@@ -1640,17 +1642,17 @@ sub _webOrTopicList {
         $line = $format;
         $line =~ s/\$web\b/$web/goi;
         $line =~ s/\$name\b/$item/goi;
-	if($isWeb) {
-	  my $webindent=$item;
-	  $webindent=~s/\/$//go;
-	  $webindent =~ s/\w+\//\&nbsp;\&nbsp;/go;
-	  $webindent =~ s/[A-Z]+.*//go;
-	  my $indenteditem=$item;
-	  $indenteditem=~s/\/$//go;
-	  $indenteditem =~ s/\w+\///go;
-	  $line =~ s/\$webindent/$webindent/goi;
-	  $line =~ s/\$indentedname/$indenteditem/goi;
-	}
+    if($isWeb) {
+      my $webindent=$item;
+      $webindent=~s/\/$//go;
+      $webindent =~ s/\w+\//\&nbsp;\&nbsp;/go;
+      $webindent =~ s/[A-Z]+.*//go;
+      my $indenteditem=$item;
+      $indenteditem=~s/\/$//go;
+      $indenteditem =~ s/\w+\///go;
+      $line =~ s/\$webindent/$webindent/goi;
+      $line =~ s/\$indentedname/$indenteditem/goi;
+    }
         $line =~ s/\$qname/"$item"/goi;
         $mark = ( $selection =~ / \Q$item\E / ) ? $marker : '';
         $line =~ s/\$marker/$mark/goi;
@@ -1774,7 +1776,7 @@ most likely you were looking for =urlEncode=.
 sub nativeUrlEncode {
     my $theStr = shift;
 
-    my $isEbcdic = ( 'A' eq chr(193) ); 	# True if Perl is using EBCDIC
+    my $isEbcdic = ( 'A' eq chr(193) );     # True if Perl is using EBCDIC
 
     if( $TWiki::cfg{Site}{CharSet} eq 'utf-8' or $isEbcdic ) {
         # SMELL: does this really work? What if non RFC-1738 characters
@@ -1782,7 +1784,7 @@ sub nativeUrlEncode {
 
         # Just strip double quotes, no URL encoding - let browser encode to
         # UTF-8 or EBCDIC based $TWiki::cfg{Site}{CharSet} as appropriate
-        $theStr =~ s/^"(.*)"$/$1/;	
+        $theStr =~ s/^"(.*)"$/$1/;    
         return $theStr;
     } else {
         return urlEncode( $theStr );
@@ -2492,11 +2494,11 @@ sub _URLPARAM {
     $value =~ s/\r?\n/$newLine/go if( $newLine );
     if ( $encode ) {
         if ( $encode =~ /^entit(y|ies)$/ ) {
-        	$value = entityEncode( $value );
-    	} else {
+            $value = entityEncode( $value );
+        } else {
             $value =~ s/\r*\n\r*/<br \/>/; # Legacy
-        	$value = urlEncode( $value );
-    	}
+            $value = urlEncode( $value );
+        }
     }
     unless( $value ) {
         $value = $params->{default} || '';
@@ -2547,6 +2549,16 @@ sub _ICON {
 
     my $value = $this->{renderer}->getDocGraphic( $file );
     return $value;
+}
+
+sub _ICONPATH {
+    my( $this, $params ) = @_;
+    my $file = $params->{_DEFAULT};
+
+    $file = '' unless $file;
+
+    my $path = $this->{renderer}->getDocGraphicFilePath( $file );
+    return $constantTags{DEFAULTURLHOST} . $path;
 }
 
 sub _RELATIVETOPICPATH {
