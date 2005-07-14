@@ -405,20 +405,22 @@ sub _linkToolTipInfo {
     my $meta = new TWiki::Meta( $this->{session}, $theWeb, $theTopic );
     my( $date, $user, $rev ) = $meta->getRevisionInfo();
     my $text = $this->{LINKTOOLTIPINFO};
-    $text =~ s/\$web/<nop>$theWeb/g;
-    $text =~ s/\$topic/<nop>$theTopic/g;
+    $text =~ s/\$web/$theWeb/g;
+    $text =~ s/\$topic/$theTopic/g;
     $text =~ s/\$rev/1.$rev/g;
     $text =~ s/\$date/TWiki::Time::formatTime( $date )/ge;
-    $text =~ s/\$username/<nop>$user/g;                                     # 'jsmith'
-    $text =~ s/\$wikiname/'<nop>' . $user->wikiName()/ge;  # 'JohnSmith'
-    $text =~ s/\$wikiusername/'<nop>' . $user->webDotWikiName()/ge; # 'Main.JohnSmith'
+    $text =~ s/\$username/$user->login()/ge;
+    $text =~ s/\$wikiname/$user->wikiName()/ge;
+    $text =~ s/\$wikiusername/$user->webDotWikiName()/ge;
     if( $text =~ /\$summary/ ) {
         my $summary = $store->readTopicRaw
           ( undef, $theWeb, $theTopic, undef );
         $summary = $this->makeTopicSummary( $summary, $theTopic, $theWeb );
-        $summary =~ s/[\"\']/<nop>/g;       # remove quotes (not allowed in title attribute)
         $text =~ s/\$summary/$summary/g;
     }
+    $text = $this->protectPlainText( $text );
+    $text =~ s/[^\w<>]/ /g;
+    $text =~ s/<nop>/?/g;
     return $text;
 }
 
@@ -1344,9 +1346,11 @@ sub protectPlainText {
 
     # prevent text from getting rendered in inline search and link tool
     # tip text by escaping links (external, internal, Interwiki)
-    $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
-    $text =~ s/(?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
-    $text =~ s/([@%])/@<nop>$1/g;	# email address, variable
+    $text =~ s((?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})))
+      (<nop>$1)go;
+    $text =~ s((?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:))
+      (<nop>$1)go;
+    $text =~ s/([@%])/<nop>$1/g;	# email address, variable
 
     return $text;
 }
@@ -1369,7 +1373,7 @@ sub makeTopicSummary {
 
     my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
     $htext =~ s/\n+/ /g;
- 
+
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
     # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
     # This avoids splitting within a Unicode codepoint (or a UTF-16
