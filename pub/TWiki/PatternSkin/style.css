@@ -555,6 +555,14 @@ create a div based solution instead of tables */
 .twikiTopicAction {
 	margin:2em 0 3em 0;
 	background-color:#666; /*C4*/
+	font-size:95%;
+	line-height:1.5em;
+	color:#ddd;
+	font-weight:normal;
+	background-color:#666;
+}
+.twikiTopicAction .twikiSeparator {
+	color:#ccc;
 }
 .twikiTopicAction table,
 table.twikiTopicAction {
@@ -563,8 +571,6 @@ table.twikiTopicAction {
 	border-collapse:collapse;
 	empty-cells:show;
 	border:0px;
-	font-size:95%;
-	color:#fff;
 	width:inherit;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
@@ -651,10 +657,6 @@ table.twikiTopicAction {
 .twikiTopicActionHelp a:link,
 .twikiTopicActionHelp a:visited  {
 	border-bottom:0px;
-}
-.twikiTopicAction .twikiSeparator {
-	display:inline;
-	color:#fff;
 }
 .twikiTopicAction input,
 .twikiTopicAction label {
@@ -1108,14 +1110,6 @@ a:hover .twikiAccessKey {
 	margin:0 0 1.5em 0;
 	padding:0.5em 2em 0.6em 2em;
 	border:none;
-	font-size:95%;
-	line-height:1.5em;
-	color:#ddd;
-	font-weight:normal;
-	background-color:#666;
-}
-.twikiViewPage .twikiTopicAction .twikiSeparator {
-	color:#ccc;
 }
 .twikiViewPage .twikiTopicAction .twikiAccessKey {
 	border-color:#fff;
