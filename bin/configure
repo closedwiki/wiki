@@ -175,25 +175,26 @@ sub _foldableBlock {
     my( $head, $attr, $body ) = @_;
 
     my $headText = $head . CGI::span({ class => 'blockLinkAttribute' }, $attr);
-    my $anchor = _makeAnchor( $head );
     $body = CGI::start_table({width => '100%', -border => 0, -cellspacing => 0, -cellpadding => 0}).$body.CGI::end_table();
     my $mess = '';
     my $errorsMess = ($errors > 1) ? ' errors' : ' error';
     my $warningsMess = ($warnings > 1) ? ' warnings' : ' warning';
     $mess .= CGI::span({class=>'error'}, $errors . $errorsMess) if $errors;
     if ($errors && $warnings) {
-    	$mess .= '&nbsp;';
+        $mess .= '&nbsp;';
     }
     $mess .= CGI::span({class=>'warn'}, $warnings . $warningsMess) if $warnings;
     $errors = $warnings = 0;
 
-    #my $id = $nextid++;
+    my $anchor = _makeAnchor( $head );
     my $id = $anchor;
     my $blockId = $id;
     my $linkId = 'blockLink'.$id;
-    return CGI::a( {id => $linkId,
+    my $linkAnchor = $anchor.'link';
+    return '<a name="'.$linkAnchor.'"></a>'.
+           CGI::a( {id => $linkId,
                     class => 'blockLink blockLinkOff',
-                    href => '#',
+                    href => '#'.$linkAnchor,
                     onclick => 'foldBlock(\'' . $id . '\'); return false;'}, $headText.$mess).
            CGI::div( { id => $blockId,
                        class=> 'foldableBlock foldableBlockClosed' }, $body ).
@@ -1854,15 +1855,15 @@ h6 { font-size:95%;}
 :visited,
 :link:active,
 :visited:active {
-	text-decoration:underline;
-	color:#0054C0; /*C1*/;
-	background-color:transparent;
+    text-decoration:underline;
+    color:#0054C0; /*C1*/;
+    background-color:transparent;
 }
 :link:hover,
 :visited:hover {
-	text-decoration:underline;
-	color:#0029A3; /*C3*/
-	background-color:#b4d5ff; /*C2*/
+    text-decoration:underline;
+    color:#0029A3; /*C3*/
+    background-color:#b4d5ff; /*C2*/
 }
 form { 
     display:inline;
@@ -1933,20 +1934,24 @@ select {
 a.blockLink {
     display:block;
     padding:0.25em 1em;
-    font-weight:0.9em;
     border-bottom:1px solid #aaa;
-    text-decoration:none;   
+}
+a:link.blockLink,
+a:visited.blockLink {
+    text-decoration:none; 
 }
 a:link:hover.blockLink {
     text-decoration:none;   
 }
-.blockLinkOff {
+a:link.blockLinkOff,
+a:visited.blockLinkOff {
     background-color:#F3EDE7;
     color:#333;
     font-weight:normal;
 }
-.blockLinkOn {
-    background-color:#fff;
+a:link.blockLinkOn,
+a:visited.blockLinkOn {
+    background-color:#b4d5ff;
     color:#333;
     font-weight:bold;
 }
