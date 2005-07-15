@@ -1048,7 +1048,7 @@ sub handleUpdate {
           CGI::p(CGI::strong("Your Password:").CGI::br()).
             CGI::span({class => 'twikiSmall'}, "First time users: leave this field empty and create a new password below at New Password. If no password is set, anyone will be able to make changes.".CGI::br()).
           CGI::password_field( 'cfgAccess', '', 20, 80 ).
-          CGI::submit(-value=>'Save changes').
+          CGI::submit(-class=>'twikiSubmit', -value=>'Save changes').
           CGI::br().
           CGI::div({ class => 'explanation'},
           CGI::span({class => 'twikiSmall'}, CGI::strong("Forgot password?") . CGI::br() .  "Your password is stored in <code>/lib/LocalSite.cfg</code>. The administrator can log in to the server and manually edit the password.")).
@@ -1061,7 +1061,7 @@ sub handleUpdate {
             CGI::strong("Confirm Password:").CGI::br().
             CGI::password_field( 'confCfgP', '', 20, 80 ).
             CGI::br().
-            CGI::submit(-value=>'Set Password and Save changes')).
+            CGI::submit(-class=>'twikiSubmit', -value=>'Set Password and Save changes')).
           CGI::end_form().
           CGI::end_html();
         return $output;
@@ -1674,15 +1674,16 @@ if( $TWiki::cfg{UseLocale} ) {
 my $js1 = <<'HERE';
 //<!--
 
-var lastOpenBlock;
-var lastOpenBlockLink;
-var allBlocks; // array of all foldable blocks
-var allBlockLinks; // array of all foldable block links (headers)
+var lastOpenBlock = null;
+var lastOpenBlockLink = null;
+var allBlocks = null; // array of all foldable blocks
+var allBlockLinks = null; // array of all foldable block links (headers)
 
 function foldBlock(id) {
     var shouldClose = false;
-    if (lastOpenBlock == undefined) {
-        var block = document.getElementById(id);
+    var block = null;
+    if (lastOpenBlock == null) {
+        block = document.getElementById(id);
         if (block.open) {
             shouldClose = true;
         }
@@ -1691,13 +1692,16 @@ function foldBlock(id) {
         closeBlock(id);
     } else {
         var o = openBlock(id);
-        if (lastOpenBlock != undefined) {
+        if (lastOpenBlock != null) {
             closeBlockElement(lastOpenBlock, lastOpenBlockLink);
         }
     }
-    lastOpenBlock = (lastOpenBlock == o.block) ? undefined : o.block;
-    lastOpenBlockLink = (lastOpenBlockLink == o.blockLink) ? undefined : o.blockLink;
-
+    if (o && o.block) {
+		lastOpenBlock = (lastOpenBlock == o.block) ? null : o.block;
+	}
+	if (o && o.blockLink) {
+		lastOpenBlockLink = (lastOpenBlockLink == o.blockLink) ? null : o.blockLink;
+	}
 }
 
 function openBlock(id) {
@@ -1727,10 +1731,10 @@ function closeBlockElement(block, blockLink) {
 }
 
 function toggleAllOptions(open) {
-    if (allBlocks == undefined) {
+    if (allBlocks == null) {
         allBlocks = getElementsByClassName('foldableBlock');
     }
-    if (allBlockLinks == undefined) {
+    if (allBlockLinks == null) {
         allBlockLinks = getElementsByClassName('blockLink');
     }
     var i, ilen=allBlocks.length;
@@ -1743,8 +1747,8 @@ function toggleAllOptions(open) {
             closeBlockElement(allBlocks[i], allBlockLinks[i]);
         }
     }
-    lastOpenBlock = undefined;
-    lastOpenBlockLink = undefined;
+    lastOpenBlock = null;
+    lastOpenBlockLink = null;
 }
 
 function getElementsByClassName(class_name)
@@ -1883,6 +1887,21 @@ input, select {
 select {
     padding:0;
     font-size:100%;
+}
+.twikiSubmit,
+.twikiButton {
+	font-size:90%;
+	font-weight:normal;
+	padding:0;
+	margin:0 0.15em;
+}
+.twikiSubmit {
+	color:#041D3A;
+	background-color:#f2f2f2;
+	border-top:1px solid #fff;
+	border-right:1px solid #333;
+	border-bottom:1px solid #333;
+	border-left:1px solid #fff;
 }
 .twikiLeft {
     float:left;
@@ -2159,7 +2178,7 @@ HERE
     $body .= CGI::div('Total: ' . CGI::span({class=>'error'}, $toterrors . $toterrorsMess)) if $toterrors;    
 
     if( $update_enabled) {
-        $body .= CGI::p(CGI::submit(-value=>'Next'));
+        $body .= CGI::p(CGI::submit(-class=>'twikiSubmit', -value=>'Next'));
         $body .= CGI::end_form();
     }
 
