@@ -125,9 +125,10 @@ Template topics define the default text for new topics. There are three types of
 | WebTopicNonWikiTemplate | Alert page shown when you try to view a nonexistent topic with a non-WikiName |
 | WebTopicEditTemplate | Default text shown when you create a new topic. |
 </blockquote>
-All template topics are located in the %TWIKIWEB% web. The WebTopicEditTemplate can be overloaded. When you create a new topic, TWiki locates a topic to use as a content template according to the following search order:
+When you create a new topic, TWiki locates a topic to use as a content template according to the following search order:
 
-	1. A topic name specified by the =templatetopic= CGI parameter.
+	1. A topic name specified by the =templatetopic= CGI parameter
+      * if no web is specified, the current web is searched first and then the %TWIKIWEB% web
 	1. <nop>WebTopicEditTemplate in the current web
 	1. <nop>WebTopicEditTemplate in the %TWIKIWEB% web
 
@@ -151,20 +152,20 @@ The following variables get expanded when a user creates a new topic based on a 
 | =%<nop>WIKIUSERNAME%= | User name of user who is instantiating the new tpoic, e.g. <nop>%WIKIUSERNAME% |
 </blockquote>
 
-The =NOP= tag is used to embed text that you _do not_ want expanded when a new topic based on the template is expanded. For example, you might want to write in the template:
+The =NOP= tag is used to embed text that you _do not_ want expanded when a new topic based on the template is created. For example, you might want to write in the template:
 <verbatim>
 %NOP{
 This template can only be changed by:
    * Set ALLOWTOPICCHANGE = WikiMastersGroup
 }%
 </verbatim>
-which will restrict who can edit the template, but will get removed when a topic based on the template is created.
+This will restrict who can edit the template, but will get removed when a topic based on the template is created.
 
 =%<nop>NOP%= (or %<nop>NOP{}% can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g. =%<nop>%NOP%SERVERTIME%=.
 
 __Notes:__
-	* Unlike other variables, =%<nop>NOP{ ... }%= can span multiple lines. 
-	* The scan for the closing =}%= pattern is "non-greedy", that is, it stops at the first occurance. That means, you need to escape variables with parameters located inside =%<nop>NOP{ ... }%=: Insert a =%<nop>NOP%= between =}= and =%=. Silly example: =%<nop>NOP{ %<nop>GMTIME{"$year"}%<nop>NOP%% }%=.
+	* =%<nop>NOP{ ... }%= can span multiple lines. 
+	* The scan for the closing =}%= pattern is "non-greedy", that is, it stops at the first occurence. That means you have to protect variables with parameters located inside =%<nop>NOP{ ... }%=. To do this, insert a =%<nop>NOP%= between =}= and =%=. Example: =%<nop>NOP{ %<nop>GMTIME{"$year"}%<nop>NOP%% }%=.
 
 All other variables are unchanged, e.g. are carried over "as is" into the new topic.
 

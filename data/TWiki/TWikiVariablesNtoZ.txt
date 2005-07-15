@@ -8,7 +8,9 @@ __Note:__ This topic is included by TWikiVariables
 %STARTINCLUDE%
 #VarNOP
 ---+++ NOP -- template text not to be expanded in instantiated topics 
-   * Available in template topics only. See TWikiTemplates#HtmlTemplates for details
+	* Syntax: =%<nop>NOP%=
+	* Syntax: =%<nop>NOP{...}%=
+	* Available in template topics only. See TWikiTemplates#HtmlTemplates for details. In normal topic text, simply expands to whatever is in the curly braces (if anything).
 
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic

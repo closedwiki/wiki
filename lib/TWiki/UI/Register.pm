@@ -693,11 +693,7 @@ sub finish {
         throw Error::Simple( "No verifyEmailAddress - no WikiName after reload");
     }
 
-    # create user topic if it does not exist
-    #    unless( TWiki::Store::topicExists( $TWiki::cfg{UsersWebName}, $data->{WikiName} ) ) {
     my $log = _newUserFromTemplate($session, 'NewUserTemplate', $data);
-
-    #  }
 
     my $success = _addUserToPasswordSystem( $session, $data );
     # SMELL - error condition? surely need a way to flag an error?
@@ -786,7 +782,7 @@ sub _writeRegistrationDetailsToTopic {
     $text =
       $session->expandVariablesOnTopicCreation
         ( $text, $user, $data->{WikiName},
-          "$data->{webName}.$data->{WikiName}" );
+          $data->{webName}.'.'.$data->{WikiName} );
 
     $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 

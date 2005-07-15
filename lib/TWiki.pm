@@ -1600,10 +1600,14 @@ sub expandVariablesOnTopicCreation {
     $text =~ s(%((USER|WIKI|WIKIUSER)NAME)%)
       ($this->{SESSION_TAGS}{$1})g;
 
-    # Remove template-only text and variable protection markers.
+    # Remove template-only text and variable protection markers. These
+    # are normally expanded to their content during topic display, but
+    # are filtered out during template topic instantiation. They are typically
+    # used for establishing topic protections over the template topics that
+    # are not inherited by the instantiated topic.
     # See TWiki.TWikiTemplates for details.
-    $text =~ s/%NOP{.*?}%//gos;
-    $text =~ s/%NOP%//go;
+    $text =~ s/%NOP{.*?}%//gs;
+    $text =~ s/%NOP%//g;
     return $text;
 }
 

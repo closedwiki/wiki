@@ -28,6 +28,7 @@ use FileHandle;
 use CGI;
 use Error qw( :try );
 use File::Copy;
+use File::Path;
 use Carp;
 use Cwd;
 
@@ -67,13 +68,22 @@ sub set_up {
         $session->{store}->createWeb($session->{user}, $testWeb);
         $session->{store}->createWeb($session->{user}, $peopleWeb,
                                      $TWiki::cfg{UsersWebName});
+        $TWiki::cfg{UsersWebName} = $peopleWeb;
         $session->{store}->saveTopic($session->{user}, $peopleWeb,
                                      'TWikiAdminGroup',
                                      "   * Set GROUP = TestAdmin\n");
-        $TWiki::cfg{UsersWebName} = $peopleWeb;
+        $session->{store}->saveTopic($session->{user}, $peopleWeb,
+                                     'NewUserTemplate',
+                                     '%NOP{Ignore this}%
+But not this
+%SPLIT%
+MIDDLE
+%SPLIT%
+AFTER');
         my $user = $session->{users}->findUser("TestAdmin", "TestAdmin");
         $session->{store}->createWeb($user, $systemWeb,
                                      $TWiki::cfg{SystemWebName});
+        $TWiki::cfg{SystemWebName} = $systemWeb;
     } catch TWiki::AccessControlException with {
         $this->assert(0,shift->stringify());
     } catch Error::Simple with {
@@ -81,7 +91,6 @@ sub set_up {
     };
 
     $TWiki::cfg{HtpasswdFileName} = "/tmp/htpasswd";
-    $TWiki::cfg{SystemWebName} = $systemWeb;
     $TWiki::cfg{RegistrationApprovals} = '/tmp/RegistrationApprovals';
 
     $Error::Debug = 1;
@@ -93,12 +102,15 @@ sub set_up {
 
 sub tear_down {
     my $this = shift;
-    $this->SUPER::tear_down();
-    # clean up after test
+
     $session->{store}->removeWeb($session->{user},$testWeb);
     $session->{store}->removeWeb($session->{user},$peopleWeb);
     $session->{store}->removeWeb($session->{user},$systemWeb);
+    File::Path::rmtree($TWiki::cfg{RegistrationApprovals});
+    unlink($TWiki::cfg{HtpasswdFileName});
     @mails = ();
+
+    $this->SUPER::tear_down();
 }
 
 # callback used by Net.pm
@@ -137,6 +149,20 @@ sub registerAccount {
     } otherwise {
         $this->assert(0, "expected an oops redirect");
     }
+}
+
+sub test_userTopic {
+    my $this = shift;
+    $this->registerAccount();
+    my( $meta, $text ) = $session->{store}->readTopic(
+        undef, $TWiki::cfg{UsersWebName}, $testUserWikiName);
+    $this->assert($text !~ /%NOP{Ignore this}%/, $text);
+    $this->assert($text =~ s/\t\* First Name: Test\n//,$text);
+    $this->assert($text =~ s/\t\* Email: kakapo\@ground.dwelling.parrot.net\n//,$text);
+    $this->assert($text =~ s/\t\* Comment:\s*\n//,$text);
+    $this->assert($text =~ s/\t\* Last Name: User\n//,$text);
+    $this->assert($text =~ s/\t\* Name: Test User\n//,$text);
+    $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
 #Register a user, and then verify it

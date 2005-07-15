@@ -270,7 +270,7 @@ sub checkAccess {
 
 =pod
 
----++ StaticMethod readTemplateTopic ( $session, $theTopicName  )
+---++ StaticMethod readTemplateTopic( $session, $theTopicName ) -> ( $meta, $text )
 
 Read a topic from the TWiki web, or if that fails from the current
 web.
@@ -281,15 +281,15 @@ sub readTemplateTopic {
     my( $session, $theTopicName ) = @_;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
 
-    $theTopicName =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
-
-    # try to read in current web, if not read from TWiki web
+    $theTopicName =~ s/$TWiki::cfg{NameFilter}//go;
 
     my $web = $TWiki::cfg{SystemWebName};
-    if( $session->{store}->topicExists( $session->{webName}, $theTopicName ) ) {
+    if( $session->{store}->topicExists( $session->{webName}, $theTopicName )) {
+        # try to read from current web, if found
         $web = $session->{webName};
     }
-    return $session->{store}->readTopic( $session->{user}, $web, $theTopicName, undef );
+    return $session->{store}->readTopic(
+        $session->{user}, $web, $theTopicName, undef );
 }
 
 1;
