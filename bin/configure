@@ -1215,6 +1215,9 @@ sub presentReadOnlyInfo {
     require CGI::Carp;
     import CGI::Carp qw( fatalsToBrowser );
 
+    $errors = 0;
+    $warnings = 0;
+
     my $output = '';
     my $block = '';
     for my $key ( sort keys %ENV ) {
@@ -2163,19 +2166,24 @@ HERE
     }
     $options .= CGI::div({ class => 'optionHeader'}, 
         CGI::span({ class => 'twikiLeft' }, 'Settings' . 
-            CGI::span({ class => 'twikiSmall' }, 'Click the buttons below to open each section')).
+            CGI::span({ class => 'twikiSmall' },
+                      'Click the buttons below to open each section')).
             CGI::span({ class => 'twikiSmall twikiRight' },
                 CGI::a({ href => '#',
                          onclick => 'toggleAllOptions(true); return false;'}, 'Open all options')).
             CGI::br({ class => 'twikiBreak'}));
+
     $options .= presentReadOnlyInfo();
+
     $options .= presentEditableInfo();
 
     $body .= CGI::div({class=>'options', id=>'options'}, $options);
     my $totwarningsMess = ($totwarnings > 1) ? ' warnings' : ' warning';
-    $body .= CGI::div('Total: ' . CGI::span({class=>'warn'}, $totwarnings . $totwarningsMess)) if $totwarnings;
+    $body .= CGI::div('Total: '.CGI::span(
+        {class=>'warn'}, $totwarnings . $totwarningsMess)) if $totwarnings;
     my $toterrorsMess = ($toterrors > 1) ? ' errors' : ' error';
-    $body .= CGI::div('Total: ' . CGI::span({class=>'error'}, $toterrors . $toterrorsMess)) if $toterrors;    
+    $body .= CGI::div('Total: ' . CGI::span(
+        {class=>'error'}, $toterrors . $toterrorsMess)) if $toterrors;
 
     if( $update_enabled) {
         $body .= CGI::p(CGI::submit(-class=>'twikiSubmit', -value=>'Next'));
