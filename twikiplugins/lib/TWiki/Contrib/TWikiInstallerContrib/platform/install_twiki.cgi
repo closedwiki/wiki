@@ -17,7 +17,7 @@ use strict;
 #    * compare/contrast with MS-'s installer
 #    * put in package namespace
 #    * install plugin dependencies (ooh, add to twiki form?)
-#		(external dependencies like imagemagick and latex, not other perl modules as those will be handled automatically)
+#		(external dependencies like ImageMagick and LaTeX, although not other perl modules as those will be handled automatically)
 ################################################################################
 # TODO DOCS:
 #    * install web bundles
@@ -344,6 +344,8 @@ __TOPIC__
     $text =~ s|!FILE_path_to_TWiki!/data|$data|g;
     $text =~ s|!URL_path_to_TWiki!/bin/oops|$localDirConfig->{ScriptUrlPath}/oops$localDirConfig->{ScriptSuffix}|g;
     $text =~ s|(<Files ")([^"\*\.]+?)(">)|$1$2$localDirConfig->{ScriptSuffix}$3|g;
+    # authentication for =configure= (for ADMIN)
+    $text =~ s|!ADMIN_users!|$administrator|g if $administrator;
     File::Slurp::write_file( "$bin/.htaccess", $text ) or die "cannot write .htaccess: $!";
 }
 
