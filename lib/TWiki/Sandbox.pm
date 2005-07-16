@@ -309,6 +309,10 @@ sub sysCommand {
 
         throw Error::Simple( "open of pipe failed: $!" ) unless defined $pid;
 
+	if (!-f $path) {
+	  throw Error::Simple "'$path' does not exist"
+	};
+	
         if ( $pid ) {
             # Parent - read data from process filehandle
             my $mem = $/;
