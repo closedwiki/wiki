@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="MartinCleaver" date="1121296496" format="1.1" version="1.1"}%
 
 
 %TOC%
@@ -19,6 +19,14 @@ Each TWiki web has an automatic email alert service that sends a list of recent 
 
 You can also use =%<nop>MAINWEB%= instead of =Main=, but this is not necessary even if you have renamed the main web by configuring ={MainWebName}= in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]].  
 
+---++ Site Statistics
+
+---++ Site Permissions
+
+See SitePermissions for a note on how your site is configured
+
+
+---++ Email
 
 ---+++ Configuring Outgoing Mail
 
@@ -132,6 +140,8 @@ WebIndex lists all web topics in alphabetical order, with the first couple of li
 %<nop>SEARCH{"\.*" scope="topic" regex="on" nosearch="on"}%
 </pre>
 </blockquote>
+
+
 
 
 

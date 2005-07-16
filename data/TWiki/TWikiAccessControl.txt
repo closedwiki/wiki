@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="MartinCleaver" date="1121457406" format="1.1" version="1.2"}%
 
 %TOC%
 %STARTINCLUDE%
@@ -62,6 +62,7 @@ Groups are defined by group topics created in the ==%MAINWEB%== web, like the %M
 			* ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
 		* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of Users and Groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. (This prevents Users not in the Group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
 		* ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
+   1. These are summarised on SitePermissions
 
 #SuperAdminGroup
 ---+++ The <nop>SuperAdminGroup
@@ -198,4 +199,6 @@ When a user accesses a web where you enabled view restriction, <nop>%WIKITOOLNAM
 </style>
 
 %STOPINCLUDE%
+
+
 
