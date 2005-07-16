@@ -269,7 +269,6 @@ sub getRevisionInfo {
                 my $comment = $3;
                 my $date = TWiki::Time::parseTime( $1 );
                 my $rev = $version;
-print STDERR "$this->{file} $1\n";
                 if( $rcsOut =~ /revision 1.([0-9]*)/ ) {
                     $rev = $1;
                     return( $rev, $date, $user, $comment );
