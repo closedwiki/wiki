@@ -66,7 +66,7 @@ hr {
 pre, code, tt {
 	font-size:100%;
 	line-height:1.4em;
-	color:#7A4707;
+	color:#800;
 }
 pre {
 	margin-top:1em;
@@ -146,19 +146,16 @@ th.twikiSortedAscendingCol a:link,
 th.twikiSortedAscendingCol a:visited {
 	border-top:1px solid #999; /*C9*/
 }
-th.twikiSortedAscendingCol a:hover,
 th.twikiSortedAscendingCol a:hover {
 	text-decoration:none;
 	border-top:0;
 	border-bottom:1px dotted #999; /*C9*/
 }
 th.twikiSortedDescendingCol a:link,
-th.twikiSortedDescendingCol a:visited,
-th.twikiSortedDescendingCol a:link,
 th.twikiSortedDescendingCol a:visited {
 	border-bottom:1px solid #999; /*C9*/
+	text-decoration:none;
 }
-th.twikiSortedDescendingCol a:hover,
 th.twikiSortedDescendingCol a:hover {
 	text-decoration:none;
 	border-bottom:0;
@@ -360,6 +357,7 @@ html>body .twikiLeftBar li a {
 	padding:0.5em 2.5em 1.5em 0.5em;
 	font-size:90%;
 	line-height:140%;
+	color:#8490A1;	/*C6*/
 }
 
 /* Topic text */
@@ -377,7 +375,11 @@ html>body .twikiLeftBar li a {
 	padding-bottom:0.25em;
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
 }
-
+.twikiTopic pre,
+.twikiTopic code,
+.twikiTopic tt {
+	color:#7A4707;
+}
 .twikiTopic table {
 	width:auto;
 }
@@ -439,7 +441,7 @@ html>body .twikiLeftBar li a {
 	border-spacing:0px;
 	empty-cells:show;
 	border:0px;
-	font-size:90%;
+	font-size:95%;
 	color:#666;
 	background-color:#fff;
 	border-top:1px solid #ccc;
@@ -543,7 +545,6 @@ html>body .twikiLeftBar li a {
 }
 .twikiAttachments th.twikiSortedAscendingCol a:hover,
 .twikiAttachments th.twikiSortedDescendingCol a:hover {
-	text-decoration:none;
 	background-color:transparent;
 }
 
@@ -559,7 +560,6 @@ create a div based solution instead of tables */
 	line-height:1.5em;
 	color:#ddd;
 	font-weight:normal;
-	background-color:#666;
 }
 .twikiTopicAction .twikiSeparator {
 	color:#ccc;
@@ -852,20 +852,18 @@ html>body .twikiToc li a {
 	border:0px;
 	border:1px solid #ccc;
 	margin-top:1em;
-	font-size:95%;
 }
 .twikiVersatileTable th,
 .twikiVersatileTable td {
 	vertical-align:top;
 	border:0px;
 	border-top:1px solid #ccc;
+	padding:0.2em 0.5em;
 }
 .twikiVersatileTable td {
-	padding:0.2em 0.5em;
 	background-color:#F5F7FD;
 }
 .twikiVersatileTable th {
-	padding:0.5em 0.5em;
 	vertical-align:top;
 	font-weight:bold;
 	background-color:#DFEDFD;
@@ -957,7 +955,6 @@ html>body .twikiToc li a {
 .twikiSmall {
 	font-size:85%;
 }
-.twikiNew { }
 .twikiSummary {
 	font-size:85%;
 	line-height:1.3em;
@@ -1109,7 +1106,6 @@ a:hover .twikiAccessKey {
 .twikiDiffPage .twikiTopicAction {
 	margin:0 0 1.5em 0;
 	padding:0.5em 2em 0.6em 2em;
-	border:none;
 }
 .twikiViewPage .twikiTopicAction .twikiAccessKey {
 	border-color:#fff;
@@ -1150,10 +1146,6 @@ a:hover .twikiAccessKey {
 }
 .twikiEditPage .twikiHelp {
 	margin-top:2em;
-	border-top:1px solid #ccc;
-}
-.twikiEditPage .twikiHelp code {
-	color:#900; /*C5*/
 }
 .twikiEditPage table.twikiChangeFormButtonHolder {
 	margin-bottom:0.5em;
@@ -1266,7 +1258,7 @@ a:hover .twikiAccessKey {
 	width:17em;
 }
 .twikiAttachPage .twikiTopicAction {
-	margin:2em 0 1em 0;
+	margin:0 0 1em 0;
 }
 .twikiAttachPage .twikiHelp {
 	margin:2em 0 3em 0;
@@ -1330,6 +1322,7 @@ a:hover .twikiAccessKey {
 	text-align:right;
 	padding-left:2em;
 }
+.twikiRenamePage .twikiVersatileTable th,
 .twikiRenamePage .twikiVersatileTable td {
 	padding:0.5em 0.5em;
 }
