@@ -73,6 +73,8 @@ sub view {
     my $revdate = '';
     my $revuser = '';
     my $store = $session->{store};
+    # is this view indexable by search engines? Default yes.
+    my $indexableView = 1;
 
     $session->enterContext( 'view' );
 
@@ -112,6 +114,7 @@ sub view {
             ( $text, $meta ) = ( $currText, $currMeta );
         }
     } else { # Topic does not exist yet
+        $indexableView = 0;
         $session->enterContext( 'new_topic' );
         $rev = 1;
         if( TWiki::isValidTopicName( $topicName )) {
@@ -126,6 +129,7 @@ sub view {
     }
 
     if( $raw ) {
+        $indexableView = 0;
         $logEntry .= ' raw='.$raw;
         if( $raw eq 'debug' ) {
             $text = $store->getDebugText( $meta, $text );
@@ -139,18 +143,12 @@ sub view {
     my( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote ) =
       $session->readOnlyMirrorWeb( $webName );
 
-    # is this view indexable by search engines?
-    my $indexableView = 1;
-
     # Note; must enter all contexts before the template is read, as
     # TMPL:P is expanded on the fly in the template reader. :-(
     my( $revTitle, $revArg ) = ( '', '' );
     if( $mirrorSiteName ) {
         $session->enterContext( 'inactive' );
-        if( $topicExists ) {
-            # allow view to be indexed
-            $indexableView = 1;
-        } else {
+        unless( $topicExists ) {
             $text = '';
         }
     } elsif( $rev < $showRev ) {
@@ -158,8 +156,6 @@ sub view {
         # disable edit of previous revisions
         $revTitle = '(r'.$rev.')';
         $revArg = '&rev='.$rev;
-    } else {
-        $indexableView = 1;
     }
 
     my $template = $query->param( 'template' ) ||
@@ -182,9 +178,11 @@ sub view {
     $tmpl =~ s/%REVTITLE%/$revTitle/g;
     $tmpl =~ s/%REVARG%/$revArg/g;
 
-    if( $indexableView && ! keys %{$query->Vars()} ) {
-        # it's an indexable view type and there are no parameters
-        # on the url. Remove the NOINDEX meta tag
+    if( $indexableView &&
+          $TWiki::cfg{AntiSpam}{RobotsAreWelcome} &&
+            !$query->param() ) {
+        # it's an indexable view type, there are no parameters
+        # on the url, and robots are welcome. Remove the NOINDEX meta tag
         $tmpl =~ s/<meta name="robots"[^>]*>//goi;
     }
 

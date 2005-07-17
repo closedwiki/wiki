@@ -718,28 +718,36 @@ sub _externalLink {
     return $pre.CGI::a( { href => $url, target => '_top' }, $url );
 }
 
-sub _mailtoLink {
-    my( $this, $theAccount, $theSubDomain, $theTopDomain ) = @_;
-
-    my $addr = "$theAccount\@$theSubDomain$TWiki::cfg{NoSpamPadding}\.$theTopDomain";
-    return CGI::a( { href=>'mailto:'.$addr }, $addr );
+sub _unprotectedMailLink {
+    my( $this, $addr, $text ) = @_;
+    $text ||= $addr;
+    return CGI::a( { href=>'mailto:'.$addr }, $text );
 }
 
-sub _mailtoLinkFull {
-    my( $this, $theAccount, $theSubDomain, $theTopDomain, $theLinkText ) = @_;
+sub _spamProtectedMailLink {
+    my( $this, $theAccount, $theSubDomain, $theTopDomain, $text ) = @_;
 
-    my $addr = "$theAccount\@$theSubDomain$TWiki::cfg{NoSpamPadding}\.$theTopDomain";
-    return CGI::a( { href=>'mailto:'.$addr }, $theLinkText );
+    my $addr = $theAccount.'@'.$theSubDomain.
+      $TWiki::cfg{AntiSpam}{EmailPadding}.'.'.$theTopDomain;
+
+    return $this->_mailToLinkSimple( $addr, $text );
 }
 
-sub _mailtoLinkSimple {
-    # Does not do any anti-spam padding, because address will not include '@'
-    my( $this, $theMailtoString, $theLinkText ) = @_;    
+# Handle [[mailto:...]]
+sub _handleMailto {
+    my ( $this, $text ) = @_;
+    if ( $text =~ /^([^\s\@]+)\s+(.+)$/ ) {
+        # e.g. mailto:fred
+        return $this->_unprotectedMailLink( $1, $2 );
 
-    if ($theMailtoString =~ s/@//g ) {
-        writeWarning("mailtoLinkSimple called with an '\@' in string - internal TWiki error");
+    } elsif ( $text =~ /^([\w\-\_\.\+]+)\@([\w\-\_\.]+)\.(.+?)(\s+|\]\[)(.*)$/ ) {
+        # [[mailto:... ]] link including '@'
+        # '[[mailto:string display text]]' link
+        return $this->_spamProtectedMailLink( $1, $2, $3, $5 );
+    } else {
+        # format not matched
+        return '::mailto:'.$text.'::';
     }
-    return CGI::a( { href=>'mailto:'.$theMailtoString }, $theLinkText );
 }
 
 =pod
@@ -1169,7 +1177,7 @@ sub getRenderedVersion {
 
     # Normal mailto:foo@example.com ('mailto:' part optional)
     # FIXME: Should be '?' after the 'mailto:'...
-    $text =~ s/$STARTWW(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)$ENDWW/$this->_mailtoLink( $1, $2, $3 )/gem;
+    $text =~ s/$STARTWW(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)$ENDWW/$this->_spamProtectedMailLink( $1, $2, $3 )/gem;
 
     # Handle [[][] and [[]] links
     # Escape rendering: Change ' ![[...' to ' [<nop>[...', for final unrendered ' [[...' output
@@ -1202,21 +1210,6 @@ sub getRenderedVersion {
 
     $plugins->postRenderingHandler( $text );
     return $text;
-}
-
-sub _handleMailto {
-    my ( $this, $text ) = @_;
-    if ( $text =~ /^([^\s\@]+)\s+(.+)$/ ) {
-        return $this->_mailtoLinkSimple( $1, $2 );
-    } elsif ( $text =~ /^([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)(\s+|\]\[)(.*)$/ ) {
-        # Explicit [[mailto:... ]] link including '@', with anti-spam 
-        # padding, so match name@subdom.dom.
-        # '[[mailto:string display text]]' link
-        return $this->_mailtoLinkFull( $1, $2, $3, $5 );
-    } else {
-        # format not matched
-        return '::mailto:'.$text.'::';
-    }
 }
 
 =pod
@@ -1318,7 +1311,7 @@ sub TML2PlainText {
     }
 
     # Format e-mail to add spam padding (HTML tags removed later)
-    $text =~ s/(?<=[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$this->_mailtoLink( $1, $2, $3 )/ge;
+    $text =~ s/(?<=[\s\(])(?:mailto\:)*([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.([a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$this->_spamProtectedMailLink( $1, $2, $3 )/ge;
     $text =~ s/<\!\-\-.*?\-\->//gs;     # remove all HTML comments
     $text =~ s/<[^>]*>//g;              # remove all HTML tags
     $text =~ s/\&[a-z]+;/ /g;           # remove entities

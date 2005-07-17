@@ -191,10 +191,11 @@ sub _foldableBlock {
     my $blockId = $id;
     my $linkId = 'blockLink'.$id;
     my $linkAnchor = $anchor.'link';
-    return '<a name="'.$linkAnchor.'"></a>'.
+    return CGI::a({ name => $linkAnchor }).
            CGI::a( {id => $linkId,
                     class => 'blockLink blockLinkOff',
                     href => '#'.$linkAnchor,
+                    rel => 'nofollow',
                     onclick => 'foldBlock(\'' . $id . '\'); return false;'}, $headText.$mess).
            CGI::div( { id => $blockId,
                        class=> 'foldableBlock foldableBlockClosed' }, $body ).
@@ -576,7 +577,7 @@ sub _CHECKVAR_PubUrlPath {
         return WARN($GUESSED);
     }
     return 'This is not set correctly if the link below is broken:'.CGI::br().
-      '<a href="'.$TWiki::cfg{PubUrlPath}.'">Go to &quot;pub&quot; directory</a>';
+      '<a rel="nofollow" href="'.$TWiki::cfg{PubUrlPath}.'">Go to &quot;pub&quot; directory</a>';
 }
 
 sub _CHECKVAR_PubDir {
@@ -1037,12 +1038,19 @@ sub handleUpdate {
             $output .= CGI::hidden( $param, $query->param( $param ));
             $output .= "\n";
         }
-        
+
         my $changed = calculateChanges();
-        my $itemText = ($changed == 1) ? 'item' : 'items'; 
-           $output .= CGI::div({ class => 'explanation'}, CGI::strong('Changing ' . $changed.' configuration ' . $itemText.'.').
-               (($changed == 0) ? CGI::br() . CGI::a({ href=>$url.'?t='.time() }, 'Return to configuration') : CGI::br() . 'Proceed with the steps below to save your changes.'));
-        
+        my $itemText = ($changed == 1) ? 'item' : 'items';
+        $output .= CGI::div({ class => 'explanation'},
+                            CGI::strong( 'Changing ' . $changed.
+                                           ' configuration ' . $itemText.
+                                             '.').
+                  (($changed == 0) ? CGI::br() .
+                     CGI::a( { href=>$url.'?t='.time(),
+                               rel => 'nofollow' },
+                             'Return to configuration') : CGI::br() .
+               'Proceed with the steps below to save your changes.'));
+
         # and add a few more
         $output .= CGI::h2('Enter your configuration password').
           CGI::p(CGI::strong("Your Password:").CGI::br()).
@@ -1127,7 +1135,9 @@ sub handleUpdate {
     my $itemText = ($changed == 1) ? 'item' : 'items';
     $output .= CGI::hr();
     $output .= CGI::p(CGI::strong($changed.' configuration ' . $itemText . ' changed. '));
-    $output .= CGI::p(CGI::a({ href=>$url.'?t='.time() }, 'Return to configuration'));
+    $output .= CGI::p(CGI::a({ rel => 'nofollow',
+                               href=>$url.'?t='.time() },
+                             'Return to configuration'));
     return $output;
 }
 
@@ -1176,7 +1186,7 @@ sub performSanityChecks {
           CGI::pre($brokenLocalSiteError).
           'The @INC path is '.
           CGI::pre(join(":", @INC)).
-          WARN('This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a href="#" onclick="foldBlock(\'GeneralPathSettings\'); return false;">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.');
+          WARN('This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a rel="nofollow" href="#" onclick="foldBlock(\'GeneralPathSettings\'); return false;">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.');
     }
 
     # Check whether basic CGI modules exist (some broken installations of
@@ -1223,7 +1233,8 @@ sub presentReadOnlyInfo {
     for my $key ( sort keys %ENV ) {
         $block .= _setting($key, $ENV{$key});
     }
-    $output .= _foldableBlock('Environment variables', '(read only) ', $block);
+    $output .= _foldableBlock(CGI::em( 'Environment variables' ),
+                              '(read only) ', $block);
 
     $block = '';
 
@@ -1428,7 +1439,7 @@ HERE
               NOTE(<<HERE
 For a URL such as <strong>$url/foo/bar</strong>,
 the correct PATH_INFO is <strong>/foo/bar</strong>, without any prefixed path
-components. <a href="$url/foo/bar#PATH_INFO">
+components. <a rel="nofollow" href="$url/foo/bar#PATH_INFO">
 <strong>Test this now</strong></a>
 - particularly if you are using mod_perl, Apache or IIS, or are using
 a web hosting provider.
@@ -1539,7 +1550,7 @@ HERE
         }
         $block .= _setting("PERL5SHELL", $n);
     };
-    $output .= _foldableBlock('CGI Setup', '(read only) ', $block);
+    $output .= _foldableBlock(CGI::em( 'CGI Setup' ), '(read only) ', $block);
     return $output;
 };
 
@@ -2096,6 +2107,7 @@ HERE
 my $hdr = CGI::start_html(
     -title => 'TWiki Configuration',
     -head => [
+        CGI::meta( { name=>'robots', content=>'noindex' }),
         CGI::script( { language => 'JavaScript',
                        type => 'text/javascript' }, $js1 ),
         CGI::style( { -type=>'text/css' }, $css),
@@ -2133,11 +2145,11 @@ if( $action eq 'update' ) {
     $body .=  <<HERE;
 <p><strong>Use this page to set the configuration options for TWiki. Fill in the settings, and then press 'Next'.</strong></p>
 <div class="explanation"><div class="specialRemark">If you are installing TWiki for the first time, and you just want to get up and running, the only section you need to worry about below is
-<a href="#" onclick="foldBlock('GeneralPathSettings'); return false;">General path settings</a>. You can always come
+<a rel="nofollow" href="#" onclick="foldBlock('GeneralPathSettings'); return false;">General path settings</a>. You can always come
 back and configure other settings later.</div>
 <ul>
     <li>If your TWiki site is already working, the front page should be
-<a href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>.</li>
+<a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>.</li>
 <li>If you are on a public site, you will need to consider carefully
 how you are going to manage authentication and access control.</li>
 <li>There are a number of documentation topics describing how to
@@ -2169,7 +2181,7 @@ HERE
             CGI::span({ class => 'twikiSmall' },
                       'Click the buttons below to open each section')).
             CGI::span({ class => 'twikiSmall twikiRight' },
-                CGI::a({ href => '#',
+                CGI::a({ href => '#', rel => 'nofollow',
                          onclick => 'toggleAllOptions(true); return false;'}, 'Open all options')).
             CGI::br({ class => 'twikiBreak'}));
 

@@ -128,7 +128,7 @@ sub upgradeConfig {
     print CFG old2new($mailProgram, "/usr/sbin/sendmail -t -oi -oeq",
                       "{MailProgram}" );
     print CFG old2new($noSpamPadding, "",
-                      "{NoSpamPadding}" );
+                      "{AntiSpam}{EmailPadding}" );
     print CFG old2new($mimeTypesFilename, "$dataDir/mime.types",
                       "{MimeTypesFileName}" );
     print CFG old2new($useRcsDir, "0",
