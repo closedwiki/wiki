@@ -13,48 +13,45 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
-# LocalLib.cfg: allows the TWikiAdministrator to over-ride the 
-# setlib.cfg defaults for TWiki and Perl library paths
+# LocalLib.cfg: local path settings for TWiki
 #
 
 use vars qw( $twikiLibPath $CPANBASE );
 
-# -------------- Only needed to work around an Apache 2.0 bug on Unix
-#
-#    If you are running TWiki on Apache 2.0 on Unix you might experience
-#    TWiki scripts hanging forever. This is a known Apache 2.0 bug. A fix is 
-#    available at http://issues.apache.org/bugzilla/show_bug.cgi?id=22030.
-#    It is recommended to patch your Apache installation.
-#
-#    As a workaround, add one of the following two lines to LocalSite.cfg
-#    (without the leading #). As a drawback, errors will not be reported
-#    to the browser via CGI::Carp any more)
-
-# open(STDERR, ">>/dev/null");      # throw away cgi script errors, or
-# open(STDERR, ">>/tmp/error.log"); # redirect errors to a log file of choice
-
 # -------------- Path to lib directory containing TWiki.pm. 
 #
-# The path should be set to an absolute path for maximum efficiency.
-# If you leave it as a relative path it'll still work, but will use
-# Cwd::abs_path() which may be slower.
-# Add the following line to LocalLib.cfg (without the leading #)
+# REQUIRED
+# The absolute path to the 'lib' directory in your installation..
 
-# $twikiLibPath = "/absolute/path/to/your/lib";
+$twikiLibPath = "/absolute/path/to/your/lib";
+
 
 # -------------- Extra path components to include in @INC
-#
+# OPTIONAL
 # If you need to use perl modules that are not installed in the standard
 # directories (e.g. you have downloaded extra modules for use with plugins)
-# then you can add the absolute paths to those modules by adding the following
-# line to LocalLib.cfg (without the leading #). You can list as many
-# directories as you want, separated by commas.
+# then you can add the absolute paths to those modules below. You can list
+# as many directories as you want, separated by commas.
 
-# @localPerlLibPath = ( 'path_to_dir' );
+# @localPerlLibPath = ( '/path/to/dir' );
 
 # http://www.perl.com/pub/a/2002/04/10/mod_perl.html?page=3 has good advice
 # on installing CPAN modules without superuser privileges.
 
 
-1;			    	# Return success for module loading
+# -------------- Only needed to work around an Apache 2.0 bug on Unix
+# OPTIONAL
+# If you are running TWiki on Apache 2.0 on Unix you might experience
+# TWiki scripts hanging forever. This is a known Apache 2.0 bug. A fix is 
+# available at http://issues.apache.org/bugzilla/show_bug.cgi?id=22030.
+# You are recommended to patch your Apache installation.
+#
+# As a workaround, uncomment ONE of the lines below. As a drawback,
+# errors will not be reported to the browser via CGI::Carp any more.
+
+# open(STDERR, ">>/dev/null");      # throw away cgi script errors, or
+# open(STDERR, ">>/tmp/error.log"); # redirect errors to a log file
+
+
+1; # Required for successful module loading
 
