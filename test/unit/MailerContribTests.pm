@@ -291,7 +291,7 @@ sub testSimple {
     # capture stdout
     my @webs = ( 'Mail*' );
     my $report = TWiki::Contrib::Mailer::mailNotify( 0, 0, \@webs );
-    print $report;
+    #print $report;
 
     my @mails = split(/Please tell /, $report);
     my %matched;

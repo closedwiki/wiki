@@ -34,7 +34,7 @@ sub list_tests {
         foreach my $impl qw(  RcsWrap RcsLite ) {
             my $fn = $i;
             $fn =~ s/\W/_/g;
-            my $sfn = 'RcsBasedStoreTests::test_'.$fn.$impl;
+            my $sfn = 'StoreSmokeTests::test_'.$fn.$impl;
             no strict 'refs';
             *$sfn = sub {
                 my $this = shift;

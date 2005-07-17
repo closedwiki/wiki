@@ -13,6 +13,7 @@ use base qw(Test::Unit::TestCase);
 use TWiki;
 use TWiki::Plugins::TestFixturePlugin::HTMLDiffer;
 use strict;
+use Error qw( :try );
 
 BEGIN {
     push( @INC, "$ENV{TWIKI_HOME}/lib" );
@@ -138,6 +139,41 @@ sub assert_html_matches {
     unless( TWiki::Plugins::TestFixturePlugin::HTMLDiffer::html_matches($e, $a)) {
         $this->assert(0, "$filename:$line\n$mess");
     }
+}
+
+# invoke a subroutine while grabbing stdout, so the "http
+# response" doesn't flood the console that you're running the
+# unit test from.
+# $this->capture(\&proc, ...) -> $stdout
+# ... params get passed on to &proc
+sub capture {
+    my $this = shift;
+    my $proc = shift;
+
+    # take copy of the file descriptor
+    open(OLDOUT, ">&STDOUT");
+    open(STDOUT, ">/tmp/cgi");
+
+    my $text = undef;
+    my @params = @_;
+
+    try {
+        &$proc( @params );
+    } finally {
+        close(STDOUT)            or die "Can't close STDOUT: $!";
+        open(STDOUT, ">&OLDOUT") or die "Can't restore stderr: $!";
+        close(OLDOUT)            or die "Can't close OLDOUT: $!";
+    };
+
+    $text = '';
+    open(FH, '/tmp/cgi');
+    while(<FH>) {
+        $text .= $_;
+    }
+    close(FH);
+    unlink('/tmp/cgi');
+
+    return $text;
 }
 
 1;
