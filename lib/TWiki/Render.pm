@@ -1350,7 +1350,9 @@ sub protectPlainText {
     # characters. Only works for ISO-8859-1 sites, since the Unicode
     # encoding (&#nnn;) is identical for first 256 characters. 
     # I18N TODO: Convert to Unicode from any site character set.
-    if( $this->{MODE} eq 'rss' and $TWiki::siteCharset =~ /^iso-?8859-?1$/i ) {
+    if( $this->{MODE} eq 'rss' &&
+          defined( $TWiki::cfg{Site}{CharSet} ) &&
+            $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
         $text =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
     }
 

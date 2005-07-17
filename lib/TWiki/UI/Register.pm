@@ -295,11 +295,11 @@ sub _registerSingleBulkUser {
       $session->{users}->addUserToTWikiUsersTopic( $user,
                                                    $session->{user} );
 
-    if ($TWiki::doEmailUserDetails) {
+    #if ($TWiki::cfg{EmailUserDetails}) {
         # If you want it, write it.
         # _sendEmail($session, 'registernotifybulk', $data );
-        $log .= "$b Password email disabled\n";
-    }
+    #    $log .= "$b Password email disabled\n";
+    #}
     return ($userTopic, $log);
 }
 
