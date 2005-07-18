@@ -475,13 +475,13 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 
 ---+++ Expected
 <!-- expected -->
-<table border="1" cellspacing="1" cellpadding="0">
+<table border="1" cellspacing="0" cellpadding="1">
  <tr>
-  <td class="twikiFirstCol" bgcolor="#FFFFCC">
+  <td>
    <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
  </tr>
  <tr>
-  <td class="twikiFirstCol" bgcolor="#FFFFFF">
+  <td>
    <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
  </tr>
 </table>

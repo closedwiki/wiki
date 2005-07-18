@@ -1065,7 +1065,7 @@ sub getRenderedVersion {
     $text =~ s/}$TWiki::TranslationToken/>/go;
 
     # standard URI
-    $text =~ s/(^|[-*\s(])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_externalLink($1,$2)/geo;
+    $text =~ s/(^|[-*\s(|])($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<|]))/$this->_externalLink($1,$2)/geo;
 
     # other entities
     $text =~ s/&(\w+);/$TWiki::TranslationToken$1;/g;      # "&abc;"
