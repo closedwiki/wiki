@@ -730,7 +730,7 @@ sub _spamProtectedMailLink {
     my $addr = $theAccount.'@'.$theSubDomain.
       $TWiki::cfg{AntiSpam}{EmailPadding}.'.'.$theTopDomain;
 
-    return $this->_mailToLinkSimple( $addr, $text );
+    return $this->_unprotectedMailLink( $addr, $text );
 }
 
 # Handle [[mailto:...]]
