@@ -77,7 +77,7 @@ The script can also be used from the browser. The following CGI parameters are s
 |  Copyright &copy;: | 2004, Wind River Systems |
 |  License: | GPL |
 |  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
-|  4 March 2005 | 1.010 Incorporated in the kernel package for Dakar release. |
+|  4 March 2005 | 1.010 Dakar release ready. |
 |  12 Oct 2004 | 1.004 Added support for anti-subscriptions. Doc fixes from TWiki:Main.PeterThoeny. Bug fixes to permissions code. Back-off and retry if the mailer can't be reached (should really be in Net::sendEmail) |
 |  6 Oct 2004 | 1.003 Excluded _ webs from processing, added =bin/remove_obsolete_locks= for full reverse-compatibility |
 |  1 Oct 2004 | 1.002 Peter<nop>Thoeny provided additional documentation |

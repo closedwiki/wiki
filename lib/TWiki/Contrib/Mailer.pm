@@ -174,7 +174,7 @@ sub _generateEmails {
     my $report = '';
 
     my $skin = $twiki->{prefs}->getPreferencesValue( 'SKIN' );
-    my $template = $twiki->{templates}->readTemplate( 'changes', $skin );
+    my $template = $twiki->{templates}->readTemplate( 'mailchanges', $skin );
     my $from = $twiki->{prefs}->getPreferencesValue('WIKIWEBMASTER');
     my $homeTopic = $TWiki::cfg{HomeTopicName};
 
