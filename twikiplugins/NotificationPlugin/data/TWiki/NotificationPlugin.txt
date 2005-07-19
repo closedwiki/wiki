@@ -1,41 +1,47 @@
-%META:TOPICINFO{author="DiabJerius" date="1102003989" format="1.0" version="1.6"}%
+%META:TOPICINFO{author="tarzan" date="1084271820" format="1.0" version="1.9"}%
 %META:TOPICPARENT{name="TWikiPlugins"}%
 ---+!! <nop>%TOPIC%
 
-This plugin allows you to send fine grained notification of topics you are interested in. It allows you to specify two kinds of notifications - immediate and regular.  Immediate notifications are sent every time somebody changes the requested topic, regular notifications are the same as default TWiki notifications, but allow better settings.
+This plugin allows you to send fine grained notifications of topics you are interested in. It allows you to specify to kinds of notifications - immediate and regular. Immediate notifications are send every time somebody changed the requested topic, regular notifications are the same as default TWiki notifications, but allows better settings.
 
 %TOC%
 
-----++ Notification types
+---++ Syntax Rules
+
+You have to create topic *%Your_user_name%NotifyList* in *Main* web from template NotificationPluginListTemplate. Fill it with desired topics, webs and regexps and enjoy...
+
+---+++ NTF variable
+For adding _fast switching_ to notifications you can use %<nop>NTF{}% variable:
+
+You should add this variable to view.tmpl (you can use view.tmpl bundled in <nop>NotificationPlugin.zip). The buttons are JavaScript-ed so you need to have JavaScript enabled in your browser.
+
+You can use these attributes in %<nop>NTF{}% variable:
+	* popup - if displays button which opens new window with support of changing notifications
+	* tin - it displays button for changing 'Topic immediate notifications'
+	* win - it displays button for changing 'Web immediate notifications'
+	* tn - it displays button for changing 'Topic notifications'
+	* wn - it displays button for changing 'Web notifications'
+
+Default values for all these attributes are "on". You can set it "off" to hide buttons.
+
+---++++ NTF examples
+	* %<nop>NTF{}% - displays all four buttons
+	* %<nop>NTF{win="off" wn="off"}% - displays only buttons for topic immediate notification and regular topic notification
+
+---++ Description of <nop>NotifyList topics
 
 There are two types of notifications - immediate and regular.
 
----+++ Immediate notifications
+---+++ Type of notifications
+
+---++++ Immediate notifications
 This type of notifications is send immediatly after user change watched topic. This type of notification is send also in the case user use 'Don't notify' checkbox. This means that you can see ANY change which is made in selected topics or webs. But, on the other hand, this is also the best way to be spammed with many mails if you set immediate notification on whole webs if topics in this web are often changed. You have to decide when to use this type of notification.
 
----+++ Regular notifications
+---++++ Regular notifications
 This type of notifications is the default TWiki notification system. The problem with this type of notifications is when somebody use "Don't notify" option because notification is not send (what is logical :-)). But sometimes you want to know about every change in your topic and then the immediate notifications come into play...
 
----++ Notification Requests
-
-%RED% _Note:_ %ENDCOLOR% Replace the __<nop>WikiName__ in the following topics with your <nop>WikiName.  Right now it looks like you are %MAINWEB%.%WIKINAME%, so for example the %MAINWEB%.<nop>WikiNameNotifyList should be %MAINWEB%.%WIKINAME%NotifyList. 
-
-To use this plugin, place your notification requests in the %MAINWEB%.<nop>WikiNameNotifyList topic. 
-
-
-There are two ways to create this topic:
-
-	1. Make a copy of %MAINWEB%.NotificationPluginListTemplate 
-	2. Embed the %<nop>NTF{}% Variable in your %MAINWEB%.<nop>WikiNameLeftBar.  This will cause the plugin to create the topic the next time the <nop>LeftBar topic is used.
-
-The %MAINWEB%.<nop>WikiNameNotifyList topic contains lists of Webs and Topics which you would like to be notified about if they change. 
-You can request Topics and Webs by name, and with Perl regular expressions.
-
-Those lists can either be entered by hand, or you can use the %<nop>NTF{}% variable in your %MAINWEB%.<nop>WikiNameLeftBar topic to provide an easy method of adding topics and webs on the fly. (See [[#AnchorNTF][Using the NTF Variable]] )
-
----+++ Notification Request Syntax
-
-Place the Topics, Webs, and Regular expressions in bullet TWiki lists.
+---+++ Subtypes
+The syntax of setting a notification is with bullet TWiki list.
 
 *Example:*
 If you put following line in "Topic immediate notifications" section when anybody change this topic you will get notification about the change:
@@ -44,93 +50,6 @@ If you want to set immediate notifications on web _TWiki_ add this line under "W
 	* TWiki
 If you want to set immediate notifications on all topics in web Test and topics which contains string 'Design' in the name add following line in "Regex immediate notifications":
 	* Test\..*Design
-
-
----+++ Email Format
-#EmailFormat
-
-The notification email may be sent in one of several _styles_ and output _formats_.  A _style_ indicates the organization of the notification.  There are currently three styles:
-
-	* =single= : a single email is sent which groups changed topics by web
-	* =multi=  : separate emails are sent for each web.  This is the same behavior as WebNotify.
-	* =srg=	 : A single email is sent which groups changed topics by the type of request (topic, web, or regular expression) (=srg= stands for Single Request Grouping)
-
-The _format_ is either =html= or =text=.
-
-To specify your choice, set the __NOTIFICATIONFORMAT__ preference variable in your home topic (%WIKIUSERNAME%). It's value should be
-=style-format=. For example,
-
-	* Change Notification Style
-		* Set NOTIFICATIONFORMAT = single-html
-
-
----+++ Using the NTF variable
-#AnchorNTF
-
-To add _fast switching_ of notification state for topics and webs, you can use the %<nop>NTF{}% variable.  This creates a set of "buttons" which may be used to toggle notification states for the current web or topic.
-
-It is easiest to use this variable in your %MAINWEB%.<nop>WikiNameLeftBar topic. Depending upon the rendering style, the buttons are JavaScript-ed so you may need to have JavaScript enabled in your browser.
-
-You can use these attributes in the %<nop>NTF{}% variable to control the buttons' appearance:
-
-| *Attribute* | *Default* | *Description* |
-| popup | on | if on, displays button which opens new window with support of changing notifications |
-| tin | on | if on, displays button for changing 'Topic immediate notifications' |
-| win | on | if on,  displays button for changing 'Web immediate notifications' |
-| tn | on | if on, displays button for changing 'Topic notifications' |
-| wn | on | if on, displays button for changing 'Web notifications' |
-| style | buttons | this determines how the buttons are displayed; see below |
-| buttonsep | nbsp | the value to separate actual buttons by (if __style__ = buttons) |
-| labelstyle | default | how the descriptive text should be displayed: either "short" or "default" |
-| value | text | how the values should be displayed: either "text" or "icon" |
-| border | 1 | the value for the HTML table border attribute |
-| cellspacing | 0 | the value for the HTML table cellspacing attribute |
-| cellpadding | 1 | the value for the HTML table cellpadding attribute |
-| align		 | center | the value for the HTML table align attribute |
-
-The possible values for the __style__ attribute are:
-
-| *Value* | *Description* |
-| buttons | display actual buttons |
-| twikitable | display in a TWiki table |
-| twikitable2 | a more compact TWiki table |
-| table | display in a straight HTML table |
-| compacttable | a more compact HTML table |
-| compacttable2 | an even more compact HTML table |
-| wide | a wide HTML table |
-
----++++ NTF examples
-	* %<nop>NTF{}% - displays all four buttons
-	* %<nop>NTF{win="off" wn="off"}% - displays only buttons for topic immediate notification and regular topic notification 
-
-	* %<nop>NTF{style="buttons"}%
-	%NTF{style="buttons"}%
-	* %<nop>NTF{style="buttons" buttonsep=" | "}%
-	%NTF{style="buttons" buttonsep=" | "}%
-	* %<nop>NTF{style="twikitable" labelstyle="short"}%
-	%NTF{style="twikitable" labelstyle="short"}%
-	* %<nop>NTF{style="twikitable2" labelstyle="short"}%
-	%NTF{style="twikitable2" labelstyle="short"}%
-	* %<nop>NTF{style="table"}%
-	%NTF{style="table"}%
-	* %<nop>NTF{style="table"  labelstyle="short"}%
-	%NTF{style="table"  labelstyle="short"}%
-	* %<nop>NTF{style="wide" labelstyle="short"}%
-	%NTF{style="wide" labelstyle="short"}%
-	* %<nop>NTF{style="wide" labelstyle="short" value="icon"}%
-	%NTF{style="wide" labelstyle="short" value="icon"}%
-	* %<nop>NTF{style="compacttable" labelstyle="short" align="center" value="icon"}%
-	%NTF{style="compacttable" labelstyle="short" align="center" value="icon"}%
-	* %<nop>NTF{style="compacttable2" labelstyle="short" align="center" value="icon"}%
-	%NTF{style="compacttable2" labelstyle="short" align="center" value="icon"}%
-
-
-
----++ <nop>%TOPIC% User Settings
-
-The following variables may be specified in the user's Home Topic (e.g. %MAINWEB%.%WIKINAME% )
-
-	* __NOTIFICATIONFORMAT__ - this sets the Notification format. See [[#EmailFormat][Email Format]] for more details.  It defaults to =single-text=.
 
 ---++ <nop>%TOPIC% Global Settings
 
@@ -144,12 +63,6 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 	* Custom settings:
 		* Set SENDER = Systinet TWiki <tarzan@systinet.com>
-
-		* The default style of output when using %<nop>NTF{}%
-		* Set NTFSTYLE = buttons
-
-		* The default separation between buttons when using the _buttons_ style.
-		* Set BUTTONSEP = &nbsp;
 
 ---++ TODO
 
@@ -169,14 +82,6 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==bin/changenotify== | Perl script for changing notifications using NTF variable |
 	  | ==templates/htmlchanges.tmpl== | Template for generating HTML mails with notifications |
 	  | ==templates/view.NP.tmpl== | Template with example of using NTF variable |
-
----+++ Normal Notifications
-
-Normal (i.e. not immediate) notifications require that the =mailnotify-NP= program be run periodically (usually via =cron=). Note that =mailnotify-NP= will also handle notifications requested via WebNotify, so you do __not__ need to run =mailnotify= in addition to =mailntoify-NP=.
-
----+++ Change List Rendering
-
-NotificationPlugin uses external template files to render the change lists and create the output email.  Change list templates have the names =changes-style-format.tmpl=, where _style_ and _format_ are described in [[#EmailFormat][Email Format]]  Email templates have the names =mailnotify-style-fromat.tmpl=.  As a special case, =changes.tmpl= (the default WebNotify template) is used instead of =changes-multi-html.tmpl=, as they describe the same output.
 
 ---++ Plugin History
 	* Version 1.03
@@ -201,15 +106,6 @@ NotificationPlugin uses external template files to render the change lists and c
 		* added popup support for changing notifications (thanx Main.KenGoldenberg :-)
 		* _mailnotify_ script renamed to _mailnotify-NP_
 			* you should create new cron job for regular notifications of NotificationPlugin
-	* Version 2.0 (Main.DiabJerius)
-		* Major overhaul of the code base.
-		* works with TWiki-20040902
-		* fixed javascript bug with Gecko based browsers
-		* =mailnotify-NP= now handles WebNotify requests
-		* users can specify email style and format
-		* users can specify format of NTF buttons
-		* incorporated formatTime patch (Main.MartinCleaver)
-		* incorporated regex security fixes (Main.JChristophFuchs)
 
 ---++ Plugin Info
 
@@ -225,7 +121,6 @@ NotificationPlugin uses external template files to render the change lists and c
 |  28 Apr 2004: | Version 1.12 - bugfix |
 |  29 Apr 2004: | Version 1.13 - mailnotify script bugfix |
 |  11 May 2004: | Version 1.14 - popup support for changing notifications |
-|	2 Dec 2004: | Version 2.0  - major overhaul; see notes |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
 |  Perl Version: | 5.005 |
