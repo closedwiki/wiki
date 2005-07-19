@@ -1,0 +1,6 @@
+%META:TOPICINFO{author="WillNorris" date="1067067060" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TWiki.PageStatsPlugin"}%
+%PAGESTATS{ max="5" }%
+
+%PAGESTATS{ web="%INCLUDINGWEB%" topic="%INCLUDINGTOPIC%" }%
+
