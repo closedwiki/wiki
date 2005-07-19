@@ -1,0 +1,75 @@
+%META:TOPICINFO{author="MichaelDaum" date="1110961620" format="1.0" version="1.10"}%
+---+!! <nop>VotePlugin
+
+This plugin might be used to establish an online-voting system. Votes are
+collected in a separate file ... basically inspired by the TWiki:Plugins/PollPlugin.
+
+---++ Example
+%VOTE{id="FavoritMeal" style="bar" select1="Drink" options1="Beer,Wine,Milk,Water" select2="Food" options2="Steak,Bread,Pasta,Pizza"}%
+
+<style type="text/css">
+.Vote {
+  margin-left:20px;
+}
+.VoteSelect {
+  margin-bottom:10px;
+}
+.VoteResult {
+}
+</style>
+
+---++ Syntax Rules
+
+The %<nop>VOTE{ ... }% macro defines a poll using the following options:
+| *name* | *description* | *example* |
+| id | The identifier of a poll. This must be unique per topic. \
+		 You can thus have multiple independent votes on the same topic page. | <nop>FaroritMeal |
+| style | Possible values are =bar=, =perc= and =total= (default =bar=) \
+		 to specify the display style of the poll results. | =bar= |
+| select&lt;n&gt; | As you can see in the above example multiple decisions can be made within \
+		 the same poll. This identifier must be unique within a poll. \
+		 You can have up to 5 selects per vote (sorry hardcoded;)) | Drinks |
+| options&lt;n&gt; | Each select&lt;n&gt; corresponds to set of options that \
+		 you must specify. | Beer,Wine,Milk |
+
+The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll results.
+The plugin will count only you latest vote. You might only vote once a day.
+
+---++ Plugin Settings
+
+	* Set SHORTDESCRIPTION = Simple way to count votes
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==bin/vote== | Plugin cgi script |
+	  | ==data/TWiki/VotePlugin.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/VotePlugin.pm== | Plugin Perl module |
+
+%X% This plugin has already been written using the security API from TWiki:Codev/UncoordinatedSecurityAlert23Feb2005, i.e. the proposed patches from http://www.enyo.de/fw/security/notes/twiki-robustness.html. 
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Plugin Version: | 2005-3-16 |
+|  Change History: | &nbsp; | 
+| &nbsp; | 2005-03-14: incorporated =getLocaldate()= function |
+| &nbsp; | 2005-03-16: use Cache API only if its there; delayed =use &lt;package&gt;= | 
+|  07 Mar 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | security patches from TWiki:Codev/UncoordinatedSecurityAlert23Feb2005 |
+|  Perl Version: | >=5.6.1 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://nats-www.informatik.uni-hamburg.de/TWiki/VotePlugin |
+|  Feedback: | http://nats-www.informatik.uni-hamburg.de/TWiki/VotePluginDev |
+|  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
+
+__Related Topics:__ TWiki:Plugins/VotePlugin
+
+%META:FILEATTACHMENT{name="VotePlugin.zip" attr="" comment="" date="1110962440" path="VotePlugin.zip" size="7001" user="MichaelDaum" version="1.4"}%
