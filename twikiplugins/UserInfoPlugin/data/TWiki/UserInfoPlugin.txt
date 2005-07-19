@@ -1,0 +1,101 @@
+%META:TOPICINFO{author="AdminUser" date="1114619722" format="1.0" version="1.1"}%
+---+ <nop>UserInfoPlugin
+
+This plugin analyses the log files of your twiki-engine and extracts usefull
+information to be displayed on your site. %BR%
+Warning: please respect the privacy of your users and don't display too much information.
+
+---++ Syntax Rules 
+| *Tag* | *Description* |
+| %<nop>VISITORS{format="..." max="..." sep="..."}% | list of users currently logged in %BR% \
+  defaults: format="\t* $wikiusername" sep="$n" max="unlimited" |
+| %<nop>NRVISITORS% | number of users currently online |
+| %<nop>LASTVISITORS{format="..." max="..." sep="..." days="..."}% | list of users that recently visited the site %BR% \
+  defaults: format="\t* $date: $wikiusername" sep="$n" max="unlimited" days="1" |
+| %<nop>NRLASTVISITORS{days="..."}% | list of users that recently visited the site %BR% \
+  defaults: days="1" |
+| %<nop>NRUSERS% | number of registered users |
+| %<nop>NRGUESTS% | number of guest users currently online |
+| %<nop>NEWUSERS{format="..." max="..." sep="..."}% | list of users that recently registerd %BR% \
+  defaults: format="\t* date: $wikiusername" sep="$n" max="10" |
+
+The format parameter might containt the following variables:
+
+| *Variable* | *Description* | *Valid in* |
+| =$counter= | enumeration | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$wikiname= | wikiname of the visitor | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$username= | username of the visitor | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$wikiusername= | wikiusername of the visitor | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$date= | date of last visit/registration | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$time= | time of last visit | %<nop>VISITORS%, %<nop>LASTVISITORS% |
+| =$host= | host of visitor | %<nop>VISITORS%, %<nop>LASTVISITORS% |
+| =$topic= | topic that a visitor viewed last | %<nop>VISITORS%, %<nop>LASTVISITORS% |
+| =$n= | newline | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$quot= | double-quote sign | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$percnt= | percentage sign | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+| =$dollar= | dollar sign | %<nop>VISITORS%, %<nop>LASTVISITORS%, %<nop>NEWUSERS% |
+
+---++ Demo
+Here's a [[http://nats-www.informatik.uni-hamburg.de/User/WebHome][demo]] for rendering
+user stats.
+
+---++ Plugin Settings
+
+	* Set SHORTDESCRIPTION = Render information about users on your <nop>TWikiSite
+
+	* add a list of host addresses to ignore users comming from them
+		* Set IGNORE_HOSTS = 
+
+---++ Plugin Installation Instructions
+
+This plugin has been tested on TWiki/Beijing and TWiki/Dakar. It is compatible
+with older and newer versions of the TWiki:Plugins/SessionPlugin (old means versions < 2.0).
+	
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+
+If the plugin is installed correctly then you should get valid output for the tags below:%BR%
+
+<blockquote>
+<table border="0" width="80%" cellspacing="5px"><tr>
+<td valign="top">
+%NRVISITORS% of %NRUSERS% registered user(s), %NRGUESTS% guest(s) currently online: %BR%
+%VISITORS% %BR%
+</td>
+<td valign="top" rowspan="2">
+%NRLASTVISITORS{days="1"}% visitor(s) today (%SERVERTIME{"$day $month $year"}%): %BR%
+%LASTVISITORS{days="1" format="	* $wikiusername"}%
+</td>
+<tr>
+<td valign="top">
+Recently registered users: %BR%
+%NEWUSERS{max="20"}%
+</td>
+</tr></table>
+</blockquote>
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Plugin Version: | 27 Apr 2005 (V1.1) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 Apr 2005: | fixed getting guests + some minor glitches | 
+|  12 Apr 2005: | initial release |
+|  &nbsp; | fixed =sep= handling, fixed =$host= parsing |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | Date::Parse |
+|  Other Dependencies: | SessionPlugin |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+
+-- TWiki:Main/MichaelDaum - 07 Apr 2005
