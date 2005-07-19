@@ -640,4 +640,21 @@ Return HTML text that renders this field. If false, form rendering continues by 
 sub DISABLE_renderFormFieldForEditHandler {
 }
 
+
+=pod
+
+
+---++ restExample($session) -> $text
+
+This is an example of a sub to be called by the =rest= script. The parameter is:
+   * =$session= - The TWiki object associated to this session.
+
+Additional parameters can be recovered via de query object in the $session.
+
+=cut
+
+sub restExample {
+   return "This is an example of a REST invocation";
+}
+
 1;
