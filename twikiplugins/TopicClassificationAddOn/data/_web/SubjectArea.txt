@@ -1,0 +1,38 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1097706222" format="1.0" version="1.4"}%
+%META:TOPICPARENT{name="WebHome"}%
+---++ %TOPIC% Table for use in WebForm
+
+This table is used to classify a topic in %WIKITOOLNAME%.%WEB% using the drop-down menu in WebForm. 
+| *Name* | *Type* | *Tooltip message* |
+| no subject | option | |
+ 
+Here is a list of all the %TOPIC%s available in the %WEB% web: %SEARCH{"[T]opicType.*value\=.*%TOPIC%" casesensitive="on" regex="on" nosearch="on" format="$topic, "}%
+Unfortunately, at present, new %TOPIC% topics must be added manually to the table above to be listed in WebForm.
+
+---++ Create a new %TOPIC% Topic
+
+To create a new %TOPIC% topic, go [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic?template=%TOPIC%][here]].
+
+<!-- Hidden include for CreateNewTopic
+%STARTINCLUDE%
+Optional: Provide *short TopicHeadline* for new topic: <br />
+<input type="text" name="TopicHeadline" size="40" />
+<input type="hidden" name="templatetopic" value="%TOPIC%Template" />
+<input type="hidden" name="TopicType" value="%TOPIC%" />
+<input type="hidden" name="topicparent" value="%TOPIC%" />
+%STOPINCLUDE%
+-->
+New %TOPIC% topics will use the %TOPIC%Template if there is one defined. 
+
+__Back to__ TopicType
+
+<!--
+		* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicType" title="TopicType" value="TopicType"}%
+%META:FIELD{name="SubjectArea" title="SubjectArea" value=""}%
+%META:FIELD{name="TopicHeadline" title="TopicHeadline" value="For grouping topics by subject"}%
+%META:TOPICMOVED{by="LynnwoodBrown" date="1086627472" from="Lynnwood.SubjectArea" to="Lynnwood.SubjectArea"}%

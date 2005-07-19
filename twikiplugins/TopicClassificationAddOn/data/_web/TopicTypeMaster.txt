@@ -1,0 +1,15 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1097549631" format="1.0" version="1.1"}%
+---++	Index for %INCLUDINGTOPIC%s
+
+<form name="selectSubject" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/" >
+*Filter by SubjectArea:* <select name="subject" size="1" onchange="document.location=this.value;"> <option value='#'><Nop>Select...</option><option value=''>All</option> %SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option value=%INCLUDINGTOPIC%?subject=$topic>$topic</option>"}% </select> __To create a new %INCLUDINGTOPIC% topic, go [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/CreateNewTopic?template=%INCLUDINGTOPIC%][here]].__ 
+</form>
+
+%SEARCH{ "[T]opicType.*value\=.*%INCLUDINGTOPIC%;[S]ubjectArea.*value\=.*%URLPARAM{subject}%" casesensitive="on" regex="on" nosearch="on"}%
+
+<form name="browseTypes" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/" >
+*View other TopicTypes:* <select name="TopicTypes" size="1" onchange="document.location=this.value;"> <option value='#'><Nop>Select...</option>%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}% </select>
+</form>
+
+__For more information on content organization within the %WEB% web, see TopicClassification.__
+

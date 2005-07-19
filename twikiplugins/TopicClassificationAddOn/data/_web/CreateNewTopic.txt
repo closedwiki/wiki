@@ -1,0 +1,36 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1097637706" format="1.0" version="1.3"}%
+---+ Create A New Topic
+
+---++ Step 1: Select Topic Template
+*Select what kind of topic you would like to create (or skip to create a blank topic).*
+%STARTINCLUDE%
+<form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%TOPIC%">
+*Create new:* <select name="template" onchange="this.form.submit()">
+  <option selected="%URLPARAM{"template"}%">%URLPARAM{"template"}%</option>
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}%</select>
+</form>
+%STOPINCLUDE%
+---++ Step 2: Enter %URLPARAM{"template"}% Topic Information
+
+<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%BASEWEB%/">
+*Enter a new topic name:* 
+<input type="text" name="topic" size=32 style="background-color: #E3F0FF ;" /> _Use a TWiki.WikiWord._ <br />
+_If the topic exists already, you will be lead to its edit page._ __See pre-existing %URLPARAM{"template"}% topics below__. <br />
+_%RED%If the topic exists already, content entered below will over-write pre-existing parallel content._ %ENDCOLOR%
+<input type="hidden" name="onlywikiname" value="on" />
+<p />
+%INCLUDE{%URLPARAM{"template"}%}%<p />
+<p /> 
+---++ Step 3: Create Topic
+Click:
+<p /> <input type="submit" value=" &nbsp;Create topic&nbsp; ">
+</form>
+
+---
+
+#ExistingTopics
+_[[#PageTop][Back to form]]_ <br>
+---+++ List of Existing %URLPARAM{"template"}% Topics  
+
+%SEARCH{"[T]opicType.*value\=.*%URLPARAM{"template"}%" regex="on" casesensitive="on" nosearch="on" format="	* $topic - $formfield(TopicHeadline)<br>"}%
+

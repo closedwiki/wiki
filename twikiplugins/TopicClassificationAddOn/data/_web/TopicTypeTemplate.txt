@@ -1,0 +1,24 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1097553367" format="1.0" version="1.1"}%
+%INCLUDE{TopicTypeMaster}%
+
+<!-- Hidden include for CreateNewTopic
+%STARTINCLUDE%
+Optional: Provide *short TopicHeadline* for new topic: <br />
+<input type="text" name="TopicHeadline" size="40" />
+<input type="hidden" name="templatetopic" value="%TOPIC%Template" />
+<input type="hidden" name="TopicType" value="%TOPIC%" />
+<input type="hidden" name="topicparent" value="%TOPIC%" />
+%STOPINCLUDE%
+-->
+New %TOPIC% topics will use the %TOPIC%Template if there is one defined. 
+
+Do not edit this page. Topics that have TopicType set to %TOPIC% will be listed here automatically.
+
+	* *Topic Permissions:*
+		* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicType" title="TopicType" value="Select..."}%
+%META:FIELD{name="SubjectArea" title="SubjectArea" value=""}%
+%META:FIELD{name="TopicHeadline" title="TopicHeadline" value=""}%
