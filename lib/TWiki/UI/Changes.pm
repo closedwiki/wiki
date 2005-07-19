@@ -34,6 +34,7 @@ use TWiki::Store;
 use TWiki::UI;
 use TWiki::Merge;
 use TWiki::Time;
+use Assert;
 
 # Command handler for changes command
 sub changes {
@@ -99,10 +100,8 @@ sub changes {
         # write log entry
         $session->writeLog( 'changes', $webName, '' );
     }
-
     $page .= $after;
-    # remove META tags rather than rendering them
-    $page =~ s/\%META{.*?}\%//go;
+
     $page = $session->handleCommonTags( $page, $webName, $topic );
     $page = $session->{renderer}->getRenderedVersion($page, $webName, $topic );
 

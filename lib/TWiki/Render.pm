@@ -1304,7 +1304,7 @@ sub TML2PlainText {
         $text =~ s/%TOPIC%/$topic/g;
         $text =~ s/%(WIKITOOLNAME)%/$this->{session}->{SESSION_TAGS}{$1}/g;
         if( $opts =~ /showvar/ ) {
-            $text =~ s/%(\w+({.*?}))%/\%$1/g; # defuse
+            $text =~ s/%(\w+({.*?}))%/$1/g; # defuse
         } else {
             $text =~ s/%$TWiki::regex{tagNameRegex}({.*?})?%//g;  # remove
         }
@@ -1360,7 +1360,7 @@ sub protectPlainText {
     # tip text by escaping links (external, internal, Interwiki)
     $text =~ s/(?<=[\s\(])((($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex}))/<nop>$1/g;
     $text =~ s/(?<=[\-\*\s])($TWiki::regex{linkProtocolPattern}\:)/<nop>$1/go;
-    $text =~ s/([@%])/@<nop>$1/g;    # email address, variable
+    $text =~ s/([@%])/<nop>$1<nop>/g;    # email address, variable
 
     return $text;
 }
@@ -1627,16 +1627,19 @@ sub summariseChanges {
     my $summary = '';
     my $store = $this->{session}->{store};
 
-    my( $nmeta, $ntext ) =
-      $store->readTopic( $user, $web, $topic, $nrev );
+    my( $nmeta, $ntext ) = $store->readTopic( $user, $web, $topic, $nrev );
 
     if( $nrev > 1 && $orev ne $nrev ) {
+        my $metaPick = qr/^[A-Z](?!OPICINFO)/; # all except TOPICINFO
         # there was a prior version. Diff it.
-        $ntext = $this->TML2PlainText( $ntext, $web, $topic, 'nonop' );
+        $ntext = $this->TML2PlainText(
+            $ntext, $web, $topic, 'nonop' )."\n".
+              $nmeta->stringify( $metaPick );
 
-        my( $ometa, $otext ) =
-          $store->readTopic( $user, $web, $topic, $orev );
-        $otext = $this->TML2PlainText( $otext, $web, $topic, 'nonop' );
+        my( $ometa, $otext ) = $store->readTopic( $user, $web, $topic, $orev );
+        $otext = $this->TML2PlainText(
+            $otext, $web, $topic, 'nonop' )."\n".
+              $ometa->stringify( $metaPick );
 
         my $blocks = TWiki::Merge::simpleMerge( $otext, $ntext, qr/[\r\n]+/ );
         # sort through, keeping one line of context either side of a change

@@ -42,7 +42,6 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
     # a browser environment?
     use CGI;
     $query = new CGI;
-    $sendmail = $query->param( 'sendmail' ) || 0;
     $verbose = $query->param( 'verbose' ) || 1;
     my $webz = $query->param( 'webs' ) || "";
     @webs = split( /[, ]+/, $webz);
@@ -51,9 +50,7 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
 } else {
     # Called from the command line
     foreach $arg ( @ARGV ) {
-        if( $arg eq "-d" ) {
-            $sendmail = 0;
-        } elsif ( $arg eq "-q" ) {
+        if ( $arg eq "-q" ) {
             $verbose = 0;
         } else {
             push( @webs, $arg );
@@ -62,4 +59,4 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
 }
 
 use TWiki::Contrib::Mailer;
-print TWiki::Contrib::Mailer::mailNotify( $sendmail, $verbose, \@webs );
+TWiki::Contrib::Mailer::mailNotify( \@webs, undef, $verbose );

@@ -56,9 +56,8 @@ This Contrib is pre-installed as part of the TWiki release package, and should o
 ---+ Setting up your cron job
 You need to set up a =cron= (or equivalent) job to run =bin/mailnotify=.
 
-<code>Usage: bin/mailnotify [-q] [-d] [ <i>web1 web2 ... webN</i> ]</code>
+<code>Usage: bin/mailnotify [-q] [ <i>web1 web2 ... webN</i> ]</code>
 | =-q= | Don't print progress information |
-| =-d= | Don't send mail. Print out plain text of mails that would be sent to STDOUT instead. |
 | <code><i>web1 web2 ... webN</i></code> | List of webs to process, separated by spaces or commas. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
 
 The script can also be used from the browser. The following CGI parameters are supported:

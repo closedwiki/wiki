@@ -34,16 +34,16 @@ Also supported is a simple API that can be used to change the Web<nop>Notify top
 
 package TWiki::Contrib::Mailer;
 
-use vars qw ( $VERSION $sendmail $verbose );
+use vars qw ( $VERSION $verbose );
 
 $VERSION = 1.010;
 
 =pod
 
----++ StaticMethod mailNotify($sendmail, $verbose, $webs)
-   * =$sendmail= - If true, will send mails. If false, will print to STDOUT
-   * =$verbose= - true to get verbose (debug) output
+---++ StaticMethod mailNotify($webs, $session, $verbose)
    * =$webs= - filter list of names webs to process. Wildcards (*) may be used.
+   * =$session= - optional session object. If not given, will use a local object.
+   * =$verbose= - true to get verbose (debug) output
 
 Main entry point.
 
@@ -55,8 +55,8 @@ only be called by =mailnotify= scripts.
 
 sub mailNotify {
     my $webs;
-
-    ( $sendmail, $verbose, $webs ) = @_;
+    my $twiki;
+    ( $webs, $twiki, $verbose ) = @_;
 
     my $webstr;
     if ( defined( $webs )) {
@@ -65,8 +65,7 @@ sub mailNotify {
     $webstr = '*' unless ( $webstr );
     $webstr =~ s/\*/\.\*/g;
 
-    my $twiki =
-      new TWiki( $TWiki::cfg{DefaultUserLogin} );
+    $twiki ||= new TWiki( $TWiki::cfg{DefaultUserLogin} );
 
     my $report = '';
     foreach my $web ( grep( /$webstr/o,
@@ -94,8 +93,8 @@ sub _processWeb {
         print "\t$web has no subscribers\n" if $verbose;
     } else {
         # create a DB object for parent pointers
+        print $wn->stringify() if $verbose;
         my $db = new TWiki::Contrib::MailerContrib::UpData( $twiki, $web );
-
         $report .= _processChanges( $twiki, $web, $wn, $db );
     }
     return $report;
@@ -161,10 +160,8 @@ sub _processChanges {
                                   \%changeset,
                                   TWiki::Time::formatTime($timeOfLastNotify) );
 
-    # Only update the memory topic if mails were sent
-    if ( $sendmail ) {
-        $twiki->{store}->saveMetaData( $web, 'mailnotify', $timeOfLastChange );
-    }
+    $twiki->{store}->saveMetaData( $web, 'mailnotify', $timeOfLastChange );
+
     return $report;
 }
 
@@ -231,13 +228,7 @@ sub _generateEmails {
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        my $error = '';
-        if ( $sendmail ) {
-            $error = $twiki->{net}->sendEmail( $mail, 5 );
-        } else {
-            $report .= "Please tell $email about the following changes:\n";
-            $report .= $plain;
-        }
+        my $error = $twiki->{net}->sendEmail( $mail, 5 );
         $sentMails++ unless $error;
     }
     $report .= "\t$sentMails change notifications\n";

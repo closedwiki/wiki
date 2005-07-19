@@ -162,9 +162,4 @@ sub expandPlain {
     return $expansion;
 }
 
-sub _summarise {
-    my( $this, $tml ) = @_;
-
-}
-
 1;

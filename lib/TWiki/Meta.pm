@@ -426,16 +426,18 @@ sub merge {
 
 =pod
 
----++ ObjectMethod stringify() -> $string
-Mainly for debugging, this method will return a string version
-of the meta object. Uses \n to separate lines.
+---++ ObjectMethod stringify( $types ) -> $string
+Return a string version of the meta object. Uses \n to separate lines.
+If $types is specified, return only types specified by that RE.
 
 =cut
 
 sub stringify {
-    my $this = shift;
+    my( $this, $types ) = @_;
     my $s = '';
-    foreach my $type ( grep { /^[A-Z]+$/ } keys %$this ) {
+    $types ||= qr/^[A-Z]+$/;
+
+    foreach my $type ( grep { /$types/ } keys %$this ) {
         foreach my $item ( @{$this->{$type}} ) {
             $s .= "$type: " .
               join(' ', map{ "$_='$item->{$_}'" } sort keys %$item ) .
