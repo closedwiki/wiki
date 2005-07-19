@@ -1,0 +1,33 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}%(history) %TMPL:END%
+%TMPL:DEF{"webaction"}% *Topic actions* %TMPL:END%
+%TMPL:DEF{"heading"}%History of [[%TOPIC%]]%TMPL:END%
+%TMPL:DEF{"message"}%
+*(1.%HISTORY_REV1% - 1.%HISTORY_REV2% from %HISTORY_MAXREV% revisions)*
+
+<form name="main" action="%SCRIPTURLPATH%/compare%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<input type="hidden" name="render" value="sidebyside">
+<input type="hidden" name="type" value="diff">
+<table border="0" cellspacing="0" cellpadding="5" style="border-width:0px!important">
+<tr><th>Rev</th><th>Date</th><th>User</th><th>Comment</th></tr>
+%HISTORY{"<tr><td nowrap=\"nowrap\" valign=\"top\" align=\"right\" style=\"border-width:0px 0px 1px;\"><a href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.$rev\">1.$rev</a>&nbsp;<input type=\"radio\" name=\"rev1\" value=\"$rev\">&nbsp;<input type=\"radio\" name=\"rev2\" value=\"$rev\"></td><td valign=\"top\" style=\"border-width:0px 0px 1px;\">$date</td><td valign=\"top\" style=\"border-width:0px 0px 1px;\">[[$wikiusername][$wikiname]]</td><td valign=\"top\" style=\"border-width:0px 0px 1px; \">%REVCOMMENT[$rev]%</td></tr>" rev1="%URLPARAM{"rev1"}%" rev2="%URLPARAM{"rev2"}%" nrev="%URLPARAM{"nrev"}%" header="<tr><td colspan=\"4\" align=\"left\" style=\"border-width:0px;\">$next{'later' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $next{'last' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&nrev=$nrev'}</td></tr>" footer="<tr><td colspan=\"4\" align=\"left\" style=\"border-width:0px;\">$previous{'earlier' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=$rev1&nrev=$nrev'} $previous{'first' url='%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopshistory&rev1=1&nrev=$nrev'}</td></tr>"}%
+</table>
+<input type="submit" value="Compare selected revisions">
+</form>
+<p>
+<form action="%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<input type="hidden" name="template" value="oopshistory">
+<input type="submit" value="Show">
+<select type="select" name="nrev" size="1">
+<option selected>%HISTORY_NREV%</option>
+<option>5</option>
+<option>10</option>
+<option>20</option>
+<option>50</option>
+</select>
+revisions up to 1.
+<input type="text" name="rev2" value="%HISTORY_REV2%" size="2">
+</form>
+%TMPL:END%
+%TMPL:DEF{"topicaction"}% [[%WEB%.%TOPIC%][Cancel]] %TMPL:END%
+%TMPL:P{"oops"}%
