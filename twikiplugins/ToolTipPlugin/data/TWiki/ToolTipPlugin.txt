@@ -1,0 +1,84 @@
+%META:TOPICINFO{author="pnomblot" date="1069422060" format="1.0" version="1.4"}%
+---+!! %TOPIC%
+
+This is a plugin to generate dynamic Tool Tips in HTML + javascript (mouseover event).
+It is based on http://www.walterzorn.com/tooltip/tooltip_e.htm
+
+%TOC%
+
+---++ TOOLTIP : dynamic text 
+
+
+This is an %TOOLTIP{URL="%TOPIC%" TEXT="here is the text you get when you move your mouse over"}% example %TOOLTIP%.
+
+The source :
+%BLOC%This is an %<nop>TOOLTIP{URL="%TOPIC%" TEXT="here is the text you get when you move your mouse over"}% example %<nop>TOOLTIP%.
+%ENDBLOC%
+
+You can use one or more %TOOLTIP{TEXT="there are soo many parameters..." BGCOLOR="#FF8000" FONTCOLOR="#00FF80" TITLE="PARAMETERS" SHADOWCOLOR="#ccaacc" FONTSIZE="30px"}%parameter%TOOLTIP% to get your own and nice tool tip !.
+
+
+Note that you can also %TOOLTIP{TEXT="You can also insert <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos in your texte... this is simply HTML !" FONTCOLOR="#336699" TITLE="PHOTOS !" SHADOWCOLOR="#ccaacc" FONTSIZE="18px"}%do this%TOOLTIP% and %TOOLTIP{TEXT="you can set a bacground image so to get a nice tool tip and also add some <img src=\'%ATTACHURLPATH%/ToolTipPhoto.gif\'> gif/jpg photos " FONTCOLOR="#336699" TITLE="Background image" SHADOWCOLOR="#ccaacc" FONTSIZE="18px" BGIMG="%ATTACHURLPATH%/ToolTipBackground.jpg"}% this %TOOLTIP%too !.
+
+
+---+++ Parameters :
+
+| *name* | *usage* | *example* |
+| END (or empty parameter) | End of url text that activate the tooltip (mandatory !). | %<nop>TOOLTIP{END}% |
+| ABOVE | Places the tooltip above the mousepointer. | ABOVE="true" |
+| BGCOLOR | Background color of the tooltip. | BGCOLOR="#d3e3f6" |
+| BGIMG | Background image. | BGIMG="images/myBgImg.jpg" |
+| BORDERWIDTH | Width of tooltip border. | BORDERWIDTH="3" |
+| BORDERCOLOR | Border color. | BORDERCOLOR="#336699" |
+| DELAY | Tooltip shows up after the specified timeout (milliseconds). | DELAY="1000" |
+| FIX | Fixes the tooltip to the co-ordinates specified. | FIX="[200, 2400]" |
+| FONTCOLOR | Font color. Value in single quotes. | FONTCOLOR="#993399" |
+| FONTFACE | Font face / family. | FONTFACE="verdana,geneva,sans-serif" |
+| FONTSIZE | Font size + unit. Unit inevitably required. | FONTSIZE="30px" |
+| FONTWEIGHT | Font weight. Available values: "normal" or "bold". | FONTWEIGHT="bold" |
+| LEFT | Tooltip positioned on the left side of the mousepointer.| LEFT="true" |
+| OFFSETX | Horizontal offset from mouse-pointer. | OFFSETX="32" |
+| OFFSETY | Vertical offset from mouse-pointer. | OFFSETY="32" |
+| PADDING | Inner spacing, i.e. the spacing between border and content, for instance text or image(s). | PADDING="5" |
+| SHADOWCOLOR | Creates shadow with the specified color. Shadow width (strength) will be automatically processed to 3 (pixels) if no global shadow width setting can be found in in wz_tooltip.js, and the concerned html tag doesn"t contain a SHADOWWIDTH command. | SHADOWCOLOR="#ccaacc" |
+| SHADOWWIDTH | Creates shadow with the specified width (strength). | SHADOWWIDTH="6" |
+| STATIC | Like OS-based tooltips, the tooltip doesn"t follow the movements of the mouse-pointer. | STATIC="true" |
+| STICKY | The tooltip stays fixed on it's initial position until another tooltip is activated, or the user clicks on the document. | STICKY="true" |
+| TITLE | Title. Text in single quotes. Background color is automatically the same as the border color. | TITLE="Some title" |
+| TITLECOLOR | Color of title text. | TITLECOLOR="#ff6666" |
+| WIDTH | Width of tooltip. | WIDTH="200" |
+| TEXT | <nop>ToolTip text. |  |
+| INCLUDE | Topic containing <nop>ToolTip text (like TWiki INCLUDE feature). |  |
+
+
+
+---++ General Settings
+
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = create Tool Tips from TWiki .
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+
+---++ Plugin install
+ Add :
+<verbatim>
+<SCRIPT LANGUAGE="JavaScript" SRC="%PUBURLPATH%/Plugins/ToolTipPlugin/wz_tooltip.js"></SCRIPT>
+</verbatim>
+in variable WEBCOPYRIGHT in TOPIC TWiki.TWikiPreferences or add it in your skins so this javascript code is called just before the closing body tag).
+
+---++ Plugin Info
+
+|  Plugin Author: | %MAINWEB%.PatrickNomblot  |
+|  Plugin Version: | 1.2 |
+|  Change History: | 21 Nov 2003: Initial version |
+|  Change History: | 10 Sep 2004: tooltip text can comes from any TOPIC |
+|  Other Dependencies: |	|
+|  Perl Version: | 5.6 |
+|  Feedback: | %MAINWEB%.PatrickNomblot |
+
+
+
+-- Main.PatrickNomblot - 21 Nov 2003
+%META:FILEATTACHMENT{name="wz_tooltip.js" attr="" comment="The Javascript Tool Tip engine" date="1069420919" path="X:\data\twiki\pub\Trash\BesacPlugin\wz_tooltip.js" size="15526" user="pnomblot" version="1.1"}%
