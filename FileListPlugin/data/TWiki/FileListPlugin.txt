@@ -1,0 +1,66 @@
+%META:TOPICINFO{author="vinod" date="1113307434" format="1.0" version="1.1"}%
+---+ File Listing Plugin
+
+Allows you to list the files using appropriate format, anywhere in the topic.
+---++ Syntax Rules
+
+=%<nop>FILELIST%= - Default rendering<nop>
+=%<nop>FILELIST{format="..." web="webname" topic="topicname"}%= - With specified format/web/topic. 
+
+The format can be specified with following variables:
+| *Variable* | *Explanation* |
+| $fileName  | Name of the file |
+| $fileIcon | Icon image representing this file type |
+| $fileSize | Size of the file |
+| $fileComment | Comment attached to this file |
+| $fileUser | Who submitted |
+| $fileDate | When submitted |
+| $fileUrl  | URL of the file, assumes ATTACHURL path |
+| $viewfileUrl | Full path with 'viewfile' as script name |
+| $fileActionUrl | Full path of management URL for this file (for changing properties etc. |
+| $n | inserts newline character. |
+| $br | inserts BR tag |
+
+---+++ Test it
+(You would have to create a topic called =Sandbox.TopicWithAttachment= and attach a set of files there.)
+
+*Input*
+
+<verbatim>
+%FILELIST{format="	* [[$fileUrl][$fileName]]: Submitted by $fileUser on $fileDate. Size=$fileSize. $fileComment [[$fileActionUrl][Manage this.]]" web="Sandbox" topic="TopicWithAttachment"}%
+</verbatim>
+
+*Output - if installed*
+
+%FILELIST{format="	* [[$fileUrl][$fileName]]: Submitted by $fileUser on $fileDate. Size=$fileSize. $fileComment [[$fileActionUrl][Manage this.]]" web="Sandbox" topic="TopicWithAttachment"}%
+
+---++ Plugin Settings
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = %<nop>FILELIST% macro allows you to reference the list of attachments anywhere in the topic, as per the given format.
+
+	* Default Format of rendering the attachments:
+		* Set FORMAT = ' * [[$filelink]: $filecomment'
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+
+---++ Plugin Installation Instructions
+	* Instructions for Admins:
+		* Untar it, and put =FileListPlugin.pm= file in Plugins directory, and =FileListPlugin.txt=.
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.VinodKulkarni |
+|  Plugin Version: | 11 Apr 2005 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  11 Apr 2005: | Initial version: v0.6 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | One non-standard function, =TWiki::handleNativeUrlEncode= used in this code. May break with new versions of twiki. |
+|  Perl Version: | 5.0 |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins, EmptyPlugin
+
