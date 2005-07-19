@@ -1,0 +1,53 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1097705298" format="1.0" version="1.3"}%
+<!-- ---+!! %TOPIC% -->
+
+Topics within the %WEB% web are organized by %TOPIC% and SubjectArea. This page provides tools for managing %TOPIC%s, including:
+%TOC% 
+
+---++ %TOPIC% Table for use in WebForm
+
+This table is used to classify a topic in %WIKITOOLNAME%.%WEB% using the drop-down menu in WebForm. 
+| *Name* | *Type* | *Tooltip message* |
+| Select... | option |  |
+| ReferenceTopic | option | |
+| TopicType | option |  |
+| SubjectArea | option |  |
+ 
+Here is a list of all the %TOPIC%s available in the %WEB% web: %SEARCH{ "[T]opicType.*value\=.*%TOPIC%" casesensitive="on" regex="on" nosearch="on" format="$topic, "}%
+---
+---++ Browse by %TOPIC%
+
+Browse topics by %TOPIC%: 
+
+<form name="browseTopics" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/" >
+<select name="TopicTypes" size="1" onchange="document.location=this.value;"> <option value='#'><Nop>Select...</option>%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}% </select>
+</form>
+
+---
+<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/">
+---++ Create a New %TOPIC%
+%RED% %X% This should only be done by a member of %MAINWEB%.WebModeratorGroup. %ENDCOLOR%
+
+*To create a new %TOPIC%:*
+	1 Create a new %TOPIC% topic using the form below.
+		* The newly created %TOPIC% topic will include a search displaying all topics within that %TOPIC%.
+		* From the newly created %TOPIC% topic you can also create a topic template for all new topics created from that page.
+	1 In order to include your new %TOPIC% within the list shown above that is displayed as a pop-up menu in WebForm, you must return to this topic and manually add it to the form above. 
+
+|  Item: | <input type="text" name="topic" size="40" /> <br /> Note: Use a TWiki.WikiWord. |
+|  About: | <input type="text" name="TopicHeadline" size="40" /> <br /> Option: Provide short description of subject matter. |
+| &nbsp; | <input type="submit" value=" Create "/ > |
+<input type="hidden" name="onlywikiname" value="on" />
+<input type="hidden" name="templatetopic" value="TopicTypeTemplate" />
+<input type="hidden" name="%TOPIC%" value="%TOPIC%" />
+<input type="hidden" name="topicparent" value="WebHome" />
+</form>
+
+See also: TopicTypeTemplate, WebForm
+
+
+<!--
+		* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+

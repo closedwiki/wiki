@@ -1,0 +1,18 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1097552121" format="1.0" version="1.1"}%
+---++ TopicClassification in the %WEB% Web
+
+To help organize content within the %WEB% web, the WebForm incorporates a TopicClassification scheme that groups topics in two ways: 
+	* *TopicTypes* group topics according to their _function or purpose_ . Some examples might include <nop>WebLog, <nop>MeetingNote, <nop>ResearchNote, or <nop>ReferenceNote. Oftentimes, <nop>TopicType have a characteristic structure which can be defined by a "[[TWiki.TWikiTemplates#Template_Topics][template topic]]".
+	* *SubjectAreas* group topics according to _the subject matter_ of the topic. Examples might include <nop>FamilyAndFriends, <nop>SocietyAndCulture, <nop>WebDesign, or <nop>OpenSourceMovement.
+
+*List of TopicTypes used in the %WEB% web:* </br>
+%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="	* $topic - $formfield(TopicHeadline)<br>"}% 
+
+*List of SubjectArea in the %WEB% web:* </br>
+%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format="	* $topic - $formfield(TopicHeadline)<br>"}% 
+
+To organize your topics using this TopicClassification, simply go to CreateNewTopic and follow the instructions there. 
+
+
+-- Main.LynnwoodBrown - 12 Oct 2004
+

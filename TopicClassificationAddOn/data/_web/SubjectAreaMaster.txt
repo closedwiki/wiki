@@ -1,0 +1,21 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1095994797" format="1.0" version="1.3"}%
+%STARTSIDEBAR%
+*Filter by TopicType* %BR%
+<form name="selectType" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/" >
+<select name="type" size="1" onchange="document.location=this.value;"> <option value='#'><Nop>Select...</option><option value=''>All</option>%SEARCH{ "[T]opicType.*value\=.*[T]opicType" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option value=%INCLUDINGTOPIC%?type=$topic>$topic</option>"}% </select>
+</form>
+
+*View other SubjectAreas* %BR%
+<form name="browseSubjects" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/" >
+<select name="SubjectAreas" size="1" onchange="document.location=this.value;"> <option value='#'><Nop>Select...</option>%SEARCH{ "[T]opicType.*value\=.*[S]ubjectArea" web="%WEB%" regex="on" nosearch="on" nosummary="on" nototal="on" order="topic" format= "<option>$topic</option>"}% </select>
+</form>
+%STOPSIDEBAR% 
+---+!! Topics regarding %INCLUDINGTOPIC%
+
+%SEARCH{"[S]ubjectArea.*value\=.*%INCLUDINGTOPIC%;[T]opicType.*value\=.*%URLPARAM{type}%" regex="on" casesensitive="on" nosearch="on"  format="	* $topic <font face=\"arial,helvetica\" size=\"1\"> _($formfield(TopicType))_ </font> - $formfield(TopicHeadline) <font face=\"arial,helvetica\" size=\"1\"> _(Modified by $wikiusername on $date)_ </font>" sort="modified" reverse="on"}%
+
+<!--
+		* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+		* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+-->
+

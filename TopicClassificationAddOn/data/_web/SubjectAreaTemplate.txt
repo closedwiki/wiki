@@ -1,0 +1,8 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1088452482" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="SubjectArea"}%
+%INCLUDE{SubjectAreaMaster}%
+
+%META:FORM{name="WebForm"}%
+%META:FIELD{name="TopicType" title="TopicType" value="Select..."}%
+%META:FIELD{name="TopicHeadline" title="TopicHeadline" value=""}%
+%META:TOPICMOVED{by="LynnwoodBrown" date="1086628876" from="Lynnwood.[S]ubjectAreaTemplate" to="Lynnwood.SubjectAreaTemplate"}%
