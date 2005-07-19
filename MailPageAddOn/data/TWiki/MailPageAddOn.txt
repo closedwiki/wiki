@@ -1,0 +1,65 @@
+%META:TOPICINFO{author="LynnwoodBrown" date="1107199745" format="1.0" version="1.6"}%
+%META:TOPICPARENT{name="SiteDevToDos"}%
+---+ Mail Page Add-On
+
+MailPageAddOn provides users several options for emailing TWiki topics to a friend including:
+	* Including the actual html topic in the body of the email. (Actually sends the "print" view of the page.)
+	* Including the html topic as an attachment.
+	* Simply sending a link to the page.
+
+This feature request was discussed in TWiki:Codev.EmailThisPageLink. The add on is based on a OS, free script called Mailpage. This is the best script of it's kind that I've found because it offers the option to send page in body of email (in html), as attachment, or simply a link.
+
+Oddly enough, the home page for the script (http://mtvwebdesign.hypermart.net/) has been defunct for some time. However, the original script package can be downloaded from  http://www.evidence.info/general/mailpage.html.
+
+---++ Usage
+
+	* After installing the %TOPIC% as described below, the following link will invoke the Mail page dialog: ==%<nop>SCRIPTURL%/mailpage/mailpage.cgi?url=%<nop>SCRIPTURL%/view/%<nop>BASEWEB%/%<nop>BASETOPIC%== . 
+	* When a users clicks on the [[%SCRIPTURL%/mailpage/mailpage.cgi?url=%SCRIPTURL%/view/%BASEWEB%/%BASETOPIC%][Email this Page!]], they get a form that allows them to enter the name and email address of the receipient and sender, along with a note.
+	* If you want this feature available to all topics, you can add it to the "view" template of your favorite skin.
+
+---++ Add-On Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this add-on. The following instructions are for the administrator who installs the add-on on the server where TWiki is running. 
+
+	* Download the ZIP file from the Add-on Home (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Add-on topic |
+	  | ==bin/mailpage/mailpage.cgi== | Add-on script (Modified - [[#ScriptModification][see note]]) |
+	  | ==bin/mailpage/mailpage.conf== | Add-on script |
+	  | ==bin/mailpage/mtvwebdesign.lib== | Script library |
+	  | ==bin/mailpage/privacy.txt== | Privacy statement |
+	  | ==bin/mailpage/readme.html== | Mailpage readme file |
+	  | ==bin/mailpage/tokenfile.html== | Custom template for mailpage (unused) |
+	* Edit the mailpage.conf file to match your site, as described in [[%SCRIPTURL%/mailpage/readme.html#gettingstarted][the readme file]].
+	* Test if the installation was successful:
+		* Click on [[%SCRIPTURL%/mailpage/mailpage.cgi?url=%SCRIPTURL%/view/%BASEWEB%/%BASETOPIC%][Email this Page!]] and you will be presented with the Mailpage form. Fill in the form and click the "Send" button to see if the email is sent and properly formatted. 
+
+---++ Add-On Info
+#ScriptModification
+%X% Note: This distribution includes a slightly modified version of the Mailpage.cgi script so that when you send the topic in the body of the email message, the "print" view of the topic is sent. Line 206 or mailpage.cgi has been edited to read as follows: <br>
+==$req = new HTTP::Request 'GET' => $FORM{'url'}."?skin=print.pattern";==  
+
+|  Add-on Author: | TWiki:Main/LynnwoodBrown |
+|  Add-on Version: | 18 Jan 2005 (v1.000) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  18 Jan 2005: | Initial version |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL |
+|  Add-on Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topic:__ %TWIKIWEB%.TWikiAddOns
+
+-- TWiki:Main/LynnwoodBrown - 18 Jan 2005
+
+%META:FORM{name="ItemToDoForm"}%
+%META:FIELD{name="TopicType" title="TopicType" value="SiteDevToDos"}%
+%META:FIELD{name="ToDoBy" title="ToDoBy" value="Main."}%
+%META:FIELD{name="DueDate" title="DueDate" value=""}%
+%META:FIELD{name="Priority" title="Priority" value="2Normal"}%
+%META:FIELD{name="SiteAspect" title="SiteAspect" value="TWikiApplications"}%
+%META:FILEATTACHMENT{name="MailPageAddOn.zip" attr="" comment="Version 1.0" date="1107199683" path="MailPageAddOn.zip" size="18706" user="LynnwoodBrown" version="1.1"}%
