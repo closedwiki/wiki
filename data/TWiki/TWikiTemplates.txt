@@ -61,6 +61,7 @@ The following context identifiers are available:
 | body_text  | when the body text is being processed in a view |
 | footer_text | when the footer text is being processed in a view |
 | oops | in oops script |
+| rest | in rest script |
 
 ---+++ Finding Templates
 

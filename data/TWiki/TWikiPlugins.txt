@@ -134,6 +134,10 @@ Most Plugins use either the =commonTagsHandler= or =startRenderingHandler= for r
 
 TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to use.
 
+---+++ RESTful interface
+
+By using the ==rest== script (see TWikiScripts for more info), external systems or other TWikiApplications can interact with a plugin in a RESTful manner.
+
 ---+++ Hints on Writing Fast Plugins
 
 	* Delay the Plugin initialization to the actual function which is handling the tag. This way all the expensive initialization is done only when needed.
