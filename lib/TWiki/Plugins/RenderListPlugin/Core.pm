@@ -19,7 +19,7 @@ use strict;
 # External entry point
 sub expand {
 ### my $text = shift;
-    $_[0] =~ s/%RENDERLIST{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+\t[^\n\r]*)+)/_handleRenderList($1, $2, $4)/ges;
+    $_[0] =~ s/%RENDERLIST{(.*?)}%(([\n\r]+[^\t]{1}[^\n\r]*)*?)(([\n\r]+(\t|   )+[^\n\r]*)+)/_handleRenderList($1, $2, $4)/ges;
 }
 
 sub _handleRenderList {
@@ -51,12 +51,17 @@ sub _renderIconList {
     my $type = '';
     my $text = '';
     my $focusIndex = -1;
+    # SMELL: this parse is not consistent with the way lists are handled
+    # in the core.
     foreach( split ( /[\n\r]+/, $theText ) ) {
-        m/^(\t+)(.) *(.*)/;
-        $level = length( $1 );
-        $type = $2;
-        $text = $3;
-        if( ( $theFocus ) && ( $focusIndex < 0 ) && ( $text =~ /$theFocus/ ) ) {
+        m/^((?:\t|   )+)(.*)/;
+        $level = ( $1 || '' );
+        $text = ( $2 || ' ' );
+        $level =~ s/   /\t/g;
+        $level = length( $level );
+        $text =~ s/^(.)//;
+        $type = $1;
+        if( $theFocus && $focusIndex < 0 && $text =~ /$theFocus/ ) {
             $focusIndex = scalar( @tree );
         }
         push( @tree, { level => $level, type => $type, text => $text } );
@@ -69,11 +74,11 @@ sub _renderIconList {
         my $nref = pop( @tree );
 
         # highlight node with focus and remove links
-        $text = $nref->{'text'};
+        $text = $nref->{text};
         $text =~ s/^([^\-]*)\[\[.*?\]\[(.*?)\]\]/$1$2/o;  # remove [[...][...]] link
         $text =~ s/^([^\-]*)\[\[(.*?)\]\]/$1$2/o;         # remove [[...]] link
         $text = "<b> $text </b>"; # bold focus text
-        $nref->{'text'} = $text;
+        $nref->{text} = $text;
 
         # remove uncles and siblings below current node
         $level = $nref->{level};
@@ -88,9 +93,9 @@ sub _renderIconList {
         # remove uncles and siblings above current node
         my @before = ();
         for( my $i = scalar( @tree ) - 1; $i >= 0; $i-- ) {
-            if( $tree[$i]->{'level'} < $level ) {
+            if( $tree[$i]->{level} < $level ) {
                 push( @before, $tree[$i] );
-                $level = $tree[$i]->{'level'};
+                $level = $tree[$i]->{level};
             }
         }
         @tree = reverse( @before );
@@ -114,18 +119,19 @@ sub _renderIconList {
     if( $depth > 0 ) {
         my @tmp = ();
         foreach my $ref ( @tree ) {
-            push( @tmp, $ref ) if( $ref->{'level'} <= $depth );
+            push( @tmp, $ref ) if( $ref->{level} <= $depth );
         }
         @tree = @tmp;
     }
 
     my $attachUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath();
+    my $twikiweb = TWiki::Func::getTwikiWebname();
     $theParams =~ s/%PUBURL%/$attachUrl/go;
-    $attachUrl .= "/$TWiki::Plugins::RenderListPlugin::installWeb/RenderListPlugin";
+    $attachUrl .= "/$twikiweb/RenderListPlugin";
     $theParams =~ s/%ATTACHURL%/$attachUrl/go;
     $theParams =~ s/%WEB%/$TWiki::Plugins::RenderListPlugin::installWeb/go;
     $theParams =~ s/%MAINWEB%/TWiki::Func::getMainWebname()/geo;
-    $theParams =~ s/%TWIKIWEB%/TWiki::Func::getTwikiWebname()/geo;
+    $theParams =~ s/%TWIKIWEB%/$twikiweb/geo;
     my ( $showLead, $width, $height, $iconSp, $iconT, $iconI, $iconL, $iconImg )
        = split( /, */, $theParams );
     $width   = 16 unless( $width );
@@ -147,26 +153,27 @@ sub _renderIconList {
     my @listIcon = ();
     for( my $i = 0; $i < scalar( @tree ); $i++ ) {
         $text .= '<table border="0" cellspacing="0" cellpadding="0"><tr>' . "\n";
-        $level = $tree[$i]->{'level'};
+        $level = $tree[$i]->{level};
         for( my $l = $start; $l < $level; $l++ ) {
+            my $ike = $listIcon[$l] || '';
             if( $l == $level - 1 ) {
-                $listIcon[$l] = $iconSp;
+                $ike = $listIcon[$l] = $iconSp;
                 for( my $x = $i + 1; $x < scalar( @tree ); $x++ ) {
-                   last if( $tree[$x]->{level} < $level );
-                   if( $tree[$x]->{level} <= $level && $tree[$x]->{'type'} ne " " ) {
-                       $listIcon[$l] = $iconI;
-                       last;
-                   }
+                    last if( $tree[$x]->{level} < $level );
+                    if( $tree[$x]->{level} <= $level && $tree[$x]->{type} ne " " ) {
+                        $ike = $iconI;
+                        last;
+                    }
                 }
                 if( $tree[$i]->{type} eq " " ) {
-                   $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
-                } elsif( $listIcon[$l] eq $iconSp ) {
+                   $text .= "<td valign=\"top\">$ike</td>\n";
+                } elsif( $ike eq $iconSp ) {
                    $text .= "<td valign=\"top\">$iconL</td>\n";
                 } else {
                    $text .= "<td valign=\"top\">$iconT</td>\n";
                 }
             } else {
-                $text .= "<td valign=\"top\">$listIcon[$l]</td>\n";
+                $text .= "<td valign=\"top\">$ike</td>\n";
             }
         }
         if( $theType eq 'icon' ) {
@@ -174,10 +181,10 @@ sub _renderIconList {
             if( $tree[$i]->{type} eq " " ) {
                 # continuation line
                 $text .= "<td valign=\"top\">$iconSp</td>\n";
-            } elsif( $tree[$i]->{'text'} =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
+            } elsif( $tree[$i]->{text} =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
                 # specific icon
-                $tree[$i]->{'text'} = $3;
-                $tree[$i]->{'text'} = "$1 $3" if( $1 );
+                $tree[$i]->{text} = $3;
+                $tree[$i]->{text} = "$1 $3" if( $1 );
                 my $icon = fixImageTag( "$attachUrl/$2.gif", $width, $height );
                 $text .= "<td valign=\"top\">$icon</td>\n";
             } else {
@@ -188,10 +195,10 @@ sub _renderIconList {
 
         } else {
             # tree theme type
-            if( $tree[$i]->{'text'} =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
+            if( $tree[$i]->{text} =~ /^\s*(<b>)?\s*icon:([^\s]+)\s*(.*)/ ) {
                 # specific icon
-                $tree[$i]->{'text'} = $3;
-                $tree[$i]->{'text'} = "$1 $3" if( $1 );
+                $tree[$i]->{text} = $3;
+                $tree[$i]->{text} = "$1 $3" if( $1 );
                 my $icon = fixImageTag( "$attachUrl/$2.gif", $width, $height );
                 $text .= "<td valign=\"top\">$icon</td>\n";
                 $text .= "<td valign=\"top\"><nobr>&nbsp; $tree[$i]->{text} </nobr></td>\n";
