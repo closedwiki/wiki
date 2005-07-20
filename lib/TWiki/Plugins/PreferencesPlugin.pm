@@ -70,7 +70,7 @@ sub preRenderingHandler {
     if ( $action eq 'edit' ) {
         TWiki::Func::setTopicEditLock( $web, $topic, 1 );
 
-        $_[0] =~ s(^(\t+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*))
+        $_[0] =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*))
           ($1._generateEditField($web, $topic, $2, $3, $formDef))gem;
         $_[0] =~ s(%EDITPREFERENCES.*%)
           (_generateButtons($web, $topic, 0))eo;
@@ -84,7 +84,7 @@ sub preRenderingHandler {
     } elsif ( $action eq 'save' ) {
 
         my $text = TWiki::Func::readTopicText( $web, $topic );
-        $text =~ s(^(\t+\*\sSet\s)(\w+)\s\=(.*)$)
+        $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=(.*)$)
           ($1._saveSet($web, $topic, $2, $3, $formDef))mgeo;
 
         my $error = TWiki::Func::saveTopicText( $web, $topic, $text, '' );
