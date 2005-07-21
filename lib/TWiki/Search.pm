@@ -829,8 +829,7 @@ sub searchWeb {
                     # FIXME: Allow all regex characters but escape them
                     # SMELL: wierd - this RE seems to require .* at the
                     # end of a pattern - compulsory! Why?
-                    $out =~ s(\$pattern\((.*?\s*\.\*)\))
-                      (getTextPattern( $text, $1 ))ges;
+                    $out =~ s/\$pattern\((.*?\s*\.\*)\)/getTextPattern( $text, $1 )/ges;
                     $out =~ s/\r?\n/$newLine/gos if( $newLine );
                     if( defined( $separator )) {
                         $out .= $separator;
