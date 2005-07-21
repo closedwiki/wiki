@@ -58,7 +58,7 @@ sub testAHTable {
 											"rows",
 											"", "");
   my $s;
-  $s = $actions->formatAsHTML( $fmt, "href", 0 );
+  $s = $actions->formatAsHTML( $fmt, "href", 0, 'atp' );
   $s =~ s/\n//go;
   $s =~ s/(;t=\d+)//g;
   $s =~ s/\s+//g;
@@ -80,20 +80,20 @@ sub testAHTable {
  <tr class="atp">
   <th class="atp">Edit</th>
   <td class="atp">
-   <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0">edit</a>
+   <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0">edit</a>
   </td>
   <td class="atp">
-   <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1">edit</a>
+   <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1">edit</a>
   </td>
   <td class="atp">
-   <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2">edit</a>
+   <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2">edit</a>
   </td>
  </tr>
 </table>
 HERE
   $cmp =~ s/\s+//g;
   $this->assert_equals($cmp, $s);
-  $s = $actions->formatAsHTML( $fmt, "name", 0 );
+  $s = $actions->formatAsHTML( $fmt, "name", 0, 'atp' );
   $s =~ s/\n//go;
   $s =~ /(;t=\d+)/;
   $t = $1;
@@ -115,12 +115,12 @@ HERE
 <td class="atp">Topic</td></tr>
 <tr class="atp">
 <th class="atp">Edit</th>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0$t">edit</a></td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1$t">edit</a></td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2$t">edit</a></td></tr></table>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
 HERE
                             $s);
-  $s = $actions->formatAsHTML( $fmt, "name", 1 );
+  $s = $actions->formatAsHTML( $fmt, "name", 1, 'atp' );
   $s =~ s/\n//go;
   $s =~ /(;t=\d+)/;
   $t = $1;
@@ -139,9 +139,9 @@ HERE
 <td class="atp">Topic</td></tr>
 <tr class="atp">
 <th class="atp">Edit</th>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0$t')">edit</a></td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1$t')">edit</a></td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2$t')">edit</a></td></tr></table>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
                             $s);
 }
@@ -153,7 +153,7 @@ sub testAVTable {
 											"cols",
 											"", "",);
   my $s;
-  $s = $actions->formatAsHTML( $fmt, "href", 0 );
+  $s = $actions->formatAsHTML( $fmt, "href", 0, 'atp' );
   $s =~ s/\n//go;
   $s =~ /(;t=\d+)/;
   my $t = $1;
@@ -167,18 +167,18 @@ sub testAVTable {
 <tr valign="top">
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0$t">edit</a></td></tr>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td></tr>
 <tr valign="top">
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1$t">edit</a></td></tr>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
 <tr valign="top">
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2$t">edit</a></td></tr></table>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
 HERE
                             , $s);
-  $s = $actions->formatAsHTML( $fmt, "name", 0 );
+  $s = $actions->formatAsHTML( $fmt, "name", 0, 'atp' );
   $s =~ s/\n//go;
   $s =~ /(;t=\d+)/;
   $t = $1;
@@ -192,18 +192,18 @@ HERE
 <tr valign="top"><a name="AcTion0"></a>
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0$t">edit</a></td></tr>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0$t">edit</a></td></tr>
 <tr valign="top"><a name="AcTion1"></a>
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1$t">edit</a></td></tr>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1$t">edit</a></td></tr>
 <tr valign="top"><a name="AcTion2"></a>
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2$t">edit</a></td></tr></table>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2$t">edit</a></td></tr></table>
 HERE
                             $s);
-  $s = $actions->formatAsHTML( $fmt, "name", 1 );
+  $s = $actions->formatAsHTML( $fmt, "name", 1, 'atp' );
   $s =~ s/\n//go;
   $s =~ /(;t=\d+)/;
   $t = $1;
@@ -217,15 +217,15 @@ HERE
 <tr valign="top"><a name="AcTion0"></a>
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion0$t')">edit</a></td></tr>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion0$t')">edit</a></td></tr>
 <tr valign="top"><a name="AcTion1"></a>
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion1$t')">edit</a></td></tr>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion1$t')">edit</a></td></tr>
 <tr valign="top"><a name="AcTion2"></a>
 <td class="atp">Test</td>
 <td class="atp">Topic</td>
-<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action;action=AcTion2$t')">edit</a></td></tr></table>
+<td class="atp"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2$t" onClick="return editWindow('%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/Test/Topic?skin=action,pattern;atp_action=AcTion2$t')">edit</a></td></tr></table>
 HERE
                             $s);
 }

@@ -29,6 +29,7 @@ Edit command handler
 package TWiki::UI::Edit;
 
 use strict;
+use Assert;
 use TWiki;
 use TWiki::Form;
 use TWiki::Plugins;
@@ -250,7 +251,8 @@ sub edit {
                                                  $topic, undef );
     }
 
-    $session->{plugins}->beforeEditHandler( $text, $topic, $webName ) unless( $saveCmd );
+    $session->{plugins}->beforeEditHandler(
+        $text, $topic, $webName, $meta ) unless( $saveCmd );
 
     if( $TWiki::cfg{Log}{edit} ) {
         # write log entry
@@ -305,8 +307,10 @@ sub edit {
     $tmpl =~ s/%FORMTEMPLATE%//go; # Clear if not being used
     my $p = $session->{prefs};
 
+    $tmpl =~ s/%UNENCODED_TEXT%/$text/g;
+
     $text = TWiki::entityEncode( $text );
-    $tmpl =~ s/%TEXT%/$text/go;
+    $tmpl =~ s/%TEXT%/$text/g;
 
     $store->setLease( $webName, $topic, $user, $TWiki::cfg{LeaseLength} );
 

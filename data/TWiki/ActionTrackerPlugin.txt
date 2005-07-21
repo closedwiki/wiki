@@ -329,7 +329,37 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 
 	* If set to 1 will edit an action in a separate browser window (requires <nop>JavaScript)
 		* Set USENEWWINDOW = 1
-
+   * Defines the CSS styles to use in formatting actions.
+      * Set CSS = .atpDef { \
+                     border-collapse: collapse; \
+                     border-spacing: 0px; \
+                     border: dotted black 1px; \
+                  } \
+                  th.atpDef { \
+                     background-color: #cccccc; \
+                  } \
+                  .atpSearch { \
+                     border-collapse: collapse; \
+                     border-spacing: 0px; \
+                     border: dotted black 1px; \
+                  } \
+                  th.atpSearch { \
+                     background-color: orange; \
+                     font-style: italic; \
+                  } \
+                  .atpChanges { \
+                     border: dotted black 1px; \
+                  } \
+                  .atpEdit { \
+                     border: dotted black 1px; \
+                  } \
+                  .atpError { \
+                     background-color: red; \
+                     text-color: yellow; \
+                  } \
+                  .atpWarn { \
+                     background-color: yellow; \
+                  }
 	* If set to 1, action edits will offer a 'Save Changes' instead of the usual 'Preview Changes' button. If this is set along with the USENEWWINDOW parameter, the subwindow _should_ close on save, but it won't because I haven't worked out how to do this safely in Java<nop>Script.
 		* Set NOPREVIEW = 1
 

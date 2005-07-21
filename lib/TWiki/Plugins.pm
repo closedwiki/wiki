@@ -555,7 +555,7 @@ Called by edit
 
 sub beforeEditHandler {
     my $this = shift;
-    #my( $text, $topic, $web ) = @_;
+    #my( $text, $topic, $web, $meta ) = @_;
     $this->_dispatch( 'beforeEditHandler', @_ );
 }
 

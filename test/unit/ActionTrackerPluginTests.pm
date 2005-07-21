@@ -157,7 +157,7 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
   $text =~ s/$re//s;
   my $script = $1;
   $script =~ s/\s+/ /go;
-  $this->assert_str_equals( "<script language=\"JavaScript\"><!-- function editWindow(url) { win=open(url,\"none\",\"titlebar=0,width=800,height=400,resizable,scrollbars\"); if(win){win.focus();} return false; } // --> </script>", $script);
+  $this->assert_matches( qr/^<script language="JavaScript">.*<\/script>/, $script);
 }
 
 sub anchor {
@@ -184,11 +184,11 @@ sub action {
 
 sub testBeforeEditHandler {
   my $this = shift;
-  my $q = new CGI({action=>"AcTion0",
+  my $q = new CGI({atp_action=>"AcTion0",
                    skin=>'action'});
   $twiki->{cgiQuery} = $q;
-  my $text = "JUNK";
-  TWiki::Plugins::ActionTrackerPlugin::beforeEditHandler($text,"Topic2",$peopleWeb);
+  my $text = '%ACTION{who=Fred,due="2 Jan 02",open}% Test1: Fred_open_ontime';
+  TWiki::Plugins::ActionTrackerPlugin::beforeEditHandler($text,"Topic2",$peopleWeb,undef);
   $text = $this->assert_html_matches("<input type=\"text\" name=\"who\" value=\"$peopleWeb\.Fred\" size=\"35\"/>", $text);
 }
 

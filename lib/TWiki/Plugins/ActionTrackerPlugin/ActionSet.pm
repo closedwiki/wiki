@@ -160,8 +160,9 @@ sub stringify {
 # Pass $newWindow=1 to get separate browser window,
 # $newWindow=0 to get jump in same window.
 sub formatAsHTML {
-    my ( $this, $format, $jump, $newWindow ) = @_;
-    return $format->formatHTMLTable( \@{$this->{ACTIONS}}, $jump, $newWindow );
+    my ( $this, $format, $jump, $newWindow, $class ) = @_;
+    return $format->formatHTMLTable( \@{$this->{ACTIONS}}, $jump, $newWindow,
+                                    $class );
 }
 
 # PUBLIC format the action set as a plain string

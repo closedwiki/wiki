@@ -180,7 +180,8 @@ sub doNotifications {
               $actionsPerEmail{$email}->formatAsString( $format );
             $actionsHTML =
               $actionsPerEmail{$email}->formatAsHTML( $format,
-                                                      'href', 0 );
+                                                      'href', 0,
+                                                     'atpChanges' );
         }
         if ( $changesPerEmail{$email} ) {
             $changesString = $changesPerEmail{$email}{text};

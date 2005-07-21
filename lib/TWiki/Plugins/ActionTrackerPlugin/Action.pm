@@ -14,10 +14,13 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
+package TWiki::Plugins::ActionTrackerPlugin::Action;
+
 use strict;
 use integer;
 
 use CGI;
+use Assert;
 
 use TWiki::Func;
 
@@ -44,7 +47,6 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 # created       When the action was created
 # closer        Who closed the action
 # closed        When the action was closed
-package TWiki::Plugins::ActionTrackerPlugin::Action;
 
 use vars qw( $now );
 
@@ -620,9 +622,11 @@ sub _formatField_edit {
         return '';
     }
 
+    my $skin = join( ',', ( 'action', TWiki::Func::getSkin()));
+
     my $url = '%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/' .
       $this->{web} . '/' . $this->{topic} .
-		'?skin=action;action=' . $this->getAnchor() . ';t='.time();
+		'?skin='.$skin.';atp_action=' . $this->getAnchor() . ';t='.time();
     my $attrs = { href => $url };
     if ( $newWindow ) {
         # Javascript window call
@@ -729,7 +733,8 @@ sub findChanges {
 
     my $plain_text = $format->formatStringTable( [ $this ] );
     $plain_text .= "\n$changes\n";
-    my $html_text = $format->formatHTMLTable( [ $this ], 'href', 0 );
+    my $html_text = $format->formatHTMLTable( [ $this ], 'href', 0,
+                                              'atpChanges' );
     $html_text .= $format->formatChangesAsHTML( $old, $this );
 
     # Add text to people interested in notification
@@ -749,7 +754,8 @@ sub findChanges {
 # and text after the action.
 sub findActionByUID {
     my ( $web, $topic, $text, $uid ) = @_;
-
+    ASSERT( $uid );
+ASSERT($text !~ /JUNK/);
     my $sn = -1;
     if ( $uid =~ m/^AcTion(\d+)$/o ) {
         $sn = $1;

@@ -227,6 +227,9 @@ sub formatHTMLTable {
     my $data = shift;
     my $jump = shift;
     my $newWindow = shift;
+    my $class = shift;
+    my $a = {};
+    $a->{class} = $class if $class;
     my $i;
     my @rows;
 
@@ -243,42 +246,44 @@ sub formatHTMLTable {
                 $entry = CGI::a( { name=>$object->getAnchor() } ).$entry;
                 $anchored = 1;
             }
-            $entry = CGI::td( { class => 'atp' }, $entry );
+            $entry = CGI::td( $a, $entry );
             $entry ||= '&nbsp;';
             push @cols, $entry;
         }
         push @rows, \@cols;
     }
 
-    return $this->_generateHTMLTable( \@rows );
+    return $this->_generateHTMLTable( \@rows, $class );
 }
 
 # PRIVATE generate an HTML table from a 2D-array of rows and
 # a, optional list of anchors, one for each row. The anchors
 # are more useful if the table is oriented as rows.
 sub _generateHTMLTable {
-    my ( $this, $rows ) = @_;
-    my $text = CGI::start_table( { class => 'atp' } )."\n";
+    my ( $this, $rows, $class ) = @_;
+    my $a = {};
+    $a->{class} = $class if $class;
+    my $text = CGI::start_table( $a )."\n";
     my $i;
 
     if ( $this->{ORIENTATION} eq "rows" ) {
         for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
             my $head = ${$this->{HEADINGS}}[$i];
-            my $row = CGI::th( { class=>'atp' }, $head )."\n";
+            my $row = CGI::th( $a, $head )."\n";
             foreach my $col ( @$rows ) {
                 my $datum = @$col[$i];
                 $row .= $datum."\n";
             }
-            $text .= CGI::Tr( { class => 'atp' }, $row )."\n";
+            $text .= CGI::Tr( $a, $row )."\n";
         }
     } else {
         my $row = '';
         foreach $i ( @{$this->{HEADINGS}} ) {
-            $row .= CGI::th( { class => 'atp' }, $i);
+            $row .= CGI::th( $a, $i);
         }
-        $text .= CGI::Tr( {class=>'atp'}, $row)."\n";
+        $text .= CGI::Tr( $a, $row)."\n";
         foreach my $r ( @$rows ) {
-            $text .= CGI::Tr({ class => 'atp' }, join( '', @$r) );
+            $text .= CGI::Tr($a, join( '', @$r) );
         }
     }
     $text .= CGI::end_table();
@@ -303,7 +308,7 @@ sub formatStringTable {
 sub formatChangesAsHTML {
     my ( $this, $old, $new ) = @_;
     my $tbl = "";
-    my $a = { class=>'atp' };
+    my $a = { class => 'atpChanges' };
     foreach my $field ( @{$this->{CHANGEFIELDS}} ) {
         my $row = '';
         if ( defined( $old->{$field} ) && defined( $new->{$field} )) {
@@ -328,7 +333,7 @@ sub formatChangesAsHTML {
         $tbl .= CGI::Tr( $a,  $row )."\n" if $row;
     }
     if ( $tbl ne "" ) {
-        return CGI::start_table({ class => 'atp' }).
+        return CGI::start_table( $a ).
           CGI::Tr( $a,
                   CGI::th( $a, 'Attribute').
                   CGI::th( $a, 'Old').
@@ -376,7 +381,7 @@ sub formatEditableFields {
     my @rows;
     push @rows, \@fields;
 
-    return $this->_generateHTMLTable( \@rows );
+    return $this->_generateHTMLTable( \@rows, 'atpEdit' );
 }
 
 # PRIVATE STATIC fill in variable expansions. If any of the expansions
@@ -437,12 +442,15 @@ sub _formatFieldForEdit {
             } else {
                 @extras = ( id => "date_$attrname" );
                 $content =
-                  CGI::button( { onclick=>"return showCalendar('date_$attrname','%e %B %Y')" } );
-                $content .=
-                  CGI::img( { src=> TWiki::Func::getPubUrlPath() . '/' .
-                              TWiki::Func::getTwikiWebname() .
-                              '/JSCalendarContrib/img.gif',
-                              alt=>'Calendar'} );
+                  CGI::image_button(
+                      -name => 'calendar',
+                      -onclick =>
+                          "return showCalendar('date_$attrname','%e %B %Y')",
+                      -src=> TWiki::Func::getPubUrlPath() . '/' .
+                        TWiki::Func::getTwikiWebname() .
+                            '/JSCalendarContrib/img.gif',
+                      -alt => 'Calendar',
+                      -align => 'MIDDLE' );
             }
         }
         return CGI::textfield( { name => $attrname,
