@@ -1390,6 +1390,10 @@ HERE
     }
     $block .= _setting('TWiki module in @INC path', $mess);
 
+    #add in the basic Modules so that we list their versions in the UI
+    map { $requiredMods->{$_} = $basicMods->{$_} }
+       keys %$basicMods;
+
     if ( defined $TWiki::cfg{DetailedOS} and ($TWiki::cfg{DetailedOS} =~ /darwin/i or $TWiki::cfg{OS} ne 'UNIX') ) {
         map { $requiredMods->{$_} = $requiredModsNonUnix->{$_} }
           keys %$requiredModsNonUnix;
