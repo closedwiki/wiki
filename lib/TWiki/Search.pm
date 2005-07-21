@@ -762,14 +762,10 @@ sub searchWeb {
                     $out =~ s/\$wikiname/$ru->wikiName()/ges;
                     $out =~ s/\$username/$ru->login()/ges;
                     my $r1info = {};
-                    $out =~ s(\$createdate)
-                      ($this->_getRev1Info( $web, $topic, 'date', $r1info ))ges;
-                    $out =~ s(\$createusername)
-                      ($this->_getRev1Info( $web, $topic, 'username', $r1info ))ges;
-                    $out =~ s(\$createwikiname)
-                      ($this->_getRev1Info( $web, $topic, 'wikiname', $r1info ))ges;
-                    $out =~ s(\$createwikiusername)
-                      ($this->_getRev1Info( $web, $topic, 'wikiusername', $r1info ))ges;
+                    $out =~ s/\$createdate/$this->_getRev1Info( $web, $topic, 'date', $r1info )/ges;
+                    $out =~ s/\$createusername/$this->_getRev1Info( $web, $topic, 'username', $r1info )/ges;
+                    $out =~ s/\$createwikiname/$this->_getRev1Info( $web, $topic, 'wikiname', $r1info )/ges;
+                    $out =~ s/\$createwikiusername/$this->_getRev1Info( $web, $topic, 'wikiusername', $r1info )/ges;
                     if( $out =~ m/\$text/ ) {
                         ( $meta, $text ) = $this->_getTextAndMeta( $topicInfo, $web, $topic ) unless $text;
                         if( $topic eq $session->{topicName} ) {
@@ -816,16 +812,12 @@ sub searchWeb {
                     $out =~ s/%TEXTHEAD%/$text/go;
 
                 } elsif( $format ) {
-                    $out =~ s(\$summary\(([^\)]*)\))
-                      ($renderer->makeTopicSummary( $text, $topic, $web, $1 ))geos;
-                    $out =~ s(\$summary)
-                      ($renderer->makeTopicSummary( $text, $topic, $web ))ges;
-                    $out =~ s(\$parent\(([^\)]*)\))
-                      (TWiki::Render::breakName( $meta->getParent(), $1 ))ges;
-                    $out =~ s(\$parent)($meta->getParent())ges;
-                    $out =~ s(\$formfield\(\s*([^\)]*)\s*\))
-                      (TWiki::Render::renderFormFieldArg( $meta, $1 ))ges;
-                    $out =~ s(\$formname)($meta->getFormName())ges;
+                    $out =~ s/\$summary\(([^\/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
+                    $out =~ s/\$summary/$renderer->makeTopicSummary( $text, $topic, $web )/ges;
+                    $out =~ s/\$parent\(([^\/(TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
+                    $out =~ s/\$parent/$meta->getParent()/ges;
+                    $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
+                    $out =~ s/\$formname/$meta->getFormName()/ges;
                     # FIXME: Allow all regex characters but escape them
                     # SMELL: wierd - this RE seems to require .* at the
                     # end of a pattern - compulsory! Why?
