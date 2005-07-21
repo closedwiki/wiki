@@ -812,10 +812,10 @@ sub searchWeb {
                     $out =~ s/%TEXTHEAD%/$text/go;
 
                 } elsif( $format ) {
-                    $out =~ s/\$summary\(([^\/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
-                    $out =~ s/\$summary/$renderer->makeTopicSummary( $text, $topic, $web )/ges;
-                    $out =~ s/\$parent\(([^\/(TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
-                    $out =~ s/\$parent/$meta->getParent()/ges;
+                    $out =~ s/\$summary\(([^\)]*)\)/$renderer->makeTopicSummary( $text, $topic, $web, $1 )/ges;
+                      $out =~ s/\$summary/$renderer->makeTopicSummary( $text, $topic, $web )/ges;
+                    $out =~ s/\$parent\(([^\)]*)\)/TWiki::Render::breakName( $meta->getParent(), $1 )/ges;
+                    $out =~ s/\$parent/$meta->getParent()/ges;;
                     $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
                     $out =~ s/\$formname/$meta->getFormName()/ges;
                     # FIXME: Allow all regex characters but escape them
