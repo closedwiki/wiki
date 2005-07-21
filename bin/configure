@@ -1213,8 +1213,8 @@ sub performSanityChecks {
                 $output .= ERROR( 'Perl Module(s) missing');
             }
             $modMissing = 1;
-            $output .= ERROR( 'Essential module ',$mod,
-                         ' not installed - please check the setting ',
+            $output .= ERROR( 'Essential Perl Module \'',$mod,
+                         '\' not installed - please check the setting ',
                          'of @INC.' );
         }
     }
