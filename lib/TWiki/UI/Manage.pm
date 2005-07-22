@@ -239,15 +239,20 @@ sub rename {
     my $oldWeb = $session->{webName};
     my $query = $session->{cgiQuery};
 
+    if( $query->param( 'action' ) eq 'renameweb' ) {
+        _renameweb( $session );
+        return;
+    }
+
+    my $newTopic = $query->param( 'newtopic' ) || '';
+    $newTopic = TWiki::Sandbox::untaintUnchecked( $newTopic );
+
     my $newWeb = $query->param( 'newweb' ) || '';
     unless( !$newWeb || TWiki::isValidWebName( $newWeb, 1 )) {
         throw TWiki::OopsException
           ( 'attention', def =>'invalid_web_name', params => $newWeb );
     }
     $newWeb = TWiki::Sandbox::untaintUnchecked( $newWeb );
-
-    my $newTopic = $query->param( 'newtopic' ) || '';
-    $newTopic = TWiki::Sandbox::untaintUnchecked( $newTopic );
 
     my $attachment = $query->param( 'attachment' );
     # SMELL: test for valid attachment name?
@@ -372,25 +377,13 @@ sub rename {
     $session->redirect( $new_url );
 }
 
-=pod
+#| =skin= | skin(s) to use |
+#| =newsubweb= | new web name |
+#| =newparentweb= | new parent web name |
+#| =breaklock= | |
+#| =confirm= | if defined, requires a second level of confirmation |
 
----++ StaticMethod renameweb( $session )
-=rename= command handler.
-This method is designed to be
-invoked via the =TWiki::UI::run= method.
-Rename the given web. Details of the new web name are passed in CGI
-parameters:
-
-| =skin= | skin(s) to use |
-| =newsubweb= | new web name |
-| =newparentweb= | new parent web name |
-| =breaklock= | |
-| =confirm= | if defined, requires a second level of confirmation |
-| =nonwikiword= | if defined, a non-wikiword is acceptable for the new web name (not currently used) |
-
-=cut
-
-sub renameweb {
+sub _renameweb {
     my $session = shift;
 
     my $oldWeb = $session->{webName};
@@ -398,16 +391,16 @@ sub renameweb {
     my $query = $session->{cgiQuery};
 
     my $newParentWeb = $query->param( 'newparentweb' ) || '';
-    unless ( TWiki::isValidWebName( $newParentWeb, 1 )) {
+    unless ( !$newParentWeb || TWiki::isValidWebName( $newParentWeb, 1 )) {
         throw TWiki::OopsException
-          ( 'attention', def =>'invalid_web_name', params => $newParentWeb );
+          ( 'attention', def => 'invalid_web_name', params => $newParentWeb );
     }
     $newParentWeb = TWiki::Sandbox::untaintUnchecked( $newParentWeb );
 
     my $newSubWeb = $query->param( 'newsubweb' ) || '';;
-    unless ( TWiki::isValidWebName( $newSubWeb, 1 )) {
+    unless ( !$newSubWeb || TWiki::isValidWebName( $newSubWeb, 1 )) {
         throw TWiki::OopsException
-          ( 'attention', def =>'invalid_web_name', params => $newSubWeb );
+          ( 'attention', def => 'invalid_web_name', params => $newSubWeb );
     }
     $newSubWeb = TWiki::Sandbox::untaintUnchecked( $newSubWeb );
 
@@ -439,8 +432,7 @@ sub renameweb {
                 $TWiki::cfg{WebPrefsTopicName}, 'rename' );
         }
 
-        if( $store->topicExists( $newWeb,
-                                 $TWiki::cfg{WebPrefsTopicName} )) {
+        if( $store->webExists( $newWeb )) {
             throw TWiki::OopsException(
                 'attention',
                 def => 'rename_web_exists',
@@ -456,10 +448,7 @@ sub renameweb {
 
     # Has user selected new name yet?
     if( ! $newWeb || $confirm ) {
-        _newWebScreen( $session,
-                         $oldWeb,
-                         $newWeb,
-                         $confirm );
+        _newWebScreen( $session, $oldWeb, $newWeb, $confirm );
         return;
     }
 
@@ -483,7 +472,7 @@ sub renameweb {
                 $TWiki::cfg{HomeTopicName}, 'view' );
         }
     } else {
-        # redirect to new topic
+        # redirect to new web
         $new_url = $session->getScriptUrl(
             $newWeb, $TWiki::cfg{HomeTopicName}, 'view' );
     }
@@ -782,6 +771,10 @@ sub _newWebScreen {
         }
     }
 
+    my $subWebStyle = 'style="display:none"';
+    $subWebStyle = '' if $TWiki::cfg{EnableHierarchicalWebs};
+
+    $tmpl =~ s/%SUBWEBSENABLE%/$subWebStyle/g;
     $tmpl =~ s/%NEW_PARENTWEB%/$newParent/go;
     $tmpl =~ s/%NEW_SUBWEB%/$newSubWeb/go;
     $tmpl =~ s/%TOPIC%/$TWiki::cfg{HomeTopicName}/go;
@@ -903,7 +896,7 @@ sub getReferringTopics {
             { casesensitive => 0, type => 'regex' } );
 
         foreach my $searchTopic ( keys %$matches ) {
-            next if( $searchWeb eq $web && $searchTopic eq $topic );
+            next if( $searchWeb eq $web && $topic && $searchTopic eq $topic );
 
             my $t = join( '...', @{$matches->{$searchTopic}});
             $t = $renderer->TML2PlainText( $t, $searchWeb, $searchTopic,

@@ -1,7 +1,5 @@
 %TMPL:INCLUDE{"twiki"}%
 
-
-
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 <!--HIDE
@@ -44,15 +42,18 @@
 <div class="twikiVersatileTable">
 <table>
 <tr>
-<th>Change from:</th>
-<td class="twikiOldCol"><b><nop>%WEB%</b></td>
+<th width="20%">Change from:</th>
+<td class="twikiOldCol" colspan="2"><b><nop>%WEB%</b></td>
 <td class="twikiOldCol twikiHelpCol"></td>
 </tr>
 <tr>
-<th>To web:</th>
-<td class="twikiMainCol">%TMPL:P{"newparentweb"}%</td>
+<th>New web name:</br></th>
 <td class="twikiMainCol">%TMPL:P{"newsubweb"}%</td>
-<td class="twikiMainCol twikiHelpCol">%TMPL:P{"movewebhelp"}%</td>
+<td class="twikiMainCol twikiHelpCol" rowspan="2">%TMPL:P{"movewebhelp"}%</td>
+</tr>
+<tr %SUBWEBSENABLE%>
+<th>New parent web:<br>(subwebs must be enabled)</th>
+<td class="twikiMainCol">%TMPL:P{"newparentweb"}%</td>
 </tr>
 </table>
 </div>
