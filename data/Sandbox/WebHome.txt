@@ -5,8 +5,25 @@ The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is w
 
 ---++ Test Topics
 
-%SEARCH{ "TestTopic*" regex="on" scope="topic" nototal="on" nosearch="on" noheader="on" format="[[$web.$topic][$topic]] &middot; " }%
+<blockquote>
+<form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/"> 
+Create a new document by name: &nbsp; (Use a topic name in TWiki.WikiNotation) <br /> 
+<input type="text" name="topic" size="32" /> 
+<input type="hidden" name="onlywikiname" value="on">
+<input type="submit" value="Create by Name" /> 
+</form>
 
 <form name="createNewTestTopic" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%BASEWEB%/TestTopicXXXXXXXXXX">
-<input type="submit" class="twikiSubmit" value="Create new <nop>TestTopic" />
+Create a new auto-numbered test topic:
+<input type="submit" class="twikiSubmit" value="Create <nop>TestTopic###" />
 </form>
+
+<h3 style="margin-top:0;display:inline;">Recently changed topics</h3> <br />
+_Current time on this server: %SERVERTIME{"$day $month $year - $hour:$min"}%_
+
+<dl><dd>
+%SEARCH{ ".*" regex="on" nosearch="on" nototal="on" order="modified" reverse="off" limit="7" format="<dt>[[$topic]] <dd>$summary <br /><span class='deem'><i>$date</i></span><dd>&nbsp;"}%
+<dd>&nbsp;
+<dl>
+_A more extensive changes list is available via the [[WebChanges][Recent Changes]] link in the navigation menu._
+</blockquote>
