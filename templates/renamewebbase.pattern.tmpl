@@ -37,7 +37,8 @@
 
 
 %TMPL:DEF{"content"}%
-<form method="post" name="renameweb" action="%SCRIPTURLPATH%/renameweb%SCRIPTSUFFIX%/%WEB%">
+<form method="post" name="renameweb" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%">
+<input type="hidden" name="action" value="renameweb" />
 %TMPL:P{"simpleheader"}%
 <div class="twikiVersatileTable">
 <table>

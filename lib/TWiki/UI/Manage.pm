@@ -971,7 +971,6 @@ sub _updateWebReferringTopics {
        oldWeb => $oldWeb,
        newWeb => $newWeb
       };
-    $options->{spacedTopic} =~ s/ / */g;
 
     foreach my $item ( @$refs ) {
         my( $itemWeb, $itemTopic ) =

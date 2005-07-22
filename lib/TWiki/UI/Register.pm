@@ -761,7 +761,7 @@ sub _newUserFromTemplate {
 sub _writeRegistrationDetailsToTopic {
     my ($session, $data, $meta, $text) = @_;
 
-    ASSERT($data->{WikiName}) if DBEUG;
+    ASSERT($data->{WikiName}) if DEBUG;
 
     # TODO - there should be some way of overwriting meta without blatting the content.
 
