@@ -69,14 +69,14 @@ sub initBinary {
       $this->{session}->{sandbox}->sysCommand(
           $TWiki::cfg{RCS}{initBinaryCmd}, FILENAME => $this->{file} );
     if( $exit ) {
-        throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{initBinaryCmd}.
-                               ' '.$this->{file}.
-                               ' failed: '.$rcsOutput );
+        throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
+                               ' of '.$this->{file}.
+                                 ' failed: '.$rcsOutput );
     } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
-        throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{initBinaryCmd}.
-                               ' failed to create history file '.
-                                 $this->{rcsFile} );
+        throw Error::Simple( $TWiki::cfg{RCS}{initBinaryCmd}.
+                               ' of '.$this->{rcsFile}.
+                                 ' failed to create history file ');
     }
 }
 
@@ -96,14 +96,14 @@ sub initText {
           FILENAME => $this->{file} );
     if( $exit ) {
         $rcsOutput ||= '';
-        throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{initTextCmd}.
-                               ' '.$this->{file}.
-                               ' failed: '.$rcsOutput );
+        throw Error::Simple( $TWiki::cfg{RCS}{initTextCmd}.
+                               ' of '.$this->{file}.
+                                 ' failed: '.$rcsOutput );
     } elsif( ! -e $this->{rcsFile} ) {
         # Sometimes (on Windows?) rcs file not formed, so check for it
-        throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{initTextCmd}.
-                               ' failed to create history file '.
-                                 $this->{rcsFile} );
+        throw Error::Simple( $TWiki::cfg{RCS}{initTextCmd}.
+                               ' of '.$this->{rcsFile}.
+                                 ' failed to create history file ');
     }
 }
 
@@ -179,8 +179,8 @@ sub _deleteRevision {
         REVISION => '1.'.$rev,
         FILENAME => $this->{file} );
     if( $exit ) {
-        throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{delRevCmd}.
-                               ' failed: '..$rcsOut );
+        throw Error::Simple( $TWiki::cfg{RCS}{delRevCmd}.
+                               ' of '.$this->{file}.' failed: '..$rcsOut );
     }
 }
 
@@ -240,7 +240,8 @@ sub numRevisions {
           FILENAME => $this->{rcsFile} );
     if( $exit ) {
         throw Error::Simple( 'RCS: '.$TWiki::cfg{RCS}{histCmd}.
-                               ' failed: '.$rcsOutput );
+                               ' of '.$this->{rcsFile}.
+                                 ' failed: '.$rcsOutput );
     }
     if( $rcsOutput =~ /head:\s+\d+\.(\d+)\n/ ) {
         return $1;
@@ -373,25 +374,30 @@ sub _ci {
 
     $comment = 'none' unless $comment;
 
-    my ($rcsOutput, $exit);
+    my( $cmd, $rcsOutput, $exit );
     if( defined( $date )) {
         $date = TWiki::Time::formatTime( $date , '$rcs', 'gmtime');
+        $cmd = $TWiki::cfg{RCS}{ciDateCmd};
         ($rcsOutput, $exit)= $this->{session}->{sandbox}->sysCommand(
-            $TWiki::cfg{RCS}{ciDateCmd},
+            $cmd,
             USERNAME => $user,
             FILENAME => $this->{file},
             COMMENT => $comment,
             DATE => $date );
     } else {
+        $cmd = $TWiki::cfg{RCS}{ciCmd};
         ($rcsOutput, $exit)= $this->{session}->{sandbox}->sysCommand(
-            $TWiki::cfg{RCS}{ciCmd},
+            $cmd,
             USERNAME => $user,
             FILENAME => $this->{file},
             COMMENT => $comment );
     }
     $rcsOutput ||= '';
 
-    throw Error::Simple('RCS failure: '.$rcsOutput ) if $exit;
+    if( $exit ) {
+        throw Error::Simple($cmd.' of '.$this->{file}.
+                              ' failed: '.$rcsOutput );
+    }
 
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 }

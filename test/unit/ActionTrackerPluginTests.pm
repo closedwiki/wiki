@@ -150,14 +150,6 @@ break the table here %ACTION{who=ActorSeven,due=01/01/02,open}% Create the maile
    * should generate %ACTION{who=ActorNine,due=01/01/02,closed}% Create the mailer";
   
   TWiki::Plugins::ActionTrackerPlugin::commonTagsHandler($text, "TheTopic", "TheWeb");
-  
-  # Check the script is the first thing
-  my $re = qr/^\s*(<script.*\/script>)\n/s;
-  $this->assert_matches($re, $text);
-  $text =~ s/$re//s;
-  my $script = $1;
-  $script =~ s/\s+/ /go;
-  $this->assert_matches( qr/^<script language="JavaScript">.*<\/script>/, $script);
 }
 
 sub anchor {

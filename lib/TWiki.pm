@@ -544,6 +544,11 @@ sub writeCompletePage {
     # see perldoc -f length
     my $len = do { use bytes; length( $text ); };
     $this->writePageHeader( undef, $pageType, $contentType, $len );
+    my $htmlHeader = join(
+        "\n",
+        map { '<!--'.$_.'-->'.$this->{htmlHeaders}{$_} }
+          keys %{$this->{htmlHeaders}} );
+    $text =~ s/([<]\/head[>])/$htmlHeader$1/i if $htmlHeader;
     print $text;
 }
 
@@ -975,7 +980,7 @@ sub new {
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
 
-    @{$this->{publicWebList}} = ();
+    $this->{htmlHeaders} = {};
 
     $this->{context} = {};
 
@@ -2160,6 +2165,30 @@ other links have $cfg{AntiSpam}{Options} added.
 sub spamProof {
     return unless( defined( $TWiki::cfg{AntiSpam}{Options} ));
     $_[0] =~ s;<a(\s+[^>]*\bhref\s*=\s*['"](?!$TWiki::cfg{AntiSpam}{Clean}));<a $TWiki::cfg{AntiSpam}{Options}$1;gio;
+}
+
+
+=pod
+
+---++ ObjectMethod addToHEAD( $id, $html )
+Add =$html= to the HEAD tag of the page currently being generated.
+
+Note that TWiki variables may be used in the HEAD. They will be expanded
+according to normal variable expansion rules.
+
+The 'id' is used to ensure that multiple adds of the same block of HTML don't
+result in it being added many times.
+
+=cut
+
+sub addToHEAD {
+	my ($this,$tag,$header) = @_;
+    ASSERT($this->isa( 'TWiki')) if DEBUG;
+	
+	$header = $this->handleCommonTags( $header, $this->{webName},
+                                       $this->{topicName} );
+	
+	$this->{htmlHeaders}{$tag} = $header;
 }
 
 =pod

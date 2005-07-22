@@ -17,7 +17,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
+=pod
 
 ---++ package TWiki::Func
 
@@ -1021,6 +1021,10 @@ sub getTopicList {
 
 ---++ Functions: Rendering
 
+=cut
+
+=pod=
+
 ---+++ registerTagHandler( $tag, \&fn )
 Should only be called from initPlugin.
 
@@ -1074,6 +1078,32 @@ sub registerTagHandler {
                                    return $result;
                                }
                              );
+}
+
+=pod
+
+---+++ addToHEAD( $id, $header )
+Adds =$header= to the HTML header (the <head> tag).
+This is useful for plugins that want to include some javascript custom css.
+   * =$id= - Unique ID to prevent the same HTML from being duplicated. Plugins should use a prefix to prevent name clashes (e.g EDITTABLEPLUGIN_JSCALENDAR)
+   * =$header= - the HTML to be added to the <head> section. The HTML must be valid in a HEAD tag - no checks are performed.
+
+All TWiki variables present in =$header= will be expanded before being inserted into the =<head>= section.
+
+Note that this is _not_ the same as the HTTP header, which is modified through the plugins =modifyHeaderHandler=.
+
+*Since:* TWiki::Plugins::VERSION 1.026
+
+example:
+<verbatim>
+TWiki::Func::addToHEAD('PATTERN_STYLE','<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%PUBURL%/TWiki/PatternSkin/layout.css" media="all" />')
+</verbatim>
+
+=cut=	
+
+sub addToHEAD {
+	my( $tag, $header ) = @_;
+	$TWiki::Plugins::SESSION->addToHEAD( $tag, $header );
 }
 
 =pod

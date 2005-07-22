@@ -20,9 +20,8 @@
 package TWiki::Plugins::EditTablePlugin;
 
 use vars qw(
-            $web $topic $user $installWeb $VERSION $debug
+            $web $topic $user $VERSION $debug
             $query $renderingWeb
-            $mishooHome
     );
 
 $VERSION = '1.025';
@@ -30,7 +29,7 @@ $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
 
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
+    ( $topic, $web ) = @_;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1.026 ) {
@@ -56,33 +55,16 @@ sub initPlugin {
     # read in a topic.
     undef $table;
 
-    $mishooHome = "%PUBURL%/$installWeb/JSCalendarContrib";
-
     return 1;
 }
 
 sub commonTagsHandler {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
 
-    # Add style sheet for date calendar to skin if needed.
-    # Handling of the common tags is done separately for the topic text and view skin
-    # The following if statement must be done before the early escape.
-    #
-    # NOTE:
-    # When adding a new button to the table that needs the table to be in the edit mode,
-    # be sure to add it below.
-    if( ( $_[0] =~ m/^[<][!]DOCTYPE/ ) &&
-        ( $query->param( 'etedit' ) || $query->param( 'etaddrow' ) || $query->param( 'etdelrow') ) &&
-        (!($_[0] =~ m/calendar-system/) ) ) {
-
-        my $string = " <link type=\"text/css\" rel=\"stylesheet\""
-                   . " href=\"$mishooHome/calendar-system.css\" />\n";
-        $_[0] =~ s/([<]\/head[>])/$string$1/i;
-    }
-
     return unless $_[0] =~ /%EDIT(TABLE|CELL){(.*)}%/os;
 
     require TWiki::Plugins::EditTablePlugin::Core;
+
     TWiki::Plugins::EditTablePlugin::Core::process( @_ );
 }
 

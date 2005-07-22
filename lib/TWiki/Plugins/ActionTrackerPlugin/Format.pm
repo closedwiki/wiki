@@ -437,9 +437,7 @@ sub _formatFieldForEdit {
         if ( $type->{type} eq 'date') {
             # make sure JSCalendar is there
             eval 'use TWiki::Contrib::JSCalendarContrib';
-            if ( $@ ) {
-                print STDERR "WARNING: JSCalendar not installed: $@\n";
-            } else {
+            unless ( $@ ) {
                 @extras = ( id => "date_$attrname" );
                 $content =
                   CGI::image_button(

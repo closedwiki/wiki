@@ -8,7 +8,7 @@ This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCale
 ---+ Detailed Documentation
 Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
 
-This package also includes an extra Javascript to make using the calendar easier from TWiki plugins. In the normal way, include the styles in the header. For example,
+This package also includes an extra Javascript module to make using the calendar easier from TWiki plugins. In the normal way, include the styles in the header. For example,
 <verbatim>
  <LINK TYPE="text/css" rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-system.css" />
 </verbatim>
@@ -30,7 +30,9 @@ you will then be able to create popup calendar buttons like this:
 </button>
 </verbatim>
 
-See TWiki:Plugins/ActionTrackerPlugin for an example of this style of usage.
+The =lib/TWiki/Contrib/JSCalendarContrib.pm= perl module provides a helper function to make adding these directives to the HTML header easier.
+
+See TWiki:Plugins/ActionTrackerPlugin or TWiki:Plugins/DateFieldPlugin for examples of this style of usage.
 
 ---++ Settings
 	* Name of the perl package

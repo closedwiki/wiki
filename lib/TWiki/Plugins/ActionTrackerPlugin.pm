@@ -29,23 +29,17 @@ use TWiki::Plugins;
 # =========================
 use vars qw(
             $web $topic $user $installWeb $VERSION $initialised
-            $allActions $useNewWindow $debug $javaScriptIncluded
-            $pluginName $defaultFormat $calendarIncludes
+            $allActions $useNewWindow $debug
+            $pluginName $defaultFormat
            );
 
-$VERSION = 2.022;
+$VERSION = 2.100;
 $initialised = 0;
 $pluginName = 'ActionTrackerPlugin';
 $installWeb = 'TWiki';
 
 my $actionNumber = 0;
 my %prefs;
-
-my @dependencies =
-  (
-   { package => 'TWiki::Plugins', constraint => '>= 1.026' },
-   { package => 'Time::ParseDate' }
-  );
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
@@ -59,33 +53,12 @@ sub initPlugin {
     # COVERAGE ON
 
     $initialised = 0;
-    $javaScriptIncluded = 0;
 
     return 1;
 };
 
 sub commonTagsHandler {
     my( $otext, $topic, $web ) = @_;
-
-    unless ($calendarIncludes) {
-        # must do this before checking if %ACTION is in the text, as this
-        # is intended to apply to the skin, not the body
-        require TWiki::Contrib::JSCalendarContrib;
-        if ( $@ ) {
-            $calendarIncludes = '';
-        } else {
-            $calendarIncludes = <<'THIS';
-<link type="text/css" rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-%ACTIONTRACKERPLUGIN_CAL_STYLE%.css" />
-<base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/lang/calendar-%ACTIONTRACKERPLUGIN_CAL_LANG%.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/twiki.js"></script>
-THIS
-            $calendarIncludes =
-              TWiki::Func::expandCommonVariables( $calendarIncludes, $topic, $web );
-        }
-    }
-    $_[0] =~ s/<!-- INCLUDEJSCALENDAR -->/$calendarIncludes/;
 
     return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
@@ -99,7 +72,7 @@ THIS
     my $actionNumber = 0;
     my $text = '';
     my $actionSet = undef;
-    my $javaScriptRequired = 0;
+    my $headersRequired = 0;
     my $gathering;
     my $pre;
     my $attrs;
@@ -127,7 +100,7 @@ THIS
                                                 $useNewWindow,
                                                'atpDef') .
                                                  "\n";
-                    $javaScriptRequired = 1;
+                    $headersRequired = 1;
                     $actionSet = undef;
                 }
                 $text .= $pre;
@@ -146,7 +119,7 @@ THIS
                   $actionSet->formatAsHTML( $defaultFormat, 'name',
                                             $useNewWindow, 'atpDef' ) .
                                               "\n";
-                $javaScriptRequired = 1;
+                $headersRequired = 1;
                 $actionSet = undef;
             }
             $text .= $line."\n";
@@ -167,13 +140,11 @@ THIS
         $text .=
           $actionSet->formatAsHTML( $defaultFormat, 'name',
                                     $useNewWindow, 'atpDef' );
-        $javaScriptRequired = 1;
+        $headersRequired = 1;
     }
-    if ( $javaScriptRequired ) {
-        # do this here rather than as we emit the actions, because it can
-        # screw up the other TWiki formatting if it's embedded.
-        $text = _embedJS() . $text;
-    }
+
+    _addHEADTags() if ( $headersRequired );
+
     $_[0] = $text;
     $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
     # COVERAGE OFF debug only
@@ -298,6 +269,22 @@ sub beforeEditHandler {
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%HIDDENFIELDS%/$fields/go;
     $_[0] = $tmpl;
+
+    # Add styles and javascript for the calendar
+    TWiki::Func::addToHEAD(
+        'ATP_CSS',
+        '<style type="text/css" media="all">@import url("%ACTIONTRACKERPLUGIN_CSS%");</style>');
+
+    use TWiki::Contrib::JSCalendarContrib;
+    if( $@ || !$TWiki::Contrib::JSCalendarContrib::VERSION ) {
+        TWiki::Func::writeWarning('JSCalendarContrib not found '.$@);
+    } elsif( $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
+        TWiki::Func::writeWarning(
+            'JSCalendarContrib >=0.961 required, '.
+              $TWiki::Contrib::JSCalendarContrib::VERSION.' found');
+    } else {
+        TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+    }
 }
 
 sub _hiddenMeta {
@@ -514,21 +501,14 @@ sub _handleActionSearch {
 
     my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
     $actions->sort( $sort );
-    return _embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow,
-                                               'atpSearch' );
+    _addHEADTags();
+    return $actions->formatAsHTML( $fmt, "href", $useNewWindow,
+                                   'atpSearch' );
 }
 
 # Lazy initialize of plugin 'cause of performance
 sub _lazyInit {
 
-    if ( defined( &TWiki::Func::checkDependencies ) ) {
-        my $err = TWiki::Func::checkDependencies($pluginName, \@dependencies);
-        if ( $err ) {
-            TWiki::Func::writeWarning($err);
-            print STDERR $err;
-            return 0;
-        }
-    }
     require TWiki::Attrs;
     require Time::ParseDate;
     require TWiki::Plugins::ActionTrackerPlugin::Action;
@@ -568,25 +548,24 @@ sub _lazyInit {
     return 1;
 }
 
-# PRIVATE embed the JavaScript that opens an edit subwindow
-sub _embedJS {
-    return "" unless ($useNewWindow && !$javaScriptIncluded);
-    $javaScriptIncluded = 1;
-    my $res = <<'THIS';
-<script language="JavaScript"><!--
+# PRIVATE insert the styles and the JavaScript that opens an edit subwindow
+sub _addHEADTags {
+
+    TWiki::Func::addToHEAD(
+        'ATP_CSS',
+        '<style type="text/css" media="all">@import url("%ACTIONTRACKERPLUGIN_CSS%");</style>');
+
+    TWiki::Func::addToHEAD(
+        'ATP_JS', <<'HERE'
+<script type="text/javascript">
 function editWindow(url) {
   win=open(url,"none","titlebar=0,width=900,height=400,resizable,scrollbars");
-  if(win){win.focus();}
+  if (win) {win.focus();}
   return false;
 }
-// -->
 </script>
-THIS
-  my $styles = _getPref( 'CSS', '' );
-    if( $styles ) {
-        $res .= '<style type="text/css" media="all">'.$styles.'</style>';
-    }
-    return $res;
+HERE
+                    );
 }
 
 # PRIVATE return formatted actions that have changed in all webs

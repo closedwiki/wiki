@@ -533,13 +533,17 @@ sub DISABLE_writeHeaderHandler {
 ---++ modifyHeaderHandler( \%headers, $query )
    * =\%headers= - reference to a hash of existing header values
    * =$query= - reference to CGI query object
-Lets the plugin modify the HTTP headers that will be emitted when an HTML
+Lets the plugin modify the HTTP headers that will be emitted when a
 page is written to the browser. \%headers= will contain the headers
 proposed by the core, plus any modifications made by other plugins that also
 implement this method that come earlier in the plugins list.
 <verbatim>
 $headers->{expires} = '+1h';
 </verbatim>
+
+Note that this is the HTTP header which is _not_ the same as the HTML
+&lt;HEAD&gt; tag. The contents of the &lt;HEAD&gt; tag may be manipulated
+using the =TWiki::Func::addToHEAD= method.
 
 __Since:__ TWiki::Plugins::VERSION 1.026
 

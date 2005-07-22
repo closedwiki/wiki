@@ -19,6 +19,8 @@
 package TWiki::Plugins::EditTablePlugin::Core;
 
 use strict;
+use Assert;
+
 use vars qw(
             $preSp %params @format @formatExpanded
             $prefsInitialized $prefCHANGEROWS $prefEDITBUTTON
@@ -68,17 +70,20 @@ sub process {
 
                if( $query->param( 'etsave' ) ) {
                    # [Save table] button pressed
-                   doSaveTable( $theWeb, $theTopic, $tableNr, '' );   # never return
-                   return; # in case browser does not redirect
-
+                   doSaveTable( $theWeb, $theTopic, $tableNr, '' );
+                   ASSERT(0) if DEBUG;
+                   return;
                } elsif( $query->param( 'etqsave' ) ) {
                    # [Quiet save] button pressed
-                   doSaveTable( $theWeb, $theTopic, $tableNr, 'on' );   # never return
-                   return; # in case browser does not redirect
+                   doSaveTable( $theWeb, $theTopic, $tableNr, 'on' );
+                   ASSERT(0) if DEBUG;
+                   return;
 
                } elsif( $query->param( 'etcancel' ) ) {
                    # [Cancel] button pressed
-                   doCancelEdit( $theWeb, $theTopic );            # never return
+                   doCancelEdit( $theWeb, $theTopic );
+                   ASSERT(0) if DEBUG;
+                   return;
                    return; # in case browser does not redirect
 
                } elsif( $query->param( 'etaddrow' ) ) {
@@ -95,7 +100,8 @@ sub process {
 
                } elsif( $query->param( 'etedit' ) ) {
                    # [Edit table] button pressed
-                   $doEdit = doEnableEdit( $theWeb, $theTopic, 1 ); # never return if locked or no permission
+                   $doEdit = doEnableEdit( $theWeb, $theTopic, 1 );
+                   # never return if locked or no permission
                    return unless( $doEdit );
                    $cgiRows = -1; # make sure to get the actual number of rows
                }
@@ -104,10 +110,11 @@ sub process {
         if( $enableForm ) {
             if( /^(\s*)\|.*\|\s*$/ ) {
                 # found table row
-                $result .= handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit ) unless $insideTable;
+                $result .= handleTableStart( $theWeb, $theTopic, $tableNr,
+                                             $doEdit ) unless $insideTable;
                 $insideTable = 1;
                 $rowNr++;
-                if( ( $doEdit ) && ( $cgiRows >= 0 ) && ( $rowNr > $cgiRows ) ) {
+                if( $doEdit && $cgiRows >= 0 && $rowNr > $cgiRows ) {
                     # deleted row
                     $rowNr--;
                     next;
@@ -117,10 +124,12 @@ sub process {
             } elsif( $insideTable ) {
                 # end of table
                 $insideTable = 0;
-                if( ( $doEdit ) && ( $cgiRows >= 0 ) && ( $rowNr < $cgiRows ) ) {
+                if( $doEdit && $cgiRows >= 0 && $rowNr < $cgiRows ) {
                     while( $rowNr < $cgiRows ) {
                         $rowNr++;
-                        $result .= handleTableRow( '', '', $tableNr, $cgiRows, $rowNr, $doEdit, 0, $theWeb, $theTopic ) . "\n";
+                        $result .= handleTableRow(
+                            '', '', $tableNr, $cgiRows, $rowNr, $doEdit,
+                            0, $theWeb, $theTopic ) . "\n";
                     }
                 }
                 $result .= handleTableEnd( $theWeb, $rowNr, $doEdit );
@@ -131,16 +140,21 @@ sub process {
             if( /^\s*$/ ) {      # empty line
                 if( $enableForm ) {
                     # empty %EDITTABLE%, so create a default table
-                    $result .= handleTableStart( $theWeb, $theTopic, $tableNr, $doEdit );
+                    $result .= handleTableStart( $theWeb, $theTopic,
+                                                 $tableNr, $doEdit );
                     $rowNr = 0;
                     if( $doEdit ) {
                        if( $params{'header'} ) {
                            $rowNr++;
-                           $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, $doEdit, 0, $theWeb, $theTopic ) . "\n";
+                           $result .= handleTableRow(
+                               $preSp, '', $tableNr, $cgiRows, $rowNr,
+                               $doEdit, 0, $theWeb, $theTopic ) . "\n";
                         }
                         do {
                             $rowNr++;
-                            $result .= handleTableRow( $preSp, '', $tableNr, $cgiRows, $rowNr, $doEdit, 0, $theWeb, $theTopic ) . "\n";
+                            $result .= handleTableRow(
+                                $preSp, '', $tableNr, $cgiRows, $rowNr,
+                                $doEdit, 0, $theWeb, $theTopic ) . "\n";
                         } while( $rowNr < $cgiRows );
                     }
                     $result .= handleTableEnd( $theWeb, $rowNr, $doEdit );
@@ -152,7 +166,9 @@ sub process {
         }
         $result .= "$_\n";
     }
-    $result =~ s|\n?<nop>\n$||o; # clean up hack that handles EDITTABLE correctly if at end
+    # clean up hack that handles EDITTABLE correctly if at end
+    $result =~ s|\n?<nop>\n$||o;
+
     $_[0] = $result;
 }
 
@@ -266,11 +282,7 @@ sub handleTableStart {
     my $viewUrl = TWiki::Func::getScriptUrl( $theWeb, $theTopic, 'viewauth' ) . "\#edittable$theTableNr";
     my $text = '';
     if( $doEdit ) {
-        my $dir = $TWiki::Plugins::EditTablePlugin::mishooHome;
-        $text .= "$preSp<script type=\"text/javascript\" src=\"$dir/calendar.js\"></script>\n";
-        $text .= "$preSp<script type=\"text/javascript\" src=\"$dir/lang/calendar-"
-               . "$prefJSCALENDARLANGUAGE.js\"></script>\n";
-        $text .= "$preSp<script type=\"text/javascript\" src=\"$dir/calendar-setup.js\"></script>\n";
+        TWiki::Contrib::JSCalendarContrib::addHEAD();
     }
     $text .= "$preSp<noautolink>\n" if $doEdit;
     $text .= "$preSp<a name=\"edittable$theTableNr\"></a>\n";
@@ -348,8 +360,8 @@ sub viewEditCell {
         $img = '';
         if( $value =~ s/(.+),\s*(.+)/$1/o ) {
             $img = $2;
-            $img =~ s|%ATTACHURL%|%PUBURL%/$TWiki::Plugins::EditTablePlugin::installWeb/EditTablePlugin|o;
-            $img =~ s|%WEB%|$TWiki::Plugins::EditTablePlugin::installWeb|o;
+            $img =~ s|%ATTACHURL%|%PUBURL%/%TWIKIWEB%/EditTablePlugin|o;
+            $img =~ s|%WEB%|%TWIKIWEB%|o;
         }
     }
 
@@ -628,6 +640,7 @@ sub doSaveTable {
     if( $error ) {
         $url = TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopssaveerr', $error );
     }
+die $url;
     TWiki::Func::redirectCgiQuery( $query, $url );
 }
 
