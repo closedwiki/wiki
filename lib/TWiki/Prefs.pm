@@ -61,10 +61,11 @@ sub new {
     my $globs =  new TWiki::Prefs::PrefsCache( $session, undef );
     $globs->loadPrefsFromTopic( $TWiki::cfg{SystemWebName},
                                 $TWiki::cfg{SitePrefsTopicName} );
-    $globs->loadPrefsFromTopic( $TWiki::cfg{UsersWebName},
-                                $TWiki::cfg{SitePrefsTopicName} );
+    my $local = $TWiki::cfg{LocalSitePreferences};
+    if( $local && $local =~ /^(\w+)\.(\w+)$/ ) {
+        $globs->loadPrefsFromTopic( $1, $2 );
+    }
     $this->{GLOBAL} = $globs;
-
 
     my @webPath=split(/[\/\.]/,$web);
     my $tmpWebPath="";
