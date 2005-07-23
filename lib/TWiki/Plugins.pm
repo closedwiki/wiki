@@ -326,13 +326,17 @@ sub _handleFAILEDPLUGINS {
       CGI::Tr(CGI::th('Plugin').CGI::th('Errors'));
 
     foreach my $plugin ( @{$this->{plugins}} ) {
-        my $err = 'none';
-        if ( $plugin->{disabled} && $plugin->{errors}) {
-            $err= "\n<verbatim class='twikiAlert'>\n" .
-              join( "\n", @{$plugin->{errors}} ) . "\n</verbatim>\n";
+        my $td;
+        if ( $plugin->{errors}) {
+            $td = CGI::td( {style => 'background-color:yellow' },
+                "\n<verbatim>\n".
+                  join( "\n", @{$plugin->{errors}} ).
+                    "\n</verbatim>\n" );
+        } else {
+            $td = CGI::td( 'none' );
         }
         $text .= CGI::Tr( { valign=>'top' },
-                          CGI::td($plugin->{name}). CGI::td( $err ));
+                          CGI::td($plugin->{name}). $td );
     }
 
     $text .= CGI::end_table().CGI::start_table({ border=>1 }).

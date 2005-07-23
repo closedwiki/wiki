@@ -42,6 +42,10 @@ package TWiki;
 # BASIC checks. Without these, nothing works.
 
 use strict;
+
+$SIG{__DIE__} = sub { Carp::confess $_[0] };
+$SIG{'__WARN__'} = sub { die @_ };
+
 my %cfg; # TWiki config
 
 # Constants
@@ -1183,7 +1187,7 @@ sub calculateChanges {
 sub performSanityChecks {
     my( $brokenTWikiCfgError, $brokenLocalSiteError ) = @_;
     my $output = '';
-    
+
     if ($brokenTWikiCfgError) {
         $output .= CGI::h2('WARNING:').
           CGI::p('TWiki.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) should help locate the problem.');
@@ -1224,7 +1228,7 @@ sub performSanityChecks {
         $output .= NOTE( '@INC = ', join( ' ', @INC ));
         return $output;
     }
-    
+
     return $output;
 }
 
@@ -1495,7 +1499,7 @@ HERE
     # Get web server's user and group info
     my $usr = "";
     my $grp = "";
-    if( $TWiki::cfg{OS} eq 'UNIX' or  ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {        
+    if( $TWiki::cfg{OS} eq 'UNIX' or  ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype eq 'Cygwin' ) ) {
         $usr = lc( getpwuid($>) );        # Unix/Cygwin Perl - effective UID
         $grp = join(',', map { lc(getgrgid( $_ )) } split( " ", $( ) );
     } else {                # ActiveState or other Win32 Perl
@@ -1642,7 +1646,7 @@ eval "use CGI::Carp qw( fatalsToBrowser )";
 # Try to use setlib.cfg, use default path if missing
 my $setlibAvail;
 if ( -r './setlib.cfg' ) {
-    require './setlib.cfg'; 
+    require './setlib.cfg';
     $setlibAvail = 1;
 } else {
     unshift @INC, '../lib';

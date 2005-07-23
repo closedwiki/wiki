@@ -1,6 +1,6 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2001-2004 Peter Thoeny, Peter@Thoeny.com
+# Copyright (C) 2005 TWikiContributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,343 +18,184 @@
 # Handle continuation lines (see Prefs::parseText). These should always
 # go into a text area.
 
-# =========================
 package TWiki::Plugins::PreferencesPlugin;
 
-# =========================
+use strict;
+use CGI ( -any );
+
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug $pluginName
-        $query $encodeStart $encodeEnd $len
-    );
+            $web $topic $user $installWeb $VERSION $pluginName
+            $query @shelter
+           );
 
-$VERSION = '1.024';
-$encodeStart = "--EditTableEncodeStart--";
-$encodeEnd   = "--EditTableEncodeEnd--";
+$VERSION = '1.025';
 
-# =========================
+my $MARKER = "\007";
+
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
-$pluginName = 'PreferencesPlugin';
+    $pluginName = 'PreferencesPlugin';
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.021 ) {
-        TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
+        TWiki::Func::writeWarning( 'Version mismatch between '.$pluginName.' and Plugins.pm' );
         return 0;
     }
+    @shelter = ();
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPluginPreferencesFlag( "PREFERENCESPLUGIN_DEBUG" );
-
-    # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( "EXAMPLE" ) || "default";
-
-    # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
-# =========================
-sub beforeCommonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+sub preRenderingHandler {
+    ### my ( $text, $map ) = @_;
 
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeCommonTagsHandler( $_[2].$_[1] )" ) if $debug;
+    return unless ( $_[0] =~ m/%EDITPREFERENCES{\s*\"(.*?)\"\s*}%/ );
+    my $form = $1;
+    my $insideVerbatim = 0;
+    my $formWeb = $web;
+    $form = TWiki::Func::expandCommonVariables( $form, $topic, $web );
+    if( $form =~ m/(.*?)\.(.*)/ ) {
+        $formWeb = $1;
+        $form = $2;
+    }
+    $query = TWiki::Func::getCgiQuery();
 
-    if ( $_[0] =~ m/%EDITPREFERENCES{\s*\"(.*?)\"\s*}%/ ) {
-      my $insideVerbatim = 0;
-      my $formWeb = $web;
-      my $form = $1;
-      $form = TWiki::Func::expandCommonVariables( $form, $topic, $web );
-      if( $form =~ m/(.*?)\.(.*)/ ) {
-	$formWeb = $1;
-	$form = $2;
-      }
-      $query = &TWiki::Func::getCgiQuery();
+    my $action = lc $query->param( 'prefsaction' );
 
-      $_[0] = &handlePrefsStart( $_[2], $_[1] ) . $_[0] . &handlePrefsEnd();
-      my $action = lc $query->param( 'prefsaction' );
+    # SMELL: Unpublished API. No choice, though :-(
+    my $formDef = new TWiki::Form( $TWiki::Plugins::SESSION,
+                                   $formWeb, $form );
 
-      my @fieldsInfo = &TWiki::Form::getFormDef( $formWeb, $form );
-      my %fields = ();
-      foreach my $c ( @fieldsInfo ) {
-	my @fieldInfo = @$c;
-	my $fieldName = shift @fieldInfo;
-	my $name = $fieldName;
-	my $title = shift @fieldInfo;
-	my $type = shift @fieldInfo;
-	my $size = shift @fieldInfo;
-	my $tooltip = shift @fieldInfo;
-	my $attributes = shift @fieldInfo;
-	$fields{$name} = [ $type, $size, @fieldInfo ];
-      }
+    if ( $action eq 'edit' ) {
+        TWiki::Func::setTopicEditLock( $web, $topic, 1 );
 
-      if ( $action eq 'edit' ) {
+        $_[0] =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=(.*$(\n[ \t]+[^\s*].*$)*))
+          ($1._generateEditField($web, $topic, $2, $3, $formDef))gem;
+        $_[0] =~ s(%EDITPREFERENCES.*%)
+          (_generateButtons($web, $topic, 0))eo;
 
-	$len = TWiki::Func::getPluginPreferencesValue( "DEFAULTLENGTH" ) || "30";
-	TWiki::Func::setTopicEditLock( $web, $topic, 1 );
+    } elsif ( $action eq 'cancel' ) {
+        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+        my $url = TWiki::Func::getViewUrl( $web, $topic );
+        TWiki::Func::redirectCgiQuery( $query, $url );
+        return 0;
 
-	my $result = "";
-	my $verbatim = "";
+    } elsif ( $action eq 'save' ) {
 
-	foreach( split( /\r?\n/, $_[0] ) ) {
+        my $text = TWiki::Func::readTopicText( $web, $topic );
+        $text =~ s(^((?:\t|   )+\*\sSet\s)(\w+)\s\=(.*)$)
+          ($1._saveSet($web, $topic, $2, $3, $formDef))mgeo;
 
-	  if ( /<verbatim>/ ) {
-	    $insideVerbatim = 1;
-	    $verbatim = "";
-	    $result .= $_;
-	    $result .= "\n";
-	  } elsif ( /<\/verbatim>/ ) {
-	    $insideVerbatim = 0;
-            $result .= $_;
-	    $result .= "\n";
-            $result .= $verbatim;
-	    $result .= "\n";
-	  } else {
-	    if ( /^(\t+)\*\sSet\s(\w+)\s\=(.*)$/ ) {
-	      if( $insideVerbatim ) {
-                 $verbatim .= &handleSet($_[2], $_[1], $2, $3, $1, %fields);
-	         $verbatim .= "\n";
-              } else {
-                 $result .= &handleSet($_[2], $_[1], $2, $3, $1, %fields);
-	         $result .= "\n";
-              }
-            } else {
-              $result .= $_;
-   	      $result .= "\n";
-            }
-          }
+        my $error = TWiki::Func::saveTopicText( $web, $topic, $text, '' );
+        TWiki::Func::setTopicEditLock( $web, $topic, 0 );
+        my $url;
+        if( $error ) {
+            $url = $error;
+        } else {
+            $url = TWiki::Func::getViewUrl( $web, $topic );
         }
-        $_[0] = $result;
-	$_[0] =~ s/%EDITPREFERENCES.*%/&handleEditButton($_[2], $_[1], 0)/eo;
-      } elsif ( $action eq 'cancel' ) {
-	 TWiki::Func::setTopicEditLock( $web, $topic, 0 );  # unlock Topic
-	 my $url = &TWiki::Func::getViewUrl( $web, $topic );
-	 &TWiki::Func::redirectCgiQuery( $query, $url );
-	 return 0;
-	
-      } elsif ( $action eq 'save' ) {
+        TWiki::Func::redirectCgiQuery( $query, $url );
+        return 0;
 
-	$text = &TWiki::Func::readTopicText( $web, $topic );
-	$text =~ s/^(\t+)\*\sSet\s(\w+)\s\=(.*)$/&handleSave($_[2], $_[1], $2, $3, $1, %fields)/mgeo;
-
-	my $error = &TWiki::Func::saveTopicText( $web, $topic, $text, "" );
-	TWiki::Func::setTopicEditLock( $web, $topic, 0 );  # unlock Topic
-	my $url = &TWiki::Func::getViewUrl( $web, $topic );
-	if( $error ) {
-	  $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopssaveerr", $error );
-	}
-	&TWiki::Func::redirectCgiQuery( $query, $url );
-	return 0;
-
-      } else {
-	$_[0] =~ s/%EDITPREFERENCES.*%/&handleEditButton($_[2], $_[1], 1)/ge;
-      }
-      
-    }
-
-}
-
-# =========================
-sub endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    &TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just after the line loop
-
-    return unless $_[0] =~ /$encodeStart/os;
-
-    $_[0] =~ s/$encodeStart(.*?)$encodeEnd/&decodeValue($1)/geos;
-}
-
-# =========================
-
-sub handleSet {
-  my( $web, $topic, $name, $value, $pre, %fields ) = @_;
-  $value =~ s/^\s*(.*?)\s*$/$1/ge;
-  my @fld = @{$fields{$name}};
-  my $type = shift @fld || "";
-  my $size = shift @fld || "";
-  $text = "$pre* Set $name = <noautolink>";
-  if( $type eq "text" ) {
-    $value = $encodeStart . encodeValue( $value ) . $encodeEnd unless( $value eq "" );
-    $text .= "<input type = \"text\" size=\"$size\" name=\"$name\" value=\"$value\" />\n";
-  } elsif( $type eq "textarea" ) {
-    my $cols = 40;
-    my $rows = 5;
-    if( my $size =~ /([0-9]+)x([0-9]+)/ ) {
-      $cols = $1;
-      $rows = $2;
-    }
-    $value = $encodeStart . encodeValue( $value ) . $encodeEnd unless( $value eq "" );
-    $text .= "<textarea cols=\"$cols\" rows=\"$rows\" name=\"$name\">$value</textarea>";
-  } elsif( $type eq "select" ) {
-    my $val = "";
-    my $matched = "";
-    my $defaultMarker = "%DEFAULTOPTION%";
-    foreach my $item ( @fld ) {
-      my $selected = $defaultMarker;
-      if( $item eq $value ) {
-	$selected = ' selected="selected"';
-	$matched = $item;
-      }
-      $defaultMarker = "";
-      $item =~ s/<nop/&lt\;nop/go;
-      $val .= "   <option$selected>$item</option>";
-    }
-    if( ! $matched ) {
-      $val =~ s/%DEFAULTOPTION%/ selected="selected"/go;
     } else {
-      $val =~ s/%DEFAULTOPTION%//go;
+        # implicit action="view"
+        $_[0] =~ s(%EDITPREFERENCES.*%)
+          (_generateButtons($web, $topic, 1))ge;
     }
-    $value = $encodeStart . encodeValue( $val ) . $encodeEnd unless( $val eq "" );
-    $text .= "<select name=\"$name\" size=\"$size\">$val</select>";
-  } elsif( $type =~ "^checkbox" ) {
-    my $val ="<table cellspacing=\"0\" cellpadding=\"0\"><tr>";
-    my $lines = 0;
-    foreach my $item ( @fld ) {
-      my $flag = "";
-      my $expandedItem = &TWiki::Func::expandCommonVariables( $item, $topic );
-      if( $value =~ /(^|,\s*)\Q$item\E(,|$)/ ) {
-	$flag = ' checked="checked"';
-      }
-      $expandedItem = $encodeStart . encodeValue( $expandedItem ) . $encodeEnd unless( $expandedItem eq "" );
-      $val .= "\n<td><input type=\"checkbox\" name=\"$name$item\"$flag />$expandedItem &nbsp;&nbsp;</td>";
-      if( $size > 0 && ($lines % $size == $size - 1 ) ) {
-	$val .= "\n</tr><tr>";
-      }
-      $lines++;
+
+    my $viewUrl = TWiki::Func::getScriptUrl( $web, $topic, 'viewauth' );
+    $_[0] = CGI::start_form(-name => 'editpreferences', -method => 'post',
+                            -action => $viewUrl ).
+                              $_[0].
+                                CGI::end_form();
+}
+
+# Use the post-rendering handler to plug our formatted editor units
+# into the text
+sub postRenderingHandler {
+    ### my ( $text ) = @_;
+
+    $_[0] =~ s/SHELTER$MARKER(\d+)/$shelter[$1]/g;
+}
+
+# Pluck the default value of a named field from a form definition
+sub _getField {
+    my( $formDef, $name ) = @_;
+    foreach my $f ( @{$formDef->{fields}} ) {
+        if( $f->{name} eq $name ) {
+            return $f;
+        }
     }
-    $val =~ s/\n<\/tr><tr>$//;
-    $text .= "$val\n</tr></table>\n";
-  } elsif( $type eq "radio" ) {
-    my $lines = 0;
-    foreach my $item ( @fld ) {
-      my $selected = $defaultMarker;
-      my $expandedItem = &TWiki::Func::expandCommonVariables( $item, $topic );
-      if( $item eq $value ) {
-	$selected = ' checked="checked"';
-	$matched = $item;
-      }
-      $defaultMarker = "";
-      $expandedItem = $encodeStart . encodeValue( $expandedItem ) . $encodeEnd unless( $expandedItem eq "" );
-      $val .= "\n<td><input type=\"radio\" name=\"$name\" value=\"$item\" $selected />$expandedItem &nbsp;&nbsp;</td>";
-      if( $size > 0 && ($lines % $size == $size - 1 ) ) {
-	$val .= "\n</tr><tr>";
-      }
-      $lines++;
-    }
-    if( ! $matched ) {
-      $val =~ s/%DEFAULTOPTION%/ checked="checked"/go;
-    } else {
-      $val =~ s/%DEFAULTOPTION%//go;
-    }
-    $val =~ s/\n<\/tr><tr>$//;
-    $value = "$val\n</tr></table>\n";
-  } elsif( $type eq "date" ) {
-    my $ifFormat = TWiki::Func::getPreferencesValue("JSCALENDARDATEFORMAT", "$web") || "%d %b %Y";
-    my $ifOptions = TWiki::Func::getPreferencesValue("JSCALENDAROPTIONS", "$web") || "";
-    my $size = 10 if ($size < 1);
-    $text .= "<input type=\"text\" name=\"$name\" id=\"id$name\"size=\"$size\" value=\"$value\" /><button type=\"reset\" id=\"trigger$name\">...</button><script type=\"text/javascript\">Calendar.setup({inputField : \"id$name\", ifFormat : \"$ifFormat\", button : \"trigger$name\", singleClick : true $ifOptions });</script>";
-    $query->{'jscalendar'} = 1;
-  } else {
-    # Treat like text, make it reasonably long
-    $value = $encodeStart . encodeValue( $value ) . $encodeEnd unless( $value eq "" );
-    $text .= "<input type=\"text\" name=\"$name\" size=\"$len\" value=\"$value\" />";
-  }
-
-  $text .= "</noautolink>";
-
-  return $text;
-
+    return undef;
 }
 
-# =========================
-sub encodeValue
-{
-    my( $theText ) = @_;
+# Generate a field suitable for editing this type. Use of the core
+# function 'renderFieldForEdit' ensures that we will pick up
+# extra edit types defined in other plugins.
+sub _generateEditField {
+    my( $web, $topic, $name, $value, $formDef ) = @_;
+    $value =~ s/^\s*(.*?)\s*$/$1/ge;
 
-    # FIXME: *very* crude encoding to escape Wiki rendering inside form fields
-    $theText =~ s/\./%dot%/gos;
-    $theText =~ s/(.)/\.$1/gos;
+    my $fieldDef = _getField( $formDef, $name );
 
-    return $theText;
+    my $extras;
+
+    # SMELL: use of unpublished core function
+    ( $extras, $value ) =
+      $formDef->renderFieldForEdit( $fieldDef, $web, $topic, $value);
+
+    push( @shelter, $value );
+
+    return CGI::span({class=>'twikiAlert'},
+                    $name.' = SHELTER'.$MARKER.$#shelter);
 }
 
-# =========================
-sub decodeValue
-{
-    my( $theText ) = @_;
-
-    $theText =~ s/\.(.)/$1/gos;
-    $theText =~ s/%dot%/\./gos;
-    $theText =~ s/\&([^#a-z])/&amp;$1/go; # escape non-entities
-    $theText =~ s/</\&lt;/go;             # change < to entity
-    $theText =~ s/>/\&gt;/go;             # change > to entity
-    $theText =~ s/\"/\&quot;/go;          # change " to entity
-
-    return $theText;
-}
-
-sub handlePrefsStart {
-    my( $web, $topic ) = @_;
-
-    my $viewUrl = &TWiki::Func::getScriptUrl( $web, $topic, "viewauth" );
-
-    return "<form name=\"editpreferences\" method=\"post\" action=\"$viewUrl\"  />\n";
-    
-}
-
-sub handlePrefsEnd {
-    return "</form>\n";
-}
-
-sub handleEditButton
-{
+# Generate the buttons that replace the EDITPREFERENCES tag, depending
+# on the mode
+sub _generateButtons {
     my( $web, $topic, $doEdit ) = @_;
 
-    my $text = "";
+    my $text = '';
     if ( $doEdit ) {
-      $text .= "<input type=\"submit\" name=\"prefsaction\" value=\"Edit\" />\n";
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Edit');
     } else {
-      $text .= "<input type=\"submit\" name=\"prefsaction\" value=\"Save\" />\n";
-      $text .= "&nbsp;&nbsp;";
-      $text .= "<input type=\"submit\" name=\"prefsaction\" value=\"Cancel\" />\n";
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Save');
+        $text .= '&nbsp;&nbsp;';
+        $text .= CGI::submit(-name=>'prefsaction', -value=>'Cancel');
     }
     return $text;
 }
 
-sub handleSave {
-    my( $web, $topic, $name, $value, $pre, %fields ) = @_;
+# Given a Set in the topic being saved, look in the query to see
+# if there is a new value for the Set and generate a new
+# Set statement.
+sub _saveSet {
+    my( $web, $topic, $name, $value, $formDef ) = @_;
 
-    my $newValue = $query->param( "$name" );
+    my $newValue = $query->param( $name ) || $value;
 
-    my @fld = @{$fields{$name}};
-    my $type = shift @fld;
-    my $size = shift @fld;
+    my $fieldDef = _getField( $formDef, $name );
+    my $type = $fieldDef->{type} || '';
 
-    if( $type =~ "^checkbox" ) {
-      $value = "";
-      foreach my $item ( @fld ) {
-	my $cvalue = $query->param( "$name$item" );
-	if( defined( $cvalue ) ) {
-	  if( ! $value ) {
-	    $value = "";
-	  } else {
-	    $value .= ", " if( $cvalue );
-	  }
-	  $value .= "$item" if( $cvalue );
-	}
-      }
-      $newValue = $value;
-    } elsif ( $type eq "textarea" ) {
-      $newValue =~ s/\r*\n/ /geo;
+    if( $type && $type =~ /^checkbox/ ) {
+        $value = '';
+        my $vals = $fieldDef->{value};
+        foreach my $item ( @$vals ) {
+            my $cvalue = $query->param( $name.$item );
+            if( defined( $cvalue ) ) {
+                if( ! $value ) {
+                    $value = '';
+                } else {
+                    $value .= ', ' if( $cvalue );
+                }
+                $value .= $item if( $cvalue );
+            }
+        }
+        $newValue = $value;
     }
 
-
-    return $pre . "* Set $name = $newValue";
+    return $name.' = '.$newValue;
 }
 
 1;

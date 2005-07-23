@@ -22,30 +22,24 @@
 package TWiki::Plugins::ActionTrackerPlugin;
 
 use strict;
-
+use Assert;
 use TWiki::Func;
 use TWiki::Plugins;
 
 # =========================
 use vars qw(
             $web $topic $user $installWeb $VERSION $initialised
-            $allActions $useNewWindow $debug $javaScriptIncluded
-            $pluginName $defaultFormat $calendarIncludes
+            $allActions $useNewWindow $debug
+            $pluginName $defaultFormat
            );
 
-$VERSION = 2.022;
+$VERSION = 2.100;
 $initialised = 0;
-$pluginName = "ActionTrackerPlugin";
-$installWeb = "TWiki";
+$pluginName = 'ActionTrackerPlugin';
+$installWeb = 'TWiki';
 
 my $actionNumber = 0;
 my %prefs;
-
-my @dependencies =
-  (
-   { package => 'TWiki::Plugins', constraint => '>= 1.026' },
-   { package => 'Time::ParseDate' }
-  );
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
@@ -54,38 +48,17 @@ sub initPlugin {
     # COVERAGE OFF standard plugin code
 
     if( $TWiki::Plugins::VERSION < 1.026 ) {
-        TWiki::Func::writeWarning( "Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. 1.026 required." );
+        TWiki::Func::writeWarning( 'Version mismatch between ActionTrackerPlugin and Plugins.pm $TWiki::Plugins::VERSION. 1.026 required.' );
     }
     # COVERAGE ON
 
     $initialised = 0;
-    $javaScriptIncluded = 0;
 
     return 1;
 };
 
 sub commonTagsHandler {
-    ### my ( $text, $topic, $web ) = @_;
-
-    unless ($calendarIncludes) {
-        # must do this before checking if %ACTION is in the text, as this
-        # is intended to apply to the skin, not the body
-        require TWiki::Contrib::JSCalendarContrib;
-        if ( $@ ) {
-            $calendarIncludes = "";
-        } else {
-            $calendarIncludes = <<'THIS';
-<link type="text/css" rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-%ACTIONTRACKERPLUGIN_CAL_STYLE%.css" />
-<base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/lang/calendar-%ACTIONTRACKERPLUGIN_CAL_LANG%.js"></script>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/twiki.js"></script>
-THIS
-            $calendarIncludes =
-              TWiki::Func::expandCommonVariables( $calendarIncludes, $topic, $web );
-        }
-    }
-    $_[0] =~ s/<!-- INCLUDEJSCALENDAR -->/$calendarIncludes/;
+    my( $otext, $topic, $web ) = @_;
 
     return unless ( $_[0] =~ m/%ACTION.*{.*}%/o );
 
@@ -97,9 +70,9 @@ THIS
     # Done this way so we get tables built up by
     # collapsing successive actions.
     my $actionNumber = 0;
-    my $text = "";
+    my $text = '';
     my $actionSet = undef;
-    my $javaScriptRequired = 0;
+    my $headersRequired = 0;
     my $gathering;
     my $pre;
     my $attrs;
@@ -113,20 +86,21 @@ THIS
                 $gathering = undef;
                 $processAction = 1;
             } else {
-                $descr .= "$line\n";
+                $descr .= $line."\n";
                 next;
             }
         } elsif ( $line =~ m/^(.*?)%ACTION{(.*?)}%(.*)/o ) {
             ( $pre, $attrs, $descr ) = ( $1, $2, $3 );
-            if ( $pre ne "" ) {
+            if ( $pre ne '' ) {
                 if ( $pre !~ m/^[ \t]*$/o && $actionSet ) {
                     # spit out pending action table if the pre text is more
                     # than just spaces or tabs
                     $text .=
-                      $actionSet->formatAsHTML( $defaultFormat, "name",
-                                                $useNewWindow ) .
-                                                  "\n";
-                    $javaScriptRequired = 1;
+                      $actionSet->formatAsHTML( $defaultFormat, 'name',
+                                                $useNewWindow,
+                                               'atpDef') .
+                                                 "\n";
+                    $headersRequired = 1;
                     $actionSet = undef;
                 }
                 $text .= $pre;
@@ -142,19 +116,21 @@ THIS
         } else {
             if ( $actionSet ) {
                 $text .=
-                  $actionSet->formatAsHTML( $defaultFormat, "name",
-                                            $useNewWindow ) .
+                  $actionSet->formatAsHTML( $defaultFormat, 'name',
+                                            $useNewWindow, 'atpDef' ) .
                                               "\n";
-                $javaScriptRequired = 1;
+                $headersRequired = 1;
                 $actionSet = undef;
             }
-            $text .= "$line\n";
+            $text .= $line."\n";
         }
 
         if ( $processAction ) {
-            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action( $_[2], $_[1], $actionNumber++, $attrs, $descr );
+            my $action = new TWiki::Plugins::ActionTrackerPlugin::Action(
+                $web, $topic, $actionNumber++, $attrs, $descr );
             if ( !defined( $actionSet )) {
-                $actionSet = new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
+                $actionSet =
+                  new TWiki::Plugins::ActionTrackerPlugin::ActionSet();
             }
             $actionSet->add( $action );
             $processAction = 0;
@@ -162,20 +138,18 @@ THIS
     }
     if ( $actionSet ) {
         $text .=
-          $actionSet->formatAsHTML( $defaultFormat, "name", $useNewWindow );
-        $javaScriptRequired = 1;
+          $actionSet->formatAsHTML( $defaultFormat, 'name',
+                                    $useNewWindow, 'atpDef' );
+        $headersRequired = 1;
     }
-    if ( $javaScriptRequired ) {
-        # do this here rather than as we emit the actions, because it can
-        # screw up the other TWiki formatting if it's embedded.
-        $text = _embedJS() . $text;
-    }
+
+    _addHEADTags() if ( $headersRequired );
+
     $_[0] = $text;
     $_[0] =~ s/%ACTIONSEARCH{(.*)?}%/&_handleActionSearch($web, $1)/geo;
     # COVERAGE OFF debug only
     if ( $debug ) {
         $_[0] =~ s/%ACTIONNOTIFICATIONS{(.*?)}%/&_handleActionNotify($web, $1)/geo;
-        $_[0] =~ s/%ACTIONTRACKERPREFS%/&_dumpPrefs()/geo;
     }
     # COVERAGE ON
 }
@@ -190,7 +164,7 @@ THIS
 # fully populated. This allows us to call either 'save' or 'preview'
 # to terminate the edit, as selected by the NOPREVIEW parameter.
 sub beforeEditHandler {
-    ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
+    my( $text, $topic, $web, $meta ) = @_;
 
     return unless ( TWiki::Func::getSkin() =~ /\baction\b/ );
 
@@ -198,19 +172,16 @@ sub beforeEditHandler {
         return unless _lazyInit();
     }
 
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeEditHandler( $_[2].$_[1] )" ) if $debug;
-
-    # If only we had control over meta!!!! But we don't so we have to 
-    # read the topic again to extract it and insert the meta fields here.
-    # We don't want to show them so they are inserted as type=hidden
-    my $topic = $_[1];
-    my $web = $_[2];
-
     my $query = TWiki::Func::getCgiQuery();
+
+    my $uid = $query->param( 'atp_action' );
+    return unless defined $uid;
+
     # actionform.tmpl is a sub-template inserted into the parent template
     # as %TEXT%. This is done so we can use the standard template mechanism
     # without screwing up the content of the subtemplate.
-    my $tmpl = TWiki::Func::readTemplate( "actionform", "");
+    my $tmpl = TWiki::Func::readTemplate( 'actionform',
+                                          TWiki::Func::getSkin());
     my $date = TWiki::Func::formatTime( time(), undef, 'gmtime' );
 
     die unless ($date);
@@ -227,34 +198,13 @@ sub beforeEditHandler {
     my $fields = CGI::hidden( -name=>'closeactioneditor', -value=>1 );
     $fields .= CGI::hidden( -name=>'cmd', -value=>"" );
 
-    # Throw away $_[0] and re-read the topic, extracting meta-data.
-    # Oh, how I wish the topic reading/writing was smarter! Or even
-    # that already extracted meta-data was passed in here!
-    my $oldText = TWiki::Func::readTopicText( $_[2], $_[1]);
-    my $text = "";
-    foreach my $line ( split( /\r?\n/, $oldText ) ) {
-        if( $line =~ /^%META:([^{]+){([^}]*)}%/ ) {
-            my $type = $1;
-            my $args = $2;
-            if ( $type eq "FIELD" ) {
-                my $name = "UNKNOWN";
-                my $value = "";
-                if ( $args =~ m/\s*name=\"([^\"]*)\"/io ) {
-                    $name = $1;
-                }
-                if ( $args =~ m/\s*value=\"([^\"]*)\"/io ) {
-                    $value = $1;
-                }
-                $fields .= CGI::hidden( -name=>$name, -value=>$value );
-            }
-        } else {
-            $text .= "$line\n";
-        }
+    # write in hidden fields
+    if( $meta ) {
+        $meta->forEachSelectedValue( qr/FIELD/, undef, \&_hiddenMeta,
+                                     { text => \$fields } );
     }
 
-    # Find the action. This re-reads the topic, but the cost doesn't seem
-    # to be too high.
-    my $uid = $query->param( "action" );
+    # Find the action.
     my ( $action, $pretext, $posttext ) =
       TWiki::Plugins::ActionTrackerPlugin::Action::findActionByUID( $web, $topic, $text, $uid );
 
@@ -318,8 +268,31 @@ sub beforeEditHandler {
 
     $tmpl =~ s/%TEXT%/$text/go;
     $tmpl =~ s/%HIDDENFIELDS%/$fields/go;
-    TWiki::Func::writeWarning("Ret $text");
     $_[0] = $tmpl;
+
+    # Add styles and javascript for the calendar
+    TWiki::Func::addToHEAD(
+        'ATP_CSS',
+        '<style type="text/css" media="all">@import url("%ACTIONTRACKERPLUGIN_CSS%");</style>');
+
+    use TWiki::Contrib::JSCalendarContrib;
+    if( $@ || !$TWiki::Contrib::JSCalendarContrib::VERSION ) {
+        TWiki::Func::writeWarning('JSCalendarContrib not found '.$@);
+    } elsif( $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
+        TWiki::Func::writeWarning(
+            'JSCalendarContrib >=0.961 required, '.
+              $TWiki::Contrib::JSCalendarContrib::VERSION.' found');
+    } else {
+        TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+    }
+}
+
+sub _hiddenMeta {
+    my( $value, $options ) = @_;
+
+    my $name = $options->{_key};
+    ${$options->{text}} .= CGI::hidden( -name => $name, -value => $value );
+    return $value;
 }
 
 # This handler is called by the preview script just before
@@ -356,7 +329,7 @@ sub afterEditHandler {
     }
 
     my $action =
-      TWiki::Plugins::ActionTrackerPlugin::Action::createFromQuery( $_[2], $_[1], $an, $query );
+      TWiki::Plugins::ActionTrackerPlugin::Action::createFromQuery( $_[2], $topic, $an, $query );
 
     $action->populateMissingFields();
 
@@ -364,14 +337,14 @@ sub afterEditHandler {
     $text = "$pretext$text\n$posttext"; 
 
     # take the opportunity to fill in the missing fields in actions
-    _addMissingAttributes( $text, $_[1], $_[2] );
+    _addMissingAttributes( $text, $topic, $_[2] );
 
     $_[0] = $text;
 }
 
 # Process the actions and add UIDs and other missing attributes
 sub beforeSaveHandler {
-    ### my ( $text, $topic, $web ) = @_;
+    my( $text, $topic, $web ) = @_;
 
     if ( !$initialised ) {
         return unless _lazyInit();
@@ -383,8 +356,6 @@ sub beforeSaveHandler {
     if ( $query->param( 'closeactioneditor' )) {
         # this is a save from the action editor
         # Strip pre and post metadata from the text
-        my $topic = $_[1];
-        my $web = $_[2];
         my $premeta = "";
         my $postmeta = "";
         my $inpost = 0;
@@ -407,7 +378,7 @@ sub beforeSaveHandler {
         $_[0] = $premeta . $text . $postmeta;
     } else {
         # take the opportunity to fill in the missing fields in actions
-        _addMissingAttributes( $_[0], $_[1], $_[2] );
+        _addMissingAttributes( $_[0], $topic, $web );
     }
 }
 
@@ -507,21 +478,6 @@ sub _loadPrefsOverrides {
     }
 }
 
-# PRIVATE Generate plugin prefs in HTML for debugging
-# COVERAGE OFF debug only
-sub _dumpPrefs {
-    my $text = "";
-    foreach my $key ( "TABLEHEADER","TABLEFORMAT","TABLEORIENT","TEXTFORMAT","LATECOL","BADDATECOL","HEADERCOL","EDITHEADER","EDITFORMAT","EDITORIENT","USENEWWINDOW","NOPREVIEW","EXTRAS","EDITBOXHEIGHT","EDITBOXWIDTH" ) {
-        $text .= "\t* $key\n<verbatim>\n";
-        if ( defined( _getPref($key))) {
-            $text .= _getPref( $key );
-        }
-        $text .= "\n</verbatim>\n";
-    }
-    return $text;
-}
-# COVERAGE ON
-
 # =========================
 # Perform filtered search for all actions
 sub _handleActionSearch {
@@ -545,20 +501,14 @@ sub _handleActionSearch {
 
     my $actions = TWiki::Plugins::ActionTrackerPlugin::ActionSet::allActionsInWebs( $web, $attrs );
     $actions->sort( $sort );
-    return _embedJS() . $actions->formatAsHTML( $fmt, "href", $useNewWindow );
+    _addHEADTags();
+    return $actions->formatAsHTML( $fmt, "href", $useNewWindow,
+                                   'atpSearch' );
 }
 
 # Lazy initialize of plugin 'cause of performance
 sub _lazyInit {
 
-    if ( defined( &TWiki::Func::checkDependencies ) ) {
-        my $err = TWiki::Func::checkDependencies($pluginName, \@dependencies);
-        if ( $err ) {
-            TWiki::Func::writeWarning($err);
-            print STDERR $err;
-            return 0;
-        }
-    }
     require TWiki::Attrs;
     require Time::ParseDate;
     require TWiki::Plugins::ActionTrackerPlugin::Action;
@@ -573,13 +523,6 @@ sub _lazyInit {
     _loadPrefsOverrides( $web );
 
     $useNewWindow = _getPref( "USENEWWINDOW", 0 );
-
-    # Colour for warning of late actions
-    $TWiki::Plugins::ActionTrackerPlugin::Format::latecol = _getPref( "LATECOL", "yellow" );
-    # Colour for an unparseable date
-    $TWiki::Plugins::ActionTrackerPlugin::Format::badcol = _getPref( "BADDATECOL", "red" );
-    # Colour for table header rows
-    $TWiki::Plugins::ActionTrackerPlugin::Format::hdrcol = _getPref( "HEADERCOL", "#FFCC66" );
 
     my $hdr      = _getPref( "TABLEHEADER" );
     my $bdy      = _getPref( "TABLEFORMAT" );
@@ -605,20 +548,24 @@ sub _lazyInit {
     return 1;
 }
 
-# PRIVATE embed the JavaScript that opens an edit subwindow
-sub _embedJS {
-    return "" unless ($useNewWindow && !$javaScriptIncluded);
-    $javaScriptIncluded = 1;
-    return <<'THIS';
-<script language="JavaScript"><!--
+# PRIVATE insert the styles and the JavaScript that opens an edit subwindow
+sub _addHEADTags {
+
+    TWiki::Func::addToHEAD(
+        'ATP_CSS',
+        '<style type="text/css" media="all">@import url("%ACTIONTRACKERPLUGIN_CSS%");</style>');
+
+    TWiki::Func::addToHEAD(
+        'ATP_JS', <<'HERE'
+<script type="text/javascript">
 function editWindow(url) {
-  win=open(url,"none","titlebar=0,width=800,height=400,resizable,scrollbars");
-  if(win){win.focus();}
+  win=open(url,"none","titlebar=0,width=900,height=400,resizable,scrollbars");
+  if (win) {win.focus();}
   return false;
 }
-// -->
 </script>
-THIS
+HERE
+                    );
 }
 
 # PRIVATE return formatted actions that have changed in all webs

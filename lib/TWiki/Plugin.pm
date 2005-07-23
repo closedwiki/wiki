@@ -122,11 +122,9 @@ sub load {
         $web = $this->{session}->{webName};
     } else {
         # not found
-        push( @{$this->{errors}}, 'Plugins: could not register '.
+        push( @{$this->{errors}}, 'Plugins: could not fully register '.
               $this->{name}.', no plugin topic' );
-        $this->{web} = '(Not Found)';
-        $this->{disabled} = 1;
-        return undef;
+        $web = '';
     }
 
     $this->{web} = $web;
@@ -188,8 +186,10 @@ sub registerHandlers {
     }
 
     my $prefs = $this->{session}->{prefs};
-    $prefs->getPrefsFromTopic( $this->{web}, $this->{name},
-                               uc( $this->{name} ) . '_');
+    if( $this->{web} ) {
+        $prefs->getPrefsFromTopic( $this->{web}, $this->{name},
+                                   uc( $this->{name} ) . '_');
+    }
 
     no strict 'refs';
     my $status = &$sub( $TWiki::Plugins::SESSION->{topicName},

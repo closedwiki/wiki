@@ -1,8 +1,12 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
 ---+!! Comment Plugin
 
 This plugin allows users to quickly post comments to a page without an edit/preview/save cycle. 
 
 _( Discussion in TWiki:Plugins/CommentPluginDev )_
+
+__Note: this version of the CommentPlugin will _not_ work with TWiki versions released prior to June 2005__
 
 %TOC%
 ---+ Features
@@ -25,7 +29,7 @@ The following attributes are [[#MoreAttrs][recognised]]
 	| =location= | Regular expression specifying the comment location in the target topic. Read _carefully_ below! |
 	| =mode= | For compatability with older versions only, synonymous with =type= |
 	| =nonotify= | Set to "on" to disable change notification for target topics |
-        | =noform= | Set to "on" to disable the automatic form that encloses your comment block - _remember_ to insert =&lt;FORM&gt;= tags yourself! |
+	| =noform= | Set to "on" to disable the automatic form that encloses your comment block - _remember_ to insert =&lt;FORM&gt;= tags yourself! |
 
 ---++ Positioning the comment
 =%COMMENT= supports several ways to specify _where_ a comment should be inserted in the target topic. This is referred to as the _location_ of the comment.
@@ -102,31 +106,22 @@ then the template will be expanded as
 </pre>
 
 As well as support for all the usual TWiki variables in templates, the following special variables are supported in the =PROMPT= definition:
-    | *Variable* | *Description* |
-    | =%<nop>MESSAGE%= | A helpful generated message, either a lock message or a reminder to refresh. |
-    | =%<nop>DISABLED%= | Set to 'disabled' when you cannot comment (see [[#HandlingPageLock][Important Note regarding Locks]], below). |
+	 | *Variable* | *Description* |
+	 | =%<nop>MESSAGE%= | A helpful generated message, either a lock message or a reminder to refresh. |
+	 | =%<nop>DISABLED%= | Set to 'disabled' when you cannot comment (e.g. in preview mode). |
 
 ---++ The =OUTPUT= template
 The =OUTPUT= template defines the format for the text that actually gets embedded into the topic. All the usual TWiki variables are available in the =PROMPT= definition, but note that they get expanded _when the comment is inserted in the text_, so time, date and username will refer to the time and date when the comment was made and the user who made it.
 
 There are also four position tags that are used to indicate where the comment should be placed, relative to the =location= defined in the =%COMMENT= tag:
 
-    | =%<nop>POS:TOP%= | If present, comments will be inserted *at the top of the topic* i.e. before any other text |
-    | =%<nop>POS:BOTTOM%= | If present, comments will be inserted *at the end of the topic* i.e. after all existing text |
-    | =%<nop>POS:BEFORE%= | If present, comments will be inserted <b>immediately before the =%<nop>COMMENT%= tag</b> |
-    | =%<nop>POS:AFTER%= | If present, comments will be inserted <b>immediately after the =%<nop>COMMENT%= tag</b> |
+	 | =%<nop>POS:TOP%= | If present, comments will be inserted *at the top of the topic* i.e. before any other text |
+	 | =%<nop>POS:BOTTOM%= | If present, comments will be inserted *at the end of the topic* i.e. after all existing text |
+	 | =%<nop>POS:BEFORE%= | If present, comments will be inserted <b>immediately before the =%<nop>COMMENT%= tag</b> |
+	 | =%<nop>POS:AFTER%= | If present, comments will be inserted <b>immediately after the =%<nop>COMMENT%= tag</b> |
 Note that these position tags are obviously mutually exclusive. If you define more than one, the result is undefined. If none is present, the default is taken from the plugin setting =DEFAULT_TYPE=
 
-#HandlingPageLock
----+ Important Note regarding Locks
-
-The plugin checks if the page is locked for edit. When a locked page is displayed in 'view' mode, comment input is automatically disabled.
-
-Note that if the page was read long time ago, it's possible that page was locked by another user *after* it was read, and the lock is still outstanding. In this case, comments cannot be saved, and you will be redirected to a "topic is locked" page. You then have two options:
-	* *Cancel* - throw away your comment and return to viewing the page.
-	* *Back* - *WARNING* some browsers might requery the page and *lose* your comments - so test how your browser behaves before using the Back button.
-
-To help avoid edit conflict, a reminder to refresh the page before entering comments is the default text for a =%COMMENT=. When the target page is known to be locked, the =PROMPT= form is automatically disabled.
+All the usual TWikiVariables that can be used in a topic template can also be used in an =OUTPUT= template. See %TWIKIWEB%.TWikiVariables for details.
 
 ---+ Settings
 	* Description:
@@ -137,32 +132,21 @@ To help avoid edit conflict, a reminder to refresh the page before entering comm
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
-%$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
-	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file.
-
-If installed correctly, you should see a =%COMMENT= edit box below here.
-
-%COMMENT{type="top" target="Sandbox.Comments"}%
+   * This plugin is pre-installed in your TWiki release.
 
 ---+ Plugin Info
 
 |  Plugin Author: | v1.0 TWiki:Main.DavidWeller v2.0 TWiki:Main.PeterMasiar v3.0 TWiki:Main.CrawfordCurrie http://www.c-dot.co.uk |
-|  Plugin Version: | %$VERSION% |
 | Change History: <!-- Most recent first --> ||
-| 25 Feb 2005 | 3.009 Added Olivier Berger's fix for anchors and Jacob Eisinger's fix for variable expansion |
+| 22 Feb 2005 | 4.000 TWiki:Main.CrawfordCurrie made Dakar release ready. Recoded for new Plugins handlers, much more efficient. Removed TIME, now replaced by SERVERTIME. |
+| 25 Feb 2005 | 3.009 TWiki:Main.CrawfordCurrie Added Olivier Berger's fix for anchors and Jacob Eisinger's fix for variable expansion. |
 | 16 Oct 2004 | 3.008 Added the =noform= attribute to Comment - TWiki:Main.MartinCleaver |
-| 12 Oct 2004 | 3.007 Disabled comment boxes in rdiff pane. |
-| 6 Oct 2004 | 3.006 Fixed action template, which was expanded incorrectly. Upped default comment box to 70 chars default width. |
-| 16 Aug 2004 | 3.005 Cairo readiness; dependency checking; added =threadmode= template. |
-| 11 Apr 2004 | 3.004 Minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
-| 6 April 2004 | 3.003 Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
-| 13 March 2004 | 3.002 Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site-specifics, support %<nop>COMMENT%, internationalisation fixes |
+| 12 Oct 2004 | 3.007 TWiki:Main.CrawfordCurrie Disabled comment boxes in rdiff pane. |
+| 6 Oct 2004 | 3.006 TWiki:Main.CrawfordCurrie Fixed action template, which was expanded incorrectly. Upped default comment box to 70 chars default width. |
+| 16 Aug 2004 | 3.005 Cairo readiness; dependency checking; added =threadmode= template. TWiki:Main.CrawfordCurrie |
+| 11 Apr 2004 | 3.004 TWiki:Main.CrawfordCurrie  fixed minor line termination problem fixed, and "security" hyphen on standard comment removed and replaced with a bulleted list. |
+| 6 April 2004 | 3.003 TWiki:Main.CrawfordCurrie Applied patches (thanks Peter Thoeny) for multiple comment adding, BOTTOM and TOP inside meta-data, and moved example to Sandbox. |
+| 13 March 2004 | 3.002  TWiki:Main.CrawfordCurrie Modified to use viewauth save technique (safer), add nonotify parameter, move templates fully into topics, with a hook for site specifics, support %<nop>COMMENT%, internationalisation fixes.|
 | 18 Feb 2004 | 3.001 TWiki:Main/CrawfordCurrie rewrote for standard templates and other user requests. Recognition to Patrice Fournier and Sam Abrams for terrific testing and patch support. |
 | 7 Feb 2004 | TWiki:Main/CrawfordCurrie rewrote this page and CommentTemplates in an effort to make the plugin more user friendly. Added {TIME} variable. Also updated CVS. |
 | 23 Sep 2003 | 2.000 TWiki:Main/PeterMasiar: 80% rewrite/refactor, adding templates |
@@ -171,13 +155,9 @@ If installed correctly, you should see a =%COMMENT= edit box below here.
 | 24 Feb 2002 | added a few more user requests, made "English" text configurable |
 | 4 Dec 2001 | 1.010 release, changed name to CommentPlugin, added $button var, changed textarea WRAP setting to "soft" |
 | 30 Nov 2001 | 1.000 Initial version |
-|  Dependencies: | %$DEPENDENCIES% |
-|  Perl Version: | 5.0 |
+|  Dependencies: | <table border=1><tr><th align="left">Name</th><th align="left">Version</th><th align="left">Description</th></tr><tr><td align="left">TWiki::Contrib::Attrs</td><td align="left">&gt;=1.000</td><td align="left">Required. Download from TWiki:Plugins/AttrsContrib and install.</td></tr><tr><td align="left">TWiki::Plugins</td><td align="left"> &gt;=1.010</td><td align="left">This plugin will not work with this TWiki version. It requires TWiki features introduced in Feb 2003 or later release.</td></tr></table> |
+|  Perl Version: | >= 5.6.1 |
 |  Plugin Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- TWiki:Main/DavidWeller - 05 Mar 2002 <br>
--- TWiki:Main/PeterMasiar - 15 Jul 2003, 23 Sep 2003<br>
--- TWiki:Main/CrawfordCurrie - %$DATE%

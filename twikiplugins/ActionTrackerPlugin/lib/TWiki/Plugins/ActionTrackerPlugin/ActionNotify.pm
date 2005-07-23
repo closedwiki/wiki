@@ -65,28 +65,28 @@ sub doNotifications {
 
     my $attrs = new TWiki::Attrs( $expr, 1 );
     my $hdr =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEHEADER" );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEHEADER' );
     my $bdy =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TABLEFORMAT" );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TABLEFORMAT' );
     my $vert =
-      TWiki::Func::getPreferencesFlag( "ACTIONTRACKERPLUGIN_TABLEVERTICAL" );
+      TWiki::Func::getPreferencesFlag( 'ACTIONTRACKERPLUGIN_TABLEVERTICAL' );
     my $textform =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_TEXTFORMAT" );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_TEXTFORMAT' );
     my $changes =
-      TWiki::Func::getPreferencesValue( "ACTIONTRACKERPLUGIN_NOTIFYCHANGES" );
+      TWiki::Func::getPreferencesValue( 'ACTIONTRACKERPLUGIN_NOTIFYCHANGES' );
 
     my $format = new TWiki::Plugins::ActionTrackerPlugin::Format( $hdr, $bdy, $vert, $textform, $changes );
 
-    my $result = "";
-    my $webs = $attrs->get( "web" ) || ".*";
-    my $topics = $attrs->get( "topic" ) || ".*";
+    my $result = '';
+    my $webs = $attrs->{web} || '.*';
+    my $topics = $attrs->{topic} || '.*';
 
     # Okay, we have tables of all the actions and a partial set of the
     # people who can be notified.
     my %notifications = ();
     my %people = ();
 
-    my $date = $attrs->remove( "changedsince" );
+    my $date = $attrs->remove( 'changedsince' );
     if ( defined( $date )) {
         # need to get rid of formatting done in actionnotify perl script
         $date =~ s/[, ]+/ /go; 
@@ -155,8 +155,8 @@ sub doNotifications {
             }
             if ( $notifications{$wikiname} ) {
                 if ( !defined( $changesPerEmail{$email} )) {
-                    $changesPerEmail{$email}{text} = "";
-                    $changesPerEmail{$email}{html} = "";
+                    $changesPerEmail{$email}{text} = '';
+                    $changesPerEmail{$email}{html} = '';
                 }
                 $changesPerEmail{$email}{text} .=
                   $notifications{$wikiname}{text};
@@ -169,10 +169,10 @@ sub doNotifications {
 
     # Finally send out the messages
     foreach my $email ( keys %notifyEmail ) {
-        my $actionsString = "";
-        my $actionsHTML = "";
-        my $changesString = "";
-        my $changesHTML = "";
+        my $actionsString = '';
+        my $actionsHTML = '';
+        my $changesString = '';
+        my $changesHTML = '';
         if ( $actionsPerEmail{$email} ) {
             # sorted by due date
             $actionsPerEmail{$email}->sort();
@@ -180,7 +180,8 @@ sub doNotifications {
               $actionsPerEmail{$email}->formatAsString( $format );
             $actionsHTML =
               $actionsPerEmail{$email}->formatAsHTML( $format,
-                                                      "href", 0 );
+                                                      'href', 0,
+                                                     'atpChanges' );
         }
         if ( $changesPerEmail{$email} ) {
             $changesString = $changesPerEmail{$email}{text};
@@ -222,13 +223,13 @@ sub _loadWebNotify {
 
     # COVERAGE OFF safety net
     if( ! TWiki::Func::webExists( $web ) ) {
-        my $error = "ActionTrackerPlugin:ActionNotify: did not find web $web";
+        my $error = 'ActionTrackerPlugin:ActionNotify: did not find web $web';
         TWiki::Func::writeWarning( $error );
         return;
     }
     # COVERAGE ON
 
-    my $topicname = $TWiki::Plugins::ActionTrackerPlugin::ActionTrackerConfig::notifyTopicname;
+    my $topicname = $TWiki::cfg{NotifyTopicName};;
     return undef unless TWiki::Func::topicExists( $web, $topicname );
 
     my $list = {};
@@ -240,7 +241,7 @@ sub _loadWebNotify {
             my $addr = $2;
             $who = TWiki::Plugins::ActionTrackerPlugin::Action::_canonicalName( $who );
             if ( !defined( $mailAddress->{$who} )) {
-                TWiki::Func::writeWarning( "ActionTrackerPlugin:ActionNotify: mail address for $who found in WebNotify" );
+                TWiki::Func::writeWarning( 'ActionTrackerPlugin:ActionNotify: mail address for $who found in WebNotify' );
                 $mailAddress->{$who} = $addr;
             }
         }
@@ -256,7 +257,6 @@ sub _getMailAddress {
     if ( defined( $mailAddress->{$who} )) {
         return $mailAddress->{$who};
     }
-
     my $addresses;
 	my $wikiWordRE = TWiki::Func::getRegularExpression('wikiWordRegex');
 	my $webNameRE = TWiki::Func::getRegularExpression('webNameRegex');
@@ -273,7 +273,7 @@ sub _getMailAddress {
         foreach my $person ( @persons ) {
             $person = _getMailAddress( $person, $mailAddress );
         }
-        $addresses = join( ",", @persons );
+        $addresses = join( ',', @persons );
         # Replaced by NKO, so that danish names accepted ...
         #damn its hard to be Danish
         # } elsif ( $who =~ m/^[A-Z]+[a-z]+[A-Z]+\w+$/o ) {
@@ -299,7 +299,7 @@ sub _getMailAddress {
                     foreach my $person ( @people ) {
                         $person = _getMailAddress( $person, $mailAddress );
                     }
-                    $addresses = join( ",", @people );
+                    $addresses = join( ',', @people );
                 }
             } else {
                 # parse Email: format lines from personal topic
@@ -307,7 +307,7 @@ sub _getMailAddress {
                 while ( $text =~ s/^\s+\*\s*E-?mail:\s*([^\s\r\n]+)//imo ) {
                     push( @people, $1 );
                 }
-                $addresses = join( ",", @people );
+                $addresses = join( ',', @people );
             }
         }
     }
@@ -328,24 +328,24 @@ sub _composeActionsMail {
     my ( $actionsString, $actionsHTML, $changesString, $changesHTML,
          $since, $mailaddr, $format ) = @_;
 
-    my $from = TWiki::Func::getPreferencesValue( "WIKIWEBMASTER" );
+    my $from = TWiki::Func::getPreferencesValue( 'WIKIWEBMASTER' );
 
-    my $text = TWiki::Func::readTemplate( "actionnotify" );
+    my $text = TWiki::Func::readTemplate( 'actionnotify' );
 
-    my $subject = "";
+    my $subject = '';
     if ( $actionsString ) {
-        $subject .= "Outstanding actions";
+        $subject .= 'Outstanding actions';
     }
     if ( $changesString ) {
-        $subject .= " and " if ( $subject ne "" );
-        $subject .= "Changes to actions";
+        $subject .= ' and ' if ( $subject ne '' );
+        $subject .= 'Changes to actions';
     }
     $text =~ s/%SUBJECT%/$subject/go;
 
     $text =~ s/%EMAILFROM%/$from/go;
     $text =~ s/%EMAILTO%/$mailaddr/go;
 
-    if ( $actionsString ne "" ) {
+    if ( $actionsString ne '' ) {
         $text =~ s/%ACTIONS_AS_STRING%/$actionsString/go;
         my $asHTML = TWiki::Func::renderText( $actionsHTML );
         $text =~ s/%ACTIONS_AS_HTML%/$asHTML/go;
@@ -354,9 +354,14 @@ sub _composeActionsMail {
         $text =~ s/%ACTIONS%.*?%END%//gso;
     }
 
-    $since = "" unless ( $since );
+    if( $since ) {
+        $since = TWiki::Func::formatTime( $since );
+    } else {
+        $since = '';
+    }
+
     $text =~ s/%SINCE%/$since/go;
-    if ( $changesString ne "" ) {
+    if ( $changesString ne '' ) {
         $text =~ s/%CHANGES_AS_STRING%/$changesString/go;
         my $asHTML = TWiki::Func::renderText( $changesHTML );
         $text =~ s/%CHANGES_AS_HTML%/$asHTML/go;
@@ -376,10 +381,10 @@ sub _composeActionsMail {
     return $text;
 }
 
-# PRIVATE STATIC get the "real" date from a relative date.
+# PRIVATE STATIC get the 'real' date from a relative date.
 sub _getRelativeDate {
     my $ago = shift;
-    my $triggerTime = Time::ParseDate::parsedate( "$ago", PREFER_PAST => 1 );
+    my $triggerTime = Time::ParseDate::parsedate( $ago, PREFER_PAST => 1 );
     return $triggerTime;
 }
 
@@ -406,7 +411,6 @@ sub _findChangesInTopic {
     my $currentActions =
       TWiki::Plugins::ActionTrackerPlugin::ActionSet::load( $theWeb,
                                                             $theTopic, $text );
-
     # find actions that have changed between the two dates. These
     # are added as text to a hash keyed on the names of people
     # interested in notification of that action.

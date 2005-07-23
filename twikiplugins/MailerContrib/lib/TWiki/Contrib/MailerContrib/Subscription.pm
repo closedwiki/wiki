@@ -18,10 +18,9 @@
 
 use strict;
 
-=begin text
+=pod
 
----
----++ package TWiki::Contrib::MailerContrib::Subscription
+---+ package TWiki::Contrib::MailerContrib::Subscription
 Object that represents a single subscription of a user to
 notification on a page. A subscription is expressed as a page
 spec (which may contain wildcards) and a depth of children of
@@ -31,11 +30,11 @@ matching pages that the user is subscribed to.
 
 package TWiki::Contrib::MailerContrib::Subscription;
 
-=begin text
+=pod
 
----+++ sub new($pages, $childDepth)
-| =$pages= | Wildcarded expression matching subscribed pages |
-| =$childDepth= | Depth of children of $topic to notify changes for. Defaults to 0 |
+---++ ClassMethod new($pages, $childDepth)
+   * =$pages= - Wildcarded expression matching subscribed pages
+   * =$childDepth= - Depth of children of $topic to notify changes for. Defaults to 0
 Create a new subscription.
 
 =cut
@@ -50,35 +49,34 @@ sub new {
 
     $topics =~ s/[^\w\*]//g;
     $topics =~ s/\*/\.\*\?/g;
-
     $this->{topicsRE} = qr/^$topics$/;
 
     return $this;
 }
 
-=begin text
+=pod
 
----+++ sub toString() -> string
+---++ ObjectMethod stringify() -> string
 Return a string representation of this object, in Web<nop>Notify format.
 
 =cut
 
-sub toString {
+sub stringify {
     my $this = shift;
 
-    my $record = $this->{topics} . "";
+    my $record = $this->{topics} . '';
     # convert RE back to wildcard
     $record =~ s/\.\*\?/\*/;
     $record .= " ($this->{depth})" if ( $this->{depth} );
     return $record;
 }
 
-=begin text
+=pod
 
----+++ sub matches($topic, $db, $depth) -> boolean
-| =$topic= | Topic object we are checking |
-| =$db= | TWiki::Contrib::MailerContrib::UpData database of parent names |
-| =$depth= | If non-zero, check if the parent of the given topic matches as well. undef = 0. |
+---++ ObjectMethod matches($topic, $db, $depth) -> boolean
+   * =$topic= - Topic object we are checking
+   * =$db= - TWiki::Contrib::MailerContrib::UpData database of parent names
+   * =$depth= - If non-zero, check if the parent of the given topic matches as well. undef = 0.
 Check if we match this topic. Recurses up the parenthood tree seeing if
 this is a child of a parent that matches within the depth range.
 
@@ -94,9 +92,11 @@ sub matches {
     return 1 if ( $topic =~ $this->{topicsRE} );
 
     $depth = $this->{depth} unless defined( $depth );
+    $depth ||= 0;
 
     if ( $depth ) {
         my $parent = $db->getParent( $topic );
+        $parent =~ s/^.*\.//;
         return $this->matches( $parent, $db, $depth - 1 ) if ( $parent );
     }
 
