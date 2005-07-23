@@ -3,7 +3,7 @@
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a>%TMPL:END%
+<body class="twikiViewPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
@@ -36,7 +36,7 @@
    * %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%
    * %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
    * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="p" title="View printable version of this topic" rel='nofollow'><span class="twikiAccessKey">P</span>rintable</a>
-</div><div class="twikiRevInfo"><span class="twikiToolbarElem"><nop>%WEB%.%TOPIC%</span><span class="twikiToolbarElem twikiRevision">%REVINFO%</span><span class="twikiToolbarElem twikiPageNav"><a href="#TopicEnd" title="Jump to end of topic" accesskey="d">topic&nbsp;en<span class="twikiAccessKey">d</span></a></span></div></div>%TMPL:END%
+</div><div class="twikiRevInfo"><span class="twikiToolbarElem"><nop>%WEB%.%TOPIC%</span><span class="twikiToolbarElem twikiRevision">%REVINFO%</span></div></div>%TMPL:END%
 
 %TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
 %TMPL:P{"content"}%

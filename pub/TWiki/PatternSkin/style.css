@@ -28,6 +28,7 @@ html body {
 	line-height:1.4em; /*C10*/
 	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
 	background-color:#F8F4F1; /*C7*/
+	color:#000;
 	margin:0;
 	padding:0;
 	font-size:x-small;
@@ -176,6 +177,7 @@ textarea {
 	font-family:monospace;
 	font-size:100%;
 	margin:0.25em 0;
+	color:#000;
 	width:auto;
 }
 input, select {
@@ -852,18 +854,20 @@ html>body .twikiToc li a {
 	border:0px;
 	border:1px solid #ccc;
 	margin-top:1em;
+	font-size:95%;
 }
 .twikiVersatileTable th,
 .twikiVersatileTable td {
 	vertical-align:top;
 	border:0px;
 	border-top:1px solid #ccc;
-	padding:0.2em 0.5em;
 }
 .twikiVersatileTable td {
+	padding:0.2em 0.5em;
 	background-color:#F5F7FD;
 }
 .twikiVersatileTable th {
+	padding:0.5em 0.5em;
 	vertical-align:top;
 	font-weight:bold;
 	background-color:#DFEDFD;
@@ -955,6 +959,7 @@ html>body .twikiToc li a {
 .twikiSmall {
 	font-size:85%;
 }
+.twikiNew { }
 .twikiSummary {
 	font-size:85%;
 	line-height:1.3em;
@@ -1190,6 +1195,7 @@ a:hover .twikiAccessKey {
 }
 .twikiEditPage .twikiSig {
 	margin:0.5em 0;
+	color:#000;
 }
 .twikiEditPage .twikiSig input {
 	background-color:#EFEDEA;
@@ -1322,7 +1328,6 @@ a:hover .twikiAccessKey {
 	text-align:right;
 	padding-left:2em;
 }
-.twikiRenamePage .twikiVersatileTable th,
 .twikiRenamePage .twikiVersatileTable td {
 	padding:0.5em 0.5em;
 }
