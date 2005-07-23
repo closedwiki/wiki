@@ -1,0 +1,92 @@
+#!/bin/perl for emacs
+# Mailbox configuration
+my $x = "some";
+my $configs = getConfig('MailIn');
+
+my $toast = sub {
+    my $configs = shift;
+    my $str = "[\n";
+    foreach my $config(@$configs) {
+        $str .= " {\n";
+        foreach my $k ( sort keys %$config ) {
+            $str .= "   $k => '$config->{$k}',\n";
+        }
+        $str .= " },\n";
+    }
+    return $str.']';
+};
+
+if($configs && scalar(@$configs)) {
+    print "Some mailboxes are already configured:\n";
+    print $toast->($configs),"\n";
+    $x = "some more";
+}
+
+while (ask("Would you like to configure $x mailboxes")) {
+    my $cfg = {};
+
+    print <<'THIS';
+ * Enter the name of this mail folder
+ * Note: support for POP3 requires that the Email::Folder::POP3
+ * module is installed. Support for IMAP requires
+ * Email::Folder::IMAP etc.
+ * Folder names are as described in the documentation for the
+ * relevant Email::Folder type e.g. for POP3, the folder name might be:
+ * pop://me:123@mail.isp.com:110/
+THIS
+    $cfg->{folder} = prompt('Mail folder');
+    $cfg->{folder} =~ s/'//g;
+
+    print <<'THIS';
+ * Enter the Wikiname of the user who will be "logged in"
+ * when messages from this folder are added. The user is important
+ * for access controls, and must be a registered TWiki user.
+ * Example: TWikiGuest
+THIS
+    $cfg->{user} = prompt('User');
+    $cfg->{user} =~ s/\W//g;
+
+    print <<'THIS';
+ * Do you want ALL messages removed from the folder after
+ * processing, even if they were not recognised as being for TWiki,
+ * or had failures? If you are going to set this, you are advised
+ * to also set ReplyOnError.
+ * (recommend NO)
+THIS
+    $cfg->{deleteall} = ask('Delete ALL messages');
+
+    if( $cfg->{deleteall} ) {
+        $cfg->{delete} = 0;
+    } else {
+        print <<'THIS';
+ * Do you want to delete messages from the folder that have been
+ * successfully added to TWiki? Requires Email::Delete to be installed.
+ * (recommend YES)
+THIS
+        $cfg->{delete} = ask('Delete READ messages');
+    }
+
+    print <<'THIS';
+ * Do you want to send replies to mails if there is an
+ * error when they are processed? Reply mails are sent using the
+ * standard TWiki notification mechanism, which must be configured
+ * for this to work. Error messages will be written to the TWiki
+ * warning log if replyonerror is false.
+ * (recommend YES)
+THIS
+    $cfg->{replyonerror} = ask('Reply on error');
+
+    print <<'THIS';
+ * Do you want to send replies to mails if the submission succeeds?
+ * Reply mails are sent using the standard TWiki notification
+ * mechanism, which must be configured for this to work.
+ * (recommend NO)
+THIS
+    $cfg->{replyonsuccess} = ask('Reply on success');
+
+    push(@$configs, $cfg);
+    $x = "another";
+
+}
+
+setConfig(MailIn => $toast->($configs));

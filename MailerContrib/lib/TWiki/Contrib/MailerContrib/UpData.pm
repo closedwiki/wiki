@@ -16,12 +16,9 @@
 # http://www.gnu.org/copyleft/gpl.html
 use strict;
 
-use TWiki::Func;
+=pod
 
-=begin text
-
----++ package TWiki::Contrib::MailerContrib::UpData
-
+---+ package TWiki::Contrib::MailerContrib::UpData
 Object that lazy-scans topics to extract
 parent relationships.
 
@@ -29,48 +26,42 @@ parent relationships.
 
 package TWiki::Contrib::MailerContrib::UpData;
 
-=begin text
+=pod
 
----+++ sub new($web)
-| =$web= | Web we are building parent relationships for |
+---++ ClassMethod new($web)
+   * =$web= - Web we are building parent relationships for
 Constructor for a web; initially empty, will lazy-load as topics
 are referenced.
 
 =cut
 
 sub new {
-    my ( $class, $web ) = @_;
+    my ( $class, $session, $web ) = @_;
     my $this = bless( {}, $class );
     $this->{web} = $web;
+    $this->{session} = $session;
     return $this;
 }
 
-=begin text
+=pod
 
----+++ sub getParent($topic) -> string
+---++ ObjectMethod getParent($topic) -> string
 Get the name of the parent topic of the given topic
-
-SMELL: *Huge* assumption about topic files containing meta-data!! This
-should really do a Search, but there is no published API.
 
 =cut
 
 sub getParent {
     my ( $this, $topic ) = @_;
 
-    if ( ! defined( $this->{topics}{$topic} )) {
-        # Not previously loaded
-        my $file = TWiki::Func::getDataDir() . "/$this->{web}/$topic.txt";
-        my $q = $TWiki::cmdQuote;
-        my $c = "egrep -s $q^%META:TOPICPARENT\\{.*\\}%$q $file";
-        $c =~ /^(.*)$/;
-        my $grep = `$1`;
-        if ( $grep =~ /%META:TOPICPARENT{name=\"(.*)\"}%/ ) {
-            $this->{topics}{$topic} = $1;
-        }
+    if ( ! defined( $this->{parent}{$topic} )) {
+        my( $meta, $text ) =
+          $this->{session}->{store}->readTopic( undef, $this->{web}, $topic );
+        my $parent = $meta->get('TOPICPARENT');
+        $this->{parent}{$topic} = $parent->{name} if $parent;
+        $this->{parent}{$topic} ||= '';
     }
 
-    return $this->{topics}{$topic};
+    return $this->{parent}{$topic};
 }
 
 1;

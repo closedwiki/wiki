@@ -14,50 +14,48 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.ai.mit.edu/copyleft/gpl.html
 #
-# =========================
-#
 # This plugin replaces smilies with small smilies bitmaps
-# see TWiki.SmiliesPlugin
 #
-# =========================
 package TWiki::Plugins::SmiliesPlugin;
-# =========================
 
-use vars qw($web $topic $user $installWeb $VERSION $debug
+use strict;
+
+use TWiki::Func;
+
+use vars qw( $VERSION
             %smiliesUrls %smiliesEmotions
-            $smiliesPattern $allPattern $smiliesPubUrl $smiliesFormat );
+            $smiliesPubUrl $allPattern $smiliesFormat );
 
-$VERSION = '1.002';
+$VERSION = '1.006';
 
-$smiliesPattern = '^\s*\|\s*<nop>(?:\&nbsp\;)?([^\s|]+)\s*\|\s*%ATTACHURL%\/([^\s]+)\s*\|\s*"([^"|]+)"\s*\|\s*$';
-#                          smilie       url            emotion
-$allPattern = "";
-$smiliesPubUrl = "";
+sub initPlugin {
+    my( $topic, $web, $user, $installWeb ) = @_;
 
-# =========================
-sub initPlugin
-{
-    ( $topic, $web, $user, $installWeb ) = @_;
-
-    # Get plugin debug flag
-    $debug = &TWiki::Func::getPreferencesFlag( "SMILIESPLUGIN_DEBUG" );
+    # check for Plugins.pm versions
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
+        TWiki::Func::writeWarning( "Version mismatch between InterwikiPlugin and Plugins.pm" );
+        return 0;
+    }
 
     # Get plugin preferences
-    $smiliesFormat = &TWiki::Func::getPreferencesValue( "SMILIESPLUGIN_FORMAT" ) 
-					|| '<img alt="$tooltip" src="$url" />';
+    $smiliesFormat =
+      TWiki::Func::getPreferencesValue( 'SMILIESPLUGIN_FORMAT' ) 
+          || '<img src="$url" alt="$tooltip" title="$tooltip" border="0" />';
 
-    my $topic = &TWiki::Func::getPreferencesValue( "SMILIESPLUGIN_TOPIC" ) 
-					|| "$installWeb.SmiliesPlugin"; 
+    $topic =
+      TWiki::Func::getPreferencesValue( 'SMILIESPLUGIN_TOPIC' ) 
+          || "$installWeb.SmiliesPlugin";
 
-    my $web = $installWeb;
+    $web = $installWeb;
     if( $topic =~ /(.+)\.(.+)/ ) {
         $web = $1;
         $topic = $2;
     }
 
     $allPattern = "(";
-    foreach( split( /\n/, TWiki::Func::readTopic( $web, $topic ) ) ) {
-        if( m/$smiliesPattern/ ) {
+    foreach( split( /\n/, TWiki::Func::readTopicText( $web, $topic, undef, 1 ) ) ) {
+        # smilie       url            emotion
+        if( m/^\s*\|\s*<nop>(?:\&nbsp\;)?([^\s|]+)\s*\|\s*%ATTACHURL%\/([^\s]+)\s*\|\s*"([^"|]+)"\s*\|\s*$/o ) {
             $allPattern .= "\Q$1\E|";
             $smiliesUrls{$1}     = $2;
             $smiliesEmotions{$1} = $3;
@@ -65,57 +63,46 @@ sub initPlugin
     }
     $allPattern =~ s/\|$//o;
     $allPattern .= ")";
-    $smiliesPubUrl = TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() .
-                     "/$installWeb/SmiliesPlugin";
+    $smiliesPubUrl =
+      TWiki::Func::getUrlHost() . TWiki::Func::getPubUrlPath() .
+          "/$installWeb/SmiliesPlugin";
 
     # Initialization OK
     return 1;
 }
 
-# =========================
-sub commonTagsHandler
-{
-#    my ( $text, $topic, $web ) = @_;
-    $_[0] =~ s/%SMILIES%/&allSmiliesTable()/geo;
+sub commonTagsHandler {
+    # my ( $text, $topic, $web ) = @_;
+    $_[0] =~ s/%SMILIES%/_allSmiliesTable()/geo;
 }
 
-# =========================
-sub outsidePREHandler
-{
-#    my ( $text, $web ) = @_;
+sub preRenderingHandler {
+#    my ( $text, \%removed ) = @_;
 
-    $_[0] =~ s/(\s|^)$allPattern(?=\s|$)/&renderSmilie( $1, $2 )/geo;
+    $_[0] =~ s/(\s|^)$allPattern(?=\s|$)/_renderSmily($1,$2)/geo;
 }
 
-# =========================
-sub renderSmilie
-{
-    my ( $thePre, $theSmilie ) = @_;
+sub _renderSmily {
+    my ( $thePre, $theSmily ) = @_;
 
-    return $thePre unless $theSmilie;  # return unless initialized
+    return $thePre unless $theSmily;
 
-    my $text = "$thePre$smiliesFormat";
-    $text =~ s/\$emoticon/$theSmilie/go;
-    $text =~ s/\$tooltip/$smiliesEmotions{$theSmilie}/go;
-    $text =~ s/\$url/$smiliesPubUrl\/$smiliesUrls{$theSmilie}/go;
+    my $text = $thePre.$smiliesFormat;
+    $text =~ s/\$emoticon/$theSmily/go;
+    $text =~ s/\$tooltip/$smiliesEmotions{$theSmily}/go;
+    $text =~ s/\$url/$smiliesPubUrl\/$smiliesUrls{$theSmily}/go;
 
     return $text;
 }
 
-# =========================
-sub allSmiliesTable
-{
+sub _allSmiliesTable {
     my $text = "| *What to Type* | *Graphic That Will Appear* | *Emotion* |\n";
 
-#    my ($k, $a, $b);
-    foreach $k ( sort { $smiliesEmotions{$b} cmp $smiliesEmotions{$a} }
-                keys %smiliesEmotions )
-    {
+    foreach my $k ( sort { $smiliesEmotions{$b} cmp $smiliesEmotions{$a} }
+                 keys %smiliesEmotions ) {
         $text .= "| <nop>$k | $k | ". $smiliesEmotions{$k} ." |\n";
     }
     return $text;
 }
-
-# =========================
 
 1;

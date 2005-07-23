@@ -34,17 +34,6 @@ use TWiki::Func;
 #    The colour may be undefined.
 package TWiki::Plugins::ActionTrackerPlugin::Format;
 
-use vars qw ( $latecol $badcol $hdrcol $border );
-
-# Colour for warning of late actions
-$latecol = "yellow";
-# Colour for an unparseable date
-$badcol = "red";
-# Colour for table header rows
-$hdrcol = "orange";
-# Border width for tables
-$border = "1";
-
 # PUBLIC Constructor
 # $header is the format of the HTML table header representation
 # $fields is the format of the HTML table body representation
@@ -166,13 +155,13 @@ sub _expandVar {
 
     if ( defined( $object->{$vbl} ) ) {
         # just expand as a string
-        return ( $object->{$vbl}, 0 );
+        return $object->{$vbl};
     }
 
     if ( $asHTML ) {
-        return ( "&nbsp;", 0 );
+        return '&nbsp;';
     } else {
-        return ( "", 0 );
+        return '';
     }
 }
 
@@ -192,7 +181,7 @@ sub _expandString {
     } elsif ($var eq "quot") {
         return "\"";
     }
-    my ( $t, $c ) = _expandVar( $object, $var, @_ );
+    my $t = _expandVar( $object, $var, @_ );
     return $t;
 }
 
@@ -214,7 +203,6 @@ sub _formatAsString {
 sub _expandHTML {
     my $object = shift;
     my $var = shift;
-    my $col = shift;
 
     if ( $var eq "dollar") {
         return "\$";
@@ -228,9 +216,9 @@ sub _expandHTML {
         return "\"";
     }
 
-    my ( $t, $c ) = _expandVar( $object, $var, @_ );
-    $$col = $c if ( $c );
-    return "$t";
+    my $t = _expandVar( $object, $var, @_ );
+
+    return $t;
 }
 
 # PUBLIC format a list of actions into a table
@@ -239,69 +227,63 @@ sub formatHTMLTable {
     my $data = shift;
     my $jump = shift;
     my $newWindow = shift;
+    my $class = shift;
+    my $a = {};
+    $a->{class} = $class if $class;
     my $i;
     my @rows;
-    my @anchors;
 
     # make a 2D array of cells
     foreach my $object ( @$data ) {
+        my $anchored = ( $jump ne "name" );
         my @cols;
         foreach $i ( @{$this->{FIELDS}} ) {
             my $c;
             my $entry = $i;
-            $entry =~ s/\$(\w+)(\(\))?/&_expandHTML( $object, $1, \$c, 1, $jump, $newWindow )/geos;
-            if ( $c ) {
-                $entry = CGI::td( { bgcolor => $c }, $entry );
-            } else {
-                $entry = CGI::td( $entry );
+            $entry =~ s/\$(\w+)(\(\))?/&_expandHTML( $object, $1, 1,
+                                                     $jump, $newWindow )/geos;
+            if( !$anchored ) {
+                $entry = CGI::a( { name=>$object->getAnchor() } ).$entry;
+                $anchored = 1;
             }
+            $entry = CGI::td( $a, $entry );
             $entry ||= '&nbsp;';
             push @cols, $entry;
-        }
-        if ( $jump eq "name" ) {
-            push @anchors, CGI::a( { name=>$object->getAnchor() } );
         }
         push @rows, \@cols;
     }
 
-    return $this->_generateHTMLTable( \@rows, \@anchors );
+    return $this->_generateHTMLTable( \@rows, $class );
 }
 
 # PRIVATE generate an HTML table from a 2D-array of rows and
 # a, optional list of anchors, one for each row. The anchors
 # are more useful if the table is oriented as rows.
 sub _generateHTMLTable {
-    my ( $this, $rows, $anchors ) = @_;
-    my $text = CGI::start_table( { border=>$border } )."\n";
+    my ( $this, $rows, $class ) = @_;
+    my $a = {};
+    $a->{class} = $class if $class;
+    my $text = CGI::start_table( $a )."\n";
     my $i;
 
     if ( $this->{ORIENTATION} eq "rows" ) {
-        if ( defined( $anchors ) ) {
-            foreach $i ( @$anchors ) {
-                $text .= $i;
-            }
-        }
         for ( $i = 0; $i <= $#{$this->{HEADINGS}}; $i++ ) {
             my $head = ${$this->{HEADINGS}}[$i];
-            my $row = CGI::th({ bgcolor=>$hdrcol }, $head )."\n";
+            my $row = CGI::th( $a, $head )."\n";
             foreach my $col ( @$rows ) {
                 my $datum = @$col[$i];
-                $text .= $datum."\n";
+                $row .= $datum."\n";
             }
-            $text .= CGI::Tr( $row )."\n";
+            $text .= CGI::Tr( $a, $row )."\n";
         }
     } else {
         my $row = '';
         foreach $i ( @{$this->{HEADINGS}} ) {
-            $row .= CGI::th($i)."\n";
+            $row .= CGI::th( $a, $i);
         }
-        $text .= CGI::Tr({bgcolor=>$hdrcol}, $row)."\n";
+        $text .= CGI::Tr( $a, $row)."\n";
         foreach my $r ( @$rows ) {
-            if ( defined( $anchors ) ) {
-                my $a = shift( @$anchors );
-                $text .= $a if ( defined( $a ) );
-            }
-            $text .= CGI::Tr({ valign=>'top' }, join( '', @$r) );
+            $text .= CGI::Tr($a, join( '', @$r) );
         }
     }
     $text .= CGI::end_table();
@@ -326,29 +308,36 @@ sub formatStringTable {
 sub formatChangesAsHTML {
     my ( $this, $old, $new ) = @_;
     my $tbl = "";
+    my $a = { class => 'atpChanges' };
     foreach my $field ( @{$this->{CHANGEFIELDS}} ) {
         my $row = '';
         if ( defined( $old->{$field} ) && defined( $new->{$field} )) {
-            my ( $oldval, $c ) = _expandVar( $old, $field );
-            my ( $newval, $d ) = _expandVar( $new, $field );
+            my $oldval = _expandVar( $old, $field, 1 );
+            my $newval = _expandVar( $new, $field, 1 );
             if ( $oldval ne $newval ) {
-                $row = CGI::td($field).CGI::td($oldval).CGI::td($newval);
+                $row = CGI::td( $a, $field ).
+                  CGI::td( $a, $oldval ).
+                      CGI::td( $a, $newval );
             }
         } elsif ( defined( $old->{$field} ) ) {
-            my ( $oldval, $c ) = _expandVar( $old, $field );
-            $row = CGI::td($field).CGI::td($oldval).CGI::td(' *removed* ');
+            my $oldval = _expandVar( $old, $field, 1 );
+            $row = CGI::td( $a, $field ).
+              CGI::td( $a, $oldval ).
+                  CGI::td( $a, ' *removed* ');
         } elsif ( defined( $new->{$field} )) {
-            my ( $newval, $c ) = _expandVar( $new, $field );
-            $row = CGI::td($field).CGI::td(' *missing* ').CGI::td($newval);
+            my $newval = _expandVar( $new, $field, 1 );
+            $row = CGI::td( $a, $field ).
+              CGI::td( $a, ' *missing* ').
+                  CGI::td( $a, $newval );
         }
-        $tbl .= CGI::Tr( $row )."\n" if $row;
+        $tbl .= CGI::Tr( $a,  $row )."\n" if $row;
     }
     if ( $tbl ne "" ) {
-        return CGI::start_table({ border=>$border }).
-          CGI::Tr({bgcolor=>$badcol},
-                  CGI::th('Attribute').
-                  CGI::th('Old').
-                  CGI::th('New').$tbl.CGI::end_table()."\n");
+        return CGI::start_table( $a ).
+          CGI::Tr( $a,
+                  CGI::th( $a, 'Attribute').
+                  CGI::th( $a, 'Old').
+                  CGI::th( $a, 'New').$tbl.CGI::end_table()."\n");
     }
     return $tbl;
 }
@@ -360,16 +349,16 @@ sub formatChangesAsString {
     my $tbl = "";
     foreach my $field ( @{$this->{CHANGEFIELDS}} ) {
         if ( defined( $old->{$field} ) && defined( $new->{$field} ) ) {
-            my ( $oldval, $c ) = _expandVar( $old, $field );
-            my ( $newval, $d ) = _expandVar( $new, $field );
+            my $oldval = _expandVar( $old, $field, 0 );
+            my $newval = _expandVar( $new, $field, 0 );
             if ( $oldval ne $newval ) {
                 $tbl .= "\t- Attribute \"$field\" changed, was \"$oldval\", now \"$newval\"\n";
             }
         } elsif ( defined( $old->{$field} ) ) {
-            my ( $oldval, $c ) = _expandVar( $old, $field );
+            my $oldval = _expandVar( $old, $field, 0 );
             $tbl .= "\t- Attribute \"$field\" was \"$oldval\" now removed\n";
         } elsif ( defined( $new->{$field} ) ) {
-            my ( $newval, $c ) = _expandVar( $new, $field );
+            my $newval = _expandVar( $new, $field, 0 );
             $tbl .= "\t- Attribute \"$field\" added with value \"$newval\"\n";
         }
     }
@@ -386,13 +375,13 @@ sub formatEditableFields {
     foreach my $col ( @{$this->{FIELDS}} ) {
         my $entry = $col;
         $entry =~ s/\$(\w+\b)(\(\))?/&_expandEditField( $this, $object, $1, $expanded )/geos;
-        $entry = CGI::td( $entry );
+        $entry = CGI::td( {class => 'atpEdit' }, $entry );
         push @fields, $entry;
     }
     my @rows;
     push @rows, \@fields;
 
-    return $this->_generateHTMLTable( \@rows );
+    return $this->_generateHTMLTable( \@rows, 'atpEdit' );
 }
 
 # PRIVATE STATIC fill in variable expansions. If any of the expansions
@@ -439,7 +428,7 @@ sub _formatFieldForEdit {
         }
         return CGI::Select( { name=>$attrname, size=>$size }, $fields )."\n";
     } elsif ( $type->{type} !~ m/noload/ ) {
-        my ( $val, $c ) = _expandVar( $object, $attrname );
+        my $val = _expandVar( $object, $attrname, 0 );
         my $content = '';
         my @extras = ();
         if ( $type->{type} eq 'date' ) {
@@ -448,17 +437,18 @@ sub _formatFieldForEdit {
         if ( $type->{type} eq 'date') {
             # make sure JSCalendar is there
             eval 'use TWiki::Contrib::JSCalendarContrib';
-            if ( $@ ) {
-                print STDERR "WARNING: JSCalendar not installed: $@\n";
-            } else {
+            unless ( $@ ) {
                 @extras = ( id => "date_$attrname" );
-                $content = CGI::button
-                  ( { type=>'reset',
-                      onclick=>"return showCalendar('date_$attrname','\%e \%B \%Y')" },
-                    CGI::img({ src=> TWiki::Func::getPubUrlPath() . '/' .
-                               TWiki::Func::getTwikiWebname() .
-                               '/JSCalendarContrib/img.gif',
-                               alt=>'Calendar'} ) );
+                $content =
+                  CGI::image_button(
+                      -name => 'calendar',
+                      -onclick =>
+                          "return showCalendar('date_$attrname','%e %B %Y')",
+                      -src=> TWiki::Func::getPubUrlPath() . '/' .
+                        TWiki::Func::getTwikiWebname() .
+                            '/JSCalendarContrib/img.gif',
+                      -alt => 'Calendar',
+                      -align => 'MIDDLE' );
             }
         }
         return CGI::textfield( { name => $attrname,
@@ -474,7 +464,7 @@ sub _formatFieldForEdit {
 sub formatHidden {
     my ( $this, $object, $attrname ) = @_;
 
-    my ( $v, $c ) = _expandVar( $object, $attrname, 0 );
+    my $v = _expandVar( $object, $attrname, 0 );
     if ( defined( $v ) ) {
         return CGI::hidden( { name=>$attrname, value=>$v } )."\n";
     }

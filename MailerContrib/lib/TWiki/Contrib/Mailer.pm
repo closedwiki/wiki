@@ -14,21 +14,17 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
+#
 use strict;
 use TWiki;
-
-# SMELL: Forced to use TWiki::Net and TWiki::Store;these due to
-# unexported entry points
-use TWiki::Net;
-use TWiki::Store;
 
 use TWiki::Contrib::MailerContrib::WebNotify;
 use TWiki::Contrib::MailerContrib::Change;
 use TWiki::Contrib::MailerContrib::UpData;
 
-=begin text
+=pod
 
----++ package TWiki::Contrib::Mailer
+---+ package TWiki::Contrib::Mailer
 
 Package of support for extended Web<nop>Notify notification, supporting per-topic notification and notification of changes to children.
 
@@ -38,14 +34,18 @@ Also supported is a simple API that can be used to change the Web<nop>Notify top
 
 package TWiki::Contrib::Mailer;
 
-use vars qw ( $VERSION $sendmail $verbose );
+use vars qw ( $VERSION $verbose );
 
-$VERSION = 1.003;
+$VERSION = 1.010;
 
-=begin text
+=pod
 
----+++ sub mailNotify($sendmail)
-| $sendmail | If true, will send mails. If false, will print to STDOUT |
+---++ StaticMethod mailNotify($webs, $session, $verbose)
+   * =$webs= - filter list of names webs to process. Wildcards (*) may be used.
+   * =$session= - optional session object. If not given, will use a local object.
+   * =$verbose= - true to get verbose (debug) output
+
+Main entry point.
 
 Process the Web<nop>Notify topics in each web and generate and issue
 notification mails. Designed to be invoked from the command line; should
@@ -55,8 +55,8 @@ only be called by =mailnotify= scripts.
 
 sub mailNotify {
     my $webs;
-
-    ( $sendmail, $verbose, $webs ) = @_;
+    my $twiki;
+    ( $webs, $twiki, $verbose ) = @_;
 
     my $webstr;
     if ( defined( $webs )) {
@@ -65,52 +65,51 @@ sub mailNotify {
     $webstr = '*' unless ( $webstr );
     $webstr =~ s/\*/\.\*/g;
 
-    TWiki::basicInitialize();
+    $twiki ||= new TWiki( $TWiki::cfg{DefaultUserLogin} );
 
-    # SMELL: have to getAllWebs, because getPublicWebList only returns public
-    # webs.
-    foreach my $web ( grep( /$webstr/o, TWiki::Store::getAllWebs() )) {
-        _processWeb( $web ) if ( TWiki::isWebName( $web ));
+    my $report = '';
+    foreach my $web ( grep( /$webstr/o,
+                            $twiki->{store}->getListOfWebs( 'user ') )) {
+        $report .= _processWeb( $twiki, $web );
     }
+    return $report;
 }
 
 # PRIVATE: Read the webnotify, and notify changes
 sub _processWeb {
-    my( $web) = @_;
+    my( $twiki, $web) = @_;
 
-    my ( $topic, $webName, $dummy, $userName, $dataDir) =
-      TWiki::initialize( "/$web", "nobody" );
-
-    if( ! TWiki::Func::webExists( $web ) ) {
-        print "**** ERROR mailnotifier cannot find web $webName\n";
-        return;
+    if( ! $twiki->{store}->webExists( $web ) ) {
+        print STDERR "**** ERROR mailnotifier cannot find web $web\n";
+        return '';
     }
 
     print "Processing $web\n" if $verbose;
 
     # Read the webnotify and load subscriptions
-    my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $web );
-
+    my $wn = new TWiki::Contrib::MailerContrib::WebNotify( $twiki, $web );
+    my $report = '';
     if ( $wn->isEmpty() ) {
         print "\t$web has no subscribers\n" if $verbose;
     } else {
         # create a DB object for parent pointers
-        my $db = new TWiki::Contrib::MailerContrib::UpData( $web );
-
-        _processChanges( $web, $wn, $db );
+        print $wn->stringify() if $verbose;
+        my $db = new TWiki::Contrib::MailerContrib::UpData( $twiki, $web );
+        $report .= _processChanges( $twiki, $web, $wn, $db );
     }
+    return $report;
 }
 
 sub _processChanges {
-    my ( $web, $notify, $db ) = @_;
+    my ( $twiki, $web, $notify, $db ) = @_;
 
-    my $wroot =  TWiki::Func::getDataDir() . "/$web";
-    my $prevLastmodify = TWiki::Func::readFile( "$wroot/.mailnotify" ) || 0;
-    my $currLastmodify = "";
+    my $timeOfLastNotify =
+      $twiki->{store}->readMetaData( $web, 'mailnotify' ) || 0;
+    my $timeOfLastChange = '';
 
     if ( $verbose ) {
         print "\tLast notification was at " .
-          TWiki::Func::formatTime( $prevLastmodify ). "\n";
+          TWiki::Time::formatTime( $timeOfLastNotify ). "\n";
     }
 
     # hash indexed on email address, each entry of which contains an
@@ -122,105 +121,82 @@ sub _processChanges {
     # record for this topic in the array of Change objects for this
     # email in %changeset.
     my %seenset;
-    my $changes = TWiki::Func::readFile("$wroot/.changes" );
+
+    my $changes = $twiki->{store}->readMetaData( $web, 'changes' );
 
     unless ( $changes ) {
         print "No changes\n" if ( $verbose );
-        return;
+        return '';
     }
 
-    foreach( reverse split( /\n/, $changes ) ) {
+    foreach my $line ( reverse split( /\n/, $changes ) ) {
         # Parse lines from .changes:
         # <topic>	<user>		<change time>	<revision>
         # WebHome	FredBloggs	1014591347	21
-        my ($topicName, $userName, $changeTime, $revision) = split( /\t/);
+        next if $line =~ /minor$/;
+        my ($topicName, $userName, $changeTime, $revision) =
+          split( /\t/, $line);
 
-        next unless TWiki::Func::topicExists( $web, $topicName );
+        next unless $twiki->{store}->topicExists( $web, $topicName );
 
-        # First formulate a change record, irrespective of
-        # whether any subscriber is interested
-        if( ! $currLastmodify ) {
-            if( $prevLastmodify eq $changeTime ) {
-                # newest entry is same as at time of previous notification
-                return;
-            }
-            $currLastmodify = $changeTime;
-        }
+        $timeOfLastChange = $changeTime unless( $timeOfLastChange );
 
-        if( $prevLastmodify >= $changeTime ) {
-            # found last notification
-            last;
-        }
-        my $frev = "";
-        if( $revision ) {
-            if( $revision > 1 ) {
-                $frev = "r1.$revision";
-            } else {
-                $frev = "<b>NEW</b>";
-            }
-        }
+        # found last interesting change?
+        last if( $changeTime <= $timeOfLastNotify );
 
         print "\tFound change to $topicName\n" if ( $verbose );
 
-        my $change =
-          new TWiki::Contrib::MailerContrib::Change
-            ( $web,
-              $topicName,
-              TWiki::Func::userToWikiName( $userName, 0 ),
-              TWiki::Func::formatTime( $changeTime ),
-              $frev,
-              # SMELL: Call to TWiki::makeTopicSummary is unavoidable
-              TWiki::makeTopicSummary
-              (TWiki::Func::readTopicText($web, $topicName),
-               $topicName,
-               $web ));
+        # Formulate a change record, irrespective of
+        # whether any subscriber is interested
+        my $change = new TWiki::Contrib::MailerContrib::Change
+          ( $twiki, $web, $topicName, $userName, $changeTime, $revision );
 
         # Now, find subscribers to this change and extend the change set
         $notify->processChange( $change, $db, \%changeset, \%seenset );
     }
 
     # Now generate emails for each recipient
-    _generateEmails( $web,
-                     \%changeset,
-                     TWiki::Func::formatTime($prevLastmodify) );
+    my $report = _generateEmails( $twiki, $web,
+                                  \%changeset,
+                                  TWiki::Time::formatTime($timeOfLastNotify) );
 
-    # Only update the memory topic if mails were sent
-    if ( $sendmail ) {
-        TWiki::Func::saveFile( "$wroot/.mailnotify", $currLastmodify );
-    }
+    $twiki->{store}->saveMetaData( $web, 'mailnotify', $timeOfLastChange );
+
+    return $report;
 }
 
 # PRIVATE generate and send an email for each user
 sub _generateEmails {
-    my ( $web, $changeset, $lastTime ) = @_;
+    my ( $twiki, $web, $changeset, $lastTime ) = @_;
+    my $report = '';
 
-    my $skin = TWiki::Func::getPreferencesValue( "SKIN" );
+    my $skin = $twiki->{prefs}->getPreferencesValue( 'SKIN' );
+    my $template = $twiki->{templates}->readTemplate( 'mailchanges', $skin );
+    my $from = $twiki->{prefs}->getPreferencesValue('WIKIWEBMASTER');
+    my $homeTopic = $TWiki::cfg{HomeTopicName};
 
-    my $template = TWiki::Func::readTemplate( "changes", $skin );
+    $template = $twiki->handleCommonTags( $template, $web, $homeTopic );
+    $template =~ s/%META{.*?}%//go;
 
-    $template = TWiki::Func::expandCommonVariables( $template, $web, "" );
-    $template =~ s/\%META{.*?}\%//go;  # remove %META{"parent"}%
-
-    # SMELL: unexported function call TWiki:: doRemoveImgInMailnotify
-    # STINK: preferences like this should be exported from TWiki.cfg
-    if( $TWiki::doRemoveImgInMailnotify ) {
+    if( $TWiki::cfg{RemoveImgInMailnotify} ) {
         # change images to [alt] text if there, else remove image
-        $template =~ s/<img src=.*?alt=\"([^\"]+)[^>]*>/[$1]/goi;
+        $template =~ s/<img\s[^>]*\balt=\"([^\"]+)[^>]*>/[$1]/goi;
         $template =~ s/<img src=.*?[^>]>//goi;
     }
 
     my ( $before, $middle, $after) = split( /%REPEAT%/, $template );
-    $before = TWiki::Func::renderText( $before );
-    $after = TWiki::Func::renderText( $after );
-    $middle =~ s/%LOCKED%//go; # SMELL: Legacy?
+    $before = $twiki->{renderer}->getRenderedVersion( $before, $web,
+                                                      $homeTopic );
+    $after = $twiki->{renderer}->getRenderedVersion( $after, $web,
+                                                     $homeTopic );
 
-    my $mailtmpl = TWiki::Func::readTemplate( "mailnotify", $skin );
+    my $mailtmpl = $twiki->{templates}->readTemplate( 'mailnotify', $skin );
 
     my $sentMails = 0;
 
     foreach my $email ( keys %{$changeset} ) {
-        my $html = "";
-        my $plain = "";
+        my $html = '';
+        my $plain = '';
 
         foreach my $change (sort { $a->{TOPIC} cmp $b->{TOPIC} }
                             @{$changeset->{$email}} ) {
@@ -229,10 +205,7 @@ sub _generateEmails {
             $plain .= $change->expandPlain( $web );
         }
 
-        my $mw = TWiki::Func::getMainWebname();
-        $plain =~ s/\($mw\./\(/go;
-
-        my $from = TWiki::Func::getPreferencesValue("WIKIWEBMASTER");
+        $plain =~ s/\($TWiki::cfg{UsersWebName}\./\(/go;
 
         my $mail = $mailtmpl;
 
@@ -241,10 +214,10 @@ sub _generateEmails {
         $mail =~ s/%EMAILBODY%/$before$html$after/go;
         $mail =~ s/%TOPICLIST%/$plain/go;
         $mail =~ s/%LASTDATE%/$lastTime/geo;
-        $mail = TWiki::Func::expandCommonVariables( $mail, $web, "" );
+        $mail = $twiki->handleCommonTags( $mail, $web, $homeTopic );
 
-        my $url = "%SCRIPTURLPATH%";
-        $url = TWiki::Func::expandCommonVariables( $url, $web, "" );
+        my $url = '%SCRIPTURLPATH%';
+        $url = $twiki->handleCommonTags( $url, $web, $homeTopic );
 
         # Inherited from mailnotify
         # SMELL: assumes Content-Base is set in the mail template,
@@ -255,21 +228,12 @@ sub _generateEmails {
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        if ( $sendmail ) {
-            my $error = TWiki::Net::sendEmail( $mail );
-            if( $error ) {
-                print "**** ERROR :Mail send failed: $error\n";
-            } else {
-                print "Mailed to following changes to $mail\n";
-                print $plain;
-            }
-        } elsif ( $verbose ) {
-            print "Please tell $email about the following changes:\n";
-            print $plain;
-        }
-        $sentMails++;
+        my $error = $twiki->{net}->sendEmail( $mail, 5 );
+        $sentMails++ unless $error;
     }
-    print "\t$sentMails change notifications\n";
+    $report .= "\t$sentMails change notifications\n";
+
+    return $report;
 }
 
 1;

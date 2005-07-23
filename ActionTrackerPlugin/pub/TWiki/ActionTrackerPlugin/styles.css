@@ -1,0 +1,41 @@
+/* Action definition table */
+.atpDef {
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: dotted black 1px;
+}
+th.atpDef {
+  background-color: #cccccc;
+}
+
+/* Action search table */
+.atpSearch {
+  border-collapse: collapse;
+  border-spacing: 0px;
+  border: dotted black 1px;
+}
+th.atpSearch {
+  background-color: orange;
+  font-style: italic;
+}
+
+/* Action changes table (in mail) */)
+.atpChanges {
+  border: dotted black 1px;
+}
+
+/* Action edit */
+.atpEdit {
+  border: dotted black 1px;
+}
+
+/* Error style */
+.atpError {
+  background-color: red;
+  text-color: yellow;
+}
+
+/* Warning style (e.g. late action) */
+).atpWarn {
+  background-color: yellow;
+}

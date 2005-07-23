@@ -1,0 +1,64 @@
+%META:TOPICINFO{author="guest" date="1115527529" format="1.0" version="1.4"}%
+---+!! <nop>%TOPIC%
+
+Allows editing of preferences using fields predefined in a %TWIKIWEB%.TWikiForms. However, the edit fields are inlined in the text, similar to how tables are edited in TWiki:Plugins/EditTablePlugin.
+
+%TOC%
+
+Insert the =%<nop>EDITPREFERENCES%= variable (see below) anywhere in your topic. It will be replaced by a button that allows editing each preference in its predefined input format (or a text box, when no format is defined for this preference).
+
+In edit mode, the edit button is replaced by save and cancel buttons, with their obvious meanings.
+
+---++ Syntax Rules
+
+	* =%<nop>EDITPREFERENCES{ "= _topic_ =" }%=
+		* _topic_ references a TWiki.TWikiForms defining the format of the edit fields for preferences. It may be prefixed by a web.
+		* If a preference setting is not mentioned in the form referenced by _topic_, a text input box of the specified length is provided.
+		* Otherwise, the input can be through textareas, select, radio, checkbox, date, or text, as provided by %TWIKIWEB%.TWikiForms.
+
+---++ Examples
+
+	* =%<nop>EDITPREFERENCES{ "%<nop>TWIKIWEB%.TWikiPreferencesForm" }%= 
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>PREFERENCESPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Allows editing of preferences using fields predefined in a form
+
+---++ Plugin Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	  | ==data/TWiki/TWikiPreferencesForm.txt== | Example form |
+	* If the installation was successful, an edit button should appear below: %EDITPREFERENCES{ "%TWIKIWEB%.TWikiPreferencesForm" }%
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.ThomasWeigert |
+|  Plugin Version: | 08 May 2005 |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  26 May 2005: | Crawford Currie recoded to use code from Form.pm to render form fields. |
+|  08 May 2005: | Add plugin preference to define default input length  |
+|  07 May 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.026 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiForms
+
+-- TWiki:Main.ThomasWeigert - 08 May 2005
+

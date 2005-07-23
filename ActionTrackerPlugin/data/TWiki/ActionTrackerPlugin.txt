@@ -1,3 +1,4 @@
+%META:TOPICINFO{author="TWikiContributor" date="1121939551" format="1.1" version="$Rev$"}%
 ---+!! Action Tracker Plugin
 
 This plugin provides support for tracking actions embedded in meeting minutes. As you write the minutes during the meeting, you simply enter the actions into the text and as soon as the topic is saved, the actions "go live".
@@ -5,6 +6,8 @@ This plugin provides support for tracking actions embedded in meeting minutes. A
 Actions are nicely formatted for display, and automatic notification of actions is supported using 'cron'. The action tracker can also be used for private reminders, for example TODO lists and diary entries, and has been successfully applied to functions as diverse as risk management and bug tracking.
 
 _( Discussion in TWiki:Plugins/ActionTrackerPluginDev )_
+
+%X% This version is the 'Dakar' release version. It *will not work* with versions of TWiki released before 2005. Older versions of the plugin are available from TWiki:Plugins/ActionTrackerPlugin
 
 %TOC%
 
@@ -317,10 +320,12 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 	* The alternative text format of an action, as seen by a mail recipient who doesn't accept HTML in mail. Used when mailing action or change notifications.
 		* Set TEXTFORMAT = Action for $who, due $due, $state$n$text$n
 
-	* The colours for late actions, errors and the table headers. Accepts standard HTML colours.
-		* Set LATECOL = yellow
-		* Set BADDATECOL = red
-		* Set HEADERCOL = orange
+	* Important changes since the last release: Colours are now defined in the  stylesheet attached to this topic. The following settings are ignored:
+		* #Set LATECOL = yellow
+		* #Set BADDATECOL = red
+		* #Set HEADERCOL = orange
+   * Full URL of the CSS to use in formatting actions.
+      * Set CSS = %PUBURL%/%TWIKIWEB%/ActionTrackerPlugin/styles.css
 
 	* The format of the fields in the action editor. You can also set EDITBOXWIDTH and EDITBOXHEIGHT to override the defaults (which are %EDITBOXWIDTH%x%EDITBOXHEIGHT%) just for the action editor.
 		* Set EDITHEADER = | Assigned to | Due date | State | Notify |
@@ -374,42 +379,12 @@ Earlier versions of this plugin installed a number of files that are no longer r
 
 The mechanism for defining notification groups as lists of "EMail" lines in a topic in Main is no longer supported. Please upgrade to the mechanism described herein.
 
----
----+ %RED%Known Issues%ENDCOLOR%
-
----++ Use of unpublished functions
-The following unpublished TWiki core functions and variables are used:
-<verbatim>
-TWiki::initialize()
-TWiki::getGmDate()
-TWiki::getTWikiLibDir()
-TWiki::Net::sendEmail()
-$TWiki::wikiWordRegex
-$TWiki::webNameRegex
-</verbatim>
-
----++ Behaviour of egrep
-The output of the =$egrepCmd= in TWiki.cfg (with no switches) must be of the form:
-	<pre>
-	filename.txt: ...matched text...
-	</pre>
-	While this is true for all UNIX grep implementations, it may be a potential issue for other operating systems.
-
----++ Limitations of Rcs<nop>Lite
-The changedsince feature of the notificationscript requires you to be using RCS as your CM tool. changedsince will not work with Rcs<nop>Lite, though all other features should be OK.
-
----++ Dates before 1970
-Due to limitations in the Time::Parsedate module, dates before January 1, 1970 may be parsed incorrectly.
-
-%RED% Please do *not* post bugs here. Please use the [[http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev][standard TWiki bug reporting mechanisms]] instead. %ENDCOLOR%
-
----
 ---+ Plugin Info
 
-|  Plugin Author: | TWiki:Main/CrawfordCurrie |
+|  Plugin Author: | TWiki:Main/CrawfordCurrie, http://c-dot.co.uk |
 |  Plugin Version: | %$VERSION% |
 |  Change History: | |
-| 30 May 2005 | 2.023 Dakar version. Removed config module. |
+| 21 July 2005 | 2.100 Dakar version. Removed config module. |
 | 26 Mar 2005 | 2.022 Corrected JSCalendar problems, and cleaned up lazy-loading of libraries. Added relative date specs to searches. |
 | 8 Feb 2005 | 2.021 Documentation fixes. |
 | 19 Nov 2004 | 2.020 Added conditions for date matching, and fixed config so that tests pass again. |
@@ -424,7 +399,7 @@ Due to limitations in the Time::Parsedate module, dates before January 1, 1970 m
 | 11 Jan 2002 | Added ACTIONSEARCH for selected webs and topics; Changed action editor to use a template; Eliminated UNIX dependencies; Fixed formatting of actions in bulleted lists |
 | 9 Jan 2002 | Bugfix version |
 |  Dependencies: | %$DEPENDENCIES% |
-|  Perl Version: | 5.0 |
+|  Perl Version: | 5.8 |
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPlugin |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/ActionTrackerPluginDev |
 
@@ -440,7 +415,7 @@ Developer discussion is in TWiki:Plugins/ActionTrackerPluginDev.
 
 This code is an original development of Motorola Inc. and is protected by the following copyrights:
 	* Copyright &copy; 2002-2003 Motorola. All Rights Reserved.
-	* Portions Copyright &copy; 2004 Crawford Currie. All Rights Reserved.
+	* Portions Copyright &copy; 2004,2005 Crawford Currie, http://c-dot.co.uk
 
 ---++ License
 
@@ -455,3 +430,6 @@ General Public License for more details, published at
 http://www.gnu.org/copyleft/gpl.html
 
 -- TWiki:Main/CrawfordCurrie - %$DATE%
+
+%META:FILEATTACHMENT{name="styles.css" attachment="styles.css" attr="" comment="" date="1121939550" path="styles.css" size="659" user="Main.TWikiContributor" version="1"}%
+

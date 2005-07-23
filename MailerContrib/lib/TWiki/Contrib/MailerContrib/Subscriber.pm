@@ -18,44 +18,45 @@
 
 use strict;
 
-=begin text
+=pod
 
----
----++ package TWiki::Contrib::MailerContrib::Subscriber
+---+ package TWiki::Contrib::MailerContrib::Subscriber
 Object that represents a subscriber to notification. A subscriber is
 a name (which may be a wikiName or an email address) and a list of
-subscriptions which describe the topis subscribed to. The subscriber
+subscriptions which describe the topis subscribed to, and
+unsubscriptions representing topics they are specifically not
+interested in. The subscriber
 name may also be a group, so it may expand to many email addresses.
 
 =cut
 
 package TWiki::Contrib::MailerContrib::Subscriber;
 
-=begin text
+use TWiki;
+use Assert;
 
----+++ sub new($name)
-| =$name= | Wikiname, with no web, or email address, of user targeted for notification |
+=pod
+
+---++ ClassMethod new($name)
+   * =$name= - Wikiname, with no web, or email address, of user targeted for notification
 Create a new user.
 
 =cut
 
 sub new {
-    my ( $class, $name ) = @_;
+    my ( $class, $session, $name ) = @_;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
 
+    $this->{session} = $session;
     $this->{name} = $name;
-    # SMELL: emailAddrRegex is not ifficially published
-    my $EMRE = TWiki::Func::getRegularExpression('emailAddrRegex');
-    if ( $name =~ /^$EMRE$/o ) {
-        $this->{emails} = [ $name ];
-    }
 
     return $this;
 }
 
-=begin text
+=pod
 
----+++ sub getEmailAddresses() -> list
+---++ ObjectMethod getEmailAddresses() -> list
 Get a list of email addresses for the user(s) represented by this
 subscription
 
@@ -63,20 +64,30 @@ subscription
 
 sub getEmailAddresses {
     my $this = shift;
+    ASSERT($this->isa( 'TWiki::Contrib::MailerContrib::Subscriber')) if DEBUG;
 
     unless ( defined( $this->{emails} )) {
-        # temporary; use unpublished function
-        my @mails = TWiki::getEmailOfUser( $this->{name} );
-        $this->{emails} = \@mails;
+        if ( $this->{name} =~ /^$TWiki::regex{emailAddrRegex}/o ) {
+            push( @{$this->{emails}}, $this->{name} );
+        } else {
+            my $user = $this->{session}->{users}->findUser
+              ( $this->{name}, $this->{name}, 1 );
+            if( $user ) {
+                push( @{$this->{emails}}, $user->emails() );
+            }
+            else {
+                # unknown - can't find an email
+                $this->{emails} = ();
+            }
+        }
     }
-
-    return @{$this->{emails}};
+    return $this->{emails};
 }
 
-=begin text
+=pod
 
----+++ sub subscribe($subs)
-| =$subs= | Subscription object |
+---++ ObjectMethod subscribe($subs)
+   * =$subs= - Subscription object
 Add a new subscription to this subscriber object.
 The subscription will always be added, even if there is
 a wildcard overlap with an existing subscription.
@@ -89,34 +100,30 @@ sub subscribe {
     push( @{$this->{subscriptions}}, $subs );
 }
 
-=begin text
+=pod
 
----+++ sub unsubscribe($topic)
-| =$topic= | Topic name |
-Remove all subscription records where the subscribed topics lexically
-match the given topic. Wildcards are _not_ used.
+---++ ObjectMethod unsubscribe($subs)
+   * =$subs= - Subscription object
+Add a new unsubscription to this subscriber object.
+The unsubscription will always be added, even if there is
+a wildcard overlap with an existing subscription or unsubscription.
+
+An unsubscription is a statement of the subscribers desire _not_
+to be notified of changes to this topic.
 
 =cut
 
 sub unsubscribe {
-   my ( $this, $topic ) = @_;
+    my ( $this, $subs ) = @_;
 
-   my $i = $#{$this->{subscriptions}};
-   while ( $i >= 0 ) {
-       my $subscription = $this->{subscriptions}[$i];
-       if ( $subscription->{topics} eq $topic ) {
-           splice( @{$this->{subscriptions}}, $i, 1 );
-       }
-       $i--;
-   }
+    push( @{$this->{unsubscriptions}}, $subs );
 }
 
+=pod
 
-=begin text
-
----+++ sub isSubscribedTo($topic) -> boolean
-| =$topic= | Topic object we are checking |
-| =$db= | TWiki::Contrib::MailerContrib::UpData database of parents |
+---++ ObjectMethod isSubscribedTo($topic) -> boolean
+   * =$topic= - Topic object we are checking
+   * =$db= - TWiki::Contrib::MailerContrib::UpData database of parents
 Check if we have a subscription to the given topic.
 
 =cut
@@ -133,18 +140,46 @@ sub isSubscribedTo {
    return 0;
 }
 
-=begin text
+=pod
 
----+++ sub toString() -> string
+---++ ObjectMethod isUnsubscribedFrom($topic) -> boolean
+   * =$topic= - Topic object we are checking
+   * =$db= - TWiki::Contrib::MailerContrib::UpData database of parents
+Check if we have an unsubscription from the given topic.
+
+=cut
+
+sub isUnsubscribedFrom {
+   my ( $this, $topic, $db ) = @_;
+
+   foreach my $subscription ( @{$this->{unsubscriptions}} ) {
+       if ( $subscription->matches( $topic, $db )) {
+           return 1;
+       }
+   }
+
+   return 0;
+}
+
+=pod
+
+---++ ObjectMethod stringify() -> string
 Return a string representation of this object, in Web<nop>Notify format.
 
 =cut
 
-sub toString {
+sub stringify {
     my $this = shift;
+    my $subs = join( ' ',
+                     map { $_->stringify(); }
+                     @{$this->{subscriptions}} );
+    my $unsubs = join( " - ",
+                       map { $_->stringify(); }
+                       @{$this->{unsubscriptions}} );
+    $unsubs = " - $unsubs" if $unsubs;
 
     return "   * " . $this->{name} . ": " .
-      join( ", ", @{$this->{subscriptions}} );
+      $subs . $unsubs;
 }
 
 1;

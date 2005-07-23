@@ -1,131 +1,90 @@
-A replacement for the core 'mailnotify' functionality. This module brings a new level of flexibility and ease of use to notifications.
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+This module is an add-on to the TWiki kernel that supports e-mail notification of changes.
 
 %TOC%
 
 ---+ Summary of Contents
----++ <code>bin/mailnotifier</code>
-The main part of the mailer module is a script, =bin/mailnotifier=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard %NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
+---++ <code>bin/mailnotify</code>
+The main part of the mailer module is a script, =bin/mailnotify=. This script is designed to be run from 'cron' (or an equivalent offline job scheduler), and processes the contents of the standard <nop>%NOTIFYTOPIC% topic. As well as providing the usual notification service, it also provides per-topic notification services. The script may be run from the command line, a cron job, or from the browser.
 
-The "new" format of <nop>%NOTIFYTOPIC% is a natural extension of the existing format. In the old format, subscribers are listed in "bullet lists" following one of the following formats:
+%STARTINCLUDE%
+Subscribers are listed <nop>%NOTIFYTOPIC% in "bullet lists" following one of the following formats:
 
-_three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ %BR%
-_three spaces_ * [ _webName_ . ] _wikiName_
-
-The second format uses the home topic of the user to recover their mail address. This format is extended to accept the following syntaxes:
-
-_three spaces_ * _SMTP mail address_ %BR%
-_three spaces_ * _SMTP mail address_ : _topics_ %BR%
+_three spaces_ * [ _webname_ . ] _wikiName_ - _SMTP mail address_ <br />
+_three spaces_ * [ _webName_ . ] _wikiName_ <br />
+_three spaces_ * _SMTP mail address_ <br />
+_three spaces_ * _SMTP mail address_ : _topics_ <br />
 _three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
 
 where _topics_ is a space-separated list of topic names.
-	* Specify topics without and _Web._ prefix
+	* Specify topics without a _Web._ prefix
 	* Topics must exist in this web.
-	* Topics may be specified using * wildcards.
+	* Topics may be specified using * wildcards
 	* Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature.
+   * Each topic may optionally be preceded by a '+' or '-' sign. The '+' sign means "subscribe to this topic" (the same as not putting anything). The '-' sign means "don't send notifications regarding this topic". This allows users to elect to filter out changes to certain topics (and their children, to an arbitrary depth). Topic filters ('-') take precedence over topic includes ('+').
 
 For example:
 <verbatim>
 	* daisy@flowers.com
 	* daisy@flowers.com: Web*
-	* DaisyCutter: Petal* (1), WeedKillers (3), Red*Phlox
+	* DaisyCutter: Petal* (1) WeedKillers (3) Red*Phlox
+    * StarTrekFan: * - *Wars - *sInTheirEyes - *shipTroopers
 </verbatim>
-A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. The basic rule is that they are registered for "old style" notification of changes, that is what they will receive i.e. listing them with a specific topic will _not_ change how they are notified. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
+A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
 
-As was the case with old =mailnotify=, if a _group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
+If a _TWiki group_ is listed for notification, the group will be recursively expanded to the email addresses of all members.
+%STOPINCLUDE%
 
-In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =bin/mailnotifier= script.
+In the future it is intended that individual users will be able to control the frequency with which they are notified of topic changes, by changing a schedule specification in their home topic. However at present, the notification schedule is controlled by the frequency of activation of the =cron= job that runs the =bin/mailnotify= script.
+
+%RED% __Note__ =mailnotify= ignores permissions in webs. It is entirely possible for a user to get added to a <nop>%NOTIFYTOPIC% topic in a web, when they are not authorised to view the topics in that web. This could result in them having limited access to sensitive information (the topic summaries). %ENDCOLOR%
 
 ---++ <code>TWiki/Contrib/MailerContrib</code> code library
-The second part of the module is a code library that provides the services for other applications to modify <nop>%NOTIFYTOPIC% through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for noitification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
+The second part of the module is a code library that provides the services for other applications to modify <nop>%NOTIFYTOPIC% through a clean, well documented interface. This allows (for example) plugin developers to add a "Register me for notification" button to their pages. The main interface is the =Web<nop>Notify= package described below.
 
 ---++ <code>bin/remove_obsolete_locks</code>
-The old =mailnotify= script had a side-effect; it would remove obsolete topic locks as it ran. This has not been implemented in =mailnotifier=. Instead, a separate side script is provided in this module that performs this function, called =bin/remove_obsolete_locks. For full compatibility with =mailnotify= this script should be run (from =bin=) on the same schedule as =mailnotifier=.
+The old =mailnotify= script had a side-effect; it would remove obsolete topic locks as it ran. This has not been implemented in =mailnotify=, as it is not required in the Dakar release of TWiki.
 
----+ Detailed Documentation
-The =bin/mailnotifier= is used from the command line as follows:
+---+ Installation Instructions
+This Contrib is pre-installed as part of the TWiki release package, and should only have to be re-installed if an upgrade is required.
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	* Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
+	* To make sure the installation was successful, run the	=bin/mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
 
-<code>Usage: bin/mailnotifier [-q] [-m] [ <i>web1 web2 ... webN</i> ]</code>
+---+ Setting up your cron job
+You need to set up a =cron= (or equivalent) job to run =bin/mailnotify=.
+
+<code>Usage: bin/mailnotify [-q] [ <i>web1 web2 ... webN</i> ]</code>
 | =-q= | Don't print progress information |
-| =-m= | Send mail. Default behaviour is to print out plain text of mails that would be sent to STDOUT |
 | <code><i>web1 web2 ... webN</i></code> | List of webs to process, separated by spaces or commas. Default is to process all legal TWiki webs. Wildcards (*) are supported. |
 
-from the browser the following CGI parameters are supported:
+The script can also be used from the browser. The following CGI parameters are supported:
 
 | =verbose= | set to 0 to get the same effect as -q |
-| =sendmail= | Set to 1 to actually send mail |
+| =sendmail= | Set to 1 to actually send mail; default is 0 |
 | =webs= | Space or comma-separated list of webs to process |
-
-<table bgcolor="lightyellow"><tr><td>
-%RED% The following POD documentation is provided for the use of developers only. %ENDCOLOR%%BR%Everyone else can just ignore it.
-
-The main class is =TWiki::Contrib::MailContrib::WebNotify=, which allows you to load a notify topic and manipulate the entries. The other classes support this main class. =TWiki::Contrib::Mailer= is the implementation of =bin/mailnotifier=.
-
-%$POD%
-</table>
 
 ---+ Settings
 	* Name of the perl package
-		* Set STUB = %$STUB%
-
----+ Installation Instructions
-
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
-	%$MANIFEST%
-	* Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
-	* To make sure the installation was successful, run the
-	=bin/mailnotifier= script from the command
-	line, with no parameters. In this case it will print out what it
-	would have done to STDOUT.
-	* Set up cron (or equivalent) jobs to run =mailnotifier= and =remove_obsolete_locks=.
-	* *Manually* modify your %TWIKIWEB%.WebChangesAlert topic from TWiki: Replace the part between the =STARTINCLUDE= and the =STOPINCLUDE= with the following text (view this topic 'raw', or edit it, to get the source of the text):
-
-<!-- TEXT FOR WebChangesAlert STARTS HERE -->
-__Format:__ TWiki handles entries in bullet list (<code>&lt;space>&lt;space>&lt;space>*</code>) format containing the WikiName of a user; a WikiName with e-mail address; an e-mail address only; or a TWikiGroup. Each of these may be followed by a colon and a comma separated list of topics, indicating what to subscribe to. Examples with explanation:
-<table cols="2"><tr valign="top"><td width="40%">
-<verbatim>
-	* Main.FredBloggs
-</verbatim>
-</td><td> send to the e-mail address specified in the users home page
-</td></tr><tr valign="top"><td>
-<verbatim>
-	* non.user@work.com
-</verbatim>
-</td><td> send to a user _not_ registered in TWiki by using their e-mail address
-</td></tr><tr valign="top"><td>
-<verbatim>
-	* Main.EngineeringGroup
-</verbatim>
-</td><td> send to all members of a TWiki group
-</td></tr><tr valign="top"><td>
-<verbatim>
-	* Main.FredBloggs - secondary@home.com
-</verbatim>
-</td><td> send to an alternative e-mail address
-</td></tr><tr valign="top"><td>
-<verbatim>
-	* Main.SamSpade: MyStuff, MeetingMinutes*, TeamIssues (2)
-</verbatim>
-</td><td> send changes to specific topics only. Wildcards * may be used. The integer in parenthesis indicates the depth of the tree of children below that topic; changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature of TWiki.
-</td></tr></table>
-<!-- TEXT FOR WebChangesAlert ENDS HERE -->
+		* Set STUB = TWiki::Contrib::Mailer
 
 ---+ Contrib Info
 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2004, Wind River Systems |
 |  License: | GPL |
-|  Dependencies: | %$DEPENDENCIES% |
-|  Version: | %$VERSION% |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
-| 6 October 2004 | 1.003 Excluded _ webs from processing, added =bin/remove_obsolete_locks= for full reverse-compatibility |
-| 1 October 2004 | 1.002 Peter<nop>Thoeny provided additional documentation |
-|  27 September 2004 | 1.001 runnable as CGI script, minor bugfixes, removed dependency on DB<nop>CacheContrib |
-|  8 September 2004 | 1.000 Initial version |
+|  Change&nbsp;History: | <!-- versions below in reverse order -->&nbsp; |
+|  4 March 2005 | 1.010 Dakar release ready. |
+|  12 Oct 2004 | 1.004 Added support for anti-subscriptions. Doc fixes from TWiki:Main.PeterThoeny. Bug fixes to permissions code. Back-off and retry if the mailer can't be reached (should really be in Net::sendEmail) |
+|  6 Oct 2004 | 1.003 Excluded _ webs from processing, added =bin/remove_obsolete_locks= for full reverse-compatibility |
+|  1 Oct 2004 | 1.002 Peter<nop>Thoeny provided additional documentation |
+|  27 Sep 2004 | 1.001 runnable as CGI script, minor bugfixes, removed dependency on DB<nop>CacheContrib |
+|  8 Sep 2004 | 1.000 Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/CrawfordCurrie - %$DATE%
+-- TWiki:Main/CrawfordCurrie

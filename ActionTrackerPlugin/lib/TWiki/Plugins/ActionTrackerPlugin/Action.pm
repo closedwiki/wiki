@@ -14,10 +14,13 @@
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
 #
+package TWiki::Plugins::ActionTrackerPlugin::Action;
+
 use strict;
 use integer;
 
 use CGI;
+use Assert;
 
 use TWiki::Func;
 
@@ -44,12 +47,10 @@ use TWiki::Plugins::ActionTrackerPlugin::Format;
 # created       When the action was created
 # closer        Who closed the action
 # closed        When the action was closed
-package TWiki::Plugins::ActionTrackerPlugin::Action;
 
 use vars qw( $now );
 
 $now = time();
-my $mainweb = TWiki::Func::getMainWebname();
 
 # Options for parsedate
 my %pdopt = ( NO_RELATIVE => 1, DATE_REQUIRED => 1, WHOLE => 1 );
@@ -202,7 +203,7 @@ sub extendTypes {
             my $exists = $types{$name};
 
             if ( defined( $exists ) && !$exists->isRedefinable() ) {
-                return 'Attempt to redefine attribute '.$name.' in EXTRAS';
+                return 'Attempt to redefine attribute \''.$name.'\' in EXTRAS';
             } elsif ( $type eq 'select' ) {
                 @values = split( /\s*,\s*/, $params );
                 foreach my $option ( @values ) {
@@ -212,7 +213,7 @@ sub extendTypes {
             $types{$name} =
               new TWiki::Plugins::ActionTrackerPlugin::AttrDef( $type, $size, 1, 1, \@values );
         } else {
-            return 'Bad EXTRAS definition '.$def.' in EXTRAS';
+            return 'Bad EXTRAS definition \''.$def.'\' in EXTRAS';
         }
     }
     return undef;
@@ -254,6 +255,13 @@ sub getNewUID {
     # and mostly works.
     # COVERAGE OFF lock file wait
     while ( -f $lockFile ) {
+        # if it's more than 10 mins old something is wrong, so just ignore
+        # it.
+        my @s = stat( $lockFile );
+        if( time() - $s[9] > 10 * 60 ) {
+            TWiki::Func::writeWarning("Action Tracker Plugin: Warning: broke $lockFile");
+            last;
+        }
         sleep(1);
     }
     # COVERAGE ON
@@ -360,7 +368,7 @@ sub _canonicalName {
             $who = TWiki::Func::getWikiName();
         }
         if ( $who !~ /\./o ) {
-            $who = "$mainweb.$who";
+            $who = TWiki::Func::getMainWebname().'.'.$who;
         }
     }
     return $who;
@@ -389,7 +397,7 @@ sub getAnchor {
 sub formatTime {
     my ( $time, $format ) = @_;
     my $stime;
-    if ( defined $time ) {
+    if ( $time ) {
         if ( $format eq 'attr' ) {
             $stime = localtime( $time );
             $stime =~ s/(\w+)\s+(\w+)\s+(\w+)\s+([^\s]+)\s+(\w+).*/$3-$2-$5/o;
@@ -527,6 +535,7 @@ sub _matchField_state {
 sub matches {
     my ( $this, $a ) = @_;
     foreach my $attrName ( keys %$a ) {
+        next if $attrName =~ /^_/;
         my $attrVal = $a->{$attrName};
         my $attrType = getBaseType( $attrName );
         my $class = ref( $this );
@@ -559,28 +568,29 @@ sub matches {
 
 # PRIVATE format the given time type
 sub _formatType_date {
-    my $this = shift;
-    my $fld = shift;
-    return ( formatTime( $this->{$fld}, 'string' ), 0 );
+    my ( $this, $fld ) = @_;
+    return formatTime( $this->{$fld}, 'string' );
 }
 
 # PRIVATE format the given field (takes precedence of standard
 # date formatting)
 sub _formatField_due {
     my ( $this, $asHTML ) = @_;
-    my $bgcol = 0;
     my $text = formatTime( $this->{due}, 'string' );
 
     if ( !defined($this->{due}) ) {
-        $bgcol = $TWiki::Plugins::ActionTrackerPlugin::Format::badcol;
-    } elsif ( $this->isLate() ) {
-        $bgcol = $TWiki::Plugins::ActionTrackerPlugin::Format::latecol;
-        if ( !$asHTML ) {
+        if( $asHTML ) {
+            $text = CGI::span( { class=>'atpError' }, $text );
+        }
+    } elsif( $this->isLate() ) {
+        if( $asHTML ) {
+            $text = CGI::span( { class=>'atpWarn' }, $text );
+        } else {
             $text .= ' (LATE)';
         }
     }
 
-    return ( $text, $bgcol );
+    return $text;
 }
 
 # PRIVATE format text field
@@ -592,12 +602,15 @@ sub _formatField_text {
         # Generate a jump-to in wiki syntax
         $text =~ s/<br ?\/?>/\n/sgo;
         # Would be nice to do the goto as a button image....
-        my $jump = ' (<a href="' .
-          TWiki::Func::getViewUrl( $this->{web}, $this->{topic} ) .
-              '#' . $this->getAnchor() . '">go to action</a>)';
+        my $jump = ' '.
+          CGI::a( { href=>
+                    TWiki::Func::getViewUrl( $this->{web},
+                                             $this->{topic} ) .
+                    '#' . $this->getAnchor() },
+                  '(go to action)' );
         $text .= $jump;
     }
-    return ( $text, 0 );
+    return $text;
 }
 
 # PRIVATE format edit field
@@ -609,16 +622,17 @@ sub _formatField_edit {
         return '';
     }
 
+    my $skin = join( ',', ( 'action', TWiki::Func::getSkin()));
+
     my $url = '%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/' .
       $this->{web} . '/' . $this->{topic} .
-		'?skin=action&action=' . $this->getAnchor() .
-		  '&t='.time();
-    my $text = '<a href="'.$url.'"';
+		'?skin='.$skin.';atp_action=' . $this->getAnchor() . ';t='.time();
+    my $attrs = { href => $url };
     if ( $newWindow ) {
         # Javascript window call
-        $text .= ' onclick="return editWindow('."'$url'".')"';
+        $attrs->{onclick} = "return editWindow('$url')";
     }
-    return ( $text.'>edit</a>', 0 );
+    return CGI::a( $attrs, 'edit' );
 }
 
 # PUBLIC see if this other action matches according to fuzzy
@@ -719,7 +733,8 @@ sub findChanges {
 
     my $plain_text = $format->formatStringTable( [ $this ] );
     $plain_text .= "\n$changes\n";
-    my $html_text = $format->formatHTMLTable( [ $this ], 'href', 0 );
+    my $html_text = $format->formatHTMLTable( [ $this ], 'href', 0,
+                                              'atpChanges' );
     $html_text .= $format->formatChangesAsHTML( $old, $this );
 
     # Add text to people interested in notification
@@ -739,7 +754,8 @@ sub findChanges {
 # and text after the action.
 sub findActionByUID {
     my ( $web, $topic, $text, $uid ) = @_;
-
+    ASSERT( $uid );
+ASSERT($text !~ /JUNK/);
     my $sn = -1;
     if ( $uid =~ m/^AcTion(\d+)$/o ) {
         $sn = $1;
