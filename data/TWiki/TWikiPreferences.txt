@@ -321,6 +321,7 @@ You can introduce new VARIABLES and use them in your topics and templates. There
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
 	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
+	* TWiki:Plugins/PreferencesPlugin makes editing preferences a snap.
 
 __Note__: Can't edit?
 [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw topic]]

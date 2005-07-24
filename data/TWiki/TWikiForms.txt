@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="TWikiGuest" date="1117921800" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
+
+
 %TOC%  
 %STARTINCLUDE%
 ---# TWiki Forms
@@ -139,59 +139,8 @@ Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreference
 ---++ Searching for Form Data
 TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
 
-#SettingVars
----++ Using Forms For Settings
-Form fields can also be used for settings ( ={3 spaces}* Set= statements ). For example, to change your WebPreferences to use forms:
-
-	1 create !WebPrefencesForm topic
-	2 fill it with a table like this:
-	<blockquote style="background-color:#f0f0f0">
-	=|*Name*        |*Type*    |*Size*|*Values* |*Tooltip message*                |*Attributes*|= %BR%
-	=| WEBTOPICLIST | textarea |      |	      | List of topics of the !%WEB% web | S          |= %BR%
-	=| SITEMAPLIST  | select   | 3    | on, off | list this web in the Site Map   | S          |= %BR%
-	=| SITEMAPWHAT  | textarea |      |	      | short web summary               | S          |= %BR%
-	=| WEBBGCOLOR   | text     | 8    |         | Web-specific background color   | S          |= %BR%
-	etc...</blockquote>
-	3 Edit WebPreferences and:
-		* Add or Change the form to !WebPrefencesForm
-		* add !WebPrefencesForm to the =Set WEBFORMS= line
-		* Save
-	4 Edit WebPreferences, jump straight down to the form ignoring all the =textarea= stuff, and set as you like
-	5 if everything works as you like it, you can delete the Set statements (the form overrides Set if they are both used).
-
-__Notes:__
-
-If it isn't working, double check that the ==S== attribute has been specified (S for Setting).
-
-Using the TWiki:Plugins.EditTablePlugin on !WebPreferencesForm makes adding new preferences a breeze.
-
-Another example, this one using !EditTablePlugin, source:
-
-=%<nop>EDITTABLE{ header="|*Name*|*Type*|*Size*|*Values*|*Tooltip message*|*Attributes*|" format="|text,20|text,20|text,20|text,20|text,20|text,1|" }%=
-
-Result (after some editing):
-
-%EDITTABLE{ header="|*Name*|*Type*|*Size*|*Values*|*Tooltip message*|*Attributes*|" format="|text,20|text,20|text,20|text,20|text,20|text,1|" }%
-|*Name* | *Type* | *Size* | *Values* | *Tooltip message* | *Attributes*|
-|ALLOWTOPICCHANGE | textarea |  |  | Users or groups __allowed__ to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup) | S|
-|ALLOWWEBCHANGE | textarea |  |  | Users or groups who __are__  allowed to  __change__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
-|ALLOWWEBRENAME | textarea |  | %MAINWEB%.TWikiAdminGroup | Users or groups who __are__  allowed to  __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
-|ALLOWWEBVIEW | textarea |  |  | Users or groups who __are__  allowed to __view__  topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
-|DENYWEBCHANGE | textarea |  |  | Users or groups who __are not__  allowed to  __change__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
-|DENYWEBRENAME | textarea |  |  | Users or groups who __are not__  allowed to  __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
-|DENYWEBVIEW | textarea |  |  | Users or groups who __are not__  allowed to __view__  topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl) | S|
-|FINALPREFERENCES | textarea |  | NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME | Web preferences that are *not* allowed to be overridden by user preferences | S|
-|NOSEARCHALL | text |  | on | "Exclude web from a =web=""all""= search: (Set to =on= for hidden webs)" | S|
-|SITEMAPLIST | select |  | on | List this web in the %TWIKIWEB%.SiteMap | S|
-|SITEMAPUSETO | textarea |  | ...to do something. | ...to do something. | S|
-|SITEMAPWHAT | textarea |  | Describe what this web does. | Describe what this web does. | |
-|SKIN | select |  | twiki, free, gnu, koala, pattern, plain, tiger | list of installed skins | S|
-|WEBBGCOLOR | select |  | lightpink, pink, crimson, lavenderblush, palevioletred, hotpink, deeppink, mediumvioletred, orchid, thistle, plum, violet, fuchsia, fuchsia, darkmagenta, purple, mediumorchid, darkviolet, darkorchid, indigo, blueviolet, mediumpurple, mediumslateblue, slateblue, darkslateblue, ghostwhite, lavender, blue, mediumblue, darkblue, navy, midnightblue, royalblue, cornflowerblue, lightsteelblue, lightslategray, slategray, dodgerblue, aliceblue, steelblue, lightskyblue, skyblue, deepskyblue, lightblue, powderblue, cadetblue, darkturquoise, azure, lightcyan, paleturquoise, aqua, aqua, darkcyan, teal, darkslategray, mediumturquoise, lightseagreen, turquoise, aquamarine, mediumaquamarine, mediumspringgreen, mintcream, springgreen, mediumseagreen, seagreen, honeydew, darkseagreen, palegreen, lightgreen, limegreen, lime, forestgreen, green, darkgreen, lawngreen, chartreuse, greenyellow, darkolivegreen, yellowgreen, olivedrab, ivory, beige, lightyellow, lightgoldenrodyellow, yellow, olive, darkkhaki, palegoldenrod, lemonchiffon, khaki, gold, cornsilk, goldenrod, darkgoldenrod, floralwhite, oldlace, wheat, orange, moccasin, papayawhip, blanchedalmond, navajowhite, antiquewhite, tan, burlywood, darkorange, bisque, linen, peru, peachpuff, sandybrown, chocolate, saddlebrown, seashell, sienna, lightsalmon, coral, orangered, darksalmon, tomato, salmon, mistyrose, lightcoral, snow, rosybrown, indianred, red, brown, firebrick, darkred, maroon, white, whitesmoke, gainsboro, lightgrey, silver, darkgray, gray, dimgray, black | Web-specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors) | S|
-|WEBFORMS | textarea |  |  | %TWIKIWEB%.TWikiForms: How to enable form(s) | S|
-|WEBTOPICLIST | textarea |  | [[WebHome]], [[WebChanges][Changes]], [[WebTopicList][Topics]], [[WebIndex][Index]], [[WebSearch][Search]], Go <input type="text" name="topic" size="16" /> | the main entry point topics for this web | S|
-
 #FormsVsCategoryTables
----+++ Importing Category Table Data
+---++ Importing Category Table Data
 
 Very old TWiki releases used a system called the "TWikiCategoryTable". Later releases support automatic import of this data.
 
@@ -202,4 +151,5 @@ The new Form Template system should work with old Category Table data with no sp
 %T% If things aren't working correctly, there may be useful entries in =data/warning.txt=.
 
 %STOPINCLUDE%
+
 
