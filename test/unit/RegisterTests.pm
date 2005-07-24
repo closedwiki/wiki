@@ -77,8 +77,11 @@ sub set_up {
                                      '%NOP{Ignore this}%
 But not this
 %SPLIT%
-MIDDLE
+\t* Set %KEY% = %VALUE%
 %SPLIT%
+%WIKIUSERNAME%
+%WIKINAME%
+%USERNAME%
 AFTER');
         my $user = $session->{users}->findUser("TestAdmin", "TestAdmin");
         $session->{store}->createWeb($user, $systemWeb,
@@ -156,12 +159,15 @@ sub test_userTopic {
     $this->registerAccount();
     my( $meta, $text ) = $session->{store}->readTopic(
         undef, $TWiki::cfg{UsersWebName}, $testUserWikiName);
-    $this->assert($text !~ /%NOP{Ignore this}%/, $text);
-    $this->assert($text =~ s/\t\* First Name: Test\n//,$text);
-    $this->assert($text =~ s/\t\* Email: kakapo\@ground.dwelling.parrot.net\n//,$text);
-    $this->assert($text =~ s/\t\* Comment:\s*\n//,$text);
-    $this->assert($text =~ s/\t\* Last Name: User\n//,$text);
-    $this->assert($text =~ s/\t\* Name: Test User\n//,$text);
+    $this->assert($text !~ /Ignore this%/, $text);
+    $this->assert($text =~ s/But not this//,$text);
+    $this->assert($text =~ s/\t*\* First Name: Test\n//,$text);
+    $this->assert($text =~ s/\t*\* Email: kakapo\@ground.dwelling.parrot.net\n//,$text);
+    $this->assert($text =~ s/\t*\* Comment:\s*\n//,$text);
+    $this->assert($text =~ s/\t*\* Last Name: User\n//,$text);
+    $this->assert($text =~ s/\t*\* Name: Test User\n//,$text);
+    $this->assert($text =~ s/$TWiki::cfg{UsersWebName}\.$testUserWikiName//,$text);
+    $this->assert($text =~ s/$testUserWikiName//,$text);
     $this->assert_matches(qr/\s*AFTER\s*/, $text);
 }
 
@@ -724,7 +730,8 @@ EOM
        ($session,
         \%data,
         "%FIRSTLASTNAME% - %WIKINAME% - %EMAILADDRESS%\n\n%FORMDATA%",0);
-
+    $expected =~ s/\s+//g;
+    $actual =~ s/\s+//g;
     $this->assert_equals( $expected, $actual );
     $this->assert_equals(0, scalar(@mails));
 }

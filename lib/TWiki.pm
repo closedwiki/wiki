@@ -1567,7 +1567,7 @@ sub inlineAlert {
 
 ---++ ObjectMethod expandVariablesOnTopicCreation ( $text, $user ) -> $text
    * =$text= - text to expand
-   * =$user= - reference to user object
+   * =$user= - reference to user object. This is the user expanded in e.g. %USERNAME. Optional, defaults to logged-in user.
 Expand limited set of variables during topic creation. These are variables
 expected in templates that must be statically expanded in new content.
 
@@ -1581,16 +1581,14 @@ The expanded variables are:
 | =%<nop>URLPARAM%= | Parameters to the current CGI query |
 | =%<nop>NOP%= | No-op |
 
-SMELL: This should really be done by _expandAllTags but with
-a subset of the substitutions.
-
 =cut
 
 sub expandVariablesOnTopicCreation {
     my ( $this, $text, $user ) = @_;
 
     ASSERT($this->isa( 'TWiki')) if DEBUG;
-    ASSERT(!$user || $user->isa( 'TWiki::User')) if DEBUG;
+    $user ||= $this->{user};
+    ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     # Must do URLPARAM first
     $text =~ s(%URLPARAM{(.*?)}%)
@@ -1602,8 +1600,10 @@ sub expandVariablesOnTopicCreation {
       ($this->_SERVERTIME(new TWiki::Attrs($1)))ge;
     $text =~ s(%GMTIME(?:{(.*?)})?%)
       ($this->_GMTIME(new TWiki::Attrs($1)))ge;
-    $text =~ s(%((USER|WIKI|WIKIUSER)NAME)%)
-      ($this->{SESSION_TAGS}{$1})g;
+
+    $text =~ s/%USERNAME%/$user->login()/ge;
+    $text =~ s/%WIKINAME%/$user->wikiName()/ge;
+    $text =~ s/%WIKIUSERNAME%/$user->webDotWikiName()/ge;
 
     # Remove template-only text and variable protection markers. These
     # are normally expanded to their content during topic display, but

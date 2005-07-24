@@ -5,8 +5,8 @@
 	* %KEY%: %VALUE%%SPLIT%
 
 __My Links__
-	* %TWIKIWEB%.WelcomeGuest to learn TWiki
-	* Sandbox.WebHome web to try out TWiki
+	* Visit %TWIKIWEB%.WelcomeGuest to learn about TWiki
+	* Sandbox.%HOMETOPIC% web to try out TWiki
 	* Sandbox.%TOPIC%Sandbox just for me
 	* 
 	* 
@@ -20,8 +20,8 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 		* Set EDITBOXHEIGHT = 22
 	* Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable.
 		* Set EDITBOXSTYLE = width: 99%
-	* Optionally write protect your home page: (set it to your %TWIKIWEB%.WikiName)
-		* Set ALLOWTOPICCHANGE =
+	* Write protect your home page: (set it to your %MAINWEB%.WikiName)
+		* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 __Related topics__
 	* %TWIKIWEB%.ChangePassword

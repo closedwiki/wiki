@@ -81,7 +81,7 @@ sub register_cgi {
     elsif ($action eq 'verify') {
         verifyEmailAddress( $session, $tempUserDir );
         if ($needApproval) {
-            throw Error::Simple("Approval code has not been written!");
+            throw Error::Simple('Approval code has not been written!');
         }
         finish( $session, $tempUserDir);
     }
@@ -156,7 +156,8 @@ sub passwd_cgi {
 #       RegistrationAsPlugin.
 # TODO: more work to align the checks made by the two register/bulkRegister systems 
 
-my $b = "\t*"; # SMELL legacy format - bulletpoint. I'd hardcode it except there is a proposal to change it.
+# SMELL legacy format - bulletpoint. I'd hardcode it except there is a proposal to change it.
+my $b = "\t*";
 my $b2 ="\t\t*";
 my $indent = "\t"; # SMELL indent legacy
 
@@ -166,7 +167,7 @@ my $indent = "\t"; # SMELL indent legacy
 
   Called by ManageCgiScript::bulkRegister (requires authentication) with topic = the page with the entries on it.
    1 Makes sure you are an admin user ;)
-   2 Calls TWiki::Data::DelimitedFile (delimiter => "|", content =>textReadFromTopic)
+   2 Calls TWiki::Data::DelimitedFile (delimiter => '|', content =>textReadFromTopic)
    3 ensures requiredFieldsPresent()
    4 starts a log file
    5 calls registerSingleBulkUser() for each row 
@@ -193,7 +194,8 @@ sub bulkRegister {
     unless( $session->{user}->isAdmin() ) {
         throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $web, topic => $topic,
-                                    params => "$TWiki::cfg{UsersWebName}.$TWiki::cfg{SuperAdminGroup}" );
+                                    params => $TWiki::cfg{UsersWebName}.'.'.
+                                      $TWiki::cfg{SuperAdminGroup} );
     }
 
     #-- Read the topic containing a table of people to be registered
@@ -202,10 +204,10 @@ sub bulkRegister {
                                                       $web, $topic, undef );
     my %data;
     ( $settings->{fieldNames}, %data ) =
-      TWiki::Data::DelimitedFile::read(content => $text, delimiter => "|" );
+      TWiki::Data::DelimitedFile::read(content => $text, delimiter => '|' );
 
     my $registrationsMade = 0;
-    my $log = "---+ Report for Bulk Register\n\n%TOC%\n";
+    my $log = '---+ Report for Bulk Register'."\n\n%TOC%\n";
 
     #-- Process each row, generate a log as we go
     foreach my $row ( values %data ) {
@@ -214,12 +216,13 @@ sub bulkRegister {
         my ($userTopic, $uLog) =
           _registerSingleBulkUser($session, $row, $settings );
         $log .= "\n---++ ". $row->{WikiName}."\n";
-        $log .= "$b Added to users' topic ".$userTopic.":\n".join("\n$indent",split /\n/, $uLog)."\n";	
+        $log .= $b.' Added to users topic '.$userTopic.":\n".
+          join("\n".$indent,split /\n/, $uLog)."\n";	
         $registrationsMade++; # SMELL - no detection for failure
     }
 
     $log .= "----\n";
-    $log .= "registrationsMade: $registrationsMade";
+    $log .= 'registrationsMade: '.$registrationsMade;
 
     my $logWeb;
     my $logTopic =  $query->param('LogTopic') || $topic.'Result';
@@ -258,7 +261,8 @@ sub _registerSingleBulkUser {
     #-- TWiki:Codev.LoginNamesShouldNotBeWikiNames - but use it if not supplied
     unless( $row->{LoginName} ) {
         $row->{LoginName} = $row->{WikiName};
-        $log = "\t* No TWiki.LoginName specified - setting to $row->{LoginName}\n";
+        $log = $b.' No TWiki.LoginName specified - setting to '.
+          $row->{LoginName}."\n";
     }
 
     #-- Ensure every required field exists
@@ -266,7 +270,7 @@ sub _registerSingleBulkUser {
     my @requiredFields = qw(WikiName FirstName LastName);
     if (_missingElements( $fieldNames, \@requiredFields )) {
         throw Error::Simple( join(' ', @{$settings->{fieldNames}}).
-                             " does not contain \nthe full set of ".
+                             ' does not contain the full set of '.
                              join(' ', @requiredFields) );
     }
 
@@ -276,16 +280,16 @@ sub _registerSingleBulkUser {
                    ];
 
     my $passResult = _addUserToPasswordSystem( $session, $row );
-    $log .= "$b Password set: ".$passResult." (1 = success)\n";
+    $log .= $b.' Password set: '.$passResult.' (1 = success)'."\n";
     #TODO: need a path for if it doesn't succeed.
 
     $session->writeLog('bulkregister', $row->{webName}.'.'.$row->{WikiName},
                        $row->{Email}, $row->{WikiName} );
 
     if( $doOverwriteTopics or !$session->{store}->topicExists( $row->{webName}, $row->{WikiName} ) ) {
-        $log .= _newUserFromTemplate($session,'NewUserTemplate', $row);
+        $log .= _newUserFromTemplate($session, 'NewUserTemplate', $row);
     } else {
-        $log .= "$b Not writing topic ".$row->{WikiName}."\n";
+        $log .= $b.' Not writing topic '.$row->{WikiName}."\n";
 	}
 
     my $user = $session->{users}->findUser( $row->{LoginName},
@@ -298,7 +302,7 @@ sub _registerSingleBulkUser {
     #if ($TWiki::cfg{EmailUserDetails}) {
         # If you want it, write it.
         # _sendEmail($session, 'registernotifybulk', $data );
-    #    $log .= "$b Password email disabled\n";
+    #    $log .= $b.' Password email disabled\n';
     #}
     return ($userTopic, $log);
 }
@@ -396,7 +400,7 @@ sub _requireVerification {
       $data->{WikiName}.'.'.TWiki::User::randomPassword();
     _putRegDetailsByCode( $data, $tmpDir );
 
-    $session->writeLog( 'regstart', "$data->{webName}.$data->{WikiName}",
+    $session->writeLog( 'regstart', $data->{webName}.'.'.$data->{WikiName},
                         $data->{Email}, $data->{WikiName} );
 
     my $err = _sendEmail( $session, 'registerconfirm', $data );
@@ -622,8 +626,8 @@ sub changePassword {
 				  web => $webName, topic => $topic,
 				  def => 'password_changed' );
     } else {
-      $session->writeLog('changepasswd', $user->stringify(), "FAILED");
-      die "Problem resetting password";
+      $session->writeLog('changepasswd', $user->stringify(), 'FAILED');
+      die 'Problem resetting password';
     }
 }
 
@@ -644,18 +648,18 @@ sub verifyEmailAddress {
 
     my $code = $session->{cgiQuery}->param('code');
     unless( $code ) {
-        throw Error::Simple( "verifyEmailAddress: no verification code!");
+        throw Error::Simple( 'verifyEmailAddress: no verification code!');
     }
     my $data = _reloadUserContext( $code, $tempUserDir );
 
     if (! exists $data->{WikiName}) {
-        throw Error::Simple( "verifyEmailAddress: no email address!");
+        throw Error::Simple( 'verifyEmailAddress: no email address!');
     }
 
     my $topic = $session->{topicName};
     my $web = $session->{webName};
 
-    #    $this->{session}->writeLog('verifyuser', $loginName, "$userName");
+    #    $this->{session}->writeLog('verifyuser', $loginName, $userName);
 
     _emailRegistrationConfirmations( $session, $data );
 }
@@ -690,7 +694,7 @@ sub finish {
     _deleteUserContext($code, $tempUserDir );
 
     if (! exists $data->{WikiName}) {
-        throw Error::Simple( "No verifyEmailAddress - no WikiName after reload");
+        throw Error::Simple( 'No verifyEmailAddress - no WikiName after reload');
     }
 
     my $log = _newUserFromTemplate($session, 'NewUserTemplate', $data);
@@ -723,7 +727,7 @@ sub finish {
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
-        $session->writeLog( 'register', "$data->{webName}.$data->{WikiName}",
+        $session->writeLog( 'register', $data->{webName}.'.'.$data->{WikiName},
                             $data->{Email}, $data->{WikiName} );
     }
     
@@ -745,12 +749,16 @@ sub finish {
 sub _newUserFromTemplate {
     my ($session, $template, $row) = @_;
     my ( $meta, $text ) = TWiki::UI::readTemplateTopic($session, $template);
-    my $log = "$b Writing topic ".$row->{webName}.".".$row->{WikiName}."\n".
-      "$b2 RegistrationHandler: ";
+    my $log = $b.' Writing topic '.$row->{webName}.'.'.$row->{WikiName}."\n".
+      $b2.' RegistrationHandler: ';
     my $regLog = $text;
     _purgeKeys( $row );
-    $log .= join("$b2 ", split /\n/, $regLog)."\n";
-    $log .= "$b2 ".join("$b2 ", split /\n/, _writeRegistrationDetailsToTopic( $session, $row, $meta, $text ))."\n";
+    $log .= join($b2.' ', split /\n/, $regLog)."\n";
+    $log .= $b2.' '.
+      join( $b2.' ',
+            split( /\n/,
+                   _writeRegistrationDetailsToTopic( $session, $row,
+                                                     $meta, $text )))."\n";
     return $log;
 }
 
@@ -763,9 +771,10 @@ sub _writeRegistrationDetailsToTopic {
 
     ASSERT($data->{WikiName}) if DEBUG;
 
-    # TODO - there should be some way of overwriting meta without blatting the content.
+    # TODO - there should be some way of overwriting meta without
+    # blatting the content.
 
-    $text = "%SPLIT%\n\t* %KEY%: %VALUE%%SPLIT%\n" unless $text;
+    $text ||= "%SPLIT%\n\t* %KEY%: %VALUE%%SPLIT%\n\t* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%\n";
     my ( $before, $repeat, $after ) = split( /%SPLIT%/, $text );
 
     my $log;
@@ -781,10 +790,7 @@ sub _writeRegistrationDetailsToTopic {
 
     my $userName = $data->{remoteUser} || $data->{WikiName};
     my $user = $session->{users}->findUser( $userName );
-    $text =
-      $session->expandVariablesOnTopicCreation
-        ( $text, $user, $data->{WikiName},
-          $data->{webName}.'.'.$data->{WikiName} );
+    $text = $session->expandVariablesOnTopicCreation( $text, $user );
 
     $meta->put( 'TOPICPARENT', { 'name' => $TWiki::cfg{UsersTopicName}} );
 
@@ -912,10 +918,10 @@ sub _buildConfirmationEmail {
         my $name  = $fd->{name};
         my $value = $fd->{value};
         if ( ( $name eq 'Password' ) && ($hidePassword) ) {
-            $value = "*******";
+            $value = '*******';
         }
         if ( $name ne 'Confirm' ) {
-            $before .= "   * $name\: $value\n";
+            $before .= $b.' '.$name.': '.$value."\n";
         }
     }
     $templateText = $before.$after;
@@ -1030,7 +1036,7 @@ sub _addUserToPasswordSystem {
         my $password = $p->{Password};
         unless ($password) {
             $password = TWiki::User::randomPassword();
-            $session->writeWarning('No password specified for '.$p->{LoginName}." - using random=".$password);
+            $session->writeWarning('No password specified for '.$p->{LoginName}.' - using random='.$password);
         }
         $success = $user->addPassword( $password );
     }
@@ -1067,7 +1073,7 @@ sub _putRegDetailsByCode {
         File::Path::mkpath( $tmpDir ) || throw Error::Simple( $! );
     }
     open( F, ">$file" ) or throw Error::Simple( "$file: $!" );
-    print F "# Verification code\n";
+    print F '# Verification code',"\n";
     print F Dumper( $data );
     close( F );
 }
@@ -1075,7 +1081,7 @@ sub _putRegDetailsByCode {
 sub _verificationCodeFilename {
     my ( $code, $tmpDir ) = @_;
     ASSERT( $code ) if DEBUG;
-    my $file = $tmpDir . "/$code";
+    my $file = $tmpDir . '/'.$code;
     $file = TWiki::Sandbox::normalizeFileName( $file );
     return $file;
 }
