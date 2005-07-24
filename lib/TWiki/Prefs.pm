@@ -59,22 +59,30 @@ sub new {
     my $web = $session->{webName};
 
     my $globs =  new TWiki::Prefs::PrefsCache( $session, undef );
-    $globs->loadPrefsFromTopic( $TWiki::cfg{SystemWebName},
-                                $TWiki::cfg{SitePrefsTopicName} );
+    $this->{GLOBAL} = $globs;
+
+    # Local prefs first, so it can set FINALPREFERENCES to override
+    # TWiki.TWikiPreferences
     my $local = $TWiki::cfg{LocalSitePreferences};
     if( $local && $local =~ /^(\w+)\.(\w+)$/ ) {
         $globs->loadPrefsFromTopic( $1, $2 );
     }
-    $this->{GLOBAL} = $globs;
 
-    my @webPath=split(/[\/\.]/,$web);
-    my $tmpWebPath="";
-    my $prevWebPrefs=$globs;
-    foreach my $tmp (@webPath) {
-      $tmpWebPath = ($tmpWebPath ne "") ? "$tmpWebPath/$tmp" : $tmp;
-      $this->{WEBS}{$tmpWebPath}=TWiki::Prefs::PrefsCache->new($session, $prevWebPrefs);
-      $this->{WEBS}{$tmpWebPath}->loadPrefsFromTopic( $tmpWebPath, $TWiki::cfg{WebPrefsTopicName} );
-      $prevWebPrefs=$this->{WEBS}{$tmpWebPath};
+    # Now TWiki.TWikiPreferences
+    $globs->loadPrefsFromTopic( $TWiki::cfg{SystemWebName},
+                                $TWiki::cfg{SitePrefsTopicName} );
+
+    my @webPath = split( /[\/\.]/, $web );
+    my $tmpWebPath = '';
+    my $prevWebPrefs = $globs;
+    foreach my $tmp ( @webPath ) {
+        $tmpWebPath .= '/' if $tmpWebPath;
+        $tmpWebPath .= $tmp;
+        $this->{WEBS}{$tmpWebPath} =
+          new TWiki::Prefs::PrefsCache($session, $prevWebPrefs);
+        $this->{WEBS}{$tmpWebPath}->loadPrefsFromTopic(
+            $tmpWebPath, $TWiki::cfg{WebPrefsTopicName} );
+        $prevWebPrefs=$this->{WEBS}{$tmpWebPath};
     }
     $this->{WEB} = $this->{WEBS}{$web};
 
