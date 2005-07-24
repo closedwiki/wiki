@@ -10,7 +10,7 @@ The editor is built on a generic framework that supports editing of TWiki topics
 	* Images cannot be resized
 	* Overlapping TWiki styles don't work very well
 	* No help information
-Feedback is very welcome - please add to the WysiwygPluginDev topic.
+Feedback is very welcome - please add to the TWiki:Plugins.WysiwygPluginDev topic.
 %ENDCOLOR%
 
 %TOC%

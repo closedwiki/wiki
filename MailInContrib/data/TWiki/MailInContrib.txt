@@ -1,0 +1,117 @@
+---+!! <nop>MailInContrib for TWiki
+
+<table bgcolor="yellow"><tr><td>
+*NOTE: THIS CONTRIB IS DESIGNED TO WORK WITH THE CODE CURRENTLY ON THE DEVELOP BRANCH. IT WILL NOT WORK WITH ANY RELEASED VERSION OF TWIKI*. It may be back-ported at some point.
+</td></tr></table>
+
+This Contrib supports the submission of content to TWiki topics via e-mail.
+
+Mails for twiki can be pulled out of mail folders using [[CPAN:Email::Folder::POP3][POP3]], [[CPAN:Email::Folder::IMAP][IMAP]], or anything else supported by CPAN:Email::Folder.
+
+The implementation is very simple; a script called =mailincron= is run every so often (usually by =cron= or an equivalent offline job scheduler). The script trawls the mail folders you specify and grabs messages that it recognises as being for the TWiki.
+
+For example, your wayward child might send a mail like this from an internet cafe in Thailand:
+<verbatim>
+To: twiki@mum_and_dad.org.uk
+From: gapper@isp.co.uk
+Subject: Travels.DailyDiary
+
+*Phuket*: I've run out of money!
+</verbatim>
+The message lands in your email folder at your ISP. Once an hour, a cron job runs the =mailincron= script, which scans the folder and finds any messages that have a correctly formatted TWiki Web.Topic<nop>Name in the subject line. The Web must exist, though the topic will be created if necessary. Both web and topic _must_ be specified.
+
+In this case, the web exists, and so does the topic, so the following text gets appended to Travels.Daily<nop>Diary:
+
+<i>By mail from Prodigal Son <gapper@isp.co.uk> 10 Jul 2005 08:35:11 -0900</i>
+
+*Phuket*: I've run out of money!
+
+---+ Settings
+	* Name of the perl package
+		* Set STUB = %$STUB%
+
+---+ Installation
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	| *File:* | *Description:* |
+	%$MANIFEST%
+	* Run the installer script =%TOPIC%_intaller.pl= or alternatively resolve all dependencies manually.
+	* Set up cron (or equivalent) jobs to run =mailincron=
+
+Because of the security issues involved (passwords for the mailboxes etc.) configuration uses variables set in your =LocalSite.cfg=. Let's say you have a mailbox on an ISP, on host =mail.isp.net=. You talk to the ISP using POP3 via port 110, and you log on using username =mummy= and password =money8ags=. Your configuration would look as follows:
+<verbatim>
+$cfg{MailIn = [
+    {
+        # Mail folder; Required.
+        # Note: support for POP3 requires that the Email::Folder::POP3
+        # module is installed. Support for IMAP requires
+        # Email::Folder::IMAP etc.
+        # Folder names are as described in
+        # the documentation for the relevant Email::Folder type
+        # e.g. for POP3, the folder name might be:
+        folder => 'pop://mummy:money8ags@mail.isp.net:110/',
+
+        # User; Required. Wikiname of the user who will be "logged in"
+        # when messages from this folder are added. The user is important
+        # for access controls, and must be a registered TWiki user..
+        user => "MummyBear",
+
+        # (default false) Whether to send replies to mails if there is an
+        # error when they are processed. Reply mails are sent using the
+        # standard TWiki notification mechanism, which must be configured
+        # for this to work. Error messages will be written to the TWiki
+        # warning log if replyonerror is false.
+        replyonerror => 1,
+
+        # Whether to send replies to mails if the submission succeeds
+        # Reply mails are sent using the standard TWiki notification
+        # mechanism, which must be configured for this to work.
+        # (default false)
+        replyonsuccess => 1,
+
+        # Whether to delete messages from the folder when they have been
+        # successfully processed. Requires Email::Delete to be installed.
+        # (default false)
+        delete => 1,
+
+        # Whether you want _all_ messages removed from the folder after
+        # processing, even if they were not recognised as being for TWiki
+        # or had failures. If you are going to set this, you are advised
+        # to also set ReplyOnError. (default false)
+        deleteall => 0
+    },
+    # you can add more inboxes here
+];
+
+</verbatim>
+The script takes one optional parameter, <tt>debug</tt>, which takes a boolean value e.g. <tt>debug=1</tt>. If you pass anything other than 0 or the empty string in =debug=, the script will scan the mail folders, describe what it would have done, and exit, without modifying any folders, the TWiki, or sending any mails.
+
+To run the script you need to set up a cron job. For example, to transfer mail into the TWiki once every hour you might write:
+<verbatim>
+0 * * * * cd /home/twiki/bin && ./mailincron 2&>1 >> /home/twiki/logs/mailincron.log
+</verbatim>
+You _must_ run the script from the bin directory.
+Make sure that the cron is run by a user with the permissions needed to read and write the TWiki data directory.
+
+The script can also be run from a browser, though this is intended primarily for testing. From the browser, the 'debug' parameter is passed as a CGI parameter e.g.
+<verbatim>
+http://my.twiki/bin/mailincron?debug=on
+</verbatim>
+
+This is a brand-new development, not related in any to the original TWiki:Plugins/MailInAddon. Due acknowledgement is made to those early pioneers for the idea. ;-)
+
+---+ Contrib Info
+
+|  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
+|  Copyright &copy;: | 2005, TWiki Contributors |
+|  License: | GPL |
+|  Dependencies: | %$DEPENDENCIES% |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 10 Mar 2005 | 1.000 Initial version |
+|  Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/CrawfordCurrie - %$DATE%

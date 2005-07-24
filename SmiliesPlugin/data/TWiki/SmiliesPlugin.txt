@@ -46,7 +46,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set SHORTDESCRIPTION = Render smilies as icons, like =&nbsp;:-)= for :-) or =&nbsp;:cool:= for :cool:
 
 	* The name of the topic containig your Smilies. Default: ==%WEB%.SmiliesPlugin==
-		* #Set TOPIC = TWiki.SmiliesPlugin
+		* #Set TOPIC = %TWIKIWEB%.SmiliesPlugin
 
 	* The way the _emoticon_ is displayed. You can use ==$emoticon== (e.g. =:<nop>D=), ==$url== (e.g. =%<nop>ATTACHURL%/biggrin.gif=) and ==$tooltip== (e.g. ="big grin"=). Default: ==&lt;img src="$url" alt="$tooltip" title="$tooltip" border="0" /&gt;==
 <verbatim>
