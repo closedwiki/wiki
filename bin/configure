@@ -957,23 +957,24 @@ sub _showPlugins {
     my @modules;
     foreach my $libDir ( @INC ) {
         if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
-            foreach my $file (grep { /^[A-Za-z0-9_]+Plugin\.pm$/ } readdir DIR ) {
+            foreach my $file ( grep { /^[A-Za-z0-9_]+Plugin\.pm$/ }
+                                 readdir DIR ) {
                 my $module = $file;
                 $module =~ s/\.pm$//;
                 my $discovered = $libDir.'/'.$file;
                 $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
-            $module =~ /^(.*)$/;    #CRAP untaint - SMELL - CDot - am i supposed to use Sandbox from here?
-        $module = $1;
-                push( @modules, $module );
+                $module =~ /^(.*)$/;    # untaint
+                $module = $1;
+                push( @modules, { name => $module, desc => $libDir });
                 closedir( DIR );
             }
         }
     }
     my $block = '';
-    foreach my $m ( sort @modules ) {
+    foreach my $m ( sort { $a->{name} cmp $b->{name} } @modules ) {
         $block .= _checkAndBuildValueGrabber
-          ( 'BOOLEAN', '', '',
-          '{Plugins}{'.$m.'}{Enabled}');
+          ( 'BOOLEAN', '', $m->{desc},
+          '{Plugins}{'.$m->{name}.'}{Enabled}');
     }
     return $block;
 }
