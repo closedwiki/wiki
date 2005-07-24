@@ -752,15 +752,9 @@ sub _handleMailto {
 
 =pod
 
----++ ObjectMethod filenameToIcon (  $fileName  ) -> $html
+---++ ObjectMethod filenameToIcon( $fileName ) -> $html
 
-Fetches an image file from an image directory, mapped from _filetypes.txt (on basis of the file extension). Calls _getSkinIconTopicPath to get the attachment topic path from preference variable ICONTOPIC. 
-
-Prerequisites:
-    - ICONTOPIC must be defined, as Web.TopicName or as TopicName (then %WEB%.TopicName is used)
-    - The file _filetypes.txts hould be in the same directory as the image attachments
-    
-used in: Attach::_expandAttrs
+Fetches an image file from an image directory, mapped from _filetypes.txt (on basis of the file extension).
 
 =cut
 
@@ -771,90 +765,75 @@ sub filenameToIcon {
     my @bits = ( split( /\./, $fileName ) );
     my $fileExt = lc $bits[$#bits];
 
-    my $iconUrl = $TWiki::cfg{PubUrlPath}.'/'.$this->_getSkinIconTopicPath();
     # SMELL: use of direct access to PubDir violates store encapsulation
-    my $iconDir = $TWiki::cfg{PubDir}.'/'.$this->_getSkinIconTopicPath();
+    my $iconDir = $TWiki::cfg{PubDir}.'/'. $this->_getIconTopicPath();
 
     my $store = $this->{session}->{store};
-    # The file _filetypes.txt should be in the same directory as the image attachments
-    my $iconList = $store->readFile( $iconDir.'/_filetypes.txt' );
+    # The file _filetypes.txt should be in the same directory as the
+    # image attachments
+    my $icons = $iconDir.'/_filetypes.txt';
+    my $iconList = $store->readFile( $icons );
     foreach( split( /\n/, $iconList ) ) {
         @bits = ( split( / / ) );
         if( $bits[0] eq $fileExt ) {
-            return CGI::img( { src => "$iconUrl/$bits[1].gif",
-                               width => 16, height=>16, align => 'top',
-                               alt => '', border => 0 } );
+            return $this->getIconHTML( $bits[1] );
         }
     }
-    return CGI::img( { src => "$iconUrl/else.gif",
-                       width => 16, height => 16, align => 'top', alt => '',
-                       border => 0 } );
+    return $this->getIconHTML( 'else' );
 }
 
 =pod
 
----++ ObjectMethod getDocGraphic (  $iconName  ) -> $html
+---++ ObjectMethod getIconHTML( $iconName ) -> $html
 
-Creates an image tag from an icon name. Calls getDocGraphicFilePath to get the attachment topic path from preference variable ICONTOPIC.
+Creates an HTML image tag from an icon name.
 
-Prerequisites:
-    - ICONTOPIC must be defined, as Web.TopicName or as TopicName (then %WEB%.TopicName is used)
-    
-used in: TWiki::_ICON
-    
 =cut
 
-sub getDocGraphic {
+sub getIconHTML {
     my( $this, $iconName ) = @_;
-    my $docGraphicFilePath = $this->getDocGraphicFilePath( $iconName );
-    return CGI::img( { src => $docGraphicFilePath,
-                       align => 'top', alt => '', border => 0 } );
+    my $url = $this->getIconURL( $iconName );
+    return CGI::img( { src => $url,
+                       width => 16, height=>16,
+                       align => 'top', alt => $iconName, border => 0 } );
 }
 
 =pod
 
----++ ObjectMethod getDocGraphicFilePath (  $iconName  ) -> $iconFilePath
+---++ ObjectMethod getIconURL( $iconName ) -> $iconFilePath
 
-Creates an image file path from an icon name. Calls _getSkinIconTopicPath to get the attachment topic path from preference variable ICONTOPIC.
+Creates an image URL path from an icon name.
 
 Prerequisites:
-    - ICONTOPIC must be defined, as Web.TopicName or as TopicName (then %WEB%.TopicName is used)
-    
-used in: getDocGraphic, TWiki::_ICONPATH
-    
+    - %<nop>ICONTOPIC% must be defined
+
 =cut
 
-sub getDocGraphicFilePath {
+sub getIconURL {
     my( $this, $iconName ) = @_;
     ASSERT(ref($this) eq 'TWiki::Render') if DEBUG;
-    my $iconUrl = $TWiki::cfg{PubUrlPath}.'/'.$this->_getSkinIconTopicPath();
-    my $iconFilePath = $iconUrl.'/'.$iconName.'.gif';
-    return $iconFilePath;
+    my $url = '%PUBURL%/'.$this->_getIconTopicPath().'/'.$iconName.'.gif';
+    $url = $this->{session}->handleCommonTags( $url, 'NOWEB', 'NOTOPIC' );
+    return $url;
 }
 
 =pod
 
----++ ObjectMethod _getSkinIconTopicPath (  ) -> $skinIconTopicPath
+---++ ObjectMethod _getIconTopicPath (  ) -> $iconTopicPath
 
-Reads the variable ICONTOPIC from the preferences, and returns a relative file path (url) to this topic. Web.TopicName becomes Web/TopicName; TopicName becomes %WEB%.TopicName.
-    
+Returns a web/topic path fragment representing the ICONTOPIC.
+
 =cut
 
-sub _getSkinIconTopicPath {
-    my( $this ) = @_;
+sub _getIconTopicPath {
+    my $this = shift;
     my $session = $this->{session};
     my $prefs = $session->{prefs};
-    my $web = $session->{webName};
-    my $skinIconTopicPath = $prefs->getPreferencesValue('ICONTOPIC');
-    # Remove whitespace at end
-    $skinIconTopicPath =~ s/\s*$//s;
-    # If there is no dot in $skinIconTopicPath, no web has been specified; use the local web
-    if ( index( $skinIconTopicPath, '.' ) == -1 ) {
-        $skinIconTopicPath = $web.'.'.$skinIconTopicPath;
-    }
-    # Replace dot in Web.TopicName with slash to get the path: Web/TopicName
-    $skinIconTopicPath =~ s/\./\//;
-    return $skinIconTopicPath;
+    my $iconTopic = $prefs->getPreferencesValue( 'ICONTOPIC' );
+    my( $web, $topic ) = $this->{session}->normalizeWebTopicName(
+        $session->{webName}, $iconTopic );
+
+    return $web.'/'.$topic;
 }
 
 =pod

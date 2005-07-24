@@ -2582,27 +2582,21 @@ sub _SPACEOUT {
 
 sub _ICON {
     my( $this, $params ) = @_;
-    my $file = $params->{_DEFAULT};
+    my $file = ( $params->{_DEFAULT} || '' );
 
-    $file = '' unless $file;
-
-    my $value = $this->{renderer}->getDocGraphic( $file );
-    return $value;
+    return $this->{renderer}->getIconHTML( $file );
 }
 
 sub _ICONPATH {
     my( $this, $params ) = @_;
-    my $file = $params->{_DEFAULT};
+    my $file = ( $params->{_DEFAULT} || '' );
 
-    $file = '' unless $file;
-
-    my $path = $this->{renderer}->getDocGraphicFilePath( $file );
-    return $constantTags{DEFAULTURLHOST} . $path;
+    return $this->{renderer}->getIconURL( $file );
 }
 
 sub _RELATIVETOPICPATH {
     my ( $this, $params, $theTopic, $web ) = @_;
-    my $topic = $params->{_DEFAULT} || '';
+    my $topic = $params->{_DEFAULT};
 
     return '' unless $topic;
 
