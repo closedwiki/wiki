@@ -19,6 +19,7 @@ BEGIN {
     push( @INC, "$ENV{TWIKI_HOME}/lib" );
     unshift @INC, '../../bin';
     require 'setlib.cfg';
+    $SIG{__DIE__} = sub { Carp::confess $_[0] };
 };
 
 sub new {

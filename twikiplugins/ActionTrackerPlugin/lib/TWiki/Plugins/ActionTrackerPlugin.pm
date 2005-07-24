@@ -213,7 +213,7 @@ sub beforeEditHandler {
 
     $tmpl =~ s/%UID%/$uid/go;
 
-    my $useNewWindow = ( _getPref( "USENEWWINDOW", 0 ) == 1 );
+    my $useNewWindow = _getPref( "USENEWWINDOW", 0 );
     my $submitCmd = "preview";
     my $submitCmdName = "Preview";
     my $submitScript = "";

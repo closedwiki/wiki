@@ -12,7 +12,7 @@ In edit mode, the edit button is replaced by save and cancel buttons, with their
 ---++ Syntax Rules
 
 	* =%<nop>EDITPREFERENCES{ "= _topic_ =" }%=
-		* _topic_ references a TWiki.TWikiForms defining the format of the edit fields for preferences. It may be prefixed by a web.
+		* _topic_ references a %TWIKIWEB%.TWikiForms defining the format of the edit fields for preferences. It may be prefixed by a web.
 		* If a preference setting is not mentioned in the form referenced by _topic_, a text input box of the specified length is provided.
 		* Otherwise, the input can be through textareas, select, radio, checkbox, date, or text, as provided by %TWIKIWEB%.TWikiForms.
 

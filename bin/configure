@@ -122,6 +122,8 @@ my $optionalMods =
    'POSIX'            => "I18N (core module) and Security",
    'Digest::MD5'      => "MD5 encoded passwords",
    'Text::Diff'       => 'UpgradeTWiki',
+   'CGI::Cookie'      => "sessions",
+   'CGI::Session'     => "sessions",
   };
 
 my $I18Mods =
@@ -874,6 +876,37 @@ sub _CHECKVAR_StoreImpl {
     return $mess;
 };
 
+sub _CHECKVAR_UseClientSessions {
+    if( $TWiki::cfg{UseClientSessions} ) {
+        if (!eval "use CGI::Cookie; 1") {
+            return ERROR("
+ The CGI::Cookie Perl module is required for session support, but is not
+ available. Please either install it or turn UseClientSessions off.
+                     ");
+        }
+        if (!eval "use CGI::Session; 1") {
+            return ERROR("
+ The CGI::Session Perl module is required for session support, but is not
+ available. Please either install it or turn UseClientSessions off.
+                     ");
+        }
+    }
+    return '';
+}
+
+sub _CHECKVAR_AuthScripts {
+    if( $TWiki::cfg{AuthScripts} ) {
+        if( $TWiki::cfg{LoginManager} eq "TWiki::Client::NoLogin" ) {
+            return WARN("
+You've asked that some scripts require authentication, but haven't
+specified a way for users to log in. Please pick a LoginManager
+(above) other than NoLogin.
+                     ");
+        }
+    }
+    return '';
+}
+
 # Generates the appropriate HTML for getting a value to configure the
 # entry. The opts are additional parameters, and by convention may
 # be a number (for a string length), a comma separated list of values
@@ -1383,8 +1416,9 @@ HERE
     my $twikiFound = 0;
     my $mess = '';
     if ($@) {
+        $mess = $@;
         $mess = ERROR("'TWiki.pm' could not be loaded. The error was:").
-                CGI::pre($@).
+                CGI::pre($mess).
                 ERROR("Check path to <code>twiki/lib</code> and check that LocalSite.cfg is present and readable");
     } else {
         $twikiFound = 1;
@@ -2143,7 +2177,7 @@ print CGI::header('text/html'), $hdr;
 my $body = "";
 $body .= CGI::h1('TWiki Configuration');
 
-my $update_enabled = 0;
+my $update_disabled = 0;
 my $path_to_localsite_cfg = _findFileOnPath('LocalSite.cfg');
 unless( $path_to_localsite_cfg ) {
     $path_to_localsite_cfg = _findFileOnPath('TWiki.cfg') || '';
@@ -2154,13 +2188,12 @@ if( !$path_to_localsite_cfg ||
     ( $errs = _checkCanCreateFile( $path_to_localsite_cfg ))) {
     $errs ||= 'Cannot locate LocalSite.cfg';
     $body .= CGI::p(WARN('Save is disabled; '.$errs));
-} else {
-    $update_enabled = 1;
+    $update_disabled = "Cannot create LocalSite.cfg";
 }
 
 if( $action eq 'update' ) {
-    unless( $update_enabled ) {
-        die "Update is disabled";
+    if( $update_disabled ) {
+        die "Update is disabled $update_disabled";
     }
     $body .= handleUpdate( $path_to_localsite_cfg );
 } else {
@@ -2191,7 +2224,7 @@ HERE
     $body .= performSanityChecks( $brokenTWikiCfgError, $brokenLocalSiteError );
 
     my $options = '';
-    if( $update_enabled ) {
+    unless( $update_disabled ) {
         $body .= CGI::start_form({ action=>$ENV{SCRIPT_NAME},method=>"post" });
         # use time to make sure we never allow cacheing
         $options .= CGI::hidden( 'action', 'update' );
@@ -2219,7 +2252,9 @@ HERE
     $body .= CGI::div('Total: ' . CGI::span(
         {class=>'error'}, $toterrors . $toterrorsMess)) if $toterrors;
 
-    if( $update_enabled) {
+    if( $update_disabled) {
+        $body .= CGI::em("Update is disabled - $update_disabled");
+    } else {
         $body .= CGI::p(CGI::submit(-class=>'twikiSubmit', -value=>'Next'));
         $body .= CGI::end_form();
     }

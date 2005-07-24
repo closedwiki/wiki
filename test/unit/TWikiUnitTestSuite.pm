@@ -1,3 +1,4 @@
+# Run _all_ test suites in the current directory (core and plugins)
 require 5.006;
 
 package TWikiUnitTestsSuite;
@@ -10,7 +11,7 @@ sub name { 'TWikiUnitTests' };
 
 sub include_tests {
     opendir(DIR, ".") || die "Failed to open .";
-    return grep( /Tests\.pm$/, sort readdir(DIR));
+    return grep( !/^TWikiUnitTestSuite/ && /Suite\.pm$/, sort readdir(DIR));
 };
 
 1;

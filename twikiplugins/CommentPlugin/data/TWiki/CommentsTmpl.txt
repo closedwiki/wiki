@@ -4,7 +4,7 @@ Templates for CommentPlugin - See %TWIKIWEB%.CommentPlugin#Customisation for hel
 
 *WARNING: THIS FILE WILL BE OVERWRITTEN WHEN YOU UPGRADE THE COMMENT PLUGIN*
 
-Put your local templates into TWiki.UserTemplates.
+Put your local templates into %TWIKIWEB%.UserTemplates.
 *LOCAL TEMPLATES WILL OVERRIDE TEMPLATES DEFINED IN THIS FILE*
 
 %TOC%
@@ -113,7 +113,7 @@ Action added to action table directly above comment box
 %TMPL:DEF{PROMPT:action}%
 <table>
  <tr>
-  <td align="right">Action for (TWiki.WikiName):</td>
+  <td align="right">Action for (%TWIKIWEB%.WikiName):</td>
   <td><input name="who" type="text" size="50" value="%URLPARAM{"who"}%" /></td>
  </tr>
  <tr>
@@ -179,5 +179,5 @@ Talk using TOC adding on end - TWiki:Main/FranzJosefSilli
 %TMPL:END%
 </verbatim>
 
-%TMPL:INCLUDE{"TWiki.UserTemplates"}%
+%TMPL:INCLUDE{"%TWIKIWEB%.UserTemplates"}%
 <!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->

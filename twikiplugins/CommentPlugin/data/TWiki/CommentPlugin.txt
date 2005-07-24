@@ -82,7 +82,7 @@ Customisation of the comment plugin requires
 	* familiarity with HTML forms,
 	* some familiarity with the [[%TWIKIWEB%.TWikiTemplates][TWiki templating language]].
 
-The plugin picks up its templates from a standard TWiki template file, named "comments". This allows different templates to be defined for different TWiki skins. This template file may include other template files, or may include a topic from a user web (this is an extension to the normal handling of =%TMPL:INCLUDE= described in the documentation). The shipped plugin defines default templates in =comments.tmpl= and then includes the topic TWiki.CommentsTmpl. If you want to define your own templates, add them to TWiki.UserTemplates. Note that you can use =%TMPL:INCLUDE= in this file to include other files of templates. Note also that if you want to override any of the default templates shipped with the plugin, you can simply do so by defining them in TWiki.UserTemplates, and they will replace the installed versions.
+The plugin picks up its templates from a standard TWiki template file, named "comments". This allows different templates to be defined for different TWiki skins. This template file may include other template files, or may include a topic from a user web (this is an extension to the normal handling of =%TMPL:INCLUDE= described in the documentation). The shipped plugin defines default templates in =comments.tmpl= and then includes the topic %TWIKIWEB%.CommentsTmpl. If you want to define your own templates, add them to %TWIKIWEB%.UserTemplates. Note that you can use =%TMPL:INCLUDE= in this file to include other files of templates. Note also that if you want to override any of the default templates shipped with the plugin, you can simply do so by defining them in %TWIKIWEB%.UserTemplates, and they will replace the installed versions.
 
 To define a comment type, you have to provide two simple template definitions in the template file; one for the prompt box, and one for the generated output. If we have a template type "mytype", these are named =PROMPT:mytype= and =OUTPUT:mytype= respectively. See =comments.tmpl= in the templates directory for examples.
 
@@ -126,7 +126,7 @@ All the usual TWikiVariables that can be used in a topic template can also be us
 ---+ Settings
 	* Description:
 		* Set SHORTDESCRIPTION = Allows users to quickly post comments to a page without an edit/preview/save cycle.
-	* Name of file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from TWiki.CommentsTmpl
+	* Name of file in the 'templates' directory that contains the comment templates. The default 'comments.tmpl' automatically includes user templates from %TWIKIWEB%.CommentsTmpl
 		* Set TEMPLATES = comments
 	* default template type (if not present, defaults to "below")
 		* Set DEFAULT_TYPE = below

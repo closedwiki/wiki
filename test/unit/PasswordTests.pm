@@ -391,9 +391,9 @@ sub test_htpasswd_plain {
 sub test_htpasswd_apache {
     my $this = shift;
 
-    eval 'use TWiki::Users::ApacheHtpasswdUser';
+    eval "require TWiki::Users::ApacheHtpasswdUser";
     if( $@ ) {
-        print STDERR "SKIPPED APACHE HTPASSWD TESTS: $@";
+        print STDERR "SKIPPED APACHE HTPASSWD TESTS: not found";
         return;
     }
 

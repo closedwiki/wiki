@@ -17,38 +17,47 @@
 
 # Tests for the plugin component
 #
-# The tests require TWIKI_LIBS to include a pointer to the lib
-# directory of a TWiki installation, so it can pick up the bits
-# of TWiki it needs to include.
-#
-use strict;
-
 package WysiwygPluginTests;
 
-use base qw(Test::Unit::TestCase);
+use strict;
 
-BEGIN {
-    unshift(@INC,'../../../..');
-}
+use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Plugins::WysiwygPlugin;
 
 use Carp;
-$SIG{__DIE__} = sub { Carp::confess $_[0] };
 
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
 }
 
-sub test_load {
+sub set_up {
+    my $this = shift;
+
+    $this->SUPER::set_up();
+
+    $TWiki::cfg{Plugins}{WysiwygPlugin}{Enabled} = 1;
+}
+
+sub tear_down {
+    my $this = shift;
+
+    $this->SUPER::tear_down();
+}
+
+sub detest_load {
     my $this = shift;
     my $query = new CGI({
-                         'skin' => [ 'kupu' ]
-                        });
-    TWiki::initialize('/Sandbox/WysiwygPluginTest', 'guest',
-                      undef, undef, $query );
+        'skin' => [ 'kupu' ],
+    });
+    $query->path_info( "/Sandbox/WysiwygPluginTest" );
+
+    my $twiki = new TWiki('guest', $query );
+
+    $TWiki::Plugins::SESSION = new TWiki('guest', $query );
+
     my $text = '[[WikiSyntax][syntax]] [[http://gnu.org][GNU]] [[http://xml.org][XML]]';
 
     # call the common tags handler. Can't call the twiki function because
@@ -64,12 +73,13 @@ sub test_save {
     my $this = shift;
     # call the beforeSaveHandler
     my $query = new CGI({
-                         'wysiwyg_edit' => [ 1 ],
-                        });
+        'wysiwyg_edit' => [ 1 ],
+    });
+    $query->path_info( "/Sandbox/WysiwygPluginTest" );
 
-    TWiki::initialize('/Sandbox/WysiwygPluginTest', 'guest',
-                      undef, undef, $query );
-
+    # this _should_ init the plugin
+    $TWiki::Plugins::SESSION = new TWiki('guest', $query );
+    $this->assert( $TWiki::Plugins::WysiwygPlugin::currentWeb );
     my $text = '<a href="'.TWiki::Func::getViewUrl("Sandbox","WikiSyntax").'">syntax</a><a href="http://gnu.org">GNU</a><a href="http://xml.org">XML</a>';
 
     TWiki::Plugins::WysiwygPlugin::beforeSaveHandler( $text, "WysiwygPluginTest", "Sandbox" );

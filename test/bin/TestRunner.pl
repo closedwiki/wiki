@@ -3,7 +3,18 @@
 require 5.006;
 
 BEGIN {
-    unshift @INC, '../../bin';
+    use Cwd 'abs_path';
+
+    # root the tree
+    my $here = Cwd::abs_path(Cwd::getcwd());
+
+    # scoot up the tree looking for a bin dir that has setlib.cfg
+    my $root = $here;
+    while( !-e "$root/bin/setlib.cfg" ) {
+        $root =~ s#/[^/]*$##;
+    }
+    unshift @INC, "$root/test/unit";
+    unshift @INC, "$root/bin";
     require 'setlib.cfg';
 };
 
@@ -11,6 +22,7 @@ use strict;
 
 use Test::Unit::Debug qw(debug_pkgs);
 use Test::Unit::TestRunner;
+use Cwd;
 
 unless (defined $ENV{TWIKI_ASSERTS}) {
   print "exporting TWIKI_ASSERTS=1 for extra checking; disable by exporting TWIKI_ASSERTS=0\n";
