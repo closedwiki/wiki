@@ -954,7 +954,7 @@ sub _checkAndBuildValueGrabber {
 }
 
 sub _showPlugins {
-    my @modules;
+    my %modules;
     foreach my $libDir ( @INC ) {
         if( opendir( DIR, "$libDir/TWiki/Plugins" ) ) {
             foreach my $file ( grep { /^[A-Za-z0-9_]+Plugin\.pm$/ }
@@ -965,16 +965,19 @@ sub _showPlugins {
                 $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
                 $module =~ /^(.*)$/;    # untaint
                 $module = $1;
-                push( @modules, { name => $module, desc => $libDir });
+                # only add the first instance of any plugin, as only
+                # the first can get loaded from @INC.
+                unless( $modules{$module} ) {
+                    $modules{$module} =  $libDir;
+                }
                 closedir( DIR );
             }
         }
     }
     my $block = '';
-    foreach my $m ( sort { $a->{name} cmp $b->{name} } @modules ) {
+    foreach my $m ( sort keys %modules ) {
         $block .= _checkAndBuildValueGrabber
-          ( 'BOOLEAN', '', $m->{desc},
-          '{Plugins}{'.$m->{name}.'}{Enabled}');
+          ( 'BOOLEAN', '', $modules{$m}, '{Plugins}{'.$m.'}{Enabled}');
     }
     return $block;
 }
