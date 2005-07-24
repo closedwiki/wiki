@@ -1,6 +1,7 @@
 #!/bin/sh
 here=`pwd`/
-for plugin in EditTablePlugin PreferencesPlugin SmiliesPlugin CommentPlugin SpreadSheetPlugin InterwikiPlugin RenderListPlugin SlideShowPlugin TablePlugin JSCalendarContrib; do
+for dir in twikiplugins/*Plugin; do
+    plugin=`basename dir`
     if [ -d twikiplugins/$plugin/pub/TWiki/$plugin ]; then
         link=pub/TWiki/$plugin
         if [ -L pub/TWiki/$plugin ]; then
