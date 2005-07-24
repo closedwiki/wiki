@@ -1,6 +1,4 @@
-%META:TOPICINFO{author="TWikiGuest" date="1117921800" format="1.0" version="1.1"}%
-%META:TOPICPARENT{name="WebHome"}%
-
+%META:TOPICINFO{author="TWikiContributor" date="1117921800" format="1.0" version="$Rev$"}%
 
 %TOC%  
 %STARTINCLUDE%
