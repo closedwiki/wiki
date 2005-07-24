@@ -27,7 +27,7 @@ This is the place to learn about TWiki features, find where to download it, and 
 </blockquote>
 
 ---++ Disclaimer
-   * TWiki<sup>TM</sup> is a trademark of PeterThoeny
+   * TWiki<sup>TM</sup> is a trademark of Peter Thoeny
    * __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers<sup>TM</sup> in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*

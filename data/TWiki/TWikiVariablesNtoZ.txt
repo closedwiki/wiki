@@ -268,7 +268,7 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarUSERNAME
 ---+++ USERNAME -- your login username
-	* TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. A user is a %MAINWEB%.TWikiGuest in case the topic is not authenticated
+	* TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. Un-authenticated users are all %MAINWEB%.TWikiGuest.
 	* Syntax: =%<nop>USERNAME%=
 	* Expands to: =%USERNAME%=
 	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication

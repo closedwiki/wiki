@@ -160,6 +160,3 @@ The code is the _hexadecimal RGB color code_, which is simply Red, Green and Blu
 
 -----
 
-
--- TWiki:Main.MikeMannix - 14 Sep 2001 %BR%	
-

@@ -178,5 +178,3 @@ You're no doubt familiar or better with HTML, JS, and "webmastering". Without ge
 
 %T% __NOTE:__ Feel free to add your own tips to TWiki:%WEB%.%TOPIC% as quick notes at the end of the list, following the existing format!
 
-*Contributors:* TWiki:Main.GrantBow, TWiki:Main.LynnwoodBrown, TWiki:Main.MikeMannix, TWiki:Main.PeterMasiar, TWiki:Main.PeterThoeny, TWiki:Main.MattWilkie
-

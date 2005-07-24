@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MartinCleaver" date="1121256319" format="1.1" version="1.6"}%
+%META:TOPICINFO{author="TWikiContributor" date="1121256319" format="1.1" version="$Rev$"}%
 ---+ List of <nop>%WIKITOOLNAME% users
 
 Below is a list of users with accounts. If you want to edit topics or see protected areas of the site then add yourself to the list by registering: fill out the form in %TWIKIWEB%.TWikiRegistration. 

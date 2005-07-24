@@ -17,6 +17,3 @@
 | MsnMessenger | text | 40 | | |
 | SpecialInterests | checkbox | 4 | | |
 
-
--- %MAINWEB%.TWikiGuest - 03 Oct 2004
-

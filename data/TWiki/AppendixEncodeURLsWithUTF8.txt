@@ -60,9 +60,5 @@ Opera Browser on the P800 smartphone is working for page viewing but leads to co
 
 For up to date information see TWiki:Codev.EncodeURLsWithUTF8
 
--- TWiki:Main.RichardDonkin - 7 Jan 2004 %BR%
-
-
-
 %STOPINCLUDE%
 

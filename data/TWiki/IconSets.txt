@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiGuest" date="1121343405" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1121343405" format="1.1" version="$Rev$"}%
 ---+!! Icon Sets
 
 *With Icon Sets every skin can have its own set of graphics/icons.*

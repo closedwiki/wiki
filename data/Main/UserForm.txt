@@ -16,6 +16,6 @@
 | <nop>YahooMessenger | text | 40 | | |
 | <nop>MsnMessenger | text | 40 | | |
 
+   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
--- %MAINWEB%.TWikiGuest - 03 Oct 2004
 

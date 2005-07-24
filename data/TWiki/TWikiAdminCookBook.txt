@@ -17,9 +17,7 @@ __See also:__
 
 ---+++ Rename Main web to User web
 
-You can rename the =Main= web to =User=. It will make WikiWord links to usernames more meaningful (<nop>User.UserName instead of <nop>Main.UserName); but does not bring much gain for other types of topics like (<nop>User.EngineeringGroup or <nop>User.TokyoOffice). Just rename =data/Main= to =data/User=, and change ={MainWebName}= variable in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. References to this web in all existing topics need to be fixed as well.
-
-See also TWiki:Codev.RenameMainWebToHome, TWiki:Codev.RenameTheMainWeb, TWiki:Codev.SeparateHowtoWeb for arguments pro and con.
+You can rename the =Main= web to =User=. It will make WikiWord links to usernames more meaningful (<nop>User.UserName instead of <nop>Main.UserName); but does not bring much gain for other types of topics like (<nop>User.EngineeringGroup or <nop>User.TokyoOffice). Use the Rename Web feature in the %MAINWEB%.WebPreferences topic of any web you want to rename.
 
 ---+++ Help with remembering passwords
 
@@ -96,5 +94,4 @@ This lets you create variables, like a graphics icon library, in any topic - ins
 
 Please add your favorite TWiki tips/trick to TWiki:%WEB%.%TOPIC% to help the next new TWiki admin. (One BIG area: include pages of implemented basic SEARCHes, like, to generate a straight TOPICS list (alphabetical web topic titles only); also, simple combos of forms + search, like one- and two-category forms to use to classify pages, and then searches to find and display in few useful formats; more in that general area.)
 
-*Contributors:* TWiki:Main.GrantBow, TWiki:Main.JonReid, TWiki:Main.MikeMannix, TWiki:Main.MikeMaurer, TWiki:Main.PeterMasiar, TWiki:Main.PeterThoeny
 

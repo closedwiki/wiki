@@ -10,5 +10,3 @@
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 
--- %MAINWEB%.PeterThoeny - 28 Oct 2000 <br>
-

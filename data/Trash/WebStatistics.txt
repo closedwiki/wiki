@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1089963263" format="1.0" version="1.4"}%
+%META:TOPICINFO{author="TWikiContributor" date="1089963263" format="1.1" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%WEB% Web
 

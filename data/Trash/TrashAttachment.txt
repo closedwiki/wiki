@@ -2,5 +2,4 @@
 %META:TOPICPARENT{name="WebHome"}%
 ---+ Placeholder for trashed attachments
 
--- Main.PeterThoeny - 28 Jun 2002
 

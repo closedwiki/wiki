@@ -8,7 +8,7 @@ This section applies only if your TWiki is installed on a server that is both *a
 TWiki internally manages two usernames: Login username and TWiki username.
 
 	* *Login username:* When you login to the intranet, you use your existing login username, for example ==pthoeny==. This name is normally passed to TWiki by the ==REMOTE_USER== environment variable. TWiki uses this name internally to log topic changes. Login usernames are maintained by your system administrator.
-	* *TWiki username:* This is your name in WikiNotation, for example ==PeterThoeny==, recorded when you register in TWikiRegistration; doing so also generates your personal home page in the %MAINWEB% web of your TWiki site.
+e	* *TWiki username:* This is your name in WikiNotation, for example ==PeterThoeny==, recorded when you register in TWikiRegistration; doing so also generates your personal home page in the %MAINWEB% web of your TWiki site.
 
 <nop>%WIKITOOLNAME% can map the intranet username to the Wiki username automatically, provided that the Login username and Wiki username pair has been entered in the %MAINWEB%.%WIKIUSERSTOPIC% topic. This happens automatically when you register.
 

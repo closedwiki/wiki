@@ -176,7 +176,7 @@ will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included
 
 #VarMAINWEB
 ---+++ MAINWEB -- name of Main web
-	* The web containing %MAINWEB%.%WIKIUSERSTOPIC%, %MAINWEB%.OfficeLocations and %MAINWEB%.TWikiGroups
+	* The web containing %MAINWEB%.%WIKIUSERSTOPIC%, individual user topics and %MAINWEB%.TWikiGroups
 	* Syntax: =%<nop>MAINWEB%=
 	* Expands to: =%MAINWEB%=
 	* Related: [[#VarTWIKIWEB][TWIKIWEB]]
