@@ -130,7 +130,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 		* Move the =data/_default= directory from the temporary location to your =$TWIKIROOT/data= directory
 		* Make sure that the directories and files below =$TWIKIROOT/data= are writable by your cgi-script user
 	1. *Adapt the other webs (all other than =TWiki= and =_default=)*:
-		* Add WebLeftBar topic. See WebLeftBarExample for a clean example, and TWiki.WebLeftBarCookbook for more information. (WebLeftBar is used by the TWiki.PatternSkin skin)
+		* Add WebLeftBar topic. See WebLeftBarExample for a clean example, and %TWIKIWEB%.WebLeftBarCookbook for more information. (WebLeftBar is used by the %TWIKIWEB%.PatternSkin skin)
 		* Add WebSearchAdvanced topic, which has this one line: %BR%
 		  =%<nop>INCLUDE{"%<nop>TWIKIWEB%.WebSearchAdvanced"}%=
 		* Consider changing WebPreferences settings:

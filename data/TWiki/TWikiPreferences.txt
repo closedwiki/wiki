@@ -186,8 +186,8 @@ The following are __site-level__ settings that affect all users in all webs on t
 		
 ---+++ Skin icons
 
-	* #Set ICONTOPIC = TWiki.TWikiDocGraphics
-	* Set ICONTOPIC = TWiki.TWikiDocGraphicsPattern
+	* #Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
+	* Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphicsPattern
 
 ---+++ Legacy support
    * Support for legacy "EDITTOPIC", now replaced by TMPL:P conditional instantiation

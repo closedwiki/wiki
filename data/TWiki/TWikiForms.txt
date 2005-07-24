@@ -76,7 +76,7 @@ You can also retrieve possible values for select, checkbox or radio types from o
 	  | Public FAQ | option | blah blah... |
 </blockquote>
 
-Field values can also be obtained as the result of a TWiki.FormattedSearch. For example,
+Field values can also be obtained as the result of a %TWIKIWEB%.FormattedSearch. For example,
 
 <blockquote style="background-color:#f0f0f0">
 =%<nop>SEARCH{"Office$" scope="topic" web="%<nop>MAINWEB%" nototal="on" nosummary="on" nosearch="on" regex="on" format="Main.$topic" separator=", " }%=
@@ -91,7 +91,7 @@ when used in the value field of the form definition, will take the set of field 
 	* The topic definition is not read when a topic is viewed.
 	* Field names can include any text, but you should stick to alphanumeric characters. If you want to use a non-wikiname for a select, checkbox or radio field, and want to get the values from another topic, you can use  ==[<nop>[...]]== links. This notation can also be used when referencing another topic to obtain field values, but one wants to use a name other than the topic name as the name of the field. 
 	* Field names have to be unique. If the same name is necessary (as when the field values for several fields are obtained from the same topic), an alternative name must be assigned using the ==[<nop>[...]]== notation.
-	* The topic defining field values can also be generated through a TWiki.FormattedSearch, which must yield a suitable table as the result.
+	* The topic defining field values can also be generated through a %TWIKIWEB%.FormattedSearch, which must yield a suitable table as the result.
 	* Form definition topics can be protected in the usual manner, using  TWikiAccessControl, to limit who can change the form template and/or individual value lists. Note that view access is required to be able to edit topics that use the form definition, though view access to the form definition is _not_ required to view a topic where the form has been used.
 	* The ==Tooltip message== column is used as a tooltip for the field name (only if field name is a %TWIKIWEB%.WikiName) - you only see the tooltip in edit view.
 	* The ==Attributes== column is used to define special behavior for that form field (multiple attributes can be entered, with or without separators):

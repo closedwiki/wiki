@@ -89,7 +89,7 @@ TWiki generates monthly log files which are used by the statistics
 	* Each access gets logged as: %BR%
 	  =| &lt;time&gt; | &lt;wikiusername&gt; | &lt;action&gt; | &lt;web&gt;.&lt;topic&gt; | &lt;extra info&gt; | &lt;IP address&gt; |=
 	* Example log entry: %BR%
-	  =| %SERVERTIME{$day $mon $year - $hour:$min}% | !Main.TWikiGuest | view | !TWiki.WebRss |  | 66.124.232.02 |=
+	  =| %SERVERTIME{$day $mon $year - $hour:$min}% | !%MAINWEB%.TWikiGuest | view | !%TWIKIWEB%.WebRss |  | 66.124.232.02 |=
 	* Actions are logged if enabled in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] by the *{Log}{<i>action</i>}* flags
 	* Logged actions:
 	  | *Script* | *Action name* | *Extra info* |

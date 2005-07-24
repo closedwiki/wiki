@@ -10,13 +10,13 @@ This page describes ways to change the layout, fonts and colors of PatternSkin.
 ---++ Your own TWiki look
 
 You can easily create your own TWiki look by attaching modified css files to your home page:
-	* If you want to change the layout of the page, download layout.css from TWiki.PatternSkin
-	* If you want to change the spacing or colors, download style.css from TWiki.PatternSkin
+	* If you want to change the layout of the page, download layout.css from %TWIKIWEB%.PatternSkin
+	* If you want to change the spacing or colors, download style.css from %TWIKIWEB%.PatternSkin
 	* modify the CSS in either style sheet, using tips from this page
 	* [[%SCRIPTURL%/attach%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME% attach]] your modified !layout.css and/or !style.css to your home page 
 	* as shown below, add the =USERLAYOUTURL= and =USERSTYLEURL= settings to [[%MAINWEB%.%WIKINAME%][your home page]]
 <verbatim>
-	* Personal TWiki.PatternSkin CSS settings
+	* Personal %TWIKIWEB%.PatternSkin CSS settings
 		* Set USERLAYOUTURL = %PUBURL%/%MAINWEB%/%WIKINAME%/layout.css
 		* Set USERSTYLEURL = %PUBURL%/%MAINWEB%/%WIKINAME%/style.css
 </verbatim>
@@ -30,10 +30,10 @@ The !PatternSkin view template uses four screen parts:
 	* Bottom bar - copyright, disclaimer
 
 These parts are dynamically included topics:
-	* Top bar: TWiki.WebTopBar 
+	* Top bar: %TWIKIWEB%.WebTopBar 
 	* Left bar: included topic WebLeftBar (one !WebLeftBar topic per web)
 		* Personal links block: %MAINWEB%.%<nop>USERNAME%LeftBar. Your own personal leftbar: %MAINWEB%.%USERNAME%LeftBar
-	* Bottom bar: included topic TWiki.WebBottomBar
+	* Bottom bar: included topic %TWIKIWEB%.WebBottomBar
 
 ---+++ Top bar
 
@@ -93,7 +93,7 @@ Add this to style.css:
 
 This CSS is also attached to this topic, [[%ATTACHURL%/LowRes.css][LowRes.css]]. To use this style, add this to your home page:
 <verbatim>
-	* Personal TWiki.PatternSkin CSS settings
+	* Personal %TWIKIWEB%.PatternSkin CSS settings
 		* Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkinCustomization/LowRes.css
 </verbatim>
 

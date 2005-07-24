@@ -54,7 +54,7 @@ This should be enabled, see the "Miscellaneous Settings" in the TWikiPreferences
 
 ---+++ EZ Graphic Icons to Highlight Text
 
-Graphics in text (like this: %X%) is done also by defining special variables. See [[TWiki.TWikiPreferences]]. Some may prefer longer names, like =HELP=, =WARN= etc. You can also add your own images, e.g. a =NEW=, or a =ASK= to ask question.
+Graphics in text (like this: %X%) is done also by defining special variables. See [[%TWIKIWEB%.TWikiPreferences]]. Some may prefer longer names, like =HELP=, =WARN= etc. You can also add your own images, e.g. a =NEW=, or a =ASK= to ask question.
 
 %T% Using graphic icons to highlight important text right from the start can seriously improve how well new users take to a TWiki site. A minimum set of two or three icons can make content much easier to follow, eye-catching, EXCITING. Research says, people tend not to read pages through, but scan them first - and graphics (used sparringly ;-) of course) can help them.  On *HELP* pages, most people tend to jump around looking for answers rather than reading through - icons help point out the most important bits. 
 
@@ -156,7 +156,7 @@ You can change the logo's filename by overriding the name using WEBLOGONAME in <
 
 Other cusomtisations are possible using =WEBLOGOIMG=, =WEBLOGOURL=, and =WEBLOGOALT= (they mirror the =WIKILOGO*= TWiki variables, but are applied to each web, rather than to the %<nop>WIKITOOLNAME%-based references)
 
-If you'd like to have the same customised logo for all the webs, make these changes in TWiki.TWikiPreferences instead of each web's <nop>WebPreferences, e.g.,
+If you'd like to have the same customised logo for all the webs, make these changes in %TWIKIWEB%.TWikiPreferences instead of each web's <nop>WebPreferences, e.g.,
 	* =Set WEBLOGOIMG = %<nop>PUBURL%/%TWIKIWEB%/WebPreferences/mylogo.png=
 
 ----

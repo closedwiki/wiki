@@ -167,7 +167,7 @@ Use the following setup to authenticate users for topic viewing in all webs and 
 		* ==Set <nop>NOSEARCHALL = on==
 	1. *Add* ==view== to the list of authenticated scripts in the =.htaccess= file.
 
-%H% This method only works if the ==view== script is authenticated, which means that all Users have to login, even for read-only access. (An open guest account, like Main.TWikiGuest, can get around this, allowing anyone to login to a common account with, for example, view-only access for public webs.) TWikiInstallationGuide has more on Basic Authentication, using the ==.htaccess== file.
+%H% This method only works if the ==view== script is authenticated, which means that all Users have to login, even for read-only access. (An open guest account, like %MAINWEB%.TWikiGuest, can get around this, allowing anyone to login to a common account with, for example, view-only access for public webs.) TWikiInstallationGuide has more on Basic Authentication, using the ==.htaccess== file.
 
 ---+++ Authenticate and Restrict Selected Webs Only
 

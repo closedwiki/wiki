@@ -12,7 +12,7 @@ This is rendered using the %<nop>META% variable.  This is mostly used in the =vi
 At present support is fairly basic:
   | *Variable usage:*	| *Comment:*  |
   | =%<nop>META{"form"}%= | Show form data, see [[TWikiDocumentation#Form_Templates][Form Templates]] |
- | =%<nop>META{"formfield"}%= | Show one particular form field. Parameter ==name="..."== identifies the form field to render. The field value can be shortened as described in TWiki.FormattedSearch for =$formfield= |
+ | =%<nop>META{"formfield"}%= | Show one particular form field. Parameter ==name="..."== identifies the form field to render. The field value can be shortened as described in %TWIKIWEB%.FormattedSearch for =$formfield= |
   | =%<nop>META{"attachments"}%= | Show attachments, excluding hidden ones. Options: <br /> \
 	 ==all="on"==: Show all attachments i.e. including hidden ones |
   | =%<nop>META{"moved"}%= | Details of any topic moves |

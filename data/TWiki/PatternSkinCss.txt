@@ -95,8 +95,8 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .twikiSmall - styled "small"
 	* .twikiNewLink - style of links to yet non-existent pages (not used)
 
-	* Table class names (emitted from TWiki.TablePlugin)
-		* .twikiSortedAscendingCol - sortable table column header that is sorted ascending (uses TWiki.TablePlugin)
+	* Table class names (emitted from %TWIKIWEB%.TablePlugin)
+		* .twikiSortedAscendingCol - sortable table column header that is sorted ascending (uses %TWIKIWEB%.TablePlugin)
 		* .twikiSortedDescendingCol - ditto sorted descending
 		* .twikiFirstCol
 	* Other table class names

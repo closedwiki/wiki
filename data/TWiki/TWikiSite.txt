@@ -38,7 +38,7 @@
 	* WikiCulture looks at the unique type of collaboration Wiki systems offer.
 	* WikiReferences links to articles and books about collaboration and Wiki technology.
 
-<blockquote> %X% If you have to log-in to use TWiki, for example, if Twiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: Main.TWikiGuest.</blockquote>
+<blockquote> %X% If you have to log-in to use TWiki, for example, if Twiki is running on an intranet, it automatically signs pages you edit and create with your WikiName. If your TWiki installation doesn't require a log-in, TWiki gives everyone the same username: %MAINWEB%.TWikiGuest.</blockquote>
 
 TWiki<sup>TM</sup> is a trademark of PeterThoeny - originator and lead developer.
 	* TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]

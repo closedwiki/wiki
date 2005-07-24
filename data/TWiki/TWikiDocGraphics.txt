@@ -11,7 +11,7 @@ There are other approaches as well:
 	* The TWiki:Plugins/SmiliesPlugin, using a different short hand than =<nop>%VARIABLES%=, may be worth checking out for extended use
 	* __Related:__ TWiki's FileAttachments show their own icons for many different file types. As documented in TWikiVariables, write =%<nop>ICON{"pdf"}%= to show the %ICON{"pdf"}% icon
 
-In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics are uploaded and displayed. Then, the paths are set in [[TWiki.TWikiPreferences#DocGraphics]] for site-wide access. You can also create individual library pages in each web. And you don't have to restrict yourself to graphics: Preferences Variables can include text and links to any type of file.
+In this example, <nop>%TOPIC% - this topic - acts as the icon library. Graphics are uploaded and displayed. Then, the paths are set in [[%TWIKIWEB%.TWikiPreferences#DocGraphics]] for site-wide access. You can also create individual library pages in each web. And you don't have to restrict yourself to graphics: Preferences Variables can include text and links to any type of file.
 
 | *Icon* | *File Name* | *Comment* |
 |  <img src="%ATTACHURLPATH%/help.gif" alt="help.gif"  width="16" height="16"  />  | =help.gif= | Help |

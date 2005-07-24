@@ -11,7 +11,7 @@ This page gives an overview of the colors used by PatternSkin and describes wher
 
 ---++ Create your own colors
 
-To create a customised set of colors for TWiki.PatternSkin
+To create a customised set of colors for %TWIKIWEB%.PatternSkin
 	* download [[%ATTACHURL%/PatternSkinPalette.css][PatternSkinPalette.css]]
 	* modify the CSS colors in !PatternSkinPalette.css
 	* [[%SCRIPTURL%/attach%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME% attach]] your modified !PatternSkinPalette.css to your home page 

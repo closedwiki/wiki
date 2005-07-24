@@ -137,7 +137,7 @@ You can try all installed skins in TWikiSkinBrowser.
 
 A skin is activated by putting it on the skin search path. Either:
 
-	* Prepend the skin name to the =SKIN= Preference variable in TWiki.TWikiPreferences, one of the WebPreferences, or in a user - %WIKIUSERNAME% - topic. For example,
+	* Prepend the skin name to the =SKIN= Preference variable in %TWIKIWEB%.TWikiPreferences, one of the WebPreferences, or in a user - %WIKIUSERNAME% - topic. For example,
 		* =Set SKIN = mine,pattern=
 
 	* _Replace_ the default skin path by adding =?skin=path= to the URL, for example:

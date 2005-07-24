@@ -9,13 +9,13 @@
 
 For this a topic is assigned as the "icon topic" (by setting the variable =%<nop>ICONTOPIC%=). Each time an image is retrieved, TWiki will get it from the attachments folder of this topic.
 
-To set ICONTOPIC, write in TWiki.TWikiPreferences:
+To set ICONTOPIC, write in %TWIKIWEB%.TWikiPreferences:
 <verbatim>
-   * Set ICONTOPIC = TWiki.TWikiDocGraphicsPattern
+   * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphicsPattern
 </verbatim>
 (default) or
 <verbatim>
-   * Set ICONTOPIC = TWiki.TWikiDocGraphics
+   * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
 </verbatim>
 
 ---++ Graphics
@@ -41,6 +41,4 @@ a.toggleIcon { background:url(%ICONPATH{"toggleclose"}%) no-repeat; }
 This will get the path of the file =toggleclose.gif=.
 
 
-__Related topics:__ TWiki.TWikiDocGraphics, TWiki.TWikiDocGraphicsPattern, TWiki.FileAttachment
-
-
+__Related topics:__ %TWIKIWEB%.TWikiDocGraphics, %TWIKIWEB%.TWikiDocGraphicsPattern, %TWIKIWEB%.FileAttachment

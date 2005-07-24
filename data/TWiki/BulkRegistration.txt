@@ -41,7 +41,7 @@ To use this:
 
 Notes:
 	1 The first row of the table dictates the heading format and that the fieldnames must be plain, i.e. *must not contain bolded* entries.
-	2 You are responsible for ensuring that the fieldnames appear in the [[TWiki.UserForm]]
+	2 You are responsible for ensuring that the fieldnames appear in the [[%TWIKIWEB%.UserForm]]
 	3 Only members of the [[%MAINWEB%.TWikiAdminGroup]] can run this.
 
 

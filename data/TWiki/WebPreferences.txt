@@ -66,6 +66,6 @@ __Related Topics:__
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
 
 __Tools:__
-%INCLUDE{"TWiki.RenameWeb"}%
+%INCLUDE{"%TWIKIWEB%.RenameWeb"}%
 
 %META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="placeholder until NonInfringingLogo created" date="1100974473" path="favicon.ico" size="318" tmpFilename="/var/tmp/CGItemp25580" user="TWikiContributor" version="1.1"}%

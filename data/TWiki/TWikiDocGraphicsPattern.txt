@@ -2,7 +2,7 @@
 
 ---+ Skins and icons with PatternSkin
 
-Graphics from this topic are used when in TWiki.TWikiPreferences, variable ==ICONTOPIC== is set to the current topic.
+Graphics from this topic are used when in %TWIKIWEB%.TWikiPreferences, variable ==ICONTOPIC== is set to the current topic.
 
 ---++ Usage
 

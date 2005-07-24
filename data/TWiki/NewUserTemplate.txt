@@ -28,5 +28,5 @@ __Related topics__
 	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of <nop>%WIKITOOLNAME%.
 	* %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users.
-%META:FORM{name="Main.UserForm"}%
+%META:FORM{name="%MAINWEB%.UserForm"}%
 
