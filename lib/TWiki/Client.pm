@@ -45,9 +45,6 @@ use strict;
 use Assert;
 use Error qw( :try );
 
-use CGI::Session;
-use CGI::Cookie;
-
 BEGIN {
     # suppress stupid warning in CGI::Cookie
     if ( exists $ENV{MOD_PERL} ) {
@@ -77,6 +74,9 @@ sub makeClient {
         # No login manager; just use default behaviours
         return new TWiki::Client( $twiki);
     } else {
+        require CGI::Session;
+        require CGI::Cookie;
+
         eval "use $TWiki::cfg{LoginManager}";
         throw Error::Simple( 'Login Manager: '.$@) if $@;
 
