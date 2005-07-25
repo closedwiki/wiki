@@ -79,7 +79,7 @@ sub new {
 
     $this->{login} = $name;
     my( $web, $topic ) =
-      $session->normalizeWebTopicName( '', $wikiname );
+      $session->normalizeWebTopicName( $TWiki::cfg{UsersWebName}, $wikiname );
     $this->{web} = $web;
     $this->{wikiname} = $topic;
     return $this;

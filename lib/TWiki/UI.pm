@@ -65,7 +65,6 @@ sub run {
     if( $ENV{'GATEWAY_INTERFACE'} ) {
         # script is called by browser
         $query = new CGI;
-        $user = $query->remote_user();
     } else {
         # script is called by cron job or user
         $scripted = 1;
@@ -104,56 +103,21 @@ sub run {
     # end of comment out in production version
 
     try {
+        $session->{client}->checkAccess();
         &$method( $session );
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        # Had an access control violation. See if there is an 'auth' version
-        # of this script, may be a result of not being logged in.
-        my $url;
-        $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/;
-        my $scriptPath = $1;
-        my $scriptName = $2;
-        $script .= "$scriptPath${scriptName}auth$TWiki::cfg{ScriptSuffix}";
-        if( ! $query->remote_user() && -e $script ) {
-            $url = $ENV{REQUEST_URI};
-            if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
-                # $url i.e. is "twiki/bin/view.cgi/Web/Topic?cms1=val1&cmd2=val2"
-                $url = $session->{urlHost}.$url;
-            } else {
-                # If REQUEST_URI is rewritten and does not contain the script
-                # name, try looking at the CGI environment variable
-                # SCRIPT_NAME.
-                #
-                # Assemble the new URL using the host, the changed script name,
-                # the path info, and the query string.  All three query
-                # variables are in the list of the canonical request meta
-                # variables in CGI 1.1.
-                $scriptPath      = $ENV{'SCRIPT_NAME'};
-                my $pathInfo    = $ENV{'PATH_INFO'};
-                my $queryString = $ENV{'QUERY_STRING'};
-                $pathInfo    = '/' . $pathInfo    if ($pathInfo);
-                $queryString = '?' . $queryString if ($queryString);
-                if( $scriptPath && $scriptPath =~ s/\/$scriptName/\/${scriptName}auth/ ) {
-                    $url = $session->{urlHost}.$scriptPath;
-                } else {
-                    # If SCRIPT_NAME does not contain the script name
-                    # the last hope is to try building up the URL using
-                    # the SCRIPT_FILENAME.
-                    $url = $session->{urlhost}.$session->{scriptUrlPath}.'/'.
-                      ${scriptName}.$TWiki::cfg{ScriptSuffix};
-                }
-                $url .= $pathInfo.$queryString;
-            }
-            $session->redirect( $url );
+        if( $session->{client}->authenticate() ) {
+            # okay
         } else {
-            $url = $session->getOopsUrl( 'accessdenied',
+            my $url = $session->getOopsUrl( 'accessdenied',
                                          def => 'topic_access',
                                          web => $e->{web},
                                          topic => $e->{topic},
                                          params => [ $e->{mode},
                                                      $e->{reason} ] );
+            $session->redirect( $url );
         }
-        $session->redirect( $url );
 
     } catch TWiki::OopsException with {
         my $e = shift;
@@ -174,6 +138,8 @@ sub run {
         print "Content-type: text/plain\n\n";
         print $e->stringify();
     };
+
+    $session->finish();
 }
 
 =pod twiki

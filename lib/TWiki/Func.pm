@@ -64,18 +64,18 @@ use TWiki::Attrs;
 
 ---+++ getSessionValue( $key ) -> $value
 
-Get a session value from the Session Plugin (if installed)
+Get a session value from the client session module
    * =$key= - Session key
-Return: =$value=  Value associated with key; empty string if not set; undef if session plugin is not installed
+Return: =$value=  Value associated with key; empty string if not set
 
-*Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 200
+*Since:* TWiki::Plugins::VERSION 1.000 (27 Feb 200)
 
 =cut
 
 sub getSessionValue {
 #   my( $theKey ) = @_;
 
-    return $TWiki::Plugins::SESSION->{plugins}->getSessionValueHandler( @_ );
+    return $TWiki::Plugins::SESSION->{client}->getSessionValueHandler( @_ );
 }
 
 

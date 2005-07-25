@@ -202,12 +202,12 @@ sub readTemplate {
     # recursively read template file(s)
     my $text = $this->_readTemplateFile( $name, $skins, $web );
 
-    # Kill comments, marked by %{ ... }%
-    $text =~ s/%{.*?}%//sg;
-
     while( $text =~ /%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/s ) {
         $text =~ s/%TMPL\:INCLUDE{[\s\"]*(.*?)[\"\s]*}%/$this->_readTemplateFile( $1, $skins, $web )/geo;
     }
+
+    # Kill comments, marked by %{ ... }%
+    $text =~ s/%{.*?}%//sg;
 
     if( ! ( $text =~ /%TMPL\:/s ) ) {
         # no template processing

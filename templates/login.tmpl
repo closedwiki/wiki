@@ -1,0 +1,51 @@
+%TMPL:INCLUDE{"twiki"}%
+
+%TMPL:DEF{"webaction"}% TWiki User Authentication %TMPL:END%
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+%TMPL:DEF{"LOG_IN_BANNER"}%Please enter your username and password%TMPL:END%
+%TMPL:DEF{"LOGGED_IN_BANNER"}%%WIKINAME% is currently logged in%TMPL:END%
+%TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity%TMPL:END%
+%TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
+
+%TMPL:DEF{"topbar"}%
+<div class="twikiTopBar">
+ <div class="twikiTopBarContents">
+  <img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/>
+ </div>
+</div>%TMPL:END%
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+---+ %BANNER%
+%NOTE%
+<form action='%SCRIPTURL%/login/%WEB%/%TOPIC%' method='POST'>
+<table border='0'>
+<tr><th>Username</th><td>
+<input type='text' size='30' name='username' value='%URLPARAM{"username"}%' />
+</td></tr><tr><th>Password</th><td>
+<input type='password' size='30' name='password' value='' />
+</td></tr></table>
+<input type='hidden' name='origurl' value='%ORIGURL%' />
+<input type='submit' value='Logon' />
+</form>
+<p />
+%TMPL:END%
+
+%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:P{"content"}%
+%TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
+
+%TMPL:P{"htmldoctype"}%
+<head>
+ <title>%WIKITOOLNAME% User Authentication</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" />
+ <meta name="robots" content="noindex" />
+ %HTTP_EQUIV_ON_VIEW%
+ <base href="%SCRIPTURL%/login%SCRIPTSUFFIX%" />
+ %TMPL:P{"twikistyle"}%
+ %TMPL:P{"templatecustomstyle"}%
+ <!-- add JS script here -->
+</head>
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%

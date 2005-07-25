@@ -93,6 +93,8 @@ sub view {
     if( $topicExists ) {
         ( $currMeta, $currText ) = $store->readTopic
           ( $session->{user}, $webName, $topicName, undef );
+        TWiki::UI::checkAccess( $session, $webName, $topicName,
+                                'view', $session->{user}, $currText );
         ( $revdate, $revuser, $showRev ) = $currMeta->getRevisionInfo();
         $revdate = TWiki::Time::formatTime( $revdate );
 

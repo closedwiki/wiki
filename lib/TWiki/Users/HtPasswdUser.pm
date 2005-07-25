@@ -267,7 +267,8 @@ sub checkPassword {
 
     $this->{error} = undef;
 
-    return 1 if( $encryptedPassword eq $this->fetchPass( $user ) );
+    my $pw = $this->fetchPass( $user );
+    return 1 if( defined($pw) && ($encryptedPassword eq $pw) );
 
     $this->{error} = 'Invalid user/password';
     return 0;

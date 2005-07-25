@@ -54,7 +54,7 @@ sub new {
 
     $this->{session} = $session;
 
-	my $impl = $TWiki::cfg{PasswordManager};
+    my $impl = $TWiki::cfg{PasswordManager};
     eval "use $impl";
     die "Password Manager: $@" if $@;
     $this->{passwords} = $impl->new( $session );
@@ -246,7 +246,7 @@ sub addUserToTWikiUsersTopic {
     my $today = TWiki::Time::formatTime(time(), '$day $mon $year', 'gmtime');
 
     # add to the cache
-    $this->{U2W}{$user->login()} = $user->{web} . "." , $user->wikiName();
+    $this->{U2W}{$user->login()} = $user->{web} . "." . $user->wikiName();
 
     # add name alphabetically to list
     foreach my $line ( split( /\r?\n/, $text) ) {
@@ -350,20 +350,8 @@ If not user is passed, the remote user defaults to $cfg{DefaultUserLogin}
 If we got here via an authentication status failure, then the remote user
 is set to blank, effectively signalling an illegal access.
 
-If $cfg{RememberUserIPAddress} is set, it looks up the IP address of
-the requestor and tries to map it to a username. If the lookup fails,
-but a remote user name was passed in (which will happen if the CGI
-query contains remote_user()) then it caches the mapping from IP addess to
-user. If no remote user name was passed in, the user defaults to
+If no remote user name was passed in, the user defaults to
 $cfg{DefaultUserLogin}.
-
-SMELL: the association of a user with an IP address is a high
-risk strategy that can fail in the following environments:
-   1 Multiple users at the same IP address
-   1 Short-lease DHCP environments
-This is documented sufficiently for a risk assessment to be made
-by the installer. However it would be much safer (and more user
-friendly) to use cookies.
 
 =cut
 
@@ -373,53 +361,6 @@ sub initializeRemoteUser {
     my $remoteUser = $theRemoteUser || $TWiki::cfg{DefaultUserLogin};
     $remoteUser =~ s/$TWiki::cfg{NameFilter}//go;
     $remoteUser = TWiki::Sandbox::untaintUnchecked( $remoteUser );
-
-    my $remoteAddr = $ENV{'REMOTE_ADDR'} || '';
-
-    if( $ENV{'REDIRECT_STATUS'} && $ENV{'REDIRECT_STATUS'} eq '401' ) {
-        # bail out if authentication failed
-        $remoteAddr = '';
-    }
-
-    if( ! $TWiki::cfg{RememberUserIPAddress} || ! $remoteAddr ) {
-        # do not remember IP address
-        return $remoteUser;
-    }
-
-    my $store = $this->{session}->{store};
-    my $text =
-      $store->readFile( $TWiki::cfg{RemoteUserFileName} );
-
-    # Assume no I18N characters in userids, as for email addresses
-    # FIXME: Needs fixing for IPv6?
-    my %AddrToName = map { split( /\|/, $_ ) }
-      grep { /^[0-9\.]+\|[A-Za-z0-9]+\|$/ }
-        split( /\n/, $text );
-
-    my $rememberedUser = '';
-    if( exists( $AddrToName{ $remoteAddr } ) ) {
-        $rememberedUser = $AddrToName{ $remoteAddr };
-    }
-
-    if( $theRemoteUser ) {
-        if( $theRemoteUser ne $rememberedUser ) {
-            $AddrToName{ $remoteAddr } = $theRemoteUser;
-            # create file as "$remoteAddr|$theRemoteUser|" lines
-            $text = "# This is a generated file, do not modify.\n";
-            foreach my $usrAddr ( sort keys %AddrToName ) {
-                my $usrName = $AddrToName{ $usrAddr };
-                # keep $userName unique
-                if(  ( $usrName ne $theRemoteUser )
-                     || ( $usrAddr eq $remoteAddr ) ) {
-                    $text .= "$usrAddr|$usrName|\n";
-                }
-            }
-            $store->saveFile( $TWiki::cfg{RemoteUserFileName}, $text );
-        }
-    } else {
-        # get user name from AddrToName table
-        $remoteUser = $rememberedUser || $TWiki::cfg{DefaultUserLogin};
-    }
 
     return $remoteUser;
 }

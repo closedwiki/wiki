@@ -672,13 +672,6 @@ sub _CHECKVAR_Htpasswd_FileName {
     return $e;
 }
 
-sub _CHECKVAR_RemoteUserFileName {
-    my $file = $TWiki::cfg{RemoteUserFileName};;
-    my $e = _checkCanCreateFile( $file );
-    $e = WARN($e) if $e;
-    return $e;
-}
-
 sub _CHECKVAR_RegistrationApprovals {
     my $file = $TWiki::cfg{RegistrationApprovals};
     my $e = _checkTreePerms( $file, 'rw' );

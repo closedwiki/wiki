@@ -247,6 +247,7 @@ BEGIN {
     # Constant tags dependent on the config
     $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
     $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
+    $constantTags{USERWEB}         = $TWiki::cfg{UsersWebName};
     $constantTags{TRASHWEB}        = $TWiki::cfg{TrashWebName};
     $constantTags{NOTIFYTOPIC}     = $TWiki::cfg{NotifyTopicName};
     $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
@@ -424,6 +425,7 @@ BEGIN {
 use TWiki::Access;    # access control
 use TWiki::Attach;    # file attachments
 use TWiki::Attrs;     # tag attribute handling
+use TWiki::Client;    # client session handling
 use TWiki::Form;      # forms
 use TWiki::Net;       # SMTP, get URL
 use TWiki::Plugins;   # plugins handler
@@ -631,7 +633,11 @@ sub writePageHeader {
     $hopts->{'Content-Type'} = $contentType;
 
     # New (since 1.026)
-    $this->{plugins}->modifyHeaderHandler($hopts);
+    $this->{plugins}->modifyHeaderHandler( $hopts );
+
+    # add cookie(s)
+    $this->{client}->modifyHeader( $hopts );
+
     my $hdr = CGI::header( $hopts );
 
     print $hdr;
@@ -665,6 +671,7 @@ sub redirect {
         if ( $query && $query->param( 'noredirect' )) {
             my $content = join(' ', @_) . " \n";
             $this->writeCompletePage( $query, $content );
+        } elsif ( $this->{client}->redirectCgiQuery( $query, $url ) ) {
         } elsif ( $query ) {
             print $query->redirect( $url );
         }
@@ -798,7 +805,8 @@ sub getSkin {
 
 Returns the absolute URL to a TWiki script, providing the web and topic as
 "path info" parameters.  The result looks something like this:
-"http://host/twiki/bin/$script/$web/$topic". ... represents an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y#XXX?a=1&b=2</tt>
+"http://host/twiki/bin/$script/$web/$topic".
+   * =...= - an arbitrary number of name,value parameter pairs that will be url-encoded and added to the url. The special parameter name '#' is reserved for specifying an anchor. e.g. <tt>getScriptUrl('x','y','view','#'=>'XXX',a=>1,b=>2)</tt> will give <tt>.../view/x/y#XXX?a=1&b=2</tt>
 
 =cut
 
@@ -976,6 +984,7 @@ sub new {
     $this->{search} = new TWiki::Search( $this );
     $this->{templates} = new TWiki::Templates( $this );
     $this->{attach} = new TWiki::Attach( $this );
+    $this->{client} = TWiki::Client::makeClient( $this );
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
@@ -1093,12 +1102,18 @@ sub new {
     } else {
         $this->{urlHost} = $TWiki::cfg{DefaultUrlHost};
     }
+
+    # setup the cgi session, from a cookie or the url. this may return
+    # the login, but even if it does, plugins will get the chance to override
+    # it below.
+    my $login = $this->{client}->load();
+
     # initialize preferences, first part for site and web level
     $this->{prefs} = new TWiki::Prefs( $this );
 
     # SMELL: there should be a way for the plugin to specify
     # the WikiName of the user as well as the login.
-    my $login = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} );
+    $login = $this->{plugins}->load( $TWiki::cfg{DisableAllPlugins} ) || $login;
     unless( $login ) {
         $login = $this->{users}->initializeRemoteUser( $remoteUser );
     }
@@ -1140,6 +1155,21 @@ sub new {
 
 # Uncomment when enabling AutoLoader
 #__END__
+
+=pod
+
+---++ ObjectMethod finish
+Complete processing after the client's HTTP request has been responded
+to. Right now this only entails one activity: calling TWiki::Client to
+flushing the user's
+session (if any) to disk.
+
+=cut
+
+sub finish {
+    my $this = shift;
+    $this->{client}->finish();
+}
 
 =pod
 
@@ -2078,7 +2108,7 @@ sub leaveContext {
 
 =pod
 
----++ StaticMethod registerTagHandler( $fnref )
+---++ StaticMethod registerTagHandler( $tag, $fnref )
 
 STATIC Add a tag handler to the function tag handlers.
    * =$tag= name of the tag e.g. MYTAG
@@ -2358,7 +2388,16 @@ sub _INCLUDE {
 
     # remove everything before %STARTINCLUDE% and
     # after %STOPINCLUDE%
-    $text =~ s/.*?%STARTINCLUDE%//s;
+    if( $text =~ s/.*?%STARTINCLUDE({([^}]*)})?%//s ) {
+        if( $2 ) {
+            # if STARTINCLUDE has a parameter, then evaluate it
+            # to see if we should include this topic or not.
+            my $attr = $2;
+            $this->_expandAllTags( \$attr, $theTopic, $theWeb );
+            $this->{plugins}->commonTagsHandler( $attr, $theTopic, $theWeb, 1 );
+            $text = "" if( !$attr || $attr == 0 );
+        }
+    }
     $text =~ s/%STOPINCLUDE%.*//s;
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 

@@ -1176,6 +1176,7 @@ sub getRenderedVersion {
 
     # DEPRECATED plugins hook after PRE re-inserted
     $plugins->endRenderingHandler( $text );
+    $this->{session}->{client}->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
     $this->putBackBlocks( \$text, $removed,

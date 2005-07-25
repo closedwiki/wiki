@@ -99,6 +99,10 @@ sub edit {
     my $extra = '';
     my $topicExists  = $store->topicExists( $webName, $topic );
 
+    # If you want to edit, you have to be able to view and change.
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'view', $user );
+    TWiki::UI::checkAccess( $session, $webName, $topic, 'change', $user );
+
     # Check lease, unless we have been instructed to ignore it
     my $breakLock = $query->param( 'breaklock' ) || '';
     unless( $breakLock ) {
@@ -155,12 +159,6 @@ sub edit {
         ( $meta, $text ) =
           $store->readTopic( undef, $webName, $topic, undef );
     }
-
-    # If you want to edit, you have to be able to view and change.
-    TWiki::UI::checkAccess( $session, $webName, $topic,
-                            'view', $session->{user} );
-    TWiki::UI::checkAccess( $session, $webName, $topic,
-                            'change', $session->{user} );
 
     if( $saveCmd && ! $session->{user}->isAdmin()) {
         throw TWiki::OopsException( 'accessdenied', def=>'only_group',

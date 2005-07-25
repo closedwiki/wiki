@@ -1,15 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121074151" format="1.1" version="1.4"}%
-<div class="twikiLeftBarPersonal" style="margin-top:0;">
-<script type="text/javascript">
-<!--
-writeToggle("+","-","twikiLeftBarPersonalContent")
-//-->
-</script>%CALC{"$IF($EXACT(%WIKINAME%,TWikiGuest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]] <font size=\"-1\">%BR%([[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%TWIKIWEB%/LogoutAndLogin][not me?]])</font>)"}%
-<div id="twikiLeftBarPersonalContent">
-%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create personal sidebar</a>"}%
-</div>
-</div>
-
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarLogin" }%
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
 
 ----

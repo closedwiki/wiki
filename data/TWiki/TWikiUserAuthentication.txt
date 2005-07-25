@@ -7,44 +7,128 @@
 
 _TWiki site access control and user activity tracking options_
 
-%X% This topic describes the _default_ authentication scheme in the TWiki package. Your environment may have an alternative authentication scheme in place.
+Authentication, or "login", is the process by which a user lets TWiki know who they are.
 
-TWiki does not authenticate users internally, it depends on the =REMOTE_USER= environment variable, which is set when you enable Basic Authentication (.htaccess) or SSL "secure server" authentication (https protocol).
+Authentication isn't just to do with access control. TWiki uses authentication to identify users, and uses those identities to keep track of who made changes, and manage a wide range of personal settings. With authentication enabled, users can personalise their environment and contribute as recognised individuals, instead of anonymous shadows.
 
-TWiki uses visitor identification to keep track of who made changes to topics at what time and to manage a wide range of personal site settings. This gives a complete audit trail of changes and activity.
-
----++ Authentication Options
-
-No special installation steps are required if the server is already authenticated. If it isn't, you have these options for controlling user access:
-	1. *No login at all:* Forget about authentication to make your site completely public - anyone can browse and edit freely, in classic Wiki mode. All visitors are assigned the %MAINWEB%.TWikiGuest default identity, so you can't track individual user activity.
-		* *How:* Default, no web server configuration necessary
-	1. *No login to view; require login to edit:* Keeping track of who changed what and when, while keeping view access unrestricted is desirable in most TWiki deployments. This option is not suitable if you need TWikiAccessControl for view restricted content since TWiki does not know who a user is when looking at content.
-		* *How:* Use Basic Authentication to control access by protecting key scripts: =attach=, =edit=, =installpasswd=, =manage=, =preview=, =rename=, =save=, =upload=. The TWikiInstallationGuide has step-by-step instructions.
-	1. *No login to view _unless necessary_; require login to edit:* You prefer not to bother the user with login for unrestricted content, but you need TWikiAccessControl for view restricted content. There are two ways to accomplish this:
-		* *How 1:* Use Basic Authentication with Partial Authentication (described below)
-		* *How 2:* Use one of the Session TWiki:Plugins where you give the user the option to login and logout.
-	1. *Require login to view and edit:* Most restrictive, but TWiki knows who the user is at all times. There are two ways to accomplish this:
-		* *How 1:* Use Basic Authentication to authenticate the whole =twiki/bin= directory. Consult your web server documentation.
-		* *How 1:* Use SSL (Secure Sockets Layer; HTTPS) to authenticate and secure the whole server. Consult your web server documentation.
-
----+++ Partial Authentication
-
-*Tracking by IP address* is an experimental feature, enabled in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]]. It lets you combine open access to some functions, with authentication on others, with full user activity tracking:
-
-	* Normally, the ==REMOTE_USER== environment variable is set for the scripts that are under authentication. If, for example, the ==edit==, ==save== and ==preview== scripts are authenticated, but not ==view==, you would get your WikiName in ==preview== for the ==%<nop>WIKIUSERNAME%== variable, but ==view== will show ==TWikiGuest== instead of your <nop>WikiName.
-	* TWiki can be configured to remember the IP address/username pair whenever an authentication happens (edit topic, attach file). Once remembered, the non-authenticated scripts, like ==view==, will show the correct username instead of %MAINWEB%.TWikiGuest.
-	* Enable this feature by setting the =={RememberUserIPAddress}== flag in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]]. TWiki then persistently stores the IP address/username pairs in the file, ={RemoteUserFileName}=.
-	* Copy the =view= script to =viewauth= (or better, create a symbolic link)
-	* Add =viewauth= to the list of authenticated scripts in the =twiki/bin/.htaccess= file. The =view= script should not be listed in the =.htaccess= file.
-	* %X% This approach can fail if the IP address changes due to dynamically assigned IP addresses or proxy servers. 
+TWiki authentication is extremely flexible, and can either stand alone or integrate with existing authentication schemes. You can set up TWiki to require authentication for every access, or set it up to require authentication only for changes. Authentication is also essential for effective access control.
 
 *Quick Authentication Test* - Use the %<nop>WIKIUSERNAME% variable to return your current identity:
-
 	* You are %WIKIUSERNAME% 
+
+TWiki supports three default authentication schemes: no authentication, Template Login, and Apache Login. You can select your chosen authentication option through the Security Settings pane in the =configure= interface.
+
+If you want users to log in, Template Login is the recommended way. Apache Login isn't as flexible, but historically it's been an option so it's still provided in case you want to use it.
+
+---++ No Login
+
+Does exactly what it says on the tin. Forget about authentication to make your site completely public - anyone can browse and edit freely, in classic Wiki style. All visitors are given the %MAINWEB%.TWikiGuest default identity, so you can't track individual user activity.
+
+---++ Template Login
+
+If a user tries to access protected content (either views a topic with access restrictions, or attempts a protected operation such as edit) they are redirected to a "login" page.
+
+Template Login uses a TWiki template to ask for a username and password in a web page, and process them using whatever Password Manager you choose (also in the security section of the configuration page).
+
+---+++ Enabling Template Login
+   1 Use the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface to enable the =TemplateLogin= login manager (on the Security Settings pane).
+   1 Select the appropriate password manager for your system, or provide your own.
+
+---++ Apache Login
+
+Using this method TWiki does not authenticate users internally. Instead it depends on the =REMOTE_USER= environment variable, which is set when you enable authentication in the webserver.
+
+The advantage of this scheme is that if you have an existing website authentication scheme using Apache modules such as =mod_auth_ldap= or =mod_auth_mysql= you can just plug in directly to them.
+
+TWiki maps the =REMOTE_USER= that was used to log in to the webserver to a WikiName using the table in %MAINWEB%.TWikiUsers. This table is updated whenever a user registers, so users can choose not to register (in which case their webserver login name is used for their signature) or register (in which case that login name is mapped to their WikiName).
+
+The same private =.htpasswd= file used in TWiki Template Login can be used to authenticate Apache users, using the Apache Basic Authentication support. This allows the TWiki registration support to maintain usernames and passwords.
+
+---+++ Enabling Apache Login using =mod_auth=
+_You can also use any other Apache authentication module that sets REMOTE_USER_
+   1 Use [[%SCRIPTURL%/configure%SCRIPTSUFFIX%#PasswordManager][configure]] to set up TWiki to create the right kind of =.htpasswd= entries.
+	1 Create a =.htaccess= file in the =twiki/bin= directory.<br />%H% There is an template for this file in =twiki/bin/.htaccess.txt= that you can copy and change. The comments in the file explain what need to be done.<br />%H% If you got it right, the browser should now ask for login name and password when you click on the <u>Edit</u>. If =.htaccess= does not have the desired effect, you may need to "AllowOverride All" for the directory in =httpd.conf= (if you have root access; otherwise, email web server support)
+    <br /> %X% At this time TWikiAccessControls do not control access to files in the =pub= area, unless they are only accessed through the =viewfile= script. If your =pub= directory is set up to allow open access you may want to add =.htaccess= files in there as well to restrict access 
+	1 In TWiki, *edit* the TWikiRegistrationPub topic, *copy* the contents, then *edit* TWikiRegistration and *paste*, deleting the old contents and replacing them with the contents of TWikiRegistrationPub.
+    <br />You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly.
+    <br />You can customize the default user home page in NewUserTemplate. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]
+	1 Register yourself in the TWikiRegistration topic.
+    <br /> %H% Check that a new line with the username and encrypted password is added to the =.htpasswd= file. If not, you may have got a path wrong, or the permissions may not allow the webserver user to write to that file.
+	1 Create a new topic to check if authentication works.
+	1 *Edit the %MAINWEB%.TWikiAdminGroup topic in the TWiki:%MAINWEB% web to include users with system administrator status.*
+    <br /> %X% *This is a very important step*, as users in this group can access _all_ topics, independent of TWiki access controls.
+TWikiAccessControl has more information on setting up access controls.
+
+---+++ Logons via bin/logon
+
+Any time a user enters a page that needs authentication, they will be forced to log on. However, if you're using Apache Login, then if a user never has a need to authenticate, they may never log on and never retrieve their personal settings. It may be convenient to force then to log on.
+
+The ==bin/logon== script accomplishes this. The ==bin/logon== script must be setup in the ==bin/.htaccess== file to be a script which requires a valid user to authenticate. However, once authenticated, it will simply redirect the user to the view URL for the page from which logon was linked.
+
+---++ Sessions
+
+TWiki uses the CPAN:CGI::Session and CPAN:CGI::Cookie modules to track sessions using cookies. These modules are de facto standards for session management among Perl programmers. If you can't use Cookies for any reason, CPAN:CGI::Session also supports session tracking using IP matching. However this is inherently insecure and you are strongly advised against it.
+
+There are a number of TWikiVariables available that you can use to interrogate your current session. You can even add your own session variables to the TWiki cookie. Session variables are referred to as "sticky" variables.
+
+---+++ Getting, Setting, and Clearing Session Variables
+
+You can get, set, and clear session variables from within TWiki web pages or by using script parameters. This allows you to use the session as a personal "persistent memory space" that is not lost until the web browser is closed. Also note that if a session variable has the same name as a TWiki preference, the session variables value takes precedence over the TWiki preference. *This allows for per-session preferences.*
+
+To make use of these features, use the tags:
+
+<verbatim>
+%SESSION_VARIABLE{ "varName" }%
+%SESSION_VARIABLE{ "varName" set="varValue" }%
+%SESSION_VARIABLE{ "varName" clear="" }%
+</verbatim>
+
+The session variables can also be set and cleared via CGI variables (include more than one in the string if necessary, separated by commas, as demonstrated here):
+
+<blockquote>
+set_session_variable=" *varName* = *varValue* , *varName* = *varValue* , ... " %BR%
+clear_session_variable=" *varName* , *varName* , ..."
+</blockquote>
+
+That is, to set the session variable SKIN equal to "gnu" while clearing the session variable TEST, adding this to the end of a TWiki URL should work:
+
+<verbatim>
+?set_session_variable=SKIN=gnu&clear_session_variable=TEST
+</verbatim>
+
+---+++ Review: Cookies
+
+A common way to pass session information from client to server is by passing per-session cookies (i.e., cookies which are not stored on the user's computer; cookies which immediately expire once the browser exits; cookies which are tied to a particular browser session with a web site). These cookies will simply hold the unique session identifier 
+
+#TransparentCGISessionID
+---+++ Alternative: Transparent CGI Session ID
+
+For a number of reasons, it may not be possible to pass cookies to the user. In this case, another method is needed to pass session ID information from script to script. This could be done by passing a special CGI variable (rather than a cookie) that held the session ID in it.
+
+This would require the user to modify every form to either POST or GET the CGI session ID variable to each other script on the site. This could be a major modification, and as new templates are added to TWiki, each would need to be modified as well.
+
+Not only that, but passing the session ID over CGI poses security risks. If a user copies and pastes a URL that has the session ID in it and sends that URL to another person, that person may get access to the other user's session. If sessions are the only form of authentication verification, this could be catastrophic on an E-Commerce site, for example. So because of the security hazards here, it would be convenient to be able to selectively decide whether or not it is desirable to pass session ID information over CGI.
+
+So a non-intrusive transparent configurable interface is provided for this CGI session ID passing. When turned on, TWiki will change every internal URL it sees to one that also passes session information. This is all done on the fly and requires no additional editing by the TWiki administrator. On top of this, it is configurable by way of a standard TWiki variable.
+
+#SessionConditionals
+---+++ Is this session authenticated?
+
+Using the TWiki variable %<nop>AUTHENTICATED% it is possible to make pages operate differently after authentication. This may be useful if a login prompt should be supressed (and possibly replaced with a user name) after a user has authenticated. For example:
+
+<verbatim>
+%AUTHENTICATED{then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
+</verbatim>
+
+Which will look like
+
+<blockquote>
+%AUTHENTICATED{then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
+</blockquote>
 
 ---++ TWiki Username vs. Login Username
 
-This section applies only if your TWiki site is installed on a server that is both *authenticated* and on an *intranet*.
+This section applies only if you are using authentication with existing login names (i.e. mapping from login names to WikiNames).
 
 <nop>%WIKITOOLNAME% internally manages two usernames: Login Username and TWiki Username.
 
@@ -65,7 +149,7 @@ This points ==<nop>WikiUser== to the %MAINWEB% web, where user registration page
 #ChangingPasswords
 ---++ Changing Passwords
 
-Change and reset passwords using forms on regular pages. Use TWikiAccessControl to restrict use as required.
+If your authentication method supports password changing, you can change and reset passwords using forms on regular pages.
 
 	* The ChangePassword form ( ==TWiki/ChangePassword== ):
 
