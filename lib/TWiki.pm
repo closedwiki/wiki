@@ -2389,13 +2389,14 @@ sub _INCLUDE {
     # remove everything before %STARTINCLUDE% and
     # after %STOPINCLUDE%
     if( $text =~ s/.*?%STARTINCLUDE({([^}]*)})?%//s ) {
-        if( $2 ) {
-            # if STARTINCLUDE has a parameter, then evaluate it
-            # to see if we should include this topic or not.
+        if( defined $2 ) {
             my $attr = $2;
+            # if STARTINCLUDE has a parameter, then evaluate it
+            # as an integer to see if we should include this content.
             $this->_expandAllTags( \$attr, $theTopic, $theWeb );
-            $this->{plugins}->commonTagsHandler( $attr, $theTopic, $theWeb, 1 );
-            $text = "" if( !$attr || $attr !~ /^\d+/ );
+            $this->{plugins}->commonTagsHandler(
+                $attr, $theTopic, $theWeb, 1 );
+            $text = '' if( !$attr || $attr !~ /^\d+$/ );
         }
     }
     $text =~ s/%STOPINCLUDE%.*//s;

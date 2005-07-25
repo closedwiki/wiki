@@ -197,8 +197,10 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarSTARTINCLUDE
 ---+++ STARTINCLUDE -- start position of topic text if included
-	* If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everyting exept the =%<nop>STARTINCLUDE%= variable itself.
+	* If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everything exept the =%<nop>STARTINCLUDE%= variable itself. An optional parameter can be used to control whether the content is expanded.
 	* Syntax: =%<nop>STARTINCLUDE%=
+	* Syntax: =%<nop>STARTINCLUDE{param}%=
+      * If param does not expand to a non-zero integer, then nothing will be included.
 	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSTATISTICSTOPIC

@@ -95,6 +95,16 @@ sub new {
     map{ $this->{authScripts}{$_} = 1; }
       split( /[\s,]+/, $TWiki::cfg{AuthScripts} );
 
+    # register tag handlers and values
+    TWiki::registerTagHandler('LOGINURL', \&_LOGINURL);
+    #TWiki::registerTagHandler('LOGINURLPATH', \&_LOGINURLPATH);
+    TWiki::registerTagHandler('LOGIN', \&_LOGIN);
+    #TWiki::registerTagHandler('LOGOUTURL', \&_LOGOUTURL);
+    TWiki::registerTagHandler('LOGOUT', \&_LOGOUT);
+    TWiki::registerTagHandler('CANLOGIN', \&_CANLOGIN);
+    TWiki::registerTagHandler('SESSION_VARIABLE', \&_SESSION_VARIABLE);
+    TWiki::registerTagHandler('AUTHENTICATED', \&_AUTHENTICATED);
+
     return $this;
 }
 
@@ -195,16 +205,6 @@ sub load {
     $this->{authUser} = $authUser;
     $this->{sessionIsAuthenticated} = $sessionIsAuthenticated;
     $this->{useTransSID} = $useTransSID;
-
-    # register tag handlers and values
-    TWiki::registerTagHandler('LOGINURL', \&_LOGINURL);
-    #TWiki::registerTagHandler('LOGINURLPATH', \&_LOGINURLPATH);
-    TWiki::registerTagHandler('LOGIN', \&_LOGIN);
-    #TWiki::registerTagHandler('LOGOUTURL', \&_LOGOUTURL);
-    TWiki::registerTagHandler('LOGOUT', \&_LOGOUT);
-    TWiki::registerTagHandler('CANLOGIN', \&_CANLOGIN);
-    TWiki::registerTagHandler('SESSION_VARIABLE', \&_SESSION_VARIABLE);
-    TWiki::registerTagHandler('AUTHENTICATED', \&_AUTHENTICATED);
 
     $twiki->{SESSION_TAGS}{SESSIONID} = ( $sessionId || '' );
     $twiki->{SESSION_TAGS}{SESSIONVAR} = ( $CGI::Session::NAME || '' );
