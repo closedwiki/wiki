@@ -2395,7 +2395,7 @@ sub _INCLUDE {
             my $attr = $2;
             $this->_expandAllTags( \$attr, $theTopic, $theWeb );
             $this->{plugins}->commonTagsHandler( $attr, $theTopic, $theWeb, 1 );
-            $text = "" if( !$attr || $attr == 0 );
+            $text = "" if( !$attr || $attr !~ /^\d+/ );
         }
     }
     $text =~ s/%STOPINCLUDE%.*//s;
