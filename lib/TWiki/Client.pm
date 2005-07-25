@@ -70,14 +70,13 @@ for the given session.
 sub makeClient {
     my $twiki = shift;
 
-    if( $TWiki::cfg{LoginManager} eq 'none' ) {
+    if( $TWiki::cfg{LoginManager} eq 'none' ||
+          !$TWiki::cfg{UseClientSessions} ) {
         # No login manager; just use default behaviours
         return new TWiki::Client( $twiki);
     } else {
-        require CGI::Session;
-        require CGI::Cookie;
-
-        eval "use $TWiki::cfg{LoginManager}";
+        eval 'use CGI::Session; use CGI::Cookie; use '.
+          $TWiki::cfg{LoginManager};
         throw Error::Simple( 'Login Manager: '.$@) if $@;
 
         return $TWiki::cfg{LoginManager}->new( $twiki );
