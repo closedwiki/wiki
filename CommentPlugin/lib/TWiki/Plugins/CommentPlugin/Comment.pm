@@ -71,7 +71,7 @@ sub _handleInput {
 
     # Expand the template in the context of the web where the comment
     # box is (not the target of the comment!)
-    my $input = _getTemplate( "PROMPT:$type", $topic, $web );
+    my $input = _getTemplate( "PROMPT:$type", $topic, $web ) || '';
 
     return $input if $input =~ m/^%RED%/so;
 
