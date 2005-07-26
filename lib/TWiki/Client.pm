@@ -230,7 +230,8 @@ sub checkAccess {
 
     my $this = shift;
 
-    unless( $this->{twiki}->inContext( 'authenticated' )) {
+    unless( $this->{twiki}->inContext( 'authenticated' ) ||
+              $TWiki::cfg{LoginManager} eq 'none' ) {
         my $script = $ENV{'SCRIPT_NAME'} || $ENV{'SCRIPT_FILENAME'};
         $script =~ s@^.*/([^/]+)@$1@g;
 
