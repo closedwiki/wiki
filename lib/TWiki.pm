@@ -2418,7 +2418,7 @@ sub _INCLUDE {
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
     # right context
     # SMELL: This is a hack.
-    if( $theWeb ne $this->{webName} ) {
+    if( $theWeb ne $incweb ) {
         # 'TopicName' to 'Web.TopicName'
         $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
         $text =~ s/(^|[\s\(])($regex{wikiWordRegex})/$1$theWeb\.$2/go;
