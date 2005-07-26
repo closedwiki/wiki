@@ -216,14 +216,10 @@ sub _generateEmails {
         $mail =~ s/%LASTDATE%/$lastTime/geo;
         $mail = $twiki->handleCommonTags( $mail, $web, $homeTopic );
 
-        my $url = '%SCRIPTURLPATH%';
-        $url = $twiki->handleCommonTags( $url, $web, $homeTopic );
-
-        # Inherited from mailnotify
-        # SMELL: assumes Content-Base is set in the mail template,
-        # and assumes it is set to the web hometopic.
-        $mail =~ s/(href=\")$url/$1..\/../goi;
-        $mail =~ s/(action=\")$url/$1..\/../goi;
+        my $url = $TWiki::cfg{DispScriptUrlPath};
+        my $base = $TWiki::cfg{DefaultUrlHost} . $url;
+        $mail =~ s/(href=\")([^"]+)/$1.relativeURL($base,$2)/goei;
+        $mail =~ s/(action=\")([^"]+)/$1.relativeURL($base,$2)/goei;
 
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
@@ -234,6 +230,11 @@ sub _generateEmails {
     $report .= "\t$sentMails change notifications\n";
 
     return $report;
+}
+
+sub relativeURL {
+    my( $base, $link ) = @_;
+    return URI->new_abs( $link, URI->new($base) )->as_string;
 }
 
 1;
