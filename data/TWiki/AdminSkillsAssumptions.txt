@@ -17,3 +17,4 @@ There are many excellent resources for learning how to administer your OS and we
 
 One of the best training courses for Linux is *Basic Linux Training* at http://basiclinux.net/ - this is a 2 month distance-learning course (via email). The course operators are friendly, and all students are newbies. A nice tool for people migrating from Windows is http://www.MidnightCommander.org/. It is already installed on Linux systems: try ==mc -ac== and ==ESC 1== to get help.
 
+__Related Topics:__ AdminDocumentationCategory

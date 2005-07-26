@@ -1,0 +1,25 @@
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+
+
+---+ Admin tools
+Manage whole <b><nop>%WIKITOOLNAME%</b> site from one screen.
+
+	* *[[%MAINWEB%.%WIKIUSERSTOPIC%][Users]]:* [[TWikiRegistration][Register]], NewUserTemplate, UserForm, ResetPassword, ChangePassword, MaintenanceGuide
+	* *[[TWikiSiteTools][Site Tools]]:*	%TWIKIWEB%.%WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
+	* *Managing:* [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
+
+TODO: replace the list above using a search for this Category
+
+%SEARCH{"*%TOPIC%" scope="topic" nosearch="on"}%
+
+---++ Plugins
+%PLUGINDESCRIPTIONS%
+see also: TWikiPlugins, FuncDotPm
+
+---++ TWiki Version
+	* TWiki engine: %WIKIVERSION%
+	* Plugin API: %PLUGINVERSION{}%
+
+
+
+__Related Topics:__ AdminDocumentationCategory

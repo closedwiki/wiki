@@ -15,5 +15,5 @@ or
 my $mobile = Telecoms->new();
 </verbatim>
 
-See also: StaticMethod, ObjectMethod
 
+__Related Topics:__ DeveloperDocumentationCategory, StaticMethod, ObjectMethod

@@ -1,8 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 %META:TOPICPARENT{name="ManagingUsers"}%
----++ Bulk Registration
+
+---+ Bulk Registration
+
+TODO: MartinCleaver - fill in a summary of what bulk registration does, and why the user would want to use it
+
+---++ Bulk Registration usage
 
 Any fields you define in this table will end up in the User's topic. If a form (such as UserForm) is attached to NewUserTemplate then the data will go in as META:FIELDS, meaning that you can use SEARCH formfield constructs to search. 
 
@@ -62,5 +65,4 @@ Notes:
 %INCLUDE{%LOGTOPIC%}%
 
 
--- People.MartinCleaver - 18 Oct 2004
-
+__Related Topics:__ AdminToolsCategory

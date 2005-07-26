@@ -19,7 +19,7 @@
    * InstalledPlugins
 
    * <b>Maintenance</b>
-   * AdminTools
+   * AdminToolsCategory
    * InterWikis
    * ManagingWebs
    * TWikiSiteTools

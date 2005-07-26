@@ -53,7 +53,7 @@ Select simpler skin and customize beginner's help topics accordingly.
 
 ---+++ Admin Tools
 
-AdminTools has most of the tools you need to administer a TWiki site - on one page. You can link it from SiteMap.
+AdminToolsCategory has most of the tools you need to administer a TWiki site - on one page. You can link it from SiteMap.
 
 ---------------------
 ---++ Best of Plugins
