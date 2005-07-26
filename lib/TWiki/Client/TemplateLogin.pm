@@ -47,7 +47,7 @@ sub new {
     return $this;
 }
 
-sub authenticate {
+sub authenticationUrl {
     my $this = shift;
     my $twiki = $this->{twiki};
 
