@@ -1,22 +1,13 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121256319" format="1.1" version="$Rev$"}%
 ---+ List of <nop>%WIKITOOLNAME% users
 
-Below is a list of users with accounts. If you want to edit topics or see protected areas of the site then add yourself to the list by registering: fill out the form in %TWIKIWEB%.TWikiRegistration. 
+Below is a list of users with accounts. If you want to edit topics or see protected areas of the site then you can get added to the list by registering: fill out the form in %TWIKIWEB%.TWikiRegistration. 
 
-If you forget your password, TWiki.ResetPassword will get a new one sent to you.
+If you forget your password, %TWIKIWEB%.ResetPassword will get a new one sent to you.
 
-__Related topics:__ TWikiGroups
+__Related topics:__ TWikiGroups, %SEARCH{"UserListBy*" web="%MAINWEB%" scope="topic" separator=", " nonoise="on" format="$web.$topic"}%
 
-Also available:
-%INCLUDE{UserListHeader}%
-
-<!--
-	* Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
--->
-
-
-The format of these lines is TWiki.WikiName - TWiki.LoginName - Date registered
-
+----
 #ListStart
 [[#A][A]] [[#B][B]] [[#C][C]] [[#D][D]] [[#E][E]] [[#F][F]] [[#G][G]] [[#H][H]] [[#I][I]] [[#J][J]] [[#K][K]] [[#L][L]] [[#M][M]] [[#N][N]] [[#O][O]] [[#P][P]] [[#Q][Q]] [[#R][R]] [[#S][S]] [[#T][T]] [[#U][U]] [[#V][V]] [[#W][W]] [[#X][X]] [[#Y][Y]] [[#Z][Z]]
 
@@ -49,5 +40,10 @@ The format of these lines is TWiki.WikiName - TWiki.LoginName - Date registered
 	* Z - <a name="Z">- - - -</a>
 
 
+
+
+<!--
+	* Set ALLOWTOPICCHANGE = TWikiAdminGroup, TWikiRegistrationAgent
+-->
 
 

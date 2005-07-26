@@ -23,10 +23,9 @@ A TWikiSite is divided into webs; each one usually represents one area of collab
 To edit topics, you need to have a TWiki account.
 	* Go to the TWikiRegistration page to create your TWiki account. Fill in a couple of lines and you're set!
 
----++ 4. Check out TWiki users, groups, offices...
+---++ 4. Check out TWiki users, groups.
 	* Go to the %MAINWEB%.%WIKIUSERSTOPIC% topic in the TWiki.%MAINWEB% web; it has a list of all users of TWiki. Your WikiName will be in this list after you register.
 	* Go to the %MAINWEB%.TWikiGroups topic in the %MAINWEB% web; it has a list of groups which can be used to define fine grained TWikiAccessControl in TWiki.
-	* Go to the %MAINWEB%.OfficeLocations topic in the TWiki.%MAINWEB% web; it has a sample list of corporate offices. This type of set-up can be used for departments, client companies, or any other type of organizational divisions.
 
 ---++ 5. Test the page controls...
 Go to the [[#PageBottom][bottom of the page]] to see what you can do. The color-coded control strip has a collection of action links:

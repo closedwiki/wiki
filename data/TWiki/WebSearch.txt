@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 %META:TOPICPARENT{name="WebHome"}%
+
+---+++ Search
 <noautolink>
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
 <table border="0" cellspacing="3" cellpadding="0"><tr><td>
@@ -23,11 +23,8 @@
 	* <b><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">Topic index</a></b>: List of <nop>%INCLUDINGWEB% topics in alphabetical order. <br />
 	  <b>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">All</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ea">A</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eb">B</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ec">C</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ed">D</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ee">E</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ef">F</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eg">G</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eh">H</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ei">I</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ej">J</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ek">K</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5El">L</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Em">M</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5En">N</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eo">O</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ep">P</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eq">Q</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Er">R</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Es">S</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Et">T</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eu">U</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ev">V</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ew">W</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ex">X</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ey">Y</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ez">Z</a>| <br />
 	  | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;bookview=on&amp;search=\.*">All</a></b> topics in %TWIKIWEB%.BookView <b>|</b>
-
 	* <b>Jump to topic</b>: If you already know the name of the topic, enter the name of the topic into the %TWIKIWEB%.GoBox at the top
-
 	* <b> [[%INCLUDINGWEB%.WebChanges][WebChanges]] </b>: Find out what topics in <nop>%INCLUDINGWEB% have changed recently
-
 	* <b>[[%TWIKIWEB%.GoodStyle][How to edit text]]</b>:
 		* Make changes to topics in %TWIKIWEB%.GoodStyle,
 		* Learn the %TWIKIWEB%.TextFormattingRules, and

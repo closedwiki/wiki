@@ -1,7 +1,0 @@
-%META:TOPICINFO{author="TWikiContributor" date="1121170010" format="1.0" version="$Rev$"}%
-	* UserListByOrganization
-	* UserListByLocation
-	* UserListByDateJoined
-<!--	* UserListByPhotograph -->
-
-

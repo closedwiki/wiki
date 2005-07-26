@@ -5,15 +5,13 @@
 
 %INCLUDE{"%ATTACHURL%/AUTHORS"}%
 
-I would like to take this opportunity to express my sincere appreciation and thanks to all who contributed ideas, code, fixes and documentation to the TWiki project :-) -- TWiki:Main.PeterThoeny
+A big Thank you to everyone who contributed ideas, code, fixes, documentation and anything else to the TWiki project.
 
-__Note:__ Please contact a TWiki:Codev/CoreTeam member if you contributed to TWiki and your name is not on this list!
+__Note:__ Please contact us at http://TWiki.org if you contributed to TWiki and your name is not on this list!
 
-__Disclaimer:__ TWiki gets installed on thousands of public web sites. The contributors are not affiliated in any way with those sites.
+__Disclaimer:__ TWiki gets installed on many public web sites. The TWiki contributors are not affiliated in any way with those sites.
 
----++ List of Contributions
 
-	* See %TWIKIWEB%.TWikiHistory
-	* See also List of Production Releases in TWiki:Codev/TWikiReleases
+__Releated Topics:__ %TWIKIWEB%.TWikiHistory, and the List of Production Releases in TWiki:Codev/TWikiReleases
 
 

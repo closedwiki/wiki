@@ -1,11 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1104771314" format="1.0" version="$Rev$"}%
----+ Sorted by country
-
-Also available:
-%INCLUDE{UserListHeader}%
+---+ User List sorted by location
 
 %TABLE{initsort="1"}%
 %SEARCH{"%META:FORM.*[U]serForm" regex="on" header="|*Country* | *State* | *!FirstName* | *!LastName* | *Organization* |" format="| $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) |" excludetopic="Web*" nosearch="on" order="formfield(Country)"}%
 
--- People.MartinCleaver - 30 Dec 2004
-
+__Related Topics:__ UserList, UserListByDateJoined

@@ -9,7 +9,7 @@ The following settings are __web preferences__ of the [[%WEB%.%HOMETOPIC%][%WEB%
 __Preferences:__
 
 	* List of topics of the <nop>%WEB% web:
-		* Set WEBTOPICLIST = [[%WIKIUSERSTOPIC%][Users]] %SEP% [[TWikiGroups][Groups]] %SEP% [[OfficeLocations][Offices]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
+		* Set WEBTOPICLIST = [[%WIKIUSERSTOPIC%][Users]] %SEP% [[TWikiGroups][Groups]] %SEP% [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
 	* Web-specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFEFA6
@@ -20,7 +20,7 @@ __Preferences:__
 	* List this web in the %TWIKIWEB%.SiteMap:
 		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
 		* Set SITEMAPLIST = on
-		* Set SITEMAPWHAT = Welcome to <nop>%WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]], [[%WEB%.OfficeLocations][Offices]] - tour this expandable virtual workspace.
+		* Set SITEMAPWHAT = Welcome to <nop>%WIKITOOLNAME%... [[%WEB%.%WIKIUSERSTOPIC%][Users]], [[%WEB%.TWikiGroups][Groups]] - tour this expandable virtual workspace.
 		* Set SITEMAPUSETO = ...get a first-hand feel for TWiki possibilities.
 
 	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs)
@@ -66,5 +66,5 @@ __Related Topics:__
 	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
 
 __Tools:__
-%INCLUDE{"TWiki.RenameWeb"}%
+%INCLUDE{"%TWIKIWEB%.RenameWeb"}%
 

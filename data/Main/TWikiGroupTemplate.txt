@@ -9,5 +9,3 @@
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 
--- %WIKIUSERNAME% - %DATE%
-

@@ -17,7 +17,7 @@ __See also:__
 
 ---+++ Rename Main web to User web
 
-You can rename the =Main= web to =User=. It will make WikiWord links to usernames more meaningful (<nop>User.UserName instead of <nop>Main.UserName); but does not bring much gain for other types of topics like (<nop>User.EngineeringGroup or <nop>User.TokyoOffice). Use the Rename Web feature in the %MAINWEB%.WebPreferences topic of any web you want to rename.
+You can rename the =Main= web to =User=. It will make WikiWord links to usernames more meaningful (<nop>User.UserName instead of <nop>Main.UserName); but does not bring much gain for other types of topics like (<nop>User.EngineeringGroup). Use the Rename Web feature in the %MAINWEB%.WebPreferences topic of any web you want to rename.
 
 ---+++ Help with remembering passwords
 

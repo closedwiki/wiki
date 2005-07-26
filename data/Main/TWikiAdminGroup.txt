@@ -6,7 +6,14 @@
 	* Set GROUP = TWikiGuest
 	* #Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
-(Setup Note: (a) Verify that user authentication is working, (b) set the members of TWiki Administrator Group in GROUP, (c) enable the ALLOWTOPICCHANGE variable by removing # sign, (d) set the ALLOWTOPICHANGE in TWiki.TWikiPreferences to this group (e) remove this note after you have done the setup)
-
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+
+---
+---+++++ Setup Note: 
+   a. Verify that user authentication is working, 
+   a. set the members of TWiki Administrator Group in GROUP, 
+   a. enable the ALLOWTOPICCHANGE variable by removing # sign, 
+   a. set the ALLOWTOPICHANGE in %TWIKIWEB%.TWikiPreferences to this group 
+   a. remove this note after you have done the setup
+
 
