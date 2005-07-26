@@ -88,8 +88,6 @@ sub _removeUser {
     my $password = $query->param( 'password' );
 
     # check if user entry exists
-    # TODO: need to handle the NoPasswdUser case (userPasswordExists
-    # will return false here)
     if( $user && !$user->passwordExists()) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,

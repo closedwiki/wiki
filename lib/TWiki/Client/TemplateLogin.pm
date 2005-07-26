@@ -26,7 +26,7 @@
 ---+ package TWiki::Client::TemplateLogin
 Redirect to an template-based authentication page.
 
-Subclass of TWiki::Client::NoLogin; see that class for documentation of the
+Subclass of TWiki::Client; see that class for documentation of the
 methods of this class.
 
 =cut
@@ -43,23 +43,21 @@ sub new {
     my( $class, $session ) = @_;
 
     my $this = bless( $class->SUPER::new($session), $class );
-    $this->{canLogin} = 1;
+    $session->enterContext( 'can_login' );
     return $this;
 }
 
 sub authenticate {
     my $this = shift;
-
     my $twiki = $this->{twiki};
-    my $query = $twiki->{cgiQuery};
 
-    unless( $this->{sessionIsAuthenticated} ) {
+    unless( $twiki->inContext( 'authenticated' )) {
+        my $query = $twiki->{cgiQuery};
         my $origurl = $query->url() . $query->path_info();
         my $url = $this->loginUrl( origurl => $origurl );
-        $twiki->redirect( $url );
-        # SMELL: this should use an exception. see the comment in Client.pm.
+        return $url;
     }
-    return 0;
+    return undef;
 }
 
 sub loginUrl {

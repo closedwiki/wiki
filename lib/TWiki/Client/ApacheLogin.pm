@@ -26,7 +26,7 @@
 ---+ package TWiki::Client::ApacheLogin
 Redirect to a script to ask Apache to ask for a username & password.
 
-Subclass of TWiki::Client::NoLogin; see that class for documentation of the
+Subclass of TWiki::Client; see that class for documentation of the
 methods of this class.
 
 =cut
@@ -41,17 +41,17 @@ use Assert;
 sub new {
     my( $class, $twiki ) = @_;
     my $this = bless( $class->SUPER::new($twiki), $class );
-    $this->{canLogin} = 1;
+    $session->enterContext( 'can_login', 1 );
     return $this;
 }
 
-sub authenticate {
+sub authenticationUrl {
     my $this = shift;
 
     my $twiki = $this->{twiki};
     my $query = $twiki->{cgiQuery};
 
-    # Had an access control violation. See if there is an 'auth' version
+    # See if there is an 'auth' version
     # of this script, may be a result of not being logged in.
     my $script = $ENV{SCRIPT_FILENAME};
     $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/o;
@@ -77,7 +77,8 @@ sub authenticate {
             my $queryString = $ENV{'QUERY_STRING'};
             $pathInfo    = '/' . $pathInfo    if ($pathInfo);
             $queryString = '?' . $queryString if ($queryString);
-            if( $scriptPath && $scriptPath =~ s/\/$scriptName/\/${scriptName}auth/ ) {
+            if( $scriptPath &&
+                  $scriptPath =~ s/\/$scriptName/\/${scriptName}auth/ ) {
                 $url = $twiki->{urlHost}.$scriptPath;
             } else {
                 # If SCRIPT_NAME does not contain the script name
@@ -88,12 +89,10 @@ sub authenticate {
             }
             $url .= $pathInfo.$queryString;
         }
-        # SMELL: this should use an exception
-        $twiki->redirect( $url );
-        return 1;
+        return $url;
     }
 
-    return 0; # can't redirect to an auth script
+    return undef;
 }
 
 sub loginUrl {

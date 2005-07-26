@@ -26,6 +26,9 @@
 
 Support for htpasswd and htdigest format password files.
 
+Subclass of [[TWikiUsersPasswordDotPm][ =TWiki::Users::Password= ]].
+See documentation of that class for descriptions of the methods of this class.
+
 =cut
 
 package TWiki::Users::HtPasswdUser;
@@ -33,6 +36,9 @@ package TWiki::Users::HtPasswdUser;
 use strict;
 use Assert;
 use Error qw( :try );
+use TWiki::Users::Password;
+
+@TWiki::Users::HtPasswdUser::ISA = qw( TWiki::Users::Password );
 
 # 'Use locale' for internationalisation of Perl sorting in getTopicNames
 # and other routines - main locale settings are done in TWiki::setupLocale
@@ -49,16 +55,9 @@ BEGIN {
     srand( time() ^ ($$ + ($$ << 15)) );
 }
 
-=pod
-
----++ ClassMethod new() -> $object
-Constructs a new password handler of this type.
-
-=cut
-
 sub new {
-    my $class = shift;
-    my $this = bless( {}, $class );
+    my( $class, $session) = @_;
+    my $this = bless( $class->SUPER::new($session), $class );
     $this->{error} = undef;
     if( $TWiki::cfg{Htpasswd}{Encoding} eq 'md5' ) {
         require Digest::MD5;
@@ -94,17 +93,6 @@ sub _savePasswd {
     close( FILE) ||
       throw Error::Simple( "$TWiki::cfg{Htpasswd}{FileName}: $!" );
 }
-
-=pod
-
----++ encrypt( $user, $passwordU, $fresh ) -> $passwordE
-Will return an encrypted password. Repeated calls
-to encrypt with the same user/passU will return the same passE.
-
-If $fresh is true, then a new password not based on any pre-existing
-salt will be used. Set this if you are generating a new password.
-
-=cut
 
 sub encrypt {
     my ( $this, $user, $passwd, $fresh ) = @_;
@@ -142,14 +130,6 @@ sub encrypt {
       $TWiki::cfg{Htpasswd}{Encoding};
 }
 
-=pod
-
----++ ObjectMethod fetchPass( $login ) -> $pass
-Returns encrypted password if succeeds.  Returns 0 if login is invalid. 
-Returns undef otherwise.
-
-=cut
-
 sub fetchPass {
     my ( $this, $user ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
@@ -171,24 +151,6 @@ sub fetchPass {
         return 0;
     }
 }
-
-=pod
-
----++ ObjectMethod passwd( $user, $newPassU, $oldPassU ) -> $boolean
-If the $oldPassU is undef, it will try to add the user, returning 0
-if they are already there.
-
-If the $oldPassU matches matches the login's password, then it will
-replace it with $newPassU.
-
-If $oldPassU is not correct and not 1, will return 0.
-
-If $oldPassU is 1, will force the change irrespective of
-the existing password, adding the user if necessary.
-
-Otherwise returns 1 if succeeds. Returns undef on failure.
-
-=cut
 
 sub passwd {
     my ( $this, $user, $newUserPassword, $oldUserPassword ) = @_;
@@ -222,14 +184,6 @@ sub passwd {
     return 1;
 }
 
-=pod
-
----++ ObjectMethod deleteUser( $user ) -> $boolean
-Delete users entry in password file.
-Returns 1 on success Returns undef on failure.
-
-=cut
-
 sub deleteUser {
     my ( $this, $user ) = @_;
     ASSERT($this->isa( 'TWiki::Users::HtPasswdUser')) if DEBUG;
@@ -249,15 +203,6 @@ sub deleteUser {
     };
     return $result;
 }
-
-=pod
-
----++ ObjectMethod checkPassword( $user, $passwordU ) -> $boolean
-Finds if the password is valid for the given login.
-
-Returns 1 if passes.  Returns 0 if fails.
-
-=cut
 
 sub checkPassword {
     my ( $this, $user, $password ) = @_;

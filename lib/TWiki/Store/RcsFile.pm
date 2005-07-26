@@ -56,7 +56,7 @@ Note that $web, $topic and $attachment must be untainted!
 
 sub new {
     my( $class, $session, $web, $topic, $attachment ) = @_;
-   #ASSERT($session->isa( 'TWiki')) if DEBUG;
+    #ASSERT($session->isa( 'TWiki')) if DEBUG;
     my $this = bless( {}, $class );
     $this->{session} = $session;
 

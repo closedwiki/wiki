@@ -55,6 +55,7 @@ sub new {
     $this->{session} = $session;
 
     my $impl = $TWiki::cfg{PasswordManager};
+    $impl = 'TWiki::Users::Password' if( $impl eq 'none' );
     eval "use $impl";
     die "Password Manager: $@" if $@;
     $this->{passwords} = $impl->new( $session );

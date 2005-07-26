@@ -25,44 +25,34 @@ package TWiki::Users::ApacheHtpasswdUser;
 use Apache::Htpasswd;
 use Assert;
 use strict;
+use TWiki::Users::Password;
+
+@TWiki::Users::ApacheHtpasswdUser::ISA = qw( TWiki::Users::Password );
 
 =begin twiki
 
 ---+ package TWiki::Users::ApacheHtpasswdUser
 
-Use Apache::HtPasswd to manage users and passwords.
+Password manager that uses Apache::HtPasswd to manage users and passwords.
 
-=cut
+Subclass of [[TWikiUsersPasswordDotPm][ =TWiki::Users::Password= ]].
+See documentation of that class for descriptions of the methods of this class.
 
-=pod
-
----++ ClassMethod new( $session ) -> $object
-Implements TWiki::Password
-
-Constructs a new password handler of this type, referring to $session
-for any required TWiki services.
+Duplicates functionality of
+[[TWikiUsersHtPasswdUserDotPm][ =TWiki::Users::HtPasswdUser=]];
+provided mainly as an example of how to write a new password manager.
 
 =cut
 
 sub new {
     my( $class, $session ) = @_;
 
-    my $this = bless( {}, $class );
+    my $this = bless( $class->SUPER::new( $session ), $class );
     $this->{apache} = new Apache::Htpasswd
       ( { passwdFile => $TWiki::cfg{Htpasswd}{FileName} } );
 
     return $this;
 }
-
-=pod
-
----++ ObjectMethod fetchPass( $login ) -> $passwordE
-Implements TWiki::Password
-
-Returns encrypted password if succeeds.  Returns 0 if login is invalid.
-Returns undef otherwise.
-
-=cut
 
 sub fetchPass {
     my( $this, $login ) = @_;
@@ -71,31 +61,12 @@ sub fetchPass {
     return $this->{apache}->fetchPass( $login );
 }
 
-=pod
-
----++ ObjectMethod checkPassword( $user, $passwordU ) -> $boolean
-Implements TWiki::Password
-
-Finds if the password is valid for the given login.
-
-Returns 1 if passes.  Returns 0 if fails.
-
-=cut
-
 sub checkPassword {
     my( $this, $login, $passU ) = @_;
     ASSERT( $login ) if DEBUG;
 
     return $this->{apache}->htCheckPassword( $login, $passU );
 }
-
-=pod
-
----++ ObjectMethod deleteUser( $user ) -> $boolean
-Delete users entry in password file.
-Returns 1 on success Returns undef on failure.
-
-=cut
 
 sub deleteUser {
     my( $this, $login ) = @_;
@@ -104,46 +75,12 @@ sub deleteUser {
     return $this->{apache}->htDelete( $login );
 }
 
-=pod
-
----++ ObjectMethod passwd( $user, $newPassU, $oldPassU ) -> $boolean
-Implements TWiki::Password
-
-If the $oldPassU is undef, it will try to add the user, failing
-if they are already there.
-
-If the $oldPassU matches matches the login's password, then it will
-replace it with $newPassU.
-
-If $oldPassU is not correct and not 1, will return 0.
-
-If $oldPassU is 1, will force the change irrespective of
-the existing password, adding the user if necessary.
-
-Otherwise returns 1 if succeeds. Returns undef on failure.
-
-=cut
-
 sub passwd {
     my( $this, $user, $newPassU, $oldPassU ) = @_;
     ASSERT( $user ) if DEBUG;
 
     return $this->{apache}->htpasswd( $user, $newPassU, $oldPassU );
 }
-
-=pod
-
----++ encrypt( $user, $passwordU, $fresh ) -> $passwordE
-Implements TWiki::Password
-
-
-Will return an encrypted password. Repeated calls
-to encrypt with the same user/passU will return the same passE.
-
-If $fresh is true, then a new password not based on any pre-existing
-salt will be used. Set this if you are generating a new password.
-
-=cut
 
 sub encrypt {
     my( $this, $user, $passwordU, $fresh ) = @_;
@@ -156,17 +93,6 @@ sub encrypt {
     }
     return $this->{apache}->CryptPasswd( $passwordU, $salt );
 }
-
-=pod
-
----++ ObjectMethod error() -> $string
-Implements TWiki::Password
-
-
-Return any error raised by the last method call, or undef if the last
-method call succeeded.
-
-=cut
 
 sub error {
     my $this = shift;

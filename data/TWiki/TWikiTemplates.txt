@@ -46,22 +46,24 @@ When the "inactive" context is set, then this will expand the "link_inactive" te
 
 The following context identifiers are available:
 | *id* | *context* |
-| changes | in changes script |
-| diff | in diff script |
-| edit | in edit script |
-| view | in view script |
-| search | in search script |
-| preview | in preview script |
-| save | in save script |
-| new_topic | if the topic doesn't already exist |
-| mirror | if this is a mirror |
-| inactive | if active links such as 'edit' and 'attach' should be disabled |
-| rss | if this is an rss skin rendering |
-| header_text | when the header text is being processed in a view |
+| authenticated | a user is authenticated |
 | body_text  | when the body text is being processed in a view |
+| can_login | current environment supports login |
+| changes | in changes script (see TWikiScripts) |
+| diff | in rdiff script (see TWikiScripts) |
+| edit | in edit script (see TWikiScripts) |
 | footer_text | when the footer text is being processed in a view |
-| oops | in oops script |
-| rest | in rest script |
+| header_text | when the header text is being processed in a view |
+| inactive | if active links such as 'edit' and 'attach' should be disabled |
+| mirror | if this is a mirror |
+| new_topic | if the topic doesn't already exist |
+| oops | in oops script (see TWikiScripts) |
+| preview | in preview script (see TWikiScripts) |
+| rss | if this is an rss skin rendering |
+| save | in save script (see TWikiScripts) |
+| search | in search script (see TWikiScripts) |
+| view | in view script (see TWikiScripts) |
+| rest | in rest script (see TWikiScripts) |
 
 ---+++ Finding Templates
 

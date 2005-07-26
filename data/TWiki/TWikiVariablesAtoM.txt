@@ -26,6 +26,13 @@ __Note:__ This topic is included by TWikiVariables
 	* Expands to: =%ATTACHURLPATH%=
 	* Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], FileAttachments
 
+#VarAUTHENTICATED
+---+++ AUTHENTICATED -- conditional detection of logged in status
+	* Syntax: =%<nop>AUTHENTICATED%=
+	* Expands to: =%AUTHENTICATED%=
+	* Syntax: =%<nop>AUTHENTICATED{then="THEN" else="ELSE"}%=
+	* Expand to: %AUTHENTICATED{then="THEN" else="ELSE"}%
+	* Related: TWikiUserAuthentication,[[#VarCANLOGIN][CANLOGIN]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 #VarBASETOPIC
 ---+++ BASETOPIC -- base topic where an INCLUDE started
 	* The name of the topic where a single or nested INCLUDE started - same as =%<nop>TOPIC%= if there is no INCLUDE
@@ -37,6 +44,13 @@ __Note:__ This topic is included by TWikiVariables
 	* The web name where the includes started, e.g. the web of the first topic of nested includes. Same as =%<nop>WEB%= in case there is no include.
 	* Syntax: =%<nop>BASEWEB%=
 	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
+
+---+++ CANLOGIN -- are logins supported in this TWiki?
+   * Syntax: =%<nop>CANLOGIN%
+   * Expand to: %CANLOGIN%
+	* Syntax: =%<nop>CANLOGIN{then="THEN" else="ELSE"}%=
+	* Expand to: %CANLOGIN{then="THEN" else="ELSE"}%
+	* Related: TWikiUserAuthentication,[[#VarAUTHENTICATED][AUTHENTICATED]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarDATE
 ---+++ DATE - signature format date
@@ -173,6 +187,16 @@ will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included
 	* The web name of the topic that includes the current topic - same as =%<nop>WEB%= if there is no INCLUDE.
 	* Syntax: =%<nop>INCLUDINGWEB%=
 	* Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
+
+---+++ LOGIN -- present a full login link
+   * Syntax: =%<nop>LOGIN%
+   * Expand to: %LOGIN%
+	* Related: TWikiUserAuthentication,[[#VarAUTHENTICATED][AUTHENTICATED]],[[#VarCANLOGIN][CANLOGIN]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+
+---+++ LOGOUT -- present a full logout link
+   * Syntax: =%<nop>LOGOUT%
+   * Expand to: %LOGOUT%
+	* Related: TWikiUserAuthentication,[[#VarAUTHENTICATED][AUTHENTICATED]],[[#VarCANLOGIN][CANLOGIN]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarMAINWEB
 ---+++ MAINWEB -- name of Main web

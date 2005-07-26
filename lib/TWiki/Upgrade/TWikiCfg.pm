@@ -157,7 +157,7 @@ sub upgradeConfig {
     if($htpasswdFormatFamily eq "ht(passwd|digest)") {
         print CFG "\$cfg{PasswordManager} = 'TWiki::Users::HtPasswdUser';\n";
     } else {
-        print CFG "\$cfg{PasswordManager} = 'TWiki::Users::NoPasswdUser';\n";
+        print CFG "\$cfg{PasswordManager} = 'none';\n";
     }
     print CFG old2new($logFilename, "$logDir/log%DATE%.txt", "{LogFileName}" );
     print CFG old2new($remoteUserFilename, "$dataDir/remoteusers.txt", "{RemoteUserFileName}" );

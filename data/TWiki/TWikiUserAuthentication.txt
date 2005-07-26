@@ -96,35 +96,11 @@ That is, to set the session variable SKIN equal to "gnu" while clearing the sess
 ?set_session_variable=SKIN=gnu&clear_session_variable=TEST
 </verbatim>
 
----+++ Review: Cookies
+---+++ Cookies and Transparent Session IDs
 
-A common way to pass session information from client to server is by passing per-session cookies (i.e., cookies which are not stored on the user's computer; cookies which immediately expire once the browser exits; cookies which are tied to a particular browser session with a web site). These cookies will simply hold the unique session identifier 
+TWiki normally uses cookies to store session information on a client computer. Cookies are a common way to pass session information from client to server. TWiki cookies simply hold a unique session identifier that is used to look up a database of session information on the TWiki server.
 
-#TransparentCGISessionID
----+++ Alternative: Transparent CGI Session ID
-
-For a number of reasons, it may not be possible to pass cookies to the user. In this case, another method is needed to pass session ID information from script to script. This could be done by passing a special CGI variable (rather than a cookie) that held the session ID in it.
-
-This would require the user to modify every form to either POST or GET the CGI session ID variable to each other script on the site. This could be a major modification, and as new templates are added to TWiki, each would need to be modified as well.
-
-Not only that, but passing the session ID over CGI poses security risks. If a user copies and pastes a URL that has the session ID in it and sends that URL to another person, that person may get access to the other user's session. If sessions are the only form of authentication verification, this could be catastrophic on an E-Commerce site, for example. So because of the security hazards here, it would be convenient to be able to selectively decide whether or not it is desirable to pass session ID information over CGI.
-
-So a non-intrusive transparent configurable interface is provided for this CGI session ID passing. When turned on, TWiki will change every internal URL it sees to one that also passes session information. This is all done on the fly and requires no additional editing by the TWiki administrator. On top of this, it is configurable by way of a standard TWiki variable.
-
-#SessionConditionals
----+++ Is this session authenticated?
-
-Using the TWiki variable %<nop>AUTHENTICATED% it is possible to make pages operate differently after authentication. This may be useful if a login prompt should be supressed (and possibly replaced with a user name) after a user has authenticated. For example:
-
-<verbatim>
-%AUTHENTICATED{then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
-</verbatim>
-
-Which will look like
-
-<blockquote>
-%AUTHENTICATED{then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
-</blockquote>
+For a number of reasons, it may not be possible to use cookies. In this case, TWiki has a fallback mechanism; it will automatically rewrite every internal URL it sees on pages being generated to one that also passes session information.
 
 ---++ TWiki Username vs. Login Username
 

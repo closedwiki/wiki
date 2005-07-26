@@ -1063,6 +1063,8 @@ sub topicExists {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT(defined($topic)) if DEBUG;
 
+    return 0 unless $topic;
+
     my $handler = $this->_getHandler( $web, $topic );
     return $handler->storedDataExists();
 }

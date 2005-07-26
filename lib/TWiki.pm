@@ -974,6 +974,8 @@ sub new {
     $remoteUser ||= $query->remote_user() || $TWiki::cfg{DefaultUserLogin};
 
     my $this = bless( {}, $class );
+    $this->{htmlHeaders} = {};
+    $this->{context} = {};
 
     # create the various sub-objects
     $this->{sandbox} = new TWiki::Sandbox
@@ -988,10 +990,6 @@ sub new {
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
-
-    $this->{htmlHeaders} = {};
-
-    $this->{context} = {};
 
     $this->{users} = new TWiki::Users( $this );
 
@@ -1106,7 +1104,7 @@ sub new {
     # setup the cgi session, from a cookie or the url. this may return
     # the login, but even if it does, plugins will get the chance to override
     # it below.
-    my $login = $this->{client}->load();
+    my $login = $this->{client}->loadSession();
 
     # initialize preferences, first part for site and web level
     $this->{prefs} = new TWiki::Prefs( $this );
@@ -2080,7 +2078,7 @@ Contexts are not just useful for tag expansion; they are also
 relevant when rendering.
 
 Contexts are intended for use mainly by plugins. Core modules can
-use $session->{context}->{$id} to determine if a context is active.
+use $session->inContext( $id ) to determine if a context is active.
 
 =cut
 
@@ -2104,6 +2102,20 @@ sub leaveContext {
     my $res = $this->{context}->{$id};
     delete $this->{context}->{$id};
     return $res;
+}
+
+=pod
+
+---++ ObjectMethod inContext( $id )
+
+Return the value for the given context id
+(see =enterContext= for more information on contexts)
+
+=cut
+
+sub inContext {
+    my( $this, $id ) = @_;
+    return $this->{context}->{$id};
 }
 
 =pod
@@ -2388,17 +2400,7 @@ sub _INCLUDE {
 
     # remove everything before %STARTINCLUDE% and
     # after %STOPINCLUDE%
-    if( $text =~ s/.*?%STARTINCLUDE({([^}]*)})?%//s ) {
-        if( defined $2 ) {
-            my $attr = $2;
-            # if STARTINCLUDE has a parameter, then evaluate it
-            # as an integer to see if we should include this content.
-            $this->_expandAllTags( \$attr, $theTopic, $theWeb );
-            $this->{plugins}->commonTagsHandler(
-                $attr, $theTopic, $theWeb, 1 );
-            $text = '' if( !$attr || $attr !~ /^\d+$/ );
-        }
-    }
+    $text =~ s/.*?%STARTINCLUDE%//s;
     $text =~ s/%STOPINCLUDE%.*//s;
     $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
 

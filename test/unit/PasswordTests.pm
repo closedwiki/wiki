@@ -6,7 +6,6 @@ use base qw(TWikiTestCase);
 
 use TWiki;
 use TWiki::Users::HtPasswdUser;
-use TWiki::Users::NoPasswdUser;
 
 sub new {
 	my $self = shift()->SUPER::new(@_);

@@ -69,28 +69,33 @@ for the given session.
 
 sub makeClient {
     my $twiki = shift;
+    ASSERT($twiki->isa( 'TWiki')) if DEBUG;
 
-    if( $TWiki::cfg{LoginManager} eq 'none' ||
-          !$TWiki::cfg{UseClientSessions} ) {
-        # No login manager; just use default behaviours
-        return new TWiki::Client( $twiki);
-    } else {
-        eval 'use CGI::Session; use CGI::Cookie; use '.
-          $TWiki::cfg{LoginManager};
-        throw Error::Simple( 'Login Manager: '.$@) if $@;
-
-        return $TWiki::cfg{LoginManager}->new( $twiki );
+    if( $TWiki::cfg{UseClientSessions} ) {
+        eval 'use CGI::Session; use CGI::Cookie';
+        throw Error::Simple( $@ ) if $@;
     }
+
+    my $mgr;
+    if( $TWiki::cfg{LoginManager} eq 'none' ) {
+        # No login manager; just use default behaviours
+        $mgr = new TWiki::Client( $twiki );
+    } else {
+        eval 'use '. $TWiki::cfg{LoginManager};
+        throw Error::Simple( $@ ) if $@;
+        $mgr = $TWiki::cfg{LoginManager}->new( $twiki );
+    }
+    return $mgr;
 }
 
 # protected: Construct new client object.
 
 sub new {
-    my ( $class, $session ) = @_;
+    my ( $class, $twiki ) = @_;
     my $this = bless( {}, $class );
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    $this->{twiki} = $session;
-    $this->{canLogin} = 0; # override in subclass constructor
+    ASSERT($twiki->isa( 'TWiki')) if DEBUG;
+    $this->{twiki} = $twiki;
+    $twiki->leaveContext( 'can_login' );
     $this->{cookies} = [];
     map{ $this->{authScripts}{$_} = 1; }
       split( /[\s,]+/, $TWiki::cfg{AuthScripts} );
@@ -101,25 +106,27 @@ sub new {
     TWiki::registerTagHandler('LOGIN', \&_LOGIN);
     #TWiki::registerTagHandler('LOGOUTURL', \&_LOGOUTURL);
     TWiki::registerTagHandler('LOGOUT', \&_LOGOUT);
-    TWiki::registerTagHandler('CANLOGIN', \&_CANLOGIN);
     TWiki::registerTagHandler('SESSION_VARIABLE', \&_SESSION_VARIABLE);
     TWiki::registerTagHandler('AUTHENTICATED', \&_AUTHENTICATED);
+    TWiki::registerTagHandler('CANLOGIN', \&_CANLOGIN);
 
     return $this;
 }
 
 =pod
 
----++ ObjectMethod load()
+---++ ObjectMethod loadSession()
 
 Get the client session data, using the cookie and/or the request URL.
+Set up appropriate session variables in the twiki object and return
+the login name.
 
 =cut
 
-sub load {
+sub loadSession {
     my $this = shift;
 
-    return unless( $TWiki::cfg{UseClientSessions} );
+    return undef unless( $TWiki::cfg{UseClientSessions} );
 
     my $query = $this->{twiki}->{cgiQuery};
 
@@ -142,15 +149,13 @@ sub load {
 
     $this->{haveCookie} = defined($query->raw_cookie( $CGI::Session::NAME ));
 
-    my $cgisession = new CGI::Session( 'driver:File', $query,
+    my $cgisession = CGI::Session->new( 'driver:File', $query,
                                        { Directory=>'/tmp' } );
 
     $this->{cgisession} = $cgisession;
 
     my $sessionId = $cgisession->id();
     $this->{sessionId} = $sessionId;
-
-    my $guest = $TWiki::cfg{DefaultUserLogin};
 
     # Check, and clear bad, session.
     $this->checkSession();
@@ -166,18 +171,21 @@ sub load {
     # or it might have come from Apache).
     $authUser ||= $twiki->{remoteUser};
 
-    # Save the user's information again if they do not appear to be a guest
-    my $sessionIsAuthenticated = ( $authUser ne $guest );
+    # Save the users information again if they do not appear to be a guest
+    my $sessionIsAuthenticated =
+      ( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} );
 
     my $do_logout = defined( $query ) && $query->param( 'logout' );
     if( $do_logout ) {
         $sessionIsAuthenticated = 0;
         $authUser = undef;
     }
+
     if( ( $do_logout || $sessionIsAuthenticated )) {
         $cgisession->param( 'AUTHUSER', $authUser );
         $cgisession->flush();
     }
+
     if( $do_logout ) {
         my $origurl = $query->url() . $query->path_info();
         #my $url = $twiki->getScriptUrl( $web, $topic, '' ).
@@ -190,32 +198,20 @@ sub load {
         # exit 0;
     }
 
-    # SMELL: $TWiki::cfg{UseTransSessionId} is not set in TWiki.cfg,
-    # and it isn't clear what it should be set to even if it is.
-    # $useTransSID sets whether or not to use
-    # transparent CGI session IDs. If cookies are working, turn
-    # this off. Otherwise, set it to whatever the user set in
-    # $useTransSessionId. Still report to the user though that
-    # %USE_TRANS_SESSIONID% is set to $useTransSessionId
-    my $useTransSID = (defined($query) &&
-                         $query->cookie( $CGI::Session::NAME ))
-      ? 0 : $TWiki::cfg{UseTransSessionId};
-
     # Save our state to member variables, because we'll need them later.
     $this->{authUser} = $authUser;
-    $this->{sessionIsAuthenticated} = $sessionIsAuthenticated;
-    $this->{useTransSID} = $useTransSID;
+    if( $sessionIsAuthenticated ) {
+        $twiki->enterContext( 'authenticated' );
+    } else {
+        $twiki->leaveContext( 'authenticated' );
+    }
+
+    # Use transparent session IDs if cookies don't seem to be working
+    $this->{useTransSID} =
+      ( !defined($query) || !$query->cookie( $CGI::Session::NAME ));
 
     $twiki->{SESSION_TAGS}{SESSIONID} = ( $sessionId || '' );
     $twiki->{SESSION_TAGS}{SESSIONVAR} = ( $CGI::Session::NAME || '' );
-    #$twiki->{SESSION_TAGS}{USE_TRANS_SESSIONID} = ( $useTransSID || '');
-
-    # SMELL: are these really necessary? Put them back if they are
-    # justified/documented
-    #$twiki->{SESSION_TAGS}{STICKSKIN} =
-    #( defined($query) && $query->param( 'stickskin' ) ) || '';
-    #$twiki->{SESSION_TAGS}{STICKSKINVAR} = 'stickskin';
-    #$twiki->{SESSION_TAGS}{STICKSKINOFFVALUE} = 'default';
 
     return $authUser;
 }
@@ -234,7 +230,7 @@ sub checkAccess {
 
     my $this = shift;
 
-    unless( $this->{sessionIsAuthenticated} ) {
+    unless( $this->{twiki}->inContext( 'authenticated' )) {
         my $script = $ENV{'SCRIPT_NAME'} || $ENV{'SCRIPT_FILENAME'};
         $script =~ s@^.*/([^/]+)@$1@g;
 
@@ -243,7 +239,7 @@ sub checkAccess {
             my $web = $this->{twiki}->{webName};
             throw TWiki::AccessControlException(
                 $script, $this->{twiki}->{user}, $web, $topic,
-                'authorization required' );
+                'authentication required' );
         }
     }
 }
@@ -257,9 +253,10 @@ to. Flush the user's session (if any) to disk.
 =cut
 
 sub finish {
-    return unless( $TWiki::cfg{UseClientSessions} );
     my $this = shift;
+
     my $cgisession = $this->{cgisession};
+    return unless $cgisession;
 
     # this predicate used to be
     # $this->{sessionIsAuthenticated} && defined($cgisession),
@@ -293,18 +290,22 @@ message.
 =cut
 
 sub userLoggedIn {
-    my ( $this, $authUser, $wikiName ) = @_;
+    my( $this, $authUser, $wikiName ) = @_;
 
     my $cgisession = $this->{cgisession};
-    my $sessionIsAuthenticated = defined($authUser) ? 1 : 0;
+    return 0 unless $cgisession;
 
-    if( $TWiki::cfg{DefaultUserLogin} ne $authUser ) {
+    if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
         $cgisession->param( 'AUTHUSER', $authUser );
         $cgisession->flush();
+        $this->{twiki}->enterContext( 'authenticated' );
+    } else {
+        $cgisession->param( 'AUTHUSER', '' );
+        $cgisession->flush();
+        $this->{twiki}->leaveContext( 'authenticated' );
     }
 
     $this->{authUser} = $authUser;
-    $this->{sessionIsAuthenticated} = $sessionIsAuthenticated;
 }
 
 =pod
@@ -407,15 +408,16 @@ Modify a HTTP header
 =cut
 
 sub modifyHeader {
-    return unless( $TWiki::cfg{UseClientSessions} );
-
     my( $this, $hopts ) = @_;
+
+    my $cgisession = $this->{cgisession};
+    return unless $cgisession;
 
     my $query = $this->{twiki}->{cgiQuery};
 
-    my $c = new CGI::Cookie( -name => $CGI::Session::NAME,
-                             -value => $this->{cgisession}->id,
-                             -path => '/' );
+    my $c = CGI::Cookie->new( -name => $CGI::Session::NAME,
+                              -value => $cgisession->id,
+                              -path => '/' );
 
     my @cs = @{$this->{cookies}};
     push @cs, $c;
@@ -425,20 +427,24 @@ sub modifyHeader {
 =pod
 
 ---++ ObjectMethod redirectCgiQuery( $url )
-Generate an HTTP redirect on STDOUT. Return 1 if the redirect was generated,
-0 otherwise.
+Generate an HTTP redirect on STDOUT.
    * =$url= - target of the redirection.
 
 =cut
 
 sub redirectCgiQuery {
-    return 0 unless $TWiki::cfg{UseClientSessions};
 
     my( $this, $query, $url ) = @_;
+    my $cgisession = $this->{cgisession};
+
+    unless( $cgisession ) {
+        # no session info to add
+        print $query->redirect( $url );
+        return;
+    }
 
     my $sessionId = $this->{sessionId};
     my $useTransSID = $this->{useTransSID};
-    my $cgisession = $this->{cgisession};
     my @urlparts;
 
     if( $useTransSID && $url !~ m/\?$CGI::Session::NAME=/ ) {
@@ -505,14 +511,12 @@ sub redirectCgiQuery {
     #
     # So this is just a big fat precaution, just like the rest of this
     # whole handler.
-    my $cookie = new CGI::Cookie( -name => $CGI::Session::NAME,
-                                  -value => $cgisession->id,
-                                  -path => '/' );
+    my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
+                                   -value => $cgisession->id,
+                                   -path => '/' );
     my @cs = @{$this->{cookies}};
     push @cs, $cookie;
     print $query->redirect( -url => $url, -cookie => \@cs );
-
-    return 1;
 }
 
 =pod
@@ -525,6 +529,7 @@ Get the value of a session variable.
 sub getSessionValue {
     my( $this, $key ) = @_;
     my $cgisession = $this->{cgisession};
+    return undef unless $cgisession;
 
     return $cgisession->param( $key );
 }
@@ -542,8 +547,9 @@ sub setSessionValue {
     my $cgisession = $this->{cgisession};
 
     # We do not allow setting of AUTHUSER.
-    if(( $key ne 'AUTHUSER' ) &&
-         defined( $cgisession->param( $key, $value ))) {
+    if( $cgisession &&
+          $key ne 'AUTHUSER' &&
+            defined( $cgisession->param( $key, $value ))) {
         return 1;
     }
 
@@ -563,8 +569,9 @@ sub clearSessionValue {
     my $cgisession = $this->{cgisession};
 
     # We do not allow clearing of AUTHUSER.
-    if( ( $key ne 'AUTHUSER' ) && 
-          defined( $cgisession->param( $key ))) {
+    if( $cgisession &&
+          $key ne 'AUTHUSER' &&
+            defined( $cgisession->param( $key ))) {
         $cgisession->clear( [ $_[1] ] );
 
         return 1;
@@ -575,23 +582,23 @@ sub clearSessionValue {
 
 =pod
 
----++ ObjectMethod authenticate()
+---++ ObjectMethod authenticationUrl()
 
 *VIRTUAL METHOD* implemented by subclasses
 
-Test to see if the current session is authenticated or not. If not,
-generate a redirect to an appropriate login URL.
+Triggered by an access control violation, this method tests
+to see if the current session is authenticated or not. If not,
+it returns a url suitable for redirection to so that the user
+can log in.
 
 If the user has an existing authenticated session, the function simply drops
-though and returns 0. If session is not authenticated it
-forces redirection to the "login" script, passing it the original URL,
-and returns 1;
+though and returns undef. If session is not authenticated it returns a URL for
+the login method.
 
 =cut
 
-sub authenticate {
-    # Default behaviour is no login
-    return 0;
+sub authenticationUrl {
+    return undef;
 }
 
 =pod
@@ -668,7 +675,7 @@ sub checkSession {
 
 =pod
 
----++ ObjectMethod login( $query, $session )
+---++ ObjectMethod login( $query, $twiki )
 
 Handler called from the "login" script. This script is automatically
 redirected to if there is no existing session cookie.
@@ -678,11 +685,17 @@ validates these and if authentic, redirects to the original
 script. If there is no username in the query or the username/password is
 invalid (validate returns non-zero) then it prompts again.
 
+The password handler is expected to return a perl true value if the password
+is valid. This return value is stored in a session variable called
+VALIDATION. This is so that password handlers can return extra information
+about the user, such as a list of TWiki groups stored in a separate
+database, that can then be displayed by referring to
+%<nop>SESSION_VARIABLE{"VALIDATION"}%
+
 =cut
 
 sub login {
     my( $this, $query, $twikiSession ) = @_;
-    my $cgisession = $this->{cgisession};
     my $twiki = $this->{twiki};
 
     my $origurl = $query->param( 'origurl' );
@@ -697,8 +710,8 @@ sub login {
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
 
-    my $currUser = $cgisession->param( 'AUTHUSER' );
-    if( $currUser ) {
+    my $cgisession = $this->{cgisession};
+    if( $cgisession && $cgisession->param( 'AUTHUSER' )) {
         $banner = $twiki->{templates}->expandTemplate( 'LOGGED_IN_BANNER' );
         $note = $twiki->{templates}->expandTemplate( 'NEW_USER_NOTE' );
     }
@@ -706,9 +719,10 @@ sub login {
     if( $loginName ) {
         my $passwordHandler = $twiki->{users}->{passwords};
         my $validation = $passwordHandler->checkPassword( $loginName, $loginPass );
+
         if( $validation ) {
             $this->userLoggedIn( $loginName );
-            $cgisession->param( 'VALIDATION', $validation );
+            $cgisession->param( 'VALIDATION', $validation ) if $cgisession;
             if( !$origurl || $origurl eq $query->url() ) {
                 $origurl = $twiki->getScriptUrl( $web, $topic, 'view' );
             }
@@ -732,18 +746,13 @@ sub login {
     print $tmpl;
 }
 
-sub _CANLOGIN {
-    return shift->{client}->{canLogin};
-}
-
 sub _LOGIN {
-    #my( $session, $params, $topic, $web ) = @_;
+    #my( $twiki, $params, $topic, $web ) = @_;
     my $twiki = shift;
     my $this = $twiki->{client};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
-    my $sessionIsAuthenticated = $this->{sessionIsAuthenticated};
 
-    return '' if($sessionIsAuthenticated);
+    return '' if $twiki->inContext( 'authenticated' );
 
     my $url = $this->loginUrl();
     if( $url ) {
@@ -770,7 +779,7 @@ sub _LOGOUT {
     my $this = $twiki->{client};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
 
-    return '' unless( $this->{sessionIsAuthenticated} );
+    return '' unless $twiki->inContext( 'authenticated' );
 
     my $url = _LOGOUTURL( @_ );
     if( $url ) {
@@ -781,11 +790,22 @@ sub _LOGOUT {
 }
 
 sub _AUTHENTICATED {
-    my( $session, $params ) = @_;
-    my $this = $session->{client};
+    my( $twiki, $params ) = @_;
+    my $this = $twiki->{client};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
 
-    if( $this->{sessionIsAuthenticated} ) {
+    if( $twiki->inContext( 'authenticated' )) {
+        return $params->{then} || 1;
+    } else {
+        return $params->{else} || 0;
+    }
+}
+
+sub _CANLOGIN {
+    my( $twiki, $params ) = @_;
+    my $this = $twiki->{client};
+    ASSERT($this->isa('TWiki::Client')) if DEBUG;
+    if( $twiki->inContext( 'can_login' )) {
         return $params->{then} || 1;
     } else {
         return $params->{else} || 0;
@@ -793,8 +813,8 @@ sub _AUTHENTICATED {
 }
 
 sub _SESSION_VARIABLE {
-    my( $session, $params ) = @_;
-    my $this = $session->{client};
+    my( $twiki, $params ) = @_;
+    my $this = $twiki->{client};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
     my $name = $params->{_DEFAULT};
 
@@ -810,15 +830,15 @@ sub _SESSION_VARIABLE {
 }
 
 sub _LOGINURL {
-    my( $session, $params ) = @_;
-    my $this = $session->{client};
+    my( $twiki, $params ) = @_;
+    my $this = $twiki->{client};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
     return $this->loginUrl();
 }
 
 sub _LOGINURLPATH {
-    my( $session, $params ) = @_;
-    my $this = $session->{client};
+    my( $twiki, $params ) = @_;
+    my $this = $twiki->{client};
     ASSERT($this->isa('TWiki::Client')) if DEBUG;
     return $this->loginUrlPath();
 }
