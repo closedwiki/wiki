@@ -1,5 +1,0 @@
-%META:TOPICINFO{author="TWikiContributor" date="1121838017" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="ClientSession"}%
-=TWiki::Client::NoLogin= is a login manager that you can specify in the security setup section of [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. It instructions TWiki not to supply login/logout functionality to users. It's the default login manager, so if you want to authenticate users then you should consider TemplateLogin (or maybe ApacheLogin).
-
-See also ClientSession and TWikiUserAuthentication.

@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121838008" format="1.1" version="$Rev$"}%
-%META:TOPICPARENT{name="NoLogin"}%
+%META:TOPICPARENT{name="TWikiUserAuthentication"}%
 =TWiki::Client::TemplateLogin= is a login manager that you can specify in the security setup section of [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. It provides users with a template-based form to enter usernames and passwords, and works with the PasswordManager that you specify to verify those passwords.
 
-See also ClientSession and TWikiUserAuthentication.
+See also TWikiUserAuthentication.
 
