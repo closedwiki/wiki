@@ -816,7 +816,7 @@ sub _noHandlersSave {
         # write log entry
         my $extra = '';
         $extra   .= 'minor' if( $options->{minor} );
-        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra );
+        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra, $user );
     }
 }
 
@@ -880,7 +880,7 @@ sub repRev {
           $revuser->login().
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
-        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra );
+        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra, $user );
     }
 }
 
