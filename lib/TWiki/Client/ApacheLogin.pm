@@ -41,7 +41,7 @@ use Assert;
 sub new {
     my( $class, $twiki ) = @_;
     my $this = bless( $class->SUPER::new($twiki), $class );
-    $session->enterContext( 'can_login', 1 );
+    $twiki->enterContext( 'can_login', 1 );
     return $this;
 }
 
