@@ -1,6 +1,0 @@
-./data/TWiki/SessionPlugin.txt
-./lib/TWiki/Plugins/SessionPlugin/build.pl
-./lib/TWiki/Plugins/SessionPlugin/test.zip
-./lib/TWiki/Plugins/SessionPlugin.pm
-./SessionPlugin_installer.pl
-./bin/logon

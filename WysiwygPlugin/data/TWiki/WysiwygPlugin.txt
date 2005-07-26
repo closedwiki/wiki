@@ -32,7 +32,7 @@ The package includes the following pieces:
 The Kupu editor is customised for use with TWiki. Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
 Some functions require a bit more explanation:
    * "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
-   * "Insert a TWiki Tag" will give you a menu of TWiki tags that can be inserted. Any of these tags can be edited after they have been placed in the text, for example to add parameters.
+   * "Insert a TWiki Tag" will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
    * "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
 
 ---++++ Kupu Notes
@@ -116,7 +116,7 @@ my $tml = $html2tml->convert( $html );
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="" />
-	* List of TWiki tags that will be available to the Kupu editor. This has to be a valid HTML &lt;select&gt; with the id =twiki-var-select=.
+	* List of TWiki variables that will be available to the Kupu editor. This has to be a valid HTML &lt;select&gt; with the id =twiki-var-select=.
 		* Set TAGS =
 		<select id='twiki-var-select'>
 		<option value="TOPIC">Current Topic</option>
