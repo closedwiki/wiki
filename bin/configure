@@ -1,4 +1,4 @@
-#!/usr/bin/perl -wT
+#!/usr/bin/perl -w
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
@@ -78,7 +78,7 @@ BEGIN {
     $TRUE = 1;
     $FALSE = 0;
     # Set default current working directory
-    if( $ENV{"SCRIPT_FILENAME"} && $ENV{"SCRIPT_FILENAME"} =~ /^(.+)\/[^\/]+$/ ) {
+    if( $ENV{SCRIPT_FILENAME} && $ENV{SCRIPT_FILENAME} =~ /^(.+)\/[^\/]+$/ ) {
         chdir $1;
     }
     # Get Perl version
@@ -151,6 +151,12 @@ my $query = new CGI;
 my $url = $query->url();
 my $action = $query->param('action') || '';
 my $nextid = 0;
+
+sub UNTAINTED($) {
+    local(@_, $@, $^W) = @_;
+    my $x;
+    return ( eval { $x = $_[0], kill 0; 1 } );
+}
 
 ########################################################################
 ########################## FORMATTING ##################################
@@ -262,8 +268,11 @@ sub _checkGnuProgram {
     if( $TWiki::cfg{OS} eq 'UNIX' ||
           $TWiki::cfg{OS} eq 'WINDOWS' && $perltype eq 'Cygwin' ) {
         $prog =~ s/^\s*(\S+)\s.*$/$1/;
-        $prog =~ /^(.*)$/; $prog = $1;
-        my $diffOut = `$prog --version 2>&1` || "";
+        $prog =~ /^(.*)$/;
+        $prog = $1;
+        # check for taintedness
+        die "$prog is tainted" unless eval { $n = $prog, kill 0; 1 };
+        my $diffOut = ( `$prog --version 2>&1` || "");
         my $notFound = ( $? == -1 );
         if( $notFound ) {
             $n = WARN("'$prog' program was not found on the",
@@ -1289,12 +1298,14 @@ sub presentReadOnlyInfo {
     $block = '';
 
     # Make %ENV safer for CGI (should reflect TWiki.pm)
-    my $originalPath = $ENV{'PATH'} || '';
+    my $originalPath = $ENV{PATH} || '';
     if( $TWiki::cfg{SafeEnvPath} ) {
-        $ENV{'PATH'} = $TWiki::cfg{SafeEnvPath};
+        # SMELL: this untaint probably isn't needed
+        my $ut = $TWiki::cfg{SafeEnvPath};
+        $ut =~ /^(.*)$/;
+        $ENV{PATH} = $1;
     }
     delete @ENV{ qw( IFS CDPATH ENV BASH_ENV ) };
-
     my $perlverMsg = $perlver;        # Default version message
 
     # Load Config module - used here and elsewhere
@@ -1355,17 +1366,17 @@ sub presentReadOnlyInfo {
     # indicates they should.
     my $exeSuffix='';
     if ( $Config::Config{'_exe'} and ($TWiki::cfg{OS} eq 'WINDOWS' and $perltype ne 'Cygwin') ) { 
-        if ( ! $ENV{'INTERIX_ROOT'} ) { #this is set is we are using UnixServicesForWindows (or INTERIX funnily enough) and they don't use .exe either
+        if ( ! $ENV{INTERIX_ROOT} ) { #this is set is we are using UnixServicesForWindows (or INTERIX funnily enough) and they don't use .exe either
             $exeSuffix = $Config::Config{'_exe'};
         }
     }
 
     # Detect whether mod_perl was loaded into Apache
-    my $modPerlLoaded = ( exists $ENV{'SERVER_SOFTWARE'} && 
-                          ( $ENV{'SERVER_SOFTWARE'} =~ /mod_perl/ ));
+    my $modPerlLoaded = ( exists $ENV{SERVER_SOFTWARE} && 
+                          ( $ENV{SERVER_SOFTWARE} =~ /mod_perl/ ));
     # Detect whether we are actually running under mod_perl
     # - test for MOD_PERL alone, which is enough.
-    my $usingModPerl = ( exists $ENV{'MOD_PERL'} );
+    my $usingModPerl = ( exists $ENV{MOD_PERL} );
     my $modPerlVersion;
 
     # Get the version of mod_perl if it's being used
@@ -1559,7 +1570,7 @@ is provided here for comparison purposes only.
 HERE
                   ));
 
-    my $currentPath = $ENV{'PATH'} || '';     # As re-set earlier in this routine
+    my $currentPath = $ENV{PATH} || '';     # As re-set earlier in this routine
     $block .= _setting("Current PATH", $currentPath,
               NOTE(<<HERE
 This is the actual PATH setting that will be used by Perl to run
@@ -1580,7 +1591,7 @@ HERE
         # ActiveState or SiePerl/other
         # FIXME: Advice in this section should be reviewed and tested by people
         # using ActivePerl
-        my $perl5shell = $ENV{'PERL5SHELL'} || '';
+        my $perl5shell = $ENV{PERL5SHELL} || '';
         $n = $perl5shell.
           NOTE(<<HERE
 This environment variable is used by ActiveState and other Win32 Perls to run
