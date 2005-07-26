@@ -262,7 +262,8 @@ sub _checkGnuProgram {
     if( $TWiki::cfg{OS} eq 'UNIX' ||
           $TWiki::cfg{OS} eq 'WINDOWS' && $perltype eq 'Cygwin' ) {
         $prog =~ s/^\s*(\S+)\s.*$/$1/;
-        my $diffOut = `$1 --version 2>&1` || "";
+        $prog =~ /^(.*)$/; $prog = $1;
+        my $diffOut = `$prog --version 2>&1` || "";
         my $notFound = ( $? == -1 );
         if( $notFound ) {
             $n = WARN("'$prog' program was not found on the",
@@ -290,6 +291,7 @@ sub _checkRCSProgram {
     my $err = '';
     my $prog = $TWiki::cfg{RCS}{$key} || '';
     $prog =~ s/^\s*(\S+)\s.*$/$1/;
+    $prog =~ /^(.*)$/; $prog = $1;
     if( !$prog ) {
         $err .= $key.' is not set';
     } else {
