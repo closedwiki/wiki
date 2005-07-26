@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -wT
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
@@ -1155,8 +1155,8 @@ HERE
     foreach $param ( $query->param ) {
         next unless $param =~ /^^TYPEOF:(.*)/;
         my $type = $query->param( $param );
-        $param =~ s/^TYPEOF://;
-        my $basevar = $param;
+        $param =~ s/^TYPEOF:(.*)$/$1/;
+        my $basevar = $1;
         $basevar =~ s/_/}{/g;
         my $var = '$TWiki::cfg{'.$basevar.'}';
         my $val = $query->param( $param );
@@ -1195,8 +1195,8 @@ sub calculateChanges {
     foreach $param ( $query->param ) {
         next unless $param =~ /^^TYPEOF:(.*)/;
         my $type = $query->param( $param );
-        $param =~ s/^TYPEOF://;
-        my $basevar = $param;
+        $param =~ s/^TYPEOF:(.*$)/$1/;
+        my $basevar = $1;
         $basevar =~ s/_/}{/g;
         my $var = '$TWiki::cfg{'.$basevar.'}';
         my $val = $query->param( $param );
