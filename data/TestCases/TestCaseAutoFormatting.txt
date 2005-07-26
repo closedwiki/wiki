@@ -178,24 +178,37 @@ class CatAnimal {
 </td></tr>
 <tr><td> Ordered List</td><td>
 <!-- expected OL -->
-<ol><li> Sushi</li></ol><p />
-<ol><li type="A"> Sushi</li></ol><p />
-<ol><li type="i"> Sushi</li></ol><p />
-<ol><li> Sushi</li>
+<ol><li>Sushi</li><li>wet fish</li></ol><p />
+<ol><li type="A"> Sushi</li><li type="A">more fish</li></ol><p />
+<ol><li type="i"> Sushi</li><li type="i">what the?</li></ol><p />
+<ol><li>Sushi</li>
 <li type="A"> Sushi</li>
 <li type="i"> Sushi</li></ol>
+<ol><li>Sushi</li>
+<li>another</li></ol>
+<ol><li type="a">Sushi</li>
+<li type="a">Fish</li></ol>
 <!-- /expected -->
 </td><td>
 <!-- actual -->
 	1. Sushi
+   2. wet fish
 
 	A. Sushi
+   B. more fish
 
 	i. Sushi
+   i. what the?
 
 	1. Sushi
-	A. Sushi
+	B. Sushi
 	i. Sushi
+
+   1 Sushi
+   2 another
+
+	a. Sushi
+	b. Fish
 <!-- /actual -->
 </td></tr>
 
