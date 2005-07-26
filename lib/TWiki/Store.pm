@@ -244,7 +244,7 @@ sub moveAttachment {
 
     $this->{session}->writeLog( 'move', $oldWeb.'.'.$oldTopic,
                                 'Attachment '.$attachment.' moved to '.
-                                  $newWeb.'.'.$newTopic );
+                                  $newWeb.'.'.$newTopic, $user );
 }
 
 =pod
@@ -347,7 +347,7 @@ sub moveTopic {
     if( $TWiki::cfg{Log}{rename} ) {
         my $old = $oldWeb.'.'.$oldTopic;
         my $new = $newWeb.'.'.$newTopic;
-        $this->{session}->writeLog( 'rename', $old, "moved to $new" );
+        $this->{session}->writeLog( 'rename', $old, "moved to $new", $user );
     }
 }
 
@@ -386,7 +386,7 @@ sub moveWeb {
     if( $TWiki::cfg{Log}{rename} ) {
         my $old = $oldWeb;
         my $new = $newWeb;
-        $this->{session}->writeLog( 'renameweb', $old, 'moved to '.$new );
+        $this->{session}->writeLog( 'renameweb', $old, 'moved to '.$new, $user );
     }
 }
 
@@ -749,7 +749,7 @@ sub saveAttachment {
     };
 
     unless( $opts->{dontlog} ) {
-        $this->{session}->writeLog( $action, $web.'.'.$topic, $attachment );
+        $this->{session}->writeLog( $action, $web.'.'.$topic, $attachment, $user );
     }
 }
 
@@ -924,7 +924,7 @@ sub delRev {
 
     # write log entry
     $this->{session}->writeLog( 'cmd', $web.'.'.$topic, 'delRev by '.
-                                  $user->login().": $rev" );
+                                  $user->login().": $rev", $user );
 }
 
 =pod
