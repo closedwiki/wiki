@@ -28,14 +28,18 @@
 
 ---+ package TWiki::Client
 
-Factory for client objects (session managers) and also
-base class for these same objects. The default behaviour
-is no logins.
+The package is also a Factory for login managers and also the base class
+for all login managers.
 
-If you are building a new login manager, then you should write
-a new subclass of this class, implementing the methods marked
-as *VIRTUAL*. There are already examples in the =lib/TWiki/Client=
-directory.
+On it's own, an object of this class is used when you specify 'none' in
+the security setup section of
+[[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. When it is used,
+logins are not supported. If you want to authenticate users then you should
+consider TemplateLogin or ApacheLogin, which are subclasses of this class.
+
+If you are building a new login manager, then you should write a new subclass
+of this class, implementing the methods marked as *VIRTUAL*. There are already
+examples in the =lib/TWiki/Client= directory.
 
 =cut
 

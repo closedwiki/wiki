@@ -24,7 +24,8 @@
 =pod
 
 ---+ package TWiki::Client::TemplateLogin
-Redirect to an template-based authentication page.
+
+This is a login manager that you can specify in the security setup section of [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. It provides users with a template-based form to enter usernames and passwords, and works with the PasswordManager that you specify to verify those passwords.
 
 Subclass of TWiki::Client; see that class for documentation of the
 methods of this class.

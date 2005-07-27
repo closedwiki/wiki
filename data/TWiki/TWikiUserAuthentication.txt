@@ -31,7 +31,7 @@ If a user tries to access protected content (either views a topic with access re
 Template Login uses a TWiki template to ask for a username and password in a web page, and process them using whatever Password Manager you choose (also in the security section of the configuration page).
 
 ---+++ Enabling Template Login
-   1 Use the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface to enable the =TemplateLogin= login manager (on the Security Settings pane).
+   1 Use the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%#LoginManager][configure]] interface to enable the =TemplateLogin= login manager (on the Security Settings pane).
    1 Select the appropriate password manager for your system, or provide your own.
 
 ---++ Apache Login
@@ -46,6 +46,7 @@ The same private =.htpasswd= file used in TWiki Template Login can be used to au
 
 ---+++ Enabling Apache Login using =mod_auth=
 _You can also use any other Apache authentication module that sets REMOTE_USER_
+   1 Use [[%SCRIPTURL%/configure%SCRIPTSUFFIX%#LoginManager][configure]] to select the =ApacheLogin= login manager.
    1 Use [[%SCRIPTURL%/configure%SCRIPTSUFFIX%#PasswordManager][configure]] to set up TWiki to create the right kind of =.htpasswd= entries.
 	1 Create a =.htaccess= file in the =twiki/bin= directory.<br />%H% There is an template for this file in =twiki/bin/.htaccess.txt= that you can copy and change. The comments in the file explain what need to be done.<br />%H% If you got it right, the browser should now ask for login name and password when you click on the <u>Edit</u>. If =.htaccess= does not have the desired effect, you may need to "AllowOverride All" for the directory in =httpd.conf= (if you have root access; otherwise, email web server support)
     <br /> %X% At this time TWikiAccessControls do not control access to files in the =pub= area, unless they are only accessed through the =viewfile= script. If your =pub= directory is set up to allow open access you may want to add =.htaccess= files in there as well to restrict access 
