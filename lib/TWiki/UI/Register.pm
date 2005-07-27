@@ -66,7 +66,8 @@ sub register_cgi {
 
     my $tempUserDir = $TWiki::cfg{RegistrationApprovals};
     # SMELL hacked name, and stores in binary format!
-    my $needVerification = 1; # NB. No test harness for needVerification = 0.
+    my $needVerification = $TWiki::cfg{Register}{NeedVerification};    
+	# NB. No test harness for needVerification = 0.
     my $needApproval = 0;
 
     # Register -> Verify -> Approve -> Finish
@@ -76,7 +77,7 @@ sub register_cgi {
     my $action = $session->{cgiQuery}->param('action');
 
     if ($action eq 'register') {
-      registerAndNext($session, $tempUserDir, $needVerification);
+      registerAndNext($session, $tempUserDir);
     }
     elsif ($action eq 'verify') {
         verifyEmailAddress( $session, $tempUserDir );
@@ -93,7 +94,7 @@ sub register_cgi {
         finish($session, $tempUserDir );
     }
     else {
-      registerAndNext($session, $tempUserDir, $needVerification);
+      registerAndNext($session, $tempUserDir);
     }
 
     # Output of register:
@@ -139,7 +140,6 @@ sub passwd_cgi {
 
 # TODO: S&R {form} with {ordered}
 # TODO: S&R row, data => user
-# TODO: Move parts to User.pm
 # TODO: Replace LoginName with UserName (NB. templates/topics)
 # TODO: During normal registration, a Plugin callback to set cookies,
 #       TWiki::Plugins::registrationHandler( $data{webName}, $data{WikiName},
@@ -147,14 +147,12 @@ sub passwd_cgi {
 #       Is called. But this has little to do with registration - it is an authentication rememberer.
 #       In fact, isn't my bulkregistration handler just a reg handler?
 # TODO: registernotifybulk.tmpl 
-# CAVEAT: you must not delete a requiredField - there is no check for this but it will break things like TWikiUsers
 # TODO: make it copy the fields it wants before handing off to the RegsitrationPlugin - that way it won't matter if
 #       that deletes such keys.
 # ISSUE: TWiki::User::addUserToTWikiUsersTopic does not replace the line if you now supply a login name when one 
 #       was not needed before.
 # TODO: write a plugin that intercepts the change of metadata on a topic and invokes functionality as described on 
 #       RegistrationAsPlugin.
-# TODO: more work to align the checks made by the two register/bulkRegister systems 
 
 # SMELL legacy format - bulletpoint. I'd hardcode it except there is a proposal to change it.
 my $b = "\t*";
@@ -336,7 +334,7 @@ sub _makeFormFieldOrderMatch {
 
 =pod
 
----++ StaticMethod registerAndNext($session, $tempUserDir, $needVerification) 
+---++ StaticMethod registerAndNext($session, $tempUserDir) 
 
 This is called when action = register or action = ""
 
@@ -347,9 +345,9 @@ Hopefully we will get workflow integrated and rewrite this to be table driven
 =cut
 
 sub registerAndNext {
-  my ($session, $tempUserDir, $needVerification) = @_;
+  my ($session, $tempUserDir) = @_;
   register( $session );
-  if ($needVerification) {
+  if ($TWiki::cfg{Register}{NeedVerification}) {
      _requireVerification($session, $tempUserDir);
   } else {
      finish($session);
@@ -687,11 +685,17 @@ sub finish {
 
     my $topic = $session->{topicName};
     my $web = $session->{webName};
+    my $query = $session->{cgiQuery};
+	my $code = $query->param('code');
 
-    my $code = $session->{cgiQuery}->param('code');
-
-    my $data = _reloadUserContext( $code, $tempUserDir );
-    _deleteUserContext($code, $tempUserDir );
+	my $data;
+	if ($TWiki::cfg{Register}{NeedVerification}) {
+		$data = _reloadUserContext( $code, $tempUserDir );
+		_deleteUserContext( $code, $tempUserDir );
+	} else {
+	    $data = _getDataFromQuery( $query, $query->param() );
+	    $data->{webName} = $web;
+	}
 
     if (! exists $data->{WikiName}) {
         throw Error::Simple( 'No verifyEmailAddress - no WikiName after reload');
