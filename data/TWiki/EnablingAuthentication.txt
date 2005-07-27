@@ -22,3 +22,5 @@ These instructions are for =mod_auth= (Basic Authentication) on the Apache webse
 	1 *Edit the %MAINWEB%.TWikiAdminGroup topic in the TWiki:%MAINWEB% web to include users with system administrator status.*
     <br /> %X% *This is a very important step*, as users in this group can access _all_ topics, independent of TWiki access controls.
 TWikiAccessControl has more information on setting up access controls.
+
+__RelatedTopics:__ AdminDocumentationCategory

@@ -1,6 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
-
 ---+ Admin tools
 Manage whole <b><nop>%WIKITOOLNAME%</b> site from one screen.
 

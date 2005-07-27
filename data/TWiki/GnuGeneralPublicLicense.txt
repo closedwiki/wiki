@@ -13,9 +13,9 @@ TWiki is distributed under the GNU General Public License, see TWikiDownload. GP
 	* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 	* See the GNU General Public License for more details, published at http://www.gnu.org/copyleft/gpl.html
 
-Please note that TWiki is not distributed under the LGPL (Lesser General Public Licence), which implies TWiki can only be used with software that is licensed under conditions compliant with the GPL. Embedding in proprietary software requires an alternative license. Contact the author for details.
+Please note that TWiki is not distributed under the LGPL (Lesser General Public Licence), which implies TWiki can only be used with software that is licensed under conditions compliant with the GPL. Embedding in proprietary software requires an alternative license. 
 
 __Back to:__ TWikiFAQ
 
-
+__Related Topics:__ UserDocumentationCategory
 

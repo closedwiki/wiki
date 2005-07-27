@@ -59,5 +59,6 @@ Whenever you write ==ExternalSite:Page== it will be linked automatically to the 
 
 </noautolink>
 
-__Note:__ This topic is powered by the InterwikiPlugin.
+__Note:__ This topic configures the InterwikiPlugin.
 
+__Related Topics:__ TWikiPlugins, UserDocumentationCategory, AdminDocumentationCategory

@@ -9,7 +9,7 @@ _Each topic can have one or more files of any type attached to it by using the A
 
 ---++ What Are Attachments Good For?
 
-File Attachments can be used to create powerful customized groupware solutions, like file sharing and document management systems, and quick Web page authoring.
+File Attachments can be used to archive data, or to create powerful customized groupware solutions, like file sharing and document management systems, and quick Web page authoring.
 
 ---+++ Document Management System
 
@@ -165,6 +165,8 @@ _Help text ..._
 	* Unlike topics, attachments are not locked during editing. As a workaround, you can change the comment to indicate an attachment file is being worked on - the comment on the specific version isn't lost, it's there when you list all versions of the attachment.
 
 %STOPINCLUDE%
+
+__Related Topics:__ UserDocumentationCategory
 
 %META:FILEATTACHMENT{name="Sample.txt" attr="" comment="Just a sample" date="964294620" path="C:\DATA\Sample.txt" size="30" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="Smile.gif" attr="" comment="Smiley face" date="964294680" path="C:\DATA\Smile.gif" size="94" user="TWikiContributor" version=""}%

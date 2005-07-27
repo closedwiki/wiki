@@ -41,4 +41,4 @@ a.toggleIcon { background:url(%ICONPATH{"toggleclose"}%) no-repeat; }
 This will get the path of the file =toggleclose.gif=.
 
 
-__Related topics:__ %TWIKIWEB%.TWikiDocGraphics, %TWIKIWEB%.TWikiDocGraphicsPattern, %TWIKIWEB%.FileAttachment
+__Related topics:__ TWikiSkins, %TWIKIWEB%.TWikiDocGraphics, %TWIKIWEB%.TWikiDocGraphicsPattern, %TWIKIWEB%.FileAttachment, AdminDocumentationCategory

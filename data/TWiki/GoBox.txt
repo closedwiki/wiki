@@ -15,5 +15,5 @@ Enter part of a topic name to get a list of similar topics, for example:
 
 __Note:__ The Go box is not a search box
 
-
+__Related Topics:__ UserDocumentationCategory
 

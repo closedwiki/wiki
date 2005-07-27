@@ -7,4 +7,4 @@ The [[%TWIKIWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls
 
 On a related note, you can force __every__ save to be a new revision number by setting =ReplaceIfEditedAgainWithin= to 0.
 
-
+__Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory

@@ -3,7 +3,7 @@
 
 ---+ Bulk Registration
 
-The Main.TWikiAdminGroup can use this bulk register feature to register (i.e. create logins and home pages) for a group of people. 
+The %MAINWEB%.TWikiAdminGroup can use %TOPIC% to register (i.e. create logins and UserTopics) for a group of people quickly. 
 Create a table in the REGISTERTOPIC named below, setting each row to represent each user and each column to correspond to the metadata.
 Then press the button on this page to perform registration for those users. 
 Unlike normal registration the administrator is assumed to have correct email addresses for the users, so no verification is required.

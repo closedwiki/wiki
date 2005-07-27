@@ -1,7 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 %META:TOPICPARENT{name="FileAttachment"}%
+
 ---+ Hide/Unhide Attachments
 
 You can hide/unhide file attachments.
@@ -10,4 +9,4 @@ You can hide/unhide file attachments.
 	* enable the *Hide file* checkbox,
 	* then click *Change properties* 
 
-
+__Related Topics:__ UserDocumentationCategory

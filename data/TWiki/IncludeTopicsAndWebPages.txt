@@ -47,7 +47,5 @@ __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUD
 	* You get:
 		* Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
 
-See also other TWikiVariables.
-
-
+__Related Topics:__ TWikiVariables, UserDocumentationCategory
 

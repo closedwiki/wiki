@@ -2,7 +2,7 @@
 
 
 %META:TOPICPARENT{name="ChangePassword"}%
----+ The name you log in with.
+---+ The name you log in with
 
 A login name is a sequence of alphanumeric characters and underscores.
 
@@ -24,3 +24,4 @@ If, on the other hand, if your entry is like this:
 
 Then you would log in using your WikiName, in this case 'TWikiGuest'
 
+__Related Topics:__ UserDocumentationCategory

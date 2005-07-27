@@ -22,4 +22,4 @@ Your current ID is %WIKIUSERNAME%.
 This TWiki seems to be using
 %CALC{"$IF($GET(IS_AUTH_PAGE),%TWIKIWEB%.AuthPagePlugin. [[%SCRIPTURL%/login%SCRIPTSUFFIX%][Click here]] to log in,$IF($GET(IS_SESSION_AUTH),%TWIKIWEB%.SessionPlugin. To logout you need to close this browser and start a new one. If that doesn't work ask your administrator to delete CGI session %SESSIONID%,$IF($GET(IS_SESSION),%TWIKIWEB%.SessionPlugin. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%][Click here]] to log in,$IF($GET(IS_AUTH),default authentication and you are already authenticated. Please restart your browser if you want to change your login.,default authentication and you are not logged in. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%][Click here]] to login))))"}%
 
-For more on authentication, see TWikiUserAuthentication
+__Related Topics:__ TWikiUserAuthentication, UserDocumentationCategory, AdminDocumentationCategory

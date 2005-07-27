@@ -3,7 +3,7 @@
 
 ---+!! Instant TWiki Site Enhancements
 
-These quick enhancements are aimed at improving TWiki's ease-of-use.  New TWiki site administrators are especially encouraged to review this document for ideas before deploying a new TWikiSite. The metaphor of building a house is useful.  The listed enhancements are some of the details possible when moving into a new office or home. These small changes can make a *big* differences for user satisfaction at your site. All modifications can be done through your Web browser, and they don't take more then in a couple of minutes.  No system administration expertise is required. Some of these enhancements are also mentioned in the reference manual and other topics.
+These quick enhancements are aimed at improving and customising your TWiki.  New TWiki site administrators are especially encouraged to review this document for ideas before deploying a new TWikiSite. The metaphor of building a house is useful.  The listed enhancements are some of the details possible when moving into a new office or home. These small changes can make a *big* differences for user satisfaction at your site. All modifications can be done through your Web browser, and they don't take more then in a couple of minutes.  No system administration expertise is required. Some of these enhancements are also mentioned in the reference manual and other topics.
 
 Many of these tips are based on setting some special TWikiVariables.
 
@@ -144,7 +144,6 @@ Here, last 15 is formatted into neat table.
 When you're creating main gateway pages, you may want to temporarily (or permanently) restrict editing to yourself or a limited group of people. You can do this with a Preference setting that includes one or more users and groups. Only auhorized users will be able to use ==Edit==.
 	* __Example:__ ==Set ALLOWTOPICCHANGE = <nop>%MAINWEB%.UserName, <nop>%MAINWEB%.GroupName==
 	* %T% *To hide the setting:* Use HTML comment tags - put ==&lt;!--== on the line _above the setting, and ==--&gt;== on the line below.
-	* _This is in the regular help files but worth highlighting._
 
 ---
 ---++ Change the Default Logo
@@ -176,5 +175,4 @@ You're no doubt familiar or better with HTML, JS, and "webmastering". Without ge
 
 ----
 
-%T% __NOTE:__ Feel free to add your own tips to TWiki:%WEB%.%TOPIC% as quick notes at the end of the list, following the existing format!
-
+__Related Topics:__ AdminDocumentationCategory
