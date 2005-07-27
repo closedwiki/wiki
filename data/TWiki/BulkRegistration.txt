@@ -3,7 +3,13 @@
 
 ---+ Bulk Registration
 
-TODO: MartinCleaver - fill in a summary of what bulk registration does, and why the user would want to use it
+The Main.TWikiAdminGroup can use this bulk register feature to register (i.e. create logins and home pages) for a group of people. 
+Create a table in the REGISTERTOPIC named below, setting each row to represent each user and each column to correspond to the metadata.
+Then press the button on this page to perform registration for those users. 
+Unlike normal registration the administrator is assumed to have correct email addresses for the users, so no verification is required.
+If you set EmailUsersWithDetails to 0 the user will not be notified that they have an account. This can be helpful in preparing and verifying the account before inviting everyone to use it.
+BulkResetPassword can be then used to notify everyone of their new account.
+
 
 ---++ Bulk Registration usage
 
