@@ -881,21 +881,27 @@ sub _CHECKVAR_StoreImpl {
 };
 
 sub _CHECKVAR_UseClientSessions {
-    if( $TWiki::cfg{UseClientSessions} ) {
-        if (!eval "use CGI::Cookie; 1") {
-            return ERROR("
- The CGI::Cookie Perl module is required for session support, but is not
- available. Please either install it or turn UseClientSessions off.
-                     ");
-        }
-        if (!eval "use CGI::Session; 1") {
-            return ERROR("
- The CGI::Session Perl module is required for session support, but is not
- available. Please either install it or turn UseClientSessions off.
-                     ");
+    my $mess = '';
+    if (!eval "use CGI::Cookie; 1") {
+        $mess .= <<HERE;
+The CGI::Cookie Perl module is required for session support, but is not
+available.
+HERE
+    }
+    if (!eval "use CGI::Session; 1") {
+        $mess .= <<HERE;
+The CGI::Session Perl module is required for session support, but is not
+available.
+HERE
+    }
+    if( $mess ) {
+        if ($TWiki::cfg{UseClientSessions} ) {
+            $mess = ERROR( $mess );
+        } else {
+            $mess = WARN( $mess );
         }
     }
-    return '';
+    return $mess;
 }
 
 sub _CHECKVAR_AuthScripts {
