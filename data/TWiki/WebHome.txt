@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1120846334" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiGuest" date="1122128753" format="1.1" version="1.1"}%
 <div style="float:right;margin:10px; width:220px;>
 <a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0"/></a><br />
 The official TWiki<sup>TM</sup><br /> site is 
@@ -14,7 +14,7 @@ This is the place to learn about TWiki features, find where to download it, and 
 ---++ Available Information
    * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
    * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial
-   * [[TWikiFAQ][Frequenty Asked Questions]]: about TWiki
+   * [[TWikiFAQ][Frequently Asked Questions]]: about TWiki
    * [[TWikiReferenceManual][Reference Manual]]: Documentation for webmasters, system administrators
    * [[Admin Tools]]: manage the <nop>%WIKITOOLNAME% site
 
@@ -32,4 +32,5 @@ This is the place to learn about TWiki features, find where to download it, and 
    * TWiki is developed as Free Software under the [[GnuGeneralPublicLicense][GNU/GPL]]
    * This site is running TWiki version *%WIKIVERSION%*, Plugin API version *%PLUGINVERSION{}%*
    * Get the current version from [[http://TWiki.org/download.html][TWiki.org Downloads]]
+
 
