@@ -9,7 +9,7 @@ __Please Note:__
 
    * A blank in the the above table may mean _either_ the corresponding control is absent or commented out _or_ that it has been set to a null value.  The two conditions have dramatically different and possibly opposed semantics.
 
-   * Main.TWikiGuest is the guest account - used by unautheticated users.
+   * Main.TWikiGuest is the guest account - used by unauthenticated users.
 
    * The TWiki web must not be denied view to %MAINWEB%.TWikiGuest - otherwise people will not be able to register.
 
