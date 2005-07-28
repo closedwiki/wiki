@@ -33,6 +33,17 @@ Template Login uses a TWiki template to ask for a username and password in a web
 ---+++ Enabling Template Login
    1 Use the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%#LoginManager][configure]] interface to enable the =TemplateLogin= login manager (on the Security Settings pane).
    1 Select the appropriate password manager for your system, or provide your own.
+	1 In TWiki, *edit* the TWikiRegistrationPub topic, *copy* the contents, then *edit* TWikiRegistration and *paste*, deleting the old contents and replacing them with the contents of TWikiRegistrationPub.
+    <br />You can customize the registration form by deleting or adding input tags. The =name=""= parameter of the input tags must start with: ="Twk0..."= (if this is an optional entry), or ="Twk1..."= (if this is a required entry). This ensures that the fields are carried over into the user home page correctly.
+    <br />You can customize the default user home page in NewUserTemplate. The same variables get expanded as in the [[TWikiTemplates#Template_Topics][template topics]]
+	1 Register yourself in the TWikiRegistration topic.
+    <br /> %H% Check that a new line with the username and encrypted password is added to the =.htpasswd= file. If not, you may have got a path wrong, or the permissions may not allow the webserver user to write to that file.
+	1 Create a new topic to check if authentication works.
+	1 *Edit the %MAINWEB%.TWikiAdminGroup topic in the TWiki:%MAINWEB% web to include users with system administrator status.*
+    <br /> %X% *This is a very important step*, as users in this group can access _all_ topics, independent of TWiki access controls.
+TWikiAccessControl has more information on setting up access controls.
+
+%X% At this time TWikiAccessControls cannot control access to files in the =pub= area, unless they are only accessed through the =viewfile= script. If your =pub= directory is set up in the webserver to allow open access you may want to add =.htaccess= files in there to restrict access.
 
 ---++ Apache Login
 
