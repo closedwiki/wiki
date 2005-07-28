@@ -20,8 +20,23 @@ pub/TWiki/WysiwygPlugin/nop.png Button image
 pub/TWiki/WysiwygPlugin/remove.png Button image
 pub/TWiki/WysiwygPlugin/smiley.png Button image
 pub/TWiki/WysiwygPlugin/vars.png Button image
-pub/TWiki/WysiwygPlugin/vbutton.png Button image
-pub/TWiki/WysiwygPlugin/verbatim.png Watermark
+pub/TWiki/WysiwygPlugin/verbatim-watermark.png Watermark
+pub/TWiki/WysiwygPlugin/verbatim.png Button image
+pub/TWiki/WysiwygPlugin/view-source.png Button image
+pub/TWiki/WysiwygPlugin/table.png Button image
+pub/TWiki/WysiwygPlugin/remove.png Button image
+pub/TWiki/WysiwygPlugin/inthyperlink.png Button image
+pub/TWiki/WysiwygPlugin/exthyperlink.png Button image
+pub/TWiki/WysiwygPlugin/indent.png Button image
+pub/TWiki/WysiwygPlugin/outdent.png Button image
+pub/TWiki/WysiwygPlugin/unordered-list.png Button image
+pub/TWiki/WysiwygPlugin/definition-list.png Button image
+pub/TWiki/WysiwygPlugin/ordered-list.png Button image
+pub/TWiki/WysiwygPlugin/text-color.png Button image
+pub/TWiki/WysiwygPlugin/redo.png Button image
+pub/TWiki/WysiwygPlugin/save.png Button image
+pub/TWiki/WysiwygPlugin/undo.png Button image
+pub/TWiki/WysiwygPlugin/help.png Button image
 templates/edit.kupu.tmpl Template for an edit using kupu
 templates/attachtables.kupu.tmpl Attachment table rendering for editor
 templates/view.kupu.tmpl Template for a kupu skin view, used by the editor

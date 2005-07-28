@@ -26,12 +26,85 @@ div.kupu-drawer {
   
 }
 
-/* toolbar buttons */
+/* icons pop-up */
+div#twiki-icons {
+  position: absolute;
+  display: none;
+  background-color: #EEEEEE;
+  padding: 0.2em;
+  font-size: small;
+  border-width: 2px;
+  border-style: solid;
+  cursor: default;
+  width: 350px;
+}
+
+div#twiki-icons img {
+  background-color: #EEEEEE;
+  cursor: hand;
+  cursor: pointer;
+}
+
+div#twiki-icons img:hover {
+  background-color: #CCCCCC;
+}
+
+div#twiki-icons img:active {
+  border: 1px solid;
+  border-color: #FFFFFF;
+}
+
+/******************************
+ * Styles used in the content *
+ ******************************/
+
+.TML { }
+.TMLvariable {
+  font-weight: bold;
+  border: thin solid black;
+  color: white;
+  background: #00CC00;
+}
+.TMLcite { }
+.TMLmailto { background: cyan; color: black; }
+.TMLnoautolink { color: #CCCCFF; }
+.TMLverbatim {
+  border: thin solid black;
+  background: url('verbatim-watermark.png')
+}
+.TMLnop {
+  border: thick solid red;
+}
+
+/*********
+ * Icons *
+ *********
+ */
+/* TWiki overrides of kupu buttons. Simply re-defined the styles. */
+.kupu-source {background-image: url("view-source.png");}
+.kupu-table {background-image: url("table.png");}
+.kupu-removelink {background-image: url("remove.png");}
+.kupu-inthyperlink {background-image: url("inthyperlink.png");}
+.kupu-inthyperlink-pressed {background-image: url("inthyperlink.png"); background-color: white}
+.kupu-exthyperlink {background-image: url("exthyperlink.png");}
+.kupu-exthyperlink-pressed {background-image: url("exthyperlink.png"); background-color: white}
+.kupu-indent {background-image: url("indent.png");}
+.kupu-outdent {background-image: url("outdent.png");}
+.kupu-insertunorderedlist {background-image: url("unordered-list.png");}
+.kupu-insertdefinitionlist {background-image: url("definition-list.png");}
+.kupu-insertorderedlist {background-image: url("ordered-list.png");}
+.kupu-forecolor {background-image: url("text-color.png");}
+.kupu-redo {background-image: url("redo.png");}
+.kupu-save {background-image: url("save.png");}
+.kupu-undo {background-image: url("undo.png");}
+.kupu-logo {background-image: url("help.png");}
+
+/* TWiki-only buttons */
 .twiki-icons-button { background: url("smiley.png"); }
-.twiki-new-attachment { background: url("attach.png"); }
-.twiki-insert-attachment { background: url("attachment.png"); }
+.twiki-new-attachment { background: url("new-attachment.png"); }
+.twiki-insert-attachment { background: url("insert-attachment.png"); }
 .twiki-vardrawer-button { background: url("vars.png"); }
-.twiki-cancel-button { background: url("cancel.png"); }
+.twiki-cancel-button { background-image: url("cancel.png"); }
 .twiki-remove-var-button {
   background-color: white;
   background: url("remove.png");
@@ -41,7 +114,7 @@ div.kupu-drawer {
   background: url("remove.png");
 }
 .twiki-code-button0 {
-  background: url("code.png");
+  background-image: url("code.png");
   background-color: #D9D9D9;
 }
 .twiki-code-button1 {
@@ -89,60 +162,10 @@ div.kupu-drawer {
   background-color: white;
 }
 .twiki-verbatim-button {
-  background: url("vbutton.png");
+  background: url("verbatim.png");
   background-color: #D9D9D9;
 }
 .twiki-verbatim-button-pressed {
-  background: url("vbutton.png");
+  background: url("verbatim.png");
   background-color: white;
-}
-
-/* icons pop-up */
-div#twiki-icons {
-  position: absolute;
-  display: none;
-  background-color: #EEEEEE;
-  padding: 0.2em;
-  font-size: small;
-  border-width: 2px;
-  border-style: solid;
-  cursor: default;
-  width: 350px;
-}
-
-div#twiki-icons img {
-  background-color: #EEEEEE;
-  cursor: hand;
-  cursor: pointer;
-}
-
-div#twiki-icons img:hover {
-  background-color: #CCCCCC;
-}
-
-div#twiki-icons img:active {
-  border: 1px solid;
-  border-color: #FFFFFF;
-}
-
-/******************************
- * Styles used in the content *
- ******************************/
-
-.TML { }
-.TMLvariable {
-  font-weight: bold;
-  border: thin solid black;
-  color: white;
-  background: #00CC00;
-}
-.TMLcite { }
-.TMLmailto { background: cyan; color: black; }
-.TMLnoautolink { color: #CCCCFF; }
-.TMLverbatim {
-  border: thin solid black;
-  background: url('verbatim.png')
-}
-.TMLnop {
-  border: thick solid red;
 }
