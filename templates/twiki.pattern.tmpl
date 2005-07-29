@@ -1,8 +1,8 @@
-%{ Internationalisable Messages/constructs }%
 %TMPL:DEF{"sep"}%<span class="twikiSeparator">|</span>%TMPL:END%
+
+
+
 %TMPL:DEF{"titlesep"}%&lt;%TMPL:END%
-%TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
-%TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
 
 
 
@@ -33,7 +33,9 @@ function initPage() { }
 	@import url(%TWIKISTYLEURL%);
 </style>
 <!-- load user styles if javascript is on -->
+<!-- javascript is used to check if urls are valid (non-empty) -->
 <script type="text/javascript">
+document.write("<style>");
 /* Custom overriding layout per web or per topic */
 if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
 	document.write("@import url(%USERLAYOUTURL%);"); 
@@ -98,7 +100,7 @@ document.write("<\/style>");
 
 
 
-%TMPL:DEF{"bottombar"}%<div class="twikiBottomBar"><div class="twikiBottomBarContents">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"bottombar"}%<div class="twikiBottomBar"><div class="twikiBottomBarContents"><span class="twikiGrayText">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</span></div></div>%TMPL:END%
 
 
 
