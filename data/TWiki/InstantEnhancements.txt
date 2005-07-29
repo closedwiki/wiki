@@ -54,18 +54,30 @@ This should be enabled, see the "Miscellaneous Settings" in the TWikiPreferences
 
 ---+++ EZ Graphic Icons to Highlight Text
 
-Graphics in text (like this: %X%) is done also by defining special variables. See [[%TWIKIWEB%.TWikiPreferences]]. Some may prefer longer names, like =HELP=, =WARN= etc. You can also add your own images, e.g. a =NEW=, or a =ASK= to ask question.
+Icons can do a lot to enhance scannability of topics. For instance, on *HELP* pages, most people tend to jump around looking for answers rather than reading through - icons help point out the most important bits.
 
-%T% Using graphic icons to highlight important text right from the start can seriously improve how well new users take to a TWiki site. A minimum set of two or three icons can make content much easier to follow, eye-catching, EXCITING. Research says, people tend not to read pages through, but scan them first - and graphics (used sparringly ;-) of course) can help them.  On *HELP* pages, most people tend to jump around looking for answers rather than reading through - icons help point out the most important bits. 
+%TWIKIWEB%.TWikiDocGraphicsPattern has a whole collection of ready icon images for %TWIKIWEB%.PatternSkin (you can find the graphics for classic skin in %TWIKIWEB%.TWikiDocGraphics). You can use these images in any topic by referring to their name. For example, %TWIKIWEB%.TWikiDocGraphicsPattern has an image attachment called =days.gif=. To get this image in a topic, write =%<nop>ICON{"days"}%= to get %ICON{"days"}%.
 
-*How to create your own set of icons:*
+For more information about icon sets, see: %TWIKIWEB%.IconSets.
 
-	1 Go to the ==Preferences== topic: TWikiPreferences for site-wide use, or WebPreferences for use in one web only. 
-	2 ==Attach== a graphic (the ones on this page are 16x16 pixels), then define a Preference Variable with a short but recognizable name.
-	* __Example:__ Enter =%<nop>TEST%= to get %TEST% - see how it's [[WebPreferences#DefineIcon][done]].
-	* %T% Ideas for quick icons: NEW; UPDATE; a STAR or other bullet; key symbols relating to your site content.
-	* For documentation and help, this [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] web uses three main icons: %H% for *HELP*, %T% for *TIP*, %X% for *IMPORTANT*. 
-	* __Related:__ There are other approaches for creating more extensive TWiki icon libraries. This is a simply and quick way to get started. See TWikiDocGraphics for more info.
+*Creating image variables*
+
+You may find it easier to write shorthand graphic notation. You can create your own image variables by defining them in a preference topic (most likely [[%TWIKIWEB%.TWikiPreferences]].
+
+A variable name may be one letter, like =Y=, or may be longer like =HELP=, =WARN= etc. You can also add your own images, e.g. a =NEW=, or a =ASK= to ask question.
+
+For instance, if we want to write =%<nop>DOWN%= instead of =%<nop>ICON{"arrowbdown"}%=, define the new variable like this:
+<verbatim>
+   * Set DOWN = %ICON{"arrowbdown"}%
+</verbatim>
+Or if you have a custom image to use, attach this to !TWikiPreferences and write:
+<verbatim>
+   * Set DOWN = <img src="%ATTACHURL%/my_image.gif" border="0" alt="DOWN" width="16" height="16" />
+</verbatim>
+
+All images in %TWIKIWEB%.TWikiDocGraphicsPattern are 16 x 16 pixels.
+
+	* __Related:__ There are other approaches for creating more extensive TWiki icon libraries. This is a simply and quick way to get started. See %TWIKIWEB%.TWikiDocGraphics for more info.
 
 ---+++ Use TOC variable to create table of content
 
