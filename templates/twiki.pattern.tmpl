@@ -25,24 +25,21 @@ function initPage() { }
 
 
 %TMPL:DEF{"twikistyle"}%
-<!-- always load TWiki styles -->
 <style type="text/css" media="all">
-	/* Default TWiki layout */
-	@import url(%TWIKILAYOUTURL%);
-	/* Default TWiki style */
-	@import url(%TWIKISTYLEURL%);
+	@import url("%TWIKILAYOUTURL%");
+	@import url("%TWIKISTYLEURL%");
 </style>
-<!-- load user styles if javascript is on -->
-<!-- javascript is used to check if urls are valid (non-empty) -->
 <script type="text/javascript">
-document.write("<style>");
+<!--
+/* Use javascript to check if style urls are valid (non-empty) */
+document.write("<style type='text/css'>");
 /* Custom overriding layout per web or per topic */
 if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
-	document.write("@import url(%USERLAYOUTURL%);"); 
+	document.write('@import url("%USERLAYOUTURL%");'); 
 }
 /* Custom overriding style per web or per topic */
 if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
-	document.write("@import url(%USERSTYLEURL%);"); 
+	document.write('@import url("%USERSTYLEURL%");'); 
 }
 document.write("<\/style>");
 //-->
