@@ -28,14 +28,28 @@ function initPage() { }
 
 
 %TMPL:DEF{"twikistyle"}%
-<style type="text/css" media="all">
-	@import url("%TWIKILAYOUTURL%");
-	@import url("%TWIKISTYLEURL%");
-</style>
+<!-- Link to stylesheets in case javascript is off. -->
+<link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%TWIKILAYOUTURL%" media="all" />
+<link id="twikiStyleCss" rel="stylesheet" type="text/css" href="%TWIKISTYLEURL%" media="all" />
+<!-- But if javascript is on, disable the links. -->
+<script type="text/javascript">
+   if (document.getElementById) {
+      document.getElementById("twikiLayoutCss").disabled = true;
+      document.getElementById("twikiStyleCss").disabled = true;
+   }
+</script>
 <script type="text/javascript">
 <!--
 /* Use javascript to check if style urls are valid (non-empty) */
-document.write("<style type='text/css'>");
+document.write('<style type="text/css" media="all">');
+/* Default TWiki layout */
+if ("%TWIKILAYOUTURL%".split("?")[0].length && "%TWIKILAYOUTURL%".split("TWIKILAYOUTURL")[0].length) {
+	document.write('@import url("%TWIKILAYOUTURL%");'); 
+}
+/* Default TWiki style */
+if ("%TWIKISTYLEURL%".split("?")[0].length && "%TWIKISTYLEURL%".split("TWIKISTYLEURL")[0].length) {
+	document.write('@import url("%TWIKISTYLEURL%");'); 
+}
 /* Custom overriding layout per web or per topic */
 if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
 	document.write('@import url("%USERLAYOUTURL%");'); 
@@ -44,13 +58,13 @@ if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOU
 if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
 	document.write('@import url("%USERSTYLEURL%");'); 
 }
-document.write("<\/style>");
+document.write('<\/style>');
 //-->
 </script>
 <style type="text/css" media="all">
 	/* Styles that are set using variables */
 	.twikiToc li {
-		list-style-image:url(%PUBURL%/%TWIKIWEB%/PatternSkin/i_arrow_down.gif);
+		list-style-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/i_arrow_down.gif");
 	}	        
 	.twikiWebIndicator {
 		background-color:%WEBBGCOLOR%;
