@@ -245,6 +245,7 @@ BEGIN {
       unless defined( $TWiki::cfg{DispScriptUrlPath} );
 
     # Constant tags dependent on the config
+    $constantTags{AUTHREALM}       = $TWiki::cfg{AuthRealm};
     $constantTags{HOMETOPIC}       = $TWiki::cfg{HomeTopicName};
     $constantTags{MAINWEB}         = $TWiki::cfg{UsersWebName};
     $constantTags{USERWEB}         = $TWiki::cfg{UsersWebName};
