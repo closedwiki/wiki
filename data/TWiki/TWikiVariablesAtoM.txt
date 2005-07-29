@@ -32,7 +32,15 @@ __Note:__ This topic is included by TWikiVariables
 	* Expands to: =%AUTHENTICATED%=
 	* Syntax: =%<nop>AUTHENTICATED{then="THEN" else="ELSE"}%=
 	* Expand to: %AUTHENTICATED{then="THEN" else="ELSE"}%
-	* Related: TWikiUserAuthentication,[[#VarCANLOGIN][CANLOGIN]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+	* Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]],[[#VarCANLOGIN][CANLOGIN]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+
+#VarAUTHREALM
+---+++ AUTHREALM -- authentication realm
+	* String defined as {AuthRealm} in =configure=. This is used in certain password encodings, and in login templates as part of the login prompt.
+	* Syntax: =%<nop>AUTHREALM%=
+	* Expands to: %AUTHREALM%
+	* Related: TWikiUserAuthentication, [[#VarAUTHENTICATED][AUTHENTICATED]], [[#VarCANLOGIN][CANLOGIN]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+
 #VarBASETOPIC
 ---+++ BASETOPIC -- base topic where an INCLUDE started
 	* The name of the topic where a single or nested INCLUDE started - same as =%<nop>TOPIC%= if there is no INCLUDE
@@ -50,7 +58,7 @@ __Note:__ This topic is included by TWikiVariables
    * Expand to: %CANLOGIN%
 	* Syntax: =%<nop>CANLOGIN{then="THEN" else="ELSE"}%=
 	* Expand to: %CANLOGIN{then="THEN" else="ELSE"}%
-	* Related: TWikiUserAuthentication,[[#VarAUTHENTICATED][AUTHENTICATED]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+	* Related: TWikiUserAuthentication, [[#VarAUTHENTICATED][AUTHENTICATED]], [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarDATE
 ---+++ DATE - signature format date
