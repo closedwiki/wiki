@@ -53,8 +53,9 @@ __Note:__ This topic is included by TWikiVariables
 	* Syntax: =%<nop>BASEWEB%=
 	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
+#VarCANLOGIN
 ---+++ CANLOGIN -- are logins supported in this TWiki?
-   * Syntax: =%<nop>CANLOGIN%
+   * Syntax: =%<nop>CANLOGIN%=
    * Expand to: %CANLOGIN%
 	* Syntax: =%<nop>CANLOGIN{then="THEN" else="ELSE"}%=
 	* Expand to: %CANLOGIN{then="THEN" else="ELSE"}%
@@ -196,13 +197,21 @@ will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included
 	* Syntax: =%<nop>INCLUDINGWEB%=
 	* Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
+#VarLOCALSITEPREFS
+---+++ LOCALSITEPREFS - web.topicname of site preferences topic
+   * The full name of the local site preferences topic. This topic is read for preferences before %TWIKIWEB%.<nop>%TWIKIPREFSTOPIC% is read.
+   * Syntax: =%<nop>LOCALSITEPREFS%=
+   * Expands to: <nop>%LOCALSITEPREFS%
+
+#VarLOGIN
 ---+++ LOGIN -- present a full login link
-   * Syntax: =%<nop>LOGIN%
+   * Syntax: =%<nop>LOGIN%=
    * Expand to: %LOGIN%
 	* Related: TWikiUserAuthentication,[[#VarAUTHENTICATED][AUTHENTICATED]],[[#VarCANLOGIN][CANLOGIN]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
+#VarLOGOUT
 ---+++ LOGOUT -- present a full logout link
-   * Syntax: =%<nop>LOGOUT%
+   * Syntax: =%<nop>LOGOUT%=
    * Expand to: %LOGOUT%
 	* Related: TWikiUserAuthentication,[[#VarAUTHENTICATED][AUTHENTICATED]],[[#VarCANLOGIN][CANLOGIN]],[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 

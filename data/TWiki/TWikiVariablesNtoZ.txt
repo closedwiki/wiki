@@ -95,23 +95,23 @@ __Note:__ This topic is included by TWikiVariables
 	* Example: =%<nop>REVINFO{"$date - $wikiusername" rev="1.1"}%= returns revision info of first revision
 	* Related: [[#VarREVINFO][REVINFO]]
 
-#VarSESSION_VARIABLE
+#VarSESSIONVARIABLE
 ---+++ SESSION_VARIABLE -- get, set or clear a session variable
-   * Syntax: =%<nop>SESSION_VARIABLE{"name"}%
-   * Syntax: =%<nop>SESSION_VARIABLE{"name" set="value"}%
-   * Syntax: =%<nop>SESSION_VARIABLE{"name" clear=""}%
+   * Syntax: =%<nop>SESSION_VARIABLE{"name"}%=
+   * Syntax: =%<nop>SESSION_VARIABLE{"name" set="value"}%=
+   * Syntax: =%<nop>SESSION_VARIABLE{"name" clear=""}%=
 	* Related: TWikiUserAuthentication, [[#VarAUTHENTICATED][AUTHENTICATED]], [[#VarAUTHREALM][AUTHREALM]], [[#VarCANLOGIN][CANLOGIN]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]]
 %H% The users ID is in the =AUTHUSER= session variable, and is read-only.
 
 #VarSESSIONID
 ---+++ SESSIONID -- The unique ID for this session | %SESSIONID% |
-   * Syntax: =%<nop>SESSIONID%
+   * Syntax: =%<nop>SESSIONID%=
    * Expand to: %SESSIONID%
 	* Related: TWikiUserAuthentication,[[#VarAUTHENTICATED][AUTHENTICATED]], [[#VarAUTHREALM][AUTHREALM]], [[#VarCANLOGIN][CANLOGIN]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarSESSIONVAR
 ---+++ SESSIONVAR -- The name of CGI and session variable that stores the session ID
-   * Syntax: =%<nop>SESSIONVAR%
+   * Syntax: =%<nop>SESSIONVAR%=
    * Expand to: %SESSIONVAR%
 	* Related: TWikiUserAuthentication, [[#VarAUTHENTICATED][AUTHENTICATED]], [[#VarAUTHREALM][AUTHREALM]], [[#VarCANLOGIN][CANLOGIN]], [[#VarSESSIONID][SESSIONID]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 

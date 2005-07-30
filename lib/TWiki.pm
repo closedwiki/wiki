@@ -254,6 +254,7 @@ BEGIN {
     $constantTags{PUBURLPATH}      = $TWiki::cfg{PubUrlPath};
     $constantTags{SCRIPTSUFFIX}    = $TWiki::cfg{ScriptSuffix};
     $constantTags{SCRIPTURLPATH}   = $TWiki::cfg{DispScriptUrlPath};
+    $constantTags{LOCALSITEPREFS}  = $TWiki::cfg{LocalSitePreferences};
     $constantTags{STATISTICSTOPIC} = $TWiki::cfg{Stats}{TopicName};
     $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
     $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
