@@ -223,7 +223,7 @@ function TWikiTagToggler(tag, clazz, checker) {
     if (node) {
       _removeClass(node, clazz);
     } else if (!button.pressed) {
-      var doc = this.editor.getInnerDocument();
+      var doc = editor.getInnerDocument();
       var elem = doc.createElement(tag);
       elem.className = clazz;
       _insertNode(editor, elem);
@@ -332,37 +332,22 @@ function TWikiInsertAttachmentTool() {
 
 TWikiInsertAttachmentTool.prototype = new KupuTool;
 
-/* UI for adding an attachment to the select in the attachment insert drawer */
-function TWikiNewAttachmentDrawer(drawerid, formid, selectid) {
+/* UI for adding an attachment */
+function TWikiNewAttachmentDrawer(drawerid, formid, tool) {
   this.element = document.getElementById(drawerid);
-  this.select = document.getElementById(selectid);
   this.form = document.getElementById(formid);
+  this.tool = tool;
 
   this.save = function() {
-    var path = this.form.filepath.value;
-    var last = path.lastIndexOf('/');
-    if (last < 0)
-      last = path.lastIndexOf('\\');
-    last++;
-    var filename = path.substring(last);
+    if (this.tool) {
+      var path = this.form.filepath.value;
+      var last = path.lastIndexOf('/');
+      if (last < 0)
+        last = path.lastIndexOf('\\');
+      last++;
+      var filename = path.substring(last);
 
-    // Add the new filename to the select list for attachments
-    var node = this.select.firstChild;
-    var alreadyThere = false;
-    while (node) {
-      var name = node.name;
-      if (name == filename) {
-        alreadyThere = true;
-        break;
-      }
-      node = node.nextSibling;
-    }
-
-    if (!alreadyThere) {
-      var elem = document.createElement("option");
-      elem.name = filename;
-      elem.appendChild(document.createTextNode(filename));
-      this.select.appendChild(elem);
+      this.tool.pick(filename);
     }
 
     this.editor.updateState();
@@ -555,3 +540,125 @@ function TWikiCleanForm() {
   }
 }
 
+function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
+    /* the colorchooser */
+    
+    this.fgcolorbutton = document.getElementById(fgcolorbuttonid);
+    this.ccwindow = document.getElementById(colorchooserid);
+    this.command = null;
+
+    this.initialize = function(editor) {
+        /* attach the event handlers */
+        this.editor = editor;
+        
+        this.createColorchooser(this.ccwindow);
+
+        addEventHandler(this.fgcolorbutton, "click", this.openFgColorChooser, this);
+        addEventHandler(this.ccwindow, "click", this.chooseColor, this);
+
+        this.hide();
+
+        this.editor.logMessage('Colorchooser tool initialized');
+    };
+
+    this.updateState = function(selNode) {
+        /* update state of the colorchooser */
+        this.hide();
+    };
+
+    this.openFgColorChooser = function() {
+        /* event handler for opening the colorchooser */
+        this.command = "forecolor";
+        this.show();
+    };
+
+    this.chooseColor = function(event) {
+        /* event handler for choosing the color */
+        var target = _SARISSA_IS_MOZ ? event.target : event.srcElement;
+        var cell = this.editor.getNearestParentOfType(target, 'td');
+        this.editor.execCommand(this.command, cell.getAttribute('bgColor'));
+        this.hide();
+    
+        this.editor.logMessage('Color chosen');
+    };
+
+    this.show = function(command) {
+        /* show the colorchooser */
+        this.ccwindow.style.display = "block";
+    };
+
+    this.hide = function() {
+        /* hide the colorchooser */
+        this.command = null;
+        this.ccwindow.style.display = "none";
+    };
+
+    this.createColorchooser = function(table) {
+        /* create the colorchooser table */
+      var cols = new Array( "black", "gray", "silver", "white",
+                            "maroon", "purple", "red", "fuschia",
+                            "green", "olive", "lime", "yellow",
+                            "navy", "teal", "blue", "aqua" );
+        table.setAttribute('id', 'kupu-colorchooser-table');
+        table.style.borderWidth = '2px';
+        table.style.borderStyle = 'solid';
+        table.style.position = 'absolute';
+        table.style.cursor = 'default';
+        table.style.display = 'none';
+
+        var tbody = document.createElement('tbody');
+
+        for (var i=0; i < 4; i++) {
+            var tr = document.createElement('tr');
+            for (var j = 0; j < 4; j++) {
+              var color = cols[i * 4 + j];;
+              var td = document.createElement('td');
+              td.setAttribute('bgColor', color);
+              td.style.backgroundColor = color;
+              td.style.borderWidth = '1px';
+              td.style.borderStyle = 'solid';
+              td.style.fontSize = '1px';
+              td.style.width = '10px';
+              td.style.height = '10px';
+              var text = document.createTextNode('\u00a0');
+              td.appendChild(text);
+              tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+
+        return table;
+    };
+}
+
+ColorchooserTool.prototype = new KupuTool;
+
+// only check max if max > min
+function twikiVerifyNumber(name,id,min,max) {
+  var field = window.document.getElementById(id);
+  var error = "";
+
+  var charpos = field.value.search("[^0-9]");
+  if (field.value.length > 0 && charpos >= 0) {
+    error = name + ": Only digits allowed\n[Error at character position " +
+      eval(charpos + 1) + "]";
+  }
+  if (error.length == 0 && isNaN(field.value)) {
+    error = name + " is not a number";
+  }
+  if (error.length == 0 && field.value < min) {
+    error = name + " must be >= " + min;
+  }
+  if (error.length == 0 && max > min && field.value > max) {
+    error = name + " must be <= " + max;
+  }
+
+  if (error.length > 0) {
+    alert(error);
+    field.focus();
+    return false;
+  };
+
+  return true;
+}

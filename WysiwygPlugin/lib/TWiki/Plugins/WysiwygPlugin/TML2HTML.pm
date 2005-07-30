@@ -387,8 +387,12 @@ sub _getRenderedVersion {
     # protect HTML parameters by pulling them out
     $text =~ s/(<[a-z]+ )([^>]+)>/$1.$this->_liftOut($2).'>'/gei;
 
-    # Convert TWiki tags to spans outside parameters
-    $text = $this->_processTags( $text );
+    my $markVars =
+      TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_MARK_VARIABLES' );
+    if( $markVars && $markVars eq 'on' ) {
+        # Convert TWiki tags to spans outside parameters
+        $text = $this->_processTags( $text );
+    }
 
     $text = $this->_dropBack( $text );
 

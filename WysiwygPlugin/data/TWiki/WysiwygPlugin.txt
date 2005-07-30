@@ -82,9 +82,8 @@ my $tml = $html2tml->convert( $html );
 ---++ Settings
 	* Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
 	* Set HELPPAGE = TWiki/WysiwygPlugin
-
-	* The name of the skin that when seen by the WysiwygPlugin will trigger translation of TML into HTML
-		* Set CONVERT_SKIN = kupu
+	* If set to =on= then TWiki variables will be "marked" by the TML -> HTML translator by putting the variable name and any parameters into a span. This works well for simple variables, but can get in trouble with complex syntax or some plugins constructs. If it isn't set to =on= variables will be treated as plain text.
+	* Set MARK_VARIABLES =
 	* Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
 		* Set ICONS =
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt="" />
@@ -135,6 +134,24 @@ my $tml = $html2tml->convert( $html );
 		<option value="SEARCH{...}"> Inline Search</option>
 		<option value="TOC"> Table of Contents</option>
 		</select>
+
+---++ Known Issues
+---+++ Overlapping formatting
+Because TWiki employs a "best guess" approach to some formatting, and allows overlapping of tags in a way forbidden by HTML, it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
+<verbatim>
+*bold _bold-italic* italic_
+</verbatim>
+is legal in TML, but in HTML is represented by
+<verbatim>
+<strong>bold <em>bold-italic</em></strong> <em>itelaic</em>
+</verbatim>
+which gets translated back to TML as
+<verbatim>
+*bold _bold-italic_* _italic_
+</verbatim>
+which is correct by construction, but does not render correctly in TWiki. This problem is unfortunately unavoidable due to the way TWiki syntax works.
+---+++ Resizing images
+In Kupu, images cannot be resized using the resizing handles. This is a [[http://codespeak.net/issues/kupu/issue221][known Kupu bug]].
 
 ---++ Plugin Info
 
