@@ -26,7 +26,29 @@ div.kupu-drawer {
   
 }
 
-/* icons pop-up */
+div.kupu-dialogbuttons {
+  text-align: center;
+}
+
+.kupu-tb {
+  padding: 3px;
+  background-color: ButtonFace;
+  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+}
+
+span.kupu-tb-buttongroup {
+  margin: 0px;
+  padding: 4px;
+  border-left: dotted 1px black;
+  border-right: dotted 1px black;
+  text-align: center;
+}
+
+#kupu-tb-buttons button {
+  vertical-align: middle;
+}
+
+/* TWiki only - icons popup */
 div#twiki-icons {
   position: absolute;
   display: none;
@@ -98,13 +120,14 @@ div#twiki-icons img:active {
 .kupu-save {background-image: url("save.png");}
 .kupu-undo {background-image: url("undo.png");}
 .kupu-logo {background-image: url("help.png");}
+.kupu-removelink {background-image: url("remove.png");}
 
 /* TWiki-only buttons */
-.twiki-icons-button { background: url("smiley.png"); }
 .twiki-new-attachment { background: url("new-attachment.png"); }
-.twiki-insert-attachment { background: url("insert-attachment.png"); }
+.twiki-new-image { background: url("new-image.png"); }
 .twiki-vardrawer-button { background: url("vars.png"); }
 .twiki-cancel-button { background-image: url("cancel.png"); }
+.twiki-insert-icon { background-image: url("smiley.png"); }
 .twiki-remove-var-button {
   background-color: white;
   background: url("remove.png");

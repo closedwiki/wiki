@@ -42,10 +42,32 @@ function initKupu(iframe) {
     // now we can create a UI object which we can use from the UI
     var ui = new KupuUI('kupu-tb-styles');
 
-    // the ui must be registered to the editor like a tool so it can be notified
-    // of state changes
-    kupu.registerTool('ui', ui); // XXX Should this be a different method?
+    // override the setTextStyle method
+    var preHunter = parentFinder(hasTag(new Array('pre')));
 
+    var superstyle = ui.setTextStyle;
+    ui.setTextStyle = function(style) {
+      var verbatim = false;
+      if (style == 'verbatim' ) {
+        style = "pre";
+        verbatim = true;
+      }
+      // copied almost verbatim from kupubasetools.js
+      if (kupu.getBrowserName() == "IE") {
+        style = '<' + style + '>';
+      };
+      kupu.execCommand('formatblock', style);
+      if (verbatim) {
+        var selNode = kupu.getSelectedNode();
+        var preNode = preHunter(selNode);
+        if (preNode) {
+          preNode.className = 'TMLverbatim';
+        }
+      }
+    }
+    // the ui must be registered to the editor like a tool so it can be
+    // notified of state changes
+    kupu.registerTool('ui', ui); // XXX Should this be a different method?
 
     // var boldcheck = hasOne(hasTag(new Array('b', 'strong')),
     //                    hasStyle('font-weight', 'bold'));
@@ -71,6 +93,7 @@ function initKupu(iframe) {
                                               'twiki-italic-button');
     kupu.registerTool('italicsbutton', italicsbutton);
 
+    /*
     var codetags = new Array('tt', 'code');
     var codecheck = hasTag(codetags);
     var codecreate = coverSelection('code');
@@ -80,6 +103,7 @@ function initKupu(iframe) {
                                            codecheck, codeexec,
                                            'twiki-code-button');
     kupu.registerTool('codebutton', codebutton);
+    */
 
     var nopcheck = hasClass('TMLnop');
     var nopcreator = coverSelection('span', 'TMLnop');
@@ -90,13 +114,15 @@ function initKupu(iframe) {
                                           'twiki-nop-button');
     kupu.registerTool('nopbutton', nopbutton);
 
-    var verbcheck = parentFinder(hasClass('TMLverbatim'));
-    var verbexec = TWikiTagToggler('pre', 'TMLverbatim', verbcheck);
-    var verbbutton = new KupuStateButton('twiki-verbatim-button', 
+    /*
+      var verbcheck = parentFinder(hasClass('TMLverbatim'));
+      var verbcover = coverSelection('pre', 'TMLverbatim');
+      var verbbutton = new KupuStateButton('twiki-verbatim-button', 
                                          verbexec, verbcheck,
                                          'twiki-verbatim-button',
                                          'twiki-verbatim-button-pressed');
-    kupu.registerTool('verbbutton', verbbutton);
+      kupu.registerTool('verbbutton', verbbutton);
+    */
 
     // Icons tool
     var twikiiconstool = new TWikiIconsTool('twiki-icons-button', 
@@ -131,19 +157,33 @@ function initKupu(iframe) {
     kupu.registerTool('removelinkbutton', removelinkbutton);
 
     // add some tools
-    var colorchoosertool = new ColorchooserTool('kupu-forecolor-button',
-                                                'kupu-hilitecolor-button',
-                                                'kupu-colorchooser');
+    var colorchoosertool = new TWikiColorChooserTool('kupu-forecolor-button',
+                                                     'kupu-colorchooser');
     kupu.registerTool('colorchooser', colorchoosertool);
 
     var listtool = new ListTool('kupu-list-ul-addbutton',
                                 'kupu-list-ol-addbutton',
                                 'kupu-ulstyles', 'kupu-olstyles');
+
+    // Override methods that enable the bullet type selection box
+    // Kupu doesn't do OO properly, so this is harder to do than it needs to be
+    listtool.super_handleStyles = listtool._handleStyles;
+    listtool._handleStyles = function(currnode, onselect, offselect) {
+      listtool.super_handleStyles(currnode, onselect, offselect);
+      onselect.style.display = "none";
+    };
+    listtool.super_addList = listtool.addList;
+    listtool.addList = function(command) {
+      listtool.super_addList(command);
+      listtool.ulselect.style.display = "none";
+    };
+
     kupu.registerTool('listtool', listtool);
     
+    /*
     var definitionlisttool = new DefinitionListTool('kupu-list-dl-addbutton');
     kupu.registerTool('definitionlisttool', definitionlisttool);
-    
+    */
     // shows the path to the current element in the status bar
     var showpathtool = new ShowPathTool();
     kupu.registerTool('showpathtool', showpathtool);
@@ -187,10 +227,6 @@ function initKupu(iframe) {
     // Link drawer
 
     var linktool = new LinkTool();
-    // Override default additions
-    linktool.createContextMenuElements = function(s, e) {
-      return new Array();
-    }
     kupu.registerTool('linktool', linktool);
 
     var linkdrawerbutton = new KupuButton('kupu-linkdrawer-button',
@@ -202,10 +238,6 @@ function initKupu(iframe) {
 
     // Table drawer
     var tabletool = new TableTool();
-    // Override default additions
-    tabletool.createContextMenuElements = function(s, e) {
-      return new Array();
-    }
     kupu.registerTool('tabletool', tabletool);
 
     var tabledrawerbutton = new KupuButton('kupu-tabledrawer-button',
@@ -232,27 +264,30 @@ function initKupu(iframe) {
     var twikivartool = new TWikiVarTool();
     kupu.registerTool('twikivartool', twikivartool);
 
-    var twikivardrawerbutton = new KupuButton('twiki-vardrawer-button',
-                                              opendrawer('twikivardrawer'));
-    kupu.registerTool('twikivardrawerbutton', twikivardrawerbutton);
+    /*
+      var twikivardrawerbutton = new KupuButton('twiki-vardrawer-button',
+           opendrawer('twikivardrawer'));
+      kupu.registerTool('twikivardrawerbutton', twikivardrawerbutton);
 
-    var twikivardrawer = new TWikiPickListDrawer('twiki-vardrawer',
-                                                 'twiki-var-select',
-                                                 twikivartool);
-    drawertool.registerDrawer('twikivardrawer', twikivardrawer);
+      var twikivardrawer = new TWikiPickListDrawer('twiki-vardrawer',
+           'twiki-var-select',
+           twikivartool);
+      drawertool.registerDrawer('twikivardrawer', twikivardrawer);
+    */
 
     // Attachments drawer
-    var insertAttLinkTool = new TWikiInsertAttachmentTool();
-    kupu.registerTool('insertattlink', insertAttLinkTool);
+    var newImageTool = new TWikiInsertAttachmentTool();
+    kupu.registerTool('insertImage', newImageTool);
+    
+    var newImageButton = new KupuButton('twiki-image-button',
+                                        opendrawer('newImageDrawer'));
+    kupu.registerTool('newImageButton', newImageButton);
 
-    var insertAttButton = new KupuButton('twiki-insert-attachment',
-                                         opendrawer('insertAttDrawer'));
-    kupu.registerTool('insertAttButton', insertAttButton);
-
-    var insertAttDrawer = new TWikiPickListDrawer('twiki-insertatt-drawer',
-                                               'twiki-insertatt-select',
-                                               insertAttLinkTool);
-    drawertool.registerDrawer('insertAttDrawer', insertAttDrawer);
+    var newImageDrawer =
+      new TWikiNewAttachmentDrawer('twiki-new-attachment-drawer',
+                                   'twiki-upload-form',
+                                   newImageTool);
+    drawertool.registerDrawer('newImageDrawer', newImageDrawer);
 
     // New attachment drawer
     var newAttButton = new KupuButton('twiki-attach-button',
@@ -262,7 +297,7 @@ function initKupu(iframe) {
     var newAttDrawer =
       new TWikiNewAttachmentDrawer('twiki-new-attachment-drawer',
                                    'twiki-upload-form',
-                                   'twiki-insertatt-select');
+                                   null);
     drawertool.registerDrawer('newAttDrawer', newAttDrawer);
 
     /* Note: the XHTML filter is disabled, so that any non-XHTML
