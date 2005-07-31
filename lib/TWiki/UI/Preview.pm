@@ -49,6 +49,13 @@ sub preview {
     if( $form ) {
         $form = $form->{name}; # used later on as well
         my $formDef = new TWiki::Form( $session, $web, $form );
+        unless( $formDef ) {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'no_form_def',
+                                        web => $session->{webName},
+                                        topic => $session->{topicName},
+                                        params => [ $web, $form ] );
+        }
         $formFields = $formDef->renderHidden( $meta );
     }
 

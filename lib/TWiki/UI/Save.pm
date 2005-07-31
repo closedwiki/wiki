@@ -167,13 +167,19 @@ sub buildNewTopic {
 
     if( $formName ) {
         $formDef = new TWiki::Form( $session, $webName, $formName );
+        unless( $formDef ) {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'no_form_def',
+                                        web => $session->{webName},
+                                        topic => $session->{topicName},
+                                        params => [ $webName, $formName ] );
+        }
         $newMeta->put( 'FORM', { name => $formName });
     }
-    if( $copyMeta && $formName ) {
+    if( $copyMeta && $formDef ) {
         # Copy existing fields into new form, filtering on the
         # known field names so we don't copy dead data. Though we
         # really should, of course. That comes later.
-        my $formDef = new TWiki::Form( $session, $webName, $formName );
         my $filter = join(
             '|',
             map { $_->{name} }

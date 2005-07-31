@@ -914,16 +914,18 @@ sub saveTopicText {
                                                      $session->{user}, '',
                                                      $topic, $web )
           ) {
+        my @plugin = caller();
         return $session->getOopsUrl( 'accessdenied',
-                                                     def => 'topic_access',
-                                                     web => $web,
-                                                     topic => $topic );
+                                     def => 'topic_access',
+                                     web => $web,
+                                     topic => $topic,
+                                     params => [ 'in', $plugin[0] ] );
     }
 
     return $session->getOopsUrl( 'attention',
-                                                 def => 'save_error',
-                                                 web => $web,
-                                                 topic => $topic )
+                                 def => 'save_error',
+                                 web => $web,
+                                 topic => $topic )
       unless( defined $text );
 
     # extract meta data and merge old attachment meta data

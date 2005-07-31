@@ -274,6 +274,13 @@ sub edit {
         # if there's a form template, then pull whatever values exist in
         # the query into the meta, overriding the values in the topic.
         my $formDef = new TWiki::Form( $session, $templateWeb, $form );
+        unless( $formDef ) {
+            throw TWiki::OopsException( 'attention',
+                                        def => 'no_form_def',
+                                        web => $session->{webName},
+                                        topic => $session->{topicName},
+                                        params => [ $templateWeb, $form ] );
+        }
         $formDef->getFieldValuesFromQuery( $session->{cgiQuery}, $meta, 0 );
         # and render them for editing
         if ( $editaction eq "text" ) {

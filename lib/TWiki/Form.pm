@@ -82,11 +82,7 @@ sub new {
 
     # Read topic that defines the form
     unless( $store->topicExists( $web, $form ) ) {
-        throw TWiki::OopsException( 'attention',
-                                    def => 'no_form_def',
-                                    web => $session->{webName},
-                                    topic => $session->{topicName},
-                                    params => [ $web, $form ] );
+        return undef;
     }
     my( $meta, $text ) =
       $store->readTopic( $session->{user}, $web, $form, undef );
