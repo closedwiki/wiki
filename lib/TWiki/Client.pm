@@ -136,25 +136,15 @@ sub loadSession {
 
     my $twiki = $this->{twiki};
 
-    # Initialize the session (you may wish to change this directory,
-    # but /tmp is probably best)
-    #
-    # Borrowing from the previous version of TWiki, perhaps using:
-    #
-    #   TWiki::Func::getDataDir() . '/.session'
-    #
-    # would work well for you. Just be sure to create data/.session
-    # and make it writable by the webserver.
-    #
-    # Another experiment might be to change your serializer. Storable
+    $this->{haveCookie} = defined($query->raw_cookie( $CGI::Session::NAME ));
+
+    # Use file serialisation.
+    # An interesting experiment might be to change your serializer. Storable
     # is a good option. See CGI::Session on http://search.cpan.org/
     # for more information on adding ';initializer:Storable' after the
     # 'driver:File' below (other serializers are available as well).
-
-    $this->{haveCookie} = defined($query->raw_cookie( $CGI::Session::NAME ));
-
     my $cgisession = CGI::Session->new( 'driver:File', $query,
-                                       { Directory=>'/tmp' } );
+                                       { Directory => $TWiki::cfg{SessionDir} } );
 
     $this->{cgisession} = $cgisession;
 
