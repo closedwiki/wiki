@@ -60,17 +60,32 @@ if [ "$params" = "" ]; then
     done
 fi
 
-echo $build $params
 for dir in $params; do
     module=`basename $dir`
+
+    # pub dir
     if [ -d $dir/pub/TWiki/$module ]; then
         mklink $dir/pub/TWiki/$module
     fi
+
+    # lib dir
+    for type in Plugins Contrib; do
+        if [ -d $dir/lib/TWiki/$type/$module ]; then
+            mklink $dir/lib/TWiki/$type/$module
+        fi
+        for pm in $dir/lib/TWiki/$type/*.pm; do
+            mklink $dir/lib/TWiki/$type/*.pm
+        done
+    done
+
+    # data dir
     if [ -d $dir/data/TWiki ]; then
         for txt in $dir/data/TWiki/*.txt; do
             mklink $txt
         done
     fi
+
+    # templates dir
     if [ -d $dir/templates ]; then
         for tmpl in $dir/templates/*.tmpl; do
             mklink $tmpl
