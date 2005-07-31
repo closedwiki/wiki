@@ -20,41 +20,12 @@ use strict;
 
 use TWiki::Func;
 
-use vars qw( $VERSION $calendarIncludes $topic $web $user $installWeb );
+use vars qw( $VERSION );
 
 $VERSION = 1.000;
 
 sub initPlugin {
-    ( $topic, $web, $user, $installWeb ) = @_;
-
-    return 1;
-}
-
-sub commonTagsHandler {
-    return unless( $_[0] =~ /<!-- INCLUDEJSCALENDAR -->/ );
-
-    unless( $calendarIncludes) {
-        eval 'use TWiki::Contrib::JSCalendarContrib';
-        if ( $@ ) {
-            $calendarIncludes = "";
-        } else {
-            $calendarIncludes =
-"<link type=\"text/css\" rel=\"stylesheet\" href=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-%DATEFIELDPLUGIN_CAL_STYLE%.css\" />
- <base href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%\" />
-<script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar.js\"></script>
-<script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/lang/calendar-%DATEFIELDPLUGIN_CAL_LANG%.js\"></script>
-<script type=\"text/javascript\" src=\"%PUBURL%/%TWIKIWEB%/JSCalendarContrib/twiki.js\"></script>";
-            $calendarIncludes =
-              TWiki::Func::expandCommonVariables( $calendarIncludes, $topic, $web );
-        }
-    }
-    $_[0] =~ s/<!-- INCLUDEJSCALENDAR -->/$calendarIncludes/;
-}
-
-sub renderFormFieldForEditHandler {
-    my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
-
-    return unless $type eq "date";
+    my( $topic, $web, $user, $installWeb ) = @_;
 
     # make sure JSCalendar is there
     eval 'use TWiki::Contrib::JSCalendarContrib';
@@ -62,18 +33,42 @@ sub renderFormFieldForEditHandler {
         my $mess = "WARNING: JSCalendar not installed: $@";
         print STDERR "$mess\n";
         TWiki::Func::writeWarning( $mess );
-        # try and force use of "text"
-        $_[1] = "text";
-        $_[2] = 16;
-        return "";
+        return 0;
+    } elsif( $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
+        TWiki::Func::writeWarning(
+            'JSCalendarContrib >=0.961 required, '.
+              $TWiki::Contrib::JSCalendarContrib::VERSION.' found');
+        return 0;
     }
-    return "<input type=\"text\" class=\"twikiEditFormTextField\" readonly=\"readonly\" "
-      . "name=\"$name\" value=\"$value\" id=\"date_$name\"/>"
-        . "<button type=\"reset\" onclick=\"return showCalendar('date_$name',"
-          . "'\%e \%B \%Y')\"><img src=\""
-            . TWiki::Func::getPubUrlPath() . "/"
-              . TWiki::Func::getTwikiWebname()
-                . "/JSCalendarContrib/img.gif\" alt=\"Calendar\"/></button>";
+
+    return 1;
+}
+
+sub beforeEditHandler {
+    # Load the 'twiki' calendar setup
+    TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+}
+
+sub renderFormFieldForEditHandler {
+    my ( $name, $type, $size, $value, $attributes, $possibleValues ) = @_;
+
+    return unless $type eq "date";
+
+    my $content =
+      CGI::image_button(
+          -name => 'calendar',
+          -onclick =>
+            "return showCalendar('date_$name','%e %B %Y')",
+          -src=> TWiki::Func::getPubUrlPath() . '/' .
+            TWiki::Func::getTwikiWebname() .
+                '/JSCalendarContrib/img.gif',
+          -alt => 'Calendar',
+          -align => 'MIDDLE' );
+    return CGI::textfield( { name => $name,
+                             value => $value,
+                             size => 30,
+                             id => 'date_'.$name } ).
+                               $content;
 }
 
 1;
