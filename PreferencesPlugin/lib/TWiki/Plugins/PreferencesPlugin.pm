@@ -22,6 +22,7 @@ package TWiki::Plugins::PreferencesPlugin;
 
 use strict;
 use CGI ( -any );
+use Error qw( :try );
 
 use vars qw(
             $web $topic $user $installWeb $VERSION $pluginName
@@ -49,24 +50,17 @@ sub initPlugin {
 
 sub preRenderingHandler {
     ### my ( $text, $map ) = @_;
+#die "FUCK ",$_[0] if ($_[0] =~ /(&37;|%)EDITPREFERENCES/);
+    return unless ( $_[0] =~ m/%EDITPREFERENCES{(.*?)}%/ );
+    my $attrs = new TWiki::Attrs( $1 );
+    my($formWeb, $form ) = TWiki::Func::normalizeWebTopicName( $web, $attrs->{_DEFAULT} );
 
-    return unless ( $_[0] =~ m/%EDITPREFERENCES{\s*\"(.*?)\"\s*}%/ );
-    my $form = $1;
-    my $insideVerbatim = 0;
-    my $formWeb = $web;
-    $form = TWiki::Func::expandCommonVariables( $form, $topic, $web );
-    if( $form =~ m/(.*?)\.(.*)/ ) {
-        $formWeb = $1;
-        $form = $2;
-    }
+    # SMELL: Unpublished API. No choice, though :-(
+    my $formDef = new TWiki::Form( $TWiki::Plugins::SESSION, $formWeb, $form );
+
     $query = TWiki::Func::getCgiQuery();
 
     my $action = lc $query->param( 'prefsaction' );
-
-    # SMELL: Unpublished API. No choice, though :-(
-    my $formDef = new TWiki::Form( $TWiki::Plugins::SESSION,
-                                   $formWeb, $form );
-
     if ( $action eq 'edit' ) {
         TWiki::Func::setTopicEditLock( $web, $topic, 1 );
 
@@ -136,16 +130,24 @@ sub _getField {
 sub _generateEditField {
     my( $web, $topic, $name, $value, $formDef ) = @_;
     $value =~ s/^\s*(.*?)\s*$/$1/ge;
+    my $html;
 
-    my $fieldDef = _getField( $formDef, $name );
+    if( $formDef ) {
+        my $fieldDef = _getField( $formDef, $name );
+        if( $fieldDef ) {
+            # SMELL: use of unpublished core function
+            my $extras;
+            ( $extras, $html ) =
+              $formDef->renderFieldForEdit( $fieldDef, $web, $topic, $value);
+        }
+    }
+    unless( $html ) {
+        # No form definition, default to text field.
+        $html = CGI::textfield( -class=>'twikiEditFormError', -name => $name,
+                                 -size => 80, -value => $value );
+    }
 
-    my $extras;
-
-    # SMELL: use of unpublished core function
-    ( $extras, $value ) =
-      $formDef->renderFieldForEdit( $fieldDef, $web, $topic, $value);
-
-    push( @shelter, $value );
+    push( @shelter, $html );
 
     return CGI::span({class=>'twikiAlert'},
                     $name.' = SHELTER'.$MARKER.$#shelter);
@@ -175,25 +177,27 @@ sub _saveSet {
 
     my $newValue = $query->param( $name ) || $value;
 
-    my $fieldDef = _getField( $formDef, $name );
-    my $type = $fieldDef->{type} || '';
-
-    if( $type && $type =~ /^checkbox/ ) {
-        $value = '';
-        my $vals = $fieldDef->{value};
-        foreach my $item ( @$vals ) {
-            my $cvalue = $query->param( $name.$item );
-            if( defined( $cvalue ) ) {
-                if( ! $value ) {
-                    $value = '';
-                } else {
-                    $value .= ', ' if( $cvalue );
+    if( $formDef ) {
+        my $fieldDef = _getField( $formDef, $name );
+        my $type = $fieldDef->{type} || '';
+        if( $type && $type =~ /^checkbox/ ) {
+            my $val = '';
+            my $vals = $fieldDef->{value};
+            foreach my $item ( @$vals ) {
+                my $cvalue = $query->param( $name.$item );
+                if( defined( $cvalue ) ) {
+                    if( ! $val ) {
+                        $val = '';
+                    } else {
+                        $val .= ', ' if( $cvalue );
+                    }
+                    $val .= $item if( $cvalue );
                 }
-                $value .= $item if( $cvalue );
             }
+            $newValue = $val;
         }
-        $newValue = $value;
     }
+    # if no form def, it's just treated as text
 
     return $name.' = '.$newValue;
 }
