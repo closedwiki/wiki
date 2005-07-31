@@ -359,16 +359,16 @@ sub endRenderingHandler {
         #
 
         # Catch hyperlinks with targets containing no colon
-        $_[0] =~ s/(<a\s[^>]*?(?<=\s)href=)(?:(")([^:]*?)([#"])|([^:]*?(?=[#\s>])))/@{[ defined($5) ? "$1$5" : "$1$2$3" ]}@{[ ( (defined($3) && ($3=~m!\?!))||(defined($5) && ($5=~m!\?!)) ) ? "&" : "?" ]}$CGI::Session::NAME=$sessionId@{[defined($4) ? "$4" : ""]}/goi;
+        $_[0] =~ s/(<a\s[^>]*?(?<=\s)href=)(?:(")([^:]*?)([#"])|([^:]*?(?=[#\s>])))/@{[ defined($5) ? "$1$5" : "$1$2$3" ]}@{[ ( (defined($3) && ($3=~m!\?!))||(defined($5) && ($5=~m!\?!)) ) ? ";" : "?" ]}$CGI::Session::NAME=$sessionId@{[defined($4) ? "$4" : ""]}/goi;
 
         # Catch hyperlinks with targets that could be returned by getScriptUrl
-        $_[0] =~ s/(<a\s[^>]*?(?<=\s)href=)(?:(")((?-i:$myScriptUrlA[^"#]*?))([#"])|((?-i:$myScriptUrlB[^\s#>]*?).*?(?=[#\s>])))/@{[ defined($5) ? "$1$5" : "$1$2$3"]}@{[( (defined($3) && ($3=~m!\?!))||(defined($5) && ($5=~m!\?!)) )? "&" : "?" ]}$CGI::Session::NAME=$sessionId@{[ defined($4) ? "$4" : ""]}/goi;
+        $_[0] =~ s/(<a\s[^>]*?(?<=\s)href=)(?:(")((?-i:$myScriptUrlA[^"#]*?))([#"])|((?-i:$myScriptUrlB[^\s#>]*?).*?(?=[#\s>])))/@{[ defined($5) ? "$1$5" : "$1$2$3"]}@{[( (defined($3) && ($3=~m!\?!))||(defined($5) && ($5=~m!\?!)) )? ";" : "?" ]}$CGI::Session::NAME=$sessionId@{[ defined($4) ? "$4" : ""]}/goi;
 
         # Catch onclicks that trigger changes of location.href to targets with no colon
-        $_[0] =~ s/(<[^>]*?\sonclick=(?:"[^"]*?|)(?=(?:javascript:|))location\.href=)(')([^:]*?)([#'])/$1$2$3@{[ ($3=~m!\?!) ? "&" :"?" ]}$CGI::Session::NAME=$sessionId$4/goi;
+        $_[0] =~ s/(<[^>]*?\sonclick=(?:"[^"]*?|)(?=(?:javascript:|))location\.href=)(')([^:]*?)([#'])/$1$2$3@{[ ($3=~m!\?!) ? ";" :"?" ]}$CGI::Session::NAME=$sessionId$4/goi;
 
         # Catch onclicks that trigger changes of location.href to targets that could be returned by getScriptUrl
-        $_[0] =~ s/(<[^>]*?\sonclick=(?:"[^"]*?|)(?=(?:javascript:|))location\.href=)(')((?-i:$myScriptUrlC[^'#]*?))([#'])/$1$2$3@{[ ($3=~m!\?!) ? "&" : "?" ]}$CGI::Session::NAME=$sessionId$4/goi;
+        $_[0] =~ s/(<[^>]*?\sonclick=(?:"[^"]*?|)(?=(?:javascript:|))location\.href=)(')((?-i:$myScriptUrlC[^'#]*?))([#'])/$1$2$3@{[ ($3=~m!\?!) ? ";" : "?" ]}$CGI::Session::NAME=$sessionId$4/goi;
 
 
         # Catch all FORM elements and add a hidden Session ID variable
