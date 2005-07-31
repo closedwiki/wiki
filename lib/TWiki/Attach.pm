@@ -28,6 +28,13 @@ A singleton object of this class is used to deal with attachments to topics.
 
 =cut
 
+# SMELL: This is horrible. HORRIBLE!!!
+# Duplicating meta-data (it should not be stored in the topic, it should be under the
+# responsibility of the Store), having this as a singleton / package operating on otherwise
+# typeless meta-data, the whole approach is NASTY. You can't even drop files in the
+# attachments directory and expect TWiki to pick them up! Or expect TWiki to recover
+# if you delete files from pub! HORRIBLE.
+
 package TWiki::Attach;
 
 use strict;
@@ -57,7 +64,7 @@ sub new {
 
 =pod
 
----++ ObjectMethod renderMetaData (  $web, $topic, $meta, $args, $isTopRev  ) -> $text
+---++ ObjectMethod renderMetaData( $web, $topic, $meta, $args, $isTopRev ) -> $text
 
 Generate a table of attachments suitable for the bottom of a topic
 view, using templates for the header, footer and each row.
@@ -217,7 +224,7 @@ sub _expandAttrs {
     }
     elsif ( $attr eq 'SIZE' ) {
         my $attrSize = $info->{size};
-        $attrSize = 100 if( $attrSize < 100 );
+        $attrSize = 100 if( !$attrSize || $attrSize < 100 );
         return sprintf( "%1.1f&nbsp;K", $attrSize / 1024 );
     }
     elsif ( $attr eq 'COMMENT' ) {
@@ -239,7 +246,9 @@ sub _expandAttrs {
         return TWiki::Time::formatTime( $info->{date} );
     }
     elsif ( $attr eq 'USER' ) {
-        return $info->{user};
+        my( $w, $t ) = $this->{session}->normalizeWebTopicName(
+            $TWiki::cfg{UsersWebName}, $info->{user} );
+        return $w.'.'.$t;
     }
     else {
         return "\0A_$attr\0";
@@ -651,7 +660,7 @@ sub upgradeFrom1v0beta {
         }
         $att->{date} = $date;
         my $u = $this->{session}->{users}->findUser( $att->{user} );
-        $att->{user} = $u->login() if $u;
+        $att->{user} = $u->webDotWikiName() if $u;
     }
 }
 

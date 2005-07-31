@@ -31,3 +31,10 @@
 <a href="%ATTACHURLPATH%/horzTWikiPowered.gif" alt="Powere">
 %BR%open
 </a>
+
+%META:FILEATTACHMENT{name="smallLogo.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="1854"}%
+%META:FILEATTACHMENT{name="vertTWiki.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="3884"}%
+%META:FILEATTACHMENT{name="vertTWikiPowered.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="4051"}%
+%META:FILEATTACHMENT{name="horzTWiki.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="3841"}%
+%META:FILEATTACHMENT{name="horzTWikiPowered.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="2984"}%
+
