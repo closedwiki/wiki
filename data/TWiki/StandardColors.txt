@@ -166,5 +166,5 @@ __Related web sites:__
 	* http://the-light.com/colclick.html 
 	* http://www.triplecode.com/munsell/
 
-
+__Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory
 

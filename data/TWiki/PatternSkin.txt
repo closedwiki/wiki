@@ -116,6 +116,7 @@ See: PatternSkinCustomization, PatternSkinPalette
 	* WebLeftBarPersonalTemplate
 	* WebLeftBarCookbook
 	* WebTopBar
+	* AdminDocumentationCategory
 
 See also [[%TOPIC%#Further_reading][Further reading]] on this page.
 
@@ -126,7 +127,6 @@ Other skins:
 ---++ Feedback
 
 Leave remarks, suggestions and other feedback in TWiki:Plugins.PatternSkinDev.
-
 
 
 %META:FILEATTACHMENT{name="i_arrow_down.gif" attr="" comment="Icon: down arrow; used for Table Of Contents" date="1092634909" path="i_arrow_down.gif" size="56" user="TWikiContributor" version="1.1"}%

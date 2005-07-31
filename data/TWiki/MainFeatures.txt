@@ -1,10 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
 
-*Main Features of TWiki*
+---+ Main Features of TWiki
 
 	* *Any web browser:* Edit existing pages or create new pages by using any web browser. There is no need to upload pages.
-	* *Edit link:* To edit a page, simply click on the ==Edit== link at the bottom of the page.
+	* *Edit link:* To edit a page, simply click on the ==Edit== link at the top or bottom of the page.
 	* *Auto links:* Web pages are [[WikiWord][linked automatically]]. You do not need to learn HTML commands to link pages.
 	* *Text formatting:* Simple, powerful and easy-to-learn [[WikiSyntax][text formatting rules]]. Basically you write text like you would write an e-mail.
 	* *Webs:* Pages are grouped into [[%TWIKIWEB%.SiteMap][TWiki webs]] (or collections). This allows you to set up separate collaboration groups.
@@ -23,3 +23,5 @@
 	* *Preferences:* Three levels of preferences: TWikiPreferences for site-level, WebPreferences for each web, and user level preferences.
 	* *Topic locking:* Users are warned if a page is being edited by another person. This is to prevent [[SimultaneousEdits][simultaneous page editing]].
 	* *Referred-By:* Find the pages that contain links to a topic.
+
+__Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory

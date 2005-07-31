@@ -19,5 +19,5 @@ or you can pass the object in as a parameter if you need to:
 Telecoms::phone( $mobile, "home" );
 </verbatim>
 
-See also: Classmethod, StaticMethod
+__Related Topics:__ Classmethod, StaticMethod, DeveloperDocumentationCategory
 

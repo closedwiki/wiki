@@ -22,7 +22,7 @@ This skin is part of every TWiki distribution.
 
 __Note:__ The Description, Screenshot and Base Name rows are needed by the %TWIKIWEB%.TWikiSkinBrowser
 
-__Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser
+__Related topic:__ %TWIKIWEB%.TWikiSkins, %TWIKIWEB%.TWikiSkinBrowser, AdminDocumentationCategory
 
 
 

@@ -160,6 +160,6 @@ See: TWikiCss
 
 <img src="%ATTACHURLPATH%/CSS_element_layout_view.pattern.tmpl.png" alt="CSS layout in View template" style="border:1px solid #ddd;" width="576" height="735"  />
 
-
+__Related Topics:__ TWikiSkins, AdminDocumentationCategory
 
 %META:FILEATTACHMENT{name="CSS_element_layout_view.pattern.tmpl.png" attr="h" comment="" date="1092634624" path="CSS_element_layout_view.pattern.tmpl.png" size="48981" user="TWikiContributor" version="1.1"}%

@@ -11,6 +11,8 @@ _Adding webs is a web based operation; renaming and deleting webs are manual ope
 
 A TWikiSite is divided into webs; each one represents one subject, one area of collaboration. Administrators can add/rename/delete webs.
 
+TODO: what sort of group / privelidges are needed for the operations here?
+
 #WebTemplate
 ---++ Choose Web Template
 
@@ -51,3 +53,5 @@ Rename a web via the Tools section in each web's WebPreferences topic.  You may 
 If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, which by default is =Main= (this is assigned in the site configuration). That means that every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
 
 If you want to rename the TWiki web, remember it is referred to by =%<nop>TWIKIWEB%= which is also defined up by a configuration setting.
+
+__Related Topics:__ AdminDocumentationCategory

@@ -1,9 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
+TODO: is this made redundant by the re-write of TWikiUserAuthentication?
+
 
 %TOC%
 %STARTINCLUDE%
----# Manage Users
+---+ Manage Users
 _Register users on your TWiki site; change/reset/install passwords; remove user accounts_
 
 ---++ Authentication and Access Control
@@ -12,6 +14,9 @@ _Register users on your TWiki site; change/reset/install passwords; remove user 
 	* TWikiAccessControl describes how to define groups and how to restrict access to content
 
 ---++ Register User
+
+It is not necessary to have user home pages in the TWiki system for Authentication to work - see TWikiUserAuthentication for deatils.
+
 
 	* TWikiRegistration is for users to fill out a form
 	* %TWIKIWEB%.NewUserTemplate can be changed to customize user home pages, it can optionally use the %MAINWEB%.UserForm to define user fields as meta data
@@ -34,6 +39,4 @@ To remove a user account (FredQuimby, who logs in as "fred"):
 
 __Note:__ Consider leaving the user topic file in place so their past signatures and revision author entries don't end up looking like AnUncreatedTopic. If you want to make it clear the user is inactive on your site (e.g. %MAINWEB%.UserWikiName) or has been banished add a note to that effect and write protect the page (TWikiAccessControl). The existance of the <nop>UserName topic should also prevent that user name from being re-used, sealing the potential security hole regarding inherited permissions..
 
-
-
-
+__Related Topics:__ AdminDocumentationCategory

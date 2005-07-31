@@ -10,3 +10,4 @@ Attachments are made when people first register, held pending until the registra
 	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
 
+__Related Topics:__ AdminToolsCategory

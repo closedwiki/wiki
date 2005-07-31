@@ -53,4 +53,4 @@ The TWikiPreferences has these settings:
 	* =SEARCHVARDEFAULTTYPE=: Default search type for =%<nop>SEARCH{}= variable
 	* =SEARCHSTOPWORDS=: List of stop words
 
-
+__Related Topics:__ UserDocumentationCategory

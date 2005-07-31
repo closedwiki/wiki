@@ -1,4 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1120654797" format="1.1" version="$Rev$"}%
+
+---+ Live view of the permissions settings on this TWiki Installation
+
 | *Web* | *Sitemap* | *VIEW* || *CHANGE* || *RENAME* ||
 |^| *Listed* | *DENY* | *ALLOW* | *DENY* | *ALLOW* | *DENY* | *ALLOW* |
 %SEARCH{ "DENYWEBVIEW" web="%MAINWEB%, %TWIKIWEB%, all" topic="%WEBPREFSTOPIC%" nototal="on" nosearch="on" format="| [[$web.WebHome][$web]] [[$web.WebPreferences][...]] | $percntVAR{ \"SITEMAPLIST\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBVIEW\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBCHANGE\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBCHANGE\" web=\"$web\" }$percnt | $percntVAR{ \"DENYWEBRENAME\" web=\"$web\" }$percnt | $percntVAR{ \"ALLOWWEBRENAME\" web=\"$web\" }$percnt |" }%
@@ -8,10 +11,8 @@ See TWikiAccessControl for details
 __Please Note:__
 
    * A blank in the the above table may mean _either_ the corresponding control is absent or commented out _or_ that it has been set to a null value.  The two conditions have dramatically different and possibly opposed semantics.
-
    * Main.TWikiGuest is the guest account - used by unauthenticated users.
-
    * The TWiki web must not be denied view to %MAINWEB%.TWikiGuest - otherwise people will not be able to register.
 
-Related: SiteMap
 
+__Related Topics:__ SiteMap, UserDocumentationCategory, AdminDocumentationCategory

@@ -702,7 +702,7 @@ You can also change the colors in a modified version of =style.css=. See Pattern
   <td style="height:20px; width:150px; background:#ffffff" > &nbsp; </td>
 </tr ></table>
 
-
+__Related Topics:__ TWikiSkins, AdminDocumentationCategory
 
 %META:FILEATTACHMENT{name="PatternSkinPalette.css" attr="" comment="" date="1093733793" path="PatternSkinPalette.css" size="9554" user="TWikiContributor" version="1.1"}%
 %META:FILEATTACHMENT{name="filterColours.pl.txt" attr="" comment="" date="1093733821" path="filterColours.pl.txt" size="98" user="TWikiContributor" version="1.1"}%

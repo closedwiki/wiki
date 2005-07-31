@@ -4,7 +4,7 @@
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
----# Managing Topics
+---+ Managing Topics
 
 _Browser-based rename, move, and delete for individual topics_
 
@@ -86,3 +86,5 @@ The following shows some limitations of square bracket processing.
 [[OldTopic]]	=> [[NewTopic]]
 </verbatim>
 </blockquote>
+
+__Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory

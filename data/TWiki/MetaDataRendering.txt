@@ -1,11 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 %META:TOPICPARENT{name="TWikiTemplates"}%
+
 %STARTINCLUDE%
----## Meta Data Rendering
+---# Meta Data Rendering
 
 Various meta data can be stored in topics - MetaDataDefinition
+
+#TODO: test that this works in DevelopBranch
 
 This is rendered using the %<nop>META% variable.  This is mostly used in the =view=, =preview= and =edit= scripts.
 
@@ -28,5 +29,4 @@ Possible future additions:
 	* Specify a template to be used for rendering
 %STOPINCLUDE%
 
--- JohnTalintyre - 29 Aug 2001 <br />
-
+__Related Topics:__ UserDocumentationCategory

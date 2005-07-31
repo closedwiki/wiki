@@ -23,10 +23,11 @@ __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__
 	* Write protect your home page: (set it to your %MAINWEB%.WikiName)
 		* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
-__Related topics__
+__Related Topics:__
 	* %TWIKIWEB%.ChangePassword
-	* %TWIKIWEB%.%WIKIPREFSTOPIC% has site-level preferences of <nop>%WIKITOOLNAME%.
-	* %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
 	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of other TWiki users.
+	* UserDocumentationCategory
+	* UserToolsCategory
+
 %META:FORM{name="%MAINWEB%.UserForm"}%
 

@@ -11,4 +11,6 @@ A StaticMethod is a method in a package that can be called without reference to 
 
 my $colour = Telecoms::defaultColour()
 
-See also: ClassMethod, ObjectMethod
+</verbatim>
+
+__Related Topics:__ ClassMethod, ObjectMethod, DeveloperDocumentationCategory
