@@ -1,23 +1,24 @@
 
 TWIKIDEV ?= ~/twiki
+MakeFor ?= twiki.org-`./svnrev.pl`
 
 all : help
 
 TAR_EXCLUDE = --exclude CVS --exclude *~ --exclude bak
 
-twiki.tar.bz2 : twiki.tar
-	bzip2 -f twiki.tar
+$(MakeFor).tar.bz2 : $(MakeFor).tar
+	bzip2 -f $(MakeFor).tar
 
-twiki.tar : 
-	tar -f twiki.tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform && find -maxdepth 1 -type f`
-	tar -f twiki.tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
-	tar -f twiki.tar -r $(TAR_EXCLUDE) 
+$(MakeFor).tar : 
+	tar -f $(MakeFor).tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform && find -maxdepth 1 -type f`
+	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
+	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) 
 
 extensions : plugins contribs addons
 
-distro : twiki-cpan extensions twiki.tar.bz2 
+distro : twiki-cpan extensions $(MakeFor).tar.bz2 
 
-test-distro : twiki-cpan extensions twiki.tar
+test-distro : twiki-cpan extensions $(MakeFor).tar
 
 minicpan :
 	cpan/mirror-cpan.pl
@@ -37,13 +38,14 @@ addons :
 ################################################################################
 
 publish :
-	scp twiki.tar.bz2 $(PUBLISH_TO)
+	scp $(MakeFor).tar.bz2 $(PUBLISH_TO)
 
 ################################################################################
 
 print :
 	@echo Settings
 	@echo ================================================================================
+	@echo MakeFor = $(MakeFor)
 	@echo TWIKIDEV = $(TWIKIDEV)
 	@echo PUBLISH_TO = $(PUBLISH_TO)
 
@@ -51,7 +53,7 @@ help : print
 	@echo 
 	@echo Usage
 	@echo ================================================================================
-	@echo make twiki.tar[.bz2] - bundle already-downloaded extensions + kernels into .tar[.bz2]
+	@echo make [build-options] MakeFor.tar[.bz2] - bundle already-downloaded extensions + kernels into .tar[.bz2]
 	@echo 
 	@echo make test-distro - download and bundle extensions + kernel
 	@echo make distro - test-distro + bzip2 compression
@@ -63,3 +65,7 @@ help : print
 	@echo make twiki-cpan - create twiki cpan repository
 	@echo 
 	@echo make publish - upload distro
+	@echo 
+	@echo ================================================================================
+	@echo build-options:
+	@echo   MakeFor - distribution name
