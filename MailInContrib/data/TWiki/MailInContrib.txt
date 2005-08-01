@@ -1,8 +1,5 @@
+%META:TOPICINFO{author="TWikiGuest" date="1122824612" format="1.1" version="1.2"}%
 ---+!! <nop>MailInContrib for TWiki
-
-<table bgcolor="yellow"><tr><td>
-*NOTE: THIS CONTRIB IS DESIGNED TO WORK WITH THE CODE CURRENTLY ON THE DEVELOP BRANCH. IT WILL NOT WORK WITH ANY RELEASED VERSION OF TWIKI*. It may be back-ported at some point.
-</td></tr></table>
 
 This Contrib supports the submission of content to TWiki topics via e-mail.
 
@@ -18,13 +15,19 @@ Subject: Travels.DailyDiary
 
 *Phuket*: I've run out of money!
 </verbatim>
-The message lands in your email folder at your ISP. Once an hour, a cron job runs the =mailincron= script, which scans the folder and finds any messages that have a correctly formatted TWiki Web.Topic<nop>Name in the subject line. The Web must exist, though the topic will be created if necessary. Both web and topic _must_ be specified.
+The message lands in your email folder at your ISP. Once an hour, a cron job runs the =mailincron= script, which scans the folder. If it finds any messages that have nothing but a correctly formatted TWiki Web.Topic<nop>Name in the subject line, that topic is appended to (created) with the plain text of the email.  The Web must exist, though the topic will be created if necessary. Both web and topic _must_ be specified.
 
-In this case, the web exists, and so does the topic, so the following text gets appended to Travels.Daily<nop>Diary:
-
-<i>By mail from Prodigal Son <gapper@isp.co.uk> 10 Jul 2005 08:35:11 -0900</i>
-
+In our example, the web exists, and so does the topic, so the following text gets appended to Travels.Daily<nop>Diary:
+<div style='background: #FFCCCC'>
 *Phuket*: I've run out of money!
+
+<em>-- Prodigal Son <gapper@isp.co.uk> 10 Jul 2005 08:35:11 -0900</em>
+</div>
+Attachments to the mail get treated as attachments by TWiki, and attached to the target topic.
+
+You can also define a 'spambox' for each mail folder. A spambox is a topic that will take all messages that do _not_ have a correctly formatted subject line.
+
+Note that =mailincron= will only process messages that have arrived since the last time it ran.
 
 ---+ Settings
 	* Name of the perl package
@@ -40,7 +43,7 @@ In this case, the web exists, and so does the topic, so the following text gets 
 
 Because of the security issues involved (passwords for the mailboxes etc.) configuration uses variables set in your =LocalSite.cfg=. Let's say you have a mailbox on an ISP, on host =mail.isp.net=. You talk to the ISP using POP3 via port 110, and you log on using username =mummy= and password =money8ags=. Your configuration would look as follows:
 <verbatim>
-$cfg{MailIn = [
+$TWiki::cfg{MailIn} = [
     {
         # Mail folder; Required.
         # Note: support for POP3 requires that the Email::Folder::POP3
@@ -79,6 +82,11 @@ $cfg{MailIn = [
         # or had failures. If you are going to set this, you are advised
         # to also set ReplyOnError. (default false)
         deleteall => 0
+
+        # If this is specified, mails that don't specify a valid
+        # web.topic name on the subject line will be appended to
+        # this topic.
+        spambox => 'Sandbox.SpamBox'
     },
     # you can add more inboxes here
 ];
@@ -108,6 +116,7 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+| 31 July 2005 | Back-ported to Cairo, added spambox (work generously supported by the [[http://www.evolvedmedianetwork.com/][Evolved Media Network]]) |
 | 10 Mar 2005 | 1.000 Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
@@ -115,3 +124,4 @@ This is a brand-new development, not related in any to the original TWiki:Plugin
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
 -- TWiki:Main/CrawfordCurrie - %$DATE%
+

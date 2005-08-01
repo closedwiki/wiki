@@ -1,3 +1,6 @@
 Time::ParseDate,>=2003.0211,cpan,Required. Available from the CPAN:Time::ParseDate archive.
 Email::Folder,>=0.84,cpan,Required. Available from the CPAN archive.
+Email::FolderType::Net,>=1.02,cpan,Required. Available from the CPAN archive.
+Email::MIME,>=1.82,cpan,Required. Available from the CPAN archive.
 Email::Delete,>=1.02,cpan,Optional, recommended. Available from the CPAN archive.
+
