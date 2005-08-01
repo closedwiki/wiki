@@ -47,6 +47,14 @@ __Notes:__
 
 Rename a web via the Tools section in each web's WebPreferences topic.  You may delete a web by moving it into a Trash web.  
 
+---+++ Permissions
+
+You may only rename a web if you have permissions to rename all the topics within that web, including any topics in that web's subwebs.  You will also need permissions to update any topics containing references to that web.
+
+---+++ Edit Conflicts
+
+If anyone is editing a topic which requires updating, or which lives in the web being renamed, a second confirmation screen will come up which will indicate which topics are still locked for edit.  You may continue to hit the refresh button until an edit lease is obtained for each topic which requires updating (the "Refresh" button will change to "Submit"), or hit "Cancel", which will cancel your edit lease on all affected topics.
+
 ---+++ Renaming the webs in the distribution
 
 If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, which by default is =Main= (this is assigned in the site configuration). That means that every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).  This potentially large change can be performed automatically with the renameweb function mentioned above, in the [[%MAINWEB%.WebPreferences]] topic.
