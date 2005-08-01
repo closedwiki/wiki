@@ -178,12 +178,12 @@ print $q->h1( $title );
 # install TWiki itself
 my $tar = $q->param( 'kernel' ) or die "kernel parameter required (how did you get here?)";
 if ( $tar =~ /^LATEST$/i ) { 
-    $tar = ( reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } <../downloads/releases/TWikiKernel-*> )[0];
+    $tar = ( reverse sort { ( $a =~ /.+?(\d+)/ )[0] <=> ( $b =~ /.+?(\d+)/ )[0] } <../downloads/kernels/TWikiKernel-*> )[0];
     # SMELL: kludge to strip the extension (and path) which gets added back in next step
     ( $tar = basename( $tar ) ) =~ s/(\..*?)$//;
 }
 
-installTWikiExtension({ file => "../downloads/releases/$tar.zip", name => 'TWiki', dir => "downloads/releases", cdinto => 'twiki', mapDirs => $mapTWikiDirs });
+installTWikiExtension({ file => "../downloads/kernels/$tar.zip", name => 'TWiki', dir => "downloads/kernels", cdinto => 'twiki', mapDirs => $mapTWikiDirs });
 
 #--------------------------------------------------------------------------------
 # update LocalSite.cfg for local directories configuration
@@ -558,7 +558,7 @@ __HTML__
 		$q->a( { -href=>'http://twiki.org/cgi-bin/view/Codev/TWikiKernel?skin=print.pattern', -target=>'details' }, 'TWikiKernel' )) .
 		q{</div>};
     }
-    my %kernels = ( dir => "../downloads/releases/", xml => "releases.xml", type => "kernel" );
+    my %kernels = ( dir => "../downloads/kernel/", xml => "kernels.xml", type => "kernel" );
     releasesCatalogue({ %kernels, cgi => $q });
     $text .= catalogue({ %kernels, inputType => "radio", title => "TWikiKernel", cgi => $q });
 
