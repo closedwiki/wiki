@@ -29,7 +29,7 @@ sub mychomp { chomp $_[0]; $_[0] }
 $main::VERSION = '0.50';
 my $Config = {
 # INSTALL OPTIONS
-	distro => undef,
+	TWikiFor => undef,
 	kernel => undef,
 	browser => undef,
 #    web => '',
@@ -56,7 +56,7 @@ my $Config = {
 };
 Getopt::Long::Configure( "bundling" );
 my $result = GetOptions( $Config,
-			'distro=s', 'kernel=s', 'web=s@',
+			'TWikiFor=s', 'kernel=s', 'web=s@',
 			 'browser=s',
 			 'administrator=s', 'WIKIWEBMASTER=s',
 			 'scriptsuffix=s', 'perl=s', 'cgiurl=s',
@@ -71,7 +71,7 @@ pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
 # generated config variables
-$Config->{distro} = 'http://twikiplugins.sourceforge.net/twiki.tar.bz2';
+$Config->{TWikiFor} ||= 'http://twikiplugins.sourceforge.net/twiki.org.tar.bz2';
 $Config->{cgibin} = $Config->{install_dir} . "/cgi-bin";
 
 # set defaults
@@ -86,7 +86,7 @@ $Config->{cgiurl} =~ m|cgi-bin/?$| or die "cgiurl must end with 'cgi-bin' (feel 
 $Config->{install_account} or die "no install_account?";
 $Config->{install_host} or die "no install_host?";
 $Config->{install_dir} or die "no install_dir?";
-$Config->{distro} or die "no distro?";
+$Config->{TWikiFor} or die "no TWikiFor?";
 
 ################################################################################
 # install 
@@ -125,7 +125,7 @@ sub PushRemoteTWikiInstall
 	my $parms = shift;
 	print STDERR "PushRemoteTWikiInstall: ", Dumper( $parms ) if $parms->{debug};
 
-	my $distro = $parms->{distro} or die "no distro?";
+	my $TWikiFor = $parms->{TWikiFor} or die "no TWikiFor?";
 	my $kernel = $parms->{kernel} or die "no kernel?";
 
 	die "no install_account?" unless $parms->{install_account};
@@ -143,7 +143,7 @@ sub PushRemoteTWikiInstall
 	# untar the tarball from sourceforge.net, install prerequisite CPAN modules
 	$Config->{verbose} &&
 	    print "Downloading TWiki distribution and installing CPAN modules (this can take many minutes...)\n";
-	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && wget -q http://twikiplugins.sourceforge.net/twiki.tar.bz2 -O - | tar xj && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
+	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && wget -q $Config->{TWikiFor} -O - | tar xj && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
 
 	# install the actual wiki and extensions
 	$Config->{verbose} && print "Installing TWiki and TWikiExtensions\n";
@@ -187,7 +187,7 @@ install-remote-twiki.pl -kernel [-web ...]* -install_account -install_host -inst
 
 =over 8
 
-=item B<-distro [distro]>				TWikiDistribution filename (.tar.bz2)
+=item B<-TWikiFor [TWikiFor]>				TWikiFor* filename (.tar.bz2)
     (hardwrired to use the latest development version from twikiplugins.sourceforge.net)
 
 =item B<-kernel [kernel|LATEST]>			
