@@ -33,11 +33,15 @@ Note that =mailincron= will only process messages that have arrived since the la
 
 This module doesn't try to do anything smart with inserting text into topics; it just appends to the end. It doesn't try to do anything smart with authentication; if the specified user isn't allowed to write to the specified topic, it will just silently fail. It is designed to be trivial to set up and simple to use. It leverages the latest CPAN perl modules for handling Email, so it should be compatible with most mail services.
 
----+ Settings
+---++ Settings
+   * One line description:
+      * Set SHORTDESCRIPTION = Supports submissions to TWiki via e-mail
 	* Name of the perl package
 		* Set STUB = %$STUB%
 
----+ Installation
+---++ Installation
+__Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
+
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
@@ -112,18 +116,19 @@ http://my.twiki/bin/mailincron?debug=on
 
 This is a brand-new development, not related in any to the original TWiki:Plugins/MailInAddon. Due acknowledgement is made to those early pioneers for the idea. ;-)
 
----+ Contrib Info
+---++ Contrib Info
 
 |  Author: | TWiki:Main/CrawfordCurrie (http://c-dot.co.uk) |
 |  Copyright &copy;: | 2005, TWiki Contributors |
-|  License: | GPL |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | %$DEPENDENCIES% |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-| 31 July 2005 | Back-ported to Cairo, added spambox (work generously supported by the [[http://www.evolvedmedianetwork.com/][Evolved Media Network]]) |
+| 31 July 2005 | 1.001 Back-ported to Cairo, added spambox (work generously supported by the [[http://www.evolvedmedianetwork.com/][Evolved Media Network]]) |
 | 10 Mar 2005 | 1.000 Initial version |
 |  Home: | TWiki:Plugins/%TOPIC% |
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
