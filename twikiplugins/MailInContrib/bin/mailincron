@@ -33,7 +33,6 @@ BEGIN {
     require 'setlib.cfg';
 }
 
-use TWiki::Attrs;
 use TWiki::Contrib::MailInContrib;
 
 my $debug;
@@ -47,23 +46,22 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
     $debug = $query->param( 'debug' ) || 0;
 } else {
     # Called from the command line
-    my $args = new TWiki::Attrs( join(" ", @ARGV ), 1);
-    $debug = $args->{debug};
+    my $args = join(" ", @ARGV );
+    $debug = ( $args =~ /-d/ );
 }
 
 my $twiki;
 my $folders;
-if( defined $TWiki::wikiversion ) {
+if( eval 'defined($TWiki::wikiversion)' ) {
     TWiki::initialize();
     $twiki = undef;
-    $folders = ....;
+    eval "use LocalSite.cfg";
 } else {
     $twiki = new TWiki();
-    $folders = $TWiki::cfg{MailIn};
 }
+$folders = $TWiki::cfg{MailIn};
 my $processor = new TWiki::Contrib::MailInContrib($twiki, $debug);
 foreach my $folder ( @$folders ) {
     $processor->processInbox( $folder );
-}
 }
 $processor->wrapUp();

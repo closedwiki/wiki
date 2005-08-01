@@ -84,6 +84,14 @@ THIS
 THIS
     $cfg->{replyonsuccess} = ask('Reply on success');
 
+    print <<'THIS';
+ * Name of the topic where you want to save mails that don't have
+ * a valid web.topic on the Subject: line. If you don't specify this,
+ * these mails will simply be ignored.
+ * You must specify a full web.topic name (recommend LEAVE BLANK)
+THIS
+    $cfg->{spambox} = prompt('Full name of spambox topic');
+
     push(@$configs, $cfg);
     $x = "another";
 

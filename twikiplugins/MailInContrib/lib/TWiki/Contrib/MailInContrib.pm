@@ -25,11 +25,19 @@ use TWiki;
 
 use Email::Folder;
 use Email::FolderType::Net;
+use Email::MIME;
 use Time::ParseDate;
 use Error qw( :try );
 use vars qw ( $VERSION );
+use Carp;
 
-$VERSION = 1.000;
+$VERSION = 1.100;
+
+my $comment = 'Saved by mailincron';
+
+BEGIN {
+    $SIG{__DIE__} = sub { Carp::confess $_[0] };
+}
 
 =pod
 
@@ -48,10 +56,10 @@ sub new {
     # Find out when we last processed mail
     if( defined $this->{session} ) {
         $this->{lastMailIn} = $session->{store}->readMetaData(
-            $TWiki::cfg{SystemWebName}, "mailincron" ) || 0;
+            '', "mailincron" ) || 0;
     } else {
-        $this->{lastMailIn} = $TWiki::Store::readFile(
-            "$TWiki::dataDir/TWiki/.mailincron" ) || 0;
+        $this->{lastMailIn} = TWiki::Store::readFile(
+            "$TWiki::dataDir/.mailincron" ) || 0;
     }
 
     return $this;
@@ -77,7 +85,7 @@ sub wrapUp {
         $this->{session}->{store}->saveMetaData
           ($TWiki::cfg{SystemWebName}, "mailincron", time() );
     } else {
-        $this->{lastMailIn} = $TWiki::Store::saveFile(
+        $this->{lastMailIn} = TWiki::Store::saveFile(
             "$TWiki::dataDir/TWiki/.mailincron", time() );
     }
 }
@@ -94,6 +102,7 @@ and process them for inclusion in TWiki topics.
 sub processInbox {
     my( $this, $box ) = @_;
 
+    print "Process $box->{folder}\n" if $this->{debug};
     my $folder = new Email::Folder( $box->{folder} );
     my $user;
     if( defined $this->{session} ) {
@@ -101,92 +110,190 @@ sub processInbox {
         unless( $user ) {
             die "User $box->{user} unknown!";
         }
+    } else {
+        $user = $box->{user};
     }
     my %kill;
 
+    print "Scanning $box->{folder}\n" if $this->{debug};
     my $mail; # an Email::Simple object
     while( ($mail = $folder->next_message()) ) {
+        $mail = new Email::MIME( $mail->as_string() );
         # If the subject line is a valid TWiki Web.WikiName, then we want
         # to process it.
+        my( $web, $topic );
         if( $mail->header('Subject') =~
-            /^\s*($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex})\s*$/i ) {
+                /^\s*($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex})\s*$/i ) {
+            ( $web, $topic ) = ( $1, $2 );
+        } elsif( $box->{spambox} && $box->{spambox} =~ /^(.*)\.(.*)$/ ) {
+            ( $web, $topic ) = ( $1, $2 );
+        } else {
+            print $mail->header('Subject')," ignored\n" if $this->{debug};
+            next;
+        }
 
-            my $web = $1;
-            my $topic = $2;
-
-            # scalar context gives first in list
-            my $received = $mail->header('Received');
-            $received =~ s/^.*; (.*?)$/$1/;
-            my $secs = Time::ParseDate::parsedate( $received );
-
-            if( $secs && $secs > $this->{lastMailIn} ) {
-                if( defined $this->{session} ) {
-                    unless( $this->{session}->{store}->webExists( $web )) {
-                        $this->fail( $box, $mail, "Web $web does not exist" );
-                        next;
-                    }
-                } else {
-                    unless( TWiki::Store::webExists( $web )) {
-                        $this->fail( $box, $mail, "Web $web does not exist" );
-                        next;
-                    }
+        print "Message ",$mail->header('Subject'),"\n" if $this->{debug};
+        # scalar context gives first in list
+        my $received = $mail->header('Received');
+        $received =~ s/^.*; (.*?)$/$1/;
+        my $secs = Time::ParseDate::parsedate( $received );
+        if( $secs && $secs > $this->{lastMailIn} ) {
+            if( defined $this->{session} ) {
+                unless( $this->{session}->{store}->webExists( $web )) {
+                    $this->fail( $box, $mail, "Web $web does not exist" );
+                    next;
                 }
-                my $body = $mail->body();
-                my $sender = $mail->header( 'From' );
-                $body = "<i>By mail from ${sender} $received</i>\n\n$body";
-                print "Received mail from $sender for $web.$topic\n";
-                print $mail->header( 'Message-ID' ),"\n" if $this->{debug};
-                try {
-                    my( $meta, $text );
-                    unless( $this->{debug} ) {
-                        if( $this->{session} ) {
-                            ( $meta, $text ) =
-                              $this->{session}->{store}->readTopic
-                                ( $user, $web, $topic );
-                            $body = $this->{session}->{store}->saveTopic
-                              ( $user, $web, $topic, $text . $body, $meta,
-                                { comment => "Saved by mailincron" } );
-                        } else {
-                            ( $meta, $text ) =
-                              TWiki::Store::readTopic( $web, $topic );
-                            $body = $this->{session}->{store}->saveTopic
-                              ( $user, $web, $topic, $text . $body, $meta,
-                                '', 1, 0, 0 );
-                        }
-                    }
-                    if ( $body ) {
-                        $this->fail( $box, $mail, $body );
-                    } elsif( $box->{replyonsuccess} ) {
-                        $this->reply( $mail, "Thank you for your successful submission" );
-                    }
-                } catch TWiki::AccessControlException with {
-                    my $e = shift;
-                    $this->fail( $box, $mail, $e->stringify() );
-                } catch Error::Simple with {
-                    my $e = shift;
-                    $this->fail( $box, $mail, $e->stringify() );
-                };
-
-                $kill{$mail->header( 'Message-ID' )} = 1;
+            } else {
+                unless( TWiki::Store::webExists( $web )) {
+                    $this->fail( $box, $mail, "Web $web does not exist" );
+                    next;
+                }
             }
+            my $sender = $mail->header( 'From' ) || 'unknown';
+
+            my @attachments = ();
+            my $body = '';
+            _extract( $mail, \$body, \@attachments );
+
+            print "Received mail from $sender for $web.$topic\n$body";
+            $body .= "\n\n-- <em>${sender} $received</em>\n";
+
+            my $err = $this->_saveTopic( $user, $web, $topic, $body );
+
+            foreach my $att ( @attachments ) {
+                $err .= $this->_saveAttachment( $user, $web, $topic, $att );
+            }
+
+            if( $err ) {
+                $this->fail( $box, $mail, $err );
+            } elsif( $box->{replyonsuccess} ) {
+                $this->reply( $box,
+                    $mail, 'Thank you for your successful submission');
+            }
+            $kill{$mail->header( 'Message-ID' )} = 1;
         }
     }
 
     if( $box->{delete} || $box->{deleteall} ) {
-        require Email::Delete;
-        Email::Delete::delete_message
-            ( from => $box,
-              matching =>
-              sub {
-                  my $test = shift;
-                  if( $box->{deleteall} ||
-                      $kill{$mail->header('Message-ID')} ) {
-                      print "Delete ",$mail->header('Message-ID'),"\n";
-                      return 1 unless $this->{debug};
-                  }
-                  return 0;
-              } );
+        eval 'use Email::Delete';
+        unless( $@ ) {
+            Email::Delete::delete_message
+                ( from => $box,
+                  matching =>
+                    sub {
+                        my $test = shift;
+                        if( $box->{deleteall} ||
+                              $kill{$mail->header('Message-ID')} ) {
+                            print "Delete ",$mail->header('Message-ID'),"\n";
+                            return 1 unless $this->{debug};
+                        }
+                        return 0;
+                    } );
+        }
     }
+}
+
+# Extract plain text and attachments from the MIME
+sub _extract {
+    my( $mime, $text, $attach ) = @_;
+
+    foreach my $part ( $mime->parts() ) {
+        my $ct = $part->content_type || 'text/plain';
+        my $dp = $part->header('Content-Disposition') || 'inline';
+
+        if( $ct =~ m[text/plain] && $dp =~ /inline/ ) {
+            $$text .= $part->body();
+        } elsif ( $part->filename()) {
+            push( @$attach,
+                  {
+                      payload => $part->body(),
+                      filename => $part->filename()
+                  } );
+        } elsif( $part != $mime ) {
+            _extract( $part, $text, $attach );
+        }
+    }
+}
+
+sub _saveTopic {
+    my( $this, $user, $web, $topic, $body ) = @_;
+    my $err;
+
+    if( $this->{debug} ) {
+        print "Save topic $web.$topic\n";
+    } elsif( $this->{session} ) {
+        try {
+            my( $meta, $text ) =
+              $this->{session}->{store}->readTopic
+                ( $user, $web, $topic );
+            $this->{session}->{store}->saveTopic
+              ( $user, $web, $topic, $text . $body, $meta,
+                { comment => $comment } );
+        } catch TWiki::AccessControlException with {
+            my $e = shift;
+            $err = $e->stringify();
+        } catch Error::Simple with {
+            my $e = shift;
+            $err = $e->stringify();
+        };
+    } else {
+        $body =~ s/   /\t/g;
+        my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
+        $err = TWiki::Store::saveTopic(
+            $web, $topic, $text . $body, $meta, '', 1, 0, 0 );
+    }
+    return $err;
+}
+
+sub _saveAttachment {
+    my( $this, $user, $web, $topic, $attachment ) = @_;
+    my $filename = $attachment->{filename};
+    my $payload = $attachment->{payload};
+
+    if( $this->{debug} ) {
+        print "Save attachment $filename\n";
+        return '';
+    }
+
+    my $tmpfile = $web.'_'.$topic.'_'.$filename;
+    if( $this->{session} ) {
+        $tmpfile = $TWiki::cfg{PubDir}.'/'.$tmpfile;
+    } else {
+        $tmpfile = $TWiki::pubDir.'/'.$tmpfile;
+    }
+
+    $tmpfile .= 'X' while -e $tmpfile;
+    open( TF, ">$tmpfile" ) || return 'Could not write '.$tmpfile;
+    print TF $attachment->{payload};
+    close( TF );
+
+    my $err = '';
+    if( $this->{session} ) {
+        $this->{session}->{store}->saveAttachment(
+            $web, $topic, $filename, { comment => $comment,
+                                       file => $tmpfile });
+    } else {
+        $err = TWiki::Store::saveAttachment( $web, $topic, '', '',
+                                      $filename, 0, 1,
+                                      0, $comment, $tmpfile );
+        return $err if $err;
+
+        my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
+
+        my @stats = stat $tmpfile;
+        my $fileSize = $stats[7];
+        my $fileDate = $stats[9];
+
+        my $fileVersion = TWiki::Store::getRevisionNumber( $web, $topic,
+                                                           $filename );
+        TWiki::Attach::updateAttachment( $fileVersion, $filename, $filename,
+                                         $fileSize,
+                                         $fileDate, $user, $comment,
+                                         0, $meta );
+        $err = TWiki::Store::saveTopic( $web, $topic, $text, $meta, '', 1 );
+    }
+    unlink( $tmpfile );
+    return $err;
 }
 
 # we had a problem; reply or record a warning.
