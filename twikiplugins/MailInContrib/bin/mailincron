@@ -47,7 +47,7 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
 } else {
     # Called from the command line
     my $args = join(" ", @ARGV );
-    $debug = ( $args =~ /-d/ );
+    $debug = ( $args =~ /\bdebug\b/ );
 }
 
 my $twiki;

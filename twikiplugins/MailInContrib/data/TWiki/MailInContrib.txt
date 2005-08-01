@@ -31,6 +31,8 @@ You can also define a 'spambox' for each mail folder. A spambox is a topic that 
 
 Note that =mailincron= will only process messages that have arrived since the last time it ran.
 
+This module doesn't try to do anything smart with inserting text into topics; it just appends to the end. It doesn't try to do anything smart with authentication; if the specified user isn't allowed to write to the specified topic, it will just silently fail. It is designed to be trivial to set up and simple to use. It leverages the latest CPAN perl modules for handling Email, so it should be compatible with most mail services.
+
 ---+ Settings
 	* Name of the perl package
 		* Set STUB = %$STUB%
