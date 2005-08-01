@@ -99,6 +99,7 @@ while ($gz->gzreadline($_) > 0) {
 
   my ($module, $version, $path) = split;
   next if $path =~ m{/perl-5};  # skip Perl distributions
+  next if $module =~ /^Acme::/;
 
   my $bMatch = 0;
   foreach my $modulePattern ( @modules )
