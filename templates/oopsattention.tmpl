@@ -72,6 +72,7 @@ Cannot rename %WEB% to <nop>%PARAM1% because it already exists.
 
 Please go _back_ in browser and try a new name
 %TMPL:END%
+
 %TMPL:DEF{"rename_not_wikiword"}%
 ---+++ New topic name "<nop>%PARAM1%" is not a %TWIKIWEB%.WikiWord
 Please go back in your browser and chose a topic name that is a %TWIKIWEB%.WikiWord or check the allow non-Wiki Word box
@@ -312,6 +313,12 @@ administrator.
 
 Go back in your browser and save your changes locally.
 %TMPL:END%
+%TMPL:DEF{"rename_web_prerequisites"}%
+---++ Potential Problems Renaming Web:
+%PARAM1%
+
+%TMPL:END%
+
 %TMPL:DEF{"message"}%
 %INSTANTIATE%
 %TMPL:END%

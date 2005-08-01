@@ -370,8 +370,20 @@ sub moveWeb {
     $oldWeb =~ s/\./\//go;
     $newWeb =~ s/\./\//go;
 
-    # SMELL: surely this must lock every topic in the web?
-    $this->lockTopic( $user, $oldWeb, $TWiki::cfg{WebPrefsTopicName} );
+    my (@webList) = $this->getListOfWebs('public',$oldWeb);
+    unshift(@webList,$oldWeb);
+    foreach my $webIter (@webList) {
+      if($webIter ne "") {
+	$webIter =~ /(.*)/;
+	$webIter = $1;
+	my @webTopicList=$this->getTopicNames($webIter);
+	foreach my $webTopic (@webTopicList) {
+	  $webTopic =~ /(.*)/;
+	  $webTopic = $1;
+	  $this->lockTopic( $user, $webIter, $webTopic );
+	}
+      }
+    }
 
     my @newParentPath = split(/\//,$newWeb);
     pop( @newParentPath );
@@ -380,13 +392,24 @@ sub moveWeb {
     my $handler = $this->_getHandler( $oldWeb );
     $handler->moveWeb( $newWeb );
 
-    $this->unlockTopic( $user, $newWeb, $TWiki::cfg{WebPrefsTopicName} );
+    (@webList) = $this->getListOfWebs('public',$newWeb);
+    unshift(@webList,$newWeb);
+    foreach my $webIter (@webList) {
+      if($webIter ne "") {
+	$webIter =~ /(.*)/;
+	$webIter = $1;
+	my @webTopicList=$this->getTopicNames($webIter);
+	foreach my $webTopic (@webTopicList) {
+	  $webTopic =~ /(.*)/;
+	  $webTopic = $1;
+	  $this->unlockTopic( $user, $webIter, $webTopic );
+	}
+      }
+    }
 
     # Log rename
     if( $TWiki::cfg{Log}{rename} ) {
-        my $old = $oldWeb;
-        my $new = $newWeb;
-        $this->{session}->writeLog( 'renameweb', $old, 'moved to '.$new, $user );
+        $this->{session}->writeLog( 'renameweb', $oldWeb, 'moved to '.$newWeb, $user );
     }
 }
 

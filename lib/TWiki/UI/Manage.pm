@@ -378,8 +378,8 @@ sub rename {
 #| =skin= | skin(s) to use |
 #| =newsubweb= | new web name |
 #| =newparentweb= | new parent web name |
-#| =breaklock= | |
-#| =confirm= | if defined, requires a second level of confirmation |
+#| =confirm= | if defined, requires a second level of confirmation.  Currently accepted values are "getlock", "continue", and "cancel" |
+
 
 sub _renameweb {
     my $session = shift;
@@ -387,6 +387,7 @@ sub _renameweb {
     my $oldWeb = $session->{webName};
     my $oldTopic = $TWiki::cfg{HomeTopicName};
     my $query = $session->{cgiQuery};
+    my $user = $session->{user};
 
     my $newParentWeb = $query->param( 'newparentweb' ) || '';
     unless ( !$newParentWeb || TWiki::isValidWebName( $newParentWeb, 1 )) {
@@ -419,12 +420,14 @@ sub _renameweb {
     my $confirm = $query->param( 'confirm' );
     my $doAllowNonWikiWord = $query->param( 'nonwikiword' ) || '';
     my $store = $session->{store};
+    my $security = $session->{security};
 
     TWiki::UI::checkWebExists(
-        $session, $oldWeb, $TWiki::cfg{WebPrefsTopicName}, 'renameweb' );
+        $session, $oldWeb, $TWiki::cfg{WebPrefsTopicName}, 'rename' );
 
     if( $newWeb ) {
         if( $newParentWeb ) {
+            # SMELL: need to check change permissions of new parent web
             TWiki::UI::checkWebExists(
                 $session, $newParentWeb,
                 $TWiki::cfg{WebPrefsTopicName}, 'rename' );
@@ -440,14 +443,205 @@ sub _renameweb {
         }
     }
 
-    TWiki::UI::checkAccess(
-        $session, $oldWeb, $TWiki::cfg{WebPrefsTopicName},
-        'rename', $session->{user} );
 
-    # Has user selected new name yet?
+    my %refs;
+    my $refs0;
+    my $refs1;
     if( ! $newWeb || $confirm ) {
-        _newWebScreen( $session, $oldWeb, $newWeb, $confirm );
-        return;
+
+      my $totalReferralAccess=1;
+      my $totalWebAccess=1;
+      my $modifyingLockedTopics;
+      my $movingLockedTopics;
+      my $webAccessMessage;
+      my $webEditedMessage;
+      my $referringAccessMessage;
+      my $referringEditedMessage;
+      my %webTopicInfo;
+      my @webList;
+
+      # get a topic list for all the topics referring to this web, and build up a hash containing permissions and lock info.
+      $refs0 = getReferringTopics( $session, $oldWeb, undef, 0 );
+      $refs1 = getReferringTopics( $session, $oldWeb, undef, 1 );
+      foreach my $ref (sort keys %$refs0) {
+	$refs{$ref}=$refs0->{$ref};
+      }
+      foreach my $ref (sort keys %$refs1) {
+	$refs{$ref}=$refs1->{$ref};
+      }
+      $webTopicInfo{referring}{refs0}=$refs0;
+      $webTopicInfo{referring}{refs1}=$refs1;
+
+      my $lease_ref;
+      foreach my $ref (sort keys %refs) {
+	if(defined($ref) && $ref ne "") {
+	  $ref =~ s/\./\//go;
+	  my (@path)=split(/\//,$ref);
+	  my $webTopic=pop(@path);
+	  my $webIter=join("/",@path);
+
+	  $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
+	  $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
+	  if($confirm eq "getlock") {
+            $store->setLease( $webIter, $webTopic, $user, $TWiki::cfg{LeaseLength});
+	    $lease_ref=$store->getLease($webIter,$webTopic);
+	  } elsif ($confirm eq "cancel") {
+	    $lease_ref=$store->getLease($webIter,$webTopic);
+	    if($lease_ref->{user} eq $user) {
+	      $store->clearLease( $webIter, $webTopic );
+	    }
+	  }
+	  $webTopicInfo{modify}{"$webIter/$webTopic"}{'leaseuser'}=$lease_ref->{user};
+	  $webTopicInfo{modify}{"$webIter/$webTopic"}{'leasetime'}=$lease_ref->{taken};
+
+	  $modifyingLockedTopics ++ if(defined($webTopicInfo{modify}{$ref}{'leaseuser'}) && $webTopicInfo{modify}{$ref}{'leaseuser'} ne $user);
+	  $webTopicInfo{modify}{$ref}{'summary'} = $refs{$ref};
+	  $webTopicInfo{modify}{$ref}{'access'}=$security->checkAccessPermission("change",$user,$webTopic,$webIter);
+	  if(!$webTopicInfo{modify}{$ref}{'access'}) {
+	    $webTopicInfo{modify}{$ref}{'accessReason'}=$security->getReason();
+	  }
+	  $totalReferralAccess = ($totalReferralAccess & $webTopicInfo{modify}{$ref}{'access'});
+	}
+      }
+
+      # get a topic list for this web and all its subwebs, and build up a hash containing permissions and lock info.
+      (@webList) = $store->getListOfWebs('public',$oldWeb);
+      unshift(@webList,$oldWeb);
+      foreach my $webIter (@webList) {
+	$webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
+	my @webTopicList=$store->getTopicNames($webIter);
+	foreach my $webTopic (@webTopicList) {
+	  $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
+	  if($confirm eq "getlock") {
+            $store->setLease( $webIter, $webTopic, $user, $TWiki::cfg{LeaseLength});
+	    $lease_ref=$store->getLease($webIter,$webTopic);
+	  } elsif ($confirm eq "cancel") {
+	    $lease_ref=$store->getLease($webIter,$webTopic);
+	    if($lease_ref->{user} eq $user) {
+	      $store->clearLease( $webIter, $webTopic );
+	    }
+	  }
+	  $webTopicInfo{move}{"$webIter/$webTopic"}{'leaseuser'}=$lease_ref->{user};
+	  $webTopicInfo{move}{"$webIter/$webTopic"}{'leasetime'}=$lease_ref->{taken};
+
+	  $movingLockedTopics++ if(defined($webTopicInfo{move}{"$webIter/$webTopic"}{'leaseuser'}) && $webTopicInfo{move}{"$webIter/$webTopic"}{'leaseuser'} ne $user);
+	  $webTopicInfo{move}{"$webIter/$webTopic"}{'access'}=$security->checkAccessPermission("rename",$user,$webTopic,$webIter);
+	  $webTopicInfo{move}{"$webIter/$webTopic"}{'accessReason'}=$security->getReason();
+	  $totalWebAccess = ($totalWebAccess & $webTopicInfo{move}{"$webIter/$webTopic"}{'access'});
+	}
+      }
+
+
+      if(!$totalReferralAccess || !$totalWebAccess || $movingLockedTopics || $modifyingLockedTopics) {
+	# build up a list of all the topics the user doesn't have permission to change or are locked, and build an oops page.
+	if(!$totalWebAccess) {
+	  # check if the user can rename all the topics in this web.
+	  foreach my $ref (sort keys %{$webTopicInfo{move}}) {
+	    if(!$webTopicInfo{move}{$ref}{access}) {
+	      $webAccessMessage .= "   * [[$ref]]\n";
+	    }
+	  }
+	}
+
+	if($movingLockedTopics) {
+	  # check if there are any locked topics in this web or its subwebs.
+	  foreach my $ref (sort keys %{$webTopicInfo{move}}) {
+	    if(defined($webTopicInfo{move}{$ref}{leaseuser}) && $webTopicInfo{move}{$ref}{leaseuser} ne $user) {
+	      $webEditedMessage .= "   * [[$ref]]\n";
+	    }
+	  }
+	}
+
+	if(!$totalReferralAccess) {
+	  # Next, build up a list of all the referrers which the user doesn't have permission to change.
+	  $referringAccessMessage .= CGI::start_table();
+	  foreach my $ref (sort keys %{$webTopicInfo{modify}}) {
+	    if(!$webTopicInfo{modify}{$ref}{access}) {
+	      $referringAccessMessage .= CGI::Tr(
+		  CGI::td(
+		    { class => 'twikiTopRow' },
+		      [[$ref]] ) . 
+		  CGI::td( { class => 'twikiSummary twikiGrayText' },
+			 $webTopicInfo{move}{$ref}{'summary'}
+		       )
+		  );
+	    }
+	  }
+	  $referringAccessMessage .= CGI::end_table();
+	}
+
+	if($modifyingLockedTopics) {
+	  # Next, build up a list of all the referrers which are currently locked.
+	  $referringEditedMessage .= CGI::start_table();
+	  foreach my $ref (sort keys %{$webTopicInfo{modify}}) {
+	    if(defined($webTopicInfo{modify}{$ref}{leaseuser}) && $webTopicInfo{modify}{$ref}{leaseuser} ne $user) {
+	      $referringEditedMessage .= CGI::Tr(
+		  CGI::td(
+		    { class => 'twikiTopRow' },
+		      $ref ) .
+		  CGI::td( { class => 'twikiSummary twikiGrayText' },
+			 $webTopicInfo{move}{$ref}{'summary'}
+		       )
+		  );
+	    }
+	  }
+	  $referringEditedMessage .= CGI::end_table();
+	}
+	if($confirm eq "") {
+	  my $notice="";
+	  if($webAccessMessage ne "") {
+	    $notice .= "---+++ Error: You do not have permission to rename the following topics:\n\n" . $webAccessMessage ;
+	  }
+	  if($webEditedMessage ne "") {
+	    $notice .= "---+++ Warning: the following topics in this web are being edited by another user:\n\n" . $webEditedMessage ;
+	  }
+	  if($referringAccessMessage ne "") {
+	    $notice .= "---+++ Warning: You do not have permission to modify the following topics:\nYou will break topic links by renaming this web\n\n" . $referringAccessMessage ;
+	  }
+	  
+	  if($referringEditedMessage ne "") {
+	    $notice .= "---+++ Warning: The following referring topics are being edited by another user:\n\n" . $referringEditedMessage;
+	  } 
+	  my $action;
+	  if(!$totalWebAccess) {
+	    $action = "You do not have access to move some topics in this web (shown below).  You are not permitted to rename this web.  [[%WEB%.%TOPIC%][OK]]";
+	  } else {
+	    if($movingLockedTopics || $modifyingLockedTopics) {
+	      $action = "Some topics which require modification are currently being edited (shown below).  Continue onward to pend on edited topics until all required topics are locked for this action.\n";
+	    }
+	    if(!$totalReferralAccess) {
+	      $action .= "*Warning:* You do not have permission to modify some of the topics which refer to this web.  Continue only if you wish to break links to topics in this web (Shown below).\n\n"
+	    }
+	    my $url = $session->getScriptUrl( $oldWeb, $TWiki::cfg{HomeTopicName}, 'rename' );
+	    $action .= "---++++ <a href=\"$url?action=renameweb&confirm=continue\">Continue?</a> \n\n";
+	  }
+	  
+	  throw TWiki::OopsException( 'attention',
+				      web => $oldWeb,
+				      topic => '',
+				      def => 'rename_web_prerequisites',
+				      params => [ $action . $notice ] );
+	} elsif($confirm eq "getlock") {
+	  $webAccessMessage =~ s/(\A\s+|\s+\Z)//sgmo;
+	  $webEditedMessage =~ s/(\A\s+|\s+\Z)//sgmo;
+	  $referringAccessMessage =~ s/(\A\s+|\s+\Z)//sgmo;
+	  $referringEditedMessage =~ s/(\A\s+|\s+\Z)//sgmo;
+	}
+      }
+
+
+
+      if ($confirm eq "cancel") {
+	# redirect to original web
+	my $viewURL = $session->getScriptUrl( $oldWeb, $TWiki::cfg{HomeTopicName}, 'view' );
+	$session->redirect( $viewURL );
+      } else {
+	if($confirm ne "getlock" || ($confirm eq "getlock" && $modifyingLockedTopics != 0 && $movingLockedTopics != 0)) {
+	  # Has user selected new name yet?
+	  _newWebScreen( $session, $oldWeb, $newWeb, $confirm, \%webTopicInfo);
+	  return;
+	}
+      }
     }
 
     # Update references in referring pages 
@@ -455,7 +649,33 @@ sub _renameweb {
         $session, $oldWeb, $TWiki::cfg{HomeTopicName},
         $newWeb, $TWiki::cfg{HomeTopicName} );
 
-    moveWeb( $session, $oldWeb, $newWeb, $refs );
+
+    # Now, we can move the web.
+    _moveWeb( $session, $oldWeb, $newWeb, $refs );
+
+    # now remove lease on all topics inside $newWeb.
+    my (@webList) = $store->getListOfWebs('public',$newWeb);
+    unshift(@webList,$newWeb);
+    foreach my $webIter (@webList) {
+      $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
+      my @webTopicList=$store->getTopicNames($webIter);
+      foreach my $webTopic (@webTopicList) {
+	$webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
+	$store->clearLease( $webIter, $webTopic );
+      }
+    }
+
+    # also remove lease on all referring topics
+    foreach my $ref (@$refs) {
+      $ref =~ s/\./\//go;
+      my (@path)=split(/\//,$ref);
+      my $webTopic=pop(@path);
+      $webTopic = TWiki::Sandbox::untaintUnchecked( $webTopic );
+      my $webIter=join("/",@path);
+      $webIter = TWiki::Sandbox::untaintUnchecked( $webIter );
+      $store->clearLease( $webIter, $webTopic );
+    }
+
 
     my $new_url = '';
     if ( $newWeb =~ /^$TWiki::cfg{TrashWebName}\// &&
@@ -673,22 +893,21 @@ sub _newTopicScreen {
     $session->writeCompletePage( $tmpl );
 }
 
-=pod
+# _moveWeb($session, $oldWeb,  $newWeb, \@refs )
+# 
+# Move the given web, correcting refs to the web in the web itself, and
+# in the list of topics (specified as web.topic pairs) in the \@refs array.
+# Currently only called by _renameweb
+# 
+# All permissions and lease conflicts should be resolved before calling this method.
+# 
+#    * =$session= - reference to session object
+#    * =$oldWeb= - name of old web
+#    * =$newWeb= - name of new web
+#    * =\@refs= - array of webg.topics that must have refs to this topic converted
+# Will throw TWiki::OopsException on an error.
 
----++ StaticMethod moveWeb($session, $oldWeb,  $newWeb, \@refs )
-
-Move the given web, correcting refs to the web in the web itself, and
-in the list of topics (specified as web.topic pairs) in the \@refs array.
-
-   * =$session= - reference to session object
-   * =$oldWeb= - name of old web
-   * =$newWeb= - name of new web
-   * =\@refs= - array of webg.topics that must have refs to this topic converted
-Will throw TWiki::OopsException on an error.
-
-=cut
-
-sub moveWeb {
+sub _moveWeb {
     my( $session, $oldWeb, $newWeb, $refs ) = @_;
     my $store = $session->{store};
 
@@ -699,14 +918,6 @@ sub moveWeb {
         undef, $oldWeb, $TWiki::cfg{WebPrefsTopicName} );
 
     my $user = $session->{user};
-    if( $user &&
-        !$session->{security}->checkAccessPermission(
-            'change', $user, $otext, $TWiki::cfg{WebPrefsTopicName},
-            $oldWeb )) {
-        throw TWiki::AccessControlException(
-            'CHANGE', $user, $oldWeb, $TWiki::cfg{WebPrefsTopicName},
-            $session->{security}->getReason());
-    }
 
     if( $store->webExists( $newWeb )) {
         throw TWiki::OopsException( 'attention',
@@ -732,10 +943,14 @@ sub moveWeb {
     }
 }
 
-# Display screen so user can decide on new web.
+# Display screen so user can decide on new web.  
+# a Refresh mechanism is provided after submission of the form
+# so the user can refresh the display until lease conflicts 
+# are resolved.
+
 sub _newWebScreen {
     my( $session, $oldWeb, $newWeb,
-        $confirm ) = @_;
+        $confirm, $webTopicInfoRef ) = @_;
 
     my $query = $session->{cgiQuery};
     my $tmpl = '';
@@ -749,7 +964,7 @@ sub _newWebScreen {
     my $accessCheckWeb = $newParent;
     my $accessCheckTopic = $TWiki::cfg{WebPrefsTopicName};
 
-    if( $confirm ) {
+    if( $confirm eq "getlock" ) {
         $tmpl = $session->{templates}->readTemplate(
             'renamewebconfirm', $skin );
     } elsif( $newWeb eq $TWiki::cfg{TrashWebName} ) {
@@ -777,13 +992,35 @@ sub _newWebScreen {
     $tmpl =~ s/%NEW_SUBWEB%/$newSubWeb/go;
     $tmpl =~ s/%TOPIC%/$TWiki::cfg{HomeTopicName}/go;
 
+    my $notices;    
+    if($webTopicInfoRef->{messages}{webEditedMessage} ne "") {
+      $notices .= "*Topics which are currently being edited by other users in the <nop>%WEB% Web:*\n" .
+		  $webTopicInfoRef->{messages}{webEditedMessage} . "\n\n";
+    }
+    if($webTopicInfoRef->{messages}{referringEditedMessage} ne "") {
+      $notices .= "*Topics which refer to this web and are are currently being edited by other users:*\n" .
+		  $webTopicInfoRef->{messages}{referringEditedMessage} . "\n\n";
+    }
+    if($webTopicInfoRef->{messages}{referringEditedMessage} ne "") {
+      $notices .= "*Topics which refer to this web that you do not have permission to change:*\n" . 
+		  $webTopicInfoRef->{messages}{referringAccessMessage} . "\n\n";
+    }
+    if($notices eq "") {
+      $notices = "(none)";
+    }
+
+    $tmpl =~ s/%RENAMEWEB_NOTICES%/$notices/;
+
+    my $submitAction = ($webTopicInfoRef->{messages}{webEditedMessage} ne "" && $webTopicInfoRef->{messages}{referringEditedMessage} ne "(none)") ? "Refresh" : "Submit";
+    $tmpl =~ s/%RENAMEWEB_SUBMIT%/$submitAction/go;
+
     my $refs;
     my %attributes;
     my %labels;
     my @keys;
     my $search = '';
 
-    $refs = getReferringTopics( $session, $oldWeb, undef, 1 );
+    $refs = ${$webTopicInfoRef}{referring}{refs1};
     @keys = sort keys %$refs;
     foreach my $entry ( @keys ) {
         $search .= CGI::Tr(
@@ -795,7 +1032,7 @@ sub _newWebScreen {
                       name => 'referring_topics',
                       value => $entry,
                       checked => 'checked' },
-                    " $entry " )
+                    " [[$entry]] " )
                  ) .
                  CGI::td( { class => 'twikiSummary twikiGrayText' },
                           $refs->{$entry}
@@ -809,9 +1046,9 @@ sub _newWebScreen {
     }
     $tmpl =~ s/%GLOBAL_SEARCH%/$search/o;
 
-    $refs = getReferringTopics( $session, $oldWeb, undef, 0 );
+    $refs = $webTopicInfoRef->{referring}{refs0};
     @keys = sort keys %$refs;
-    $search = '';;
+    $search = '';
     foreach my $entry ( @keys ) {
         $search .= CGI::Tr
         (CGI::td

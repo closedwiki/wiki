@@ -39,6 +39,7 @@
 %TMPL:DEF{"content"}%
 <form method="post" name="renameweb" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%">
 <input type="hidden" name="action" value="renameweb" />
+<input type="hidden" name="confirm" value="getlock" />
 %TMPL:P{"simpleheader"}%
 <div class="twikiVersatileTable">
 <table>
@@ -57,6 +58,10 @@
 <td class="twikiMainCol">%TMPL:P{"newparentweb"}%</td>
 </tr>
 </table>
+</div>
+
+<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Notices:</div>
+%RENAMEWEB_NOTICES%
 </div>
 
 <div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to %WEB% in the <nop>%WEB% Web:</div>%LOCAL_SEARCH%</div>

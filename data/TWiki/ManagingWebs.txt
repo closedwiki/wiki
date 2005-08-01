@@ -45,13 +45,39 @@ __Notes:__
 
 ---++ Renaming or Deleting a Web
 
-Rename a web via the Tools section in each web's WebPreferences topic.  You may delete a web by renaming it into a Trash web.  
-
+Rename a web via the Tools section in each web's WebPreferences topic.  You may delete a web by moving it into a Trash web.  
 
 ---+++ Renaming the webs in the distribution
 
-If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, which by default is =Main= (this is assigned in the site configuration). That means that every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).
+If you plan to rename the %MAINWEB% web, remember that TWiki stores user and group topics in =%<nop>MAINWEB%=, which by default is =Main= (this is assigned in the site configuration). That means that every WikiName signature - =Main.<nop>SomeUserName= - points to it and would need updating (unless the variable, =%<nop>MAINWEB%.<nop>SomeUserName=, is used throughout).  This potentially large change can be performed automatically with the renameweb function mentioned above, in the [[%MAINWEB%.WebPreferences]] topic.
 
-If you want to rename the TWiki web, remember it is referred to by =%<nop>TWIKIWEB%= which is also defined up by a configuration setting.
+If you want to rename the TWiki web, remember it is referred to by =%<nop>TWIKIWEB%= which is also defined by a configuration setting.
+
+---++ Hierarchical Webs
+
+Hierarchical web support is enabled by turning on the =EnableHierarchicalWebs= setting in =configure=. Without this setting, TWiki will only allow a single level of hierarchy (webs). If you set this, you can use multiple levels, like a directory tree, i.e. webs within webs.
+
+You can create hierarchical webs via the _Adding a New Web_ form above, by using a slash- or dot-separated path name which is based on an existing web name in the _Name of new web:_ field.
+
+*Example:*
+
+To create a subweb named =Bar= inside a web named =Foo=, use =Foo/Bar= or =Foo.Bar= as the new web name in the form above.
+
+---+++ Subweb Preferences are Inherited
+
+The preferences of a subweb are inherited from the parent web and overridden locally.  Preferences are ultimately inherited from the [[%TWIKIWEB%.TWikiPreferences]] topic.
+
+*Example Preference Inheritance for =Sandbox/TestWeb/SubWeb.SubWebTopic= topic:*
+
+   1. =%TWIKIWEB%.TWikiPreferences= site-wide preferences
+   2. =Sandbox.WebPreferences= inherits from and overrides settings in =%TWIKIWEB%.TWikiPreferences=
+   3. =Sandbox/TestWeb.WebPreferences= inherits from and overrides settings in =Sandbox.WebPreferences=
+   4. =Sandbox/TestWeb/SubWeb.WebPreferences= inherits from and overrides settings in =Sandbox/TestWeb.WebPreferences= 
+   5. =Sandbox/TestWeb/SubWeb.SubWebTopic= inherits from and overrides settings in =Sandbox/TestWeb/SubWeb.WebPreferences= 
+
+---+++ Navigation
+
+The Pattern skin (default) indicates Subwebs by indententing them in the sidebar relative to their level in the hierarchy.
+
 
 __Related Topics:__ AdminDocumentationCategory
