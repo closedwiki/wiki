@@ -18,10 +18,12 @@ Subject: Travels.DailyDiary
 The message lands in your email folder at your ISP. Once an hour, a cron job runs the =mailincron= script, which scans the folder. If it finds any messages that have nothing but a correctly formatted TWiki Web.Topic<nop>Name in the subject line, that topic is appended to (created) with the plain text of the email.  The Web must exist, though the topic will be created if necessary. Both web and topic _must_ be specified.
 
 In our example, the web exists, and so does the topic, so the following text gets appended to Travels.Daily<nop>Diary:
-<div style='background: #FFCCCC'>
+<div style='background: #EEFFEE'>
+
 *Phuket*: I've run out of money!
 
-<em>-- Prodigal Son <gapper@isp.co.uk> 10 Jul 2005 08:35:11 -0900</em>
+<em> -- Prodigal Son &lt;gapper@isp.co.uk> 10 Jul 2005 08:35:11 -0900 </em>
+
 </div>
 Attachments to the mail get treated as attachments by TWiki, and attached to the target topic.
 
@@ -38,7 +40,7 @@ Note that =mailincron= will only process messages that have arrived since the la
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File:* | *Description:* |
 	%$MANIFEST%
-	* Run the installer script =%TOPIC%_intaller.pl= or alternatively resolve all dependencies manually.
+	* Run the installer script =%TOPIC%_intaller.pl= or alternatively resolve all dependencies manually. The installer script also helps you set up your mailboxes.
 	* Set up cron (or equivalent) jobs to run =mailincron=
 
 Because of the security issues involved (passwords for the mailboxes etc.) configuration uses variables set in your =LocalSite.cfg=. Let's say you have a mailbox on an ISP, on host =mail.isp.net=. You talk to the ISP using POP3 via port 110, and you log on using username =mummy= and password =money8ags=. Your configuration would look as follows:
