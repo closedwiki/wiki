@@ -31,7 +31,7 @@ use Error qw( :try );
 use vars qw ( $VERSION );
 use Carp;
 
-$VERSION = 1.100;
+$VERSION = 1.101;
 
 my $comment = 'Saved by mailincron';
 
@@ -178,7 +178,7 @@ sub processInbox {
         eval 'use Email::Delete';
         unless( $@ ) {
             Email::Delete::delete_message
-                ( from => $box,
+                ( from => $box->{folder},
                   matching =>
                     sub {
                         my $test = shift;
@@ -227,7 +227,7 @@ sub _saveTopic {
               $this->{session}->{store}->readTopic
                 ( $user, $web, $topic );
             $this->{session}->{store}->saveTopic
-              ( $user, $web, $topic, $text . $body, $meta,
+              ( $user, $web, $topic, $text . "\n\n" . $body, $meta,
                 { comment => $comment } );
         } catch TWiki::AccessControlException with {
             my $e = shift;
@@ -240,7 +240,7 @@ sub _saveTopic {
         $body =~ s/   /\t/g;
         my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
         $err = TWiki::Store::saveTopic(
-            $web, $topic, $text . $body, $meta, '', 1, 0, 0 );
+            $web, $topic, $text . "\n\n" . $body, $meta, '', 1, 0, 0 );
     }
     return $err;
 }
