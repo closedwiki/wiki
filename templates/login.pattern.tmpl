@@ -1,0 +1,54 @@
+%TMPL:INCLUDE{"twiki"}%
+
+
+
+%TMPL:DEF{"bodystart"}%
+<body class="twikiNoViewPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+
+
+
+%TMPL:DEF{"webaction"}% %WIKITOOLNAME% User Authentication %TMPL:END%
+
+
+
+%TMPL:DEF{"topicaction"}% %TMPL:END%
+
+
+
+%TMPL:DEF{"LOG_IN_BANNER"}% <h2> Please enter your username and password: </h2> %TMPL:END%
+
+
+
+%TMPL:DEF{"LOGGED_IN_BANNER"}% %MAINWEB%.%WIKINAME% is currently logged in%TMPL:END%
+
+
+
+%TMPL:DEF{"NEW_USER_NOTE"}% <h2> Enter a new username and password to change identity: </h2> %TMPL:END%
+
+
+
+%TMPL:DEF{"UNRECOGNISED_USER"}% <h2> Unrecognised user and/or password </h2> %TMPL:END%
+
+
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+---+ %BANNER%
+%NOTE%
+<form action="%SCRIPTURL%/login/%WEB%/%TOPIC%" method="POST">
+*Username*
+<div class="twikiSmall twikiGrayText">%AUTHREALM%</div>
+<input type="text" size="30" name="username" value="%URLPARAM{"username"}%" /> %BR%
+*Password* %BR%
+<input type="password" size="30" name="password" value="" />
+<input type="hidden" name="origurl" value="%ORIGURL%" /> %BR%
+<input class="twikiSubmit" type="submit" value="Logon" />
+</form>
+%TMPL:END%
+
+
+
+%TMPL:P{"htmldoctype"}%
+%TMPL:P{"head"}%
+%TMPL:P{"bodystart"}%
+%TMPL:P{"main"}%
+%TMPL:P{"bodyend"}%
