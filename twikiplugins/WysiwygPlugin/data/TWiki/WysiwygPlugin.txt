@@ -2,6 +2,8 @@
 
 A WYSIWYG (What-You-See-Is-What-You-Get) editor.
 
+<img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
+
 The editor is built on a generic framework that supports editing of TWiki topics using any browser-based HTML editor and the import of HTML from external sources such as existing web pages.
 
 %RED% WARNING: this is a what-you-see-is-all-you-get, Beta release with the following known problems:
@@ -251,3 +253,4 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_back.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/go_forward.gif" alt="" />
 -->
+

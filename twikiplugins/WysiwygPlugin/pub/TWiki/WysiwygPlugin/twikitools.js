@@ -621,7 +621,6 @@ function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
               var color = cols[i * 4 + j];;
               var td = document.createElement('td');
               td.setAttribute('bgColor', color);
-              td.style.backgroundColor = color;
               td.style.borderWidth = '1px';
               td.style.borderStyle = 'solid';
               td.style.fontSize = '1px';
@@ -639,7 +638,7 @@ function TWikiColorChooserTool(fgcolorbuttonid, colorchooserid) {
     };
 }
 
-ColorchooserTool.prototype = new KupuTool;
+TWikiColorChooserTool.prototype = new KupuTool;
 
 // only check max if max > min
 function twikiVerifyNumber(name,id,min,max) {

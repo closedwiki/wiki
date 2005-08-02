@@ -34,6 +34,7 @@ pub/TWiki/WysiwygPlugin/unordered-list.png Button image
 pub/TWiki/WysiwygPlugin/vars.png Button image
 pub/TWiki/WysiwygPlugin/verbatim.png Button image
 pub/TWiki/WysiwygPlugin/verbatim-watermark.png Watermark
+pub/TWiki/WysiwygPlugin/screenshot.jpg Screen shot
 pub/TWiki/WysiwygPlugin/view-source.png Button image
 templates/edit.kupu.tmpl Template for an edit using kupu
 templates/attachtables.kupu.tmpl Attachment table rendering for editor
