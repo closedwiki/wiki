@@ -260,21 +260,13 @@ function initKupu(iframe) {
                                                  wikiwordtool);
     drawertool.registerDrawer('wikiworddrawer', wikiworddrawer);
 
-    // Variables drawer
+    // Variables select
     var twikivartool = new TWikiVarTool();
     kupu.registerTool('twikivartool', twikivartool);
 
-    /*
-      var twikivardrawerbutton = new KupuButton('twiki-vardrawer-button',
-           opendrawer('twikivardrawer'));
-      kupu.registerTool('twikivardrawerbutton', twikivardrawerbutton);
-
-      var twikivardrawer = new TWikiPickListDrawer('twiki-vardrawer',
-           'twiki-var-select',
-           twikivartool);
-      drawertool.registerDrawer('twikivardrawer', twikivardrawer);
-    */
-
+    var twikivarselect = new TWikiSelect('twiki-var-select', twikivartool);
+    kupu.registerTool('twikivarselect', twikivarselect);
+    
     // Attachments drawer
     var newImageTool = new TWikiInsertAttachmentTool();
     kupu.registerTool('insertImage', newImageTool);

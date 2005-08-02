@@ -365,9 +365,16 @@ function TWikiVarTool(){
  
   this.pick = function(name) {
     var doc = this.editor.getInnerDocument();
-    var elem = doc.createElement('span');
-    elem.setAttribute('class', 'TMLvariable');
-    elem.appendChild(doc.createTextNode(name));
+    var elem;
+
+    // if using spans for variables
+    //    elem = doc.createElement('span');
+    //    elem.setAttribute('class', 'TMLvariable');
+    //    elem.appendChild(doc.createTextNode(name));
+    // else
+          elem = doc.createTextNode('%'+name+'%');
+    // endif
+
     // stomp anything already selected
     this.editor.insertNodeAtSelection(elem);
     this.editor.updateState();
@@ -662,3 +669,21 @@ function twikiVerifyNumber(name,id,min,max) {
 
   return true;
 }
+
+function TWikiSelect(id, tool) {
+    this.selector = window.document.getElementById(id);
+    this.tool = tool;
+
+    this.initialize = function(editor) {
+        this.editor = editor;
+        this._fixTabIndex(this.selector);
+        addEventHandler(this.selector, 'change', this.execCommand, this);
+    };
+
+    this.execCommand = function() {
+        this.tool.pick(this.selector.options[this.selector.selectedIndex].value);
+        this.editor.focusDocument();
+    };
+}
+
+TWikiSelect.prototype = new KupuTool;

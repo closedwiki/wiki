@@ -151,9 +151,8 @@ sub rootGenerate {
     $tml =~ s/($WC::CHECKn)+/$WC::NBBR/gos;
 
     # isolate $NBBR and convert to \n
-    $tml =~ s/$WC::NBBR\n+/$WC::NBBR/gs;
-    $tml =~ s/\n+$WC::NBBR\n+/$WC::NBBR/gs;
-    $tml =~ s/\n\n+/\n/gs;
+    $tml =~ s/\n*$WC::NBBR\n*/$WC::NBBR/gs;
+    $tml =~ s/$WC::NBBR$WC::NBBR+/$WC::NBBR$WC::NBBR/go;
     $tml =~ s/$WC::NBBR/\n/go;
 
     # isolate $NBSP and convert to space
@@ -303,6 +302,7 @@ sub _convertList {
             } else {
                 ( $f, $t ) = $grandkid->generate( $WC::NO_BLOCK_TML );
                 $t =~ s/$WC::CHECKn/ /g;
+                $t =~ s/\s*$//s;
             }
             $spawn .= $t;
         }
@@ -613,7 +613,9 @@ sub _handleSPAN {
         return (0, $var);
     } elsif (defined( $this->{attrs}->{class} ) &&
              $this->{attrs}->{class} =~ /\bTMLnop\b/) {
-        return $this->_flatKids( $options | $WC::NOP_ALL );
+        my($flags, $kids ) = $this->_flatKids( $options | $WC::NOP_ALL );
+        $kids =~ s/%([A-Z0-9_:]+({.*})?)%/%<nop>$1%/g;
+        return ( $flags, $kids );
     } elsif( !scalar( %{$this->{attrs}} )) {
         # ignore the span if there are no attrs
         return $this->_flatKids( $options );

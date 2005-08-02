@@ -63,6 +63,9 @@ sub new {
     my( $class, $getViewUrl ) = @_;
     my $this = {};
     $this->{getViewUrl} = $getViewUrl;
+    my $mv = TWiki::Func::getPreferencesValue(
+        'WYSIWYGPLUGIN_MARK_VARIABLES' );
+    $this->{markvars} = ( $mv && $mv eq 'on' );
     return bless( $this, $class );
 }
 
@@ -126,9 +129,13 @@ sub _processTags {
                     $stackTop = pop( @stack ) . $top;
                 }
             }
-            if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)(?:({.*}))?$/o ) {
-                my( $tag, $args ) = ( $2, $3 || '' );
-                $tag = CGI::span({class => 'TMLvariable'}, $tag.$args);
+            if( $stackTop =~ m/^%(<nop>)?([A-Z0-9_:]+)({.*})?$/o ) {
+                my $tag = $2 . ( $3 || '' );
+                if( $this->{markvars} ) {
+                    $tag = CGI::span({class => 'TMLvariable'}, $tag);
+                } else {
+                    $tag = '%'.$tag.'%';
+                }
                 if( $1 && $1 eq '<nop>' ) {
                     $tag = CGI::span({class => 'TMLnop'}, $tag);
                 }
@@ -387,12 +394,8 @@ sub _getRenderedVersion {
     # protect HTML parameters by pulling them out
     $text =~ s/(<[a-z]+ )([^>]+)>/$1.$this->_liftOut($2).'>'/gei;
 
-    my $markVars =
-      TWiki::Func::getPreferencesValue( 'WYSIWYGPLUGIN_MARK_VARIABLES' );
-    if( $markVars && $markVars eq 'on' ) {
-        # Convert TWiki tags to spans outside parameters
-        $text = $this->_processTags( $text );
-    }
+    # Convert TWiki tags to spans outside parameters
+    $text = $this->_processTags( $text );
 
     $text = $this->_dropBack( $text );
 

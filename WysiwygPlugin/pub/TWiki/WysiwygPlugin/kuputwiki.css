@@ -30,18 +30,19 @@ div.kupu-dialogbuttons {
   text-align: center;
 }
 
-.kupu-tb {
-  padding: 3px;
-  background-color: ButtonFace;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+div.kupu-tb { 
+    height: 24px;
 }
 
 span.kupu-tb-buttongroup {
-  margin: 0px;
-  padding: 4px;
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-left: 4px;
+  padding-right: 4px;
   border-left: dotted 1px black;
   border-right: dotted 1px black;
   text-align: center;
+  float: left;
 }
 
 #kupu-tb-buttons button {

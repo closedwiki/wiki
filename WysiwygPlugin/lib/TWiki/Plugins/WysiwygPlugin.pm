@@ -39,7 +39,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
 
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;

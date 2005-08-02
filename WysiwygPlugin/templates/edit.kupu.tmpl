@@ -91,40 +91,38 @@
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-undo" id="kupu-undo-button" title="undo: alt-z" i18n:attributes="title" accesskey="z"></button>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-redo" id="kupu-redo-button" title="redo: alt-y" i18n:attributes="title" accesskey="y"></button>
      </span>
-     <select id="kupu-tb-styles">
-      <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="P" i18n:translate="paragraph-normal">
-       Normal
-      </option>
-      <option value="H1">
-       <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 1
-      </option>
-      <option value="H2">
-       <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 2
-      </option>
-      <option value="H3">
-       <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 3
-      </option>
-      <option value="H4">
-       <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 4
-      </option>
-      <option value="H5">
-       <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 5
-      </option>
-      <option value="H6">
-       <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 6
-      </option>
-      <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="verbatim" i18n:translate="paragraph-formatted">
-       Formatted
-      </option>
-     </select>
      <span class="kupu-tb-buttongroup" id="kupu-bg-basicmarkup">
+      <select id="kupu-tb-styles">
+       <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="P" i18n:translate="paragraph-normal">
+        Normal
+       </option>
+       <option value="H1">
+        <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 1
+       </option>
+       <option value="H2">
+        <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 2
+       </option>
+       <option value="H3">
+        <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 3
+       </option>
+       <option value="H4">
+        <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 4
+       </option>
+       <option value="H5">
+        <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 5
+       </option>
+       <option value="H6">
+        <span xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="heading">Heading</span> 6
+       </option>
+       <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="verbatim" i18n:translate="paragraph-formatted">
+        Formatted
+       </option>
+      </select>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-bold-button0" id="twiki-bold-button" title="bold: alt-b" i18n:attributes="title" accesskey="b"></button>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-italic-button0" id="twiki-italic-button" title="italic: alt-i" i18n:attributes="title" accesskey="i"></button>
 <!-- Uncomment to enable  fixed-width text button
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-code-button0" id="twiki-code-button" title="fixed: alt-=" i18n:attributes="title" accesskey="="></button>
 -->
-     </span>
-     <span class="kupu-tb-buttongroup">
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-forecolor" id="kupu-forecolor-button" title="text color: alt-f" i18n:attributes="title" accesskey="f"></button>
      </span>
      <span class="kupu-tb-buttongroup" id="kupu-bg-list">
@@ -152,9 +150,9 @@
 <!--
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" id="twiki-verbatim-button" class="twiki-verbatim-button" title="Insert Verbatim block" i18n:attributes="title"></button>
 -->
-<!--
-      <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-vardrawer-button" id="twiki-vardrawer-button" title="Insert a TWiki tag" i18n:attributes="title"></button> 
--->
+      <select id="twiki-var-select">
+       %WYSIWYGPLUGIN_TAGS%
+      </select>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-table" id="kupu-tabledrawer-button" title="Insert / Edit a table" i18n:attributes="title"></button>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-new-attachment" id="twiki-attach-button" title="Add a new attachment" i18n:attributes="title"></button> 
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-new-image" id="twiki-image-button" title="Add a new image" i18n:attributes="title"></button> 
@@ -222,14 +220,6 @@
     <select id="twiki-insertatt-select">
      %META{"attachments" all="on"}%
     </select>
-    <div class="kupu-dialogbuttons">
-     <button type="button" onclick="drawertool.current_drawer.save()">Ok</button>
-     <button type="button" onclick="drawertool.closeDrawer()">Cancel</button>
-    </div>
-   </div>
-   <div id="twiki-vardrawer" class="kupu-drawer">
-    <h1 id="variables-title" xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="">TWiki Variables</h1>
-    %WYSIWYGPLUGIN_TAGS%
     <div class="kupu-dialogbuttons">
      <button type="button" onclick="drawertool.current_drawer.save()">Ok</button>
      <button type="button" onclick="drawertool.closeDrawer()">Cancel</button>
