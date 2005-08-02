@@ -115,9 +115,8 @@ my $tml = $html2tml->convert( $html );
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="" />
-	* List of TWiki variables that will be available to the Kupu editor. This has to be a valid HTML &lt;select&gt; with the id =twiki-var-select=.
+	* List of TWiki variables that will be available to the Kupu editor, in the form of a set of HTML option tags
 		* Set TAGS =
-		<select id='twiki-var-select'>
 		<option value="TOPIC">Current Topic</option>
 		<option value="WEB">Current Web</option>
 		<option value="DATE"> Today's Date</option>
@@ -133,7 +132,6 @@ my $tml = $html2tml->convert( $html );
 		<option value="INCLUDE{...}"> Server Side Include</option>
 		<option value="SEARCH{...}"> Inline Search</option>
 		<option value="TOC"> Table of Contents</option>
-		</select>
 
 ---++ Known Issues
 ---+++ Overlapping formatting

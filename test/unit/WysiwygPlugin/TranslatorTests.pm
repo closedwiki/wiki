@@ -46,8 +46,8 @@ use vars qw( $nofiles $notml2html $nohtml2tml $unsafe);
 BEGIN {
     # hacky way to narrow down set of tests run
     $nofiles = 0;
-    $notml2html = 0;
-    $nohtml2tml = 0;
+    $notml2html = 1;
+    $nohtml2tml = 1;
 
     for( my $i = 0; $i < 32; $i++) {
         $unsafe .= chr($i) unless $i == 10;
@@ -217,7 +217,7 @@ class CatAnimal {
       * level 2
 ',
         finaltml => 'X
-	* level 1 
+	* level 1
 		* level 2 ',
        },
        {
@@ -244,7 +244,7 @@ class CatAnimal {
         html => '<ol><li>Things</li><li>Stuff
 <ul><li>Banana Stuff</li><li>Other</li><li></li></ul></li><li>Something</li><li>kello<br />kitty</li></ol>',
         tml => '	1 Things
-	1 Stuff 
+	1 Stuff
 		* Banana Stuff
 		* Other
 		* 
@@ -901,7 +901,9 @@ sub _paramsSame {
 
 sub compareTML_HTML {
     my ( $this, $args ) = @_;
+    $TWiki::Plugins::SESSION = new TWiki();
     my $txer = new TWiki::Plugins::WysiwygPlugin::TML2HTML(\&getViewUrl);
+    $txer->{markvars} = 1;
     my $tx = $txer->convert( $args->{tml} );
     $this->_compareHTML($args->{html}, $tx, 1);
 }

@@ -19,7 +19,7 @@ Nested list item (level 5):
 			* Level 4 : Second line
 	* Level 1 : Last line...
 list item with list in LI (level 2):
-	* Level 1 : First line 
+	* Level 1 : First line
 	* 
 		* Level 2 : First line
 		* Level 2 : Second line
@@ -34,12 +34,12 @@ list item with list in LI (level 2):
 		* List 2 => Level 2 : Second line
 	* List 2 => Level 1 : Last line...
 Last test:
-	* First line  *TOTO*
+	* First line *TOTO*
 	* Second line
 	* Last line...
 AND
 	* gee
-	* bar  <br />  bar2
+	* bar<br />  bar2
 	* foo
 	
 

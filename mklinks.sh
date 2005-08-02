@@ -67,6 +67,11 @@ for dir in $params; do
     if [ -d $dir/pub/TWiki/$module ]; then
         mklink $dir/pub/TWiki/$module
     fi
+    for pubdir in $dir/pub/*; do
+        if [ ! -e pub/`basename $pubdir` ]; then
+            mklink $pubdir
+        fi
+    done
 
     # lib dir
     for type in Plugins Contrib; do

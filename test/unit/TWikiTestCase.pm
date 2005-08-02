@@ -59,7 +59,7 @@ sub _copy {
 
     if (UNIVERSAL::isa($n, 'ARRAY')) {
         my @new;
-        for ( @$n ) {
+        for ( 0..$#$n ) {
             push(@new, _copy( $n->[$_] ));
         }
         return \@new;
