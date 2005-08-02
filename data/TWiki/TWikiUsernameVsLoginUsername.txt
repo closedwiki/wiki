@@ -16,5 +16,5 @@ e	* *TWiki username:* This is your name in WikiNotation, for example ==PeterThoe
 __NOTE:__ *To correctly enter a WikiName* - your own or someone else's - be sure to specify the %MAINWEB% web in front of the Wiki username: write ==%MAINWEB%.<nop>WikiUsername== or ==%<nop>MAINWEB%.<nop>WikiUsername==. This assures that the name will be linked automatically to the %MAINWEB% web, where user home pages are stored, even if the text is entered in a different web.
 </blockquote>
 
-
+__Related Topics:__ UserDocumentationCategory
 

@@ -382,4 +382,5 @@ __Note:__ This topic is included by TWikiVariables
 %STOPINCLUDE%
 
 
+__Related Topics:__ UserDocumentationCategory
 

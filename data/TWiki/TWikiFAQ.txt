@@ -22,6 +22,8 @@ New FAQ topic: &nbsp; (Use a name in %TWIKIWEB%.WikiNotation) <br />
 <input type="submit" value="Create Topic" /> <br />
 </form>
 
+TODO: should this FAQ TWikiApplication be removed from the distributed TWikiKernel? (as the distributed topics should be read only able)
+
 ---++ More sources...
 
 Other places where you can find answers to your questions:

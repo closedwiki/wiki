@@ -37,8 +37,10 @@ The TWiki [[TWikiInstallationGuide][standard installation]] has extremely low br
 
 You can easily add functionality, by customizing TWikiTemplates, for one, while tailoring the browser requirements to your situation. 
 
----++ Known Issues
+---++ Important note about TWikiPlugins
 
 	* The TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
 		* %H% Plugins included in the TWiki distribution do not add requirements.
 
+
+__Related Topics:__ AdminDocumentationCategory

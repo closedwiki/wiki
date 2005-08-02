@@ -21,7 +21,7 @@ If you want to read about the features on your local TWiki, then you should read
 
 __Note:__ Read the most up to date version of this document at http://TWiki.org/cgi-bin/view/TWiki/TWikiDocumentation
 
-__Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests
+__Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancementRequests, UserDocumentationCategory, AdminDocumentationCategory
 
 ------
 %INCLUDE{"TWikiSystemRequirements"}%

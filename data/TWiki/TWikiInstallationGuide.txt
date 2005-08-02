@@ -55,3 +55,4 @@ If you need help, ask a question in the TWiki:Support web or on IRC (irc.freenod
 
 %STOPINCLUDE%
 
+__Related Topics:__ AdminDocumentationCategory

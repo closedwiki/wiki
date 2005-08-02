@@ -30,7 +30,8 @@ To get the full path, call =ICONPATH=:
 </verbatim>
 gets: %ICONPATH{"toggleopen"}% (!%ICONPATH{"toggleopen"}%)
 ---
-__See also: TWikiDocGraphics__
+
+__Related Topics:__ TWikiDocGraphics, TWikiSkins, DeveloperDocumentationCategory, AdminDocumentationCategory
 
 ---++ File icon table
 

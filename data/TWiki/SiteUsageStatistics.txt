@@ -17,4 +17,4 @@
 			* Update current month for Main web only: <br> =http://mydomain.com/twiki/bin/statistics/Main=
 			* Update January 2000 for Main web: <br> =http://mydomain.com/twiki/bin/statistics/Main?logdate=200001=
 
-__Related Topics:__ AdminDocumentationCategory
+__Related Topics:__ AdminDocumentationCategory, AdminToolsCategory

@@ -94,4 +94,4 @@ This lets you create variables, like a graphics icon library, in any topic - ins
 
 Please add your favorite TWiki tips/trick to TWiki:%WEB%.%TOPIC% to help the next new TWiki admin. (One BIG area: include pages of implemented basic SEARCHes, like, to generate a straight TOPICS list (alphabetical web topic titles only); also, simple combos of forms + search, like one- and two-category forms to use to classify pages, and then searches to find and display in few useful formats; more in that general area.)
 
-
+__Related Topics:__ AdminDocumentationCategory

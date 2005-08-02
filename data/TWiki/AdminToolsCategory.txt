@@ -9,7 +9,7 @@ Manage whole <b><nop>%WIKITOOLNAME%</b> site from one screen.
 
 TODO: replace the list above using a search for this Category
 
-%SEARCH{"*%TOPIC%" scope="topic" nosearch="on"}%
+%SEARCH{"%TOPIC%" nosearch="on"}%
 
 ---++ Plugins
 %PLUGINDESCRIPTIONS%

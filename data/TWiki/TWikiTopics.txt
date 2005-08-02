@@ -141,3 +141,5 @@ RCS revision control automatically saves all topic changes. To look at earlier v
 	1 Preview and save the topic.
 See: [[TWikiDocumentation#Managing_Topics][ManagingTopics]] for more details.
 
+---
+__Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory

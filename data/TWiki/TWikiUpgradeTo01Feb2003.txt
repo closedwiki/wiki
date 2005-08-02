@@ -103,3 +103,4 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 
 	* Check TWiki:Codev/KnownIssuesOfTWiki01Feb2003 for known issues of TWiki 01-Feb-2003 production release
 
+__Related Topics:__ AdminDocumentationCategory

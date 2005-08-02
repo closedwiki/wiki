@@ -88,4 +88,4 @@ The preferences of a subweb are inherited from the parent web and overridden loc
 The Pattern skin (default) indicates Subwebs by indententing them in the sidebar relative to their level in the hierarchy.
 
 
-__Related Topics:__ AdminDocumentationCategory
+__Related Topics:__ AdminDocumentationCategory, AdminToolsCategory

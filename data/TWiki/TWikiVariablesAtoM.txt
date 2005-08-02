@@ -239,3 +239,5 @@ will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included
 	* Example: =%<nop>METASEARCH{type="field" name="Country" value="China"}%=
 	* Related: [[#VarSEARCH][SEARCH]]
 %STOPINCLUDE%
+
+__Related Topics:__ UserDocumentationCategory

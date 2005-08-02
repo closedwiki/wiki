@@ -312,3 +312,5 @@ sub _make_filename
 	 return "$dir/_FooBarPlugin_$name";
 }
 </verbatim>
+
+__Related Topics:__ DeveloperDocumentationCategory, AdminDocumentationCategory

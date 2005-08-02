@@ -140,18 +140,8 @@ This points ==<nop>WikiUser== to the %MAINWEB% web, where user registration page
 If your authentication method supports password changing, you can change and reset passwords using forms on regular pages.
 
 	* The ChangePassword form ( ==TWiki/ChangePassword== ):
-
-<blockquote style="background-color:#f5f5f5">
-%INCLUDE{"ChangePassword"}%
-</blockquote>
-
 	* The ResetPassword form ( ==TWiki/ResetPassword== ):
 
-<blockquote style="background-color:#f5f5f5">
-%INCLUDE{"ResetPassword"}%
-</blockquote>
-
-
-
-
 %STOPINCLUDE%
+
+__Related Topics:__ AdminDocumentationCategory

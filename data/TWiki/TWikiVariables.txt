@@ -224,6 +224,5 @@ You can also set Variables in forms attached to topics. If a variable is set in 
 
 %STOPINCLUDE%
 
-
-
+__Related Topics:__ UserDocumentationCategory
 

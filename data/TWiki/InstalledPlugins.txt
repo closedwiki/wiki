@@ -15,5 +15,5 @@ Here is a list of the plugins currently installed and enabled on this TWiki site
 
 __Note:__ The diagnostics are provided by the =%<nop>FAILEDPLUGINS%= variable
 
-__Related Topics:__ TWikiPlugins, %WIKIPREFSTOPIC%, AdminDocumentationCategory
+__Related Topics:__ TWikiPlugins, %WIKIPREFSTOPIC%, AdminDocumentationCategory, AdminToolsCategory
 

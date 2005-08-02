@@ -164,3 +164,4 @@ will recover the plain text of the topic as presented to =edit=, as MIME type =a
 
 Skin names starting with =rss= also have a special meaning; if one or more of the skins in the skin path starts with 'rss' then 8-bit characters will be encoded as XML entities in the output, and the =content-type= header will be forced to =text/xml=.
 
+__Related Topics:__ AdminDocumentationCategory, DeveloperDocumentationCategory

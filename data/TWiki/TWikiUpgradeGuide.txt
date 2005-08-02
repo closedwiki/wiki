@@ -153,6 +153,6 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 	* Check TWiki:Codev/KnownIssuesOfTWiki01Sep2004 for known issues of TWiki 01-Sep-2004 production release
 
 
-
 %STOPINCLUDE%
 
+__Related Topics:__ AdminDocumentationCategory

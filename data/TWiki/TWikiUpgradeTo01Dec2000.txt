@@ -104,3 +104,4 @@ These are the steps you need to perform to upgrade the 01 May 2000 version to th
 		* Check http://TWiki.org/cgi-bin/view/Codev/KnownIssuesOfTWiki01Dec2000 for known issues of TWiki 01 Dec 2000 (production release) 
 
 
+__Related Topics:__ AdminDocumentationCategory

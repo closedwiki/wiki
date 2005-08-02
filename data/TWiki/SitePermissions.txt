@@ -15,4 +15,4 @@ __Please Note:__
    * The TWiki web must not be denied view to %MAINWEB%.TWikiGuest - otherwise people will not be able to register.
 
 
-__Related Topics:__ SiteMap, UserDocumentationCategory, AdminDocumentationCategory
+__Related Topics:__ SiteMap, UserDocumentationCategory, AdminDocumentationCategory, AdminToolsCategory

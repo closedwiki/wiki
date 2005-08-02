@@ -9,7 +9,7 @@ I would like to install TWiki on my server. Can I get the source?
 
 TWiki is distributed under the GnuGeneralPublicLicense. You can get the source from http://TWiki.org/download.html.
 
-__Back to:__ TWikiFAQ
+__Back to:__ TWikiFAQ, AdminDocumentationCategory
 
 
 

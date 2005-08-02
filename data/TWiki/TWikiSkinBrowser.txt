@@ -11,7 +11,8 @@ You can try out the TWikiSkins currently installed on this system:
 <style type="text/css" media="all">
 .skinstable td {border-top:2px solid #444; padding:0.75em 0.5em;}
 </style>
+
 __Note:__ TWikiSkins describes how to install and activate a skin
 
-
+__Related Topics:__ TWikiSkins, AdminDocumentationCategory, UserDocumentationCategory
 

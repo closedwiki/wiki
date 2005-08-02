@@ -149,6 +149,8 @@ Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and redirect the control to 
 
 ---++ =rdiff=
 
+---++ =configure=
+
 ---++ =register=
 
 ---++ =rename=
@@ -168,3 +170,5 @@ Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and redirect the control to 
 ---++ =passwd=
 
 ---++ =resetpasswd=
+
+__Related Topics:__ AdminDocumentationCategory, DeveloperDocumentationCategory
