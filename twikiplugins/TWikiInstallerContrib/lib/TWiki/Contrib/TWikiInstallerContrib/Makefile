@@ -24,7 +24,7 @@ minicpan :
 	cpan/mirror-cpan.pl
 
 twiki-cpan : minicpan
-	cpan/mirror-cpan.pl --twiki `cpan/calc-twiki-deps.pl`
+	cpan/mirror-cpan.pl --twiki `bin/calc-twiki-deps.pl`
 
 plugins :
 	bin/download-twiki-extensions.pl plugins
