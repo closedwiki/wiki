@@ -987,7 +987,10 @@ sub _showPlugins {
     my $block = '';
     foreach my $m ( sort keys %modules ) {
         $block .= _checkAndBuildValueGrabber
-          ( 'BOOLEAN', '', $modules{$m}, '{Plugins}{'.$m.'}{Enabled}');
+          ( 'BOOLEAN', '', 
+#SMELL - i'm assuming that the Plugin topic is in the SystemWeb :(
+"<a rel=\"nofollow\" href=\"$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/$m\">$m</a>",
+	  , '{Plugins}{'.$m.'}{Enabled}');
     }
     return $block;
 }
