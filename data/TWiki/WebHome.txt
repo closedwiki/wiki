@@ -16,7 +16,7 @@ This is the place to learn about TWiki features, find where to download it, and 
    * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial
    * [[TWikiFAQ][Frequently Asked Questions]]: about TWiki
    * [[TWikiReferenceManual][Reference Manual]]: Documentation for webmasters, system administrators
-   * [[Admin Tools]]: manage the <nop>%WIKITOOLNAME% site
+   * [[AdminToolsCategory][Admin Tools]]: manage the <nop>%WIKITOOLNAME% site
 
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">

@@ -37,16 +37,3 @@
    * *ToolsCategorys*
 %SEARCH{"ToolsCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
 
----++++ UserDocumentationCategory
-%SEARCH{"UserDocumentationCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
-
----++++ UserToolsCategory
-%SEARCH{"UserToolsCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
-
-----
-
----++++ AdminDocumentationCategory
-%SEARCH{"AdminDocumentationCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
-
----++++ AdminToolsCategory
-%SEARCH{"AdminToolsCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%

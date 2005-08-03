@@ -4,16 +4,15 @@
 Manage whole <b><nop>%WIKITOOLNAME%</b> site from one screen.
 
 	* *[[%MAINWEB%.%WIKIUSERSTOPIC%][Users]]:* [[TWikiRegistration][Register]], NewUserTemplate, UserForm, ResetPassword, ChangePassword, MaintenanceGuide
-	* *[[TWikiSiteTools][Site Tools]]:*	%TWIKIWEB%.%WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
+	* *[[TWikiSiteTools][Site Tools]]:* [[%SCRIPTURL%/configure][configure]], %TWIKIWEB%.%WIKIPREFSTOPIC%, InterWikis, [[TWikiVariables][Variables]]
 	* *Managing:* [[ManagingTopics][Topics]], [[ManagingWebs][Webs]], YouAreHere
 
-TODO: replace the list above using a search for this Category
-
-%SEARCH{"%TOPIC%" nonoise="on" format="   * $web.$topic$n      * $summary(100, noheader)"}%
+---++ All Admin Tools Category topics
+%SEARCH{"%TOPIC%" excludetopics="%TOPIC%" nonoise="on" format="   * $web.$topic$n      * $summary(100, noheader)"}%
 
 ---++ Plugins
 %PLUGINDESCRIPTIONS%
-see also: TWikiPlugins, FuncDotPm
+see also: TWikiPlugins
 
 ---++ TWiki Version
 	* TWiki engine: %WIKIVERSION%
