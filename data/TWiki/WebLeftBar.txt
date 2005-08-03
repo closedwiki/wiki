@@ -12,13 +12,17 @@
    * [[WebStatistics][Statistics]] 
    * [[WebPreferences][Preferences]] 
 ----
-   * <b>Reference</b>
+   * <b>User Reference</b>
+   * ATasteOfTWiki
+   * TextFormattingRules
    * TWikiVariables
    * TWikiDocGraphics
    * TWikiSkinBrowser
    * InstalledPlugins
 
-   * <b>Maintenance</b>
+
+
+   * <b>Admin Maintenance</b>
    * AdminToolsCategory
    * InterWikis
    * ManagingWebs
@@ -27,3 +31,22 @@
    * %WIKIPREFSTOPIC%
    * %WEBPREFSTOPIC%
 
+   * *DocumentationCategorys*
+%SEARCH{"DocumentationCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
+
+   * *ToolsCategorys*
+%SEARCH{"ToolsCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
+
+---++++ UserDocumentationCategory
+%SEARCH{"UserDocumentationCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
+
+---++++ UserToolsCategory
+%SEARCH{"UserToolsCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
+
+----
+
+---++++ AdminDocumentationCategory
+%SEARCH{"AdminDocumentationCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
+
+---++++ AdminToolsCategory
+%SEARCH{"AdminToolsCategory" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%

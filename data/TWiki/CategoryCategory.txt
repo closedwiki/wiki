@@ -2,4 +2,4 @@
 
 ---+ List of all Category topics
 
-%SEARCH{"Category" scope="topic" nosearch="on"}%
+%SEARCH{"Category" scope="topic" nonoise="on" format="   * $web.$topic$n      * $summary(100, noheader)"}%

@@ -2,6 +2,5 @@
 %META:TOPICPARENT{name="BookView"}%
 ---+ A List of TWiki Administrator Documentation
 
-%SEARCH{"%TOPIC%" nosearch="on"}%
-
+%SEARCH{"%TOPIC%" nonoise="on" format="   * $web.$topic$n      * $summary(100, noheader)"}%
 
