@@ -4,7 +4,7 @@
 %META:TOPICPARENT{name="WebHome"}%
 %TOC%
 %STARTINCLUDE%
-#MetaDataDefinition
+#TWikiMetaData
 ---# TWiki Meta Data
 
 _Additional topic data, program-generated or from TWikiForms, is stored in =META= variable name/value pairs_

@@ -4,7 +4,7 @@
 %STARTINCLUDE%
 ---# Meta Data Rendering
 
-Various meta data can be stored in topics - MetaDataDefinition
+Various meta data can be stored in topics - TWikiMetaData
 
 #TODO: test that this works in DevelopBranch
 
