@@ -19,7 +19,7 @@ BEGIN {
 };
 
 use strict;
-
+use TWiki;   # If you take this out then TestRunner.pl will fail on IndigoPerl
 use Test::Unit::Debug qw(debug_pkgs);
 use Test::Unit::TestRunner;
 use Cwd;
