@@ -105,6 +105,17 @@ sub configExtensions {
 sub destroy {
   my ($param) = @_;
   print "\t\tDESTROY $param\n";
+  if ($Config->{mode} eq "cp") {
+  	if (-f $param) {
+		print "\t\tDestroying $param\n";
+  	} else {
+  		print "\t\tNo $param to destroy\n";  	
+  	}
+  	`$Config->{destroy} $param`;
+    } else {
+      die "Not implemented";
+  } 
+  
 }
 
 sub build {
@@ -132,13 +143,15 @@ sub mklink {
     if ( -e $link ) {
         my $x =`diff -q $param $link`;
         if ( "$x" eq "" ) {
+        	print "$param and $link are not different - destroying $link\n";
             destroy $link;
         } else {
             print "diff $param $link different - Keeping $link intact\n";
         }
-    } else {
-        build("$cwd/$param", $link);
-    }
+    } 
+    
+    build ("$cwd/$param", $link);
+    
 }
 
 sub getPubDir ($$) {
@@ -172,9 +185,14 @@ sub linkLibDir {
     	my $lib = getLibDir($dir, $type, $ext);
     	
 		print "LIB $lib:\n" if $Config->{debug};;
-        if ( -d $lib ) {
-            mklink $lib;
+#        if ( -d $lib ) {
+#            mklink $lib;
+#        }
+        
+        if (-e "$lib.pm") {
+        	mklink "$lib.pm"
         }
+        
         foreach my $pm (glob("$lib/*.pm")) {
             mklink $pm
         }
@@ -227,6 +245,7 @@ sub main {
 		linkLibDir($dir, $extension);
 		linkDataDir($dir, $extension);
 		linkTemplatesDir($dir, $extension);
+
 		print "... DONE\n\n";
 	}
 }
