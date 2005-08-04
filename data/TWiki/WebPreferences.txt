@@ -15,7 +15,6 @@ __Preferences:__
 		* Set WEBBGCOLOR = #FFD8AA
 
 	* Image, URL and alternate tooltip text of TWiki logo: (can be overwritten by web preferences)
-		* Set WEBLOGOIMG = %WIKILOGOIMG%
 		* Set WEBLOGOALT = %WIKILOGOALT%
 
 	* List this web in the %TWIKIWEB%.SiteMap:
