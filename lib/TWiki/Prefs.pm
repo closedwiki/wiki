@@ -61,16 +61,15 @@ sub new {
     my $globs =  new TWiki::Prefs::PrefsCache( $session, undef );
     $this->{GLOBAL} = $globs;
 
-    # Local prefs first, so it can set FINALPREFERENCES to override
-    # TWiki.TWikiPreferences
+    # TWiki.TWikiPreferences first
+    $globs->loadPrefsFromTopic( $TWiki::cfg{SystemWebName},
+                                $TWiki::cfg{SitePrefsTopicName} );
+
+    # Then local prefs
     my $local = $TWiki::cfg{LocalSitePreferences};
     if( $local && $local =~ /^(\w+)\.(\w+)$/ ) {
         $globs->loadPrefsFromTopic( $1, $2 );
     }
-
-    # Now TWiki.TWikiPreferences
-    $globs->loadPrefsFromTopic( $TWiki::cfg{SystemWebName},
-                                $TWiki::cfg{SitePrefsTopicName} );
 
     my @webPath = split( /[\/\.]/, $web );
     my $tmpWebPath = '';
