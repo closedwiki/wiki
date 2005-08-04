@@ -26,7 +26,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 		* Set WEBLOGOALT = Home
 
 	* [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences
-		* Set FAVICON = %PUBURL%/%WEB%/WebPreferences/favicon.ico
+		* Set FAVICON = %PUBURL%/%BASEWEB%/%WEBPREFSTOPIC%/favicon.ico
 
 	* Copyright notice:
 		* Set WEBCOPYRIGHT = Copyright &copy; 1999-%GMTIME{"$year"}% by the contributing authors. \nAll material on this collaboration platform is the property of the contributing authors. <br /> \nIdeas, requests, problems regarding <nop>%WIKITOOLNAME%? <a href="mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%BASEWEB%.%BASETOPIC%">Send feedback</a>
