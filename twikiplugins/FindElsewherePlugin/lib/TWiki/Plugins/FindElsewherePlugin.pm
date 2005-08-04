@@ -124,7 +124,7 @@ sub startRenderingHandler
    # If it isn't found there either, put the word back unchnaged
 
    # Match WikiWordAsWebName.WikiWord, WikiWords, [[wiki words]] and WIK IWO RDS
-   $_[0] =~ s/([\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex}|$regex{wikiWordRegex}|\[\[[$regex{mixedAlphaNum}\s]+\]\]|$regex{abbrevRegex})/&findTopicElsewhere($_[1],$1,$2,$2,"")/geo;
+   $_[0] =~ s/([\s\(])($TWiki::regex{webNameRegex}\.$TWiki::regex{wikiWordRegex}|$TWiki::regex{wikiWordRegex}|\[\[[$TWiki::regex{mixedAlphaNum}\s]+\]\]|$TWiki::regex{abbrevRegex})/&findTopicElsewhere($_[1],$1,$2,$2,"")/geo;
 
 }
 
@@ -142,7 +142,7 @@ sub findTopicElsewhere
    my( $theWeb, $thePreamble, $theTopic, $theLinkText, $theAnchor ) = @_;
 
    # If we got ourselves a WikiWordAsWebName.WikiWord, we're done - return untouched info
-   if ($theTopic =~ /$regex{webNameRegex}\.$regex{wikiWordRegex}/o) {
+   if ($theTopic =~ /$TWiki::regex{webNameRegex}\.$TWiki::regex{wikiWordRegex}/o) {
       return "$thePreamble$theTopic";
    }
    
@@ -152,8 +152,8 @@ sub findTopicElsewhere
    # Turn spaced-out names into WikiWords - upper case first letter of
    # whole link, and first of each word.
    $theTopic =~ s/^(.)/\U$1/o;
-   $theTopic =~ s/\s($regex{singleMixedAlphaNumRegex})/\U$1/go;
-   $theTopic =~ s/\[\[($regex{singleMixedAlphaNumRegex})(.*)\]\]/\u$1$2/o;
+   $theTopic =~ s/\s($TWiki::regex{singleMixedAlphaNumRegex})/\U$1/go;
+   $theTopic =~ s/\[\[($TWiki::regex{singleMixedAlphaNumRegex})(.*)\]\]/\u$1$2/o;
 
    my $text = $thePreamble;
  
@@ -210,7 +210,7 @@ sub findTopicElsewhere
      # If link text [[was in this form]] <em> it
      $theLinkText =~ s/\[\[(.*)\]\]/<em>$1<\/em>/go;
      # Prepend WikiWords with <nop>, preventing double links
-     $theLinkText =~ s/([\s\(])($regex{wikiWordRegex})/$1<nop>$2/go;
+     $theLinkText =~ s/([\s\(])($TWiki::regex{wikiWordRegex})/$1<nop>$2/go;
      $text .= "<nop>$theLinkText<sup>(".join(",", @topicLinks ).")</sup>" ;
    }
    else
