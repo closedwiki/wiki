@@ -101,13 +101,24 @@ WWW::Mechanize
 ^ExtUtils::ParserXS$
 ^ExtUtils::MakeMaker$
 ^String::Interpolate$
-SVK
 TWiki
 ^Number::Compare$
 ^Text::Glob$
 ^File::Find::Rule$
 ^IPC::Run$
 ^GraphViz
+SVK
+^SVN::
+^File::Type$
+^Encode$
+^IO::Pager$
+^Class::Autouse$
+^FreezeThaw$
+^PerlIO::eol$
+^Locale::Maketext
+^Term::ReadKey$
+^File::chdir$
+^Class::Accessor$
 __MODULES__
 
 print $deps, "\n";
