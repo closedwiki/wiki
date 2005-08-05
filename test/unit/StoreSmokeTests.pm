@@ -128,7 +128,7 @@ sub verify_checkin_attachment {
 
     $twiki->{store}->saveTopic($user, $testweb, $topic, $text );
 
-    # directly put file in pub directory (where attachments go)
+    # ensure pub directory for topic exists (SMELL surely not needed?)
     my $dir = $TWiki::cfg{PubDir};
     $dir = "$dir/$testweb/$topic";
     if( ! -e "$dir" ) {
