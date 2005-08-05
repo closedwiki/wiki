@@ -160,7 +160,7 @@ sub view {
     }
 
     my $template = $query->param( 'template' ) ||
-      $session->{prefs}->getPreferencesValue("VIEW_TEMPLATE") ||
+      $session->{prefs}->getPreferencesValue("VIEW_TEMPLATE", undef, 1) ||
         'view';
 
     my $tmpl = $session->{templates}->readTemplate( $template, $skin );

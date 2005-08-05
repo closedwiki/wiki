@@ -292,14 +292,6 @@ You can enable/disable plugins using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][
 	* Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
 		* #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
----++ Preferences Control Settings
-
-	*  Allow topic level preferences, on or off:  If set to =on=, topic preferences will be read, and will override any web- or site-level preferences not set as =FINALPREFERENCES=.  By default, user preferences will override topic preferences.
-		* Set READTOPICPREFS = on
-
-	* Topic level overrides user level preferences, on or off: If set to =on=, topic preferences will override user preferences.  The user can in turn override this behavior by setting further =FINALPREFERENCES= in his or her user topic.
-		* Set TOPICOVERRIDESUSER = off
-
 ---++ Creating New Preference Variables
  
 You can introduce new VARIABLES and use them in your topics and templates. There is no need to change the TWiki engine (Perl scripts).

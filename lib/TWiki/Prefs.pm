@@ -67,6 +67,7 @@ sub new {
 
     # Then local prefs
     my $local = $TWiki::cfg{LocalSitePreferences};
+    #SMELL: Why not use TWiki::normalizeWebTopicName
     if( $local && $local =~ /^(\w+)\.(\w+)$/ ) {
         $globs->loadPrefsFromTopic( $1, $2 );
     }
@@ -90,35 +91,33 @@ sub new {
 
 =pod
 
----++ ObjectMethod loadUserAndTopicPreferences()
+---++ ObjectMethod loadUserPreferences()
+---++ ObjectMethod loadTopicPreferences()
 
 Reads preferences from the current user's personal topic, and
 read topic prefs if required.
 
 =cut
 
-sub loadUserAndTopicPreferences {
-    my( $this, $web, $topic, $user ) = @_;
+sub loadUserPreferences {
+    my( $this, $web, $user ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     my $req = new TWiki::Prefs::PrefsCache($this->{session}, $this->{WEB} );
 
-    my $topicPrefsSetting =
-      $this->getPreferencesFlag( 'READTOPICPREFS', $web );
-    my $topicPrefsOverride =
-      $this->getPreferencesFlag( 'TOPICOVERRIDESUSER', $web );
+    $req->loadPrefsFromTopic( $TWiki::cfg{UsersWebName}, $user->wikiName() );
+    $this->{USER} = $req;
+}
 
-    if( $topicPrefsSetting && !$topicPrefsOverride ) {
-        # topic prefs overridden by user prefs
-        $req->loadPrefsFromTopic( $web, $topic );
-    }
-    $req->loadPrefsFromTopic( $TWiki::cfg{UsersWebName},
-                              $user->wikiName() );
+sub loadTopicPreferences {
+    my( $this, $web, $topic ) = @_;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    if( $topicPrefsSetting && $topicPrefsOverride ) {
-        # topic prefs override user prefs
-        $req->loadPrefsFromTopic( $web, $topic );
-    }
+    my $req = new TWiki::Prefs::PrefsCache($this->{session}, $this->{USER} );
+
+    $req->loadPrefsFromTopic( $web, $topic );
+    $req->{topicName} = $topic;
+
     $this->{REQUEST} = $req;
 }
 
@@ -167,9 +166,10 @@ sub loadHash {
 
 =pod
 
----++ ObjectMethod getPreferencesValue( $key, $web ) -> $value
+---++ ObjectMethod getPreferencesValue( $key, $web, $nouser ) -> $value
    * =$key - key to look up
    * =$web= - if specified, ignores request preferences and looks up the key in the given web instead.
+   * =$nouser= - if true, the preferences in the user topic are ignored
 
 Returns the value of the preference =$key=.
 
@@ -181,7 +181,7 @@ Always returns a string value, never undef.
 =cut
 
 sub getPreferencesValue {
-    my( $this, $key, $web ) = @_;
+    my( $this, $key, $web, $nouser ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
     my $val = $this->{session}->{plugins}->getSessionValueHandler( $key );
@@ -199,6 +199,11 @@ sub getPreferencesValue {
     } else {
         if( defined( $this->{REQUEST} )) {
             $val = $this->{REQUEST}->{prefs}{$key};
+            return $val if defined( $val );
+        }
+
+        if( !$nouser && defined( $this->{USER} )) {
+            $val = $this->{USER}->{prefs}{$key};
             return $val if defined( $val );
         }
 

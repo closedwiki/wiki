@@ -1137,8 +1137,12 @@ sub new {
     $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$TWiki::cfg{PubUrlPath};
     $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$TWiki::cfg{DispScriptUrlPath};
 
-    $this->{prefs}->loadUserAndTopicPreferences(
-        $this->{webName}, $this->{topicName}, $user );
+    # SMELL: can this be moved into Prefs::new?
+    $this->{prefs}->loadUserPreferences(
+        $this->{webName}, $user );
+
+    $this->{prefs}->loadTopicPreferences(
+        $this->{webName}, $this->{topicName} );
 
     $this->{renderer} = new TWiki::Render( $this );
 

@@ -3,7 +3,7 @@
 | Site-level preferences are located in [[%TWIKIWEB%.%TOPIC%]], however this [[%MAINWEB%.%TOPIC%]] prefs topic has overrride priority and should be used for local customisations. This allows for easier upgrades as you don't need to worry about the shipped preferences clobbering yours. It's easier to keep a handle on if you only copy over the settings you actually change.|
 
 	* Site-level preferences that are *not* allowed to be overridden by %WEBPREFSTOPIC% and user preferences:
-		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER, PROXYHOST, PROXYPORT
+		* Set FINALPREFERENCES = ATTACHFILESIZELIMIT, PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, PROXYHOST, PROXYPORT
 
 <!-- keep this as a security measure:
 	* Set ALLOWTOPICCHANGE = TWikiAdminGroup

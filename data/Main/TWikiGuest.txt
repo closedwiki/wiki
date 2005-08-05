@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiGuest" date="1123211354" format="1.1" version="1.2"}%
 
 
 A guest of this TWiki web, not unlike yourself. You can leave your trace behind you, just add your name in %TWIKIWEB%.TWikiRegistration and create your own page.
@@ -19,6 +19,7 @@ __Related topics__
    * Set USERTESTPREF = user test pref
    * Set USERFINALTESTPREF = user final test pref
    * Set OVERRIDETHISTESTPREF = Setting from user topic
+
 %META:FORM{name="UserForm"}%
 %META:FIELD{name="FirstName" attributes="" title="FirstName" value="TWiki"}%
 %META:FIELD{name="LastName" attributes="" title="LastName" value="Guest"}%
@@ -33,4 +34,5 @@ __Related topics__
 %META:FIELD{name="Fax" attributes="" title="Fax" value=""}%
 %META:FIELD{name="YahooMessenger" attributes="" title="<nop>YahooMessenger" value=""}%
 %META:FIELD{name="MsnMessenger" attributes="" title="<nop>MsnMessenger" value=""}%
+%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" value="UserView"}%
 
