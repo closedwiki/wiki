@@ -37,6 +37,7 @@ You now have a basic, unauthenticated installation running. At this point you ca
 ---+ Next Steps (optional)
 Once you have your TWiki running, you can move on to customise it for your users.
    * *Edit the TWikiPreferences topic* in the %TWIKIWEB% web. Read through it and set any additional settings you think you might need (you can click the 'Edit' button near the top to edit the settings in place)
+      * %I% Alternately, you can *copy* any settings or variables that you want to customize from [[%TWIKIWEB%.TWikiPreferences]] and *paste* them into [[%MAINWEB%.TWikiPreferences]]. This will protect your local customizations from being overwritten in later upgrades. See notes at top of [[%TWIKIWEB%.TWikiPreferences]] for more information.
    * *Enable authentication*, if required. Read TWikiUserAuthentication..
    * *Enable email notification* (WebChangesAlerts). Read TWikiSiteTools.
    * *Install Plugins*. TWiki:Plugins is an extensive library of Plugins for TWiki, that enhance functionality in a huge number of ways. A few plugins are pre-installed in the TWiki distribution. Installation instructions for the other plugins can be found in the plugin topics on [[TWiki:Plugins][TWiki.org]].
