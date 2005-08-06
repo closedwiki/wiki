@@ -22,16 +22,20 @@ use strict;
 use vars qw(
 	$web $topic $user $installWeb $VERSION $debug @currentVisitors 
 	$isDakar $twikiGuest @isoMonth
-	$ignoreHosts $isInitialized $isOldSessionPlugin
+	$ignoreHosts $isInitialized $sessionDir
 );
 
-$VERSION = '1.1';
+$VERSION = '1.3';
 
 ###############################################################################
 sub writeDebug {
   &TWiki::Func::writeDebug("- UserInfoPlugin - " . $_[0]) if $debug;
 }
 
+###############################################################################
+sub writeWarning {
+  &TWiki::Func::writeWarning("- UserInfoPlugin - " . $_[0]);
+}
 
 ###############################################################################
 sub initPlugin {
@@ -46,8 +50,8 @@ sub initPlugin {
   $debug = 0;
   $isInitialized = 0;
 
-  # Plugin correctly initialized
-  #&writeDebug("initPlugin ($web.$topic) is OK");
+  # plugin correctly initialized
+  &writeDebug("initPlugin ($web.$topic) is OK");
 
   return 1;
 }
@@ -57,10 +61,20 @@ sub doInit {
 
   return if $isInitialized;
   $isInitialized = 1;
+
+  # figure out where the sessions are
+  if ($TWiki::cfg{SessionDir}) {
+    $sessionDir = $TWiki::cfg{SessionDir};
+  } else {
+    $sessionDir = &TWiki::Func::getDataDir() . "/.session"; 
+  }
+  if (! -e $sessionDir) {
+    &writeDebug("sessionDir '$sessionDir' not found ... falling back to /tmp");
+    $sessionDir = '/tmp';
+  }
   
   # find out if we run dakar or not
   $isDakar = (defined $TWiki::cfg{MimeTypesFileName})?1:0;
-  writeDebug("isDakar=$isDakar");
 
   # get twiki guest string
   $twikiGuest = &TWiki::Func::getDefaultUserName();
@@ -73,13 +87,6 @@ sub doInit {
   # get spiders
   $ignoreHosts = TWiki::Func::getPreferencesValue("USERINFOPLUGIN_IGNOR_HOSTS") || '';
   $ignoreHosts = join('|', split(/,\s?/, $ignoreHosts));
-
-  # get version of the SessionPlugin
-  use TWiki::Plugins::SessionPlugin;
-  my $sessionPluginVersion = $TWiki::Plugins::SessionPlugin::VERSION;
-  $isOldSessionPlugin = ($sessionPluginVersion < 2.0)?1:0;
-  writeDebug("sessionPluginVersion=$sessionPluginVersion, isOldSessionPlugin=$isOldSessionPlugin");
-  
 
   writeDebug("doInit() done");
 }
@@ -121,7 +128,7 @@ sub getNrVisitors {
   &doInit();
 
   writeDebug("getNrVisitors()");
-  my ($visitors) = &getCurrentVisitors(undef, $twikiGuest);
+  my ($visitors) = &getVisitorsFromSessionStore(undef, $twikiGuest);
   return scalar @$visitors;
 }
 
@@ -130,7 +137,7 @@ sub getNrGuests {
   &doInit();
 
   writeDebug("getNrGuests()");
-  my (undef, $guests) = &getCurrentVisitors($twikiGuest);
+  my (undef, $guests) = &getVisitorsFromSessionStore($twikiGuest);
   return scalar @$guests;
 }
 
@@ -169,7 +176,7 @@ sub renderCurrentVisitors {
   my $isFirst = 1;
   my $n = $theMax;
   my $counter = 1;
-  my ($visitors) = &getCurrentVisitors(undef, $twikiGuest);
+  my ($visitors) = &getVisitorsFromSessionStore(undef, $twikiGuest);
   return "" if !@$visitors;
   $visitors = join('|', @$visitors);
   $visitors = &getVisitors(1, undef, $visitors, $twikiGuest);
@@ -255,28 +262,22 @@ sub renderNewUsers
 }
 
 ###############################################################################
-# get list of users currently online.
+# get list of users that stil have a session object
 # this is the number of session objects
-sub getCurrentVisitors {
+sub getVisitorsFromSessionStore {
 
   my ($includeNames, $excludeNames) = @_;
 
-  writeDebug("getCurrentVisitors()");
+  writeDebug("getVisitorsFromSessionStore()");
   writeDebug("includeNames=$includeNames") if $includeNames;
   writeDebug("excludeNames=$excludeNames") if $excludeNames;
 
   # get session directory
-  my $sessionDir = &TWiki::Func::getDataDir() . "/.session";
-
-  if (! -e $sessionDir) {
-    writeDebug("sessionDir '$sessionDir' not found");
-    return ();
-  }
 
   # get wikinames of current visitors
   my %users = ();
   my %guests = ();
-  my @sessionFiles = reverse glob "$sessionDir/*";
+  my @sessionFiles = reverse glob "$sessionDir/cgisess_*";
   foreach my $sessionFile (@sessionFiles) {
 
     #writeDebug("reading $sessionFile");
@@ -286,26 +287,20 @@ sub getCurrentVisitors {
 
     my $wikiName;
     my $host;
-    if ($isOldSessionPlugin) {
-      my %sessionInfo = map { split( /\|/, $_, 2 ) }
-		     grep { /[^\|]*\|[^\|]*$/ }
-		     split( /\n/, $dump );
 
-      $wikiName = $sessionInfo{"user"} || $twikiGuest;
-      $host = $sessionInfo{"host"};
-    } else {
-      $wikiName = $twikiGuest;
-      if ($dump =~ /"AUTHUSER" => "(.*?)"/) {
-	$wikiName = $1;
-      }
-      if ($dump =~ /"_SESSION_REMOTE_ADDR" => "(.*?)"/) {
-	$host = $1;
-      }
+    $wikiName = $twikiGuest;
+    if ($dump =~ /"AUTHUSER" => "(.*?)"/) {
+      $wikiName = $1;
     }
+    if ($dump =~ /"_SESSION_REMOTE_ADDR" => "(.*?)"/) {
+      $host = $1;
+    }
+
     if ($host) {
       next if $host =~ /$ignoreHosts/;
       $guests{$host} = 1 if $wikiName eq $twikiGuest;
     }
+
     next if $users{$wikiName};
     next if $excludeNames && $wikiName =~ /$excludeNames/;
     writeDebug("found $wikiName");
@@ -481,7 +476,7 @@ sub replaceVars {
   if (defined $data) {
     if (defined $data->{wikiname}) {
       $data->{username} = &TWiki::Func::wikiToUserName($data->{wikiname});
-      $data->{wikiusername} = &TWiki::Func::getMainWebname() . '.' . $data->{wikiname};
+      $data->{wikiusername} = &TWiki::Func::userToWikiName($data->{wikiname});
     }
 
     foreach my $key (keys %$data) {
