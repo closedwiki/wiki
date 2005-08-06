@@ -1,4 +1,5 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1123097457" format="1.1" version="$Rev $"}%
+
 
 ---+!! <nop>%WIKITOOLNAME% Site-Level Preferences
 
@@ -121,7 +122,7 @@ The following are __site-level__ settings that affect all users in all webs on t
 ---+++ Email and Proxy Server Settings
 
 	* TWiki webmaster email address:
-		* Set WIKIWEBMASTER = webmaster@your.company
+		* Set WIKIWEBMASTER = webmaster@tinderbox.wbniv.wikihosting.com
 
 	* TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
 		* Set WIKIWEBMASTERNAME = TWiki Administrator
@@ -322,3 +323,4 @@ Done on separate lines to test merging
    * Set FINALPREFERENCES = GLOBALFINALTESTPREF1
    * Set FINALPREFERENCES = GLOBALFINALTESTPREF2
 -->
+

@@ -14,9 +14,6 @@ __Preferences:__
 	* Web-specific background color: (Pick a lighter one of the %TWIKIWEB%.StandardColors)
 		* Set WEBBGCOLOR = #FFEFA6
 
-	* [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences
-		* Set FAVICON = %PUBURL%/%TWIKIWEB%/WebPreferences/favicon.ico
-
 	* List this web in the %TWIKIWEB%.SiteMap:
 		* If yes, Set SITEMAPLIST = =on=, and add the "what" and "use to..." description for the site map. Make sure to list only links that include the name of the web, e.g. <nop>%WEB%.Topic links.
 		* Set SITEMAPLIST = on
