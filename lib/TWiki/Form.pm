@@ -624,7 +624,7 @@ Extract new values for form fields from a query.
 
 For each field, if there is a value in the query, use it.
 Otherwise if there is already entry for the field in the meta, keep it.
-Otherwise, initialise the field to '' and set it in the meta.
+Otherwise, if $handleMandatory, initialise the field to '' and set it in the meta.
 
 =cut
 
@@ -647,10 +647,15 @@ sub getFieldValuesFromQuery {
             }
         }
 
-        unless( defined( $value )) {
+	# SMELL: This is really independent of $handleMandatory, but happens
+	# to coincide with usage (to be proper, should introduce additional flag)
+	if ( $handleMandatory ) {
+	  unless( defined( $value )) {
+	    # Note: In Cairo, meta data is overwritten by empty query parameter
             unless( defined( $meta->get( 'FIELD', $fieldDef->{name} ))) {
-                $value = '';
+	      $value = '';
             }
+	  }
         }
 
         # NOTE: title and name are stored in the topic so that it can be
