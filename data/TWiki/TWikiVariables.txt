@@ -210,7 +210,8 @@ Spaces between the = sign and the value will be ignored. You can split a value o
    and continues here
 </pre>
 </blockquote>
-You can also set Variables in forms attached to topics. If a variable is set in a form, the value in the form will always override any value set in the topic. See TWikiForms#SettingVars for more details.
+
+You can also set preference variables on a topic by clicking the link =Edit topic preference settings= under =More topic actions=. Preferences set in this manner are not visible in the topic text but take effect nevertheless.
 
 ---++ Creating Custom Variables
 
