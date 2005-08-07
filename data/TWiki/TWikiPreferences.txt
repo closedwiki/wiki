@@ -8,7 +8,8 @@ This topic defines __site-level__ settings that apply to all users and webs on t
    *  *Over-riding site preferences* - Site-level settings can be selectively overwritten on the __individual web level__ (see %WEBPREFSTOPIC% in each web), __topic level__ (see "Edit topic preference settings" under =More topic actions= on any topic), and on the __user level__ (add preferences to your user topic in the %MAINWEB% web, ex: %WIKIUSERNAME%). For more information about web and topic-level preferences, see [[TWikiVariables#Preferences_Variables]].
    * *Locking individual settings* - You can lock individual settings at the site or web levels using the =FINALPREFERENCES= setting. See [[%MAINWEB%.%TOPIC%]] for more information. It is recommended that =FINALPREFERENCES= be set there rather than in this topic to avoid conflicts with your custom site preferences.
 
-%EDITPREFERENCES{"TWikiPreferencesForm"}% _(Click for form-based editing of preferences.)_
+%EDITPREFERENCES{"TWikiPreferencesForm"}% 
+_(Click for form-based editing of preferences.)_
 %TOC%
 
 ---++ Default Web Preferences
