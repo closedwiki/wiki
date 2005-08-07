@@ -70,6 +70,10 @@ sub PERMITTED {
                  "$user $mode $web.$topic");
 }
 
+# Note: As we do not initialize twiki with a query, the topic that topic prefs
+# are initialized from is WebHome. Thus these tests also test reading a topic
+# other than the current topic.
+
 sub test_denytopic {
     my $this = shift;
     $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
@@ -119,6 +123,54 @@ THIS
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
+}
+
+sub test_allowtopic_a {
+    my $this = shift;
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
+                                <<THIS
+If ALLOWTOPIC is set
+   1. people in the list are PERMITTED
+   2. everyone else is DENIED
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
+THIS
+                                , undef);
+    my $topicquery = new CGI( "" );
+    $topicquery->path_info("/$testWeb/$testTopic");
+    # renew TWiki, so WebPreferences gets re-read
+    $twiki = new TWiki(undef, $topicquery);
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $twiki = new TWiki(undef, $topicquery);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $twiki = new TWiki(undef, $topicquery);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $twiki = new TWiki(undef, $topicquery);
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $twiki = new TWiki(undef, $topicquery);
+    $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
+}
+
+sub test_allowtopic_b {
+    my $this = shift;
+    $twiki->{store}->saveTopic( $currUser, $testWeb, $testTopic,
+                                <<THIS
+If ALLOWTOPIC is set
+   1. people in the list are PERMITTED
+   2. everyone else is DENIED
+\t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
+THIS
+                                , undef);
+    # renew TWiki, so WebPreferences gets re-read
+    $twiki = new TWiki();
+    $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
+    $twiki = new TWiki();
+    $this->DENIED($testWeb,$testTopic,"VIEW",$MrWhite);
+    $twiki = new TWiki();
     $this->DENIED($testWeb,$testTopic,"view",$MrBlue);
 }
 

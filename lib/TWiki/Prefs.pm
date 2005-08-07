@@ -220,6 +220,21 @@ sub getPreferencesValue {
     return $val || '';
 }
 
+sub getTopicPreferencesValue {
+    my( $this, $key ) = @_;
+    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
+
+    my $val = $this->{session}->{plugins}->getSessionValueHandler( $key );
+    return $val if defined( $val );
+
+    if( defined( $this->{REQUEST} )) {
+      $val = $this->{REQUEST}->{prefs}{$key};
+      return $val if defined( $val );
+    }
+
+    return '';
+}
+
 =pod
 
 ---++ ObjectMethod getPreferencesFlag( $key, $web ) -> $boolean

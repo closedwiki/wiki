@@ -108,7 +108,7 @@ Check if user is allowed to access topic
    * =$text=    - If empty: Read '$theWebName.$theTopicName' to check permissions
    * =$topic=   - Topic name to check, e.g. 'SomeTopic'
    * =$web=     - Web, e.g. 'Know'
-If the check fails, the reason can be recoveered using getReason
+If the check fails, the reason can be recoveered using getReason.
 
 =cut
 
@@ -120,47 +120,32 @@ sub checkAccessPermission {
 
     undef $this->{failure};
 
-    #print STDERR "Check access ", $user->stringify()," to $web.$topic ";
+    #print STDERR "Check access ", $user->stringify()," to $web.$topic\n";
 
     # super admin is always allowed
     if( $user->isAdmin() ) {
-        #print STDERR " - ADMIN\n";
+        #print STDERR $user->stringify() . " - ADMIN\n";
         return 1;
     }
 
     $mode = uc( $mode );  # upper case
     $web ||= $this->{session}->{webName};
 
-    if( ! $theTopicText ) {
-        # text not supplied as parameter, so read topic. The
-        # read is 'Raw' just to hint to store that we want the
-        # data _fast_.
-        my $store = $this->{session}->{store};
-        if( $store->topicExists( $web, $topic )) {
-            $theTopicText = $store->readTopicRaw( undef, $web, $topic, undef );
-        } else {
-            $theTopicText = '';
-        }
+    my $prefs = $this->{session}->{prefs};
+    # If topic has not been loaded, get preferences now
+    unless ( $prefs->{REQUEST}->{topicName} eq $topic ) {
+      $prefs->loadTopicPreferences( $web, $topic );
     }
 
     my $allowText;
     my $denyText;
 
-    # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode =
-    # from the topic text
-    foreach( split( /\n/, $theTopicText ) ) {
-        if( /^$TWiki::regex{setRegex}(ALLOW|DENY)TOPIC$mode\s*\=\s*(.*)$/ ) {
-            my ( $how, $set ) = ( $1, $2 );
-            # Note: an empty value is a valid value!
-            if( defined( $set )) {
-                if( $how eq 'DENY' ) {
-                    $denyText = $set;
-                } else {
-                    $allowText = $set;
-                }
-            }
-        }
-    }
+    # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
+    my $tmp;
+    $tmp = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode );
+    $allowText = $tmp if $tmp;
+    $tmp = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode );
+    $denyText = $tmp if $tmp;
 
     # Check DENYTOPIC
     if( defined( $denyText )) {
@@ -178,7 +163,7 @@ sub checkAccessPermission {
     }
 
     # Check ALLOWTOPIC. If this is defined the user _must_ be in it
-    if( defined( $allowText )) {
+    if( defined( $allowText ) && $allowText =~ /\S/ ) {
         if( $user->isInList( $allowText )) {
             #print STDERR "in ALLOWTOPIC\n";
             return 1;
@@ -187,8 +172,6 @@ sub checkAccessPermission {
         #print STDERR $this->{failure},"\n";
         return 0;
     }
-
-    my $prefs = $this->{session}->{prefs};
 
     # Check DENYWEB, but only if DENYTOPIC is not set (even if it
     # is empty - empty means "don't deny anybody")
