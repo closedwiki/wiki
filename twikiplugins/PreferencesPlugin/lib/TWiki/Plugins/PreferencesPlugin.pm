@@ -50,7 +50,6 @@ sub initPlugin {
 
 sub preRenderingHandler {
     ### my ( $text, $map ) = @_;
-#die "FUCK ",$_[0] if ($_[0] =~ /(&37;|%)EDITPREFERENCES/);
     return unless ( $_[0] =~ m/%EDITPREFERENCES{(.*?)}%/ );
     my $attrs = new TWiki::Attrs( $1 );
     my($formWeb, $form ) = TWiki::Func::normalizeWebTopicName( $web, $attrs->{_DEFAULT} );
