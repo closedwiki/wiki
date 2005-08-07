@@ -337,6 +337,7 @@ sub save {
 			$n++;
         } while( $session->{store}->topicExists( $webName, $topic ));
         $session->{topicName} = $topic;
+	$session->{store}->clearLease( $webName, $baseTopic );
     }
 
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
