@@ -71,8 +71,9 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/ThomasWeigert |
-|  Plugin Version: | 2 May 2005 |
+|  Plugin Version: | 4 Aug 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  4 Aug 2005:  | Cleaned up error log messages  |
 |  2 May 2005:  | Fixed caching problem when using Speedy CGI	|
 |  21 Mar 2005: | Utilize 21 Mar version of TWiki:Plugins/EditContrib |
 |  12 Mar 2005: | Abstract additional functionality into TWiki:Plugins/EditContrib  |

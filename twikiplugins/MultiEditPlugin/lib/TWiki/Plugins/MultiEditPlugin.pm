@@ -21,8 +21,7 @@ package TWiki::Plugins::MultiEditPlugin;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName $debug
-        $label $skipskin $placement
-        $TranslationToken $renderedText $prefix
+        $label $skipskin $placement $renderedText $prefix
     );
 
 use TWiki;
@@ -49,7 +48,7 @@ sub initPlugin
 
     #initialize a few other things
     $renderedText = [];
-    $prefix = $translationToken . "_render_" . $translationToken;
+    $prefix = "<_render_>";
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
@@ -135,7 +134,7 @@ sub endRenderingHandler
     TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
 
     if (@$renderedText) {
-        while ($_[0] =~ s/$translationToken$prefix$translationToken([0-9]+)/$$renderedText[$1]/e) {}
+        while ($_[0] =~ s/$prefix([0-9]+)/$$renderedText[$1]/e) {}
     }
 }
 
