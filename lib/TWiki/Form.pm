@@ -318,24 +318,15 @@ sub renderForEdit {
     ASSERT($meta->isa( 'TWiki::Meta')) if DEBUG;
     my $session = $this->{session};
 
-    my $mandatoryFieldsPresent = 0;
-    my $chooseForm = '';
-    my $prefs = $session->{prefs};
-    if( $prefs->getPreferencesValue( 'WEBFORMS', $web ) ) {
-        # SMELL: localisation - this should be from a template
-        $chooseForm =
-          CGI::submit(-name => 'action',
-                      -value => 'Replace form...',
-                      -class => "twikiChangeFormButton twikiSubmit");
+    if( $this->{mandatoryFieldsPresent} ) {
+      $session->enterContext( 'mandatoryfields' );
     }
+    my $tmpl = $session->{templates}->readTemplate( "form", $session->getSkin() );
 
-    my $text = CGI::start_table(-border=>1, -cellspacing=>0, -cellpadding=>0 );
-    $text .= CGI::Tr( CGI::th( { colspan => 2,
-                                 bgcolor => '#99CCCC' },
-                               $this->_link( $this->{web},
-                                             $this->{topic}, '' ).
-                               $chooseForm ));
+    # Note: if WEBFORMS preference is not set, can only delete form.
+    $tmpl =~ s/%FORMTITLE%/$this->_link($this->{web},$this->{topic},'')/geo;
 
+    my $text = '';
     foreach my $fieldDef ( @{$this->{fields}} ) {
 
         my $tooltip = $fieldDef->{tooltip};
@@ -387,16 +378,9 @@ sub renderForEdit {
                              CGI::td( { align=>'left' } , $value ));
         }
     }
-    $text .= CGI::end_table();
 
-    $text = CGI::div( { class=>'twikiForm twikiEditForm' }, $text);
-
-    if( $this->{mandatoryFieldsPresent} ) {
-        # SMELL: localisation - this should be from a template
-        $text .= CGI::span( { class => 'twikiAlert' }, '*' ).
-          ' indicates mandatory fields';
-    }
-    return $text;
+    $tmpl =~ s/%FORMROWS%/$text/go;
+    return $tmpl;
 }
 
 =pod

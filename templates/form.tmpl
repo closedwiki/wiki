@@ -1,0 +1,12 @@
+%{"Should only be there if WEBFORMS preference is set"}%
+%TMPL:DEF{"changeform"}%<input type="submit" name="action" value="Replace form..." class="twikiChangeFormButton twikiSubmit" />%TMPL:END%
+
+%TMPL:DEF{"mandatory"}%<span class="twikiAlert">*</span> indicates mandatory fields %TMPL:END%
+%TMPL:DEF{"no_mandatory"}% %TMPL:END%
+
+%TMPL:DEF{"formtail"}% %TMPL:P{context="mandatoryfields" then="mandatory" else="no_mandatory"}% %TMPL:END%
+
+<div class="twikiForm twikiEditForm"><table><tr><th bgcolor="#99CCCC" colspan="2">%FORMTITLE% %TMPL:P{"changeform"}%</th></tr>%FORMROWS%</table></div> %TMPL:P{"formtail"}%
+
+
+

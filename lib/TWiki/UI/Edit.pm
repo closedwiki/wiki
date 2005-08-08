@@ -292,19 +292,7 @@ sub edit {
         }
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
-        # follows a html monster to let the 'choose form button' align at
-        # the right of the page in all browsers
-        my $formText = CGI::submit(-name => 'action',
-				   -value => 'Add form',
-				   -class => "twikiChangeFormButton twikiSubmit");
-        $formText = CGI::Tr(CGI::td( { align=>'right' }, $formText ));
-        $formText = CGI::table( { width=>'100%',
-				  border=>0,
-				  cellspacing=>0,
-				  cellpadding=>0,
-				  class=>'twikiChangeFormButtonHolder' }, $formText );
-        $formText = CGI::div( { style=>'text-align:right;' }, $formText );
-
+        my $formText = $session->{templates}->readTemplate( "addform", $session->getSkin() );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } else {
         $tmpl =~ s/%FORMFIELDS%//go;
