@@ -325,8 +325,9 @@ sub renderForEdit {
 
     # Note: if WEBFORMS preference is not set, can only delete form.
     $tmpl =~ s/%FORMTITLE%/$this->_link($this->{web},$this->{topic},'')/geo;
+    my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) =
+      split( /%REPEAT%/, $tmpl );
 
-    my $text = '';
     foreach my $fieldDef ( @{$this->{fields}} ) {
 
         my $tooltip = $fieldDef->{tooltip};
@@ -335,16 +336,12 @@ sub renderForEdit {
 
         if (! $title && $fieldDef->{type} eq 'label') {
             # Special handling for untitled labels
-            $text .= CGI::Tr
-              (CGI::th
-               ( { align => 'left',
-                   colspan => '2',
-                   bgcolor => '#99CCCC'},
-                 CGI::Div
-                 ( { class => 'twikiChangeFormButton' },
-                   $session->{renderer}->getRenderedVersion
-                   ( $session->handleCommonTags( $fieldDef->{value},
-                                                 $web, $topic ))) ));
+	    my $tmp = $repeatUntitledText;
+	    my $value = 
+	      $session->{renderer}->getRenderedVersion(
+		 $session->handleCommonTags($fieldDef->{value}, $web, $topic));
+	    $tmp =~ s/%ROWVALUE%/$value/go;
+	    $text .= $tmp;
         } else {
             my( $extra, $value );
             my $name = $fieldDef->{name};
@@ -367,20 +364,16 @@ sub renderForEdit {
 
             ( $extra, $value ) =
               $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
-
-            $text .= CGI::Tr(CGI::th( { align => 'right',
-                                        bgcolor=>'#99CCCC' },
-                                      # TW: Maybe do not link field headings
-                                      #$title .
-                                      $this->_link( $title, $tooltip,
-                                                    $referenced).
-                                      $extra ).
-                             CGI::td( { align=>'left' } , $value ));
+	    my $tmp = $repeatTitledText;
+	    $tmp =~ s/%ROWTITLE%/$this->_link($title,$tooltip,$referenced)/geo;
+	    $tmp =~ s/%ROWEXTRA%/$extra/go;
+	    $tmp =~ s/%ROWVALUE%/$value/go;
+	    $text .= $tmp;
         }
     }
 
-    $tmpl =~ s/%FORMROWS%/$text/go;
-    return $tmpl;
+    $text .= $afterText;
+    return $text;
 }
 
 =pod
