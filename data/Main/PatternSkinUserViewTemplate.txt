@@ -9,11 +9,12 @@
 
 %TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
 
-
+%TMPL:DEF{"active_form"}%<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=form&t=%GMTIME{$hour$min$sec}%">Edit personal data</a>%TMPL:END%
+%TMPL:DEF{"inactive_form"}% %TMPL:END%
 
 %TMPL:DEF{"form"}%
 <!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
-%META{"form"}%%TMPL:END%
+%META{"form"}%%TMPL:P{context="inactive" then="inactive_form" else="active_form"}%%TMPL:END%
 
 
 
@@ -21,10 +22,10 @@
 <!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
 %META{"attachments"}%%TMPL:END%
 
-%TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
+%TMPL:DEF{"inactive_edit"}%<strike>Edit text</strike>%TMPL:END%
 %TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
-%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
-%TMPL:DEF{"active_edit"}%<a href='%EDITURL%' rel='nofollow' title='Edit this topic text' accesskey='e'>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:END%
+%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit text%TMPL:END%
+%TMPL:DEF{"active_edit"}%<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=text&t=%GMTIME{$hour$min$sec}%" title="Edit topic text" accesskey="e" rel='nofollow'> %TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:END%
 
 %TMPL:DEF{"inactive_attach"}%<strike>Attach</strike>%TMPL:END%
 %TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="a" title="Attach an image or document to this topic" rel='nofollow'><span class="twikiAccessKey">A</span>ttach</a>%TMPL:END%
@@ -53,7 +54,9 @@
 %TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}% %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" title="View printable version of this topic" accesskey="p" rel='nofollow'><span class="twikiAccessKey">P</span>rintable version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="View raw text without formatting" accesskey="r" rel='nofollow'><span class="twikiAccessKey">R</span>aw text</a> %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%<br /><span class="twikiRevision">Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="View total topic history" accesskey="h" rel='nofollow'>Total page <span class="twikiAccessKey">h</span>istory</a> %TMPL:P{"sep"}% </span>Backlinks: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here" accesskey="w"><span class="twikiAccessKey">W</span>eb</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here" accesskey="l">A<span class="twikiAccessKey">ll</span> webs</a></div>%TMPL:END%
+
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="twikiTopicAction">
+%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}% %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" title="View printable version of this topic" accesskey="p" rel='nofollow'><span class="twikiAccessKey">P</span>rintable version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="View raw text without formatting" accesskey="r" rel='nofollow'><span class="twikiAccessKey">R</span>aw text</a> %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%<br /><span class="twikiRevision">Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="View total topic history" accesskey="h" rel='nofollow'>Total page <span class="twikiAccessKey">h</span>istory</a> %TMPL:P{"sep"}% </span>Backlinks: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here" accesskey="w"><span class="twikiAccessKey">W</span>eb</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here" accesskey="l">A<span class="twikiAccessKey">ll</span> webs</a></div>%TMPL:END%
 
 
 

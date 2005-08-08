@@ -37,18 +37,21 @@ Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
 %TMPL:DEF{"inactive_more"}%<strike>More topic actions...</strike>%TMPL:END%
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&amp;param1=%MAXREV%&amp;param2=%CURRREV%" rel='nofollow'>More</a>%TMPL:END%
 
+%TMPL:DEF{"active_form"}%<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=form&t=%GMTIME{$hour$min$sec}%">Edit personal data</a>%TMPL:END%
+%TMPL:DEF{"inactive_form"}% %TMPL:END%
 
 %TMPL:DEF{"content"}%
 %TMPL:P{"form"}%
+%TMPL:P{context="inactive" then="inactive_form" else="active_form"}%
 %TEXT%
 #TopicEnd
 %TMPL:P{"attachments"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
-%TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
+%TMPL:DEF{"inactive_edit"}%<strike>Edit text</strike>%TMPL:END%
 %TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
-%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
-%TMPL:DEF{"active_edit"}%<a href='%EDITURL%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b>%TMPL:END%
+%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit text%TMPL:END%
+%TMPL:DEF{"active_edit"}%<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=text&t=%GMTIME{$hour$min$sec}%" title="Edit topic text" rel='nofollow'> %TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:END%
 
 %TMPL:DEF{"topicaction"}%
   %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%
