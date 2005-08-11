@@ -213,7 +213,8 @@ sub _renderFormData {
     foreach my $field ( @fields ) {
         my $fa = $field->{attributes} || '';
         unless ( $fa =~ /H/ ) {
-            my $value = $field->{value} || '&nbsp;';
+            my $value = $field->{value};
+	    $value = '&nbsp;' unless defined($value);
             $metaText .= CGI::Tr( { valign => 'top' },
                                   CGI::td( { class => 'twikiFirstCol',
                                              align => 'right' },
