@@ -131,11 +131,11 @@ sub _renderParent {
         $parent = $pWeb.'.'.$pTopic;
         last if( $noWebHome &&
                  ( $pTopic eq $TWiki::cfg{HomeTopicName} ) ||
-                 $dontRecurse ||
                  $visited{$parent} );
         $visited{$parent} = 1;
         unshift( @stack, "[[$parent][$pTopic]]" );
         $parent = $store->getTopicParent( $pWeb, $pTopic );
+	last if $dontRecurse;
     }
     $text = join( $usesep, @stack );
 
