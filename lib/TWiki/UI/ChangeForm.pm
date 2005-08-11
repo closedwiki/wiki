@@ -72,16 +72,17 @@ sub generate {
     my $formList = '';
     foreach my $form ( @forms ) {
         $formList .= CGI::br() if( $formList );
+	my %props = (
+	  type => 'radio',
+	  name => 'formtemplate',
+	  value => $form
+	);
+	%props->{checked} = 'checked' if $form eq $formName;
 	$formList .=
-      CGI::input( {
-                   type => 'radio',
-                   name => 'formtemplate',
-                   value => $form,
-                   checked => $form eq $formName ? 'checked' : '',
-                  },
-                  ' '.( $store->topicExists( $web, $form ) ?
-                        '[['.$form.']]' : $form )
-                );
+	CGI::input( {%props},
+		    ' '.( $store->topicExists( $web, $form ) ?
+			  '[['.$form.']]' : $form )
+		  );
     }
     $page =~ s/%FORMLIST%/$formList/go;
 
