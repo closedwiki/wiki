@@ -649,7 +649,7 @@ sub webExists {
 ---+++ topicExists( $web, $topic ) -> $flag
 
 Test if topic exists
-   * =$web=   - Web name, optional, e.g. ='Main'=
+   * =$web=   - Web name, optional, e.g. ='Main'=. If not specified, or specified as the empty string, defaults to the current web (the web of the topic being operated on in this session)
    * =$topic= - Topic name, required, e.g. ='TokyoOffice'=, or ="Main.TokyoOffice"=
 Return: =$flag=     ="1"= if topic exists, ="0"= if not
 
@@ -658,8 +658,9 @@ Return: =$flag=     ="1"= if topic exists, ="0"= if not
 =cut
 
 sub topicExists {
-#   my( $web, $topic ) = @_;
-    return $TWiki::Plugins::SESSION->{store}->topicExists( @_ );
+    my( $web, $topic ) = @_;
+    $web ||= $TWiki::Plugins::SESSION->{webName};
+    return $TWiki::Plugins::SESSION->{store}->topicExists( $web, $topic );
 }
 
 =pod
