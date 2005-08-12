@@ -646,20 +646,19 @@ sub webExists {
 
 =pod
 
----+++ topicExists( $web, $topic ) -> $flag
+---+++ topicExists( $web, $topic ) -> $boolean
 
 Test if topic exists
-   * =$web=   - Web name, optional, e.g. ='Main'=. If not specified, or specified as the empty string, defaults to the current web (the web of the topic being operated on in this session)
+   * =$web=   - Web name, optional, e.g. ='Main'=.
    * =$topic= - Topic name, required, e.g. ='TokyoOffice'=, or ="Main.TokyoOffice"=
-Return: =$flag=     ="1"= if topic exists, ="0"= if not
+$web and $topic are parsed as described in the documentation for =normalizeWebTopicName=.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (14 Jul 2001)
 
 =cut
 
 sub topicExists {
-    my( $web, $topic ) = @_;
-    $web ||= $TWiki::Plugins::SESSION->{webName};
+    my( $web, $topic ) = $TWiki::Plugins::SESSION->normalizeWebTopicName( @_ );
     return $TWiki::Plugins::SESSION->{store}->topicExists( $web, $topic );
 }
 
