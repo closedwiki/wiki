@@ -271,11 +271,35 @@ sub getConfig {
 
 =pod
 
+---++ StaticMethod commentConfig( $comment )
+   * $comment - comment to insert in LocalSite.cfg, usually before a setConfig
+Inserts a comment into LocalSite.cfg. The comment will usually describe a following setConfig; for example,
+<verbatim>
+commentConfig( <<HERE
+#---++ Cars Plugin
+# **STRING 30**
+# Name of manufacturer
+HERE
+);
+setConfig( 'CarsPlugin', Manufacturer => 'Mercedes' );
+</verbatim>
+
+=cut
+
+sub commentConfig {
+    open(F, ">>lib/LocalSite.cfg") ||
+              die "Failed to open lib/LocalSite.cfg for write";
+    print F $_[0];
+    close(F);
+}
+
+=pod
+
 ---++ StaticMethod setConfig( $major, ... )
    * =$major= if defined, name of major key. If not given, there is no major key and the minorkeys are treated as major keys
    * =...= list of minorkey=>value pairs
-Set the given configuration variables. =$value= must be complete
-with all syntactic sugar including quotes.
+Set the given configuration variables in LocalSite.cfg. =$value= must be
+complete with all syntactic sugar, including quotes.
 The valued are written to $TWiki::cfg{major key}{setting} if a major
 key is given (recommended, use the plugin name) or $TWiki::cfg{setting} otherwise. Example:
 <verbatim>
@@ -295,27 +319,27 @@ sub setConfig {
     my $txt;
     my $key;
     if (scalar(@settings) % 2) {
-        # pluck the first odd parameter off to be the key
+        # pluck the first odd parameter off to be the major key
         $key = shift @settings;
     }
     my %keys = @settings;
     if( -e "lib/LocalSite.cfg" ) {
         open(F, "<lib/LocalSite.cfg") ||
-              die "Failed to open lib/LocalSite.cfg for read";
+          die "Failed to open lib/LocalSite.cfg for read";
         undef $/;
         $txt = <F>;
         close(F);
-        # kill the old settings if any are there
+        # kill the old settings (and previous comment) if any are there
         foreach my $setting ( keys %keys ) {
             if( $key ) {
-                $txt =~ s/\$TWiki::cfg{$key}{$setting}\s*=.*;//s;
+                $txt =~ s/(# \*\*.*?\n(#.*?\n))?\$TWiki::cfg{$key}{$setting}\s*=.*;\r?\n//s;
             } else {
-                $txt =~ s/\$TWiki::cfg{$setting}\s*=.*;//s;
+                $txt =~ s/(# \*\*.*?\n(#.*?\n))?\$TWiki::cfg{$setting}\s*=.*;\r?\n//s;
             }
         }
     }
     open(F, ">lib/LocalSite.cfg") ||
-              die "Failed to open lib/LocalSite.cfg for write";
+      die "Failed to open lib/LocalSite.cfg for write";
     print F $txt if $txt;
     foreach my $setting ( keys %keys ) {
         if( defined $key ) {

@@ -28,8 +28,9 @@
 # The values available to configuration are determined by parsing
 # TWiki.cfg. Special full-line comments guide the parse:
 # Any comment of the form
-######## Some text #########
-# is taken as a H2 heading, and following comments are dragged in too.
+#---+ Some text
+# is taken as a foldable block, and following comments are dragged in too.
+# ---++ is H3, ---+++ is H4 etc
 # Comments of the form
 # **TYPE opts**
 # where TYPE is one of URL, PATH, URLPATH, BOOLEAN, STRING, REGEX, SELECT
@@ -152,11 +153,11 @@ my $url = $query->url();
 my $action = $query->param('action') || '';
 my $nextid = 0;
 
-sub UNTAINTED($) {
-    local(@_, $@, $^W) = @_;
-    my $x;
-    return ( eval { $x = $_[0], kill 0; 1 } );
-}
+#sub UNTAINTED($) {
+#    local(@_, $@, $^W) = @_;
+#    my $x;
+#    return ( eval { $x = $_[0], kill 0; 1 } );
+#}
 
 ########################################################################
 ########################## FORMATTING ##################################
@@ -185,7 +186,6 @@ sub ERROR {
 # that contains the settings and doc rows.
 sub _foldableBlock {
     my( $head, $attr, $body ) = @_;
-
     my $headText = $head . CGI::span({ class => 'blockLinkAttribute' }, $attr);
     $body = CGI::start_table({width => '100%', -border => 0, -cellspacing => 0, -cellpadding => 0}).$body.CGI::end_table();
     my $mess = '';
@@ -214,6 +214,20 @@ sub _foldableBlock {
                        "\n";
 }
 
+# Generate an ordinary inline headedblock
+sub _ordinaryBlock {
+    my( $depth, $head, $attr, $body ) = @_;
+    $head .= CGI::span({ class => 'blockLinkAttribute' }, $attr) if $attr;
+    if( $depth == 2 ) { $head = CGI::h1( $head ); }
+    elsif( $depth == 3 ) { $head = CGI::h2( $head ); }
+    elsif( $depth == 4 ) { $head = CGI::h3( $head ); }
+    elsif( $depth == 5 ) { $head = CGI::h4( $head ); }
+    elsif( $depth == 6 ) { $head = CGI::h5( $head ); }
+    else { $head = CGI::h6( $head ); }
+    return CGI::Tr(CGI::td( { colspan => 2 } , $head)).
+        $body;
+}
+
 # Generate a sub-heading table row
 sub _subHead {
     my $text = shift;
@@ -230,7 +244,7 @@ sub _setting {
 
 # generate a documentation table row
 sub _docBlock {
-    my $desc = shift;
+    my $desc = shift || '';
     my $hidden = shift;
     if (length($desc) == 0 || $desc =~ /\A\s\Z/) { 
         return '';
@@ -1625,15 +1639,17 @@ HERE
         }
         $block .= _setting("PERL5SHELL", $n);
     };
-    $output .= _foldableBlock(CGI::em( 'CGI Setup' ), '(read only) ', $block);
+    $output .= _foldableBlock(CGI::em( 'CGI Setup' ), '(read only) ',
+                              $block);
     return $output;
 };
 
 sub presentEditableInfo {
     # "Parse" TWiki.cfg and LocalSite.cfg
     my $output = '';
-    my $block = '';
-    my $head = '';
+    my @blocks;
+    my @heads;
+    my $depth = 0;
     for my $file ( 'TWiki.cfg', 'LocalSite.cfg' ) {
         my $cfgfile = _findFileOnPath($file);
         next unless $cfgfile;
@@ -1643,13 +1659,13 @@ sub presentEditableInfo {
         close(F);
         $text =~ s/^# //gm;
 
-        my $type;
+        my $type = '';
         my $descr;
         my $opts;
         foreach (split(/\r?\n/, $text)) {
             if( m/^\*\*([A-Z]+)(\s*.*?)\*\*/ ) {
                 if( $type eq '_HELP' ) {
-                    $block .= _docBlock( $descr );
+                    $blocks[$depth] .= _docBlock( $descr );
                 }
                 $type = $1;
                 $opts = $2 || '';
@@ -1657,32 +1673,45 @@ sub presentEditableInfo {
                 $descr = '';
             } elsif ($type && /\$(TWiki::)?cfg(.*?)\s*=/) {
                 if( $type eq '_HELP' ) {
-                    $block .= _docBlock( $descr );
+                    $blocks[$depth] .= _docBlock( $descr );
                 } else {
-                    $block .= _checkAndBuildValueGrabber($type, $opts, $descr, $2);
+                    $blocks[$depth] .= _checkAndBuildValueGrabber($type, $opts, $descr, $2);
                 }
                 $type = '';
                 $descr = '';
-            } elsif( m/^##+(.*?)#+$/ ) {
-                if( $block ) {
-                    $output .= _foldableBlock( $head, '', $block );
+            } elsif( m/^#---(\++) *(.*?)$/ ) {
+                my $ndepth = length($1);
+                my $nhead = $2;
+                while( $depth >= $ndepth ) {
+                    if ($depth <= 1) {
+                        $output .= _foldableBlock($heads[$depth], '', $blocks[$depth]);
+                    } else {
+                        $blocks[$depth - 1] .= _ordinaryBlock($depth, $heads[$depth], '', $blocks[$depth]);
+                    }
+                    $depth--;
                 }
-                $head = $1;
-                $block = '';
+                $depth = $ndepth;
+                $heads[$depth] = $nhead;
+                $blocks[$depth] = '';
                 $type = '_HELP';
             } elsif( m/^\*PLUGINS\*/ ) {
                 if( $type eq '_HELP' ) {
-                    $block .= _docBlock( $descr );
+                    $blocks[$depth] .= _docBlock( $descr );
                     $descr = '';
                 }
-                $block .= _showPlugins();
+                $blocks[$depth] .= _showPlugins();
             } elsif( $type ) {
                 $descr .= "$_ ";
             }
         }
     }
-    if( $head || $block ) {
-        $output .= _foldableBlock( $head, '', $block );
+    while( $depth && $blocks[$depth]) {
+        if ($depth <= 1) {
+            $output .= _foldableBlock($heads[$depth], '', $blocks[$depth]);
+        } else {
+            $blocks[ $depth - 1] .= _ordinaryBlock($depth, $heads[$depth], '', $blocks[$depth]);
+        }
+        $depth--;
     }
     return $output;
 }
