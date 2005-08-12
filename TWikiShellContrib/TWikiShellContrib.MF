@@ -1,0 +1,11 @@
+twikishell
+data/TWiki/TWikiShellContrib.txt
+data/TWiki/CommandSet.txt
+lib/TWiki/Contrib/TWikiShellContrib/*
+lib/TWiki/Contrib/CommandSet/Dump.pm
+lib/TWiki/Contrib/CommandSet/Apache.pm
+lib/TWiki/Contrib/CommandSet/Apache/*
+lib/TWiki/Contrib/CommandSet/TWiki.pm
+lib/TWiki/Contrib/CommandSet/TWiki/*
+
+

@@ -31,19 +31,16 @@ sub unzip {
 }
 
 sub checkUnzipMechanism {
-    my $config=shift;
-    if ($config->{ZIP}{useArchiveZip} && 
-        ($config->{ZIP}{useArchiveZip} eq 0 && 
-            defined $config->{ZIP}{unzipPath} && 
-            defined $config->{ZIP}{unzipParams}) || 
-        $config->{ZIP}{useArchiveZip} eq 1) {
-        $config->printVeryVerbose("**** Zip file services installed ****\n");
+    my ($shell,$config)=shift;
+    if ((defined $config->{ZIP}{useArchiveZip} && $config->{ZIP}{useArchiveZip} eq 0) ||(defined $config->{ZIP}{unzipPath} && 
+                                           defined $config->{ZIP}{unzipParams})) {
+        $shell->printVeryVerbose("**** Zip file services installed ****\n");
         return;
     }
     
-    $config->printNotQuiet("**** Configuring Zip files service ****\n");
+    $shell->printNotQuiet("**** Configuring Zip files service ****\n");
     
-    $config->printNotQuiet(" * Checking if Archive::Zip is installed .... ");
+    $shell->printNotQuiet(" * Checking if Archive::Zip is installed .... ");
     
     eval "use Archive::Zip";
     if ($@) {

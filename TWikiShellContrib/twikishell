@@ -3,7 +3,7 @@
 # Support functionality for the TWiki Collaboration Platform, http://TWiki.org/
 # 
 # TWiki Shell 
-# Oct 2004 - written by Rafael Alvarez based on the work of MartinCleaver
+# Oct 2004 - written by Rafael Alvarez based on MartinCleaver work
 #
 # Assumes that the user has enough privileges to perform the required operations.
 #
@@ -23,210 +23,51 @@
 #
 #-------------------------------------------------------------------------------
 
-# Vars from PluginInstaller.cfg
 use vars qw {
-    $twikiConfigDir
     $twikiLibPath
-    $twikiBinDir
-    $unzipPath
-    $useArchiveZip
-    $unzipParams
     $config
 };
 
-
-#My vars
-use vars qw {
-    $VERSION
-};
-    
-$VERSION = "1.00";
 
 
 use diagnostics;
 
 
 ####################################################################################
-{
-package Config;
-    my $mode="";
-    
-    sub new {
-        my $self=bless {};
-        
-        $self->{verbosity}=1;
-        return  $self;
-    }
-    
-    #######################################
-    # Printing stuff
-    #######################################
-    
-    sub printVerbose { #verbose == 1 && verbose !=0
-        my ($config,$text)=@_;    
-        print $text unless ($config->{verbosity}<1);
-    }
-
-    sub printVeryVerbose{
-        my ($config,$text)=@_;    
-        print $text unless ($config->{verbosity}<2);
-    }
-    
-    sub printNotQuiet {
-        my ($config,$text)=@_;    
-        print $text unless ($config->{verbosity}==0);
-    }
-
-    #######################################
-    # Mode stuff
-    #######################################
-
-    sub mode {
-        my ($self,$newMode)=@_;
-        if ($newMode) {
-            if ($newMode eq "--") {
-                $mode="";
-            } else {
-                $mode=$newMode;
-            }
-        } else {
-            return $mode;
-        }
-    }
-
-    
-    #######################################
-    # Handle CL params
-    #######################################
-
-    sub handleParams {
-        my $self=shift;
-        my $n = 0;
-        my $execute = 0;
-    
-        while ($n <= $#ARGV) {
-            if ($ARGV[$n] =~ /^-(.+)/o) {
-                if ($1 eq "v") {
-                    $self->{verbosity}=1;
-                }elsif ($1 eq "vv") {
-                    $self->{verbosity}=2;
-                }elsif ($1 eq "q") {
-                    $self->{verbosity}=0;
-                }elsif ($1 eq "e") {
-                    $execute=1;
-                }elsif ($1 eq "d") {
-                    $self->{debug}=1;
-                }
-            } elsif ($execute) {
-                $self->{execute}.=$ARGV[$n]." ";
-            }
-            $n++;
-        }   
-    }
-    
-    #######################################
-    # Prepare the enviroment
-    #######################################
-    
-    sub prepareEnvironment {
-        my $self=shift;
-        print "The config file was not found\n";
-        print "I'll explore the system and try to figure out your configuration\n";
-        $self->_checkSetLibCfg("./bin");
-        print "\n";
-    }
-    
-    sub _checkSetLibCfg {
-        my ($self,$twikiBinDir)=@_;
-        print("   * Looking for $twikiBinDir/setlib.cfg ..... ");
-    
-        if (-d $twikiBinDir && -f "$twikiBinDir/setlib.cfg") {
-            print("FOUND ($twikiBinDir/setlib.cfg)\n");   
-        } else {
-            print("NOT FOUND\n");
-            $twikiBinDir=_findLibFile();
-        }
-        $self->{twikiBinDir}=$twikiBinDir;
-    }
-    
-    sub loadSetLibCfg {
-        my  $self=shift;
-        my $setLibFile=$self->{twikiBinDir}."/setlib.cfg";
-       
-        do $setLibFile;    
-        $self->{twikiLibDir}=$twikiLibPath;
-    }
-    
-    sub _findLibFile {
-        print "     Please tell me the path to setlib.cfg \n      ---> "; 
-        my $configPath;
-        do {
-            chomp ($configPath = <STDIN>) ;
-        } until ((-f "$configPath/setlib.cfg") ? 1 :
-           (print("     Hmmm - I can't see setlib.cfg at $configPath ... please check and try again\n      --->"), 0) 
-        );
-        return $configPath;
-    }
-    
-    sub saveAndDispose {
-        my $self=shift;
-        
-        if ($self->{execute}) {
-            $self->{execute}="";
-        }
-        
-        $self->{debug}=0;
-        $self->save();        
-    }
-    
-    sub save {
-        my $self=shift;
-        use Data::Dumper;
-        
-        my $data= Data::Dumper->Dump([$self],[qw(config)]);
-        open CONFIG,">".$self->{configFileName};
-        print CONFIG $data;
-        close CONFIG;
-    }
-}
 ####################################################################################
 
 
 BEGIN {
-    my $configFileName = ".twikishellrc";    
-    if (-f "./".$configFileName) {
-        do "./".$configFileName
-    } else {
-        $config=new Config();
-        $config->prepareEnvironment();
-        $config->{configFileName}=".twikishellrc";
-    }
- 
-    if (defined $config) {
-        $config->handleParams();
-        $config->loadSetLibCfg();
-    }
-    $config->save();
+    unshift @INC,"./lib";
 }
 
 # The shell starts here
 
 use TWiki::Contrib::TWikiShellContrib::TWikiShell;
-print "\n";
+require TWiki::Contrib::TWikiShellContrib::Config;
+
+my $configFileName = ".twikirc";    
+if (-f "./".$configFileName) {
+  do "./".$configFileName
+} 
+
+if (! defined($config)) {
+  $config=new TWiki::Contrib::TWikiShellContrib::Config();
+  $config->{configFileName}=$configFileName;
+}
+
+$config->handleParams();
+$config->save();
+
 my  $shell= new TWiki::Contrib::TWikiShellContrib::TWikiShell($config);
 
-if ($config->{execute}) {
-    $shell->cmd($config->{execute});
+if ($config->{execute} && $config->{execute} ne "shell") {
+#     $shell->cmd("sdk " . $config->{execute});
+   $shell->cmd($config->{execute});
 }else {
-    print "\nTWiki Interactive Shell v$VERSION
- Oct 2004 - written by Rafael Alvarez based on the work of MartinCleaver
- Type \"help\" for a list of available commands
- 
-";
-    $shell->prompt("twiki");
+    print "\n";
+    $shell->splash();
     $shell->cmdloop();
 }
 
 $config->saveAndDispose();
-
-
