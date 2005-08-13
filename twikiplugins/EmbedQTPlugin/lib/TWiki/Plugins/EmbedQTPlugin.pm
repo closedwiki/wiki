@@ -74,7 +74,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -128,9 +128,9 @@ sub commonTagsHandler
 sub handleEmbedQT
 {
     my ( $theAttributes ) = @_;
-    my $QTFileName = &TWiki::extractNameValuePair($theAttributes, "filename");
-    my $QTFileWidth = &TWiki::extractNameValuePair($theAttributes, "width"); 
-    my $QTFileHeight = &TWiki::extractNameValuePair($theAttributes, "height"); 
+    my $QTFileName = &TWiki::Func::extractNameValuePair($theAttributes, "filename");
+    my $QTFileWidth = &TWiki::Func::extractNameValuePair($theAttributes, "width"); 
+    my $QTFileHeight = &TWiki::Func::extractNameValuePair($theAttributes, "height"); 
 
     return "<OBJECT CLASSID=\"clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B\" WIDTH=\"$QTFileWidth\" HEIGHT=\"$QTFileHeight\" CODEBASE=\"http://www.apple.com/qtactivex/qtplugin.cab\"> <EMBED SRC=\"$QTFileName\" AUTOPLAY=\"true\" CONTROLLER=\"false\" PLUGINSPAGE=\"http://www.apple.com/quicktime/download/\"> </EMBED> </OBJECT>";
 

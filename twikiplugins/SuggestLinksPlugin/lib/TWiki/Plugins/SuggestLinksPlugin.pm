@@ -87,7 +87,7 @@ sub initPlugin
     $stopWords = qr /$stopWords/i ; 
 
     $format1 = &TWiki::Func::getPreferencesValue('SUGGESTLINKSPLUGIN_FORMAT1')
-			|| "<SPAN STYLE=\"background : $TWiki::newTopicBgColor;\">";
+			|| "<SPAN STYLE=\"background : yellow;\">";
     $format2 = &TWiki::Func::getPreferencesValue('SUGGESTLINKSPLUGIN_FORMAT2')
 			|| "<\/SPAN><img src=\"%PUBURLPATH%\/$installWeb\/SuggestLinksPlugin\/exclam.gif\" alt=\"\$web.\$topic\">" ;
 

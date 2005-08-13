@@ -127,7 +127,7 @@ sub updateAttachment
       die "Problem with ".$zip;
     }
   ($tmpDir, %processedFiles ) = doUnzip($zip, $tmpFilename, $fileComment);
-  #	TWiki::writeDebug( "upload: tmpDir = $tmpDir" );
+  #	TWiki::Func::writeDebug( "upload: tmpDir = $tmpDir" );
   
 
 #  die Dumper(\%processedFiles);
@@ -141,7 +141,7 @@ sub updateAttachment
     $fileName =~ /^(.*?)$/goi ; $fileName = $1;
     $tmpFilename = $fileNameKey;
     
-    #	TWiki::writeDebug( "upload: fileName=$fileName, fileComment=$fileComment, tmpFilename=$fileNameKey" );
+    #	TWiki::Func::writeDebug( "upload: fileName=$fileName, fileComment=$fileComment, tmpFilename=$fileNameKey" );
     
     my( $fileSize, $fileUser, $fileDate, $fileVersion ) = "";
 
@@ -190,7 +190,7 @@ sub doUnzip
 	    $good{"$tmpDir/$mName"} = [ $mName, $comment ];
 	} else {
 	    # FIXME: oops here
-	    TWiki::writeDebug( "upload: zip->extractMemberWithoutPaths = $zipRet" );
+	    TWiki::Func::writeDebug( "upload: zip->extractMemberWithoutPaths = $zipRet" );
 	}
     }
 
@@ -199,7 +199,7 @@ sub doUnzip
 
 sub zipErrorHandler
 {
-    TWiki::writeDebug (@_);
+    TWiki::Func::writeDebug (@_);
 }
 
 # EPIC
@@ -239,7 +239,7 @@ sub openZipSanityCheck
 #	 $mName =~ s/$nonAlphaNum//go;   # ----------- SMELL breaks.
 	 $mName =~ s/$TWiki::uploadFilter/$1\.txt/goi;
 
-	 ##TWiki::writeDebug( "upload: zip member name: $mName" );
+	 ##TWiki::Func::writeDebug( "upload: zip member name: $mName" );
 	 if ( defined $dupCheck{"$mName"} ) {
 	      return "Duplicate file in archive ".$mName." in ".$archive;
 	 } else {
@@ -278,7 +278,7 @@ sub findTopicForPicture {
     $newTopic = $topic; # Can't move it.
   }
 
-  unless (TWiki::Store::topicExists($web, $newTopic)) {
+  unless (TWiki::Func::topicExists($web, $newTopic)) {
     my ( $meta, $text ) = TWiki::Store::readTemplateTopic($template);
     my $err = TWiki::Store::saveTopic($web, $newTopic, $text, $meta, "",  1 );
   }

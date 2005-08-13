@@ -63,8 +63,8 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "STYLEPLUGIN_EXAMPLE" ) || "default";
-    $skipskin = &TWiki::Prefs::getPreferencesValue( "STYLEPLUGIN_SKIPSKIN" ) || "";
+    # $exampleCfgVar = &TWiki::Func::getPreferencesValue( "STYLEPLUGIN_EXAMPLE" ) || "default";
+    $skipskin = &TWiki::Func::getPreferencesValue( "STYLEPLUGIN_SKIPSKIN" ) || "";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "STYLEPLUGIN_DEBUG" );
@@ -100,7 +100,7 @@ sub startRenderingHandler
 
     # This handler is called by getRenderedVersion just before the line loop
 
-    my $cskin = &TWiki::getSkin();
+    my $cskin = &TWiki::Func::getSkin();
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
         if ($cskin eq $ss) {

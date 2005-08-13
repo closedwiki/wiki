@@ -92,7 +92,7 @@ sub initPlugin
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
 #    $prefApprovalWorkflow = TWiki::Func::getPluginPreferencesValue( "APPROVALWORKFLOW" ) || "Lopt nicht";
     if (($prefApprovalWorkflow = TWiki::Func::getPreferencesValue( "APPROVALWORKFLOW" )) &&
-	&TWiki::Store::topicExists( $globWebName, $prefApprovalWorkflow)) {
+	&TWiki::Func::topicExists( $globWebName, $prefApprovalWorkflow)) {
 
 	# get preferences
 	$prefNeedsApproval=1;
@@ -506,7 +506,7 @@ sub Timestamp {
 sub changeApprovalState {
     my $state = shift;
 
-    my ($meta, $text) = &TWiki::Store::readTopic( $web, $topic );
+    my ($meta, $text) = &TWiki::Func::readTopic( $web, $topic );
     $text = TWiki::expandVariablesOnTopicCreation( $text );
     $version = TWiki::Store::getRevisionInfoFromMeta( $web, $topic, $meta );
 
@@ -560,8 +560,8 @@ sub parseApprovalWorkflow {
     my $CurrentStateIsValid=0;
 
     # Read topic that defines the statemachine
-    if( &TWiki::Store::topicExists( $globWebName, $WorkflowTopic ) ) {
-	my( $meta, $text ) = &TWiki::Store::readTopic( $globWebName, $WorkflowTopic );
+    if( &TWiki::Func::topicExists( $globWebName, $WorkflowTopic ) ) {
+	my( $meta, $text ) = &TWiki::Func::readTopic( $globWebName, $WorkflowTopic );
 
 	my $inBlock = 0;
 	# | *Current form* | *Next form* | *Next state* | *Action* |

@@ -221,13 +221,13 @@ sub initPlugin
     }
     # Plugin correctly initialized
 
-    my ($meta, $text) = &TWiki::Store::readTopic($web, $topic);
+    my ($meta, $text) = &TWiki::Func::readTopic($web, $topic);
     my $query = &TWiki::Func::getCgiQuery();
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "PHANTOMPLUGIN_DEBUG" );
 
-    $WEBCONTENTTYPE = &TWiki::Prefs::getPreferencesValue( "PHANTOMPLUGIN_WEBCONTENTTYPE" ) || "text/html";
+    $WEBCONTENTTYPE = &TWiki::Func::getPreferencesValue( "PHANTOMPLUGIN_WEBCONTENTTYPE" ) || "text/html";
     # Follow parameter used in bin/view script
     $query->param("contenttype", $WEBCONTENTTYPE);
 
@@ -240,8 +240,8 @@ sub initPlugin
 
     # Parse custom variables declarations to hash
     # Syntax: %VAR:DEF{"name"}% value %VAR:END%
-    if (&TWiki::Store::topicExists($installWeb, "PhantomPluginVariables")) {
-      ($globalMeta, $globalText) = &TWiki::Store::readTopic($installWeb, "PhantomPluginVariables");
+    if (&TWiki::Func::topicExists($installWeb, "PhantomPluginVariables")) {
+      ($globalMeta, $globalText) = &TWiki::Func::readTopic($installWeb, "PhantomPluginVariables");
     }
     %CUSTOM_VARS = ("$text$globalText" =~ m/%VAR:DEF{\"(.+?)\"}%(.*?)%VAR:END%/gs);
       
@@ -253,8 +253,8 @@ sub initPlugin
     }
     
     # Parse custom formatters declarations to hash
-    if (&TWiki::Store::topicExists($installWeb, "PhantomPluginFormatters")) {
-      ($globalMeta, $globalText) = &TWiki::Store::readTopic($installWeb, "PhantomPluginFormatters");
+    if (&TWiki::Func::topicExists($installWeb, "PhantomPluginFormatters")) {
+      ($globalMeta, $globalText) = &TWiki::Func::readTopic($installWeb, "PhantomPluginFormatters");
     }
     %CUSTOM_FORMAT = &loadFormatters($globalText);
     &enableFormatters(\%CUSTOM_FORMAT, "$text$globalText");
@@ -262,16 +262,16 @@ sub initPlugin
     &validateFormatters(\%CUSTOM_FORMAT);
           
     # Parse custom code highlighters to hash
-    if (&TWiki::Store::topicExists($installWeb, "PhantomHighlighters")) {
-      ($globalMeta, $globalText) = &TWiki::Store::readTopic($installWeb, "PhantomHighlighters");
+    if (&TWiki::Func::topicExists($installWeb, "PhantomHighlighters")) {
+      ($globalMeta, $globalText) = &TWiki::Func::readTopic($installWeb, "PhantomHighlighters");
     }
     if ($globalText =~ /\t+\*\sSet\sHIGHLIGHTERS\s\=\s*(.*)/g) {
       my @highlighterTopics = split(/[, ]+/, $1);
       foreach $hlTopic (@highlighterTopics) {
-        if (&TWiki::Store::topicExists($installWeb, $hlTopic)) {
+        if (&TWiki::Func::topicExists($installWeb, $hlTopic)) {
           &TWiki::Func::writeDebug( "- TWiki::Plugins::PhantomPlugin::initPlugin( $web.$topic ) - Load highlighter $hlTopic" ) if $debug; 
   
-          ($globalMeta, $globalText) = &TWiki::Store::readTopic($installWeb, $hlTopic);
+          ($globalMeta, $globalText) = &TWiki::Func::readTopic($installWeb, $hlTopic);
           if ($globalText =~ /%CODE:DEF{\"(.+?)\"}%(.*?)%CODE:END%/gs) {
             my $name = $1;
             $globalText = $2;

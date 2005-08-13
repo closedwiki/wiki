@@ -117,7 +117,7 @@ sub _handleKeyword( )
      my ( $attributes ) = @_;
     
      #Extraxct value of topic specified                                                                                                                     
-     $topic = scalar &TWiki::extractNameValuePair( $attributes, "topic" ) ;
+     $topic = scalar &TWiki::Func::extractNameValuePair( $attributes, "topic" ) ;
 
         $query =$topic;
 

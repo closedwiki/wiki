@@ -133,8 +133,8 @@ sub _handleTag()
         
         # Retrieving the values of the parameters specified in the tag or assigning defalut values.
       
-	$topic = scalar &TWiki::extractNameValuePair( $attributes, "topic" ) || $TWiki::topicName;
-	$web   = scalar &TWiki::extractNameValuePair( $attributes, "web" ) || $TWiki::webName;
+	$topic = scalar &TWiki::Func::extractNameValuePair( $attributes, "topic" ) || $TWiki::topicName;
+	$web   = scalar &TWiki::Func::extractNameValuePair( $attributes, "web" ) || $TWiki::webName;
 
         # $name variable will contain the url path of   topic where the Album directories are stored.
 	$name = &TWiki::Func::getPubUrlPath() . "/$web/$topic/"; 

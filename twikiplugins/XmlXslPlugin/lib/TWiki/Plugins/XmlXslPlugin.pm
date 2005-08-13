@@ -60,7 +60,7 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:         
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "XMLXSLPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "XMLXSLPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "XMLXSLPLUGIN_DEBUG" ) || 1;
@@ -195,7 +195,7 @@ sub openfile
 # =========================
 sub getWebTopic
 {
-	return &TWiki::Store::normalizeWebTopicName( $web, @_ );
+	return &TWiki::Func::normalizeWebTopicName( $web, @_ );
 }
 
 sub getScriptGenericText

@@ -58,7 +58,7 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:         
-    #$exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "SPACEDWIKIWORDPLUGIN" ) || "default";
+    #$exampleCfgVar = &TWiki::Func::getPreferencesValue( "SPACEDWIKIWORDPLUGIN" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "SPACEDWIKIWORDPLUGIN_DEBUG" );

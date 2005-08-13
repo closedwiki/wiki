@@ -74,7 +74,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -137,15 +137,15 @@ sub handleEmbedBib
     my $text;
 
     my ( $theAttributes ) = @_;
-    my $BibSelect1 = &TWiki::extractNameValuePair($theAttributes, "select1");
-    my $BibSelect2 = &TWiki::extractNameValuePair($theAttributes, "select2");
-    my $BibSelect3 = &TWiki::extractNameValuePair($theAttributes, "select3");
-    my $BibSelect4 = &TWiki::extractNameValuePair($theAttributes, "select4");
-    my $BibFile = &TWiki::extractNameValuePair($theAttributes, "bibfile"); 
-    my $WebName = &TWiki::extractNameValuePair($theAttributes, "webname"); 
-    my $Topic = &TWiki::extractNameValuePair($theAttributes, "topic"); 
-    my $Style = &TWiki::extractNameValuePair($theAttributes, "style"); 
-    my $Sort = &TWiki::extractNameValuePair($theAttributes, "sort"); 
+    my $BibSelect1 = &TWiki::Func::extractNameValuePair($theAttributes, "select1");
+    my $BibSelect2 = &TWiki::Func::extractNameValuePair($theAttributes, "select2");
+    my $BibSelect3 = &TWiki::Func::extractNameValuePair($theAttributes, "select3");
+    my $BibSelect4 = &TWiki::Func::extractNameValuePair($theAttributes, "select4");
+    my $BibFile = &TWiki::Func::extractNameValuePair($theAttributes, "bibfile"); 
+    my $WebName = &TWiki::Func::extractNameValuePair($theAttributes, "webname"); 
+    my $Topic = &TWiki::Func::extractNameValuePair($theAttributes, "topic"); 
+    my $Style = &TWiki::Func::extractNameValuePair($theAttributes, "style"); 
+    my $Sort = &TWiki::Func::extractNameValuePair($theAttributes, "sort"); 
 
     $WebName = $defaultWebName if $WebName eq "";
     $Topic = $defaultTopic if $Topic eq "";
@@ -155,11 +155,11 @@ sub handleEmbedBib
     # Check for error
     return "EMBEDBIB Error: missing parameters" if ($BibFile eq '' or $BibSelect1 eq '');
 
-    return "EMBEDBIB Error: $WebName not found" if (!&TWiki::Store::webExists( $WebName ));
+    return "EMBEDBIB Error: $WebName not found" if (!&TWiki::Func::webExists( $WebName ));
 
-    return "EMBEDBIB Error: $Topic not found" if (!&TWiki::Store::topicExists( $WebName, $Topic ));
+    return "EMBEDBIB Error: $Topic not found" if (!&TWiki::Func::topicExists( $WebName, $Topic ));
 
-    ( $meta, $text ) = &TWiki::Store::readTopic( $WebName, $Topic );
+    ( $meta, $text ) = &TWiki::Func::readTopic( $WebName, $Topic );
     my %args = $meta->findOne("FILEATTACHMENT", $BibFile);
 
     return "EMBEDBIB Error: $BibFile not found" if (! %args);

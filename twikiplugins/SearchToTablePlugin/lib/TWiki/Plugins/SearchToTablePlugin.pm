@@ -62,7 +62,7 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $searchVar = &TWiki::Prefs::getPreferencesValue( "KENSPLUGIN_SEARCH" ) || "default";
+    $searchVar = &TWiki::Func::getPreferencesValue( "KENSPLUGIN_SEARCH" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "KENSPLUGIN_DEBUG" );
@@ -182,7 +182,7 @@ sub handleSearchToTable
     foreach( @topicList ) {
        my $tempVal = $_;
        # FIXME should be able to get data from topic
-       my( $meta, $text ) = &TWiki::Store::readTopic( $thisWebName, $tempVal );
+       my( $meta, $text ) = &TWiki::Func::readTopic( $thisWebName, $tempVal );
        my ( $revdate, $revuser, $revnum ) = &TWiki::Store::getRevisionInfoFromMeta( $thisWebName, $tempVal, $meta, 1 );
        $revuser = &TWiki::userToWikiName( $revuser );
        $allowView = &TWiki::Access::checkAccessPermission( "view", $TWiki::wikiUserName, $text, $tempVal, $thisWebName );

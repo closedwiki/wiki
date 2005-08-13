@@ -13,7 +13,7 @@ use vars qw($user $pass $server $twikiuser $web $topic $debug $warning $sendEmai
 #    $user is the logged-in user
 sub initMethod {
     ($topic, $web, $twikiuser) = @_;
-    $server = TWiki::Prefs::getPreferencesValue("SMTPMAILHOST");
+    $server = TWiki::Func::getPreferencesValue("SMTPMAILHOST");
     $twikiuser = $_[2];
     $debug = \&TWiki::Plugins::ImmediateNotifyPlugin::debug;
     $warning = \&TWiki::Plugins::ImmediateNotifyPlugin::warning;
@@ -28,9 +28,9 @@ sub initMethod {
 sub handleNotify {
     my ($users) = @_;
 
-    my ($skin) = TWiki::Prefs::getPreferencesValue("SKIN");
-    my ($template) = &TWiki::Store::readTemplate("immediatenotify-SMTP", $skin);
-    my ($from) = TWiki::Prefs::getPreferencesValue("WIKIWEBMASTER");
+    my ($skin) = TWiki::Func::getPreferencesValue("SKIN");
+    my ($template) = &TWiki::Func::readTemplate("immediatenotify-SMTP", $skin);
+    my ($from) = TWiki::Func::getPreferencesValue("WIKIWEBMASTER");
 
     $template =~ s/%EMAILFROM%/$from/go;
     $template =~ s/%WEB%/$web/go;

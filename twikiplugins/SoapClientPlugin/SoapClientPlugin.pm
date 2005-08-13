@@ -78,7 +78,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -88,9 +88,9 @@ sub initPlugin
 # =========================
 sub doSoapRequest
 {
-my $service= TWiki::extractNameValuePair( $_[0], "service");
-my $call_with_params= TWiki::extractNameValuePair( $_[0], "call");
-my $format= TWiki::extractNameValuePair( $_[0], "format");
+my $service= TWiki::Func::extractNameValuePair( $_[0], "service");
+my $call_with_params= TWiki::Func::extractNameValuePair( $_[0], "call");
+my $format= TWiki::Func::extractNameValuePair( $_[0], "format");
 
 my $text = "";
 

@@ -40,7 +40,7 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    # $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "QUICKSEARCHPLUGIN_DEBUG" );
@@ -133,7 +133,7 @@ sub handleQuickSearch
     my $tempVal = "";
     my $topicCount = 0; # JohnTalintyre
     my $originalSearch = $theSearchVal;
-    my $tmpl = &TWiki::Store::readTemplate( "quicksearch" );
+    my $tmpl = &TWiki::Func::readTemplate( "quicksearch" );
     my( $tmplTable, $tmplNumber ) = split( /%SPLIT%/, $tmpl );
 
     if( ! $tmplTable ) {
@@ -176,10 +176,10 @@ sub handleQuickSearch
         $thisWebName =~ /(.*)/;
         $thisWebName = $1;  # untaint variable
 
-        next unless &TWiki::Store::webExists( $thisWebName );  # can't process what ain't thar
+        next unless &TWiki::Func::webExists( $thisWebName );  # can't process what ain't thar
 
-        my $thisWebBGColor     = &TWiki::Prefs::getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
-        my $thisWebNoSearchAll = &TWiki::Prefs::getPreferencesValue( "NOSEARCHALL", $thisWebName );
+        my $thisWebBGColor     = &TWiki::Func::getPreferencesValue( "WEBBGCOLOR", $thisWebName ) || "\#FF00FF";
+        my $thisWebNoSearchAll = &TWiki::Func::getPreferencesValue( "NOSEARCHALL", $thisWebName );
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.

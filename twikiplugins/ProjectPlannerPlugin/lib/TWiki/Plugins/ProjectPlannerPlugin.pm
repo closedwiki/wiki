@@ -151,7 +151,7 @@ sub initPlugin
     }
     
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue("PROJECTPLANNERPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue("PROJECTPLANNERPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
@@ -486,7 +486,7 @@ sub ppReadPlanTemplate
         $col_priority = $col_status = $col_estdays = $col_spentdays =
         $col_effort = $col_dateadded = $col_results = 0;
     
-    my $tmplText = &TWiki::Store::readTopic($web, "PlanTemplate");
+    my $tmplText = &TWiki::Func::readTopic($web, "PlanTemplate");
     foreach my $line (split(/\n/, $tmplText)) {
         if ($line =~ /.*\|\s*\*Key\*\s*\|.*/) {
             $line =~ s/^\s*(.*?)\s*$/$1/;
@@ -547,7 +547,7 @@ sub ppFindAllProjPlans {
         if ($eachF =~ /.*ProjectTemplate.*/) {
             next;
         }
-        my $planText = &TWiki::Store::readTopic($web, $eachF);
+        my $planText = &TWiki::Func::readTopic($web, $eachF);
         if ($planText =~ /.*\|.*PP Project Template.*\|.*PROJECTPLANNER.*\|.*/) {
             $allProjPlans{$eachF} .= "";
         }
@@ -594,7 +594,7 @@ sub ppBuildCache
     
     foreach $eachPl (@allPlans) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Store::readTopic($web, $eachPl);
+            $planText = &TWiki::Func::readTopic($web, $eachPl);
             # To go from Plan -> Task (multiple values)
             $inLoop = 0;
             $planId = "";
@@ -735,19 +735,19 @@ sub ppSavePage()
     
     # check the user has entered a non-null string
     if($title eq "") {
-        TWiki::redirect( $query, &TWiki::getViewUrl( $web, "NewPageError" ) );
+        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "NewPageError" ) );
         return;
     }
 
     # check topic does not already exist
     if(TWiki::Func::topicExists($web, $title)) {
-        TWiki::redirect( $query, &TWiki::getViewUrl( $web, "NewPageError" ) );
+        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "NewPageError" ) );
         return;
     }
 
     # check the user has entered a WIKI name
     if(!TWiki::isWikiName($title)) {
-        TWiki::redirect( $query, &TWiki::getViewUrl( $web, "NewPageError" ) );
+        TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, "NewPageError" ) );
         return;
     }
 
@@ -757,13 +757,13 @@ sub ppSavePage()
     
 #     if($template eq "ProjectTemplate") {
 #         if(!($title =~ /^[\w]*PPProject$/)) {
-#             TWiki::redirect( $query, &TWiki::getViewUrl( "", "NewPageError" ) );
+#             TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( "", "NewPageError" ) );
 #             return;
 #         }
 #     }
 
     # load template for page type requested
-    my( $meta, $text ) = &TWiki::Store::readTopic( $web, $template );
+    my( $meta, $text ) = &TWiki::Func::readTopic( $web, $template );
 
     # write parent name into page
     my $parent = $query->param( 'topicparent' );
@@ -773,12 +773,12 @@ sub ppSavePage()
 
     # save new page and open in browser
     my $error = &TWiki::Store::saveTopic( $web, $title, $text, $meta );
-    TWiki::redirect( $query, &TWiki::getViewUrl( $web, $title ) );
+    TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $title ) );
     
-    &TWiki::Store::lockTopic( $title, "on" );
+    &TWiki::Func::setTopicEditLock( $web, $title, "on" );
     if( $error ) {
         my $url = &TWiki::Func::getOopsUrl( $web, $title, "oopssaveerr", $error );
-        TWiki::redirect( $query, $url );
+        TWiki::Func::redirectCgiQuery( $query, $url );
     }
     
 }
@@ -940,7 +940,7 @@ sub ppAllProjects {
     foreach my $project (@projects) {
         my $summary = "";
         if (&TWiki::Func::topicExists($web, $project)) {
-            my $projText = &TWiki::Store::readTopic($web, $project);
+            my $projText = &TWiki::Func::readTopic($web, $project);
             if ($projText =~ /.*\|.*PP Project Summary.*\|.*\|.*/) {
                 $projText =~ /.*\|.*PP Project Summary.*\|(.*?)\|.*/;
                 $summary = "$1";
@@ -991,7 +991,7 @@ sub ppProjectPlansNewForm {
     $list .= "| *Plan* | *Summary* | *Status By Tasks* | *Done Tasks* | *Total Tasks* | *Status By Days* | *Spent Days* | *Estimated Days* | \n";
     foreach my $eachPl (split(/;/, $cachedProjPlans{$project})) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Store::readTopic($web, $eachPl);
+            $planText = &TWiki::Func::readTopic($web, $eachPl);
             $summary = "";
             if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                 $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -1186,7 +1186,7 @@ sub ppAllProjectPlans {
         }
         foreach my $eachPl (split(/;/, $cachedProjPlans{$eachPr})) {
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                $planText = &TWiki::Store::readTopic($web,  $eachPl);
+                $planText = &TWiki::Func::readTopic($web,  $eachPl);
                 $summary = "";
                 if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                     $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -1383,7 +1383,7 @@ sub ppAllPlansTasksSummary {
         } 
         push @matchTasks, @{$allPlansTasks{$eachPl}};
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Store::readTopic($web,  $eachPl);
+            $planText = &TWiki::Func::readTopic($web,  $eachPl);
             $summary = "";
             if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                 $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -1577,7 +1577,7 @@ sub ppGetProjectTasks {
     my $proj = $project; # print project only for first plan
     foreach my $eachPl (split(/;/, $cachedProjPlans{$project})) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Store::readTopic($web, $eachPl);
+            $planText = &TWiki::Func::readTopic($web, $eachPl);
             $planText =~ /.*\|.*PP Plan Id.*\|\s*(.*?)\s*\|.*/;
             my $ids = "$1";
             if ($ids ne "") {
@@ -1653,7 +1653,7 @@ sub ppGetProjectInfo {
     
     foreach my $eachPl (split(/;/, $cachedProjPlans{$project})) {
         if (&TWiki::Func::topicExists($web, $eachPl)) {
-            $planText = &TWiki::Store::readTopic($web, $eachPl);
+            $planText = &TWiki::Func::readTopic($web, $eachPl);
             $inLoop = 0;
             $planText =~ /.*\|.*PP Plan Id.*\|\s*(.*?)\s*\|.*/;
             my $ids = "$1";
@@ -1672,7 +1672,7 @@ sub ppGetProjectInfo {
                     $plantask[$col_taskname] =~ s/^\s*(.*?)\s*$/$1/;
                     if (&TWiki::Func::topicExists($web, $plantask[$col_taskname])) {
                         $list .= "<b>Description</b>:<br>";
-                        $list .= &TWiki::Store::readTopic($web, $plantask[$col_taskname]);
+                        $list .= &TWiki::Func::readTopic($web, $plantask[$col_taskname]);
                     }
                     $list .= "<br><br>";
                 } elsif ($inLoop) {
@@ -1766,7 +1766,7 @@ sub ppAllDevSummary {
                 }
             }
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                my $planText = &TWiki::Store::readTopic($web, $eachPl);
+                my $planText = &TWiki::Func::readTopic($web, $eachPl);
                 # To go from Plan -> Task (multiple values)
                 my $line;
                 my $inLoop = 0;
@@ -1933,7 +1933,7 @@ sub ppAllPlanIdSummary {
             }
             my $results;
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                my $planText = &TWiki::Store::readTopic($web, $eachPl);
+                my $planText = &TWiki::Func::readTopic($web, $eachPl);
                 my $summary = "";
                 if ($planText =~ /.*\|.*PP Plan Summary.*\|.*\|.*/) {
                     $planText =~ /.*\|.*PP Plan Summary.*\|(.*?)\|.*/;
@@ -1997,7 +1997,7 @@ sub ppAllPlanIdSummary {
                 }
             }
             if (&TWiki::Func::topicExists($web, $eachPl)) {
-                my $planText = &TWiki::Store::readTopic($web, $eachPl);
+                my $planText = &TWiki::Func::readTopic($web, $eachPl);
                 # To go from Plan -> Task (multiple values)
                 my $line;
                 my $inLoop = 0;

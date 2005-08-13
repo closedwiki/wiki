@@ -48,7 +48,7 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    #$exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "TOPICVARSPLUGIN_EXAMPLE" ) || "default";
+    #$exampleCfgVar = &TWiki::Func::getPreferencesValue( "TOPICVARSPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "TOPICVARSPLUGIN_DEBUG" );
@@ -72,7 +72,7 @@ sub getVarsFromTopic {
 
 	&TWiki::Func::writeDebug( "- TWiki::Plugins::TopicVarsPlugin::getVarsFromTopic( $theWeb.$theTopic )" ) if $debug;
 
-	my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+	my( $meta, $text ) = &TWiki::Func::readTopic( $theWeb, $theTopic );
 	$text =~ s/\r/\n/go;
 	$text =~ s/\n+/\n/go;
 

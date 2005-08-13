@@ -45,7 +45,7 @@ sub initPlugin
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
-    $DefaultReadersFormat = &TWiki::Prefs::getPreferencesValue ("TOPICREADERSPLUGIN_READERSFORMAT") || "<li> %READERNAME% : %READERDATE%";
+    $DefaultReadersFormat = &TWiki::Func::getPreferencesValue ("TOPICREADERSPLUGIN_READERSFORMAT") || "<li> %READERNAME% : %READERDATE%";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -283,7 +283,7 @@ sub handleReaders
 
 
   my ($logfileLimit, $timeLimit) = GetLogTimeInfos("$theDate");
-  my $tmp=&TWiki::formatGmTime($timeLimit, "HTTP");
+  my $tmp=&TWiki::Func::formatTime($timeLimit, "HTTP", "gmtime");
   $theTitle =~ s/%READERSSINCE%/$tmp/g;
 
 
@@ -336,7 +336,7 @@ sub handleReaders
   foreach my $author (sort keys %readers) 
   {
     my ($time, $count) = split (' ',$readers{"$author"});
-    my $date=&TWiki::formatGmTime($time, "HTTP");
+    my $date=&TWiki::Func::formatTime($time, "HTTP","gmtime");
     my $tmp="$theFormat";
     $tmp=~s/%READERNAME%/$author/gi;
     $tmp=~s/%READERDATE%/$date/gi;

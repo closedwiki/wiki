@@ -77,7 +77,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "GUIDPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "GUIDPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -92,7 +92,7 @@ sub handleGUID {
    $ug = new Data::UUID;
 
    if ($args) {
-      $type = &TWiki::extractNameValuePair( $args, "type" ) || $type;
+      $type = &TWiki::Func::extractNameValuePair( $args, "type" ) || $type;
    }
    if ($type eq 'bin') {
       $result = $ug->create();

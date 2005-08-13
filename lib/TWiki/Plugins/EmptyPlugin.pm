@@ -311,13 +311,14 @@ Since TWiki::Plugins::VERSION = '1.026'
 =cut
 
 sub DISABLE_preRenderingHandler {
-    my( $pText, $pMap ) = @_;
+    # do not uncomment, use $_[0], $_[1]... instead
+    #my( $text, $pMap ) = @_;
 }
 
 =pod
 
 ---++ postRenderingHandler( $text )
-   * =\$text= - a reference to text that has just been rendered. May be modified in place.
+   * =$text= - the text that has just been rendered. May be modified in place.
 
 __NOTE__: This handler is called once for each rendered block of text i.e. it may be called several times during the rendering of a topic.
 
@@ -329,7 +330,8 @@ Since TWiki::Plugins::VERSION = '1.026'
 =cut
 
 sub DISABLE_postRenderingHandler {
-    my $pText = shift;
+    # do not uncomment, use $_[0], $_[1]... instead
+    #my $text = shift;
 }
 
 =pod

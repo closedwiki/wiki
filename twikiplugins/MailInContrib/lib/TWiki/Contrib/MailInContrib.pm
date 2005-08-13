@@ -59,7 +59,7 @@ sub new {
             '', "mailincron" ) || 0;
     } else {
         $this->{lastMailIn} = TWiki::Store::readFile(
-            "$TWiki::dataDir/.mailincron" ) || 0;
+            "$TWiki::dataDir/.mailincron" ) || 0; # COMPATIBILITY
     }
 
     return $this;
@@ -85,8 +85,8 @@ sub wrapUp {
         $this->{session}->{store}->saveMetaData
           ($TWiki::cfg{SystemWebName}, "mailincron", time() );
     } else {
-        $this->{lastMailIn} = TWiki::Store::saveFile(
-            "$TWiki::dataDir/TWiki/.mailincron", time() );
+        $this->{lastMailIn} = TWiki::Store::saveFile( # COMPATIBILITY
+            "$TWiki::dataDir/TWiki/.mailincron", time() ); # COMPATIBILITY
     }
 }
 
@@ -122,6 +122,7 @@ sub processInbox {
         # If the subject line is a valid TWiki Web.WikiName, then we want
         # to process it.
         my( $web, $topic );
+        my $wnre = 
         if( $mail->header('Subject') =~
                 /^\s*($TWiki::regex{webNameRegex})\.($TWiki::regex{wikiWordRegex})\s*$/i ) {
             ( $web, $topic ) = ( $1, $2 );
@@ -144,7 +145,7 @@ sub processInbox {
                     next;
                 }
             } else {
-                unless( TWiki::Store::webExists( $web )) {
+                unless( TWiki::Func::webExists( $web )) { # COMPATIBILITY
                     $this->fail( $box, $mail, "Web $web does not exist" );
                     next;
                 }
@@ -238,8 +239,9 @@ sub _saveTopic {
         };
     } else {
         $body =~ s/   /\t/g;
-        my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
-        $err = TWiki::Store::saveTopic(
+        my( $meta, $text ) =
+          TWiki::Func::readTopic( $web, $topic ); # COMPATIBILITY
+        $err = TWiki::Store::saveTopic(            # COMPATIBILITY
             $web, $topic, $text . "\n\n" . $body, $meta, '', 1, 0, 0 );
     }
     return $err;
@@ -259,7 +261,7 @@ sub _saveAttachment {
     if( $this->{session} ) {
         $tmpfile = $TWiki::cfg{PubDir}.'/'.$tmpfile;
     } else {
-        $tmpfile = $TWiki::pubDir.'/'.$tmpfile;
+        $tmpfile = $TWiki::pubDir.'/'.$tmpfile; # COMPATIBILITY
     }
 
     $tmpfile .= 'X' while -e $tmpfile;
@@ -273,24 +275,29 @@ sub _saveAttachment {
             $web, $topic, $filename, { comment => $comment,
                                        file => $tmpfile });
     } else {
-        $err = TWiki::Store::saveAttachment( $web, $topic, '', '',
-                                      $filename, 0, 1,
-                                      0, $comment, $tmpfile );
+        $err = TWiki::Store::saveAttachment(  # COMPATIBILITY
+            $web, $topic, '', '',
+            $filename, 0, 1,
+            0, $comment, $tmpfile );
         return $err if $err;
 
-        my( $meta, $text ) = TWiki::Store::readTopic( $web, $topic );
+        my( $meta, $text ) =
+          TWiki::Func::readTopic( $web, $topic ); # COMPATIBILITY
 
         my @stats = stat $tmpfile;
         my $fileSize = $stats[7];
         my $fileDate = $stats[9];
 
-        my $fileVersion = TWiki::Store::getRevisionNumber( $web, $topic,
-                                                           $filename );
-        TWiki::Attach::updateAttachment( $fileVersion, $filename, $filename,
-                                         $fileSize,
-                                         $fileDate, $user, $comment,
-                                         0, $meta );
-        $err = TWiki::Store::saveTopic( $web, $topic, $text, $meta, '', 1 );
+        my $fileVersion =
+          TWiki::Store::getRevisionNumber( $web, $topic, # COMPATIBILITY
+                                           $filename );
+        TWiki::Attach::updateAttachment( # COMPATIBILITY
+            $fileVersion, $filename, $filename,
+            $fileSize,
+            $fileDate, $user, $comment,
+            0, $meta );
+        $err = TWiki::Store::saveTopic( # COMPATIBILITY
+            $web, $topic, $text, $meta, '', 1 );
     }
     unlink( $tmpfile );
     return $err;
@@ -305,7 +312,7 @@ sub fail {
         if( defined $this->{session} ) {
             $this->{session}->writeWarning( "mailincron: $body" );
         } else {
-            TWiki::writeWarning( "mailincron: $body" );
+            TWiki::writeWarning( "mailincron: $body" ); # COMPATIBILITY
         }
     }
 }

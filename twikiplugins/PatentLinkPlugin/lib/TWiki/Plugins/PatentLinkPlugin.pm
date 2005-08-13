@@ -65,24 +65,24 @@ sub initPlugin
     # Get plugin preferences, the variable defined by:     
   # Patent URL pref's see "http://patft.uspto.gov/netahtml/srchnum.htm";
     $patentUrl01 = "http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO1&Sect2=HITOFF&d=PALL&p=1&u=/netahtml/srchnum.htm&r=1&f=G&l=50&s1=";
-       # $patentUrl01 = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTURL01" )  || "http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO1&Sect2=HITOFF&d=PALL&p=1&u=/netahtml/srchnum.htm&r=1&f=G&l=50&s1=";
+       # $patentUrl01 = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTURL01" )  || "http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO1&Sect2=HITOFF&d=PALL&p=1&u=/netahtml/srchnum.htm&r=1&f=G&l=50&s1=";
     $patentUrl02 = ".WKU.&OS=PN/";
-       # $patentUrl02 = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTURL02" )  || ".WKU.&OS=PN/";
+       # $patentUrl02 = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTURL02" )  || ".WKU.&OS=PN/";
     $patentUrl03 = "&RS=PN/";
-       # $patentUrl03 = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTURL03" )  || "&RS=PN/";
+       # $patentUrl03 = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTURL03" )  || "&RS=PN/";
   # Patent Application URL pref's see "http://appft1.uspto.gov/netahtml/PTO/srchnum.html";
     $patentApplicationUrl01 = "http://appft1.uspto.gov/netacgi/nph-Parser?Sect1=PTO1&Sect2=HITOFF&d=PG01&p=1&u=%2Fnetahtml%2FPTO%2Fsrchnum.html&r=1&f=G&l=50&s1=%22";
-      # &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPURL01" )  || "http://appft1.uspto.gov/netacgi/nph-Parser?TERM1=";
+      # &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPURL01" )  || "http://appft1.uspto.gov/netacgi/nph-Parser?TERM1=";
     $patentApplicationUrl02 = "%22.PGNR.&OS=DN/";
-      # &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPURL02" )  || "&Sect1=PTO1&Sect2=HITOFF&d=PG01&p=1&u=%2Fnetahtml%2FPTO%2Fsrchnum.html&r=0&f=S&l=50";
+      # &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPURL02" )  || "&Sect1=PTO1&Sect2=HITOFF&d=PG01&p=1&u=%2Fnetahtml%2FPTO%2Fsrchnum.html&r=0&f=S&l=50";
     $patentApplicationUrl03 = "&RS=DN/";
-#    $milestoneBugListUrl = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_MILESTONEBUGLISTURL" )  || "http://localhost/bugzilla/buglist.cgi?";
-    $patentImgUrl = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTIMGURL" ) || "%S%";
-    $patentApplicationImgUrl = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPIMGURL" ) || "%I%";
-    $patentText = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTTEXT" ) || "Patent #";
-    $patentApplicationText = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPTEXT" ) || "Patent Application #";
-#    $milestoneBugListText = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_MILESTONEBUGLISTEXT" ) || "Buglist for Milestone ";
-#     $myBugListText = &TWiki::Prefs::getPreferencesValue( "PATENTLINKPLUGIN_MYBUGLISTEXT" ) || "Buglist for ";
+#    $milestoneBugListUrl = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_MILESTONEBUGLISTURL" )  || "http://localhost/bugzilla/buglist.cgi?";
+    $patentImgUrl = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTIMGURL" ) || "%S%";
+    $patentApplicationImgUrl = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPIMGURL" ) || "%I%";
+    $patentText = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTTEXT" ) || "Patent #";
+    $patentApplicationText = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_PATENTAPPTEXT" ) || "Patent Application #";
+#    $milestoneBugListText = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_MILESTONEBUGLISTEXT" ) || "Buglist for Milestone ";
+#     $myBugListText = &TWiki::Func::getPreferencesValue( "PATENTLINKPLUGIN_MYBUGLISTEXT" ) || "Buglist for ";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "PATENTLINKPLUGIN_DEBUG" );

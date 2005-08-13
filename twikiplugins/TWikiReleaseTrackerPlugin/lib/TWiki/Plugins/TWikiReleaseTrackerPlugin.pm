@@ -64,12 +64,12 @@ sub getParam {
 
  #    writeDebug("2: $paramName = $ans");
  if ( $ans eq "" ) {
-  $ans = TWiki::Prefs::getPreferencesValue("\U$pluginName\E_\U$paramName\E");
+  $ans = TWiki::Func::getPreferencesValue("\U$pluginName\E_\U$paramName\E");
  }
 
  #    writeDebug("$paramName = $ans");
  # Circumstances sometimes that getPreferencesValue returns a CR, breaking the table definitions.
- # Arguably a bug in TWiki::Prefs::getPreferencesValue (Codev.GetPreferencesValueReturnsNL)
+ # Arguably a bug in TWiki::Func::getPreferencesValue (Codev.GetPreferencesValueReturnsNL)
  $ans =~ s/\n//;
  return $ans;
 }

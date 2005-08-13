@@ -62,7 +62,7 @@ sub initPlugin
 # =========================
 sub commonTagsHandler
 {
-    &TWiki::writeDebug( "NavPlugin::commonTagsHandler called" ) if $debug;
+    &TWiki::Func::writeDebug( "NavPlugin::commonTagsHandler called" ) if $debug;
     $_[0] =~ s/%PREVTOPIC%/$prevTopic/geo;
     $_[0] =~ s/%NEXTTOPIC%/$nextTopic/geo;
     $_[0] =~ s/%TOCTOPIC%/$tocTopic/geo;

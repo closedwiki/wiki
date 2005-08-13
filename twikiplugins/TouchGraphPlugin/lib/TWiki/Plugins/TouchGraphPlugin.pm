@@ -49,7 +49,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $tgPopup = &TWiki::Prefs::getPreferencesValue("TOUCHGRAPHPLUGIN_TGPOPUP") || "";
+    $tgPopup = &TWiki::Func::getPreferencesValue("TOUCHGRAPHPLUGIN_TGPOPUP") || "";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;

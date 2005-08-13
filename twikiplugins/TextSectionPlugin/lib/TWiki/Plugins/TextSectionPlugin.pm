@@ -104,7 +104,7 @@ sub commonTagsHandler
     # check if there's an TEXTSECTION statement in this topic
     if ( $_[0] !~ m/%textsection.*%/i) { return; } # nothing to do
 
-    my $usedSkin = &TWiki::getSkin();
+    my $usedSkin = &TWiki::Func::getSkin();
     foreach my $skin (split(/[ ,]/, $skipSkin))
     {
        if ($usedSkin eq $skin) 

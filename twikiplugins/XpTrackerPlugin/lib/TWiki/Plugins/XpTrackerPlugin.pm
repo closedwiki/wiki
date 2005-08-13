@@ -650,7 +650,6 @@ sub xpSavePage()
     TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $topic ) );
     
     TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::xpSavePage Redirected to: " . &TWiki::Func::getViewUrl( $web, $topic ) ) if $debug;
-    #&TWiki::Store::lockTopic( $theTopic, "on" );
     #TWiki::Func::setTopicEditLock( $web,$theTopic, 1 );
 
 }

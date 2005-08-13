@@ -53,7 +53,7 @@ sub initPlugin
 	$saved = 0;
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-#    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EDITINTABLEPLUGIN_EXAMPLE" ) || "default";
+#    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EDITINTABLEPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -100,7 +100,7 @@ sub commonTagsHandler
 			my $result = "";
 
 			my ($theWeb, $theTopic) = ($_[2], $_[1]);
-			my( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+			my( $meta, $text ) = &TWiki::Func::readTopic( $theWeb, $theTopic );
 
 			my $tableRowNumber = 0;
 			foreach $line ( split( /\n/, $text ) ) {
@@ -157,7 +157,7 @@ sub commonTagsHandler
 			# TODO: these lines could be refactored into a common method in &TWiki::Func
 #			TWiki::Func::writeDebug( "result [$result]" ) if $debug;
 			my $error = &TWiki::Store::saveTopic( $theWeb, $theTopic, $result, $meta );
-			&TWiki::Store::lockTopic( $theTopic, "on" );
+			&TWiki::Func::setTopicEditLock( $theWeb, $theTopic, "on" );
 		    my $url = &TWiki::Func::getViewUrl( $theWeb, $theTopic );
 			if( $error ) {
 				$url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopssaveerr", $error );

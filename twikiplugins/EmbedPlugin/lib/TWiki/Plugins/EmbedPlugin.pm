@@ -74,7 +74,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -128,10 +128,10 @@ sub commonTagsHandler
 sub handleEmbed
 {
     my ( $theAttributes ) = @_;
-    my $filename = &TWiki::extractNameValuePair($theAttributes, "filename");
-    my $width = &TWiki::extractNameValuePair($theAttributes, "width") || 200; 
-    my $height = &TWiki::extractNameValuePair($theAttributes, "height") || 42; 
-    my $autostart = &TWiki::extractNameValuePair($theAttributes, "autostart") || 1; 
+    my $filename = &TWiki::Func::extractNameValuePair($theAttributes, "filename");
+    my $width = &TWiki::Func::extractNameValuePair($theAttributes, "width") || 200; 
+    my $height = &TWiki::Func::extractNameValuePair($theAttributes, "height") || 42; 
+    my $autostart = &TWiki::Func::extractNameValuePair($theAttributes, "autostart") || 1; 
 
     my $string =<<EOM;
       <OBJECT   ID="MediaPlayer"   WIDTH="$width"   HEIGHT="$height" 

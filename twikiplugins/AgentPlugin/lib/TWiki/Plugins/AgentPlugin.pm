@@ -113,14 +113,14 @@ sub handleAgent
   }
 
   my $check = $options{check};
-  my $idList = &TWiki::Prefs::getPreferencesValue( "AGENTPLUGIN_CHECK".uc($check) ) || $check;
+  my $idList = &TWiki::Func::getPreferencesValue( "AGENTPLUGIN_CHECK".uc($check) ) || $check;
   &TWiki::Func::writeDebug( "- AgentPlugin::handleAgent($_[0]): idList=$idList") if $debug;
   return $options{none} if (!$idList);
   foreach $id (split(/\s+/,$idList)) {
     my $idp= $id; 
     $idp =~ s/[^A-Za-z0-9_]//g; # prune id to allow for '.' in return values
     $exp = &TWiki::Func::extractNameValuePair($attributes,"exp$idp") || undef;
-    if (!$exp) { $exp = &TWiki::Prefs::getPreferencesValue( "AGENTPLUGIN_EXP".uc($idp) ) || undef;}
+    if (!$exp) { $exp = &TWiki::Func::getPreferencesValue( "AGENTPLUGIN_EXP".uc($idp) ) || undef;}
     &TWiki::Func::writeDebug( "- AgentPlugin::handleAgent($_[0]): testing agent for \"$id\" with expression \"$exp\"" ) if $debug;
     if ($exp) {
       return "$id" if ($userAgent =~ m/$exp/);

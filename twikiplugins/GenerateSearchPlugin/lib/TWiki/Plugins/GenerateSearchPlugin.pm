@@ -281,12 +281,12 @@ sub search {
   $result .= " web=\"$searchWeb\" nosearch=\"on\" nototal=\"on\" regex=\"on\" noheader=\"on\" terminator=\"on\" format=\"";
   $result .= $format . "\" }%\n</form>";
 
-  my $tmpl = &TWiki::Store::readTemplate( "oopsgensearch" );
+  my $tmpl = &TWiki::Func::readTemplate( "oopsgensearch" );
   $tmpl =~ s/%PARAM1%/$heading/go;
   $tmpl =~ s/%PARAM2%/$message/go;
   $tmpl =~ s/%PARAM3%/$result/go;
 
-  $tmpl = &TWiki::handleCommonTags( $tmpl, "" );
+  $tmpl = &TWiki::Func::expandCommonVariables( $tmpl, "" );
   $tmpl = &TWiki::handleMetaTags( $webName, "", $tmpl );
 
   TWiki::writeHeader( $query );

@@ -172,7 +172,7 @@ $debug=0;
 	}
 
 	&TWiki::Func::writeDebug( "- $value" ) if $debug;
-	$value=&TWiki::getRenderedVersion( $value );
+	$value=&TWiki::Func::renderText( $value );
     return ($value);
 }
 
@@ -189,25 +189,25 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $LDAP_Base = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_BASE");
-    $LDAP_Host = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_HOST");
-    $LDAP_Header = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_HEADER");
-    $LDAP_Format = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_FORMAT");
-    $LDAP_Order = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_ORDER");
-    $LDAP_MvFormat = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_MVFORMAT") || "<br>";
-    $LDAP_Notfounderror = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_NOTFOUNDERROR");
+    $LDAP_Base = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_BASE");
+    $LDAP_Host = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_HOST");
+    $LDAP_Header = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_HEADER");
+    $LDAP_Format = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_FORMAT");
+    $LDAP_Order = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_ORDER");
+    $LDAP_MvFormat = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_MVFORMAT") || "<br>";
+    $LDAP_Notfounderror = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_NOTFOUNDERROR");
     
     # LDAP_Filter is the default Filter 
     # The word TOPIC in the filter is replaced with the topic.
 
-	$LDAP_Filter = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_DEFAULTFILTER");
+	$LDAP_Filter = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_DEFAULTFILTER");
 	my $topicreplace=&TWiki::wikiToUserName($topic);
     $LDAP_Filter =~ s/TOPIC/$topicreplace/;
     
     #jpegPhoto define the Photo attribute name, if any
-    $LDAP_jpegPhoto = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_JPEGPHOTO") || 'jpegPhoto';
+    $LDAP_jpegPhoto = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_JPEGPHOTO") || 'jpegPhoto';
 	#jpegDefaultPhoto define a default photo if someone doesn't have one
-    $LDAP_jpegDefaultPhoto = &TWiki::Prefs::getPreferencesValue ("LDAPPLUGIN_JPEGDEFAULTPHOTO") || '';
+    $LDAP_jpegDefaultPhoto = &TWiki::Func::getPreferencesValue ("LDAPPLUGIN_JPEGDEFAULTPHOTO") || '';
         
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "LDAPPLUGIN_DEBUG" );

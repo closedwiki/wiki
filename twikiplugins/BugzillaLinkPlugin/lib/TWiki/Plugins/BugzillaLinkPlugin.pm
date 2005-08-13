@@ -64,12 +64,12 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:     
-    $bugUrl = &TWiki::Prefs::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGURL" )  || "http://localhost/bugzilla/show_bug.cgi?id=";
-    $milestoneBugListUrl = &TWiki::Prefs::getPreferencesValue( "BUGZILLALINKPLUGIN_MILESTONEBUGLISTURL" )  || "http://localhost/bugzilla/buglist.cgi?";
-    $bugImgUrl = &TWiki::Prefs::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGIMGURL" ) || "%TWIKIWEB%/BugzillaLinkPlugin/bug.gif";
-    $bugText = &TWiki::Prefs::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGTEXT" ) || "Bug #";
-    $milestoneBugListText = &TWiki::Prefs::getPreferencesValue( "BUGZILLALINKPLUGIN_MILESTONEBUGLISTEXT" ) || "Buglist for Milestone ";
-     $myBugListText = &TWiki::Prefs::getPreferencesValue( "BUGZILLALINKPLUGIN_MYBUGLISTEXT" ) || "Buglist for ";
+    $bugUrl = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGURL" )  || "http://localhost/bugzilla/show_bug.cgi?id=";
+    $milestoneBugListUrl = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MILESTONEBUGLISTURL" )  || "http://localhost/bugzilla/buglist.cgi?";
+    $bugImgUrl = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGIMGURL" ) || "%TWIKIWEB%/BugzillaLinkPlugin/bug.gif";
+    $bugText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGTEXT" ) || "Bug #";
+    $milestoneBugListText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MILESTONEBUGLISTEXT" ) || "Buglist for Milestone ";
+     $myBugListText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MYBUGLISTEXT" ) || "Buglist for ";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "BUGZILLAPLUGIN_DEBUG" );

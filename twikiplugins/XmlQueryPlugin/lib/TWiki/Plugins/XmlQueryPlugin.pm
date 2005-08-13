@@ -65,8 +65,8 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" ) || $debug;
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $xmldir = &TWiki::Prefs::getPreferencesValue( "${pluginName}_XMLDIR" ) || $xmldir;
-    my $cl = &TWiki::Prefs::getPreferencesValue( "${pluginName}_CACHESIZELIMIT" ) || $cachelimit;
+    $xmldir = &TWiki::Func::getPreferencesValue( "${pluginName}_XMLDIR" ) || $xmldir;
+    my $cl = &TWiki::Func::getPreferencesValue( "${pluginName}_CACHESIZELIMIT" ) || $cachelimit;
     my ($cl_value,$cl_type) = ($cl =~ /^\s*([0-9]*)\s*([a-z]*)\s*$/);
     if (defined $cl_value) {
       if (not defined $cl_type =~  /^m/i ) {
@@ -80,7 +80,7 @@ sub initPlugin
       }
     }
 
-    my $ct = &TWiki::Prefs::getPreferencesValue( "${pluginName}_CACHEEXPIRES" ) || $cacheexpires;
+    my $ct = &TWiki::Func::getPreferencesValue( "${pluginName}_CACHEEXPIRES" ) || $cacheexpires;
     $ct =~ s/^\s*//; $ct =~ s/\s*$//; # strip leading and trailing spaces
     if ($ct =~ /^(now|never)$/ or $ct =~ /^[0-9]+\s+(s|second|seconds|sec|m|minute|minutes|min|h|hour|hours|d|day|days|w|week|weeks|M|month|months|y|year|years)$/) {
       $cacheexpires = $ct;

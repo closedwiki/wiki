@@ -74,7 +74,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -142,9 +142,9 @@ sub handleEmbedFlash
     my $FlashOBJECTScale = "";
     my $FlashEMBEDScale = "";
         
-    my $fileName = &TWiki::extractNameValuePair($theAttributes, "filename");
+    my $fileName = &TWiki::Func::extractNameValuePair($theAttributes, "filename");
 	if ($fileName) { $FlashFileName = $fileName; }
-	my $movieId = &TWiki::extractNameValuePair($theAttributes, "id");
+	my $movieId = &TWiki::Func::extractNameValuePair($theAttributes, "id");
 	if (!$movieId) {
 		my @arr = split(/.swf/, $fileName); # string before .swf
 		my @arr2 = split(/\//, pop @arr); # remove .swf
@@ -152,24 +152,24 @@ sub handleEmbedFlash
 	} else {
 		$FlashID = $movieId;
 	}
-    my $width = &TWiki::extractNameValuePair($theAttributes, "width");
+    my $width = &TWiki::Func::extractNameValuePair($theAttributes, "width");
     if ($width) { $FlashWidth = $width; }
-    my $height = &TWiki::extractNameValuePair($theAttributes, "height");
+    my $height = &TWiki::Func::extractNameValuePair($theAttributes, "height");
     if ($height) { $FlashHeight = $height; }
-    my $background = &TWiki::extractNameValuePair($theAttributes, "background");
+    my $background = &TWiki::Func::extractNameValuePair($theAttributes, "background");
     if ($background) {
     	$FlashOBJECTBackground = "<param name=bgcolor value=$background>";
     	$FlashEMBEDBackground = "bgcolor=$background";
     }
-	my $version = &TWiki::extractNameValuePair($theAttributes, "version");
+	my $version = &TWiki::Func::extractNameValuePair($theAttributes, "version");
     if ($version) { $FlashVersion = $version; }
-    my $quality = &TWiki::extractNameValuePair($theAttributes, "quality");
+    my $quality = &TWiki::Func::extractNameValuePair($theAttributes, "quality");
     if ($quality) { $FlashQuality = $quality; }
-    my $menu = &TWiki::extractNameValuePair($theAttributes, "menu");
+    my $menu = &TWiki::Func::extractNameValuePair($theAttributes, "menu");
     if ($menu) { $FlashAllowContextMenu = $menu; }
-    my $align = &TWiki::extractNameValuePair($theAttributes, "align");
+    my $align = &TWiki::Func::extractNameValuePair($theAttributes, "align");
     if ($align) { $FlashAlign = $align; }
-    my $scale = &TWiki::extractNameValuePair($theAttributes, "scale");
+    my $scale = &TWiki::Func::extractNameValuePair($theAttributes, "scale");
     if ($scale) {
     	$FlashOBJECTScale = "<param name=scale value=$scale>";
     	$FlashEMBEDScale = "scale=$scale";

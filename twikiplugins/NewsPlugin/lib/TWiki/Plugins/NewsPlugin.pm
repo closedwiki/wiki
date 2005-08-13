@@ -65,7 +65,7 @@ sub beforeSaveHandler
     my $args; my $arg;
     # process options
     if ($options) {
-      $args = TWiki::handleCommonTags( $options, $_[2], $_[1]);
+      $args = TWiki::Func::expandCommonVariables( $options, $_[1], $_[2]);
     }
     my $headlinesfilename = &TWiki::Func::extractNameValuePair( $args, "topic" );
     if ( !$headlinesfilename ) {

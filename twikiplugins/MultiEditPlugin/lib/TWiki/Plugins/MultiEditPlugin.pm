@@ -40,10 +40,10 @@ sub initPlugin
         return 0;
     }
 
-    $label = &TWiki::Prefs::getPreferencesValue( "\U$pluginName\E_LABEL" ) || "Edit";
+    $label = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_LABEL" ) || "Edit";
     #$label = "<br><img src=\"". &TWiki::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\">";
-    $skipskin = &TWiki::Prefs::getPreferencesValue( "\U$pluginName\E_SKIPSKIN" ) || "";
-    $placement = &TWiki::Prefs::getPreferencesValue( "\U$pluginName\E_PLACEMENT" ) || "after";
+    $skipskin = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_SKIPSKIN" ) || "";
+    $placement = &TWiki::Func::getPreferencesValue( "\U$pluginName\E_PLACEMENT" ) || "after";
     $placement = ($placement =~ /left/i ? 1 : 0);
 
     #initialize a few other things
@@ -67,7 +67,7 @@ sub startRenderingHandler
 
     # This handler is called by getRenderedVersion just before the line loop
 
-    my $cskin = &TWiki::getSkin();
+    my $cskin = &TWiki::Func::getSkin();
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
         if ($cskin eq $ss) {

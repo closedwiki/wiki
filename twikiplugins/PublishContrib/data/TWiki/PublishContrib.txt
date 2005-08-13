@@ -1,4 +1,7 @@
----+!! PublishAddOn
+---+!! PublishContrib
+
+_Previously known as !GenHTMLAddOn, and then !PublishAddOn_.
+
 %TOC%
 
 ---++ Summary
@@ -10,7 +13,7 @@ When TWiki generates a view, it does so dynamically i.e. there's a CGI script th
 	1 Published versions of TWiki pages must be read-only,
 	1 The TWiki server is inaccessible to the audience (e.g. on the other side of a corporate firewall).
 
-PublishAddOn provides support for the generation of stand-alone HTML from a TWiki web. It will generate a zip file containing rendered versions of a set of TWiki pages together with any attached files.
+PublishContrib provides support for the generation of stand-alone HTML from a TWiki web. It will generate a zip file containing rendered versions of a set of TWiki pages together with any attached files.
 
 *WARNING* The zip files can get pretty big, and the process itself puts a heavy load on the server for large webs.
 
@@ -53,7 +56,7 @@ Ypu can also create a permanent topic in a web to help with the publishing proce
 <tr>
   <td valign="top">Select skin for published HTML :</td>
   <td>
-   <input type="text" name="publishskin" size="20" value="%SKIN%" /><br />
+   <input type="text" name="publishskin" size="20" value="%PUBLISHSKIN%" /><br />
    You are recommended to pick =print.pattern= or =plain= or =print= skin. Your installation may also offer a special =export= skin.
   </td>
 </tr>
@@ -85,6 +88,7 @@ You can control what gets published from a topic using the &lt;nopublish&gt; .. 
       * Set STUB = %$STUB%
    * Short description
       * Set SHORTDESCRIPTION = Generate static HTML for a TWiki Web
+
 ---++++ Known problems
 	* Doesn't handle revision info tags in templates
 	* Plugin tags that create complex HTML (sug as TWikiDraw DRAWING tags) are not handled correctly.
@@ -95,10 +99,20 @@ You can control what gets published from a topic using the &lt;nopublish&gt; .. 
    | *File:* | *Description:* |
 %$MANIFEST%
    * Unzip ==%TOPIC%.zip== in your twiki installation directory.
-   * =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on, and configure the plugin. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
-   * Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
-   * Set the 'Settings' above in your %TWIKIWEB%.TWikiPreferences topic..
+   * =perl= ==%TOPIC%_installer.pl== =install= to automatically check and install other TWiki modules that this module depends on, and configure the plugin. This script also includes an =uninstall= option should you ever wish to remove the plugin from your installation, and an =upgrade= option that will automatically download and install the latest version of the add-on.
+   * If the install script fails for any reason, you may need to define the configuration yourself. Create a file called =LocalSite.cfg= in the same directory as your =TWiki.cfg= and add the following lines:
+<blockquote>
+<verbatim>
+$TWiki::cfg{PublishContrib}{Dir} = "dir_path";
+$TWiki::cfg{PublishContrib}{URL} = "url_path";
+</verbatim>
+Where =dir_path= is the file system path to your publish directory on the server, and =url_path= is the URL of the same directory.
+
+Then edit =TWiki.cfg= and add the following line to the end:
+<verbatim>
+do 'LocalSite.cfg';
+</verbatim>
+</blockquote>
 
 ---+++ Info
 This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/CrawfordCurrie at Motorola. This version is a rewrite from TWiki:Main/EricScouten, subsequently fixed by TWiki:Main/CrawfordCurrie (http://c-dot.co.uk)
@@ -107,6 +121,7 @@ This add-on started as the TWiki:Plugins/GenHTMLAddon, submitted by TWiki:Main/C
 | Dependencies: | %$DEPENDENCIES% |
 | Version: | %$VERSION% |
 | Change History: | |
+| 27 Apr 2005 | 1.301 Crawford Currie - fixed minor issues highlighted by Bruce Dillahunty and Scott Claridge |
 | 11 Apr 2005 | 1.3 Crawford Currie - reworked the interface and code to work better |
 | 13 October 2004 | 1.200 Crawford Currie - Cairo compatible |
 | 7 Jan 2003 | 1.1 Initial version |

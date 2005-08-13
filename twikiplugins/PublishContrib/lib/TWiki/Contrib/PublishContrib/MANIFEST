@@ -1,5 +1,5 @@
-data/TWiki/PublishAddOn.txt
+data/TWiki/PublishContrib.txt
 data/TWiki/PublishWeb.txt
 lib/TWiki/Contrib/Publish.pm
-lib/TWiki/Contrib/PublishAddOn/build.pl
+lib/TWiki/Contrib/PublishContrib/build.pl
 bin/publish 0775 Publish script

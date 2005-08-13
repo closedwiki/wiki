@@ -102,19 +102,7 @@ sub commonTagsHandler
 
     TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    # for compatibility for earlier TWiki versions:
-    if( $doOldInclude ) {
-        # allow two level includes
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::handleIncludeFile( $1, $_[1], $_[2], "" )/geo;
-        $_[0] =~ s/%INCLUDE:"([^%\"]*?)"%/TWiki::handleIncludeFile( $1, $_[1], $_[2], "" )/geo;
-    }
-
-    # do custom extension rule, like for example:
     $_[0] =~ s/( *)%RANDOMQUOTE{(.*?)}%/&_handleRandomQuoteTag( $1, $2 )/geo;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 }
 
 # =========================

@@ -43,7 +43,7 @@ sub initPlugin
     $debug = TWiki::Func::getPreferencesFlag( "LOCALTIMEPLUGIN_DEBUG" );
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $timezone = &TWiki::Prefs::getPreferencesValue( "LOCALTIMEPLUGIN_TIMEZONE" ) || "Asia/Tokyo";
+    $timezone = &TWiki::Func::getPreferencesValue( "LOCALTIMEPLUGIN_TIMEZONE" ) || "Asia/Tokyo";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
