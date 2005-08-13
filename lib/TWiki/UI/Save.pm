@@ -322,6 +322,8 @@ sub save {
     my $query = $session->{cgiQuery};
     my $webName = $session->{webName};
     my $topic = $session->{topicName};
+    my $store = $session->{store};
+    my $user = $session->{user};
 
     #
     # Allow for dynamic topic creation by replacing strings of at least
@@ -331,13 +333,13 @@ sub save {
     if ( $topic =~ /X{10}/ ) {
 		my $n = 0;
 		my $baseTopic = $topic;
+        $store->clearLease( $webName, $baseTopic );
 		do {
 			$topic = $baseTopic;
 			$topic =~ s/X{10}X*/$n/e;
 			$n++;
-        } while( $session->{store}->topicExists( $webName, $topic ));
+        } while( $store->topicExists( $webName, $topic ));
         $session->{topicName} = $topic;
-	$session->{store}->clearLease( $webName, $baseTopic );
     }
 
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
@@ -353,14 +355,27 @@ sub save {
         $redirecturl .= 'action='.$editaction.';' if $editaction;
         $redirecturl .= 'skin='.$query->param('skin').';' if $query->param('skin');
         $redirecturl .= 'cover='.$query->param('cover').';' if $query->param('cover');
+        my $lease = $store->getLease( $webName, $topic );
+        if( $lease && $lease->{user}->equals( $user )) {
+            $store->setLease( $webName, $topic, $user,
+                                         $TWiki::cfg{LeaseLength} );
+        }
+
     } elsif( $saveaction eq 'quietsave' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
+
     } elsif( $saveaction eq 'cancel' ) {
+        my $lease = $store->getLease( $webName, $topic );
+        if( $lease && $lease->{user}->equals( $user )) {
+            $store->clearLease( $webName, $topic );
+        }
         my $viewURL = $session->getScriptUrl( $webName, $topic, 'view' );
         $session->redirect( $viewURL );
         return;
+
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
         $query->param( -name => 'cmd', -value => $saveaction );
+
     } elsif( $saveaction eq 'add form' ||
              $saveaction eq 'replace form...' ||
              $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
@@ -369,6 +384,7 @@ sub save {
           ( TWiki::UI::ChangeForm::generate( $session, $webName,
                                              $topic, $editaction ) );
         return;
+
     } elsif( $saveaction eq 'preview' ) {
         require TWiki::UI::Preview;
         TWiki::UI::Preview::preview( $session );
