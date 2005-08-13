@@ -215,8 +215,7 @@ sub _renderFormData {
         unless ( $fa =~ /H/ ) {
             my $value = $field->{value};
             $value = '&nbsp;' unless defined($value);
-            my $title = $field->{title};
-            $title ||= $field->{name};
+            my $title = $field->{title} || $field->{name};
             $metaText .= CGI::Tr( { valign => 'top' },
                                   CGI::td( { class => 'twikiFirstCol',
                                              align => 'right' },
