@@ -214,11 +214,13 @@ sub _renderFormData {
         my $fa = $field->{attributes} || '';
         unless ( $fa =~ /H/ ) {
             my $value = $field->{value};
-	    $value = '&nbsp;' unless defined($value);
+            $value = '&nbsp;' unless defined($value);
+            my $title = $field->{title};
+            $title ||= $field->{name};
             $metaText .= CGI::Tr( { valign => 'top' },
                                   CGI::td( { class => 'twikiFirstCol',
                                              align => 'right' },
-                                           ' '.$field->{title}.':' ).
+                                           ' '.$title.':' ).
                                   CGI::td( ' '.$value.' ' ));
         }
     }
@@ -1896,8 +1898,9 @@ sub renderFormFieldArg {
     my $value = '';
     my @fields = $meta->find( 'FIELD' );
     foreach my $field ( @fields ) {
-        if( $name =~ /^($field->{name}|$field->{title})$/ ) {
-            $value = $field->{value};
+        my $title = $field->{title} || $field->{name};
+        if( $name =~ /^($field->{name}|$title)$/ ) {
+            $value = $field->{value} || '';
             $value =~ s/^\s*(.*?)\s*$/$1/go;
             $value = breakName( $value, $breakArgs );
             return $value;
