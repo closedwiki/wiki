@@ -40,14 +40,9 @@ use TWiki::Func;
 
 use strict;
 
-use vars qw( $ZipPubUrl $VERSION $PUBLISH_DIR $PUBLISH_URL );
+use vars qw( $ZipPubUrl $VERSION $session );
 
-BEGIN {
-    require "TWiki/Contrib/PublishAddOn/PublishAddOn.cfg";
-    die "Could not configure PublishAddOn: $!" if $!;
-}
-
-$VERSION = 1.3;
+$VERSION = 1.302;
 
 #  Main rendering loop.
 sub main {
@@ -92,14 +87,30 @@ sub main {
         $pi = '/'.$query->param('web');
     }
 
-    my ($topic, $web, $scriptUrlPath, $userName, $dataDir) =
-      TWiki::initialize($pi, $query->remote_user(), '',
-                        $query->url(), $query);
+    my ($topic, $web, $wikiName);
 
+    if( defined &TWiki::new ) {
+        $session = new TWiki($pi, $query->remote_user(), '',
+                            $query->url(), $query);
+        $TWiki::Plugins::SESSION = $session;
+        $topic = $session->{topicName};
+        $web = $session->{webName};
+        $wikiName = $session->{user}->wikiName();
+    } else {
+        my( $userName, $scriptUrlPath, $dataDir );
+        ($topic, $web, $scriptUrlPath, $userName, $dataDir) =
+          TWiki::initialize($pi, $query->remote_user(), '',
+                            $query->url(), $query);
+        $wikiName = TWiki::Func::userToWikiName($userName);
+    }
+
+    unless ( defined $TWiki::cfg{PublishAddOn}{Dir} &&
+             defined $TWiki::cfg{PublishAddOn}{Dir}) {
+        die "Configuration is missing; run install script";
+    }
 
     my ($inclusions, $exclusions, $topicsearch, $skin);
     my $notify="off";
-    my $wikiName = TWiki::Func::userToWikiName($userName);
 
     # Load defaults from a config topic if one was specified
     my $configtopic = $query->param('configtopic');
@@ -126,6 +137,8 @@ sub main {
                 $exclusions = $v;
             } elsif ( $k eq "TOPICSEARCH" ) {
                 $topicsearch = $v;
+            } elsif ( $k eq "PUBLISHSKIN" ) {
+                $skin = $v;
             } elsif ( $k eq "SKIN" ) {
                 $skin = $v;
             }
@@ -148,16 +161,17 @@ sub main {
     $exclusions =~ s/([*?])/.$1/g;
     $exclusions =~ s/,/|/g;
 
-    $skin = $query->param('publishskin') ||
-      TWiki::Func::getPreferencesValue("SKIN");
+    $skin ||= $query->param('publishskin') ||
+      TWiki::Func::getPreferencesValue("PUBLISHSKIN");
 
     my $ok = 1;
-    if ( ! -d $PUBLISH_DIR && ! -e $PUBLISH_DIR) {
-        mkdir($PUBLISH_DIR, 0777);
+    if ( ! -d $TWiki::cfg{PublishAddOn}{Dir} &&
+         ! -e $TWiki::cfg{PublishAddOn}{Dir}) {
+        mkdir($TWiki::cfg{PublishAddOn}{Dir}, 0777);
         $ok = !($!);
     }
-    die "Can't publish because no useable publish directory was found. Please notify your TWiki administrator" unless -d $PUBLISH_DIR;
-    die "Can't publish because publish URL was not set. Please notify your TWiki administrator" unless $PUBLISH_URL;
+    die "Can't publish because no useable publish directory was found. Please notify your TWiki administrator" unless -d $TWiki::cfg{PublishAddOn}{Dir};
+    die "Can't publish because publish URL was not set. Please notify your TWiki administrator" unless $TWiki::cfg{PublishAddOn}{URL};
 
     my $tmp = TWiki::Func::formatTime(time());
     $tmp =~s/^(\d+)\s+(\w+)\s+(\d+).*/$1_$2_$3/g;
@@ -173,14 +187,14 @@ sub main {
         TWiki::Func::redirectCgiQuery($query, $url);
     } else {
         TWiki::Func::writeHeader($query);
-        my $tmpl = TWiki::Store::readTemplate("view", "print.pattern");
+        my $tmpl = TWiki::Func::readTemplate("view", "print.pattern");
         $tmpl =~ s/%META{.*?}%//g;
         my($header, $footer) = split(/%TEXT%/, $tmpl);
         $header = TWiki::Func::expandCommonVariables( $header, $topic, $web );
         $header = TWiki::Func::renderText( $header, $web );
         print $header;
-        print "<b>PUBLISH_DIR: </b>$PUBLISH_DIR<br />\n";
-        print "<b>PUBLISH_URL_PATH: </b>$PUBLISH_URL<br />\n";
+        print "<b>TWiki::cfg{PublishAddOn}{Dir}: </b>$TWiki::cfg{PublishAddOn}{Dir}<br />\n";
+        print "<b>TWiki::cfg{PublishAddOn}{URL}_PATH: </b>$TWiki::cfg{PublishAddOn}{URL}<br />\n";
         print "<b>Config: $configtopic<br />\n" if $configtopic;
         print "<b>Skin: </b>$skin<br />\n";
         print "<b>Inclusions: </b>$inclusions<br />\n";
@@ -188,9 +202,9 @@ sub main {
         print "<b>Content Filter: </b>$topicsearch<p />\n";
         my $succeeded = publishWeb($web, $topic, $wikiName, $inclusions,
                                    $exclusions, $skin, $topicsearch,
-                                   "$PUBLISH_DIR/$zipfilename");
+                                   "$TWiki::cfg{PublishAddOn}{Dir}/$zipfilename");
 
-        my $text = "Published at $PUBLISH_URL/$zipfilename";
+        my $text = "Published at $TWiki::cfg{PublishAddOn}{URL}/$zipfilename";
         $text = TWiki::Func::expandCommonVariables( $text, $topic, $web );
         $text = TWiki::Func::renderText( $text, $web );
         print $text;
@@ -252,17 +266,6 @@ sub publishWeb {
 sub publishTopic {
     my ($web, $topic, $wikiName, $skin, $tmpl, $copied, $topicsearch, $zip) = @_;
 
-    # Used to set the topic when traversing the web.
-    # THIS IS NASTY - but I can't find any other reliable way
-    # to force TWiki to change topic.
-#    my $thePathInfo = $query->path_info(); 
-#    my $theRemoteUser = $query->remote_user();
-#    my $theUrl = $query->url;
-#    my ($itopic, $iweb, $iscriptUrlPath, $iuserName, $idataDir) =
-#      TWiki::initialize($thePathInfo, $theRemoteUser, $topic, $theUrl, $query);
-#    die "Bad re-init (web = $iweb, should be $web)\n" if ($iweb ne $web);
-#    die "Bad re-init (topic = $itopic, should be $topic)\n" if ($itopic ne $topic);
-
     # Read topic data.
     my ($meta, $text) = TWiki::Func::readTopic( $web, $topic );
 
@@ -277,15 +280,26 @@ sub publishTopic {
         return;
     }
 
-    my ($revdate, $revuser, $maxrev) = TWiki::Store::getRevisionInfoFromMeta($web, $topic, $meta, "isoFormat");
-    $revuser = TWiki::userToWikiName($revuser);
+    my ($revdate, $revuser, $maxrev);
+    if( $session ) {
+        ($revdate, $revuser, $maxrev) = $meta->getRevisionInfo();
+        $revuser = $revuser->wikiName();
+    } else {
+        TWiki::Store::getRevisionInfoFromMeta($web, $topic, $meta,
+                                              "isoFormat");
+        $revuser = TWiki::userToWikiName($revuser);
+    }
 
     # Handle standard formatting.
     $text = TWiki::Func::expandCommonVariables($text, $topic, $web);
     $text = TWiki::Func::renderText($text);
 
     $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
-    $tmpl = TWiki::handleMetaTags($web, $topic, $tmpl, $meta, 1);
+    if( $session ) {
+        $tmpl = $session->{renderer}->renderMetaTags($web, $topic, $tmpl, $meta, 1);
+    } else {
+        $tmpl = TWiki::handleMetaTags($web, $topic, $tmpl, $meta, 1);
+    }
     $tmpl = TWiki::Func::renderText($tmpl, "", $meta); ## better to use meta rendering?
 
     $tmpl =~ s/%TEXT%/$text/go;
@@ -301,7 +315,14 @@ sub publishTopic {
     my $pub = '(?:http://localhost)?'.TWiki::Func::getPubUrlPath();
     $tmpl =~ s!$pub/([^"']+)!&copyResource($web, $1, $copied, $zip)!ge;
     # Modify internal links.
-    my $ilt = '(?:http://localhost)?'.$TWiki::dispScriptUrlPath.$TWiki::dispViewPath. $TWiki::scriptSuffix;
+    my $ilt;
+    if( $session ) {
+        $ilt  = '(?:http://localhost)?'.$TWiki::dispScriptUrlPath.
+          $TWiki::dispViewPath.$TWiki::scriptSuffix;
+    } else {
+        $ilt = TWiki::Func::getViewUrl('NOISE', 'NOISE');
+        $ilt =~ s!/NOISE.*!!;
+    }
     # link to this web
     $tmpl =~ s!(href=["'])$ilt/$web/(\w+)!$1$2.html!go;
     # link to another web
@@ -348,12 +369,18 @@ sub copyResource {
     return $copied->{$rsrcName};
 }
 
-#  Returns a pattern that will match the HTML used by TWiki to represent an
-#  unsatisfied link. THIS IS NASTY, but I don't know how else to do it.
+# Returns a pattern that will match the HTML used by TWiki to represent an
+# unsatisfied link. THIS IS NASTY, but I don't know how else to do it.
+# SMELL: another case for a WysiwygPlugin-style rendering engine
 sub getUnsatisfiedLinkTemplate {
     my ($web) = @_;
     my $t = "!£%^&*(){}";# must _not_ exist!
-    my $linkFmt = TWiki::Render::internalLink("", $web, $t, "TheLink", undef, 1);
+    my $linkFmt;
+    if( $session ) {
+        $linkFmt = $session->{renderer}->_renderNonExistingWikiWord($web, $t, "TheLink");
+    } else {
+        $linkFmt = TWiki::Render::internalLink("", $web, $t, "TheLink", undef, 1);
+    }
     $linkFmt =~ s/\//\\\//go;
     my $pre = $linkFmt;
     $pre =~ s/TheLink.*//o;
