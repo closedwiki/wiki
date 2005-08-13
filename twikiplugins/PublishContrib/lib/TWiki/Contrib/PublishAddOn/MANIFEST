@@ -2,4 +2,4 @@ data/TWiki/PublishAddOn.txt
 data/TWiki/PublishWeb.txt
 lib/TWiki/Contrib/Publish.pm
 lib/TWiki/Contrib/PublishAddOn/build.pl
-bin/publish
+bin/publish 0775 Publish script
