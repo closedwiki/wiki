@@ -259,10 +259,8 @@ BEGIN {
     $constantTags{TWIKIWEB}        = $TWiki::cfg{SystemWebName};
     $constantTags{WEBPREFSTOPIC}   = $TWiki::cfg{WebPrefsTopicName};
     $constantTags{DEFAULTURLHOST}  = $TWiki::cfg{DefaultUrlHost};
-    $constantTags{WIKIHOMEURL}     =
-      $TWiki::cfg{DefaultUrlHost} .
-        '/' . $TWiki::cfg{ScriptUrlPath} . '/view' .
-          $TWiki::cfg{ScriptSuffix};
+    $constantTags{WIKIHOMEURL}     = $TWiki::cfg{DefaultUrlHost}
+      . $TWiki::cfg{ScriptUrlPath} . '/view' .  $TWiki::cfg{ScriptSuffix};
     $constantTags{WIKIPREFSTOPIC}  = $TWiki::cfg{SitePrefsTopicName};
     $constantTags{WIKIUSERSTOPIC}  = $TWiki::cfg{UsersTopicName};
     if( $TWiki::cfg{NoFollow} ) {
