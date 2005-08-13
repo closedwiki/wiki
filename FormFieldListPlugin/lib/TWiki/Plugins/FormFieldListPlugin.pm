@@ -116,14 +116,14 @@ sub getFormFieldList
 
     &TWiki::Func::writeDebug( "- getFormFieldList(web $web, topic $topic, args $args)" ) if $debug;
 
-    my $formFieldList = TWiki::extractNameValuePair( $args );   # CHANGED $formField -> $formFieldList
-    my $formTopic = TWiki::extractNameValuePair( $args, "topic" );
-    my $altText   = TWiki::extractNameValuePair( $args, "alttext" );
-    my $default   = TWiki::extractNameValuePair( $args, "default" ) || undef;
-    my $format    = TWiki::extractNameValuePair( $args, "format" );
+    my $formFieldList = TWiki::Func::extractNameValuePair( $args );   # CHANGED $formField -> $formFieldList
+    my $formTopic = TWiki::Func::extractNameValuePair( $args, "topic" );
+    my $altText   = TWiki::Func::extractNameValuePair( $args, "alttext" );
+    my $default   = TWiki::Func::extractNameValuePair( $args, "default" ) || undef;
+    my $format    = TWiki::Func::extractNameValuePair( $args, "format" );
 
     # BEGIN NEW
-    my $separator = TWiki::extractNameValuePair( $args, "separator" );
+    my $separator = TWiki::Func::extractNameValuePair( $args, "separator" );
     unless ( $separator ) {
 	if ( $args =~ m/separator\s*=/o ) {
 	    # If empty separator explicitly set, use it
@@ -152,7 +152,7 @@ sub getFormFieldList
 	    ( $formWeb, $topic ) = ( $1, $2 );
 	} else {
          # SMELL: Undocumented feature, "web" parameter
-	    $formWeb = TWiki::extractNameValuePair( $args, "web" );
+	    $formWeb = TWiki::Func::extractNameValuePair( $args, "web" );
 	}
 	$formWeb = $web unless $formWeb;
     } else {
@@ -164,7 +164,7 @@ sub getFormFieldList
     unless ( $meta ) {
 	my $dummyText;
        ( $meta, $dummyText ) =
-	   TWiki::Store::readTopic( $formWeb, $formTopic );
+	   TWiki::Func::readTopic( $formWeb, $formTopic );
 	$TWiki::Render::ffCache{"$formWeb.$formTopic"} = $meta;
     }
 

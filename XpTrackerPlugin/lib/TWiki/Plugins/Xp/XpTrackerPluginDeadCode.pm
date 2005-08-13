@@ -88,7 +88,7 @@ package TWiki::Plugins::Xp::XpTrackerPluginDeadCode;
 #
 #    my @dev = ();
 #    foreach my $story (@iterStories) {
-#    my $storyText = &TWiki::Store::readTopic($web, $story);      
+#    my $storyText = &TWiki::Func::readTopic($web, $story);      
 #
 #    # search for text matching a developer
 #    my $ret = "";

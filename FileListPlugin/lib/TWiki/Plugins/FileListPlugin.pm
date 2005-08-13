@@ -109,7 +109,7 @@ sub _handleFileList
   # my $flags = $params{"flags"}; # Later use
   my $selection = $params{"selection"}; # "abc, def" syntax. Substring match will be used
 
-  my ($meta, $text) = TWiki::Store::readTopic($thisWeb, $thisTopic); # Third parameter: check permissions.
+  my ($meta, $text) = TWiki::Func::readTopic($thisWeb, $thisTopic); # Third parameter: check permissions.
   my $outtext=""; 
 
   # Make sure selection string is valid.

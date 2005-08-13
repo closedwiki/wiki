@@ -16,7 +16,7 @@ sub initMethod {
     my $prefPrefix = "IMMEDIATENOTIFYPLUGIN_JABBER_";
     $user = TWiki::Func::getPreferencesValue($prefPrefix."USERNAME");
     $pass = TWiki::Func::getPreferencesValue($prefPrefix."PASSWORD");
-    $server = TWiki::Prefs::getPreferencesValue($prefPrefix."SERVER");
+    $server = TWiki::Func::getPreferencesValue($prefPrefix."SERVER");
     $twikiuser = $_[2];
     $debug = \&TWiki::Plugins::ImmediateNotifyPlugin::debug;
     $warning = \&TWiki::Plugins::ImmediateNotifyPlugin::warning;

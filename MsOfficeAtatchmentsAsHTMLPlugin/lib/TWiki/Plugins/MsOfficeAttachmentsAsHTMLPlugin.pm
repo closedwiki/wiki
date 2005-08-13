@@ -49,7 +49,7 @@ sub initPlugin
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
-    $replacementNote = TWiki::Prefs::getPreferencesValue("\U$pluginName\E_REPLACEMENTNOTE" )
+    $replacementNote = TWiki::Func::getPreferencesValue("\U$pluginName\E_REPLACEMENTNOTE" )
           || 'This text was automatically generated from the attachment $attachment'
              ."\n".'%INCLUDE{%ATTACHURL%/$convertedAttachmentPath}%'."\n";
 

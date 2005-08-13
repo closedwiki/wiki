@@ -51,7 +51,7 @@ sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
     
-    #TWiki::writeDebug( "init FormPivot ..." );
+    #TWiki::Func::writeDebug( "init FormPivot ..." );
         
     # Plugin correctly initialized
     return 1;
@@ -91,7 +91,7 @@ sub pivot
    my @fields = split( /,/, $fieldsp );
    
    if( ! @fields ) {
-       my ( $formMeta, $formDef ) = TWiki::Store::readTopic( $web, $form );
+       my ( $formMeta, $formDef ) = TWiki::Func::readTopic( $web, $form );
        my @fieldDefs = TWiki::Form::getFormDefinition( $formDef );
        foreach my $fieldDefP ( @fieldDefs ) {
            my $name = $fieldDefP->[1];
@@ -126,7 +126,7 @@ sub pivot
 
    
    foreach my $formTopic ( split( /\s/, $search ) ) {
-       my( $meta, $text ) = TWiki::Store::readTopic( $web, $formTopic );
+       my( $meta, $text ) = TWiki::Func::readTopic( $web, $formTopic );
        for( my $i; $i<=$#fields; $i++ ) {
            my $name = $fields[$i];
            $name =~ s/\s*//go;
@@ -162,7 +162,7 @@ sub pivot
                $field =~ s/\s*//go;
                # Problems passing = and " to URL
                my $searchVal = "%META:FIELD\{.*name..$field..*value..$key.*\}%";
-               my $title = "<a href=\"" . &TWiki::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$title</a>";
+               my $title = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$title</a>";
                $table .= "| $title | " . $found[$i]->{$key} . " |\n";
            }
            $pivot .= "$table";
@@ -191,7 +191,7 @@ sub pivot
               my $searchVal = "%META:FIELD\{.*name%3D.$fieldRow..*value..$valueRow.*\}%%3B" .
                               "%META:FIELD\{.*name%3D.$fieldCol..*value..$valueCol.*\}%";
               #my $searchVal = "FIELD,$fieldRow,value,$valueRow,FIELD,$fieldCol,value,$valueCol";
-              my $link = "<a href=\"" . &TWiki::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$count</a>";
+              my $link = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$count</a>";
               $pivot .= " $link |";
            }
            $pivot .= "\n";

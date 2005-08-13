@@ -291,7 +291,7 @@ sub getRowColumnCount
     my ($this, $spreadSheetSyntax) = @_;
     my ($r1, $c1, $r2, $c2) = $this->getTableRange($spreadSheetSyntax);
     return (($r2 - $r1), ($c2 - $c1)) if (defined($r1));
-    #&TWiki::writeDebug( "- getRowColumnCount: bad data, returning undef");
+    #&TWiki::Func::writeDebug( "- getRowColumnCount: bad data, returning undef");
     return (undef, undef);
 }
 
@@ -364,7 +364,7 @@ sub getTableRange
     my $r2 = $3 - 1;
     my $c2 = $4 - 1;
     @arr = ($r1, $c1, $r2, $c2);
-    #&TWiki::writeDebug( "- SpreadSheetPlugin::getTableRange() returns @arr" ) if $debug;
+    #&TWiki::Func::writeDebug( "- SpreadSheetPlugin::getTableRange() returns @arr" ) if $debug;
     return @arr;
 }
 

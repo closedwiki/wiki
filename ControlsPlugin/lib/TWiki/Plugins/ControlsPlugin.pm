@@ -363,8 +363,8 @@ sub getListOfFieldValues
     }
     my @posValues = ();
 
-    if( &TWiki::Store::topicExists( $webName, $topic ) ) {
-      my( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+    if( &TWiki::Func::topicExists( $webName, $topic ) ) {
+      my( $meta, $text ) = &TWiki::Func::readTopic( $webName, $topic );
       # Processing of SEARCHES for Lists
       $text =~ s/%SEARCH{(.*?)}%/&TWiki::handleSearchWeb($1)/geo;
       @posValues = &TWiki::Form::getPossibleFieldValues( $text );
@@ -385,7 +385,7 @@ sub getListOfFieldValues
       my $val ="<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
       my $lines = 0;
       foreach my $item ( @posValues ) {
-	my $expandedItem = &TWiki::handleCommonTags( $item, $topic );
+	my $expandedItem = &TWiki::Func::expandCommonVariables( $item, $topic );
 	$val .= "\n<td><input class=\"twikiEditFormCheckboxField\" type=\"checkbox\" name=\"$name$item\" />$expandedItem &nbsp;&nbsp;</td>";
 	if( $size > 0 && ($lines % $size == $size - 1 ) ) {
 	  $val .= "\n</tr><tr>";
@@ -398,7 +398,7 @@ sub getListOfFieldValues
       my $val = "<table  cellspacing=\"0\" cellpadding=\"0\"><tr>";
       my $lines = 0;
       foreach my $item ( @posValues ) {
-	my $expandedItem = &TWiki::handleCommonTags( $item, $topic );
+	my $expandedItem = &TWiki::Func::expandCommonVariables( $item, $topic );
 	$val .= "\n<td><input class=\"twikiEditFormRadioField twikiRadioButton\" type=\"radio\" name=\"$name\" value=\"$item\" />$expandedItem &nbsp;&nbsp;</td>";
 	if( $size > 0 && ($lines % $size == $size - 1 ) ) {
 	  $val .= "\n</tr><tr>";

@@ -54,7 +54,7 @@ sub initPlugin {
  }
 
  # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
- $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "SABLOTRONPLUGIN_EXAMPLE" ) || "default";
+ $exampleCfgVar = &TWiki::Func::getPreferencesValue( "SABLOTRONPLUGIN_EXAMPLE" ) || "default";
 
  # Get plugin debug flag
  $debug = &TWiki::Func::getPreferencesFlag( "SABLOTRONPLUGIN_DEBUG" ) || 0;

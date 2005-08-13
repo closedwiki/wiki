@@ -120,7 +120,7 @@ sub prDispPrTopicRev #format db revision (INT) to wiki rev 1.INT if internal wik
 sub prDispPrDateTime #format db datetime for wiki
 {
     my $epSecs = shift;
-    return( &TWiki::formatGmTime( $epSecs ) );  #FIXME - do something!
+    return( &TWiki::formatTime( $epSecs ) );  #FIXME - do something!
 }
 
 # ===========================
@@ -151,8 +151,8 @@ sub prTextColor #set class of body text
 sub prTestRev #test if review rev matches latest topic rev
 {
     my $prRev = shift;
-    #&TWiki::writeDebug( "PeerPlugin: page rev is $TWiki::revision" );
-    if( $prRev == $TWiki::cgiQuery->param( 'prrevinfo' ) )
+    #&TWiki::Func::writeDebug( "PeerPlugin: page rev is $TWiki::revision" );
+    if( $prRev == $TWiki::Func::getCgiQuery()->param( 'prrevinfo' ) )
     {
         return( "latest" );
     } else {
@@ -183,8 +183,8 @@ sub prLink
 # ============================
 sub prObject
 {
-    my $prTopic = $TWiki::cgiQuery->param( 'prtopic' );
-    my $prUrl = $TWiki::cgiQuery->param( 'prurl' );
+    my $prTopic = $TWiki::Func::getCgiQuery()->param( 'prtopic' );
+    my $prUrl = $TWiki::Func::getCgiQuery()->param( 'prurl' );
         
     my $opText = "";
     
@@ -192,8 +192,8 @@ sub prObject
     {
         $opText = $prUrl;
     } else {
-        my $prWeb = $TWiki::cgiQuery->param( 'prweb' );
-        my $prRevInfo = $TWiki::cgiQuery->param( 'prrevinfo' );
+        my $prWeb = $TWiki::Func::getCgiQuery()->param( 'prweb' );
+        my $prRevInfo = $TWiki::Func::getCgiQuery()->param( 'prrevinfo' );
         $opText = "[[$prUrl][$prTopic]]";
     }
     return( $opText );
@@ -210,19 +210,19 @@ sub prDoForm
 {
     my $dbh = shift;
     
-    my $prUrl = $TWiki::cgiQuery->param( 'prurl' );
-    my $prWeb = $TWiki::cgiQuery->param( 'prweb' );
-    my $prTopic = $TWiki::cgiQuery->param( 'prtopic' );    
+    my $prUrl = $TWiki::Func::getCgiQuery()->param( 'prurl' );
+    my $prWeb = $TWiki::Func::getCgiQuery()->param( 'prweb' );
+    my $prTopic = $TWiki::Func::getCgiQuery()->param( 'prtopic' );    
     
     # add new review (if form filled)
-    if( $TWiki::cgiQuery->param( 'praction' ) eq "add" )
+    if( $TWiki::Func::getCgiQuery()->param( 'praction' ) eq "add" )
     {   
         #grab params from form
-        my $fmQuality = $TWiki::cgiQuery->param( 'quality' );
-        my $fmRelevance = $TWiki::cgiQuery->param( 'relevance' ) || 0;
-        my $fmCompleteness = $TWiki::cgiQuery->param( 'completeness' ) || 0;
-        my $fmTimeliness = $TWiki::cgiQuery->param( 'timeliness' ) || 0;
-        my $fmComment = $TWiki::cgiQuery->param( 'comment' );
+        my $fmQuality = $TWiki::Func::getCgiQuery()->param( 'quality' );
+        my $fmRelevance = $TWiki::Func::getCgiQuery()->param( 'relevance' ) || 0;
+        my $fmCompleteness = $TWiki::Func::getCgiQuery()->param( 'completeness' ) || 0;
+        my $fmTimeliness = $TWiki::Func::getCgiQuery()->param( 'timeliness' ) || 0;
+        my $fmComment = $TWiki::Func::getCgiQuery()->param( 'comment' );
           
         # check access permission - FIXME if we want to manage access permission on the PeerReviewView page - need one for each web
         my $changeAccessOK = &TWiki::Access::checkAccessPermission( "CHANGE", &TWiki::userToWikiName( $user ), $_[0] , $topic, $web );
@@ -246,7 +246,7 @@ sub prDoForm
             
             push( @rvItems, $user );
             push( @rvItems, $prUrl );
-            push( @rvItems, $TWiki::cgiQuery->param( 'prrevinfo' ) || 0 );
+            push( @rvItems, $TWiki::Func::getCgiQuery()->param( 'prrevinfo' ) || 0 );
             push( @rvItems, 1 );    #FIXME - Hardwire notify for now
             push( @rvItems, $fmQuality );
             push( @rvItems, $fmRelevance );
@@ -262,7 +262,7 @@ sub prDoForm
             } else {
                 $opText .= "<P><FONT color=red>$error</FONT></P>"; 
             }
-            #&TWiki::writeDebug( "PeerPlugin: Add rvItems is @rvItems" );
+            #&TWiki::Func::writeDebug( "PeerPlugin: Add rvItems is @rvItems" );
         }
     }    
     return $opText;
@@ -277,12 +277,12 @@ sub prList
     my $prUrl  = "";
     
     # get list format from TWiki var attributes
-    my $format = TWiki::extractNameValuePair( $attributes, "format" );    
+    my $format = TWiki::Func::extractNameValuePair( $attributes, "format" );    
     if( $format eq "topicview" || $format eq "userview" )
     {
-        $prUrl = $TWiki::cgiQuery->param( 'prurl' );
+        $prUrl = $TWiki::Func::getCgiQuery()->param( 'prurl' );
     } else {
-        $prUrl = TWiki::extractNameValuePair( $attributes, "topic" );
+        $prUrl = TWiki::Func::extractNameValuePair( $attributes, "topic" );
     }
     
     if(! $prUrl )
@@ -290,11 +290,11 @@ sub prList
         return "No review list available.";
     }
     
-    my $prWeb = $TWiki::cgiQuery->param( 'prweb' );
-    my $prTopic = $TWiki::cgiQuery->param( 'prtopic' );
+    my $prWeb = $TWiki::Func::getCgiQuery()->param( 'prweb' );
+    my $prTopic = $TWiki::Func::getCgiQuery()->param( 'prtopic' );
    
     # load table template
-    my $tbTemp = &TWiki::Store::readTemplate( "peerview" );
+    my $tbTemp = &TWiki::Func::readTemplate( "peerview" );
     my $tbText = "";
     my $opText = "";
     
@@ -306,7 +306,7 @@ sub prList
        @rvList = &Review::rvList( $dbh, $format, "Reviewer" => &TWiki::wikiToUserName( $prTopic ) );
     }
     
-    #&TWiki::writeDebug( "PeerPlugin: rvList is @rvList" );  
+    #&TWiki::Func::writeDebug( "PeerPlugin: rvList is @rvList" );  
     
     #FIXME - add error handling
     foreach my $rv ( @rvList )
@@ -347,10 +347,10 @@ sub prRating
     my $rating = 0;
     
     # handle url according to normal view or review
-    if( $TWiki::cgiQuery->param( 'prurl' ) ) {
-        $prUrl = $TWiki::cgiQuery->param( 'prurl' );
+    if( $TWiki::Func::getCgiQuery()->param( 'prurl' ) ) {
+        $prUrl = $TWiki::Func::getCgiQuery()->param( 'prurl' );
     } else {
-        $prUrl = $TWiki::cgiQuery->url().$TWiki::cgiQuery->path_info();
+        $prUrl = $TWiki::Func::getCgiQuery()->url().$TWiki::Func::getCgiQuery()->path_info();
     } 
     
     # test if url internal to wiki - then extract object web & topic
@@ -429,8 +429,8 @@ sub prStats
     my $prWeb = "";
     my $prTopic = "";
     
-    my $atUrl = TWiki::extractNameValuePair( $attributes, "web" );
-    my $limit = TWiki::extractNameValuePair( $attributes, "limit" ) || 10;
+    my $atUrl = TWiki::Func::extractNameValuePair( $attributes, "web" );
+    my $limit = TWiki::Func::extractNameValuePair( $attributes, "limit" ) || 10;
     
     if( $atUrl ne "all") {
         $opText .= "Sorry - only stats for \"all\" webs supported.";
@@ -479,16 +479,16 @@ sub prStats
 # ========================
 sub prExtUrl
 {
-    return $TWiki::cgiQuery->param( 'prexturl' ) || "http://www.google.com/";
+    return $TWiki::Func::getCgiQuery()->param( 'prexturl' ) || "http://www.google.com/";
 }
 
 # ========================
 sub prInclude
 {
     my $attributes = shift;
-    my $item = TWiki::extractNameValuePair( $attributes, "prurl" );
+    my $item = TWiki::Func::extractNameValuePair( $attributes, "prurl" );
     
-    &TWiki::writeDebug( "PeerPlugin: prInclude" );
+    &TWiki::Func::writeDebug( "PeerPlugin: prInclude" );
     
     if( &prTestTopic( $item ) && $item =~ /.*\/(.*)\/(.*)/ )
     {
@@ -520,7 +520,7 @@ sub commonTagsHandler
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
     
-    #&TWiki::writeDebug( "PeerPlugin: opening DB connection" );
+    #&TWiki::Func::writeDebug( "PeerPlugin: opening DB connection" );
     # open db
     my $dbh = &Review::rvOpen();
 	
@@ -529,10 +529,10 @@ sub commonTagsHandler
     $_[0] =~ s/%PRLIST{([^}]*)}%/&prList( $dbh, $1 )/geo;
     $_[0] =~ s/%PROBJECT%/&prObject()/geo;
     $_[0] =~ s/%PRFORMURL%/&prFormUrl()/geo;
-    $_[0] =~ s/%PRURL%/$TWiki::cgiQuery->param( 'prurl' )/geo;
-    $_[0] =~ s/%PRWEB%/$TWiki::cgiQuery->param( 'prweb' )/geo;
-    $_[0] =~ s/%PRTOPIC%/$TWiki::cgiQuery->param( 'prtopic' )/geo;
-    $_[0] =~ s/%PRREVINFO%/$TWiki::cgiQuery->param( 'prrevinfo' )/geo;
+    $_[0] =~ s/%PRURL%/$TWiki::Func::getCgiQuery()->param( 'prurl' )/geo;
+    $_[0] =~ s/%PRWEB%/$TWiki::Func::getCgiQuery()->param( 'prweb' )/geo;
+    $_[0] =~ s/%PRTOPIC%/$TWiki::Func::getCgiQuery()->param( 'prtopic' )/geo;
+    $_[0] =~ s/%PRREVINFO%/$TWiki::Func::getCgiQuery()->param( 'prrevinfo' )/geo;
     $_[0] =~ s/<!--%PRRATING%-->/&prRating( $dbh )/geo;
     $_[0] =~ s/%PRSTATS{([^}]*)}%/&prStats( $dbh, $1 )/geo;
     $_[0] =~ s/%PREXTURL%/&prExtUrl()/geo;

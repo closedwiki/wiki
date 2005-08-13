@@ -229,7 +229,7 @@ sub _loadWebNotify {
     }
     # COVERAGE ON
 
-    my $topicname = $TWiki::cfg{NotifyTopicName};;
+    my $topicname = $TWiki::cfg{NotifyTopicName};
     return undef unless TWiki::Func::topicExists( $web, $topicname );
 
     my $list = {};
@@ -370,7 +370,8 @@ sub _composeActionsMail {
         $text =~ s/%CHANGES%.*?%END%//gso;
     }
 
-    $text = TWiki::Func::expandCommonVariables( $text, $TWiki::mainTopicname );
+    $text = TWiki::Func::expandCommonVariables( $text,
+                                                $TWiki::cfg{HomeTopicName} );
     $text =~ s/<img src=.*?[^>]>/[IMG]/goi;  # remove all images
     # add the url host to any in-twiki urls that lack it
     my $sup = TWiki::Func::getScriptUrlPath();

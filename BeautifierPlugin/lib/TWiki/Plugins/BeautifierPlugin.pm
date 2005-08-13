@@ -65,7 +65,7 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    # $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "BEAUTIFIERPLUGIN_DEBUG" );

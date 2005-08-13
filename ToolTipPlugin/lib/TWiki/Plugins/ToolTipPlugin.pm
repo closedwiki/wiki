@@ -45,7 +45,7 @@ sub initPlugin
     # Get plugin debug flag
     $debug = TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
 
-    $DefaultReadersFormat = &TWiki::Prefs::getPreferencesValue ("TOOLTIPPLUGIN_READERSFORMAT") || "<li> %READERNAME% : %READERDATE%";
+    $DefaultReadersFormat = &TWiki::Func::getPreferencesValue ("TOOLTIPPLUGIN_READERSFORMAT") || "<li> %READERNAME% : %READERDATE%";
 
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -299,8 +299,8 @@ sub handleToolTip
         my ( $meta, $text ) = &TWiki::Func::readTopic( $iweb, $itopic );
         $text =~ s/.*?%STARTINCLUDE%//os;
         $text =~ s/%STOPINCLUDE%.*//os;
-        $theText = &TWiki::handleCommonTags($text, $itopic);
-        $theText = &TWiki::getRenderedVersion( $theText );
+        $theText = &TWiki::Func::expandCommonVariables($text, $itopic, $iweb);
+        $theText = &TWiki::Func::renderText( $theText );
         $theText =~ s/\'//g;
         $theText =~ s/\"//g;
         $theText =~ s/\n//g;

@@ -43,7 +43,7 @@ sub initPlugin
 sub linkToInclude	  # instead of handling %INCLUDE, return link to it
 {
     my( $theAttributes, $format ) = @_;
-    my $incfile = &TWiki::extractNameValuePair( $theAttributes );
+    my $incfile = &TWiki::Func::extractNameValuePair( $theAttributes );
     my $linktext = " &bull;&nbsp;[[$incfile]]";	# tbd: get default from pref
 
     if ( $format )	{
@@ -63,9 +63,9 @@ sub linkToInclude	  # instead of handling %INCLUDE, return link to it
 sub handleIncludeIndex	  # clone of TWiki::handleIncludeFile
 {
     my( $theAttributes, $theWeb ) = @_;
-    my $incfile = &TWiki::extractNameValuePair( $theAttributes );
-    my $headers = &TWiki::extractNameValuePair( $theAttributes, "headers" );
-    my $format = &TWiki::extractNameValuePair( $theAttributes, "format" );
+    my $incfile = &TWiki::Func::extractNameValuePair( $theAttributes );
+    my $headers = &TWiki::Func::extractNameValuePair( $theAttributes, "headers" );
+    my $format = &TWiki::Func::extractNameValuePair( $theAttributes, "format" );
 
     $headers = 4	unless $headers =~ /^[0-6]$/;
     # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
@@ -91,7 +91,7 @@ sub handleIncludeIndex	  # clone of TWiki::handleIncludeFile
     # set include web/filenames and current web/filenames
     {
 
-        ( $meta, $text ) = &TWiki::Store::readTopic( $theWeb, $theTopic );
+        ( $meta, $text ) = &TWiki::Func::readTopic( $theWeb, $theTopic );
         # remove everything before %STARTINCLUDE% and after %STOPINCLUDE%
         $text =~ s/.*?%STARTINCLUDE%//os;
         $text =~ s/%STOPINCLUDE%.*//os;

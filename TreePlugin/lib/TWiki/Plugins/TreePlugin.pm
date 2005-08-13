@@ -36,7 +36,7 @@ use vars qw(
         %FormatMap %TreeTopics $RootLabel $cgi $CurrUrl
     );
 
-$VERSION = '0.310';
+$VERSION = '0.311';
 
 $RootLabel = "_"; # what we use to label the root of a tree if not a topic
 $cgi = &TWiki::Func::getCgiQuery();
@@ -56,7 +56,7 @@ sub initPlugin
     &TWiki::Func::writeDebug( "installWeb: $installWeb" );
     
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "TreePlugin_EXAMPLE" ) || "default";
+    # $exampleCfgVar = &TWiki::Func::getPreferencesValue( "TreePlugin_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "TreePlugin_DEBUG" );
@@ -284,84 +284,83 @@ sub installWeb {
     return $installWeb;
 }
 
-sub handleCreateChildInput {
-	my ($args, $web) = @_;
-
-	my ($addtext, $meta, $text);
-
-	if( TWiki::Func::topicExists( $web, "AddUnder" ) ) {
-			( $meta, $addtext ) = &TWiki::Func::readTopic( $web, "AddUnder" );
-	}
-
-	# need to reread to get the meta of this topic
-	( $meta, $text ) = &TWiki::Func::readTopic( $web, $topic );
-
-	# change meta according to new attributes (reuse $meta for object props)
-	if ($args) {
-		$meta = setMetaFromAttr($meta, $args);
-	}
-
-	# put in fields data (if this is going to be a form)
-
-	my $formfields;
-
-	# so: is new topic to have a form? if so, put in new fields
-	my %form = $meta->findOne( "FORM" );
-	if( %form ) {
-		my $name = $form{"name"};
-		$formfields = &TWiki::Form::getFieldParams($meta);
-		my $forminput = "<input type=\"hidden\" name=\"formtemplate\" value=\"$name\" />";
-		$addtext =~ s/%FORMINPUT%/$forminput/e;
-	} else {
-		$addtext =~ s/%FORMINPUT%//g;
-	}
-
-	$addtext =~ s/%ADDFORM%/$formfields/g;
-
-	return $addtext;
-}
-
-
-# changes the passed meta, to the given fields value of the given args
-
-sub setMetaFromAttr {
-	my ($meta, $args) = @_; 
-
-	# no matter what, no inherited values in child's form
-	if (&TWiki::extractNameValuePair($args, "resetform")){
-		$meta->remove ("FIELD");
-		return $meta;
-	}
-
-	# get this form name
-	my %form = $meta->findOne( "FORM" );
-	my $name = $form{"name"} if ( %form ) || "";
-
-	# get new form name, if any
-	my $newform = TWiki::extractNameValuePair($args, "form");
-
-	# if newform & different, just set new form name (& delete all fields)
-	if ($newform && $newform ne $name) {
-		$meta->put( "FORM", ( "name" => $newform) );
-		$meta->remove ("FIELD");
-	}
-
-	my $fields = TWiki::extractNameValuePair($args, "fields");
-
-	# put in new fields into $meta
-
-	# hash of fields
-	my %f = map { split( /=/, $_ ) }
-		grep { /[^\=]*\=[^\=]*$/ }
-		split (/\s*,\s*/, $fields) ;
-
-	foreach (keys %f) {
-		my @a = ( "name" =>  $_, "value" => $f{$_} );
-		$meta->put( "FIELD", @a );
-	}
-
-	return $meta;
-}
-
+#sub handleCreateChildInput {
+#	my ($args, $web) = @_;
+#
+#	my ($addtext, $meta, $text);
+#
+#	if( TWiki::Func::topicExists( $web, "AddUnder" ) ) {
+#			( $meta, $addtext ) = &TWiki::Func::readTopic( $web, "AddUnder" );
+#	}
+#
+#	# need to reread to get the meta of this topic
+#	( $meta, $text ) = &TWiki::Func::readTopic( $web, $topic );
+#
+#	# change meta according to new attributes (reuse $meta for object props)
+#	if ($args) {
+#		$meta = setMetaFromAttr($meta, $args);
+#	}
+#
+#	# put in fields data (if this is going to be a form)
+#
+#	my $formfields;
+#
+#	# so: is new topic to have a form? if so, put in new fields
+#	my %form = $meta->findOne( "FORM" );
+#	if( %form ) {
+#		my $name = $form{"name"};
+#		$formfields = &TWiki::Form::getFieldParams($meta);
+#		my $forminput = "<input type=\"hidden\" name=\"formtemplate\" value=\"$name\" />";
+#		$addtext =~ s/%FORMINPUT%/$forminput/e;
+#	} else {
+#		$addtext =~ s/%FORMINPUT%//g;
+#	}
+#
+#	$addtext =~ s/%ADDFORM%/$formfields/g;
+#
+#	return $addtext;
+#}
+#
+#
+## changes the passed meta, to the given fields value of the given args
+#
+#sub setMetaFromAttr {
+#	my ($meta, $args) = @_; 
+#
+#	# no matter what, no inherited values in child's form
+#	if (&TWiki::Func::extractNameValuePair($args, "resetform")){
+#		$meta->remove ("FIELD");
+#		return $meta;
+#	}
+#
+#	# get this form name
+#	my %form = $meta->findOne( "FORM" );
+#	my $name = $form{"name"} if ( %form ) || "";
+#
+#	# get new form name, if any
+#	my $newform = TWiki::Func::extractNameValuePair($args, "form");
+#
+#	# if newform & different, just set new form name (& delete all fields)
+#	if ($newform && $newform ne $name) {
+#		$meta->put( "FORM", ( "name" => $newform) );
+#		$meta->remove ("FIELD");
+#	}
+#
+#	my $fields = TWiki::Func::extractNameValuePair($args, "fields");
+#
+#	# put in new fields into $meta
+#
+#	# hash of fields
+#	my %f = map { split( /=/, $_ ) }
+#		grep { /[^\=]*\=[^\=]*$/ }
+#		split (/\s*,\s*/, $fields) ;
+#
+#	foreach (keys %f) {
+#		my @a = ( "name" =>  $_, "value" => $f{$_} );
+#		$meta->put( "FIELD", @a );
+#	}
+#
+#	return $meta;
+#}
 
 1;

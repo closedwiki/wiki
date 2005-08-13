@@ -56,15 +56,17 @@ sub handlePageStats
 { 
     my ( $attributes ) = @_;
 
-    my $topic = &TWiki::extractNameValuePair( $attributes, "" ) || scalar &TWiki::extractNameValuePair( $attributes, "topic" ) || $TWiki::topicName;
-    my $web = scalar &TWiki::extractNameValuePair( $attributes, "web" ) || $TWiki::webName;
+    my $topic = &TWiki::Func::extractNameValuePair( $attributes, "" ) ||
+      scalar &TWiki::Func::extractNameValuePair( $attributes, "topic" ) ||
+        $TWiki::topicName;
+    my $web = scalar &TWiki::Func::extractNameValuePair( $attributes, "web" ) || $TWiki::webName;
 
 #    my ( $meta, $page ) = &TWiki::Func::readTopic( $web, $topic );
 #    my @text = $meta->find( 'FILEATTACHMENT' );
 
     my @pagestats = `grep $web\\.$topic $TWiki::dataDir/log*.txt | grep -E \\(view\\|save\\)`;
 
-    my $maxEntries = scalar &TWiki::extractNameValuePair( $attributes, "max" ) || scalar @pagestats;
+    my $maxEntries = scalar &TWiki::Func::extractNameValuePair( $attributes, "max" ) || scalar @pagestats;
     $maxEntries = scalar @pagestats if $maxEntries > scalar @pagestats;
 
 #    &TWiki::Func::writeDebug( "dataDir=[$TWiki::dataDir]" ) if $debug;

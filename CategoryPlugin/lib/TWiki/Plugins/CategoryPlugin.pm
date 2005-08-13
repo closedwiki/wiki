@@ -62,16 +62,16 @@ sub initPlugin
         return 0;
     }
 
-    $categoryTemplate= &TWiki::Prefs::getPreferencesValue( "CATEGORY_TEMPLATE" ) || &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_CATEGORY_TEMPLATE" ) || "%TWIKIWEB%.CategoryTemplate";
+    $categoryTemplate= &TWiki::Func::getPreferencesValue( "CATEGORY_TEMPLATE" ) || &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_CATEGORY_TEMPLATE" ) || "%TWIKIWEB%.CategoryTemplate";
 
     # web where global categories topics are stored
-    $globalCategoriesWeb = &TWiki::Prefs::getPreferencesValue( "GLOBAL_CATEGORIES_WEB" ) || &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_GLOBAL_CATEGORIES_WEB" ) || "%TWIKIWEB%";
+    $globalCategoriesWeb = &TWiki::Func::getPreferencesValue( "GLOBAL_CATEGORIES_WEB" ) || &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_GLOBAL_CATEGORIES_WEB" ) || "%TWIKIWEB%";
 
     # CATEGORY_SEARCH
-    $categorySearch = &TWiki::Prefs::getPreferencesValue( "GLOBAL_CATEGORIES_WEB" ) || &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_GLOBAL_CATEGORIES_WEB" ) || "%SEARCH{\".*Category$\" scope=\"topic\" regex=\"on\" order=\"topic\" web=\"%CATEGORY_WEBS%\" nosearch=\"on\" nosummary=\"on\" }%";
+    $categorySearch = &TWiki::Func::getPreferencesValue( "GLOBAL_CATEGORIES_WEB" ) || &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_GLOBAL_CATEGORIES_WEB" ) || "%SEARCH{\".*Category$\" scope=\"topic\" regex=\"on\" order=\"topic\" web=\"%CATEGORY_WEBS%\" nosearch=\"on\" nosummary=\"on\" }%";
 
-    $categoryImgUrl = &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_CATEGORYIMGURL" )  || "%M%";
-    $categoryHeader = &TWiki::Prefs::getPreferencesValue( "CATEGORYPLUGIN_HEADER" )  || "[[Categories]]: |";
+    $categoryImgUrl = &TWiki::Func::getPreferencesValue( "CATEGORYPLUGIN_CATEGORYIMGURL" )  || "%M%";
+    $categoryHeader = &TWiki::Func::getPreferencesValue( "CATEGORYPLUGIN_HEADER" )  || "[[Categories]]: |";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "CATEGORYPLUGIN_DEBUG" );

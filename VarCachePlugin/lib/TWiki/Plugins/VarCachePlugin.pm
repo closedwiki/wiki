@@ -165,7 +165,7 @@ sub _handleVarCache
 {
     my ( $theWeb, $theTopic, $theArgs ) = @_;
 
-    my $query = TWiki::getCgiQuery();
+    my $query = TWiki::Func::getCgiQuery();
     my $action = "check";
     if( $query ) {
         my $tmp = $query->param( 'varcache' ) || "";

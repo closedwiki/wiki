@@ -63,7 +63,7 @@ sub beforeSaveHandler
     # the save action.
     my $text = "";
     my $meta = "";
-    ( $meta, $text ) = &TWiki::Store::readTopic( $_[2], $_[1] );
+    ( $meta, $text ) = &TWiki::Func::readTopic( $_[2], $_[1] );
     my %parent = $meta->findOne( "TOPICPARENT" );
 
     # Find topics with the list of users to notify and the
@@ -72,11 +72,11 @@ sub beforeSaveHandler
     else{ $pname = $parent{"name"}; $pweb = $_[2]; }
     my $userTopic="$pname$userListSuffix";
     my $mailTopic="$pname$mailTextSuffix";
-    my $existsUsers=&TWiki::Store::topicExists($pweb,$userTopic);
-    my $existsText=&TWiki::Store::topicExists($pweb,$mailTopic);
+    my $existsUsers=&TWiki::Func::topicExists($pweb,$userTopic);
+    my $existsText=&TWiki::Func::topicExists($pweb,$mailTopic);
     if( $existsUsers && ! $existsText ){
       $mailTopic=$mailTextSuffix;
-      $existsText=&TWiki::Store::topicExists($pweb,$mailTopic);
+      $existsText=&TWiki::Func::topicExists($pweb,$mailTopic);
       }
 
     # Send email notification to users
@@ -84,7 +84,7 @@ sub beforeSaveHandler
       my @notifylist = TWiki::getEmailNotifyList( $pweb, $userTopic );
       my $notifylist = join ', ', @notifylist;
       if( $#notifylist >= 0 ){
-        ( $meta, $text ) = &TWiki::Store::readTopic( $pweb, $mailTopic );
+        ( $meta, $text ) = &TWiki::Func::readTopic( $pweb, $mailTopic );
         my %mf=$meta->findOne("FIELD","NotifyOnChildModificationFormFrom");
         my %ms=$meta->findOne("FIELD","NotifyOnChildModificationFormSubject");
         my %mh=$meta->findOne("FIELD","NotifyOnChildModificationFormHeaders");
@@ -95,7 +95,7 @@ sub beforeSaveHandler
         if(!$head eq ""){ $mail .= "\n$head"; }
         $text = "$mail\n\n$text";
 	$text =~ s/%TOPICPARENT%/$pname/g;
-        $text = &TWiki::handleCommonTags( $text, $_[1] );
+        $theText = &TWiki::Func::expandCommonVariables($text, $_[1] );
 	&TWiki::Func::writeDebug(
           "${pluginName}::beforeSaveHandler - Sending mail notification to:".
           " $notifylist" ) if $debug;

@@ -231,7 +231,7 @@ sub beforeSaveHandler
   push( @notifyUsers, getUsersToNotify( $_[2], $_[1], 2 ) );
   #&TWiki::Func::writeDebug( "COUNT = $#notifyUsers" );
   my $subject = "Topic $_[2].$_[1] has been changed by $wikiUser.";
-  my $body = "Topic ".&TWiki::getScriptUrl( $_[2], $_[1], "view" )." has been changed by $wikiUser at " . &TWiki::formatGmTime( time() ) . " GMT";
+  my $body = "Topic ".&TWiki::Func::getScriptUrl( $_[2], $_[1], "view" )." has been changed by $wikiUser at " . &TWiki::Func::formatTime( time() ) . " GMT";
   notifyUsers( \@notifyUsers, $subject, $body );
 }
 
@@ -314,7 +314,7 @@ sub getUsersToNotify {
   #&TWiki::Func::writeDebug( "TYPE = $type" );
   foreach my $tmp ( @users ) {
     #&TWiki::Func::writeDebug( "TMP = $tmp" );
-    my $text = &TWiki::Store::readTopic( &TWiki::Func::getMainWebname(), "$tmp"."NotifyList" );
+    my $text = &TWiki::Func::readTopic( &TWiki::Func::getMainWebname(), "$tmp"."NotifyList" );
     my $test = "";
     foreach my $line ( split( /\n/, $text ) ) {
       $line =~ s/\s+$//;
@@ -472,13 +472,13 @@ sub checkUserNotifyList {
   my $tmpText;
   my $tmpMeta;
   #&TWiki::Func::writeDebug( "NTF:checkUserNotifyList: WHO = $who" );
-  if ( !&TWiki::Store::topicExists( "Main", $who."NotifyList" ) ) {
+  if ( !&TWiki::Func::topicExists( "Main", $who."NotifyList" ) ) {
     &TWiki::Func::writeDebug( "TEST1" );
-    ( $tmpMeta, $tmpText ) = &TWiki::Store::readTopic( "Main", "NotificationPluginListTemplate" );
+    ( $tmpMeta, $tmpText ) = &TWiki::Func::readTopic( "Main", "NotificationPluginListTemplate" );
     $tmpMeta->put( "TOPICPARENT", ( "name" => $who ) );
     saveUserNotifyList( $who, $tmpMeta, $tmpText );
   } else {
-    ( $tmpMeta, $tmpText ) = &TWiki::Store::readTopic( "Main", $who."NotifyList" );
+    ( $tmpMeta, $tmpText ) = &TWiki::Func::readTopic( "Main", $who."NotifyList" );
   }
   return ( $tmpMeta, $tmpText );
 }
@@ -488,11 +488,11 @@ sub saveUserNotifyList {
   #&TWiki::Func::writeDebug( "NTF:saveUserNotifyList: Saving Main.".$who."NotifyList topic..." );
   $text =~ s/   /\t/g;
   my $repRev = "repRev";
-  $repRev = "" if ( !&TWiki::Store::topicExists( "Main", $who."NotifyList" ) );
+  $repRev = "" if ( !&TWiki::Func::topicExists( "Main", $who."NotifyList" ) );
   my $error = &TWiki::Store::saveTopic( "Main", $who."NotifyList", $text, $meta, $repRev, "checked", "checked" );
   if ( $error ) {
-    my $url = &TWiki::getOopsUrl( $web, $topic, "oopssaveerr", $error );
-    &TWiki::redirect( $query, $url );
+    my $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopssaveerr", $error );
+    &TWiki::Func::redirectCgiQuery( $query, $url );
   }    
 }
 
@@ -527,11 +527,11 @@ sub showNotifyButtons {
     $winOn = "off" if ( !isItemInSection( $TWiki::wikiName, "$web", 1 ) );
     $tnOn = "off" if ( !isItemInSection( $TWiki::wikiName, "$web.$topic", 3 ) );
     $wnOn = "off" if ( !isItemInSection( $TWiki::wikiName, "$web", 4 ) );
-    $text .= "<input onClick='javascript:window.open(\"".&TWiki::getScriptUrl( $web, $topic, "changenotify" )."?popup=on\");' type='button' value='Popup'>&nbsp;" if ( $popup eq "on" );
-    $text .= "<input onClick='javascript:location.href(\"".&TWiki::getScriptUrl( $web, $topic, "changenotify" )."?what=TIN&action=$tmp{$tinOn}&$opt\");' type='button' value='TIN $tinOn' title='Topic immediate notifications! Click to set it $tmp{$tinOn}!'>&nbsp;" if ( $tin eq "on" );
-    $text .= "<input onClick='javascript:location.href(\"".&TWiki::getScriptUrl( $web, $topic, "changenotify" )."?what=WIN&action=$tmp{$winOn}&$opt\");' type='button' value='WIN $winOn' title='Web immediate notifications! Click to set it $tmp{$winOn}!'>&nbsp;" if ( $win eq "on" );
-    $text .= "<input onClick='javascript:location.href(\"".&TWiki::getScriptUrl( $web, $topic, "changenotify" )."?what=TN&action=$tmp{$tnOn}&$opt\");' type='button' value='TN $tnOn' title='Topic notifications! Click to set it $tmp{$tnOn}!'>&nbsp;" if ( $tn eq "on" );
-    $text .= "<input onClick='javascript:location.href(\"".&TWiki::getScriptUrl( $web, $topic, "changenotify" )."?what=WN&action=$tmp{$wnOn}&$opt\");' type='button' value='WN $wnOn' title='Web notifications! Click to set it $tmp{$wnOn}!'>&nbsp;" if ( $wn eq "on" );
+    $text .= "<input onClick='javascript:window.open(\"".&TWiki::Func::getScriptUrl( $web, $topic, "changenotify" )."?popup=on\");' type='button' value='Popup'>&nbsp;" if ( $popup eq "on" );
+    $text .= "<input onClick='javascript:location.href(\"".&TWiki::Func::getScriptUrl( $web, $topic, "changenotify" )."?what=TIN&action=$tmp{$tinOn}&$opt\");' type='button' value='TIN $tinOn' title='Topic immediate notifications! Click to set it $tmp{$tinOn}!'>&nbsp;" if ( $tin eq "on" );
+    $text .= "<input onClick='javascript:location.href(\"".&TWiki::Func::getScriptUrl( $web, $topic, "changenotify" )."?what=WIN&action=$tmp{$winOn}&$opt\");' type='button' value='WIN $winOn' title='Web immediate notifications! Click to set it $tmp{$winOn}!'>&nbsp;" if ( $win eq "on" );
+    $text .= "<input onClick='javascript:location.href(\"".&TWiki::Func::getScriptUrl( $web, $topic, "changenotify" )."?what=TN&action=$tmp{$tnOn}&$opt\");' type='button' value='TN $tnOn' title='Topic notifications! Click to set it $tmp{$tnOn}!'>&nbsp;" if ( $tn eq "on" );
+    $text .= "<input onClick='javascript:location.href(\"".&TWiki::Func::getScriptUrl( $web, $topic, "changenotify" )."?what=WN&action=$tmp{$wnOn}&$opt\");' type='button' value='WN $wnOn' title='Web notifications! Click to set it $tmp{$wnOn}!'>&nbsp;" if ( $wn eq "on" );
   }
   return $text;
 }

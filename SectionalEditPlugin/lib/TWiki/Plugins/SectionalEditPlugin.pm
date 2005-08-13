@@ -58,11 +58,11 @@ sub initPlugin
         return 0;
     }
 
-    $bgcolor = &TWiki::Prefs::getPreferencesValue( "SECTIONALEDITPLUGIN_BGCOLOR" ) || "silver";
+    $bgcolor = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_BGCOLOR" ) || "silver";
     $bgcolor = &TWiki::Func::expandCommonVariables($bgcolor, $topic, $web);
-    $label = &TWiki::Prefs::getPreferencesValue( "SECTIONALEDITPLUGIN_LABEL" ) || "Edit";
-    $skipskin = &TWiki::Prefs::getPreferencesValue( "SECTIONALEDITPLUGIN_SKIPSKIN" ) || "";
-    $leftjustify = &TWiki::Prefs::getPreferencesValue( "SECTIONALEDITPLUGIN_JUSTIFICATION" ) || "left";
+    $label = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_LABEL" ) || "Edit";
+    $skipskin = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_SKIPSKIN" ) || "";
+    $leftjustify = &TWiki::Func::getPreferencesValue( "SECTIONALEDITPLUGIN_JUSTIFICATION" ) || "left";
     $leftjustify = ($leftjustify =~ /left/i ? 1 : 0);
 
     # Get plugin debug flag
@@ -131,7 +131,7 @@ sub startRenderingHandler
 
     # This handler is called by getRenderedVersion just before the line loop
 
-    my $cskin = &TWiki::getSkin();
+    my $cskin = &TWiki::Func::getSkin();
     my $skipit = 0;
     foreach my $ss (split(/\s*,\s*/, $skipskin)) {
         if ($cskin eq $ss) {

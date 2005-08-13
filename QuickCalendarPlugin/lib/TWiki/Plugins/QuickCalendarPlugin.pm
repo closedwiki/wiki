@@ -386,10 +386,10 @@ sub handleCal
     $This{'displayQtr'} = $Static{'thisQtr'};
     $This{'doy'} = $Config{'doy'};
 
-    $This{'userHref'} = scalar &TWiki::extractNameValuePair( $arg1, "href" );
-    $This{'usermonth'} = scalar &TWiki::extractNameValuePair( $arg1, "month" );
-    $This{'useryear'} = scalar &TWiki::extractNameValuePair( $arg1, "year" );
-    $This{'doy'} = scalar &TWiki::extractNameValuePair( $arg1, "doy" );
+    $This{'userHref'} = scalar &TWiki::Func::extractNameValuePair( $arg1, "href" );
+    $This{'usermonth'} = scalar &TWiki::Func::extractNameValuePair( $arg1, "month" );
+    $This{'useryear'} = scalar &TWiki::Func::extractNameValuePair( $arg1, "year" );
+    $This{'doy'} = scalar &TWiki::Func::extractNameValuePair( $arg1, "doy" );
 
     if ($Config{'anchor'} && !$This{'userHref'}) {
         # anchor mode forces calendar to link within current topic

@@ -94,7 +94,7 @@ sub logSizes {
 
 
 sub diskusage {
-    my $web = TWiki::extractNameValuePair( @_, "web" );
+    my $web = TWiki::Func::extractNameValuePair( @_, "web" );
     $web =~ s/\W//go;
     TWiki::Func::writeDebug( "- ${pluginName}::diskusage($web)" ) if $debug;
 

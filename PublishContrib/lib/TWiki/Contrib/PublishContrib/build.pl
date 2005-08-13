@@ -25,18 +25,18 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Declare our build package
-{ package PublishAddOnBuild;
+{ package PublishContribBuild;
 
-  @PublishAddOnBuild::ISA = ( "TWiki::Contrib::Build" );
+  @PublishContribBuild::ISA = ( "TWiki::Contrib::Build" );
 
   sub new {
     my $class = shift;
-    return bless( $class->SUPER::new( "PublishAddOn", "Publish" ), $class );
+    return bless( $class->SUPER::new( "PublishContrib", "Publish" ), $class );
   }
 }
 
 # Create the build object
-$build = new PublishAddOnBuild();
+$build = new PublishContribBuild();
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});

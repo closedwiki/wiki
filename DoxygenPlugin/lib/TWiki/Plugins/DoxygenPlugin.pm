@@ -43,7 +43,7 @@ sub initPlugin
         return 0;
     }
 
-    $project = &TWiki::Prefs::getPreferencesValue( "DOXYGENPLUGIN_PROJECT" );
+    $project = &TWiki::Func::getPreferencesValue( "DOXYGENPLUGIN_PROJECT" );
 
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::DoxygenPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -80,11 +80,11 @@ sub handleDoxygen
     my ( $name, $alt ) = ( $1, $3 );
     $alt ||= $name;
 
-    my $thisProject = scalar &TWiki::extractNameValuePair( $attributes, "project" ) || $project;
+    my $thisProject = scalar &TWiki::Func::extractNameValuePair( $attributes, "project" ) || $project;
 
     # allow a trailing slash so that the location is a valid url in the plugin's settings (sometimes you have to include the trailing / on url's)
-    ( $doxygen_docs_base = &TWiki::Prefs::getPreferencesValue( uc "DOXYGENPLUGIN_DOCS_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
-    ( $doxygen_url_base = &TWiki::Prefs::getPreferencesValue( uc "DOXYGENPLUGIN_URL_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
+    ( $doxygen_docs_base = &TWiki::Func::getPreferencesValue( uc "DOXYGENPLUGIN_DOCS_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
+    ( $doxygen_url_base = &TWiki::Func::getPreferencesValue( uc "DOXYGENPLUGIN_URL_BASE_$thisProject" ) . '/' ) =~ s|//$|/|;
 
     &TWiki::Func::writeDebug( "project=[$thisProject]\ndocs_base=[$doxygen_docs_base] url_base=[$doxygen_url_base]\nname=[$name] alt=[$alt]\nattributes=[$attributes]" ) if $debug;
 

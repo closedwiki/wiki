@@ -47,7 +47,7 @@ sub initPlugin
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "NAVBARPLUGIN_EXAMPLE" ) || "default";
+    $exampleCfgVar = &TWiki::Func::getPreferencesValue( "NAVBARPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "NAVBARPLUGIN_DEBUG" );

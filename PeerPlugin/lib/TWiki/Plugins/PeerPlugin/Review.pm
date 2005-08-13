@@ -65,7 +65,7 @@ sub rvAdd {
 	$sqlstatement .= "'$params[8]',";
 	$sqlstatement .= "NOW());";
 
-	&TWiki::writeDebug( "Review db add: sql is $sqlstatement" );
+	&TWiki::Func::writeDebug( "Review db add: sql is $sqlstatement" );
 
 	my $sth = $dbh->prepare($sqlstatement);
 	$sth->execute || die "Could not execute SQL statement ... maybe invalid?";
@@ -84,7 +84,7 @@ sub rvStats {
 	my @topicList = ();
 	my @rvResult = ();
 	
-	#&TWiki::writeDebug( "Review stats: start" );
+	#&TWiki::Func::writeDebug( "Review stats: start" );
 
 	#####do count
 	if( $type eq 'count' ) {
@@ -265,8 +265,8 @@ sub rvRating {
 	
 	&makeTempOut( $dbh, $itemType, $where );
 
-	#&TWiki::writeDebug( "Review rating: start" );
-	#&TWiki::writeDebug( "Review rating: sql is $sqlstatement" );
+	#&TWiki::Func::writeDebug( "Review rating: start" );
+	#&TWiki::Func::writeDebug( "Review rating: sql is $sqlstatement" );
 
 	#get sorted output
 	$sqlstatement=qq{
@@ -316,7 +316,7 @@ sub rvList {
 		
 	while( @row=$sth->fetchrow_array )
 	{	
-		#&TWiki::writeDebug( "Review inner loop: row is @row\n" );
+		#&TWiki::Func::writeDebug( "Review inner loop: row is @row\n" );
 		
 		#initialize review object
 		my $review = {};
@@ -333,7 +333,7 @@ sub rvList {
 		bless ( $review );			#FIXME - add 2nd param to specify class - or inheritance not supported
 		push( @list, $review );    
 	}
-	#&TWiki::writeDebug( "Review topicview: list is @list\n" );
+	#&TWiki::Func::writeDebug( "Review topicview: list is @list\n" );
 	
 	$sqlstatement=qq{
 	DROP TABLE $tempOutTable
@@ -358,8 +358,8 @@ sub makeTempOut {
 	my @itemList = ();
 	my $item = "";
 
-#&TWiki::writeDebug( "Review: makeTempOut: itemType is $itemType\n" );
-#&TWiki::writeDebug( "Review: makeTempOut: where is $where\n" );
+#&TWiki::Func::writeDebug( "Review: makeTempOut: itemType is $itemType\n" );
+#&TWiki::Func::writeDebug( "Review: makeTempOut: where is $where\n" );
 
 	#lock table
 	$sqlstatement=qq{
@@ -385,7 +385,7 @@ sub makeTempOut {
 		push( @itemList, $row[0] );
 	}
 
-	#&TWiki::writeDebug( "Review: $itemType is @itemList\n" );
+	#&TWiki::Func::writeDebug( "Review: $itemType is @itemList\n" );
 	
 	#create output table
 	$sqlstatement=qq{
@@ -554,13 +554,13 @@ sub makeWhere {
 				$error = "Error: incorrect value type (int)";
 			}
 		}
-		#&TWiki::writeDebug( "Review: makeWhere: key is $key\n" );
-		#&TWiki::writeDebug( "Review: makeWhere: format is $format\n" );
-		#&TWiki::writeDebug( "Review: makeWhere: value is $value\n" );
+		#&TWiki::Func::writeDebug( "Review: makeWhere: key is $key\n" );
+		#&TWiki::Func::writeDebug( "Review: makeWhere: format is $format\n" );
+		#&TWiki::Func::writeDebug( "Review: makeWhere: value is $value\n" );
 	}
 	
-	#&TWiki::writeDebug( "Review: makeWhere: where is $where\n" );
-	#&TWiki::writeDebug( "Review: makeWhere: error is $error\n" );
+	#&TWiki::Func::writeDebug( "Review: makeWhere: where is $where\n" );
+	#&TWiki::Func::writeDebug( "Review: makeWhere: error is $error\n" );
 	
 	return ( $where, $error );
 }

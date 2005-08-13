@@ -97,8 +97,8 @@ sub fetch {
 # ========================
 sub link {
     my ( $theAttributes ) = @_;
-    my $pmid = &TWiki::extractNameValuePair($theAttributes, "pmid");
-    my $link = &TWiki::extractNameValuePair($theAttributes, "name");
+    my $pmid = &TWiki::Func::extractNameValuePair($theAttributes, "pmid");
+    my $link = &TWiki::Func::extractNameValuePair($theAttributes, "name");
     $pmid = $_[0] if $pmid eq '';
     return '' if $pmid eq '';
     $link = $pmid if $link eq '';

@@ -291,9 +291,9 @@ sub DISABLE_setSessionValueHandler
 sub _getTodaysVisitors
 {
     my( $theAttributes ) = @_;
-    my $theHeader = TWiki::extractNameValuePair( $theAttributes, "header" ) || "";
-    my $theFormat = TWiki::extractNameValuePair( $theAttributes, "format" ) || "\$user";
-    my $theFooter = TWiki::extractNameValuePair( $theAttributes, "footer" ) || "";
+    my $theHeader = TWiki::Func::extractNameValuePair( $theAttributes, "header" ) || "";
+    my $theFormat = TWiki::Func::extractNameValuePair( $theAttributes, "format" ) || "\$user";
+    my $theFooter = TWiki::Func::extractNameValuePair( $theAttributes, "footer" ) || "";
 
     my $text = "";
     my @visitorList = ();

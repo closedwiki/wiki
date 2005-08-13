@@ -45,7 +45,7 @@ sub initPlugin
 
     # Get plugin color settings
     %color =
-      map { $_->[0] => &TWiki::Prefs::getPreferencesValue( $_->[1] ) }
+      map { $_->[0] => &TWiki::Func::getPreferencesValue( $_->[1] ) }
 	( [ TABLE_HEAD   => "\U$pluginName\E_TABLE_HEAD_COLOR" ],
 	  [ REVERSE_LINE => "\U$pluginName\E_REVERSE_LINE_COLOR" ],
 	);
@@ -53,7 +53,7 @@ sub initPlugin
     # Get plugin messages (so you can internationalize and customize
     # them at will )
     %i18nMessage =
-      map { $_->[0] => &TWiki::Prefs::getPreferencesValue( $_->[1] ) }
+      map { $_->[0] => &TWiki::Func::getPreferencesValue( $_->[1] ) }
 	( [ DB_CONNECT_ERROR => "\U$pluginName\E_MSG_DB_CONNECT_ERROR" ],
 	  [ DB_CLOSE_ERROR   => "\U$pluginName\E_MSG_DB_CLOSE_ERROR" ],
 	  [ DB_PREPARE_ERROR => "\U$pluginName\E_MSG_DB_PREPARE_ERROR" ],
@@ -66,7 +66,7 @@ sub initPlugin
 
     # Get plugin database meta-data
     %db =
-      map { $_->[0] => &TWiki::Prefs::getPreferencesValue( $_->[1] ) }
+      map { $_->[0] => &TWiki::Func::getPreferencesValue( $_->[1] ) }
 	( [ driver   => "\U$pluginName\E_DB_DRIVER" ],
 	  [ host     => "\U$pluginName\E_DB_SERVER" ],
 	  [ port     => "\U$pluginName\E_DB_SERVER_PORT" ],
@@ -128,8 +128,8 @@ sub display{
   my $result = eval { $sth->fetchall_arrayref( {} ); };
   return $i18nMessage{DB_FETCH_ERROR}. ": $@." if $@;
 
-  my $trash_icon = &TWiki::Func::expandCommonVariables( &TWiki::Prefs::getPreferencesValue( "\U$pluginName\E_TRASH_CAN_ICON_LINK" ), $topic, $web );
-  my $pencil_icon = &TWiki::Func::expandCommonVariables( &TWiki::Prefs::getPreferencesValue( "\U$pluginName\E_PENCIL_ICON_LINK" ), $topic, $web );
+  my $trash_icon = &TWiki::Func::expandCommonVariables( &TWiki::Func::getPreferencesValue( "\U$pluginName\E_TRASH_CAN_ICON_LINK" ), $topic, $web );
+  my $pencil_icon = &TWiki::Func::expandCommonVariables( &TWiki::Func::getPreferencesValue( "\U$pluginName\E_PENCIL_ICON_LINK" ), $topic, $web );
 
   # Build Message Board Table and return it.
   return

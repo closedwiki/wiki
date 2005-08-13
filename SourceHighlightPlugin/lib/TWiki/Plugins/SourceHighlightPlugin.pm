@@ -60,7 +60,7 @@ sub initPlugin {
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    # $exampleCfgVar = &TWiki::Prefs::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
+    # $exampleCfgVar = &TWiki::Func::getPreferencesValue( "EMPTYPLUGIN_EXAMPLE" ) || "default";
 
     # Get plugin debug flag
 
@@ -70,7 +70,7 @@ sub initPlugin {
     # This should be set to something like
     # /usr/local/bin/source-highlight or source-highlight-cgi
 
-    my $bin = TWiki::Prefs::getPreferencesValue( "${key}_BINARY" );
+    my $bin = TWiki::Func::getPreferencesValue( "${key}_BINARY" );
     unless ( $bin and $bin =~ /source\-highlight(\-cgi)?$/ and -x $bin ) {
         TWiki::Func::writeWarning( "Invalid source-highlight binary [$bin]" );
         return 0;
@@ -78,14 +78,14 @@ sub initPlugin {
 
     # It's okay if this is empty, just means that there's no default
 
-    $DEFAULT_LANG = TWiki::Prefs::getPreferencesValue( "${key}_DEFAULTLANGUAGE" );
+    $DEFAULT_LANG = TWiki::Func::getPreferencesValue( "${key}_DEFAULTLANGUAGE" );
 
     # It's okay if these two are empty since we have a reasonable
     # default defined
 
-    my $spacing   = TWiki::Prefs::getPreferencesValue( "${key}_SPACE" )
+    my $spacing   = TWiki::Func::getPreferencesValue( "${key}_SPACE" )
                     || $DEFAULT_SPACE;
-    $FORMAT_CLASS = TWiki::Prefs::getPreferencesValue( "${key}_FORMATCLASS" )
+    $FORMAT_CLASS = TWiki::Func::getPreferencesValue( "${key}_FORMATCLASS" )
                     || $DEFAULT_FORMAT_CLASS;
 
     $COMMAND = "$bin -f html -t $spacing -s %s";

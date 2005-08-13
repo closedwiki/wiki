@@ -94,7 +94,7 @@ sub compare {
     # get and process templates
 
     my $skin = $query->param( "skin" );
-    $skin = &TWiki::Prefs::getPreferencesValue( "SKIN" ) unless ( $skin );
+    $skin = &TWiki::Func::getPreferencesValue( "SKIN" ) unless ( $skin );
     my $tmpl = TWiki::Func::readTemplate
 	       ($interweave ? 'interweave' : 'compare',$skin);
 

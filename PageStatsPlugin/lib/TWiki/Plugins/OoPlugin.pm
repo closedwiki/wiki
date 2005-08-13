@@ -86,13 +86,13 @@ sub _name
 sub getPreferencesValue
 {
     my ( $self, $var ) = @_;
-    return &TWiki::Prefs::getPreferencesValue( "\U$self->{name}PLUGIN_$var" );
+    return &TWiki::Func::getPreferencesValue( "\U$self->{name}PLUGIN_$var" );
 }
 
 sub getPreferencesFlag
 {
     my ( $self, $var ) = @_;
-    return &TWiki::Prefs::getPreferencesFlag( "\U$self->{name}PLUGIN_$var" );
+    return &TWiki::Func::getPreferencesFlag( "\U$self->{name}PLUGIN_$var" );
 }
 
 sub writeDebug
