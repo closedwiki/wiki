@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 %META:TOPICPARENT{name="TWikiVariables"}%
 __Note:__ This topic is included by TWikiVariables
 
@@ -230,8 +228,8 @@ will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included
 	  | =type="topicmoved"= | What sort of search is required? <br /> ="topicmoved"= if search for a topic that may have been moved <br /> ="parent"= if searching for topics that have a specific parent i.e. its children <br /> ="field"= if searching for topics that have a particular form field value (use the =name= and =value= parameters to specify which field to search) | required |
 	  | =web="%<nop>WEB%"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. | current web |
 	  | =topic="%<nop>TOPIC%"= | The topic the search relates to, for =topicmoved= and =parent= searches | current topic |
-	  | =name= | form field to search, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). |
-	  | =value= | form field value, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). |
+	  | =name= | form field to search, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
+	  | =value= | form field value, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
 	  | =title="Title"= | Text that is prefixed to any search results | empty |
 	  | =default="none"= | Default text shown if no search hit | empty |
 	* Example: =%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="This topic used to exist and was moved to: "}%=

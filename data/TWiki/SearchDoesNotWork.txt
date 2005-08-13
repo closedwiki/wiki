@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---++ FAQ:
 
 I've problems with the <nop>WebSearch</nop>. There is no Search Result on any inquiry. By clicking the Index topic it's the same problem.

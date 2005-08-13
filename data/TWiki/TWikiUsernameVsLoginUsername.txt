@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---## TWiki Username vs. Login Username
 
 This section applies only if your TWiki is installed on a server that is both *authenticated* and on an *intranet*.

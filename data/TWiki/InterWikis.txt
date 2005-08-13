@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---++ <nop>Inter-Wiki Link Rules (or Links to other Sites)
 
 This topic lists all aliases needed to map Inter-Site links to external wikis/sites.

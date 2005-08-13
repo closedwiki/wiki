@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 %SEARCH{".*" web="%INCLUDINGWEB%" regex="on" nosearch="on" order="modified" limit="50"}%
 
 	* See [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?search=%5C.*&amp;scope=topic&amp;order=modified&amp;reverse=on&amp;regex=on&amp;nosearch=on&amp;limit=100][100]], [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?search=%5C.*&amp;scope=topic&amp;order=modified&amp;reverse=on&amp;regex=on&amp;nosearch=on&amp;limit=200][200]], [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?search=%5C.*&amp;scope=topic&amp;order=modified&amp;reverse=on&amp;regex=on&amp;nosearch=on&amp;limit=400][400]], [[%SCRIPTURL%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?search=%5C.*&amp;scope=topic&amp;order=modified&amp;reverse=on&amp;regex=on&amp;nosearch=on&amp;limit=800][800]] most recent changes

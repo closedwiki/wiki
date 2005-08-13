@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 To edit pages on this TWikiSite, you must have a registered user name and password. 
 
 	* %H% *NOTE:* You can also login anonymously as user *TWikiGuest* with password *guest*. 

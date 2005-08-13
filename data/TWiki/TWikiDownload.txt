@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---++ FAQ:
 
 I would like to install TWiki on my server. Can I get the source?

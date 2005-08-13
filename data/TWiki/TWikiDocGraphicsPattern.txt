@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 3920 $"}%
-
 ---+ Skins and icons with PatternSkin
 
 Graphics from this topic are used when in %TWIKIWEB%.TWikiPreferences, variable ==ICONTOPIC== is set to the current topic.

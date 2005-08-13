@@ -1,5 +1,4 @@
 ---+ TWiki CGI Scripts
-
 TWiki uses a set of scripts in the =bin= directory. This topic describes the interfaces to some of those scripts.
 
 All the scripts can be called from the CGI environment or from the command-line.

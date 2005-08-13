@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 %TOC{depth="4"}%
 %STARTINCLUDE%
 ---# TWiki Text Formatting

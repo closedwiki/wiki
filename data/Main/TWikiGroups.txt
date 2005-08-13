@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-
-
 These groups can be used to define fine grained %TWIKIWEB%.TWikiAccessControl in <nop>%WIKITOOLNAME%:
 
 %SEARCH{"GROUP" topic="*Group" casesensitive="on" nosummary="on" nosearch="on" noheader="on" nototal="on" format="	* $topic$n		* <font size=\"-1\">Members: $pattern(.*	\* Set GROUP =([^\n]*).*)</font>"}%

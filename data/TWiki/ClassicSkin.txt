@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---+ Classic Skin
 
 The classic TWiki skin is a bare bone and functional skin, supporting any browser, and has a minimum of graphics

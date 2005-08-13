@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 To upgrade an earlier TWiki version like =01 Sep 1999= to version =01 May 2000= you should do the following things:
 
 	* Back up your system.

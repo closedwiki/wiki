@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 __Note:__ This feature has been replaced by: TWikiForms
 
 __Related Topics:__ AdminDocumentationCategory

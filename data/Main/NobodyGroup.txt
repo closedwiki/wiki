@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-
-
 *Nobody Group*
 
 	* Set GROUP = 

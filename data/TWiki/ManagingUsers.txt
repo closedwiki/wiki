@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
 TODO: is this made redundant by the re-write of TWikiUserAuthentication?
 
 

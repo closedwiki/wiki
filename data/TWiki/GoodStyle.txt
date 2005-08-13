@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---+ <nop>GoodStyle Collaboration Tips
 
 	* TWiki has a very simple *[[TWikiShorthand][text formatting shorthand]]*. In any case, you won't go wrong if you simply:

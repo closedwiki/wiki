@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
 ---++ Time Interval Strings
 
 Some features of TWiki, such as searches, permit the specification of _time intervals_. A time interval is a period of time, such as "1337 to 1451" (the Hundred Years War) or "9th February 2005 to 26th March 2005" (the Christian season of Lent).

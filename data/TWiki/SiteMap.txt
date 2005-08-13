@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---+ <nop>%WIKITOOLNAME% Site Map
 %STARTINCLUDE%
 <table width="100%" border="0" cellspacing="2" bgcolor="#000000" cellpadding="3">

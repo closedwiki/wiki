@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiGuest" date="1123211354" format="1.1" version="1.2"}%
-
-
 A guest of this TWiki web, not unlike yourself. You can leave your trace behind you, just add your name in %TWIKIWEB%.TWikiRegistration and create your own page.
 
 __Personal Preferences (details in %TWIKIWEB%.TWikiVariables)__

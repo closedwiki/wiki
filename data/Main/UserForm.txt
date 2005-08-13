@@ -1,9 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
-
-
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | 
-| FirstName | text | 40 | | |
-| LastName | text | 40 | | |
+| <nop>FirstName | text | 40 | | |
+| <nop>LastName | text | 40 | | |
 | Organization | text | 40 | | |
 | Email | text | 40 | | |
 | Profession | text | 40 | | |
@@ -16,6 +14,5 @@
 | <nop>YahooMessenger | text | 40 | | |
 | <nop>MsnMessenger | text | 40 | | |
 
-   * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 

@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---## TWiki Upgrade Notes for Version 01 May 2000
 
 If you are coming from a version earlier than the 01 May 2000 production release, please see TWikiUpgradeTo01May2000 first. For the latest version read TWikiUpgradeGuide.

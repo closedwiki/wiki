@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---++ How to Find out What's New?
 
 There are three ways to find out what's new in each TWiki web:

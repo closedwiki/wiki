@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 | *Name* | *Type* | *Size* | *Values* | *Tooltip message* | 
 | FirstName | text | 40 | | |
 | LastName | text | 40 | | |

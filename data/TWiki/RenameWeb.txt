@@ -1,4 +1,3 @@
-
    * *Rename or move this web:*
       * *<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%INCLUDINGWEB%/%INCLUDINGTOPIC%?action=renameweb" rel='nofollow'>Rename/move web...</a>*,
         looking for references in _all public webs_. Delete a web by moving it to a Trash web. &nbsp;

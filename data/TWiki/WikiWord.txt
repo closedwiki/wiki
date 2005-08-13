@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 A <nop>WikiWord consists of two or more words with initial capitals, run together.
 
 When you type a <nop>WikiWord, you establish a hyperlink. It's as easy as that.

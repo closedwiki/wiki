@@ -1,9 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
-<!--
----+ Webs
--->
 	* *Webs*
 %WEBLIST{" $webindent<span style=\"background-color: %$markerVAR{\"WEBBGCOLOR\" web=$qname}$marker%\">&nbsp;&nbsp;</span>  <b><a href=\"%SCRIPTURL%/view%SCRIPTSUFFIX%/$name/%HOMETOPIC%\">$indentedname</a></b><br/>"}%
 

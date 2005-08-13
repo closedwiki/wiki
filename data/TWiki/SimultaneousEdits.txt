@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---++ FAQ:
 
 What happens if two of us try to edit the same topic simultaneously?

@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---+!! TWiki Admin Cook Book
 
 This page has many tips and tricks, particularly useful when you're installing TWiki for the first time. This guide is most useful *%RED%before%ENDCOLOR%* or immediately following a TWiki installation! 

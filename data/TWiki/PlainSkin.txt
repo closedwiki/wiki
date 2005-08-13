@@ -1,6 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
 ---+ Plain Skin
 
 The plain skin can be used to get the rendered topic text without any page decoration.
