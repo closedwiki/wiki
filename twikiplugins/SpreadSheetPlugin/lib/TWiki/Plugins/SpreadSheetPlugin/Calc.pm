@@ -22,7 +22,6 @@
 # performance reasons, so it doesn't get compiled until it
 # is actually used.
 
-
 package TWiki::Plugins::SpreadSheetPlugin::Calc;
 
 use strict;
@@ -84,8 +83,8 @@ sub CALC
     foreach( split( /\n/, $_[0] ) ) {
 
         # change state:
-        m|<pre\b|i       && ( $insidePRE = 1 );
-        m|<verbatim\b|i  && ( $insidePRE = 1 );
+        m|<pre>|i       && ( $insidePRE = 1 );
+        m|<verbatim>|i  && ( $insidePRE = 1 );
         m|</pre>|i      && ( $insidePRE = 0 );
         m|</verbatim>|i && ( $insidePRE = 0 );
 
@@ -170,7 +169,7 @@ sub doFunc
     $theAttr = "" unless( defined $theAttr );
     TWiki::Func::writeDebug( "- SpreadSheetPlugin::Calc::doFunc: $theFunc( $theAttr ) start" ) if $debug;
 
-    unless( $theFunc =~ /^(IF|LISTIF|LISTMAP)$/ ) {
+    unless( $theFunc =~ /^(IF|LISTIF|LISTMAP|NOEXEC)$/ ) {
         # Handle functions recursively
         $theAttr =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
         # Clean up unbalanced mess
@@ -182,6 +181,18 @@ sub doFunc
     my $result = "";
     my $i = 0;
     if( $theFunc eq "MAIN" ) {
+        $result = $theAttr;
+
+    } elsif( $theFunc eq "EXEC" ) {
+        # add nesting level escapes
+        my $level = 0;
+        $result = $theAttr;
+        $result =~ s/([\(\)])/addNestingLevel($1, \$level)/geo;
+        # execute functions in attribute recursively and clean up unbalanced parenthesis
+        $result =~ s/\$([A-Z]+)$escToken([0-9]+)\((.*?)$escToken\2\)/&doFunc($1,$3)/geo;
+        $result =~ s/$escToken\-*[0-9]+([\(\)])/$1/go;
+
+    } elsif( $theFunc eq "NOEXEC" ) {
         $result = $theAttr;
 
     } elsif( $theFunc eq "T" ) {
@@ -634,7 +645,7 @@ sub doFunc
             if( $string && eval "\$string =~ tr/$from/$to/" ) {
                 $result = $string;
             }
-       }
+        }
 
     } elsif ( $theFunc eq "TIME" ) {
        $result = $theAttr;
