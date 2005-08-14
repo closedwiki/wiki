@@ -330,7 +330,7 @@ sub handleControls
 {
     my( $theWeb, $theTopic, $theArgs ) = @_;
 
-    my %params = TWiki::extractParameters( $theArgs );
+    my %params = TWiki::Func::extractParameters( $theArgs );
 
     my $name   = $params{"_DEFAULT"} || $params{"name"} || "";
     my $web    = $params{"web"}   || $theWeb;
