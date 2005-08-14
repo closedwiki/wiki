@@ -69,7 +69,7 @@ sub new {
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
-    %{$this->{VARS}} = ();
+    $this->{VARS} = { sep => ' | ' };
 
     return $this;
 }
@@ -86,7 +86,7 @@ sub haveTemplate {
     my ( $this, $template ) = @_;
     ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
-    return exists( $this->{VARS}{ $template } );
+    return exists( $this->{VARS}->{$template} );
 }
 
 # Expand only simple templates that can be expanded statically.
@@ -99,24 +99,19 @@ sub _expandTrivialTemplate {
     my $attrs = new TWiki::Attrs( $1 );
     # Can't expand context-dependant templates
     return $text if ( $attrs->{context} );
-    return $this->_tmplP( $attrs );
+    return $this->tmplP( $attrs );
 }
 
 =pod
 
----++ ObjectMethod expandTemplate( $params  ) -> $string
+---++ ObjectMethod expandTemplate( $params ) -> $string
 
-Expand the template named in the parameter after recursive expansion
-of any TMPL:P tags it contains. Note that all other template tags
-will have been expanded at template load time.
+Expand the template specified in the parameter string using =tmplP=.
 
-SMELL: does not support template parameters
-
-Note that it would be trivial to add template parameters to this,
-simply by iterating over the other parameters (other than __default__)
-and doing a subs in the template for that parameter value. This
-would add considerably to the power of templates. There is already code
-to do this in the MacrosPlugin.
+Examples:
+<verbatim>
+$tmpls->expandTemplate('"blah");
+$tmpls->expandTemplate('context="view" then="sigh" else="humph"');
 
 =cut
 
@@ -125,37 +120,51 @@ sub expandTemplate {
     ASSERT($this->isa( 'TWiki::Templates')) if DEBUG;
 
     my $attrs = new TWiki::Attrs( $params );
-    my $value = $this->_tmplP( $attrs );
+    my $value = $this->tmplP( $attrs );
     return $value;
 }
 
-# Return value: expanded text of the named template, as found from looking
-# in the register of template definitions.
-# If $var is the name of a previously defined template, returns the text of
-# that template after recursive expansion of any TMPL:P tags it contains.
-sub _tmplP {
+=pod
+
+---+ ObjectMethod tmplP( $attrs ) -> $string
+
+Return value expanded text of the template, as found from looking
+in the register of template definitions. The attrs can contain a template
+name in _DEFAULT, and / or =context=, =then= and =else= values.
+
+Recursively expands any contained TMPL:P tags.
+
+Note that it would be trivial to add template parameters to this,
+simply by iterating over the other parameters (other than _DEFAULT, context,
+then and else) and doing a s/// in the template for that parameter value. This
+would add considerably to the power of templates. There is already code
+to do this in the MacrosPlugin.
+
+=cut
+
+sub tmplP {
     my( $this, $params ) = @_;
 
-    my $template = $params->{_DEFAULT};
-
-    if( $params->{context} ) {
-        $template = $params->{then} || $params->{_DEFAULT};
-        foreach my $id ( split( /, */, $params->{context} )) {
+    my $template = $params->remove('_DEFAULT') || '';
+    my $context = $params->remove('context');
+    my $then = $params->remove('then');
+    my $else = $params->remove('else');
+    if( $context ) {
+        $template = $then if defined( $then );
+        foreach my $id ( split( /, */, $context )) {
             unless( $this->{session}->{context}->{$id} ) {
-                $template = $params->{else} || '';
+                $template = ( $else || '' );
                 last;
             }
         }
     }
 
+    return '' unless $template;
+
     my $val = '';
-    if( exists($this->{VARS}{ $template } )) {
-        $val = $this->{VARS}{ $template };
+    if( exists($this->{VARS}->{$template} )) {
+        $val = $this->{VARS}->{$template};
         $val =~ s/%TMPL\:P{(.*?)}%/$this->expandTemplate($1)/geo;
-    }
-    if( ( $template eq 'sep' ) && ( ! $val ) ) {
-        # set separator explicitly if not set
-        $val = " | ";
     }
     return $val;
 }
@@ -225,14 +234,14 @@ sub readTemplate {
         } elsif( ( /^DEF{[\s\"]*(.*?)[\"\s]*}%[\n\r]*(.*)/s ) && ( $1 ) ) {
             # handle %TMPL:DEF{key}%
             if( $key ) {
-                $this->{VARS}{ $key } = $val;
+                $this->{VARS}->{$key} = $val;
             }
             $key = $1;
             $val = $2;
 
         } elsif( /^END%[\n\r]*(.*)/s ) {
             # handle %TMPL:END%
-            $this->{VARS}{ $key } = $val;
+            $this->{VARS}->{$key} = $val;
             $key = '';
             $val = '';
             $result .= $1;

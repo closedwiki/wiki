@@ -2287,7 +2287,7 @@ sub _FORMFIELD {
 
 sub _TMPLP {
     my( $this, $params ) = @_;
-    return $this->{templates}->expandTemplate( $params );
+    return $this->{templates}->tmplP( $params );
 }
 
 sub _VAR {

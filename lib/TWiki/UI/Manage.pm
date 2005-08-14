@@ -236,8 +236,9 @@ sub rename {
     my $oldTopic = $session->{topicName};
     my $oldWeb = $session->{webName};
     my $query = $session->{cgiQuery};
+    my $action = $query->param( 'action' ) || '';
 
-    if( $query->param( 'action' ) eq 'renameweb' ) {
+    if( $action eq 'renameweb' ) {
         _renameweb( $session );
         return;
     }
@@ -277,7 +278,7 @@ sub rename {
                                         web => $oldWeb,
                                         topic => $oldTopic,
                                         def => 'rename_not_wikiword',
-                                        [ $newTopic ] );
+                                        params => [ $newTopic ] );
         }
         # Filter out dangerous characters (. and / may cause
         # issues with pathnames
