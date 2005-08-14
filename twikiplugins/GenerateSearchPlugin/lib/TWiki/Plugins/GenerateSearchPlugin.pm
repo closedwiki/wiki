@@ -112,7 +112,7 @@ sub handleGenSearch
 {
     my( $theWeb, $theTopic, $theArgs ) = @_;
 
-    my %params = TWiki::extractParameters( $theArgs );
+    my %params = TWiki::Func::extractParameters( $theArgs );
 
     my $topicregex = $params{"_DEFAULT"} || $params{"topic"} || "";
     my $webs   = $params{"web"} || $theWeb;
