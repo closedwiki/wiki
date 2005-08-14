@@ -1228,6 +1228,8 @@ sub renderMetaTags {
     my( $this, $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
+    return $text unless $text;
+
     if ( $noexpand ) {
         $text =~ s/%META{[^}]*}%//go;
         return $text;

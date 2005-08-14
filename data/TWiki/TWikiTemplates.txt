@@ -34,7 +34,14 @@ _Templates_ are plain text with embedded _template directives_ that tell TWiki h
 	* %H% Use of template directives is optional: templates work without them.
 	* %X% *NOTE:* Template directives work only for templates: they do not get processed in normal topic text.
 
-TMPL:P also supports a limited form of "if" condition, that you can use to select which of two templates to use, based on a _context identifier_:
+TMPL:P also supports simple parameters. For example, given the definition
+=%<nop>TMPL:DEF{"x"}% x%P%z%<nop>TMPL:END%= then =%<nop>TMPL:P{"x" P="y"}%= will expand to =xyz=.
+
+Note that parameters can simply be ignored; for example=%<nop>TMPL:P{"x"}%= will expand to x%<nop>P%z.
+
+Any alphanumeric characters can be used in parameter names. You are highly recommended to use parameter names that cannot be confused with TWikiVariables.
+
+Note that three parameter names, =context=, =then= and =else= are *reserved*. They are used to support a limited form of "if" condition that you can use to select which of two templates to use, based on a _context identifier_:
 <verbatim>
 %TMPL:DEF{"link_inactive"}%<input type="button" disabled value="Link>%TMPL:END%
 %TMPL:DEF{"link_active"}%<input type="button" onclick="link()" value="Link" />%TMPL:END%

@@ -164,7 +164,13 @@ sub tmplP {
     my $val = '';
     if( exists($this->{VARS}->{$template} )) {
         $val = $this->{VARS}->{$template};
-        $val =~ s/%TMPL\:P{(.*?)}%/$this->expandTemplate($1)/geo;
+        $val =~ s/%TMPL\:P{(.*?)}%/$this->expandTemplate($1)/ge;
+
+        foreach my $p ( keys %$params ) {
+            if( $p =~ /^[A-Za-z0-9]+$/ ) {
+                $val =~ s/%$p%/$this->expandTemplate($1)/ge;
+            }
+        }
     }
     return $val;
 }

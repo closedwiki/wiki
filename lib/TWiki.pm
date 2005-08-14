@@ -2155,6 +2155,8 @@ sub handleCommonTags {
     ASSERT($theWeb) if DEBUG;
     ASSERT($theTopic) if DEBUG;
 
+    return $text unless $text;
+
     # Plugin Hook (for cache Plugins only)
     $this->{plugins}->beforeCommonTagsHandler( $text, $theTopic, $theWeb );
 
