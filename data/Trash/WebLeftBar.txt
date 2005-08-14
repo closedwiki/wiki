@@ -1,11 +1,11 @@
 %META:TOPICINFO{author="ArthurClemens" date="1093167095" format="1.0" version="1.1"}%
-<div class="twikiLeftBarPersonal" style="margin-top:0;">
+<div class="patternLeftBarPersonal" style="margin-top:0;">
 <script type="text/javascript">
 <!--
-writeToggle("+","-","twikiLeftBarPersonalContent")
+writeToggle("+","-","patternLeftBarPersonalContent")
 //-->
 </script>%CALC{"$IF($EXACT(%WIKINAME%,TWikiGuest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]] <font size=\"-1\">%BR%([[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%TWIKIWEB%/LogoutAndLogin][not me?]])</font>)"}%
-<div id="twikiLeftBarPersonalContent">
+<div id="patternLeftBarPersonalContent">
 %INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create personal sidebar</a>"}%
 </div>
 </div>

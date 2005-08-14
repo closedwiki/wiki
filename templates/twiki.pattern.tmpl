@@ -1,5 +1,5 @@
 %{ Internationalisable Messages/constructs }%
-%TMPL:DEF{"sep"}%<span class="twikiSeparator">|</span>%TMPL:END%
+%TMPL:DEF{"sep"}%<span class="patternSeparator">|</span>%TMPL:END%
 %TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
  
@@ -9,7 +9,7 @@
 
 
 
-%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="Back to topic" accesskey="c" rel='nofollow'><span class="twikiAccessKey">C</span>ancel</a>%TMPL:END%
+%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="Back to topic" accesskey="c" rel='nofollow'><span class="patternAccessKey">C</span>ancel</a>%TMPL:END%
 
 
 
@@ -66,7 +66,7 @@ document.write('<\/style>');
 	.twikiToc li {
 		list-style-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/i_arrow_down.gif");
 	}	        
-	.twikiWebIndicator {
+	.patternWebIndicator {
 		background-color:%WEBBGCOLOR%;
 	}
 </style>%TMPL:END%
@@ -104,22 +104,22 @@ document.write('<\/style>');
 
 
 
-%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="twikiTopBar"><div class="twikiTopBarContents"> %INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="patternTopBar"><div class="patternTopBarContents"> %INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="twikiLeftBar"><div class="twikiWebIndicator"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a></div>
-<div class="twikiLeftBarContents">
+%TMPL:DEF{"leftbar"}%<div class="patternLeftBar"><div class="patternWebIndicator"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a></div>
+<div class="patternLeftBarContents">
 %INCLUDE{"%WEB%.WebLeftBar"}%</div></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"bottombar"}%<div class="twikiBottomBar"><div class="twikiBottomBarContents"><span class="twikiGrayText">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</span></div></div>%TMPL:END%
+%TMPL:DEF{"bottombar"}%<div class="patternBottomBar"><div class="patternBottomBarContents"><span class="twikiGrayText">%INCLUDE{"%TWIKIWEB%.WebBottomBar"}%</span></div></div>%TMPL:END%
 
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
@@ -140,19 +140,19 @@ document.write('<\/style>');
 
 
 
-%TMPL:DEF{"main"}%<div class="twikiMiddleContainer"><div class="twikiMain">
+%TMPL:DEF{"main"}%<div class="patternMiddleContainer"><div class="patternMain">
 %TMPL:P{"content"}%
 %TMPL:P{"standardfooter"}%</div></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"content"}%<div class="twikiTopic">
+%TMPL:DEF{"content"}%<div class="patternTopic">
 ---+ %TMPL:P{"heading"}%
 ---+++ <span class="twikiAlert">%TMPL:P{"webaction"}%</span>
 %BR%
 %TMPL:P{"message"}%
 </div>
-<div class="twikiTopicAction">
+<div class="patternTopicAction">
 <table>
 <tr>
 <td>%TMPL:P{"topicaction"}%</td>

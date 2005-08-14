@@ -11,21 +11,21 @@ Designed by: Crawford Currie
 ---+ Search _default
 ---++ Expected
 <!-- expected expand rex DEFAULT -->
-<div class="twikiSearchString">Searched: <b>hit me with your rhythm stick</b></div><div class="twikiSearchResultsBegin"></div>
-<div class="twikiSearchResultsHeader" style="background-color:yellow"><span class="twikiLeft">Results from TestCases web</span><span class="twikiRight">retrieved at @TIME GMT</span><br class="twikiClear" /></div><div class="twikiSearchResults">
+<div class="patternSearchString">Searched: <b>hit me with your rhythm stick</b></div><div class="patternSearchResultsBegin"></div>
+<div class="patternSearchResultsHeader" style="background-color:yellow"><span class="twikiLeft">Results from TestCases web</span><span class="twikiRight">retrieved at @TIME GMT</span><br class="twikiClear" /></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a>&nbsp;</div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText">Description: Automated search function tests. Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern ...</div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText">Description: Automated search function tests. Results dependent on templates used to render search results. Tests only make sense when this topic is viewed with "pattern ...</div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a></div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a>&nbsp;</div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
 <div class="twikiSummary twikiGrayText">This is a test fixture topic, used in TestCaseAutoSearch hit me with your rhythm stick hit me! hit me! schmerz ist gut, ich liebe dich hit me! hit me! hit me! ...</div></div></div>
-<div class="twikiSearchResultCount">Number of topics: <b>2</b></div>
+<div class="patternSearchResultCount">Number of topics: <b>2</b></div>
 <!-- /expected -->
 ---++ Actual
 <!-- actual -->
@@ -55,13 +55,13 @@ Same as last test
 ---+ Topic search with two webs specified, all summary fields disabled
 ---++ Expected
 <!-- expected expand rex TWOWEBS -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WebPreferences"><b>WebPreferences</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WebPreferences" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WebPreferences"><b>WebPreferences</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -77,13 +77,13 @@ Same as last test
 ---+ Topic search with all webs specified
 ---++ Expected
 <!-- expected expand rex ALLWEBS -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TWiki/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -99,7 +99,7 @@ Same as last test
 ---+ Text search with topic parameter
 ---++ Expected
 <!-- expected expand rex TOPICPARAMETER -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -116,7 +116,7 @@ Same as last test
 ---+ Text search with excludetopic parameter set to a topic
 ---++ Expected
 <!-- expected rex expand EXCLUDETOPICTOPIC -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -160,32 +160,32 @@ Same as last test
 ---+ Text search with multiple set
 ---++ Expected
 <!-- expected expand rex MULTIPLE -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a></div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -201,13 +201,13 @@ Same as last test
 ---+ Regex search
 ---++ Expected
 <!-- expected expand rex REGEX -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -223,13 +223,13 @@ Same as last test
 ---+ scope="all" search
 ---++ Expected
 <!-- expected expand rex SCOPEALL -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki"><b>WhatIsWikiWiki</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
 <div class="twikiRight twikiSRRev"><span class="twikiNew">NEW</span> - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/TestCases/WhatIsWikiWiki" rel='nofollow'>@DATE - @TIME</a> </div><br class="twikiClear" /></div>
 <div class="twikiBottomRow">
-<div class="twikiSummary twikiGrayText"></div></div></div><div class="twikiSearchResults">
+<div class="twikiSummary twikiGrayText"></div></div></div><div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -245,7 +245,7 @@ Same as last test
 ---+ casesensitive="on"
 ---++ Expected
 <!-- expected rex expand CASESENSITIVE -->
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a> </div>
 <div class="twikiRight twikiSRAuthor">
 <a class='twikiLink' href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%MAINWEB%/@WIKIWORD">@WIKIWORD</a></div>
@@ -260,7 +260,7 @@ Same as last test
 
 <!-- expected rex NOOPED -->
 NOOPED vars shouldn't expand in search results %DATE%
-<div class="twikiSearchResults">
+<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft">
 <a href="@REX(.*?)view@REX(.*?)/TestCases/TestCaseAutoSearch"><b>TestCaseAutoSearch</b></a></div>
 <div class="twikiRight twikiSRAuthor">

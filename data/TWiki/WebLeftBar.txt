@@ -20,8 +20,6 @@
    * TWikiSkinBrowser
    * InstalledPlugins
 
-
-
    * <b>Admin Maintenance</b>
    * AdminToolsCategory
    * InterWikis

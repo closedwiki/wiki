@@ -21,7 +21,7 @@
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiAttachPage" onload="initForm()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage patternAttachPage" onload="initForm()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
@@ -52,16 +52,16 @@
 %TMPL:P{"simpleheader"}%
 <div>
 %TMPL:P{"previousdetails"}%
-<div class="twikiVersatileTable">
+<div class="patternVersatileTable">
 <table width="100%">%TMPL:P{"previous"}% 
 	<tr>
 		<th>
 			Local file 
 		</th>
-		<td class="twikiMainCol">
+		<td class="patternMainCol">
 			<input type="hidden" name="filename" value="%FILENAME%" /><input type="file" name="filepath" value="%FILEPATH%" size="30" /> 
 		</td>
-		<td class="twikiHelpCol twikiMainCol">
+		<td class="patternHelpCol patternMainCol">
 Upload up to %ATTACHFILESIZELIMIT% KB.
 		</td>
 	</tr>
@@ -72,7 +72,7 @@ Upload up to %ATTACHFILESIZELIMIT% KB.
 		<td>
 			<input class="comment" type="text" name="filecomment" value="%FILECOMMENT%" maxlength="256" size="50" /> 
 		</td>
-		<td class="twikiHelpCol"></td>
+		<td class="patternHelpCol"></td>
 	</tr>
 	<tr>
 		<th>
@@ -81,7 +81,7 @@ Upload up to %ATTACHFILESIZELIMIT% KB.
 		<td>
 			<input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink" %ATTACHLINKBOX% /><label for="createlink">Create a link to the attached file</label>
 		</td>
-		<td class="twikiHelpCol">
+		<td class="patternHelpCol">
 Images will be displayed, for other attachments a link will be created.
 		</td>
 	</tr>
@@ -92,7 +92,7 @@ Images will be displayed, for other attachments a link will be created.
 		<td>
 			<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile" %HIDEFILE% /><label for="hidefile">Do not show attachment in table</label>
 		</td>
-		<td class="twikiHelpCol">Attachments will not be shown in topic view page.</td>
+		<td class="patternHelpCol">Attachments will not be shown in topic view page.</td>
 	</tr>
 </table>
 </div>

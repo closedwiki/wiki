@@ -66,7 +66,7 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#666;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#666; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#666666== </td>
-<td>visited link in topic text =.twikiTopic a:visited= </td>
+<td>visited link in topic text =.patternTopic a:visited= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#7A4707;"></td>
@@ -95,13 +95,13 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#fff;"></td>
 <td></td>
 <td> ==#ffffff== </td>
-<td>main page =.twikiMain= </td>
+<td>main page =.patternMain= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ddd;"></td>
 <td></td>
 <td> ==#dddddd== </td>
-<td>main page border =.twikiMain= </td>
+<td>main page border =.patternMain= </td>
 </tr>
 </table>
 
@@ -112,25 +112,25 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#800;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#800; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#880000== </td>
-<td>body text in left bar =.twikiLeftBar= </td>
+<td>body text in left bar =.patternLeftBar= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#22638C;"></td>
 <td></td>
 <td> ==#22638C== </td>
-<td>top border left bar contents =.twikiLeftBarContents= </td>
+<td>top border left bar contents =.patternLeftBarContents= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#DFEDFD;"></td>
 <td></td>
 <td> ==#DFEDFD== </td>
-<td>personal left bar background =.twikiLeftBarPersonal= </td>
+<td>personal left bar background =.patternLeftBarPersonal= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ccc;"></td>
 <td></td>
 <td> ==#cccccc== </td>
-<td>personal left bar border =.twikiLeftBarPersonal= </td>
+<td>personal left bar border =.patternLeftBarPersonal= </td>
 </tr>
 </table>
 
@@ -145,7 +145,7 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#98A2B0;"></td>
 <td></td>
 <td> ==#98A2B0== </td>
-<td>action buttons background view page =.twikiTopicAction= </td>
+<td>action buttons background view page =.patternTopicAction= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#fff;"></td>
@@ -168,7 +168,7 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#22638c;"></td>
 <td></td>
 <td> ==#22638c== </td>
-<td>action buttons background non-view page =.twikiTopicAction= </td>
+<td>action buttons background non-view page =.patternTopicAction= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#698FA8;"></td>
@@ -180,7 +180,7 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#DFEDFD;"></td>
 <td></td>
 <td> ==#DFEDFD== </td>
-<td>action buttons secondary row (top) background =.twikiTopicActionSecondary= </td>
+<td>action buttons secondary row (top) background =.patternTopicActionSecondary= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#22638c;"></td>
@@ -198,13 +198,13 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#D4E6FC;"></td>
 <td></td>
 <td> ==#D4E6FC== </td>
-<td>action buttons submit options =.twikiSubmitOptions= </td>
+<td>action buttons submit options =.patternSubmitOptions= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#B6C6D9;"></td>
 <td></td>
 <td> ==#B6C6D9== </td>
-<td>action buttons submit options border =.twikiSubmitOptions= </td>
+<td>action buttons submit options border =.patternSubmitOptions= </td>
 </tr>
 </table>
 
@@ -233,19 +233,19 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#E8F1F9;"></td>
 <td></td>
 <td> ==#E8F1F9== </td>
-<td>topic submit button =.twikiTopic .twikiSubmit= </td>
+<td>topic submit button =.patternTopic .twikiSubmit= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#B9D6FA;"></td>
 <td></td>
 <td> ==#B9D6FA== </td>
-<td>secondary submit button =.twikiTopic .twikiSubmit= </td>
+<td>secondary submit button =.patternTopic .twikiSubmit= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#eee;"></td>
 <td></td>
 <td> ==#eeeeee== </td>
-<td>cancel button =.twikiCancel= </td>
+<td>cancel button =.patternCancel= </td>
 </tr>
 </table>
 
@@ -256,43 +256,43 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#FCFAF7;"></td>
 <td></td>
 <td> ==#FCFAF7== </td>
-<td>textarea background =.twikiEditPage textarea= </td>
+<td>textarea background =.patternEditPage textarea= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#888;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#888; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#888888== </td>
-<td> =.twikiChangeFormButton= </td>
+<td> =.patternChangeFormButton= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#E0E9F7;"></td>
 <td></td>
 <td> ==#E0E9F7== </td>
-<td>edit form header background =.twikiEditPage .twikiEditForm th= </td>
+<td>edit form header background =.patternEditPage .patternEditForm th= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#F5F7FD;"></td>
 <td></td>
 <td> ==#F5F7FD== </td>
-<td>edit form row background =.twikiEditPage .twikiEditForm td= </td>
+<td>edit form row background =.patternEditPage .patternEditForm td= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#EFEDEA;"></td>
 <td></td>
 <td> ==#EFEDEA== </td>
-<td>signature area background =.twikiEditPage .twikiSig input= </td>
+<td>signature area background =.patternEditPage .patternSig input= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ccc;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#ccc; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#cccccc== </td>
-<td>help text =.twikiEditPage .twikiHelp= </td>
+<td>help text =.patternEditPage .twikiHelp= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#900;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#900; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#990000== </td>
-<td>help text code text =.twikiEditPage .twikiHelp code= </td>
+<td>help text code text =.patternEditPage .twikiHelp code= </td>
 </tr>
 </table>
 
@@ -303,37 +303,37 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#F5F7FD;"></td>
 <td style="width:30px;"></td>
 <td> ==#F5F7FD== </td>
-<td>background =.twikiVersatileTable td= </td>
+<td>background =.patternVersatileTable td= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#E0E9F7;"></td>
 <td></td>
 <td> ==#E0E9F7== </td>
-<td>background =.twikiVersatileTable th= </td>
+<td>background =.patternVersatileTable th= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#fff;"></td>
 <td></td>
 <td> ==#ffffff== </td>
-<td>background main part =.twikiVersatileTable .twikiMainCol= </td>
+<td>background main part =.patternVersatileTable .patternMainCol= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#E9E9E9;"></td>
 <td></td>
 <td> ==#E9E9E9== </td>
-<td>background =.twikiVersatileTable .twikiOldCol= </td>
+<td>background =.patternVersatileTable .patternOldCol= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#E9E9E9;"></td>
 <td></td>
 <td> ==#E9E9E9== </td>
-<td>background =.twikiVersatileTable .twikiOldCol= </td>
+<td>background =.patternVersatileTable .patternOldCol= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#8490A1;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#8490A1; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#8490A1== </td>
-<td>help text =.twikiHelpCol= </td>
+<td>help text =.patternHelpCol= </td>
 </tr>
 </table>
 
@@ -350,7 +350,7 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#000;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#000; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#000000== </td>
-<td>text color previous attachments =.twikiAttachPage .twikiPrevious .twikiAttachments table= </td>
+<td>text color previous attachments =.patternAttachPage .patternPrevious .twikiAttachments table= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ccc;"></td>
@@ -391,37 +391,37 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#FF3000;"></td>
 <td style="width:30px;"></td>
 <td> ==#FF3000== </td>
-<td>deleted header background =.twikiDiffPage .twikiDiffDeletedHeader, -twikiDiffDeletedMarker= </td>
+<td>deleted header background =.patternDiffPage .twikiDiffDeletedHeader, .twikiDiffDeletedMarker= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#FFEAE5;"></td>
 <td style="width:30px;"></td>
 <td> ==#FFEAE5== </td>
-<td>deleted header background =.twikiDiffPage .twikiDiffDeletedText= </td>
+<td>deleted header background =.patternDiffPage .twikiDiffDeletedText= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#3DB234;"></td>
 <td style="width:30px;"></td>
 <td> ==#3DB234== </td>
-<td>added header background =.twikiDiffPage .twikiDiffAddedHeader, -twikiDiffAddedMarker= </td>
+<td>added header background =.patternDiffPage .twikiDiffAddedHeader, .twikiDiffAddedMarker= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#EBF7EA;"></td>
 <td style="width:30px;"></td>
 <td> ==#EBF7EA== </td>
-<td>added header background =.twikiDiffPage .twikiDiffAddedText= </td>
+<td>added header background =.patternDiffPage .twikiDiffAddedText= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#98A2B0;"></td>
 <td style="width:30px;"></td>
 <td> ==#98A2B0== </td>
-<td>changed header and row background =.twikiDiffPage th.twikiDiffChangedHeader= </td>
+<td>changed header and row background =.patternDiffPage th.twikiDiffChangedHeader= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ddd;"></td>
 <td style="width:30px;"></td>
 <td> ==#dddddd== </td>
-<td> =.twikiDiffPage .twikiDiffLineNumberHeader= </td>
+<td> =.patternDiffPage .twikiDiffLineNumberHeader= </td>
 </tr>
 </table>
 
@@ -456,13 +456,13 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#F3EDE7;"></td>
 <td></td>
 <td> ==#F3EDE7== </td>
-<td>background search results header =.twikiSearchResultsHeader, .twikiSearchString= </td>
+<td>background search results header =.patternSearchResultsHeader, .patternSearchString= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ccc;"></td>
 <td></td>
 <td> ==#cccccc== </td>
-<td>bottom border search results header =.twikiSearchResultsHeader, .twikiSearchString= </td>
+<td>bottom border search results header =.patternSearchResultsHeader, .patternSearchString= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#f00;"></td>
@@ -474,19 +474,19 @@ You can also change the colors in a modified version of =style.css=. See Pattern
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#900;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#900; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#990000== </td>
-<td>alert in search results =.twikiSearchResults .twikiSummary .twikiAlert= </td>
+<td>alert in search results =.patternSearchResults .twikiSummary .twikiAlert= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#22638c;"></td>
 <td></td>
 <td> ==#22638c== </td>
-<td>search results in book view, top row background =.twikiBookViewList .twikiTopRow= </td>
+<td>search results in book view, top row background =.patternBookViewList .twikiTopRow= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ccc;"></td>
 <td style="width:30px; height:30px; border:1px solid #ddd; background-color:#ccc; background-image:url(%ATTACHURLPATH%/textmask.gif);"></td>
 <td> ==#cccccc== </td>
-<td>search results in book view, top row =.twikiBookViewList .twikiTopRow= </td>
+<td>search results in book view, top row =.patternBookViewList .twikiTopRow= </td>
 </tr>
 <tr>
 <td style="width:30px; height:30px; border:1px solid #fff; background-color:#ff0;"></td>

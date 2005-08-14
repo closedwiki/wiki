@@ -11,7 +11,7 @@
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiChangeFormPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage patternChangeFormPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
@@ -23,10 +23,10 @@
 <form name="main" action="%EDITURL%" method="post">
 ---++ Choose a new form template
 
-<div class="twikiVersatileTable">
+<div class="patternVersatileTable">
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<th class="twikiMainCol">
+<th class="patternMainCol">
 *Possible form templates*
 </th>
 <th>
@@ -34,7 +34,7 @@
 </th>
 </tr>
 <tr>
-<td class="twikiMainCol">
+<td class="patternMainCol">
 %FORMLIST%
 </td>
 <td>
@@ -49,12 +49,12 @@
 <input type="hidden" name="topicparent" value="%URLPARAM{"topicparent"}%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
 <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
-<div class="twikiTopicAction">
+<div class="patternTopicAction">
 <table>
 <tr>
-<td class="twikiCancelCol"><input type="button" class="twikiSubmit" name="backbutton" value="Back" onclick="history.go(-1)" /></td>
-<td class="twikiSubmitCol">%TMPL:P{"topicaction"}%</td>
-<td class="twikiAddCol"></td>
+<td class="patternCancelCol"><input type="button" class="twikiSubmit" name="backbutton" value="Back" onclick="history.go(-1)" /></td>
+<td class="patternSubmitCol">%TMPL:P{"topicaction"}%</td>
+<td class="patternAddCol"></td>
 </tr></table></div></form>%TMPL:END%
 
 

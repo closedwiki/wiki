@@ -46,7 +46,7 @@ function initForm() {
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage" onload="initForm()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage" onload="initForm()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 %TMPL:DEF{"titleaction"}%(set preferences) %TMPL:END%
 
@@ -59,17 +59,17 @@ function initForm() {
 ---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
 
 
-%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
+%TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
 <tr>
-<td class="twikiCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Update" /></td>
-<td class="twikiAddCol"></td>
+<td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Update" /></td>
+<td class="patternAddCol"></td>
 </tr></table>
 %TMPL:END%
 
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form method="post" name="saveSettings" action="%SCRIPTURLPATH%/manage/%WEB%/%TOPIC%">
+%TMPL:P{"simpleheader"}%<div class="patternFormHolder"><form method="post" name="saveSettings" action="%SCRIPTURLPATH%/manage/%WEB%/%TOPIC%">
 
 <div class="twikiEditTextarea">
 <input type="hidden" name="action" value="saveSettings" />

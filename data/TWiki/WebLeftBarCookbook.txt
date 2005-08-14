@@ -16,9 +16,9 @@ Each link is an item in a bullet list. So it can look like this:
 
 The list is formatted with CSS, and the bullets themselves are not displayed, and also indents are flattened. To get an idea of the actual look, see the list above formatted as in the left bar (you need to have PatternSkin set to on):
 
-<div class="twikiLeftBar" style="position:relative; top:0; left:0;">
-<div class="twikiLeftBarContents">
-<div class="twikiLeftBarPersonal">
+<div class="patternLeftBar" style="position:relative; top:0; left:0;">
+<div class="patternLeftBarContents">
+<div class="patternLeftBarPersonal">
 	* *My links*
 		* WebHome
 		* WebIndex

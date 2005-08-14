@@ -11,15 +11,15 @@
 
 
 %TMPL:DEF{"inactive_edit"}%<strike>Edit text</strike>%TMPL:END%
-%TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
-%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit text%TMPL:END%
+%TMPL:DEF{"create_topic"}%Cr<span class="patternAccessKey">e</span>ate%TMPL:END%
+%TMPL:DEF{"edit_topic"}%<span class="patternAccessKey">E</span>dit text%TMPL:END%
 %TMPL:DEF{"active_edit"}%<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=text&t=%GMTIME{$hour$min$sec}%" title="Edit topic text" accesskey="e" rel='nofollow'> %TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:END%
 
 %TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">Start of topic | <a href="#Actions">Skip to actions</a><hr /></div>
 %TMPL:P{"form"}%
-<div class="twikiTopic">%TEXT%<br class="twikiClear" />
+<div class="patternTopic">%TEXT%<br class="twikiClear" />
 #TopicEnd
-<span class="twikiRight twikiPageNav twikiGrayText"><a href="#PageTop" title="Jump to start of topic" accesskey="t">to&nbsp;<span class="twikiAccessKey">t</span>op</a></span><br class="twikiClear" />
+<span class="twikiRight patternPageNav twikiGrayText"><a href="#PageTop" title="Jump to start of topic" accesskey="t">to&nbsp;<span class="patternAccessKey">t</span>op</a></span><br class="twikiClear" />
 </div><div class="twikiHidden"><hr />End of topic<br /><a href="#Actions">Skip to action links</a> | <a href="#PageTop">Back to top</a><hr /></div>
 %TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%

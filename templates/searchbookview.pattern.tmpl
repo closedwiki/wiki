@@ -2,17 +2,17 @@
 
 
 
-%TMPL:DEF{"content"}%<div class="twikiBookViewList">%SPLIT%
-<div class="twikiSearchString">Searched: <b><nop>%SEARCHSTRING%</b></div>
+%TMPL:DEF{"content"}%<div class="patternBookViewList">%SPLIT%
+<div class="patternSearchString">Searched: <b><nop>%SEARCHSTRING%</b></div>
 %TMPL:P{"searchbody"}%%SPLIT%%TMPL:P{"standardfooter"}%</div>%TMPL:END%
 
 
 
 %TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%
-%SPLIT%<div class="twikiSearchResultCount">Number of topics: <b>%NTOPICS%</b></div>%TMPL:END%
+%SPLIT%<div class="patternSearchResultCount">Number of topics: <b>%NTOPICS%</b></div>%TMPL:END%
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%<div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Results from <nop>%WEB% web</div>%REPEAT%<div class="twikiSearchResults">
+%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%">Results from <nop>%WEB% web</div>%REPEAT%<div class="patternSearchResults">
 <div class="twikiTopRow"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a> (<a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION% - %AUTHOR%)</div>
 <div class="twikiBottomRow">%TEXTHEAD%</div></div>%REPEAT%%TMPL:END%

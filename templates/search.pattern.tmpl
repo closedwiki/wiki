@@ -11,11 +11,11 @@
 
 
 
-%TMPL:DEF{"bodystart"}%<body class="twikiSearchResultsPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+%TMPL:DEF{"bodystart"}%<body class="patternSearchResultsPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%<div class="twikiSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">Results from <nop>%WEB% web</span><span class="twikiRight">retrieved at %DISPLAYTIME{"$hour:$min"}% GMT</span><br class="twikiClear" /></div>%REPEAT%<div class="twikiSearchResults">
+%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">Results from <nop>%WEB% web</span><span class="twikiRight">retrieved at %DISPLAYTIME{"$hour:$min"}% GMT</span><br class="twikiClear" /></div>%REPEAT%<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft">
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></div>
 <div class="twikiRight twikiSRAuthor">
@@ -29,22 +29,22 @@
 
 
 %TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%%SPLIT%
-<div class="twikiSearchResultCount">Number of topics: <b>%NTOPICS%</b></div>%TMPL:END%
+<div class="patternSearchResultCount">Number of topics: <b>%NTOPICS%</b></div>%TMPL:END%
 
 
 
 %TMPL:DEF{"content"}%
-%SPLIT%<div class="twikiSearchString">Searched: <b><nop>%SEARCHSTRING%</b></div><div class="twikiSearchResultsBegin"></div>
+%SPLIT%<div class="patternSearchString">Searched: <b><nop>%SEARCHSTRING%</b></div><div class="patternSearchResultsBegin"></div>
 %TMPL:P{"searchbody"}%%SPLIT%%TMPL:P{"standardfooter"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"standardfooter"}%
-<div class="twikiTopicFooter"></div>
+<div class="patternTopicFooter"></div>
 #PageBottom %TMPL:END%
 
 
 
-%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="twikiMiddleContainer">%TMPL:P{"leftbar"}%<div class="twikiMain">
+%TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="patternMiddleContainer">%TMPL:P{"leftbar"}%<div class="patternMain">
 %TMPL:P{"content"}%
 </div></div>%TMPL:P{"bottombar"}%%TMPL:END%

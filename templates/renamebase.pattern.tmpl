@@ -28,7 +28,7 @@
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiRenamePage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage patternRenamePage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
@@ -41,35 +41,35 @@
 %TMPL:DEF{"content"}%
 <form method="post" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 %TMPL:P{"simpleheader"}%
-<div class="twikiVersatileTable">
+<div class="patternVersatileTable">
 <table>
 <tr>
 <th>Change from:</th>
-<td class="twikiOldCol"><b><nop>%WEB%.%TOPIC%</b></td>
-<td class="twikiOldCol twikiHelpCol"></td>
+<td class="patternOldCol"><b><nop>%WEB%.%TOPIC%</b></td>
+<td class="patternOldCol patternHelpCol"></td>
 </tr>
 <tr>
 <th>To web:</th>
-<td class="twikiMainCol">%TMPL:P{"newweb"}%</td>
-<td class="twikiMainCol twikiHelpCol">%TMPL:P{"movewebhelp"}%</td>
+<td class="patternMainCol">%TMPL:P{"newweb"}%</td>
+<td class="patternMainCol patternHelpCol">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr>
 <th>Topic name:</th>
-<td class="twikiMainCol">%TMPL:P{"newtopic"}%</td>
-<td class="twikiMainCol twikiHelpCol">%TMPL:P{"namehelp"}%</td>
+<td class="patternMainCol">%TMPL:P{"newtopic"}%</td>
+<td class="patternMainCol patternHelpCol">%TMPL:P{"namehelp"}%</td>
 </tr>
 <tr>
 <th></th>
-<td class="twikiMainCol">%TMPL:P{"allownonwikiword"}%</td>
-<td class="twikiMainCol twikiHelpCol"></td>
+<td class="patternMainCol">%TMPL:P{"allownonwikiword"}%</td>
+<td class="patternMainCol patternHelpCol"></td>
 </tr>
 </table>
 </div>
 
-<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to %TOPIC% in the <nop>%WEB% Web:</div>%LOCAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">Change links in topics that refer to %TOPIC% in the <nop>%WEB% Web:</div>%LOCAL_SEARCH%</div>
 
-<div class="twikiSearchResults"><div class="twikiSearchResultsHeader">Change links in topics that refer to [[%WEB%.%TOPIC%]] in any Web:</div>%GLOBAL_SEARCH%</div>
-<div class="twikiTopicActionSecondary">
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">Change links in topics that refer to [[%WEB%.%TOPIC%]] in any Web:</div>%GLOBAL_SEARCH%</div>
+<div class="patternTopicActionSecondary">
 <table>
 <tr>
 <td><input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" /><input type="button" class="twikiButton" value="Clear all" onclick="checkAll(false);" /> checkboxes of referenced topics</td>

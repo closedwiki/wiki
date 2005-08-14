@@ -17,7 +17,7 @@
 
 %TMPL:DEF{"previousdetails"}%
 ---++ Update file <span class="twikiTitle">%FILENAME%</span>
-<div class="twikiPrevious"><div class="twikiAttachments">
+<div class="patternPrevious"><div class="twikiAttachments">
 <!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
 %ATTACHTABLE%</div></div> %TMPL:END%
 
@@ -25,11 +25,11 @@
 
 %TMPL:DEF{"previous"}%
   <tr>
-  <th class="twikiOldCol">Previous upload</th>
-  <td class="twikiOldCol">
+  <th class="patternOldCol">Previous upload</th>
+  <td class="patternOldCol">
    <code>%FILEPATH%</code> <span class="twikiGrayText">%TMPL:P{"fileuser"}%</span>
   </td>
-  <td class="twikiHelpCol twikiOldCol">Select a new local file to update this attachment.</td>
+  <td class="patternHelpCol patternOldCol">Select a new local file to update this attachment.</td>
  </tr>%TMPL:END%
 
 %TMPL:DEF{"extranotes"}%
@@ -44,14 +44,14 @@
 
 
 
-%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
-<tr class="twikiTopicActionSecondary">
-<td class="twikiCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>Move&nbsp;attachment...</a></td>
+%TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
+<tr class="patternTopicActionSecondary">
+<td class="patternCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>Move&nbsp;attachment...</a></td>
 </tr>
-<tr class="twikiTopicAction">
-<td class="twikiCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
-<td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="changeproperties" value="Change properties only" /></td>
+<tr class="patternTopicAction">
+<td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
+<td class="patternAddCol"><input type="submit" class="twikiSubmit patternTertiary" name="changeproperties" value="Change properties only" /></td>
 </tr>
 </table>%TMPL:END%
 

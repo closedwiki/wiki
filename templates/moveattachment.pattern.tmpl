@@ -9,16 +9,16 @@
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiRenamePage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage patternRenamePage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="twikiTopicAction">
+%TMPL:DEF{"topicaction"}%<div class="patternTopicAction">
 <table>
 <tr>
-<td class="twikiCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value=" Move " /></td>
-<td class="twikiAddCol"></td>
+<td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value=" Move " /></td>
+<td class="patternAddCol"></td>
 </tr></table></div>%TMPL:END%
 
 
@@ -34,22 +34,22 @@
 %TMPL:DEF{"content"}%
 <form name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 ---+ Move or Delete File <code>%FILENAME%</code>
-<div class="twikiVersatileTable">
+<div class="patternVersatileTable">
 <table>
 <tr>
 <th>Change from:</th>
-<td class="twikiOldCol"><b><nop>%WEB%.%TOPIC%</b></td>
-<td class="twikiOldCol twikiHelpCol"></td>
+<td class="patternOldCol"><b><nop>%WEB%.%TOPIC%</b></td>
+<td class="patternOldCol patternHelpCol"></td>
 </tr>
 <tr>
 <th>To web:</th>
-<td class="twikiMainCol"><select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%WEB%" separator=" "}% </select></td>
-<td class="twikiMainCol twikiHelpCol">%TMPL:P{"movewebhelp"}%</td>
+<td class="patternMainCol"><select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%WEB%" separator=" "}% </select></td>
+<td class="patternMainCol patternHelpCol">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr>
 <th>Topic name:</th>
-<td class="twikiMainCol"><input name="newtopic" value="%TOPIC%" /></td>
-<td class="twikiMainCol twikiHelpCol">%TMPL:P{"namehelp"}%</td>
+<td class="patternMainCol"><input name="newtopic" value="%TOPIC%" /></td>
+<td class="patternMainCol patternHelpCol">%TMPL:P{"namehelp"}%</td>
 </tr>
 </table>
 </div>

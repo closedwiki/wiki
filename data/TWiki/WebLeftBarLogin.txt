@@ -1,13 +1,13 @@
 %META:TOPICINFO{author="TWikiContributor" date="$Rev$" format="1.1" version="1.1"}%
 %STARTINCLUDE%
-<div class="twikiLeftBarPersonal" style="margin-top:0;">
+<div class="patternLeftBarPersonal" style="margin-top:0;">
 <script type="text/javascript">
 <!--
-writeToggle("+","-","twikiLeftBarPersonalContent")
+writeToggle("+","-","patternLeftBarPersonalContent")
 //-->
 </script>
 %AUTHENTICATED{then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
-<div id="twikiLeftBarPersonalContent">
+<div id="patternLeftBarPersonalContent">
 %INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create personal sidebar</a>"}%
 </div>
 </div>

@@ -20,7 +20,7 @@ function launchWindow( theWeb, theTopic ) {
 
 %TMPL:DEF{"templatecustomstyle"}%
 <style type="text/css" media="all">
-.twikiPreviewPage .twikiMain {
+.patternPreviewPage .patternMain {
 	background-image:url(%PREVIEWBGIMAGE%);
 }
 </style>%TMPL:END%
@@ -34,7 +34,7 @@ function launchWindow( theWeb, theTopic ) {
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiPreviewPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage patternPreviewPage" onload="initPage()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
@@ -42,21 +42,21 @@ function launchWindow( theWeb, theTopic ) {
 
 
 
-%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
-<tr class="twikiTopicActionHelp twikiGrayText">
-<td colspan="3" class="twikiTopicActionHelp twikiGrayText"></td>
+%TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
+<tr class="patternTopicActionHelp twikiGrayText">
+<td colspan="3" class="patternTopicActionHelp twikiGrayText"></td>
 </tr>
-<tr class="twikiTopicActionSecondary">
-<td class="twikiCancelCol"></td>
-<td class="twikiSubmitCol"><div class="twikiSubmitOptions">
+<tr class="patternTopicActionSecondary">
+<td class="patternCancelCol"></td>
+<td class="patternSubmitCol"><div class="patternSubmitOptions">
    <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>help</a><br />
    <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">Force new revision</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" rel='nofollow'>help</a></div></td>
-<td class="twikiAddCol"></td>
+<td class="patternAddCol"></td>
 </tr>
-<tr class="twikiTopicAction">
-<td class="twikiCancelCol"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" rel='nofollow'>Discard</a></td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit" value="Save Changes" />%FORMFIELDS%</td>
-<td class="twikiAddCol"></td>
+<tr class="patternTopicAction">
+<td class="patternCancelCol"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?unlock=on" rel='nofollow'>Discard</a></td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Save Changes" />%FORMFIELDS%</td>
+<td class="patternAddCol"></td>
 </tr>
 </table>%TMPL:END%
 
@@ -72,8 +72,8 @@ function launchWindow( theWeb, theTopic ) {
   <li> To <b>cancel</b> and discard any changes: Press the [Discard] button.</li>
 </ul>
 </div>
-<div class="twikiPreviewArea">
-<div class="twikiTopic">
+<div class="patternPreviewArea">
+<div class="patternTopic">
 %TEXT%
 </div>
 %META{"form"}%

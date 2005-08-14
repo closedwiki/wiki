@@ -7,7 +7,7 @@
 ---
 	* *Webs*
 %WEBLIST{"		* [[$name.%HOMETOPIC%][$name]]" separator=""}%
-<div class="twikiLeftBarPersonal">
+<div class="patternLeftBarPersonal">
 %INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate\">Create personal sidebar</a>"}%
 </div>
 

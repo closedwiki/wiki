@@ -32,8 +32,8 @@
 	Positioning of layout blocks
 	-----------------------------------------------------------	*/
 
-.twikiMiddleContainer {}
-.twikiLeftBar {
+.patternMiddleContainer {}
+.patternLeftBar {
 	position:absolute;
 	left:0;
 	margin:0;
@@ -42,24 +42,24 @@
 
 /* setting the height of the top bar */
 
-.twikiMiddleContainer {}
-.twikiLeftBar {
+.patternMiddleContainer {}
+.patternLeftBar {
 	top:60px;
 }
-.twikiTopBar {
+.patternTopBar {
 	height:60px;
 }
 
 /* positioning the left bar (width:13em) */
 
-.twikiLeftBar,
-.twikiLeftBarContents /* needed for Explorer 5.0 */ {
+.patternLeftBar,
+.patternLeftBarContents /* needed for Explorer 5.0 */ {
 	width:13em;
 }
-.twikiMain {
+.patternMain {
 	margin-left:13em;
 }
-.twikiBottomBar {
+.patternBottomBar {
 	margin:0 0 0 13.5em; /* add small margin for content offset */
 }
 
@@ -67,37 +67,37 @@
 	Pages that are not view
 	-----------------------------------------------------------	*/
 	
-.twikiNoViewPage .twikiMain {
+.patternNoViewPage .patternMain {
 	margin-left:8em;
 	margin-right:8em;
 	/* padding in style.css */
 }
-.twikiEditPage .twikiMain {
+.patternEditPage .patternMain {
 	margin-left:6em;
 	margin-right:6em;
 }
 
 /* Print */
 
-.twikiPrintPage .twikiMain {
+.patternPrintPage .patternMain {
 	margin-left:0;
 	margin-right:0;
 	padding:0 0 0 2em;
 	border-width:1px;
 	border-color:#ddd #fff #ddd #ddd;
 }
-.twikiPrintPage .twikiBottomBar {
+.patternPrintPage .patternBottomBar {
 	margin-left:1em;
 	margin-right:0;
 	padding:0;
 }
-.twikiPrintPage .twikiBottomBarContents {
+.patternPrintPage .patternBottomBarContents {
 	padding-left:1em;
 }
 
 /* Plain */
 
-.twikiPlainPage .twikiMain {
+.patternPlainPage .patternMain {
 	margin-left:0px;
 	margin-right:0px;
 	/* padding in style.css */

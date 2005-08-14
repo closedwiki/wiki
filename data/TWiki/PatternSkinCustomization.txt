@@ -64,13 +64,13 @@ If you have a low screen resolution of say, 640 by 480 pixels, it can be useful 
 Add this to layout.css:
 <!-- /* -->
 <verbatim>
-.twikiMain {
+.patternMain {
 	margin-left:0px;
 }
-.twikiLeftBar {
+.patternLeftBar {
 	margin-left:100%;
 }
-.twikiBottomBar {
+.patternBottomBar {
 	margin-left:1em;
 	margin-right:0;
 	padding:0;
@@ -80,11 +80,11 @@ Add this to layout.css:
 Add this to style.css:
 <!-- /* -->
 <verbatim>
-.twikiMain {
+.patternMain {
 	padding-left:1em;
 	padding-right:1em;
 }
-.twikiBottomBarContents {
+.patternBottomBarContents {
 	padding-left:0em;
 }
 </verbatim>
@@ -103,9 +103,9 @@ The bottom bar contains the copyright disclaimer, but may contain other informat
 
 ---++ Customizing the logo
 
-The top bar is 60 pixels high, and has a padding of 5 pixels on top, bottom and left, so the logo should be 50 pixels high. If your logo image has a different size, you can either alter the padding in =style.css= (.twikiTopBarContents) or change the top bar height in =layout.css= (look for the comment _setting the height of the top bar_).
+The top bar is 60 pixels high, and has a padding of 5 pixels on top, bottom and left, so the logo should be 50 pixels high. If your logo image has a different size, you can either alter the padding in =style.css= (.patternTopBarContents) or change the top bar height in =layout.css= (look for the comment _setting the height of the top bar_).
 
-You can also choose to set a background image for the top bar. In =style.css=, add this to .twikiTopBar:
+You can also choose to set a background image for the top bar. In =style.css=, add this to .patternTopBar:
 <verbatim>
 	background-position:top left;
 	background-attachment:fixed;
@@ -135,10 +135,10 @@ textarea {
 input, select {
 	font-family:verdana,arial,sans-serif;
 }
-.twikiSeparator {
+.patternSeparator {
 	font-family:Arial,sans-serif;
 }
-.twikiEditPage .twikiSig input {
+.patternEditPage .patternSig input {
 	font-family:monospace;
 }
 </verbatim>
@@ -175,51 +175,51 @@ To create a customised palette of colors, see PatternSkinPalette.
 
 ---+++ Tables in topic text
 
-If you have TablePlugin installed, tables in topics take on the properties from =TABLEATTRIBUTES=. Without TablePlugin (if not installed, or disabled in TWikiPreferences under =DISABLEDPLUGINS=), the tables have a default appearance that is hardcoded in Render.pm. Styles of topic text tables are not set in a style sheet. If you want to have control over the design of tables, for instance if you work with a style guide, you should add table styles under =.twikiTopic=. See for an example below.
+If you have TablePlugin installed, tables in topics take on the properties from =TABLEATTRIBUTES=. Without TablePlugin (if not installed, or disabled in TWikiPreferences under =DISABLEDPLUGINS=), the tables have a default appearance that is hardcoded in Render.pm. Styles of topic text tables are not set in a style sheet. If you want to have control over the design of tables, for instance if you work with a style guide, you should add table styles under =.patternTopic=. See for an example below.
 
 ---++++ Topic text table example
 
-This is an example css to give tables in topic text a similar appearance. This will override settings in TablePlugin. This code should be added below the other =.twikiTopic= code in style.css:
+This is an example css to give tables in topic text a similar appearance. This will override settings in TablePlugin. This code should be added below the other =.patternTopic= code in style.css:
 <!-- /* -->
 <verbatim>
-.twikiTopic table {
+.patternTopic table {
 	border-collapse:collapse;
 	padding:0px;
 	border-spacing:0px;
 	empty-cells:show;
 	border:0px;
 }
-.twikiTopic table th {
+.patternTopic table th {
 	background-color:#ccc;
 	padding:0.5em 1em;
 }
-.twikiTopic table td {
+.patternTopic table td {
 	border:1px solid #eee;
 }
 /* override hardcoded font color */
-.twikiTopic table font {
+.patternTopic table font {
 	color:#1e5bbd;
 }
-.twikiTopic table th a:link,
-.twikiTopic table th a:visited {
+.patternTopic table th a:link,
+.patternTopic table th a:visited {
 	color:#1e5bbd;
 	text-decoration:none;
 }
 /* don't show hover background color because we have a table header background */
-.twikiTopic table th a:hover {
+.patternTopic table th a:hover {
 	background-color:transparent;
 	text-decoration:underline;
 	border-width:1px;
 }
 /* no underline if a sort indicator (line) is displayed */
-.twikiTopic table th.twikiSortedDescendingCol a:hover,
-.twikiTopic table th.twikiSortedAscendingCol a:hover {
+.patternTopic table th.twikiSortedDescendingCol a:hover,
+.patternTopic table th.twikiSortedAscendingCol a:hover {
 	text-decoration:none;
 }
 /* hide sort icons */
-.twikiTopic table th img,
-.twikiTopic table th a:link img,
-.twikiTopic table th a:visited img {
+.patternTopic table th img,
+.patternTopic table th a:link img,
+.patternTopic table th a:visited img {
 	display:none;
 }
 </verbatim>
@@ -237,7 +237,7 @@ The appearance of the form table and the attachment table are set in style.css u
 
 ---+++ Other templates
 
-Other templates than =view= use the style =.twikiVersatileTable= for, as the name says, tables with versatile functions. Versatile tables appear a little diffent in each template page (differences are created using multiple classes). Versatile tables are mostly used to format forms to highlight important parts and to dim less important parts. See =style.css= for specific settings for each template.
+Other templates than =view= use the style =.patternVersatileTable= for, as the name says, tables with versatile functions. Versatile tables appear a little diffent in each template page (differences are created using multiple classes). Versatile tables are mostly used to format forms to highlight important parts and to dim less important parts. See =style.css= for specific settings for each template.
 
 __Related Topics:__ TWikiSkins, AdminDocumentationCategory
 

@@ -64,7 +64,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="twikiNoViewPage twikiEditPage" onload="initForm()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage patternEditPage" onload="initForm()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
 
 
 
@@ -86,20 +86,20 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 
-%TMPL:DEF{"topicaction"}%<table class="twikiTopicAction">
-<tr class="twikiTopicActionHelp twikiGrayText">
-<td colspan="3" class="twikiTopicActionHelp twikiGrayText"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;" title="Read access keys help text in new window">Access keys</a>: C = Cancel, K = Checkpoint, Q = Save quietly, S = Save, P = Preview</td>
+%TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
+<tr class="patternTopicActionHelp twikiGrayText">
+<td colspan="3" class="patternTopicActionHelp twikiGrayText"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;" title="Read access keys help text in new window">Access keys</a>: C = Cancel, K = Checkpoint, Q = Save quietly, S = Save, P = Preview</td>
 </tr>
-<tr class="twikiTopicActionSecondary">
-<td class="twikiCancelCol">&nbsp;</td>
-<td class="twikiSubmitCol"><div class="twikiSubmitOptions">
+<tr class="patternTopicActionSecondary">
+<td class="patternCancelCol">&nbsp;</td>
+<td class="patternSubmitCol"><div class="patternSubmitOptions">
 <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">Force new revision</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" title="Read new revision help text in new window" rel='nofollow'>help</a></div></td>
-<td class="twikiAddCol">&nbsp;</td>
+<td class="patternAddCol">&nbsp;</td>
 </tr>
-<tr class="twikiTopicAction">
-<td class="twikiCancelCol"><a id="cancel" href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=cancel" title="Cancel editing" accesskey="c" rel='nofollow'><span class="twikiAccessKey">C</span>ancel</a></a></td>
-<td class="twikiSubmitCol"><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="checkpoint" value="Checkpoint" title="Save and immediately resume editing"  /><label accesskey="k" for="checkpoint"></label><input type="submit" class="twikiSubmit twikiSecondary" name="action" id="quietsave" value="Save quietly" title="Save changes, don't notify" /><label accesskey="q" for="quietsave"></label><input type="submit" class="twikiSubmit" name="action" id="save" value="Save" title="Save topic" /><label accesskey="s" for="save"></label></td>
-<td class="twikiAddCol"><input type="submit" class="twikiSubmit twikiTertiary" name="action" id="preview" value="Preview" title="Preview topic" /><label accesskey="p" for="preview"></label></td>
+<tr class="patternTopicAction">
+<td class="patternCancelCol"><a id="cancel" href="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=cancel" title="Cancel editing" accesskey="c" rel='nofollow'><span class="patternAccessKey">C</span>ancel</a></a></td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit patternSecondary" name="action" id="checkpoint" value="Checkpoint" title="Save and immediately resume editing"  /><label accesskey="k" for="checkpoint"></label><input type="submit" class="twikiSubmit patternSecondary" name="action" id="quietsave" value="Save quietly" title="Save changes, don't notify" /><label accesskey="q" for="quietsave"></label><input type="submit" class="twikiSubmit" name="action" id="save" value="Save" title="Save topic" /><label accesskey="s" for="save"></label></td>
+<td class="patternAddCol"><input type="submit" class="twikiSubmit patternTertiary" name="action" id="preview" value="Preview" title="Preview topic" /><label accesskey="p" for="preview"></label></td>
 </tr>
 </table>
 %TMPL:END%
@@ -107,7 +107,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 
 
 %TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<div class="twikiFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
+%TMPL:P{"simpleheader"}%<div class="patternFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
 <div class="twikiEditTextarea">
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
 %TEXT%
@@ -119,7 +119,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" /><div></div>
-<div class="twikiSig">
+<div class="patternSig">
 <label for="sig" class="twikiGrayText">Your signature to copy/paste:&nbsp;&nbsp;</label><input name="sig" type="text" readonly="readonly" title="Select, copy and paste your signature text to the bottom of your entry" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
