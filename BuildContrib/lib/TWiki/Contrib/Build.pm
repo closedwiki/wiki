@@ -677,9 +677,10 @@ sub target_release {
     }
 
     if( $this->{other_modules} ) {
+        my $libs = join(':',@INC);
         foreach my $module (@{$this->{other_modules}}) {
             print STDERR "Installing $module in $tmpdir\n";
-            print `export TWIKI_HOME=$tmpdir; cd $basedir/$module; perl build.pl handsoff_install`;
+            print `export TWIKI_HOME=$tmpdir; export TWIKI_LIBS=$libs; cd $basedir/$module; perl build.pl handsoff_install`;
         }
     }
 
