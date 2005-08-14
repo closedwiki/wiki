@@ -154,6 +154,7 @@ BEGIN {
                      HTTP_HOST         => \&_HTTP_HOST,
                      ICON              => \&_ICON,
                      ICONPATH          => \&_ICONPATH,
+                     IFCONTEXT         => \&_IFCONTEXT,
                      INCLUDE           => \&_INCLUDE,
                      INTURLENCODE      => \&_INTURLENCODE,
                      METASEARCH        => \&_METASEARCH,
@@ -2307,6 +2308,19 @@ sub _PLUGINVERSION {
     $this->{plugins}->getPluginVersion( $params->{_DEFAULT} );
 }
 
+sub _IFCONTEXT {
+    my ( $this, $params ) = @_;
+
+    my $id = $params->{_DEFAULT};
+    return '' unless $id;
+    foreach my $id ( split( /, */, $id )) {
+        unless( $this->{context}->{$id} ) {
+            return $params->{else} || '';
+        }
+    }
+    return $params->{then} || '';
+}
+
 # Processes a specific instance %<nop>INCLUDE{...}% syntax.
 # Returns the text to be inserted in place of the INCLUDE command.
 # $topic and $web should be for the immediate parent topic in the
@@ -2630,9 +2644,8 @@ sub _SPACEOUT {
 
 sub _ICON {
     my( $this, $params ) = @_;
-    my $file = ( $params->{_DEFAULT} || '' );
-
-    return $this->{renderer}->getIconHTML( $file );
+    my $file = $params->{_DEFAULT} || '';
+    return $this->{renderer}->filenameToIcon( $file );
 }
 
 sub _ICONPATH {

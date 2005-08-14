@@ -8,6 +8,16 @@ Designed by: Crawford Currie
 
 <table border="1"><tr><th> Tag </th><th>Expected</th><th>Actual</th></tr>
  <tr>
+  <td>IFCONTEXT</td>
+  <td><!-- expected -->YES<!-- /expected --></td>
+  <td><!-- actual -->%IFCONTEXT{"view" then="YES" else="NO"}%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>IFCONTEXT</td>
+  <td><!-- expected -->NO<!-- /expected --></td>
+  <td><!-- actual -->%IFCONTEXT{"none" then="YES" else="NO"}%<!-- /actual --></td>
+ </tr>
+ <tr>
   <td>TOPIC</td>
   <td><!-- expected -->TOPIC TestCaseAutoInternalTags<!-- /expected --></td>
   <td><!-- actual -->TOPIC <nop>%TOPIC%<!-- /actual --></td>
@@ -19,23 +29,28 @@ Designed by: Crawford Currie
  </tr>
   <tr>
   <td>ICON{}</td>
-  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURL%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" height="16" width="16" /><!-- /expected --></td>
   <td><!-- actual -->ICON %ICON{}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{""}</td>
-  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" /><!-- /expected --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURL%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" height="16" width="16" /><!-- /expected --></td>
   <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{"Fleegle"}</td>
-  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="" border="0" /><!-- /expected --></td>
-  <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURL%/%TWIKIWEB%/@WIKIWORD/else.gif" align="top" alt="Fleegle" border="0" height="16" width="16" /><!-- /expected --></td>
+  <td><!-- actual -->ICON %ICON{"Fleegle"}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>ICON{"sniff.sniff"}</td>
-  <td><!-- expected rex expand -->ICON <img src="%PUBURLPATH%/%TWIKIWEB%/@WIKIWORD/sniff.gif"/><!-- /expected --></td>
-  <td><!-- actual -->ICON %ICON{""}%<!-- /actual --></td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURL%/%TWIKIWEB%/@WIKIWORD/sniff.gif" align="top" alt="sniff.sniff" border="0" height="16" width="16" /><!-- /expected --></td>
+  <td><!-- actual -->ICON %ICON{"sniff.sniff"}%<!-- /actual --></td>
+ </tr>
+ <tr>
+  <td>ICON{"gif"}</td>
+  <td><!-- expected rex expand -->ICON <img src="%PUBURL%/%TWIKIWEB%/@WIKIWORD/gif.gif" align="top" alt="sniff.gif" border="0" height="16" width="16" /><!-- /expected --></td>
+  <td><!-- actual -->ICON %ICON{"sniff.gif"}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>URLENCODE{""}</td>

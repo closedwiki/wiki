@@ -775,29 +775,30 @@ sub filenameToIcon {
     # image attachments
     my $icons = $iconDir.'/_filetypes.txt';
     my $iconList = $store->readFile( $icons );
+    my $picked = 'else';
     foreach( split( /\n/, $iconList ) ) {
-        @bits = ( split( / / ) );
-        if( $bits[0] eq $fileExt ) {
-            return $this->getIconHTML( $bits[1] );
+        if( /^$fileExt\s+(\S+)\s*$/ ) {
+            $picked = $1;
+            last;
         }
     }
-    return $this->getIconHTML( 'else' );
+    return $this->getIconHTML( $picked, $fileName );
 }
 
 =pod
 
----++ ObjectMethod getIconHTML( $iconName ) -> $html
+---++ ObjectMethod getIconHTML( $iconName, $alt ) -> $html
 
 Creates an HTML image tag from an icon name.
 
 =cut
 
 sub getIconHTML {
-    my( $this, $iconName ) = @_;
+    my( $this, $iconName, $alt ) = @_;
     my $url = $this->getIconURL( $iconName );
     return CGI::img( { src => $url,
                        width => 16, height=>16,
-                       align => 'top', alt => $iconName, border => 0 } );
+                       align => 'top', alt => $alt, border => 0 } );
 }
 
 =pod

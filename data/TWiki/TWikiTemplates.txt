@@ -48,27 +48,7 @@ Note that three parameter names, =context=, =then= and =else= are *reserved*. Th
 %TMPL:P{context="inactive" then="inactive_link" else="active_link"}% for %CONTEXT%
 </verbatim>
 When the "inactive" context is set, then this will expand the "link_inactive" template; otherwise it will expand the "link_active" template.
-
-The following context identifiers are available:
-| *id* | *context* |
-| authenticated | a user is authenticated |
-| body_text  | when the body text is being processed in a view |
-| can_login | current environment supports login |
-| changes | in changes script (see TWikiScripts) |
-| diff | in rdiff script (see TWikiScripts) |
-| edit | in edit script (see TWikiScripts) |
-| footer_text | when the footer text is being processed in a view |
-| header_text | when the header text is being processed in a view |
-| inactive | if active links such as 'edit' and 'attach' should be disabled |
-| mirror | if this is a mirror |
-| new_topic | if the topic doesn't already exist |
-| oops | in oops script (see TWikiScripts) |
-| preview | in preview script (see TWikiScripts) |
-| rss | if this is an rss skin rendering |
-| save | in save script (see TWikiScripts) |
-| search | in search script (see TWikiScripts) |
-| view | in view script (see TWikiScripts) |
-| rest | in rest script (see TWikiScripts) |
+See [[TWikiVariables#VarIFCONTEXT][IFCONTEXT]] for details of supported context identifiers.
 
 ---+++ Finding Templates
 

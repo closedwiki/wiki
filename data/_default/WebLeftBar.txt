@@ -7,9 +7,7 @@
 writeToggle("+","-","patternLeftBarPersonalContent")
 //-->
 </script>
-
-%INCLUDE{"%CANLOGIN{then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
-
+%INCLUDE{"%IFCONTEXT{"can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 	* <b><nop>%INCLUDINGWEB% Web</b>
 	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
 	* [[WebChanges][Changes]]

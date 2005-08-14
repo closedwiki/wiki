@@ -6,7 +6,7 @@
 writeToggle("+","-","patternLeftBarPersonalContent")
 //-->
 </script>
-%AUTHENTICATED{then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
+%IFCONTEXT{"authenticated" then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
 <div id="patternLeftBarPersonalContent">
 %INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create personal sidebar</a>"}%
 </div>
