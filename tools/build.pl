@@ -4,11 +4,25 @@
 # Crawford Currie
 # Copyright (C) TWikiContributors, 2005
 
-# Standard preamble
 BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
-    unshift @INC, $pc;
-  }
+    use File::Spec;
+
+    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+        unshift @INC, $pc;
+    }
+
+    # designed to be run within a SVN checkout area
+    my @path = split( /\/+/, File::Spec->rel2abs($0) );
+    pop(@path); # the script name
+
+    while (scalar(@path) > 0) {
+        last if -d join( '/', @path).'/twikiplugins/BuildContrib';
+        pop( @path );
+    }
+
+    if(scalar(@path)) {
+        unshift @INC, join( '/', @path ).'/twikiplugins/BuildContrib/lib';
+    }
 }
 
 use TWiki::Contrib::Build;

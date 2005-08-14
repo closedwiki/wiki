@@ -1,1 +1,5 @@
-
+URI,>=1.35,cpan,Required. Available from the CPAN archive.
+Error,>=1000000,cpan,Required. Available from the CPAN archive.
+Algorithm::Diff,>=1000000,cpan,Required. Available from the CPAN archive.
+CGI::Session,>=1000000,cpan,Optional. Needed if you want to have persistant logins.
+CGI::Cookie,>=1000000,cpan,Optional. Needed if you want to have persistant logins.
