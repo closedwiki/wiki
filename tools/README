@@ -1,0 +1,23 @@
+The tools directory contains the following:
+
+---++ a quick BuildContrib based TWikiRelease builder
+   * build.pl
+      * running 'perl build.pl release' should result in TWiki.txt, TWiki.tgz and TWiki.zip
+   * DEPENDENCIES
+   * MANIFEST
+---++ documentation extractor and generator
+   * addpod.pl
+   * gendocs.pl
+---++ a full TWikiFor builder and installer
+   * builddistros.pl
+   * distro
+---++ various tools to help configure TWiki
+   * fixHtaccess.pl
+   * mklinks.pl
+   * perlmod2www.pl
+   * plugins_conformance_analyser.pl
+   * rewriteshbang.pl
+   * unisonsync.pl
+   * upgradeformat
+---++ packaging info and scripts for various distributions
+   * pkg
