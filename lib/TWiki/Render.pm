@@ -958,14 +958,12 @@ sub getRenderedVersion {
     $text =~ s/$TWiki::TranslationToken/!/go;    
 
     my $removed = {};    # Map of placeholders to tag parameters and text
-
-    my $doctype = '';
-    if( $text =~ s/(\s*<!DOCTYPE.*?>\s*)//is ) {
-        $doctype = $1;
-    }
+    my $removedComments = {};    # Map of placeholders to tag parameters and text
 
     $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
+    $text = $this->takeOutCommentBlocks( $text, 'DOCTYPE', $removedComments );
     $text = $this->takeOutBlocks( $text, 'head', $removed );
+
 
     # DEPRECATED startRenderingHandler before PRE removed
     # SMELL: could parse more efficiently if this wasn't
@@ -1181,14 +1179,12 @@ sub getRenderedVersion {
     $this->{session}->{client}->endRenderingHandler( $text );
 
     # replace verbatim with pre in the final output
-    $this->putBackBlocks( \$text, $removed,
-                          'verbatim', 'pre', \&verbatimCallBack );
+    $this->putBackBlocks( \$text, $removed, 'verbatim', 'pre', \&verbatimCallBack );
 
     $text =~ s|\n?<nop>\n$||o; # clean up clutch
 
     $this->putBackBlocks( \$text, $removed, 'head' );
-
-    $text = $doctype.$text;
+    $this->putBackCommentBlocks( \$text, $removedComments, 'DOCTYPE' );
 
     $plugins->postRenderingHandler( $text );
     return $text;
@@ -1406,6 +1402,99 @@ sub setRenderMode {
 
 =pod
 
+---++ ObjectMethod takeOutCommentBlocks( \$text, $commentTag, \%map ) -> $text
+
+   * =$text= - Text to process
+   * =$tag= - XHTML-style comment tag (eg DOCTYPE )
+   * =\%map= - Reference to a hash to contain the removed blocks
+
+Return value: $text with blocks removed
+
+used to extract from $text comment type tags like &lt;!DOCTYPE blah>
+
+WARNING: if you want to take out &lt;!-- comments --> you _will_ need to re-write all the takeOuts 
+	to use a different placeholder
+
+=cut
+
+sub takeOutCommentBlocks {
+	my( $this, $intext, $tag, $map ) = @_;
+	ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
+
+	return $intext unless ( $intext =~ m/<!$tag[^>]*>/ );
+
+	my $count = 0;
+	my $counter = \$count;
+	$intext =~ s/<!$tag([^<>]*)>?/$this->_replaceCommentBlock($tag, $1, $map, $counter)/mige;
+
+	return $intext;
+}
+
+=pod
+
+---++ _replaceCommentBlock ( $this, $tag, $scoop, $map, $counter ) -> $replacementTagText
+   * internal use only
+
+=cut
+
+sub _replaceCommentBlock {
+	my( $this, $tag, $scoop, $map, $counter ) = @_;
+	ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
+
+	my $placeholder = $tag.${$counter};
+	${$counter}++;
+	$map->{$placeholder}{params} = '';
+	$map->{$placeholder}{text} = $scoop;
+
+	return '<!--'.$TWiki::TranslationToken.$placeholder.$TWiki::TranslationToken.'-->';
+}
+
+=pod
+
+---++ ObjectMethod putBackCommentBlocks( \$text, \%map, $tag, $newtag, $callBack ) -> $text
+
+Return value: $text with blocks added back
+   * =\$text= - reference to text to process
+   * =\%map= - map placeholders to blocks removed by takeOutBlocks
+   * =$tag= - Tag name processed by takeOutBlocks
+   * =$newtag= - Tag name to use in output, in place of $tag. If undefined, uses $tag.
+   * =$callback= - Reference to function to call on each block being inserted (optional)
+
+Reverses the actions of takeOutCommentBlocks.
+
+Each replaced block is processed by the callback (if there is one) before
+re-insertion.
+
+Parameters to the outermost cut block are replaced into the open tag,
+even if that tag is changed. This allows things like
+&lt;!DOCTYPE class=''>
+to be mapped to
+&lt;!ILLEGAL class=''>
+
+Cool, eh what? Jolly good show.
+
+=cut
+
+sub putBackCommentBlocks {
+    my( $this, $text, $map, $tag, $newtag, $callback ) = @_;
+    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
+
+    $newtag ||= $tag;
+
+    foreach my $placeholder ( keys %$map ) {
+        if( $placeholder =~ /^$tag\d+$/ ) {
+            my $params = $map->{$placeholder}{params} || '';
+            my $val = $map->{$placeholder}{text};
+            $val = &$callback( $val ) if ( defined( $callback ));
+            $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
+              (<!$newtag$val>);
+            delete( $map->{$placeholder} );
+        }
+    }
+}
+
+=pod
+
 ---++ ObjectMethod takeOutBlocks( \$text, $tag, \%map ) -> $text
 
    * =$text= - Text to process
@@ -1429,10 +1518,11 @@ sub takeOutBlocks {
 
     return $intext unless ( $intext =~ m/<$tag\b/ );
 
-    my $open = qr/^\s*<$tag\b([^>]*)?>(.*)$/i;
-    my $close = qr/^\s*<\/$tag>(.*)$/i;
+    my $open = qr/^([^<]*)<$tag\b([^>]*)?>(.*)$/i;
+    my $close = qr/^([^<]*)<\/$tag>(.*)$/i;
     my $out = '';
     my $depth = 0;
+    my $pre;
     my $scoop;
     my $tagParams;
     my $n = 0;
@@ -1440,19 +1530,21 @@ sub takeOutBlocks {
     foreach my $line ( split/\r?\n/, $intext ) {
         if ( $line =~ m/$open/ ) {
             unless ( $depth++ ) {
-                $tagParams = $1;
-                $scoop = $2;
+	    	$pre = $1;
+                $tagParams = $2;
+                $scoop = $3;
                 next;
             }
         }
         if ( $depth && $line =~ m/$close/ ) {
-            my $rest = $1;
+	    my $closeScoop = $1;
+            my $rest = $2;
             unless ( --$depth ) {
-                my $placeholder = $tag.$n;
+                my $placeholder = $tag."$n";
                 $map->{$placeholder}{params} = $tagParams;
-                $map->{$placeholder}{text} = $scoop;
+                $map->{$placeholder}{text} = $scoop.$closeScoop;
 
-                $line = '<!--'.$TWiki::TranslationToken.$placeholder.
+                $line = $pre.'<!--'.$TWiki::TranslationToken.$placeholder.
                   $TWiki::TranslationToken.'-->'.$rest;
                 $n++;
             }
@@ -1469,7 +1561,7 @@ sub takeOutBlocks {
         # while ( $depth-- ) {
         #     $scoop .= "</$tag>\n";
         # }
-        my $placeholder = $tag.$n;
+        my $placeholder = $tag."$n";
         $map->{$placeholder}{params} = $tagParams;
         $map->{$placeholder}{text} = $scoop;
         $out .= '<!--'.$TWiki::TranslationToken.$placeholder.
