@@ -1,9 +1,7 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-
+%META:TOPICINFO{author="PeterThoeny" date="1119844520" format="1.0" version="1.45"}%
 ---+!! TWiki Spreadsheet Plugin
 
-This Plugin adds speadsheet capabilities to <nop>%WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
+This Plugin adds spreadsheet capabilities to %WIKITOOLNAME% topics. Formulae like ==%<nop>CALC{"$INT(7/3)"}%== are evaluated at page view time. They can be placed in table cells and outside of tables. In other words, this Plugin provides general formula evaluation capability, not just classic spreadsheet functions.
 
 <table><tr><td valign="top">
 __Example:__
@@ -65,7 +63,7 @@ Conventions for Syntax:
 ---+++ ABS( num ) -- absolute value of a number
 	* Syntax: ==$ABS( num )==
 	* Example: ==%<nop>CALC{"$ABS(-12.5)"}%== returns ==12.5==
-	* Related: =[[#FuncSIGN][$SIGN()]]=
+	* Related: =[[#FuncSIGN][$SIGN()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncODD][$ODD()]]=
 
 #FuncAND
 ---+++ AND( list ) -- logcial AND of a list
@@ -121,11 +119,17 @@ Conventions for Syntax:
 	* Related: =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLIST][$LIST()]]=
 
 #FuncEVAL
----+++ EVAL( formula ) -- evaluate a simple formula
+---+++ EVAL( formula ) -- evaluate a simple mathematical formula
 	* Addition, substraction, multiplication, division and modulus of numbers are supported. Any nesting is permitted
 	* Syntax: ==$EVAL( formula )==
 	* Example: ==%<nop>CALC{"$EVAL( (5 * 3) / 2 + 1.1 )"}%== returns ==8.6==
-	* Related: =[[#FuncINT][$INT()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncROUND][$ROUND()]]=, =[[#FuncVALUE][$VALUE()]]=
+	* Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncROUND][$ROUND()]]=, =[[#FuncVALUE][$VALUE()]]=
+
+#FuncEVEN
+---+++ EVEN( num ) -- test for even number
+	* Syntax: ==$EVEN( num )==
+	* Example: ==%<nop>CALC{"$EVEN(2)"}%== returns ==1==
+	* Related: =[[#FuncABS][$ABS()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncODD][$ODD()]]=, =[[#FuncSIGN][$SIGN()]]=
 
 #FuncEXACT
 ---+++ EXACT( text1, text2 ) -- compare two text strings
@@ -134,6 +138,22 @@ Conventions for Syntax:
 	* Example: ==%<nop>CALC{"$EXACT(foo, Foo)"}%== returns ==0==
 	* Example: ==%<nop>CALC{"$EXACT(foo, $LOWER(Foo))"}%== returns ==1==
 	* Related: =[[#FuncIF][$IF()]]=, =[[#FuncTRIM][$TRIM()]]=
+
+#FuncEXEC
+---+++ EXEC( formula ) -- execute a spreadsheet formula
+	* Execute a spreadsheet formula, typically retrieved from a variable. This can be used to store a formula in a variable once and execute it many times using different parameters.
+	* Syntax: ==$EXEC( formula )==
+	* Example: ==%<nop>CALC{"$SET(msg, $NOEXEC(Hi $GET(name)))"}%== sets the =msg= variable with raw formula =Hi $GET(name)=
+	* Example: ==%<nop>CALC{"$SET(name, Tom) $EXEC($GET(msg))"}%== executes content of =msg= variable and returns =Hi Tom=
+	* Example: ==%<nop>CALC{"$SET(name, Jerry) $EXEC($GET(msg))"}%== returns =Hi Jerry=
+	* Related: =[[#FuncEVAL][$EVAL()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSET][$SET()]]=
+
+#FuncEXISTS
+---+++ EXISTS( topic ) -- check if topic exists
+	* Topic can be =TopicName= or a =Web.TopicName=
+	* Syntax: ==$EXISTS( topic )==
+	* Example: ==%<nop>CALC{"$EXISTS(<nop>%HOMETOPIC%)"}%== returns ==1==
+	* Example: ==%<nop>CALC{"$EXISTS(<nop>ThisDoesNotExist)"}%== returns ==0==
 
 #FuncFIND
 ---+++ FIND( string, text, start ) -- find one string within another string
@@ -146,10 +166,14 @@ Conventions for Syntax:
 
 #FuncFORMAT
 ---+++ FORMAT( type, prec, number ) -- format a number to a certain type and precision
-	* Type can be COMMA for comma format, DOLLAR for Dollar format, NUMBER for number, and PERCENT for percent format
+	* Type can be COMMA for comma format, DOLLAR for Dollar format, KB for Kilo Byte format, MB for Mega Byte format, KBMB for Kilo/Mega/Giga/Tera Byte auto-adjust format, NUMBER for number, and PERCENT for percent format
 	* Syntax: ==$FORMAT( type, prec, number )==
 	* Example: ==%<nop>CALC{"$FORMAT(COMMA, 2, 12345.6789)"}%== returns ==12,345.68==
 	* Example: ==%<nop>CALC{"$FORMAT(DOLLAR, 2, 12345.67)"}%== returns ==$12,345.68==
+	* Example: ==%<nop>CALC{"$FORMAT(KB, 2, 1234567)"}%== returns ==1205.63 KB==
+	* Example: ==%<nop>CALC{"$FORMAT(MB, 2, 1234567)"}%== returns ==1.18 MB==
+	* Example: ==%<nop>CALC{"$FORMAT(KBMB, 2, 1234567)"}%== returns ==1.18 MB==
+	* Example: ==%<nop>CALC{"$FORMAT(KBMB, 2, 1234567890)"}%== returns ==1.15 GB==
 	* Example: ==%<nop>CALC{"$FORMAT(NUMBER, 1, 12345.67)"}%== returns ==12345.7==
 	* Example: ==%<nop>CALC{"$FORMAT(PERCENT, 1, 0.1234567)"}%== returns ==12.3%==
 	* Related: =[[#FuncROUND][$ROUND()]]=
@@ -173,7 +197,7 @@ Conventions for Syntax:
 	* Specify the variable name (alphanumeric characters and underscores). An empty string is returned if the variable does not exist. Use =$SET()= to set a variable first. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables.
 	* Syntax: ==$GET( name )==
 	* Example: ==%<nop>CALC{"$GET(my_total)"}%== returns the value of the =my_total= variable
-	* Related: =[[#FuncSET][$SET()]]=, =[[#FuncSETM][$SETM()]]=
+	* Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSET][$SET()]]=, =[[#FuncSETM][$SETM()]]=
 
 #FuncIF
 ---+++ IF( condition, value if true, value if 0 ) -- return a value based on a condition
@@ -208,7 +232,7 @@ Conventions for Syntax:
 	* Convert the content of a range of cells into a flat list, delimited by comma. Cells containing commas are merged into the list
 	* Syntax: ==$LIST( range )==
 	* Example: ==%<nop>CALC{"$LIST($LEFT())"}%== returns ==Apples, Lemons, Oranges, Kiwis== assuming the cells to the left contain ==| Apples | Lemons, Oranges | Kiwis |==
-	* Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncDEF][$DEF()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSUM][$SUM()]]=, =[[#FuncSUMDAYS][$SUMDAYS()]]=, =[[#FuncSUMPRODUCT][$SUMPRODUCT()]]=
+	* Related: =[[#FuncAVERAGE][$AVERAGE()]]=, =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncDEF][$DEF()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSUM][$SUM()]]=, =[[#FuncSUMDAYS][$SUMDAYS()]]=, =[[#FuncSUMPRODUCT][$SUMPRODUCT()]]=
 
 #FuncLISTIF
 ---+++ LISTIF( condition, list ) -- remove elements from a list that do not meet a condition
@@ -227,6 +251,13 @@ Conventions for Syntax:
 	* Example: ==%<nop>CALC{"$LISTITEM(-1, Apple, Orange, Apple, Kiwi)"}%== returns ==Kiwi==
 	* Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
 
+#FuncLISTJOIN
+---+++ LISTJOIN( separator, list ) -- convert a list into a string
+	* By default, list items are separated by a comma and a space. Use this function to indicate a specific =separator= string, which may include =$comma= for comma, =$n= for newline, and =$sp= for space.
+	* Syntax: ==$LISTJOIN( separator, list )==
+	* Example: ==%<nop>CALC{"$LISTJOIN($n, Apple, Orange, Apple, Kiwi)"}%== returns the four items separated by new lines
+	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTSIZE][$LISTSIZE()]]=
+
 #FuncLISTMAP
 ---+++ LISTMAP( formula, list ) -- evaluate and update each element of a list
 	* In the formula you can use ==$item== to indicate the element; ==$index== to show the index of the list, starting at 1
@@ -244,7 +275,7 @@ Conventions for Syntax:
 ---+++ LISTSIZE( list ) -- number of elements in a list
 	* Syntax: ==$LISTSIZE( list )==
 	* Example: ==%<nop>CALC{"$LISTSIZE(Apple, Orange, Apple, Kiwi)"}%== returns ==4==
-	* Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
+	* Related: =[[#FuncCOUNTITEMS][$COUNTITEMS()]]=, =[[#FuncCOUNTSTR][$COUNTSTR()]]=, =[[#FuncLIST][$LIST()]]=, =[[#FuncLISTIF][$LISTIF()]]=, =[[#FuncLISTITEM][$LISTITEM()]]=, =[[#FuncLISTJOIN][$LISTJOIN()]]=, =[[#FuncLISTMAP][$LISTMAP()]]=, =[[#FuncLISTREVERSE][$LISTREVERSE()]]=, =[[#FuncLISTSORT][$LISTSORT()]]=, =[[#FuncLISTUNIQUE][$LISTUNIQUE()]]=, =[[#FuncSUM][$SUM()]]=
 
 #FuncLISTSORT
 ---+++ LISTSORT( list ) -- sort a list
@@ -269,25 +300,32 @@ Conventions for Syntax:
 ---+++ MAX( list ) - biggest value of a list or range of cells
 	* Syntax: ==$MAX( list )==
 	* Example: To find the biggest number to the left of the current cell, write: ==%<nop>CALC{"$MAX($LEFT())"}%==
-	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=
+	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=
 
 #FuncMEDIAN
 ---+++ MEDIAN( list ) -- median of a list or range of cells
 	* Syntax: ==$MEDIAN( list )==
 	* Example: ==%<nop>CALC{"$MEDIAN(3, 9, 4, 5)"}%== returns ==4.5==
-	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMIN][$MIN()]]=
+	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMIN][$MIN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=
 
 #FuncMIN
 ---+++ MIN( list ) -- smallest value of a list or range of cells
 	* Syntax: ==$MIN( list )==
 	* Example: ==%<nop>CALC{"$MIN(15, 3, 28)"}%== returns ==3==
-	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=
+	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncPERCENTILE][$PERCENTILE()]]=
 
 #FuncMOD
 ---+++ MOD( num, divisor ) -- reminder after dividing ==num== by ==divisor==
 	* Syntax: ==$MOD( num, divisor )==
 	* Example: ==%<nop>CALC{"$MOD(7, 3)"}%== returns ==1==
-	* Related: =[[#FuncEVAL][$EVAL()]]=, =[[#Func][$()]]=
+	* Related: =[[#FuncEVAL][$EVAL()]]=
+
+#FuncNOEXEC
+---+++ NOEXEC( formula ) -- do not execute a spreadsheet formula
+	* Prevent a formula from getting executed. This is typically used to store a raw formula in a variable for later use as described in =[[#FuncEXEC][$EXEC()]]=.
+	* Syntax: ==$NOEXEC( formula )==
+	* Example: ==%<nop>CALC{"$SET(msg, $NOEXEC(Hi $GET(name)))"}%== sets the =msg= variable with the formula =Hi $GET(name)= without executing it
+	* Related: =[[#FuncEVAL][$EVAL()]]=, =[[#FuncEXEC][$EXEC()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncSET][$SET()]]=
 
 #FuncNOP
 ---+++ NOP( text ) -- no-operation
@@ -301,11 +339,24 @@ Conventions for Syntax:
 	* Example: ==%<nop>CALC{"$NOT(0)"}%== returns ==1==
 	* Related: =[[#FuncAND][$AND()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncOR][$OR()]]=
 
+#FuncODD
+---+++ ODD( num ) -- test for odd number
+	* Syntax: ==$ODD( num )==
+	* Example: ==%<nop>CALC{"$ODD(2)"}%== returns ==0==
+	* Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncMOD][$MOD()]]=, =[[#FuncSIGN][$SIGN()]]=
+
 #FuncOR
 ---+++ OR( list ) -- logcial OR of a list
 	* Syntax: ==$OR( list )==
 	* Example: ==%<nop>CALC{"$OR(1, 0, 1)"}%== returns ==1==
 	* Related: =[[#FuncAND][$AND()]]=, =[[#FuncIF][$IF()]]=, =[[#FuncNOT][$NOT()]]=
+
+#FuncPERCENTILE
+---+++ PERCENTILE( num, list ) -- percentile of a list or range of cells
+	* Calculates the num-th percentile, useful to establish a threshold of acceptance. num is the percentile value, range 0..100
+	* Syntax: ==$PERCENTILE( num, list )==
+	* Example: ==%<nop>CALC{"$PERCENTILE(75, 400, 200, 500, 100, 300)"}%== returns ==450==
+	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncMAX][$MAX()]]=, =[[#FuncMEDIAN][$MEDIAN()]]=, =[[#FuncMIN][$MIN()]]=
 
 #FuncPRODUCT
 ---+++ PRODUCT( list ) -- product of a list or range of cells
@@ -314,7 +365,7 @@ Conventions for Syntax:
 	* Related: =[[#FuncLIST][$LIST()]]=, =[[#FuncPRODUCT][$PRODUCT()]]=, =[[#FuncSUM][$SUM()]]=, =[[#FuncSUMPRODUCT][$SUMPRODUCT()]]=
 
 #FuncPROPER
----+++ PROPER( text ) -- properly capitalize trxt
+---+++ PROPER( text ) -- properly capitalize text
 	* Capitalize letters that follow any character other than a letter; convert all other letters to lowercase letters
 	* Syntax: ==$PROPER( text )==
 	* Example: ==%<nop>CALC{"PROPER(a small STEP)"}%== returns ==A Small Step==
@@ -325,7 +376,7 @@ Conventions for Syntax:
 ---+++ PROPERSPACE( text ) -- properly space out <nop>WikiWords
 	* Properly spaces out %TWIKIWEB%.WikiWords preceeded by white space, parenthesis, or ==][==. Words listed in the DONTSPACE %TWIKIWEB%.%WIKIPREFSTOPIC% variable or DONTSPACE Plugins setting are excluded
 	* Syntax: ==$PROPERSPACE( text )==
-	* Example: Assuming DONTSPACE contains <nop>MacDonald: ==%<nop>CALC{"PROPERSPACE(Old <nop>MacDonald had a <nop>ServerFarm, <nop>EeEyeEeEyeOh"}%== returns ==Old <nop>MacDonald had a Server Farm, Ee Eye Ee Eye Oh==
+	* Example: Assuming DONTSPACE contains <nop>MacDonald: ==%<nop>CALC{"$PROPERSPACE(Old <nop>MacDonald had a <nop>ServerFarm, <nop>EeEyeEeEyeOh"}%== returns ==Old <nop>MacDonald had a Server Farm, Ee Eye Ee Eye Oh==
 	* Related: =[[#FuncLOWER][$LOWER()]]=, =[[#FuncPROPER][$PROPER()]]=, =[[#FuncTRIM][$TRIM()]]=, =[[#FuncUPPER][$UPPER()]]=
 
 #FuncRAND
@@ -380,10 +431,10 @@ Conventions for Syntax:
 
 #FuncSET
 ---+++ SET( name, value ) -- set a variable for later use
-	* Specify the variable name (alphanumeric characters and underscores) and the value. The value may contain a formula; formulas are evaluated before the variable assignment. This function returns no output. Use =$GET()= to retrieve variables. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables
+	* Specify the variable name (alphanumeric characters and underscores) and the value. The value may contain a formula; formulae are evaluated before the variable assignment; see =[[#FuncNOEXEC][$NOEXEC()]]= if you want to prevent that. This function returns no output. Use =$GET()= to retrieve variables. Unlike table ranges, variables live for the time of the page view and persist across tables, i.e. you can use it to summarize results across several tables and also included topics
 	* Syntax: ==$SET( name, value )==
 	* Example: ==%<nop>CALC{"$SET(my_total, $SUM($ABOVE()))"}%== sets the =my_total= variable to the sum of all table cells located above the current cell and returns an empty string
-	* Related: =[[#FuncGET][$GET()]]=, =[[#FuncSETM][SETM()]]=
+	* Related: =[[#FuncEXEC][$EXEC()]]=, =[[#FuncGET][$GET()]]=, =[[#FuncNOEXEC][$NOEXEC()]]=, =[[#FuncSETM][SETM()]]=
 
 #FuncSETM
 ---+++ SETM( name, formula ) -- update an existing variable based on a formula
@@ -397,7 +448,7 @@ Conventions for Syntax:
 	* Returns -1 if ==num== is negative, 0 if zero, or 1 if positive
 	* Syntax: ==$SIGN( num )==
 	* Example: ==%<nop>CALC{"$SIGN(-12.5)"}%== returns ==-1==
-	* Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncNOT][$NOT()]]=
+	* Related: =[[#FuncABS][$ABS()]]=, =[[#FuncEVAL][$EVAL()]]=, =[[#FuncEVEN][$EVEN()]]=, =[[#FuncINT][$INT()]]=, =[[#FuncNOT][$NOT()]]=, =[[#FuncODD][$ODD()]]=
 
 #FuncSUBSTITUTE
 ---+++ SUBSTITUTE( text, old, new, instance, option ) -- substitute text
@@ -453,8 +504,7 @@ Conventions for Syntax:
 ---+++ TIMEADD( serial, value, unit ) -- add a value to a serialized date
 	* The unit is seconds if not specified; unit can be =second=, =minute=, =hour=, =day=, =week=, =month=, =year=. Note: An approximation is used for month and year calculations
 	* Syntax: ==$TIMEADD( serial, value, _unit_ )==
-	* Example: ==%<nop>CALC{"$TIMEADD($TIME(), 2, week)"}%==
-	* Related: =[[#Func][$()]]=, =[[#Func][$()]]= returns the serialized date two weeks from now
+	* Example: ==%<nop>CALC{"$TIMEADD($TIME(), 2, week)"}%== returns the serialized date two weeks from now
 	* Related: =[[#FuncFORMATTIME][$FORMATTIME()]]=, =[[#FuncFORMATGMTIME][$FORMATGMTIME()]]=, =[[#FuncTIME][$TIME()]]=, =[[#FuncTIMEDIFF][$TIMEDIFF()]]=, =[[#FuncTODAY][$TODAY()]]=
 
 #FuncTIMEDIFF
@@ -529,7 +579,7 @@ Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>SPREADSHEETPLUGIN_SHORTDESCRIPTION%==
 
 	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to tables located in <nop>%WIKITOOLNAME% topics.
+		* Set SHORTDESCRIPTION = Add spreadsheet calculation like ="$SUM( $ABOVE() )"= to tables located in %WIKITOOLNAME% topics.
 
 	* Debug plugin: (See output in =data/debug.txt=)
 		* Set DEBUG = 0
@@ -544,7 +594,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>S
 
 
 ---++ Plugin Installation Instructions
-This plugin is pre-installed with your TWiki release. You should not need to install it unless you are upgrading to a new version.
+
+__Note:__ You do not need to install anything on the browser to use this plugin. Below installation instructions are for the administrator who needs to install this plugin on the TWiki server. 
+
 	* Download the ZIP file from the <nop>%TOPIC% home
 	* Unzip ==SpreadSheetPlugin.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -556,9 +608,13 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/PeterThoeny |
-|  Plugin Version: | 1.014 |
+|  Plugin Version: | 17 Jun 2005 (1.018) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
-| 5 Mar 2004 | 1.014 Crawford Currie added strict and prepped for Dakar Release |
+|  17 Jun 2005: | Added $NOEXEC(), $EXEC() |
+|  25 Mar 2005: | Fixed evaluation bug when using <nop>SpeedyCGI accelerator; code refactor to load module only when needed, contributed by TWiki:Main/CrawfordCurrie |
+|  24 Oct 2004: | Added $EXISTS(), contributed by TWiki:Main/RodrigoChandia; added $PERCENTILE() |
+|  18 Oct 2004: | Added $LISTJOIN() |
+|  26 Sep 2004: | Added $FORMAT(KB), $FORMAT(MB), contributed by TWiki:Main/ArthurClemens; added $FORMAT(KBMB), $EVEN(), $ODD() |
 |  17 Jul 2004: | Added $WORKINGDAYS(), contributed by TWiki:Main/CrawfordCurrie |
 |  24 May 2004: | Refactored documentation (no code changes) |
 |  03 Apr 2004: | Added $ABS(), $LISTIF(); fixed $VALUE() to remove leading zeros; changed $FIND() and $SEARCH() to return 0 instead of empty string if no match |
@@ -573,17 +629,17 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
 |  13 Oct 2003: | Added $MULT(), contributed by TWiki:Main/GerritJanBaarda |
 |  30 Jul 2003: | Added $TRANSLATE() |
 |  19 Jul 2003: | Added $FIND(), $NOP(), $REPLACE(), $SEARCH(), $SUBSTITUTE(), contributed by TWiki:Main/PaulineCheung |
-|  19 Apr 2003: | Added $COUNTSTR(), $EXACT(), $IF(), $ROUND(), $TRIM(); added $FORMAT(), contributed by TWiki:Main/JimStraus; support =%= modulus operator in $EVAL, $INT, and $ROUND; fixed bug in $DEF |
+|  19 Apr 2003: | Added $COUNTSTR(), $EXACT(), $IF(), $ROUND(), $TRIM(); added $FORMAT(), contributed by TWiki:Main/JimStraus; support =%= modulus operator in $EVAL(), $INT(), and $ROUND(); fixed bug in $DEF() |
 |  07 Jun 2002: | Added $DEF(), contributed by TWiki:Main/MartinFuzzey; allow values with HTML formatting like =&lt;u&gt;102&lt;/u&gt;=, suggested by TWiki:Main/GladeDiviney; added SKIPINCLUDE setting |
 |  12 Mar 2002: | Support for multiple functions per nesting level |
 |  15 Jan 2002: | Added $CHAR(), $CODE() and $LENGTH() |
 |  12 Nov 2001: | Added $RIGHT() |
 |  12 Aug 2001: | Fixed bug of disappearing multi-column cells |
-|  19 Jul 2001: | Fixed incorrect $SUM calculation of cell with value =0= |
+|  19 Jul 2001: | Fixed incorrect $SUM() calculation of cell with value =0= |
 |  14 Jul 2001: | Changed to plug & play |
-|  01 Jun 2001: | Fixed insecure dependencies for $MIN and $MAX |
-|  16 Apr 2001: | Fixed div by 0 bug in $AVERAGE |
-|  17 Mar 2001: | Initial version |
+|  01 Jun 2001: | Fixed insecure dependencies for $MIN() and $MAX() |
+|  16 Apr 2001: | Fixed div by 0 bug in $AVERAGE() |
+|  17 Mar 2001: | Initial version with $ABOVE(), $AVERAGE(), $COLUMN(), $COUNTITEMS(), $EVAL(), $INT(), $LEFT(), $LOWER(), $MAX(), $MIN(), $ROW(), $SUM(), $T(), $UPPER() |
 |  CPAN Dependencies: | none |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle 99%, %TWIKIWEB%.FormattedSearch 99%, %TOPIC% 95% |
 |  Other Dependencies: | none |
@@ -593,5 +649,5 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
-
+-- TWiki:Main/PeterThoeny - 17 Jun 2005
 
