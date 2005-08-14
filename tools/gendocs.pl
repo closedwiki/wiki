@@ -20,30 +20,34 @@ BEGIN {
 #
 	smells => 1,
 	root => Cwd::abs_path( "$FindBin::Bin/../" ),
-# 
+#
 	verbose => 0,
 	debug => 0,
 	help => 0,
 	man => 0,
     };
-    
+
     my $result = GetOptions( $Config,
 			     'smells!',
-# miscellaneous/generic options
-			     'agent=s', 'help', 'man', 'debug', 'verbose|v',
+                             # miscellaneous/generic options
+			     'root=s', 'agent=s', 'help', 'man', 'debug', 'verbose|v',
 			     );
     pod2usage( 1 ) if $Config->{help};
     pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
     print STDERR Dumper( $Config ) if $Config->{debug};
-    
+
     unshift @INC, "$Config->{root}/bin";
     do 'setlib.cfg';
 };
 
 use TWiki;
 
-my $twiki = new TWiki("/TWiki", "BuildUser", "WebHome", "/save/TWiki");
-my $user = $twiki->{users}->findUser("admin", "TWikiAdminGroup");
+my $twiki = new TWiki("admin");
+my $user = $twiki->{users}->findUser("admin", "TWikiContributor");
+my $adminGroup = $twiki->{users}->findUser($TWiki::cfg{SuperAdminGroup});
+$adminGroup->groupMembers();
+push( @{$adminGroup->{members}}, $user );
+
 my @index;
 my $smells = 0;
 
@@ -64,11 +68,11 @@ if ( $Config->{smells} ) {
     $i .= "\n\n There were a total of *$smells* smells\n";
 }
 my $meta = new TWiki::Meta($twiki, "TWiki", "SourceCode");
-print $twiki->{store}->saveTopic( $user, "TWiki", "SourceCode",
-                                  $i,
-                                  $meta,
-                                  { dontlog => 1, minor => 1,
-                                    comment => "created by build" } );
+$twiki->{store}->saveTopic( $user, "TWiki", "SourceCode",
+                            $i,
+                            $meta,
+                            { dontlog => 1, minor => 1,
+                              comment => "created by build" } );
 
 1;
 
@@ -179,10 +183,10 @@ sub eachfile {
     }
 
 
-    print $twiki->{store}->saveTopic( $user, "TWiki", $topic, $text,
-                              $meta,
-                              { dontlog => 1, minor => 1,
-                                comment => "created by build" } );
+    $twiki->{store}->saveTopic( $user, "TWiki", $topic, $text,
+                                $meta,
+                                { dontlog => 1, minor => 1,
+                                  comment => "created by build" } );
 }
 
 __DATA__
