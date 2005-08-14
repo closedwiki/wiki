@@ -3,8 +3,9 @@
 package CommentPluginBuild;
 
 BEGIN {
-    unshift(@INC, '../../../../bin');
-    do 'setlib.cfg';
+    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+        unshift @INC, $pc;
+    }
 }
 use TWiki::Contrib::Build;
 
