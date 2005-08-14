@@ -333,12 +333,12 @@ sub save {
     if ( $topic =~ /X{10}/ ) {
 		my $n = 0;
 		my $baseTopic = $topic;
-        $store->clearLease( $webName, $baseTopic );
+		$store->clearLease( $webName, $baseTopic );
 		do {
 			$topic = $baseTopic;
 			$topic =~ s/X{10}X*/$n/e;
 			$n++;
-        } while( $store->topicExists( $webName, $topic ));
+		} while( $store->topicExists( $webName, $topic ));
         $session->{topicName} = $topic;
     }
 
