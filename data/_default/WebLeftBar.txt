@@ -6,11 +6,9 @@
 <!--
 writeToggle("+","-","patternLeftBarPersonalContent")
 //-->
-</script>%CALC{"$IF($EXACT(%WIKINAME%,TWikiGuest),[[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%][login]],Hello [[%WIKIUSERNAME%][$PROPERSPACE(%WIKINAME%)]] <font size=\"-1\">%BR%([[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%TWIKIWEB%/LogoutAndLogin][not me?]])</font>)"}%
-<div id="patternLeftBarPersonalContent">
-%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create personal sidebar</a>"}%
-</div>
-</div>
+</script>
+
+%INCLUDE{"%CANLOGIN{then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 
 	* <b><nop>%INCLUDINGWEB% Web</b>
 	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
