@@ -765,3 +765,4 @@ templates/view.rss.tmpl
 templates/view.text.tmpl
 templates/view.tmpl
 twiki_httpd_conf.txt
+!include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
