@@ -7,7 +7,7 @@
 
 
 
-%TMPL:DEF{"titleaction"}% %REVTITLE% %TMPL:END%
+%TMPL:DEF{"titleaction"}%%REVTITLE%%TMPL:END%
 
 
 
@@ -32,11 +32,13 @@
 %TMPL:DEF{"inactive_more"}%<strike>More topic actions...</strike>%TMPL:END%
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title="Delete or rename this topic; set parent topic; view and compare revisions" accesskey="m" rel='nofollow'><span class="patternAccessKey">M</span>ore topic actions</a>%TMPL:END%
 
-%TMPL:DEF{"toolbar"}%<div class="patternToolBar"><div>
-   * %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%
-   * %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
-   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="p" title="View printable version of this topic" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a>
-</div><div class="patternRevInfo"><span class="patternToolbarElem"><nop>%WEB%.%TOPIC%</span><span class="patternToolbarElem patternRevision">%REVINFO%</span></div></div>%TMPL:END%
+%TMPL:DEF{"toolbar"}%<div class="patternTop"><span class="patternHomePath twikiLeft">You are here: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> %META{"parent" nowebhome="on" prefix=" <span class='patternSeparator'>&gt;</span> " suffix=""}% <span class='patternSeparator'>&gt;</span> <nop>%TOPIC% </span>
+<span class="patternRevInfo twikiRight"><nop>%WEB%.%TOPIC% <span class="patternRevision">%REVINFO%</span> <span class="patternRevision">%REVISIONS% - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="View total topic history" accesskey="h" rel='nofollow'>Topic <span class="patternAccessKey">h</span>istory</a></span></span><br class="twikiClear" />
+<div class="patternToolBar">
+%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%<br />
+%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%<br />
+<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="p" title="View printable version of this topic" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a></div></div>%TMPL:END%
+
 
 %TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="patternMiddleContainer">%TMPL:P{"leftbar"}%<div class="patternMain">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
 %TMPL:P{"content"}%
@@ -53,7 +55,7 @@
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
 %TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="patternTopicAction">
-%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}% %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" title="View printable version of this topic" accesskey="p" rel='nofollow'><span class="patternAccessKey">P</span>rintable version</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="View raw text without formatting" accesskey="r" rel='nofollow'><span class="patternAccessKey">R</span>aw text</a> %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%<br /><span class="patternRevision">Revisions: %REVISIONS% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="View total topic history" accesskey="h" rel='nofollow'>Total page <span class="patternAccessKey">h</span>istory</a> %TMPL:P{"sep"}% </span>Backlinks: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here" accesskey="w"><span class="patternAccessKey">W</span>eb</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here" accesskey="l">A<span class="patternAccessKey">ll</span> webs</a></div>%TMPL:END%
+%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}% %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" title="View printable version of this topic" accesskey="p" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="View raw text without formatting" accesskey="r" rel='nofollow'><span class="patternAccessKey">R</span>aw text</a> %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here" accesskey="w"><span class="patternAccessKey">W</span>eb</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here" accesskey="l">A<span class="patternAccessKey">ll</span> webs</a> %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%</div>%TMPL:END%
 
 
 
@@ -62,7 +64,7 @@
 
 
 %TMPL:DEF{"standardfooter"}%
-<div class="patternTopicFooter"><span class="twikiLeft"><span class="patternHomePath">You are here: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> %META{"parent" nowebhome="on" prefix=" <span class='patternSeparator'>&gt;</span> " suffix=""}% <span class='patternSeparator'>&gt;</span> <nop>%TOPIC% </span></span><span class="twikiHidden"><br /><br /></span><span class="twikiRight patternPageNav twikiGrayText"><a href="#PageTop" title="Jump to start of topic" accesskey="t">to&nbsp;<span class="patternAccessKey">t</span>op</a></span><br class="twikiClear" /><span class="twikiHidden"><br /></span></div>
+<div class="patternTopicFooter"></div>
 #PageBottom %TMPL:END%
 
 

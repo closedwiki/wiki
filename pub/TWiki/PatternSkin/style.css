@@ -13,10 +13,11 @@
 	C4	topic action background; left bar top thick border							#666
 	C5	color H2, code text															#900
 	C6	grayed out text																#8490A1
-	C7	page, legend background color												#F8F4F1
+	C7	page, legend background color												#f7f7f7
 	C8	h2 background color															#F3EDE7
 	C9	neutral table bg gray that should work on light and dark backgrounds		#999
 	C10	line-height																	1.4em
+	C11	small font size																85%
 	---------------------------------------------------------------------------------------	*/
 
 /*	-----------------------------------------------------------
@@ -27,7 +28,7 @@
 html body {
 	line-height:1.4em; /*C10*/
 	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
-	background-color:#F8F4F1; /*C7*/
+	background-color:#f7f7f7; /*C7*/
 	color:#000;
 	margin:0;
 	padding:0;
@@ -94,8 +95,8 @@ h2 {
 	font-size:145%;
 	display:block;
 	background-color:#F3EDE7; /*C8*/
-	padding:0.2em 0.7em;
-	margin:1em -0.7em 0.35em -0.7em;
+	padding:0.2em 10px;
+	margin:1em -10px 0.35em -10px;
 	height:auto;
 }
 h3 { font-size:140%;}
@@ -198,7 +199,7 @@ legend {
 	color:#8490A1; /*C6*/
 	font-size:95%;
 	border:1px solid #8490A1; /*C6*/
-	background-color:#F8F4F1; /*C7*/
+	background-color:#f7f7f7; /*C7*/
 }
 label {
 	margin-left:0.5em;
@@ -277,11 +278,9 @@ label {
 	font-weight:bold;
 	text-align:center;
 	line-height:104%;
-	padding:0;
-	margin:1em 0 0.1em 0;
 	display:block;
 	background-color:#efefef; /* color variable WEBBGGCOLOR is set in twiki.pattern.tmpl */
-	padding:0.7em 0;
+	padding:10px 0;
 	margin:0;
 }
 .patternWebIndicator ul,
@@ -364,7 +363,7 @@ html>body .patternLeftBar li a {
 
 /* Topic text */
 .patternTopic {
-	padding-bottom:1.5em;
+	padding:1em 0 1.5em 0;
 	background-color:transparent;
 }
 .patternTopic pre {
@@ -721,26 +720,6 @@ html>body .twikiToc li a {
 	margin:0.5em 0 0 0;
 }
 
-/* Revision info */
-.patternRevInfo {
-	display:block;
-	font-size:95%;
-}
-.patternRevInfo a {
-	color:#8490A1; /*C6*/
-	text-decoration:none;
-	font-weight:bold;
-}
-.patternRevInfo .patternPageNav {
-	/* this is ugly, I know */
-	font-size:100%;
-}
-.patternRevInfo em,
-.patternRevInfo i {
-	font-style:normal;
-}
-.patternRevision {}
-
 /* Footer */
 .patternTopicFooter {
 	display:block;
@@ -748,66 +727,43 @@ html>body .twikiToc li a {
 	padding-bottom:2em;
 }
 
-/* Homepath */
-.patternHomePath {
-	font-size:90%;
+.patternTop {
+	background-color:#eee; /*C13*/
+	line-height:1.5em;
+	padding:0.2em 10px; /*C12*/
+	margin:0 -10px 0.35em -10px; /*C12*/
 }
-.patternHomePath a:hover {
+.patternHomePath,
+.patternRevInfo {	
+	font-size:85%; /*C11*/
+	color:#666; /*C4*/
+}
+.patternHomePath a:link,
+.patternHomePath a:visited,
+.patternRevInfo a:link,
+.patternRevInfo a:visited {
+	color:#666; /*C4*/
 	text-decoration:underline;
+}
+.patternHomePath a:hover,
+.patternRevInfo a:hover {
+	color:#0029A3; /*C3*/
 }
 
 /* Tool bar at top of topic */
 .patternToolBar {
-	display:block;
-	padding:0.3em 0 1em 0;
-	margin-left:-0.55em; /* same amount as button padding */
-	margin-bottom:0.5em;
-	height:1.3em; /* WIN/IE needs this, or a top border is drawn */
 }
-.patternToolBar p {
-	clear:both;
-	height:0;
-	display:none;
+.patternToolBar a,
+.patternToolBar s,
+.patternToolBar strike {
+	margin-right:0.2em;
 }
-.patternToolBar ul {
-	display:inline;
-	padding:0;
-	margin:0;
-	float:left;
-	font-size:95%;
-}
-.patternToolBar ul li {
-	display:inline;
-	color:#8490A1; /*C6*/
-	font-weight:bold;
-}
-.patternToolBar ul li s,
-.patternToolBar ul li strike {
-	padding:0 0.55em;
-	float:left;
-}
-.patternToolBar ul li a:link,
-.patternToolBar ul li a:visited {
-	padding:0 0.55em;
-	float:left;
-	text-decoration:none;
-	padding-bottom:1px; /* to account for hover border */
-	color:#8490A1; /*C6*/
-	font-weight:bold;
-}
-.patternToolBar ul li a:hover {
+.patternToolBar a:hover {
 	color:#0029A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
-	padding-bottom:0;
-	border-bottom:1px solid #0054C0; /*C1*/
-	text-decoration:none;
 }
-.patternToolBar .patternRevInfo {
-	text-align:right;
-}
-.patternToolbarElem {
-	margin-left:0.7em;
-	color:#8490A1; /*C6*/
+.patternToolBar br {
+	display:none; /* displayed in text-only browsers */
 }
 
 /* page nav:top to, to bottom */
@@ -934,8 +890,8 @@ html>body .twikiToc li a {
 .twikiBroadcastMessage {
 	background-color:#ff0;
 	color:black;
-	padding:0.2em 0.7em;
-	margin:0 -0.7em 0.5em -0.7em;
+	padding:0.2em 10px;
+	margin:0 -10px 0.5em -10px;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
@@ -957,11 +913,11 @@ html>body .twikiToc li a {
 	color:#0029A3; /*C3*/
 }
 .twikiSmall {
-	font-size:85%;
+	font-size:85%; /*C11*/
 }
 .twikiNew { }
 .twikiSummary {
-	font-size:85%;
+	font-size:85%; /*C11*/
 	line-height:1.3em;
 }
 .patternAccessKey {
@@ -997,8 +953,8 @@ a:hover .patternAccessKey {
 .patternSearchResults {}
 
 .patternSearchResultsHeader {
-	padding:0.25em 0.7em 0.15em 0.7em;
-	margin:0 -0.7em 0.25em -0.7em;
+	padding:0.25em 10px 0.15em 10px;
+	margin:0 -10px 0.25em -10px;
 	font-weight:bold;
 	background-color:#F3EDE7; /*C8*/
 	border-bottom:1px solid #ccc;
@@ -1031,7 +987,7 @@ a:hover .patternAccessKey {
 .patternSearchResults .twikiNew {
 	background-color:green;
 	color:#fff;
-	font-size:85%;
+	font-size:85%; /*C11*/
 	padding:1px;
 	font-weight:bold;
 }
@@ -1064,8 +1020,8 @@ a:hover .patternAccessKey {
 	margin-bottom:1em;
 }
 .patternBookViewList .twikiTopRow {
-	padding:0.2em 0.7em;
-	margin:2.5em -0.7em 0.15em -0.7em;
+	padding:0.2em 10px;
+	margin:2.5em -10px 0.15em -10px;
 	background-color:#666; /*C4*/
 	color:#ccc;
 }
@@ -1253,7 +1209,7 @@ a:hover .patternAccessKey {
 }
 .patternAttachPage .patternVersatileTable th,
 .patternAttachPage .patternVersatileTable td {
-	padding:0.7em 1em 0.7em 1.25em;
+	padding:10px 1em 10px 1.25em;
 }
 .patternAttachPage .patternVersatileTable th {
 	text-align:left;
