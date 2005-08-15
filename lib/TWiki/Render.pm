@@ -703,7 +703,11 @@ sub _protocolLink {
         # match, not a CAPWORD match?
         $theText =~ s/(?<=[\s\(])([$TWiki::regex{upperAlpha}])/<nop>$1/go;
     }
-    return CGI::a( { href=>$url, target=>'_top' }, $theText );
+    # SMELL: Can't use CGI::a here, because it encodes ampersands in the link,
+    # and those have already been encoded once in the rendering loop (they are
+    # identified as "stand-alone"). One encoding works; two is too many. None
+    # would be better for everyone!
+    return '<a href="'.$url.' target="_top">'.$theText.'</a>';
 }
 
 # Handle an external link typed directly into text. If it's an image
