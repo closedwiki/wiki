@@ -447,7 +447,7 @@ sub searchWeb {
             # the web processing loop filters for valid web names,
             # so don't do it here.
             if ( $web =~ s/^-// ) {
-                $excludeWeb{$1} = 1;
+                $excludeWeb{$web} = 1;
             } else {
                 push( @tmpWebs, $web );
                 if( TWiki::isTrue( $subWeb ) || $web =~ /^(all|on)$/i ) {
