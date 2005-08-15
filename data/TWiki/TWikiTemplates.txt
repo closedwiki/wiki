@@ -61,7 +61,7 @@ TWiki uses the following search order to determine which template file or topic 
    1 templates/%RED%script%ENDCOLOR%.%RED%skin%ENDCOLOR%.tmpl for each %RED%skin%ENDCOLOR% on the skin path
    1 templates/%RED%web%ENDCOLOR%/%RED%script%ENDCOLOR%.tmpl
    1 templates/%RED%script%ENDCOLOR%.tmpl
-   1 %RED%pweb%ENDCOLOR%.%RED%ptopic%ENDCOLOR% if the template name can be parsed into %RED%pweb%ENDCOLOR%.%RED%ptopic%ENDCOLOR% (e.g. "Myweb.MyTemplate")
+   1 %RED%web%ENDCOLOR%.%RED%topic%ENDCOLOR% if the template name can be parsed into %RED%web%ENDCOLOR%.%RED%topic%ENDCOLOR% (e.g. "Myweb.MyTemplate")
    1 %RED%web%ENDCOLOR%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
    1 %RED%web%ENDCOLOR%.%RED%Script%ENDCOLOR%Template
    1 %TWIKIWEB%.%RED%Skin%ENDCOLOR%Skin%RED%Script%ENDCOLOR%Template for each %RED%skin%ENDCOLOR% on the skin path
@@ -83,7 +83,7 @@ The template name may also be a full =%RED%Web%ENDCOLOR%.%RED%Topic%ENDCOLOR%= n
 </blockquote>
 
 ---++ Master Templates
-Master templates use the block definition directives (=%TMPL:DEF= and =%TMPL:END%) to define common sections that appear in two or more other templates. ==twiki.tmpl== is the default master template.
+Master templates use the block definition directives (=%TMPL:DEF= and =%TMPL:END%=) to define common sections that appear in two or more other templates. ==twiki.tmpl== is the default master template.
 <blockquote>
 | *Template variable:* | *Defines:* |
 | %<nop>TMPL:DEF{"sep"}% | "&#124;" separator |
