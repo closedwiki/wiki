@@ -257,7 +257,10 @@ sub getWebNames {
     my $this = shift;
     my $dir = $TWiki::cfg{DataDir}.'/'.$this->{web};
     if( opendir( DIR, $dir ) ) {
-        my @tmpList = grep { !/^\./ && -d $dir.'/'.$_ } readdir( DIR );
+        my @tmpList =
+          grep { !/$TWiki::cfg{NameFilter}/ &&
+                   !/^\./ &&
+                     -d $dir.'/'.$_ } readdir( DIR );
         closedir( DIR );
         return @tmpList;
     }

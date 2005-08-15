@@ -182,11 +182,24 @@ sub upload {
         my @pathza = ( split( '/', $filetemp ) );
         $fileName = $pathza[$#pathza];
 
-        # Delete unwanted characters from filename, with I18N
-        my $nonAlphaNum = "[^$TWiki::regex{mixedAlphaNum}" . '\._-]+';
-        $fileName =~ s/${nonAlphaNum}//go;
-        # apply security filter
-        $fileName =~ s/$TWiki::cfg{UploadFilter}/$1\.txt/goi;
+        # Check that name isn't filtered for upload
+        # Check that name doesn't contain illegal chars
+        if( $fileName =~ /$TWiki::cfg{UploadFilter}/ ||
+              $fileName =~ /$TWiki::cfg{NameFilter}/ ) {
+            my $e1 = $TWiki::cfg{UploadFilter};
+            $e1 =~ s#\(\?-xism:(.*)\)$#/$1/#;
+            my $e2 = $TWiki::cfg{NameFilter};
+            $e2 =~ s#\(\?-xism:(.*)\)$#/$1/#;
+            throw TWiki::OopsException( 'attention',
+                                        def => 'illegally_named_upload',
+                                        web => $webName,
+                                        topic => $topic,
+                                        params =>
+                                          [ $fileName,
+                                            $e1,
+                                            $e2 ] );
+        }
+
         $fileName = TWiki::Sandbox::untaintUnchecked( $fileName );
 
         ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
