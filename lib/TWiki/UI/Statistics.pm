@@ -228,20 +228,6 @@ sub _collectLogData {
     my %statSaves;
     my %statUploads;
 
-    # Imported regex objects, supporting I18N
-    my $webNameRegex = $TWiki::regex{webNameRegex};
-    my $wikiWordRegex = $TWiki::regex{wikiWordRegex};
-    my $abbrevRegex = $TWiki::regex{abbrevRegex};
-
-    # Script regexes
-    my $intranetUserRegex = qr/[a-z0-9]+/;	# FIXME: should centralise this
-    my $userRegex = qr/(?:$intranetUserRegex|$wikiWordRegex)/o;
-    my $opRegex = qr/[a-z0-9]+/;        	# Operation, no i18n needed
-    # my $topicRegex = qr/(?:$wikiWordRegex|$abbrevRegex)/; 	# Strict topic names only
-    my $topicRegex = qr/[^ ]+/; 	# Relaxed topic names - any non-space OK
-    # but won't be auto-linked in WebStatistics
-    my $errorRegex = qr/\(not exist\)/; 	# Match '(not exist)' flag
-
     binmode $TMPFILE;
     while ( my $line = <$TMPFILE> ) {
         my @fields = split( /\s*\|\s*/, $line );
@@ -258,7 +244,7 @@ sub _collectLogData {
         # ignore minor changes - not statistically helpful
         next if( $notes && $notes =~ /(minor|dontNotify)/ );
 
-        if( $opName && $webTopic =~ /($webNameRegex)\.($wikiWordRegex)/ ) {
+        if( $opName && $webTopic =~ /(\w+)\.(\w+)/ ) {
             my $webName = $1;
             my $topicName = $2;
 
@@ -278,7 +264,7 @@ sub _collectLogData {
 
             } elsif( $opName eq 'rename' ) {
                 # Pick up the old and new topic names
-                $notes =~/moved to ($webNameRegex)\.($topicRegex)/o;
+                $notes =~/moved to (\w+)\.(\w+)/o;
                 my $newTopicWeb = $1;
                 my $newTopicName = $2;
 
