@@ -235,10 +235,13 @@ sub getTopicNames {
     my $this = shift;
 
     opendir DIR, $TWiki::cfg{DataDir}.'/'.$this->{web};
-    my @topicList;
-    foreach my $topic ( sort grep { s/\.txt$// } readdir( DIR )) {
-        push(@topicList, TWiki::Sandbox::untaintUnchecked( $topic ));
-    }
+    # the name filter is used to ensure we don't return filenames
+    # that contain illegal characters as topic names.
+    my @topicList =
+      sort
+        map { TWiki::Sandbox::untaintUnchecked( $_ ) }
+          grep { !/$TWiki::cfg{NameFilter}/ && s/\.txt$// }
+            readdir( DIR );
     closedir( DIR );
     return @topicList;
 }
