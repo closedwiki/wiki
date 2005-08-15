@@ -35,7 +35,7 @@ _Templates_ are plain text with embedded _template directives_ that tell TWiki h
 	* %X% *NOTE:* Template directives work only for templates: they do not get processed in normal topic text.
 
 TMPL:P also supports simple parameters. For example, given the definition
-=%<nop>TMPL:DEF{"x"}% x%P%z%<nop>TMPL:END%= then =%<nop>TMPL:P{"x" P="y"}%= will expand to =xyz=.
+=%<nop>TMPL:DEF{"x"}% x%<nop>P%z%<nop>TMPL:END%= then =%<nop>TMPL:P{"x" P="y"}%= will expand to =xyz=.
 
 Note that parameters can simply be ignored; for example=%<nop>TMPL:P{"x"}%= will expand to x%<nop>P%z.
 
