@@ -109,7 +109,11 @@ sub _dropBack {
     return $text;
 }
 
-# Cribbed wholesale from Render.pm on the DevelopBranch
+# Parse and convert twiki variables. If we are not using span markers
+# for variables, we have to change the percent signs into entities
+# to prevent internal tags being expanded by TWiki during rendering.
+# It's assumed that the editor will have the common sense to convert
+# them back to characters when editing.
 sub _processTags {
     my( $this, $text ) = @_;
 
@@ -134,7 +138,7 @@ sub _processTags {
                 if( $this->{markvars} ) {
                     $tag = CGI::span({class => 'TMLvariable'}, $tag);
                 } else {
-                    $tag = '%'.$tag.'%';
+                    $tag = '&#37;'.$tag.'&#37;';
                 }
                 if( $1 && $1 eq '<nop>' ) {
                     $tag = CGI::span({class => 'TMLnop'}, $tag);
