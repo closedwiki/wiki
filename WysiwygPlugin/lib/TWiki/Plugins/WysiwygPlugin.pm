@@ -101,12 +101,12 @@ sub beforeSaveHandler {
 # provide the text for that request. It's a real struggle, because the
 # commonTagsHandler is called so many times that getting the right
 # call is hard, and then preventing a repeat call is harder!
-sub commonTagsHandler {
+sub beforeCommonTagsHandler {
     #my ( $text, $topic, $web )
 
     return if ( $inSave || $calledThisSession );
-
     my $query = TWiki::Func::getCgiQuery();
+
     return unless $query;
 
     return unless defined( $query->param( 'wysiwyg_edit' ));
@@ -123,8 +123,7 @@ sub commonTagsHandler {
     }
 
     # Have to re-read the topic because verbatim blocks have already been
-    # lifted out, and we need them. We really need a hook that lets
-    # us intercept raw=text.
+    # lifted out, and we need them.
     my( $meta, $text ) = TWiki::Func::readTopic( $_[2], $_[1] );
     $_[0] = $tml2html->convert( $text );
     $calledThisSession = 1;
