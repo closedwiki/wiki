@@ -57,7 +57,7 @@ sub verifyRepRev {
     my $topic = "RcsRepRev";
 
     my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
-    $rcs->addRevision( "there was a man\n\n", "in once", "JohnTalintyre" );
+    $rcs->addRevisionFromText( "there was a man\n\n", "in once", "JohnTalintyre" );
     $this->assert_equals( "there was a man\n\n", $rcs->getRevision(1) );
     $this->assert_equals( 1, $rcs->numRevisions() );
 
@@ -65,7 +65,7 @@ sub verifyRepRev {
                            "NotJohnTalintyre", time() );
     $this->assert_equals( 1, $rcs->numRevisions() );
     $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
-    $rcs->addRevision( "and now this\n\n\n", "2nd entry", "J1" );
+    $rcs->addRevisionFromText( "and now this\n\n\n", "2nd entry", "J1" );
     $this->assert_equals( 2, $rcs->numRevisions() );
     $this->assert_equals( "there was a cat\n", $rcs->getRevision(1) );
     $this->assert_equals( "and now this\n\n\n", $rcs->getRevision(2) );
@@ -82,7 +82,7 @@ sub test_RcsWrapOnly_ciLocked {
     my $topic = "CiTestLockedTempDeleteMeItsOk";
     # create the fixture
     my $rcs = TWiki::Store::RcsWrap->new( $twiki, $testWeb, $topic, "" );
-    $rcs->addRevision( "Shooby Dooby", "original", "BungditDin" );
+    $rcs->addRevisionFromText( "Shooby Dooby", "original", "BungditDin" );
     # hack the lock so someone else has it
     my $user = `whoami`;
     chop($user);
@@ -183,7 +183,7 @@ sub verifyGetRevision {
 
     for( my $i = 0; $i < scalar(@$revs); $i++ ) {
         my $text = $revs->[$i];
-        $rcs->addRevision( $text, "rev".($i+1), "UserForRev".($i+1) );
+        $rcs->addRevisionFromText( $text, "rev".($i+1), "UserForRev".($i+1) );
     }
 
     $rcs = $class->new( $twiki, $testWeb, $topic );
@@ -206,12 +206,17 @@ sub verifyGetBinaryRevision {
     my $attachment = "file.binary";
     my $rcs = $class->new( $twiki, $testWeb, $topic, $attachment );
     $rcs->_saveFile("tmp.tmp", $atttext1) && die;
-    $rcs->addRevision( "tmp.tmp", "comment attachment",
+    my $fh;
+    open($fh, "<tmp.tmp");
+    $rcs->addRevisionFromStream( $fh, "comment attachment",
                        "UserForRev" );
+    close($fh);
     unlink("tmp.tmp");
     $rcs->_saveFile("tmp.tmp", $atttext2) && die;
-    $rcs->addRevision( "tmp.tmp", "comment attachment",
-                       "UserForRev" );
+    open($fh, "<tmp.tmp");
+    $rcs->addRevisionFromStream( $fh, "comment attachment",
+                                 "UserForRev" );
+    close($fh);
     unlink("tmp.tmp");
 
     $rcs = $class->new( $twiki, $testWeb, $topic, $attachment );
@@ -228,7 +233,7 @@ sub verifyKeywords {
     my $topic = "TestRcsTopic";
     my $check = '$Author$ $Date$ $Header$ $Id$ $Locker$ $Log$ $Name$ $RCSfile$ $Revision$ $Source$ $State$';
     my $rcs = $class->new( $twiki, $testWeb, $topic, undef );
-    $rcs->addRevision( $check, "comment", "UserForRev0" );
+    $rcs->addRevisionFromText( $check, "comment", "UserForRev0" );
     open(F,"<$rcs->{file}") || die "Failed to open $rcs->{file}";
     undef $/;
     $this->assert_str_equals($check, <F>);
@@ -241,8 +246,8 @@ sub verifyDifferences {
     my $topic = "RcsDiffTest";
     my $rcs = $class->new( $twiki, $testWeb, $topic, "" );
 
-    $rcs->addRevision( $from, "num 0", "RcsWrapper" );
-    $rcs->addRevision( $to, "num 1", "RcsWrapper" );
+    $rcs->addRevisionFromText( $from, "num 0", "RcsWrapper" );
+    $rcs->addRevisionFromText( $to, "num 1", "RcsWrapper" );
 
     $rcs = $class->new( $twiki, $testWeb, $topic, "" );
 
@@ -285,9 +290,9 @@ sub verifyRevAtTime {
     my( $this, $class ) = @_;
 
     my $rcs = $class->new( $twiki, $testWeb, 'AtTime', "" );
-    $rcs->addRevision( "Rev0\n", '', "RcsWrapper", 0 );
-    $rcs->addRevision( "Rev1\n", '', "RcsWrapper", 1000 );
-    $rcs->addRevision( "Rev2\n", '', "RcsWrapper", 2000 );
+    $rcs->addRevisionFromText( "Rev0\n", '', "RcsWrapper", 0 );
+    $rcs->addRevisionFromText( "Rev1\n", '', "RcsWrapper", 1000 );
+    $rcs->addRevisionFromText( "Rev2\n", '', "RcsWrapper", 2000 );
     $rcs = $class->new( $twiki, $testWeb, 'AtTime', "" );
 
     my $r = $rcs->getRevisionAtTime(500);
@@ -302,9 +307,9 @@ sub verifyRevInfo {
     my( $this, $class ) = @_;
 
     my $rcs = $class->new( $twiki, $testWeb, 'RevInfo', "" );
-    $rcs->addRevision( "Rev1\n", 'FirstComment', "FirstUser", 0 );
-    $rcs->addRevision( "Rev2\n", 'SecondComment', "SecondUser", 1000 );
-    $rcs->addRevision( "Rev3\n", 'ThirdComment', "ThirdUser", 2000 );
+    $rcs->addRevisionFromText( "Rev1\n", 'FirstComment', "FirstUser", 0 );
+    $rcs->addRevisionFromText( "Rev2\n", 'SecondComment', "SecondUser", 1000 );
+    $rcs->addRevisionFromText( "Rev3\n", 'ThirdComment', "ThirdUser", 2000 );
 
     $rcs = $class->new( $twiki, $testWeb, 'RevInfo', "" );
 

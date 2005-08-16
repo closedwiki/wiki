@@ -116,7 +116,7 @@ The Application Programming Interface (API) for <nop>TWikiPlugins provides the s
 
 ---+++ Available Core Functions
 
-The FuncDotPm module (=lib/TWiki/Func.pm=) implements ALL official Plugin functions. Plugins should ONLY use functions published in this module.
+The TWikiFuncDotPm module (=lib/TWiki/Func.pm=) implements ALL official Plugin functions. Plugins should ONLY use functions published in this module.
 
 %X% If you use functions not in =Func.pm=, you run the risk of creating security holes. Also, your Plugin will likely break and require updating when you upgrade to a new version of TWiki.
 
@@ -269,7 +269,7 @@ In case the Plugin generates data just for internal use, or data which is not sp
 		* The leading underscore avoids a nameclash with files attached to the Plugin topic
 		* Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
 		* Do not use subdirectories (rename and delete would fail)
-	* Use Plugin API functions documented in FuncDotPm to ensure portability:
+	* Use Plugin API functions documented in TWikiFuncDotPm to ensure portability:
 		* Use =getPubDir()= to get the attachment root directory
 		* Use =getUrlHost()= and =getPubUrlPath()= to build the URL in case you create content for the browser
 		* Use =$installWeb= to get the name of the web where the Plugin is installed
@@ -286,7 +286,7 @@ In case the Plugin generates data which is specific to a topic, store it in the 
 		* The leading underscore avoids a nameclash with files attached to the same topic
 		* Use only alphanumeric characters, underscores and periods to avoid platform dependency issues and URL issues
 		* Do not use subdirectories (rename and delete would fail)
-	* Use Plugin API functions documented in FuncDotPm to ensure portability:
+	* Use Plugin API functions documented in TWikiFuncDotPm to ensure portability:
 		* Use =getPubDir()= to get the attachment root directory
 		* Use =getUrlHost()= and =getPubUrlPath()= to build the URL in case you create content for the browser
 

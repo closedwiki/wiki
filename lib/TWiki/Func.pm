@@ -74,6 +74,7 @@ Return: =$value=  Value associated with key; empty string if not set
 
 sub getSessionValue {
 #   my( $theKey ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     return $TWiki::Plugins::SESSION->{client}->getSessionValue( @_ );
 }
@@ -94,6 +95,8 @@ Return: =$result=   ="1"= if success; undef if session plugin is not installed
 
 sub setSessionValue {
 #   my( $theKey, $theValue ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     $TWiki::Plugins::SESSION->{client}->setSessionValue( @_ );
 }
 
@@ -109,6 +112,8 @@ Return: =$skin= Comma-separated list of skins, e.g. ='gnu,tartan'=. Empty string
 =cut
 
 sub getSkin {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     return $TWiki::Plugins::SESSION->getSkin();
 }
 
@@ -124,6 +129,8 @@ Return: =$host= URL host, e.g. ="http://example.com:80"=
 =cut
 
 sub getUrlHost {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     return $TWiki::Plugins::SESSION->{urlHost};
 }
 
@@ -143,6 +150,8 @@ Return: =$url=       URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebN
 
 sub getScriptUrl {
 #   my( $web, $topic, $script ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     return $TWiki::Plugins::SESSION->getScriptUrl( @_ ); 
 }
 
@@ -158,6 +167,8 @@ Return: =$path= URL path of TWiki scripts, e.g. ="/cgi-bin"=
 =cut
 
 sub getScriptUrlPath {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     return $TWiki::Plugins::SESSION->{scriptUrlPath};
 }
 
@@ -176,6 +187,8 @@ Return: =$url=      URL, e.g. ="http://example.com:80/cgi-bin/view.pl/Main/WebNo
 
 sub getViewUrl {
     my( $web, $topic ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     $web ||= $TWiki::Plugins::SESSION->{webName} || $TWiki::cfg{UsersWebName};
     return $TWiki::Plugins::SESSION->getScriptUrl( $web, $topic, 'view' );
 }
@@ -197,6 +210,8 @@ Return: =$url=                     URL, e.g. ="http://example.com:80/cgi-bin/oop
 
 sub getOopsUrl {
     my( $web, $topic, $template, @params ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     $template =~ s/^oops//;
     return $TWiki::Plugins::SESSION->getOopsUrl( $template, web => $web,
                                                  topic => $topic,
@@ -230,6 +245,7 @@ Return: =$query= CGI query object; or 0 if script is called as a shell script
 =cut
 
 sub getCgiQuery {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{cgiQuery};
 }
 
@@ -248,6 +264,7 @@ Return:             none
 
 sub writeHeader {
     my( $theQuery ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->writePageHeader( $theQuery );
 }
 
@@ -266,6 +283,7 @@ Return:             none, never returns
 
 sub redirectCgiQuery {
     my( $theQuery, $theUrl ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->redirect( $theUrl );
 }
 
@@ -288,6 +306,7 @@ in the %TWIKIWEB%.TWikiTemplates topic.
 =cut
 
 sub getContext {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{context};
 }
 
@@ -371,6 +390,7 @@ Return: =$value=  Preferences value; empty string if not set
 
 sub getPreferencesValue {
 #   my( $theKey, $theWeb ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{prefs}->getPreferencesValue( @_ );
 }
 
@@ -388,6 +408,7 @@ Return: =$value=  Preferences value; empty string if not set
 
 sub getPluginPreferencesValue {
     my( $theKey ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
     return $TWiki::Plugins::SESSION->{prefs}->getPreferencesValue( "\U$package\E_$theKey" );
@@ -413,6 +434,7 @@ Return: =$value=  Preferences flag ='1'= (if set), or ="0"= (for preferences val
 
 sub getPreferencesFlag {
 #   my( $theKey, $theWeb ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{prefs}->getPreferencesFlag( @_ );
 }
 
@@ -430,6 +452,7 @@ Return: =$flag=   Preferences flag ='1'= (if set), or ="0"= (for preferences val
 
 sub getPluginPreferencesFlag {
     my( $theKey ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
     return $TWiki::Plugins::SESSION->{prefs}->getPreferencesFlag( "\U$package\E_$theKey" );
@@ -509,6 +532,7 @@ Return: =$wikiName= Wiki Name, e.g. ='JohnDoe'=
 =cut
 
 sub getWikiName {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{user}->wikiName();
 }
 
@@ -524,6 +548,7 @@ Return: =$wikiName= Wiki Name, e.g. ="Main.JohnDoe"=
 =cut
 
 sub getWikiUserName {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{user}->webDotWikiName();
 }
 
@@ -541,6 +566,7 @@ Return: =$loginName=   Login name of user, e.g. ='jdoe'=
 
 sub wikiToUserName {
     my( $wiki ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
     return $wiki unless $user;
@@ -563,6 +589,7 @@ Return: =$wikiName=      Wiki name of user, e.g. ='Main.JohnDoe'= or ='JohnDoe'=
 sub userToWikiName {
     my( $login, $dontAddWeb ) = @_;
     return '' unless $login;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $login );
     return '' unless $user;
     return $user->wikiName() if $dontAddWeb;
@@ -581,6 +608,7 @@ Return: =$flag= ="1"= if yes, ="0"= if not
 =cut
 
 sub isGuest {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{user}->isDefaultUser();
 }
 
@@ -598,6 +626,7 @@ Return: =$flag=   ="1"= if yes, ="0"= if no
 
 sub permissionsSet {
 #   my( $web ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{security}->permissionsSet( @_ );
 }
 
@@ -620,6 +649,7 @@ Return: =$flag=        ="1"= if access may be granted, ="0"= if not
 sub checkAccessPermission {
     my( $type, $user, $text, $topic, $web ) = @_;
     return 1 unless ( $user );
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     $user = $TWiki::Plugins::SESSION->{users}->findUser( $user );
     return $TWiki::Plugins::SESSION->{security}->checkAccessPermission
       ( $type, $user, $text, $topic, $web );
@@ -641,6 +671,7 @@ Return: =$flag=   ="1"= if web exists, ="0"= if not
 
 sub webExists {
 #   my( $theWeb ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->webExists( @_ );
 }
 
@@ -659,6 +690,7 @@ $web and $topic are parsed as described in the documentation for =normalizeWebTo
 
 sub topicExists {
     my( $web, $topic ) = $TWiki::Plugins::SESSION->normalizeWebTopicName( @_ );
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->topicExists( $web, $topic );
 }
 
@@ -685,6 +717,7 @@ more efficient.
 =cut
 
 sub getRevisionInfo {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->getRevisionInfo( @_ );
 }
 
@@ -702,6 +735,7 @@ Returns a single-digit rev number or undef if it couldn't be determined
 =cut
 
 sub getRevisionAtTime {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->getRevisionAtTime( @_ );
 }
 
@@ -717,6 +751,7 @@ Return =( $oopsUrl, $loginName, $unlockTime )= | The =$oopsUrl= for calling redi
 
 sub checkTopicEditLock {
     my( $web, $topic ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     ( $web, $topic ) = normalizeWebTopicName( $web, $topic );
 
@@ -757,6 +792,7 @@ merged.
 
 sub setTopicEditLock {
     my( $web, $topic, $lock ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $session = $TWiki::Plugins::SESSION;
     my $store = $session->{store};
     if( $lock ) {
@@ -790,6 +826,7 @@ This method *ignores* topic access permissions. You should be careful to use =ch
 
 sub readTopic {
     my( $web, $topic ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     return $TWiki::Plugins::SESSION->{store}->readTopic( undef, $web, $topic, undef, 0 );
 }
@@ -813,6 +850,7 @@ This method is more efficient than =readTopic=, but returns meta-data embedded i
 
 sub readTopicText {
     my( $web, $topic, $rev, $ignorePermissions ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     my $user;
     $user = $TWiki::Plugins::SESSION->{user}
@@ -862,6 +900,7 @@ appropriate.
 
 sub saveTopic {
     my( $web, $topic, $meta, $text, $options ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
     return $TWiki::Plugins::SESSION->{store}->saveTopic
       ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
@@ -902,6 +941,8 @@ This method is inherently less efficient and more dangerous than =saveTopic=.
 
 sub saveTopicText {
     my( $web, $topic, $text, $ignorePermissions, $dontNotify ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
     my $session = $TWiki::Plugins::SESSION;
     my( $mirrorSite, $mirrorViewURL ) = $session->readOnlyMirrorWeb( $web );
     return $session->getOopsUrl
@@ -946,6 +987,92 @@ sub saveTopicText {
     return '';
 }
 
+=cut
+
+---+++ readAttachment( $web, $topic, $name, $rev ) -> $data
+   * =$web= - web for topic
+   * =$topic= - topic
+   * =$name= - attachment name
+   * =$rev= - revision to read (default latest)
+Read an attachment from the store for a topic, and return it as a string. The names of attachments on a topic can be recovered from the meta-data returned by =readTopic=. If the attachment does not exist, or cannot be read, undef will be returned.
+
+View permission on the topic is required for the
+read to be successful.  Access control violations are flagged by a
+TWiki::AccessControlException. Permissions are checked for the user
+passed in.
+
+<verbatim>
+my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
+my @attachments = $meta->find( 'FILEATTACHMENT' );
+foreach my $a ( @attachments ) {
+   my $data = TWiki::Func::readAttachment( $meta, $a->{name} );
+   ...
+}
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.026
+
+=cut
+
+sub readAttachment {
+    my( $meta, $name ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    my $result;
+
+#    try {
+        $result = $TWiki::Plugins::SESSION->{store}->readAttachment(
+            $TWiki::Plugins::SESSION->{user}, @_ );
+#    } catch Error::Simple with {
+#    };
+    return $result;
+}
+
+=pod
+
+---+++ saveAttachment( $web, $topic, $attachment, $opts )
+   * =$web= - web for topic
+   * =$topic= - topic to atach to
+   * =$attachment= - name of the attachment
+   * =$opts= - Ref to hash of options
+=$opts= may include:
+| =dontlog= | don't log this change in twiki log |
+| =comment= | comment for save |
+| =hide= | if the attachment is to be hidden in normal topic view |
+| =stream= | Stream of file to upload |
+| =file= | Name of a file to use for the attachment data. ignored if stream is set. Local file on the server. |
+| =filepath= | Client path to file |
+| =filesize= | Size of uploaded data |
+| =filedate= | Date |
+
+Save an attachment to the store for a topic. On success, returns undef. If there is an error, a report string will be returned.
+<verbatim>
+    TWiki::Func::saveAttachment( $web, $topic, 'image.gif',
+                                 { file => 'image.gif',
+                                   comment => 'Picture of Health',
+                                   hide => 1 } );
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.026
+
+=cut
+
+sub saveAttachment {
+    my( $web, $topic, $name, $data ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    my $result = undef;
+
+    try {
+        $TWiki::Plugins::SESSION->{store}->saveAttachment(
+            $web, $topic, $name,
+            $TWiki::Plugins::SESSION->{user},
+            $data );
+    } catch Error::Simple with {
+        $result = shift->{-text};
+    };
+
+    return $result;
+}
+
 =pod
 
 ---+++ getPublicWebList( ) -> @webs
@@ -959,6 +1086,7 @@ Return: =@webs= List of all public webs, e.g. =( 'Main',  'Know', 'TWiki' )=
 =cut
 
 sub getPublicWebList {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->getListOfWebs("user,public");
 }
 
@@ -985,6 +1113,7 @@ as follows:
 
 sub getListOfWebs {
     my $filter = shift;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->getListOfWebs($filter);
 }
 
@@ -1016,6 +1145,7 @@ Return: =@topics= Topic list, e.g. =( 'WebChanges',  'WebHome', 'WebIndex', 'Web
 
 sub getTopicList {
 #   my( $web ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->getTopicNames ( @_ );
 }
 
@@ -1069,6 +1199,7 @@ would let you do this:
 
 sub registerTagHandler {
     my( $tag, $function ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     # Use an anonymous function so it gets inlined at compile time.
     # Make sure we don't mangle the session reference.
     TWiki::registerTagHandler( $tag,
@@ -1105,6 +1236,7 @@ TWiki::Func::addToHEAD('PATTERN_STYLE','<link id="twikiLayoutCss" rel="styleshee
 
 sub addToHEAD {
 	my( $tag, $header ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 	$TWiki::Plugins::SESSION->addToHEAD( $tag, $header );
 }
 
@@ -1126,6 +1258,7 @@ See also: expandVariablesOnTopicCreation
 
 sub expandCommonVariables {
     my( $text, $topic, $web ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     $topic ||= $TWiki::Plugins::SESSION->{topicName};
     $web ||= $TWiki::Plugins::SESSION->{webName};
     return $TWiki::Plugins::SESSION->handleCommonTags( $text, $web, $topic );
@@ -1146,6 +1279,7 @@ Return: =$text=    XHTML text, e.g. ='&lt;b>bold&lt;/b> and &lt;code>fixed font&
 
 sub renderText {
 #   my( $text, $web ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{renderer}->getRenderedVersion( @_ );
 }
 
@@ -1168,6 +1302,7 @@ Return: =$text=          XHTML anchor, e.g. ='&lt;a href='/cgi-bin/view/Main/Web
 
 sub internalLink {
     my $pre = shift;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 #   my( $web, $topic, $label, $anchor, $anchor, $createLink ) = @_;
     return $pre . $TWiki::Plugins::SESSION->{renderer}->internalLink( @_ );
 }
@@ -1250,6 +1385,8 @@ Return: =$dir= Pub directory, e.g. ='/htdocs/twiki/pub'=
 
 This function violates store encapsulation and is therefore *deprecated*.
 
+Use =readAttachment= and =writeAttachment= instead.
+
 =cut
 
 sub getPubDir {
@@ -1271,6 +1408,7 @@ Return: =$text=    Template text
 
 sub readTemplate {
 #   my( $name, $skin ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{templates}->readTemplate( @_ );
 }
 
@@ -1288,6 +1426,7 @@ Return: =$text=        Content of file
 
 sub readFile {
 #   my( $filename ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->readFile( @_ );
 }
 
@@ -1307,6 +1446,7 @@ Return:                none
 # TODO: This should return an error for the different failure modes.
 sub saveFile {
 #   my( $filename, $text ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->saveFile( @_ );
 }
 
@@ -1324,6 +1464,7 @@ Return:            none
 
 sub writeWarning {
 #   my( $theText ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->writeWarning( @_ );
 }
 
@@ -1341,6 +1482,7 @@ Return:            none
 
 sub writeDebug {
 #   my( $theText ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->writeDebug( @_ );
 }
 
@@ -1493,6 +1635,7 @@ If template text is found, extracts include statements and fully expands them.
 =cut
 
 sub loadTemplate {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{templates}->readTemplate( @_ );
 }
 
@@ -1511,6 +1654,7 @@ file. See the documentation on TWiki templates for more information.
 =cut
 
 sub expandTemplate {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{templates}->expandTemplate( @_ );
 }
 
@@ -1541,6 +1685,7 @@ See also: expandVariables
 =cut
 
 sub expandVariablesOnTopicCreation {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->expandVariablesOnTopicCreation( shift, $TWiki::Plugins::SESSION->{user} );
 }
 
@@ -1570,6 +1715,7 @@ where =Main= and =TWiki= are the web names set in $cfg{UsersWebName} and $cfg{Sy
 
 sub normalizeWebTopicName {
     #my( $theWeb, $theTopic ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->normalizeWebTopicName( @_ );
 }
 
@@ -1638,6 +1784,7 @@ Leave a blank line between the last header field and the message body.
 
 sub sendEmail {
     #my( $text, $retries ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{net}->sendEmail( @_ );
 }
 
@@ -1655,30 +1802,12 @@ be comma-separated.
 
 sub wikiToEmail {
     my( $wiki ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return '' unless $wiki;
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
     return '' unless $user;
     return join( ',', @{$user->emails()} );
 }
-
-=pod
-
----++ Copyright and License
-
-Copyright (C) 2000-2004 Peter Thoeny, Peter@Thoeny.com
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details, published at 
-http://www.gnu.org/copyleft/gpl.html
-
-=cut
 
 1;
 

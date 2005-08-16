@@ -411,27 +411,36 @@ sub numRevisions {
 }
 
 # implements RcsFile
-sub addRevision {
-    my( $this, $text, $log, $author, $date ) = @_;
+sub addRevisionFromText {
+    shift->_addRevision( @_ );
+}
+
+sub addRevisionFromStream {
+    shift->_addRevision( @_ );
+}
+
+sub _addRevision {
+    my( $this, $data, $log, $author, $date ) = @_;
 
     if( $this->{attachment} ) {
-        $this->_saveAttachment( $text );
+        $this->_saveStream( $data );
+        # SMELL: for big attachments, this is a dog
+        $data = $this->_readFile( $this->{file} );
     } else {
-        $this->_saveFile( $this->{file}, $text );
+        $this->_saveFile( $this->{file}, $data );
     }
-    $text = $this->_readFile( $this->{file} ) if( $this->{attachment} );
 
     $this->_ensureProcessed();
 
     my $head = $this->{head};
     if( $head ) {
-        my $lNew = _split( $text );
+        my $lNew = _split( $data );
         my $lOld = _split( $this->{revs}[$head]->{text} );
         my $delta = _diff( $lNew, $lOld );
         $this->{revs}[$head]->{text} = $delta;
     }
     $head++;
-    $this->{revs}[$head]->{text} = $text;
+    $this->{revs}[$head]->{text} = $data;
     $this->{head} = $head;
     $this->{revs}[$head]->{log} = $log;
     $this->{revs}[$head]->{author} = $author;
@@ -466,7 +475,7 @@ sub replaceRevision {
     my( $this, $text, $comment, $user, $date ) = @_;
     $this->_ensureProcessed();
     $this->_delLastRevision();
-    return $this->addRevision( $text, $comment, $user, $date );
+    return $this->_addRevision( $text, $comment, $user, $date );
 }
 
 # implements RcsFile

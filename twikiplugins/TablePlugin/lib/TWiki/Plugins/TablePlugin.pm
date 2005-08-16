@@ -97,11 +97,10 @@ sub initPlugin {
 }
 
 sub preRenderingHandler {
-### my ( $text, $removed ) = @_;   # do not uncomment, use $_[0] instead
+    ### my ( $text, $removed ) = @_;
     undef $initSort;
     $insideTABLE = 0;
 
-    # Table of format: | cell | cell |
     my @lines = split( /\r?\n/, $_[0] );
     for ( @lines ) {
         $_ =~ s/%TABLE{(.*)}%/handleTableAttrs($1)/eo;

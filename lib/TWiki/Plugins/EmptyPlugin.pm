@@ -504,34 +504,6 @@ sub DISABLE_mergeHandler {
 
 =pod
 
----++ writeHeaderHandler($query )
-   * =$query= - the CGI query
-
-This handler is called just prior to writing the HTTP header.
-
-Return a string containing _additional_ HTTP headers, delimited by CR/LF
-and with no blank lines. Plugin generated headers may be modified by core
-code before they are output, to fix bugs or manage caching. Plugins should
-_not_ attempt to write headers to standard output.
-
-If this handler is defined in more than one plugin, only the handler
-in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
-the others will be ignored.
-
-*DEPRECATED* since TWiki::Plugins::VERSION = '1.026' - *DO NOT USE*
-Use =modifyHeaderHandler= instead.
-
-=cut
-
-sub DISABLE_writeHeaderHandler {
-    # do not uncomment, use $_[0] instead
-    ### my ( $query ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::writeHeaderHandler( query )" ) if $debug;
-}
-
-=pod
-
 ---++ modifyHeaderHandler( \%headers, $query )
    * =\%headers= - reference to a hash of existing header values
    * =$query= - reference to CGI query object

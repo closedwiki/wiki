@@ -1,6 +1,6 @@
 require 5.006;
 
-package TWikiUnitTestsSuite;
+package CoreTestSuite;
 
 use base qw(Test::Unit::TestSuite);
 

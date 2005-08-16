@@ -346,6 +346,8 @@ sub afterEditHandler {
 sub beforeSaveHandler {
     my( $text, $topic, $web ) = @_;
 
+    return unless $text;
+
     if ( !$initialised ) {
         return unless _lazyInit();
     }

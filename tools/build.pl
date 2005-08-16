@@ -45,7 +45,7 @@ use TWiki::Contrib::Build;
 
     # generate the POD documentation
     print "Building documentation....\n";
-    #print `perl gendocs.pl -root $this->{basedir}`;
+    print `perl gendocs.pl -root $this->{basedir}`;
     print "Documentation built\n";
   }
 }

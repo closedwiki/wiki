@@ -140,7 +140,7 @@ HERE
 
     my $rcs = new TWiki::Store::RcsLite($twiki, $testweb, "ActionChanged" );
     my $t1 = Time::ParseDate::parsedate("21 Jun 2001");
-    $rcs->addRevision(<<HERE,
+    $rcs->addRevisionFromText(<<HERE,
 %META:TOPICINFO{author="guest" date="$t1" format="1.0" version="1.1"}%
 %ACTION{who=ActorFive,due="22-jun-2001",notify=$peopleWeb.ActorFive}% A7: Date change
 %ACTION{who="$peopleWeb.ActorFour",due="22-jul-2001",notify=ActorFive}% A8: Text change
@@ -149,7 +149,7 @@ HERE
 
                       'Initial revision', 'crawford', $t1);
     my $t2 = Time::ParseDate::parsedate("21 Jun 2003");
-    $rcs->addRevision(<<HERE,
+    $rcs->addRevisionFromText(<<HERE,
 %META:TOPICINFO{author="guest" date="$t2" format="1.0" version="1.2"}%
 %ACTION{who=ActorFive,due="22-jun-2002",notify=$peopleWeb.ActorFive}% A7: Date change
 %ACTION{who=EMailGroup,due="5 Jan 01",state=open,notify=nobody}% No change

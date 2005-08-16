@@ -649,7 +649,7 @@ sub saveTopic {
         }
         $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
         # remove meta again and throw it away (!)
-        $text =~ s/^%META:([^{]+){(.*)}%\r?\n/''/gem;
+        $text =~ s/^%META:([^{]+){(.*)}%\r?\n/''/gem if $text;
     }
 
     my $error;
@@ -682,10 +682,13 @@ sub saveTopic {
    * =$opts= - Ref to hash of options
 =$opts= may include:
 | =dontlog= | don't log this change in twiki log |
-| =minor= | don't log this change in .changes |
-| =hide= | if the attachment is to be hidden in normal topic view |
 | =comment= | comment for save |
-| =file= | Temporary file name to upload |
+| =hide= | if the attachment is to be hidden in normal topic view |
+| =stream= | Stream of file to upload |
+| =file= | Name of a file to use for the attachment data. ignored is stream is set. |
+| =filepath= | Client path to file |
+| =filesize= | Size of uploaded data |
+| =filedate= | Date |
 
 Saves a new revision of the attachment, invoking plugin handlers as
 appropriate.
@@ -718,7 +721,14 @@ sub saveAttachment {
                 $this->{session}->{security}->getReason());
         }
 
-        if ( $opts->{file} ) {
+        if( $opts->{file} && !$opts->{stream} ) {
+            open($opts->{stream}, $opts->{file}) ||
+              throw Error::Simple('Could not open '.$opts->{file} );
+            binmode($opts->{stream}) ||
+              throw Error::Simple( $opts->{file}.': '.$! );
+        }
+
+        if ( $opts->{stream} ) {
             my $fileVersion = $this->getRevisionNumber( $web, $topic,
                                                         $attachment );
             $action = 'upload';
@@ -726,22 +736,55 @@ sub saveAttachment {
             $attrs =
               {
                   attachment => $attachment,
-                  tmpFilename => $opts->{file},
+                  stream => $opts->{stream},
                   comment => $opts->{comment},
                   user => $user->webDotWikiName()
                  };
 
             my $handler = $this->_getHandler( $web, $topic, $attachment );
-            $plugins->beforeAttachmentSaveHandler( $attrs, $topic, $web );
+
+            my $tmpFile = $handler->{file};
+
+            if( $plugins->haveHandlerFor( 'beforeAttachmentSaveHandler' )) {
+                # SMELL: legacy spec of beforeAttachmentSaveHandler requires
+                # a local copy of the stream. This could be a problem for
+                # very big data files. It really should use the stream.
+                open( F, $tmpFile );
+                binmode( F );
+                while( read( $opts->{stream}, $text, 1024 )) {
+                    print F $text;
+                }
+                close( F );
+                $attrs->{file} = $tmpFile;
+                $plugins->beforeAttachmentSaveHandler( $attrs, $topic, $web );
+                open( $opts->{stream}, $tmpFile );
+                binmode( $opts->{stream} );
+            }
+
             my $error;
             try {
-                $handler->addRevision( $opts->{file}, $opts->{comment},
-                                            $user->wikiName() );
+                $handler->addRevisionFromStream( $opts->{stream},
+                                                 $opts->{comment},
+                                                 $user->wikiName() );
             } catch Error::Simple with {
                 $error = shift;
             };
-            $plugins->afterAttachmentSaveHandler( $attrs, $topic, $web,
-                                                  $error?$error->{-text}:'' );
+
+            if( $plugins->haveHandlerFor( 'afterAttachmentSaveHandler' )) {
+                # SMELL: legacy spec of beforeAttachmentSaveHandler requires
+                # a local copy of the stream. This could be a problem for
+                # very big data files. It really should use the stream.
+                open( F, $tmpFile );
+                binmode(F);
+                while( read($opts->{stream}, $text, 1024 )) {
+                    print F $text;
+                }
+                close(F);
+                $attrs->{file} = $tmpFile;
+                $plugins->afterAttachmentSaveHandler( $attrs, $topic, $web,
+                                                      $error ? 
+                                                        $error->{-text} : '' );
+            }
             throw $error if $error;
 
             $attrs->{name} ||= $attachment;
@@ -819,9 +862,10 @@ sub _noHandlersSave {
 
     # will block
     $this->lockTopic( $user, $web, $topic );
+
     try {
-        $handler->addRevision( $text, $options->{comment},
-                                    $user->wikiName() );
+        $handler->addRevisionFromText( $text, $options->{comment},
+                                       $user->wikiName() );
     } finally {
         $this->unlockTopic( $user, $web, $topic );
     };
@@ -1550,6 +1594,7 @@ sub _writeEnd {
 sub _writeMeta {
     my( $meta, $text ) = @_;
     ASSERT($meta->isa('TWiki::Meta')) if DEBUG;
+    $text ||= '';
 
     my $start = _writeStart( $meta );
     my $end = _writeEnd( $meta );

@@ -120,4 +120,68 @@ sub test_leases {
     $this->assert_equals(0,$time);
 }
 
+sub test_attachments {
+    my $this = shift;
+
+    my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
+    my $attnm = 'blahblahblah.gif';
+    my $tmpfile = '/tmp/tmpity-tmp.gif';
+    my $name1 = 'blahblahblah.gif';
+    my $name2 = 'bleagh.sniff';
+    my $topic = "BlahBlahBlah";
+
+    my $stream;
+    $this->assert(open($stream,">$tmpfile"));
+    binmode($stream);
+    print $stream $data;
+    close($stream);
+
+    $this->assert(open($stream, "<$tmpfile"));
+    binmode($stream);
+
+    $twiki = new TWiki( );
+
+	$twiki->{store}->saveTopic( $twiki->{user}, $testweb, $topic,
+                                undef, undef );
+
+    my $e = TWiki::Func::saveAttachment(
+        $testweb, $topic, $name1,
+        {
+            dontlog => 1,
+            comment => 'Feasgar Bha',
+            stream => $stream,
+            filepath => '/local/file',
+            filesize => 999,
+            filedate => 0,
+      } );
+    $this->assert(!$e,$e);
+
+    my( $meta, $text ) = TWiki::Func::readTopic( $testweb, $topic );
+    my @attachments = $meta->find( 'FILEATTACHMENT' );
+    $this->assert_str_equals($name1, $attachments[0]->{name} );
+
+    $e = TWiki::Func::saveAttachment(
+        $testweb, $topic, $name2,
+        {
+            dontlog => 1,
+            comment => 'Ciamar a tha u',
+            file => $tmpfile,
+            filepath => '/local/file',
+            filesize => 999,
+            filedate => 0,
+      } );
+    $this->assert(!$e,$e);
+
+    ( $meta, $text ) = TWiki::Func::readTopic( $testweb, $topic );
+    @attachments = $meta->find( 'FILEATTACHMENT' );
+    $this->assert_str_equals($name1, $attachments[0]->{name} );
+    $this->assert_str_equals($name2, $attachments[1]->{name} );
+    unlink("$tmpfile");
+
+    my $x = TWiki::Func::readAttachment($testweb, $topic, $name1);
+    $this->assert_str_equals($data, $x);
+    $x = TWiki::Func::readAttachment($testweb, $topic, $name2);
+    $this->assert_str_equals($data, $x);
+}
+
 1;

@@ -111,7 +111,6 @@ sub _mkPathTo {
     my @components = split( /(\/+)/, $file );
     pop( @components );
     my $path = '';
-    umask( 0 );
     for my $dir ( @components ) {
         if( $dir =~ /\/+/ ) {
             $path .= '/';
@@ -652,10 +651,24 @@ sub getLease {
     return undef;
 }
 
-sub _saveAttachment {
-    my( $this, $theTmpFilename ) = @_;
+sub _saveStream {
+    my( $this, $fh ) = @_;
 
-    _copyFile( $theTmpFilename, $this->{file} );
+    ASSERT($fh) if DEBUG;
+
+    _mkPathTo( $this->{file} );
+    open( F, '>'.$this->{file} ) ||
+        throw Error::Simple( 'RCS: open '.$this->{file}.' failed: '.$! );
+    binmode( F ) ||
+      throw Error::Simple( 'RCS: failed to binmode '.$this->{file}.': '.$! );
+    my $text;
+    binmode(F);
+    while( read( $fh, $text, 1024 )) {
+        print F $text;
+    }
+    close(F) ||
+        throw Error::Simple( 'RCS: close '.$this->{file}.' failed: '.$! );;
+
     chmod( $TWiki::cfg{RCS}{filePermission}, $this->{file} );
 
     return '';
@@ -684,7 +697,6 @@ sub _saveFile {
 
     _mkPathTo( $name );
 
-    umask( 002 );
     open( FILE, '>'.$name ) ||
       throw Error::Simple( 'RCS: failed to create file '.$name.': '.$! );
     binmode( FILE ) ||
@@ -842,10 +854,22 @@ Must be provided by subclasses.
 
 =pod
 
----++ ObjectMethod addRevision (   $text, $comment, $user, $date )
+---++ ObjectMethod addRevisionFromText($text, $comment, $user, $date)
 
-Add new revision. Replace file (if exists) with text.
+Add new revision. Replace file with text.
    * =$text= of new revision
+   * =$comment= checkin comment
+   * =$user= is a wikiname.
+   * =$date= in epoch seconds; may be ignored
+
+*Virtual method* - must be implemented by subclasses
+
+=pod
+
+---++ ObjectMethod addRevisionFromStream($fh, $comment, $user, $date)
+
+Add new revision. Replace file with contents of stream.
+   * =$fh= filehandle for contents of new revision
    * =$comment= checkin comment
    * =$user= is a wikiname.
    * =$date= in epoch seconds; may be ignored

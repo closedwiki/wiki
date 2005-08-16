@@ -108,16 +108,22 @@ sub initText {
 }
 
 # implements RcsFile
-sub addRevision {
+sub addRevisionFromText {
     my( $this, $text, $comment, $user, $date ) = @_;
     $this->init();
 
     $this->_lock();
-    if( $this->{attachment} ) {
-        $this->_saveAttachment( $text );
-    } else {
-        $this->_saveFile( $this->{file}, $text );
-    }
+    $this->_saveFile( $this->{file}, $text );
+    $this->_ci( $comment, $user, $date );
+}
+
+# implements RcsFile
+sub addRevisionFromStream {
+    my( $this, $stream, $comment, $user, $date ) = @_;
+    $this->init();
+
+    $this->_lock();
+    $this->_saveStream( $stream );
     $this->_ci( $comment, $user, $date );
 }
 

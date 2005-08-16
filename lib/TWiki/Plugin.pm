@@ -71,6 +71,7 @@ use vars qw( @registrableHandlers %deprecated );
    outsidePREHandler => 1,
    insidePREHandler => 1,
    endRenderingHandler => 1,
+   writeHeaderHandler => 1,
   );
 
 =pod

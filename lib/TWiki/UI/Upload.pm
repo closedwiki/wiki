@@ -158,14 +158,9 @@ sub upload {
         $fileName = $1;
     }
 
-    my $stream;
-    $stream = $query->upload( 'filepath' ) unless ( $doPropsOnly );
-
     $fileComment =~ s/\s+/ /go;
     $fileComment =~ s/^\s*//o;
     $fileComment =~ s/\s*$//o;
-
-    close $filePath if( $TWiki::cfg{OS} eq 'WINDOWS');
 
     TWiki::UI::checkWebExists( $session, $webName, $topic, 'attach files to' );
     TWiki::UI::checkTopicExists( $session, $webName, $topic, 'attach files to' );
@@ -174,6 +169,9 @@ sub upload {
                             'change', $user );
 
     my ( $fileSize, $fileDate, $tmpFileName );
+
+    my $stream;
+    $stream = $query->upload( 'filepath' ) unless ( $doPropsOnly );
 
     unless( $doPropsOnly ) {
         # cut path from filepath name (Windows '\' and Unix "/" format)
@@ -205,8 +203,7 @@ sub upload {
         ##$session->writeDebug ("Upload filename after cleanup is '$fileName'");
 
         # check if upload has non zero size
-        $tmpFileName = $query->tmpFileName( $filePath );
-        my @stats = stat $tmpFileName;
+        my @stats = stat $stream;
         $fileSize = $stats[7];
         $fileDate = $stats[9];
 
@@ -237,8 +234,7 @@ sub upload {
               comment => $fileComment,
               hide => $hideFile,
               createlink => $createLink,
-              # Undocumented CGI call
-              file => $tmpFileName,
+              stream => $stream,
               filepath => $filePath,
               filesize => $fileSize,
               filedate => $fileDate,
@@ -250,6 +246,8 @@ sub upload {
                                     topic => $topic,
                                     params => shift->{-text} );
     };
+
+    close( $stream ) if $stream;
 
     $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
 

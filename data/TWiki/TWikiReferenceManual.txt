@@ -22,7 +22,7 @@ _Documentation for webmasters, system administrators, project managers, team lea
 		1. [[FormattedSearch][Formatted Search]]
 		1. [[TWikiMetaData][TWiki MetaData]]
 		1. [[TWikiPlugins][TWiki Plugins]]
-		1. [[FuncDotPm][TWiki::Func Module]]
+		1. [[TWikiFuncDotPm][TWiki::Func Module]]
 		1. [[TWikiScripts][CGI Scripts]]
 		1. [[TWikiSiteTools][TWiki Site Tools]] 
 		1. [[ManagingTopics][Managing Topics]] 
