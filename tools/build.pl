@@ -37,7 +37,6 @@ use TWiki::Contrib::Build;
     return bless( $class->SUPER::new( "TWiki" ), $class );
   }
 
-  # Example: Override the build target
   sub target_build {
     my $this = shift;
 
@@ -47,6 +46,15 @@ use TWiki::Contrib::Build;
     print "Building documentation....\n";
     print `perl gendocs.pl -root $this->{basedir}`;
     print "Documentation built\n";
+  }
+
+  sub target_stage {
+    my $this = shift;
+
+    $this->SUPER::target_stage();
+
+    #use a Cairo install to create new ,v files for the data
+    #WARNING: I don't know how to get the 'last' release, so i'm hardcoding Cairo
   }
 }
 

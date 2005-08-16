@@ -656,40 +656,66 @@ in the MANIFEST.
 =cut
 sub target_release {
     my $this = shift;
-    my $project = $this->{project};
 
     $this->build('build');
     $this->build('installer');
+    $this->build('stage');
+    $this->build('archive');
+}
 
-    my $tmpdir = '/tmp/'.$$;
-    $this->makepath($tmpdir);
+=pod
+---++++ target_stage
+stages all the files to be in the release in a tmpDir, ready for target_archive
 
-    $this->copy_fileset($this->{files}, $this->{basedir}, $tmpdir);
+=cut
+sub target_stage {
+    my $this = shift;
+    my $project = $this->{project};
+
+    $this->{tmpDir} = '/tmp/'.$$;
+    $this->makepath($this->{tmpDir});
+
+    $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir});
     foreach my $file (@{$this->{files}}) {
         if ($file->{name} =~ /\.txt$/) {
             my $txt = $file->{name};
-            $this->filter($this->{basedir}.'/'.$txt, $tmpdir.'/'.$txt);
+            $this->filter($this->{basedir}.'/'.$txt, $this->{tmpDir}.'/'.$txt);
         }
     }
     if( $this->{project} =~ /(Plugin|Contrib|AddOn)$/) {
-        $this->cp($tmpdir.'/'.$this->{data_twiki_module}.'.txt',
+        $this->cp($this->{tmpDir}.'/'.$this->{data_twiki_module}.'.txt',
                   $this->{basedir}.'/'.$project.'.txt');
     }
 
     if( $this->{other_modules} ) {
         my $libs = join(':',@INC);
         foreach my $module (@{$this->{other_modules}}) {
-            print STDERR "Installing $module in $tmpdir\n";
-            print `export TWIKI_HOME=$tmpdir; export TWIKI_LIBS=$libs; cd $basedir/$module; perl build.pl handsoff_install`;
+            print STDERR "Installing $module in $this->{tmpDir}\n";
+            print `export TWIKI_HOME=$this->{tmpDir}; export TWIKI_LIBS=$libs; cd $basedir/$module; perl build.pl handsoff_install`;
         }
     }
+}
 
-    $this->cd($tmpdir);
+=pod
+
+---++++ target_archive
+makes zip and tgz archives of the files in tmpDir
+
+=cut
+sub target_archive {
+    my $this = shift;
+    my $project = $this->{project};
+
+    die 'no tmpDir set' unless defined ($this->{tmpDir});
+    die 'no project set' unless defined ($project);
+    die 'tmpDir ('.$this->{tmpDir}.') not found' unless ( -e $this->{tmpDir} );
+
+    $this->cd($this->{tmpDir});
     $this->sys_action('zip -r -q '.$project.'.zip *');
-    $this->sys_action('mv '.$tmpdir.'/'.$project.'.zip '.$this->{basedir}.'/'.
+    $this->sys_action('mv '.$this->{tmpDir}.'/'.$project.'.zip '.$this->{basedir}.'/'.
                       $project.'.zip');
     $this->sys_action('tar czf '.$project.'.tgz *');
-    $this->sys_action('mv '.$tmpdir.'/'.$project.'.tgz '.$this->{basedir}.'/'.
+    $this->sys_action('mv '.$this->{tmpDir}.'/'.$project.'.tgz '.$this->{basedir}.'/'.
                       $project.'.tgz');
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
     print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
