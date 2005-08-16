@@ -109,7 +109,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%<div class="patternFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post"><label for="topic" class="twikiGrayText">See below for help in editing this page.<br /></label>
 <div class="twikiEditTextarea">
-<textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
+<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='if (window.event.keyCode==27) return false;'>
 %TEXT%
 </textarea> <br />
 </div>
@@ -120,7 +120,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 <input type="hidden" name="cmd" value="%CMD%" /><div></div>
 <div class="patternSig">
-<label for="sig" class="twikiGrayText">Your signature to copy/paste:&nbsp;&nbsp;</label><input name="sig" type="text" readonly="readonly" title="Select, copy and paste your signature text to the bottom of your entry" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
+<label for="sig" class="twikiGrayText">Your signature to copy/paste:&nbsp;&nbsp;</label><input size="35" name="sig" type="text" readonly="readonly" title="Select, copy and paste your signature text to the bottom of your entry" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
 </form></div><div class="twikiHelp">
