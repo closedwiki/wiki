@@ -2285,7 +2285,7 @@ sub initialize {
 
 sub _FORMFIELD {
     my $this = shift;
-    return $this->{renderer}->renderFormField( @_ );
+    return $this->{renderer}->renderFORMFIELD( @_ );
 }
 
 sub _TMPLP {

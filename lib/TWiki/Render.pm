@@ -193,7 +193,7 @@ sub _renderFormField {
         $text = renderFormFieldArg( $meta, $name ) if( $name );
     }
     # change any new line character sequences to <br />
-    $text =~ s/(\n\r?)|(\r\n?)+/ <br \/> /gos;
+    $text =~ s/\r?\n/ <br \/> /gos;
     # escape "|" to HTML entity
     $text =~ s/\|/\&\#124;/gos;
     return $text;
@@ -845,13 +845,13 @@ sub _getIconTopicPath {
 
 =pod
 
----++ ObjectMethod renderFormField ( %params, $topic, $web ) -> $html
+---++ ObjectMethod renderFORMFIELD ( %params, $topic, $web ) -> $html
 
 Returns the fully rendered expansion of a %FORMFIELD{}% tag.
 
 =cut
 
-sub renderFormField {
+sub renderFORMFIELD {
     my ( $this, $params, $topic, $web ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
@@ -919,9 +919,7 @@ sub renderFormField {
         $text = $altText;
     }
 
-    return '' unless $text;
-
-    return $this->getRenderedVersion( $text, $web, $topic );
+    return $text;
 }
 
 =pod
