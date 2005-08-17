@@ -1,4 +1,5 @@
 AUTHORS
+CHANGELOG
 COPYING
 COPYRIGHT
 LICENSE
@@ -70,166 +71,215 @@ data/Sandbox/WebSearch.txt
 data/Sandbox/WebSearchAdvanced.txt
 data/Sandbox/WebStatistics.txt
 data/Sandbox/WebTopicList.txt
-data/TWiki/ATasteOfTWiki.txt
-data/TWiki/ATasteOfTWikiTemplate.txt
-data/TWiki/AccessKeys.txt
-data/TWiki/AdminDocumentationCategory.txt
-data/TWiki/AdminSkillsAssumptions.txt
-data/TWiki/AdminToolsCategory.txt
-data/TWiki/AppendixEncodeURLsWithUTF8.txt
-data/TWiki/BookView.txt
-data/TWiki/BulkRegistration.txt
-data/TWiki/BulkResetPassword.txt
-data/TWiki/BumpyWord.txt
-data/TWiki/CategoryCategory.txt
-data/TWiki/ChangePassword.txt
-data/TWiki/ClassMethod.txt
-data/TWiki/ClassicSkin.txt
-data/TWiki/DeleteOrRenameATopic.txt
-data/TWiki/DeleteOrRenameAnAttachment.txt
-data/TWiki/DeveloperDocumentationCategory.txt
-data/TWiki/DontNotify.txt
-data/TWiki/EditDoesNotIncreaseTheRevision.txt
-data/TWiki/EmptyPlugin.txt
-data/TWiki/ExampleTopicTemplate.txt
-data/TWiki/FileAttachment.txt
-data/TWiki/FileAttribute.txt
-data/TWiki/ForceNewRevision.txt
-data/TWiki/FormattedSearch.txt
-data/TWiki/GnuGeneralPublicLicense.txt
-data/TWiki/GoBox.txt
-data/TWiki/GoodStyle.txt
-data/TWiki/HiddenAttachment.txt
-data/TWiki/IconSets.txt
-data/TWiki/IncludeTopicsAndWebPages.txt
-data/TWiki/InstalledPlugins.txt
-data/TWiki/InstantEnhancements.txt
-data/TWiki/InterWikis.txt
-data/TWiki/LoginName.txt
-data/TWiki/MainFeatures.txt
-data/TWiki/ManagingTopics.txt
-data/TWiki/ManagingUsers.txt
-data/TWiki/ManagingWebs.txt
-data/TWiki/MetaDataRendering.txt
-data/TWiki/MoveTopic.txt
-data/TWiki/NewUserTemplate.txt
-data/TWiki/ObjectMethod.txt
-data/TWiki/PatternSkin.txt
-data/TWiki/PatternSkinCss.txt
-data/TWiki/PatternSkinCustomization.txt
-data/TWiki/PatternSkinPalette.txt
-data/TWiki/PeterThoeny.txt
-data/TWiki/PlainSkin.txt
-data/TWiki/PreviewBackground.txt
-data/TWiki/PrintSkin.txt
-data/TWiki/QuietSave.txt
-data/TWiki/RegistrationApprovals.txt
-data/TWiki/RegularExpression.txt
-data/TWiki/RenameWeb.txt
-data/TWiki/ResetPassword.txt
-data/TWiki/SearchDoesNotWork.txt
-data/TWiki/SearchHelp.txt
-data/TWiki/SimultaneousEdits.txt
-data/TWiki/SiteChanges.txt
-data/TWiki/SiteMap.txt
-data/TWiki/SitePermissions.txt
-data/TWiki/SiteUsageStatistics.txt
-data/TWiki/StandardColors.txt
-data/TWiki/StartingPoints.txt
-data/TWiki/StaticMethod.txt
-data/TWiki/TWikiAccessControl.txt
-data/TWiki/TWikiAdminCookBook.txt
-data/TWiki/TWikiCategoryTable.txt
-data/TWiki/TWikiCss.txt
-data/TWiki/TWikiDocGraphics.txt
-data/TWiki/TWikiDocGraphicsPattern.txt
-data/TWiki/TWikiDocumentation.txt
-data/TWiki/TWikiDownload.txt
-data/TWiki/TWikiEnhancementRequests.txt
-data/TWiki/TWikiFAQ.txt
-data/TWiki/TWikiFaqTemplate.txt
-data/TWiki/TWikiForms.txt
-data/TWiki/TWikiGlossary.txt
-data/TWiki/TWikiHistory.txt
-data/TWiki/TWikiInstallationGuide.txt
-data/TWiki/TWikiLogos.txt
-data/TWiki/TWikiMetaData.txt
-data/TWiki/TWikiPlannedFeatures.txt
-data/TWiki/TWikiPlugins.txt
-data/TWiki/TWikiPreferences.txt
-data/TWiki/TWikiReferenceManual.txt
-data/TWiki/TWikiRegistration.txt
-data/TWiki/TWikiRegistrationPub.txt
-data/TWiki/TWikiScripts.txt
-data/TWiki/TWikiShorthand.txt
-data/TWiki/TWikiSite.txt
-data/TWiki/TWikiSiteTools.txt
-data/TWiki/TWikiSkinBrowser.txt
-data/TWiki/TWikiSkins.txt
-data/TWiki/TWikiSystemRequirements.txt
-data/TWiki/TWikiTemplates.txt
-data/TWiki/TWikiTopics.txt
-data/TWiki/TWikiTutorial.txt
-data/TWiki/TWikiUpgradeGuide.txt
-data/TWiki/TWikiUpgradeTo01Dec2000.txt
-data/TWiki/TWikiUpgradeTo01Dec2001.txt
-data/TWiki/TWikiUpgradeTo01Feb2003.txt
-data/TWiki/TWikiUpgradeTo01May2000.txt
-data/TWiki/TWikiUserAuthentication.txt
-data/TWiki/TWikiUsernameVsLoginUsername.txt
-data/TWiki/TWikiUsersGuide.txt
-data/TWiki/TWikiVariables.txt
-data/TWiki/TWikiVariablesAtoM.txt
-data/TWiki/TWikiVariablesNtoZ.txt
-data/TWiki/TWikiWebsTable.txt
-data/TWiki/TemplateWeb.txt
-data/TWiki/TextEditor.txt
-data/TWiki/TextFormattingFAQ.txt
-data/TWiki/TextFormattingRules.txt
-data/TWiki/TimBernersLee.txt
-data/TWiki/TimeInterval.txt
-data/TWiki/UserDocumentationCategory.txt
-data/TWiki/UserForm.txt
-data/TWiki/UserToolsCategory.txt
-data/TWiki/WabiSabi.txt
-data/TWiki/WebBottomBar.txt
-data/TWiki/WebChanges.txt
-data/TWiki/WebChangesAlert.txt
-data/TWiki/WebHome.txt
-data/TWiki/WebIndex.txt
-data/TWiki/WebLeftBar.txt
-data/TWiki/WebLeftBarCookbook.txt
-data/TWiki/WebLeftBarExample.txt
-data/TWiki/WebLeftBarLogin.txt
-data/TWiki/WebLeftBarPersonalTemplate.txt
-data/TWiki/WebLeftBarWebsList.txt
-data/TWiki/WebNotify.txt
-data/TWiki/WebPreferences.txt
-data/TWiki/WebRss.txt
-data/TWiki/WebRssBase.txt
-data/TWiki/WebSearch.txt
-data/TWiki/WebSearchAdvanced.txt
-data/TWiki/WebSiteTools.txt
-data/TWiki/WebStatistics.txt
-data/TWiki/WebTopBar.txt
-data/TWiki/WebTopicEditTemplate.txt
-data/TWiki/WebTopicList.txt
-data/TWiki/WebTopicNonWikiTemplate.txt
-data/TWiki/WebTopicViewTemplate.txt
-data/TWiki/WelcomeGuest.txt
-data/TWiki/WhatIsWikiWiki.txt
-data/TWiki/WikiCulture.txt
-data/TWiki/WikiName.txt
-data/TWiki/WikiNotation.txt
-data/TWiki/WikiReferences.txt
-data/TWiki/WikiSyntax.txt
-data/TWiki/WikiSyntaxSummary.txt
-data/TWiki/WikiTopic.txt
-data/TWiki/WikiWikiClones.txt
-data/TWiki/WikiWord.txt
-data/TWiki/WindowsInstallCookbook.txt
-data/TWiki/WindowsInstallSummary.txt
-data/TWiki/YouAreHere.txt
+data/TWiki/ATasteOfTWiki.txt NEW
+data/TWiki/ATasteOfTWikiTemplate.txt NEW
+data/TWiki/AccessKeys.txt NEW
+data/TWiki/AdminDocumentationCategory.txt NEW
+data/TWiki/AdminSkillsAssumptions.txt NEW
+data/TWiki/AdminToolsCategory.txt NEW
+data/TWiki/AppendixEncodeURLsWithUTF8.txt NEW
+data/TWiki/BookView.txt NEW
+data/TWiki/BulkRegistration.txt NEW
+data/TWiki/BulkResetPassword.txt NEW
+data/TWiki/BumpyWord.txt NEW
+data/TWiki/CategoryCategory.txt NEW
+data/TWiki/ChangePassword.txt NEW
+data/TWiki/ClassMethod.txt NEW
+data/TWiki/ClassicSkin.txt NEW
+data/TWiki/DeleteOrRenameATopic.txt NEW
+data/TWiki/DeleteOrRenameAnAttachment.txt NEW
+data/TWiki/DeveloperDocumentationCategory.txt NEW
+data/TWiki/DontNotify.txt NEW
+data/TWiki/EditDoesNotIncreaseTheRevision.txt NEW
+data/TWiki/EmptyPlugin.txt NEW
+data/TWiki/ExampleTopicTemplate.txt NEW
+data/TWiki/FileAttachment.txt NEW
+data/TWiki/FileAttribute.txt NEW
+data/TWiki/ForceNewRevision.txt NEW
+data/TWiki/FormattedSearch.txt NEW
+data/TWiki/GnuGeneralPublicLicense.txt NEW
+data/TWiki/GoBox.txt NEW
+data/TWiki/GoodStyle.txt NEW
+data/TWiki/HiddenAttachment.txt NEW
+data/TWiki/IconSets.txt NEW
+data/TWiki/IncludeTopicsAndWebPages.txt NEW
+data/TWiki/InstalledPlugins.txt NEW
+data/TWiki/InstantEnhancements.txt NEW
+data/TWiki/InterWikis.txt NEW
+data/TWiki/LoginName.txt NEW
+data/TWiki/MainFeatures.txt NEW
+data/TWiki/ManagingTopics.txt NEW
+data/TWiki/ManagingUsers.txt NEW
+data/TWiki/ManagingWebs.txt NEW
+data/TWiki/MetaDataRendering.txt NEW
+data/TWiki/MoveTopic.txt NEW
+data/TWiki/NewUserTemplate.txt NEW
+data/TWiki/ObjectMethod.txt NEW
+data/TWiki/PatternSkin.txt NEW
+data/TWiki/PatternSkinCss.txt NEW
+data/TWiki/PatternSkinCustomization.txt NEW
+data/TWiki/PatternSkinPalette.txt NEW
+data/TWiki/PeterThoeny.txt NEW
+data/TWiki/PlainSkin.txt NEW
+data/TWiki/PreviewBackground.txt NEW
+data/TWiki/PrintSkin.txt NEW
+data/TWiki/QuietSave.txt NEW
+data/TWiki/RegistrationApprovals.txt NEW
+data/TWiki/RegularExpression.txt NEW
+data/TWiki/RenameWeb.txt NEW
+data/TWiki/ResetPassword.txt NEW
+data/TWiki/SearchDoesNotWork.txt NEW
+data/TWiki/SearchHelp.txt NEW
+data/TWiki/SimultaneousEdits.txt NEW
+data/TWiki/SiteChanges.txt NEW
+data/TWiki/SiteMap.txt NEW
+data/TWiki/SitePermissions.txt NEW
+data/TWiki/SiteUsageStatistics.txt NEW
+data/TWiki/SourceCode.txt NEW
+data/TWiki/StandardColors.txt NEW
+data/TWiki/StartingPoints.txt NEW
+data/TWiki/StaticMethod.txt NEW
+data/TWiki/TWikiAccessControl.txt NEW
+data/TWiki/TWikiAccessControlExceptionDotPm.txt NEW
+data/TWiki/TWikiAccessDotPm.txt NEW
+data/TWiki/TWikiAdminCookBook.txt NEW
+data/TWiki/TWikiAttachDotPm.txt NEW
+data/TWiki/TWikiAttrsDotPm.txt NEW
+data/TWiki/TWikiCategoryTable.txt NEW
+data/TWiki/TWikiClientApacheLoginDotPm.txt NEW
+data/TWiki/TWikiClientDotPm.txt NEW
+data/TWiki/TWikiClientTemplateLoginDotPm.txt NEW
+data/TWiki/TWikiCompatibilityDotPm.txt NEW
+data/TWiki/TWikiCss.txt NEW
+data/TWiki/TWikiDocGraphics.txt NEW
+data/TWiki/TWikiDocGraphicsPattern.txt NEW
+data/TWiki/TWikiDocumentation.txt NEW
+data/TWiki/TWikiDotPm.txt NEW
+data/TWiki/TWikiDownload.txt NEW
+data/TWiki/TWikiEnhancementRequests.txt NEW
+data/TWiki/TWikiFAQ.txt NEW
+data/TWiki/TWikiFaqTemplate.txt NEW
+data/TWiki/TWikiFormDotPm.txt NEW
+data/TWiki/TWikiForms.txt NEW
+data/TWiki/TWikiFormsDotPm.txt NEW
+data/TWiki/TWikiFuncDotPm.txt NEW
+data/TWiki/TWikiGlossary.txt NEW
+data/TWiki/TWikiHistory.txt NEW
+data/TWiki/TWikiInstallationGuide.txt NEW
+data/TWiki/TWikiLogos.txt NEW
+data/TWiki/TWikiMergeDotPm.txt NEW
+data/TWiki/TWikiMetaData.txt NEW
+data/TWiki/TWikiMetaDotPm.txt NEW
+data/TWiki/TWikiNetDotPm.txt NEW
+data/TWiki/TWikiOopsExceptionDotPm.txt NEW
+data/TWiki/TWikiPlannedFeatures.txt NEW
+data/TWiki/TWikiPluginDotPm.txt NEW
+data/TWiki/TWikiPlugins.txt NEW
+data/TWiki/TWikiPluginsDotPm.txt NEW
+data/TWiki/TWikiPluralsDotPm.txt NEW
+data/TWiki/TWikiPreferences.txt NEW
+data/TWiki/TWikiPrefsDotPm.txt NEW
+data/TWiki/TWikiPrefsParserDotPm.txt NEW
+data/TWiki/TWikiPrefsPrefsCacheDotPm.txt NEW
+data/TWiki/TWikiReferenceManual.txt NEW
+data/TWiki/TWikiRegistration.txt NEW
+data/TWiki/TWikiRegistrationPub.txt NEW
+data/TWiki/TWikiRenderDotPm.txt NEW
+data/TWiki/TWikiSandboxDotPm.txt NEW
+data/TWiki/TWikiScripts.txt NEW
+data/TWiki/TWikiSearchDotPm.txt NEW
+data/TWiki/TWikiShorthand.txt NEW
+data/TWiki/TWikiSite.txt NEW
+data/TWiki/TWikiSiteTools.txt NEW
+data/TWiki/TWikiSkinBrowser.txt NEW
+data/TWiki/TWikiSkins.txt NEW
+data/TWiki/TWikiStoreDotPm.txt NEW
+data/TWiki/TWikiStoreRcsFileDotPm.txt NEW
+data/TWiki/TWikiStoreRcsLiteDotPm.txt NEW
+data/TWiki/TWikiStoreRcsWrapDotPm.txt NEW
+data/TWiki/TWikiSystemRequirements.txt NEW
+data/TWiki/TWikiTemplates.txt NEW
+data/TWiki/TWikiTemplatesDotPm.txt NEW
+data/TWiki/TWikiTimeDotPm.txt NEW
+data/TWiki/TWikiTopics.txt NEW
+data/TWiki/TWikiTutorial.txt NEW
+data/TWiki/TWikiUIChangeFormDotPm.txt NEW
+data/TWiki/TWikiUICompareDotPm.txt NEW
+data/TWiki/TWikiUIDotPm.txt NEW
+data/TWiki/TWikiUIEditDotPm.txt NEW
+data/TWiki/TWikiUIManageDotPm.txt NEW
+data/TWiki/TWikiUIOopsDotPm.txt NEW
+data/TWiki/TWikiUIRDiffDotPm.txt NEW
+data/TWiki/TWikiUIRegisterDotPm.txt NEW
+data/TWiki/TWikiUIRestDotPm.txt NEW
+data/TWiki/TWikiUISaveDotPm.txt NEW
+data/TWiki/TWikiUISearchDotPm.txt NEW
+data/TWiki/TWikiUIStatisticsDotPm.txt NEW
+data/TWiki/TWikiUIUploadDotPm.txt NEW
+data/TWiki/TWikiUIViewDotPm.txt NEW
+data/TWiki/TWikiUpgradeGuide.txt NEW
+data/TWiki/TWikiUpgradeTo01Dec2000.txt NEW
+data/TWiki/TWikiUpgradeTo01Dec2001.txt NEW
+data/TWiki/TWikiUpgradeTo01Feb2003.txt NEW
+data/TWiki/TWikiUpgradeTo01May2000.txt NEW
+data/TWiki/TWikiUserAuthentication.txt NEW
+data/TWiki/TWikiUserDotPm.txt NEW
+data/TWiki/TWikiUsernameVsLoginUsername.txt NEW
+data/TWiki/TWikiUsersDotPm.txt NEW
+data/TWiki/TWikiUsersGuide.txt NEW
+data/TWiki/TWikiUsersPasswordDotPm.txt NEW
+data/TWiki/TWikiVariables.txt NEW
+data/TWiki/TWikiVariablesAtoM.txt NEW
+data/TWiki/TWikiVariablesNtoZ.txt NEW
+data/TWiki/TWikiWebsTable.txt NEW
+data/TWiki/TemplateWeb.txt NEW
+data/TWiki/TextEditor.txt NEW
+data/TWiki/TextFormattingFAQ.txt NEW
+data/TWiki/TextFormattingRules.txt NEW
+data/TWiki/TimBernersLee.txt NEW
+data/TWiki/TimeInterval.txt NEW
+data/TWiki/UserDocumentationCategory.txt NEW
+data/TWiki/UserForm.txt NEW
+data/TWiki/UserToolsCategory.txt NEW
+data/TWiki/WabiSabi.txt NEW
+data/TWiki/WebBottomBar.txt NEW
+data/TWiki/WebChanges.txt NEW
+data/TWiki/WebChangesAlert.txt NEW
+data/TWiki/WebHome.txt NEW
+data/TWiki/WebIndex.txt NEW
+data/TWiki/WebLeftBar.txt NEW
+data/TWiki/WebLeftBarCookbook.txt NEW
+data/TWiki/WebLeftBarExample.txt NEW
+data/TWiki/WebLeftBarLogin.txt NEW
+data/TWiki/WebLeftBarPersonalTemplate.txt NEW
+data/TWiki/WebLeftBarWebsList.txt NEW
+data/TWiki/WebNotify.txt NEW
+data/TWiki/WebPreferences.txt NEW
+data/TWiki/WebRss.txt NEW
+data/TWiki/WebRssBase.txt NEW
+data/TWiki/WebSearch.txt NEW
+data/TWiki/WebSearchAdvanced.txt NEW
+data/TWiki/WebSiteTools.txt NEW
+data/TWiki/WebStatistics.txt NEW
+data/TWiki/WebTopBar.txt NEW
+data/TWiki/WebTopicEditTemplate.txt NEW
+data/TWiki/WebTopicList.txt NEW
+data/TWiki/WebTopicNonWikiTemplate.txt NEW
+data/TWiki/WebTopicViewTemplate.txt NEW
+data/TWiki/WelcomeGuest.txt NEW
+data/TWiki/WhatIsWikiWiki.txt NEW
+data/TWiki/WikiCulture.txt NEW
+data/TWiki/WikiName.txt NEW
+data/TWiki/WikiNotation.txt NEW
+data/TWiki/WikiReferences.txt NEW
+data/TWiki/WikiSyntax.txt NEW
+data/TWiki/WikiSyntaxSummary.txt NEW
+data/TWiki/WikiTopic.txt NEW
+data/TWiki/WikiWikiClones.txt NEW
+data/TWiki/WikiWord.txt NEW
+data/TWiki/WindowsInstallCookbook.txt NEW
+data/TWiki/WindowsInstallSummary.txt NEW
+data/TWiki/YouAreHere.txt NEW
 data/Trash/TrashAttachment.txt
 data/Trash/WebChanges.txt
 data/Trash/WebHome.txt
@@ -350,6 +400,7 @@ pub/TWiki/PreviewBackground/preview2bg.gif
 pub/TWiki/PreviewBackground/previewbg.gif
 pub/TWiki/PrintSkin/fullscreen.gif
 pub/TWiki/PrintSkin/screenshot.gif
+pub/TWiki/TWikiContributor/AUTHORS
 pub/TWiki/TWikiDocGraphics/_filetypes.txt
 pub/TWiki/TWikiDocGraphics/arrowbdown.gif
 pub/TWiki/TWikiDocGraphics/arrowbleft.gif
@@ -627,11 +678,6 @@ pub/TWiki/WabiSabi/wabisabi.gif
 pub/TWiki/WebPreferences/favicon.ico
 pub/TWiki/WebPreferences/logo.png
 pub/TWiki/WindowsInstallCookbook/cygwin-icon.gif
-pub/TestCases/TestCaseAmISane/volcano.jpg
-pub/TestCases/TestCaseAmISane/volcano.jpg,v
-pub/TestCases/TestCaseAutoIncludeAttachment/attachment.html
-pub/TestCases/WebPreferences/favicon.ico
-pub/TestCases/WebPreferences/logo.png
 pub/Trash/WebPreferences/favicon.ico
 pub/Trash/WebPreferences/logo.png
 pub/_default/WebPreferences/favicon.ico

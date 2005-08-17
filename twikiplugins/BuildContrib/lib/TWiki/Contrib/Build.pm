@@ -84,7 +84,7 @@ Perl modules also referenced in the dependencies list in the stub topic should b
 
 A dependency may optionally be preceded by a condition that limits the cases where the dependency applies. The condition is specified using a line that contains <code>ONLYIF ( _condition_ )</code>, where _condition_ is a Perl conditional. This is most useful for enabling dependencies only for certain versions of TWiki. For example,
 <verbatim>
-TWiki::Contrib::Attrs,>=1.000,perl,Required. Download from TWiki:Plugins/AttrsContrib and install.
+TWiki::Rhinos,>=1.000,perl,Required. Download from TWiki:Plugins/RhinosContrib and install.
 ONLYIF ($TWiki::Plugins::VERSION < 1.025)
 TWiki::Plugins::CairoContrib, >=1.000, perl, Optional, only required if the plugin is to be run with versions of TWiki before Cairo. Available from the TWiki:Plugins/CairoContrib repository.
 </verbatim>

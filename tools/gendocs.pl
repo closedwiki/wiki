@@ -34,52 +34,37 @@ BEGIN {
 			     );
     pod2usage( 1 ) if $Config->{help};
     pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
-    print STDERR Dumper( $Config ) if $Config->{debug};
 
     unshift @INC, "$Config->{root}/bin";
     do 'setlib.cfg';
 };
 
-use TWiki;
-
-my $twiki = new TWiki("admin");
-my $user = $twiki->{users}->findUser("admin", "TWikiContributor");
-my $adminGroup = $twiki->{users}->findUser($TWiki::cfg{SuperAdminGroup});
-$adminGroup->groupMembers();
-push( @{$adminGroup->{members}}, $user );
-
 my @index;
 my $smells = 0;
+print "Building in $Config->{root}\n" if $Config->{debug};
 
-find( \&eachfile, ( $Config->{root} ));
+find( \&eachfile, ( $Config->{root}.'/lib' ));
 
-my $i = <<__TOPIC__;
+open(F, ">$Config->{root}/data/TWiki/SourceCode.txt") or die $!;
+print F <<__TOPIC__;
 ---+!! TWiki Source Code Packages
 
 %X% This documentation is automatically generated from the =pod=, so it always matches the running code
 
-Wherever you see a smell, your help is needed to get rid of it!
-
 %TOC%
 
 __TOPIC__
-$i .= join("\n", sort @index);
+print F join("\n", sort @index);
 if ( $Config->{smells} ) {
-    $i .= "\n\n There were a total of *$smells* smells\n";
+    print F "\n\n There were a total of *$smells* smells\n";
 }
-my $meta = new TWiki::Meta($twiki, "TWiki", "SourceCode");
-$twiki->{store}->saveTopic( $user, "TWiki", "SourceCode",
-                            $i,
-                            $meta,
-                            { dontlog => 1, minor => 1,
-                              comment => "created by build" } );
+close(F);
 
 1;
 
 sub eachfile {
     my $dir = $File::Find::dir;
     if( $dir =~ m!/\.! ||
-        $dir =~ m!/test! ||
         $dir =~ m!/Plugins! ||
         $dir =~ m!/Upgrade! ||
         $dir =~ m!/Contrib! ) {
@@ -90,6 +75,7 @@ sub eachfile {
     my $file = $_;
 
     my $pmfile = $File::Find::name;
+
     $pmfile =~ s/\0//g;
     return unless -f $pmfile;
 
@@ -174,19 +160,16 @@ sub eachfile {
             $howSmelly = "\n\nThis package doesn't smell\n";
         }
     }
-    my $meta = new TWiki::Meta($twiki, "TWiki", $topic);
-    $Config->{debug} && print STDERR "$pmfile -> $topic\n";
+    $Config->{debug} && print STDERR "$pmfile -> $Config->{root}/data/TWiki/$topic.txt\n";
     push(@index, "---++ [[$topic][$packageName]] \n$packageSpec$howSmelly");
     $text = "---+ Package =$packageName=$extends\n$packageSpec\n%TOC%$text";
     foreach my $method ( sort keys %spec ) {
         $text =~ s/!!!$method!!!/$spec{$method}/;
     }
 
-
-    $twiki->{store}->saveTopic( $user, "TWiki", $topic, $text,
-                                $meta,
-                                { dontlog => 1, minor => 1,
-                                  comment => "created by build" } );
+    open(F, ">$Config->{root}/data/TWiki/$topic.txt") || die $!;
+    print F $text;
+    close F;
 }
 
 __DATA__

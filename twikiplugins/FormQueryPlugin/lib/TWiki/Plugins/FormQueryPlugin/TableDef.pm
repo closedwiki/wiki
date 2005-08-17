@@ -4,7 +4,7 @@
 use strict;
 use integer;
 
-use TWiki::Contrib::Attrs;
+use TWiki::Attrs;
 
 # A table definition object. This encapsulates the formatting of
 # a "table" object inside a topic - or at least, mostly. The
@@ -26,7 +26,7 @@ use TWiki::Contrib::Attrs;
       }
     }
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
     my $hdrdef = $attrs->get( "header" );
     if ( !defined( $hdrdef ) || $hdrdef eq "on" ) {
       return undef;

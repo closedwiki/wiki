@@ -44,9 +44,15 @@ use TWiki::Contrib::Build;
 
     # generate the POD documentation
     print "Building documentation....\n";
-    print `perl gendocs.pl -root $this->{basedir}`;
+    $this->sys_action('perl gendocs.pl -root '.$this->{basedir});
+    $this->cp( $this->{basedir}.'/AUTHORS',
+               $this->{basedir}.'/pub/TWiki/TWikiContributor/AUTHORS' );
+    print "Generating CHANGELOG...\n";
+    $this->sys_action( 'svn log --xml --verbose | xsltproc '.
+                         $this->{basedir}.'/tools/distro/svn2cl.xsl - > '.
+                           $this->{basedir}.'/CHANGELOG' );
     print "Documentation built\n";
-  }
+}
 
   sub target_stage {
     my $this = shift;
