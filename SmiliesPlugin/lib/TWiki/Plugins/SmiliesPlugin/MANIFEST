@@ -1,0 +1,17 @@
+data/TWiki/SmiliesPlugin.txt NEW
+lib/TWiki/Plugins/SmiliesPlugin.pm NEW
+lib/TWiki/Plugins/SmiliesPlugin/build.pl NEW
+pub/TWiki/SmiliesPlugin/biggrin.gif NEW
+pub/TWiki/SmiliesPlugin/confused.gif NEW
+pub/TWiki/SmiliesPlugin/cool.gif NEW
+pub/TWiki/SmiliesPlugin/devil.gif NEW
+pub/TWiki/SmiliesPlugin/devilwink.gif NEW
+pub/TWiki/SmiliesPlugin/eek.gif NEW
+pub/TWiki/SmiliesPlugin/frown.gif NEW
+pub/TWiki/SmiliesPlugin/indifferent.gif NEW
+pub/TWiki/SmiliesPlugin/mad.gif NEW
+pub/TWiki/SmiliesPlugin/redface.gif NEW
+pub/TWiki/SmiliesPlugin/rolleyes.gif NEW
+pub/TWiki/SmiliesPlugin/smile.gif NEW
+pub/TWiki/SmiliesPlugin/tongue.gif NEW
+pub/TWiki/SmiliesPlugin/wink.gif NEW

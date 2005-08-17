@@ -844,7 +844,7 @@ sub target_upload {
     my $to = $this->{project};
 
     # Get the old form data and attach it to the update
-    print 'Downloading old topic to recover form',$NL;
+    print 'Downloading http://twiki.org/cgi-bin/view/Plugins/'.$to.' to recover form',$NL;
     my $response = $userAgent->get( 'http://twiki.org/cgi-bin/view/Plugins/'.$to.'?raw=debug' );
 
     die 'Failed to GET old plugins topic ', $response->request->uri,
@@ -1101,7 +1101,11 @@ sub target_manifest {
 sub _manicollect {
     if( /^(CVS|\.svn|twikiplugins)$/ ) {
         $File::Find::prune = 1;
-    } elsif ( !-d && /^\w.*\w$/ && !/^DEPENDENCIES$/ && !/^MANIFEST$/ && !/^[A-Z]+INSTALL$/ ) {
+    } elsif ( !-d && /^\w.*\w$/ &&
+                !/^DEPENDENCIES$/ &&
+                  !/^MANIFEST$/ &&
+                    !/^[A-Z]+INSTALL$/ &&
+                      !/^build.pl$/ ) {
         my $n = $File::Find::name;
         $n =~ s/$rootdir\/?//;
         $manilist{$n} = 'NEW' unless exists $manilist{$n};
