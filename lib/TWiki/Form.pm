@@ -291,7 +291,7 @@ sub _link {
         $link =
           CGI::a(
               { target => $topic,
-                onclick => 'return launchWindow("'.$web.'","'.$string.'")',
+                onclick => 'return launchWindow("'.$web.'","'.$topic.'")',
                 title => $tooltip,
                 href =>$this->{session}->getScriptUrl($web, $topic, 'view'),
                 rel => 'nofollow'
