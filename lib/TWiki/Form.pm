@@ -40,23 +40,23 @@ BEGIN {
     # used as field names in forms.
     $reservedFieldNames =
       {
-       action => 1,
-       breaklock => 1,
-       contenttype => 1,
-       cover => 1,
-       dontnotify => 1,
-       editaction => 1,
-       forcenewrevision => 1,
-       formtemplate => 1,
-       onlynewtopic => 1,
-       onlywikiname => 1,
-       originalrev => 1,
-       skin => 1,
-       templatetopic => 1,
-       text => 1,
-       topic => 1,
-       topicparent => 1,
-       user => 1,
+          action => 1,
+          breaklock => 1,
+          contenttype => 1,
+          cover => 1,
+          dontnotify => 1,
+          editaction => 1,
+          forcenewrevision => 1,
+          formtemplate => 1,
+          onlynewtopic => 1,
+          onlywikiname => 1,
+          originalrev => 1,
+          skin => 1,
+          templatetopic => 1,
+          text => 1,
+          topic => 1,
+          topicparent => 1,
+          user => 1,
       };
 };
 
@@ -99,9 +99,9 @@ sub new {
 
         if( $fieldDef->{type} =~ /^(checkbox|radio|select)/ ) {
             @posValues = split( /,/, $fieldDef->{value} );
-            my $topic = $fieldDef->{referenced} || $fieldDef->{name};
+            my $topic = $fieldDef->{definingTopic} || $fieldDef->{name};
             if( !scalar( @posValues ) &&
-                $store->topicExists( $web, $topic ) ) {
+                  $store->topicExists( $web, $topic ) ) {
                 # If no values are defined, see if we can get them from
                 # the topic of the same name as the field
                 my( $meta, $text ) =
@@ -191,9 +191,9 @@ sub _parseFormDefinition {
             $tooltip =~ s/^\s*//go;
             $tooltip =~ s/\s*$//go;
 
-            my $referenced = "";
+            my $definingTopic = "";
             if( $title =~ /\[\[(.+)\]\[(.+)\]\]/ )  { # use common defining
-                $referenced = _cleanField( $1 );      # topics with diff.
+                $definingTopic = _cleanField( $1 );      # topics with different
                 $title = $2;                          # field titles
             }
 
@@ -213,8 +213,8 @@ sub _parseFormDefinition {
                     value => $vals,
                     tooltip => $tooltip,
                     attributes => $attributes,
-                    referenced => $referenced
-                  } );
+                    definingTopic => $definingTopic
+                   } );
         } else {
             $inBlock = 0;
         }
@@ -224,25 +224,25 @@ sub _parseFormDefinition {
 }
 
 sub _searchVals {
-  my ( $session, $arg ) = @_;
-  $arg =~ s/%WEB%/$session->{webName}/go;
-  return $session->_SEARCH(new TWiki::Attrs($arg), $session->{topicName}, $session->{webName});
+    my ( $session, $arg ) = @_;
+    $arg =~ s/%WEB%/$session->{webName}/go;
+    return $session->_SEARCH(new TWiki::Attrs($arg), $session->{topicName}, $session->{webName});
 }
 
 # Chop out all except A-Za-z0-9_.
 # I'm sure there must have been a good reason for this once.
 sub _cleanField {
-   my( $text ) = @_;
-   $text = '' if( ! $text );
-   # TODO: make this dependent on a 'character set includes non-alpha'
-   # setting in TWiki.cfg - and do same in Render.pm re 8859 test.
-   # I18N: don't get rid of non-ASCII characters
-   # TW: this is applied to the key in the field; it is not obvious
-   # why we need I18N in the key (albeit there could be collisions due
-   # to the filtering... but all the current topics are keyed on _cleanField
-   $text =~ s/<nop>//go;    # support <nop> character in title
-   $text =~ s/[^A-Za-z0-9_\.]//go;
-   return $text;
+    my( $text ) = @_;
+    $text = '' if( ! $text );
+    # TODO: make this dependent on a 'character set includes non-alpha'
+    # setting in TWiki.cfg - and do same in Render.pm re 8859 test.
+    # I18N: don't get rid of non-ASCII characters
+    # TW: this is applied to the key in the field; it is not obvious
+    # why we need I18N in the key (albeit there could be collisions due
+    # to the filtering... but all the current topics are keyed on _cleanField
+    $text =~ s/<nop>//go;    # support <nop> character in title
+    $text =~ s/[^A-Za-z0-9_\.]//go;
+    return $text;
 }
 
 
@@ -270,30 +270,36 @@ sub _getPossibleFieldValues {
     return @defn;
 }
 
-# Generate a link to the given topic in the same web as this form def came from
+# Generate a link to the given topic, so we can bring up details in a
+# separate window.
 sub _link {
-    my( $this, $name, $tooltip, $target ) = @_;
+    my( $this, $string, $tooltip, $topic ) = @_;
 
-    $name =~ s/[\[\]]//go;
+    $string =~ s/[\[\]]//go;
 
-    my $link = $name;
-    $target = $name unless $target;
+    $topic ||= $string;
+    $tooltip ||= 'Click to see details in separate window';
+
+    my $web;
+    ( $web, $topic ) =
+      $this->{session}->normalizeWebTopicName( $this->{web}, $topic );
+
+    my $link;
 
     my $store = $this->{session}->{store};
-    if( $store->topicExists( $this->{web}, $target ) ) {
-        ( $this->{web}, $target ) = $this->{session}->normalizeWebTopicName( $this->{web}, $target );
-        if( ! $tooltip ) {
-            $tooltip = 'Click to see details in separate window';
-        }
+    if( $store->topicExists( $web, $topic ) ) {
         $link =
-          CGI::a( { target => $target,
-                    onclick => 'return launchWindow("'.$this->{web}.'","'.$name.'")',
-                    title => $tooltip,
-                    href =>$this->{session}->getScriptUrl($this->{web}, $target, 'view'),
-                    rel => 'nofollow'
-                  }, $name );
+          CGI::a(
+              { target => $topic,
+                onclick => 'return launchWindow("'.$web.'","'.$string.'")',
+                title => $tooltip,
+                href =>$this->{session}->getScriptUrl($web, $topic, 'view'),
+                rel => 'nofollow'
+               }, $string );
     } elsif ( $tooltip ) {
-        $link = CGI::span( { title=>$tooltip }, $name );
+        $link = CGI::span( { title=>$tooltip }, $string );
+    } else {
+        $link = $string;
     }
 
     return $link;
@@ -319,29 +325,29 @@ sub renderForEdit {
     my $session = $this->{session};
 
     if( $this->{mandatoryFieldsPresent} ) {
-      $session->enterContext( 'mandatoryfields' );
+        $session->enterContext( 'mandatoryfields' );
     }
     my $tmpl = $session->{templates}->readTemplate( "form", $session->getSkin() );
 
     # Note: if WEBFORMS preference is not set, can only delete form.
-    $tmpl =~ s/%FORMTITLE%/$this->_link($this->{web},$this->{topic},'')/geo;
+    $tmpl =~ s/%FORMTITLE%/$this->_link($this->{web}.'.'.$this->{topic})/geo;
     my( $text, $repeatTitledText, $repeatUntitledText, $afterText ) =
       split( /%REPEAT%/, $tmpl );
 
     foreach my $fieldDef ( @{$this->{fields}} ) {
 
         my $tooltip = $fieldDef->{tooltip};
-        my $referenced = $fieldDef->{referenced};
+        my $definingTopic = $fieldDef->{definingTopic};
         my $title = $fieldDef->{title};
 
         if (! $title && $fieldDef->{type} eq 'label') {
             # Special handling for untitled labels
-	    my $tmp = $repeatUntitledText;
-	    my $value = 
-	      $session->{renderer}->getRenderedVersion(
-		 $session->handleCommonTags($fieldDef->{value}, $web, $topic));
-	    $tmp =~ s/%ROWVALUE%/$value/go;
-	    $text .= $tmp;
+            my $tmp = $repeatUntitledText;
+            my $value =
+              $session->{renderer}->getRenderedVersion(
+                  $session->handleCommonTags($fieldDef->{value}, $web, $topic));
+            $tmp =~ s/%ROWVALUE%/$value/go;
+            $text .= $tmp;
         } else {
             my( $extra, $value );
             my $name = $fieldDef->{name};
@@ -350,7 +356,7 @@ sub renderForEdit {
                 $value = $field->{value};
             }
             if( $useDefaults && !defined( $value ) &&
-                $fieldDef->{type} !~ /^checkbox/ ) {
+                  $fieldDef->{type} !~ /^checkbox/ ) {
 
                 # Try and get a sensible default value from the form
                 # definition. Doesn't make sense for checkboxes.
@@ -364,11 +370,12 @@ sub renderForEdit {
 
             ( $extra, $value ) =
               $this->renderFieldForEdit( $fieldDef, $web, $topic, $value );
-	    my $tmp = $repeatTitledText;
-	    $tmp =~ s/%ROWTITLE%/$this->_link($title,$tooltip,$referenced)/geo;
-	    $tmp =~ s/%ROWEXTRA%/$extra/go;
-	    $tmp =~ s/%ROWVALUE%/$value/go;
-	    $text .= $tmp;
+
+            my $tmp = $repeatTitledText;
+            $tmp =~ s/%ROWTITLE%/$this->_link($title,$tooltip,$definingTopic)/geo;
+            $tmp =~ s/%ROWEXTRA%/$extra/go;
+            $tmp =~ s/%ROWVALUE%/$value/go;
+            $text .= $tmp;
         }
     }
 
@@ -564,7 +571,7 @@ sub renderHidden {
         }
 
         if( $useDefaults && !defined( $value ) &&
-            $fieldDef->{type} !~ /^checkbox/ ) {
+              $fieldDef->{type} !~ /^checkbox/ ) {
 
             $value = $fieldDef->{value};
         }
@@ -624,15 +631,15 @@ sub getFieldValuesFromQuery {
             }
         }
 
-	# SMELL: This is really independent of $handleMandatory, but happens
-	# to coincide with usage (to be proper, should introduce additional flag)
-	if ( $handleMandatory ) {
-	  unless( defined( $value )) {
-	    # Note: In Cairo, meta data is overwritten by empty query parameter
-            unless( defined( $meta->get( 'FIELD', $fieldDef->{name} ))) {
-	      $value = '';
+        # SMELL: This is really independent of $handleMandatory, but happens
+        # to coincide with usage (to be proper, should introduce additional flag)
+        if ( $handleMandatory ) {
+            unless( defined( $value )) {
+                # Note: In Cairo, meta data is overwritten by empty query parameter
+                unless( defined( $meta->get( 'FIELD', $fieldDef->{name} ))) {
+                    $value = '';
+                }
             }
-	  }
         }
 
         # NOTE: title and name are stored in the topic so that it can be
@@ -650,10 +657,10 @@ sub getFieldValuesFromQuery {
         if( defined( $value ) ) {
             my $args =
               {
-               name =>  $fieldDef->{name},
-               title => $fieldDef->{title},
-               value => $value,
-               attributes => $fieldDef->{attributes},
+                  name =>  $fieldDef->{name},
+                  title => $fieldDef->{title},
+                  value => $value,
+                  attributes => $fieldDef->{attributes},
               };
             $meta->putKeyed( 'FIELD', $args );
         }
