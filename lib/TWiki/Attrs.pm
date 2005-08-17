@@ -258,4 +258,20 @@ sub extractValue {
     return $value;
 }
 
+=pod
+
+---++ ObjectMethod get($key) -> $value
+| $key | Attribute to get |
+Get an attr value from the map.
+
+Synonymous with $attrs->{$key}. Retained mainly for compatibility with
+the old AttrsContrib.
+
+=cut
+
+sub get {
+    my( $this, $field) = @_;
+    return $this->{$field};
+}
+
 1;

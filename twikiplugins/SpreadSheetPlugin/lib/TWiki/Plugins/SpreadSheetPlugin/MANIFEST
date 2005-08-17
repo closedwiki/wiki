@@ -1,0 +1,3 @@
+data/TWiki/SpreadSheetPlugin.txt NEW
+lib/TWiki/Plugins/SpreadSheetPlugin.pm NEW
+lib/TWiki/Plugins/SpreadSheetPlugin/Calc.pm NEW

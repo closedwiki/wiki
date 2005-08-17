@@ -765,3 +765,8 @@ templates/view.text.tmpl
 templates/view.tmpl
 twiki_httpd_conf.txt
 !include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
+!include twikiplugins/SmiliesPlugin/lib/TWiki/Plugins/SmiliesPlugin
+!include twikiplugins/InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
+!include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
+!include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
+!include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
