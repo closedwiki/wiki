@@ -44,23 +44,66 @@ use TWiki::Contrib::Build;
 
     # generate the POD documentation
     print "Building documentation....\n";
-    $this->sys_action('perl gendocs.pl -root '.$this->{basedir});
-    $this->cp( $this->{basedir}.'/AUTHORS',
-               $this->{basedir}.'/pub/TWiki/TWikiContributor/AUTHORS' );
-    print "Generating CHANGELOG...\n";
-    $this->sys_action( 'svn log --xml --verbose | xsltproc '.
-                         $this->{basedir}.'/tools/distro/svn2cl.xsl - > '.
-                           $this->{basedir}.'/CHANGELOG' );
+    print `perl gendocs.pl -root $this->{basedir}`;
     print "Documentation built\n";
-}
+  }
 
   sub target_stage {
     my $this = shift;
 
     $this->SUPER::target_stage();
 
-    #use a Cairo install to create new ,v files for the data
+    #use a Cairo install to create new ,v files for the data, and pub
     #WARNING: I don't know how to get the 'last' release, so i'm hardcoding Cairo
+    $this->stage_rcsfiles();
+  }
+
+  sub stage_rcsfiles() {
+    my $this = shift;
+
+    # svn co cairo to a new dir
+    #foreach file in data|pub in tmpDir, cp ,v file from svnCo 
+    #do a ci
+    #if there was no existing ,v file, make one and ci
+
+    my $lastReleaseDir = '/tmp/lastRel'.($$ +1);
+
+    $this->makepath($lastReleaseDir);
+    $this->cd($lastReleaseDir);
+    print 'last Release is being put in '.$lastReleaseDir."\n";
+    `svn co http://svn.twiki.org:8181/svn/twiki/tags/twiki-20040902-release/ .`;
+
+    $this->cd($this->{tmpDir}.'/data');
+    #foreach web
+    opendir(DATADIR, '.');
+    my $web;
+    while ($web = readdir(DATADIR)) {
+        unless (-d $web) {next;}  #only consider directories
+        if ($web eq '.' || $web eq '..') {next;}
+ #       print 'found web: '.$web."\n";
+        opendir(WEBDIR, $web);
+        my $topic;
+        while ($topic = readdir(WEBDIR)) {
+            unless ($topic =~ /.*\.txt$/) {next;} #consider only topics
+#            print "\tfound topic: $topic\n";
+
+#TODO: need to update the META"TOPICINFO with the correct verion number :(
+
+    		if ( -e $lastReleaseDir.'/data/'.$web.'/'.$topic.',v' ) {
+                $this->cp($lastReleaseDir.'/data/'.$web.'/'.$topic.',v', $web);
+                `rcs -u -M $web/$topic,v`;
+                `rcs -l $web/$topic`;
+            } else {
+                #create rsc file, and ci
+                print 'new topic: '.$web.'/'.$topic."\n";
+            }
+            `ci -mbuildrelease -t-new-topic $web/$topic`;
+            `co -u -M $web/$topic`;
+		}
+		closedir(WEBDIR);
+    }
+    closedir(DATADIR);
+
   }
 }
 
