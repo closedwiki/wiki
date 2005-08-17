@@ -224,7 +224,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub formQuery {
     my ( $this, $macro, $params ) = @_;
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $name = $attrs->get( "name" );
     if ( !defined( $name )) {
@@ -298,7 +298,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub tableFormat {
     my ( $this, $macro, $params ) = @_;
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $name = $attrs->get( "name" );
     if ( !defined( $name )) {
@@ -330,7 +330,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub showQuery {
     my ( $this, $macro, $params ) = @_;
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $name = $attrs->get( "query" );
     if ( !defined( $name )) {
@@ -364,7 +364,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   # field in a query
   sub sumQuery {
     my ( $this, $macro, $params ) = @_;
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $name = $attrs->get( "query" );
     if ( !defined( $name )) {
@@ -389,7 +389,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub createNewTopic {
     my ( $this, $macro, $params, $web, $topic ) = @_;
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $relation = $attrs->get( "relation" );
     if ( !defined( $relation )) {
@@ -451,7 +451,7 @@ use TWiki::Plugins::FormQueryPlugin::TableDef;
   sub getInfo {
     my ( $this, $params ) = @_;
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     $this->SUPER::load();
     my $topic = $attrs->get("topic");

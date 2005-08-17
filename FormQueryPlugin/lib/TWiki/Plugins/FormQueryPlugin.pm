@@ -25,7 +25,6 @@ my @dependencies =
   (
    { package => 'TWiki::Plugins', constraint => '>= 1.010' },
    { package => 'TWiki::Contrib::DBCache', constraint => '>= 1.000' },
-   { package => 'TWiki::Contrib::Attrs', constraint => '>= 1.000' }
   );
 
 sub initPlugin {

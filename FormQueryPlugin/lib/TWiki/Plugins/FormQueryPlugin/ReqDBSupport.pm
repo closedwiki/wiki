@@ -6,7 +6,7 @@ use strict;
 use TWiki::Func;
 
 use TWiki::Plugins::FormQueryPlugin::WebDB;
-use TWiki::Contrib::Attrs;
+use TWiki::Attrs;
 
 # Extra stuff specific to the application of the FormQueryPlugin to it's
 # role as a requirements database - though still generally useful, so
@@ -17,7 +17,7 @@ use TWiki::Contrib::Attrs;
   sub workingDays {
     my ( $macro, $params, $web, $topic ) = @_;
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $start = $attrs->fastget( "start" );
     $start = Time::ParseDate::parsedate( $start );
@@ -44,7 +44,7 @@ use TWiki::Contrib::Attrs;
     my ( $macro, $params, $web, $topic ) = @_;
     $params = TWiki::Func::expandCommonVariables( $params, "NoTopic", $web );
 
-    my $attrs = new TWiki::Contrib::Attrs( $params );
+    my $attrs = new TWiki::Attrs( $params );
 
     my $total = $attrs->fastget( "total" );
     if ( !defined( $total ) || $total <= 0 ) {

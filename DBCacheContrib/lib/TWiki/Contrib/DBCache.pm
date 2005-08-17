@@ -8,7 +8,7 @@ use TWiki::Contrib::Archive;
 use TWiki::Contrib::Array;
 use TWiki::Contrib::FileTime;
 use TWiki::Contrib::Map;
-use TWiki::Contrib::Attrs;
+use TWiki::Attrs;
 
 =begin text
 
@@ -180,7 +180,7 @@ Construct a new DBCache object.
 		  $att->set( "_up", $meta );
 		  $meta->set( "moved", $att );
 		} elsif ( $line =~ m/%META:FIELD{(.*)}%/o ) {
-		  my $fs = new TWiki::Contrib::Attrs($1);
+		  my $fs = new TWiki::Attrs($1);
 		  $form = new TWiki::Contrib::Map() unless $form;
 		  $form->set( $fs->get("name"), $fs->get("value"));
 		} elsif ( $line =~ m/%META:FILEATTACHMENT{(.*)}%/o ) {
