@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1118858555" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="LynnwoodBrown" date="1124300292" format="1.1" version="1.2"}%
 
 ---+!! %TOPIC%
 
@@ -54,12 +54,9 @@ Before running this test, check if SavedNewTopicNoEdit exist and, if so, [[%SCRI
 
 Before running this test, check if SavedNewTopicNoEdit exists and, if so, [[%SCRIPTURL%/manage%SCRIPTSUFFIX%/%WEB%/SavedNewTopicNoEdit?action=rename;newweb=%TRASHWEB%;newtopic=SavedNewTopicNoEdit;breaklock=1][delete it]].
 
-[[%SCRIPTURL%/save%SCRIPTSUFFIX%/TestCases?topic=SavedNewTopicNoEdit&formtemplate=ThisForm&testtext=text%20from%20the%20url&Rubaduba=%ENCODE{"%GMTIME%"}%][Click here]] to run the test and topic. Expected result:
+[[%SCRIPTURL%/save%SCRIPTSUFFIX%/TestCases?topic=SavedNewTopicNoEdit&formtemplate=ThisForm&text=text%20from%20the%20url&Rubaduba=%ENCODE{"%GMTIME%"}%&Squeegle=Hugh][Click here]] to run the test and topic. Expected result:
    * The topic should contain some text passed in url.
    * The topic should have ThisForm assigned.
    * Rubaduba form field should contain current GMTIME.
-   * The other form fields should be unchanged. i.e.:
-      * Squeegle =  Hugh Pugh Barney McGrew
-      * Smomble = unchecked
-      * Slash Slash Escape = One
+   * Squeegle form field should contain "Hugh"
 
