@@ -707,7 +707,7 @@ sub _protocolLink {
     # and those have already been encoded once in the rendering loop (they are
     # identified as "stand-alone"). One encoding works; two is too many. None
     # would be better for everyone!
-    return '<a href="'.$url.' target="_top">'.$theText.'</a>';
+    return '<a href="'.$url.'" target="_top">'.$theText.'</a>';
 }
 
 # Handle an external link typed directly into text. If it's an image

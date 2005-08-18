@@ -492,6 +492,18 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 | http://www.google.co.uk |
 <!-- /actual -->
 
+---++ Newlines in variable parameter lists
+<!-- expected expand NEWLINES_IN_VBLS -->
+%IFCONTEXT{"view" then="X" else="Y"}%
+<!-- /expected -->
+<!-- actual -->
+%IFCONTEXT{
+   "view"
+   then = "X"
+   else = "Y"
+}%
+<!-- /actual -->
+
 <!-- expected expand LINKATEND -->
 <span class="twikiNewLink">LinkAtEnd<a title="Create this topic" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/TestCases/LinkAtEnd?topicparent=TestCases.TestCaseAutoFormatting" rel="nofollow"><sup>?</sup></a></span>
 <!-- /expected -->

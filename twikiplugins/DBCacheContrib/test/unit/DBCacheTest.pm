@@ -7,64 +7,73 @@ use TWiki::Func;
 
 package DBCacheTest;
 
-use base qw(BaseFixture);
-
+my $testweb = "TemporaryTestWebDBCacheContrib";
+use base qw(TWikiTestCase);
+my $twiki;
 sub new {
   my $self = shift()->SUPER::new(@_);
   # your state for fixture here
   return $self;
 }
 
-my $webHome =
-"\%META:TOPICINFO{author=\"guest\" date=\"1089644791\" format=\"1.0\" version=\"1.12\"}\%\n".
-"\%META:TOPICPARENT{name=\"TWiki.TWikiPreferences\"}%\n";
-my $formTest =
-"\%META:TOPICINFO{author=\"gipper\" date=\"1091696467\" format=\"1.0\" version=\"1.5\"}\%\n".
-"\%META:TOPICPARENT{name=\"WebHome\"}\%\n".
-"CategoryForms\n".
-"\%META:FORM{name=\"ThisForm\"}\%\n".
-"\%META:FIELD{name=\"FieldOne\" title=\"FieldOne\" value=\"Value One\"}\%\n".
-"\%META:FIELD{name=\"FieldTwo\" title=\"FieldTwo\" value=\"Value Two\"}\%\n".
-"\%META:FIELD{name=\"FieldThree\" title=\"FieldThree\" value=\"7.1\"}\%\n".
-"\%META:FIELD{name=\"BackSlash\" title=\"Back Slash\" value=\"One\"}\%\n".
-"\%META:FILEATTACHMENT{name=\"conftest.val\" attr=\"\" comment=\"Bangra bingo\" date=\"1091696180\" path=\"conftest.val\" size=\"8\" user=\"guest\" version=\"1.2\"}\%\n".
-"\%META:FILEATTACHMENT{name=\"left.gif\" attr=\"\" comment=\"left arrer\" date=\"1091696102\" path=\"left.gif\" size=\"107\" user=\"guest\" version=\"1.1\"}\%\n".
-"\%META:FILEATTACHMENT{name=\"right.gif\" attr=\"h\" comment=\"\" date=\"1091696127\" path=\"right.gif\" size=\"105\" user=\"guest\" version=\"1.1\"}\%\n".
-"\%META:TOPICMOVED{by=\"guest\" date=\"1091696242\" from=\"Test.FormsTest\" to=\"Test.FormTest\"}\%\n";
+my $formTest = <<END;
+%META:TOPICPARENT{name="WebHome"}%
+CategoryForms
+%META:FORM{name="ThisForm"}%
+%META:FIELD{name="FieldOne" title="FieldOne" value="Value One"}%
+%META:FIELD{name="FieldTwo" title="FieldTwo" value="Value Two"}%
+%META:FIELD{name="FieldThree" title="FieldThree" value="7.1"}%
+%META:FIELD{name="BackSlash" title="Back Slash" value="One"}%
+%META:FILEATTACHMENT{name="conftest.val" attr="" comment="Bangra bingo" date="1091696180" path="conftest.val" size="8" user="guest" version="1.2"}%
+"%META:FILEATTACHMENT{name="left.gif" attr="" comment="left arrer" date="1091696102" path="left.gif" size="107" user="guest" version="1.1"}%
+"%META:FILEATTACHMENT{name="right.gif" attr="h" comment="" date="1091696127" path="right.gif" size="105" user="guest" version="1.1"}%
+"%META:TOPICMOVED{by="guest" date="1091696242" from="$testweb.FormsTest" to="$testweb.FormTest"}%
+END
 
+# Set up the test fixture
 sub set_up {
-  my $this = shift;
-  $this->SUPER::set_up();
-  BaseFixture::writeTopic("Test", "WebHome", $webHome);
-  BaseFixture::writeTopic("Test", "FormTest", $formTest);
+    my $this = shift;
+
+    $this->SUPER::set_up();
+
+    $twiki = new TWiki( "TestUser1" );
+
+    $twiki->{store}->createWeb($twiki->{user}, $testweb);
+    $twiki->{store}->saveTopic( $twiki->{user}, $testweb, "FormTest",
+                                $formTest, undef );
+
+    $TWiki::Plugins::SESSION = $twiki;
+}
+
+sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
+    $twiki->{store}->removeWeb($twiki->{user}, $testweb);
 }
 
 sub test_loadSimple {
   my $this = shift;
-  my $db = new TWiki::Contrib::DBCache("Test");
+  my $db = new TWiki::Contrib::DBCache($testweb);
   $this->assert_str_equals("0 2 0", $db->load());
   my $topic = $db->get("WebHome");
   $this->assert($topic);
   my $info = $topic->get("info");
   $this->assert_not_null($info);
   $this->assert_equals($topic, $info->get("_up"));
-  $this->assert_str_equals("guest", $info->get("author"));
-  $this->assert_equals(1089644791, $info->get("date"));
-  $this->assert_str_equals("1.0", $info->get("format"));
-  $this->assert_str_equals("1.12", $info->get("version"));
-  $this->assert_str_equals("TWiki.TWikiPreferences", $topic->get("parent"));
+  $this->assert_str_equals("TestUser1", $info->get("author"));
+  $this->assert_str_equals("1.1", $info->get("format"));
 
   $topic = $db->get("FormTest");
   $this->assert_not_null($topic);
   $info = $topic->get("info");
   $this->assert_not_null($info);
   $this->assert_equals($topic, $info->get("_up"));
-  $this->assert_str_equals("gipper", $info->get("author"));
-  $this->assert_equals(1091696467, $info->get("date"));
-  $this->assert_str_equals("1.0", $info->get("format"));
-  $this->assert_str_equals("1.5", $info->get("version"));
+  $this->assert_str_equals("TestUser1", $info->get("author"));
+  $this->assert_str_equals("1.1", $info->get("format"));
+  $this->assert_str_equals("1.1", $info->get("version"));
+print STDERR $topic->toString();
   $this->assert_str_equals("WebHome", $topic->get("parent"));
-  $this->assert_str_equals("CategoryForms\n", $topic->get("text"));
+  $this->assert_str_equals("CategoryForms\n\n", $topic->get("text"));
   $this->assert_str_equals("ThisForm", $topic->get("form"));
   my $form = $topic->get("ThisForm");
   $this->assert_not_null($form);
@@ -118,14 +127,14 @@ sub test_loadSimple {
   $this->assert_equals($topic, $moved->get("_up"));
   $this->assert_str_equals("guest", $moved->get("by"));
   $this->assert_equals(1091696242, $moved->get("date"));
-  $this->assert_str_equals("Test.FormsTest", $moved->get("from"));
-  $this->assert_str_equals("Test.FormTest", $moved->get("to"));
+  $this->assert_str_equals("$testweb.FormsTest", $moved->get("from"));
+  $this->assert_str_equals("$testweb.FormTest", $moved->get("to"));
 }
 
 sub test_cache {
   my $this = shift;
-  my $db = new TWiki::Contrib::DBCache("Test");
-  $this->assert_str_equals("Test", $db->{_web});
+  my $db = new TWiki::Contrib::DBCache($testweb);
+  $this->assert_str_equals($testweb, $db->{_web});
   $this->assert_equals(0, $db->{loaded});
 
   # There should be no cache there
@@ -134,7 +143,7 @@ sub test_cache {
   $this->assert_str_equals("0 0 0", $db->load());
   my $initial = $db;
   # There's a cache there now
-  $db = new TWiki::Contrib::DBCache("Test");
+  $db = new TWiki::Contrib::DBCache($testweb);
   $this->assert_equals(0, $db->{loaded});
   $this->assert_str_equals("2 0 0", $db->load());
   $this->assert_equals(1, $db->{loaded});
@@ -142,26 +151,32 @@ sub test_cache {
   $this->checkSameAs($initial,$db);
 
   sleep(1);# wait for clock tick
-  BaseFixture::writeTopic("Test", "FormTest", $formTest."\nBlah");
+  $twiki->{store}->saveTopic( $twiki->{user}, $testweb, "FormTest",
+                              $formTest, undef );
   # One file in the cache has been touched
-  $db = new TWiki::Contrib::DBCache("Test");
+  $db = new TWiki::Contrib::DBCache($testweb);
   $this->assert_str_equals("1 1 0", $db->load());
-  $db = new TWiki::Contrib::DBCache("Test");
+  $db = new TWiki::Contrib::DBCache($testweb);
   $this->assert_str_equals("2 0 0", $db->load());
 
   # A new file has been created
-  BaseFixture::writeTopic("Test", "NewFile", "Blah");
-  $db = new TWiki::Contrib::DBCache("Test");
+  $twiki->{store}->saveTopic( $twiki->{user}, $testweb, "NewFile",
+                              "Blah", undef );
+
+  $db = new TWiki::Contrib::DBCache($testweb);
   $this->assert_str_equals("2 1 0", $db->load());
 
   # One file in the cache has been deleted
-  BaseFixture::deleteTopic("Test", "FormTest");
-  $db = new TWiki::Contrib::DBCache("Test");
+  $twiki->{store}->moveTopic($testweb, "FormTest", "Trash", "FormTest$$",
+                            $twiki->{user});
+  $db = new TWiki::Contrib::DBCache($testweb);
   $this->assert_str_equals("2 0 1", $db->load());
 
-  BaseFixture::deleteTopic("Test", "NewFile");
-  BaseFixture::writeTopic("Test", "FormTest", $formTest);
-  $db = new TWiki::Contrib::DBCache("Test");
+  $twiki->{store}->moveTopic($testweb, "NewFile", "Trash", "NewFile$$",
+                            $twiki->{user});
+  $twiki->{store}->saveTopic( $twiki->{user}, $testweb, "FormTest",
+                              $formTest, undef );
+  $db = new TWiki::Contrib::DBCache($testweb);
   $this->assert_str_equals("1 1 1", $db->load());
 
   $this->checkSameAs($initial, $db);
@@ -198,7 +213,7 @@ sub checkSameAsMap {
     my $c = "$cmping.$k";
     if (ref($a)) {
       $this->checkSameAs($a, $b, $c, $checked );
-    } elsif ( $k !~ /^_/) {
+    } elsif ( $k !~ /^_/ && $c !~ /\.date$/ ) {
       $this->assert_str_equals($a, $b, "$c $a $b");
     }
   }

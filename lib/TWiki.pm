@@ -1971,31 +1971,32 @@ sub _processTags {
     # referring to the top of the stack for efficiency. This var
     # should be considered to be $stack[$#stack]
 
-    #my $tell = 0; # uncomment all tell lines set this to 1 to print debugging
+    #my $tell = 1; # uncomment all tell lines set this to 1 to print debugging
     while ( scalar( @queue )) {
         my $token = shift( @queue );
-        #print ' ' x $tell,"PROCESSING $token \n" if $tell;
+        #print STDERR ' ' x $tell,"PROCESSING $token \n" if $tell;
 
         # each % sign either closes an existing stacked context, or
         # opens a new context.
         if ( $token eq '%' ) {
-            #print ' ' x $tell,"CONSIDER $stackTop\n" if $tell;
+            #print STDERR ' ' x $tell,"CONSIDER $stackTop\n" if $tell;
             # If this is a closing }%, try to rejoin the previous
             # tokens until we get to a valid tag construct. This is
             # a bit of a hack, but it's hard to think of a better
             # way to do this without a full parse that takes % signs
             # in tag parameters into account.
-            if ( $stackTop =~ /}$/ ) {
+            if ( $stackTop =~ /}$/s ) {
                 while ( scalar( @stack) &&
-                        $stackTop !~ /^%($regex{tagNameRegex}){.*}$/o ) {
+                        $stackTop !~ /^%($regex{tagNameRegex}){.*}$/so ) {
                     my $top = $stackTop;
-                    #print ' ' x $tell,"COLLAPSE $top \n" if $tell;
+                    #print STDERR ' ' x $tell,"COLLAPSE $top \n" if $tell;
                     $stackTop = pop( @stack ) . $top;
                 }
             }
-            if ( $stackTop =~ m/^%($regex{tagNameRegex})(?:{(.*)})?$/o ) {
+            # /s so you can have newlines in parameters
+            if ( $stackTop =~ m/^%($regex{tagNameRegex})(?:{(.*)})?$/so ) {
                 my( $tag, $args ) = ( $1, $2 );
-                #print ' ' x $tell,"POP $tag\n" if $tell;
+                #print STDERR ' ' x $tell,"POP $tag\n" if $tell;
                 my $e;
                 if ( defined( $this->{SESSION_TAGS}{$tag} )) {
                     $e = $this->{SESSION_TAGS}{$tag};
@@ -2007,7 +2008,7 @@ sub _processTags {
                 }
 
                 if ( defined( $e )) {
-                    #print ' ' x $tell--,"EXPANDED $tag -> $e\n" if $tell;
+                    #print STDERR ' ' x $tell--,"EXPANDED $tag -> $e\n" if $tell;
                     $stackTop = pop( @stack );
                     # Choice: can either tokenise and push the expanded
                     # tag, or can recursively expand the tag. The
@@ -2016,7 +2017,7 @@ sub _processTags {
                     $stackTop .=
                       $this->_processTags($e, $depth-1, $expanding , @_ );
                 } else { # expansion failed
-                    #print ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
+                    #print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
                     push( @stack, $stackTop );
                     $stackTop = '%'; # push a new context
                 }
