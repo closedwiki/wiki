@@ -2,18 +2,20 @@ use strict;
 
 package FileTimeTest;
 
-use base qw(BaseFixture);
+use base qw(TWikiTestCase);
 
 use TWiki::Contrib::Archive;
 use TWiki::Contrib::FileTime;
+use TWiki::Contrib::Array;
 use TWiki::Func;
 use Storable;
 
 my $files; # fixture
-my $web = "FT"; # fixture
+my $testweb = "TemporaryFileTimeTestWeb";
 my $root;
 my $acache;
 my $scache;
+my $twiki;
 
 sub new {
   my $self = shift()->SUPER::new(@_);
@@ -21,21 +23,32 @@ sub new {
 }
 
 sub set_up {
-  my $this = shift;
+    my $this = shift;
 
-  $this->SUPER::set_up();
+    $this->SUPER::set_up();
 
-  my $dbt = BaseFixture::readFile("./testDB.dat");
-  $root = TWiki::Func::getDataDir() . "/$web";
+    $twiki = new TWiki( "TestUser1" );
+
+    $twiki->{store}->createWeb($twiki->{user}, $testweb);
+
+  my $dbt = $twiki->{store}->readFile("./testDB.dat");
+  $root = TWiki::Func::getDataDir() . "/$testweb";
   $files = new TWiki::Contrib::Array();
   foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
     if ( $t =~ m/\"(.*?)\"/o ) {
-      BaseFixture::writeTopic($web, $1, $t);
-      $files->add(new TWiki::Contrib::FileTime( "$root/$1.txt" ));
+        $twiki->{store}->saveTopic( $twiki->{user}, $testweb, $1,
+                                    $t, undef );
+        $files->add(new TWiki::Contrib::FileTime( "$root/$1.txt" ));
     }
   }
   $acache = "$root/cache.Archive";
   $scache = "$root/cache.Storable";
+}
+
+sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
+    $twiki->{store}->removeWeb($twiki->{user}, $testweb);
 }
 
 sub test_OK {
