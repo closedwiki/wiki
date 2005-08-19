@@ -2327,16 +2327,17 @@ sub _IFCONTEXT {
 # $topic and $web should be for the immediate parent topic in the
 # include hierarchy. Works for both URLs and absolute server paths.
 sub _INCLUDE {
-    my ( $this, $params, $theTopic, $theWeb ) = @_;
+    my ( $this, $params, $topic, $web ) = @_;
     # Remove params, so they don't get expanded in the included page
     my $path = $params->remove('_DEFAULT') || '';
     my $pattern = $params->remove('pattern');
     my $rev = $params->remove('rev');
-    my $warn = $params->remove('warn');
+    my $warn = $params->remove('warn')
+      || $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
 
     if( $path =~ /^https?\:/ ) {
         # include web page
-        return $this->_includeUrl( $path, $pattern, $theWeb, $theTopic );
+        return $this->_includeUrl( $path, $pattern, $web, $topic );
     }
 
     $path =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
@@ -2359,7 +2360,7 @@ sub _INCLUDE {
     # TopicName.txt
     # Web.TopicName.txt
     # Web/TopicName.txt
-    my $incweb = $theWeb;
+    my $incweb = $web;
     my $inctopic = $path;
     $inctopic =~ s/\.txt$//; # strip .txt extension
     if ( $inctopic =~ /^($regex{webNameRegex})[\.\/]($regex{wikiWordRegex})$/o ) {
@@ -2369,10 +2370,9 @@ sub _INCLUDE {
 
     # See Codev.FailedIncludeWarning for the history.
     unless( $this->{store}->topicExists($incweb, $inctopic)) {
-        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
         if( $warn eq 'on' ) {
             return $this->inlineAlert( 'alerts', 'no_such_topic', $inctopic );
-        } elsif( $warn ne 'off' ) {
+        } elsif( isTrue( $warn )) {
             $inctopic =~ s/\//\./go;
             $warn =~ s/\$topic/$inctopic/go;
             return $warn;
@@ -2385,7 +2385,6 @@ sub _INCLUDE {
     # itself is not blocked; however subsequent attempts to include the
     # topic will fail.
     if( grep( /^$path$/, @{$this->{includeStack}} )) {
-        $warn ||= $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
         if( $warn eq 'on' ) {
             my $more = '';
             if( $#{$this->{includeStack}} ) {
@@ -2393,7 +2392,7 @@ sub _INCLUDE {
             }
             return $this->inlineAlert( 'alerts', 'already_included',
                                        $incweb, $inctopic, $more );
-        } elsif( $warn ne 'off' ) {
+        } elsif( isTrue( $warn )) {
             $inctopic =~ s/\//\./go;
             $warn =~ s/\$topic/$inctopic/go;
             return $warn;
@@ -2404,20 +2403,28 @@ sub _INCLUDE {
     my %saveTags = %{$this->{SESSION_TAGS}};
 
     push( @{$this->{includeStack}}, $path );
-    $this->{SESSION_TAGS}{INCLUDINGWEB} = $theWeb;
-    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $theTopic;
+    $this->{SESSION_TAGS}{INCLUDINGWEB} = $web;
+    $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $topic;
 
     # copy params into session tags
     foreach my $k ( keys %$params ) {
         $this->{SESSION_TAGS}{$k} = $params->{$k};
     }
 
-    $theTopic = $inctopic;
-    $theWeb = $incweb;
+    $topic = $inctopic;
+    $web = $incweb;
 
     ( $meta, $text ) =
-      $this->{store}->readTopic( $this->{user}, $theWeb, $theTopic,
+      $this->{store}->readTopic( undef, $web, $topic,
                                  $rev );
+
+    unless( $this->{security}->checkAccessPermission(
+        'VIEW', $this->{user}, $text, $topic, $web )) {
+        if( isTrue( $warn )) {
+            return $this->inlineAlert( 'alerts', 'access_denied', $topic );
+        } # else fail silently
+        return '';
+    }
 
     # remove everything before %STARTINCLUDE% and
     # after %STOPINCLUDE%
@@ -2431,28 +2438,28 @@ sub _INCLUDE {
     $text = $this->{renderer}->takeOutBlocks( $text, 'verbatim',
                                               $this->{_verbatims} );
 
-    $this->_expandAllTags( \$text, $theTopic, $theWeb );
+    $this->_expandAllTags( \$text, $topic, $web );
 
     # 4th parameter tells plugin that its called for an included file
-    $this->{plugins}->commonTagsHandler( $text, $theTopic, $theWeb, 1 );
+    $this->{plugins}->commonTagsHandler( $text, $topic, $web, 1 );
 
     # If needed, fix all 'TopicNames' to 'Web.TopicNames' to get the
     # right context
     # SMELL: This is a hack.
-    if( $theWeb ne $incweb ) {
+    if( $web ne $incweb ) {
         # 'TopicName' to 'Web.TopicName'
         $text =~ s/(^|[\s\(])($regex{webNameRegex}\.$regex{wikiWordRegex})/$1$TranslationToken$2/go;
-        $text =~ s/(^|[\s\(])($regex{wikiWordRegex})/$1$theWeb\.$2/go;
+        $text =~ s/(^|[\s\(])($regex{wikiWordRegex})/$1$web\.$2/go;
         $text =~ s/(^|[\s\(])$TranslationToken/$1/go;
         # '[[TopicName]]' to '[[Web.TopicName][TopicName]]'
-        $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $theWeb, $1 )/geo;
+        $text =~ s/\[\[([^\]]+)\]\]/&_fixIncludeLink( $web, $1 )/geo;
         # '[[TopicName][...]]' to '[[Web.TopicName][...]]'
-        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $theWeb, $1, $2 )/geo;
+        $text =~ s/\[\[([^\]]+)\]\[([^\]]+)\]\]/&_fixIncludeLink( $web, $1, $2 )/geo;
         # FIXME: Support for <noautolink>
     }
 
     # handle tags again because of plugin hook
-    $this->_expandAllTags( \$text, $theTopic, $theWeb );
+    $this->_expandAllTags( \$text, $topic, $web );
 
     # restore the tags
     pop( @{$this->{includeStack}} );
