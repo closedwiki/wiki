@@ -951,6 +951,9 @@ sub getRenderedVersion {
 
     # Initial cleanup
     $text =~ s/\r//g;
+     # whitespace before <! tag (if it is the first thing) is illegal
+    $text =~ s/^\s+(<![a-z])/$1/i;
+
     # clutch to enforce correct rendering at end of doc
     $text =~ s/\n?$/\n<nop>\n/s;
     # Convert any occurrences of token (very unlikely - details in
@@ -975,7 +978,7 @@ sub getRenderedVersion {
 
     $text = $this->takeOutBlocks( $text, 'pre', $removed );
 
-    # Join lines ending in '\'
+    # Join lines ending in '\' (don't need \r?, it was removed already)
     $text =~ s/\\\n//gs;
 
     $plugins->preRenderingHandler( $text, $removed );
