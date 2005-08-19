@@ -1,0 +1,7 @@
+Note: it looks like %INCLUDINGWEB%.%INCLUDINGTOPIC% is still using the old way for handling logins. Please update it (or ask for it to be updated)
+
+An example of a WebLeftBar topic that handles logins correctly follows:
+
+<verbatim>
+%INCLUDE{"%IFCONTEXT{"can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
+</verbatim>
