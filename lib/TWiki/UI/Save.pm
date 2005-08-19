@@ -84,23 +84,38 @@ sub buildNewTopic {
     $saveOpts->{minor} = 1 if $query->param( 'dontnotify' );
     my $originalrev = $query->param( 'originalrev' ); # rev edit started on
 
-    my ( $templateText, $templateMeta );
-
-    my $templatetopic = $query->param( 'templatetopic');
-    if ($templatetopic) {
-        ( $templateMeta, $templateText ) =
-          $store->readTopic( $session->{user}, $webName,
-                                        $templatetopic, undef );
-        $templateText =
-          $session->expandVariablesOnTopicCreation( $templateText );
-        # topic creation, there is no original rev
-        $originalrev = 0;
-    }
+    # Populate the new meta data
+    my $newMeta = new TWiki::Meta( $session, $webName, $topic );
 
     my ( $prevMeta, $prevText );
+    my ( $templateText, $templateMeta );
+    my $templatetopic = $query->param( 'templatetopic');
     if( $topicExists ) {
         ( $prevMeta, $prevText ) =
           $store->readTopic( undef, $webName, $topic, undef );
+	if( $prevMeta ) {
+	  foreach my $k ( keys %$prevMeta ) {
+            unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
+		    $k eq 'FIELD' ) {
+	      $newMeta->copyFrom( $prevMeta, $k );
+            }
+	  }
+	}
+    } elsif ($templatetopic) {
+      ( $templateMeta, $templateText ) =
+	$store->readTopic( $session->{user}, $webName,
+			   $templatetopic, undef );
+      $templateText = '' if $query->param( 'newtopic' ); # created by edit
+      $templateText =
+	$session->expandVariablesOnTopicCreation( $templateText );
+      foreach my $k ( keys %$templateMeta ) {
+	unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
+		$k eq 'FIELD' ) {
+	  $newMeta->copyFrom( $templateMeta, $k );
+	}
+      }
+      # topic creation, there is no original rev
+      $originalrev = 0;
     }
 
     # Determine the new text
@@ -121,17 +136,6 @@ sub buildNewTopic {
     # is a mistake.
     $saveOpts->{forcenewrevision} = 1
       if( $query->param( 'forcenewrevision' ) || !$newText );
-
-    # Populate the new meta data
-    my $newMeta = new TWiki::Meta( $session, $webName, $topic );
-    if( $prevMeta ) {
-        foreach my $k ( keys %$prevMeta ) {
-            unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
-                      $k eq 'FIELD' ) {
-                $newMeta->copyFrom( $prevMeta, $k );
-            }
-        }
-    }
 
     my $newParent = $query->param( 'topicparent' ) || '';
     my $mum;

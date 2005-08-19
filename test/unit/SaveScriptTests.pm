@@ -392,7 +392,7 @@ sub test_simpleFormSave2 {
     $this->assert_null($meta->get('FIELD', 'CheckboxandButtons' ));
 }
 
-# meta data (other than FORM, FIELD, TOPICPARENT, etc., is preserved
+# meta data (other than FORM, FIELD, TOPICPARENT, etc.) is preserved
 # during saves.
 sub test_simpleFormSave3 {
     my $this = shift;
@@ -422,5 +422,26 @@ sub test_simpleFormSave3 {
 
 }
 
+# meta data (other than FORM, FIELD, TOPICPARENT, etc.) is inherited from
+# templatetopic
+sub test_templateTopicWithMeta {
+    my $this = shift;
+    my $query = new CGI({
+                         action => [ 'save' ],
+			 text   => [ $testtext1 ],
+			 topic  => [ $testweb.'.TemplateTopic' ]
+                        });
+    $twiki = new TWiki( $testuser1, $query);
+    TWiki::UI::Save::save($twiki);
+    $query = new CGI({
+                         templatetopic => [ 'TemplateTopic' ],
+                         action => [ 'save' ],
+                         topic => [ $testweb.'.'.$testtopic ]
+                        });
+    $twiki = new TWiki( $testuser1, $query );
+    TWiki::UI::Save::save($twiki);
+    my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
+    $this->assert_str_equals('UserTopic', $meta->get( 'PREFERENCE', 'VIEW_TEMPLATE' )->{value});
+}
 
 1;

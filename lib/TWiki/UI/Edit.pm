@@ -207,7 +207,11 @@ sub edit {
         }
 
         $text = $session->expandVariablesOnTopicCreation( $text, $user );
+	$tmpl =~ s/%NEWTOPIC%/1/;
+    } else {
+	$tmpl =~ s/%NEWTOPIC%//;
     }
+    $tmpl =~ s/%TEMPLATETOPIC%/$templateTopic/;
 
     # override with parameter if set
     $text = $ptext if defined $ptext;
