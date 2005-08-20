@@ -730,21 +730,22 @@ html>body .twikiToc li a {
 }
 
 .patternTop {
-	background-color:#eee; /*C13*/
-	line-height:1.5em;
-	padding:0.2em 10px; /*C12*/
-	margin:0 -10px 0.35em -10px; /*C12*/
+	background-color:#fff;
+	border-bottom:1px solid #ccc;
+	padding:0.2em 10px 0 10px;
+	margin:0 -10px 0.35em -10px;
+	font-size:90%;
 }
 .patternHomePath,
-.patternRevInfo {	
-	font-size:85%; /*C11*/
-	color:#666; /*C4*/
+.patternRevInfo {
+	color:#8490A1; /*C6*/
+	margin-bottom:0.5em;
 }
 .patternHomePath a:link,
 .patternHomePath a:visited,
 .patternRevInfo a:link,
 .patternRevInfo a:visited {
-	color:#666; /*C4*/
+	color:#8490A1; /*C6*/
 	text-decoration:underline;
 }
 .patternHomePath a:hover,
@@ -754,39 +755,52 @@ html>body .twikiToc li a {
 
 /* Tool bar at top of topic */
 .patternToolBar {
+
 }
-.patternToolBar a,
+.patternToolBar ul {
+	margin:0;
+	padding:0;
+	white-space:nowrap;
+	list-style:none;
+}
+.patternToolBar li {
+	display:inline;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+.patternToolBar a {
+	padding:1px 0.5em;
+}
 .patternToolBar s,
-.patternToolBar strike {
-	margin-right:0.2em;
+.patternToolBar strike,
+.patternToolBar a:link,
+.patternToolBar a:visited {
+	color:#8490A1; /*C6*/
+	background-color:#fff;
+	border:1px solid #ccc;
+	border-bottom:0;
+	text-decoration:none;
 }
 .patternToolBar a:hover {
-	color:#0029A3; /*C3*/
-	background-color:#b4d5ff; /*C2*/
-}
-.patternToolBar br {
-	display:none; /* displayed in text-only browsers */
-}
-
-/* page nav:top to, to bottom */
-.patternPageNav {
-	font-size:95%;
-	font-weight:bold;
-	margin-left:1em;
-	margin-bottom:1em;
-}
-.patternPageNav a:link,
-.patternPageNav a:visited {
+	color:#0054C0; /*C1*/
+	background-color:#fff;
+	border:1px solid #D6D3D0;
+	border-bottom:1px solid #fff;
 	text-decoration:none;
-	color:#8490A1; /*C6*/
+}      
+.patternToolBar .patternAccessKey {
+	border:0;
 }
-.patternPageNav a:hover {
-	text-decoration:underline;
-	color:#0029A3; /*C3*/
+.patternToolBar a:hover .patternAccessKey {
+	background-color:transparent;
 }
 
 /* Moved message */
-.patternMoved {}
+.patternMoved {
+	font-size:90%;
+	margin-bottom:1em;
+}
 
 /* search box */
 .patternSearchBox {
@@ -1067,11 +1081,30 @@ a:hover .patternAccessKey {
 }
 .patternViewPage .patternTopicAction,
 .patternDiffPage .patternTopicAction {
+	font-size:95%;
+	line-height:1.5em;
+	color:#8490A1; /*C6*/
+	background-color:#fff;
 	margin:0 0 1.5em 0;
 	padding:0.5em 2em 0.6em 2em;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+}
+.patternViewPage .patternTopicAction a:link,
+.patternViewPage .patternTopicAction a:visited {
+	text-decoration:none;
+	font-weight:normal;
+	color:#0054C0; /*C1*/;
+	background-color:transparent;
+}
+.patternViewPage .patternTopicAction a:hover {
+	text-decoration:underline;
+	font-weight:normal;
+	color:#0029A3; /*C3*/
+	background-color:#b4d5ff; /*C2*/
 }
 .patternViewPage .patternTopicAction .patternAccessKey {
-	border-color:#fff;
+	border-color:#0054C0;
 }
 
 /*	-----------------------------------------------------------

@@ -32,12 +32,15 @@
 %TMPL:DEF{"inactive_more"}%<strike>More topic actions...</strike>%TMPL:END%
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title="Delete or rename this topic; set parent topic; view and compare revisions" accesskey="m" rel='nofollow'><span class="patternAccessKey">M</span>ore topic actions</a>%TMPL:END%
 
+
+
 %TMPL:DEF{"toolbar"}%<div class="patternTop"><span class="patternHomePath twikiLeft">You are here: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> %META{"parent" nowebhome="on" prefix=" <span class='patternSeparator'>&gt;</span> " suffix=""}% <span class='patternSeparator'>&gt;</span> <nop>%TOPIC% </span>
 <span class="patternRevInfo twikiRight"><nop>%WEB%.%TOPIC% <span class="patternRevision">%REVINFO%</span> <span class="patternRevision">%REVISIONS% - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="View total topic history" accesskey="h" rel='nofollow'>Topic <span class="patternAccessKey">h</span>istory</a></span></span><br class="twikiClear" />
 <div class="patternToolBar">
-%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%<br />
-%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%<br />
-<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="p" title="View printable version of this topic" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a></div></div>%TMPL:END%
+   * %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%
+   * %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
+   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="p" title="View printable version of this topic" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a></div></div>%TMPL:END%
+
 
 
 %TMPL:DEF{"main"}%%TMPL:P{"topbar"}%<div class="patternMiddleContainer">%TMPL:P{"leftbar"}%<div class="patternMain">%BROADCASTMESSAGE%%TMPL:P{"toolbar"}%
@@ -53,12 +56,14 @@
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
+
+
 %TMPL:DEF{"topicaction"}%<a name="Actions"> </a><span class="twikiHidden"><br /></span><div class="patternTopicAction">
 %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}% %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}% %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" title="View printable version of this topic" accesskey="p" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a> %TMPL:P{"sep"}% <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on%REVARG%" title="View raw text without formatting" accesskey="r" rel='nofollow'><span class="patternAccessKey">R</span>aw text</a> %TMPL:P{"sep"}% Backlinks: <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksweb" title="Search the <nop>%WEB% Web for topics that link to here" accesskey="w"><span class="patternAccessKey">W</span>eb</a>, <a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here" accesskey="l">A<span class="patternAccessKey">ll</span> webs</a> %TMPL:P{"sep"}% %TMPL:P{context="inactive" then="inactive_more" else="active_more"}%</div>%TMPL:END%
 
 
 
-%TMPL:DEF{"topicinfo"}%<div class="patternTopicInfo patternRevInfo twikiGrayText patternMoved">%META{"moved"}%</div>%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div class="patternMoved twikiGrayText">%META{"moved"}%</div>%TMPL:END%
 
 
 

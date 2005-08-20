@@ -84,7 +84,6 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .patternTopicFooter - used for breadcrumb (patternHomePath)
 	* .patternHomePath - breadcrumb
 	* .patternToolBar - action buttons at top of topic (a bullet list), revision info
-	* .patternPageNav - links "end of topic" and "to top"
 	* .patternSearchBox - go box and current page in top bar
 	* .twikiHelp - help text
 	* .twikiBroadcastMessage - BROADCASTMESSAGE
