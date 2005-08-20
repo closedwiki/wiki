@@ -441,7 +441,9 @@ sub test_templateTopicWithMeta {
     $twiki = new TWiki( $testuser1, $query );
     TWiki::UI::Save::save($twiki);
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
-    $this->assert_str_equals('UserTopic', $meta->get( 'PREFERENCE', 'VIEW_TEMPLATE' )->{value});
+    my $pref = $meta->get( 'PREFERENCE', 'VIEW_TEMPLATE' );
+    $this->assert_not_null($pref);
+    $this->assert_str_equals('UserTopic', $pref->{value});
 }
 
 1;
