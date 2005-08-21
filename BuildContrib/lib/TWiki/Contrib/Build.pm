@@ -559,31 +559,33 @@ Basic Test::Unit test target, runs <project>Suite.
 sub target_test {
     my $this = shift;
     $this->build('build');
-    my $testrunner;
 
     # find testrunner
-    foreach my $d ( @INC ) {
-        my $f = $d.'/../test/bin/TestRunner.pl';
-        if (-f $f) {
-            $testrunner = $f;
-            last;
+    my $testrunner = _findRelativeTo($this->{basedir},
+                                     'test/bin/TestRunner.pl');
+
+    my $tests = _findRelativeTo($this->{basedir}, 'test/unit/'.
+                                  $this->{project}.'/'.
+                                    $this->{project}.'Suite.pm');
+    unless( $tests ) {
+        $tests = _findRelativeTo($this->{basedir}, '/test/unit/'.
+                                   $this->{project}.'Suite.pm');
+        unless( $tests ) {
+            warn 'WARNING: COULD NOT FIND ANY UNIT TESTS FOR '.
+              $this->{project};
+            return;
         }
     }
-
-    my $testdir = $this->{basedir}.'/test/unit';
-    my $testsuite = $this->{project}.'Suite';
-    if (!-f $testdir.'/'.$testsuite.'.pm') {
-        warn 'WARNING: COULD NOT FIND ANY UNIT TESTS FOR '.$this->{project}.' IN '.$testdir.'/'.$testsuite.'.pm';
-        return;
-    }
     unless($testrunner) {
-        warn 'WARNING: CANNOT RUN TESTS; TestRunner.pl not found using path ',
-          join(' ', @INC);;
+        warn 'WARNING: CANNOT RUN TESTS; TestRunner.pl not found';
         return;
     }
     my $inc = join(' -I', @INC);
+    my $testdir = $tests;
+    $testdir =~ s/\/[^\/]*$//;
+    print "Running tests in $tests\n";
     $this->cd($testdir);
-    $this->sys_action('perl -w -I'.$inc.' '.$testrunner.' '.$testsuite);
+    $this->sys_action('perl -w -I'.$inc.' '.$testrunner.' '.$tests);
     shift( @INC );
 }
 
