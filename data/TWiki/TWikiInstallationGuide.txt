@@ -14,7 +14,7 @@ TWiki should be fine with any web server and OS that meet the [[TWikiSystemRequi
 	* To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/TWikiOnSourceForge
 	* For other platforms, see TWiki:Codev/TWikiOn, and search the TWiki:Codev and TWiki:Support webs for other installation notes.
 
-If you need help, ask a question in the TWiki:Support web or on IRC (irc.freenode.net, channel #twiki)
+If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWikiIRC (irc.freenode.net, channel #twiki)
 
 #StandardInstallation
 ---+ Basic Installation
