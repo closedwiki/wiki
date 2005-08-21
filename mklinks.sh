@@ -14,9 +14,10 @@ shopt -s nullglob
 
 function mklink () {
     link=`echo $1 | sed -e 's#twikiplugins/[A-Za-z0-9]*/##'`
-    if [ -L $link ]; then
+# Temporary hack to try to clear problems on develop server
+#    if [ -L $link ]; then
         $destroy $link
-    fi
+#    fi
     if [ -e $link ]; then
         x=`diff -q $1 $link`
         if [ "$x" = "" ]; then
@@ -34,7 +35,7 @@ if [ "$1" = "-cp" ]; then
     shift;
     # must be -r to catch dirs
     build="cp -r"
-    destroy="rm -r"
+    destroy="rm -rf"
 elif [ "$1" = "-echo" ]; then
     shift;
     build="echo"
