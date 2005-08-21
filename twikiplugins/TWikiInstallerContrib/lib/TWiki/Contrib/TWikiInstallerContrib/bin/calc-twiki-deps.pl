@@ -119,6 +119,7 @@ SVK
 ^Term::ReadKey$
 ^File::chdir$
 ^Class::Accessor$
+^HTML::TreeBuilder$
 __MODULES__
 
 print $deps, "\n";
