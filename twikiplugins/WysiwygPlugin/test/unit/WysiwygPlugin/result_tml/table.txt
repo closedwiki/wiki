@@ -1,0 +1,23 @@
+A simple twiki table:
+|  *A*  |*B*  |  *C*|
+|Et 1|Et 2|Et 3|
+A twiki table with a colspan:
+|  A  |B  |  C|
+|Et 1|Et 2|Et 3|
+|  La ligne de 3 cases.  |||
+A no twiki table (rowspan>1):<br />
+<table border="1">
+ <tr>
+     <td align="center">A</td>
+     <td align="left">B</td>
+     <td align="right">C</td>
+    </tr>
+    <tr>
+        <td rowspan="2">Et 1</td>
+        <td>Et 2</td>
+        <td>Et 3</td>
+    </tr>
+    <tr>
+   <td colspan="2">La ligne de 3 cases.</td>
+    </tr>
+</table>
