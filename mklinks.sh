@@ -3,9 +3,11 @@
 # mklinks.sh [-cp|-echo] <plugin> ...
 # Make links from the core into twikiplugins, to pseudo-install these
 # components into a subversion checkout area. Default is to process
-# all plugins and contribs, or you can do just a subset. You can also
-# request a cp instead of ln -s.
+# all plugins and contribs, or you can do just a subset. Default behaviour
+# is to skip a link if there is an existing file in the way. You can also
+# request a cp instead of ln -s, which will stomp existing files.
 #    -cp - copy files from the twikiplugins area instead of linking them.
+#    DESTROYS THE EXISTING INSTALL OF THE PLUGIN EVEN IF FILES HAVE CHANGED
 #    -echo - just print the names of files that would be linked/copied
 #    <plugin>... list of plugins and contribs to link into the core.
 #    Example: CommentPlugin RenderListPlugin JSCalendarContrib
@@ -14,11 +16,13 @@ shopt -s nullglob
 
 function mklink () {
     link=`echo $1 | sed -e 's#twikiplugins/[A-Za-z0-9]*/##'`
-# Temporary hack to try to clear problems on develop server
-#    if [ -L $link ]; then
+    if [ -L $link ]; then
+        # Always kill links
         $destroy $link
-#    fi
-    if [ -e $link ]; then
+    fi
+    if [ x$wipeout = x -a -e $link ]; then
+        # If we are linking, and there's a file in the way, check
+        # if it is different
         x=`diff -q $1 $link`
         if [ "$x" = "" ]; then
             $destroy $link
@@ -26,6 +30,7 @@ function mklink () {
             echo "diff $1 $link different - Keeping $link intact"
         fi
     else
+        # if wipeout is 1, will simply overwrite whatever is already there
         $build `pwd`/$1 $link
     fi
 }
@@ -34,8 +39,10 @@ function mklink () {
 if [ "$1" = "-cp" ]; then
     shift;
     # must be -r to catch dirs
-    build="cp -r"
+    build="cp -rf"
     destroy="rm -rf"
+    # set wipeout to always overwrite existing installed files
+    wipeout=1
 elif [ "$1" = "-echo" ]; then
     shift;
     build="echo"
