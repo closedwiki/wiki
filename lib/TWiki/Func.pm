@@ -972,10 +972,11 @@ sub saveTopicText {
     # extract meta data and merge old attachment meta data
     my $meta = new TWiki::Meta( $session, $web, $topic );
     $session->{store}->extractMetaData( $meta, \$text );
+    $meta->remove( 'FILEATTACHMENT' );
+
     my( $oldMeta, $oldText ) =
       $session->{store}->readTopic( undef, $web, $topic, undef );
     $meta->copyFrom( $oldMeta, 'FILEATTACHMENT' );
-
     # save topic
     my $error =
       $session->{store}->saveTopic

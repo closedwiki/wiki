@@ -398,6 +398,8 @@ sub searchWeb {
     my $subWeb =        $params{'subweb'} || '';
     my $finalTerm =     $inline ? ( $params{nofinalnewline} || 0 ) : 0;
 
+    $separator = "" if $nonoise;
+
     $baseWeb =~ s/\./\//go;
 
     my $session = $this->{session};
@@ -692,7 +694,6 @@ sub searchWeb {
         my $headerDone = $noHeader;
         foreach my $topic ( @topicList ) {
             my $forceRendering = 0;
-
             unless( exists( $topicInfo->{$topic} ) ) {
                 # not previously cached
                 $topicInfo->{$topic} =

@@ -602,7 +602,7 @@ sub _readKeyValues {
 
 =pod
 
----++ ObjectMethod saveTopic (  $user, $web, $topic, $text, $meta, $options  )
+---++ ObjectMethod saveTopic( $user, $web, $topic, $text, $meta, $options  )
    * =$user= - user doing the saving (object)
    * =$web= - web for topic
    * =$topic= - topic to atach to
@@ -649,7 +649,7 @@ sub saveTopic {
         }
         $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
         # remove meta again and throw it away (!)
-        $text =~ s/^%META:([^{]+){(.*)}%\r?\n/''/gem if $text;
+        $text =~ s/^%META:([^{]+){(.*)}%\s*$//gm if $text;
     }
 
     my $error;

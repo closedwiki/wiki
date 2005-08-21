@@ -1651,7 +1651,7 @@ sub expandVariablesOnTopicCreation {
 
 sub _webOrTopicList {
     my( $this, $isWeb, $params ) = @_;
-    my $format = $params->{_DEFAULT} || $params->{format};
+    my $format = $params->{_DEFAULT} || $params->{format} || '$name';
     $format .= '$name' unless( $format =~ /\$name/ );
     my $separator = $params->{separator} || "\n";
     my $web = $params->{web} || '';
