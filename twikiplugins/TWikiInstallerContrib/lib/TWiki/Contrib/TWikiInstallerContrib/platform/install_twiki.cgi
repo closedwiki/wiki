@@ -211,10 +211,7 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
     my $file = "$mapTWikiDirs->{bin}->{dest}/LocalLib.cfg";
     open( FH, ">$file" ) or die "Can't open $file: $!";
     print FH <<'__LOCALLIB_CFG__';
-use vars qw( $twikiLibPath $CPANBASE );
-
-use Cwd qw( abs_path );
-( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( "../lib" )) =~ /(.*)/;
+use vars qw( $CPANBASE );
 
 $CPANBASE = "$twikiLibPath/CPAN/lib/";
 @localPerlLibPath = ( "$CPANBASE/", "$CPANBASE/arch/" );
@@ -455,7 +452,7 @@ sub installTWikiExtension
 	    }
 	    else
 	    {
-		mv( "$INSTALL/$file", $destFile ) or die "$file -> $destFile: $!";
+		mv( "$INSTALL/$file", $destFile ) or warn "$file -> $destFile: $!";
 	    }
 	    $map->{perms} && chmod $map->{perms}, $destFile;
 	}
