@@ -226,7 +226,7 @@ sub _renderFormData {
                                   CGI::td( { class => 'twikiFirstCol',
                                              align => 'right' },
                                            ' '.$title.':' ).
-                                  CGI::td( ' '.$value.' ' ));
+                                  CGI::td( "\n".$value."\n" ));
         }
     }
     return CGI::div( { class => 'twikiForm' },
