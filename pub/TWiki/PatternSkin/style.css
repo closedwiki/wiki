@@ -133,7 +133,7 @@ h6 { font-size:95%;}
 :visited,
 :link:active,
 :visited:active {
-	text-decoration:none;
+	text-decoration:underline;
 	color:#0054C0; /*C1*/;
 	background-color:transparent;
 }
@@ -142,6 +142,14 @@ h6 { font-size:95%;}
 	text-decoration:underline;
 	color:#0029A3; /*C3*/
 	background-color:#b4d5ff; /*C2*/
+}
+.twikiGrayText a:link,
+.twikiGrayText a:visited {
+	color:#8490A1; /*C6*/
+	text-decoration:underline;
+}
+.twikiGrayText a:hover {
+	color:#0029A3; /*C3*/
 }
 
 /* sorting of table columns */
@@ -177,36 +185,21 @@ form {
 	padding:0;
 }
 textarea {
-	font-family:monospace;
-	font-size:100%;
-	margin:0.25em 0;
-	color:#000;
-	width:auto;
+	border-color:#ccc;
+	background-color:#FBFAF8;
 }
 input, select {
-	font-family:verdana,arial,sans-serif;
-	padding:1px;
-	/*background-color:#E8F1F9;*/
+	border-color:#ccc;
 }
 select {
 	padding:0;
 	font-size:100%;
 }
 fieldset {
-	border:1px solid #666; /*C4*/
-	padding-left:1em;
 }
 legend {
-	padding: 0.2em 1em;
-	color:#8490A1; /*C6*/
-	font-size:95%;
-	border:1px solid #8490A1; /*C6*/
-	background-color:#f7f7f7; /*C7*/
 }
 label {
-	margin-left:0.5em;
-	font-size:95%;
-	line-height:125%;
 }
 
 /*	-----------------------------------------------------------
@@ -553,120 +546,34 @@ html>body .patternLeftBar li a {
 
 /* patternTopicAction: actions buttons at bottom of page */
 
-/* If someone has enough insight or time to spare, please
-create a div based solution instead of tables */
-
 .patternTopicAction {
-	margin:2em 0 3em 0;
-	background-color:#666; /*C4*/
 	font-size:95%;
 	line-height:1.5em;
-	color:#ddd;
-	font-weight:normal;
-}
-.patternTopicAction .patternSeparator {
-	color:#ccc;
-}
-.patternTopicAction table,
-table.patternTopicAction {
-	padding:0px;
-	border-spacing:0px;
-	border-collapse:collapse;
-	empty-cells:show;
-	border:0px;
-	width:inherit;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:100%;
-}
-.patternTopicAction a:link,
-.patternTopicAction a:visited {
-	color:#fff;
-	text-decoration:none;
-	font-weight:bold;
-}
-.patternTopicAction a:hover {
-	border-bottom:1px solid #fff;
-	background-color:transparent;
-}
-.patternTopicAction tr {
-	background-color:#666; /*C4*/
-}
-.patternTopicAction th {
-	border:none;
-}
-.patternTopicAction td {
-	height:2em;
-	border:none;
-	padding:0.3em 1em;
-	vertical-align:middle;
-	text-align:left;
-}
-.patternTopicAction td.patternCancelCol {
-	text-align:left;
-	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:20%;
-}
-.patternTopicAction td.patternSubmitCol {
-	text-align:center;
-	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:40%;
-}
-.patternTopicAction .patternSubmitOptions {
-	background-color:#D4E6FC;
-	border:1px solid #B6C6D9;
-	margin:0.25em 0;
-	text-align:center;
-}
-.patternTopicAction td.patternAddCol {
-	text-align:right;
-	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:20%;
-}
-.patternTopicActionSecondary {
-	padding:0.15em 0.5em 0.15em 1em;
+	color:#8490A1; /*C6*/
 	background-color:#fff;
+	margin:0 0 1.5em 0;
+	padding:0.5em 2em 0.6em 2em;
+	border-top:1px solid #ccc;
+	border-bottom:1px solid #ccc;
 }
-.patternTopicActionHelp,
-.patternTopicAction .patternTopicActionHelp {
-	background-color:#fff;
-	padding:0;
-}
-.patternTopicActionSecondary,
-.patternTopicAction .patternTopicActionSecondary {
-	background-color:#DFEDFD;
-	color:#444;
-	border-top:1px solid #bbb;
-}
-.patternTopicActionSecondary td.patternSubmitCol {
-	text-align:left;
-}
-.patternTopicActionSecondary a:link,
-.patternTopicActionSecondary a:visited {
-	color:#0054C0; /*C1*/;
-	border-bottom:1px solid #A3BCF1;
+.patternTopicAction .patternActionButtons a:link,
+.patternTopicAction .patternActionButtons a:visited {
 	text-decoration:none;
 }
-.patternTopicActionSecondary a:hover {
-	color:#0054C0; /*C1*/
-	border-bottom:1px solid #b4d5ff; /*C2*/
+.patternTopicAction .patternActionButtons a:hover {
+	text-decoration:underline;
 }
-.patternTopicActionHelp a:link,
-.patternTopicActionHelp a:visited  {
-	border-bottom:0px;
-}
-.patternTopicAction input,
 .patternTopicAction label {
-	font-size:100%;
+	color:#000;
 }
-.patternTopicAction .patternAccessKey {
-	border-color:#fff;
+.patternTopicAction button {
+	vertical-align:middle;
+}
+.patternTopicAction .patternSaveOptions {
+	margin-bottom:0.5em;
+}
+.patternTopicAction .patternSaveOptions .patternSaveOptionsContents {
+	padding:0.2em 0;
 }
 
 /**	----------------------------------
@@ -864,34 +771,34 @@ html>body .twikiToc li a {
 .patternSeparator {
 	font-family:Arial,sans-serif;
 }
+.twikiHelp {
+	background-color:#eee;
+	padding:0.5em;
+	font-size:90%;
+	margin:0.5em 0 1em 0;
+}
 .twikiHelp ul {
 	margin-top:0;
 	margin-bottom:0;
 }
-.twikiSubmit,
+.twikiButton, 
+.twikiSubmit {
+	border-width:1px;
+	vertical-align:middle;
+}
 .twikiButton {
-	font-size:90%;
-	font-weight:normal;
-	padding:0;
-	margin:0 0.15em;
+	border-color:#ccc;
+	background-color:#e6e6e6;
 }
 .twikiSubmit {
-	color:#041D3A;
-	background-color:#f2f2f2;
-	border-top:1px solid #fff;
-	border-right:1px solid #333;
-	border-bottom:1px solid #333;
-	border-left:1px solid #fff;
-}
-.twikiButton {
-	color:#05264D;
-	background-color:#f2f2f2;
-	border:1px solid #aaa;
+	border-color:#88B6CF;
+	background-color:#CADDED;
 }
 .twikiCheckbox,
 .twikiRadioButton {
 	border:none;
 	background-color:transparent;
+	vertical-align:middle;
 }
 .patternTopic .twikiSubmit { /* topic submit button */
 	background-color:#E8F1F9;
@@ -1079,33 +986,6 @@ a:hover .patternAccessKey {
 	margin-top:0;
 	margin-bottom:0em;
 }
-.patternViewPage .patternTopicAction,
-.patternDiffPage .patternTopicAction {
-	font-size:95%;
-	line-height:1.5em;
-	color:#8490A1; /*C6*/
-	background-color:#fff;
-	margin:0 0 1.5em 0;
-	padding:0.5em 2em 0.6em 2em;
-	border-top:1px solid #ccc;
-	border-bottom:1px solid #ccc;
-}
-.patternViewPage .patternTopicAction a:link,
-.patternViewPage .patternTopicAction a:visited {
-	text-decoration:none;
-	font-weight:normal;
-	color:#0054C0; /*C1*/;
-	background-color:transparent;
-}
-.patternViewPage .patternTopicAction a:hover {
-	text-decoration:underline;
-	font-weight:normal;
-	color:#0029A3; /*C3*/
-	background-color:#b4d5ff; /*C2*/
-}
-.patternViewPage .patternTopicAction .patternAccessKey {
-	border-color:#0054C0;
-}
 
 /*	-----------------------------------------------------------
 	Pages that are not view
@@ -1127,84 +1007,24 @@ a:hover .patternAccessKey {
 	styles and overridden styles used in edit.pattern.tmpl
 	-----------------------------------------------------------	*/
 
-.patternEditPage .patternFormHolder { /* constrains the width of the textarea */
-	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:100%;
-}
-.patternEditPage textarea {
-	background-color:#FCFAF7;
-	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:100%;
-}
-.patternEditPage .twikiHelp {
-	margin-top:2em;
-}
-.patternEditPage table.patternChangeFormButtonHolder {
-	margin-bottom:0.5em;
-	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:100%;
+.twikiChangeFormButtonHolder {
+	margin:1em 0;
 }
 .twikiChangeFormButton {
 	padding:0;
 	margin:0;
-	color:#888;
-	font-size:90%;
-	background-color:transparent;
-	border:none;
+	color:#777;
+	background-color:#e8e8e8;
 }
-.patternEditPage .twikiEditForm {
-	margin-top:1.5em;
-}
-.patternEditPage .twikiEditForm table {
-	width:auto;
-	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
-	voice-family:inherit;
-	width:100%;
-}
-.patternEditPage .twikiEditForm th {
-	border-left:none;
-	background-color:#DFEDFD; /*#EFEDEA;*/
+.twikiEditForm th {
+	background-color:#e8e8e8;
 	padding-left:1em;
-	color:black;
-}
-.patternEditPage .twikiEditForm td {
-	border-left:1px solid #ddd;
-	padding-right:1em;
-	padding-left:0.5em;
-	background-color:#F5F7FD; /*#E8F1F9;*/
 	vertical-align:middle;
 }
+
 .patternEditPage .twikiEditForm input,
 .patternEditPage .twikiEditForm select {
 	font-size:100%;
-}
-.patternEditPage .patternSig {
-	margin:0.5em 0;
-	color:#000;
-}
-.patternEditPage .patternSig input {
-	background-color:#EFEDEA;
-	border:1px solid #ddd;
-	padding:2px;
-	width:25em;
-	font-family:monospace;
-	font-size:100%;
-}
-.patternEditPage .patternTopicAction {
-	margin-top:0;
-}
-.patternEditPage .patternTopicActionHelp a:link,
-.patternEditPage .patternTopicActionHelp a:visited  {
-	color:#8490A1; /*C6*/
-}
-.patternEditPage .patternTopicActionHelp a:hover  {
-	color:#0029A3; /*C3*/
 }
 
 /*	-----------------------------------------------------------

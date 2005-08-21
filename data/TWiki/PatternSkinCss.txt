@@ -71,11 +71,6 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .twikiAttachments - attachment table; used in template attachtables.tmpl
 	* .twikiForm - !WebForm table; used in template attachtables.tmpl
 	* .patternTopicAction - actions buttons at bottom of page; holder of table with buttons
-	* .patternTopicActionSecondary - second layer above patternTopicAction (for instance in Preview)
-	* .patternTopicActionHelp - help text row
-	* .patternCancelCol - table columns (td) for cancel button
-	* .patternSubmitCol - table columns (td) for submit button
-	* .patternAddCol - table columns (td) for additional button/link (for instance: "Move attachment")
 	* .patternSeparator - separator character
 	* .twikiToc - topic contents (%<nop>TOC%)
 	* .twikiTocTitle - title of TOC (%<nop>TOC{title="Contents:"}%)
@@ -125,7 +120,6 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 		* .patternChangeFormButton - emitted from Form.pm, button to change the !WebForm - styled as link
 		* .patternEditForm - emitted from Form.pm, editable !WebForm table
 		* .twikiEditFormTextField - emitted from Form.pm, input textfield in patternEditForm
-		* .patternSig - signature copy field
 
 	* Preview
 		* .patternPreviewPage .patternPreviewArea - holder of previewed topic text
