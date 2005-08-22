@@ -543,15 +543,16 @@ sub writeCompletePage {
         spamProof( $text );
     }
 
-    # can't use simple length() in case we have UNICODE
-    # see perldoc -f length
-    my $len = do { use bytes; length( $text ); };
-    $this->writePageHeader( undef, $pageType, $contentType, $len );
     my $htmlHeader = join(
         "\n",
         map { '<!--'.$_.'-->'.$this->{htmlHeaders}{$_} }
           keys %{$this->{htmlHeaders}} );
     $text =~ s/([<]\/head[>])/$htmlHeader$1/i if $htmlHeader;
+
+    # can't use simple length() in case we have UNICODE
+    # see perldoc -f length
+    my $len = do { use bytes; length( $text ); };
+    $this->writePageHeader( undef, $pageType, $contentType, $len );
     print $text;
 }
 
