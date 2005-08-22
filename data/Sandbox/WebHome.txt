@@ -22,7 +22,7 @@ Create a new auto-numbered test topic:
 _Current time on this server: %SERVERTIME{"$day $month $year - $hour:$min"}%_
 
 <dl>
-%SEARCH{ ".*" regex="on" nosearch="on" nototal="on" order="modified" reverse="off" limit="7" format="<dt>[[$topic]]</dt><dd>$summary<br /><span class='deem'><i>$date</i></span></dd>&nbsp;"}%
+%SEARCH{ ".*" regex="on" nosearch="on" nototal="on" order="modified" reverse="off" limit="7" format="<dt>[[$topic]]</dt><dd>$summary<br /><span class='deem'><i>$date</i></span></dd>"}%
 </dl>
 _A more extensive changes list is available via the [[WebChanges][Recent Changes]] link in the navigation menu._
 </blockquote>
