@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiGuest" date="1122128753" format="1.1" version="1.1"}%
 <div style="float:right;margin-left:10px;margin-bottom:10px;">
-<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0"/></a><br />
+<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%" /></a><br />
 The official TWiki<sup>TM</sup><br /> site is 
 http://twiki.org/
 </div>
