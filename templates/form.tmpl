@@ -3,7 +3,7 @@
 %TMPL:DEF{"mandatory"}%<span class="twikiAlert">*</span> indicates mandatory fields %TMPL:END%
 
 %TMPL:DEF{"repeatedformrows"}% %REPEAT%
-<tr><th bgcolor="#99CCCC" align="right">%ROWTITLE%%ROWEXTRA%</th><td align="left">%ROWVALUE%</td></tr>%REPEAT%<td><th bgcolor="#99CCCC" align="left" colspan="2"><div class="twikiChangeFormButton">%ROWVALUE%</div></th></tr>%REPEAT% %TMPL:END%
+<tr><th bgcolor="#99CCCC" align="right">%ROWTITLE%%ROWEXTRA%</th><td align="left">%ROWVALUE%</td></tr>%REPEAT%<tr><th bgcolor="#99CCCC" align="left" colspan="2"><div class="twikiChangeFormButton">%ROWVALUE%</div></th></tr>%REPEAT% %TMPL:END%
 
 %TMPL:DEF{"formtail"}% %TMPL:P{context="mandatoryfields" then="mandatory"}% %TMPL:END%
 
