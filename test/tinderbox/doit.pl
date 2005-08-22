@@ -97,11 +97,11 @@ my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
 ################################################################################
 # build a new twiki kernel
 system( 'bash' => '-c' => "cd ../.. && svn update" ) == 0 or die $!;
-system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/$BRANCH/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/kernels/" ) == 0 or die $!;
+system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/kernels/" ) == 0 or die $!;
 
 ################################################################################
 # build a new distribution
-system( 'bash' => '-c' => "cd $TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/ && make distro && scp twiki.tar.bz2 wbniv\@twikiplugins.sourceforge.net:/home/groups/t/tw/twikiplugins/htdocs/" );
+system( 'bash' => '-c' => "cd $TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/ && make distro && scp twiki.tar.bz2 wbniv\@twikiplugins.sourceforge.net:/home/groups/t/tw/twikiplugins/htdocs/" );
 
 ################################################################################
 # install the distribution
@@ -111,7 +111,7 @@ my $DHACCOUNT = 'wbniv';
 my $ADMIN = 'WillNorris';
 
 # TODO: look into usefulness of --plugin=TWikiReleaseTrackerPlugin --contrib=DistributionContrib for testing purposes
-system( 'bash' => '-c' => qq{$TWIKIDEV/$BRANCH/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
+system( 'bash' => '-c' => qq{$TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
 
 ################################################################################
 
