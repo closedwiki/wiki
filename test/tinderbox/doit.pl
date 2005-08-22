@@ -87,7 +87,7 @@ if ( $Config->{debug} )
 
 chdir $FindBin::Bin;
 
-chomp( my @svnInfo = `/home/wbniv/bin/svn/svn info .` );
+chomp( my @svnInfo = `svn info .` );
 die "no svn info?" unless @svnInfo;
 my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
 
