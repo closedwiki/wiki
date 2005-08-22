@@ -205,34 +205,6 @@ sub _renderFormField {
     return $text;
 }
 
-sub _renderFormData {
-    my( $this, $web, $topic, $meta ) = @_;
-    my $form = $meta->get( 'FORM' );
-
-    return '' unless( $form );
-
-    my $name = $form->{name};
-    my $metaText = CGI::Tr( CGI::th( { class => 'twikiFirstCol',
-                                       colspan => 2 },
-                                     '[['.$name.']]' ));
-    my @fields = $meta->find( 'FIELD' );
-    foreach my $field ( @fields ) {
-        my $fa = $field->{attributes} || '';
-        unless ( $fa =~ /H/ ) {
-            my $value = $field->{value};
-            $value = '&nbsp;' unless defined($value);
-            my $title = $field->{title} || $field->{name};
-            $metaText .= CGI::Tr( { valign => 'top' },
-                                  CGI::td( { class => 'twikiFirstCol',
-                                             align => 'right' },
-                                           ' '.$title.':' ).
-                                  CGI::td( "\n".$value."\n" ));
-        }
-    }
-    return CGI::div( { class => 'twikiForm' },
-                     CGI::table( { border => 1 }, $metaText ));
-}
-
 # Add a list item, of the given type and indent depth. The list item may
 # cause the opening or closing of lists currently being handled.
 sub _addListItem {
@@ -1255,10 +1227,11 @@ sub renderMetaTags {
         $text =~ s/%META{[^}]*}%//go;
         return $text;
     }
+    my $session = $this->{session};
 
-    $text =~ s/%META{\s*"form"\s*}%/$this->_renderFormData( $theWeb, $theTopic, $meta )/ge;    #this renders META:FORM and META:FIELD
+    $text =~ s/%META{\s*"form"\s*}%/TWiki::Form::renderForDisplay( $session->{templates}, $meta )/ge;    #this renders META:FORM and META:FIELD
     $text =~ s/%META{\s*"formfield"\s*(.*?)}%/$this->_renderFormField( $meta, $1 )/ge;         #renders a formfield from within topic text
-    $text =~ s/%META{\s*"attachments"\s*(.*)}%/$this->{session}->{attach}->renderMetaData( $theWeb, $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
+    $text =~ s/%META{\s*"attachments"\s*(.*)}%/$session->{attach}->renderMetaData( $theWeb, $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
     $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
     $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
 

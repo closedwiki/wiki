@@ -327,7 +327,7 @@ sub renderForEdit {
     if( $this->{mandatoryFieldsPresent} ) {
         $session->enterContext( 'mandatoryfields' );
     }
-    my $tmpl = $session->{templates}->readTemplate( "form", $session->getSkin() );
+    my $tmpl = $session->{templates}->readTemplate( "form" );
 
     # Note: if WEBFORMS preference is not set, can only delete form.
     $tmpl =~ s/%FORMTITLE%/$this->_link($this->{web}.'.'.$this->{topic})/geo;
@@ -688,6 +688,48 @@ sub isTextMergeable {
     }
     # Field not found - assume it is mergeable
     return 1;
+}
+
+=pod
+
+---++ StaticMethod renderForDisplay($templates, $meta )
+   * =$templates= ref to templates singleton
+   * =$meta= - meta object containing the form to be rendered
+Static because we want to be able to do this without a form definition.
+
+SMELL: Why? Is reading the form topic such a big burden?
+
+=cut
+
+sub renderForDisplay {
+    my( $templates, $meta ) = @_;
+    my $form = $meta->get( 'FORM' );
+
+    return '' unless( $form );
+
+    $templates->readTemplate('formtables');
+
+    my $name = $form->{name};
+
+    my $text = $templates->expandTemplate('FORM:display:header');
+    $text =~ s/%A_TITLE%/$name/g;
+
+	my $rowTemplate = $templates->expandTemplate('FORM:display:row');
+    my @fields = $meta->find( 'FIELD' );
+    foreach my $field ( @fields ) {
+        my $fa = $field->{attributes} || '';
+        unless ( $fa =~ /H/ ) {
+            my $value = $field->{value};
+            $value = '&nbsp;' unless defined($value);
+            my $title = $field->{title} || $field->{name};
+            my $row = $rowTemplate;
+            $row =~ s/%A_TITLE%/$title/g;
+            $row =~ s/%A_VALUE%/$value/g;
+            $text .= $row;
+        }
+    }
+    $text .= $templates->expandTemplate('FORM:display:footer');
+    return $text;
 }
 
 1;

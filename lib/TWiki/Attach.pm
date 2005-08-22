@@ -89,8 +89,11 @@ sub renderMetaData {
 	my @attachments = $meta->find( 'FILEATTACHMENT' );
     return '' unless @attachments;
 
+    my $templates = $this->{session}->{templates};
+    $templates->readTemplate('attachtables');
+
 	my $rows = '';
-	my $row = $this->_getTemplate("ATTACH:files:row$a");
+	my $row = $templates->expandTemplate('ATTACH:files:row'.$a);
     foreach my $attachment ( @attachments ) {
         my $attrAttr = $attachment->{attr};
 
@@ -105,23 +108,12 @@ sub renderMetaData {
     my $text = '';
 
     if( $showAll || $rows ne '' ) {
-        my $header = $this->_getTemplate("ATTACH:files:header$a");
-        my $footer = $this->_getTemplate("ATTACH:files:footer$a");
+        my $header = $templates->expandTemplate('ATTACH:files:header'.$a);
+        my $footer = $templates->expandTemplate('ATTACH:files:footer'.$a);
 
-        $text = "$header$rows$footer";
+        $text = $header.$rows.$footer;
     }
-    return "$title$text";
-}
-
-# PRIVATE get a template, reading the attachment tables template
-# if not already defined.
-sub _getTemplate {
-    my ( $this, $template ) = @_;
-    my $templates = $this->{session}->{templates};
-    $templates->readTemplate('attachtables') unless
-        $templates->haveTemplate( $template );
-
-    return $templates->expandTemplate( $template );
+    return $title.$text;
 }
 
 =pod
@@ -143,9 +135,12 @@ sub formatVersions {
     my $latestRev =
       $store->getRevisionNumber( $web, $topic, $attrs{name} );
 
-    my $header = $this->_getTemplate('ATTACH:versions:header');
-    my $footer = $this->_getTemplate('ATTACH:versions:footer');
-    my $row    = $this->_getTemplate('ATTACH:versions:row');
+    my $templates = $this->{session}->{templates};
+    $templates->readTemplate('attachtables');
+
+    my $header = $templates->expandTemplate('ATTACH:versions:header');
+    my $footer = $templates->expandTemplate('ATTACH:versions:footer');
+    my $row    = $templates->expandTemplate('ATTACH:versions:row');
 
     my $rows ='';
 
@@ -200,10 +195,10 @@ sub _expandAttrs {
         return $fileIcon;
     }
     elsif ( $attr eq 'EXT' ) {
-	# $fileExtension is used to map the attachment to its MIME type
-	$file =~ m/\.([^.]*)$/;	# only grab the last extension in case of multiple extensions
-        my $fileExtension = $1;
-        return $fileExtension;
+        # $fileExtension is used to map the attachment to its MIME type
+        # only grab the last extension in case of multiple extensions
+        $file =~ m/\.([^.]*)$/;
+        return $1;
     }
     elsif ( $attr eq 'URL' ) {
         my $url;
