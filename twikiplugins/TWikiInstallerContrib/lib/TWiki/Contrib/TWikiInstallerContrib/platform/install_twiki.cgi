@@ -211,7 +211,11 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
     my $file = "$mapTWikiDirs->{bin}->{dest}/LocalLib.cfg";
     open( FH, ">$file" ) or die "Can't open $file: $!";
     print FH <<'__LOCALLIB_CFG__';
-use vars qw( $CPANBASE );
+use vars qw( $twikiLibPath $CPANBASE );
+
+# SMELL: duplicated code from bin/setlib.cfg
+use Cwd qw( abs_path );
+( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( "../lib" )) =~ /(.*)/;
 
 $CPANBASE = "$twikiLibPath/CPAN/lib/";
 @localPerlLibPath = ( "$CPANBASE/", "$CPANBASE/arch/" );
@@ -285,6 +289,7 @@ if ( 0 ) #-e $fileInstallationReport )
 }
 
 # WIKIWEBMASTER
+try 
 {
     my $topicTWiki_TWikiPreferences = 'TWiki.TWikiPreferences';
     $mech->edit( $topicTWiki_TWikiPreferences );
@@ -292,6 +297,10 @@ if ( 0 ) #-e $fileInstallationReport )
     $topic =~ s/(Set WIKIWEBMASTER = ).+/$1$WIKIWEBMASTER/;
     $mech->field( text => $topic );
     $mech->click_button( value => 'Save' );
+}
+catch 
+{
+    print "error updating TWiki.TWikiPreferences\n";
 }
 
 ################################################################################
@@ -303,14 +312,16 @@ print $q->h2( 'Authentication' );
 # more authentication stuff (/lock down the wiki)
 if ( $administrator )
 {
-    # setup Main.TWikiAdminGroup
-    $mech->edit( "Main.TWikiAdminGroup" );
-
-    my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
-    my ($mday,$mon,$year) = (gmtime(time))[3..5];
-    my $date = sprintf( "%02d %3s %04d", $mday, $months[$mon], 1900+$year );
-
-    my $text = <<__TOPIC__;
+    try 
+    {
+	# setup Main.TWikiAdminGroup
+	$mech->edit( "Main.TWikiAdminGroup" );
+	
+	my @months = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
+	my ($mday,$mon,$year) = (gmtime(time))[3..5];
+	my $date = sprintf( "%02d %3s %04d", $mday, $months[$mon], 1900+$year );
+	
+	my $text = <<__TOPIC__;
 *TWiki Administrator Group*
 
    * Set GROUP = $administrator
@@ -321,8 +332,13 @@ __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 -- %MAINWEB%.PeterThoeny - 28 Oct 2000, TWiki:Codev.TWikiInstaller - $date
 __TOPIC__
 
-    $mech->field( text => $text );
-    $mech->click_button( value => 'Save' );
+	$mech->field( text => $text );
+	$mech->click_button( value => 'Save' );
+    }
+    catch
+    {
+	print "error updating Main.TWikiAdminGroup\n";
+    }
 }
 
 ################################################################################
