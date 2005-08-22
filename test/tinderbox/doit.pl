@@ -10,7 +10,7 @@ use Data::Dumper qw( Dumper );
 # run the tests
 # post the tests to tinderbox.wbniv.wikihosting.com
 
-my $TWIKIDEV;
+my ( $TWIKIDEV, $BRANCH );
 	 
 BEGIN {
     $TWIKIDEV = $ENV{TWIKIDEV};
