@@ -160,7 +160,7 @@
 		}
 	}
 //]]>
-</script> %TMPL:END%
+</script>%TMPL:END%
 
 
 
@@ -176,8 +176,7 @@ document.write("<style type='text/css'>");
 document.write(".twikiTwistMakeHidden {display:none;}");
 document.write("<\/style>");
 //]]>
-</script>
-%TMPL:END%
+</script>%TMPL:END%
 
 
 
@@ -217,8 +216,6 @@ document.write("<\/style>");
 
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
-<p><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic</p>
-
 <div id="helpshow" class="twikiTwistMakeVisible">
 <a href="#" onclick="twist('help'); return false;" class="twikiSmall">Show formatting help</a>
 </div><div id="helphide" class="twikiTwistHidden twikiTwistMakeVisible">
@@ -241,6 +238,7 @@ document.write("<\/style>");
 <input type="hidden" name="cmd" value="%CMD%" /><div></div>
 <div class="patternSig">
 <label for="sig" class="twikiGrayText">Your signature to copy/paste:&nbsp;&nbsp;</label><input size="35" name="sig" type="text" readonly="readonly" title="Select, copy and paste your signature text to the bottom of your entry" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
+<span><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a> for this topic</span>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
 </form></div>%TMPL:END%

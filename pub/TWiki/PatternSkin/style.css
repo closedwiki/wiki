@@ -208,7 +208,7 @@ label {
 
 .patternMiddleContainer {}
 .patternMain {
-	padding:0 3.5em;
+	padding:0 3.5em 1em 3.5em;
 	background-color:#fff;
 	border-width:1px;
 	border-style:solid;
@@ -992,7 +992,7 @@ a:hover .patternAccessKey {
 	-----------------------------------------------------------	*/
 
 .patternNoViewPage .patternMain {
-	padding-top:2.5em;
+	padding-top:2em;
 	padding-bottom:2em;
 }
 .patternNoViewPage h1 {
