@@ -662,7 +662,7 @@ html>body .twikiToc li a {
 
 /* Tool bar at top of topic */
 .patternToolBar {
-
+	margin:0.5em 0 0 0;
 }
 .patternToolBar ul {
 	margin:0;
@@ -673,34 +673,48 @@ html>body .twikiToc li a {
 .patternToolBar li {
 	display:inline;
 	list-style-type:none;
-	margin:0;
+	margin:0 1px 0 0;
 	padding:0;
 }
-.patternToolBar a {
-	padding:1px 0.5em;
-}
-.patternToolBar s,
-.patternToolBar strike,
-.patternToolBar a:link,
-.patternToolBar a:visited {
+.patternToolBar li b,
+.patternToolBar li s,
+.patternToolBar li strike,
+.patternToolBar li a:link,
+.patternToolBar li a:visited {
+	position:relative;
+	padding:1px .5em;
 	color:#8490A1; /*C6*/
 	background-color:#fff;
 	border:1px solid #ccc;
-	border-bottom:0;
+	border-bottom:none;
 	text-decoration:none;
+	z-index:0;
 }
-.patternToolBar a:hover {
+.patternToolBar li b,
+.patternToolBar li a:hover {
+	padding:1px .5em;
 	color:#0054C0; /*C1*/
 	background-color:#fff;
 	border:1px solid #D6D3D0;
-	border-bottom:1px solid #fff;
+	border-bottom:3px solid #fff;
 	text-decoration:none;
-}      
+	z-index:3;
+}
+.patternToolBar li b {
+	/* selected item */
+	font-weight:normal;
+	color:#000;
+}
 .patternToolBar .patternAccessKey {
 	border:0;
 }
+.patternToolBar a:link .patternAccessKey,
+.patternToolBar a:visited .patternAccessKey {
+	color:inherit;
+}
 .patternToolBar a:hover .patternAccessKey {
 	background-color:transparent;
+	color:inherit;
 }
 
 /* Moved message */
@@ -772,10 +786,10 @@ html>body .twikiToc li a {
 	font-family:Arial,sans-serif;
 }
 .twikiHelp {
-	background-color:#eee;
-	padding:0.5em;
+	background-color:#e6e6e6;
+	padding:1em;
 	font-size:90%;
-	margin:0.5em 0 1em 0;
+	margin:1em 0 1em 0;
 }
 .twikiHelp ul {
 	margin-top:0;
