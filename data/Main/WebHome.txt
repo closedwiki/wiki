@@ -12,7 +12,7 @@ TWiki is a flexible, powerful, secure, yet simple-to-use web-based collaboration
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
 <input type="text" name="search" size="22" />
-<input type="submit" value="Search">
+<input type="submit" value="Search" />
 <br/>
 ([[WebSearchAdvanced][advanced search]])
 </form>	
