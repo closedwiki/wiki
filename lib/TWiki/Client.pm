@@ -306,8 +306,10 @@ sub userLoggedIn {
 =pod
 
 ---++ ObjectMethod endRenderingHandler()
-SMELL: this method uses the plugins endRenderingHandler method which is
-deprecated, and stunningly inefficient. It badly needs to be refactored.
+
+This handler is called by getRenderedVersion just before the plugins
+postRenderingHandler. So it is passed all HTML text just before it is
+printed.
 
 =cut
 
@@ -319,9 +321,6 @@ sub endRenderingHandler {
     my $useTransSID = $this->{useTransSID};
     my $sessionId = $this->{sessionId};
 
-    # This handler is called by getRenderedVersion just after the line loop, that is,
-    # after almost all XHTML rendering of a topic. <nop> tags are removed after this.
-
     # If cookies are not turned on and transparent CGI session IDs are,
     # grab every URL that is an internal link and pass a CGI variable
     # with the session ID
@@ -331,18 +330,20 @@ sub endRenderingHandler {
         # would bve returned by getScriptUrl. Internal links are additionally
         # specified by forms that have no target.
 
-        # Gather the URLs one would expect to be returned by getScriptUrl if a URL
-        # was inside of quotes (A) or outside of quotes (B) or inside of single quotes
-        # for javascript (C).
+        # Gather the URLs one would expect to be returned by getScriptUrl
+        # if a URL was inside of quotes (A) or outside of quotes (B) or
+        # inside of single quotes for javascript (C).
+        #
+        # SMELL: this will munge URLs in verbatim sections
         #
         # Use these later in all the regex's below.
         my $myScriptUrlA = quotemeta($this->{twiki}->getScriptUrl( $M1, $M1,
                                                                    $M1 ));
         my $myScriptUrlB = $myScriptUrlA;
         my $myScriptUrlC = $myScriptUrlA;
-        $myScriptUrlA =~ s/$M1/[^"#]*?/g;
-        $myScriptUrlB =~ s/$M1/[^\\s#>]*?/g;
-        $myScriptUrlC =~ s/$M1/[^'#>]*?/g;
+        $myScriptUrlA =~ s/$M1/[^"#]*?/go;
+        $myScriptUrlB =~ s/$M1/[^\\s#>]*?/go;
+        $myScriptUrlC =~ s/$M1/[^'#>]*?/go;
 
         #
         # NOTE: Lots of the defined's here are to quiet down the highly overrated perl -w
@@ -422,7 +423,8 @@ sub modifyHeader {
 =pod
 
 ---++ ObjectMethod redirectCgiQuery( $url )
-Generate an HTTP redirect on STDOUT.
+Generate an HTTP redirect on STDOUT, if you can. Return 1 if you did.
+Don't forget to pass all query parameters through.
    * =$url= - target of the redirection.
 
 =cut
@@ -434,8 +436,7 @@ sub redirectCgiQuery {
 
     unless( $cgisession ) {
         # no session info to add
-        print $query->redirect( $url );
-        return;
+        return 0;
     }
 
     my $sessionId = $this->{sessionId};
@@ -512,6 +513,8 @@ sub redirectCgiQuery {
     my @cs = @{$this->{cookies}};
     push @cs, $cookie;
     print $query->redirect( -url => $url, -cookie => \@cs );
+
+    return 1;
 }
 
 =pod
@@ -577,23 +580,21 @@ sub clearSessionValue {
 
 =pod
 
----++ ObjectMethod authenticationUrl()
+---++ ObjectMethod forceAuthentication() -> boolean
 
 *VIRTUAL METHOD* implemented by subclasses
 
 Triggered by an access control violation, this method tests
 to see if the current session is authenticated or not. If not,
-it returns a url suitable for redirection to so that the user
-can log in.
+it does whatever is needed so that the user can log in, and returns 1.
 
 If the user has an existing authenticated session, the function simply drops
-though and returns undef. If session is not authenticated it returns a URL for
-the login method.
+though and returns 0.
 
 =cut
 
-sub authenticationUrl {
-    return undef;
+sub forceAuthentication {
+    return 0;
 }
 
 =pod
@@ -666,79 +667,6 @@ for a username apart from the stored session (e.g. Apache).
 =cut
 
 sub checkSession {
-}
-
-=pod
-
----++ ObjectMethod login( $query, $twiki )
-
-Handler called from the "login" script. This script is automatically
-redirected to if there is no existing session cookie.
-
-If a login name and password have been passed in the query, it
-validates these and if authentic, redirects to the original
-script. If there is no username in the query or the username/password is
-invalid (validate returns non-zero) then it prompts again.
-
-The password handler is expected to return a perl true value if the password
-is valid. This return value is stored in a session variable called
-VALIDATION. This is so that password handlers can return extra information
-about the user, such as a list of TWiki groups stored in a separate
-database, that can then be displayed by referring to
-%<nop>SESSION_VARIABLE{"VALIDATION"}%
-
-=cut
-
-sub login {
-    my( $this, $query, $twikiSession ) = @_;
-    my $twiki = $this->{twiki};
-
-    my $origurl = $query->param( 'origurl' );
-    my $loginName = $query->param( 'username' );
-    my $loginPass = $query->param( 'password' );
-
-    my $tmpl = $twiki->{templates}->readTemplate(
-        'login', $twiki->getSkin() );
-
-    my $banner = $twiki->{templates}->expandTemplate( 'LOG_IN_BANNER' );
-    my $note = '';
-    my $topic = $twiki->{topicName};
-    my $web = $twiki->{webName};
-
-    my $cgisession = $this->{cgisession};
-    if( $cgisession && $cgisession->param( 'AUTHUSER' )) {
-        $banner = $twiki->{templates}->expandTemplate( 'LOGGED_IN_BANNER' );
-        $note = $twiki->{templates}->expandTemplate( 'NEW_USER_NOTE' );
-    }
-
-    if( $loginName ) {
-        my $passwordHandler = $twiki->{users}->{passwords};
-        my $validation = $passwordHandler->checkPassword( $loginName, $loginPass );
-
-        if( $validation ) {
-            $this->userLoggedIn( $loginName );
-            $cgisession->param( 'VALIDATION', $validation ) if $cgisession;
-            if( !$origurl || $origurl eq $query->url() ) {
-                $origurl = $twiki->getScriptUrl( $web, $topic, 'view' );
-            }
-            $this->redirectCgiQuery( $query, $origurl );
-            return;
-        } else {
-            $banner = $twiki->{templates}->expandTemplate('UNRECOGNISED_USER');
-        }
-    }
-
-    # TODO: add JavaScript password encryption in the template
-    # to use a template)
-    $origurl ||= '';
-    $tmpl =~ s/%ORIGURL%/$origurl/g;
-    $tmpl =~ s/%BANNER%/$banner/g;
-    $tmpl =~ s/%NOTE%/$note/g;
-
-    $tmpl = $twiki->handleCommonTags( $tmpl, $web, $topic );
-    $tmpl = $twiki->{renderer}->getRenderedVersion( $tmpl, '' );
-    $twiki->writePageHeader( $query );
-    print $tmpl;
 }
 
 sub _LOGIN {

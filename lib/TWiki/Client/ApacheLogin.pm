@@ -48,7 +48,7 @@ sub new {
     return $this;
 }
 
-sub authenticationUrl {
+sub forceAuthentication {
     my $this = shift;
 
     my $twiki = $this->{twiki};
@@ -92,10 +92,11 @@ sub authenticationUrl {
             }
             $url .= $pathInfo.$queryString;
         }
-        return $url;
+        $twiki->redirect( $url );
+        return 1;
     }
 
-    return undef;
+    return 0;
 }
 
 sub loginUrl {

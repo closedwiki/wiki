@@ -107,18 +107,17 @@ sub run {
         &$method( $session );
     } catch TWiki::AccessControlException with {
         my $e = shift;
-        my $url = $session->{client}->authenticationUrl();
-        unless( $url ) {
-            # Could not generate an authentication URL, perhaps because
+        unless( $session->{client}->forceAuthentication() ) {
+            # Client did not want to authenticate, perhaps because
             # we are already authenticated 
-            $url = $session->getOopsUrl( 'accessdenied',
-                                         def => 'topic_access',
-                                         web => $e->{web},
-                                         topic => $e->{topic},
-                                         params => [ $e->{mode},
-                                                     $e->{reason} ] );
+            my $url = $session->getOopsUrl( 'accessdenied',
+                                            def => 'topic_access',
+                                            web => $e->{web},
+                                            topic => $e->{topic},
+                                            params => [ $e->{mode},
+                                                        $e->{reason} ] );
+            $session->redirect( $url );
         }
-        $session->redirect( $url );
 
     } catch TWiki::OopsException with {
         my $e = shift;

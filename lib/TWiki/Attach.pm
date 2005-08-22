@@ -93,7 +93,7 @@ sub renderMetaData {
     $templates->readTemplate('attachtables');
 
 	my $rows = '';
-	my $row = $templates->expandTemplate('ATTACH:files:row'.$a);
+    my $row = $templates->expandTemplate('ATTACH:files:row'.$a);
     foreach my $attachment ( @attachments ) {
         my $attrAttr = $attachment->{attr};
 
