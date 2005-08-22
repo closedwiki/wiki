@@ -18,12 +18,11 @@ Create a new auto-numbered test topic:
 <input type="submit" class="twikiSubmit" value="Create <nop>TestTopic###" />
 </form>
 
-<h3 style="margin-top:0;display:inline;">Recently changed topics</h3> <br />
+<h3 style="margin-top:0;display:inline;">Recently changed topics</h3>
 _Current time on this server: %SERVERTIME{"$day $month $year - $hour:$min"}%_
 
-<dl><dd>
-%SEARCH{ ".*" regex="on" nosearch="on" nototal="on" order="modified" reverse="off" limit="7" format="<dt>[[$topic]] <dd>$summary <br /><span class='deem'><i>$date</i></span><dd>&nbsp;"}%
-<dd>&nbsp;
 <dl>
+%SEARCH{ ".*" regex="on" nosearch="on" nototal="on" order="modified" reverse="off" limit="7" format="<dt>[[$topic]]</dt><dd>$summary<br /><span class='deem'><i>$date</i></span></dd>&nbsp;"}%
+</dl>
 _A more extensive changes list is available via the [[WebChanges][Recent Changes]] link in the navigation menu._
 </blockquote>
