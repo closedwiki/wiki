@@ -1,6 +1,6 @@
 
 TWIKIDEV ?= ~/twiki
-MakeFor ?= twiki.org-`./svnrev.pl`
+MakeFor ?= twiki.org-`bin/svnrev.pl`
 
 all : help
 
