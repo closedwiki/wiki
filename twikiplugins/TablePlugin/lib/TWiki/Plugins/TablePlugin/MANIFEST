@@ -1,0 +1,6 @@
+data/TWiki/TablePlugin.txt NEW
+lib/TWiki/Plugins/TablePlugin.pm NEW
+lib/TWiki/Plugins/TablePlugin/Core.pm NEW
+pub/TWiki/TablePlugin/diamond.gif NEW
+pub/TWiki/TablePlugin/down.gif NEW
+pub/TWiki/TablePlugin/up.gif NEW
