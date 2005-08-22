@@ -16,6 +16,9 @@ BEGIN {
     $TWIKIDEV = $ENV{TWIKIDEV};
     die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
 
+    $BRANCH = $ENV{BRANCH};
+    die "must set environment varibale BRANCH" unless $BRANCH;
+
     my $cpan = "$TWIKIDEV/CPAN/";
     die "no cpan directory [$cpan]" unless -d $cpan;
     my @localLibs = ( "$cpan/lib", "$cpan/lib/arch" );
@@ -94,7 +97,7 @@ my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
 ################################################################################
 # build a new twiki kernel
 system( 'bash' => '-c' => "cd ../.. && svn update" ) == 0 or die $!;
-system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/kernels/" ) == 0 or die $!;
+system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/$BRANCH/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/kernels/" ) == 0 or die $!;
 
 ################################################################################
 # build a new distribution
@@ -108,7 +111,7 @@ my $DHACCOUNT = 'wbniv';
 my $ADMIN = 'WillNorris';
 
 # TODO: look into usefulness of --plugin=TWikiReleaseTrackerPlugin --contrib=DistributionContrib for testing purposes
-system( 'bash' => '-c' => qq{$TWIKIDEV/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
+system( 'bash' => '-c' => qq{$TWIKIDEV/$BRANCH/twikiplugins/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
 
 ################################################################################
 
