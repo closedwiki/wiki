@@ -96,11 +96,14 @@ my ( $svnRev ) = ( ( grep { /^Revision:\s+(\d+)$/ } @svnInfo )[0] ) =~ /(\d+)$/;
 
 ################################################################################
 # build a new twiki kernel
+print "Updating SVN\n" if $Config->{verbose};
 system( 'bash' => '-c' => "cd ../.. && svn update" ) == 0 or die $!;
+print "Building a new TWikiKernel\n" if $Config->{verbose};
 system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendocs', '--notar', '--outputdir' => "$TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/downloads/kernels/" ) == 0 or die $!;
 
 ################################################################################
 # build a new distribution
+print "Building a distribution\n" if $Config->{verbose};
 system( 'bash' => '-c' => "cd $TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/ && make distro && scp twiki.tar.bz2 wbniv\@twikiplugins.sourceforge.net:/home/groups/t/tw/twikiplugins/htdocs/" );
 
 ################################################################################
@@ -110,6 +113,7 @@ my $SERVER_NAME = 'tinderbox.wbniv.wikihosting.com';
 my $DHACCOUNT = 'wbniv';
 my $ADMIN = 'WillNorris';
 
+print "Installing to $SERVER_NAME\n" if $Config->{verbose};
 # TODO: look into usefulness of --plugin=TWikiReleaseTrackerPlugin --contrib=DistributionContrib for testing purposes
 system( 'bash' => '-c' => qq{$TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/bin/install-remote-twiki.pl --force --report --verbose --debug --install_account=$DHACCOUNT --administrator=$ADMIN --install_host=$SERVER_NAME --install_dir=/home/$DHACCOUNT/$SERVER_NAME --kernel=LATEST --addon=GetAWebAddOn --scriptsuffix=.cgi --cgiurl=http://$SERVER_NAME/cgi-bin} ) == 0 or die $!;
 
@@ -119,10 +123,12 @@ my $report = 'report.txt';
 
 ################################################################################
 # run the tests
+print "Running the tests\n" if $Config->{verbose};
 system( 'bash' => '-c' => qq{cd ../unit && perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm >&../tinderbox/$report} );
 
 ################################################################################
 # post the tests to tinderbox.wbniv.wikihosting.com
+print "Posting the test results to $SERVER_NAME\n" if $Config->{verbose};
 system( './report-test.pl','--svn' => $svnRev, '--report' => $report, 
 	'--attachment' => "$SERVER_NAME-install.html",
 );
