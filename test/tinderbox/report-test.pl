@@ -8,8 +8,8 @@ BEGIN {
     $TWIKIDEV = $ENV{TWIKIDEV};
     die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
 
-    my $cpan = "$TWIKIDEV/CPAN/";
-    die "no cpan directory [$cpan]" unless -d $cpan;
+    my $cpan = "$TWIKIDEV/CPAN/"
+	or die "no cpan directory [$cpan]";
     my @localLibs = ( "$cpan/lib", "$cpan/lib/arch" );
     unshift @INC, @localLibs;
 }
