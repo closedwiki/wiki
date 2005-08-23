@@ -104,7 +104,7 @@ system( '../../tools/distro/build-twiki-kernel.pl', '--nochangelog', '--nogendoc
 ################################################################################
 # build a new distribution
 print "Building a distribution\n" if $Config->{verbose};
-system( 'bash' => '-c' => "cd $TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/ && make distro && scp twiki.tar.bz2 wbniv\@twikiplugins.sourceforge.net:/home/groups/t/tw/twikiplugins/htdocs/" );
+system( 'bash' => '-c' => "cd $TWIKIDEV/$BRANCH/twikiplugins/TWikiInstallerContrib/lib/TWiki/Contrib/TWikiInstallerContrib/ && make distro && scp twiki.org.tar.bz2 wbniv\@twikiplugins.sourceforge.net:/home/groups/t/tw/twikiplugins/htdocs/" );
 
 ################################################################################
 # install the distribution
