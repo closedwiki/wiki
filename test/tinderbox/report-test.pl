@@ -4,12 +4,14 @@
 use strict;
 use Data::Dumper qw( Dumper );
 
-BEGIN {
-    $TWIKIDEV = $ENV{TWIKIDEV};
-    die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
+my ( $TWIKIDEV );
 
-    my $cpan = "$TWIKIDEV/CPAN/"
-	or die "no cpan directory [$cpan]";
+BEGIN {
+    $TWIKIDEV = $ENV{TWIKIDEV}
+    	or die "must set environment variable TWIKIDEV";
+
+    my $cpan = "$TWIKIDEV/CPAN/";
+    die "no cpan directory [$cpan]" unless $cpan;
     my @localLibs = ( "$cpan/lib", "$cpan/lib/arch" );
     unshift @INC, @localLibs;
 }
