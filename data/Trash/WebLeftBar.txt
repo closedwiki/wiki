@@ -1,10 +1,5 @@
 %META:TOPICINFO{author="ArthurClemens" date="1093167095" format="1.0" version="1.1"}%
 <div class="patternLeftBarPersonal" style="margin-top:0;">
-<script type="text/javascript">
-<!--
-writeToggle("+","-","patternLeftBarPersonalContent")
-//-->
-</script>
 %INCLUDE{"%IFCONTEXT{"can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 	* <b><nop>%INCLUDINGWEB% Web</b>
 	* [[%HOMETOPIC%][%INCLUDINGWEB% Web Home]]
