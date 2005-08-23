@@ -86,7 +86,10 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .twikiGrayText - grayed out text, literally gray
 	* .twikiSmall - styled "small"
 	* .twikiNewLink - style of links to yet non-existent pages (not used)
-
+	* .patternTab
+	* .patternTabSelected
+	* .patternToolBarBottom
+    
 	* Table class names (emitted from %TWIKIWEB%.TablePlugin)
 		* .twikiSortedAscendingCol - sortable table column header that is sorted ascending (uses %TWIKIWEB%.TablePlugin)
 		* .twikiSortedDescendingCol - ditto sorted descending

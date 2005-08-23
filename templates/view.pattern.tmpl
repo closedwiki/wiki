@@ -34,10 +34,11 @@
 %TMPL:DEF{"toolbar"}%<div class="patternTop"><span class="patternHomePath twikiLeft">You are here: <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> %META{"parent" nowebhome="on" prefix=" <span class='patternSeparator'>&gt;</span> " suffix=""}% <span class='patternSeparator'>&gt;</span> <nop>%TOPIC% </span>
 <span class="patternRevInfo twikiRight"><nop>%WEB%.%TOPIC% <span class="patternRevision">%REVINFO%</span> <span class="patternRevision">%REVISIONS% - <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="View total topic history" accesskey="h" rel='nofollow'>Topic <span class="patternAccessKey">h</span>istory</a></span></span><br class="twikiClear" />
 <div class="patternToolBar">
-   * %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%
-   * %TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%
-   * <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="p" title="View printable version of this topic" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a>
-</div></div>%TMPL:END%
+   * <span class="patternTab" onmouseover="tabRollOver(this); return true;"  onmouseout="tabRollOut(this); return true;">%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%</span>
+   * <span class="patternTab" onmouseover="tabRollOver(this); return true;"  onmouseout="tabRollOut(this); return true;">%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%</span>
+   * <span class="patternTab" onmouseover="tabRollOver(this); return true;"  onmouseout="tabRollOut(this); return true;"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="p" title="View printable version of this topic" rel='nofollow'><span class="patternAccessKey">P</span>rintable</a></span>
+<br class="twikiClear" />
+</div></div><div class="patternToolBarBottom"></div>%TMPL:END%
 
 
 

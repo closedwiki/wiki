@@ -1,5 +1,5 @@
 %{ Internationalisable Messages/constructs }%
-%TMPL:DEF{"sep"}%<span class="patternSeparator">|</span>%TMPL:END%
+%TMPL:DEF{"sep"}%<span class="patternSeparator">&nbsp;|&nbsp;</span>%TMPL:END%
 %TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
 %TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
  
@@ -20,9 +20,52 @@
 
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
-<!--
-function initPage() { }
-//-->
+//<![CDATA[
+	function initPage() { }
+	function removeClass(element, classname) {
+		var classes = getClassList(element);
+		var index = indexOf(classname,classes);
+		if (index >= 0) {
+			classes.splice(index,1);
+			setClassList(element,classes);
+		}
+	}
+	function addClass(element, classname) {
+		var classes = getClassList(element);
+		if (indexOf(classname, classes)<0) {
+			classes[classes.length]=classname;
+			setClassList(element,classes);
+		}
+	}
+	function getClassList(element) {
+		if (element.classes) return element.classes; // cached in element property
+		if (element.className && element.className!="") {
+			element.classes = element.className.split(' ');
+			return element.classes;
+		}
+		return [];
+	}
+	function setClassList(element, classlist) {
+		element.className=classlist.join(' ');
+	}
+	function indexOf(element,array) {
+		var i=array.length-1;
+		do 
+		{
+			if (array[i]==element) {
+				return i;
+			}
+			i--;
+		} while (i>=0);
+		return -1;
+	}
+	function tabRollOver(tab) {
+		addClass(tab, 'patternTabHover');
+	}
+	function tabRollOut(tab) {
+		removeClass(tab, 'patternTabHover');
+	}
+//]]>
 </script>%TMPL:END%
 
 

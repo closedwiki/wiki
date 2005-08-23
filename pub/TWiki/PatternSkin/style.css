@@ -184,15 +184,13 @@ form {
 	margin:0;
 	padding:0;
 }
-textarea {
-	border-color:#ccc;
-	background-color:#FBFAF8;
-}
-input, select {
-	border-color:#ccc;
-}
+textarea,
+input,
 select {
-	padding:0;
+	border-width:1px;
+	border-color:#ccc;
+	background-color:#FBF9F7;
+	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
 	font-size:100%;
 }
 fieldset {
@@ -638,15 +636,13 @@ html>body .twikiToc li a {
 
 .patternTop {
 	background-color:#fff;
-	border-bottom:1px solid #ccc;
-	padding:0.2em 10px 0 10px;
-	margin:0 -10px 0.35em -10px;
+	padding:.2em 10px 0 10px;
+	margin:0 -10px 0 -10px;
 	font-size:90%;
 }
 .patternHomePath,
 .patternRevInfo {
 	color:#8490A1; /*C6*/
-	margin-bottom:0.5em;
 }
 .patternHomePath a:link,
 .patternHomePath a:visited,
@@ -666,44 +662,70 @@ html>body .twikiToc li a {
 }
 .patternToolBar ul {
 	margin:0;
-	padding:0;
-	white-space:nowrap;
+	padding:0 0 0 1em;
 	list-style:none;
 }
 .patternToolBar li {
 	display:inline;
 	list-style-type:none;
-	margin:0 1px 0 0;
+	margin:0;
 	padding:0;
 }
-.patternToolBar li b,
-.patternToolBar li s,
-.patternToolBar li strike,
-.patternToolBar li a:link,
-.patternToolBar li a:visited {
+.patternToolBar .patternTab,
+.patternToolBar .patternNoTab {
 	position:relative;
-	padding:1px .5em;
-	color:#8490A1; /*C6*/
-	background-color:#fff;
-	border:1px solid #ccc;
+	padding:2px .75em;
 	border-bottom:none;
+	z-index:0;
+}
+.patternToolBar .patternTab {
+	float:left;
+	border:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+	background-color:#fff;
+	margin:0 4px -1px 0;
+}
+.patternToolBar .patternNoTab {
+	/* assuming a right float position */
+	border:1px solid white;
+	margin:0 0 -1px 0;
+	padding:1px 0 0 .5em;
+}
+.patternToolBar .patternTab a:link,
+.patternToolBar .patternTab a:visited {
+	color:#8490A1; /*C6*/
 	text-decoration:none;
 	z-index:0;
 }
-.patternToolBar li b,
-.patternToolBar li a:hover {
-	padding:1px .5em;
+.patternToolBar .patternTab a:hover {
 	color:#0054C0; /*C1*/
-	background-color:#fff;
-	border:1px solid #D6D3D0;
-	border-bottom:3px solid #fff;
+	border-bottom:none;
 	text-decoration:none;
 	z-index:3;
 }
-.patternToolBar li b {
-	/* selected item */
-	font-weight:normal;
+.patternToolBar .patternTabSelected {
 	color:#000;
+	background-color:#fff;
+	border-bottom:1px solid #fff;
+	z-index:3;
+}
+.patternToolBar .patternTabHover {
+	color:#0054C0; /*C1*/
+	background-color:#fff;
+	border-bottom:1px solid #fff;
+	z-index:3;
+}
+.patternToolBar .patternTabHover a:link,
+.patternToolBar .patternTabHover a:visited {
+	color:#0054C0; /*C1*/
+	background-color:transparent;
+}
+.patternToolBar .patternTabHover a:hover {
+	background-color:transparent;
+}
+.patternToolBarBottom {
+	border-top:1px solid #ccc;
+	margin:0 0 0.5em 0;
 }
 .patternToolBar .patternAccessKey {
 	border:0;
@@ -786,19 +808,21 @@ html>body .twikiToc li a {
 	font-family:Arial,sans-serif;
 }
 .twikiHelp {
-	background-color:#e6e6e6;
+	background-color:#F2EFEB;
 	padding:1em;
-	font-size:90%;
-	margin:1em 0 1em 0;
+	font-size:100%;
+	margin:0;
 }
 .twikiHelp ul {
 	margin-top:0;
 	margin-bottom:0;
 }
-.twikiButton, 
+.twikiButton,
 .twikiSubmit {
+	font-size:95%;
 	border-width:1px;
 	vertical-align:middle;
+	margin:0 0.15em;
 }
 .twikiButton {
 	border-color:#ccc;
@@ -1006,8 +1030,7 @@ a:hover .patternAccessKey {
 	-----------------------------------------------------------	*/
 
 .patternNoViewPage .patternMain {
-	padding-top:2em;
-	padding-bottom:2em;
+	padding:2em 3em 2em 3em;
 }
 .patternNoViewPage h1 {
 	font-size:170%; /* as big as h2 in topic */
@@ -1021,6 +1044,15 @@ a:hover .patternAccessKey {
 	styles and overridden styles used in edit.pattern.tmpl
 	-----------------------------------------------------------	*/
 
+.patternEditPage .patternFormHolder { /* constrains the width of the textarea */
+	width:auto;
+	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
+	voice-family:inherit;
+	width:100%;
+}
+.twikiEditTextarea {
+	margin:.5em 0 0.25em 0;
+}
 .twikiChangeFormButtonHolder {
 	margin:1em 0;
 }

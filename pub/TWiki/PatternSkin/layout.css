@@ -19,8 +19,8 @@
 	/* to clean up floats */
 	margin:0;
 	padding:0;
-	height:1px;
-	line-height:1%;
+	height:0;
+	line-height:0%;
 	clear:both;
 	display:block;
 }
@@ -73,8 +73,8 @@
 	/* padding in style.css */
 }
 .patternEditPage .patternMain {
-	margin-left:6em;
-	margin-right:6em;
+	margin-left:4em;
+	margin-right:4em;
 }
 
 /* Print */
