@@ -54,7 +54,7 @@ die "no report '$Config->{report}'?" unless -e $Config->{report};
 
 my $agent = "TWikiTestInfrastructure: " . File::Basename::basename( $0 );
 my $mech = WWW::Mechanize::TWiki->new( agent => "$agent", autocheck => 1 ) or die $!;
-$mech->cgibin( 'http://ntwiki.ethermage.net/~develop/cgi-bin' );
+$mech->cgibin( 'http://develop.twiki.org/~develop/cgi-bin' );
 
 my $topic = "Tinderbox.TestsReportSvn$Config->{svn}";
 
