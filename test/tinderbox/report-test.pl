@@ -5,7 +5,11 @@ use strict;
 use Data::Dumper qw( Dumper );
 
 BEGIN {
-    my $cpan = '/home/wbniv/tinderbox.wbniv.wikihosting.com/cgi-bin/lib/CPAN/';
+    $TWIKIDEV = $ENV{TWIKIDEV};
+    die "must set environment variable TWIKIDEV" unless $TWIKIDEV;
+
+    my $cpan = "$TWIKIDEV/CPAN/";
+    die "no cpan directory [$cpan]" unless -d $cpan;
     my @localLibs = ( "$cpan/lib", "$cpan/lib/arch" );
     unshift @INC, @localLibs;
 }
