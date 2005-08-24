@@ -2,9 +2,9 @@
 
 ---+!! <nop>%TOPIC%
 
-*Under Development in the DevelopBranch*
+*Under Development in the DEVELOP Branch, untested with Cairo*
 
-This plugin attempts to reduce the instance of WikiSpam by using the MoinMoin [[http://moinmoin.wikiwikiweb.de/AntiSpamGlobalSolution][AntiSpamGlobalSolution]] regex's
+This plugin attempts to reduce the instance of Wiki Spam by using the [[http://moinmoin.wikiwikiweb.de/][MoinMoin]] [[http://moinmoin.wikiwikiweb.de/AntiSpamGlobalSolution][AntiSpamGlobalSolution]] regex's
 
 to manually update the list, click [[%SCRIPTURL%/rest/%TOPIC%/forceUpdate][here]]
 
@@ -13,8 +13,8 @@ it is intended to
    1 refuse to save a topic if the text contains a matching string - *DONE*
       * need to make the Oops page better
    2 automatically update the regex list from the configured source 
-      * either using a rest based url (*DONE*), a command line, or like MoinMoin, onSave, if the list is determined to be too out of date (*DONE*)
-   3 consider mutliple source lists that are then merged (Though ThomasWaldemann is currently doing this work for us __Thanks__ )
+      * either using a rest based url (*DONE*), a command line, or like Moin Moin, onSave, if the list is determined to be too out of date (*DONE*)
+   3 consider mutliple source lists that are then merged (Though [[http://moinmoin.wikiwikiweb.de/ThomasWaldmann][ThomasWaldemann]] is currently doing this work for us __Thanks__ )
    4 have a local list to allow for quick responses - *DONE*
       * and then provide a plain text version of this to be merged back
    5 add topic permissions to the spam topics, while filtering them out when using them for regex's
@@ -28,17 +28,17 @@ it is intended to
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
    * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = prevents registered WikiSpam from being saved
+      * Set SHORTDESCRIPTION = prevents registered Wiki Spam from being saved
 
    * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 1
+      * Set DEBUG = 0
 
    * where to get the regex list to check for
       * Set ANTISPAMREGEXLISTURL = http://arch.thinkmo.de/cgi-bin/spam-merge
       * Set ANTISPAMREGEXLISTTOPIC = Plugins.AntiWikiSpamPluginList
    * time in minutes between attempts to get a new version of the list
       * Set GETLISTTIMEOUT = 60
-   * Local spam list (added to the common one
+   * Local spam list (checked before the larger shared one)
       * Set LOCALANTISPAMREGEXLISTTOPIC = Plugins.LocalAntiWikiSpamPluginList
 
 
