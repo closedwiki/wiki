@@ -44,9 +44,8 @@ foreach my $item (@{$rss->{'items'}}) {
 
     my ( $rev, $author ) = ( $item->{title} =~ /Revision\s+(\d+)\s+by\s+(.+)$/ );
 
-    print "revision => $rev,\n";
-    print "author => '", quotify($author), "',\n";
-
+    print "$rev", "\n";
+    print quotify($author), "\n";
     last;
 }
 
