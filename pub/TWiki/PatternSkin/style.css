@@ -55,7 +55,7 @@ table {
 }
 th {
 	line-height:1.15em;
-	padding:0.3em;
+	padding:.3em;
 	/* don't define more or you'll override TablePlugin settings */
 }
 strong, b {
@@ -85,20 +85,20 @@ h1, h2, h3, h4, h5, h6 {
 	font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
 	line-height:104%;
 	padding:0;
-	margin:1em 0 0.1em 0;
+	margin:1em 0 .1em 0;
 }
 h1 {
 	font-size:210%;
 	color:#e24628;
-	margin:0 0 0.5em 0;
+	margin:0 0 .5em 0;
 }
 h2, h3, h4, h5, h6 {color:#900;} /*C5*/
 h2 {
 	font-size:145%;
 	display:block;
 	background-color:#F3EDE7; /*C8*/
-	padding:0.2em 10px;
-	margin:1em -10px 0.35em -10px;
+	padding:.2em 10px;
+	margin:1em -10px .35em -10px;
 	height:auto;
 }
 h3 { font-size:140%;}
@@ -220,7 +220,7 @@ label {
 }
 .patternTopBar ul li a:link,
 .patternTopBar ul li a:visited {
-	padding:0.25em 0.85em;
+	padding:.25em .85em;
 	text-decoration:none;
 	float:left;
 	color:#fff;
@@ -330,8 +330,8 @@ html>body .patternLeftBar li a {
 	border:none;
 }
 .patternLeftBarPersonal {
-	margin:-0.5em -1px -0.5em -1em;
-	padding:0.25em 0 0.5em 1em;
+	margin:-.5em -1px -.5em -1em;
+	padding:.25em 0 .5em 1em;
 	background-color:#DFEDFD;
 	border-top:1px solid #ccc;
 	border-bottom:1px solid #ccc;
@@ -348,7 +348,7 @@ html>body .patternLeftBar li a {
 	padding-bottom:1em;
 }
 .patternBottomBarContents {
-	padding:0.5em 2.5em 1.5em 0.5em;
+	padding:.5em 2.5em 1.5em .5em;
 	font-size:90%;
 	line-height:140%;
 	color:#8490A1;	/*C6*/
@@ -366,7 +366,7 @@ html>body .patternLeftBar li a {
     width:100%;
 }
 .patternTopic>pre { /* hide from IE */
-	padding-bottom:0.25em;
+	padding-bottom:.25em;
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
 }
 .patternTopic pre,
@@ -454,7 +454,7 @@ html>body .patternLeftBar li a {
 .twikiForm th,
 .twikiAttachments th,
 .twikiForm th {
-	padding:0.2em 0.6em;
+	padding:.2em .6em;
 	height:2.5em;
 	border-color:#ccc;
 	border-left:1px solid #ccc;
@@ -477,7 +477,7 @@ html>body .patternLeftBar li a {
 .twikiForm td {
 	border:0px;
 	border-bottom:1px solid #ccc;
-	padding:0.2em 0.6em;
+	padding:.2em .6em;
 	background-color:#fff;
 	height:1.4em;
 	text-align:left;
@@ -550,7 +550,7 @@ html>body .patternLeftBar li a {
 	color:#8490A1; /*C6*/
 	background-color:#fff;
 	margin:0 0 1.5em 0;
-	padding:0.5em 2em 0.6em 2em;
+	padding:.5em 2em .6em 2em;
 	border-top:1px solid #ccc;
 	border-bottom:1px solid #ccc;
 }
@@ -564,14 +564,11 @@ html>body .patternLeftBar li a {
 .patternTopicAction label {
 	color:#000;
 }
-.patternTopicAction button {
-	vertical-align:middle;
-}
 .patternTopicAction .patternSaveOptions {
-	margin-bottom:0.5em;
+	margin-bottom:.5em;
 }
 .patternTopicAction .patternSaveOptions .patternSaveOptionsContents {
-	padding:0.2em 0;
+	padding:.2em 0;
 }
 
 /**	----------------------------------
@@ -583,7 +580,7 @@ html>body .patternLeftBar li a {
 	font-size:95%;
 	line-height:1.6em;
 	margin:1em 0 2em 0;
-	padding:0.3em 0 0.6em 0;
+	padding:.3em 0 .6em 0;
 	border-top:1px solid;
 	border-bottom:1px solid;
 	border-color:#ddd;
@@ -591,7 +588,7 @@ html>body .patternLeftBar li a {
 
 .twikiToc ul {
 	list-style:outside;
-	padding:0 0 0 0.5em;
+	padding:0 0 0 .5em;
 	margin:0;
 	/* list style image ref in twiki.pattern.tmpl */
 	/*list-style-image:url(/twiki/pub/TWiki/PatternSkin/i_arrow_down.gif);*/
@@ -624,7 +621,7 @@ html>body .twikiToc li a {
 
 /* Topic info */
 .patternTopicInfo {
-	margin:0.5em 0 0 0;
+	margin:.5em 0 0 0;
 }
 
 /* Footer */
@@ -658,7 +655,7 @@ html>body .twikiToc li a {
 
 /* Tool bar at top of topic */
 .patternToolBar {
-	margin:0.5em 0 0 0;
+	margin:.5em 0 0 0;
 }
 .patternToolBar ul {
 	margin:0;
@@ -674,7 +671,7 @@ html>body .twikiToc li a {
 .patternToolBar .patternTab,
 .patternToolBar .patternNoTab {
 	position:relative;
-	padding:2px .75em;
+	padding:1px .75em 2px .75em;
 	border-bottom:none;
 	z-index:0;
 }
@@ -725,7 +722,7 @@ html>body .twikiToc li a {
 }
 .patternToolBarBottom {
 	border-top:1px solid #ccc;
-	margin:0 0 0.5em 0;
+	margin:0 0 .5em 0;
 }
 .patternToolBar .patternAccessKey {
 	border:0;
@@ -778,11 +775,11 @@ html>body .twikiToc li a {
 	border-top:1px solid #ccc;
 }
 .patternVersatileTable td {
-	padding:0.2em 0.5em;
+	padding:.2em .5em;
 	background-color:#F5F7FD;
 }
 .patternVersatileTable th {
-	padding:0.5em 0.5em;
+	padding:.5em .5em;
 	vertical-align:top;
 	font-weight:bold;
 	background-color:#DFEDFD;
@@ -822,7 +819,7 @@ html>body .twikiToc li a {
 	font-size:95%;
 	border-width:1px;
 	vertical-align:middle;
-	margin:0 0.15em;
+	margin:0 .15em;
 }
 .twikiButton {
 	border-color:#ccc;
@@ -831,6 +828,10 @@ html>body .twikiToc li a {
 .twikiSubmit {
 	border-color:#88B6CF;
 	background-color:#CADDED;
+}
+input.twikiSubmit,
+input.twikiButton {
+	padding:2px;
 }
 .twikiCheckbox,
 .twikiRadioButton {
@@ -851,8 +852,8 @@ html>body .twikiToc li a {
 .twikiBroadcastMessage {
 	background-color:#ff0;
 	color:black;
-	padding:0.2em 10px;
-	margin:0 -10px 0.5em -10px;
+	padding:.2em 10px;
+	margin:0 -10px .5em -10px;
 }
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
@@ -894,8 +895,8 @@ a:hover .patternAccessKey {
 	text-decoration:underline;
 }
 .twikiPageForm {
-	margin:0.5em 0 1.5em 0;
-	padding:0.5em 1em;
+	margin:.5em 0 1.5em 0;
+	padding:.5em 1em;
 	border:1px solid #aaa;
 	background-color:#EBEDF2;
 }
@@ -914,8 +915,8 @@ a:hover .patternAccessKey {
 .patternSearchResults {}
 
 .patternSearchResultsHeader {
-	padding:0.25em 10px 0.15em 10px;
-	margin:0 -10px 0.25em -10px;
+	padding:.25em 10px .15em 10px;
+	margin:0 -10px .25em -10px;
 	font-weight:bold;
 	background-color:#F3EDE7; /*C8*/
 	border-bottom:1px solid #ccc;
@@ -931,10 +932,10 @@ a:hover .patternAccessKey {
 	width:100%;
 }
 .patternSearchResults .twikiTopRow {
-	padding-top:0.2em;
+	padding-top:.2em;
 }
 .patternSearchResults .twikiBottomRow {
-	padding-bottom:0.25em;
+	padding-bottom:.25em;
 	border-bottom:1px solid #ddd;
 }
 .patternSearchResults .twikiAlert {
@@ -956,7 +957,7 @@ a:hover .patternAccessKey {
 	background-color:#FFC0CB;
 	display:block;
 	width:auto;
-	margin:0.5em 0;
+	margin:.5em 0;
 }
 .patternSearchResults .twikiSRAuthor {
 	width:15%;
@@ -967,7 +968,7 @@ a:hover .patternAccessKey {
 	text-align:left;
 }
 .patternSearchResultCount {
-	margin:0.25em 0 2.5em 0;
+	margin:.25em 0 2.5em 0;
 	font-size:95%;
 }
 .patternViewPage .patternSearchResultsBegin { /* for changes template with noheader="on" */
@@ -981,8 +982,8 @@ a:hover .patternAccessKey {
 	margin-bottom:1em;
 }
 .patternBookViewList .twikiTopRow {
-	padding:0.2em 10px;
-	margin:2.5em -10px 0.15em -10px;
+	padding:.2em 10px;
+	margin:2.5em -10px .15em -10px;
 	background-color:#666; /*C4*/
 	color:#ccc;
 }
@@ -1051,17 +1052,13 @@ a:hover .patternAccessKey {
 	width:100%;
 }
 .twikiEditTextarea {
-	margin:.5em 0 0.25em 0;
+	margin:.5em 0 .25em 0;
 }
 .twikiChangeFormButtonHolder {
-	margin:1em 0;
+	margin:0 0 .5em 0;
+	float:right;
 }
-.twikiChangeFormButton {
-	padding:0;
-	margin:0;
-	color:#777;
-	background-color:#e8e8e8;
-}
+.twikiChangeFormButton {}
 .twikiEditForm th {
 	background-color:#e8e8e8;
 	padding-left:1em;
@@ -1152,7 +1149,7 @@ a:hover .patternAccessKey {
 }
 .patternChangeFormPage .patternVersatileTable th {
 	text-align:left;
-	padding:0.25em 1em;
+	padding:.25em 1em;
 }
 .patternChangeFormPage .patternVersatileTable td {
 	padding:1em;
@@ -1186,7 +1183,7 @@ a:hover .patternAccessKey {
 	padding-left:2em;
 }
 .patternRenamePage .patternVersatileTable td {
-	padding:0.5em 0.5em;
+	padding:.5em .5em;
 }
 .patternRenamePage .patternVersatileTable .patternHelpCol {
 	width:22em;
@@ -1197,7 +1194,7 @@ a:hover .patternAccessKey {
 }
 .patternRenamePage .twikiHelp {
 	margin:1em 0 1em 0;
-	padding:0.25em 0 0.5em 0;
+	padding:.25em 0 .5em 0;
 }
 .patternRenamePage .patternTopicActionSecondary {
 	margin:1.5em 0;
@@ -1219,7 +1216,7 @@ a:hover .patternAccessKey {
 }
 .patternDiffPage .twikiDiffTable th,
 .patternDiffPage .twikiDiffTable td {
-	padding:0.1em;
+	padding:.1em;
 }
 
 /* Deleted */
