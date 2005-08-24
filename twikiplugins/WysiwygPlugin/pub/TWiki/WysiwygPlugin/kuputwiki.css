@@ -39,10 +39,10 @@ span.kupu-tb-buttongroup {
   margin-left: 0px;
   padding-left: 4px;
   padding-right: 4px;
-  border-left: dotted 1px black;
-  border-right: dotted 1px black;
   text-align: center;
   float: left;
+  background: url("separator.png");
+  background-repeat: no-repeat;
 }
 
 #kupu-tb-buttons button {
@@ -192,4 +192,7 @@ div#twiki-icons img:active {
 .twiki-verbatim-button-pressed {
   background: url("verbatim.png");
   background-color: white;
+}
+.separator { 
+  background: url("separator.png");
 }

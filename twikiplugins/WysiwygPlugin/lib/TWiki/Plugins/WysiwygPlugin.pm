@@ -39,7 +39,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION $html2tml $tml2html $inSave $imgMap $calledThisSession $currentWeb );
 
-$VERSION = 0.14;
+$VERSION = 0.15;
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;
@@ -144,7 +144,11 @@ sub getViewUrl {
 # the current web, only return the topic
 sub parseWikiUrl {
     my $url = shift;
-
+    my( $web, $topic);
+    if( $url =~ /^(\w+\.)?\w+$/ ) {
+        ( $web, $topic) = TWiki::Func::normaliseWebTopicName(undef, $url);
+        return $web.'.'.$topic;
+    }
     my $aurl = TWiki::Func::getViewUrl('WEB', 'TOPIC');
     $aurl =~ s!WEB/TOPIC.*$!!;
 
@@ -153,7 +157,7 @@ sub parseWikiUrl {
     return undef unless substr($url, 0, length($aurl)) eq $aurl;
     $url = substr($url,length($aurl),length($url));
     return undef unless $url =~ /^(\w+)[.\/](\w+)$/;
-    my( $web, $topic) = ($1, $2);
+    ( $web, $topic) = ($1, $2);
 
     return $topic if( $web eq $currentWeb);
     return $web.'.'.$topic;

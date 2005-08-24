@@ -179,7 +179,7 @@ sub _makeWikiWord {
 sub _makeSquab {
     my( $this, $url, $text ) = @_;
     unless( $url =~ /^$TWiki::regex{linkProtocolPattern}/ ||
-          $url =~ /[^\w\s]/ ) {
+              $url =~ /[^\w\s]/ ) {
         $text ||= $url;
         my($web,$topic);
         if( $url =~ /^(?:(\w+)\.)?(\w+)$/ ) {
@@ -243,8 +243,9 @@ sub _getRenderedVersion {
     $text =~ s/{$TT0/</go;
     $text =~ s/}$TT0/>/go;
 
+    # mailto: URI - this should be collapsed into linkProtocoPattern
+    $text =~ s/(?:^|(?<=[-*\s(]))((mailto):([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink($1,$1)/geo;
     # standard URI
-    my $x;
     $text =~ s/(?:^|(?<=[-*\s(]))($TWiki::regex{linkProtocolPattern}:([^\s<>"]+[^\s*.,!?;:)<]))/$this->_makeLink($1,$1)/geo;
 
     # other entities

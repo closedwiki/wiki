@@ -69,6 +69,8 @@ $CHECKs = "\002"; # require adjacent space character (' ' or $NBSP)
 $CHECKw = "\003"; # require adjacent whitespace (\s|$NBBR|$NBSP)
 $NBSP   = "\004"; # unbreakable space
 $NBBR   = "\005"; # unbreakable newline
+$CHECK1 = "\006"; # start of wiki-word
+$CHECK2 = "\007"; # end of wiki-word
 
 =pod
 

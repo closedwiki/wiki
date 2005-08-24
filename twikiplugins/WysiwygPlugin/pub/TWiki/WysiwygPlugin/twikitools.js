@@ -478,19 +478,7 @@ function TWikiWikiWordTool() {
     var elem = doc.createElement('a');
     elem.setAttribute('href', url);
     var selection = editor.getSelection();
-    if (selection) {
-      if ( selection.startNode() == selection.endNode()) {
-        var startoffset = selection.startOffset();
-        var endoffset = selection.endOffset();
-        if (endoffset == startoffset) {
-          // nothing selected, just an insertion point
-          elem.appendChild(doc.createTextNode(wikiword));
-        }
-      }
-    } else {
-      // nothing selected, just an insertion point
-      elem.appendChild(doc.createTextNode(wikiword));
-    }
+    elem.appendChild(doc.createTextNode(wikiword));
     _insertNode(editor, elem);
     editor.updateState();
   };
