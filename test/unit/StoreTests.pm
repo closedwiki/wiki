@@ -111,7 +111,6 @@ sub test_CreateSimpleTopic {
 	my $text = "This is some test text\n   * some list\n   * content\n :) :)";
 	$twiki->{store}->saveTopic( $user, $web, $topic, $text, $meta );
 	$this->assert( $twiki->{store}->topicExists($web, $topic) );
-	
 	my ($readMeta, $readText) = $twiki->{store}->readTopic($user, $web, $topic);
 
     # ignore whitspace at end of data

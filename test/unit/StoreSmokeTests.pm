@@ -228,7 +228,7 @@ sub verify_releaselocksonsave {
     my $query = new CGI ({
                           originalrev => [ 0 ],
                           'action' => [ 'save' ],
-                          text => [ "Baseline\nText\n" ],
+                          text => [ "Before\nBaseline\nText\nAfter\n" ],
                          });
     $query->path_info( "/$testweb/$topic" );
 
@@ -247,7 +247,7 @@ sub verify_releaselocksonsave {
     $query = new CGI ({
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
-                       text => [ "Changed\nLines\n" ],
+                       text => [ "Before\nChanged\nLines\nAfter\n" ],
                        forcenewrevision => [ 1 ],
                       });
     $query->path_info( "/$testweb/$topic" );
@@ -266,7 +266,7 @@ sub verify_releaselocksonsave {
     $query = new CGI ({
                        originalrev => [ 1 ],
                        'action' => [ 'save' ],
-                       text => [ "Sausage\nChips\n" ],
+                       text => [ "Before\nSausage\nChips\nAfter\n" ],
                        forcenewrevision => [ 1 ],
                       });
 

@@ -65,11 +65,15 @@ sub test_TML_in_forms {
     my $this = shift;
     my($meta, $text) = $twiki->{store}->readTopic(undef, $testweb, $testtopic);
     my $render = new TWiki::Render($twiki);
-    my $res = $render->_renderFormData($testweb,$testtopic,$meta);
+    my $res = TWiki::Form::renderForDisplay($twiki->{templates},$meta);
     $res = $render->getRenderedVersion($res, $testweb, $testtopic);
 
-    use HTML::TreeBuilder;
-    use HTML::Element;
+    eval 'use HTML::TreeBuilder; use HTML::Element;';
+    if( $@ ) {
+        print STDERR "$@\nUNABLE TO RUN TEST\n";
+        return;
+    }
+
     my $tree = HTML::TreeBuilder->new_from_content($res);
     # Analyze the tree, could use find_by_tag_name
     my @children = $tree->content_list();
@@ -98,8 +102,6 @@ sub test_TML_in_forms {
     $text = (($children[7]->content_list())[1]->content_list())[0];
     $this->assert_str_equals(' :-) ', $text);
     $tree->delete;
-    
-
 }
 
 1;

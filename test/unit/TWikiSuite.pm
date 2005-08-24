@@ -5,13 +5,13 @@ package TWikiUnitTestsSuite;
 
 use base qw(Test::Unit::TestSuite);
 
-sub name { 'TWikiUnitTests' };
+sub name { 'TWikiSuite' };
 
 # Assume we are run from the "test/unit" directory
 
 sub include_tests {
     opendir(DIR, ".") || die "Failed to open .";
-    return grep( !/^TWikiUnitTestSuite/ && /Suite\.pm$/, sort readdir(DIR));
+    return grep( !/^TWikiSuite/ && /Suite\.pm$/, sort readdir(DIR));
 };
 
 1;

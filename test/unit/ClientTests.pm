@@ -109,7 +109,10 @@ sub verify_edit {
     } catch Error::Simple with {
         $this->assert(0,shift->stringify());
     } otherwise {
-        $this->assert(0, "expected an oops redirect");
+        unless( $TWiki::cfg{LoginManager} eq 'none' ) {
+            $this->assert(0, "expected an oops redirect ".
+                            $TWiki::cfg{LoginManager});
+        }
     };
 
     $query = new CGI ({});

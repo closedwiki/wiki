@@ -10,7 +10,7 @@ package AutoAttachTests;
 
 use base qw(TWikiTestCase);
 
-
+use strict;
 use TWiki;
 use TWiki::Meta;
 use Error qw( :try );
@@ -30,6 +30,9 @@ my $session;
 
 my $testUser1;
 my $testUser2;
+
+my $testWeb = "TemporaryAutoAttachTestsWeb";
+my $twiki;
 
 my %cfg;
 
@@ -115,9 +118,9 @@ sub test_autoattach {
     $this->sneakAttachmentsAddedToTopic($topic);
    
     my ($readMeta, $readText) = $session->{store}->readTopic($session->{user}, $testWeb, $topic);
-    my @attachments = $meta->find( 'FILEATTACHMENT' );
+    my @attachments = $readMeta->find( 'FILEATTACHMENT' );
     
-    foreach $attachment (@attachments) {
+    foreach my $attachment (@attachments) {
     	print "Attachment found: ".$attachment."\n";
     }
 }
@@ -159,3 +162,5 @@ sub verify_normal_attachment {
     $rev = $session->{store}->getRevisionNumber( $testweb, $topic, $attachment );
     $this->assert_num_equals(2, $rev);
 }
+
+1;
