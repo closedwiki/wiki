@@ -649,7 +649,7 @@ sub saveTopic {
         }
         $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
         # remove meta again and throw it away (!)
-        $text =~ s/^%META:([^{]+){(.*)}%\s*$//gm if $text;
+        $text =~ s/^%META:([^{]+){(.*)}%\r?\n//gm if $text;
     }
 
     my $error;
