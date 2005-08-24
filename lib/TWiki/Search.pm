@@ -398,8 +398,6 @@ sub searchWeb {
     my $subWeb =        $params{'subweb'} || '';
     my $finalTerm =     $inline ? ( $params{nofinalnewline} || 0 ) : 0;
 
-    $separator = "" if( $nonoise && !defined($separator));;
-
     $baseWeb =~ s/\./\//go;
 
     my $session = $this->{session};
