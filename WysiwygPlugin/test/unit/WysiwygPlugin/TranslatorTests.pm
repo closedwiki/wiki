@@ -30,11 +30,6 @@ package TranslatorTests;
 
 use base qw(Test::Unit::TestCase);
 
-BEGIN {
-    unshift(@INC,'../../../..');
-}
-
-use TWiki;
 use TWiki::Plugins::WysiwygPlugin::TML2HTML;
 use TWiki::Plugins::WysiwygPlugin::HTML2TML;
 use Carp;
@@ -46,8 +41,8 @@ use vars qw( $nofiles $notml2html $nohtml2tml $unsafe);
 BEGIN {
     # hacky way to narrow down set of tests run
     $nofiles = 0;
-    $notml2html = 1;
-    $nohtml2tml = 1;
+    $notml2html = 0;
+    $nohtml2tml = 0;
 
     for( my $i = 0; $i < 32; $i++) {
         $unsafe .= chr($i) unless $i == 10;
@@ -345,6 +340,12 @@ RedHat & SuSE
         html => '<a href="mailto:a@z.com">Mail</a><a href="mailto:?subject=Hi">Hi</a>',
         tml => '[[mailto:a@z.com][Mail]] [[mailto:?subject=Hi][Hi]]',
         finaltml => '[[mailto:a@z.com][Mail]] [[mailto:?subject=Hi][Hi]]',
+       },
+       {
+        exec => 3,
+        name => 'mailtoLink2',
+        html => '<a href="mailto:a@z.com">mailto:a@z.com</a>',
+        tml => 'mailto:a@z.com',
        },
        {
         exec => 3,
@@ -759,12 +760,19 @@ HERE
 5 <span class="arfle">francais</span>
 HERE
        },
+       {
+        exec => 3,
+        name => 'linkToOtherWeb',
+        html => '<a href="Sandbox.WebHome">this</a>',
+        tml => '[[Sandbox.WebHome][this]]',
+       },
 
       ];
 
 
     unless($notml2html) {
         foreach my $datum ( @$data ) {
+            #next unless( $datum->{exec} == 999 );
             next unless( $datum->{exec} & 1 );
             my $fn = 'TranslatorTests::test_TML2HTML_'.$datum->{name};
             no strict 'refs';
@@ -775,6 +783,7 @@ HERE
 
     unless( $nohtml2tml) {
         foreach my $datum ( @$data ) {
+            #next unless( $datum->{exec} == 999 );
             next unless( $datum->{exec} & 2 );
             my $fn = 'TranslatorTests::test_HTML2TML_'.$datum->{name};
             no strict 'refs';

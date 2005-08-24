@@ -160,6 +160,19 @@ sub rootGenerate {
     $tml =~ s/$WC::NBSP +/$WC::NBSP/go;
     $tml =~ s/$WC::NBSP/ /go;
 
+    $tml =~ s/$WC::CHECK1$WC::CHECK1+/$WC::CHECK1/g;
+    $tml =~ s/$WC::CHECK2$WC::CHECK2+/$WC::CHECK2/g;
+    $tml =~ s/$WC::CHECK2$WC::CHECK1/$WC::CHECK2/g;
+
+    $tml =~ s/(^|[\s\(])$WC::CHECK1/$1/gso;
+    $tml =~ s/$WC::CHECK2($|[\s\,\.\;\:\!\?\)\*])/$1/gso;
+
+    $tml =~ s/$WC::CHECK1(\s|$)/$1/gso;
+    $tml =~ s/(^|\s)$WC::CHECK2/$1/gso;
+
+    $tml =~ s/$WC::CHECK1/ /go;
+    $tml =~ s/$WC::CHECK2/ /go;
+
     # Top and tail, and terminate with a single newline
     $tml =~ s/^\s*//s;
     $tml =~ s/\s*$/\n/s;
@@ -565,7 +578,12 @@ sub _handleA {
     if( $text && $text =~ /\S/ && $this->{attrs}->{href}) {
         # there's text and an href
         my $href = $this->{attrs}->{href};
-        my $topic = &{$this->{context}->{parseWikiUrl}}( $href );
+        my $topic;
+        if( $href =~ /^(\w+\.)?\w+$/s ) {
+            $topic = $href;
+        } else {
+            $topic = &{$this->{context}->{parseWikiUrl}}( $href );
+        }
         my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
 
         if( $topic ) {
@@ -574,7 +592,7 @@ sub _handleA {
             # if the clean text is the known topic we can ignore it
             if( $cleantext eq $topic || $topic =~ /\.$cleantext$/ ) {
                 # wikiword or web.wikiword
-                return (0, $WC::CHECKw.$nop.$topic.$WC::CHECKw);
+                return (0, $WC::CHECK1.$nop.$topic.$WC::CHECK2);
             } else {
                 # text and link differ
                 return (0, $WC::CHECKw.'['.$nop.'['.$topic.']['.$text.
@@ -583,7 +601,8 @@ sub _handleA {
         } elsif ( $href =~ $WC::PROTOCOL ) {
             # normal link
             if( $text eq $href ) {
-                return (0, $WC::CHECKw.$nop.$text.$WC::CHECKw);
+                # Wikiword
+                return (0, $WC::CHECK1.$nop.$text.$WC::CHECK2);
             } else {
                 return (0, $WC::CHECKw.'['.$nop.'['.$href.']['.$text.
                         ']]'.$WC::CHECKw );
