@@ -39,6 +39,7 @@ use TWiki::UI;
 use Error qw( :try );
 use TWiki::OopsException;
 use TWiki::Merge;
+use TWiki::Merge3;
 use Assert;
 
 # Used by save and preview
@@ -201,8 +202,13 @@ sub buildNewTopic {
         my ( $date, $author, $rev ) = $newMeta->getRevisionInfo();
         # If the last save was by me, don't merge
         if ( $rev ne $originalrev && !$author->equals( $user )) {
-            $newText = TWiki::Merge::insDelMerge( $prevText, $newText,
-                                                  '\r?\n', $session, undef );
+            # the new three-way code
+            my ( $ancestorMeta, $ancestorText ) =
+                $store->readTopic( undef, $webName, $topic, $originalrev );
+            $newText = TWiki::Merge3::merge(
+                $ancestorText, $prevText, $newText,
+                $originalrev, $rev, "new",
+                '\r?\n' );
             if( $formDef && $prevMeta ) {
                 $newMeta->merge( $prevMeta, $formDef );
             }
