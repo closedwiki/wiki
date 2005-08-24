@@ -98,6 +98,7 @@ The =edit= scipt understands the following parameters, typically supplied by HTM
 | =breaklock= | If set, any lease conflicts will be ignored, and the edit will proceed even if someone is already editing the topic. |
 
 Form field values are passed in parameters named 'field' - for example, if I have a field =Status= the parameter name is =Status=.
+   1 The first sequence of ten or more =X= characters in the topic name will be converted on save to a number such that the resulting topic name is unique in the target web.
 
 ---++ =view=
 Used for viewing topics.
