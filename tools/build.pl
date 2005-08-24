@@ -7,7 +7,7 @@
 BEGIN {
     use File::Spec;
 
-    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+    foreach my $pc (split(/:/, $ENV{TWIKI_LIBS} || '../lib' )) {
         unshift @INC, $pc;
     }
 
