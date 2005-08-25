@@ -731,13 +731,13 @@ html>body .patternToolBar .patternNoTab {
 	color:#000;
 }
 .patternToolBarBottom {
+	position:relative;
 	border-top:1px solid #ccc;
 	margin:0 0 .5em 0;
-}
-.patternViewPage .patternToolBarBottom {
-	position:relative;
-	margin:0 -10px .5em -10px;
 	z-index:2;
+}
+.patternViewPage .patternToolBarBottom 
+	margin:0 -10px .5em -10px;
 }
 .patternToolBar .patternAccessKey {
 	border:0;
