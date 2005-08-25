@@ -57,10 +57,15 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 
 ---++ Style classes
 	
+	* .patternPage - html content container
 	* .patternMiddleContainer - holder for patternMain and twikiLeftbar
 	* .patternMain - holder of twikiToolbar, patternTopic, twikiAttachments, etc)
 	* .patternTopBar - top bar area
 	* .patternTopBarContents - logo, go box
+	* .patternTop - top action buttons, breadcrumb, version
+	* .patternTab - tab navigation item
+	* .patternTabNoBorder - tab navigation item without border
+	* .patternTabSelected - selected tab navigation item
 	* .patternLeftBar - left bar area
 	* .patternWebIndicator - shows current Web name; background of color %<nop>WEBBGCOLOR%
 	* .patternLeftBarContents - used for left menu (a bullet list) 
@@ -71,6 +76,11 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .twikiAttachments - attachment table; used in template attachtables.tmpl
 	* .twikiForm - !WebForm table; used in template attachtables.tmpl
 	* .patternTopicAction - actions buttons at bottom of page; holder of table with buttons
+	* .patternTopicActionSecondary - second layer above patternTopicAction (for instance in Preview)
+	* .patternTopicActionHelp - help text row
+	* .patternCancelCol - table columns (td) for cancel button
+	* .patternSubmitCol - table columns (td) for submit button
+	* .patternAddCol - table columns (td) for additional button/link (for instance: "Move attachment")
 	* .patternSeparator - separator character
 	* .twikiToc - topic contents (%<nop>TOC%)
 	* .twikiTocTitle - title of TOC (%<nop>TOC{title="Contents:"}%)
@@ -79,6 +89,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .patternTopicFooter - used for breadcrumb (patternHomePath)
 	* .patternHomePath - breadcrumb
 	* .patternToolBar - action buttons at top of topic (a bullet list), revision info
+	* .patternPageNav - links "end of topic" and "to top"
 	* .patternSearchBox - go box and current page in top bar
 	* .twikiHelp - help text
 	* .twikiBroadcastMessage - BROADCASTMESSAGE
@@ -86,10 +97,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .twikiGrayText - grayed out text, literally gray
 	* .twikiSmall - styled "small"
 	* .twikiNewLink - style of links to yet non-existent pages (not used)
-	* .patternTab
-	* .patternTabSelected
-	* .patternToolBarBottom
-    
+
 	* Table class names (emitted from %TWIKIWEB%.TablePlugin)
 		* .twikiSortedAscendingCol - sortable table column header that is sorted ascending (uses %TWIKIWEB%.TablePlugin)
 		* .twikiSortedDescendingCol - ditto sorted descending
@@ -123,6 +131,7 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 		* .patternChangeFormButton - emitted from Form.pm, button to change the !WebForm - styled as link
 		* .patternEditForm - emitted from Form.pm, editable !WebForm table
 		* .twikiEditFormTextField - emitted from Form.pm, input textfield in patternEditForm
+		* .patternSig - signature copy field
 
 	* Preview
 		* .patternPreviewPage .patternPreviewArea - holder of previewed topic text

@@ -159,13 +159,6 @@
 			toggleElem.twisted = 0;
 		}
 	}
-	
-	function tabRollOver(tab) {
-		addClass(tab, 'patternTabHover');
-	}
-	function tabRollOut(tab) {
-		removeClass(tab, 'patternTabHover');
-	}
 //]]>
 </script>%TMPL:END%
 
@@ -189,14 +182,14 @@ document.write("<\/style>");
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
 <div class="patternToolBar">
-   * <span class="patternTab patternTabSelected">Edit content</span>
-   * <span class="patternTab" onmouseover="tabRollOver(this); return true;"  onmouseout="tabRollOut(this); return true;"><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a></span>
-   * <span class="patternNoTab twikiRight"><span id="helpshow" class="twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">Show formatting help</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">Hide formatting help</a></span></span>
+   * <span class="patternTab"><span class="patternTabSelected">Edit content</span></span>
+   * <span class="patternTab"><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Edit settings</a></span>
+   * <span class="patternTabNoBorder twikiRight"><span id="helpshow" class="twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">Show formatting help</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">Hide formatting help</a></span></span>
 <br class="twikiClear" /></div></div><div class="patternToolBarBottom"></div>%TMPL:END%
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage patternEditPage" onload="init()"><a name="PageTop"></a><div class="twikiPage">%TMPL:END%
+<body class="patternNoViewPage patternEditPage" onload="init()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
 
 
 

@@ -40,6 +40,7 @@ html body {
 	font-size:small;
 }
 html>body {
+	/* mozilla only */
 	font-size:small;	
 }
 
@@ -204,6 +205,7 @@ label {
 	TWiki specific elements
 	-----------------------------------------------------------	*/
 
+.patternPage {}
 .patternMiddleContainer {}
 .patternMain {
 	padding:0 3.5em 1em 3.5em;
@@ -660,12 +662,15 @@ html>body .twikiToc li a {
 
 /* Tool bar at top of topic */
 .patternToolBar {
-	margin:.5em 0 0 0;
+	margin:0.5em 0 0 0;
 }
 .patternToolBar ul {
 	margin:0;
-	padding:0 0 0 1em;
+	padding-left:1em;
 	list-style:none;
+}
+.patternViewPage .patternToolBar ul {
+	padding-left:0;
 }
 .patternToolBar li {
 	display:inline;
@@ -675,59 +680,64 @@ html>body .twikiToc li a {
 }
 .patternToolBar .patternTab,
 .patternToolBar .patternNoTab {
-	position:relative;
-	padding:1px .75em 2px .75em;
-	border-bottom:none;
-	z-index:0;
+	padding:1px 0 3px 0;
+}
+html>body .patternToolBar .patternTab,
+html>body .patternToolBar .patternNoTab {
+	/* mozilla only */
+	padding:1px 0 2px 0;
+	margin-bottom:-1px;	
 }
 .patternToolBar .patternTab {
 	float:left;
-	border:1px solid #ccc;
-	border-bottom:1px solid #ccc;
-	background-color:#fff;
-	margin:0 4px -1px 0;
+	margin-right:4px;
 }
 .patternToolBar .patternNoTab {
 	/* assuming a right float position */
-	border:1px solid white;
-	margin:0 0 -1px 0;
 	padding:1px 0 0 .5em;
+}
+.patternToolBar .patternTab s,
+.patternToolBar .patternTab strike,
+.patternToolBar .patternTab a:link,
+.patternToolBar .patternTab a:visited,
+.patternToolBar .patternTab .patternTabSelected {
+	border:1px solid #ccc;
+	border-bottom:none;
+	position:relative;
+	z-index:0;
+	background-color:#fff;
+	padding:2px .75em 3px .75em;
+}
+.patternToolBar .patternTab s,
+.patternToolBar .patternTab strike {
+	color:#8490A1; /*C6*/
+	border-color:#eee;
 }
 .patternToolBar .patternTab a:link,
 .patternToolBar .patternTab a:visited {
 	color:#8490A1; /*C6*/
 	text-decoration:none;
-	z-index:0;
+}
+.patternToolBar .patternTab a:hover,
+.patternToolBar .patternTab .patternTabSelected {
+	border-bottom:1px solid #fff;
+	z-index:3;
 }
 .patternToolBar .patternTab a:hover {
 	color:#0054C0; /*C1*/
-	border-bottom:none;
 	text-decoration:none;
-	z-index:3;
 }
-.patternToolBar .patternTabSelected {
+.patternToolBar .patternTab .patternTabSelected {
 	color:#000;
-	background-color:#fff;
-	border-bottom:1px solid #fff;
-	z-index:3;
-}
-.patternToolBar .patternTabHover {
-	color:#0054C0; /*C1*/
-	background-color:#fff;
-	border-bottom:1px solid #fff;
-	z-index:3;
-}
-.patternToolBar .patternTabHover a:link,
-.patternToolBar .patternTabHover a:visited {
-	color:#0054C0; /*C1*/
-	background-color:transparent;
-}
-.patternToolBar .patternTabHover a:hover {
-	background-color:transparent;
 }
 .patternToolBarBottom {
 	border-top:1px solid #ccc;
 	margin:0 0 .5em 0;
+}
+.patternViewPage .patternToolBarBottom {
+	position:relative;
+	margin:0 -10px .5em -10px;
+	z-index:2;
 }
 .patternToolBar .patternAccessKey {
 	border:0;
@@ -808,6 +818,7 @@ html>body .twikiToc li a {
 
 .patternSeparator {
 	font-family:Arial,sans-serif;
+	margin:0 0.15em;
 }
 .twikiHelp {
 	background-color:#F2EFEB;
