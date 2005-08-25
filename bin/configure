@@ -1405,6 +1405,14 @@ sub presentReadOnlyInfo {
     # Get the version of mod_perl if it's being used
     if ( $usingModPerl ) {
         $modPerlVersion = eval 'use mod_perl; return $mod_perl::VERSION';
+        $block .= _setting('',
+                           WARN(<<HERE
+You are running <tt>configure</tt> with <tt>mod_perl</tt>. This
+is risky because mod_perl will remember old values of configuration
+variables. You are *highly* recommended not to run configure under
+mod_perl (though the rest of TWiki can be run with mod_perl, of course)
+HERE
+                               ));
     }
 
     my $n = ucfirst(lc($TWiki::cfg{OS}));
