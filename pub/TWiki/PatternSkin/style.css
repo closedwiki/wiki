@@ -819,12 +819,12 @@ html>body .twikiToc li a {
 	margin-top:0;
 	margin-bottom:0;
 }
-.twikiButton,
+.twikiButton, 
 .twikiSubmit {
-	font-size:95%;
+	font-size:100%;
 	border-width:1px;
-	vertical-align:middle;
-	margin:0 .15em;
+	vertical-align:bottom;
+	margin:0 0.15em;
 }
 .twikiButton {
 	border-color:#ccc;
