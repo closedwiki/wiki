@@ -82,6 +82,7 @@ my $tml = $html2tml->convert( $html );
 	As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
 ---++ Settings
+	* Set SHORTDESCRIPTION = WYSIWYG editor for TWiki topics
 	* Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
 	* Set HELPPAGE = TWiki/WysiwygPlugin
 	* If set to =on= then TWiki variables will be "marked" by the TML -> HTML translator by putting the variable name and any parameters into a span. This works well for simple variables, but can get in trouble with complex syntax or some plugins constructs. If it isn't set to =on= variables will be treated as plain text.
