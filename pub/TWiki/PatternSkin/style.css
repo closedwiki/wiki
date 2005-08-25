@@ -29,7 +29,7 @@
 /* HTML elements */
 html body {
 	line-height:1.4em; /*C10*/
-	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
+	font-family:"Lucida Grande", lucida, verdana, helvetica, sans-serif;
 	background-color:#f7f7f7; /*C7*/
 	color:#000;
 	margin:0;
@@ -190,7 +190,7 @@ select {
 	border-width:1px;
 	border-color:#ccc;
 	background-color:#FBF9F7;
-	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
+	font-family:"Lucida Grande", lucida, verdana, helvetica, sans-serif;
 	font-size:100%;
 }
 fieldset {
@@ -424,6 +424,11 @@ html>body .patternLeftBar li a {
 .twikiAttachments,
 .twikiForm {
 	margin:2em 0;
+}
+.twikiAttachments table,
+.twikiForm table {
+	font-size:95%;
+	color:#666;
 }
 .twikiAttachments p { /* fix for extra <p> */
 	display:none;
@@ -1058,13 +1063,24 @@ a:hover .patternAccessKey {
 	margin:0 0 .5em 0;
 	float:right;
 }
-.twikiChangeFormButton {}
+.twikiChangeFormButton {
+	font-family:"Lucida Grande", lucida, verdana, helvetica, sans-serif;
+	padding:0;
+	margin:0;
+	color:#0054C0; /*C1*/
+	font-size:95%;
+	background-color:transparent;
+	border:none;
+	text-decoration:underline;
+}
 .twikiEditForm th {
 	background-color:#e8e8e8;
 	padding-left:1em;
 	vertical-align:middle;
 }
-
+.twikiEditForm table {
+	margin:0 0 .5em 0;
+}
 .patternEditPage .twikiEditForm input,
 .patternEditPage .twikiEditForm select {
 	font-size:100%;
