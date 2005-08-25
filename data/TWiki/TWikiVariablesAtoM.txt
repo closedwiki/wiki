@@ -197,11 +197,7 @@ The following context identifiers are available:
 	| =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
 	| =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
 	| =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
-Any other parameters will be defined as variables within the scope of the included topic. For example,
-<verbatim>
-%INCLUDE{"AnotherTopic" PONE="val 1" PTWO="val 2"}%
-</verbatim>
-will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included topic.
+Any other parameters will be defined as variables within the scope of the included topic. For example, =%<nop>INCLUDE{"AnotherTopic" PONE="val 1" PTWO="val 2"}%= will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included topic.
 	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], IncludeTopicsAndWebPages, [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]],
 
 #VarINCLUDINGTOPIC
