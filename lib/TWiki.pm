@@ -847,23 +847,6 @@ sub getScriptUrl {
 
 =pod
 
----++ ObjectMethod getUniqueScriptURL( $web, $topic, $script ) -> $absoluteScriptURL
-
-Returns the absolute URL to a TWiki script, providing the web and topic as
-"path info" parameters.  Add a "t" parameter that makes the URL unique to
-defeat browser cacheing. The result looks something like this:
-"http://host/twiki/bin/$script/$web/$topic?t=123456"
-
-=cut
-
-sub getUniqueScriptUrl {
-    my( $this, $web, $topic, $script ) = @_;
-
-    return $this->getScriptUrl( $web, $topic, $script, t => time() );
-}
-
-=pod
-
 ---++ ObjectMethod getOopsUrl( $template, @options ) -> $absoluteOopsURL
 
 Composes a URL for an "oops" error page. The @options consists of a list
@@ -1906,19 +1889,17 @@ sub _expandAllTags {
     # push current context
     my $memTopic = $this->{SESSION_TAGS}{TOPIC};
     my $memWeb   = $this->{SESSION_TAGS}{WEB};
-    my $memEurl  = $this->{SESSION_TAGS}{EDITURL};
 
     $this->{SESSION_TAGS}{TOPIC}   = $topic;
     $this->{SESSION_TAGS}{WEB}     = $web;
-    $this->{SESSION_TAGS}{EDITURL} =
-      $this->getUniqueScriptUrl( $web, $topic, 'edit' );
 
     # Escape ' !%VARIABLE%'
     $$text =~ s/(?<=\s)!%($regex{tagNameRegex})/&#37;$1/g;
 
-    # SMELL: why is this done every time, and not statically during
-    # template loading?
-    $$text =~ s/%NOP{(.*?)}%/$1/gs;  # remove NOP tag in template topics but show content
+    # Remove NOP tag in template topics but show content. Used in template
+    # _topics_ (not templates, per se, but topics used as templates for new
+    # topics)
+    $$text =~ s/%NOP{(.*?)}%/$1/gs;
     $$text =~ s/%NOP%/<nop>/g;
 
     # SMELL: this is crap, a hack, and should go. It should be handled with
@@ -1940,7 +1921,6 @@ sub _expandAllTags {
     # restore previous context
     $this->{SESSION_TAGS}{TOPIC}   = $memTopic;
     $this->{SESSION_TAGS}{WEB}     = $memWeb;
-    $this->{SESSION_TAGS}{EDITURL} = $memEurl;
 }
 
 # Process TWiki %TAGS{}% by parsing the input tokenised into

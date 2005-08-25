@@ -21,7 +21,7 @@
 %TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
 %TMPL:DEF{"create_topic"}%Cr<span class="patternAccessKey">e</span>ate%TMPL:END%
 %TMPL:DEF{"edit_topic"}%<span class="patternAccessKey">E</span>dit%TMPL:END%
-%TMPL:DEF{"active_edit"}%<a href='%EDITURL%' rel='nofollow' title='Edit this topic text' accesskey='e'>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:END%
+%TMPL:DEF{"active_edit"}%<a href='%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit this topic text' accesskey='e'>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:END%
 
 %TMPL:DEF{"inactive_attach"}%<strike>Attach</strike>%TMPL:END%
 %TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="a" title="Attach an image or document to this topic" rel='nofollow'><span class="patternAccessKey">A</span>ttach</a>%TMPL:END%

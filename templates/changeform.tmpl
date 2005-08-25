@@ -7,7 +7,8 @@
 
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
-<form name="main" action="%EDITURL%" method="post">
+<form name="main" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<input type="hidden" name="t" value="t=%GMTIME{"$epoch"}%" />
 ---++ Choose a new form template
 
 <table border="0" cellspacing="0" cellpadding="0">

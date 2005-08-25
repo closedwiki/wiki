@@ -192,8 +192,9 @@ _(Click for form-based editing of existing preferences.)_
 	* Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphicsPattern
 
 ---+++ Legacy support
-   * Support for legacy "EDITTOPIC", now replaced by TMPL:P conditional instantiation
-      * Set EDITTOPIC = <a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="Edit Topic - deprecated usage - please see release notes">Edit</a>
+   * Support for legacy "EDITTOPIC", used to be hard-coded, now replaced by TMPL:P conditional instantiation
+      * Set EDITURL = %SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME("$epoch"}%
+      * Set EDITTOPIC = <a href="%EDITURL%" title="Edit Topic - deprecated usage - please see release notes">Edit</a>
 
 ---++ Plugins Settings
 

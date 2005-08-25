@@ -20,7 +20,8 @@
 
 
 %TMPL:DEF{"content"}%
-<form name="main" action="%EDITURL%" method="post">
+<form name="main" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
 ---++ Choose a new form template
 
 <div class="patternVersatileTable">

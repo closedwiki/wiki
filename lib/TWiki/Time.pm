@@ -31,6 +31,7 @@ Time handling functions.
 
 package TWiki::Time;
 
+use strict;
 use Time::Local;
 use TWiki;
 
@@ -155,6 +156,7 @@ sub parseTime {
    | $http | ful HTTP header format date/time |
    | $email | full email format date/time |
    | $rcs | full RCS format date/time |
+   | $epoch | seconds since 1st January 1970 |
 =cut
 
 # previous known as TWiki::formatTime
@@ -208,6 +210,7 @@ sub formatTime  {
     $value =~ s/\$mo/sprintf('%.2u',$mon+1)/gei;
     $value =~ s/\$year?/sprintf('%.4u',$year+1900)/gei;
     $value =~ s/\$ye/sprintf('%.2u',$year%100)/gei;
+    $value =~ s/\$epoch/$epochSeconds/gi;
 
     # SMELL: how do we get the different timezone strings (and when
     # we add usertime, then what?)

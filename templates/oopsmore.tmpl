@@ -23,7 +23,8 @@
    * *Child topics in <nop>%WEB% web:*
       * %METASEARCH{type="parent" web="%WEB%" topic="%TOPIC%" default="No child topics"}%
 
-<form name="main" action="%EDITURL%">
+<form name="main" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<input type="hidden" name="t" value="%GMTIME{"$epoch"}%" />
    * *Set new topic parent:*
       * Step 1: Select topic parent: %BR%
         <select name="topicparent" size="10">

@@ -122,6 +122,7 @@ __Note:__ This topic is included by TWikiVariables
 	  | =$iso= | ISO format timestamp | %GMTIME{"$iso"}% |
 	  | =$rcs= | RCS format timestamp | %GMTIME{"$rcs"}% |
 	  | =$http= | E-mail & http format timestamp | %GMTIME{"$http"}% |
+      | =$epoch= | Number of seconds since 00:00 on 1st January, 1970 | %GMTIME{"$epoch"}% |
 	* Variables can be shortened to 3 characters
 	* Example: =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= expands to =%GMTIME{"$day $month, $year - $hour:$min:$sec"}%=
 	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
