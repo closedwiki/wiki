@@ -6,5 +6,6 @@
 	* [[WebChanges][Changes]]
 	* [[WebIndex][Index]]
 	* [[WebSearch][Search]]
+</div>
 ----
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
