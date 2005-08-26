@@ -37,10 +37,10 @@ use Assert;
 # on earlier releases of CGI.pm (pre 2.79)
 use CGI qw( -any );
 
-use TWiki::Plurals;
-use TWiki::Attach;
-use TWiki::Attrs;
-use TWiki::Time;
+use TWiki::Plurals ();
+use TWiki::Attach ();
+use TWiki::Attrs ();
+use TWiki::Time ();
 
 # Used to generate unique placeholders for when we lift blocks out of the
 # text during rendering. SMELL: a horrible hack to get around the horrible
@@ -949,10 +949,11 @@ sub getRenderedVersion {
 
     $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
     $text = $this->takeOutProtected( $text, qr/<!DOCTYPE([^<>]*)>?/mi,
-                                $removedComments );
-    $text = $this->takeOutBlocks( $text, qr/<head.*?<\/head>/, $removedHead );
+                                     $removedComments );
+    $text = $this->takeOutProtected( $text, qr/<head.*?<\/head>/si,
+                                     $removedHead );
     $text = $this->takeOutProtected( $text, qr/<script\b.*?<\/script>/si,
-                                $removedScript );
+                                     $removedScript );
 
     # DEPRECATED startRenderingHandler before PRE removed
     # SMELL: could parse more efficiently if this wasn't
@@ -1175,9 +1176,8 @@ sub getRenderedVersion {
     $this->putBackProtected( \$text, $removedScript )
       if $TWiki::cfg{AllowInlineScript};
 
-    $this->putBackBlocks( \$text, $removed, 'head' );
+    $this->putBackProtected( \$text, $removedHead );
     $this->putBackProtected( \$text, $removedComments );
-
     $this->{session}->{client}->endRenderingHandler( $text );
 
     $plugins->postRenderingHandler( $text );
@@ -1425,12 +1425,12 @@ sub takeOutProtected {
 
 sub _replaceBlock {
 	my( $scoop, $map ) = @_;
-
 	my $placeholder = $placeholderMarker;
     $placeholderMarker++;
 	$map->{$placeholder}{text} = $scoop;
 
-	return '<!--'.$TWiki::TranslationToken.$placeholder.$TWiki::TranslationToken.'-->';
+	return '<!--'.$TWiki::TranslationToken.$placeholder.
+      $TWiki::TranslationToken.'-->';
 }
 
 =pod
