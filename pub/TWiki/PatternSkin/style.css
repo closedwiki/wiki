@@ -13,7 +13,6 @@
 	C4	topic action background; left bar top thick border							#666
 	C5	color H2, code text															#900
 	C6	grayed out text																#8490A1
-	C7	page, legend background color												#f7f7f7
 	C8	h2 background color															#F3EDE7
 	C9	neutral table bg gray that should work on light and dark backgrounds		#999
 	C10	line-height																	1.4em
@@ -29,8 +28,8 @@
 /* HTML elements */
 html body {
 	line-height:1.4em; /*C10*/
-	font-family:"Lucida Grande", lucida, verdana, helvetica, sans-serif;
-	background-color:#f7f7f7; /*C7*/
+	font-family:"Lucida Grande", verdana, helvetica, sans-serif;
+	background-color:#fff;
 	color:#000;
 	margin:0;
 	padding:0;
@@ -191,14 +190,15 @@ select {
 	border-width:1px;
 	border-color:#ccc;
 	background-color:#FBF9F7;
-	font-family:"Lucida Grande", lucida, verdana, helvetica, sans-serif;
+	font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
 	font-size:100%;
 }
-fieldset {
-}
-legend {
+textarea {
+	font-family:monospace;
 }
 label {
+	vertical-align:middle;
+	font-size:100%;
 }
 
 /*	-----------------------------------------------------------
@@ -218,7 +218,7 @@ label {
 /* Top bar */
 
 .patternTopBar {
-	background-color:transparent;
+	background-color:#f7f7f7;
 }
 .patternTopBar ul li a:link,
 .patternTopBar ul li a:visited {
@@ -245,13 +245,10 @@ label {
 
 /* Left bar */
 .patternLeftBar {
-	border-top:1px solid #ddd;
-	border-right:1px solid #ddd;
-	border-bottom:1px solid #ddd;
+	border-right:2px solid #ddd;
 	color:#800;
 	overflow:hidden;
 	line-height:1.5em;
-	background-color:#FBFAF8;
 }
 .patternLeftBar a:link,
 .patternLeftBar a:visited {
@@ -647,6 +644,7 @@ html>body .twikiToc li a {
 .patternHomePath,
 .patternRevInfo {
 	color:#8490A1; /*C6*/
+	margin-bottom:0.5em;
 }
 .patternHomePath a:link,
 .patternHomePath a:visited,
@@ -661,9 +659,7 @@ html>body .twikiToc li a {
 }
 
 /* Tool bar at top of topic */
-.patternToolBar {
-	margin:0.5em 0 0 0;
-}
+.patternToolBar {}
 .patternToolBar ul {
 	margin:0;
 	padding-left:1em;
@@ -736,7 +732,7 @@ html>body .patternToolBar .patternNoTab {
 	margin:0 0 .5em 0;
 	z-index:2;
 }
-.patternViewPage .patternToolBarBottom 
+.patternViewPage .patternToolBarBottom {
 	margin:0 -10px .5em -10px;
 }
 .patternToolBar .patternAccessKey {
@@ -816,13 +812,14 @@ html>body .patternToolBar .patternNoTab {
 	Other styles
 	-----------------------------------------------------------	*/
 
-.patternSeparator {
+.twikiSeparator {
 	font-family:Arial,sans-serif;
-	margin:0 0.15em;
+	padding:0 .15em;
+	color:#8490A1; /*C6*/
 }
 .twikiHelp {
 	background-color:#F2EFEB;
-	padding:1em;
+	padding:0.5em 1em;
 	font-size:100%;
 	margin:0;
 }
@@ -834,8 +831,11 @@ html>body .patternToolBar .patternNoTab {
 .twikiSubmit {
 	font-size:100%;
 	border-width:1px;
-	vertical-align:bottom;
-	margin:0 0.15em;
+	margin:0 0.2em;
+}
+.patternTopicAction .twikiButton, 
+.patternTopicAction .twikiSubmit {
+	vertical-align:middle;
 }
 .twikiButton {
 	border-color:#ccc;
@@ -845,25 +845,11 @@ html>body .patternToolBar .patternNoTab {
 	border-color:#88B6CF;
 	background-color:#CADDED;
 }
-input.twikiSubmit,
-input.twikiButton {
-	padding:2px;
-}
 .twikiCheckbox,
 .twikiRadioButton {
 	border:none;
 	background-color:transparent;
 	vertical-align:middle;
-}
-.patternTopic .twikiSubmit { /* topic submit button */
-	background-color:#E8F1F9;
-}
-.patternSecondary { }
-.patternTertiary {
-	background-color:#B9D6FA;
-}
-.patternCancel { /* cancel button */
-	background-color:#eee;
 }
 .twikiBroadcastMessage {
 	background-color:#ff0;
@@ -892,6 +878,7 @@ input.twikiButton {
 }
 .twikiSmall {
 	font-size:85%; /*C11*/
+	line-height:100%;
 }
 .twikiNew { }
 .twikiSummary {
@@ -1075,7 +1062,7 @@ a:hover .patternAccessKey {
 	float:right;
 }
 .twikiChangeFormButton {
-	font-family:"Lucida Grande", lucida, verdana, helvetica, sans-serif;
+	font-family:"Lucida Grande", verdana, helvetica, sans-serif;
 	padding:0;
 	margin:0;
 	color:#0054C0; /*C1*/
@@ -1092,9 +1079,8 @@ a:hover .patternAccessKey {
 .twikiEditForm table {
 	margin:0 0 .5em 0;
 }
-.patternEditPage .twikiEditForm input,
-.patternEditPage .twikiEditForm select {
-	font-size:100%;
+.patternSig input {
+	font-family:monospace;
 }
 
 /*	-----------------------------------------------------------
