@@ -81,7 +81,6 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .patternCancelCol - table columns (td) for cancel button
 	* .patternSubmitCol - table columns (td) for submit button
 	* .patternAddCol - table columns (td) for additional button/link (for instance: "Move attachment")
-	* .patternSeparator - separator character
 	* .twikiToc - topic contents (%<nop>TOC%)
 	* .twikiTocTitle - title of TOC (%<nop>TOC{title="Contents:"}%)
 	* .patternTopicInfo - revision (%<nop>REVINFO%) and moved (%<nop>META{"moved"}%) info

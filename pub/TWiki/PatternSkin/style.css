@@ -179,7 +179,7 @@ img {
 }
 
 /* Forms */
-form { 
+form {
 	display:inline;
 	margin:0;
 	padding:0;
@@ -190,7 +190,7 @@ select {
 	border-width:1px;
 	border-color:#ccc;
 	background-color:#FBF9F7;
-	font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
+	font-family:"Lucida Grande", verdana, helvetica, sans-serif;
 	font-size:100%;
 }
 textarea {
@@ -814,7 +814,6 @@ html>body .patternToolBar .patternNoTab {
 
 .twikiSeparator {
 	font-family:Arial,sans-serif;
-	padding:0 .15em;
 	color:#8490A1; /*C6*/
 }
 .twikiHelp {

@@ -1,37 +1,41 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
----+++ Search
+---+ Search
 <noautolink>
-<table border="0" cellspacing="3" cellpadding="0"><tr><td>
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
-  <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="32" /> 
+<div style="border:1px solid #ccc; padding:1em;">
+<table border="0" cellspacing="1" cellpadding="0">
+<tr>
+<td>
+  <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="60" /> 
   <input type="submit" class="twikiSubmit" value="Search" />
-  %BR%
-  <input type="checkbox" class="twikiCheckbox" id="web" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% />
-  <label for="web">All public webs</label>
-  %BR%
-  <input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% />
-  <label for="textbody">Text body &nbsp;</label>
-  <input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% />
-  <label for="topictitle">Topic title &nbsp;</label>
-  <input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %CALC{$IF($EXACT(%URLPARAM{scope}%,all),checked="checked")}% />
-  <label for="both">Both </label>
-</td><td>
-	* [[%TWIKIWEB%.SearchHelp][Help]]
-	* [[%INCLUDINGWEB%.WebSearchAdvanced][Advanced search]]
-</td></tr></table>
+</td>
+<td><span class="twikiSmall">&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][Advanced search]] %BR% &nbsp;[[%TWIKIWEB%.SearchHelp][Help]]</span></td>
+</tr>
+</table>
+<table border="0" cellspacing="1" cellpadding="0">
+<tr>
+<td>Search: </td>
+<td><input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% /><label for="textbody">Text body</label>
+<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /><label for="topictitle">Topic title</label>
+<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %CALC{$IF($EXACT(%URLPARAM{scope}%,all),checked="checked")}% /><label for="both">Body and title</label></td>
+</tr>
+<tr>
+<td></td>
+<td><input type="checkbox" class="twikiCheckbox" id="web" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% /><label for="web">All public webs</label></td>
+</tr>
+</table>
+<span class="twikiSmall">%BR%TIP: to search for all topics that contain ="SOAP"=, ="WSDL"=, a literal ="web service"=, but not ="shampoo"=, write: <code>soap wsdl "web service" -shampoo</code></span>
+</div>
 </form>
 </noautolink>
 
 %SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="on" }%
 
-	* <b><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">Topic index</a></b>: List of <nop>%INCLUDINGWEB% topics in alphabetical order. <br />
-	  <b>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">All</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ea">A</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eb">B</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ec">C</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ed">D</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ee">E</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ef">F</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eg">G</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eh">H</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ei">I</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ej">J</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ek">K</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5El">L</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Em">M</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5En">N</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eo">O</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ep">P</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eq">Q</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Er">R</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Es">S</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Et">T</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eu">U</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ev">V</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ew">W</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ex">X</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ey">Y</a>|<a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ez">Z</a>| <br />
-	  | <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;bookview=on&amp;search=\.*">All</a></b> topics in %TWIKIWEB%.BookView <b>|</b>
-	* <b>Jump to topic</b>: If you already know the name of the topic, enter the name of the topic into the %TWIKIWEB%.GoBox at the top
-	* <b> [[%INCLUDINGWEB%.WebChanges][WebChanges]] </b>: Find out what topics in <nop>%INCLUDINGWEB% have changed recently
-	* <b>[[%TWIKIWEB%.GoodStyle][How to edit text]]</b>:
-		* Make changes to topics in %TWIKIWEB%.GoodStyle,
-		* Learn the %TWIKIWEB%.TextFormattingRules, and
-		* Have a look at the %TWIKIWEB%.TextFormattingFAQ
-
+<div class="twikiHelp">
+*Other search options:*
+   * If you already know the name of the topic, enter the name of the topic into the [[%TWIKIWEB%.GoBox][Jump box]] at the top
+   * <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&regex=on&search=\.*">List all topics in the <nop>%INCLUDINGWEB% web</a> in alphabetical order
+   * List topics that start with the letter: <a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ea">A</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eb">B</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ec">C</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ed">D</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ee">E</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ef">F</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eg">G</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eh">H</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ei">I</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ej">J</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ek">K</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5El">L</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Em">M</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5En">N</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eo">O</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ep">P</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eq">Q</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Er">R</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Es">S</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Et">T</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Eu">U</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ev">V</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ew">W</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ex">X</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ey">Y</a><span class="twikiSeparator">|</span><a href="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INCLUDINGWEB%/?scope=topic&amp;regex=on&amp;search=%5Ez">Z</a>
+   * [[%INCLUDINGWEB%.WebChanges][Recently changed topics]]
+</div>
