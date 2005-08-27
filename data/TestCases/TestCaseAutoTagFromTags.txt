@@ -31,7 +31,7 @@ Designed by: Crawford Currie
 
 ---++ <nop>%<nop>%A<nop>%<nop>%B<nop>%<nop>%
 Expected:
-<!-- expected expand -->
+<!-- expected expand 1 -->
 %EGGSAMPLE%
 <!-- /expected -->
 saw:
@@ -41,7 +41,7 @@ saw:
 
 ---++ <nop>%C<nop>%<nop>%D<nop>%
 Expected:
-<!-- expected expand -->
+<!-- expected expand 2 -->
 %EGGSAMPLE%
 <!-- /expected -->
 saw:
@@ -51,7 +51,7 @@ saw:
 
 ---++ <nop>%E<nop>%<nop>%F<nop>%
 Expected:
-<!-- expected expand -->
+<!-- expected expand 3 -->
 %EGGSAMPLE%
 <p />
 <!-- /expected -->
@@ -64,9 +64,9 @@ saw:
 	* Set XA = EXEM
 	* Set XB = PLAR
 
----++ <nop>%<nop>%XA{}<nop>%<nop>%XB{}<nop>%<nop>%
+---++ <nop>%<nop>%<nop>XA{}<nop>%<nop>%<nop>XB{}<nop>%<nop>%
 Expected:
-<!-- expected expand -->
+<!-- expected expand 4 -->
 %EXEMPLAR%
 <!-- /expected -->
 saw:
@@ -74,9 +74,9 @@ saw:
 %%XA{}%%XB{}%%
 <!-- /actual -->
 
----++ <nop>%<nop>%XA<nop>%<nop>%XB<nop>%<nop>{}%
+---++ <nop>%<nop>%<nop>XA<nop>%<nop>%<nop>XB<nop>%<nop>{}%
 Expected:
-<!-- expected expand -->
+<!-- expected expand 5 -->
 %EXEMPLAR%
 <!-- /expected -->
 saw:
@@ -84,13 +84,14 @@ saw:
 %%XA%%XB%{}%
 <!-- /actual -->
 
----++ <nop>%<nop>%<nop>%PA<nop>%<nop>%<nop>%<nop>%SB{}<nop>%<nop>%<nop>%
+---++ <nop>%<nop>%<nop>%<nop>PA<nop>%<nop>%<nop>%<nop>%<nop>SB{}<nop>%<nop>%<nop>%
 Expected:
-<!-- expected expand -->
+<!-- expected expand 6 -->
 %EGGSAMPLE%
 <!-- /expected -->
 saw:
 <!-- actual -->
 %%%PA%%%%SB{}%%%
 <!-- /actual -->
+
 

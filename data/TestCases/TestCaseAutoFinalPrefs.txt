@@ -20,7 +20,7 @@ Finally check topic prefs
 <table>
 <tr><th>Expected</th><th>Actual</th></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected GLOBALFINALTESTPREF1 -->
 global final test pref 1
 <!-- /expected -->
 </td><td>
@@ -29,7 +29,7 @@ global final test pref 1
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected GLOBALFINALTESTPREF -->
 global final test pref 2
 <!-- /expected -->
 </td><td>
@@ -38,7 +38,7 @@ global final test pref 2
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected GLOBALTESTPREF -->
 global test pref
 <!-- /expected -->
 </td><td>
@@ -47,7 +47,7 @@ global test pref
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected WEBFINALTESTPREF -->
 web final test pref
 <!-- /expected -->
 </td><td>
@@ -56,7 +56,7 @@ web final test pref
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected WEBTESTPREF -->
 web test pref
 <!-- /expected -->
 </td><td>
@@ -65,7 +65,7 @@ web test pref
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected TOPICTESTPREF -->
 topic test pref
 <!-- /expected -->
 </td><td>
@@ -74,7 +74,7 @@ topic test pref
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected USERFINALTESTPREF -->
 user final test pref
 <!-- /expected -->
 </td><td>
@@ -83,7 +83,7 @@ user final test pref
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected USERTESTPREF -->
 user test pref
 <!-- /expected -->
 </td><td>
@@ -92,7 +92,7 @@ user test pref
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected OVERRIDETHISTESTPREF -->
 Setting from user topic
 <!-- /expected -->
 </td><td>
@@ -101,7 +101,7 @@ Setting from user topic
 <!-- /actual -->
 </td></tr>
 <tr><td>
-<!-- expected -->
+<!-- expected TESTFIXTUREPLUGIN_SHORTDESCRIPTION -->
 Support for automatic tests
 <!-- /expected -->
 </td><td>
