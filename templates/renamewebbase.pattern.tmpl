@@ -61,7 +61,13 @@
 </div>
 
 <div class="patternSearchResults"><div class="patternSearchResultsHeader">Notices:</div>
-%RENAMEWEB_NOTICES%
+*Topics which are currently being edited by other users in the <nop>%WEB% Web:*
+%MOVE_LOCKED%
+
+*Topics which refer to this web and are are currently being edited by other users:* %REF_LOCKED%
+
+*Topics which refer to this web that you do not have permission to change:*
+%REF_DENIED%
 </div>
 
 <div class="patternSearchResults"><div class="patternSearchResultsHeader">Change links in topics that refer to %WEB% in the <nop>%WEB% Web:</div>%LOCAL_SEARCH%</div>
@@ -74,9 +80,7 @@
 </tr></table></div>
 <div class="twikiHelp">
 *Note:*
-   * Get help on
-     <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Renaming and moving webs</a>.
-   * Select the %TRASHWEB% Web to delete the web.
+   * <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Click here</a> to get help on managing webs
    * The checkmarked topics will be updated 
 </div>
 %TMPL:P{"topicaction"}%

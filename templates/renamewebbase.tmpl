@@ -32,9 +32,14 @@
 |  *To:* |  %TMPL:P{"newparentweb"}%. |%TMPL:P{"newsubweb"}%  |
 %TMPL:P{"notes"}%
 
----++ Notices:
+---++ Notices
+*Topics which are currently being edited by other users in the <nop>%WEB% Web:*
+%MOVE_LOCKED%
 
-%RENAMEWEB_NOTICES%
+*Topics which refer to this web and are are currently being edited by other users:* %REF_LOCKED%
+
+*Topics which refer to this web that you do not have permission to change:*
+%REF_DENIED%
 
 ---++ Change links in topics that refer to <nop>%WEB%.Topicname in the <nop>%WEB% Web:
 

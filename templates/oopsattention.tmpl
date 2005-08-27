@@ -78,7 +78,7 @@ Please go _back_ in browser and try a new name
 Please go back in your browser and chose a topic name that is a %TWIKIWEB%.WikiWord or check the allow non-Wiki Word box
 %TMPL:END%
 %TMPL:DEF{"rename_err"}%
-During rename of topic <nop>%WEB%.<nop>%TOPIC% to <nop>%PARAM2%.<nop>%PARAM3% an error (%PARAM1%) was found. Please notify your %WIKITOOLNAME%
+During rename of topic <nop>%WEB%.<nop>%TOPIC% to <nop>%PARAM2% an error (%PARAM1%) was found. Please notify your %WIKITOOLNAME%
 administrator.
 %TMPL:END%
 %TMPL:DEF{"rename_web_err"}%
@@ -322,8 +322,22 @@ administrator.
 Go back in your browser and save your changes locally.
 %TMPL:END%
 %TMPL:DEF{"rename_web_prerequisites"}%
----++ Potential Problems Renaming Web:
+---+++ There are problems with renaming this web:
+1. You are denied access to the following topics in the web:
 %PARAM1%
+
+2. The following topics are locked for edit, and cannot be moved:
+%PARAM2%
+
+3. The following topics refer to topics in this web, but you are denied access to them:
+%PARAM3%
+
+4. The following topics refer to topics in this web, but are being edited:
+%PARAM4%
+
+<div %PARAM5%>
+<a href="%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%?action=renameweb;confirm=continue" />Continue and try to rename web?</a>
+</div>
 
 %TMPL:END%
 
