@@ -1058,7 +1058,7 @@ Returns a hash that maps the web.topic name to a summary of the lines that match
 =cut
 
 sub getReferringTopics {
-    my( $session, $web, $topic, $allWebs, $details ) = @_;
+    my( $session, $web, $topic, $allWebs ) = @_;
     my $store = $session->{store};
     my $renderer = $session->{renderer};
     $web =~ s#\.#/#go;
@@ -1073,21 +1073,26 @@ sub getReferringTopics {
         next if( $allWebs && $searchWeb eq $web );
         my @topicList = $store->getTopicNames( $searchWeb );
         my $searchString = $topic;
-        my $webString=$web;
+        my $webString = $web;
         $webString =~ s#[\./]#[\\.\\/]#go;
 
-        if(defined($topic)) {
+        if( defined($topic) ) {
              unless( $searchWeb eq $web ) {
-                 $searchString = $webString.'.'.$topic
+                 $searchString = '\<'.$webString.'\.'.$topic.'\>';
              }
+        } elsif( $searchWeb ne $web ) {
+            # search for the *qualified* web name
+            $searchString = '\<'.$webString.'\.[A-Za-z0-9]*\>';
         } else {
-            $searchString = $webString;
+            # most general search
+            $searchString = '\<'.$webString.'\>';
         }
-        # Note use of \< and \> to match the empty string at the edges of a word.
+        # Note use of \< and \> to match the empty string at the
+        # edges of a word.
         my $matches = $store->searchInWebContent
-          ( '\<'.$searchString.'\>',
+          ( $searchString,
             $searchWeb, \@topicList,
-            { casesensitive => 0, type => 'regex' } );
+            { casesensitive => 1, type => 'regex' } );
 
         foreach my $searchTopic ( keys %$matches ) {
             next if( $searchWeb eq $web && $topic && $searchTopic eq $topic );
