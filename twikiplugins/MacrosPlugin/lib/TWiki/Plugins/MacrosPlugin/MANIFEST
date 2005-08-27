@@ -1,4 +1,2 @@
 lib/TWiki/Plugins/MacrosPlugin.pm  Main plugin script 
-lib/TWiki/Plugins/MacrosPlugin/test.zip  Test::Unit tests 
-lib/TWiki/Plugins/MacrosPlugin/build.pl  Build file
 data/TWiki/MacrosPlugin.txt  Plugin topic 
