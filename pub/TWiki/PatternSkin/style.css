@@ -28,7 +28,7 @@
 /* HTML elements */
 html body {
 	line-height:1.4em; /*C10*/
-	font-family:"Lucida Grande", verdana, helvetica, sans-serif;
+	font-family:"Lucida Grande", verdana, arial, sans-serif;
 	background-color:#fff;
 	color:#000;
 	margin:0;
@@ -82,7 +82,7 @@ ol li, ul li {
 	
 /* Text */
 h1, h2, h3, h4, h5, h6 {
-	font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
+	font-family:"Lucida Grande", arial, verdana, sans-serif;
 	line-height:104%;
 	padding:0;
 	margin:1em 0 .1em 0;
@@ -190,8 +190,11 @@ select {
 	border-width:1px;
 	border-color:#ccc;
 	background-color:#FBF9F7;
-	font-family:"Lucida Grande", verdana, helvetica, sans-serif;
 	font-size:100%;
+}
+input,
+select {
+	font-family:"Lucida Grande", verdana, arial, sans-serif;
 }
 textarea {
 	font-family:monospace;
@@ -1062,7 +1065,7 @@ a:hover .patternAccessKey {
 	float:right;
 }
 .twikiChangeFormButton {
-	font-family:"Lucida Grande", verdana, helvetica, sans-serif;
+	font-family:"Lucida Grande", verdana, arial, sans-serif;
 	padding:0;
 	margin:0;
 	color:#0054C0; /*C1*/
