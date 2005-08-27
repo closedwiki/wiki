@@ -335,7 +335,8 @@ sub emitTable {
     }
     my $direction = $up ? 0 : 1;
     my $doIt = doIt( $curTable[$headerRows-1] );
-    my $tattrs = { border => $tableBorder,
+    my $tattrs = { class => 'twikiTable',
+                   border => $tableBorder,
                    cellspacing => $cellSpacing,
                    cellpadding => $cellPadding };
     $tattrs->{frame} = $tableFrame if( $tableFrame );
@@ -430,6 +431,9 @@ sub emitTable {
             my $type = $fcell->[2];
             my $cell = $fcell->[0];
             my $attr = $fcell->[1] || {};
+
+            $attr->{class} = 'twikiTable' unless $attr->{class};
+
             if( $type eq 'th' ) {
                 # reset data color count to start with first color after
                 # each table heading
@@ -516,7 +520,7 @@ sub emitTable {
             use strict 'refs';
             $colCount++;
         }
-        $text .= $currTablePre.CGI::Tr( {}, $rowtext )."\n";
+        $text .= $currTablePre.CGI::Tr( { class=>'twikiTable' }, $rowtext )."\n";
         $rowCount++;
         $dataColorCount++;
     }
@@ -573,15 +577,23 @@ sub handler {
     undef $initSort;
     $insideTABLE = 0;
 
+    my $acceptable = 0;
     my @lines = split( /\r?\n/, $_[0] );
     for ( @lines ) {
-        $_ =~ s/%TABLE{(.*?)}%/_parseParameters($1)/seo;
-        if( s/^(\s*)\|(.*\|\s*)$/_processTableRow($1,$2)/eo ) {
+        if( s/%TABLE(?:{(.*?)})?%/_parseParameters($1)/se ) {
+            $acceptable = 1;
+        }
+        elsif( $acceptable &&
+                 s/^(\s*)\|(.*\|\s*)$/_processTableRow($1,$2)/eo ) {
             $insideTABLE = 1;
-        } elsif( $insideTABLE ) {
-            $_ = emitTable() . $_;
-            $insideTABLE = 0;
-            undef $initSort;
+        }
+        else {
+            if( $insideTABLE ) {
+                $_ = emitTable() . $_;
+                $insideTABLE = 0;
+                undef $initSort;
+            }
+            $acceptable = 0;
         }
     }
     $_[0] = join( "\n", @lines );
