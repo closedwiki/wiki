@@ -24,7 +24,20 @@
 <head>
  %TMPL:P{"windowtitle"}%
  <meta http-equiv="Content-Type" content="text/html; charset=%CHARSET%" /> <meta name="robots" content="noindex" /> %HTTP_EQUIV_ON_VIEW%
- <style type="text/css">.twikiNewLink {color:%NEWTOPICFONTCOLOR%; background-color:%NEWTOPICBGCOLOR%;}</style>
+ <style type="text/css" media="all">
+  .twikiNewLink {
+   color:%NEWTOPICFONTCOLOR%;
+   background-color:%NEWTOPICBGCOLOR%;
+  }
+  .twikiTable {
+   border-collapse: collapse;
+  }
+  .twikiTable td,
+  .twikiTable th {
+   border: thin solid black;
+   margin: 0px;
+  }
+ </style>
  <link rel="icon" href="%FAVICON%" type="image/x-icon" /> <link rel="shortcut icon" href="%FAVICON%" type="image/x-icon" />
  <base href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" />
  %TMPL:P{"script"}%

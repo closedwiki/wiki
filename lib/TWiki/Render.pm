@@ -252,7 +252,10 @@ sub _emitTR {
 
     unless( $insideTABLE ) {
         $thePre .=
-          CGI::start_table({ border=>1, cellspacing=>0, cellpadding=>1} );
+          CGI::start_table({ class=>'twikiTable',
+                             border => 1,
+                             cellspacing => 0,
+                             cellpadding => 0 });
     }
 
     $theRow =~ s/\t/   /g;  # change tabs to space
@@ -260,7 +263,7 @@ sub _emitTR {
     $theRow =~ s/(\|\|+)/$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
     my $cells = '';
     foreach( split( /\|/, $theRow ) ) {
-        my @attr;
+        my @attr = ( class => 'twikiTable' );
 
         # Avoid matching single columns
         if ( s/$TWiki::TranslationToken([0-9]+)//o ) {
@@ -286,7 +289,7 @@ sub _emitTR {
             $cells .= CGI::td( { @attr }, " $_" );
         }
     }
-    return $thePre.CGI::Tr( $cells );
+    return $thePre.CGI::Tr( { class => 'twikiTable' }, $cells );
 }
 
 sub _fixedFontText {
