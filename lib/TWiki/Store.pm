@@ -38,14 +38,15 @@ types of error.
 
 package TWiki::Store;
 
-use File::Copy;
-use TWiki::Meta;
-use TWiki::Time;
-use TWiki::AccessControlException;
+use strict;
+
 use Assert;
 use Error qw( :try );
+use File::Copy ();
 
-use strict;
+use TWiki::Meta ();
+use TWiki::Time ();
+use TWiki::AccessControlException ();
 
 use vars qw( $STORE_FORMAT_VERSION );
 
@@ -370,19 +371,19 @@ sub moveWeb {
     $oldWeb =~ s/\./\//go;
     $newWeb =~ s/\./\//go;
 
-    my (@webList) = $this->getListOfWebs('public',$oldWeb);
+    my (@webList) = $this->getListOfWebs('public', $oldWeb);
     unshift(@webList,$oldWeb);
     foreach my $webIter (@webList) {
-      if($webIter ne "") {
-	$webIter =~ /(.*)/;
-	$webIter = $1;
-	my @webTopicList=$this->getTopicNames($webIter);
-	foreach my $webTopic (@webTopicList) {
-	  $webTopic =~ /(.*)/;
-	  $webTopic = $1;
-	  $this->lockTopic( $user, $webIter, $webTopic );
-	}
-      }
+        if( $webIter ) {
+            $webIter =~ /(.*)/;
+            $webIter = $1;
+            my @webTopicList = $this->getTopicNames( $webIter );
+            foreach my $webTopic (@webTopicList) {
+                $webTopic =~ /(.*)/;
+                $webTopic = $1;
+                $this->lockTopic( $user, $webIter, $webTopic );
+            }
+        }
     }
 
     my @newParentPath = split(/\//,$newWeb);
@@ -392,19 +393,19 @@ sub moveWeb {
     my $handler = $this->_getHandler( $oldWeb );
     $handler->moveWeb( $newWeb );
 
-    (@webList) = $this->getListOfWebs('public',$newWeb);
-    unshift(@webList,$newWeb);
+    (@webList) = $this->getListOfWebs('public', $newWeb);
+    unshift(@webList, $newWeb);
     foreach my $webIter (@webList) {
-      if($webIter ne "") {
-	$webIter =~ /(.*)/;
-	$webIter = $1;
-	my @webTopicList=$this->getTopicNames($webIter);
-	foreach my $webTopic (@webTopicList) {
-	  $webTopic =~ /(.*)/;
-	  $webTopic = $1;
-	  $this->unlockTopic( $user, $webIter, $webTopic );
-	}
-      }
+        if( $webIter ) {
+            $webIter =~ /(.*)/;
+            $webIter = $1;
+            my @webTopicList = $this->getTopicNames( $webIter );
+            foreach my $webTopic (@webTopicList) {
+                $webTopic =~ /(.*)/;
+                $webTopic = $1;
+                $this->unlockTopic( $user, $webIter, $webTopic );
+            }
+        }
     }
 
     # Log rename
@@ -640,7 +641,6 @@ sub saveTopic {
             $this->{session}->{security}->getReason());
     }
     my $plugins = $this->{session}->{plugins};
-
     # Semantics inherited from Cairo. See
     # TWiki:Codev.BugBeforeSaveHandlerBroken
     if( $plugins->haveHandlerFor( 'beforeSaveHandler' )) {
@@ -649,7 +649,8 @@ sub saveTopic {
         }
         $plugins->beforeSaveHandler( $text, $topic, $web, $meta );
         # remove meta again and throw it away (!)
-        $text =~ s/^%META:([^{]+){(.*)}%\r?\n//gm if $text;
+        my $trash = new TWiki::Meta( $this->{session}, $web, $topic);
+        $this->extractMetaData( $trash, \$text );
     }
 
     my $error;
@@ -856,9 +857,6 @@ sub _noHandlersSave {
         $meta->addTOPICINFO( $nextRev, time(), $user );
         $text = _writeMeta( $meta, $text );
     }
-
-    # RCS requires a newline for the last line,
-    $text =~ s/([^\n\r])$/$1\n/os;
 
     # will block
     $this->lockTopic( $user, $web, $topic );
@@ -1150,6 +1148,7 @@ sub extractMetaData {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     my $format = $STORE_FORMAT_VERSION;
 
+    # head meta-data
     $$rtext =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
       ($meta->put( 'TOPICINFO', _readKeyValues( $1 ));'')gem;
 
@@ -1160,8 +1159,13 @@ sub extractMetaData {
         $ti->{format} = $STORE_FORMAT_VERSION;
     }
 
+    my $endMeta = 0;
+
     $$rtext =~ s(^%META:([^{]+){(.*)}%\r?\n)
-      ($meta->putKeyed( $1, _readKeyValues( $2, $format )),'')gem;
+      ($endMeta=1;$meta->putKeyed( $1, _readKeyValues( $2, $format )),'')gem;
+
+    # eat the extra newline put in to separate text from tail meta-data
+    $$rtext =~ s/\n$//s if $endMeta;
 
     # If there is no meta data then convert from old format
     if( ! $meta->count( 'TOPICINFO' ) ) {
@@ -1552,7 +1556,7 @@ sub _writeTypes {
         my $data = $meta->{$type};
         foreach my $item ( @$data ) {
             my $sep = '';
-            $text .= "%META:$type\{";
+            $text .= '%META:'.$type.'{';
             my $name = $item->{name};
             if( $name ) {
                 # If there's a name field, put first to make regexp based searching easier
@@ -1566,7 +1570,7 @@ sub _writeTypes {
                     $sep = ' ';
                 }
             }
-            $text .= "\}%\n";
+            $text .= '}%'."\n";
         }
     }
 
@@ -1599,7 +1603,7 @@ sub _writeMeta {
     my $start = _writeStart( $meta );
     my $end = _writeEnd( $meta );
     $text = $start . $text;
-    $text =~ s/([^\n\r])$/$1\n/;     # new line is required at end
+    $end = "\n".$end if $end;
     $text .= $end;
 
     return $text;
