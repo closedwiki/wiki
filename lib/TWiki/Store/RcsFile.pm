@@ -345,8 +345,10 @@ sub moveWeb {
     my( $this, $newWeb ) = @_;
     _moveFile( $TWiki::cfg{DataDir}.'/'.$this->{web},
                $TWiki::cfg{DataDir}.'/'.$newWeb );
-    _moveFile( $TWiki::cfg{PubDir}.'/'.$this->{web},
-               $TWiki::cfg{PubDir}.'/'.$newWeb );
+    if( -d $TWiki::cfg{PubDir}.'/'.$this->{web} ) {
+        _moveFile( $TWiki::cfg{PubDir}.'/'.$this->{web},
+                   $TWiki::cfg{PubDir}.'/'.$newWeb );
+    }
 }
 
 =pod
