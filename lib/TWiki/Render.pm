@@ -1816,14 +1816,12 @@ sub replaceTopicReferences {
         $repl = $args->{newWeb}.'.'.$repl;
     }
 
-    $text =~ s/$STARTWW$oldWebRegex\.$args->{oldTopic}$ENDWW/$repl/g;
-    $text =~ s/"$oldWebRegex\.$args->{oldTopic}"/$repl/g;
+    $text =~ s/\b$oldWebRegex\.$args->{oldTopic}\b/$repl/g;
     $text =~ s/\[\[$oldWebRegex\.$args->{spacedTopic}(\](\[[^\]]+\])?\])/[[$repl$1/g;
 
     return $text unless( $args->{inWeb} eq $args->{oldWeb} );
 
-    $text =~ s/$STARTWW$args->{oldTopic}$ENDWW/$repl/g;
-    $text =~ s/"$args->{oldTopic}"/"$repl"/g;
+    $text =~ s/\b$args->{oldTopic}\b/$repl/g;
     $text =~ s/\[\[($args->{spacedTopic})(\](\[[^\]]+\])?\])/[[$repl$2/g;
 
     return $text;
