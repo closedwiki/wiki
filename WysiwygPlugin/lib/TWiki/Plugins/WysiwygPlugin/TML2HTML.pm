@@ -336,13 +336,13 @@ sub _getRenderedVersion {
     $text = join("\n", @result );
 
     $text =~ s(${STARTWW}==([^\s]+?|[^\s].*?[^\s])==$ENDWW)
-      (CGI::strong(CGI::code($1)))gem;
+      (CGI::b(CGI::code($1)))gem;
     $text =~ s(${STARTWW}__([^\s]+?|[^\s].*?[^\s])__$ENDWW)
-      (CGI::strong(CGI::em($1)))gem;
+      (CGI::b(CGI::i($1)))gem;
     $text =~ s(${STARTWW}\*([^\s]+?|[^\s].*?[^\s])\*$ENDWW)
-      (CGI::strong($1))gem;
+      (CGI::b($1))gem;
     $text =~ s(${STARTWW}\_([^\s]+?|[^\s].*?[^\s])\_$ENDWW)
-      (CGI::em($1))gem;
+      (CGI::i($1))gem;
     $text =~ s(${STARTWW}\=([^\s]+?|[^\s].*?[^\s])\=$ENDWW)
       (CGI::code($1))gem;
 
