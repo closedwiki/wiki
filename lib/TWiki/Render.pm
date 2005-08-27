@@ -184,6 +184,7 @@ sub _renderMoved {
                       },
                       'put it back' );
         }
+        # SMELL: this English string should be in a template
         $text = CGI::i("<nop>$toWeb.<nop>$toTopic moved from <nop>$fromWeb".
           ".<nop>$fromTopic on $date by $by ").$putBack;
     }
@@ -218,27 +219,28 @@ sub _addListItem {
         my $firstTime = 1;
         while( $size < $depth ) {
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
-            push( @$result, "<$theElement>" ) unless( $firstTime );
-            push( @$result, "<$theType>" );
+            $$result .= '<'.$theElement.'>' unless( $firstTime );
+            $$result .= '<'.$theType.'>';
             $firstTime = 0;
             $size++;
         }
     } else {
         while( $size > $depth ) {
             my $tags = pop( @{$this->{LIST}} );
-            push( @$result, "</$tags->{element}>" );
-            push( @$result, "</$tags->{type}>" );
+            $$result .= '</'.$tags->{element}.'>';
+            $$result .= '</'.$tags->{type}.'>';
             $size--;
         }
-        if ($size) {
-            push( @$result, "</$this->{LIST}->[$size-1]->{element}>" );
+        if( $size ) {
+            $$result .= '</'.$this->{LIST}->[$size-1]->{element}.'>';
         }
     }
 
     if ( $size ) {
         my $oldt = $this->{LIST}->[$size-1];
         if( $oldt->{type} ne $theType ) {
-            push( @$result, "</$oldt->{type}>\n<$theType>" );
+            $$result .= '</'.$oldt->{type}.'>';
+            $$result .= '<'.$theType.'>';
             pop( @{$this->{LIST}} );
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
         }
@@ -911,7 +913,6 @@ The main rendering function.
 sub getRenderedVersion {
     my( $this, $text, $theWeb, $theTopic ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
-    my( $head, $result, $insideNoAutoLink );
 
     return '' unless $text;  # nothing to do
 
@@ -921,15 +922,11 @@ sub getRenderedVersion {
     my $plugins = $session->{plugins};
     my $prefs = $session->{prefs};
 
-    $head = '';
-    $result = '';
-    $insideNoAutoLink = 0;
-
     @{$this->{LIST}} = ();
 
     # Initial cleanup
     $text =~ s/\r//g;
-     # whitespace before <! tag (if it is the first thing) is illegal
+    # whitespace before <! tag (if it is the first thing) is illegal
     $text =~ s/^\s+(<![a-z])/$1/i;
 
     # clutch to enforce correct rendering at end of doc
@@ -939,7 +936,7 @@ sub getRenderedVersion {
     # WARNING: since the token is used as a marker in takeOutBlocks,
     # be careful never to call this method on text which has already had
     # embedded blocks removed!
-    $text =~ s/$TWiki::TranslationToken/!/go;    
+    $text =~ s/$TWiki::TranslationToken/!/go;
 
     # Maps of placeholders to tag parameters and text
     my $removed = {};
@@ -971,7 +968,7 @@ sub getRenderedVersion {
         foreach my $region ( sort keys %$removed ) {
             next unless ( $region =~ /^pre\d+$/i );
             my @lines = split( /\n/, $removed->{$region}{text} );
-            my $result = '';
+            my $rt = '';
             while ( scalar( @lines )) {
                 my $line = shift( @lines );
                 $plugins->insidePREHandler( $line );
@@ -979,9 +976,9 @@ sub getRenderedVersion {
                     unshift( @lines, split( /\n/, $line ));
                     next;
                 }
-                $result .= $line."\n";
+                $rt .= $line."\n";
             }
-            $removed->{$region}{text} = $result;
+            $removed->{$region}{text} = $rt;
         }
     }
 
@@ -993,7 +990,7 @@ sub getRenderedVersion {
         # But without it, a lot of processing could be moved
         # outside the line loop.
         my @lines = split( /\n/, $text );
-        my @result = ();
+        my $rt = '';
         while ( scalar( @lines ) ) {
             my $line = shift( @lines );
             $plugins->outsidePREHandler( $line );
@@ -1001,10 +998,10 @@ sub getRenderedVersion {
                 unshift( @lines, split( /\n/, $line ));
                 next;
             }
-            push( @result, $line );
+            $rt .= $line . "\n";
         }
 
-        $text = join("\n", @result );
+        $text = $rt;
     }
 
     # Escape rendering: Change ' !AnyWord' to ' <nop>AnyWord',
@@ -1059,7 +1056,7 @@ sub getRenderedVersion {
     # line-oriented stuff.
     my $isList = 0;        # True when within a list
     my $insideTABLE = 0;
-    my @result = ();
+    my $result = '';
 
     foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
@@ -1068,7 +1065,7 @@ sub getRenderedVersion {
             $line =~ s/^(\s*)\|(.*)/$this->_emitTR($1,$2,$insideTABLE)/e;
             $insideTABLE = 1;
         } elsif( $insideTABLE ) {
-            push( @result, '</table>' );
+            $result .= '</table>';
             $insideTABLE = 0;
         }
 
@@ -1083,15 +1080,15 @@ sub getRenderedVersion {
             $isList = 1;
             if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o ) {
                 # Definition list
-                $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
+                $this->_addListItem( \$result, 'dl', 'dd', $1, '' );
             }
             elsif ( $line =~ s/^((\t|   )+)(\S+?):\s/<dt> $3<\/dt><dd> /o ) {
                 # Definition list
-                $this->_addListItem( \@result, 'dl', 'dd', $1, '' );
+                $this->_addListItem( \$result, 'dl', 'dd', $1, '' );
             }
             elsif ( $line =~ s/^((\t|   )+)\* /<li> /o ) {
                 # Unnumbered list
-                $this->_addListItem( \@result, 'ul', 'li', $1, '' );
+                $this->_addListItem( \$result, 'ul', 'li', $1, '' );
             }
             elsif ( $line =~ m/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/ ) {
                 # Numbered list
@@ -1103,7 +1100,7 @@ sub getRenderedVersion {
                     $ot = '';
                 }
                 $line =~ s/^((\t|   )+)([1AaIi]\.|\d+\.?) ?/<li$ot> /;
-                $this->_addListItem( \@result, 'ol', 'li', $1, $ot );
+                $this->_addListItem( \$result, 'ol', 'li', $1, $ot );
             }
             else {
                 $isList = 0;
@@ -1111,20 +1108,20 @@ sub getRenderedVersion {
         }
 
         # Finish the list
-        if( ! $isList ) {
-            $this->_addListItem( \@result, '', '', '' );
+        unless( $isList ) {
+            $this->_addListItem( \$result, '', '', '' );
             $isList = 0;
         }
 
-        push( @result, $line );
+        $result .= $line."\n";
     }
 
     if( $insideTABLE ) {
-        push( @result, '</table>' );
+        $result .= '</table>';
     }
-    $this->_addListItem( \@result, '', '', '' );
+    $this->_addListItem( \$result, '', '', '' );
 
-    $text = join("\n", @result );
+    $text = $result;
 
     # '#WikiName' anchors
     $text =~ s/^(\#)($TWiki::regex{wikiWordRegex})/CGI::a( { name=>$this->makeAnchorName( $2 )}, '')/geom;
@@ -1485,8 +1482,8 @@ sub takeOutBlocks {
 
     return $intext unless ( $intext =~ m/<$tag\b/ );
 
-    my $open = qr/^([^<]*)<$tag\b([^>]*)?>(.*)$/i;
-    my $close = qr/^([^<]*)<\/$tag>(.*)$/i;
+    my $open = qr/^([^<]*)<$tag\b([^>]*)?>(.*)$/im;
+    my $close = qr/^([^<]*)<\/$tag>(.*)$/im;
     my $out = '';
     my $depth = 0;
     my $pre;
