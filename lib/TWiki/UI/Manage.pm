@@ -1072,13 +1072,15 @@ sub getReferringTopics {
     foreach my $searchWeb ( @webs ) {
         next if( $allWebs && $searchWeb eq $web );
         my @topicList = $store->getTopicNames( $searchWeb );
-        my $searchString = $topic;
+        my $searchString;
         my $webString = $web;
         $webString =~ s#[\./]#[\\.\\/]#go;
 
         if( defined($topic) ) {
-             unless( $searchWeb eq $web ) {
-                 $searchString = '\<'.$webString.'\.'.$topic.'\>';
+            if( $searchWeb eq $web ) {
+                $searchString = '\<'.$topic.'\>';
+            } else {
+                $searchString = '\<'.$webString.'\.'.$topic.'\>';
              }
         } elsif( $searchWeb ne $web ) {
             # search for the *qualified* web name
@@ -1089,6 +1091,7 @@ sub getReferringTopics {
         }
         # Note use of \< and \> to match the empty string at the
         # edges of a word.
+
         my $matches = $store->searchInWebContent
           ( $searchString,
             $searchWeb, \@topicList,

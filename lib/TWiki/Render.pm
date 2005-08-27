@@ -1805,28 +1805,29 @@ sub replaceTopicReferences {
 
     my $repl = $args->{newTopic};
 
-    $args->{inWeb}=~s/\//./go;
-    $args->{newWeb}=~s/\//./go;
-    $args->{oldWeb}=~s/\//./go;
-    my $oldWebRegex=$args->{oldWeb};
+    $args->{inWeb} =~ s/\//./go;
+    $args->{newWeb} =~ s/\//./go;
+    $args->{oldWeb} =~ s/\//./go;
+    my $oldWebRegex = $args->{oldWeb};
 
-    $oldWebRegex=~s#\.#[.\\/]#go;
+    $oldWebRegex =~ s#\.#[.\\/]#go;
 
     if( $args->{inWeb} ne $args->{newWeb} || $args->{fullPaths} ) {
         $repl = $args->{newWeb}.'.'.$repl;
     }
 
     $text =~ s/$STARTWW$oldWebRegex\.$args->{oldTopic}$ENDWW/$repl/g;
+    $text =~ s/"$oldWebRegex\.$args->{oldTopic}"/$repl/g;
     $text =~ s/\[\[$oldWebRegex\.$args->{spacedTopic}(\](\[[^\]]+\])?\])/[[$repl$1/g;
 
     return $text unless( $args->{inWeb} eq $args->{oldWeb} );
 
     $text =~ s/$STARTWW$args->{oldTopic}$ENDWW/$repl/g;
+    $text =~ s/"$args->{oldTopic}"/"$repl"/g;
     $text =~ s/\[\[($args->{spacedTopic})(\](\[[^\]]+\])?\])/[[$repl$2/g;
 
     return $text;
 }
-
 
 =pod
 
