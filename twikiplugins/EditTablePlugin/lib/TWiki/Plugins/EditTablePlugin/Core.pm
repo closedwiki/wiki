@@ -640,7 +640,6 @@ sub doSaveTable {
     if( $error ) {
         $url = TWiki::Func::getOopsUrl( $theWeb, $theTopic, 'oopssaveerr', $error );
     }
-die $url;
     TWiki::Func::redirectCgiQuery( $query, $url );
 }
 
