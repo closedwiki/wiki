@@ -24,9 +24,19 @@ BEGIN {
 use FindBin;
 use Cwd;
 use Data::Dumper;
+use Getopt::Long;
 
 use constant BUILD_LOCK => '.build';
 use constant LAST_BUILD => '.last_build';
+
+my $Config = {
+    force => 0,
+};
+
+my $result = GetOptions( $Config,
+#
+			 'force|f',
+			);
 
 # make easy to work as a crontab job
 chdir( $FindBin::Bin );
@@ -44,7 +54,7 @@ if ( open( VERSION, LAST_BUILD ) )
 }
 
 my $newVersionAvailable = !$lastVersion || ($rev > $lastVersion);
-if ( $newVersionAvailable )
+if ( $Config->{force} || $newVersionAvailable )
 {
     # start new build
     open( LOCK, ">.build" ) or die $!;
