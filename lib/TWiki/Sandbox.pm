@@ -188,6 +188,8 @@ sub buildCommandLine {
     ASSERT($this->isa( 'TWiki::Sandbox' )) if DEBUG;
     my @arguments;
 
+    $template ||= '';
+
     for my $tmplarg (split /\s+/, $template) {
         next if $tmplarg eq ''; # ignore leading/trailing whitespace
 
@@ -290,6 +292,8 @@ sub sysCommand {
     my $data = '';          # Output
     my $handle;             # Holds filehandle to read from process
     my $exit = 0;           # Exit status of child process
+
+    return '' unless $template;
 
     $template =~ /(^.*?)\s+(.*)$/;
     my $path = $1;
