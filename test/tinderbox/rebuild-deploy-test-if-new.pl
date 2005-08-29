@@ -28,12 +28,15 @@ use Data::Dumper;
 use constant BUILD_LOCK => '.build';
 use constant LAST_BUILD => '.last_build';
 
-# make easy to work as a crontab entry
+# make easy to work as a crontab job
 chdir( $FindBin::Bin );
+
+my $buildInProgress = -x BUILD_LOCK;
+exit if $buildInProgress;
 
 chomp( my ( $rev, $author ) = `./latest-svn-checkin.pl` );
 
-my $lastVersion;
+my $lastVersion = '';
 if ( open( VERSION, LAST_BUILD ) )
 {
     chomp( $lastVersion = <VERSION> );
@@ -41,15 +44,26 @@ if ( open( VERSION, LAST_BUILD ) )
 }
 
 my $newVersionAvailable = !$lastVersion || ($rev > $lastVersion);
-my $buildInProgress = -x BUILD_LOCK;
-if ( $newVersionAvailable && !$buildInProgress )
+if ( $newVersionAvailable )
 {
     # start new build
     open( LOCK, ">.build" ) or die $!;
     print LOCK "$rev\n";
     close( LOCK );
 
+#    system( 'svn cleanup ../..' );
+
     system( './doit.pl' );
+    if ($? == -1) {
+	print "failed to execute: $!\n";
+    }
+    elsif ($? & 127) {
+                       printf "child died with signal %d, %s coredump\n",
+		       ($? & 127),  ($? & 128) ? 'with' : 'without';
+                   }
+    else {
+	printf "child exited with value %d\n", $? >> 8;
+    }
 
     # mark build complete
     rename BUILD_LOCK, LAST_BUILD;
