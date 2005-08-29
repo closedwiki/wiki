@@ -263,7 +263,7 @@ sub _emitTR {
     $theRow =~ s/(\|\|+)/$TWiki::TranslationToken.length($1).'|'/ge;  # calc COLSPAN
     my $cells = '';
     foreach( split( /\|/, $theRow ) ) {
-        my @attr = ( class => 'twikiTable' );
+        my @attr;
 
         # Avoid matching single columns
         if ( s/$TWiki::TranslationToken([0-9]+)//o ) {
