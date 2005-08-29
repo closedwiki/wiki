@@ -90,8 +90,8 @@ sub preview {
     $dispText = $session->{renderer}->getRenderedVersion( $dispText, $web, $topic );
 
     # Disable links and inputs in the text
-    $dispText =~ s(<a\s[^>]*>(.*?)</a>)
-      (<span style="text-decoration:underline;color:blue"><span class="twikiEmulatedLink">$1</span></span>)gis;
+    $dispText =~ s(<a\s[^>]*>(.+?)</a>)
+      (<span class="twikiEmulatedLink">$1</span>)gis;
     $dispText =~ s/<(input|button|textarea) /<$1 disabled="disabled"/gis;
     $dispText =~ s(</?form(|\s.*?)>)()gis;
     $dispText =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
