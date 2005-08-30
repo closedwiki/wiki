@@ -750,9 +750,6 @@ html>body .patternToolBar .patternNoTab {
 .patternViewPage .patternToolBarBottom {
 	margin:0 -10px .5em -10px;
 }
-.patternToolBar .patternAccessKey {
-	border:0;
-}
 .patternToolBar a:link .patternAccessKey,
 .patternToolBar a:visited .patternAccessKey {
 	color:inherit;
