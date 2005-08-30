@@ -1,8 +1,8 @@
 package ArchiveTest;
 
-use TWiki::Contrib::Archive;
-use TWiki::Contrib::Map;
-use TWiki::Contrib::Array;
+use TWiki::Contrib::DBCacheContrib::Archive;
+use TWiki::Contrib::DBCacheContrib::Map;
+use TWiki::Contrib::DBCacheContrib::Array;
 use base qw(Test::Unit::TestCase);
 
 sub new {
@@ -16,9 +16,9 @@ my $array;
 my $map;
 
 sub set_up {
-  $submap = new TWiki::Contrib::Map("a=1 b=2");
-  $array = new TWiki::Contrib::Array();
-  $map = new TWiki::Contrib::Map();
+  $submap = new TWiki::Contrib::DBCacheContrib::Map("a=1 b=2");
+  $array = new TWiki::Contrib::DBCacheContrib::Array();
+  $map = new TWiki::Contrib::DBCacheContrib::Map();
 
   $array->add("string in array");
   $array->add(-22348957);
@@ -44,12 +44,12 @@ sub tear_down {
 sub test_writeRead {
   my $this = shift;
 
-  my $a = new TWiki::Contrib::Archive("data.dat", "w");
+  my $a = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "w");
   $a->writeInt(1949);
   $a->writeObject($map);
   $a->close();
 
-  $a = new TWiki::Contrib::Archive("data.dat", "r");
+  $a = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "r");
   $this->assert_equals(1949,$a->readInt());
   my $m = $a->readObject();
   $a->close();
@@ -83,22 +83,22 @@ sub checkmap {
 # another process is trying to write
 sub test_writeDuringRead {
   my $this = shift;
-  my $a1 = new TWiki::Contrib::Archive("data.dat", "w");
+  my $a1 = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "w");
   $a1->writeByte('Y');
   $a1->close();
 
-  $a1 = new TWiki::Contrib::Archive("data.dat", "r");
+  $a1 = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "r");
   $this->assert_str_equals("Y",$a1->readByte());
   $a1->close();
 
-  $a1 = new TWiki::Contrib::Archive("data.dat", "r");
+  $a1 = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "r");
   # should now have a LOCK_SH, so a LOCK_EX should be blocked.
   # This open for write should block.
   my $inc = join(" ",@INC);
   my $cmd = <<DONE;
 | perl -e 'BEGIN{ \@INC=qw($inc); };
-require TWiki::Contrib::Archive;
-\$a = new TWiki::Contrib::Archive(\"data.dat\",
+require TWiki::Contrib::DBCacheContrib::Archive;
+\$a = new TWiki::Contrib::DBCacheContrib::Archive(\"data.dat\",
 \"w\");\$a->writeByte(\"X\");
 \$a->close();
 1;'
@@ -115,7 +115,7 @@ DONE
   # That should have unleashed the child process, so it will now write
   waitpid($pid,0);
   close(SUB);
-  $a1 = new TWiki::Contrib::Archive("data.dat", "r");
+  $a1 = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "r");
   $m = $a1->readByte();
   $a1->close();
   $this->assert_str_equals("X", $m);
@@ -124,7 +124,7 @@ DONE
 sub test_multipleReads {
   # make sure we can open the same file multiple times for read
   my $this = shift;
-  my $a1 = new TWiki::Contrib::Archive("data.dat", "w");
+  my $a1 = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "w");
   $a1->writeByte('X');
   $a1->writeByte('Y');
   $a1->writeByte('Z');
@@ -134,8 +134,8 @@ sub test_multipleReads {
   my $cmd = <<DONE;
 | perl -e '
 BEGIN{ \@INC=qw($inc); }
-require TWiki::Contrib::Archive;
-\$a = new TWiki::Contrib::Archive(\"data.dat\", \"r\");
+require TWiki::Contrib::DBCacheContrib::Archive;
+\$a = new TWiki::Contrib::DBCacheContrib::Archive(\"data.dat\", \"r\");
 die unless(\$a->readByte() eq \"X\");
 sleep(1);
 die unless(\$a->readByte() eq \"Y\");
@@ -170,15 +170,15 @@ DONE
 sub test_writeLock {
   my $this = shift;
   # make sure a file open for write can't be opened for write again
-  my $a1 = new TWiki::Contrib::Archive("data.dat", "w");
+  my $a1 = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "w");
   $a1->writeByte('Y');
 
   # Spawn a subprocess that tries to write
   my $inc = join(" ",@INC);
   my $cmd = <<DONE;
 | perl -e 'BEGIN{ \@INC=qw($inc); };
-require TWiki::Contrib::Archive;
-\$a = new TWiki::Contrib::Archive("data.dat", "w");
+require TWiki::Contrib::DBCacheContrib::Archive;
+\$a = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "w");
 \$a->writeByte("X");\$a->close(); 1;'
 DONE
   $cmd =~ s/\n//go;
@@ -192,7 +192,7 @@ DONE
   close(SUB);
 
   # Now we expect the child process to have dominated
-  $a1 = new TWiki::Contrib::Archive("data.dat", "r");
+  $a1 = new TWiki::Contrib::DBCacheContrib::Archive("data.dat", "r");
   $m = $a1->readByte();
   $this->assert_str_equals("X", $m);
   $a1->close();

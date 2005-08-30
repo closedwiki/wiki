@@ -1,13 +1,11 @@
 lib/TWiki/Plugins/FormQueryPlugin.pm  Main plugin script 
 lib/TWiki/Plugins/FormQueryPlugin/Arithmetic.pm  Arithmetic interpreter 
-lib/TWiki/Plugins/FormQueryPlugin/build.pl Build file
 lib/TWiki/Plugins/FormQueryPlugin/ColourMap.pm  Highlight map class 
 lib/TWiki/Plugins/FormQueryPlugin/TableFormat.pm  Table formatter 
 lib/TWiki/Plugins/FormQueryPlugin/TableDef.pm  Table format definition class 
 lib/TWiki/Plugins/FormQueryPlugin/Relation.pm  Topic relation class 
 lib/TWiki/Plugins/FormQueryPlugin/ReqDBSupport.pm  Extra features 
 lib/TWiki/Plugins/FormQueryPlugin/WebDB.pm  Subclass of Map for a whole web 
-lib/TWiki/Plugins/FormQueryPlugin/test.zip  Test::Unit tests 
 data/TWiki/FormQueryPlugin.txt  Plugin topic 
 bin/autocreate  Topic creation script 
 bin/tasknotify  Mailer script 

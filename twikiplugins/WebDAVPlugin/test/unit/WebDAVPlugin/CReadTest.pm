@@ -2,7 +2,7 @@ use strict;
 
 package CReadTest;
 
-use base qw(BaseFixture);
+use base qw(TWikiTestCase);
 
 use TWiki::Plugins::WebDAVPlugin;
 use TWiki::Plugins::WebDAVPlugin::Permissions;
@@ -18,7 +18,7 @@ use vars qw( $tmpdir );
 sub set_up {
   my $this = shift;
   $this->SUPER::set_up();
-  $tmpdir = "$BaseFixture::testDir/$$";
+  $tmpdir = "/tmp/$$";
   mkdir($tmpdir);
 }
 

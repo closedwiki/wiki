@@ -4,7 +4,7 @@
 #
 use strict;
 
-use TWiki::Contrib::Array;
+use TWiki::Contrib::DBCacheContrib::Array;
 
 =begin text
 
@@ -17,7 +17,7 @@ support toString.
 
 =cut
 
-{ package TWiki::Contrib::Map;
+package TWiki::Contrib::DBCacheContrib::Map;
 
 =begin text
 
@@ -29,42 +29,42 @@ value may be a word or a quoted string (no escapes!)
 
 =cut
 
-  sub new {
+sub new {
     my ( $class, $string ) = @_;
     my $this = bless( {}, $class );
     $this->{keys} = ();
 
     if ( defined( $string ) ) {
-      my $orig = $string;
-      my $n = 1;
-      while ( $string !~ m/^[\s,]*$/o ) {
-	if ( $string =~ s/^\s*(\w[\w\.]*)\s*=\s*\"(.*?)\"//o ) {
-	  $this->set( $1, $2 );
-	} elsif ( $string =~ s/^\s*(\w[\w\.]*)\s*=\s*([^\s,\}]*)//o ) {
-	  $this->set( $1, $2 );
-	} elsif ( $string =~ s/^\s*\"(.*?)\"//o ) {
-	  $this->set( "\$$n", $1 );
-	  $n++;
-	} elsif ( $string =~ s/^\s*(\w[\w+\.]*)\b//o ) {
-	  $this->set( $1, "on" );
-	} elsif ( $string =~ s/^[^\w\.\"]//o ) {
-	  # skip bad char or comma
-	} else {
-	  # some other problem
-	  die "TWiki::Contrib::Map: Badly formatted attribute string at '$string' in '$orig'";
-	}
-      }
+        my $orig = $string;
+        my $n = 1;
+        while ( $string !~ m/^[\s,]*$/o ) {
+            if ( $string =~ s/^\s*(\w[\w\.]*)\s*=\s*\"(.*?)\"//o ) {
+                $this->set( $1, $2 );
+            } elsif ( $string =~ s/^\s*(\w[\w\.]*)\s*=\s*([^\s,\}]*)//o ) {
+                $this->set( $1, $2 );
+            } elsif ( $string =~ s/^\s*\"(.*?)\"//o ) {
+                $this->set( "\$$n", $1 );
+                $n++;
+            } elsif ( $string =~ s/^\s*(\w[\w+\.]*)\b//o ) {
+                $this->set( $1, "on" );
+            } elsif ( $string =~ s/^[^\w\.\"]//o ) {
+                # skip bad char or comma
+            } else {
+                # some other problem
+                die "TWiki::Contrib::DBCacheContrib::Map: Badly formatted attribute string at '$string' in '$orig'";
+            }
+        }
     }
     return $this;
-  }
+}
 
-  # PUBLIC dispose of this map, breaking any circular references
-  sub DESTROY {
+# PUBLIC dispose of this map, breaking any circular references
+sub DESTROY {
     my $this = shift;
     #print STDERR "Destroy ",ref($this),"\n";
     $this->{keys} = undef;
     # should be enough; nothing else should be pointing to the keys
-  }
+}
 
 =begin text
 
@@ -74,10 +74,10 @@ Get the value for a key, but without any subfield field expansion
 
 =cut
 
-  sub fastget {
+sub fastget {
     my ( $this, $attr ) = @_;
     return $this->{keys}{$attr};
-  }
+}
 
 =begin text
 
@@ -97,34 +97,34 @@ Where the result of a subfield expansion is another object (a Map or an Array) t
 get("UserTable[0].Surname", $web);
 </verbatim>
 
-See also =TWiki::Contrib::Array= for syntax that applies to arrays.
+See also =TWiki::Contrib::DBCacheContrib::Array= for syntax that applies to arrays.
 
 =cut
 
-  sub get {
+sub get {
     my ( $this, $key, $root ) = @_;
 
 	# If empty string, then we are the required result
 	return $this unless $key;
 
     if ( $key =~ m/^(\w+)(.*)$/o ) {
-	  # Sub-expression
-      my $field = $this->{keys}{$1};
-      return $field->get( $2, $root ) if ( $2 && ref( $field ));
-	  return $field;
+        # Sub-expression
+        my $field = $this->{keys}{$1};
+        return $field->get( $2, $root ) if ( $2 && ref( $field ));
+        return $field;
     } elsif ( $key =~ m/^\.(.*)$/o ) {
-	  return $this->get( $1, $root );
+        return $this->get( $1, $root );
     } elsif ( $key =~ m/^\[(.*)$/o ) {
-	  my ( $one, $two ) = TWiki::Contrib::Array::mbrf( "[", "]", $1 );
-	  my $field = $this->get( $one, $root );
-	  return $field->get( $two, $root ) if ( $two  && ref( $field ));
-	  return $field;
+        my ( $one, $two ) = TWiki::Contrib::DBCacheContrib::Array::mbrf( "[", "]", $1 );
+        my $field = $this->get( $one, $root );
+        return $field->get( $two, $root ) if ( $two  && ref( $field ));
+        return $field;
     } elsif ( $key =~ m/^#(.*)$/o ) {
-	  return $root->get( $1, $root );
+        return $root->get( $1, $root );
     } else {
-	  die "ERROR: bad Map expression at $key";
+        die "ERROR: bad Map expression at $key";
     }
-  }
+}
 
 =begin text
 
@@ -135,19 +135,19 @@ Set the given key, value pair in the map.
 
 =cut
 
- sub set {
+sub set {
     my ( $this, $attr, $val ) = @_;
     if ( $attr =~ m/^(\w+)\.(.*)$/o ) {
-      $attr = $1;
-      my $field = $2;
-      if ( !defined( $this->{keys}{$attr} )) {
-	$this->{keys}{$attr} = new TWiki::Contrib::Map();
-      }
-      $this->{keys}{$attr}->set( $field, $val );
+        $attr = $1;
+        my $field = $2;
+        if ( !defined( $this->{keys}{$attr} )) {
+            $this->{keys}{$attr} = new TWiki::Contrib::DBCacheContrib::Map();
+        }
+        $this->{keys}{$attr}->set( $field, $val );
     } else {
-      $this->{keys}{$attr} = $val;
+        $this->{keys}{$attr} = $val;
     }
-  }
+}
 
 =begin text
 
@@ -156,11 +156,11 @@ Get the size of the map
 
 =cut
 
-  sub size {
+sub size {
     my $this = shift;
 
     return scalar( keys( %{$this->{keys}} ));
-  }
+}
 
 =begin text
 
@@ -170,19 +170,19 @@ Remove an entry at an index from the array. Return the old value.
 
 =cut
 
-  sub remove {
+sub remove {
     my ( $this, $attr ) = @_;
 
     if ( $attr =~ m/^(\w+)\.(.*)$/o && ref( $this->{keys}{$attr} )) {
-      $attr = $1;
-      my $field = $2;
-      return $this->{keys}{$attr}->remove( $field );
+        $attr = $1;
+        my $field = $2;
+        return $this->{keys}{$attr}->remove( $field );
     } else {
-      my $val = $this->{keys}{$attr};
-      delete( $this->{keys}{$attr} );
-      return $val;
+        my $val = $this->{keys}{$attr};
+        delete( $this->{keys}{$attr} );
+        return $val;
     }
-  }
+}
 
 =begin text
 
@@ -192,11 +192,11 @@ Get a "perl" array of the keys in the map, suitable for use with =foreach=
 
 =cut
 
-  sub getKeys {
+sub getKeys {
     my $this = shift;
 
     return keys( %{$this->{keys}} );
-  }
+}
 
 =begin text
 
@@ -206,33 +206,33 @@ Get a "perl" array of the values in the Map, suitable for use with =foreach=
 
 =cut
 
-  sub getValues {
+sub getValues {
     my $this = shift;
 
     return values( %{$this->{keys}} );
-  }
+}
 
 =begin text
 
 ---+++ =search($search)= -> search result
-   * =$search* =TWiki::Contrib::Search object to use in the search
+   * =$search* =TWiki::Contrib::DBCacheContrib::Search object to use in the search
 Search the map for keys that match with the given object.
-values. Return a =TWiki::Contrib::Array= of matching keys.
+values. Return a =TWiki::Contrib::DBCacheContrib::Array= of matching keys.
 
 =cut
 
-  sub search {
+sub search {
     my ( $this, $search ) = @_;
-    my $result = new TWiki::Contrib::Array();
+    my $result = new TWiki::Contrib::DBCacheContrib::Array();
 
     foreach my $meta ( values( %{$this->{keys}} )) {
-      if ( $search->matches( $meta )) {
-		$result->add( $meta );
-      }
+        if ( $search->matches( $meta )) {
+            $result->add( $meta );
+        }
     }
 
     return $result;
-  }
+}
 
 =begin text
 
@@ -243,73 +243,73 @@ Generates an HTML string representation of the object.
 
 =cut
 
-  sub toString {
+sub toString {
     my ( $this, $limit, $level, $strung ) = @_;
+
     if ( !defined( $strung )) {
-      $strung = {};
-    } elsif ( $strung->{$this} ) {
-      return "$this";
+        $strung = {};
+    } elsif( $strung->{$this} ) {
+        return $this;
     }
     $level = 0 unless (defined($level));
     $limit = 2 unless (defined($limit));
     if ( $level == $limit ) {
-      return "$this.....";
+        return $this.'.....';
     }
     $strung->{$this} = 1;
     my $key;
-    my $ss = "$this<ul>";
+    my $ss = '';
     foreach $key ( keys %{$this->{keys}} ) {
-      $ss .= "<li>$key = ";
-      my $entry = $this->{keys}{$key};
-      if ( ref( $entry )) {
-	$ss .= $entry->toString( $limit, $level + 1, $strung );
-      } elsif ( defined( $entry )) {
-	$ss .= "\"$entry\"";
-      } else {
-	$ss .= "UNDEF";
-      }
-      $ss .= "</li>";
+        my $item = $key.' = ';
+        my $entry = $this->{keys}{$key};
+        if ( ref( $entry )) {
+            $item .= $entry->toString( $limit, $level + 1, $strung );
+        } elsif ( defined( $entry )) {
+            $item .= '"'.$entry.'"';
+        } else {
+            $item .= 'UNDEF';
+        }
+        $ss .= CGI::li( $item );
     }
-    return "$ss</ul>";
-  }
+    return CGI::ul($ss);
+}
 
 =begin text
 
 ---+++ write($archive)
-   * =$archive= - the TWiki::Contrib::Archive being written to
+   * =$archive= - the TWiki::Contrib::DBCacheContrib::Archive being written to
 Writes this object to the archive. Archives are used only if Storable is not available. This
 method must be overridden by subclasses is serialisation of their data fields is required.
 
 =cut
 
-  sub write {
+sub write {
     my ( $this, $archive ) = @_;
 
     $archive->writeInt( $this->size());
     foreach my $key ( keys %{$this->{keys}} ) {
-      $archive->writeObject( $key );
-      $archive->writeObject( $this->{keys}{$key} );
+        $archive->writeObject( $key );
+        $archive->writeObject( $this->{keys}{$key} );
     }
-  }
+}
 
 =begin text
 
 ---+++ read($archive)
-   * =$archive= - the TWiki::Contrib::Archive being read from
+   * =$archive= - the TWiki::Contrib::DBCacheContrib::Archive being read from
 Reads this object from the archive. Archives are used only if Storable is not available. This
 method must be overridden by subclasses is serialisation of their data fields is required.
 
 =cut
 
-  sub read {
+sub read {
     my ( $this, $archive ) = @_;
 
     my $sz = $archive->readInt();
     while ( $sz-- > 0 ) {
-      my $key = $archive->readObject();
-      $this->{keys}{$key} = $archive->readObject();
+        my $key = $archive->readObject();
+        $this->{keys}{$key} = $archive->readObject();
     }
-  }
 }
 
 1;

@@ -1,7 +1,7 @@
 package SearchTest;
 
-use TWiki::Contrib::Map;
-use TWiki::Contrib::Search;
+use TWiki::Contrib::DBCacheContrib::Map;
+use TWiki::Contrib::DBCacheContrib::Search;
 use Time::ParseDate;
 use base qw(Test::Unit::TestCase);
 
@@ -13,14 +13,14 @@ sub new {
 
 sub set_up {
   my $this = shift;
-  $this->{map} = new TWiki::Contrib::Map("
+  $this->{map} = new TWiki::Contrib::DBCacheContrib::Map("
      string = \"String\",
      number = 99,
      date = \"3-Jul-1960\"");
   # date's a sunday!
-  my $mother = new TWiki::Contrib::Map("who=Mother");
+  my $mother = new TWiki::Contrib::DBCacheContrib::Map("who=Mother");
   $this->{map}->set("mother", $mother);
-  my $gran = new TWiki::Contrib::Map("who=GrandMother");
+  my $gran = new TWiki::Contrib::DBCacheContrib::Map("who=GrandMother");
   $mother->set("mother", $gran);
 }
 
@@ -31,24 +31,24 @@ sub tear_down {
 
 sub test_empty {
   my $this = shift;
-  my $search = new TWiki::Contrib::Search("");
+  my $search = new TWiki::Contrib::DBCacheContrib::Search("");
   $this->assert_not_null( $search );
   $this->assert_equals(1,$search->matches($this->{map}));
 }
 
 sub test_badparse {
   my $this = shift;
-  eval {  new TWiki::Contrib::Search("WITHIN_DAYS"); };
+  eval {  new TWiki::Contrib::DBCacheContrib::Search("WITHIN_DAYS"); };
   $this->assert_not_null($@,$@);
-  eval {  new TWiki::Contrib::Search("x WITHIN_DAYS 30"); };
+  eval {  new TWiki::Contrib::DBCacheContrib::Search("x WITHIN_DAYS 30"); };
   $this->assert_not_null($@,$@);
-  eval {  new TWiki::Contrib::Search("z WITHIN_DAYS < 3"); };
+  eval {  new TWiki::Contrib::DBCacheContrib::Search("z WITHIN_DAYS < 3"); };
   $this->assert_not_null($@,$@);
 }
 
 sub check {
   my ( $this, $s, $r ) = @_;
-  my $search = new TWiki::Contrib::Search($s);
+  my $search = new TWiki::Contrib::DBCacheContrib::Search($s);
   $this->assert_equals($r,
 		       $search->matches($this->{map}),
 		       $search->toString().
@@ -102,7 +102,7 @@ sub test_dateops {
 
 sub test_dateops2 {
   my $this = shift;
-  TWiki::Contrib::Search::forceTime("30 jun 1960");#thursday
+  TWiki::Contrib::DBCacheContrib::Search::forceTime("30 jun 1960");#thursday
   $this->check("date WITHIN_DAYS '4'", 1);
   $this->check("date WITHIN_DAYS '3'", 1);
   $this->check("date WITHIN_DAYS '2'", 1); # th & fri
@@ -112,7 +112,7 @@ sub test_dateops2 {
 
 sub test_dateops3 {
   my $this = shift;
-  TWiki::Contrib::Search::forceTime("3 jul 1960");
+  TWiki::Contrib::DBCacheContrib::Search::forceTime("3 jul 1960");
   $this->check("date WITHIN_DAYS '2'", 1);
   $this->check("date WITHIN_DAYS '1'", 1);
   $this->check("date WITHIN_DAYS '0'", 1);
@@ -120,7 +120,7 @@ sub test_dateops3 {
 
 sub test_dateops4 {
   my $this = shift;
-  TWiki::Contrib::Search::forceTime("4 jul 1960");
+  TWiki::Contrib::DBCacheContrib::Search::forceTime("4 jul 1960");
   $this->check("date WITHIN_DAYS '2'", 0);
   $this->check("date WITHIN_DAYS '1'", 0);
   $this->check("date WITHIN_DAYS '0'", 0);

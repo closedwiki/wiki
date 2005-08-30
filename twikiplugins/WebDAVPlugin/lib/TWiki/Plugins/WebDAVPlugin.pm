@@ -31,12 +31,6 @@ $VERSION = 1.012;
 
 my $pluginName = 'WebDAVPlugin';
 
-my @dependencies =
-  (
-   { package => 'TWiki::Plugins', constraint => '>= 1.000' },
-   { package => 'TDB_File' }
-  );
-
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
 
@@ -47,16 +41,6 @@ sub beforeSaveHandler {
   my ( $text, $topic, $web ) = @_;
 
   unless ($initialised) {
-      # Late initialisation
-      if ( defined( &TWiki::Func::checkDependencies ) ) {
-          my $err = TWiki::Func::checkDependencies( $pluginName,
-                                                    \@dependencies );
-          if( $err ) {
-              TWiki::Func::writeWarning( $err );
-              print STDERR $err; # print to webserver log file
-              return 0; # plugin initialisation failed
-          }
-      }
       my $twn = TWiki::Func::getTwikiWebname();
       my $pd = TWiki::Func::getPubDir();
       my $pdb = TWiki::Func::getPreferencesValue( "WEBDAVPLUGIN_LOCK_DB" );

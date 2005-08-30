@@ -16,7 +16,7 @@ much faster, because it is implemented in C.
 
 =cut
 
-{ package TWiki::Contrib::Archive;
+{ package TWiki::Contrib::DBCacheContrib::Archive;
 
   # Must be first in an archive, or it isn't an archive
   my $ARCHIVE_ID = 0x76549876;

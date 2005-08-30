@@ -3,13 +3,23 @@ use Benchmark;
 
 package WebDBTest;
 
-use base qw(BaseFixture);
+use base qw(TWikiTestCase);
 
 use TWiki::Plugins::FormQueryPlugin::WebDB;
 use TWiki::Func;
 
+my $testweb = "TemporaryTestFormQueryPlugin";
 my $db;
 my $truesum;
+my $twiki;
+my $testDir;
+
+BEGIN {
+    $testDir = `pwd`; chomp($testDir);
+    while( ! -e "$testDir/test/unit/FormQueryPlugin/testDB.dat" ) {
+        last unless $testDir =~ s#/[^/]*$##;
+    }
+}
 
 sub new {
   my $self = shift()->SUPER::new(@_);
@@ -17,30 +27,47 @@ sub new {
 }
 
 sub set_up {
-  my $this = shift;
+    my $this = shift;
 
-  $this->SUPER::set_up();
+    $this->SUPER::set_up();
 
-  my $dbt = BaseFixture::readFile("./testDB.dat");
-  foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
-    if ( $t =~ m/\"(.*?)\"/o ) {
-      BaseFixture::writeTopic("Test", $1, $t);
+    $twiki = new TWiki( "TestUser1" );
+    $TWiki::Plugins::SESSION = $twiki;
+
+    $twiki->{store}->createWeb($twiki->{user}, $testweb);
+
+    open(DB,"<$testDir/test/unit/FormQueryPlugin/testDB.dat") ||
+      die "No test database";
+    undef $/;
+    my $dbt = <DB>;
+    close(DB);
+    foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
+        if ( $t =~ m/\"(.*?)\"/o ) {
+            TWiki::Func::saveTopicText($testweb, $1, $t);
+        }
     }
-  }
 
-  $dbt = BaseFixture::readFile("./testDB.dat");
-  $truesum = 0;
-  foreach my $t ( split(/\n/,$dbt)) {
-    if ( $t =~ /\|\s*(\d+)\s*\|/o ) {
-      $truesum += $1;
+    $truesum = 0;
+    foreach my $t ( split(/\n/,$dbt)) {
+        if ( $t =~ /\|\s*(\d+)\s*\|/o ) {
+            $truesum += $1;
+        }
     }
-  }
 
-  BaseFixture::setPreference("FQRELATIONS","Dir%B_%A subdir Dir%B; Dir%A_%C_%B subsubdir Dir%A_%C");
-  BaseFixture::setPreference("FQTABLES", "FileTable,DirTable");
-  BaseFixture::setPreference("FQHIGHLIGHTMAP", "PrettyPrint");
-  #$FormQueryPlugin::WebDB::storable = 0;
-  $this->{db} = new FormQueryPlugin::WebDB( "Test" );
+    # re-init to read preferences
+    my $query = new CGI("");
+    $query->path_info("/$testweb/WebPreferences");
+    $twiki = new TWiki( "TestUser1", $query );
+    $TWiki::Plugins::SESSION = $twiki;
+    #$ TWiki::Plugins::FormQueryPlugin::WebDB::storable = 0;
+    $this->{db} = new TWiki::Plugins::FormQueryPlugin::WebDB( $testweb );
+
+}
+
+sub tear_down {
+    my $this = shift;
+    $this->SUPER::tear_down();
+    $twiki->{store}->removeWeb($twiki->{user}, $testweb);
 }
 
 sub test_formQuery {
@@ -48,8 +75,10 @@ sub test_formQuery {
   my $db = $this->{db};
 
   my $res = $db->formQuery("TEST", "name=fred search=\"topic='Dir1'\"");
+
   $this->assert_str_equals("", $res);
   my $qr = $db->{_queries}{fred};
+  $this->assert_not_null($qr);
   $this->assert_equals(1, $qr->size());
   $qr = $qr->get(0);
   $qr = $qr->get("topic");
@@ -138,7 +167,7 @@ sub test_tables {
 sub test_sumQuery {
   my $this = shift;
   my $db = $this->{db};
-  my $res=$db->formQuery("TEST", "name=fred search=\"\" extract=FileTable");
+  my $res=$db->formQuery("TEST", 'name=fred search="" extract=FileTable');
   $this->assert_str_equals("", $res);
   my $sum = $db->sumQuery("TEST","query=fred field=Size");
 
@@ -160,18 +189,18 @@ sub test_createNewTopic1 {
   my $this = shift;
   my $db = $this->{db};
 
-  my $res = $db->createNewTopic("TEST", "relation=subdir text=Blah form=DirForm template=FileTemplate", "Test", "Dir1");
+  my $res = $db->createNewTopic("TEST", "relation=subdir text=Blah form=DirForm template=FileTemplate", $testweb, "Dir1");
 
-  $this->assert_str_equals("<form name=\"topiccreator0\" action=\"%SCRIPTURL%/autocreate/Test/Dir1\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"subdir\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
+  $this->assert_str_equals("<form name=\"topiccreator0\" action=\"%SCRIPTURL%/autocreate/$testweb/Dir1\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"subdir\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
 
   $res = $db->deriveNewTopic( "subdir", "Dir1");
   $this->assert_str_equals("Dir1_\n", $res);
   $res = $db->deriveNewTopic( "copy", "Dir1");
   $this->assert_str_equals("Dir\n", $res);
 
-  $res = $db->createNewTopic("TEST", "base=Dir75 relation=copy text=Blah form=DirForm template=FileTemplate", "Test", "TestTopic");
+  $res = $db->createNewTopic("TEST", "base=Dir75 relation=copy text=Blah form=DirForm template=FileTemplate", $testweb, "TestTopic");
 
-  $this->assert_str_equals("<form name=\"topiccreator1\" action=\"%SCRIPTURL%/autocreate/Test/Dir75\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"copy\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
+  $this->assert_str_equals("<form name=\"topiccreator1\" action=\"%SCRIPTURL%/autocreate/$testweb/Dir75\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"copy\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
 }
 
 sub test_checkTableParse {

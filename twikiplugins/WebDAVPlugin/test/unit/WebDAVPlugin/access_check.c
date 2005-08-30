@@ -1,5 +1,5 @@
 #define PROT_PRINT 1
-#include "dav_twiki.c"
+#include "../../../lib/twiki_dav/dav_twiki.c"
 int main(int argc, const char** argv) {
   int ret;
   const char* web = argv[1];

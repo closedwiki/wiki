@@ -1,12 +1,10 @@
 #!/usr/bin/perl -w
 #
 # Build class for WebDAVPlugin
-# Requires the environment variable TWIKI_LIBS to be
-# set to point at the AttrsContrib code repository root
 
 # Standard preamble
 BEGIN {
-  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS})) {
+  foreach my $pc (split(/:/, $ENV{TWIKI_LIBS} || '')) {
     unshift @INC, $pc;
   }
 }
@@ -25,8 +23,8 @@ sub new {
 # override to build C program in test dir
 sub target_test {
   my $this = shift;
-  $this->cd("$this->{basedir}/$this->{libdir}/WebDAVPlugin/test");
-  $this->sys_action("gcc access_check.c -I ../../../../twiki_dav -g -o accesscheck -ltdb");
+  $this->cd("$this->{basedir}/test/unit/WebDAVPlugin");
+  $this->sys_action("gcc access_check.c -I ../lib/twiki_dav -g -o accesscheck -ltdb");
   $this->SUPER::target_test;
 }
 

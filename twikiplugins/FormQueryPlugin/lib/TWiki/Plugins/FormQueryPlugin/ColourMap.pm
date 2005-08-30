@@ -7,7 +7,7 @@ use strict;
 # colour map, it has now been morphed to be more powerful, with
 # the ability to embed the matched string inside a more complex
 # formatting statement.
-package FormQueryPlugin::ColourMap;
+package TWiki::Plugins::FormQueryPlugin::ColourMap;
 
 # Load the colour map by parsing a newline-separated list of
 # mappings from re to colour. For example,
@@ -17,15 +17,11 @@ package FormQueryPlugin::ColourMap;
 #
 sub new {
     my ( $class, $text ) = @_;
-    my $this = {};
+    my $this = bless( {}, $class );
 
-    foreach my $line ( split( /\n/, $text )) {
-        if ( $line =~ m/\s+\*\s+\/(.*?)\/\s*=\s*(.*)$/ ) {
-            $this->{map}{$1} = $2;
-        }
-    }
+    $text =~ s/^\s+\*\s+\/(.*?)\/\s*=\s*(.*)$/$this->{map}{$1} = $2/gem;
 
-    return bless( $this, $class );
+    return $this;
 }
 
 # PUBLIC map the test string into a formatted string
