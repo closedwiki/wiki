@@ -36,10 +36,9 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
 		* Set DEBUG = 0
 
-	* Make sortable:
-		* #Set SORT = attachments
-		* Set SORT = all
+	* Make all tables in a topic sortable. If this is set to =all=, all tables that have a header row (including those that do not have %TABLE before them) will be made sortable. If set to =none=, only tables with %TABLE will be sortable. Topic rendering is faster if this is set to =none=.
 		* #Set SORT = none
+		* Set SORT = all
 
 	* Default table attributes:
 		* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"

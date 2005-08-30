@@ -22,10 +22,10 @@ use Time::Local;
 
 use vars qw( $translationToken
              $insideTABLE $tableCount @curTable $sortCol $requestedTable $up
-             $doBody $doAttachments $currTablePre $tableWidth @columnWidths
+             $sortTablesInText $sortAttachments $currTablePre $tableWidth @columnWidths
              $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing 
              @headerAlign @dataAlign $vAlign
-             $headerBg $headerColor $doSort $twoCol @dataBg @dataColor
+             $headerBg $headerColor $sortAllTables $twoCol @dataBg @dataColor
              @isoMonth
              $headerRows $footerRows
              @fields $upchar $downchar $diamondchar $url
@@ -51,7 +51,7 @@ BEGIN {
 };
 
 sub _setDefaults {
-    $doSort       = $doBody;
+    $sortAllTables = $sortTablesInText;
     $tableBorder  = 1;
     $tableFrame   = '';
     $tableRules   = '';
@@ -92,7 +92,7 @@ sub _parseParameters {
 
     $tmp = $params{sort};
     $tmp = '0' if( $tmp && $tmp =~ /^off$/oi );
-    $doSort = $tmp if( $tmp && $tmp ne '' );
+    $sortAllTables = $tmp if( $tmp && $tmp ne '' );
 
     $tmp = $params{tableborder};
     $tableBorder = $tmp if( $tmp && $tmp ne '' );
@@ -266,27 +266,28 @@ sub _processTableRow {
     return $currTablePre.'<nop>'; # Avoid TWiki converting empty lines to new paras
 }
 
-# Do sort?
-sub doIt {
+# Determine whether to generate sorting headers for this table. The header
+# indicates the context of the table (body or file attachment)
+sub _shouldISortThisTable {
     my( $header ) = @_;
 
     # Attachments table?
     if( $header->[0]->[0] =~ /FileAttachment/ ) {
-        return $doAttachments;
+        return $sortAttachments;
     }
 
-    my $doIt = $doSort;
-    if( $doSort ) {
+    my $sortThisTable = $sortAllTables;
+    if( $sortAllTables ) {
         # All cells in header are headings?
         foreach my $cell ( @$header ) {
             if( $cell->[2] ne 'th' ) {
-                $doIt = 0;
+                $sortThisTable = 0;
                 last;
             }
         }
     }
 
-    return $doIt;
+    return $sortThisTable;
 }
 
 # Guess if a column is a date (4), number (3) or plain text (0)
@@ -334,7 +335,7 @@ sub emitTable {
         $footerRows = @curTable - $headerRows; # and footer to whatever is left
     }
     my $direction = $up ? 0 : 1;
-    my $doIt = doIt( $curTable[$headerRows-1] );
+    my $sortThisTable = _shouldISortThisTable( $curTable[$headerRows-1] );
     my $tattrs = { class => 'twikiTable',
                    border => $tableBorder,
                    cellspacing => $cellSpacing,
@@ -477,7 +478,7 @@ sub emitTable {
                 if( $headerColor ) {
                     $cell = CGI::font( { color => $headerColor }, $cell );
                 }
-                if( $doIt && $rowCount == $headerRows - 1 ) {
+                if( $sortThisTable && $rowCount == $headerRows - 1 ) {
                     if( $cell =~ /\[\[|href/o ) {
                         $cell .= ' '.CGI::a({ href => $url.
                                                 'sortcol='.$colCount.
@@ -553,14 +554,14 @@ sub handler {
         $requestedTable = $cgi->param( 'table' );
         $up = $cgi->param( 'up' );
 
-        $doBody = 0;
-        $doAttachments = 0;
+        $sortTablesInText = 0;
+        $sortAttachments = 0;
         my $tmp = TWiki::Func::getPreferencesValue( 'TABLEPLUGIN_SORT' );
         if( ! $tmp || $tmp =~ /^all$/oi ) {
-            $doBody = 1;
-            $doAttachments = 1;
+            $sortTablesInText = 1;
+            $sortAttachments = 1;
         } elsif( $tmp =~ /^attachments$/oi ) {
-            $doAttachments =1;
+            $sortAttachments =1;
         }
 
         _setDefaults();
@@ -577,23 +578,26 @@ sub handler {
     undef $initSort;
     $insideTABLE = 0;
 
-    my $acceptable = 0;
+    my $defaultSort = $sortAllTables;
+
+    my $acceptable = $sortAllTables;
     my @lines = split( /\r?\n/, $_[0] );
     for ( @lines ) {
         if( s/%TABLE(?:{(.*?)})?%/_parseParameters($1)/se ) {
+            # %TABLE tables are always sortable
+            $sortAllTables = 1;
             $acceptable = 1;
         }
         elsif( $acceptable &&
                  s/^(\s*)\|(.*\|\s*)$/_processTableRow($1,$2)/eo ) {
             $insideTABLE = 1;
         }
-        else {
-            if( $insideTABLE ) {
-                $_ = emitTable() . $_;
-                $insideTABLE = 0;
-                undef $initSort;
-            }
-            $acceptable = 0;
+        elsif( $insideTABLE ) {
+            $_ = emitTable() . $_;
+            $insideTABLE = 0;
+            undef $initSort;
+            $sortAllTables = $defaultSort;
+            $acceptable = $defaultSort;
         }
     }
     $_[0] = join( "\n", @lines );
