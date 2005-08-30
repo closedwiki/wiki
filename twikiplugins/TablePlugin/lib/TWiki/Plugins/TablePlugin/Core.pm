@@ -433,8 +433,6 @@ sub emitTable {
             my $cell = $fcell->[0];
             my $attr = $fcell->[1] || {};
 
-            $attr->{class} = 'twikiTable' unless $attr->{class};
-
             if( $type eq 'th' ) {
                 # reset data color count to start with first color after
                 # each table heading
@@ -521,7 +519,7 @@ sub emitTable {
             use strict 'refs';
             $colCount++;
         }
-        $text .= $currTablePre.CGI::Tr( { class=>'twikiTable' }, $rowtext )."\n";
+        $text .= $currTablePre.CGI::Tr( {}, $rowtext )."\n";
         $rowCount++;
         $dataColorCount++;
     }
