@@ -288,8 +288,8 @@ sub verify_releaselocksonsave {
     my $text = <F>;
     close(F);
     $this->assert_matches(qr/version="1.3"/, $text);
-    $this->assert_matches(qr/<del>Changed<\/del><ins>Sausage<\/ins>/, $text);
-    $this->assert_matches(qr/<del>Lines<\/del><ins>Chips<\/ins>/, $text);
+    $this->assert_matches(qr/<div\s+class="twikiConflict">.+version\s+2.*<\/div>\s*Changed\nLines[\s.]+<div/, $text);
+    $this->assert_matches(qr/<div\s+class="twikiConflict">.+version\s+new.*<\/div>\s*Sausage\nChips[\s.]+<div/, $text);
     $this->assert_matches(qr/%META:TOPICINFO{author="$testUser2"/, $text);
 
 }
