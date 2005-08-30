@@ -46,7 +46,8 @@ sub initPlugin {
 sub preRenderingHandler {
     ### my ( $text, $removed ) = @_;
 
-    return unless $_[0] =~ /%TABLE{.*?}%/;
+    my $sort = TWiki::Func::getPreferencesValue( 'TABLEPLUGIN_SORT' );
+    return unless $sort =~ /^(all|attachments)$/ || $_[0] =~ /%TABLE{.*?}%/;
 
     # on-demand inclusion
     eval 'use TWiki::Plugins::TablePlugin::Core';
