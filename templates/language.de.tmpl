@@ -1,4 +1,5 @@
-%TMPL:INCLUDE{"language-base.tmpl"}%
+%{ include the base template, so undefined strings default to English }%
+%TMPL:INCLUDE{"language.tmpl"}%
 
 %TMPL:DEF{"i18n:edit"}%Editieren%TMPL:END%
 %TMPL:DEF{"i18n:Tab-edit"}%<span class="patternAccessKey">E</span>ditieren%TMPL:END%

@@ -282,6 +282,12 @@ sub _readTemplateFile {
     $name =~ s/[^A-Za-z0-9_,.]//go;
     $skins =~ s/[^A-Za-z0-9_,.]//go;
 
+    # if the name ends in .tmpl, then this is an explicit include from
+    # the templates directory. No further searching required.
+    if( $name =~ /\.tmpl$/ ) {
+        return TWiki::readFile( $TWiki::cfg{TemplateDir}.'/'.$name );
+    }
+
     my @skinList = split( /,+/, $skins );
 
     unless( defined( $this->{files} )) {
@@ -365,6 +371,7 @@ sub _readTemplateFile {
     # SMELL: should really
     #throw Error::Simple( 'Template '.$name.' was not found' );
     # instead of
+    #print STDERR "Template $name could not be found anywhere\n";
     return '';
 }
 

@@ -54,6 +54,8 @@ See [[TWikiVariables#VarIFCONTEXT][IFCONTEXT]] for details of supported context 
 
 Templates are stored either in the ==twiki/templates== directory, or can also be read from user topics. As an example, ==twiki/templates/view.tmpl== is the default template file for the ==twiki/bin/view== script.
 
+Templates that are included using =%TMPL:INCLUDE%= are also found using the same search algorithm, unless you explicitly put ='.tmpl'= at the end of the template name. In this case, the string is assumed to be the full name of a template in the =templates= directory, and the algorithm isn't used.
+
 TWiki uses the following search order to determine which template file or topic to use for a particular script. The _skin path_ is set as described in TWikiSkins.
 
 <blockquote>
