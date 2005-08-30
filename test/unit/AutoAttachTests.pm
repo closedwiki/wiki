@@ -6,6 +6,8 @@ use strict;
 # 3) Turn autoattach = on. Ask for the list of attachments. attachmentAdded should appear. attachmentMissing should not.
 
 
+# SMELL: this looks very incomplete
+
 package AutoAttachTests;
 
 use base qw(TWikiTestCase);
@@ -19,21 +21,15 @@ use TWiki::UI::Save;
 use TWiki::OopsException;
 use Devel::Symdump;
 
-my $testweb = "TemporaryStoreAutoAttachTestWeb";
-
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
 }
 
+my $testweb = "TemporaryStoreAutoAttachTestWeb";
 my $session;
-
 my $testUser1;
 my $testUser2;
-
-my $testWeb = "TemporaryAutoAttachTestsWeb";
-my $twiki;
-
 my %cfg;
 
 use Data::Dumper;
@@ -64,11 +60,11 @@ sub saveTopicWithMissingAttachment {
 	my $this = shift;
 	my $topic = shift;
 	my $file = 'bogusAttachment.txt';
+
+	$this->assert($session->{store}->topicExists($testweb, $topic));
 	
-	$this->assert($session->{store}->topicExists($testWeb, $topic));
-	
-    my ($text, $meta) = $session->{store}->readTopic( 
-    				$session->{user}, $testWeb, $topic );
+    my ($meta, $text) = $session->{store}->readTopic( 
+    				$session->{user}, $testweb, $topic );
 	
 	$meta->putKeyed( 'FILEATTACHMENT',
                        {
@@ -76,14 +72,14 @@ sub saveTopicWithMissingAttachment {
                              version => '',
                              path    => $file,
                              size    => 2000000,
-                             date    => 2000000, 
+                             date    => 2000000,
                              user    => "TWikiContributor",
                              comment => "I am a figment of TWiki's imagination",
                              attr    => ''
                         }
                        );
-	$twiki->{store}->saveTopic(
-					 $session->{user}, $testWeb, $topic, $text, $meta );
+	$session->{store}->saveTopic(
+					 $session->{user}, $testweb, $topic, $text, $meta );
 }
 
 sub sneakAttachmentsAddedToTopic {
@@ -106,8 +102,6 @@ sub sneakAttachmentsAddedToTopic {
 }
 
 sub test_no_autoattach {
-
-
 }
 
 sub test_autoattach {
@@ -117,11 +111,11 @@ sub test_autoattach {
     $this->saveTopicWithMissingAttachment($topic);
     $this->sneakAttachmentsAddedToTopic($topic);
    
-    my ($readMeta, $readText) = $session->{store}->readTopic($session->{user}, $testWeb, $topic);
+    my ($readMeta, $readText) = $session->{store}->readTopic($session->{user}, $testweb, $topic);
     my @attachments = $readMeta->find( 'FILEATTACHMENT' );
     
     foreach my $attachment (@attachments) {
-    	print "Attachment found: ".$attachment."\n";
+    	#print "Attachment found: ".$attachment."\n";
     }
 }
 

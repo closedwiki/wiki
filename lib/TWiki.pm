@@ -2265,6 +2265,31 @@ sub initialize {
              $twiki->{userName}, $TWiki::cfg{DataDir} );
 }
 
+=pod
+
+---++ StaticMethod readFile( $filename ) -> $text
+
+Returns the entire contents of the given file, which can be specified in any
+format acceptable to the Perl open() function. Fast, but inherently unsafe.
+
+WARNING: Never, ever use this for accessing topics or attachments! Use the
+Store API for that. This is for global control files only, and should be
+used *only* if there is *absolutely no alternative*.
+
+=cut
+
+sub readFile {
+    my $name = shift;
+    open( IN_FILE, "<$name" ) || return '';
+    my $s = $/;
+    undef $/; # set to read to EOF
+    my $data = <IN_FILE>;
+    $/ = $s;
+    close( IN_FILE );
+    $data = '' unless( defined( $data ));
+    return $data;
+}
+
 sub _FORMFIELD {
     my $this = shift;
     return $this->{renderer}->renderFORMFIELD( @_ );

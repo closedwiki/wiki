@@ -104,5 +104,10 @@ for dir in $params; do
             mklink $tmpl
         done
     fi
+
+    # unit tests dir
+    if [ -d $dir/test/unit/$module ]; then
+        mklink $dir/test/unit/$module
+    fi
 done
 

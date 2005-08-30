@@ -761,7 +761,7 @@ sub filenameToIcon {
     # The file _filetypes.txt should be in the same directory as the
     # image attachments
     my $icons = $iconDir.'/_filetypes.txt';
-    my $iconList = $store->readFile( $icons );
+    my $iconList = TWiki::readFile( $icons );
     my $picked = 'else';
     foreach( split( /\n/, $iconList ) ) {
         if( /^$fileExt\s+(\S+)\s*$/ ) {
@@ -1354,11 +1354,10 @@ sub makeTopicSummary {
     my( $this, $theText, $theTopic, $theWeb, $theFlags ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
     $theFlags ||= '';
-    # called by search, mailnotify & changes after calling readFile
 
     my $htext = $this->TML2PlainText( $theText, $theWeb, $theTopic, $theFlags);
     $htext =~ s/\n+/ /g;
- 
+
     # FIXME I18N: Avoid splitting within multi-byte characters (e.g. EUC-JP
     # encoding) by encoding bytes as Perl UTF-8 characters in Perl 5.8+. 
     # This avoids splitting within a Unicode codepoint (or a UTF-16
@@ -1824,7 +1823,7 @@ sub replaceTopicReferences {
 
     return $text unless( $args->{inWeb} eq $args->{oldWeb} );
 
-    $text =~ s/\b$args->{oldTopic}\b/$repl/g;
+    $text =~ s/([^\.]|^)$args->{oldTopic}\b/$1$repl/g;
     $text =~ s/\[\[($args->{spacedTopic})(\](\[[^\]]+\])?\])/[[$repl$2/g;
 
     return $text;

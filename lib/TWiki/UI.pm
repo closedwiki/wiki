@@ -137,6 +137,9 @@ sub run {
         my $e = shift;
         print "Content-type: text/plain\n\n";
         print $e->stringify();
+    } otherwise {
+        print "Content-type: text/plain\n\n";
+        print "Unspecified error";
     };
 
     $session->finish();

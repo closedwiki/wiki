@@ -635,8 +635,7 @@ EOM
     $session->{topicName} = $regTopic;
     $session->{webName} = $testWeb;
     try {
-        TWiki::UI::Register::bulkRegister($session)
-
+        $this->capture( \&TWiki::UI::Register::bulkRegister, $session);
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert(0, $e->stringify()." EXPECTED");

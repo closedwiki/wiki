@@ -18,13 +18,16 @@ sub new {
 
 my $twiki;
 my $testweb = "TemporaryFuncModuleTestWeb";
+my $testextra = $testweb."Extra";
 
 sub set_up {
     my $this = shift;
     $this->SUPER::set_up();
+    $TWiki::cfg{StoreImpl} = "RcsWrap";
     $twiki = new TWiki();
     $TWiki::Plugins::SESSION = $twiki;
     $this->assert_null($twiki->{store}->createWeb($twiki->{user}, $testweb));
+    $this->assert_null($twiki->{store}->createWeb($twiki->{user}, $testextra));
     $this->assert($twiki->{store}->webExists($testweb));
 }
 
@@ -32,6 +35,27 @@ sub tear_down {
     my $this = shift;
     $this->SUPER::tear_down();
     $twiki->{store}->removeWeb($twiki->{user},$testweb);
+    $twiki->{store}->removeWeb($twiki->{user},$testextra);
+}
+
+sub test_web {
+    my $this = shift;
+
+    TWiki::Func::createWeb($testweb."Blah");
+    $this->assert(TWiki::Func::webExists($testweb."Blah"));
+
+    TWiki::Func::moveWeb($testweb."Blah", $testweb."Blah2");
+    $this->assert(!TWiki::Func::webExists($testweb."Blah"));
+    $this->assert(TWiki::Func::webExists($testweb."Blah2"));
+
+    TWiki::Func::moveWeb($testweb."Blah2",
+                         $TWiki::cfg{TrashWebName}.'.'.$testweb);
+    $this->assert(!TWiki::Func::webExists($testweb."Blah2"));
+    $this->assert(TWiki::Func::webExists(
+        $TWiki::cfg{TrashWebName}.'.'.$testweb));
+
+    $twiki->{store}->removeWeb($twiki->{user},
+                               $TWiki::cfg{TrashWebName}.'.'.$testweb);
 }
 
 sub test_getViewUrl {
@@ -140,9 +164,9 @@ sub test_attachments {
     binmode($stream);
 
     $twiki = new TWiki( );
+    $TWiki::Plugins::SESSION = $twiki;
 
-	$twiki->{store}->saveTopic( $twiki->{user}, $testweb, $topic,
-                                undef, undef );
+	TWiki::Func::saveTopicText( $testweb, $topic,'' );
 
     my $e = TWiki::Func::saveAttachment(
         $testweb, $topic, $name1,
@@ -182,6 +206,94 @@ sub test_attachments {
     $this->assert_str_equals($data, $x);
     $x = TWiki::Func::readAttachment($testweb, $topic, $name2);
     $this->assert_str_equals($data, $x);
+}
+
+sub test_moveTopic {
+    my $this = shift;
+    my $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+	TWiki::Func::saveTopicText( $testweb, "SourceTopic", "Wibble" );
+    $this->assert(TWiki::Func::topicExists( $testweb, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $testweb, "TargetTopic"));
+    $this->assert(!TWiki::Func::topicExists( $testextra, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $testextra, "TargetTopic"));
+
+	TWiki::Func::moveTopic( $testweb, "SourceTopic",
+                              $testweb, "TargetTopic" );
+    $this->assert(!TWiki::Func::topicExists( $testweb, "SourceTopic"));
+    $this->assert(TWiki::Func::topicExists( $testweb, "TargetTopic"));
+
+	TWiki::Func::moveTopic( $testweb, "TargetTopic",
+                              undef, "SourceTopic" );
+    $this->assert(TWiki::Func::topicExists( $testweb, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $testweb, "TargetTopic"));
+
+	TWiki::Func::moveTopic( $testweb, "SourceTopic",
+                              $testextra, "SourceTopic" );
+    $this->assert(!TWiki::Func::topicExists( $testweb, "SourceTopic"));
+    $this->assert(TWiki::Func::topicExists( $testextra, "SourceTopic"));
+
+	TWiki::Func::moveTopic( $testextra, "SourceTopic",
+                              $testweb, undef );
+    $this->assert(TWiki::Func::topicExists( $testweb, "SourceTopic"));
+    $this->assert(!TWiki::Func::topicExists( $testextra, "SourceTopic"));
+
+	TWiki::Func::moveTopic( $testweb, "SourceTopic",
+                              $testextra, "TargetTopic" );
+    $this->assert(!TWiki::Func::topicExists( $testweb, "SourceTopic"));
+    $this->assert(TWiki::Func::topicExists( $testextra, "TargetTopic"));
+}
+
+sub test_moveAttachment {
+    my $this = shift;
+
+    my $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+	TWiki::Func::saveTopicText( $testweb, "SourceTopic", "Wibble" );
+    my $stream;
+    my $data = "\0b\1l\2a\3h\4b\5l\6a\7h";
+    my $tmpfile = "temporary.dat";
+    $this->assert(open($stream,">$tmpfile"));
+    binmode($stream);
+    print $stream $data;
+    close($stream);
+    TWiki::Func::saveAttachment(
+        $testweb, "SourceTopic", "Name1",
+        {
+            dontlog => 1,
+            comment => 'Feasgar Bha',
+            file => $tmpfile,
+            filepath => '/local/file',
+            filesize => 999,
+            filedate => 0,
+      } );
+    unlink($tmpfile);
+    $this->assert(TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+                                                  "Name1"));
+
+    TWiki::Func::saveTopicText( $testweb, "TargetTopic", "Wibble" );
+    TWiki::Func::saveTopicText( $testextra, "TargetTopic", "Wibble" );
+
+	TWiki::Func::moveAttachment( $testweb, "SourceTopic", "Name1",
+                              $testweb, "SourceTopic", "Name2" );
+    $this->assert(!TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+                                                  "Name1"));
+    $this->assert(TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+                                                 "Name2"));
+
+	TWiki::Func::moveAttachment( $testweb, "SourceTopic", "Name2",
+                              $testweb, "TargetTopic", undef );
+    $this->assert(!TWiki::Func::attachmentExists( $testweb, "SourceTopic",
+                                                  "Name2"));
+    $this->assert(TWiki::Func::attachmentExists( $testweb, "TargetTopic",
+                                                 "Name2"));
+
+	TWiki::Func::moveAttachment( $testweb, "TargetTopic", "Name2",
+                              $testextra, "TargetTopic", "Name1" );
+    $this->assert(!TWiki::Func::attachmentExists( $testweb, "TargetTopic",
+                                                  "Name2"));
+    $this->assert(TWiki::Func::attachmentExists( $testextra, "TargetTopic",
+                                                 "Name1"));
 }
 
 1;

@@ -386,7 +386,8 @@ sub _suffixToMimeType {
         my $suffix = $1;
         my @types = grep{ s/^\s*([^\s]+).*?\s$suffix\s.*$/$1/i }
           map{ $_.' ' }
-            split( /[\n\r]/, $session->{store}->readFile( $TWiki::cfg{MimeTypesFileName} ) );
+            split( /[\n\r]/,
+                   TWiki::readFile( $TWiki::cfg{MimeTypesFileName} ) );
         $mimeType = $types[0] if( @types );
     }
     return $mimeType;

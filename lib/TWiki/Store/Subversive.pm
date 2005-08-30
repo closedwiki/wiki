@@ -452,15 +452,11 @@ sub copyTopic {
 }
 
 sub moveAttachment {
-    my( $this, $newWeb, $newTopic ) = @_;
-
-    my $oldWeb = $this->{web};
-    my $oldTopic = $this->{topic};
-    my $attachment = $this->{attachment};
+    my( $this, $newWeb, $newTopic, $newAttachment ) = @_;
 
     # FIXME might want to delete old directories if empty
     my $new = TWiki::Store::Subversive->new( $this->{session}, $newWeb,
-                                          $newTopic, $attachment );
+                                          $newTopic, $newAttachment );
 
     $this->_moveFile( $this->{file}, $new->{file} );
 }

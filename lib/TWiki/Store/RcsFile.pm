@@ -505,21 +505,17 @@ sub copyTopic {
 
 =pod
 
----++ ObjectMethod moveAttachment( $newWeb, $newTopic )
+---++ ObjectMethod moveAttachment( $newWeb, $newTopic, $newAttachment )
 Move an attachment from one topic to another. The name is retained.
 
 =cut
 
 sub moveAttachment {
-    my( $this, $newWeb, $newTopic ) = @_;
-
-    my $oldWeb = $this->{web};
-    my $oldTopic = $this->{topic};
-    my $attachment = $this->{attachment};
+    my( $this, $newWeb, $newTopic, $newAttachment ) = @_;
 
     # FIXME might want to delete old directories if empty
     my $new = TWiki::Store::RcsFile->new( $this->{session}, $newWeb,
-                                          $newTopic, $attachment );
+                                          $newTopic, $newAttachment );
 
     _moveFile( $this->{file}, $new->{file} );
 
@@ -606,7 +602,7 @@ sub isLocked {
 
     my $filename = $this->_controlFileName('lock');
     if ( -e $filename ) {
-        my $t = $this->{session}->{store}->readFile( $filename );
+        my $t = $this->_readFile( $filename );
         return split( /\s+/, $t, 2 );
     }
     return ( undef, undef );
@@ -646,7 +642,7 @@ sub getLease {
 
     my $filename = $this->_controlFileName('lease');
     if ( -e $filename ) {
-        my $t = $this->{session}->{store}->readFile( $filename );
+        my $t = $this->_readFile( $filename );
         my $lease = { split( /\n/, $t ) };
         return $lease;
     }

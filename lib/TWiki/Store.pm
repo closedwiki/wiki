@@ -24,10 +24,14 @@
 
 ---+ package TWiki::Store
 
-This module hosts the generic storage backend. This module should be the
-only module, anywhere, that knows that meta-data is stored interleaved
-in the topic text. This is so it can be easily replaced by alternative
-store implementations.
+This module hosts the generic storage backend. This module provides
+the interface layer between the "real" store provider - which is hidden
+behind a handler - and the rest of the system. it is responsible for
+checking for topic existance, access permissions, and all the other
+general admin tasks that are common to all store implementations.
+
+This module knows nothing about how the data is actually _stored_ -
+that knowledge is entirely encapsulated in the handlers.
 
 The general contract for methods in the class requires that errors
 are signalled using exceptions. TWiki::AccessControlException is
@@ -42,7 +46,6 @@ use strict;
 
 use Assert;
 use Error qw( :try );
-use File::Copy ();
 
 use TWiki::Meta ();
 use TWiki::Time ();
@@ -179,19 +182,19 @@ sub readTopicRaw {
 
 =pod
 
----++ ObjectMethod moveAttachment (  $oldWeb, $oldTopic, $newWeb, $newTopic, $attachment, $user  )
+---++ ObjectMethod moveAttachment( $oldWeb, $oldTopic, $oldAttachment, $newWeb, $newTopic, $newAttachment, $user  )
 
 Move an attachment from one topic to another.
 
 The caller to this routine should check that all topics are valid.
 
-All of oldWeb, oldTopic, newWeb and newTopic and attachment must be untained.
+All parameters must be defined, and must be untainted.
 
 =cut
 
 sub moveAttachment {
-    my( $this, $oldWeb, $oldTopic,
-        $newWeb, $newTopic, $attachment, $user ) = @_;
+    my( $this, $oldWeb, $oldTopic, $oldAttachment,
+        $newWeb, $newTopic, $newAttachment, $user ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user->isa('TWiki::User')) if DEBUG;
 
@@ -217,35 +220,36 @@ sub moveAttachment {
 
         # Remove file attachment from old topic
         my $handler =
-          $this->_getHandler( $oldWeb, $oldTopic, $attachment );
+          $this->_getHandler( $oldWeb, $oldTopic, $oldAttachment );
 
-        $handler->moveAttachment( $newWeb, $newTopic );
+        $handler->moveAttachment( $newWeb, $newTopic, $newAttachment );
 
         my $fileAttachment =
-          $ometa->get( 'FILEATTACHMENT', $attachment );
-        $ometa->remove( 'FILEATTACHMENT', $attachment );
+          $ometa->get( 'FILEATTACHMENT', $oldAttachment );
+        $ometa->remove( 'FILEATTACHMENT', $oldAttachment );
         $this->_noHandlersSave( $user, $oldWeb, $oldTopic, $otext, $ometa,
                                 { notify => 0 } );
 
         # Add file attachment to new topic
-        $fileAttachment->{movefrom} = $oldWeb.'.'.$oldTopic;
+        $fileAttachment->{name} = $newAttachment;
+        $fileAttachment->{movefrom} = $oldWeb.'.'.$oldTopic.'.'.$oldAttachment;
         $fileAttachment->{moveby}   = $user->webDotWikiName();
-        $fileAttachment->{movedto}  = $newWeb.'.'.$newTopic;
+        $fileAttachment->{movedto}  = $newWeb.'.'.$newTopic.'.'.$newAttachment;
         $fileAttachment->{movedwhen} = time();
         $nmeta->putKeyed( 'FILEATTACHMENT', $fileAttachment );
 
         $this->_noHandlersSave( $user, $newWeb, $newTopic, $ntext,
-                                $nmeta, { notify => 0,
+                                $nmeta, { dontlog => 1,
+                                          notify => 0,
                                           comment => 'moved' } );
-
+        $this->{session}->writeLog(
+            'move',
+            $fileAttachment->{movefrom}.' moved to '.
+              $fileAttachment->{movedto}, $user );
     } finally {
         $this->unlockTopic( $user, $oldWeb, $oldTopic );
         $this->unlockTopic( $user, $newWeb, $newTopic );
     };
-
-    $this->{session}->writeLog( 'move', $oldWeb.'.'.$oldTopic,
-                                'Attachment '.$attachment.' moved to '.
-                                  $newWeb.'.'.$newTopic, $user );
 }
 
 =pod
@@ -301,10 +305,7 @@ sub attachmentExists {
 
 ---++ ObjectMethod moveTopic(  $oldWeb, $oldTopic, $newWeb, $newTopic, $user )
 
-It is the responsibility of the caller to check for existence of webs,
-topics & lock taken for topic
-
-All of oldWeb, oldTopic, newWeb and newTopic must be untained.
+All parameters must be defined and must be untainted.
 
 =cut
 
@@ -354,12 +355,11 @@ sub moveTopic {
 
 =pod
 
----++ ObjectMethod moveWeb(  $oldWeb, $newWeb, $user )
+---++ ObjectMethod moveWeb( $oldWeb, $newWeb, $user )
 
 Move a web.
-It is up to the caller to check access permissions etc before calling.
 
-All of oldWeb, newWeb must be untained.
+All parrameters must be defined and must be untainted.
 
 =cut
 
@@ -652,7 +652,6 @@ sub saveTopic {
         my $trash = new TWiki::Meta( $this->{session}, $web, $topic);
         $this->extractMetaData( $trash, \$text );
     }
-
     my $error;
     try {
         $this->_noHandlersSave( $user, $web, $topic, $text, $meta, $options );
@@ -734,13 +733,12 @@ sub saveAttachment {
                                                         $attachment );
             $action = 'upload';
 
-            $attrs =
-              {
-                  attachment => $attachment,
-                  stream => $opts->{stream},
-                  comment => $opts->{comment},
-                  user => $user->webDotWikiName()
-                 };
+            $attrs = {
+                attachment => $attachment,
+                stream => $opts->{stream},
+                comment => $opts->{comment},
+                user => $user->webDotWikiName()
+               };
 
             my $handler = $this->_getHandler( $web, $topic, $attachment );
 
@@ -749,11 +747,12 @@ sub saveAttachment {
             if( $plugins->haveHandlerFor( 'beforeAttachmentSaveHandler' )) {
                 # SMELL: legacy spec of beforeAttachmentSaveHandler requires
                 # a local copy of the stream. This could be a problem for
-                # very big data files. It really should use the stream.
+                # very big data files.
                 open( F, $tmpFile );
                 binmode( F );
-                while( read( $opts->{stream}, $text, 1024 )) {
-                    print F $text;
+                # transfer 512KB blocks
+                while( my $r = sysread( $opts->{stream}, $text, 0x80000 )) {
+                    syswrite( F, $text, $r );
                 }
                 close( F );
                 $attrs->{file} = $tmpFile;
@@ -875,7 +874,6 @@ sub _noHandlersSave {
     $minor = "\tminor" if $options->{minor};
     push( @foo, "$topic\t".$user->login()."\t".time()."\t$nextRev$minor" );
     $this->saveMetaData( $web, 'changes', join( "\n", @foo ));
-    close(FILE);
 
     if( ( $TWiki::cfg{Log}{save} ) && ! ( $options->{dontlog} ) ) {
         # write log entry
@@ -990,34 +988,6 @@ sub delRev {
     # write log entry
     $this->{session}->writeLog( 'cmd', $web.'.'.$topic, 'delRev by '.
                                   $user->login().": $rev", $user );
-}
-
-=pod
-
----++ ObjectMethod saveFile (  $name, $text  )
-
-Save an arbitrary file
-
-SMELL: Breaks Store encapsulation, if it is used to save topic or
-meta-data files.
-Therefore this method should _never_ be used for saving topics or
-web-specific meta data files, as they may not be stored as text files
-in another store implementation. Use =saveTopic*= and =saveMetaData= instead.
-
-=cut
-
-sub saveFile {
-    my( $this, $name, $text ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
-
-    $name = TWiki::Sandbox::normalizeFileName( $name );
-
-    umask( 002 );
-    unless ( open( FILE, ">$name" ) )  {
-        die "Can't create file $name - $!\n";
-    }
-    print FILE $text;
-    close( FILE);
 }
 
 =pod
@@ -1146,8 +1116,9 @@ sub topicExists {
 sub extractMetaData {
     my( $this, $meta, $rtext ) = @_;
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    my $format = $STORE_FORMAT_VERSION;
+    ASSERT(defined($$rtext)) if DEBUG;
 
+    my $format = $STORE_FORMAT_VERSION;
     # head meta-data
     $$rtext =~ s(^%META:TOPICINFO{(.*)}%\r?\n)
       ($meta->put( 'TOPICINFO', _readKeyValues( $1 ));'')gem;
@@ -1253,39 +1224,6 @@ sub getTopicLatestRevTime {
 
     my $handler = $this->_getHandler( $web, $topic );
     return $handler->getLatestRevisionTime();
-}
-
-=pod
-
----++ ObjectMethod readFile( $filename ) -> $text
-
-Return value: $fileContents
-
-Thorws Error::Simple if a file operation failed.
-
-Returns the entire contents of the given file, which can be specified in any
-format acceptable to the Perl open() function.
-
-SMELL: Breaks Store encapsulation, if it is used to read topic or meta-data
-files. Therefore this method should _never_ be used for reading topics or
-web-specific meta data files, as they may not be stored as text files
-in another store implementation. Use =readTopic*= and =readMetaData= instead.
-
-=cut
-
-sub readFile {
-    my( $this, $name ) = @_;
-    ASSERT($this->isa('TWiki::Store')) if DEBUG;
-    $name = TWiki::Sandbox::normalizeFileName( $name );
-    my $data = '';
-    open( IN_FILE, "<$name" ) || return '';
-    my $s = $/;
-    undef $/; # set to read to EOF
-    $data = <IN_FILE>;
-    $/ = $s;
-    close( IN_FILE );
-    $data = '' unless $data; # no undefined
-    return $data;
 }
 
 =pod
@@ -1483,8 +1421,10 @@ sub createWeb {
     my( $meta, $text ) =
       $this->readTopic( undef, $newWeb, $wpt, undef );
 
-    foreach my $key ( %$opts ) {
-        $text =~ s/($TWiki::regex{setRegex}$key\s*=).*?$/$1 $opts->{$key}/gm;
+    if( $opts ) {
+        foreach my $key ( %$opts ) {
+            $text =~ s/($TWiki::regex{setRegex}$key\s*=).*?$/$1 $opts->{$key}/gm;
+        }
     }
     $this->saveTopic( $user, $newWeb, $wpt, $text, $meta );
 }

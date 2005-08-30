@@ -234,7 +234,7 @@ sub verify_releaselocksonsave {
 
     $twiki = new TWiki( $testUser1, $query );
     try {
-        TWiki::UI::Save::save( $twiki );
+        $this->capture(\&TWiki::UI::Save::save, $twiki );
     } catch TWiki::OopsException with {
         my $e = shift;
         print $e->stringify();
@@ -253,7 +253,7 @@ sub verify_releaselocksonsave {
     $query->path_info( "/$testweb/$topic" );
     $twiki = new TWiki( $testUser1, $query );
     try {
-        TWiki::UI::Save::save( $twiki );
+        $this->capture( \&TWiki::UI::Save::save,  $twiki );
     } catch TWiki::OopsException with {
         my $e = shift;
         print $e->stringify();
@@ -273,7 +273,7 @@ sub verify_releaselocksonsave {
     $query->path_info( "/$testweb/$topic" );
     $twiki = new TWiki( $testUser2, $query );
     try {
-        TWiki::UI::Save::save( $twiki );
+        $this->capture( \&TWiki::UI::Save::save,  $twiki );
         $this->assert(0);
     } catch TWiki::OopsException with {
         my $e = shift;

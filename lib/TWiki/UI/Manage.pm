@@ -678,7 +678,7 @@ in the list of topics (specified as web.topic pairs) in the \@refs array.
    * =$newTopic= - name of new topic - must be untained
    * =$attachment= - name of the attachment to move (from oldtopic to newtopic) (undef to move the topic) - must be untaineted
    * =\@refs= - array of webg.topics that must have refs to this topic converted
-Will throw TWiki::OopsException on an error.
+Will throw TWiki::OopsException or TWiki::AccessControlException on an error.
 
 =cut
 
@@ -689,8 +689,9 @@ sub move {
 
     if( $attachment ) {
         try {
-            $store->moveAttachment( $oldWeb, $oldTopic, $newWeb, $newTopic,
-                                    $attachment, $session->{user} );
+            $store->moveAttachment( $oldWeb, $oldTopic, $attachment,
+                                    $newWeb, $newTopic, $attachment,
+                                    $session->{user} );
         } catch Error::Simple with {
             throw TWiki::OopsException( 'attention',
                                         web => $oldWeb,
@@ -860,13 +861,13 @@ sub _newTopicScreen {
 }
 
 # _moveWeb($session, $oldWeb,  $newWeb, \@refs )
-# 
+#
 # Move the given web, correcting refs to the web in the web itself, and
 # in the list of topics (specified as web.topic pairs) in the \@refs array.
 # Currently only called by _renameweb
-# 
+#
 # All permissions and lease conflicts should be resolved before calling this method.
-# 
+#
 #    * =$session= - reference to session object
 #    * =$oldWeb= - name of old web
 #    * =$newWeb= - name of new web
@@ -879,9 +880,6 @@ sub _moveWeb {
 
     $oldWeb =~ s/\./\//go;
     $newWeb =~ s/\./\//go;
-
-    my $otext = $store->readTopicRaw(
-        undef, $oldWeb, $TWiki::cfg{WebPrefsTopicName} );
 
     my $user = $session->{user};
 

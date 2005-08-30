@@ -304,7 +304,7 @@ sub _readTemplateFile {
         foreach my $file ( @{$this->{files}} ) {
             if ( $file =~ /\/$name.$skin.tmpl$/ ) {
                 #print STDERR "Template $name comes from $file\n";
-                return $store->readFile( $file );
+                return TWiki::readFile( $file );
             }
         }
     }
@@ -313,7 +313,7 @@ sub _readTemplateFile {
     foreach my $file ( @{$this->{files}} ) {
         if ( $file =~ /\/$name.tmpl$/ ) {
             #print STDERR "Template $name comes from $file\n";
-            return $store->readFile( $file );
+            return TWiki::readFile( $file );
         }
     }
 

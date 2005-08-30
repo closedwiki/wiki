@@ -301,7 +301,7 @@ etc. So you can easily tell what 'type' of script your plugin is
 being called within. The available context identifiers are listed
 in the %TWIKIWEB%.TWikiTemplates topic.
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -659,6 +659,35 @@ sub checkAccessPermission {
 
 ---++ Functions: Content Handling
 
+=pod
+
+---+++ getListOfWebs( $filter ) -> @webs
+   * =$filter= - spec of web types to recover
+Gets a list of webs, filtered according to the spec in the $filter,
+which may include one of:
+   1 'user' (for only user webs)
+   2 'template' (for only template webs i.e. those starting with "_")
+=$filter= may also contain the word 'public' which will further filter
+out webs that have NOSEARCHALL set on them.
+
+For example, the deprecated getPublicWebList function can be duplicated
+as follows:
+<verbatim>
+   my @webs = TWiki::Func::getListOfWebs( "user,public" );
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub getListOfWebs {
+    my $filter = shift;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    return $TWiki::Plugins::SESSION->{store}->getListOfWebs($filter);
+}
+
+=pod
+
 ---+++ webExists( $web ) -> $flag
 
 Test if web exists
@@ -673,6 +702,86 @@ sub webExists {
 #   my( $theWeb ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{store}->webExists( @_ );
+}
+
+=pod
+
+---+++ createWeb( $newWeb, $baseWeb, $opts )
+
+$newWeb is the name of the new web.
+
+$baseWeb is the name of an existing web (a template web). If the
+base web is a system web, all topics in it
+will be copied into the new web. If it is a normal web, only topics starting
+with 'Web' will be copied. If no base web is specified, an empty web
+(with no topics) will be created. If it is specified but does not exist,
+an error will be thrown.
+
+$opts is a ref to a hash that contains settings to be modified in
+the web preferences topic in the new web.
+
+<verbatim>
+use Error qw( :try );
+
+try {
+    TWiki::Func::createWeb( "Newweb" );
+} catch Error::Simple with {
+    my $e = shift;
+    # see documentation on Error::Simple
+} catch TWiki::AccessControlException with {
+    my $e = shift;
+    # see documentation on TWiki::AccessControlException
+} otherwise {
+    ...
+};
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub createWeb {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    $TWiki::Plugins::SESSION->{store}->createWeb(
+        $TWiki::Plugins::SESSION->{user}, @_ );
+}
+
+=pod
+
+---+++ moveWeb( $oldName, $newName )
+
+Move (rename) a web.
+
+<verbatim>
+use Error qw( :try );
+
+try {
+    TWiki::Func::moveWeb( "Oldweb", "Newweb" );
+} catch Error::Simple with {
+    my $e = shift;
+    # see documentation on Error::Simple
+} catch TWiki::AccessControlException with {
+    my $e = shift;
+    # see documentation on TWiki::AccessControlException
+} otherwise {
+    ...
+};
+</verbatim>
+
+To delete a web, move it to a subweb of =Trash=
+<verbatim>
+TWiki::Func::moveWeb( "Deadweb", "Trash.Deadweb" );
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub moveWeb {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    return $TWiki::Plugins::SESSION->{store}->moveWeb(
+        @_, $TWiki::Plugins::SESSION->{user});
+
 }
 
 =pod
@@ -873,7 +982,7 @@ sub readTopicText {
 
 =pod
 
----+++ saveTopic( $web, $topic, $meta, $text, $options )
+---+++ saveTopic( $web, $topic, $meta, $text, $options ) -> $error
    * =$web= - web for the topic
    * =$topic= - topic name
    * =$meta= - reference to TWiki::Meta object
@@ -901,6 +1010,7 @@ appropriate.
 sub saveTopic {
     my( $web, $topic, $meta, $text, $options ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    ASSERT($meta) if DEBUG;
 
     return $TWiki::Plugins::SESSION->{store}->saveTopic
       ( $TWiki::Plugins::SESSION->{user}, $web, $topic, $text, $meta,
@@ -920,22 +1030,24 @@ Save topic text, typically obtained by readTopicText(). Topic data usually inclu
    * =$dontNotify=         - Set to ="1"= if not to notify users of the change
 Return: =$oopsUrl=               Empty string if OK; the =$oopsUrl= for calling redirectCgiQuery() in case of error
 
-This method is inherently less efficient and more dangerous than =saveTopic=.
+This method is a lot less efficient and much more dangerous than =saveTopic=.
 
 *Since:* TWiki::Plugins::VERSION 1.010 (31 Dec 2002)
 
-   * Example: <br />
-     =my $text = TWiki::Func::readTopicText( $web, $topic );        # read topic text= <br />
-     =# check for oops URL in case of error:= <br />
-     =if( $text =~ /^http.*?\/oops/ ) {= <br />
-     =&nbsp;   TWiki::Func::redirectCgiQuery( $query, $text );= <br />
-     =&nbsp;   return;= <br />
-     =}= <br />
-     =# do topic text manipulation like:= <br />
-     =$text =~ s/old/new/g;= <br />
-     =# do meta data manipulation like:= <br />
-     =$text =~ s/(META\:FIELD.*?name\=\"TopicClassification\".*?value\=\")[^\"]*/$1BugResolved/;= <br />
-     =$oopsUrl = TWiki::Func::saveTopicText( $web, $topic, $text ); # save topic text= <br />
+<verbatim>
+my $text = TWiki::Func::readTopicText( $web, $topic );
+
+# check for oops URL in case of error:
+if( $text =~ /^http.*?\/oops/ ) {
+    TWiki::Func::redirectCgiQuery( $query, $text );
+    return;
+}
+# do topic text manipulation like:
+$text =~ s/old/new/g;
+# do meta data manipulation like:
+$text =~ s/(META\:FIELD.*?name\=\"TopicClassification\".*?value\=\")[^\"]*/$1BugResolved/;
+$oopsUrl = TWiki::Func::saveTopicText( $web, $topic, $text ); # save topic text
+</verbatim>
 
 =cut
 
@@ -988,7 +1100,79 @@ sub saveTopicText {
     return '';
 }
 
+=pod
+
+---+++ moveTopic( $web, $topic, $newWeb, $newTopic )
+   * =$web= source web - required
+   * =$topic= source topic - required
+   * =$newWeb= dest web
+   * =$newTopic= dest topic
+Renames the topic. Throws an exception if something went wrong.
+If $newWeb is undef, it defaults to $web. If $newTopic is undef, it defaults
+to $topic.
+
+The destination topic must not already exist.
+
+Rename a topic to the $TWiki::cfg{TrashWebName} to delete it.
+
+<verbatim>
+use Error qw( :try );
+
+try {
+    moveTopic( "Work", "TokyoOffice", "Trash", "ClosedOffice" );
+} catch Error::Simple with {
+    my $e = shift;
+    # see documentation on Error::Simple
+} catch TWiki::AccessControlException with {
+    my $e = shift;
+    # see documentation on TWiki::AccessControlException
+} otherwise {
+    ...
+};
+</verbatim>
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
 =cut
+
+sub moveTopic {
+    my( $web, $topic, $newWeb, $newTopic ) = @_;
+    $newWeb ||= $web;
+    $newTopic ||= $topic;
+
+    return if( $newWeb eq $web && $newTopic eq $topic );
+
+    $TWiki::Plugins::SESSION->{store}->moveTopic(
+        $web, $topic,
+        $newWeb, $newTopic,
+        $TWiki::Plugins::SESSION->{user} );
+}
+
+=pod
+
+---+++ attachmentExists( $web, $topic, $attachment ) -> $boolean
+
+Test if attachment exists
+   * =$web=   - Web name, optional, e.g. =Main=.
+   * =$topic= - Topic name, required, e.g. =TokyoOffice=, or =Main.TokyoOffice=
+   * =$attachment= - attachment name, e.g.=logo.gif=
+$web and $topic are parsed as described in the documentation for =normalizeWebTopicName=.
+
+*Since:* TWiki::Plugins::VERSION 1.1
+
+=cut
+
+sub attachmentExists {
+    my( $web, $topic, $attachment ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+
+    ( $web, $topic ) =
+      $TWiki::Plugins::SESSION->normalizeWebTopicName( $web, $topic );
+    return $TWiki::Plugins::SESSION->{store}->attachmentExists(
+        $web, $topic, $attachment );
+}
+
+=pod
 
 ---+++ readAttachment( $web, $topic, $name, $rev ) -> $data
    * =$web= - web for topic
@@ -1006,12 +1190,15 @@ passed in.
 my( $meta, $text ) = TWiki::Func::readTopic( $web, $topic );
 my @attachments = $meta->find( 'FILEATTACHMENT' );
 foreach my $a ( @attachments ) {
-   my $data = TWiki::Func::readAttachment( $meta, $a->{name} );
-   ...
+   try {
+       my $data = TWiki::Func::readAttachment( $meta, $a->{name} );
+       ...
+   } catch TWiki::AccessControlException with {
+   };
 }
 </verbatim>
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -1045,15 +1232,22 @@ sub readAttachment {
 | =filesize= | Size of uploaded data |
 | =filedate= | Date |
 
-Save an attachment to the store for a topic. On success, returns undef. If there is an error, a report string will be returned.
+Save an attachment to the store for a topic. On success, returns undef. If there is an error, an exception will be thrown.
+
 <verbatim>
-    TWiki::Func::saveAttachment( $web, $topic, 'image.gif',
-                                 { file => 'image.gif',
-                                   comment => 'Picture of Health',
-                                   hide => 1 } );
+    try {
+        TWiki::Func::saveAttachment( $web, $topic, 'image.gif',
+                                     { file => 'image.gif',
+                                       comment => 'Picture of Health',
+                                       hide => 1 } );
+   } catch Error::Simple with {
+      # see documentation on Error
+   } otherwise {
+      ...
+   };
 </verbatim>
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -1076,61 +1270,59 @@ sub saveAttachment {
 
 =pod
 
----+++ getPublicWebList( ) -> @webs
-*DEPRECATED* since 1.026 - use =getListOfWebs= instead.
+---+++ moveAttachment( $web, $topic, $attachment, $newWeb, $newTopic, $newAttachment )
+   * =$web= source web - required
+   * =$topic= source topic - required
+   * =$attachment= source attachment - required
+   * =$newWeb= dest web
+   * =$newTopic= dest topic
+   * =$newAttachment= dest attachment
+Renames the topic. Throws an exception on error or access violation.
+If $newWeb is undef, it defaults to $web. If $newTopic is undef, it defaults
+to $topic. If $newAttachment is undef, it defaults to $attachment. If all of $newWeb, $newTopic and $newAttachment are undef, it is an error.
 
-Get list of all public webs, e.g. all webs that do not have the =NOSEARCHALL= flag set in the WebPreferences
-Return: =@webs= List of all public webs, e.g. =( 'Main',  'Know', 'TWiki' )=
+The destination topic must already exist, but the destination attachment must
+*not* exist.
 
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
+Rename an attachment to $TWiki::cfg{TrashWebName}.TrashAttament to delete it.
 
-=cut
-
-sub getPublicWebList {
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{store}->getListOfWebs("user,public");
-}
-
-=pod
-
----+++ getListOfWebs( $filter ) -> @webs
-   * =$filter= - spec of web types to recover
-Gets a list of webs, filtered according to the spec in the $filter,
-which may include one of:
-   1 'user' (for only user webs)
-   2 'template' (for only template webs i.e. those starting with "_")
-=$filter= may also contain the word 'public' which will further filter
-out webs that have NOSEARCHALL set on them.
-
-For example, the deprecated getPublicWebList function can be duplicated
-as follows:
 <verbatim>
-   my @webs = TWiki::Func::getListOfWebs( "user,public" );
+use Error qw( :try );
+
+try {
+   # move attachment between topics
+   moveAttachment( "Countries", "Germany", "AlsaceLorraine.dat",
+                     "Countries", "France" );
+   # Note destination attachment name is defaulted to the same as source
+} catch TWiki::AccessControlException with {
+   my $e = shift;
+   # see documentation on TWiki::AccessControlException
+} catch Error::Simple with {
+   my $e = shift;
+   # see documentation on Error::Simple
+};
 </verbatim>
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
-sub getListOfWebs {
-    my $filter = shift;
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{store}->getListOfWebs($filter);
+sub moveAttachment {
+    my( $web, $topic, $attachment, $newWeb, $newTopic, $newAttachment ) = @_;
+
+    $newWeb ||= $web;
+    $newTopic ||= $topic;
+    $newAttachment ||= $attachment;
+
+    return if( $newWeb eq $web &&
+                 $newTopic eq $topic &&
+                   $newAttachment eq $attachment );
+
+    $TWiki::Plugins::SESSION->{store}->moveAttachment(
+        $web, $topic, $attachment,
+        $newWeb, $newTopic, $newAttachment,
+        $TWiki::Plugins::SESSION->{user} );
 }
-
-=pod
-
----+++ getListOfWebs( $filter ) -> @webNames
-
-Gets a list of webs, filtered according to the spec in the $filter,
-which may include one of:
-   1 'user' (for only user webs)
-   2 'template' (for only template webs)
-$filter may also contain the word 'public' which will further filter
-webs on whether NOSEARCHALL is specified for them or not.
-
-=cut
-
 
 =pod
 
@@ -1165,7 +1357,7 @@ Register a function to handle a simple tag. Handles both %<nop>TAG% and %<nop>TA
    * =$tag= - The name of the tag i.e. the 'MYTAG' part of %<nop>MYTAG%. The tag name *must* match /^[A-Z][A-Z0-9_]*$/ or it won't work.
    * =\&fn= - Reference to the handler function.
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 The tag handler function must be of the form:
 <verbatim>
@@ -1226,7 +1418,7 @@ All TWiki variables present in =$header= will be expanded before being inserted 
 
 Note that this is _not_ the same as the HTTP header, which is modified through the plugins =modifyHeaderHandler=.
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 example:
 <verbatim>
@@ -1330,72 +1522,6 @@ sub formatTime {
 
 =pod
 
----+++ formatGmTime( $time, $format ) -> $text
-*DEPRECATED* since  TWiki::Plugins::VERSION 1.025 (7 Dec 2002)
-
-Format the time to GM time
-   * =$time=   - Time in epoc seconds
-   * =$format= - Format type, optional. Default e.g. ='31 Dec 2002 - 19:30'=, can be ='iso'= (e.g. ='2002-12-31T19:30Z'=), ='rcs'= (e.g. ='2001/12/31 23:59:59'=, ='http'= for HTTP header format (e.g. ='Thu, 23 Jul 1998 07:21:56 GMT'=)
-Return: =$text=      Formatted time string
-
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
-
-=cut
-
-sub formatGmTime {
-#   my ( $epSecs, $format ) = @_;
-
-    # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
-    ## writeWarning( 'deprecated use of Func::formatGmTime' );
-
-    return TWiki::Time::formatTime( @_, 'gmtime' );
-}
-
-
-=pod
-
----++ Functions: File I/O
-
----+++ getDataDir( ) -> $dir
-
-Get data directory (topic file root)
-Return: =$dir= Data directory, e.g. ='/twiki/data'=
-
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
-
-*Deprecated:* TWiki::Plugins::VERSION 1.026
-
-This function violates store encapsulation and is therefore *deprecated*.
-
-=cut
-
-sub getDataDir {
-    return $TWiki::cfg{DataDir};
-}
-
-=pod
-
----+++ getPubDir( ) -> $dir
-
-Get pub directory (file attachment root). Attachments are in =$dir/Web/TopicName=
-Return: =$dir= Pub directory, e.g. ='/htdocs/twiki/pub'=
-
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
-
-*Deprecated:* TWiki::Plugins::VERSION 1.026
-
-This function violates store encapsulation and is therefore *deprecated*.
-
-Use =readAttachment= and =writeAttachment= instead.
-
-=cut
-
-sub getPubDir {
-    return $TWiki::cfg{PubDir};
-}
-
-=pod
-
 ---+++ readTemplate( $name, $skin ) -> $text
 
 Read a template or skin. Embedded [[%TWIKIWEB%.TWikiTemplates][template directives]] get expanded
@@ -1411,44 +1537,6 @@ sub readTemplate {
 #   my( $name, $skin ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{templates}->readTemplate( @_ );
-}
-
-=pod
-
----+++ readFile( $filename ) -> $text
-
-Read text file, low level. NOTE: For topics use readTopicText()
-   * =$filename= - Full path name of file
-Return: =$text=        Content of file
-
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
-
-=cut
-
-sub readFile {
-#   my( $filename ) = @_;
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{store}->readFile( @_ );
-}
-
-=pod
-
----+++ saveFile( $filename, $text )
-
-Save text file, low level. NOTE: For topics use saveTopicText()
-   * =$filename= - Full path name of file
-   * =$text=     - Text to save
-Return:                none
-
-*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
-
-=cut
-
-# TODO: This should return an error for the different failure modes.
-sub saveFile {
-#   my( $filename, $text ) = @_;
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{store}->saveFile( @_ );
 }
 
 =pod
@@ -1543,78 +1631,6 @@ sub getRegularExpression {
 
 =pod
 
----+++ checkDependencies( $moduleName, $dependenciesRef ) -> $error
-
-Checks a list of Perl dependencies at runtime
-   * =$moduleName= - Context description e.g. name of the module being checked
-   * =$dependenciesRef= - Reference of list of hashes containing dependency information; see notes below
-Return: =$error= undef if dependencies are OK, an error message otherwise
-
-*Since:* TWiki::Plugins::VERSION 1.025 (01 Aug 2004)
-
-The dependencies are expressed as a list of hashes. Each hash contains
-the name of a package and (optionally) a boolean constraint on the VERSION
-variable in that package. It is usually used from the =initPlugin= method
-like this:
-<verbatim>
-    if( $TWiki::Plugins::VERSION >= 1.025 ) {
-        my @deps = (
-            { package => 'TWiki::Plugins::CalendarPlugin', constraint => '>= 5.030' },
-            { package => 'Time::ParseDate' },
-            { package => 'Apache::VMonitor' }
-        );
-        my $err = TWiki::Func::checkDependencies( $pluginName, \@deps );
-        if( $err ) {
-            TWiki::Func::writeWarning( $err );
-            print STDERR $err; # print to webserver log file
-            return 0; # plugin initialisation failed
-        }
-    }
-</verbatim>
-
-=cut
-
-sub checkDependencies {
-    my ( $context, $deps ) = @_;
-    my $report = '';
-    my $depsOK = 1;
-    foreach my $dep ( @$deps ) {
-        my ( $ok, $ver ) = ( 1, 0 );
-        my $msg = '';
-        my $const = '';
-
-        eval "use $dep->{package}";
-        if ( $@ ) {
-            $msg .= "it could not be found: $@";
-            $ok = 0;
-        } else {
-            if ( defined( $dep->{constraint} ) ) {
-                $const = $dep->{constraint};
-                eval "\$ver = \$$dep->{package}::VERSION;";
-                if ( $@ ) {
-                    $msg .= "the VERSION of the package could not be found: $@";
-                    $ok = 0;
-                } else {
-                    eval "\$ok = ( \$ver $const )";
-                    if ( $@ || ! $ok ) {
-                        $msg .= " $ver is currently installed: $@";
-                        $ok = 0;
-                    }
-                }
-            }
-        }
-        unless ( $ok ) {
-            $report .= "WARNING: $dep->{package}$const is required for $context, but $msg\n";
-            $depsOK = 0;
-        }
-    }
-    return undef if( $depsOK );
-
-    return $report;
-}
-
-=pod
-
 ---++ Functions: Template handling and topic creation
 
 ---+++ loadTemplate ( $theName, $theSkin, $theWeb ) -> $text
@@ -1624,7 +1640,7 @@ sub checkDependencies {
    * =$theWeb= - the web to look in for topics that contain templates (default: current web)
 Return: expanded template text (what's left after removal of all %TMPL:DEF% statements)
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 Reads a template and extracts template definitions, adding them to the
 list of loaded templates, overwriting any previous definition.
@@ -1647,7 +1663,7 @@ Do a %TMPL:P{$theDef}%, only expanding the template (not expanding any tags othe
    * =$theDef= - template name
 Return: the text of the expanded template
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 A template is defined using a %TMPL:DEF% statement in a template
 file. See the documentation on TWiki templates for more information.
@@ -1666,7 +1682,7 @@ Expand the limited set of variables that are always expanded during topic creati
    * =$text= - the text to process
 Return: text with variables expanded
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 Expands only the variables expected in templates that must be statically
 expanded in new content.
@@ -1699,7 +1715,7 @@ Parse a web and topic name, supplying defaults as appropriate.
    * =$topic= - Topic name, may be a web.topic string, required.
 Return: the parsed Web/Topic pai
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 | *Input* | *Return* |
 | <tt>( 'Web',  'Topic' )     </tt> | <tt>( 'Web',  'Topic' ) </tt> |
@@ -1779,7 +1795,7 @@ A. Peasant
 </verbatim>
 Leave a blank line between the last header field and the message body.
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -1797,7 +1813,7 @@ Get the email address(es) of the named user. If the user has multiple
 email addresses (for example, the user is a group), then the list will
 be comma-separated.
 
-*Since:* TWiki::Plugins::VERSION 1.026
+*Since:* TWiki::Plugins::VERSION 1.1
 
 =cut
 
@@ -1808,6 +1824,190 @@ sub wikiToEmail {
     my $user = $TWiki::Plugins::SESSION->{users}->findUser( $wiki );
     return '' unless $user;
     return join( ',', @{$user->emails()} );
+}
+
+=pod
+
+---++ Deprecated functions
+
+The following functions are retained for compatibility only. You should
+stop using them as soon as possible.
+
+---+++ getPublicWebList( ) -> @webs
+
+*DEPRECATED* since 1.1 - use =getListOfWebs= instead.
+
+Get list of all public webs, e.g. all webs that do not have the =NOSEARCHALL= flag set in the WebPreferences
+Return: =@webs= List of all public webs, e.g. =( 'Main',  'Know', 'TWiki' )=
+
+=cut
+
+sub getPublicWebList {
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    return $TWiki::Plugins::SESSION->{store}->getListOfWebs("user,public");
+}
+
+=pod
+
+---+++ formatGmTime( $time, $format ) -> $text
+
+*DEPRECATED* TWiki::Plugins::VERSION 1.025 (7 Dec 2002)
+
+Format the time to GM time
+   * =$time=   - Time in epoc seconds
+   * =$format= - Format type, optional. Default e.g. ='31 Dec 2002 - 19:30'=, can be ='iso'= (e.g. ='2002-12-31T19:30Z'=), ='rcs'= (e.g. ='2001/12/31 23:59:59'=, ='http'= for HTTP header format (e.g. ='Thu, 23 Jul 1998 07:21:56 GMT'=)
+Return: =$text=      Formatted time string
+
+*Since:* TWiki::Plugins::VERSION 1.000 (7 Dec 2002)
+
+=cut
+
+sub formatGmTime {
+#   my ( $epSecs, $format ) = @_;
+
+    # FIXME: Write warning based on flag (disabled for now); indicate who is calling this function
+    ## writeWarning( 'deprecated use of Func::formatGmTime' );
+
+    return TWiki::Time::formatTime( @_, 'gmtime' );
+}
+
+=pod
+
+---+++ getDataDir( ) -> $dir
+
+Get data directory (topic file root)
+Return: =$dir= Data directory, e.g. ='/twiki/data'=
+
+*DEPRECATED:* TWiki::Plugins::VERSION 1.1
+
+This function violates store encapsulation and is therefore *deprecated*. Use
+the various web, topic and attachment manipulation functions instead.
+
+=cut
+
+sub getDataDir {
+    return $TWiki::cfg{DataDir};
+}
+
+=pod
+
+---+++ getPubDir( ) -> $dir
+
+*DEPRECATED:* TWiki::Plugins::VERSION 1.1
+
+Get pub directory (file attachment root). Attachments are in =$dir/Web/TopicName=
+Return: =$dir= Pub directory, e.g. ='/htdocs/twiki/pub'=
+
+This function violates store encapsulation and is therefore *deprecated*.
+
+Use =readAttachment= and =saveAttachment= instead.
+
+=cut
+
+sub getPubDir {
+    return $TWiki::cfg{PubDir};
+}
+
+=pod
+
+---+++ checkDependencies( $moduleName, $dependenciesRef ) -> $error
+
+*DEPRECATED:* TWiki::Plugins::VERSION 1.1
+
+Use Plugins.BuildContrib and define DEPENDENCIES that can be statically
+evaluated at install time instead. It is a lot more efficient.
+
+=cut
+
+sub checkDependencies {
+    my ( $context, $deps ) = @_;
+    my $report = '';
+    my $depsOK = 1;
+    foreach my $dep ( @$deps ) {
+        my ( $ok, $ver ) = ( 1, 0 );
+        my $msg = '';
+        my $const = '';
+
+        eval "use $dep->{package}";
+        if ( $@ ) {
+            $msg .= "it could not be found: $@";
+            $ok = 0;
+        } else {
+            if ( defined( $dep->{constraint} ) ) {
+                $const = $dep->{constraint};
+                eval "\$ver = \$$dep->{package}::VERSION;";
+                if ( $@ ) {
+                    $msg .= "the VERSION of the package could not be found: $@";
+                    $ok = 0;
+                } else {
+                    eval "\$ok = ( \$ver $const )";
+                    if ( $@ || ! $ok ) {
+                        $msg .= " $ver is currently installed: $@";
+                        $ok = 0;
+                    }
+                }
+            }
+        }
+        unless ( $ok ) {
+            $report .= "WARNING: $dep->{package}$const is required for $context, but $msg\n";
+            $depsOK = 0;
+        }
+    }
+    return undef if( $depsOK );
+
+    return $report;
+}
+
+=pod
+
+---+++ readFile( $filename ) -> $text
+
+*DEPRECATED:* TWiki::Plugins::VERSION 1.1
+Deprecated because this API must not manipulate text files, just
+TWiki topics and webs.
+
+Read text file, low level. NOTE: For topics use readTopicText()
+   * =$filename= - Full path name of file
+Return: =$text=        Content of file
+
+=cut
+
+sub readFile {
+    my $name = shift;
+    my $data = '';
+    open( IN_FILE, "<$name" ) || return '';
+    my $s = $/;
+    undef $/; # set to read to EOF
+    $data = <IN_FILE>;
+    $/ = $s;
+    close( IN_FILE );
+    $data = '' unless $data; # no undefined
+    return $data;
+}
+
+=pod
+
+---+++ saveFile( $filename, $text )
+
+*DEPRECATED:* TWiki::Plugins::VERSION 1.1
+Deprecated because this API must not manipulate text files, just
+TWiki topics and webs.
+
+Save text file, low level.
+   * =$filename= - Full path name of file
+   * =$text=     - Text to save
+Return:                none
+
+=cut
+
+sub saveFile {
+    my( $name, $text ) = @_;
+
+    unless ( open( FILE, ">$name" ) )  {
+        die "Can't create file $name - $!\n";
+    }
+    print FILE $text;
+    close( FILE);
 }
 
 1;

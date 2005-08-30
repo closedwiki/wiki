@@ -137,7 +137,7 @@ sub fetchPass {
     if( $user ) {
         try {
             my $text = _readPasswd();
-            if( $text =~ m/^$user\:(\S+)/m ) {
+            if( $text =~ m/^$user\:(\S+)\s*$/m ) {
                 return $1;
             }
             $this->{error} = 'Login invalid';

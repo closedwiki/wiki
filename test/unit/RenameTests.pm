@@ -102,7 +102,7 @@ sub check {
     while (scalar(@old)) {
         my $o = "$num: ".shift(@old);
         my $n = "$num: ".shift(@new);
-        $this->assert_str_equals($o, $n, "$o $n ".join(",",caller));
+        $this->assert_str_equals($o, $n, "Expect $o\nActual $n\n".join(",",caller));
     }
 }
 
@@ -142,7 +142,7 @@ sub test_rename_oldwebnewtopic {
     $query->path_info( "/$oldweb/SanityCheck" );
     $twiki = new TWiki( "TestUser1", $query );
     $TWiki::Plugins::SESSION = $twiki;
-    TWiki::UI::Manage::rename( $twiki );
+    $this->capture(\&TWiki::UI::Manage::rename, $twiki );
 
     $this->assert( $twiki->{store}->topicExists( $oldweb, $newtopic ));
     $this->assert(!$twiki->{store}->topicExists( $oldweb, $oldtopic ));
@@ -220,7 +220,7 @@ sub test_rename_newweboldtopic {
     $query->path_info("/$oldweb" );
     $twiki = new TWiki( "TestUser1", $query );
     $TWiki::Plugins::SESSION = $twiki;
-    TWiki::UI::Manage::rename( $twiki );
+    $this->capture( \&TWiki::UI::Manage::rename, $twiki );
 
     $this->assert( $twiki->{store}->topicExists( $newweb, $oldtopic ));
     $this->assert(!$twiki->{store}->topicExists( $oldweb, $oldtopic ));
