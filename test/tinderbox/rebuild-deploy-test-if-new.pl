@@ -68,7 +68,7 @@ my $newVersionAvailable = !$lastVersion || ($rev > $lastVersion);
 if ( $Config->{force} || $newVersionAvailable )
 {
     # start new build
-    open( LOCK, ">.build" ) or die $!;
+    open( LOCK, ">", BUILD_LOCK ) or die $!;
     print LOCK "$rev\n";
     close( LOCK );
 
