@@ -1,7 +1,7 @@
 use strict;
 
-use TWiki::Contrib::DBCache;
-use TWiki::Contrib::Map;
+use TWiki::Contrib::DBCacheContrib;
+use TWiki::Contrib::DBCacheContrib::Map;
 
 use TWiki::Func;
 
@@ -52,7 +52,7 @@ sub tear_down {
 
 sub notest_loadSimple {
   my $this = shift;
-  my $db = new TWiki::Contrib::DBCache($testweb);
+  my $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_str_equals("0 2 0", $db->load());
   my $topic = $db->get("WebHome");
   $this->assert($topic);
@@ -126,7 +126,7 @@ sub notest_loadSimple {
 
 sub test_cache {
   my $this = shift;
-  my $db = new TWiki::Contrib::DBCache($testweb);
+  my $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_str_equals($testweb, $db->{_web});
   $this->assert_equals(0, $db->{loaded});
 
@@ -137,7 +137,7 @@ sub test_cache {
   my $initial = $db;
 
   # There's a cache there now
-  $db = new TWiki::Contrib::DBCache($testweb);
+  $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_equals(0, $db->{loaded});
   $this->assert_str_equals("2 0 0", $db->load());
   $this->assert_equals(1, $db->{loaded});
@@ -145,41 +145,33 @@ sub test_cache {
   $this->checkSameAs($initial,$db);
 
   sleep(1);# wait for clock tick, and re-save file
-print "URGLE $formTest\n";
   TWiki::Func::saveTopicText( $testweb, "FormTest", $formTest );
 
-print STDERR "exXXXXXXXXXX\n";
-print `cat /home/twiki/DEVELOP/data/$testweb/FormTest.txt`;
-
   # One file in the cache has been touched
-  $db = new TWiki::Contrib::DBCache($testweb);
+  $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_str_equals("1 1 0", $db->load());
 
-print STDERR "initial ",$initial->toString(),"\n";
-print STDERR "stored ",$db->toString(),"\n";
-`cat /home/twiki/DEVELOP/data/$testweb/FormTest.txt`;
   $this->checkSameAs($initial,$db);
-print STDERR "OK PASSED\n";
-  $db = new TWiki::Contrib::DBCache($testweb);
+  $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_str_equals("2 0 0", $db->load());
   $this->checkSameAs($initial,$db);
 
   # A new file has been created
   TWiki::Func::saveTopicText( $testweb, "NewFile", "Blah" );
 
-  $db = new TWiki::Contrib::DBCache($testweb);
+  $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_str_equals("2 1 0", $db->load());
 
   # One file in the cache has been deleted
   $twiki->{store}->moveTopic($testweb, "FormTest", "Trash", "FormTest$$",
                             $twiki->{user});
-  $db = new TWiki::Contrib::DBCache($testweb);
+  $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_str_equals("2 0 1", $db->load());
 
   $twiki->{store}->moveTopic($testweb, "NewFile", "Trash", "NewFile$$",
                             $twiki->{user});
   TWiki::Func::saveTopicText( $testweb, "FormTest", $formTest );
-  $db = new TWiki::Contrib::DBCache($testweb);
+  $db = new TWiki::Contrib::DBCacheContrib($testweb);
   $this->assert_str_equals("1 1 1", $db->load());
 
   $this->checkSameAs($initial, $db);
@@ -195,14 +187,14 @@ sub checkSameAs {
   my $type = ref($first);
 
   $this->assert_str_equals($type,ref($second),"$cmping |$type|\n|".ref($second)."|");
-  if ($type =~ /Map$/ || $type =~ /DBCache$/) {
+  if ($type =~ /Map$/ || $type =~ /DBCacheContrib$/) {
     $this->checkSameAsMap($first, $second, $cmping, $checked);
   } elsif ($type =~ /Array$/) {
     $this->checkSameAsArray($first, $second, $cmping, $checked);
   } elsif ($type =~ /FileTime$/) {
     $this->checkSameAsFileTime($first, $second, $cmping, $checked);
   } else {
-    $this->assert(0,ref($first));
+    $this->assert(0,ref($first)." != ".ref($second));
   }
 }
 
@@ -217,7 +209,11 @@ sub checkSameAsMap {
     if (ref($a)) {
       $this->checkSameAs($a, $b, $c, $checked );
     } elsif ( $k !~ /^_/ && $c !~ /\.date$/ ) {
-      $this->assert_str_equals($a, $b, "$c |$a| |$b|");
+        if($c =~ /\.text$/) {
+            $this->assert_matches(qr/^$a\s*$/, $b, "$c ($a!=$b)");
+        } else {
+            $this->assert_str_equals($a, $b, "$c ($a!=$b)");
+        }
     }
   }
 }
@@ -232,9 +228,13 @@ sub checkSameAsArray {
     my $c = "$cmping\[$i\]";
     my $b = $second->get($i++);
     if ( ref( $a )) {
-      $this->checkSameAs($a, $b, $c, $checked );
+        $this->checkSameAs($a, $b, $c, $checked );
     } else {
-      $this->assert_str_equals($a, $b, "$c ($a!=$b)");
+        if($c =~ /\.text$/) {
+            $this->assert_matches(qr/^$a\s*$/, $b, "$c ($a!=$b)");
+        } else {
+            $this->assert_str_equals($a, $b, "$c ($a!=$b)");
+        }
     }
   }
 }

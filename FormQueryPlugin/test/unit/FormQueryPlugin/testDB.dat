@@ -356,3 +356,7 @@ text|302|19-AUG-2000|
 %META:FIELD{name="Level" value="3"}%
 %META:FIELD{name="RealName" value="Plugins"}%
 
+<TOPIC> "WebPreferences"
+   * Set FQRELATIONS =  Dir%B_%A subdir Dir%B; Dir%A_%C_%B subsubdir Dir%A_%C
+   * Set FQTABLES = FileTable,DirTable
+   * Set FQHIGHLIGHTMAP = PrettyPrint

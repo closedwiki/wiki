@@ -15,17 +15,11 @@ use vars qw(
 	    $debug $db $initialised
 	   );
 
-$VERSION = '1.201';
+$VERSION = '1.202';
 $pluginName = 'FormQueryPlugin';
 $initialised = 0;
 $db = undef;
 $debug = 0;
-
-my @dependencies =
-  (
-   { package => 'TWiki::Plugins', constraint => '>= 1.010' },
-   { package => 'TWiki::Contrib::DBCache', constraint => '>= 1.000' },
-  );
 
 sub initPlugin {
   ( $topic, $web, $user, $installWeb ) = @_;
@@ -100,15 +94,15 @@ sub _handleSumQuery {
 }
 
 sub _handleCalc {
-  return FormQueryPlugin::Arithmetic::evaluate( shift );
+  return  TWiki::Plugins::FormQueryPlugin::Arithmetic::evaluate( shift );
 }
 
 sub _handleWorkingDays {
-  return FormQueryPlugin::ReqDBSupport::workingDays( @_ );
+  return  TWiki::Plugins::FormQueryPlugin::ReqDBSupport::workingDays( @_ );
 }
 
 sub _handleProgress {
-  return FormQueryPlugin::ReqDBSupport::progressBar( @_ );
+  return  TWiki::Plugins::FormQueryPlugin::ReqDBSupport::progressBar( @_ );
 }
 
 sub _lazyInit {
@@ -118,15 +112,6 @@ sub _lazyInit {
   # FQP_ENABLE must be set globally or in this web!
   return 0 unless ( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_ENABLE" ));
 
-  if ( defined( &TWiki::Func::checkDependencies ) ) {
-    my $err = TWiki::Func::checkDependencies( $pluginName, \@dependencies );
-    if( $err ) {
-      TWiki::Func::writeWarning( $err );
-      print STDERR $err; # print to webserver log file
-      return 0; # plugin initialisation failed
-    }
-  }
-
   eval 'use TWiki::Plugins::FormQueryPlugin::WebDB;';
   die $@ if $@;
   eval 'use TWiki::Plugins::FormQueryPlugin::ReqDBSupport;';
@@ -134,7 +119,7 @@ sub _lazyInit {
   eval 'use TWiki::Plugins::FormQueryPlugin::Arithmetic;';
   die $@ if $@;
 
-  $db = new FormQueryPlugin::WebDB( $web );
+  $db = new  TWiki::Plugins::FormQueryPlugin::WebDB( $web );
 
   return 0 unless $db;
 

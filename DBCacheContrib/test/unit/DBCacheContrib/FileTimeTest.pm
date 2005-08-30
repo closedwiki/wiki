@@ -4,9 +4,9 @@ package FileTimeTest;
 
 use base qw(TWikiTestCase);
 
-use TWiki::Contrib::Archive;
-use TWiki::Contrib::FileTime;
-use TWiki::Contrib::Array;
+use TWiki::Contrib::DBCacheContrib::Archive;
+use TWiki::Contrib::DBCacheContrib::FileTime;
+use TWiki::Contrib::DBCacheContrib::Array;
 use TWiki::Func;
 use Storable;
 
@@ -33,12 +33,12 @@ sub set_up {
 
   my $dbt = $twiki->{store}->readFile("./testDB.dat");
   $root = TWiki::Func::getDataDir() . "/$testweb";
-  $files = new TWiki::Contrib::Array();
+  $files = new TWiki::Contrib::DBCacheContrib::Array();
   foreach my $t ( split(/\<TOPIC\>/,$dbt)) {
     if ( $t =~ m/\"(.*?)\"/o ) {
         $twiki->{store}->saveTopic( $twiki->{user}, $testweb, $1,
                                     $t, undef );
-        $files->add(new TWiki::Contrib::FileTime( "$root/$1.txt" ));
+        $files->add(new TWiki::Contrib::DBCacheContrib::FileTime( "$root/$1.txt" ));
     }
   }
   $acache = "$root/cache.Archive";

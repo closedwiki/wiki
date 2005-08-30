@@ -13,9 +13,9 @@ cannot be subclassed e.g. for serialisation. To avoid lots of horrid code to han
 special cases of the different perl data structures, we use this array object instead.
 
 =cut
-use TWiki::Contrib::Search;
+use TWiki::Contrib::DBCacheContrib::Search;
 
-{ package TWiki::Contrib::Array;
+package TWiki::Contrib::DBCacheContrib::Array;
 
 =begin text
 
@@ -24,7 +24,7 @@ Create a new, empty array object
 
 =cut
 
-  sub new {
+sub new {
     my $class = shift;
     my $this = {};
 
@@ -33,15 +33,15 @@ Create a new, empty array object
     $this->{values} = ();
 
     return bless( $this, $class );
-  }
+}
 
-  # PUBLIC dispose of this array, breaking any circular references
-  sub DESTROY {
+# PUBLIC dispose of this array, breaking any circular references
+sub DESTROY {
     my $this = shift;
     #print STDERR "Destroy ",ref($this),"\n";
     $this->{values} = undef;
     # should be enough; nothing else should be pointing to the array
-  }
+}
 
 =begin text
 
@@ -51,10 +51,10 @@ Add an element to the end of the array
 
 =cut
 
-  sub add {
+sub add {
     my $this = shift;
     return push( @{$this->{values}}, shift );
-  }
+}
 
 =begin text
 
@@ -64,15 +64,15 @@ Uses "==" to find the given element in the array and return it's index
 
 =cut
 
-  sub find {
+sub find {
     my ( $this, $obj ) = @_;
     my $i = 0;
     foreach my $meta ( @{$this->{values}} ) {
-      return $i if ( $meta == $obj );
-      $i++;
+        return $i if ( $meta == $obj );
+        $i++;
     }
     return -1;
-  }
+}
 
 =begin text
 
@@ -82,10 +82,10 @@ Remove an entry at an index from the array.
 
 =cut
 
-  sub remove {
+sub remove {
     my ( $this, $i ) = @_;
     splice( @{$this->{values}}, $i, 1 );
-  }
+}
 
 =begin text
 
@@ -106,51 +106,51 @@ Where the result of a subfield expansion is another object (a Map or an Array) t
 get("parent.UserTable[?SubTopic='ThisTopic'].UserName", $web);
 </verbatim>
 
-See also =TWiki::Contrib::Map= for syntax that applies to maps.
+See also =TWiki::Contrib::DBCacheContrib::Map= for syntax that applies to maps.
 
 =cut
 
-  sub get {
+sub get {
     my ( $this, $key, $root ) = @_;
     # Field
     if ( $key =~ m/^(\d+)(.*)/o ) {
-	  return undef unless ( $this->size() > $1 );
-	  my $field = $this->{values}[$1];
-	  return $field->get( $2, $root ) if ( $2  && ref( $field ));
-	  return $field;
+        return undef unless ( $this->size() > $1 );
+        my $field = $this->{values}[$1];
+        return $field->get( $2, $root ) if ( $2  && ref( $field ));
+        return $field;
     } elsif ( $key =~ m/^\.(.*)$/o ) {
-	  return $this->get( $1, $root );
+        return $this->get( $1, $root );
 	} elsif ( $key =~ /^(\w+)$/o ) {
-      return $this->sum( $key );
+        return $this->sum( $key );
 	} elsif ( $key =~ m/^\[\?(.+)$/o ) {
-	  my ( $one, $two ) = mbrf( "[", "]", $1);
-      my $res = $this->search( new TWiki::Contrib::Search( $one ) );
-	  return $res->get( $two ) if ( $two && ref( $res ));
-	  return $res;
+        my ( $one, $two ) = mbrf( "[", "]", $1);
+        my $res = $this->search( new TWiki::Contrib::DBCacheContrib::Search( $one ) );
+        return $res->get( $two ) if ( $two && ref( $res ));
+        return $res;
 	} elsif ( $key =~ m/^\[\*(.+)$/o ) {
-	  my ( $one, $two ) = mbrf( "[", "]", $1);
-      my $res = new TWiki::Contrib::Array();
+        my ( $one, $two ) = mbrf( "[", "]", $1);
+        my $res = new TWiki::Contrib::DBCacheContrib::Array();
 
-	  foreach my $meta ( @{$this->{values}} ) {
-		if ( ref( $meta )) {
-		  my $fieldval = $meta->get( $one, $root );
-		  if ( defined( $fieldval ) ) {
-			$res->add( $fieldval );
-		  }
-		}
-	  }
+        foreach my $meta ( @{$this->{values}} ) {
+            if ( ref( $meta )) {
+                my $fieldval = $meta->get( $one, $root );
+                if ( defined( $fieldval ) ) {
+                    $res->add( $fieldval );
+                }
+            }
+        }
 
-	  return $res;
+        return $res;
 	} elsif ( $key =~ m/^\[(.+)\](.*)$/o ) {
-	  my $field = $this->get( $1, $root );
-	  return $field->get( $2, $root ) if ( $2 && ref( $field ));
-	  return $field;
+        my $field = $this->get( $1, $root );
+        return $field->get( $2, $root ) if ( $2 && ref( $field ));
+        return $field;
     } elsif ( $key =~ m/^#(.*)$/o ) {
-	  return $root->get( $1, $root );
+        return $root->get( $1, $root );
     } else {
-	  die "ERROR: bad Array expression at $key";
+        die "ERROR: bad Array expression at $key";
 	}
-  }
+}
 
 =begin text
 
@@ -159,11 +159,11 @@ Get the size of the array
 
 =cut
 
-  sub size {
+sub size {
     my $this = shift;
     return 0 unless ( defined( $this->{values} ));
     return scalar( @{$this->{values}} );
-  }
+}
 
 =begin text
 
@@ -173,7 +173,7 @@ Returns the sum of values of the given field in the objects stored in this array
 
 =cut
 
-  sub sum {
+sub sum {
     my ( $this, $field ) = @_;
     return 0 if ( $this->size() == 0 );
 
@@ -181,54 +181,54 @@ Returns the sum of values of the given field in the objects stored in this array
     my $subfields;
 
     if ( $field =~ s/(\w+)\.(.*)/$1/o ) {
-      $subfields = $2;
+        $subfields = $2;
     }
 
     foreach my $meta ( @{$this->{values}} ) {
-      if ( ref( $meta )) {
-		my $fieldval = $meta->get( $field, undef );
-		if ( defined( $fieldval ) ) {
-		  if ( defined( $subfields )) {
-			die "$field has no subfield $subfields" unless ( ref( $fieldval ));
-			$sum += $fieldval->sum( $subfields );
-		  } elsif ( $fieldval =~ m/^\s*\d+/o ) {
-			$sum += $fieldval;
-		  }
-		}
-      }
+        if ( ref( $meta )) {
+            my $fieldval = $meta->get( $field, undef );
+            if ( defined( $fieldval ) ) {
+                if ( defined( $subfields )) {
+                    die "$field has no subfield $subfields" unless ( ref( $fieldval ));
+                    $sum += $fieldval->sum( $subfields );
+                } elsif ( $fieldval =~ m/^\s*\d+/o ) {
+                    $sum += $fieldval;
+                }
+            }
+        }
     }
 
     return $sum;
-  }
+}
 
-  sub contains {
+sub contains {
     my ( $this, $tv ) = @_;
     return ( $this->find( $tv ) >= 0 );
-  }
+}
 
 =begin text
 
 ---+++ =search($search)= -> search result
-   * =$search* =TWiki::Contrib::Search object to use in the search
+   * =$search* =TWiki::Contrib::DBCacheContrib::Search object to use in the search
 Search the array for matches with the given object.
-values. Return a =TWiki::Contrib::Array= of matching entries.
+values. Return a =TWiki::Contrib::DBCacheContrib::Array= of matching entries.
 
 =cut
 
-  sub search {
+sub search {
     my ( $this, $search ) = @_;
-    my $result = new TWiki::Contrib::Array();
+    my $result = new TWiki::Contrib::DBCacheContrib::Array();
 
     return $result unless ( $this->size() > 0 );
 
     foreach my $meta ( @{$this->{values}} ) {
-      if ( $search->matches( $meta )) {
-	$result->add( $meta );
-      }
+        if ( $search->matches( $meta )) {
+            $result->add( $meta );
+        }
     }
 
     return $result;
-  }
+}
 
 =begin text
 
@@ -238,17 +238,17 @@ Get a "perl" array of the values in the array, suitable for use with =foreach=
 
 =cut
 
-   # For some reason when an empty array is restored from Storable,
-  # getValues gives us a one-element array. Archive doesn't,
-  # it gives us a nice empty array. With storable, the one
-  # entry is undef.
-  sub getValues {
+# For some reason when an empty array is restored from Storable,
+# getValues gives us a one-element array. Archive doesn't,
+# it gives us a nice empty array. With storable, the one
+# entry is undef.
+sub getValues {
     my $this = shift;
 
     return undef unless ( defined( @{$this->{values}} ));
     # does this return the array by reference? probably not...
     return @{$this->{values}};
-  }
+}
 
 =begin text
 
@@ -259,79 +259,80 @@ Generates an HTML string representation of the object.
 
 =cut
 
-  sub toString {
+sub toString {
     my ( $this, $limit, $level, $strung ) = @_;
+
     if ( !defined( $strung )) {
-      $strung = {};
+        $strung = {};
     } elsif ( $strung->{$this} ) {
-      return "$this";
+        return $this;
     }
     $level = 0 unless (defined($level));
     $limit = 2 unless (defined($limit));
     if ( $level == $limit ) {
-      return "$this.....";
+        return "$this.....";
     }
     $strung->{$this} = 1;
-    my $ss = "$this<ol start=0>";
+    my $ss = '';
     if ( $this->size() > 0 ) {
-      my $n = 0;
-      foreach my $entry ( @{$this->{values}} ) {
-	$ss .= "<li>";
-	if ( ref( $entry )) {
-	  $ss .= $entry->toString( $limit, $level + 1, $strung );
-	} elsif ( defined( $entry )) {
-	  $ss .= "\"$entry\"";
-	} else {
-	  $ss .= "UNDEF";
-	}
-	$ss .= "</li>";
-	$n++;
-      }
+        my $n = 0;
+        foreach my $entry ( @{$this->{values}} ) {
+            my $item = '';
+            if( ref( $entry )) {
+                $item .= $entry->toString( $limit, $level + 1, $strung );
+            } elsif( defined( $entry )) {
+                $item .= '"'.$entry.'"';
+            } else {
+                $item .= 'UNDEF';
+            }
+            $ss .= CGI::li( $item );
+            $n++;
+        }
     }
-    return "$ss</ol>";
-  }
+    return CGI::ol({start=>0}, $ss);
+}
 
 =begin text
 
 ---+++ write($archive)
-   * =$archive= - the TWiki::Contrib::Archive being written to
+   * =$archive= - the TWiki::Contrib::DBCacheContrib::Archive being written to
 Writes this object to the archive. Archives are used only if Storable is not available. This
 method must be overridden by subclasses is serialisation of their data fields is required.
 
 =cut
 
-  sub write {
+sub write {
     my ( $this, $archive ) = @_;
 
     my $sz = $this->size();
     $archive->writeInt( $sz );
     foreach my $v ( @{$this->{values}} ) {
-      $archive->writeObject( $v );
+        $archive->writeObject( $v );
     }
-  }
+}
 
 =begin text
 
 ---+++ read($archive)
-   * =$archive= - the TWiki::Contrib::Archive being read from
+   * =$archive= - the TWiki::Contrib::DBCacheContrib::Archive being read from
 Reads this object from the archive. Archives are used only if Storable is not available. This
 method must be overridden by subclasses is serialisation of their data fields is required.
 
 =cut
 
-  sub read {
+sub read {
     my ( $this, $archive ) = @_;
     my $sz = $archive->readInt();
     while ( $sz-- > 0 ) {
-      push( @{$this->{values}}, $archive->readObject() );
+        push( @{$this->{values}}, $archive->readObject() );
     }
-  }
+}
 
-  # PUBLIC but not exported
-  # bracket-matching split of a string into ( $one, $two ) where $one
-  # matches the section before the closing bracket and $two matches
-  # the section after. throws if the closing bracket isn't found.
-  sub mbrf {
+# PUBLIC but not exported
+# bracket-matching split of a string into ( $one, $two ) where $one
+# matches the section before the closing bracket and $two matches
+# the section after. throws if the closing bracket isn't found.
+sub mbrf {
 	my ($ob, $cb, $s) = @_;
 	
 	my @a = reverse(split(/ */, $s));
@@ -339,20 +340,19 @@ method must be overridden by subclasses is serialisation of their data fields is
 	my $d = 0;
 	
 	while ( $#a >= 0 ) {
-	  my $c = pop( @a );
-	  if ($c eq $cb) {
-		if ( !$d ) {
-		  return ( $pre, join("", reverse(@a)));
-		} else {
-		  $d--;
-		}
-	  } elsif ( $c eq $ob ) {
-		$d++;
-	  }
-	  $pre .= $c;
+        my $c = pop( @a );
+        if ($c eq $cb) {
+            if ( !$d ) {
+                return ( $pre, join("", reverse(@a)));
+            } else {
+                $d--;
+            }
+        } elsif ( $c eq $ob ) {
+            $d++;
+        }
+        $pre .= $c;
 	}
 	die "ERROR: mismatched $ob$cb at $s";
-  }
 }
 
 1;

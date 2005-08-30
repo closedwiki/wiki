@@ -34,59 +34,59 @@ use strict;
 #
 # The method "apply" is used to get from a shild topic to a parent topic
 # name. 
-{ package FormQueryPlugin::Relation;
+package TWiki::Plugins::FormQueryPlugin::Relation;
 
-  # PUBLIC create a new relation by parsing the given string
-  sub new {
+# PUBLIC create a new relation by parsing the given string
+sub new {
     my ( $class, $cm ) = @_;
     my $this = {};
     if ( $cm =~ m/^\s*([^\s]+)\s+(\w+)\s+([^\s]+)/o ) {
-      my $child = $1;
-      $this->{relation} = $2;
-      my $parent = $3;
-      $this->{child} = $child;
-      $this->{parent} = $parent;
-      my $n = 1;
-      while ( $child =~ s/%(\w)/(\\w+)/o ) {
-	$parent =~ s/%$1/\$$n/;
-	$n++;
-      }
-      $this->{childToParent} = "\$parent =~ s/^${child}\$/$parent/o";
+        my $child = $1;
+        $this->{relation} = $2;
+        my $parent = $3;
+        $this->{child} = $child;
+        $this->{parent} = $parent;
+        my $n = 1;
+        while ( $child =~ s/%(\w)/(\\w+)/o ) {
+            $parent =~ s/%$1/\$$n/;
+            $n++;
+        }
+        $this->{childToParent} = "\$parent =~ s/^${child}\$/$parent/o";
     }
     return bless( $this, $class );
-  }
+}
 
-  sub childToParent {
+sub childToParent {
     my $this = shift;
 
     return $this->{relation} . "_of";
-  }
+}
 
-  sub parentToChild {
+sub parentToChild {
     my $this = shift;
 
     return $this->{relation};
-  }
+}
 
-  # PUBLIC apply the relation to derive a new topic name
-  sub apply {
+# PUBLIC apply the relation to derive a new topic name
+sub apply {
     my ( $this, $topic ) = @_;
     my $parent = $topic;
     eval $this->{childToParent};
     if ( $parent eq $topic ) {
-      return undef;
+        return undef;
     } else {
-      return $parent;
+        return $parent;
     }
-  }
+}
 
-  # Derivative creation. A derivative is defined as the next topic that
-  # does not exist found by incrementing the last %n in the re. This
-  # method computes a pattern for the next child in the sequence, returning
-  # a topic name with a '\n' where the topic number should go. It is
-  # the responsibility of the caller to determine if this conflicts with
-  # any known topic.
-  sub nextChild {
+# Derivative creation. A derivative is defined as the next topic that
+# does not exist found by incrementing the last %n in the re. This
+# method computes a pattern for the next child in the sequence, returning
+# a topic name with a '\n' where the topic number should go. It is
+# the responsibility of the caller to determine if this conflicts with
+# any known topic.
+sub nextChild {
     my ( $this, $topic ) = @_;
 
     # find out what all the other fields should be by matching this
@@ -97,8 +97,8 @@ use strict;
     # Replace map characters in the parent with (\w+) and
     # record the character for each match number ($1, $2 etc )
     while ( $parent =~ s/%(\w)/(\\w+)/o ) {
-      #print STDERR "Push $1\n";
-      push( @chars, $1 );
+        #print STDERR "Push $1\n";
+        push( @chars, $1 );
     }
 
     # use apply to find the parent of the known child
@@ -114,27 +114,26 @@ use strict;
     my $n = 1;
     my %map;
     foreach my $ch ( @chars ) {
-      $map{$ch} = eval "\$$n";
-      $n++;
+        $map{$ch} = eval "\$$n";
+        $n++;
     }
 
     # Now replace the named field values in the child expression
     my $child = $this->{child};
     foreach my $key ( keys( %map )) {
-      #print STDERR "Map %$key -> $map{$key}\n";
-      $child =~ s/%$key/$map{$key}/;
+        #print STDERR "Map %$key -> $map{$key}\n";
+        $child =~ s/%$key/$map{$key}/;
     }
     # the remaining % in the child is what we want to increment
     $child =~ s/%\w/\n/o;
 
     return $child;
-  }
+}
 
-  sub toString {
+sub toString {
     my $this = shift;
 
     return $this->{child} . " " . $this->{relation} . " " . $this->{parent};
-  }
 }
 
 1;

@@ -21,7 +21,7 @@ Feedback is very welcome - please add to the TWiki:Plugins.WysiwygPluginDev topi
 	* Supports the input of malformed HTML
 	* Full round-trip (TWiki syntax -> XHTML -> TWiki syntax)
 	* Framework is editor agnostic
-	* Customised [[http://kupu.osqom.org][Kupu]] editor included
+	* Customised [[http://kupu.oscom.org][Kupu]] editor included
 
 ---++ Details
 ---+++ What's in the package

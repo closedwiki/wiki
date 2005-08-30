@@ -9,7 +9,7 @@ use Time::ParseDate;
 =begin text
 
 ---++ class Search
-Search operators work on the fields of a TWiki::Contrib::Map. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
+Search operators work on the fields of a TWiki::Contrib::DBCacheContrib::Map. The fields are given by name, and the values by strings. Strings should always be surrounded by 'single-quotes'. String which are regular expressions use 'perl' re syntax (see =man perlre= for help)
 
 *Warning* single and double quotes are not allowed in values!
 
@@ -39,9 +39,9 @@ contract with the rest of the world.
 ---+++ Example
 Get a list of attachments that have a date earlier than 1st January 2000
 <verbatim>
-  $db = new TWiki::Contrib::DBCache( $web ); # always done
+  $db = new TWiki::Contrib::DBCacheContrib::DBCache( $web ); # always done
   $db->load();
-  my $search = new TWiki::Contrib::Search("date EARLIER_THAN '1st January 2000'");
+  my $search = new TWiki::Contrib::DBCacheContrib::Search("date EARLIER_THAN '1st January 2000'");
 
   foreach my $topic ($db->getKeys()) {
      my $attachments = $topic->get("attachments");
@@ -55,7 +55,7 @@ Get a list of attachments that have a date earlier than 1st January 2000
 
 =cut
 
-{ package TWiki::Contrib::Search;
+{ package TWiki::Contrib::DBCacheContrib::Search;
 
   # Operator precedences
   my %prec =
@@ -102,7 +102,7 @@ Construct a new search node by parsing the passed expression.
     my $this;
     if ( defined( $string )) {
       if ( $string =~ m/^\s*$/o ) {
-		return new TWiki::Contrib::Search( undef, undef, "TRUE", undef );
+		return new TWiki::Contrib::DBCacheContrib::Search( undef, undef, "TRUE", undef );
       } else {
 		my $rest;
 		( $this, $rest ) = _parse( $string );
@@ -129,7 +129,7 @@ Construct a new search node by parsing the passed expression.
       $l = pop( @$opands );
       die "Bad search" unless defined( $l );
     }
-    my $n = new TWiki::Contrib::Search( undef, $l, $o, $r );
+    my $n = new TWiki::Contrib::DBCacheContrib::Search( undef, $l, $o, $r );
     push( @$opands, $n);
   }
 

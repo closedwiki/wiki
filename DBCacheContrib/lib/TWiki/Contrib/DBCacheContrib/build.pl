@@ -32,7 +32,7 @@ package DBCacheBuild;
 
 sub new {
   my $class = shift;
-  return bless( $class->SUPER::new( "DBCacheContrib", "DBCache" ), $class );
+  return bless( $class->SUPER::new( "DBCacheContrib" ), $class );
 }
 
 $build = new DBCacheBuild();
