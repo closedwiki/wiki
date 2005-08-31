@@ -52,8 +52,8 @@ print STDERR Dumper( $Config ) if $Config->{debug};
 # make easy to work as a crontab job
 chdir( $FindBin::Bin );
 
-my $buildInProgress = -x BUILD_LOCK;
-exit if $buildInProgress;
+# bail early (as early as possible) if we're already doing a build
+exit 0 if -e BUILD_LOCK;
 
 chomp( my ( $rev, $author ) = `./latest-svn-checkin.pl` );
 
