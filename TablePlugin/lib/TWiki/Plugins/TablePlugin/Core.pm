@@ -30,7 +30,7 @@ use vars qw( $translationToken
              $headerRows $footerRows
              @fields $upchar $downchar $diamondchar $url
              @isoMonth %mon2num $initSort $initDirection
-             @rowspan );
+             @rowspan $pluginAttrs $prefsAttrs );
 
 BEGIN {
     $translationToken = "\0";
@@ -69,6 +69,9 @@ sub _setDefaults {
     @dataBg       = ( "#FFFFCC", "#FFFFFF" );
     @dataColor    = ( );
     undef $initSort;
+
+    _parseParameters( $pluginAttrs );
+    _parseParameters( $prefsAttrs );   # Preferences setting
 }
 
 # Table attributes defined as a Plugin setting, a preferences setting
@@ -562,13 +565,11 @@ sub handler {
             $sortAttachments =1;
         }
 
-        _setDefaults();
-        my $pluginAttrs =
+        $pluginAttrs =
           TWiki::Func::getPreferencesValue( 'TABLEPLUGIN_TABLEATTRIBUTES' );
-        _parseParameters( $pluginAttrs );
-        my $prefsAttrs =
+        $prefsAttrs =
           TWiki::Func::getPreferencesValue( 'TABLEATTRIBUTES' );
-        _parseParameters( $prefsAttrs );   # Preferences setting
+        _setDefaults();
 
         $TWiki::Plugins::TablePlugin::initialised = 1;
     }
