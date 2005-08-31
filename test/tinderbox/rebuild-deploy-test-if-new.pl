@@ -75,12 +75,19 @@ if ( $Config->{force} || $newVersionAvailable )
 #    system( 'svn cleanup ../..' );
 
     system( './doit.pl' );
-
-    # SMELL: use LWP
-    system( 'wget http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome -O - >/dev/null' );
+    # SMELL: switch to exceptions
     if ( $? == 0 )
-    {   # mark build complete
-	rename BUILD_LOCK, LAST_BUILD;
+    {
+	# SMELL: use LWP
+	system( 'wget http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome -O - >/dev/null' );
+	if ( $? == 0 )
+	{   # mark build complete
+	    rename BUILD_LOCK, LAST_BUILD;
+	}
+	else
+	{   # try again next crontab iteration
+	    unlink BUILD_LOCK;
+	}
     }
     else
     {   # try again next crontab iteration
