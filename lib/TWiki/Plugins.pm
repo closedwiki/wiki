@@ -108,8 +108,6 @@ my %onlyOnceHandlers =
    registrationHandler            => 1,
    writeHeaderHandler             => 1,
    redirectCgiQueryHandler        => 1,
-   getSessionValueHandler         => 1,
-   setSessionValueHandler         => 1,
    renderFormFieldForEditHandler  => 1,
    renderWikiWordHandler          => 1,
   );
@@ -322,7 +320,7 @@ sub haveHandlerFor {
 sub _handleFAILEDPLUGINS {
     my $this = shift->{plugins};
 
-    my $text = CGI::start_table( { border => 1 } ).
+    my $text = CGI::start_table( { border => 1, class => 'twikiTable' } ).
       CGI::Tr(CGI::th('Plugin').CGI::th('Errors'));
 
     foreach my $plugin ( @{$this->{plugins}} ) {
@@ -339,7 +337,7 @@ sub _handleFAILEDPLUGINS {
                           CGI::td($plugin->{name}). $td );
     }
 
-    $text .= CGI::end_table().CGI::start_table({ border=>1 }).
+    $text .= CGI::end_table().CGI::start_table({ border=>1, class => 'twikiTable' }).
       CGI::Tr(CGI::th('Handler').CGI::th('Plugins'));
 
     foreach my $handler (@TWiki::Plugin::registrableHandlers) {
@@ -715,32 +713,6 @@ Called by TWiki::redirect
 sub redirectCgiQueryHandler {
     my $this = shift;
     return $this->_dispatch( 'redirectCgiQueryHandler', @_ );
-}
-
-=pod
-
----++ ObjectMethod getSessionValueHandler () -> $sessionValue
-
-Called by TWiki::getSessionValue
-
-=cut
-
-sub getSessionValueHandler {
-    my $this = shift;
-    return $this->_dispatch( 'getSessionValueHandler', @_ );
-}
-
-=pod
-
----++ ObjectMethod setSessionValueHandler () -> $result
-
-Called by TWiki::setSessionValue
-
-=cut
-
-sub setSessionValueHandler {
-    my $this = shift;
-    return $this->_dispatch( 'setSessionValueHandler', @_ );
 }
 
 =pod

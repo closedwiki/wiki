@@ -554,54 +554,6 @@ sub DISABLE_redirectCgiQueryHandler {
 
 =pod
 
----++ getSessionValueHandler($key )
-   * =$key= - the name of the key
-
-This handler is called to recover the value of a session key i.e. a key
-defined by setSessionValueHandler. This is primarily intended for use
-with sesison management plugins..
-
-If this handler is defined in more than one plugin, only the handler
-in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
-the others will be ignored.
-
-__Since:__ TWiki::Plugins::VERSION = '1.010'
-
-=cut
-
-sub DISABLE_getSessionValueHandler {
-    # do not uncomment, use $_[0] instead
-    ### my ( $key ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::getSessionValueHandler( $_[0] )" ) if $debug;
-}
-
-=pod
-
----++ setSessionValueHandler($key, $value )
-   * =$key= - the name of the key
-   * =$value= - the value of the key
-
-This handler is called to set the value of a session key. This is
-primarily intended for use with sesison management plugins.
-
-If this handler is defined in more than one plugin, only the handler
-in the earliest plugin in the INSTALLEDPLUGINS list will be called. All
-the others will be ignored.
-
-__Since:__ TWiki::Plugins::VERSION = '1.010'
-
-=cut
-
-sub DISABLE_setSessionValueHandler {
-    # do not uncomment, use $_[0], $_[1] instead
-    ### my ( $key, $value ) = @_;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::setSessionValueHandler( $_[0], $_[1] )" ) if $debug;
-}
-
-=pod
-
 ---++ renderFormFieldForEditHandler($name, $type, $size, $value, $attributes, $possibleValues) -> $html
 
 This handler is called before built-in types are considered. It generates the HTML text rendering this form field, or false, if the rendering should be done by the built-in type handlers.

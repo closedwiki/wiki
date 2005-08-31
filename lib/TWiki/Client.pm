@@ -201,8 +201,8 @@ sub loadSession {
     }
 
     # Use transparent session IDs if cookies don't seem to be working
-    $this->{useTransSID} =
-      ( !defined($query) || !$query->cookie( $CGI::Session::NAME ));
+    $this->{useTransSID} = 0;
+#      ( !defined($query) || !$query->cookie( $CGI::Session::NAME ));
 
     $twiki->{SESSION_TAGS}{SESSIONID} = ( $sessionId || '' );
     $twiki->{SESSION_TAGS}{SESSIONVAR} = ( $CGI::Session::NAME || '' );

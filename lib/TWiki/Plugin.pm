@@ -46,7 +46,6 @@ use vars qw( @registrableHandlers %deprecated );
    'commonTagsHandler',            # 1.000
    'earlyInitPlugin',              # 1.020
    'endRenderingHandler',          # 1.000 DEPRECATED
-   'getSessionValueHandler',       # 1.010
    'initPlugin',                   # 1.000
    'initializeUserHandler',        # 1.010
    'insidePREHandler',             # 1.000 DEPRECATED
@@ -59,7 +58,6 @@ use vars qw( @registrableHandlers %deprecated );
    'registrationHandler',          # 1.010
    'renderFormFieldForEditHandler',# ?
    'renderWikiWordHandler',        # 1.023
-   'setSessionValueHandler',       # 1.010
    'startRenderingHandler',        # 1.000 DEPRECATED
    'writeHeaderHandler',           # 1.010 DEPRECATED
   );

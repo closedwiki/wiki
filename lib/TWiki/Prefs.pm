@@ -130,7 +130,7 @@ Reads preferences from the topic at =$web.$topic=, prefixes them with
 
 This is provided for late initialisation of preferences by modules such
 as plugins. Note that any preference values loaded this way are still
-subject to finalisation, and may be overridden by =getSessionValueHandler=.
+subject to finalisation, and may be overridden by =getSessionValue=.
 
 =cut
 
@@ -184,7 +184,7 @@ sub getPreferencesValue {
     my( $this, $key, $web, $nouser ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    my $val = $this->{session}->{plugins}->getSessionValueHandler( $key );
+    my $val = $this->{session}->{client}->getSessionValue( $key );
     return $val if defined( $val );
 
     if( $web ) {
@@ -224,7 +224,7 @@ sub getTopicPreferencesValue {
     my( $this, $key ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    my $val = $this->{session}->{plugins}->getSessionValueHandler( $key );
+    my $val = $this->{session}->{client}->getSessionValue( $key );
     return $val if defined( $val );
 
     if( defined( $this->{REQUEST} )) {
