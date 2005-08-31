@@ -76,8 +76,18 @@ if ( $Config->{force} || $newVersionAvailable )
 
     system( './doit.pl' );
 
-    # mark build complete
-    rename BUILD_LOCK, LAST_BUILD;
+    # SMELL: use LWP
+    system( 'wget http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome -O - >/dev/null' );
+    if ( $? == 0 )
+    {   # mark build complete
+#	print STDERR "successful build :)\n";
+	rename BUILD_LOCK, LAST_BUILD;
+    }
+    else
+    {   # try again next crontab iteration
+#	print STDERR "unsuccessful build :(\n";
+	unlink BUILD_LOCK;
+    }
 }
 
 exit 0;
