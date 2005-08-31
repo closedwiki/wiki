@@ -750,11 +750,11 @@ html>body .patternToolBar .patternNoTab {
 .patternViewPage .patternToolBarBottom {
 	margin:0 -10px .5em -10px;
 }
-.patternToolBar a:link .patternAccessKey,
-.patternToolBar a:visited .patternAccessKey {
+.patternToolBar a:link .twikiAccessKey,
+.patternToolBar a:visited .twikiAccessKey {
 	color:inherit;
 }
-.patternToolBar a:hover .patternAccessKey {
+.patternToolBar a:hover .twikiAccessKey {
 	background-color:transparent;
 	color:inherit;
 }
@@ -896,11 +896,11 @@ html>body .patternToolBar .patternNoTab {
 	font-size:85%; /*C11*/
 	line-height:1.3em;
 }
-.patternAccessKey {
+.twikiAccessKey {
 	text-decoration:none;
 	border-bottom:1px solid #8490A1; /*C6*/
 }
-a:hover .patternAccessKey {
+a:hover .twikiAccessKey {
 	text-decoration:none;
 	border-bottom:none;
 }
