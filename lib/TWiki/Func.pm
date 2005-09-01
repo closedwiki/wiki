@@ -402,6 +402,8 @@ Get a preferences value from your Plugin
    * =$key= - Plugin Preferences key w/o PLUGINNAME_ prefix.
 Return: =$value=  Preferences value; empty string if not set
 
+NOTE: This sub will retrieve nothing if called from a module in a subpackage of TWiki::Plugins (ie, TWiki::Plugins::MyPlugin::MyModule)
+
 *Since:* TWiki::Plugins::VERSION 1.021 (27 Mar 2004)
 
 =cut
@@ -445,6 +447,9 @@ sub getPreferencesFlag {
 Get a preferences flag from your Plugin
    * =$key= - Plugin Preferences key w/o PLUGINNAME_ prefix.
 Return: =$flag=   Preferences flag ='1'= (if set), or ="0"= (for preferences values ="off"=, ="no"= and ="0"=, or values not set at all)
+
+NOTE: This sub will retrieve nothing if called from a module in a subpackage of TWiki::Plugins (ie, TWiki::Plugins::MyPlugin::MyModule)
+
 
 *Since:* TWiki::Plugins::VERSION 1.021 (27 Mar 2004)
 
@@ -610,6 +615,18 @@ Return: =$flag= ="1"= if yes, ="0"= if not
 sub isGuest {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{user}->isDefaultUser();
+}
+
+=pod
+
+---+++ isValidWikiWord (  $name  ) -> $boolean
+
+Check for a valid WikiWord or WikiName
+
+=cut
+
+sub isValidWikiWord {
+   return &TWiki::isValidWikiWord(@_);
 }
 
 =pod
@@ -888,6 +905,9 @@ sub checkTopicEditLock {
 =pod
 
 ---+++ setTopicEditLock( $web, $topic, $lock )
+   * =$web= Web name, e.g. ="Main"=, or empty
+   * =$topic= Topic name, e.g. ="MyTopic"=, or ="Main.MyTopic"=
+   * =$lock= 1 to lease the topic, 0 to clear the lease=
 
 Takes out a "lease" on the topic. The lease doesn't prevent
 anyone from editing and changing the topic, but it does redirect them
@@ -1522,6 +1542,14 @@ sub formatTime {
 
 =pod
 
+
+=pod
+
+---++ Functions: File I/O
+
+=cut
+=pod
+
 ---+++ readTemplate( $name, $skin ) -> $text
 
 Read a template or skin. Embedded [[%TWIKIWEB%.TWikiTemplates][template directives]] get expanded
@@ -1554,7 +1582,8 @@ Return:            none
 sub writeWarning {
 #   my( $theText ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->writeWarning( @_ );
+    my ($message)=@_;
+    return $TWiki::Plugins::SESSION->writeWarning( "(".caller().") ".$message );
 }
 
 =pod
