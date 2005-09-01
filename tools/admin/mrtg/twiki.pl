@@ -22,56 +22,36 @@ my $logFileTemplate = '/home/twiki/data/log%DATE%.txt';
 
 #TODO: only re-analyse if the time is right, otherwise return values stored in the seek file
 sub analyseLogFile {
-	my ($logFile, $timeRegex) = @_;
+	my ($logFile, $pos, $timeRegex) = @_;
 
-	my $total_nunber_of_requests = 0;
-	my $total_number_of_views = 0;
-	my $total_number_of_twikiguest_requests = 0;
 	my $linesProcessed = 0;
 	
-	my %pos;
-	if (-e 'twiki_seek.cfg' ) {
-		open(seekFile, 'twiki_seek.cfg');
-		while(<seekFile>) {
-			if ( /^(.*): (\d*)$/ ) {
-				$pos{$1} = $2;
-			}
-		}
-		close(seekFile);
-	}
+#TODO: gonna need a lock file too	
 	
 	die 'cannot find: '.$logFile unless ( -e $logFile );   #change this to throw, so caller can continue
 	open(logFile, $logFile);
-	if ( $pos{$logFile} ) {
-		seek(logFile, $pos{$logFile}, 0);
+	if ( $pos->{$logFile} ) {
+		seek(logFile, $pos->{$logFile}, 0);
 	}
 	my @logLines = <logFile>;
-	$pos{$logFile} = tell(logFile);	
+	$pos->{$logFile} = tell(logFile);	
 	close(logFile);
 	
-	open(seekFile, '>twiki_seek.cfg');
-	foreach my $fileName (keys %pos) {
-		print seekFile $fileName.': '.$pos{$fileName}."\n";
-	}
-	close(seekFile);
-
 	foreach my $line (@logLines) {
 		$linesProcessed++;
 		my ($before, $date, $user, $oper, $topic, $browser, $host) = split(/\|/, $line);
 		if ( $date =~ /$timeRegex/ ) {
-			$total_nunber_of_requests++;
+			$pos->{total_nunber_of_requests}++;
+			
 			
 			if ( $user =~ /TWikiGuest/ ) {
-				$total_number_of_twikiguest_requests++;
+				$pos->{total_number_of_twikiguest_requests}++;
 			}
 			if ( $oper =~ /view/ ) {
-				$total_number_of_views++;
+				$pos->{total_number_of_views}++;
 			}
 		}
 	}
-
-#todo: replace with hash of all stats
-	return ($total_nunber_of_requests, $total_number_of_twikiguest_requests, $total_number_of_views);
 }
 
 
@@ -88,38 +68,66 @@ sub analyseLogFile {
 	my $total_number_of_views = 0;
 	my $total_number_of_twikiguest_requests = 0;
 
-	my $timeRegex = '(?:';
-	for (my $count = 0;$count < $numberOfMinutesToScan;$count++)
-	{
-	        my $time = formatTime( $systemTime-($count*60), '$day $mon $year - $hour:$min' , 'servertime' );
-	        $timeRegex = $timeRegex.' '.$time.' |';
-	        
-	        $time = formatTime( $systemTime-($count*60), '$year$mo' , 'servertime' );
-	        if ( $time ne $logTime ) {
-	        	$previousLog = $logFileTemplate;
-		        $log =~ s/%DATE%/$time/go;
-	        }
+	my %pos;
+	if (-e 'twiki_seek.cfg' ) {
+		open(seekFile, 'twiki_seek.cfg');
+		while(<seekFile>) {
+			if ( /^(.*): (\d*)$/ ) {
+				$pos{$1} = $2;
+			}
+		}
+		close(seekFile);
+	}	
 
-	}
+    if ( $systemTime - $pos{lastScanTime} > ($numberOfMinutesToScan * 60) ) {
+#time to scan again    
 
-	$timeRegex = $timeRegex.'^$)';
-	($total_number_of_requests, $total_number_of_twikiguest_requests, $total_number_of_views) = analyseLogFile($log, $timeRegex);
-	if ( $previousLog ) {
-		my ($prev_total_number_of_requests, $prev_total_number_of_twikiguest_requests, $prev_total_number_of_views) = analyseLogFile($previousLog, $timeRegex);
-		$total_number_of_requests += $prev_total_number_of_requests;
-		$total_number_of_twikiguest_requests += $prev_total_number_of_twikiguest_requests;
-		$total_number_of_views += $prev_total_number_of_views;
-	}
+        $pos{lastScanTime} = $systemTime;
+        my $timeRegex = '(?:';
+	   for (my $count = 0;$count < $numberOfMinutesToScan;$count++)
+	   {
+	           my $time = formatTime( $systemTime-($count*60), '$day $mon $year - $hour:$min' , 'servertime' );
+	           $timeRegex = $timeRegex.' '.$time.' |';
+	           
+	           $time = formatTime( $systemTime-($count*60), '$year$mo' , 'servertime' );
+	           if ( $time ne $logTime ) {
+	              	$previousLog = $logFileTemplate;
+	       	        $log =~ s/%DATE%/$time/go;
+	           }
+
+	   }
+	   $timeRegex = $timeRegex.'^$)';
+	   
+#reset the important vars	   
+$pos{total_number_of_twikiguest_requests} = 0;
+$pos{total_number_of_requests} = 0;
+$pos{total_number_of_views} = 0;	   
+	   
+       analyseLogFile($log, \%pos, $timeRegex);
+	   if ( $previousLog ) {
+    		analyseLogFile($previousLog, \%pos, $timeRegex);
+    	}
+    	open(seekFile, '>twiki_seek.cfg');
+    	foreach my $fileName (keys %pos) {
+    	   print seekFile $fileName.': '.$pos{$fileName}."\n";
+    	}
+	   close(seekFile);
+    } else {
+#use the stored values from the twiki_seek file
+    
+    }
+
+
 
 #number of TWikiGuest requests
-print $total_number_of_twikiguest_requests."\n";
+print $pos{total_number_of_twikiguest_requests}."\n";
 #number of registered user requests
-print ($total_number_of_requests-$total_number_of_twikiguest_requests);
+print ($pos{total_number_of_requests}-$pos{total_number_of_twikiguest_requests});
 print "\n";
 #total number of views
-print $total_number_of_views."\n";
+print $pos{total_number_of_views}."\n";
 #total number of non-views
-print $total_number_of_requests-$total_number_of_views."\n";
+print $pos{total_number_of_requests}-$pos{total_number_of_views}."\n";
 
 # =========================
 =pod
