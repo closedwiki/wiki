@@ -20,7 +20,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
+=pod
 
 ---+ package TWiki::Render
 
@@ -190,6 +190,7 @@ sub _renderMoved {
     }
     return $text;
 }
+
 
 sub _renderFormField {
     my( $this, $meta, $args ) = @_;
@@ -842,7 +843,7 @@ sub renderFORMFIELD {
     my $formTopic = $params->{topic};
     my $altText   = $params->{alttext};
     my $default   = $params->{default};
-    my $format    = $params->{format};
+    my $format    = $params->{'format'};
 
     unless ( $format ) {
         # if null format explicitly set, return empty
@@ -879,16 +880,18 @@ sub renderFORMFIELD {
 
     my $text = '';
     my $found = 0;
+    my $title='';
     if ( $meta ) {
         my @fields = $meta->find( 'FIELD' );
         foreach my $field ( @fields ) {
-            my $title = $field->{title};
+            $title = $field->{title};
             my $name = $field->{name};
             if( $title eq $formField || $name eq $formField ) {
                 $found = 1;
                 my $value = $field->{value};
+
                 if (length $value) {
-                    $text = $format;
+                    $text = $format;   
                     $text =~ s/\$value/$value/go;
                 } elsif ( defined $default ) {
                     $text = $default;
@@ -901,6 +904,8 @@ sub renderFORMFIELD {
     unless ( $found ) {
         $text = $altText;
     }
+
+    $text =~ s/\$title/$title/go;
 
     return $text;
 }

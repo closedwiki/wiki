@@ -20,7 +20,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
+=pod
 
 ---+ package TWiki::Search
 

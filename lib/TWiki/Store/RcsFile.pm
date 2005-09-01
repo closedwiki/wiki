@@ -21,8 +21,7 @@
 #
 # As per the GPL, removal of this notice is prohibited.
 
-=begin twiki
-
+=pod
 ---+ package TWiki::Store::RcsFile
 
 This class is PACKAGE PRIVATE to Store, and should never be

@@ -16,7 +16,7 @@ use strict;
 use Error qw( :try );
 
 BEGIN {
-    push( @INC, "$ENV{TWIKI_HOME}/lib" );
+    push( @INC, "$ENV{TWIKI_HOME}/lib" ) if defined($ENV{TWIKI_HOME});
     unshift @INC, '../../bin';
     require 'setlib.cfg';
     $SIG{__DIE__} = sub { Carp::confess $_[0] };

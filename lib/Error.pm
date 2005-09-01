@@ -275,6 +275,9 @@ sub run_clauses ($$$\@) {
     my($clauses,$err,$wantarray,$result) = @_;
     my $code = undef;
 
+    print STDERR "********************************\n";
+    print STDERR $err."\n";
+    print STDERR "********************************\n";
     $err = new Error::Simple($err) unless ref($err);
 
     CATCH: {
