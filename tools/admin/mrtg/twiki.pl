@@ -8,6 +8,7 @@
 #   and returns the number of requests in that period
 # 
 #   TODO: remove the hard coded 5 minutes and use mrtglib..
+#   TODO: add a command line param list to select what variables you want to see
 #
 # Copyright 2005:
 # Sven Dowideit, SvenDowideit@home.org.au
@@ -20,13 +21,10 @@ my $logFileTemplate = '/home/twiki/data/log%DATE%.txt';
 
 #####  Subroutines  #####
 
-#TODO: only re-analyse if the time is right, otherwise return values stored in the seek file
 sub analyseLogFile {
 	my ($logFile, $pos, $timeRegex) = @_;
 
 	my $linesProcessed = 0;
-	
-#TODO: gonna need a lock file too	
 	
 	die 'cannot find: '.$logFile unless ( -e $logFile );   #change this to throw, so caller can continue
 	open(logFile, $logFile);
@@ -49,6 +47,12 @@ sub analyseLogFile {
 			}
 			if ( $oper =~ /view/ ) {
 				$pos->{total_number_of_views}++;
+			} else {
+				$pos->{total_number_of_nonviews}++;
+			} 
+			
+			if ( $oper =~ /edit/ ) {
+				$pos->{total_number_of_edits}++;
 			}
 		}
 	}
@@ -70,6 +74,7 @@ sub analyseLogFile {
 
 	my %pos;
 	if (-e 'twiki_seek.cfg' ) {
+#TODO: gonna need a lock file too	
 		open(seekFile, 'twiki_seek.cfg');
 		while(<seekFile>) {
 			if ( /^(.*): (\d*)$/ ) {
@@ -102,6 +107,8 @@ sub analyseLogFile {
 $pos{total_number_of_twikiguest_requests} = 0;
 $pos{total_number_of_requests} = 0;
 $pos{total_number_of_views} = 0;	   
+$pos{total_number_of_nonviews} = 0;	   
+$pos{total_number_of_edits} = 0;	   
 	   
        analyseLogFile($log, \%pos, $timeRegex);
 	   if ( $previousLog ) {
