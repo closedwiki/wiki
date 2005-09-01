@@ -17,7 +17,7 @@ use strict;
 #settings that should be moved to the mrtg cfg file, and read using mrtglib?
 my $numberOfMinutesToScan = 5;  #mrtg will not allow less than 5...
 my $logFileTemplate = '/home/twiki/data/log%DATE%.txt';
-my $displayTimeValues = 'servertime';
+my $displayTimeValues = '';
 
 # =========================
 =pod
@@ -38,8 +38,8 @@ sub formatTime
     $formatString = "\$day \$month \$year - \$hour:\$min" unless( $formatString );
     my $outputTimeZone = $displayTimeValues unless( $outputTimeZone );
 
-    my( $sec, $min, $hour, $day, $mon, $year, $wday) = gmtime( $epochSeconds );
-      ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ) if( $outputTimeZone eq 'servertime' );
+#    my( $sec, $min, $hour, $day, $mon, $year, $wday) = gmtime( $epochSeconds );
+     my ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ); #if( $outputTimeZone eq 'servertime' );
 
     #standard twiki date time formats
     if( $formatString =~ /rcs/i ) {
