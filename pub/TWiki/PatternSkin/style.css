@@ -939,6 +939,11 @@ a:hover .twikiAccessKey {
 	color:#e6e6e6;
 }
 
+/* WebSearchAdvanced */
+table#twikiSearchTable th, table#twikiSearchTable td {padding:.5em; background:white;}
+table#twikiSearchTable th {width:15%; text-align:left; color:#666;}
+table#twikiSearchTable td {width:85%;}
+table#twikiSearchTable td.first {padding-top:1em; background:#e6e6e6;}
 
 /*	-----------------------------------------------------------
 	Search results
