@@ -26,6 +26,7 @@ use Cwd;
 use Data::Dumper;
 use Getopt::Long;
 use Pod::Usage;
+use LWP::Simple;
 
 use constant BUILD_LOCK => '.build';
 use constant LAST_BUILD => '.last_build';
@@ -78,9 +79,8 @@ if ( $Config->{force} || $newVersionAvailable )
     # SMELL: switch to exceptions
     if ( $? == 0 )
     {
-	# SMELL: use LWP
-	system( 'wget http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome -O - >/dev/null' );
-	if ( $? == 0 )
+	my $wikiPage = LWP::Simple::get( 'http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome' );
+	if ( defined $wikiPage )
 	{   # mark build complete
 	    rename BUILD_LOCK, LAST_BUILD;
 	}
