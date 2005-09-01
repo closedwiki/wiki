@@ -53,6 +53,12 @@ A guest of this TWiki web, not unlike yourself. You can leave your trace behind 
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" value="UserTopic"}%
 HERE
 
+my $testtext_nometa = <<'HERE';
+
+A guest of this TWiki web, not unlike yourself. You can leave your trace behind you, just add your name in %TWIKIWEB%.TWikiRegistration and create your own page.
+
+HERE
+
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
@@ -345,7 +351,7 @@ sub test_simpleFormSave1 {
     my $this = shift;
     my $query = new CGI({
                          action => [ 'save' ],
-			 text   => [ $testtext1 ],
+			 text   => [ $testtext_nometa ],
                          formtemplate => [ 'TestForm1' ],
                          TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
                          TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
@@ -376,7 +382,7 @@ sub test_simpleFormSave2 {
                                 $testform1, $oldmeta );
     my $query = new CGI({
                          action => [ 'save' ],
-			 text   => [ $testtext1 ],
+			 text   => [ $testtext_nometa ],
                          formtemplate => [ 'TestForm3' ],
                          TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
                          TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
@@ -408,7 +414,7 @@ sub test_simpleFormSave3 {
     my $query = new CGI(
         {
             action => [ 'save' ],
-            text   => [ $testtext1 ],
+            text   => [ $testtext_nometa ],
             formtemplate => [ 'TestForm1' ],
             TWiki::Form::cgiName(undef,'Select') => [ 'Value_2' ],
             TWiki::Form::cgiName(undef,'Radio') => [ '3' ],
