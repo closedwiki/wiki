@@ -17,75 +17,11 @@ use strict;
 #settings that should be moved to the mrtg cfg file, and read using mrtglib?
 my $numberOfMinutesToScan = 5;  #mrtg will not allow less than 5...
 my $logFileTemplate = '/home/twiki/data/log%DATE%.txt';
-my $displayTimeValues = '';
 
-# =========================
-=pod
----++ sub formatTime ($epochSeconds, $formatString, $outputTimeZone) ==> $value
-| $epochSeconds | epochSecs GMT |
-| $formatString | twiki time date format |
-| $outputTimeZone | timezone to display. (not sure this will work)(gmtime or servertime) |
-
-from TWiki Cairo Codebase
-
-=cut
-sub formatTime 
-{
-    my ($epochSeconds, $formatString, $outputTimeZone) = @_;
-    my $value = $epochSeconds;
-
-    # use default TWiki format "31 Dec 1999 - 23:59" unless specified
-    $formatString = "\$day \$month \$year - \$hour:\$min" unless( $formatString );
-    my $outputTimeZone = $displayTimeValues unless( $outputTimeZone );
-
-#    my( $sec, $min, $hour, $day, $mon, $year, $wday) = gmtime( $epochSeconds );
-     my ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds ); #if( $outputTimeZone eq 'servertime' );
-
-    #standard twiki date time formats
-    if( $formatString =~ /rcs/i ) {
-        # RCS format, example: "2001/12/31 23:59:59"
-        $formatString = "\$year/\$mo/\$day \$hour:\$min:\$sec";
-    } elsif ( $formatString =~ /http|email/i ) {
-        # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
- 	    # - based on RFC 2616/1123 and HTTP::Date; also used
-        # by TWiki::Net for Date header in emails.
-        $formatString = "\$wday, \$day \$month \$year \$hour:\$min:\$sec \$tz";
-    } elsif ( $formatString =~ /iso/i ) {
-        # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
-        # e.g. "2002-12-31T19:30Z"
-        $formatString = "\$year-\$mo-\$dayT\$hour:\$min";
-        if( $outputTimeZone eq "gmtime" ) {
-            $formatString = $formatString."Z";
-        } else {
-            #TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
-        }
-    } 
-    
-    $value = $formatString;
-    $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
-    $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
-    $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
-    $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
-    my @weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-    $value =~ s/\$wday/$weekDay[$wday]/geoi;
-   my @isoMonth =   ( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
-    $value =~ s/\$mon[t]?[h]?/$isoMonth[$mon]/goi;
-    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
-    $value =~ s/\$yea[r]?/sprintf("%.4u",$year+1900)/geoi;
-    $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
-        
-#TODO: how do we get the different timezone strings (and when we add usertime, then what?)    
-    my $tz_str = "GMT";
-    $tz_str = "Local" if ( $outputTimeZone eq "servertime" );
-    $value =~ s/\$tz/$tz_str/geoi;
- 
-    return $value;        
-}
 #####  Subroutines  #####
 
-
-sub getNumberOfRequests {
+#TODO: only re-analyse if the time is right, otherwise return values stored in the seek file
+sub analyseLogFile {
 	my ($logFile, $timeRegex) = @_;
 
 	my $total_nunber_of_requests = 0;
@@ -134,6 +70,7 @@ sub getNumberOfRequests {
 		}
 	}
 
+#todo: replace with hash of all stats
 	return ($total_nunber_of_requests, $total_number_of_twikiguest_requests, $total_number_of_views);
 }
 
@@ -166,9 +103,9 @@ sub getNumberOfRequests {
 	}
 
 	$timeRegex = $timeRegex.'^$)';
-	($total_number_of_requests, $total_number_of_twikiguest_requests, $total_number_of_views) = getNumberOfRequests($log, $timeRegex);
+	($total_number_of_requests, $total_number_of_twikiguest_requests, $total_number_of_views) = analyseLogFile($log, $timeRegex);
 	if ( $previousLog ) {
-		my ($prev_total_number_of_requests, $prev_total_number_of_twikiguest_requests, $prev_total_number_of_views) = getNumberOfRequests($previousLog, $timeRegex);
+		my ($prev_total_number_of_requests, $prev_total_number_of_twikiguest_requests, $prev_total_number_of_views) = analyseLogFile($previousLog, $timeRegex);
 		$total_number_of_requests += $prev_total_number_of_requests;
 		$total_number_of_twikiguest_requests += $prev_total_number_of_twikiguest_requests;
 		$total_number_of_views += $prev_total_number_of_views;
@@ -179,6 +116,70 @@ print $total_number_of_twikiguest_requests."\n";
 #number of registered user requests
 print ($total_number_of_requests-$total_number_of_twikiguest_requests);
 print "\n";
-print $total_number_of_twikiguest_requests."\n";
+#total number of views
+print $total_number_of_views."\n";
+#total number of non-views
+print $total_number_of_requests-$total_number_of_views."\n";
 
+# =========================
+=pod
+---++ sub formatTime ($epochSeconds, $formatString, $outputTimeZone) ==> $value
+| $epochSeconds | epochSecs GMT |
+| $formatString | twiki time date format |
+| $outputTimeZone | timezone to display. (not sure this will work)(gmtime or servertime) |
 
+from TWiki Cairo Codebase
+
+=cut
+sub formatTime 
+{
+    my ($epochSeconds, $formatString, $outputTimeZone) = @_;
+    my $value = $epochSeconds;
+
+    # use default TWiki format "31 Dec 1999 - 23:59" unless specified
+    $formatString = "\$day \$month \$year - \$hour:\$min" unless( $formatString );
+#    my $outputTimeZone = $displayTimeValues unless( $outputTimeZone );
+
+    my  ( $sec, $min, $hour, $day, $mon, $year, $wday ) = localtime( $epochSeconds );
+
+    #standard twiki date time formats
+    if( $formatString =~ /rcs/i ) {
+        # RCS format, example: "2001/12/31 23:59:59"
+        $formatString = "\$year/\$mo/\$day \$hour:\$min:\$sec";
+    } elsif ( $formatString =~ /http|email/i ) {
+        # HTTP header format, e.g. "Thu, 23 Jul 1998 07:21:56 EST"
+ 	    # - based on RFC 2616/1123 and HTTP::Date; also used
+        # by TWiki::Net for Date header in emails.
+        $formatString = "\$wday, \$day \$month \$year \$hour:\$min:\$sec \$tz";
+    } elsif ( $formatString =~ /iso/i ) {
+        # ISO Format, see spec at http://www.w3.org/TR/NOTE-datetime
+        # e.g. "2002-12-31T19:30Z"
+        $formatString = "\$year-\$mo-\$dayT\$hour:\$min";
+        if( $outputTimeZone eq "gmtime" ) {
+            $formatString = $formatString."Z";
+        } else {
+            #TODO:            $formatString = $formatString.  # TZD  = time zone designator (Z or +hh:mm or -hh:mm) 
+        }
+    } 
+    
+    $value = $formatString;
+    $value =~ s/\$sec[o]?[n]?[d]?[s]?/sprintf("%.2u",$sec)/geoi;
+    $value =~ s/\$min[u]?[t]?[e]?[s]?/sprintf("%.2u",$min)/geoi;
+    $value =~ s/\$hou[r]?[s]?/sprintf("%.2u",$hour)/geoi;
+    $value =~ s/\$day/sprintf("%.2u",$day)/geoi;
+    my @weekDay = ("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+    $value =~ s/\$wday/$weekDay[$wday]/geoi;
+   my @isoMonth =   ( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
+    $value =~ s/\$mon[t]?[h]?/$isoMonth[$mon]/goi;
+    $value =~ s/\$mo/sprintf("%.2u",$mon+1)/geoi;
+    $value =~ s/\$yea[r]?/sprintf("%.4u",$year+1900)/geoi;
+    $value =~ s/\$ye/sprintf("%.2u",$year%100)/geoi;
+        
+#TODO: how do we get the different timezone strings (and when we add usertime, then what?)    
+    my $tz_str = "GMT";
+    $tz_str = "Local" if ( $outputTimeZone eq "servertime" );
+    $value =~ s/\$tz/$tz_str/geoi;
+ 
+    return $value;        
+}
