@@ -41,7 +41,7 @@ sub analyseLogFile {
 		$linesProcessed++;
 		my ($before, $date, $user, $oper, $topic, $browser, $host) = split(/\|/, $line);
 		if ( $date =~ /$timeRegex/ ) {
-			$pos->{total_nunber_of_requests}++;
+			$pos->{total_number_of_requests}++;
 			
 			
 			if ( $user =~ /TWikiGuest/ ) {
