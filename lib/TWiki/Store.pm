@@ -585,7 +585,8 @@ sub _readKeyValues {
     while( $args =~ s/\s*([^=]+)=\"([^"]*)\"//o ) {
         my $key = $1;
         my $value = $2;
-        if( $format && $format < 1.1 ) {
+        $format =~ s/[^\d\.]+//g if $format;
+        if( !$format || $format < 1.1 ) {
             # Old decoding retained for backward compatibility
             # (this encoding is badly broken)
             $value =~ s/%_N_%/\n/g;
@@ -943,7 +944,7 @@ sub repRev {
           $revuser->login().
             ' '. TWiki::Time::formatTime( $revdate, '$rcs', 'gmtime' );
         $extra   .= ' minor' if( $options->{minor} );
-        $this->{session}->writeLog( 'save', $web.'.'.$topic, $extra, $user );
+        $this->{session}->writeLog( 'cmd', $web.'.'.$topic, $extra, $user );
     }
 }
 
