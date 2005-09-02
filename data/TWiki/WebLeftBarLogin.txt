@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="$Rev$" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="0" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 <div class="patternLeftBarPersonal" style="margin-top:0;">
 %IFCONTEXT{"authenticated" then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
