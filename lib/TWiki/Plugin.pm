@@ -87,7 +87,7 @@ sub new {
 
     my $this = bless( {}, $class );
     $name = TWiki::Sandbox::untaintUnchecked( $name );
-    $this->{name} = $name;
+    $this->{name} = $name || '';
     $this->{session} = $session;
     $this->{module} = $module || 'TWiki::Plugins::'.$name;
 
@@ -126,7 +126,7 @@ sub load {
         $web = '';
     }
 
-    $this->{web} = $web;
+    $this->{web} = $web || '';
 
     my $p = $this->{module};
 
@@ -232,7 +232,7 @@ sub getVersion {
     ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
 
     no strict 'refs';
-    return ${$this->{module}.'::VERSION'};
+    return ${$this->{module}.'::VERSION'} || '';
     use strict 'refs';
 }
 
@@ -244,13 +244,15 @@ sub getDescription {
     unless( $this->{description} ) {
         my $pref = uc( $this->{name} ) . '_SHORTDESCRIPTION';
         my $prefs = $this->{session}->{prefs};
-        $this->{description} = $prefs->getPreferencesValue( $pref );
+        $this->{description} = $prefs->getPreferencesValue( $pref ) || '';
     }
     if( $this->{disabled} ) {
-        return " !$this->{name}: (disabled)";
+        return ' !'.$this->{name}.': (disabled)';
     } else {
-        return " $this->{web}.$this->{name} (".$this->getVersion().
-          "): $this->{description}";
+        return ' '.$this->{web}.'.'.
+          $this->{name}.' ('.
+            $this->getVersion().
+              '): '.$this->{description};
     }
 }
 

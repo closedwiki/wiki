@@ -44,6 +44,8 @@ errors.
 
 package TWiki::Plugins::EmptyPlugin;    # change the package name and $pluginName!!!
 
+use strict;
+
 use vars qw( $VERSION $pluginName $debug $exampleCfgVar );
 
 $VERSION = '1.200';

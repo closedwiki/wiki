@@ -99,7 +99,7 @@ as kernel methods may change between TWiki releases.
 
 =cut
 
-$VERSION = '1.026';
+$VERSION = '1.1';
 
 $inited = 0;
 
@@ -326,7 +326,7 @@ sub _handleFAILEDPLUGINS {
     foreach my $plugin ( @{$this->{plugins}} ) {
         my $td;
         if ( $plugin->{errors}) {
-            $td = CGI::td( {style => 'background-color:yellow' },
+            $td = CGI::td( {class => 'twikiAlert' },
                 "\n<verbatim>\n".
                   join( "\n", @{$plugin->{errors}} ).
                     "\n</verbatim>\n" );
@@ -334,7 +334,7 @@ sub _handleFAILEDPLUGINS {
             $td = CGI::td( 'none' );
         }
         $text .= CGI::Tr( { valign=>'top' },
-                          CGI::td($plugin->{name}). $td );
+                          CGI::td(' '.$plugin->{web}.'.'.$plugin->{name}.' '). $td );
     }
 
     $text .= CGI::end_table().CGI::start_table({ border=>1, class => 'twikiTable' }).
@@ -351,7 +351,8 @@ sub _handleFAILEDPLUGINS {
                           CGI::td( $handler ).CGI::td( $h ) );
     }
 
-    return $text.CGI::end_table();
+    return $text.CGI::end_table()."\n*".scalar(@{$this->{plugins}}).
+      " plugins*\n\n";
 }
 
 # note this is invoked with the session as the first parameter
