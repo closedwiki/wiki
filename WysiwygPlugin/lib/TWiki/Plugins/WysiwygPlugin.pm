@@ -47,6 +47,8 @@ sub initPlugin {
     $currentWeb = $web;
     $calledThisSession = 0;
 
+    TWiki::Func::getContext()->{WysiwygPluginEnabled} = 1;
+
     # Plugin correctly initialized
     return 1;
 }
