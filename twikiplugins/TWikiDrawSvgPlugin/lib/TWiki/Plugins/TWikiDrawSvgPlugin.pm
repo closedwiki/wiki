@@ -141,7 +141,7 @@ sub activateWebStart
     }
     my $tmplData = TWiki::Func::readTemplate( $tmplName );
     if( ! $tmplData ) {
-        TWiki::writeHeader( $query );
+        TWiki::Func::writeHeader( $query );
         print "<html><body>\n"
             . "<h1>TWiki Installation Error</h1>\n"
             . "Template file $tmplName.tmpl not found or template directory \n"
