@@ -23,8 +23,8 @@
 </td>
 </tr>
 </table>
-</div>
 </form>
+</div>
 </noautolink>
 
 %SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="on" }%
