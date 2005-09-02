@@ -79,7 +79,7 @@ sub handleIncludeRev
     my $topic = $2;
 
 
-    $text .= &TWiki::Store::readTopicRaw( $webName, $topic, "$rev" );
+    $text .= &TWiki::Func::readTopicText( $webName, $topic, $rev );
     $text =~ s/%META.*{.*version=\"(.*?)\"}?%/<a href="\%SCRIPTURLPATH\%\/view\%SCRIPTSUFFIX\%\/$webName\/$topic?rev=$1"><nop>$topic<\/a> *Revision: $1*/g;
     return $text;
 }

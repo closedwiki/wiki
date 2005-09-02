@@ -299,16 +299,28 @@ sub _getTodaysVisitors
     my @visitorList = ();
 
     # calculate some time/date things
+    my $yearmonth;
+    my $filename;
+    my $today;
     my ( $sec, $min, $hour, $mday, $mon, $year ) = localtime( time() );
-    my( $tmon) = $TWiki::isoMonth[$mon];
-    $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
-    my $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
-    
+    if(!defined($TWiki::cfg{LogFileName})) {
+        my ($tmon) = $TWiki::isoMonth[$mon];
+        $year = sprintf( "%.4u", $year + 1900 );  # Y2K fix
+        $yearmonth = sprintf( "%.4u%.2u", $year, $mon+1 );
+        $filename = $TWiki::logFilename;
+        $today = sprintf( "%.2u ${tmon} %.2u", $mday, $year );
+    } else {
+        require TWiki::Time;
+        $yearmonth =
+          TWiki::Time::formatTime( time(), '$year$mo', 'servertime');
+        $today =
+          TWiki::Time::formatTime( time(), '$day $month $year', 'servertime');
+        $filename = $TWiki::cfg{LogFileName};
+    }
 
     # read the current logfile
-    my $filename = $TWiki::logFilename;
     $filename =~ s/%DATE%/$yearmonth/go;
-    my $logfile = TWiki::Store::readFile( $filename );
+    my $logfile = TWiki::Func::readFile( $filename );
     
     
     my @bar = ();         # one line in logfile
@@ -319,7 +331,7 @@ sub _getTodaysVisitors
       @bar = split( /\|/ );
       if( ( ! %exclude ) || ( ! $exclude{ $bar[2] } ) ) {
         # strip off all days not today
-        next unless sprintf( "%.2u ${tmon} %.2u", $mday, $year ) eq substr( $bar[1], 1, 11 );
+        next unless $today eq substr( $bar[1], 1, 11 );
         
         push @visitorList, $bar[2];
         $exclude{ $bar[2] } = "1";

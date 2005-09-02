@@ -150,7 +150,7 @@ sub formatText() {
 	}
 	
  	# Disable nested formaters for allowoverlap="false"
- 	my @pairs = split(/(<format:.*?:false>)/g, $text);
+ 	my @pairs = split(/(<format:.*?:false>)/, $text);
  	$text = "";
  	for (my $i = 0; $i < scalar(@pairs); $i++) {
  		my $pair = $pairs[$i];

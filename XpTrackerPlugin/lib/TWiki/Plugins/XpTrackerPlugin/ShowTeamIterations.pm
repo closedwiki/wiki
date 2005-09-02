@@ -30,19 +30,21 @@
 #                          recently started iterations appear first
 # =========================
 # TODO: Count the stories by status
-package TWiki::Plugins::Xp::ShowTeamIterations;
+package TWiki::Plugins::XpTrackerPlugin::ShowTeamIterations;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::HtmlUtil;
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::HtmlUtil;
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowTeamIterations is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowTeamIterations is loaded" ) if $debug;
 
 
 sub xpShowTeamIteration {
@@ -52,12 +54,12 @@ sub xpShowTeamIteration {
 
     $list .= "| *Iter* | *Summary* | *Start* | *End* | *Stories* | *Est* | *Spent* | *<nop>ToDo* | *Progress* | *Done* | *Overrun* |\n";
 
-    my @iterations=TWiki::Plugins::Xp::Common::loadTeamIterations($web,$team);
+    my @iterations=TWiki::Plugins::XpTrackerPlugin::Common::loadTeamIterations($web,$team);
 
     # write out all iterations to table
 	foreach my $iteration (sort { $b->order <=> $a->order } @iterations) {
 		#$iteration->sumarize();
-	    my $gaugeTxt =  TWiki::Plugins::Xp::HtmlUtil::gaugeLite($iteration->done);
+	    my $gaugeTxt =  TWiki::Plugins::XpTrackerPlugin::HtmlUtil::gaugeLite($iteration->done);
         $list .= "| ".$iteration->name;
         $list .= " | ".$iteration->summary;
         $list .= "  |  ".$iteration->startDate;

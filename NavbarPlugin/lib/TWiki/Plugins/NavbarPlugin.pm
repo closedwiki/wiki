@@ -66,8 +66,8 @@ sub beforeSaveHandler
    if ( $_[0] =~ /%NAVBARINDEX%/ ) {
     # we are saving an index topic, rebuild cache of this web
     # TODO: lock for concurrent access
-    my $cachefilename = "$TWiki::dataDir/$_[2]/.navbarcache";
-    my $cachetext = TWiki::Store::readFile($cachefilename);
+    my $cachefilename = TWiki::Func::getDataDir()."/$_[2]/.navbarcache";
+    my $cachetext = TWiki::Func::readFile($cachefilename);
     # &TWiki::Func::writeDebug( "- Navbar: generating cache $cachefilename");
     # remove old cache for this index
     $cachetext =~ s/=START=$_[1]={.*}=END=$_[1]=\n//sg;
@@ -85,7 +85,7 @@ sub beforeSaveHandler
     # look for each bullet list beginning by a Wiki name
     foreach( split( /\n/, $buffer ) ) {
       if( /^\s+(\*|[0-9]+)\s+([A-Z]+[a-z]+[A-Z]+[a-zA-Z0-9]*)/ ) {
-	if( -e "$TWiki::dataDir/$_[2]/$2.txt" ) {
+	if( -e TWiki::Func::getDataDir()."/$_[2]/$2.txt" ) {
 	  $prev = $cur;
 	  $cur = $next;
 	  $next = $2;
@@ -114,7 +114,7 @@ sub endRenderingHandler
 #    &TWiki::Func::writeDebug( "- NavbarPlugin::endRenderingHandler( $web.$topic ) " ) if $debug;
 
     # This handler is called by getRenderedVersion just after the line loop
-    my $cache = TWiki::Store::readFile("$TWiki::dataDir/$web/.navbarcache");
+    my $cache = TWiki::Func::readFile(TWiki::Func::getDataDir()."/$web/.navbarcache");
     if ( $cache =~ /\n%$topic ([a-zA-Z_0-9]+) ([a-zA-Z_0-9]+) ([a-zA-Z_0-9]+)/ ) {
       my $prev = $1;
       my $up = $2;

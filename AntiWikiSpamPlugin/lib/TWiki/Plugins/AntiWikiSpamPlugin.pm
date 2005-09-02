@@ -78,8 +78,9 @@ sub beforeSaveHandler {
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
     
     #do localspamlist first
+    my $regexWeb;
     my $regexTopic = TWiki::Func::getPluginPreferencesValue( 'LOCALANTISPAMREGEXLISTTOPIC' );
-    my ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName('TWiki', $regexTopic);
+    ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName('TWiki', $regexTopic);
 
     if (($_[1] eq $regexTopic) && ($_[2] eq $regexWeb)) {
         return; #don't check the anti-spam topics
@@ -90,8 +91,8 @@ sub beforeSaveHandler {
     }
 
     #check the global spamlist
-    my $regexTopic = TWiki::Func::getPluginPreferencesValue( 'ANTISPAMREGEXLISTTOPIC' );
-    my ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName('TWiki', $regexTopic);
+    $regexTopic = TWiki::Func::getPluginPreferencesValue( 'ANTISPAMREGEXLISTTOPIC' );
+    ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName('TWiki', $regexTopic);
 
     if (($_[1] eq $regexTopic) && ($_[2] eq $regexWeb)) {
         return; #don't check the anti-spam topics
@@ -168,8 +169,9 @@ sub forceUpdate {
 
     TWiki::Func::writeDebug(${pluginName}.' about to forceUpdate') if $debug;
 
+    my $regexWeb;
     my $regexTopic = TWiki::Func::getPluginPreferencesValue( 'ANTISPAMREGEXLISTTOPIC' );
-    my ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName('TWiki', $regexTopic);
+    ($regexWeb, $regexTopic) = TWiki::Func::normalizeWebTopicName('TWiki', $regexTopic);
     getSharedSpamData($regexWeb, $regexTopic);
 
     TWiki::Func::writeDebug(${pluginName}.' forceUpdate complete') if $debug;

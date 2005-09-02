@@ -28,14 +28,16 @@
 # Manages the story and task coloring according to their completition status
 #
 # =========================
-package TWiki::Plugins::Xp::Status;
+package TWiki::Plugins::XpTrackerPlugin::Status;
 use strict;
 
 #(RAF)
 #If this module is load because using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Status is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+# = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Status is loaded" ) if $debug;
 
 
 # reasonable defaults for colouring. By default task and stories
@@ -56,7 +58,7 @@ sub initModule() {
     my $v;
     foreach my $option (keys %status) {
         # read defaults from XpTrackerPlugin topic
-        &TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Status XPTRACKERPLUGIN_\U$option\UCOLOR" ) if $debug;
+        &TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Status XPTRACKERPLUGIN_\U$option\UCOLOR" ) if $debug;
         $v = &TWiki::Func::getPreferencesValue("XPTRACKERPLUGIN_\U$option\UCOLOR") || undef;
         $status{$option}[0] = $v if defined($v);
     }
@@ -111,8 +113,8 @@ sub calculateStats {
 	$spent=$spent||0;
 	$todo=$todo||0;
 	
-	my $done=int(TWiki::Plugins::Xp::Common::getPercentage($spent,$spent + $todo));	
-	my $overrun=int(TWiki::Plugins::Xp::Common::getPercentage($spent + $todo,$est)- 100);
+	my $done=int(TWiki::Plugins::XpTrackerPlugin::Common::getPercentage($spent,$spent + $todo));	
+	my $overrun=int(TWiki::Plugins::XpTrackerPlugin::Common::getPercentage($spent + $todo,$est)- 100);
 	
 	$overrun= "+".$overrun if ($overrun>0);
 	return ($done,$overrun);

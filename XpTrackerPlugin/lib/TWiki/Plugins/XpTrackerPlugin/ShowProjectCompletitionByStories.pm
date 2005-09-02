@@ -31,19 +31,21 @@
 # 2004-02-28 RafaelAlvarez Replace all the calls of "unofficial" subs 
 #                          with their equivalent in the Func module. 
 # =========================
-package TWiki::Plugins::Xp::ShowProjectCompletitionByStories;
+package TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByStories;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::Status;
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::Status;
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowProjectCompletitionByStories is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByStories is loaded" ) if $debug;
 
 
 sub xpShowProjectCompletitionByStories {
@@ -128,7 +130,7 @@ sub xpShowProjectCompletitionByStories {
 
 sub xpGetStoryStatus {
     # Get acceptance test status
-    my $storyComplete = TWiki::Plugins::Xp::Common::acceptanceTestStatus($_[0]);
+    my $storyComplete = TWiki::Plugins::XpTrackerPlugin::Common::acceptanceTestStatus($_[0]);
 
 	my ($etc,$spent)=(0,0);
     # Run through tasks and get their status
@@ -140,7 +142,7 @@ sub xpGetStoryStatus {
         $etc+=$taskEtc;
         $spent+=$taskSpent;
     }
-    my ($color,$statusS,$status) =TWiki::Plugins::Xp::Status::getStatus($spent,$etc,$storyComplete);
+    my ($color,$statusS,$status) =TWiki::Plugins::XpTrackerPlugin::Status::getStatus($spent,$etc,$storyComplete);
     return $status;
 }    
 

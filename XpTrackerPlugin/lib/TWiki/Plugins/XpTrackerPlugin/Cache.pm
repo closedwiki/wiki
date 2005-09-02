@@ -24,7 +24,7 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # =========================
-package TWiki::Plugins::Xp::Cache;
+package TWiki::Plugins::XpTrackerPlugin::Cache;
 use strict;
 
 use TWiki::Plugins::XpTrackerPlugin;
@@ -43,8 +43,10 @@ my $projectsCacheFile=".xpprojectcache";
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Cache is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Cache is loaded" ) if $debug;
 
 #-------------------------------------------------------------------------------
 sub initCache {
@@ -99,7 +101,7 @@ sub buildCache {
 
     my @topics=&TWiki::Func::getTopicList($web);
     foreach my $topic (@topics) {
-        #TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Cache::buildCache $topic" );
+        #TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Cache::buildCache $topic" );
         my $topicText = &TWiki::Func::readTopicText($web, $topic);
         
         #Found a Story

@@ -21,17 +21,19 @@
 # 2004-02-28 RafaelAlvarez Replace all the calls of "unofficial" subs 
 #                          with their equivalent in the Func module. 
 # =========================
-package TWiki::Plugins::Xp::Iteration;
+package TWiki::Plugins::XpTrackerPlugin::Iteration;
 use HTTP::Date;
 use TWiki::Func;
-use TWiki::Plugins::Xp::Common;
+use TWiki::Plugins::XpTrackerPlugin::Common;
 use TWiki::Plugins::XpTrackerPlugin;
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Iteration is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Iteration is loaded" ) if $debug;
 
 sub new {
 	my ($type,$web,$name)=@_;
@@ -80,7 +82,7 @@ sub new {
 
 sub summarize {
 	my $self=shift;
-	my @stories=TWiki::Plugins::Xp::Common::loadStories($self->web,$self->name);
+	my @stories=TWiki::Plugins::XpTrackerPlugin::Common::loadStories($self->web,$self->name);
 	my ($totalSpent,$totalEtc,$totalEst) = 0;
 	my $count=0;
 	foreach my $story (@stories) {
@@ -91,7 +93,7 @@ sub summarize {
 	}
 	
 	# Do iteration totals
-	my ($done,$overrun) = TWiki::Plugins::Xp::Status::calculateStats($totalEst,$totalSpent,$totalEtc);
+	my ($done,$overrun) = TWiki::Plugins::XpTrackerPlugin::Status::calculateStats($totalEst,$totalSpent,$totalEtc);
 
 	$self->{spent}=$totalSpent||0;
 	$self->{todo}=$totalEtc||0;

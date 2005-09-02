@@ -78,35 +78,15 @@ sub initPlugin
 }
 
 # =========================
-sub DISABLE_commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-    &TWiki::Func::writeDebug( "- EncryptedPagesPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-}
-
-# =========================
-sub DISABLE_startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-    &TWiki::Func::writeDebug( "- EncryptedPagesPlugin::startRenderingHandler( $_[1] )" ) if $debug;
-}
-
-# =========================
 # Expand the Site:page references, called once per line of text
 sub outsidePREHandler
 {
 ### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 
     $replacementText = &TWiki::Func::expandCommonVariables( $replacementText, $topic, $web);
-    $_[0] =~ s/$prefixPattern(.*)$postfixPattern/$replacementText/geo;
-    my $key= $1;
+    $_[0] =~ s/$prefixPattern(.*?)$postfixPattern/$replacementText/geo;
+    my $key= $1 || '';
     $_[0] =~ s/--!!--/$key/geo;
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
 }
 
 

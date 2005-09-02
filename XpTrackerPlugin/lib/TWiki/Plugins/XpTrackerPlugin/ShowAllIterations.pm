@@ -27,20 +27,22 @@
 # 2004-02-23 RafaelAlvarez Added Start Date and End Date fields 
 #                          to the output table
 # =========================
-package TWiki::Plugins::Xp::ShowAllIterations;
+package TWiki::Plugins::XpTrackerPlugin::ShowAllIterations;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::HtmlUtil
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::HtmlUtil
 
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowAllIterations is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowAllIterations is loaded" ) if $debug;
 
 
 sub xpShowAllIterations {
@@ -56,11 +58,11 @@ sub xpShowAllIterations {
         my @projTeams = &TWiki::Plugins::XpTrackerPlugin::xpGetProjectTeams($project, $web);
         foreach my $team (@projTeams){ 
           
-            my @iterations=TWiki::Plugins::Xp::Common::loadTeamIterations($web,$team,1);
+            my @iterations=TWiki::Plugins::XpTrackerPlugin::Common::loadTeamIterations($web,$team,1);
         
             # write out all iterations to table
         	foreach my $iteration (sort { $b->order <=> $a->order } @iterations) {
-        	    my $gaugeTxt =  TWiki::Plugins::Xp::HtmlUtil::gaugeLite($iteration->done);
+        	    my $gaugeTxt =  TWiki::Plugins::XpTrackerPlugin::HtmlUtil::gaugeLite($iteration->done);
                 $list .= "| ".$project." ";
                 $list .= "| ".$team." ";
                 $list .= "| ".$iteration->name." ";

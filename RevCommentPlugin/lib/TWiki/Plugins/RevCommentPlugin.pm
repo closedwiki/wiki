@@ -68,8 +68,12 @@ use vars qw(
     $minorMark $rlogCmd $rcsMsgCmd
 );
 
-$rlogCmd   = "$TWiki::rcsDir/rlog %FILE%";
-$rcsMsgCmd = "$TWiki::rcsDir/rcs -q -m:%MSG% %FILE%";
+if(defined($TWiki::rcsDir)) {
+    $rlogCmd   = "$TWiki::rcsDir/rlog %FILE%";
+    $rcsMsgCmd = "$TWiki::rcsDir/rcs -q -m:%MSG% %FILE%";
+} else {
+    # do something for Dakar
+}
 
 $VERSION = '1.021';
 $pluginName = 'RevCommentPlugin';  # Name of this Plugin
@@ -86,6 +90,8 @@ sub initPlugin
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
+
+    return 0 unless defined( $rlogCmd );
 
     $commentFromUpload = undef;
 

@@ -28,18 +28,20 @@
 #						   are assigned to the same task the estimate, todo, and spent time are 
 #                          accounted to both.
 # =========================
-package TWiki::Plugins::Xp::ShowVelocities;
+package TWiki::Plugins::XpTrackerPlugin::ShowVelocities;
 
 use HTTP::Date;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::Story;
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::Story;
 
 #(RAF)
 #If this module is load because using the "use" directive before the plugin is 
 #initialized, then $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowVelocities is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowVelocities is loaded" ) if $debug;
 
  
 
@@ -49,7 +51,7 @@ sub xpShowVelocities {
     my (%whoAssigned,%whoSpent,%whoEtc,%whoTAssigned,%whoTRemaining) = ();
     my ($totalSpent,$totalEtc,$totalAssigned,$totalVelocity,$totalTAssigned,$totalTRemaining) = (0,0,0,0,0,0);
     
-    my @stories=TWiki::Plugins::Xp::Common::loadStories($web,$iteration);
+    my @stories=TWiki::Plugins::XpTrackerPlugin::Common::loadStories($web,$iteration);
     foreach my $story (@stories) {
     	my @tasks=$story->tasks;
     	foreach my $task (@tasks) {
@@ -103,7 +105,7 @@ sub xpShowVelocities {
 
     foreach my $who (sort { $whoEtc{$b} <=> $whoEtc{$a} } keys %whoSpent) {
         
-        my $completition=int(TWiki::Plugins::Xp::Common::getPercentage($whoSpent{$who},$whoSpent{$who}+$whoEtc{$who}));
+        my $completition=int(TWiki::Plugins::XpTrackerPlugin::Common::getPercentage($whoSpent{$who},$whoSpent{$who}+$whoEtc{$who}));
     	$list .= "<tr>";
 	    $list .= "<td> ".$who." </td>";
 	    $list .= "<td align=\"center\">".$whoAssigned{$who}."</td>";
@@ -120,7 +122,7 @@ sub xpShowVelocities {
     #$list .= "<th>".$totalAssigned."</th>";
     #$list .= "<th>".$totalSpent."</th>";
     #$list .= "<th>".$totalEtc."</th>";
-    #$list .= "<th align=\"center\">".int(TWiki::Plugins::Xp::Common::getPercentage($totalSpent,$totalSpent+$totalEtc))."%</th>";
+    #$list .= "<th align=\"center\">".int(TWiki::Plugins::XpTrackerPlugin::Common::getPercentage($totalSpent,$totalSpent+$totalEtc))."%</th>";
     #$list .= "<th align=\"center\">&nbsp;</td>";
     #$list .= "<th>".$totalTAssigned."</th>";
     #$list .= "<th>".$totalTRemaining."</th>";

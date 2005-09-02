@@ -537,7 +537,7 @@ sub ppFindAllProjPlans {
     
     # Read in all projects in this web
     #opendir(WEB,$dataDir."/".$web);
-    opendir(WEB,$TWiki::dataDir."/".$web);
+    opendir(WEB,TWiki::Func::getDataDir()."/".$web);
     my @allFiles = grep { s/(.*?).txt$/$1/go } readdir(WEB);
     closedir(WEB);
     foreach my $eachF (@allFiles) {
@@ -618,7 +618,7 @@ sub ppBuildCache
     }
 
     my $cacheText = $projCache.$planCache;
-    &TWiki::Store::saveFile($cacheFileName, $cacheText);
+    &TWiki::Func::saveFile($cacheFileName, $cacheText);
 }
 
 #################################################################################
@@ -631,7 +631,7 @@ sub ppReadCache
 {
     my $web = shift;
 
-    $cacheFileName = "$TWiki::dataDir/$web/.ppcache";
+    $cacheFileName = TWiki::Func::getDataDir()."/$web/.ppcache";
 
     # if there is no disk cache file, build one
     if (! (-e "$cacheFileName")) {
@@ -642,7 +642,7 @@ sub ppReadCache
         # if cache exists but is not most recent file, rebuild it
         # Do this by checking directory timestamp
         my @cacheStat = stat("$cacheFileName");
-        my @latestStat = stat("$TWiki::dataDir/$web");
+        my @latestStat = stat(TWiki::Func::getDataDir()."/$web");
         # field 9 is the last modified timestamp
         if($cacheStat[9] < $latestStat[9]) {
           # &TWiki::Func::writeDebug( "OLD CACHE $cacheStat[9] $latestStat[9]" );
@@ -651,7 +651,7 @@ sub ppReadCache
     }
 
     # read disk cache
-    my $cacheText = &TWiki::Store::readFile($cacheFileName);
+    my $cacheText = &TWiki::Func::readFile($cacheFileName);
     %cachedProjPlans = ();
     %cachedIdPlans = ();
     $cachedIdPlans{0} = "";
@@ -763,7 +763,7 @@ sub ppSavePage()
 #     }
 
     # load template for page type requested
-    my( $meta, $text ) = &TWiki::Func::readTopic( $web, $template );
+    my( $text ) = &TWiki::Func::readTopicText( $web, $template );
 
     # write parent name into page
     my $parent = $query->param( 'topicparent' );
@@ -772,7 +772,7 @@ sub ppSavePage()
     $text =~ s/PPID/$id/geo;
 
     # save new page and open in browser
-    my $error = &TWiki::Store::saveTopic( $web, $title, $text, $meta );
+    my $error = &TWiki::Func::saveTopicText( $web, $title, $text );
     TWiki::Func::redirectCgiQuery( $query, &TWiki::Func::getViewUrl( $web, $title ) );
     
     &TWiki::Func::setTopicEditLock( $web, $title, "on" );

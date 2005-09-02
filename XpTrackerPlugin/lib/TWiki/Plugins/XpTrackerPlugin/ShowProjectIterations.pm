@@ -24,26 +24,28 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # =========================
-package TWiki::Plugins::Xp::ShowProjectIterations;
+package TWiki::Plugins::XpTrackerPlugin::ShowProjectIterations;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::HtmlUtil;
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::HtmlUtil;
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowProjectIterations is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowProjectIterations is loaded" ) if $debug;
 
 
 sub xpShowProjectIterations {
 
     my ($project, $web) = @_;
 
-    my $list = TWiki::Plugins::Xp::HtmlUtil::emmitTwikiHeader(3,"All iterations for project ".$project);
+    my $list = TWiki::Plugins::XpTrackerPlugin::HtmlUtil::emmitTwikiHeader(3,"All iterations for project ".$project);
 
     $list .= "| *Team* ";
     $list .= "| *Iter* ";
@@ -61,11 +63,11 @@ sub xpShowProjectIterations {
     my @projTeams = &TWiki::Plugins::XpTrackerPlugin::xpGetProjectTeams($project, $web);
     foreach my $team (@projTeams){ 
       
-        my @iterations=TWiki::Plugins::Xp::Common::loadTeamIterations($web,$team);
+        my @iterations=TWiki::Plugins::XpTrackerPlugin::Common::loadTeamIterations($web,$team);
     
         # write out all iterations to table
     	foreach my $iteration (sort { $b->order <=> $a->order } @iterations) {
-    	    my $gaugeTxt =  TWiki::Plugins::Xp::HtmlUtil::gaugeLite($iteration->done);
+    	    my $gaugeTxt =  TWiki::Plugins::XpTrackerPlugin::HtmlUtil::gaugeLite($iteration->done);
             $list .= "| ".$team." ";
             $list .= "| ".$iteration->name." ";
             $list .= "| ".$iteration->summary." ";

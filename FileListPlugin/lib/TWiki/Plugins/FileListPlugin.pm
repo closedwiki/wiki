@@ -116,8 +116,8 @@ sub _handleFileList
   if ( $selection ) {
     # Convert it into regexp to search files against.
     # "abc, bcd" => (abc)|(bcd)
-    $selection =~ s/\s*([\w\._\-\+\s]*)\s*,/(\1)|/g  ;
-    $selection =~ s/\s*([\w\._\-\+\s]*)\s*$/(\1)/;
+    $selection =~ s/\s*([\w\._\-\+\s]*)\s*,/($1)|/g  ;
+    $selection =~ s/\s*([\w\._\-\+\s]*)\s*$/($1)/;
   }
 
   my @attachments = $meta->find( "FILEATTACHMENT" );
@@ -129,7 +129,7 @@ sub _handleFileList
     my $attrSize=$attachment->{size};
     my $attrUser=$attachment->{user};
     my $attrComment=$attachment->{comment};
-    my $attrAttr=attachment->{attr};
+    my $attrAttr=$attachment->{attr};
 
     my $fileIcon = TWiki::Attach::filenameToIcon( $file );
 

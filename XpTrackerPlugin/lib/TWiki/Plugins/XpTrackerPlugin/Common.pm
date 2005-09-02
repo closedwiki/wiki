@@ -27,20 +27,22 @@
 # 2004-02-28 RafaelAlvarez Replace all the calls of "unofficial" subs 
 #                          with their equivalent in the Func module. 
 # =========================
-package TWiki::Plugins::Xp::Common;
+package TWiki::Plugins::XpTrackerPlugin::Common;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Task;
-use TWiki::Plugins::Xp::Story;
-use TWiki::Plugins::Xp::Iteration;
+use TWiki::Plugins::XpTrackerPlugin::Task;
+use TWiki::Plugins::XpTrackerPlugin::Story;
+use TWiki::Plugins::XpTrackerPlugin::Iteration;
 
 
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Common is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Common is loaded" ) if $debug;
 
 sub getStoryTasks {
 	my @tasks=();
@@ -48,7 +50,7 @@ sub getStoryTasks {
         (my $status,my $name,my $est,my $who,my $spent,my $etc,my $tstatus, my $reviewer) = TWiki::Plugins::XpTrackerPlugin::xpGetNextTask($_[0]);
 		last if (!$status);
 
-        my $task= new TWiki::Plugins::Xp::Task();
+        my $task= new TWiki::Plugins::XpTrackerPlugin::Task();
         $task->name($name);
         $task->est($est);
 		$task->who($who);
@@ -71,7 +73,7 @@ sub loadStories {
 sub loadStoriesByTitle {
 	my @stories=();
 	foreach my $storyTitle (@_) {
-    	push @stories,new TWiki::Plugins::Xp::Story($web,$storyTitle);
+    	push @stories,new TWiki::Plugins::XpTrackerPlugin::Story($web,$storyTitle);
    	}
    	return @stories;
 }
@@ -81,7 +83,7 @@ sub loadTeamIterations {
     my @iterations=();
     my @teamIters = &TWiki::Plugins::XpTrackerPlugin::xpGetTeamIterations($team, $web);
     foreach my $iter (@teamIters) {
-    	my $iteration = new TWiki::Plugins::Xp::Iteration($web,$iter);
+    	my $iteration = new TWiki::Plugins::XpTrackerPlugin::Iteration($web,$iter);
         $iteration->summarize() unless $dontSummarize;
       push @iterations,$iteration;
     }

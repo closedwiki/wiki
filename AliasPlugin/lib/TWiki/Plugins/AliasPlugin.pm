@@ -55,9 +55,10 @@ sub initPlugin
 
 
     # create alias hash
+    my $ww = TWiki::Func::getRegularExpression('wikiWordRegex');
     foreach my $line ( @prefLines ) {
       if(($acceptNonTWikiWord && $line =~ /\|\s*(?:\<nop\>)?(\w+)\s*\|\s*(?:\<nop\>)?(\S*)\s*\|/) ||
-         ($line =~ /\|\s*(?:\<nop\>)?($TWiki::wikiWordRegex)\s*\|\s*(?:\<nop\>)?(\S*)\s*\|/)) 
+         ($line =~ /\|\s*(?:\<nop\>)?($ww)\s*\|\s*(?:\<nop\>)?(\S*)\s*\|/)) 
       {
           TWiki::Func::writeDebug("AliasPlugin (detail): Config match: key=$1, value=$2") if($debug>1); #heavy debug
           $aliasHash{"$1"} = "$2";       

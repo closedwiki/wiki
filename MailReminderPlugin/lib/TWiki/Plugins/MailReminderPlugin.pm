@@ -22,7 +22,6 @@
 package TWiki::Plugins::MailReminderPlugin;
 
 
-
 # use strict;
 
 # =========================
@@ -68,9 +67,12 @@ sub initPlugin
 	
 	close (CONFIG);
 
-	$dbh = Mysql->connect($host,$database,$user,$passwd);	# connect to database.
+    eval {
+        $dbh = Mysql->connect($host,$database,$user,$passwd);	# connect to database.
+    };
+    return 0 if $@;
 
-    	return 1;
+    return 1;
 }
 
 # =========================

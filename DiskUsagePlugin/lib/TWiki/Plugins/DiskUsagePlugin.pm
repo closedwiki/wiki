@@ -98,7 +98,8 @@ sub diskusage {
     $web =~ s/\W//go;
     TWiki::Func::writeDebug( "- ${pluginName}::diskusage($web)" ) if $debug;
 
-    my $cmd = "/usr/bin/du -k $TWiki::dataDir/$web/*.txt 2>&1";
+    my $dd = TWiki::Func::getDataDir();
+    my $cmd = "/usr/bin/du -k $dd/$web/*.txt 2>&1";
 
     my @lines = `$cmd`;
     my %usageByTopic;
@@ -106,10 +107,11 @@ sub diskusage {
     foreach my $line (@lines) {
       my ($kb, $file) = split /\s+/, $line;
       $topic = $file;
-      $topic =~ s!$TWiki::dataDir/(.*).txt!$1!;
+      $topic =~ s!$dd/(.*).txt!$1!;
       $topic =~ s!/!.!;
       $usageByTopic{$topic}{text} = $kb;
-      $usageByTopic{$topic}{history} = (-s "$file,v") % 1024;
+      my $sz = (-s "$file,v") || 0;
+      $usageByTopic{$topic}{history} = $sz % 1024;
     }
 
     $cmd = "/usr/bin/du -k $TWiki::pubDir/$web/* 2>&1";

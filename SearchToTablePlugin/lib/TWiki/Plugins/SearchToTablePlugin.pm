@@ -155,7 +155,7 @@ sub handleSearchToTable
 
     $cmd = "$TWiki::egrepCmd -l $TWiki::cmdQuote$theSearchVal$TWiki::cmdQuote *.txt";
 
-    my $sDir = "$TWiki::dataDir/$thisWebName";
+    my $sDir = TWiki::Func::getDataDir()."/$thisWebName";
     my @topicList = "";
     if( $theSearchVal ) {
        # do grep search
@@ -280,7 +280,7 @@ sub _getFirstLine
     else{
       return $ln;
        &TWiki::Func::writeDebug( "- else( $rtn )" ) if $debug;
-      break;
+      last;
     }
   }
 

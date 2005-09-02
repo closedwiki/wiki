@@ -26,7 +26,7 @@
 # =========================
 # 2004-02-28 RafaelAlvarez Replace all the calls of "unofficial" subs 
 #                          with their equivalent in the Func module. 
-package TWiki::Plugins::Xp::ShowProjectStories;
+package TWiki::Plugins::XpTrackerPlugin::ShowProjectStories;
 
 use HTTP::Date;
 use TWiki::Func;
@@ -35,8 +35,10 @@ use TWiki::Plugins::XpTrackerPlugin;
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowProjectStories is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowProjectStories is loaded" ) if $debug;
 
 sub xpShowProjectStories {
 

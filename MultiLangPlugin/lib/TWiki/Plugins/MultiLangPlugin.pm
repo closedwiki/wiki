@@ -45,9 +45,6 @@ use vars qw(
 $VERSION = '0.92';
 $pluginName = 'MultiLangPlugin';  # Name of this Plugin
 
-# TODO: unclean, better possibility?
-use TWiki qw(%regex);
-
 my %langNames = (
 		 en => 'English',
 		 de => 'Deutsch',
@@ -61,6 +58,8 @@ my %formNames = (
 		 DATADIRFORM => \$dataDirForm
 		 );
 
+my %regex;
+
 # =========================
 sub initPlugin
 {
@@ -71,6 +70,13 @@ sub initPlugin
         TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
         return 0;
     }
+
+    $regex{webNameRegex} = TWiki::Func::getRegularExpression('webNameRegex');
+    $regex{wikiWordRegex} = TWiki::Func::getRegularExpression('wikiWordRegex');
+    $regex{mixedAlpha} = TWiki::Func::getRegularExpression('mixedAlpha');
+    $regex{mixedAlphaNum} = TWiki::Func::getRegularExpression('mixedAlphaNum');
+    $regex{abbrevRegex} = TWiki::Func::getRegularExpression('abbrevRegex');
+    $regex{singleMixedAlphaNumRegex} = qr/[A-Za-z0-9]/;;
 
     # TODO: getPluginPreferencesFlag is broken with latest stable
     # but works in alpha, for now work around that
@@ -495,7 +501,8 @@ sub makeLink {
     $script = 'view' unless defined $script;
 
     my $url = makeUrl($web, $topic, $lang, $script);
-    return "<a class=\"translationLink\" rel=\"alternate\" lang=\"$lang\" title=\"$langNames{$lang}\" href=\"$url\">$linkText</a>";
+    my $ln = $langNames{$lang} || '';
+    return "<a class=\"translationLink\" rel=\"alternate\" lang=\"$lang\" title=\"$ln\" href=\"$url\">$linkText</a>";
 }
 
 =pod

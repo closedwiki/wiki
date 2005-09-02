@@ -133,10 +133,16 @@ sub formatDateTime
    }
    #my $incYears  = TWiki::Func::extractNameValuePair( $textArgs, "incyears"  ) or 0;
    #my $incMonths = TWiki::Func::extractNameValuePair( $textArgs, "incmonths" ) or 0;
-   my $incDays   = TWiki::Func::extractNameValuePair( $textArgs, "incdays"   ) or 0;
-   my $incHours  = TWiki::Func::extractNameValuePair( $textArgs, "inchours"  ) or 0;
-   my $incMins   = TWiki::Func::extractNameValuePair( $textArgs, "incmins"   ) or 0;
-   my $incSecs   = TWiki::Func::extractNameValuePair( $textArgs, "incsecs"   ) or 0;
+   my $incDays   = TWiki::Func::extractNameValuePair( $textArgs, "incdays"   );
+   my $incHours  = TWiki::Func::extractNameValuePair( $textArgs, "inchours"  );
+   my $incMins   = TWiki::Func::extractNameValuePair( $textArgs, "incmins"   );
+   my $incSecs   = TWiki::Func::extractNameValuePair( $textArgs, "incsecs"   );
+
+   $myGreewich ||= 0;
+   $incDays ||= 0;
+   $incHours ||= 0;
+   $incMins ||= 0;
+   $incSecs ||= 0;
 
    $incHours += $myGreenwich;
    my $inc = $incSecs + ($incMins*60) + ($incHours*60*60) + ($incDays*60*60*24);
@@ -151,7 +157,7 @@ sub formatDateTime
    my $i_lmonth = $i18n_monthLongNames[ $numMonth ];
    my $i_month = $i18n_monthShortNames[ $numMonth ];
    my $lmonth = $monthLongNames[ $numMonth ];
-   my $month = $monthShortNames[ $numMonth ];
+   $month = $monthShortNames[ $numMonth ];
    my $i_lwday = $i18n_weekdayLongNames[ $wday ];
    my $i_wday = $i18n_weekdayShortNames[ $wday ];
    my $lwday = $weekdayLongNames[ $wday ];

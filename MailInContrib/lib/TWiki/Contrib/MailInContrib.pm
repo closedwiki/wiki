@@ -58,8 +58,8 @@ sub new {
         $this->{lastMailIn} = $session->{store}->readMetaData(
             '', "mailincron" ) || 0;
     } else {
-        $this->{lastMailIn} = TWiki::Store::readFile(
-            "$TWiki::dataDir/.mailincron" ) || 0; # COMPATIBILITY
+        $this->{lastMailIn} = TWiki::Func::readFile(
+            TWiki::Func::getDataDir()."/.mailincron" ) || 0; # COMPATIBILITY
     }
 
     return $this;
@@ -85,8 +85,8 @@ sub wrapUp {
         $this->{session}->{store}->saveMetaData
           ($TWiki::cfg{SystemWebName}, "mailincron", time() );
     } else {
-        $this->{lastMailIn} = TWiki::Store::saveFile( # COMPATIBILITY
-            "$TWiki::dataDir/TWiki/.mailincron", time() ); # COMPATIBILITY
+        $this->{lastMailIn} = TWiki::Func::saveFile( # COMPATIBILITY
+            TWiki::Func::getDataDir()."/TWiki/.mailincron", time() ); # COMPATIBILITY
     }
 }
 

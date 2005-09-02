@@ -86,8 +86,8 @@
 # Following vairabl will contain the number of times image is seen
   @counter_array = ("");
 
-  $width;
-  $height;
+#  $width;
+#  $height;
 
 
 #============================================================================================== =========================
@@ -302,7 +302,7 @@ sub show_dir()
 		{
 			$str=$str."</tr><tr>";
 		}
-		$str=$str."<td>$dir_array_list[i] <a href=\"$script?prev=$pagepath;script=$script;abspath=$abspath;menu=$menu;relurl=$imagedir;dir=$dir_array_list[$i]\"><img src=\"$menu/album.gif \" width=100 height=100 alt=\"$dir_array_list[$i]\" / ><br>$dir_array_list[$i] </a> </td>\n";
+		$str=$str."<td>$dir_array_list[$i] <a href=\"$script?prev=$pagepath;script=$script;abspath=$abspath;menu=$menu;relurl=$imagedir;dir=$dir_array_list[$i]\"><img src=\"$menu/album.gif \" width=100 height=100 alt=\"$dir_array_list[$i]\" / ><br>$dir_array_list[$i] </a> </td>\n";
 	}
 	
 #***********************************888

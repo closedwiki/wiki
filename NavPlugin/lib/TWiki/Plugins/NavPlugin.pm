@@ -45,10 +45,10 @@ sub initPlugin
     $nextTopic = "";
     $prevTopic = "";
     $tocTopic = "";
-    if( topicExists($web, $topic) ){
+    if( TWiki::Func::topicExists($web, $topic) ){
 	$documentName = &getDocName($topic, $web);
 	$tocTopic = $documentName.$tocNameFlag; 
-	if ( topicExists($web, $tocTopic) ){
+	if ( TWiki::Func::topicExists($web, $tocTopic) ){
 	    &handleNavLinks($topic, $web, $tocTopic);
 	    return 1;
 	}
@@ -73,7 +73,7 @@ sub getDocName
 {
     my ($theTopic, $theWeb) = @_;
     my $theTopicText;
-    $theTopicText = &TWiki::Store::readWebTopic( $theWeb, $theTopic );
+    $theTopicText = &TWiki::Func::readTopicText( $theWeb, $theTopic );
     if( ! $theTopicText ) {
 	#was not able to read the topic text - don't know why .... DNE??
 	return "";
@@ -108,7 +108,7 @@ sub handleNavLinks
 {
     my( $theTopic, $theWeb, $theToc) = @_;
     my $tocData;   
-    $tocData = &TWiki::Store::readWebTopic( $theWeb, $theToc );
+    $tocData = &TWiki::Func::readTopicText( $theWeb, $theToc );
     if( ! $tocData ) {
 	#was not able to read the topic text - don't know why .... DNE??
 	return "";
@@ -162,22 +162,6 @@ sub handleNavLinks
 	}
     }
 }
-
-# =========================
-sub webExists
-{
-    my( $theWeb ) = @_;
-    return -e "$TWiki::dataDir/$theWeb";
-}
-
-# =========================
-sub topicExists
-{
-    my( $theWeb, $theName ) = @_;
-    return -e "$TWiki::dataDir/$theWeb/$theName.txt";
-}
-
-
 
 #===========================================
 

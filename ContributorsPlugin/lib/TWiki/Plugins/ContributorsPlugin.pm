@@ -123,7 +123,15 @@ sub handleContributors
     # If there someday is a way to get all the rev info at once, this should
     # take advantage of that.
     for ($revision=$maxRevision; $revision>($maxRevision-$last); $revision--) {
-        my @lines = &TWiki::Store::getRevisionInfo($web, $topic, $revision);
+
+        my @lines;
+        if( $session ) {
+            @lines = $meta->getRevisionInfo();
+            $lines[1] = $lines[1]->wikiName();
+        } else {
+            @lines = TWiki::Store::getRevisionInfo($web, $topic, $revision);
+        }
+
         for ($lineIndex = 0; $lineIndex < $#lines; $lineIndex += 4) {
 	    my $date = &TWiki::Func::formatTime($lines[$lineIndex+0], "http");
 	    my $author = $lines[$lineIndex+1];

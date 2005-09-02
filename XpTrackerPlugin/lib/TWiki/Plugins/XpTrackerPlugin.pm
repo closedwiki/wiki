@@ -29,11 +29,11 @@
 package TWiki::Plugins::XpTrackerPlugin;
 
 use HTTP::Date;
-use TWiki::Plugins::Xp::Status;
-use TWiki::Plugins::Xp::Cache;
-use TWiki::Plugins::Xp::HtmlUtil;
+use TWiki::Plugins::XpTrackerPlugin::Status;
+use TWiki::Plugins::XpTrackerPlugin::Cache;
+use TWiki::Plugins::XpTrackerPlugin::HtmlUtil;
 
-use TWiki::Plugins::Xp::Story;
+use TWiki::Plugins::XpTrackerPlugin::Story;
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION $debug
@@ -73,7 +73,7 @@ sub initPlugin
     &initCache($web);
 
     # Read the color schema from the Plugin Topic
-    &TWiki::Plugins::Xp::Status::initModule();
+    &TWiki::Plugins::XpTrackerPlugin::Status::initModule();
     
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
@@ -86,7 +86,7 @@ sub initPlugin
 sub afterSaveHandler 
 {
 	### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-	TWiki::Plugins::Xp::Cache::buildCache($_[2]);
+	TWiki::Plugins::XpTrackerPlugin::Cache::buildCache($_[2]);
 	&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::afterSaveHandler( $_[2].$_[1] ) is OK" );
 }
 
@@ -173,9 +173,9 @@ sub commonTagsHandler
 }
 
 sub xpGetStoryStatus {
-    my $storyName= @_[0];
+    my $storyName= $_[0];
     my @elements = split (/\./,$storyName);
-    my $story = new TWiki::Plugins::Xp::Story($elements[0],$elements[1]);
+    my $story = new TWiki::Plugins::XpTrackerPlugin::Story($elements[0],$elements[1]);
     
     return $story->{storyStatS};    
 }
@@ -244,7 +244,7 @@ sub xpDumpIteration {
     my $bigList = "";
 
     foreach my $story (@allStories) {
-        my $storyText = &TWiki::Plugins::Xp::Common::readStoryText($web, $story);
+        my $storyText = &TWiki::Plugins::XpTrackerPlugin::Common::readStoryText($web, $story);
         # TODO: This is a hack!
         # Patch the embedded "DumpStoryList" name to the real story name
         if(&xpGetValue("\\*Iteration\\*", $storyText, "storyiter") eq $iteration) {
@@ -264,8 +264,8 @@ sub xpDumpIteration {
 # Shows the specified iteration broken down by stories and tasks
 
 sub xpShowIteration {
-    eval("use TWiki::Plugins::Xp::ShowIteration;");
-	return TWiki::Plugins::Xp::ShowIteration::xpShowIteration(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowIteration;");
+	return TWiki::Plugins::XpTrackerPlugin::ShowIteration::xpShowIteration(@_);
 }
 
 ###########################
@@ -275,8 +275,8 @@ sub xpShowIteration {
 # Copied from XpShowIteration. Need to refactor!
 
 sub xpShowIterationTerse {
-    eval("use TWiki::Plugins::Xp::ShowIterationTerse;");
-	return TWiki::Plugins::Xp::ShowIterationTerse::xpShowIterationTerse(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowIterationTerse;");
+	return TWiki::Plugins::XpTrackerPlugin::ShowIterationTerse::xpShowIterationTerse(@_);
 }
 
 
@@ -286,8 +286,8 @@ sub xpShowIterationTerse {
 # Shows all the iterations
 
 sub xpShowAllIterations {
-    eval("use TWiki::Plugins::Xp::ShowAllIterations;");
-    return TWiki::Plugins::Xp::ShowAllIterations::xpShowAllIterations(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowAllIterations;");
+    return TWiki::Plugins::XpTrackerPlugin::ShowAllIterations::xpShowAllIterations(@_);
 }
 
 
@@ -296,8 +296,8 @@ sub xpShowAllIterations {
 #
 # Shows all the iterations for this project
 sub xpShowProjectIterations {
-    eval("use TWiki::Plugins::Xp::ShowProjectIterations;");
-    return TWiki::Plugins::Xp::ShowProjectIterations::xpShowProjectIterations(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowProjectIterations;");
+    return TWiki::Plugins::XpTrackerPlugin::ShowProjectIterations::xpShowProjectIterations(@_);
 }
 
 ###########################
@@ -306,8 +306,8 @@ sub xpShowProjectIterations {
 # Shows all the stories for this project
 
 sub xpShowProjectStories {
-    eval("use TWiki::Plugins::Xp::ShowProjectStories;");
-    return TWiki::Plugins::Xp::ShowProjectStories::xpShowProjectStories(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowProjectStories;");
+    return TWiki::Plugins::XpTrackerPlugin::ShowProjectStories::xpShowProjectStories(@_);
 }
 
 
@@ -317,8 +317,8 @@ sub xpShowProjectStories {
 # Shows all the iterations for this team
 
 sub xpShowTeamIterations {
-    eval("use TWiki::Plugins::Xp::ShowTeamIterations;");
-	return TWiki::Plugins::Xp::ShowTeamIterations::xpShowTeamIteration(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowTeamIterations;");
+	return TWiki::Plugins::XpTrackerPlugin::ShowTeamIterations::xpShowTeamIteration(@_);
 }
 
 
@@ -333,14 +333,14 @@ sub xpShowAllTeams {
 
     my @projects = &xpGetAllProjects($web);
 
-    my $list = TWiki::Plugins::Xp::HtmlUtil::emmitTwikiHeader(3,"List of all projects and teams:");
+    my $list = TWiki::Plugins::XpTrackerPlugin::HtmlUtil::emmitTwikiHeader(3,"List of all projects and teams:");
     $list .= "| *Project* | *Project Teams* |\n";
 
     foreach my $project (@projects) {
 
       my @projTeams = &xpGetProjectTeams($project, $web);
       
-      $list .= "| ".$project." | ".TWiki::Plugins::Xp::HtmlUtil::emmitArrayInBullets(@projTeams) ." |\n";
+      $list .= "| ".$project." | ".TWiki::Plugins::XpTrackerPlugin::HtmlUtil::emmitArrayInBullets(@projTeams) ." |\n";
     }
 
     # append form to allow creation of new projects
@@ -355,8 +355,8 @@ sub xpShowAllTeams {
 # Shows all the teams on this project
 
 sub xpShowProjectTeams {
-    eval("use TWiki::Plugins::Xp::ShowProjectTeams;");
-    return TWiki::Plugins::Xp::ShowProjectTeams::xpShowProjectTeams(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowProjectTeams;");
+    return TWiki::Plugins::XpTrackerPlugin::ShowProjectTeams::xpShowProjectTeams(@_);
 }
 
 
@@ -366,8 +366,8 @@ sub xpShowProjectTeams {
 # Shows the project completion by release and iteration using stories.
 
 sub xpShowProjectCompletionByStories{
-    eval("use TWiki::Plugins::Xp::ShowProjectCompletitionByStories;");
-	return TWiki::Plugins::Xp::ShowProjectCompletitionByStories::xpShowProjectCompletitionByStories(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByStories;");
+	return TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByStories::xpShowProjectCompletitionByStories(@_);
 }
 
 ###########################
@@ -376,8 +376,8 @@ sub xpShowProjectCompletionByStories{
 # Shows the project completion using tasks.
 
 sub xpShowProjectCompletionByTasks {
-    eval("use TWiki::Plugins::Xp::ShowProjectCompletitionByTasks;");
-    return TWiki::Plugins::Xp::ShowProjectCompletitionByTasks::xpShowProjectCompletionByTasks(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByTasks;");
+    return TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByTasks::xpShowProjectCompletionByTasks(@_);
 }
 
 ###########################
@@ -386,8 +386,8 @@ sub xpShowProjectCompletionByTasks {
 # Shows workload by developer and project/iteration.
 
 sub xpShowLoad {
-    eval("use TWiki::Plugins::Xp::ShowLoad;");
-    return TWiki::Plugins::Xp::ShowLoad::xpShowLoad(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowLoad;");
+    return TWiki::Plugins::XpTrackerPlugin::ShowLoad::xpShowLoad(@_);
 }
 
 ###########################
@@ -395,8 +395,8 @@ sub xpShowLoad {
 # RafaelAlvarez: Modified to be able to consult the open task from any web.
 # Shows open tasks by developer.
 sub xpShowDeveloperTasks {
-    eval("use TWiki::Plugins::Xp::Show;");
-	return TWiki::Plugins::Xp::Show::developerTasks(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::Show;");
+	return TWiki::Plugins::XpTrackerPlugin::Show::developerTasks(@_);
 }
 
 
@@ -404,16 +404,16 @@ sub xpShowDeveloperTasks {
 # RafaelAlvarez: xpShowDeveloperTasksByProject
 # Shows open tasks in a project by developer in the specified web.
 sub xpShowDeveloperTasksByProject {
-    eval("use TWiki::Plugins::Xp::Show;");
-	return TWiki::Plugins::Xp::Show::developerTasksByProject(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::Show;");
+	return TWiki::Plugins::XpTrackerPlugin::Show::developerTasksByProject(@_);
 }
 
 ###########################
 # RafaelAlvarez: xpShowDeveloperTasksByIteration 
 # Shows open tasks in an iteration by developer in the specified web.
 sub xpShowDeveloperTasksByIteration {
-    eval("use TWiki::Plugins::Xp::Show;");
-	return TWiki::Plugins::Xp::Show::developerTasksByIteration (@_,1,1);
+    eval("use TWiki::Plugins::XpTrackerPlugin::Show;");
+	return TWiki::Plugins::XpTrackerPlugin::Show::developerTasksByIteration (@_,1,1);
 }
 
 ###########################
@@ -422,8 +422,8 @@ sub xpShowDeveloperTasksByIteration {
 # Shows velocities of resources in an iteration.
 
 sub xpShowVelocities {
-    eval("use TWiki::Plugins::Xp::ShowVelocities");
-	return TWiki::Plugins::Xp::ShowVelocities::xpShowVelocities(@_);
+    eval("use TWiki::Plugins::XpTrackerPlugin::ShowVelocities");
+	return TWiki::Plugins::XpTrackerPlugin::ShowVelocities::xpShowVelocities(@_);
 }
 
 ###########################
@@ -456,7 +456,7 @@ sub xpShowAllProjects {
 #
 # Service method to show current background colours
 sub xpShowColours {
-  return TWiki::Plugins::Xp::Status::showColours(@_);
+  return TWiki::Plugins::XpTrackerPlugin::Status::showColours(@_);
 }
 
 
@@ -664,7 +664,7 @@ sub xpSavePage()
 #
 # Make form to create new subtype
 sub xpCreateHtmlForm {
-   return TWiki::Plugins::Xp::HtmlUtil::createHtmlForm(@_);
+   return TWiki::Plugins::XpTrackerPlugin::HtmlUtil::createHtmlForm(@_);
 }
 
 ###########################
@@ -672,7 +672,7 @@ sub xpCreateHtmlForm {
 #
 # Get all the teams on this project
 sub xpGetProjectTeams {
-	return &TWiki::Plugins::Xp::Cache::getProjectTeams(@_);
+	return &TWiki::Plugins::XpTrackerPlugin::Cache::getProjectTeams(@_);
 }
 
 ###########################
@@ -680,7 +680,7 @@ sub xpGetProjectTeams {
 #
 # Returns a list of all stories in this web in this iteration
 sub xpGetIterStories {
-	return &TWiki::Plugins::Xp::Cache::getIterStories(@_);
+	return &TWiki::Plugins::XpTrackerPlugin::Cache::getIterStories(@_);
 }
 
 ###########################
@@ -688,7 +688,7 @@ sub xpGetIterStories {
 #
 # Get all the iterations for this team
 sub xpGetTeamIterations {
-	return &TWiki::Plugins::Xp::Cache::getTeamIterations(@_);
+	return &TWiki::Plugins::XpTrackerPlugin::Cache::getTeamIterations(@_);
 }
 
 ###########################
@@ -696,7 +696,7 @@ sub xpGetTeamIterations {
 #
 # Get all the projects for the web
 sub xpGetAllProjects {
-    return &TWiki::Plugins::Xp::Cache::getAllProjects(@_);
+    return &TWiki::Plugins::XpTrackerPlugin::Cache::getAllProjects(@_);
 }
 
 ###########################
@@ -704,7 +704,7 @@ sub xpGetAllProjects {
 #
 # Initializes the cache for the specified web
 sub initCache {
-	TWiki::Plugins::Xp::Cache::initCache( @_);	
+	TWiki::Plugins::XpTrackerPlugin::Cache::initCache( @_);	
 }
 
 
@@ -713,7 +713,7 @@ sub initCache {
 #
 # Return the color for a given status
 sub getColor {
-	return TWiki::Plugins::Xp::Status::getColor(@_);
+	return TWiki::Plugins::XpTrackerPlugin::Status::getColor(@_);
 }
 
 ###########################
@@ -721,7 +721,7 @@ sub getColor {
 #
 # Return the string associated to a given status
 sub getStatusS {
-	return TWiki::Plugins::Xp::Status::getStatusS(@_);
+	return TWiki::Plugins::XpTrackerPlugin::Status::getStatusS(@_);
 }
 
 # =========================

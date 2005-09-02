@@ -25,19 +25,21 @@
 #
 # =========================
 # TODO: Count the stories by status
-package TWiki::Plugins::Xp::ShowIterationTerse;
+package TWiki::Plugins::XpTrackerPlugin::ShowIterationTerse;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::HtmlUtil;
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::HtmlUtil;
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowIterationTerse is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowIterationTerse is loaded" ) if $debug;
 
 
 sub xpShowIterationTerse {
@@ -45,7 +47,7 @@ sub xpShowIterationTerse {
 
     # append "create new story" form
 
-    my $list = &TWiki::Plugins::Xp::HtmlUtil::emmitTwikiHeader(3,"Iteration summary");
+    my $list = &TWiki::Plugins::XpTrackerPlugin::HtmlUtil::emmitTwikiHeader(3,"Iteration summary");
     $list .= TWiki::Plugins::XpTrackerPlugin::xpCreateHtmlForm("NewnameStory", "XpStoryTemplate", "Create new story in this iteration");
     $list .= "<script src=\"%PUBURLPATH%/%TWIKIWEB%/XpTrackerPlugin/sorttable.js\">\n";
     $list .= "<table class=\"sortable\" border=\"1\" id=\"SHOWITERATIONTERSE_$iterationName_$web\">";
@@ -60,7 +62,7 @@ sub xpShowIterationTerse {
     $list .= "<th>Reviewer</th>";
     $list .= "</tr>";
 
-	my @stories=TWiki::Plugins::Xp::Common::loadStories($web,$iterationName);
+	my @stories=TWiki::Plugins::XpTrackerPlugin::Common::loadStories($web,$iterationName);
     my ($totalSpent,$totalEtc,$totalEst) = (0,0,0);
 	
 
@@ -73,7 +75,7 @@ sub xpShowIterationTerse {
 	    $list .= "<td align=\"center\"><b>".$story->storyCalcEst."</b></td>";
 	    $list .= "<td align=\"center\"><b>".$story->storySpent."</b></td>";
 	    $list .= "<td align=\"center\"><b>".$story->storyEtc."</b></td>";
-	    $list .= "<td>".TWiki::Plugins::Xp::HtmlUtil::gaugeLite($story->done)."</td>";
+	    $list .= "<td>".TWiki::Plugins::XpTrackerPlugin::HtmlUtil::gaugeLite($story->done)."</td>";
 	    $list .= "<td align=right>".$story->done."%</td>";
 	    $list .= "<td align=right>".$story->overrun."%</td>";
 	    $list .= "<td>".$story->storyStatS."</td>";
@@ -88,8 +90,8 @@ sub xpShowIterationTerse {
     }
 
     # Do iteration totals
-	my ($totDone,$cfTotEst) = TWiki::Plugins::Xp::Status::calculateStats($totalEst,$totalSpent,$totalEtc);
-    my $gaugeTxt =  TWiki::Plugins::Xp::HtmlUtil::gaugeLite($totDone);
+	my ($totDone,$cfTotEst) = TWiki::Plugins::XpTrackerPlugin::Status::calculateStats($totalEst,$totalSpent,$totalEtc);
+    my $gaugeTxt =  TWiki::Plugins::XpTrackerPlugin::HtmlUtil::gaugeLite($totDone);
 
     $list .= "<tr bgcolor=\"#CCCCCC\">";
     $list .= "<td><b>Team totals</b></td>";

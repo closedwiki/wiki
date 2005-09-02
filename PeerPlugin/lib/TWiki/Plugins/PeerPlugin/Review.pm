@@ -19,12 +19,17 @@ my $dbPassword  = "sjrmysql";
 ## the static (class) functions (independent of review object)
 
 sub rvOpen {
-	return DBI->connect( $dataBase, $dbUsername, $dbPassword );
+    my $res;
+	eval {
+        $res = DBI->connect( $dataBase, $dbUsername, $dbPassword );
+    };
+    # check whether the connect failed!
+    return $res;
 }
 
 sub rvClose {
 	my $dbh = shift;
-	$dbh->disconnect;
+	$dbh->disconnect() if $dbh;
 	return 1;
 }
 

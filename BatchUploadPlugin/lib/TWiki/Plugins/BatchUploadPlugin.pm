@@ -88,7 +88,8 @@ Example usage:
 		 $createLink,
 
 =cut
-sub beforeAttachmentSaveHandler ( $attrHashRef, $topic, $web ) {
+
+sub beforeAttachmentSaveHandler {
   my( $attrHashRef, $topic, $web ) = @_;
 
   if ($pluginEnabled) {

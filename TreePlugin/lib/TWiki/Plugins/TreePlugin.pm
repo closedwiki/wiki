@@ -39,7 +39,6 @@ use vars qw(
 $VERSION = '0.311';
 
 $RootLabel = "_"; # what we use to label the root of a tree if not a topic
-$cgi = &TWiki::Func::getCgiQuery();
 
 
 # =========================
@@ -52,6 +51,8 @@ sub initPlugin
         &TWiki::Func::writeWarning( "Version mismatch between TreePlugin and Plugins.pm" );
         return 0;
     }
+
+    $cgi = &TWiki::Func::getCgiQuery();
 
     &TWiki::Func::writeDebug( "installWeb: $installWeb" );
     
@@ -188,7 +189,14 @@ sub handleTreeView {
 		# get parent
         my( $meta, $text ) = &TWiki::Func::readTopic( $attrWeb, $topic );
 
-        my %par = $meta->findOne( "TOPICPARENT" );
+        my %par;
+        if(defined(&TWiki::Meta::findOne)) {
+            %par = $meta->findOne( "TOPICPARENT" );
+        } else {
+            my $r = $meta->get( "TOPICPARENT" );
+            next unless $r;
+            %par = %{$r};
+        }
         my $parent = ( %par )
              ?  _findTWikiNode($par{"name"}, \%nodes)    # yes i have a parent, get it
              : $root;                              # otherwise root's my parent

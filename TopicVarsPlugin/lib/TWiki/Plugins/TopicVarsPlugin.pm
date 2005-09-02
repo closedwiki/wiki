@@ -109,7 +109,12 @@ sub getVarsFromTopic {
 
 sub do_var_from_wiki {
 ### my ( $web, $topic, $varname ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-	(my($theWeb) = $_[0]) =~ s/$TWiki::securityFilter//go;
+	my $theWeb = $_[0];
+    if(defined($TWiki::securityFilte)) {
+        $theWeb =~ s/$TWiki::securityFilter//go;
+    } else {
+        $theWeb =~ s/$TWiki::cfg{NameFilter}//go;
+    }
 	getVarsFromTopic( $theWeb, $_[1] ) unless $vars{$theWeb}{$_[1]};
 	my $var = $vars{$theWeb}{$_[1]}{$_[2]};
 	$var = defined $var ? $var : "\%$theWeb.$_[1].$_[2]\%";
