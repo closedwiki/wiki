@@ -298,8 +298,29 @@ during specific phases of TWiki processing. For example, each of
 the standard scripts in the 'bin' directory each has a context
 identifier - the view script has 'view', the edit script has 'edit'
 etc. So you can easily tell what 'type' of script your plugin is
-being called within. The available context identifiers are listed
-in the %TWIKIWEB%.TWikiTemplates topic.
+being called within. The core context identifiers are listed
+in the %TWIKIWEB%.TWikiTemplates topic. Please be careful not to
+overwrite any of these identifiers!
+
+Context identifiers can be used to communicate between plugins, and between
+plugins and templates. For example, in FirstPlugin.pm, you might write:
+<verbatim>
+sub initPlugin {
+   TWiki::Func::getContext()->{'FirstPlugin'} = 1;
+   ...
+</verbatim>
+and in SecondPlugin.pm:
+<verbatim>
+sub initPlugin {
+   if( TWiki::Func::getContext()->{'FirstPlugin'}) {
+      ...
+   }
+   ...
+</verbatim>
+or in a template:
+<verbatim>
+%TMPL:P{context="FirstPlugin", then="first plugin"}%
+</verbatim>
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
@@ -309,6 +330,7 @@ sub getContext {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     return $TWiki::Plugins::SESSION->{context};
 }
+
 
 =pod
 
