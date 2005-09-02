@@ -69,11 +69,11 @@ sub beforeSaveHandler
     }
     my $headlinesfilename = &TWiki::Func::extractNameValuePair( $args, "topic" );
     if ( !$headlinesfilename ) {
-      $headlinesfilename = "$TWiki::dataDir/$_[2]/$_[1]Headlines.txt";
+      $headlinesfilename = TWiki::Func::getDataDir()."/$_[2]/$_[1]Headlines.txt";
     } elsif ( $headlinesfilename =~ /([^.]+)[.]([^.]+)/ ) {
-      $headlinesfilename = "$TWiki::dataDir/$2/$1.txt";
+      $headlinesfilename = TWiki::Func::getDataDir()."/$2/$1.txt";
     } else {
-      $headlinesfilename = "$TWiki::dataDir/$_[2]/$headlinesfilename.txt";
+      $headlinesfilename = TWiki::Func::getDataDir()."/$_[2]/$headlinesfilename.txt";
     }
     my $count = &TWiki::Func::extractNameValuePair( $args, "count" );
     $count = 5 unless $count;
@@ -105,7 +105,7 @@ sub beforeSaveHandler
       }
     }
     $buffer .= $suffix;
-    TWiki::Store::saveFile($headlinesfilename, $buffer);
+    TWiki::Func::saveFile($headlinesfilename, $buffer);
   }
 }
 

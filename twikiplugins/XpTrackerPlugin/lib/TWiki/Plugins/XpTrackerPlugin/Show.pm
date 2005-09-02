@@ -27,19 +27,21 @@
 # 2004-02-28 RafaelAlvarez Replace all the calls of "unofficial" subs 
 #                          with their equivalent in the Func module. 
 # =========================
-package TWiki::Plugins::Xp::Show;
+package TWiki::Plugins::XpTrackerPlugin::Show;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Status;
-use TWiki::Plugins::Xp::Iteration;
+use TWiki::Plugins::XpTrackerPlugin::Status;
+use TWiki::Plugins::XpTrackerPlugin::Iteration;
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Show is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Show is loaded" ) if $debug;
 
 
 ###########################
@@ -50,7 +52,7 @@ my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
 sub developerTasks {
     my ($developer, $web) = @_;
 
-    TWiki::Plugins::Xp::Cache::initCache($web);
+    TWiki::Plugins::XpTrackerPlugin::Cache::initCache($web);
 
     my @projects = TWiki::Plugins::XpTrackerPlugin::xpGetAllProjects($web);
 
@@ -100,7 +102,7 @@ sub developerTasks {
 sub developerTasksByProject {
     my ($developer,$project,$web) = @_;
     
-    TWiki::Plugins::Xp::Cache::initCache($web);
+    TWiki::Plugins::XpTrackerPlugin::Cache::initCache($web);
 
     my $list="";
     my @teams = &TWiki::Plugins::XpTrackerPlugin::xpGetProjectTeams($project, $web);
@@ -133,7 +135,7 @@ sub developerTasksByProject {
 sub developerTasksByIteration {
 	my ($developer,$iterationName,$web,$header,$totalize)=@_;
 
-    TWiki::Plugins::Xp::Cache::initCache($web);
+    TWiki::Plugins::XpTrackerPlugin::Cache::initCache($web);
 
 	my $list= "<table cellspacing=\"1\" border=\"1\" width=\"100%\">";
 
@@ -155,7 +157,7 @@ sub developerTasksByIteration {
 	my ($iterEst,$iterSpent,$iterEtc) = (0,0,0);
 
     # Get date of iteration
-    my $iteration=new TWiki::Plugins::Xp::Iteration($web, $iterationName);
+    my $iteration=new TWiki::Plugins::XpTrackerPlugin::Iteration($web, $iterationName);
     
     my $iterDate=$iteration->{endDate};
     my $iterDatecolor = "";
@@ -231,7 +233,7 @@ sub developerTasksByIteration {
         $iterEtc += $storyEtc;
 
         # Calculate story status
-        my ($color,$statusS) = TWiki::Plugins::Xp::Status::getStatus($storySpent,$storyEtc,'N');
+        my ($color,$statusS) = TWiki::Plugins::XpTrackerPlugin::Status::getStatus($storySpent,$storyEtc,'N');
 
 	    # Show iteration line	
         $list .= "<tr bgcolor=\"$color\">";
@@ -254,7 +256,7 @@ sub developerTasksByIteration {
         
             for (my $x=0; $x<@who; $x++) {
               	next if ($etc == 0);
-        		my ($taskColor,$taskStatusS) = TWiki::Plugins::Xp::Status::getStatus($spent,$etc,'N');
+        		my ($taskColor,$taskStatusS) = TWiki::Plugins::XpTrackerPlugin::Status::getStatus($spent,$etc,'N');
 
                 $list .= "<tr bgcolor=\"".$taskColor."\">";
                 $list .= "<td >&nbsp;";

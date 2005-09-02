@@ -99,8 +99,8 @@ sub endRenderingHandler
 sub applyXmlToXsl
 {
         #my ($theArgs) = @_;
-        my $theArgs = @_[0];
-	my $ctr = @_[1];
+        my $theArgs = $_[0];
+	my $ctr = $_[1];
 
 	my $xmlsource = &TWiki::Func::extractNameValuePair( $theArgs, "xml" );
 	my $xslsource = &TWiki::Func::extractNameValuePair( $theArgs, "xsl" );

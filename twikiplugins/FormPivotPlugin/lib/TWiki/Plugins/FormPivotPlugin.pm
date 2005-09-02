@@ -162,7 +162,7 @@ sub pivot
                $field =~ s/\s*//go;
                # Problems passing = and " to URL
                my $searchVal = "%META:FIELD\{.*name..$field..*value..$key.*\}%";
-               my $title = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$title</a>";
+               $title = "<a href=\"" . &TWiki::Func::getScriptUrl( $web, "", "search" ) . "?regex=on&search=$searchVal&nosearch=on\">$title</a>";
                $table .= "| $title | " . $found[$i]->{$key} . " |\n";
            }
            $pivot .= "$table";

@@ -31,20 +31,22 @@
 # 2004-02-28 RafaelAlvarez Replace all the calls of "unofficial" subs 
 #                          with their equivalent in the Func module. 
 # =========================
-package TWiki::Plugins::Xp::ShowProjectCompletitionByTasks;
+package TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByTasks;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Status;
-use TWiki::Plugins::Xp::Common;
+use TWiki::Plugins::XpTrackerPlugin::Status;
+use TWiki::Plugins::XpTrackerPlugin::Common;
 
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowProjectCompletitionByTasks is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowProjectCompletitionByTasks is loaded" ) if $debug;
 
 
 sub xpShowProjectCompletionByTasks {
@@ -63,7 +65,7 @@ sub xpShowProjectCompletionByTasks {
 
     foreach my $story (@projectStories) {
         my $storyText = &TWiki::Func::readTopicText($web, $story);
-        my $storyAcceptance = TWiki::Plugins::Xp::Common::acceptanceTestStatus($storyText);
+        my $storyAcceptance = TWiki::Plugins::XpTrackerPlugin::Common::acceptanceTestStatus($storyText);
         my $iter = &TWiki::Plugins::XpTrackerPlugin::xpGetValue("\\*Iteration\\*", $storyText, "storyiter");
         if ($iter ne "TornUp") {
             if (!exists $unstarted{$iter}) {
@@ -80,7 +82,7 @@ sub xpShowProjectCompletionByTasks {
                 }
                 $master{$iter}++;
             	
-                my ($color,$statusS,$desc) =TWiki::Plugins::Xp::Status::getStatus($taskSpent,$taskEtc,$storyAcceptance);
+                my ($color,$statusS,$desc) =TWiki::Plugins::XpTrackerPlugin::Status::getStatus($taskSpent,$taskEtc,$storyAcceptance);
                 if ($desc eq "unstarted") {
 	            		$unstarted{$iter}++;
 	            		$unstarted++;

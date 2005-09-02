@@ -25,7 +25,7 @@
 #
 # =========================
 
-package TWiki::Plugins::Xp::ShowProjectTeams;
+package TWiki::Plugins::XpTrackerPlugin::ShowProjectTeams;
 
 use HTTP::Date;
 use TWiki::Func;
@@ -34,8 +34,10 @@ use TWiki::Plugins::XpTrackerPlugin;
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowProjectTeams is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowProjectTeams is loaded" ) if $debug;
 
 
 sub xpShowProjectTeams {
@@ -44,9 +46,9 @@ sub xpShowProjectTeams {
 
     my @projTeams = &TWiki::Plugins::XpTrackerPlugin::xpGetProjectTeams($project, $web);
 
-    my $list = TWiki::Plugins::Xp::HtmlUtil::emmitTwikiHeader(3,"All teams for project ".$project);
+    my $list = TWiki::Plugins::XpTrackerPlugin::HtmlUtil::emmitTwikiHeader(3,"All teams for project ".$project);
     
-    $list .= TWiki::Plugins::Xp::HtmlUtil::emmitArrayInBullets(@projTeams);
+    $list .= TWiki::Plugins::XpTrackerPlugin::HtmlUtil::emmitArrayInBullets(@projTeams);
 
     # append CreateNewTeam form
     $list .= &TWiki::Plugins::XpTrackerPlugin::xpCreateHtmlForm("NewnameTeam", &TWiki::Func::getPreferencesValue("XPTRACKERPLUGIN_TEAMTEMPLATE") , "Create new team for <nop>".$project." project");

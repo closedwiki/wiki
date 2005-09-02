@@ -64,7 +64,8 @@ sub handlePageStats
 #    my ( $meta, $page ) = &TWiki::Func::readTopic( $web, $topic );
 #    my @text = $meta->find( 'FILEATTACHMENT' );
 
-    my @pagestats = `grep $web\\.$topic $TWiki::dataDir/log*.txt | grep -E \\(view\\|save\\)`;
+    my $dd = TWiki::Func::getDataDir();
+    my @pagestats = `grep $web\\.$topic $dd/log*.txt | grep -E \\(view\\|save\\)`;
 
     my $maxEntries = scalar &TWiki::Func::extractNameValuePair( $attributes, "max" ) || scalar @pagestats;
     $maxEntries = scalar @pagestats if $maxEntries > scalar @pagestats;

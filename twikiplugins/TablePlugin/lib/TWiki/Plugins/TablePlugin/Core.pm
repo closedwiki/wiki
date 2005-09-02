@@ -518,7 +518,7 @@ sub emitTable {
             }
             my $fn = 'CGI::'.$type;
             no strict 'refs';
-            $rowtext .= &$fn($attr, $cell);
+            $rowtext .= &$fn($attr, " $cell ");
             use strict 'refs';
             $colCount++;
         }

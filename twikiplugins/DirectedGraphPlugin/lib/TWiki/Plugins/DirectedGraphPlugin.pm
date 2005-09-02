@@ -147,7 +147,7 @@ sub handleDot
 
     if($_[1]) {
         # read and format map
-        my $mapfile = TWiki::Store::readFile( $cmapx );
+        my $mapfile = TWiki::Func::readFile( $cmapx );
         $mapfile =~ s/(<map\ id\=\")(.*?)(\"\ name\=\")(.*?)(\">)/$1$hash_code$3$hash_code$5/go;
         # place map and "foo.png" at the source of the <dot> tag in $Web.$Topic
         my $loc = &TWiki::Func::getPubUrlPath() . "/$web/$topic";

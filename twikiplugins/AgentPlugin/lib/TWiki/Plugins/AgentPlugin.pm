@@ -97,7 +97,6 @@ sub commonTagsHandler
 
 sub handleAgent
 {
-  &TWiki::Func::writeDebug( "- AgentPlugin::handleAgent($_[0]) called") if $debug;
   if (!$query || !$userAgent) {
     $query = &TWiki::Func::getCgiQuery();
     $userAgent = $query->user_agent();
@@ -121,7 +120,6 @@ sub handleAgent
     $idp =~ s/[^A-Za-z0-9_]//g; # prune id to allow for '.' in return values
     $exp = &TWiki::Func::extractNameValuePair($attributes,"exp$idp") || undef;
     if (!$exp) { $exp = &TWiki::Func::getPreferencesValue( "AGENTPLUGIN_EXP".uc($idp) ) || undef;}
-    &TWiki::Func::writeDebug( "- AgentPlugin::handleAgent($_[0]): testing agent for \"$id\" with expression \"$exp\"" ) if $debug;
     if ($exp) {
       return "$id" if ($userAgent =~ m/$exp/);
     }

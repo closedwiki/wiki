@@ -102,7 +102,7 @@ sub handleQuickSearch
     } elsif ($searchAllFlag) {
 
         # get list of all webs by scanning $dataDir
-        opendir DIR, $TWiki::dataDir;
+        opendir DIR, TWiki::Func::getDataDir();
         my @tmpList = readdir(DIR);
         closedir(DIR);
 
@@ -110,7 +110,7 @@ sub handleQuickSearch
         @webList = sort
 	           grep { s#^.+/([^/]+)$#$1# }
                    grep { -d }
-	           map  { "$TWiki::dataDir/$_" }
+	           map  { TWiki::Func::getDataDir()."/$_" }
                    grep { ! /^[._]/ } @tmpList;
 
         # what that does (looking from the bottom up) is take the file
@@ -191,7 +191,7 @@ sub handleQuickSearch
         (my $baz = "foo") =~ s/foo//;  # reset search vars. defensive coding
 
         # 0501 kjk : vvv New var for accessing web dirs.
-        my $sDir = "$TWiki::dataDir/$thisWebName";
+        my $sDir = TWiki::Func::getDataDir()."/$thisWebName";
         my @topicList = "";
         if( $theSearchVal ) {
             # do grep search

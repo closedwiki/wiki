@@ -478,7 +478,7 @@ sub viewPDF {
       my $cwd = cwd; # we need to chdir back after searching
 
       # Get a list of possibilities (all files in the web)
-      chdir("$TWiki::dataDir/$webName");
+      chdir(TWiki::Func::getDataDir()."/$webName");
       opendir(DIR, ".") or carp "$!";
       my @files = grep { /\.txt$/ && -f "$_" } readdir(DIR);
       closedir DIR;

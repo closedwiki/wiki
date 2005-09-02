@@ -341,7 +341,7 @@ sub getVotesFile
 
   my $attachPath = &TWiki::Func::getPubDir() . "/$web/$topic";
   my $votesFile = "$attachPath/Votes" . ($id?"_$id":"") . ".txt";
-  &TWiki::normalizeFileName($votesFile);
+  #&TWiki::normalizeFileName($votesFile);
 
   #&writeDebug("attachPath=$attachPath votesFile=$votesFile");
 

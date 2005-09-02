@@ -25,15 +25,17 @@
 #
 # =========================
 # TODO: Count the stories by status
-package TWiki::Plugins::Xp::ShowIteration;
+package TWiki::Plugins::XpTrackerPlugin::ShowIteration;
 
 use HTTP::Date;
 use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::Status;
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::Status;
 
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
 
 sub xpShowIteration {
     my ($iterationName,$web) = @_;
@@ -48,7 +50,7 @@ sub xpShowIteration {
     $list .= "<th>To do</th>";
     $list .= "<th>Status</th></tr>";
 
-    my @stories=TWiki::Plugins::Xp::Common::loadStories($web,$iterationName);
+    my @stories=TWiki::Plugins::XpTrackerPlugin::Common::loadStories($web,$iterationName);
     my ($totalSpent,$totalEtc,$totalEst) = (0,0,0);
 
 
@@ -66,7 +68,7 @@ sub xpShowIteration {
         my @tasks=$story->tasks;
         # Show each task
         foreach my $task (@tasks) {
-        	my ($taskBG,$statusString) =TWiki::Plugins::Xp::Status::getStatus($task->spent,$task->etc,$story->storyComplete);
+        	my ($taskBG,$statusString) =TWiki::Plugins::XpTrackerPlugin::Status::getStatus($task->spent,$task->etc,$story->storyComplete);
         
             $list .= "<tr bgcolor=\"".$taskBG."\">";
             $list .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;".$task->name."</td>";
@@ -102,6 +104,6 @@ sub xpShowIteration {
     return $list;
 }
 
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::ShowIteration is loaded" ) if $debug;
+&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::ShowIteration is loaded" ) if $debug;
 
 1;

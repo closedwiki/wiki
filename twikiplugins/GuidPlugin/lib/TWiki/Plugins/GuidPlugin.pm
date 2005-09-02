@@ -49,7 +49,7 @@
 
 
 # =========================
-package TWiki::Plugins::GUIDPlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::GuidPlugin;    # change the package name and $pluginName!!!
 
 # =========================
 use vars qw(

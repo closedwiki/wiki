@@ -357,7 +357,7 @@ sub _handle_XSLT_tag {
     # process an xslt tag
     my ($args_txt,$xslt_txt,$topic,$web) = @_;
     TWiki::Func::writeDebug( "TWiki::Plugins::XmlQueryPlugin::_handle_XSLT_tag $web $topic "  ) if $debug;
-    return if not _initialize();
+    return '' if not _initialize();
 
     my $t0 = new Benchmark;
     my $benchmark = 0;
@@ -629,7 +629,7 @@ sub _handle_XML_tag {
     # process an xml tag
     my ($args_txt,$xml_txt,$topic,$web) = @_;
     TWiki::Func::writeDebug( "TWiki::Plugins::XmlQueryPlugin::_handle_XML_tag $web $topic "  ) if $debug;
-    return if not _initialize();
+    return '' if not _initialize();
 
     # read the args associated with the xml
     $args_txt = TWiki::Func::expandCommonVariables($args_txt,$topic,$web) if $args_txt =~ /\%.*\%/;

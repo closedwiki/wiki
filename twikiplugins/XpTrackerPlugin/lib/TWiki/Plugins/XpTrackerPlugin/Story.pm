@@ -17,16 +17,18 @@
 #
 # =========================
 
-package TWiki::Plugins::Xp::Story;
+package TWiki::Plugins::XpTrackerPlugin::Story;
 use TWiki::Plugins::XpTrackerPlugin;
-use TWiki::Plugins::Xp::Common;
-use TWiki::Plugins::Xp::Status;
+use TWiki::Plugins::XpTrackerPlugin::Common;
+use TWiki::Plugins::XpTrackerPlugin::Status;
 
 #(RAF)
 #If this module is load using the "use" directive before the plugin is 
 #initialized, $debug will be 0
-my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-&TWiki::Func::writeDebug( "- TWiki::Plugins::Xp::Story is loaded" ) if $debug;
+#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
+my $debug;
+#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
+#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Story is loaded" ) if $debug;
 
 sub new {
 	my ($type,$web,$name)=@_;
@@ -72,7 +74,7 @@ sub cmp {
 sub _processStoryText {
 	my $self=shift;
 	my $storyText=&TWiki::Func::readTopicText($self->web, $self->name);
-	$self->{storyComplete}=TWiki::Plugins::Xp::Common::acceptanceTestStatus($storyText);
+	$self->{storyComplete}=TWiki::Plugins::XpTrackerPlugin::Common::acceptanceTestStatus($storyText);
 	$self->{storyLead} = &TWiki::Plugins::XpTrackerPlugin::xpGetValue("\\*Story Lead\\*", $storyText, "storyLead");
 	$self->{FEA}=TWiki::Plugins::XpTrackerPlugin::xpGetValue("\\*FEA\\*", $storyText, "notagsforthis");
 	$self->{iteration}=TWiki::Plugins::XpTrackerPlugin::xpGetValue("\\*Iteration\\*", $storyText, "notagsforthis");
@@ -96,7 +98,7 @@ sub _processStoryText {
 
 sub _sumarize {
 	my $self=$_[0];
-  	my @tasks=TWiki::Plugins::Xp::Common::getStoryTasks($_[1]);
+  	my @tasks=TWiki::Plugins::XpTrackerPlugin::Common::getStoryTasks($_[1]);
 
     my ($storySpent,$storyEtc,$storyCalcEst) = 0;
     my $all="";
@@ -130,8 +132,8 @@ sub _sumarize {
 
 	}
 
-	my ($color,$storyStatS,$status) = TWiki::Plugins::Xp::Status::getStatus($storySpent,$storyEtc,$self->storyComplete);
-    my ($done,$overrun) = TWiki::Plugins::Xp::Status::calculateStats($storyCalcEst,$storySpent,$storyEtc);
+	my ($color,$storyStatS,$status) = TWiki::Plugins::XpTrackerPlugin::Status::getStatus($storySpent,$storyEtc,$self->storyComplete);
+    my ($done,$overrun) = TWiki::Plugins::XpTrackerPlugin::Status::calculateStats($storyCalcEst,$storySpent,$storyEtc);
     
 	$self->storySpent($storySpent);
 	$self->storyEtc($storyEtc);

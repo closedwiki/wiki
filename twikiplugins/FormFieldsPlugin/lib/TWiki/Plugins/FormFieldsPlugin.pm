@@ -257,7 +257,7 @@ sub renderFormFieldForEditHandler
         $ret = &singleselect( $name, $size, $value, $possibleValues, $fix );
             &TWiki::addScript("toHide[toHide.length]=\"${name}\";");
             $needScript = 1;
-        } elsif( $multi="twopane" ) {
+        } elsif( $multi eq "twopane" ) {
             init();
             $ret = &multiselect( $name, $size, $value, $possibleValues );
             &TWiki::addScript("toShow[toShow.length]=\"${name}s\";\ntoHide[toHide.length]=\"${name}ns\";");

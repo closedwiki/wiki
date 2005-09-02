@@ -25,12 +25,12 @@
 # =========================
 # DEAD CODE FROM XpTrackerPlugin
 # =========================
-package TWiki::Plugins::Xp::XpTrackerPluginDeadCode;
+package TWiki::Plugins::XpTrackerPlugin::XpTrackerPluginDeadCode;
 
 ###########################
 # xpTaskStatus
 # WARNING: (RAF) THIS METHOD IS NOT BEING USED ANYWHERE... IS DEAD CODE
-# Substituted by a call to TWiki::Plugins::Xp::Status::getStatus(est,spent,"N");
+# Substituted by a call to TWiki::Plugins::XpTrackerPlugin::Status::getStatus(est,spent,"N");
 # Leaved here for historical reasons
 # Calculates the status of a task.
 #sub xpTaskStatus {

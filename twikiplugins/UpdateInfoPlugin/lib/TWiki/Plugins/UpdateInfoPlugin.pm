@@ -38,7 +38,7 @@ sub update_info
 
   #return " web $web topic $topic opts $opts";
 
-  ( $meta, $dummy ) = TWiki::Store::readTopMeta($web, $topic);
+  ( $meta, $dummy ) = TWiki::Func::readTopic($web, $topic);
   if ( $meta ) {
 
     $opts =~ s/{(.*?)}/$1/geo;
@@ -52,7 +52,13 @@ sub update_info
 	$params{$key} = $val;
     }
 
-    %info = $meta->findOne( "TOPICINFO" );
+    if( defined(&TWiki::Meta::findOne)) {
+        %info = $meta->findOne( "TOPICINFO" );
+    } else {
+        my $r = $meta->get( "TOPICINFO" );
+        return '' unless $r;
+        %info = %$r;
+    }
     $updated = ((time-$info{"date"})/86400) < $params{"days"}; #24*60*60
     $new = $updated & (($info{"version"}+0) <= ($params{"version"}+0)); 
 
