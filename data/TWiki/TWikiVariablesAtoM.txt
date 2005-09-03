@@ -135,6 +135,28 @@ __Note:__ This topic is included by TWikiVariables
 	* Expands to: =%HOMETOPIC%=, renders as [[%HOMETOPIC%]]
 	* Related: [[#VarNOTIFYTOPIC][NOTIFYTOPIC]], [[#VarSTATISTICSTOPIC][STATISTICSTOPIC]], [[#VarTOPIC][TOPIC]]
 
+#VarHTTP
+---+++ HTTP -- get HTTP headers
+	* Syntax: =%<nop>HTTP{'Header-name'}%=
+	* Related: [[#VarHTTPS][HTTPS]],[[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+Called with the name of an HTTP header field, returns its value.
+Capitalization and the use of hyphens versus underscores are not significant.
+
+Examples:
+| =%<nop>HTTP%= | %HTTP% |
+| =%<nop>HTTP{"Accept-language"}%= | %HTTP{"Accept-language"}% |
+| =%<nop>HTTP{"User-Agent"}%= | %HTTP{"User-Agent"}% |
+
+You can see the HTTP headers your browser sends to the server on a number
+of sites e.g. http://www.ericgiguere.com/tools/http-header-viewer.html
+
+#VarHTTP
+---+++ HTTPS -- get HTTPS headers
+	* Syntax: =%<nop>HTTPS%=
+	* Syntax: =%<nop>HTTPS{'Header-name'}%=
+	* Related: [[#VarHTTP][HTTP]],[[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+The same as %<nop>HTTP but operates on the HTTPS environment variables present when the SSL protocol is in effect. Can be used to determine whether SSL is turned on.
+
 #VarHTTPHOST
 ---+++ HTTP_HOST -- environment variable
 	* Syntax: =%<nop>HTTP_HOST%=

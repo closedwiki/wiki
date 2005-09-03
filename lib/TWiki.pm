@@ -152,6 +152,8 @@ BEGIN {
                      FORMFIELD         => \&_FORMFIELD,
                      GMTIME            => \&_GMTIME,
                      HTTP_HOST         => \&_HTTP_HOST,
+                     HTTP              => \&_HTTP,
+                     HTTPS             => \&_HTTPS,
                      ICON              => \&_ICON,
                      ICONPATH          => \&_ICONPATH,
                      IFCONTEXT         => \&_IFCONTEXT,
@@ -2475,6 +2477,26 @@ sub _INCLUDE {
     $text =~ s/\n+$/\n/;
 
     return $text;
+}
+
+sub _HTTP {
+    my( $this, $params ) = @_;
+    my $res;
+    if( $params->{_DEFAULT} ) {
+        $res = $this->{cgiQuery}->http( $params->{_DEFAULT} );
+    }
+    $res = '' unless defined( $res );
+    return $res;
+}
+
+sub _HTTPS {
+    my( $this, $params ) = @_;
+    my $res;
+    if( $params->{_DEFAULT} ) {
+        $res = $this->{cgiQuery}->https( $params->{_DEFAULT} );
+    }
+    $res = '' unless defined( $res );
+    return $res;
 }
 
 sub _HTTP_HOST {

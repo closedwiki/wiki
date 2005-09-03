@@ -1,17 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
----+ Installed Plugins
-
-Plugins are mainly user-contributed add-ons that enhance and extend TWiki features and capabilities. A limited number of plugins are included in the core TWiki distribution - and most those can be removed - while the rest are optional, available from TWiki:Plugins/%HOMETOPIC%.
+%META:TOPICINFO{author="TWikiGuest" date="1125660044" format="1.1" version="1.2"}%
+---+ Installed Plugins 
+Plugins are mainly user-contributed add-ons that enhance and extend TWiki features and capabilities. A limited number of plugins are included in the core TWiki distribution - and any those can be removed - while the rest are optional, available from TWiki:Plugins/%HOMETOPIC%.
 
 Here is a list of the plugins currently installed and enabled on this TWiki site:
 
 %PLUGINDESCRIPTIONS%
 
----+ Plugin Diagnostics
-
+---+ Plugin Diagnostics 
 %FAILEDPLUGINS%
 
 __Note:__ The diagnostics are provided by the =%<nop>FAILEDPLUGINS%= variable
 
 __Related Topics:__ TWikiPlugins, %WIKIPREFSTOPIC%, AdminDocumentationCategory, AdminToolsCategory
-

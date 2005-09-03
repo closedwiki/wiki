@@ -78,6 +78,16 @@ Tag tests requiring manual inspection
  <td>%HTTP_HOST%</td>
 </tr>
 <tr>
+ <td>HTTP</td>
+ <td>Manual check</td>
+ <td>%HTTP{"accept-language"}%</td>
+</tr>
+<tr>
+ <td>HTTPS</td>
+ <td>Manual check</td>
+ <td>%HTTPS{"accept-language"}%</td>
+</tr>
+<tr>
  <td>LANG</td>
  <td>Manual check</td>
  <td>%LANG%</td>
