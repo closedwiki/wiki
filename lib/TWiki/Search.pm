@@ -817,6 +817,7 @@ sub searchWeb {
                     $out =~ s/\$parent/$meta->getParent()/ges;;
                     $out =~ s/\$formfield\(\s*([^\)]*)\s*\)/TWiki::Render::renderFormFieldArg( $meta, $1 )/ges;
                     $out =~ s/\$formname/$meta->getFormName()/ges;
+                    $out =~ s/\$count\((.*?\s*\.\*)\)/getCountPattern( $text, $1 )/ges;
                     # FIXME: Allow all regex characters but escape them
                     # SMELL: wierd - this RE seems to require .* at the
                     # end of a pattern - compulsory! Why?
@@ -1099,5 +1100,24 @@ sub _getRev1Info {
 
     return 1;
 }
+
+# With the same argument as $pattern, returns a number which is the count of
+# occurences of the pattern argument.
+
+sub getCountPattern
+ {
+     my( $theText, $thePattern ) = @_;
+ 
+     $thePattern =~ s/([^\\])([\$\@\%\&\#\'\`\/])/$1\\$2/go;  # escape some special chars
+     $thePattern =~ /(.*)/;     # untaint
+     $thePattern = $1;
+     my $OK = 0;
+     eval {
+        # counting hack, see: http://dev.perl.org/perl6/rfc/110.html
+        $OK = () = $theText =~ /$thePattern/g;
+     };
+ 
+     return $OK;
+ }
 
 1;
