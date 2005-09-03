@@ -69,7 +69,11 @@ sub handleIncludeIndex	  # clone of TWiki::handleIncludeFile
 
     $headers = 4	unless $headers =~ /^[0-6]$/;
     # CrisBailiff, PeterThoeny 12 Jun 2000: Add security
-    $incfile =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    if( defined( $TWiki::securityFilter )) {
+        $incfile =~ s/$TWiki::securityFilter//go;    # zap anything suspicious
+    } else {
+        $incfile =~ s/$TWiki::cfg{NameFilter}//go;    # zap anything suspicious
+    }
     $incfile =~ s/passwd//goi;    # filter out passwd filename
 
     if( $TWiki::doSecureInclude ) {
