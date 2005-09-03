@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ColasNahaboo" date="1031821452" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="TWikiGuest" date="1125664042" format="1.1" version="1.2"}%
 %META:TOPICPARENT{name="NavbarPlugin"}%
 This example topic for the NavbarPlugin is comprised
 of 3 parts of a short text of Douglas Adams

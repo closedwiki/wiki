@@ -133,7 +133,7 @@ sub _block {
     my ( $width, $bcol, $tcol, $text ) = @_;
     if ( $width > 0 ) {
         return CGI::td({ width=>$width.'%', bgcolor=>$bcol, align=>'center'},
-                       CGI:span( { style=>'color: '.$tcol }, $text ));
+                       CGI::span( { style=>'color: '.$tcol }, $text ));
     }
     return '';
 }

@@ -232,7 +232,7 @@ sub getFormFieldList
     &TWiki::Func::writeDebug( "- after expansion = $text." ) if $debug;
     # END CHANGE
 
-    return &TWiki::Render::getRenderedVersion( $text, $web );
+    return TWiki::Func::renderText( $text, $web );
 }
 
 

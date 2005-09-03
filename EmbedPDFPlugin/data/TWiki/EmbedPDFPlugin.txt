@@ -59,10 +59,9 @@ __Note:__ You do not need to have a PDF plugin installed in your browser for thi
 	  | ==data/TWiki/%TOPIC%/pdf.pdf== | Sample pdf file |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	* Test if the installation was successful:
-		* Edit this page on your local TWiki installation and change the &amp;lt; and &amp;gt; three lines down to &lt; and &gt; to enable the =&lt;EMBED /&gt;= tag.
 		* The following two pictures should then look the same (assuming you have a PDF plugin installed in your browser)
-			* embed tag created using =%<nop>EMBEDPDF{ pdf }%= %BR% %EMBEDPDF{ pdf }%
-			* hard coded embed tag %BR% &lt;embed SRC="%ATTACHURL%/pdf.pdf" width="216" height="31" /&gt;				
+			* embed tag created using =%<nop>>EMBEDPDF{ pdf }%= %BR% %EMBEDPDF{ pdf }%
+			* hard coded embed tag %BR% <embed SRC="%ATTACHURL%/pdf.pdf" width="216" height="31" />				
 		* The width and height of %ATTACHURL%/pdf.pdf as determined by =%<nop>EMBEDPDFSIZE{ pdf }%= are as follows:
 			* %EMBEDPDFSIZE{ pdf }%
 		* Here is a pdf file for which we have a prerendered version available (I did not actually upload the pdf file, so the link under the image is dead): %BR% %EMBEDPDF{ pdf-prerendered }%
