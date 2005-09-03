@@ -55,7 +55,7 @@ use vars qw(
         $debug 
     );
 
-$VERSION = '1.010';
+$VERSION = '1.020';
 $pluginName = 'BibliographyPlugin';  # Name of this Plugin
 
 # =========================
@@ -89,7 +89,8 @@ sub readBibliography
   {
     TWiki::Func::writeDebug("readBibliography:: reading $topic") if $debug;
 
-    $_ = TWiki::Func::readTopicText("", $topic, "", 1);
+    $_ = TWiki::Func::readTopicText($web, $topic, "", 1);
+    TWiki::Func::writeDebug($_) if $debug;
     while (m/^\|([^\|]*)\|([^\|]*)\|/gm)
     {
       ($key,$value) = ($1,$2);
@@ -102,10 +103,13 @@ sub readBibliography
                               "cited" => 0,
                               "order" => 0
                             };
+      TWiki::Func::writeDebug("Adding key $key") if $debug;
     }
   }
 
+  TWiki::Func::writeDebug("ended reading bibliography topics") if $debug;
   return %bibliography;
+
 }
 
 sub bibliographyAlphaSort
@@ -176,10 +180,9 @@ sub handleCitation
   }
 }
 
-# ==================================
-# Plugin HOOK: startRenderingHandler
-# ==================================
-sub startRenderingHandler
+# was startRenderingHandler before. changed to preRenderingHandler as indicated
+# in TWiki:Plugins/DeprecatedHandlers.
+sub preRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
 
@@ -198,23 +201,35 @@ sub startRenderingHandler
     }
     else
     {
-      return;
+      %bibliography= ();
     }
 
     ######################################################
 
     # mark cited entries:
-
     my $i = 1;
     $_ = $_[0];
-    while (m/%CITE{([^}]*)}%/mg)
+    while (m/%CITE(INLINE)?{([^}]*)}%/mg)
     {
-      if (exists $bibliography{$1})
-      {
-        if (not $bibliography{$1}{"cited"})
+      if ($1) {
+        # was a %CITEINLINE{...}%:
+        if (not (exists $bibliography{$2}))
         {
-          $bibliography{$1}{"cited"} = 1;
-          $bibliography{$1}{"order"} = $i++; # citation order
+          $bibliography{$2}{"name"} = $2;
+          $bibliography{$2}{"cited"} = 1;
+          $bibliography{$2}{"order"} = $i++;
+        }
+      }
+      else
+      {
+        # was a %CITE{...}%
+        if (exists $bibliography{$2})
+        {
+          if (not $bibliography{$2}{"cited"})
+          {
+            $bibliography{$2}{"cited"} = 1;
+            $bibliography{$2}{"order"} = $i++; # citation order
+          }
         }
       }
     }
@@ -238,7 +253,7 @@ sub startRenderingHandler
       }
     }
     
-    $_[0] =~ s/%CITE{([^}]*)}%/&handleCitation($1,%bibliography)/ge;
+    $_[0] =~ s/%CITE(INLINE)?{([^}]*)}%/&handleCitation($2,%bibliography)/ge;
     $_[0] =~ s/%BIBLIOGRAPHY{([^}]*)}%/&generateBibliography($header, %bibliography)/ge;
 }
 
