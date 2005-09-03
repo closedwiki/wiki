@@ -161,6 +161,7 @@ BEGIN {
                      INTURLENCODE      => \&_INTURLENCODE,
                      METASEARCH        => \&_METASEARCH,
                      PLUGINVERSION     => \&_PLUGINVERSION,
+                     QUERYSTRING       => \&_QUERYSTRING,
                      RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
                      REMOTE_ADDR       => \&_REMOTE_ADDR,
                      REMOTE_PORT       => \&_REMOTE_PORT,
@@ -2596,6 +2597,11 @@ sub _WEBLIST {
 sub _TOPICLIST {
     my $this = shift;
     return $this->_webOrTopicList( 0, @_ );
+}
+
+sub _QUERYSTRING {
+    my $this = shift;
+    return $this->{cgiQuery}->query_string();
 }
 
 sub _URLPARAM {

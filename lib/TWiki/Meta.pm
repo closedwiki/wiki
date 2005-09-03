@@ -362,7 +362,7 @@ sub getRevisionInfo {
         $date = $topicinfo->{date} ;
         $author = $this->{_session}->{users}->findUser($topicinfo->{author});
         $rev = $topicinfo->{version};
-        $rev =~ s/^\$Rev(:\s*\d+\s*)?\$$/0/; # parse out SVN keywords in doc
+        $rev =~ s/^\$Rev(:\s*\d+)?\s*\$$/0/; # parse out SVN keywords in doc
         $rev =~ s/^\d+\.//;
         $comment = '';
         if ( !$fromrev || $rev eq $fromrev ) {

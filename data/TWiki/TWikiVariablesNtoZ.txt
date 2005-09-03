@@ -48,6 +48,13 @@ __Note:__ This topic is included by TWikiVariables
 	* Expands to: =%PUBURLPATH%=
 	* Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], FileAttachments
 
+#VarQUERYSTRING
+---+++ QUERYSTRING -- full, unprocessed string of parameters to this URL
+   * Syntax: %<nop>QUERYSTRING%
+   * Expands to: <code> %QUERYSTRING% </code>
+   * String of all the URL parameters that were on the URL used to get to the current page. For example, if you click on %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?name=Samantha;age=24;favorite_colour=pink you can see this in action. This string can be appended to a URL to pass parameter values on to another page.<br /> %X% URLs built this way are typically restricted in length, typically to 2048 characters. If you need more space than this, you will need to use an HTML form and =%<nop>URLPARAM=.
+   * Related: [[#VarURLPARAM][URLPARAM]]
+ 
 #VarREMOTEADDR
 ---+++ REMOTE_ADDR -- environment variable
 	* Syntax: =%<nop>REMOTE_ADDR%=
@@ -280,7 +287,7 @@ __Note:__ This topic is included by TWikiVariables
 	  | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
 	  | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (new line) |
 	* Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%TOPIC%?skin=print= URL. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print#VarURLPARAM][Test this]]: %URLPARAM{"skin"}%
-	* Related: [[#VarSEARCH][SEARCH]], FormattedSearch
+	* Related: [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
