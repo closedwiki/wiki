@@ -24,7 +24,7 @@
 %TMPL:P{"sep"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title="%TMPL:P{"i18n:Tooltip-edit"}%">Wysiwyg</a>
 %TMPL:END%
 
-%TMPL:DEF{"active_edit"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title="%TMPL:P{"i18n:Tooltip-edit"}%" accesskey="%TMPL:P{"i18n:AccessKey-edit"}%">%TMPL:P{context="new_topic" then="i18n:Tab-create" else="i18n:Tab-edit"}%</a>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
+%TMPL:DEF{"active_edit"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title="%TMPL:P{"i18n:Tooltip-edit"}%" accesskey="%TMPL:P{"i18n:AccessKey-edit"}%">%TMPL:P{context="new_topic" then="i18n:Tab-create" else="i18n:Tab-edit"}%</a>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
 
 %TMPL:DEF{"inactive_attach"}%<strike>%TMPL:P{"i18n:attach"}%</strike>%TMPL:END%
 %TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" accesskey="%TMPL:P{"i18n:AccessKey-attach"}%" title="%TMPL:P{"i18n:Tooltip-attach"}%" rel="nofollow">%TMPL:P{"i18n:Tab-attach"}%</a>%TMPL:END%
