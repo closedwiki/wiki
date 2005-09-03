@@ -14,9 +14,12 @@
 #
 package TWiki::Contrib::Build;
 
+use TWiki::Contrib::BuildContrib::BaseBuild;
+
 =pod
 
 ---++ Package TWiki::Contrib::Build
+
 This is a base class used for making build scripts for TWiki packages.
 This class is derived from to create a build script for a specific module.
 
@@ -31,6 +34,7 @@ below, and the following options:
 | -v | Be verbose |
 
 ---+++ Targets
+
 The following targets will always exist:
 | build | *internal target* check that everything is perl |
 | test | run unit tests |
@@ -215,6 +219,7 @@ sub new {
     # The following paths are all relative to the root of the twiki
     # installation
 
+    #SMELL: Hardcoded project classification
     # where the sub-modules live
     $this->{libdir} = $libpath;
     if( $this->{project} =~ /Plugin$/ ) {
@@ -245,7 +250,7 @@ sub new {
     # Read the manifest
 
     my $manifest = _findRelativeTo( $buildpldir, 'MANIFEST' );
-    $this->readManifest( '', $manifest );
+    ($this->{files},$this->{other_modules})=readManifest($this->{basedir},'',$manifest,sub{exit(1)});
 
     # Add the install script to the manifest, unless it is already there
     unless( grep(/^$this->{project}_installer.pl$/,
@@ -369,44 +374,6 @@ sub new {
     $this->{MODULE} = $this->{project};
 
     return $this;
-}
-
-sub readManifest {
-    my( $this, $path, $file ) = @_;
-
-    $file ||= '';
-    $file = $path.$file if $path;
-
-    unless($file && open(PF, '<'.$file)) {
-        print STDERR 'COULD NOT OPEN MANIFEST FILE ',$file,$NL;
-        exit(1);
-    }
-    my $line;
-    while ($line = <PF>) {
-        if ( $line =~ /^!include\s+(\S+)\s*$/ ) {
-            push(@{$this->{other_modules}}, $1);
-        } elsif ( $line =~ /^(\S+)\s+(\d\d\d\s+)?(\S.*)?\s*$/o ) {
-            my $name = $1;
-            my $permissions = 0;
-            $permissions = "0$2" if $2;
-            my $desc = $3;
-            unless( $permissions ) {
-                # No permissions in MANIFEST, read them from the file system
-                my @s = stat( $this->{basedir}.'/'.$name );
-                if( $! ) {
-                    # default perms
-                    $permissions = 0775;
-                } else {
-                    $permissions = $s[2] & 0777;
-                }
-            }
-            push(@{$this->{files}},
-                 { name => $1,
-                   description => ($3 || ''),
-                   permissions => 0+$permissions });
-        }
-    }
-    close(PF);
 }
 
 =pod
