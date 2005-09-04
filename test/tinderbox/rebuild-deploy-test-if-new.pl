@@ -1,7 +1,14 @@
 #! /usr/bin/perl -w
 use strict;
 ################################################################################
-# rebuild-deploy-test-if-new.pl - 
+# rebuild-deploy-test-if-new.pl - crontab-compatible script used to perform the following:
+#   * run the (unit) tests
+#   * build a new twiki kernel
+#   * build a new distribution
+#   * publish the distribution
+#   * install the distribution
+#   * run the (golden html) tests
+#   * post the test results to tinderbox.wbniv.wikihosting.com
 # 
 # Copyright 2005 Will Norris.  All Rights Reserved.
 # License: GPL
