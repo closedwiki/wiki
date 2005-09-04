@@ -90,7 +90,7 @@ if ( $Config->{force} || $newVersionAvailable )
 	throw Error::Simple( 'build error' ) if $?;
 
 	my $wikiPage = LWP::Simple::get( 'http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome' );
-	throw Error::Simple( 'installation error' ) unless defined $wikiPage;
+	throw Error::Simple( 'installation error' ) unless ( $wikiPage || '' ) =~ /build\s+$rev/i;
 
 	# mark build complete
 	rename BUILD_LOCK, LAST_BUILD;
