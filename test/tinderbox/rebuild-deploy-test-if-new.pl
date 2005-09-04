@@ -1,7 +1,8 @@
 #! /usr/bin/perl -w
 use strict;
 ################################################################################
-# latest-svn-checkin.pl - parses output returned by svnlog.xslt
+# rebuild-deploy-test-if-new.pl - 
+# 
 # Copyright 2005 Will Norris.  All Rights Reserved.
 # License: GPL
 ################################################################################
@@ -27,6 +28,7 @@ use Data::Dumper;
 use Getopt::Long;
 use Pod::Usage;
 use LWP::Simple;
+use Error qw( :try );
 
 use constant BUILD_LOCK => '.build';
 use constant LAST_BUILD => '.last_build';
@@ -53,6 +55,8 @@ print STDERR Dumper( $Config ) if $Config->{debug};
 # make easy to work as a crontab job
 chdir( $FindBin::Bin );
 
+################################################################################
+
 # bail early (as early as possible) if we're already doing a build
 exit 0 if -e BUILD_LOCK;
 
@@ -68,31 +72,26 @@ if ( open( VERSION, LAST_BUILD ) )
 my $newVersionAvailable = !$lastVersion || ($rev > $lastVersion);
 if ( $Config->{force} || $newVersionAvailable )
 {
-    # start new build
-    open( LOCK, ">", BUILD_LOCK ) or die $!;
-    print LOCK "$rev\n";
-    close( LOCK );
-
-#    system( 'svn cleanup ../..' );
-
-    system( './doit.pl' );
-    # SMELL: switch to exceptions
-    if ( $? == 0 )
+    try
     {
+	# start new build
+	open( LOCK, ">", BUILD_LOCK ) or die $!;
+	print LOCK "$rev\n";
+	close( LOCK );
+
+	system( './doit.pl' );
+	throw Error::Simple( 'build error' ) if $?;
+
 	my $wikiPage = LWP::Simple::get( 'http://tinderbox.wbniv.wikihosting.com/cgi-bin/twiki/view.cgi/TWiki/WebHome' );
-	if ( defined $wikiPage )
-	{   # mark build complete
-	    rename BUILD_LOCK, LAST_BUILD;
-	}
-	else
-	{   # try again next crontab iteration
-	    unlink BUILD_LOCK;
-	}
+	throw Error::Simple( 'installation error' ) unless defined $wikiPage;
+
+	# mark build complete
+	rename BUILD_LOCK, LAST_BUILD;
     }
-    else
+    catch Error::Simple with
     {   # try again next crontab iteration
 	unlink BUILD_LOCK;
-    }
+    };
 }
 
 exit 0;
