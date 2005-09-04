@@ -201,6 +201,7 @@ sub preRenderingHandler
     }
     else
     {
+      ($header, $order, @referencesTopics) = parseArgs ("");
       %bibliography= ();
     }
 
