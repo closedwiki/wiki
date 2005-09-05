@@ -2687,7 +2687,7 @@ sub _SPACEOUT {
 sub _ICON {
     my( $this, $params ) = @_;
     my $file = $params->{_DEFAULT} || '';
-    return $this->{renderer}->filenameToIcon( $file );
+    return $this->{renderer}->getIconHTML( $file );
 }
 
 sub _ICONPATH {
