@@ -164,7 +164,7 @@ __Note:__ This topic is included by TWikiVariables
 	  | =nosearch="on"= | Suppress search string | Show search string |
 	  | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
 	  | =nototal="on"= | Do not show number of topics found | Show number |
-	  | =zeroresults="off"= | Suppress all output if there are no hits | "Number of topics: 0" |
+	  | =zeroresults="off"= | Suppress all output if there are no hits | =zeroresults="on"=, displays: "Number of topics: 0" |
 	  | =noempty="on"= | Suppress results for webs that have no hits. | Show webs with no hits |
 	  | =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
 	  | =expandvariables="on"= | Expand variables before applying a FormattedSearch on a search hit. Useful to show the expanded text, e.g. to show the result of a SpreadSheetPlugin =%<nop>CALC{}%= instead of the formula | Raw text |
