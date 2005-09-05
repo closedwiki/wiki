@@ -11,7 +11,7 @@ $(MakeFor).tar.bz2 : $(MakeFor).tar
 
 $(MakeFor).tar : 
 	tar -f $(MakeFor).tar -c $(TAR_EXCLUDE) --no-recursion --directory platform `cd platform && find -maxdepth 1 -type f`
-	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/ config/ cpan/MIRROR/TWIKI/
+	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) bin/* cpan/*.pl downloads/addons/ downloads/contribs/ downloads/plugins/ downloads/kernels/TWikiKernel-$(BRANCH)-`bin/svnrev.pl`.* config/ cpan/MIRROR/TWIKI/
 	tar -f $(MakeFor).tar -r $(TAR_EXCLUDE) 
 
 extensions : plugins contribs addons
