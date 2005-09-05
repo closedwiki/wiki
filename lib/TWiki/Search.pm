@@ -382,7 +382,7 @@ sub searchWeb {
     my $noHeader =      TWiki::isTrue( $params{noheader}, $nonoise );
     my $noSearch =      TWiki::isTrue( $params{nosearch}, $nonoise );
     my $noSummary =     TWiki::isTrue( $params{nosummary}, $nonoise );
-    my $noZeroResults = TWiki::isTrue( $params{nozeroresults}, $nonoise );
+    my $zeroResults =   1 - TWiki::isTrue( ($params{zeroresults} || 'on'), $nonoise );
     my $noTotal =       TWiki::isTrue( $params{nototal}, $nonoise );
     my $newLine =       $params{newline} || '';
     my $sortOrder =     $params{order} || '';
@@ -937,7 +937,7 @@ sub searchWeb {
                 }
             }
         }
-        return '' if ( $ntopics == 0 && $noZeroResults );
+        return '' if ( $ntopics == 0 && $zeroResults );
     }
 
     if( $format  && ! $finalTerm ) {

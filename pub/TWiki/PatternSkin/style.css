@@ -1007,7 +1007,7 @@ table#twikiSearchTable td.first {padding-top:1em; background:#e6e6e6;}
 	text-align:left;
 }
 .patternSearchResultCount {
-	margin:.25em 0 2.5em 0;
+	margin:.25em 0 1.5em 0;
 	font-size:95%;
 }
 .patternViewPage .patternSearchResultsBegin { /* for changes template with noheader="on" */

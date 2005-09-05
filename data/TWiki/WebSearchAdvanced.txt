@@ -1,6 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebSearch"}%
 ---+ Advanced Search
+
+%SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="on" zeroresults="off%URLPARAM{search}%"}%
 <noautolink>
 <div class="twikiPageForm">
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
@@ -60,8 +62,6 @@
 </form>
 </div>
 </noautolink>
-
-%SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="on" }%
 
 <div class="twikiHelp">
 *Other search options:*
