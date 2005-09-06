@@ -120,6 +120,7 @@ SVK
 ^File::chdir$
 ^Class::Accessor$
 ^HTML::TreeBuilder$
+^Image::Info$
 __MODULES__
 
 print $deps, "\n";
