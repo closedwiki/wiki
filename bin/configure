@@ -2265,7 +2265,7 @@ back and configure other settings later.</div>
 how you are going to manage authentication and access control.</li>
 <li>There are a number of documentation topics describing how to
 configure TWiki for different platforms, and a lot of support
-available on IRC (irc.freenode.net, channel #twiki) and at <a href="http://twiki.org">TWiki.org</a>.</li>
+available on <a href="http://twiki.org/cgi-bin/view/Codev/TWikiIRC">TWikiIRC</a> (irc.freenode.net, channel #twiki) and at <a href="http://twiki.org">TWiki.org</a>.</li>
 </ul>
 </div>
 <div class="remark">Explanation of color codes:
