@@ -121,6 +121,8 @@ SVK
 ^Class::Accessor$
 ^HTML::TreeBuilder$
 ^Image::Info$
+^Locale::Maketext::Lexicon$
+^Text:IConv$
 __MODULES__
 
 print $deps, "\n";
