@@ -1,0 +1,84 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: twiki_20030201-5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-07-04 11:52+0200\n"
+"PO-Revision-Date: 2005-09-04A 13:45-0300\n"
+"Last-Translator: Antonio S. de A. Terceiro <asaterceiro@inf.ufrgs.br>\n"
+"Language-Team: TWikiBrasil <twikibr@listas.softwarelivre.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Description
+#: ../templates:4
+msgid "What is the top-level URL of the server TWiki runs under?"
+msgstr "Qual a URL inicial do servidor onde o TWiki roda?"
+
+#. Description
+#: ../templates:4
+msgid ""
+"For a normal install, this should be a URL for your web server's full name, "
+"which is used to construct urls on some pages.  The install will serve up "
+"the data by adding \"twiki\" to the end of this setting; it is also needed "
+"for certain redirections."
+msgstr ""
+"Para uma instalação normal, essa deve deve a URL pro nome completo do seu "
+"servidor, que é usada para construir URL's am alguma páginas. A instalação "
+"vai fornecer essa informação adicionando \"twiki\" ao final desse valor; é "
+"necessário também pra alguns redirecionamentos."
+
+#. Description
+#: ../templates:13
+msgid "What is the email address of the webmaster for this TWiki?"
+msgstr "Qual o endereço de e-mail to webmaster desse TWiki?"
+
+#. Description
+#: ../templates:13
+msgid ""
+"This email address gets mail for new user registration, and is listed on the "
+"\"oops\" page when things go wrong."
+msgstr ""
+"Esse endereço de e-mail recebe mensagens em registros de novos usuários, e é "
+"listado na página \"oops\" quando alguma coisa dá errado."
+
+#. Description
+#: ../templates:20
+msgid "Install sample wiki universe on initial install?"
+msgstr "Instalar universo wiki inicial na primeira instalação?"
+
+#. Description
+#: ../templates:20
+msgid ""
+"TWiki includes a complete \"starter kit\" which includes user registration "
+"pages, documentation, and tutorials.  If you're re-installing twiki after "
+"deleting the package and want to keep the old data, or if you've got a twiki "
+"data set from your own manual install, you should refuse here. On a normal "
+"initial install, accept, and a sample data set will be installed in /var/lib/"
+"twiki/data. (In either case, if data/Main/WebHome.txt is present, the "
+"starter kit will not be unpacked; you can look in /usr/share/doc/twiki/twiki-"
+"data.tar.gz if you wish to install it manually or compare a new version.)"
+msgstr ""
+"O TWiki inclui um \"kit inicial\" completo que inclui páginas de registro de "
+"usuários, documentação e tutoriais. Se você estiver reinstalando twiki depois "
+"de remover o pacote e quiser manter os dados antigos, ou se você tem um conjunto "
+"de dados do twiki de uma instalação manual própria, você deve negar aqui. Numa "
+"instalação inicial normal, aceite, e um conjunto de dados inicial vai ser instalado "
+"em /var/lib/twiki/data. (Em qualquer um dos casos, se data/Main/WebHome.txt estiver "
+"presente, o kit inicial não vai ser extraído; você pode olhar em /usr/share/doc/"
+"twiki/twiki-data.tar.gz se quiser instalá-lo manualmente ou comparar com uma versão "
+"mais nova.)"
