@@ -52,6 +52,7 @@ sub main {
     # Fill in default environment variables if invoked from command-line.
 
     $ENV{HTTP_USER_AGENT} = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)" unless(exists $ENV{HTTP_USER_AGENT});
+    $ENV{HTTP_HOST} = "localhost" unless(exists $ENV{HTTP_HOST});
     $ENV{REMOTE_ADDR} = "127.0.0.1" unless(exists $ENV{REMOTE_ADDR});
     $ENV{REMOTE_PORT} = "2509" unless(exists $ENV{REMOTE_PORT});
     $ENV{REMOTE_USER} = "TWikiGuest" unless(exists $ENV{REMOTE_USER});
@@ -312,7 +313,7 @@ sub publishTopic {
     my $ult = getUnsatisfiedLinkTemplate($web);
     $tmpl =~ s/$ult/$1/g;
     # Copy files from pub dir to rsrc dir in static dir.
-    my $pub = '(?:http://localhost)?'.TWiki::Func::getPubUrlPath();
+    my $pub = "(?:http://$ENV{HTTP_HOST})?".TWiki::Func::getPubUrlPath();
     $tmpl =~ s!$pub/([^"']+)!&copyResource($web, $1, $copied, $zip)!ge;
     # Modify internal links.
     my $ilt;
