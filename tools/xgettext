@@ -25,7 +25,7 @@ open(R, "<tools/MANIFEST") || die "Could not open tools/MANIFEST: $!";
 open(W, ">$sources_listing") || die "Could not open $sources_listing: $!";
 foreach my $source (<R>) {
     chomp($source);
-    if( $source =~ /^bin\// || $source =~ /^lib\/.*\.pm$/ ) {
+    if( $source =~ /^bin\/[a-z]/ || $source =~ /^lib\/.*\.pm$/ ) {
         print W $source,"\n";
     } elsif( $source =~ /^templates\/.*\.tmpl$/ ) {
         push(@templates, $source);
