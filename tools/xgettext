@@ -1,9 +1,11 @@
 #!/usr/bin/perl
-
+#
+# Script to extract strings from TWiki sources and templates
+#
 use strict;
 
-# force the use from 
--d 'bin' and -d "lib" and -d 'tools' and -d 'templates' or die("Certify yourself to run this utility from the root directory of TWiki sources!");
+# force the use from the root
+-d 'bin' and -d "lib" and -d 'tools' and -d 'templates' or die("You may only run this utility from the root directory of TWiki sources!");
 
 # config
 my $localesDir = "po";
@@ -11,19 +13,40 @@ my $potfile = "${localesDir}/TWiki.pot";
 my $newpotfile = $potfile . '.new';
 my $sources_listing = "sources.in";
 
-#create header of new potfilew
+# create header of new potfile
 system("echo | xgettext --force-po --language=Perl --output=$newpotfile -"); #empty potfile
 
 # extract strings from the source code and append to the new potfile
-my $bin = "find bin/* -name '[a-z]*'";
-my $lib = "find lib -name '*.pm'";
-system("($bin && $lib) > $sources_listing");
+
+#####################################################################
+# driven from MANIFEST (picks up only files that are included in the release)
+my @templates;
+open(R, "<tools/MANIFEST") || die "Could not open tools/MANIFEST: $!";
+open(W, ">$sources_listing") || die "Could not open $sources_listing: $!";
+foreach my $source (<R>) {
+    chomp($source);
+    if( $source =~ /^bin\// || $source =~ /^lib\/.*\.pm$/ ) {
+        print W $source,"\n";
+    } elsif( $source =~ /^templates\/.*\.tmpl$/ ) {
+        push(@templates, $source);
+    }
+}
+close(R);
+close(W);
+
+#################### OR ########################
+# driven from 
+#my $bin = "find bin/* -name '[a-z]*'";
+#my $lib = "find lib -name '*.pm'";
+#system("($bin && $lib) > $sources_listing");
+#my @templates = `find templates/*`;
+#####################################################################
+
 system("xgettext --omit-header --force-po --language=Perl --keyword=_ --keyword=translate -f $sources_listing -o $newpotfile.sources");
 system("cat $newpotfile.sources >> $newpotfile"); # add sources' strings
 print("I: source strings extracted and appended.\n");
 
 # extract strings from the templates and create potfile
-my @templates = `find templates/*`;
 open(OUT,'>>',$newpotfile);
 foreach (@templates) {
 
@@ -67,4 +90,4 @@ foreach my $translation (@translations) {
 
 # cleanup after generating base POT
 print("I: Removing intermediate files\n");
-system("rm -f $sources_listing $newpotfile $newpotfile.sources");
+#system("rm -f $sources_listing $newpotfile $newpotfile.sources");
