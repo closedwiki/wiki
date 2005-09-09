@@ -34,13 +34,13 @@ package TWiki::I18N;
 
 use TWiki;
 use Assert;
-use Text::Iconv;
 
-use base 'Locale::Maketext';
-use Locale::Maketext::Lexicon {
-    en      => ['Auto'],
-    '*'     => [ Gettext => $TWiki::cfg{LocalesDir} . '/*.po' ]
-};
+use vars qw( $initialised );
+
+BEGIN {
+   eval "use base 'Locale::Maketext'";
+   $initialised = !$@;
+}
 
 =pod
 
@@ -56,9 +56,24 @@ sub new {
     my $this = bless( {}, $class );
     $this->{session} = $session;
 
+    return $this unless $initialised;
+
     # TODO:
     #   web/user/session setting must override the language detected from the
     #   browser.
+
+    die '{LocalesDir} not configured - run configure' unless
+      $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir};
+
+    my $dependencies = <<HERE;
+    use Locale::Maketext::Lexicon {
+        en      => ['Auto'],
+        '*'     => [ Gettext => $TWiki::cfg{LocalesDir} . '/*.po' ]
+    };
+    use Text::Iconv;
+HERE
+    eval $dependencies;
+    return $this if( $@ );
 
     # guesses the language from the CGI environment
     $this->{language} = $this->get_handle();
@@ -66,8 +81,10 @@ sub new {
     # what to do with failed translations
     $this->{language}->{fail} = \&_identity;
 
+
     # encoding converter from utf-8 to site charset:
-    $this->{converter} = Text::Iconv->new("utf-8", $TWiki::cfg{Site}{CharSet});
+    $this->{converter} = new Text::Iconv('utf-8',
+                                         $TWiki::cfg{Site}{CharSet});
 
     return $this;
 }
@@ -75,13 +92,13 @@ sub new {
 # Function to be used as default for failed translations:
 # just return the same string passed for translations.
 sub _identity {
-  my ($h,$text) = @_;
-  return $text;
+    my( $h, $text ) = @_;
+    return $text;
 }
 
 =pod
 
----++ ObjectMethod translate ( $text ) -> $translation
+---++ ObjectMethod translate( $text ) -> $translation
 
 Translates the given string (assumed to be written in English) into the
 current language, as detected in the constructor.
@@ -89,31 +106,37 @@ current language, as detected in the constructor.
 Return value: translated string, or the argument itself if no translation is
 found for thet argument.
 
-=cut 
+=cut
 
 sub translate {
   my ( $this, $text ) = @_;
 
+  return $text unless $this->{language};
+
   # translate text:
   my $result = $this->{language}->maketext($text);
+
   # translate encoding:
   $result = $this->{converter}->convert($result);
-  
+
   return $result;
 }
 
 =pod
 
----++ ObjectMethod language ( ) -> $language_tag
+---++ ObjectMethod language() -> $language_tag
 
 Indicates the language tag of the current user's language, as detected from the
-information sent by the browser.
+information sent by the browser. Returns the empty string if the language
+could not be determined.
 
 =cut
 
 sub language {
-  my $this = shift;
-  return $this->{language}->language_tag();
+    my $this = shift;
+
+    return '' unless $this->{language};
+    return $this->{language}->language_tag();
 }
 
 1;
