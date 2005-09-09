@@ -11,123 +11,126 @@ use TWiki::Func;
 package TWiki::Plugins::FormQueryPlugin;
 
 use vars qw(
-	    $web $topic $user $installWeb $VERSION $pluginName
-	    $debug $db $initialised
-	   );
+            $web $topic $user $installWeb $VERSION $pluginName
+            $debug %db
+           );
 
 $VERSION = '1.202';
 $pluginName = 'FormQueryPlugin';
-$initialised = 0;
-$db = undef;
 $debug = 0;
 
 sub initPlugin {
-  ( $topic, $web, $user, $installWeb ) = @_;
+    ( $topic, $web, $user, $installWeb ) = @_;
 
-  if ( defined( $WebDB::storable ) &&
-       TWiki::Func::getPreferencesFlag( "\U$pluginName\E_STORABLE" )) {
-    $WebDB::storable = 1;
-  } else {
-    $WebDB::storable = 0;
-  }
+    if ( defined( $WebDB::storable ) &&
+           TWiki::Func::getPreferencesFlag( "\U$pluginName\E_STORABLE" )) {
+        $WebDB::storable = 1;
+    } else {
+        $WebDB::storable = 0;
+    }
 
-  # Get plugin debug flag
-  $debug = ( $debug || TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" ));
+    # Get plugin debug flag
+    $debug = ( $debug || TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" ));
 
-  # Plugin correctly initialized
-  TWiki::Func::writeDebug( "${pluginName} preinitialised" ) if $debug;
+    TWiki::Func::registerTagHandler( 'FQPDEBUG', \&_handleFQPInfo,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'FORMQUERY', \&_handleFormQuery,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'WORKDAYS', \&_handleWorkingDays,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'SUMFIELD', \&_handleSumQuery,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'ARITH', \&_handleCalc,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'TABLEFORMAT', \&_handleTableFormat,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'SHOWQUERY', \&_handleShowQuery,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'TOPICCREATOR', \&_handleTopicCreator,
+                                     'context-free' );
+    TWiki::Func::registerTagHandler( 'PROGRESS', \&_handleProgress,
+                                     'context-free' );
 
-  return 1;
-}
-
-sub commonTagsHandler {
-  ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-  return unless ( $_[0] =~ m/%(FQPDEBUG|FORMQUERY|WORKDAYS|SUMFIELD|ARITH|TABLEFORMAT|SHOWQUERY|TOPICCREATOR|PROGRESS)/o );
-
-  return unless ( _lazyInit() );
-
-  my $text = "";
-
-  $_[0] =~
-	s/%FQPDEBUG{(.*?)}%/&_handleFQPInfo($1)/geo;
-  $_[0] =~
-	s/%(FORMQUERY){(.+?)}%/&_handleFormQuery($1,$2)/geo;
-  $_[0] =~
-	s/%(WORKDAYS){(.+?)}%/&_handleWorkingDays($1, $2,$_[2],$_[1])/geo;
-  $_[0] =~
-	s/%(SUMFIELD){(.+?)}%/&_handleSumQuery($1,$2)/geo;
-  $_[0] =~
-	s/%(ARITH){\"(.+?)\"}%/&_handleCalc($2)/geo;
-  $_[0] =~
-	s/%(TABLEFORMAT){(.+?)}%/&_handleTableFormat($1,$2)/geo;
-  $_[0] =~
-	s/%(SHOWQUERY){(.+?)}%/&_handleShowQuery($1,$2)/geo;
-  $_[0] =~
-	s/%(TOPICCREATOR){(.+?)}%/&_handleTopicCreator($1,$2,$_[2],$_[1])/geo;
-
-  $_[0] =~ s/%(PROGRESS){(.+?)}%/&_handleProgress($1,$2,$_[2],$_[1])/geo;
+    return 1;
 }
 
 sub _handleFQPInfo {
-  return $db->getInfo( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
+      unless ( _lazyInit($web) );
+    return $db{$web}->getInfo( $params );
 }
 
 sub _handleFormQuery {
-  return $db->formQuery( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
+      unless ( _lazyInit($web) );
+    return $db{$web}->formQuery( 'FORMQUERY', $params );
 }
 
 sub _handleTableFormat {
-  return $db->tableFormat( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
+      unless ( _lazyInit($web) );
+    return $db{$web}->tableFormat( 'TABLEFORMAT', $params );
 }
 
 sub _handleShowQuery {
-  return $db->showQuery( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
+      unless ( _lazyInit() );
+    return $db{$web}->showQuery( 'SHOWQUERY', $params );
 }
 
 sub _handleTopicCreator {
-  return $db->createNewTopic( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'TOPICCREATOR REMOVED - use XXXXXXXXXX');
 }
 
 sub _handleSumQuery {
-  return $db->sumQuery( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
+      unless ( _lazyInit($web) );
+    return $db{$web}->sumQuery( 'SUMQUERY', $params );
 }
 
 sub _handleCalc {
-  return  TWiki::Plugins::FormQueryPlugin::Arithmetic::evaluate( shift );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'ARITH REMOVED - use SpreadSheetPlugin');
 }
 
 sub _handleWorkingDays {
-  return  TWiki::Plugins::FormQueryPlugin::ReqDBSupport::workingDays( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'WORKDAYS REMOVED - use SpreadSheetPlugin');
 }
 
 sub _handleProgress {
-  return  TWiki::Plugins::FormQueryPlugin::ReqDBSupport::progressBar( @_ );
+    my($session, $params, $topic, $web) = @_;
+    return CGI::span({class=>'twikiAlert'}, 'FQP init failed')
+      unless ( _lazyInit() );
+    return  TWiki::Plugins::FormQueryPlugin::ReqDBSupport::progressBar(
+        'PROGRESSBAR', $params, $web, $topic );
 }
 
 sub _lazyInit {
 
-  return 1 if ( $initialised );
+    return 1 if $db{$web};
 
-  # FQP_ENABLE must be set globally or in this web!
-  return 0 unless ( TWiki::Func::getPreferencesFlag( "\U$pluginName\E_ENABLE" ));
+    # FQP_ENABLE must be set globally or in this web!
+    return 0 unless TWiki::Func::getPreferencesFlag( "\U$pluginName\E_ENABLE" );
 
-  eval 'use TWiki::Plugins::FormQueryPlugin::WebDB;';
-  die $@ if $@;
-  eval 'use TWiki::Plugins::FormQueryPlugin::ReqDBSupport;';
-  die $@ if $@;
-  eval 'use TWiki::Plugins::FormQueryPlugin::Arithmetic;';
-  die $@ if $@;
+    eval <<'HERE';
+use TWiki::Plugins::FormQueryPlugin::WebDB;
+use TWiki::Plugins::FormQueryPlugin::ReqDBSupport;
+use TWiki::Plugins::FormQueryPlugin::Arithmetic;
+HERE
+    die $@ if $@;
 
-  $db = new  TWiki::Plugins::FormQueryPlugin::WebDB( $web );
+    $db{$web} = new  TWiki::Plugins::FormQueryPlugin::WebDB( $web );
 
-  return 0 unless $db;
+    return 0 unless $db{$web};
 
-  $initialised = 1;
-
-  TWiki::Func::writeDebug( "${pluginName} lazy initialised" ) if $debug;
-
-  return 1;
+    return 1;
 }
 
 1;

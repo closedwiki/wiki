@@ -209,12 +209,13 @@ sub toString {
 
 # PUBLIC STATIC generate error message unless moan is off
 sub moan {
-    my ( $macro, $params, $message, $nomess ) = @_;
+    my ( $macro, $attrs, $message, $nomess ) = @_;
 
-    return $nomess if ( $params =~ m/moan=\"?off\"?/o );
+    return $nomess if( $attrs->{moan} && $attrs->{moan} eq 'off' );
 
-    return ' '.CGI::span( {class=>'twikiAlert'},
-                          $message.' in '.$macro.'{'.$params.'}').' ';
+    return ' '.CGI::span(
+        {class=>'twikiAlert'},
+        $message.' in '.$macro.'{'.$attrs->stringify().'}').' ';
 }
 
 # PUBLIC
@@ -224,28 +225,26 @@ sub moan {
 # It must has the field
 # search Boolean expression for the query
 sub formQuery {
-    my ( $this, $macro, $params ) = @_;
+    my ( $this, $macro, $attrs ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params, 1 );
-
-    my $name = $attrs->get( "name" );
+    my $name = $attrs->{name};
     if ( !defined( $name )) {
-        return moan( $macro, $params, "'name' not defined", "" );
+        return moan( $macro, $attrs, "'name' not defined", "" );
     }
 
     my $search;
     eval {
-        $search = new TWiki::Contrib::DBCacheContrib::Search( $attrs->get( "search" ));
+        $search = new TWiki::Contrib::DBCacheContrib::Search( $attrs->{search} );
     };
     if ( !defined( $search )) {
-        return moan( $macro, $params,
+        return moan( $macro, $attrs,
                      "'search' not defined, or invalid search expression", "" );
     }
 
     # Make sure the DB is loaded
     $this->load();
 
-    my $queryname = $attrs->get( "query" );
+    my $queryname = $attrs->{query};
     my $query;
     if ( defined( $queryname )) {
         $query = $this->{_queries}{$queryname};
@@ -255,18 +254,18 @@ sub formQuery {
     }
 
     if ( !defined( $query )) {
-        return moan( $macro, $params, "Query '$queryname' not defined", "" );
+        return moan( $macro, $attrs, "Query '$queryname' not defined", "" );
     }
 
     if ( $query->size() == 0 ) {
-        return moan( $macro, $params, "Query '$queryname' returned no values", "" );
+        return moan( $macro, $attrs, "Query '$queryname' returned no values", "" );
     }
 
     delete( $this->{_queries}{$name} );
 
     my $matches = $query->search( $search );
 
-    my $extract = $attrs->get( "extract" );
+    my $extract = $attrs->{extract};
     if ( defined( $extract ) && $matches->size() > 0) {
         # Extract a defined subfield and make the query result an
         # array of the subfield. If the subfield is an array, flatten out
@@ -288,7 +287,7 @@ sub formQuery {
     }
 
     if ( !defined( $matches ) || $matches->size() == 0 ) {
-        return moan( $macro, $params, "No values returned", "" );
+        return moan( $macro, $attrs, "No values returned", "" );
     }
     $this->{_queries}{$name} = $matches;
 
@@ -297,18 +296,16 @@ sub formQuery {
 
 # PUBLIC
 sub tableFormat {
-    my ( $this, $macro, $params ) = @_;
+    my ( $this, $macro, $attrs ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params, 1 );
-
-    my $name = $attrs->get( "name" );
+    my $name = $attrs->{name};
     if ( !defined( $name )) {
-        return moan( $macro, $params, "'name' not defined", "" );
+        return moan( $macro, $attrs, "'name' not defined", "" );
     }
 
-    my $format = $attrs->get( "format" );
+    my $format = $attrs->{format};
     if ( !defined( $format )) {
-        return moan( $macro, $params, "'format' not defined", "" );
+        return moan( $macro, $attrs, "'format' not defined", "" );
     }
 
     my $fmt = new  TWiki::Plugins::FormQueryPlugin::TableFormat( $attrs, $colourmap );
@@ -329,57 +326,54 @@ sub tableFormat {
 # row_from  (optional) Render rows starting from row_from (1st row == 1)
 # row_count (optional) Render a maximum of row_count rows
 sub showQuery {
-    my ( $this, $macro, $params ) = @_;
+    my ( $this, $macro, $attrs ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params, 1 );
-
-    my $name = $attrs->get( "query" );
+    my $name = $attrs->{query};
     if ( !defined( $name )) {
-        return moan( $macro, $params, "'query' not defined", "" );
+        return moan( $macro, $attrs, "'query' not defined", "" );
     }
 
-    my $format = $attrs->get( "format" );
+    my $format = $attrs->{format};
     if ( !defined( $format )) {
-        return moan( $macro, $params, "'format' not defined", "" );
+        return moan( $macro, $attrs, "'format' not defined", "" );
     }
     $format = new  TWiki::Plugins::FormQueryPlugin::TableFormat( $attrs, $colourmap );
 
     if ( !defined( $format )) {
-        return moan( $macro, $params, "Table format not defined", "" );
+        return moan( $macro, $attrs, "Table format not defined", "" );
     }
 
     my $matches = $this->{_queries}{$name};
     if ( !defined( $matches ) || $matches->size() == 0 ) {
-        return moan( $macro, $params, "Query '$name' returned no values", "" );
+        return moan( $macro, $attrs, "Query '$name' returned no values", "" );
     }
 
     ## get finished html or twiki format table as string
     # Patch from SimonHardyFrancis
     
     return $format->formatTable( $matches, $colourmap,
-								 $attrs->get( "row_from" ),
-								 $attrs->get ( "row_count" ));
+								 $attrs->{row_from},
+								 $attrs->{row_count});
 }
 
 # PUBLIC return the sum of all occurrences of a numeric
 # field in a query
 sub sumQuery {
-    my ( $this, $macro, $params ) = @_;
-    my $attrs = new TWiki::Attrs( $params, 1 );
+    my ( $this, $macro, $attrs ) = @_;
 
-    my $name = $attrs->get( "query" );
+    my $name = $attrs->{query};
     if ( !defined( $name )) {
-        return moan( $macro, $params, "'query' not defined", 0 );
+        return moan( $macro, $attrs, "'query' not defined", 0 );
     }
 
-    my $field = $attrs->get( "field" );
+    my $field = $attrs->{field};
     if ( !defined( $field )) {
-        return moan( $macro, $params, "'field' not defined", 0 );
+        return moan( $macro, $attrs, "'field' not defined", 0 );
     }
 
     my $matches = $this->{_queries}{$name};
     if ( !defined( $matches ) || $matches->size() == 0 ) {
-        return moan( $macro, $params, "Query '$name' returned no values", 0 );
+        return moan( $macro, $attrs, "Query '$name' returned no values", 0 );
     }
 
     return $matches->sum( $field );
@@ -388,24 +382,22 @@ sub sumQuery {
 # PUBLIC generate HTML to generate a new topic according to the rules
 # given in the relation
 sub createNewTopic {
-    my ( $this, $macro, $params, $web, $topic ) = @_;
+    my ( $this, $macro, $attrs, $web, $topic ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params, 1 );
-
-    my $relation = $attrs->get( "relation" );
+    my $relation = $attrs->{relation};
     if ( !defined( $relation )) {
-        return moan( $macro, $params, "'relation' not defined", "" );
+        return moan( $macro, $attrs, "'relation' not defined", "" );
     }
 
-    my $base = $attrs->get( "base" );
+    my $base = $attrs->{base};
     $base = $topic unless ( defined( $base ));
 
     # Optional
-    my $text = $attrs->get( "text" ) || "";
+    my $text = $attrs->{text} || "";
     # Optional
-    my $formtype = $attrs->get( "form" );
+    my $formtype = $attrs->{form};
     # Optional
-    my $template = $attrs->get( "template" );
+    my $template = $attrs->{template};
 
     my $tc = $this->{_topiccreator}++;
     my $child;
@@ -450,21 +442,19 @@ sub deriveNewTopic {
 }
 
 sub getInfo {
-    my ( $this, $params ) = @_;
-
-    my $attrs = new TWiki::Attrs( $params, 1 );
+    my ( $this, $attrs ) = @_;
 
     $this->SUPER::load();
-    my $topic = $attrs->get("topic");
+    my $topic = $attrs->{topic};
 
-    if (!defined($topic) || $topic eq "") {
+    if (!defined($topic) || $topic eq '') {
         return $this->toString();
     } else {
         my $ti = $this->get( $topic );
         if (defined($ti)) {
-            return $ti->toString($attrs->get("limit"));
+            return $ti->toString($attrs->{limit});
         }
-        return CGI::span({class=>'twikiAlert'},$topic.' not known');
+        return CGI::span({class=>'twikiAlert'}, $topic.' not known');
     }
 }
 

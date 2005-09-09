@@ -1392,12 +1392,13 @@ sub getTopicList {
 
 =pod=
 
----+++ registerTagHandler( $tag, \&fn )
+---+++ registerTagHandler( $tag, \&fn, $syntax )
 Should only be called from initPlugin.
 
 Register a function to handle a simple tag. Handles both %<nop>TAG% and %<nop>TAG{...}%. Registered tags are treated the same as TWiki internal tags, and are expanded at the same time. This is a _lot_ more efficient than using the =commonTagsHandler=.
    * =$tag= - The name of the tag i.e. the 'MYTAG' part of %<nop>MYTAG%. The tag name *must* match /^[A-Z][A-Z0-9_]*$/ or it won't work.
    * =\&fn= - Reference to the handler function.
+   * =$syntax= can be 'classic' (the default) or 'context-free'. 'classic' syntax is appropriate where you want the tag to support classic TWiki syntax i.e. to accept an unquoted default parameter. For example, %MYTAG{unquoted parameter}%. If your tag will only use named parameters, you can use 'context-free' syntax, which supports a more natural and friendly syntax. For example, %MYTAG{param1=value1, value 2, param3="value 3", param4='value 5"}%
 
 *Since:* TWiki::Plugins::VERSION 1.1
 
@@ -1433,7 +1434,7 @@ would let you do this:
 =cut
 
 sub registerTagHandler {
-    my( $tag, $function ) = @_;
+    my( $tag, $function, $syntax ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     # Use an anonymous function so it gets inlined at compile time.
     # Make sure we don't mangle the session reference.
@@ -1444,7 +1445,8 @@ sub registerTagHandler {
                                    my $result = &$function( @_ );
                                    $TWiki::Plugins::SESSION = $record;
                                    return $result;
-                               }
+                               },
+                               $syntax
                              );
 }
 

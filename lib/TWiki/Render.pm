@@ -880,12 +880,12 @@ sub renderFORMFIELD {
 
     my $text = '';
     my $found = 0;
-    my $title='';
+    my $title = '';
     if ( $meta ) {
         my @fields = $meta->find( 'FIELD' );
         foreach my $field ( @fields ) {
-            $title = $field->{title};
             my $name = $field->{name};
+            $title = $field->{title} || $name;
             if( $title eq $formField || $name eq $formField ) {
                 $found = 1;
                 my $value = $field->{value};
@@ -902,7 +902,7 @@ sub renderFORMFIELD {
     }
 
     unless ( $found ) {
-        $text = $altText;
+        $text = $altText || '';
     }
 
     $text =~ s/\$title/$title/go;
@@ -1500,9 +1500,9 @@ sub takeOutBlocks {
     foreach my $line ( split/\r?\n/, $intext ) {
         if ( $line =~ m/$open/ ) {
             unless ( $depth++ ) {
-	    	$pre = $1;
+                $pre = $1;
                 $tagParams = $2;
-                $scoop = $3;
+                $scoop = $3."\n";
                 next;
             }
         }

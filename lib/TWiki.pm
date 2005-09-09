@@ -59,6 +59,7 @@ use vars qw(
             %regex
             %constantTags
             %functionTags
+            %contextFreeSyntax
             $VERSION
             $TRUE
             $FALSE
@@ -687,7 +688,7 @@ sub redirect {
 
 =pod
 
----++ StaticMethod isValidWikiWord (  $name  ) -> $boolean
+---++ StaticMethod isValidWikiWord( $name ) -> $boolean
 
 Check for a valid WikiWord or WikiName
 
@@ -700,7 +701,7 @@ sub isValidWikiWord {
 
 =pod
 
----++ StaticMethod isValidTopicName (  $name  ) -> $boolean
+---++ StaticMethod isValidTopicName( $name ) -> $boolean
 
 Check for a valid topic name
 
@@ -714,7 +715,7 @@ sub isValidTopicName {
 
 =pod
 
----++ StaticMethod isValidAbbrev (  $name  ) -> $boolean
+---++ StaticMethod isValidAbbrev( $name ) -> $boolean
 
 Check for a valid ABBREV (acronym)
 
@@ -727,7 +728,7 @@ sub isValidAbbrev {
 
 =pod
 
----++ StaticMethod isValidWebName (  $name, $system  ) -> $boolean
+---++ StaticMethod isValidWebName( $name, $system ) -> $boolean
 
 STATIC Check for a valid web name. If $system is true, then
 system web names are considered valid (names starting with _)
@@ -744,7 +745,7 @@ sub isValidWebName {
 
 =pod
 
----++ ObjectMethod readOnlyMirrorWeb (  $theWeb  ) -> ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote )
+---++ ObjectMethod readOnlyMirrorWeb( $theWeb ) -> ( $mirrorSiteName, $mirrorViewURL, $mirrorLink, $mirrorNote )
 
 If this is a mirrored web, return information about the mirror. The info
 is returned in a quadruple:
@@ -908,7 +909,7 @@ sub getOopsUrl {
 
 =pod
 
----++ ObjectMethod normalizeWebTopicName (  $theWeb, $theTopic  ) -> ( $theWeb, $theTopic )
+---++ ObjectMethod normalizeWebTopicName( $theWeb, $theTopic ) -> ( $theWeb, $theTopic )
 
 Normalize a Web<nop>.<nop>TopicName
 <pre>
@@ -1167,7 +1168,7 @@ sub finish {
 
 =pod
 
----++ ObjectMethod writeLog (  $action, $webTopic, $extra, $user  )
+---++ ObjectMethod writeLog( $action, $webTopic, $extra, $user )
    * =$action= - what happened, e.g. view, save, rename
    * =$wbTopic= - what it happened to
    * =$extra= - extra info, such as minor flag
@@ -1322,7 +1323,7 @@ sub _cleanupIncludedHTML {
 
 =pod
 
----++ StaticMethod applyPatternToIncludedText (  $text, $pattern ) -> $text
+---++ StaticMethod applyPatternToIncludedText( $text, $pattern ) -> $text
 
 Apply a pattern on included text to extract a subset
 
@@ -1669,7 +1670,7 @@ sub _webOrTopicList {
         $web = $this->{webName} if( ! $web );
         my $hidden =
           $this->{prefs}->getPreferencesValue( 'NOSEARCHALL', $web );
-        if( ( $web eq $this->{webName}  ) || ( ! $hidden ) ) {
+        if( ( $web eq $this->{webName} ) || ( !$hidden )) {
             @list = $this->{store}->getTopicNames( $web );
         }
     }
@@ -1992,7 +1993,8 @@ sub _processTags {
                     $e = $constantTags{$tag};
                 } elsif ( defined( $functionTags{$tag} )) {
                     $e = &{$functionTags{$tag}}
-                      ( $this, new TWiki::Attrs( $args ), @_ );
+                      ( $this, new TWiki::Attrs(
+                          $args, $contextFreeSyntax{$tag} ), @_ );
                 }
 
                 if ( defined( $e )) {
@@ -2029,7 +2031,7 @@ sub _processTags {
     return $stackTop;
 }
 
-# Handle expansion of a tag (as against preference tags)
+# Handle expansion of an internal tag (as against preference tags)
 # $tag is the tag name
 # $args is the bit in the {} (if there are any)
 # $topic and $web should be passed for dynamic tags (not needed for
@@ -2046,7 +2048,7 @@ sub _expandTag {
     } elsif ( defined( $constantTags{$tag} )) {
         $res = $constantTags{$tag};
     } elsif ( defined( $functionTags{$tag} )) {
-        my $params = new TWiki::Attrs( $args );
+        my $params = new TWiki::Attrs( $args, $contextFreeSyntax{$tag} );
         $res = &{$functionTags{$tag}}( $this, $params, @_ );
     }
 
@@ -2123,8 +2125,11 @@ STATIC Add a tag handler to the function tag handlers.
 =cut
 
 sub registerTagHandler {
-    my ( $tag, $fnref ) = @_;
-    $TWiki::functionTags{$tag} = \&$fnref;
+    my ( $tag, $fnref, $syntax ) = @_;
+    $functionTags{$tag} = \&$fnref;
+    if( $syntax && $syntax eq 'context-free' ) {
+        $contextFreeSyntax{$tag} = 1;
+    }
 }
 
 =pod
