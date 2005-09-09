@@ -45,7 +45,7 @@ sub test_wikiVersionToDistributionName {
 sub test_cairoWikiVersionToDistributionName {
  my $self = shift;
  $self->assert_equals( "TWiki20040901",
-  TWiki::Contrib::DistributionContrib::TWikiReleaseNames::wikiVersionToDistributionName('01 Sep 2004 $Rev: 1742 $') );
+  TWiki::Contrib::DistributionContrib::TWikiReleaseNames::wikiVersionToDistributionName('01 Sep 2004 $Rev$') );
 }
 
 sub Atest_thisFaultsTestUnit {
