@@ -1,11 +1,22 @@
-twikishell
-data/TWiki/TWikiShellContrib.txt
-data/TWiki/CommandSet.txt
-lib/TWiki/Contrib/TWikiShellContrib/*
-lib/TWiki/Contrib/CommandSet/Dump.pm
+data/TWiki/TWikiShellContrib.txt Description
+data/TWiki/CommandSet.txt CommandSets documentation.
+lib/TWiki/Contrib/TWikiShellContrib/Common.pm Common functions
+lib/TWiki/Contrib/TWikiShellContrib/Config.pm TWikiShell configuration object
+lib/TWiki/Contrib/TWikiShellContrib/DirHandling.pm Dir Handling functions
+lib/TWiki/Contrib/TWikiShellContrib/Help.pm Funcions to build help texts for CommandSets    
+lib/TWiki/Contrib/TWikiShellContrib/Standard.pm Standard CommandSet
+lib/TWiki/Contrib/TWikiShellContrib/TWikiShell.pm Main code module
+lib/TWiki/Contrib/TWikiShellContrib/Zip.pm Zip handling functions
 lib/TWiki/Contrib/CommandSet/Apache.pm
-lib/TWiki/Contrib/CommandSet/Apache/*
-lib/TWiki/Contrib/CommandSet/TWiki.pm
-lib/TWiki/Contrib/CommandSet/TWiki/*
-
-
+lib/TWiki/Contrib/CommandSet/Dump.pm 
+lib/TWiki/Contrib/CommandSet/Package.pm 
+lib/TWiki/Contrib/CommandSet/Plugin.pm 
+lib/TWiki/Contrib/CommandSet/RunTest.pm 
+lib/TWiki/Contrib/CommandSet/TWiki.pm 
+lib/TWiki/Contrib/CommandSet/Apache/Conf.pm
+lib/TWiki/Contrib/CommandSet/Apache/Httpd.pm
+lib/TWiki/Contrib/CommandSet/Plugin/Develop.pm
+lib/TWiki/Contrib/CommandSet/Plugin/PutBack.pm
+lib/TWiki/Contrib/CommandSet/RunTest/Conf.pm 
+lib/TWiki/Contrib/CommandSet/TWiki/Conf.pm 
+twikishell

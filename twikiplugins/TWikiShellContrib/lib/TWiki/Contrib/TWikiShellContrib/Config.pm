@@ -50,10 +50,12 @@ sub saveAndDispose {
 sub save {
   my $self=shift;
   use Data::Dumper;
-  
+  my $oldValue=$self->{execute};
+  $self->{execute}='';
   my $data= Data::Dumper->Dump([$self],[qw(config)]);
   open CONFIG,">".$self->{configFileName};
   print CONFIG $data;
   close CONFIG;
+  $self->{execute}=$oldValue;
 }
 1;
