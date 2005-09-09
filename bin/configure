@@ -637,6 +637,14 @@ sub _CHECKVAR_DataDir {
     return $e;
 }
 
+sub _CHECKVAR_LocalesDir {
+    my $e = _findMajorDir('LocalesDir', 'po');
+    my $e2 = _checkTreePerms( $TWiki::cfg{LocalesDir}, "r" );
+    $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{DataDir});
+    $e .= ERROR($e2) if $e2;
+    return $e;
+}
+
 sub _CHECKVAR_MailProgram {
     eval "use Net::SMTP";
     my $n;

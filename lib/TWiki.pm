@@ -176,6 +176,7 @@ BEGIN {
                      TOPICLIST         => \&_TOPICLIST,
                      URLENCODE         => \&_ENCODE,
                      URLPARAM          => \&_URLPARAM,
+                     USERLANGUAGE      => \&_USERLANGUAGE,
                      VAR               => \&_VAR,
                      WEBLIST           => \&_WEBLIST,
                     );
@@ -440,6 +441,7 @@ use TWiki::Store;     # file I/O and rcs related functions
 use TWiki::Templates; # TWiki template language
 use TWiki::Time;      # date/time conversions
 use TWiki::Users;     # user handler
+use TWiki::I18N;      # i18n handler
 
 =pod
 
@@ -978,6 +980,8 @@ sub new {
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
+    # language information
+    $this->{i18n} = new TWiki::I18N( $this );
 
     $this->{users} = new TWiki::Users( $this );
 
@@ -2722,6 +2726,11 @@ sub _RELATIVETOPICPATH {
 sub _ATTACHURLPATH {
     my ( $this, $params, $theTopic, $theWeb ) = @_;
     return nativeUrlEncode( "$TWiki::cfg{PubUrlPath}/$theWeb/$theTopic" );
+}
+
+sub _USERLANGUAGE {
+    my $this = shift;
+    return $this->{i18n}->language();
 }
 
 sub _SCRIPTNAME {

@@ -302,6 +302,12 @@ __Note:__ This topic is included by TWikiVariables
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
+#VarUSERLANGUAGE
+---+++ USERLANGUAGE -- current user's language
+	* Returns the language code for the language used as the current user. This is the used actually used by TWiki Internationalization.
+        * The language is detected from the user's browser, unless some user/web/session setting overrides it.
+	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarUSERNAME][USERNAME]
+
 #VarVAR
 ---+++ VAR{"NAME" web="Web"} -- get a preference value from another web 
 	* Syntax: =%<nop>VAR{"NAME" web="Web"}%=

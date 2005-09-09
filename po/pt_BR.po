@@ -1,0 +1,148 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-09-08 18:51-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# please leave this comment here
+#: templates/twiki.i18n.tmpl:5
+msgid "Log In"
+msgstr "Entrar"
+
+#: templates/twiki.i18n.tmpl:6
+msgid "Log Out"
+msgstr "Sair"
+
+#: templates/twiki.i18n.tmpl:14
+msgid "Back to topic"
+msgstr "Retornar ao tópico"
+
+#: templates/twiki.i18n.tmpl:14
+msgid "&Cancel"
+msgstr "&Cancelar"
+
+#: templates/twiki.i18n.tmpl:146
+msgid "Skip to topic"
+msgstr "Pular para o tópico"
+
+#: templates/twiki.i18n.tmpl:146
+msgid "Skip to bottom"
+msgstr "Pular para o final"
+
+#: templates/view.i18n.tmpl:21
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/view.i18n.tmpl:24 templates/view.i18n.tmpl:30
+msgid "Edit this topic text"
+msgstr "Editar o texto desse tópico"
+
+#: templates/view.i18n.tmpl:27
+msgid "Cr&eate"
+msgstr "Criar(&e)"
+
+#: templates/view.i18n.tmpl:28
+msgid "&Edit"
+msgstr "&Editar"
+
+#: templates/view.i18n.tmpl:32
+msgid "Attach"
+msgstr "Anexar"
+
+#: templates/view.i18n.tmpl:33
+msgid "Attach an image or document to this topic"
+msgstr "Anexar uma imagem ou documento a este tópico"
+
+#: templates/view.i18n.tmpl:33
+msgid "&Attach"
+msgstr "&Anexar"
+
+#: templates/view.i18n.tmpl:35
+msgid "More topic actions..."
+msgstr "Mais ações de tópico..."
+
+#: templates/view.i18n.tmpl:36
+msgid ""
+"Delete or rename this topic; set parent topic; view and compare revisions"
+msgstr ""
+"Apagar ou remover este tópico; alterar tópico pai; ver e comparar revisões"
+
+#: templates/view.i18n.tmpl:36
+msgid "&More topic actions"
+msgstr "&Mais ações de tópico"
+
+#: templates/view.i18n.tmpl:38
+msgid "You are here"
+msgstr "Você está aqui"
+
+#: templates/view.i18n.tmpl:43 templates/view.i18n.tmpl:65
+msgid "Printable version of this topic"
+msgstr "Versão imprimível deste tópico"
+
+#: templates/view.i18n.tmpl:43 templates/view.i18n.tmpl:65
+msgid "&Printable"
+msgstr "Im&primível"
+
+#: templates/view.i18n.tmpl:55 templates/view.i18n.tmpl:58
+msgid "Skip to actions"
+msgstr "Pular para ações"
+
+#: templates/view.i18n.tmpl:58
+msgid "End of topic"
+msgstr "Final do tópico"
+
+#: templates/view.i18n.tmpl:58
+msgid "Back to top"
+msgstr "Retornar ao topo"
+
+#: templates/view.i18n.tmpl:65
+msgid "View raw text without formatting"
+msgstr "Ver texto puro sem formatação"
+
+#: templates/view.i18n.tmpl:65
+msgid "&Raw text"
+msgstr "Texto pu&ro"
+
+#: templates/view.i18n.tmpl:65
+msgid "Backlinks"
+msgstr "Referências"
+
+#: templates/view.i18n.tmpl:65
+msgid "Search the <nop>%WEB% Web for topics that link to here"
+msgstr "Procurar na web <nop>%WEB% por tópicos que façam link pra cá"
+
+#: templates/view.i18n.tmpl:65
+msgid "&Web"
+msgstr "&Web"
+
+#: templates/view.i18n.tmpl:65
+msgid "Search all webs for topics that link to here"
+msgstr "Procurar em todas as webs por tópicos que façam link pra cá"
+
+#: templates/view.i18n.tmpl:65
+msgid "A&ll Webs"
+msgstr "Todas (&l)"
+
+#: templates/view.i18n.tmpl:65
+msgid "Version"
+msgstr "Versão"
+
+#: templates/view.i18n.tmpl:65
+msgid "View total topic history"
+msgstr "Ver histórico completo do tópico"
+
+#: templates/view.i18n.tmpl:65
+msgid "&History"
+msgstr "&Histórico"

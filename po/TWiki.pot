@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-09-08 18:51-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/twiki.i18n.tmpl:5
+msgid "Log In"
+msgstr ""
+
+#: templates/twiki.i18n.tmpl:6
+msgid "Log Out"
+msgstr ""
+
+#: templates/twiki.i18n.tmpl:14
+msgid "Back to topic"
+msgstr ""
+
+#: templates/twiki.i18n.tmpl:14
+msgid "&Cancel"
+msgstr ""
+
+#: templates/twiki.i18n.tmpl:146
+msgid "Skip to topic"
+msgstr ""
+
+#: templates/twiki.i18n.tmpl:146
+msgid "Skip to bottom"
+msgstr ""
+
+#: templates/view.i18n.tmpl:21
+msgid "Edit"
+msgstr ""
+
+#: templates/view.i18n.tmpl:24 templates/view.i18n.tmpl:30
+msgid "Edit this topic text"
+msgstr ""
+
+#: templates/view.i18n.tmpl:27
+msgid "Cr&eate"
+msgstr ""
+
+#: templates/view.i18n.tmpl:28
+msgid "&Edit"
+msgstr ""
+
+#: templates/view.i18n.tmpl:32
+msgid "Attach"
+msgstr ""
+
+#: templates/view.i18n.tmpl:33
+msgid "Attach an image or document to this topic"
+msgstr ""
+
+#: templates/view.i18n.tmpl:33
+msgid "&Attach"
+msgstr ""
+
+#: templates/view.i18n.tmpl:35
+msgid "More topic actions..."
+msgstr ""
+
+#: templates/view.i18n.tmpl:36
+msgid ""
+"Delete or rename this topic; set parent topic; view and compare revisions"
+msgstr ""
+
+#: templates/view.i18n.tmpl:36
+msgid "&More topic actions"
+msgstr ""
+
+#: templates/view.i18n.tmpl:38
+msgid "You are here"
+msgstr ""
+
+#: templates/view.i18n.tmpl:43 templates/view.i18n.tmpl:65
+msgid "Printable version of this topic"
+msgstr ""
+
+#: templates/view.i18n.tmpl:43 templates/view.i18n.tmpl:65
+msgid "&Printable"
+msgstr ""
+
+#: templates/view.i18n.tmpl:55 templates/view.i18n.tmpl:58
+msgid "Skip to actions"
+msgstr ""
+
+#: templates/view.i18n.tmpl:58
+msgid "End of topic"
+msgstr ""
+
+#: templates/view.i18n.tmpl:58
+msgid "Back to top"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "View raw text without formatting"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "&Raw text"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "Backlinks"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "Search the <nop>%WEB% Web for topics that link to here"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "&Web"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "Search all webs for topics that link to here"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "A&ll Webs"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "Version"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "View total topic history"
+msgstr ""
+
+#: templates/view.i18n.tmpl:65
+msgid "&History"
+msgstr ""

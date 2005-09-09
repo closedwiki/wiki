@@ -150,7 +150,7 @@ Examples:
 You can see the HTTP headers your browser sends to the server on a number
 of sites e.g. http://www.ericgiguere.com/tools/http-header-viewer.html
 
-#VarHTTP
+#VarHTTPS
 ---+++ HTTPS -- get HTTPS headers
 	* Syntax: =%<nop>HTTPS%=
 	* Syntax: =%<nop>HTTPS{'Header-name'}%=

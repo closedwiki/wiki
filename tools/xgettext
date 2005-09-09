@@ -1,0 +1,70 @@
+#!/usr/bin/perl
+
+use strict;
+
+# force the use from 
+-d 'bin' and -d "lib" and -d 'tools' and -d 'templates' or die("Certify yourself to run this utility from the root directory of TWiki sources!");
+
+# config
+my $localesDir = "po";
+my $potfile = "${localesDir}/TWiki.pot";
+my $newpotfile = $potfile . '.new';
+my $sources_listing = "sources.in";
+
+#create header of new potfilew
+system("echo | xgettext --force-po --language=Perl --output=$newpotfile -"); #empty potfile
+
+# extract strings from the source code and append to the new potfile
+my $bin = "find bin/* -name '[a-z]*'";
+my $lib = "find lib -name '*.pm'";
+system("($bin && $lib) > $sources_listing");
+system("xgettext --omit-header --force-po --language=Perl --keyword=_ --keyword=translate -f $sources_listing -o $newpotfile.sources");
+system("cat $newpotfile.sources >> $newpotfile"); # add sources' strings
+print("I: source strings extracted and appended.\n");
+
+# extract strings from the templates and create potfile
+my @templates = `find templates/*`;
+open(OUT,'>>',$newpotfile);
+foreach (@templates) {
+
+  my $lineno = 0;
+  my $file = $_;
+  chomp($file);
+  
+  open(IN, $file);
+  my @text = <IN>;
+  
+  foreach (@text) {
+    $lineno++;
+    while (m/%(TMPL:GETTEXT|_)\{"([^"]*)"\}%/gm) {
+      print OUT "#: $file:$lineno\nmsgid \"$2\"\nmsgstr \"\"\n\n";
+    }
+  }
+  close(IN);
+}
+close(OUT);
+print ("I: template strings extracted and appended.\n");
+
+#unify duplicates:
+system("cp $newpotfile $newpotfile.orig && ( cat $newpotfile.orig | sed -e 's/CHARSET/UTF-8/' | msguniq --output=$newpotfile - ) && rm -f $newpotfile.orig"); 
+print("I: unified strings.\n");
+
+# merge with $potfile if it already exists, copy to it otherwise
+if (-e "$potfile") {
+  print("W: merging generated potfile with existing one ($potfile)\n");
+  system("msgmerge --update $potfile $newpotfile");
+} else {
+  system("cp $newpotfile $potfile");
+}
+
+# merge with existing translations:
+my @translations = `find ${localesDir}/ -name '*.po'`;
+foreach my $translation (@translations) {
+  chomp($translation);
+  print("I: Merging $potfile into $translation.\n");
+  system("msgmerge --update $translation $potfile");
+}
+
+# cleanup after generating base POT
+print("I: Removing intermediate files\n");
+system("rm -f $sources_listing $newpotfile $newpotfile.sources");
