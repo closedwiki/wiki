@@ -74,7 +74,7 @@ sub test_formQuery {
   my $this = shift;
   my $db = $this->{db};
 
-  my $res = $db->formQuery("TEST", "name=fred search=\"topic='Dir1'\"");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"topic='Dir1'\"", 1));
 
   $this->assert_str_equals("", $res);
   my $qr = $db->{_queries}{fred};
@@ -98,23 +98,23 @@ sub test_formQuery {
 sub test_queryGoes {
   my $this = shift;
   my $db = $this->{db};
-  my $res = $db->formQuery("TEST", "name=fred search=\"name='Dir1'\"");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir1'\"", 1));
   $this->assert_str_equals("", $res);
-  $res = $db->formQuery("TEST", "name=fred search=\"name='Dir99'\"");
+  $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir99'\"", 1));
   $this->assert_null($db->{_queries}{fred});
 }
 
 sub test_badFQ {
   my $this = shift;
   my $db = $this->{db};
-  my $res = $db->formQuery("TEST", "search=\"name='Dir1'\"");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("search=\"name='Dir1'\"", 1));
   $this->assert_str_equals("OK", $res) if ($res !~ m/\'name\' not defined/);
 
-  $res = $db->formQuery("TEST", "name=fred search=\"name='Dir1\"");
+  $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir1\"", 1));
   $this->assert_str_equals("OK", $res) if ($res !~ m/invalid search/);
-  $res = $db->formQuery("TEST", "name=fred search=\"topic='Dir75'\"");
+  $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"topic='Dir75'\"", 1));
   $this->assert_str_equals("OK", $res) if ($res !~ m/no values/i);
-  $res = $db->formQuery("TEST", "name=fred search=\"name='Dir75'\" moan=off");
+  $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir75'\" moan=off", 1));
   $this->assert_str_equals("", $res);
 }
 
@@ -122,14 +122,14 @@ sub noest_extractOnEmpty {
   my $this = shift;
   my $db = $this->{db};
 
-  my $res = $db->formQuery("TEST", "name=fred search=\"name='NonExistant'\" extract=FileTable moan=off");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='NonExistant'\" extract=FileTable moan=off", 1));
   $this->assert_str_equals("", $res);
 }
 
 sub test_extractRef {
   my $this = shift;
   my $db = $this->{db};
-  my $res = $db->formQuery("TEST", "name=smee search=\"topic='Dir1_1'\" extract=subdir_of");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("name=smee search=\"topic='Dir1_1'\" extract=subdir_of", 1));
   $this->assert_str_equals("", $res);
   my $dir = $db->{_queries}{smee}->get(0);
   $this->assert_str_equals("Dir1",$dir->get("topic"));
@@ -139,11 +139,11 @@ sub test_tables {
   my $this = shift;
   my $db = $this->{db};
 
-  my $res = $db->formQuery("TEST", "name=fred search=\"name='Dir1'\"");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir1'\"", 1));
   $this->assert_str_equals("", $res);
   my $dir = $db->{_queries}{fred}->get(0);
 
-  $res = $db->formQuery("TEST", "name=fred search=\"name='Dir1'\" extract=DirTable");
+  $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir1'\" extract=DirTable", 1));
   $this->assert_str_equals("", $res);
 
   my $table = $db->{_queries}{fred};
@@ -158,7 +158,7 @@ sub test_tables {
   }
   $this->assert_str_equals("", $list);
 
-  $res = $db->formQuery("TEST", "name=joe query=fred search=\"Date LATER_THAN '9-sep-2001'\"");
+  $res = $db->formQuery("TEST", new TWiki::Attrs("name=joe query=fred search=\"Date LATER_THAN '9-sep-2001'\"", 1));
   $this->assert_str_equals("", $res);
   my $qr = $db->{_queries}{joe};
   $this->assert_equals(2, $qr->size());
@@ -167,9 +167,9 @@ sub test_tables {
 sub test_sumQuery {
   my $this = shift;
   my $db = $this->{db};
-  my $res=$db->formQuery("TEST", 'name=fred search="" extract=FileTable');
+  my $res=$db->formQuery("TEST", new TWiki::Attrs('name=fred search="" extract=FileTable', 1));
   $this->assert_str_equals("", $res);
-  my $sum = $db->sumQuery("TEST","query=fred field=Size");
+  my $sum = $db->sumQuery("TEST",new TWiki::Attrs("query=fred field=Size", 1));
 
   $this->assert_equals($truesum, $sum);
 }
@@ -177,11 +177,11 @@ sub test_sumQuery {
 sub test_tableFormat {
   my $this = shift;
   my $db = $this->{db};
-  my $res = $db->tableFormat("TEST", "name=TF header=\"| *Name* | *Level* |\" format=\"|\$RealName|\$Level|\" sort=\"Level,RealName\"");
+  my $res = $db->tableFormat("TEST", new TWiki::Attrs("name=TF header=\"| *Name* | *Level* |\" format=\"|\$RealName|\$Level|\" sort=\"Level,RealName\"", 1));
   $this->assert_str_equals("", $res);
-  $res = $db->formQuery("TEST", "name=fred search=\"name='.*'\"");
+  $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='.*'\"", 1));
   my $qr = $db->{_queries}{fred};
-  $res = $db->showQuery("TEST", "query=fred format=TF");
+  $res = $db->showQuery("TEST", new TWiki::Attrs("query=fred format=TF", 1));
   $this->assert_str_equals("OK", $res) unless ( $res =~ /^<table/);
 }
 
@@ -189,7 +189,7 @@ sub test_createNewTopic1 {
   my $this = shift;
   my $db = $this->{db};
 
-  my $res = $db->createNewTopic("TEST", "relation=subdir text=Blah form=DirForm template=FileTemplate", $testweb, "Dir1");
+  my $res = $db->createNewTopic("TEST", new TWiki::Attrs("relation=subdir text=Blah form=DirForm template=FileTemplate", $testweb, "Dir1", 1));
 
   $this->assert_str_equals("<form name=\"topiccreator0\" action=\"%SCRIPTURL%/autocreate/$testweb/Dir1\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"subdir\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
 
@@ -198,7 +198,7 @@ sub test_createNewTopic1 {
   $res = $db->deriveNewTopic( "copy", "Dir1");
   $this->assert_str_equals("Dir\n", $res);
 
-  $res = $db->createNewTopic("TEST", "base=Dir75 relation=copy text=Blah form=DirForm template=FileTemplate", $testweb, "TestTopic");
+  $res = $db->createNewTopic("TEST", new TWiki::Attrs("base=Dir75 relation=copy text=Blah form=DirForm template=FileTemplate", $testweb, "TestTopic", 1));
 
   $this->assert_str_equals("<form name=\"topiccreator1\" action=\"%SCRIPTURL%/autocreate/$testweb/Dir75\"><input type=\"submit\" value=\"Blah\" /><input type=\"hidden\" name=\"relation\" value=\"copy\" /><input type=\"hidden\" name=\"formtemplate\" value=\"DirForm\" /><input type=\"hidden\" name=\"templatetopic\" value=\"FileTemplate\" /></form>", $res);
 }
@@ -207,7 +207,7 @@ sub test_checkTableParse {
   my $this=shift;
   my $db = $this->{db};
   # Dir1_1 is formatted with \ in the table
-  my $res = $db->formQuery("TEST", "name=fred search=\"name='Dir1_1'\" extract=FileTable");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir1_1'\" extract=FileTable", 1));
   $this->assert_str_equals("", $res);
   my $qr = $db->{_queries}{fred};
   $this->assert_equals(26, $qr->size());
@@ -217,14 +217,14 @@ sub test_fieldSum {
   my $this = shift;
   my $db = $this->{db};
 
-  my $res = $db->formQuery("TEST", "name=fred search=\"name='Dir1_2'\"");
+  my $res = $db->formQuery("TEST", new TWiki::Attrs("name=fred search=\"name='Dir1_2'\"", 1));
   $this->assert_str_equals("", $res);
 
-  $res = $db->tableFormat("TEST", "name=TF header=\"\" format=\"\$FileTable.Size\"");
+  $res = $db->tableFormat("TEST", new TWiki::Attrs("name=TF header=\"\" format=\"\$FileTable.Size\"", 1));
   $this->assert_str_equals("", $res);
 
   my $qr = $db->{_queries}{fred};
-  $res = $db->showQuery("TEST", "query=fred format=TF");
+  $res = $db->showQuery("TEST", new TWiki::Attrs("query=fred format=TF", 1));
 
   my $truesum = 163+709+281+691+417+987+283+466+942+686+2060+163+280+124+2597+56+729+3146+158+850+572+803+332;
 
@@ -234,8 +234,8 @@ sub test_fieldSum {
 my $bmdb;
 
 sub bmFn {
-  $bmdb->formQuery("TEST", "name=q1 search=\"name='Dir\\d_\\d'\" extract=FileTable");
-  $bmdb->formQuery("TEST", "name=q2 query=q1 search=\"Type='text'\"");
+  $bmdb->formQuery("TEST", new TWiki::Attrs("name=q1 search=\"name='Dir\\d_\\d'\" extract=FileTable", 1));
+  $bmdb->formQuery("TEST", new TWiki::Attrs("name=q2 query=q1 search=\"Type='text'\"", 1));
 }
 
 sub dont_test_benchmarkFormQuery {

@@ -15,20 +15,18 @@ package TWiki::Plugins::FormQueryPlugin::ReqDBSupport;
 
 # Calculate number of working days between two dates.
 sub workingDays {
-    my ( $macro, $params, $web, $topic ) = @_;
+    my ( $macro, $attrs, $web, $topic ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params, 1 );
-
-    my $start = $attrs->fastget( "start" );
+    my $start = $attrs->{start};
     $start = Time::ParseDate::parsedate( $start );
     if ( !defined( $start )) {
-        return  TWiki::Plugins::FormQueryPlugin::WebDB::moan( $macro, $params, "'start' not defined, or bad date format", 0 );
+        return  TWiki::Plugins::FormQueryPlugin::WebDB::moan( $macro, $attrs, "'start' not defined, or bad date format", 0 );
     }
 
-    my $end = $attrs->fastget( "end" );
+    my $end = $attrs->{end};
     $end = Time::ParseDate::parsedate( $end );
     if ( !defined( $end )) {
-        return  TWiki::Plugins::FormQueryPlugin::WebDB::moan( $macro, $params, "'end' not defined, or bad date format", 0 );
+        return  TWiki::Plugins::FormQueryPlugin::WebDB::moan( $macro, $attrs, "'end' not defined, or bad date format", 0 );
     }
 
     return TWiki::Contrib::DBCacheContrib::Search::workingDays( $start, $end );
@@ -41,20 +39,17 @@ sub workingDays {
 # If target and actual are the same, or actual isn't defined, works like
 # a standard progress bar.
 sub progressBar {
-    my ( $macro, $params, $web, $topic ) = @_;
-    $params = TWiki::Func::expandCommonVariables( $params, "NoTopic", $web );
+    my ( $macro, $attrs, $web, $topic ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params, 1 );
-
-    my $total = $attrs->fastget( "total" );
+    my $total = $attrs->{total};
     if ( !defined( $total ) || $total <= 0 ) {
-        return  TWiki::Plugins::FormQueryPlugin::WebDB::moan( $macro, $params, "'total' not defined, or is <= zero", 0 );
+        return  TWiki::Plugins::FormQueryPlugin::WebDB::moan( $macro, $attrs, "'total' not defined, or is <= zero", 0 );
     }
 
-    my $target = $attrs->fastget( "target" );
-    my $actual = $attrs->fastget( "actual" );
+    my $target = $attrs->{target};
+    my $actual = $attrs->{actual};
     if ( !defined( $target ) && !defined( $actual )) {
-        return moan( $macro, $params, "At least one of 'target' or 'actual must be defined", 0 );
+        return moan( $macro, $attrs, "At least one of 'target' or 'actual must be defined", 0 );
     }
 
     $actual = $target unless ( defined( $actual ));
@@ -63,7 +58,7 @@ sub progressBar {
     if ( $actual !~ m/^\s*\d+/o &&
            $target !~ m/^\s*\d+/o &&
              $total !~ m/^\s*\d+/o ) {
-        return moan( $macro, $params, "One of the parameters was non-numeric", 0 );
+        return moan( $macro, $attrs, "One of the parameters was non-numeric", 0 );
     }
 
     my $tp = int(0.5 + 100 * $target / $total);
