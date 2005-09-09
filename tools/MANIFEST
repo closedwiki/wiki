@@ -317,6 +317,7 @@ lib/TWiki/Compatibility.pm
 lib/TWiki/Data/DelimitedFile.pm
 lib/TWiki/Form.pm
 lib/TWiki/Func.pm
+lib/TWiki/I18N.pm
 lib/TWiki/Merge.pm
 lib/TWiki/Meta.pm
 lib/TWiki/Net.pm
