@@ -15,7 +15,7 @@ use vars qw {$VERSION $config $prefix $prefixPath};
 
 $VERSION = "2.00";
 
-my @standardModules =qw (TWiki::Contrib::TWikiShellContrib::Standard);
+my @systemModules =qw (TWiki::Contrib::TWikiShellContrib::Standard);
 
 
 $prefix= "TWiki::Contrib::CommandSet";
@@ -52,8 +52,8 @@ sub init_handlers {
    my $self=shift;
    my $config=shift;
    
-   foreach my $standardModule (@standardModules) {
-      $self->find_handlers($standardModule);
+   foreach my $systemModule (@systemModules) {
+      $self->find_handlers($systemModule);
    }
 }
 
@@ -432,31 +432,45 @@ sub classExists {
 
 sub discover {
    my ($self,$config)=@_;
+
+   #DIRTY HACK: "Discover" CommandSet::TWiki before the rest.
+   # The proper solution is to define dependencies between CommandSets
+   foreach my $libDir ( @INC ) {
+       if (-f "$libDir/$prefixPath/TWiki.pm") {
+           $self->_discover($config,'TWiki');
+       }
+   }
    foreach my $libDir ( @INC ) {
       if( opendir( DIR, "$libDir/$prefixPath" ) ) {
          foreach my $file (grep { /\.pm$/ } readdir DIR ) {
             $self->printVeryVerbose("Found CommandSet $file\n");
             $file=~ s/\.pm//;
-            my $module=$prefix.'::'.$file;
-            my $method=$module.'::onImport';
-            $self->printVeryVerbose("Trying to initialize CommandSet $file using $method\n");
-            no strict 'refs';
-            eval("require $module");
-            if ($@) {
-               $self->printVerbose("Error Initializing CommandSet $module:\n$@\n");
-            } else {
-               if (defined &$method) {
-                  &$method($self,$config);
-                  $self->printVeryVerbose("CommandSet $file initialized\n");
-               } else {
-                  $self->printVeryVerbose("CommandSet $file don't have an onImport method\n");
-               }
-               $self->importCommand($config,$module);
-            }
-            use strict 'refs';
+            $self->_discover($config,$file);
          }
       }
    }
+}
+
+sub _discover {
+    my ($self,$config,$file)=@_;
+    
+    my $module=$prefix.'::'.$file;
+    my $method=$module.'::onImport';
+    $self->printVeryVerbose("Trying to initialize CommandSet $file using $method\n");
+    no strict 'refs';
+    eval("require $module");
+    if ($@) {
+       $self->printVerbose("Error Initializing CommandSet $module:\n$@\n");
+    } else {
+       if (defined &$method) {
+          &$method($self,$config);
+          $self->printVeryVerbose("CommandSet $file initialized\n");
+       } else {
+          $self->printVeryVerbose("CommandSet $file don't have an onImport method\n");
+       }
+       $self->importCommand($config,$module);
+    }
+    use strict 'refs';
 }
 
 1;

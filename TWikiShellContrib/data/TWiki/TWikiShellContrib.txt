@@ -114,6 +114,12 @@ will try to create the following directories if they don't exist:
 /pub/SomeDir
 </verbatim>
 
+---++ TWiki::Contrib::TWikiShellContrib::Help
+
+---+++ assembleHelp(\%doco,@order) -> $helpText
+
+Assembles a help text from the provided hash (to be continued)
+
 
 ---+ Contrib Info
 

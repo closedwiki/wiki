@@ -3,10 +3,23 @@ package TWiki::Contrib::TWikiShellContrib::Zip;
 use Exporter;
 
 @ISA=(Exporter);
-@EXPORT=qw(checkUnzipMechanism unzip);
+@EXPORT=qw(checkUnzipMechanism unzip zip);
 
 use strict;
 
+
+sub zip {
+   my ($config,$zipName,@files)=@_;
+   print 'Zipping to File '.$zipName."\n";
+   foreach my $file (@files) {
+      my $cmd="zip -u -v $zipName $file";
+      `$cmd`;
+   }
+#    if ($config->{ZIP}{useArchiveZip}) {
+#    } else{
+#
+#    }
+}
 
 sub unzip {
     my ($config,$sourceFile,$destDir)=@_;

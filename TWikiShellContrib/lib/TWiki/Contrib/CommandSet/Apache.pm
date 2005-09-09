@@ -12,6 +12,24 @@ sub run_add {
     addInstallToApacheConfig(@_);
 }
 
+sub help_delete {
+    return 'Not implemented';
+}
+
+sub help_add {
+    return 'Not implemented';
+}
+
+
+sub smry_delete {
+    return 'Not implemented';
+}
+
+sub smry_add {
+    return 'Not implemented';
+}
+
+
 sub onImport {
     configure(@_);
 }
