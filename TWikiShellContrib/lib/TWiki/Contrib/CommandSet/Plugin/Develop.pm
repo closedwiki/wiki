@@ -88,7 +88,7 @@ sub _processDir {
          makepath($currentTargetDir.'/'.$entry);
          $shell->printVerbose('copying '.$entry.' to '. $currentTargetDir."\n");
          my $targetEntry=$currentTargetDir.'/'.$entry;
-         copy($src, $targetEntry) || warn "Warning: Failed to copy $from to $to: $!";
+         copy($src, $targetEntry) || warn "Warning: Failed to copy $src to $currentTargetDir: $!";
          
          push (@files,$targetEntry);
       } else {                                 

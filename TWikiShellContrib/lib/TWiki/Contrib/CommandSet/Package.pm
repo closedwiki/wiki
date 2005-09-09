@@ -60,6 +60,8 @@ sub run {
 #    my @toZip=map {$srcDir.'/'.$_->{name}} @{$files};
    foreach my $fileData (@{$files}) {
       my $file=$fileData->{name};
+      next if $file =~ /\.svn/;
+
 
       if ($file =~ /(.*)\/\*/) {
          handleDir($srcDir,$tmpDir,$1);
@@ -91,7 +93,10 @@ sub handleFile {
 
 sub handleDir {
    my ($srcDir,$tmpDir,$dir)=@_;
+   
+   return if $dir =~ /\.svn/;
    print "processing $dir\n";
+
    if( opendir( DIR, "$srcDir/$dir" ) ) {
 #       foreach my $file (grep {/\.(txt|pm)/} readdir DIR ) {
        foreach my $file (readdir DIR ) {
@@ -101,7 +106,7 @@ sub handleDir {
             handleDir($srcDir,$tmpDir,"$dir/$file");
          }
          
-      }
+      }                
    }
 }
 
