@@ -90,4 +90,4 @@ foreach my $translation (@translations) {
 
 # cleanup after generating base POT
 print("I: Removing intermediate files\n");
-#system("rm -f $sources_listing $newpotfile $newpotfile.sources");
+system("rm -f $sources_listing $newpotfile $newpotfile.sources");
