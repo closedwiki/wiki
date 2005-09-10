@@ -420,14 +420,13 @@ sub _isConvertableTableRow {
         }
         return 0 if( $flags & $WC::BLOCK_TML );
         if( $kid->{attrs} ) {
-            if( $kid->{attrs}->{align} ) {
-                if( $kid->{attrs}->{align} eq 'left' ) {
-                    $text .= '  ';
-                } elsif( $kid->{attrs}->{align} eq 'right' ) {
-                    $text = '  '.$text;
-                } elsif( $kid->{attrs}->{align} eq 'center' ) {
-                    $text = '  '.$text.'  ';
-                }
+            my $a = _deduceAlignment( $kid );
+            if( $a eq 'left' ) {
+                $text .= '  ';
+            } elsif( $a eq 'right' ) {
+                $text = '  '.$text;
+            } elsif( $a eq 'center' ) {
+                $text = '  '.$text.'  ';
             }
             if( $kid->{attrs}->{rowspan} && $kid->{attrs}->{rowspan} > 1 ) {
                 return 0;
@@ -436,6 +435,24 @@ sub _isConvertableTableRow {
         push( @row, $text );
     }
     return \@row;
+}
+
+sub _deduceAlignment {
+    my $td = shift;
+
+    if( $td->{attrs}->{align} ) {
+        return lc( $td->{attrs}->{align} );
+    } else {
+        if( $td->{attrs}->{style} &&
+              $td->{attrs}->{style} =~ /text-align\s*:\s*(left|right|center)/ ) {
+            return $1;
+        }
+        if( $td->{attrs}->{class} &&
+              $td->{attrs}->{class} =~ /align-(left|right|center)/ ) {
+            return $1;
+        }
+    }
+    return 'left';
 }
 
 # convert a heading tag
@@ -453,6 +470,7 @@ sub _emphasis {
     my( $flags, $contents ) = $this->_flatKids( $options | $WC::NO_BLOCK_TML );
     return ( 0, undef ) if( !defined( $contents ) || ( $flags & $WC::BLOCK_TML ));
     $contents = _trim( $contents );
+    return (0, undef) if( $contents =~ /^</ || $contents =~ />$/ );
     return (0, '') unless( $contents =~ /\S/ );
     return ( $flags, $WC::CHECKw.$ch.$contents.$ch.$WC::CHECKw );
 }
@@ -581,7 +599,7 @@ sub _handleA {
         my $topic;
         if( $href =~ /^(\w+\.)?\w+$/s ) {
             $topic = $href;
-        } else {
+        } elsif( $this->{context} && $this->{context}->{parseWikiUrl} ) {
             $topic = &{$this->{context}->{parseWikiUrl}}( $href );
         }
         my $nop = ($options & $WC::NOP_ALL) ? '<nop>' : '';
@@ -730,6 +748,10 @@ sub _handleTABLE {
 
 sub _handleIMG {
     my( $this, $options ) = @_;
+
+    return (0, undef) unless $this->{context} &&
+      $this->{context}->{convertImage};
+
     my $alt = &{$this->{context}->{convertImage}}( $this->{attrs}->{src} );
     if( $alt ) {
         return (0, " $alt ");

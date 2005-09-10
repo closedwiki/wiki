@@ -6,15 +6,6 @@ A WYSIWYG (What-You-See-Is-What-You-Get) editor.
 
 The editor is built on a generic framework that supports editing of TWiki topics using any browser-based HTML editor and the import of HTML from external sources such as existing web pages.
 
-%RED% WARNING: this is a what-you-see-is-all-you-get, Beta release with the following known problems:
-	* No way to add form or change form
-	* No way to force a new revision on save
-	* Images cannot be resized
-	* Overlapping TWiki styles don't work very well
-	* No help information
-Feedback is very welcome - please add to the TWiki:Plugins.WysiwygPluginDev topic.
-%ENDCOLOR%
-
 %TOC%
 
 ---++ Features
@@ -67,6 +58,15 @@ my $html = $txer->convert( "---++ TML text\n   Some TWiki syntax" );
 my $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
 my $tml = $html2tml->convert( $html );
 </verbatim>
+
+---++ Known problems
+Some of the following known problems apply to the Kupu editor or the browser rather than this plugin - they have been marked as such.
+	* Overlapping styles don't work very well (WysiwygPlugin)
+	* Images cannot be resized (Kupu)
+	* Can't *undo* all functions (Kupu)
+	* Images cannot be resized (Kupu)
+	* Incompatible with TWiki::Plugins.MathModePlugin and TWiki::Plugins.LatexModePlugin (WysiwygPlugin)
+
 
 ---++ Plugin Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
