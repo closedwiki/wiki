@@ -4,6 +4,8 @@
 # Crawford Currie
 # Copyright (C) TWikiContributors, 2005
 
+use strict;
+
 BEGIN {
     use File::Spec;
 
@@ -73,6 +75,7 @@ use TWiki::Contrib::Build;
     print 'last Release is being put in '.$lastReleaseDir."\n";
     `svn co http://svn.twiki.org:8181/svn/twiki/tags/twiki-20040902-release/ .`;
 
+#TODO: and pub dir too!!
     $this->cd($this->{tmpDir}.'/data');
     #foreach web
     opendir(DATADIR, '.');
@@ -85,18 +88,33 @@ use TWiki::Contrib::Build;
         my $topic;
         while ($topic = readdir(WEBDIR)) {
             unless ($topic =~ /.*\.txt$/) {next;} #consider only topics
-#            print "\tfound topic: $topic\n";
+            print "-------\tfound topic: $topic\n";
 
-#TODO: need to update the META"TOPICINFO with the correct verion number :(
-
+            my $currentRevision = 1;
     		if ( -e $lastReleaseDir.'/data/'.$web.'/'.$topic.',v' ) {
                 $this->cp($lastReleaseDir.'/data/'.$web.'/'.$topic.',v', $web);
                 `rcs -u -M $web/$topic,v`;
                 `rcs -l $web/$topic`;
+
+                my ($rcsInfo) = "rlog -r  $web/$topic";
+#                print $rcsInfo."\n";
+                $rcsInfo = `$rcsInfo`;
+#                print $rcsInfo;
+                if ( $rcsInfo =~ /revision \d+\.(\d+)/ ) {     #revision 1.2
+                    $currentRevision = $1;
+#                    print 'existing topic: (rev = '.$currentRevision.') '.$web.'/'.$topic."\n";
+                } else {
+#                    print "=========\n$rcsInfo\n=======\n";
+                    die 'failed to get revision: '.$web.'/'.$topic."\n";
+                }
             } else {
-                #create rsc file, and ci
+                #create rcs file, and ci
                 print 'new topic: '.$web.'/'.$topic."\n";
             }
+#TODO: need to update the META"TOPICINFO with the correct verion number :(
+            my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$web.'/'.$topic;
+            `$cmd`;
+
             `ci -mbuildrelease -t-new-topic $web/$topic`;
             `co -u -M $web/$topic`;
 		}
@@ -108,7 +126,7 @@ use TWiki::Contrib::Build;
 }
 
 # Create the build object
-$build = new TWikiBuild();
+my $build = new TWikiBuild();
 
 # Build the target on the command line, or the default target
 $build->build($build->{target});
