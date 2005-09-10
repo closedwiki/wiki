@@ -47,8 +47,9 @@ sub initPlugin {
     $currentWeb = $web;
     $calledThisSession = 0;
 
-    TWiki::Func::getContext()->{WysiwygPluginEnabled} = 1;
-
+    if( defined( &TWiki::Func::getContext )) {
+        TWiki::Func::getContext()->{WysiwygPluginEnabled} = 1;
+    }
     # Plugin correctly initialized
     return 1;
 }
@@ -147,9 +148,13 @@ sub getViewUrl {
 sub parseWikiUrl {
     my $url = shift;
     my( $web, $topic);
+
+    $url =~ s/([#\?].*)$//;
+    my $anchor = $1 || '';
+
     if( $url =~ /^(\w+\.)?\w+$/ ) {
-        ( $web, $topic) = TWiki::Func::normaliseWebTopicName(undef, $url);
-        return $web.'.'.$topic;
+        ( $web, $topic) = TWiki::Func::normalizeWebTopicName(undef, $url);
+        return $web.'.'.$topic . $anchor;
     }
     my $aurl = TWiki::Func::getViewUrl('WEB', 'TOPIC');
     $aurl =~ s!WEB/TOPIC.*$!!;
@@ -160,6 +165,8 @@ sub parseWikiUrl {
     $url = substr($url,length($aurl),length($url));
     return undef unless $url =~ /^(\w+)[.\/](\w+)$/;
     ( $web, $topic) = ($1, $2);
+
+    $topic .= $anchor;
 
     return $topic if( $web eq $currentWeb);
     return $web.'.'.$topic;

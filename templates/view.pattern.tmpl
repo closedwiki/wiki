@@ -21,7 +21,7 @@
 %TMPL:DEF{"inactive_edit"}%<strike>%TMPL:P{"i18n:edit"}%</strike>%TMPL:END%
 
 %TMPL:DEF{wysiwyg}%
-%TMPL:P{"sep"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title="%TMPL:P{"i18n:Tooltip-edit"}%">Wysiwyg</a>
+%TMPL:P{"sep"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu,pattern" rel="nofollow" title="%TMPL:P{"i18n:Tooltip-edit"}%">Wysiwyg</a>
 %TMPL:END%
 
 %TMPL:DEF{"active_edit"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title="%TMPL:P{"i18n:Tooltip-edit"}%" accesskey="%TMPL:P{"i18n:AccessKey-edit"}%">%TMPL:P{context="new_topic" then="i18n:Tab-create" else="i18n:Tab-edit"}%</a>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%

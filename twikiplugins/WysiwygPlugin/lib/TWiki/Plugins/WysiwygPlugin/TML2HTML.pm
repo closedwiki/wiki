@@ -26,13 +26,9 @@ The convertor does _not_ use the TWiki rendering, as that is a
 lossy conversion, and would make symmetric translation back to TML
 an impossibility.
 
-All generated HTML tags are marked with CSS class names for the
-TML syntax structure that was used to generate them. The
-translation is designed to be as clean as possible (nothing "spurious"
-HTML is generated e.g. spaces or newlines). The design goal was
-to support round-trip conversion from well-formed TML to HTML and
-back to identical HTML. Excepting for certain deprecated syntaxes,
-and identical spacing around data in tables, this has been achieved.
+The design goal was to support round-trip conversion from well-formed
+TML to XHTML1.0 and back to identical TML. Notes that some deprecated
+TML syntax is not supported.
 
 =cut
 
@@ -366,11 +362,9 @@ sub _getRenderedVersion {
     # Handle WikiWords
     $text = _takeOutBlocks( $text, 'noautolink', $removed );
 
-    $text =~ s(<nop>($TWiki::regex{wikiWordRegex})$ENDWW)
-      (<span class="TMLnop">$1</span>)gom;
+    $text =~ s/<nop>($TWiki::regex{wikiWordRegex})/<span class="TMLnop">$1<\/span>/gom;
 
-    $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)$ENDWW/$this->_makeWikiWord($1,$2)/geom;
-
+    $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}($TWiki::regex{anchorRegex})?)/$this->_makeWikiWord($1,$2)/geom;
     foreach my $placeholder ( keys %$removed ) {
         my $pm = $removed->{$placeholder}{params}->{class};
         if( $placeholder =~ /^noautolink/i ) {
@@ -389,6 +383,7 @@ sub _getRenderedVersion {
             $removed->{$placeholder}{params}->{class} = $pm;
         }
     }
+
 
     _putBackBlocks( $text, $removed, 'noautolink', 'div' );
 
@@ -589,11 +584,14 @@ sub _emitTR {
             $right = length( $2 );
         }
         if( $left > $right ) {
-            $attr->{align} = 'right';
+            $attr->{style} = 'text-align: right';
+            $attr->{class} = 'align-right';
         } elsif( $left < $right ) {
-            $attr->{align} = 'left';
+            $attr->{style} = 'text-align: left';
+            $attr->{class} = 'align-left';
         } elsif( $left > 1 ) {
-            $attr->{align} = 'center';
+            $attr->{style} = 'text-align: center';
+            $attr->{class} = 'align-center';
         }
         $attr->{colspan} = $colspan if $colspan > 1;
         if( /^\s*\*(.*)\*\s*$/ ) {

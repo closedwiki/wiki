@@ -53,6 +53,10 @@ use HTML::Parser;
 
 Constructs a new HTML to TML convertor.
 
+You *must* provide parseWikiUrl and convertImage if you want URLs
+translated back to wikinames. See WysiwygPlugin.pm for an example
+of how to call it.
+
 =cut
 
 sub new {
