@@ -1,5 +1,6 @@
 # FormFieldListPlugin for TWiki Collaboration Platform, http://TWiki.org/
 #
+# Copyright (C) 2004 Rafael Alvarez, soronthar@flashmail.com
 # Copyright (C) 2004 Bernd Raichle, bernd.raichle@gmx.de
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001 Peter Thoeny, Peter@Thoeny.com
@@ -55,6 +56,7 @@
 #
 #
 # Change history:
+# r2.000 2005/09/09 - changes to make it work with Dakar.
 # r1.000 2004/10/01 - initial revision
 #
 
@@ -74,7 +76,7 @@ use vars qw(
 	$debug
     );
 
-$VERSION = '1.000';
+$VERSION = '2.000';
 $pluginName = 'FormFieldListPlugin';   # Name of this Plugin
 
 # =========================
@@ -87,7 +89,7 @@ sub initPlugin
     ( $topic, $web, $user, $installWeb ) = @_;
 
     # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1.021 ) {
+    if( $TWiki::Plugins::VERSION < 1.026 ) {
         &TWiki::Func::writeWarning( "Version mismatch between ${pluginName} and Plugins.pm" );
         return 0;
     }
@@ -95,6 +97,7 @@ sub initPlugin
     # Get plugin debug flag
     $debug = &TWiki::Func::getPluginPreferencesValue( "DEBUG" );
 
+    TWiki::Func::registerTagHandler('FORMFIELDLIST',\&getFormFieldList);
     # Plugin correctly initialized
     &TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
@@ -112,139 +115,32 @@ sub initPlugin
 
 sub getFormFieldList
 {
-    my( $web, $topic, $args ) = @_;
+    my ($session, $params, $topic, $web) = @_;
 
-    &TWiki::Func::writeDebug( "- getFormFieldList(web $web, topic $topic, args $args)" ) if $debug;
 
-    my $formFieldList = TWiki::Func::extractNameValuePair( $args );   # CHANGED $formField -> $formFieldList
-    my $formTopic = TWiki::Func::extractNameValuePair( $args, "topic" );
-    my $altText   = TWiki::Func::extractNameValuePair( $args, "alttext" );
-    my $default   = TWiki::Func::extractNameValuePair( $args, "default" ) || undef;
-    my $format    = TWiki::Func::extractNameValuePair( $args, "format" );
+    my $formFieldList = $params->{_DEFAULT};
+    my $separator = $params->{'separator'} || "\n";
+    my $format=$params->{'format'} || '$value';
+    my $formTopic=$params->{'topic'} || $topic;
+    my $default=$params->{'default'} || '';
+    my $alttext=$params->{'alttext'} || '';
 
-    # BEGIN NEW
-    my $separator = TWiki::Func::extractNameValuePair( $args, "separator" );
-    unless ( $separator ) {
-	if ( $args =~ m/separator\s*=/o ) {
-	    # If empty separator explicitly set, use it
-	    $separator = '';
-	} else {
-	    # Otherwise default to newline ($n)
-	    $separator = '$n';
-	}
-    }
-    # END NEW
+    my $text='';
+    foreach my $formField ( split( /\s*,\s*/, $formFieldList) ) {
+       $params->{_DEFAULT}=$formField;
+#       $text.= $TWiki::Plugins::SESSION->{renderer}->renderFormField($params, $topic, $web);
+       $text .= '%FORMFIELD{"'.$formField.'" '
+               .'format="'.$format.'" '
+               .'topic="'.$topic.'" '
+               .'default="'.$default.'" '
+               .'alttext="'.$alttext.'" '
+               .'}%';
 
-    unless ( $format ) {
-	# if null format explicitly set, return empty
-	return "" if ( $args =~ m/format\s*=/o);
-	# Otherwise default to value
-	$format = '$title=$value ';   # CHANGED
+       $text.= $separator;
     }
 
-    # BEGIN NEW
-    &TWiki::Func::writeDebug( "- getFormFieldList() topic=$formTopic, alttext=$altText, default=$default, format=$format, separator=$separator.." ) if $debug;
-    # END NEW
-
-    my $formWeb;
-    if ( $formTopic ) {
-	if ($topic =~ /^([^.]+)\.([^.]+)/o) {
-	    ( $formWeb, $topic ) = ( $1, $2 );
-	} else {
-         # SMELL: Undocumented feature, "web" parameter
-	    $formWeb = TWiki::Func::extractNameValuePair( $args, "web" );
-	}
-	$formWeb = $web unless $formWeb;
-    } else {
-	$formWeb = $web;
-	$formTopic = $topic;
-    }
-
-    my $meta = $TWiki::Render::ffCache{"$formWeb.$formTopic"};
-    unless ( $meta ) {
-	my $dummyText;
-       ( $meta, $dummyText ) =
-	   TWiki::Func::readTopic( $formWeb, $formTopic );
-	$TWiki::Render::ffCache{"$formWeb.$formTopic"} = $meta;
-    }
-
-    # BEGIN CHANGE
-    my $text = "";
-    my $outputSeparator = 0;
-    if ( $meta ) {
-	my @fields = $meta->find( "FIELD" );
-
-	# Split the comma-separated list of form field names
-	# removing leading and trailing white-spaces.
-	foreach my $formField ( split( /\s*,\s*/, $formFieldList) ) {
-
-	    &TWiki::Func::writeDebug( "- search for field $formField." ) if $debug;
-
-	    $text .= $separator if ( $outputSeparator );
-	    $outputSeparator = 1;
-
-	    my $found = 0;
-	    foreach my $field ( @fields ) {
-		my $title = $field->{"title"};
-		my $name = $field->{"name"};
-		if( $title eq $formField || $name eq $formField ) {
-		    $found = 1;
-		    my $value = $field->{"value"};
-		    my $newtext = '';
-		    if (length $value) {
-			$newtext = $format;
-			$newtext =~ s/\$value/$value/go;  # expand "$value" to value of field
-		    } elsif ( defined $default ) {
-			$newtext = $default;
-		    }
-		    $newtext =~ s/\$name/$name/go;
-		    $newtext =~ s/\$title/$title/go;
-
-		    &TWiki::Func::writeDebug( "- search for field $formField: $newtext." ) if $debug;
-
-		    $outputSeparator = 0 if (! $newtext);
-		    $text .= $newtext;
-		    last; #one hit suffices
-		}
-	    }
-	    unless ( $found ) {
-		my $newtext = $altText;
-		$newtext =~ s/\$name/$formField/go;
-		$newtext =~ s/\$title/$formField/go;
-
-		$outputSeparator = 0 if (! $newtext);
-		$text .= $newtext;
-	    }
-
-
-	    &TWiki::Func::writeDebug( "- result = $text." ) if $debug;
-	}
-    }
-
-    return "" unless $text;
-
-    &TWiki::Func::writeDebug( "- before expansion = $text." ) if $debug;
-
-    $text =~ s/\$n/\n/gos;       # expand "$n" to new line
-    $text =~ s/\$percnt/\%/gos;  # expand "$n" to new line
-    $text =~ s/\$dollar/\$/gos;  # expand "$n" to new line
-
-    &TWiki::Func::writeDebug( "- after expansion = $text." ) if $debug;
-    # END CHANGE
-
-    return TWiki::Func::renderText( $text, $web );
+    TWiki::Func::writeDebug($text);
+    return $text;
 }
-
-
-# =========================
-sub commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    &TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    $_[0] =~ s/%FORMFIELDLIST{(.*?)}%/&getFormFieldList($_[2], $_[1], $1)/ge;
-}
-
 
 1;
