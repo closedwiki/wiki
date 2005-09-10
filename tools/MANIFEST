@@ -367,6 +367,8 @@ lib/TWiki/Users.pm
 lib/TWiki.cfg
 lib/TWiki.pm
 lib/Text/Diff.pm
+po/pt_BR.po
+po/TWiki.pot
 pub/Main/TWikiContributor/AUTHORS
 pub/Main/WebPreferences/favicon.ico
 pub/Main/WebPreferences/logo.png

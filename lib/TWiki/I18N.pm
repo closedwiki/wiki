@@ -68,7 +68,7 @@ sub new {
     my $dependencies = <<HERE;
     use Locale::Maketext::Lexicon {
         en      => ['Auto'],
-        '*'     => [ Gettext => $TWiki::cfg{LocalesDir} . '/*.po' ]
+        '*'     => [ Gettext => '$TWiki::cfg{LocalesDir}' . '/*.po' ]
     };
     use Text::Iconv;
 HERE
