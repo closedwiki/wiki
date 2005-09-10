@@ -318,7 +318,7 @@ HERE
               exec => 3,
               name => 'simpleTable',
               html => <<'HERE',
-<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
+<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td class="align-center" style="text-align: center">2</td><td class="align-right" style="text-align: right">2</td></tr><tr><td>A3</td><td class="align-center" style="text-align: center">3</td><td class="align-left" style="text-align: left">3</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
 HERE
               tml => <<'HERE',
 
@@ -346,7 +346,7 @@ HERE
               exec => 0,# disabled because of Kupu problems handling colspans
               name => 'tableWithSpans',
               html => <<'HERE',
-<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td align="center">2</td><td align="right">2</td></tr><tr><td>A3</td><td align="center">3</td><td align="left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
+<table border="1" cellpadding="0" cellspacing="1"><tr><th>L</th><th>C</th><th>R</th></tr><tr><td>A2</td><td class="align-center" style="text-align: center">2</td><td class="align-right" style="text-align: right">2</td></tr><tr><td>A3</td><td class="align-center" style="text-align: center">3</td><td class="align-left" style="text-align: left">3</td></tr><tr><td colspan="3">multi span</td></tr><tr><td>A4-6</td><td>four</td><td>four</td></tr><tr><td>^</td><td>five</td><td>five</td></tr></table><p /><table border="1" cellpadding="0" cellspacing="1"><tr><td>^</td><td>six</td><td>six</td></tr></table>
 HERE
               tml => <<'HERE',
 

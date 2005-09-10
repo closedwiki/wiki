@@ -1,10 +1,10 @@
 ---+!! Wysiwyg Plugin
 
-A WYSIWYG (What-You-See-Is-What-You-Get) editor.
+Support for the integration of WYSIWYG (What-You-See-Is-What-You-Get) editors. Comes bundled with a complete integration of the feature-rich [[http://kupu.osqom.org][Kupu]] editor.
 
 <img src="%ATTACHURL%/screenshot.jpg" alt="Screenshot" />
 
-The editor is built on a generic framework that supports editing of TWiki topics using any browser-based HTML editor and the import of HTML from external sources such as existing web pages.
+The plugin is a generic framework that supports editing of TWiki topics using any browser-based HTML editor, and the import of HTML from external sources such as existing web pages.
 
 %TOC%
 
@@ -18,55 +18,35 @@ The editor is built on a generic framework that supports editing of TWiki topics
 ---+++ What's in the package
 The package includes the following pieces:
 	* TML (TWiki syntax) to HTML translator
-	* HTML to TML translator
+	* HTML to TML translator (with stand-alone script)
 	* Generic TWiki plugin for automating the translation during editing
 	* [[http://kupu.osqom.org][Kupu]] editor integration, implemented as a TWiki skin
----+++ How to use it
-The Kupu editor is customised for use with TWiki. Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
+---+++ How to use the editor
+Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
 Some functions require a bit more explanation:
    * "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
-   * "Insert a TWiki Tag" will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
+   * The rightmost drop-down will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
    * "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
 
 ---++++ Kupu Notes
-The version of Kupu shipped with this plugin is a customised version of the basic Kupu release. All the customisation is done as plugins and extensions to Kupu - the basic kupu code is shipped intact. Kupu has a number of limitations that are worth mentioning:
-   * Undo does not work in all cases. Undo is implemented using the browser undo support, and only a limited number of functions can be undone. Nothing done while editing HTML source can be undone.
+The version of Kupu shipped with this plugin is an uncustomised basic Kupu release. All the TWiki customisation is done as plugins and extensions to Kupu - the basic kupu code is shipped completely intact.
 
 ---+++ How it works
-The plugin works by translating the topic text into HTML, which is then fed to the editor. The edited HTML is then run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic.
+The plugin works by translating the topic text into HTML, which is then fed to the editor. The edited HTML is then run through the reverse translation before saving to the topic. TWiki syntax is used in preference to HTML in the stored topic wherever possible, though HTML may be used if the translator can't find a suitable TML equivalent..
 
-The default rendering that TWiki uses to generate HTML for browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this the plugin instead uses its own translation of TWiki syntax to pure XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
+The default rendering that TWiki uses to generate HTML for browsers is 'lossy' - information in the TWiki syntax is lost in the HTML output, and a round-trip (recovering the original TWiki syntax from the HTML) is impossible. To solve this problem the plugin instead uses its own translation of TWiki syntax to pure XHTML. The generated XHTML is annotated with CSS classes that support the accurate recovery of the original TWiki syntax.
 
 _(before you ask the obvious question, yes, the translator *could* be used to replace the TWiki rendering pipeline for generating HTML pages. In fact, the translator is taken directly from the implementation of the rendering pipeline for the TWiki 'Dakar' release)_
 
-Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed syntax. There is also the advantage that the translator can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the complexity of HTML, this translation is lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
+Translation of the HTML back to TWiki syntax uses the CPAN:HTML::Parser. This parser is used in preference to a more modern XML parser, because the HTML may not generate fully compliant XHTML. A strict parser would risk losing content. CPAN:HTML::Parser is better at handling malformed syntax.
+
+There is also the advantage that the translator can be used to import HTML from other sources - for example, existing web pages. Due to the simple nature of TWiki syntax and the complexity of HTML, this translation is lossy - i.e there will be HTML features that can be entered by editors that will be lost in this translation step. This is especially noticeable with HTML tables.
 
 ---+++ Using the translators from Perl scripts
 
-Both translators can be used directly from Perl scripts, for example to build your own stand-alone translators. For example
-<verbatim>
-# We require a pointer to a TWiki installation, so we can use parts of
-# TWiki. Substitute your own path.
-unshift(@INC,'/home/twiki/cairo/lib');
+Both translators can be used directly from Perl scripts, for example to build your own stand-alone translators.
 
-use TWiki::Plugins::WysiwygPlugin::TML2HTML;
-use TWiki::Plugins::WysiwygPlugin::HTML2TML;
-
-my $tml2html = new TWiki::Plugins::WysiwygPlugin::TML2HTML();
-my $html = $txer->convert( "---++ TML text\n   Some TWiki syntax" );
-
-my $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML();
-my $tml = $html2tml->convert( $html );
-</verbatim>
-
----++ Known problems
-Some of the following known problems apply to the Kupu editor or the browser rather than this plugin - they have been marked as such.
-	* Overlapping styles don't work very well (WysiwygPlugin)
-	* Images cannot be resized (Kupu)
-	* Can't *undo* all functions (Kupu)
-	* Images cannot be resized (Kupu)
-	* Incompatible with TWiki::Plugins.MathModePlugin and TWiki::Plugins.LatexModePlugin (WysiwygPlugin)
-
+An example stand-alone convertor script for HTML to TWiki is included in the installation. It can be found in the top-level =tools= directory and is called =html2tml.pl=.
 
 ---++ Plugin Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
@@ -75,19 +55,15 @@ Some of the following known problems apply to the Kupu editor or the browser rat
 %$MANIFEST%
 	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
 	%$DEPENDENCIES%
-	* The installer script will try to install the [[http://kupu.osqom.org][Kupu]] editor. The script simply unzips the kupu.zip package and then follows the steps described in the Kupu installation documentation. The Kupu package in this install (in =pub/_kupu=) is a one-for-one copy of the Kupu 1.2.1 release package. If you don't run the installer script, you need to do this manually.
-		* Kupu install requires an XSLT processor with XInclude support, such as xsltproc from Gnome's libxml/libxslt.<p /> Windows users: You can get libxml/libxslt binaries at http://www.zlatkovic.com/pub/libxml/. As a minimum you need to download the zipfiles for libxslt, libxml2, iconv and zlib. Extracting all of the .dll and .exe files into c:\libxslt is sufficient for make.bat to work (ignore subdirectories in the zipfiles).
-	* To enable the editor in one of you skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br />
-	<code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />
-	As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
+	* To enable the editor in one of your skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br /><code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
 ---++ Settings
-	* Set SHORTDESCRIPTION = WYSIWYG editor for TWiki topics
-	* Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
+	* Set SHORTDESCRIPTION = Translator framework and WYSIWYG editor for TWiki topics
+Web/Topic name of a help page. Change this to point to your local version of the help page. Currently only used by the Kupu editor.
 	* Set HELPPAGE = TWiki/WysiwygPlugin
-	* If set to =on= then TWiki variables will be "marked" by the TML -> HTML translator by putting the variable name and any parameters into a span. This works well for simple variables, but can get in trouble with complex syntax or some plugins constructs. If it isn't set to =on= variables will be treated as plain text.
+If MARK_VARIABLES set to =on= then TWiki variables will be "marked" by the TML -> HTML translator by putting the variable name and any parameters into a span. This works well for simple variables, but can get in trouble with complex syntax or some plugins constructs. If it isn't set to =on= variables will be treated as plain text.
 	* Set MARK_VARIABLES =
-	* Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
+Lists of icons that will be available in the Kupu editor. This has to be a list of &lt;IMG&gt; tags. If present, the 'alt' text will be used in place of the &lt;IMG&gt; tag when translating from HTML to TML.
 		* Set ICONS =
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/smile.gif" alt="" />
 		<img src="%PUBURL%/TWiki/SmiliesPlugin/cool.gif" alt="" />
@@ -118,7 +94,7 @@ Some of the following known problems apply to the Kupu editor or the browser rat
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/new.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/starred.gif" alt="" />
 		<img src="%PUBURL%/TWiki/TWikiDocGraphics/arrowright.gif" alt="" />
-	* List of TWiki variables that will be available to the Kupu editor, in the form of a set of HTML option tags
+List of TWiki variables that will be available to the Kupu editor
 		* Set TAGS =
 		<option value="TOPIC">Current Topic</option>
 		<option value="WEB">Current Web</option>
@@ -137,22 +113,29 @@ Some of the following known problems apply to the Kupu editor or the browser rat
 		<option value="TOC"> Table of Contents</option>
 
 ---++ Known Issues
----+++ Overlapping formatting
+Some of the following known problems apply to the Kupu editor or the browser rather than this plugin - they have been marked as such.
+	* Incompatible with plugins that expand non-standard syntax e.g. TWiki:Plugins.MathModePlugin (WysiwygPlugin)
+		* Plugins that extend the syntax using TWiki variables, such as %MYVARIABLE%, should work fine.
+	* Overlapping styles don't work very well (WysiwygPlugin)
+	* Images cannot be resized (Kupu)
+	* Can't *undo* all functions (Kupu)
+	*  Nothing done while editing HTML source can be undone (Kupu)
+	* Images cannot be resized [[http://codespeak.net/issues/kupu/issue221][known Kupu bug]]
+
+---+++ Overlapping styles
 Because TWiki employs a "best guess" approach to some formatting, and allows overlapping of tags in a way forbidden by HTML, it is impossible to guarantee 100% that formating in the original TWiki document will still be there when the same document is loaded and then saved through the WysiwygPlugin. The most obvious case of this is to do with styles. For example, the sentence
 <verbatim>
 *bold _bold-italic* italic_
 </verbatim>
 is legal in TML, but in HTML is represented by
 <verbatim>
-<strong>bold <em>bold-italic</em></strong> <em>itelaic</em>
+<strong>bold <em>bold-italic</em></strong> <em>italic</em>
 </verbatim>
 which gets translated back to TML as
 <verbatim>
 *bold _bold-italic_* _italic_
 </verbatim>
 which is correct by construction, but does not render correctly in TWiki. This problem is unfortunately unavoidable due to the way TWiki syntax works.
----+++ Resizing images
-In Kupu, images cannot be resized using the resizing handles. This is a [[http://codespeak.net/issues/kupu/issue221][known Kupu bug]].
 
 ---++ Plugin Info
 
