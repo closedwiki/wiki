@@ -101,8 +101,19 @@ sub convert {
     return $this->{stackTop}->rootGenerate();
 }
 
+# Support autoclose of the tags that are most typically incorrectly
+# nested. Autoclose triggers when a second tag of the same type is
+# seen without the first tag being closed.
+my %autoclose = ( 'li' => 1, 'td' => 1, 'th' => 1, 'tr' => 1 );
+
 sub _openTag {
     my( $this, $tag, $attrs ) = @_;
+    if( $autoclose{ lc( $tag )} &&
+          $this->{stackTop} &&
+            lc($this->{stackTop}->{tag}) eq lc($tag) ) {
+        $this->_apply( $tag );
+    }
+
     push( @{$this->{stack}}, $this->{stackTop} ) if $this->{stackTop};
     $this->{stackTop} =
       new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, $tag, $attrs );

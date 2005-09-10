@@ -45,6 +45,15 @@ span.kupu-tb-buttongroup {
   background-repeat: no-repeat;
 }
 
+span.kupu-tb-buttongroup-nobg {
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-align: center;
+  float: left;
+}
+
 #kupu-tb-buttons button {
   vertical-align: middle;
 }
@@ -139,7 +148,6 @@ div#twiki-icons img:active {
 }
 .twiki-code-button0 {
   background-image: url("code.png");
-  background-color: #D9D9D9;
 }
 .twiki-code-button1 {
   background: url("code.png");
@@ -151,7 +159,6 @@ div#twiki-icons img:active {
 }
 .twiki-nop-button0 {
   background: url("nop.png");
-  background-color: #D9D9D9;
 }
 .twiki-nop-button1 {
   background: url("nop.png");
@@ -163,11 +170,10 @@ div#twiki-icons img:active {
 }
 .twiki-bold-button0 {
   background: url("bold.png");
-  background-color: #D9D9D9;
 }
 .twiki-bold-button1 {
   background: url("bold.png");
-  background-color: #ECECEC;
+  background-color: silver;
 }
 .twiki-bold-button2 {
   background: url("bold.png");
@@ -175,11 +181,10 @@ div#twiki-icons img:active {
 }
 .twiki-italic-button0 {
   background: url("italic.png");
-  background-color: #D9D9D9;
 }
 .twiki-italic-button1 {
   background: url("italic.png");
-  background-color: #ECECEC;
+  background-color: silver;
 }
 .twiki-italic-button2 {
   background: url("italic.png");
@@ -187,7 +192,6 @@ div#twiki-icons img:active {
 }
 .twiki-verbatim-button {
   background: url("verbatim.png");
-  background-color: #D9D9D9;
 }
 .twiki-verbatim-button-pressed {
   background: url("verbatim.png");

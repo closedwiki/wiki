@@ -334,6 +334,7 @@ sub _convertList {
 # can be converted to TML.
 sub _isConvertableList {
     my( $this, $options ) = @_;
+
     foreach my $kid ( @{$this->{children}} ) {
         # check for malformed list. We can still handle it,
         # by simply ignoring illegal text.
@@ -344,7 +345,7 @@ sub _isConvertableList {
         }
         next unless( $kid->{tag} =~ m/^(dt|dd|li)$/i );
         unless( $kid->_isConvertableListItem( $options, $this )) {
-            return ( 0, undef );
+            return 0;
         }
     }
     return 1;
@@ -421,12 +422,12 @@ sub _isConvertableTableRow {
         return 0 if( $flags & $WC::BLOCK_TML );
         if( $kid->{attrs} ) {
             my $a = _deduceAlignment( $kid );
-            if( $a eq 'left' ) {
-                $text .= '  ';
-            } elsif( $a eq 'right' ) {
+            if( $a eq 'right' ) {
                 $text = '  '.$text;
             } elsif( $a eq 'center' ) {
                 $text = '  '.$text.'  ';
+            } elsif( $a eq 'left' ) {
+                $text .= '  ';
             }
             if( $kid->{attrs}->{rowspan} && $kid->{attrs}->{rowspan} > 1 ) {
                 return 0;
@@ -452,7 +453,7 @@ sub _deduceAlignment {
             return $1;
         }
     }
-    return 'left';
+    return '';
 }
 
 # convert a heading tag
@@ -577,8 +578,10 @@ sub _handleBR {
 
 sub _handleHR {
     my( $this, $options ) = @_;
-    return '<hr />' if( $options & $WC::NO_BLOCK_TML );
-    return ( $WC::BLOCK_TML, "$WC::CHECKn---$WC::CHECKn");
+
+    my( $f, $kids ) = $this->_flatKids( $options );
+    return ($f, '<hr />'.$kids) if( $options & $WC::NO_BLOCK_TML );
+    return ( $f | $WC::BLOCK_TML, $WC::CHECKn.'---'.$WC::CHECKn.$kids);
 }
 
 sub _handleP {

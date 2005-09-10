@@ -21,26 +21,26 @@
    @import url("%USERLAYOUTURL%");
    @import url("%USERSTYLEURL%");
   </style>
-  <link href="%PUBURL%/_kupu/common/kupustyles.css" rel="stylesheet" type="text/css"/>
-  <link href="%PUBURL%/_kupu/common/kupudrawerstyles.css" rel="stylesheet" type="text/css"/>
+  <link href="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupustyles.css" rel="stylesheet" type="text/css"/>
+  <link href="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupudrawerstyles.css" rel="stylesheet" type="text/css"/>
   <link href="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/kuputwiki.css" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/sarissa.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/sarissa.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupuhelpers.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupuhelpers.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupueditor.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupueditor.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupubasetools.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupubasetools.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupuloggers.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupuloggers.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupucontentfilters.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupucontentfilters.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupucontextmenu.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupucontextmenu.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupusourceedit.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupusourceedit.js">
   </script>
-  <script type="text/javascript" src="%PUBURL%/_kupu/common/kupudrawers.js">
+  <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupudrawers.js">
   </script>
   <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/twikitools.js">
   </script>
@@ -83,7 +83,7 @@
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-source" id="kupu-source-button" title="edit HTML code" i18n:attributes="title"></button>
       <button type="button" class="kupu-logo" title="Help" accesskey="k" onclick="window.open('%SCRIPTURL%/view%SCRIPTSUFFIX%/%WYSIWYGPLUGIN_HELPPAGE%');"></button>
      </span>
-     <span class="kupu-tb-buttongroup">
+     <span class="kupu-tb-buttongroup-nobg">
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-save" id="kupu-save-button" title="save: alt-s" i18n:attributes="title" accesskey="s"></button>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="twiki-cancel-button" id="twiki-cancel-button" title="cancel: alt-q" i18n:attributes="title" accesskey="q"></button>
      </span>
@@ -91,7 +91,7 @@
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-undo" id="kupu-undo-button" title="undo: alt-z" i18n:attributes="title" accesskey="z"></button>
       <button xmlns:i18n="http://xml.zope.org/namespaces/i18n" type="button" class="kupu-redo" id="kupu-redo-button" title="redo: alt-y" i18n:attributes="title" accesskey="y"></button>
      </span>
-     <span class="kupu-tb-buttongroup" id="kupu-bg-basicmarkup">
+     <span class="kupu-tb-buttongroup-nobg" id="kupu-bg-basicmarkup">
       <select id="kupu-tb-styles">
        <option xmlns:i18n="http://xml.zope.org/namespaces/i18n" value="P" i18n:translate="paragraph-normal">
         Normal
@@ -196,7 +196,7 @@
       </tr>
       <tr>
        <td colspan="2" align="center">
-        <iframe frameborder="1" scrolling="auto" width="440" height="198" id="kupu-linkdrawer-preview" src="%PUBURL%/_kupu/common/kupublank.html">
+        <iframe frameborder="1" scrolling="auto" width="440" height="198" id="kupu-linkdrawer-preview" src="%PUBURL%/%TWIKIWEB%/WysiwygPlugin/_kupu/common/kupublank.html">
         </iframe>
        </td>
       </tr>
@@ -370,7 +370,7 @@
      %FORMFIELDS%
     </form>
    </div>
-   <div xmlns="" class="kupu-toolboxes">
+   <div xmlns="" class="kupu-toolboxes" style="display: none">
     <div class="kupu-toolbox" id="kupu-toolbox-debug invisible">
      <h1 xmlns:i18n="http://xml.zope.org/namespaces/i18n" i18n:translate="debug-log">Debug Log</h1>
      <div id="kupu-toolbox-debuglog" class="kupu-toolbox-label">
