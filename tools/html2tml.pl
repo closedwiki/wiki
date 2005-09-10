@@ -1,0 +1,1 @@
+/home/twiki/DEVELOP/twikiplugins/WysiwygPlugin/tools/static.pl

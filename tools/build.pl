@@ -30,16 +30,16 @@ BEGIN {
 use TWiki::Contrib::Build;
 
 # Declare our build package
-{ package TWikiBuild;
+package TWikiBuild;
 
-  @TWikiBuild::ISA = ( "TWiki::Contrib::Build" );
+@TWikiBuild::ISA = ( "TWiki::Contrib::Build" );
 
-  sub new {
+sub new {
     my $class = shift;
     return bless( $class->SUPER::new( "TWiki" ), $class );
-  }
+}
 
-  sub target_build {
+sub target_build {
     my $this = shift;
 
     $this->SUPER::target_build();
@@ -48,9 +48,9 @@ use TWiki::Contrib::Build;
     print "Building documentation....\n";
     print `perl gendocs.pl -root $this->{basedir}`;
     print "Documentation built\n";
-  }
+}
 
-  sub target_stage {
+sub target_stage {
     my $this = shift;
 
     $this->SUPER::target_stage();
@@ -58,9 +58,55 @@ use TWiki::Contrib::Build;
     #use a Cairo install to create new ,v files for the data, and pub
     #WARNING: I don't know how to get the 'last' release, so i'm hardcoding Cairo
     $this->stage_rcsfiles();
-  }
+}
 
-  sub stage_rcsfiles() {
+# check in a single file to RCS
+sub _checkInFile {
+    my( $this, $old, $new, $file ) = @_;
+
+    my $currentRevision = 1;
+    print "Checking in $new/$file\n";
+    if ( -e $old.'/'.$file.',v' ) {
+        $this->cp($old.'/'.$file.',v', $new.'/'.$file.',v');
+        `rcs -u -M $new/$file,v`;
+        `rcs -l $new/$file`;
+
+        my ($rcsInfo) = "rlog -r $new/$file";
+        $rcsInfo = `$rcsInfo`;
+        if ( $rcsInfo =~ /revision \d+\.(\d+)/ ) {     #revision 1.2
+            $currentRevision = $1;
+        } else {
+            die 'failed to get revision: '.$file."\n";
+        }
+    } else {
+        # create rcs file, and ci
+    }
+    my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
+    `$cmd`;
+
+    `ci -mbuildrelease -t-new-topic $new/$file`;
+    `co -u -M $new/$file`;
+}
+
+# recursively check in files to RCS
+sub _checkInDir {
+    my( $this, $old, $new, $root, $filterIn ) = @_;
+    my $dir;
+
+    opendir( $dir, "$new/$root" ) || die "Failed to open $root: $!";
+    print "Scanning $new/$root...\n";
+    foreach my $content ( grep { !/^\./ } readdir($dir)) {
+        my $sub = "$root/$content";
+        if( -d "$new/$sub" ) {
+            $this->_checkInDir( $old, $new, $sub, $filterIn );
+        } elsif( -f "$new/$sub" && &$filterIn( $sub )) {
+            $this->_checkInFile( $old, $new, $sub );
+        }
+    }
+    close($dir);
+}
+
+sub stage_rcsfiles() {
     my $this = shift;
 
     # svn co cairo to a new dir
@@ -72,58 +118,16 @@ use TWiki::Contrib::Build;
 
     $this->makepath($lastReleaseDir);
     $this->cd($lastReleaseDir);
-    print 'last Release is being put in '.$lastReleaseDir."\n";
+    print 'Checking out last release to '.$lastReleaseDir."\n";
     `svn co http://svn.twiki.org:8181/svn/twiki/tags/twiki-20040902-release/ .`;
+    print "Creating ,v files.\n";
+    $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'data',
+                       sub { return shift =~ /\.txt$/ } );
 
-#TODO: and pub dir too!!
-    $this->cd($this->{tmpDir}.'/data');
-    #foreach web
-    opendir(DATADIR, '.');
-    my $web;
-    while ($web = readdir(DATADIR)) {
-        unless (-d $web) {next;}  #only consider directories
-        if ($web eq '.' || $web eq '..') {next;}
- #       print 'found web: '.$web."\n";
-        opendir(WEBDIR, $web);
-        my $topic;
-        while ($topic = readdir(WEBDIR)) {
-            unless ($topic =~ /.*\.txt$/) {next;} #consider only topics
-            print "-------\tfound topic: $topic\n";
-
-            my $currentRevision = 1;
-    		if ( -e $lastReleaseDir.'/data/'.$web.'/'.$topic.',v' ) {
-                $this->cp($lastReleaseDir.'/data/'.$web.'/'.$topic.',v', $web);
-                `rcs -u -M $web/$topic,v`;
-                `rcs -l $web/$topic`;
-
-                my ($rcsInfo) = "rlog -r  $web/$topic";
-#                print $rcsInfo."\n";
-                $rcsInfo = `$rcsInfo`;
-#                print $rcsInfo;
-                if ( $rcsInfo =~ /revision \d+\.(\d+)/ ) {     #revision 1.2
-                    $currentRevision = $1;
-#                    print 'existing topic: (rev = '.$currentRevision.') '.$web.'/'.$topic."\n";
-                } else {
-#                    print "=========\n$rcsInfo\n=======\n";
-                    die 'failed to get revision: '.$web.'/'.$topic."\n";
-                }
-            } else {
-                #create rcs file, and ci
-                print 'new topic: '.$web.'/'.$topic."\n";
-            }
-#TODO: need to update the META"TOPICINFO with the correct verion number :(
-            my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$web.'/'.$topic;
-            `$cmd`;
-
-            `ci -mbuildrelease -t-new-topic $web/$topic`;
-            `co -u -M $web/$topic`;
-		}
-		closedir(WEBDIR);
-    }
-    closedir(DATADIR);
-
-  }
+    $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'pub',
+                       sub { return -f shift; } );
 }
+
 
 # Create the build object
 my $build = new TWikiBuild();
