@@ -134,6 +134,8 @@ my $I18Mods =
    'Unicode::Map'     => "I18N conversions",
    'Unicode::Map8'    => "I18N conversions",
    'Jcode'            => "I18N conversions",
+   'Locale::Maketext::Lexicon' => "I18N translations",
+   'Text::Iconv'      => "I18N charset conversion for translations"
   };
 
 ########################################################################
