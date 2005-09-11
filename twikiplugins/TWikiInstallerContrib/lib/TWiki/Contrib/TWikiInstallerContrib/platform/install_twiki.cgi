@@ -90,6 +90,7 @@ BEGIN {
 	PubDir           => "$cgibin/../htdocs/twiki",
 	TemplateDir      => "$home/twiki/templates",
 	DataDir          => "$home/twiki/data",
+	LocalesDir       => "$home/twiki/po",
     };
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
@@ -157,6 +158,7 @@ my $mapTWikiDirs = {
     data => { dest => $localDirConfig->{DataDir} },
     templates => { dest => $localDirConfig->{TemplateDir} },
     bin => { dest => "$cgibin/twiki", perms => 0755, },
+    po => { dest => $localDirConfig->{LocalesDir} },
 };
 
 ################################################################################
@@ -190,7 +192,7 @@ installTWikiExtension({ file => "../downloads/kernels/$tar.zip", name => 'TWiki'
 print $q->h2( 'LocalSite.cfg' );
 
 # normalise pathnames (Sandbox.pm doesn't like .. in pathnames!)
-foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
+foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
 {
     $localDirConfig->{ $dir } = abs_path( $localDirConfig->{ $dir } );
 }
@@ -198,7 +200,7 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir ) )
 { # write LocalSite.cfg
     my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
     open(FH, ">$file") or die "Can't open $file: $!";
-    foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir ) )
+    foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir LocalesDir ) )
     {
 	print FH qq{\$cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
     }
