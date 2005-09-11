@@ -142,7 +142,7 @@ if ( $Config->{pdoc} )
 
 ################################################################################
 #-[lib/, templates/, data/, pub/icn, pub/TWiki, bin/]-----------------------------------
-foreach my $dir qw( lib templates data bin pub logs )
+foreach my $dir qw( lib templates data bin pub logs po )
 {
     my $tree = slurp_tree( $dir, rule => $ruleNormalFiles->start( $dir ) );
     spew_tree( "$installBase/$dir" => $tree );
