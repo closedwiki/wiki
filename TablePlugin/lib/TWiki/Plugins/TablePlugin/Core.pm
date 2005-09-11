@@ -355,6 +355,7 @@ sub emitTable {
             my $nRows = scalar(@curTable);
             my $rspan = $rowspan[$i]+1;
             my $r = $nRows - $rspan;
+            $curTable[$r][$i][1] ||= {};
             $curTable[$r][$i][1]->{rowspan} = $rspan;
         }
     }
