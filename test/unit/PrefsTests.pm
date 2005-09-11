@@ -91,7 +91,9 @@ sub _setTWikiPref {
 
 sub _setLocalPref {
    my ( $this, $pref, $val ) = @_;
-   my ( $web, $topic ) = $twiki->normalizeWebTopicName( '', $TWiki::cfg{LocalSitePreferences} );
+   my ( $web, $topic ) = $twiki->normalizeWebTopicName(
+       '', $TWiki::cfg{LocalSitePreferences} );
+   $this->assert_str_equals($web,$TWiki::cfg{UsersWebName});
    $this->_set($web, $topic, $pref, $val);
 }
 

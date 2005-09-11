@@ -186,8 +186,8 @@ sub registerHandlers {
 
     my $prefs = $this->{session}->{prefs};
     if( $this->{web} ) {
-        $prefs->getPrefsFromTopic( $this->{web}, $this->{name},
-                                   uc( $this->{name} ) . '_');
+        $prefs->pushPreferences( $this->{web}, $this->{name}, 'PLUGIN',
+                                 uc( $this->{name} ) . '_');
     }
 
     no strict 'refs';

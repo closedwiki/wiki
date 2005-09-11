@@ -146,50 +146,51 @@ BEGIN {
 
     # Default handlers for different %TAGS%
     %functionTags = (
-                     ATTACHURLPATH     => \&_ATTACHURLPATH,
-                     DATE              => \&_DATE,
-                     DISPLAYTIME       => \&_DISPLAYTIME,
-                     ENCODE            => \&_ENCODE,
-                     FORMFIELD         => \&_FORMFIELD,
-                     GMTIME            => \&_GMTIME,
-                     HTTP_HOST         => \&_HTTP_HOST,
-                     HTTP              => \&_HTTP,
-                     HTTPS             => \&_HTTPS,
-                     ICON              => \&_ICON,
-                     ICONPATH          => \&_ICONPATH,
-                     IFCONTEXT         => \&_IFCONTEXT,
-                     INCLUDE           => \&_INCLUDE,
-                     INTURLENCODE      => \&_INTURLENCODE,
-                     METASEARCH        => \&_METASEARCH,
-                     PLUGINVERSION     => \&_PLUGINVERSION,
-                     QUERYSTRING       => \&_QUERYSTRING,
-                     RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
-                     REMOTE_ADDR       => \&_REMOTE_ADDR,
-                     REMOTE_PORT       => \&_REMOTE_PORT,
-                     REMOTE_USER       => \&_REMOTE_USER,
-                     REVINFO           => \&_REVINFO,
-                     SCRIPTNAME        => \&_SCRIPTNAME,
-                     SEARCH            => \&_SEARCH,
-                     SERVERTIME        => \&_SERVERTIME,
-                     SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
-                     SPACEOUT           => \&_SPACEOUT,
-                     'TMPL:P'          => \&_TMPLP,
-                     TOPICLIST         => \&_TOPICLIST,
-                     URLENCODE         => \&_ENCODE,
-                     URLPARAM          => \&_URLPARAM,
-                     USERLANGUAGE      => \&_USERLANGUAGE,
-                     VAR               => \&_VAR,
-                     WEBLIST           => \&_WEBLIST,
-                    );
+        ALL_VARIABLES     => \&_ALL_VARIABLES,
+        ATTACHURLPATH     => \&_ATTACHURLPATH,
+        DATE              => \&_DATE,
+        DISPLAYTIME       => \&_DISPLAYTIME,
+        ENCODE            => \&_ENCODE,
+        FORMFIELD         => \&_FORMFIELD,
+        GMTIME            => \&_GMTIME,
+        HTTP_HOST         => \&_HTTP_HOST,
+        HTTP              => \&_HTTP,
+        HTTPS             => \&_HTTPS,
+        ICON              => \&_ICON,
+        ICONPATH          => \&_ICONPATH,
+        IFCONTEXT         => \&_IFCONTEXT,
+        INCLUDE           => \&_INCLUDE,
+        INTURLENCODE      => \&_INTURLENCODE,
+        METASEARCH        => \&_METASEARCH,
+        PLUGINVERSION     => \&_PLUGINVERSION,
+        QUERYSTRING       => \&_QUERYSTRING,
+        RELATIVETOPICPATH => \&_RELATIVETOPICPATH,
+        REMOTE_ADDR       => \&_REMOTE_ADDR,
+        REMOTE_PORT       => \&_REMOTE_PORT,
+        REMOTE_USER       => \&_REMOTE_USER,
+        REVINFO           => \&_REVINFO,
+        SCRIPTNAME        => \&_SCRIPTNAME,
+        SEARCH            => \&_SEARCH,
+        SERVERTIME        => \&_SERVERTIME,
+        SPACEDTOPIC       => \&_SPACEDTOPIC, # deprecated, use SPACEOUT
+        SPACEOUT           => \&_SPACEOUT,
+        'TMPL:P'          => \&_TMPLP,
+        TOPICLIST         => \&_TOPICLIST,
+        URLENCODE         => \&_ENCODE,
+        URLPARAM          => \&_URLPARAM,
+        USERLANGUAGE      => \&_USERLANGUAGE,
+        VAR               => \&_VAR,
+        WEBLIST           => \&_WEBLIST,
+       );
 
     # Constant tag strings _not_ dependent on config
     %constantTags = (
-                     ENDSECTION      => '',
-                     WIKIVERSION     => $VERSION,
-                     SECTION         => '',
-                     STARTINCLUDE    => '',
-                     STOPINCLUDE     => '',
-                    );
+        ENDSECTION      => '',
+        WIKIVERSION     => $VERSION,
+        SECTION         => '',
+        STARTINCLUDE    => '',
+        STOPINCLUDE     => '',
+       );
 
     unless( ( $TWiki::cfg{DetailedOS} = $^O ) ) {
         require Config;
@@ -762,10 +763,10 @@ sub readOnlyMirrorWeb {
     my @mirrorInfo = ( '', '', '', '' );
     if( $TWiki::cfg{SiteWebTopicName} ) {
         my $mirrorSiteName =
-          $this->{prefs}->getPreferencesValue( 'MIRRORSITENAME', $theWeb );
+          $this->{prefs}->getWebPreferencesValue( 'MIRRORSITENAME', $theWeb );
         if( $mirrorSiteName && $mirrorSiteName ne $TWiki::cfg{SiteWebTopicName} ) {
             my $mirrorViewURL  =
-              $this->{prefs}->getPreferencesValue( 'MIRRORVIEWURL', $theWeb );
+              $this->{prefs}->getWebPreferencesValue( 'MIRRORVIEWURL', $theWeb );
             my $mirrorLink = $this->{templates}->readTemplate( 'mirrorlink' );
             $mirrorLink =~ s/%MIRRORSITENAME%/$mirrorSiteName/g;
             $mirrorLink =~ s/%MIRRORVIEWURL%/$mirrorViewURL/g;
@@ -1099,8 +1100,9 @@ sub new {
     # it below.
     my $login = $this->{client}->loadSession();
 
-    # initialize preferences, first part for site and web level
-    $this->{prefs} = new TWiki::Prefs( $this );
+    my $prefs = new TWiki::Prefs( $this );
+    $this->{prefs} = $prefs;
+    $prefs->pushGlobalPreferences();
 
     # SMELL: there should be a way for the plugin to specify
     # the WikiName of the user as well as the login.
@@ -1128,22 +1130,19 @@ sub new {
     $this->{SESSION_TAGS}{PUBURL}         = $this->{urlHost}.$TWiki::cfg{PubUrlPath};
     $this->{SESSION_TAGS}{SCRIPTURL}      = $this->{urlHost}.$TWiki::cfg{DispScriptUrlPath};
 
-    # SMELL: can this be moved into Prefs::new?
-    $this->{prefs}->loadUserPreferences(
-        $this->{webName}, $user );
+    $prefs->pushPreferences(
+        $TWiki::cfg{UsersWebName}, $user->wikiName(),
+        'USER '.$user->wikiName() );
 
-    $this->{prefs}->loadTopicPreferences(
-        $this->{webName}, $this->{topicName} );
+    $prefs->pushWebPreferences( $this->{webName} );
+
+    $prefs->pushPreferences(
+        $this->{webName}, $this->{topicName}, 'TOPIC' );
 
     $this->{renderer} = new TWiki::Render( $this );
 
     # Finish plugin initialization - register handlers
     $this->{plugins}->enable();
-
-    # Assumes all preferences values are set by now, which may well be false!
-    # populate the session hash with prefs values. These always override
-    # default values of these tags, which is really a bad idea.
-    $this->{prefs}->loadHash( \%{$this->{SESSION_TAGS}} );
 
     return $this;
 }
@@ -1669,7 +1668,7 @@ sub _webOrTopicList {
     } else {
         $web = $this->{webName} if( ! $web );
         my $hidden =
-          $this->{prefs}->getPreferencesValue( 'NOSEARCHALL', $web );
+          $this->{prefs}->getWebPreferencesValue( 'NOSEARCHALL', $web );
         if( ( $web eq $this->{webName} ) || ( !$hidden )) {
             @list = $this->{store}->getTopicNames( $web );
         }
@@ -1986,15 +1985,17 @@ sub _processTags {
             if ( $stackTop =~ m/^%($regex{tagNameRegex})(?:{(.*)})?$/so ) {
                 my( $tag, $args ) = ( $1, $2 );
                 #print STDERR ' ' x $tell,"POP $tag\n" if $tell;
-                my $e;
-                if ( defined( $this->{SESSION_TAGS}{$tag} )) {
+                my $e = $this->{prefs}->getPreferencesValue( $tag );
+                unless( defined( $e )) {
                     $e = $this->{SESSION_TAGS}{$tag};
-                } elsif ( defined( $constantTags{$tag} )) {
-                    $e = $constantTags{$tag};
-                } elsif ( defined( $functionTags{$tag} )) {
-                    $e = &{$functionTags{$tag}}
-                      ( $this, new TWiki::Attrs(
-                          $args, $contextFreeSyntax{$tag} ), @_ );
+                    unless( defined( $e )) {
+                        $e = $constantTags{$tag};
+                    }
+                    if( !defined( $e ) && defined( $functionTags{$tag} )) {
+                        $e = &{$functionTags{$tag}}
+                          ( $this, new TWiki::Attrs(
+                              $args, $contextFreeSyntax{$tag} ), @_ );
+                    }
                 }
 
                 if ( defined( $e )) {
@@ -2043,7 +2044,10 @@ sub _expandTag {
     # my( $topic, $web ) = @_;
 
     my $res;
-    if ( defined( $this->{SESSION_TAGS}{$tag} )) {
+    my $e = $this->{prefs}->getPreferencesValue( $tag );
+    if( defined( $e )) {
+        $res = $e;
+    } elsif ( defined( $this->{SESSION_TAGS}{$tag} )) {
         $res = $this->{SESSION_TAGS}{$tag};
     } elsif ( defined( $constantTags{$tag} )) {
         $res = $constantTags{$tag};
@@ -2052,7 +2056,7 @@ sub _expandTag {
         $res = &{$functionTags{$tag}}( $this, $params, @_ );
     }
 
-    return $res;
+    return $res || '';
 }
 
 =pod
@@ -2319,7 +2323,7 @@ sub _VAR {
     if( $web =~ m/%$regex{tagNameRegex}%/o ) { # handle %MAINWEB%-type cases 
         handleInternalTags( $web, $inweb, $topic );
     }
-    return $this->{prefs}->getPreferencesValue( $key, $web );
+    return $this->{prefs}->getWebPreferencesValue( $key, $web );
 }
 
 sub _PLUGINVERSION {
@@ -2419,6 +2423,7 @@ sub _INCLUDE {
     }
 
     my %saveTags = %{$this->{SESSION_TAGS}};
+    my $prefsMark = $this->{prefs}->mark();
 
     push( @{$this->{includeStack}}, $path );
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $web;
@@ -2482,6 +2487,8 @@ sub _INCLUDE {
     # restore the tags
     pop( @{$this->{includeStack}} );
     %{$this->{SESSION_TAGS}} = %saveTags;
+
+    $this->{prefs}->restore( $prefsMark );
 
     $text =~ s/^\n+/\n/;
     $text =~ s/\n+$/\n/;
@@ -2755,6 +2762,10 @@ sub _SCRIPTNAME {
     }
     # no joy
     return '';
+}
+
+sub _ALL_VARIABLES {
+    return shift->{prefs}->stringify();
 }
 
 1;

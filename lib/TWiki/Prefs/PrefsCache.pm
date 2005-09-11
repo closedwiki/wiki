@@ -1,9 +1,8 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 1999-2005 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -38,32 +37,31 @@ use Assert;
 
 =pod
 
----++ ClassMethod new( $session, $type, $parent )
+---++ ClassMethod new( $prefs, $type, $web, $topic, $prefix )
 
 Creates a new Prefs object.
-| Parameter: =$type= | Type of prefs object to create, see notes. |
-| Parameter: =$parent= | Prefs object which contains higher-level settings. |
+   * =$prefs= - controlling TWiki::Prefs object
+   * =$type= - Type of prefs object to create, see notes.
+   * =$web= - web containing topic to load from (required is =$topic= is set)
+   * =$topic= - topic to load from
+   * =$prefix= - key prefix for all preferences (used for plugins)
+
+If the specified topic is not found, returns an empty object.
 
 =cut
 
 sub new {
-    my( $class, $session, $parent ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
+    my( $class, $prefs, $type, $web, $topic, $prefix ) = @_;
+
+    ASSERT($prefs->isa( 'TWiki::Prefs')) if DEBUG;
+    ASSERT($type) if DEBUG;
 
     my $this = bless( {}, $class );
-    $this->{session} = $session;
-    $this->{keyPrefix} = '';
+    $this->{MANAGER} = $prefs;
+    $this->{TYPE} = $type;
 
-    # initialise the final prefs from the parent, so they don't get
-    # overwritten when loading prefs at this level. The final hash
-    # will be rewritten when the prefs have been loaded.
-    if( $parent ) {
-        ASSERT($parent->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
-        $this->{final} = $parent->{final};
-        $this->{prefs}{FINALPREFERENCES} =
-          join(', ', keys( %{$this->{final}} ));
-    } else {
-        $this->{final} = ();
+    if( $web && $topic ) {
+        $this->loadPrefsFromTopic( $web, $topic, $prefix );
     }
 
     return $this;
@@ -71,26 +69,28 @@ sub new {
 
 =pod
 
----++ ObjectMethod loadPrefsFromTopic( $web, $topic )
+---++ ObjectMethod loadPrefsFromTopic( $web, $topic, $keyPrefix )
 
 Loads preferences from a topic. All settings loaded are prefixed
-with the key prefix set in setKeyPrefix (default '').
+with the key prefix (default '').
 
 =cut
 
 sub loadPrefsFromTopic {
-    my( $this, $theWeb, $theTopic ) = @_;
+    my( $this, $theWeb, $theTopic, $keyPrefix ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
 
-    my $session = $this->{session};
+    $keyPrefix ||= '';
+
+    my $session = $this->{MANAGER}->{session};
     if( $session->{store}->topicExists( $theWeb, $theTopic )) {
         my( $meta, $text ) =
           $session->{store}->readTopic( undef,
                                          $theWeb, $theTopic,
                                          undef );
         my $parser = new TWiki::Prefs::Parser();
-        $parser->parseText( $text, $this );
-        $parser->parseMeta( $meta, $this );
+        $parser->parseText( $text, $this, $keyPrefix );
+        $parser->parseMeta( $meta, $this, $keyPrefix );
     }
 
     my $finalPrefs = $this->{prefs}{FINALPREFERENCES};
@@ -102,25 +102,10 @@ sub loadPrefsFromTopic {
 
 =pod
 
----++ ObjectMethod setKeyPrefix( $pfx )
-Set the key prefix to be prepended to any key added to the cache
-from now on.
-
-=cut
-
-sub setKeyPrefix {
-    my( $this, $pfx ) = @_;
-    $this->{keyPrefix} = $pfx;
-}
-
-=pod
-
 ---++ ObjectMethod insertPrefsValue($key, $val)
 Adds a key-value pair to the object.
 Callback used for the Prefs::Parser object, or can be used to add
-arbitrary new entries to a prefs cache. Note that the last
-keyPrefix set in a call to setKeyPrefix is automatically prepended
-to the key.
+arbitrary new entries to a prefs cache.
 
 Note that final preferences can't be set this way, they can only
 be set in the context of a full topic read, because they cannot
@@ -131,10 +116,7 @@ be finalised until after the whole topic has been read.
 sub insertPrefsValue {
     my( $this, $theKey, $theValue ) = @_;
 
-    $theKey = $this->{keyPrefix} . $theKey;
-
-    # key is final, may not be overridden
-    return if exists $this->{final}{$theKey};
+    return if $this->{MANAGER}->isFinal( $theKey );
 
     $theValue =~ s/\t/ /g;                 # replace TAB by space
     $theValue =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
@@ -143,21 +125,44 @@ sub insertPrefsValue {
 
     if ( defined( $this->{prefs}{$theKey} ) &&
          $theKey eq 'FINALPREFERENCES' ) {
-        # merge final preferences lists
-        $this->{prefs}{$theKey} .= ",$theValue";
+        $this->{final}{$theValue} = 1;
     } else {
         $this->{prefs}{$theKey} = $theValue;
     }
 }
 
-#sub stringify {
-#    my $this = shift;
-#    my $res = '';
-#
-#    foreach my $key ( keys %{$this->{prefs}} ) {
-#        $res .= "$key => $this->{prefs}{$key}\n";
-#    }
-#    return $res;
-#}
+=pod
+
+---++ ObjectMethod stringify(\%shown) -> $text
+Generate an HTML representation of the content of this cache.
+
+=cut
+
+sub stringify {
+    my( $this, $shown ) = @_;
+    my $res = CGI::Tr( {style=>'background-color: yellow'},
+                       CGI::Th( {colspan=>2}, $this->{TYPE} ))."\n";
+    my %shown;
+
+    foreach my $key ( sort keys %{$this->{prefs}} ) {
+
+        next if $shown->{$key};
+
+        my $final = '';
+        if ( $this->{final}{$key}) {
+            $final = ' *final* ';
+        } else {
+            next if $this->{MANAGER}->isFinal( $key );
+        }
+        my $val = $this->{prefs}{$key};
+        $val =~ s/^(.{32}).*$/$1..../s;
+        $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
+        $res .= CGI::Tr( {valign=>'top'},
+                        CGI::td(" $key$final ").
+                            CGI::td( $val ))."\n";
+        $shown->{$key} = 1;
+    }
+    return $res;
+}
 
 1;

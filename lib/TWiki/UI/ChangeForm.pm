@@ -63,7 +63,7 @@ sub generate {
     $formName = 'none' if( !$formName );
 
     my $prefs = $session->{prefs};
-    my $legalForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
+    my $legalForms = $prefs->getWebPreferencesValue( 'WEBFORMS', $web );
     $legalForms =~ s/^\s*//;
     $legalForms =~ s/\s*$//;
     my @forms = split( /[,\s]+/, $legalForms );

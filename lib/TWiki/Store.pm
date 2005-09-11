@@ -1319,7 +1319,7 @@ sub getListOfWebs {
         @webList =
           grep {
               $_ eq $this->{session}->{webName} ||
-                !$prefs->getPreferencesValue( 'NOSEARCHALL', $_ )
+                !$prefs->getWebPreferencesValue( 'NOSEARCHALL', $_ )
             } @webList;
     }
 

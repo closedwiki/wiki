@@ -148,6 +148,9 @@ sub loadSession {
 
     $this->{cgisession} = $cgisession;
 
+    # expire the session after 1 idle hour
+    $cgisession->expire($TWiki::cfg{SessionExpiresAfter});
+
     my $sessionId = $cgisession->id();
     $this->{sessionId} = $sessionId;
 

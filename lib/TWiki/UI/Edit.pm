@@ -171,9 +171,9 @@ sub edit {
     my $templateWeb = $webName;
 
     # Get edit template, standard or a different skin
-    my $template = $session->{prefs}->getPreferencesValue("EDIT_TEMPLATE") ||
+    my $template = $session->{prefs}->getPreferencesValue('EDIT_TEMPLATE') ||
         'edit';
-    $tmpl = $session->{templates}->readTemplate( "$template$editaction", $skin );
+    $tmpl = $session->{templates}->readTemplate( $template.$editaction, $skin );
     if( ! $tmpl ) {
         my $mess = CGI::start_html().
           CGI::h1('TWiki Installation Error').
@@ -296,7 +296,7 @@ sub edit {
                                                  $getValuesFromFormTopic );
         }
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
-    } elsif( !$saveCmd && $session->{prefs}->getPreferencesValue( 'WEBFORMS', $webName )) {
+    } elsif( !$saveCmd && $session->{prefs}->getWebPreferencesValue( 'WEBFORMS', $webName )) {
         my $formText = $session->{templates}->readTemplate( "addform", $session->getSkin() );
         $tmpl =~ s/%FORMFIELDS%/$formText/go;
     } else {

@@ -28,168 +28,22 @@ __Note:__ Above text is included from TWikiVariablesAtoM and TWikiVariablesNtoZ
 #PreferencesVariables
 ---++ Preferences Variables
 
-Additional variables are defined in the preferences topics:
-	* site-level ( __SL__ ) in %TWIKIWEB%.%WIKIPREFSTOPIC%
-	* web-level ( __WL__ ) in %WEBPREFSTOPIC% of each web
-	* user level ( __UL__ ) in individual user topics
+Preferences variables are variables defined in the preferences topics:
+	1 default in %TWIKIWEB%.%WIKIPREFSTOPIC%
+    1 local site level in %LOCALSITEPREFS%
+	1 web-level in %WEBPREFSTOPIC% of each web
+    1 session variables (if sessions are enabled)
+	1 user level in individual user topics in %MAINWEB% web
+	1 topic level in topics in webs
 
-<table cellspacing="0" cellpadding="2" border="1" align="center" style="background-color:#f5f5f5">
-<tr>
-  <th width="160"> Variable: </th><th> Level: </th><th> What: </th><th>Expands to:</th>
-</tr>
-<tr>
-  <td> =%<nop>ALLOWTOPICCHANGE%= </td>
-  <td> __(any topic)__ </td>
-  <td> List of users and groups who are *allowed* to change the current topic. (More in TWikiAccessControl) </td>
-  <td> %ALLOWTOPICCHANGE% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>ALLOWTOPICRENAME%= </td>
-  <td> __(any topic)__ </td>
-  <td> List of users and groups who are *allowed* to rename the current topic. (More in TWikiAccessControl) </td>
-  <td> %ALLOWTOPICRENAME% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>ALLOWWEBCHANGE%= </td>
-  <td> __WL__ </td>
-  <td> List of users and groups who are *allowed* to change topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
-  <td> %ALLOWWEBCHANGE% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>ALLOWWEBRENAME%= </td>
-  <td> __WL__ </td>
-  <td> List of users and groups who are *allowed* to rename topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
-  <td> %ALLOWWEBRENAME% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>ATTACHLINKBOX%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> Default state of the link check box in the attach file page. Check box is initially checked if value is set to =CHECKED= , unchecked if empty. If checked, a link is created to the attached file at the end of the topic. Value is: <b><code>%ATTACHLINKBOX%</code></b> </td>
-  <td> %ATTACHLINKBOX% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>DENYTOPICCHANGE%= </td>
-  <td> __(any topic)__ </td>
-  <td> List of users and groups who are *not allowed* to change the current topic. (More in TWikiAccessControl) </td>
-  <td> %DENYTOPICCHANGE% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>DENYTOPICRENAME%= </td>
-  <td> __(any topic)__ </td>
-  <td> List of users and groups who are *not allowed* to rename the current topic. (More in TWikiAccessControl) </td>
-  <td> %DENYTOPICRENAME% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>DENYWEBCHANGE%= </td>
-  <td> __WL__ </td>
-  <td> List of users and groups who are *not allowed* to change topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
-  <td> %DENYWEBCHANGE% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>DENYWEBRENAME%= </td>
-  <td> __WL__ </td>
-  <td> List of users and groups who are *not allowed* to rename topics in the <nop>%WIKITOOLNAME% web. (More in TWikiAccessControl) </td>
-  <td> %DENYWEBRENAME% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>DONTNOTIFYCHECKBOX%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> Default state of the "Minor Changes, Don't Notify" (DontNotify) check box in preview. Check box is initially checked if =Set DONTNOTIFYCHECKBOX = checked="checked"=, or unchecked if empty. Value is: <b><code>%DONTNOTIFYCHECKBOX%</code></b> </td>
-  <td> %DONTNOTIFYCHECKBOX% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>EDITBOXHEIGHT%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> Vertical size of edit box, is <b> =%EDITBOXHEIGHT%= </b> </td>
-  <td> %EDITBOXHEIGHT% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>EDITBOXWIDTH%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> Horizontal size of edit box, is <b> =%EDITBOXWIDTH%= </b> </td>
-  <td> %EDITBOXWIDTH% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>EDITBOXSTYLE%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> Style of text edit box. Set to =width: 99%= for full window width (default; overwrites the EDITBOXWIDTH setting), or =width: auto= to disable. Value is: <b><code>%EDITBOXSTYLE%</code></b> </td>
-  <td> %EDITBOXSTYLE% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>FINALPREFERENCES%= </td>
-  <td> __SL__ , __WL__ </td>
-  <td> List of preferences that are not allowed to be overridden by next level preferences</td>
-  <td> %FINALPREFERENCES% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>HTTP_EQUIV_ON_EDIT%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> http-equiv meta tags for edit script. </td>
-  <td> %HTTP_EQUIV_ON_EDIT% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>HTTP_EQUIV_ON_PREVIEW%= </td>
-  <td> __SL__ , __UL__ </td>
-  <td> http-equiv meta tags for preview script. </td>
-  <td> %HTTP_EQUIV_ON_PREVIEW% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>HTTP_EQUIV_ON_VIEW%= </td>
-  <td> __SL__ </td>
-  <td> http-equiv meta tags for view, rdiff, attach, search* scripts. </td>
-  <td> %HTTP_EQUIV_ON_VIEW% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>NEWTOPICBGCOLOR%= </td>
-  <td> __SL__ , _UL_ </td>
-  <td> Background color of non existing topic. ( __UL__ needs authentication for topic views ) </td>
-  <td> %NEWTOPICBGCOLOR% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>NEWTOPICFONTCOLOR%= </td>
-  <td> __SL__ , _UL_ </td>
-  <td> Font color of non existing topic. ( __UL__ needs authentication for topic views ) </td>
-  <td> %NEWTOPICFONTCOLOR% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>NOSEARCHALL%= </td>
-  <td> __WL__ </td>
-  <td> Exclude web from a =web="all"= search (set variable to =on= for hidden webs) </td>
-  <td> %NOSEARCHALL% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>WEBBGCOLOR%= </td>
-  <td> __WL__ </td>
-  <td> Background color of web </td>
-  <td> %WEBBGCOLOR% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>WEBCOPYRIGHT%= </td>
-  <td> __SL__ , __WL__ </td>
-  <td> Copyright notice (bottom right corner of topics) </td>
-  <td> %WEBCOPYRIGHT% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>WEBTOPICLIST%= </td>
-  <td> __WL__ </td>
-  <td> Common links of web (second line of topics) </td>
-  <td> %WEBTOPICLIST% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>WIKIWEBLIST%= </td>
-  <td> __SL__ </td>
-  <td> List of <nop>%WIKITOOLNAME% webs (in upper right corner of topics) </td>
-  <td> %WIKIWEBLIST% &nbsp;</td>
-</tr>
-<tr>
-  <td> =%<nop>WIKIWEBMASTER%= </td>
-  <td> __SL__ </td>
-  <td> Webmaster email address (sender of email notifications) , is <b>%WIKIWEBMASTER%</b> </td>
-  <td> %WIKIWEBMASTER% &nbsp;</td>
-</tr>
-</table>
+Settings at higher-numbered levels override settings of the same variable at lower numbered levels, unless the variable was included in the setting of FINALPREFERENCES at a lower-numbered level, in which case it is locked at the value it has at that level.
 
-__Note:__ There are some more useful variables defined in the TWikiPreferences like =%<nop>BR%= for line break, colors like =%<nop>RED%= for colored text and small icons like =%<nop>H%= for a %H% Help icon.
+There are many variables defined by default, and many more you can define, or may have been defined for your site. You can put !%ALL_VARIABLES% into a topic anywhere in your TWiki to get a full listing of the variables defined there. You can also review:
+   * %TWIKIWEB%.%WIKIPREFSTOPIC%
+   * %LOCALSITEPREFS%
+   * the template topic for new users
+   * the default _default.%WEBPREFSTOPIC%
+   * and TWikiAccessControl for details about security settings
 
 #SettingPrefs
 ---++ Setting Variables

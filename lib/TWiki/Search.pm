@@ -584,7 +584,7 @@ sub searchWeb {
         next unless $store->webExists( $web );  # can't process what ain't thar
 
         my $prefs = $session->{prefs};
-        my $thisWebNoSearchAll = $prefs->getPreferencesValue( 'NOSEARCHALL', $web );
+        my $thisWebNoSearchAll = $prefs->getWebPreferencesValue( 'NOSEARCHALL', $web );
 
         # make sure we can report this web on an 'all' search
         # DON'T filter out unless it's part of an 'all' search.
@@ -857,7 +857,7 @@ sub searchWeb {
                     $headerDone = 1;
                     my $prefs = $session->{prefs};
                     my $thisWebBGColor =
-                      $prefs->getPreferencesValue( 'WEBBGCOLOR', $web ) ||
+                      $prefs->getWebPreferencesValue( 'WEBBGCOLOR', $web ) ||
                         '\#FF00FF';
                     $beforeText =~ s/%WEBBGCOLOR%/$thisWebBGColor/go;
                     $beforeText =~ s/%WEB%/$web/go;

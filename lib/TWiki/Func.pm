@@ -411,9 +411,14 @@ Return: =$value=  Preferences value; empty string if not set
 =cut
 
 sub getPreferencesValue {
-#   my( $theKey, $theWeb ) = @_;
+    my( $key, $web ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{prefs}->getPreferencesValue( @_ );
+    if( $web ) {
+        return $TWiki::Plugins::SESSION->{prefs}->getWebPreferencesValue(
+            $key, $web );
+    } else {
+        return $TWiki::Plugins::SESSION->{prefs}->getPreferencesValue( $key );
+    }
 }
 
 =pod
@@ -458,8 +463,8 @@ Return: =$value=  Preferences flag ='1'= (if set), or ="0"= (for preferences val
 
 sub getPreferencesFlag {
 #   my( $theKey, $theWeb ) = @_;
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{prefs}->getPreferencesFlag( @_ );
+    my $t = getPreferencesValue( @_ );
+    return TWiki::isTrue( $t );
 }
 
 =pod
@@ -479,10 +484,9 @@ NOTE: This sub will retrieve nothing if called from a module in a subpackage of 
 
 sub getPluginPreferencesFlag {
     my( $theKey ) = @_;
-    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
     my $package = caller;
     $package =~ s/.*:://; # strip off TWiki::Plugins:: prefix
-    return $TWiki::Plugins::SESSION->{prefs}->getPreferencesFlag( "\U$package\E_$theKey" );
+    return getPreferencesFlag( "\U$package\E_$theKey" );
 }
 
 =pod

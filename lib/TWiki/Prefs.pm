@@ -1,9 +1,8 @@
 # TWiki Enterprise Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
-# and TWiki Contributors. All Rights Reserved. TWiki Contributors
-# are listed in the AUTHORS file in the root of this distribution.
-# NOTE: Please extend that file, not this notice.
+# Copyright (C) 1999-2005 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root of
+# this distribution. NOTE: Please extend that file, not this notice.
 #
 # Additional copyrights apply to some or all of the code in this
 # file as follows:
@@ -26,11 +25,19 @@ use strict;
 ---+ package TWiki::Prefs
 
 The Prefs class is a singleton that implements management of preferences.
-It uses a number of TWiki::Prefs::PrefsCache objects to store the
+It uses a stack of TWiki::Prefs::PrefsCache objects to store the
 preferences for global, web, user and topic contexts, and provides
-the means to look up preferences in these. It handles loading from
-files, finalisation of preferences, and is able to populate a
-caller-provided hash for fast lookups.
+the means to look up preferences in these.
+
+Preferences from different places stack on top of each other, so there
+are global preferences, then site, then web (and subweb and subsubweb),
+then topic, included topic and so on. Each level of the stack is tagged with
+a type identifier.
+
+The module also maintains a separate of the preferences found in every topic
+and web it reads. This supports the lookup of preferences for webs and topics
+that are not on the stack, and must not be chained in (you can't allow
+a user to override protections from their home topic!)
 
 =cut
 
@@ -41,271 +48,243 @@ use Assert;
 
 =pod
 
----++ ClassMethod new( $session )
+---++ ClassMethod new( $session [, $cache] )
 
-Creates a new Prefs object, reading
-preferences from TWiki::TWikiPreferences, Main::TWikiPreferences, and
-WebPreferences. User and topic preferences are not read until the
-user is initialised using =initializeUser=.
+Creates a new Prefs object. If $cache is defined, it will be
+pushed onto the stack.
 
 =cut
 
 sub new {
-    my( $class, $session ) = @_;
+    my( $class, $session, $cache ) = @_;
     my $this = bless( {}, $class );
     ASSERT($session->isa( 'TWiki')) if DEBUG;
     $this->{session} = $session;
-
-    my $web = $session->{webName};
-
-    my $globs =  new TWiki::Prefs::PrefsCache( $session, undef );
-    $this->{GLOBAL} = $globs;
-
-    # TWiki.TWikiPreferences first
-    $globs->loadPrefsFromTopic( $TWiki::cfg{SystemWebName},
-                                $TWiki::cfg{SitePrefsTopicName} );
-
-    # Then local prefs
-    my $local = $TWiki::cfg{LocalSitePreferences};
-    #SMELL: Why not use TWiki::normalizeWebTopicName
-    if( $local && $local =~ /^(\w+)\.(\w+)$/ ) {
-        $globs->loadPrefsFromTopic( $1, $2 );
-    }
-
-    my @webPath = split( /[\/\.]/, $web );
-    my $tmpWebPath = '';
-    my $prevWebPrefs = $globs;
-    foreach my $tmp ( @webPath ) {
-        $tmpWebPath .= '/' if $tmpWebPath;
-        $tmpWebPath .= $tmp;
-        $this->{WEBS}{$tmpWebPath} =
-          new TWiki::Prefs::PrefsCache($session, $prevWebPrefs);
-        $this->{WEBS}{$tmpWebPath}->loadPrefsFromTopic(
-            $tmpWebPath, $TWiki::cfg{WebPrefsTopicName} );
-        $prevWebPrefs=$this->{WEBS}{$tmpWebPath};
-    }
-    $this->{WEB} = $this->{WEBS}{$web};
+    push( @{$this->{PREFS}}, $cache ) if defined( $cache );
+    # $this->{CACHE} - hash of TWiki::Prefs objects, for other topics and webs
 
     return $this;
 }
 
 =pod
 
----++ ObjectMethod loadUserPreferences()
----++ ObjectMethod loadTopicPreferences()
-
-Reads preferences from the current user's personal topic, and
-read topic prefs if required.
+---++ ObjectMethod pushGlobalPreferences()
+Add global preferences to this preferences stack.
 
 =cut
 
-sub loadUserPreferences {
-    my( $this, $web, $user ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
+sub pushGlobalPreferences {
+    my $this = shift;
 
-    my $req = new TWiki::Prefs::PrefsCache($this->{session}, $this->{WEB} );
+    # Default prefs first, from read-only web
+    my $prefs = $this->pushPreferences(
+        $TWiki::cfg{SystemWebName},
+        $TWiki::cfg{SitePrefsTopicName},
+        'DEFAULT' );
 
-    $req->loadPrefsFromTopic( $TWiki::cfg{UsersWebName}, $user->wikiName() );
-    $this->{USER} = $req;
+    # Then local site prefs
+    if( $TWiki::cfg{LocalSitePreferences} ) {
+        my( $lweb, $ltopic ) = $this->{session}->normalizeWebTopicName(
+            undef, $TWiki::cfg{LocalSitePreferences} );
+        $this->pushPreferences( $lweb, $ltopic, 'SITE' );
+
+    }
 }
 
-sub loadTopicPreferences {
-    my( $this, $web, $topic ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
+sub _newCache {
+    my( $this, $type, $web, $topic, $prefix ) = @_;
 
-    my $req = new TWiki::Prefs::PrefsCache($this->{session}, $this->{USER} );
+    my $req =
+      new TWiki::Prefs::PrefsCache( $this, $type, $web, $topic, $prefix );
 
-    $req->loadPrefsFromTopic( $web, $topic );
-    $req->{topicName} = $topic;
+    $this->{CACHE}{$web.'.'.$topic} =
+      new TWiki::Prefs( $this->{session}, $req );
 
-    $this->{REQUEST} = $req;
-}
-
-=pod
-
----++ ObjectMethod getPrefsFromTopic( $web, $topic, $keyPrefix )
-
-Reads preferences from the topic at =$web.$topic=, prefixes them with
-=$keyPrefix= if one is provided, and adds them to the request preferences.
-
-This is provided for late initialisation of preferences by modules such
-as plugins. Note that any preference values loaded this way are still
-subject to finalisation, and may be overridden by =getSessionValue=.
-
-=cut
-
-sub getPrefsFromTopic {
-    my( $this, $web, $topic, $keyPrefix ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
-    $this->{REQUEST}->setKeyPrefix( $keyPrefix ) if $keyPrefix;
-    $this->{REQUEST}->loadPrefsFromTopic( $web, $topic );
-    $this->{REQUEST}->setKeyPrefix( '' ) if $keyPrefix;
+    return $req;
 }
 
 =pod
 
----++ ObjectMethod loadHash( \%hash )
-Loads the top level of all the preferences into the passed
-hash, in order to accelerate substitutions.
+---++ ObjectMethod pushPreferences( $web, $topic, $type )
+   * =$web= - web to read from
+   * =$topic= - topic to read
+   * =$type= - DEFAULT, SITE, USER, WEB, TOPIC or PLUGIN
+   * =$prefix= - key prefix for all preferences (used for plugins)
+Reads preferences from the given topic, and pushes them onto the
+preferences stack.
 
 =cut
 
-sub loadHash {
-    my ( $this, $hash ) = @_;
+sub pushPreferences {
+    my( $this, $web, $topic, $type, $prefix ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    foreach my $set qw( REQUEST WEB GLOBAL ) {
-        foreach my $key ( keys %{$this->{$set}->{prefs}} ) {
-            unless( defined( $hash->{$key} )) {
-                my $value = $this->getPreferencesValue( $key );
-                $hash->{$key} = $value;
-            }
-        }
+    my $req = $this->_newCache($type, $web, $topic, $prefix );
+    push( @{$this->{PREFS}}, $req ) if $req;
+}
+
+=pod
+
+---++ ObjectMethod pushWebPreferences( $web )
+
+Pushes web preferences. Web preferences for a particular web depend
+on the preferences of all containing webs.
+
+=cut
+
+sub pushWebPreferences {
+    my( $this, $web ) = @_;
+
+    my @webPath = split( /[\/\.]/, $web );
+    my $path = '';
+    foreach my $tmp ( @webPath ) {
+        $path .= '/' if $path;
+        $path .= $tmp;
+        $this->pushPreferences(
+            $path, $TWiki::cfg{WebPrefsTopicName}, 'WEB' );
     }
 }
 
 =pod
 
----++ ObjectMethod getPreferencesValue( $key, $web, $nouser ) -> $value
+---++ ObjectMethod mark()
+Return a marker representing the current top of the preferences
+stack. Used to remember the stack when new web and topic preferences
+are pushed during a topic include.
+
+=cut
+
+sub mark {
+    my $this = shift;
+    return scalar( @{$this->{PREFS}} );
+}
+
+=pod
+
+---++ ObjectMethod resetTo( $mark )
+Resets the preferences stack to the given mark, to recover after a topic
+include.
+
+=cut
+
+sub restore {
+    my( $this, $where ) = @_;
+    ASSERT( $where ) if DEBUG;
+    splice( @{$this->{PREFS}}, $where );
+}
+
+=pod
+
+---++ ObjectMethod getPreferencesValue( $key ) -> $value
    * =$key - key to look up
-   * =$web= - if specified, ignores request preferences and looks up the key in the given web instead.
-   * =$nouser= - if true, the preferences in the user topic are ignored
 
-Returns the value of the preference =$key=.
-
-In all cases, if a plugin supports sessions and provides a value for =$key=,
-this value overrides all other preference settings.
-
-Always returns a string value, never undef.
+Returns the value of the preference =$key=, or undef.
 
 =cut
 
 sub getPreferencesValue {
-    my( $this, $key, $web, $nouser ) = @_;
+    my( $this, $key, $class ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    my $val = $this->{session}->{client}->getSessionValue( $key );
-    return $val if defined( $val );
+    my $val;
 
-    if( $web ) {
-        unless( defined( $this->{WEBS}{$web} )) {
-            my $webs = new TWiki::Prefs::PrefsCache( $this->{session} );
-            $webs->loadPrefsFromTopic( $web,
-                                       $TWiki::cfg{WebPrefsTopicName} );
-            $this->{WEBS}{$web} = $webs;
+    foreach my $level ( reverse @{$this->{PREFS}} ) {
+        if( $level->{TYPE} =~ /^USER/ ) {
+            # If we get as high as User level, check for cookie
+            # overrides.
+            $val = $this->{session}->{client}->getSessionValue( $key );
+            return $val if defined( $val );
         }
-        $val = $this->{WEBS}{$web}->{prefs}{$key};
+        $val = $level->{prefs}{$key};
         return $val if defined( $val );
-    } else {
-        if( defined( $this->{REQUEST} )) {
-            $val = $this->{REQUEST}->{prefs}{$key};
-            return $val if defined( $val );
-        }
-
-        if( !$nouser && defined( $this->{USER} )) {
-            $val = $this->{USER}->{prefs}{$key};
-            return $val if defined( $val );
-        }
-
-        if( defined( $this->{WEB} )) {
-            $val = $this->{WEB}->{prefs}{$key};
-            return $val if defined( $val );
-        }
     }
 
-    unless( defined($val) ) {
-        $val = $this->{GLOBAL}->{prefs}{$key};
-    }
-
-    return $val || '';
+    return undef;
 }
+
+=pod
+
+---++ ObjectMethod getTopicPreferencesValue( $key, $web, $topic ) -> $value
+
+Recover a preferences value that is defined in a specific topic. Does
+not recover web, user or global settings.
+
+Intended for use in protections mechanisms.
+
+=cut
 
 sub getTopicPreferencesValue {
+    my( $this, $key, $web, $topic ) = @_;
+    my $wtn = $web.'.'.$topic;
+
+    unless( $this->{CACHE}{$wtn} ) {
+        $this->_newCache( 'TOPIC', $web, $topic );
+    }
+
+    return $this->{CACHE}{$wtn}->getPreferencesValue( $key );
+}
+
+=pod
+
+---++ ObjectMethod getWebPreferencesValue( $key, $web ) -> $value
+
+Recover a preferences value that is defined in the webhome topic of
+a specific web.. Does not recover user or global settings, but
+does recover settings from containing webs.
+
+Intended for use in protections mechanisms.
+
+=cut
+
+sub getWebPreferencesValue {
+    my( $this, $key, $web ) = @_;
+    my $wtn = $web.'.'.$TWiki::cfg{WebPrefsTopicName};
+
+    unless( $this->{CACHE}{$wtn} ) {
+        $this->{CACHE}{$wtn} = new TWiki::Prefs( $this->{session} );
+        $this->{CACHE}{$wtn}->pushWebPreferences( $web );
+    }
+    return $this->{CACHE}{$wtn}->getPreferencesValue( $key );
+}
+
+=pod
+
+---++ ObjectMethod getWebPreferencesValue( $key, $key ) -> $value
+
+Return true if the preference is a final preference.
+
+
+=cut
+
+sub isFinal {
     my( $this, $key ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    my $val = $this->{session}->{client}->getSessionValue( $key );
-    return $val if defined( $val );
-
-    if( defined( $this->{REQUEST} )) {
-      $val = $this->{REQUEST}->{prefs}{$key};
-      return $val if defined( $val );
+    foreach my $level ( @{$this->{PREFS}} ) {
+        return 1 if( $level->{final}{$key} );
     }
 
-    return '';
+    return 0;
 }
 
 =pod
 
----++ ObjectMethod getPreferencesFlag( $key, $web ) -> $boolean
+---++ObjectMethod stringify() -> $text
 
-Returns the preference =$key= from =$web= as a flag.  See
-=getPreferencesValue= for the semantics of the parameters.
-Returns 1 if the pref value is 'on', and 0 otherwise.  'On' means set to
-something with a true Perl-truth-value, with the special cases that 'off' and
-'no' are forced to false.  (Both of the latter are case-insensitive.)  Note
-also that leading and trailing whitespace on the pref value will be stripped
-prior to this conversion.
+Generate a TML-formatted version of the current preferences
 
 =cut
 
-sub getPreferencesFlag {
-    my( $this, $key, $web ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
+sub stringify {
+    my $this = shift;
+    my $s = '';
 
-    my $value = $this->getPreferencesValue( $key, $web );
-    return TWiki::isTrue( $value );
-}
+    my %shown;
 
-=pod
-
----++ ObjectMethod getPreferencesNumber( $key, $web ) -> $number
-
-Returns the preference =$key= from =$web= as a flag.  See
-=getPreferencesValue= for the semantics of the parameters.
-Converts the string =$prefValue= to a number.  First any whitespace and commas
-are removed.  *L10N note: assumes thousands separator is comma and decimal
-point is period.*  Then, if the first character is a zero, the value is
-passed to oct(), which will interpret hex (0x prefix), octal (leading zero
-only), or binary (0b prefix) numbers.  If the first character is a digit
-greater than zero, the value is assumed to be a decimal number and returned.
-If the =$prefValue= is empty or not a number, zero is returned.  Finally, if
-=$prefValue= is undefined, an undefined value is returned.  *Undefined
-preferences are automatically converted to empty strings, and so this function
-will always return zero for these, rather than 'undef'.*
-
-=cut
-
-sub getPreferencesNumber {
-    my( $this, $key, $web ) = @_;
-    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
-
-    my $value = $this->getPreferencesValue( $key, $web );
-
-    return undef unless defined( $value );
-
-    $value =~ s/[,\s]+//g;
-
-    if( $value =~ /^0(\d|x|b)/i ) {
-        return oct( $value ); # octal, 0x hex, 0b binary
-    } elsif( $value =~ /^\d(\.\d+)?/) {
-        return $value;      # decimal
+    foreach my $ptr ( @{$this->{PREFS}} ) {
+        $s .= $ptr->stringify(\%shown);
     }
-    return 0;              # empty/non-numeric
-}
 
-#sub stringify {
-#    my $this = shift;
-#    ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
-#    my $res = '';
-#
-#    foreach my $set qw( REQUEST WEB GLOBAL ) {
-#        foreach my $key ( keys %{$this->{$set}->{prefs}} ) {
-#            my $value = $this->getPreferencesValue( $key );
-#            $res .= "$set: $key => $value\n";
-#        }
-#    }
-#    return $res;
-#}
+    return CGI::table({style=>'width: 100%',class=>'twikiTable'}, $s);
+}
 
 1;

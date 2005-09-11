@@ -142,7 +142,7 @@ sub upgradeCategoryTable {
             }
         }
         my $prefs = $session->{prefs};
-        my $listForms = $prefs->getPreferencesValue( 'WEBFORMS', $web );
+        my $listForms = $prefs->getWebPreferencesValue( 'WEBFORMS', $web );
         $listForms =~ s/^\s*//go;
         $listForms =~ s/\s*$//go;
         my @formTemplates = split( /\s*,\s*/, $listForms );

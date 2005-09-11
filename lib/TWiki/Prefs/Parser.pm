@@ -63,7 +63,7 @@ Parse settings from text and add them to the preferences in $prefs
 =cut
 
 sub parseText {
-    my( $this, $text, $prefs ) = @_;
+    my( $this, $text, $prefs, $keyPrefix ) = @_;
 
     my $key = '';
     my $value ='';
@@ -71,7 +71,7 @@ sub parseText {
     foreach my $line ( split( /\r?\n/, $text ) ) {
         if( $line =~ m/$TWiki::regex{setVarRegex}/o ) {
             if( $isKey ) {
-                $prefs->insertPrefsValue( $key, $value );
+                $prefs->insertPrefsValue( $keyPrefix.$key, $value );
             }
             $key = $1;
             $value = (defined $2) ? $2 : '';
@@ -81,13 +81,13 @@ sub parseText {
                 # follow up line, extending value
                 $value .= "\n$line";
             } else {
-                $prefs->insertPrefsValue( $key, $value );
+                $prefs->insertPrefsValue( $keyPrefix.$key, $value );
                 $isKey = 0;
             }
         }
     }
     if( $isKey ) {
-        $prefs->insertPrefsValue( $key, $value );
+        $prefs->insertPrefsValue( $keyPrefix.$key, $value );
     }
 }
 
@@ -105,18 +105,18 @@ Settings are added to the $prefs passed.
 =cut
 
 sub parseMeta {
-    my( $this, $meta, $prefs ) = @_;
+    my( $this, $meta, $prefs, $keyPrefix ) = @_;
 
-        my @fields = $meta->find( 'PREFERENCE' );
-        foreach my $field( @fields ) {
-            my $title = $field->{title};
-            my $prefixedTitle = $settingPrefPrefix . $title;
-            my $value = $field->{value};
-            $prefs->insertPrefsValue( $prefixedTitle, $value );
+    my @fields = $meta->find( 'PREFERENCE' );
+    foreach my $field( @fields ) {
+        my $title = $field->{title};
+        my $prefixedTitle = $settingPrefPrefix . $title;
+        my $value = $field->{value};
+        $prefs->insertPrefsValue( $prefixedTitle, $value );
 	    #SMELL: Why do we insert both based on title and name?
 	    my $name = $field->{name};
-	    $prefs->insertPrefsValue( $name, $value );
-        }
+	    $prefs->insertPrefsValue( $keyPrefix.$name, $value );
+    }
 }
 
 1;

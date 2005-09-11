@@ -1169,7 +1169,7 @@ sub getRenderedVersion {
     # i.e. [[$1][$3]]
     $text =~ s/\[\[([^\]]+)\](\[([^\]]+)\])?\]/$this->_handleSquareBracketedLink($theWeb,$theTopic,$3,$1)/ge;
 
-    unless( $prefs->getPreferencesFlag('NOAUTOLINK') ) {
+    unless( TWiki::isTrue( $prefs->getPreferencesValue('NOAUTOLINK')) ) {
         # Handle WikiWords
         $text = $this->takeOutBlocks( $text, 'noautolink', $removed );
         $text =~ s/$STARTWW(?:($TWiki::regex{webNameRegex})\.)?($TWiki::regex{wikiWordRegex}|$TWiki::regex{abbrevRegex})($TWiki::regex{anchorRegex})?/$this->_handleWikiWord($theWeb,$1,$2,$3)/geom;
@@ -1589,9 +1589,6 @@ sub putBackBlocks {
             my $params = $map->{$placeholder}{params} || '';
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
-            if($newtag eq "pre"){
-                print STDERR "Raplce'$val'\n";
-            }
             $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
               (<$newtag$params>\n$val</$newtag>);
             delete( $map->{$placeholder} );

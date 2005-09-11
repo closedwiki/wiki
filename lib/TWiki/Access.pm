@@ -73,7 +73,7 @@ sub permissionsSet {
   OUT: foreach my $type ( @types ) {
         foreach my $action ( @actions ) {
             my $pref = $type . 'WEB' . $action;
-            my $prefValue = $prefs->getPreferencesValue( $pref, $web ) || '';
+            my $prefValue = $prefs->getWebPreferencesValue( $pref, $web ) || '';
             if( $prefValue =~ /\S/ ) {
                 $permSet = 1;
                 last OUT;
@@ -132,19 +132,18 @@ sub checkAccessPermission {
     $web ||= $this->{session}->{webName};
 
     my $prefs = $this->{session}->{prefs};
-    # If topic has not been loaded, get preferences now
-    unless ( $prefs->{REQUEST}->{topicName} eq $topic ) {
-      $prefs->loadTopicPreferences( $web, $topic );
-    }
 
     my $allowText;
     my $denyText;
 
     # extract the * Set (ALLOWTOPIC|DENYTOPIC)$mode
     my $tmp;
-    $tmp = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode );
+    $tmp = $prefs->getTopicPreferencesValue( 'ALLOWTOPIC'.$mode,
+                                             $web, $topic );
+
     $allowText = $tmp if $tmp;
-    $tmp = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode );
+    $tmp = $prefs->getTopicPreferencesValue( 'DENYTOPIC'.$mode,
+                                             $web, $topic );
     $denyText = $tmp if $tmp;
 
     # Check DENYTOPIC
@@ -177,7 +176,7 @@ sub checkAccessPermission {
     # is empty - empty means "don't deny anybody")
     unless( defined( $denyText )) {
         $denyText =
-          $prefs->getPreferencesValue( 'DENYWEB'.$mode, $web );
+          $prefs->getWebPreferencesValue( 'DENYWEB'.$mode, $web );
         if( defined( $denyText ) && $user->isInList( $denyText )) {
             $this->{failure} = 'web is denied';
             #print STDERR $this->{failure},"\n";
@@ -187,7 +186,7 @@ sub checkAccessPermission {
 
     # Check ALLOWWEB. If this is defined and not overridden by
     # ALLOWTOPIC, the user _must_ be in it.
-    $allowText = $prefs->getPreferencesValue( 'ALLOWWEB'.$mode, $web );
+    $allowText = $prefs->getWebPreferencesValue( 'ALLOWWEB'.$mode, $web );
 
     if( defined( $allowText ) && $allowText =~ /\S/ ) {
         unless( $user->isInList( $allowText )) {
