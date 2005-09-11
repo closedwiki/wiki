@@ -43,7 +43,7 @@ Prolog
 ^URI$
 ^HTML::Parser$
 ^HTML::Tagset$
-^Digest::MD5$
+^Digest::
 ^Storable$
 ^Test::Unit$
 ^LWP::Simple$

@@ -71,6 +71,7 @@ foreach my $module (
 		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
 		    qw( CGI::Session ),
 		    qw( Encode Locale::Maketext::Lexicon Text:IConv ),
+		    qw( Digest::base Digest::SHA1 ),
 		    )
 {
     print "Installing $module\n";
