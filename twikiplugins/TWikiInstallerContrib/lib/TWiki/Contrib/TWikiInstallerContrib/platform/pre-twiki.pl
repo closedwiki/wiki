@@ -70,7 +70,7 @@ foreach my $module (
 		    # Net::SSLeay IO::Socket::SSL
 		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
 		    qw( CGI::Session ),
-		    qw( Locale::Maketext::Lexicon Text:IConv ),
+		    qw( Encode Locale::Maketext::Lexicon Text:IConv ),
 		    )
 {
     print "Installing $module\n";
