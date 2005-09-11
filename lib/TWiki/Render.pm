@@ -304,23 +304,24 @@ sub _fixedFontText {
 
 # Build an HTML &lt;Hn> element with suitable anchor for linking from %<nop>TOC%
 sub _makeAnchorHeading {
-    my( $this, $theHeading, $theLevel ) = @_;
+    my( $this, $text, $theLevel ) = @_;
+
+    $text =~ s/^\s*(.*?)\s*$/$1/;
 
     # - Build '<nop><h1><a name='atext'></a> heading </h1>' markup
     # - Initial '<nop>' is needed to prevent subsequent matches.
     # - filter out $TWiki::regex{headerPatternNoTOC} ( '!!' and '%NOTOC%' )
-    # CODE_SMELL: Empty anchor tags seem not to be allowed, but validators and browsers tolerate them
-
-    my $anchorName =       $this->makeAnchorName( $theHeading, 0 );
-    my $compatAnchorName = $this->makeAnchorName( $theHeading, 1 );
+    my $anchorName =       $this->makeAnchorName( $text, 0 );
+    my $compatAnchorName = $this->makeAnchorName( $text, 1 );
     # filter '!!', '%NOTOC%'
-    $theHeading =~ s/$TWiki::regex{headerPatternNoTOC}//o;
-    my $text = "<nop><h$theLevel>";
-    $text .= CGI::a( { name=>$anchorName }, "" );
-    $text .= CGI::a( { name=>$compatAnchorName }, "") if( $compatAnchorName ne $anchorName );
-    $text .= " $theHeading </h$theLevel>";
+    $text =~ s/$TWiki::regex{headerPatternNoTOC}//o;
+    my $html = '<nop><h'.$theLevel.'>';
+    $html .= CGI::a( { name=>$anchorName }, '' );
+    $html .= CGI::a( { name=>$compatAnchorName }, '')
+      if( $compatAnchorName ne $anchorName );
+    $html .= ' '.$text.' </h'.$theLevel.'>';
 
-    return $text;
+    return $html;
 }
 
 =pod
@@ -338,39 +339,47 @@ sub makeAnchorName {
     my( $this, $anchorName, $compatibilityMode ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
-    if ( ! $compatibilityMode && $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
-    # accept, already valid -- just remove leading #
-    return substr($anchorName, 1);
+    if( !$compatibilityMode &&
+          $anchorName =~ /^$TWiki::regex{anchorRegex}$/ ) {
+        # accept, already valid -- just remove leading #
+        return substr($anchorName, 1);
     }
 
-    # strip out potential links so they don't get rendered.  Screws up header rendering.
-    $anchorName =~ s/\s*\[\s*\[.*?\]\s*\[(.*?)\]\s*\]/$1/go; # remove double bracket link 
-    $anchorName =~ s/\s*\[\s*\[\s*(.*?)\s*\]\s*\]/$1/go; # remove double bracket link
-    $anchorName =~ s/($TWiki::regex{wikiWordRegex})/_$1/go; # add an _ before bare WikiWords
+    # strip out potential links so they don't get rendered.
+    # SMELL: Screws up header rendering.
+    # remove double bracket link
+    $anchorName =~ s/\s*\[\s*\[.*?\]\s*\[(.*?)\]\s*\]/$1/go;
+    $anchorName =~ s/\s*\[\s*\[\s*(.*?)\s*\]\s*\]/$1/go;
+    # add an _ before bare WikiWords
+    $anchorName =~ s/($TWiki::regex{wikiWordRegex})/_$1/go;
 
-    if ( $compatibilityMode ) {
-    # remove leading/trailing underscores first, allowing them to be
-    # reintroduced
-    $anchorName =~ s/^[\s\#\_]*//;
+    if( $compatibilityMode ) {
+        # remove leading/trailing underscores first, allowing them to be
+        # reintroduced
+        $anchorName =~ s/^[\s\#\_]*//;
         $anchorName =~ s/[\s\_]*$//;
     }
-    $anchorName =~ s/<[\/]?\w[^>]*>//gi;         # remove HTML tags
+    $anchorName =~ s/<[\/]?\w[^>]*>//gi;    # remove HTML tags
     $anchorName =~ s/\&\#?[a-zA-Z0-9]*;//g; # remove HTML entities
     $anchorName =~ s/\&//g;                 # remove &
-    $anchorName =~ s/^(.+?)\s*$TWiki::regex{headerPatternNoTOC}.*/$1/o; # filter TOC excludes if not at beginning
-    $anchorName =~ s/$TWiki::regex{headerPatternNoTOC}//o; # filter '!!', '%NOTOC%'
+    # filter TOC excludes if not at beginning
+    $anchorName =~ s/^(.+?)\s*$TWiki::regex{headerPatternNoTOC}.*/$1/o;
+    # filter '!!', '%NOTOC%'
+    $anchorName =~ s/$TWiki::regex{headerPatternNoTOC}//o;
 
-    # For most common alphabetic-only character encodings (i.e. iso-8859-*), remove non-alpha characters 
-    if( defined($TWiki::cfg{Site}{CharSet}) && $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?/i ) {
+    # For most common alphabetic-only character encodings (i.e. iso-8859-*),
+    # remove non-alpha characters 
+    if( defined($TWiki::cfg{Site}{CharSet}) &&
+          $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?/i ) {
         $anchorName =~ s/[^$TWiki::regex{mixedAlphaNum}]+/_/g;
     }
-    $anchorName =~ s/__+/_/g;               # remove excessive '_' chars
+    $anchorName =~ s/__+/_/g;           # remove excessive '_' chars
     if ( !$compatibilityMode ) {
-        $anchorName =~ s/^[\s\#\_]*//;      # no leading space nor '#', '_'
+        $anchorName =~ s/^[\s\#\_]*//;  # no leading space nor '#', '_'
     }
-    $anchorName =~ s/^(.{32})(.*)$/$1/;     # limit to 32 chars - FIXME: Use Unicode chars before truncate
+    $anchorName =~ s/^(.{32})(.*)$/$1/; # limit to 32 chars - FIXME: Use Unicode chars before truncate
     if ( !$compatibilityMode ) {
-        $anchorName =~ s/[\s\_]*$//;        # no trailing space, nor '_'
+        $anchorName =~ s/[\s\_]*$//;    # no trailing space, nor '_'
     }
 
     # No need to encode 8-bit characters in anchor due to UTF-8 URL support
@@ -1050,11 +1059,11 @@ sub getRenderedVersion {
 
     # Headings
     # '<h6>...</h6>' HTML rule
-    $text =~ s/$TWiki::regex{headerPatternHt}/$this->_makeAnchorHeading($2,$1)/geomi;
+    $text =~ s/$TWiki::regex{headerPatternHt}/$this->_makeAnchorHeading($2,$1)/geo;
     # '\t+++++++' rule
-    $text =~ s/$TWiki::regex{headerPatternSp}/$this->_makeAnchorHeading($2,(length($1)))/geom;
+    $text =~ s/$TWiki::regex{headerPatternSp}/$this->_makeAnchorHeading($2,(length($1)))/geo;
     # '----+++++++' rule
-    $text =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geom;
+    $text =~ s/$TWiki::regex{headerPatternDa}/$this->_makeAnchorHeading($2,(length($1)))/geo;
 
     # Horizontal rule
     my $hr = CGI::hr();
@@ -1297,7 +1306,7 @@ sub TML2PlainText {
     $text =~ s/\&[a-z]+;/ /g;           # remove entities
     if( $opts =~ /nohead/ ) {
         # skip headings on top
-        while( $text =~ s/^\s*\-\-\-+\+[^\n\r]+// ) {}; # remove heading
+        while( $text =~ s/^\s*\-\-\-+\+[^\n\r]*// ) {}; # remove heading
     }
     # keep only link text of [[][]]
     $text =~ s/\[\[([^\]]*\]\[|[^\s]*\s)(.*?)\]\]/$2/g;
@@ -1487,10 +1496,8 @@ sub takeOutBlocks {
     my( $this, $intext, $tag, $map ) = @_;
     ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
 
-    return $intext unless ( $intext =~ m/<$tag\b/ );
+    return $intext unless( $intext =~ m/<$tag\b/ );
 
-    my $open = qr/^([^<]*)<$tag\b([^>]*)?>(.*)$/im;
-    my $close = qr/^([^<]*)<\/$tag>(.*)$/im;
     my $out = '';
     my $depth = 0;
     my $pre;
@@ -1498,25 +1505,28 @@ sub takeOutBlocks {
     my $tagParams;
 
     foreach my $line ( split/\r?\n/, $intext ) {
-        if ( $line =~ m/$open/ ) {
-            unless ( $depth++ ) {
+        if( $line =~ m/^([^<]*)<$tag\b([^>]*)?>(.*)$/im ) {
+            unless( $depth++ ) {
                 $pre = $1;
                 $tagParams = $2;
-                $scoop = $3."\n";
+                if( defined( $3 ) && $3 ne '' ) {
+                    $scoop = $3."\n";
+                } else {
+                    $scoop = '';
+                }
                 next;
             }
         }
-        if ( $depth && $line =~ m/$close/ ) {
-	    my $closeScoop = $1;
-            my $rest = $2;
-            unless ( --$depth ) {
+        if( $depth && $line =~ m/^([^<]*)<\/$tag>(.*)$/im ) {
+            my $bol = $1;
+            my $eol = $2;
+            unless( --$depth ) {
                 my $placeholder = $tag.$placeholderMarker;
                 $placeholderMarker++;
                 $map->{$placeholder}{params} = $tagParams;
-                $map->{$placeholder}{text} = $scoop.$closeScoop;
-
+                $map->{$placeholder}{text} = $scoop.$bol;
                 $line = $pre.'<!--'.$TWiki::TranslationToken.$placeholder.
-                  $TWiki::TranslationToken.'-->'.$rest;
+                  $TWiki::TranslationToken.'-->'.$eol;
             }
         }
         if ( $depth ) {
@@ -1579,6 +1589,9 @@ sub putBackBlocks {
             my $params = $map->{$placeholder}{params} || '';
             my $val = $map->{$placeholder}{text};
             $val = &$callback( $val ) if ( defined( $callback ));
+            if($newtag eq "pre"){
+                print STDERR "Raplce'$val'\n";
+            }
             $$text =~ s(<!--$TWiki::TranslationToken$placeholder$TWiki::TranslationToken-->)
               (<$newtag$params>\n$val</$newtag>);
             delete( $map->{$placeholder} );

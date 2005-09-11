@@ -339,12 +339,12 @@ BEGIN {
     # Header patterns based on '+++'. The '###' are reserved for numbered
     # headers
     # '---++ Header', '---## Header'
-    $regex{headerPatternDa} = '^---+(\++|\#+)\s*(.+)\s*$';
+    $regex{headerPatternDa} = qr/^---+(\++|\#+)(.*)$/m;
     # '   ++ Header', '   + Header'
     # SMELL: is this ever used? It's not documented AFAICT
-    $regex{headerPatternSp} = '^\t(\++|\#+)\s*(.+)\s*$';
+    $regex{headerPatternSp} = qr/^\t(\++|\#+)(.+)$/m;
     # '<h6>Header</h6>
-    $regex{headerPatternHt} = '^<h([1-6])>\s*(.+?)\s*</h[1-6]>';
+    $regex{headerPatternHt} = qr/^<h([1-6])>(.+?)<\/h\1>/mi;
     # '---++!! Header' or '---++ Header %NOTOC% ^top'
     $regex{headerPatternNoTOC} = '(\!\!+|%NOTOC%)';
 
