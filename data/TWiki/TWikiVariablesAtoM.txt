@@ -236,6 +236,21 @@ Any other parameters will be defined as variables within the scope of the includ
 	* Syntax: =%<nop>INCLUDINGWEB%=
 	* Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
+#VarLANGUAGES
+---+++ LANGUAGES -- TWiki available languages
+	* list the languages available (as _PO_ files) to TWiki.
+	  Those are the languages in which TWiki's user interface is available.
+	* Syntax: =%<nop>LANGUAGES{...}%=
+	* Supported parameters:
+	  | *Parameter:* | *Description:* | *Default:* |
+	  | =format=     | format for each item. See below for variables available in the format string. | ="   * $langname"= |
+	  | =sep=        | separator between items. | ="\n"= (newline) |
+	* =format= variables:
+	  | *Variable* | *Meaning* |
+	  | =$langname= | language's name, as informed by the translators |
+	  | =$langtag= | language's tag. Ex: =en=, =pt-br=, etc. |
+        
+
 #VarLOCALSITEPREFS
 ---+++ LOCALSITEPREFS - web.topicname of site preferences topic
    * The full name of the local site preferences topic. This topic is read for preferences before %TWIKIWEB%.<nop>%TWIKIPREFSTOPIC% is read.

@@ -16,6 +16,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+# please entre here the name of your language (written in it):
+msgid "_language_name"
+msgstr "Português"
+
 # please leave this comment here
 #: templates/twiki.i18n.tmpl:5
 msgid "Log In"

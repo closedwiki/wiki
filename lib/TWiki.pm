@@ -161,6 +161,7 @@ BEGIN {
         IFCONTEXT         => \&_IFCONTEXT,
         INCLUDE           => \&_INCLUDE,
         INTURLENCODE      => \&_INTURLENCODE,
+        LANGUAGES         => \&_LANGUAGES,
         METASEARCH        => \&_METASEARCH,
         PLUGINVERSION     => \&_PLUGINVERSION,
         QUERYSTRING       => \&_QUERYSTRING,
@@ -2743,6 +2744,32 @@ sub _ATTACHURLPATH {
 sub _USERLANGUAGE {
     my $this = shift;
     return $this->{i18n}->language();
+}
+
+sub _LANGUAGES {
+    my ( $this , $params ) = @_;
+    my $format = $params->{format} || "   * \$langname";
+    my $sep = $params->{sep} || "\n";
+    $sep =~ s/\\n/\n/g;
+
+    # $languages is a hash reference:
+    my $languages = $this->{i18n}->available_languages(); 
+
+    my @tags = sort(keys(%{$languages}));
+
+    my $result = '';
+    my $i = 0; 
+    foreach my $lang (@tags) {
+         my $item = $format;
+         my $name = ${$languages}{$lang};
+         $item =~ s/\$langname/$name/g;
+         $item =~ s/\$langtag/$lang/g;
+         $result .= $sep if $i;
+         $result .= $item;
+         $i++;
+    }
+
+    return $result;
 }
 
 sub _SCRIPTNAME {

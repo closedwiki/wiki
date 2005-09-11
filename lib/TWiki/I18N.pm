@@ -34,6 +34,7 @@ package TWiki::I18N;
 
 use TWiki;
 use Assert;
+use File::Find;
 
 use vars qw( $initialised );
 
@@ -86,6 +87,10 @@ HERE
     $this->{converter} = new Text::Iconv('utf-8',
                                          $TWiki::cfg{Site}{CharSet});
 
+
+    $this->{available_languages} = { en => 'English' };
+    $this->{checked_available}   = undef;
+
     return $this;
 }
 
@@ -109,17 +114,17 @@ found for thet argument.
 =cut
 
 sub translate {
-  my ( $this, $text ) = @_;
+    my ( $this, $text ) = @_;
 
-  return $text unless $this->{language};
+    return $text unless $this->{language};
 
-  # translate text:
-  my $result = $this->{language}->maketext($text);
+    # translate text:
+    my $result = $this->{language}->maketext($text);
 
-  # translate encoding:
-  $result = $this->{converter}->convert($result);
+    # translate encoding:
+    $result = $this->{converter}->convert($result);
 
-  return $result;
+    return $result;
 }
 
 =pod
@@ -137,6 +142,46 @@ sub language {
 
     return '' unless $this->{language};
     return $this->{language}->language_tag();
+}
+
+=pod
+
+---++ ObjectMethod available_languages() -> %languages
+
+Returns an array with language tags as keys and language (native) names as
+values. Useful for listing available languages to the user.
+
+=cut
+
+sub available_languages {
+
+    my $this = shift;
+    return $this->{available_languages} if $this->{checked_available};
+  
+    File::Find::find( { wanted =>
+                        sub {
+                            if ($File::Find::name =~ /^.*\/([a-zA-Z]+\_[a-zA-Z]+)\.po$/ ) {
+                                my $h = $this->get_handle($1);
+                                $this->_add_language($1, $this->{converter}->convert($h->maketext("_language_name")));
+                            }
+                        },
+                        untaint => 1
+                      },
+                      $TWiki::cfg{LocalesDir}
+                    );
+    $this->{checked_available} = 1;
+    return $this->{available_languages};
+
+}
+
+
+# private utility method: add a pair tag/language name
+sub _add_language {
+  my ( $this, $tag, $name ) = @_;
+  $tag =~ s/[A-Z]/lc($&)/ge;
+  $tag =~ s/\_/-/g;
+  
+  ${$this->{available_languages}}{$tag} = $name;
 }
 
 1;
