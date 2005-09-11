@@ -12,7 +12,7 @@ Low client and server requirements are core features that keep TWiki widely depl
 TWiki is written in Perl 5, uses a number of shell commands, and requires [[http://www.gnu.org/software/rcs/rcs.html][RCS (Revision Control System)]], a GNU Free Software package. TWiki is developed in a basic Linux/Apache environment. It also works with Microsoft Windows, and should have no problem on any other platform that meets the requirements.
 
 | *Resource* | *Required Server Environment *<nop>* |
-| Perl | 5.005_03 or higher (5.6.1 recommended, 5.8.x does work in most cases, but see TWiki:Codev.IssuesWithPerl5dot8) |
+| Perl | 5.005_03 or higher (5.6.1 or higher recommended, 5.8.4 is recommended for Internationalization) |
 | Non-standard Perl modules | %BULLET% Unix: =Net::SMTP= (or =sendmail=) %BB% Windows: =Net::SMTP=, =MIME::Base64=, =Digest::SHA1= %BB% Internationalisation: =Unicode::MapUTF8= &nbsp; <font size="-1">(only for non-ISO-8859-1 sites using TWiki:Codev.EncodeURLsWithUTF8 with Perl 5.6 or lower)</font> |
 | RCS | 5.7 or higher (including GNU =diff=) %BR% Optional, but the all-Perl RCS replacement is not currently recommended for live sites - see TWiki:Codev.RcsLite |
 | GNU =diff= | GNU =diff= 2.7 or higher is required when not using the all-Perl <nop>RcsLite.  %BR% Install on PATH if not included with RCS (check version with =diff -v=)  %BR% Must be the version used by RCS, to avoid problems with binary attachments - RCS may have hard-coded path to =diff= |
