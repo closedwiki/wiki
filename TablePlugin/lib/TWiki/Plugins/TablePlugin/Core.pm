@@ -79,7 +79,7 @@ sub _setDefaults {
 sub _parseParameters {
     my( $args ) = @_;
 
-    return '' if( $args =~/^\s*$/ );
+    return '' if( !$args || $args =~/^\s*$/ );
 
     my %params = TWiki::Func::extractParameters( $args );
 
