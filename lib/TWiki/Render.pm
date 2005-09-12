@@ -228,20 +228,20 @@ sub _addListItem {
     } else {
         while( $size > $depth ) {
             my $tags = pop( @{$this->{LIST}} );
-            $$result .= '</'.$tags->{element}.'>';
-            $$result .= '</'.$tags->{type}.'>';
+            $$result .= '</'.$tags->{element}.'></'.$tags->{type}.'>';
             $size--;
         }
         if( $size ) {
             $$result .= '</'.$this->{LIST}->[$size-1]->{element}.'>';
+        } else {
+            $$result .= "\n";
         }
     }
 
     if ( $size ) {
         my $oldt = $this->{LIST}->[$size-1];
         if( $oldt->{type} ne $theType ) {
-            $$result .= '</'.$oldt->{type}.'>';
-            $$result .= '<'.$theType.'>';
+            $$result .= '</'.$oldt->{type}.'><'.$theType.'>';
             pop( @{$this->{LIST}} );
             push( @{$this->{LIST}}, { type=>$theType, element=>$theElement } );
         }
