@@ -43,7 +43,7 @@ BEGIN {
 		debug => 1,
 		help => 0,
 		man => 0,
-		extensions => 'twikiplugins/TestFixturePlugin',
+		extensions => [],
 		build => '',
 		destroy => ''
     };
@@ -86,8 +86,9 @@ sub configMode {
 # BUG: Ignores extensions passed to it. They go in but disappear.
 sub configExtensions {
     my (@ext) = @_;	
-    
-    @{$Config->{extensions}} = @ext;
+
+    push @{$Config->{extensions}}, @ext;
+	print STDERR "Adding extensions: ".join(", ", @{$Config->{extensions}})."\n" if $Config->{debug};    
 
 	# default is to do all plugins and contribs
 	unless ( @ext ) {
@@ -98,8 +99,7 @@ sub configExtensions {
 	        push @{$Config->{extensions}}, $ext;
 	    }
 	}
-#	print STDERR "EXT: ".join(", ", @{$Config->{extensions}})."\n" if $Config->{debug};;
-	
+	print STDERR "Extensions adding: ".join(", ", @{$Config->{extensions}})."\n" if $Config->{debug};;
 }
 
 sub destroy {
@@ -185,9 +185,9 @@ sub linkLibDir {
     	my $lib = getLibDir($dir, $type, $ext);
     	
 		print "LIB $lib:\n" if $Config->{debug};;
-#        if ( -d $lib ) {
-#            mklink $lib;
-#        }
+        if (! -d $lib ) {
+            mkdir $lib;
+        }
         
         if (-e "$lib.pm") {
         	mklink "$lib.pm"
@@ -236,7 +236,7 @@ sub linkTemplatesDir {
 
 
 sub main {
-	my @ext = $Config->{extensions};
+	my @ext = @{$Config->{extensions}};
     foreach my $dir (@ext) { 
     	my $extension = basename($dir);
     	print "Linking $extension from $dir ... \n";
