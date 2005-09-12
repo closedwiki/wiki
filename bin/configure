@@ -2230,11 +2230,14 @@ my $hdr = CGI::start_html(
     -title => 'TWiki Configuration',
     -head => [
         CGI::meta( { name=>'robots', content=>'noindex' }),
+        CGI::Link( { -rel=>'icon', -href=>'configure.ico', -type=>'image/x-icon' } ),
+        CGI::Link( { -rel=>'shortcut icon', -href=>'configure.ico', -type=>'image/x-icon' } ),
         CGI::script( { language => 'JavaScript',
                        type => 'text/javascript' }, $js1 ),
         CGI::style( { -type=>'text/css' }, $css),
         CGI::script( { language => 'JavaScript',
-                       type => 'text/javascript' }, $js2 ) ]);
+                       type => 'text/javascript' }, $js2 ),
+	      ]);
 
 # XML confuses IE, so strip it out. This is fixed in CGI.pm 3.06.
 $hdr =~ s/^<\?xml.*?>//s;
