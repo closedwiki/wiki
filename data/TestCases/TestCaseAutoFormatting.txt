@@ -250,17 +250,17 @@ WikiWordAfterList
 <tr><td> Table</td><td>
 <!-- expected SIMPLE TABLE -->
 <p />
-<table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tr class=twikiTable><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr>
-<tr class=twikiTable><td>  A2  </td><td align="center">	2	</td><td align="right">	2  </td></tr>
+<table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tr><th bgcolor="#99CCCC"> <strong>L</strong> </th><th bgcolor="#99CCCC"> <strong>C</strong> </th><th bgcolor="#99CCCC"> <strong>R</strong> </th></tr>
+<tr><td>  A2  </td><td align="center">	2	</td><td align="right">	2  </td></tr>
 
-<tr class=twikiTable><td>  A3  </td><td align="center">	3	</td><td align="right">	3  </td></tr>
-<tr class=twikiTable><td colspan="3">  multi span  </td></tr>
-<tr class=twikiTable><td>  A4-6  </td><td>  four  </td><td>  four  </td></tr>
+<tr><td>  A3  </td><td align="center">	3	</td><td align="right">	3  </td></tr>
+<tr><td colspan="3">  multi span  </td></tr>
+<tr><td>  A4-6  </td><td>  four  </td><td>  four  </td></tr>
 
-<tr class=twikiTable><td> ^ </td><td>  five  </td><td>  five  </td></tr>
+<tr><td> ^ </td><td>  five  </td><td>  five  </td></tr>
 </table>
 <p />
-<table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tr class=twikiTable><td> ^ </td><td>  six  </td><td>  six  </td></tr>
+<table border="1" cellspacing="0" cellpadding="0" class=twikiTable> <tr><td> ^ </td><td>  six  </td><td>  six  </td></tr>
 
 </table>
 <p />
@@ -426,37 +426,37 @@ nowt!%MAINWEB%
 ---++ Complex table
 ---+++ Expected
 <!-- expected expand COMPLEX TABLE -->
-<table cellpadding="0" cellspacing="0" border="1" class=twikiTable><tr class=twikiTable>
+<table cellpadding="0" cellspacing="0" border="1" class=twikiTable><tr>
   <th bgcolor="#99CCCC"><strong>A0 all rows</strong></th>
   <th bgcolor="#99CCCC"><strong>B0</strong></th>
   <th bgcolor="#99CCCC"><strong>C0 widen this col</strong></th>
   <th bgcolor="#99CCCC"><strong>D0LinkInColHeader</strong></th>
   <th bgcolor="#99CCCC"><strong>E0 not a link this time</strong></th>
  </tr>
- <tr class=twikiTable>
+ <tr>
   <td align="right">   ^ </td>
   <td>  B1 left </td>
   <td align="center">   C1 center  </td>
   <td align="right">   D1 right </td>
   <th bgcolor="#99CCCC"><strong>E1 strong</strong></th>
  </tr>
- <tr class=twikiTable>
+ <tr>
   <td> ^</td>
   <td colspan="4" align="center">   B2:E2 span whole row  </td>
  </tr>
- <tr class=twikiTable>
+ <tr>
   <td> ^ </td>
   <td colspan="2" align="right">   B3:C3 span 2 cols right</td>
   <td> D3</td>
   <td> E3:E4 span 2 rows </td>
  </tr>
- <tr class=twikiTable>
+ <tr>
   <td>  ^</td>
   <td> B4:B5 span 2 rows </td>
   <td colspan="2"> C4:D4 span 2 cols</td>
   <td>  ^ </td>
  </tr>
- <tr class=twikiTable>
+ <tr>
   <td> ^</td>
   <td> ^</td>
   <td> C5</td>
@@ -478,11 +478,11 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 ---+++ Expected
 <!-- expected GOOGLE -->
 <table border="1" cellspacing="0" cellpadding="0" class=twikiTable>
- <tr class=twikiTable>
+ <tr>
   <td>
    <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
  </tr>
- <tr class=twikiTable>
+ <tr>
   <td>
    <a  target="_top" href="http://www.google.co.uk">http://www.google.co.uk</a>  </td>
  </tr>

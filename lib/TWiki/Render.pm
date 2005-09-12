@@ -290,7 +290,7 @@ sub _emitTR {
             $cells .= CGI::td( { @attr }, " $_" );
         }
     }
-    return $thePre.CGI::Tr( { class => 'twikiTable' }, $cells );
+    return $thePre.CGI::Tr( $cells );
 }
 
 sub _fixedFontText {
