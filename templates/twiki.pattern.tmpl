@@ -21,6 +21,25 @@
 %TMPL:DEF{"script"}%
 <script type="text/javascript">
 //<![CDATA[
+// DON'T overwrite existing onload handlers
+//	http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+
+	function addLoadEvent(func){
+		var oldonload = window.onload;
+		if (typeof window.onload != 'function') {
+			window.onload = function() {
+			    func();
+            }
+		} else {
+			window.onload = function() {
+				oldonload();
+				func();
+			}
+		}
+	}
+    
+ addLoadEvent(initPage);
+    
 	function initPage() { }
 	function removeClass(element, classname) {
 		var classes = getClassList(element);
