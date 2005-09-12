@@ -286,7 +286,34 @@ sub getAttachmentStream {
 }
 
 =pod
+---++ ObjectMethod getAttachmentList($web, $topic)
 
+returns @($attachmentName => [stat]) for any given web, topic
+=cut
+sub getAttachmentList {
+    my( $this, $web, $topic ) = @_;
+
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    my $handler = $this->_getHandler( $web, $topic ); 
+    return $handler->getAttachmentList($web, $topic);
+}
+
+=pod
+---++ ObjectMethod getAttachmentAttributes($web, $topic, $attachment)
+
+returns @($attachmentName => [stat]) for any given web, topic
+=cut
+sub getAttachmentAttributes {
+    my( $this, $web, $topic, $attachment ) = @_;
+
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    my $handler = $this->_getHandler( $web, $topic ); 
+    return $handler->getAttachmentAttributes($web, $topic, $attachment);
+}
+
+
+
+=pod
 ---++ ObjectMethod attachmentExists( $web, $topic, $att ) -> $boolean
 
 Determine if the attachment already exists on the given topic
@@ -359,7 +386,7 @@ sub moveTopic {
 
 Move a web.
 
-All parrameters must be defined and must be untainted.
+All parameters must be defined and must be untainted.
 
 =cut
 

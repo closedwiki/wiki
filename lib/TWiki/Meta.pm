@@ -109,6 +109,8 @@ Put a hash of key=value pairs into the given type set in this meta.
 See the main comment for this package to understand how meta-data is
 represented.
 
+This is a no-op if args are empty.
+SMELL (Should this no-op behaviour exist in putKeyed too?)
 =cut
 
 sub put {
@@ -120,7 +122,9 @@ sub put {
       # overwrite old single value
       $data->[0] = $args;
     } else {
-      push( @{$this->{$type}}, $args );
+    	if ($args) {
+	      push( @{$this->{$type}}, $args );
+    	}
     }
 }
 
@@ -134,6 +138,7 @@ entries are keyed by 'name'.
 See the main comment for this package to understand how meta-data is
 represented.
 
+SMELL (Should the puts' no-op on empty args behaviour exist here too?)
 =cut
 
 sub putKeyed {
@@ -165,26 +170,35 @@ Find the value of a meta-datum in the map. If the type is
 keyed, the $key parameter is required to say _which_
 entry you want. Otherwise it can be undef.
 
+If you want all the keys of a given type use the 'find' method.
+
 The result is a reference to the hash for the item.
 
 =cut
 
 sub get {
-    my( $this, $type, $keyValue ) = @_;
+    my( $this, $type, $key ) = @_;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
     my $data = $this->{$type};
+    my $value = undef;
     if( $data ) {
-        if( defined $keyValue ) {
+        if( defined $key ) {
+        	#SMELL - what's with the sequential search? Why not store it in a hash? 
             foreach my $item ( @$data ) {
-                return $item if( $item->{name} eq $keyValue );
+                $value = $item if( $item->{name} eq $key );
             }
         } else {
-            return $data->[0];
+            $value = $data->[0];
         }
     }
 
-    return undef;
+    if ($type eq 'FILEATTACHMENT' && $TWiki::cfg{AutoAttachPubFiles}) {
+    	my $filename = $key; # Any known meta data is in $value
+        $value = TWiki::Attach::getAttachmentAttributes($this->{_session},$this->{_web}, $this->{_topic}, $key, $value);
+	}
+
+    return $value;
 }
 
 =pod
@@ -201,14 +215,40 @@ sub find {
     my( $this, $type ) = @_;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
 
-    my $itemsr = $this->{$type};
-    my @items = ();
+	if ($type eq 'FILEATTACHMENT' && $TWiki::cfg{AutoAttachPubFiles}) {
+			# Get TWiki to look on the disk, supplementing with what's in META
+			return TWiki::Attach::findAttachments($this->{_session},$this->{_web},$this->{_topic},$this->{'FILEATTACHMENT'});
+	} else {
+	    my $itemsr = $this->{$type};
+	    my @items = ();
+	
+	    if( $itemsr ) {
+	        @items = @$itemsr;
+	    }
+	
+	    return @items;
+	}
+}
 
-    if( $itemsr ) {
-        @items = @$itemsr;
-    }
+=pod
+---++ StaticMethod indexByKey ($keyName, @array) -> %values{key} 
+From an array of hashes returns a hash of values indexed by any key in those hashes. 
+e.g. TWiki::Meta::indexByKeyed('name', $meta->find('FILEATTACHMENT'))
 
-    return @items;
+The result is a hash the same as the array provided by find but keyed by the keyName.
+NB. results are indeterminate if the key you choose is not unique in the find. 
+=cut
+
+sub indexByKey {
+    my( $keyName, @array) = @_;
+    ASSERT(@array) if DEBUG;
+
+	my %findKeyed = ();
+	foreach my $result (@array) {
+		my $key = $result->{$keyName};
+		$findKeyed{$key} = $result;
+	}
+	return %findKeyed;
 }
 
 =pod

@@ -22,8 +22,8 @@ use TWiki::OopsException;
 use Devel::Symdump;
 
 sub new {
-    my $self = shift()->SUPER::new(@_);
-    return $self;
+    my $this = shift()->SUPER::new(@_);
+    return $this;
 }
 
 my $testweb = "TemporaryStoreAutoAttachTestWeb";
@@ -55,11 +55,13 @@ sub tear_down {
     $session->{store}->removeWeb($session->{user}, $testweb);
 }
 
-
-sub saveTopicWithMissingAttachment {
+# We create a topic with a missing attachment
+# This attachment should be now omitted from the resulting output
+sub addMissingAttachment {
 	my $this = shift;
 	my $topic = shift;
-	my $file = 'bogusAttachment.txt';
+	my $file = shift; 
+	my $comment = shift; 
 
 	$this->assert($session->{store}->topicExists($testweb, $topic));
 	
@@ -74,7 +76,7 @@ sub saveTopicWithMissingAttachment {
                              size    => 2000000,
                              date    => 2000000,
                              user    => "TWikiContributor",
-                             comment => "I am a figment of TWiki's imagination",
+                             comment => $comment,
                              attr    => ''
                         }
                        );
@@ -82,40 +84,96 @@ sub saveTopicWithMissingAttachment {
 					 $session->{user}, $testweb, $topic, $text, $meta );
 }
 
+# We create a 3 more attachment entries:
+# one (afile.txt) that should be detected and 
+# another two (_afile.txt and _hiddenDirectoryForPlugins) that should not
+
 sub sneakAttachmentsAddedToTopic {
 	my $this = shift;
-	my ($topic) = @_;
+	my ($topic, @filenames) = @_;
+	
     my $dir = $TWiki::cfg{PubDir};
     $dir = "$dir/$testweb/$topic";
- 
-    my $attachment = "afile.txt";
-    open( FILE, ">$dir/$attachment" );
-    print FILE "Test attachment\n";
-    close(FILE); 
-    
-    my $hiddenAttachment = "_afile.txt";
-    open( FILE, ">$dir/$hiddenAttachment" );
-    print FILE "Test hidden attachment\n";
-    close(FILE); 
-    
+
+	foreach my $file (@filenames) {
+		touchFile("$dir/$file");
+	}
+
+	    
     mkdir $dir.'/_hiddenDirectoryForPlugins';    
+}
+
+sub touchFile {
+    my $filename = shift;
+    open( FILE, ">$filename" );
+    print FILE "Test attachment $filename\n";
+    close(FILE); 
 }
 
 sub test_no_autoattach {
 }
 
 sub test_autoattach {
+	
+	$TWiki::cfg{AutoAttachPubFiles} = 1;
+	print "AutoAttachPubFiles = $TWiki::cfg{AutoAttachPubFiles}\n";
+	
 	my $this = shift; 
 	my $topic = "UnitTest1";	
 	$this->verify_normal_attachment($topic);
-    $this->saveTopicWithMissingAttachment($topic);
-    $this->sneakAttachmentsAddedToTopic($topic);
-   
-    my ($readMeta, $readText) = $session->{store}->readTopic($session->{user}, $testweb, $topic);
-    my @attachments = $readMeta->find( 'FILEATTACHMENT' );
+    $this->addMissingAttachment($topic, 'bogusAttachment.txt', "I'm a figment of TWiki's imagination");
+    $this->addMissingAttachment($topic, 'ressurectedComment.txt', 'ressurected attachment comment');
+    $this->sneakAttachmentsAddedToTopic($topic, 'sneakedfile1.txt','sneakedfile2.txt', 'commavfilesshouldbeignored2.txt,v','_hiddenAttachment.txt', 'ressurectedComment.txt');
+
+    my ($meta, $text) = $session->{store}->readTopic($session->{user}, $testweb, $topic);
+    my @attachments = $meta->find( 'FILEATTACHMENT' );
+# 	printAttachments(@attachments);
+
+    $this->foundAttachmentsMustBeGettable($meta, @attachments);
+    # ASSERT the commavfile should not be found, but should be gettable.
+
+	# Our attachment correctly listed in meta data still exists:
+    my $afileAttributes = $meta->get('FILEATTACHMENT', "afile.txt");
+  	$this->assert_not_null($afileAttributes);
+    
+    # Our added files now exist:
+    my $sneakedfile1Attributes = $meta->get('FILEATTACHMENT', "sneakedfile1.txt");
+    my $sneakedfile2Attributes = $meta->get('FILEATTACHMENT', "sneakedfile2.txt");
+	$this->assert_not_null($sneakedfile1Attributes);
+	$this->assert_not_null($sneakedfile2Attributes);
+	
+	# We have deleted the faulty bogus reference:
+    my $bogusAttachmentAttributes = $meta->get('FILEATTACHMENT', "bogusAttachment.txt");
+    $this->assert_null($bogusAttachmentAttributes);
+    
+    # And commav files are still gettable (we check earlier that it is not listable).
+    my $commavfilesshouldbeignoredAttributes = $meta->get('FILEATTACHMENT', "commavfilesshouldbeignored2.txt,v");
+	$this->assert_not_null($commavfilesshouldbeignoredAttributes);
+
+}
+
+sub foundAttachmentsMustBeGettable {
+   my ($this, $meta, @attachments) = @_;
+
+	foreach my $attachment (@attachments) {
+		my $attachmentName = $attachment->{name};
+#		print "Testing file exists ".$attachmentName.": ";
+		my $attachmentAttributes = $meta->get('FILEATTACHMENT', $attachmentName);
+		$this->assert_not_null($attachmentAttributes);
+	    # print Dumper($attachmentAttributes)."\n";
+	    
+	    if ($attachmentName eq "commavfilesshouldbeignored2.txt,v") {
+	    	die "commavfilesshouldbeignored2.txt,v should not be returned in the listing";
+	    }
+	}
+}   
+
+
+sub printAttachments {
+	my (@attachments) = @_; 
     
     foreach my $attachment (@attachments) {
-    	#print "Attachment found: ".$attachment."\n";
+    	print "Attachment found: ".Dumper($attachment)."\n";
     }
 }
 
@@ -139,7 +197,7 @@ sub verify_normal_attachment {
     my $doUnlock = 1;
 
     $session->{store}->saveAttachment($testweb, $topic, $attachment, $user,
-                                { file => "/tmp/$attachment" } );
+                                { file => "/tmp/$attachment", comment => 'comment 1' } );
 
     # Check revision number
     my $rev = $session->{store}->getRevisionNumber($testweb, $topic, $attachment);
@@ -151,7 +209,7 @@ sub verify_normal_attachment {
     close(FILE);
 
     $session->{store}->saveAttachment( $testweb, $topic, $attachment, $user,
-                                  { file => "/tmp/$attachment" } );
+                                  { file => "/tmp/$attachment", comment => 'comment 2'  } );
     # Check revision number
     $rev = $session->{store}->getRevisionNumber( $testweb, $topic, $attachment );
     $this->assert_num_equals(2, $rev);

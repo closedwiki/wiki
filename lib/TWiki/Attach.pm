@@ -638,7 +638,7 @@ sub migrateToFileAttachmentMacro {
 ---++ ObjectMethod upgradeFrom1v0beta (  $meta  ) -> $text
 
 CODE_SMELL: Is this really necessary? upgradeFrom1v0beta?
-
+Can we move it to an external tool?
 =cut
 
 sub upgradeFrom1v0beta {
@@ -656,6 +656,99 @@ sub upgradeFrom1v0beta {
         my $u = $this->{session}->{users}->findUser( $att->{user} );
         $att->{user} = $u->webDotWikiName() if $u;
     }
+}
+
+=pod
+---++ getAttachmentAttributes($session, $web, $topic, $knownAttributes)
+=cut
+
+sub getAttachmentAttributes {
+   my ($session, $web, $topic, $attachmentName, $knownAttributes) = @_;
+#   print "GETTING attributes for $web.$topic/$attachmentName: ".Dumper($knownAttributes)."\n"; # SMELL - should be attachmentName
+   
+# You need the following line if you want metadata to override the filesystem
+#   return $knownAttributes if (defined $knownAttributes);
+#   print "Constructing from filesystem...\n";   
+
+   my $store = ${session}->{store};   
+   my @stat = $store->getAttachmentAttributes($web, $topic, $attachmentName);
+   
+   my $newAttributes = _constructAttributesForAutoAttached($attachmentName, \@stat);
+#   print "CONSTRUCTED attributes: ".Dumper($newAttributes)."\n";
+   
+   return $newAttributes;
+}
+
+=pod
+---++ findAttachments($session, $web, $topic, $knownAttachments)
+Synchronise the attachment list with what's actually on disk
+Returns the new meta. 
+IDEA On Windows machines where the underlying filesystem can store arbitary meta data against files, this might replace/fulfil the COMMENT purpose
+TODO consider logging when things are added to metadata
+=cut
+
+sub findAttachments {
+    my ($session, $web, $topic, $attachmentsKnownInMeta) = @_;
+    ASSERT($session->isa( 'TWiki' )) if DEBUG;
+ 
+# 	use Data::Dumper;
+# 	shift; die Dumper(@_);
+    my $store = ${session}->{store};   
+    
+    # SMELL Should this be returning a stat or a key-value paired list? (as in _constructAttributesForAutoAttached)
+    my %statForFilesListedInPub = $store->getAttachmentList($web, $topic);
+
+#	die Dumper(\%filesListedInPub);
+	my %filesListedInMeta = ();
+
+# You need the following lines if you want metadata to supplement the filesystem	
+	if (defined $attachmentsKnownInMeta) {
+		%filesListedInMeta = TWiki::Meta::indexByKey('name', @$attachmentsKnownInMeta);
+	}
+#	die "In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub);
+
+    my $newMetaForPub = TWiki::Meta->new($session, $web, $topic);
+    foreach my $file (keys %statForFilesListedInPub) {
+       my %autoAttributes = %{_constructAttributesForAutoAttached($file, $statForFilesListedInPub{$file})};
+
+       if ($filesListedInMeta{$file}) {
+       	  # Bring forward any missing yet wanted attributes
+          $autoAttributes{comment} = $filesListedInMeta{$file}{comment};
+       }
+	   $newMetaForPub ->putKeyed( 'FILEATTACHMENT',	\%autoAttributes);
+    }
+#	die Dumper($newMetaForPub->{'FILEATTACHMENT'});
+
+	# A comparison of the keys of the $filesListedInMeta and %statForFilesListedInPub 
+	# would show files that were in Meta but have disappeared from Pub.
+	    
+    return @{$newMetaForPub->{'FILEATTACHMENT'} || []};
+}
+
+=pod
+sub _constructAttributesForAutoAttached
+as long as stat is defined, return an emulated set of attributes for that attachment.
+=cut
+
+sub _constructAttributesForAutoAttached {
+   my ($file, $stat) = @_;
+ 
+    my %pairs = (
+                  name    => $file,
+                  version => '',
+                  path    => $file,
+                  size    => $stat->[7],
+                  date    => $stat->[9], 
+                  user    => "TWikiContributor",
+                  comment => "autoattached",
+                  attr    => ''
+   );
+   
+   if ($#$stat > 0) {
+	return \%pairs;
+   } else {
+ 	return undef;  
+   }
 }
 
 1;
