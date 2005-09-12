@@ -202,9 +202,10 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
     open(FH, ">$file") or die "Can't open $file: $!";
     foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir LocalesDir ) )
     {
-	print FH qq{\$cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
+	print FH qq{\$TWiki::cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
     }
-#    print FH qq{\$cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
+#    print FH qq{\$TWiki::cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
+    print FH qq{\$TWiki::cfg{HidePasswdInRegistration} = 1;\n};
 
     close( FH ) or die "Can't close $file: $! ???";
 }
