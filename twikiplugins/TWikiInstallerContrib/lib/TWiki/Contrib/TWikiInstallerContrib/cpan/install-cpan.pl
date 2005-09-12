@@ -20,10 +20,12 @@ use Pod::Usage;
 use Cwd qw( cwd );
 sub mychomp { chomp $_[0]; $_[0] }
 
+my $dirMirror = "file:$FindBin::Bin/MIRROR/TWIKI";
 my $optsConfig = {
 #
     baselibdir => $FindBin::Bin . "/../cgi-bin/lib/CPAN",
-    mirror => "file:$FindBin::Bin/MIRROR/TWIKI",
+# SMELL: change into list   
+    mirror => -d $dirMirror && $dirMirror || 'http://perl.org',
 #
     config => "~/.cpan/CPAN/MyConfig.pm",
 #
@@ -55,12 +57,14 @@ foreach my $path qw( baselibdir mirror config )
                        )
 		}ex;
 
-    $optsConfig->{$path} = File::Spec->rel2abs( $optsConfig->{$path} );
+    $optsConfig->{$path} = File::Spec->rel2abs( $optsConfig->{$path} ) 
+	unless $optsConfig->{$path} =~ /^[^:]{2,}:/;
+    if ( $path eq 'mirror' )
+    {
+	# use file: unless some transport (eg, http:, ftp:, etc.) has already been specified
+	$optsConfig->{$path} = 'file:' . $optsConfig->{$path} unless $optsConfig->{$path} =~ /^[^:]{2,}:/;
+    }
 }
-
-# use file: unless some transport (eg, http:, ftp:, etc.) has already been specified
-$optsConfig->{mirror} = "file:$optsConfig->{mirror}" 
-    unless $optsConfig->{mirror} =~ /^[^:]{2,}:/;
 
 print STDERR Dumper( $optsConfig ) if $optsConfig->{debug};
 
