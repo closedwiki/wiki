@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<title>Toggle test</title>
+<style type="text/css" media="all">
+@import url("http://twiki.org/p/pub/TWiki/PatternSkin/layout.css");
+@import url("twist.css");
+</style>
+
+<script type="text/javascript" src="twist.js"></script>
+</head>
+<body>
+
+<p>
+<span id="no_1show" class="twikiTwistMakeVisible">
+	<a href="#" class="twikiTwistTrigger">Expand...</a>
+	<span class="twikiTwistPlaceholder twikiTwistMakeVisible">Hamlet is without question the most famous play in the English language...</span>
+</span>
+<span id="no_1hide" class="twikiTwistHidden">
+	<a href="#" class="twikiTwistTrigger">Collapse...</a>
+</span>
+<span id="no_1toggle" class="twikiTwistMakeHidden">
+Hamlet is without question the most famous play in the English language. Probably written in 1601 or 1602, the tragedy is a milestone in Shakespeare's dramatic development; the playwright achieved artistic maturity in this work through his brilliant depiction of the hero's struggle with two opposing forces: moral integrity and the need to avenge his father's murder.
+</span>
+</p>
+
+<p>
+<span id="no_2show" class="twikiTwistMakeVisible">
+<a href="#" class="twikiTwistTrigger">Show logo</a>
+</span>
+<span id="no_2hide" class="twikiTwistHidden twikiTwistMakeVisible">
+<a href="#" class="twikiTwistTrigger">Hide logo</a>
+</span>
+</p>
+<div id="no_2toggle" class="twikiTwistMakeHidden">
+<img src="http://twiki.org/p/pub/Codev/HighResolutionLogos/twiki_logo.gif" alt="" />
+</div>
+
+</body>
+</html>

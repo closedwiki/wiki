@@ -1,0 +1,102 @@
+%META:TOPICINFO{author="RafaelAlvarez" date="1126488524" format="1.1" version="1.2"}%
+---+!! %TOPIC%
+
+%TOC%
+
+---+ Summary
+
+Convenience plugin for TWiki:Plugins.TwistyContrib.
+
+It has two major features:
+   * When active, the Twisty javascript library is included in every topic.
+   * Provides a convenience sintax to define twisty areas.
+
+Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sections.
+
+---++ Syntax Rules
+
+#VarTWISTYSHOW
+---+++ TWISTYSHOW{id="myid" link="Link Text"} -- Twisty Show link.
+	* Syntax: =%<nop>TWISTYSHOW{id="myid" link="Link Text"}%=
+	* Supported parameters:
+	 | *Parameter:* | *Description:* | *Default:* |
+	 | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
+	 | =link="Link Text"= | The text to be used in the Twisty Show link | required |
+	 | =mode="div/span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
+	* Example: =%<nop>TWISTYSHOW{id="demo" link=" Click to Unfold "}%= expands to 
+=&lt;span id="demoshow" class="twikiTwistMakeVisible"&gt;&lt;a href="#" class="twikiTwistTrigger"&gt; Click to Unfold &lt;/a>&lt;/span&gt;=
+	* Related: [[#VarTWISTYHIDE][TWISTYHIDE]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
+
+#VarTWISTYHIDE
+---+++ TWISTYHIDE{id="myid" link="Link Text"} -- Twisty Hide link.
+	* Syntax: =%<nop>TWISTYHIDE{id="myid" link="Link Text"}%=
+	* Supported parameters:
+	 | *Parameter:* | *Description:* | *Default:* |
+	 | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
+	 | =link="Link Text"= | The text to be used in the Twisty Hide link | required |
+	 | =mode="div/span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
+	* Example: =%<nop>TWISTYHIDE{id="demo" link=" Click to Fold "}%= expands to 
+=&lt;span id="demohide" class="twikiTwistHidden twikiTwistMakeVisible"&gt;&lt;a href="#" class="twikiTwistTrigger"&gt; Click to Fold &lt;/a>&lt;/span&gt;=
+	* Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
+
+#VarTWISTYTOGGLE
+---+++ TWISTYTOGGLE{id="myid"} -- Twisty Toggle section.
+	* Syntax: =%<nop>TWISTYTOGGLE{id="myid"}%=
+	* Supported parameters:
+	 | *Parameter:* | *Description:* | *Default:* |
+	 | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
+	 | =mode="div/span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
+	* Example: =%<nop>TWISTYTOOGLE{id="demo" mode="div"}%= expands to 
+=&lt;div id="demotoggle" class="twikiTwistMakeHidden"&gt;=
+	* Related: [[#VarTWISTYHIDE][TWISTYHIDE]], [[#VarTWISTYHIDE][TWISTYHIDE]] an [[#VarENDTWISTYTOGGLE][ENDTWISTYTOGGLE]]
+
+#VarENDTWISTYTOGGLE
+---+++ ENDTWISTYTOGGLE -- Outputs the required string for end a Twisty Toggle section.
+	* Syntax: =%<nop>ENDTWISTYTOGGLE%=
+        * Will end the most inner unclosed Twisty Toggle section, using the proper tag
+	* Example: =%<nop>ENDTWISTYTOGGLE%= expands to =&lt;/div&gt;= if =mode="div"= was used in the last [[#VarTWISTYTOGGLE][TWISTYTOGGLE]],
+	* Related: [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
+
+---++ Plugin Settings
+
+Plugin settings are stored as preferences variables. To reference
+a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>TWISTYPLUGIN_SHORTDESCRIPTION%==
+
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+		* Set SHORTDESCRIPTION = Convenience plugin for TWiki:Plugins.TwistyContrib.
+
+	* Debug plugin: (See output in =data/debug.txt=)
+		* Set DEBUG = 0
+
+---++ Plugin Installation Instructions
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your root ($TWIKI_ROOT) directory. Content:
+	| *File:* | *Description:* |
+%$MANIFEST%
+	* Optionally, if it exists, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
+	%$DEPENDENCIES%
+
+---++ Demo & Test
+ If the plugin is properly installed, you should see the twisty effect below:
+
+%TWISTYSHOW{id="demo" link=" Click to Unfold "}% %TWISTYHIDE{id="demo" link=" Click to Fold "}% 
+---
+%TWISTYTOGGLE{id="demo" mode="div"}% 
+TwistyPlugin is properly installed
+%ENDTWISTYTOGGLE% 
+---
+---+ Plugin Info
+
+| Authors: | TWiki:Main.RafaelAlvarez |
+| Copyright &copy;: | 2005 Rafael Alvarez |
+| License: | [[http://www.gnu.org/copyleft/gpl.html][GPL]] |
+| Dependencies: | %$DEPENDENCIES% |
+| 12/09/2005 | 1.000 First Version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+
