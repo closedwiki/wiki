@@ -42,7 +42,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 	* Default table attributes:
 		* #Set TABLEATTRIBUTES = tableborder="1" cellpadding="0" cellspacing="1" headerbg="#99CCCC" databg="#FFFFCC, #FFFFFF"
-		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="1" cellspacing="2" headerbg="#2E414E" headercolor="#F3EDE7" databg="#E2E2E2, #F8F8F8"
+		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="1" cellspacing="2" headerbg="#2E414E" headercolor="#F3EDE7" databg="#e8e8e8, #fafafa"
 
 ---++ Table Attributes
 
