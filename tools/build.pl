@@ -64,27 +64,36 @@ sub target_stage {
 sub _checkInFile {
     my( $this, $old, $new, $file ) = @_;
 
-    my $currentRevision = 1;
+    return if ( shift =~ /\,v$/ ); #lets not check in ,v files
+
+    my $currentRevision = 0;
     print "Checking in $new/$file\n";
     if ( -e $old.'/'.$file.',v' ) {
         $this->cp($old.'/'.$file.',v', $new.'/'.$file.',v');
+        #force unlock
         `rcs -u -M $new/$file,v`;
+        #lock to this user
         `rcs -l $new/$file`;
 
+        #try to get current revision number
         my ($rcsInfo) = "rlog -r $new/$file";
         $rcsInfo = `$rcsInfo`;
         if ( $rcsInfo =~ /revision \d+\.(\d+)/ ) {     #revision 1.2
             $currentRevision = $1;
         } else {
+            #it seems that you can have a ,v file with no commit, if you get here, you have an invalid ,v file. remove that file.
             die 'failed to get revision: '.$file."\n";
         }
     } else {
         # create rcs file, and ci
     }
+    #set revision number #TODO: what about topics with no META DATA?
     my $cmd = 'perl -pi -e \'s/^(%META:TOPICINFO{.*version=)\"[^\"]*\"(.*)$/$1\"'.($currentRevision+1).'\"$2/\' '.$new.'/'.$file;
     `$cmd`;
 
+    #check in TODO: this commits as the current user, not TWikiContributor
     `ci -mbuildrelease -t-new-topic $new/$file`;
+    #get a copy of the latest revsion, no lock
     `co -u -M $new/$file`;
 }
 
