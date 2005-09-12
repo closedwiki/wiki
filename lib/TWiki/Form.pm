@@ -108,7 +108,8 @@ sub new {
                   $store->readTopic( $session->{user}, $web, $topic, undef );
                 # Add processing of SEARCHES for Lists
                 # SMELL: why isn't this just handleCommonTags?
-                $text =~ s/%SEARCH{(.*?)}%/_searchVals($session, $1)/geo;
+#                $text =~ s/%SEARCH{(.*?)}%/_searchVals($session, $1)/geo;
+                $text = $this->{session}->handleCommonTags($text,$this->{web},$this->{topic});
                 @posValues = _getPossibleFieldValues( $text );
                 $fieldDef->{type} ||= 'select';  #FIXME keep?
             }
@@ -176,7 +177,9 @@ sub _parseFormDefinition {
 
             $vals ||= '';
             # SMELL: why isn't this just handleCommonTags?
-            $vals =~ s/%SEARCH{(.*?)}%/_searchVals($this->{session}, $1)/geo;
+#            $vals =~ s/%SEARCH{(.*?)}%/_searchVals($this->{session}, $1)/geo;
+            $vals = $this->{session}->handleCommonTags($vals,$this->{web},$this->{topic});
+
             $vals =~ s/^\s*//go;
             $vals =~ s/\s*$//go;
 
