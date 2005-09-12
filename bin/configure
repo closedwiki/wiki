@@ -58,7 +58,7 @@ my $perlverRecommended = '5.6.1';
 my $perlVerPreferred = 5.006;    # 5.6 or higher has [:lower:] etc
 my $ActivePerlRecommendedBuild = 631;    # Fixes PERL5SHELL bugs
 my $GUESSED = <<'HERE';
-I guessed this setting. You are advised to confirm this setting (and any other guessed settings) and 'Save' before changing any other settings.
+I guessed this setting. You are advised to confirm this setting (and any other guessed settings) and hit 'Next' to save before changing any other settings.
 HERE
 
 # CGI.pm version, on some platforms - actually need CGI 2.93 for mod_perl
@@ -565,7 +565,7 @@ sub _CHECKVAR_DefaultUrlHost {
         my $protocol = $url || 'http://'.$ENV{HTTP_HOST};
         $protocol =~ s(^(.*?://.*?)/.*$)($1);
         $TWiki::cfg{DefaultUrlHost} = $protocol;
-        return WARN($GUESSED);
+        return ERROR($GUESSED);
     }
     return '';
 }
@@ -597,7 +597,7 @@ HERE
                        );
         };
         $TWiki::cfg{ScriptUrlPath} = $guess;
-        return WARN($GUESSED);
+        return ERROR($GUESSED);
     }
     return '';
 }
@@ -1274,11 +1274,11 @@ sub performSanityChecks {
 
     if ($brokenLocalSiteError) {
         $output .= CGI::h2('WARNING:').
-          WARN('LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) was generated:').
+          ERROR('LocalSite.cfg is unreadable or has a configuration problem that is causing a Perl error - the following message(s) was generated:').
           CGI::pre($brokenLocalSiteError).
           'The @INC path is '.
           CGI::pre(join(":", @INC)).
-          WARN('This may be because this is the first time you have run configure. In this case you can simply ignore this warning until you have filled in your <a rel="nofollow" href="#" onclick="foldBlock(\'GeneralPathSettings\'); return false;">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.');
+          NOTE('This may be because this is the first time you have run configure. In this case you can simply ignore this error until you have filled in your <a rel="nofollow" href="#" onclick="foldBlock(\'GeneralPathSettings\'); return false;">General path settings</a>. Otherwise, check that the file exists, and the webserver user is allowed to read it.');
     }
 
     # Check whether basic CGI modules exist (some broken installations of
@@ -1781,6 +1781,7 @@ unless( $TWiki::cfg{OS} ) {
 }
 
 my $brokenLocalSiteError;
+
 # if this fails, ignore the problem, but we have to do it
 unless( eval 'do "LocalSite.cfg"' ) {
     # Capture the Perl error(s)
