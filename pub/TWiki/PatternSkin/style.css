@@ -19,8 +19,6 @@
 	C11	small font size																85%
 	C12	horizontal bar padding (h2, patternTop)										10px
 	C13	light gray background														#eee
-    C14 table border colour
-    #9999FF
 	---------------------------------------------------------------------------------------	*/
 
 /*	-----------------------------------------------------------
@@ -160,8 +158,8 @@ h6 { font-size:95%;}
 }
 .twikiTable td,
 .twikiTable th {
-    border: thin solid #9999FF; /*C14*/
-    margin: 0px;
+    border:1px solid #ccc;
+    margin: 0;
     padding: 5px;
 }
 
