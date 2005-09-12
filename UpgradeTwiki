@@ -82,11 +82,15 @@ EOUSAGE
 	if ( $newCfgFile =~ /^(.+)\/[^\/]+$/ ) {
 		$newCfgFileDir = $1;
 	}
-    # Set library paths in @INC, at compile time
+    # Set library paths in @INC
     unshift @INC, $newCfgFileDir;
+    unshift @INC, $newCfgFileDir.'/../lib';	#TODO: make sure its not a relative path
     require 'setlib.cfg';
 
 	eval 'use TWiki';
+	if ( $@ ) {
+		die "Error finding TWiki.pm, please check your setlib.cfg file points to the lib dir using absolute paths\n";
+	}
 print "\nLoaded TWiki version: $TWiki::VERSION\n";
 
 #Make absolute paths from parameters
@@ -106,6 +110,10 @@ if ( $mode eq '' )
 elsif ( $mode eq 'dakar' ) 
 {
 	eval 'use TWiki::Upgrade::UpgradeToDakar';
+	if ( $@ ) {
+		print "error: $@ \n";
+		return;
+	}
 	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($newCfgFile, $oldCfgFile, $outputDir);
 }
 elsif ( $mode eq 'cairo' ) 
