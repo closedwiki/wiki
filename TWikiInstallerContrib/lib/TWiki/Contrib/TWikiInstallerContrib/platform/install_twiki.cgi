@@ -91,6 +91,7 @@ BEGIN {
 	TemplateDir      => "$home/twiki/templates",
 	DataDir          => "$home/twiki/data",
 	LocalesDir       => "$home/twiki/po",
+	LogDir           => "$home/twiki/log",
     };
     $VIEW = URI->new( "twiki/view$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
     $TESTENV = URI->new( "twiki/testenv$localDirConfig->{ScriptSuffix}", $install_cgi->scheme )->abs( $install_cgi );
