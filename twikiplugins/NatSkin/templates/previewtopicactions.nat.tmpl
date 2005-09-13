@@ -1,8 +1,13 @@
 <!-- template: previewtopicactions.nat.tmpl -->
 %TMPL:DEF{"topicactions"}%
 <a href="javascript:history.back();" accesskey="e">Edit</a>
-| <span class="natAction">Preview</span> %FORMBUTTON%
+| <span class="natAction">Preview</span> 
+%IFSKINSTATETHEN{release="dakar"}%<!-- -->
+| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="c">Checkpoint</a> 
+%FISKINSTATE%<!-- -->
 | <a href="javascript:submitEditFormular('save', '');" accesskey="s">Save</a>
-| <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u">Undo</a>
+<br/>
+%FORMBUTTON{"$1 |"}%
+<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u">Undo</a>
 | <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
 %TMPL:END%
