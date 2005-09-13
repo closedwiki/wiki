@@ -69,7 +69,7 @@ h1, h2, h3, h4, h5, h6 {
 .natMain, .natMainFooter {
   width:100%;
 }
-.natTopRight {
+.natTopRightContents {
   white-space:nowrap;
 }
 .natSideBarContents, .natMainContents {
