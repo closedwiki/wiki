@@ -35,98 +35,138 @@ package TWiki::I18N;
 use TWiki;
 use Assert;
 use File::Find;
+use base 'Locale::Maketext';
 
-use vars qw( $initialised );
+##########################################################
+# Initizaling default language: Engligh is an AUTO lexicon
+# please read `perldoc Locale::Maketext`
+##########################################################
+package TWiki::I18N::en;
+use base 'TWiki::I18N';
+$TWiki::I18N::en::Lexicon{_AUTO} = 1;
+
+# back to the right package
+package TWiki::I18N;
+##########################################################
+
+use vars qw( $initialised @initErrors $current_language );
 
 BEGIN {
-   eval "use base 'Locale::Maketext'";
-   $initialised = !$@;
-}
-
-=pod
-
----++ ClassMethod new ( $session )
-
-Constructor. Creates a new language object
-
-=cut
-
-sub new {
-    my ( $class, $session ) = @_;
-    ASSERT($session->isa( 'TWiki')) if DEBUG;
-    my $this = bless( {}, $class );
-    $this->{session} = $session;
-
-    return $this unless $initialised;
-
-    # TODO:
-    #   web/user/session setting must override the language detected from the
-    #   browser.
 
     unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
-        $session->writeWarning(
-            '{LocalesDir} not configured - run configure' );
+      push(@initErrors, '{LocalesDir} not configured - run configure (I18N disabled).');
+      $initialised = 0;
     }
 
     my $dependencies = <<HERE;
     use Locale::Maketext::Lexicon {
-        en      => ['Auto'],
         '*'     => [ Gettext => '$TWiki::cfg{LocalesDir}' . '/*.po' ]
     };
-    use Text::Iconv;
 HERE
     eval $dependencies;
-    return $this if( $@ );
-
-    # guesses the language from the CGI environment
-    $this->{language} = $this->get_handle();
-
-    # what to do with failed translations
-    $this->{language}->{fail} = \&_identity;
-
-
-    # encoding converter from utf-8 to site charset:
-    $this->{converter} = new Text::Iconv('utf-8',
-                                         $TWiki::cfg{Site}{CharSet});
-
-
-    $this->{available_languages} = { en => 'English' };
-    $this->{checked_available}   = undef;
-
-    return $this;
-}
-
-# Function to be used as default for failed translations:
-# just return the same string passed for translations.
-sub _identity {
-    my( $h, $text ) = @_;
-    return $text;
+    $initialised = !$@;
+    unless ($initialised) {
+      push(@initErrors, 'Couldn\'t load Perl Locale::Maketext::Lexicon. It\'s need for I18N support.');
+    }
 }
 
 =pod
 
----++ ObjectMethod translate( $text ) -> $translation
+---++ ClassMethod get ( $session )
+
+Constructor. Gets the language object corresponding to the current user's language.
+5B
+
+=cut
+
+sub get {
+    my $session  = shift;
+    ASSERT($session->isa( 'TWiki')) if DEBUG;
+    
+    unless ($initialised) {
+        foreach my $error (@initErrors) {
+            $session->writeWarning(@initErrors);
+        }
+    }
+
+    # guesses the language from the CGI environment
+    # TODO:
+    #   web/user/session setting must override the language detected from the
+    #   browser.
+    my $this;
+    if ($initialised) {
+        $this = TWiki::I18N->get_handle();
+    } else {
+        $this = TWiki::I18N->get_handle('en');
+        $session->writeWarning('TWiki::I18N: falling back to English: ' . $this);
+    }
+
+    # if we couldn't initialise 'optional' I18N infrastrcture, warn that we can
+    # only use English.
+   
+    # keep a reference to the session object
+    $this->{session} = $session;
+
+    $current_language = $this;
+
+    # languages we know about
+    $this->{available_languages} = { en => 'English' };
+    $this->{checked_available}   = undef;
+    
+    # what to do with failed translations (only needed when already initialised
+    # and language is not English);
+    if ($initialised and ($this->language ne 'en')) {
+        my $fallback_handle = TWiki::I18N->get_handle('en');
+        $this->fail_with (sub {
+                              my( $h, $text, $args ) = @_;
+                              return $fallback_handle->maketext($text,$args);
+                          }
+                         );
+    }
+
+    # finally! :-p
+    return $this;
+}
+
+=pod
+
+---++ ObjectMethod maketext( $text ) -> $translation
 
 Translates the given string (assumed to be written in English) into the
-current language, as detected in the constructor.
+current language, as detected in the constructor, and converts it into
+the site charset.
+
+Wraps around Locale::Maketext's maketext method, adding charset conversion and checking
 
 Return value: translated string, or the argument itself if no translation is
 found for thet argument.
 
 =cut
 
-sub translate {
-    my ( $this, $text ) = @_;
+sub maketext {
+    my ( $this, $text, @args ) = @_;
 
-    return $text unless $this->{language};
+    # eventually translate text:
+    my $result = $this->SUPER::maketext($text, @args);
 
-    # translate text:
-    my $result = $this->{language}->maketext($text);
-
-    # translate encoding:
-    $result = $this->{converter}->convert($result);
+    if ($this->{session}) {
+      # external calls get the resultant text in the right charset:
+      $result = $this->{session}->UTF82SiteCharSet($result) || $result;
+    }
 
     return $result;
+}
+
+=pod
+
+---++ StaticMethod _ ( $text, $args ) -> $text
+
+This method is a shortcut to $TWiki::I18N::current_language->maketext
+
+=cut
+
+sub _ {
+  $current_language->maketext(@_);
 }
 
 =pod
@@ -142,8 +182,7 @@ could not be determined.
 sub language {
     my $this = shift;
 
-    return '' unless $this->{language};
-    return $this->{language}->language_tag();
+    return $this->language_tag();
 }
 
 =pod
@@ -158,13 +197,20 @@ values. Useful for listing available languages to the user.
 sub available_languages {
 
     my $this = shift;
+
+    # need to be initialised
+    return $this->{available_languages} unless $initialised;
+
+    # don't need to check twice
     return $this->{available_languages} if $this->{checked_available};
   
     File::Find::find( { wanted =>
                         sub {
                             if ($File::Find::name =~ /^.*\/([a-zA-Z]+\_[a-zA-Z]+)\.po$/ ) {
-                                my $h = $this->get_handle($1);
-                                $this->_add_language($1, $this->{converter}->convert($h->maketext("_language_name")));
+                                my $tag = _normalize_language_tag($1);
+                                my $h = TWiki::I18N->get_handle($tag);
+                                my $name = $this->{session}->UTF82SiteCharSet($h->maketext("_language_name"));
+                                $this->_add_language($tag, $name);
                             }
                         },
                         untaint => 1
@@ -179,11 +225,16 @@ sub available_languages {
 
 # private utility method: add a pair tag/language name
 sub _add_language {
-  my ( $this, $tag, $name ) = @_;
-  $tag =~ s/[A-Z]/lc($&)/ge;
-  $tag =~ s/\_/-/g;
-  
+  my ( $this, $tag, $name ) = @_;  
   ${$this->{available_languages}}{$tag} = $name;
+}
+
+# utility function: normalize language tags like ab_CD to ab-cd
+sub _normalize_language_tag {
+  my $tag = shift;
+  $tag = lc($tag);;
+  $tag =~ s/\_/-/g;
+  return $tag;
 }
 
 1;

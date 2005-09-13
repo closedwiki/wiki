@@ -992,7 +992,7 @@ sub new {
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
     # language information
-    $this->{i18n} = new TWiki::I18N( $this );
+    $this->{i18n} = TWiki::I18N::get( $this );
 
     $this->{users} = new TWiki::Users( $this );
 

@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 #
 # Script to extract strings from TWiki sources and templates
-#
+
 use strict;
+use Locale::Maketext::Extract::Run 'xgettext';
 
 # force the use from the root
 -d 'bin' and -d "lib" and -d 'tools' and -d 'templates' or die("You may only run this utility from the root directory of TWiki sources!");
@@ -11,28 +12,23 @@ use strict;
 my $localesDir = "po";
 my $potfile = "${localesDir}/TWiki.pot";
 my $newpotfile = $potfile . '.new';
-my $sources_listing = "sources.in";
-
-# create header of new potfile
-system("echo | xgettext --force-po --language=Perl --output=$newpotfile -"); #empty potfile
 
 # extract strings from the source code and append to the new potfile
 
 #####################################################################
 # driven from MANIFEST (picks up only files that are included in the release)
 my @templates;
+my @sources;
 open(R, "<tools/MANIFEST") || die "Could not open tools/MANIFEST: $!";
-open(W, ">$sources_listing") || die "Could not open $sources_listing: $!";
 foreach my $source (<R>) {
     chomp($source);
     if( $source =~ /^bin\/[a-z]/ || $source =~ /^lib\/.*\.pm$/ ) {
-        print W $source,"\n";
+        push(@sources, $source);
     } elsif( $source =~ /^templates\/.*\.tmpl$/ ) {
         push(@templates, $source);
     }
 }
 close(R);
-close(W);
 
 #################### OR ########################
 # driven from 
@@ -42,8 +38,15 @@ close(W);
 #my @templates = `find templates/*`;
 #####################################################################
 
-system("xgettext --omit-header --force-po --language=Perl --keyword=_ --keyword=translate -f $sources_listing -o $newpotfile.sources");
-system("cat $newpotfile.sources >> $newpotfile"); # add sources' strings
+#system("xgettext --omit-header --force-po --language=Perl --keyword=_ --keyword=translate -f $sources_listing -o $newpotfile.sources");
+print("I: scanning sources, it may take some time...\n");
+xgettext("-o", $newpotfile, @sources);
+
+if (! -e $newpotfile) {
+  # create an empty potfile
+  system("echo | xgettext --force-po --language=Perl --output=$newpotfile -"); #empty potfile
+  print("W: no strings extracted from source: creating an empty potfile ($newpotfile).\n");
+}
 print("I: source strings extracted and appended.\n");
 
 # extract strings from the templates and create potfile
@@ -58,7 +61,7 @@ foreach (@templates) {
   my @text = <IN>;
   
   foreach (@text) {
-    $lineno++;
+  $lineno++;
     while (m/%(TMPL:GETTEXT|_)\{"([^"]*)"\}%/gm) {
       print OUT "#: $file:$lineno\nmsgid \"$2\"\nmsgstr \"\"\n\n";
     }
@@ -69,12 +72,12 @@ close(OUT);
 print ("I: template strings extracted and appended.\n");
 
 #unify duplicates:
-system("cp $newpotfile $newpotfile.orig && ( cat $newpotfile.orig | sed -e 's/CHARSET/UTF-8/' | msguniq --output=$newpotfile - ) && rm -f $newpotfile.orig"); 
+system("cp $newpotfile $newpotfile.orig && ( cat $newpotfile.orig | sed -e 's/CHARSET/UTF-8/' | msguniq --force-po --output=$newpotfile - ) && rm -f $newpotfile.orig"); 
 print("I: unified strings.\n");
 
 # merge with $potfile if it already exists, copy to it otherwise
 if (-e "$potfile") {
-  print("W: merging generated potfile with existing one ($potfile)\n");
+  print("W: merging generated potfile ($newpotfile) with existing one ($potfile)\n");
   system("msgmerge --update $potfile $newpotfile");
 } else {
   system("cp $newpotfile $potfile");
@@ -90,4 +93,4 @@ foreach my $translation (@translations) {
 
 # cleanup after generating base POT
 print("I: Removing intermediate files\n");
-system("rm -f $sources_listing $newpotfile $newpotfile.sources");
+system("rm -f $newpotfile");

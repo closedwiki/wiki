@@ -38,7 +38,7 @@ The following tokens are supported by this language:
 | %<nop>TMPL:DEF% | Opens a template definition |
 | %<nop>TMPL:END% | Closes a template definition |
 | %<nop>TMPL:INCLUDE% | Includes another file of templates |
-| %<nop>TMPL:GETTEXT% | Translates text into the user's language |
+| %<nop>TMPL:MAKETEXT% | Translates text into the user's language |
 
 Note; the template cache does not get reset during initialisation, so
 the haveTemplate test will return true if a template was loaded during
@@ -178,28 +178,25 @@ sub tmplP {
 
 =pod
 
---++ ObjectMethod _expandGettext( $text ) -> $translation
+--++ ObjectMethod _expandMaketext( $text ) -> $translation
 
 Translates a string to the current language. Supports the following formats:
 
-   * =%<nop>TMPL:GETTEXT{"..."}%=
-   * =%<nop>TMPL:GETTEXT{context="..." then="..." else="..."}%=
+   * =%<nop>TMPL:MAKETEXT{"..."}%=
+   * =%_{"..."}%=
 
-The first form directly translates the argument. The second translates =then=
-or =else=, depending on =context=, in a way similar to =TMPL:P=.
-
-Return value: translated text
+Return value: (eventually) translated text
 
 =cut
 
-sub _expandGettext {
+sub _expandMaketext {
     my ( $this, $params ) = @_;
 
     my $attrs = new TWiki::Attrs( $params );
     my $text = $attrs->remove('_DEFAULT') || '';
 
     # translate
-    my $result = $this->{session}->{i18n}->translate( $text );
+    my $result = $this->{session}->{i18n}->maketext( $text );
 
     # replace acceskeys:
     $result =~ s#&(.)#<span class='twikiAccessKey'>$1</span>#g;
@@ -257,7 +254,7 @@ sub readTemplate {
     $text =~ s/%{.*?}%//sg;
 
     # handle %TMPL:GEXTTEXT{"..."}% and %TMPL:GEXTTEXT{"..."}%
-    $text =~ s/%(TMPL\:GETTEXT|_)\{"([^"]*)"\}%/$this->_expandGettext($2)/geo;
+    $text =~ s/%(TMPL\:MAKETEXT|_)\{"([^"]*)"\}%/$this->_expandMaketext($2)/geo;
 
     if( ! ( $text =~ /%TMPL\:/s ) ) {
         # no template processing
