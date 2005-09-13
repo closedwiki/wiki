@@ -1,0 +1,74 @@
+The %IF construct gives TWiki the power to include content in topics based on the value of simple expressions.
+
+=%<nop>IF{"CONDITION" then="THEN" else="ELSE"}%=
+
+In the example above, if CONDITION evaluates to TRUE, then THEN will be included in the topic; otherwise ELSE will be included.
+
+What can be included in the THEN and ELSE parameters is obviously limited by standard TWiki syntax for parameters. The best way to use this feature is to define two TWikiVariables, one for the THEN case and the other for the ELSE case. FOr example:
+<verbatim>
+<!--
+   * Set LI = Fred is here!
+   * Set LO = Fred is there!
+-->
+%IF{"context authenticated and defined WIKINAME and %WIKINAME='FredBloggs'" then="%LI%" else="%LO%"}%
+</verbatim>
+
+The basic syntax of a condition is as follows:
+<verbatim>
+expr ::= '(' expr ')' ;
+expr ::= andexpr | andexpr 'or' expr ;
+andexpr ::= notexpr | notexpr 'and' andexpr ;
+notexpr ::= basexpr | 'not' baseexpr ;
+basexpr ::= atom | uop atom | atom bop basexpr ;
+uop ::= 'context' | 'defined' | '%' ;
+bop ::= '=' | '!=' | '=~' | '|~' | '>' | '<' | '>=' | '<=' ;
+atom ::= context identifier, TWiki variable name, single-quoted string
+</verbatim>
+| *Operators* ||
+| and | True if both sides are true |
+| or | True if one or other side is true |
+| not | negate the following expression |
+| <nop>=, !<nop>= | String comparison |
+| >, &gt;, >=, &gt;= | Number comparison |
+| context | True if the current context is set (see below) |
+| defined | True if a user preference variable of this name is defined |
+| % | expands a variable. plugins handlers *are not called*. Returns the empty string if not defined. Built-in variables and user-defined preferences are wupported. |
+examples:
+<verbatim>
+%IF{ "%WHO='BrianSnail'" then="Monopod" else="Gastronaut" }%
+seeks
+%IF{ "context view" then="psylocybin" }%
+for
+%IF{ "!defined FOR" then="oops" else="%FOR%" }%
+</verbatim>
+Given
+   * Set BERUDE =
+this expands to:
+
+You are %IF{ "%WIKINAME='TWikiGuest'" then="Not" }% Permitted to
+%IF{ "context view" then="View" }% this topic,
+you %IF{ "defined BERUDE" then="idiot" else="genius" }%
+
+Context identifiers are used in TWiki to label various stages of the rendering process. They are especially useful for [[TWikiSkins][skin]] authors to find out where they are in the renderin gprocess. The following context identifiers are available:
+| *id* | *context* |
+| authenticated | a user is authenticated |
+| body_text  | when the body text is being processed in a view |
+| can_login | current environment supports login |
+| changes | in changes script (see TWikiScripts) |
+| diff | in rdiff script (see TWikiScripts) |
+| edit | in edit script (see TWikiScripts) |
+| footer_text | when the footer text is being processed in a view |
+| header_text | when the header text is being processed in a view |
+| inactive | if active links such as 'edit' and 'attach' should be disabled |
+| mirror | if this is a mirror |
+| new_topic | if the topic doesn't already exist |
+| oops | in oops script (see TWikiScripts) |
+| preview | in preview script (see TWikiScripts) |
+| rss | if this is an rss skin rendering |
+| save | in save script (see TWikiScripts) |
+| search | in search script (see TWikiScripts) |
+| view | in view script (see TWikiScripts) |
+| rest | in rest script (see TWikiScripts) |
+| AllowLoginName | the {Register}{AllowLoginName} option was set |
+
+The %IF statements is kept deliberately simple. In particular, note that there is no way to conditionally execute a Set statement. If you need more sophisticated control over formatting, then consider using the SpreadSheetPlugin.

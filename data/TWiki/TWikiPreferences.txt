@@ -123,7 +123,7 @@ _(Click for form-based editing of existing preferences.)_
 ---+++ Email and Proxy Server Settings
 
 	* TWiki webmaster email address:
-		* Set WIKIWEBMASTER = webmaster@tinderbox.wbniv.wikihosting.com
+		* Set WIKIWEBMASTER = webmaster
 
 	* TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
 		* Set WIKIWEBMASTERNAME = TWiki Administrator

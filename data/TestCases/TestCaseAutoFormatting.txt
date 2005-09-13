@@ -496,11 +496,11 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 
 ---++ Newlines in variable parameter lists
 <!-- expected expand NEWLINES_IN_VBLS -->
-%IFCONTEXT{"view" then="X" else="Y"}%
+%IF{"context view" then="X" else="Y"}%
 <!-- /expected -->
 <!-- actual -->
-%IFCONTEXT{
-   "view"
+%IF{
+   "context yview"
    then = "X"
    else = "Y"
 }%

@@ -179,7 +179,7 @@ sub upgradeConfig {
     print CFG old2new($doRemoveImgInMailnotify, "1", "{RemoveImgInMailnotify}" );
     print CFG old2new($doRememberRemoteUser, "0", "{RememberUsersIPAddress}" );
     print CFG old2new($doPluralToSingular, "1", "{PluralToSingular}" );
-    print CFG old2new($doHidePasswdInRegistration, "1", "{HidePasswdInRegistration}" );
+    print CFG old2new($doHidePasswdInRegistration, "1", "{Register}{HidePasswd}" );
     print CFG old2new($doSecureInclude, "1", "{DenyDotDotInclude}" );
     print CFG old2new($doLogTopicView, "1", "{Log}{view}" );
     print CFG old2new($doLogTopicEdit, "1", "{Log]{edit}" );

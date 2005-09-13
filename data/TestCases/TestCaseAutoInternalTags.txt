@@ -8,14 +8,14 @@ Designed by: Crawford Currie
 
 <table border="1"><tr><th> Tag </th><th>Expected</th><th>Actual</th></tr>
  <tr>
-  <td>IFCONTEXT</td>
+  <td>IF</td>
   <td><!-- expected -->YES<!-- /expected --></td>
-  <td><!-- actual -->%IFCONTEXT{"view" then="YES" else="NO"}%<!-- /actual --></td>
+  <td><!-- actual -->%IF{"context view" then="YES" else="NO"}%<!-- /actual --></td>
  </tr>
  <tr>
-  <td>IFCONTEXT</td>
+  <td>IF</td>
   <td><!-- expected -->NO<!-- /expected --></td>
-  <td><!-- actual -->%IFCONTEXT{"none" then="YES" else="NO"}%<!-- /actual --></td>
+  <td><!-- actual -->%IF{"" then="YES" else="NO"}%<!-- /actual --></td>
  </tr>
  <tr>
   <td>TOPIC</td>

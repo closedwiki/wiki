@@ -48,7 +48,7 @@ Note that three parameter names, =context=, =then= and =else= are *reserved*. Th
 %TMPL:P{context="inactive" then="inactive_link" else="active_link"}% for %CONTEXT%
 </verbatim>
 When the "inactive" context is set, then this will expand the "link_inactive" template; otherwise it will expand the "link_active" template.
-See [[TWikiVariables#VarIFCONTEXT][IFCONTEXT]] for details of supported context identifiers.
+See IfStatements for details of supported context identifiers.
 
 ---+++ Finding Templates
 

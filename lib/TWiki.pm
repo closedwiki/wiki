@@ -158,7 +158,7 @@ BEGIN {
         HTTPS             => \&_HTTPS,
         ICON              => \&_ICON,
         ICONPATH          => \&_ICONPATH,
-        IFCONTEXT         => \&_IFCONTEXT,
+        IF                => \&_IF,
         INCLUDE           => \&_INCLUDE,
         INTURLENCODE      => \&_INTURLENCODE,
         LANGUAGES         => \&_LANGUAGES,
@@ -183,6 +183,7 @@ BEGIN {
         VAR               => \&_VAR,
         WEBLIST           => \&_WEBLIST,
        );
+    $contextFreeSyntax{IF} = 1;
 
     # Constant tag strings _not_ dependent on config
     %constantTags = (
@@ -282,6 +283,7 @@ BEGIN {
     if( $TWiki::cfg{NoFollow} ) {
         $constantTags{NOFOLLOW} = 'rel='.$TWiki::cfg{NoFollow};
     }
+    $constantTags{ALLOWLOGINNAME}  = $TWiki::cfg{Register}{AllowLoginName};
 
     # locale setup
     #
@@ -2339,17 +2341,23 @@ sub _PLUGINVERSION {
     $this->{plugins}->getPluginVersion( $params->{_DEFAULT} );
 }
 
-sub _IFCONTEXT {
+my $ifFactory;
+sub _IF {
     my ( $this, $params ) = @_;
 
-    my $id = $params->{_DEFAULT};
-    return '' unless $id;
-    foreach my $id ( split( /, */, $id )) {
-        unless( $this->{context}->{$id} ) {
-            return $params->{else} || '';
-        }
+    unless( $ifFactory ) {
+        require TWiki::If;
+        $ifFactory = new TWiki::If();
     }
-    return $params->{then} || '';
+
+    my $expr = $ifFactory->parse( $params->{_DEFAULT} );
+    return $ifFactory->{error} unless $expr;
+
+    if( $expr->evaluate( $this )) {
+        return $params->{then} || '';
+    } else {
+        return $params->{else} || '';
+    }
 }
 
 # Processes a specific instance %<nop>INCLUDE{...}% syntax.

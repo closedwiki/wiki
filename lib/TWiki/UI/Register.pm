@@ -879,7 +879,7 @@ sub _emailRegistrationConfirmations {
       _buildConfirmationEmail( $session,
                                $data,
                                $template,
-                               $TWiki::cfg{HidePasswdInRegistration}
+                               $TWiki::cfg{Register}{HidePasswd}
                              );
 
     my $err = 

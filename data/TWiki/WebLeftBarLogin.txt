@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="0" format="1.1" version="$Rev$"}%
 %STARTINCLUDE%
 <div class="patternLeftBarPersonal" style="margin-top:0;">
-%IFCONTEXT{"authenticated" then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
+%IF{"context authenticated" then="Hello [[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]!%BR%%LOGOUT%" else="%LOGIN%"}%
 <div id="patternLeftBarPersonalContent">
 %INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">Create personal sidebar</a>"}%
 </div>
