@@ -87,7 +87,7 @@ BEGIN {
     eval "use base 'Locale::Maketext'";
     $initialised = !$@;
     unless ($initialised) {
-      push(@initErrors, 'Couldn\t load Locale::Maketext. It\'s needed for I18N support.');
+      push(@initErrors, "Couldn't load Locale::Maketext. It's needed for I18N support:\n" . $@);
     }
 
     unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
@@ -97,14 +97,14 @@ BEGIN {
 
     my $dependencies = <<HERE;
     use Locale::Maketext::Lexicon {
-        'en'    => [ Auto ],
-        '*'     => [ Gettext => '$TWiki::cfg{LocalesDir}' . '/*.po' ]
+        'en'    => [ 'Auto' ],
+        '*'     => [ 'Gettext' => '$TWiki::cfg{LocalesDir}' . '/*.po' ]
     };
 HERE
     eval $dependencies;
-    $initialised &&= !$@;
-    unless ($initialised) {
-      push(@initErrors, 'Couldn\'t load Perl Locale::Maketext::Lexicon. It\'s need for I18N support.');
+    if ( $@ ) {
+      $initialised &&= 0;
+      push(@initErrors, "Couldn't load Perl Locale::Maketext::Lexicon. It's need for I18N support:\n" . $@);
     }
 }
 
