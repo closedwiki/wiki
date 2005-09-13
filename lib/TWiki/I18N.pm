@@ -35,27 +35,61 @@ package TWiki::I18N;
 use TWiki;
 use Assert;
 use File::Find;
-use base 'Locale::Maketext';
 
-##########################################################
-# Initizaling default language: Engligh is an AUTO lexicon
-# please read `perldoc Locale::Maketext`
-##########################################################
-package TWiki::I18N::en;
+# ##########################################################
+# # Initizaling default language: Engligh is an AUTO lexicon
+# # please read `perldoc Locale::Maketext`
+# ##########################################################
+# package TWiki::I18N::en;
+# use base 'TWiki::I18N';
+# $TWiki::I18N::en::Lexicon{_AUTO} = 1;
+# 
+# # back to the right package
+# package TWiki::I18N;
+# ##########################################################
+
+######################################################
+package TWiki::I18N::Fallback;
 use base 'TWiki::I18N';
-$TWiki::I18N::en::Lexicon{_AUTO} = 1;
 
-# back to the right package
+sub new {
+  my $class = shift;
+  my $this = bless({}, $class);;
+  $this->{available_languages} = { 'en' => 'English' };
+  return $this;
+}
+
+sub maketext {
+  my ( $this, $text, @args ) = @_;
+  return $text;
+}
+
+sub language {
+  return 'en';
+}
+
+sub available_languages {
+  my $this = shift;
+  return $this->{available_languages};
+}
+
+# back to teh right package
 package TWiki::I18N;
-##########################################################
+######################################################
+
 
 use vars qw( $initialised @initErrors $current_language );
 
 BEGIN {
+    eval "use base 'Locale::Maketext'";
+    $initialised = !$@;
+    unless ($initialised) {
+      push(@initErrors, 'Couldn\t load Locale::Maketext. It\'s needed for I18N support.');
+    }
 
     unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
       push(@initErrors, '{LocalesDir} not configured - run configure (I18N disabled).');
-      $initialised = 0;
+      $initialised &&= 0;
     }
 
     my $dependencies = <<HERE;
@@ -64,7 +98,7 @@ BEGIN {
     };
 HERE
     eval $dependencies;
-    $initialised = !$@;
+    $initialised &&= !$@;
     unless ($initialised) {
       push(@initErrors, 'Couldn\'t load Perl Locale::Maketext::Lexicon. It\'s need for I18N support.');
     }
@@ -97,8 +131,9 @@ sub get {
     if ($initialised) {
         $this = TWiki::I18N->get_handle();
     } else {
-        $this = TWiki::I18N->get_handle('en');
+        $this = new TWiki::I18N::Fallback();
         $session->writeWarning('TWiki::I18N: falling back to English: ' . $this);
+        return $this;
     }
 
     # if we couldn't initialise 'optional' I18N infrastrcture, warn that we can
@@ -198,18 +233,16 @@ sub available_languages {
 
     my $this = shift;
 
-    # need to be initialised
-    return $this->{available_languages} unless $initialised;
-
     # don't need to check twice
     return $this->{available_languages} if $this->{checked_available};
   
     File::Find::find( { wanted =>
                         sub {
-                            if ($File::Find::name =~ /^.*\/([a-zA-Z]+\_[a-zA-Z]+)\.po$/ ) {
+                            if ($File::Find::name =~ /^.*\/([a-zA-Z]+(\_[a-zA-Z]+)?)\.po$/ ) {
                                 my $tag = _normalize_language_tag($1);
                                 my $h = TWiki::I18N->get_handle($tag);
-                                my $name = $this->{session}->UTF82SiteCharSet($h->maketext("_language_name"));
+                                my $name = $h->maketext("_language_name");
+                                $name = ($this->{session}->UTF82SiteCharSet($name)) || $name ; 
                                 $this->_add_language($tag, $name);
                             }
                         },
