@@ -7,8 +7,12 @@
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
 %TMPL:DEF{"onloadscript"}%onload="document.SearchForm.search.focus()"%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%[[%TOPIC%]]%TMPL:END%
-
 %TMPL:DEF{"content"}%
+<style type="text/css">
+.natTopRightContents {
+  white-space:normal;
+}
+</style>
 %REPEAT%<table class="twikiTable twikiDiffTable" cellspacing="0" cellpadding="0">
 <th>
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=%REVTITLE1%">%TOPIC% %REVTITLE1% - %REVINFO1%</a>
@@ -19,7 +23,14 @@
 </table>
 <br clear="all" />%REPEAT%
 <div class="natRevision">
+%IFSKINSTATETHEN{release="dakar"}%
+<table class="twikiTable">
+%TAIL%
+</table>
+%ELSESKINSTATE%
 Revision %REVTITLE2% - %REVINFO2%<br />
 Revision %REVTITLE1% - %REVINFO1%
+%FISKINSTATE%
 </div>
 %TMPL:END%
+%REPEAT%<tr><td>Revision %REVTITLE%</td><td>%REVINFO%</td></tr>

@@ -274,6 +274,7 @@ hr {
   border-right:0px;
   padding-bottom:5px;
   font-size:x-small;
+  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .twikiPageForm input,
 .natTopicForm input {
