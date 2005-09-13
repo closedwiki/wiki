@@ -108,11 +108,9 @@ sub oops {
     if( ! $tmplData ) {
         $tmplData = CGI::start_html()
           . CGI::h1('TWiki Installation Error')
-            . 'Template file '.$tmplName
-               . '.tmpl not found or template directory '
-                 . $TWiki::cfg{TemplateDir}.' not found.'.CGI::p()
-                   . 'Check the configuration setting for TemplateDir.'
-                     .CGI::end_html();
+            . 'Template "'.$tmplName.'" not found.'.CGI::p()
+              . 'Check the configuration setting for {TemplateDir}.'
+                .CGI::end_html();
     } else {
         if( defined $def ) {
             # if a def is specified, instantiate that def

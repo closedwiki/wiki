@@ -1588,9 +1588,8 @@ sub inlineAlert {
 
     } else {
         $text = CGI::h1('TWiki Installation Error')
-          . 'Template file '.$template.'.tmpl not found or template directory '
-            . $TWiki::cfg{TemplateDir}.' not found.'.CGI::p()
-              . 'Check the configuration setting for TemplateDir.';
+          . 'Template "'.$template.'" not found.'.CGI::p()
+            . 'Check the configuration setting for {TemplateDir}';
     }
 
     return $text;

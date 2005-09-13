@@ -167,9 +167,8 @@ sub view {
     unless( $tmpl ) {
         my $mess = CGI::start_html().
           CGI::h1('TWiki Installation Error').
-          "Template file \'$template\' not found or template directory ".
-            $TWiki::cfg{TemplateDir}.' not found.'.CGI::p().
-              'Check the configuration setting for TemplateDir'.
+          'Template "'.$template.'" not found '.CGI::p().
+            'Check the configuration setting for {TemplateDir}'.
                 CGI::end_html();
         $session->writeCompletePage( $mess );
         return;
