@@ -230,12 +230,20 @@ BEGIN {
     require 'TWiki.cfg';
     die "Cannot read TWiki.cfg: $@" if $@;
     die "Bad configuration: $@" if $@;
-    # Make sure key variables are defined
-    foreach my $var ( 'DataDir', 'DefaultUrlHost', 'PubUrlPath',
-                      'PubDir', 'TemplateDir' ) {
-        die "$var must be defined in LocalSite.cfg"
-          unless( defined $TWiki::cfg{$var} );
+
+    # If we got this far without definitions for key variables, then
+    # we need to default them. otherwise we get peppered with
+    # 'uninitialised variable' alerts later.
+
+    foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
+                        PubDir TemplateDir ScriptUrlPath LocalesDir ) {
+        # We can't do this, because it prevents TWiki being run without
+        # a LocalSite.cfg, which we don't want
+        # die "$var must be defined in LocalSite.cfg"
+        #  unless( defined $TWiki::cfg{$var} );
+        $TWiki::cfg{$var} ||= 'NOT SET';
     }
+
     # read localsite again to ensure local definitions override TWiki.cfg
     do 'LocalSite.cfg';
     die "Bad configuration: $@" if $@;

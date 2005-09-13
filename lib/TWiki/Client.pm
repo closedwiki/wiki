@@ -450,18 +450,16 @@ sub redirectCgiQuery {
         # If the URL has no colon in it, it must be an internal URL
         if( $url !~ /:/ ) {
             # Does it already have CGI parameters passed?
-            if( $url =~ m/\?/ ) {
-                @urlparts = split( $url, /\?/, 2 );
-                $url = $urlparts[0] . "?$CGI::Session::NAME=$sessionId;" . $urlparts[1];
+            if( $url =~ m/^(.*?)\?(.*)$/ ) {
+                $url = $1 . '?'.$CGI::Session::NAME.'='.$sessionId.';'.$2;
             }
             # Does it have any anchors passed?
-            elsif( $url =~ m/#/ ) {
-                @urlparts = split( $url, /#/, 2 );
-                $url = $urlparts[0] . "?$CGI::Session::NAME=$sessionId#" . $urlparts[1];
+            elsif( $url =~ m/^(.*?)#(.*)$/ ) {
+                $url = $1.'?'.$CGI::Session::NAME.'='.$sessionId.'#'.$2;
             }
             # Otherwise, we're the first CGI parameter
             else {
-                $url .= "?$CGI::Session::NAME=$sessionId";
+                $url .= '?'.$CGI::Session::NAME.'='.$sessionId;
             }
 
         } else {

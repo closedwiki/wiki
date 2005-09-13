@@ -63,8 +63,10 @@ sub new {
     #   web/user/session setting must override the language detected from the
     #   browser.
 
-    die '{LocalesDir} not configured - run configure' unless
-      $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir};
+    unless( $TWiki::cfg{LocalesDir} && -e $TWiki::cfg{LocalesDir} ) {
+        $session->writeWarning(
+            '{LocalesDir} not configured - run configure' );
+    }
 
     my $dependencies = <<HERE;
     use Locale::Maketext::Lexicon {
