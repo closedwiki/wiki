@@ -1,0 +1,19 @@
+<!-- template: renamesidebar.nat.tmpl -->
+%TMPL:DEF{"sidebar"}%
+---+ Help
+   * <a href="javascript:launchWindow('Support','TWikiTopics');">About Topics</a>
+   * <a href="javascript:launchWindow('Support','ManagingTopics');">Managing Topics</a>
+   * <a href="javascript:launchWindow('Support','DeleteOrRenameATopicFAQ');">Deleting Topics</a>
+   * <a href="javascript:launchWindow('Support','WikiWord');">WikiWord</a>
+
+---+ Notes
+<div class="natNotes">
+<p> Get help on <a target="ManagingTopics" onClick="return launchWindow('Support','ManagingTopics')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Support/ManagingTopics">Renaming and moving topics</a>.</p>
+<p> It's usually best to chose a <a target="WikiWord" onClick="return launchWindow('Support,'WikiWord')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/Support/WikiWord">WikiWord</a> 
+     for the new topic name, otherwise automatic linking may not work.  Characters not 
+     allowed in topic names, such as spaces will automatically be removed. </p>
+<p> Select the [[Trash.WebHome][Trash Web]] to delete the topic. </p>
+<p> The checkmarked topics will be updated (another form will appear which
+     will _eventually_ allow you to rename any topics that were locked) </p>
+</div>
+%TMPL:END%

@@ -1,0 +1,15 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopssave.nat.tmpl -->
+%TMPL:DEF{"heading"}%Inproper use of the "<code>save</code>" script%TMPL:END%
+%TMPL:DEF{"message"}%
+You cannot call this script directly, <nop>%WIKITOOLNAME% uses it internally.
+
+Some browser configurations occasionally send undefined data to the
+server. Don't worry, your changes are not lost. Just click the Back 
+button on your browser and then try Save again.
+
+The other possibility is an internal error in <nop>%WIKITOOLNAME% 
+configuration, or that you did not have write access to the 
+directory or file that was being edited.
+
+%TMPL:P{"goback"}% %TMPL:END%

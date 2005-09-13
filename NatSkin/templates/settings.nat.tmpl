@@ -1,0 +1,19 @@
+%TMPL:INCLUDE{"page"}% 
+<!-- template: settings.nat.tmpl -->
+%TMPL:INCLUDE{"settingsbody"}%
+%TMPL:INCLUDE{"settingstopicactions"}%
+%TMPL:INCLUDE{"settingssidebar"}%
+%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
+%TMPL:DEF{"titleaction"}%(prefs)%TMPL:END%
+%TMPL:DEF{"onloadscript"}%onload="document.EditFormular.text.focus()"%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%TOPIC%%TMPL:END%
+%TMPL:DEF{"content"}%
+<h2>Preference Settings for [[%WEB%.%TOPIC%]]:</h2>
+<div class="natEdit">
+<form name="SettingsFormular" method="post" action="%SCRIPTURLPATH%/manage/%WEB%/%TOPIC%">
+  <input type="hidden" name="action" value="saveSettings" />
+  <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+  <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
+</form>
+</div>
+%TMPL:END%

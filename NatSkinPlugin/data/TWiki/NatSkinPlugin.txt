@@ -1,0 +1,203 @@
+%META:TOPICINFO{author="MichaelDaum" date="1126603364" format="1.1" version="1.5"}%
+---+!! The Natural Skin Plugin
+
+This is the supplemental plugin for the NatSkin. This plugin is inspired
+by the TWiki:Plugins/GnuSkin by TWiki:Main/JoachimNilsson and the TWiki:Plugins/PhotonSkin by TWiki:Main/EstebanManchado (<nop>PhotonSearch) renamed to =natsearch= . This plugin tries
+to be maximal compatible with all past, current and upcomming TWiki releases, namely beijing,
+cairo and dakar. Therefore some mechanisms have been internalized that are only available on
+the newest dakar engine, sandbox security and html login dialogues comparable  to TWiki:Plugins/AuthPagePlugin. In addition the plugin tries to be interface-compatible to all
+engines using the =Func.pm= API. In those cases where this is _not_ possible, because needed
+functions are not part of the =Func.pm= API, access functions have been added to 
+address the different implementations and incompatibilities (e.g. access to topic meta data).
+
+%TOC%
+
+---++ Current Features
+	* Sandbox security: backport of the dakar sandbox
+	* Login page: independent implementation of a login page (see ) for
+	  maximal compatibility with old TWiki releases
+	* Trash.TWikiWebSideBar: a configurable navigation bar on the 
+	  left hand side, with topic content on the right;
+	* MySideBar: every user can extend the sidebar with a personalized navigation
+	* <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
+	* Conditional content: 
+		* USERACTIONS: display topic actions depending on the user being logged in or not
+		* IFSKINSTYLE: render different content depending on the current NatSkin style
+		* IFRELEASE: render different if the NatSkinPlugin is installed on a beijing, cairo or dakar
+		  TWiki engine
+		* IFACCESS: render different content or include topics depending on access rights
+	* GROUPSUMMARY: render %MAINWEB%.TWikiGroups nicely
+	* Group based subsription: generate an automated email notification if a new TWiki
+	  user want's to join a TWiki Group
+	* email address obfuscation: all email addresses in topic texts are obfuscated by the use
+	  of dynamic html; so mailto links are still clickable while the pure html text does not
+	  allow to extract the addresses by respective web crawlers.
+	* skin style control: add infrastructure to get, set and display the skin style that
+	  is currently active.
+
+---++ Syntax Rules
+| *Tag* | *Desciption* |
+| =%<nop>WEBSIDEBAR%= \
+| displays the left navigation menu using Trash.TWikiWebSideBar and %TWIKIWEB%.TWikiSideBar topic |
+| =%<nop>MYSIDEBAR%= \
+| display a personalized Trash.TWikiWebSideBar for the user currently logged in |
+| =%<nop>WEBLINK{web="..." name="..."}%= \
+| display a link to a WebHome with the given name and add the SITEMAPUSEDTO description to \
+  to the hover balloon |
+| =%<nop>NATLOGON%= \
+| displays =Logon&#124;Register= for <nop>TWikiGuest, and \
+  =%WIKINAME%&#124;Logout= otherewise |
+| =%<nop>USERACTIONS%= \
+| display =Edit&#124;Attach&#124;Move&#124;Raw&#124;Diffs&#124;More= when \
+  logged in and an empty string for <nop>TWikiGuest |
+| =%<nop>GROUPSUMMARY%= \
+| display list of group members in a %MAINWEB%.TWikiGroups nicely \
+  by extracting the =GROUP= and =ALLOWTOPICCHANGE= variables of \
+  a group topic and adds links "Contact all members" and "Contact all maintainters"; \
+  by definition maintainers of a group are those listed in the =ALLOWTOPICCHANGE= \
+  variable of the group topic |
+| =%<nop>ALLUSERS%= \
+| display a list of all registered users generated from the %MAINWEB%.TWikiUsers topic; \
+  this is usefull for specific access configurations on beijing and cairo engines \
+  (obsolete on dakar) |
+| =%<nop>SETSKINSTYLE{"&ltname>"}%= \
+| set the skin to =&lt;name>= for the current topic |
+| =%<nop>GETSKINSTYLE%= \
+| get the current skin style; the priority is \
+  (1) urlparam =style=&lt;name>=, \
+  (2) topic style set via =%<nop>SETSKINSTYLE{}%, \
+  (3) value of the session variable =NATSKIN_STYLE= and \
+  (4) preference value =SKINSTYLE= set in \
+		(a) the user preferences \
+		(b) the WebPreferences or \
+		(c) %TWIKIWEB%.TWikiPreferences |
+| =%<nop>IFSKINSTYLE{"&lt;name>" then="..." else="..."}%= \
+| conditionally returns content depending on the active skin style \
+  (example usage: configure different sets of WEBCOLORS for each skin) |
+| =%<nop>SKINSTYLEBROWSER%= \
+| displays a selection form to actiate a skin style attached to the NatSkin style; \
+  attach =&lt;name>Style.css= to the NatSkin topic to make the style =&lt;name>= available \
+  to the NatSkin style control |
+| =%<nop>WIKIRELEASENAME% \
+| returns "beijing", "cairo" or "dakar" depending on the TWiki engine this plugin is installed on; \
+  shorthand for %<nop>IFRELEASE{beijing="beijing" cairo="cairo" dakar="dakar"}% |
+| =%<nop>IFRELEASE{beijing="..." notbejing="..." cairo="..." notcairo="..." dakar="..." notdakar="..."}%= \
+| conditionally display content depending on the Twiki engine this plugin is installed on |
+| =%<nop>IFACCESS{"&lt;topic>" action="" then="..." else="..." mode="" [then_]args="..." else_args="..."}%= \
+| display content in =then= or =else= argument depending on the access rights of the current user\
+  to the topic =&lt;topic>; \
+  =action= can be =view=, =change= or =rename= \
+  specifying the requested access mode;\
+  =mode= can be =text= or =include= where =text= conditionally renders the text in  \
+  the =then= and =else= arguments and =text= includes the topic in =then= or =else=; \
+  if =then= is not specified in =include= mode then =&lt;topic>= is included if access \
+  is granted; example: %<nop>IFACCESS{"<nop>AdminSideBar" mode="include"}% includes the \
+  <nop>AdminSideBar if the current user has view access to this topic |
+| =%<nop>NATREVISIONS%= | substitute for the =%<nop>REVISIONS%= tag which only works on \
+  the PatternSkin (todo: fix REVISIONS) |
+| =%<nop>NATMAXREV%= | substitute for =%<nop>MAXREV%= which differes on beijing, cairo and dakar |
+| =%<nop>PREVREV%= | returns the previous topic revision taking =NumberOfRevisions= into account |
+| =%<nop>CURREV%= | returns the current topic revision (compatible among all TWiki engines) |
+
+
+---++ About <nop>NatSearch
+
+This is a cgi-script that is heavily based on the <nop>PhotonSearch of the TWiki:Plugins/PhotonSkin.
+So =natsearch= is basically a fork of that including fixes to similar security flaws that 
+hit the WebSearch those days also. Here's the list of differences:
+
+	* replaced the =a= flag with =g= to indicate global search
+	* obey the =NOSEARCHALL= flag for global search
+	* remember the original search string and insert it back into the input field
+	* added perl's =use strict= and fixed all warnings
+	* fixed several mod-perl issues
+	* add friendly message when nothing's been found
+	* use =noSpamPadding= to obfuscate email addresses
+	* light weighted google-like hit colorization
+
+Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible search parameters
+(TODO: maby move that stuff in here).
+
+---++ About the Trash.TWikiWebSideBar
+
+The Trash.TWikiWebSideBar is used to generate a navigation appearing left to 
+the current topic. Each web in your <nop>%WIKITOOLNAME% might optionaly have a 
+separate Trash.TWikiWebSideBar. The default %TWIKIWEB%.TWikiSideBar can be used to add a default 
+section common to all WebSideBars.
+If the Trash.TWikiWebSideBar isn't defined the default %TWIKIWEB%.WebSideBar in the %TWIKIWEB% web
+is used. Each user might define a Trash.TWikiWebSideBar called =%<nop>WIKINAME%Trash.TWikiWebSideBar= that is
+appended to the Trash.TWikiWebSideBar. The RedDotPlugin is used to make customizing the Trash.TWikiWebSideBar
+easier appended to the different parts that make up the complete sidebar. These are hidden if
+you don't have write access to the respective topic fragments.
+
+---++ About Logon &amp; Logout
+
+=LOGONTOPIC=
+
+---++ Plugin Settings
+Below are the settings which affect the behavior of the NatSkin.
+
+	* Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
+
+---+++ Style support for the TablePlugin 
+These attributes will be loaded into your session and thereby overwriting any 
+default settings on the TablePlugin topic. Depending on the skin style you are currently
+using these settings will be changed accordingly.
+
+
+	* Set BASETABLEATTRIBUTES = databg="white" headercolor="black" tableborder="0" cellpadding="0" cellspacing="0" 
+	* Set CLEANTABLEATTRIBUTES = headercolor="#444444"
+	* Set GEORGIABLUETABLEATTRIBUTES = headercolor="#999966"
+	* Set GETTYSBURGTABLEATTRIBUTES = headercolor="#03366"
+	* Set INDEPENDENCETABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
+	* Set KUBRICKTABLEATTRIBUTES = databg="#f4f4f4, white" headercolor="#0055aa"
+	* Set PLAINJANETABLEATTRIBUTES = headercolor="#666666"
+	* Set RUSTYTABLEATTRIBUTES = headercolor="white"
+	* Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
+	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
+	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black"
+
+   * Set EXAMPLE = hello world
+
+---++ Plugin Installation Instructions
+
+	* If you are installing on a beijing or cairo TWiki release then get 
+	  the SessionPlugin and install it
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+
+	  | *File:* | *Description:* |
+	  | ==bin/natlogon== | logon cgi script |
+	  | ==bin/natsearch== | search cgi script |
+	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
+	  | ==data/TWiki/MySideBar.txt== | plugin to customize a personalized sidebar |
+	  | ==data/TWiki/MySideBarTemplate.txt== | topic template for MySideBar |
+	  | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
+	  | ==lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm== | security module |
+	  | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
+	  | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Plugin Version: | v2.10 (2005-08-30) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  30 Aug 2005: | added external link detection; fixed IFSKINSTYLE; \
+						added style support for the TWiki:Plugins.TablePlugin |
+|  26 Aug 2005: | new NatSkin-2.0 release |
+|  28 Apr 2005: | pre-release to fix installation on TWiki/Cairo |
+|  16 Mar 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | SessionPlugin, RedDotPlugin |
+|  Perl Version: | >=5.6 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | TWiki:Plugins.NatSkinPlugin |
+|  Feedback: | TWiki:Plugins.NatSkinPluginDev  |
+|  Appraisal: | TWiki:Plugins.%TOPIC%Appraisal |
+
+__Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
+
+-- TWiki:Main.MichaelDaum - 26 Aug 2005 

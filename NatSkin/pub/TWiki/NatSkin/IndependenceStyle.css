@@ -1,0 +1,313 @@
+/* independence style */
+@import url("BaseStyle.css");
+
+/* html */
+.twikiEmulatedLink,
+a, a:link, a:active {
+  color: #555; 
+}
+a:hover { 
+  color: #B22222; 
+}
+
+hr {
+  border-bottom:1px solid #B22222; 
+}
+
+/* layout */
+.natBody {
+  background-color: #0F314E;
+}
+.natBodyContents {
+  line-height: 140%;
+  padding: 0px;
+  background: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  text-align:left;
+}
+.natMiddle {
+  padding:20px;
+}
+.natTopBar {
+  padding-top:1.5em;
+}
+
+.natTopRightContents,
+.natTopLeftContents {
+  margin-left:20px;
+  margin-right:20px;
+}
+
+/* top */
+.natTopBar {
+  font-family: Georgia, 'Times New Roman', serif;
+  color:white;
+  background: #B22222;
+  border-bottom: 1px solid #FFFFFF;
+}
+
+.natTopLeft,
+.natTopRight,
+.natTopBar a:hover,
+.natTopBar a {
+  color:white;
+}
+
+.natWebLocator a,
+.natWebLocator,
+.natWebTitle a {
+  font-family: Georgia, 'Times New Roman', serif;
+  color:white;
+}
+.natWebTitle {
+  padding-top:10px;
+  font-size:xx-large;
+}
+.natWebLocator {
+  font-size:small;
+}
+
+.natTopRightContents {
+  font-size:0.7em;
+  line-height:120%;
+}
+.natTopRightContents, .natWebSlogan {
+  font-family:'Trebuchet MS', arial, sans-serif;
+}
+.natWebSlogan {
+  padding-left:5px;
+}
+
+.natSearchBox input {
+  margin-top:5px;
+  background:#B22222;
+  color:white;
+  border:1px dotted white;
+  font-size:x-small;
+}
+.natAction {
+  font-weight:bold;
+  color:white;
+}
+
+/* sidebar */
+.natSideBar {
+  font-family: 'Trebuchet MS', arial, sans-serif;
+  font-size: small;
+  line-height:120%;
+}
+
+.natSideBar h1 {
+  padding: 3px;
+  padding-left:0px;
+}
+.natSideBar h1 a,
+.natSideBar h1 {
+  color: #B22222;
+  font-size: small;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-decoration:none;
+  letter-spacing: .3em;
+}
+
+.natSideBar h2 {
+  padding-left:0px;
+}
+.natSideBar h2,
+.natSideBar h2 a {
+  font-size: small;
+  color: #666666;
+}
+
+.natSideBar ul {
+  padding-left:38px;
+}
+
+.natNotes {
+  padding-left:5px;
+}
+
+/* main area */
+.natMiddle {
+  color: #666666;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.natMain .twikiEmulatedLink,
+.natMain a {
+  font-weight:normal;
+  color:#0F314E;
+  text-decoration:underline;
+}
+.natMain a:hover {
+  color:#B22222;
+}
+
+.natMain pre {
+  border-left:5px solid #eeeeee;
+  padding-left:5px;
+}
+
+.natMainContents {
+}
+
+.natMain h1 .twikiEmulatedLink,
+.natMain h2 .twikiEmulatedLink,
+.natMain h3 .twikiEmulatedLink,
+.natMain h4 .twikiEmulatedLink,
+.natMain h5 .twikiEmulatedLink,
+.natMain h6 .twikiEmulatedLink,
+.natMain h1, .natMain h2, .natMain h3, .natMain h4, .natMain h5, .natMain h6,
+.natMain h1 a, .natMain h2 a, .natMain h3 a, .natMain h4 a,
+.natMain h5 a, .natMain h6 a,
+.natMain h1 a:hover, .natMain h2 a:hover, .natMain h3 a:hover,
+.natMain h4 a:hover, .natMain h5 a:hover, .natMain h6 a:hover {
+  color:#B22222;
+}
+.natMain h1 {font-size:24px;}
+.natMain h2 {font-size:18px;}
+.natMain h3 {font-size:16px;}
+.natMain h4 {font-size:small;}
+.natMain h5 {font-size:small;}
+.natMain h6 {font-size:small; margin-top:5px}
+
+.natMain h1 {
+  border-bottom:1px solid #B22222;
+}
+
+.natMain table,
+.natMain blockquote,
+.natMain li {
+  line-height: 150%;
+}
+.natMain .natOopsHeading {
+  color:#B22222;
+  font-weight:bold;
+}
+.natMainFooterContents {
+  font-size:x-small;
+}
+
+
+/* bottom */
+.natBottomBar {
+  font-size:x-small;
+}
+.natBottomBarContents {
+  letter-spacing:.3em;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size: 0.9em;
+  line-height: 150%;
+  color: #666666;
+  margin-bottom:5px;
+  margin-left:10px;
+  margin-right:10px;
+}
+.natCopyRight, .natTWikiInfo {
+  display:inline;
+}
+
+/* twiki tables */
+.twikiTable th,
+.twikiTable th a {
+  color:white;
+  background:#B22222;
+  font-weight:bold;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size:x-small;
+  letter-spacing: .3em;
+}
+.twikiTable th a {
+  text-decoration:none;
+}
+
+.twikiTable th a:hover {
+  color:#0F314E;
+  text-decoration:none;
+}
+
+.twikiTable {
+  border:1px #B22222 solid;
+}
+.twikiTable th {
+  border:1px dotted white;
+}
+.twikiTable td {
+  border:1px ridge #999;
+}
+
+/* twiki page form */
+.twikiPageForm th,
+.twikiPageForm th a {
+  color:white;
+  background:#B22222;
+}
+.twikiPageForm th a {
+  text-decoration:none;
+}
+
+.twikiPageForm th a:hover {
+  color:#0F314E;
+  text-decoration:none;
+}
+
+.twikiPageForm th  {
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size:x-small;
+  letter-spacing: .3em;
+  vertical-align:middle;
+}
+.twikiPageForm table {
+  border:1px #B22222 solid;
+}
+.twikiPageForm th {
+  border:1px dotted white;
+}
+.twikiPageForm td {
+  border:1px ridge #999;
+}
+
+/* search table */
+.natSearchTable {
+  border:1px #B22222 solid;
+  margin-bottom:15px;
+}
+.natSearchTableTitle th {
+  color:white;
+  background:#B22222;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-size:x-small;
+  letter-spacing: .3em;
+  vertical-align:middle;
+}
+.natSearchHit {
+  font-size:0.9em;
+  line-height:140%;
+}
+/*
+.natSearchHit td,
+.natSearchHit th {
+  padding-top:0px;
+  padding-bottom:0px;
+}
+*/
+.natSearchEvenHit {
+  background:#f0f0f0;
+}
+
+/* misc twiki */
+.twikiNew {
+  color:#B22222; 
+}
+
+.twikiNewLink {
+  color:#B22222;
+}
+
+/* supported plugins and applications */
+
+/* RedDotPlugin */
+.natSideBar .redDot a {
+  color:#0F314E;
+}

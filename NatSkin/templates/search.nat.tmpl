@@ -1,0 +1,28 @@
+%TMPL:INCLUDE{"searchbase"}% 
+<!-- template: search.nat.tmpl -->
+%TMPL:DEF{"content"}% %SPLIT%<b>Search</b>: <span class="natSearchString">%SEARCHSTRING%</span> %SPLIT% <table class="natSearchTable" cellpadding="0" cellspacing="0">
+<tr class="natSearchTableTitle">
+  <th width="50%">%WEB% Web</th>
+  <th width="30%">Changed</th>
+  <th width="20%">Changed by</th>
+</tr>
+<!-- debug: search header end -->%REPEAT%<!-- debug: search repeat start -->
+<tr class="natSearchHit">
+  <th width="50%">
+    <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TOPICNAME%</a>
+  </th>
+  <th width="30%">
+    <a style="white-space:pre"href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%">%TIME% - %REVISION%</a>
+  </th><th width="20%">
+    %AUTHOR% 
+  </th>
+</tr>
+<tr class="natSearchHit">
+  <td colspan="3">%TEXTHEAD%<!-- guard--></td>
+</tr>
+<!-- debug: search repeat end -->%REPEAT%<!-- debug: search footer start-->
+</table> 
+%SPLIT% <div class="natSearchTotal">Number of topics: <span>%NTOPICS%</span></div>
+%SPLIT% 
+%TMPL:END%
+

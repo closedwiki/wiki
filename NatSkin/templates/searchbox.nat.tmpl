@@ -1,0 +1,9 @@
+<!-- template: searchbox.nat.tmpl -->
+%TMPL:DEF{"searchbox"}% <form class="natSearchBox" name="SearchForm" action="%SCRIPTURLPATH%/natsearch%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+Search:&nbsp;<input type="text" name="search" value="%URLPARAM{search}%" />
+  <input type="hidden" name="regex" value="on" />
+  <input type="hidden" name="scope" value="text" />
+  <input type="hidden" name="web" value="%WEB%" />
+  <input type="hidden" name="topic" value="%TOPIC%" />
+  <input type="hidden" name="set_session_variable" value="" />
+</form>%TMPL:END%

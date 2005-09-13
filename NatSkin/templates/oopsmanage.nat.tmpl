@@ -1,0 +1,12 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopsaccesschange.nat.tmpl -->
+%TMPL:DEF{"msg_missing_action"}%Missing action command%TMPL:END%
+%TMPL:DEF{"msg_unrecognized_action"}%Unrecognized action command:%TMPL:END%
+
+%TMPL:DEF{"heading"}%Administration error%TMPL:END%
+%TMPL:DEF{"message"}%
+---++ Error: %PARAM1% <span style="color:red;">%PARAM2%</span>
+Possibly caused by improper use of the =manage= script.<br />
+
+%TMPL:P{"goback"}%
+%TMPL:END%

@@ -1,0 +1,7 @@
+/* variation to switch the sidebar to the right for georgia blue */
+@import url('BaseRight.css');
+.natSideBar {
+  border-left:1px dotted #999999;
+  border-right:0px;
+}
+

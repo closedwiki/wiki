@@ -1,0 +1,61 @@
+// vim:set filetype=javascript:
+function launchWindow( theWeb, theTopic ) {
+  win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic,
+              theTopic, "width=1024,height=780,resizable,scrollbars");
+}
+
+function checkAll(formular, theCheck) {
+  var j = 0;
+  for( var i = 0; i < document.forms[formular].length; i++ ) {
+    document.forms[formular].elements[i].checked = theCheck;
+  }
+}
+
+function toggleElement(id) {
+  if(document.getElementById) {
+    var element = document.getElementById(id);
+    var toggle = document.getElementById(id + "toggle").firstChild.firstChild;
+    if (element.style.display == '') {
+      element.style.display = 'none';
+      toggle.nodeValue = 'show';
+    } else {
+      element.style.display = '';
+      toggle.nodeValue = 'hide';
+    }
+  }
+}
+
+function submitEditFormular(script, action) {
+  if (action == 'add form') {
+    document.EditFormular.elements['submitChangeForm'].value = action;
+  }
+  %IFSKINSTATETHEN{release="beijing"}%
+    document.EditFormular.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
+  %ELSESKINSTATE%
+    document.EditFormular.elements['action'].value = action; 
+  %FISKINSTATE%
+  document.EditFormular.submit();
+}
+
+function writeEmailAddrs(addrs, linkText) {
+
+  var text = ('<' + 'a' + ' href' + '="mai' + 'lto:');
+
+  for (var i = 0; i < addrs.length; i++) {
+    text += addrs[i][0] + '@' + addrs[i][1] + '.' + addrs[i][2];
+    if (i < addrs.length-1) {
+      text += ', ';
+    }
+  }
+  
+  if (linkText == '') {
+    for (var i = 0; i < addrs.length; i++) {
+      linkText += addrs[i][0] + '&#064;' + addrs[i][1] + '.' + addrs[i][2] + ' ';
+    }
+  }
+
+  text += '">'+ linkText + '<' + '/a' + '>';
+
+  //window.alert('text = ' + text); 
+  document.write(text);
+}

@@ -1,0 +1,28 @@
+%TMPL:INCLUDE{"attach"}%
+<!-- template: attachagain.nat.tmpl -->
+%TMPL:DEF{"previousdetails"}%<h2> Update attachment "%FILENAME%" </h2>
+%ATTACHTABLE% 
+%TMPL:END%
+%TMPL:DEF{"notes"}%
+<p>
+*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
+uploading a file by pressing _Change Properties_
+</p>
+<p>
+*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in 
+the topic will change, but the comment shown against the attachment history will be the 
+comment when the file was uploaded.
+</p>
+<p>
+*Local file:* If you select a different file in _Local file:_, it is this that will be 
+updated or added.
+</p>
+<p> *Move attachment*: An attachment can be deleted by moving it to the Trash.TrashAttachment.  </p>
+%TMPL:END%
+
+%TMPL:DEF{"attachaction"}%
+<input type="submit" class="natFormOkButton" value="Upload file" />
+<input type="submit" class="natFormActionButton" name="changeproperties" value="Change properties" />
+<input type="button" class="natFormCancelButton" value="Cancel" onclick="window.location.href = '%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%';">
+%TMPL:END%
+%TMPL:DEF{"fileuser"}%(%FILEUSER%)%TMPL:END%

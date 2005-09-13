@@ -1,0 +1,12 @@
+%TMPL:INCLUDE{"oopserrbase"}% 
+<!-- template: oopsmoveerr.nat.tmpl -->
+%TMPL:DEF{"heading"}%Attachment move error%TMPL:END%
+%TMPL:DEF{"errormessage"}% 
+During move of attachment " ==%PARAM1%== " in [[%WEB%.%TOPIC%]] an error was found.
+<div class="natErrorMsg">%PARAM1%</div>
+%TMPL:END%
+%TMPL:DEF{"formvariables"}%
+<input type="hidden" name="Topic" value="%WEB%.%TOPIC%" />
+<input type="hidden" name="Attachment" value="%PARAM1%" />
+<input type="hidden" name="Error" value="%PARAM2%" />
+%TMPL:END%

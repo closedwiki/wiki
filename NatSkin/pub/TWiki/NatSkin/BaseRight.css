@@ -1,0 +1,5 @@
+/* variation to switch the sidebar to the right for clean */
+.natTopRight,
+.natSideBar {
+  width:15em;
+}

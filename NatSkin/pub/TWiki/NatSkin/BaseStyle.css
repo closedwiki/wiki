@@ -1,0 +1,628 @@
+/* Base Style */
+
+/* html elements */
+.twikiEmulatedLink,
+a, a:link {
+  text-decoration:none; 
+  color:blue;
+}
+.twikiEmulatedLink:hover,
+a:hover { 
+  text-decoration:underline; 
+  color:blue;
+}
+
+hr {
+  border:0px;
+  border-bottom:1px solid black;
+  margin:0px;
+}
+a img {border: none;}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top:20px;
+  margin-bottom:5px;
+  padding:0px;
+}
+
+/* debug */
+/*
+.natBody, .natBodyContents			{ border: 1px solid green }
+.natWebTitle, .natSearchBox,
+.natTopBar, .natTopBarContents, 
+.natTopLeft, .natTopRight			{ border: 1px solid blue }
+.natMiddle, 
+.natSideBar, natSideBarContents			{ border: 1px solid red }
+.natMain, .natMainContents,
+.natSideBar, .natSideBarContents,
+.natMainFooter, natMainFooterContents {
+  border:1px solid red;
+}
+*/
+
+/* layout */
+.natBody {
+  background:#ffffff;
+  margin:0;
+  padding:0;
+  text-align:center;
+}
+.natBodyContents {
+  text-align:left;
+}
+.natLayoutTable {
+  table-layout:fixed;
+  width:100%;
+}
+.natBottomBarContents {
+  text-align:center;
+  padding-top:5px;
+}
+.natSideBar, .natTopRight {
+  width:16em;
+  min-width:16em;
+  _width:16em; /* IE hack */
+}
+.natSideBar {
+  padding-bottom:5px;
+}
+.natMain, .natMainFooter {
+  width:100%;
+}
+.natTopRight {
+  white-space:nowrap;
+}
+.natSideBarContents, .natMainContents {
+  min-height:50em;
+  overflow:hidden;
+}
+.natTopRight,
+.natTopLeft {
+  padding-top:1em;
+  padding-bottom:1em;
+}
+.natTopRightContents {
+  margin-top:7px;
+}
+
+/* topbar */
+.natTopRight form {
+  padding:0px;
+  margin:0px;
+  margin-bottom:5px;
+}
+
+.natSearchBox {
+  font-weight:bold;
+}
+
+.natSearchBox input {
+  font-weight:normal;
+  border:1px solid #aaaaaa;
+  margin:0px;
+  padding:0px;
+  width:13em;
+}
+
+.natWebTitle {
+  font-weight:bold;
+}
+.natWebLocator {
+  font-weight:bold;
+  text-transform:none;
+}
+
+/* sidebar */
+.natSideBarPersonal {
+  padding-top:20px;
+}
+.natSideBar h1 {
+  margin-top:0px;
+  margin-bottom:5px;
+  font-size:24px;
+}
+.natSideBar h2 {
+  margin-top:10px;
+  margin-bottom:0px;
+  font-size:18px;
+  padding-left:15px; 
+}
+
+.natSideBar ul {
+  list-style-type:square;
+  margin-left:0px; 
+  margin-top:5px;
+  margin-bottom:5px;
+}
+
+.natNotes a:hover,
+.natNotes a {
+  font-weight:bold;
+}
+.natNotes p {
+  margin-top:0px;
+}
+
+/* main area */
+.natMainContents { 
+  font-weight:normal;
+  /*font-size:small;*/
+  padding:1px; /* firefox fix */
+  padding-bottom:15px;
+}
+.natMainContents pre {
+  width:99%;
+  padding-bottom:.25em;
+  overflow-x:auto;
+  overflow-y:visible;
+}
+.natMainContents > pre { /* hide from IE */
+  /*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
+}
+.natMainContents > ul, .natMainContents > ol {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+.natMainFooterContents {
+  font-weight:normal;
+  text-align:right;
+}
+.natRevision {
+  padding-top:1em;
+  padding-bottom:1em;
+  /*font-size:0.9em;*/
+}
+
+/* bottom bar */
+.natBottomBarContents {
+  /*font-size:x-small;*/
+}
+
+/* headings */
+.natMain h1 {font-size:32px;}
+.natMain h2 {font-size:24px;}
+.natMain h3 {font-size:18px;}
+.natMain h4 {font-size:16px;}
+.natMain h5 {font-size:16px;}
+.natMain h6 {font-size:16px; margin-top:5px}
+
+.natMain h1 .twikiEmulatedLink,
+.natMain h2 .twikiEmulatedLink,
+.natMain h3 .twikiEmulatedLink,
+.natMain h4 .twikiEmulatedLink,
+.natMain h5 .twikiEmulatedLink,
+.natMain h1, .natMain h2, .natMain h3, .natMain h4, .natMain h5, .natMain h6,
+.natMain h1 a, .natMain h2 a, .natMain h3 a, .natMain h4 a,
+.natMain h5 a, .natMain h6 a,
+.natMain h1 a:hover, .natMain h2 a:hover, .natMain h3 a:hover,
+.natMain h4 a:hover, .natMain h5 a:hover, .natMain h6 a:hover {
+  font-weight:normal;
+  text-decoration:none;
+  line-height:140%;
+}
+.natMain li {
+  line-height:140%;
+}
+.natMainContents > h1,
+.natMainContents > h1,h2,
+.natMainContents > h1,h3,
+.natMainContents h1:first-child,
+.natMainContents h2:first-child,
+.natMainContents h3:first-child {
+  margin-top:0px;
+  padding-top:0px;
+}
+
+/* search */
+.natSearchRenameContents {
+  width:100%;
+  padding:5px;
+}
+.natSearchRenameContents table {
+  width:100%;
+}
+.natSearchRenameContents .twikiTopRow {
+  white-space:pre;
+  text-align:left;
+  vertical-align:top;
+  padding:5px;
+}
+.natSearchRenameContents .twikiSummary {
+  padding:5px;
+  text-align:left;
+  vertical-align:top;
+}
+.natSearchTable {
+  width:100%;
+  border-collapse:collapse;
+  margin-top:1px; /* gecko fix against forgetting the top border on border-collapsed */
+  margin-bottom:10px;
+}
+.natSearchTable th,
+.natSearchTable td {
+  padding-left:5px;
+  padding-right:5px;
+}
+.natSearchTable th {
+  text-align:left;
+}
+.natSearchTable td {
+  vertical-align:top;
+}
+.natSearchHit th {
+  padding-top:10px;
+}
+.natSearchHit td {
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.natSearchTotal {
+  margin-top:10px;
+  margin-bottom:10px;
+  font-weight:bold;
+}
+
+.natSearchTotal span {
+  color:red;
+}
+.natSearchString {
+  margin-bottom:10px;
+  font-weight:bold;
+  color:red;
+}
+
+.natSearchMessage {
+  color:red; 
+  font-weight:bold; 
+  margin:20px;
+}
+
+.twikiNew {
+  text-transform:lowercase;
+}
+.twikiNew,
+.natSearchNewTopic {
+  color:red; 
+  font-style:italic;
+}
+
+/* diff */
+.natDiffTable {
+  width:100%;
+}
+
+/* oops styles */
+.natErrorMsg {
+  border:1px solid #aaaaaa;
+  padding:5px;
+  margin-top:2ex;
+  margin-bottom:2ex;
+  font:normal small monospace;
+  color:red;
+}
+
+.natFormOkButton {
+  color:green;
+  padding:2px;
+}
+.natFormCancelButton {
+  color:red;
+  padding:2px;
+}
+.natFormActionButton {
+  color:blue;
+  padding:2px;
+}
+
+.natMain .natOopsHeading {
+  color:red;
+}
+.natMain .natNoteHeading {
+  color:green;
+}
+
+/* helpers */
+.natSep {
+  padding-left:5px;
+  padding-right:5px;
+}
+.natAction {
+  color:red;
+  text-transform:capitalize;
+  font-weight:bold;
+}
+
+.natSignature {
+  white-space:nowrap;
+  float:right;
+}
+.natSignature, .natSubmitOptions {
+  padding-top:10px;
+  padding-right:10px;
+  vertical-align:top;
+}
+.natSubmitOptions {
+  width:100%;
+}
+.natSubmitOptions label,
+.natSubmitOptions input {
+  vertical-align:middle;
+}
+
+.natTopicAttachments table {
+  width:100%;
+}
+.natTopicAttachments th,
+.natTopicAttachments td {
+  font-size:x-small;
+}
+.natSideBarContents .natSkinStyleBrowser ul {
+  padding-left:0px;
+}
+.natSideBarContents .natSkinStyleBrowser li  {
+  list-style-type: none;
+}
+
+
+/* twiki styles */
+.twikiNewLink {
+  color:blue;
+  background:#eeeeee;
+}
+
+.twikiAlert {
+  color:red;
+}
+.twikiBroadcastMessage {
+  background:yellow;
+  position:fixed;
+  border:2px solid orange;
+  padding:2px;
+  left:2px;
+  bottom:0px;
+  width:99%;
+  font-size:small;
+  line-height:100%;
+}
+
+/* twiki tables */
+.twikiTable {
+  width:100%;
+  margin-top:1px;
+  border-collapse:collapse;
+  empty-cells:show;
+}
+
+.twikiTable th, 
+.twikiTable td {
+  padding-left:5px;
+  padding-right:5px;
+  padding-top:2px;
+  line-height:140%;
+  border:0px;
+}
+
+.twikiTable th {
+  font-weight:bold;
+  text-align:left;
+}
+
+/* twiki forms */
+.natTopicForm .twikiFirstCol,
+.natTopicFormFirstCol {
+  width:20%;
+  text-align:right;
+  font-weight:bold;
+  padding-left:5px;
+  padding-right:5px;
+}
+.twikiPageForm .twikiFirstCol {
+  width:30%;
+  text-align:right;
+  font-weight:bold;
+  padding-left:5px;
+  padding-right:5px;
+}
+.twikiPageForm th,
+.natTopicForm .natTopicFormTitle {
+  text-align:center;
+}
+.twikiPageForm table,
+.natTopicForm table {
+  width:100%;
+  border-collapse:collapse;
+}
+
+.natTopicForm table table td {
+  border:0px;
+}
+
+/* CAIRO-HACK to use the FORMBUTTON of the NatSkin */
+.natTopicForm .twikiChangeFormButtonHolder,
+.natTopicForm .twikiChangeFormButton {
+  display:none;
+}
+
+/* external link */
+
+/* see also page.nat.tmpl */
+.natMain .natExternalLink:after {
+  margin-left:2px;
+  content:url("external.png");
+}
+
+
+/* custom styles */
+.alt {
+  background-color: #f8f8f8;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 0;
+  padding:10px;
+}
+.border {
+  border:1px solid #ddd;
+  padding:3px;
+}
+.overflow {
+  overflow:auto;
+  padding:1px;
+}
+
+.block {
+  display:block;
+}
+.center {
+  display: table;
+  margin-left:auto;
+  margin-right:auto;
+}
+img.center {
+  margin-left:auto;
+  margin-right:auto;
+  display: block;
+  margin-top:3px;
+  margin-bottom:3px;
+}
+	
+img.alignright {
+  padding: 4px;
+  margin: 0 0 2px 7px;
+  display: inline;
+}
+
+img.alignleft {
+  padding: 4px;
+  margin: 0 7px 2px 0;
+  display: inline;
+}
+
+/* supported plugins and applications */
+
+/* blogging */
+
+/* debug */
+.blogEntry, .blogHeadline, .blogInfo, .blogDate, .blogText, .blogMore,
+.blogComments, .blogComment, .blogCommentDate, .blogRef, .blogNavigation,
+.blogNext, .blogPrev .blogCommentCount {
+   border:0px solid red;
+}
+
+.blogEntry {
+  padding-bottom:20px;
+}
+
+.blogHeadline {
+  margin:0px;
+  padding:0px;
+  margin-bottom:0px;
+}
+
+.blogInfo {
+  padding-bottom:5px;
+}
+
+.blogText {
+  text-align:justify;
+}
+.blogMore {
+  display:inline;
+  margin:0px;
+  padding:0px;
+}
+
+.blogNavigation {
+  font-size:0.8em;
+  margin-bottom:10px;
+  padding:0px;
+}
+.blogNavigation table {
+  width:100%;
+}
+.blogPrev {
+  text-align:left;
+}
+.blogNext {
+  text-align:right;
+}
+
+.blogCommentOdd,
+.blogCommentEven {
+  margin-top:20px;
+}
+.blogCommentCount {
+  margin-left:5px;
+}
+.blogComment {
+  padding:5px;
+}
+.blogComments {
+  margin-top:20px;
+}
+.blogComments .blogMore {
+}
+.blogComment h3 a:hover {
+  text-decoration:underline;
+}
+
+.blogAddComment {
+  margin-top:10px;
+}
+.blogComment h4 {
+  margin-top:5px;
+  margin-bottom:5px;
+  padding:0px;
+}
+
+
+/* BlackListPlugin */
+.blackList {
+  border:0px;
+  overflow:auto;
+  padding:5px;
+}
+.blackListComments {
+  padding-left:25px;
+}
+.comment {
+  padding-top:5px;
+  padding-bottom:5px;
+}
+.posted {
+  margin-top:5px;
+}
+.text {
+  padding-bottom:5px;
+}
+.banForm {
+  margin:5px;
+  margin-left:25px;
+  margin-top:10px;
+}
+.currentScore {
+  margin:10px;
+  margin-left:25px;
+}
+.blackListTitle {
+  padding:10px;
+  padding-left:25px;
+}
+.blackListToggle {
+  padding-left:25px;
+  padding-right:5px;
+  padding-bottom:5px;
+  font-size:small;
+  text-transform:capitalize;
+}
+
+/* RedDotPlugin */
+.natBody .redDot a {
+  color:red;
+  font-weight:bold;
+  padding-left:2px;
+  padding-right:2px;
+  line-height:100%;
+  font-size:18px;
+  text-decoration:none;
+}
+

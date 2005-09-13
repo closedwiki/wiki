@@ -1,0 +1,16 @@
+%TMPL:INCLUDE{"oopslogonbase"}%
+<!-- template: login.nat.tmpl -->
+%TMPL:DEF{"titleaction"}%(note)%TMPL:END%
+%TMPL:DEF{"LOG_IN_BANNER"}%Please enter your username and password.%TMPL:END%
+%TMPL:DEF{"LOGGED_IN_BANNER"}% %MAINWEB%.%WIKINAME% is currently logged in.%TMPL:END%
+%TMPL:DEF{"NEW_USER_NOTE"}%Enter a new username and password to change identity.%TMPL:END%
+%TMPL:DEF{"UNRECOGNISED_USER"}%Unrecognised user and/or password.%TMPL:END%
+%TMPL:DEF{"heading"}%Welcome to the <nop>%WIKITOOLNAME%%TMPL:END%
+%TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
+%TMPL:DEF{"message"}%
+%BANNER% %NOTE%
+
+%TMPL:P{"logon"}%
+<p/>
+*See also*: %TWIKIWEB%.TWikiRegistration, %TWIKIWEB%.ResetPassword, %TWIKIWEB%.ChangePassword
+%TMPL:END%

@@ -1,0 +1,14 @@
+/* thin variant for gettysburg */
+@import url("BaseThin.css");
+.natTopLeft,
+.natMiddleLeft {
+  border-left:1px solid #cccccc;
+}
+.natTopRight,
+.natMiddleRight {
+  border-right:1px solid #cccccc;
+}
+.natSideBar,
+.natMainFooter {
+  border-bottom:1px solid #cccccc;
+}

@@ -1,0 +1,35 @@
+%TMPL:INCLUDE{"oopslogonbase"}%
+<!-- template: oopsaccessdenied.nat.tmpl -->
+%TMPL:DEF{"heading"}%Access Denied%TMPL:END%
+%TMPL:DEF{"topic_access"}%
+<nop>%WIKINAME% has no permission to %PARAM1% [[%WEB%.%TOPIC%]].
+
+%TMPL:P{"logon"}%
+
+See also: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
+%TWIKIWEB%.TWikiRegistration
+%TMPL:END%
+%TMPL:DEF{"only_group"}%
+Only members of the %PARAM1% are allowed to perform this action.
+
+%TMPL:P{"logon"}%
+
+See also: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl,
+%TWIKIWEB%.TWikiRegistration
+%TMPL:END%
+%TMPL:DEF{"no_such_web"}%
+---++ The "%WEB%" web does not exist
+You are trying to '%PARAM1%' a topic in a web that does not exist.
+
+%TMPL:P{"goback"}%
+%TMPL:END%
+%TMPL:DEF{"no_such_topic"}%
+---++ "%WEB%.%TOPIC%" topic does not exist
+You are trying to %PARAM1% a topic that does not exist.
+
+If you want to create the topic then
+[[%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%][click here]].
+%TMPL:END%
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%

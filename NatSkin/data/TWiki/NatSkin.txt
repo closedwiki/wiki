@@ -1,0 +1,137 @@
+%META:TOPICINFO{author="MichaelDaum" date="1126003092" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! The <nop>NatSkin
+NatSkin is a skin driven by cascading stylesheets. This is a rework of the 
+TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
+[[http://nats-www.informatik.uni-hamburg.de/Main/WebHome][Natural Language Systems Division]] 
+(NATS) of the University of Hamburg, Germany. 
+The NatSkin comes with 19 predefined styles that are inspired by the 
+[[http://www.movabletype.org][MovableType]] and 
+[[http://wordpress.org][WordPress]] among others a port of the Kubrick style by 
+[[http://binarybonsai.com][Michael Heilemann]].
+
+The NatSkin includes an enhanced navigation mechanism named Trash.TWikiWebSideBar.
+This combines the best of the old <nop>WebMenu idea from the <nop>GnuSkin and the <nop>WebLeftBar known from the TWiki:Plugins/PatternSkin by providing all the flexibility of the <nop>WebLeftBar
+including the MySideBar feature and an enhanced navigation scheme. See the NatSkinPlugin
+documentation for more information.
+
+%TOC%
+
+---++ Selecting Styles
+You can try alternative styles
+
+	1 per request: by appending =style=&lt;skin-name>= to the end of the url; 
+	  if you use the SessionPlugin this will be sticky; 
+	  alternatively, use the style browser below. (tip: you might want to add
+	  %<nop>SKINSTYLEBROWSER% to your sidebar)
+	1 per topic: add a =%<nop>SETSKINSTYLE{"&lt;name>"}% to the topic text
+	1 per user by setting a variable =SKINSYLE= on your %WIKIUSERNAME% homepage
+	1 per web by setting the variable =SKINSTYLE= in the WebPreferences
+	1 site-wide by setting the skinstyle in the %TWIKIWEB%.TWikiPreferences
+
+The default style is hardcoded into the NatSkinPlugin (Clean).
+
+%SKINSTYLEBROWSER%
+
+---++ Documentation
+(TODO: "refine" me)
+
+	* NatSkinTemplates
+	* NatSkinCss
+
+---++ Installation
+	* Get the TWiki:Plugins.NatSkinPlugin supplementary package and install it.
+	* Get the TWiki:Plugins.RedDotPlugin for red dots on the Trash.TWikiWebSideBar (or delete
+	  the =%<nop>REDDOT{...}% macros from the Trash.TWikiWebSideBar topic).
+	* If you are installing on TWiki/Cairo then consider applying the patches 
+		* [[%ATTACHURL%/Cairo_UI_pm.diff][Cairo_UI_pm.diff]]: fixes a bug in =UI.pm=
+		* [[%ATTACHURL%/TablePlugin_pm.diff][TablePlugin_pm.diff]]: adds full CSS support
+		  to the TablePlugin supported by the NatSkin of course; this patch is against
+		  the current version uploaded to TWiki.org and not suitable otherwise, i.e. not
+		  needed if you run a TWiki/dakar engine.
+	* Download the ZIP file from the Skin Home page (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory
+	* Test if installed: [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=nat&style=Kubrick][click here]]
+
+---++ Skin Info
+<style type="text/css">
+.screenshotter {
+  height:130px;
+  overflow:hidden;
+}
+.screenshotter img {
+  width:600px;
+}
+</style>
+
+|  Description: | Driven by cascading stylesheets, Comes with 9 alternative styles, <nop>MoveableType Look-n-Feel |
+|  Screenshot: | <div class="screenshotter" style="height:130px; overflow:hidden"><a href="%ATTACHURL%/Clean.jpeg"><img src="%ATTACHURL%/Clean.jpeg" title="Clean"/></a></div> |
+|  More Screenshots: | \
+<div class="screenshotter"><a href="%ATTACHURL%/GeorgiaBlue.jpeg"><img src="%ATTACHURL%/GeorgiaBlue.jpeg" title="GeorgiaBlue"/></a></div>\
+  <div class="screenshotter"><a href="%ATTACHURL%/Gettysburg.jpeg"><img src="%ATTACHURL%/Gettysburg.jpeg" title="Gettysburg" /></a></div>\
+	<div class="screenshotter"><a href="%ATTACHURL%/IndependenceThin.jpeg"><img src="%ATTACHURL%/IndependenceThin.jpeg" title="IndependenceThin" /></a></div>\
+	<div class="screenshotter"><a href="%ATTACHURL%/Kubrick.jpeg"><img src="%ATTACHURL%/Kubrick.jpeg" title="Kubrick" /></a></div> \
+	<div class="screenshotter"><a href="%ATTACHURL%/PlainJane.jpeg"><img src="%ATTACHURL%/PlainJane.jpeg" title="PlainJane" /></a></div>\
+	<div class="screenshotter"><a href="%ATTACHURL%/SeaGreenThin.jpeg"><img src="%ATTACHURL%/SeaGreenThin.jpeg" title="SeaGreenThin" /></a></div>\
+	<div class="screenshotter"><a href="%ATTACHURL%/Rusty.jpeg"><img src="%ATTACHURL%/Rusty.jpeg" title="Rusty" /></a></div>\
+	<div class="screenshotter"><a href="%ATTACHURL%/SquashThin.jpeg"><img src="%ATTACHURL%/SquashThin.jpeg" title="SquashThin" /></a></div>\
+	<div class="screenshotter"><a href="%ATTACHURL%/StormyThin.jpeg"><img src="%ATTACHURL%/StormyThin.jpeg" title="StormyThin" /></a></div> \
+|
+|  Base Name: | nat |
+|  Skin Author: | TWiki:Main/MichaelDaum |
+|  Skin Version: | v2.10 (2005-08-30) |
+|  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-08-30: | lots of css fixes for IE and Opera; \
+					  fixed topicactions for IE; \
+					  different cancel actions per engine |
+|  2005-08-26: | final NatSkin-2.0 |
+|  2005-07-12: | first round of pre-releases numbered 1.91 upwards |
+|  2005-06-24: | rewritten the templates, renamed the CSS classes |
+|  2003-07-25: | Initial version |
+|  Dependencies: | NatSkinPlugin, SessionPlugin, RedDotPlugin |
+|  Skin Home: | TWiki:Plugins/NatSkin |
+|  Feedback: | TWiki:Plugins/NatSkinDev |
+|  Appraisal: | TWiki:Plugins/NatSkinAppraisal |
+
+__Note:__ The Description, Screenshot and Base Name rows are needed by the TWiki:TWiki/TWikiSkinBrowser
+
+__Related topic:__ TWiki:TWiki/TWikiSkins, TWiki:TWiki/TWikiSkinBrowser, TWiki:Plugins/NatSkinDev, NatSkinPlugin
+
+-- TWiki:Main/MichaelDaum - 15 Mar 2005
+
+%META:FILEATTACHMENT{name="NatSkin.zip" attr="" comment="" date="1110909107" path="NatSkin.zip" size="325290" user="MichaelDaum" version="1.3"}%
+%META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1113468984" path="favicon.ico" size="4710" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="previewbg.png" attr="" comment="" date="1114174051" path="previewbg.png" size="19334" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="Cairo_UI_pm.diff" attr="" comment="" date="1120239647" path="Cairo_UI_pm.diff" size="413" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="TablePlugin_pm.diff" attr="" comment="" date="1120239660" path="TablePlugin_pm.diff" size="3205" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="Independence.jpeg" attr="h" comment="" date="1124706583" path="Independence.jpeg" size="53113" user="MichaelDaum" version="1.2"}%
+%META:FILEATTACHMENT{name="Squash.jpeg" attr="h" comment="" date="1124706784" path="Squash.jpeg" size="50940" user="MichaelDaum" version="1.2"}%
+%META:FILEATTACHMENT{name="BaseStyle.css" attachment="BaseStyle.css" attr="" comment="" date="1111145731" path="BaseStyle.css" size="8838" tmpFilename="/var/tmp/CGItemp63783" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="CleanStyle.css" attachment="CleanStyle.css" attr="" comment="" date="1111145731" path="CleanStyle.css" size="8838" tmpFilename="/var/tmp/CGItemp63783" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueStyle.css" attachment="GeorgiaBlueStyle.css" attr="" comment="" date="1111145744" path="GeorgiaBlueStyle.css" size="4555" tmpFilename="/var/tmp/CGItemp63773" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="GettysburgStyle.css" attachment="GettysburgStyle.css" attr="" comment="" date="1111145755" path="GettysburgStyle.css" size="3221" tmpFilename="/var/tmp/CGItemp63961" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="PlainJaneStyle.css" attachment="PlainJaneStyle.css" attr="" comment="" date="1111145769" path="PlainJaneStyle.css" size="3326" tmpFilename="/var/tmp/CGItemp63861" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="RustyStyle.css" attachment="RustyStyle.css" attr="" comment="" date="1111145782" path="RustyStyle.css" size="4480" tmpFilename="/var/tmp/CGItemp63764" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="StormyStyle.css" attachment="StormyStyle.css" attr="" comment="" date="1111145793" path="StormyStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="IndependenceStyle.css" attachment="IndependenceStyle.css" attr="" comment="" date="1111145793" path="IndependenceStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="SquashStyle.css" attachment="SquashStyle.css" attr="" comment="" date="1111145793" path="SquashStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="SeaGreenStyle.css" attachment="SeaGreenStyle.css" attr="" comment="" date="1111145793" path="SeaGreenStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="KubrickStyle.css" attachment="KubrickStyle.css" attr="" comment="" date="1111145793" path="KubrickStyle.css" size="2827" tmpFilename="/var/tmp/CGItemp63629" user="Main.TWikiGuest" version="0"}%
+%META:FILEATTACHMENT{name="Kubrick.jpeg" attr="h" comment="" date="1124706654" path="Kubrick.jpeg" size="35719" user="MichaelDaum" version="1.2"}%
+%META:FILEATTACHMENT{name="external.png" attachment="external.png" attr="h" comment="" date="1123862151" path="external.png" size="165" tmpFilename="/var/tmp/CGItemp25437" user="Main.MichaelDaum" version="0"}%
+%META:FILEATTACHMENT{name="Clean.jpeg" attr="h" comment="" date="1124706451" path="Clean.jpeg" size="56887" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="CleanThin.jpeg" attr="h" comment="" date="1124706478" path="CleanThin.jpeg" size="51905" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlue.jpeg" attr="h" comment="" date="1124706508" path="GeorgiaBlue.jpeg" size="53646" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="GeorgiaBlueThin.jpeg" attr="h" comment="" date="1124706527" path="GeorgiaBlueThin.jpeg" size="49838" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="Gettysburg.jpeg" attr="h" comment="" date="1124706558" path="Gettysburg.jpeg" size="55745" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="GettysburgThin.jpeg" attr="h" comment="" date="1124706570" path="GettysburgThin.jpeg" size="52234" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="IndependenceThin.jpeg" attr="h" comment="" date="1124706638" path="IndependenceThin.jpeg" size="50108" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJane.jpeg" attr="h" comment="" date="1124706668" path="PlainJane.jpeg" size="50928" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="PlainJaneThin.jpeg" attr="h" comment="" date="1124706685" path="PlainJaneThin.jpeg" size="44181" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="Rusty.jpeg" attr="h" comment="" date="1124706699" path="Rusty.jpeg" size="56897" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="RustyThin.jpeg" attr="h" comment="" date="1124706717" path="RustyThin.jpeg" size="50184" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreen.jpeg" attr="h" comment="" date="1124706729" path="SeaGreen.jpeg" size="56265" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="SeaGreenThin.jpeg" attr="h" comment="" date="1124706749" path="SeaGreenThin.jpeg" size="52702" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="SquashThin.jpeg" attr="h" comment="" date="1124706795" path="SquashThin.jpeg" size="49337" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="Stormy.jpeg" attr="h" comment="" date="1124706818" path="Stormy.jpeg" size="52029" user="MichaelDaum" version="1.1"}%
+%META:FILEATTACHMENT{name="StormyThin.jpeg" attr="h" comment="" date="1124706827" path="StormyThin.jpeg" size="51154" user="MichaelDaum" version="1.1"}%

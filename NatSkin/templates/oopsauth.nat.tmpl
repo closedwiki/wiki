@@ -1,0 +1,17 @@
+%TMPL:INCLUDE{"oopslogonbase"}%
+<!-- template: oopsauth.nat.tmpl -->
+%TMPL:DEF{"action"}%view%TMPL:END%
+%TMPL:DEF{"heading"}%Either you need to register or the authentication failed%TMPL:END%
+%TMPL:DEF{"message"}%
+To edit topics on this <nop>%WIKITOOLNAME% collaborative web, you must be registered as a user.
+
+%TMPL:P{"logon"}%
+
+---+++ If you expected to be logged in at this point:
+   * Did you type in your login name and password correctly? Remeber, both are case sensitive.
+   * Your login name is usually the %TWIKIWEB%.WikiName, like *<nop>TomSawyer* and _not_ Tom Sawyer or tom or sawyer.
+   * Registered users can %TWIKIWEB%.ChangePassword and %TWIKIWEB%.ResetPassword.
+---+++ To register as a new user:
+   * Simply fill out the *[[%TWIKIWEB%.TWikiRegistration][TWikiRegistration]]* form. It only takes a minute. 
+%TMPL:END%
+

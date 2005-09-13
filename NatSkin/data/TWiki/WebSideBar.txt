@@ -1,0 +1,86 @@
+%META:TOPICINFO{author="MichaelDaum" date="1126514607" format="1.1" version="1.3"}%
+---+ %TOPIC%
+
+%STARTINCLUDE%
+---+ Navigation%REDDOT{"%TWIKIWEB%.WebSideBar"}%
+---++ %WEBLINK{"Main"}%
+<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Main),block,none)"}%;">
+	* %CALC{"$IF($EXISTS(Support/WelcomeGuest),[[Support.WelcomeGuest][Welcome]],[[%TWIKIWEB%.WelcomeGuest][Welcome]])"}%
+	* [[%TWIKIWEB%.TWikiRegistration][Registration]]
+	* [[%MAINWEB%.TWikiUsers][Users]]
+	* [[%MAINWEB%.TWikiGroups][Groups]]
+	* [[%TWIKIWEB%.ChangePassword][Password]]
+	* [[Main.WebTopicList][Index]]
+	* [[Main.WebChanges][Changes]]
+	* [[Main.WebNotify][Notifications]]
+	* [[Main.WebStatistics][Statistics]]
+	* [[Main.WebPreferences][Preferences]]
+</div>
+%FORMATLIST{"%USERWEBS%" format="<h2>$percntWEBLINK{\"$1\"}$percnt</h2>$n"}%<!--
+-->
+<div style="display:%CALC{"$IF($EXISTS(User/WebHome),block,none)"}%;">
+---++ %WEBLINK{"User"}%
+<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,User),block,none)"}%;">
+	* [[User.TWikiUsers][Accounts]]
+	* [[User.TWikiGroups][Groups]]
+	* [[User.WebTopicList][Index]]
+	* [[User.WebChanges][Changes]]
+	* [[User.WebNotify][Notifications]]
+	* [[User.WebStatistics][Statistics]]
+	* [[User.WebPreferences][Preferences]]
+</div>
+</div>
+<div style="display:%CALC{"$IF($EXISTS(Support/WebHome),block,none)"}%;">
+---++ %WEBLINK{"Support"}%
+<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Support),block,none)"}%;">
+	* [[Support.UsersGuide][User's Guide]]
+	* [[Support.TWikiDocumentation][Reference Manual]]
+	* [[Support.FrequentlyAskedQuestions][FAQs]]
+	* [[Support.TWikiGlossary][Glossary]]
+	* [[Support.WebTopicList][Index]]
+	* [[Support.WebChanges][Changes]]
+	* [[Support.WebNotify][Notifications]]
+	* [[Support.WebStatistics][Statistics]]
+	* [[Support.WebPreferences][Preferences]] 
+</div>
+</div>
+---++ %WEBLINK{"Sandbox"}%
+<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Sandbox),block,none)"}%;">
+	* [[Sandbox.WebTopicList][Index]]
+	* [[Sandbox.WebChanges][Changes]]
+	* [[Sandbox.WebNotify][Notifications]]
+	* [[Sandbox.WebStatistics][Statistics]]
+	* [[Sandbox.WebPreferences][Preferences]] 
+</div>
+---++ %WEBLINK{web="%TWIKIWEB%" name="System"}%
+<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,%TWIKIWEB%),block,none)"}%;">
+	* [[%TWIKIWEB%.InstalledPlugins][Plugins]]
+	* [[%TWIKIWEB%.WebTopicList][Index]]
+	* [[%TWIKIWEB%.WebChanges][Changes]]
+	* [[%TWIKIWEB%.WebNotify][Notifications]]
+	* [[%TWIKIWEB%.WebStatistics][Statistics]]
+	* [[%TWIKIWEB%.WebPreferences][Preferences]]
+	* [[%TWIKIWEB%.TWikiPreferences][SitePreferences]] 
+</div>
+<div style="display:%CALC{"$IF($EXISTS(TestCases/WebHome),block,none)"}%;">
+---++ %WEBLINK{"TestCases"}%
+<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,TestCases),block,none)"}%;">
+	* [[TestCases.CreateNewTestCaseForm][Create Test]]
+	* [[TestCases.WebTopicList][Index]]
+	* [[TestCases.WebStatistics][Statistics]]
+	* [[TestCases.WebPreferences][Preferences]]
+</div>
+</div>
+<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Trash),block,none)"}%;">
+---++ %WEBLINK{"Trash"}%
+	* [[Trash.TrashAttachment][Attachments]]
+	* [[Trash.WebTopicList][Index]]
+	* [[Trash.WebStatistics][Statistics]]
+	* [[Trash.WebPreferences][Preferences]]
+</div>
+<div class="natSideBarPersonal">
+%MYSIDEBAR%
+</div>%STOPINCLUDE%
+
+
+%META:TOPICMOVED{by="MichaelDaum" date="1126003103" from="TWiki.TWikiSideBar" to="TWiki.WebSideBar"}%

@@ -1,0 +1,12 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopschangepasswd.nat.tmpl -->
+%TMPL:DEF{"titleaction"}%(note)%TMPL:END%
+%TMPL:DEF{"heading"}%Password change successfully%TMPL:END%
+%TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
+%TMPL:DEF{"message"}%
+... for user %PARAM1%.
+
+<form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%MAINWEB%/%USERNAME%">
+  <input type="submit" style="color:green" value="OK">
+</form>
+%TMPL:END%

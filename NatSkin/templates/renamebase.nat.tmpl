@@ -1,0 +1,46 @@
+%TMPL:INCLUDE{"page"}% 
+<!-- template: renamebase.nat.tmpl-->
+%TMPL:INCLUDE{"renamebody"}% 
+%TMPL:INCLUDE{"renamesidebar"}% 
+%TMPL:INCLUDE{"renametopicactions"}% 
+
+%TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
+%TMPL:DEF{"titleaction"}%(rename)%TMPL:END%
+%TMPL:DEF{"onloadscript"}%onload="document.rename.newtopic.focus()"%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
+
+%TMPL:DEF{"content"}%
+<form method="POST" name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<!--input type="hidden" name="confirm" value="on"-->
+---+ %TMPL:P{"webaction"}% <nop>%TOPIC%
+
+<style type="text/css">
+.twikiTable {
+  width:auto;
+}
+</style>
+| *&nbsp;* |  *Web:* | *Topic:* |
+|  *From:* |    %WEB% | <nop>%TOPIC% |
+|  *To:* |  %TMPL:P{"newweb"}% | %TMPL:P{"newtopic"}% |
+%TMPL:P{"buttons"}%
+---++ Change links in topics that refer to <nop>%TOPIC% in the %WEB% Web:
+<div class="natSearchRenameContents">
+%IFSKINSTATETHEN{release="dakar"}%
+  %LOCAL_SEARCH%
+%ELSESKINSTATE%
+  %RESEARCH{ "%TOPIC%" web="%WEB%" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="local"}%
+%FISKINSTATE%
+</div>
+
+---++ Change links in topics that refer to <nop>%WEB%.<nop>%TOPIC% in any Web:
+<div class="natSearchRenameContents">
+%IFSKINSTATETHEN{release="dakar"}%
+  %GLOBAL_SEARCH%
+%ELSESKINSTATE%
+  %RESEARCH{ "%WEB%\.%TOPIC%" web="all" noempty="on" showlock="on" nototal="on" regex="on" nosearch="on" order="modified" reverse="on" nosummary="on" showlock="on" renameview="global"}%
+%FISKINSTATE%
+</div>
+
+<input type="button" style="color:blue" value="Clear all checkboxes" onClick="checkAll('rename', false);" />
+</form>
+%TMPL:END%
