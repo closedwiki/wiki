@@ -222,9 +222,7 @@ document.write("<\/style>");
 %TMPL:P{"toolbar"}%<div id="helptoggle" class="twikiHelp twikiTwistHidden">%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>
 <div class="patternFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <div class="twikiEditTextarea">
-<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='if (window.event.keyCode==27) return false;'>
-%TEXT%
-</textarea>
+<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='if (window.event.keyCode==27) return false;'>%TEXT%</textarea>
 </div>
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />

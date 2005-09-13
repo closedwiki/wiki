@@ -87,9 +87,7 @@ function launchWindow( theWeb, theTopic, theAnchor ) {
 %TMPL:P{"simpleheader"}%
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <div class"twikiEditTextarea">
-<textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
-%TEXT%
-</textarea><br />
+<textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>%TEXT%</textarea><br />
 </div>
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
