@@ -980,10 +980,10 @@ This method *ignores* topic access permissions. You should be careful to use =ch
 =cut
 
 sub readTopic {
-    my( $web, $topic ) = @_;
+    #my( $web, $topic, $rev ) = @_;
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
 
-    return $TWiki::Plugins::SESSION->{store}->readTopic( undef, $web, $topic, undef, 0 );
+    return $TWiki::Plugins::SESSION->{store}->readTopic( undef, @_ );
 }
 
 =pod
