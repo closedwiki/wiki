@@ -1,0 +1,15 @@
+%TMPL:INCLUDE{"renamebase"}%
+<!-- template: rename.nat.tmpl -->
+%TMPL:DEF{"newtopic"}%<input name="newtopic" value="%TOPIC%" size="30" />%TMPL:END%
+%TMPL:DEF{"newweb"}% <select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> %TMPL:END%
+
+%TMPL:DEF{"webaction"}% Rename %TMPL:END%
+%TMPL:DEF{"buttons"}%
+<br />
+<input type="checkbox" name="nonwikiword" /> Allow non <nop>WikiWord for the new topic name. <p>
+<center>
+<input type="submit" style="color:green" value="OK" />&nbsp;
+<input type="button" style="color:red" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%'">
+</center>
+<p>
+%TMPL:END%

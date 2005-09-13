@@ -1,0 +1,15 @@
+%TMPL:INCLUDE{"oopserrbase"}%
+<!-- template: oopssoftwareerr.tmpl -->
+%TMPL:DEF{"heading"}%Software Error%TMPL:END%
+%TMPL:DEF{"errormessage"}%
+A software error occured in 
+<verbatim>
+%PARAM1%
+</verbatim>
+<div class="natErrorMsg">%PARAM2%</div>
+%TMPL:END%
+
+%TMPL:DEF{"formvariables"}%
+<input type="hidden" name="Where" value="%PARAM1%" />
+<input type="hidden" name="Error" value="%PARAM2%" />
+%TMPL:END%

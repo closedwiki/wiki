@@ -1,0 +1,9 @@
+./bin/natlogon
+./bin/natsearch
+./data/TWiki/NatSkinPlugin.txt
+./data/TWiki/MySideBar.txt
+./data/TWiki/MySideBarTemplate.txt
+./lib/TWiki/Plugins/NatSkinPlugin.pm
+./lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm
+./lib/TWiki/Plugins/NatSkinPlugin/Search.pm
+./lib/TWiki/Plugins/NatSkinPlugin/Auth.pm

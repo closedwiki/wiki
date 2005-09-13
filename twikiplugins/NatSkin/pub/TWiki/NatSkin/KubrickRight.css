@@ -1,0 +1,5 @@
+/* variation to switch the sidebar to the right for kubrick */
+.natTopRight,
+.natSideBar {
+  width:250px;
+}

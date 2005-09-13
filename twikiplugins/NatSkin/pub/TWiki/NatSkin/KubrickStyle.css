@@ -1,0 +1,555 @@
+/* kubrick style */
+@import url("BaseStyle.css");
+
+/* based on the famous Kubrick WordPress style */
+
+/* html */
+a:hover {
+  color: #147;
+  text-decoration: underline;
+}
+.twikiEmulatedLink,
+.natMain a,
+.natMainFooter a,
+.natTopBar a,
+.natSideBar a,
+a, h2 a:hover, h3 a:hover {
+  color: #06c;
+}
+hr {
+  border-bottom: 1px solid #999;
+}
+
+/* local basics */
+.natBody {
+  background:#eee;
+  background:#d5d6d7;
+  text-align: center;
+}
+.natBodyContents {
+  background-color: white;
+  border: 1px solid #959596;
+  text-align: left;
+  border: 1px solid #959596;
+  font-size: 62.5%; 
+  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+}
+.natSideBar,
+.natTopRight {
+  width:22em;
+}
+
+.natSideBarContents,
+.natMainFooterContents,
+.natMainContents {
+  padding:15px;
+}
+
+.natTopLeft, .natTopRight {
+  padding-top:5em;
+  padding-bottom:4em;
+}
+.natTopLeftContents,
+.natTopRightContents{
+  margin-left:20px;
+}
+.natTopRightContents {
+  margin-top:12px;
+}
+.natSearchBox input {
+  width:10em;
+  font-size:1.2em;
+}
+
+/* top bar */
+.natTopBar {
+  background:#3388CC;
+  border:1px solid #3388CC; /* IE fix */
+}
+.natTopBar,
+.natTopBar a {
+  color:white;
+}
+.natTopRight form {
+  font-weight:bold;
+  margin:0px;
+}
+
+.natWebTitle {
+  font-size: 3em;
+  text-transform:none;
+}
+.natWebTitle a {
+  color:white;
+  /*text-shadow:2px 2px 2px #0055aa;*/
+
+}
+.natWebLocator,
+.natWebLocator a {
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-size:0.7em;
+}
+.natTopicActions,
+.natWebSlogan {
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+}
+.natSearchBox input {
+  background-color: #3388CC;
+  border:0px;
+  font-family:arial,sans-serif;
+}
+.natAction {
+  color:darkblue;
+  text-transform:capitalize;
+  font-weight:bold;
+}
+
+/* sidebar */
+.natSideBarContents {
+  font-family:Verdana, Arial, Sans-Serif;
+  color: #666;
+  /*
+  background:#f9f9f9;
+  border-right:1px dotted #ddd;
+  */
+}
+.natSideBar h1 {
+  font-size: 1.8em;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  text-shadow:2px 2px 2px #ccc;
+  color:#444444;
+}
+.natSideBar h2 {
+  font-size: 1.4em;
+  margin:0px;
+  margin-top:5px;
+  padding:0;
+  text-decoration: none;
+}
+
+.natSideBar h1,
+.natSideBar h1 a {
+  font-weight:normal;
+  color:#444444;
+}
+.natSideBar h2,
+.natSideBar h2 a,
+.natWebLink a {
+  font-weight:normal;
+  color:#575757;
+  display:block;
+}
+.natSideBar a:hover {
+  text-decoration:underline;
+}
+.natSideBar ul {
+  padding-left:2ex;
+  list-style-type: none;
+  text-indent:-2ex;
+}
+.natSideBar li:before {
+  content: "\00BB \0020";
+  color:#777;
+}
+
+.natSideBarContents .natSkinStyleBrowser ul {
+  padding-left:2ex;
+}
+
+.natSkinStyleBrowser li:before {
+  content:""
+}
+
+
+/* main */
+.natMiddle {
+  font-weight:normal;
+  color:#444;
+}
+.natMainContents {
+  /*color:#777;*/
+  line-height:1.5em;
+  font: 1.2em/1.5em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+}
+.natMainFooterContents {
+  text-align:left;
+}
+.natMain h1 .twikiEmulatedLink,
+.natMain h2 .twikiEmulatedLink,
+.natMain h3 .twikiEmulatedLink,
+.natMain h4 .twikiEmulatedLink,
+.natMain h5 .twikiEmulatedLink,
+.natMain h6 .twikiEmulatedLink,
+.natMain h1 a, .natMain h2 a, .natMain h3 a, .natMain h4 a,
+.natMain h5 a, .natMain h6 a,
+.natMain h1 a:hover, .natMain h2 a:hover, .natMain h3 a:hover, .natMain h4 a:hover,
+.natMain h5 a:hover, .natMain h6 a:hover,
+.natMain h1, .natMain h2, .natMain h3, .natMain h4, .natMain h5, .natMain h6
+{
+  color:#444444;
+  font-weight:normal;
+}
+.natMain h1 {font-size:2.0em}
+.natMain h2 {font-size:1.6em}
+.natMain h3 {font-size:1.5em}
+.natMain h4 {font-size:1.4em}
+.natMain h5 {font-size:1.2em}
+.natMain h6 {font-size:1.1em}
+
+.natMain h1 {
+  text-shadow:2px 2px 2px #ccc;
+}
+
+.natMain h1,
+.natMain h2,
+.natMain h3,
+.natMain h4,
+.natMain h5,
+.natMain h6 {
+  font-family: 'Century Gothic', 'Lucida Grande', 'Trebuchet MS', Verdana, sans-serif;
+  letter-spacing:-1px;
+}
+
+
+.natMainContents pre {
+  border-left:5px solid #ddd;
+  margin-left:0px;
+  padding-left:5px;
+  font-size:0.9em;
+  line-height:1.3em;
+}
+
+.natMain textarea {
+  background:white;
+  border:0px;
+  color:#555;
+  padding:2px;
+}
+
+.natMain .natNoteHeading {
+  color: #0055aa;
+}
+
+/* bottom bar */
+.natBottomBarContents {
+  margin: 0px 15px 10px 15px;
+  font-size: 1em;
+}
+.natBottomBarContents,
+.natBottomBarContents a {
+  color:#959596;
+}
+.natCopyRight,
+.natTWikiInfo {
+  display:inline;
+}
+
+/* tables */
+.twikiTable {
+  border:1px solid #d9d6e7;
+  background:#f6f7f8;
+  font-size:0.9em;
+}
+
+.twikiTable td,
+.twikiTable th {
+  border-left:1px solid #ddd;
+  border-right:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+}
+
+.twikiTable th {
+  background:#fff6bf;
+  border-top:1px solid #ffd324;
+  border-bottom:1px solid #ffd324;
+}
+
+/* twiki forms */
+.twikiPageForm table,
+.natTopicForm .twikiTable {
+  background:#fff6bf;
+  border-top:2px solid #ffd324;
+  border-bottom:2px solid #ffd324;
+  border-left:0px;
+  border-right:0px;
+  padding-bottom:5px;
+  font-size:x-small;
+}
+.twikiPageForm input,
+.natTopicForm input {
+  color:#555;
+}
+.twikiPageForm table td,
+.twikiPageForm table th,
+.natTopicForm table td,
+.natTopicForm table th {
+  border:0px;
+}
+
+.twikiPageForm th,
+.natTopicForm td {
+  border:1px solid #fff6bf;
+  background:#fff6bf;
+}
+
+.twikiPageForm table th,
+.twikiPageForm table th a,
+.twikiPageForm table th,
+.natTopicForm table th a {
+  background:#fff6bf;
+}
+.twikiPageForm table textarea,
+.twikiPageForm table input,
+.natTopicForm table textarea,
+.natTopicForm table input {
+  border:0px;
+  background:white;
+  border:1px solid #ffd324;
+  margin:2px;
+  font-family:arial, sans-serif;
+  font-size:small;
+}
+
+/* attachments */
+.natTopicAttachments table th,
+.natTopicAttachments table td {
+  padding:2px;
+}
+.natTopicAttachments table th {
+  white-space:pre;
+}
+
+/* search tables */
+.natSearchTable {
+  font-size:x-small;
+}
+.natSearchTableTitle th {
+  border-bottom:1px solid #ddd;
+  color:#444444;
+  background:white;
+  font-size:1.1em;
+}
+
+.natSearchHit {
+  font-size:1.0em;
+  line-height:140%;
+}
+.natSearchHit td {
+  padding-bottom:10px;
+  border-bottom:1px solid #ddd;
+}
+.natSearchTable tr:nth-child(4n+3),
+.natSearchTable tr:nth-child(4n+2) {
+  background:#f8f8f8;
+}
+/*
+.natSearchTable tr:nth-child(4n+2) {
+  border-top:1px solid #ddd;
+}
+.natSearchTable tr:nth-child(4n+3) {
+  border-bottom:1px solid #ddd;
+}
+*/
+
+.natSearchOddHit {
+  background:#f0f0f0;
+}
+.natSearchOddHit th {
+  border-top:1px solid #ddd;
+}
+.natSearchOddHit td {
+  border-bottom:1px solid #ddd;
+}
+
+/* table of contents */
+.twikiToc {
+  padding-top:5px;
+  padding-bottom:5px;
+  background:#fff6bf;
+  border-top:2px solid #ffd324;
+  border-bottom:2px solid #ffd324;
+  line-height:1.7em;
+}
+
+.twikiToc ul {
+  margin-top:0px;
+  margin-bottom:0px;
+}
+
+.twikiToc li a {
+  display:block;
+  width:100%;
+}
+.twikiToc a + a {
+  display:inline;
+}
+.twikiToc li a:hover {
+  background-color:#ffd324;
+  text-decoration:none;
+}
+
+/* CSS2 stuff to render proper section numbering
+ * works with konqueror, safari
+ * fails gecko
+ */
+
+/*
+.twikiToc > ul {
+  padding:0px;
+}
+
+.twikiToc ul {
+  list-style-type:none;
+  list-style-position:outside;
+}
+.twikiToc > ul > li:before {
+  content: counter(s1) ". ";
+  counter-increment: s1;
+}
+.twikiToc > ul > li > ul > li:before {
+  content: counter(s1) "." counter(s2) ". ";
+  counter-increment:s2;
+}
+.twikiToc > ul > li > ul > li > ul > li:before {
+  content: counter(s1) "." counter(s2) "." counter(s3) ". ";
+  counter-increment: s3;
+}
+.twikiToc > ul > li > ul > li > ul > li > ul > li:before {
+  content: counter(s1) "." counter(s2) "." counter(s3) "." counter(s4) ". ";
+  counter-increment: s4;
+}
+.twikiToc > ul > li > ul > li > ul > li > ul > li > ul > li:before {
+  content: counter(s1) "." counter(s2) "." counter(s3) "." counter(s4) "." counter(s5);
+  counter-increment:s5;
+}
+.twikiToc > ul > li {counter-reset: s2 s3 s4 s5;}
+.twikiToc > ul > li > ul > li {counter-reset:s3 s4 s5;}
+.twikiToc > ul > li > ul > li > ul > li {counter-reset:s4 s5;}
+.twikiToc > ul > li > ul > li > ul > li > ul > li {counter-reset:s5;}
+*/
+
+/* misc twiki */
+.twikiNewLink {
+  /*color:#B22222;*/
+  color:#b85b5a;
+}
+
+
+/* custom styles */
+.alt {
+  background-color: #f8f8f8;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.border {
+  border:1px solid #b8b8b8;
+  padding:3px;
+}
+
+/* supported plugins */
+
+/* blogging */
+.blogHeadline {
+  border-bottom:1px solid #ddd;
+}
+.blogInfo {
+  font-size:0.8em;
+}
+.blogText {
+  margin-top:5px;
+}
+.blogMore {
+  font-size:0.9em;
+}
+.blogMore:before,
+.blogMore:after {
+  font-size:1.3em;
+}
+.blogMore:before {
+  content:"... ";
+}
+.blogCommentOdd {
+  background-color: #f8f8f8;
+}
+.blogComments h4 {
+  margin-top:10px;
+}
+.blogComment {
+  margin-bottom:30px;
+}
+.blogComment h3 {
+  margin-top:0px;
+}
+.blogComment h3 a:hover,
+.blogComment h3 a {
+  color:#06c;
+}
+.blogComment .blogDate {
+  font-size:0.8em;
+  color:#777;
+  font-weight:normal;
+}
+.blogCommentNr {
+  color:#959596;
+  margin-right:10px;
+}
+.blogCommentCount {
+  color:#959596;
+  margin-left:10px;
+}
+.blogComments .blogCommentCount {
+  margin-left:0px;
+  color:#444444;
+}
+.blogNavigation {
+  padding-top:2px;
+}
+.blogNavigation,
+.blogNavigation a {
+  color:#aaa;
+}
+.blogAddComment {
+  margin-top:30px;
+}
+.blogAddComment textarea,
+.blogAddComment input {
+  border:1px solid #aaa;
+  color:#444;
+  font-family:arial, sans-serif;
+  padding:2px;
+}
+.blogAddComment .blogSubmitButton {
+  margin-top:5px;
+  color:#444444;
+}
+.blogSubmitButton {
+  color:#444444;
+}
+.blogArchiveDescription {
+  margin-bottom:20px;
+  font-size:0.9em;
+}
+.blogSideBarSection {
+  margin-bottom:20px;
+}
+.blogSideBarCategories li:before {
+  content: "";
+}
+.blogSideBarCategories ul {
+  text-indent:0px;
+  padding-left:0px;
+}
+
+/* BlackListPlugin */
+.blackList {
+  border-top:2px solid #ffd324;
+  border-bottom:2px solid #ffd324;
+  background:#fff6bf;
+}
+.blackListComments {
+  border-top:2px solid #ffd324;
+  padding-top:5px;
+}
+.blackListTitle {
+  border-bottom:1px dashed #999;
+}

@@ -1,0 +1,13 @@
+%TMPL:INCLUDE{"renamebase"}%
+
+<!-- template: renamerefs.nat.tmpl -->
+%TMPL:DEF{"newtopic"}%<input type="hidden" name="newtopic" value="%NEW_TOPIC%" />%NEW_TOPIC%%TMPL:END%
+%TMPL:DEF{"newweb"}%<input type="hidden" name="newweb" value="%NEW_WEB%" />%NEW_WEB%%TMPL:END%
+%TMPL:DEF{"hidden"}% <input type="hidden" name="changeRefs" value="on" /> %TMPL:END%
+%TMPL:DEF{"buttons"}%
+<p>
+<div style="width:60%; text-align:center">
+<input type="submit" style="color:green" value="Change references" />&nbsp;
+<input type="button" style="color:red" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%'">
+</div>
+%TMPL:END%

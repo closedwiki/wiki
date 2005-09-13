@@ -1,0 +1,80 @@
+--- lib/TWiki/Plugins/TablePlugin.pm	2004-08-02 07:01:53.000000000 +0200
++++ /home/micha/Projekt/twiki/cairo/lib/TWiki/Plugins/TablePlugin.pm	2005-05-18 17:43:47.000000000 +0200
+@@ -39,6 +39,7 @@
+         @fields $upchar $downchar $diamondchar $url $curTablePre
+         @isoMonth %mon2num $initSort $initDirection $pluginAttrs $prefsAttrs
+         @rowspan
++	$tableClass @dataClass
+     );
+ 
+ $VERSION = '1.013';  # 01 Aug 2004
+@@ -97,6 +98,8 @@
+         $doAttachments = 1;
+     } elsif( $tmp =~ /^attachments$/oi ) {
+         $doAttachments =1;
++    } elsif( $tmp =~ /^body$/oi ) {
++        $doBody =1;
+     }
+ 
+     $pluginAttrs = TWiki::Func::getPreferencesValue( "TABLEPLUGIN_TABLEATTRIBUTES" );
+@@ -172,6 +175,8 @@
+     @dataBg       = ( "#FFFFCC", "#FFFFFF" );
+     @dataColor    = ( );
+     undef $initSort;
++    $tableClass   = "twikiTable";
++    @dataClass    = ( "twikiTableCellOdd", "twikiTableCellEven" );
+ 
+     handleTableAttrs( $pluginAttrs );  # Plugin setting
+     handleTableAttrs( $prefsAttrs );   # Preferences setting
+@@ -248,6 +253,12 @@
+     $tmp = TWiki::Func::extractNameValuePair( $args, "datacolor" );
+     @dataColor = split( /,\s*/, $tmp ) if( $tmp );
+ 
++    $tmp = TWiki::Func::extractNameValuePair( $args, "tableclass" );
++    $tableClass = $tmp if( $tmp ne "" );
++
++    $tmp = TWiki::Func::extractNameValuePair( $args, "dataclass" );
++    @dataClass = split( /,\s*/, $tmp ) if( $tmp );
++
+     return "$currTablePre<nop>";
+ }
+ 
+@@ -346,7 +357,6 @@
+                 }
+ 
+                 $attr .= " valign=\"$vAlign\"" if $vAlign;
+-                $attr .= " class=\"twikiFirstCol\"" if $colCount == 1;
+                 push @row, [ $value, "$attr", "th" ];
+             } else {
+                 if( /^\s*(.*?)\s*$/ ) {   # strip white spaces
+@@ -358,7 +368,6 @@
+                     $attr .= " align=\"$align\""; # override $attr
+                 }
+                 $attr .= " valign=\"$vAlign\"" if $vAlign;
+-                $attr .= " class=\"twikiFirstCol\"" if $colCount == 1;
+                 push @row, [ $value, "$attr", "td" ];
+             }
+         }
+@@ -450,6 +459,7 @@
+     my $direction = $up ? 0 : 1;
+     my $doIt = doIt( $curTable[$headerRows-1] );
+     my $text = "$currTablePre<table border=\"$tableBorder\"";
++    $text .= " class=\"$tableClass\"" if( $tableClass );
+     $text .= " frame=\"$tableFrame\"" if( $tableFrame );
+     $text .= " cellspacing=\"$cellSpacing\" cellpadding=\"$cellPadding\"";
+     $text .= " rules=\"$tableRules\"" if( $tableRules );
+@@ -588,6 +598,14 @@
+                    $color = $dataBg[$dataColorCount % ($#dataBg + 1) ];
+                    $attr .= " bgcolor=\"$color\"" unless( $color =~ /none/i );
+                }
++               if( @dataClass ) {
++                   my $class;
++		   $class = "twikiFirstCol " if $colCount == 0;
++		   $class .= $dataClass[$dataColorCount % ($#dataClass + 1) ];
++                   $attr .= " class=\"$class\"" unless( $class =~ /none/i );
++               } else {
++		   $attr .= " class=\"twikiFirstCol\"" if $colCount == 0;
++	       }
+                $color = "";
+                if( @dataColor ) {
+                    $color = $dataColor[$dataColorCount % ($#dataColor + 1) ];

@@ -1,0 +1,38 @@
+%TMPL:INCLUDE{"page"}% 
+<!-- template: moveattachment.nat.tmpl -->
+%TMPL:INCLUDE{"moveattachmentbody"}% 
+%TMPL:INCLUDE{"moveattachmentsidebar"}% 
+%TMPL:INCLUDE{"moveattachmenttopicactions"}% 
+
+%TMPL:DEF{"titleaction"}%(move)%TMPL:END%
+%TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
+%TMPL:DEF{"onloadscript"}%onload="document.rename.newtopic.focus()"%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%
+
+%TMPL:DEF{"content"}%
+<form name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+---+ Move or Delete File "<nop>%FILENAME%"
+
+<div style="width:450px">
+| *&nbsp;* |  *Web:* | *&nbsp;Topic:* |
+|  *From:* |    %WEB% | &nbsp;%TOPIC% |
+|  *To:* |  <select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="Trash,public" selection="%WEB%" separator=" "}% </select> | &nbsp;<input type="text" name="newtopic" value="%TOPIC%" /> |
+<input type="hidden" name="attachment" value="%FILENAME%" />
+<input type="hidden" name="changeRefs" value="0" />
+<center>
+
+<input type="submit" style="color:green" value="OK" />&nbsp;
+<input type="button" style="color:red" value="Cancel" onclick="window.location.href='%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%'">
+</center>
+</div>
+</form>
+%TMPL:END%
+
+
+%TMPL:DEF{"notes"}%
+<p> To delete an attachment move it to Trash.TrashAttachment. </p>
+<p> The attachment and any history will be moved to the new topic. </p>
+<p> An error page will be shown if either of the topics are locked by another user. </p>
+<p> The new topic chosen must already exist. </p>
+<p> Note that any URLs that refer to the attachment will be broken after this move. </p>
+%TMPL:END%

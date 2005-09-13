@@ -1,0 +1,12 @@
+%TMPL:INCLUDE{"oopslogonbase"}%
+<!-- template: oopsaccessgroup.nat.tmpl -->
+%TMPL:DEF{"action"}%view%TMPL:END%
+%TMPL:DEF{"heading"}%Access Denied%TMPL:END%
+%TMPL:DEF{"message"}%
+Only members of the %MAINWEB%.%PARAM1% are allowed to perform this action.
+
+%TMPL:P{"logon"}%
+
+See also: %MAINWEB%.TWikiGroups, %TWIKIWEB%.TWikiAccessControl, %TWIKIWEB%.TWikiRegistration, 
+%MAINWEB%.%PARAM1%
+%TMPL:END%

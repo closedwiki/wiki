@@ -1,0 +1,83 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopsmngcreatweb.nat.tmpl -->
+%TMPL:DEF{"heading"}%Create New Web%TMPL:END%
+
+%TMPL:DEF{"msg_web_missing"}%
+---++ Error: Name of new web is missing
+%TMPL:P{"goback"}% %TMPL:END%
+
+%TMPL:DEF{"msg_web_name"}%
+---++ Error: Invalid name of new web 
+Enter a short name of up to 10 characters. The name must start with one 
+or more upper case letters, followed by optional lower case letters or 
+numbers; it cannot be a %TWIKIWEB%.WikiWord. If you want to create a
+template web (a web just used as a base to create new webs) choose a
+name that starts with an underscore and has only alphanumeric characters.
+
+%TMPL:P{"goback"}% <div style="visibility:hidden">%TMPL:END%
+
+%TMPL:DEF{"msg_web_exist"}%
+---++ Error: Cannot create this web because it already exists
+%TMPL:P{"goback"}% <div> *Existing Web:* %TMPL:END%
+
+%TMPL:DEF{"msg_base_web"}%
+---++ Error: Name of base web is missing or does not exist
+%TMPL:P{"goback"}% <div> *Base web*: %TMPL:END%
+
+%TMPL:DEF{"msg_web_color"}%
+---++ Error: Web color is missing or has an invalid format
+A color starts with the number sign, followed by 6 hexadecimal
+numbers, e.g. yellow is =#FFFF00=. 
+
+Pick one of the %TWIKIWEB%.StandardColors.
+
+%TMPL:P{"goback"}% <div style="visibility:hidden">%TMPL:END%
+
+%TMPL:DEF{"msg_web_create"}%
+---++ Error: Could not create the new web
+%TMPL:P{"goback"}%
+*Error message*: <div class="natErrorMsg">%TMPL:END%
+
+%TMPL:DEF{"msg_web_copy_topics"}%
+---++ Error: Could not copy topics to the new web
+The new web has been created, however not all topics could
+be copied from the base web.
+%TMPL:P{"goback"}%
+*Error message*: <div class="natErrorMsg">%TMPL:END%
+
+%TMPL:DEF{"msg_patch_webpreferences"}%
+---++ Error: Could not update the <nop>WebPreferences
+The new web has been created and all topics have been copied.<br />
+However, there was an error while trying to update the WebPreferences.
+
+Please check out the WebPreferences or try again.
+<form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/WebPreferences" method="post">
+  <input type="submit" style="color:green" value="OK">
+  <input type="button" style="color:red" value="Cancel" onclick="history.back()">&nbsp;
+</form>
+
+*Error message*: <div class="natErrorMsg">%TMPL:END%
+
+%TMPL:DEF{"msg_create_web_ok"}%
+---++ Note: The new web has been created successfully and populated with topics from the base web
+Would you like to go to:
+	* the %HOMETOPIC% to start working on the new web,
+	* the %WEBPREFSTOPIC% to customize the web specific preferences or
+	* the [[%MAINWEB%.%HOMETOPIC%][%WIKITOOLNAME%]] home? 
+
+<form name="ButtonBox" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%">
+<table border=0>
+<tr><td valign="top" rowspan="2"><div style="padding-top:5px; font-weight:bold">Topic:</div></td><td valign="top">
+  <select name="topic"><option value="">Select...</option>
+  %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
+  </select>
+</td></tr>
+<tr><td>
+  <input type="submit" style="color:green" value="OK">&nbsp;
+  <input type="button" style="color:red" value="Cancel" onclick="history.back()">
+</td></tr> </table> </form> <div style="visibility:hidden">%TMPL:END%
+
+%TMPL:DEF{"message"}%
+%PARAM1%
+%PARAM2%</div>
+%TMPL:END%

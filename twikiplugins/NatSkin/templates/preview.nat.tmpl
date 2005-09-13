@@ -1,0 +1,40 @@
+%TMPL:INCLUDE{"page"}% 
+<!-- template: preview.nat.tmpl -->
+%TMPL:INCLUDE{"previewbody"}% 
+%TMPL:INCLUDE{"previewtopicactions"}% 
+%TMPL:INCLUDE{"previewsidebar"}% 
+%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_PREVIEW% %TMPL:END%
+%TMPL:DEF{"titleaction"}%(preview)%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%<b>%TOPIC%</b></span>%TMPL:END%
+%TMPL:DEF{"content"}% %TEXT%
+<style type="text/css">
+.natMainContents {
+  background-image:url('%PUBURL%/%TWIKIWEB%/NatSkin/previewbg.png');
+</style>
+<div class="natTopicForm"> %META{"form"}% </div>
+<form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+  %IFSKINSTATE{release="beijing=" else="<input type='hidden' name='action' value='' />" then="<!-- placeholder -->"}%
+  <input type="hidden" name="submitChangeForm" value="" />
+  %FORMFIELDS% 
+  <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+  <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+  <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+  <input type="hidden" name="cmd" value="%CMD%" />
+  <input type="hidden" name="text" value="%HIDDENTEXT%" />
+  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="natSubmitOptions">
+      <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes</label>
+    </td>
+  </tr>
+  <tr>
+    <td class="natSubmitOptions">
+      <input type="checkbox" id="unlock" name="unlock" %RELEASEEDITLOCKCHECKBOX% /><label for="unlock">Release edit lock</label>
+      <!--input type="checkbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">Force new revision</label-->
+    </td>
+  </tr>
+  </table>
+</form>
+%TMPL:END%
+%TMPL:DEF{"contentfooter"}% 
+%TMPL:END%

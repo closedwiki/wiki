@@ -1,0 +1,11 @@
+<!-- template: edittopicactions.nat.tmpl -->
+%TMPL:DEF{"topicactions"}%
+<span class="natAction">Edit</span>
+| <a href="javascript:submitEditFormular('preview','preview');" accesskey="p">Preview</a> <br/>
+<a href="javascript:submitEditFormular('save', '');" accesskey="s">Save</a>
+| <a href="javascript:self.location.reload();" accesskey="u">Undo</a>
+| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
+%FORMBUTTON{"| $1"}%
+%TMPL:END%
+
+

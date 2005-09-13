@@ -1,0 +1,19 @@
+%META:TOPICINFO{author="AdminUser" date="1115627820" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="MySideBar"}%
+%STARTINCLUDE%
+---+ My Sidebar%REDDOT{"%MAINWEB%.%WIKINAME%SideBar"}%
+	* <a>My Links</a>
+		* 
+		* 
+		* 
+	* <a>Documentation</a>
+		* [[Support.WelcomeGuest][Welcome Guest]]
+		* [[Support.UsersGuide][User's Guide]]
+		* [[Support.GoodStyle][Good Style]]
+		* [[Support.FrequentlyAskedQuestions][FAQs]]
+		* [[Support.FileAttachment][File Attachments]]
+	* [[TWiki.InstalledPlugins][Plugins]]
+%FORMATLIST{"%ACTIVATEDPLUGINS%" join="$n" format="		* [[%TWIKIWEB%.$1Plugin][$1]]" pattern="(\w+)Plugin" sort="on"}%
+%STOPINCLUDE%
+
+	* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%

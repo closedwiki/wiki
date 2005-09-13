@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="MichaelDaum" date="1126546895" format="1.1" version="1.9"}%
+<div class="natSideBarContents">
+%STARTINCLUDE%
+<div class="natSkinStyleBrowser">
+<form method="post" action="">
+<select name="style" onchange="this.form.submit();">
+<noautolink>
+%FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n"}%
+</noautolink>
+</select>&nbsp;
+	* <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Border On
+	* <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Border Off
+	* <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Thin Layout
+	* <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Left
+	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Right
+	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Off
+</form>
+</div>
+%STOPINCLUDE%
+</div>
+
+%META:TOPICMOVED{by="MichaelDaum" date="1125609298" from="Sandbox.TestTopic5" to="TWiki.NatSkinStyleBrowser"}%

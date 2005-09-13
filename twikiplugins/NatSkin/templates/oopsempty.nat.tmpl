@@ -1,0 +1,17 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopsempty.nat.tmpl -->
+%TMPL:DEF{"heading"}%Topic must not be empty%TMPL:END%
+%TMPL:DEF{"message"}%
+You cannot save a topic with no text entered. Please try again.
+
+Some browser configurations occasionally send undefined data to the
+server. <br/>
+Don't worry, your changes are not lost. Just go <a href="javascript:history.back()">back</a>
+and try again.
+<form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+  <input type="button" style="color:green" value="OK" onclick="history.back()">&nbsp;
+  <input type="submit" style="color:red" value="Cancel">
+</form> 
+The other possibility is that someone sent you the preview URL of 
+[[%WEB%.%TOPIC%]] instead of the view URL.
+%TMPL:END%

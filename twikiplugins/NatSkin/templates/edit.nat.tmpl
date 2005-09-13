@@ -1,0 +1,39 @@
+%TMPL:INCLUDE{"page"}% 
+<!-- template: edit.nat.tmpl -->
+%TMPL:INCLUDE{"editbody"}%
+%TMPL:INCLUDE{"edittopicactions"}%
+%TMPL:INCLUDE{"editsidebar"}%
+%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
+%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"onloadscript"}%onload="document.EditFormular.text.focus()"%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>" suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%%TOPIC%%TMPL:END%
+%TMPL:DEF{"content"}%
+<div class="natEdit">
+<form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+  %IFSKINSTATE{release="beijing" then="<!-- placeholder -->" else="<input type='hidden' name='action' value='' />"}%
+  <input type="hidden" name="submitChangeForm" value="" />
+  <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />
+  <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
+  <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
+  <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
+  <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+  <input type="hidden" name="cmd" value="%CMD%" />
+  <textarea name="text" wrap="virtual" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style="%EDITBOXSTYLE%">%TEXT%</textarea>
+</div>
+<div class="natTopicForm"> %FORMFIELDS% </div>
+<div class="natSignature">-- <nop>%WIKIUSERNAME% - %DATE%</div>
+<div class="natSubmitOptions">
+  <input type="checkbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% />
+  <label for="dontnotify">Minor changes</label>
+</div>
+<div class="natSubmitOptions">
+%IFSKINSTATETHEN{release="dakar"}%
+  <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% />
+  <label for="forcenewrevision">Force new revision</label>
+%ELSESKINSTATE%
+  <input type="checkbox" id="unlock" name="unlock" %RELEASEEDITLOCKCHECKBOX% /><label for="unlock">Release edit lock</label>
+  <!--input type="checkbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">Force new revision</label-->
+%FISKINSTATE%
+</div>
+</form>
+%TMPL:END%

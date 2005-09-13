@@ -1,0 +1,18 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: ooslockedrename.nat.tmpl -->
+%TMPL:DEF{"heading"}%Topic is locked by another user%TMPL:END%
+%TMPL:DEF{"message"}%
+%OLD_LOCK%
+%NEW_LOCK%
+<br />
+   * To look at the text without editing the topic click on the [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw text]].
+   * To rename anyway click on [[%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%][Rename anyway]]
+   * To cancel go <a href="javscript:history.back()">back</a> in your browser.
+<form class="natOopsButtons" name="ButtonBox">
+  <input style="color:red" type="button" value="Rename anyway" onclick="window.location.href='%SCRIPTURL%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?breaklock=on&newWeb=%NEW_WEB%&newTopic=%NEW_TOPIC%&attachment=%ATTACHMENT%'">&nbsp;
+  <input type="button" value="View raw" onclick="window.location.href='%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on';">&nbsp;
+  <input style="color:green" type="button" value="Cancel" onclick="history.back()">
+</form> 
+%I% __Note:__ Renaming a topic which is being edited by someone else might 
+cause serious trouble as it will _break_ the lock on the topic!
+%TMPL:END%

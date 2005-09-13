@@ -1,0 +1,278 @@
+/* rusty style */
+@import url("BaseStyle.css");
+
+/* html elements */
+.twikiEmulatedLink,
+a:link, a {
+  color:#9C3300;
+}
+a:hover, a:active {
+  color:#ffcc66 
+}
+
+hr {
+  border-bottom:1px solid #ff9831;
+}
+
+/* basics */
+.natBody {
+  background:#6c6457;
+  font-family:verdana,arial,sans-serif;
+}
+.natTopBar {
+  border-top:1px dotted white;
+  padding-top:1.5em;
+  padding-bottom:1.5em;
+}
+.natTopLeft {
+  border-left:1px dotted white;
+}
+.natTopRight{
+  border-right:1px dotted white;
+}
+.natTopLeftContents,
+.natTopRightContents {
+  margin-left:20px;
+  margin-right:20px;
+}
+
+.natMiddle {
+  border-bottom:1px dotted white;
+  border-left:1px dotted white;
+  border-right:1px dotted white;
+}
+.natSideBarContents,
+.natMainContents,
+.natMainFooterContents {
+  margin:20px;
+}
+
+/* twiki table */
+.twikiTable th,
+.twikiTable td,
+.twikiTable {
+  border:1px #ff9831 solid;
+}
+.twikiTable th {
+  border-bottom:1px #ff9831 solid;
+  background:#ff9831;
+  color:white;
+  font-weight:bold;
+  font-size:x-small;
+  line-height:140%;
+  text-transform:uppercase;
+}
+.twikiTable th a:hover,
+.twikiTable th a {
+  color:white;
+  font-weight:bold;
+}
+
+/* twiki page form */
+.twikiPageForm th,
+.twikiPageForm td,
+.twikiPageForm table {
+  border:1px #ff9831 solid;
+}
+.twikiPageForm th {
+  border-bottom:1px #ff9831 solid;
+  background:#ff9831;
+  color:white;
+  font-weight:bold;
+  font-size:x-small;
+  line-height:140%;
+  text-transform:uppercase;
+}
+.twikiPageForm th a:hover,
+.twikiPageForm th a {
+  color:white;
+  font-weight:bold;
+}
+
+
+/* search table */
+.natSearchTable {
+  border:1px #ff9831 solid;
+  font-size:x-small;
+}
+
+.natSearchTableTitle th {
+  background:#ff9831;
+  color:white;
+  font-weight:bold;
+  font-size:x-small;
+  line-height:140%;
+  text-transform:uppercase;
+}
+.natSearchHit th {
+  padding-top:5px;
+}
+
+/* top */
+.natTopBar {
+  background:#9C3300;
+}
+
+.natTopRight a,
+.natTopRight {
+  color:white;
+}
+.natTopRight a:hover {
+  color:#ffcc66;
+}
+
+.natSearchBox input {
+  background:#9C3300;
+  color:white;
+  border:1px dotted white;
+  font-size:x-small;
+}
+
+.natWebTitle a {
+  color:white;
+  font:bold xx-large "Century Schoolbook l", georgia, "Times New Roman", serif;
+}
+
+.natWebTitle a:hover {
+  color:#ffcc66;
+  font:bold xx-large "Century Schoolbook l", georgia, "Times New Roman", serif;
+  text-decoration:none;
+}
+
+.natWebSlogan a:hover,
+.natWebSlogan a,
+.natWebSlogan {
+  color:white;
+  text-transform:none
+}
+.natWebSlogan {
+  padding-left:35px;
+  font-size:x-small;
+  line-height:100%;
+}
+
+.natWebLocator {
+  color:white;
+}
+.natWebLocator a:hover,
+.natWebLocator a,
+.natWebLocator {
+  font-weight:bold;
+  font-size:small;
+  line-height:100%;
+  text-transform:none;
+  font-family:verdana,arial,sans-serif;
+}
+
+.natAction {
+  color:#ff9831;
+}
+
+.natTopRightContents {
+  font-size:xx-small;
+}
+
+/* sidebar */
+.natSideBar {
+  font-size:0.8em;
+  line-height:100%;
+  background:#ff9831;
+  color:#9C3300;
+}
+
+.natSideBar h1,
+.natSideBar h1 a {
+  color:white;
+  font:bold small/140% verdana,arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  padding-left:0px;
+}
+.natSideBar h1 {
+  border-bottom:1px dotted white;
+  text-align:center;
+}
+
+.natSideBar h2 {
+  padding-left:15px;
+}
+
+.natSideBar ul {
+  margin-left:15px;
+  padding-left:20px;
+}
+
+.natWebLink a,
+.natSideBar h2 a {
+  font-weight:bold;
+  font-size:0.8em;
+}
+
+.natNotes {
+  padding-left:10px;
+  padding-right:5px;
+}
+
+
+/* main area */
+.natMain, .natMainFooter {
+  background:white;
+  color:#444444;
+  font-weight:normal;
+}
+.natMainContents {
+  font-size:small;
+}
+.natMainFooterContents {
+  font-size:x-small;
+}
+
+.natMain .twikiEmulatedLink,
+.natMain h1, .natMain h2, .natMain h3, .natMain h4, 
+.natMain h5, .natMain h6, 
+.natMain h1 a, .natMain h2 a, .natMain h3 a, .natMain h4 a,
+.natMain h5 a, .natMain h6 a, .natMain h1 a:link,
+.natMain h2 a:link, .natMain h3 a:link, .natMain h4 a:link,
+.natMain h5 a:link, .natMain h6 a:link,
+.natMain h1 a:hover,
+.natMain h2 a:hover, .natMain h3 a:hover, .natMain h4 a:hover,
+.natMain h5 a:hover, .natMain h6 a:hover {
+  color:#444444;
+}
+
+.natMain a:hover {
+  color:#ff9831;
+}
+
+/* bottom */
+.natBottomBarContents {
+  font:bold xx-small/140% verdana,arial,sans-serif;
+  float:left;
+  color:#444444;
+  height:10em;
+}
+.natBottomBarContents a {
+  color:#444444;
+}
+
+
+/* supported plugins */
+
+/* BibtexPlugin */
+.bibsearch th {
+  background:#ff9831;
+  text-transform:uppercase;
+  font:bold small verdana,arial,sans-serif;
+  color:white;
+}
+
+.bibsearch,
+.bibtex {
+  border:1px solid #ff9831; 
+  background:white;
+}
+.bibtex dt a,
+.bibtex dt {
+  font:normal;
+  color:#9C3300;
+}

@@ -1,0 +1,27 @@
+%TMPL:INCLUDE{"page"}% 
+<!-- template: changeform.nat.tmpl -->
+%TMPL:INCLUDE{"changeformbody"}% 
+%TMPL:INCLUDE{"changeformtopicactions"}% 
+%TMPL:INCLUDE{"changeformsidebar"}% 
+%TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
+%TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natWebLocator"> 
+<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]
+</span>%TMPL:END%
+%TMPL:DEF{"content"}%
+<form name="EditFormular" method="post" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">
+  <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+%IFSKINSTATETHEN{release="Dakar"}% %TEXT% %ELSESKINSTATE% <input type="hidden" name="text" value="%TEXT%" /> %FISKINSTATE%
+  <input type="hidden" name="skin" value="%URLPARAM{"skin"}%" />
+  <input type="hidden" name="cover" value="%URLPARAM{"cover"}%" />
+---+ Choose a new form template
+<ul>
+%FORMLIST%
+</ul>
+<p>
+<blockquote>
+  <input type="submit" style="color:green" name="submit" value="OK" />&nbsp;
+  <input type="button" style="color:red" value="Cancel" onclick="history.back()">
+</blockquote>
+</form>
+%TMPL:END%

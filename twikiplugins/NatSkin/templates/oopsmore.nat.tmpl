@@ -1,0 +1,81 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopsmore.nat.tmpl -->
+%TMPL:DEF{"titleaction"}%(more)%TMPL:END%
+%TMPL:DEF{"heading"}%More Actions on <nop>%WEB%.%TOPIC%%TMPL:END%
+%TMPL:DEF{"headingstyle"}%natNoteHeading%TMPL:END%
+%TMPL:DEF{"message"}%
+<table border="0">
+---++ Set Parent Topic</td> </tr>
+<form name="main" action="%EDITURL%">
+<tr>
+  <td style="padding-left:20px"> <select name="topicparent"><option value="">Select...</option>
+     %TOPICLIST{"<option value=$qname>$name</option>" separator=" "}%
+     </select>&nbsp;
+  <td><input type="submit" style="color:green;width:5em" value="Edit"/><br/>
+  </td>
+</tr><tr>
+  <td>
+    <ul style="margin:0px"><li>Note: Edit and save the topic  to activate the new parent. %I%</li></ul>
+  </td>
+  <td>
+    <input type="button" style="color:red;width:5em" value="Cancel" onclick="self.location.href = '%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%';">
+  </td>
+</tr>
+</form>
+<tr><td colspan="2">
+---++ Back-links</td></tr>
+<form name="main" action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%WEB%/SearchResult">
+<tr>
+  <td>
+    <input type="hidden" name="scope" value="text">
+    <input type="hidden" name="regex" value="on">
+    <input type="hidden" name="search" value="%TOPIC%[^A-Za-z]">
+    <ul style="margin:0px"><li>Find topics that link to [[%WEB%.%TOPIC%]]</li></ul>
+  </td>
+  <td>
+    <input type="submit" style="color:blue;width:5em" value="Find">
+  </td>
+</tr>
+<tr>
+  <td>
+    <ul style="margin:0px"><li>Search in all public webs</li></ul>
+  </td>
+  <td>
+    <input type="checkbox" name="web">
+  </td>
+</tr>     
+</form>
+%IFSKINSTATETHEN{release="dakar"}%
+<tr>
+<td colspan="2">
+---++ Topic preferences</td></tr>
+<form name="main" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+  <input type="hidden" name="action" value="editSettings" />
+<tr>
+  <td>
+    <ul style="margin:0px"><li>Edit preference settings for [[%WEB%.%TOPIC%]]</li></ul>
+  </td>
+  <td><input type="submit" style="color:green;width:5em" value="Edit">
+</tr>
+</form>
+%FISKINSTATE%
+<tr><td colspan="2">
+<tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
+<td colspan="2">
+---++ Topic Caching</td>
+</tr>
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<tr style="%CALC{"$IF($EXISTS(%TWIKIWEB%/NatCachePlugin),,display:none)"}%;">
+  <td>
+    <ul style="margin:0px;"><li>Get a fresh page of the topic [[%WEB%.%TOPIC%]]&nbsp;</li></ul>
+  </td>
+  <td>
+      <input type="hidden" name="refresh" value="on" />
+      <input type="submit" style="color:blue;width:5em" value="Refresh" />
+  </td>
+</tr>
+</form>
+</tr>
+</table>
+%TMPL:END%
+

@@ -1,0 +1,66 @@
+<!-- template: defaultbody.nat.tmpl -->
+%TMPL:DEF{"defaultbody"}% 
+<div class="natBodyContents">
+  <table class="natLayoutTable" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td class="natTopBar natTopLeft" valign="top">
+	<div class="natTopLeftContents">
+	  <div class="natWebTitle">
+	    <a href="%WIKILOGOURL%">%WIKITOOLNAME%</a><span class="natWebLocator">%TMPL:P{"locator"}%</span>
+	  </div>
+	  <div class="natWebSlogan">%SITEMAPUSETO%</div>
+	</div>
+      </td>
+      <td class="natTopBar natTopRight" valign="top">
+	<div class="natTopRightContents">
+	  <div class="natSearchBox">
+%TMPL:P{"searchbox"}%
+	  </div>
+	  <div class="natTopicActions">
+%TMPL:P{"topicactions"}% 
+	  </div>
+	</div>
+      </td>
+    </tr>
+  %IFSKINSTATETHEN{sidebar="left|off"}%
+  </table>
+  <table class="natLayoutTable" cellpadding="0" cellspacing="0" border="0">
+  %FISKINSTATE%
+    <tr>
+      %IFSKINSTATETHEN{sidebar="left"}%
+      <td class="natMiddle natMiddleLeft natSideBar" rowspan="2" valign="top">
+	<div class="natSideBarContents">
+%TMPL:P{"sidebar"}%
+	</div>
+      </td>
+      %FISKINSTATE%
+      <td class="natMiddle natMain %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}% valign="top">
+	<div class="natMainContents"> %TMPL:P{"content"}% </div>
+      </td> 
+      %IFSKINSTATETHEN{sidebar="right"}%
+      <td class="natMiddle natMiddleRight natSideBar rowspan="2" valign="top">
+	<div class="natSideBarContents">
+%TMPL:P{"sidebar"}%
+	</div>
+      </td> 
+      %FISKINSTATE%
+    </tr>
+    <tr>
+      <td class="natMiddle natMainFooter %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}% valign="bottom">
+	<div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>
+      </td>
+    </tr>
+  </table> 
+  <div class="natBottomBar">
+    <div class="natBottomBarContents">
+      <div class="natCopyRight">%WEBCOPYRIGHT%</div>
+      <div class="natTWikiInfo">
+	<!--a href="http://TWiki.org" border="0"><img  border="0" src="%PUBURL%/%TWIKIWEB%/TWikiLogos/horzTWikiPowered.gif" alt=TWiki.org"/></a><br/-->
+	Powered by <a href="http://TWiki.org">TWiki/%WIKIRELEASENAME%</a>
+	<nop>%WIKIVERSION%
+      </div>
+    </div>
+  </div>
+</div>
+%TMPL:END%
+%TMPL:DEF{"body"}%%TMPL:P{"defaultbody"}%%TMPL:END%

@@ -1,0 +1,49 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopsleaseconflict.nat.tmpl -->
+%TMPL:DEF{"heading"}%Conflict%TMPL:END%
+%TMPL:DEF{"active"}%
+They have been editing for %PARAM2% and their lease is still active for another
+%PARAM3%.
+%TMPL:END%
+%TMPL:DEF{"old"}%
+Their lease on this topic expired %PARAM2% ago.
+
+The chances are good that they simply navigated away from the edit page without
+saving.
+%TMPL:END%
+%TMPL:DEF{"message"}%
+%PARAM1% is editing [[%WEB%.%TOPIC%]].
+
+%INSTANTIATE%
+
+It is probably OK to go ahead and edit, unless you intend to change the form
+attached to the topic.  If they _do_ save while you are editing, your changes
+will be merged with theirs. Form data cannot easily be merged, so in this case
+you are recommended to check with them first.
+
+   * To edit the topic anyway, hit 'Edit&nbsp;Anyway'.
+   * To see if they have finished their edit yet, click 'Try&nbsp;Again'
+   * If unsure, click 'Cancel'.
+
+<table border="0"><tr>
+<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<td valign="top">
+  <input type="hidden" name="breaklock" value="on" />
+  <input type="submit" style="color:red" value="Edit Anyway" />
+%QUERYPARAMS% 
+</td> 
+</form>
+<form class="natOopsButtons" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<td valign="top">
+  <input type="submit" style="color:blue" value="Try Again" />
+%QUERYPARAMS% 
+</td>
+</form>
+<form class="natOopsButtons" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+<td valign="top">
+  <input type="submit" style="color:green" value="Cancel">
+</td>
+</form>
+</tr></table>
+%TMPL:END%
+

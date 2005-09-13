@@ -1,0 +1,8 @@
+<!-- template: previewtopicactions.nat.tmpl -->
+%TMPL:DEF{"topicactions"}%
+<a href="javascript:history.back();" accesskey="e">Edit</a>
+| <span class="natAction">Preview</span> %FORMBUTTON%
+| <a href="javascript:submitEditFormular('save', '');" accesskey="s">Save</a>
+| <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u">Undo</a>
+| <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
+%TMPL:END%

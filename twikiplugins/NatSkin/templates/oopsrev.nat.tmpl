@@ -1,0 +1,36 @@
+%TMPL:INCLUDE{"oops"}%
+<!-- template: oopsrev.nat.tmpl -->
+%TMPL:DEF{"heading"}%View Previous Topic Revisions of <nop>%WEB%.%TOPIC%%TMPL:END%
+%TMPL:DEF{"message"}%
+<p>
+<form name="main" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<table border="0"><tr><td>
+   * Revision: 
+</td><td>
+<input type="text" name="rev" size="6" value="%PARAM1%" />
+&nbsp;<input type="submit" value="View revision" /> <br/>
+in <input type="checkbox" name="raw"> raw text format.
+</td></tr>
+<tr><td>&nbsp;</td><td valign=top> (1.1 ... %PARAM3%)</td></tr>
+</form>
+<tr><td colspan="2" style="padding-top:30px; padding-bottom:10px">
+<h1 class="%TMPL:P{"headingstyle"}%">Compare Revisions %PUBURL%/%TWIKIWEB%/TWikiDocGraphics/warning.gif</h1>
+</td>
+<form name="main" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<tr><td>
+   * Older revision: 
+</td><td>
+<input type="text" name="rev2" size="6" value="%PARAM1%" />
+</td></tr><tr><td>
+   * Newer revision: 
+</td><td>
+<input type="text" name="rev1" size="6" value="%PARAM2%" />
+&nbsp;<input type="submit" value="View difference" />
+</td></tr>
+</form>
+<form name="ButtonBox" action="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%">
+<tr><td style="padding-top:30px;" align="right" valign="bottom">
+<input type="submit" style="color:green" value="View all diffs"></td>
+<td style="padding-top:30px;" align="left" valign="bottom">
+<input type="button" style="color:red" value="Cancel" onclick="javascript:history.back()">
+</td></tr> </table> </form> %TMPL:END%

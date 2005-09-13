@@ -1,0 +1,8 @@
+/* variation to switch the sidebar to the right for clean */
+@import url('BaseRight.css');
+.natSideBar {
+  width:18em;
+}
+.natTopRight {
+  width:15em;
+}

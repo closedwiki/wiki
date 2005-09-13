@@ -1,0 +1,36 @@
+%TMPL:INCLUDE{"page"}% 
+<!-- template: oops.nat.tmpl -->
+%TMPL:INCLUDE{"oopsbody"}%
+%TMPL:INCLUDE{"oopstopicactions"}%
+%TMPL:INCLUDE{"oopssidebar"}%
+%TMPL:DEF{"titleaction"}%(oops)%TMPL:END%
+%TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
+%TMPL:DEF{"locator"}% %TMPL:END%
+%TMPL:DEF{"headingstyle"}%natOopsHeading%TMPL:END%
+%TMPL:DEF{"contact"}%<div class="natContact">
+---
+Contact <a href="mailto:%WIKIWEBMASTER%?subject=%URLENCODE{"%WIKITOOLNAME%: Request for support"}%&amp;body=%URLENCODE{"Hello, i've got a question ..."}%">%WIKIWEBMASTER%</a> 
+if you have any questions.
+</div>
+%TMPL:END%
+%TMPL:DEF{"goback"}%Please go <a href="javascript:history.back()">back</a> in your browser and try again.
+
+<form class="natOopsButtons" name="ButtonBox" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
+  <input type="button" style="color:green" value="Ok" onclick="history.back()">&nbsp;
+  <input type="submit" style="color:red" value="Cancel">
+</form> %TMPL:END%
+%TMPL:DEF{"content"}%
+<style type="text/css">
+.natMain h1, .natMain h2, .natMain h3, .natMain h4, .natMain h5, .natMain h6 {
+  border-bottom:0px;
+}
+</style>
+<div style="float:right; width:35%; padding-left:10px; padding-bottom:10px; padding-top:20px">
+<img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/SepiaTWiki.png" alt="SepiaTWiki.png" />
+</div>
+<div style="padding-top:20px;margin-right:200px;">
+<h1 class="%TMPL:P{"headingstyle"}%">%TMPL:P{"heading"}%</h1>
+%TMPL:P{"message"}%
+%TMPL:P{"contact"}%
+</div>
+%TMPL:END%

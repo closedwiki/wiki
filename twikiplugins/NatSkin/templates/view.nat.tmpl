@@ -1,0 +1,17 @@
+%TMPL:INCLUDE{"page"}%
+<!-- template: view.nat.tmpl 
+--> %TMPL:INCLUDE{"viewbody"}%
+%TMPL:INCLUDE{"viewtopicactions"}%
+%TMPL:INCLUDE{"viewsidebar"}%
+%TMPL:INCLUDE{"searchbox"}%
+%TMPL:DEF{"titleaction"}% %TMPL:END%
+%TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_VIEW% %TMPL:END%
+%TMPL:DEF{"onloadscript"}%onload="alignMiddle(); document.SearchForm.search.focus()"%TMPL:END%
+%TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%[[%TOPIC%]]%TMPL:END%
+%TMPL:DEF{"content"}% %TEXT% 
+<div class="natTopicForm"> %META{"form"}% </div>
+%TMPL:END%
+%TMPL:DEF{"contentfooter"}% 
+<div class="natRevision"> %REVINFO% </div> 
+<div class="natTopicAttachments"> %META{"attachments"}% </div>
+%TMPL:END%

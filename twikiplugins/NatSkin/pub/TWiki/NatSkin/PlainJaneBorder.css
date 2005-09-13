@@ -1,0 +1,6 @@
+/* border variation for plain jane */
+@import url('BaseBorder.css');
+.natBodyContents {
+  border:1px solid #aaaaaa;
+  padding:20px;
+}
