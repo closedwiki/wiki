@@ -1,12 +1,4 @@
 <!-- template: defaulttopicactions.nat.tmpl -->
-%TMPL:DEF{"defaulttopicactions"}% 
-%IFSKINSTATETHEN{style="Kubrick"}%
-<span class="natLogonRegister"> %NATLOGON% </span>
-| <a href="%SCRIPTURL%/view/%TWIKIWEB%/SiteMap" accesskey="s">Sitemap</a> 
-%ELSESKINSTATE%
-<span class="natLogonRegister"> %NATLOGON% </span>
-<!--| <a href="%SCRIPTURL%/view/%WEB%/%TOPIC%?skin=print.nat&rev=%CURREV%" accesskey="p">Printable</a>-->
-| <a href="%SCRIPTURL%/view/%TWIKIWEB%/SiteMap" accesskey="s">Sitemap</a>
-%FISKINSTATE%
-%TMPL:END%
+%TMPL:DEF{"defaulttopicactions"}% <span class="natLogonRegister">%NATLOGON%</span>
+| <a href="%SCRIPTURL%/view/%TWIKIWEB%/SiteMap" accesskey="s">Sitemap</a> %TMPL:END%
 %TMPL:DEF{"topicactions"}% %TMPL:P{"defaulttopicactions"}% %TMPL:END%
