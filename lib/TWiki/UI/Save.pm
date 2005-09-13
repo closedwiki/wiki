@@ -360,11 +360,10 @@ sub save {
     if( $saveaction eq 'checkpoint' ) {
         $query->param( -name=>'dontnotify', -value=>'checked' );
         my $editURL = $session->getScriptUrl( $webName, $topic, 'edit' );
-        my $randompart = randomURL();
-        $redirecturl = $editURL.'|'.$randompart.'?';
-        $redirecturl .= 'action='.$editaction.';' if $editaction;
-        $redirecturl .= 'skin='.$query->param('skin').';' if $query->param('skin');
-        $redirecturl .= 'cover='.$query->param('cover').';' if $query->param('cover');
+        $redirecturl = $editURL.'?t='.time();
+        $redirecturl .= '&action='.$editaction if $editaction;
+        $redirecturl .= '&skin='.$query->param('skin') if $query->param('skin');
+        $redirecturl .= '&cover='.$query->param('cover') if $query->param('cover');
         my $lease = $store->getLease( $webName, $topic );
         if( $lease && $lease->{user}->equals( $user )) {
             $store->setLease( $webName, $topic, $user,
@@ -404,17 +403,6 @@ sub save {
     if ( _save( $session )) {
         $session->redirect( $redirecturl );
     }
-}
-
-## Random URL:
-# returns 4 random bytes in 0x01-0x1f range in %xx form
-# =========================
-sub randomURL
-{
-    my (@hc) = (qw (01 02 03 04 05 06 07 08 09 0b 0c 0d 0e 0f 10
-                    11 12 13 14 15 16 17 18 19 1a 1b 1c 1d 1e 1f));
-    #  srand; # needed only for perl < 5.004
-    return "%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]%$hc[rand(30)]";
 }
 
 1;
