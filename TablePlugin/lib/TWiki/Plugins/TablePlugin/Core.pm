@@ -90,61 +90,61 @@ sub _parseParameters {
     # Defines which direction to sort the column set by initsort :
     # ShawnBradford 20020221
     $tmp = $params{initdirection};
-    $initDirection = 0 if( $tmp && $tmp =~/^down$/i );
-    $initDirection = 1 if( $tmp && $tmp =~/^up$/i );
+    $initDirection = 0 if( defined $tmp && $tmp =~/^down$/i );
+    $initDirection = 1 if( defined $tmp && $tmp =~/^up$/i );
 
     $tmp = $params{sort};
-    $tmp = '0' if( $tmp && $tmp =~ /^off$/oi );
-    $sortAllTables = $tmp if( $tmp && $tmp ne '' );
+    $tmp = '0' if( defined $tmp && $tmp =~ /^off$/oi );
+    $sortAllTables = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{tableborder};
-    $tableBorder = $tmp if( $tmp && $tmp ne '' );
+    $tableBorder = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{tableframe};
-    $tableFrame = $tmp if( $tmp && $tmp ne '' );
+    $tableFrame = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{tablerules};
-    $tableRules = $tmp if( $tmp && $tmp ne '' );
+    $tableRules = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{cellpadding};
-    $cellPadding = $tmp if( $tmp && $tmp ne '' );
+    $cellPadding = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{cellspacing};
-    $cellSpacing = $tmp if( $tmp && $tmp ne '' );
+    $cellSpacing = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{headeralign};
-    @headerAlign = split( /,\s*/, $tmp ) if( $tmp );
+    @headerAlign = split( /,\s*/, $tmp ) if( defined $tmp );
 
     $tmp = $params{dataalign};
-    @dataAlign = split( /,\s*/, $tmp ) if( $tmp );
+    @dataAlign = split( /,\s*/, $tmp ) if( defined $tmp );
 
     $tmp = $params{tablewidth};
-    $tableWidth = $tmp if( $tmp );
+    $tableWidth = $tmp if( defined $tmp );
 
     $tmp = $params{columnwidths};
-    @columnWidths = split ( /, */, $tmp ) if( $tmp );
+    @columnWidths = split ( /, */, $tmp ) if( defined $tmp );
 
     $tmp = $params{headerrows};
-    $headerRows = $tmp if( $tmp && $tmp ne '' );
+    $headerRows = $tmp if( defined $tmp && $tmp ne '' );
     $headerRows = 1 if( $headerRows < 1 );
 
     $tmp = $params{footerrows};
-    $footerRows = $tmp if( $tmp && $tmp ne '' );
+    $footerRows = $tmp if( defined $tmp && $tmp ne '' );
 
     $tmp = $params{valign};
-    $vAlign = $tmp if( $tmp );
+    $vAlign = $tmp if( defined $tmp );
 
     $tmp = $params{headerbg};
-    $headerBg = $tmp if( $tmp );
+    $headerBg = $tmp if( defined $tmp );
 
     $tmp = $params{headercolor};
-    $headerColor = $tmp if( $tmp );
+    $headerColor = $tmp if( defined $tmp );
 
     $tmp = $params{databg};
-    @dataBg = split( /,\s*/, $tmp ) if( $tmp );
+    @dataBg = split( /,\s*/, $tmp ) if( defined $tmp );
 
     $tmp = $params{datacolor};
-    @dataColor = split( /,\s*/, $tmp ) if( $tmp );
+    @dataColor = split( /,\s*/, $tmp ) if( defined $tmp );
 
     return $currTablePre.'<nop>';
 }
