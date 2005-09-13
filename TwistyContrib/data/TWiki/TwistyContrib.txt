@@ -24,6 +24,9 @@ It's recommended to use the TWiki:Plugins.TwistyPlugin, as it ease the deploymen
 %RED%Caution: If the previous scriplet is put in the HEAD section of the page or the TWiki:Plugins.TwistyPlugin is used, it won't work if the =&lt;body onload=""&gt;= manager is set by the skin. Check the [[%ATTACHURL%/twist.js][twist.js]] file for an idea on how to register an eventmanager for the onload event without overwriting the previous one.%ENDCOLOR%
 
 This Contrib should works in all versions of TWiki. It has been tested against TWiki:Codev.CairoRelease and TWiki:Codev.DakarRelease.
+---++ Customization
+
+Skins can customize the color of the twisti placeholder by modifiying the =.twikiTwistPlaceholder= style.
 
 ---++ Settings
 
