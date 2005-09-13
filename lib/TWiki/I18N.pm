@@ -48,7 +48,10 @@ use File::Find;
 # package TWiki::I18N;
 # ##########################################################
 
-######################################################
+############################################################
+# TWiki::I18N::Fallback - a fallback class for when
+# Locale::Maketext isn't available.
+############################################################
 package TWiki::I18N::Fallback;
 use base 'TWiki::I18N';
 
@@ -73,7 +76,7 @@ sub available_languages {
   return $this->{available_languages};
 }
 
-# back to teh right package
+# back to the right package
 package TWiki::I18N;
 ######################################################
 
@@ -94,6 +97,7 @@ BEGIN {
 
     my $dependencies = <<HERE;
     use Locale::Maketext::Lexicon {
+        'en'    => [ Auto ],
         '*'     => [ Gettext => '$TWiki::cfg{LocalesDir}' . '/*.po' ]
     };
 HERE
