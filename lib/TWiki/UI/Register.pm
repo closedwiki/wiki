@@ -74,7 +74,7 @@ sub register_cgi {
 
     # NB. bulkRegister invoked from ManageCgiScript.
 
-    my $action = $session->{cgiQuery}->param('action');
+    my $action = $session->{cgiQuery}->param('action') || '';
 
     if ($action eq 'register') {
       registerAndNext($session, $tempUserDir);
@@ -918,6 +918,7 @@ sub _emailRegistrationConfirmations {
 sub _buildConfirmationEmail {
     my ( $session, $data, $templateText, $hidePassword ) = @_;
 
+    $data->{Name} ||= $data->{WikiName};
     $templateText =~ s/%FIRSTLASTNAME%/$data->{Name}/go;
     $templateText =~ s/%WIKINAME%/$data->{WikiName}/go;
     $templateText =~ s/%EMAILADDRESS%/$data->{Email}/go;
@@ -1058,10 +1059,10 @@ sub _sendEmail {
 
     my $text = $session->{templates}->readTemplate( $template );
     $p->{Introduction} ||= '';
-
+    $p->{Name} ||= $p->{WikiName};
     $text =~ s/%LOGINNAME%/$p->{LoginName}/geo;
-    $text =~ s/%FIRSTLASTNAME%/$p->{Name}/go;
-    $text =~ s/%WIKINAME%/$p->{WikiName}/geo;
+    $text =~ s/%FIRSTLASTNAME%/$p->{WikiName}/go;
+    $text =~ s/%WIKINAME%/$p->{Name}/geo;
     $text =~ s/%EMAILADDRESS%/$p->{Email}/go;
     $text =~ s/%INTRODUCTION%/$p->{Introduction}/go;
     $text =~ s/%VERIFICATIONCODE%/$p->{VerificationCode}/go;

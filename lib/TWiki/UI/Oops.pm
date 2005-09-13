@@ -32,6 +32,7 @@ package TWiki::UI::Oops;
 
 use strict;
 use TWiki;
+use Assert;
 
 =pod
 
@@ -89,7 +90,7 @@ sub oops {
                 $n++;
             }
         } elsif( defined $keep->{params} ) {
-            push( @params, param1 => $keep->{params} );
+            push( @params, $keep->{params} );
         }
     } else {
         $tmplName = $query->param( 'template' );
@@ -123,6 +124,7 @@ sub oops {
             $tmplData =~ s/%PARAM$n%/$param/g;
             $n++;
         }
+        ASSERT( $tmplData !~ /%PARAM\d+%/ ) if DEBUG;
         $tmplData = $session->{renderer}->getRenderedVersion( $tmplData, $web,
                                                               $topic );
         if( $keep ) {
