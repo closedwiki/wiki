@@ -205,6 +205,8 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
 	print FH qq{\$TWiki::cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
     }
 #    print FH qq{\$TWiki::cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
+    # SMELL: this is going to have to be a command line option
+    print FH qq{\$TWiki::cfg{Site}{CharSet} = 'iso-8859-15';\n};
     print FH qq{\$TWiki::cfg{HidePasswdInRegistration} = 1;\n};
 
     close( FH ) or die "Can't close $file: $! ???";
