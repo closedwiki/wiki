@@ -306,7 +306,7 @@ BEGIN {
     }
 
     $constantTags{CHARSET} = $TWiki::cfg{Site}{CharSet};
-    $constantTags{SHORTLANG} = $Wiki::cfg{Site}{Lang};
+    $constantTags{SHORTLANG} = $TWiki::cfg{Site}{Lang};
     $constantTags{LANG} = $TWiki::cfg{Site}{FullLang};
 
     # Set up pre-compiled regexes for use in rendering.  All regexes with
