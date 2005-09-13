@@ -9,10 +9,14 @@
 | Location | text | 40 | | |
 | State | text | 40 | | |
 | Country | text | 40 | | |
+| <nop>HomePage | text | 40 | | |
 | Telephone | text | 40 | | |
 | Fax | text | 40 | | |
 | <nop>YahooMessenger | text | 40 | | |
 | <nop>MsnMessenger | text | 40 | | |
+| <nop>AolInstantMessenger | text | 40 | | |
+| <nop>GoogleTalk | text | 40 | | |
+| <nop>ICQ | text | 40 | | |
 
 
 
