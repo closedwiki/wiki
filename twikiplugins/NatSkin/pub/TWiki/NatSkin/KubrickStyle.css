@@ -84,14 +84,8 @@ hr {
   /*text-shadow:2px 2px 2px #0055aa;*/
 
 }
-.natWebLocator,
-.natWebLocator a {
-  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  font-size:0.7em;
-}
-.natTopicActions,
-.natWebSlogan {
-  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+.natWebLocator {
+  font-size:0.5em;
 }
 .natSearchBox input {
   background-color: #3388CC;
@@ -120,7 +114,8 @@ hr {
   color:#444444;
 }
 .natSideBar h2 {
-  font-size: 1.4em;
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-size: 1.5em;
   margin:0px;
   margin-top:5px;
   padding:0;
