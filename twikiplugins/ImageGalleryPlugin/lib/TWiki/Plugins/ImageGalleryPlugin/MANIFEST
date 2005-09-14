@@ -1,0 +1,4 @@
+./data/TWiki/ImageGalleryPlugin.txt
+./lib/TWiki/Plugins/ImageGalleryPlugin.pm
+./lib/TWiki/Plugins/ImageGalleryPlugin/Core.pm
+./pub/TWiki/ImageGalleryPlugin/style.css
