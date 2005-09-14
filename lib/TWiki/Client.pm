@@ -74,7 +74,7 @@ for the given session.
 sub makeClient {
     my $twiki = shift;
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
-
+   
     if( $TWiki::cfg{UseClientSessions} ) {
         eval 'use CGI::Session; use CGI::Cookie';
         throw Error::Simple( $@ ) if $@;

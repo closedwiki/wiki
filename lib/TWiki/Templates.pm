@@ -322,51 +322,60 @@ sub _readTemplateFile {
 
     my @skinList = split( /,+/, $skins );
 
-    unless( defined( $this->{files} )) {
-        @{$this->{files}} = ();
-        foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
-                              $TWiki::cfg{TemplateDir} ) {
+#     unless( defined( $this->{files} )) {
+#         @{$this->{files}} = ();
+#         foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
+#                               $TWiki::cfg{TemplateDir} ) {
+#
+#             if( opendir( DIR, $tmplDir ) ) {
+#                 push( @{$this->{files}},
+#                       map { $tmplDir.'/'.$_ }
+#                       grep { /\.tmpl$/ }
+#                       readdir DIR );
+#                 closedir( DIR );
+#             }
+#         }
+#     }
 
-            if( opendir( DIR, $tmplDir ) ) {
-                push( @{$this->{files}},
-                      map { $tmplDir.'/'.$_ }
-                      grep { /\.tmpl$/ }
-                      readdir DIR );
-                closedir( DIR );
-            }
-        }
-    }
-
+    
     # Search the web dir and the root dir for the skinned version first
+    my @candidates;
+
     foreach my $skin ( @skinList ) {
-        foreach my $file ( @{$this->{files}} ) {
-            if ( $file =~ /\/$name.$skin.tmpl$/ ) {
-                #print STDERR "Template $name comes from $file\n";
-                return TWiki::readFile( $file );
-            }
-        }
+       foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
+                             $TWiki::cfg{TemplateDir} ) {
+          my $file=$tmplDir."/$name.$skin.tmpl";
+          my $candidate;
+          $candidate->{name}=$file;
+          $candidate->{validate}=\&validateFile;
+          $candidate->{retrieve}=\&TWiki::readFile;
+
+          push @candidates, $candidate;
+       }
     }
 
     # now search the web dir and the root dir for the unskinned version
-    foreach my $file ( @{$this->{files}} ) {
-        if ( $file =~ /\/$name.tmpl$/ ) {
-            #print STDERR "Template $name comes from $file\n";
-            return TWiki::readFile( $file );
-        }
+    foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
+                          $TWiki::cfg{TemplateDir} ) {
+       my $file=$tmplDir."/$name.tmpl";
+       my $candidate;
+       $candidate->{name}=$file;
+       $candidate->{validate}=\&validateFile;
+       $candidate->{retrieve}=\&TWiki::readFile;
+
+       push @candidates, $candidate;
     }
 
     # See if it is web.topic
     if ( $name =~ /^(\w+)\.(\w+)$/ ) {
         my $web = $1;
         my $topic = $2;
-        if ( $store->topicExists( $web, $topic ) &&
-             $this->{session}->{security}->checkAccessPermission
-             ( 'view', $this->{session}->{user}, '', $topic, $web )) {
-            #print STDERR "Template $name comes from $web.$topic\n";
-            my ( $meta, $text ) =
-              $store->readTopic( undef, $web, $topic, undef );
-            return $text;
-        }
+        my $candidate;
+        $candidate->{name}=$web.'.'.$topic;
+        $candidate->{validate}=sub {return &validateTopic($this->{session},$store,$this->{session}->{user},$topic,$web)};
+        $candidate->{retrieve}=sub {return &retrieveTopic($store,$web,$topic)};
+        push @candidates, $candidate;
+
     }
 
     # See if it is a user topic. Search first in current web, then
@@ -379,32 +388,61 @@ sub _readTemplateFile {
     foreach my $lookWeb ( $web, $TWiki::cfg{SystemWebName} ) {
         foreach my $skin ( @skinList ) {
             my $skintopic = ucfirst( $skin ).'Skin'.$topic.'Template';
-            if( $store->topicExists( $lookWeb, $skintopic ) &&
-                $this->{session}->{security}->checkAccessPermission
-                ( 'view', $this->{session}->{user}, '', $skintopic,
-                  $lookWeb )) {
-                my ( $meta, $text ) =
-                  $store->readTopic( undef, $lookWeb, $skintopic, undef );
-                #print STDERR "Template $name comes from $lookWeb.$skintopic\n";
-                return $text;
-            }
+            my $candidate;
+            $candidate->{name}=$lookWeb.'.'.$skintopic;
+            $candidate->{validate}=sub {return &validateTopic($this->{session},
+                                                               $store,
+                                                               $this->{session}->{user},
+                                                               $skintopic,
+                                                               $lookWeb)};
+            $candidate->{retrieve}=sub {return &retrieveTopic($store,$lookWeb,$skintopic)};
+            push @candidates, $candidate;
         }
-        if ( $store->topicExists( $lookWeb, $ttopic ) &&
-             $this->{session}->{security}->checkAccessPermission
-             ( 'view', $this->{session}->{user}, '', $ttopic,
-               $lookWeb )) {
-            my ( $meta, $text ) =
-              $store->readTopic( undef, $lookWeb, $ttopic, undef );
-            #print STDERR "Template $name comes from $lookWeb.$ttopic\n";
-            return $text;
-        }
+
+        my $candidate;
+        $candidate->{name}=$lookWeb.'.'.$ttopic;
+        $candidate->{validate}=sub {return &validateTopic($this->{session},
+                                                           $store,
+                                                           $this->{session}->{user},
+                                                           $ttopic,
+                                                           $lookWeb)};
+        $candidate->{retrieve}=sub {return &retrieveTopic($store,$lookWeb,$ttopic)};
+        push @candidates, $candidate;
+
+    }
+
+
+    foreach my $candidate (@candidates) {
+       my $validate=$candidate->{validate};
+       my $retrieve=$candidate->{retrieve};
+       my $name=$candidate->{name};
+       if (&$validate($name)) {
+          return &$retrieve($name);
+       }
     }
 
     # SMELL: should really
     #throw Error::Simple( 'Template '.$name.' was not found' );
     # instead of
     #print STDERR "Template $name could not be found anywhere\n";
+    #Is Failing Silently the best option here?
     return '';
 }
 
+sub validateFile {
+   my $file=shift;
+   return -e $file;
+}
+
+sub validateTopic {
+   my ($session,$store,$user,$topic,$web)=@_;
+   return $store->topicExists( $web, $topic ) && 
+   $session->{security}->checkAccessPermission ('view', $user, '', $topic, $web );
+}
+
+sub retrieveTopic {
+   my ($store,$web,$topic)=@_;
+   my ( $meta, $text ) = $store->readTopic( undef, $web, $topic, undef ); 
+   return $text;
+}
 1;
