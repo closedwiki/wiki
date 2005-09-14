@@ -1,83 +1,150 @@
-%META:TOPICINFO{author="NielsKoldsø" date="1070232240" format="1.0" version="1.2"}%
----++ Alias Plugin
+%META:TOPICINFO{author="AdminUser" date="1114620497" format="1.0" version="1.1"}%
+---+!! <nop>AliasPlugin
+%TOC%
 
-This plugin allows you to create Aliases for already existing topis.
-It will be easier then to link to a topic because you don't have
-to write the full path.
+---++ Description
+This plugin allows you to create arbitrary word aliases.
+If you write down a word that has a defined alias, it will then be replaced with 
+the given text string. If that string is a string of the format =&lt;web&gt;.&lt;topic&gt;=
+it will be replaced by an appropriate TWiki link. Aliases take only effect within the boundaries
+if _alias areas_ between %<nop>STARTALIASAREA% and %<nop>STOPALIASAREA% tags.  
 
-If you write down a %TWIKIWEB%.WikiWord which is registered as an alias, it 
-will then act as a link to the topic it is assigned to.
+Aliases aren't replaced within html tags (=&lt;html tag ... <nop>TESTALIAS ... &gt;=), TWiki tags (=%<nop>INCLUDE... <nop>TESTALIAS ...%=) and TWiki links
+(=[<nop>[TWiki.WebHome][<nop>TESTALIAS]]=). A word can be prevented of being substituted by
+prefixing it with =&lt;nop&gt;=.
 
-Non WikiWord may optionally be used as alias.
+---++ Configuration
+Configuration of this plugin is done by writing 
+your aliases into a specific topic which defaults to the topic defined
+by the =DEFAULT_ALIASES= variable (see below). This topic is looked up
+in the current web. If it does not exist in the current web, the plugin will fallback to
+the =DEFAULT_ALIASES= in the %TWIKIWEB%. 
+Aliases defined in =DEFAULT_ALIASES= will be
+used within the current web.
+Aliases can be defined temporarily also, that is
+they will only be taking effect within the current topic. Similarly, aliases can be
+disabled. See the Syntax section for more details.
 
-An alias must be prefixed by one of:
-	* A white space character
-	* One of: <code> - = * # &amp; , ; . : / ( ) ] { } + _ &gt; </code>
+---++ Syntax
+This is the list of TWiki tags defined by this plugin.
+| *Name* | *Description* | 
+| %<nop>ALIASES% | display all aliases | 
+| %<nop>ALIASES{"&lt;topic&gt;" merge="on,off"}% \
+| use aliases defined in &lt;topic&gt; by either merging or redefining the set of current aliases |
+| %<nop>ALIAS{name="..." value="..." }% | defines one new alias |
+| %<nop>STARTALIASAREA% | mark the beginning of an alias area |
+| %<nop>STOPALIASAREA% | mark the end of an alias area |
+| %<nop>UNALIAS% | delete all aliases |
+| %<nop>UNALIAS{name="..."}%,%<nop>UNALIAS{"..."}% | deletes one alias |
 
-Note especially, an alias can not be prefixed by: <code> &lt;[ </code>
+The aliases in the topic =DEFAULT_ALIASES= can be either defined using the %<nop>ALIAS{}%
+macro or listed in the following way:
+<verbatim>
+	* <name1>: <value1>
+	* <name2>: <value2>
+	* <name3>: <value3>
+	...
+</verbatim>
 
-Configuration of this plugin is done by writing your aliases and 
-the topic they should point to in the configuration table on this
-page. Note, that you have to to specify the full 'path' to the
-existing topic for making the aliases work correctly in all Webs.
+---++ Plugin Settings
 
-If you want to prevent an alias to become a link you can use the
-=&lt;nop&gt;= tag
+	* Set SHORTDESCRIPTION = Define aliases which will be replaced with arbitrary strings automatically
 
----++ Examples
+	* restrict aliases to TWiki.WikiWords
+		* Set ALIAS_WIKI_WORDS_ONLY = 0
 
-	* Just type '<nop>MySelf' and it will become a link to '<nop>Main.MyFullUsername' if defined as an alias
+	* Set the topic holding some default aliases
+		* Set DEFAULT_ALIASES = WebAliases
 
----++ <nop>%TOPIC% Global Settings
-
-<noautolink>
-	* Set SHORTDESCRIPTION = Define aliases which will automatically extend to valid wiki links
-
-	* Debug: <br>
-	  See output in =data/debug.txt= <br>
-	  0 ~ No debug <br>
-	  1 ~ Normal debug <br>
-	  2 ~ Detailed debug
-		* Set DEBUG = 0
-
-	* Allow non TWiki words to become links
-		* Set ACCEPT_NON_TWIKI_WORD_ALIASES = 1
-
-	* Put your global aliases in this table:
-	|  *the alias*				|  *the topic it points to*  |
-	| AlPlug						| TWiki.AliasPlugin			 |
-	| MRX							| TWiki.AliasPlugin			 |
-	|								 |									 |
-
-</noautolink>
-
+---++ Defined Aliases
+%ALIAS{name="rtfm" value="read the fine manual"}%
+%ALIASES%
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
 	* Download the ZIP file from the Plugin web (see below)
+
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==data/TWiki/WebAliases.txt== | definition of site-wide aliases |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	* Test if the installation was successful:
-		* AlPlug should be a link to <nop>TWiki.AliasPlugin
-		* If you set the variable =ACCEPT_NON_TWIKI_WORD_ALIASES= on this page, 
-		  then MRX should also be a link to <nop>TWiki.AliasPlugin
-	* Developers test:
-		* -MRX =MRX= *MRX* #MRX&MRX,MRX&times;MRX.MRX:MRX/MRX(MRX)MRX{MRX}MRX+MRX_MRX<u>MRX</u>&#91;MRX]
 
----++ Known Bugs
-	* For some reason I cannot get alias expanded if prefixed by '+'
-	  <br> -- TWiki:Main.NielsKoldso - 30 Nov 2003
+	* On TWiki/Dakar:
+	  You might add %<nop>STARTALIASAREA% and %<nop>STOPALIASAREA% surrounding the %<nop>TEXT% tag
+	  of the view and preview templates of your TWiki.TWikiSkins 
+	  (e.g. =view.pattern.tmpl= and =preview.pattern.tmpl=) 
+	  to enable the AliasPlugin sitewide.
+
+	* On TWiki/Beijing:
+	  add the line marked with %RED% =+= %ENDCOLOR% to the script =bin/view= (a similar
+	  change must be added to the =bin/preview= script):
+<verbatim>
+	if( $viewRaw ) {
+		$text = &TWiki::Store::readTopicRaw( $webName, $topic );
+	} else {
+		( $meta, $text ) = &TWiki::Store::readTopic( $webName, $topic );
+</verbatim> 
+%RED%
+<verbatim>
++	  $text = "%STARTALIASAREA% $text %STOPALIASAREA%";
+	}
+</verbatim>
+		
+%ENDCOLOR%
+
+	* On TWiki/Cairo: either of both might work (can someone confirm?)
+
+	
+
+
+
+---++ Test-Cases
+%STARTALIASAREA%
+| *&nbsp;* | *Pattern* | *Substitution* | *Correctness* |
+|  1 | TESTLINK | yes, this is a link to <nop>TWiki.WebHome | %Y% |
+|  2 | TESTALIAS | yes | %Y% |
+|  3 | _TESTLINK | no, =_= is no word boundary | %Y% |
+|  4 | TESTLINK_TESTLINK | no, =_= is no  word boundary | %Y% |
+|  5 | <u>TESTLINK</u> | yes | %Y% |
+|  6 | TESTLINKTESTLINK | no, this is _one_ word not being aliases | %Y% |
+|  7 | rtfm | yes, but be more polite to your users | %Y% |
+|  8 | <a href="%SCRIPTURL%/TESTALIAS%SCRIPTSUFFIX%" title="TESTALIAS">TESTALIAS</a> | this should be a green link to <nop>%SCRIPTURL%/<nop>TESTALIAS%SCRIPTSUFFIX% | %Y% |
+|  9 | [[TWiki.WebHome][TESTALIAS]] | no, don't substitute inside a TWiki tag | %Y% |
+|  10 | [[TESTALIAS]] | no, don't substitute inside a TWiki tag | %Y% |
+|  11 | [<nop>[TESTALIAS]] | no, not even inside a _nopped_ TWiki tag | %Y% |
+|  12 | <font color="red"> TESTALIAS </font> | yes, ignores =red= | %Y% |
+|  13 | %RED% %TESTALIAS% %ENDCOLOR%  | no, inside two =%= | %Y% |
+|  14 | %RED%%TESTALIAS%%ENDCOLOR%  | no, this is inside two =%= | %Y% |
+|  15 | <font color="red"> %TESTALIAS% </font>  | no. inside two =%= | %Y% |
+|  16 | <font color="red">%TESTALIAS%</font>  | no. inside two =%= | %Y% |
+|  17 | %TESTALIAS | yes, no =perc= on the same line | %Y% |
+|  18 | %TESTALIAS | yes, with a second =%= here | %Y% |
+|  19 | %BLABLA TESTALIAS% | yes, this is no regular TWiki tag | %Y% |
+|  20 | %BLABLA{TESTALIAS}% | no, this is a regular TWiki tag | %Y% |
+|  21 | %<nop>BLABLA{TESTALIAS}% | no, albeit this is a _nopped_ TWiki tag | %Y% |
+%STOPALIASAREA%
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/OthelloMaurer |
-|  Plugin Version: | 1 Dec 2003 |
-|  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|	1 Dec 2003: | <li>No WikiWord aliases as an option  <li>More alias prefixes allowed <br> TWiki:Main.NielsKoldso |
+|  Plugin Author: | TWiki:Main/OthelloMaurer, TWiki:Main/MichaelDaum |
+|  Plugin Version: | v1.1 (27 Apr 2005) |
+|  Change History: | &nbsp; |
+|  27 Apr 2005 | always read site aliases and then merge in web aliases |
+|  07 Apr 2005 | TWiki:Main/MichaelDaum: major rewrite |
+|  30 Mar 2005 | TWiki:Main/MichaelDaum: added alias area |
+| &nbsp; | added fix to honor order of alias/unalias commands in a topic |
+|  23 Mar 2005: | TWiki:Main/MichaelDaum: added list of test-cases |
+|  &nbsp; | rewrite of substitution code |
+|  &nbsp; | improved configurability |
+|  22 Mar 2005: | TWiki:Main/MichaelDaum: prevent substitutions within html tags, twiki tags and twiki links |
+|  21 Mar 2005: | TWiki:Main/MichaelDaum: allow arbitrary string substs |
+|  &nbsp; | configured via a list now (was tables) |
+|  &nbsp; | taking care not to replace inside html tags |
+|  1 Dec 2003: | TWiki:Main.NielsKoldso: Non TWiki.WikiWord aliases as an option | 
+|  &nbsp; | More alias prefixes allowed |
 |  16 Oct 2003: | Speedup |
 |  09 Oct 2003: | Initial Version |
 |  CPAN Dependencies: | none |
@@ -86,7 +153,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
 -- TWiki:Main/OthelloMaurer - 09 Oct 2003
-
+-- TWiki:Main/MichaelDaum - 21 Mar 2005

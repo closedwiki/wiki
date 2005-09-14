@@ -1,7 +1,7 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
-# Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
-# Copyright (C) 2001-2003 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2003 Othello Maurer <maurer@nats.informatik.uni-hamburg.de>
+# Copyright (C) 2003-2005 Michael Daum <micha@nats.informatik.uni-hamburg.de>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,93 +18,386 @@ package TWiki::Plugins::AliasPlugin;    # change the package name and $pluginNam
 # =========================
 use vars qw(
         $web $topic $user $installWeb $VERSION
-        $aliasPattern $prefixRegExp 
-        $debug $acceptNonTWikiWord
+        $aliasPattern $debug $aliasWikiWordsOnly
+	%seenAliasWebTopics $wordRegex $wikiWordRegex
+	$defaultAliasTopic $foundError $isInitialized $insideAliasArea
     );
 
-$VERSION = '1.011';
+$VERSION = '1.1';
+
+# =========================
+sub writeDebug {
+  TWiki::Func::writeDebug("AliasPlugin - " . $_[0]) if $debug;
+}
 
 # =========================
 sub initPlugin
 {
-    ( $topic, $web, $user, $installWeb ) = @_;
+  ( $topic, $web, $user, $installWeb ) = @_;
 
-    # check for Plugins.pm versions
-    if( $TWiki::Plugins::VERSION < 1 ) {
-        TWiki::Func::writeWarning( "Version mismatch between AliasPlugin and Plugins.pm" );
-        return 0;
-    }
+  # check for Plugins.pm versions
+  if ($TWiki::Plugins::VERSION < 1) {
+    TWiki::Func::writeWarning( "Version mismatch between AliasPlugin and Plugins.pm" );
+    return 0;
+  }
 
-    # Get plugin debug flag
-    $debug = TWiki::Func::getPreferencesValue("ALIASPLUGIN_DEBUG");
+  # 0: off, 1: debug, 2: heavy debug
+  $debug = 0;
 
-    TWiki::Func::writeDebug( "Trying to start AliasPlugin, debug level = $debug" ) if $debug;
+  # more in doInit if we actually have an alias area
+  $isInitialized = 0;
+  %seenAliasWebTopics = ();
+  $insideAliasArea = 0;
+  $foundError = 0;
 
-    # Get plugin flag for non-twiki aliases
-    $acceptNonTWikiWord = TWiki::Func::getPreferencesFlag( "ALIASPLUGIN_ACCEPT_NON_TWIKI_WORD_ALIASES" );
-    TWiki::Func::writeDebug("AliasPlugin: ".($acceptNonTWikiWord?"DOES":"Does NOT")." accept non-TWiki-word aliases") if $debug;  
+  # Plugin correctly initialized
+  writeDebug("initPlugin( $web.$topic ) is OK" );
+
+  return 1;
+}
+
+# =========================
+sub doInit {
+  return if $isInitialized;
+  #writeDebug("doinit() called");
+
+
+  # for getRegularExpression
+  if ($TWiki::Plugins::VERSION < 1.020) {
+    eval 'use TWiki::Contrib::CairoContrib;';
+    writeDebug("reading in CairoContrib");
+  }
+
+  # get plugin flags
+  $aliasWikiWordsOnly = 
+    TWiki::Func::getPreferencesFlag("ALIASPLUGIN_ALIAS_WIKIWORDS_ONYL");
+  $defaultAliasTopic = 
+    TWiki::Func::getPreferencesValue("ALIASPLUGIN_DEFAULT_ALIASES");
   
-	#$prefixRegExp = '\\s|\\)'; 
-	$prefixRegExp = '[-=*#&,;.:\\/()\\]{}+_>\\s]'; # should this be set by user on AliasPlugin page ?
+  # decide on how to match alias words
+  $wikiWordRegex = &TWiki::Func::getRegularExpression('wikiWordRegex');
+  if ($aliasWikiWordsOnly) {
+    $wordRegex = $wikiWordRegex;
+  } else {
+    $wordRegex = '\w+';
+  }
 
-    TWiki::Func::writeDebug("AliasPlugin: Reg exp prefixing aliases: $prefixRegExp") if $debug;
+  # init globals
+  my $topicRegex = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
+  my $webRegex = &TWiki::Func::getRegularExpression('webNameRegex');
 
-    # get the plugin preferences text
-    my $prefText = TWiki::Func::readTopicText( TWiki, AliasPlugin );
-    my @prefLines = split /\n/, $prefText;
-
-
-    # create alias hash
-    my $ww = TWiki::Func::getRegularExpression('wikiWordRegex');
-    foreach my $line ( @prefLines ) {
-      if(($acceptNonTWikiWord && $line =~ /\|\s*(?:\<nop\>)?(\w+)\s*\|\s*(?:\<nop\>)?(\S*)\s*\|/) ||
-         ($line =~ /\|\s*(?:\<nop\>)?($ww)\s*\|\s*(?:\<nop\>)?(\S*)\s*\|/)) 
-      {
-          TWiki::Func::writeDebug("AliasPlugin (detail): Config match: key=$1, value=$2") if($debug>1); #heavy debug
-          $aliasHash{"$1"} = "$2";       
-      }
-    }
-
-    # create alias pattern
-    $aliasPattern = join('|', keys(%aliasHash));
-    TWiki::Func::writeDebug( "AliasPlugin: generated aliasPattern: $aliasPattern") if $debug;
-
-    # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::AliasPlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
-    return 1;
+  if ($defaultAliasTopic =~ /^($topicRegex)$/) {
+    my $twikiWeb = &TWiki::Func::getTwikiWebname();
+    &getAliases(0, "$twikiWeb.$defaultAliasTopic");
+  } elsif ($defaultAliasTopic =~ /^($webRegex)\.($topicRegex)$/) {
+    &getAliases(0, $defaultAliasTopic);
+  }
+  &getAliases(1);
+  $isInitialized = 1;
 }
 
 
 # =========================
-sub startRenderingHandler
+sub commonTagsHandler 
 {
-
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-    TWiki::Func::writeDebug("AliasPlugin: startRenderingHandler(...,$_[1]) was called") if $debug;
-
-    # if a WikiWord is found, check the line for defined aliases
-    # and replace them
-    TWiki::Func::writeDebug("AliasPlugin: startRenderingHandler got aliasPattern = $aliasPattern") if $debug;
-    $_[0] =~ s/<nop>/NOPTOKEN/g;
-    
-    if($debug>1)
-    {
-      # debug each alisa substitution  
-	  $_[0] =~ s/($prefixRegExp)($aliasPattern)\b/&_debugAliasReplacement($1,$2)/eg;
-    }
-    else
-    {
-      $_[0] =~ s/($prefixRegExp)($aliasPattern)\b/$1\[\[$aliasHash{$2}\]\[$2\]\]/g;
-    }
-    $_[0] =~ s/NOPTOKEN/<nop>/g;
+  # order matters. example: UNALIAS -> dump all ALIAS -> add one alias
+  $_[0] =~ s/%(ALIAS|ALIASES|UNALIAS)(?:{(.*)?})?%/&handleAllAliasCmds($1, $2)/ge;
 }
 
-sub _debugAliasReplacement
+# =========================
+sub outsidePREHandler
 {
-    my($prefix,$alias) = @_;
-    my $link  = $aliasHash{$alias};
-    TWiki::Func::writeDebug("AliasPlugin (detail): Render '$alias' as link to '$link'");
-    return "$prefix\[\[$link\]\[$alias\]\]";
+
+  #writeDebug("outsidePREHandler called for '$_[0]'");
+  if ($_[0] =~ /%STARTALIASAREA%/) {
+    $insideAliasArea = 1;
+    #writeDebug("found STARTALIASAREA") if $debug > 1;
+  }
+  if ($_[0] =~ /%STOPALIASAREA%/) {
+    $insideAliasArea = 0;
+    #writeDebug("found STOPALIASAREA") if $debug > 1;
+  }
+
+  #writeDebug("insideAliasArea=$insideAliasArea");
+  $_[0] = &handleAliasArea($_[0]) if $insideAliasArea;
+}
+
+# =========================
+sub endRenderingHandler
+{
+  $_[0] =~ s/%STARTALIASAREA%//go;
+  $_[0] =~ s/%STOPALIASAREA%//go;
+}
+
+# =========================
+sub handleAllAliasCmds {
+  my ($name, $args) = @_;
+
+  &doInit(); # delayed initialization
+
+  return handleAlias($args) if $name eq 'ALIAS';
+  return handleAliases($args) if $name eq 'ALIASES';
+  return handleUnAlias($args) if $name eq 'UNALIAS';
+  return '<font color=\"red\">Error: never reach ...</font>';
+}
+
+# =========================
+sub handleAliases {
+  my $args = shift;
+
+  #writeDebug("handleAliases() called");
+
+  if ($args) {
+    my $doMerge = &TWiki::Func::extractNameValuePair($args, "merge") || 'off';
+    if ($doMerge eq 'on') {
+      $doMerge = 1;
+    } elsif ($doMerge eq 'off') {
+      $doMerge = 0;
+    } else {
+      $foundError = 1;
+      return '<font color="red">' .
+	     'Error in %<nop>ALIASES%: =merge= must be =on= or =off= </font>';
+    }
+
+    return "" if &getAliases($doMerge, &TWiki::Func::extractNameValuePair($args));
+    $foundError = 1;
+    return '<font color="red">' .
+	   'Error in %<nop>ALIASES%: no alias definitions found</font>';
+  }
+
+  my $text = "<noautolink>\n";
+  $text .= "| *Name* | *Value* |\n";
+  foreach my $key (sort {uc($a) cmp uc($b)} keys %aliasHash) {
+    $text .= "| <nop>$key | $aliasHash{$key} |\n";
+  }
+  $text .= "</noautolink>\n";
+  
+  return $text;
+}
+
+# =========================
+sub handleAlias {
+  my $args = shift;
+
+  #writeDebug("handleAlias() called");
+
+  my $thisKey = &TWiki::Func::extractNameValuePair($args, 'name');
+  my $thisValue = &TWiki::Func::extractNameValuePair($args, 'value');
+
+  if ($thisKey && $thisValue) {
+    $aliasHash{$thisKey} = &getConvenientAlias($thisKey, $thisValue);
+    $aliasPattern = join('|', keys(%aliasHash));
+    #writeDebug("handleAlias(): added alias '$thisKey' -> '$thisValue')");
+    #writeDebug("handleAlias(): aliasPattern='$aliasPattern'") if $aliasPattern;
+    return "";
+  }
+
+  $foundError = 1;
+  return '<font color="red">Error in %<nop>ALIAS%: need a =name= and a =value= </font>';
+}
+
+# =========================
+sub handleUnAlias {
+  my $args = shift;
+
+  #writeDebug("handleUnAlias() called");
+
+  if ($args) {
+    my $thisKey = &TWiki::Func::extractNameValuePair($args) ||
+		  &TWiki::Func::extractNameValuePair($args, 'name');
+
+    if ($thisKey) {
+      my $thisValue = $aliasHash{$thisKey};
+      if ($thisValue) {
+	delete $aliasHash{$thisKey};
+	$aliasPattern = join('|', keys(%aliasHash));
+	#writeDebug("handleUnAlias(): removed alias '$thisKey' -> '$thisValue')");
+      }
+      return "";
+    }
+
+    $foundError = 1;
+    return '<font color="red">Error in %<nop>UNALIAS%: don\'t know what to unalias</font>';
+  } 
+
+  #writeDebug("handleUnAlias(): dumping all aliases");
+  %aliasHash = ();
+
+  return "";
+}
+
+# =========================
+sub getAliases
+{
+  my ($doMerge, $thisWebTopic) = @_;
+  my $thisWeb;
+  my $thisTopic;
+
+  # extract web and topic name
+  my $topicRegex = &TWiki::Func::getRegularExpression('mixedAlphaNumRegex');
+  my $webRegex = &TWiki::Func::getRegularExpression('webNameRegex');
+
+  $thisWebTopic = $defaultAliasTopic unless $thisWebTopic;
+  $thisWebTopic =~ s/^\s+//o;
+  $thisWebTopic =~ s/\s+$//o;
+  if ($thisWebTopic =~ /^($topicRegex)$/) {
+    $thisTopic = $1;
+    $thisWeb = $web;
+  } elsif ($thisWebTopic =~ /^($webRegex)\.($topicRegex)$/) {
+    $thisWeb = $1;
+    $thisTopic = $2;
+  }
+
+  writeDebug("getAliases($doMerge, $thisWeb.$thisTopic) called");
+
+
+  # find topic with alias definitions
+
+  # look for thisWeb.thisTopic
+  #writeDebug("looking for $thisWeb.$thisTopic");
+  if (!&TWiki::Func::topicExists($thisWeb, $thisTopic)) {
+
+    # look for TWIKIWEB.thisTopic
+    $thisWeb = &TWiki::Func::getTwikiWebname();
+    #writeDebug("looking for $thisWeb.$thisTopic");
+    if (!&TWiki::Func::topicExists($thisWeb, $thisTopic)) {
+
+      # nothing there
+      #writeDebug("getAliases($webTopic) - no alias definitions found");
+      return 0;
+    }
+  }
+  # have we alread red these aliaes
+  if (defined $seenAliasWebTopics{"$thisWeb.$thisTopic"}) {
+    writeDebug("bailing out on $thisWeb.$thisTopic");
+    return 1;
+  }
+  $seenAliasWebTopics{"$thisWeb.$thisTopic"} = 1;
+  writeDebug("reading aliases from $thisWeb.$thisTopic");
+
+  # parse the plugin preferences lines
+  my $prefText = TWiki::Func::readTopicText($thisWeb, $thisTopic);
+
+  #$prefText =~ s/%INCLUDE{(.*?)}%/&handleIncludeFile($1, $topic, $web)/ge;
+
+  if (!$doMerge) {
+    #writeDebug("getAliases(): dumping old aliases");
+    %aliasHash = ();
+  } else {
+    #writeDebug("getAliases(): merging aliases");
+  }
+
+  foreach my $line (split /\n/, $prefText) {
+    if ($line =~ /^(?:\t| {3})+\* (?:\<nop\>)?($wordRegex): +(.*)$/) {
+      my $key = $1;
+      my $value = $2;
+      $value =~ s/\s+$//go;
+
+      $aliasHash{$key} = &getConvenientAlias($key, $value);
+
+      #writeDebug("config match: key='$key', value='$aliasHash{$key}'") if $debug > 1;
+    }
+  }
+
+  # create alias pattern
+  $aliasPattern = join('|', keys(%aliasHash));
+  #writeDebug("getAliases(): aliasPattern='$aliasPattern'") if $aliasPattern;
+
+  return 1;
+}
+
+# =========================
+sub getConvenientAlias {
+  my ($key, $value) = @_;
+
+  #writeDebug("getConvenientAlias($key, $value) called");
+
+  # convenience for wiki-links
+  if ($value =~ /([^.]+)\.$wikiWordRegex/) {
+    $value = "\[\[$value\]\[$key\]\]";
+  }
+
+  #writeDebug("returns '$value'");
+
+  return $value;
+}
+
+# =========================
+sub handleAliasArea
+{
+
+  my $text = shift;
+  return "" unless $text;
+
+  &doInit(); # delayed initialization
+  return $text if $foundError || !$aliasPattern;
+
+  #writeDebug("handleAliasArea() called for '$text'");
+
+  my $result = '';
+
+  $text =~ s/<nop>/NOPTOKEN/g;
+  foreach my $line (split(/\n/, $text)) {
+
+    # escape html tags
+    while ($line =~ /([^<]*)((?:<[^>]*>)*|<)/g) {
+      
+      my $substr = $1;
+      my $tail = $2;
+
+      #writeDebug("html: substr='$substr', tail='$tail'\n");
+      
+      # escape twiki tags
+      if ($substr) {
+	while ($substr =~ /([^%]*)(((%[A-Z][a-zA-Z_0-9]+({[^}]+})?%)*)|%)/g) {
+	
+	  my $substr = $1;
+	  my $tail = $2;
+
+	  #writeDebug("twiki tags: substr='$substr', tail='$tail'\n");
+	  
+	  # escape twiki links
+	  if ($substr) {
+	    while ($substr =~ /([^\[]*)((?:\[[^\]]*\])*|\[)/g) {
+
+	      my $substr = $1;
+	      my $tail = $2;
+
+	      #writeDebug("twiki links: substr='$substr', tail='$tail'\n");
+
+	      # do the substitution
+	      if ($substr) {
+
+		if ($debug > 1) { 
+		  $substr =~ s/\b($aliasPattern)\b/&_debugSubstitute($1)/ge;
+		} else {
+		  $substr =~ s/\b($aliasPattern)\b/$aliasHash{$1}/g;
+		}
+		$result .= $substr;
+
+	      }
+	      $result .= $tail if $tail;
+	    }
+	  }
+	  $result .= $tail if $tail;
+	}
+      }
+      $result .= $tail if $tail;
+    }
+  }
+  $result =~ s/NOPTOKEN/<nop>/g;
+
+  #writeDebug("result is '$result'");
+  return $result;
+}
+
+# =========================
+sub _debugSubstitute
+{
+  my ($key) = @_;
+  my $value = $aliasHash{$key};
+  writeDebug("subst '$key' -> '$value'");
+  return $value; 
 }
 
 1;

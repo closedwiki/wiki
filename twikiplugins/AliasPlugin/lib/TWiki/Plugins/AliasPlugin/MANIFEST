@@ -1,0 +1,3 @@
+lib/TWiki/Plugins/AliasPlugin.pm
+data/TWiki/AliasPlugin.txt
+data/TWiki/WebAliases.txt
