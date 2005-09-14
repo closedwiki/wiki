@@ -67,10 +67,6 @@ package TWiki::Plugins::FormFieldListPlugin;
 # =========================
 use strict;
 
-# Unless this code is not integrated into TWiki::Render, use the same form cache.
-# WARNING: This can break if the use of $ffCache in TWiki::Render::getFormField() will change.
-use TWiki::Render qw(%ffCache);
-
 use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName
 	$debug
@@ -78,9 +74,6 @@ use vars qw(
 
 $VERSION = '2.000';
 $pluginName = 'FormFieldListPlugin';   # Name of this Plugin
-
-# =========================
-
 
 
 # =========================
