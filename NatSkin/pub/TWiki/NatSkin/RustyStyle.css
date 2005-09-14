@@ -159,7 +159,6 @@ hr {
 .natWebLocator {
   font-weight:bold;
   font-size:small;
-  line-height:100%;
   text-transform:none;
   font-family:verdana,arial,sans-serif;
 }
@@ -175,7 +174,7 @@ hr {
 /* sidebar */
 .natSideBar {
   font-size:0.8em;
-  line-height:100%;
+  line-height:140%;
   background:#ff9831;
   color:#9C3300;
 }
@@ -219,12 +218,6 @@ hr {
   background:white;
   color:#444444;
   font-weight:normal;
-}
-.natMainContents {
-  font-size:small;
-}
-.natMainFooterContents {
-  font-size:x-small;
 }
 
 .natMain .twikiEmulatedLink,

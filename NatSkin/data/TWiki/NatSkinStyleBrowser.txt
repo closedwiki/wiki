@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126546895" format="1.1" version="1.9"}%
+%META:TOPICINFO{author="MichaelDaum" date="1126692404" format="1.1" version="1.10"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%
 <div class="natSkinStyleBrowser">
@@ -14,6 +14,7 @@
 	* <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Left
 	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Right
 	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Off
+<input type="hidden" name="search" value="%URLPARAM{search}%" />
 </form>
 </div>
 %STOPINCLUDE%

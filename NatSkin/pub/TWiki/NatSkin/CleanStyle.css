@@ -113,10 +113,8 @@ hr {
 }
 .natTopLeftContents,
 .natTopRightContents,
-.natSearchBox 
 .natSearchBox input,
-.natWebSlogan,
-.natWebLocator {
+.natWebSlogan {
   font-size:x-small;
 }
 
@@ -167,11 +165,7 @@ hr {
 .natMainFooterContents,
 .natMainContents table {
   color:#444444;
-  font:normal small arial,sans-serif;
-  line-height:140%;
-}
-.natMainFooterContents {
-  font-size:x-small;
+  font-family:arial,sans-serif;
 }
 
 /* anchors in natMain */

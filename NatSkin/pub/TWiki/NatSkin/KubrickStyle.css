@@ -62,6 +62,11 @@ hr {
 }
 
 /* top bar */
+.natTopLeftContents,
+.natTopRightContents,
+.natSearchBox input {
+  font-size:1em;
+}
 .natTopBar {
   background:#3388CC;
   border:1px solid #3388CC; /* IE fix */
@@ -106,6 +111,7 @@ hr {
   background:#f9f9f9;
   border-right:1px dotted #ddd;
   */
+  font-size:1em;
 }
 .natSideBar h1 {
   font-size: 1.8em;
@@ -224,11 +230,13 @@ hr {
 .natMain .natNoteHeading {
   color: #0055aa;
 }
+.natRevision {
+  font-size:0.9em;
+}
 
 /* bottom bar */
 .natBottomBarContents {
-  margin: 0px 15px 10px 15px;
-  font-size: 1em;
+  font-size:1em;
 }
 .natBottomBarContents,
 .natBottomBarContents a {

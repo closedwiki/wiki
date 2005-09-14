@@ -3,9 +3,11 @@
 <a href="javascript:history.back();" accesskey="e">Edit</a>
 | <span class="natAction">Preview</span> 
 %IFSKINSTATETHEN{release="dakar"}%<!-- -->
-| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="c">Checkpoint</a> 
-%FISKINSTATE%<!-- -->
+| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s">Save</a> 
+| <a href="javascript:submitEditFormular('save', '');" accesskey="q">Quit</a>
+%ELSESKINSTATE%
 | <a href="javascript:submitEditFormular('save', '');" accesskey="s">Save</a>
+%FISKINSTATE%<!-- -->
 <br/>
 %FORMBUTTON{"$1 |"}%
 <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u">Undo</a>
