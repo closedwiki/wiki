@@ -66,9 +66,7 @@ sub initPlugin
 
   &doInit();
 
-  writeDebug("topic=$topic, web=$web");
   writeDebug("done initPlugin");
-
   return 1;
 }
 
@@ -106,18 +104,19 @@ sub doInit {
   $hasInitKnownStyles = 0;
   $hasInitSkinState = 0;
   &initKnownStyles();
-  &initSkinState();
 
   $defaultWikiUserName = &TWiki::Func::getDefaultUserName();
   $defaultWikiUserName = &TWiki::Func::userToWikiName($defaultWikiUserName, 1);
   my $wikiUserName = &TWiki::Func::userToWikiName($user, 1);
 
   $isGuest = ($wikiUserName eq $defaultWikiUserName)?1:0;
-  writeDebug("defaultWikiUserName=$defaultWikiUserName, wikiUserName=$wikiUserName, isGuest=$isGuest");
+  #writeDebug("defaultWikiUserName=$defaultWikiUserName, wikiUserName=$wikiUserName, isGuest=$isGuest");
 
+  $query = &TWiki::Func::getCgiQuery();
   if ($query) { # are we in cgi mode?
     # disable during register context
-    $useSpamObfuscator = ($skinState{'action'} =~ /^register/)?0:1; 
+    my $theAction = $query->url(-relative=>1); # cannot use skinState yet, we are in initPlugin
+    $useSpamObfuscator = ($theAction =~ /^register/)?0:1; 
   } else {
     $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
     writeDebug("no query ... batch mode");
@@ -160,19 +159,19 @@ sub initKnownStyles {
 
 ###############################################################################
 sub initSkinState {
+  writeDebug("called initSkinState");
 
   return if $hasInitSkinState;
   $hasInitSkinState = 1;
   %skinState = ();
 
-  writeDebug("called initSkinState");
+  writeDebug("initializing the skin state");
 
   my $theStyle;
   my $theStyleBorder;
   my $theStyleSideBar;
   my $theRaw;
 
-  $query = &TWiki::Func::getCgiQuery();
   if ($query) {
     $theStyle = $query->param('style');
     $theStyleBorder = $query->param('styleborder'); # SMELL: add toggles for the others
@@ -282,6 +281,8 @@ sub initSkinState {
 # $_[2] - The web
 sub commonTagsHandler
 {
+  &initSkinState();
+
   $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
   $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
@@ -465,6 +466,7 @@ sub renderIfSkinState {
   my $theRelease = lc &TWiki::Func::extractNameValuePair($args, 'release');
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action');
 
+
   #writeDebug("called renderIfSkinState($args)");
   #writeDebug("releaseName=" . lc &getReleaseName());
   #writeDebug("skinRelease=$skinState{'release'}");
@@ -499,6 +501,7 @@ sub renderGetSkinStyle {
 
   my $theBorder;
   my $theSideBar;
+
 
   $theBorder = $skinState{'style'} . 'Border' if $skinState{'border'} eq 'on';
   $theBorder = $skinState{'style'} . 'Thin' if $skinState{'border'} eq 'thin';
@@ -625,6 +628,7 @@ sub renderMySideBar {
 sub renderWebSideBar {
 
   writeDebug("called renderWebSideBar()");
+
 
   if ($skinState{'sidebar'} eq 'off') {
     return '';
