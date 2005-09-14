@@ -29,9 +29,9 @@
    * %WIKIPREFSTOPIC%
    * %WEBPREFSTOPIC%
 
-   * *DocumentationCategorys*
+   * *DocumentationCategories*
 %SEARCH{"DocumentationCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
 
-   * *ToolsCategorys*
+   * *ToolsCategories*
 %SEARCH{"ToolsCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
 
