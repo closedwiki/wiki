@@ -148,9 +148,6 @@ sub loadSession {
 
     $this->{cgisession} = $cgisession;
 
-    # expire the session after idle time
-    $cgisession->expire($TWiki::cfg{SessionExpiresAfter});
-
     my $sessionId = $cgisession->id();
     $this->{sessionId} = $sessionId;
 
@@ -273,6 +270,53 @@ sub finish {
         # _bother_ writing it to disk if you haven't already". :-(
         $cgisession->delete();
     }
+    _expireDeadSessions();
+}
+
+# Delete sessions that are sitting around but are really expired.
+# This *assumes* that the sessions are stored as files.
+# Ths doesn't get run until after the user's query has been
+# responded to, so it shouldn't be burdensome.
+sub _expireDeadSessions {
+	my $time = time();
+
+	opendir(D, $TWiki::cfg{SessionDir}) || return;
+	foreach my $file ( grep { /cgisess_[0-9a-f]{32}/ } readdir(D) ) {
+        $file = TWiki::Sandbox::untaintUnchecked(
+            $TWiki::cfg{SessionDir}.'/'.$file );
+		my @stat = stat( $file );
+
+		# Abort tiny 2-day olds. They can't be valid sessions.
+		if( $time - $stat[8] >= $TWiki::cfg{SessionExpiresAfter} &&
+              $stat[7] <= 6 ) {
+			unlink $file;
+			next;
+		}
+
+		# Ignore tiny new files. They can't be complete sessions.
+		next if ($stat[7] <= 6);
+
+		open(F, $file) || next;
+		my $session = <F>;
+		close F;
+
+        # SMELL: security hazard?
+        $session = TWiki::Sandbox::untaintUnchecked( $session );
+
+        my $D;
+		eval $session;
+		next if ($@);
+
+        # The session is expired if it hasn't been accessed in ages
+        # or has exceeded its registered expiry time.
+        if( $time >= $D->{_SESSION_ATIME} + $TWiki::cfg{SessionExpiresAfter} ){
+              $D->{_SESSION_ETIME} &&
+                $time >= $D->{_SESSION_ATIME} + $D->{_SESSION_ETIME} ) {
+            unlink $file;
+            next;
+        }
+	}
+	closedir D;
 }
 
 =pod
