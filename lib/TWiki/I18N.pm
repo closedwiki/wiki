@@ -204,7 +204,7 @@ This method is a shortcut to $TWiki::I18N::current_language->maketext
 
 =cut
 
-sub _ {
+sub c_l {
   $current_language->maketext(@_);
 }
 
