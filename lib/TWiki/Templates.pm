@@ -302,11 +302,12 @@ sub readTemplate {
 # STATIC: Return value: raw template text, or '' if read fails
 sub _readTemplateFile {
     my( $this, $name, $skins, $web ) = @_;
-    my $store = $this->{session}->{store};
+    my $session = $this->{session};
+    my $store = $session->{store};
 
-    $skins = $this->{session}->getSkin() unless defined( $skins );
+    $skins = $session->getSkin() unless defined( $skins );
     #print STDERR "SKIN path is $skins\n";
-    $web ||= $this->{session}->{webName};
+    $web ||= $session->{webName};
     $name ||= '';
 
     # SMELL: not i18n-friendly (can't have accented characters in skin name)
@@ -322,22 +323,6 @@ sub _readTemplateFile {
 
     my @skinList = split( /,+/, $skins );
 
-#     unless( defined( $this->{files} )) {
-#         @{$this->{files}} = ();
-#         foreach my $tmplDir ( "$TWiki::cfg{TemplateDir}/$web",
-#                               $TWiki::cfg{TemplateDir} ) {
-#
-#             if( opendir( DIR, $tmplDir ) ) {
-#                 push( @{$this->{files}},
-#                       map { $tmplDir.'/'.$_ }
-#                       grep { /\.tmpl$/ }
-#                       readdir DIR );
-#                 closedir( DIR );
-#             }
-#         }
-#     }
-
-    
     # Search the web dir and the root dir for the skinned version first
     my @candidates;
 
@@ -347,8 +332,8 @@ sub _readTemplateFile {
           my $file=$tmplDir."/$name.$skin.tmpl";
           my $candidate;
           $candidate->{name}=$file;
-          $candidate->{validate}=\&validateFile;
-          $candidate->{retrieve}=\&TWiki::readFile;
+          $candidate->{validate} = \&validateFile;
+          $candidate->{retrieve} = \&TWiki::readFile;
 
           push @candidates, $candidate;
        }
@@ -360,20 +345,28 @@ sub _readTemplateFile {
        my $file=$tmplDir."/$name.tmpl";
        my $candidate;
        $candidate->{name}=$file;
-       $candidate->{validate}=\&validateFile;
-       $candidate->{retrieve}=\&TWiki::readFile;
+       $candidate->{validate} = \&validateFile;
+       $candidate->{retrieve} = \&TWiki::readFile;
 
        push @candidates, $candidate;
     }
 
     # See if it is web.topic
-    if ( $name =~ /^(\w+)\.(\w+)$/ ) {
+    if( $name =~ /^(\w+)\.(\w+)$/ ) {
         my $web = $1;
         my $topic = $2;
         my $candidate;
-        $candidate->{name}=$web.'.'.$topic;
-        $candidate->{validate}=sub {return &validateTopic($this->{session},$store,$this->{session}->{user},$topic,$web)};
-        $candidate->{retrieve}=sub {return &retrieveTopic($store,$web,$topic)};
+        $candidate->{name} = $web.'.'.$topic;
+        $candidate->{validate} =
+          sub {
+              return validateTopic(
+                  $session, $store,
+                  $session->{user}, $topic, $web)
+          };
+        $candidate->{retrieve} =
+          sub {
+              return retrieveTopic($store, $web, $topic)
+          };
         push @candidates, $candidate;
 
     }
@@ -389,36 +382,47 @@ sub _readTemplateFile {
         foreach my $skin ( @skinList ) {
             my $skintopic = ucfirst( $skin ).'Skin'.$topic.'Template';
             my $candidate;
-            $candidate->{name}=$lookWeb.'.'.$skintopic;
-            $candidate->{validate}=sub {return &validateTopic($this->{session},
-                                                               $store,
-                                                               $this->{session}->{user},
-                                                               $skintopic,
-                                                               $lookWeb)};
-            $candidate->{retrieve}=sub {return &retrieveTopic($store,$lookWeb,$skintopic)};
+            $candidate->{name} = $lookWeb.'.'.$skintopic;
+            $candidate->{validate} =
+              sub {
+                  return validateTopic($session,
+                                       $store,
+                                       $session->{user},
+                                       $skintopic,
+                                       $lookWeb)
+              };
+            $candidate->{retrieve} =
+              sub {
+                  return retrieveTopic( $store, $lookWeb, $skintopic)
+              };
             push @candidates, $candidate;
         }
 
         my $candidate;
         $candidate->{name}=$lookWeb.'.'.$ttopic;
-        $candidate->{validate}=sub {return &validateTopic($this->{session},
-                                                           $store,
-                                                           $this->{session}->{user},
-                                                           $ttopic,
-                                                           $lookWeb)};
-        $candidate->{retrieve}=sub {return &retrieveTopic($store,$lookWeb,$ttopic)};
+        $candidate->{validate} =
+          sub {
+              return validateTopic($session,
+                                   $store,
+                                   $session->{user},
+                                   $ttopic,
+                                   $lookWeb)
+          };
+        $candidate->{retrieve} =
+          sub {
+              return retrieveTopic( $store, $lookWeb, $ttopic )
+          };
         push @candidates, $candidate;
 
     }
 
-
     foreach my $candidate (@candidates) {
-       my $validate=$candidate->{validate};
-       my $retrieve=$candidate->{retrieve};
-       my $name=$candidate->{name};
-       if (&$validate($name)) {
-          return &$retrieve($name);
-       }
+        my $validate = $candidate->{validate};
+        my $retrieve = $candidate->{retrieve};
+        my $name = $candidate->{name};
+        if( &$validate( $name )) {
+            return &$retrieve( $name );
+        }
     }
 
     # SMELL: should really
@@ -430,19 +434,20 @@ sub _readTemplateFile {
 }
 
 sub validateFile {
-   my $file=shift;
+   my $file = shift;
    return -e $file;
 }
 
 sub validateTopic {
-   my ($session,$store,$user,$topic,$web)=@_;
+   my( $session, $store, $user, $topic, $web ) = @_;
    return $store->topicExists( $web, $topic ) && 
    $session->{security}->checkAccessPermission ('view', $user, '', $topic, $web );
 }
 
 sub retrieveTopic {
-   my ($store,$web,$topic)=@_;
-   my ( $meta, $text ) = $store->readTopic( undef, $web, $topic, undef ); 
+   my( $store, $web, $topic ) = @_;
+   my ( $meta, $text ) = $store->readTopic( undef, $web, $topic, undef );
    return $text;
 }
+
 1;
