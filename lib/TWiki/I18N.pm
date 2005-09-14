@@ -81,7 +81,7 @@ package TWiki::I18N;
 ######################################################
 
 
-use vars qw( $initialised @initErrors $current_language );
+use vars qw( $initialised @initErrors );
 
 BEGIN {
     eval "use base 'Locale::Maketext'";
@@ -120,7 +120,7 @@ Constructor. Gets the language object corresponding to the current user's langua
 sub get {
     my $session  = shift;
     ASSERT($session->isa( 'TWiki')) if DEBUG;
-    
+
     unless ($initialised) {
         foreach my $error (@initErrors) {
             $session->writeWarning(@initErrors);
@@ -145,8 +145,6 @@ sub get {
    
     # keep a reference to the session object
     $this->{session} = $session;
-
-    $current_language = $this;
 
     # languages we know about
     $this->{available_languages} = { en => 'English' };
@@ -194,18 +192,6 @@ sub maketext {
     }
 
     return $result;
-}
-
-=pod
-
----++ StaticMethod _ ( $text, $args ) -> $text
-
-This method is a shortcut to $TWiki::I18N::current_language->maketext
-
-=cut
-
-sub c_l {
-  $current_language->maketext(@_);
 }
 
 =pod
