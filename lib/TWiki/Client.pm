@@ -309,7 +309,7 @@ sub _expireDeadSessions {
 
         # The session is expired if it hasn't been accessed in ages
         # or has exceeded its registered expiry time.
-        if( $time >= $D->{_SESSION_ATIME} + $TWiki::cfg{SessionExpiresAfter} ){
+        if( $time >= $D->{_SESSION_ATIME} + $TWiki::cfg{SessionExpiresAfter} ||
               $D->{_SESSION_ETIME} &&
                 $time >= $D->{_SESSION_ATIME} + $D->{_SESSION_ETIME} ) {
             unlink $file;
