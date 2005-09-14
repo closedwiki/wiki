@@ -32,5 +32,5 @@ __Related topics__
 %META:FIELD{name="Fax" attributes="" title="Fax" value=""}%
 %META:FIELD{name="YahooMessenger" attributes="" title="<nop>YahooMessenger" value=""}%
 %META:FIELD{name="MsnMessenger" attributes="" title="<nop>MsnMessenger" value=""}%
-%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" value="UserView"}%
+
 
