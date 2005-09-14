@@ -564,7 +564,6 @@ sub renderUserActions {
     #writeDebug("get WHITEBOARD from $web.$topic");
     my $whiteBoard = _getValueFromTopic($web, $topic, 'WHITEBOARD') || '';
     $whiteBoard =~ s/^\s*(.*?)\s*$/$1/g;
-    #writeDebug("whiteBoard='$whiteBoard'");
     my $formAction = '';
     $formAction = '&action=form' if $whiteBoard eq 'off';
     $text = 
@@ -879,7 +878,7 @@ sub _getValueFromTopic
 
   if (!$text) {
     my $meta;
-    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theTopic, 1);
+    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theTopic);
   }
 
   foreach my $line (split(/\n/, $text)) {
@@ -889,7 +888,7 @@ sub _getValueFromTopic
     }
   }
 
-  return "";
+  return '';
 }
 
 
@@ -918,7 +917,7 @@ sub registrationHandler
   # get maintainers of the group
   my %adminsEmail;
   my @adminAddrs;
-  my $value = _getValueFromTopic("User", $group, "ALLOWTOPICCHANGE", $text);
+  my $value = _getValueFromTopic("User", $group, "ALLOWTOPICCHANGE");
   foreach my $admin (split(/[\,\s]+/, $value)) {
     if ($admin =~ /Group$/) {
       foreach my $admin (&TWiki::Access::getUsersOfGroup($admin)) { # FIXME on dakar
