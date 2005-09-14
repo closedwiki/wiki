@@ -1,131 +1,194 @@
-%META:TOPICINFO{author="RobertSuna" date="1075560360" format="1.0" version="1.3"}%
-%META:TOPICPARENT{name="TWikiPreferences"}%
----++ TWiki Image Gallery Plugin
+%META:TOPICINFO{author="MichaelDaum" date="1126719428" format="1.0" version="1.13"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! <nop>ImageGalleryPlugin
+%TOC%
+---++ Description
+This plugin helps you in viewing pictures that are attached to a topic in a nice thumbnail 
+gallery. Clicking on a thumbnail zooms the image. You might navigate within your images using
+a navigation toolbar to visit the next, previous, first or last image in your gallery.
+Images and thumbnails are resized according to the given settings and are cached thereafter.
+The order of images can be customized by putting a sequence number into the attachment comment.
+An image attachment can be managed by clicking on the red dot in its title.
+The plugin will generate the document relations "parent", "first", "last", "next", "previous"
+for each image to improve navigation (only a few browsers support this, e.g. mozilla).
+The image gallery is highly customizable using cascading stylesheets and html formats (see
+below).
 
-Pages containing ==%<nop>IMAGEGALLERY%== variables are expanded at view time, providing a thumbnailed image gallery for those images attached to a wiki page.  Thumbnails are created automatically and subsequently cached.  Display is simple ( trivial--probably not really good enough, although each picture is surrounded by a =span= with a class of =imgGallery= )
+---++ Example
+%IMAGEGALLERY{"TWiki.TWikiLogos"}%
+There are %NRIMAGES{"TWiki.TWikiLogos"}% images at TWiki.TWikiLogos.
+<style type="text/css">
+.igp { border:1px dashed gray; margin:0 auto;}
+</style>
 
-	* size => =small=, *<tt>medium</tt>*, =large=, =xlarge=, =huge=
-	* web => _web_; default is *%<nop>WEB%*
-	* topic => _topic_; default is *%<nop>TOPIC%*
-	* format => how to format each image (see [[#VariAbles][Variables]]), default format is:
-<verbatim>
-		  <span class="imgGallery"><a href="$imageurl"><img src="$thumburl" title="$sizeK: $comment"/></a></span>$n
-</verbatim>
-	* options => additionaly oprins for the CONVERT program, default is "" (empty)
-	* columns => number of columns default is "0" which means infinity%BR%
-	  if set to some number, the following sequence is generated:%BR%
-	  __$rowstart$format$rowinside$format ... $format$rowend__
-	* rowstart => formatted text at start of a row if columns > 0, default is "" (empty)
-	* rowinside => formatted text inside of a row if columns > 0, default is "" (empty)
-	* rowend => formatted text at end of a row if columns > 0, default is "" (empty)
-	* rowinsideempty => formatted text inside of a row if columns > 0 and no more images, default is "" (empty)
-	* rowendempty => formatted text at end of a row if columns > 0 and no more images, default is "" (empty)
+---++ Syntax
+---+++ Arguments
+This plugin introduces two tags:
+	* %<nop>IMAGEGALLERY{...}%: render an image gallery
+	* %<nop>NRIMAGES%: returns the number of images attachted to a (list of) topics
+that both take the following arguments:
 
-#VariAbles
+| *Argument* | *Description* |
+| topic | comma separated list of topics whose attachments should be displayed %BR% \
+			 (default: the current topic) |
+| size | the thumbnail size, the actual geometries of a size can be configured below; \
+			possible values: tiny, small, medium, large, huge  \
+			(default: medium) |
+| columns | number of thumbnais to be displayed in one row of the gallery %BR% \
+				(default: 4) |
+| docrels | flag to disable/enable document relations between images; \
+			possible values are on, off, 0, 1 (default: on) |
+| maxwidth | maximal display width of an image; images are scaled not to exceed this limit \
+			 while preserving aspect ratio %BR% \
+			 (default: 640) |
+| maxheight | maximal display height of an image %BR% (default: 480) |
+| minwidth | minimal display width of an image; images are scaled not to fall below this \
+				limit while preserving aspect ratio %BR% (default: 0) |
+| minheight | minimal display height of an image %BR% (default: 0) |
+| format | html format of an image %BR% \
+			 (default: &lt;a href="$origurl"&gt;&lt;img src="$imageurl" title="$comment" width="$width" height="$height"/&gt;&lt;/a&gt;) |
+| titles | toggles image and thumnail titles on and off %BR% \
+			 (default: on) |
+| title | html format of an image title; "off" will hide the image's title %BR% \
+			 (default: $comment ($imgnr/$nrimgs)&nbsp;$reddot) |
+| thumbtitle  | html format of a thumbnail title; "off" will hide the thumbnail's title %BR% \
+			 (default: $comment&nbsp;$reddot) |
+
+Note, that only =topic= is meaningful to %<nop>NRIMAGES%.
+
 ---+++ Variables
-Variables are recognized and replaced in the format strings: _format_, _rowstart_, _rowinside_, _rowend_, _rowinsideempty_, _rowendempty_
-	* ==$web== the *%<nop>WEB%* the image is from 
-	* ==$topic== the *%<nop>TOPIC%* the image is from
-	* ==$width== width in pixels of the original image
-	* ==$height== height in pixels of the original image
-	* ==$version== version number of the ioriginal mage
-	* ==$name== complete name of the original image (no path)
-	* ==$sizeK== size of the original image in kilobytes (example: 8k)
-	* ==$size== size of the original image in bytes (example: 8234)
-	* ==$comment== the comment of the image attachment
-	* ==$wikiusername== the WikiName of the user checked in the image
-	* ==$username== the user name of the user checked in the image
-	* ==$thumburl== the complete URL of the thumbnail image
-	* ==$imageurl== the complete URL of the original image
-	* ==$date{...}== the check in date of the original image, can be formatted like *%<nop>GMTIME%* (see %TWIKIWEB%.TWikiVariables). The default format is like (if no {} spezified) "31 Dec 2002 - 19:30"
-	* ==$n== insert a line break
-	* ==$imgnr== number of the image (starts at 1)
+The parameters "format", "title" and "thumbtitle" can use the following variables to
+refer to image properties:
 
----+++ Examples
+| *Variable* | *Description* |
+| $web | the web the image is located |
+| $topic | the topic the image is located |
+| $nrimages | the total number of images in the gallery |
+| $n | a linefeed |
+| $reddot | render a red-dot anchor to access the attachment |
+| $width | the display width of the image |
+| $height | the display height of the image |
+| $thumbwidth | the thumbnail width of the image |
+| $thumbheight | the thumbnail height of the image |
+| $origwidth | the original width of the image |
+| $origheight | the original height of the image |
+| $size | the size of the image |
+| $sizeK | the size of the image in kilobytes |
+| $comment | the comment of the image (with its sequence number stripped off) |
+| $imgnr | the sequence number of the image |
+| $date | the date when the image has been uploaded |
+| $version | the version of the image attachment | 
+| $name | the filename of the image |
+| $wikiusername | the wikiusername who uploaded the image |
+| $username | the username who uploaded the image |
+| $imageurl | the url path of the display image |
+| $thumburl | the url path of the thumbnail image |
+| $origurl | the url path pointing to the original image attachment |
 
-=%<nop>IMAGEGALLERY%<br/>=
-%IMAGEGALLERY%
+---+++ Query Parameters
+The IGP will check for certain query parameters in the url. These are:
+	* id=&lt;n;&gt;: distinguish multiple IMAGEGALLERYs in the same topic
+	* filename=&lt;name&gt;: display the given file of the image set
+	* refresh=on: recompute all images and thumbnails in the IGP cache
+Each IMAGEGALLERY has an anchor, namely a &lt;a name="igp&lt;n&gt;"/&gt;, that
+is used to scroll the display appropriately.
 
-=%<nop>IMAGEGALLERY{ web="%<nop>WEB%" topic="%<nop>TOPIC%" size="small" }%<br/>=
-%IMAGEGALLERY{ web="%WEB%" size="small" }%
+---++ Customization
+First of all this plugin should come with reasonable default values, so that
+you will get a nice image gallery (with regards to my taste) right on.
+There are several things that are customizable:
+	* customize a gallery using a compination of the arguments described above
+	* add custom cascading styles in a topic to format the gallery
+	* alter the default cascading styles in the [[%ATTACHURL%/styles.css][styles.css]]
+	  file attached to this topic
+	* customize the plugin settings below
 
-=%<nop>IMAGEGALLERY{ web="Saneasylum" topic="ArtworkGallery" size="x50" }%<br/>=
-%IMAGEGALLERY{ web="Saneasylum" topic="ArtworkGallery" size="x50" }%
+---+++ Cascading Stylesheets
+The plugin emits the following css classes (see the comments in the [[%ATTACHURL%/styles.css][styles.css]] file):
 
-Generates a table with 4 rows, images are centerd and with a tooltip. Below each image is a simple description line with a image number.
+<noautolink>
+| *Class* | *Description* |
+| igp | division for the complete output of the image gallery |
+| igpThumbNails | division of all thumbnails |
+| igpThumbNailsTable | table of thumbnail images |
+| igpThumbNail | table cell of one thumbnail image |
+| igpThumbNailTitle | table cell of the thumbnail title |
+| igpPictureTable | table of the display image and the navigation bar |
+| igpPicture | table cell of the display image |
+| igpPictureTitle | division of the title of the display image |
+| igpNavigation | table cell of the navigation bar |
+| igpRedDot | span surrounding the red dot |
+| igpAlert | span surrounding error messages |
+</noautolink>
+
+---+++ Adjusting the image sequence
+By default the image gallery will display images in the order that they where uploaded.
+This determines their _natural_ order. When you want to change this order you can
+prefix the comment of the attachment with a sequence number. For example: given a
+picture whose comment is "My old bike" that should be put at position 12
+in your image gallery then change the comment to "12 - My old bike". This
+will put the image at the desired position. Sequence numbers don't necessarily need
+to be unique, that is if there's another picture with a comment like 
+"12 - My new bike" then the natural order of the both is relevant. In general,
+a picture will be put at position =&lt;nr&gt;= if its attachment comment has the format
 <verbatim>
-%IMAGEGALLERY{columns="4" rowstart="|  " rowinside="  |  " rowend="  |$n" rowinsideempty="  |" rowendempty=" |$n" 
-  format="<span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span><br/>$imgnr: $comment"}%
+  <nr><space>-<space><comment>
 </verbatim>
-%BR%
-%IMAGEGALLERY{columns="4" rowstart="|  " rowinside="  |  " rowend="  |$n" rowinsideempty="  |" rowendempty=" |$n" format="<span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span><br/>$imgnr: $comment"}%
-
-Format the Images as a list, images have tool tips.
-<verbatim>
-%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date$n"}%
-</verbatim>
-%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date$n"}%
-
-Format the Images as a list, images have tool tips and customized date.
-<verbatim>
-%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date{$year$mo$day-$hour:$min:$sec}$n"}%
-</verbatim>
-%IMAGEGALLERY{format="	* <span class='imgGallery'><a href='$imageurl'><img src='$thumburl' title='$tooltip'/></a></span> $wikiusername $date{$year$mo$day-$hour:$min:$sec}$n"}%
-
-
----++ <nop>%TOPIC% Settings
-
-Plugin settings are stored as preferences variables. To reference
-a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>IMAGEGALLERYPLUGIN_SHORTDESCRIPTION%==
+Note, that the $comment variable will only display =&lt;comment&gt;= , that is with 
+=&lt;nr&gt;&lt;space&gt;-&lt;space&gt;= stripped off.
+ 
+---++ Plugin Settings
 
 	* Names and sizes for thumbnails (feel free to add additional entries or to modify these defaults)
 		* Set TINY = 25x25
 		* Set SMALL = 50x50
 		* Set MEDIUM = 95x95
 		* Set LARGE = 150x150
-		* Set XLARGE = 250x250
+		* Set HUGE = 250x250
+	
+	* cascading style sheets 
+		* Set STYLE = %PUBURLPATH%/%TWIKIWEB%/ImageGalleryPlugin/style.css
 
-	* Name and location of program used to generate thumbnails
-		* Set IMAGE_MAGICK = /usr
-		* Set CONVERT = /usr/bin/convert
-		* Set IDENTIFY = /usr/bin/identify
-
-	* Additionaly program options for the CONVERT program
-		* Set CONVERT_OPTIONS = ""
-
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Displays image gallery with auto-generated thumbnails for attachments.
-
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
-
+	* One line description:
+		* Set SHORTDESCRIPTION = Displays image gallery with auto-generated thumbnails from attachments.
 
 ---++ Plugin Installation Instructions
 
 	* Download the ZIP file from the <nop>%TOPIC% home
 	* Unzip == ImageGalleryPlugin.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==pub/TWiki/%TOPIC%/twikiwide.gif== | test image for this page |
+	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
+	  | ==pub/TWiki/%TOPIC%/style.css== | cascading style sheets |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin interface |
+	  | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | core implementation |
 
 ---++ Plugin Info
 
-|  Plugin Author: | TWiki:Main/WillNorris |
-|  Plugin Version: | 31 Jan 2004 (V1.1) |
+|  Plugin Author: | TWiki:Main/MichaelDaum |
+|  Plugin Version: | v3.1 (14 Sep 2005) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  31 Jan 2004 | Add format fields and variable substitution (autor TWiki:Main.RobertSuna) |
+|  14 Sep 2005 | don't strictly depend on normalizeFilename() |
+|  15 June 2005 | new release |
+|  10 May 2005 | fixed igp id clash error found by TWiki:Main/MartinCleaver; \
+					  capture <nop>ImageMagick error messages; \
+					  don't trust attachment info - check for attachment existence aswell ;\
+					  added refresh query parameter to recompute images |
+|  09 May 2005 | fixed errors reported by TWiki:Main/MarcelTrap; \
+					  added support for multiple topics (proposed by TWiki:Main/MartinCleaver; \
+					  added %<nop>NRIMAGES% tag |
+|  &nbsp;		| fix error when called from within rename view |
+|  03 May 2005 | fixed thumbnail resizing; reintroduced =titles= parameter;  \
+					  support for multiple galleries per topic |
+|  27 Apr 2005 | complete rewrite |
 |	1 Aug 2003 | Updates from feedback from a Windows installation |
 |  25 Jul 2003 | Initial version posted to TWiki.org |
 |  15 Mar 2002 | Initial (internal) version |
-|  CPAN Dependencies: | none |
-|  Other Dependencies: | [[http://www.imagemagick.org/][ImageMagick]]'s =convert= and =identify= |
+|  CPAN Dependencies: | Image::Magick |
+|  Other Dependencies: |  |
 |  Perl Version: | 5 something ? (not sure--i'm using 5.8.0) |
-|  Plugin Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
-|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 
-__Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
-
--- Main.WillNorris - 1 Aug 2003 <br>
-%META:FILEATTACHMENT{name="twikiwide.gif" attr="" comment="" date="1059773705" path="twikiwide.gif" size="5850" user="WillNorris" version="1.1"}%
+-- TWiki:Main.MichaelDaum - 14 Sep 2005
+%META:FILEATTACHMENT{name="ImageGalleryPlugin.zip" attr="" comment="v3.0 (15 June 2005)" date="1118829177" path="ImageGalleryPlugin.zip" size="12781" user="MichaelDaum" version="1.7"}%
+%META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1114698585" path="style.css" size="1039" user="MichaelDaum" version="1.1"}%
