@@ -6,6 +6,8 @@ This plugin encapsulates the <nop>TWikiDraw Java Applet first developed by TWiki
 
 <nop>JHotDraw is a simple drawing editor that supports drawing in a style similar to that found in MS Powerpoint and MS Word. Various shaped figures can be placed in the drawing and text annotations joined to them.
 
+<img src="%ATTACHURLPATH%/screenshot.png" alt="screenshot.png" />
+
 Unique to %TOPIC%, a drawing can also have a "map" which makes figures in the drawing sensitive to the mouse cursor. A map is automatically added to an image when a URL is attached to any of the figures.
 
 How you edit a drawing depends on whether the drawing has a map and the setting of the "EDIT_BUTTON" option. A drawing with no map can be edited simply by clicking on the drawing. A drawing with a map can be edited by clicking the edit button or, failing that, on the boundary of the image.

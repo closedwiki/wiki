@@ -55,5 +55,6 @@ pub/TWiki/TWikiDrawPlugin/TRIANGLE3.gif
 pub/TWiki/TWikiDrawPlugin/URL1.gif
 pub/TWiki/TWikiDrawPlugin/URL2.gif
 pub/TWiki/TWikiDrawPlugin/URL3.gif
+pub/TWiki/TWikiDrawPlugin/screenshot.png
 pub/TWiki/TWikiDrawPlugin/twikidraw.jar JAR file for applet
 templates/twikidraw.tmpl Template for drawing editor
