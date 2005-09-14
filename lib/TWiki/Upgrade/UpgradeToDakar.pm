@@ -256,10 +256,10 @@ Now you need to
     (some sites have bin in a very different place to the rest, for
      example)
 
-11. Use your browser to check the whole thing: visit the 'testenv'
+11. Use your browser to check the whole thing: visit the 'configure'
     script, which I am guessing is at:
 
-    $TWiki::defaultUrlHost$TWiki::scriptUrlPath/testenv$TWiki::scriptSuffix
+    $TWiki::defaultUrlHost$TWiki::scriptUrlPath/configure$TWiki::scriptSuffix
 
     make sure there are no unwarranted warnings,
 
