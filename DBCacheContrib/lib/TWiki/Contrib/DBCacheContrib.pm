@@ -161,7 +161,7 @@ sub _loadTopic {
 	my $text = "";
 	my $form;
     my $tailMeta = 0;
-    $/ = "\n";
+    local $/ = "\n";
     while ( $line = <$fh> ) {
         if ( $line =~ m/^%META:FORM{name=\"([^\"]*)\"}%/o ) {
             $form = new TWiki::Contrib::DBCacheContrib::Map() unless $form;

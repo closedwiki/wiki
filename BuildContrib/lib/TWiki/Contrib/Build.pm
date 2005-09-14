@@ -361,7 +361,7 @@ sub new {
     $this->{VERSION} = $version;
     $this->{DATE} = POSIX::strftime('%T %d %B %Y', localtime);
 
-    undef $/;
+    local $/ = undef;
     foreach my $stage ( 'PREINSTALL', 'POSTINSTALL', 'PREUNINSTALL', 'POSTUNINSTALL' ) {
         $this->{$stage} = '# No '.$stage.' script';
         my $file = _findRelativeTo($buildpldir, $stage);
@@ -369,7 +369,6 @@ sub new {
             $this->{$stage} = <PF>;
         }
     }
-    $/ = $NL;
 
     $this->{MODULE} = $this->{project};
 
@@ -582,10 +581,9 @@ sub filter {
     return unless (-f $from);
 
     open(IF, '<'.$from) || die 'No source topic '.$from.' for filter';
-    undef $/;
+    local $/ = undef;
     my $text = <IF>;
     close(IF);
-    $/ = $NL;
     $text =~ s/%\$(\w+)%/&_expand($this,$1)/geo;
     $text =~ s/ {3}/\t/g;
 
@@ -828,11 +826,10 @@ sub target_upload {
             }
         }
     }
-    undef $/; # set to read to EOF
+    local $/ = undef; # set to read to EOF
     open( IN_FILE, '<'.$this->{basedir}.'/'.$to.'.txt' ) or
       die 'Failed to reopen topic: '.$@;
     $newform{'text'} = <IN_FILE>;
-    $/ = $NL;
     close( IN_FILE );
 
     print 'Uploading new topic',$NL;
@@ -1042,7 +1039,7 @@ sub target_manifest {
     my $manifest = _findRelativeTo($buildpldir,'MANIFEST');
     if( $manifest && -e $manifest ) {
         open(F, '<'.$manifest) || die 'Could not open existing '.$manifest;
-        undef $/;
+        local $/ = undef;
         %manilist = map{ /^(.*?)(\s+.*)?$/; $1 => ($2||'') } split(/\r?\n/, <F> );
         close(F);
     } else {
