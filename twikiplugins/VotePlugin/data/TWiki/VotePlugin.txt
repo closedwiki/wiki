@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1110961620" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="MichaelDaum" date="1126710514" format="1.0" version="1.1"}%
 ---+!! <nop>VotePlugin
 
 This plugin might be used to establish an online-voting system. Votes are
@@ -41,8 +41,6 @@ The plugin will count only you latest vote. You might only vote once a day.
 
 ---++ Plugin Installation Instructions
 
-__Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
-
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
@@ -50,16 +48,15 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/VotePlugin.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/VotePlugin.pm== | Plugin Perl module |
 
-%X% This plugin has already been written using the security API from TWiki:Codev/UncoordinatedSecurityAlert23Feb2005, i.e. the proposed patches from http://www.enyo.de/fw/security/notes/twiki-robustness.html. 
-
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | 2005-3-16 |
+|  Plugin Version: | v1.10 (2005-8-14) |
 |  Change History: | &nbsp; | 
-| &nbsp; | 2005-03-14: incorporated =getLocaldate()= function |
-| &nbsp; | 2005-03-16: use Cache API only if its there; delayed =use &lt;package&gt;= | 
-|  07 Mar 2005: | Initial version |
+|  2005-09-14 | fixes for dakar |
+|  2005-03-14 | incorporated =getLocaldate()= function |
+|  2005-03-16 | use Cache API only if its there; delayed =use &lt;package&gt;= | 
+|  2005-03-07 | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | security patches from TWiki:Codev/UncoordinatedSecurityAlert23Feb2005 |
@@ -70,6 +67,5 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 |  Feedback: | http://nats-www.informatik.uni-hamburg.de/TWiki/VotePluginDev |
 |  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
 
-__Related Topics:__ TWiki:Plugins/VotePlugin
+-- TWiki:Main.MichaelDaum - 15 Sep 2005
 
-%META:FILEATTACHMENT{name="VotePlugin.zip" attr="" comment="" date="1110962440" path="VotePlugin.zip" size="7001" user="MichaelDaum" version="1.4"}%
