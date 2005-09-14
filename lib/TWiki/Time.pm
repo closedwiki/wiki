@@ -267,7 +267,7 @@ sub formatDelta {
     if( $secs ) {
         $str .= $secs . ' second' .( $secs > 1 ? 's ' : ' ' );
     }
-    chomp( $str );
+    $str =~ s/\s+$//;
     return $str;
 }
 

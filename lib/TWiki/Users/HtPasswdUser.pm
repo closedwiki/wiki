@@ -101,7 +101,8 @@ sub encrypt {
     if( $TWiki::cfg{Htpasswd}{Encoding} eq 'sha1') {
         my $encodedPassword = '{SHA}'.
           MIME::Base64::encode_base64( Digest::SHA1::sha1( $passwd ) );
-        chomp $encodedPassword;
+        # don't use chomp, it relies on $/
+        $encodedPassword =~ s/\s+$//;
         return $encodedPassword;
 
     } elsif ( $TWiki::cfg{Htpasswd}{Encoding} eq 'crypt' ) {
