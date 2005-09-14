@@ -12,42 +12,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details, published at 
 # http://www.gnu.org/copyleft/gpl.html
-#
-# =========================
-#
-# This is an empty TWiki plugin. Use it as a template
-# for your own plugins; see TWiki.TWikiPlugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with TWiki use the official TWiki functions 
-# in the TWiki::Func module. Do not reference any functions or
-# variables elsewhere in TWiki!!
-
 
 ###############################################################################
-package TWiki::Plugins::VotePlugin;    # change the package name and $pluginName!!!
+package TWiki::Plugins::VotePlugin; 
 
 ###############################################################################
 use vars qw(
@@ -55,63 +22,37 @@ use vars qw(
         $debug $isInitialized
     );
 
-$VERSION = '1.010';
+use Digest::MD5 qw(md5_base64);
+use Fcntl qw(:flock);
+
+$VERSION = '1.10';
 $pluginName = 'VotePlugin';  # Name of this Plugin
 
 ###############################################################################
 # debug suite
-sub writeDebug 
-{
+sub writeDebug {
   &TWiki::Func::writeDebug("${pluginName} - $_[0]") if $debug;
 }
 
 ###############################################################################
 # standard plugin initialization
-sub initPlugin
-{
+sub initPlugin {
   ($topic, $web, $user, $installWeb) = @_;
 
-  # check for Plugins.pm versions
-  if( $TWiki::Plugins::VERSION < 1 ) {
-    TWiki::Func::writeWarning( "Version mismatch between $pluginName and Plugins.pm" );
-    return 0;
-  }
-
   $isInitialized = 0;
+  $debug = 0; # toggle me
 
   return 1;
 }
 
 ###############################################################################
-# initialize those parts of the plugin that we can delay til we realy need
-# the plugin
-sub doInit
-{
-  return if $isInitialized;
-  $isInitialized = 1;
-
-  eval {
-    use Digest::MD5 qw(md5_base64);
-    use Fcntl qw(:flock);
-  };
-
-  #$debug = &TWiki::Func::getPreferencesFlag( "\U$pluginName\E_DEBUG" );
-  $debug = 0;
-}
-
-###############################################################################
-sub commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-  $_[0] =~ s/%VOTE{(.*?)%/&handleVote($1)/ge;
+sub commonTagsHandler {
+  $_[0] =~ s/%VOTE{(.*?)%/&handleVote($1)/geo;
 }
 
 ###############################################################################
 # render the VOTE macro
-sub handleVote
-{
-  &doInit();
+sub handleVote {
   &writeDebug("handleVote called");
   my $theAttributes = shift;
   $theAttributes = "" if !$theAttributes;
@@ -142,13 +83,13 @@ sub handleVote
 
   # check attributes
   if (!@theOptions) {
-    return &TWiki::showError("no options specified");
+    return &showError("no options specified");
   }
   if (!@theSelects) {
-    return &TWiki::showError("no options for your select specified");
+    return &showError("no options for your select specified");
   }
   if ($theStyle !~ /^(bar|perc|total)$/) {
-    return &TWiki::showError("unknown style $theStyle");
+    return &showError("unknown style $theStyle");
   }
 
 
@@ -167,7 +108,7 @@ sub handleVote
     next if ! $optionNames;
 
     $result .= "<tr><td><b>$selectName</b>&nbsp;</td>\n";
-    $result .= "<td><select name=\"$selectName\" size=\"1\" style=\"width:90%\">\n";
+    $result .= "<td><select name=\"$selectName\" size=\"1\">\n";
     $result .= "<option selected value=\"\">Select ...</option>\n";
 
     foreach my $optionName (split /\s?,\s?/,$optionNames) {
@@ -190,28 +131,30 @@ sub handleVote
 
   # read in the votes
   my $votesFile = &getVotesFile($theId);
-  open(VOTES, "<$votesFile");
   my %votes;
-  while (my $line = <VOTES>) {
-    chomp($line);
-#    &writeDebug("line=$line");
-    if ($line =~ /^([^\|]+)\|([^\|]+)\|(.+)$/) {
-      my $date = $1;
-      my $voter = $2;
-      my $data = $3;
-      #&writeDebug("date=$date voter=$voter data=$data");
-      foreach my $item (split(/\|/, $data)) {
-	if ($item =~ /^(.+)=(.+)$/) {
-	  if ($selectOptions{$1}{$2}) {
-	    $votes{$voter}{$1} = $2;
-	  } else {
-	    &TWiki::Func::writeWarning("invalid votes key='$1', value='$2' from $ENV{REMOTE_ADDR}, $user");
+  
+  if (open(VOTES, "<$votesFile")) {
+    while (my $line = <VOTES>) {
+      chomp($line);
+  #    &writeDebug("line=$line");
+      if ($line =~ /^([^\|]+)\|([^\|]+)\|(.+)$/) {
+	my $date = $1;
+	my $voter = $2;
+	my $data = $3;
+	#&writeDebug("date=$date voter=$voter data=$data");
+	foreach my $item (split(/\|/, $data)) {
+	  if ($item =~ /^(.+)=(.+)$/) {
+	    if ($selectOptions{$1}{$2}) {
+	      $votes{$voter}{$1} = $2;
+	    } else {
+	      &TWiki::Func::writeWarning("invalid votes key='$1', value='$2' from $ENV{REMOTE_ADDR}, $user");
+	    }
 	  }
 	}
       }
     }
+    close VOTES;
   }
-  close VOTES;
 
   # collect statistics
   my %keyValueFreq;
@@ -273,18 +216,14 @@ sub handleVote
 
 ###############################################################################
 # called by the vote cgi
-sub vote
-{
-  &doInit();
+sub vote {
   &writeDebug("vote called");
 
   my $formData = shift;
 
   # check parameters
   $formData->{id} = "" if ! $formData->{id};
-  $formData->{id} =~ s/$TWiki::securityFilter//go;
-  $formData->{id} =~ /(.*)/;
-  $formData->{id} = $1;  # untaint variable
+  $formData->{id} = &securityFilter($formData->{id});
 
   # create the attachment directory for this topic
   my $attachPath = &TWiki::Func::getPubDir() . "/$web/$topic";
@@ -325,13 +264,12 @@ sub vote
   
   # invalidate cache entry
   my $libDir = &TWiki::getTWikiLibDir();
-  if(-e "$libDir/TWiki/Cache.pm" ) {
-    &writeDebug("found Cache.pm");
-    eval "&TWiki::Cache::invalidateEntry($web, $topic);";
+  if (defined &TWiki::Cache::invalidateEntry) {
+    &writeDebug("found Cache");
+    &TWiki::Cache::invalidateEntry($web, $topic);
   }
   
   &writeDebug("vote done");
-  return 1;
 }
 
 ###############################################################################
@@ -341,7 +279,8 @@ sub getVotesFile
 
   my $attachPath = &TWiki::Func::getPubDir() . "/$web/$topic";
   my $votesFile = "$attachPath/Votes" . ($id?"_$id":"") . ".txt";
-  #&TWiki::normalizeFileName($votesFile);
+
+  &normalizeFileName($votesFile);
 
   #&writeDebug("attachPath=$attachPath votesFile=$votesFile");
 
@@ -349,13 +288,53 @@ sub getVotesFile
 }
 
 ###############################################################################
-sub getLocaldate
-{
+# wrapper
+sub normalizeFileName {
+  my $fileName = shift;
+
+  if (defined &TWiki::Sandbox::normalizeFileName) {
+    writeDebug("using TWiki::Sandbox::normalizeFileName");
+    return &TWiki::Sandbox::normalizeFileName($fileName);
+  }
+
+  if (defined &TWiki::normalizeFileName) {
+    writeDebug("using TWiki::normalizeFileName");
+    return &TWiki::normalizeFileName($fileName)
+  }
+  
+  writeDebug("WARNING: normalizeFileName not found ... you live dangerous");
+  return $fileName;
+}
+
+
+###############################################################################
+sub getLocaldate {
 
   my( $sec, $min, $hour, $mday, $mon, $year) = localtime(time());
   $year = sprintf("%.4u", $year + 1900);  # Y2K fix
   my $date = sprintf("%.2u-%.2u-%.2u", $year, $mon, $mday);
   return $date;
+}
+
+###############################################################################
+sub showError {
+  my $msg = shift;
+  return "<span class=\"twikiAlert\">Error: $msg</span>" ;
+}
+
+###############################################################################
+sub securityFilter {
+  my $string = shift;
+  
+  if (defined $TWiki::securityFilter) {
+    $string =~ s/$TWiki::securityFilter//go
+  } elsif (defined $TWiki::cfg{NameFilter}) {
+    $string =~ s/$TWiki::cfg{NameFilter}//go
+  }
+
+  $string =~ /(.*)/;
+  $string = $1; # untaint
+  return $string;
 }
 
 1;
