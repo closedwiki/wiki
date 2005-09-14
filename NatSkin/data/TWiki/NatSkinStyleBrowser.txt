@@ -1,8 +1,8 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126692404" format="1.1" version="1.10"}%
+%META:TOPICINFO{author="MichaelDaum" date="1126716180" format="1.0" version="1.11"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%
 <div class="natSkinStyleBrowser">
-<form method="post" action="">
+<form method="post" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
 <select name="style" onchange="this.form.submit();">
 <noautolink>
 %FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n"}%
@@ -15,9 +15,9 @@
 	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Right
 	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Off
 <input type="hidden" name="search" value="%URLPARAM{search}%" />
+<input type="hidden" name="refresh" value="on" />
 </form>
 </div>
 %STOPINCLUDE%
 </div>
-
 %META:TOPICMOVED{by="MichaelDaum" date="1125609298" from="Sandbox.TestTopic5" to="TWiki.NatSkinStyleBrowser"}%

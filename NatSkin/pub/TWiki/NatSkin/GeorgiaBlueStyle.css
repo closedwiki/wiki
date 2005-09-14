@@ -64,6 +64,11 @@ hr {
 .natMainFooter {
   padding:20px 20px 20px 10px;
 }
+.natSideBar, .natTopRight {
+  width:17em;
+  min-width:17em;
+  _width:17em; /* IE hack */
+}
 .natSideBar {
   padding-top:20px;
   padding-bottom:20px;
