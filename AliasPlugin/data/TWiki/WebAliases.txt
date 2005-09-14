@@ -1,0 +1,20 @@
+%META:TOPICINFO{author="AdminUser" date="1114160160" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="AliasPlugin"}%
+---+!! %TOPIC%
+
+Put your global aliases into this list.
+
+<noautolink>
+	* Shortcuts for webnames
+		* TWikiWeb: TWiki.WebHome
+		* MainWeb: Main.WebHome
+		* UserWeb: Main.WebHome
+		* SandboxWeb: Sandbox.WebHome
+	* Test aliases [[AliasPlugin#Test_Cases][test-cases]]
+		* <nop>TESTLINK: TWiki.WebHome
+		* <nop>TESTALIAS: <font color="green">GREEN</font>
+		* <nop>rtfm: read the fucking manual
+</noautolink>
+
+
+
