@@ -1,0 +1,3 @@
+lib/TWiki/Plugins/VotePlugin.pm
+bin/vote
+data/TWiki/VotePlugin.txt
