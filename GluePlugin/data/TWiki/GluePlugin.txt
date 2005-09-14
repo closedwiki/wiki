@@ -1,0 +1,188 @@
+%META:TOPICINFO{author="MichaelDaum" date="1124126460" format="1.0" version="1.1"}%
+---+!! <nop>%TOPIC%
+%TOC%
+---++ Description
+This plugin will help you to write _readable_ <nop>TWikiML by 
+allowing tags and arguments to be formatted on multiple lines. 
+This is done by removing whitespaces surrounding tilde characters
+at the beginning of a line and recombine consecutive lines again.
+Basically, there are two was of glueing and recombining lines by
+either removing all whitespaces between two lines or
+by removing all whitespaces and separateing lines with a single space.
+In addition, there's a helper character sequence that prevents the
+TWiki engine to interprete tags before the GluePlugin could reformat
+the text.
+
+---++ Syntax
+| *Line prefix* | *Action* |
+| =~~~&lt;space>= | combine lines by removing all, insert one whitespaces |
+| =*~~&lt;space>= | recombine lines by removing any whitespaces between them |
+| =%~~&lt;space>= | escape tag interpretation |
+
+The &lt;space> is a literal whitespace blank. The =~~~&lt;space>= and 
+=*~~&lt;space>= sequences are recognized only at the beginning of a line, whereas
+the =%~~&lt;space>= escape sequence might appear everywhere. The basic
+anatomy of writing a TWiki tag using the GluePlugin is exemplified by
+<verbatim>
+%~~ TAG{
+~~~ key="
+*~~		hello
+~~~		world
+*~~ "
+~~~ }%
+</verbatim>
+which will be recombined to
+<verbatim>
+%<nop>TAG{ key="hello world" }%
+</verbatim>
+
+---++ Examples
+<table class="twikiTable">
+<tr><th> You type: </th></tr>
+<tr><td>
+<verbatim>
+This is a line
+~~~ glued to another line.
+</verbatim>
+</td></tr>
+<tr><th> You get (faked): </th></tr>
+<tr><td>
+<pre>
+This is a line glued to another line.
+</pre>
+</td></tr>
+<tr><th> You get if installed: </th></tr>
+<tr><td>
+<pre>
+This is a line 
+~~~ glued to another line.
+</pre>
+</td></tr>
+</table>
+
+<table class="twikiTable">
+<tr><th>You type:</th></tr>
+<tr><td>
+<verbatim>
+Glue
+*~~ Plugin
+</verbatim>
+</td></tr>
+<tr><th>You get (faked):</th></tr>
+<tr><td> GluePlugin </td></tr>
+<tr><th>You get if installed:</th></tr>
+<tr><td>
+Glue
+*~~ Plugin
+</td></tr>
+</table>
+
+<table class="twikiTable">
+<tr><th>You type:</th></tr>
+<tr><td>
+<verbatim>
+Apples
+
+~~~  
+
+And
+
+~~~
+
+Oranges
+</verbatim>
+</td></tr>
+<tr><th>You get (faked):</th></tr>
+<tr><td> Apples And Oranges </td></tr>
+<tr><th>You get if installed:</th></tr>
+<tr><td>
+Apples
+
+~~~
+
+And 
+
+~~~
+
+Oranges
+</td></tr>
+</table>
+
+<table class="twikiTable">
+<tr><th>You type:</th></tr>
+<tr><td>
+<verbatim>
+%~~ SEARCH{"GluePlugin"
+~~~		  nosearch="on" nosummary="on" nototal="on"
+~~~		  separator=", "
+~~~		  scope="topic"
+~~~		  format="$topic"
+~~~ }%
+</verbatim>
+</td></tr>
+<tr><th>You get (faked):</th></tr>
+<tr><td>
+%SEARCH{"GluePlugin" nosearch="on" nosummary="on" nototal="on" separator=", " scope="topic" format="$topic"}%
+</td></tr>
+<tr><th>You get if installed:</th></tr>
+<tr><td>
+%~~ SEARCH{"GluePlugin"
+~~~		  nosearch="on" nosummary="on" nototal="on"
+~~~		  separator=", "
+~~~		  scope="topic"
+~~~		  format="$topic"
+~~~ }%
+</td></tr>
+</table>
+<style type="text/css">
+.twikiTable {
+	width:100%;
+}
+.twikiTable th {
+	text-align:left;
+}
+.twikiTable pre {
+  margin:0px;
+}
+</style>
+
+---++ Plugin Settings
+	* Set SHORTDESCRIPTION = Enable <nop>TWikiML to span multiple lines
+
+---++ Plugin Installation Instructions
+
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	  | *File:* | *Description:* |
+	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+	* If the plugin is installed correctly then the following two fruits
+	  will appear joined on one line: Apples
+
+~~~ and Oranges
+
+
+---++ Plugin Info
+
+|  Plugin Author: | TWiki:Main.MichaelDaum |
+|  Plugin Version: | 28 Aug 2005 (V1.5) |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  28 Aug 2005: | changed glue syntax; added glue escape sequence to \
+						work arround tags been interpreted before lines are \
+						recombined |
+|  16 Aug 2005: | properly support internal tags; \
+			 performance improvements;\
+		  fixed use if uninitialized value | 
+|  15 Aug 2005: | Initial version |
+|  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
+|  CPAN Dependencies: | none |
+|  Other Dependencies: | none |
+|  Perl Version: | 5.005 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
+|  Plugin Home: | TWiki:Plugins/%TOPIC% |
+|  Feedback: | TWiki:Plugins/%TOPIC%Dev |
+|  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
+
+
+-- TWiki:Main.MichaelDaum - 15 Aug 2005
