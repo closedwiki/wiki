@@ -165,6 +165,7 @@ sub natSearch {
   $tmplHead =~ s|</*nop/*>||goi;
   $tmplHead =~ s/%TOPIC%/$topic/go;
   $tmplHead =~ s/%SEARCHSTRING%/$origSearch/go;
+
   print $tmplHead;
 
   #$tmplSearch = &TWiki::Func::expandCommonVariables($tmplSearch, $topic);
@@ -413,7 +414,6 @@ sub _natPrintSearchResult
       my @searchTerms = _getSearchTerms($theSearchString);
       my $summary = _getTopicSummary($text, $thisTopic, $thisWeb, @searchTerms);
       $tempVal =~ s/%TEXTHEAD%/$summary/go;
-      $tempVal = &TWiki::Func::renderText($tempVal, $thisWeb);
       $tempVal =~ s|</*nop/*>||goi;   # remove <nop> tag
 
       # fiddle in even/odd CSS classes
@@ -489,6 +489,7 @@ sub _getTopicSummary
   $htext =~ s/([\s\(])([A-Z]{3,})/$1<nop>$2/go;
   $htext =~ s/@([a-zA-Z0-9\-\_\.]+)/@<nop>$1/go;
 
+  $htext = &TWiki::Func::renderText($htext, $theWeb);
   return $htext;
 }
 

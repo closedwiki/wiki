@@ -175,9 +175,10 @@ sub initSkinState {
   $query = &TWiki::Func::getCgiQuery();
   if ($query) {
     $theStyle = $query->param('style');
-    $theStyleBorder = $query->param('styleborder');
+    $theStyleBorder = $query->param('styleborder'); # SMELL: add toggles for the others
     $theStyleSideBar = $query->param('stylesidebar');
     $theToggleSideBar = $query->param('togglesidebar');
+
     $theRaw = $query->param('raw');
 
     writeDebug("urlparam style=$theStyle") if $theStyle;
@@ -264,11 +265,13 @@ sub initSkinState {
   &TWiki::Func::setSessionValue('TABLEATTRIBUTES', $tablePluginAttrs);
 
   # temporary toggles
-  $theToggleSideBar = 1 if $theRaw;
-  $theToggleSideBar = 1 if $skinState{'border'} eq 'thin' && 
-    $skinState{'action'} =~ /^(edit|manage|rdiff)$/o;
+  $theToggleSideBar = 'off' if $theRaw;
+  $theToggleSideBar = 'off' if $skinState{'border'} eq 'thin' && 
+    $skinState{'action'} =~ /^(edit|manage|rdiff|natsearch|changes|search)$/o;
+    # SMELL get away with this hardcode
 
-  $skinState{'sidebar'} = 'off' if $theToggleSideBar;
+  $skinState{'sidebar'} = $theToggleSideBar 
+    if $theToggleSideBar && $theToggleSideBar ne '';
 }
 
 
@@ -299,10 +302,6 @@ sub commonTagsHandler
     $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $3)/ge;
   }
 
-  $_[0] =~ s/%SETSKINSTYLE{(.*?)}%/&renderSetSkinStyle($1)/geo;
-  $_[0] =~ s/%GETSKINSTYLE%/&renderGetSkinStyle()/geo;
-  $_[0] =~ s/%KNOWNSTYLES%/&renderKnownStyles()/geo;
-
   # conditional content
   $_[0] =~ s/%IFSKINSTATE{(.*?)}%/&renderIfSkinState($1)/geo;
   while ($_[0] =~ s/\s*%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%\s*/&renderIfSkinStateThen($1, $2)/geos) {
@@ -310,6 +309,9 @@ sub commonTagsHandler
   }
   $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;
   $_[0] =~ s/%WIKIRELEASENAME%/&getReleaseName()/geo;
+
+  $_[0] =~ s/%GETSKINSTYLE%/&renderGetSkinStyle()/geo;
+  $_[0] =~ s/%KNOWNSTYLES%/&renderKnownStyles()/geo;
 
   # REVISIONS only worked properly for the PatternSkin :(
   # REVARG is expanded for templates only :(
@@ -473,35 +475,17 @@ sub renderIfSkinState {
       (!$theSideBar || $skinState{'sidebar'} =~ /$theSideBar/) &&
       (!$theRelease || $skinState{'release'} =~ /$theRelease/) &&
       (!$theAction || $skinState{'action'} =~ /$theAction/)) {
+
+    &escapeParameter($theThen);
     #writeDebug("match");
     return $theThen if $theThen;
   } else {
+    &escapeParameter($theThen);
     #writeDebug("NO match");
     return $theElse if $theElse;
   }
 
   return '';
-}
-
-###############################################################################
-sub renderSetSkinStyle {
-  my $args = shift;
-
-  my $theStyle = &TWiki::Func::extractNameValuePair($args);
-  my $theBorder = &TWiki::Func::extractNameValuePair($args, 'border');
-  my $theSideBar = &TWiki::Func::extractNameValuePair($args, 'sidebar');
-
-  &initKnownStyles();
-  $skinState{'style'} = $theStyle 
-    if $theStyle && $knownStyles{$theStyle};
-
-  $skinState{'border'} = $theBorder 
-    if $theBorder && $theBorder =~ /$knownStyleBorders/;
-
-  $skinState{'sidebar'} = $theSideBar 
-    if $theSideBar && $theSideBar =~ /$knownStyleSidebars/;
-  
-  return "";
 }
 
 ###############################################################################
@@ -1070,12 +1054,7 @@ sub renderFormatList {
 
   my $result = join($theJoin, @result);
 
-  $result =~ s/\\n/\n/g;
-  $result =~ s/\$n/\n/g;
-  $result =~ s/\\%/%/g;
-  $result =~ s/\$nop//g;
-  $result =~ s/\$percnt/%/g;
-  $result =~ s/\$dollar/\$/g;
+  &escapeParameter($result);
   #writeDebug("result=$result");
 
 
@@ -1330,6 +1309,18 @@ sub getMetaData {
   }
 
   return $result;
+}
+
+###############################################################################
+sub escapeParameter {
+  return '' unless $_[0];
+
+  $_[0] =~ s/\\n/\n/g;
+  $_[0] =~ s/\$n/\n/g;
+  $_[0] =~ s/\\%/%/g;
+  $_[0] =~ s/\$nop//g;
+  $_[0] =~ s/\$percnt/%/g;
+  $_[0] =~ s/\$dollar/\$/g;
 }
 
 1;
