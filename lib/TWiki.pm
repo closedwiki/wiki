@@ -2307,10 +2307,8 @@ used *only* if there is *absolutely no alternative*.
 sub readFile {
     my $name = shift;
     open( IN_FILE, "<$name" ) || return '';
-    my $s = $/;
-    undef $/; # set to read to EOF
+    local $/ = undef;
     my $data = <IN_FILE>;
-    $/ = $s;
     close( IN_FILE );
     $data = '' unless( defined( $data ));
     return $data;

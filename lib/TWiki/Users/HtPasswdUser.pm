@@ -73,10 +73,8 @@ sub new {
 sub _readPasswd {
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" ) ||
       throw Error::Simple( "$TWiki::cfg{Htpasswd}{FileName}: $!" );
-    my $s = $/;
-    undef $/; # set to read to EOF
+    local $/ = undef;
     my $data = <IN_FILE>;
-    $/ = $s;
     close( IN_FILE ) ||
       throw Error::Simple( "$TWiki::cfg{Htpasswd}{FileName}: $!" );
     return $data;

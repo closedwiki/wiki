@@ -2033,10 +2033,8 @@ sub readFile {
     my $name = shift;
     my $data = '';
     open( IN_FILE, "<$name" ) || return '';
-    my $s = $/;
-    undef $/; # set to read to EOF
+    local $/ = undef; # set to read to EOF
     $data = <IN_FILE>;
-    $/ = $s;
     close( IN_FILE );
     $data = '' unless $data; # no undefined
     return $data;

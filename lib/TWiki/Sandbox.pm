@@ -315,12 +315,10 @@ sub sysCommand {
 
         if ( $pid ) {
             # Parent - read data from process filehandle
-            my $mem = $/;
-            undef $/; # set to read to EOF
+            local $/ = undef; # set to read to EOF
             $data = <$handle>;
             close $handle;
             $exit = ( $? >> 8 );
-            $/ = $mem;
         } else {
             # Child - run the command
             open (STDERR, '>'.File::Spec->devnull()) || die "Fuck";
@@ -348,13 +346,11 @@ sub sysCommand {
 
             close( $writeHandle ) or die;
 
-            my $mem = $/;
-            undef $/; # set to read to EOF
+            local $/ = undef; # set to read to EOF
             $data = <$readHandle>;
             close( $readHandle );
             $pid = wait; # wait for child process so we can get exit status
             $exit = ( $? >> 8 );
-            $/ = $mem;
 
         } else {
             # Child - run the command, stdout to pipe

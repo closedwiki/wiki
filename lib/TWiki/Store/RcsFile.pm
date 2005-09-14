@@ -710,10 +710,8 @@ sub _readFile {
     my $data;
     if( open( IN_FILE, '<'.$name )) {
         binmode( IN_FILE );
-        my $mem = $/;
-        undef $/;
+        local $/ = undef;
         $data = <IN_FILE>;
-        $/ = $mem;
         close( IN_FILE );
     }
     $data ||= '';
