@@ -31,6 +31,8 @@ bin/twiki
 bin/upload
 bin/view
 bin/viewfile
+bin/logos/logo.png
+bin/logos/.htaccess
 data/Main/NobodyGroup.txt
 data/Main/PatternSkinUserViewTemplate.txt
 data/Main/TWikiAdminGroup.txt
@@ -317,6 +319,7 @@ lib/TWiki/Data/DelimitedFile.pm
 lib/TWiki/Form.pm
 lib/TWiki/Func.pm
 lib/TWiki/I18N.pm
+lib/TWiki/If.pm
 lib/TWiki/Merge.pm
 lib/TWiki/Meta.pm
 lib/TWiki/Net.pm

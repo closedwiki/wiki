@@ -2244,7 +2244,8 @@ $hdr =~ s/^<\?xml.*?>//s;
 print CGI::header('text/html'), $hdr;
 
 my $body = "";
-$body .= CGI::h1('TWiki Configuration');
+$body .= CGI::h1( CGI::img({src=>'logos/logo.png', alt=>'logo'}).
+  '&nbsp;Configuration');
 
 my $update_disabled = 0;
 my $path_to_localsite_cfg = _findFileOnPath('LocalSite.cfg');
