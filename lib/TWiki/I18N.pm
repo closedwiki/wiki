@@ -58,7 +58,6 @@ use base 'TWiki::I18N';
 sub new {
   my $class = shift;
   my $this = bless({}, $class);;
-  $this->{available_languages} = { 'en' => 'English' };
   return $this;
 }
 
@@ -136,12 +135,10 @@ sub get {
         $this = TWiki::I18N->get_handle();
     } else {
         $this = new TWiki::I18N::Fallback();
+        # we couldn't initialise 'optional' I18N infrastrcture, warn that we
+        # can only use English.
         $session->writeWarning('TWiki::I18N: falling back to English: ' . $this);
-        return $this;
     }
-
-    # if we couldn't initialise 'optional' I18N infrastrcture, warn that we can
-    # only use English.
    
     # keep a reference to the session object
     $this->{session} = $session;
