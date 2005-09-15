@@ -688,7 +688,7 @@ sub renderIfDefined {
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
 
   if (!$theAction || $skinState{'action'} =~ /$theAction/o) {
-    foreach my $title (split(/,/,$theFormat)) {
+    foreach my $title (split(/\|/,$theFormat)) {
       next if $title =~ /^%[A-Z]+%$/o; # special handling of unresolved variables
       return $title if $title;
     }
