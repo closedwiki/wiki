@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1124731920" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="MichaelDaum" date="1126809518" format="1.1" version="1.2"}%
 ---+!! <nop>%TOPIC%
 
 This plugin allows to substitute and extract information from content by
@@ -62,7 +62,7 @@ This is a second comment.
 
 ---++ Plugin Settings
 
-	* Set SHORTDESCRIPTION = Filters content
+	* Set SHORTDESCRIPTION = Substitute and extract information from content by using regular expressions
 
 ---++ Plugin Installation Instructions
 
@@ -80,8 +80,7 @@ This is a second comment.
 |  Plugin Author: | TWiki:Main.MichaelDaum |
 |  Plugin Version: | 22 Aug 2005 (v0.91) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  22 Aug 2005: | Initial version |
-|  &nbsp; | added =expand= toggle |
+|  22 Aug 2005: | Initial version; added =expand= toggle |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
 |  Other Dependencies: | none |
@@ -93,4 +92,3 @@ This is a second comment.
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
 -- TWiki:Main.MichaelDaum - 22 Aug 2005
-
