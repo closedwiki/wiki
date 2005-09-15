@@ -354,7 +354,16 @@ sub save {
 
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
-    my $saveaction = lc($query->param( 'action' ));
+    my $saveaction;
+    foreach my $action ( 'save', 'checkpoint', 'quietsave',
+                         'cancel', 'preview', 'addform',
+                         'replaceform') {
+        if ($query->param('action_' . $action)) {
+          $saveaction = $action;
+          last;
+        }
+    }
+
     my $editaction = lc($query->param( 'editaction' )) || '';
 
     if( $saveaction eq 'checkpoint' ) {
@@ -382,11 +391,16 @@ sub save {
         $session->redirect( $viewURL );
         return;
 
+      # SMELL: does this apply yet?
+      # Doing a 
+      # grep 'delRev\|repRev' lib/ templates/ -r
+      # from TWiki sources root doens't reveals nothing ...
+      # -- AntonioTerceiro
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
         $query->param( -name => 'cmd', -value => $saveaction );
 
-    } elsif( $saveaction eq 'add form' ||
-             $saveaction eq 'replace form...' ||
+    } elsif( $saveaction eq 'addform' ||
+             $saveaction eq 'replaceform' ||
              $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
         require TWiki::UI::ChangeForm;
         $session->writeCompletePage
