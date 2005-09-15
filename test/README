@@ -10,7 +10,7 @@ Unit tests are held in the subdirectory "unit", and are written using CPAN:Test:
 
 All TWiki unit tests are run from that directory with the command:
 
-perl ../bin/TestRunner.pl TWikiUnitTestSuite.pm
+perl ../bin/TestRunner.pl TWikiSuite.pm
 
 TestCases Tests
 ===============

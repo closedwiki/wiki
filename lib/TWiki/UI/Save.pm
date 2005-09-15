@@ -366,8 +366,12 @@ sub save {
     # the 'action' parameter has been deprecated, though is still available
     # for compatibility with old templates.
     if( !$saveaction && $query->param( 'action' )) {
-        $saveaction = $query->param( 'action' );
+        $saveaction = lc($query->param( 'action' ));
         $session->writeWarning('Use of deprecated "action" parameter to "save". Correct your templates!');
+
+        # handle old values for form-related actions:
+        $saveaction = 'addform' if ( $saveaction eq 'add form');
+        $saveaction = 'replaceform' if ( $saveaction eq 'replace form...');
     }
 
     my $editaction = lc($query->param( 'editaction' )) || '';
