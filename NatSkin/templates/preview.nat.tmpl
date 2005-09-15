@@ -13,7 +13,16 @@
 </style>
 <div class="natTopicForm"> %META{"form"}% </div>
 <form name="EditFormular" method="post" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
-  %IFSKINSTATE{release="beijing=" else="<input type='hidden' name='action' value='' />" then="<!-- placeholder -->"}%
+  %IFSKINSTATETHEN{release="cairo"}%
+    <input type="hidden" name="action" value="" />
+  %ELSIFSKINSTATE{release="dakar"}%
+    <input type="hidden" name="action_preview" value="" />
+    <input type="hidden" name="action_save" value="" />
+    <input type="hidden" name="action_checkpoint" value="" />
+    <input type="hidden" name="action_addform" value="" />
+    <input type="hidden" name="action_replaceform" value="" />
+    <input type="hidden" name="action_cancel" value="" />
+  %FISKINSTATE%
   <input type="hidden" name="submitChangeForm" value="" />
   %FORMFIELDS% 
   <input type="hidden" name="formtemplate" value="%FORMTEMPLATE%" />

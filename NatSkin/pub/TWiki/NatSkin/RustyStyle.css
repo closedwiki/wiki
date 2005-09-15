@@ -68,6 +68,27 @@ hr {
   font-weight:bold;
 }
 
+/* topic form */
+.natTopicForm th,
+.natTopicForm td,
+.natTopicForm table {
+  border:1px #ff9831 solid;
+}
+.natTopicForm th {
+  border-bottom:1px #ff9831 solid;
+  background:#ff9831;
+  color:white;
+  font-weight:bold;
+  font-size:x-small;
+  line-height:140%;
+  text-transform:uppercase;
+}
+.natTopicForm th a:hover,
+.natTopicForm th a {
+  color:white;
+  font-weight:bold;
+}
+
 /* twiki page form */
 .twikiPageForm th,
 .twikiPageForm td,

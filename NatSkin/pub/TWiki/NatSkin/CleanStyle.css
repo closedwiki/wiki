@@ -213,12 +213,35 @@ hr {
   display:inline;
 }
 
-/* footer */
+/* forms */
 .natTopicForm td,
 .natTopicForm th,
 .natTopicForm {
   font-size:small;
 }
+
+.natTopicForm table {
+  border:1px #aaaaaa solid;
+}
+
+.natTopicForm .natTopicFormFirstCol,
+.natTopicForm .twikiFirstCol,
+.natTopicForm table th {
+  border:1px #aaaaaa solid;
+  color:#444444;
+  background: #eeeeee;
+  vertical-align:top;
+  padding-top:2px;
+}
+.natTopicForm table th a {
+  color:#444444;
+  text-decoration:none;
+  font-weight:bold;
+}
+.natTopicForm table td {
+  border:1px #aaaaaa solid;
+}
+
 /* search tables */
 .natSearchTable {
   border:1px #aaaaaa solid;

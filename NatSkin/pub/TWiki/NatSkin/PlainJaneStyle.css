@@ -61,6 +61,28 @@ a:hover {
   color:#3f59bb;
 }
 
+/* topic form */
+.natTopicForm th,
+.natTopicForm td,
+.natTopicForm table {
+  border:1px #aaaaaa solid;
+}
+.natTopicForm .natTopicFormFirstCol,
+.natTopicForm .twikiFirstCol,
+.natTopicForm th {
+  color:#666666;
+  background:#eeeeee;
+}
+.natTopicForm th a:hover,
+.natTopicForm th a {
+  text-decoration:none;
+  background:#eeeeee;
+  color:#666666;
+}
+.natTopicForm th a:hover {
+  color:#3f59bb;
+}
+
 /* twik page form */
 .twikiPageForm th,
 .twikiPageForm td,

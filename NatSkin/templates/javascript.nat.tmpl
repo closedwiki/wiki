@@ -31,8 +31,10 @@ function submitEditFormular(script, action) {
   }
   %IFSKINSTATETHEN{release="beijing"}%
     document.EditFormular.action = '%SCRIPTURLPATH%/' + script + '%SCRIPTSUFFIX%/%WEB%/%TOPIC%';
-  %ELSESKINSTATE%
+  %ELSIFSKINSTATE{release="cairo"}%
     document.EditFormular.elements['action'].value = action; 
+  %ELSESKINSTATE%
+    document.EditFormular.elements['action_' + action].value = 'foobar';
   %FISKINSTATE%
   document.EditFormular.submit();
 }

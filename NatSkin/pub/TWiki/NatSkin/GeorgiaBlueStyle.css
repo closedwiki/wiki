@@ -37,6 +37,37 @@ hr {
   color:#999966;
 }
 
+/* forms */
+.natTopicForm table,
+.natTopicForm th,
+.natTopicForm td {
+  border:1px #aaaaaa solid;
+}
+
+.natTopicForm .natTopicFormFirstCol,
+.natTopicForm .twikiFirstCol,
+.natTopicForm th {
+  background:#eeeeee;
+  color:#666;
+  font:bold x-small/140% verdana,arial,sans-serif;
+  text-transform:uppercase;
+}
+.natTopicForm th a {
+  color:#999966;
+}
+
+/* fix for disappearing borders */
+.natTopicForm {
+  border:1px solid white;
+  margin:1px;
+}
+.twikiTable {
+  margin:1px;
+}
+.natTopicForm .twikiTable {
+  margin:0px;
+}
+
 /* twiki page form */
 .twikiPageForm table,
 .twikiPageForm th,
@@ -53,6 +84,7 @@ hr {
 .twikiPageForm th a {
   color:#999966;
 }
+
 
 
 /* page layout */

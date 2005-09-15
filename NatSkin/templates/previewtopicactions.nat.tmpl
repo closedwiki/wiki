@@ -2,14 +2,13 @@
 %TMPL:DEF{"topicactions"}%
 <a href="javascript:history.back();" accesskey="e">Edit</a>
 | <span class="natAction">Preview</span> 
-%IFSKINSTATETHEN{release="dakar"}% <!-- -->
-| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s">Save</a> 
-| <a href="javascript:submitEditFormular('save', '');" accesskey="q">Quit</a>
+%IFSKINSTATETHEN{release="beijing"}% <!-- -->
+| <a href="javascript:submitEditFormular('save', 'save');" accesskey="s">Save</a>
 %ELSESKINSTATE% <!-- -->
-| <a href="javascript:submitEditFormular('save', '');" accesskey="s">Save</a>
+| <a href="javascript:submitEditFormular('save','checkpoint');" accesskey="s">Save</a> 
+| <a href="javascript:submitEditFormular('save', 'save');" accesskey="q">Quit</a>
 %FISKINSTATE% <!-- -->
-<br/>
-%FORMBUTTON{"$1 |"}%
+<br/> %FORMBUTTON{"$1 |"}%
 <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%" accesskey="u">Undo</a>
 | <a href="%IFSKINSTATE{release="beijing" then="%SCRIPTURLPATH%/view/%WEB%/%TOPIC%?unlock=on" else="javascript:submitEditFormular('save', 'cancel');"}%" accesskey="c">Cancel</a>
 %TMPL:END%
