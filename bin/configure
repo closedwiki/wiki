@@ -433,7 +433,7 @@ sub _findFileOnPath {
     $file =~ s(::)(/)g;
 
     foreach my $dir ( @INC ) {
-        if( -e "$dir/$file" ) {
+        if ( -e "$dir/$file" ) {
             return "$dir/$file";
         }
     }
@@ -472,6 +472,14 @@ sub _PROMPT_FOR_STRING {
     if( $opts =~ /\s(\d+)\s/ ) {
         $size = $1;
     }
+    # support upgrade from old configuration, where LowerNational and UpperNational
+    # were stored as REGEX'es (now they are STRING's):
+    if ( $id eq "LowerNational" || $id eq "UpperNational" ) { 
+        if ($value =~ /^\(\?-xism:(.*)\)$/) {
+            $value = $1;
+        }
+    }
+
     return CGI::textfield( -name => $id, -size=>$size, -default=>$value );
 }
 
