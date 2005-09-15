@@ -28,15 +28,15 @@ All the scripts accept a number of common parameters. The first two components o
 ---++ =save=
 The =save= script performs a range of save-related functions, as selected by the =action= parameter.
 
-| =action=save= | *default*; save, return to view, dontnotify is OFF |
-| =action=quietsave= | save, and return to view, =dontnotify= is ON |
-| =action=checkpoint= | save and redirect to the edit script, =dontnotify= is ON |
-| =action=cancel= | exit without save, return to view |
-| =action=preview= | preview edited text |
-| =action=add form= | Redirect to the "change form" page. |
-| =action=replace&nbsp;form...= | Redirect to the "change form" page. |
-| =action=delRev= | *Administrators only* delete the most recent revision of the topic - all other parameters are ignored |
-| =action=repRev= | *Administrators only* replace the text of the most recent revision of the topic with the text in the =text= parameter. =text= must included embedded meta-data tags. All other parameters are ignored. |
+| =action_save=1= | *default*; save, return to view, dontnotify is OFF |
+| =action_quietsave=1= | save, and return to view, =dontnotify= is ON |
+| =action_checkpoint= | save and redirect to the edit script, =dontnotify= is ON |
+| =action_cancel= | exit without save, return to view |
+| =action_preview= | preview edited text |
+| =action_addform= | Redirect to the "change form" page. |
+| =action_replaceform...= | Redirect to the "change form" page. |
+| =action_delRev= | *Administrators only* delete the most recent revision of the topic - all other parameters are ignored |
+| =action_repRev= | *Administrators only* replace the text of the most recent revision of the topic with the text in the =text= parameter. =text= must included embedded meta-data tags. All other parameters are ignored. |
 | =onlynewtopic= | If set, error if topic already exists |
 | =onlywikiname= | If set, error if topic name is not a WikiWord |
 | =dontnotify= | if defined, suppress change notification |

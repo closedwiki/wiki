@@ -69,8 +69,8 @@ sub buildNewTopic {
     # prevent non-Wiki names?
     my $onlyWikiName = $query->param( 'onlywikiname' ) || '';
     if( ( $onlyWikiName )
-        && ( ! $topicExists )
-        && ( ! TWiki::isValidTopicName( $topic ) ) ) {
+          && ( ! $topicExists )
+            && ( ! TWiki::isValidTopicName( $topic ) ) ) {
         # do not allow non-wikinames, redirect to view topic
         # SMELL: this should be an oops, shouldn't it?
         $session->redirect( $session->getScriptUrl( $webName, $topic, 'view' ) );
@@ -94,29 +94,29 @@ sub buildNewTopic {
     if( $topicExists ) {
         ( $prevMeta, $prevText ) =
           $store->readTopic( undef, $webName, $topic, undef );
-	if( $prevMeta ) {
-	  foreach my $k ( keys %$prevMeta ) {
-            unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
-		    $k eq 'FIELD' ) {
-	      $newMeta->copyFrom( $prevMeta, $k );
+        if( $prevMeta ) {
+            foreach my $k ( keys %$prevMeta ) {
+                unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
+                          $k eq 'FIELD' ) {
+                    $newMeta->copyFrom( $prevMeta, $k );
+                }
             }
-	  }
-	}
+        }
     } elsif ($templatetopic) {
-      ( $templateMeta, $templateText ) =
-	$store->readTopic( $session->{user}, $webName,
-			   $templatetopic, undef );
-      $templateText = '' if $query->param( 'newtopic' ); # created by edit
-      $templateText =
-	$session->expandVariablesOnTopicCreation( $templateText );
-      foreach my $k ( keys %$templateMeta ) {
-	unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
-		$k eq 'FIELD' ) {
-	  $newMeta->copyFrom( $templateMeta, $k );
-	}
-      }
-      # topic creation, there is no original rev
-      $originalrev = 0;
+        ( $templateMeta, $templateText ) =
+          $store->readTopic( $session->{user}, $webName,
+                             $templatetopic, undef );
+        $templateText = '' if $query->param( 'newtopic' ); # created by edit
+        $templateText =
+          $session->expandVariablesOnTopicCreation( $templateText );
+        foreach my $k ( keys %$templateMeta ) {
+            unless( $k =~ /^_/ || $k eq 'FORM' || $k eq 'TOPICPARENT' ||
+                      $k eq 'FIELD' ) {
+                $newMeta->copyFrom( $templateMeta, $k );
+            }
+        }
+        # topic creation, there is no original rev
+        $originalrev = 0;
     }
 
     # Determine the new text
@@ -204,7 +204,7 @@ sub buildNewTopic {
         if ( $rev ne $originalrev && !$author->equals( $user )) {
             # the new three-way code
             my ( $ancestorMeta, $ancestorText ) =
-                $store->readTopic( undef, $webName, $topic, $originalrev );
+              $store->readTopic( undef, $webName, $topic, $originalrev );
             $newText = TWiki::Merge3::merge(
                 $ancestorText, $prevText, $newText,
                 $originalrev, $rev, "new",
@@ -238,7 +238,7 @@ sub _save {
         throw TWiki::OopsException( 'accessdenied', def => 'only_group',
                                     web => $webName, topic => $topic,
                                     params => $TWiki::cfg{UsersWebName}.
-                                    '.'.$TWiki::cfg{SuperAdminGroup} );
+                                      '.'.$TWiki::cfg{SuperAdminGroup} );
     }
 
     my $user = $session->{user};
@@ -355,13 +355,19 @@ sub save {
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
     my $saveaction;
-    foreach my $action ( 'save', 'checkpoint', 'quietsave',
-                         'cancel', 'preview', 'addform',
-                         'replaceform') {
+    foreach my $action qw( save checkpoint quietsave cancel preview
+                           addform replaceform delRev repRev ) {
         if ($query->param('action_' . $action)) {
-          $saveaction = $action;
-          last;
+            $saveaction = $action;
+            last;
         }
+    }
+
+    # the 'action' parameter has been deprecated, though is still available
+    # for compatibility with old templates.
+    if( !$saveaction && $query->param( 'action' )) {
+        $saveaction = $query->param( 'action' );
+        $session->writeWarning('Use of deprecated "action" parameter to "save". Correct your templates!');
     }
 
     my $editaction = lc($query->param( 'editaction' )) || '';
@@ -376,7 +382,7 @@ sub save {
         my $lease = $store->getLease( $webName, $topic );
         if( $lease && $lease->{user}->equals( $user )) {
             $store->setLease( $webName, $topic, $user,
-                                         $TWiki::cfg{LeaseLength} );
+                              $TWiki::cfg{LeaseLength} );
         }
 
     } elsif( $saveaction eq 'quietsave' ) {
@@ -391,17 +397,17 @@ sub save {
         $session->redirect( $viewURL );
         return;
 
-      # SMELL: does this apply yet?
-      # Doing a 
-      # grep 'delRev\|repRev' lib/ templates/ -r
-      # from TWiki sources root doens't reveals nothing ...
-      # -- AntonioTerceiro
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
+        # hidden, largely undocumented functions, used by administrators for
+        # reverting spammed topics. These functions constitute editing
+        # history, in a Joe Stalin kind of way. The should be replaced with
+        # mechanisms for hiding revisions, but are retained purely for
+        # compatibility with Cairo.
         $query->param( -name => 'cmd', -value => $saveaction );
 
     } elsif( $saveaction eq 'addform' ||
-             $saveaction eq 'replaceform' ||
-             $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
+               $saveaction eq 'replaceform' ||
+                 $saveaction eq 'preview' && $query->param( 'submitChangeForm' )) {
         require TWiki::UI::ChangeForm;
         $session->writeCompletePage
           ( TWiki::UI::ChangeForm::generate( $session, $webName,
@@ -420,4 +426,3 @@ sub save {
 }
 
 1;
-

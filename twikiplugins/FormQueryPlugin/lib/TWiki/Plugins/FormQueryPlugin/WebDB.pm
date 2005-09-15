@@ -403,7 +403,8 @@ sub createNewTopic {
     my $child;
 
     my $form = "<form name=\"topiccreator$tc\" ";
-    $form .= "action=\"%SCRIPTURL%/autocreate/$web/$base\">";
+    $form .= "action=\"%SCRIPTURL%/autocreate/$web/";
+    $form .= "$base\">";
     $form .= "<input type=\"submit\" value=\"$text\" />";
     $form .= "<input type=\"hidden\" name=\"relation\" value=\"$relation\" />";
     if ( defined( $formtype )) {

@@ -1051,17 +1051,17 @@ sub target_manifest {
     print STDERR "Gathering from $rootdir\n";
 
     File::Find::find(\&_manicollect, $rootdir);
-    print 'DRAFT ',$manifest,' follows:',$NL;
+    print '# DRAFT ',$manifest,' follows:',$NL;
     print '################################################',$NL;
     for (sort keys %manilist) {
         print $_.' '.$manilist{$_}.$NL;
     }
     print '################################################',$NL;
-    print 'Copy and paste the text between the ###### lines into the file',$NL;
-    print $manifest,$NL;
-    print 'to create an initial manifest. Remove any files',$NL;
-    print 'that should _not_ be released (such as build.pl!), and add a',$NL;
-    print 'description of each file in place of NEW.',$NL;
+    print '# Copy and paste the text between the ###### lines into the file',$NL;
+    print '# '.$manifest,$NL;
+    print '# to create an initial manifest. Remove any files',$NL;
+    print '# that should _not_ be released (such as build.pl!), and add a',$NL;
+    print '# description of each file in place of NEW.',$NL;
 }
 
 sub _manicollect {
