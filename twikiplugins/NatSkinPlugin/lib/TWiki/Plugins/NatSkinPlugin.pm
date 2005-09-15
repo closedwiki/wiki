@@ -195,7 +195,7 @@ sub initSkinState {
     } else {
       $theStyle = 
 	  &TWiki::Func::getSessionValue('NATSKIN_STYLE') ||
-	  &TWiki::Func::getPreferencesValue("SKINSTYLE", $web) ||
+	  &TWiki::Func::getPreferencesValue("SKINSTYLE") ||
 	  $defaultStyle;
     }
   }
@@ -213,7 +213,7 @@ sub initSkinState {
     } else {
       $theStyleBorder =
 	&TWiki::Func::getSessionValue('NATSKIN_STYLEBORDER') ||
-	&TWiki::Func::getPreferencesValue("STYLEBORDER", $web) ||
+	&TWiki::Func::getPreferencesValue("STYLEBORDER") ||
 	$defaultStyleBorder;
     }
   }
@@ -230,7 +230,7 @@ sub initSkinState {
     } else {
       $theStyleSideBar =
 	&TWiki::Func::getSessionValue('NATSKIN_STYLESIDEBAR') ||
-	&TWiki::Func::getPreferencesValue("STYLESIDEBAR", $web) ||
+	&TWiki::Func::getPreferencesValue("STYLESIDEBAR") ||
 	$defaultStyleSideBar;
     }
   }
@@ -242,10 +242,17 @@ sub initSkinState {
   # handle TablePlugin attributes
   my $prefsName = "\U$theStyle\ETABLEATTRIBUTES";
   my $tablePluginAttrs = 
+    &TWiki::Func::getPreferencesValue('BASETABLEATTRIBUTES') ||
     &TWiki::Func::getPreferencesValue('NATSKINPLUGIN_BASETABLEATTRIBUTES') || '';
   my $skinTablePluginAttrs =
+    &TWiki::Func::getPreferencesValue("$prefsName") ||
     &TWiki::Func::getPreferencesValue("NATSKINPLUGIN_$prefsName") || '';
-  $tablePluginAttrs .= ' ' . $skinTablePluginAttrs;
+  # order matters ... differently *sigh*
+  if ($isDakar) {
+    $tablePluginAttrs .= ' ' . $skinTablePluginAttrs;
+  } else {
+    $tablePluginAttrs = $skinTablePluginAttrs . ' ' . $tablePluginAttrs;
+  }
   $tablePluginAttrs =~ s/\s+$//;
   $tablePluginAttrs =~ s/^\s+//;
   
@@ -273,7 +280,6 @@ sub initSkinState {
     if $theToggleSideBar && $theToggleSideBar ne '';
 }
 
-
 ###############################################################################
 # commonTagsHandler:
 # $_[0] - The text
@@ -281,7 +287,11 @@ sub initSkinState {
 # $_[2] - The web
 sub commonTagsHandler
 {
-  &initSkinState();
+  &initSkinState(); # this might already be too late but there is no
+                    # handler between initPlugin and beforeCommonTagsHandler
+		    # which only matters if you've got a SessionPlugin and the 
+		    # TablePlugin installed which most probably is only the 
+		    # case on a cairo installation
 
   $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
@@ -322,6 +332,7 @@ sub commonTagsHandler
   $_[0] =~ s/%PREVREV%/'1.' . &getPrevRevision()/geo;
   $_[0] =~ s/%CURREV%/'1.' . &getCurRevision($web, $topic)/geo; 
   $_[0] =~ s/%NATMAXREV%/1.$maxRev/go;
+
 }
 
 ###############################################################################
@@ -1087,15 +1098,27 @@ sub renderFormButton {
   my $formMeta = &getMetaData($meta, "FORM"); 
   my $form = '';
   $form = $formMeta->{"name"} if $formMeta;
-  my $text = "<a href=\"javascript:submitEditFormular('save', 'add form');\" accesskey=\"f\">";
-  if ($form) {
-    $text .= "Change form</a>";
-  } elsif (&TWiki::Func::getPreferencesValue("WEBFORMS", $web)) {
-    $text .= "Add form</a>";
-  } else {
-    return ''
-  }
 
+  my $action;
+  my $actionText;
+  if ($isDakar) {
+    if ($form) {
+      $action = 'replaceform';
+    } else {
+      $action = 'addform';
+    }
+  } else {
+    $action = 'add form';
+  }
+  if ($form) {
+    $actionText = 'Change form';
+  } elsif (&TWiki::Func::getPreferencesValue('WEBFORMS', $web)) {
+    $actionText = 'Add form';
+  } else {
+    return '';
+  }
+  
+  my $text = "<a href=\"javascript:submitEditFormular('save', '$action');\" accesskey=\"f\">$actionText</a>";
   $theFormat =~ s/\$1/$text/;
   return $theFormat;
 }
