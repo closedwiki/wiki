@@ -9,9 +9,11 @@ package TWikiTestCase;
 # you can always create a new web based on that web.
 #
 use base qw(Test::Unit::TestCase);
+use vars qw( $has_TestFixturePlugin );
 
 use TWiki;
-use TWiki::Plugins::TestFixturePlugin::HTMLDiffer;
+eval "use TWiki::Plugins::TestFixturePlugin::HTMLDiffer";
+$has_TestFixturePlugin = 1 unless $@;
 use strict;
 use Error qw( :try );
 
@@ -114,6 +116,9 @@ sub createFakeUser {
 # tags which will _not_ be detected.
 sub assert_html_equals {
     my( $this, $e, $a, $mess ) = @_;
+
+    $this->assert(0, "Failed loading TWiki::Plugins::TestFixturePlugin::HTMLDiffer, TestFixturePlugin's lib directory should be in \@INC.") unless $has_TestFixturePlugin;
+    
     my ($package, $filename, $line) = caller(0);
     my $opts =
       {
@@ -135,6 +140,9 @@ sub assert_html_equals {
 # block of HTML. Not too clever about tag attributes.
 sub assert_html_matches {
     my ($this, $e, $a, $mess ) = @_;
+
+    $this->assert(0, "Failed loading TWiki::Plugins::TestFixturePlugin::HTMLDiffer, TestFixturePlugin's lib directory should be in \@INC.") unless $has_TestFixturePlugin;
+    
     $mess ||= "$a\ndoes not match\n$e";
     my ($package, $filename, $line) = caller(0);
     unless( TWiki::Plugins::TestFixturePlugin::HTMLDiffer::html_matches($e, $a)) {

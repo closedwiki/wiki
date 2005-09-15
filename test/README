@@ -6,15 +6,23 @@ This file documents the various automatic TWiki test suites.
 Unit Tests
 ==========
 
-Unit tests are held in the subdirectory "unit", and are written using CPAN:Test::Unit
+Unit tests are held in the subdirectory "unit", and are written using
+CPAN:Test::Unit (*thus you'll need to have it installed*)
 
 All TWiki unit tests are run from that directory with the command:
 
 perl ../bin/TestRunner.pl TWikiSuite.pm
 
+Attention: 
+
+   * for the tests to be run, you need a valid LocalLib.cfg under
+     /path/to/twiki/bin/ stating where your /path/to/twiki/lib directory is.
+
 TestCases Tests
 ===============
 
-TestCases tests use static test case topics held in the "TestCases" TWiki web. See ../lib/TWiki/Plugins/TestFixturePlugin and ../data/TestCases/WebHome for details on the support and process for these tests.
+TestCases tests use static test case topics held in the "TestCases" TWiki web.
+See ../lib/TWiki/Plugins/TestFixturePlugin and ../data/TestCases/WebHome for
+details on the support and process for these tests.
 
 --- Main.CrawfordCurrie 23-11-2004
