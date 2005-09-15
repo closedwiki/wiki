@@ -77,6 +77,7 @@ text/html                       html htm
 text/plain                      txt
 text/richtext                   rtx
 text/tab-separated-values       tsv
+text/xml                        rdf
 text/x-setext                   etx
 text/x-sgml                     sgml sgm
 video/mpeg                      mpeg mpg mpe
