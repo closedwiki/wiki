@@ -34,7 +34,6 @@ hr {
 .twikiTable th {
   font:bold x-small georgia,serif;
   text-align:left;
-  vertical-align:bottom;
   background: #eeeeee;
   line-height:170%;
 }
@@ -59,7 +58,6 @@ hr {
 .natTopicForm .twikiFirstCol,
 .natTopicForm th {
   font:bold x-small georgia,serif;
-  vertical-align:bottom;
   background: #eeeeee;
   line-height:170%;
 }
@@ -82,7 +80,6 @@ hr {
 
 .twikiPageForm th {
   font:bold x-small georgia,serif;
-  vertical-align:bottom;
   background: #eeeeee;
   line-height:170%;
 }

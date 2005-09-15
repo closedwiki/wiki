@@ -238,6 +238,7 @@ hr {
 }
 
 /* topic form */
+.natTopicForm .natTopicFormFirstCol a,
 .natTopicForm .natTopicFormFirstCol,
 .natTopicForm .twikiFirstCol,
 .natTopicForm th {
@@ -248,16 +249,19 @@ hr {
   font-weight:bold;
   font-size:x-small;
 }
+.natTopicForm .natTopicFormFirstCol a,
 .natTopicForm th,
 .natTopicForm th a {
   color:white;
   background:#B22222;
   font-weight:bold;
 }
+.natTopicForm .natTopicFormFirstCol a,
 .natTopicForm th a {
   text-decoration:none;
 }
 
+.natTopicForm .natTopicFormFirstCol a:hover,
 .natTopicForm th a:hover {
   color:#0F314E;
   text-decoration:none;

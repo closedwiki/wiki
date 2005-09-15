@@ -26,7 +26,6 @@ hr {
   color:#444444;
   text-align:left;
   background: #eeeeee;
-  vertical-align:bottom;
 }
 .twikiTable th a {
   color:#444444;
@@ -52,7 +51,6 @@ hr {
   border:1px #aaaaaa solid;
   color:#444444;
   background: #eeeeee;
-  vertical-align:bottom;
   padding-top:2px;
   padding-bottom:2px;
 }
@@ -227,7 +225,6 @@ hr {
 .natTopicForm .natTopicFormFirstCol,
 .natTopicForm .twikiFirstCol,
 .natTopicForm table th {
-  border:1px #aaaaaa solid;
   color:#444444;
   background: #eeeeee;
   vertical-align:top;

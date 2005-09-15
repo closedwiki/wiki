@@ -266,22 +266,25 @@ hr {
 .natTopicForm th {
   border:1px dotted white;
   font-size:0.9em;
-  letter-spacing: .3em;
   font-family: 'Trebuchet MS', sans-serif;
   color:white;
   background:#99cc66;
   font-weight:bold;
 }
+.natTopicForm .natTopicFormFirstCol a,
 .natTopicForm th a {
+  letter-spacing: .3em;
   color:white;
   background:#99cc66;
   text-decoration:none;
   font-weight:bold;
 }
+.natTopicForm .natTopicFormFirstCol a,
 .natTopicForm th a {
   text-decoration:none;
 }
 
+.natTopicForm .natTopicFormFirstCol a:hover,
 .natTopicForm th a:hover {
   color:#0F314E;
 }

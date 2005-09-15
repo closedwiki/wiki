@@ -447,6 +447,7 @@ h1, h2, h3, h4, h5, h6 {
   border-collapse:collapse;
 }
 
+.natTopicForm table table,
 .natTopicForm table table td {
   border:0px;
 }
@@ -455,7 +456,6 @@ h1, h2, h3, h4, h5, h6 {
   padding-left:3px;
   padding-right:3px;
 }
-
 
 /* CAIRO-HACK to use the FORMBUTTON of the NatSkin */
 .natTopicForm .twikiChangeFormButtonHolder,
