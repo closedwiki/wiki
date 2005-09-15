@@ -82,7 +82,6 @@ hr {
 .natTopicForm .natTopicFormFirstCol,
 .natTopicForm .twikiFirstCol,
 .natTopicForm th {
-  text-align:left;
   background:black;
 }
 .natTopicForm th,
@@ -101,7 +100,6 @@ hr {
 .twikiPageForm th {
   font:bold small sans-serif;
   background: #eeeeee;
-  vertical-align:bottom;
   color:#cccccc;
   background:black;
 }
@@ -257,6 +255,14 @@ hr {
 .natMiddle input[type="submit"] {
   background:white;
   color:black;
+}
+.natMiddle input[type="checkbox"] {
+  color:#333333;
+  background:#cccccc;
+}
+.natMiddle input[type="radio"] {
+  background:#333333;
+  color:red;
 }
 
 .natMainFooterContents {
