@@ -726,7 +726,7 @@ sub saveAttachment {
             open($opts->{stream}, $opts->{file}) ||
               throw Error::Simple('Could not open '.$opts->{file} );
             binmode($opts->{stream}) ||
-              throw Error::Simple( $opts->{file}.': '.$! );
+              throw Error::Simple( $opts->{file}.' binmode failed: '.$! );
         }
 
         if ( $opts->{stream} ) {
@@ -970,7 +970,8 @@ sub delRev {
 
     my $rev = $this->getRevisionNumber( $web, $topic );
     if( $rev <= 1 ) {
-        throw Error::Simple( 'cannot delete initial revision' );
+        throw Error::Simple( 'Cannot delete initial revision of '.
+                               $web.'.'.$topic );
     }
 
     $this->lockTopic( $user, $web, $topic );

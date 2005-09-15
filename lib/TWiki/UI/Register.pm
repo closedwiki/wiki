@@ -1082,7 +1082,7 @@ sub _putRegDetailsByCode {
         require File::Path;
         File::Path::mkpath( $tmpDir ) || throw Error::Simple( $! );
     }
-    open( F, ">$file" ) or throw Error::Simple( "$file: $!" );
+    open( F, ">$file" ) or throw Error::Simple( 'Failed to open file: '.$! );
     print F '# Verification code',"\n";
     print F Dumper( $data );
     close( F );
@@ -1104,7 +1104,7 @@ sub _getRegDetailsByCode {
     my $file = _verificationCodeFilename( $code, $tmpDir );
     use vars qw( $VAR1 );
     do $file;
-    throw Error::Simple( "Bad code $file: $!" ) if $!;
+    throw Error::Simple( 'Bad activation code '.$code ) if $!;
     return $VAR1;
 }
 
@@ -1120,9 +1120,8 @@ sub _reloadUserContext {
     my $verificationFilename = _verificationCodeFilename( $code, $tmpDir );
     unless (-f $verificationFilename){
         throw TWiki::OopsException( 'attention',
-                                    def => 'no_ver_file',
-                                    params => [ $code,
-                                                $verificationFilename ] );
+                                    def => 'bad_ver_code',
+                                    params => [ $code ] );
     }
 
     my $data = _getRegDetailsByCode($code, $tmpDir);

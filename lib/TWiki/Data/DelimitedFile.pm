@@ -90,14 +90,18 @@ sub read {
 
 sub save {
     my (%settings) = @_;
-    my $filename = $settings{filename} || throw Error::Simple( "Save: filename parameter is mandatory" );
+    my $filename = $settings{filename} ||
+      throw Error::Simple( 'Save: filename parameter is mandatory' );
     my $delimiter = $settings{delimiter} || "\t";
     my $rowstart = $settings{rowstart} || '';
     my $rowend = $settings{rowend} || "\n";
-    my %data = %{$settings{data} || throw Error::Simple( "Save: data parameter is mandatory" )};
-    my @fieldNames = @{$settings{fieldNames} || throw Error::Simple( "Save: fieldNames parameter is mandatory" )};
+    my %data = %{$settings{data} ||
+                   throw Error::Simple( 'Save: data parameter is mandatory' )};
+    my @fieldNames = @{$settings{fieldNames} ||
+                         throw Error::Simple( 'Save: fieldNames parameter is mandatory' )};
 
-    my $fh         = new FileHandle("> ".$filename) || throw Error::Simple( "Can't write $filename" );
+    my $fh = new FileHandle('> '.$filename) ||
+      throw Error::Simple( 'Cannot write file: '.$! );
     my $headerRow = $rowstart.join($delimiter, @fieldNames).$rowend;
     print $fh $headerRow;
     

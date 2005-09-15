@@ -42,7 +42,7 @@ use File::Spec;
 
 =pod
 
----++ ClassMethod new( $session, $os, $realOS )
+---++ ClassMethod new( $os, $realOS )
 
 Construct a new sandbox suitable for $os, setting
 flags for platform features that help.  $realOS distinguishes
@@ -51,14 +51,11 @@ Perl variants on platforms such as Windows.
 =cut
 
 sub new {
-    my ( $class, $session, $os, $realOS ) = @_;
+    my ( $class, $os, $realOS ) = @_;
     my $this = bless( {}, $class );
 
-    ASSERT($session->isa( 'TWiki' )) if DEBUG;
     ASSERT( defined $os ) if DEBUG;
     ASSERT( defined $realOS ) if DEBUG;
-
-    $this->{session} = $session;
 
     $this->{REAL_SAFE_PIPE_OPEN} = 1;     # supports open(FH, '-|")
     $this->{EMULATED_SAFE_PIPE_OPEN} = 1; # supports pipe() and fork()
@@ -118,10 +115,9 @@ sub untaintUnchecked {
 
 =pod
 
----++ StaticMethod normalizeFileName ( $string [, $dotdot] ) -> $filename
+---++ StaticMethod normalizeFileName ( $string ) -> $filename
 
-STATIC Errors out if $string contains filtered characters.  If $dotdot is
-present and true, allow ".." in path names.
+STATIC Errors out if $string contains filtered characters.
 
 The returned string is not tainted, but it may contain shell
 metacharacters and even control characters.
@@ -129,7 +125,7 @@ metacharacters and even control characters.
 =cut
 
 sub normalizeFileName {
-    my ($string, $dotdot) = @_;
+    my ($string) = @_;
     return '' unless $string;
     my $absolute = $string =~ /^\//;
     my @result;
@@ -137,17 +133,14 @@ sub normalizeFileName {
         next unless $component;
         next if $component eq '.';
         if ($component eq '..') {
-            if ($dotdot && @result > 0) {
-                pop @result;
-            } else {
-                throw Error::Simple( "directory traversal attempt in filename '$string'" );
-            }
+            throw Error::Simple( 'relative path in filename '.$string );
         } elsif ($component !~ /$TWiki::cfg{NameFilter}/) {
             # We need to untaint the string explicitly.
             # FIXME: This might be a Perl bug.
             push @result, untaintUnchecked( $component );
         } else {
-            throw Error::Simple( "illegal characters in file name component '$component' of filename '$string'" );
+            throw Error::Simple( 'illegal characters in file name component '.
+                                   $component.' of filename '.$string );
         }
     }
     if (@result) {
@@ -159,31 +152,25 @@ sub normalizeFileName {
         return join '/', @result;
     } else {
         return '/' if $absolute;
-        throw Error::Simple( "empty filename '$string'" );
+        throw Error::Simple( 'empty filename '.$string );
     }
 }
 
-=pod
+# $template is split at whitespace, and '%VAR%' strings contained in it
+# are replaced with $params{VAR}.  %params may consist of scalars and
+# array references as values.  Array references are dereferenced and the
+# array elements are inserted into the command line at the indicated
+# point.
+#
+# '%VAR%' can optionally take the form '%VAR|FLAG%', where FLAG is a
+# single character flag.  Permitted flags are
+#   * U untaint without further checks -- dangerous,
+#   * F normalize as file name,
+#   * N generalized number,
+#   * S simple, short string,
+#   * D rcs format date
 
----++ ObjectMethod buildCommandLine ( $template, %params ) -> @arguments
-
-$template is split at whitespace, and '%VAR%' strings contained in it
-are replaced with $params{VAR}.  %params may consist of scalars and
-array references as values.  Array references are dereferenced and the
-array elements are inserted into the command line at the indicated
-point.
-
-'%VAR%' can optionally take the form '%VAR|FLAG%', where FLAG is a
-single character flag.  Permitted flags are
-   * U untaint without further checks -- dangerous,
-   * F normalize as file name,
-   * N generalized number,
-   * S simple, short string,
-   * D rcs format date
-
-=cut
-
-sub buildCommandLine {
+sub _buildCommandLine {
     my ($this, $template, %params) = @_;
     ASSERT($this->isa( 'TWiki::Sandbox' )) if DEBUG;
     my @arguments;
@@ -202,7 +189,7 @@ sub buildCommandLine {
             if ($t =~ /%(.*?)(|\|[A-Z])%/) {
                 my ($p, $flag) = ($1, $2);
                 if (! exists $params{$p}) {
-                    throw Error::Simple( "unknown parameter name $p" );
+                    throw Error::Simple( 'unknown parameter name '.$p );
                 }
                 my $type = ref $params{$p};
                 my @params;
@@ -211,7 +198,7 @@ sub buildCommandLine {
                 } elsif ($type eq 'ARRAY') {
                     @params =  @{$params{$p}};
                 } else {
-                    throw Error::Simple( "$type reference passed in $p" );
+                    throw Error::Simple( $type.' reference passed in '.$p );
                 }
 
                 for my $param (@params) {
@@ -220,9 +207,9 @@ sub buildCommandLine {
                         next;
                     }
                     if ($flag =~ /U/) {
-                        push @targs, untaintUnchecked $param;
+                        push @targs, untaintUnchecked($param);
                     } elsif ($flag =~ /F/) {
-                        push @targs, normalizeFileName $param;
+                        push @targs, normalizeFileName($param);
                     } elsif ($flag =~ /N/) {
                         # Generalized number.
                         if ( $param =~ /^([0-9A-Fa-f.x+\-]{0,30})$/ ) {
@@ -245,7 +232,7 @@ sub buildCommandLine {
                             throw Error::Simple( "invalid date argument '$param' $t" );
                         }
                     } else {
-                        throw Error::Simple( "illegal flag in $t" );
+                        throw Error::Simple( 'illegal flag in '.$t );
                     }
                 }
             } else {
@@ -266,6 +253,13 @@ sub buildCommandLine {
     return @arguments;
 }
 
+# Catch and redirect error reports from programs and argument processing,
+# to avert the risk of exposing server paths to a hacker.
+sub _safeDie {
+    print STDERR $_[0];
+    die "TWiki experienced a fatal error. Please check your webserver error logs for details."
+}
+
 =pod
 
 ---++ ObjectMethod sysCommand( $template, @params ) -> ( $data, $exit )
@@ -273,8 +267,6 @@ sub buildCommandLine {
 Invokes the program described by $template
 and @params, and returns the output of the program and an exit code.
 STDOUT is returned. STDERR is THROWN AWAY.
-
-$template is interpreted by buildCommandLine.
 
 The caller has to ensure that the invoked program does not react in a
 harmful way to the passed arguments.  sysCommand merely
@@ -289,6 +281,8 @@ sub sysCommand {
     my ($this, $template, %params) = @_;
     ASSERT($this->isa( 'TWiki::Sandbox')) if DEBUG;
 
+    #local $SIG{__DIE__} = &_safeDie;
+
     my $data = '';          # Output
     my $handle;             # Holds filehandle to read from process
     my $exit = 0;           # Exit status of child process
@@ -300,7 +294,7 @@ sub sysCommand {
     my $pTmpl = $2;
 
     # Build argument list from template
-    my @args = $this->buildCommandLine( $pTmpl, %params );
+    my @args = $this->_buildCommandLine( $pTmpl, %params );
     if ( $this->{REAL_SAFE_PIPE_OPEN} ) {
         # Real safe pipes, open from process directly - works
         # for most Unix/Linux Perl platforms and on Cygwin.  Based on
@@ -311,7 +305,7 @@ sub sysCommand {
 
         my $pid = open($handle, '-|');
 
-        throw Error::Simple( "open of pipe failed: $!" ) unless defined $pid;
+        throw Error::Simple( 'open of pipe failed: '.$! ) unless defined $pid;
 
         if ( $pid ) {
             # Parent - read data from process filehandle
@@ -321,10 +315,9 @@ sub sysCommand {
             $exit = ( $? >> 8 );
         } else {
             # Child - run the command
-            open (STDERR, '>'.File::Spec->devnull()) || die "Fuck";
+            open (STDERR, '>'.File::Spec->devnull()) || die "Oh dear";
             exec( $path, @args ) ||
-              throw Error::Simple( 'exec of '.$path.' '.
-                                     join(',',@args).' failed: '.$! );
+              throw Error::Simple( 'exec failed: '.$! );
             # can never get here
         }
 
@@ -336,10 +329,10 @@ sub sysCommand {
         my $writeHandle;
 
         pipe( $readHandle, $writeHandle ) ||
-          throw Error::Simple( "could not create pipe: $!" );
+          throw Error::Simple( 'could not create pipe: '.$! );
 
         my $pid = fork();
-        throw Error::Simple( "fork() failed: $!" ) unless defined( $pid );
+        throw Error::Simple( 'fork() failed: '.$! ) unless defined( $pid );
 
         if ( $pid ) {
             # Parent - read data from process filehandle and remove newlines
@@ -364,8 +357,7 @@ sub sysCommand {
 
             open (STDERR, '>'.File::Spec->devnull());
             exec( $path, @args ) ||
-              throw Error::Simple( 'exec of '.$path.' '.
-                                     join(',',@args).' failed: '.$! );
+              throw Error::Simple( 'exec failed: '.$! );
             # can never get here
         }
 

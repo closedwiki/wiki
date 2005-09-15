@@ -97,9 +97,8 @@ sub run {
 
     my $session = new TWiki( $user, $query );
 
-    # comment out in production version
-    $Error::Debug = 1;
-    local $SIG{__DIE__} = sub { Carp::confess $_[0] };
+    local $SIG{__DIE__} = \&Carp::confess;
+
     # end of comment out in production version
 
     try {
@@ -136,7 +135,20 @@ sub run {
     } catch Error::Simple with {
         my $e = shift;
         print "Content-type: text/plain\n\n";
-        print $e->stringify();
+        if( DEBUG ) {
+            # output the full message and stacktrace to the browser
+            print $e->stringify();
+        } else {
+            my $mess = $e->stringify();
+            print STDERR $mess;
+            $session->writeWarning( $mess );
+            # tell the browser where to look for more help
+            print 'TWiki detected an error or attempted hack - please check your TWiki logs and webserver logs for more information.'."\n\n";
+            $mess =~ s/ at .*$//s;
+            # cut out pathnames from public announcement
+            $mess =~ s#/[\w./]+#path#g;
+            print $mess;
+        }
     } otherwise {
         print "Content-type: text/plain\n\n";
         print "Unspecified error";

@@ -7,7 +7,7 @@ require 5.008;
 use TWiki;
 use TWiki::Sandbox;
 use TWiki::Time;
-
+use Error qw(:try);
 sub new {
     my $self = shift()->SUPER::new(@_);
     return $self;
@@ -61,62 +61,58 @@ sub test_normalize {
     $this->assert_str_equals('/a/b/c', TWiki::Sandbox::normalizeFileName ('//a/b/c'));
     $this->assert_str_equals('/a/b/c', TWiki::Sandbox::normalizeFileName ('/a/b/c/'));
     $this->assert_str_equals('/a/b/c', TWiki::Sandbox::normalizeFileName ('//a/b/c/'));
-    $this->assert_str_equals('/a/b', TWiki::Sandbox::normalizeFileName ('/a/b/c/..', 1));
-    $this->assert_str_equals('/a/b', TWiki::Sandbox::normalizeFileName ('//a/b/c/..', 1));
-    $this->assert_str_equals('/a', TWiki::Sandbox::normalizeFileName ('/a/b/c/../..', 1));
-    $this->assert_str_equals('/a', TWiki::Sandbox::normalizeFileName ('//a/b/c/../..', 1));
-    $this->assert_str_equals('/', TWiki::Sandbox::normalizeFileName ('/a/b/c/../../..', 1));
-    $this->assert_str_equals('/', TWiki::Sandbox::normalizeFileName ('//a/b/c/../../..', 1));
-    $this->assert_str_equals('a/b', TWiki::Sandbox::normalizeFileName ('a/b/c/..', 1));
-    $this->assert_str_equals('a', TWiki::Sandbox::normalizeFileName ('a/b/c/../..', 1));
 
-    eval { TWiki::Sandbox::normalizeFileName ('a/b/c/../../..', 1) };
-    $this->assert_not_null ($@, '');
-    eval { TWiki::Sandbox::normalizeFileName ('a/..', 1) };
-    $this->assert_not_null ($@, '');
-    eval { TWiki::Sandbox::normalizeFileName ('-/..', 1) };
-    $this->assert_not_null ($@, '');
-    eval { TWiki::Sandbox::normalizeFileName ('') };
-    $this->assert_not_null ($@, '');
-    eval { TWiki::Sandbox::normalizeFileName ('', 1) };
-    $this->assert_not_null ($@, '');
-    eval { TWiki::Sandbox::normalizeFileName (undef) };
-    $this->assert_not_null ($@, '');
-    eval { TWiki::Sandbox::normalizeFileName (undef, 1) };
-    $this->assert_not_null ($@, '');
-    eval { TWiki::Sandbox::normalizeFileName ('a/b/../c') };
-    $this->assert_not_null ($@, '');
+    try {
+        TWiki::Sandbox::normalizeFileName('c/..');
+        $this->assert(0);
+    } catch Error::Simple with {
+        $this->assert_matches(qr/^relative path/, shift->stringify());
+    };
+    try {
+        TWiki::Sandbox::normalizeFileName ('../a');
+        $this->assert(0);
+    } catch Error::Simple with {
+        $this->assert_matches(qr/^relative path/, shift->stringify());
+    };
+    try {
+        $this->assert_str_equals('a/../b', TWiki::Sandbox::normalizeFileName ('//a/b/c/../..'));
+        $this->assert(0);
+    } catch Error::Simple with {
+        $this->assert_matches(qr/^relative path/, shift->stringify());
+    };
+    $this->assert_str_equals('..a', TWiki::Sandbox::normalizeFileName ('..a/'));
+    $this->assert_str_equals('a/..b', TWiki::Sandbox::normalizeFileName ('a/..b'));
 }
 
 sub test_buildCommandLine {
     my $this = shift;
     $this->assert_deep_equals(['a', 'b', 'c'],
-                              [$twiki->{sandbox}->buildCommandLine('a b c', ())]);
+                              [$twiki->{sandbox}->_buildCommandLine('a b c', ())]);
     $this->assert_deep_equals(['a', 'b', 'c'],
-                              [$twiki->{sandbox}->buildCommandLine(' a  b  c ', ())]);
+                              [$twiki->{sandbox}->_buildCommandLine(' a  b  c ', ())]);
     $this->assert_deep_equals([1, 2, 3],
-                              [$twiki->{sandbox}->buildCommandLine(' %A%  %B%  %C% ', (A => 1, B => 2, C => 3))]);
+                              [$twiki->{sandbox}->_buildCommandLine(' %A%  %B%  %C% ', (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals([1, "./-..", 'a/b'],
-                              [$twiki->{sandbox}->buildCommandLine(' %A|U%  %B|F%  %C|F% ', (A => 1, B => "-..", C => "a/b"))]);
+                              [$twiki->{sandbox}->_buildCommandLine(' %A|U%  %B|F%  %C|F% ', (A => 1, B => "-..", C => "a/b"))]);
     $this->assert_deep_equals([1, "2:3"],
-                              [$twiki->{sandbox}->buildCommandLine(' %A%  %B%:%C% ', (A => 1, B => 2, C => 3))]);
+                              [$twiki->{sandbox}->_buildCommandLine(' %A%  %B%:%C% ', (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals([1, "-n2:3"],
-                              [$twiki->{sandbox}->buildCommandLine(' %A%  -n%B%:%C% ', (A => 1, B => 2, C => 3))]);
+                              [$twiki->{sandbox}->_buildCommandLine(' %A%  -n%B%:%C% ', (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals([1, "-r2:HEAD", 3],
-                              [$twiki->{sandbox}->buildCommandLine(' %A%  -r%B%:HEAD %C% ', (A => 1, B => 2, C => 3))]);
+                              [$twiki->{sandbox}->_buildCommandLine(' %A%  -r%B%:HEAD %C% ', (A => 1, B => 2, C => 3))]);
     $this->assert_deep_equals(['a', 'b', '/c'],
-                              [$twiki->{sandbox}->buildCommandLine(' %A|F%  ', (A => ["a", "b", "/c"]))]);
+                              [$twiki->{sandbox}->_buildCommandLine(' %A|F%  ', (A => ["a", "b", "/c"]))]);
     $this->assert_deep_equals(['1', '2.3', '4', 'string', ''],
-                              [$twiki->{sandbox}->buildCommandLine(' %A|N% %B|S% %C|S%', (A => [1, 2.3, 4], B => 'string', C => ''))]);
+                              [$twiki->{sandbox}->_buildCommandLine(' %A|N% %B|S% %C|S%', (A => [1, 2.3, 4], B => 'string', C => ''))]);
     $this->assert_deep_equals(['2004/11/20 09:57:41'],
-                              [$twiki->{sandbox}->buildCommandLine('%A|D%', A => TWiki::Time::formatTime (1100944661, '$rcs', 'gmtime'))]);
-    eval { $twiki->{sandbox}->buildCommandLine('%A|%') };
+                              [$twiki->{sandbox}->_buildCommandLine('%A|D%', A => TWiki::Time::formatTime (1100944661, '$rcs', 'gmtime'))]);
+    eval { $twiki->{sandbox}->_buildCommandLine('%A|%') };
     $this->assert_not_null($@, '');
-    eval { $twiki->{sandbox}->buildCommandLine('%A|X%') };
+    eval { $twiki->{sandbox}->_buildCommandLine('%A|X%') };
     $this->assert_not_null($@, '');
-    eval { $twiki->{sandbox}->buildCommandLine(' %A|N%  ', A => '2/3') };
+    eval { $twiki->{sandbox}->_buildCommandLine(' %A|N%  ', A => '2/3') };
     $this->assert_not_null($@, '');
-    eval { $twiki->{sandbox}->buildCommandLine(' %A|S%  ', A => '2/3') };
+    eval { $twiki->{sandbox}->_buildCommandLine(' %A|S%  ', A => '2/3') };
     $this->assert_not_null($@, '');
 }
 

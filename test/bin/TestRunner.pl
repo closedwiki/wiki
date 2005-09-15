@@ -29,10 +29,10 @@ unless (defined $ENV{TWIKI_ASSERTS}) {
   $ENV{TWIKI_ASSERTS} = 1;
 }
 
-if ($ENV{TWIKI_ASSERTS} == 1) {
-  print "Assert checking on\n";
+if ($ENV{TWIKI_ASSERTS}) {
+  print "Assert checking on $ENV{TWIKI_ASSERTS}\n";
 } else {
-  print "Assert checking off\n";
+  print "Assert checking off $ENV{TWIKI_ASSERTS}\n";
 }
 
 # Uncomment and edit to debug individual packages.

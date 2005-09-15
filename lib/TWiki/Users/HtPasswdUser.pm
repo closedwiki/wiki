@@ -72,11 +72,10 @@ sub new {
 
 sub _readPasswd {
     open( IN_FILE, "<$TWiki::cfg{Htpasswd}{FileName}" ) ||
-      throw Error::Simple( "$TWiki::cfg{Htpasswd}{FileName}: $!" );
+      throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.' open failed: '.$! );
     local $/ = undef;
     my $data = <IN_FILE>;
-    close( IN_FILE ) ||
-      throw Error::Simple( "$TWiki::cfg{Htpasswd}{FileName}: $!" );
+    close( IN_FILE );
     return $data;
 }
 
@@ -85,11 +84,11 @@ sub _savePasswd {
 
     umask( 077 );
     open( FILE, ">$TWiki::cfg{Htpasswd}{FileName}" ) ||
-      throw Error::Simple( "$TWiki::cfg{Htpasswd}{FileName}: $!" );
+      throw Error::Simple( $TWiki::cfg{Htpasswd}{FileName}.
+                             ' open failed: '.$! );
 
     print FILE $text;
-    close( FILE) ||
-      throw Error::Simple( "$TWiki::cfg{Htpasswd}{FileName}: $!" );
+    close( FILE);
 }
 
 sub encrypt {

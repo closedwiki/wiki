@@ -346,7 +346,7 @@ sub test_registerBadVerify {
     } catch TWiki::OopsException with {
         my $e = shift;
         $this->assert_str_equals("attention",$e->{template});
-        $this->assert_str_equals("no_ver_file",$e->{def});
+        $this->assert_str_equals("bad_ver_file",$e->{def});
     } catch Error::Simple with {
         $this->assert(0, shift->stringify());
     } otherwise {

@@ -98,6 +98,9 @@ sub view {
         ( $revdate, $revuser, $showRev ) = $currMeta->getRevisionInfo();
         $revdate = TWiki::Time::formatTime( $revdate );
 
+        throw Error::Simple( $rev.' is not a valid revision' )
+          unless $rev =~ /^([\d\.]+)$/;
+
         if ( !$rev || $rev > $showRev ) {
             $rev = $showRev;
         } elsif ( $rev < 0 ) {

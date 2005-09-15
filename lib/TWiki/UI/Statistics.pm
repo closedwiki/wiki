@@ -113,11 +113,11 @@ sub statistics {
     my $tmpFilename = TWiki::Sandbox::untaintUnchecked( "$tmpDir/twiki-stats.$$.$randNo" );
 
     File::Copy::copy ($logFile, $tmpFilename)
-        or throw Error::Simple( "Can't copy $logFile to $tmpFilename - $!" );
+        or throw Error::Simple( 'Cannot backup log file: '.$! );
 
     my $TMPFILE = new IO::File;
     open $TMPFILE, $tmpFilename
-      or throw Error::Simple( "Can't open $tmpFilename - $!" );
+      or throw Error::Simple( 'Cannot open backup file: '.$! );
 
     # Do a single data collection pass on the temporary copy of logfile,
     # then process each web once.

@@ -186,7 +186,7 @@ sub _deleteRevision {
         FILENAME => $this->{file} );
     if( $exit ) {
         throw Error::Simple( $TWiki::cfg{RCS}{delRevCmd}.
-                               ' of '.$this->{file}.' failed: '..$rcsOut );
+                               ' of '.$this->{file}.' failed: '.$rcsOut );
     }
 }
 

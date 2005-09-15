@@ -63,6 +63,7 @@ use vars qw(
             $VERSION
             $TRUE
             $FALSE
+            $sharedSandbox
            );
 
 # Token character that must not occur in any normal text - converted
@@ -136,7 +137,14 @@ BEGIN {
         # Look out also for $cfg{WarningsAreErrors}, below, which
         # is another way to install this handler without enabling
         # ASSERTs
+        # ASSERTS are turned on by defining the environment variable
+        # TWIKI_ASSERTS. If ASSERTs are off, this is assumed to be a
+        # production environment, and no stack traces or paths are
+        # output to the browser.
         $SIG{'__WARN__'} = sub { die @_ };
+        $Error::Debug = 1; # verbose stack traces, please
+    } else {
+        $Error::Debug = 0; # no verbose stack traces
     }
 
     # DO NOT CHANGE THE FORMAT OF $VERSION without updating tools/distro/build-twiki-kernel.pl !!!
@@ -438,6 +446,10 @@ BEGIN {
 
     # initialize lib directory early because of later 'cd's
     getTWikiLibDir();
+
+    # "shared" between mod_perl instances
+    $sharedSandbox = new TWiki::Sandbox(
+        $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
 };
 
 use TWiki::Access;    # access control
@@ -981,8 +993,7 @@ sub new {
     $this->{context} = {};
 
     # create the various sub-objects
-    $this->{sandbox} = new TWiki::Sandbox
-      ( $this, $TWiki::cfg{OS}, $TWiki::cfg{DetailedOS} );
+    $this->{sandbox} = $sharedSandbox;
     $this->{plugins} = new TWiki::Plugins( $this );
     $this->{net} = new TWiki::Net( $this );
     $this->{store} = new TWiki::Store( $this );
