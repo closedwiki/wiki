@@ -297,7 +297,6 @@ sub commonTagsHandler
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
   $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
   $_[0] =~ s/%USERWEBS%/&renderUserWebs()/geo;
-
   $_[0] =~ s/%USERACTIONS%/&renderUserActions/geo;
 
   $_[0] =~ s/%GROUPSUMMARY%/&renderGroupSummary($_[0])/geo;
@@ -319,6 +318,7 @@ sub commonTagsHandler
     # nop
   }
   $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;
+  $_[0] =~ s/%IFDEFINED{(.*?)}%/&renderIfDefined($1)/geo;
   $_[0] =~ s/%WIKIRELEASENAME%/&getReleaseName()/geo;
 
   $_[0] =~ s/%GETSKINSTYLE%/&renderGetSkinStyle()/geo;
@@ -678,6 +678,23 @@ sub renderWebSideBar {
   writeDebug("done renderWebSideBar()");
 
   return $text;
+}
+
+###############################################################################
+sub renderIfDefined {
+
+  my $args = shift;
+  my $theFormat = &TWiki::Func::extractNameValuePair($args);
+  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
+
+  if (!$theAction || $skinState{'action'} =~ /$theAction/o) {
+    foreach my $title (split(/,/,$theFormat)) {
+      next if $title =~ /^%[A-Z]+%$/o; # special handling of unresolved variables
+      return $title if $title;
+    }
+  }
+  
+  return $topic;
 }
 
 ###############################################################################
