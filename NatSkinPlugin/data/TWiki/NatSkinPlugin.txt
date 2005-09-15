@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126603364" format="1.1" version="1.5"}%
+%META:TOPICINFO{author="MichaelDaum" date="1126793981" format="1.1" version="1.6"}%
 ---+!! The Natural Skin Plugin
 
 This is the supplemental plugin for the NatSkin. This plugin is inspired
@@ -145,7 +145,7 @@ default settings on the TablePlugin topic. Depending on the skin style you are c
 using these settings will be changed accordingly.
 
 
-	* Set BASETABLEATTRIBUTES = databg="white" headercolor="black" tableborder="0" cellpadding="0" cellspacing="0" 
+	* Set BASETABLEATTRIBUTES = databg="white" headercolor="black" headerbg="white" tableborder="0" cellpadding="0" cellspacing="0" 
 	* Set CLEANTABLEATTRIBUTES = headercolor="#444444"
 	* Set GEORGIABLUETABLEATTRIBUTES = headercolor="#999966"
 	* Set GETTYSBURGTABLEATTRIBUTES = headercolor="#03366"
@@ -155,9 +155,7 @@ using these settings will be changed accordingly.
 	* Set RUSTYTABLEATTRIBUTES = headercolor="white"
 	* Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
 	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black"
-
-   * Set EXAMPLE = hello world
+	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black", headerbg="black"
 
 ---++ Plugin Installation Instructions
 
@@ -201,3 +199,4 @@ using these settings will be changed accordingly.
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
 -- TWiki:Main.MichaelDaum - 26 Aug 2005 
+
