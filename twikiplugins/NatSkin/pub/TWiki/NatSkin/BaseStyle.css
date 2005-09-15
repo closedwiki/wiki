@@ -450,6 +450,12 @@ h1, h2, h3, h4, h5, h6 {
 .natTopicForm table table td {
   border:0px;
 }
+.natTopicForm td,
+.natTopicForm th {
+  padding-left:3px;
+  padding-right:3px;
+}
+
 
 /* CAIRO-HACK to use the FORMBUTTON of the NatSkin */
 .natTopicForm .twikiChangeFormButtonHolder,
@@ -572,8 +578,6 @@ img.alignleft {
 }
 .blogComments {
   margin-top:20px;
-}
-.blogComments .blogMore {
 }
 .blogComment h3 a:hover {
   text-decoration:underline;

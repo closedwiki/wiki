@@ -48,6 +48,31 @@ hr {
   line-height:170%;
 }
 
+/* topic form */
+.natTopicForm table,
+.natTopicForm th,
+.natTopicForm td {
+  border:1px #aaaaaa solid;
+}
+
+.natTopicForm .natTopicFormFirstCol,
+.natTopicForm .twikiFirstCol,
+.natTopicForm th {
+  font:bold x-small georgia,serif;
+  vertical-align:bottom;
+  background: #eeeeee;
+  line-height:170%;
+}
+.natTopicForm th a {
+  color:#003366;
+}
+.natTopicForm th a:hover {
+  color:#ffcc66;
+}
+.natTopicForm td {
+  line-height:170%;
+}
+
 /* twiki page form */
 .twikiPageForm table,
 .twikiPageForm th,

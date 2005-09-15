@@ -237,6 +237,42 @@ hr {
   border:1px ridge #999;
 }
 
+/* topic form */
+.natTopicForm .natTopicFormFirstCol,
+.natTopicForm .twikiFirstCol,
+.natTopicForm th {
+  letter-spacing: .3em;
+  background:#B22222;
+  color:white;
+  font-family: 'Trebuchet MS', sans-serif;
+  font-weight:bold;
+  font-size:x-small;
+}
+.natTopicForm th,
+.natTopicForm th a {
+  color:white;
+  background:#B22222;
+  font-weight:bold;
+}
+.natTopicForm th a {
+  text-decoration:none;
+}
+
+.natTopicForm th a:hover {
+  color:#0F314E;
+  text-decoration:none;
+}
+
+.natTopicForm table {
+  border:1px #B22222 solid;
+}
+.natTopicForm th {
+  border:1px dotted white;
+}
+.natTopicForm td {
+  border:1px ridge #999;
+}
+
 /* twiki page form */
 .twikiPageForm th,
 .twikiPageForm th a {

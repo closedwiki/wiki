@@ -71,6 +71,26 @@ hr {
   font-size:small;
   color:#cccccc;
 }
+
+/* topic form */
+.natTopicForm td,
+.natTopicForm th,
+.natTopicForm table {
+  border:1px #aaaaaa solid;
+}
+
+.natTopicForm .natTopicFormFirstCol,
+.natTopicForm .twikiFirstCol,
+.natTopicForm th {
+  text-align:left;
+  background:black;
+}
+.natTopicForm th,
+.natTopicForm th a {
+  font-weight:bold;
+  font-size:small;
+  color:#cccccc;
+}
 /* twiki page form */
 .twikiPageForm td,
 .twikiPageForm th,

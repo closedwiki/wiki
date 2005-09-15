@@ -116,7 +116,7 @@ hr {
 .natSideBar h1 {
   font-size: 1.8em;
   font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
-  text-shadow:2px 2px 2px #ccc;
+  /*text-shadow:2px 2px 2px #ccc;*/
   color:#444444;
 }
 .natSideBar h2 {
@@ -198,7 +198,7 @@ hr {
 .natMain h6 {font-size:1.1em}
 
 .natMain h1 {
-  text-shadow:2px 2px 2px #ccc;
+  /*text-shadow:2px 2px 2px #ccc;*/
 }
 
 .natMain h1,
@@ -269,7 +269,7 @@ hr {
 
 /* twiki forms */
 .twikiPageForm table,
-.natTopicForm .twikiTable {
+.natTopicForm table {
   background:#fff6bf;
   border-top:2px solid #ffd324;
   border-bottom:2px solid #ffd324;
@@ -281,7 +281,7 @@ hr {
 }
 .twikiPageForm input,
 .natTopicForm input {
-  color:#555;
+  color:#333;
 }
 .twikiPageForm table td,
 .twikiPageForm table th,
@@ -294,6 +294,11 @@ hr {
 .natTopicForm td {
   border:1px solid #fff6bf;
   background:#fff6bf;
+}
+.natTopicForm th {
+  background:#fff6bf;
+  border-top:1px solid #ffd324;
+  border-bottom:1px solid #ffd324;
 }
 
 .twikiPageForm table th,
@@ -473,7 +478,7 @@ hr {
   content:"... ";
 }
 .blogCommentOdd {
-  background-color: #f8f8f8;
+  background:#f0f0f0;
 }
 .blogComments h4 {
   margin-top:10px;
@@ -500,6 +505,7 @@ hr {
 .blogCommentCount {
   color:#959596;
   margin-left:10px;
+  text-shadow:none;
 }
 .blogComments .blogCommentCount {
   margin-left:0px;
@@ -524,10 +530,10 @@ hr {
 }
 .blogAddComment .blogSubmitButton {
   margin-top:5px;
-  color:#444444;
 }
-.blogSubmitButton {
-  color:#444444;
+.blogAddComment .blogSubmitButton,
+.twikiPageForm .blogSubmitButton {
+  color:black;
 }
 .blogArchiveDescription {
   margin-bottom:20px;
