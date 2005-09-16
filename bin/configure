@@ -125,7 +125,6 @@ my $optionalMods =
    'Text::Diff'       => 'UpgradeTWiki',
    'CGI::Cookie'      => "sessions",
    'CGI::Session'     => "sessions",
-   'URI::Escape'      => 'Mail notifications',
   };
 
 my $I18Mods =
@@ -1539,7 +1538,9 @@ HERE
     # Check that each of the optional Perl modules can be loaded, and
     # print its version number.
     $set = _perlModulesCheck( $optionalMods );
-    $set .= _perlModulesCheck( $I18Mods );
+    if($TWiki::cfg{UseLocale}) {
+        $set .= _perlModulesCheck( $I18Mods );
+    }
     $block .= _setting("Optional Perl Modules",
                        CGI::start_table({width=>'100%'}).
                        $set.CGI::end_table());
