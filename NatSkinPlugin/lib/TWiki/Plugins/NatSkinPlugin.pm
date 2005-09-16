@@ -293,24 +293,9 @@ sub commonTagsHandler
 		    # TablePlugin installed which most probably is only the 
 		    # case on a cairo installation
 
-  $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
-  $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
-  $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
-  $_[0] =~ s/%USERWEBS%/&renderUserWebs()/geo;
-  $_[0] =~ s/%USERACTIONS%/&renderUserActions/geo;
+  # caution: order of tags matters
 
-  $_[0] =~ s/%GROUPSUMMARY%/&renderGroupSummary($_[0])/geo;
-  $_[0] =~ s/%ALLUSERS%/&renderAllUsers()/geo;
-  $_[0] =~ s/%FORMBUTTON%/&renderFormButton()/geo;
-  $_[0] =~ s/%FORMBUTTON{(.*?)}%/&renderFormButton($1)/geo;
-
-  $_[0] =~ s/%FORMATLIST{(.*?)}%/&renderFormatList($1)/geo; # undocumented
-
-  # spam obfuscator
-  if ($useSpamObfuscator) {
-    $_[0] =~ s/([\s\(])(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &renderEmailAddrs([$2])/ge;
-    $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $3)/ge;
-  }
+  $_[0] =~ s/\%FORMATLIST{(.*?)}%/&renderFormatList($1)/geo; # SMELL: be a plugin
 
   # conditional content
   $_[0] =~ s/%IFSKINSTATE{(.*?)}%/&renderIfSkinState($1)/geo;
@@ -319,10 +304,18 @@ sub commonTagsHandler
   }
   $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;
   $_[0] =~ s/%IFDEFINED{(.*?)}%/&renderIfDefined($1)/geo;
+  $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
+  $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
+  $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
+  $_[0] =~ s/%USERWEBS%/&renderUserWebs()/geo;
+  $_[0] =~ s/%USERACTIONS%/&renderUserActions/geo;
+  $_[0] =~ s/%FORMBUTTON%/&renderFormButton()/geo;
+  $_[0] =~ s/%FORMBUTTON{(.*?)}%/&renderFormButton($1)/geo;
   $_[0] =~ s/%WIKIRELEASENAME%/&getReleaseName()/geo;
-
   $_[0] =~ s/%GETSKINSTYLE%/&renderGetSkinStyle()/geo;
   $_[0] =~ s/%KNOWNSTYLES%/&renderKnownStyles()/geo;
+  $_[0] =~ s/%GROUPSUMMARY%/&renderGroupSummary($_[0])/geo; # SMELL: be a plugin
+  $_[0] =~ s/%ALLUSERS%/&renderAllUsers()/geo;
 
   # REVISIONS only worked properly for the PatternSkin :(
   # REVARG is expanded for templates only :(
@@ -333,6 +326,11 @@ sub commonTagsHandler
   $_[0] =~ s/%CURREV%/'1.' . &getCurRevision($web, $topic)/geo; 
   $_[0] =~ s/%NATMAXREV%/1.$maxRev/go;
 
+  # spam obfuscator
+  if ($useSpamObfuscator) {
+    $_[0] =~ s/([\s\(])(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &renderEmailAddrs([$2])/ge;
+    $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $3)/ge;
+  }
 }
 
 ###############################################################################
@@ -687,14 +685,27 @@ sub renderIfDefined {
   my $theFormat = &TWiki::Func::extractNameValuePair($args);
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
 
+  my $text;
+  if ($isBeijing) {
+    $text = &TWiki::Func::readTopic($web, $topic);
+  }
+
   if (!$theAction || $skinState{'action'} =~ /$theAction/o) {
     foreach my $title (split(/\|/,$theFormat)) {
-      next if $title =~ /^%[A-Z]+%$/o; # special handling of unresolved variables
+      if ($title =~ /^%([A-Z]+)%$/) {
+	if ($isBeijing) {
+	  $title = &_getValueFromTopic($web, $topic, $1, $text);
+	  $title =~ s/^\s+//;
+	  $title =~ s/\s+$//;
+	} else {
+	  next;
+	}
+      }
       return $title if $title;
     }
   }
   
-  return $topic;
+  return '';
 }
 
 ###############################################################################
@@ -1043,7 +1054,7 @@ sub renderFormatList {
 
   my $theList = &TWiki::Func::extractNameValuePair($args) ||
     &TWiki::Func::extractNameValuePair($args, 'list') || '';
-  my $thePattern = &TWiki::Func::extractNameValuePair($args, 'pattern') || '(.*)';
+  my $thePattern = &TWiki::Func::extractNameValuePair($args, 'pattern') || '\s*(.*)\s*';
   my $theFormat = &TWiki::Func::extractNameValuePair($args, 'format') || '%s';
   my $theSplit = &TWiki::Func::extractNameValuePair($args, 'split') || ',';
   my $theJoin = &TWiki::Func::extractNameValuePair($args, 'join') || ', ';
@@ -1084,13 +1095,8 @@ sub renderFormatList {
   }
 
   my $result = join($theJoin, @result);
-
   &escapeParameter($result);
-  #writeDebug("result=$result");
 
-
-  $result = &TWiki::Func::expandCommonVariables($result);
-  $result = &TWiki::Func::renderText($result);
   return $result;
 }
 
