@@ -125,6 +125,7 @@ my $optionalMods =
    'Text::Diff'       => 'UpgradeTWiki',
    'CGI::Cookie'      => "sessions",
    'CGI::Session'     => "sessions",
+   'URI::Escape'      => 'Mail notifications',
   };
 
 my $I18Mods =
@@ -647,7 +648,7 @@ sub _CHECKVAR_DataDir {
 }
 
 sub _CHECKVAR_LocalesDir {
-    my $e = _findMajorDir('LocalesDir', 'po');
+    my $e = _findMajorDir('LocalesDir', 'locale');
     my $e2 = _checkTreePerms( $TWiki::cfg{LocalesDir}, "r" );
     $e .= _warnAboutWindowsBackSlashes($TWiki::cfg{DataDir});
     $e .= ERROR($e2) if $e2;
@@ -1538,9 +1539,7 @@ HERE
     # Check that each of the optional Perl modules can be loaded, and
     # print its version number.
     $set = _perlModulesCheck( $optionalMods );
-    if($TWiki::cfg{UseLocale}) {
-        $set .= _perlModulesCheck( $I18Mods );
-    }
+    $set .= _perlModulesCheck( $I18Mods );
     $block .= _setting("Optional Perl Modules",
                        CGI::start_table({width=>'100%'}).
                        $set.CGI::end_table());
