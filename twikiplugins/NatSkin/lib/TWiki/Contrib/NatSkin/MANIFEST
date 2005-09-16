@@ -13,6 +13,7 @@ templates/changestopicactions.nat.tmpl
 templates/defaultbody.nat.tmpl
 templates/defaultsidebar.nat.tmpl
 templates/defaulttopicactions.nat.tmpl
+templates/defaulttopbar.nat.tmpl
 templates/edit.nat.tmpl
 templates/editform.nat.tmpl
 templates/editsidebar.nat.tmpl

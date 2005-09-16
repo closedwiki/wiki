@@ -46,11 +46,13 @@ hr {
 }
 
 .natTopLeft, .natTopRight {
-  padding-top:5em;
-  padding-bottom:4em;
+  padding-top:0px;
+  padding-bottom:0px;
 }
 .natTopLeftContents,
 .natTopRightContents{
+  padding-top:5em;
+  padding-bottom:3em;
   margin-left:20px;
 }
 .natTopRightContents {
@@ -101,6 +103,45 @@ hr {
   color:darkblue;
   text-transform:capitalize;
   font-weight:bold;
+}
+
+/* menu */
+.natMenu {
+  background:#3388CC;
+  padding-left:10px;
+}
+.natMenuContents {
+  padding:5px 10px 5px;
+}
+.natMenu ul {
+  margin:0;
+  padding:0;
+}
+
+.natMenu ul li {
+  display: inline;
+  margin: 0;
+}
+
+.natMenu ul li a {
+  padding:5px 10px 5px;
+  font: 1em Verdana, Arial, Sans-Serif;
+  text-transform: lowercase;
+  color: white;
+  margin: 0;
+}
+
+.natMenu ul li a:hover {
+  background: #333;
+  color: #eee !important;
+  text-decoration: none;
+}
+
+.natMenu ul li.current a,
+.natMenu ul li.current a:hover {
+  color: #333 !important;
+  background: white;
+  text-decoration: none;
 }
 
 /* sidebar */
@@ -161,6 +202,23 @@ hr {
   content:""
 }
 
+.natSideBarSearch {
+  margin-top:1em;
+  margin-bottom:1em;
+}
+.natSideBarSearch input {
+  color: #444;
+  padding: 2px 0 2px 2px;
+  margin: 0;
+  border: 1px solid #ccc;
+  width:100%;
+  font-family:arial,sans-serif;
+  font-size:1.5em;
+}
+.natAbout {
+  text-align:justify; 
+  font-size:0.9em; 
+}
 
 /* main */
 .natMiddle {
@@ -331,6 +389,7 @@ hr {
 /* search tables */
 .natSearchTable {
   font-size:x-small;
+  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
 .natSearchTableTitle th {
   border-bottom:1px solid #ddd;
