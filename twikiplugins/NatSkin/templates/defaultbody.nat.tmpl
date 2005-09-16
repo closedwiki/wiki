@@ -21,6 +21,11 @@
       %IFSKINSTATETHEN{sidebar="right"}%
       <td class="natMiddle natMiddleRight natSideBar" rowspan="2" valign="top">
 	<div class="natSideBarContents">
+	  %IFSKINSTATETHEN{style="Kubrick"}%
+	  <div class="natSearchBox">
+%TMPL:P{"searchbox"}%
+	  </div>
+	  %FISKINSTATE%
 %TMPL:P{"sidebar"}%
 	</div>
       </td> 

@@ -11,9 +11,12 @@
       </td>
       <td class="natTopBar natTopRight" valign="top">
 	<div class="natTopRightContents">
+%IFSKINSTATETHEN{style="Kubrick" sidebar="right"}% 
+%ELSESKINSTATE%
 	  <div class="natSearchBox">
 %TMPL:P{"searchbox"}%
 	  </div>
+%FISKINSTATE%
 	  <div class="natTopicActions">
 %TMPL:P{"topicactions"}% 
 	  </div>
