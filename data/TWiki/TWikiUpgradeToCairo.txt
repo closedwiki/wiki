@@ -1,34 +1,44 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev: 6036 $"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
 
-_Upgrade from the previous TWiki Sep-2004 "Cairo" production release to TWiki "Dakar"
+_Upgrade from the previous TWiki 01-Feb-2003 production release to TWiki 01-Sep-2004_
 
 ---++ Overview
 
-Dakar is a major new release. You can chose between an automated upgrade using a script or a manual update.
+This guide describes how to upgrade from TWiki 01-Feb-2003 to TWiki 01-Sep-2004. This is a major new release. You can chose between an automated upgrade using a script or a manual update.
 
 ---++ Upgrade Requirements
 
 	* Please review the AdminSkillsAssumptions before you upgrade TWiki
-	* To upgrade from a Cairo standard installation to the latest Dakar Production Release, follow the instructions below
-	* __NOTE:__ To upgrade from a *pre-Cairo* TWiki, start with %TWIKIWEB%.TWikiUpgradeToCairo
-	* To upgrade from a Beta of the new release, or if you made custom modifications, read through all new reference documentation, then use the procedure below as a guideline
-   * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but will not be able to write. Make sure you take a backup!
-   * Not all Cairo plugins are supported with Dakar. Make sure the plugins you use can be upgraded as well!
+	* To upgrade from a 01-Feb-2003 standard installation to the latest 01-Sep-2004 TWiki Production Release, follow the instructions below
+	* __NOTE:__ To upgrade from a *pre-01-Feb-2003* TWiki, start with %TWIKIWEB%.TWikiUpgradeTo01Feb2003
+	* To upgrade from a Beta of the new release, or if you made custom modifications to the application, read through all new reference documentation, then use the procedure below as a guideline
 
----++ Major Changes Compared to TWiki Cairo
+---++ Major Changes Compared to TWiki 01-Feb-2003
 
-SEE TWiki:Codev.DakarReleaseNotes FOR NOW
+	* Automatic upgrade script, and easier first-time installation
+	* Attractive new skins, using a standard set of CSS classes, and a TWikiSkinBrowser to help you choose
+	* New easier-to-use save options
+	* Many improvements to SEARCH
+	* Improved support for internationalisation
+	* Better topic management screens
+	* More pre-installed Plugins: CommentPlugin, EditTablePlugin, RenderListPlugin, SlideShowPlugin, SmiliesPlugin, SpreadSheetPlugin, TablePlugin
+	* Improved Plugins API and more Plugin callbacks
+	* Better support for different authentication methods
+	* Many user interface and usability improvements
+	* And many more enhancements, see the complete change log at TWikiHistory
 
----++ Automated Upgrade Procedure
 
-If you would prefer to do things manually, skip to the [[#ManualUpgradeProcedure][manual upgrade procedure]] below.
+---++ Automated Upgrade Procedure from 01-Feb-2003 to 01-Sep-2004 Release
 
-The upgrade script is called ="UpgradeTwiki"=, and is found in the root of the distribution. It can be run by any user, though you will need to make sure you correct permissions so the webserver user can write all files in the new installation when you have finished. The upgrade script does *not* write to your existing installation.
+With the 01-Sep-2004 Release, for the first time, comes a helper script for upgrading from a previous version. This feature is currently at beta stage, it has only been sanity tested under Unix. It should be worth giving it a try, it won't mess up your existing
+TWiki installation because it leaves that untouched.
 
-The upgrade script will upgrade the *TWiki core only*. Plugins will need to be upgraded separately.
+If you would prefer to do things manually than trust a beta script, skip to the [[#ManualUpgradeProcedure][manual upgrade procedure]] below.
+
+The upgrade script is called ="UpgradeTwiki"=, and is found in the root of the distribution.
 
 It will:
 
@@ -63,13 +73,13 @@ There are a few points worth noting:
 If you use it, and would be kind enough to add your experiences to TWiki:Codev.UpgradeTwiki, it would be much appreciated.  The report of your experience will help to make =UpgradeTwiki= more robust.
 
 #ManualUpgradeProcedure
----++ Manual Upgrade Procedure
+---++ Manual Upgrade Procedure from 01-Feb-2003 to 01-Sep-2004 Release
 
-The following steps describe the upgrade assuming that =$TWIKIROOT= is the root of your current install. As written this will require some downtime.  A process for switching over without downtime is described at the end of this section.
+The following steps describe the upgrade assuming that =$TWIKIROOT= is the root of your current 01-Feb-2003 release.  As written this will require some downtime.  A process for switching over without downtime is described at the end of this section.
 
 	1. *Back up and prepare*:
 		* Back up all existing TWiki directories =$TWIKIROOT/bin=, =$TWIKIROOT/pub=, =$TWIKIROOT/data=, =$TWIKIROOT/templates=, =$TWIKIROOT/lib=
-		* Create a temporary directory and unpack the new release there
+		* Create a temporary directory and unpack the ZIP file there
 	1. *Update files in TWiki root*:
 		* Overwrite all =*.html= and =*.txt= files in =$TWIKIROOT= with the new ones
 	1. *Update template files*:
@@ -106,7 +116,7 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 		* Copy and overwrite all subdirectories below =$TWIKIROOT/lib= with the new ones. Make sure to preserve any extra Plugins you might have in =$TWIKIROOT/lib/TWiki/Plugins= 
 	1. *Update data files*:
 		* In the temporary =twiki/data/TWiki= directory where you unzipped the installation package:
-			* Remove the files you do *not* want to upgrade: for example, =InterWikis.*=, =TWikiRegistration.*=, =WebPreferences.*=, =WebStatistics.*= all =WebTopic*= files
+			* Remove the files you do *not* want to upgrade: =InterWikis.*=, =TWikiRegistration.*=, =TWikiRegistrationPub.*=, =WebPreferences.*=, =WebStatistics.*= and all =WebTopic*= files
 		* Rename in the temporary directory the file =$TWIKIROOT/data/TWiki/TWikiPreferences.*= to =TWikiPreferencesSave.*=.
 		* Move all remaining =*.txt= and =*.txt,v= files from the temporary =data/TWiki= directory to your =$TWIKIROOT/data/TWiki= directory, overwriting the existing ones
 		* Merge your original =TWikiPreferencesSave.txt= settings into =$TWIKIROOT/data/TWiki/TWikiPreferences.txt=. Notable changes are:
@@ -134,7 +144,12 @@ The following steps describe the upgrade assuming that =$TWIKIROOT= is the root 
 		* Test your updated TWiki installation to see if you can view, create, edit and rename topics; upload and move attachments; register users
 		* Test if the installed Plugins work as expected. You should see the list of installed Plugins in [[%TWIKIWEB%.WebHome]]
 
-*Note:* These steps assume a downtime during the upgrade. You could install the new version in parallel to the existing one and switch over in an instant without affecting the users. As a guideline, install the new version into =$TWIKIROOT/bin1=, =$TWIKIROOT/lib1=, =$TWIKIROOT/templates1=, =$TWIKIROOT/data/TWiki1= (from =data/TWiki=), =$TWIKIROOT/pub/TWiki1= (from =pub/TWiki=), and configure =LocalSite.cfg= to point to the same data and pub directory like the existing installation. Once tested and ready to go, reconfigure =$TWIKIROOT/bin1/setlib.cfg= and =$TWIKIROOT/lib1/LocalSite.cfg=, then rename =$TWIKIROOT/bin= to =$TWIKIROOT/bin2=, =$TWIKIROOT/bin1= to =$TWIKIROOT/bin=. Do the same with the =lib=, =templates= and =data/TWiki= directories.
+*Note:* These steps assume a downtime during the time of upgrade. You could install the new version in parallel to the existing one and switch over in an instant without affecting the users. As a guideline, install the new version into =$TWIKIROOT/bin1=, =$TWIKIROOT/lib1=, =$TWIKIROOT/templates1=, =$TWIKIROOT/data/TWiki1= (from =data/TWiki=), =$TWIKIROOT/pub/TWiki1= (from =pub/TWiki=), and configure =LocalSite.cfg= to point to the same data and pub directory like the existing installation. Once tested and ready to go, reconfigure =$TWIKIROOT/bin1/setlib.cfg= and =$TWIKIROOT/lib1/LocalSite.cfg=, then rename =$TWIKIROOT/bin= to =$TWIKIROOT/bin2=, =$TWIKIROOT/bin1= to =$TWIKIROOT/bin=. Do the same with the =lib=, =templates= and =data/TWiki= directories.
+
+---++ Known Issues
+
+	* Check TWiki:Codev/KnownIssuesOfTWiki01Sep2004 for known issues of TWiki 01-Sep-2004 production release
+
 
 %STOPINCLUDE%
 
