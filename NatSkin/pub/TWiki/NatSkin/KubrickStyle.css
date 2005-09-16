@@ -198,10 +198,6 @@ hr {
   padding-left:2ex;
 }
 
-.natSkinStyleBrowser li:before {
-  content:""
-}
-
 .natSideBarSearch {
   margin-top:1em;
   margin-bottom:1em;
@@ -214,6 +210,7 @@ hr {
   width:100%;
   font-family:arial,sans-serif;
   font-size:1.5em;
+  background:white;
 }
 .natAbout {
   text-align:justify; 
