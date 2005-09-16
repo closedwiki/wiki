@@ -50,11 +50,15 @@ sub natSearch {
   writeDebug("called natSearch()");
 
   my $wikiUserName = &TWiki::Func::getWikiUserName();
-  my $theSearchString = $query->param("search") || "";
+  my $theSearchString = $query->param('search') || '';
+  my $theWeb = $query->param('web') || '';
+  my $theIgnoreCase = $query->param('ignorecase') || '';
   my $origSearch = $theSearchString;
 
   writeDebug("search=$theSearchString");
   writeDebug("wikiUserName=$wikiUserName");
+  writeDebug("theWeb=$theWeb");
+  writeDebug("theIgnoreCase=$theIgnoreCase");
   
   # separate and process options
   my $options = "";
@@ -62,12 +66,12 @@ sub natSearch {
     $options = $1;
   }
 
-  my $doIgnoreCase = ($options =~ /u/) ? '' : 'i';
+  my $doIgnoreCase = ($options =~ /u/ || $theIgnoreCase) ? '' : 'i';
   writeDebug("options=$options");
 
   # construct the list of webs to search in
   my @webList;
-  if ($options =~ /l/) {
+  if ($options =~ /l/ || $theWeb eq $web) {
     @webList = ($web);
   } else {
 
