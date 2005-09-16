@@ -90,8 +90,8 @@ $defOps{context} =
         return $twiki->inContext($b->evaluate($twiki)) || 0;
     }
    };
-$defOps{'%'} =
-  { name => '%',
+$defOps{'$'} =
+  { name => '$',
     prec => 5,
     type => 0,
     exec => sub {
@@ -215,7 +215,9 @@ sub new {
 
     # build up REs that match all the types
     foreach my $opn ( keys %{$this->{operators}} ) {
-        $this->{RE}[$this->{operators}->{$opn}->{type}] .= $opn.'|';
+        my $re = $opn;
+        $re =~ s/(\W)/\\$1/g;
+        $this->{RE}[$this->{operators}->{$opn}->{type}] .= $re.'|';
     }
     $this->{RE}[0] =~ s/\|$//;
     $this->{RE}[1] =~ s/\|$//;
