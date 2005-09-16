@@ -180,22 +180,38 @@ sub restore {
 
 Returns the value of the preference =$key=, or undef.
 
+Looks up local preferences when the level
+topic is the same as the current web,topic in the session.
+
 =cut
 
 sub getPreferencesValue {
-    my( $this, $key, $class ) = @_;
+    my( $this, $key ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs')) if DEBUG;
 
-    my $val;
+    # establish the 'local' level
+    my $local = $this->{session}->{webName}.'.'.
+      $this->{session}->{topicName};
 
+    # is there a final value?
+    my $final = $this->_getFinalValue( $key );
+
+    return $final if defined $final;
+    my $val;
     foreach my $level ( reverse @{$this->{PREFS}} ) {
+        # If we get as high as User level, check for cookie values.
         if( $level->{TYPE} =~ /^USER/ ) {
-            # If we get as high as User level, check for cookie
-            # overrides.
+            # if the key was finalised somewhere higher on the stack,
+            # then we can't take it from the cookie.
             $val = $this->{session}->{client}->getSessionValue( $key );
             return $val if defined( $val );
         }
-        $val = $level->{prefs}{$key};
+        if( $local && $level->{SOURCE} eq $local ) {
+            $val = $level->{Local}{$key};
+        }
+        unless( defined $val ) {
+            $val = $level->{Set}{$key};
+        }
         return $val if defined( $val );
     }
 
@@ -247,23 +263,25 @@ sub getWebPreferencesValue {
     return $this->{CACHE}{$wtn}->getPreferencesValue( $key );
 }
 
-=pod
-
----++ ObjectMethod getWebPreferencesValue( $key, $key ) -> $value
-
-Return true if the preference is a final preference.
-
-
-=cut
-
-sub isFinal {
+# The the key is finalised somewhere in the stack, then return the
+# final value. If the key is finalised, return a value even if
+# a value isn't defined, to block lower level definition. If it
+# isn't final, return undef.
+sub _getFinalValue {
     my( $this, $key ) = @_;
+    my $finalVal;
 
     foreach my $level ( @{$this->{PREFS}} ) {
-        return 1 if( $level->{final}{$key} );
+        if( $level->{final}{$key} ) {
+            $finalVal = '';
+        }
+        if( defined $finalVal ) {
+            my $val = $level->{Set}{$key};
+            return $val if defined $val;
+        }
     }
 
-    return 0;
+    return $finalVal;
 }
 
 =pod
@@ -275,16 +293,21 @@ Generate a TML-formatted version of the current preferences
 =cut
 
 sub stringify {
-    my $this = shift;
+    my( $this, $html ) = @_;
     my $s = '';
 
     my %shown;
+    $html = 1 unless defined $html;
 
-    foreach my $ptr ( @{$this->{PREFS}} ) {
-        $s .= $ptr->stringify(\%shown);
+    foreach my $ptr ( reverse @{$this->{PREFS}} ) {
+        $s .= $ptr->stringify($html, \%shown);
     }
 
-    return CGI::table({style=>'width: 100%',class=>'twikiTable'}, $s);
+    if( $html ) {
+        return CGI::table({style=>'width: 100%',class=>'twikiTable'}, $s);
+    } else {
+        return $s;
+    }
 }
 
 1;

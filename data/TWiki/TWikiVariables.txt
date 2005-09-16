@@ -32,8 +32,8 @@ Preferences variables are variables defined in the preferences topics:
 	1 default in %TWIKIWEB%.%WIKIPREFSTOPIC%
     1 local site level in %LOCALSITEPREFS%
 	1 web-level in %WEBPREFSTOPIC% of each web
-    1 session variables (if sessions are enabled)
 	1 user level in individual user topics in %MAINWEB% web
+    1 session variables (if sessions are enabled)
 	1 topic level in topics in webs
 
 Settings at higher-numbered levels override settings of the same variable at lower numbered levels, unless the variable was included in the setting of FINALPREFERENCES at a lower-numbered level, in which case it is locked at the value it has at that level.
@@ -64,6 +64,18 @@ Spaces between the = sign and the value will be ignored. You can split a value o
 </blockquote>
 
 You can also set preference variables on a topic by clicking the link =Edit topic preference settings= under =More topic actions=. Preferences set in this manner are not visible in the topic text but take effect nevertheless.
+
+---++ Local values for variables
+Certain topics (a user's home topic, web site and default preferences topics) have a problem; variables defined in those topics can have two meanings. For example, consider a user topic. A user may want to use a double-height edit box when they are editing their home topic - but *only* when editing their home topic. The rest of the time, they want to have a normal edit box. This separation is achieved using =Local= in place of =Set= in the variable definition. For example, if the user sets the following in their home topic:
+<verbatim>
+   * Set EDITBOXHEIGHT = 10
+   * Local EDITBOXHEIGHT = 20
+</verbatim>
+Then when they are editing any other topic, they will get a 10 high edit box. However when they are editing their home topic, they will get a 20 high edit box.
+
+=Local= can be used wherever a preference needs to take a different value depending on where the current operation is being performed.
+
+Use this powerful feature with great care! %<nop>ALL_VARIABLES% can be used to get a listing of the values of all variables in their evaluation order, so you can see variable scope if you get confused.
 
 ---++ Creating Custom Variables
 

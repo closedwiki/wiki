@@ -77,33 +77,27 @@ with the key prefix (default '').
 =cut
 
 sub loadPrefsFromTopic {
-    my( $this, $theWeb, $theTopic, $keyPrefix ) = @_;
+    my( $this, $web, $topic, $keyPrefix ) = @_;
     ASSERT($this->isa( 'TWiki::Prefs::PrefsCache')) if DEBUG;
 
     $keyPrefix ||= '';
 
+    $this->{SOURCE} = $web.'.'.$topic;
+
     my $session = $this->{MANAGER}->{session};
-    if( $session->{store}->topicExists( $theWeb, $theTopic )) {
+    if( $session->{store}->topicExists( $web, $topic )) {
         my( $meta, $text ) =
-          $session->{store}->readTopic( undef,
-                                         $theWeb, $theTopic,
-                                         undef );
+          $session->{store}->readTopic( undef, $web, $topic, undef );
         my $parser = new TWiki::Prefs::Parser();
         $parser->parseText( $text, $this, $keyPrefix );
         $parser->parseMeta( $meta, $this, $keyPrefix );
-    }
-
-    my $finalPrefs = $this->{prefs}{FINALPREFERENCES};
-    if ( defined( $finalPrefs )) {
-        my @finalPrefsList = split /[\s,]+/, $finalPrefs;
-        $this->{final} = { map { $_ => 1 } @finalPrefsList };
     }
 }
 
 =pod
 
----++ ObjectMethod insertPrefsValue($key, $val)
-Adds a key-value pair to the object.
+---++ ObjectMethod insert($type, $key, $val)
+Adds a key-value pair of the given type to the object. Type is Set or Local.
 Callback used for the Prefs::Parser object, or can be used to add
 arbitrary new entries to a prefs cache.
 
@@ -113,54 +107,64 @@ be finalised until after the whole topic has been read.
 
 =cut
 
-sub insertPrefsValue {
-    my( $this, $theKey, $theValue ) = @_;
-
-    return if $this->{MANAGER}->isFinal( $theKey );
+sub insert {
+    my( $this, $type, $theKey, $theValue ) = @_;
 
     $theValue =~ s/\t/ /g;                 # replace TAB by space
     $theValue =~ s/([^\\])\\n/$1\n/g;      # replace \n by new line
     $theValue =~ s/([^\\])\\\\n/$1\\n/g;   # replace \\n by \n
     $theValue =~ s/`//g;                   # filter out dangerous chars
-
-    if ( defined( $this->{prefs}{$theKey} ) &&
-         $theKey eq 'FINALPREFERENCES' ) {
-        $this->{final}{$theValue} = 1;
+    if ( $theKey eq 'FINALPREFERENCES' ) {
+        foreach ( split( /[\s,]+/, $theValue ) ) {
+            $this->{final}{$_} = 1;
+        }
     } else {
-        $this->{prefs}{$theKey} = $theValue;
+        $this->{$type}{$theKey} = $theValue;
     }
 }
 
 =pod
 
----++ ObjectMethod stringify(\%shown) -> $text
-Generate an HTML representation of the content of this cache.
+---++ ObjectMethod stringify($html, \%shown) -> $text
+Generate an (HTML if $html) representation of the content of this cache.
 
 =cut
 
 sub stringify {
-    my( $this, $shown ) = @_;
-    my $res = CGI::Tr( {style=>'background-color: yellow'},
-                       CGI::Th( {colspan=>2}, $this->{TYPE} ))."\n";
+    my( $this, $html, $shown ) = @_;
+    my $res;
+
+    if( $html ) {
+        $res = CGI::Tr( {style=>'background-color: yellow'},
+                   CGI::Th( {colspan=>2}, $this->{TYPE}.' '.
+                              $this->{SOURCE} ))."\n";
+    } else {
+        $res = '******** '.$this->{TYPE}.' '.$this->{SOURCE}."\n";
+    }
+
     my %shown;
 
-    foreach my $key ( sort keys %{$this->{prefs}} ) {
+    foreach my $type qw( Set Local ) {
+        foreach my $key ( sort keys %{$this->{$type}} ) {
 
-        next if $shown->{$key};
+            #next if $shown->{$type.$key};
 
-        my $final = '';
-        if ( $this->{final}{$key}) {
-            $final = ' *final* ';
-        } else {
-            next if $this->{MANAGER}->isFinal( $key );
+            my $final = '';
+            if ( $this->{final}{$key}) {
+                $final = ' *final* ';
+            }
+            my $val = $this->{$type}{$key};
+            $val =~ s/^(.{32}).*$/$1..../s;
+            if( $html ) {
+                $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
+                $res .= CGI::Tr( {valign=>'top'},
+                                 CGI::td(" $type $final $key").
+                                     CGI::td( $val ))."\n";
+            } else {
+                $res .= "$type $final $key = $val\n";
+            }
+            $shown->{$type.$key} = 1;
         }
-        my $val = $this->{prefs}{$key};
-        $val =~ s/^(.{32}).*$/$1..../s;
-        $val = "\n<verbatim>\n$val\n</verbatim>\n" if $val;
-        $res .= CGI::Tr( {valign=>'top'},
-                        CGI::td(" $key$final ").
-                            CGI::td( $val ))."\n";
-        $shown->{$key} = 1;
     }
     return $res;
 }

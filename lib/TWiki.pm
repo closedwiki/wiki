@@ -391,7 +391,7 @@ BEGIN {
 
     # Set statement in a topic
     $regex{bulletRegex} = qr/^(?:\t|   )+\*/;
-    $regex{setRegex} = qr/$regex{bulletRegex}\s+Set\s+/o;
+    $regex{setRegex} = qr/$regex{bulletRegex}\s+(Set|Local)\s+/o;
     # SMELL: this ought to use $regex{tagNameRegex}
     $regex{setVarRegex} = qr/$regex{setRegex}(\w+)\s*=\s*(.*)$/o;
 

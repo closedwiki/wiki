@@ -1250,7 +1250,7 @@ sub _saveSettings {
 
     $newMeta->remove( 'PREFERENCE' );  # delete previous settings
     $settings =~ s($TWiki::regex{setVarRegex})
-      (&_handleSave($web, $topic, $1, $2, $newMeta))mgeo;
+      (&_handleSave($web, $topic, $1, $2, $3, $newMeta))mgeo;
 
     my $saveOpts = {};
     $saveOpts->{minor} = 1;            # don't notify
@@ -1282,7 +1282,7 @@ sub _saveSettings {
 }
 
 sub _handleSave {
-  my( $web, $topic, $name, $value ) = @_;
+  my( $web, $topic, $type, $name, $value, $meta ) = @_;
 
   $value =~ s/^\s*(.*?)\s*$/$1/ge;
 
@@ -1290,10 +1290,11 @@ sub _handleSave {
     {
      name =>  $name,
      title => $name,
-     value => $value
+     value => $value,
+     type =>  $type
     };
-  $_[4]->putKeyed( 'PREFERENCE', $args );
-  return "";
+  $meta->putKeyed( 'PREFERENCE', $args );
+  return '';
 
 }
 

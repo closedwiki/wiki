@@ -26,9 +26,9 @@ use strict;
 
 ---+ UNPUBLISHED package TWiki::Prefs::Parser
 
-This Prefs-internal class is used to parse * Set statements from arbitrary
-text, and extract settings from meta objects.  It is used by TopicPrefs to
-parse preference settings from topics.
+This Prefs-internal class is used to parse * Set and * Local statements
+from arbitrary text, and extract settings from meta objects.  It is used
+by TopicPrefs to parse preference settings from topics.
 
 This class does no validation or duplicate-checking on the settings; it
 simply returns the recognized settings in the order it sees them in.
@@ -67,27 +67,27 @@ sub parseText {
 
     my $key = '';
     my $value ='';
-    my $isKey = 0;
+    my $type;
     foreach my $line ( split( /\r?\n/, $text ) ) {
         if( $line =~ m/$TWiki::regex{setVarRegex}/o ) {
-            if( $isKey ) {
-                $prefs->insertPrefsValue( $keyPrefix.$key, $value );
+            if( $type ) {
+                $prefs->insert( $type, $keyPrefix.$key, $value );
             }
-            $key = $1;
-            $value = (defined $2) ? $2 : '';
-            $isKey = 1;
-        } elsif( $isKey ) {
+            $type = $1;;
+            $key = $2;
+            $value = (defined $3) ? $3 : '';
+        } elsif( $type ) {
             if( $line =~ /^\s+/ && $line !~ m/$TWiki::regex{bulletRegex}/o ) {
                 # follow up line, extending value
                 $value .= "\n$line";
             } else {
-                $prefs->insertPrefsValue( $keyPrefix.$key, $value );
-                $isKey = 0;
+                $prefs->insert( $type, $keyPrefix.$key, $value );
+                undef $type;
             }
         }
     }
-    if( $isKey ) {
-        $prefs->insertPrefsValue( $keyPrefix.$key, $value );
+    if( $type ) {
+        $prefs->insert( $type, $keyPrefix.$key, $value );
     }
 }
 
@@ -112,10 +112,11 @@ sub parseMeta {
         my $title = $field->{title};
         my $prefixedTitle = $settingPrefPrefix . $title;
         my $value = $field->{value};
-        $prefs->insertPrefsValue( $prefixedTitle, $value );
+        my $type = $field->{type} || 'Set';
+        $prefs->insert( $type, $prefixedTitle, $value );
 	    #SMELL: Why do we insert both based on title and name?
 	    my $name = $field->{name};
-	    $prefs->insertPrefsValue( $keyPrefix.$name, $value );
+	    $prefs->insert( $type, $keyPrefix.$name, $value );
     }
 }
 

@@ -449,10 +449,11 @@ sub groupMembers {
                                 undef );
         foreach( split( /\n/, $text ) ) {
             if( /$TWiki::regex{setRegex}GROUP\s*=\s*(.+)$/ ) {
+                next unless( $1 eq 'Set' );
                 # Note: if there are multiple GROUP assignments in the
                 # topic, only the last will be taken.
                 $this->{members} = 
-                  $this->{session}->{users}->expandUserList( $1 );
+                  $this->{session}->{users}->expandUserList( $2 );
             }
         }
         # backlink the user to the group
