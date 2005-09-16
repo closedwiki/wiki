@@ -39,6 +39,8 @@ These parts are dynamically included topics:
 
 The top bar is mainly used as branding space. To change the screen room for the logo, see below, [[%TOPIC%#Customizing_the_logo][Customizing the logo]].
 
+If you want to have a custom top bar per web, place =%<nop>INCLUDE{%<nop>INCLUDINGWEB%.TopBar}%= in [[TWiki.WebTopBar]]. Then, in each web create the topic "Top<nop>Bar".
+
 ---+++ Left bar
 
 The menu items are css-formatted bullet lists. So in WebLeftBar you write:
