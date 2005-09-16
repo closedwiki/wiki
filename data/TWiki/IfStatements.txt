@@ -35,17 +35,15 @@ atom ::= context identifier, TWiki variable name, single-quoted string
 | $ | expands a variable name. Plugins handlers *are not called*. Returns the empty string if not defined. Built-in variables and user-defined preferences are supported, but you *cannot* pass parameters. |
 examples:
 <verbatim>
-You are %IF{ "$ WIKINAME='TWikiGuest'" then="not" }% allowed to
-%IF{ "context view" then="use" else="ruin"}% this TWiki for your
-%IF{ "defined BE_NICE" then="own" else="evil"}% purposes.
+You are %IF{ "$ WIKINAME='TWikiGuest' and not defined OPEN_DAY" then="not" }% allowed to
+%IF{ "context view" then="view" else="edit"}% this TWiki today.
 </verbatim>
 Given
-   * Set BE_NICE =
+   * Set OPEN_DAY = yes
 this expands to:
 
-You are %IF{ "$ WIKINAME='TWikiGuest'" then="not" }% allowed to
-%IF{ "context view" then="use" else="ruin"}% this TWiki for your
-%IF{ "defined BE_NICE" then="own" else="evil"}% purposes.
+You are %IF{ "$ WIKINAME='TWikiGuest' and not defined OPEN_DAY" then="not" }% allowed to
+%IF{ "context view" then="view" else="edit"}% this TWiki today.
 
 Context identifiers are used in TWiki to label various stages of the rendering process. They are especially useful for [[TWikiSkins][skin]] authors to find out where they are in the renderin gprocess. The following context identifiers are available:
 | *id* | *context* |
