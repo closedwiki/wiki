@@ -1,0 +1,36 @@
+<!-- template: defaulttopbar.nat.tmpl -->
+%TMPL:DEF{"defaulttopbar"}%
+    <tr>
+      <td class="natTopBar natTopLeft" valign="top">
+	<div class="natTopLeftContents">
+	  <div class="natWebTitle">
+	    <a href="%WIKILOGOURL%">%WIKITOOLNAME%</a><span class="natWebLocator">%TMPL:P{"locator"}%</span>
+	  </div>
+	  <div class="natWebSlogan">%SITEMAPUSETO%</div>
+	</div>
+      </td>
+      <td class="natTopBar natTopRight" valign="top">
+	<div class="natTopRightContents">
+	  <div class="natSearchBox">
+%TMPL:P{"searchbox"}%
+	  </div>
+	  <div class="natTopicActions">
+%TMPL:P{"topicactions"}% 
+	  </div>
+	</div>
+      </td>
+    </tr>
+%IFSKINSTATETHEN{style="Kubrick"}%
+    <tr>
+      <td class="natMenu" colspan="2">
+	<div class="natMenuContents">
+	  <ul>
+%FORMATLIST{"Main, %USERWEBS%, Sandbox" join="$n" format="<li $percntCALC{\"$IF($EXACT(%WEB%,$1),class=\"current\")\"}$percnt>[[$1.WebHome][$1]]</li>"}%
+	    <li %CALC{"$IF($EXACT(%WEB%,%TWIKIWEB%),class=\"current\")"}%>[[%TWIKIWEB%.WebHome][System]]</li>
+	  </ul>
+	</div>
+      </td>
+    </tr>
+%FISKINSTATE%
+%TMPL:END%
+%TMPL:DEF{"topbar"}%%TMPL:P{"defaulttopbar"}%%TMPL:END%
