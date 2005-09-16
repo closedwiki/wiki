@@ -397,8 +397,20 @@ sub save {
         if( $lease && $lease->{user}->equals( $user )) {
             $store->clearLease( $webName, $topic );
         }
-        my $viewURL = $session->getScriptUrl( $webName, $topic, 'view' );
+
+	# redirect to a sensible place (a topic that exists)
+	my $viewURL;
+	# check that the page already exist before redirecting to it
+	if ( $store->topicExists( $webName, $topic ) ) {
+	    $viewURL = $session->getScriptUrl( $webName, $topic, 'view' ) . '?unlock=on';
+	} elsif ( $query->param( 'topicparent' ) &&
+		 $store->topicExists( $webName, $query->param('topicparent') ) ) { # go to parent
+	    $viewURL = $session->getScriptUrl( $webName, $query->param( 'topicparent' ), 'view' );
+	} else { # last resort: web home
+	    $viewURL = $session->getScriptUrl( $webName, $TWiki::cfg{HomeTopicName}, 'view' );
+	}
         $session->redirect( $viewURL );
+
         return;
 
     } elsif( $saveaction =~ /^(del|rep)Rev$/ ) {
