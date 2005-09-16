@@ -1,11 +1,13 @@
-%META:TOPICINFO{author="MichaelDaum" date="1124868780" format="1.0" version="1.3"}%
+%META:TOPICINFO{author="MichaelDaum" date="1126870380" format="1.0" version="1.4"}%
 ---+!! <nop>RedDotPlugin
 
 This plugin renders a clickable red dot (<a style="color:red; font-weight:bold; padding-left:2px; padding-right:2px; line-height:100%; font-size:18px; text-decoration:none" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%">.</a>) to ease the edit access to
 a page. The red dot will only be visible if the current wikiuser has
 write access to the page the dot points to. You might also specify
 a list of topics (see syntax), where the first topic that grants
-write access will be the target when you click on the red dot.
+write access will be the target when you click on the red dot. After finishing an edit
+initiated by a red dot you will be redirected to the topic where the red dot was on, or any
+other topic that you specify. Note, however, that you need to enable cookies in your browser.
 
 %TOC%
 
@@ -14,8 +16,10 @@ write access will be the target when you click on the red dot.
 | *Tag* | *Description* | 
 | =%<nop>REDDOT%= \
 | red-dot the current topic |
-| =%<nop>REDDOT{"&lt;topic1>[,..., &lt;topicN>]"}%= \
-| red-dot the first topic that grants write access |
+| =%<nop>REDDOT{"&lt;topic1>[,..., &lt;topicN>]" redirect="&lt;origin>"}%= \
+| red-dot the first topic that grants write access; \
+  redirect to the =origin= topic after edit is finished \
+  (defaults to the topic the red dot was on) |
 
 ---++ Examples
 	* %TOPIC%%REDDOT%  will get a red dot only if you are in the 
@@ -39,12 +43,13 @@ write access will be the target when you click on the red dot.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | 22 Aug 2005 (v0.91) |
+|  Plugin Version: | v1.01, 19 Sept 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  19 Sept 2005: | added redirect-to-origin feature |
 |  22 Aug 2005: | Initial version |
 |  TWiki Dependency: | $TWiki::Plugins::VERSION 1.024 |
 |  CPAN Dependencies: | none |
-|  Other Dependencies: | none |
+|  Other Dependencies: | TWiki:Plugins/SessionPlugin (not needed on TWiki/Dakar) |
 |  Perl Version: | 5.005 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | %TWIKIWEB%.GoodStyle nn%, %TWIKIWEB%.FormattedSearch nn%, %TOPIC% nn% |
