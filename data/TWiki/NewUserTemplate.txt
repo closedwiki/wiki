@@ -28,4 +28,4 @@ __Related Topics:__
 	* UserToolsCategory
 
 %META:FORM{name="%MAINWEB%.UserForm"}%
-
+%META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%
