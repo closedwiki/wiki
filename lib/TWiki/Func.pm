@@ -856,13 +856,19 @@ Get revision info of a topic
    * =$attachment=                 -attachment filename
 Return: =( $date, $user, $rev, $comment )= List with: ( last update date, login name of last user, minor part of top revision number ), e.g. =( 1234561, 'phoeny', "5" )=
 | $date | in epochSec |
-| $user | |
-| $rev |  |
+| $user | Wiki name of the author (*not* login name) |
+| $rev | actual rev number |
 | $comment | WHAT COMMENT? |
 
-NOTE if you are trying to get revision info for a topic, use
+NOTE: if you are trying to get revision info for a topic, use
 $meta->getRevisionInfo instead if you can - it is significantly
-more efficient.
+more efficient, and returns a user object that contains other user
+information.
+
+NOTE: prior versions of TWiki may under some circumstances have returned
+the login name of the user rather than the wiki name; the code documentation
+was totally unclear, and we have been unable to establish the intent.
+However the wikiname is obviously more useful, so that is what is returned.
 
 *Since:* TWiki::Plugins::VERSION 1.000 (29 Jul 2001)
 
@@ -870,7 +876,10 @@ more efficient.
 
 sub getRevisionInfo {
     ASSERT($TWiki::Plugins::SESSION) if DEBUG;
-    return $TWiki::Plugins::SESSION->{store}->getRevisionInfo( @_ );
+    my( $date, $user, $rev, $comment ) =
+      $TWiki::Plugins::SESSION->{store}->getRevisionInfo( @_ );
+    $user = $user->wikiName();
+    return ( $date, $user, $rev, $comment );
 }
 
 =pod

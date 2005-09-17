@@ -127,9 +127,9 @@ sub handleContributors
         my @lines;
         if( $session ) {
             @lines = $meta->getRevisionInfo();
-            $lines[1] = $lines[1]->wikiName();
+            $lines[1] = $lines[1];
         } else {
-            @lines = TWiki::Store::getRevisionInfo($web, $topic, $revision);
+            @lines = TWiki::Func::getRevisionInfo($web, $topic, $revision);
         }
 
         for ($lineIndex = 0; $lineIndex < $#lines; $lineIndex += 4) {

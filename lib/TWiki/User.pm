@@ -57,7 +57,7 @@ sub randomPassword {
 
 =pod
 
----++ ClassMethod new( $users, $name, $wikiname )
+---++ ClassMethod new( $session, $loginname, $wikiname )
 
 Construct a new user object for the given login name, wiki name.
 

@@ -208,6 +208,23 @@ sub test_attachments {
     $this->assert_str_equals($data, $x);
 }
 
+sub test_getrevinfo {
+    my $this = shift;
+    my $topic = "RevInfo";
+
+    $twiki = new TWiki( );
+    $TWiki::Plugins::SESSION = $twiki;
+
+    my $testuser = new TWiki::User( $twiki, "lunch", "PeterRabbit" );
+    $twiki->{user} = $testuser;
+	TWiki::Func::saveTopicText( $testweb, $topic, 'blah' );
+
+    my( $date, $user, $rev, $comment ) =
+      TWiki::Func::getRevisionInfo( $testweb, $topic );
+    $this->assert_equals( 1, $rev );
+    $this->assert_str_equals( "PeterRabbit", $user );
+}
+
 sub test_moveTopic {
     my $this = shift;
     my $twiki = new TWiki();
