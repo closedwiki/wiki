@@ -1,14 +1,6 @@
 TWiki (TM) - A Web Based Collaboration Platform
 ===============================================
 
-
-TWiki Distribution
-------------------
-
-Version: 01 Sep 2004 $Rev: 1742 $
-Release type: Production release
-
-
 What is TWiki?
 --------------
 
@@ -43,20 +35,13 @@ TWiki is open source software and is distributed under the
 terms of the GNU General Public License. You can request 
 the latest version of TWiki from http://TWiki.org/ .
 
-The license.txt file, located in the root of the TWiki 
+The LICENSE file, located in the root of the TWiki 
 distribution package, shows your rights and duties on how to 
 use, redistribute and/or modify it. We would appreciate if 
 redistributions of TWiki and its clones retain the 
 license.txt file in its entire form, thus acknowledging the 
 origin of TWiki and the thousands of hours the core team and 
 contributors put into creating this product.
-
-Please note that TWiki is not distributed under the LGPL 
-(Lesser General Public Licence), which implies TWiki can 
-only be used with software that is licensed under conditions 
-compliant with the GPL. Embedding in proprietary software 
-requires an alternative license. Contact the author for 
-details.
 
 
 TWiki Installation, Support
@@ -71,10 +56,6 @@ make sure to add yourself to the list of TWikiInstallations
 at http://TWiki.org/cgi-bin/view/Main/TWikiInstallations . 
 This helps in getting more exposure --> attracts more 
 developers --> results in a better product.
-
-Please add a "Powered by TWiki" logo to your TWiki home page. 
-Review details in
-http://TWiki.org/cgi-bin/view/Main/PoweredByTWikiLogo
 
 TWiki is free software and does not include any support. There
 is a TWiki web for support questions, run by TWiki users for
@@ -94,23 +75,9 @@ http://TWiki.org/cgi-bin/view/Codev/ . ReadmeFirst tells you
 how to collaborate. Subscribe in WebNotify to stay up to 
 date on latest development issues.
 
-A side note in case you intend to use TWiki on your Intranet:
-TWiki is successfully deployed as a collaboration tool and
-dynamic Intranet tool at many major companies. You need to 
-consider some important points to reach that goal. Do not 
-underestimate the initial effort it takes to get a 
-collaboration tool accepted within the company. Support from 
-upper management is a must. A company with a culture that 
-encourages information sharing is much more likely to succeed 
-than one where information hoarding is the norm. There is 
-also an initial catch 22 problem if you intend to use it as a 
-knowledge base: "Why should I use the tool, there is so 
-little information in it". An incentive program to reward 
-contributions, and a dedicated knowledge engineer can help in 
-the initial phase of deployment.
-
 Good luck with your collaboration effort and with TWiki.
 Happy collaboration and twiki'ing.
 
 Best regards,
-PeterThoeny - Peter@Thoeny.com
+
+The TWiki Developers

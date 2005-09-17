@@ -8,11 +8,10 @@ TWiki is open source software; you can redistribute it
 and/or modify it under the terms of the GNU General Public 
 License as published by the Free Software Foundation; 
 either version 2 of the License, or (at your option) any 
-later version. We would appreciate if redistributions of 
-TWiki and its clones retain this license.txt file in its 
-entire form, thus acknowledging the origin of TWiki and 
-the thousands of hours the core team and contributors put 
-into creating this product.
+later version. We would appreciate it if redistributions of 
+TWiki and its clones retain this file in its entire form,
+thus acknowledging the origin of TWiki and  the thousands
+of hours the contributors put into creating this software.
 
 This program is distributed in the hope that it will be 
 useful, but WITHOUT ANY WARRANTY; without even the implied 
@@ -20,13 +19,6 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE. See the GNU General Public License for more 
 details, for your convenience attached below, also 
 published at http://www.gnu.org/copyleft/gpl.html
-
-Please note that TWiki is NOT distributed under the LGPL
-(Lesser General Public Licence), which implies TWiki can
-only be used with software that is licensed under conditions
-compliant with the GPL. Embedding in proprietary software
-requires an alternative license. Contact the authors for
-details.
 
 --
 Peter Thoeny, Peter@Thoeny.com, http://TWiki.org/

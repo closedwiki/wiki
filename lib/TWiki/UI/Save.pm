@@ -121,6 +121,7 @@ sub buildNewTopic {
 
     # Determine the new text
     my $newText = $query->param( 'text' );
+
     if( defined( $newText) ) {
         # text from the query
     } elsif( defined $templateText ) {
@@ -258,12 +259,11 @@ sub _save {
         return 1;
     }
 
-    my $textQueryParam = $query->param( 'text' );
-
     if( $saveCmd eq 'repRev' ) {
         # replace top revision with the text from the query, trying to
         # make it look as much like the original as possible. The query
         # text is expected to contain %META as well as text.
+        my $textQueryParam = $query->param( 'text' );
         my $meta = new TWiki::Meta( $session, $webName, $topic );
         $store->extractMetaData( $meta, \$textQueryParam );
         my $saveOpts = { timetravel => 1 };
