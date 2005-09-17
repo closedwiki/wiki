@@ -2,6 +2,7 @@
 #
 # Copyright (C) 2001-2003 John Talintyre, jet@cheerful.com
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
+# Copyright (C) 2005 TWiki Contributors
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,6 +15,7 @@
 # GNU General Public License for more details, published at
 # http://www.gnu.org/copyleft/gpl.html
 #
+
 use strict;
 
 package TWiki::Plugins::TablePlugin::Core;
@@ -22,13 +24,14 @@ use Time::Local;
 
 use vars qw( $translationToken
              $insideTABLE $tableCount @curTable $sortCol $requestedTable $up
-             $sortTablesInText $sortAttachments $currTablePre $tableWidth @columnWidths
+             $sortTablesInText $sortAttachments $currTablePre
+             $tableWidth @columnWidths
              $tableBorder $tableFrame $tableRules $cellPadding $cellSpacing 
              @headerAlign @dataAlign $vAlign
              $headerBg $headerColor $sortAllTables $twoCol @dataBg @dataColor
              @isoMonth
              $headerRows $footerRows
-             @fields $upchar $downchar $diamondchar $url
+             $upchar $downchar $diamondchar $url
              @isoMonth %mon2num $initSort $initDirection
              @rowspan $pluginAttrs $prefsAttrs );
 
@@ -45,9 +48,6 @@ BEGIN {
         my $count = 0;
         %mon2num = map { $_ => $count++ } @isoMonth;
     }
-
-    @fields = ( 'text', 'attributes', 'th td X', 'numbers', 'dates' );
-    # X means a spanned cell
 };
 
 sub _setDefaults {
@@ -194,7 +194,7 @@ sub _processTableRow {
     }
     $theRow =~ s/\t/   /go;  # change tabs to space
     $theRow =~ s/\s*$//o;    # remove trailing spaces
-    $theRow =~ s/(\|\|+)/$translationToken . length($1) . "\|"/geo;  # calc COLSPAN
+    $theRow =~ s/(\|\|+)/$translationToken.length($1)."\|"/geo;# calc COLSPAN
     my $colCount = 0;
     my @row = ();
     $span = 0;
@@ -221,18 +221,20 @@ sub _processTableRow {
                 $attr->{align} = 'center';
             }
         }
-        if( defined $columnWidths[$colCount-1] && $columnWidths[$colCount-1] && $span <= 2 ) {
+        if( defined $columnWidths[$colCount-1] &&
+              $columnWidths[$colCount-1] && $span <= 2 ) {
             $attr->{width} = $columnWidths[$colCount-1];
         }
         if( /^\s*\^\s*$/ ) { # row span above
             $rowspan[$colCount-1]++;
-            push @row, [ $value, '', 'X' ];
+            push @row, { text => $value, type => 'Y' };
         } else {
             for (my $col = $colCount-1; $col < ($colCount+$span-1); $col++) {
                 if( defined($rowspan[$col]) && $rowspan[$col] ) {
                     my $nRows = scalar(@curTable);
                     my $rspan = $rowspan[$col]+1;
-                    $curTable[$nRows-$rspan][$col][1]->{rowspan} = $rspan;
+                    $curTable[$nRows - $rspan][$col]->{attrs}->{rowspan} =
+                      $rspan;
                     undef($rowspan[$col]);
                 }
             }
@@ -245,7 +247,7 @@ sub _processTableRow {
 
                 $attr->{valign} = $vAlign if $vAlign;
                 $attr->{class} = 'twikiFirstCol' if $colCount == 1;
-                push @row, [ $value, $attr, 'th' ];
+                push @row, { text => $value, attrs => $attr, type => 'th' };
             } else {
                 if( /^\s*(.*?)\s*$/ ) {   # strip white spaces
                     $_ = $1;
@@ -257,11 +259,11 @@ sub _processTableRow {
                 }
                 $attr->{valign} = $vAlign if $vAlign;
                 $attr->{class} = 'twikiFirstCol' if $colCount == 1;
-                push @row, [ $value, $attr, 'td' ];
+                push @row, { text => $value, attrs => $attr, type => 'td' };
             }
         }
         while( $span > 1 ) {
-            push @row, [ $value, '', 'X' ];
+            push @row, { text => $value, type => 'X' };
             $colCount++;
             $span--;
         }
@@ -276,7 +278,7 @@ sub _shouldISortThisTable {
     my( $header ) = @_;
 
     # Attachments table?
-    if( $header->[0]->[0] =~ /FileAttachment/ ) {
+    if( $header->[0]->{text} =~ /FileAttachment/ ) {
         return $sortAttachments;
     }
 
@@ -284,7 +286,7 @@ sub _shouldISortThisTable {
     if( $sortAllTables ) {
         # All cells in header are headings?
         foreach my $cell ( @$header ) {
-            if( $cell->[2] ne 'th' ) {
+            if( $cell->{type} ne 'th' ) {
                 $sortThisTable = 0;
                 last;
             }
@@ -294,7 +296,7 @@ sub _shouldISortThisTable {
     return $sortThisTable;
 }
 
-# Guess if a column is a date (4), number (3) or plain text (0)
+# Guess if column is a date, number or plain text
 sub _guessColumnType {
     my( $col ) = @_;
     my $isDate = 1;
@@ -302,21 +304,20 @@ sub _guessColumnType {
     my $num = '';
     my $date = '';
     foreach my $row ( @curTable ) {
-        ( $num, $date ) = _convertToNumberAndDate( $row->[$col]->[0] );
+        ( $num, $date ) = _convertToNumberAndDate( $row->[$col]->{text} );
         $isDate = 0 if( ! defined( $date ) );
         $isNum  = 0 if( ! defined( $num ) );
         last if( !$isDate && !$isNum );
-        $row->[$col]->[4] = $date;
-        $row->[$col]->[3] = $num;
+        $row->[$col]->{date} = $date;
+        $row->[$col]->{number} = $num;
     }
-
+    my $type = 'text';
     if( $isDate ) {
-        return 4;
+        $type = 'date';
     } elsif( $isNum ) {
-        return 3;
-    } else {
-        return 0;
+        $type = 'number';
     }
+    return $type;
 }
 
 # Remove HTML from text so it can be sorted
@@ -356,8 +357,8 @@ sub emitTable {
             my $nRows = scalar(@curTable);
             my $rspan = $rowspan[$i]+1;
             my $r = $nRows - $rspan;
-            $curTable[$r][$i][1] ||= {};
-            $curTable[$r][$i][1]->{rowspan} = $rspan;
+            $curTable[$r][$i]->{attrs} ||= {};
+            $curTable[$r][$i]->{attrs}->{rowspan} = $rspan;
         }
     }
 
@@ -384,42 +385,46 @@ sub emitTable {
             @trailer = splice( @curTable, -$footerRows );
         }
 
-        # Handle multi-row labels
+        # Handle multi-row labels by killing rowspans in sorted tables
         for my $row (0..$#curTable) {
             for my $col (0..$#{$curTable[$row]}) {
-                delete $curTable[$row][$col][1]->{rowspan}
-                  if $curTable[$row][$col][1];
-                $curTable[$row][$col] =
-                  [ $curTable[$row-1][$col][0],
-                    $curTable[$row][$col][1],
-                    'td',
-                    $curTable[$row][$col][3],
-                    $curTable[$row][$col][4] ]
-                    if $curTable[$row][$col][2] eq 'X';
+                $curTable[$row][$col]->{attrs}->{rowspan} = 1;
+                if( $curTable[$row][$col]->{type} eq 'Y' ) {
+                    $curTable[$row][$col]->{text} =
+                      $curTable[$row-1][$col]->{text};
+                    $curTable[$row][$col]->{type} = 'td';
+                }
             }
         }
 
         $stype = _guessColumnType( $sortCol );
-        if( $stype ) {
-            if( $up ) {
-                @curTable = sort { $b->[$sortCol]->[$stype] <=> $a->[$sortCol]->[$stype] } @curTable;
-            } else {
-                @curTable = sort { $a->[$sortCol]->[$stype] <=> $b->[$sortCol]->[$stype] } @curTable;
-            }
-
-        } else {
+        if( $stype eq 'text' ) {
             if( $up ) {
                 # efficient way of sorting stripped HTML text
                 # SMELL: efficient? That's not efficient!
                 @curTable = map { $_->[0] }
                   sort { $b->[1] cmp $a->[1] }
-                    map { [ $_, _stripHtml( $_->[$sortCol]->[0] ) ] } @curTable;
+                    map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
+                      @curTable;
             } else {
                 @curTable = map { $_->[0] }
                   sort { $a->[1] cmp $b->[1] }
-                    map { [ $_, _stripHtml( $_->[$sortCol]->[0] ) ] } @curTable;
+                    map { [ $_, _stripHtml( $_->[$sortCol]->{text} ) ] }
+                      @curTable;
             }
+        } else {
+            if( $up ) {
+                @curTable = sort {
+                    $b->[$sortCol]->{$stype} <=> $a->[$sortCol]->{$stype} }
+                  @curTable;
+            } else {
+                @curTable = sort {
+                    $a->[$sortCol]->{$stype} <=> $b->[$sortCol]->{$stype} }
+                  @curTable;
+            }
+
         }
+
         # DG 08 Aug 2002: Cleanup after the header/trailer splicing
         # this is probably awfully inefficient - but how big is a table?
         @curTable = ( @header, @curTable, @trailer );
@@ -433,10 +438,10 @@ sub emitTable {
         my $colCount = 0;
         foreach my $fcell ( @$row ) {
             $arrow = '';
-            next if( $fcell->[2] eq 'X' ); # data was there so sort could work with col spanning
-            my $type = $fcell->[2];
-            my $cell = $fcell->[0];
-            my $attr = $fcell->[1] || {};
+            next if( $fcell->{type} eq 'X' ); # data was there so sort could work with col spanning
+            my $type = $fcell->{type};
+            my $cell = $fcell->{text};
+            my $attr = $fcell->{attrs} || {};
 
             if( $type eq 'th' ) {
                 # reset data color count to start with first color after
@@ -466,15 +471,16 @@ sub emitTable {
                       $stype ne '' ) {
                     if( $dir == 0 ) {
                         $arrow = CGI::a({ name=>'sorted_table' },
-                                        CGI::span({ title=>$fields[$stype].
+                                        CGI::span({ title=>$stype.
                                                       ' sorted ascending'},
                                                   $upchar));
                         $attr->{class} = 'twikiSortedAscendingCol';
                     } else {
-                        $arrow = CGI::a({ name=>'sorted_table' },
-                                        CGI::span({ title=>$fields[$stype].
-                                                      ' sorted descending'},
-                                                  $downchar));
+                        $arrow = CGI::a(
+                            { name=>'sorted_table' },
+                            CGI::span({ title=>$stype.
+                                          ' sorted descending'},
+                                      $downchar));
                         $attr->{class} = 'twikiSortedDescendingCol';
                     }
                 }
