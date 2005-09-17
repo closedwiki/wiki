@@ -29,7 +29,7 @@ To register as a new user, simply fill out this form:
    # optional row for login name, enabled by {Register}{AllowLoginName} option in =configure=
    * Set BESPOKE_AUTH = <tr><td align='right'> (how you log in) LoginName:</td><td><input type='text' name='Twk1LoginName' size='40' value='%REMOTE_USER%'/> =<font color='red'>**</font>= </td></tr>
 -->
-%IF{"%ALLOWLOGINNAME" then="%BESPOKE_AUTH%"}%
+%IF{"$ ALLOWLOGINNAME" then="%BESPOKE_AUTH%"}%
 <tr>
   <td align="right"> Email address: </td>
   <td><input type="text" name="Twk1Email" size="40" value="" /> =<font color="red">**</font>= </td>
