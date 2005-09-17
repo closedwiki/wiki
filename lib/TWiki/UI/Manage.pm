@@ -1217,7 +1217,7 @@ sub _editSettings {
     foreach my $field ( @fields ) {
        my $name  = $field->{name};
        my $value = $field->{value};
-       $settings .= "   * Set $name = $value\n";
+       $settings .= "   * " . (($field->{type} == "Local")?"Local":"Set") . " $name = $value\n";
     }
 
     my $skin = $session->getSkin();
