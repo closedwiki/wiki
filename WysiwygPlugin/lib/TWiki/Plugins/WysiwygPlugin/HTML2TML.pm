@@ -67,15 +67,22 @@ sub new {
                                  declaration_h => [\&_ignore, 'self'],
                                  default_h => [\&_text, 'self,text']);
 
-    $this->{stackTop} =
-      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, '' );
-    $this->{stack} = ();
+    $this = bless( $this, $class );
+
     $this->xml_mode( 1 );
     $this->unbroken_text( 1 );
 
     map { $this->{$_} = $options->{$_} } keys %$options;
 
-    return bless( $this, $class );
+    return $this;
+}
+
+sub _resetStack {
+    my $this = shift;
+
+    $this->{stackTop} =
+      new TWiki::Plugins::WysiwygPlugin::HTML2TML::Node( $this, '' );
+    $this->{stack} = ();
 }
 
 =pod
@@ -95,6 +102,7 @@ sub convert {
     $text =~ s/\r//g;
     $text =~ s/\t/ /g;
 
+    $this->_resetStack();
     $this->parse( $text );
     $this->eof();
     $this->_apply( undef );
