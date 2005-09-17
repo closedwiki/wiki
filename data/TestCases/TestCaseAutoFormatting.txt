@@ -500,7 +500,7 @@ Note that when viewing this topic the table below may be formatted by <nop>Table
 <!-- /expected -->
 <!-- actual -->
 %IF{
-   "context yview"
+   "context view"
    then = "X"
    else = "Y"
 }%

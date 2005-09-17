@@ -234,7 +234,7 @@ sub _addListItem {
         if( $size ) {
             $$result .= '</'.$this->{LIST}->[$size-1]->{element}.'>';
         } else {
-            $$result .= "\n";
+            $$result .= "\n" if $$result;
         }
     }
 
@@ -962,6 +962,8 @@ sub getRenderedVersion {
     my $removedHead = {};
 
     $text = $this->takeOutBlocks( $text, 'verbatim', $removed );
+    $text = $this->takeOutProtected( $text, qr/<\?([^?]*)\?>/s,
+                                     $removedComments );
     $text = $this->takeOutProtected( $text, qr/<!DOCTYPE([^<>]*)>?/mi,
                                      $removedComments );
     $text = $this->takeOutProtected( $text, qr/<head.*?<\/head>/si,
@@ -1074,6 +1076,7 @@ sub getRenderedVersion {
     my $isList = 0;        # True when within a list
     my $insideTABLE = 0;
     my $result = '';
+    my $isFirst = 1;
 
     foreach my $line ( split( /\n/, $text )) {
         # Table: | cell | cell |
@@ -1087,15 +1090,18 @@ sub getRenderedVersion {
         }
 
         # Lists and paragraphs
-        if ( $line =~ s/^\s*$/<p \/>/o ) {
+        if ( $line =~ m/^\s*$/ ) {
+            unless( $insideTABLE || $isFirst ) {
+                $line = '<p />';
+            }
             $isList = 0;
         }
-        elsif ( $line =~ m/^(\S+?)/o ) {
+        elsif ( $line =~ m/^(\S+?)/ ) {
             $isList = 0;
         }
         elsif ( $line =~ m/^(\t|   )+\S/ ) {
             $isList = 1;
-            if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> /o ) {
+            if ( $line =~ s/^((\t|   )+)\$\s(([^:]+|:[^\s]+)+?):\s/<dt> $3 <\/dt><dd> / ) {
                 # Definition list
                 $this->_addListItem( \$result, 'dl', 'dd', $1, '' );
             }
@@ -1131,6 +1137,7 @@ sub getRenderedVersion {
         }
 
         $result .= $line."\n";
+        $isFirst = 0;
     }
 
     if( $insideTABLE ) {
