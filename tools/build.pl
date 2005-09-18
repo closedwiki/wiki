@@ -47,6 +47,8 @@ sub target_build {
     # generate the POD documentation
     print "Building documentation....\n";
     print `perl gendocs.pl -root $this->{basedir}`;
+    $this->cp( $this->{basedir}.'/AUTHORS',
+               $this->{basedir}.'/pub/TWiki/TWikiContributor/AUTHORS' );
     print "Documentation built\n";
 }
 
@@ -136,7 +138,6 @@ sub stage_rcsfiles() {
     $this->_checkInDir( $lastReleaseDir, $this->{tmpDir}, 'pub',
                        sub { return -f shift; } );
 }
-
 
 # Create the build object
 my $build = new TWikiBuild();

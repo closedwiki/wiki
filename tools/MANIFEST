@@ -32,7 +32,6 @@ bin/upload
 bin/view
 bin/viewfile
 bin/logos/logo.png
-bin/logos/.htaccess
 data/Main/NobodyGroup.txt
 data/Main/PatternSkinUserViewTemplate.txt
 data/Main/TWikiAdminGroup.txt
