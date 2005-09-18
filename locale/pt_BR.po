@@ -188,7 +188,7 @@ msgstr "Anexo"
 
 #: templates/attach.pattern.tmpl:95
 msgid "Attachments will not be shown in topic view page."
-msgstr "Anexos não serão exibidos na página de visualização do tópico"
+msgstr "Anexos não serão exibidos na página de visualização do tópico."
 
 #: templates/attachtables.pattern.tmpl:30
 msgid "Attribute"
@@ -493,7 +493,7 @@ msgstr "Ler ajuda sobre nova revisão numa nova janela"
 
 #: templates/oopsmore.pattern.tmpl:13
 msgid "Rename or move topic:"
-msgstr "Renomear ou mover tópico"
+msgstr "Renomear ou mover tópico:"
 
 #: templates/oopsmore.pattern.tmpl:14 templates/oopsmore.pattern.tmpl:16
 msgid "Rename/move topic..."
@@ -583,7 +583,7 @@ msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:59
 msgid "The attachment and any history will be moved to the new topic."
-msgstr "O anexo e seu histórico serão movidos para o novo tópico"
+msgstr "O anexo e seu histórico serão movidos para o novo tópico."
 
 #: templates/renamebase.pattern.tmpl:81
 msgid ""
@@ -673,7 +673,7 @@ msgstr "Quem"
 
 #: templates/edit.pattern.tmpl:237
 msgid "Your signature to copy/paste:"
-msgstr "Sua assinatura pra copiar e colar"
+msgstr "Sua assinatura pra copiar e colar:"
 
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:234
