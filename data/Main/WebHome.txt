@@ -1,6 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1120846368" format="1.1" version="1.2"}%
 <table><tr><td>
----+!! Welcome to %IF{"defined WIKITOLNAME" then="%WIKITOOLNAME%" else="TWiki"}%
+---+!! Welcome to %IF{"defined WIKITOOLNAME" then="%WIKITOOLNAME%" else="TWiki"}%
 TWiki is a flexible, powerful, secure, yet simple-to-use web-based collaboration platform. Use TWiki to run a project development space, a document management system, a knowledge base, or virtually any other groupware function on either on an intranet or on the internet!
 </td><td>
 <a href="%WIKILOGOURL%"><img align="right" src="%WIKILOGOIMG%" border="0" alt="WIKILOGOALT" /></a>
