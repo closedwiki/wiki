@@ -675,7 +675,7 @@ msgstr "Quem"
 msgid "Your signature to copy/paste:"
 msgstr "Sua assinatura pra copiar e colar"
 
-# please entre here the name of your language (written in it):
+# please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:234
 msgid "_language_name"
 msgstr "Português"

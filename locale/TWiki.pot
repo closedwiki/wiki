@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: TWiki DakarRelease\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -639,6 +639,7 @@ msgstr ""
 msgid "Your signature to copy/paste:"
 msgstr ""
 
+# please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:234
 msgid "_language_name"
 msgstr ""
