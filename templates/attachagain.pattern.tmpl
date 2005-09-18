@@ -6,17 +6,17 @@
 
 
 
-%TMPL:DEF{"webaction"}% Update attachment *%FILENAME%* on *%TOPIC%* %TMPL:END%
+%TMPL:DEF{"webaction"}% %_{"Update attachment *%FILENAME%* on *%TOPIC%*"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"simpleheader"}%
----+ Update image or document on %TOPIC% %TMPL:END%
+---+ %_{"Update image or document on %TOPIC%"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"previousdetails"}%
----++ Update file <span class="twikiTitle">%FILENAME%</span>
+---++ %{"Update file <span class="twikiTitle">%FILENAME%</span>"}%
 <div class="patternPrevious"><div class="twikiAttachments">
 <!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
 %ATTACHTABLE%</div></div> %TMPL:END%
@@ -25,33 +25,29 @@
 
 %TMPL:DEF{"previous"}%
   <tr>
-  <th class="patternOldCol">Previous upload</th>
+  <th class="patternOldCol">%_{"Previous upload"}%</th>
   <td class="patternOldCol">
    <code>%FILEPATH%</code> <span class="twikiGrayText">%TMPL:P{"fileuser"}%</span>
   </td>
-  <td class="patternHelpCol patternOldCol">Select a new local file to update this attachment.</td>
+  <td class="patternHelpCol patternOldCol">%_{"Select a new local file to update this attachment."}%</td>
  </tr>%TMPL:END%
 
 %TMPL:DEF{"extranotes"}%
-   * *Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without 
-     uploading a file by pressing "Change Properties"; see <a target="HiddenAttachment" onclick="return launchWindow('%TWIKIWEB%','HiddenAttachment')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment" rel='nofollow'>HiddenAttachment</a>
-   * *Change comment:* If you use _Change Properties_ to change a comment, the comment shown in 
-     the topic will change, but the comment shown against the attachment history will be the 
-     comment when the file was uploaded.
-   * *Local file:* If you select a different file in _Local file:_, it is this that will be 
-     updated or added.
+   * %_{"*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties\"; see [_1]." , "<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%TWIKIWEB%','HiddenAttachment')\" href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment\" rel='nofollow'>HiddenAttachment</a>"}%
+   * %_{"*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in the topic will change, but the comment shown against the attachment history will be the comment when the file was uploaded."}%
+   * %_{"*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."}%
 %TMPL:END%
 
 
 
 %TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
 <tr class="patternTopicActionSecondary">
-<td class="patternCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>Move&nbsp;attachment...</a></td>
+<td class="patternCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%_{"Move attachment..."}%</a></td>
 </tr>
 <tr class="patternTopicAction">
 <td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
-<td class="patternAddCol"><input type="submit" class="twikiSubmit patternTertiary" name="changeproperties" value="Change properties only" /></td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /></td>
+<td class="patternAddCol"><input type="submit" class="twikiSubmit patternTertiary" name="changeproperties" value='%_{"Change properties only"}%' /></td>
 </tr>
 </table>%TMPL:END%
 

@@ -1,7 +1,7 @@
 %{ Internationalisable Messages/constructs }%
 %TMPL:DEF{"sep"}%<span class="twikiSeparator">&nbsp;|&nbsp;</span>%TMPL:END%
-%TMPL:DEF{"LOG_IN"}%Log In%TMPL:END%
-%TMPL:DEF{"LOG_OUT"}%Log Out%TMPL:END%
+%TMPL:DEF{"LOG_IN"}%%_{"Log In"}%%TMPL:END%
+%TMPL:DEF{"LOG_OUT"}%%_{"Log Out"}%%TMPL:END%
  
 
 
@@ -9,7 +9,7 @@
 
 
 
-%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="Back to topic" accesskey="c" rel='nofollow'><span class="twikiAccessKey">C</span>ancel</a>%TMPL:END%
+%TMPL:DEF{"canceltopicaction"}%<a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="Back to topic" accesskey='C' rel='nofollow'>%_{"&Cancel"}%</a>%TMPL:END%
 
 
 
@@ -160,7 +160,7 @@ document.write('<\/style>');
 
 
 
-%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">Skip to topic</a> | <a href="#PageBottom">Skip to bottom</a><hr /></div><div class="patternTopBar"><div class="patternTopBarContents"> %INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"topbar"}%<div class="twikiHidden"><a href="#Content">%_{"Skip to topic"}%</a> | <a href="#PageBottom">%_{"Skip to bottom"}%</a><hr /></div><div class="patternTopBar"><div class="patternTopBarContents"> %INCLUDE{"%TWIKIWEB%.WebTopBar"}%</div></div>%TMPL:END%
 
 
 

@@ -2,12 +2,12 @@
 
 
 
-%TMPL:DEF{"titleaction"}%(backlinks in %WEB% Web) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(backlinks in [_1] Web)", "%WEB%"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"content"}%<div class="patternTopic"><div class="patternSearchResults">
-<div class="patternSearchString"><b>Backlinks to %TOPIC% in <nop>%WEB% Web</b>&nbsp;&nbsp;<a class="twikiSmall" href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title="Search all webs for topics that link to here" accesskey="l">Search a<span class="twikiAccessKey">ll</span> webs</a></div>
+<div class="patternSearchString"><b>%_{"Backlinks to [_1] in [_2] Web", "%TOPIC", "<nop>%WEB%"}%</b>&nbsp;&nbsp;<a class="twikiSmall" href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=backlinksallwebs" title='%_{"Search all webs for topics that link to here"}%' accesskey="l">%_{"Search a&ll webs"}%</a></div>
 %TMPL:P{"searchweb"}%
 </div></div>%TMPL:END%
 

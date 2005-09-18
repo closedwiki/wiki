@@ -6,16 +6,16 @@
 
 
 
-%TMPL:DEF{"webaction"}% Attach file to topic <b>%TOPIC%</b> %TMPL:END%
+%TMPL:DEF{"webaction"}% %_{"Attach file to topic [_1]", "*%TOPIC%*"}% %TMPL:END%
 
 
 
 %TMPL:DEF{"previousdetails"}%
----++ Attach new file%TMPL:END%
+---++ %_{"Attach new file"}%%TMPL:END%
 
 
 
-%TMPL:DEF{"action"}%Attach new file%TMPL:END%
+%TMPL:DEF{"action"}%%_{"Attach new file"}%%TMPL:END%
 
 
 
@@ -23,7 +23,7 @@
 <table>
 <tr>
 <td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Upload file" /></td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /></td>
 <td class="patternAddCol">&nbsp;</td>
 </tr>
 </table>

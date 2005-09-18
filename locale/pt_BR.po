@@ -6,147 +6,776 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: TWiki DakarRelease\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-08 18:51-0300\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Antonio S. de A. Terceiro <asaterceiro@inf.ufrgs.br>\n"
+"Language-Team: TWiki Brazil <twikibr-ownerlistas.softwarelivre.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-# please entre here the name of your language (written in it):
-msgid "_language_name"
-msgstr "Português"
+#: templates/login.pattern.tmpl:10
+msgid "%1 User Authentication"
+msgstr "Autenticação de Usuário no %1"
 
-# please leave this comment here
-#: templates/twiki.i18n.tmpl:5
-msgid "Log In"
-msgstr "Entrar"
+#: templates/login.pattern.tmpl:22
+msgid "%1 is currently logged in"
+msgstr "%1 está autenticado nesse momento"
 
-#: templates/twiki.i18n.tmpl:6
-msgid "Log Out"
-msgstr "Sair"
-
-#: templates/twiki.i18n.tmpl:14
-msgid "Back to topic"
-msgstr "Retornar ao tópico"
-
-#: templates/twiki.i18n.tmpl:14
+#: templates/twiki.pattern.tmpl:12
 msgid "&Cancel"
 msgstr "&Cancelar"
 
-#: templates/twiki.i18n.tmpl:146
-msgid "Skip to topic"
-msgstr "Pular para o tópico"
+#: templates/rdiff.pattern.tmpl:3
+msgid "(%1 vs. %2)"
+msgstr "(%1 vs. %2)"
 
-#: templates/twiki.i18n.tmpl:146
-msgid "Skip to bottom"
-msgstr "Pular para o final"
+#: templates/attach.pattern.tmpl:28
+msgid "(attach)"
+msgstr "(anexar)"
 
-#: templates/view.i18n.tmpl:21
-msgid "Edit"
-msgstr "Editar"
+#: templates/backlinksweb.pattern.tmpl:5
+msgid "(backlinks in %1 Web)"
+msgstr "(referências na web %1)"
 
-#: templates/view.i18n.tmpl:24 templates/view.i18n.tmpl:30
-msgid "Edit this topic text"
-msgstr "Editar o texto desse tópico"
+#: templates/backlinksallwebs.pattern.tmpl:5
+msgid "(backlinks in all Webs)"
+msgstr "(referências em todas as webs)"
 
-#: templates/view.i18n.tmpl:27
-msgid "Cr&eate"
-msgstr "Criar(&e)"
+#: templates/changeform.pattern.tmpl:5
+msgid "(change form)"
+msgstr "(alterar formulário)"
 
-#: templates/view.i18n.tmpl:28
-msgid "&Edit"
-msgstr "&Editar"
+#: templates/changes.pattern.tmpl:5
+msgid "(changes)"
+msgstr "(alterações)"
 
-#: templates/view.i18n.tmpl:32
-msgid "Attach"
-msgstr "Anexar"
+#: templates/editform.pattern.tmpl:6
+msgid "(edit form)"
+msgstr "(editar formulário)"
 
-#: templates/view.i18n.tmpl:33
-msgid "Attach an image or document to this topic"
-msgstr "Anexar uma imagem ou documento a este tópico"
+#: templates/edittext.pattern.tmpl:5
+msgid "(edit text)"
+msgstr "(editar texto)"
 
-#: templates/view.i18n.tmpl:33
-msgid "&Attach"
-msgstr "&Anexar"
+#: templates/edit.pattern.tmpl:196 templates/edit.pattern.tmpl:209
+msgid "(edit)"
+msgstr "(editar)"
 
-#: templates/view.i18n.tmpl:35
-msgid "More topic actions..."
-msgstr "Mais ações de tópico..."
+#: templates/oopsmore.pattern.tmpl:2
+msgid "(more)"
+msgstr "(mais)"
 
-#: templates/view.i18n.tmpl:36
+#: templates/moveattachment.pattern.tmpl:3
+msgid "(move attachment)"
+msgstr "(mover anexo)"
+
+#: templates/preview.pattern.tmpl:31 templates/preview.pattern.tmpl:41
+msgid "(preview)"
+msgstr "(pré-visualização)"
+
+#: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
+msgid "(recommended)"
+msgstr "(recomendado)"
+
+#: templates/attach.pattern.tmpl:39
 msgid ""
-"Delete or rename this topic; set parent topic; view and compare revisions"
+"*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
+"Error\" message when you upload a file, you need to try again. It should "
+"work the second time."
 msgstr ""
-"Apagar ou remover este tópico; alterar tópico pai; ver e comparar revisões"
+"*Bug:* Internet Explorer 4.0 ou anterior: se você receber uma mensagem "
+"\"Internal Server Error\" ao subir um arquivo, você precisa tentar de novo. "
+"Deve funcionar da segunda vez."
 
-#: templates/view.i18n.tmpl:36
-msgid "&More topic actions"
-msgstr "&Mais ações de tópico"
+#: templates/attachagain.pattern.tmpl:37
+msgid ""
+"*Change comment:* If you use _Change Properties_ to change a comment, the "
+"comment shown in the topic will change, but the comment shown against the "
+"attachment history will be the comment when the file was uploaded."
+msgstr ""
+"*Comentário da alteração*: se você usar _Alterar Propriedades_ para alterar "
+"o comentário exibido no tópico vai mudar, mas o comentário exibido no "
+"histórico do anexo vai ser o comentário de quando o arquivo foi enviado."
 
-#: templates/view.i18n.tmpl:38
-msgid "You are here"
-msgstr "Você está aqui"
+#: templates/attach.pattern.tmpl:38
+msgid ""
+"*Help:* Please see %TWIKIWEB%.FileAttachment for more information about "
+"attaching files."
+msgstr ""
+"*Ajuda:* Por favor veja %TWIKIWEB%.FileAttachment para maiores informações "
+"sobre anexar arquivos."
 
-#: templates/view.i18n.tmpl:43 templates/view.i18n.tmpl:65
-msgid "Printable version of this topic"
-msgstr "Versão imprimível deste tópico"
+#: templates/attachagain.pattern.tmpl:38
+msgid ""
+"*Local file:* If you select a different file in _Local file:_, it is this "
+"that will be updated or added."
+msgstr ""
+"*Arquivo local:* se você selecionar um arquivo diferente em _Arquivo local_,"
+"será esse arquivo que será alterado ou adicionado."
 
-#: templates/view.i18n.tmpl:43 templates/view.i18n.tmpl:65
-msgid "&Printable"
-msgstr "Im&primível"
+#: templates/attachagain.pattern.tmpl:36
+msgid ""
+"*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
+"changed without uploading a file by pressing \"Change Properties\"; see %1."
+msgstr ""
+"*Propriedades:* o comentário e a visibilidade (i.e. se o anexo é oculto) "
+"podem ser alterados sem enviar um arquivo clicando em \"Alterar Propriedades"
+"\"; veja %1."
 
-#: templates/view.i18n.tmpl:55 templates/view.i18n.tmpl:58
-msgid "Skip to actions"
-msgstr "Pular para ações"
+#: templates/oopsmore.pattern.tmpl:54
+msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
+msgstr "<a href='%1' rel='nofollow'>Editar preferências</a> para este tópico"
 
-#: templates/view.i18n.tmpl:58
-msgid "End of topic"
-msgstr "Final do tópico"
+#: templates/preview.pattern.tmpl:68
+msgid ""
+"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
+msgstr ""
+"<span class='twikiAlert'><b>Não esqueça</b></span> de salvar suas alterações."
 
-#: templates/view.i18n.tmpl:58
-msgid "Back to top"
-msgstr "Retornar ao topo"
+#: templates/edit.pattern.tmpl:217
+msgid "Access keys"
+msgstr "Teclas de atalho"
 
-#: templates/view.i18n.tmpl:65
-msgid "View raw text without formatting"
-msgstr "Ver texto puro sem formatação"
+#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
+msgid "Action"
+msgstr "Ação"
 
-#: templates/view.i18n.tmpl:65
-msgid "&Raw text"
-msgstr "Texto pu&ro"
+#: templates/addform.tmpl:1
+msgid "Add form"
+msgstr "Adicionar formulário"
 
-#: templates/view.i18n.tmpl:65
-msgid "Backlinks"
-msgstr "Referências"
+#: lib/TWiki/UI/RDiff.pm:241
+msgid "Added"
+msgstr "Adicionado"
 
-#: templates/view.i18n.tmpl:65
-msgid "Search the <nop>%WEB% Web for topics that link to here"
-msgstr "Procurar na web <nop>%WEB% por tópicos que façam link pra cá"
+#: templates/renamebase.pattern.tmpl:35
+msgid "Allow non <nop>WikiWord for the new topic name"
+msgstr "Permitir algo que não seja uma <nop>WikiWord como novo nome do tópico"
 
-#: templates/view.i18n.tmpl:65
-msgid "&Web"
-msgstr "&Web"
+#: templates/moveattachment.pattern.tmpl:60
+msgid ""
+"An error page will be shown if either of the topics are locked by another "
+"user."
+msgstr ""
+"Uma página de erro será exibida se qualquer um dos tópicos estiver travado "
+"por outro usuário."
 
-#: templates/view.i18n.tmpl:65
+#: templates/changeform.pattern.tmpl:43
+msgid "Any change you made to topic before coming to this page are preserved."
+msgstr ""
+"Qualquer mudanças que você tenha feito no tópico antes de vir a essa página "
+"são preservadas"
+
+#: templates/attachnew.pattern.tmpl:9
+msgid "Attach file to topic %1"
+msgstr "Anexar uma imagem ou documento a %1"
+
+#: templates/attach.pattern.tmpl:33
+msgid "Attach image or document on %1"
+msgstr "Anexar uma imagem ou documento a %1"
+
+#: templates/attachnew.pattern.tmpl:14 templates/attachnew.pattern.tmpl:18
+msgid "Attach new file"
+msgstr "Anexar novo arquivo"
+
+#: templates/attachtables.pattern.tmpl:7
+msgid "Attachment"
+msgstr "Anexo"
+
+#: templates/attach.pattern.tmpl:95
+msgid "Attachments will not be shown in topic view page."
+msgstr "Anexos não serão exibidos na página de visualização do tópico"
+
+#: templates/attachtables.pattern.tmpl:30
+msgid "Attribute"
+msgstr "Atributo"
+
+#: templates/changeform.pattern.tmpl:56
+msgid "Back"
+msgstr "Voltar"
+
+#: templates/backlinksweb.pattern.tmpl:10
+msgid "Backlinks to %1 in %2 Web"
+msgstr "Referências a %1 na Web %2"
+
+#: templates/backlinksallwebs.pattern.tmpl:10
+msgid "Backlinks to %1 in all Webs"
+msgstr "Referências a %1 em todas as Webs"
+
+#: templates/oopsmore.pattern.tmpl:19
+msgid "Backlinks:"
+msgstr "Referências:"
+
+#: templates/edit.pattern.tmpl:217
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/edit.pattern.tmpl:217
+msgid "Cancel editing and discard changes"
+msgstr "Cancelar edição e descartar alterações"
+
+#: templates/changeform.pattern.tmpl:18
+msgid "Change form"
+msgstr "Alterar formulário"
+
+#: templates/moveattachment.pattern.tmpl:40
+#: templates/renamebase.pattern.tmpl:47
+msgid "Change from:"
+msgstr "Alterar de:"
+
+#: templates/renamebase.pattern.tmpl:71
+msgid "Change links in topics that refer to %1 in any Web:"
+msgstr "Alterar links em tópicos que façam referência a %1 em qualquer Web:"
+
+#: templates/renamebase.pattern.tmpl:69
+msgid "Change links in topics that refer to %1 in the %2 Web:"
+msgstr "Alterar links em tópicos que façam referência a %1 na Web %2:"
+
+#: templates/attachagain.pattern.tmpl:50
+msgid "Change properties only"
+msgstr "Apenas alterar propriedades"
+
+#: templates/edit.pattern.tmpl:204
+msgid "Change topic"
+msgstr "Alterar tópico"
+
+#: lib/TWiki/UI/RDiff.pm:255 lib/TWiki/UI/RDiff.pm:261
+msgid "Changed"
+msgstr "Alterado"
+
+#: templates/edit.pattern.tmpl:217
+msgid "Checkpoint"
+msgstr "Checkpoint"
+
+#: templates/oopsmore.pattern.tmpl:23
+msgid "Child topics in %1 web:"
+msgstr "Tópicos filhos na web %1:"
+
+#: templates/changeform.pattern.tmpl:25
+msgid "Choose a new form template"
+msgstr "Escolha um novo modelo de formulário"
+
+#: templates/renamebase.pattern.tmpl:75
+msgid "Clear all"
+msgstr "Limpas todos"
+
+#: templates/attach.pattern.tmpl:70 templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:7
+msgid "Comment"
+msgstr "Comentário"
+
+#: templates/oopsmore.pattern.tmpl:47
+msgid "Compare revisions:"
+msgstr "Comparar revisões:"
+
+#: templates/attach.pattern.tmpl:82
+msgid "Create a link to the attached file"
+msgstr "Criar um link para o arquivo anexado"
+
+#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:7
+msgid "Date"
+msgstr "Data"
+
+#: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
+msgid "Delete topic..."
+msgstr "Remover tópico..."
+
+#: templates/oopsmore.pattern.tmpl:7
+msgid "Delete topic:"
+msgstr "Remover tópico:"
+
+#: lib/TWiki/UI/RDiff.pm:234
+msgid "Deleted"
+msgstr "Removido"
+
+#: templates/rdiff.pattern.tmpl:11
+msgid "Difference Topic"
+msgstr "Diferenças no tópico:"
+
+#: templates/rdiff.pattern.tmpl:19
+msgid "Diffs"
+msgstr "Diferenças"
+
+#: templates/preview.pattern.tmpl:57
+msgid "Discard"
+msgstr "Descartar"
+
+#: templates/attach.pattern.tmpl:93
+msgid "Do not show attachment in table"
+msgstr "Não mostrar o anexo na tabela"
+
+#: templates/edit.pattern.tmpl:185
+msgid "Edit content"
+msgstr "Editar conteúdo"
+
+#: templates/oopsmore.pattern.tmpl:53
+msgid "Edit topic preference settings:"
+msgstr "Editar preferências do tópico:"
+
+#: templates/login.pattern.tmpl:26
+msgid "Enter a new username and password to change identity:"
+msgstr "Entre um nome de usuário e senha para trocar de identidade:"
+
+#: templates/attach.pattern.tmpl:45
+msgid "Existing attachments"
+msgstr "Anexos existentes"
+
+#: templates/changeform.pattern.tmpl:42
+msgid "Existing form data will be lost! (still available in old version)"
+msgstr "Dados existentes serão perdidos! (ainda disponíveis na versão antiga)"
+
+#: templates/oopsmore.pattern.tmpl:21
+msgid ""
+"Find topics <a href='%1' title='Search all webs for topics that link to "
+"here' accesskey='l'>in a&ll public webs</a> that link to %2"
+msgstr ""
+"Procurar tópicoss <a href='%1' title='Procurar em todas as webs públicas por "
+"tópicos que façam link pra cá' accesskey='l'>em todas as webs públicas(&L)</"
+"a> que façam link para %2"
+
+#: templates/oopsmore.pattern.tmpl:20
+msgid ""
+"Find topics <a href='%1' title='Search the %2 Web for topics that link to "
+"here' accesskey='w'>in %2 &web</a> that link to %3"
+msgstr ""
+"Procurar tópicos <a href='%1' title='Procurar na web %2 por tópicos que "
+"façam link pra cá' accesskey='w'>na &web %2 </a> que façam link pra %3"
+
+#: templates/edit.pattern.tmpl:214 templates/preview.pattern.tmpl:53
+msgid "Force new revision"
+msgstr "Forçar nova revisão"
+
+#: templates/renamebase.pattern.tmpl:79
+msgid ""
+"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%"
+"TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
+"moving topics</a>."
+msgstr ""
+"Obtenha ajuda sobre <a target='ManagingTopics' onclick=\"return launchWindow"
+"('%TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renomear e "
+"mover tópicos</a>."
+
+#: templates/attach.pattern.tmpl:90
+msgid "Hide file"
+msgstr "Esconder arquivo"
+
+#: templates/edit.pattern.tmpl:187
+msgid "Hide formatting help"
+msgstr "Esconder ajuda sobre formatação"
+
+#: templates/attach.pattern.tmpl:85
+msgid "Images will be displayed, for other attachments a link will be created."
+msgstr "Imagens serão exibidas, para outros anexos um link será criado."
+
+#. ($left)
+#. ($right)
+#: lib/TWiki/UI/RDiff.pm:161 lib/TWiki/UI/RDiff.pm:163
+msgid "Line: %1"
+msgstr "Linha: %1"
+
+#. ($left,$right)
+#: lib/TWiki/UI/RDiff.pm:270
+msgid "Line: %1 to %2"
+msgstr "Linha: %1 até %2"
+
+#: templates/attach.pattern.tmpl:79
+msgid "Link"
+msgstr "Link"
+
+#: templates/attach.pattern.tmpl:59
+msgid "Local file"
+msgstr "Arquivo local"
+
+#: templates/twiki.pattern.tmpl:3
+msgid "Log In"
+msgstr "Entrar"
+
+#: templates/twiki.pattern.tmpl:4
+msgid "Log Out"
+msgstr "Sair"
+
+#: templates/login.pattern.tmpl:44
+msgid "Logon"
+msgstr "Entrar"
+
+#: templates/preview.pattern.tmpl:52
+msgid "Minor changes, don't notify"
+msgstr "Modificações pequenas, não notificar"
+
+#: templates/rdiff.pattern.tmpl:20
+msgid "More"
+msgstr "Mais"
+
+#: templates/oopsmore.pattern.tmpl:4
+msgid "More Actions on Topic %1"
+msgstr "Mais ações sobre o tópico %1"
+
+#: templates/moveattachment.pattern.tmpl:20
+msgid "Move"
+msgstr "Mover"
+
+#: templates/attachagain.pattern.tmpl:45
+msgid "Move attachment..."
+msgstr "Mover anexo..."
+
+#: templates/moveattachment.pattern.tmpl:7
+msgid "Move file attachment"
+msgstr "Mover arquivo anexo"
+
+#: templates/moveattachment.pattern.tmpl:36
+msgid "Move or Delete File %1"
+msgstr "Mover ou Remover arquivo %1"
+
+#: templates/oopsmore.pattern.tmpl:49
+msgid "Newer revision:"
+msgstr "Revisão mais recente:"
+
+#: templates/oopsmore.pattern.tmpl:24
+msgid "No child topics"
+msgstr "Nenhum tópico filho"
+
+#: templates/moveattachment.pattern.tmpl:61
+msgid ""
+"Note that any URLs that refer to the attachment will be broken after this "
+"move."
+msgstr ""
+"Note que quaisquer URLs que se refiram ao anexo vão quebrar depois de mover."
+
+#: templates/moveattachment.pattern.tmpl:58
+#: templates/renamebase.pattern.tmpl:78
+msgid "Note:"
+msgstr "Notas:"
+
+#: templates/changeform.pattern.tmpl:34
+msgid "Notes"
+msgstr "Notas"
+
+#: templates/oopsmore.pattern.tmpl:48
+msgid "Older revision:"
+msgstr "Revisão mais antiga:"
+
+#: templates/login.pattern.tmpl:41
+msgid "Password"
+msgstr "Senha"
+
+#: templates/login.pattern.tmpl:18
+msgid "Please enter your username and password:"
+msgstr "Por favor, entre seu nome de usuário e senha:"
+
+#: templates/changeform.pattern.tmpl:31
+msgid "Possible form templates"
+msgstr "Possíveis modelos de formulário"
+
+#: templates/edit.pattern.tmpl:217
+msgid "Preview"
+msgstr "Pré-visualizar"
+
+#: templates/attachagain.pattern.tmpl:28
+msgid "Previous upload"
+msgstr "Upload anterior"
+
+#: templates/edit.pattern.tmpl:217
+msgid "Quiet Save"
+msgstr "Salvar em silêncio"
+
+#: templates/edit.pattern.tmpl:216
+msgid "QuietSave"
+msgstr "Salvar em silêncio"
+
+#: templates/edit.pattern.tmpl:214
+msgid "Read new revision help text in new window"
+msgstr "Ler ajuda sobre nova revisão numa nova janela"
+
+#: templates/oopsmore.pattern.tmpl:13
+msgid "Rename or move topic:"
+msgstr "Renomear ou mover tópico"
+
+#: templates/oopsmore.pattern.tmpl:14 templates/oopsmore.pattern.tmpl:16
+msgid "Rename/move topic..."
+msgstr "Renomear/mover tópico..."
+
+#: templates/rdiff.pattern.tmpl:39
+msgid "Revision"
+msgstr "Revisão"
+
+#: templates/oopsmore.pattern.tmpl:40
+msgid "Revision:"
+msgstr "Revisão:"
+
+#: templates/oopsmore.pattern.tmpl:43
+msgid "Revisions:"
+msgstr "Revisões:"
+
+#: templates/edit.pattern.tmpl:216 templates/edit.pattern.tmpl:217
+msgid "Save"
+msgstr "Salvar"
+
+#: templates/preview.pattern.tmpl:58
+msgid "Save Changes"
+msgstr "Salvar alterações"
+
+#: templates/backlinksallwebs.pattern.tmpl:10
+msgid "Search %1 &Web only"
+msgstr "Procurar só na &Web %1"
+
+#: templates/backlinksweb.pattern.tmpl:10
+msgid "Search a&ll webs"
+msgstr "Procurar em todas as Webs(&l)"
+
+#: templates/backlinksallwebs.pattern.tmpl:10
+#: templates/backlinksweb.pattern.tmpl:10
 msgid "Search all webs for topics that link to here"
 msgstr "Procurar em todas as webs por tópicos que façam link pra cá"
 
-#: templates/view.i18n.tmpl:65
-msgid "A&ll Webs"
-msgstr "Todas (&l)"
+#: templates/attachagain.pattern.tmpl:32
+msgid "Select a new local file to update this attachment."
+msgstr "Selecione um novo arquivo local para alterar esse anexo."
 
-#: templates/view.i18n.tmpl:65
+#: templates/renamebase.pattern.tmpl:75
+msgid "Select all"
+msgstr "Selecionar todos"
+
+#: templates/renamebase.pattern.tmpl:80
+msgid "Select the %1 Web to delete the topic."
+msgstr "Selecione a Web %1 para remover o tópico."
+
+#: templates/edit.pattern.tmpl:237
+msgid "Select, copy and paste your signature text to the bottom of your entry"
+msgstr ""
+"Selecione, copie e cole o texto da sua assinatura no final da sua entrada"
+
+#: templates/oopsmore.pattern.tmpl:28
+msgid "Set new topic parent:"
+msgstr "Indicar novo tópico pai:"
+
+#: templates/edit.pattern.tmpl:187
+msgid "Show formatting help"
+msgstr "Exibir ajuda sobre formatação"
+
+#: templates/attachtables.pattern.tmpl:7
+msgid "Size"
+msgstr "Tamanho"
+
+#: templates/twiki.pattern.tmpl:163
+msgid "Skip to bottom"
+msgstr "Pular para o final"
+
+#: templates/twiki.pattern.tmpl:163
+msgid "Skip to topic"
+msgstr "Pular para o tópico"
+
+#: templates/oopsmore.pattern.tmpl:29
+msgid "Step 1: Select topic parent:"
+msgstr "Passo 1: Selecione o tópico pai:"
+
+#: templates/oopsmore.pattern.tmpl:34
+msgid ""
+"Step 2: Continue to <input type='submit' class='twikiSubmit' value='Edit' /> "
+"and save %1 to activate the new parent"
+msgstr ""
+"Passo 2: Continue <input type='submit' class='twikiSubmit' value='Editando' /"
+"> e salve %1 para ativar o novo pai"
+
+#: templates/moveattachment.pattern.tmpl:59
+msgid "The attachment and any history will be moved to the new topic."
+msgstr "O anexo e seu histórico serão movidos para o novo tópico"
+
+#: templates/renamebase.pattern.tmpl:81
+msgid ""
+"The checkmarked topics will be updated (another form will appear which will "
+"_eventually_ allow you to rename any topics that were locked)"
+msgstr ""
+"Os tópicos marcados serão atualizados (outro formulário vai aparecer e "
+"_pode_ permitir você renomear tópicos que estejam travados)"
+
+#: templates/moveattachment.pattern.tmpl:30
+msgid "The new topic chosen must already exist."
+msgstr "O novo tópico selecionado deve já existir."
+
+#: templates/preview.pattern.tmpl:72
+msgid "To *cancel* and discard any changes: Press the [Discard] button."
+msgstr ""
+"Para *cancelar* e descartar suas alterações: aperte o botão [Descartar] "
+"abaixo."
+
+#: templates/preview.pattern.tmpl:70
+msgid "To *save* changes: Press the [Save Changes] button."
+msgstr ""
+"Para *salvar* suas alterações: aperte o botão [Salvar alterações] abaixo."
+
+#: templates/moveattachment.pattern.tmpl:26
+msgid "To delete an attachment move it to web %1, topic %2."
+msgstr "Para remover um anexo mova-o para a web %1, tópico %2."
+
+#: templates/preview.pattern.tmpl:71
+msgid "To make *more changes*: Go back in your browser."
+msgstr "Para fazer *mais alterações*: volte no seu navegador."
+
+#: templates/moveattachment.pattern.tmpl:45
+#: templates/renamebase.pattern.tmpl:52
+msgid "To web:"
+msgstr "Para web:"
+
+#: templates/moveattachment.pattern.tmpl:50
+#: templates/renamebase.pattern.tmpl:57
+msgid "Topic name:"
+msgstr "Nome do tópico:"
+
+#: templates/edit.pattern.tmpl:186
+msgid "Topic settings"
+msgstr "Preferências do tópico"
+
+#: lib/TWiki/UI/RDiff.pm:248
+msgid "Unchanged"
+msgstr "Inalterado"
+
+#: templates/login.pattern.tmpl:30
+msgid "Unrecognised user and/or password"
+msgstr "Usuário e/ou senha não reconhecidos"
+
+#: templates/attachagain.pattern.tmpl:9
+msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
+msgstr "Atualizar o anexo *%FILENAME%* em *%TOPIC%*"
+
+#: templates/attachagain.pattern.tmpl:14
+msgid "Update image or document on %TOPIC%"
+msgstr "Upload de imagem ou documento em %TOPIC%"
+
+#: templates/attachagain.pattern.tmpl:49 templates/attachnew.pattern.tmpl:26
+msgid "Upload file"
+msgstr "Upload de arquivo"
+
+#: templates/login.pattern.tmpl:38
+msgid "Username"
+msgstr "Nome de usuário"
+
+#: templates/attachtables.pattern.tmpl:45
 msgid "Version"
 msgstr "Versão"
 
-#: templates/view.i18n.tmpl:65
-msgid "View total topic history"
-msgstr "Ver histórico completo do tópico"
+#: templates/oopsmore.pattern.tmpl:39
+msgid "View previous topic revision:"
+msgstr "Ver versão anterior do tópico:"
 
-#: templates/view.i18n.tmpl:65
-msgid "&History"
-msgstr "&Histórico"
+#: templates/rdiff.pattern.tmpl:18
+msgid "View topic"
+msgstr "Visualizar tópico"
+
+#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:7
+msgid "Who"
+msgstr "Quem"
+
+#: templates/edit.pattern.tmpl:237
+msgid "Your signature to copy/paste:"
+msgstr "Sua assinatura pra copiar e colar"
+
+# please entre here the name of your language (written in it):
+#: lib/TWiki/I18N.pm:234
+msgid "_language_name"
+msgstr "Português"
+
+#: templates/attachtables.pattern.tmpl:11
+msgid "change, update, previous revisions, move, delete..."
+msgstr "alterar, atualizar, revisões anteriores, mover, remover..."
+
+#: templates/renamebase.pattern.tmpl:75
+msgid "checkboxes of referenced topics"
+msgstr "checkboxes de tópicos referenciados"
+
+#: templates/edit.pattern.tmpl:214 templates/preview.pattern.tmpl:52
+#: templates/preview.pattern.tmpl:53
+msgid "help"
+msgstr "ajuda"
+
+#: templates/oopsmore.pattern.tmpl:41
+msgid "in raw text format"
+msgstr "com formato de texto puro"
+
+#: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
+msgid "looking for references in _%1 web_ only"
+msgstr "procurando por referências em _apenas na web %1_"
+
+#: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
+msgid "looking for references in _all public webs_"
+msgstr "procurando por referências em _todas as webs públicas_"
+
+#: templates/attachtables.pattern.tmpl:11
+msgid "manage"
+msgstr "gerenciar"
+
+#: templates/oopsmore.pattern.tmpl:31
+msgid "none (remove topic parent)"
+msgstr "nenhum (remover tópico pai)"
+
+#: templates/edit.pattern.tmpl:217
+msgid "or"
+msgstr "ou"
+
+#: templates/attachtables.pattern.tmpl:50
+msgid "view"
+msgstr "ver"
+
+#~ msgid "Back to topic"
+#~ msgstr "Retornar ao tópico"
+
+#~ msgid "Edit"
+#~ msgstr "Editar"
+
+#~ msgid "Edit this topic text"
+#~ msgstr "Editar o texto desse tópico"
+
+#~ msgid "Cr&eate"
+#~ msgstr "Criar(&e)"
+
+#~ msgid "&Edit"
+#~ msgstr "&Editar"
+
+#~ msgid "More topic actions..."
+#~ msgstr "Mais ações de tópico..."
+
+#~ msgid ""
+#~ "Delete or rename this topic; set parent topic; view and compare revisions"
+#~ msgstr ""
+#~ "Apagar ou remover este tópico; alterar tópico pai; ver e comparar revisões"
+
+#~ msgid "&More topic actions"
+#~ msgstr "&Mais ações de tópico"
+
+#~ msgid "You are here"
+#~ msgstr "Você está aqui"
+
+#~ msgid "Printable version of this topic"
+#~ msgstr "Versão imprimível deste tópico"
+
+#~ msgid "&Printable"
+#~ msgstr "Im&primível"
+
+#~ msgid "Skip to actions"
+#~ msgstr "Pular para ações"
+
+#~ msgid "End of topic"
+#~ msgstr "Final do tópico"
+
+#~ msgid "Back to top"
+#~ msgstr "Retornar ao topo"
+
+#~ msgid "&Raw text"
+#~ msgstr "Texto pu&ro"
+
+#~ msgid "Search the <nop>%WEB% Web for topics that link to here"
+#~ msgstr "Procurar na web <nop>%WEB% por tópicos que façam link pra cá"
+
+#~ msgid "&Web"
+#~ msgstr "&Web"
+
+#~ msgid "A&ll Webs"
+#~ msgstr "Todas (&l)"
+
+#~ msgid "&History"
+#~ msgstr "&Histórico"

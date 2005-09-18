@@ -28,7 +28,7 @@ function launchWindow( theWeb, theTopic ) {
 
 
 %TMPL:DEF{"simpleheader"}%
----+ <nop>%TOPIC% (preview)
+---+ <nop>%TOPIC% %_{"(preview)"}%
 %BR%%TMPL:END%
 
 
@@ -38,7 +38,7 @@ function launchWindow( theWeb, theTopic ) {
 
 
 
-%TMPL:DEF{"titleaction"}%(preview) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(preview)"}% %TMPL:END%
 
 
 
@@ -49,13 +49,13 @@ function launchWindow( theWeb, theTopic ) {
 <tr class="patternTopicActionSecondary">
 <td class="patternCancelCol"></td>
 <td class="patternSubmitCol"><div class="patternSubmitOptions">
-   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">Minor changes, don't notify</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>help</a><br />
-   <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">Force new revision</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" rel='nofollow'>help</a></div></td>
+   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">%_{"Minor changes, don't notify"}%</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>%_{"help"}%</a><br />
+   <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" rel='nofollow'>%_{"help"}%</a></div></td>
 <td class="patternAddCol"></td>
 </tr>
 <tr class="patternTopicAction">
-<td class="patternCancelCol"><input type="submit" class="twikiSubmit" value="Discard" name="action_cancel" /></td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Save Changes" />%FORMFIELDS%</td>
+<td class="patternCancelCol"><input type="submit" class="twikiSubmit" value='%_{"Discard"}%' name="action_cancel" /></td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Save Changes"}%' />%FORMFIELDS%</td>
 <td class="patternAddCol"></td>
 </tr>
 </table>%TMPL:END%
@@ -65,11 +65,11 @@ function launchWindow( theWeb, theTopic ) {
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
 <div class="twikiHelp">
-<span class="twikiAlert"><b>Do not forget</b></span> to save your changes.
+%_{"<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."}%
 <ul>
-  <li> To <b>save</b> changes: Press the [Save Changes] button.</li>
-  <li> To make <b>more changes</b>: Go back in your browser.</li>
-  <li> To <b>cancel</b> and discard any changes: Press the [Discard] button.</li>
+  <li> %_{"To *save* changes: Press the ~[Save Changes~] button."}%</li>
+  <li> %_{"To make *more changes*: Go back in your browser."}%</li>
+  <li> %_{"To *cancel* and discard any changes: Press the ~[Discard~] button."}%</li>
 </ul>
 </div>
 <div class="patternPreviewArea">

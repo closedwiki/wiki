@@ -9,7 +9,7 @@ use Locale::Maketext::Extract::Run 'xgettext';
 -d 'bin' and -d "lib" and -d 'tools' and -d 'templates' or die("You may only run this utility from the root directory of TWiki sources!");
 
 # config
-my $localesDir = "po";
+my $localesDir = "locale";
 my $potfile = "${localesDir}/TWiki.pot";
 my $newpotfile = $potfile . '.new';
 
@@ -22,10 +22,9 @@ my @sources;
 open(R, "<tools/MANIFEST") || die "Could not open tools/MANIFEST: $!";
 foreach my $source (<R>) {
     chomp($source);
-    if( $source =~ /^bin\/[a-z]/ || $source =~ /^lib\/.*\.pm$/ ) {
+    if( $source =~ /^bin\/[a-z]/ || $source =~ /^lib\/.*\.pm$/ ||
+        $source =~ /^templates\/.*\.tmpl$/ ) {
         push(@sources, $source);
-    } elsif( $source =~ /^templates\/.*\.tmpl$/ ) {
-        push(@templates, $source);
     }
 }
 close(R);
@@ -38,42 +37,19 @@ close(R);
 #my @templates = `find templates/*`;
 #####################################################################
 
-#system("xgettext --omit-header --force-po --language=Perl --keyword=_ --keyword=translate -f $sources_listing -o $newpotfile.sources");
 print("I: scanning sources, it may take some time...\n");
 xgettext("-o", $newpotfile, @sources);
 
 if (! -e $newpotfile) {
-  # create an empty potfile
+  # no extracted strings
   system("echo | xgettext --force-po --language=Perl --output=$newpotfile -"); #empty potfile
-  print("W: no strings extracted from source: creating an empty potfile ($newpotfile).\n");
+  print("W: no strings extracted from source: $newpotfile was not created.\n");
+  exit 1;
 }
-print("I: source strings extracted and appended.\n");
-
-# extract strings from the templates and create potfile
-open(OUT,'>>',$newpotfile);
-foreach (@templates) {
-
-  my $lineno = 0;
-  my $file = $_;
-  chomp($file);
-  
-  open(IN, $file);
-  my @text = <IN>;
-  
-  foreach (@text) {
-  $lineno++;
-    while (m/%(TMPL:GETTEXT|_)\{"([^"]*)"\}%/gm) {
-      print OUT "#: $file:$lineno\nmsgid \"$2\"\nmsgstr \"\"\n\n";
-    }
-  }
-  close(IN);
-}
-close(OUT);
-print ("I: template strings extracted and appended.\n");
 
 #unify duplicates:
 system("cp $newpotfile $newpotfile.orig && ( cat $newpotfile.orig | sed -e 's/CHARSET/UTF-8/' | msguniq --force-po --output=$newpotfile - ) && rm -f $newpotfile.orig"); 
-print("I: unified strings.\n");
+print("I: unified duplicated strings.\n");
 
 # merge with $potfile if it already exists, copy to it otherwise
 if (-e "$potfile") {

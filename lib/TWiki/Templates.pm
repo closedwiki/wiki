@@ -182,8 +182,8 @@ sub tmplP {
 
 Translates a string to the current language. Supports the following formats:
 
-   * =%<nop>TMPL:MAKETEXT{"..."}%=
-   * =%_{"..."}%=
+   * =%<nop>TMPL:MAKETEXT{ ... }%=
+   * =%_{ ... }%=
 
 Return value: (eventually) translated text
 
@@ -192,11 +192,26 @@ Return value: (eventually) translated text
 sub _expandMaketext {
     my ( $this, $params ) = @_;
 
-    my $attrs = new TWiki::Attrs( $params );
-    my $text = $attrs->remove('_DEFAULT') || '';
+    my $str;
+    my @args;
+    while ($params) {
+        $params =~ s/^\s*//; # remove any leading spaces
+        last unless $params;
+     
+        last unless ($params =~ m/^("((\\\"|[^"])*)")(.*)$/); #next argument
+        $str = $1;
+        $params = substr($params,length($str)); #remove extracted string
+        $params =~ s/^\s*,//; # remove comma
+        $str = substr($str,1,-1);
+        $str =~ s/\\"/"/g;
+
+
+        push( @args, $str );
+    }
+
 
     # translate
-    my $result = $this->{session}->{i18n}->maketext( $text );
+    my $result = $this->{session}->{i18n}->maketext( @args );
 
     # replace acceskeys:
     $result =~ s#&(.)#<span class='twikiAccessKey'>$1</span>#g;
@@ -253,8 +268,8 @@ sub readTemplate {
     # Kill comments, marked by %{ ... }%
     $text =~ s/%{.*?}%//sg;
 
-    # handle %TMPL:GEXTTEXT{"..."}% and %TMPL:GEXTTEXT{"..."}%
-    $text =~ s/%(TMPL\:MAKETEXT|_)\{"([^"]*)"\}%/$this->_expandMaketext($2)/geo;
+    # handle %TMPL:MAKETEXT{ ... }% and %TMPL:GEXTTEXT{ ... }%
+    $text =~ s/%(TMPL\:MAKETEXT|_)\{(\s*"((\\\"|[^"])*)"(\s*,\s*"((\\\"|[^"])*)")*\s*)\}%/$this->_expandMaketext($2)/geo;
 
     if( ! ( $text =~ /%TMPL\:/s ) ) {
         # no template processing

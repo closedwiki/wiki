@@ -158,9 +158,10 @@ sub _renderSideBySide
                             class=>$format{l}[1],
                            },
                            CGI::th({align=>'center'},
-                                   'Line: '.$left).
+                                   ($session->{i18n}->maketext('Line: [_1]',$left))).
                            CGI::th({align=>'center'},
-                                   'Line: '.$right));
+                                   ($session->{i18n}->maketext('Line: [_1]',$right)))
+                          );
     }
     return $result;
 }
@@ -230,38 +231,45 @@ sub _renderSequential
     if ( $diffType eq '-') {
         $result .=
           _sequentialRow( '#FFD7D7',
-                          'Deleted', 'Deleted',
+                          ($session->{i18n}->maketext('Deleted')),
+                          'Deleted',
                           _renderCellData( $session, $left, $web, $topic ),
                           '-', '&lt;');
     } elsif ( $diffType eq '+') {
         $result .=
           _sequentialRow( '#D0FFD0',
-                          'Added', 'Added',
+                          ($session->{i18n}->maketext('Added')),
+                          'Added',
                           _renderCellData( $session, $right, $web, $topic ),
                           '+', '&gt;' );
     } elsif ( $diffType eq 'u') {
         $result .=
           _sequentialRow( undef,
-                          'Unchanged', 'Unchanged',
+                          ($session->{i18n}->maketext('Unchanged')),
+                          'Unchanged',
                           _renderCellData( $session, $right, $web, $topic ),
                           'u', '' );
     } elsif ( $diffType eq 'c') {
         $result .=
           _sequentialRow( '#D0FFD0',
-                          'Changed', 'Added',
+                          ($session->{i18n}->maketext('Changed')),
+                          'Added',
                           _renderCellData( $session, $left, $web, $topic ),
                           '-', '&lt;' );
         $result .=
           _sequentialRow( undef,
-                          'Changed', 'Added',
+                          ($session->{i18n}->maketext('Changed')),
+                          'Added',
                           _renderCellData( $session, $right, $web, $topic ),
                           '+', '&gt;' );
     } elsif ( $diffType eq 'l' && $left ne '' && $right ne '' ) {
         $result .= CGI::Tr({bgcolor=>$format{l}[0],
                             class=>'twikiDiffLineNumberHeader'},
                            CGI::th({align=>'left',
-                                    colspan=>9}, 'Line: '.
-                                   "$left to $right"));
+                                    colspan=>9},
+                                    ($session->{i18n}->maketext('Line: [_1] to [_2]',$left,$right))
+                                  )
+                           );
     }
 
     return $result;

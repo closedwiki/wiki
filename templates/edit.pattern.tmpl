@@ -182,9 +182,9 @@ document.write("<\/style>");
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
 <div class="patternToolBar">
-   * <span class="patternTab"><span class="patternTabSelected">Edit content</span></span>
-   * <span class="patternTab"><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>Topic settings</a></span>
-   * <span class="patternTabNoBorder twikiRight"><span id="helpshow" class="twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">Show formatting help</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">Hide formatting help</a></span></span>
+   * <span class="patternTab"><span class="patternTabSelected">%_{"Edit content"}%</span></span>
+   * <span class="patternTab"><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>%_{"Topic settings"}%</a></span>
+   * <span class="patternTabNoBorder twikiRight"><span id="helpshow" class="twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Show formatting help"}%</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Hide formatting help"}%</a></span></span>
 <br class="twikiClear" /></div></div><div class="patternToolBarBottom"></div>%TMPL:END%
 
 
@@ -193,7 +193,7 @@ document.write("<\/style>");
 
 
 
-%TMPL:DEF{"titleaction"}%(edit) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(edit)"}% %TMPL:END%
 
 
 
@@ -201,20 +201,20 @@ document.write("<\/style>");
 
 
 
-%TMPL:DEF{"webaction"}%Change topic%TMPL:END%
+%TMPL:DEF{"webaction"}%%_{"Change topic"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"simpleheader"}%
----+ <nop>%TOPIC% (edit)%TMPL:END%
+---+ <nop>%TOPIC% %_{"(edit)"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
-<input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">Force new revision</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" title="Read new revision help text in new window" rel='nofollow'>help</a></span></div>
+<input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" title='%_{"Read new revision help text in new window"}%' rel='nofollow'>%_{"help"}%</a></span></div>
 <div class="patternActionButtons">
-<input type="submit" class="twikiSubmit" name="action_save" id="save" value="Save" /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value="QuietSave" /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%
-<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value="Checkpoint" /><label accesskey="k" for="checkpoint"></label>&nbsp;or&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value="Preview" /><label accesskey="p" for="preview"></label>&nbsp;or&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value="Cancel" title="Cancel editing and discard changes" /><label accesskey="c" for="cancel"></label></div><div class="twikiGrayText" style="margin-top:2em;"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">Access keys</a>: S = Save, Q = Quiet Save, K = Checkpoint, P = Preview, C = Cancel</div></div>%TMPL:END%
+<input type="submit" class="twikiSubmit" name="action_save" id="save" value='%_{"Save"}%' /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%_{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%
+<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value='%_{"Preview"}%' /><label accesskey="p" for="preview"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value='%_{"Cancel"}%' title='%_{"Cancel editing and discard changes"}%' /><label accesskey="c" for="cancel"></label></div><div class="twikiGrayText" style="margin-top:2em;"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, P = %_{"Preview"}%, C = %_{"Cancel"}%</div></div>%TMPL:END%
 
 
 
@@ -234,7 +234,7 @@ document.write("<\/style>");
 <input type="hidden" name="newtopic" value="%NEWTOPIC%" />
 <input type="hidden" name="cmd" value="%CMD%" /><div></div>
 <div class="patternSig">
-<label for="sig" class="twikiGrayText">Your signature to copy/paste:&nbsp;&nbsp;</label><input size="41" name="sig" type="text" readonly="readonly" title="Select, copy and paste your signature text to the bottom of your entry" id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
+<label for="sig" class="twikiGrayText">%_{"Your signature to copy/paste:"}%&nbsp;&nbsp;</label><input size="41" name="sig" type="text" readonly="readonly" title='%_{"Select, copy and paste your signature text to the bottom of your entry"}%' id="sig" value="-- <nop>%WIKIUSERNAME% - %DATE%" /></div>
 %FORMFIELDS%
 %TMPL:P{"topicaction"}%
 </form>

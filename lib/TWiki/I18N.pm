@@ -63,6 +63,9 @@ sub new {
 
 sub maketext {
   my ( $this, $text, @args ) = @_;
+
+  $text =~ s/\[\_(\d+)\]/$args[$1-1]/ge;
+  
   return $text;
 }
 

@@ -1,0 +1,48 @@
+--- Extract.pm.orig	2005-09-16 22:39:06.000000000 -0300
++++ Extract.pm	2005-09-17 13:54:08.240524080 -0300
+@@ -51,6 +51,11 @@
+ 
+ Strings inside {{...}} are extracted.
+ 
++=item TWiki Templates
++
++Inside %_{...}% or %TMPL:MAKETEXT{...}%, first string is extracted
++(subsequent ones are assumed to be arguments to be interpolated).
++
+ =back
+ 
+ =head1 METHODS
+@@ -240,6 +245,22 @@
+         $self->add_entry($val, [ $file, $line, '' ]);
+     }
+ 
++    # TWiki templates:
++    $line = 1; pos($_) = 0;
++    my $doublequoted = '"(\\\"|[^"])*"';
++    my @_lines = split(/\n/,$_);
++    foreach (@_lines) {
++        while (m/%(TMPL:MAKETEXT|_)\{\s*($doublequoted)(\s*,\s*($doublequoted))*\s*\}%/gm) {
++            my $str = substr($2, 1, -1);
++	    #print "$file: $str\n";
++            $str =~ s/\\"/"/g;
++	    #print "$file: $str\n";
++            $self->add_entry($str, [ $file, $line, '' ]);
++        }
++        $line ++;
++    }
++
++
+     # Perl code:
+     my ($state,$str,$vars,$quo)=(0);
+     pos($_) = 0;
+@@ -423,8 +444,8 @@
+     my ($text, $verbatim) = @_;
+     return '' unless defined $text;
+ 
+-    $text =~ s/\\/\\\\/g;
+-    $text =~ s/\"/\\"/g;
++    #$text =~ s/\\/\\\\/g;
++    #$text =~ s/\"/\\"/g;
+ 
+     while (my ($char, $esc) = each %Escapes) {
+         $text =~ s/$esc/$char/g;
