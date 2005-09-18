@@ -150,7 +150,7 @@ sub checkAccessPermission {
     if( defined( $denyText )) {
         if( $denyText =~ /\S$/ ) {
             if( $user->isInList( $denyText )) {
-                $this->{failure} = 'topic is denied';
+                $this->{failure} = $this->{session}->{i18n}->maketext('access denied on topic');
                 #print STDERR $this->{failure},"\n";
                 return 0;
             }
@@ -167,7 +167,7 @@ sub checkAccessPermission {
             #print STDERR "in ALLOWTOPIC\n";
             return 1;
         }
-        $this->{failure} = 'topic is not allowed';
+        $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on topic');
         #print STDERR $this->{failure},"\n";
         return 0;
     }
@@ -178,7 +178,7 @@ sub checkAccessPermission {
         $denyText =
           $prefs->getWebPreferencesValue( 'DENYWEB'.$mode, $web );
         if( defined( $denyText ) && $user->isInList( $denyText )) {
-            $this->{failure} = 'web is denied';
+            $this->{failure} = $this->{session}->{i18n}->maketext('access denied on web');
             #print STDERR $this->{failure},"\n";
             return 0;
         }
@@ -190,7 +190,7 @@ sub checkAccessPermission {
 
     if( defined( $allowText ) && $allowText =~ /\S/ ) {
         unless( $user->isInList( $allowText )) {
-            $this->{failure} = 'web is not allowed';
+            $this->{failure} = $this->{session}->{i18n}->maketext('access not allowed on web');
             #print STDERR $this->{failure},"\n";
             return 0;
         }

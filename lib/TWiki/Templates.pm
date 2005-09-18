@@ -214,7 +214,7 @@ sub _expandMaketext {
     my $result = $this->{session}->{i18n}->maketext( @args );
 
     # replace acceskeys:
-    $result =~ s#&(.)#<span class='twikiAccessKey'>$1</span>#g;
+    $result =~ s#&([a-zA-Z])#<span class='twikiAccessKey'>$1</span>#g;
     
     return $result;
 }

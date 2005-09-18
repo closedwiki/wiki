@@ -24,10 +24,14 @@ msgstr "Autenticação de Usuário no %1"
 msgid "%1 is currently logged in"
 msgstr "%1 está autenticado nesse momento"
 
-#. ("<nop>$toWeb.<nop>$toTopic",                                     "<nop>$fromWeb.<nop>$fromTopic",                                     $date,                                     $by)
+#. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:194
 msgid "%1 moved from %2 on %3 by %4"
 msgstr "%1 movido de %2 em %3 por %4"
+
+#: templates/oopsaccessdenied.tmpl:36
+msgid "%1 topic does not exist"
+msgstr "O tópico %1 não esiste"
 
 #: templates/view.pattern.tmpl:31
 msgid "&Attach"
@@ -109,6 +113,10 @@ msgstr "(mais)"
 #: templates/moveattachment.pattern.tmpl:3
 msgid "(move attachment)"
 msgstr "(mover anexo)"
+
+#: templates/oopsaccessdenied.tmpl:3
+msgid "(oops)"
+msgstr "(oops)"
 
 #: templates/preview.pattern.tmpl:31 templates/preview.pattern.tmpl:41
 msgid "(preview)"
@@ -197,9 +205,42 @@ msgid ""
 msgstr ""
 "<span class='twikiAlert'><b>Não esqueça</b></span> de salvar suas alterações."
 
+#: templates/oopsaccessdenied.tmpl:25
+msgid ""
+"A %1 is divided into webs; each one represents one subject, one area of "
+"collaboration. You are trying to %1 in a web that does not exist."
+msgstr ""
+"Um %1 é dividido em webs; cada uma representa um assunto, uma área de "
+"colaboração. Você está tentando realizar a ação \"%1\" numa web que não "
+"existe."
+
+#: templates/oopsaccessdenied.tmpl:29
+msgid ""
+"A link to a topic located in another web is written like %1. Make sure that "
+"the name of the web is not spelt wrongly on the previous page; fix the link "
+"if necessary."
+msgstr ""
+"Um link para um tópico localizado numa outra web são escritos como %1. "
+"Certifique-se que o nome da web não esteja escrito incorretamente na página "
+"anterior; conserte-o se necessário."
+
+#: templates/oopsalerts.tmpl:37
+msgid ""
+"A new *system-generated* password for login name %1 (wikiname %2) has been "
+"sent to %3"
+msgstr ""
+
 #: templates/view.pattern.tmpl:63
 msgid "A&ll Webs"
 msgstr "Todas (&l)"
+
+#: templates/oopsaccessdenied.tmpl:5
+msgid "Access Denied"
+msgstr "Acesso negado"
+
+#: templates/oopsaccessdenied.tmpl:8
+msgid "Access check on %1 failed"
+msgstr "Checagem de acesso a %1 falhou"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Access keys"
@@ -209,6 +250,10 @@ msgstr "Teclas de atalho"
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
 msgid "Action"
 msgstr "Ação"
+
+#: templates/oopsaccessdenied.tmpl:9
+msgid "Action %1: %2."
+msgstr "Ação %1: %2."
 
 #: templates/addform.tmpl:1
 msgid "Add form"
@@ -265,6 +310,10 @@ msgstr "Anexo"
 msgid "Attachments will not be shown in topic view page."
 msgstr "Anexos não serão exibidos na página de visualização do tópico."
 
+#: templates/oopsaccessdenied.tmpl:4
+msgid "Attention"
+msgstr "Atenção"
+
 #: templates/attachtables.pattern.tmpl:30
 msgid "Attribute"
 msgstr "Atributo"
@@ -296,6 +345,14 @@ msgstr "Referências a %1 em todas as Webs"
 #: templates/oopsmore.pattern.tmpl:19
 msgid "Backlinks:"
 msgstr "Referências:"
+
+#: templates/oopsalerts.tmpl:31
+msgid "Can't find user %1"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:34
+msgid "Can't get an email address for %1 (required for password reset)"
+msgstr ""
 
 #: templates/edit.pattern.tmpl:217
 msgid "Cancel"
@@ -354,6 +411,10 @@ msgstr "Escolha um novo modelo de formulário"
 msgid "Clear all"
 msgstr "Limpar todos"
 
+#: templates/oopsaccessdenied.tmpl:40
+msgid "Click here"
+msgstr "Clique aqui"
+
 #: lib/TWiki/Render.pm:177
 msgid ""
 "Click to move topic back to previous location, with option to change "
@@ -375,6 +436,11 @@ msgstr "Comparar revisões:"
 #: templates/renamewebconfirm.pattern.tmpl:9
 msgid "Confirm rename or move"
 msgstr "Confirme renomear ou mover"
+
+#: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
+#: templates/oopsaccessdenied.tmpl:42
+msgid "Contact %1 if you have any questions."
+msgstr "Contacte %1 se você tiver qualquer questão."
 
 #: templates/view.pattern.tmpl:25
 msgid "Cr&eate"
@@ -468,6 +534,20 @@ msgstr "Final do tópico"
 msgid "Enter a new username and password to change identity:"
 msgstr "Entre um nome de usuário e senha para trocar de identidade:"
 
+#: templates/oopsalerts.tmpl:10
+msgid "Error: File attachment at %1,%2 does not exist"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:16
+msgid ""
+"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
+"=text/css=)"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:13
+msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:45
 msgid "Existing attachments"
 msgstr "Anexos existentes"
@@ -514,6 +594,18 @@ msgstr "Esconder arquivo"
 #: templates/edit.pattern.tmpl:187
 msgid "Hide formatting help"
 msgstr "Esconder ajuda sobre formatação"
+
+#: templates/oopsaccessdenied.tmpl:27
+msgid "If you came here by clicking on a question mark link"
+msgstr "Se você chagou aqui clicando num link com uma interrogação"
+
+#: templates/oopsaccessdenied.tmpl:39
+msgid "If you want to create the topic"
+msgstr "Se você quiser criar o tópico"
+
+#: templates/oopsaccessdenied.tmpl:32
+msgid "If you would like to create this web"
+msgstr "Se você quiser criar essa web"
 
 #: templates/attach.pattern.tmpl:85
 msgid "Images will be displayed, for other attachments a link will be created."
@@ -633,6 +725,10 @@ msgstr "Revisão mais recente:"
 msgid "No child topics"
 msgstr "Nenhum tópico filho"
 
+#: templates/oopsalerts.tmpl:7
+msgid "No permission to view %1"
+msgstr ""
+
 #: templates/moveattachment.pattern.tmpl:61
 msgid ""
 "Note that any URLs that refer to the attachment will be broken after this "
@@ -659,9 +755,17 @@ msgstr "Avisos:"
 msgid "Number of topics:"
 msgstr "Número de tópicos:"
 
+#: templates/oopsaccessdenied.tmpl:6
+msgid "OK"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:48
 msgid "Older revision:"
 msgstr "Revisão mais antiga:"
+
+#: templates/oopsaccessdenied.tmpl:16
+msgid "Only members of the %1 are allowed to perform this action."
+msgstr "Apenas membros do %1 têm permissão para realizar essa ação."
 
 #: templates/login.pattern.tmpl:41
 msgid "Password"
@@ -702,6 +806,10 @@ msgstr "Salvar em silêncio"
 #: templates/edit.pattern.tmpl:214
 msgid "Read new revision help text in new window"
 msgstr "Ler ajuda sobre nova revisão numa nova janela"
+
+#: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
+msgid "Related topics:"
+msgstr "Tópicos relacionados:"
 
 #: templates/rename.pattern.tmpl:9 templates/renameweb.pattern.tmpl:9
 msgid "Rename"
@@ -822,6 +930,10 @@ msgstr ""
 "Passo 2: Continue <input type='submit' class='twikiSubmit' value='Editando' /"
 "> e salve %1 para ativar o novo pai"
 
+#: templates/oopsaccessdenied.tmpl:24
+msgid "The %1 web does not exist"
+msgstr "A web %1 não existe"
+
 #: templates/moveattachment.pattern.tmpl:59
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "O anexo e seu histórico serão movidos para o novo tópico."
@@ -837,6 +949,10 @@ msgid ""
 msgstr ""
 "Os tópicos marcados serão atualizados (outro formulário vai aparecer e "
 "_pode_ permitir você renomear tópicos que estejam travados)"
+
+#: templates/oopsalerts.tmpl:28
+msgid "The entry for user %1 was missing in the password system."
+msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:30
 msgid "The new topic chosen must already exist."
@@ -955,6 +1071,14 @@ msgstr "Visualizar tópico"
 msgid "View total topic history"
 msgstr "Ver histórico completo do tópico"
 
+#: templates/oopsalerts.tmpl:22
+msgid "Warning: Can't INCLUDE %1 twice, topic is already included. %2"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:19
+msgid "Warning: Can't find topic %1"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
@@ -963,6 +1087,18 @@ msgstr "Quem"
 #: templates/view.pattern.tmpl:36
 msgid "You are here"
 msgstr "Você está aqui"
+
+#: templates/oopsaccessdenied.tmpl:37
+msgid "You are trying to %1 a topic that does not exist."
+msgstr "Você está tentando realizar a ação %1 num tópico que não existe."
+
+#: templates/oopsaccessdenied.tmpl:33
+msgid ""
+"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
+"have any questions."
+msgstr ""
+"Você pode [[%1][criar uma nova web]] se você tiver permissão. Contacte %2 se "
+"você tiver qualquer questão."
 
 #: templates/rename.pattern.tmpl:27
 msgid "You can move the topic to a different web."
@@ -987,6 +1123,22 @@ msgstr ""
 #: lib/TWiki/I18N.pm:234
 msgid "_language_name"
 msgstr "Português"
+
+#: lib/TWiki/Access.pm:153
+msgid "access denied on topic"
+msgstr "Acesso ao tópico negado"
+
+#: lib/TWiki/Access.pm:181
+msgid "access denied on web"
+msgstr "acesso à web negado"
+
+#: lib/TWiki/Access.pm:170
+msgid "access not allowed on topic"
+msgstr "acesso ao tópico não permitido"
+
+#: lib/TWiki/Access.pm:193
+msgid "access not allowed on web"
+msgstr "accesso à web não permitido"
 
 #: templates/attachtables.pattern.tmpl:11
 msgid "change, update, previous revisions, move, delete..."

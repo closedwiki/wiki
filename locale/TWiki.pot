@@ -27,9 +27,13 @@ msgstr ""
 #   "<nop>$fromWeb.<nop>$fromTopic",
 #   $date,
 #   $by)
-#. ("<nop>$toWeb.<nop>$toTopic",                                     "<nop>$fromWeb.<nop>$fromTopic",                                     $date,                                     $by)
+#. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:194
 msgid "%1 moved from %2 on %3 by %4"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:36
+msgid "%1 topic does not exist"
 msgstr ""
 
 #: templates/view.pattern.tmpl:31
@@ -113,6 +117,10 @@ msgstr ""
 msgid "(move attachment)"
 msgstr ""
 
+#: templates/oopsaccessdenied.tmpl:3
+msgid "(oops)"
+msgstr ""
+
 #: templates/preview.pattern.tmpl:31 templates/preview.pattern.tmpl:41
 msgid "(preview)"
 msgstr ""
@@ -183,8 +191,35 @@ msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
 
+#: templates/oopsaccessdenied.tmpl:25
+msgid ""
+"A %1 is divided into webs; each one represents one subject, one area of "
+"collaboration. You are trying to %1 in a web that does not exist."
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:29
+msgid ""
+"A link to a topic located in another web is written like %1. Make sure that "
+"the name of the web is not spelt wrongly on the previous page; fix the link "
+"if necessary."
+msgstr ""
+
+#: templates/oopsalerts.tmpl:37
+msgid ""
+"A new *system-generated* password for login name %1 (wikiname %2) has been "
+"sent to %3"
+msgstr ""
+
 #: templates/view.pattern.tmpl:63
 msgid "A&ll Webs"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:5
+msgid "Access Denied"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:8
+msgid "Access check on %1 failed"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:217
@@ -194,6 +229,10 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7 templates/changeform.pattern.tmpl:9
 msgid "Action"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:9
+msgid "Action %1: %2."
 msgstr ""
 
 #: templates/addform.tmpl:1
@@ -247,6 +286,10 @@ msgstr ""
 msgid "Attachments will not be shown in topic view page."
 msgstr ""
 
+#: templates/oopsaccessdenied.tmpl:4
+msgid "Attention"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:30
 msgid "Attribute"
 msgstr ""
@@ -277,6 +320,14 @@ msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:19
 msgid "Backlinks:"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:31
+msgid "Can't find user %1"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:34
+msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:217
@@ -336,6 +387,10 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
+#: templates/oopsaccessdenied.tmpl:40
+msgid "Click here"
+msgstr ""
+
 #: lib/TWiki/Render.pm:177
 msgid ""
 "Click to move topic back to previous location, with option to change "
@@ -354,6 +409,11 @@ msgstr ""
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
 msgid "Confirm rename or move"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
+#: templates/oopsaccessdenied.tmpl:42
+msgid "Contact %1 if you have any questions."
 msgstr ""
 
 #: templates/view.pattern.tmpl:25
@@ -447,6 +507,20 @@ msgstr ""
 msgid "Enter a new username and password to change identity:"
 msgstr ""
 
+#: templates/oopsalerts.tmpl:10
+msgid "Error: File attachment at %1,%2 does not exist"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:16
+msgid ""
+"Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
+"=text/css=)"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:13
+msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:45
 msgid "Existing attachments"
 msgstr ""
@@ -484,6 +558,18 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:187
 msgid "Hide formatting help"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:27
+msgid "If you came here by clicking on a question mark link"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:39
+msgid "If you want to create the topic"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:32
+msgid "If you would like to create this web"
 msgstr ""
 
 #: templates/attach.pattern.tmpl:85
@@ -592,6 +678,10 @@ msgstr ""
 msgid "No child topics"
 msgstr ""
 
+#: templates/oopsalerts.tmpl:7
+msgid "No permission to view %1"
+msgstr ""
+
 #: templates/moveattachment.pattern.tmpl:61
 msgid ""
 "Note that any URLs that refer to the attachment will be broken after this "
@@ -617,8 +707,16 @@ msgstr ""
 msgid "Number of topics:"
 msgstr ""
 
+#: templates/oopsaccessdenied.tmpl:6
+msgid "OK"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:48
 msgid "Older revision:"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:16
+msgid "Only members of the %1 are allowed to perform this action."
 msgstr ""
 
 #: templates/login.pattern.tmpl:41
@@ -659,6 +757,10 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:214
 msgid "Read new revision help text in new window"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
+msgid "Related topics:"
 msgstr ""
 
 #: templates/rename.pattern.tmpl:9 templates/renameweb.pattern.tmpl:9
@@ -777,6 +879,10 @@ msgid ""
 "and save %1 to activate the new parent"
 msgstr ""
 
+#: templates/oopsaccessdenied.tmpl:24
+msgid "The %1 web does not exist"
+msgstr ""
+
 #: templates/moveattachment.pattern.tmpl:59
 msgid "The attachment and any history will be moved to the new topic."
 msgstr ""
@@ -789,6 +895,10 @@ msgstr ""
 msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
 "_eventually_ allow you to rename any topics that were locked)"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:28
+msgid "The entry for user %1 was missing in the password system."
 msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:30
@@ -899,6 +1009,14 @@ msgstr ""
 msgid "View total topic history"
 msgstr ""
 
+#: templates/oopsalerts.tmpl:22
+msgid "Warning: Can't INCLUDE %1 twice, topic is already included. %2"
+msgstr ""
+
+#: templates/oopsalerts.tmpl:19
+msgid "Warning: Can't find topic %1"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
@@ -906,6 +1024,16 @@ msgstr ""
 
 #: templates/view.pattern.tmpl:36
 msgid "You are here"
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:37
+msgid "You are trying to %1 a topic that does not exist."
+msgstr ""
+
+#: templates/oopsaccessdenied.tmpl:33
+msgid ""
+"You can [[%1][create a new web]] if you have permission. Contact %2 if you "
+"have any questions."
 msgstr ""
 
 #: templates/rename.pattern.tmpl:27
@@ -928,6 +1056,22 @@ msgstr ""
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:234
 msgid "_language_name"
+msgstr ""
+
+#: lib/TWiki/Access.pm:153
+msgid "access denied on topic"
+msgstr ""
+
+#: lib/TWiki/Access.pm:181
+msgid "access denied on web"
+msgstr ""
+
+#: lib/TWiki/Access.pm:170
+msgid "access not allowed on topic"
+msgstr ""
+
+#: lib/TWiki/Access.pm:193
+msgid "access not allowed on web"
 msgstr ""
 
 #: templates/attachtables.pattern.tmpl:11

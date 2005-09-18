@@ -1,43 +1,39 @@
-%TMPL:DEF{"comment"}%
-
+%{
 Inline alerts, embedded in rendered text. One DEF is selected and
 inserted at %INSTANTIATE%
+}%
 
-%TMPL:END%
 %TMPL:DEF{"access_denied"}%
-No permission to view %PARAM1%
+%_{"No permission to view [_1]", "%PARAM1%"}%
 %TMPL:END%
 %TMPL:DEF{"no_such_attachment"}%
-Error: File attachment at %PARAM1%,%PARAM2% does not exist
+%_{"Error: File attachment at [_1],[_2] does not exist", "%PARAM1%", "%PARAM2%"}%
 %TMPL:END%
 %TMPL:DEF{"bad_protocol"}%
-Error: Unsupported protocol. (Must be 'http://domain/...'
+%_{"Error: Unsupported protocol. (Must be 'http://domain/...')"}%
 %TMPL:END%
 %TMPL:DEF{"bad_content_type"}%
-Error: Unsupported content type: %PARAM1% (Must be =text/html=, =text/plain=
-or =text/css=)
+%_{"Error: Unsupported content type: [_1] (Must be =text/html=, =text/plain= or =text/css=)", "%PARAM1%"}%
 %TMPL:END%
 %TMPL:DEF{"no_such_topic"}%
-Warning: Can't find topic <nop>%PARAM1%
+%_{"Warning: Can't find topic [_1]", "<nop>%PARAM1%"}%
 %TMPL:END%
 %TMPL:DEF{"already_included"}%
-Warning: Can't INCLUDE <nop>%PARAM1%.<nop>%PARAM2% twice, topic is already
-included. %PARAM3%
+%_{"Warning: Can't INCLUDE [_1] twice, topic is already included. [_2]", "<nop>%PARAM1%.<nop>%PARAM2%", "%PARAM3%"}%
 %TMPL:END%
 %TMPL:DEF{"generic"}%
 %PARAM1% %PARAM2% %PARAM3% %PARAM4%<br />
 %TMPL:END%
 %TMPL:DEF{"missing_user"}%
-The entry for user %PARAM1% was missing in the password system.<br />
+%_{"The entry for user [_1] was missing in the password system.", "%PARAM1%"}%<br />
 %TMPL:END%
 %TMPL:DEF{"notwikiuser"}%
-Can't find user %PARAM1%<br />
+%_{"Can't find user [_1]", "%PARAM1%"}%<br />
 %TMPL:END%
 %TMPL:DEF{"no_email_for"}%
-Can't get an email address for %PARAM1% (required for password reset)<br />
+%_{"Can't get an email address for [_1] (required for password reset)", "%PARAM1%"}%<br />
 %TMPL:END%
 %TMPL:DEF{"new_sys_pass"}%
-A new *system-generated* password for login name %PARAM1% (wikiname %MAINWEB%.%PARAM2%)
-has been sent to %PARAM3%<br />
+%_{"A new *system-generated* password for login name [_1] (wikiname [_2]) has been sent to [_3]", "%PARAM1%", "%MAINWEB%.%PARAM2%", "%PARAM3%"}%<br />
 %TMPL:END%
 <span class='twikiAlert'> %INSTANTIATE% </span>
