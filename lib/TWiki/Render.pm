@@ -173,7 +173,9 @@ sub _renderMoved {
         my $putBack = '';
         if( $web eq $toWeb && $topic eq $toTopic ) {
             $putBack  = ' - '.
-              CGI::a( { title=>'Click to move topic back to previous location, with option to change references.',
+              CGI::a( { title=>($this->{session}->{i18n}->maketext(
+                                  'Click to move topic back to previous location, with option to change references.')
+                               ),
                         href => $this->{session}->getScriptUrl
                         ($web, $topic,
                          'rename',
@@ -182,11 +184,14 @@ sub _renderMoved {
                          confirm => 'on' ),
                         rel => 'nofollow'
                       },
-                      'put it back' );
+                      $this->{session}->{i18n}->maketext('put it back') );
         }
-        # SMELL: this English string should be in a template
-        $text = CGI::i("<nop>$toWeb.<nop>$toTopic moved from <nop>$fromWeb".
-          ".<nop>$fromTopic on $date by $by ").$putBack;
+        $text = CGI::i(
+          $this->{session}->{i18n}->maketext("[_1] moved from [_2] on [_3] by [_4]",
+                                             "<nop>$toWeb.<nop>$toTopic",
+                                             "<nop>$fromWeb.<nop>$fromTopic",
+                                             $date,
+                                             $by)) . $putBack;
     }
     return $text;
 }
@@ -538,7 +543,7 @@ sub _renderNonExistingWikiWord {
                        topicparent => $this->{session}->{webName}.'.'.
                        $this->{session}->{topicName} ),
                        rel=>'nofollow',
-                       title=>'Create this topic'
+                       title=>($this->{session}->{i18n}->maketext('Create this topic'))
                     },
                     $this->{NEWLINKSYMBOL} x $num . " " );
             $num++;
@@ -549,7 +554,7 @@ sub _renderNonExistingWikiWord {
                        topicparent => $this->{session}->{webName}.'.'.
                        $this->{session}->{topicName} ),
                        rel=>'nofollow',
-                       title=>'Create this topic'
+                       title=>($this->{session}->{i18n}->maketext('Create this topic'))
                     },
                     $this->{NEWLINKSYMBOL} );
     }

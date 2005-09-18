@@ -24,6 +24,11 @@ msgstr "Autenticação de Usuário no %1"
 msgid "%1 is currently logged in"
 msgstr "%1 está autenticado nesse momento"
 
+#. ("<nop>$toWeb.<nop>$toTopic",                                     "<nop>$fromWeb.<nop>$fromTopic",                                     $date,                                     $by)
+#: lib/TWiki/Render.pm:194
+msgid "%1 moved from %2 on %3 by %4"
+msgstr "%1 movido de %2 em %3 por %4"
+
 #: templates/view.pattern.tmpl:31
 msgid "&Attach"
 msgstr "&Anexar"
@@ -272,6 +277,10 @@ msgstr "Voltar"
 msgid "Back to top"
 msgstr "Retornar ao topo"
 
+#: templates/twiki.pattern.tmpl:12
+msgid "Back to topic"
+msgstr "Retornar ao tópico"
+
 #: templates/view.pattern.tmpl:63
 msgid "Backlinks"
 msgstr "Referências:"
@@ -345,6 +354,14 @@ msgstr "Escolha um novo modelo de formulário"
 msgid "Clear all"
 msgstr "Limpar todos"
 
+#: lib/TWiki/Render.pm:177
+msgid ""
+"Click to move topic back to previous location, with option to change "
+"references."
+msgstr ""
+"Clique para mover o tópico de volta à sua localização anterior, com a opção "
+"de mudar as referências."
+
 #: templates/attach.pattern.tmpl:70 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Comment"
@@ -366,6 +383,10 @@ msgstr "Criar(&e)"
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
 msgstr "Criar um link para o arquivo anexado"
+
+#: lib/TWiki/Render.pm:546 lib/TWiki/Render.pm:557
+msgid "Create this topic"
+msgstr "Criar este tópico"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
@@ -1005,6 +1026,10 @@ msgstr "nenhum (remover tópico pai)"
 msgid "or"
 msgstr "ou"
 
+#: lib/TWiki/Render.pm:187
+msgid "put it back"
+msgstr "pôr de volta"
+
 #: templates/search.pattern.tmpl:18
 msgid "retrieved at %1 GMT"
 msgstr "obtidos em %1 GMT"
@@ -1012,6 +1037,3 @@ msgstr "obtidos em %1 GMT"
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "ver"
-
-#~ msgid "Back to topic"
-#~ msgstr "Retornar ao tópico"

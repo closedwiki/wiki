@@ -24,6 +24,11 @@ msgstr ""
 msgid "%1 is currently logged in"
 msgstr "%1 esta en linea"
 
+#. ("<nop>$toWeb.<nop>$toTopic",                                     "<nop>$fromWeb.<nop>$fromTopic",                                     $date,                                     $by)
+#: lib/TWiki/Render.pm:194
+msgid "%1 moved from %2 on %3 by %4"
+msgstr ""
+
 #: templates/view.pattern.tmpl:31
 #, fuzzy
 msgid "&Attach"
@@ -257,6 +262,11 @@ msgstr "Retroceda"
 msgid "Back to top"
 msgstr ""
 
+#: templates/twiki.pattern.tmpl:12
+#, fuzzy
+msgid "Back to topic"
+msgstr "Renombre o mueva la pagina:"
+
 #: templates/view.pattern.tmpl:63
 #, fuzzy
 msgid "Backlinks"
@@ -331,6 +341,12 @@ msgstr "Escoge el nuevo patrón del formulario"
 msgid "Clear all"
 msgstr ""
 
+#: lib/TWiki/Render.pm:177
+msgid ""
+"Click to move topic back to previous location, with option to change "
+"references."
+msgstr ""
+
 #: templates/attach.pattern.tmpl:70 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Comment"
@@ -353,6 +369,11 @@ msgstr ""
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
 msgstr "Cree un enlace al archivo"
+
+#: lib/TWiki/Render.pm:546 lib/TWiki/Render.pm:557
+#, fuzzy
+msgid "Create this topic"
+msgstr "Cambie la pagina"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
@@ -968,6 +989,10 @@ msgstr "ninguno ()"
 #: templates/edit.pattern.tmpl:217
 msgid "or"
 msgstr "o"
+
+#: lib/TWiki/Render.pm:187
+msgid "put it back"
+msgstr ""
 
 #: templates/search.pattern.tmpl:18
 msgid "retrieved at %1 GMT"
