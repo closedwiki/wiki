@@ -1,14 +1,16 @@
 %META:TOPICINFO{author="TWikiGuest" date="1122128753" format="1.1" version="1.1"}%
-<div style="float:right;margin-left:10px;margin-bottom:10px;">
-<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%" /></a><br />
-The official TWiki<sup>TM</sup><br /> site is 
-http://twiki.org/
-</div>
+
 ---+!! Welcome to the %WEB% Web
 
+<table><tr><td>
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
+</td><td align="center">
+<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%" /></a><br />
+The official TWiki<sup>&trade;</sup> site is 
+http://twiki.org/
+</td></tr></table>
 
 ---++ Available Information
    * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
