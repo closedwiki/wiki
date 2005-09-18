@@ -320,6 +320,7 @@ lib/TWiki/Func.pm
 lib/TWiki/I18N.pm
 lib/TWiki/If.pm
 lib/TWiki/Merge.pm
+lib/TWiki/Merge3.pm
 lib/TWiki/Meta.pm
 lib/TWiki/Net.pm
 lib/TWiki/OopsException.pm
