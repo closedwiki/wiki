@@ -269,19 +269,17 @@ sub getWebPreferencesValue {
 # isn't final, return undef.
 sub _getFinalValue {
     my( $this, $key ) = @_;
-    my $finalVal;
+    my $candVal;
 
     foreach my $level ( @{$this->{PREFS}} ) {
+        my $val = $level->{Set}{$key};
+        $candVal = $val if defined $val;
         if( $level->{final}{$key} ) {
-            $finalVal = '';
-        }
-        if( defined $finalVal ) {
-            my $val = $level->{Set}{$key};
-            return $val if defined $val;
+            return $candVal || '';
         }
     }
 
-    return $finalVal;
+    return undef;
 }
 
 =pod
