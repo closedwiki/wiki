@@ -1,0 +1,11 @@
+data/TWiki/SlideShowPlugin.txt NEW
+lib/TWiki/Plugins/SlideShowPlugin.pm NEW
+lib/TWiki/Plugins/SlideShowPlugin/SlideShow.pm NEW
+pub/TWiki/SlideShowPlugin/clearpixel.gif NEW
+pub/TWiki/SlideShowPlugin/endpres.gif NEW
+pub/TWiki/SlideShowPlugin/first.gif NEW
+pub/TWiki/SlideShowPlugin/last.gif NEW
+pub/TWiki/SlideShowPlugin/logo.gif NEW
+pub/TWiki/SlideShowPlugin/next.gif NEW
+pub/TWiki/SlideShowPlugin/prev.gif NEW
+pub/TWiki/SlideShowPlugin/startpres.gif NEW

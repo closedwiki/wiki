@@ -259,7 +259,7 @@ sub new {
              { name => $this->{project}.'_installer.pl',
                description => 'Install script',
                permissions => 0770 });
-        print 'Auto-adding install script to manifest',$NL;
+        print STDERR 'Auto-adding install script to manifest',$NL;
     }
 
     # Generate a TWiki table representing the manifest contents

@@ -1,0 +1,5 @@
+data/Plugins/NewsPlugin.txt NEW
+data/Plugins/NewsPluginExample.txt NEW
+data/Plugins/NewsPluginExampleHeadlines.txt NEW
+data/Plugins/NewsPluginExampleInclusion.txt NEW
+lib/TWiki/Plugins/NewsPlugin.pm NEW

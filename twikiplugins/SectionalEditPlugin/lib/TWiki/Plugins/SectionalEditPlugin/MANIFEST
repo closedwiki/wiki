@@ -1,0 +1,6 @@
+bin/editsection NEW
+bin/previewsection NEW
+data/TWiki/SectionalEditPlugin.txt NEW
+lib/TWiki/Plugins/SectionalEditPlugin.pm NEW
+templates/editsection.tmpl NEW
+templates/previewsection.tmpl NEW

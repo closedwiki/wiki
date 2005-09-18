@@ -1,0 +1,3 @@
+BatchUploadPlugin_installer.pl NEW
+data/TWiki/BatchUploadPlugin.txt NEW
+lib/TWiki/Plugins/BatchUploadPlugin.pm NEW

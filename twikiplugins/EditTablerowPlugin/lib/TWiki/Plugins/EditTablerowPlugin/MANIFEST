@@ -1,0 +1,6 @@
+bin/editTableRow NEW
+bin/uploadTableRow NEW
+data/TWiki/EditTablerowPlugin.txt NEW
+lib/TWiki/Plugins/EditTablerowPlugin.pm NEW
+templates/editTableRow.pattern.tmpl NEW
+templates/editTableRow.tmpl NEW
