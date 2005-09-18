@@ -1,0 +1,42 @@
+# the default unison profile must not exist 
+# pageant must be running
+# this is designed to run on a windows box
+
+# Add your accounts to the 'accounts' tree and then the default ones to sync to the 'syncAccounts' array
+
+# Common debug options
+# SYMPTOM:
+#   Two or more files on a Unix system have names identical except for case.
+#   They cannot be synchronized to a Windows file system.
+# DIAGNOSIS
+#   See http://groups.yahoo.com/group/unison-users/message/4445
+
+
+$UnisonSync::options = {
+	'syncAccounts' => ['testAccount'],
+
+    'plinkExecutable' => 'c:\\program files\\putty\plink.exe',
+    'plinkTempLauncherScriptFile' => 'c:\\temp\\plinkLauncher.bat',
+
+    'clientUnisonExecutable' => 'c:\\moreprgs\\unison\\unison-2.9.1-win-text.exe',
+    'serverUnisonExecutable' => 'unison',
+
+    'dataDir' => 'data',
+    'pubDir' => 'pub',
+    'protocol' => 'ssh',
+
+	'accounts' => {
+		'testAccount' => {
+	        clientRoot => 'c:/moreprgs/indigoperl/apache/TWiki',
+			serverRoot => '/home/mrjc/cairotwiki.mrjc.com/twiki',
+			clientServerPrivateKey => 'c:\\Documents and Settings\\Martin Cleaver\\PuttyPrivateKey.ppk',
+			serverAccount => 'mrjc',
+		    	serverSite => 'mrjc.com',
+			webs => ['Sandbox'],
+			unisonOptions => '-debug all',
+			debug => '3'
+		}
+	}	
+};
+
+1;
