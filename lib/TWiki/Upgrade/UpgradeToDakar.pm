@@ -139,7 +139,7 @@ foreach my $file (readdir(HERE)) {
 
 print "Preparing to write new format configuration files for you...\n\n";
 
-TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
+my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
 
 print "\n\nMerging your existing twiki data ($TWiki::dataDir) with new release twiki data...\n";
 
@@ -272,6 +272,7 @@ Now you need to
 12. Enjoy!
 ";
 
+    return ($oldDataDir, $oldPubDir);
 }
 
 1;

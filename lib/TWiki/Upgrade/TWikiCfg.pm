@@ -69,7 +69,7 @@ sub UpgradeTWikiConfig {
     # and now we have the old definitions...
     # ...  write those out where we can, or new defaults where we can't
 
-    TWiki::upgradeConfig($twikiCfgFile, $newConfigFile);
+    return TWiki::upgradeConfig($twikiCfgFile, $newConfigFile);
 }
 
 package TWiki;
@@ -232,6 +232,8 @@ sub upgradeConfig {
 
     close( CFG );
     print "$newConfigFile created...\n";
+
+    return ($dataDir, $pubDir);
 }
 
 my @ActiveSubstitutions = ();

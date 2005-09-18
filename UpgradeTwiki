@@ -44,10 +44,14 @@ if ( ( $#ARGV >= 1 ) && ($mode eq 'moveTopics') ) { # must be 2 parameters
         $newDataDir = $ARGV[2] || die "missing newDataDir\n\n"; 
         $oldDataDir = $ARGV[3] || die "missing oldDataDir\n\n"; 
         $outputDir = $ARGV[4] || die "missing outputDir\n\n"; 
-} elsif ( ( $#ARGV == 2 ) || ( $#ARGV == 3 ) ) { # 3or4 arguments
-        $newCfgFile = $ARGV[0 + ($mode eq ''?0:1)] || die "missing parameter2\n\n"; 
-        $oldCfgFile = $ARGV[1 + ($mode eq ''?0:1)] || die "missing parameter3\n\n"; 
-        $outputDir = $ARGV[2 + ($mode eq ''?0:1)] || die "missing parameter4\n\n"; 
+} elsif ( (($mode eq 'cairo') || ($mode eq 'dakar')) && ($#ARGV == 3)) {
+        $newCfgFile = $ARGV[1] || die "missing newCfgFile\n\n"; 
+        $oldDataDir = $ARGV[2] || die "missing oldDataDir\n\n"; 
+        $outputDir = $ARGV[3] || die "missing outputDir\n\n"; 
+} elsif ( ($mode eq '') && ($#ARGV == 1)) {		#do dakar & upgradeTopics
+        $oldCfgFile = $ARGV[0] || die "missing oldCfgFile\n\n"; 
+        $outputDir = $ARGV[1] || die "missing outputDir\n\n"; 
+	$newCfgFile = './bin/setlib.cfg';
 } else {
 	print <<EOUSAGE;
 
@@ -55,8 +59,8 @@ Create an upgraded twiki installation from an existing one
 and a new distribution.
 
 usage: UpgradeTWiki 
-usage: UpgradeTWiki <newCfgFile> <oldCfgFile> <outputDirectory>
-will run the --dakar option and then the --upgradeTopics option
+usage: UpgradeTWiki <oldCfgFile> <outputDirectory>
+will run the --dakar option and then the --upgradeTopics option (transfers your existing config, and upgrades your topics and pub files into the outputDirectory (doesn not modify your existing directories)
 
 usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
 does the CairoRelease upgrade (should end up incompatible with DakarRelease code)
@@ -106,6 +110,15 @@ print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile
 if ( $mode eq '' ) 
 {
 #run --dakar then --upgradeTopics
+	eval 'use TWiki::Upgrade::UpgradeToDakar';
+	my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades('./lib/TWiki.cfg', $oldCfgFile, $outputDir);
+	$oldDataDir = File::Spec->rel2abs( $oldDataDir );
+	$oldPubDir = File::Spec->rel2abs( $oldPubDir );
+	my $newTWikiDir = File::Spec->rel2abs( '.' );
+#	print "===========$oldDataDir\n============$oldPubDir\n";
+	eval 'use TWiki::Upgrade::UpdateTopics';
+	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/data/', $oldDataDir, $outputDir.'/data/');
+	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/pub/', $oldPubDir, $outputDir.'/pub/');
 } 
 elsif ( $mode eq 'dakar' ) 
 {
