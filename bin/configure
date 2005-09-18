@@ -154,6 +154,10 @@ my $url = $query->url();
 my $action = $query->param('action') || '';
 my $nextid = 0;
 
+if( $action eq 'image' ) {
+    return _serveImage( $query->param('type'), $query->param('image' ));
+}
+
 #sub UNTAINTED($) {
 #    local(@_, $@, $^W) = @_;
 #    my $x;
@@ -1110,6 +1114,17 @@ sub _perlModulesCheck {
 ########################################################################
 #################### MAIN ACTION ENTRY POINTS ##########################
 ########################################################################
+
+sub _serveImage {
+    my($type, $image )= @_;
+
+    print "Content-type: $type\n\n";
+    if( open(F, "logos/$image")) {
+        local $/ = undef;
+        print <F>;
+        close(F);
+    }
+}
 
 sub handleUpdate {
     my $path = shift;
@@ -2238,8 +2253,8 @@ my $hdr = CGI::start_html(
     -title => 'TWiki Configuration',
     -head => [
         CGI::meta( { name=>'robots', content=>'noindex' }),
-        CGI::Link( { -rel=>'icon', -href=>'logos/configure.ico', -type=>'image/x-icon' } ),
-        CGI::Link( { -rel=>'shortcut icon', -href=>'logos/configure.ico', -type=>'image/x-icon' } ),
+        CGI::Link( { -rel=>'icon', -href=>'configure?action=image;image=configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
+        CGI::Link( { -rel=>'shortcut icon', -href=>'configure?action=image;image=logos/configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
         CGI::script( { language => 'JavaScript',
                        type => 'text/javascript' }, $js1 ),
         CGI::style( { -type=>'text/css' }, $css),
@@ -2252,7 +2267,7 @@ $hdr =~ s/^<\?xml.*?>//s;
 print CGI::header('text/html'), $hdr;
 
 my $body = "";
-$body .= CGI::h1( CGI::img({src=>'logos/logo.png', alt=>'logo'}).
+$body .= CGI::h1( CGI::img({src=>'configure?action=image&image=logo.png;type=image/png', alt=>'TWiki'}).
   '&nbsp;Configuration');
 
 my $update_disabled = 0;
