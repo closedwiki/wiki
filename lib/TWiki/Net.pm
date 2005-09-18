@@ -235,7 +235,7 @@ sub _sendEmailByNetSMTP {
     my @to = ();
 
     my ( $header, $body ) = split( "\n\n", $theText, 2 );
-    my @headerlines = split( /\n/, $header );
+    my @headerlines = split( /\r?\n/, $header );
     $header =~ s/\nBCC\:[^\n]*//os;  #remove BCC line from header
     $header =~ s/([\n\r])(From|To|CC|BCC)(\:\s*)([^\n\r]*)/$1 . $2 . $3 . _fixLineLength( $4 )/geois;
     $theText = "$header\n\n$body";   # rebuild message

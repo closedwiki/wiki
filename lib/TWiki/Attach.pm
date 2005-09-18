@@ -620,7 +620,7 @@ sub migrateToFileAttachmentMacro {
     } else {
         # Format of macro that came before META:ATTACHMENT
         my $line = '';
-        foreach $line ( split( /\n/, $atext ) ) {
+        foreach $line ( split( /\r?\n/, $atext ) ) {
             if( $line =~ /%FILEATTACHMENT{\s"([^"]*)"([^}]*)}%/ ) {
                 my $name = $1;
                 my $values = new TWiki::Attrs( $2 );

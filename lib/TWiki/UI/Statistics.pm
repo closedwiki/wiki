@@ -337,7 +337,7 @@ sub _processWeb {
     if( $session->{store}->topicExists( $web, $statsTopic ) ) {
         my( $meta, $text ) =
           $session->{store}->readTopic( undef, $web, $statsTopic, undef );
-        my @lines = split( /\n/, $text );
+        my @lines = split( /\r?\n/, $text );
         my $statLine;
         my $idxStat = -1;
         my $idxTmpl = -1;

@@ -168,7 +168,7 @@ The significant differences between the new template for .htacess
 and your previous one are:
 
 ";
-        print join "\n", grep( /^[+-][^#]/ , split( /\n/, diff("$targetDir/bin/.htaccess", "./bin/.htaccess.txt")));
+        print join "\n", grep( /^[+-][^#]/ , split( /\r?\n/, diff("$targetDir/bin/.htaccess", "./bin/.htaccess.txt")));
 
         print "
 You may need to apply some of these differences to the new .htaccess

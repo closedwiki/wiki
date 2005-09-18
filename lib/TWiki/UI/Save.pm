@@ -121,6 +121,8 @@ sub buildNewTopic {
 
     # Determine the new text
     my $newText = $query->param( 'text' );
+    # HTTP uses CRLF, so remove the CRs
+    $newText =~ s/\r//g;
 
     if( defined( $newText) ) {
         # text from the query

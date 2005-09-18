@@ -215,7 +215,7 @@ sub bulkRegister {
           _registerSingleBulkUser($session, $row, $settings );
         $log .= "\n---++ ". $row->{WikiName}."\n";
         $log .= $b.' Added to users topic '.$userTopic.":\n".
-          join("\n".$indent,split /\n/, $uLog)."\n";	
+          join("\n".$indent,split /\r?\n/, $uLog)."\n";	
         $registrationsMade++; # SMELL - no detection for failure
     }
 
@@ -762,10 +762,10 @@ sub _newUserFromTemplate {
       $b2.' RegistrationHandler: ';
     my $regLog = $text;
     _purgeKeys( $row );
-    $log .= join($b2.' ', split /\n/, $regLog)."\n";
+    $log .= join($b2.' ', split /\r?\n/, $regLog)."\n";
     $log .= $b2.' '.
       join( $b2.' ',
-            split( /\n/,
+            split( /\r?\n/,
                    _writeRegistrationDetailsToTopic( $session, $row,
                                                      $meta, $text )))."\n";
     return $log;

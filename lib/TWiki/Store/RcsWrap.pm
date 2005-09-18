@@ -296,7 +296,7 @@ sub revisionDiff {
     if ( $rev1 eq '1' && $rev2 eq '1' ) {
         my $text = $this->getRevision(1);
         $tmp = "1a1\n";
-        foreach( split( /\n/, $text ) ) {
+        foreach( split( /\r?\n/, $text ) ) {
             $tmp = "$tmp> $_\n";
         }
     } else {
@@ -341,7 +341,7 @@ sub parseRevisionDiff {
 
     my $lineNumber=1;
     if ( $diffFormat eq 'unified' ) {
-        foreach( split( /\n/, $text ) ) {
+        foreach( split( /\r?\n/, $text ) ) {
             if ( $lineNumber > 2 ) {   #skip the first 2 lines (filenames)
                 if ( /@@ [-+]([0-9]+)([,0-9]+)? [-+]([0-9]+)(,[0-9]+)? @@/ ) {
 	    	        #line number
@@ -359,7 +359,7 @@ sub parseRevisionDiff {
         }
     } else {
         #'normal' rcsdiff output
-        foreach( split( /\n/, $text ) ) {
+        foreach( split( /\r?\n/, $text ) ) {
     	    if ( /^([0-9]+)[0-9\,]*([acd])([0-9]+)/ ) {
     	        #line number
                 push @diffArray, ['l', $1, $3];

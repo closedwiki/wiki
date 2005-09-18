@@ -52,7 +52,7 @@ sub _upgradeCategoryItem {
     if( $cvalue ) {
         $src = "<!---->$cvalue<!---->";
     } elsif( $ctext ) {
-        foreach( split( /\n/, $ctext ) ) {
+        foreach( split( /\r?\n/, $ctext ) ) {
             if( /$cmd[1]/ ) {
                 $src = $_;
                 last;
@@ -135,7 +135,7 @@ sub upgradeCategoryTable {
         $ctext = '' if( ! $ctext );
 
         my $ttext = '';
-        foreach( split( /\n/, $icat ) ) {
+        foreach( split( /\r?\n/, $icat ) ) {
             my( $catname, $catmod, $catvalue ) = _upgradeCategoryItem( $_, $ctext );
             if( $catname ) {
                 push @items, ( [$catname, $catmod, $catvalue] );

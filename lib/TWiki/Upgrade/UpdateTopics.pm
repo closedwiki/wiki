@@ -343,7 +343,7 @@ sub patchFile
 
     my @diff;
 
-    @diff = split(/\n/, $diff);
+    @diff = split(/\r?\n/, $diff);
 
     my $i;
 
@@ -468,7 +468,7 @@ sub removeVersionChangeDiff
 {
     my ($diff) = @_;
 
-    my @diff = split( /\n/, $diff);
+    my @diff = split( /\r?\n/, $diff);
 
     if ($diff[0] eq '1c1')
     {

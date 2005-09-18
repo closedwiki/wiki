@@ -642,7 +642,7 @@ sub getLease {
     my $filename = $this->_controlFileName('lease');
     if ( -e $filename ) {
         my $t = $this->_readFile( $filename );
-        my $lease = { split( /\n/, $t ) };
+        my $lease = { split( /\r?\n/, $t ) };
         return $lease;
     }
     return undef;

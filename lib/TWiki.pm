@@ -2515,8 +2515,8 @@ sub _INCLUDE {
 
     $this->{prefs}->restore( $prefsMark );
 
-    $text =~ s/^\n+/\n/;
-    $text =~ s/\n+$/\n/;
+    $text =~ s/^[\r\n]+/\n/;
+    $text =~ s/[\r\n]+$/\n/;
 
     return $text;
 }

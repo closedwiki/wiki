@@ -773,7 +773,7 @@ sub filenameToIcon {
     my $icons = $iconDir.'/_filetypes.txt';
     my $iconList = TWiki::readFile( $icons );
     my $picked = 'else';
-    foreach( split( /\n/, $iconList ) ) {
+    foreach( split( /\r?\n/, $iconList ) ) {
         if( /^$fileExt\s+(\S+)\s*$/ ) {
             $picked = $1;
             last;
@@ -986,13 +986,13 @@ sub getRenderedVersion {
     if( $plugins->haveHandlerFor( 'insidePREHandler' )) {
         foreach my $region ( sort keys %$removed ) {
             next unless ( $region =~ /^pre\d+$/i );
-            my @lines = split( /\n/, $removed->{$region}{text} );
+            my @lines = split( /\r?\n/, $removed->{$region}{text} );
             my $rt = '';
             while ( scalar( @lines )) {
                 my $line = shift( @lines );
                 $plugins->insidePREHandler( $line );
                 if ( $line =~ /\n/ ) {
-                    unshift( @lines, split( /\n/, $line ));
+                    unshift( @lines, split( /\r?\n/, $line ));
                     next;
                 }
                 $rt .= $line."\n";
@@ -1008,13 +1008,13 @@ sub getRenderedVersion {
         # but HTML is not a line-oriented language (though TML is).
         # But without it, a lot of processing could be moved
         # outside the line loop.
-        my @lines = split( /\n/, $text );
+        my @lines = split( /\r?\n/, $text );
         my $rt = '';
         while ( scalar( @lines ) ) {
             my $line = shift( @lines );
             $plugins->outsidePREHandler( $line );
             if ( $line =~ /\n/ ) {
-                unshift( @lines, split( /\n/, $line ));
+                unshift( @lines, split( /\r?\n/, $line ));
                 next;
             }
             $rt .= $line . "\n";
@@ -1078,7 +1078,7 @@ sub getRenderedVersion {
     my $result = '';
     my $isFirst = 1;
 
-    foreach my $line ( split( /\n/, $text )) {
+    foreach my $line ( split( /\r?\n/, $text )) {
         # Table: | cell | cell |
         # allow trailing white space after the last |
         if( $line =~ m/^(\s*)\|.*\|\s*$/ ) {
@@ -1322,7 +1322,7 @@ sub TML2PlainText {
     $text =~ s/[\+\-]+/ /g;             # remove special chars
     $text =~ s/^\s+//;                  # remove leading whitespace
     $text =~ s/\s+$//;                  # remove trailing whitespace
-    $text =~ s/\n+/\n/s;
+    $text =~ s/[\r\n]+/\n/s;
     $text =~ s/[ \t]+/ /s;
 
     return $text;

@@ -139,7 +139,7 @@ sub _parseFormDefinition {
 
     # | *Name:* | *Type:* | *Size:* | *Value:*  | *Tooltip message:* | *Attributes:* |
     # Tooltip and attributes are optional
-    foreach( split( /\n/, $text ) ) {
+    foreach( split( /\r?\n/, $text ) ) {
         if( /^\s*\|.*Name[^|]*\|.*Type[^|]*\|.*Size[^|]*\|/ ) {
             $inBlock = 1;
             next;
@@ -250,7 +250,7 @@ sub _getPossibleFieldValues {
     my( $text ) = @_;
     my @defn = ();
     my $inBlock = 0;
-    foreach( split( /\n/, $text ) ) {
+    foreach( split( /\r?\n/, $text ) ) {
         if( /^\s*\|.*Name[^|]*\|/ ) {
             $inBlock = 1;
         } else {

@@ -447,7 +447,7 @@ sub groupMembers {
           $store->readTopicRaw( undef,
                                 $this->{web}, $this->{wikiname},
                                 undef );
-        foreach( split( /\n/, $text ) ) {
+        foreach( split( /\r?\n/, $text ) ) {
             if( /$TWiki::regex{setRegex}GROUP\s*=\s*(.+)$/ ) {
                 next unless( $1 eq 'Set' );
                 # Note: if there are multiple GROUP assignments in the

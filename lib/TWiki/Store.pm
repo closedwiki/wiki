@@ -869,7 +869,7 @@ sub _noHandlersSave {
     };
 
     # update .changes
-    my @foo = split( /\n/, $this->readMetaData( $web, 'changes' ));
+    my @foo = split( /\r?\n/, $this->readMetaData( $web, 'changes' ));
     shift( @foo) if( $#foo > 500 );
     my $minor = '';
     $minor = "\tminor" if $options->{minor};
