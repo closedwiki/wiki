@@ -1,0 +1,4 @@
+bin/DatabasePluginConfig.pm NEW
+bin/DatabasePluginEdit NEW
+data/TWiki/DatabasePlugin.txt NEW
+lib/TWiki/Plugins/DatabasePlugin.pm NEW

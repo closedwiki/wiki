@@ -1,0 +1,12 @@
+data/TWiki/NavPlugin.txt NEW
+data/TWiki/NavPluginDev.txt NEW
+data/TWiki/NavPluginExample.txt NEW
+data/TWiki/NavPluginIndex.txt NEW
+data/TWiki/NavPluginLastPage.txt NEW
+data/TWiki/NavPluginPageOne.txt NEW
+data/TWiki/NavPluginPageTwo.txt NEW
+lib/TWiki/Plugins/NavPlugin.pm NEW
+pub/TWiki/NavPlugin/next.gif NEW
+pub/TWiki/NavPlugin/prev.gif NEW
+pub/TWiki/NavPlugin/toc.gif NEW
+templates/view.nav.tmpl NEW

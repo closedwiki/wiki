@@ -1,0 +1,4 @@
+data/TWiki/DirectedGraphPlugin.txt NEW
+lib/TWiki/Plugins/DirectedGraphPlugin.pm NEW
+pub/TWiki/DirectedGraphPlugin/graphsample.png NEW
+pub/TWiki/DirectedGraphPlugin/graphsample2.png NEW

@@ -1,0 +1,5 @@
+data/TWiki/PollExample.txt NEW
+data/TWiki/PollPlugin.txt NEW
+data/TWiki/SmiliesPoll.txt NEW
+lib/TWiki/Plugins/PollPlugin.pm NEW
+templates/oopsaccessvote.tmpl NEW

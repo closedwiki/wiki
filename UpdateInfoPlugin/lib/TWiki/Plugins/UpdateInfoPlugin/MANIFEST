@@ -1,0 +1,4 @@
+data/TWiki/UpdateInfoPlugin.txt NEW
+lib/TWiki/Plugins/UpdateInfoPlugin.pm NEW
+pub/TWiki/UpdateInfoPlugin/new.gif NEW
+pub/TWiki/UpdateInfoPlugin/updated.gif NEW

@@ -1,0 +1,3 @@
+data/TWiki/ToolTipPlugin.txt NEW
+lib/TWiki/Plugins/ToolTipPlugin.pm NEW
+pub/TWiki/ToolTipPlugin/wz_tooltip.js NEW

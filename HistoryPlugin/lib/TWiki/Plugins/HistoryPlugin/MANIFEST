@@ -1,0 +1,4 @@
+data/TWiki/HistoryPlugin.txt NEW
+lib/TWiki/Plugins/HistoryPlugin.pm NEW
+pub/TWiki/HistoryPlugin/screenshot.png NEW
+templates/oopshistory.tmpl NEW

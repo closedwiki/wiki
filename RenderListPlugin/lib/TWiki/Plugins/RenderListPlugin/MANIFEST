@@ -1,0 +1,3 @@
+data/TWiki/RenderListPlugin.txt NEW
+lib/TWiki/Plugins/RenderListPlugin.pm NEW
+lib/TWiki/Plugins/RenderListPlugin/Core.pm NEW
