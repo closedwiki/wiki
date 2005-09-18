@@ -24,9 +24,37 @@ msgstr "Autenticação de Usuário no %1"
 msgid "%1 is currently logged in"
 msgstr "%1 está autenticado nesse momento"
 
+#: templates/view.pattern.tmpl:31
+msgid "&Attach"
+msgstr "&Anexar"
+
 #: templates/twiki.pattern.tmpl:12
 msgid "&Cancel"
 msgstr "&Cancelar"
+
+#: templates/view.pattern.tmpl:26
+msgid "&Edit"
+msgstr "&Editar"
+
+#: templates/view.pattern.tmpl:63
+msgid "&History"
+msgstr "&Histórico"
+
+#: templates/view.pattern.tmpl:34
+msgid "&More topic actions"
+msgstr "&Mais ações de tópico"
+
+#: templates/view.pattern.tmpl:41 templates/view.pattern.tmpl:63
+msgid "&Printable"
+msgstr "Im&primível"
+
+#: templates/view.pattern.tmpl:63
+msgid "&Raw text"
+msgstr "Texto pu&ro"
+
+#: templates/view.pattern.tmpl:63
+msgid "&Web"
+msgstr "&Web"
 
 #: templates/rdiff.pattern.tmpl:3
 msgid "(%1 vs. %2)"
@@ -95,6 +123,10 @@ msgstr "(renomear)"
 msgid "(search results)"
 msgstr "(resultados da busca)"
 
+#: templates/settings.pattern.tmpl:51
+msgid "(set preferences)"
+msgstr "(configurar preferências)"
+
 #: templates/attach.pattern.tmpl:39
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
@@ -160,6 +192,10 @@ msgid ""
 msgstr ""
 "<span class='twikiAlert'><b>Não esqueça</b></span> de salvar suas alterações."
 
+#: templates/view.pattern.tmpl:63
+msgid "A&ll Webs"
+msgstr "Todas (&l)"
+
 #: templates/edit.pattern.tmpl:217
 msgid "Access keys"
 msgstr "Teclas de atalho"
@@ -196,6 +232,14 @@ msgstr ""
 "Qualquer mudanças que você tenha feito no tópico antes de vir a essa página "
 "são preservadas"
 
+#: templates/view.pattern.tmpl:30
+msgid "Attach"
+msgstr "Anexar"
+
+#: templates/view.pattern.tmpl:31
+msgid "Attach an image or document to this topic"
+msgstr "Anexar uma imagem ou documento a este tópico"
+
 #: templates/attachnew.pattern.tmpl:9
 msgid "Attach file to topic %1"
 msgstr "Anexar uma imagem ou documento a %1"
@@ -223,6 +267,14 @@ msgstr "Atributo"
 #: templates/changeform.pattern.tmpl:56
 msgid "Back"
 msgstr "Voltar"
+
+#: templates/view.pattern.tmpl:56
+msgid "Back to top"
+msgstr "Retornar ao topo"
+
+#: templates/view.pattern.tmpl:63
+msgid "Backlinks"
+msgstr "Referências:"
 
 #: templates/backlinksweb.pattern.tmpl:10
 msgid "Backlinks to %1 in %2 Web"
@@ -291,7 +343,7 @@ msgstr "Escolha um novo modelo de formulário"
 #: templates/renamebase.pattern.tmpl:75
 #: templates/renamewebbase.pattern.tmpl:79
 msgid "Clear all"
-msgstr "Limpas todos"
+msgstr "Limpar todos"
 
 #: templates/attach.pattern.tmpl:70 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
@@ -306,6 +358,10 @@ msgstr "Comparar revisões:"
 #: templates/renamewebconfirm.pattern.tmpl:9
 msgid "Confirm rename or move"
 msgstr "Confirme renomear ou mover"
+
+#: templates/view.pattern.tmpl:25
+msgid "Cr&eate"
+msgstr "Criar(&e)"
 
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
@@ -323,6 +379,12 @@ msgstr "Data"
 #: templates/renamewebdelete.pattern.tmpl:9
 msgid "Delete"
 msgstr "Remover"
+
+#: templates/view.pattern.tmpl:34
+msgid ""
+"Delete or rename this topic; set parent topic; view and compare revisions"
+msgstr ""
+"Apagar ou remover este tópico; alterar tópico pai; ver e comparar revisões"
 
 #: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
 msgid "Delete topic..."
@@ -357,13 +419,29 @@ msgstr "Descartar"
 msgid "Do not show attachment in table"
 msgstr "Não mostrar o anexo na tabela"
 
+#: templates/settings.pattern.tmpl:84
+msgid "Each preference has the syntax"
+msgstr "Cada preferência tem a sintaxe"
+
+#: templates/view.pattern.tmpl:19
+msgid "Edit"
+msgstr "Editar"
+
 #: templates/edit.pattern.tmpl:185
 msgid "Edit content"
 msgstr "Editar conteúdo"
 
+#: templates/view.pattern.tmpl:22 templates/view.pattern.tmpl:28
+msgid "Edit this topic text"
+msgstr "Editar o texto desse tópico"
+
 #: templates/oopsmore.pattern.tmpl:53
 msgid "Edit topic preference settings:"
 msgstr "Editar preferências do tópico:"
+
+#: templates/view.pattern.tmpl:56
+msgid "End of topic"
+msgstr "Final do tópico"
 
 #: templates/login.pattern.tmpl:26
 msgid "Enter a new username and password to change identity:"
@@ -491,6 +569,10 @@ msgstr "Mais"
 msgid "More Actions on Topic %1"
 msgstr "Mais ações sobre o tópico %1"
 
+#: templates/view.pattern.tmpl:33
+msgid "More topic actions..."
+msgstr "Mais ações de tópico..."
+
 #: templates/moveattachment.pattern.tmpl:20
 msgid "Move"
 msgstr "Mover"
@@ -539,7 +621,7 @@ msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:58
 #: templates/renamebase.pattern.tmpl:78
-#: templates/renamewebbase.pattern.tmpl:82
+#: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:82
 msgid "Note:"
 msgstr "Notas:"
 
@@ -572,6 +654,10 @@ msgstr "Por favor, entre seu nome de usuário e senha:"
 msgid "Possible form templates"
 msgstr "Possíveis modelos de formulário"
 
+#: templates/settings.pattern.tmpl:55
+msgid "Preferences for"
+msgstr "Preferências para"
+
 #: templates/edit.pattern.tmpl:217
 msgid "Preview"
 msgstr "Pré-visualizar"
@@ -579,6 +665,10 @@ msgstr "Pré-visualizar"
 #: templates/attachagain.pattern.tmpl:28
 msgid "Previous upload"
 msgstr "Upload anterior"
+
+#: templates/view.pattern.tmpl:41 templates/view.pattern.tmpl:63
+msgid "Printable version of this topic"
+msgstr "Versão imprimível deste tópico"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Quiet Save"
@@ -616,7 +706,7 @@ msgstr "Resultados na web %1"
 msgid "Revision"
 msgstr "Revisão"
 
-#: templates/oopsmore.pattern.tmpl:40
+#: templates/oopsmore.pattern.tmpl:40 templates/view.print.pattern.tmpl:26
 msgid "Revision:"
 msgstr "Revisão:"
 
@@ -641,9 +731,13 @@ msgid "Search a&ll webs"
 msgstr "Procurar em todas as Webs(&l)"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-#: templates/backlinksweb.pattern.tmpl:10
+#: templates/backlinksweb.pattern.tmpl:10 templates/view.pattern.tmpl:63
 msgid "Search all webs for topics that link to here"
 msgstr "Procurar em todas as webs por tópicos que façam link pra cá"
+
+#: templates/view.pattern.tmpl:63
+msgid "Search the <nop>%WEB% Web for topics that link to here"
+msgstr "Procurar na web <nop>%WEB% por tópicos que façam link pra cá"
 
 #: templates/search.pattern.tmpl:37 templates/searchbookview.pattern.tmpl:6
 msgid "Searched:"
@@ -679,6 +773,10 @@ msgstr "Exibir ajuda sobre formatação"
 msgid "Size"
 msgstr "Tamanho"
 
+#: templates/view.pattern.tmpl:53 templates/view.pattern.tmpl:56
+msgid "Skip to actions"
+msgstr "Pular para ações"
+
 #: templates/twiki.pattern.tmpl:163
 msgid "Skip to bottom"
 msgstr "Pular para o final"
@@ -686,6 +784,10 @@ msgstr "Pular para o final"
 #: templates/twiki.pattern.tmpl:163
 msgid "Skip to topic"
 msgstr "Pular para o tópico"
+
+#: templates/view.pattern.tmpl:53
+msgid "Start of topic"
+msgstr "Final do tópico"
 
 #: templates/oopsmore.pattern.tmpl:29
 msgid "Step 1: Select topic parent:"
@@ -727,6 +829,10 @@ msgid ""
 msgstr ""
 "Este nome foi escolhido para não conflitar com nenhum outro tópico "
 "jáexistente na web %1."
+
+#: templates/view.print.pattern.tmpl:38
+msgid "This topic:"
+msgstr "Este tópico:"
 
 #: templates/preview.pattern.tmpl:72
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
@@ -788,6 +894,10 @@ msgstr "Inalterado"
 msgid "Unrecognised user and/or password"
 msgstr "Usuário e/ou senha não reconhecidos"
 
+#: templates/settings.pattern.tmpl:65
+msgid "Update"
+msgstr "Atualizar"
+
 #: templates/attachagain.pattern.tmpl:9
 msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
 msgstr "Atualizar o anexo *%FILENAME%* em *%TOPIC%*"
@@ -804,7 +914,7 @@ msgstr "Upload de arquivo"
 msgid "Username"
 msgstr "Nome de usuário"
 
-#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:45 templates/view.pattern.tmpl:63
 msgid "Version"
 msgstr "Versão"
 
@@ -812,14 +922,26 @@ msgstr "Versão"
 msgid "View previous topic revision:"
 msgstr "Ver versão anterior do tópico:"
 
+#: templates/view.pattern.tmpl:63
+msgid "View raw text without formatting"
+msgstr "Visualizar texto puro sem formatação"
+
 #: templates/rdiff.pattern.tmpl:18
 msgid "View topic"
 msgstr "Visualizar tópico"
+
+#: templates/view.pattern.tmpl:63
+msgid "View total topic history"
+msgstr "Ver histórico completo do tópico"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
 msgstr "Quem"
+
+#: templates/view.pattern.tmpl:36
+msgid "You are here"
+msgstr "Você está aqui"
 
 #: templates/rename.pattern.tmpl:27
 msgid "You can move the topic to a different web."
@@ -832,6 +954,13 @@ msgstr "Você pode renomear esta web para um nome de web diferente."
 #: templates/edit.pattern.tmpl:237
 msgid "Your signature to copy/paste:"
 msgstr "Sua assinatura pra copiar e colar:"
+
+#: templates/settings.pattern.tmpl:85
+msgid ""
+"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgstr ""
+"[múltiplo de 3 espaços] * [espaço] Set [espaço] NOMEDAVARIAVEL [espaço] = "
+"[valor]"
 
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:234
@@ -886,59 +1015,3 @@ msgstr "ver"
 
 #~ msgid "Back to topic"
 #~ msgstr "Retornar ao tópico"
-
-#~ msgid "Edit"
-#~ msgstr "Editar"
-
-#~ msgid "Edit this topic text"
-#~ msgstr "Editar o texto desse tópico"
-
-#~ msgid "Cr&eate"
-#~ msgstr "Criar(&e)"
-
-#~ msgid "&Edit"
-#~ msgstr "&Editar"
-
-#~ msgid "More topic actions..."
-#~ msgstr "Mais ações de tópico..."
-
-#~ msgid ""
-#~ "Delete or rename this topic; set parent topic; view and compare revisions"
-#~ msgstr ""
-#~ "Apagar ou remover este tópico; alterar tópico pai; ver e comparar revisões"
-
-#~ msgid "&More topic actions"
-#~ msgstr "&Mais ações de tópico"
-
-#~ msgid "You are here"
-#~ msgstr "Você está aqui"
-
-#~ msgid "Printable version of this topic"
-#~ msgstr "Versão imprimível deste tópico"
-
-#~ msgid "&Printable"
-#~ msgstr "Im&primível"
-
-#~ msgid "Skip to actions"
-#~ msgstr "Pular para ações"
-
-#~ msgid "End of topic"
-#~ msgstr "Final do tópico"
-
-#~ msgid "Back to top"
-#~ msgstr "Retornar ao topo"
-
-#~ msgid "&Raw text"
-#~ msgstr "Texto pu&ro"
-
-#~ msgid "Search the <nop>%WEB% Web for topics that link to here"
-#~ msgstr "Procurar na web <nop>%WEB% por tópicos que façam link pra cá"
-
-#~ msgid "&Web"
-#~ msgstr "&Web"
-
-#~ msgid "A&ll Webs"
-#~ msgstr "Todas (&l)"
-
-#~ msgid "&History"
-#~ msgstr "&Histórico"

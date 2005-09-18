@@ -24,9 +24,38 @@ msgstr ""
 msgid "%1 is currently logged in"
 msgstr "%1 esta en linea"
 
+#: templates/view.pattern.tmpl:31
+#, fuzzy
+msgid "&Attach"
+msgstr "Archivo"
+
 #: templates/twiki.pattern.tmpl:12
 msgid "&Cancel"
 msgstr "&Cancele"
+
+#: templates/view.pattern.tmpl:26
+msgid "&Edit"
+msgstr ""
+
+#: templates/view.pattern.tmpl:63
+msgid "&History"
+msgstr ""
+
+#: templates/view.pattern.tmpl:34
+msgid "&More topic actions"
+msgstr ""
+
+#: templates/view.pattern.tmpl:41 templates/view.pattern.tmpl:63
+msgid "&Printable"
+msgstr ""
+
+#: templates/view.pattern.tmpl:63
+msgid "&Raw text"
+msgstr ""
+
+#: templates/view.pattern.tmpl:63
+msgid "&Web"
+msgstr ""
 
 #: templates/rdiff.pattern.tmpl:3
 msgid "(%1 vs. %2)"
@@ -96,6 +125,10 @@ msgstr "Usuario"
 msgid "(search results)"
 msgstr ""
 
+#: templates/settings.pattern.tmpl:51
+msgid "(set preferences)"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:39
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
@@ -146,6 +179,10 @@ msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
 
+#: templates/view.pattern.tmpl:63
+msgid "A&ll Webs"
+msgstr ""
+
 #: templates/edit.pattern.tmpl:217
 msgid "Access keys"
 msgstr "Teclas de acceso"
@@ -178,6 +215,16 @@ msgstr ""
 msgid "Any change you made to topic before coming to this page are preserved."
 msgstr ""
 
+#: templates/view.pattern.tmpl:30
+#, fuzzy
+msgid "Attach"
+msgstr "Archivo"
+
+#: templates/view.pattern.tmpl:31
+#, fuzzy
+msgid "Attach an image or document to this topic"
+msgstr "Una la imagen o documento en %1"
+
 #: templates/attachnew.pattern.tmpl:9
 msgid "Attach file to topic %1"
 msgstr "Una el archivo a la pagina %1"
@@ -205,6 +252,15 @@ msgstr "Propiedad"
 #: templates/changeform.pattern.tmpl:56
 msgid "Back"
 msgstr "Retroceda"
+
+#: templates/view.pattern.tmpl:56
+msgid "Back to top"
+msgstr ""
+
+#: templates/view.pattern.tmpl:63
+#, fuzzy
+msgid "Backlinks"
+msgstr "Referencias:"
 
 #: templates/backlinksweb.pattern.tmpl:10
 msgid "Backlinks to %1 in %2 Web"
@@ -290,6 +346,10 @@ msgstr "Compare las reviciones:"
 msgid "Confirm rename or move"
 msgstr "Renombre o mueva la pagina:"
 
+#: templates/view.pattern.tmpl:25
+msgid "Cr&eate"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
 msgstr "Cree un enlace al archivo"
@@ -307,6 +367,11 @@ msgstr "Fecha"
 #, fuzzy
 msgid "Delete"
 msgstr "Borre la pagina:"
+
+#: templates/view.pattern.tmpl:34
+msgid ""
+"Delete or rename this topic; set parent topic; view and compare revisions"
+msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
 msgid "Delete topic..."
@@ -341,13 +406,31 @@ msgstr ""
 msgid "Do not show attachment in table"
 msgstr "No muestre la union en el tabulador"
 
+#: templates/settings.pattern.tmpl:84
+msgid "Each preference has the syntax"
+msgstr ""
+
+#: templates/view.pattern.tmpl:19
+#, fuzzy
+msgid "Edit"
+msgstr "(edite)"
+
 #: templates/edit.pattern.tmpl:185
 msgid "Edit content"
 msgstr "Edite el contenido"
 
+#: templates/view.pattern.tmpl:22 templates/view.pattern.tmpl:28
+msgid "Edit this topic text"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:53
 msgid "Edit topic preference settings:"
 msgstr "Edite las preferencias de la pagina:"
+
+#: templates/view.pattern.tmpl:56
+#, fuzzy
+msgid "End of topic"
+msgstr "Renombre o mueva la pagina:"
 
 #: templates/login.pattern.tmpl:26
 msgid "Enter a new username and password to change identity:"
@@ -459,6 +542,10 @@ msgstr "Mas"
 msgid "More Actions on Topic %1"
 msgstr "Mas aciones en la pagina %1"
 
+#: templates/view.pattern.tmpl:33
+msgid "More topic actions..."
+msgstr ""
+
 #: templates/moveattachment.pattern.tmpl:20
 msgid "Move"
 msgstr "Mueva"
@@ -505,7 +592,7 @@ msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:58
 #: templates/renamebase.pattern.tmpl:78
-#: templates/renamewebbase.pattern.tmpl:82
+#: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:82
 msgid "Note:"
 msgstr "Notas:"
 
@@ -540,12 +627,20 @@ msgstr "Por favor, ingrese usuario y contraseña:"
 msgid "Possible form templates"
 msgstr "Posible patrón de formulario"
 
+#: templates/settings.pattern.tmpl:55
+msgid "Preferences for"
+msgstr ""
+
 #: templates/edit.pattern.tmpl:217
 msgid "Preview"
 msgstr ""
 
 #: templates/attachagain.pattern.tmpl:28
 msgid "Previous upload"
+msgstr ""
+
+#: templates/view.pattern.tmpl:41 templates/view.pattern.tmpl:63
+msgid "Printable version of this topic"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:217
@@ -586,7 +681,7 @@ msgstr ""
 msgid "Revision"
 msgstr "Revición"
 
-#: templates/oopsmore.pattern.tmpl:40
+#: templates/oopsmore.pattern.tmpl:40 templates/view.print.pattern.tmpl:26
 msgid "Revision:"
 msgstr "Revición:"
 
@@ -611,8 +706,12 @@ msgid "Search a&ll webs"
 msgstr ""
 
 #: templates/backlinksallwebs.pattern.tmpl:10
-#: templates/backlinksweb.pattern.tmpl:10
+#: templates/backlinksweb.pattern.tmpl:10 templates/view.pattern.tmpl:63
 msgid "Search all webs for topics that link to here"
+msgstr ""
+
+#: templates/view.pattern.tmpl:63
+msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr ""
 
 #: templates/search.pattern.tmpl:37 templates/searchbookview.pattern.tmpl:6
@@ -648,6 +747,10 @@ msgstr ""
 msgid "Size"
 msgstr "Tamaño"
 
+#: templates/view.pattern.tmpl:53 templates/view.pattern.tmpl:56
+msgid "Skip to actions"
+msgstr ""
+
 #: templates/twiki.pattern.tmpl:163
 msgid "Skip to bottom"
 msgstr ""
@@ -655,6 +758,11 @@ msgstr ""
 #: templates/twiki.pattern.tmpl:163
 msgid "Skip to topic"
 msgstr ""
+
+#: templates/view.pattern.tmpl:53
+#, fuzzy
+msgid "Start of topic"
+msgstr "Renombre o mueva la pagina:"
 
 #: templates/oopsmore.pattern.tmpl:29
 msgid "Step 1: Select topic parent:"
@@ -690,6 +798,11 @@ msgid ""
 "This name has been chosen so it doesn't conflict with any other topics "
 "already in the %1 web."
 msgstr ""
+
+#: templates/view.print.pattern.tmpl:38
+#, fuzzy
+msgid "This topic:"
+msgstr "Cambie la pagina"
 
 #: templates/preview.pattern.tmpl:72
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
@@ -744,6 +857,11 @@ msgstr ""
 msgid "Unrecognised user and/or password"
 msgstr "No reconocido usuario y/o contraseña"
 
+#: templates/settings.pattern.tmpl:65
+#, fuzzy
+msgid "Update"
+msgstr "Fecha"
+
 #: templates/attachagain.pattern.tmpl:9
 msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
 msgstr "Actualise la union *%FILENAME%* en la pagina *%TOPIC%*"
@@ -760,7 +878,7 @@ msgstr "Sube el archivo"
 msgid "Username"
 msgstr "Usuario"
 
-#: templates/attachtables.pattern.tmpl:45
+#: templates/attachtables.pattern.tmpl:45 templates/view.pattern.tmpl:63
 msgid "Version"
 msgstr "Version"
 
@@ -768,14 +886,28 @@ msgstr "Version"
 msgid "View previous topic revision:"
 msgstr "Vea antes la revicion de la pagina:"
 
+#: templates/view.pattern.tmpl:63
+#, fuzzy
+msgid "View raw text without formatting"
+msgstr "con formato de texto original"
+
 #: templates/rdiff.pattern.tmpl:18
 msgid "View topic"
 msgstr ""
+
+#: templates/view.pattern.tmpl:63
+#, fuzzy
+msgid "View total topic history"
+msgstr "Vea antes la revicion de la pagina:"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Who"
 msgstr "Quien"
+
+#: templates/view.pattern.tmpl:36
+msgid "You are here"
+msgstr ""
 
 #: templates/rename.pattern.tmpl:27
 msgid "You can move the topic to a different web."
@@ -788,6 +920,11 @@ msgstr ""
 #: templates/edit.pattern.tmpl:237
 msgid "Your signature to copy/paste:"
 msgstr "Su asignatura para copiar y pegar:"
+
+#: templates/settings.pattern.tmpl:85
+msgid ""
+"[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
+msgstr ""
 
 # please enter the name of your language here (written in the native language):
 #: lib/TWiki/I18N.pm:234
