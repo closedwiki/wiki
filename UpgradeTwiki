@@ -119,6 +119,7 @@ if ( $mode eq '' )
 	eval 'use TWiki::Upgrade::UpdateTopics';
 	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/data/', $oldDataDir, $outputDir.'/data/');
 	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/pub/', $oldPubDir, $outputDir.'/pub/');
+	TWiki::Upgrade::UpgradeToDakar::RemainingSteps('./lib/TWiki.cfg', $oldCfgFile, $outputDir);
 } 
 elsif ( $mode eq 'dakar' ) 
 {
@@ -128,6 +129,7 @@ elsif ( $mode eq 'dakar' )
 		return;
 	}
 	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($newCfgFile, $oldCfgFile, $outputDir);
+	TWiki::Upgrade::UpgradeToDakar::RemainingSteps('./lib/TWiki.cfg', $oldCfgFile, $outputDir);
 }
 elsif ( $mode eq 'cairo' ) 
 {

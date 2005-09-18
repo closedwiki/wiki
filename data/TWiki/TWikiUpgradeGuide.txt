@@ -3,7 +3,7 @@
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
 
-_Upgrade from the previous TWiki Sep-2004 "Cairo" production release to TWiki "Dakar"
+Upgrade from the previous TWiki Sep-2004 "Cairo" production release to TWiki "Dakar"
 
 ---++ Overview
 
@@ -33,7 +33,7 @@ The upgrade script will upgrade the *TWiki core only*. Plugins will need to be u
 It will:
 
 	* Create a new TWiki installation, placing the files from the distribution there as appropriate
-	* Where possible, merge the changes you've made in your existing topics into the new twiki
+	* Where possible, merge the changes you've made in your existing topics and attachments into the new twiki
 	* Where not possible, it will tell you, and you can inspect those differences manually
 	* Create new configuration files for the new TWiki based on your existing configuation information
 	* Set the permissions in the new TWiki so that it should work straight away
@@ -48,7 +48,8 @@ To perform the upgrade, you need to:
 	* Unzip it
 	* Choose a directory for the new installation.  I will call this =new_twiki=.  This directory must not already exist.
 	* Change directory to =distro/= and run: %BR%
-	  =./UpgradeTwiki &lt;full path to new_twiki&gt;=
+	  =./UpgradeTwiki &lt;full path to existing_twiki's setlib.cfg&gt; &lt;full path to new_twiki&gt;=
+	* confirm your system settings by pointing your browser to =cgi-bin/configure=
 
 Assuming all goes well, =UpgradeTwiki= will give you the final instructions.
 

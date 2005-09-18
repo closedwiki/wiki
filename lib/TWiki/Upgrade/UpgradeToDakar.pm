@@ -210,9 +210,13 @@ Applying your '\$scriptSuffix' ($TWiki::scriptSuffix) to the scripts in $targetD
 
 # At last!
 
+    return ($oldDataDir, $oldPubDir);
+}
+
+sub RemainingSteps {
+my ($newCfgFile, $oldCfgFile, $targetDir) = @_;
 print "
 OK, I'm finished.
-
 Now you need to
 
 1.  Check the files listed above (if any) who's patches were rejected.
@@ -271,8 +275,6 @@ Now you need to
 
 12. Enjoy!
 ";
-
-    return ($oldDataDir, $oldPubDir);
 }
 
 1;
