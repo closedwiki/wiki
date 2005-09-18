@@ -1121,7 +1121,7 @@ sub _reloadUserContext {
     unless (-f $verificationFilename){
         throw TWiki::OopsException( 'attention',
                                     def => 'bad_ver_code',
-                                    params => [ $code ] );
+                                    params => [ $code, '' ] );
     }
 
     my $data = _getRegDetailsByCode($code, $tmpDir);
