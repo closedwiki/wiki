@@ -52,6 +52,11 @@ msgstr "(alterar formulário)"
 msgid "(changes)"
 msgstr "(alterações)"
 
+#: templates/renamedelete.pattern.tmpl:5
+#: templates/renamewebdelete.pattern.tmpl:5
+msgid "(delete)"
+msgstr "(remover)"
+
 #: templates/editform.pattern.tmpl:6
 msgid "(edit form)"
 msgstr "(editar formulário)"
@@ -79,6 +84,16 @@ msgstr "(pré-visualização)"
 #: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
 msgid "(recommended)"
 msgstr "(recomendado)"
+
+#: templates/rename.pattern.tmpl:5 templates/renameconfirm.pattern.tmpl:5
+#: templates/renameweb.pattern.tmpl:5
+#: templates/renamewebconfirm.pattern.tmpl:5
+msgid "(rename)"
+msgstr "(renomear)"
+
+#: templates/search.pattern.tmpl:2
+msgid "(search results)"
+msgstr "(resultados da busca)"
 
 #: templates/attach.pattern.tmpl:39
 msgid ""
@@ -129,6 +144,16 @@ msgstr ""
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "<a href='%1' rel='nofollow'>Editar preferências</a> para este tópico"
 
+#: templates/renamewebbase.pattern.tmpl:83
+msgid ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>Click here</a> to get help on "
+"managing webs"
+msgstr ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>Clique aqui</a> para ajuda "
+"sobre gerenciar webs"
+
 #: templates/preview.pattern.tmpl:68
 msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
@@ -153,6 +178,7 @@ msgid "Added"
 msgstr "Adicionado"
 
 #: templates/renamebase.pattern.tmpl:35
+#: templates/renamewebbase.pattern.tmpl:33
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr "Permitir algo que não seja uma <nop>WikiWord como novo nome do tópico"
 
@@ -224,14 +250,17 @@ msgstr "Alterar formulário"
 
 #: templates/moveattachment.pattern.tmpl:40
 #: templates/renamebase.pattern.tmpl:47
+#: templates/renamewebbase.pattern.tmpl:47
 msgid "Change from:"
 msgstr "Alterar de:"
 
 #: templates/renamebase.pattern.tmpl:71
+#: templates/renamewebbase.pattern.tmpl:75
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr "Alterar links em tópicos que façam referência a %1 em qualquer Web:"
 
 #: templates/renamebase.pattern.tmpl:69
+#: templates/renamewebbase.pattern.tmpl:73
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "Alterar links em tópicos que façam referência a %1 na Web %2:"
 
@@ -260,6 +289,7 @@ msgid "Choose a new form template"
 msgstr "Escolha um novo modelo de formulário"
 
 #: templates/renamebase.pattern.tmpl:75
+#: templates/renamewebbase.pattern.tmpl:79
 msgid "Clear all"
 msgstr "Limpas todos"
 
@@ -272,6 +302,11 @@ msgstr "Comentário"
 msgid "Compare revisions:"
 msgstr "Comparar revisões:"
 
+#: templates/renameconfirm.pattern.tmpl:9
+#: templates/renamewebconfirm.pattern.tmpl:9
+msgid "Confirm rename or move"
+msgstr "Confirme renomear ou mover"
+
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
 msgstr "Criar um link para o arquivo anexado"
@@ -280,6 +315,14 @@ msgstr "Criar um link para o arquivo anexado"
 #: templates/attachtables.pattern.tmpl:7
 msgid "Date"
 msgstr "Data"
+
+#: templates/renameconfirm.pattern.tmpl:25
+#: templates/renamedelete.pattern.tmpl:44
+#: templates/renamedelete.pattern.tmpl:9
+#: templates/renamewebdelete.pattern.tmpl:44
+#: templates/renamewebdelete.pattern.tmpl:9
+msgid "Delete"
+msgstr "Remover"
 
 #: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
 msgid "Delete topic..."
@@ -292,6 +335,11 @@ msgstr "Remover tópico:"
 #: lib/TWiki/UI/RDiff.pm:234
 msgid "Deleted"
 msgstr "Removido"
+
+#: templates/renamedelete.pattern.tmpl:27
+#: templates/renamewebdelete.pattern.tmpl:27
+msgid "Deleted topics will be moved to the %1 web"
+msgstr "Tópicos removidos serão movidos para a web %1"
 
 #: templates/rdiff.pattern.tmpl:11
 msgid "Difference Topic"
@@ -372,6 +420,34 @@ msgstr "Esconder ajuda sobre formatação"
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Imagens serão exibidas, para outros anexos um link será criado."
 
+#: templates/rename.pattern.tmpl:22
+msgid ""
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
+"a> for the new topic name, otherwise automatic linking may not work. "
+"Characters not allowed in topic names, such as spaces will automatically be "
+"removed."
+msgstr ""
+"Normalmente é melhor escolher uma <a target='WikiWord' onclick=\"return "
+"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
+"a> para o novo nome do tópico, do contrário os links automáticos podem não "
+"funcionar. Caracteres não permitidos em nomes de tópicos, como espaços, "
+"serão removidos automaticamente."
+
+#: templates/renameweb.pattern.tmpl:20
+msgid ""
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
+"a> for the new web name, otherwise automatic linking may not work. "
+"Characters not allowed in web names, such as spaces will automatically be "
+"removed."
+msgstr ""
+"Normalmente é melhor escolher uma <a target='WikiWord' onclick=\"return "
+"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
+"a> para o novo nome da web, do contrário os links automáticos podem não "
+"funcionar. Caracteres não permitidos em nomes de webs, como espaços, serão "
+"removidos automaticamente."
+
 #. ($left)
 #. ($right)
 #: lib/TWiki/UI/RDiff.pm:161 lib/TWiki/UI/RDiff.pm:163
@@ -431,6 +507,21 @@ msgstr "Mover arquivo anexo"
 msgid "Move or Delete File %1"
 msgstr "Mover ou Remover arquivo %1"
 
+#: templates/renameweb.pattern.tmpl:25
+msgid ""
+"Move this web to the Trash web to delete it (for example, rename it to %1)."
+msgstr ""
+"Mova esta web para a web Trash para removê-la (por exemple, renomeie ela "
+"para %1)."
+
+#: templates/renamewebbase.pattern.tmpl:57
+msgid "New parent web:<br>(subwebs must be enabled)"
+msgstr "Nova web pai:<br>(subwebs devem estar habilitadas)"
+
+#: templates/renamewebbase.pattern.tmpl:52
+msgid "New web name:"
+msgstr "Novo nome da web:"
+
 #: templates/oopsmore.pattern.tmpl:49
 msgid "Newer revision:"
 msgstr "Revisão mais recente:"
@@ -448,12 +539,22 @@ msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:58
 #: templates/renamebase.pattern.tmpl:78
+#: templates/renamewebbase.pattern.tmpl:82
 msgid "Note:"
 msgstr "Notas:"
 
 #: templates/changeform.pattern.tmpl:34
 msgid "Notes"
 msgstr "Notas"
+
+#: templates/renamewebbase.pattern.tmpl:63
+msgid "Notices:"
+msgstr "Avisos:"
+
+#: templates/search.pattern.tmpl:32 templates/searchbookview.pattern.tmpl:12
+#: templates/searchformat.pattern.tmpl:7
+msgid "Number of topics:"
+msgstr "Número de tópicos:"
 
 #: templates/oopsmore.pattern.tmpl:48
 msgid "Older revision:"
@@ -491,13 +592,25 @@ msgstr "Salvar em silêncio"
 msgid "Read new revision help text in new window"
 msgstr "Ler ajuda sobre nova revisão numa nova janela"
 
+#: templates/rename.pattern.tmpl:9 templates/renameweb.pattern.tmpl:9
+msgid "Rename"
+msgstr "Renomear"
+
 #: templates/oopsmore.pattern.tmpl:13
 msgid "Rename or move topic:"
 msgstr "Renomear ou mover tópico:"
 
+#: templates/rename.pattern.tmpl:35 templates/renameweb.pattern.tmpl:33
+msgid "Rename/Move"
+msgstr "Renomear/Mover"
+
 #: templates/oopsmore.pattern.tmpl:14 templates/oopsmore.pattern.tmpl:16
 msgid "Rename/move topic..."
 msgstr "Renomear/mover tópico..."
+
+#: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
+msgid "Results from %1 web"
+msgstr "Resultados na web %1"
 
 #: templates/rdiff.pattern.tmpl:39
 msgid "Revision"
@@ -532,11 +645,16 @@ msgstr "Procurar em todas as Webs(&l)"
 msgid "Search all webs for topics that link to here"
 msgstr "Procurar em todas as webs por tópicos que façam link pra cá"
 
+#: templates/search.pattern.tmpl:37 templates/searchbookview.pattern.tmpl:6
+msgid "Searched:"
+msgstr "Busca:"
+
 #: templates/attachagain.pattern.tmpl:32
 msgid "Select a new local file to update this attachment."
 msgstr "Selecione um novo arquivo local para alterar esse anexo."
 
 #: templates/renamebase.pattern.tmpl:75
+#: templates/renamewebbase.pattern.tmpl:79
 msgid "Select all"
 msgstr "Selecionar todos"
 
@@ -585,6 +703,10 @@ msgstr ""
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "O anexo e seu histórico serão movidos para o novo tópico."
 
+#: templates/renamewebbase.pattern.tmpl:84
+msgid "The checkmarked topics will be updated"
+msgstr "Os tópicos marcados serão atualizados"
+
 #: templates/renamebase.pattern.tmpl:81
 msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
@@ -596,6 +718,15 @@ msgstr ""
 #: templates/moveattachment.pattern.tmpl:30
 msgid "The new topic chosen must already exist."
 msgstr "O novo tópico selecionado deve já existir."
+
+#: templates/renamedelete.pattern.tmpl:22
+#: templates/renamewebdelete.pattern.tmpl:22
+msgid ""
+"This name has been chosen so it doesn't conflict with any other topics "
+"already in the %1 web."
+msgstr ""
+"Este nome foi escolhido para não conflitar com nenhum outro tópico "
+"jáexistente na web %1."
 
 #: templates/preview.pattern.tmpl:72
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
@@ -629,6 +760,25 @@ msgstr "Nome do tópico:"
 #: templates/edit.pattern.tmpl:186
 msgid "Topic settings"
 msgstr "Preferências do tópico"
+
+#: templates/renamewebbase.pattern.tmpl:64
+msgid "Topics which are currently being edited by other users in the %1 Web:"
+msgstr "Tópicos que estão sendo editados agora por outros usuários na Web %1:"
+
+#: templates/renamewebbase.pattern.tmpl:67
+msgid ""
+"Topics which refer to this web and are are currently being edited by other "
+"users:"
+msgstr ""
+"Tópicos que fazem referência a essa web e estão sendo atualizados agora por "
+"outros usuários:"
+
+#: templates/renamewebbase.pattern.tmpl:69
+msgid ""
+"Topics which refer to this web that you do not have permission to change:"
+msgstr ""
+"Tópicos que fazem referência a essa web que você não tem permissão de "
+"alterar:"
 
 #: lib/TWiki/UI/RDiff.pm:248
 msgid "Unchanged"
@@ -671,6 +821,14 @@ msgstr "Visualizar tópico"
 msgid "Who"
 msgstr "Quem"
 
+#: templates/rename.pattern.tmpl:27
+msgid "You can move the topic to a different web."
+msgstr "Você pode mover este tópíco para uma web diferente."
+
+#: templates/renameweb.pattern.tmpl:25
+msgid "You can rename this web to a different web name."
+msgstr "Você pode renomear esta web para um nome de web diferente."
+
 #: templates/edit.pattern.tmpl:237
 msgid "Your signature to copy/paste:"
 msgstr "Sua assinatura pra copiar e colar:"
@@ -685,6 +843,7 @@ msgid "change, update, previous revisions, move, delete..."
 msgstr "alterar, atualizar, revisões anteriores, mover, remover..."
 
 #: templates/renamebase.pattern.tmpl:75
+#: templates/renamewebbase.pattern.tmpl:79
 msgid "checkboxes of referenced topics"
 msgstr "checkboxes de tópicos referenciados"
 
@@ -716,6 +875,10 @@ msgstr "nenhum (remover tópico pai)"
 #: templates/edit.pattern.tmpl:217
 msgid "or"
 msgstr "ou"
+
+#: templates/search.pattern.tmpl:18
+msgid "retrieved at %1 GMT"
+msgstr "obtidos em %1 GMT"
 
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"

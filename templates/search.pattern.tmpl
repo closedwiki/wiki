@@ -1,5 +1,5 @@
 %TMPL:INCLUDE{"view"}%
-%TMPL:DEF{"titleaction"}%(search results) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(search results)"}% %TMPL:END%
 
 
 
@@ -15,7 +15,7 @@
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">Results from <nop>%WEB% web</span><span class="twikiRight">retrieved at %DISPLAYTIME{"$hour:$min"}% GMT</span><br class="twikiClear" /></div>%REPEAT%<div class="patternSearchResults">
+%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">%_{"Results from [_1] web", "<nop>%WEB%"}%</span><span class="twikiRight">%_{"retrieved at [_1] GMT", "%DISPLAYTIME{\"$hour:$min\"}%"}%</span><br class="twikiClear" /></div>%REPEAT%<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft">
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></div>
 <div class="twikiRight twikiSRAuthor">
@@ -29,12 +29,12 @@
 
 
 %TMPL:DEF{"searchbody"}%%SPLIT%%TMPL:P{"repeatedsearchblock"}%%SPLIT%
-<div class="patternSearchResultCount">Number of topics: <b>%NTOPICS%</b></div>%TMPL:END%
+<div class="patternSearchResultCount">%_{"Number of topics:"}% <b>%NTOPICS%</b></div>%TMPL:END%
 
 
 
 %TMPL:DEF{"content"}%
-%SPLIT%<div class="patternSearchString">Searched: <b><nop>%SEARCHSTRING%</b></div><div class="patternSearchResultsBegin"></div>
+%SPLIT%<div class="patternSearchString">%_{"Searched:"}% <b><nop>%SEARCHSTRING%</b></div><div class="patternSearchResultsBegin"></div>
 %TMPL:P{"searchbody"}%%SPLIT%%TMPL:P{"standardfooter"}%%TMPL:END%
 
 

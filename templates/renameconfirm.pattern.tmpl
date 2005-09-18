@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%(rename) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%Confirm rename or move%TMPL:END%
+%TMPL:DEF{"webaction"}%%_{"Confirm rename or move"}%%TMPL:END%
 
 
 
@@ -22,7 +22,7 @@
 <table>
 <tr>
 <td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" /><input type="submit" class="twikiSubmit" value="Delete" /></td>
+<td class="patternSubmitCol"><input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" /><input type="submit" class="twikiSubmit" value='%_{"Delete"}%' /></td>
 <td class="patternAddCol"></td>
 </tr></table></div>%TMPL:END%
 

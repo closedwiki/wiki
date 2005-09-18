@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%(delete) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(delete)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%Delete%TMPL:END%
+%TMPL:DEF{"webaction"}%%_{"Delete"}%%TMPL:END%
 
 
 
@@ -19,12 +19,12 @@
 
 
 %TMPL:DEF{"namehelp"}%
-This name has been chosen so it doesn't conflict with any other topics already in the %NEW_WEB% web.
+%_{"This name has been chosen so it doesn't conflict with any other topics already in the [_1] web.", "%NEW_WEB%"}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"movewebhelp"}%Deleted topics will be moved to the %NEW_WEB% web%TMPL:END%
+%TMPL:DEF{"movewebhelp"}%%_{"Deleted topics will be moved to the [_1] web", "%NEW_WEB%"}%%TMPL:END%
 
 
 
@@ -41,7 +41,7 @@ checkAll(false)
 <table>
 <tr>
 <td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Delete" /></td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Delete"}%' /></td>
 <td class="patternAddCol"></td>
 </tr></table></div>%TMPL:END%
 

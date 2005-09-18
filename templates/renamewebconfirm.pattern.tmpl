@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%(rename) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%Confirm rename or move%TMPL:END%
+%TMPL:DEF{"webaction"}%%_{"Confirm rename or move"}%%TMPL:END%
 
 
 %TMPL:DEF{"newsubweb"}%<input type="hidden" name="newsubweb" value="%NEW_SUBWEB%"  />%NEW_SUBWEB%%TMPL:END%
@@ -24,7 +24,7 @@
 %TMPL:DEF{"topicaction"}%<div class="patternTopicAction">
 <table>
 <tr>
-<td class="patternCancelCol"><a href="%SCRIPTURLPATH%/rename/%WEB%/%TOPIC%?action=renameweb&confirm=cancel">Cancel</a></td>
+<td class="patternCancelCol"><a href="%SCRIPTURLPATH%/rename/%WEB%/%TOPIC%?action=renameweb&confirm=cancel">%TMPL:P{"canceltopicaction"}%</a></td>
 <td class="patternSubmitCol"><input type="hidden" name="nonwikiword" value="%URLPARAM{"nonwikiword"}%" />
 <input type="submit" class="twikiSubmit" value="%RENAMEWEB_SUBMIT%" then=refresh_prompt" else="submit_prompt"}%" /></td>
 <td class="patternAddCol"></td>

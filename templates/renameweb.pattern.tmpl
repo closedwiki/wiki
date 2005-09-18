@@ -2,11 +2,11 @@
 
 
 
-%TMPL:DEF{"titleaction"}%(rename) %TMPL:END%
+%TMPL:DEF{"titleaction"}%%_{"(rename)"}% %TMPL:END%
 
 
 
-%TMPL:DEF{"webaction"}%Rename%TMPL:END%
+%TMPL:DEF{"webaction"}%%_{"Rename"}%%TMPL:END%
 
 
 %TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="36" />%TMPL:END%
@@ -17,14 +17,12 @@
 
 
 %TMPL:DEF{"namehelp"}%
-It's usually best to choose a 
-<a target="WikiWord" onclick="return launchWindow('%TWIKIWEB%','WikiWord')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WikiWord" rel='nofollow'>WikiWord</a> 
-for the new web name, otherwise automatic linking may not work. Characters not allowed in web names, such as spaces will automatically be removed.
+%_{"It's usually best to choose a <a target='WikiWord' onclick=\"return launchWindow('%TWIKIWEB%','WikiWord')\" href='[_1]' rel='nofollow'>WikiWord</a> for the new web name, otherwise automatic linking may not work. Characters not allowed in web names, such as spaces will automatically be removed.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/WikiWord"}%
 %TMPL:END%
 
 
 
-%TMPL:DEF{"movewebhelp"}%You can rename this web to a different web name. <br />Move this web to the Trash web to delete it (for example, rename it to %TRASHWEB%/%WEB%). %TMPL:END%
+%TMPL:DEF{"movewebhelp"}%%_{"You can rename this web to a different web name."}% <br />%_{"Move this web to the Trash web to delete it (for example, rename it to [_1]).", "%TRASHWEB%/%WEB%"}% %TMPL:END%
 
 
 
@@ -32,7 +30,7 @@ for the new web name, otherwise automatic linking may not work. Characters not a
 <table>
 <tr>
 <td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value="Rename/Move" /></td>
+<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Rename/Move"}%' /></td>
 <td class="patternAddCol"></td>
 </tr></table></div>%TMPL:END%
 

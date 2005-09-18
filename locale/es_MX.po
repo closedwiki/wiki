@@ -52,6 +52,11 @@ msgstr "(cambie el formulario)"
 msgid "(changes)"
 msgstr "(cambios)"
 
+#: templates/renamedelete.pattern.tmpl:5
+#: templates/renamewebdelete.pattern.tmpl:5
+msgid "(delete)"
+msgstr ""
+
 #: templates/editform.pattern.tmpl:6
 msgid "(edit form)"
 msgstr "(edite el formulario)"
@@ -80,13 +85,23 @@ msgstr "()"
 msgid "(recommended)"
 msgstr "(recomendado)"
 
+#: templates/rename.pattern.tmpl:5 templates/renameconfirm.pattern.tmpl:5
+#: templates/renameweb.pattern.tmpl:5
+#: templates/renamewebconfirm.pattern.tmpl:5
+#, fuzzy
+msgid "(rename)"
+msgstr "Usuario"
+
+#: templates/search.pattern.tmpl:2
+msgid "(search results)"
+msgstr ""
+
 #: templates/attach.pattern.tmpl:39
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 "Error\" message when you upload a file, you need to try again. It should "
 "work the second time."
 msgstr ""
-""
 
 #: templates/attachagain.pattern.tmpl:37
 msgid ""
@@ -94,39 +109,42 @@ msgid ""
 "comment shown in the topic will change, but the comment shown against the "
 "attachment history will be the comment when the file was uploaded."
 msgstr ""
-""
 
 #: templates/attach.pattern.tmpl:38
 msgid ""
 "*Help:* Please see %TWIKIWEB%.FileAttachment for more information about "
 "attaching files."
 msgstr ""
-"*Ayuda:* Por favor vea %TWIKIWEB%.FileAttachment para mas información "
-"acera de la union de los archivos."
+"*Ayuda:* Por favor vea %TWIKIWEB%.FileAttachment para mas información acera "
+"de la union de los archivos."
 
 #: templates/attachagain.pattern.tmpl:38
 msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
 "that will be updated or added."
 msgstr ""
-""
 
 #: templates/attachagain.pattern.tmpl:36
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties\"; see %1."
 msgstr ""
-""
 
 #: templates/oopsmore.pattern.tmpl:54
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
 msgstr "<a href='%1' rel='nofollow'>Edite preferencias</a> para esta pagina"
 
+#: templates/renamewebbase.pattern.tmpl:83
+msgid ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>Click here</a> to get help on "
+"managing webs"
+msgstr ""
+
 #: templates/preview.pattern.tmpl:68
 msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
-""
 
 #: templates/edit.pattern.tmpl:217
 msgid "Access keys"
@@ -146,6 +164,7 @@ msgid "Added"
 msgstr ""
 
 #: templates/renamebase.pattern.tmpl:35
+#: templates/renamewebbase.pattern.tmpl:33
 msgid "Allow non <nop>WikiWord for the new topic name"
 msgstr ""
 
@@ -154,12 +173,10 @@ msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
 msgstr ""
-""
 
 #: templates/changeform.pattern.tmpl:43
 msgid "Any change you made to topic before coming to this page are preserved."
 msgstr ""
-""
 
 #: templates/attachnew.pattern.tmpl:9
 msgid "Attach file to topic %1"
@@ -215,14 +232,17 @@ msgstr "Cambie el formulario"
 
 #: templates/moveattachment.pattern.tmpl:40
 #: templates/renamebase.pattern.tmpl:47
+#: templates/renamewebbase.pattern.tmpl:47
 msgid "Change from:"
 msgstr "Cambie desde:"
 
 #: templates/renamebase.pattern.tmpl:71
+#: templates/renamewebbase.pattern.tmpl:75
 msgid "Change links in topics that refer to %1 in any Web:"
 msgstr ""
 
 #: templates/renamebase.pattern.tmpl:69
+#: templates/renamewebbase.pattern.tmpl:73
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr ""
 
@@ -251,6 +271,7 @@ msgid "Choose a new form template"
 msgstr "Escoge el nuevo patrón del formulario"
 
 #: templates/renamebase.pattern.tmpl:75
+#: templates/renamewebbase.pattern.tmpl:79
 msgid "Clear all"
 msgstr ""
 
@@ -263,6 +284,12 @@ msgstr "Comente"
 msgid "Compare revisions:"
 msgstr "Compare las reviciones:"
 
+#: templates/renameconfirm.pattern.tmpl:9
+#: templates/renamewebconfirm.pattern.tmpl:9
+#, fuzzy
+msgid "Confirm rename or move"
+msgstr "Renombre o mueva la pagina:"
+
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
 msgstr "Cree un enlace al archivo"
@@ -271,6 +298,15 @@ msgstr "Cree un enlace al archivo"
 #: templates/attachtables.pattern.tmpl:7
 msgid "Date"
 msgstr "Fecha"
+
+#: templates/renameconfirm.pattern.tmpl:25
+#: templates/renamedelete.pattern.tmpl:44
+#: templates/renamedelete.pattern.tmpl:9
+#: templates/renamewebdelete.pattern.tmpl:44
+#: templates/renamewebdelete.pattern.tmpl:9
+#, fuzzy
+msgid "Delete"
+msgstr "Borre la pagina:"
 
 #: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
 msgid "Delete topic..."
@@ -282,6 +318,11 @@ msgstr "Borre la pagina:"
 
 #: lib/TWiki/UI/RDiff.pm:234
 msgid "Deleted"
+msgstr ""
+
+#: templates/renamedelete.pattern.tmpl:27
+#: templates/renamewebdelete.pattern.tmpl:27
+msgid "Deleted topics will be moved to the %1 web"
 msgstr ""
 
 #: templates/rdiff.pattern.tmpl:11
@@ -318,21 +359,21 @@ msgstr "Uniones existentes"
 
 #: templates/changeform.pattern.tmpl:42
 msgid "Existing form data will be lost! (still available in old version)"
-msgstr "Datos existentes que pueda perder (sin embargo, estan disponibles en la version anterior)"
+msgstr ""
+"Datos existentes que pueda perder (sin embargo, estan disponibles en la "
+"version anterior)"
 
 #: templates/oopsmore.pattern.tmpl:21
 msgid ""
 "Find topics <a href='%1' title='Search all webs for topics that link to "
 "here' accesskey='l'>in a&ll public webs</a> that link to %2"
 msgstr ""
-""
 
 #: templates/oopsmore.pattern.tmpl:20
 msgid ""
 "Find topics <a href='%1' title='Search the %2 Web for topics that link to "
 "here' accesskey='w'>in %2 &web</a> that link to %3"
 msgstr ""
-""
 
 #: templates/edit.pattern.tmpl:214 templates/preview.pattern.tmpl:53
 msgid "Force new revision"
@@ -344,7 +385,6 @@ msgid ""
 "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
 "moving topics</a>."
 msgstr ""
-""
 
 #: templates/attach.pattern.tmpl:90
 msgid "Hide file"
@@ -357,6 +397,24 @@ msgstr "Oculte el formata de ayuda"
 #: templates/attach.pattern.tmpl:85
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Imagenes podra mostrar, por otras uniones al enlace que podra crear."
+
+#: templates/rename.pattern.tmpl:22
+msgid ""
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
+"a> for the new topic name, otherwise automatic linking may not work. "
+"Characters not allowed in topic names, such as spaces will automatically be "
+"removed."
+msgstr ""
+
+#: templates/renameweb.pattern.tmpl:20
+msgid ""
+"It's usually best to choose a <a target='WikiWord' onclick=\"return "
+"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWord</"
+"a> for the new web name, otherwise automatic linking may not work. "
+"Characters not allowed in web names, such as spaces will automatically be "
+"removed."
+msgstr ""
 
 #. ($left)
 #. ($right)
@@ -417,6 +475,19 @@ msgstr "Mueva el archivo"
 msgid "Move or Delete File %1"
 msgstr "Mueva o Borre el archivo %1"
 
+#: templates/renameweb.pattern.tmpl:25
+msgid ""
+"Move this web to the Trash web to delete it (for example, rename it to %1)."
+msgstr ""
+
+#: templates/renamewebbase.pattern.tmpl:57
+msgid "New parent web:<br>(subwebs must be enabled)"
+msgstr ""
+
+#: templates/renamewebbase.pattern.tmpl:52
+msgid "New web name:"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:49
 msgid "Newer revision:"
 msgstr "Revicion mas nueva:"
@@ -434,12 +505,24 @@ msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:58
 #: templates/renamebase.pattern.tmpl:78
+#: templates/renamewebbase.pattern.tmpl:82
 msgid "Note:"
 msgstr "Notas:"
 
 #: templates/changeform.pattern.tmpl:34
 msgid "Notes"
 msgstr "Notas"
+
+#: templates/renamewebbase.pattern.tmpl:63
+#, fuzzy
+msgid "Notices:"
+msgstr "Notas:"
+
+#: templates/search.pattern.tmpl:32 templates/searchbookview.pattern.tmpl:12
+#: templates/searchformat.pattern.tmpl:7
+#, fuzzy
+msgid "Number of topics:"
+msgstr "Renombre o mueva la pagina:"
 
 #: templates/oopsmore.pattern.tmpl:48
 msgid "Older revision:"
@@ -477,13 +560,27 @@ msgstr "Guarde sin notificación"
 msgid "Read new revision help text in new window"
 msgstr ""
 
+#: templates/rename.pattern.tmpl:9 templates/renameweb.pattern.tmpl:9
+#, fuzzy
+msgid "Rename"
+msgstr "Usuario"
+
 #: templates/oopsmore.pattern.tmpl:13
 msgid "Rename or move topic:"
 msgstr "Renombre o mueva la pagina:"
 
+#: templates/rename.pattern.tmpl:35 templates/renameweb.pattern.tmpl:33
+#, fuzzy
+msgid "Rename/Move"
+msgstr "Renombre/mueva la pagina..."
+
 #: templates/oopsmore.pattern.tmpl:14 templates/oopsmore.pattern.tmpl:16
 msgid "Rename/move topic..."
 msgstr "Renombre/mueva la pagina..."
+
+#: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
+msgid "Results from %1 web"
+msgstr ""
 
 #: templates/rdiff.pattern.tmpl:39
 msgid "Revision"
@@ -518,11 +615,16 @@ msgstr ""
 msgid "Search all webs for topics that link to here"
 msgstr ""
 
+#: templates/search.pattern.tmpl:37 templates/searchbookview.pattern.tmpl:6
+msgid "Searched:"
+msgstr ""
+
 #: templates/attachagain.pattern.tmpl:32
 msgid "Select a new local file to update this attachment."
 msgstr "Selecione un neuvo archivo local para actulisar esa union."
 
 #: templates/renamebase.pattern.tmpl:75
+#: templates/renamewebbase.pattern.tmpl:79
 msgid "Select all"
 msgstr ""
 
@@ -563,27 +665,35 @@ msgid ""
 "Step 2: Continue to <input type='submit' class='twikiSubmit' value='Edit' /> "
 "and save %1 to activate the new parent"
 msgstr ""
-""
 
 #: templates/moveattachment.pattern.tmpl:59
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "La union y historial que podra ser movido para la nueva pagina."
+
+#: templates/renamewebbase.pattern.tmpl:84
+msgid "The checkmarked topics will be updated"
+msgstr ""
 
 #: templates/renamebase.pattern.tmpl:81
 msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
 "_eventually_ allow you to rename any topics that were locked)"
 msgstr ""
-""
 
 #: templates/moveattachment.pattern.tmpl:30
 msgid "The new topic chosen must already exist."
 msgstr "La nueva pagina debe ya existir."
 
+#: templates/renamedelete.pattern.tmpl:22
+#: templates/renamewebdelete.pattern.tmpl:22
+msgid ""
+"This name has been chosen so it doesn't conflict with any other topics "
+"already in the %1 web."
+msgstr ""
+
 #: templates/preview.pattern.tmpl:72
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
 msgstr ""
-""
 
 #: templates/preview.pattern.tmpl:70
 msgid "To *save* changes: Press the [Save Changes] button."
@@ -610,6 +720,21 @@ msgstr "Nombre de la pagina:"
 #: templates/edit.pattern.tmpl:186
 msgid "Topic settings"
 msgstr "Propiedades de la pagina"
+
+#: templates/renamewebbase.pattern.tmpl:64
+msgid "Topics which are currently being edited by other users in the %1 Web:"
+msgstr ""
+
+#: templates/renamewebbase.pattern.tmpl:67
+msgid ""
+"Topics which refer to this web and are are currently being edited by other "
+"users:"
+msgstr ""
+
+#: templates/renamewebbase.pattern.tmpl:69
+msgid ""
+"Topics which refer to this web that you do not have permission to change:"
+msgstr ""
 
 #: lib/TWiki/UI/RDiff.pm:248
 msgid "Unchanged"
@@ -652,6 +777,14 @@ msgstr ""
 msgid "Who"
 msgstr "Quien"
 
+#: templates/rename.pattern.tmpl:27
+msgid "You can move the topic to a different web."
+msgstr ""
+
+#: templates/renameweb.pattern.tmpl:25
+msgid "You can rename this web to a different web name."
+msgstr ""
+
 #: templates/edit.pattern.tmpl:237
 msgid "Your signature to copy/paste:"
 msgstr "Su asignatura para copiar y pegar:"
@@ -666,6 +799,7 @@ msgid "change, update, previous revisions, move, delete..."
 msgstr "cambie, actualize, reviciones anteriores, mueva, borre..."
 
 #: templates/renamebase.pattern.tmpl:75
+#: templates/renamewebbase.pattern.tmpl:79
 msgid "checkboxes of referenced topics"
 msgstr ""
 
@@ -697,6 +831,10 @@ msgstr "ninguno ()"
 #: templates/edit.pattern.tmpl:217
 msgid "or"
 msgstr "o"
+
+#: templates/search.pattern.tmpl:18
+msgid "retrieved at %1 GMT"
+msgstr ""
 
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"

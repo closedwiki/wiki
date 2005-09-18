@@ -30,7 +30,7 @@
 
 
 
-%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">Allow non <nop>WikiWord for the new topic name</label>%TMPL:END%
+%TMPL:DEF{"allownonwikiword"}%<input type="checkbox" class="twikiCheckbox" id="nonwikiword" name="nonwikiword" %NONWIKIWORDFLAG% /><label for="nonwikiword">%_{"Allow non <nop>WikiWord for the new topic name"}%</label>%TMPL:END%
 
 %TMPL:DEF{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
@@ -44,44 +44,44 @@
 <div class="patternVersatileTable">
 <table>
 <tr>
-<th width="20%">Change from:</th>
+<th width="20%">%_{"Change from:"}%</th>
 <td class="patternOldCol" colspan="2"><b><nop>%WEB%</b></td>
 <td class="patternOldCol patternHelpCol"></td>
 </tr>
 <tr>
-<th>New web name:</br></th>
+<th>%_{"New web name:"}%</br></th>
 <td class="patternMainCol">%TMPL:P{"newsubweb"}%</td>
 <td class="patternMainCol patternHelpCol" rowspan="2">%TMPL:P{"movewebhelp"}%</td>
 </tr>
 <tr %SUBWEBSENABLE%>
-<th>New parent web:<br>(subwebs must be enabled)</th>
+<th>%_{"New parent web:<br>(subwebs must be enabled)"}%</th>
 <td class="patternMainCol">%TMPL:P{"newparentweb"}%</td>
 </tr>
 </table>
 </div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">Notices:</div>
-*Topics which are currently being edited by other users in the <nop>%WEB% Web:*
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Notices:"}%</div>
+*%_{"Topics which are currently being edited by other users in the [_1] Web:", "<nop>%WEB%"}%*
 %MOVE_LOCKED%
 
-*Topics which refer to this web and are are currently being edited by other users:* %REF_LOCKED%
+*%_{"Topics which refer to this web and are are currently being edited by other users:"}%* %REF_LOCKED%
 
-*Topics which refer to this web that you do not have permission to change:*
+*%_{"Topics which refer to this web that you do not have permission to change:"}%*
 %REF_DENIED%
 </div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">Change links in topics that refer to %WEB% in the <nop>%WEB% Web:</div>%LOCAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in the [_2] Web:", "%WEB%", "<nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
 
-<div class="patternSearchResults"><div class="patternSearchResultsHeader">Change links in topics that refer to %WEB% in any Web:</div>%GLOBAL_SEARCH%</div>
+<div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in any Web:", "%WEB%"}%</div>%GLOBAL_SEARCH%</div>
 <div class="patternTopicActionSecondary">
 <table>
 <tr>
-<td><input type="button" class="twikiButton" value="Select all" onclick="checkAll(true);" /><input type="button" class="twikiButton" value="Clear all" onclick="checkAll(false);" /> checkboxes of referenced topics</td>
+<td><input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" /><input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%</td>
 </tr></table></div>
 <div class="twikiHelp">
-*Note:*
-   * <a target="ManagingWebs" onclick="return launchWindow('%TWIKIWEB%','ManagingWebs')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs" rel='nofollow'>Click here</a> to get help on managing webs
-   * The checkmarked topics will be updated 
+*%_{"Note:"}%*
+   * %_{"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB%','ManagingWebs')\" href='[_1]' rel='nofollow'>Click here</a> to get help on managing webs", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingWebs"}%
+   * %_{"The checkmarked topics will be updated"}%
 </div>
 %TMPL:P{"topicaction"}%
 %TMPL:P{"hidden"}%
