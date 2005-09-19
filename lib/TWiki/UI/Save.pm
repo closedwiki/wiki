@@ -356,7 +356,7 @@ sub save {
 
     my $redirecturl = $session->getScriptUrl( $session->normalizeWebTopicName($webName, $topic), 'view' );
 
-    my $saveaction;
+    my $saveaction = '';
     foreach my $action qw( save checkpoint quietsave cancel preview
                            addform replaceform delRev repRev ) {
         if ($query->param('action_' . $action)) {
