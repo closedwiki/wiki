@@ -552,7 +552,7 @@ sub UTF82SiteCharSet {
 
 =pod
 
----++ ObjectMethod writeCompletePage( $text )
+---++ ObjectMethod writeCompletePage( $text, $pageType, $contentType )
 
 Write a complete HTML page with basic header to the browser.
 $text is the HTML of the page body (&lt;html&gt; to &lt;/html&gt;)
@@ -578,11 +578,14 @@ sub writeCompletePage {
         map { '<!--'.$_.'-->'.$this->{htmlHeaders}{$_} }
           keys %{$this->{htmlHeaders}} );
     $text =~ s/([<]\/head[>])/$htmlHeader$1/i if $htmlHeader;
-
-    # can't use simple length() in case we have UNICODE
-    # see perldoc -f length
-    my $len = do { use bytes; length( $text ); };
-    $this->writePageHeader( undef, $pageType, $contentType, $len );
+    chomp($text);
+    
+    if ( $this->{context}->{command_line} != 1 ) {
+        # can't use simple length() in case we have UNICODE
+        # see perldoc -f length
+        my $len = do { use bytes; length( $text ); };
+        $this->writePageHeader( undef, $pageType, $contentType, $len );
+    }
     print $text;
 }
 

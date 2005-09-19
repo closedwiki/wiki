@@ -96,7 +96,8 @@ sub run {
     }
 
     my $session = new TWiki( $user, $query );
-
+    $session->{context}->{command_line} = $scripted;
+    
     local $SIG{__DIE__} = \&Carp::confess;
 
     # end of comment out in production version
