@@ -35,7 +35,6 @@ sub set_up {
     $twiki->{store}->createWeb($twiki->{user}, $baseweb);
     $twiki->{store}->createWeb($twiki->{user}, $targetweb);
 
-    TWiki::Plugins::CommentPlugin::initPlugin();
     $TWiki::Plugins::SESSION = $twiki;
 }
 

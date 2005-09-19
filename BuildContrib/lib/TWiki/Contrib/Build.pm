@@ -729,7 +729,10 @@ sub target_handsoff_install {
     my $twiki = $ENV{TWIKI_HOME};
     die 'TWIKI_HOME not set' unless $twiki;
     $this->cd($twiki);
-    $this->sys_action('unzip -u -o '.$this->{basedir}.'/'.$this->{project}.'.zip');
+    $this->sys_action('unzip -u -o '.$this->{basedir}.'/'.
+                        $this->{project}.'.zip');
+    # kill off the child module installer
+    $this->rm($this->{basedir}.'/'.$this->{project}.'_installer.pl');
 }
 
 =pod
