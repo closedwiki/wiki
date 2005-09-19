@@ -159,7 +159,7 @@ my $mapTWikiDirs = {
     data => { dest => $localDirConfig->{DataDir} },
     templates => { dest => $localDirConfig->{TemplateDir} },
     bin => { dest => "$cgibin/twiki", perms => 0755, },
-    po => { dest => $localDirConfig->{LocalesDir} },
+    locale => { dest => $localDirConfig->{LocalesDir} },
 };
 
 ################################################################################
