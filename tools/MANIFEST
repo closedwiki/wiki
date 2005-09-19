@@ -3,6 +3,9 @@ COPYING
 COPYRIGHT
 LICENSE
 UpgradeTwiki
+TWikiDocumentation.html
+TWikiHistory.html
+DakarReleaseNotes.html
 bin/.htaccess.txt
 bin/actionnotify
 bin/attach

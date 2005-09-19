@@ -49,6 +49,11 @@ sub target_build {
     print `perl gendocs.pl -root $this->{basedir}`;
     $this->cp( $this->{basedir}.'/AUTHORS',
                $this->{basedir}.'/pub/TWiki/TWikiContributor/AUTHORS' );
+               
+    `cd ../bin ; ./view TWiki.TWikiDocumentation skin plain > ../TWikiDocumentation.html 2> /dev/null`;
+    `cd ../bin ; ./view TWiki.TWikiHistory skin plain > ../TWikiHistory.html 2> /dev/null`;
+    `cd ../bin ; ./view TWiki.DakarReleaseNotes skin plain > ../DakarReleaseNotes.html 2> /dev/null`;
+               
     print "Documentation built\n";
 }
 
