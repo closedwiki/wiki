@@ -30,7 +30,7 @@ function mklink () {
             echo "diff $1 $link different - Keeping $link intact"
         fi
     else
-        target=`dirname $link | sed -e 's/[A-Za-z0-9]*/../g'`
+        target=`dirname $link | sed -e 's/[^\/][^\/]*/../g'`
         # if wipeout is 1, will simply overwrite whatever is already there
         $build $target/$1 $link
     fi
