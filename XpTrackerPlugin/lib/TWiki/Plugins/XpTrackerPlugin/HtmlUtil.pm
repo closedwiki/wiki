@@ -29,13 +29,6 @@ use TWiki::Func;
 use TWiki::Plugins::XpTrackerPlugin::Status;
 use strict;
 
-#(RAF)
-#If this module is load using the "use" directive before the plugin is 
-#initialized, then $debug will be 0
-#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
-my $debug;
-#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::HtmlUtil is loaded" ) if $debug;
 
 
 ###########################
@@ -48,17 +41,28 @@ sub gaugeLite
 {
     my $done = $_[0];
     my $todo = 100 - $done;
-    
-    my $line="<table height=20 width=100%><tr>";
-    if ($todo==0)  { 
-    	$line .= "<td width=$done% bgcolor=\"#00cc00\" align=\"center\" valign=\"center\"> :-) </td>"; 
+
+    my $width=80;
+    my $cellWidth=$width/10;
+
+    my $line='<table border="0" cellspacing="2" height="20" width="'.$width.'">';
+    $line.='<tr>';
+    #my $line="<table height=20 width=\"100%\"><tr>";
+    if ($todo==0)  {
+       $line .= '<td width="'.($width+24).'" bgcolor="#00cc00" align="center" valign="center"> :-) </td>';
     } elsif ($done==0) {
-    	$line .= "<td width=$done% bgcolor=\"#cc0000\" align=\"center\" valign=\"center\"> %X% </td>"; 
+        $line .= '<td width="'.($width+24).'" bgcolor="#cc0000" align="center" valign="center"> %X% </td>';
     } else {
-    	if ($done > 0) { $line .= "<td width=$done% bgcolor=\"#00cc00\" align=\"right\">&nbsp;</td>"; }
-    	if ($todo > 0) { $line .= "<td width=$todo% bgcolor=\"#cc0000\">&nbsp;</td>"; }
+       $done=$done/10;
+       for my $i (1..10) {
+          if ($i <= $done) { 
+             $line .= '<td width="'.$cellWidth.'" bgcolor="#00cc00" align="right">&nbsp;</td>'; 
+          } else {
+             $line .= '<td width="'.$cellWidth.'" bgcolor="#cc0000">&nbsp;</td>'; 
+          }
+        }
     }
-    $line .= "</tr></table>";
+    $line .= '</tr></table>';
     return $line;
 }
 

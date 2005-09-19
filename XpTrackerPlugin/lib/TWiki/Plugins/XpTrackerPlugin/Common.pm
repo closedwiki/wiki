@@ -35,17 +35,9 @@ use TWiki::Plugins::XpTrackerPlugin::Story;
 use TWiki::Plugins::XpTrackerPlugin::Iteration;
 
 
-
-#(RAF)
-#If this module is load using the "use" directive before the plugin is 
-#initialized, $debug will be 0
-#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
-my $debug;
-#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Common is loaded" ) if $debug;
-
 sub getStoryTasks {
 	my @tasks=();
+
     while(1) {
         (my $status,my $name,my $est,my $who,my $spent,my $etc,my $tstatus, my $reviewer) = TWiki::Plugins::XpTrackerPlugin::xpGetNextTask($_[0]);
 		last if (!$status);
@@ -67,10 +59,11 @@ sub getStoryTasks {
 sub loadStories {
 	my ($web,$iterationName) = @_;
 	my @storiesTitles = TWiki::Plugins::XpTrackerPlugin::xpGetIterStories($iterationName, $web);
-	return loadStoriesByTitle(@storiesTitles);
+	return loadStoriesByTitle($web,@storiesTitles);
 }
 
 sub loadStoriesByTitle {
+   my $web=shift;
 	my @stories=();
 	foreach my $storyTitle (@_) {
     	push @stories,new TWiki::Plugins::XpTrackerPlugin::Story($web,$storyTitle);
