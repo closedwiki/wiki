@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TWiki DakarRelease\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-19 18:30+2\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Andre Ulrich <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,17 +16,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/oopsattention.tmpl:253
-msgid " Topic can not be upgraded from old style category table"
-msgstr " Topic konnte nicht vom alten Kategorie-Stil aktualisiert werden"
+#: templates/registernotify.tmpl:3
+msgid "%1 - Registration for %2"
+msgstr ""
 
-#: templates/oopsattention.tmpl:289
-msgid " You are denied access to the following topics in the web:"
-msgstr " Sie haben keinen Zugriff auf die folgenden Topics im Web:"
+#: templates/registernotifyadmin.tmpl:3
+msgid "%1 - Registration for %2 (%3)"
+msgstr ""
 
 #: templates/login.pattern.tmpl:10
 msgid "%1 User Authentication"
 msgstr "%1 Benutzer Authentifizierung"
+
+#: templates/registernotifyadmin.tmpl:10
+msgid "%1 has been registered with email %2"
+msgstr ""
 
 #: templates/oopsattention.tmpl:20
 msgid "%1 home"
@@ -34,15 +38,19 @@ msgstr "%1 Startseite"
 
 #: templates/oopsattention.tmpl:93
 msgid "%1 is an invalid name for a new web"
-msgstr "%1 ist ein ungültiger Name für ein neues Web"
+msgstr "%1 ist ein ungÃ¼ltiger Name fÃ¼r ein neues Web"
 
 #: templates/login.pattern.tmpl:22
 msgid "%1 is currently logged in"
 msgstr "%1 ist gerade eingeloggt"
 
+#: templates/oopsleaseconflict.tmpl:16
+msgid "%1 is editing %2."
+msgstr ""
+
 #: templates/oopsattention.tmpl:44
 msgid "%1 is in at least one group and cannot be removed"
-msgstr "%1 ist in mindestens einer Gruppe und konnte nicht gelöscht werden"
+msgstr "%1 ist in mindestens einer Gruppe und konnte nicht gelÃ¶scht werden"
 
 #   "<nop>$fromWeb.<nop>$fromTopic",
 #   $date,
@@ -106,7 +114,8 @@ msgstr "(%1 vs. %2)"
 
 #: templates/oopsattention.tmpl:123
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
-msgstr "(__Vorschlag:__ Wie wäre es, wenn Sie Ihr Foto an Ihre Seite anhängen?)"
+msgstr ""
+"(__Vorschlag:__ Wie wÃ¤re es, wenn Sie Ihr Foto an Ihre Seite anhÃ¤ngen?)"
 
 #: templates/attach.pattern.tmpl:28
 msgid "(attach)"
@@ -126,12 +135,12 @@ msgstr "(Formular wechseln)"
 
 #: templates/changes.pattern.tmpl:5
 msgid "(changes)"
-msgstr "(Änderungen)"
+msgstr "(Ã„nderungen)"
 
 #: templates/renamedelete.pattern.tmpl:5
 #: templates/renamewebdelete.pattern.tmpl:5
 msgid "(delete)"
-msgstr "(Löschen)"
+msgstr "(LÃ¶schen)"
 
 #: templates/editform.pattern.tmpl:6
 msgid "(edit form)"
@@ -153,7 +162,8 @@ msgstr "(Mehr)"
 msgid "(move attachment)"
 msgstr "(Anhang verschieben)"
 
-#: templates/oopsaccessdenied.tmpl:3
+#: templates/oopsaccessdenied.tmpl:3 templates/oopsauth.tmpl:2
+#: templates/oopsleaseconflict.tmpl:3 templates/oopssaveerr.tmpl:2
 msgid "(oops)"
 msgstr ""
 
@@ -177,7 +187,7 @@ msgstr "(Suchergebnisse)"
 
 #: templates/settings.pattern.tmpl:51
 msgid "(set preferences)"
-msgstr "(Einstellungen ändern)"
+msgstr "(Einstellungen Ã¤ndern)"
 
 #: templates/oopsattention.tmpl:198
 msgid "(single character first name)"
@@ -212,20 +222,21 @@ msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
 "that will be updated or added."
 msgstr ""
-"*Lokale Datei:* Wenn Sie eine Datei mit einem anderen Namen als unter _Lokale Datei_"
-"hochladen, wird diese neue Datei hinzugefügt."
+"*Lokale Datei:* Wenn Sie eine Datei mit einem anderen Namen als unter "
+"_Lokale Datei_hochladen, wird diese neue Datei hinzugefÃ¼gt."
 
 #: templates/attachagain.pattern.tmpl:36
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties\"; see %1."
 msgstr ""
-"*Eigenschaften:* Der Kommentar und die Sichtbarkeit von versteckten Anhängen können "
-"mittels \"Eigenschaften ändern\" ohne erneutes Hochladen der Datei geändert; siehe %1."
+"*Eigenschaften:* Der Kommentar und die Sichtbarkeit von versteckten AnhÃ¤ngen "
+"kÃ¶nnen mittels \"Eigenschaften Ã¤ndern\" ohne erneutes Hochladen der Datei "
+"geÃ¤ndert; siehe %1."
 
 #: templates/oopsmore.pattern.tmpl:54
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
-msgstr "<a href='%1' rel='nofollow'>Topic Einstellungen</a> ändern"
+msgstr "<a href='%1' rel='nofollow'>Topic Einstellungen</a> Ã¤ndern"
 
 #: templates/renamewebbase.pattern.tmpl:83
 msgid ""
@@ -234,21 +245,22 @@ msgid ""
 "managing webs"
 msgstr ""
 "<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
-"%','ManagingWebs')\" href='%1' rel='nofollow'>Hilfe</a> für die "
-"Verwaltung von Webs"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>Hilfe</a> fÃ¼r die Verwaltung "
+"von Webs"
 
 #: templates/preview.pattern.tmpl:68
 msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
-"<span class='twikiAlert'><b>Nicht vergessen</b></span> Änderungen zu speichern."
+"<span class='twikiAlert'><b>Nicht vergessen</b></span> Ã„nderungen zu "
+"speichern."
 
 #: templates/oopsaccessdenied.tmpl:25
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %1 in a web that does not exist."
 msgstr ""
-"Eine %1 ist in Webs unterteilt; jedes für ein Thema, ein Bereich für "
+"Eine %1 ist in Webs unterteilt; jedes fÃ¼r ein Thema, ein Bereich fÃ¼r "
 "Zusammenarbeit. Sie versuchen in ein Web zu %1, dass nicht existiert."
 
 #: templates/oopsattention.tmpl:108
@@ -256,12 +268,12 @@ msgid ""
 "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
 "=#FFFF00=."
 msgstr ""
-"Eine Farbdefition beginnt mit einem # Zeichen, gefolgt von 6 Zahlen in Hexadezimal, z.B. "
-"=#FFFF00=."
+"Eine Farbdefition beginnt mit einem # Zeichen, gefolgt von 6 Zahlen in "
+"Hexadezimal, z.B. =#FFFF00=."
 
 #: templates/oopsattention.tmpl:125
 msgid "A confirmation e-mail has been sent to %1"
-msgstr "Eine Bestätigungs E-Mail wurde an %1 gesendet"
+msgstr "Eine BestÃ¤tigungs E-Mail wurde an %1 gesendet"
 
 #: templates/oopsaccessdenied.tmpl:29
 msgid ""
@@ -269,17 +281,18 @@ msgid ""
 "the name of the web is not spelt wrongly on the previous page; fix the link "
 "if necessary."
 msgstr ""
-"Ein Verweis zu einem Topic, das sich in einem anderen Web befindet, wird wie folgt geschrieben: %1. "
-"Stellen Sie sicher, dass der Name des Webs auf der vorherigen Seiten nicht falsch geschrieben ist; falls notwendig korrigieren Sie "
-"den Verweis."
+"Ein Verweis zu einem Topic, das sich in einem anderen Web befindet, wird wie "
+"folgt geschrieben: %1. Stellen Sie sicher, dass der Name des Webs auf der "
+"vorherigen Seiten nicht falsch geschrieben ist; falls notwendig korrigieren "
+"Sie den Verweis."
 
 #: templates/oopsalerts.tmpl:37
 msgid ""
 "A new *system-generated* password for login name %1 (wikiname %2) has been "
 "sent to %3"
 msgstr ""
-"Ein neues vom System erzeugtes Passwort für den Login Namen %1 (Wikiname %2) wurde "
-"an %3 gesendet"
+"Ein neues vom System erzeugtes Passwort fÃ¼r den Login Namen %1 (Wikiname %2) "
+"wurde an %3 gesendet"
 
 #: templates/view.pattern.tmpl:63
 msgid "A&ll Webs"
@@ -291,7 +304,7 @@ msgstr "Zugriff verweigert"
 
 #: templates/oopsaccessdenied.tmpl:8
 msgid "Access check on %1 failed"
-msgstr "Zugriffskontrolle für %1 fehlgeschlagen"
+msgstr "Zugriffskontrolle fÃ¼r %1 fehlgeschlagen"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Access keys"
@@ -308,46 +321,47 @@ msgstr "Aktion %1: %2."
 
 #: templates/addform.tmpl:1
 msgid "Add form"
-msgstr "Formular hinzufügen"
+msgstr "Formular hinzufÃ¼gen"
 
 #: lib/TWiki/UI/RDiff.pm:241
 msgid "Added"
-msgstr "hinzugefügt"
+msgstr "hinzugefÃ¼gt"
 
 #: templates/oopsattention.tmpl:260
 msgid "Adding a %1 variable in WebPreferences"
-msgstr "Füge eine %1 Variable in WebPreferences hinzu"
+msgstr "FÃ¼ge eine %1 Variable in WebPreferences hinzu"
 
 #: templates/renamebase.pattern.tmpl:35
 #: templates/renamewebbase.pattern.tmpl:33
 msgid "Allow non <nop>WikiWord for the new topic name"
-msgstr "Nicht <nop>WikiWörter als Topic Namen erlauben"
+msgstr "Nicht <nop>WikiWÃ¶rter als Topic Namen erlauben"
 
 #: templates/oopsattention.tmpl:186
 msgid ""
 "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
 "different username."
 msgstr ""
-"Alternativ können Sie zurück drücken, um in TWiki.TWikiRegistration einen "
-"anderen Benutzernamen zu wählen."
+"Alternativ kÃ¶nnen Sie zurÃ¼ck drÃ¼cken, um in TWiki.TWikiRegistration einen "
+"anderen Benutzernamen zu wÃ¤hlen."
 
 #: templates/oopsattention.tmpl:176
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
-"Eine E-Mail konnte nicht zugestellt werden. Bitte informieren Sie Ihren %1 Administrator, %2"
+"Eine E-Mail konnte nicht zugestellt werden. Bitte informieren Sie Ihren %1 "
+"Administrator, %2"
 
 #: templates/oopsattention.tmpl:226
 msgid "An email address is required before a password can be reset."
-msgstr "Eine E-Mail Adresse ist erforderlich, um das Passwort zurückzusetzen."
+msgstr "Eine E-Mail Adresse ist erforderlich, um das Passwort zurÃ¼ckzusetzen."
 
 #: templates/moveattachment.pattern.tmpl:60
 msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
 msgstr ""
-"Eine Fehler-Seite wird angezeigt, wenn eines der Topics von einem anderen Benutzer "
-"gesperrt ist."
+"Eine Fehler-Seite wird angezeigt, wenn eines der Topics von einem anderen "
+"Benutzer gesperrt ist."
 
 #: templates/oopsattention.tmpl:14
 msgid "And populated with topics from the base web"
@@ -355,7 +369,9 @@ msgstr "Und mit Topics aus dem Basis Web angereichert"
 
 #: templates/changeform.pattern.tmpl:43
 msgid "Any change you made to topic before coming to this page are preserved."
-msgstr "Änderungen, die Sie an dem Topic vollzogen haben, bevor Sie auf diese Seite gelangten, bleiben erhalten."
+msgstr ""
+"Ã„nderungen, die Sie an dem Topic vollzogen haben, bevor Sie auf diese Seite "
+"gelangten, bleiben erhalten."
 
 #: templates/view.pattern.tmpl:30
 msgid "Attach"
@@ -363,19 +379,19 @@ msgstr "Anhang"
 
 #: templates/view.pattern.tmpl:31
 msgid "Attach an image or document to this topic"
-msgstr "Ein Bild oder Dokument an dieses Topic anhängen"
+msgstr "Ein Bild oder Dokument an dieses Topic anhÃ¤ngen"
 
 #: templates/attachnew.pattern.tmpl:9
 msgid "Attach file to topic %1"
-msgstr "Datei an das Topic %1 hängen"
+msgstr "Datei an das Topic %1 hÃ¤ngen"
 
 #: templates/attach.pattern.tmpl:33
 msgid "Attach image or document on %1"
-msgstr "Bild oder Dokument an %1 hängen"
+msgstr "Bild oder Dokument an %1 hÃ¤ngen"
 
 #: templates/attachnew.pattern.tmpl:14 templates/attachnew.pattern.tmpl:18
 msgid "Attach new file"
-msgstr "Neue Datei anhängen"
+msgstr "Neue Datei anhÃ¤ngen"
 
 #: templates/attachtables.pattern.tmpl:7
 msgid "Attachment"
@@ -387,9 +403,11 @@ msgstr "Verschieben des Anhangs fehlgeschlagen"
 
 #: templates/attach.pattern.tmpl:95
 msgid "Attachments will not be shown in topic view page."
-msgstr "Anhäge in der normalen Ansicht nicht angezeigen"
+msgstr "AnhÃ¤ge in der normalen Ansicht nicht angezeigen"
 
 #: templates/oopsaccessdenied.tmpl:4 templates/oopsattention.tmpl:4
+#: templates/oopsauth.tmpl:3 templates/oopsleaseconflict.tmpl:4
+#: templates/oopssaveerr.tmpl:3
 msgid "Attention"
 msgstr "Achtung"
 
@@ -399,11 +417,11 @@ msgstr "Attribut"
 
 #: templates/mailnotify.tmpl:3
 msgid "Automated notification of topic changes"
-msgstr "Automatische Benachrichtigung von Änderungen dieses Topics"
+msgstr "Automatische Benachrichtigung von Ã„nderungen dieses Topics"
 
 #: templates/changeform.pattern.tmpl:56
 msgid "Back"
-msgstr "Zurück"
+msgstr "ZurÃ¼ck"
 
 #: templates/view.pattern.tmpl:56
 msgid "Back to top"
@@ -411,7 +429,7 @@ msgstr "nach oben"
 
 #: templates/twiki.pattern.tmpl:12
 msgid "Back to topic"
-msgstr "Zurück zum Topic"
+msgstr "ZurÃ¼ck zum Topic"
 
 #: templates/view.pattern.tmpl:63
 msgid "Backlinks"
@@ -443,7 +461,9 @@ msgstr "E-Mail Adresse von %1 konnte nicht ermittelt werden"
 
 #: templates/oopsalerts.tmpl:34
 msgid "Can't get an email address for %1 (required for password reset)"
-msgstr "E-Mail Adresse von %1 konnte nicht ermittelt werden (benötigt für das Zurücksetzen des Passworts"
+msgstr ""
+"E-Mail Adresse von %1 konnte nicht ermittelt werden (benÃ¶tigt fÃ¼r das "
+"ZurÃ¼cksetzen des Passworts"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Cancel"
@@ -451,11 +471,11 @@ msgstr "Abbrechen"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Cancel editing and discard changes"
-msgstr "Editieren abbrechen und Änderungen verwerfen"
+msgstr "Editieren abbrechen und Ã„nderungen verwerfen"
 
 #: templates/oopsattention.tmpl:56
 msgid "Cannot create %1 because it already exists."
-msgstr "Konnte %1 nicht anlegen, da es bereits existiert"
+msgstr "Konnte %1 nicht anlegen, da es bereits existiert."
 
 #: templates/oopsattention.tmpl:99
 msgid "Cannot create web %1 because it already exists"
@@ -471,9 +491,9 @@ msgid ""
 "not permitted for security reasons. Your filename matched one of the "
 "following regular expressions, so it was rejected:"
 msgstr ""
-"Bestimmte Zeichen sind für Dateienamen aus Sicherheitsgründen nicht erlaubt. "
-"Ihr Dateiname wurde von einem der folgenden regulären Ausdrücke gefunden "
-"und zurückgewiesen.
+"Bestimmte Zeichen sind fÃ¼r Dateienamen aus SicherheitsgrÃ¼nden nicht erlaubt. "
+"Ihr Dateiname wurde von einem der folgenden regulÃ¤ren AusdrÃ¼cke gefunden und "
+"zurÃ¼ckgewiesen."
 
 #: templates/changeform.pattern.tmpl:18
 msgid "Change form"
@@ -483,37 +503,37 @@ msgstr "Formular wechseln"
 #: templates/renamebase.pattern.tmpl:47
 #: templates/renamewebbase.pattern.tmpl:47
 msgid "Change from:"
-msgstr "Geändert von:"
+msgstr "GeÃ¤ndert von:"
 
 #: templates/renamebase.pattern.tmpl:71
 #: templates/renamewebbase.pattern.tmpl:75
 msgid "Change links in topics that refer to %1 in any Web:"
-msgstr "Verweise in Topics ändern, die auf %1 zeigen (alle Webs)"
+msgstr "Verweise in Topics Ã¤ndern, die auf %1 zeigen (alle Webs)"
 
 #: templates/renamebase.pattern.tmpl:69
 #: templates/renamewebbase.pattern.tmpl:73
 msgid "Change links in topics that refer to %1 in the %2 Web:"
-msgstr "Verweise in Topics ändern, die auf %1 zeigen (nur im %2 Web)"
+msgstr "Verweise in Topics Ã¤ndern, die auf %1 zeigen (nur im %2 Web)"
 
 #: templates/attachagain.pattern.tmpl:50
 msgid "Change properties only"
-msgstr "Nur Eigenschaften ändern"
+msgstr "Nur Eigenschaften Ã¤ndern"
 
 #: templates/edit.pattern.tmpl:204
 msgid "Change topic"
-msgstr "Topic ändern"
+msgstr "Topic Ã¤ndern"
 
 #: lib/TWiki/UI/RDiff.pm:255 lib/TWiki/UI/RDiff.pm:261
 msgid "Changed"
-msgstr "Geändert"
+msgstr "GeÃ¤ndert"
 
 #: templates/mailchanges.tmpl:14
 msgid "Changed by:"
-msgstr "Geändert von:"
+msgstr "GeÃ¤ndert von:"
 
 #: templates/mailchanges.tmpl:12
 msgid "Changed:"
-msgstr "Geändert"
+msgstr "GeÃ¤ndert"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Checkpoint"
@@ -525,32 +545,33 @@ msgstr "Unter-Topics im %1 Web:"
 
 #: templates/changeform.pattern.tmpl:25
 msgid "Choose a new form template"
-msgstr "Wählen Sie eine neue Formularvorlage"
+msgstr "WÃ¤hlen Sie eine neue Formularvorlage"
 
 #: templates/renamebase.pattern.tmpl:75
 #: templates/renamewebbase.pattern.tmpl:79
 msgid "Clear all"
-msgstr "Alles abwählen"
+msgstr "Alles abwÃ¤hlen"
 
 #: templates/oopsaccessdenied.tmpl:40
 msgid "Click here"
 msgstr "Hier klicken"
 
 #: templates/oopsattention.tmpl:249
-msgid "Click on [[][Debug topic text]]."
-msgstr "Klicken Sie auf [[][Topic Text auf Fehler überprüfen]]."
+#, fuzzy
+msgid "Click on [[%1][Debug topic text]]."
+msgstr "Klicken Sie auf [[][Topic Text auf Fehler Ã¼berprÃ¼fen]]."
 
 #: lib/TWiki/Render.pm:177
 msgid ""
 "Click to move topic back to previous location, with option to change "
 "references."
 msgstr ""
-"Klicken, um das Topic an seine vorherige Stelle zu verschieben, mit der Möglichkeit "
-"die Querverweise zu ändern.
+"Klicken, um das Topic an seine vorherige Stelle zu verschieben, mit der "
+"MÃ¶glichkeit die Querverweise zu Ã¤ndern."
 
 #: templates/oopsattention.tmpl:107
 msgid "Color %1 has an invalid format"
-msgstr "Farbe %1 hat ein ungültiges Format"
+msgstr "Farbe %1 hat ein ungÃ¼ltiges Format"
 
 #: templates/attach.pattern.tmpl:70 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
@@ -564,7 +585,11 @@ msgstr "Vergleiche Revisionen:"
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
 msgid "Confirm rename or move"
-msgstr "Umbenennen oder Verschieben bestätigen"
+msgstr "Umbenennen oder Verschieben bestÃ¤tigen"
+
+#: templates/oopsleaseconflict.tmpl:5
+msgid "Conflict"
+msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
 #: templates/oopsaccessdenied.tmpl:42
@@ -589,7 +614,7 @@ msgstr "Anlegen"
 
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
-msgstr "Verweis auf die angehängte Datei erzeugen"
+msgstr "Verweis auf die angehÃ¤ngte Datei erzeugen"
 
 #: lib/TWiki/Render.pm:546 lib/TWiki/Render.pm:557
 msgid "Create this topic"
@@ -597,7 +622,7 @@ msgstr "Dieses Topic anlegen"
 
 #: templates/oopsattention.tmpl:259
 msgid "Creating a suitable Form Definition topic"
-msgstr "Legen Sie ein geeignetes Topic für die Formular-Definition an"
+msgstr "Legen Sie ein geeignetes Topic fÃ¼r die Formular-Definition an"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
@@ -614,42 +639,50 @@ msgstr "Hallo %1"
 #: templates/renamewebdelete.pattern.tmpl:44
 #: templates/renamewebdelete.pattern.tmpl:9
 msgid "Delete"
-msgstr "Löschen"
+msgstr "LÃ¶schen"
 
 #: templates/view.pattern.tmpl:34
 msgid ""
 "Delete or rename this topic; set parent topic; view and compare revisions"
 msgstr ""
-"Topic löschen oder umbenennen; Ober-Topic setzen; Revisionen anzeigen und vergleichen"
+"Topic lÃ¶schen oder umbenennen; Ober-Topic setzen; Revisionen anzeigen und "
+"vergleichen"
 
 #: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
 msgid "Delete topic..."
-msgstr "Topic löschen..."
+msgstr "Topic lÃ¶schen..."
 
 #: templates/oopsmore.pattern.tmpl:7
 msgid "Delete topic:"
-msgstr "Gelöschtes Topic"
+msgstr "GelÃ¶schtes Topic"
 
 #: lib/TWiki/UI/RDiff.pm:234
 msgid "Deleted"
-msgstr "Gelöscht"
+msgstr "GelÃ¶scht"
 
 #: templates/renamedelete.pattern.tmpl:27
 #: templates/renamewebdelete.pattern.tmpl:27
 msgid "Deleted topics will be moved to the %1 web"
-msgstr "Gelöschte Topics werden in das %1 Web verschoben"
+msgstr "GelÃ¶schte Topics werden in das %1 Web verschoben"
+
+#: templates/oopsauth.tmpl:10
+msgid ""
+"Did you type in your login name and password correctly? Remember, both are "
+"case sensitive."
+msgstr ""
 
 #: templates/oopsattention.tmpl:184
-msgid "Did you want to [[[_1]][reset %2's password]]?"
-msgstr "Wollen Sie[[[_1]][%2's Passwort zurücksetzen]]?"
+#, fuzzy
+msgid "Did you want to [[%1][reset %2's password]]?"
+msgstr "Wollen Sie[[[_1]][%2's Passwort zurÃ¼cksetzen]]?"
 
 #: templates/rdiff.pattern.tmpl:11
 msgid "Difference Topic"
-msgstr "Änderungs Topic"
+msgstr "Ã„nderungs Topic"
 
 #: templates/rdiff.pattern.tmpl:19
 msgid "Diffs"
-msgstr "Änderungen"
+msgstr "Ã„nderungen"
 
 #: templates/preview.pattern.tmpl:57
 msgid "Discard"
@@ -664,32 +697,41 @@ msgid ""
 "During move of attachment %1 to %2 an error was found. Please notify your %3 "
 "administrator."
 msgstr ""
-"Während des Verschiebens des Anhangs %1 nach %2 ist ein Fehler aufgetreten. Bitte "
-"informieren Sie Ihren %3 Administrator."
+"WÃ¤hrend des Verschiebens des Anhangs %1 nach %2 ist ein Fehler aufgetreten. "
+"Bitte informieren Sie Ihren %3 Administrator."
 
 #: templates/oopsattention.tmpl:78
 msgid ""
 "During rename of topic %1 to %2 an error (%3) was found. Please notify your %"
 "4 administrator."
 msgstr ""
-"Während des Umbenennens des Topics %1 nach %2 ist ein Fehler (%3) aufgetreten. Bitte "
-"informieren Sie Ihren %4 Administrator."
+"WÃ¤hrend des Umbenennens des Topics %1 nach %2 ist ein Fehler (%3) "
+"aufgetreten. Bitte informieren Sie Ihren %4 Administrator."
 
 #: templates/oopsattention.tmpl:81
 msgid ""
 "During rename of web %1 to %2 an error (%3) was found. Please notify your %4 "
 "administrator."
 msgstr ""
-"Während des Umbenennens von Web %1 nach %2 ist ein Fehler (%3) aufgetreten. Bitte "
-"informieren Sie Ihren %4 Administrator."
+"WÃ¤hrend des Umbenennens von Web %1 nach %2 ist ein Fehler (%3) aufgetreten. "
+"Bitte informieren Sie Ihren %4 Administrator."
 
 #: templates/oopsattention.tmpl:281
 msgid ""
 "During save of %1 an error was found by the version control system. Please "
 "notify your %2 administrator."
 msgstr ""
-"Während des Speicherns von %1 gab es einen Fehler im Version-Kontroll System. Bitte "
-"informieren Sie Ihren %2 Administrator."
+"WÃ¤hrend des Speicherns von %1 gab es einen Fehler im Version-Kontroll "
+"System. Bitte informieren Sie Ihren %2 Administrator."
+
+#: templates/oopssaveerr.tmpl:6
+#, fuzzy
+msgid ""
+"During save of file %1 an error was found by the version control system. "
+"Please notify your %2 administrator."
+msgstr ""
+"WÃ¤hrend des Speicherns von %1 gab es einen Fehler im Version-Kontroll "
+"System. Bitte informieren Sie Ihren %2 Administrator."
 
 #: templates/settings.pattern.tmpl:84
 msgid "Each preference has the syntax"
@@ -698,6 +740,10 @@ msgstr "Jede Einstellung hat die Syntax"
 #: templates/view.pattern.tmpl:19
 msgid "Edit"
 msgstr "Editieren"
+
+#: templates/oopsleaseconflict.tmpl:36
+msgid "Edit Anyway"
+msgstr ""
 
 #: templates/edit.pattern.tmpl:185
 msgid "Edit content"
@@ -711,13 +757,19 @@ msgstr "Topic Text editieren"
 msgid "Edit topic preference settings:"
 msgstr "Topic Einstellungen editieren:"
 
+#: templates/oopsauth.tmpl:4
+msgid "Either you need to register or the authentication failed"
+msgstr ""
+
 #: templates/view.pattern.tmpl:56
 msgid "End of topic"
 msgstr "Topic Ende"
 
 #: templates/login.pattern.tmpl:26
 msgid "Enter a new username and password to change identity:"
-msgstr "Geben Sie einen neuen Benutzernamen und ein Passwort ein, um die Identität zu wechseln:"
+msgstr ""
+"Geben Sie einen neuen Benutzernamen und ein Passwort ein, um die IdentitÃ¤t "
+"zu wechseln:"
 
 #: templates/oopsattention.tmpl:170
 msgid "Error registering user %1"
@@ -736,40 +788,41 @@ msgid ""
 "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
 "=text/css=)"
 msgstr ""
-"Fehler: Nicht unterstützter Inhalts-Typ: %1 (Muss =text/html=, =text/plain= oder "
-"=text/css= sein)"
+"Fehler: Nicht unterstÃ¼tzter Inhalts-Typ: %1 (Muss =text/html=, =text/plain= "
+"oder =text/css= sein)"
 
 #: templates/oopsalerts.tmpl:13
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
-msgstr "Fehler: Nicht unterstütztes Protokoll. (Muss 'http://domain/..' sein)"
+msgstr "Fehler: Nicht unterstÃ¼tztes Protokoll. (Muss 'http://domain/..' sein)"
 
 #: templates/attach.pattern.tmpl:45
 msgid "Existing attachments"
-msgstr "Existierende Anhänge"
+msgstr "Existierende AnhÃ¤nge"
 
 #: templates/changeform.pattern.tmpl:42
 msgid "Existing form data will be lost! (still available in old version)"
-msgstr "Bestehende Formulardaten gehen verloren (verbleiben in älterer Version)"
+msgstr ""
+"Bestehende Formulardaten gehen verloren (verbleiben in Ã¤lterer Version)"
 
 #: templates/oopsattention.tmpl:265
 msgid "Filename %1 is not legal for a TWiki attachment."
-msgstr "Dateiname %1 ist nicht für TWiki Anhänge erlaubt."
+msgstr "Dateiname %1 ist nicht fÃ¼r TWiki AnhÃ¤nge erlaubt."
 
 #: templates/oopsmore.pattern.tmpl:21
 msgid ""
 "Find topics <a href='%1' title='Search all webs for topics that link to "
 "here' accesskey='l'>in a&ll public webs</a> that link to %2"
 msgstr ""
-"Querverweise auf %2 <a href='%1' title='Durchsuche alle Webs nach Topics, die auf das aktuelle Topic verweisen' "
-"accesskey='l'>in a&llen Webs</a> finden"
+"Querverweise auf %2 <a href='%1' title='Durchsuche alle Webs nach Topics, "
+"die auf das aktuelle Topic verweisen' accesskey='l'>in a&llen Webs</a> finden"
 
 #: templates/oopsmore.pattern.tmpl:20
 msgid ""
 "Find topics <a href='%1' title='Search the %2 Web for topics that link to "
 "here' accesskey='w'>in %2 &web</a> that link to %3"
 msgstr ""
-"Querverweise auf %3 <a href='%1' title='Durchsuche das %2 Web nach Topics, die auf das aktuelle Topic verweisen' "
-"accesskey='w'>im %2 &Web</a> finden"
+"Querverweise auf %3 <a href='%1' title='Durchsuche das %2 Web nach Topics, "
+"die auf das aktuelle Topic verweisen' accesskey='w'>im %2 &Web</a> finden"
 
 #: templates/edit.pattern.tmpl:214 templates/preview.pattern.tmpl:53
 msgid "Force new revision"
@@ -789,7 +842,7 @@ msgid ""
 "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renaming and "
 "moving topics</a>."
 msgstr ""
-"Hilfe für das <a target='ManagingTopics' onclick=\"return launchWindow('%"
+"Hilfe fÃ¼r das <a target='ManagingTopics' onclick=\"return launchWindow('%"
 "TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Umbenennen und "
 "Verschieben von Topics</a> anzeigen."
 
@@ -797,11 +850,13 @@ msgstr ""
 msgid ""
 "Go back in your browser and insert information for all mandatory fields."
 msgstr ""
-"Bitte gehen Sie mit Ihrem Browser zurück und füllen Sie alle benötigten Feldern aus."
+"Bitte gehen Sie mit Ihrem Browser zurÃ¼ck und fÃ¼llen Sie alle benÃ¶tigten "
+"Feldern aus."
 
-#: templates/oopsattention.tmpl:285
+#: templates/oopsattention.tmpl:285 templates/oopssaveerr.tmpl:10
 msgid "Go back in your browser and save your changes locally."
-msgstr "Gehen Sie mit Ihrem Browser zurück und speichern Sie alle Änderungen lokal."
+msgstr ""
+"Gehen Sie mit Ihrem Browser zurÃ¼ck und speichern Sie alle Ã„nderungen lokal."
 
 #: templates/oopsattention.tmpl:194
 msgid "Good examples:"
@@ -815,25 +870,55 @@ msgstr "Datei verstecken"
 msgid "Hide formatting help"
 msgstr "Formatierungshilfe ausblenden"
 
+#: templates/registernotify.tmpl:16
+msgid "How about attaching your photo?"
+msgstr ""
+
+#: templates/registerconfirm.tmpl:4
+msgid "How to activate your %1 registration"
+msgstr ""
+
 #: templates/oopsattention.tmpl:251
 msgid "If this line isn't present see _upgrade_ section below"
-msgstr "Wenn diese Zeile nicht erscheint, beachten Sie den nachvollgenden _upgrade_ Abschnitt"
+msgstr ""
+"Wenn diese Zeile nicht erscheint, beachten Sie den nachvollgenden _upgrade_ "
+"Abschnitt"
 
 #: templates/oopsattention.tmpl:245
 msgid "If this topic is missing create it, otherwise check it for errors."
-msgstr "Wenn dieses Topic fehlt, legen Sie es an, ansonsten kontrollieren Sie es auf Fehler."
+msgstr ""
+"Wenn dieses Topic fehlt, legen Sie es an, ansonsten kontrollieren Sie es auf "
+"Fehler."
 
 #: templates/oopsaccessdenied.tmpl:27
 msgid "If you came here by clicking on a question mark link"
 msgstr "Wenn Sie durch einen Klick auf ein Fragezeichen hierher gekommen sind"
 
+#: templates/oopsauth.tmpl:8
+msgid "If you expected to be logged in at this point:"
+msgstr ""
+
+#: templates/registernotify.tmpl:23
+msgid ""
+"If you got this email by mistake: Somebody (%1) registered at the %2 site "
+"using your mail address %3. Contact %4 if this is in error."
+msgstr ""
+
 #: templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr "Wenn Sie Fragen haben wenden Sie sich bitte an %1."
 
+#: templates/registernotify.tmpl:25
+msgid "If you haven't set a password yet or you want to reset it, go to: %1"
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:39
 msgid "If you want to create the topic"
 msgstr "Wenn Sie das Topic anlegen wollen"
+
+#: templates/oopsauth.tmpl:11
+msgid "If you want to try again, back arrow and hit edit again."
+msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:32
 msgid "If you would like to create this web"
@@ -841,7 +926,13 @@ msgstr "Wenn Sie dieses Web anlegen wollen"
 
 #: templates/attach.pattern.tmpl:85
 msgid "Images will be displayed, for other attachments a link will be created."
-msgstr "Bilder werden angezeigt, für andere Anhänge wird ein Link erzeugt."
+msgstr "Bilder werden angezeigt, fÃ¼r andere AnhÃ¤nge wird ein Link erzeugt."
+
+#: templates/registerconfirm.tmpl:14
+msgid ""
+"In case you got this email by mistake: Somebody (%1) registered  at the %2 "
+"site using your mail address %3. Contact %4 if needed."
+msgstr ""
 
 #: templates/oopsattention.tmpl:191
 msgid "Incorrect %1"
@@ -857,11 +948,19 @@ msgstr "Inkorrektes Passwort"
 
 #: templates/oopsattention.tmpl:211
 msgid "Invalid Activation Code"
-msgstr "Ungültiger Aktivierungs-Code"
+msgstr "UngÃ¼ltiger Aktivierungs-Code"
 
 #: templates/oopsattention.tmpl:203
 msgid "Invalid email address"
-msgstr "Ungültige E-Mail Adresse"
+msgstr "UngÃ¼ltige E-Mail Adresse"
+
+#: templates/oopsleaseconflict.tmpl:20
+msgid ""
+"It is probably OK to go ahead and edit, unless you intend to change the form "
+"attached to the topic. If they _do_ save while you are editing, your changes "
+"will be merged with theirs. Form data cannot easily be merged, so in this "
+"case you are recommended to check with them first."
+msgstr ""
 
 #: templates/rename.pattern.tmpl:22
 msgid ""
@@ -871,12 +970,11 @@ msgid ""
 "Characters not allowed in topic names, such as spaces will automatically be "
 "removed."
 msgstr ""
-"Es ist meist besser ein <a target='WikiWord' onclick=\"return "
-"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWort</"
-"a> als Topic Namen zu wählen, da sonst die automatische Verlinkung möglicherweise nicht funktioniert. "
-"Zeichen wie z.B. Leerzeichen, die nicht in Topic Namen erlaubt sind, werden automatisch "
-"entfernt."
-
+"Es ist meist besser ein <a target='WikiWord' onclick=\"return launchWindow('%"
+"TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWort</a> als Topic "
+"Namen zu wÃ¤hlen, da sonst die automatische Verlinkung mÃ¶glicherweise nicht "
+"funktioniert. Zeichen wie z.B. Leerzeichen, die nicht in Topic Namen erlaubt "
+"sind, werden automatisch entfernt."
 
 #: templates/renameweb.pattern.tmpl:20
 msgid ""
@@ -886,11 +984,11 @@ msgid ""
 "Characters not allowed in web names, such as spaces will automatically be "
 "removed."
 msgstr ""
-"Es ist meist besser ein <a target='WikiWord' onclick=\"return "
-"launchWindow('%TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWort</"
-"a> als neuen Web Namen zu wählen, da sonst die automatische Verlinkung möglicherweise nicht funktioniert. "
-"Zeichen wie z.B. Leerzeichen, die nicht in Topic Namen erlaubt sind, werden automatisch "
-"entfernt."
+"Es ist meist besser ein <a target='WikiWord' onclick=\"return launchWindow('%"
+"TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWort</a> als neuen Web "
+"Namen zu wÃ¤hlen, da sonst die automatische Verlinkung mÃ¶glicherweise nicht "
+"funktioniert. Zeichen wie z.B. Leerzeichen, die nicht in Topic Namen erlaubt "
+"sind, werden automatisch entfernt."
 
 #. ($left)
 #. ($right)
@@ -929,7 +1027,7 @@ msgstr "Einloggen"
 
 #: templates/preview.pattern.tmpl:52
 msgid "Minor changes, don't notify"
-msgstr "Geringfügige Änderungen, nicht benachrichtigen"
+msgstr "GeringfÃ¼gige Ã„nderungen, nicht benachrichtigen"
 
 #: templates/oopsattention.tmpl:158
 msgid "Missing Fields"
@@ -945,7 +1043,7 @@ msgstr "Mehr"
 
 #: templates/oopsmore.pattern.tmpl:4
 msgid "More Actions on Topic %1"
-msgstr "Mehr Aktionen für Topic %1"
+msgstr "Mehr Aktionen fÃ¼r Topic %1"
 
 #: templates/view.pattern.tmpl:33
 msgid "More topic actions..."
@@ -965,13 +1063,14 @@ msgstr "Dateianhang verschieben"
 
 #: templates/moveattachment.pattern.tmpl:36
 msgid "Move or Delete File %1"
-msgstr "Datei %1 verschieben oder löschen"
+msgstr "Datei %1 verschieben oder lÃ¶schen"
 
 #: templates/renameweb.pattern.tmpl:25
 msgid ""
 "Move this web to the Trash web to delete it (for example, rename it to %1)."
 msgstr ""
-"Verschieben Sie das Web in das Papierkorb Web, um es zu löschen (z.B. benennen Sie es in %1 um)."
+"Verschieben Sie das Web in das Papierkorb Web, um es zu lÃ¶schen (z.B. "
+"benennen Sie es in %1 um)."
 
 #: templates/oopsattention.tmpl:90
 msgid "Name of new web is missing"
@@ -979,11 +1078,11 @@ msgstr "Der Names des neuen Webs fehlt"
 
 #: templates/mailnotify.tmpl:14
 msgid "New or changed topics in %1, since %2:"
-msgstr "Neue oder geänderte Topics in %1 seit %2"
+msgstr "Neue oder geÃ¤nderte Topics in %1 seit %2"
 
 #: templates/renamewebbase.pattern.tmpl:57
 msgid "New parent web:<br>(subwebs must be enabled)"
-msgstr "Neues Ober-Web:<br>(Subwebs müssen aktiviert sein)"
+msgstr "Neues Ober-Web:<br>(Subwebs mÃ¼ssen aktiviert sein)"
 
 #: templates/oopsattention.tmpl:74
 msgid "New topic name %1 is not a %2"
@@ -1007,17 +1106,18 @@ msgstr "Keine Erlaubnis um %1 zu sehen"
 
 #: templates/oopsattention.tmpl:151
 msgid "No users to reset passwords for."
-msgstr "Keine Benutzer um das Passwort zurück zu setzen."
+msgstr "Keine Benutzer um das Passwort zurÃ¼ck zu setzen."
 
 #: templates/moveattachment.pattern.tmpl:61
 msgid ""
 "Note that any URLs that refer to the attachment will be broken after this "
 "move."
 msgstr ""
-"Beachten Sie, dass alle URLs die auf diesen Anhang zeigen, "
-"nach dem Verschieben nicht mehr funktionieren."
+"Beachten Sie, dass alle URLs die auf diesen Anhang zeigen, nach dem "
+"Verschieben nicht mehr funktionieren."
 
-#: templates/moveattachment.pattern.tmpl:58
+#: templates/moveattachment.pattern.tmpl:58 templates/oopsauth.tmpl:13
+#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
 #: templates/renamebase.pattern.tmpl:78
 #: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:82
 msgid "Note:"
@@ -1036,17 +1136,18 @@ msgstr "Notizen:"
 msgid "Number of topics:"
 msgstr "Anzahl der Topics:"
 
-#: templates/oopsaccessdenied.tmpl:6
+#: templates/oopsaccessdenied.tmpl:6 templates/oopsauth.tmpl:19
+#: templates/oopssaveerr.tmpl:11
 msgid "OK"
 msgstr "OK"
 
 #: templates/oopsmore.pattern.tmpl:48
 msgid "Older revision:"
-msgstr "Ältere Revisionen"
+msgstr "Ã„ltere Revisionen"
 
 #: templates/oopsaccessdenied.tmpl:16
 msgid "Only members of the %1 are allowed to perform this action."
-msgstr "Nur Mitglieder von %1 dürfen diese Aktion durchführen."
+msgstr "Nur Mitglieder von %1 dÃ¼rfen diese Aktion durchfÃ¼hren."
 
 #: templates/login.pattern.tmpl:41
 msgid "Password"
@@ -1054,19 +1155,19 @@ msgstr "Passwort"
 
 #: templates/oopsattention.tmpl:133
 msgid "Password changed successfully!"
-msgstr "Passwort erfolgreich geändert!"
+msgstr "Passwort erfolgreich geÃ¤ndert!"
 
 #: templates/oopsattention.tmpl:150 templates/oopsattention.tmpl:154
 msgid "Password reset failed"
-msgstr "Das Zurücksetzen des Passwortes ist fehlgeschlagen"
+msgstr "Das ZurÃ¼cksetzen des Passwortes ist fehlgeschlagen"
 
 #: templates/oopsattention.tmpl:164
 msgid "Passwords do not match"
-msgstr "Passwörter stimmen nicht überein"
+msgstr "PasswÃ¶rter stimmen nicht Ã¼berein"
 
 #: templates/oopsattention.tmpl:110
 msgid "Pick one of the %1."
-msgstr "Wählen Sie eine der %1."
+msgstr "WÃ¤hlen Sie eine der %1."
 
 #: templates/oopsattention.tmpl:188 templates/oopsattention.tmpl:222
 msgid "Please contact %1 if you have any questions."
@@ -1078,23 +1179,29 @@ msgstr "Bitte geben Sie Ihren Benutzernamen und Passwort ein:"
 
 #: templates/oopsattention.tmpl:64 templates/oopsattention.tmpl:70
 msgid "Please go _back_ in browser and try a new name"
-msgstr "Bitte gehen Sie mit Ihrem Browser _zurück_ und versuchen Sie einen neuen Namen"
+msgstr ""
+"Bitte gehen Sie mit Ihrem Browser _zurÃ¼ck_ und versuchen Sie einen neuen "
+"Namen"
 
 #: templates/oopsattention.tmpl:58
 msgid "Please go _back_ in your browser and try a new name."
-msgstr "Bitte gehen Sie mit Ihrem Browser _zurück_ und versuchen Sie einen neuen Namen"
+msgstr ""
+"Bitte gehen Sie mit Ihrem Browser _zurÃ¼ck_ und versuchen Sie einen neuen "
+"Namen"
 
 #: templates/oopsattention.tmpl:273
 msgid "Please go back in your browser and check again."
-msgstr "Bitte gehen Sie mit Ihrem Browser zurück und überprüfen Sie es noch einmal."
+msgstr ""
+"Bitte gehen Sie mit Ihrem Browser zurÃ¼ck und Ã¼berprÃ¼fen Sie es noch einmal."
 
 #: templates/oopsattention.tmpl:75
 msgid ""
 "Please go back in your browser and chose a topic name that is a %TWIKIWEB%."
 "WikiWord or check the allow non-Wiki Word box"
 msgstr ""
-"Bitten gehen Sie mit Ihrem Browser zurück und wählen Sie einen Topic Namen, der ein %TWIKIWEB%."
-"WikiWord ist oder erlauben Sie Nicht-<nop>WikiWörter in der Check-Box"
+"Bitten gehen Sie mit Ihrem Browser zurÃ¼ck und wÃ¤hlen Sie einen Topic Namen, "
+"der ein %TWIKIWEB%.WikiWord ist oder erlauben Sie Nicht-<nop>WikiWÃ¶rter in "
+"der Check-Box"
 
 #: templates/oopsattention.tmpl:100 templates/oopsattention.tmpl:104
 #: templates/oopsattention.tmpl:114 templates/oopsattention.tmpl:161
@@ -1103,15 +1210,15 @@ msgstr ""
 #: templates/oopsattention.tmpl:36 templates/oopsattention.tmpl:87
 #: templates/oopsattention.tmpl:91 templates/oopsattention.tmpl:96
 msgid "Please go back in your browser and try again."
-msgstr "Bitte gehen Sie mit Ihrem Browser zurück und versuchen Sie es erneut."
+msgstr "Bitte gehen Sie mit Ihrem Browser zurÃ¼ck und versuchen Sie es erneut."
 
 #: templates/oopsattention.tmpl:40
 msgid ""
 "Please make sure you spelled the %1 correctly and try again. If you get "
 "stuck, please mail %2."
 msgstr ""
-"Bitten stellen Sie sicher, dass %1 korrekt geschrieben ist, und versuchen Sie es erneut. Wenn Sie nicht "
-"weiter kommen, schreiben Sie %2 eine E-Mail."
+"Bitten stellen Sie sicher, dass %1 korrekt geschrieben ist, und versuchen "
+"Sie es erneut. Wenn Sie nicht weiter kommen, schreiben Sie %2 eine E-Mail."
 
 #: templates/oopsattention.tmpl:214
 msgid "Please try again."
@@ -1121,15 +1228,16 @@ msgstr "Bitte versuchen Sie es erneut."
 msgid ""
 "Please visit %1 to change your password to something more memorable for you."
 msgstr ""
-"Bitte besuchen Sie %1, um Ihr Passwort in ein leichter zu merkendes zu ändern."
+"Bitte besuchen Sie %1, um Ihr Passwort in ein leichter zu merkendes zu "
+"Ã¤ndern."
 
 #: templates/changeform.pattern.tmpl:31
 msgid "Possible form templates"
-msgstr "Mögliche Formularvorlagen"
+msgstr "MÃ¶gliche Formularvorlagen"
 
 #: templates/settings.pattern.tmpl:55
 msgid "Preferences for"
-msgstr "Einstellungen für"
+msgstr "Einstellungen fÃ¼r"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Preview"
@@ -1151,13 +1259,27 @@ msgstr "Leises Speichern"
 msgid "QuietSave"
 msgstr "LeisesSpeichern"
 
+#: templates/registernotify.tmpl:10
+msgid ""
+"Read %1 to get a quick overview of this collaboration platform. To learn "
+"more, study the TWikiTutorial, which is accessible from the same link."
+msgstr ""
+
 #: templates/edit.pattern.tmpl:214
 msgid "Read new revision help text in new window"
 msgstr "Lesen Sie den Hilfetext zu neuen Revision in einem neuen Fenster"
 
+#: templates/oopsauth.tmpl:20
+msgid "Register"
+msgstr ""
+
+#: templates/oopsauth.tmpl:12
+msgid "Registered users can %1 and %2."
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
 msgid "Related topics:"
-msgstr "Zugehörige Topics:"
+msgstr "ZugehÃ¶rige Topics:"
 
 #: templates/oopsattention.tmpl:46
 msgid "Remove the user from the group(s) %1 first."
@@ -1177,7 +1299,9 @@ msgstr "Topic umbenennen oder verschieben:"
 
 #: templates/oopsattention.tmpl:269
 msgid "Rename the file on your local machine and try uploading again."
-msgstr "Benennen Sie die Datei auf Ihrem lokalen Rechner um und versuchen Sie den Upload erneut."
+msgstr ""
+"Benennen Sie die Datei auf Ihrem lokalen Rechner um und versuchen Sie den "
+"Upload erneut."
 
 #: templates/rename.pattern.tmpl:35 templates/renameweb.pattern.tmpl:33
 msgid "Rename/Move"
@@ -1187,17 +1311,21 @@ msgstr "Umbenennen/Verschieben"
 msgid "Rename/move topic..."
 msgstr "Topic umbenennen/verschieben..."
 
+#: templates/form.tmpl:1
+msgid "Replace form..."
+msgstr ""
+
 #: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
 msgstr "Ergebnisse vom %1 web"
 
 #: templates/oopsattention.tmpl:24
 msgid "Rev %1 was saved by %2, while you were still editing."
-msgstr "Rev %1 wurde von %2 gespeichert, während Sie noch editierten."
+msgstr "Rev %1 wurde von %2 gespeichert, wÃ¤hrend Sie noch editierten."
 
 #: templates/mailnotify.tmpl:17
 msgid "Review recent changes in:"
-msgstr "Anzeigen der aktuellen Änderungen in:"
+msgstr "Anzeigen der aktuellen Ã„nderungen in:"
 
 #: templates/rdiff.pattern.tmpl:39
 msgid "Revision"
@@ -1217,7 +1345,12 @@ msgstr "Speichern"
 
 #: templates/preview.pattern.tmpl:58
 msgid "Save Changes"
-msgstr "Änderungen speichern"
+msgstr "Ã„nderungen speichern"
+
+#: templates/registernotifyadmin.tmpl:16
+#, fuzzy
+msgid "Saved to:"
+msgstr "Speichern"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Search %1 &Web only"
@@ -1242,28 +1375,31 @@ msgstr "Gesucht:"
 
 #: templates/oopsattention.tmpl:42
 msgid "See %1 for a list of existing users or register as new user in %2."
-msgstr "Gehen Sie auf %1 für eine Liste existierender Benutzer oder registrieren Sie neue Benutzer unter %2."
+msgstr ""
+"Gehen Sie auf %1 fÃ¼r eine Liste existierender Benutzer oder registrieren Sie "
+"neue Benutzer unter %2."
 
 #: templates/oopsattention.tmpl:238
 msgid "See %1 for information about Form Definitions."
-msgstr "Konsultieren Sie %1 für Informationen über Forumular Definitionen"
+msgstr "Konsultieren Sie %1 fÃ¼r Informationen Ã¼ber Forumular Definitionen"
 
 #: templates/attachagain.pattern.tmpl:32
 msgid "Select a new local file to update this attachment."
-msgstr "Wählen Sie eine neue Datei auf Ihrem Rechner, um den Anhang zu aktualisieren."
+msgstr ""
+"WÃ¤hlen Sie eine neue Datei auf Ihrem Rechner, um den Anhang zu aktualisieren."
 
 #: templates/renamebase.pattern.tmpl:75
 #: templates/renamewebbase.pattern.tmpl:79
 msgid "Select all"
-msgstr "Alles auswählen"
+msgstr "Alles auswÃ¤hlen"
 
 #: templates/renamebase.pattern.tmpl:80
 msgid "Select the %1 Web to delete the topic."
-msgstr "Wählen Sie das %1 Web, um das Topic zu löschen."
+msgstr "WÃ¤hlen Sie das %1 Web, um das Topic zu lÃ¶schen."
 
 #: templates/edit.pattern.tmpl:237
 msgid "Select, copy and paste your signature text to the bottom of your entry"
-msgstr "Fügen Sie Ihre Signatur unter dem Text ein, indem Sie sie kopieren."
+msgstr "FÃ¼gen Sie Ihre Signatur unter dem Text ein, indem Sie sie kopieren."
 
 #: templates/oopsmore.pattern.tmpl:28
 msgid "Set new topic parent:"
@@ -1273,9 +1409,13 @@ msgstr "Neues Ober-Topic zuordnen:"
 msgid "Show formatting help"
 msgstr "Formatierungshilfe anzeigen"
 
+#: templates/oopsauth.tmpl:17
+msgid "Simply fill out the %1 form. It only takes a minute."
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:7
 msgid "Size"
-msgstr "Größe"
+msgstr "GrÃ¶ÃŸe"
 
 #: templates/view.pattern.tmpl:53 templates/view.pattern.tmpl:56
 msgid "Skip to actions"
@@ -1289,25 +1429,41 @@ msgstr "nach unten"
 msgid "Skip to topic"
 msgstr "Zum Topic"
 
+#: templates/registernotify.tmpl:15
+msgid "Some add schedule information and vacation notice."
+msgstr ""
+
+#: templates/registernotify.tmpl:14
+msgid ""
+"Some people turn it into a personal portal with favorite links, what they "
+"work on, what help they'd like, etc."
+msgstr ""
+
 #: templates/view.pattern.tmpl:53
 msgid "Start of topic"
 msgstr "Topic-Anfang"
 
 #: templates/oopsmore.pattern.tmpl:29
 msgid "Step 1: Select topic parent:"
-msgstr "Schritt 1: Ober-Topic auswählen"
+msgstr "Schritt 1: Ober-Topic auswÃ¤hlen"
 
 #: templates/oopsmore.pattern.tmpl:34
 msgid ""
 "Step 2: Continue to <input type='submit' class='twikiSubmit' value='Edit' /> "
 "and save %1 to activate the new parent"
 msgstr ""
-"Schritt 2: Setzen Sie mit <input type='submit' class='twikiSubmit' value='Edit' /> "
-"fort und speichern Sie %1 ab, um das neue Ober-Topic zu aktivieren."
+"Schritt 2: Setzen Sie mit <input type='submit' class='twikiSubmit' "
+"value='Edit' /> fort und speichern Sie %1 ab, um das neue Ober-Topic zu "
+"aktivieren."
 
 #: templates/oopsattention.tmpl:145 templates/oopsattention.tmpl:219
 msgid "Submit"
 msgstr "?bermitteln"
+
+#: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
+#, fuzzy
+msgid "Submitted content:"
+msgstr "Inhalt editieren"
 
 #: templates/mailnotify.tmpl:20
 msgid "Subscribe / Unsubscribe in:"
@@ -1315,18 +1471,30 @@ msgstr "Abonnieren / Abbestellen von:"
 
 #: templates/mailresetpassword.tmpl:3
 msgid "TWiki password reset for %1"
-msgstr "TWiki Passwort zurücksetzen für %1"
+msgstr "TWiki Passwort zurÃ¼cksetzen fÃ¼r %1"
 
 #: templates/oopsattention.tmpl:121 templates/oopsattention.tmpl:138
 msgid "Thank you for registering"
-msgstr "Vielen Dank für Ihre Registrierung"
+msgstr "Vielen Dank fÃ¼r Ihre Registrierung"
+
+#: templates/registernotify.tmpl:8
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Please save this "
+"email for future reference."
+msgstr ""
+
+#: templates/registerconfirm.tmpl:9
+msgid ""
+"Thank you for registering in the %1 collaboration tool. Your verification "
+"code is %2."
+msgstr ""
 
 #: templates/oopsattention.tmpl:192
 msgid ""
 "The %1 field must be your first and lastname in %2, e.g. your capitalized "
 "first and lastname with spaces removed."
 msgstr ""
-"Das Feld %1 muß Ihr Vor- und Nachname %2 sein, z.B. Ihr groß geschriebener "
+"Das Feld %1 muÃŸ Ihr Vor- und Nachname %2 sein, z.B. Ihr groÃŸ geschriebener "
 "Vor- und Nachname ohne Leerzeichen."
 
 #: templates/oopsattention.tmpl:55
@@ -1339,47 +1507,58 @@ msgstr "Das %1 Web existiert nicht"
 
 #: templates/oopsattention.tmpl:212
 msgid "The activation code %1 is invalid."
-msgstr "Der Aktivierungscode %1 ist ungültig."
+msgstr "Der Aktivierungscode %1 ist ungÃ¼ltig."
 
 #: templates/moveattachment.pattern.tmpl:59
 msgid "The attachment and any history will be moved to the new topic."
-msgstr "Anhänge und die Änderungshistorie wird zu dem neuen Topic verschoben."
+msgstr "AnhÃ¤nge und die Ã„nderungshistorie wird zu dem neuen Topic verschoben."
+
+#: templates/oopsleaseconflict.tmpl:13
+msgid ""
+"The chances are good that they simply navigated away from the edit page "
+"without saving."
+msgstr ""
 
 #: templates/renamewebbase.pattern.tmpl:84
 msgid "The checkmarked topics will be updated"
-msgstr "Die ausgewählten Topics werden aktualisiert"
+msgstr "Die ausgewÃ¤hlten Topics werden aktualisiert"
 
 #: templates/renamebase.pattern.tmpl:81
 msgid ""
 "The checkmarked topics will be updated (another form will appear which will "
 "_eventually_ allow you to rename any topics that were locked)"
 msgstr ""
-"Die ausgewählten Topics werden aktualisiert (ein weiteres Formular wird erscheinen, "
-"welches Ihnen erlaubt, _eventuell_ alle Topics umzubennen, die gesperrt sind)"
+"Die ausgewÃ¤hlten Topics werden aktualisiert (ein weiteres Formular wird "
+"erscheinen, welches Ihnen erlaubt, _eventuell_ alle Topics umzubennen, die "
+"gesperrt sind)"
 
 #: templates/oopsattention.tmpl:204
 msgid "The email address for this account is not valid."
-msgstr "Die E-Mail Adresse für diesen Zugang ist ungültig."
+msgstr "Die E-Mail Adresse fÃ¼r diesen Zugang ist ungÃ¼ltig."
 
 #: templates/oopsalerts.tmpl:28
 msgid "The entry for user %1 was missing in the password system."
-msgstr "Der Eintrag für Benutzer %1 fehlt im Passwort System."
+msgstr "Der Eintrag fÃ¼r Benutzer %1 fehlt im Passwort System."
 
 #: templates/oopsattention.tmpl:292
 msgid "The following topics are locked for edit, and cannot be moved:"
-msgstr "Die folgenden Topics sind für das Editieren gesperrt und können nicht verschoben werden:"
+msgstr ""
+"Die folgenden Topics sind fÃ¼r das Editieren gesperrt und kÃ¶nnen nicht "
+"verschoben werden:"
 
 #: templates/oopsattention.tmpl:298
 msgid "The following topics refer to topics in this web, but are being edited:"
-msgstr "Die folgenden Topics verweisen auf Topics in diesem Web, werden jedoch gerade editiert:"
+msgstr ""
+"Die folgenden Topics verweisen auf Topics in diesem Web, werden jedoch "
+"gerade editiert:"
 
 #: templates/oopsattention.tmpl:295
 msgid ""
 "The following topics refer to topics in this web, but you are denied access "
 "to them:"
 msgstr ""
-"Die folgenden Topics verweisen auf Topics in diesem Web, jedoch haben Sie nicht genügend Zugriffsrechte, "
-"um sie zu ändern:"
+"Die folgenden Topics verweisen auf Topics in diesem Web, jedoch haben Sie "
+"nicht genÃ¼gend Zugriffsrechte, um sie zu Ã¤ndern:"
 
 #: templates/oopsattention.tmpl:244
 msgid "The form should be defined in the topic %1"
@@ -1387,7 +1566,7 @@ msgstr "Das Formular sollte in Topic %1 definiert werden"
 
 #: templates/moveattachment.pattern.tmpl:30
 msgid "The new topic chosen must already exist."
-msgstr "Das neu auszuwählende Topic muß bereits existieren."
+msgstr "Das neu auszuwÃ¤hlende Topic muÃŸ bereits existieren."
 
 #: templates/oopsattention.tmpl:13
 msgid "The new web has been created"
@@ -1395,11 +1574,12 @@ msgstr "Das neue Web wurde angelegt"
 
 #: templates/oopsattention.tmpl:85
 msgid "The password you entered in the *old password* field is incorrect."
-msgstr "Das Passwort, welches Sie in *altes Passwort* eingegeben haben, ist falsch."
+msgstr ""
+"Das Passwort, welches Sie in *altes Passwort* eingegeben haben, ist falsch."
 
 #: templates/oopsattention.tmpl:232
 msgid "The required field %1 was not filled in."
-msgstr "Das benötigte Feld %1 wurde nicht ausgefüllt."
+msgstr "Das benÃ¶tigte Feld %1 wurde nicht ausgefÃ¼llt."
 
 #: templates/oopsattention.tmpl:247
 msgid "The topic is in an old format"
@@ -1407,7 +1587,11 @@ msgstr "Das Topic hat ein altes Format"
 
 #: templates/oopsattention.tmpl:165
 msgid "The two passwords you entered do not match."
-msgstr "Die beiden eingegebenen Passwörter stimmen nicht überein."
+msgstr "Die beiden eingegebenen PasswÃ¶rter stimmen nicht Ã¼berein."
+
+#: templates/oopsleaseconflict.tmpl:11
+msgid "Their lease on this topic expired %1 ago."
+msgstr ""
 
 #: templates/oopsattention.tmpl:288
 msgid "There are problems with renaming this web:"
@@ -1418,12 +1602,19 @@ msgid ""
 "There has been a problem adding your user id to the Password system. Please "
 "contact %1."
 msgstr ""
-"Es gab ein Problem beim Hinzufügen Ihrer Benutzerkennung zum Passwortsystem. Bitte "
-"kontaktieren Sie %1."
+"Es gab ein Problem beim HinzufÃ¼gen Ihrer Benutzerkennung zum Passwortsystem. "
+"Bitte kontaktieren Sie %1."
 
 #: templates/oopsattention.tmpl:250
 msgid "There should be a line that includes %1, look for %2 (or %2)"
-msgstr "Es sollte eine Zeile geben, die %1 inkludiert, bitte nach %2 (oder %2) schauen"
+msgstr ""
+"Es sollte eine Zeile geben, die %1 inkludiert, bitte nach %2 (oder %2) "
+"schauen"
+
+#: templates/oopsleaseconflict.tmpl:8
+msgid ""
+"They have been editing for %1 and their lease is still active for another %2."
+msgstr ""
 
 #: templates/oopsattention.tmpl:257
 msgid "This can be automatically upgraded by:"
@@ -1431,10 +1622,15 @@ msgstr "Dieses kann automatisch aktualisiert werden von:"
 
 #: templates/oopsattention.tmpl:240
 msgid "This could be for several reasons:"
-msgstr "Das kann viele Gründe haben:"
+msgstr "Das kann viele GrÃ¼nde haben:"
 
 #: templates/mailnotify.tmpl:12
 msgid "This is an automated email from %1."
+msgstr "Dies ist eine automatisierte E-Mail von %1"
+
+#: templates/registernotifyadmin.tmpl:8
+#, fuzzy
+msgid "This is an automated email notification of user registration in %1."
 msgstr "Dies ist eine automatisierte E-Mail von %1"
 
 #: templates/renamedelete.pattern.tmpl:22
@@ -1443,12 +1639,12 @@ msgid ""
 "This name has been chosen so it doesn't conflict with any other topics "
 "already in the %1 web."
 msgstr ""
-"Der Name wurde so ausgewählt, dass er nicht mit bereits existierenden Topics "
+"Der Name wurde so ausgewÃ¤hlt, dass er nicht mit bereits existierenden Topics "
 "in Web %1 kollidiert."
 
 #: templates/oopsattention.tmpl:255
 msgid "This requires the form definition to be present."
-msgstr "Dazu wird die Forumalr Definition benötigt."
+msgstr "Dazu wird die Forumalr Definition benÃ¶tigt."
 
 #: templates/view.print.pattern.tmpl:38
 msgid "This topic:"
@@ -1461,26 +1657,47 @@ msgid ""
 "the other users changes. Please inspect the topic to make sure it is OK, "
 "especially if you made any changes to form fields."
 msgstr ""
-"Diese Änderungen wurden mit Ihren zusammengeführt und Rev %1 erzeugt. Textfelder "
-"werden zusammengeführt, aber andere Daten wie Formularfelder könnten von den anderen Änderungen "
-"überschrieben worden sein. Bitte untersuchen Sie das Topic, um sicher zu gehen, dass es in Ordnung ist; "
-"insbersondere wenn Sie Änderungen an den Formularfeldern vorgenommen haben."
+"Diese Ã„nderungen wurden mit Ihren zusammengefÃ¼hrt und Rev %1 erzeugt. "
+"Textfelder werden zusammengefÃ¼hrt, aber andere Daten wie Formularfelder "
+"kÃ¶nnten von den anderen Ã„nderungen Ã¼berschrieben worden sein. Bitte "
+"untersuchen Sie das Topic, um sicher zu gehen, dass es in Ordnung ist; "
+"insbersondere wenn Sie Ã„nderungen an den Formularfeldern vorgenommen haben."
 
 #: templates/preview.pattern.tmpl:72
 msgid "To *cancel* and discard any changes: Press the [Discard] button."
-msgstr "*Abbrechen* und alle Änderungen verwerfen: Den [Verwerfen] Knopf drücken."
+msgstr ""
+"*Abbrechen* und alle Ã„nderungen verwerfen: Den [Verwerfen] Knopf drÃ¼cken."
 
 #: templates/preview.pattern.tmpl:70
 msgid "To *save* changes: Press the [Save Changes] button."
-msgstr "Änderungen *speichern*: [Änderungen speichern] Knopf drücken."
+msgstr "Ã„nderungen *speichern*: [Ã„nderungen speichern] Knopf drÃ¼cken."
 
 #: templates/moveattachment.pattern.tmpl:26
 msgid "To delete an attachment move it to web %1, topic %2."
-msgstr "Um einen Anhang zu löschen, verschieben Sie es nach Web %1, Topic %2."
+msgstr "Um einen Anhang zu lÃ¶schen, verschieben Sie es nach Web %1, Topic %2."
+
+#: templates/oopsleaseconflict.tmpl:24
+msgid "To edit the topic anyway, hit 'Edit Anyway'."
+msgstr ""
+
+#: templates/oopsauth.tmpl:6
+msgid ""
+"To edit topics on this %1 collaborative web, you must be registered as a "
+"user."
+msgstr ""
 
 #: templates/preview.pattern.tmpl:71
 msgid "To make *more changes*: Go back in your browser."
-msgstr "Für *weitere Änderungen*: Gehen Sie zurück in Ihrem Browser."
+msgstr "FÃ¼r *weitere Ã„nderungen*: Gehen Sie zurÃ¼ck in Ihrem Browser."
+
+#: templates/oopsauth.tmpl:15
+#, fuzzy
+msgid "To register as a new user:"
+msgstr "Fehler beim Registrieren von Benutzer %1"
+
+#: templates/oopsleaseconflict.tmpl:22
+msgid "To see if they have finished their edit yet, click 'Try Again'."
+msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:45
 #: templates/renamebase.pattern.tmpl:52
@@ -1491,10 +1708,20 @@ msgstr "Nach Web:"
 msgid "Topic Save Error"
 msgstr "Topic-Speichern-Fehler"
 
+#: templates/oopsattention.tmpl:253
+#, fuzzy
+msgid "Topic can not be upgraded from old style category table"
+msgstr " Topic konnte nicht vom alten Kategorie-Stil aktualisiert werden"
+
 #: templates/moveattachment.pattern.tmpl:50
 #: templates/renamebase.pattern.tmpl:57
 msgid "Topic name:"
 msgstr "Topic Name:"
+
+#: templates/oopssaveerr.tmpl:4
+#, fuzzy
+msgid "Topic save error"
+msgstr "Topic-Speichern-Fehler"
 
 #: templates/edit.pattern.tmpl:186
 msgid "Topic settings"
@@ -1502,7 +1729,7 @@ msgstr "Topic Einstellungen"
 
 #: templates/oopsattention.tmpl:23
 msgid "Topic was merged"
-msgstr "Topic wurde zusammengeführt"
+msgstr "Topic wurde zusammengefÃ¼hrt"
 
 #: templates/mailchanges.tmpl:10
 msgid "Topics in %1 web:"
@@ -1524,11 +1751,16 @@ msgstr ""
 msgid ""
 "Topics which refer to this web that you do not have permission to change:"
 msgstr ""
-"Topics, die auf dieses Web referenzieren, Sie jedoch keine Berechtigung haben, diese zu ändern:"
+"Topics, die auf dieses Web referenzieren, Sie jedoch keine Berechtigung "
+"haben, diese zu Ã¤ndern:"
+
+#: templates/oopsleaseconflict.tmpl:30
+msgid "Try Again"
+msgstr ""
 
 #: lib/TWiki/UI/RDiff.pm:248
 msgid "Unchanged"
-msgstr "Unverändert"
+msgstr "UnverÃ¤ndert"
 
 #: templates/login.pattern.tmpl:30
 msgid "Unrecognised user and/or password"
@@ -1560,15 +1792,15 @@ msgstr "Hochgeladene Datei %1 existiert nicht oder ist leer"
 
 #: templates/oopsattention.tmpl:277
 msgid "Uploaded file %1 exceeds limit of %2 KB"
-msgstr "Die hochgeladene Datei überschreitet das Limit von %2 KB"
+msgstr "Die hochgeladene Datei Ã¼berschreitet das Limit von %2 KB"
 
 #: templates/oopsattention.tmpl:276
 msgid "Uploaded file is too big"
-msgstr "Die hochgeladene Datei ist zu groß"
+msgstr "Die hochgeladene Datei ist zu groÃŸ"
 
 #: templates/oopsattention.tmpl:7
 msgid "User Account %1 Deleted"
-msgstr "Benutzer Zugang %1 gelöscht"
+msgstr "Benutzer Zugang %1 gelÃ¶scht"
 
 #: templates/login.pattern.tmpl:38
 msgid "Username"
@@ -1579,8 +1811,8 @@ msgid ""
 "Users with automatically generated passwords should proceed immediately to "
 "[[%1][change password]] to change their password to something memorable."
 msgstr ""
-"Benutzer mit automatisch erzeugten Passwörtern sollten unmittelbar mit "
-"[[%1][Passwort ändern]] fortfahren, um Ihr Passwort in ein merkbares umzuändern."
+"Benutzer mit automatisch erzeugten PasswÃ¶rtern sollten unmittelbar mit [[%1]"
+"[Passwort Ã¤ndern]] fortfahren, um Ihr Passwort in ein merkbares umzuÃ¤ndern."
 
 #: templates/attachtables.pattern.tmpl:45 templates/view.pattern.tmpl:63
 msgid "Version"
@@ -1594,7 +1826,7 @@ msgstr "Vorherige Topic Revision ansehen:"
 msgid "View raw text without formatting"
 msgstr "Rohtext ohne Formatierung ansehen"
 
-#: templates/rdiff.pattern.tmpl:18
+#: templates/oopsleaseconflict.tmpl:27 templates/rdiff.pattern.tmpl:18
 msgid "View topic"
 msgstr "Topic ansehen"
 
@@ -1604,7 +1836,9 @@ msgstr "Topic Historie ansehen"
 
 #: templates/oopsalerts.tmpl:22
 msgid "Warning: Can't INCLUDE %1 twice, topic is already included. %2"
-msgstr "Warnung: Konnte INCLUDE %1 nicht zweimal durchführen, Topic wurde bereits inkludiert. %2"
+msgstr ""
+"Warnung: Konnte INCLUDE %1 nicht zweimal durchfÃ¼hren, Topic wurde bereits "
+"inkludiert. %2"
 
 #: templates/oopsalerts.tmpl:19
 msgid "Warning: Can't find topic %1"
@@ -1627,6 +1861,11 @@ msgstr "Sie sind bereits registriert"
 msgid "You are also listed in the %1 topic"
 msgstr "Sie sind auch auf Topic %1 gelistet"
 
+#: templates/oopsattention.tmpl:289
+#, fuzzy
+msgid "You are denied access to the following topics in the web:"
+msgstr " Sie haben keinen Zugriff auf die folgenden Topics im Web:"
+
 #: templates/view.pattern.tmpl:36
 msgid "You are here"
 msgstr "Sie sind hier"
@@ -1639,11 +1878,11 @@ msgid ""
 "used as a base to create new webs) choose a name that starts with an "
 "underscore and has only alphanumeric characters."
 msgstr ""
-"Es wird empfohlen, kurze Namen zu wählen, möglichst weniger als 10 Zeichen, "
-"beginnend mit großen alphanumerischen Zeichen. Wenn Sie ein Vorlagen Web (ein Web "
-"als Vorlage für neu anzulegende Webs) anlegen wollen, wählen Sie einen Namen beginnend "
-"mit einem Unterstrich und ausschließlich alphanumerischen Zeichen."
-
+"Es wird empfohlen, kurze Namen zu wÃ¤hlen, mÃ¶glichst weniger als 10 Zeichen, "
+"beginnend mit groÃŸen alphanumerischen Zeichen. Wenn Sie ein Vorlagen Web "
+"(ein Web als Vorlage fÃ¼r neu anzulegende Webs) anlegen wollen, wÃ¤hlen Sie "
+"einen Namen beginnend mit einem Unterstrich und ausschlieÃŸlich "
+"alphanumerischen Zeichen."
 
 #: templates/oopsaccessdenied.tmpl:37
 msgid "You are trying to %1 a topic that does not exist."
@@ -1654,8 +1893,13 @@ msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
 msgstr ""
-"Sie können ein [[%1][neues Web anlegen]], wenn Sie die Berechtigung dazu haben. Kontaktieren "
-"Sie %2, fall Sie Fragen haben."
+"Sie kÃ¶nnen ein [[%1][neues Web anlegen]], wenn Sie die Berechtigung dazu "
+"haben. Kontaktieren Sie %2, fall Sie Fragen haben."
+
+#: templates/oopsauth.tmpl:13
+msgid ""
+"You can also login anonymously as user *TWikiGuest* with password *guest*."
+msgstr ""
 
 #: templates/oopsattention.tmpl:112
 msgid ""
@@ -1663,37 +1907,51 @@ msgid ""
 "white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
 "teal, or aqua)"
 msgstr ""
-"Sie können auch Namen der Standard HTML Farben verwenden (black, silver, gray, "
-"white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
-"teal, or aqua)"
+"Sie kÃ¶nnen auch Namen der Standard HTML Farben verwenden (black, silver, "
+"gray, white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, "
+"blue, teal, or aqua)"
+
+#: templates/registernotify.tmpl:24
+msgid "You can change your password at via %1"
+msgstr ""
 
 #: templates/rename.pattern.tmpl:27
 msgid "You can move the topic to a different web."
-msgstr "Sie können das Topic in ein anderes Web verschieben"
+msgstr "Sie kÃ¶nnen das Topic in ein anderes Web verschieben"
 
 #: templates/renameweb.pattern.tmpl:25
 msgid "You can rename this web to a different web name."
-msgstr "Sie können diesem Web einen anderen Namen geben."
+msgstr "Sie kÃ¶nnen diesem Web einen anderen Namen geben."
 
 #: templates/oopsattention.tmpl:122
 msgid "You can review your changes in your personal TWiki topic %1"
-msgstr "Sie können Ihre Änderungen in Ihrem persönlichen TWiki topic %1 ansehen"
+msgstr ""
+"Sie kÃ¶nnen Ihre Ã„nderungen in Ihrem persÃ¶nlichen TWiki topic %1 ansehen"
 
 #: templates/oopsattention.tmpl:28
 msgid "You can see the differences [[%1][here]]."
-msgstr "Sie können die Unterschiede [[%1][hier]] einsehen."
+msgstr "Sie kÃ¶nnen die Unterschiede [[%1][hier]] einsehen."
 
 #: templates/oopsattention.tmpl:182
 msgid "You cannot register twice, the name %1 is already registered."
-msgstr "Sie können sich nicht zweimal registrieren, der Name %1 ist bereits registriert."
+msgstr ""
+"Sie kÃ¶nnen sich nicht zweimal registrieren, der Name %1 ist bereits "
+"registriert."
 
 #: templates/oopsattention.tmpl:135
 msgid "You need to close your browser to make this change take effect."
-msgstr "Sie müssen Ihren Browser schließen, um diese Änderung zu aktivieren"
+msgstr "Sie mÃ¼ssen Ihren Browser schlieÃŸen, um diese Ã„nderung zu aktivieren"
+
+#: templates/registerconfirm.tmpl:11
+msgid ""
+"You now need to verify your email address. You can do so by entering %1 in "
+"the form presented to you when this email was sent or by going to: %2"
+msgstr ""
 
 #: templates/oopsattention.tmpl:262
 msgid "You will probably have to ask your administrator, %1, to do this."
-msgstr "Sie müssen wahrscheinlich Ihren Administrator, %1, fragen, um das zu tun."
+msgstr ""
+"Sie mÃ¼ssen wahrscheinlich Ihren Administrator, %1, fragen, um das zu tun."
 
 #: templates/oopsattention.tmpl:140
 msgid ""
@@ -1701,37 +1959,45 @@ msgid ""
 "your email or enter the code in the box below to activate your membership. "
 "(This code is of the form \"YourName.xxxx\")"
 msgstr ""
-"Ihr Aktivierungs-Code wurde nach %PARAM1% gesendet. Entweder klicken Sie auf den Verweis in "
-"Ihrer Mail oder Sie fügen den Code in die Box unten ein, um Ihre Mitgliedschaft zu aktivieren."
-"(Dieser Code ist von der Form \"IhrName.xxxx\")"
+"Ihr Aktivierungs-Code wurde nach %PARAM1% gesendet. Entweder klicken Sie auf "
+"den Verweis in Ihrer Mail oder Sie fÃ¼gen den Code in die Box unten ein, um "
+"Ihre Mitgliedschaft zu aktivieren.(Dieser Code ist von der Form \"IhrName."
+"xxxx\")"
 
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
-msgstr "Ihr Passwort wurde in %1 geändert."
+msgstr "Ihr Passwort wurde in %1 geÃ¤ndert."
+
+#: templates/registernotify.tmpl:12
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
+msgstr ""
 
 #: templates/edit.pattern.tmpl:237
 msgid "Your signature to copy/paste:"
-msgstr "Ihre Signatur zum Kopieren/Einfügen"
+msgstr "Ihre Signatur zum Kopieren/EinfÃ¼gen"
 
 #: templates/oopsattention.tmpl:8
 msgid "Your user name has been removed from the Authentication System."
-msgstr "Ihr Benutzername wurde von dem Authentifizierungssystem gelöscht."
+msgstr "Ihr Benutzername wurde von dem Authentifizierungssystem gelÃ¶scht."
 
 #: templates/oopsattention.tmpl:10
 msgid "Your user topic has not been renamed. Please email %1 to request this."
-msgstr "Ihre Heimatseite wurde nicht umbenannt. Bitte schicken Sie %1 eine E-Mail, "
+msgstr ""
+"Ihre Heimatseite wurde nicht umbenannt. Bitte schicken Sie %1 eine E-Mail, "
 "um das zu beantragen."
 
 #: templates/settings.pattern.tmpl:85
 msgid ""
 "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
-"[Vielfaches von 3 Leerzeichen] * [Leerzeichen] Set [Leerzeichen] VARIABLENNAME [Leerzeichen] = [Wert]
+"[Vielfaches von 3 Leerzeichen] * [Leerzeichen] Set [Leerzeichen] "
+"VARIABLENNAME [Leerzeichen] = [Wert]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:234
+#: lib/TWiki/I18N.pm:238
 msgid "_language_name"
-msgstr "_sprachen_name"
+msgstr "Deutsch"
 
 #: lib/TWiki/Access.pm:153
 msgid "access denied on topic"
@@ -1751,7 +2017,7 @@ msgstr "Zugriff zu diesem Web nicht gestattet"
 
 #: templates/attachtables.pattern.tmpl:11
 msgid "change, update, previous revisions, move, delete..."
-msgstr "ändern, aktualisieren, vorherige Revisionen, verschieben, Löschen..."
+msgstr "Ã¤ndern, aktualisieren, vorherige Revisionen, verschieben, LÃ¶schen..."
 
 #: templates/renamebase.pattern.tmpl:75
 #: templates/renamewebbase.pattern.tmpl:79
@@ -1767,13 +2033,17 @@ msgstr "Hilfe"
 msgid "in raw text format"
 msgstr "im Rohtext Format"
 
+#: templates/form.tmpl:3
+msgid "indicates mandatory fields"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
 msgid "looking for references in _%1 web_ only"
 msgstr "nach Querverweisen nur in _%1 Web_ suchen"
 
 #: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
 msgid "looking for references in _all public webs_"
-msgstr "nach Querverweisen in _allen öffentlichen Webs_ suchen"
+msgstr "nach Querverweisen in _allen Ã¶ffentlichen Webs_ suchen"
 
 #: templates/attachtables.pattern.tmpl:11
 msgid "manage"
@@ -1781,7 +2051,7 @@ msgstr "verwalten"
 
 #: templates/oopsmore.pattern.tmpl:31
 msgid "none (remove topic parent)"
-msgstr "keiner (Ober-Topic Verknüpfung entfernen)"
+msgstr "keiner (Ober-Topic VerknÃ¼pfung entfernen)"
 
 #: templates/mailchanges.tmpl:12
 msgid "now %1"
@@ -1793,7 +2063,7 @@ msgstr "oder"
 
 #: lib/TWiki/Render.pm:187
 msgid "put it back"
-msgstr "zurück verschieben"
+msgstr "zurÃ¼ck verschieben"
 
 #: templates/search.pattern.tmpl:18
 msgid "retrieved at %1 GMT"
