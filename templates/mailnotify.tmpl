@@ -1,6 +1,6 @@
 From: %WIKIWEBMASTERNAME% <%WIKIWEBMASTER%>
 To: %EMAILTO%
-Subject: %WIKITOOLNAME%.%WEB% - Automated notification of topic changes
+Subject: %WIKITOOLNAME%.%WEB% - %_{"Automated notification of topic changes"}%
 MIME-Version: 1.0
 Content-Type: multipart/alternative; boundary="------------2D594AE113AD25493C2C7246"
 
@@ -9,15 +9,15 @@ This is a multi-part message in MIME format.
 Content-Type: text/plain; charset=%CHARSET%
 Content-Transfer-Encoding: 7bit
 
-This is an automated email from %WIKITOOLNAME%.
+%_{"This is an automated email from [_1].", "%WIKITOOLNAME%"}%
 
-New or changed topics in %WIKITOOLNAME%.%WEB%, since %LASTDATE%:
+%_{"New or changed topics in [_1], since [_2]:", "%WIKITOOLNAME%.%WEB%", "%LASTDATE%"}%
 %TOPICLIST%
 
-Review recent changes in:
+%_{"Review recent changes in:"}%
   %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebChanges
 
-Subscribe / Unsubscribe in:
+%_{"Subscribe / Unsubscribe in:"}%
   %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%NOTIFYTOPIC%
 
 --------------2D594AE113AD25493C2C7246

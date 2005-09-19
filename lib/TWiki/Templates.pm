@@ -213,8 +213,11 @@ sub _expandMaketext {
     # translate
     my $result = $this->{session}->{i18n}->maketext( @args );
 
-    # replace acceskeys:
+    # replace accesskeys:
     $result =~ s#&([a-zA-Z])#<span class='twikiAccessKey'>$1</span>#g;
+
+    # replace escaped amperstands:
+    $result =~ s/&&/\&/g;
     
     return $result;
 }
