@@ -373,6 +373,7 @@ lib/TWiki/Users.pm
 lib/TWiki.cfg
 lib/TWiki.pm
 lib/Text/Diff.pm
+locale/de_DE.po
 locale/es_MX.po
 locale/pt_BR.po
 pub/Main/TWikiContributor/AUTHORS
