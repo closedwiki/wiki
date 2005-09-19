@@ -16,16 +16,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: templates/oopsattention.tmpl:253
-msgid " Topic can not be upgraded from old style category table"
+#: templates/registernotify.tmpl:3
+msgid "%1 - Registration for %2"
 msgstr ""
 
-#: templates/oopsattention.tmpl:289
-msgid " You are denied access to the following topics in the web:"
+#: templates/registernotifyadmin.tmpl:3
+msgid "%1 - Registration for %2 (%3)"
 msgstr ""
 
 #: templates/login.pattern.tmpl:10
 msgid "%1 User Authentication"
+msgstr ""
+
+#: templates/registernotifyadmin.tmpl:10
+msgid "%1 has been registered with email %2"
 msgstr ""
 
 #: templates/oopsattention.tmpl:20
@@ -39,6 +43,10 @@ msgstr ""
 #: templates/login.pattern.tmpl:22
 msgid "%1 is currently logged in"
 msgstr "%1 esta en linea"
+
+#: templates/oopsleaseconflict.tmpl:16
+msgid "%1 is editing %2."
+msgstr ""
 
 #: templates/oopsattention.tmpl:44
 msgid "%1 is in at least one group and cannot be removed"
@@ -150,7 +158,8 @@ msgstr "(mas)"
 msgid "(move attachment)"
 msgstr "(mover la union)"
 
-#: templates/oopsaccessdenied.tmpl:3
+#: templates/oopsaccessdenied.tmpl:3 templates/oopsauth.tmpl:2
+#: templates/oopsleaseconflict.tmpl:3 templates/oopssaveerr.tmpl:2
 msgid "(oops)"
 msgstr ""
 
@@ -367,6 +376,8 @@ msgid "Attachments will not be shown in topic view page."
 msgstr "No se puede mostrar las uniones de la vista de la pagina."
 
 #: templates/oopsaccessdenied.tmpl:4 templates/oopsattention.tmpl:4
+#: templates/oopsauth.tmpl:3 templates/oopsleaseconflict.tmpl:4
+#: templates/oopssaveerr.tmpl:3
 msgid "Attention"
 msgstr "Atención"
 
@@ -511,7 +522,7 @@ msgid "Click here"
 msgstr ""
 
 #: templates/oopsattention.tmpl:249
-msgid "Click on [[][Debug topic text]]."
+msgid "Click on [[%1][Debug topic text]]."
 msgstr ""
 
 #: lib/TWiki/Render.pm:177
@@ -536,6 +547,10 @@ msgstr "Comparar las reviciones:"
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
 msgid "Confirm rename or move"
+msgstr ""
+
+#: templates/oopsleaseconflict.tmpl:5
+msgid "Conflict"
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
@@ -610,8 +625,14 @@ msgstr ""
 msgid "Deleted topics will be moved to the %1 web"
 msgstr ""
 
+#: templates/oopsauth.tmpl:10
+msgid ""
+"Did you type in your login name and password correctly? Remember, both are "
+"case sensitive."
+msgstr ""
+
 #: templates/oopsattention.tmpl:184
-msgid "Did you want to [[[_1]][reset %2's password]]?"
+msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr ""
 
 #: templates/rdiff.pattern.tmpl:11
@@ -654,6 +675,12 @@ msgid ""
 "notify your %2 administrator."
 msgstr ""
 
+#: templates/oopssaveerr.tmpl:6
+msgid ""
+"During save of file %1 an error was found by the version control system. "
+"Please notify your %2 administrator."
+msgstr ""
+
 #: templates/settings.pattern.tmpl:84
 msgid "Each preference has the syntax"
 msgstr ""
@@ -661,6 +688,10 @@ msgstr ""
 #: templates/view.pattern.tmpl:19
 msgid "Edit"
 msgstr "(editar)"
+
+#: templates/oopsleaseconflict.tmpl:36
+msgid "Edit Anyway"
+msgstr ""
 
 #: templates/edit.pattern.tmpl:185
 msgid "Edit content"
@@ -673,6 +704,10 @@ msgstr "Editar esto texto de pagina"
 #: templates/oopsmore.pattern.tmpl:53
 msgid "Edit topic preference settings:"
 msgstr "Editar las preferencias de la pagina:"
+
+#: templates/oopsauth.tmpl:4
+msgid "Either you need to register or the authentication failed"
+msgstr ""
 
 #: templates/view.pattern.tmpl:56
 msgid "End of topic"
@@ -754,7 +789,7 @@ msgid ""
 "Go back in your browser and insert information for all mandatory fields."
 msgstr ""
 
-#: templates/oopsattention.tmpl:285
+#: templates/oopsattention.tmpl:285 templates/oopssaveerr.tmpl:10
 msgid "Go back in your browser and save your changes locally."
 msgstr ""
 
@@ -770,6 +805,14 @@ msgstr "Ocultar el archivo"
 msgid "Hide formatting help"
 msgstr "Ocultar el formata de ayuda"
 
+#: templates/registernotify.tmpl:16
+msgid "How about attaching your photo?"
+msgstr ""
+
+#: templates/registerconfirm.tmpl:4
+msgid "How to activate your %1 registration"
+msgstr ""
+
 #: templates/oopsattention.tmpl:251
 msgid "If this line isn't present see _upgrade_ section below"
 msgstr ""
@@ -782,12 +825,30 @@ msgstr ""
 msgid "If you came here by clicking on a question mark link"
 msgstr ""
 
+#: templates/oopsauth.tmpl:8
+msgid "If you expected to be logged in at this point:"
+msgstr ""
+
+#: templates/registernotify.tmpl:23
+msgid ""
+"If you got this email by mistake: Somebody (%1) registered at the %2 site "
+"using your mail address %3. Contact %4 if this is in error."
+msgstr ""
+
 #: templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
 msgstr ""
 
+#: templates/registernotify.tmpl:25
+msgid "If you haven't set a password yet or you want to reset it, go to: %1"
+msgstr ""
+
 #: templates/oopsaccessdenied.tmpl:39
 msgid "If you want to create the topic"
+msgstr ""
+
+#: templates/oopsauth.tmpl:11
+msgid "If you want to try again, back arrow and hit edit again."
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:32
@@ -797,6 +858,12 @@ msgstr ""
 #: templates/attach.pattern.tmpl:85
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Imagenes podra mostrar, por otras uniones al enlace que podra crear."
+
+#: templates/registerconfirm.tmpl:14
+msgid ""
+"In case you got this email by mistake: Somebody (%1) registered  at the %2 "
+"site using your mail address %3. Contact %4 if needed."
+msgstr ""
 
 #: templates/oopsattention.tmpl:191
 msgid "Incorrect %1"
@@ -816,6 +883,14 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:203
 msgid "Invalid email address"
+msgstr ""
+
+#: templates/oopsleaseconflict.tmpl:20
+msgid ""
+"It is probably OK to go ahead and edit, unless you intend to change the form "
+"attached to the topic. If they _do_ save while you are editing, your changes "
+"will be merged with theirs. Form data cannot easily be merged, so in this "
+"case you are recommended to check with them first."
 msgstr ""
 
 #: templates/rename.pattern.tmpl:22
@@ -959,7 +1034,8 @@ msgid ""
 msgstr ""
 "Note que todos los URLs que referencian para esa union que podra romper."
 
-#: templates/moveattachment.pattern.tmpl:58
+#: templates/moveattachment.pattern.tmpl:58 templates/oopsauth.tmpl:13
+#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
 #: templates/renamebase.pattern.tmpl:78
 #: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:82
 msgid "Note:"
@@ -978,7 +1054,8 @@ msgstr "Avisos:"
 msgid "Number of topics:"
 msgstr "Numero de paginas:"
 
-#: templates/oopsaccessdenied.tmpl:6
+#: templates/oopsaccessdenied.tmpl:6 templates/oopsauth.tmpl:19
+#: templates/oopssaveerr.tmpl:11
 msgid "OK"
 msgstr ""
 
@@ -1088,8 +1165,22 @@ msgstr "Guardar sin notificación"
 msgid "QuietSave"
 msgstr "Guardar sin notificación"
 
+#: templates/registernotify.tmpl:10
+msgid ""
+"Read %1 to get a quick overview of this collaboration platform. To learn "
+"more, study the TWikiTutorial, which is accessible from the same link."
+msgstr ""
+
 #: templates/edit.pattern.tmpl:214
 msgid "Read new revision help text in new window"
+msgstr ""
+
+#: templates/oopsauth.tmpl:20
+msgid "Register"
+msgstr ""
+
+#: templates/oopsauth.tmpl:12
+msgid "Registered users can %1 and %2."
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
@@ -1124,6 +1215,10 @@ msgstr "Retitular/Mover"
 msgid "Rename/move topic..."
 msgstr "Retitular/mover la pagina..."
 
+#: templates/form.tmpl:1
+msgid "Replace form..."
+msgstr ""
+
 #: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
 msgstr ""
@@ -1155,6 +1250,11 @@ msgstr "Guardar"
 #: templates/preview.pattern.tmpl:58
 msgid "Save Changes"
 msgstr ""
+
+#: templates/registernotifyadmin.tmpl:16
+#, fuzzy
+msgid "Saved to:"
+msgstr "Guardar"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Search %1 &Web only"
@@ -1210,6 +1310,10 @@ msgstr ""
 msgid "Show formatting help"
 msgstr ""
 
+#: templates/oopsauth.tmpl:17
+msgid "Simply fill out the %1 form. It only takes a minute."
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:7
 msgid "Size"
 msgstr "Tamaño"
@@ -1224,6 +1328,16 @@ msgstr ""
 
 #: templates/twiki.pattern.tmpl:163
 msgid "Skip to topic"
+msgstr ""
+
+#: templates/registernotify.tmpl:15
+msgid "Some add schedule information and vacation notice."
+msgstr ""
+
+#: templates/registernotify.tmpl:14
+msgid ""
+"Some people turn it into a personal portal with favorite links, what they "
+"work on, what help they'd like, etc."
 msgstr ""
 
 #: templates/view.pattern.tmpl:53
@@ -1244,6 +1358,11 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+#: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
+#, fuzzy
+msgid "Submitted content:"
+msgstr "Editar el contenido"
+
 #: templates/mailnotify.tmpl:20
 msgid "Subscribe / Unsubscribe in:"
 msgstr ""
@@ -1254,6 +1373,18 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:121 templates/oopsattention.tmpl:138
 msgid "Thank you for registering"
+msgstr ""
+
+#: templates/registernotify.tmpl:8
+msgid ""
+"Thank you for registering in the %1 collaboration platform. Please save this "
+"email for future reference."
+msgstr ""
+
+#: templates/registerconfirm.tmpl:9
+msgid ""
+"Thank you for registering in the %1 collaboration tool. Your verification "
+"code is %2."
 msgstr ""
 
 #: templates/oopsattention.tmpl:192
@@ -1277,6 +1408,12 @@ msgstr ""
 #: templates/moveattachment.pattern.tmpl:59
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "La union y historial que podra ser movido para la nueva pagina."
+
+#: templates/oopsleaseconflict.tmpl:13
+msgid ""
+"The chances are good that they simply navigated away from the edit page "
+"without saving."
+msgstr ""
 
 #: templates/renamewebbase.pattern.tmpl:84
 msgid "The checkmarked topics will be updated"
@@ -1338,6 +1475,10 @@ msgstr ""
 msgid "The two passwords you entered do not match."
 msgstr ""
 
+#: templates/oopsleaseconflict.tmpl:11
+msgid "Their lease on this topic expired %1 ago."
+msgstr ""
+
 #: templates/oopsattention.tmpl:288
 msgid "There are problems with renaming this web:"
 msgstr ""
@@ -1352,6 +1493,11 @@ msgstr ""
 msgid "There should be a line that includes %1, look for %2 (or %2)"
 msgstr ""
 
+#: templates/oopsleaseconflict.tmpl:8
+msgid ""
+"They have been editing for %1 and their lease is still active for another %2."
+msgstr ""
+
 #: templates/oopsattention.tmpl:257
 msgid "This can be automatically upgraded by:"
 msgstr ""
@@ -1362,6 +1508,10 @@ msgstr ""
 
 #: templates/mailnotify.tmpl:12
 msgid "This is an automated email from %1."
+msgstr ""
+
+#: templates/registernotifyadmin.tmpl:8
+msgid "This is an automated email notification of user registration in %1."
 msgstr ""
 
 #: templates/renamedelete.pattern.tmpl:22
@@ -1399,8 +1549,26 @@ msgstr ""
 msgid "To delete an attachment move it to web %1, topic %2."
 msgstr ""
 
+#: templates/oopsleaseconflict.tmpl:24
+msgid "To edit the topic anyway, hit 'Edit Anyway'."
+msgstr ""
+
+#: templates/oopsauth.tmpl:6
+msgid ""
+"To edit topics on this %1 collaborative web, you must be registered as a "
+"user."
+msgstr ""
+
 #: templates/preview.pattern.tmpl:71
 msgid "To make *more changes*: Go back in your browser."
+msgstr ""
+
+#: templates/oopsauth.tmpl:15
+msgid "To register as a new user:"
+msgstr ""
+
+#: templates/oopsleaseconflict.tmpl:22
+msgid "To see if they have finished their edit yet, click 'Try Again'."
 msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:45
@@ -1412,10 +1580,18 @@ msgstr ""
 msgid "Topic Save Error"
 msgstr ""
 
+#: templates/oopsattention.tmpl:253
+msgid "Topic can not be upgraded from old style category table"
+msgstr ""
+
 #: templates/moveattachment.pattern.tmpl:50
 #: templates/renamebase.pattern.tmpl:57
 msgid "Topic name:"
 msgstr "Nombre de la pagina:"
+
+#: templates/oopssaveerr.tmpl:4
+msgid "Topic save error"
+msgstr ""
 
 #: templates/edit.pattern.tmpl:186
 msgid "Topic settings"
@@ -1442,6 +1618,10 @@ msgstr ""
 #: templates/renamewebbase.pattern.tmpl:69
 msgid ""
 "Topics which refer to this web that you do not have permission to change:"
+msgstr ""
+
+#: templates/oopsleaseconflict.tmpl:30
+msgid "Try Again"
 msgstr ""
 
 #: lib/TWiki/UI/RDiff.pm:248
@@ -1510,7 +1690,7 @@ msgstr "Vea antes la revicion de la pagina:"
 msgid "View raw text without formatting"
 msgstr ""
 
-#: templates/rdiff.pattern.tmpl:18
+#: templates/oopsleaseconflict.tmpl:27 templates/rdiff.pattern.tmpl:18
 msgid "View topic"
 msgstr ""
 
@@ -1543,6 +1723,10 @@ msgstr ""
 msgid "You are also listed in the %1 topic"
 msgstr ""
 
+#: templates/oopsattention.tmpl:289
+msgid "You are denied access to the following topics in the web:"
+msgstr ""
+
 #: templates/view.pattern.tmpl:36
 msgid "You are here"
 msgstr ""
@@ -1566,11 +1750,20 @@ msgid ""
 "have any questions."
 msgstr ""
 
+#: templates/oopsauth.tmpl:13
+msgid ""
+"You can also login anonymously as user *TWikiGuest* with password *guest*."
+msgstr ""
+
 #: templates/oopsattention.tmpl:112
 msgid ""
 "You can also use the names of the standard HTML colors (black, silver, gray, "
 "white, maroon, red, purple, fuchsia, green, lime, olive, yellow, navy, blue, "
 "teal, or aqua)"
+msgstr ""
+
+#: templates/registernotify.tmpl:24
+msgid "You can change your password at via %1"
 msgstr ""
 
 #: templates/rename.pattern.tmpl:27
@@ -1597,6 +1790,12 @@ msgstr ""
 msgid "You need to close your browser to make this change take effect."
 msgstr ""
 
+#: templates/registerconfirm.tmpl:11
+msgid ""
+"You now need to verify your email address. You can do so by entering %1 in "
+"the form presented to you when this email was sent or by going to: %2"
+msgstr ""
+
 #: templates/oopsattention.tmpl:262
 msgid "You will probably have to ask your administrator, %1, to do this."
 msgstr ""
@@ -1610,6 +1809,11 @@ msgstr ""
 
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
+msgstr ""
+
+#: templates/registernotify.tmpl:12
+msgid ""
+"Your personal %1 topic is located at %2. You can customize it as you like:"
 msgstr ""
 
 #: templates/edit.pattern.tmpl:237
@@ -1630,7 +1834,7 @@ msgid ""
 msgstr ""
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:234
+#: lib/TWiki/I18N.pm:238
 msgid "_language_name"
 msgstr "español"
 
@@ -1667,6 +1871,10 @@ msgstr "ayuda"
 #: templates/oopsmore.pattern.tmpl:41
 msgid "in raw text format"
 msgstr "con formato de texto original"
+
+#: templates/form.tmpl:3
+msgid "indicates mandatory fields"
+msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:11 templates/oopsmore.pattern.tmpl:17
 msgid "looking for references in _%1 web_ only"
