@@ -64,7 +64,11 @@ sub new {
 sub maketext {
   my ( $this, $text, @args ) = @_;
 
+  # substitute parameters:
   $text =~ s/\[\_(\d+)\]/$args[$1-1]/ge;
+
+  # unescape escaped square brackets:
+  $text =~ s/~(\[|\])/$1/g;
   
   return $text;
 }
@@ -155,8 +159,8 @@ sub get {
     if ($initialised and ($this->language ne 'en')) {
         my $fallback_handle = TWiki::I18N->get_handle('en');
         $this->fail_with (sub {
-                              my( $h, $text, $args ) = @_;
-                              return $fallback_handle->maketext($text,$args);
+                              my( $h, $text, @args ) = @_;
+                              return $fallback_handle->maketext($text,@args);
                           }
                          );
     }

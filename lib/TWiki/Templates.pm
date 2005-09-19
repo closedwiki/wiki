@@ -199,6 +199,7 @@ sub _expandMaketext {
         last unless $params;
      
         last unless ($params =~ m/^("((\\\"|[^"])*)")(.*)$/); #next argument
+
         $str = $1;
         $params = substr($params,length($str)); #remove extracted string
         $params =~ s/^\s*,//; # remove comma
@@ -208,7 +209,6 @@ sub _expandMaketext {
 
         push( @args, $str );
     }
-
 
     # translate
     my $result = $this->{session}->{i18n}->maketext( @args );

@@ -181,7 +181,7 @@
 ---+++ %_{"You are already registered"}%
 %_{"You cannot register twice, the name [_1] is already registered.", "'%PARAM1%'"}%
 
-%_{"Did you want to ~[~[~[_1]~]~[reset '[_2]'s password~]~]?", "%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki.ResetPassword?username=%PARAM1%", "%PARAM1%"}%
+%_{"Did you want to ~[~[[_1]~]~[reset [_2]'s password~]~]?", "%SCRIPTURL%/view%SCRIPTSUFFIX%/TWiki.ResetPassword?username=%PARAM1%", "%PARAM1%"}%
 
 %_{"Alternatively hit back to go back to TWiki.TWikiRegistration and choose a different username."}%
 
@@ -246,11 +246,11 @@
 
 ---++ 2. %_{"The topic is in an old format"}%
 
-   * %_{"Click on ~[~[~]~[Debug topic text~]~].", "%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug"}%
+   * %_{"Click on ~[~[[_1]~]~[Debug topic text~]~].", "%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug"}%
       * %_{"There should be a line that includes [_1], look for [_2] (or [_2])", "=META:FORM=", "name=\"%PARAM1%.%PARAM2%\"", "name=\"%PARAM2%\""}%
       * %_{"If this line isn't present see _upgrade_ section below"}%
 
----++ 3.%_{" Topic can not be upgraded from old style category table"}%
+---++ 3.%_{"Topic can not be upgraded from old style category table"}%
 
 %_{"This requires the form definition to be present."}%
 
@@ -286,7 +286,7 @@
 %TMPL:END%
 %TMPL:DEF{"rename_web_prerequisites"}%
 ---+++ %_{"There are problems with renaming this web:"}%
-1.%_{" You are denied access to the following topics in the web:"}%
+1.%_{"You are denied access to the following topics in the web:"}%
 %PARAM1%
 
 2. %_{"The following topics are locked for edit, and cannot be moved:"}%
