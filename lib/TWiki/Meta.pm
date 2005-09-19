@@ -133,8 +133,10 @@ entries are keyed by 'name'.
 
 See the main comment for this package to understand how meta-data is
 represented.
-
 =cut
+
+#SMELL - why are we iterating down an array looking for a keyname instead of
+#SMELL - just using a hash ?
 
 sub putKeyed {
     my( $this, $type, $args ) = @_;
@@ -158,12 +160,28 @@ sub putKeyed {
 }
 
 =pod
+---++ ObjectMethod putAll
+Replaces all the items of a given key with a new array
+This is the logical inverse of the find method
+=cut
+
+sub putAll {
+    my( $this, $type, @array ) = @_;
+    ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
+
+    $this->{$type} = \@array;
+}
+
+=pod
 
 ---++ ObjectMethod get( $type, $key ) -> \%hash
 
 Find the value of a meta-datum in the map. If the type is 
 keyed, the $key parameter is required to say _which_
 entry you want. Otherwise it can be undef.
+
+WARNING SMELL If key is undef but the type is keyed you get the FIRST entry
+If you want all the keys of a given type use the 'find' method.
 
 The result is a reference to the hash for the item.
 
@@ -200,7 +218,7 @@ if there are no entries.
 sub find {
     my( $this, $type ) = @_;
     ASSERT($this->isa( 'TWiki::Meta')) if DEBUG;
-
+    
     my $itemsr = $this->{$type};
     my @items = ();
 
@@ -210,6 +228,45 @@ sub find {
 
     return @items;
 }
+
+=pod
+---++ StaticMethod indexByKey
+
+See tests/unit/MetaTests.pm for an example
+
+The result is a hash the same as the array provided by find but keyed by the keyName.
+NB. results are indeterminate if the key you choose is not unique in the find. 
+=cut
+
+sub indexByKey {
+    my( $keyName, @array) = @_;
+    ASSERT(@array) if DEBUG;
+
+	my %findKeyed = ();
+	foreach my $result (@array) {
+		my $key = $result->{$keyName};
+		$findKeyed{$key} = $result;
+	}
+	return %findKeyed;
+}
+=pod
+Flattens a keyed hash structure, taking only the values.
+Returns a hash.
+
+See tests/unit/MetaTests.pm for an example
+
+=cut
+sub deindexKeyed {
+    my (%hash) =@_;
+
+	my @array = ();
+	foreach my $key (keys %hash) {
+		my $value = $hash{$key};
+		push @array, $value;
+	}
+	return @array;
+}
+
 
 =pod
 

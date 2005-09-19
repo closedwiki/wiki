@@ -927,4 +927,78 @@ given epoch-secs time, or undef it none could be found.
 
 =cut
 
+
+=pod
+---++ ObjectMethod getAttachmentAttributes($web, $topic, $attachment)
+
+returns [stat] for any given web, topic, $attachment
+SMELL - should this return a hash of arbitrary attributes so that 
+SMELL + attributes supported by the underlying filesystem are supported
+SMELL + (eg: windows directories supporting photo "author", "dimension" fields)
+=cut
+
+sub getAttachmentAttributes {
+	my( $this, $web, $topic, $attachment ) = @_;
+    ASSERT(defined $attachment) if DEBUG;
+	
+	my $dir = dirForTopicAttachments($web, $topic);
+   	my @stat = stat ($dir."/".$attachment);
+
+	return @stat;
+}
+
+=pod
+sub _constructAttributesForAutoAttached
+as long as stat is defined, return an emulated set of attributes for that attachment.
+=cut
+
+sub _constructAttributesForAutoAttached {
+   my ($file, $stat) = @_;
+ 
+    my %pairs = (
+                  name    => $file,
+                  version => '',
+                  path    => $file,
+                  size    => $stat->[7],
+                  date    => $stat->[9], 
+                  user    => 'TWikiContributor',
+                  comment => '',
+                  attr    => ''
+   );
+   
+   if ($#$stat > 0) {
+	return \%pairs;
+   } else {
+ 	return undef;  
+   }
+}
+
+
+=pod
+---++ ObjectMethod getAttachmentList($web, $topic)
+
+returns {} of filename => { key => value, key2 => value } for any given web, topic
+=cut
+
+sub getAttachmentList {
+	my( $this, $web, $topic ) = @_;
+	my $dir = dirForTopicAttachments($web, $topic);
+		
+    opendir DIR, $dir || return '';
+    my %attachmentList = ();
+    my @files = sort grep { m/^[^\.*_]/ } readdir( DIR );
+    @files = grep { !/.*,v/ } @files;
+    foreach my $attachment ( @files ) {
+    	my @stat = stat ($dir."/".$attachment);
+        $attachmentList{$attachment} = _constructAttributesForAutoAttached($attachment, \@stat);
+    }
+    closedir( DIR );
+    return %attachmentList;
+}
+
+sub dirForTopicAttachments {
+   my ($web, $topic ) = @_;
+   return $TWiki::cfg{PubDir}.'/'.$web.'/'.$topic;
+}
+
 1;

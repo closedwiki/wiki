@@ -90,6 +90,15 @@ sub test_multiple {
     my $vals2 = $meta->get( "FIELD", "b" );
     $this->assert_str_equals( $vals2->{"name"}, "b" );
     $this->assert_str_equals( $vals2->{"value"}, "3" );
+    
+    my @all = $meta->find('FIELD');
+    
+    my %metaByName = TWiki::Meta::indexByKey('name', @all);
+    $this->assert_str_equals($metaByName{'a'}->{value}, "2");
+    
+    my %metaByValue = TWiki::Meta::indexByKey('value', @all);
+    $this->assert_str_equals($metaByValue{'3'}->{name}, "b")
+    
 }
 
 sub test_removeSingle {
@@ -208,6 +217,57 @@ sub test_copyFrom {
     $this->assert($d->{collected} =~ s/FIELD.value:aval;//);
     $this->assert($d->{collected} =~ s/FIELD.value:bval;//);
     $this->assert_str_equals("", $d->{collected});
+}
+
+#
+# The following two structures are equivalent and should be translatable
+# with indexByKey and deindexKeyed
+
+
+my $unkeyed = [
+        {
+          'name' => 'afile.txt',
+          'comment' => 'comment 1',
+        },
+        {
+         'comment' => 'autoattached',
+         'name' => 'sneakedfile1.txt',
+        },
+     ];
+     
+   my $keyed = {
+          'sneakedfile1.txt' => {
+                                  'comment' => 'autoattached',
+                                  'name' => 'sneakedfile1.txt',
+                                },
+          'afile.txt' => {
+                           'comment' => 'comment 1',
+                           'name' => 'afile.txt'
+                         },
+   };
+ 
+
+sub test_indexKeyed {
+     
+    my $this = shift;
+    my $meta = TWiki::Meta->new($session, $web, $topic);
+
+    my %keyedActual = TWiki::Meta::indexByKey('name', @$unkeyed);
+    use Data::Dumper;
+    $this->assert_deep_equals($keyed, \%keyedActual);
+
+}
+
+sub test_deindexKeyed {
+    my $this = shift;
+    my $meta = TWiki::Meta->new($session, $web, $topic);
+
+    my @unkeyedActual = TWiki::Meta::deindexKeyed(%$keyed);
+    use Data::Dumper;
+    print Dumper($unkeyed, \@unkeyedActual);
+#    $this->assert_deep_equals(@$unkeyed, @unkeyedActual);
+# You can't know the order of the output but there is no unordered test
+
 }
 
 1;

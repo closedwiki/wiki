@@ -123,6 +123,17 @@ sub readTopic {
     my $text = $this->readTopicRaw( $user, $web, $topic, $version );
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic);
     $this->extractMetaData( $meta, \$text );
+    my @knownAttachments = $meta->find('FILEATTACHMENT');
+    my $ka = undef; #ugly I know
+    if ($#knownAttachments) {
+        $ka = \@knownAttachments;
+	}
+    
+	my $autoAttachments = $this->extractMetaDataAutoAttachments($user, $web, $topic, $version, $ka );
+	if (defined $autoAttachments) {
+		$meta->putAll('FILEATTACHMENT', @$autoAttachments);
+	};
+
     return( $meta, $text );
 }
 
@@ -287,6 +298,17 @@ sub getAttachmentStream {
 
 =pod
 
+returns @($attachmentName => [stat]) for any given web, topic
+=cut
+sub getAttachmentList {
+    my( $this, $web, $topic ) = @_;
+
+    ASSERT($this->isa('TWiki::Store')) if DEBUG;
+    my $handler = $this->_getHandler( $web, $topic ); 
+    return $handler->getAttachmentList($web, $topic);
+}
+
+=pod
 ---++ ObjectMethod attachmentExists( $web, $topic, $att ) -> $boolean
 
 Determine if the attachment already exists on the given topic
@@ -300,6 +322,53 @@ sub attachmentExists {
     my $handler = $this->_getHandler( $web, $topic, $att );
     return $handler->storedDataExists();
 }
+
+=pod
+---++ findAttachments($session, $web, $topic, $knownAttachments)
+Synchronise the attachment list with what's actually on disk
+Returns an ARRAY of FILEATTACHMENTs- these can be put in the new meta using meta->put('FILEATTACHMENTS', $tree)
+
+IDEA On Windows machines where the underlying filesystem can store arbitary meta data against files, this might replace/fulfil the COMMENT purpose
+TODO consider logging when things are added to metadata
+=cut
+
+sub findAttachments {
+    my ($this, $web, $topic, $attachmentsKnownInMeta) = @_;
+    my $session = $this->{session};
+    ASSERT($session->isa( 'TWiki' )) if DEBUG;
+  
+    my $store = $this;   
+    
+    my %filesListedInPub = $store->getAttachmentList($web, $topic);
+	my %filesListedInMeta = ();
+
+# You need the following lines if you want metadata to supplement the filesystem	
+	if (defined $attachmentsKnownInMeta) {
+		%filesListedInMeta = TWiki::Meta::indexByKey('name', @$attachmentsKnownInMeta);
+	}
+# Please retain following print until this feature is out of beta
+#	print "In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub);
+
+    foreach my $file (keys %filesListedInPub) {
+       if ($filesListedInMeta{$file}) {
+       	  # Bring forward any missing yet wanted attributes
+          $filesListedInPub{$file}{comment} = $filesListedInMeta{$file}{comment};
+       }
+    }
+
+# Please retain following print until this feature is out of beta
+#    print "Result:".Dumper(\%filesListedInPub)."\n";
+
+	# A comparison of the keys of the $filesListedInMeta and %filesListedInPub 
+	# would show files that were in Meta but have disappeared from Pub.
+		
+	# SMELL Meta really ought index its attachments in a hash by attachment name but this is not the case
+	# SMELL so fit the interface and return an ugly array instead
+	my @deindexedBecauseMetaDoesnotIndexAttachments = TWiki::Meta::deindexKeyed(%filesListedInPub);
+	    
+	return @deindexedBecauseMetaDoesnotIndexAttachments;
+}
+
 
 =pod
 
@@ -772,7 +841,7 @@ sub saveAttachment {
             };
 
             if( $plugins->haveHandlerFor( 'afterAttachmentSaveHandler' )) {
-                # SMELL: legacy spec of beforeAttachmentSaveHandler requires
+                # SMELL: legacy spec of afterAttachmentSaveHandler requires
                 # a local copy of the stream. This could be a problem for
                 # very big data files. It really should use the stream.
                 open( F, $tmpFile );
@@ -1109,6 +1178,8 @@ sub topicExists {
 # Expect meta data at top of file, but willing to accept it anywhere.
 # If we have an old file format without meta data, then convert.
 #
+# If autoattachments is on then get this from the filestore rather than meta data
+#
 # SMELL: SIDE-EFFECTING FUNCTION meta-data is stripped from the $rtext
 #
 # SMELL: Calls to this method from outside of Store
@@ -1170,6 +1241,22 @@ sub extractMetaData {
     }
 
     return $meta;
+}
+
+sub extractMetaDataAutoAttachments {
+    
+    my( $this, $user, $web, $topic, $version, $attachmentsKnownInMeta ) = @_;    
+ 
+	if ($TWiki::cfg{AutoAttachPubFiles}) {
+#  	   print "AUTOATTACHING on $web.$topic\nFOUND BEFORE ".Dumper($attachmentsKnownInMeta)."\n";
+       my @attachmentsFoundInPub = findAttachments($this, $web, $topic, $attachmentsKnownInMeta);
+#       print "FOUND AFTER ".Dumper(\@attachmentsFoundInPub);
+       return \@attachmentsFoundInPub;
+    } else {
+#       print "NOT AUTOATTACHING on $web.$topic\n ".Dumper($attachmentsKnownInMeta)."\n";
+       return $attachmentsKnownInMeta;
+    }
+    
 }
 
 =pod
