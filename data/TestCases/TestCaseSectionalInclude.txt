@@ -1,0 +1,30 @@
+%META:TOPICINFO{author="TWikiContributor" date="1127090110" format="1.1" version="1.3"}%
+%META:TOPICPARENT{name="WebHome"}%
+---+!! %TOPIC%
+
+Description: Verify that TWiki:Codev.NamedSectionalincludes are working
+
+Verify that only the proper section is being included under each header.
+Each included section has a text that is easily recognizable.
+
+Additional Test Topic: IncludeFixtures
+
+---++ Whole Topic
+
+%INCLUDE{"IncludeFixtures"}%
+
+
+---++ First (Non Nested) Section
+
+%INCLUDE{"IncludeFixtures" section="first"}%
+
+---++ Outer Nested Section
+
+%INCLUDE{"IncludeFixtures" section="outer"}%
+
+---++ Inner Nested Section
+
+%INCLUDE{"IncludeFixtures" section="inner"}%
+
+---
+

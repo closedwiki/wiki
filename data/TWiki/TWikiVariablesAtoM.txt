@@ -75,6 +75,15 @@ __Note:__ This topic is included by TWikiVariables
 	* Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
 	* Related: [[#VarURLPARAM][URLPARAM]]
 
+#VarENDSECTION
+---+++ ENDSECTION{"name"} -- Marks the end of a named section
+   * Syntax: =%<nop>ENDSECTION{"name"}%=
+	* Supported parameters:
+	  | *Parameter:* | *Description:* | *Default:* | 
+	  | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous %<nop>SEcTION% tag. | Mandatory parameter without a default |
+	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]]
+	
+	
 #VarFAILEDPLUGINS
 ---+++ FAILEDPLUGINS -- debugging for plugins that failed to load, and handler list
    * Syntax: =%<nop>FAILEDPLUGINS%=

@@ -1,0 +1,20 @@
+%META:TOPICINFO{author="TWikiContributor" date="1127090110" format="1.1" version="1.2"}%
+%META:TOPICPARENT{name="TestCaseSectionalInclude"}%
+
+This is outside any section 
+
+%SECTION{"first"}%
+This is the first section
+%ENDSECTION{"first"}%
+
+%SECTION{"outer"}%
+This is the start of the outer section
+
+%SECTION{"inner"}%
+This is the whole content of the inner section
+
+%ENDSECTION{"inner"}%
+This is the end of the outer section
+%ENDSECTION{"outer"}%
+
+This is outside any section 

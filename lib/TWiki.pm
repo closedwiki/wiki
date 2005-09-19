@@ -1210,7 +1210,7 @@ sub writeLog {
     if( ref($user) && $user->isa('TWiki::User')) {
         $user = $user->wikiName();
     }
-
+#SMELL: Hardwired TWikiGuest
     if ($user eq 'TWikiGuest') {
        my $cgiQuery = $this->{cgiQuery};
        if( $cgiQuery ) {
@@ -1663,7 +1663,7 @@ sub expandVariablesOnTopicCreation {
 
 sub _webOrTopicList {
     my( $this, $isWeb, $params ) = @_;
-    my $format = $params->{_DEFAULT} || $params->{format} || '$name';
+    my $format = $params->{_DEFAULT} || $params->{'format'} || '$name';
     $format .= '$name' unless( $format =~ /\$name/ );
     my $separator = $params->{separator} || "\n";
     my $web = $params->{web} || '';
@@ -2379,6 +2379,7 @@ sub _INCLUDE {
     my $path = $params->remove('_DEFAULT') || '';
     my $pattern = $params->remove('pattern');
     my $rev = $params->remove('rev');
+    my $section = $params->remove('section');
     my $warn = $params->remove('warn')
       || $this->{prefs}->getPreferencesValue( 'INCLUDEWARNING' );
 
@@ -2476,10 +2477,18 @@ sub _INCLUDE {
 
     # remove everything before %STARTINCLUDE% and
     # after %STOPINCLUDE%
-    $text =~ s/.*?%STARTINCLUDE%//s;
-    $text =~ s/%STOPINCLUDE%.*//s;
-    $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
+    if ($section) {
+       $this->writeDebug("Processing a Section");
+       $text =~ s/.*?%SECTION{[^\}]*\"$section\"[^\}]*}%//s;
+       $text =~ s/%ENDSECTION{[^\}]*\"$section\"[^\}]*}%.*//s;
+       $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
+       $this->writeDebug("Text:\n$text");
 
+    } else {
+       $text =~ s/.*?%STARTINCLUDE%//s;
+       $text =~ s/%STOPINCLUDE%.*//s;
+       $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
+    }
     # take out verbatims, pushing them into the same storage block
     # as the including topic so when we do the replacement at
     # the end they are all there

@@ -100,6 +100,14 @@ __Note:__ This topic is included by TWikiVariables
 	* Example: =%<nop>REVINFO{"$date - $wikiusername" rev="1.1"}%= returns revision info of first revision
 	* Related: [[#VarREVINFO][REVINFO]]
 
+#VarSECTION
+---+++ SECTION{"name"} -- Marks the start of a named section
+   * Syntax: =%<nop>SECTION{"name"}%=
+	* Supported parameters:
+	  | *Parameter:* | *Description:* | *Default:* |
+	  | ="name"= | Name of the section. Must be unique inside a topic. | Mandatory parameter without a default |
+	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]]
+
 #VarSESSIONVARIABLE
 ---+++ SESSION_VARIABLE -- get, set or clear a session variable
    * Syntax: =%<nop>SESSION_VARIABLE{"name"}%=
