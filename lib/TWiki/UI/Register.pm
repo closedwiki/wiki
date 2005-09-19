@@ -1150,10 +1150,13 @@ sub _validateUserContext {
 
 #SMELL: 'Context'?
 sub _deleteUserContext {
-    my ( $code, $tmpDir ) = @_;
-    my ( $name ) = $code =~ /^([^.]+)\./;
+    my $code = shift;
+    my $tmpDir = TWiki::Sandbox::untaintUnchecked( shift );
+    $code =~ s/^([^.]+)\.//;
+    my $name = TWiki::Sandbox::untaintUnchecked( $1 );
+
     foreach (<$tmpDir/$name.*>) {
-        unlink TWiki::Sandbox::untaintUnchecked($_);
+        unlink( TWiki::Sandbox::untaintUnchecked( $_ ));
     }
     # ^^ In case a user registered twice, etc...
 }

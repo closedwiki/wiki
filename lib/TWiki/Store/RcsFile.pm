@@ -975,9 +975,11 @@ sub _constructAttributesForAutoAttached {
 
 
 =pod
+
 ---++ ObjectMethod getAttachmentList($web, $topic)
 
 returns {} of filename => { key => value, key2 => value } for any given web, topic
+
 =cut
 
 sub getAttachmentList {

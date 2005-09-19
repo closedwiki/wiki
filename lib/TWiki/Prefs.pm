@@ -206,7 +206,8 @@ sub getPreferencesValue {
             $val = $this->{session}->{client}->getSessionValue( $key );
             return $val if defined( $val );
         }
-        if( $local && $level->{SOURCE} eq $local ) {
+        if( defined $local && defined $level->{SOURCE} &&
+              $level->{SOURCE} eq $local ) {
             $val = $level->{Local}{$key};
         }
         unless( defined $val ) {
