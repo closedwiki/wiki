@@ -30,8 +30,9 @@ function mklink () {
             echo "diff $1 $link different - Keeping $link intact"
         fi
     else
+        target=`dirname $link | sed -e 's/[A-Za-z0-9]*/../g'`
         # if wipeout is 1, will simply overwrite whatever is already there
-        $build `pwd`/$1 $link
+        $build $target/$1 $link
     fi
 }
 
@@ -50,6 +51,7 @@ elif [ "$1" = "-echo" ]; then
 else
     build="ln -s"
     destroy="rm"
+wipeout=1
 fi
 
 # examine remaining params
