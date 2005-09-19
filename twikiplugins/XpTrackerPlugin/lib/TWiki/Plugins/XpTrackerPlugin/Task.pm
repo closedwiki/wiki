@@ -18,15 +18,6 @@
 # =========================
 package TWiki::Plugins::XpTrackerPlugin::Task;
 
-#(RAF)
-#If this module is load using the "use" directive before the plugin is 
-#initialized, $debug will be 0
-#(CC) this will not work in Dakar; TWiki::Func methods cannot be called before initPlugin.
-my $debug;
-#my $debug = &TWiki::Func::getPreferencesFlag( "XPTRACKERPLUGIN_DEBUG" );
-#&TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::Task is loaded" ) if $debug;
-
-
 sub new {
 	my $object= {name=>"", 
 				 est=>0,

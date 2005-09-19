@@ -36,14 +36,15 @@ use TWiki::Plugins::XpTrackerPlugin::HtmlUtil;
 use TWiki::Plugins::XpTrackerPlugin::Story;
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug
+        $web $query $topic $user $installWeb $VERSION $debug
         $exampleCfgVar $dataDir $orderBy
     );
 
 use vars qw ( @timeRec
     );
 
-$VERSION = '3.200';
+use strict;
+$VERSION = '3.300';
 
 $debug=0;
 
@@ -105,7 +106,7 @@ sub commonTagsHandler
         xpSavePage($web);
         # return; # in case browser does not redirect
     }
-
+    my $web=$_[2];
     # %XPSHOWALLPROJECTS% - Show all projects
     $_[0] =~ s/%XPSHOWALLPROJECTS%/&xpShowAllProjects($web)/geo;
 
@@ -638,7 +639,7 @@ sub xpSavePage()
 
     if( $error ) {
         TWiki::Func::writeDebug( "- TWiki::Plugins::XpTrackerPlugin::xpSavePage ERROR $error") if $debug;
-        $url = &TWiki::Func::getOopsUrl( $theWeb, $theTopic, "oopssaveerr", $error );
+        my $url = &TWiki::Func::getOopsUrl( $web, $topic, "oopssaveerr", $error );
         TWiki::Func::redirectCgiQuery( $query, $url );
         return;
     }
