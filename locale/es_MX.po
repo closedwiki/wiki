@@ -66,21 +66,20 @@ msgid "%1 topic does not exist"
 msgstr ""
 
 #: templates/view.pattern.tmpl:31
-#, fuzzy
 msgid "&Attach"
-msgstr "Archivo"
+msgstr "&Unir"
 
 #: templates/twiki.pattern.tmpl:12
 msgid "&Cancel"
-msgstr "&Cancele"
+msgstr "&Cancelar"
 
 #: templates/view.pattern.tmpl:26
 msgid "&Edit"
-msgstr ""
+msgstr "&Editar"
 
 #: templates/view.pattern.tmpl:63
 msgid "&History"
-msgstr ""
+msgstr "&Historia"
 
 #: templates/view.pattern.tmpl:34
 msgid "&More topic actions"
@@ -92,11 +91,11 @@ msgstr ""
 
 #: templates/view.pattern.tmpl:63
 msgid "&Raw text"
-msgstr ""
+msgstr "Texto original"
 
 #: templates/view.pattern.tmpl:63
 msgid "&Web"
-msgstr ""
+msgstr "&Web"
 
 #: templates/rdiff.pattern.tmpl:3
 msgid "(%1 vs. %2)"
@@ -108,7 +107,7 @@ msgstr ""
 
 #: templates/attach.pattern.tmpl:28
 msgid "(attach)"
-msgstr "(una)"
+msgstr "(unir)"
 
 #: templates/backlinksweb.pattern.tmpl:5
 msgid "(backlinks in %1 Web)"
@@ -120,7 +119,7 @@ msgstr "(referencias en toda las webs)"
 
 #: templates/changeform.pattern.tmpl:5
 msgid "(change form)"
-msgstr "(cambie el formulario)"
+msgstr "(cambiar el formulario)"
 
 #: templates/changes.pattern.tmpl:5
 msgid "(changes)"
@@ -129,19 +128,19 @@ msgstr "(cambios)"
 #: templates/renamedelete.pattern.tmpl:5
 #: templates/renamewebdelete.pattern.tmpl:5
 msgid "(delete)"
-msgstr ""
+msgstr "(borrar)"
 
 #: templates/editform.pattern.tmpl:6
 msgid "(edit form)"
-msgstr "(edite el formulario)"
+msgstr "(editar el formulario)"
 
 #: templates/edittext.pattern.tmpl:5
 msgid "(edit text)"
-msgstr "(edite el texto)"
+msgstr "(editar el texto)"
 
 #: templates/edit.pattern.tmpl:196 templates/edit.pattern.tmpl:209
 msgid "(edit)"
-msgstr "(edite)"
+msgstr "(editar)"
 
 #: templates/oopsmore.pattern.tmpl:2
 msgid "(more)"
@@ -149,7 +148,7 @@ msgstr "(mas)"
 
 #: templates/moveattachment.pattern.tmpl:3
 msgid "(move attachment)"
-msgstr "(mueva la union)"
+msgstr "(mover la union)"
 
 #: templates/oopsaccessdenied.tmpl:3
 msgid "(oops)"
@@ -166,9 +165,8 @@ msgstr "(recomendado)"
 #: templates/rename.pattern.tmpl:5 templates/renameconfirm.pattern.tmpl:5
 #: templates/renameweb.pattern.tmpl:5
 #: templates/renamewebconfirm.pattern.tmpl:5
-#, fuzzy
 msgid "(rename)"
-msgstr "Usuario"
+msgstr ""
 
 #: templates/search.pattern.tmpl:2
 msgid "(search results)"
@@ -270,9 +268,8 @@ msgid "A&ll Webs"
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:5
-#, fuzzy
 msgid "Access Denied"
-msgstr "Teclas de acceso"
+msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:8
 msgid "Access check on %1 failed"
@@ -288,13 +285,12 @@ msgid "Action"
 msgstr "Acción"
 
 #: templates/oopsaccessdenied.tmpl:9
-#, fuzzy
 msgid "Action %1: %2."
-msgstr "Acción"
+msgstr "Acción %1: %2."
 
 #: templates/addform.tmpl:1
 msgid "Add form"
-msgstr "Añada un formulario"
+msgstr "Añadar un formulario"
 
 #: lib/TWiki/UI/RDiff.pm:241
 msgid "Added"
@@ -339,44 +335,40 @@ msgid "Any change you made to topic before coming to this page are preserved."
 msgstr ""
 
 #: templates/view.pattern.tmpl:30
-#, fuzzy
 msgid "Attach"
-msgstr "Archivo"
+msgstr "Unir"
 
 #: templates/view.pattern.tmpl:31
-#, fuzzy
 msgid "Attach an image or document to this topic"
-msgstr "Una la imagen o documento en %1"
+msgstr "Unir la imagen o documento a esta pagina"
 
 #: templates/attachnew.pattern.tmpl:9
 msgid "Attach file to topic %1"
-msgstr "Una el archivo a la pagina %1"
+msgstr "Unir el archivo a la pagina %1"
 
 #: templates/attach.pattern.tmpl:33
 msgid "Attach image or document on %1"
-msgstr "Una la imagen o documento en %1"
+msgstr "Unir la imagen o documento en %1"
 
 #: templates/attachnew.pattern.tmpl:14 templates/attachnew.pattern.tmpl:18
 msgid "Attach new file"
-msgstr "Una el nuevo archivo"
+msgstr "Unir el nuevo archivo"
 
 #: templates/attachtables.pattern.tmpl:7
 msgid "Attachment"
 msgstr "Archivo"
 
 #: templates/oopsattention.tmpl:49
-#, fuzzy
 msgid "Attachment move failed"
-msgstr "Una el nuevo archivo"
+msgstr ""
 
 #: templates/attach.pattern.tmpl:95
 msgid "Attachments will not be shown in topic view page."
 msgstr "No se puede mostrar las uniones de la vista de la pagina."
 
 #: templates/oopsaccessdenied.tmpl:4 templates/oopsattention.tmpl:4
-#, fuzzy
 msgid "Attention"
-msgstr "Acción"
+msgstr "Atención"
 
 #: templates/attachtables.pattern.tmpl:30
 msgid "Attribute"
@@ -388,29 +380,27 @@ msgstr ""
 
 #: templates/changeform.pattern.tmpl:56
 msgid "Back"
-msgstr "Retroceda"
+msgstr "Retroceder"
 
 #: templates/view.pattern.tmpl:56
 msgid "Back to top"
 msgstr ""
 
 #: templates/twiki.pattern.tmpl:12
-#, fuzzy
 msgid "Back to topic"
-msgstr "Renombre o mueva la pagina:"
+msgstr ""
 
 #: templates/view.pattern.tmpl:63
-#, fuzzy
 msgid "Backlinks"
-msgstr "Referencias:"
+msgstr "Referencias"
 
 #: templates/backlinksweb.pattern.tmpl:10
 msgid "Backlinks to %1 in %2 Web"
-msgstr "Referencias a %1 en Web %2"
+msgstr "Referencias a %1 en web %2"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Backlinks to %1 in all Webs"
-msgstr "Referencias a %1 en todas las Webs"
+msgstr "Referencias a %1 en todas las webs"
 
 #: templates/oopsmore.pattern.tmpl:19
 msgid "Backlinks:"
@@ -434,11 +424,11 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:217
 msgid "Cancel"
-msgstr "Cancele"
+msgstr "Cancelar"
 
 #: templates/edit.pattern.tmpl:217
 msgid "Cancel editing and discard changes"
-msgstr "Cancele edicion y descarge los cambios"
+msgstr "Cancelar edicion y descarge los cambios"
 
 #: templates/oopsattention.tmpl:56
 msgid "Cannot create %1 because it already exists."
@@ -449,9 +439,8 @@ msgid "Cannot create web %1 because it already exists"
 msgstr ""
 
 #: templates/oopsattention.tmpl:62 templates/oopsattention.tmpl:68
-#, fuzzy
 msgid "Cannot rename %1 to %2 because it already exists."
-msgstr "La nueva pagina debe ya existir."
+msgstr ""
 
 #: templates/oopsattention.tmpl:266
 msgid ""
@@ -462,13 +451,13 @@ msgstr ""
 
 #: templates/changeform.pattern.tmpl:18
 msgid "Change form"
-msgstr "Cambie el formulario"
+msgstr "Cambiar el formulario"
 
 #: templates/moveattachment.pattern.tmpl:40
 #: templates/renamebase.pattern.tmpl:47
 #: templates/renamewebbase.pattern.tmpl:47
 msgid "Change from:"
-msgstr "Cambie desde:"
+msgstr "Cambiar desde:"
 
 #: templates/renamebase.pattern.tmpl:71
 #: templates/renamewebbase.pattern.tmpl:75
@@ -482,25 +471,23 @@ msgstr ""
 
 #: templates/attachagain.pattern.tmpl:50
 msgid "Change properties only"
-msgstr "Cambie propiedades solamente"
+msgstr "Cambiar propiedades solamente"
 
 #: templates/edit.pattern.tmpl:204
 msgid "Change topic"
-msgstr "Cambie la pagina"
+msgstr "Cambiar la pagina"
 
 #: lib/TWiki/UI/RDiff.pm:255 lib/TWiki/UI/RDiff.pm:261
 msgid "Changed"
 msgstr ""
 
 #: templates/mailchanges.tmpl:14
-#, fuzzy
 msgid "Changed by:"
-msgstr "Cambie desde:"
+msgstr "Cambiar para:"
 
 #: templates/mailchanges.tmpl:12
-#, fuzzy
 msgid "Changed:"
-msgstr "Cambie desde:"
+msgstr ""
 
 #: templates/edit.pattern.tmpl:217
 msgid "Checkpoint"
@@ -512,7 +499,7 @@ msgstr ""
 
 #: templates/changeform.pattern.tmpl:25
 msgid "Choose a new form template"
-msgstr "Escoge el nuevo patrón del formulario"
+msgstr "Escoger el nuevo patrón del formulario"
 
 #: templates/renamebase.pattern.tmpl:75
 #: templates/renamewebbase.pattern.tmpl:79
@@ -540,17 +527,16 @@ msgstr ""
 #: templates/attach.pattern.tmpl:70 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Comment"
-msgstr "Comente"
+msgstr "Comentar"
 
 #: templates/oopsmore.pattern.tmpl:47
 msgid "Compare revisions:"
-msgstr "Compare las reviciones:"
+msgstr "Comparar las reviciones:"
 
 #: templates/renameconfirm.pattern.tmpl:9
 #: templates/renamewebconfirm.pattern.tmpl:9
-#, fuzzy
 msgid "Confirm rename or move"
-msgstr "Renombre o mueva la pagina:"
+msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
 #: templates/oopsaccessdenied.tmpl:42
@@ -571,16 +557,15 @@ msgstr ""
 
 #: templates/view.pattern.tmpl:25
 msgid "Cr&eate"
-msgstr ""
+msgstr "Crear"
 
 #: templates/attach.pattern.tmpl:82
 msgid "Create a link to the attached file"
-msgstr "Cree un enlace al archivo"
+msgstr "Crear un enlace al archivo"
 
 #: lib/TWiki/Render.pm:546 lib/TWiki/Render.pm:557
-#, fuzzy
 msgid "Create this topic"
-msgstr "Cambie la pagina"
+msgstr "Crear esta pagina"
 
 #: templates/oopsattention.tmpl:259
 msgid "Creating a suitable Form Definition topic"
@@ -600,9 +585,8 @@ msgstr ""
 #: templates/renamedelete.pattern.tmpl:9
 #: templates/renamewebdelete.pattern.tmpl:44
 #: templates/renamewebdelete.pattern.tmpl:9
-#, fuzzy
 msgid "Delete"
-msgstr "Borre la pagina:"
+msgstr "Borrar"
 
 #: templates/view.pattern.tmpl:34
 msgid ""
@@ -611,11 +595,11 @@ msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:10 templates/oopsmore.pattern.tmpl:8
 msgid "Delete topic..."
-msgstr "Borre la pagina..."
+msgstr "Borrar la pagina..."
 
 #: templates/oopsmore.pattern.tmpl:7
 msgid "Delete topic:"
-msgstr "Borre la pagina:"
+msgstr "Borrar la pagina:"
 
 #: lib/TWiki/UI/RDiff.pm:234
 msgid "Deleted"
@@ -675,26 +659,24 @@ msgid "Each preference has the syntax"
 msgstr ""
 
 #: templates/view.pattern.tmpl:19
-#, fuzzy
 msgid "Edit"
-msgstr "(edite)"
+msgstr "(editar)"
 
 #: templates/edit.pattern.tmpl:185
 msgid "Edit content"
-msgstr "Edite el contenido"
+msgstr "Editar el contenido"
 
 #: templates/view.pattern.tmpl:22 templates/view.pattern.tmpl:28
 msgid "Edit this topic text"
-msgstr ""
+msgstr "Editar esto texto de pagina"
 
 #: templates/oopsmore.pattern.tmpl:53
 msgid "Edit topic preference settings:"
-msgstr "Edite las preferencias de la pagina:"
+msgstr "Editar las preferencias de la pagina:"
 
 #: templates/view.pattern.tmpl:56
-#, fuzzy
 msgid "End of topic"
-msgstr "Renombre o mueva la pagina:"
+msgstr ""
 
 #: templates/login.pattern.tmpl:26
 msgid "Enter a new username and password to change identity:"
@@ -705,9 +687,8 @@ msgid "Error registering user %1"
 msgstr ""
 
 #: templates/oopsattention.tmpl:280
-#, fuzzy
 msgid "Error saving topic"
-msgstr "Cambie la pagina"
+msgstr ""
 
 #: templates/oopsalerts.tmpl:10
 msgid "Error: File attachment at %1,%2 does not exist"
@@ -783,11 +764,11 @@ msgstr ""
 
 #: templates/attach.pattern.tmpl:90
 msgid "Hide file"
-msgstr "Oculte el archivo"
+msgstr "Ocultar el archivo"
 
 #: templates/edit.pattern.tmpl:187
 msgid "Hide formatting help"
-msgstr "Oculte el formata de ayuda"
+msgstr "Ocultar el formata de ayuda"
 
 #: templates/oopsattention.tmpl:251
 msgid "If this line isn't present see _upgrade_ section below"
@@ -826,9 +807,8 @@ msgid "Incorrect %1:"
 msgstr ""
 
 #: templates/oopsattention.tmpl:84
-#, fuzzy
 msgid "Incorrect Password"
-msgstr "Contraseña"
+msgstr "Contraseña Incorrecta"
 
 #: templates/oopsattention.tmpl:211
 msgid "Invalid Activation Code"
@@ -877,11 +857,11 @@ msgstr "Archivo local"
 
 #: templates/twiki.pattern.tmpl:3
 msgid "Log In"
-msgstr "Inicie la session"
+msgstr "Iniciar la session"
 
 #: templates/twiki.pattern.tmpl:4
 msgid "Log Out"
-msgstr "Cerre la session"
+msgstr "Cerrar la session"
 
 #: templates/mailresetpassword.tmpl:9
 msgid "Login name %1"
@@ -889,7 +869,7 @@ msgstr ""
 
 #: templates/login.pattern.tmpl:44
 msgid "Logon"
-msgstr "Inicie la session"
+msgstr "Iniciar la session"
 
 #: templates/preview.pattern.tmpl:52
 msgid "Minor changes, don't notify"
@@ -917,19 +897,19 @@ msgstr ""
 
 #: templates/moveattachment.pattern.tmpl:20
 msgid "Move"
-msgstr "Mueva"
+msgstr "Mover"
 
 #: templates/attachagain.pattern.tmpl:45
 msgid "Move attachment..."
-msgstr "Mueva la union..."
+msgstr "Mover la union..."
 
 #: templates/moveattachment.pattern.tmpl:7
 msgid "Move file attachment"
-msgstr "Mueva el archivo"
+msgstr "Mover el archivo"
 
 #: templates/moveattachment.pattern.tmpl:36
 msgid "Move or Delete File %1"
-msgstr "Mueva o Borre el archivo %1"
+msgstr "Mover o Borrar el archivo %1"
 
 #: templates/renameweb.pattern.tmpl:25
 msgid ""
@@ -990,15 +970,13 @@ msgid "Notes"
 msgstr "Notas"
 
 #: templates/renamewebbase.pattern.tmpl:63
-#, fuzzy
 msgid "Notices:"
-msgstr "Notas:"
+msgstr "Avisos:"
 
 #: templates/search.pattern.tmpl:32 templates/searchbookview.pattern.tmpl:12
 #: templates/searchformat.pattern.tmpl:7
-#, fuzzy
 msgid "Number of topics:"
-msgstr "Renombre o mueva la pagina:"
+msgstr "Numero de paginas:"
 
 #: templates/oopsaccessdenied.tmpl:6
 msgid "OK"
@@ -1104,51 +1082,47 @@ msgstr ""
 
 #: templates/edit.pattern.tmpl:217
 msgid "Quiet Save"
-msgstr "Guarde sin notificación"
+msgstr "Guardar sin notificación"
 
 #: templates/edit.pattern.tmpl:216
 msgid "QuietSave"
-msgstr "Guarde sin notificación"
+msgstr "Guardar sin notificación"
 
 #: templates/edit.pattern.tmpl:214
 msgid "Read new revision help text in new window"
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
-#, fuzzy
 msgid "Related topics:"
-msgstr "Borre la pagina:"
+msgstr ""
 
 #: templates/oopsattention.tmpl:46
 msgid "Remove the user from the group(s) %1 first."
 msgstr ""
 
 #: templates/rename.pattern.tmpl:9 templates/renameweb.pattern.tmpl:9
-#, fuzzy
 msgid "Rename"
-msgstr "Usuario"
+msgstr ""
 
 #: templates/oopsattention.tmpl:61 templates/oopsattention.tmpl:67
-#, fuzzy
 msgid "Rename failed"
-msgstr "Usuario"
+msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:13
 msgid "Rename or move topic:"
-msgstr "Renombre o mueva la pagina:"
+msgstr "Retitular o mover la pagina:"
 
 #: templates/oopsattention.tmpl:269
 msgid "Rename the file on your local machine and try uploading again."
 msgstr ""
 
 #: templates/rename.pattern.tmpl:35 templates/renameweb.pattern.tmpl:33
-#, fuzzy
 msgid "Rename/Move"
-msgstr "Renombre/mueva la pagina..."
+msgstr "Retitular/Mover"
 
 #: templates/oopsmore.pattern.tmpl:14 templates/oopsmore.pattern.tmpl:16
 msgid "Rename/move topic..."
-msgstr "Renombre/mueva la pagina..."
+msgstr "Retitular/mover la pagina..."
 
 #: templates/search.pattern.tmpl:18 templates/searchbookview.pattern.tmpl:16
 msgid "Results from %1 web"
@@ -1176,7 +1150,7 @@ msgstr "Reviciones:"
 
 #: templates/edit.pattern.tmpl:216 templates/edit.pattern.tmpl:217
 msgid "Save"
-msgstr "Guarde"
+msgstr "Guardar"
 
 #: templates/preview.pattern.tmpl:58
 msgid "Save Changes"
@@ -1213,12 +1187,12 @@ msgstr ""
 
 #: templates/attachagain.pattern.tmpl:32
 msgid "Select a new local file to update this attachment."
-msgstr "Selecione un neuvo archivo local para actulisar esa union."
+msgstr "Seleccionar un neuvo archivo local para actulisar esa union."
 
 #: templates/renamebase.pattern.tmpl:75
 #: templates/renamewebbase.pattern.tmpl:79
 msgid "Select all"
-msgstr ""
+msgstr "Seleccionar todos"
 
 #: templates/renamebase.pattern.tmpl:80
 msgid "Select the %1 Web to delete the topic."
@@ -1253,9 +1227,8 @@ msgid "Skip to topic"
 msgstr ""
 
 #: templates/view.pattern.tmpl:53
-#, fuzzy
 msgid "Start of topic"
-msgstr "Renombre o mueva la pagina:"
+msgstr ""
 
 #: templates/oopsmore.pattern.tmpl:29
 msgid "Step 1: Select topic parent:"
@@ -1290,9 +1263,8 @@ msgid ""
 msgstr ""
 
 #: templates/oopsattention.tmpl:55
-#, fuzzy
 msgid "The %1 topic already exists"
-msgstr "La nueva pagina debe ya existir."
+msgstr "La pagina %1 ya existir"
 
 #: templates/oopsaccessdenied.tmpl:24
 msgid "The %1 web does not exist"
@@ -1404,9 +1376,8 @@ msgid "This requires the form definition to be present."
 msgstr ""
 
 #: templates/view.print.pattern.tmpl:38
-#, fuzzy
 msgid "This topic:"
-msgstr "Cambie la pagina"
+msgstr "Esta pagina:"
 
 #: templates/oopsattention.tmpl:26
 msgid ""
@@ -1451,14 +1422,12 @@ msgid "Topic settings"
 msgstr "Propiedades de la pagina"
 
 #: templates/oopsattention.tmpl:23
-#, fuzzy
 msgid "Topic was merged"
-msgstr "Nombre de la pagina:"
+msgstr ""
 
 #: templates/mailchanges.tmpl:10
-#, fuzzy
 msgid "Topics in %1 web:"
-msgstr "Nombre de la pagina:"
+msgstr "Numero de paginas in el web %1:"
 
 #: templates/renamewebbase.pattern.tmpl:64
 msgid "Topics which are currently being edited by other users in the %1 Web:"
@@ -1488,13 +1457,12 @@ msgid "Unrecognized action command %1"
 msgstr ""
 
 #: templates/settings.pattern.tmpl:65
-#, fuzzy
 msgid "Update"
-msgstr "Fecha"
+msgstr ""
 
 #: templates/attachagain.pattern.tmpl:9
 msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
-msgstr "Actualise la union *%FILENAME%* en la pagina *%TOPIC%*"
+msgstr "Actualise(XXX) la union *%FILENAME%* en la pagina *%TOPIC%*"
 
 #: templates/attachagain.pattern.tmpl:14
 msgid "Update image or document on %TOPIC%"
@@ -1502,7 +1470,7 @@ msgstr ""
 
 #: templates/attachagain.pattern.tmpl:49 templates/attachnew.pattern.tmpl:26
 msgid "Upload file"
-msgstr "Sube el archivo"
+msgstr "Subir el archivo"
 
 #: templates/oopsattention.tmpl:272
 msgid "Uploaded file %1 does not exist or is empty"
@@ -1513,9 +1481,8 @@ msgid "Uploaded file %1 exceeds limit of %2 KB"
 msgstr ""
 
 #: templates/oopsattention.tmpl:276
-#, fuzzy
 msgid "Uploaded file is too big"
-msgstr "Sube el archivo"
+msgstr ""
 
 #: templates/oopsattention.tmpl:7
 msgid "User Account %1 Deleted"
@@ -1540,18 +1507,16 @@ msgid "View previous topic revision:"
 msgstr "Vea antes la revicion de la pagina:"
 
 #: templates/view.pattern.tmpl:63
-#, fuzzy
 msgid "View raw text without formatting"
-msgstr "con formato de texto original"
+msgstr ""
 
 #: templates/rdiff.pattern.tmpl:18
 msgid "View topic"
 msgstr ""
 
 #: templates/view.pattern.tmpl:63
-#, fuzzy
 msgid "View total topic history"
-msgstr "Vea antes la revicion de la pagina:"
+msgstr ""
 
 #: templates/oopsalerts.tmpl:22
 msgid "Warning: Can't INCLUDE %1 twice, topic is already included. %2"
@@ -1670,14 +1635,12 @@ msgid "_language_name"
 msgstr "español"
 
 #: lib/TWiki/Access.pm:153
-#, fuzzy
 msgid "access denied on topic"
-msgstr "Teclas de acceso"
+msgstr ""
 
 #: lib/TWiki/Access.pm:181
-#, fuzzy
 msgid "access denied on web"
-msgstr "Teclas de acceso"
+msgstr ""
 
 #: lib/TWiki/Access.pm:170
 msgid "access not allowed on topic"
