@@ -1,0 +1,656 @@
+---+!! TWiki 'Dakar' Release
+'Dakar' is the first major release of the TWiki collaboration environment in nearly a year. The focus of this release has been on refactoring the code in the interests of efficiency and maintainance, though a range of sexy new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
+
+Most of the refactoring and documentation work in Dakar release was done by TWiki:Main.CrawfordCurrie (http://c-dot.co.uk). Other major code contributions were made by:
+   * TWiki:Main.AntonioTerceiro - internationalisation framework
+   * TWiki:Main.ArthurClemens - templates
+   * TWiki:Main.FlorianWeimer - sandbox
+   * TWiki:Main.GregAbbas - integration of !SessionPlugin
+   * TWiki:Main.MartinCleaver - registration process, and auto-attachments
+   * TWiki:Main.PeterNixon - hierarchical subwebs support
+   * TWiki:Main.RafaelAlvarez - sectional includes
+   * TWiki:Main.ThomasWeigert - preferences editing
+Other people who gave significant amounts of their time and patience to less sexy aspects of the work, or were pivotal in the design process, are:
+   * TWiki:Main.AntonAylward
+   * TWiki:Main.LynnwoodBrown
+   * TWiki:Main.MichaelDaum
+   * TWiki:Main.MichaelSparks
+   * TWiki:Main.SvenDowideit
+   * TWiki:Main.WillNorris
+There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor.
+
+Note: In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
+
+%TOC%
+
+---++ Notes for end users
+
+---+++ Editing at the same time as other people
+
+Dakar release introduces a brand-new strategy for handling simultaneous changes to a topic by several people. Instead of one person locking the topic, and other having to wait until they are finished, Dakar allows multiple simultaneous edits of the same topic, and then _merges_ the different changes.
+
+You probably won't even notice this happening unless you are changing existing text in the file at the same time as someone else. In this case, you may see TWiki inserting "change marks" into the text to highlight conflicts between your edits and another persons. These change marks are only used if you edit the same part of a topic as someone else, and they indicate what the text used to look like, what the other person's edits were, and what your edits were. For example, let's say you have a topic that contains this text:
+<table>
+<tr bgcolor="lightgrey"><th>You edit</th><th>You see</th></tr>
+<tr bgcolor="lightgrey"><td>
+<pre>
+Casablanca is
+Humphrey Bogart's finest film.
+Of all the gin joints in all the world,
+you had to walk into mine.
+</pre>
+</td><td>
+Casablanca is
+Humphrey Bogart's finest film.
+Of all the gin joints in all the world,
+you had to walk into mine.
+</td></tr>
+<tr><td colspan=2>and you start editing this text before going for coffee. Meanwhile, a colleague also starts editng the same topic and changes the text to:</td></tr>
+<tr bgcolor="lightgrey"><td>
+<pre>
+<b>The Maltese Falcon</b> is
+Humphrey Bogart's finest film.
+Of all the gin joints in all the world,
+you had to walk into mine.
+</pre>
+</td><td>
+The Maltese Falcon is
+Humphrey Bogart's finest film.
+Of all the gin joints in all the world,
+you had to walk into mine.
+</td></tr>
+<tr><td colspan=2>When you get back from coffee, you finish your edit, changing the text to</td></tr>
+<tr bgcolor="lightgrey"><td>
+<pre>
+<b>To Have or Have Not</b> is
+Humphrey Bogart's finest film.
+<b>You know how to whistle, don't you Steve?
+You just put your lips together and blow.</b>
+</pre>
+</td><td>
+To Have or Have Not is
+Humphrey Bogart's finest film.
+You know how to whistle, don't you Steve?
+You just put your lips together and blow.
+</td></tr>
+<tr><td colspan=2>and saving it. The topic will now look like this when you display it:</td></tr>
+<tr bgcolor="lightgrey"><td>
+<pre>
+&lt;div class="twikiConflict"&gt;&lt;b>CONFLICT&lt;/b&gt; original 5:&lt;/div&gt;
+Casablanca is
+&lt;div class="twikiConflict"&gt;&lt;b>CONFLICT&lt;/b&gt; version 6:&lt;/div&gt;
+The Maltese Falcon is
+&lt;div class="twikiConflict"&gt;&lt;b>CONFLICT&lt;/b&gt; version 7:&lt;/div&gt;
+To Have or Have Not is
+&lt;div class="twikiConflict"&gt;&lt;b>CONFLICT&lt;/b&gt; end&lt;/div&gt;
+Humphrey Bogart's finest film.
+You know how to whistle, don't you Steve?
+You just put your lips together and blow.
+</pre>
+</td><td>
+<div class="twikiConflict"><b>CONFLICT</b> original 5:</div>
+Casablanca is
+<div class="twikiConflict"><b>CONFLICT</b> version 6:</div>
+The Maltese Falcon is
+<div class="twikiConflict"><b>CONFLICT</b> version 7:</div>
+To Have or Have Not is
+<div class="twikiConflict"><b>CONFLICT</b> end</div>
+Humphrey Bogart's finest film.
+You know how to whistle, don't you Steve?
+You just put your lips together and blow.
+</td></tr>
+</table>
+As you can see, your changes have been merged with your colleagues. The merge is done on a line-by-line basis, and if your changes do not overlap, then change marks will not be used.
+
+Merging only applies to text fields. When there are conflicts in field data in forms such as checkboxes, radio buttons and selects, the most recent change (usually your change) always wins, even if someone else has changed the form since you started editing. All changes are of course available from the topic history.
+
+Because there are cases where you actually want to avoid overlapping edits altogether (e.g. if you are changing forms data) TWiki will *warn* if you attempt to edit a topic that someone else is editing. It will also warn if a merge was required during a save.
+
+---+++ Internationalisation
+
+TWiki will now pick up the language you are using in you browser, and try to present system messages in you chosen language, if it is available. If your preferred language is not available, TWiki will revert to English.
+
+The translation is performed by the Perl standard internationalisation framework. If you want to contribute a new language, it would be most welcome.
+
+---+++ New options on the editing screen
+
+You will notice a couple of changes to the editing screen; first, there is no switch for releasing the edit lock any more (if locks are enabled, they are always released when an edit finishes). You will also notice a new "force new revision" checkbox. TWiki normally doesn't add a new revision if the same user re-edits a topic within a certain time period; this checkbox allows you to _force_ TWiki to add a revision for every change, regardless of how small it is.
+
+---+++ Change notification
+
+You now have much more control over _which_ topics in a web you are interested in changes to. You can choose to receive notifications about topics selected by name, or by their parent relationship. See %TWIKIWEB%.MailerContrib for more details.
+
+---+++ Parameterised Includes
+=%<nop>INCLUDE= tags have a predefined set of parameters. In the past, any parameters not in this set were simply ignored. With Dakar, these parameters are now defined as TWikiVariables within the included topic - for example,
+<verbatim>
+%INCLUDE{ "BugList" FAVOURITE="Damsel Flies" }%
+</verbatim>
+will define =%FAVOURITE%= as =Damsel Flies= in the included topic, so if =BugList= contained the line
+<verbatim>
+My favourite bugs are %FAVOURITE%
+</verbatim>
+it will be expanded to
+<verbatim>
+My favourite bugs are Damsel Flies
+</verbatim>
+
+---+++ Named Section Include
+
+=%<nop>INCLUDE= tag allows to include only a named section of the included topic. These sections are defined in the included topic using the =%<nop>SECTION%= and =%<nop>ENDSECTION%= tags. For example, if the included topic has:
+
+<verbatim>
+---+ News
+
+---++ IT News
+All news related to IT.
+%SECTION{"itnews"}%
+   * 2005-10-02 Final deployment of Dakar
+   * 2005-10-01 Moving platform to Dakar
+%ENDSECTION{"itnews"}%
+</verbatim>
+
+Using =%<nop>INCLUDE{ "AllNews" section="itnews" }%= will produce:
+<verbatim>
+   * 2005-10-02 Final deployment of Dakar
+   * 2005-10-01 Moving platform to Dakar
+</verbatim>
+
+This syntax also allows for nested sections. For example, given the following topic:
+<verbatim>
+%SECTION{"outer"}%
+   * Top Outer Text
+%SECTION{"inner"}%
+   * Inner Text
+%ENDSECTION{"inner"}%
+   * Top Outer Text
+%ENDSECTION{"outer"}%
+</verbatim>
+
+Using =%<nop>INCLUDE{"SampleTopic" section="outer"}%= will produce:
+<verbatim>
+   * Top Outer Text
+   * Inner Text
+   * Top Outer Text
+</verbatim>
+
+And =%<nop>INCLUDE{"SampleTopic" section="inner"}%= will produce:
+<verbatim>
+   * Inner Text
+</verbatim>
+
+In the same line, overlapped sections are allowed.
+
+---++ Notes for !TWikiAdmins and !WikiMasters
+
+---+++ CPAN Requirements
+
+CPAN:Error and CPAN:Algorithm::Diff are now considered TWiki _prerequisites_, and are not shipped with the distribution itself anymore.  CPAN:Text::Diff is a prerequisite for the UpgradeTWiki script only. CPAN:URI is a prerequisite for =configure=. Other new prerequisites are CPAN:CGI::Session and CPAN:CGI::Cookie, if you want to take advantage of the new session support.
+
+---+++ Installation and configuration
+
+The installation and configuration processes has been significantly simplified. 
+
+---++++ setlib.cfg
+The installer should now provide a file called =LocalLib.cfg= that contains local path settings. =setlib.cfg= contains documentation of what has to be done. Old =setlib.cfg= files *will not work* with Dakar.
+
+---++++ TWiki.cfg
+=TWiki.cfg= now contains all the default configuration settings, and the installer should provide a file called =LocalSite.cfg= that contains just those settings that are different to the defaults. The syntax of the settings in the file has also changed. Old =TWiki.cfg= files *will not work* with Dakar. The !UpgradeTWiki script can be used to automate most of the necessary changes.
+
+---++++ =testenv= / =configure=
+=testenv= has been removed, and replaced with the new =configure= interface. This interface performs all the checking functions of the old =testenv=, adds several new ones (including permissions checks) and also acts as a browser interface allowing you to do *all* TWiki configuration from the browser. =configure= is now the main installation interface for TWiki.
+
+The =configure= script can be used like the old =testenv= for public review of the configuration of the site. Saving from the interface is password-protected, using a password set in the configuration files, so to ordinary users =configure= just looks like a posh version of =testenv=. If you want to hide your configuration from public view, you can restrict access to the script webserver access controls (Apache users see the Apache documentation on the 'require' directive for more infomation on how to do this).
+
+---++++ =configure= optional features
+
+New optional features include AutomaticAttachments.
+
+---+++ Preferences
+
+There have been some significant changes to the handling of preferences, aimed at making them more logical, consistent and easy to use.
+
+Preferences are now evaluated in the following order:
+   1 Topic
+   1 Web
+   1 Session
+   1 User
+   1 Local Site (as set in {LocalSitePreferences})
+   1 Default (as set in {SitePrefsTopic})
+this is a change from previous versions, where the User preferences were evaluated between the topic and the web.
+
+Note that a user can still dictate preference values that can't be overridden, but they will now need to set those preferences as FINALPREFERENCES.
+
+Permissions controls are not affected by this change.
+
+---++++ Changes to the evaluation order
+The rules for preference evaluation (whether the user setting overrides the topic setting etc) have always been a bit confused.
+
+---++++ Preferences Plugin
+TWiki:Plugins.PreferencesPlugin has been included to allow more convenient editing of preferences. This plugin provides input controls, such as menus, radio buttons, and checkboxes to select preference settings.
+
+The following standard preferences have been removed: [[%SCRIPTURL%/search%SCRIPTSUFFIX%?scope=text&web=all&order=topic&search=%25MAILTHISTOPIC%25&casesensitive=on&limit=all][MAILTHISTOPIC]], [[%SCRIPTURL%/search%SCRIPTSUFFIX%?scope=text&web=all&order=topic&search=%25MAILTHISTOPICTEXT%25&casesensitive=on&limit=all][MAILTHISTOPICTEXT]], [[%SCRIPTURL%/search%SCRIPTSUFFIX%?scope=text&web=all&order=topic&search=%25TOPICURL%25&casesensitive=on&limit=all][TOPICURL]], [[%SCRIPTURL%/search%SCRIPTSUFFIX%?scope=text&web=all&order=topic&search=%25READTOPICPREFS%25&casesensitive=on&limit=all][READTOPICPREFS]], [[%SCRIPTURL%/search%SCRIPTSUFFIX%?scope=text&web=all&order=topic&search=%25TOPICOVERRIDESUSER%25&casesensitive=on&limit=all][TOPICOVERRIDESUSER]]  (click on the name to search for occurrences on this site). If they are in use on your site, you can restore them to their Cairo settings by simply cutting and pasting the old definitions.
+
+---++++ {SitePrefsTopicName} (was <nop>%MAINWEB%.TWikiPreferences)
+
+Customized site preferences can now be saved in the {LocalSitePreferences} topic which will override settings in {SitePrefsTopicName}. This simplifies upgrades as you can overwrite the {SitePrefsTopicName} topic and gain any new or updated preference settings without losing your local customizations.
+
+---++++ =FAVICON=
+
+=favicon.ico= is a small graphic that _can_ appear in a variety of places in the browser: the titlebar, the taskbar, the address bar, bookmarks/favourites, and tabs.  Each web browser has a unique user interface, and as a result uses the Favicon in different ways.  _Most_ browsers display it in _most_ of the locations listed.
+
+Out of the box, TWiki is configured to easily customise the =favicon.ico= for each web.  To switch to a new =favicon.ico=, upload it to the desired web's <nop>WebPreferences.
+<verbatim>
+      * Set FAVICON = %PUBURL%/%WEB%/WebPreferences/favicon.ico
+</verbatim>
+
+To provide a single, site-wide =favicon.ico=, hardcode a specific web, for example:
+<verbatim>
+      * Set FAVICON = %PUBURL%/%TWIKIWEB%/WebPreferences/favicon.ico
+</verbatim>
+
+---++++ =FORCENEWREVISIONCHECKBOX=
+
+Normally, if you make another edit within a one hour period (was =$editLockTime=in =lib/TWiki.cfg=, now ={ReplaceIfEditedAgainWithin}=), TWiki will fold together your changes.  This is often the "right thing to do", as it can reduce the visual clutter of diffs.
+
+The "Force New Revision" checkbox is a way to force it to create a separate revision each time you save.
+
+The [[%TWIKIWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls whether this is checked by default or not.
+
+On a related note, you can force __every__ save to be a new revision number by editing =lib/TWiki.cfg= and setting =={ReplaceIfEditedAgainWithin}== to 0.
+
+---++++ =WEBLOGONAME=, =WEBLOGOIMG=, =WEBLOGOURL=, =WEBLOGOALT=
+
+Each web can have its own customised logo.  The simplest way is to upload a =logo.png= to a web's <nop>WebPreferences, and it will appear in the top-left corner.
+
+To change the logo's filename, set the =WEBLOGONAME= variable.  You'll especially need to do this if you use =.jpg= or =.gif= for the logo file format:
+<verbatim>
+      * Set WEBLOGONAME = MyLogo.jpg
+</verbatim>
+
+RSS feeds have also been enhanced to use the web-specific logo.
+
+If you don't want to have custom logos on a per-web basic, but instead want to use a single, site-wide logo, hardcode a specific web in the =WEBLOGOURL= variable.  For example:
+<verbatim>
+      * Set WEBLOGOURL = %PUBURL%/%MAINWEB%/WebPreferences/logo.png
+</verbatim>
+
+---++++ =WIKILOGOIMG=, =WIKILOGOURL=, =WIKILOGOALT=
+
+These variables are now more closely associated with =WIKITOOLNAME=.  If you change =WIKITOOLNAME=, you'll probably want to change these variables, too.  =WIKILOGOIMG=, =WIKILOGOURL=, =WIKILOGOALT=, and =WIKITOOLNAME= are now used more consistently together.
+
+---+++ Final Preferences
+
+The =FINALPREFERENCES= setting prevents particular preference settings from being over-ridden at a lower level. The hierarchy of how =FINALPREFERENCES= settings are applied has been clarified/formalized as reflected in the following chart:
+| *Level* | *Set By* | *Local site examples* |
+| default site | !TWiki.TWikiPreferences or !%WIKIPREFSTOPIC%  | %TWIKIWEB%.%WIKIPREFSTOPIC% | 
+| local site | !%MAINWEB%.TWikiPreferences or !%LOCALSITEPREFS%  | %LOCALSITEPREFS% |
+| web | !WebPreferences  | %WEB%.%WEBPREFSTOPIC% |
+| user | In one's user topic  | %WIKIUSERNAME% |
+| topic | "Edit topic preferences settings" under "More topic actions"  | %WEB%.%TOPIC% | 
+
+By default, the site level =FINALPREFERENCES= are set in !%MAINWEB%.TWikiPreferences so as not to conflict with preference settings in that topic. 
+
+---+++ =mod_perl= support improvements
+TWiki no longer uses global variables other than for constants. Each CGI script creates a new "session object" that holds all session-specific information.
+
+There is still an issue with the =@INC= path in =mod_perl=, that mainly impacts plugins that lazy-load modules. You should use the =PerlSetEnv= directive that =mod_perl= provides to make sure that your TWiki =lib= directory is permanently on the path, if you are using =mod_perl=.
+
+---+++ Plugins
+Plugins are no longer searched for every time a TWiki script is run. Instead they are automatically discovered in =configure=. To enable and disable plugins, use the =configure= interface. The entire @INC path is searched for plugins, so you can easily point at plugins outside the installation. However only the first instance of a plugin on the @INC path will be found (it is a path, after all).
+
+=%<nop>INSTALLEDPLUGINS%= and =%<nop>DISABLEDPLUGINS%= are no longer supported in !TWikiPreferences. If you have set =%<nop>INSTALLEDPLUGINS%= in !TWikiPreferences, you need to move that setting into the ={PluginsOrder}= configuration key, using the =configure= interface. To disable plugins, uncheck them in the =configure= interface, and save the changes.
+
+---+++ Logins, Logouts, Sessions and Passwords
+
+TWiki:Plugins.SessionPlugin and TWiki:Plugins.AuthPagePlugin have been integrated into the core. TWiki now supports cookied sessions, in the context of a much improved authentication architecture. The setup for authentication is now much simpler, and for most sites can be done entirely from the =configure= interface. There are some incompatibilities with TWiki::Plugins.SessionPlugin, with resepect to the in-line variables. See TWiki.TWikiUserAuthentication in the release for full details of how authentication works now. TWiki also now supports the concept of pluggable password managers, making the integration of corporate authentication services much simpler.
+
+---+++ Protections
+
+The evaluation of protections has been re-worked to make it more naturally understandable, and also fill a number of holes in the protection scheme, These holes meant that it was relatively easy to _deny_ access to a topic, but rather difficult to subsequently _restore_ access without either compromising other topics, or compromising old revisions.
+
+When deciding whether to grant access, TWiki now evaluates the following rules in order (read from the top of the list; if the logic arrives at *PERMITTED* or *DENIED* that applies immediately and no more rules are applied). You need to read the rules bearing in mind that VIEW, CHANGE and RENAME access may be granted/denied separately.
+   1 If the user is a [[#SuperAdminGroup][super-user]]
+      * access is *PERMITTED*.
+   1 If DENYTOPIC is set to a list of wikinames
+      * people in the list will be *DENIED*.
+   1 If DENYTOPIC is set to _empty_ ( i.e. <tt>Set DENYTOPIC =</tt> )
+      * access is *PERMITTED* _i.e._ no-one is denied access to this topic
+   1 If ALLOWTOPIC is set
+      1 people in the list are *PERMITTED*
+      1 everyone else is *DENIED*
+   1 If DENYWEB is set to a list of wikiname
+      * people in the list are *DENIED* access
+   1 If ALLOWWEB is set to a list of wikinames
+      * people in the list will be *PERMITTED*
+      * everyone else will be *DENIED*
+   1 If you got this far, access is *PERMITTED*
+In addition, permissions set on a specific revision of a topic now _always_ apply to that revision, even if access to the topic is relaxed in a later revision. This change was necessary to prevent accidentally permitting access to sensitive data in old revisions.
+
+The major impact of this change is that !WebPreferences topics shipped with earlier releases of TWiki will have excessively restrictive controls, as the default settings were:
+   * <nop>Set DENYWEBVIEW = 
+   * <nop>Set ALLOWWEBVIEW = 
+      * This will now _deny_ view access to everyone _not_ in the list (i.e. everyone except admins)
+   * <nop>Set DENYWEBCHANGE = 
+   * <nop>Set ALLOWWEBCHANGE = 
+      * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
+   * <nop>Set DENYWEBRENAME = 
+   * <nop>Set ALLOWWEBRENAME = 
+      * This will now _deny_ rename access to everyone _not_ in the list (i.e. everyone except admins)
+   * <nop>Set ALLOWTOPICCHANGE = 
+      * This will now _deny_ change access to everyone _not_ in the list (i.e. everyone except admins)
+   * <nop>Set ALLOWTOPICRENAME = %MAINWEB%.<nop>TWikiAdminGroup
+
+The standard webs shipped with this release have these settings disabled. However you are likely to have inherited the old default settings in your user webs. The easiest way to deal with this is to simply insert a # sign in these settings; for example:
+   * #Set DENYWEBVIEW = 
+   * #Set ALLOWWEBVIEW = 
+   * _etc_
+
+---++++ TWiki.SitePermissions
+
+This topic gives you a quick view of the permissions on each web  - i.e. it aggregates ALLOWWEB* etc. into a handy table. It is also installed on TWiki.org as TWiki:TWiki.SitePermissions but is not in Cairo.
+
+---+++ Frustrating Robots
+To help contain the growth of wiki spam, TWiki now incorporates some features to prevent robots from following links. You can constain links using the =rel='nofollow'= feature on links, which is honoured by the major search engines, to prevent spammers from gaining any ranking benefit from vandalising your site. See the *Anti-spam measures* section in =configure= for full details.
+
+---+++ New User Registration 
+
+The new user registration process has been extensively reworked to improve usability and security of the registration process.
+   1 !FirstName and !LastName are taken separately and tabulated. See http://wiki.conceptmapping.org/People/UserListByLocation
+   1 Sends a email that the user has to respond to; registration data is staged until this is done
+   1 Populates a form in the user topic, if there is one in the !NewUserTemplate. If there is no form, then bullets are used, as in pre-Dakar TWiki.
+   1 Sends different emails to the WIKIWEBMASTER and the USER, with the user's containing the password unless {HidePasswdInRegistration} is set.
+   1 The =templates/view.pattern.tmpl= template is rearranged to show the form on the top LHS, any pictures on the top RHS (uses TWiki:Plugins.ImageGalleryPlugin if installed), and any fields not in the form (e.g. comment) in the content in the topic. 
+   1 There is now a mechanism for bulk registration, with callbacks for augmentation (e.g. from other sources).
+   %RED% This needs clearer explanation e.g. a pointer to the user doc %ENDCOLOR%
+   1 Absorbed ResetPasswordByEmail.
+   1 Obsoleted InstallPassword
+
+---+++ Change notification support
+The old =mailnotify= script has been retired in favour of the TWiki.MailerContrib. The main difference you will see is that the script you call to generate change notifications has changed from =mailnotify= to =mailnotifier=. See TWiki.MailerContrib for information about functional changes.
+
+---+++ TWiki.SiteChanges
+
+This topic mimics TWiki.org's TWiki:Codev:WebChangesForAllWebs - i.e. it shows a WebChanges view across a whole site. It's name was chosen to parallel !TWiki.SiteMap; at some point you can expect the arrival of !TWiki.SiteStatistics too.
+
+---+++ What's a Web
+Old versions of TWiki would consider all subdirectories of the TWiki data directory to be webs. This behaviour has changed; now only subdirectories that contain a web home topic (as identified by the =HomeTopicName=) will be considered to be webs. This may result in directories that used to return search matches no longer doing so.
+
+---+++ Disable &lt;script&gt; tags
+In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. See the ={AllowInlineScript}= setting in the *Security* section of =[[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]=.
+
+---++ Notes for !TWikiApplication Developers
+
+---+++ Space/Tab conversion
+
+Previous TWiki versions would automatically convert three spaces at the start of lines to a tab when the topic was saved. This meant that the saved topic was _not_ the same as the edited topic, which could result in considerable confusion. This conversion has been disabled, and the saved topic is now exactly what you see in the editor. One impact of this change is that any add-on scripts you may have developed that rely on bulleted list lines starting with a tab will no longer work. They must be adapted to treat groups of three spaces and single tabs as equivalent.
+
+---+++ Evaluation order of !TWikiVariables
+
+In previous TWiki versions the evaluation order of %TAG%s depended on where they were expanded in the code. The parser was somewhat crude, and could easily be confused when embedded variables (variables embedded in the parameters of other variables) were used.
+
+The parser has been replaced in Dakar with a deterministic variable parser with predictable behaviour. Specifically, variables are now always evaluated left to right and inside out. For example, consider %TAG2{ "%TAG1{ "%TAG0{ "params" }%" }%" }% %TAG3%. Previously, the expansion order would have depended on the order of expressions in the code, so the expansion may have proceeded TAG3 - TAG0 - TAG2 - TAG1. If you were lucky, this was the intended order. In Dakar, the order is now guranteed to be TAG0 - TAG1 - TAG2 - TAG3 (i.e. inside out and left to right).
+
+The main impact of this is that some TWikiApplications may cease to work if they have been written to take advantage of the old chaotic order. There is no way to predict which will work and which will fail, so you will have to deal with this on a case-by-case basis. In most cases !TWikiApplication authors will have worked hard to do the "sensible thing" so instances of this problem should be rare.
+
+Note that because the TWiki spec allows double quotes within double-quoted strings in certain variable parameters it has been impossible to make the parser 100% deterministic. There may still be pathological cases where the parser may fail. In these cases, consider how open and close curly brackets are matched up.
+
+---+++ Skin search paths
+
+New in Dakar release is support for _skin search paths_ which allow you to specify any number of skins, instead of the default single skin. If a template can't be found for the first skin in the path, then the second skin is used, and so on until the default template is used as a last resort. See %TWIKIWEB%.TWikiSkins for more information.
+
+---+++ Encoding of form-field values
+The encoding used to escape characters in form-field values has had to change. The old encoding could very easily be confused by text strings in data values. Existing topics with the old encoding will still be loaded into TWiki as before, but if edited they will be saved with the new encoding. This should not affect you unless you have searches that look for the old encodings; specifically, the %<nop%_G_
+, %<nop>_Q_%, and %<nop>_P_% character sequences. Any such searches will not work any more, and need to be converted to search for the new encoding. Assuming they are =regex= type searches, you can use =(%<nop%_G_
+|%0A)= to match encoded newlines in field data in both old and new format topics, =(%<nop>_Q_%|%22)= to match quotes, and =(%<nop>_P_%|25)= for percent signs.
+
+---+++ &lt;script&gt; tags in topics
+Previous releases of TWiki would attempt to interpret the content of &lt;script&gt; tags in topics as TWikiML, often resulting in non-functional scripts. This release protects script sections from expansion by TWiki. Note that this means that TWiki.TWikiVariables will *not* be expanded in script tags - they are passed through _verbatim_.
+
+In recognition of security concerns around &lt;script&gt; tags, the administrator has the choice whether to allow users to add script to topics or not. Check the setting of ={AllowInlineScript}= in =[[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]= to see if it is allowed on your site. If not, script sections will simply disappear from topics.
+
+---+++ =ALL_VARIABLES=
+
+You can use =%<nop>ALL_VARIABLES%= in a topic to get a dump of all variables set in that context. Invaluable for debugging those tricksy !TWikiApplications!
+
+---+++ =IF=
+
+The new =%<nop>IF()%= variable defines simple conditional statements that are evaluated at view time. This allows you to include content conditionally based on environmental factors. See ViewDEVELOP:TWiki.IfStatements for more information on usage.
+
+
+---+++ New =$count(reg-exp)= variable in TWiki.FormattedSearch
+This new variable for TWiki.FormattedSearch returns the number of instances a specified TWiki.RegularExpression occur in a topic. This is useful for such things as counting the number of comments on a page (assuming they are marked my a unique heading level).
+
+---++ Notes for Skin Developers
+
+---+++ Supporting web names that are !WikiWords
+Although web names have been [[WebNameAsWikiName][permitted to be WikiWords]] since the CairoRelease, the base templates have been [[DefaultTemplatesSupportWebNameAsWikiWord][fixed]] for Dakar.
+
+Skins should be upgraded if they have standalone =%<nop>WEB%= variables; only standalone =%<nop>WEB%= text that potentially could be turned into a link (because of a WikiWord) needs to be escaped. Same for =%<nop>MAINWEB%= and =%<nop>TWIKIWEB%=.
+
+Examples:
+
+   * =%<nop>WEB%= -- needs to be escaped with =&lt;nop&gt;%<nop>WEB%=
+   * =(%<nop>WEB%)= -- needs to be escaped because of parenthesis
+   * ="%<nop>WEB%"= -- no need to escape, does not get linked
+   * =&lt;b&gt;%<nop>WEB%&lt;/b&gt;= -- no need to escape, does not get linked
+   * =%<nop>WEB%.%<nop>TOPIC%= -- no need, is a =Web.TopicName=
+   * =(%<nop>WEB%.%<nop>TOPIC%)= -- no need, is a =Web.TopicName=
+
+Basically, any prefix other then space and parenthesis needs to be looked at. =%<nop>WEB%= in a =%<nop>SEARCH%= should not be escaped.
+
+---+++ Deprecation of %<nop>EDITTOPIC%
+In Cairo release (and earlier) the only way to have an edit link that changed with the context was to use %<nop>EDITTOPIC%. This was only available in view templates, and had no flexibility in formatting. it was also impossible to disable other active links, such as Attach.
+
+Dakar release includes new support for "context if" parameters to the %<nop>TMPL:P construct. See TWikiTemplates for details. The default templates shipped with Dakar have been modified to use this support. %<nop>EDITTOPIC has been deprecated, though it is still available as a simple edit link, defined in TWikiPreferences. Skin authors are strongly recommended to replace this link with context-if conditionals.
+
+---+++ Template Parameters
+%<nop>TMPL:P% now accepts parameters. Values passed in these parameters can be expanded in the %TMPL:DEF. See http://develop.twiki.org/~develop/cgi-bin/view/TWiki/TWikiTemplates for full details. (Remember, this happens at template expansion time, which is usually early in the rendering process.)
+
+---+++ IFCONTEXT
+The new %IFCONTEXT TWiki variable can be used to instantiate different blocks of text depending on the current rendering context. See http://develop.twiki.org/~develop/cgi-bin/view/TWiki/TWikiVariables#VarIFCONTEXT for full details.
+
+---+++ HTTP and HTTPS
+These two new !TWikiVariables give access to the HTTP headers sent by your browser. For example, your browser says your browser is %HTTP:{"User-Agent"}% (this will be filled in if you are running Dakar).
+
+---+++ QUERYSTRING
+This new !TWikiVariable gives access to the full query string from the URL sent to your browser. For example, for the URL =%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?make=Reliant&model=Robin=, the query string is =?make=Reliant;model=Robin= (yes, the semicolon is correct!)
+
+---++ Notes for Plugin Developers
+
+---+++ Internals
+
+A lot of the TWiki internals have changed. As a result, plugins that bypass the =TWiki::Func= API and call core functions directly are unlikely to work.
+
+The restructuring of the code internals is such that there are no 1:1 equivalents for the old core functions. Only the TWiki::Func API is guaranteed to work.
+
+You should convert your plugins to call the =TWiki::Func= API. If you have called unpublished functions that have no equivalent in =TWiki::Func=, then you may still be able to call the function via the TWiki "session" object, =$TWiki::Plugins::SESSION=. See the implementation of the =TWiki::Func= module for ideas on how to do this. However calling internals is *not* recommended, even using this new mechanism, as they are liable to change without prior notice.
+
+---+++ Extensions to the Func API
+
+   * The =TWiki::Func= API has been extended to expose a number of new core functions. Review TWikiFuncDotPm for details.
+   * The =TWiki::Meta= API, which was previously for internal core use only, has now been exposed and may be used in plugins. See TWikiMetaDotPm for full details.
+   * Plugins which observed the existing published API (TWiki::Func) should continue to work.
+
+---++ Public contributions, tested on Dakar
+
+Many contributions have had to be modified to work with Dakar. These modifications have been required to remove abuses of the published APIs. Therefore the tables below apply to the plugin code as checked into Subversion *only*.
+
+---+++ Contributions that don't conform to standards sufficiently to be compiled
+| TWiki:Plugins.ControlsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.GpgkeyPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.IrcLogPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.NavbarPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.NewsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.NotificationPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ProtocolTlaPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.QuickCalendarPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SlashFilenamePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SuggestLinksPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SyntaxHighlightingPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TranslateTagPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+
+---+++ Contributions that fail =initPlugin=
+| TWiki:Plugins.BarcodePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ContributorsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.DirectedGraphWebMapPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.DiskUsagePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EFetchPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EmbedBibPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ExifMetaDataPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.FakeBasicAuthRegPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.FileListPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.FormFieldListPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.GenerateSearchPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.LoginNameAliasesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MailReminderPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MathModePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.NavPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.PatentLinkPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.PhotoarchivePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.QuickSearchPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.RevisionLinkPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SearchToTablePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SourceHighlightPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ToolTipPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TouchGraphPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TWikiDrawSvgPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.VotePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+
+---+++ Contributions that can't be loaded for testing because of missing perl components
+| TWiki:Plugins.AddDBMGroupPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.DatabasePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.LDAPPasswordChangerPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.LdapPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MovableTypePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MultiEditPlugin | Relies on Plugins.EditContrib |
+| TWiki:Plugins.SablotronPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SectionalEditPlugin | Relies on Plugins.EditContrib |
+| TWiki:Plugins.SvgPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ThreadedDiscussionPlugin | Relies on Plugins.EditContrib |
+| TWiki:Plugins.TopicTranslationsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+
+---+++ Contributions that load and don't fail, but don't work as advertised
+| TWiki:Plugins.BatchUploadPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.CompareRevisionsAddOn | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EditInTablePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EmbedTopicPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EncryptedPagesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.IncludeIndexPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.IncludeRevisionPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.PeerPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.RecursiveRenderPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.RevCommentPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TodaysVisitorsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TopicReadersPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TWikiReleaseTrackerPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.UpdateInfoPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.WeatherPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.WebDAVPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+
+---+++ Contributions that load harmlessly, but cannot be fully tested due to lack of tests, or lack of external dependencies.
+They probably work, we just can't be sure.
+| TWiki:Plugins.AdvertsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.BugzillaLinkPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.BugzillaQueryPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ChartPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.CounterPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.DoxygenPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EmbedFlashPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EmbedPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EmbedQTPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.FormFieldsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.FormQueryPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.HistoryPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.LaTeXToMathMLPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MsOfficeAttachmentsAsHTMLPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.PhantomPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TigerSkinPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.VarCachePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+
+---+++ Contributions that are known to work with Dakar
+| TWiki:Plugins.ActionTrackerPlugin | Tested by TWiki:Main.CrawfordCurrie. 2.023 required |
+| TWiki:Plugins.AgentPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.AliasPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.BeautifierPlugin | Cairo version seems to work |
+| TWiki:Plugins.BibliographyPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.BuildContrib | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.CalendarPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.CommentPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ConditionalPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.DateFieldPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.DateTimePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.DefaultPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EditTablePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EmbedPDFPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.EmptyPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ExplicitNumberingPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.FilterPlugin | |
+| TWiki:Plugins.FindElsewherePlugin | Tested by TWiki:Main.CrawfordCurrie |
+| TWiki:Plugins.GaugePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.GetAWebAddOn | Cairo version works |
+| TWiki:Plugins.GuidPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.HeadlinesPlugin | Updated to support Cairo + Dakar |
+| TWiki:Plugins.HolidaylistPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.InterwikiPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.JSCalendarContrib | Tested by TWiki:Main.CrawfordCurrie |
+| TWiki:Plugins.LinkOptionsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.LocalCityTimePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.LocalTimePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MacrosPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MailerContrib | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MailInContrib | Tested by TWiki:Main.CrawfordCurrie |
+| TWiki:Plugins.PerlDocPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.PreferencesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.PseudoXmlPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.PublishAddOn |  Tested by TWiki:Main.CrawfordCurrie.Version 1.302 required |
+| TWiki:Plugins.RandomTopicPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.RenderListPlugin | Tested by TWiki:Main.CrawfordCurrie |
+| TWiki:Plugins.RevRecoverPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SingletonWikiWordPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SlideShowPlugin | Tested by TWiki:Main.CrawfordCurrie |
+| TWiki:Plugins.SmiliesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SpacedWikiWordPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SpreadSheetPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TablePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TocPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TreePlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TWikiDrawPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TypographyPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.UserInfoPlugin | Tested by TWiki:Main.AntonAylward |
+| TWiki:Plugins.VersionLinkPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.WysiwygPlugin | Tested by TWiki:Main.CrawfordCurrie |
+| TWiki:Plugins.XpTrackerPlugin | Tested by TWiki:Main.RafaelAlvarez |
+
+---+++ The jury is still out on these
+| TWiki:Plugins.AlbumOfSnapsPlugin | |
+| TWiki:Plugins.ApprovalPlugin | |
+| TWiki:Plugins.BlackListPlugin | |
+| TWiki:Plugins.ChildTopicTemplatePlugin | |
+| TWiki:Plugins.DirectedGraphPlugin | |
+| TWiki:Plugins.EditContrib | Needs to be updated, as some functionality has been moved into core. |
+| TWiki:Plugins.EditTablerowPlugin | |
+| TWiki:Plugins.FlowchartPlugin | |
+| TWiki:Plugins.FormPivotPlugin | |
+| TWiki:Plugins.GenPDFAddOn | |
+| TWiki:Plugins.GlobalReplacePlugin | |
+| TWiki:Plugins.HiddenTextPlugin | |
+| TWiki:Plugins.ImageGalleryPlugin | |
+| TWiki:Plugins.MessageBoardPlugin | |
+| TWiki:Plugins.MrdIdPlugin | |
+| TWiki:Plugins.MultiLangPlugin | |
+| TWiki:Plugins.NetgrepPlugin | |
+| TWiki:Plugins.PhotonSkin | |
+| TWiki:Plugins.PollPlugin | |
+| TWiki:Plugins.PowerEditPlugin | |
+| TWiki:Plugins.ProjectPlannerPlugin | |
+| TWiki:Plugins.RandomQuotePlugin | |
+| TWiki:Plugins.RedirectPlugin | |
+| TWiki:Plugins.RollupPlugin | |
+| TWiki:Plugins.SecurityPlugin | |
+| TWiki:Plugins.SnmpCommandPlugin | |
+| TWiki:Plugins.SpellCheckAddOn | |
+| TWiki:Plugins.StylePlugin | |
+| TWiki:Plugins.TextSectionPlugin | comparable to Plugins.TwistyPlugin? |
+| TWiki:Plugins.TopicVarsPlugin | |
+| TWiki:Plugins.XmlQueryPlugin | |
+| TWiki:Plugins.XmlXslPlugin | |

@@ -10,6 +10,7 @@ TWiki is a flexible, powerful, secure, yet simple-to-use web-based collaboration
    * [[%TWIKIWEB%.TWikiRegistration][Registration]]: become a <nop>%WIKITOOLNAME% user
    * %WIKIUSERSTOPIC%: List of users of this <nop>%WIKITOOLNAME% web.
    * TWikiGroups: List of groups.
+   * %TWIKIWEB%.DakarReleaseNotes: Describes what's new in this release of TWiki.
  
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
