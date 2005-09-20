@@ -33,12 +33,12 @@ __Preferences:__
 		* Set WEBFORMS = 
 
 	* Users or groups who __are not__ / __are__ allowed to __view__ / __change__ / __rename__ topics in the <nop>%WEB% web: (See %TWIKIWEB%.TWikiAccessControl)
-		* Set DENYWEBVIEW = 
-		* Set ALLOWWEBVIEW = 
-		* Set DENYWEBCHANGE = 
-		* Set ALLOWWEBCHANGE = 
-		* Set DENYWEBRENAME = 
-		* Set ALLOWWEBRENAME = 
+		*# Set DENYWEBVIEW = 
+		*# Set ALLOWWEBVIEW = 
+		*# Set DENYWEBCHANGE = 
+		*# Set ALLOWWEBCHANGE = 
+		*# Set DENYWEBRENAME = 
+		*# Set ALLOWWEBRENAME = 
 
 	* Users or groups allowed to change or rename this <nop>%TOPIC% topic: (e.g., %MAINWEB%.TWikiAdminGroup)
 		* #Set ALLOWTOPICCHANGE = 
