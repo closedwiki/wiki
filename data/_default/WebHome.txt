@@ -1,14 +1,16 @@
 %META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="$Rev$"}%
-Welcome to the home of <b><nop>%WEB%</b>. This is a web-based collaboration area for ...
+---+!! Welcome to the <nop>%WEB% web
 
-	* MeetingMinutes
-	* 
-
----++ Site Tools of the <nop>%WEB% Web
-
-%INCLUDE{"%TWIKIWEB%.WebSiteTools"}%
-
-*Notes:*
-%INCLUDE{"%TWIKIWEB%.YouAreHere"}%
-
-%INCLUDE{"%TWIKIWEB%.SiteMap"}%
+---++ Available Information
+   * ...
+   * ...
+   * ...
+ 
+<blockquote>
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<input type="text" name="search" size="22" />
+<input type="submit" value="Search" />
+<br/>
+([[WebSearchAdvanced][advanced search]])
+</form>	
+</blockquote>
