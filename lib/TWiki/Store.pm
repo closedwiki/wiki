@@ -1260,7 +1260,7 @@ sub _extractMetaDataAutoAttachments {
 	if ($TWiki::cfg{AutoAttachPubFiles}) {
         #  	   print "AUTOATTACHING on $web.$topic\nFOUND BEFORE ".Dumper($attachmentsKnownInMeta)."\n";
        my @attachmentsFoundInPub =
-         -findAttachments($this, $web, $topic, $attachmentsKnownInMeta);
+         _findAttachments($this, $web, $topic, $attachmentsKnownInMeta);
        #       print "FOUND AFTER ".Dumper(\@attachmentsFoundInPub);
        return \@attachmentsFoundInPub;
     } else {
