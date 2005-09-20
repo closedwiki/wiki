@@ -355,6 +355,7 @@ sub registerAndNext {
 }
 
 =pod
+
 ---++ StaticMethod register($session)
 
 This is called through: TWikiRegistration -> RegisterCgiScript -> here
@@ -375,7 +376,6 @@ sub register {
 
     $data->{webName} = $web;
     $data->{debug} = 1;
-    $data->{WikiName} = TWiki::Sandbox::untaintUnchecked($data->{WikiName});
 
     _validateRegistration( $session, $data, $query, $topic );
 }
@@ -570,11 +570,20 @@ sub changePassword {
     my $topicName = $query->param( 'TopicName' );
 
     # check if required fields are filled in
-    if( ! $username || ! $passwordA ) {
+    unless( $username ) {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
-                                    def => 'missing_fields' );
+                                    def => 'missing_fields',
+                                    params => 'username' );
+    }
+
+    unless( $passwordA ) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $webName,
+                                    topic => $topic,
+                                    def => 'missing_fields',
+                                    params => 'password' );
     }
 
     my $user = $session->{users}->findUser( $username );
@@ -603,7 +612,8 @@ sub changePassword {
         throw TWiki::OopsException( 'attention',
                                     web => $webName,
                                     topic => $topic,
-                                    def => 'missing_fields' );
+                                    def => 'missing_fields',
+                                    params => 'oldpassword' );
     }
 
     unless( $user->checkPassword( $oldpassword )) {
@@ -650,7 +660,7 @@ sub verifyEmailAddress {
     }
     my $data = _reloadUserContext( $code, $tempUserDir );
 
-    if (! exists $data->{WikiName}) {
+    if (! exists $data->{Email}) {
         throw Error::Simple( 'verifyEmailAddress: no email address!');
     }
 
@@ -698,7 +708,7 @@ sub finish {
 	}
 
     if (! exists $data->{WikiName}) {
-        throw Error::Simple( 'No verifyEmailAddress - no WikiName after reload');
+        throw Error::Simple( 'no WikiName after reload');
     }
 
     my $log = _newUserFromTemplate($session, 'NewUserTemplate', $data);
@@ -722,7 +732,7 @@ sub finish {
     # eliminates the need for the registrationHandler call above,
     # but we'll leave them both in here for now.)
     $session->{client}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
-    
+
     # add user to TWikiUsers topic
     my $user = $session->{users}->findUser( $data->{LoginName},
                                             $data->{WikiName} );
@@ -739,7 +749,6 @@ sub finish {
         $session->writeLog( 'register', $data->{webName}.'.'.$data->{WikiName},
                             $data->{Email}, $data->{WikiName} );
     }
-    
 
     # and finally display thank you page
     throw TWiki::OopsException( 'attention',
@@ -953,7 +962,8 @@ sub _validateRegistration {
         throw TWiki::OopsException( 'attention',
                                     web => $data->{webName},
                                     topic => $topic,
-                                    def => 'missing_fields' );
+                                    def => 'missing_fields',
+                                    params => '' );
     }
 
     if($session->{store}->topicExists( $data->{webName}, $data->{WikiName} )) {
@@ -982,14 +992,19 @@ sub _validateRegistration {
     }
 
     # check if required fields are filled in
+    my @missing = ();
     foreach my $fd ( @{ $data->{form} } ) {
         if ( ( $fd->{required} ) && ( !$fd->{value} ) ) {
-            # TODO - add all fields that are missing their values
-            throw TWiki::OopsException( 'attention',
-                                        web => $data->{webName},
-                                        topic => $topic,
-                                        def => 'missing_fields' );
+            push( @missing, $fd->{name} );
         }
+    }
+
+    if( scalar( @missing )) {
+        throw TWiki::OopsException( 'attention',
+                                    web => $data->{webName},
+                                    topic => $topic,
+                                    def => 'missing_fields',
+                                    params => join(', ', @missing) );
     }
 
     # check if WikiName is a WikiName
@@ -1121,17 +1136,16 @@ sub _reloadUserContext {
     unless (-f $verificationFilename){
         throw TWiki::OopsException( 'attention',
                                     def => 'bad_ver_code',
-                                    params => [ $code, '' ] );
+                                    params => [ $code, '.' ] );
     }
 
     my $data = _getRegDetailsByCode($code, $tmpDir);
     my $error = _validateUserContext($code, $tmpDir);
 
-    if ($error) {
+    if( $error ) {
         throw TWiki::OopsException( 'attention',
                                     def => 'bad_ver_code',
-                                    params => [ $code,
-                                                $error ] );
+                                    params => [ $code, $error ] );
     }
 
     return $data;
@@ -1190,6 +1204,13 @@ sub _getDataFromQuery {
 
             $data->{$name} = $value;
         }
+    }
+    $data->{WikiName} = TWiki::Sandbox::untaintUnchecked($data->{WikiName});
+    $data->{LoginName} ||= $data->{WikiName}
+      unless $TWiki::cfg{AllowLoginName};
+    if( !$data->{Name} &&
+          defined $data->{FirstName} && defined $data->{LastName}) {
+        $data->{Name} = $data->{FirstName}.' '.$data->{LastName};
     }
     return $data;
 }
