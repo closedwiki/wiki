@@ -1,4 +1,12 @@
 %META:TOPICINFO{author="TWikiContributor" date="1120846368" format="1.1" version="1.2"}%
+---+!! Welcome to the <nop> %MAINWEB% web on %IF{"defined WIKITOOLNAME" then="<nop>%WIKITOOLNAME%" else="TWiki"}%
+Congratulations, you have finished TWiki installation. If you want to learn
+more about TWiki then visit the [[%TWIKIWEB%.WebHome][TWiki web]]. Please ensure that the read/write
+permissions for each web on your site match your access control policies (see
+[[%MAINWEB%.WebPreferences]], [[Sandbox.WebPreferences]], [[%TWIKIWEB%.WebPreferences]]
+and [[%TWIKIWEB%.TWikiPreferences]]). Replace this text with a description of your new
+<nop>%WIKITOOLNAME% site.
+
 ---++ Available Information
    * %TWIKIWEB%.WelcomeGuest: for first time visitors
    * [[%TWIKIWEB%.TWikiRegistration][Registration]]: become a <nop>%WIKITOOLNAME% user
