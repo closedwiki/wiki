@@ -2,8 +2,7 @@
 ---+!! Welcome to the <nop>%MAINWEB% web 
 Congratulations, you have finished the TWiki installation. If you want to learn
 more about TWiki then visit the [[%TWIKIWEB%.WebHome][TWiki web]]. Please ensure that the read/write
-permissions for each web on your site match your access control policies (see
-%WEBLIST{format="[[$name.WebPreferences]]" separator=", "}%
+permissions for each web on your site match your access control policies (see TWiki.SitePermissions
 and [[%TWIKIWEB%.TWikiPreferences]]). Replace this text with a description of your new
 %IF{"defined WIKITOOLNAME" then="<nop>%WIKITOOLNAME%" else="TWiki"}% site. 
 
