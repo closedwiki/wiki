@@ -605,6 +605,7 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.PreferencesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.PseudoXmlPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.PublishAddOn | Tested by TWiki:Main.CrawfordCurrie.Version 1.302 required |
+| TWiki:Plugins.RandomQuotePlugin | Tested by TWiki:Main.RafaelAlvarez |
 | TWiki:Plugins.RandomTopicPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.RedDotPlugin | Tested by TWiki:Main.MichaelDaum |
 | TWiki:Plugins.RenderListPlugin | Tested by TWiki:Main.CrawfordCurrie |
@@ -646,7 +647,6 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.PollPlugin | |
 | TWiki:Plugins.PowerEditPlugin | |
 | TWiki:Plugins.ProjectPlannerPlugin | |
-| TWiki:Plugins.RandomQuotePlugin | |
 | TWiki:Plugins.RedirectPlugin | |
 | TWiki:Plugins.RollupPlugin | |
 | TWiki:Plugins.SecurityPlugin | |
