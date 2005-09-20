@@ -2,6 +2,6 @@
 ---+ User List sorted by location
 
 %TABLE{initsort="1"}%
-%SEARCH{"%META:FORM.*[U]serForm" regex="on" header="|*Country* | *State* | *!FirstName* | *!LastName* | *Organization* |" format="| $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) |" excludetopic="Web*" nosearch="on" order="formfield(Country)"}%
+%SEARCH{"%META:FORM.*[U]serForm" regex="on" header="|*Country* | *State* | *FirstName* | *LastName* | *Organization* |" format="| $formfield(Country) | $formfield(State) | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) |" excludetopic="Web*" nosearch="on" order="formfield(Country)"}%
 
 __Related Topics:__ UserList, UserListByDateJoined

@@ -4,5 +4,5 @@
 
 __Related topics:__ TWikiGroups, %SEARCH{"UserListBy*" web="%MAINWEB%" scope="topic" separator=", " nonoise="on" format="$web.$topic"}%
 
-%SEARCH{"%META:FORM.*[U]serForm" nosearch="on" regex="on" header="| *!FirstName* | *!LastName* | *Organization* | *State* | *Country* |", format="| [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) | $formfield(State) | $formfield(Country) |" excludetopic="Web*"}%
+%SEARCH{"%META:FORM.*[U]serForm" nosearch="on" regex="on" header="| *FirstName* | *LastName* | *Organization* | *State* | *Country* |" format="| [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) | $formfield(State) | $formfield(Country) |" excludetopic="Web*"}%
 
