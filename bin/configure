@@ -155,7 +155,7 @@ my $action = $query->param('action') || '';
 my $nextid = 0;
 
 if( $action eq 'image' ) {
-    return _serveImage( $query->param('type'), $query->param('image' ));
+    _serveImage( $query->param('type'), $query->param('image' ));
 }
 
 #sub UNTAINTED($) {
