@@ -79,7 +79,11 @@ sub beforeSaveHandler {
             $inSave = 0;
         }
         $html2tml = new TWiki::Plugins::WysiwygPlugin::HTML2TML
-          ( { convertImage => sub { my $x = shift; return $imgMap->{$x}; },
+          ( { convertImage => sub {
+                  my $x = shift;
+                  return undef unless $x;
+                  return $imgMap->{$x};
+              },
               parseWikiUrl => \&parseWikiUrl } );
     }
 
