@@ -1,22 +1,22 @@
 ---+!! TWiki 'Dakar' Release
 'Dakar' is the first major release of the TWiki collaboration environment in nearly a year. The focus of this release has been on refactoring the code in the interests of efficiency and maintainance, though a range of sexy new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
 
-Most of the refactoring and documentation work in Dakar release was done by TWiki:Main.CrawfordCurrie (http://c-dot.co.uk). Other major code contributions were made by:
-   * TWiki:Main.AntonioTerceiro - internationalisation framework
-   * TWiki:Main.ArthurClemens - templates
-   * TWiki:Main.FlorianWeimer - sandbox
-   * TWiki:Main.GregAbbas - integration of !SessionPlugin
-   * TWiki:Main.MartinCleaver - registration process, and auto-attachments
-   * TWiki:Main.PeterNixon - hierarchical subwebs support
-   * TWiki:Main.RafaelAlvarez - sectional includes
-   * TWiki:Main.ThomasWeigert - preferences editing
+Most of the refactoring and documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
+   * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - internationalisation framework
+   * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - templates
+   * [[TWiki:Main.FlorianWeimer][Florian Weimer]] - sandbox
+   * [[TWiki:Main.GregAbbas][Greg Abbas]] - integration of !SessionPlugin
+   * [[TWiki:Main.MartinCleaver][Martin Cleaver]] - registration process, and auto-attachments
+   * [[TWiki:Main.PeterNixon][Peter Nixon]] - hierarchical subwebs support
+   * [[TWiki:Main.RafaelAlvarez][Rafael Alvarez]] - sectional includes
+   * [[TWiki:Main.ThomasWeigert][Thomas Weigert]] - preferences editing
 Other people who gave significant amounts of their time and patience to less sexy aspects of the work, or were pivotal in the design process, are:
-   * TWiki:Main.AntonAylward
-   * TWiki:Main.LynnwoodBrown
-   * TWiki:Main.MichaelDaum
-   * TWiki:Main.MichaelSparks
-   * TWiki:Main.SvenDowideit
-   * TWiki:Main.WillNorris
+   * [[TWiki:Main.AntonAylward][Anton Aylward]]
+   * [[TWiki:Main.LynnwoodBrown][Lynnwood Brown]]
+   * [[TWiki:Main.MichaelDaum][Michael Daum]]
+   * [[ http://kamaelia.org/Michael.html][Michael Sparks]]
+   * [[TWiki:Main.SvenDowideit][Sven Dowideit]]
+   * [[TWiki:Main.WillNorris][Will Norris]]
 There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor.
 
 Note: In what follows, {This} (words in curly braces) refers to settings in the new 'configure' interface.
@@ -361,7 +361,7 @@ The new user registration process has been extensively reworked to improve usabi
    1 Sends different emails to the WIKIWEBMASTER and the USER, with the user's containing the password unless {HidePasswdInRegistration} is set.
    1 The =templates/view.pattern.tmpl= template is rearranged to show the form on the top LHS, any pictures on the top RHS (uses TWiki:Plugins.ImageGalleryPlugin if installed), and any fields not in the form (e.g. comment) in the content in the topic. 
    1 There is now a mechanism for bulk registration, with callbacks for augmentation (e.g. from other sources).
-   %RED% This needs clearer explanation e.g. a pointer to the user doc %ENDCOLOR%
+
    1 Absorbed ResetPasswordByEmail.
    1 Obsoleted InstallPassword
 

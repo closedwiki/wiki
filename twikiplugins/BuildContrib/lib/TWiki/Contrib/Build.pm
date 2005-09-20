@@ -471,16 +471,14 @@ sub cp {
 
 ---++++ prot($perms, $file)
 Set permissions on a file. Permissions should be expressed using POSIX
-chmod notation. This is a bit useless, really, as the permissions do
-_not_ get carried into the installer. You have to add them to the
-MANIFEST if you want to do _that_.
+chmod notation.
 
 =cut
 
 sub prot {
     my ($this, $perms, $file) = @_;
 
-    $this->sys_action('chmod '.$perms.' '.$file);
+    $this->sys_action('chmod '.sprintf('0%03o', $perms).' '.$file);
 }
 
 =pod
@@ -621,6 +619,7 @@ in the MANIFEST are released. Automatically runs =filter= on all =.txt= files
 in the MANIFEST.
 
 =cut
+
 sub target_release {
     my $this = shift;
 
@@ -631,10 +630,12 @@ sub target_release {
 }
 
 =pod
+
 ---++++ target_stage
 stages all the files to be in the release in a tmpDir, ready for target_archive
 
 =cut
+
 sub target_stage {
     my $this = shift;
     my $project = $this->{project};
@@ -642,7 +643,7 @@ sub target_stage {
     $this->{tmpDir} = '/tmp/'.$$;
     $this->makepath($this->{tmpDir});
 
-    $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir});
+    $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir}, 1);
     foreach my $file (@{$this->{files}}) {
         if ($file->{name} =~ /\.txt$/) {
             my $txt = $file->{name};
@@ -669,6 +670,7 @@ sub target_stage {
 makes zip and tgz archives of the files in tmpDir
 
 =cut
+
 sub target_archive {
     my $this = shift;
     my $project = $this->{project};
@@ -681,7 +683,7 @@ sub target_archive {
     $this->sys_action('zip -r -q '.$project.'.zip *');
     $this->sys_action('mv '.$this->{tmpDir}.'/'.$project.'.zip '.$this->{basedir}.'/'.
                       $project.'.zip');
-    $this->sys_action('tar czf '.$project.'.tgz *');
+    $this->sys_action('tar czpf '.$project.'.tgz *');
     $this->sys_action('mv '.$this->{tmpDir}.'/'.$project.'.tgz '.$this->{basedir}.'/'.
                       $project.'.tgz');
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
@@ -695,8 +697,9 @@ sub target_archive {
 Copy all files in a file set from on directory root to another.
 
 =cut
+
 sub copy_fileset {
-    my ($this, $set, $from, $to) = @_;
+    my ($this, $set, $from, $to, $apply_perms) = @_;
     
     my $uncopied = scalar(@$set);
     if ($this->{-v} || $this->{-n}) {
@@ -708,7 +711,9 @@ sub copy_fileset {
             die $from.'/'.$name.' does not exist - cannot copy';
         }
         $this->cp($from.'/'.$name, $to.'/'.$name);
-        #$this->prot('a+rx,u+w', $to.'/'.$name);
+        if( $apply_perms && defined $file->{permissions} ) {
+            $this->prot($file->{permissions}, $to.'/'.$name);
+        }
         $uncopied--;
     }
     die 'Files left uncopied' if ($uncopied);
@@ -722,6 +727,7 @@ Install target, installs to local twiki pointed at by TWIKI_HOME.
 Does not run the installer script.
 
 =cut
+
 sub target_handsoff_install {
     my $this = shift;
     $this->build('release');
@@ -743,6 +749,7 @@ Install target, installs to local twiki pointed at by TWIKI_HOME.
 Uses the installer script written by target_installer
 
 =cut
+
 sub target_install {
     my $this = shift;
     $this->build('handsoff_install');
@@ -757,6 +764,7 @@ Uninstall target, uninstall from local twiki pointed at by TWIKI_HOME.
 Uses the installer script written by target_installer
 
 =cut
+
 sub target_uninstall {
     my $this = shift;
     my $twiki = $ENV{TWIKI_HOME};
@@ -905,7 +913,7 @@ sub target_pod {
     my $this = shift;
     my $tmpfile = '/tmp/buildpod';
     $this->{POD} = '';
-    
+
     foreach my $file (@{$this->{files}}) {
         my $pmfile = $file->{name};
         if ($pmfile =~ /\.pm$/o) {
@@ -999,7 +1007,7 @@ sub target_installer {
 
     $this->filter( $template, $installScript );
 
-    $this->prot('a+rx,u+w', $installScript);
+    $this->prot(0755, $installScript);
 }
 
 =pod
