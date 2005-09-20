@@ -7,6 +7,5 @@ lib/TWiki/Contrib/MailerContrib/build.pl
 lib/TWiki/Contrib/Mailer.pm
 data/TWiki/MailerContrib.txt
 bin/mailnotifier
-bin/remove_obsolete_locks
 MailerContrib_installer.pl
 
