@@ -69,8 +69,17 @@ sub maketext {
 
   # unescape escaped square brackets:
   $text =~ s/~(\[|\])/$1/g;
+
+  #plurals:
+  $text =~ s/\[\*,\_(\d+),(\S+)(,(\S+))?\]/_handlePlurals($args[$1-1],$2,$4)/ge;
   
   return $text;
+}
+
+sub _handlePlurals {
+  my ( $number, $singular, $plural ) = @_;
+  # bad hack, but Locale::Maketext does it the same way ;)
+  return $number . ' ' . (($number == 1) ? $singular : ( $plural ? ($plural) : ($singular . 's') ) );
 }
 
 sub language {

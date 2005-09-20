@@ -14,6 +14,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#. ($days)
+#: lib/TWiki/Time.pm:263
+msgid "%*(%1,day) "
+msgstr "%*(%1,dia) "
+
+#. ($hours)
+#: lib/TWiki/Time.pm:266
+msgid "%*(%1,hour) "
+msgstr "%*(%1,hora) "
+
+#. ($mins)
+#: lib/TWiki/Time.pm:269
+msgid "%*(%1,minute) "
+msgstr "%*(%1,minuto) "
+
+#. ($secs)
+#: lib/TWiki/Time.pm:272
+msgid "%*(%1,second) "
+msgstr "%*(%1,segundo) "
+
 #: templates/registernotify.tmpl:3
 msgid "%1 - Registration for %2"
 msgstr "%1 - Registro de %2"
@@ -287,7 +307,7 @@ msgstr ""
 "Certifique-se que o nome da web não esteja escrito incorretamente na página "
 "anterior; conserte-o se necessário."
 
-#: templates/oopsalerts.tmpl:37
+#: templates/oopsalerts.tmpl:12
 msgid ""
 "A new *system-generated* password for login name %1 (wikiname %2) has been "
 "sent to %3"
@@ -454,7 +474,7 @@ msgstr "Referências:"
 msgid "Base web %1 is missing or does not exist"
 msgstr "A web base %1 não foi encontrada ou não existe"
 
-#: templates/oopsalerts.tmpl:31 templates/oopsattention.tmpl:39
+#: templates/oopsalerts.tmpl:10 templates/oopsattention.tmpl:39
 msgid "Can't find user %1"
 msgstr "Usuário %1 não encontrado"
 
@@ -462,7 +482,7 @@ msgstr "Usuário %1 não encontrado"
 msgid "Can't get an email address for %1"
 msgstr "Não foi possível obter um endereço de e-mail para %1"
 
-#: templates/oopsalerts.tmpl:34
+#: templates/oopsalerts.tmpl:11
 msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 "Não foi possível obter um endereço de e-mail para %1 (necessário para "
@@ -778,11 +798,11 @@ msgstr "Erro ao registrar o usuário %1"
 msgid "Error saving topic"
 msgstr "Erro ao salvar tópico"
 
-#: templates/oopsalerts.tmpl:10
+#: templates/oopsalerts.tmpl:3
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr "Erro: Arquivo anexado em %1,%2 não existe"
 
-#: templates/oopsalerts.tmpl:16
+#: templates/oopsalerts.tmpl:5
 msgid ""
 "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
 "=text/css=)"
@@ -790,7 +810,7 @@ msgstr ""
 "Erro: Tipo de conteúdo não suportado: %1 (Deveria ser =text/html=, =text/"
 "plain= ou =text/css=)"
 
-#: templates/oopsalerts.tmpl:13
+#: templates/oopsalerts.tmpl:4
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "Erro: protocolo não suportado. (Deveria ser 'http://domínio/...')"
 
@@ -1108,7 +1128,7 @@ msgstr "Revisão mais recente:"
 msgid "No child topics"
 msgstr "Nenhum tópico filho"
 
-#: templates/oopsalerts.tmpl:7
+#: templates/oopsalerts.tmpl:2
 msgid "No permission to view %1"
 msgstr "Sem permissão para visualizar %1"
 
@@ -1379,8 +1399,8 @@ msgstr "Busca:"
 #: templates/oopsattention.tmpl:42
 msgid "See %1 for a list of existing users or register as new user in %2."
 msgstr ""
-"Veja %1 para uma lista de usuários existentes ou registre-se como "
-"um novo usuário em %2."
+"Veja %1 para uma lista de usuários existentes ou registre-se como um novo "
+"usuário em %2."
 
 #: templates/oopsattention.tmpl:238
 msgid "See %1 for information about Form Definitions."
@@ -1525,8 +1545,8 @@ msgid ""
 "The chances are good that they simply navigated away from the edit page "
 "without saving."
 msgstr ""
-"São grandes a chances de que ele(a) simplesmente navegaram pra outro "
-"lugar a partir da página de edição sem salvar."
+"São grandes a chances de que ele(a) simplesmente navegaram pra outro lugar a "
+"partir da página de edição sem salvar."
 
 #: templates/renamewebbase.pattern.tmpl:84
 msgid "The checkmarked topics will be updated"
@@ -1544,28 +1564,28 @@ msgstr ""
 msgid "The email address for this account is not valid."
 msgstr "O endereço de e-mail para essa conta não é válido."
 
-#: templates/oopsalerts.tmpl:28
+#: templates/oopsalerts.tmpl:9
 msgid "The entry for user %1 was missing in the password system."
 msgstr "A entrada para o usuário %1 estava faltando no sistema de senhas."
 
 #: templates/oopsattention.tmpl:292
 msgid "The following topics are locked for edit, and cannot be moved:"
 msgstr ""
-"Os seguintes tópicos estão travados para edição, e não podem "
-"ser movidos:"
+"Os seguintes tópicos estão travados para edição, e não podem ser movidos:"
 
 #: templates/oopsattention.tmpl:298
 msgid "The following topics refer to topics in this web, but are being edited:"
-msgstr "Os seguintes tópicos fazem referência a tópicos nessa web, mas estão "
-"sendo editados."
+msgstr ""
+"Os seguintes tópicos fazem referência a tópicos nessa web, mas estão sendo "
+"editados."
 
 #: templates/oopsattention.tmpl:295
 msgid ""
 "The following topics refer to topics in this web, but you are denied access "
 "to them:"
 msgstr ""
-"Os seguintes tópicos fazem referência a tópicos nessa web, mas você tem acesso "
-"negado a eles:"
+"Os seguintes tópicos fazem referência a tópicos nessa web, mas você tem "
+"acesso negado a eles:"
 
 #: templates/oopsattention.tmpl:244
 msgid "The form should be defined in the topic %1"
@@ -1831,12 +1851,13 @@ msgstr "Visualizar tópico"
 msgid "View total topic history"
 msgstr "Ver histórico completo do tópico"
 
-#: templates/oopsalerts.tmpl:22
+#: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 twice, topic is already included. %2"
 msgstr "Aviso: Não é possível incluir %1 duas vezes, o tópico já foi incluído."
 
-#: templates/oopsalerts.tmpl:19
-msgid "Warning: Can't find topic %1"
+#: templates/oopsalerts.tmpl:6
+#, fuzzy
+msgid "Warning: Can't find topic"
 msgstr "Aviso: tópico %1 não encontrado"
 
 #: templates/attachtables.pattern.tmpl:45
@@ -1929,7 +1950,7 @@ msgstr ""
 #: templates/registerconfirm.tmpl:11
 msgid ""
 "You now need to verify your email address. You can do so by entering %1 in "
-"the form presented to you when this email was sent or by going to: %2"
+"the form presented to you when this email was sent, or by visiting "
 msgstr ""
 
 #: templates/oopsattention.tmpl:262
@@ -2000,6 +2021,10 @@ msgstr "alterar, atualizar, revisões anteriores, mover, remover..."
 #: templates/renamewebbase.pattern.tmpl:79
 msgid "checkboxes of referenced topics"
 msgstr "checkboxes de tópicos referenciados"
+
+#: templates/oopsattention.tmpl:159
+msgid "fields are required."
+msgstr ""
 
 #: templates/edit.pattern.tmpl:214 templates/preview.pattern.tmpl:52
 #: templates/preview.pattern.tmpl:53

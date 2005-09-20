@@ -241,6 +241,7 @@ Format a time in seconds as a string. For example,
 
 sub formatDelta {
     my $secs = shift;
+    my $language = shift;
 
     my $rem = $secs % (60 * 60 * 24);
     my $days = ($secs - $rem) / (60 * 60 * 24);
@@ -255,17 +256,35 @@ sub formatDelta {
     $secs = $rem;
 
     my $str = '';
-    if( $days ) {
-        $str .= $days . ' day' .( $days > 1 ? 's ' : ' ' );
-    }
-    if( $hours ) {
-        $str .= $hours . ' hour' .( $hours > 1 ? 's ' : ' ' );
-    }
-    if( $mins ) {
-        $str .= $mins . ' minute' .( $mins > 1 ? 's ' : ' ' );
-    }
-    if( $secs ) {
-        $str .= $secs . ' second' .( $secs > 1 ? 's ' : ' ' );
+
+    if ($language) {
+        #format as in user's language
+        if( $days ) {
+            $str .= $language->maketext('[*,_1,day] ', $days);
+        }
+        if( $hours ) {
+            $str .= $language->maketext('[*,_1,hour] ', $hours);
+        }
+        if( $mins ) {
+            $str .= $language->maketext('[*,_1,minute] ', $mins);
+        }
+        if( $secs ) {
+            $str .= $language->maketext('[*,_1,second] ', $secs);
+        }
+    } else {
+        #original code, harcoded English (BAD)
+        if( $days ) {
+            $str .= $days . ' day' .( $days > 1 ? 's ' : ' ' );
+        }
+        if( $hours ) {
+            $str .= $hours . ' hour' .( $hours > 1 ? 's ' : ' ' );
+        }
+        if( $mins ) {
+            $str .= $mins . ' minute' .( $mins > 1 ? 's ' : ' ' );
+        }
+        if( $secs ) {
+            $str .= $secs . ' second' .( $secs > 1 ? 's ' : ' ' );
+        }
     }
     $str =~ s/\s+$//;
     return $str;

@@ -16,6 +16,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#. ($days)
+#: lib/TWiki/Time.pm:263
+msgid "%*(%1,day) "
+msgstr ""
+
+#. ($hours)
+#: lib/TWiki/Time.pm:266
+msgid "%*(%1,hour) "
+msgstr ""
+
+#. ($mins)
+#: lib/TWiki/Time.pm:269
+msgid "%*(%1,minute) "
+msgstr ""
+
+#. ($secs)
+#: lib/TWiki/Time.pm:272
+msgid "%*(%1,second) "
+msgstr ""
+
 #: templates/registernotify.tmpl:3
 msgid "%1 - Registration for %2"
 msgstr ""
@@ -266,7 +286,7 @@ msgid ""
 "if necessary."
 msgstr ""
 
-#: templates/oopsalerts.tmpl:37
+#: templates/oopsalerts.tmpl:12
 msgid ""
 "A new *system-generated* password for login name %1 (wikiname %2) has been "
 "sent to %3"
@@ -421,7 +441,7 @@ msgstr "Referencias:"
 msgid "Base web %1 is missing or does not exist"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:31 templates/oopsattention.tmpl:39
+#: templates/oopsalerts.tmpl:10 templates/oopsattention.tmpl:39
 msgid "Can't find user %1"
 msgstr ""
 
@@ -429,7 +449,7 @@ msgstr ""
 msgid "Can't get an email address for %1"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:34
+#: templates/oopsalerts.tmpl:11
 msgid "Can't get an email address for %1 (required for password reset)"
 msgstr ""
 
@@ -725,17 +745,17 @@ msgstr ""
 msgid "Error saving topic"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:10
+#: templates/oopsalerts.tmpl:3
 msgid "Error: File attachment at %1,%2 does not exist"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:16
+#: templates/oopsalerts.tmpl:5
 msgid ""
 "Error: Unsupported content type: %1 (Must be =text/html=, =text/plain= or "
 "=text/css=)"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:13
+#: templates/oopsalerts.tmpl:4
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr ""
 
@@ -1019,7 +1039,7 @@ msgstr "Revicion mas nueva:"
 msgid "No child topics"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:7
+#: templates/oopsalerts.tmpl:2
 msgid "No permission to view %1"
 msgstr ""
 
@@ -1430,7 +1450,7 @@ msgstr ""
 msgid "The email address for this account is not valid."
 msgstr ""
 
-#: templates/oopsalerts.tmpl:28
+#: templates/oopsalerts.tmpl:9
 msgid "The entry for user %1 was missing in the password system."
 msgstr ""
 
@@ -1699,12 +1719,12 @@ msgstr ""
 msgid "View total topic history"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:22
+#: templates/oopsalerts.tmpl:7
 msgid "Warning: Can't INCLUDE %1 twice, topic is already included. %2"
 msgstr ""
 
-#: templates/oopsalerts.tmpl:19
-msgid "Warning: Can't find topic %1"
+#: templates/oopsalerts.tmpl:6
+msgid "Warning: Can't find topic"
 msgstr ""
 
 #: templates/attachtables.pattern.tmpl:45
@@ -1794,7 +1814,7 @@ msgstr ""
 #: templates/registerconfirm.tmpl:11
 msgid ""
 "You now need to verify your email address. You can do so by entering %1 in "
-"the form presented to you when this email was sent or by going to: %2"
+"the form presented to you when this email was sent, or by visiting "
 msgstr ""
 
 #: templates/oopsattention.tmpl:262
@@ -1862,6 +1882,10 @@ msgstr "cambie, actualize, reviciones anteriores, mueva, borre..."
 #: templates/renamebase.pattern.tmpl:75
 #: templates/renamewebbase.pattern.tmpl:79
 msgid "checkboxes of referenced topics"
+msgstr ""
+
+#: templates/oopsattention.tmpl:159
+msgid "fields are required."
 msgstr ""
 
 #: templates/edit.pattern.tmpl:214 templates/preview.pattern.tmpl:52

@@ -22,10 +22,13 @@ my @sources;
 open(R, "<tools/MANIFEST") || die "Could not open tools/MANIFEST: $!";
 foreach my $source (<R>) {
     chomp($source);
+    my @fields = split(/\s/, $source);
+    $source = $fields[0];
+    print $source, "\n";
     if( $source =~ /^bin\/[a-z]/ || $source =~ /^lib\/.*\.pm$/ ||
         $source =~ /^templates\/.*\.tmpl$/ ) {
         push(@sources, $source);
-    }
+   }
 }
 close(R);
 

@@ -118,12 +118,18 @@ sub edit {
                 my $def = 'active';
                 if( time() > $lease->{expires} ) {
                     $def = 'old';
-                    $past = TWiki::Time::formatDelta(time()-$lease->{expires});
+                    $past = TWiki::Time::formatDelta(time()-$lease->{expires},
+                                                     $session->{i18n}
+                                                    );
                     $future = '';
                 }
                 else {
-                    $past = TWiki::Time::formatDelta(time()-$lease->{taken});
-                    $future = TWiki::Time::formatDelta($lease->{expires}-time());
+                    $past = TWiki::Time::formatDelta(time()-$lease->{taken},
+                                                     $session->{i18n}
+                                                    );
+                    $future = TWiki::Time::formatDelta($lease->{expires}-time(),
+                                                       $session->{i18n}
+                                                      );
                 }
                 # use a 'keep' redirect to ensure we pass parameter
                 # values in the query on to the oops script

@@ -924,8 +924,12 @@ sub checkTopicEditLock {
         if( $remain > 0 ) {
             my $who = $lease->{user}->login();
             my $wn = $lease->{user}->webDotWikiName();
-            my $past = TWiki::Time::formatDelta(time()-$lease->{taken});
-            my $future = TWiki::Time::formatDelta($lease->{expires}-time());
+            my $past = TWiki::Time::formatDelta(time()-$lease->{taken},
+                                                $TWiki::Plugins::SESSION->{i18n}
+                                               );
+            my $future = TWiki::Time::formatDelta($lease->{expires}-time(),
+                                                  $TWiki::Plugins::SESSION->{i18n}
+                                                 );
             return( $session->getOopsUrl( 'leaseconflict',
                                           def => 'active',
                                           web => $web,
