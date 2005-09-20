@@ -847,7 +847,7 @@ msgid "If you want to create the topic"
 msgstr ""
 
 #: templates/oopsauth.tmpl:11
-msgid "If you want to try again, back arrow and hit edit again."
+msgid "If you want to try again, go back in your browser and hit edit again."
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:32
@@ -1178,7 +1178,8 @@ msgid "Register"
 msgstr ""
 
 #: templates/oopsauth.tmpl:12
-msgid "Registered users can %1 and %2."
+msgid ""
+"Registered users can [[%1][change passwords]] and [[%2][reset passwords]]."
 msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:14 templates/oopsaccessdenied.tmpl:21
