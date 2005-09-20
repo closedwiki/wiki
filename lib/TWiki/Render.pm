@@ -772,7 +772,6 @@ sub filenameToIcon {
     # SMELL: use of direct access to PubDir violates store encapsulation
     my $iconDir = $TWiki::cfg{PubDir}.'/'. $this->_getIconTopicPath();
 
-    my $store = $this->{session}->{store};
     # The file _filetypes.txt should be in the same directory as the
     # image attachments
     my $icons = $iconDir.'/_filetypes.txt';
@@ -797,6 +796,8 @@ Creates an HTML image tag from an icon name.
 
 sub getIconHTML {
     my( $this, $iconName, $alt ) = @_;
+    $iconName ||= 'else';
+    $alt ||= $iconName;
     my $url = $this->getIconURL( $iconName );
     return CGI::img( { src => $url,
                        width => 16, height=>16,

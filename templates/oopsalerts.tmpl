@@ -1,39 +1,13 @@
-%{
-Inline alerts, embedded in rendered text. One DEF is selected and
-inserted at %INSTANTIATE%
-}%
-
-%TMPL:DEF{"access_denied"}%
-%_{"No permission to view [_1]", "%PARAM1%"}%
-%TMPL:END%
-%TMPL:DEF{"no_such_attachment"}%
-%_{"Error: File attachment at [_1],[_2] does not exist", "%PARAM1%", "%PARAM2%"}%
-%TMPL:END%
-%TMPL:DEF{"bad_protocol"}%
-%_{"Error: Unsupported protocol. (Must be 'http://domain/...')"}%
-%TMPL:END%
-%TMPL:DEF{"bad_content_type"}%
-%_{"Error: Unsupported content type: [_1] (Must be =text/html=, =text/plain= or =text/css=)", "%PARAM1%"}%
-%TMPL:END%
-%TMPL:DEF{"no_such_topic"}%
-%_{"Warning: Can't find topic [_1]", "<nop>%PARAM1%"}%
-%TMPL:END%
-%TMPL:DEF{"already_included"}%
-%_{"Warning: Can't INCLUDE [_1] twice, topic is already included. [_2]", "<nop>%PARAM1%.<nop>%PARAM2%", "%PARAM3%"}%
-%TMPL:END%
-%TMPL:DEF{"generic"}%
-%PARAM1% %PARAM2% %PARAM3% %PARAM4%<br />
-%TMPL:END%
-%TMPL:DEF{"missing_user"}%
-%_{"The entry for user [_1] was missing in the password system.", "%PARAM1%"}%<br />
-%TMPL:END%
-%TMPL:DEF{"notwikiuser"}%
-%_{"Can't find user [_1]", "%PARAM1%"}%<br />
-%TMPL:END%
-%TMPL:DEF{"no_email_for"}%
-%_{"Can't get an email address for [_1] (required for password reset)", "%PARAM1%"}%<br />
-%TMPL:END%
-%TMPL:DEF{"new_sys_pass"}%
-%_{"A new *system-generated* password for login name [_1] (wikiname [_2]) has been sent to [_3]", "%PARAM1%", "%MAINWEB%.%PARAM2%", "%PARAM3%"}%<br />
-%TMPL:END%
+%{ Inline alerts, embedded in rendered text. One DEF is selected and inserted at %INSTANTIATE% }%
+%TMPL:DEF{"access_denied"}%      %_{"No permission to view [_1]", "%PARAM1%"}% %TMPL:END%
+%TMPL:DEF{"no_such_attachment"}% %_{"Error: File attachment at [_1],[_2] does not exist", "%PARAM1%", "%PARAM2%"}% %TMPL:END%
+%TMPL:DEF{"bad_protocol"}%       %_{"Error: Unsupported protocol. (Must be 'http://domain/...')"}% %TMPL:END%
+%TMPL:DEF{"bad_content_type"}%   %_{"Error: Unsupported content type: [_1] (Must be =text/html=, =text/plain= or =text/css=)", "%PARAM1%"}% %TMPL:END%
+%TMPL:DEF{"no_such_topic"}%      %_{"Warning: Can't find topic"}% <nop>%PARAM1% %TMPL:END%
+%TMPL:DEF{"already_included"}%   %_{"Warning: Can't INCLUDE [_1] twice, topic is already included. [_2]", "<nop>%PARAM1%.<nop>%PARAM2%", "%PARAM3%"}% %TMPL:END%
+%TMPL:DEF{"generic"}%            %PARAM1% %PARAM2% %PARAM3% %PARAM4%<br /> %TMPL:END%
+%TMPL:DEF{"missing_user"}%       %_{"The entry for user [_1] was missing in the password system.", "%PARAM1%"}%<br /> %TMPL:END%
+%TMPL:DEF{"notwikiuser"}%        %_{"Can't find user [_1]", "%PARAM1%"}%<br /> %TMPL:END%
+%TMPL:DEF{"no_email_for"}%       %_{"Can't get an email address for [_1] (required for password reset)", "%PARAM1%"}%<br /> %TMPL:END%
+%TMPL:DEF{"new_sys_pass"}%       %_{"A new *system-generated* password for login name [_1] (wikiname [_2]) has been sent to [_3]", "%PARAM1%", "%MAINWEB%.%PARAM2%", "%PARAM3%"}%<br /> %TMPL:END%
 <span class='twikiAlert'> %INSTANTIATE% </span>

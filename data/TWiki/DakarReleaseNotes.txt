@@ -14,7 +14,7 @@ Other people who gave significant amounts of their time and patience to less sex
    * [[TWiki:Main.AntonAylward][Anton Aylward]]
    * [[TWiki:Main.LynnwoodBrown][Lynnwood Brown]]
    * [[TWiki:Main.MichaelDaum][Michael Daum]]
-   * [[ http://kamaelia.org/Michael.html][Michael Sparks]]
+   * [[http://kamaelia.org/Michael.html][Michael Sparks]]
    * [[TWiki:Main.SvenDowideit][Sven Dowideit]]
    * [[TWiki:Main.WillNorris][Will Norris]]
 There were many other contributors; for a full list, visit %MAINWEB%.TWikiContributor.
