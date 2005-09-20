@@ -66,76 +66,21 @@ If you use it, and would be kind enough to add your experiences to TWiki:Codev.U
 #ManualUpgradeProcedure
 ---++ Manual Upgrade Procedure
 
-The following steps describe the upgrade assuming that =$TWIKIROOT= is the root of your current install. As written this will require some downtime.  A process for switching over without downtime is described at the end of this section.
+The following steps are a rough guide to upgrading only. It is impossible to give detailed instructions, as what you have to do may depend on whether you can configure the webserver or not, and how much you have changed distributed files in your current TWiki release.
 
-	1. *Back up and prepare*:
-		* Back up all existing TWiki directories =$TWIKIROOT/bin=, =$TWIKIROOT/pub=, =$TWIKIROOT/data=, =$TWIKIROOT/templates=, =$TWIKIROOT/lib=
-		* Create a temporary directory and unpack the new release there
-	1. *Update files in TWiki root*:
-		* Overwrite all =*.html= and =*.txt= files in =$TWIKIROOT= with the new ones
-	1. *Update template files*:
-		* Overwrite all template files in =$TWIKIROOT/templates= with the new ones
-			* If you have customized your templates, make sure to merge those changes back to the new files
-		* If you have customized skins or loaded new skins, make sure to merge or apply those changes to the new files
-		* Change to *view* templates and skins:
-			* Add =%<nop>BROADCASTMESSAGE%= somewhere on the top of the rendered HTML page (see the new =view.tmpl= for reference)
-		* Changes to *edit* templates and skins:
-			* Change the form action from =preview= to =save=: %BR%
-			  =&lt;form name="main" action="%<nop>SCRIPTURLPATH%/<b>save</b>%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%" method="post"&gt;=
-			* Change the topic action to the following: %BR%
-			  =%<nop>TMPL:DEF{"topicaction"}%= %BR%
-		=&lt;input type="submit" class="twikiSubmit" name="action" value="Cancel" id="cancel" /&gt;= %BR%
-		=&lt;input type="submit" class="twikiSubmit" name="action" value="Preview" id="preview" /&gt;= %BR%
-		=&lt;input type="submit" class="twikiSubmit" name="action" value="Checkpoint" id="checkpoint" /&gt;= %BR%
-		=&lt;input type="submit" class="twikiSubmit" name="action" value="QuietSave" id="quietsave" /&gt;= %BR%
-			  =&lt;input type="submit" class="twikiSubmit" name="action" value="Save" id="save" /&gt;%<nop>TMPL:END%=
-	1. *Update script files*:
-		* Overwrite all script files in =$TWIKIROOT/bin= with the new ones.
-			* If necessary, rename the scrips to include the required extension, e.g. =.cgi=
-		* Edit =$TWIKIROOT/bin/setlib.cfg= and point =$twikiLibPath= to the __absolute__ file path of =$TWIKIROOT/lib= 
-		* Edit your existing =$TWIKIROOT/bin/.htaccess= file to include a directive for the new =rdiffauth= script:%BR%
-		  =&lt;Files "rdiffauth"&gt;= %BR%
-		  =&nbsp; &nbsp; require valid-user= %BR%
-		  =&lt;/Files&gt;=
-		* Pay attention to the file and directory permissions, the scripts need to be executable, e.g. =chmod 775 $TWIKIROOT/bin/*=
-			* Certain hosted environments require a =755= (do so if you get a "Premature end of script headers" messages in the Apache error log)
-		* For Windows hosts, make sure the correct path to the perl interpreter is changed in the first line of every script file. See also [[WindowsInstallCookbook#Editing_the_CGI_scripts][WindowsInstallCookbook]]
-	1. *Update library files*:
-		* Overwrite the =TWiki.cfg= configuration file in =$TWIKIROOT/lib= with the new one
-		* Add the unique local configuration values from the backup. You can do this manually if you have to, but you are highly recommended to use the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]] interface. If you choose to do it manually, add the local settings to =LocalSite.cfg= and _not_ to TWiki.cfg. *Do not edit the new TWiki.cfg*.
-		* Overwrite the =TWiki.pm= library in =$TWIKIROOT/lib= with the new one
-		* Copy and overwrite all subdirectories below =$TWIKIROOT/lib= with the new ones. Make sure to preserve any extra Plugins you might have in =$TWIKIROOT/lib/TWiki/Plugins= 
-	1. *Update data files*:
-		* In the temporary =twiki/data/TWiki= directory where you unzipped the installation package:
-			* Remove the files you do *not* want to upgrade: for example, =InterWikis.*=, =TWikiRegistration.*=, =WebPreferences.*=, =WebStatistics.*= all =WebTopic*= files
-		* Rename in the temporary directory the file =$TWIKIROOT/data/TWiki/TWikiPreferences.*= to =TWikiPreferencesSave.*=.
-		* Move all remaining =*.txt= and =*.txt,v= files from the temporary =data/TWiki= directory to your =$TWIKIROOT/data/TWiki= directory, overwriting the existing ones
-		* Merge your original =TWikiPreferencesSave.txt= settings into =$TWIKIROOT/data/TWiki/TWikiPreferences.txt=. Notable changes are:
-			* New WIKIWEBMASTERNAME setting to avoid notifications being trapped by spam filters
-			* New ATTACHFILESIZELIMIT setting for maximum size of FileAttachments in KB, 0 for no limit
-			* New READTOPICPREFS and TOPICOVERRIDESUSER settings to allow override Preference settings in topics
-			* Changed FINALPREFERENCES:
-				* <nop>Set FINALPREFERENCES = PREVIEWBGIMAGE, WIKITOOLNAME, WIKIWEBMASTER, SMTPMAILHOST, SMTPSENDERHOST, ALLOWWEBMANAGE, READTOPICPREFS, TOPICOVERRIDESUSER
-		* Move the =data/_default= directory from the temporary location to your =$TWIKIROOT/data= directory
-		* Make sure that the directories and files below =$TWIKIROOT/data= are writable by your cgi-script user
-	1. *Adapt the other webs (all other than =TWiki= and =_default=)*:
-		* Add WebLeftBar topic. See WebLeftBarExample for a clean example, and %TWIKIWEB%.WebLeftBarCookbook for more information. (WebLeftBar is used by the %TWIKIWEB%.PatternSkin skin)
-		* Add WebSearchAdvanced topic, which has this one line: %BR%
-		  =%<nop>INCLUDE{"%<nop>TWIKIWEB%.WebSearchAdvanced"}%=
-		* Consider changing WebPreferences settings:
-			* New NOAUTOLINK setting to prevent automatic linking of WikiWords and acronyms
-			* Changed FINALPREFERENCES:
-				* <nop>Set FINALPREFERENCES = NOSEARCHALL, ATTACHFILESIZELIMIT, WIKIWEBMASTER, WEBCOPYRIGHT, WEBTOPICLIST, DENYWEBVIEW, ALLOWWEBVIEW, DENYWEBCHANGE, ALLOWWEBCHANGE, DENYWEBRENAME, ALLOWWEBRENAME
-	1. *Update pub files*:
-		* Move all subdirectories below =pub/TWiki= from your temporary directory into your =$TWIKIROOT/pub/TWiki= directory
-		* Make sure that the directories and files below =$TWIKIROOT/pub/TWiki= are writable by your cgi-script user
-		* Move all files in =pub/icn= directory from the temporary location to your =$TWIKIROOT/pub/icn= directory
-	1. *Verify installation*:
-		* Execute the =$TWIKIROOT/bin/configure= script from your browser (e.g. =http://localhost/bin/configure=) to see if it reports any issues; address any potential problems
-		* Test your updated TWiki installation to see if you can view, create, edit and rename topics; upload and move attachments; register users
-		* Test if the installed Plugins work as expected. You should see the list of installed Plugins in [[%TWIKIWEB%.WebHome]]
+   1 Follow the installation instructions, and install the new release in a new directory.
+   1 Copy your local webs over to the data and pub directories of the new install
+      * You could also use softlinks to link the web directories in data and pub to the old installation area
+   1 Examine your old TWiki.cfg, and for each local setting, set the corresponding value in the =configure= interface for the new install.
+   *  If you can't use =configure=, then copy the *new* =TWiki.cfg= to =LocalSite.cfg=, and edit LocalSite.cfg. Remove all the settings that you didn't change in your previous install, and change the remaining settings to the values from your *old* TWiki.cfg.
+   1 Transfer any local settings from TWiki.TWikiPreferences to the topic pointed at by {LocalSitePreferences} (usually Main.TWikiPreferences). This avoids having to write over files in the distribution.
+   1 If you changed any of the topics in the original TWiki distribution, you will have to transfer your changes to the new install manually. There is no simple way to do this, though the following procedure may help:
+      1 Install a copy of the original TWiki release you were using in a temporary directory
+      1 Use 'diff' to find changed files, and transfer the changes into the new Dakar install.
+      1 Install updated plugins into your new area.
+   1 Point your webserver at the new install.
 
-*Note:* These steps assume a downtime during the upgrade. You could install the new version in parallel to the existing one and switch over in an instant without affecting the users. As a guideline, install the new version into =$TWIKIROOT/bin1=, =$TWIKIROOT/lib1=, =$TWIKIROOT/templates1=, =$TWIKIROOT/data/TWiki1= (from =data/TWiki=), =$TWIKIROOT/pub/TWiki1= (from =pub/TWiki=), and configure =LocalSite.cfg= to point to the same data and pub directory like the existing installation. Once tested and ready to go, reconfigure =$TWIKIROOT/bin1/setlib.cfg= and =$TWIKIROOT/lib1/LocalSite.cfg=, then rename =$TWIKIROOT/bin= to =$TWIKIROOT/bin2=, =$TWIKIROOT/bin1= to =$TWIKIROOT/bin=. Do the same with the =lib=, =templates= and =data/TWiki= directories.
+You are *highly* recommended *not* to change any distributed files if you can avoid it, to simplify future upgrades!
 
 %STOPINCLUDE%
 
