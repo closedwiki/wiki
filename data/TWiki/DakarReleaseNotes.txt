@@ -514,7 +514,6 @@ Many contributions have had to be modified to work with Dakar. These modificatio
 | TWiki:Plugins.ToolTipPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.TouchGraphPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.TWikiDrawSvgPlugin | Tested by TWiki:Main.CrawfordCurrie. |
-| TWiki:Plugins.VotePlugin | Tested by TWiki:Main.CrawfordCurrie. |
 
 ---+++ Contributions that can't be loaded for testing because of missing perl components
 | TWiki:Plugins.AddDBMGroupPlugin | Tested by TWiki:Main.CrawfordCurrie. |
@@ -584,13 +583,15 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.EmbedPDFPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.EmptyPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.ExplicitNumberingPlugin | Tested by TWiki:Main.CrawfordCurrie. |
-| TWiki:Plugins.FilterPlugin | |
+| TWiki:Plugins.FilterPlugin | Tested by TWiki:Main.MichaelDaum |
 | TWiki:Plugins.FindElsewherePlugin | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.GaugePlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.GetAWebAddOn | Cairo version works |
+| TWiki:Plugins.GluePlugin | Tested by TWiki:Main.MichaelDaum. |
 | TWiki:Plugins.GuidPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.HeadlinesPlugin | Updated to support Cairo + Dakar |
 | TWiki:Plugins.HolidaylistPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.ImageGalleryPlugin | Tested by TWiki:Main.MichaelDaum. |
 | TWiki:Plugins.InterwikiPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.JSCalendarContrib | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.LinkOptionsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
@@ -599,11 +600,13 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.MacrosPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.MailerContrib | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.MailInContrib | Tested by TWiki:Main.CrawfordCurrie |
+| TWiki:Plugins.NatSkinPlugin | Tested by TWiki:Main.MichaelDaum |
 | TWiki:Plugins.PerlDocPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.PreferencesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.PseudoXmlPlugin | Tested by TWiki:Main.CrawfordCurrie. |
-| TWiki:Plugins.PublishAddOn |  Tested by TWiki:Main.CrawfordCurrie.Version 1.302 required |
+| TWiki:Plugins.PublishAddOn | Tested by TWiki:Main.CrawfordCurrie.Version 1.302 required |
 | TWiki:Plugins.RandomTopicPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.RedDotPlugin | Tested by TWiki:Main.MichaelDaum |
 | TWiki:Plugins.RenderListPlugin | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.RevRecoverPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.SingletonWikiWordPlugin | Tested by TWiki:Main.CrawfordCurrie. |
@@ -618,6 +621,7 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.TypographyPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.UserInfoPlugin | Tested by TWiki:Main.AntonAylward |
 | TWiki:Plugins.VersionLinkPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.VotePlugin | Tested by TWiki:Main.MichaelDaum. |
 | TWiki:Plugins.WysiwygPlugin | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.XpTrackerPlugin | Tested by TWiki:Main.RafaelAlvarez |
 
@@ -634,7 +638,6 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.GenPDFAddOn | |
 | TWiki:Plugins.GlobalReplacePlugin | |
 | TWiki:Plugins.HiddenTextPlugin | |
-| TWiki:Plugins.ImageGalleryPlugin | |
 | TWiki:Plugins.MessageBoardPlugin | |
 | TWiki:Plugins.MrdIdPlugin | |
 | TWiki:Plugins.MultiLangPlugin | |
