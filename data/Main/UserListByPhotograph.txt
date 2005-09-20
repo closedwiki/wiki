@@ -9,6 +9,3 @@ Also available:
 If TWiki:Plugins.ImageGalleryPlugin is installed this page will show photos and names of all registered users. 
 
 
-
-%META:TOPICMOVED{by="martincleaver" date="1117021135" from="People.UserListByPicture" to="People.UserListByPhotograph"}%
-
