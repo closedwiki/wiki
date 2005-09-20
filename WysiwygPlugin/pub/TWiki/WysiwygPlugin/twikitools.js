@@ -426,11 +426,14 @@ function TWikiIconsTool(buttonid, popupid){
     var target = _SARISSA_IS_MOZ ? evt.target : evt.srcElement;
     this.createImage(target);
     this.hide();
-    this.editor.logMessage('TWiki Image chosen');
   };
 
   this.createImage = function(template) {
     var doc = this.editor.getInnerDocument();
+    var src = template.getAttribute('src');
+    if( !src || src.length == 0) {
+      return;
+    }
     var img = doc.createElement('img');
     img.setAttribute('src', template.getAttribute('src'));
     img.setAttribute('alt', template.getAttribute('alt'));
