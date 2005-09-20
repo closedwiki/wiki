@@ -71,7 +71,7 @@ sub maketext {
   $text =~ s/~(\[|\])/$1/g;
 
   #plurals:
-  $text =~ s/\[\*,\_(\d+),(\S+)(,(\S+))?\]/_handlePlurals($args[$1-1],$2,$4)/ge;
+  $text =~ s/\[\*,\_(\d+),([^,]+)(,([^,]+))?\]/_handlePlurals($args[$1-1],$2,$4)/ge;
   
   return $text;
 }
