@@ -14,6 +14,7 @@ http://twiki.org/
 
 ---++ Available Information
    * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
+      * DakarReleaseNotes: Describes what's new in this release of TWiki.
    * [[TWikiTutorial][Tutorial]]: 20 minutes TWiki tutorial
    * [[TWikiFAQ][Frequently Asked Questions]]: about TWiki
    * [[TWikiReferenceManual][Reference Manual]]: Documentation for webmasters, system administrators
