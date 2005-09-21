@@ -253,14 +253,12 @@ sub view {
     $session->{SESSION_TAGS}{MAXREV} = $showRev;
     $session->{SESSION_TAGS}{CURRREV} = $rev;
 
-    $session->enterContext( 'rss' ) if $skin =~ /\brss/;
-    $session->enterContext( 'can_render_meta', $meta );
-
     # Set page generation mode to RSS if using an RSS skin
-    # SMELL: this is dodgy
-    if( $skin =~ /\brss/ ) {
-        $session->{renderer}->setRenderMode( 'rss' );
-    }
+    $session->enterContext( 'rss' ) if $skin =~ /\brss/;
+
+    # Set the meta-object that contains the rendering info
+    # SMELL: hack to get around not having a proper topic object model
+    $session->enterContext( 'can_render_meta', $meta );
 
     my $page;
     # Legacy: If the _only_ skin is 'text' it is used like this:

@@ -82,7 +82,6 @@ sub new {
 
     $this->{session} = $session;
 
-    $this->{MODE} = 'html';        # Default is to render as HTML
     $this->{NEWTOPICBGCOLOR} =
       $session->{prefs}->getPreferencesValue('NEWTOPICBGCOLOR')
         || '#FFFFCE';
@@ -1328,7 +1327,7 @@ sub protectPlainText {
     # characters. Only works for ISO-8859-1 sites, since the Unicode
     # encoding (&#nnn;) is identical for first 256 characters. 
     # I18N TODO: Convert to Unicode from any site character set.
-    if( $this->{MODE} eq 'rss' &&
+    if( $this->{session}->inContext( 'rss' ) &&
           defined( $TWiki::cfg{Site}{CharSet} ) &&
             $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
         $text =~ s/([\x7f-\xff])/"\&\#" . unpack( 'C', $1 ) .';'/ge;
@@ -1382,21 +1381,6 @@ sub makeTopicSummary {
     $htext =~ s/\s+/ /g;
 
     return $this->protectPlainText( $htext );
-}
-
-=pod
-
----++ ObjectMethod setPageMode( $mode )
-
-Set page rendering mode:
-   * rss - encode 8-bit characters as XML entities
-   * html - (default) no encoding of 8-bit characters
-
-=cut
-
-sub setRenderMode {
-    my $this = shift;
-    $this->{MODE} = shift;
 }
 
 =pod
