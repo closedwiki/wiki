@@ -823,3 +823,5 @@ twiki_httpd_conf.txt 0755
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
+!include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
+!include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin

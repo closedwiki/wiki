@@ -160,6 +160,7 @@ sub putKeyed {
 }
 
 =pod
+
 ---++ ObjectMethod putAll
 Replaces all the items of a given key with a new array
 This is the logical inverse of the find method
@@ -230,17 +231,18 @@ sub find {
 }
 
 =pod
+
 ---++ StaticMethod indexByKey
 
 See tests/unit/MetaTests.pm for an example
 
 The result is a hash the same as the array provided by find but keyed by the keyName.
 NB. results are indeterminate if the key you choose is not unique in the find. 
+
 =cut
 
 sub indexByKey {
     my( $keyName, @array) = @_;
-    ASSERT(@array) if DEBUG;
 
 	my %findKeyed = ();
 	foreach my $result (@array) {
@@ -249,13 +251,16 @@ sub indexByKey {
 	}
 	return %findKeyed;
 }
+
 =pod
+
 Flattens a keyed hash structure, taking only the values.
 Returns a hash.
 
 See tests/unit/MetaTests.pm for an example
 
 =cut
+
 sub deindexKeyed {
     my (%hash) =@_;
 
@@ -266,7 +271,6 @@ sub deindexKeyed {
 	}
 	return @array;
 }
-
 
 =pod
 
