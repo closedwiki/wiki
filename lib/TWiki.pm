@@ -486,7 +486,7 @@ sub UTF82SiteCharSet {
     return undef unless( $text =~ $regex{validUtf8StringRegex} );
 
     # Convert into ISO-8859-1 if it is the site charset
-    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?1$/i ) {
+    if ( $TWiki::cfg{Site}{CharSet} =~ /^iso-?8859-?15?$/i ) {
         # ISO-8859-1 maps onto first 256 codepoints of Unicode
         # (conversion from 'perldoc perluniintro')
         $text =~ s/ ([\xC2\xC3]) ([\x80-\xBF]) / 
