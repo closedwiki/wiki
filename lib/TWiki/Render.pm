@@ -102,14 +102,15 @@ sub new {
     return $this;
 }
 
-sub _renderParent {
-    my( $this, $web, $topic, $meta, $args ) = @_;
+=pod
 
-    my $ah;
+---++ ObjectMethod renderParent($web, $topic, $meta, $params) -> $text
+Render parent meta-data
 
-    if( $args ) {
-        $ah = new TWiki::Attrs( $args );
-    }
+=cut
+
+sub renderParent {
+    my( $this, $web, $topic, $meta, $ah ) = @_;
     my $dontRecurse = $ah->{dontrecurse} || 0;
     my $noWebHome =   $ah->{nowebhome} || 0;
     my $prefix =      $ah->{prefix} || '';
@@ -153,8 +154,15 @@ sub _renderParent {
     return $text;
 }
 
-sub _renderMoved {
-    my( $this, $web, $topic, $meta ) = @_;
+=pod
+
+---++ ObjectMethod renderMoved($web, $topic, $meta, $params) -> $text
+Render moved meta-data
+
+=cut
+
+sub renderMoved {
+    my( $this, $web, $topic, $meta, $params ) = @_;
     my $text = '';
     my $moved = $meta->get( 'TOPICMOVED' );
     $web =~ s#\.#/#go;
@@ -197,14 +205,18 @@ sub _renderMoved {
 }
 
 
-sub _renderFormField {
-    my( $this, $meta, $args ) = @_;
+=pod
+
+---++ ObjectMethod renderFormField($web, $topic, $meta, $params) -> $text
+Render meta-data for a single formfield
+
+=cut
+
+sub renderFormField {
+    my( $this, $web, $topic, $meta, $attrs ) = @_;
     my $text = '';
-    if( $args ) {
-        my $attrs = new TWiki::Attrs( $args );
-        my $name = $attrs->{name};
-        $text = renderFormFieldArg( $meta, $name ) if( $name );
-    }
+    my $name = $attrs->{name};
+    $text = renderFormFieldArg( $meta, $name ) if( $name );
     # change any new line character sequences to <br />
     $text =~ s/\r?\n/ <br \/> /gos;
     # escape "|" to HTML entity
@@ -1228,42 +1240,6 @@ sub verbatimCallBack {
     $val =~ s/\t/   /g;
 
     return TWiki::entityEncode( $val );
-}
-
-=pod
-
----++ ObjectMethod renderMetaTags (  $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) -> $html
-
-   * =$theWeb - name of the web
-   * =$theTopic - name of the topic
-   * =$text - text being expanded
-   * =$meta - meta-data object
-   * =$isTopRev |- if this topic is being rendered at the most recent revision
-   * =$noexpand= - if META tags are simply to be removed
-Used to render %META{}% tags in templates for non-active views
-(view, preview etc)
-
-=cut
-
-sub renderMetaTags {
-    my( $this, $theWeb, $theTopic, $text, $meta, $isTopRev, $noexpand ) = @_;
-    ASSERT($this->isa( 'TWiki::Render')) if DEBUG;
-
-    return $text unless $text;
-
-    if ( $noexpand ) {
-        $text =~ s/%META{[^}]*}%//go;
-        return $text;
-    }
-    my $session = $this->{session};
-
-    $text =~ s/%META{\s*"form"\s*}%/TWiki::Form::renderForDisplay( $session->{templates}, $meta )/ge;    #this renders META:FORM and META:FIELD
-    $text =~ s/%META{\s*"formfield"\s*(.*?)}%/$this->_renderFormField( $meta, $1 )/ge;         #renders a formfield from within topic text
-    $text =~ s/%META{\s*"attachments"\s*(.*)}%/$session->{attach}->renderMetaData( $theWeb, $theTopic, $meta, $1, $isTopRev )/ge;                                       #renders attachment tables
-    $text =~ s/%META{\s*"moved"\s*}%/$this->_renderMoved( $theWeb, $theTopic, $meta )/ge;      #render topic moved information
-    $text =~ s/%META{\s*"parent"\s*(.*)}%/$this->_renderParent( $theWeb, $theTopic, $meta, $1 )/ge;    #render the parent information
-
-    return $text;
 }
 
 =pod

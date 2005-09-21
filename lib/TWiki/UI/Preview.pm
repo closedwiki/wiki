@@ -83,9 +83,9 @@ sub preview {
     $parent ||= '';
     $tmpl =~ s/%TOPICPARENT%/$parent/g;
 
+    $session->enterContext( 'can_render_meta', $meta )
+
     my $dispText = $text;
-    $dispText = $session->{renderer}->renderMetaTags
-      ( $web, $topic, $dispText, $meta, 0, 0 );
     $dispText = $session->handleCommonTags( $dispText, $web, $topic );
     $dispText = $session->{renderer}->getRenderedVersion( $dispText, $web, $topic );
 
@@ -96,8 +96,6 @@ sub preview {
     $dispText =~ s(</?form(|\s.*?)>)()gis;
     $dispText =~ s/(<[^>]*\bon[A-Za-z]+=)('[^']*'|"[^"]*")/$1''/gis;
 
-    $tmpl = $session->{renderer}->renderMetaTags
-      ( $web, $topic, $tmpl, $meta, 0, 0 );
     $tmpl = $session->handleCommonTags( $tmpl, $web, $topic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $web, $topic );
     $tmpl =~ s/%TEXT%/$dispText/go;

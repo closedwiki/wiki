@@ -170,6 +170,7 @@ BEGIN {
         INCLUDE           => \&_INCLUDE,
         INTURLENCODE      => \&_INTURLENCODE,
         LANGUAGES         => \&_LANGUAGES,
+        META              => \&_META,
         METASEARCH        => \&_METASEARCH,
         PLUGINVERSION     => \&_PLUGINVERSION,
         QUERYSTRING       => \&_QUERYSTRING,
@@ -1639,15 +1640,11 @@ sub expandVariablesOnTopicCreation {
     ASSERT($user->isa( 'TWiki::User')) if DEBUG;
 
     # Must do URLPARAM first
-    $text =~ s(%URLPARAM{(.*?)}%)
-      ($this->_URLPARAM(new TWiki::Attrs($1)))ge;
+    $text =~ s/%URLPARAM{(.*?)}%/$this->_URLPARAM(new TWiki::Attrs($1))/ge;
 
-    $text =~ s(%DATE%)
-      ($this->_DATE())ge;
-    $text =~ s(%SERVERTIME(?:{(.*?)})?%)
-      ($this->_SERVERTIME(new TWiki::Attrs($1)))ge;
-    $text =~ s(%GMTIME(?:{(.*?)})?%)
-      ($this->_GMTIME(new TWiki::Attrs($1)))ge;
+    $text =~ s/%DATE%/$this->_DATE()/ge;
+    $text =~ s/%SERVERTIME(?:{(.*?)})?%/$this->_SERVERTIME(new TWiki::Attrs($1))/ge;
+    $text =~ s/%GMTIME(?:{(.*?)})?%/$this->_GMTIME(new TWiki::Attrs($1))/ge;
 
     $text =~ s/%USERNAME%/$user->login()/ge;
     $text =~ s/%WIKINAME%/$user->wikiName()/ge;
@@ -2829,6 +2826,33 @@ sub _SCRIPTNAME {
 
 sub _ALL_VARIABLES {
     return shift->{prefs}->stringify();
+}
+
+sub _META {
+    my ( $this, $params, $topic, $web ) = @_;
+
+    my $meta  = $this->inContext( 'can_render_meta' );
+
+    return '' unless $meta;
+
+    my $option = $params->{_DEFAULT};
+
+    if( $option eq 'form' ) {
+        # META:FORM and META:FIELD
+        return TWiki::Form::renderForDisplay( $this->{templates}, $meta );
+    } elsif ( $option eq 'formfield' ) {
+        # a formfield from within topic text
+        return $this->{renderer}->renderFormField( $meta, $params );
+    } elsif( $option eq 'attachments' ) {
+        # renders attachment tables
+        return $this->{attach}->renderMetaData( $web, $topic, $meta, $params );
+    } elsif( $option eq 'moved' ) {
+        return $this->{renderer}->renderMoved( $web, $topic, $meta, $params );
+    } elsif( $option eq 'parent' ) {
+        $this->{renderer}->renderParent( $web, $topic, $meta, $params );
+    }
+
+    return '';
 }
 
 1;

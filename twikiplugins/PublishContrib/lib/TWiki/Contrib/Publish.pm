@@ -296,9 +296,7 @@ sub publishTopic {
     $text = TWiki::Func::renderText($text);
 
     $tmpl = TWiki::Func::expandCommonVariables($tmpl, $topic, $web);
-    if( $session ) {
-        $tmpl = $session->{renderer}->renderMetaTags($web, $topic, $tmpl, $meta, 1);
-    } else {
+    unless( $session ) {
         $tmpl = TWiki::handleMetaTags($web, $topic, $tmpl, $meta, 1); # COMPATIBILITY
     }
     $tmpl = TWiki::Func::renderText($tmpl, "", $meta); ## better to use meta rendering?

@@ -64,7 +64,7 @@ sub new {
 
 =pod
 
----++ ObjectMethod renderMetaData( $web, $topic, $meta, $args, $isTopRev ) -> $text
+---++ ObjectMethod renderMetaData( $web, $topic, $meta, $args ) -> $text
 
 Generate a table of attachments suitable for the bottom of a topic
 view, using templates for the header, footer and each row.
@@ -72,15 +72,13 @@ view, using templates for the header, footer and each row.
    * =$topic= the topic
    * =$meta= meta-data hash for the topic
    * =$args= hash of attachment arguments
-   * =$isTopRev= if this topic is being rendered at the most recent revision
 
 =cut
 
 sub renderMetaData {
-    my( $this, $web, $topic, $meta, $attrs, $isTopTopicRev ) = @_;
+    my( $this, $web, $topic, $meta, $attrs ) = @_;
     ASSERT($this->isa( 'TWiki::Attach')) if DEBUG;
 
-    $attrs = new TWiki::Attrs( $attrs );
     my $showAll = $attrs->{all};
     my $showAttr = $showAll ? 'h' : '';
 	my $a = ( $showAttr ) ? ':A' : '';
@@ -98,10 +96,7 @@ sub renderMetaData {
         my $attrAttr = $attachment->{attr};
 
         if( ! $attrAttr || ( $showAttr && $attrAttr =~ /^[$showAttr]*$/ )) {
-            $rows .= $this->_formatRow( $web, $topic,
-                                 $attachment,
-                                 $isTopTopicRev,
-                                 $row );
+            $rows .= $this->_formatRow( $web, $topic, $attachment, $row );
         }
     }
 
@@ -159,7 +154,6 @@ sub formatVersions {
                               attr    => $attrs{attr},
                               size    => $attrs{size}
                              },
-                             ( $rev == $latestRev),
                              $row );
     }
 
@@ -170,21 +164,20 @@ sub formatVersions {
 #| =$web= | the web |
 #| =$topic= | the topic |
 #| =$info= | hash containing fields name, user (user (not wikiname) who uploaded this revision), date (date of _this revision_ of the attachment), command and version  (the required revision; required to be a full (major.minor) revision number) |
-#| =$topRev= | boolean indicating if this revision is the most recent revision |
 #| =$tmpl= | The template of a row |
 sub _formatRow {
-    my ( $this, $web, $topic, $info, $topRev, $tmpl ) = @_;
+    my ( $this, $web, $topic, $info, $tmpl ) = @_;
 
     my $row = $tmpl;
 
-    $row =~ s/%A_(\w+)%/$this->_expandAttrs($1,$web,$topic,$info,$topRev)/ge;
+    $row =~ s/%A_(\w+)%/$this->_expandAttrs($1,$web,$topic,$info)/ge;
     $row =~ s/\0/%/g;
 
     return $row;
 }
 
 sub _expandAttrs {
-    my ( $this, $attr, $web, $topic, $info, $topRev ) = @_;
+    my ( $this, $attr, $web, $topic, $info ) = @_;
     my $file = $info->{name};
 
     if ( $attr eq 'REV' ) {
@@ -201,21 +194,9 @@ sub _expandAttrs {
         return $1;
     }
     elsif ( $attr eq 'URL' ) {
-        my $url;
-
-        if ( $topRev ) {
-            # I18N: To support attachments via UTF-8 URLs to attachment
-            # directories/files that use non-UTF-8 character sets, go
-            # through viewfile.
-            # If using %PUBURL%, must URL-encode explicitly to site
-            # character set.
-            $url = TWiki::nativeUrlEncode( "$TWiki::cfg{PubUrlPath}/$web/$topic/$file" );
-        } else {
-            $url = $this->{session}->getScriptUrl
-              ( $web, $topic, 'viewfile',
-                rev => $info->{version}, filename => $file );
-        }
-        return $url;
+        return $this->{session}->getScriptUrl
+          ( $web, $topic, 'viewfile',
+            rev => $info->{version}, filename => $file );
     }
     elsif ( $attr eq 'SIZE' ) {
         my $attrSize = $info->{size};

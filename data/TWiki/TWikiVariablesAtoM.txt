@@ -87,7 +87,7 @@ __Note:__ This topic is included by TWikiVariables
 #VarFAILEDPLUGINS
 ---+++ FAILEDPLUGINS -- debugging for plugins that failed to load, and handler list
    * Syntax: =%<nop>FAILEDPLUGINS%=
-   * Expands to: =%FAILEDPLUGINS%=
+   * Expands to: %FAILEDPLUGINS%
    * Related: [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]], [[#ACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#PLUGINVERSION2][PLUGINVERSION]]
 
 #VarFORMFIELD
@@ -256,6 +256,23 @@ Any other parameters will be defined as variables within the scope of the includ
 	* Syntax: =%<nop>MAINWEB%=
 	* Expands to: =%MAINWEB%=
 	* Related: [[#VarTWIKIWEB][TWIKIWEB]]
+
+#VarMETA
+---+++ META - displays meta-data
+   * Syntax: =%<nop>META{ "item" ...}%=
+Provided mainly for use in templates, this variable generates the parts of the topic view that relate to meta-data (attachments, forms etc. The =formfield= item is the most likely to be useful to casual users.
+| *Item* | *Options* | *Description* |
+| ="formfield"= | =name="..."= - name of the field. The field value can be shortened as described in %TWIKIWEB%.FormattedSearch for =$formfield= | Show a single form field |
+| ="form"= | _none_ | Generates the table showing the form fields. See [[TWikiDocumentation#Form_Templates][Form Templates]] |
+| ="attachments"= | =all="on"= to show hidden attachments | Generates the table showing the attachments |
+| ="moved"= | _none_ | Details of any topic moves |
+| ="parent"= | \
+==dontrecurse="on"==: By default recurses up tree, this has some cost. <br /> \
+==nowebhome="on"==: Suppress <nop>%HOMETOPIC%. <br /> \
+==prefix="..."==: Prefix that goes before parents, but only if there are parents, default =""=. <br /> \
+==suffix="..."==: Suffix, only appears if there are parents, default =""=. <br /> \
+==separator="..."==: Separator between parents, default is =" &gt; "=. \
+| Generates the parent link |
 
 #VarMETASEARCH
 ---+++ METASEARCH -- special search of meta data

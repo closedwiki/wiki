@@ -254,8 +254,7 @@ sub view {
     $session->{SESSION_TAGS}{CURRREV} = $rev;
 
     $session->enterContext( 'rss' ) if $skin =~ /\brss/;
-
-    my $isTop = ( $rev == $showRev );
+    $session->enterContext( 'can_render_meta', $meta );
 
     # Set page generation mode to RSS if using an RSS skin
     # SMELL: this is dodgy
@@ -274,8 +273,7 @@ sub view {
         # use raw text
         $page = $text;
     } else {
-        my @args = ( $session, $webName, $topicName, $meta,
-                     $isTop, $minimalist );
+        my @args = ( $session, $webName, $topicName, $meta, $minimalist );
 
         $session->enterContext( 'header_text' );
         $page = _prepare($start, @args);
@@ -307,11 +305,7 @@ sub view {
 }
 
 sub _prepare {
-    my( $text, $session, $webName, $topicName, $meta,
-        $isTop, $minimalist) = @_;
-
-    $text = $session->{renderer}->renderMetaTags
-      ( $webName, $topicName, $text, $meta, $isTop, 0 );
+    my( $text, $session, $webName, $topicName, $meta, $minimalist) = @_;
 
     $text = $session->handleCommonTags( $text, $webName, $topicName );
     $text = $session->{renderer}->getRenderedVersion( $text, $webName, $topicName );
