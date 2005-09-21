@@ -616,7 +616,7 @@ a:hover .twikiAccessKey {
 
 .patternTop {
 	font-size:94%; /*C15*/
-	padding-top:0.25em;
+	padding:0.25em 0;
 	height:1.5em;
 }
 .patternHomePath,
@@ -673,7 +673,7 @@ a:hover .twikiAccessKey {
 	position:relative;
 	background-color:#FCF5DF; /*C14*/
 	border:1px solid #FCD582; /*C16*/
-	padding:.2em .5em;
+	padding:.2em .6em;
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike {
