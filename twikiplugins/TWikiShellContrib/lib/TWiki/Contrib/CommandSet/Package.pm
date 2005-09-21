@@ -8,6 +8,9 @@ use TWiki::Contrib::BuildContrib::BaseBuild;
 
 use File::Copy;
 
+#Pattern of excluded files from the package
+my $excludePattern='(\.svn|\/CVS|\.bak)';
+
 my $doco = {
    "SMRY" => "Package a set of files for distribution",
    "SYNOPSIS" =>" package <TWikiApp> - Package a set of files for distribution",
@@ -57,11 +60,10 @@ sub run {
    my ($files,$otherModules)=readManifest($srcDir,'',$manifestFile);
    
    return unless $files;
-#    my @toZip=map {$srcDir.'/'.$_->{name}} @{$files};
+   my @toZip=map {$srcDir.'/'.$_->{name}} @{$files};
+   
    foreach my $fileData (@{$files}) {
       my $file=$fileData->{name};
-      next if $file =~ /\.svn/;
-
 
       if ($file =~ /(.*)\/\*/) {
          handleDir($srcDir,$tmpDir,$1);
@@ -69,20 +71,23 @@ sub run {
          handleFile($srcDir,$tmpDir,$file);
       }
    }
+
    handleFile($srcDir,$tmpDir,"$project.MF");
-   handleFile($srcDir,$tmpDir,"$project.DEP"); #TODO: Handle Dependencies
-  push @toZip, $srcDir.'/'."$project.MF";
-  push @toZip, $srcDir.'/'."$project.DEP";
-  #zip($config,$srcDir.'/'.$project.'.zip',@toZip);
-#    sys_action('zip -r -q '.$srcDir.'/'.$project.'.zip *');
-#   cd($srcDir);
-#    sys_action('rm -rf '.$tmpDir);
+   handleFile($srcDir,$tmpDir,"$project.DEP");
+#   push @toZip, $srcDir.'/'."$project.MF";
+#   push @toZip, $srcDir.'/'."$project.DEP";
+#   zip($config,$srcDir.'/'.$project.'.zip',@toZip);
+   cd($tmpDir);
+   sys_action('tar -cvzf '.$srcDir.'/'.$project.'.tar.gz *');
+   cd($srcDir);
+    sys_action('rm -rf '.$tmpDir);
 
 }
 
 sub handleFile {
    my ($srcDir,$tmpDir,$file)=@_;
    return if (!$file);
+   return if $file =~ /$excludePattern/x;
    print "processing $file\n";
 
    my $targetFile="$tmpDir/$file";
@@ -94,7 +99,7 @@ sub handleFile {
 sub handleDir {
    my ($srcDir,$tmpDir,$dir)=@_;
    
-   return if $dir =~ /\.svn/;
+   return if $dir =~ /$excludePattern/x;
    print "processing $dir\n";
 
    if( opendir( DIR, "$srcDir/$dir" ) ) {

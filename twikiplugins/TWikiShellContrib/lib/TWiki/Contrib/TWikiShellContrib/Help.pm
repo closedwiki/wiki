@@ -19,6 +19,7 @@ sub assembleHelp {
 
 sub _section {
    my ($section,$text)=@_;
+   return '' unless $text;
    $section=uc $section;
    $text=join("\n",map {"    ".$_;} split("\n",$text));
    return "

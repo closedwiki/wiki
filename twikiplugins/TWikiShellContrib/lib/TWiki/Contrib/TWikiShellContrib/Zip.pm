@@ -11,10 +11,11 @@ use strict;
 sub zip {
    my ($config,$zipName,@files)=@_;
    print 'Zipping to File '.$zipName."\n";
-   foreach my $file (@files) {
-      my $cmd="zip -u -v $zipName $file";
-      `$cmd`;
-   }
+   
+   my $cmd="zip -u -v $zipName ".join(" ",@files);
+   print $cmd."\n";
+   `$cmd`;
+   
 #    if ($config->{ZIP}{useArchiveZip}) {
 #    } else{
 #
