@@ -34,7 +34,7 @@ use vars qw(
         $debug $doOldInclude $renderingWeb
     );
 
-$VERSION = '1.010';
+$VERSION = '1.11';
 $pluginName = 'EFetchPlugin';  # Name of this Plugin
 use LWP::Simple;
 

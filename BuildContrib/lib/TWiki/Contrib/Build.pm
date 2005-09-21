@@ -132,7 +132,7 @@ use diagnostics;
 use Carp;
 use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
 
-$VERSION = 1.010;
+$VERSION = '1.010';
 
 my $NL = "\n";
 

@@ -47,10 +47,10 @@ use vars qw(
 	$patentUrl01 $patentUrl02 $patentUrl03 $patentApplicationUrl01 $patentApplicationUrl02 $patentApplicationUrl03 $patentText $patentApplicationText $patentImgUrl $patentApplicationImgUrl
     );
 
-$VERSION = '0.900';
+$VERSION = '1.0';
 
 # =========================
-sub initPlugin
+sub  initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
 

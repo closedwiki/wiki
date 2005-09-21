@@ -32,7 +32,7 @@ use vars qw(
         $debug $xslDoc $replacementNote
     );
 
-$VERSION = '1.010';
+$VERSION = '1.11';
 $pluginName = 'MsOfficeAttachmentsAsHTMLPlugin';  # Name of this Plugin
 
 # =========================

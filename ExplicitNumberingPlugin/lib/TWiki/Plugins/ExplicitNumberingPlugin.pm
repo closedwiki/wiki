@@ -56,7 +56,7 @@ use vars qw(
         $debug
     );
 
-$VERSION = '1.010';
+$VERSION = '1.11';
 $pluginName = 'ExplicitNumberingPlugin';  # Name of this Plugin
 
 

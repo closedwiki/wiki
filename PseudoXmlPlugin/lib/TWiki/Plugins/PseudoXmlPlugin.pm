@@ -23,7 +23,7 @@ use vars qw(
 	%htmlTags
     );
 
-$VERSION = '1.001';
+$VERSION = '1.101';
 
 # =========================
 sub initPlugin

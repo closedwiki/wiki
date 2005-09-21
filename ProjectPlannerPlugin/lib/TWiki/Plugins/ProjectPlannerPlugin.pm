@@ -122,7 +122,7 @@ use vars qw (
              $col_results
              );
 
-$VERSION = '2.040';
+$VERSION = '2.14';
 $pluginName = 'ProjectPlannerPlugin';  # Name of this Plugin
 
 use vars qw ( $TIMESCALE @monthArr @weekdayArr %monthToNum);

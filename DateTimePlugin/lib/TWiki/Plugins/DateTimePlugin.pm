@@ -58,7 +58,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '0.90';
+$VERSION = '1.0';
 $pluginName = 'DateTimePlugin';  # Name of this Plugin
 $uCasePName = uc($pluginName);   # The Uper-Case Name
 

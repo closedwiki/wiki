@@ -127,7 +127,7 @@ use vars qw(
     $web $topic $user $installWeb $VERSION $debug
 );
 
-$VERSION = do { my @r = (q$Revision$ =~ /\d+/g); sprintf "%d."."%03d" x $#r, @r };
+$VERSION = '0.1';
 
 # =========================
 sub initPlugin {

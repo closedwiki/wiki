@@ -40,7 +40,7 @@ use strict;
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION );
 
-$VERSION = '1.010';
+$VERSION = '1.11';
 # =========================
 sub initPlugin
 {

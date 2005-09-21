@@ -72,7 +72,7 @@
     );
 
 # Following variable contains the version of our plugin 
-  $VERSION = '1.000';
+  $VERSION = 1.1;
 
 # Default debug option
   $debug = 1;

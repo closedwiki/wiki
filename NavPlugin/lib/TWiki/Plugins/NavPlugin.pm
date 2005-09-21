@@ -30,7 +30,7 @@ use vars qw(
 	    $tocNameFlag $debug
 	    );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 
 # ========================
 sub initPlugin

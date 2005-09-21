@@ -59,7 +59,7 @@ use vars qw(
         $debug
     );
 
-$VERSION = '1.021';
+$VERSION = '1.121';
 $pluginName = 'GenerateSearchPlugin';  # Name of this Plugin
 
 # =========================

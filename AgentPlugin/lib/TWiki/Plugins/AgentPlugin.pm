@@ -49,7 +49,7 @@ use vars qw(
     );
 
 
-$VERSION    = '1.001'; #at# improved options
+$VERSION    = 1.101;
 #$VERSION   = '1.000'; #at# initial release
 
 # =========================

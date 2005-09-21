@@ -48,7 +48,7 @@ use vars qw(
         $exampleCfgVar
     );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 
 # =========================
 sub initPlugin

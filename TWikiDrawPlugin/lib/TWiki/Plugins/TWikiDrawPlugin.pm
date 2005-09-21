@@ -9,7 +9,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $editButton
     );
 
-$VERSION = 1.101;
+$VERSION = '1.201';
 my $editmess;
 
 sub initPlugin {

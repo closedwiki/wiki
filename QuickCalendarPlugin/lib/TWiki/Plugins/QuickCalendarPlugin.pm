@@ -92,7 +92,7 @@ use vars qw(
         %This %Next %Last %Prev
     );
 
-$VERSION = '1.300';
+$VERSION = '1.4';
 $pluginName = 'QuickCalendarPlugin';
 
 

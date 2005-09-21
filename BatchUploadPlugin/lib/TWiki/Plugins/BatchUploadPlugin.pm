@@ -34,7 +34,7 @@ use vars qw(
         $debug $pluginEnabled
     );
 
-$VERSION = '1.021';
+$VERSION = '1.121';
 $pluginName = 'ArchiveUploadPlugin';  # Name of this Plugin
 
 # =========================
