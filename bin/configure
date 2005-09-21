@@ -1689,12 +1689,19 @@ This should be set in the System Environment, and ideally set directly in the
 web server (e.g. using the Apache <tt>SetEnv</tt> directive).
 HERE
               );
-        if ($perltype eq 'ActiveState' and 
-            Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
-            $n .= WARN("ActiveState Perl must be upgraded to build <strong>",
-                       $ActivePerlRecommendedBuild,
-                       "</strong> if you are going to use PERL5SHELL, which was broken",
-                       "in earlier builds.");
+        if( $perltype eq 'ActiveState' ) {
+            $n .= WARN(<<HERE
+ActiveState Perl on IIS does not support safe pipes, which is the mechanism used by TWiki to prevent a range of attacks aimed at arbitrary command execution on the server. You are *highly* recommended not to use this particular configuration on a public server!
+HERE
+                      );
+            if( Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {
+                $n .= WARN(<<HERE
+ActiveState Perl must be upgraded to build <strong>
+$ActivePerlRecommendedBuild
+if you are going to use PERL5SHELL, which was broken in earlier builds.
+HERE
+                             );
+            }
         }
         $block .= _setting("PERL5SHELL", $n);
     };
