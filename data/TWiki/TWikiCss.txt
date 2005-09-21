@@ -91,7 +91,7 @@ Some of these styles are used in templates:
 
 Practical introduction to CSS: http://www.w3.org/Style/LieBos2e/enter/
 
-__Related Topics:__ TWikiSkins, PatternSkin, DragonSkin, DeveloperDocumentationCategory, AdminDocumentationCategory
+__Related Topics:__ TWikiSkins, PatternSkin, DeveloperDocumentationCategory, AdminDocumentationCategory
 
 %STOPINCLUDE%
 

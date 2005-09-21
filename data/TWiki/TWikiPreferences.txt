@@ -177,15 +177,6 @@ _(Click for form-based editing of existing preferences.)_
 		* Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
 		* Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
 
----+++ DragonSkin
-
-	* Theme: (gray, monochrome, tabstyle)
-		* Set DS_THEME = gray
-	* Quicklinks headings:
-		* Set DS_QUICKLINKSHEADING = 
-	* Quicklinks submenu:
-		* Set DS_QUICKLINKS = 
-		
 ---+++ Skin icons
 
 	* #Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
