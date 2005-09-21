@@ -83,7 +83,7 @@ sub preview {
     $parent ||= '';
     $tmpl =~ s/%TOPICPARENT%/$parent/g;
 
-    $session->enterContext( 'can_render_meta', $meta )
+    $session->enterContext( 'can_render_meta', $meta );
 
     my $dispText = $text;
     $dispText = $session->handleCommonTags( $dispText, $web, $topic );

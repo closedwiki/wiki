@@ -110,7 +110,7 @@ sub attach {
     }
     $tmpl =~ s/%ATTACHTABLE%/$atext/go;
     $tmpl =~ s/%FILEUSER%/$fileWikiUser/go;
-    $session->enterContext( 'can_render_meta', $meta )
+    $session->enterContext( 'can_render_meta', $meta );
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );
     $tmpl =~ s/%HIDEFILE%/$isHideChecked/go;
