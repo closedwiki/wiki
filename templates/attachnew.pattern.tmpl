@@ -19,15 +19,9 @@
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="patternTopicAction">
-<table>
-<tr>
-<td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /></td>
-<td class="patternAddCol">&nbsp;</td>
-</tr>
-</table>
-</div>%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%
+<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
+%TMPL:END%
 
 
 

@@ -69,20 +69,19 @@
 <div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in the [_2] Web:", "%TOPIC%", "<nop>%WEB%"}%</div>%LOCAL_SEARCH%</div>
 
 <div class="patternSearchResults"><div class="patternSearchResultsHeader">%_{"Change links in topics that refer to [_1] in any Web:", "[[%WEB%.%TOPIC%]]"}%</div>%GLOBAL_SEARCH%</div>
-<div class="patternTopicActionSecondary">
-<table>
-<tr>
-<td><input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" /><input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%</td>
-</tr></table></div>
+<hr />
+<input type="button" class="twikiButton" value='%_{"Select all"}%' onclick="checkAll(true);" /> <input type="button" class="twikiButton" value='%_{"Clear all"}%' onclick="checkAll(false);" /> %_{"checkboxes of referenced topics"}%
+<p />
+
+%TMPL:P{"topicaction"}%
+%TMPL:P{"hidden"}%
+</form>
 <div class="twikiHelp">
 *%_{"Note:"}%*
    * %_{"Get help on <a target='ManagingTopics' onclick=\"return launchWindow('%TWIKIWEB%','ManagingTopics')\" href=\"[_1]\" rel='nofollow'>Renaming and moving topics</a>.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ManagingTopics"}%
    * %_{"Select the [_1] Web to delete the topic.", "%TRASHWEB%"}%
    * %_{"The checkmarked topics will be updated (another form will appear which will _eventually_ allow you to rename any topics that were locked)"}%
 </div>
-%TMPL:P{"topicaction"}%
-%TMPL:P{"hidden"}%
-</form>
 %TMPL:END%
 
 

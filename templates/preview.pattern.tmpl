@@ -42,23 +42,12 @@ function launchWindow( theWeb, theTopic ) {
 
 
 
-%TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
-<tr class="patternTopicActionHelp twikiGrayText">
-<td colspan="3" class="patternTopicActionHelp twikiGrayText"></td>
-</tr>
-<tr class="patternTopicActionSecondary">
-<td class="patternCancelCol"></td>
-<td class="patternSubmitCol"><div class="patternSubmitOptions">
-   <input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">%_{"Minor changes, don't notify"}%</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>%_{"help"}%</a><br />
-   <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" rel='nofollow'>%_{"help"}%</a></div></td>
-<td class="patternAddCol"></td>
-</tr>
-<tr class="patternTopicAction">
-<td class="patternCancelCol"><input type="submit" class="twikiSubmit" value='%_{"Discard"}%' name="action_cancel" /></td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Save Changes"}%' />%FORMFIELDS%</td>
-<td class="patternAddCol"></td>
-</tr>
-</table>%TMPL:END%
+%TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
+<input type="checkbox" class="twikiCheckbox" id="dontnotify" name="dontnotify" %DONTNOTIFYCHECKBOX% /><label for="dontnotify">%_{"Minor changes, don't notify"}%</label>&nbsp;&nbsp;<a target="DontNotify" onclick="return launchWindow('%TWIKIWEB%','DontNotify')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/DontNotify" rel='nofollow'>%_{"help"}%</a><br />
+   <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" rel='nofollow'>%_{"help"}%</a></span></div>
+<div class="patternActionButtons">
+<input type="submit" class="twikiSubmit" value='%_{"Save Changes"}%' />%FORMFIELDS% %_{"or"}% <input type="submit" class="twikiSubmit" value='%_{"Discard"}%' name="action_cancel" />
+</div></div>%TMPL:END%
 
 
 

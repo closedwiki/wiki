@@ -18,7 +18,6 @@
 %TMPL:DEF{"previousdetails"}%
 ---++ %{"Update file <span class="twikiTitle">%FILENAME%</span>"}%
 <div class="patternPrevious"><div class="twikiAttachments">
-<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
 %ATTACHTABLE%</div></div> %TMPL:END%
 
 
@@ -40,16 +39,11 @@
 
 
 
-%TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
-<tr class="patternTopicActionSecondary">
-<td class="patternCancelCol" colspan="3" style="text-align:right;"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%_{"Move attachment..."}%</a></td>
-</tr>
-<tr class="patternTopicAction">
-<td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /></td>
-<td class="patternAddCol"><input type="submit" class="twikiSubmit patternTertiary" name="changeproperties" value='%_{"Change properties only"}%' /></td>
-</tr>
-</table>%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%
+<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit patternTertiary" name="changeproperties" value='%_{"Change properties only"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
+<br />
+<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%_{"Move attachment..."}%</a>
+%TMPL:END%
 
 
 

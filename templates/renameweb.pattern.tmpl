@@ -9,7 +9,9 @@
 %TMPL:DEF{"webaction"}%%_{"Rename"}%%TMPL:END%
 
 
+
 %TMPL:DEF{"newsubweb"}%<input name="newsubweb" value="%NEW_SUBWEB%" size="36" />%TMPL:END%
+
 
 
 %TMPL:DEF{"newparentweb"}%<select name="newparentweb"><option value=""></option>%WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%NEW_PARENTWEB%" separator=" "}%</select>%TMPL:END%
@@ -26,13 +28,7 @@
 
 
 
-%TMPL:DEF{"topicaction"}%<div class="patternTopicAction">
-<table>
-<tr>
-<td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Rename/Move"}%' /></td>
-<td class="patternAddCol"></td>
-</tr></table></div>%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Rename/Move"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 

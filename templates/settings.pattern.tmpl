@@ -59,12 +59,8 @@ function initForm() {
 ---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
 
 
-%TMPL:DEF{"topicaction"}%<table class="patternTopicAction">
-<tr>
-<td class="patternCancelCol">%TMPL:P{"canceltopicaction"}%</td>
-<td class="patternSubmitCol"><input type="submit" class="twikiSubmit" value='%_{"Update"}%' /></td>
-<td class="patternAddCol"></td>
-</tr></table>
+%TMPL:DEF{"topicactionbuttons"}%
+<input type="submit" class="twikiSubmit" value='%_{"Update"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
 %TMPL:END%
 
 
@@ -76,11 +72,11 @@ function initForm() {
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
 <textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
 %TEXT%
-</textarea> <br />
+</textarea>
 </div>
 <div class="twikiHelp">
 *%_{"Note:"}%*
-   * _%{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','TWikiVariables')\" href='[_1]' rel='nofollow'>Setting topic preferences</a>.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiVariables"}%
+   * %_{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','TWikiVariables')\" href='[_1]' rel='nofollow'>Setting topic preferences</a>.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiVariables"}%
    * %_{"Each preference has the syntax"}% <br />
      %_{"~[multiple of 3 spaces~] * ~[space~] Set ~[space~] VARIABLENAME ~[space~] = ~[value~]"}%
 </div>

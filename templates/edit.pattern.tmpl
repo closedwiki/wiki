@@ -62,6 +62,8 @@
 		return false;
 	}
 
+	/* Twist functions: */
+	
 	function removeClass(element, classname) {
 		var classes = getClassList(element);
 		var index = indexOf(classname,classes);
@@ -180,12 +182,11 @@ document.write("<\/style>");
 
 
 
-%TMPL:DEF{"toolbar"}%<div class="patternTop">
+%TMPL:DEF{"toolbar"}%
 <div class="patternToolBar">
-   * <span class="patternTab"><span class="patternTabSelected">%_{"Edit content"}%</span></span>
-   * <span class="patternTab"><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>%_{"Topic settings"}%</a></span>
-   * <span class="patternTabNoBorder twikiRight"><span id="helpshow" class="twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Show formatting help"}%</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Hide formatting help"}%</a></span></span>
-<br class="twikiClear" /></div></div><div class="patternToolBarBottom"></div>%TMPL:END%
+<span id="helpshow" class="twikiTwistMakeVisible twikiLeft"><a href="#" onclick="twist('help'); return false;">%_{"Show formatting help"}%</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible twikiLeft"><a href="#" onclick="twist('help'); return false;">%_{"Hide formatting help"}%</a></span>
+   * <span class="patternButton"><a href="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=editSettings" rel='nofollow'>%_{"Topic settings"}%</a></span>
+<br class="twikiClear" /></div>%TMPL:END%
 
 
 %TMPL:DEF{"bodystart"}%
@@ -214,7 +215,7 @@ document.write("<\/style>");
 <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" title='%_{"Read new revision help text in new window"}%' rel='nofollow'>%_{"help"}%</a></span></div>
 <div class="patternActionButtons">
 <input type="submit" class="twikiSubmit" name="action_save" id="save" value='%_{"Save"}%' /><label accesskey="s" for="save"></label>%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%_{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%
-<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value='%_{"Preview"}%' /><label accesskey="p" for="preview"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value='%_{"Cancel"}%' title='%_{"Cancel editing and discard changes"}%' /><label accesskey="c" for="cancel"></label></div><div class="twikiGrayText" style="margin-top:2em;"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, P = %_{"Preview"}%, C = %_{"Cancel"}%</div></div>%TMPL:END%
+<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_preview" id="preview" value='%_{"Preview"}%' /><label accesskey="p" for="preview"></label>&nbsp;%_{"or"}%&nbsp;<input type="submit" class="twikiButton" name="action_cancel" id="cancel" value='%_{"Cancel"}%' title='%_{"Cancel editing and discard changes"}%' /><label accesskey="c" for="cancel"></label></div><div class="patternAccessKeyInfo twikiGrayText"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, P = %_{"Preview"}%, C = %_{"Cancel"}%</div></div>%TMPL:END%
 
 
 

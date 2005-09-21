@@ -10,7 +10,7 @@
 <tr>
 <td colspan="2" class="first"><div class="twikiLeft">
   <input type="text" name="search" value="%URLPARAM{ "search" encode="entity" }%" size="40" /> 
-  <input type="submit" class="twikiSubmit" value="Search" /></div><div class="twikiLeft"><span class="twikiSmall">&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][Advanced search]] %BR% &nbsp;[[%TWIKIWEB%.SearchHelp][Help]]</span></div><br class="twikiClear" />
+  <input type="submit" class="twikiSubmit" value="Search" /></div><div class="twikiLeft"><span class="twikiSmall">&nbsp;[[%INCLUDINGWEB%.WebSearchAdvanced][Advanced search]] | [[%TWIKIWEB%.SearchHelp][Help]]</span></div><br class="twikiClear" />
 <div class="twikiSmall" style="padding:1em 0 0 0;">TIP: to search for all topics that contain ="SOAP"=, ="WSDL"=, a literal ="web service"=, but not ="shampoo"=, write: <code>soap wsdl "web service" -shampoo</code></div>
 </td>
 </tr>

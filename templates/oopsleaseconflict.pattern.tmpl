@@ -1,0 +1,15 @@
+<!-- Templates for lease conflict messages. One DEF is selected and inserted at %INSTANTIATE -->
+%TMPL:INCLUDE{"oopsleaseconflict.tmpl"}%
+
+%TMPL:DEF{"topicaction"}%<a name="Actions"> </a><div class="patternTopicAction"><span class="patternActionButtons"> 
+<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+%QUERYPARAMS% 
+<input type="submit" value='%_{"Try Again"}%' />
+</form>
+%TMPL:P{"sep"}%
+<form action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<input type="hidden" name="breaklock" value="on" />
+%QUERYPARAMS% 
+<input type="submit" value='%_{"Edit Anyway"}%' />
+</form>
+%_{"or"}% [[%WEB%.%TOPIC%][%_{"View topic"}%]]</span></div>%TMPL:END%

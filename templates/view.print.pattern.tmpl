@@ -23,7 +23,10 @@
 
 
 
-%TMPL:DEF{"topicinfo"}%<div class="patternTopicInfo"><span class="patternRevInfo twikiGrayText">%_{"Revision:"}% %REVINFO%</span></div>%TMPL:END%
+%TMPL:DEF{"topicinfo"}%<div class="patternTopicFooter"><span class="patternHomePath">%_{"This topic:"}% <nop>%WEB% %META{"parent" prefix=" <span class='sep'>&gt;</span> " suffix=""}%
+<span class='sep'>&gt;</span> %TOPIC%</span>
+<div class="patternTopicInfo patternRevInfo twikiGrayText">%_{"Revision:"}% %REVINFO%</div></div>
+<p />%TMPL:END%
 
 
 
@@ -34,9 +37,7 @@
 
 
 
-%TMPL:DEF{"standardfooter"}%
-<div class="patternTopicFooter"><span class="twikiLeft"><span class="patternHomePath">%_{"This topic:"}% <nop>%WEB% %META{"parent" prefix=" <span class='sep'>&gt;</span> " suffix=""}%
-<span class='sep'>&gt;</span> %TOPIC% </span></span></div>%TMPL:END%
+%TMPL:DEF{"standardfooter"}%%TMPL:END%
 
 
 
