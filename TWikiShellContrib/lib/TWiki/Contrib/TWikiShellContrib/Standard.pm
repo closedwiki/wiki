@@ -103,5 +103,33 @@ sub undefined_help {
     return "No help available\n";
 }
     
+sub run_shorcuts {
+   if (! -f 'cli') {
+      `ln -s cli twikishell`;
+   }
+
+   _createFile('build');
+   _createFile('plugin');
+   _createFile('package');
+}
+
+sub _createFile {
+   my $file=shift;
+   if (! -f $file) {
+      open FILE,">$file";
+      print FILE "twikishell $file \$*\n";
+      close FILE;
+      chmod 0755, $file;
+   }
+}
+
+sub smry_shorcuts {
+   return "creates convenience shellscripts (linux/unix only)";
+}
+
+
+sub help_shorcuts {
+   return "Creates useful shellscripts to shorten the calls to the most commonly used modules (build,plugin). ONLY WORKS ON LINUX\n";
+}
 1;
     

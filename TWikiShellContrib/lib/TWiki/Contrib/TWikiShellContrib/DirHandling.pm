@@ -1,34 +1,41 @@
 package TWiki::Contrib::TWikiShellContrib::DirHandling;
 
 use Exporter;
+use File::Path;
 
 @ISA=(Exporter);
 @EXPORT=qw(makepath dirEntries cd);
 
-
 sub makepath {
     my ($to) = @_;
-    chop($to) if ($to =~ /\n$/o);
-    $to =~ m!(.*?)\/(.*)$!;
-    _buildpath($1,$2);
+     chop($to) if ($to =~ /\n$/o);
+     $to =~ m!(.+)\/([^\/]*?)$!;  
+     mkpath($1,1);
+
+     #     _buildpath($1,$2);
     
 }
 
-sub _buildpath {
-    my ($parent,$to) =@_;
-    return if (!$to); 
-    chop($to) if ($to =~ /\n$/o);
-    _create($parent) if $parent;
-    
-    if ($to =~ m!(.*?)\/(.*)$!) {
-        _buildpath("$parent/$1",$2);
-    }
-}    
-
-sub _create {
-    my $dir=shift;
-    mkdir "$dir" || warn "Warning: Failed to make $dir: $!" unless (-e "$dir" || -d "$dir");;
-}
+# sub _buildpath {
+#     my ($parent,$to) =@_;
+#     return if (!$to);
+#     chop($to) if ($to =~ /\n$/o);
+#     _create($parent) if $parent;
+#
+#     if ($to =~ m!([^\/]+?)\/(.*)$!) {;
+#        if ($2) {
+#            _buildpath("$parent/$1",$2);
+#        } else  {
+#           _create($parent.'/'.$1);
+#        }
+#     }
+#
+# }
+#
+# sub _create {
+#     my $dir=shift;
+#     mkdir "$dir" || warn "Warning: Failed to make $dir: $!" unless (-e "$dir" || -d "$dir");;
+# }
 
 =pod
 

@@ -48,6 +48,9 @@ sub run {
       my $file=$fileData->{name};
       handleFile($srcDir,$tmpDir,$file);
    }
+   handleFile($srcDir,$tmpDir,$project.'.DEP');
+   handleFile($srcDir,$tmpDir,$project.'.MF');
+   #TODO: Filter build.pl from the manifest file
 
 }
 
@@ -57,7 +60,15 @@ sub handleFile {
    print "processing $file\n";
 
    my $targetFile="$tmpDir/$file";
+   if ($targetFile =~ /(.+\/)?(.+\.DEP)/) {
+      $targetFile =~ s/$2/DEPENDENCIES/;
+   } elsif ($targetFile =~ /(.+\/)?(.+\.MF)/) {
+      $targetFile =~ s/$2/MANIFEST/;
+   }
+
+
    makepath($targetFile);
+
    copy("$srcDir/$file",$targetFile);
 }
 

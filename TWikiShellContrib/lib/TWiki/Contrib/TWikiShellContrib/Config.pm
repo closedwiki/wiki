@@ -18,7 +18,7 @@ sub handleParams {
   my $execute = 0;
 
   while ($n <= $#ARGV) {
-      if ($ARGV[$n] =~ /^--?(.+)/o) {
+      if ($ARGV[$n] =~ /^--(.+)/o) {
           if ($1 eq "v") {
               $self->{verbosity}=1;
           } elsif ($1 eq "vv") {
@@ -27,7 +27,10 @@ sub handleParams {
               $self->{verbosity}=0;
           } elsif ($1 eq "d") {
               $self->{debug}=1;
-          } 
+          } elsif ($1 eq "shorcuts") {
+             $self->{execute}="shorcuts";
+             last;
+          }
       } else {
           $self->{execute}.=$ARGV[$n]." ";
       }
