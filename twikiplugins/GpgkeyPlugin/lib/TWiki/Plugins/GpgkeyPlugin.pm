@@ -26,7 +26,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $debug $CurrUrl
     );
 
-$VERSION = '0.010';
+$VERSION = '0.11';
 my $pluginName = "GpgkeyPlugin";
 my $KeyserverCheckURL = "http://blackhole.pca.dfn.de:11371/pks/lookup?op=index&search=";
 # =========================

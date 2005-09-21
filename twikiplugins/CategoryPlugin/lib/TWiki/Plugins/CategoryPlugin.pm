@@ -47,10 +47,10 @@ use vars qw(
         $globalCategoriesWeb $categoryImgUrl $categoryHeader $categorySearch 
     );
 
-$VERSION = '0.900';
+$VERSION = '1.00';
 
 # =========================
-sub initPlugin
+sub  initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
 

@@ -56,7 +56,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.010';
+$VERSION = '1.11';
 $pluginName = 'EmbedBibPlugin';  # Name of this Plugin
 
 # =========================

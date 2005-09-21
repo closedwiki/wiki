@@ -46,7 +46,7 @@ use vars qw(
 		$cgi_query
 	);
 
-$VERSION = '1.021';
+$VERSION = '1.121';
 $pluginName = 'PhotoarchivePlugin';  # Name of this Plugin
 
 # initialize to be safe against warnings

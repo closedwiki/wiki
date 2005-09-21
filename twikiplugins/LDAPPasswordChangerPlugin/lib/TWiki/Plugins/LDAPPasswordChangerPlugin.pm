@@ -30,7 +30,7 @@ sub pwChanger;
 sub talkToLDAP;
 sub genDialog;
 
-$VERSION = '1.003';
+$VERSION = '1.103';
 $pluginName = 'LDAPPasswordChangerPlugin';
 
 # =========================

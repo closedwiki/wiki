@@ -55,7 +55,7 @@ use vars qw(
         %CUSTOM_CODE
      );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 $VARS = 0;
 
 # Loading formatters into hash, return hasp with loaded formatters

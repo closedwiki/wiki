@@ -54,7 +54,7 @@ use vars qw(
          $VERSION $pluginName $debug
     );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 $pluginName = 'TextSectionPlugin';
 $sectionInitVal = "0.";
 

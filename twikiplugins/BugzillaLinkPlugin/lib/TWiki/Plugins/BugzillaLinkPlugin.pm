@@ -48,7 +48,7 @@ use vars qw(
 	$bugUrl $milestoneBugListUrl $milestoneBugListText $bugText $bugImgUrl
     );
 
-$VERSION = '1.200';
+$VERSION = '1.3';
 
 # =========================
 sub initPlugin

@@ -58,7 +58,7 @@ use vars qw(
         $sender @users $debug @sections
     );
 
-$VERSION = '1.14';
+$VERSION = '1.24';
 $pluginName = 'NotificationPlugin';  # Name of this Plugin
 
 # =========================

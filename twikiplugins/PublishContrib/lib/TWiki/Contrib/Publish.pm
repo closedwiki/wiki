@@ -42,7 +42,7 @@ use strict;
 
 use vars qw( $ZipPubUrl $VERSION $session );
 
-$VERSION = 1.302;
+$VERSION = '1.302';
 
 #  Main rendering loop.
 sub main {

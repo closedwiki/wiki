@@ -60,7 +60,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 $pluginName = 'SecurityPlugin';  # Name of this Plugin
 
 # =========================

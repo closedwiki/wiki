@@ -29,7 +29,7 @@ use vars qw(
         $debug  $DefaultReadersFormat $ToolTipID $ToolTipOpened
     );
 
-$VERSION = '1.02';
+$VERSION = '1.12';
 $pluginName = 'ToolTipPlugin';  # Name of this Plugin
 
 # =========================

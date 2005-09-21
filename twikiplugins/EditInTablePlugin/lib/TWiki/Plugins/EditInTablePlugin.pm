@@ -25,7 +25,7 @@ use vars qw(
         $debug $exampleCfgVar $query $saved
     );
 
-$VERSION = '1.020';
+$VERSION = '1.12';
 $pluginName = 'EditInTablePlugin';  # Name of this Plugin
 
 # =========================

@@ -59,7 +59,7 @@ use vars qw(
         $debug $paramMsg
     );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 $pluginName = 'VarCachePlugin';  # Name of this Plugin
 
 # =========================

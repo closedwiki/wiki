@@ -33,7 +33,7 @@ use vars qw(
         $exampleCfgVar $webName $topicName
     );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 
 # =========================
 sub initPlugin

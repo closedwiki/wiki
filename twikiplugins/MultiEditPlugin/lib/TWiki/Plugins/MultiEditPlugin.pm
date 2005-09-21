@@ -26,7 +26,7 @@ use vars qw(
 
 use TWiki;
 
-$VERSION = '1.003';
+$VERSION = '1.103';
 $pluginName = 'MultiEditPlugin';
 
 # =========================

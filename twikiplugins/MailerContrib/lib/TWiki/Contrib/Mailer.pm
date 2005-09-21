@@ -36,7 +36,7 @@ package TWiki::Contrib::Mailer;
 
 use vars qw ( $VERSION $verbose );
 
-$VERSION = 1.010;
+$VERSION = '1.010';
 
 =pod
 

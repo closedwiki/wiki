@@ -4,7 +4,7 @@ use vars qw( $VERSION );
 
 use TWiki;
 
-$VERSION = 0.961;
+$VERSION = '0.961';
 
 # Helper for plugins, to add the requisite bits of the calendar
 # to the header

@@ -40,7 +40,7 @@ use vars qw(
         $debug $bgcolor $hdcolor
     );
 
-$VERSION = '1';
+$VERSION = '1.1';
 $pluginName = 'EmbedTopicPlugin';  # Name of this Plugin
 
 sub initPlugin

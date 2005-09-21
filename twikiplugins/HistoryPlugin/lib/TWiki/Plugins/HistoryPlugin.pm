@@ -62,7 +62,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.021';
+$VERSION = '1.121';
 $pluginName = 'HistoryPlugin';  # Name of this Plugin
 
 my ($rev1, $rev2, $nrev, $maxrev);

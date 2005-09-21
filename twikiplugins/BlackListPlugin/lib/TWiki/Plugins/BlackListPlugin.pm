@@ -29,7 +29,7 @@ use vars qw(
     );
 
 BEGIN {
-    $VERSION = '1.004';  # 22 Jan 2005
+    $VERSION = 1.104;
     $pluginName = 'BlackListPlugin';  # Name of this Plugin
     %cfg =
         (

@@ -35,7 +35,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.201';
+$VERSION = '1.301';
 $pluginName = 'DirectedGraphPlugin';
 use Digest::MD5 qw( md5_hex );
 #the MD5 and hash table are used to create a unique name for each graph

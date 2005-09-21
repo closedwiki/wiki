@@ -45,7 +45,7 @@ use vars qw(
 
 #use Safe;
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 
 $prefixPattern  = '(^|[\s\-\*\(])';
 $ops      = '(<|>|<=|>=|lt|gt|le|ge|==|\!=|<=>|eq|ne|cmp|=~|\!~)';

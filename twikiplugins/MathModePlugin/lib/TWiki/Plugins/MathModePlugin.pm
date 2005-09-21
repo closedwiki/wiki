@@ -62,7 +62,7 @@ use vars qw(
     );
 
 #this is the second release of this plugin
-$VERSION = '1.100';
+$VERSION = '1.2';
 
 #the MD5 hash function is used to uniquely identify a string of math
 use Digest::MD5 qw( md5_hex );

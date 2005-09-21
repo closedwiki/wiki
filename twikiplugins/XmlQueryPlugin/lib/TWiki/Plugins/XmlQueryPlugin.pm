@@ -42,7 +42,7 @@ BEGIN {
     $initialized = 0;
     $xmldir = '/var/tmp/twiki_xml';
     $xmldir = 'c:/.twiki_xml' if $^O eq 'MSWin32' and $xmldir !~ /^\[a-z]\:/i;
-    $VERSION = '1.003';
+    $VERSION = 1.103;
     $debug=0;
     $cache=undef;
     $cachelimit=1024*1024*100; # default 100 meg

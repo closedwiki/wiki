@@ -46,7 +46,7 @@ use vars qw(
 	$totalRemainingTime
     );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 
 # =========================
 sub initPlugin

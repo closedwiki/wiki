@@ -58,7 +58,7 @@ use vars qw(
         $debug $exampleCfgVar $usedColour $unusedColour
     );
 
-$VERSION = '1.010';
+$VERSION = '1.11';
 $pluginName = 'DiskUsagePlugin';  # Name of this Plugin
 
 # =========================

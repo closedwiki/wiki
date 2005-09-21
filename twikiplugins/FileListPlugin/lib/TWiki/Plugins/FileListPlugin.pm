@@ -61,7 +61,7 @@ use vars qw(
         $debug $doOldInclude $renderingWeb
     );
 
-$VERSION = '1.021';
+$VERSION = '1.121';
 $pluginName = 'FileListPlugin';  # Name of this Plugin
 
 # =========================

@@ -26,7 +26,7 @@ use vars qw(
         $debug %db %i18nMessage %color
     );
 
-$VERSION = '1.000';
+$VERSION = '1.1';
 $pluginName = 'MessageBoardPlugin';
 
 # =========================

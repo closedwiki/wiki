@@ -21,7 +21,7 @@ use vars qw(
         $LDAP_Base $LDAP_Host $LDAP_Header $LDAP_Format $LDAP_Filter $LDAP_jpegPhoto $LDAP_Notfounderror
     );
 
-$VERSION = '1.010';
+$VERSION = '1.11';
 
 use Net::LDAP;
 use Net::LDAP::Entry;

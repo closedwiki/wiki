@@ -55,7 +55,7 @@ use vars qw(
         $debug $doOldInclude $renderingWeb
     );
 
-$VERSION = '1.0';
+$VERSION = '1.1';
 $pluginName = 'TodaysVisitorsPlugin';  # Name of this Plugin
 
 # =========================
