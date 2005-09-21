@@ -1,9 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1104759349" format="1.0" version="$Rev$"}%
 ---+ User List sorted by date joined / updated
 
-Click the Last Updated column heading to see when people updated.
+%INCLUDE{"UserListHeader"}%
 
 %TABLE{initsort="1" initdirection="up"}%
 %SEARCH{"%META:FORM.*[U]serForm" regex="on" header="| *Date joined* | *Last updated* | *FirstName* | *LastName* | *Organization* | *Country* |" format="| $createdate | $date | [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) | $formfield(Country) |" excludetopic="Web*" nosearch="on"}%
-
-__Related Topic:__ UserList, UserListByLocation 

@@ -1,11 +1,8 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121218644" format="1.1" version="$Rev$"}%
----+ Showing all photographs
+---+ User List showing all photographs
 
-Also available:
-%INCLUDE{UserListHeader}%
+%INCLUDE{"UserListHeader"}%
 
-%IMAGEGALLERY{ thumbtitle="[[People.$topic][$topic]]" topics="%TOPICLIST{separator=","}%" size="large" title="[[People.$topic][$topic]]" }%
+%IMAGEGALLERY{thumbtitle="[[$topic]]" topics="%SEARCH{"META:FORM.name.*[U]serForm\"" type="regex" nonoise="on" separator="," format="$topic"}%" size="large" title="[[$topic]]"}%
 
 If TWiki:Plugins.ImageGalleryPlugin is installed this page will show photos and names of all registered users. 
-
-

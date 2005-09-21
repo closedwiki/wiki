@@ -1,8 +1,6 @@
 %META:TOPICINFO{author="TWikiContributor" date="1104759966" format="1.0" version="$Rev$"}%
-%META:TOPICPARENT{name="WebHome"}%
 ---+ User List sorted by name
 
-__Related topics:__ TWikiGroups, %SEARCH{"UserListBy*" web="%MAINWEB%" scope="topic" separator=", " nonoise="on" format="$web.$topic"}%
+%INCLUDE{"UserListHeader"}%
 
 %SEARCH{"%META:FORM.*[U]serForm" nosearch="on" regex="on" header="| *FirstName* | *LastName* | *Organization* | *State* | *Country* |" format="| [[$topic][$formfield(FirstName)]] | [[$topic][$formfield(LastName)]] | $formfield(Organization) | $formfield(State) | $formfield(Country) |" excludetopic="Web*"}%
-

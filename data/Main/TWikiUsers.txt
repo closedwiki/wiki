@@ -5,7 +5,7 @@ Below is a list of users with accounts. If you want to edit topics or see protec
 
 If you forget your password, %TWIKIWEB%.ResetPassword will get a new one sent to you.
 
-__Related topics:__ TWikiGroups, %SEARCH{"UserListBy*" web="%MAINWEB%" scope="topic" separator=", " nonoise="on" format="$web.$topic"}%
+%INCLUDE{"UserListHeader"}%
 
 ----
 #ListStart
