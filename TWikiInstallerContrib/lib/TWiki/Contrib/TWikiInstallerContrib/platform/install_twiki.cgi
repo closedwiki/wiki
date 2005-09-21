@@ -207,6 +207,7 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
     }
 #    print FH qq{\$TWiki::cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
     print FH qq{\$TWiki::cfg{HidePasswdInRegistration} = 1;\n};
+    print FH qq{\$TWiki::cfg{AutoAttachPubFiles} = 1;\n};
 
     close( FH ) or die "Can't close $file: $! ???";
 }
