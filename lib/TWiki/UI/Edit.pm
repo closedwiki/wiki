@@ -270,7 +270,7 @@ sub edit {
     $tmpl =~ s/\(edit\)/\(edit cmd=$saveCmd\)/go if $saveCmd;
 
     $tmpl =~ s/%CMD%/$saveCmd/go;
-    $session->enterContext( 'can_render_meta', $meta )
+    $session->enterContext( 'can_render_meta', $meta );
 
     $tmpl = $session->handleCommonTags( $tmpl, $webName, $topic );
     $tmpl = $session->{renderer}->getRenderedVersion( $tmpl, $webName, $topic );

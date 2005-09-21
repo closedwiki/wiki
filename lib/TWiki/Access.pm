@@ -196,7 +196,9 @@ sub checkAccessPermission {
         }
     }
 
-    #print STDERR "OK ALLOW $allowText DENY $denyText\n";
+    #print STDERR "OK, permitted\n";
+    #print STDERR "ALLOW: $allowText\n" if defined $allowText;
+    #print STDERR "DEBY: $denyText\n" if defined $denyText;
     return 1;
 }
 
