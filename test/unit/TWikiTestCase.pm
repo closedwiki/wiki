@@ -92,9 +92,10 @@ sub _copy {
 # Only the user topic is created; the user is _not_ added to TWikiUsers.
 # The wikiname of the new user topic is returned.
 sub createFakeUser {
-    my( $this, $twiki, $text ) = @_;
+    my( $this, $twiki, $text, $name ) = @_;
     $this->assert($twiki->{store}->webExists($TWiki::cfg{UsersWebName}));
-    my $base = "TemporaryTestUser";
+    $name ||= '';
+    my $base = "TemporaryTestUser".$name;
     my $i = 0;
     while($twiki->{store}->topicExists($TWiki::cfg{UsersWebName},$base.$i)) {
         $i++;

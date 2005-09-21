@@ -37,14 +37,14 @@ sub set_up {
     $twiki->{store}->saveTopic($twiki->{user},
                                $TWiki::cfg{UsersWebName},
                                $TWiki::cfg{DefaultUserWikiName},'');
-    $MrWhite = $this->createFakeUser($twiki);
-    $MrBlue = $this->createFakeUser($twiki);
-    $MrOrange = $this->createFakeUser($twiki);
-    $MrGreen = $this->createFakeUser($twiki);
-    $MrYellow = $this->createFakeUser($twiki);
+    $MrWhite = $this->createFakeUser($twiki, '', "White");
+    $MrBlue = $this->createFakeUser($twiki, '', "Blue");
+    $MrOrange = $this->createFakeUser($twiki, '', "Orange");
+    $MrGreen = $this->createFakeUser($twiki, '', "Green");
+    $MrYellow = $this->createFakeUser($twiki, '', "Yellow");
     $twiki->{store}->saveTopic( $currUser, $peopleWeb, "ReservoirDogsGroup",
                                 <<THIS
-   * Set GROUP=$MrWhite,$peopleWeb.$MrBlue
+   * Set GROUP = $MrWhite,$peopleWeb.$MrBlue
 THIS
                                 , undef);
 }
@@ -80,10 +80,11 @@ sub test_denytopic {
                                 <<THIS
 If DENYTOPIC is set to a list of wikinames
     * people in the list will be DENIED.
-\t* Set DENYTOPICVIEW=$MrGreen
-   * Set DENYTOPICVIEW=$MrYellow,$peopleWeb.$MrOrange,%MAINWEB%.ReservoirDogsGroup
+\t* Set DENYTOPICVIEW = $MrGreen
+   * Set DENYTOPICVIEW = $MrYellow,$peopleWeb.$MrOrange,%MAINWEB%.ReservoirDogsGroup
 THIS
                                 , undef);
+    $twiki = new TWiki();
 
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
@@ -102,6 +103,7 @@ If DENYTOPIC is set to empty ( i.e. Set DENYTOPIC = )
    * Set DENYTOPICVIEW=
 THIS
                                 , undef);
+    $twiki = new TWiki();
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrGreen);
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrYellow);
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
@@ -119,6 +121,7 @@ If ALLOWTOPIC is set
 \t* Set ALLOWTOPICVIEW = %MAINWEB%.$MrOrange
 THIS
                                 , undef);
+    $twiki = new TWiki();
     $this->PERMITTED($testWeb,$testTopic,"VIEW",$MrOrange);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrGreen);
     $this->DENIED($testWeb,$testTopic,"VIEW",$MrYellow);
