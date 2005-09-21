@@ -201,6 +201,7 @@ See IfStatements for more information on how to write %IF statements.
 	| =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
 	| =section="name"= | Includes only the specified section, as defined in the included topic by the [[#VarSECTION][SECTION]] and [[#VarENDSECTION][ENDSECTION]] tags| |
 Any other parameters will be defined as variables within the scope of the included topic. For example, =%<nop>INCLUDE{"AnotherTopic" PONE="val 1" PTWO="val 2"}%= will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included topic.
+	* Example: To include a part of a webpage, use this pattern: =%<nop>INCLUDE{"http://some.page.com/index.html" pattern="^.*?BEFORE(.*)AFTER.*" }%=, where =BEFORE= is the part of the page just before the inclusion, and =AFTER= is the part just after the inclusion. 
 	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], IncludeTopicsAndWebPages, [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]], [[#VarSECTION][SECTION]], [[#VarENDSECTION][ENDSECTION]]
 
 #VarINCLUDINGTOPIC
