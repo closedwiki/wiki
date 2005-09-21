@@ -1,5 +1,4 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-TODO: is this made redundant by the re-write of TWikiUserAuthentication?
 
 
 %TOC%
@@ -15,7 +14,6 @@ _Register users on your TWiki site; change/reset/install passwords; remove user 
 ---++ Register User
 
 It is not necessary to have user home pages in the TWiki system for Authentication to work - see TWikiUserAuthentication for deatils.
-
 
 	* TWikiRegistration is for users to fill out a form
 	* %TWIKIWEB%.NewUserTemplate can be changed to customize user home pages, it can optionally use the %MAINWEB%.UserForm to define user fields as meta data

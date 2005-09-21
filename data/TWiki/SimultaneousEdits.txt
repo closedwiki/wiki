@@ -10,6 +10,4 @@ The second person gets a warning that the topic is currently being edited by ano
 __Back to:__ TWikiFAQ
 
 
-TODO: run a link checker - where's this UnloadTopic?
-
 __Related Topics:__ UserDocumentationCategory

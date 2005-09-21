@@ -113,7 +113,6 @@ data/TWiki/MainFeatures.txt 0755
 data/TWiki/ManagingTopics.txt 0755
 data/TWiki/ManagingUsers.txt 0755
 data/TWiki/ManagingWebs.txt 0755
-data/TWiki/MetaDataRendering.txt 0755
 data/TWiki/MoveTopic.txt 0755
 data/TWiki/NewUserTemplate.txt 0755
 data/TWiki/ObjectMethod.txt 0755
@@ -278,8 +277,6 @@ data/TWiki/WikiSyntaxSummary.txt 0755
 data/TWiki/WikiTopic.txt 0755
 data/TWiki/WikiWikiClones.txt 0755
 data/TWiki/WikiWord.txt 0755
-data/TWiki/WindowsInstallCookbook.txt 0755
-data/TWiki/WindowsInstallSummary.txt 0755
 data/TWiki/YouAreHere.txt 0755
 data/Trash/TrashAttachment.txt 0755
 data/Trash/WebChanges.txt 0755
@@ -823,5 +820,6 @@ twiki_httpd_conf.txt 0755
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
+!include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/MailerContrib
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin

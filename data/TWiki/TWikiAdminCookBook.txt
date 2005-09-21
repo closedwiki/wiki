@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 ---+!! TWiki Admin Cook Book
 
-This page has many tips and tricks, particularly useful when you're installing TWiki for the first time. This guide is most useful *%RED%before%ENDCOLOR%* or immediately following a TWiki installation! 
+This page has some tips and tricks, particularly useful when you're installing TWiki for the first time. This guide is most useful *%RED%before%ENDCOLOR%* or immediately following a TWiki installation! 
 
 %TOC%
 
@@ -13,6 +13,10 @@ __See also:__
 ---
 ---++ During Installation
 
+---+++ Don't change anything in the %TWIKIWEB% web!
+
+Everything you change during installation makes life a little bit harder next time you come to upgrade. So treat the TWiki web as read-only, and create your own local site web for customised documentation.
+
 ---+++ Rename Main web to User web
 
 You can rename the =Main= web to =User=. It will make WikiWord links to usernames more meaningful (<nop>User.UserName instead of <nop>Main.UserName); but does not bring much gain for other types of topics like (<nop>User.EngineeringGroup). Use the Rename Web feature in the %MAINWEB%.WebPreferences topic of any web you want to rename.
@@ -21,18 +25,12 @@ You can rename the =Main= web to =User=. It will make WikiWord links to username
 
 Users keep Forgetting Passwords (see TWiki:Codev.ForgettingPasswords ). When demonstrating TWiki to new users and/or helping them with TWikiRegistration, do not forget to show the user how to use the "remember my password" feature in their browser.
 
-A quick way to check the guest password is to view the =.htaccess= file. 
-
-=<nop>AuthName 'TWiki <nop>UserName (i.e. <nop>TWikiGuest/guest)'=
-
 ----
 ---++ Before First Presentation
 
-Tips about first presentation -- ATasteOfTWiki is a handy presentation you can give to your users. Read also TWiki:Main.TWikiCourseOutlineExample and TWiki:Codev.HowToGetInternalBuyInForTWiki. The TWiki:Codev.TWikiPresentation05Aug2004 talk given by TWiki:Main.PeterThoeny during !LinuxWorld gives some background on TWiki collaboration.
+Tips about first presentation -- ATasteOfTWiki is a handy presentation you can give to your users. Read also TWiki:Main.TWikiCourseOutlineExample and TWiki:Codev.HowToGetInternalBuyInForTWiki. There are a number of other presentations on TWiki.org (in the Codev web) that you might like to browse.
 
 How to build participation: read WikiOrg:TipsForSiteOperators - advice directly from Ward Cunningham, author of Wiki concept and first Wiki.
-
-Consider installing [[#CommentPlugin]] and [[#SlideShowPlugin]] before your first demo.
 
 ---+++ Simplify menu in page templates
 
@@ -40,7 +38,7 @@ Consider installing [[#CommentPlugin]] and [[#SlideShowPlugin]] before your firs
 
 A *Skin* is TWiki's way to present different system-generated formats (like header/footer/sidebar menu) *and exactly the same* information from the page body (see TWikiSkins). The "Classic" TWiki skin is oriented towards advanced power users. _Newbies_ may feel overwhelmed by the number of options. Many simpler custom skins are in development at TWiki:Plugins.WebHome. Consider using a simpler custom skin to make a better "first impression": _TWiki is simple to use._ 
 
-There is currently a discussion at TWiki:Codev.SimplerDefaultTemplates about simpler default template for TWiki:Codev.SimplerTWikiDistribution.
+There are other skins available for download. Visit the TWiki:Plugins.WebHome web on TWiki.org for a full list.
 
 ---+++ Customize tutorial for beginners 
 
@@ -56,37 +54,16 @@ AdminToolsCategory has most of the tools you need to administer a TWiki site - o
 ---------------------
 ---++ Best of Plugins
 
-With more than 100 TWiki plugins (and counting), there are a lot to choose from. Plugins are mainly contributed by TWiki users who are software developers. Plugins are a relatively new TWiki addition, so there are fewer established standards than for the core TWiki code.  This means that not all plugins are equal in ease of installation, operation, or compatibility with each other. Here are selected plugins that are reliable, easy-to-use and offer basic enhanced functionality.
-
-#CommentPlugin
----+++ <nop>CommentPlugin !! -- TWiki:Plugins.CommentPlugin
-
-User-friendly alternative of ==Edit==, without losing Wiki spirit. Comments can be entered in a conventional Web form style with a text box and a submit button.  This is all displayed on a TWiki page without having to use TWiki's ==Edit==. Text added appears exactly as if edited normally, and topic can be edited also using the full TWiki ==Edit==. This is useful to encourage participation among your users who are not yet comfortable with TWiki capabilities.
-
-#SlideShowPlugin
----+++ <nop>SlideShowPlugin !! -- TWiki:Plugins.SlideShowPlugin
-
-This Plugin allows you to convert topics with headings into web based presentations. This is a useful alternative to <nop>PowerPoint, especially if you need to link to related content.
-
----+++ <nop>SpreadSheetPlugin !! -- TWiki:Plugins.SpreadSheetPlugin
-
-This Plugin allows you to add spreadsheet calculation like ="$SUM( $ABOVE() )"= to tables located in TWiki topics. 
-
----+++ <nop>TablePlugin !! -- TWiki:Plugins.TablePlugin
-
-A must-have, this Plugin allows you to control attributes of tables and sorting of table columns.
-
----+++ <nop>TopicVarsPlugin !! -- TWiki:Plugins.TopicVarsPlugin
-
-This lets you create variables, like a graphics icon library, in any topic - instead of only in WebPreferences - and refer to them from other topics within the same web.
+With more than 100 TWiki plugins (and counting), there are a lot to choose from. Visit the TWiki:Plugins.WebHome web on TWiki.org for a full list.
 
 ---
 ---++ TWiki-based applications
 
+See TWiki:Codev.CategoryCookbook for ideas
+
 	* Simple workflow application: TWiki:Sandbox.ItemToDo 
 	* Simple inventory system with filtering capabilities: TWiki:Main.TWikiInstallation
 	* Simple change request application: TWiki:Sandbox.ChangeRequest
-	* Extended SEARCH capabilities: TWiki:Codev.SearchWithAnd
 
 ---
 

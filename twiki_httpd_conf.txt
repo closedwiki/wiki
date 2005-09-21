@@ -36,6 +36,11 @@ Alias /twiki/ "/home/httpd/twiki/"
 # other files like CSS stylesheets and icons. AllowOverride None stops a
 # user installing a .htaccess file that overrides these options.
 
+# Note that files in pub are *not* protected by TWiki Access Controls,
+# so if you want to control access to files attached to topics, you may
+# need to add your own .htaccess files to subdirectories of pub. See the
+# Apache documentation on .htaccess for more info.
+
 #### Change the path to match your local installation
 <Directory "/home/httpd/twiki/pub">
 	 Options FollowSymLinks +Includes
@@ -43,13 +48,18 @@ Alias /twiki/ "/home/httpd/twiki/"
 	 Allow from all
 </Directory>
 
-# The data and templates directories should be set so that they are
-# *not* visible as URLs, so we set them as =deny from all=.
+# Security note: All other directories should be set so
+# that they are *not* visible as URLs, so we set them as =deny from all=.
 
 #### Change the paths to match your local installation
 <Directory "/home/httpd/twiki/data">
 	 deny from all
 </Directory>
+
 <Directory "/home/httpd/twiki/templates">
+	 deny from all
+</Directory>
+
+<Directory "/home/httpd/twiki/lib">
 	 deny from all
 </Directory>

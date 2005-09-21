@@ -1,5 +1,15 @@
-URI,>=1.35,cpan,Required. Available from the CPAN archive.
-Error,>=1000000,cpan,Required. Available from the CPAN archive.
-Algorithm::Diff,>=1000000,cpan,Required. Available from the CPAN archive.
-CGI::Session,>=1000000,cpan,Optional. Needed if you want to have persistant logins.
-CGI::Cookie,>=1000000,cpan,Optional. Needed if you want to have persistant logins.
+CGI::Carp,>=1.26,cpan,Required. Available from the CPAN archive.
+CGI::Cookie,>=1.24,cpan,Optional. Available from the CPAN archive.
+CGI::Session,>=3.95,cpan,Optional. Available from the CPAN archive.
+Config,>=0,cpan,Required. Available from the CPAN archive.
+Cwd,>=3.05,cpan,Required. Available from the CPAN archive.
+Data::Dumper,>=2.121,cpan,Required. Available from the CPAN archive.
+File::Copy,>=2.06,cpan,Required. Available from the CPAN archive.
+File::Find,>=1.05,cpan,Required. Available from the CPAN archive.
+File::Spec,>=3.05,cpan,Required. Available from the CPAN archive.
+FileHandle,>=2.01,cpan,Required. Available from the CPAN archive.
+IO::File,>=1.10,cpan,Required. Available from the CPAN archive.
+Locale::Maketext::Lexicon,>=0,cpan,Optional. Available from the CPAN archive.
+Net::SMTP,>=2.29,cpan,Optional. Available from the CPAN archive.
+Time::Local,>=1.11,cpan,Required. Available from the CPAN archive.
+
