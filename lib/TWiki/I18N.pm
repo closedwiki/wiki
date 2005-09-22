@@ -24,7 +24,7 @@ use strict;
 
 =pod
 
----+ Package TWiki::I18N
+---+ package TWiki::I18N
 
 Support for strings translation and language detection.
 
@@ -148,7 +148,13 @@ sub get {
     #   browser.
     my $this;
     if ($initialised) {
-        $this = TWiki::I18N->get_handle();
+        $session->enterContext( 'i18n_enabled' );
+        my $userLanguage = _normalize_language_tag($session->{prefs}->getPreferencesValue('LANGUAGE'));
+        if ($userLanguage) {
+            $this = TWiki::I18N->get_handle($userLanguage);
+        } else {
+            $this = TWiki::I18N->get_handle();
+        }
     } else {
         $this = new TWiki::I18N::Fallback();
         # we couldn't initialise 'optional' I18N infrastrcture, warn that we
@@ -266,10 +272,12 @@ sub _add_language {
 }
 
 # utility function: normalize language tags like ab_CD to ab-cd
+# also renove any character there is not a letter [a-z] or a hyphen.
 sub _normalize_language_tag {
   my $tag = shift;
   $tag = lc($tag);;
   $tag =~ s/\_/-/g;
+  $tag =~ s/[^a-z-]//g;
   return $tag;
 }
 

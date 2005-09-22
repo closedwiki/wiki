@@ -1008,8 +1008,6 @@ sub new {
     # cache CGI information in the session object
     $this->{cgiQuery} = $query;
     $this->{remoteUser} = $remoteUser;
-    # language information
-    $this->{i18n} = TWiki::I18N::get( $this );
 
     $this->{users} = new TWiki::Users( $this );
 
@@ -1164,6 +1162,9 @@ sub new {
 
     $prefs->pushPreferences(
         $this->{webName}, $this->{topicName}, 'TOPIC' );
+
+    # language information; must be loaded after preferences are available
+    $this->{i18n} = TWiki::I18N::get( $this );
 
     $this->{renderer} = new TWiki::Render( $this );
 

@@ -1,0 +1,42 @@
+%TMPL:INCLUDE{"twiki"}%
+%TMPL:DEF{"titleaction"}% %_{"(change language)"}% %TMPL:END%
+%TMPL:DEF{"webaction"}%%TMPL:END%
+%TMPL:DEF{"heading"}%%_{"Change language"}%%TMPL:END%
+%TMPL:DEF{"topicaction"}% %TMPL:P{"canceltopicaction"}%   %TMPL:END%
+
+%TMPL:DEF{"languagenotes"}%
+*%_{"Notes:"}%*
+
+   * %_{"You can set your favourite language permanently by setting the [_1] variable in your user topic.", "*LANGUAGE*"}%
+%TMPL:END%
+
+%TMPL:DEF{"changelanguage"}%
+
+%_{"TWiki's user interface is available in several language. You want to change to change the language for this session, choose one of the following and hit \"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of the page."}%
+
+<center>
+<form action="%SCRIPTURL%/oops/%WEB%/%TOPIC%" method="GET">
+  <select name="language">
+    %LANGUAGES{format="<option value='$langtag'>$langname</option>"}%
+  </select>
+  <input type="hidden" name="template" value="oopschangelanguage"/>
+  <input type="hidden" name="def" value="languagechanged"/>
+  <input type="submit" value=' %_{"Change language"}% ' />
+</form>
+</center>
+
+%TMPL:P{"languagenotes"}%
+%TMPL:END%
+%TMPL:DEF{"languagechanged"}%
+
+%SESSION_VARIABLE{"LANGUAGE" set="%URLPARAM{language}%"}%
+
+%_{"Your language will be changed to [_1] from the next screen. ~[~[[_2]~]~[Click here~]~] to proceed.", "*%SESSION_VARIABLE{LANGUAGE}%*", "%SCRIPTURL%/view/%WEB%/%TOPIC%"}%
+
+%TMPL:P{"languagenotes"}%
+
+%TMPL:END%
+%TMPL:DEF{"message"}%
+%INSTANTIATE%
+%TMPL:END%
+%TMPL:P{"oops"}%
