@@ -46,6 +46,7 @@ data/Main/TWikiUsers.txt 0755
 data/Main/UnknownUser.txt 0755
 data/Main/UserForm.txt 0755
 data/Main/UserList.txt 0755
+data/Main/UserListHeader.txt 0755
 data/Main/UserListByDateJoined.txt 0755
 data/Main/UserListByLocation.txt 0755
 data/Main/UserListByPhotograph.txt 0755
