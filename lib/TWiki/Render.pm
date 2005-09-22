@@ -1279,7 +1279,9 @@ sub TML2PlainText {
     } else {
         $text =~ s/%WEB%/$web/g;
         $text =~ s/%TOPIC%/$topic/g;
-        $text =~ s/%(WIKITOOLNAME)%/$this->{session}->{SESSION_TAGS}{$1}/g;
+        my $wtn = $this->{session}->{prefs}->getPreferencesValue(
+            'WIKITOOLNAME' ) || '';
+        $text =~ s/%WIKITOOLNAME%/$wtn/g;
         if( $opts =~ /showvar/ ) {
             $text =~ s/%(\w+({.*?}))%/$1/g; # defuse
         } else {
