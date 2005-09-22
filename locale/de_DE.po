@@ -1628,7 +1628,8 @@ msgstr ""
 "Bitte kontaktieren Sie %1."
 
 #: templates/oopsattention.tmpl:250
-msgid "There should be a line that includes %1, look for %2 (or %2)"
+#, fuzzy
+msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr ""
 "Es sollte eine Zeile geben, die %1 inkludiert, bitte nach %2 (oder %2) "
 "schauen"
@@ -1977,10 +1978,11 @@ msgstr ""
 "Sie müssen wahrscheinlich Ihren Administrator, %1, fragen, um das zu tun."
 
 #: templates/oopsattention.tmpl:140
+#, fuzzy
 msgid ""
-"Your activation code has been sent to %PARAM1%.  Either click on the link in "
-"your email or enter the code in the box below to activate your membership. "
-"(This code is of the form \"YourName.xxxx\")"
+"Your activation code has been sent to %1.  Either click on the link in your "
+"email or enter the code in the box below to activate your membership. (This "
+"code is of the form \"YourName.xxxx\")"
 msgstr ""
 "Ihr Aktivierungs-Code wurde nach %PARAM1% gesendet. Entweder klicken Sie auf "
 "den Verweis in Ihrer Mail oder Sie fügen den Code in die Box unten ein, um "

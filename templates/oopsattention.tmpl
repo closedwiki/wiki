@@ -137,7 +137,7 @@
 %TMPL:DEF{"confirm"}%
 ---+++ %_{"Thank you for registering"}%
 
-%_{"Your activation code has been sent to %PARAM1%.  Either click on the link in your email or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxx\")"}%
+%_{"Your activation code has been sent to [_1].  Either click on the link in your email or enter the code in the box below to activate your membership. (This code is of the form \"YourName.xxxx\")", "%PARAM1%"}%
 
 <form action="%SCRIPTURL%/register%SCRIPTSUFFIX%" method=get>
 <input type="hidden" name="action" value="verify" size="20" />
@@ -247,7 +247,7 @@
 ---++ 2. %_{"The topic is in an old format"}%
 
    * %_{"Click on ~[~[[_1]~]~[Debug topic text~]~].", "%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=debug"}%
-      * %_{"There should be a line that includes [_1], look for [_2] (or [_2])", "=META:FORM=", "name=\"%PARAM1%.%PARAM2%\"", "name=\"%PARAM2%\""}%
+      * %_{"There should be a line that includes [_1], look for [_2] (or [_3])", "=META:FORM=", "name=\"%PARAM1%.%PARAM2%\"", "name=\"%PARAM2%\""}%
       * %_{"If this line isn't present see _upgrade_ section below"}%
 
 ---++ 3.%_{"Topic can not be upgraded from old style category table"}%

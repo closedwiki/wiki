@@ -1502,7 +1502,7 @@ msgid ""
 msgstr ""
 
 #: templates/oopsattention.tmpl:250
-msgid "There should be a line that includes %1, look for %2 (or %2)"
+msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr ""
 
 #: templates/oopsleaseconflict.tmpl:8
@@ -1814,9 +1814,9 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:140
 msgid ""
-"Your activation code has been sent to %PARAM1%.  Either click on the link in "
-"your email or enter the code in the box below to activate your membership. "
-"(This code is of the form \"YourName.xxxx\")"
+"Your activation code has been sent to %1.  Either click on the link in your "
+"email or enter the code in the box below to activate your membership. (This "
+"code is of the form \"YourName.xxxx\")"
 msgstr ""
 
 #: templates/mailresetpassword.tmpl:10
