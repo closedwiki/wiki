@@ -1,5 +1,5 @@
 ---+!! TWiki 'Dakar' Release
-'Dakar' is the first major release of the TWiki collaboration environment in nearly a year. The focus of this release has been on refactoring the code in the interests of efficiency and maintainance, though a range of sexy new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
+'Dakar' is the first major release of the TWiki collaboration environment in nearly a year. The focus of this release has been on refactoring the code in the interests of *security*, *efficiency* and *maintainability*, though a range of sexy new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
 
 Most of the redesign, refactoring and documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
    * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - internationalisation framework
@@ -181,6 +181,10 @@ And =%<nop>INCLUDE{"SampleTopic" section="inner"}%= will produce:
 In the same line, overlapped sections are allowed.
 
 ---++ Notes for !TWikiAdmins and !WikiMasters
+
+---+++ Security
+
+Dakar Release introduces the use of 'safe pipes' to prevent any malicious request from executing code on the server. This strategy stops any of the known attacks dead in its tracks. The Dakar codebase has not been impacted by any of the recent security advisories in any way. Several public sites have been running Dakar code for some months now, and to the best of our knowledge none has been hacked.
 
 ---+++ CPAN Requirements
 
