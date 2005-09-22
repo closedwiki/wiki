@@ -185,7 +185,9 @@ select {
 	padding:1px;
 }
 textarea {
-	font-family:"Lucida Grande", verdana, arial, sans-serif;
+	font-family: monospace;
+        font-size: 110%;
+
 }
 fieldset {
 }
