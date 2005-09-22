@@ -96,12 +96,12 @@ h1 {
 	margin:0 0 .5em 0;
 }
 .patternNoViewPage h1 {
-	font-size:140%; /* almost as big as h2 in topic */
+	font-size:150%;
 }
 h2, h3, h4, h5, h6 {color:#a00;} /*C5*/
 h2 { font-size:135%;}
-h3 { font-size:130%;}
-h4 { font-size:125%;}
+h3 { font-size:125%;}
+h4 { font-size:118%;}
 h5 { font-size:110%;}
 h6 { font-size:100%;}
 h2 {
@@ -185,9 +185,7 @@ select {
 	padding:1px;
 }
 textarea {
-	font-family: monospace;
-        font-size: 110%;
-
+	font-family:"Lucida Grande", verdana, arial, sans-serif;
 }
 fieldset {
 }
@@ -382,15 +380,34 @@ th.twikiSortedDescendingCol a:hover {
 	color:#0054C0; /*C1*/
 	text-decoration:underline;
 }
-.twikiPageForm {
-	margin:.5em 0 1.5em 0;
-	padding:.5em 1em;
-	border:1px solid #aaa;
+.twikiPageForm table {
+	margin:0 0 2em 0;
+	width:100%;
+	border:2px solid #e6e6e6;
+	background:#e6e6e6;
 }
-.twikiPageForm table,
 .twikiPageForm th,
 .twikiPageForm td {
 	border:0;
+	padding:.15em;
+	border-bottom:1px solid #e6e6e6;
+}
+.twikiPageForm th {
+	color:#666;
+}
+.twikiPageForm td {}
+.twikiPageForm th.last,
+.twikiPageForm td.last {
+	border-bottom:0;
+}
+.twikiPageForm td.first {
+	padding-top:1em;
+	background:#e6e6e6;
+}
+.twikiPageForm hr {
+	border-color:#e6e6e6;
+	background-color:#e6e6e6;
+	color:#e6e6e6;
 }
 .twikiButton, 
 .twikiSubmit {
