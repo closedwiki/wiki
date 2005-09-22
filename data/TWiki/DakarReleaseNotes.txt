@@ -524,9 +524,7 @@ You should convert your plugins to call the =TWiki::Func= API. If you have calle
 | TWiki:Plugins.MultiEditPlugin | Relies on Plugins.EditContrib |
 | TWiki:Plugins.SablotronPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.SectionalEditPlugin | Relies on Plugins.EditContrib |
-| TWiki:Plugins.SvgPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.ThreadedDiscussionPlugin | Relies on Plugins.EditContrib |
-| TWiki:Plugins.TopicTranslationsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 
 ---+++ Contributions that load and don't fail, but don't work as advertised
 | TWiki:Plugins.BatchUploadPlugin | Tested by TWiki:Main.CrawfordCurrie. |
@@ -615,8 +613,10 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.SmiliesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.SpacedWikiWordPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.SpreadSheetPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.SvgPlugin | Tested by TWiki:Main.AntonioTerceiro. |
 | TWiki:Plugins.TablePlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.TocPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.TopicTranslationsPlugin | Tested by TWiki:Main.AntonioTerceiro. |
 | TWiki:Plugins.TreePlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.TWikiDrawPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.TypographyPlugin | Tested by TWiki:Main.CrawfordCurrie. |
