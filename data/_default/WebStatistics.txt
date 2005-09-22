@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiGuest" date="1112697648" format="1.0" version="1.2"}%
+%META:TOPICINFO{author="TWikiGuest" date="1112697648" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---++ Statistics for <nop>%WEB% Web
 
