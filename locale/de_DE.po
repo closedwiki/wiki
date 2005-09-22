@@ -1841,6 +1841,10 @@ msgstr ""
 msgid "Version"
 msgstr "Version"
 
+#: templates/oopsmore.pattern.tmpl:50
+msgid "View difference"
+msgstr ""
+
 #: templates/oopsmore.pattern.tmpl:39
 msgid "View previous topic revision:"
 msgstr "Vorherige Topic Revision ansehen:"
@@ -1848,6 +1852,11 @@ msgstr "Vorherige Topic Revision ansehen:"
 #: templates/view.pattern.tmpl:79
 msgid "View raw text without formatting"
 msgstr "Rohtext ohne Formatierung ansehen"
+
+#: templates/oopsmore.pattern.tmpl:42
+#, fuzzy
+msgid "View revision"
+msgstr "Neuere Revision"
 
 #: templates/oopsleaseconflict.tmpl:27 templates/rdiff.pattern.tmpl:18
 msgid "View topic"
@@ -2020,7 +2029,7 @@ msgstr ""
 "VARIABLENNAME [Leerzeichen] = [Wert]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:247
+#: lib/TWiki/I18N.pm:252
 msgid "_language_name"
 msgstr "Deutsch"
 

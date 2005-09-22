@@ -1849,6 +1849,10 @@ msgstr ""
 msgid "Version"
 msgstr "Versão"
 
+#: templates/oopsmore.pattern.tmpl:50
+msgid "View difference"
+msgstr "Ver diferença"
+
 #: templates/oopsmore.pattern.tmpl:39
 msgid "View previous topic revision:"
 msgstr "Ver versão anterior do tópico:"
@@ -1856,6 +1860,10 @@ msgstr "Ver versão anterior do tópico:"
 #: templates/view.pattern.tmpl:79
 msgid "View raw text without formatting"
 msgstr "Visualizar texto puro sem formatação"
+
+#: templates/oopsmore.pattern.tmpl:42
+msgid "View revision"
+msgstr "Ver revisão"
 
 #: templates/oopsleaseconflict.tmpl:27 templates/rdiff.pattern.tmpl:18
 msgid "View topic"
@@ -1995,7 +2003,6 @@ msgstr ""
 "ou clicar no link no seu e-mail ou colocar o código no campo abaixo. (Esse "
 "código é da forma \"SeuNome.xxxx\")"
 
-
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "Sua senha foi alterada para %1."
@@ -2029,7 +2036,7 @@ msgstr ""
 "[valor]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:247
+#: lib/TWiki/I18N.pm:252
 msgid "_language_name"
 msgstr "Português"
 
