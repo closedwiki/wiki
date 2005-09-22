@@ -82,7 +82,7 @@ multiple="on" nosearch="on" nototal="on" format="<option value=%INCLUDINGTOPIC%?
 %STOPSIDEBAR% 
 </verbatim>
 
-This will create similar functionality as Plugins.TopicClassificationAddOn
+This will create similar functionality as TWiki:Plugins.TopicClassificationAddOn
 %BR%
 
 ---++ Pattern 3a: listbox with all user names
