@@ -1051,10 +1051,6 @@ msgstr "Login Name %1"
 msgid "Logon"
 msgstr "Einloggen"
 
-#: templates/preview.pattern.tmpl:46
-msgid "Minor changes, don't notify"
-msgstr "Geringfügige Änderungen, nicht benachrichtigen"
-
 #: templates/oopsattention.tmpl:158
 msgid "Missing Fields"
 msgstr "Fehlende Felder"

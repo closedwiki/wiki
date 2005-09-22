@@ -964,10 +964,6 @@ msgstr ""
 msgid "Logon"
 msgstr ""
 
-#: templates/preview.pattern.tmpl:46
-msgid "Minor changes, don't notify"
-msgstr ""
-
 #: templates/oopsattention.tmpl:158
 msgid "Missing Fields"
 msgstr ""
