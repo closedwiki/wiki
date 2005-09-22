@@ -84,9 +84,5 @@ __Related Topics:__ TWikiSite, TWikiHistory, TWikiPlannedFeatures, TWikiEnhancem
 -----
 %INCLUDE{"TWikiCss"}%
 
------
-%INCLUDE{"AppendixEncodeURLsWithUTF8"}%
 
------
-%INCLUDE{"TWikiHistory"}%
 
