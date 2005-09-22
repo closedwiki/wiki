@@ -276,9 +276,10 @@ msgstr ""
 "speichern."
 
 #: templates/oopsaccessdenied.tmpl:25
+#, fuzzy
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
-"collaboration. You are trying to %1 in a web that does not exist."
+"collaboration. You are trying to %2 in a web that does not exist."
 msgstr ""
 "Eine %1 ist in Webs unterteilt; jedes für ein Thema, ein Bereich für "
 "Zusammenarbeit. Sie versuchen in ein Web zu %1, dass nicht existiert."

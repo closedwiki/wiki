@@ -282,10 +282,10 @@ msgstr ""
 #: templates/oopsaccessdenied.tmpl:25
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
-"collaboration. You are trying to %1 in a web that does not exist."
+"collaboration. You are trying to %2 in a web that does not exist."
 msgstr ""
 "Um %1 é dividido em webs; cada uma representa um assunto, uma área de "
-"colaboração. Você está tentando realizar a ação \"%1\" numa web que não "
+"colaboração. Você está tentando realizar a ação \"%2\" numa web que não "
 "existe."
 
 #: templates/oopsattention.tmpl:108
