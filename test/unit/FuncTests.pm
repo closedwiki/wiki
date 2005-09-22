@@ -25,6 +25,7 @@ sub set_up {
     $this->SUPER::set_up();
     $TWiki::cfg{StoreImpl} = "RcsWrap";
     $twiki = new TWiki();
+    $TWiki::cfg{AutoAttachPubFiles} = 0;
     $TWiki::Plugins::SESSION = $twiki;
     $this->assert_null($twiki->{store}->createWeb($twiki->{user}, $testweb));
     $this->assert_null($twiki->{store}->createWeb($twiki->{user}, $testextra));

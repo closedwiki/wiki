@@ -140,6 +140,7 @@ data/TWiki/SourceCode.txt 0755
 data/TWiki/StandardColors.txt 0755
 data/TWiki/StartingPoints.txt 0755
 data/TWiki/StaticMethod.txt 0755
+data/TWiki/TWiki.txt 0755
 data/TWiki/TWikiAccessControl.txt 0755
 data/TWiki/TWikiAccessControlExceptionDotPm.txt 0755
 data/TWiki/TWikiAccessDotPm.txt 0755
@@ -203,7 +204,6 @@ data/TWiki/TWikiTimeDotPm.txt 0755
 data/TWiki/TWikiTopics.txt 0755
 data/TWiki/TWikiTutorial.txt 0755
 data/TWiki/TWikiUIChangeFormDotPm.txt 0755
-data/TWiki/TWikiUICompareDotPm.txt 0755
 data/TWiki/TWikiUIDotPm.txt 0755
 data/TWiki/TWikiUIEditDotPm.txt 0755
 data/TWiki/TWikiUIManageDotPm.txt 0755
@@ -376,6 +376,7 @@ pub/Main/WebPreferences/favicon.ico 0755
 pub/Main/WebPreferences/logo.png 0755
 pub/Sandbox/WebPreferences/favicon.ico 0755
 pub/Sandbox/WebPreferences/logo.png 0755
+pub/TWiki/TWiki/thoth_baboon.gif 0755
 pub/TWiki/ATasteOfTWiki/anarchy.gif 0755
 pub/TWiki/ATasteOfTWiki/hula.gif 0755
 pub/TWiki/ATasteOfTWiki/lego.gif 0755
@@ -820,6 +821,6 @@ twiki_httpd_conf.txt 0755
 !include twikiplugins/PreferencesPlugin/lib/TWiki/Plugins/PreferencesPlugin
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
-!include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/MailerContrib
+!include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin

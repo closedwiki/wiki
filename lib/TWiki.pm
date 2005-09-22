@@ -147,7 +147,7 @@ BEGIN {
         $Error::Debug = 0; # no verbose stack traces
     }
 
-    # DO NOT CHANGE THE FORMAT OF $VERSION without updating tools/distro/build-twiki-kernel.pl !!!
+    # DO NOT CHANGE THE FORMAT OF $VERSION
     # automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;

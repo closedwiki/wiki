@@ -227,7 +227,7 @@ sub checkAccess {
     unless( $this->{twiki}->inContext( 'authenticated' ) ||
               $TWiki::cfg{LoginManager} eq 'none' ) {
         my $script = $ENV{'SCRIPT_NAME'} || $ENV{'SCRIPT_FILENAME'};
-        $script =~ s@^.*/([^/]+)@$1@g;
+        $script =~ s@^.*/([^/]+)@$1@g if $script;
 
         if( defined $script && $this->{authScripts}{$script} ) {
             my $topic = $this->{twiki}->{topicName};

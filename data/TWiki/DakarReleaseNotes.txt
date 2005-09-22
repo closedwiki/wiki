@@ -1,7 +1,7 @@
 ---+!! TWiki 'Dakar' Release
 'Dakar' is the first major release of the TWiki collaboration environment in nearly a year. The focus of this release has been on refactoring the code in the interests of efficiency and maintainance, though a range of sexy new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
 
-Most of the refactoring and documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
+Most of the redesign, refactoring and documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
    * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - internationalisation framework
    * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - templates
    * [[TWiki:Main.FlorianWeimer][Florian Weimer]] - sandbox
@@ -473,7 +473,7 @@ You should convert your plugins to call the =TWiki::Func= API. If you have calle
 
 ---++ Public contributions, tested on Dakar
 
-Many contributions have had to be modified to work with Dakar. These modifications have been required to remove abuses of the published APIs. Therefore the tables below apply to the plugin code as checked into Subversion *only*.
+*Most contributions have had to be modified to work with Dakar*. These modifications have been required to remove abuses of the published APIs.
 
 ---+++ Contributions that don't conform to standards sufficiently to be compiled
 | TWiki:Plugins.ControlsPlugin | Tested by TWiki:Main.CrawfordCurrie. |

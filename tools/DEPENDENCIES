@@ -1,7 +1,6 @@
 CGI::Carp,>=1.26,cpan,Required. Available from the CPAN archive.
 CGI::Cookie,>=1.24,cpan,Optional. Available from the CPAN archive.
 CGI::Session,>=3.95,cpan,Optional. Available from the CPAN archive.
-Config,>=0,cpan,Required. Available from the CPAN archive.
 Cwd,>=3.05,cpan,Required. Available from the CPAN archive.
 Data::Dumper,>=2.121,cpan,Required. Available from the CPAN archive.
 File::Copy,>=2.06,cpan,Required. Available from the CPAN archive.

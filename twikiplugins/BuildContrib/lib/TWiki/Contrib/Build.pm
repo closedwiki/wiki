@@ -650,7 +650,7 @@ sub target_stage {
             $this->filter($this->{basedir}.'/'.$txt, $this->{tmpDir}.'/'.$txt);
         }
     }
-    if( $this->{project} =~ /(Plugin|Contrib|AddOn)$/) {
+    if( -e $this->{tmpDir}.'/'.$this->{data_twiki_module}.'.txt' ) {
         $this->cp($this->{tmpDir}.'/'.$this->{data_twiki_module}.'.txt',
                   $this->{basedir}.'/'.$project.'.txt');
     }
@@ -744,8 +744,8 @@ sub target_handsoff_install {
     $this->cd($twiki);
     $this->sys_action('unzip -u -o '.$this->{basedir}.'/'.
                         $this->{project}.'.zip');
-    # kill off the child module installer
-    $this->rm($this->{basedir}.'/'.$this->{project}.'_installer.pl');
+    # kill off the module installer
+    $this->rm($twiki.'/'.$this->{project}.'_installer.pl');
 }
 
 =pod
