@@ -686,9 +686,16 @@ sub target_archive {
     $this->sys_action('tar czpf '.$project.'.tgz *');
     $this->sys_action('mv '.$this->{tmpDir}.'/'.$project.'.tgz '.$this->{basedir}.'/'.
                       $project.'.tgz');
+
+    $this->sys_action('md5sum '.$this->{basedir}.'/'.$project.'.tgz '.
+                        $this->{basedir}.'/'.$project.'.zip > '.
+                        $this->{basedir}.'/'.$project.'.md5');
+
+
     print 'Release ZIP is '.$this->{basedir}.'/'.$project.'.zip',$NL;
     print 'Release TGZ is '.$this->{basedir}.'/'.$project.'.tgz',$NL;
     print 'Release TOPIC is '.$this->{basedir}.'/'.$project.'.txt',$NL;
+    print 'MD5 checksums are in '.$this->{basedir}.'/'.$project.'.md5',$NL;
 }
 
 =pod
@@ -881,6 +888,22 @@ sub target_upload {
       ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
         unless $response->is_redirect &&
           $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
+
+    print 'Uploading md5 checksums',$NL;
+    $response =
+      $userAgent->post( 'http://twiki.org/cgi-bin/upload/Plugins/'.$to,
+                        [
+                         'filename' => $to.'.md5',
+                         'filepath' => [ $this->{basedir}.'/'.$to.'.md5' ],
+                         'filecomment' => 'md5 checksums'
+                        ],
+                        'Content_Type' => 'form-data' );
+
+    die 'Update of zip failed ', $response->request->uri,
+      ' -- ', $response->status_line, $NL, 'Aborting',$NL, $response->as_string
+        unless $response->is_redirect &&
+          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/$to/;
+
 }
 
 sub _unhtml {
