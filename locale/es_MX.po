@@ -294,7 +294,7 @@ msgstr ""
 "=#FFFF00=."
 
 #: templates/oopsattention.tmpl:125
-msgid "A confirmation e-mail has been sent to %1"
+msgid "A confirmation email has been sent to %1"
 msgstr "Una confirmatión te sera enuiada por email"
 
 #: templates/oopsaccessdenied.tmpl:29
@@ -365,7 +365,7 @@ msgstr "Alternativamente, clickear para retosceder para ir TWiki.TWikiRegistrati
 
 #: templates/oopsattention.tmpl:176
 msgid ""
-"An e-mail could not be delivered. Please notify your %1 administrator, %2"
+"An email could not be delivered. Please notify your %1 administrator, %2"
 msgstr "No se puede enviar email notifique a su administrador %1, %2"
 
 #: templates/oopsattention.tmpl:226

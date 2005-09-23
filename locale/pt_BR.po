@@ -301,7 +301,7 @@ msgstr ""
 "=#FFFF00=."
 
 #: templates/oopsattention.tmpl:125
-msgid "A confirmation e-mail has been sent to %1"
+msgid "A confirmation email has been sent to %1"
 msgstr "Uma e-mail de confirmação foi enviado para %1"
 
 #: templates/oopsaccessdenied.tmpl:29
@@ -374,7 +374,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:176
 msgid ""
-"An e-mail could not be delivered. Please notify your %1 administrator, %2"
+"An email could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
 "Não foi possível enviar um e-mail. Por favor, notifique o administrador do %"
 "1, %2"
