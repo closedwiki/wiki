@@ -43,8 +43,10 @@ $VERSION = '2.10';
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';
 $defaultStyleBorder = 'off';
+$defaultStyleButtons = 'off';
 $defaultStyleSideBar = 'left';
 $knownStyleBorders = '^(on|off|thin)$';
+$knownStyleButtons = '^(on|off)$';
 $knownStyleSidebars = '^(left|right|both|off)$';
 
 ###############################################################################
@@ -98,7 +100,6 @@ sub doInit {
   }
 
   writeDebug("isDakar=$isDakar isBeijing=$isBeijing isCairo=$isCairo");
-
   
   # get skin state from session
   $hasInitKnownStyles = 0;
@@ -174,7 +175,8 @@ sub initSkinState {
 
   if ($query) {
     $theStyle = $query->param('style');
-    $theStyleBorder = $query->param('styleborder'); # SMELL: add toggles for the others
+    $theStyleBorder = $query->param('styleborder'); 
+    $theStyleButtons = $query->param('stylebuttons'); 
     $theStyleSideBar = $query->param('stylesidebar');
     $theToggleSideBar = $query->param('togglesidebar');
 
@@ -182,6 +184,7 @@ sub initSkinState {
 
     writeDebug("urlparam style=$theStyle") if $theStyle;
     writeDebug("urlparam styleborder=$theStyleBorder") if $theStyleBorder;
+    writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
     writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
     writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
   }
@@ -221,6 +224,23 @@ sub initSkinState {
   $theStyleBorder = $defaultStyleBorder
     if $theStyleBorder !~ /$knownStyleBorders/;
   $skinState{'border'} = $theStyleBorder;
+
+  # handle buttons
+  if (!$theStyleButtons) {
+    if ($skinState{'buttons'}) {
+      writeDebug("found skinStyleButtons=$skinState{'buttons'}");
+      $theStyleButtons = $skinState{'buttons'};
+    } else {
+      $theStyleButtons =
+	&TWiki::Func::getSessionValue('NATSKIN_STYLEBUTTONS') ||
+	&TWiki::Func::getPreferencesValue("STYLEBUTTONS") ||
+	$defaultStyleButtons;
+    }
+  }
+  $theStyleButtons =~ s/\s+$//;
+  $theStyleButtons = $defaultStyleButtons
+    if $theStyleButtons !~ /$knownStyleButtons/;
+  $skinState{'buttons'} = $theStyleButtons;
 
   # handle sidebar */
   if (!$theStyleSideBar) {
@@ -265,15 +285,17 @@ sub initSkinState {
   }
 
   # store (part of the) state into session
+  # SMELL: this will overwrite per web -> does it work with webs using different settings?
   &TWiki::Func::setSessionValue('NATSKIN_STYLE', $skinState{'style'});
   &TWiki::Func::setSessionValue('NATSKIN_STYLEBORDER', $skinState{'border'});
+  &TWiki::Func::setSessionValue('NATSKIN_STYLEBUTTONS', $skinState{'buttons'});
   &TWiki::Func::setSessionValue('NATSKIN_STYLESIDEBAR', $skinState{'sidebar'});
   &TWiki::Func::setSessionValue('TABLEATTRIBUTES', $tablePluginAttrs);
 
   # temporary toggles
   $theToggleSideBar = 'off' if $theRaw;
   $theToggleSideBar = 'off' if $skinState{'border'} eq 'thin' && 
-    $skinState{'action'} =~ /^(edit|manage|rdiff|natsearch|changes|search)$/o;
+    $skinState{'action'} =~ /^(edit|manage|rdiff|natsearch|changes|search)$/;
     # SMELL get away with this hardcode
 
   $skinState{'sidebar'} = $theToggleSideBar 
@@ -302,19 +324,22 @@ sub commonTagsHandler
   while ($_[0] =~ s/\s*%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%\s*/&renderIfSkinStateThen($1, $2)/geos) {
     # nop
   }
-  $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;
   $_[0] =~ s/%IFDEFINED{(.*?)}%/&renderIfDefined($1)/geo;
+  while ($_[0] =~ s/\s*%IFDEFINEDTHEN{(?!.*%IFDEFINEDTHEN)(.*?)}%\s*(.*?)\s*%FIDEFINED%\s*/&renderIfDefinedThen($1, $2)/geos) {
+    # nop
+  }
+
+  $_[0] =~ s/%IFACCESS{(.*?)}%/&renderIfAccess($1)/geo;
   $_[0] =~ s/%NATLOGON%/&renderLogon()/geo;
   $_[0] =~ s/%WEBLINK%/renderWebLink()/geos;
   $_[0] =~ s/%WEBLINK{(.*?)}%/renderWebLink($1)/geos;
-  $_[0] =~ s/%USERWEBS%/&renderUserWebs()/geo;
   $_[0] =~ s/%USERACTIONS%/&renderUserActions/geo;
   $_[0] =~ s/%FORMBUTTON%/&renderFormButton()/geo;
   $_[0] =~ s/%FORMBUTTON{(.*?)}%/&renderFormButton($1)/geo;
   $_[0] =~ s/%WIKIRELEASENAME%/&getReleaseName()/geo;
   $_[0] =~ s/%GETSKINSTYLE%/&renderGetSkinStyle()/geo;
   $_[0] =~ s/%KNOWNSTYLES%/&renderKnownStyles()/geo;
-  $_[0] =~ s/%GROUPSUMMARY%/&renderGroupSummary($_[0])/geo; # SMELL: be a plugin
+  $_[0] =~ s/%GROUPSUMMARY%/&renderGroupSummary($_[0])/geo; # SMELL: be a plugin, broken on dakar
   $_[0] =~ s/%ALLUSERS%/&renderAllUsers()/geo;
 
   # REVISIONS only worked properly for the PatternSkin :(
@@ -338,6 +363,10 @@ sub endRenderingHandler {
   $_[0] =~ s/%WEBSIDEBAR%/&renderWebSideBar()/geo;
   $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
   $_[0] =~ s/(<a .*?href=[\"\']?)([^\"\'\s]+[\"\']?)(\s*[a-z]*)/renderExternalLink($1,$2,$3)/geoi;
+
+  # remove support for AliasPlugin if it is not installed
+  $_[0] =~ s/%STARTALIASAREA%//go;
+  $_[0] =~ s/%STOPALIASAREA%//go;
 }
 
 ###############################################################################
@@ -431,6 +460,7 @@ sub renderIfSkinStateThen {
   my $theStyle = &TWiki::Func::extractNameValuePair($args) ||
 	      &TWiki::Func::extractNameValuePair($args, 'style');
   my $theBorder = &TWiki::Func::extractNameValuePair($args, 'border');
+  my $theButtons = &TWiki::Func::extractNameValuePair($args, 'buttons');
   my $theSideBar = &TWiki::Func::extractNameValuePair($args, 'sidebar');
   my $theRelease = lc &TWiki::Func::extractNameValuePair($args, 'release');
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action');
@@ -439,8 +469,10 @@ sub renderIfSkinStateThen {
   writeDebug("theThen=$theThen");
   writeDebug("theElse=$theElse");
 
+  # SMELL get a ifSkinStateTImpl
   if ((!$theStyle || $skinState{'style'} =~ /$theStyle/) &&
       (!$theBorder || $skinState{'border'} =~ /$theBorder/) &&
+      (!$theButtons || $skinState{'buttons'} =~ /$theButtons/) &&
       (!$theSideBar || $skinState{'sidebar'} =~ /$theSideBar/) &&
       (!$theRelease || $skinState{'release'} =~ /$theRelease/) &&
       (!$theAction || $skinState{'action'} =~ /$theAction/)) {
@@ -471,6 +503,7 @@ sub renderIfSkinState {
   my $theThen = &TWiki::Func::extractNameValuePair($args, 'then');
   my $theElse = &TWiki::Func::extractNameValuePair($args, 'else');
   my $theBorder = &TWiki::Func::extractNameValuePair($args, 'border');
+  my $theButtons = &TWiki::Func::extractNameValuePair($args, 'buttons');
   my $theSideBar = &TWiki::Func::extractNameValuePair($args, 'sidebar');
   my $theRelease = lc &TWiki::Func::extractNameValuePair($args, 'release');
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action');
@@ -481,8 +514,10 @@ sub renderIfSkinState {
   #writeDebug("skinRelease=$skinState{'release'}");
   #writeDebug("theRelease=$theRelease");
 
+  # SMELL get a ifSkinStateTImpl
   if ((!$theStyle || $skinState{'style'} =~ /$theStyle/) &&
       (!$theBorder || $skinState{'border'} =~ /$theBorder/) &&
+      (!$theButtons || $skinState{'buttons'} =~ /$theButtons/) &&
       (!$theSideBar || $skinState{'sidebar'} =~ /$theSideBar/) &&
       (!$theRelease || $skinState{'release'} =~ /$theRelease/) &&
       (!$theAction || $skinState{'action'} =~ /$theAction/)) {
@@ -510,12 +545,16 @@ sub renderGetSkinStyle {
 
   my $theBorder;
   my $theSideBar;
-
+  my $theButtons;
+  my $cssDir = 
+    &TWiki::Func::getPubDir() . '/' . 
+    &TWiki::Func::getTwikiWebname() . '/NatSkin';
 
   $theBorder = $skinState{'style'} . 'Border' if $skinState{'border'} eq 'on';
   $theBorder = $skinState{'style'} . 'Thin' if $skinState{'border'} eq 'thin';
   $theSideBar = $skinState{'style'} . 'Right' if $skinState{'sidebar'} eq 'right';
   $theSideBar = 'NoSideBar' if $skinState{'sidebar'} eq 'off';
+  $theButtons = $skinState{'style'} . 'Buttons' if $skinState{'buttons'} eq 'on';
 
   my $text = 
     '<style type="text/css">' . "\n" .
@@ -523,7 +562,12 @@ sub renderGetSkinStyle {
 
   $text .=
     '@import url("%PUBURL%/%TWIKIWEB%/NatSkin/' . $theBorder . '.css");' . "\n"
-    if $theBorder;
+    if $theBorder && -e "$cssDir/$theBorder.css";
+
+  $text .=
+    '@import url("%PUBURL%/%TWIKIWEB%/NatSkin/' . $theButtons . '.css");' . "\n"
+    if $theButtons && -e "$cssDir/$theButtons.css";;
+
 #  $text .=
 #    '@import url("%PUBURL%/%TWIKIWEB%/NatSkin/' . $theSideBar . '.css");' . "\n"
 #    if $theSideBar;
@@ -679,59 +723,81 @@ sub renderWebSideBar {
 }
 
 ###############################################################################
-sub renderIfDefined {
+sub ifDefinedImpl {
+  my ($theVariable, $theAction, $theThen, $theElse, $theElsIfArgs) = @_;
 
-  my $args = shift;
-  my $theFormat = &TWiki::Func::extractNameValuePair($args);
-  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
+  writeDebug("called ifDefinedImpl()");
+  writeDebug("theVariable='$theVariable'");
+  writeDebug("theAction='$theAction'");
+  writeDebug("theThen='$theThen'");
+  writeDebug("theElse='$theElse'");
+  writeDebug("theElsIfArgs='$theElsIfArgs'");
+  
 
-  my $text;
-  if ($isBeijing) {
-    $text = &TWiki::Func::readTopic($web, $topic);
-  }
-
-  if (!$theAction || $skinState{'action'} =~ /$theAction/o) {
-    foreach my $title (split(/\|/,$theFormat)) {
-      if ($title =~ /^%([A-Z]+)%$/) {
-	if ($isBeijing) {
-	  $title = &_getValueFromTopic($web, $topic, $1, $text);
-	  $title =~ s/^\s+//;
-	  $title =~ s/\s+$//;
-	} else {
-	  next;
-	}
+  if (!$theAction || $skinState{'action'} =~ /$theAction/) {
+    if ($theVariable =~ /^%([A-Z]+)%$/) {
+      my $varName = $1;
+      if ($isBeijing) {
+	my $topicText = &TWiki::Func::readTopic($web, $topic);
+	$theVariable = &_getValueFromTopic($web, $topic, $varName, $topicText);
+	$theVariable =~ s/^\s+//;
+	$theVariable =~ s/\s+$//;
+	$theVariable = &TWiki::Func::expandCommonVariables($theVariable);
+	$theThen =~ s/%$varName%/$theVariable/g;# SMELL: do we need to backport topic vars?
+      } else {
+	return $theElse unless $theElsIfArgs;
+	$theVariable = '';
       }
-      return $title if $title;
     }
+    return $theThen if $theVariable ne ''; # variable is defined
   }
   
-  return '';
+  return "%IFDEFINEDTHEN{$theElsIfArgs}%$theElse%FIDEFINED%" if $theElsIfArgs;
+  return $theElse; # variable is empty
 }
 
 ###############################################################################
-sub renderUserWebs {
+sub renderIfDefined {
 
-  my @publicWebs = &TWiki::Func::getPublicWebList(); 
-    # deprecated on dakar ... but still there
+  my $args = shift;
 
-  my $mainWeb = &TWiki::Func::getMainWebname();
-  my $twikiWeb = &TWiki::Func::getTwikiWebname();
+  $args = '' unless $args;
 
-  my @webs;
-  foreach my $web (@publicWebs) {
-    next if # TODO add an 'exlcude' parameter
-      $web eq $mainWeb ||
-      $web eq $twikiWeb ||
-      $web eq 'Main' ||
-      $web eq 'TWiki' ||
-      $web eq 'TestCases' ||
-      $web eq 'Sandbox' || 
-      $web eq 'User' ||
-      $web eq 'Support';
-    push @webs, $web;
-  }
+  writeDebug("called renderIfDefined($args)");
   
-  return join(',', @webs);
+  my $theVariable = &TWiki::Func::extractNameValuePair($args);
+  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
+  my $theThen = &TWiki::Func::extractNameValuePair($args, 'then') || $theVariable;
+  my $theElse = &TWiki::Func::extractNameValuePair($args, 'else') || '';
+
+  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse);
+}
+
+###############################################################################
+sub renderIfDefinedThen {
+  my ($args, $text) = @_;
+
+  $args = '' unless $args;
+
+  writeDebug("called renderIfDefinedThen($args)");
+
+  my $theThen = $text; 
+  my $theElse = '';
+  my $elsIfArgs = '';
+
+  if ($text =~ /^(.*?)\s*%ELSIFDEFINED{(.*?)}%\s*(.*)\s*$/gos) {
+    $theThen = $1;
+    $elsIfArgs = $2;
+    $theElse = $3;
+  } elsif ($text =~ /^(.*?)\s*%ELSEDEFINED%\s*(.*)\s*$/gos) {
+    $theThen = $1;
+    $theElse = $2;
+  }
+
+  my $theVariable = &TWiki::Func::extractNameValuePair($args);
+  my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
+
+  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, $elsIfArgs);
 }
 
 ###############################################################################
@@ -1055,32 +1121,54 @@ sub renderFormatList {
   my $theList = &TWiki::Func::extractNameValuePair($args) ||
     &TWiki::Func::extractNameValuePair($args, 'list') || '';
   my $thePattern = &TWiki::Func::extractNameValuePair($args, 'pattern') || '\s*(.*)\s*';
-  my $theFormat = &TWiki::Func::extractNameValuePair($args, 'format') || '%s';
+  my $theFormat = &TWiki::Func::extractNameValuePair($args, 'format') || '$1';
   my $theSplit = &TWiki::Func::extractNameValuePair($args, 'split') || ',';
-  my $theJoin = &TWiki::Func::extractNameValuePair($args, 'join') || ', ';
+  my $theSeparator = &TWiki::Func::extractNameValuePair($args, 'separator') || ', ';
   my $theLimit = &TWiki::Func::extractNameValuePair($args, 'limit') || -1;
   my $theSort = &TWiki::Func::extractNameValuePair($args, 'sort') || 'off';
+  my $theUnique = &TWiki::Func::extractNameValuePair($args, 'unique') ||'';
+  my $theExclude = &TWiki::Func::extractNameValuePair($args, 'exclude') || '';
 
+  &escapeParameter($theList);
   $theList = &TWiki::Func::expandCommonVariables($theList, $topic, $web);
 
-  my @result = 
-    map { 
-      $_ =~ m/$thePattern/;
-      my $arg1 = $1 || '';
-      my $arg2 = $2 || '';
-      my $arg3 = $3 || '';
-      my $arg4 = $4 || '';
-      my $arg5 = $5 || '';
-      my $arg6 = $6 || '';
-      my $item = $theFormat;
-      $item =~ s/\$1/$arg1/g;
-      $item =~ s/\$2/$arg2/g;
-      $item =~ s/\$3/$arg3/g;
-      $item =~ s/\$4/$arg4/g;
-      $item =~ s/\$5/$arg5/g;
-      $item =~ s/\$6/$arg6/g;
-      $_ = $item;
-    } split /$theSplit/, $theList, $theLimit;
+  #writeDebug("thePattern='$thePattern'");
+  #writeDebug("theFormat='$theFormat'");
+  #writeDebug("theSplit='$theSplit'");
+  #writeDebug("theSeparator='$theSeparator'");
+  #writeDebug("theLimit='$theLimit'");
+  #writeDebug("theSort='$theSort'");
+  #writeDebug("theUnique='$theUnique'");
+  #writeDebug("theExclude='$theExclude'");
+  #writeDebug("theList='$theList'");
+
+  my %seen = ();
+  my @result;
+  foreach my $item (split /$theSplit/, $theList, $theLimit) {
+    #writeDebug("found '$item'");
+    next if $theExclude && $item =~ /($theExclude)/;
+    $item =~ m/$thePattern/;
+    my $arg1 = $1 || '';
+    my $arg2 = $2 || '';
+    my $arg3 = $3 || '';
+    my $arg4 = $4 || '';
+    my $arg5 = $5 || '';
+    my $arg6 = $6 || '';
+    my $item = $theFormat;
+    $item =~ s/\$1/$arg1/g;
+    $item =~ s/\$2/$arg2/g;
+    $item =~ s/\$3/$arg3/g;
+    $item =~ s/\$4/$arg4/g;
+    $item =~ s/\$5/$arg5/g;
+    $item =~ s/\$6/$arg6/g;
+    #writeDebug("after susbst '$item'");
+    if ($theUnique) {
+      next if $seen{$item};
+      $seen{$item} = 1;
+    }
+    next if $item eq '';
+    push @result, $item;
+  }
 
   if ($theSort ne 'off') {
     if ($theSort eq 'alpha' || $theSort eq 'on') {
@@ -1094,8 +1182,10 @@ sub renderFormatList {
     }
   }
 
-  my $result = join($theJoin, @result);
+  my $result = join($theSeparator, @result);
   &escapeParameter($result);
+
+  #writeDebug("result=$result");
 
   return $result;
 }
