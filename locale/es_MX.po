@@ -1,12 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
+# translation of es_MX.po to (mexican) spanish
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
+# Translators:
+# Will Norris
+
 msgid ""
 msgstr ""
-"Project-Id-Version: TWiki DakarRelease\n"
+"Project-Id-Version: es_MX\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -16,49 +16,50 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+
 #. ($days)
 #: lib/TWiki/Time.pm:263
 msgid "%*(%1,day) "
-msgstr ""
+msgstr "%*(%1,diá) "
 
 #. ($hours)
 #: lib/TWiki/Time.pm:266
 msgid "%*(%1,hour) "
-msgstr ""
+msgstr "%*(%1,hora) "
 
 #. ($mins)
 #: lib/TWiki/Time.pm:269
 msgid "%*(%1,minute) "
-msgstr ""
+msgstr "%*(%1,minuto) "
 
 #. ($secs)
 #: lib/TWiki/Time.pm:272
 msgid "%*(%1,second) "
-msgstr ""
+msgstr "%*(%1,segundo) "
 
 #: templates/registernotify.tmpl:3
 msgid "%1 - Registration for %2"
-msgstr ""
+msgstr "%1 - Registro de %2"
 
 #: templates/registernotifyadmin.tmpl:3
 msgid "%1 - Registration for %2 (%3)"
-msgstr ""
+msgstr "%1 - Registro de %2 (%3)"
 
 #: templates/login.pattern.tmpl:10
 msgid "%1 User Authentication"
-msgstr ""
+msgstr "Autentificación de usuario %1"
 
 #: templates/registernotifyadmin.tmpl:10
 msgid "%1 has been registered with email %2"
-msgstr ""
+msgstr "%1 esta registrado con email"
 
 #: templates/oopsattention.tmpl:20
 msgid "%1 home"
-msgstr ""
+msgstr "Pagina de inicio de %1"
 
 #: templates/oopsattention.tmpl:93
 msgid "%1 is an invalid name for a new web"
-msgstr ""
+msgstr "%1 es un nombre invalido para la nueva web"
 
 #: templates/login.pattern.tmpl:22
 msgid "%1 is currently logged in"
@@ -66,32 +67,32 @@ msgstr "%1 esta en linea"
 
 #: templates/oopsleaseconflict.tmpl:16
 msgid "%1 is editing %2."
-msgstr ""
+msgstr "%1 editando %2."
 
 #: templates/oopsattention.tmpl:44
 msgid "%1 is in at least one group and cannot be removed"
-msgstr ""
+msgstr "%1 esta en uno amos grupes y no puede ser remouido"
 
 #. ("<nop>$toWeb.<nop>$toTopic",                                             "<nop>$fromWeb.<nop>$fromTopic",                                             $date,                                             $by)
 #: lib/TWiki/Render.pm:201
 msgid "%1 moved from %2 on %3 by %4"
-msgstr ""
+msgstr "%1 movido de %2 a %3 por %4"
 
 #: templates/oopsattention.tmpl:19
 msgid "%1 to create another web"
-msgstr ""
+msgstr "%1 para crear otra web"
 
 #: templates/oopsattention.tmpl:18
 msgid "%1 to customize the web specific preferences"
-msgstr ""
+msgstr "%1 para configurar preferencia especificas de la web"
 
 #: templates/oopsattention.tmpl:17
 msgid "%1 to start working on the new web"
-msgstr ""
+msgstr "%1 para comenzar a trabajar en una nueva web"
 
 #: templates/oopsaccessdenied.tmpl:36
 msgid "%1 topic does not exist"
-msgstr ""
+msgstr "La pagina %1 no existe"
 
 #: templates/view.pattern.tmpl:40
 msgid "&Attach"
@@ -111,11 +112,11 @@ msgstr "&Historia"
 
 #: templates/view.pattern.tmpl:45
 msgid "&More topic actions"
-msgstr ""
+msgstr "&Mas acciones de la pagina"
 
 #: templates/view.pattern.tmpl:58 templates/view.pattern.tmpl:79
 msgid "&Printable"
-msgstr ""
+msgstr "Imprimible"
 
 #: templates/view.pattern.tmpl:79
 msgid "&Raw text"
@@ -186,11 +187,11 @@ msgstr "(mover la union)"
 #: templates/oopsaccessdenied.tmpl:3 templates/oopsauth.tmpl:2
 #: templates/oopsleaseconflict.tmpl:3 templates/oopssaveerr.tmpl:2
 msgid "(oops)"
-msgstr ""
+msgstr "(oops)"
 
 #: templates/preview.pattern.tmpl:31 templates/preview.pattern.tmpl:41
 msgid "(preview)"
-msgstr "()"
+msgstr "(previsualizar)"
 
 #: templates/oopsmore.pattern.tmpl:15 templates/oopsmore.pattern.tmpl:9
 msgid "(recommended)"
@@ -200,15 +201,15 @@ msgstr "(recomendado)"
 #: templates/renameweb.pattern.tmpl:5
 #: templates/renamewebconfirm.pattern.tmpl:5
 msgid "(rename)"
-msgstr ""
+msgstr "(renombrar)"
 
 #: templates/search.pattern.tmpl:2
 msgid "(search results)"
-msgstr ""
+msgstr "(resultados de la busquenda)"
 
 #: templates/settings.pattern.tmpl:51
 msgid "(set preferences)"
-msgstr ""
+msgstr "(configurar preferencias)"
 
 #: templates/oopsattention.tmpl:198
 msgid "(single character first name)"
@@ -230,31 +231,37 @@ msgid ""
 "*Change comment:* If you use _Change Properties_ to change a comment, the "
 "comment shown in the topic will change, but the comment shown against the "
 "attachment history will be the comment when the file was uploaded."
-msgstr ""
+msgstr "*Cambiar el commentario:* Si usa _Cambiar de Propiedades_ para cambiar "
+"un comentario, el comentario mostiado cambiara, pero el comentario "
+"mostraido por la historia delaurión sera el comentario cuando el archivo "
+"sea enviado."
 
 #: templates/attach.pattern.tmpl:38
 msgid ""
 "*Help:* Please see %TWIKIWEB%.FileAttachment for more information about "
 "attaching files."
 msgstr ""
-"*Ayuda:* Por favor vea %TWIKIWEB%.FileAttachment para mas información acera "
+"*Ayuda:* Por favor vea %TWIKIWEB%.FileAttachment para mas información hacerca "
 "de la union de los archivos."
 
 #: templates/attachagain.pattern.tmpl:37
 msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
 "that will be updated or added."
-msgstr ""
+msgstr "*Archivo local:* Si escoge un archivo diferente en el archivo local, "
+"sera el archivo que sera actualizado ó anexado."
 
 #: templates/attachagain.pattern.tmpl:35
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties\"; see %1."
-msgstr ""
+msgstr "*Propiedades:* El comentario y visibilidad (sera la unión oculto) "
+"prodra ser cambiado sin enviar el archivo, haciendo click en \"Cambiar las "
+"Propiedades\"; vea %1."
 
 #: templates/oopsmore.pattern.tmpl:54
 msgid "<a href='%1' rel='nofollow'>Edit settings</a> for this topic"
-msgstr "<a href='%1' rel='nofollow'>Edite preferencias</a> para esta pagina"
+msgstr "<a href='%1' rel='nofollow'>Editar preferencias</a> para esta pagina"
 
 #: templates/renamewebbase.pattern.tmpl:83
 msgid ""
@@ -262,11 +269,15 @@ msgid ""
 "%','ManagingWebs')\" href='%1' rel='nofollow'>Click here</a> to get help on "
 "managing webs"
 msgstr ""
+"<a target='ManagingWebs' onclick=\"return launchWindow('%TWIKIWEB"
+"%','ManagingWebs')\" href='%1' rel='nofollow'>Click aqui</a> para "
+"ayudar a administrar webs"
 
 #: templates/preview.pattern.tmpl:57
 msgid ""
 "<span class='twikiAlert'><b>Do not forget</b></span> to save your changes."
 msgstr ""
+"<span class='twikiAlert'><b>No olvidar</b></span> para guardar [tus] cambios."
 
 #: templates/oopsaccessdenied.tmpl:25
 msgid ""
@@ -279,10 +290,12 @@ msgid ""
 "A color starts with a # sign, followed by 6 hexadecimal numbers, e.g. "
 "=#FFFF00=."
 msgstr ""
+"Un color comienza con un #, seguido por 6 numeros hexadecimales, e.g. "
+"=#FFFF00=."
 
 #: templates/oopsattention.tmpl:125
 msgid "A confirmation e-mail has been sent to %1"
-msgstr ""
+msgstr "Una confirmatión te sera enuiada por email"
 
 #: templates/oopsaccessdenied.tmpl:29
 msgid ""
@@ -290,24 +303,28 @@ msgid ""
 "the name of the web is not spelt wrongly on the previous page; fix the link "
 "if necessary."
 msgstr ""
+"Un enlace para una pagina localizado en otra web es escrito como %1, que el "
+"nombre de la web na esta escrito incorrectamente en la pagina anterior; "
+"corriga si es necesario."
 
 #: templates/oopsalerts.tmpl:12
 msgid ""
 "A new *system-generated* password for login name %1 (wikiname %2) has been "
 "sent to %3"
-msgstr ""
+msgstr "El sistema creara una nueva contraseña para un hombre de usuario %1 "
+"(wikiname %2) sero enviado para %3"
 
 #: templates/view.pattern.tmpl:79
 msgid "A&ll Webs"
-msgstr ""
+msgstr "Todas las webs"
 
 #: templates/oopsaccessdenied.tmpl:5
 msgid "Access Denied"
-msgstr ""
+msgstr "Acceso Denegado"
 
 #: templates/oopsaccessdenied.tmpl:8
 msgid "Access check on %1 failed"
-msgstr ""
+msgstr "Codigo de acceso fallido por %1"
 
 #: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:50
 msgid "Access keys"
@@ -324,41 +341,45 @@ msgstr "Acción %1: %2."
 
 #: templates/addform.tmpl:1
 msgid "Add form"
-msgstr "Añadar un formulario"
+msgstr "Añadir formulario"
 
 #: lib/TWiki/UI/RDiff.pm:241
 msgid "Added"
-msgstr ""
+msgstr "Anexar"
 
 #: templates/oopsattention.tmpl:260
 msgid "Adding a %1 variable in WebPreferences"
-msgstr ""
+msgstr "Anadiendo una variable en WebPreferences"
 
 #: templates/renamebase.pattern.tmpl:35
 #: templates/renamewebbase.pattern.tmpl:33
 msgid "Allow non <nop>WikiWord for the new topic name"
-msgstr ""
+msgstr "Permitir algo que no es <nop>WikiWord como nuevo nombre de pagina"
 
 #: templates/oopsattention.tmpl:186
 msgid ""
 "Alternatively hit back to go back to TWiki.TWikiRegistration and choose a "
 "different username."
-msgstr ""
+msgstr "Alternativamente, clickear para retosceder para ir TWiki.TWikiRegistration "
+"y escoger un nombre de usuario diferente."
 
 #: templates/oopsattention.tmpl:176
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
-msgstr ""
+msgstr "No se puede enviar email notifique a su administrador %1, %2"
 
 #: templates/oopsattention.tmpl:226
 msgid "An email address is required before a password can be reset."
-msgstr ""
+msgstr "Para una cuenta de email es necesario antes una contraseña poder "
+"ser reiniciada."
 
 #: templates/moveattachment.pattern.tmpl:54
 msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
 msgstr ""
+"Una pagina de error sera mostrado si las paginas estan bloqueoadas por "
+"otro usuario."
 
 #: templates/oopsattention.tmpl:14
 msgid "And populated with topics from the base web"
@@ -464,11 +485,11 @@ msgstr "Cancelar edicion y descarge los cambios"
 
 #: templates/oopsattention.tmpl:56
 msgid "Cannot create %1 because it already exists."
-msgstr ""
+msgstr "No se puede crear %1 por que ya lo existe."
 
 #: templates/oopsattention.tmpl:99
 msgid "Cannot create web %1 because it already exists"
-msgstr ""
+msgstr "No se puede crear el %1 web por que ya lo existe"
 
 #: templates/oopsattention.tmpl:62 templates/oopsattention.tmpl:68
 msgid "Cannot rename %1 to %2 because it already exists."
