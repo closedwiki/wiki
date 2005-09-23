@@ -1,10 +1,23 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126859355" format="1.1" version="1.4"}%
+%META:TOPICINFO{author="MichaelDaum" date="1127482214" format="1.1" version="1.16"}%
 ---+ %TOPIC%
 
 %STARTINCLUDE%
+<style type="text/css">
+.navMain {%CALC{"$IF($EXACT(%BASEWEB%,Main),,display:none;)"}%}
+.navUserSection {%CALC{"$IF($EXISTS(User/WebHome),,display:none;)"}%}
+.navUser {%CALC{"$IF($EXACT(%BASEWEB%,User),,display:none;)"}%}
+.navSupportSection {%CALC{"$IF($EXISTS(Support/WebHome),,display:none;)"}%}
+.navSupport {%CALC{"$IF($EXACT(%BASEWEB%,Support),,display:none;)"}%}
+.navSandbox {%CALC{"$IF($EXACT(%BASEWEB%,Sandbox),,display:none;)"}%}
+.navTWiki {%CALC{"$IF($EXACT(%BASEWEB%,%TWIKIWEB%),,display:none;)"}%}
+.navTestCasesSection {%CALC{"$IF($EXISTS(TestCases/WebHome),,display:none;)"}%}
+.navTestCases {%CALC{"$IF($EXACT(%BASEWEB%,TestCases),,display:none;)"}%}
+.navTrashSection {%CALC{"$IF($EXACT(%BASEWEB%,Trash),,display:none;)"}%}
+</style>
 ---+ Navigation%REDDOT{"%TWIKIWEB%.WebSideBar"}%
+<div class="navMainSection %IFSKINSTATE{buttons="on" then="navMain"}%">
 ---++ %WEBLINK{"Main"}%
-<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Main),block,none)"}%;">
+<div class="navMain">
 	* %CALC{"$IF($EXISTS(Support/WelcomeGuest),[[Support.WelcomeGuest][Welcome]],[[%TWIKIWEB%.WelcomeGuest][Welcome]])"}%
 	* [[%TWIKIWEB%.TWikiRegistration][Registration]]
 	* [[%MAINWEB%.TWikiUsers][Users]]
@@ -16,11 +29,13 @@
 	* [[Main.WebStatistics][Statistics]]
 	* [[Main.WebPreferences][Preferences]]
 </div>
-%FORMATLIST{"%USERWEBS%" format="<h2>$percntWEBLINK{\"$1\"}$percnt</h2>$n"}%<!--
--->
-<div style="display:%CALC{"$IF($EXISTS(User/WebHome),block,none)"}%;">
+</div>
+<div style="%IFSKINSTATE{buttons="on" then="display:none"}%">
+%FORMATLIST{"%WEBLIST{webs="public" separator=" "}%" exclude="Main|TWiki|Sandbox|TestCases|Trash" split=" " separator="$n" format="<h2>$percntWEBLINK{\"$1\"}$percnt</h2>"}%
+</div>
+<div class="navUserSection %IFSKINSTATE{buttons="on" then="navUser"}%">
 ---++ %WEBLINK{"User"}%
-<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,User),block,none)"}%;">
+<div class="navUser">
 	* [[User.TWikiUsers][Accounts]]
 	* [[User.TWikiGroups][Groups]]
 	* [[User.WebTopicList][Index]]
@@ -30,9 +45,9 @@
 	* [[User.WebPreferences][Preferences]]
 </div>
 </div>
-<div style="display:%CALC{"$IF($EXISTS(Support/WebHome),block,none)"}%;">
+<div class="navSupportSection %IFSKINSTATE{buttons="on" then="navSupport"}%">
 ---++ %WEBLINK{"Support"}%
-<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Support),block,none)"}%;">
+<div class="navSupport">
 	* [[Support.UsersGuide][User's Guide]]
 	* [[Support.TWikiDocumentation][Reference Manual]]
 	* [[Support.FrequentlyAskedQuestions][FAQs]]
@@ -44,16 +59,19 @@
 	* [[Support.WebPreferences][Preferences]] 
 </div>
 </div>
+<div class="navSandboxSection %IFSKINSTATE{buttons="on" then="navSandbox"}%">
 ---++ %WEBLINK{"Sandbox"}%
-<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Sandbox),block,none)"}%;">
+<div class="navSandbox">
 	* [[Sandbox.WebTopicList][Index]]
 	* [[Sandbox.WebChanges][Changes]]
 	* [[Sandbox.WebNotify][Notifications]]
 	* [[Sandbox.WebStatistics][Statistics]]
 	* [[Sandbox.WebPreferences][Preferences]] 
 </div>
+</div>
+<div class="navTWikiSection %IFSKINSTATE{buttons="on" then="navTWiki"}%">
 ---++ %WEBLINK{web="%TWIKIWEB%" name="System"}%
-<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,%TWIKIWEB%),block,none)"}%;">
+<div class="navTWiki">
 	* [[%TWIKIWEB%.InstalledPlugins][Plugins]]
 	* [[%TWIKIWEB%.WebTopicList][Index]]
 	* [[%TWIKIWEB%.WebChanges][Changes]]
@@ -62,25 +80,28 @@
 	* [[%TWIKIWEB%.WebPreferences][Preferences]]
 	* [[%TWIKIWEB%.TWikiPreferences][SitePreferences]] 
 </div>
-<div style="display:%CALC{"$IF($EXISTS(TestCases/WebHome),block,none)"}%;">
+</div>
+<div class="navTestCasesSection %IFSKINSTATE{buttons="on" then="navTestCases"}%">
 ---++ %WEBLINK{"TestCases"}%
-<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,TestCases),block,none)"}%;">
+<div class="navTestCases">
 	* [[TestCases.CreateNewTestCaseForm][Create Test]]
 	* [[TestCases.WebTopicList][Index]]
 	* [[TestCases.WebStatistics][Statistics]]
 	* [[TestCases.WebPreferences][Preferences]]
 </div>
 </div>
-<div style="display:%CALC{"$IF($EXACT(%BASEWEB%,Trash),block,none)"}%;">
+<div class="navTrashSection">
 ---++ %WEBLINK{"Trash"}%
 	* [[Trash.TrashAttachment][Attachments]]
+	* [[Trash.WebChanges][Changes]]
 	* [[Trash.WebTopicList][Index]]
 	* [[Trash.WebStatistics][Statistics]]
 	* [[Trash.WebPreferences][Preferences]]
 </div>
 <div class="natSideBarPersonal">
 %MYSIDEBAR%
-</div>%STOPINCLUDE%
+</div>
+%STOPINCLUDE%
 
 
 %META:TOPICMOVED{by="MichaelDaum" date="1126003103" from="TWiki.TWikiSideBar" to="TWiki.WebSideBar"}%

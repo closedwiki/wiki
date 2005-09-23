@@ -1,10 +1,10 @@
 <!-- template: searchbox.nat.tmpl -->
 %TMPL:DEF{"searchbox"}% 
-%IFSKINSTATETHEN{style="Kubrick" sidebar="right"}%
+%IFSKINSTATETHEN{style="Kabrick" sidebar="right"}%
 <form class="natSideBarSearch" action="%SCRIPTURLPATH%/natsearch%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <input type="text" name="search" value="search" onfocus="if (this.value == 'search') {this.value = '';}"/> </form>
 %ELSESKINSTATE%
-<form class="natSearchBox" name="SearchForm" action="%SCRIPTURLPATH%/natsearch%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
+<form name="SearchForm" action="%SCRIPTURLPATH%/natsearch%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 Search:&nbsp;<input type="text" name="search" value="%URLPARAM{search}%"/></form>
 %FISKINSTATE%
 %TMPL:END%

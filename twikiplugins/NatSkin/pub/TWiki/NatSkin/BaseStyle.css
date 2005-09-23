@@ -30,7 +30,10 @@ h1, h2, h3, h4, h5, h6 {
 .natBody, .natBodyContents			{ border: 1px solid green }
 .natWebTitle, .natSearchBox,
 .natTopBar, .natTopBarContents, 
-.natTopLeft, .natTopRight			{ border: 1px solid blue }
+.natTopLeft, .natTopRight, 
+.natTopLeftContents, .natTopRightContents, 
+.natWebButtons, .natWebButtonsContents
+						{ border: 1px solid blue }
 .natMiddle, 
 .natSideBar, natSideBarContents			{ border: 1px solid red }
 .natMain, .natMainContents,
@@ -92,7 +95,7 @@ h1, h2, h3, h4, h5, h6 {
 .natTopLeftContents,
 .natTopRightContents,
 .natSearchBox input {
-  font-size:small;
+  font-size:x-small;
 }
 .natTopRight form {
   padding:0px;
@@ -186,6 +189,13 @@ h1, h2, h3, h4, h5, h6 {
   padding-top:1em;
   padding-bottom:1em;
 }
+
+/*
+.natMainContents a:visited:after {
+  content: "\00A0\221A";
+  font-size: 75%;
+}
+*/
 
 /* bottom bar */
 .natBottomBarContents {
@@ -522,12 +532,18 @@ img.alignleft {
 /* blogging */
 
 /* debug */
+.blogAbout,
 .blogEntry, .blogHeadline, .blogInfo, .blogDate, .blogText, .blogMore,
 .blogComments, .blogComment, .blogCommentDate, .blogRef, .blogNavigation,
 .blogNext, .blogPrev .blogCommentCount {
    border:0px solid red;
 }
 
+.blogAbout {
+  text-align:justify; 
+  font-size:0.9em; 
+  margin-bottom:1.5em;
+}
 .blogEntry {
   padding-bottom:20px;
 }
@@ -544,6 +560,9 @@ img.alignleft {
 
 .blogText {
   text-align:justify;
+}
+.blogTeaser {
+  margin-bottom:1em;
 }
 .blogMore {
   display:inline;
@@ -579,7 +598,9 @@ img.alignleft {
 .blogComments {
   margin-top:20px;
 }
-.blogComment h3 a:hover {
+.blogRef h2 a:hover,
+.blogComment h3 a:hover,
+.blogComment h4 a:hover {
   text-decoration:underline;
 }
 
@@ -592,6 +613,9 @@ img.alignleft {
   padding:0px;
 }
 
+.blogSideBarCommenter {
+  font-size:0.8em;
+}
 
 /* BlackListPlugin */
 .blackList {

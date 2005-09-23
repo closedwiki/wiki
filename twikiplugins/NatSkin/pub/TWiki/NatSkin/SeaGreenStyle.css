@@ -85,7 +85,7 @@ hr {
 .natWebSlogan {
   padding-left:5px;
   color:#669966;
-  font-size:normal;
+  font:normal small 'Trebuchet MS', arial, sans-serif;
 }
 
 .natSearchBox input {
@@ -149,7 +149,9 @@ hr {
   padding-left:5px;
   padding-right:5px;
 }
+.natWebLink a:hover,
 .natSideBar a:hover {
+  color:#669966;
   text-decoration:underline;
 }
 

@@ -24,9 +24,11 @@ hr {
   padding-top:1.5em;
   padding-bottom:1.5em;
 }
+.natWebButtons,
 .natTopLeft {
   border-left:1px dotted white;
 }
+.natWebButtons,
 .natTopRight{
   border-right:1px dotted white;
 }
@@ -289,4 +291,12 @@ hr {
 .bibtex dt {
   font:normal;
   color:#9C3300;
+}
+
+/* blogging */
+.blogSideBarSection ul {
+  margin:0px;
+}
+.blogSideBarComments li {
+  margin-bottom:0.5em;
 }

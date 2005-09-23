@@ -1,9 +1,11 @@
 /* border variation for clean */
 @import url('BaseBorder.css');
 
+.natWebButtons,
 .natTopLeft {
   border-left:1px #aaaaaa solid;
 }
+.natWebButtons,
 .natTopRight {
   border-right:1px #aaaaaa solid;
 }

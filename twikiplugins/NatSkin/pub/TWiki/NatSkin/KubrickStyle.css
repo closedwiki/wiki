@@ -52,7 +52,7 @@ hr {
 .natTopLeftContents,
 .natTopRightContents{
   padding-top:5em;
-  padding-bottom:3em;
+  padding-bottom:5.4em;
   margin-left:20px;
 }
 .natTopRightContents {
@@ -77,6 +77,11 @@ hr {
 .natTopBar a {
   color:white;
 }
+/*
+.natTopBar {
+  background:url(woman.jpg);
+}
+*/
 .natTopRight form {
   font-weight:bold;
   margin:0px;
@@ -103,45 +108,6 @@ hr {
   color:darkblue;
   text-transform:capitalize;
   font-weight:bold;
-}
-
-/* menu */
-.natMenu {
-  background:#3388CC;
-  padding-left:10px;
-}
-.natMenuContents {
-  padding:5px 10px 5px;
-}
-.natMenu ul {
-  margin:0;
-  padding:0;
-}
-
-.natMenu ul li {
-  display: inline;
-  margin: 0;
-}
-
-.natMenu ul li a {
-  padding:5px 10px 5px;
-  font: 1em Verdana, Arial, Sans-Serif;
-  text-transform: lowercase;
-  color: white;
-  margin: 0;
-}
-
-.natMenu ul li a:hover {
-  background: #333;
-  color: #eee !important;
-  text-decoration: none;
-}
-
-.natMenu ul li.current a,
-.natMenu ul li.current a:hover {
-  color: #333 !important;
-  background: white;
-  text-decoration: none;
 }
 
 /* sidebar */
@@ -179,17 +145,19 @@ hr {
 .natWebLink a {
   font-weight:normal;
   color:#575757;
-  display:block;
 }
 .natSideBar a:hover {
   text-decoration:underline;
+}
+.natSideBar ol {
+  padding-left:2em;
 }
 .natSideBar ul {
   padding-left:2ex;
   list-style-type: none;
   text-indent:-2ex;
 }
-.natSideBar li:before {
+.natSideBar ul li:before {
   content: "\00BB \0020";
   color:#777;
 }
@@ -211,10 +179,6 @@ hr {
   font-family:arial,sans-serif;
   font-size:1.5em;
   background:white;
-}
-.natAbout {
-  text-align:justify; 
-  font-size:0.9em; 
 }
 
 /* main */
@@ -278,7 +242,7 @@ hr {
 .natMain textarea {
   background:white;
   border:0px;
-  color:#555;
+  color:#444;
   padding:2px;
 }
 
@@ -370,8 +334,9 @@ hr {
   background:white;
   border:1px solid #ffd324;
   margin:2px;
-  font-family:arial, sans-serif;
+  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   font-size:small;
+  color:#444;
 }
 
 /* attachments */
@@ -405,7 +370,7 @@ hr {
 }
 .natSearchTable tr:nth-child(4n+3),
 .natSearchTable tr:nth-child(4n+2) {
-  background:#f8f8f8;
+  background:#f0f0f0;
 }
 /*
 .natSearchTable tr:nth-child(4n+2) {
@@ -502,7 +467,7 @@ hr {
 
 /* custom styles */
 .alt {
-  background-color: #f8f8f8;
+  background-color: #f0f0f0;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
@@ -522,16 +487,14 @@ hr {
 }
 .blogText {
   margin-top:5px;
+  padding:1px; /* fix for konqueror */
+}
+.blogEntry img {
+  border:1px solid #ddd;
+  padding:3px;
 }
 .blogMore {
   font-size:0.9em;
-}
-.blogMore:before,
-.blogMore:after {
-  font-size:1.3em;
-}
-.blogMore:before {
-  content:"... ";
 }
 .blogCommentOdd {
   background:#f0f0f0;
@@ -562,6 +525,7 @@ hr {
   color:#959596;
   margin-left:10px;
   text-shadow:none;
+  font-size:80%;
 }
 .blogComments .blogCommentCount {
   margin-left:0px;
@@ -581,7 +545,8 @@ hr {
 .blogAddComment input {
   border:1px solid #aaa;
   color:#444;
-  font-family:arial, sans-serif;
+  font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
+  font-size:small;
   padding:2px;
 }
 .blogAddComment .blogSubmitButton {

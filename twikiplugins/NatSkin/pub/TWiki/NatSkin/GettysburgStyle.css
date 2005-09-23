@@ -24,6 +24,28 @@ hr {
   font-family:arial,sans-serif;
 }
 
+/* page layout */
+.natTopBar {
+  padding-top:2em;
+  padding-bottom:2em;
+}
+.natSideBar {
+  padding:10px 20px 10px 20px;
+}
+.natMainContents,
+.natMainFooterContents {
+  margin:20px;
+}
+.natTopRightContents,
+.natTopLeftContents {
+  margin-left:20px;
+  margin-right:20px;
+}
+.natWebTitle,
+.natWebTitle a {
+  line-height:100%;
+}
+
 /* twiki table */
 .twikiTable,
 .twikiTable th,
@@ -88,24 +110,6 @@ hr {
 }
 .twikiPageForm td {
   line-height:170%;
-}
-
-/* page layout */
-.natTopBar {
-  padding-top:2em;
-  padding-bottom:2em;
-}
-.natSideBar {
-  padding:10px 20px 10px 20px;
-}
-.natMainContents,
-.natMainFooterContents {
-  margin:20px;
-}
-.natTopRightContents,
-.natTopLeftContents {
-  margin-left:20px;
-  margin-right:20px;
 }
 
 /* search */
