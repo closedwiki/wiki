@@ -81,7 +81,7 @@ _(Click for form-based editing of existing preferences.)_
 		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab (3 spaces for bullets).
 <verbatim>
 		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br />
-		  <img src="%ATTACHURLPATH%/$name" alt="$comment" $size />
+		  <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
 </verbatim>
 
 
