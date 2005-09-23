@@ -11,7 +11,7 @@
       </td>
       <td class="natTopBar natTopRight" valign="top">
 	<div class="natTopRightContents">
-%IFSKINSTATETHEN{style="Kubrick" sidebar="right"}% 
+%IFSKINSTATETHEN{style="Kabrick" sidebar="right|off"}% 
 %ELSESKINSTATE%
 	  <div class="natSearchBox">
 %TMPL:P{"searchbox"}%
@@ -23,13 +23,17 @@
 	</div>
       </td>
     </tr>
-%IFSKINSTATETHEN{style="Kubrick"}%
+%IFSKINSTATETHEN{buttons="on"}%
     <tr>
-      <td class="natMenu" colspan="2">
-	<div class="natMenuContents">
+      <td class="natWebButtons" colspan="2" align="%IFSKINSTATE{sidebar="left" then="right" else="left"}%">
+	<div class="natWebButtonsContents">
 	  <ul>
-%FORMATLIST{"Main, %USERWEBS%, Sandbox" join="$n" format="<li $percntCALC{\"$IF($EXACT(%WEB%,$1),class=\"current\")\"}$percnt>[[$1.WebHome][$1]]</li>"}%
-	    <li %CALC{"$IF($EXACT(%WEB%,%TWIKIWEB%),class=\"current\")"}%>[[%TWIKIWEB%.WebHome][System]]</li>
+	    <li class="%CALC{"$IF($EXACT(%WEB%,Main),current)"}%">[[Main.WebHome][Main]]</li>
+	    <li class="%CALC{"$IF($EXACT(%WEB%,User),current)"}%" style="%CALC{"$IF($EXISTS(User/WebHome),,display:none;)"}%">[[User.WebHome][User]]</li>
+%FORMATLIST{"%WEBLIST{separator=","}%" exclude="Main|User|TWiki|TestCases|Sandbox" separator="$n" format="<li class=\"$percntCALC{\"$IF($EXACT(%WEB%,$1),current)\"}$percnt\">[[$1.WebHome][$1]]</li>"}%
+	    <li class="%CALC{"$IF($EXACT(%WEB%,Sandbox),current)"}%">[[Sandbox.WebHome][Sandbox]]</li>
+	    <li class="%CALC{"$IF($EXACT(%WEB%,%TWIKIWEB%),current)"}%">[[%TWIKIWEB%.WebHome][System]]</li>
+	    <!--li class="%CALC{"$IF($EXACT(%WEB%,TestCases),current)"}%" style="%CALC{"$IF($EXISTS(TestCases/WebHome),,display:none;)"}%">[[TestCases.WebHome][TestCases]]</li-->
 	  </ul>
 	</div>
       </td>

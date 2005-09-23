@@ -193,19 +193,19 @@ a:hover {
 .natSideBar h2 a,
 .natSideBar li a {
   display:block;
+  padding:2px;
 }
 .natSideBar li {
   padding-left:15px;
-  margin-bottom:3px;
+  margin-bottom:0px;
+  margin-top:0px;
 }
-.natSideBar h2 a:hover,
-.natSideBar li a:hover,
-.natWebLink a:hover {
+.natWebLink a:hover,
+.natSideBar li a:hover {
   background:#3f59bb;
-  color:#ffffff;
+  background:#eeeeee;
   text-decoration:none;
 }
-
 
 /* main */
 .natMiddle {
@@ -280,4 +280,12 @@ a:hover {
 
 .bibsearch td {
   padding-top:2px;
+}
+
+/* blogging */
+.blogSideBarComments li a {
+  display:inline;
+}
+.blogSideBarComments li {
+  margin-bottom:0.5em;
 }

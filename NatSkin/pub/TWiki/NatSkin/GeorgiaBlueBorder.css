@@ -1,10 +1,12 @@
 /* border variation for georgia blue */
 @import url('BaseBorder.css');
 
+.natWebButtons,
 .natTopLeft,
 .natMiddleLeft {
   border-left:1px solid #aaaaaa;
 }
+.natWebButtons,
 .natTopRight, 
 .natMiddleRight {
   border-right:1px solid #aaaaaa;

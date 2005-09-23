@@ -1,9 +1,11 @@
 /* thin variant for clean */
 @import url("BaseThin.css");
 
+.natWebButtons,
 .natTopLeft {
   border-left:1px #aaaaaa solid;
 }
+.natWebButtons,
 .natTopRight {
   border-right:1px #aaaaaa solid;
 }

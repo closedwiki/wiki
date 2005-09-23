@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126716180" format="1.0" version="1.11"}%
+%META:TOPICINFO{author="MichaelDaum" date="1127379290" format="1.1" version="1.13"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%
 <div class="natSkinStyleBrowser">
@@ -14,10 +14,14 @@
 	* <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Left
 	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Right
 	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Off
+	* <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Web Buttons On
+	* <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Web Buttons Off
 <input type="hidden" name="search" value="%URLPARAM{search}%" />
 <input type="hidden" name="refresh" value="on" />
 </form>
 </div>
 %STOPINCLUDE%
 </div>
+
+
 %META:TOPICMOVED{by="MichaelDaum" date="1125609298" from="Sandbox.TestTopic5" to="TWiki.NatSkinStyleBrowser"}%

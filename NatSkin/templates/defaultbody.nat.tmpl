@@ -15,24 +15,24 @@
 	</div>
       </td>
       %FISKINSTATE%
-      <td class="natMiddle natMain %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}% valign="top">
+      <td class="natMiddle natMain %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}%" valign="top">
 	<div class="natMainContents"> %TMPL:P{"content"}% </div>
       </td> 
       %IFSKINSTATETHEN{sidebar="right"}%
       <td class="natMiddle natMiddleRight natSideBar" rowspan="2" valign="top">
 	<div class="natSideBarContents">
-	  %IFSKINSTATETHEN{style="Kubrick"}%
+	  %IFSKINSTATETHEN{style="Kabrick"}%
 	  <div class="natSearchBox">
 %TMPL:P{"searchbox"}%
 	  </div>
-	  %FISKINSTATE%
+	  %FISKINSTATE% <!-- -->
 %TMPL:P{"sidebar"}%
 	</div>
       </td> 
       %FISKINSTATE%
     </tr>
     <tr>
-      <td class="natMiddle natMainFooter %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}% valign="bottom">
+      <td class="natMiddle natMainFooter %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}%" valign="bottom">
 	<div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>
       </td>
     </tr>

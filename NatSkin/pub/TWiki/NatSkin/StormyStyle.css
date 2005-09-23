@@ -333,3 +333,16 @@ hr {
   color:#99ff66;
   font-weight:bold;
 }
+/* blogging */
+.blogSideBar {
+  color:#cccccc;
+}
+.blogSideBarSection ul {
+  margin:0px;
+}
+.blogSideBarCategories ul,
+.blogSideBarComments ul {
+}
+.blogSideBarComments li {
+  margin-bottom:0.5em;
+}

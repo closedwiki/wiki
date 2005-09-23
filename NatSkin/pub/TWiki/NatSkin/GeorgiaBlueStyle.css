@@ -155,19 +155,13 @@ hr {
   color:#99ccff;
 }
 .natTopRightContents {
-  font-size:small;
   font-family:arial,sans-serif;
-}
-.natSearchBox 
-.natSearchBox input {
-  font-size:0.8em;
 }
 .natSearchBox input {
   background:#336699;
   color:#99ccff;
 }
 .natTopicActions {
-  font-size:0.8em;
 }
 
 /* sidebar */
@@ -211,8 +205,12 @@ hr {
   text-transform:uppercase;
 }
 
+.natSideBar ol,
 .natSideBar ul {
-  font:bold x-small/150% verdana,arial,sans-serif;
+  font:normal x-small/150% verdana,arial,sans-serif;
+}
+.natSideBar ul {
+  font-weight:bold;
   text-align:left;
   list-style-type:circle;
   text-transform:none;
@@ -229,9 +227,9 @@ hr {
 
 .natMain a, 
 .natMain a:link, 
+.natMain a:visited, 
 .natMain a:active, 
 .natMain a:hover {
-  font-weight:bold;
   font-family:arial,sans-serif;
 }
 
@@ -302,3 +300,37 @@ hr {
   border:1px dotted #aaaaaa; 
 }
 
+/* blogging */
+.blogAbout {
+  padding:0px 15px;
+  font-size:0.8em;
+}
+.blogSideBar {
+  color:#444444;
+}
+.blogSideBar a {
+  color:#336699;
+  font-weight:normal;
+}
+.blogSideBar a:hover {
+  color:#996666;
+}
+.blogSideBar ul {
+  font-weight:normal;
+}
+.blogSideBarCategories ul,
+.blogSideBarLatest ul,
+.blogSideBarComments ul {
+  padding:0px;
+  padding-left:15px;
+  list-style:none;
+}
+.blogSideBarCategories li,
+.blogSideBarLatest li,
+.blogSideBarComments li {
+  margin-bottom:0.8em;
+  line-height:120%;
+}
+.blogSideBarAdmin {
+  padding-left:1ex;
+}

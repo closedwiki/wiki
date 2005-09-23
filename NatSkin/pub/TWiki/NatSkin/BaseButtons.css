@@ -1,0 +1,15 @@
+/* variation to switch on the web buttons */
+.natWebButtonsContents {
+  padding-right:10px;
+  padding-left:10px;
+  font-size:x-small;
+}
+.natWebButtons ul {
+  margin:0;
+  padding:0;
+}
+.natWebButtons ul li {
+  display: inline;
+}
+
+
