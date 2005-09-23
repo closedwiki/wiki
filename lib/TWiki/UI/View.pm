@@ -235,11 +235,16 @@ sub view {
     $tmpl =~ s/%REVINFO%/$ri/go;
     $tmpl =~ s/%REVISIONS%/$revs/go;
 
-    # Split template into 5 sections
-    my( $start, $middle, $end ) =
-      split( /%SPLIT%/, $tmpl );
-    $middle =~ s/%TEXT%/$text/go;
-    $text = $middle;
+    # extract header and footer from the template, if there is a
+    # %TEXT% tag marking the split point
+    my( $start, $end );
+    if( $tmpl =~ m/^(.*)%TEXT%(.*)$/s ) {
+        $start = $1;
+        $end = $2;
+    } else {
+        $start = '';
+        $end = '';
+    }
 
     # If minimalist is set, images and anchors will be stripped from text
     my $minimalist = 0;
