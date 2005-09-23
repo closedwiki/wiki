@@ -355,17 +355,24 @@ sub _findAttachments {
 	}
 
     # Please retain following print until this feature is out of beta
+    #	use Data::Dumper;
     #	print "In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub);
 
     foreach my $file (keys %filesListedInPub) {
         if ($filesListedInMeta{$file}) {
             # Bring forward any missing yet wanted attributes
-            $filesListedInPub{$file}{comment} =
-              $filesListedInMeta{$file}{comment};
-        }
+            foreach my $value qw(comment attr) {
+              if ($filesListedInMeta{$file}{$value}) {
+              		$filesListedInPub{$file}{$value} =
+ 		            $filesListedInMeta{$file}{$value};
+              }
+            }
+         	# Develop:Bugs.Item452 - WHY IS USER STILL WRONG?
+	     }
     }
 
     # Please retain following print until this feature is out of beta
+    #	use Data::Dumper;
     #    print "Result:".Dumper(\%filesListedInPub)."\n";
 
 	# A comparison of the keys of the $filesListedInMeta and %filesListedInPub 

@@ -961,9 +961,10 @@ sub _constructAttributesForAutoAttached {
                   path    => $file,
                   size    => $stat->[7],
                   date    => $stat->[9], 
-                  user    => 'TWikiContributor',
+                  user    => '', 
                   comment => '',
-                  attr    => ''
+                  attr    => '',
+                  autoattached => '1'
    );
    
    if ($#$stat > 0) {
@@ -979,7 +980,7 @@ sub _constructAttributesForAutoAttached {
 ---++ ObjectMethod getAttachmentList($web, $topic)
 
 returns {} of filename => { key => value, key2 => value } for any given web, topic
-
+Ignores files starting with _ or ending with ,v
 =cut
 
 sub getAttachmentList {
