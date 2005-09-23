@@ -814,6 +814,7 @@ templates/view.plain.tmpl 0755
 templates/view.print.pattern.tmpl 0755
 templates/view.print.tmpl 0755
 templates/view.rss.tmpl 0755
+templates/view.text.tmpl 0755
 templates/view.tmpl 0755
 twiki_httpd_conf.txt 0755
 !include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
