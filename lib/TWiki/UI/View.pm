@@ -234,10 +234,13 @@ sub view {
                                                        $meta );
     $tmpl =~ s/%REVINFO%/$ri/go;
     $tmpl =~ s/%REVISIONS%/$revs/go;
-    $tmpl =~ m/^(.*)%TEXT%(.*$)/s;
 
-    my $start = $1;
-    my $end = $2;
+    # Split template into 5 sections
+    my( $start, $middle, $end ) =
+      split( /%SPLIT%/, $tmpl );
+    $middle =~ s/%TEXT%/$text/go;
+    $text = $middle;
+
     # If minimalist is set, images and anchors will be stripped from text
     my $minimalist = 0;
     if( $contentType ) {
