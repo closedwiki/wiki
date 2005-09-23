@@ -149,6 +149,11 @@ msgstr "(referencias en toda las webs)"
 msgid "(change form)"
 msgstr "(cambiar el formulario)"
 
+#: templates/oopschangelanguage.tmpl:2
+#, fuzzy
+msgid "(change language)"
+msgstr "(cambios)"
+
 #: templates/changes.pattern.tmpl:5
 msgid "(changes)"
 msgstr "(cambios)"
@@ -304,7 +309,7 @@ msgstr ""
 msgid "Access check on %1 failed"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:50
 msgid "Access keys"
 msgstr "Teclas de acceso"
 
@@ -486,6 +491,11 @@ msgstr "Cambiar el formulario"
 msgid "Change from:"
 msgstr "Cambiar desde:"
 
+#: templates/oopschangelanguage.tmpl:24 templates/oopschangelanguage.tmpl:4
+#: templates/twiki.pattern.tmpl:173
+msgid "Change language"
+msgstr ""
+
 #: templates/renamebase.pattern.tmpl:71
 #: templates/renamewebbase.pattern.tmpl:75
 msgid "Change links in topics that refer to %1 in any Web:"
@@ -516,7 +526,8 @@ msgstr "Cambiar para:"
 msgid "Changed:"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:49
+#: templates/preview.pattern.tmpl:50
 msgid "Checkpoint"
 msgstr "Revición de puntos"
 
@@ -659,7 +670,7 @@ msgstr ""
 msgid "Diffs"
 msgstr ""
 
-#: templates/preview.pattern.tmpl:49
+#: templates/preview.pattern.tmpl:49 templates/preview.pattern.tmpl:50
 msgid "Discard"
 msgstr ""
 
@@ -777,7 +788,7 @@ msgid ""
 "here' accesskey='w'>in %2 &web</a> that link to %3"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:215 templates/preview.pattern.tmpl:47
+#: templates/edit.pattern.tmpl:215 templates/preview.pattern.tmpl:46
 msgid "Force new revision"
 msgstr "Haga una nueva revicion"
 
@@ -1056,6 +1067,11 @@ msgstr "Notas:"
 msgid "Notes"
 msgstr "Notas"
 
+#: templates/oopschangelanguage.tmpl:8
+#, fuzzy
+msgid "Notes:"
+msgstr "Notas"
+
 #: templates/renamewebbase.pattern.tmpl:63
 msgid "Notices:"
 msgstr "Avisos:"
@@ -1168,11 +1184,11 @@ msgstr ""
 msgid "Printable version of this topic"
 msgstr ""
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:50
 msgid "Quiet Save"
 msgstr "Guardar sin notificación"
 
-#: templates/edit.pattern.tmpl:217
+#: templates/edit.pattern.tmpl:217 templates/preview.pattern.tmpl:48
 msgid "QuietSave"
 msgstr "Guardar sin notificación"
 
@@ -1256,10 +1272,11 @@ msgid "Revisions:"
 msgstr "Reviciones:"
 
 #: templates/edit.pattern.tmpl:217 templates/edit.pattern.tmpl:218
+#: templates/preview.pattern.tmpl:50
 msgid "Save"
 msgstr "Guardar"
 
-#: templates/preview.pattern.tmpl:49
+#: templates/preview.pattern.tmpl:48
 msgid "Save Changes"
 msgstr ""
 
@@ -1381,6 +1398,14 @@ msgstr ""
 
 #: templates/mailresetpassword.tmpl:3
 msgid "TWiki password reset for %1"
+msgstr ""
+
+#: templates/oopschangelanguage.tmpl:15
+msgid ""
+"TWiki's user interface is available in several language. If you want to "
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
 msgstr ""
 
 #: templates/oopsattention.tmpl:121 templates/oopsattention.tmpl:138
@@ -1803,6 +1828,12 @@ msgstr ""
 msgid "You can see the differences [[%1][here]]."
 msgstr ""
 
+#: templates/oopschangelanguage.tmpl:10
+msgid ""
+"You can set your favourite language permanently by setting the %1 variable "
+"in your user topic."
+msgstr ""
+
 #: templates/oopsattention.tmpl:182
 msgid "You cannot register twice, the name %1 is already registered."
 msgstr ""
@@ -1826,6 +1857,12 @@ msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
 "code is of the form \"YourName.xxxx\")"
+msgstr ""
+
+#: templates/oopschangelanguage.tmpl:34
+msgid ""
+"Your language will be changed to %1 from the next screen. [[%2][Click here]] "
+"to proceed."
 msgstr ""
 
 #: templates/mailresetpassword.tmpl:10
@@ -1855,7 +1892,7 @@ msgid ""
 msgstr ""
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:252
+#: lib/TWiki/I18N.pm:253
 msgid "_language_name"
 msgstr "español"
 
@@ -1889,7 +1926,6 @@ msgid "fields are required."
 msgstr ""
 
 #: templates/edit.pattern.tmpl:215 templates/preview.pattern.tmpl:46
-#: templates/preview.pattern.tmpl:47
 msgid "help"
 msgstr "ayuda"
 

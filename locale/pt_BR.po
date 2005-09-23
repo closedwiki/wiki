@@ -84,7 +84,7 @@ msgstr "%1 para criar outra web"
 
 #: templates/oopsattention.tmpl:18
 msgid "%1 to customize the web specific preferences"
-msgstr "%1 para customizar as preferências específicas da web"
+msgstr "%1 para personalizar as preferências específicas da web"
 
 #: templates/oopsattention.tmpl:17
 msgid "%1 to start working on the new web"
@@ -92,7 +92,7 @@ msgstr "%1 para começar a trabalhar na nova web"
 
 #: templates/oopsaccessdenied.tmpl:36
 msgid "%1 topic does not exist"
-msgstr "O tópico %1 não esiste"
+msgstr "O tópico %1 não existe"
 
 #: templates/view.pattern.tmpl:40
 msgid "&Attach"
@@ -149,6 +149,10 @@ msgstr "(referências em todas as webs)"
 #: templates/changeform.pattern.tmpl:5
 msgid "(change form)"
 msgstr "(alterar formulário)"
+
+#: templates/oopschangelanguage.tmpl:2
+msgid "(change language)"
+msgstr "(alterar idioma)"
 
 #: templates/changes.pattern.tmpl:5
 msgid "(changes)"
@@ -208,11 +212,11 @@ msgstr "(configurar preferências)"
 
 #: templates/oopsattention.tmpl:198
 msgid "(single character first name)"
-msgstr "(primeiro nome com um caracter só)"
+msgstr "(primeiro nome com um caractere só)"
 
 #: templates/oopsattention.tmpl:197
 msgid "(single character last name)"
-msgstr "(último nome com um caracter só)"
+msgstr "(último nome com um caractere só)"
 
 #: templates/attach.pattern.tmpl:39
 msgid ""
@@ -315,7 +319,7 @@ msgid ""
 "A new *system-generated* password for login name %1 (wikiname %2) has been "
 "sent to %3"
 msgstr ""
-"Uma nova senha *generada pelo sistema* para o nome de login %1 (wikiname %2) "
+"Uma nova senha *gerada pelo sistema* para o nome de login %1 (wikiname %2) "
 "voi enviada para %3"
 
 #: templates/view.pattern.tmpl:79
@@ -330,7 +334,7 @@ msgstr "Acesso negado"
 msgid "Access check on %1 failed"
 msgstr "Checagem de acesso a %1 falhou"
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:50
 msgid "Access keys"
 msgstr "Teclas de atalho"
 
@@ -391,7 +395,7 @@ msgstr ""
 
 #: templates/oopsattention.tmpl:14
 msgid "And populated with topics from the base web"
-msgstr "E populada com tópicos da web básica"
+msgstr "E preenchida com tópicos da web básica"
 
 #: templates/changeform.pattern.tmpl:43
 msgid "Any change you made to topic before coming to this page are preserved."
@@ -505,7 +509,7 @@ msgstr "Não foi possível criar a web %1 pois ela já existe"
 
 #: templates/oopsattention.tmpl:62 templates/oopsattention.tmpl:68
 msgid "Cannot rename %1 to %2 because it already exists."
-msgstr "Não foi possível renomar %1 para %2 porque %2 já existe."
+msgstr "Não foi possível renomear %1 para %2 porque %2 já existe."
 
 #: templates/oopsattention.tmpl:266
 msgid ""
@@ -526,6 +530,11 @@ msgstr "Alterar formulário"
 #: templates/renamewebbase.pattern.tmpl:47
 msgid "Change from:"
 msgstr "Alterar de:"
+
+#: templates/oopschangelanguage.tmpl:24 templates/oopschangelanguage.tmpl:4
+#: templates/twiki.pattern.tmpl:173
+msgid "Change language"
+msgstr "Alterar idioma"
 
 #: templates/renamebase.pattern.tmpl:71
 #: templates/renamewebbase.pattern.tmpl:75
@@ -557,7 +566,8 @@ msgstr "Alterado por:"
 msgid "Changed:"
 msgstr "Alterado:"
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:49
+#: templates/preview.pattern.tmpl:50
 msgid "Checkpoint"
 msgstr "Checkpoint"
 
@@ -615,7 +625,7 @@ msgstr "Conflito"
 #: templates/oopsaccessdenied.tmpl:11 templates/oopsaccessdenied.tmpl:18
 #: templates/oopsaccessdenied.tmpl:42
 msgid "Contact %1 if you have any questions."
-msgstr "Contacte %1 se você tiver qualquer questão."
+msgstr "Contate %1 se você tiver qualquer questão."
 
 #: templates/oopsattention.tmpl:302
 msgid "Continue and try to rename web?"
@@ -690,8 +700,8 @@ msgid ""
 "Did you type in your login name and password correctly? Remember, both are "
 "case sensitive."
 msgstr ""
-"Você digitou sem nome de usuário e senha corretamente? Lembre-se nos dois "
-"casos maiúsculas e minúsculas fazem diferença."
+"Você digitou sem nome de usuário e senha corretamente? Lembre-se de que nos "
+"dois casos maiúsculas e minúsculas fazem diferença."
 
 #: templates/oopsattention.tmpl:184
 msgid "Did you want to [[%1][reset %2's password]]?"
@@ -705,7 +715,7 @@ msgstr "Diferenças no tópico:"
 msgid "Diffs"
 msgstr "Diferenças"
 
-#: templates/preview.pattern.tmpl:49
+#: templates/preview.pattern.tmpl:49 templates/preview.pattern.tmpl:50
 msgid "Discard"
 msgstr "Descartar"
 
@@ -718,7 +728,7 @@ msgid ""
 "During move of attachment %1 to %2 an error was found. Please notify your %3 "
 "administrator."
 msgstr ""
-"Um erro foi encontardo ao mover o anexo %1 para %2. Por favor, notifique o "
+"Um erro foi encontrado ao mover o anexo %1 para %2. Por favor, notifique o "
 "administrador do %3."
 
 #: templates/oopsattention.tmpl:78
@@ -775,7 +785,7 @@ msgstr "Editar preferências do tópico:"
 
 #: templates/oopsauth.tmpl:4
 msgid "Either you need to register or the authentication failed"
-msgstr "Ou voce precisa se registrar ou a autenticação falhou"
+msgstr "Ou você precisa se registrar ou a autenticação falhou"
 
 #: templates/view.pattern.tmpl:73
 msgid "End of topic"
@@ -838,7 +848,7 @@ msgstr ""
 "Procurar tópicos <a href='%1' title='Procurar na web %2 por tópicos que "
 "façam link pra cá' accesskey='w'>na &web %2 </a> que façam link pra %3"
 
-#: templates/edit.pattern.tmpl:215 templates/preview.pattern.tmpl:47
+#: templates/edit.pattern.tmpl:215 templates/preview.pattern.tmpl:46
 msgid "Force new revision"
 msgstr "Forçar nova revisão"
 
@@ -913,7 +923,7 @@ msgstr ""
 
 #: templates/oopsaccessdenied.tmpl:27
 msgid "If you came here by clicking on a question mark link"
-msgstr "Se você chagou aqui clicando num link com uma interrogação"
+msgstr "Se você chegou aqui clicando num link com uma interrogação"
 
 #: templates/oopsauth.tmpl:8
 msgid "If you expected to be logged in at this point:"
@@ -925,11 +935,11 @@ msgid ""
 "using your mail address %3. Contact %4 if this is in error."
 msgstr ""
 "Se você recebeu esse e-mail por engano: alguém (%1) se registrou no sítio %2 "
-"usando seu endereço de e-mail %3. Contacte %4 se isso foi um engano."
+"usando seu endereço de e-mail %3. Contate %4 se isso foi um engano."
 
 #: templates/mailresetpassword.tmpl:14
 msgid "If you have any questions, please contact %1."
-msgstr "Se você tiver qualquer questão, contacte %1."
+msgstr "Se você tiver qualquer questão, contate %1."
 
 #: templates/registernotify.tmpl:25
 msgid "If you haven't set a password yet or you want to reset it, go to: %1"
@@ -960,7 +970,7 @@ msgid ""
 "site using your mail address %3. Contact %4 if needed."
 msgstr ""
 "No caso de você ter recebido esse e-mail por engano: alguém (%1) registrou-"
-"se no site %2 usando seu endereço de e-mail %3. Contacte %4 de necessário."
+"se no site %2 usando seu endereço de e-mail %3. Contate %4 de necessário."
 
 #: templates/oopsattention.tmpl:191
 msgid "Incorrect %1"
@@ -992,7 +1002,7 @@ msgstr ""
 "Provavelmente é seguro ir à frente e editar, a não ser que você pretenda "
 "alterar o formulário anexo ao tópico. _Se_ alguém salvar enquanto você está "
 "editando, suas alterações serão combinadas com as dele(a). Dados de "
-"formulário não podem ser combinados facilmente, então nesse caso recomanda-"
+"formulário não podem ser combinados facilmente, então nesse caso recomenda-"
 "se que você cheque com ele(a) primeiro."
 
 #: templates/rename.pattern.tmpl:22
@@ -1094,7 +1104,7 @@ msgstr "Mover ou Remover arquivo %1"
 msgid ""
 "Move this web to the Trash web to delete it (for example, rename it to %1)."
 msgstr ""
-"Mova esta web para a web Trash para removê-la (por exemple, renomeie ela "
+"Mova esta web para a web Trash para removê-la (por exemplo, renomeie-a "
 "para %1)."
 
 #: templates/oopsattention.tmpl:90
@@ -1151,6 +1161,10 @@ msgstr "Notas:"
 msgid "Notes"
 msgstr "Notas"
 
+#: templates/oopschangelanguage.tmpl:8
+msgid "Notes:"
+msgstr "Notas:"
+
 #: templates/renamewebbase.pattern.tmpl:63
 msgid "Notices:"
 msgstr "Avisos:"
@@ -1195,7 +1209,7 @@ msgstr "Escolha uma das %1."
 
 #: templates/oopsattention.tmpl:188 templates/oopsattention.tmpl:222
 msgid "Please contact %1 if you have any questions."
-msgstr "Por favor, contacte %1 se você tiver qualquer questão."
+msgstr "Por favor, contate %1 se você tiver qualquer questão."
 
 #: templates/login.pattern.tmpl:18
 msgid "Please enter your username and password:"
@@ -1269,11 +1283,11 @@ msgstr "Upload anterior"
 msgid "Printable version of this topic"
 msgstr "Versão imprimível deste tópico"
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:50
 msgid "Quiet Save"
 msgstr "Salvar em silêncio"
 
-#: templates/edit.pattern.tmpl:217
+#: templates/edit.pattern.tmpl:217 templates/preview.pattern.tmpl:48
 msgid "QuietSave"
 msgstr "Salvar em silêncio"
 
@@ -1361,10 +1375,11 @@ msgid "Revisions:"
 msgstr "Revisões:"
 
 #: templates/edit.pattern.tmpl:217 templates/edit.pattern.tmpl:218
+#: templates/preview.pattern.tmpl:50
 msgid "Save"
 msgstr "Salvar"
 
-#: templates/preview.pattern.tmpl:49
+#: templates/preview.pattern.tmpl:48
 msgid "Save Changes"
 msgstr "Salvar alterações"
 
@@ -1458,7 +1473,7 @@ msgid ""
 "Some people turn it into a personal portal with favorite links, what they "
 "work on, what help they'd like, etc."
 msgstr ""
-"Algumas pessoas tranformam-no num portal pessoal com links favoritos, em que "
+"Algumas pessoas transformam-no num portal pessoal com links favoritos, em que "
 "trabalham, que ajuda eles gostariam, etc."
 
 #: templates/view.pattern.tmpl:70
@@ -1493,6 +1508,18 @@ msgstr "Se inscreva / desinscreva em:"
 msgid "TWiki password reset for %1"
 msgstr "Reiniciar senha no TWiki para %1"
 
+#: templates/oopschangelanguage.tmpl:15
+msgid ""
+"TWiki's user interface is available in several language. If you want to "
+"change the language for this session, choose one of the following and hit "
+"\"Change language\". Otherwise, follow the \"Cancel\" link on the bottom of "
+"the page to return to the previous topic."
+msgstr ""
+"A interface de usuário do TWiki está disponível em vários idiomas. Se "
+"você quiser alterar o idioma para essa sessão, escolha um dos seguintes e "
+"clique em \"Alterar idioma\". Caso contrário, siga o link \"Cancelar\" no "
+"rodapé da página para retornar ao tópico anterior."
+
 #: templates/oopsattention.tmpl:121 templates/oopsattention.tmpl:138
 msgid "Thank you for registering"
 msgstr "Obrigado por se registrar"
@@ -1510,7 +1537,7 @@ msgid ""
 "Thank you for registering in the %1 collaboration tool. Your verification "
 "code is %2."
 msgstr ""
-"Obrigado por se registrar na platforma de colaboração %1. Seu código de "
+"Obrigado por se registrar na plataforma de colaboração %1. Seu código de "
 "verificação é %2."
 
 #: templates/oopsattention.tmpl:192
@@ -1626,7 +1653,7 @@ msgid ""
 "contact %1."
 msgstr ""
 "Houve um problema ao incluir a identificação do usuário ao sistema de senha. "
-"Por favor, contacte %1."
+"Por favor, contate %1."
 
 #: templates/oopsattention.tmpl:250
 msgid "There should be a line that includes %1, look for %2 (or %3)"
@@ -1662,8 +1689,8 @@ msgid ""
 "This name has been chosen so it doesn't conflict with any other topics "
 "already in the %1 web."
 msgstr ""
-"Este nome foi escolhido para não conflitar com nenhum outro tópico "
-"jáexistente na web %1."
+"Este nome foi escolhido para não chocar com nenhum outro tópico "
+"já existente na web %1."
 
 #: templates/oopsattention.tmpl:255
 msgid "This requires the form definition to be present."
@@ -1710,7 +1737,7 @@ msgid ""
 "To edit topics on this %1 collaborative web, you must be registered as a "
 "user."
 msgstr ""
-"Para editar tópicos nessaweb colaborativa %1, você precisa ser um usuário "
+"Para editar tópicos nesta web colaborativa %1, você precisa ser um usuário "
 "registrado."
 
 #: templates/preview.pattern.tmpl:60
@@ -1911,7 +1938,7 @@ msgid ""
 "underscore and has only alphanumeric characters."
 msgstr ""
 "Recomendamos que utilize nomes curtos, preferencialmente até 10 caracteres, "
-"iniciando com um caracter alfabético em caixa alta e usando somente "
+"iniciando com um caractere alfabético em caixa alta e usando somente "
 "caracteres alfanuméricos. Se você deseja criar um modelo de Web (uma web "
 "para usar como base quando criar outras) escolha então um nome que começe "
 "com um sublinhado e contenha apenas caracteres alfanuméricos."
@@ -1925,15 +1952,15 @@ msgid ""
 "You can [[%1][create a new web]] if you have permission. Contact %2 if you "
 "have any questions."
 msgstr ""
-"Você pode [[%1][criar uma nova web]] se você tiver permissão. Contacte %2 se "
+"Você pode [[%1][criar uma nova web]] se você tiver permissão. Contate %2 se "
 "você tiver qualquer questão."
 
 #: templates/oopsauth.tmpl:13
 msgid ""
 "You can also login anonymously as user *TWikiGuest* with password *guest*."
 msgstr ""
-"Você também pode se logar anônimamente, como usuário *TWikiGuest* com senha "
-"*guest*."
+"Você também pode se permanecer anônimo, com o usuário *TWikiGuest* e com a "
+"senha *guest*."
 
 #: templates/oopsattention.tmpl:112
 msgid ""
@@ -1964,6 +1991,14 @@ msgstr "Você pode revisar suas alterações em seu tópico TWiki pessoal %1"
 #: templates/oopsattention.tmpl:28
 msgid "You can see the differences [[%1][here]]."
 msgstr "Você pode ver as diferenças [[%1][aqui]]."
+
+#: templates/oopschangelanguage.tmpl:10
+msgid ""
+"You can set your favourite language permanently by setting the %1 variable "
+"in your user topic."
+msgstr ""
+"Você pode configurar sua linguagem favorita permanentemente configurando a "
+"variáveel %1 no seu tópico de usuário."
 
 #: templates/oopsattention.tmpl:182
 msgid "You cannot register twice, the name %1 is already registered."
@@ -1999,6 +2034,14 @@ msgstr ""
 "ou clicar no link no seu e-mail ou colocar o código no campo abaixo. (Esse "
 "código é da forma \"SeuNome.xxxx\")"
 
+#: templates/oopschangelanguage.tmpl:34
+msgid ""
+"Your language will be changed to %1 from the next screen. [[%2][Click here]] "
+"to proceed."
+msgstr ""
+"Seu idioma será alterado para %1 a partir da próxima tela. [[%2][Clique "
+"aqui]] para continuar."
+
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "Sua senha foi alterada para %1."
@@ -2032,13 +2075,13 @@ msgstr ""
 "[valor]"
 
 # please enter the name of your language here (written in the native language):
-#: lib/TWiki/I18N.pm:252
+#: lib/TWiki/I18N.pm:253
 msgid "_language_name"
 msgstr "Português"
 
 #: lib/TWiki/Access.pm:153
 msgid "access denied on topic"
-msgstr "Acesso ao tópico negado"
+msgstr "acesso ao tópico negado"
 
 #: lib/TWiki/Access.pm:181
 msgid "access denied on web"
@@ -2050,7 +2093,7 @@ msgstr "acesso ao tópico não permitido"
 
 #: lib/TWiki/Access.pm:193
 msgid "access not allowed on web"
-msgstr "accesso à web não permitido"
+msgstr "acesso à web não permitido"
 
 #: templates/attachtables.pattern.tmpl:11
 msgid "change, update, previous revisions, move, delete..."
@@ -2066,7 +2109,6 @@ msgid "fields are required."
 msgstr "campos obrigatórios"
 
 #: templates/edit.pattern.tmpl:215 templates/preview.pattern.tmpl:46
-#: templates/preview.pattern.tmpl:47
 msgid "help"
 msgstr "ajuda"
 
