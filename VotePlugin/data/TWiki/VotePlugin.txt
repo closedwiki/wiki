@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126710514" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="MichaelDaum" date="1126717800" format="1.0" version="1.2"}%
 ---+!! <nop>VotePlugin
 
 This plugin might be used to establish an online-voting system. Votes are
@@ -63,9 +63,9 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Perl Version: | >=5.6.1 |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  TWiki:Plugins/Benchmark: | TWiki:TWiki/GoodStyle nn%, TWiki:TWiki/FormattedSearch nn%, %TOPIC% nn% |
-|  Plugin Home: | http://nats-www.informatik.uni-hamburg.de/TWiki/VotePlugin |
-|  Feedback: | http://nats-www.informatik.uni-hamburg.de/TWiki/VotePluginDev |
+|  Plugin Home: | TWiki:Plugins/VotePlugin |
+|  Feedback: | TWiki:Plugins/VotePluginDev |
 |  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
 
--- TWiki:Main.MichaelDaum - 15 Sep 2005
+-- TWiki:Main.MichaelDaum - 14 Sep 2005
 
