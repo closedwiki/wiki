@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiGuest" date="1127433585" format="1.1" version="1.2"}%
 %TOC%
 %STARTINCLUDE%
 ---# TWiki Upgrade Guide
@@ -42,7 +42,7 @@ It will:
 
 To perform the upgrade, you need to:
 
-	* Check first if there is a newer =UpgradeTwiki= script available, see TWiki:Codev.UpgradeTwiki
+	* Check first if there is a newer =UpgradeTwiki= script available, see TWiki:Codev.UpgradeTWiki
 	* Create a new directory for your new installation: Let's call this =distro/=
 	* Put the distribution zip file in =distro/=
 	* Unzip it
@@ -61,7 +61,7 @@ There are a few points worth noting:
 		* If you have symlinks under your =data/= directory in your existing installation, these are reproduced as actual directories in the new structure.	It is up to you to pull these sub-directories out again and re-symlink as needed
 	* =UpgradeTwiki= doesn't deal with custom templates or Plugins, you will have to reinstall these in the new installation.
 
-If you use it, and would be kind enough to add your experiences to TWiki:Codev.UpgradeTwiki, it would be much appreciated.  The report of your experience will help to make =UpgradeTwiki= more robust.
+If you use it, and would be kind enough to add your experiences to TWiki:Codev.UpgradeTWiki, it would be much appreciated.  The report of your experience will help to make =UpgradeTwiki= more robust.
 
 #ManualUpgradeProcedure
 ---++ Manual Upgrade Procedure
@@ -85,3 +85,4 @@ You are *highly* recommended *not* to change any distributed files if you can av
 %STOPINCLUDE%
 
 __Related Topics:__ AdminDocumentationCategory
+
