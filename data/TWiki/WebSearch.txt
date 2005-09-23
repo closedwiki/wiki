@@ -2,7 +2,7 @@
 %META:TOPICPARENT{name="WebHome"}%
 ---+ Web Search
 
-%SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="on" zeroresults="off%URLPARAM{search}%"}%
+%SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="%URLPARAM{nosearch}%" zeroresults="off%URLPARAM{search}%"}%
 <noautolink>
 <div class="twikiPageForm">
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
