@@ -242,8 +242,9 @@ sub view {
         $start = $1;
         $end = $2;
     } else {
-        $start = '';
+        $start = $tmpl;
         $end = '';
+	$text = '';
     }
 
     # If minimalist is set, images and anchors will be stripped from text
