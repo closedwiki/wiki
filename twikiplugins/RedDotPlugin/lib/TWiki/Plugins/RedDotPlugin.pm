@@ -22,7 +22,7 @@ use vars qw(
         $debug $styleLink $doneHeader $hasInitRedirector
     );
 
-$VERSION = '1.01';
+$VERSION = '1.20';
 
 ###############################################################################
 sub writeDebug {
@@ -134,8 +134,9 @@ sub clearSessionValue {
 
 ###############################################################################
 sub renderRedDot {
-  my $args = shift || '';
+  my $args = shift;
 
+  $args = '' unless $args;
 
   my $theWebTopics;
   if ($theWebTopics = &TWiki::Func::extractNameValuePair($args)) {
@@ -145,12 +146,15 @@ sub renderRedDot {
   }
   my $theRedirect = &TWiki::Func::extractNameValuePair($args, 'redirect') 
     || "$web.$topic";
+  my $theText = &TWiki::Func::extractNameValuePair($args, 'text') || '.';
+  my $theStyle = &TWiki::Func::extractNameValuePair($args, 'style') || '';
+  my $theGrant = &TWiki::Func::extractNameValuePair($args, 'grant') || '.*';
 
   # find the first webtopic that we have access to
   my $theWeb;
   my $theTopic;
-  my $wikiName = &TWiki::Func::getWikiUserName();
   my $hasEditAccess = 0;
+  my $wikiName = &TWiki::Func::getWikiName();
 
   foreach my $webTopic (split(/, /, $theWebTopics)) {
     #writeDebug("testing webTopic=$webTopic");
@@ -164,9 +168,16 @@ sub renderRedDot {
     }
 
     if (&TWiki::Func::topicExists($theWeb, $theTopic)) {
+      writeDebug("checking access on $theWeb.$theTopic for $wikiName");
       $hasEditAccess = &TWiki::Func::checkAccessPermission("CHANGE", 
 	$wikiName, '', $theTopic, $theWeb);
       if ($hasEditAccess) {
+	$hasEditAccess = 0 unless $wikiName =~ /$theGrant/; 
+	# SMELL: use the twiki users and groups functions to check
+	# if we are in theGrant
+      }
+      if ($hasEditAccess) {
+	writeDebug("granted");
 	last;
       }
     }
@@ -179,15 +190,48 @@ sub renderRedDot {
   #writeDebug("rendering red dot on $theWeb.$theTopic for $wikiName");
 
   # red dotting
+  my $whiteBoard = _getValueFromTopic($theWeb, $theTopic, 'WHITEBOARD') || '';
   my $result = 
-    '<span class="redDot"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/' .
+    '<span class="redDot" ';
+  $result .=
+    '><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/' .
     "$theWeb/$theTopic" .
-    '?t=' . time() . 
-    "&redirect=$theRedirect" . '" ' .
+    '?t=' . time();
+  $result .= 
+    "&redirect=$theRedirect" if $theRedirect ne "$theWeb.$theTopic";
+  $result .= 
+    '&action=form' if $whiteBoard =~ /off/;
+  $result .= '" ';
+  $result .= "style=\"$theStyle\" " if $theStyle;
+  $result .=
     "title=\"Edit&nbsp;<nop>$theWeb.$theTopic\" " .
     "alt=\"Edit&nbsp;<nop>$theWeb.$theTopic\"" .
-    '>.</a></span>';
+    ">$theText</a></span>";
+
+  return $result;
 }
+
+###############################################################################
+# _getValue: my version to get the value of a variable in a topic
+sub _getValueFromTopic {
+  my ($theWeb, $theTopic, $theKey, $text) = @_;
+
+  if (!$text) {
+    my $meta;
+    ($meta, $text) = &TWiki::Func::readTopic($theWeb, $theTopic);
+  }
+
+  foreach my $line (split(/\n/, $text)) {
+    if ($line =~ /^(?:\t|\s\s\s)+\*\sSet\s$theKey\s\=\s*(.*)/) {
+      my $value = defined $1 ? $1 : "";
+      return $value;
+    }
+  }
+
+  return '';
+}
+
+
 
 
 1;
