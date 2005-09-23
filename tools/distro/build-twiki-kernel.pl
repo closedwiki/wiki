@@ -33,7 +33,7 @@ my $Config = {
     tempdir => '.',
     outputdir => '.',
     outfile => undef,
-    agent => "TWikiKernel Builder/v0.7.2",
+    agent => "TWikiKernel Builder/v0.8.0",
     manifest => '-',
 # output formats
     tar => 1,
@@ -41,7 +41,6 @@ my $Config = {
 # documentation switches
     changelog => 1,
     pdoc => 0,
-# AUTODETECT:   pdoc => eval { require Pdoc::Parsers::Files::PerlModule } && $@ eq '',
     gendocs => 1,
 # 
     verbose => 0,
@@ -72,7 +71,7 @@ my ( $branch ) = ( ( grep { /^URL:/ } @svnInfo )[0] ) =~ m/^.+?\/branches\/([^\/
 # TODO: use Getopt to process these (learn how to do this), er, maybe not?
 map { checkdirs( $Config->{$_} = rel2abs( $Config->{$_} ) ) } qw( tempdir outputdir );
 
-$Config->{localcache} = $Config->{tempdir} . "/.cache";
+$Config->{localcache} = $Config->{tempdir} . "/.twiki-cache";
 $Config->{svn_export} = $Config->{localcache} . "/twiki";
 $Config->{install_base} = $Config->{tempdir} . "/twiki";		# the directory the official release is untarred into
 $Config->{outfile} ||= "TWikiKernel-$branch-$svnRev";
@@ -85,7 +84,7 @@ print STDERR Dumper( $Config ) if $Config->{debug};
 if ( $Config->{verbose} )
 {
     print "temporary files will go into $Config->{tempdir}\n";
-    print "output tar file will go into $Config->{outputdir}\n";
+    print "output tar/zip files will go into $Config->{outputdir}\n";
 }
 
 ################################################################################
@@ -110,16 +109,11 @@ mkpath( $installBase ) or die "Unable to create the new build directory: $!";
 
 my $pwdStart = cwd();
 
-if ( 0 ) {	# SVN EXPORT concept on hold (i _want_ anonymous svn checkouts...)
-    my $svnExport = $Config->{svn_export} or die "no svn_export?";
-    ( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
-    execute( qq{svn export ../.. $svnExport} ) or die $!;
-#    die "no svn export output?" unless -d $svnExport;
-    chdir( $svnExport ) or die $!;
-}
-else {
-    chdir( '../..' ) or die $!;            # from tools/distro up to BRANCH (eg, trunk, DEVELOP)
-}
+my $svnExport = $Config->{svn_export} or die "no svn_export?";
+( rmtree( $svnExport ) or die qq{Unable to empty the svn export directory "$svnExport": $!} ) if -e $svnExport;
+execute( qq{svn export ../.. $svnExport} ) or die $!;	# from tools/distro up to BRANCH (eg, trunk, DEVELOP)
+#die "no svn export output?" unless -d $svnExport;
+chdir( $svnExport ) or die $!;
 
 ###############################################################################
 # build source code docs
