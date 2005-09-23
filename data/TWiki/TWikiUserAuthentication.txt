@@ -113,19 +113,6 @@ To make use of these features, use the tags:
 %SESSION_VARIABLE{ "varName" clear="" }%
 </verbatim>
 
-The session variables can also be set and cleared via CGI variables (include more than one in the string if necessary, separated by commas, as demonstrated here):
-
-<blockquote>
-set_session_variable=" *varName* = *varValue* , *varName* = *varValue* , ... " %BR%
-clear_session_variable=" *varName* , *varName* , ..."
-</blockquote>
-
-That is, to set the session variable SKIN equal to "gnu" while clearing the session variable TEST, adding this to the end of a TWiki URL should work:
-
-<verbatim>
-?set_session_variable=SKIN=gnu&clear_session_variable=TEST
-</verbatim>
-
 ---+++ Cookies and Transparent Session IDs
 
 TWiki normally uses cookies to store session information on a client computer. Cookies are a common way to pass session information from client to server. TWiki cookies simply hold a unique session identifier that is used to look up a database of session information on the TWiki server.
