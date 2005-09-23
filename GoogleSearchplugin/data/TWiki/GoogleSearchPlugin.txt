@@ -14,7 +14,7 @@ You can change this option to required value (0 or 1).
 
 		* Set debug = 1
 
-Demo of this documen is present at http://www.it.iitb.ac.in/~naval/twiki/bin/view/Main/GoogleSearchdemo
+Demo of this document is present at http://www.it.iitb.ac.in/~naval/twiki/bin/view/Main/GoogleSearchdemo
 
 
 *Usage of Plugin :-*
