@@ -2476,20 +2476,16 @@ sub _INCLUDE {
         return '';
     }
 
-    # remove everything before %STARTINCLUDE% and
-    # after %STOPINCLUDE%
-    if ($section) {
-       $this->writeDebug("Processing a Section");
-       $text =~ s/.*?%SECTION{[^\}]*\"$section\"[^\}]*}%//s;
-       $text =~ s/%ENDSECTION{[^\}]*\"$section\"[^\}]*}%.*//s;
-       $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
-       $this->writeDebug("Text:\n$text");
-
+    # remove everything before and after the selected include block
+    if( $section ) {
+        $text =~ s/.*?%SECTION{[^\}]*\"$section\"[^\}]*}%//s;
+        $text =~ s/%ENDSECTION{[^\}]*\"$section\"[^\}]*}%.*//s;
     } else {
        $text =~ s/.*?%STARTINCLUDE%//s;
        $text =~ s/%STOPINCLUDE%.*//s;
-       $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
     }
+    $text = applyPatternToIncludedText( $text, $pattern ) if( $pattern );
+
     # take out verbatims, pushing them into the same storage block
     # as the including topic so when we do the replacement at
     # the end they are all there
