@@ -7,7 +7,8 @@ use FileHandle;
 
 my $old = "/usr/bin/perl";
 my $new = "perl";
-my @files = qw(actionnotify attach changes configure edit geturl mailnotify manage oops passwd preview rdiff register rename renameweb resetpasswd rest save search statistics twiki upload view viewfile);
+# FIXME: @files should be generated from what actually exists in bin
+my @files = qw(edit preview resetpasswd view attach geturl manage rdiff rest statistics  viewfile changes login oops register save twiki configure logon passwd rename search upload);
 
 unless (-d "bin") {
   die "This must be run in the top level bin directory";
