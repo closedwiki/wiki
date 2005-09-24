@@ -14,7 +14,7 @@
 	C5	color H2, code text															#a00
 	C6	grayed out text																#8E9195
 	C7	page																		#FEFBF4
-	C8	h2 background color															#F3EDE7
+	C8	h2 background color															#FEF4E0
 	C9	neutral table bg gray that should work on light and dark backgrounds		#8E9195
 	C10	line-height																	1.4em
 	C11	small font size																85%
@@ -98,8 +98,8 @@ h1, h2, h3, h4, h5, h6 {
 	margin:1em 0 .1em 0;
 }
 h1 {
-	font-size:195%;
-	color:#DE5D07; /*C20*/
+	font-size:200%;
+	color:#E24628;
 	margin:0 0 .5em 0;
 }
 .patternNoViewPage h1 {
@@ -113,7 +113,8 @@ h5 { font-size:110%;}
 h6 { font-size:100%;}
 h2 {
 	display:block;
-	background-color:#F3EDE7; /*C8*/
+	background-color:#FEF4E0; /*C8*/
+	border-bottom:1px solid #E2DCC8;
 	padding:.2em 5px; /*C12*/
 	margin:1em -5px .35em -5px; /*C12*/
 	height:auto;
@@ -476,8 +477,8 @@ a:hover .twikiAccessKey {
 	background-color:#FCF5DF; /*C14*/
 	margin:0 0 1.5em 0;
 	padding:.5em 2em;
-	border-top:1px solid #FCD582; /*C16*/
-	border-bottom:1px solid #FCD582; /*C16*/
+	border-top:1px solid #E2DCC8;
+	border-bottom:1px solid #EACA98;
 }
 .patternTopicAction .patternActionButtons {}
 .patternTopicAction .patternActionButtons a:link,
@@ -660,7 +661,7 @@ a:hover .twikiAccessKey {
 	color:#8E9195; /*C6*/
 	background-color:#F2F9FD;
 	padding:.25em .5em;
-	border-bottom:1px solid #B9C1C7; /*C16*/
+	border-bottom:1px solid #CBD8DA;
 }
 .patternTop table {
 	border:none;
@@ -697,8 +698,11 @@ a:hover .twikiAccessKey {
 	font-size:94%; /*C15*/
 	padding:.6em 0 .7em 0;
 }
+/*
 .patternViewPage .patternToolBar {
+	margin:-.4em 0 2.2em 0;
 }
+*/
 .patternEditPage .patternToolBar {
 	margin:0 0 1.35em 0;
 }
@@ -723,8 +727,8 @@ a:hover .twikiAccessKey {
 .patternToolBar .patternButton a:visited {
 	position:relative;
 	background-color:#FCF5DF; /*C14*/
-	border:1px solid #FCD582; /*C16*/
-	border-bottom:1px solid #F1B969;
+	border:1px solid #E2DCC8;
+	border-bottom:1px solid #EACA98;
 	padding:.5em .6em;
 }
 .patternToolBar .patternButton s,
@@ -836,7 +840,7 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#eee;}
 	padding:.25em 10px .15em 10px;
 	margin:0 -10px .25em -10px;
 	font-weight:bold;
-	background-color:#F3EDE7; /*C8*/
+	background-color:#FEF4E0; /*C8*/
 	border-bottom:1px solid #ccc; /*C18*/
 	height:1.5em; /* or WIN/IE wont draw the backgound */
 }
@@ -865,10 +869,11 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#eee;}
 	font-weight:normal;
 }
 .patternSearchResults .twikiNew {
-	background-color:green;
-	color:#fff;
+	background-color:#E6F5D3;
+	border:1px solid #049804;
+	color:#049804;
 	font-size:85%; /*C11*/
-	padding:1px;
+	padding:0 1px;
 	font-weight:bold;
 }
 .patternSearchResultsPage .twikiHelp {
