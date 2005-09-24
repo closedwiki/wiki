@@ -13,7 +13,7 @@
 %TMPL:DEF{"inactive_edit"}%<strike>%_{"Edit text"}%</strike>%TMPL:END%
 %TMPL:DEF{"create_topic"}%_{"Cr&eate"}%%TMPL:END%
 %TMPL:DEF{"edit_topic"}%%_{"&Edit text"}%%TMPL:END%
-%TMPL:DEF{"active_edit"}%<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=text&t=%GMTIME{$hour$min$sec}%" title='%_{"Edit topic text"}%' accesskey="e" rel='nofollow'> %TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:END%
+%TMPL:DEF{"active_edit"}%<span class='patternButton'><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=text&t=%GMTIME{$hour$min$sec}%" title='%_{"Edit topic text"}%' accesskey="e" rel='nofollow'> %TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
 
 %TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">%_{"Start of topic"}% | <a href="#Actions">%_{"Skip to actions"}%</a><hr /></div>
 %TMPL:P{"form"}%
