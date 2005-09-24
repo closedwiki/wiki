@@ -130,6 +130,7 @@ my $optionalMods =
 my $I18Mods =
   {
    'Encode'           => "I18N conversions (core module in Perl 5.8)",
+   'Unicode::String'  => 'I18N conversions',
    'Unicode::MapUTF8' => "I18N conversions",
    'Unicode::Map'     => "I18N conversions",
    'Unicode::Map8'    => "I18N conversions",
