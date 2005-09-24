@@ -358,7 +358,7 @@ msgstr ""
 
 #: templates/view.pattern.tmpl:75
 msgid "A&ll Webs"
-msgstr "Todas (&l)"
+msgstr "G&lobal"
 
 #: templates/oopsaccessdenied.tmpl:5
 msgid "Access Denied"
@@ -2256,7 +2256,7 @@ msgid ""
 "in your user topic."
 msgstr ""
 "Você pode configurar sua linguagem favorita permanentemente configurando a "
-"variáveel %1 no seu tópico de usuário."
+"variável %1 no seu tópico de usuário."
 
 #: templates/oopsattention.tmpl:182
 msgid "You cannot register twice, the name %1 is already registered."
