@@ -312,9 +312,11 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarUSERLANGUAGE
 ---+++ USERLANGUAGE -- current user's language
-	* Returns the language code for the language used as the current user. This is the used actually used by TWiki Internationalization.
-        * The language is detected from the user's browser, unless some user/web/session setting overrides it.
-	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarUSERNAME][USERNAME]
+	* Returns the language code for the language used as the current user. This is the language actually used by TWiki Internationalization (e.g. in user interface).
+	* The language is detected from the user's browser, unless some site/web/user/session-defined setting overrides it:
+		* Is the =LANGUAGE= preference is set, it's used as user's language instead of any language detected from the browser.
+		* Avoid to define it =LANGUAGE= at a non per-user way, so each user can choose his/her preferred language.
+	* Related: [[#VarLANGUAGES][LANGUAGES]]
 
 #VarVAR
 ---+++ VAR{"NAME" web="Web"} -- get a preference value from another web 

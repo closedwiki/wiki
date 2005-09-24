@@ -170,6 +170,7 @@ BEGIN {
         INCLUDE           => \&_INCLUDE,
         INTURLENCODE      => \&_INTURLENCODE,
         LANGUAGES         => \&_LANGUAGES,
+        MAKETEXT          => \&_MAKETEXT,
         META              => \&_META,
         METASEARCH        => \&_METASEARCH,
         PLUGINVERSION     => \&_PLUGINVERSION,
@@ -2800,6 +2801,31 @@ sub _LANGUAGES {
     }
 
     return $result;
+}
+
+sub _MAKETEXT {
+    my ( $this, $params ) = @_;
+    
+    my $str = $params->{_DEFAULT} || $params->{string};
+    return "" unless $str;
+
+    # escape everything:
+    $str =~ s/\[/~[/g;
+    $str =~ s/\]/~]/g;
+
+    # restore already escaped stuff:
+    $str =~ s/~~\[/~[/g;
+    $str =~ s/~~\]/~]/g;
+
+    # unescape parameters:
+    $str =~ s/~\[(\_(\d+))~\]/[$1]/g;
+    $str =~ s/~\[(\*,\_\d+,[^,]+(,([^,]+))?)~\]/[$1]/g;
+
+    # get the args to be interpolated.
+    my @args = split (/\s*,\s*/, $params->{args}) ;
+
+    # do the magic:
+    return $this->{i18n}->maketext($str, @args);
 }
 
 sub _SCRIPTNAME {

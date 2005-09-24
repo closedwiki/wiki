@@ -1,7 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="$Rev$"}%
----+!! Welcome to the <nop>%WEB% web
+---+!! MAKETEXT{"Welcome to the [_1] web" args="<nop>%WEB%"}%
 
----++ Available Information
+---++ %MAKETEXT{"Available Information"}%
    * ...
    * ...
    * ...
@@ -9,8 +9,8 @@
 <blockquote>
 <form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
 <input type="text" name="search" size="22" />
-<input type="submit" value="Search" />
+<input type="submit" value='MAKETEXT{"Search"}%' />
 <br/>
-([[WebSearchAdvanced][advanced search]])
+([[WebSearchAdvanced][%MAKETEXT{"advanced search"}%]])
 </form>	
 </blockquote>

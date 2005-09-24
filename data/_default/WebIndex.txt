@@ -2,4 +2,4 @@
 %META:TOPICPARENT{name="WebHome"}%
 %SEARCH{"\.*" scope="topic" regex="on" nosearch="on"}%
 
-See also the faster WebTopicList
+%MAKETEXT{"See also the faster [_1]" args="WebTopicList"}%

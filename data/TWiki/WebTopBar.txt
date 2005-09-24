@@ -9,7 +9,7 @@
 <tr>
 <td>
 <form name="top" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
-<label for="go">Jump: </label><input type="text" id="go" name="topic" size="16" />
+<label for="go">%MAKETEXT{"Jump:"}% </label><input type="text" id="go" name="topic" size="16" />
 </form>
 </td>
 </tr>

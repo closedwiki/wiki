@@ -250,6 +250,27 @@ Any other parameters will be defined as variables within the scope of the includ
    * Expand to: %LOGOUT%
 	* Related: TWikiUserAuthentication,[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
+
+#VarMAKETEXT
+---+++ MAKETEXT -- creates text using TWiki's I18N infrastructure
+   * Syntax = =%<nop>MAKETEXT{"string" args="..."}=
+   * Supported parameters:
+     | *Parameter* | *Description* | *Default* |
+     | ="text"= or =string="text"= | The text to be displayed. | _none_ |
+     | =args="param1,param2"= | a comma-separated list of arguments to be interpolated in the string, replacing the =[_N]= placeholders in it. | _none_ |
+   * Examples:
+      * =%<nop>MAKETEXT{string="Notes:"}%=
+        %BR% expands to %BR%
+        <em> %MAKETEXT{string="Notes:"}% </em>
+      * =%<nop>MAKETEXT{"Contact [_1] if you have any questions." args="%<nop>WIKIWEBMASTER%"}%=
+        %BR% expands to %BR%
+        <em> %MAKETEXT{"Contact [_1] if you have any questions." args="%WIKIWEBMASTER%"}% </em>
+      * =%<nop>MAKETEXT{"Did you want to [<nop>[<nop>[<nop>_1]<nop>]<nop>[reset [_2]'s password]<nop>]<nop>?" args="TWiki.ResetPassword,%<nop>WIKIUSERNAME%"}%=
+        %BR% expands to %BR%
+        <em> %MAKETEXT{"Did you want to [[[_1]][reset [_2]'s password]]?" args="TWiki.ResetPassword,%WIKIUSERNAME%"}% </em>
+   * __Note__ that TWiki will translate the =string= to the current user's language _only_
+     if it has such string in its translation table for that language.
+
 #VarMAINWEB
 ---+++ MAINWEB -- name of Main web
 	* The web containing %MAINWEB%.%WIKIUSERSTOPIC%, individual user topics and %MAINWEB%.TWikiGroups

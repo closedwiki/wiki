@@ -3,14 +3,14 @@
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
 
 ---
-   * <b><nop>%INCLUDINGWEB% Web</b>
-   * [[%HOMETOPIC%][Home]]
-   * [[TWikiUsers][Users]]
-   * [[TWikiGroups][Groups]]
-   * [[WebTopicList][Index]]
-   * [[%INCLUDINGWEB%.WebSearchAdvanced][Search]]
-   * [[WebChanges][Changes]]
-   * [[WebNotify][Notifications]]
-   * [[WebStatistics][Statistics]]
-   * [[WebPreferences][Preferences]]
+   * <b><nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%</b>
+   * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
+   * [[TWikiUsers][%MAKETEXT{"Users"}%]]
+   * [[TWikiGroups][%MAKETEXT{"Groups"}%]]
+   * [[WebTopicList][%MAKETEXT{"Index"}%]]
+   * [[%INCLUDINGWEB%.WebSearchAdvanced][%MAKETEXT{"Search"}%]]
+   * [[WebChanges][%MAKETEXT{"Changes"}%]]
+   * [[WebNotify][%MAKETEXT{"Notifications"}%]]
+   * [[WebStatistics][%MAKETEXT{"Statistics"}%]]
+   * [[WebPreferences][%MAKETEXT{"Preferences"}%]]
 

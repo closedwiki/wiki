@@ -5,5 +5,5 @@
 	* Set GROUP = %WIKIUSERNAME%, Main.Others...
 	* Set ALLOWTOPICCHANGE = %URLPARAM{"topic"}%
 
-__Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
+__%MAKETEXT{"Related topics:"}%__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 

@@ -4,15 +4,15 @@
 
 ----
    * <b><nop>%INCLUDINGWEB% Web</b>
-   * [[%HOMETOPIC%][Home]]
-   * [[WebTopicList][Index]]
-   * [[WebSearchAdvanced][Search]]
-   * [[WebChanges][Changes]] 
-   * [[WebNotify][Notifications]] 
-   * [[WebStatistics][Statistics]] 
-   * [[WebPreferences][Preferences]] 
+   * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
+   * [[WebTopicList][%MAKETEXT{"Index"}%]]
+   * [[WebSearchAdvanced][%MAKETEXT{"Search"}%]]
+   * [[WebChanges][%MAKETEXT{"Changes"}%]] 
+   * [[WebNotify][%MAKETEXT{"Notifications"}%]] 
+   * [[WebStatistics][%MAKETEXT{"Statistics"}%]] 
+   * [[WebPreferences][%MAKETEXT{"Preferences"}%]] 
 ----
-   * <b>User Reference</b>
+   * <b>%MAKETEXT{"User Reference"}%</b>
    * ATasteOfTWiki
    * TextFormattingRules
    * TWikiVariables
@@ -20,7 +20,7 @@
    * TWikiSkinBrowser
    * InstalledPlugins
 
-   * <b>Admin Maintenance</b>
+   * <b>%MAKETEXT{"Admin Maintenance"}%</b>
    * AdminToolsCategory
    * InterWikis
    * ManagingWebs

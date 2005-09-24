@@ -3,12 +3,12 @@
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
 
 ----
-   * <b><nop>%INCLUDINGWEB% Web</b>
-   * [[%HOMETOPIC%][Home]]
-   * [[WebTopicList][Index]]
-   * [[WebSearchAdvanced][Search]]
-   * [[WebChanges][Changes]] 
-   * [[WebNotify][Notifications]] 
-   * [[WebStatistics][Statistics]] 
-   * [[WebPreferences][Preferences]] 
+   * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
+   * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
+   * [[WebTopicList][%MAKETEXT{"Index"}%]]
+   * [[WebSearchAdvanced][%MAKETEXT{"Search"}%]]
+   * [[WebChanges][%MAKETEXT{"Changes"}%]] 
+   * [[WebNotify][%MAKETEXT{"Notifications"}%]] 
+   * [[WebStatistics][%MAKETEXT{"Statistics"}%]] 
+   * [[WebPreferences][%MAKETEXT{"Preferences"}%]] 
 ----

@@ -24,8 +24,12 @@ foreach my $source (<R>) {
     chomp($source);
     my @fields = split(/\s/, $source);
     $source = $fields[0];
-    if( $source =~ /^bin\/[a-z]/ || $source =~ /^lib\/.*\.pm$/ ||
-        $source =~ /^templates\/.*\.tmpl$/ ) {
+    if( $source =~ m/^bin\/[a-z]/ ||
+        $source =~ m/^lib\/.*\.pm$/ ||
+        $source =~ m/^templates\/.*\.tmpl$/ ||
+        $source =~ m/^data\/TWiki\/.*Template\.txt$/ ||
+        $source =~ m/^data\/TWiki\/Web.*Bar.*\.txt$/ ||
+        $source =~ m/^data\/Main\/.*Template\.txt$/ ) {
         push(@sources, $source);
    }
 }

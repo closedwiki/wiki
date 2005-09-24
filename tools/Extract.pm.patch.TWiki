@@ -1,18 +1,18 @@
 --- Extract.pm.orig	2005-09-16 22:39:06.000000000 -0300
-+++ Extract.pm	2005-09-17 13:54:08.240524080 -0300
++++ Extract.pm	2005-09-23 23:22:36.031451128 -0300
 @@ -51,6 +51,11 @@
  
  Strings inside {{...}} are extracted.
  
-+=item TWiki Templates
++=item TWiki Templates and Topics
 +
-+Inside %_{...}% or %TMPL:MAKETEXT{...}%, first string is extracted
-+(subsequent ones are assumed to be arguments to be interpolated).
++Inside %_{...}% or %TMPL:MAKETEXT{...}% or %MAKETEXT{...}%, first string is
++extracted (subsequent ones are assumed to be arguments to be interpolated).
 +
  =back
  
  =head1 METHODS
-@@ -240,6 +245,22 @@
+@@ -240,6 +245,33 @@
          $self->add_entry($val, [ $file, $line, '' ]);
      }
  
@@ -30,12 +30,23 @@
 +        }
 +        $line ++;
 +    }
++    # TWiki topics:
++    $line = 1; pos($_) = 0;
++    my @_lines = split(/\n/,$_);
++    foreach (@_lines) {
++        while (m/%MAKETEXT\{\s*(string=)?($doublequoted)(\s*args=($doublequoted))?\s*\}%/gm) {
++            my $str = substr($2, 1, -1);
++	    $str =~ s/\\"/"/g;
++	    $self->add_entry($str, [ $file, $line, '']);
++        }
++        $line ++;
++    }
 +
 +
      # Perl code:
      my ($state,$str,$vars,$quo)=(0);
      pos($_) = 0;
-@@ -423,8 +444,8 @@
+@@ -423,8 +455,8 @@
      my ($text, $verbatim) = @_;
      return '' unless defined $text;
  
