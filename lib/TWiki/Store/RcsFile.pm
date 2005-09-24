@@ -961,7 +961,7 @@ sub _constructAttributesForAutoAttached {
                   path    => $file,
                   size    => $stat->[7],
                   date    => $stat->[9], 
-                  user    => '', 
+                  user    => 'UnknownUser', 
                   comment => '',
                   attr    => '',
                   autoattached => '1'

@@ -123,16 +123,9 @@ sub readTopic {
     my $text = $this->readTopicRaw( $user, $web, $topic, $version );
     my $meta = new TWiki::Meta( $this->{session}, $web, $topic);
     $this->extractMetaData( $meta, \$text );
-    my @knownAttachments = $meta->find('FILEATTACHMENT');
-    my $ka = undef; #ugly I know
-    if ($#knownAttachments) {
-        $ka = \@knownAttachments;
-	}
-    
-	my $autoAttachments = $this->_extractMetaDataAutoAttachments($user, $web, $topic, $version, $ka );
-	if (defined $autoAttachments) {
-		$meta->putAll('FILEATTACHMENT', @$autoAttachments);
-	};
+
+	# Override meta with that blended from pub.
+	$meta = $this->_extractMetaDataAutoAttachments($user, $web, $topic, $version, $meta );
 
     return( $meta, $text );
 }
@@ -355,16 +348,19 @@ sub _findAttachments {
 	}
 
     # Please retain following print until this feature is out of beta
-    #	use Data::Dumper;
-    #	print "In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub);
+#    	print "Topic: $web.$topic:\n";
+#    	use Data::Dumper;
+#    	print "In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub);
 
     foreach my $file (keys %filesListedInPub) {
         if ($filesListedInMeta{$file}) {
             # Bring forward any missing yet wanted attributes
-            foreach my $value qw(comment attr) {
-              if ($filesListedInMeta{$file}{$value}) {
-              		$filesListedInPub{$file}{$value} =
- 		            $filesListedInMeta{$file}{$value};
+            foreach my $field qw(comment attr user) {
+              if ($filesListedInMeta{$file}{field}) {
+#              		print "$file: bringing forward field $field: was ".$filesListedInPub{$file}{$field};
+              		$filesListedInPub{$file}{$field} =
+ 		            $filesListedInMeta{$file}{$field};
+# 		            print " now: ".$filesListedInPub{$file}{$field}."\n";
               }
             }
          	# Develop:Bugs.Item452 - WHY IS USER STILL WRONG?
@@ -373,7 +369,7 @@ sub _findAttachments {
 
     # Please retain following print until this feature is out of beta
     #	use Data::Dumper;
-    #    print "Result:".Dumper(\%filesListedInPub)."\n";
+#        print "Result:".Dumper(\%filesListedInPub)."\n";
 
 	# A comparison of the keys of the $filesListedInMeta and %filesListedInPub 
 	# would show files that were in Meta but have disappeared from Pub.
@@ -387,6 +383,17 @@ sub _findAttachments {
 	return @deindexedBecauseMetaDoesnotIndexAttachments;
 }
 
+=pod
+---++ ObjectMethod _removeAutoAttachmentsFromMeta
+This is where we are going to remove from meta any entry that is marked as an automatic attachment.
+=cut
+
+sub _removeAutoAttachmentsFromMeta {
+    my ($this, $meta) = @_;
+#    use Data::Dumper;
+#    die "removeAutoAttachmentsFromMeta".Dumper($meta);
+    return $meta;
+}
 
 =pod
 
@@ -717,7 +724,8 @@ sub saveTopic {
     ASSERT($this->isa('TWiki::Store')) if DEBUG;
     ASSERT($user->isa('TWiki::User')) if DEBUG;
     $web =~ s#\.#/#go;
-
+	$meta = $this->_removeAutoAttachmentsFromMeta($meta);
+	
     $options = {} unless defined( $options );
 
     if( $user &&
@@ -1262,18 +1270,37 @@ sub extractMetaData {
 }
 
 sub _extractMetaDataAutoAttachments {
-    my( $this, $user, $web, $topic, $version, $attachmentsKnownInMeta ) = @_;
+    my( $this, $user, $web, $topic, $version, $meta ) = @_;
+
+    my @knownAttachments = $meta->find('FILEATTACHMENT');
+    my $ka = undef; #ugly I know
+    if ($#knownAttachments) {
+        $ka = \@knownAttachments;
+		$this->{session}->writeDebug("\n\n<body>$web.$topic META: ".Dumper($meta->{'FILEATTACHMENT'})."\n");  
+	} else {
+		$this->{session}->writeDebug("$web.$topic: no attachments");
+	}
 
 	if ($TWiki::cfg{AutoAttachPubFiles}) {
-        #  	   print "AUTOATTACHING on $web.$topic\nFOUND BEFORE ".Dumper($attachmentsKnownInMeta)."\n";
+
+
+		use Data::Dumper;
+		$Data::Dumper::Maxdepth = 2;
+		$this->{session}->writeDebug("$web.$topic META =".Dumper($meta));
+       	$this->{session}->writeDebug("AUTOATTACHING on $web.$topic\nFOUND BEFORE ".Dumper($ka)."\n");
+
+       $this->{session}->writeDebug("KA2: ".Dumper(@knownAttachments));
        my @attachmentsFoundInPub =
-         _findAttachments($this, $web, $topic, $attachmentsKnownInMeta);
-       #       print "FOUND AFTER ".Dumper(\@attachmentsFoundInPub);
-       return \@attachmentsFoundInPub;
+         _findAttachments($this, $web, $topic, $ka);
+       	$this->{session}->writeDebug("FOUND AFTER ".Dumper(\@attachmentsFoundInPub));
+
+		if ($#attachmentsFoundInPub) {
+			$meta->putAll('FILEATTACHMENT', @attachmentsFoundInPub);
+		};
     } else {
-        #       print "NOT AUTOATTACHING on $web.$topic\n ".Dumper($attachmentsKnownInMeta)."\n";
-       return $attachmentsKnownInMeta;
+       	$this->{session}->writeDebug("NOT AUTOATTACHING on $web.$topic\n ".Dumper($ka)."\n");
     }
+    return $meta;
 }
 
 =pod
