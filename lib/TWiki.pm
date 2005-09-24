@@ -2822,7 +2822,7 @@ sub _MAKETEXT {
     $str =~ s/~\[(\*,\_\d+,[^,]+(,([^,]+))?)~\]/[$1]/g;
 
     # get the args to be interpolated.
-    my @args = split (/\s*,\s*/, $params->{args}) ;
+    my @args = split (/\s*,\s*/, $params->{args} || "") ;
 
     # do the magic:
     return $this->{i18n}->maketext($str, @args);
