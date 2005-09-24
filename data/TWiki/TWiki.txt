@@ -7,7 +7,7 @@ information is<br /><strong> %$VERSION% </strong>
 
 See TWiki.DakarReleaseNotes for full release information.
 
-See http://develop.twiki.org/~develop/cgi-bin/view/Bugs/AllOutStandingItems for a list of known issues, especially [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item432][notes for beta testers]]. Please add bug reports against the beta to this database.
+See http://develop.twiki.org/~develop/cgi-bin/view/Bugs/AllOutStandingItems for a list of known issues, especially [[http://develop.twiki.org/~develop/cgi-bin/view/Bugs/Item432][notes for beta testers]]. Please [[http://develop.twiki.org/~develop/cgi-bin/edit/Bugs/ItemXXXXXXXXXX?templatetopic=Bugs.HideTextarea&formtemplate=Bugs.ItemTemplate&action=form][add bug reports]] against the beta to this database.
 
 *NOTE Most contributions (Plugins, AddOns, Contribs, Skins) have had to be modified to work with Dakar*. These modifications have been required to remove abuses of the published APIs. Please do not expect all the plugins currently published to TWiki:Plugins web to work. Many will, but most won't.
 
