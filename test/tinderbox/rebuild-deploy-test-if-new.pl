@@ -39,6 +39,7 @@ use Error qw( :try );
 
 use constant BUILD_LOCK => '.build';
 use constant LAST_BUILD => '.last_build';
+use constant FREEZE_LOCK => '.freeze';
 
 my $Config = {
     force => 0,
@@ -65,7 +66,7 @@ chdir( $FindBin::Bin );
 ################################################################################
 
 # bail early (as early as possible) if we're already doing a build
-exit 0 if -e BUILD_LOCK;
+exit 0 if -e BUILD_LOCK || -e FREEZE_LOCK;
 
 chomp( my ( $rev, $author ) = `./latest-svn-checkin.pl` );
 
