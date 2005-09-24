@@ -207,7 +207,7 @@ The =configure= script can be used like the old =testenv= for public review of t
 
 ---++++ =configure= optional features
 
-New optional features include AutomaticAttachments.
+New optional features include TWiki:Codev.AutomaticAttachments.
 
 ---+++ Preferences
 
