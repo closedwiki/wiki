@@ -4,7 +4,7 @@
 Most of the redesign, refactoring and documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
    * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - internationalisation framework
    * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - templates
-   * [[TWiki:Main.FlorianWeimer][Florian Weimer]] - sandbox
+   * [[TWiki:Main.FlorianWeimer][Florian Weimer]] - security sandbox
    * [[TWiki:Main.GregAbbas][Greg Abbas]] - integration of !SessionPlugin
    * [[TWiki:Main.MartinCleaver][Martin Cleaver]] - registration process, and auto-attachments
    * [[TWiki:Main.PeterNixon][Peter Nixon]] - hierarchical subwebs support
