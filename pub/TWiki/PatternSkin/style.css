@@ -8,7 +8,7 @@
 /*	---------------------------------------------------------------------------------------
 	CONSTANTS
 	C1	link color	 																#06c
-	C2	orange hover link background color 											#C75305 
+	C2	red hover link background color 											#D6000F 
 	C3	link label hover color														#fff
 	C4	visited link color															#777
 	C5	color H2, code text															#a00
@@ -99,7 +99,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 h1 {
 	font-size:200%;
-	color:#E24628;
+	color:#a00;
 	margin:0 0 .5em 0;
 }
 .patternNoViewPage h1 {
@@ -113,11 +113,12 @@ h5 { font-size:110%;}
 h6 { font-size:100%;}
 h2 {
 	display:block;
-	background-color:#FEF4E0; /*C8*/
+	background-color:#FEFBF4; /*C7*/
 	border-bottom:1px solid #E2DCC8;
 	padding:.2em 5px; /*C12*/
 	margin:1em -5px .35em -5px; /*C12*/
 	height:auto;
+	font-weight:600;
 }
 
 /* Links */
@@ -150,7 +151,7 @@ h2 {
 :visited:hover {
 	text-decoration:none;
 	color:#FCF5DF; /*C14*/
-	background-color:#C75305; /*C2*/
+	background-color:#D6000F; /*C2*/
 }
 .patternTopic a:visited {
 	color:#777; /*C4*/
@@ -431,11 +432,12 @@ th.twikiSortedDescendingCol a:hover {
 	vertical-align:middle;
 }
 .twikiHelp {
-	background-color:#ECF2F9;
+	background-color:#E9F2F9;
 	padding:1em;
-	border:4px solid #B5D5EC;
+	border:3px solid #B5D5EC;
 }
-.twikiHelp ul {
+.twikiHelp ul,
+.twikiHelp li {
 	margin-top:0;
 	margin-bottom:0;
 }
@@ -473,25 +475,28 @@ a:hover .twikiAccessKey {
 .patternTopicAction {
 	font-size:94%; /*C15*/
 	line-height:1.5em;
-	color:#8E9195; /*C6*/
-	background-color:#FCF5DF; /*C14*/
+	color:#555;
+	background-color:#FCF5E0;
 	margin:0 0 1.5em 0;
-	padding:.5em 2em;
-	border-top:1px solid #E2DCC8;
-	border-bottom:1px solid #EACA98;
+	padding:.35em 2em;
+	border-top:1px solid #EFEBDB;
+	border-bottom:1px solid #E2DCC8;
+}
+.patternTopicAction .twikiSeparator {
+	color:#aaa;
 }
 .patternTopicAction .patternActionButtons {}
 .patternTopicAction .patternActionButtons a:link,
 .patternTopicAction .patternActionButtons a:visited {
 	text-decoration:none;
 	padding:1px 1px 2px 1px;
-	color:#C75305; /*C2*/
+	color:#a00;
 }
 .patternTopicAction .patternActionButtons a:hover {
 	color:#FCF5DF; /*C14*/
 }
 .patternTopicAction .twikiAccessKey {
-	border-color:#C75305; /*C2*/
+	border-color:#C75305;
 }
 
 .patternTopicAction label {
@@ -552,7 +557,7 @@ a:hover .twikiAccessKey {
 	border-bottom:1px solid #E2DCC8;
 	color:#777;
 	overflow:hidden;
-	background-color:#FBF8F1;
+	background-color:#FBF7E8;
 	line-height:1.4em;
 }
 .patternLeftBar hr {
@@ -561,7 +566,7 @@ a:hover .twikiAccessKey {
 }
 .patternLeftBar a:link,
 .patternLeftBar a:visited {
-	color:#C75305;
+	color:#9A0A0B;
 }
 .patternLeftBar a:hover {
 	color:#fff;
@@ -588,7 +593,7 @@ a:hover .twikiAccessKey {
 .patternLeftBarPersonal {
 	margin:-1px -1px -.5em -1em;
 	padding:.5em 0 .5em 1em;
-	background-color:#F2F6FB;
+	background-color:#E9F2F9;
 	border-top:1px solid #B5D5EC;
 	border-bottom:1px solid #B5D5EC;
 }
@@ -599,7 +604,7 @@ a:hover .twikiAccessKey {
 .patternLeftBarPersonal a:hover {
 	text-decoration:none;
 	color:#FCF5DF; /*C14*/
-	background-color:#C75305; /*C2*/
+	background-color:#D6000F; /*C2*/
 }
 
 /* Bottom bar */
@@ -659,31 +664,27 @@ a:hover .twikiAccessKey {
 	font-size:94%; /*C15*/
 	line-height:1.5em;
 	color:#8E9195; /*C6*/
-	background-color:#F2F9FD;
-	padding:.25em .5em;
-	border-bottom:1px solid #CBD8DA;
+}
+.patternViewPage .patternTop {
+	background-color:#FBF7E8;
 }
 .patternTop table {
 	border:none;
 	width:100%;
 }
-
-.patternTop td.patternHomePath {
-	text-align:left;
-}
-.patternTop td.patternRevInfo {
-	float:right;
-	text-align:right;
-}
 .patternHomePath,
 .patternRevInfo {
+	padding:.25em .5em;
 	color:#8E9195; /*C6*/
 }
 .patternHomePath {
 	color:#000; /*C17*/
+	text-align:left;
 }
 .patternRevInfo {
 	color:#8E9195; /*C4*/
+	float:right;
+	text-align:right;
 }
 .patternRevInfo a:link,
 .patternRevInfo a:visited {
@@ -692,19 +693,21 @@ a:hover .twikiAccessKey {
 .patternRevInfo a:hover {
 	color:#FCF5DF; /*C14*/
 }
-
-/* Tool bar at top of topic */
+/* Button tool bar */
 .patternToolBar {
-	font-size:94%; /*C15*/
-	padding:.6em 0 .7em 0;
+	padding:.15em .5em 0 .5em;
 }
-/*
+html>body .patternToolBar { /* for Mozilla only */
+	padding-bottom:1px;
+}
 .patternViewPage .patternToolBar {
-	margin:-.4em 0 2.2em 0;
+	border-bottom:1px solid #E2DCC8;
 }
-*/
-.patternEditPage .patternToolBar {
-	margin:0 0 1.35em 0;
+.patternViewPage td.patternToolBar {
+	vertical-align:bottom;
+}
+.patternEditPage .patternTop {
+	margin-bottom:.25em;
 }
 .patternToolBarButtons {
 	float:right;
@@ -713,23 +716,16 @@ a:hover .twikiAccessKey {
 	display:none;
 }
 .patternToolBar .patternButton {
-	padding:1em 0 3px 0;
-	margin-left:-1px;
+	margin-left:1px;
 	float:left;
-	margin-top:-1px; /* make it aligned with the topic text */
 }
-.patternEditPage .patternToolBar .patternButton {
-	margin-top:-1em; /* make it aligned with non-button text */
-}
+
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike,
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
-	position:relative;
-	background-color:#FCF5DF; /*C14*/
-	border:1px solid #E2DCC8;
-	border-bottom:1px solid #EACA98;
-	padding:.5em .6em;
+	background-color:#F8E6BD;
+	padding:3px .55em;
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike {
@@ -740,12 +736,12 @@ a:hover .twikiAccessKey {
 }
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
-	color:#C75305; /*C2*/
+	color:#a00;
 	text-decoration:none;
 }
 .patternToolBar .patternButton a:hover {
-	background-color:#C75305; /*C2*/
-	border-color:#C75305; /*C2*/
+	background-color:#D6000F; /*C2*/
+	border-color:#D6000F; /*C2*/
 	color:#FCF5DF; /*C14*/
 }
 .patternToolBar .patternButton a:hover {
@@ -754,13 +750,12 @@ a:hover .twikiAccessKey {
 .patternToolBar a:link .twikiAccessKey,
 .patternToolBar a:visited .twikiAccessKey {
 	color:inherit;
-	border-color:#C75305; /*C2*/
+	border-color:#a00;
 }
 .patternToolBar a:hover .twikiAccessKey {
 	background-color:transparent;
 	color:inherit;
 }
-
 
 /* Edit page */
 
@@ -791,6 +786,10 @@ a:hover .twikiAccessKey {
 }
 .patternAccessKeyInfo {
 	margin-top:1.5em;
+	color:#555;
+	background-color:#ECF2F9;
+	padding:.25em .5em;
+	border:2px solid #B5D5EC;
 }
 
 /* Preview page */

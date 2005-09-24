@@ -106,14 +106,6 @@ if ("%TWIKILAYOUTURL%".split("?")[0].length && "%TWIKILAYOUTURL%".split("TWIKILA
 if ("%TWIKISTYLEURL%".split("?")[0].length && "%TWIKISTYLEURL%".split("TWIKISTYLEURL")[0].length) {
 	document.write('@import url("%TWIKISTYLEURL%");'); 
 }
-/* Custom overriding layout per web or per topic */
-if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
-	document.write('@import url("%USERLAYOUTURL%");'); 
-}
-/* Custom overriding style per web or per topic */
-if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
-	document.write('@import url("%USERSTYLEURL%");'); 
-}
 document.write('<\/style>');
 //-->
 </script>
@@ -125,25 +117,38 @@ document.write('<\/style>');
 	.patternWebIndicator {
 		background-color:%WEBBGCOLOR%;
 	}
-	.patternTop {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/top_bg.gif");
-	}
+
 	.patternToolBar .patternButton s,
 	.patternToolBar .patternButton strike,
 	.patternToolBar .patternButton a:link,
-	.patternToolBar .patternButton a:visited,
-	.patternTopicAction {
+	.patternToolBar .patternButton a:visited {
 		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/button_bg.gif");
-	}
-	.patternEditPage .patternTopicAction,
-	.patternPreviewPage .patternTopicAction {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/button_bg_high.gif");
 	}
 	.patternToolBar .patternButton a:hover {
 		background:none;
-		background-color:#C75305; /*C2*/
+		background-color:#D6000F;
 	}
-</style>%TMPL:END%
+	.patternTopicAction {
+		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/button_bg_high.gif");
+	}
+	
+</style>
+<script type="text/javascript">
+<!--
+/* Use javascript to check if style urls are valid (non-empty) */
+document.write('<style type="text/css" media="all">');
+/* Custom overriding layout per web or per topic */
+if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOUTURL")[0].length) {
+	document.write('@import url("%USERLAYOUTURL%");'); 
+}
+/* Custom overriding style per web or per topic */
+if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
+	document.write('@import url("%USERSTYLEURL%");'); 
+}
+document.write('<\/style>');
+//-->
+</script>
+%TMPL:END%
 
 
 
