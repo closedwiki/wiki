@@ -72,6 +72,7 @@ foreach my $module (
 		    qw( CGI::Session ),
 		    qw( Encode Locale::Maketext::Lexicon Text:IConv ),
 		    qw( Digest::base Digest::SHA1 ),
+		    qw( Unicode::Map Unicode::Map8 Jcode Map::String Unicode::MapUTF8 ),
 		    )
 {
     print "Installing $module\n";

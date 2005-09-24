@@ -123,6 +123,9 @@ SVK
 ^Image::Info$
 ^Locale::Maketext::Lexicon$
 ^Text:IConv$
+^Unicode::Map
+^Unicode::String$
+Jcode
 __MODULES__
 
 print $deps, "\n";
