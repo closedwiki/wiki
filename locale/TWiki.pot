@@ -534,7 +534,7 @@ msgid "Change from:"
 msgstr ""
 
 #: templates/oopschangelanguage.tmpl:24 templates/oopschangelanguage.tmpl:4
-#: templates/twiki.pattern.tmpl:181
+#: templates/twiki.pattern.tmpl:185
 msgid "Change language"
 msgstr ""
 
@@ -1476,7 +1476,7 @@ msgstr ""
 msgid "See also the faster %1"
 msgstr ""
 
-#: data/_default/WebTopicList.txt:5
+#: data/TWiki/WebTopicList.txt:5 data/_default/WebTopicList.txt:5
 msgid "See also the verbose %1."
 msgstr ""
 
@@ -1533,11 +1533,11 @@ msgstr ""
 msgid "Skip to actions"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:177
+#: templates/twiki.pattern.tmpl:181
 msgid "Skip to bottom"
 msgstr ""
 
-#: templates/twiki.pattern.tmpl:177
+#: templates/twiki.pattern.tmpl:181
 msgid "Skip to topic"
 msgstr ""
 

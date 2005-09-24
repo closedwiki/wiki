@@ -575,7 +575,7 @@ msgid "Change from:"
 msgstr "Geändert von:"
 
 #: templates/oopschangelanguage.tmpl:24 templates/oopschangelanguage.tmpl:4
-#: templates/twiki.pattern.tmpl:181
+#: templates/twiki.pattern.tmpl:185
 msgid "Change language"
 msgstr ""
 
@@ -1606,7 +1606,7 @@ msgstr "Konsultieren Sie %1 für Informationen über Forumular Definitionen"
 msgid "See also the faster %1"
 msgstr ""
 
-#: data/_default/WebTopicList.txt:5
+#: data/TWiki/WebTopicList.txt:5 data/_default/WebTopicList.txt:5
 msgid "See also the verbose %1."
 msgstr ""
 
@@ -1666,11 +1666,11 @@ msgstr "Zu den Aktionen"
 msgid "Skip to actions"
 msgstr "Zu den Aktionen"
 
-#: templates/twiki.pattern.tmpl:177
+#: templates/twiki.pattern.tmpl:181
 msgid "Skip to bottom"
 msgstr "nach unten"
 
-#: templates/twiki.pattern.tmpl:177
+#: templates/twiki.pattern.tmpl:181
 msgid "Skip to topic"
 msgstr "Zum Topic"
 

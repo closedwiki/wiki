@@ -574,7 +574,7 @@ msgid "Change from:"
 msgstr "Alterar de:"
 
 #: templates/oopschangelanguage.tmpl:24 templates/oopschangelanguage.tmpl:4
-#: templates/twiki.pattern.tmpl:181
+#: templates/twiki.pattern.tmpl:185
 msgid "Change language"
 msgstr "Alterar idioma"
 
@@ -1591,7 +1591,7 @@ msgstr "Veja %1 para informações sobre definições de formulário."
 msgid "See also the faster %1"
 msgstr "Veja também o mais rápido %1"
 
-#: data/_default/WebTopicList.txt:5
+#: data/TWiki/WebTopicList.txt:5 data/_default/WebTopicList.txt:5
 msgid "See also the verbose %1."
 msgstr "Veja também o mais detalhado %1."
 
@@ -1651,11 +1651,11 @@ msgstr "Pular para links de ações"
 msgid "Skip to actions"
 msgstr "Pular para ações"
 
-#: templates/twiki.pattern.tmpl:177
+#: templates/twiki.pattern.tmpl:181
 msgid "Skip to bottom"
 msgstr "Pular para o final"
 
-#: templates/twiki.pattern.tmpl:177
+#: templates/twiki.pattern.tmpl:181
 msgid "Skip to topic"
 msgstr "Pular para o tópico"
 
@@ -1769,8 +1769,8 @@ msgid ""
 "The %1 web of TWiki. TWiki is a Web-Based Collaboration Platform for the "
 "Corporate World."
 msgstr ""
-"A web %1 do TWiki. TWiki é uma plataforma colaborativa para a web para o mundo "
-"das organizações."
+"A web %1 do TWiki. TWiki é uma plataforma colaborativa para a web para o "
+"mundo das organizações."
 
 #: templates/oopsattention.tmpl:212
 msgid "The activation code %1 is invalid."
