@@ -223,9 +223,6 @@ use vars qw( $twikiLibPath $CPANBASE );
 use Cwd qw( abs_path );
 ( $twikiLibPath ) = ($twikiLibPath = Cwd::abs_path( "../lib" )) =~ /(.*)/;
 
-$CPANBASE = "$twikiLibPath/CPAN/lib/";
-@localPerlLibPath = ( "$CPANBASE/", "$CPANBASE/arch/" );
-
 1;
 __LOCALLIB_CFG__
     close( FH ) or die "Can't close $file: $! ???";
