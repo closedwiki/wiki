@@ -71,7 +71,8 @@ pod2usage( 1 ) if $Config->{help};
 pod2usage({ -exitval => 1, -verbose => 2 }) if $Config->{man};
 
 # generated config variables
-$Config->{TWikiFor} ||= 'http://twikiplugins.sourceforge.net/twiki.org.tar.bz2';
+#$Config->{TWikiFor} ||= 'http://twikiplugins.sourceforge.net/twiki.org.tar.bz2';
+$Config->{TWikiFor} ||= 'http://develop.twiki.org/~wnorris/twiki.org.tar.bz2';
 $Config->{cgibin} = $Config->{install_dir} . "/cgi-bin";
 
 # set defaults
