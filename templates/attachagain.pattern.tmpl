@@ -22,6 +22,17 @@
 
 
 
+%TMPL:DEF{"changepropertiesaction"}%
+<tr>
+	<th> </th>
+	<td colspan="2">
+		<input type="submit" class="twikiSubmit" name="changeproperties" value='%_{"Change properties only"}%' />
+	</td>
+</tr>
+%TMPL:END%
+
+
+
 %TMPL:DEF{"previous"}%
   <tr>
   <th class="patternOldCol">%_{"Previous upload"}%</th>
@@ -40,7 +51,7 @@
 
 
 %TMPL:DEF{"topicactionbuttons"}%
-<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' />%TMPL:P{"sep"}%<input type="submit" class="twikiSubmit patternTertiary" name="changeproperties" value='%_{"Change properties only"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
+<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
 <br />
 <a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%_{"Move attachment..."}%</a>
 %TMPL:END%

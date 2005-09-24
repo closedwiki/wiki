@@ -106,6 +106,10 @@ msgstr "&Cancelar"
 msgid "&Edit"
 msgstr "&Editar"
 
+#: templates/view.pattern.tmpl:24
+msgid "&Compose"
+msgstr ""
+
 #: templates/view.pattern.tmpl:79
 msgid "&History"
 msgstr "&Histórico"

@@ -47,6 +47,10 @@
 
 
 
+%TMPL:DEF{"changepropertiesaction"}%%TMPL:END%
+
+
+
 %TMPL:DEF{"content"}%
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 %TMPL:P{"simpleheader"}%
@@ -94,6 +98,7 @@
 		</td>
 		<td class="patternHelpCol">%_{"Attachments will not be shown in topic view page."}%</td>
 	</tr>
+	%TMPL:P{"changepropertiesaction"}%
 </table>
 </div>
 %TMPL:P{"topicaction"}%</form>

@@ -125,12 +125,20 @@ document.write('<\/style>');
 	.patternWebIndicator {
 		background-color:%WEBBGCOLOR%;
 	}
-	/*
-	.twikiAttachments,
-	.twikiAttachments {
-		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/pattern_yellow_stripes.gif");
+	.patternTop {
+		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/top_bg.gif");
 	}
-	*/
+	.patternToolBar .patternButton s,
+	.patternToolBar .patternButton strike,
+	.patternToolBar .patternButton a:link,
+	.patternToolBar .patternButton a:visited,
+	.patternTopicAction {
+		background:url("%PUBURL%/%TWIKIWEB%/PatternSkin/button_bg.gif");
+	}
+	.patternToolBar .patternButton a:hover {
+		background:none;
+		background-color:#C75305; /*C2*/
+	}
 </style>%TMPL:END%
 
 

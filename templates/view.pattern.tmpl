@@ -21,9 +21,7 @@
 
 
 
-%TMPL:DEF{wysiwyg}%
-%TMPL:P{"sep"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title='%_{"Edit this topic text"}%'>Wysiwyg</a>
-%TMPL:END%
+%TMPL:DEF{"wysiwyg"}%%TMPL:P{"sep"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu" rel="nofollow" title='%_{"Edit this topic text"}%'>%_{"&Compose"}%</a></span>%TMPL:END%
 
 
 
@@ -32,7 +30,7 @@
 
 
 
-%TMPL:DEF{"active_edit"}%<a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%_{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
+%TMPL:DEF{"active_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%" rel="nofollow" title='%_{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
 
 
 
@@ -47,17 +45,15 @@
 
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
-<div class="patternHomePath twikiLeft">
-<strong>%_{"You are here"}%: </strong><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></div>
-<div class="patternRevInfo twikiRight"><span class="patternRevision">%REVINFO%</span>
+<table cellpadding="0" cellspacing="0" border="0"><tr><td class="patternHomePath">
+<strong>%_{"You are here"}%: </strong><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></td>
+<td class="patternRevInfo"><span class="patternRevision">%REVINFO%</span></td></tr></table>
 </div>
-<br class="twikiClear" /></div>
 <div class="patternToolBar">
-   * <span class="patternButton">%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%</span>
-   * <span class="patternButton">%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%</span>
-   * <span class="patternButton"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="P" title="%_{"Printable version of this topic"}%" rel="nofollow">%_{"&Printable"}%</a></span>
+<div class="patternToolBarButtons">%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%<span class="patternButton">%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%</span>
+<span class="patternButton"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="P" title="%_{"Printable version of this topic"}%" rel="nofollow">%_{"&Printable"}%</a></span>
 <br class="twikiClear" />
-</div>%TMPL:END%
+</div></div>%TMPL:END%
 
 
 
