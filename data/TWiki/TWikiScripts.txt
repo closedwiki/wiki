@@ -103,9 +103,9 @@ Form field values are passed in parameters named 'field' - for example, if I hav
 ---++ =view=
 Used for viewing topics.
 
-| =raw=text= | View the raw, unprocessed source of the topic |
-| =raw=on= | View the source of the topic |
-| =raw=debug= | As =raw=on=, except that it shows meta-data as embedded tags |
+| =raw=on= | Shows the source of the topic in a scrollable textarea |
+| =raw=debug= | As =raw=on=, but also shows the metadata |
+| =raw=text= | Shows only the source of the topic, including metadata |
 | =contenttype= | Allows you to specify a different content type |
 | =rev= | Revision to view |
 | =template= | Allows you to specify a different base template. The default template is =view=. For example, you could specify [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=edit][%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=edit]] to view the rendered HTML of the topic. |
