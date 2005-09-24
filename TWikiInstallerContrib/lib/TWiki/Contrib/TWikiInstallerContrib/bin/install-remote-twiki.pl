@@ -143,7 +143,8 @@ sub PushRemoteTWikiInstall
 	# untar the tarball from sourceforge.net, install prerequisite CPAN modules
 	$Config->{verbose} &&
 	    print "Downloading TWiki distribution and installing CPAN modules (this can take many minutes...)\n";
-	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && wget -q $Config->{TWikiFor} -O - | tar xj && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
+	my $outfile = basename $Config->{TWikiFor};
+	logSystem( qq{ssh $Config->{install_account}\@$SERVER_NAME "cd $SERVER_NAME && wget -q $Config->{TWikiFor} -O $outfile && tar xjf $outfile && rm -f $outfile && SERVER_NAME=$SERVER_NAME perl pre-twiki.pl >&pre-twiki.log </dev/null"} );
 
 	# install the actual wiki and extensions
 	$Config->{verbose} && print "Installing TWiki and TWikiExtensions\n";
