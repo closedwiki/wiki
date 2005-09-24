@@ -143,6 +143,8 @@ Copyright 2005 Will Norris.  All Rights Reserved.
 
 =head1 DESCRIPTION
 
+The existence of a .freeze file prevents new checkins from being built and deployed.  This is 
+handy when testing a given build, but new checkins are rolling in.
 
 =head2 SEE ALSO
 
