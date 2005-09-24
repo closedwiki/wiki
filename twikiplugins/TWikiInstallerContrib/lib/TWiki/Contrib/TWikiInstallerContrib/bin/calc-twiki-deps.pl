@@ -122,7 +122,6 @@ SVK
 ^HTML::TreeBuilder$
 ^Image::Info$
 ^Locale::Maketext::Lexicon$
-^Text:IConv$
 ^Unicode::Map
 ^Unicode::String$
 Jcode
