@@ -124,7 +124,7 @@ SVK
 ^Locale::Maketext::Lexicon$
 ^Unicode::Map
 ^Unicode::String$
-Jcode
+^Jcode
 __MODULES__
 
 print $deps, "\n";
