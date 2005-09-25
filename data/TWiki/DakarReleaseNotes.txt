@@ -262,6 +262,8 @@ The [[%TWIKIWEB%.TWikiPreferences]] variable =FORCENEWREVISIONCHECKBOX= controls
 
 On a related note, you can force __every__ save to be a new revision number by editing =lib/TWiki.cfg= and setting =={ReplaceIfEditedAgainWithin}== to 0.
 
+NOTE: Although this feature is being introduced in this release, it is also being deprecated at the same time.  TWiki:Codev.EdinburghRelease is planned to provide the ability to elide revisions at the GUI level, rather than the Store level, thus obviating the need for this stopgap measure.
+
 ---++++ =WEBLOGONAME=, =WEBLOGOIMG=, =WEBLOGOURL=, =WEBLOGOALT=
 
 Each web can have its own customised logo.  The simplest way is to upload a =logo.png= to a web's <nop>WebPreferences, and it will appear in the top-left corner.
