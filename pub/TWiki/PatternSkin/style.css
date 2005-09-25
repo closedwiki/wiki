@@ -375,13 +375,8 @@ th.twikiSortedDescendingCol a:hover {
 *	---------------------------------- */
 
 .twikiToc {
-	display:block;
-	font-size:94%;
-	margin:1em 0 2em 0;
+	margin:1em 0;
 	padding:.3em 0 .6em 0;
-	border-top:1px solid;
-	border-bottom:1px solid;
-	border-color:#ddd;
 }
 
 .twikiToc ul {
@@ -392,30 +387,13 @@ th.twikiSortedDescendingCol a:hover {
 	/*list-style-image:url(/twiki/pub/TWiki/PatternSkin/i_arrow_down.gif);*/
 }
 .twikiToc li {
-	margin-left:2em;
+	margin-left:1em;
 }
 .twikiToc .twikiTocTitle {
 	margin:0;
 	padding:0;
 	font-weight:bold;
 	color:#666;
-}
-.twikiToc a:link,
-.twikiToc a:visited {
-	text-decoration:none;
-	color:#06c; /*C1*/;
-	border:0;
-}
-.twikiToc a:hover {
-	text-decoration:underline;
-	color:#fff; /*C3*/
-}
-.twikiToc li a {
-	display:block;	
-	width:100%;
-}
-html>body .twikiToc li a {
-	width:auto;
 }
 
 .twikiBroadcastMessage b,
@@ -440,16 +418,15 @@ html>body .twikiToc li a {
 	text-decoration:underline;
 }
 .twikiPageForm table {
-	margin:0 0 2em 0;
 	width:100%;
-	border:2px solid #e6e6e6;
-	background:#e6e6e6;
+	border:1px solid #ddd;
+	background:#F7E1B3;
+	margin:0 0 2em 0;
 }
 .twikiPageForm th,
 .twikiPageForm td {
 	border:0;
 	padding:.15em;
-	border-bottom:1px solid #e6e6e6;
 }
 .twikiPageForm th {
 	color:#8E9195; /*C6*/
@@ -491,8 +468,8 @@ html>body .twikiToc li a {
 	background-color:#E9F2F9;
 	padding:1em;
 	margin:.5em 0 1em 0;
-	border-top:1px solid #B5D5EC;
-	border-bottom:1px solid #B5D5EC;
+	border-top:1px solid #DAEAF5;
+	border-bottom:1px solid #DAEAF5;
 }
 .twikiHelp ul,
 .twikiHelp li {
@@ -900,6 +877,7 @@ td.patternToolBar {
 }
 
 /* WebSearchAdvanced */
+table#twikiSearchTable {background:none;} 
 table#twikiSearchTable th,
 table#twikiSearchTable td {padding:.5em; background-color:white;}
 table#twikiSearchTable th {width:15%; text-align:left; color:#8E9195;}
