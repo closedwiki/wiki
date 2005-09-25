@@ -27,9 +27,9 @@ Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
 %TMPL:P{"standardfooter"}%%TMPL:END%
 
 %TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
-%TMPL:DEF{"create_topic"}%Create%TMPL:END%
-%TMPL:DEF{"edit_topic"}%Edit%TMPL:END%
-%TMPL:DEF{"active_edit"}%<a href='%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit this topic text'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a>%TMPL:END%
+%TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
+%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
+%TMPL:DEF{"active_edit"}%<a href='%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a>%TMPL:END%
 
 %TMPL:DEF{"inactive_attach"}%<strike>Attach</strike>%TMPL:END%
 %TMPL:DEF{"active_attach"}%<a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%" title="Attach an image or document to this topic" rel='nofollow'>Attach</a>%TMPL:END%
@@ -43,11 +43,6 @@ Revision %REVINFO% %META{"parent" prefix="<br />Parents: "}%
 #TopicEnd
 %TMPL:P{"form"}%%TMPL:P{"attachments"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
-
-%TMPL:DEF{"inactive_edit"}%<strike>Edit</strike>%TMPL:END%
-%TMPL:DEF{"create_topic"}%Cr<span class="twikiAccessKey">e</span>ate%TMPL:END%
-%TMPL:DEF{"edit_topic"}%<span class="twikiAccessKey">E</span>dit%TMPL:END%
-%TMPL:DEF{"active_edit"}%<a href='%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$epoch"}%' rel='nofollow' title='Edit this topic text' accesskey='e'><b>%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</b></a>%TMPL:END%
 
 %TMPL:DEF{"topicaction"}%
   %TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%

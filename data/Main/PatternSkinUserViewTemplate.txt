@@ -1,25 +1,24 @@
 %TMPL:INCLUDE{"view"}%
 
-
-%TMPL:DEF{"active_form"}%<a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=form&t=%GMTIME{$hour$min$sec}%">%_{"Edit personal data"}%</a>%TMPL:END%
+%TMPL:DEF{"active_form"}%<span class="patternButton"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=form&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%_{"Edit personal data"}%'>%_{"Edit personal data"}%</a></span>%TMPL:END%
 %TMPL:DEF{"inactive_form"}% %TMPL:END%
 
-%TMPL:DEF{"form"}%
-<!--%TABLE{tableborder="0" cellpadding="0" cellspacing="0"}%-->
-%META{"form"}%%TMPL:P{context="inactive" then="inactive_form" else="active_form"}%%TMPL:END%
+
+%TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title='%_{"View topic"}%'>%_{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%_{"Edit text"}%</strike></span>%TMPL:END%
 
 
 
-%TMPL:DEF{"inactive_edit"}%<strike>%_{"Edit text"}%</strike>%TMPL:END%
-%TMPL:DEF{"create_topic"}%_{"Cr&eate"}%%TMPL:END%
 %TMPL:DEF{"edit_topic"}%%_{"&Edit text"}%%TMPL:END%
-%TMPL:DEF{"active_edit"}%<span class='patternButton'><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=text&t=%GMTIME{$hour$min$sec}%" title='%_{"Edit topic text"}%' accesskey="e" rel='nofollow'> %TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:END%
 
-%TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden">%_{"Start of topic"}% | <a href="#Actions">%_{"Skip to actions"}%</a><hr /></div>
-%TMPL:P{"form"}%
+
+
+%TMPL:DEF{"active_edit"}%%TMPL:P{context="inactive" then="inactive_form" else="active_form"}%%TMPL:P{"sep"}%<span class="patternButton"><a href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?action=text&t=%GMTIME{"$epoch"}%" rel="nofollow" title='%_{"Edit this topic text"}%' accesskey="E">%TMPL:P{context="new_topic" then="create_topic" else="edit_topic"}%</a></span>%TMPL:P{context="WysiwygPluginEnabled" then="wysiwyg"}%%TMPL:END%
+
+%TMPL:DEF{"content"}%%TMPL:P{"form"}%
+<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden"> %_{"Start of topic"}% | <a href="#Actions">%_{"Skip to actions"}%</a><hr /></div>
 <div class="patternTopic">%TEXT%<br class="twikiClear" />
 #TopicEnd
-<span class="twikiRight patternPageNav twikiGrayText"><a href="#PageTop" title='%_{"Jump to start of topic"}%' accesskey="t">%_{"to &top"}%</a></span><br class="twikiClear" />
-</div><div class="twikiHidden"><hr />%_{"End of topic"}%<br /><a href="#Actions">%_{"Skip to action links"}%</a> | <a href="#PageTop">%_{"Back to top"}%</a><hr /></div>
+</div><div class="twikiHidden"><hr />%_{"End of topic"}%<br /><a href="#Actions">%_{"Skip to actions"}%</a> | <a href="#PageTop">%_{"Back to top"}%</a><hr /></div>
 %TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
+
