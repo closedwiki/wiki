@@ -63,6 +63,8 @@ sub new {
 
 sub maketext {
   my ( $this, $text, @args ) = @_;
+  
+  return '' unless $text;
 
   # substitute parameters:
   $text =~ s/\[\_(\d+)\]/$args[$1-1]/ge;
@@ -205,7 +207,7 @@ sub maketext {
     # eventually translate text:
     my $result = $this->SUPER::maketext($text, @args);
 
-    if ($this->{session}) {
+    if ($result && $this->{session}) {
       # external calls get the resultant text in the right charset:
       $result = $this->{session}->UTF82SiteCharSet($result) || $result;
     }

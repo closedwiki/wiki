@@ -2806,7 +2806,7 @@ sub _LANGUAGES {
 sub _MAKETEXT {
     my ( $this, $params ) = @_;
     
-    my $str = $params->{_DEFAULT} || $params->{string};
+    my $str = $params->{_DEFAULT} || $params->{string} || "";
     return "" unless $str;
 
     # escape everything:
@@ -2817,12 +2817,17 @@ sub _MAKETEXT {
     $str =~ s/~~\[/~[/g;
     $str =~ s/~~\]/~]/g;
 
-    # unescape parameters:
-    $str =~ s/~\[(\_(\d+))~\]/[$1]/g;
-    $str =~ s/~\[(\*,\_\d+,[^,]+(,([^,]+))?)~\]/[$1]/g;
+    # unescape parameters and calculate highest parameter number:
+    my $max = 0;
+    $str =~ s/~\[(\_(\d+))~\]/ $max = $2 if ($2 > $max); "[$1]"/ge;
+    $str =~ s/~\[(\*,\_(\d+),[^,]+(,([^,]+))?)~\]/ $max = $2 if ($2 > $max); "[$1]"/ge;
 
     # get the args to be interpolated.
     my @args = split (/\s*,\s*/, $params->{args} || "") ;
+    # fill omitted args with zeros
+    while ((scalar @args) < $max) {
+      push(@args, 0);
+    }
 
     # do the magic:
     return $this->{i18n}->maketext($str, @args);
