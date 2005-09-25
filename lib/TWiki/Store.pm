@@ -680,7 +680,7 @@ sub _readKeyValues {
         my $key = $1;
         my $value = $2;
         $format =~ s/[^\d\.]+//g if $format;
-        if( !$format || $format < 1.1 ) {
+        if( !$format || $format =~ /[^\d.]/ || $format < 1.1 ) {
             # Old decoding retained for backward compatibility
             # (this encoding is badly broken)
             $value =~ s/%_N_%/\n/g;
