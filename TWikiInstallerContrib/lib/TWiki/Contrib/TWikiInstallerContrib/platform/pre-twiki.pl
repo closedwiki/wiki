@@ -66,6 +66,7 @@ foreach my $module (
 		    # Module::Build
 		    qw( Error URI HTML::Tagset HTML::Parser LWP LWP::UserAgent XML::Parser XML::Simple Algorithm::Diff Text::Diff HTML::Diff ),
 #		    qw( HTML::Form HTML::HeadParser HTTP::Status HTML::TokeParser HTTP::Daemon HTTP::Request ),
+		    	qw( Test::Builder::Tester Test::LongString ),
 		    qw( WWW::Mechanize HTML::TableExtract WWW::Mechanize::TWiki ),
 		    # Net::SSLeay IO::Socket::SSL
 		    qw( Number::Compare Text::Glob File::Find::Rule File::Slurp File::Slurp::Tree ),
