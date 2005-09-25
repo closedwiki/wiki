@@ -816,7 +816,7 @@ msgid ""
 "notify your %2 administrator."
 msgstr ""
 "Um erro foi encontrado pelo sistema de controle de versões ao salvar %1. Por "
-"favor, notifique o administrador do %4."
+"favor, notifique o administrador do %2."
 
 #: templates/oopssaveerr.tmpl:6
 msgid ""
