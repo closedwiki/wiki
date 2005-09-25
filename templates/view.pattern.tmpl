@@ -17,7 +17,7 @@
 
 
 
-%TMPL:DEF{"inactive_edit"}%<strike>%_{"Edit"}%</strike>%TMPL:END%
+%TMPL:DEF{"inactive_edit"}%<span class="patternButton"><a href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%" rel="nofollow" title='%_{"View topic"}%'>%_{"View topic"}%</a></span>%TMPL:P{"sep"}%<span class="patternButton"><strike>%_{"Edit"}%</strike></span>%TMPL:END%
 
 
 
@@ -39,22 +39,25 @@
 
 
 
-%TMPL:DEF{"inactive_more"}%<strike>%_{"More topic actions..."}%</strike>%TMPL:END%
+%TMPL:DEF{"inactive_more"}%<span class="patternButton"><strike>%_{"More topic actions..."}%</strike></span>%TMPL:END%
 %TMPL:DEF{"active_more"}%<a href="%SCRIPTURLPATH%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopsmore&param1=%MAXREV%&param2=%CURRREV%" title='%_{"Delete or rename this topic; set parent topic; view and compare revisions"}%' accesskey="M" rel="nofollow">%_{"&More topic actions"}%</a>%TMPL:END%
 
 
 
 %TMPL:DEF{"toolbar"}%<div class="patternTop">
-<table cellpadding="0" cellspacing="0" border="0"><tr><td class="patternHomePath">
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td class="patternHomePath" rowspan="2">
 <strong>%_{"You are here"}%: </strong><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%HOMETOPIC%">%WEB%</a> %META{"parent" nowebhome="on" prefix=" <span class=\"twikiSeparator\">&gt;</span> " suffix=""}% <span class="twikiSeparator">&gt;</span> <span title="%WEB%.%TOPIC%"><nop>%TOPIC%</span></td>
 <td class="patternRevInfo"><span class="patternRevision">%REVINFO%</span></td></tr>
 <tr>
-<td colspan="2" class="patternToolBar">
+<td class="patternToolBar">
 <div class="patternToolBarButtons">%TMPL:P{context="inactive" then="inactive_edit" else="active_edit"}%<span class="patternButton">%TMPL:P{context="inactive" then="inactive_attach" else="active_attach"}%</span><span class="patternButton"><a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern%REVARG%" accesskey="P" title="%_{"Printable version of this topic"}%" rel="nofollow">%_{"&Printable"}%</a></span>
 </td>
 </tr>
 </table>
 </div>
+<div class="patternToolBarBottom"></div>
 %TMPL:END%
 
 
