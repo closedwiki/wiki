@@ -46,8 +46,8 @@ function launchWindow( theWeb, theTopic ) {
 <input type="checkbox" class="twikiCheckbox" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label>&nbsp;&nbsp;<a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" rel='nofollow'>%_{"help"}%</a></span></div>
 <div class="patternActionButtons">
 <input type="submit" class="twikiSubmit" value='%_{"Save Changes"}%' />%FORMFIELDS%%TMPL:P{"sep"}%<input type="submit" class="twikiButton" name="action_quietsave" id="quietsave" value='%_{"QuietSave"}%' /><label accesskey="q" for="quietsave"></label>%TMPL:P{"sep"}%
-<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label> %_{"or"}% <input id="cancel" type="submit" class="twikiButton" value='%_{"Discard"}%' name="action_cancel" /><label accesskey="d" for="cancel"></label>
-<div class="patternAccessKeyInfo twikiGrayText"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, D = %_{"Discard"}%</div></div>%TMPL:END%
+<input type="submit" class="twikiButton" name="action_checkpoint" id="checkpoint" value='%_{"Checkpoint"}%' /><label accesskey="k" for="checkpoint"></label> %_{"or"}% <input id="cancel" type="submit" class="twikiButton" value='%_{"Discard"}%' name="action_cancel" /><label accesskey="d" for="cancel"></label></div>
+<div class="patternAccessKeyInfo"><a href="#Opens page in new window" onclick="launchWindow('%TWIKIWEB%', 'AccessKeys'); return false;">%_{"Access keys"}%</a>: S = %_{"Save"}%, Q = %_{"Quiet Save"}%, K = %_{"Checkpoint"}%, D = %_{"Discard"}%</div></div>%TMPL:END%
 
 
 

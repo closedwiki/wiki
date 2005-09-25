@@ -54,13 +54,13 @@
 
 .patternLeftBar,
 .patternLeftBarContents /* needed for Explorer 5.0 */ {
-	width:13em;
+	width:16%;
 }
 .patternMain {
-	margin-left:13em;
+	margin:0 0 0 16%;
 }
 .patternBottomBar {
-	margin:0 0 0 13.5em; /* add small margin for content offset */
+	margin:0 0 0 17%; /* add small margin for content offset */
 }
 
 /*	-----------------------------------------------------------
@@ -68,13 +68,9 @@
 	-----------------------------------------------------------	*/
 	
 .patternNoViewPage .patternMain {
-	margin-left:4em;
-	margin-right:4em;
+	margin-left:3%;
+	margin-right:3%;
 	/* padding in style.css */
-}
-.patternEditPage .patternMain {
-	margin-left:4em;
-	margin-right:4em;
 }
 
 /* Print */

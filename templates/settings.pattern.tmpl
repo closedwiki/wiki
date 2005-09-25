@@ -74,13 +74,13 @@ function initForm() {
 %TEXT%
 </textarea>
 </div>
+%TMPL:P{"topicaction"}%
 <div class="twikiHelp">
 *%_{"Note:"}%*
    * %_{"Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%TWIKIWEB%','TWikiVariables')\" href='[_1]' rel='nofollow'>Setting topic preferences</a>.", "%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TWikiVariables"}%
    * %_{"Each preference has the syntax"}% <br />
      %_{"~[multiple of 3 spaces~] * ~[space~] Set ~[space~] VARIABLENAME ~[space~] = ~[value~]"}%
 </div>
-%TMPL:P{"topicaction"}%
 %TMPL:P{"hidden"}%
 </form></div>
 %TMPL:END%
