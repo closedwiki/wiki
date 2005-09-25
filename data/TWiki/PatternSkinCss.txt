@@ -87,7 +87,6 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .patternRevInfo - revision info (top and bottom of page)
 	* .patternTopicFooter - used for breadcrumb (patternHomePath)
 	* .patternHomePath - breadcrumb
-	* .patternToolBar - action buttons at top of topic (a bullet list), revision info
 	* .patternPageNav - links "end of topic" and "to top"
 	* .patternSearchBox - go box and current page in top bar
 	* .twikiHelp - help text
@@ -96,6 +95,11 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 	* .twikiGrayText - grayed out text, literally gray
 	* .twikiSmall - styled "small"
 	* .twikiNewLink - style of links to yet non-existent pages (not used)
+	* .patternLanguageOption - "Change language" link in left bar
+	* .patternTop - area at top of topic text, with patternHomePath, revision and action buttons
+	* .patternToolBar - holder for action buttons at top of topic (a bullet list), revision info
+	* .patternButton - action button in patternTop
+	* .patternToolBarBottom - bottom line of patternTop
 
 	* Table class names (emitted from %TWIKIWEB%.TablePlugin)
 		* .twikiSortedAscendingCol - sortable table column header that is sorted ascending (uses %TWIKIWEB%.TablePlugin)
@@ -131,6 +135,9 @@ If you want to learn how to create your own look or skin based on !PatternSkin, 
 		* .patternEditForm - emitted from Form.pm, editable !WebForm table
 		* .twikiEditFormTextField - emitted from Form.pm, input textfield in patternEditForm
 		* .patternSig - signature copy field
+
+	* Edit
+		* .patternFormHolder - container for edit form, prevents the textarea to expand when typing into (on WIN/Explorer)
 
 	* Preview
 		* .patternPreviewPage .patternPreviewArea - holder of previewed topic text

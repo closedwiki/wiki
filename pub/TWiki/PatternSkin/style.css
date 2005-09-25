@@ -606,7 +606,6 @@ a:hover .twikiAccessKey {
 	color:#777;
 	overflow:hidden;
 	background-color:#FBF7E8;
-	line-height:1.4em;
 }
 .patternLeftBar hr {
 	color:#E2DCC8;
@@ -638,9 +637,14 @@ a:hover .twikiAccessKey {
 	padding:0 0 1.7em 1em;
 	width:auto;
 }
+.patternLeftBar .patternLanguageOption {
+	border-top:1px solid #ddd;
+	padding:.25em 0 .25em 1em;
+	font-size:94%; /*C15*/
+}
 .patternLeftBarPersonal {
-	margin:-1px -1px -.5em -1em;
-	padding:.5em 0 .5em 1em;
+	margin:-2px -1px -.5em -1em;
+	padding:.25em 0 .25em 1em;
 	background-color:#E9F2F9;
 	border-top:1px solid #B5D5EC;
 	border-bottom:1px solid #B5D5EC;
@@ -706,6 +710,17 @@ a:hover .twikiAccessKey {
 /* Topic text */
 .patternTopic {
 	padding:0 0 1.5em 0;
+}
+/* put overflow pre in a scroll area */
+.patternTopic pre {
+	overflow-x:auto;
+    overflow-y:visible;
+    padding-bottom:1.5em;
+    width:100%;
+}
+.patternTopic>pre { /* hide from IE */
+	padding-bottom:0.25em;
+	/*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
 }
 
 .patternTop {
@@ -824,10 +839,9 @@ html>body .patternToolBar { /* for Mozilla only */
 	margin:1em 0;
 	float:right;
 }
-.twikiFormHolder { /* constrains the textarea */
+.patternFormHolder { /* constrains the textarea */
 	width:100%;
-}
-.twikiFormHolder 
+} 
 .twikiChangeFormButton {
 	font-family:"Lucida Grande", verdana, arial, sans-serif;
 	padding:0;

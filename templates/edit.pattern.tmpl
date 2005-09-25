@@ -232,7 +232,7 @@ document.write("<\/style>");
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
 %TMPL:P{"toolbar"}%<div id="helptoggle" class="twikiHelp twikiTwistHidden">%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>
-<div class="twikiFormHolder">
+<div class="patternFormHolder">
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <textarea id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%' onkeydown="if (window.event.keyCode==27) return false;">%TEXT%</textarea>
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />

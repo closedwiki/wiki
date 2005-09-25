@@ -193,7 +193,7 @@ document.write('<\/style>');
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="patternLeftBar"><div class="patternLeftBarContents">%IF{"context i18n_enabled" then="<div class='patternLeftBarPersonal'><strong>[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopschangelanguage;def=changelanguage][%_{"Change language"}%]]</strong></div>" else=""}%%INCLUDE{"%WEB%.WebLeftBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"leftbar"}%<div class="patternLeftBar">%IF{"context i18n_enabled" then="<div class=\"patternLanguageOption\">[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopschangelanguage;def=changelanguage][%_{"Change language"}%]]</div>"}%<div class="patternLeftBarContents">%INCLUDE{"%WEB%.WebLeftBar"}%</div></div>%TMPL:END%
 
 
 
