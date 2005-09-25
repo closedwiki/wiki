@@ -86,6 +86,17 @@ pre {
 	margin-top:1em;
 	margin-bottom:1em;
 }
+/* put overflow pre in a scroll area */
+.patternPage pre {
+	overflow-x:auto;
+    overflow-y:visible;
+    padding-bottom:1.5em;
+    width:100%;
+}
+html>body pre { /* hide from IE */
+	padding-bottom:0.25em;
+	/*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
+}
 ol li, ul li {
 	line-height:1.4em; /*C10*/
 }
@@ -251,7 +262,7 @@ th.twikiSortedDescendingCol a:hover {
 .patternPreviewPage .twikiForm {
 	background-color:#FEFBF4; /*C22*/
 	padding:20px;
-	border-top:1px solid #ccc; /*C18*/
+	border-top:1px solid #E2DCC8;
 	margin-top:0;
 	margin-bottom:0em;
 }
@@ -643,7 +654,7 @@ a:hover .twikiAccessKey {
 	font-size:94%; /*C15*/
 }
 .patternLeftBarPersonal {
-	margin:-2px -1px -.5em -1em;
+	margin:-1px -1px -.5em -1em;
 	padding:.25em 0 .25em 1em;
 	background-color:#E9F2F9;
 	border-top:1px solid #B5D5EC;
@@ -710,17 +721,6 @@ a:hover .twikiAccessKey {
 /* Topic text */
 .patternTopic {
 	padding:0 0 1.5em 0;
-}
-/* put overflow pre in a scroll area */
-.patternTopic pre {
-	overflow-x:auto;
-    overflow-y:visible;
-    padding-bottom:1.5em;
-    width:100%;
-}
-.patternTopic>pre { /* hide from IE */
-	padding-bottom:0.25em;
-	/*\*/ overflow:auto !important; /* */ overflow:scroll; /* for Mac Safari */
 }
 
 .patternTop {
