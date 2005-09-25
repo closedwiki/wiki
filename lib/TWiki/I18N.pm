@@ -101,9 +101,16 @@ package TWiki::I18N;
 use vars qw( $initialised @initErrors );
 
 BEGIN {
+    # Perl 5.8 or higher required.
+    $initialised = ( $] >= 5.008 );
+    unless ( $initialised ) {
+      push(@initErrors, "Perl 5.8 or higher is required for TWiki I18N support (I18N disabled).");
+      return;
+    }
+
     eval "use base 'Locale::Maketext'";
-    $initialised = !$@;
-    unless ($initialised) {
+    if ( $@ ) {
+      $initialised &&= 0;
       push(@initErrors, "Couldn't load Locale::Maketext. It's needed for I18N support:\n" . $@);
     }
 
