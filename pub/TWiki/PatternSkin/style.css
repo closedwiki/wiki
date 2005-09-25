@@ -260,8 +260,8 @@ th.twikiSortedDescendingCol a:hover {
 	background-color:#FCF9EE;
 	padding:20px;
 	border-top:1px solid #E2DCC8;
-	margin-top:0;
-	margin-bottom:0em;
+	border-bottom:1px solid #E2DCC8;
+	margin:0 0 -1px 0;
 }
 .twikiAttachments p { /* fix for extra generated <p> */
 	display:none;
