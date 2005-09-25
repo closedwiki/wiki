@@ -489,21 +489,21 @@ sub _PROMPT_FOR_STRING {
 }
 
 # generate an input field for URL types
-# This has its own type in case someone wants to ann javascript validation
+# This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_URL {
     my( $id, $opts, $value, $keys ) = @_;
     return CGI::textfield( -name => $id, -size=>60, -default=>$value );
 }
 
 # generate an input field for URLPATH types
-# This has its own type in case someone wants to ann javascript validation
+# This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_URLPATH {
     my( $id, $opts, $value, $keys ) = @_;
     return CGI::textfield( -name => $id, -size=>60, -default=>$value );
 }
 
 # generate an input field for PATH types
-# This has its own type in case someone wants to ann javascript validation
+# This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_PATH {
     my( $id, $opts, $value, $keys ) = @_;
     return CGI::textfield( -name => $id, -size=>60, -default=>$value );
@@ -517,21 +517,21 @@ sub _PROMPT_FOR_BOOLEAN {
 }
 
 # generate an input field for REGEX types
-# This has its own type in case someone wants to ann javascript validation
+# This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_REGEX {
     my( $id, $opts, $value, $keys ) = @_;
     return CGI::textfield( -name => $id, -size=>60, -default=>$value );
 }
 
 # generate an input field for COMMAND types
-# This has its own type in case someone wants to ann javascript validation
+# This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_COMMAND {
     my( $id, $opts, $value, $keys ) = @_;
     return CGI::textfield( -name => $id, -size=>60, -default=>$value );
 }
 
 # generate an input field for NUMBER types
-# This has its own type in case someone wants to ann javascript validation
+# This has its own type in case someone wants to add javascript validation
 sub _PROMPT_FOR_NUMBER {
     my( $id, $opts, $value, $keys ) = @_;
     return CGI::textfield( -name => $id, -size=>20, -default=>$value );
