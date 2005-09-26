@@ -290,25 +290,42 @@ sub rename {
         # Does old attachment exist?
         unless( $store->attachmentExists( $oldWeb, $oldTopic,
                                           $attachment )) {
-            throw TWiki::OopsException( 'attention',
-                                        web => $oldWeb,
-                                        topic => $oldTopic,
-                                        def => 'move_err',
-                                        params => $attachment );
+            throw TWiki::OopsException(
+                'attention',
+                web => $oldWeb, topic => $oldTopic,
+                def => 'move_err',
+                keep => 1,
+                params => [
+                    $newWeb, $newTopic,
+                    $attachment,
+                    $session->{i18n}->maketext('Attachment does not exist')
+                   ] );
         }
-        # does new attachment already exist?
-        if( $store->attachmentExists( $newWeb, $newTopic,
-                                      $attachment )) {
-            throw TWiki::OopsException( 'attention',
-                                        def => 'move_err',
-                                        web => $newWeb,
-                                        topic => $newTopic,
-                                        params => $attachment );
-        }
-        # SMELL: what about if the target topic doesn't exist?
+
+        if( $newWeb && $newTopic ) {
+            TWiki::UI::checkTopicExists( $session, $newWeb,
+                                         $newTopic, 'rename');
+
+            # does new attachment already exist?
+            if( $store->attachmentExists( $newWeb, $newTopic,
+                                          $attachment )) {
+                throw TWiki::OopsException(
+                    'attention',
+                    def => 'move_err',
+                    web => $oldWeb, topic => $oldTopic,
+                    keep => 1,
+                    params => [
+                        $newWeb, $newTopic,
+                        $attachment,
+                        $session->{i18n}->maketext(
+                            'Attachment already exists in new topic')
+                       ] );
+            }
+        } # else fall through to new topic screen
     } elsif( $newTopic ) {
         ( $newWeb, $newTopic ) =
           $session->normalizeWebTopicName( $newWeb, $newTopic );
+
         TWiki::UI::checkWebExists( $session, $newWeb, $newTopic, 'rename' );
         if( $store->topicExists( $newWeb, $newTopic)) {
             throw TWiki::OopsException( 'attention',
@@ -693,13 +710,13 @@ sub move {
                                     $newWeb, $newTopic, $attachment,
                                     $session->{user} );
         } catch Error::Simple with {
-            throw TWiki::OopsException( 'attention',
-                                        web => $oldWeb,
-                                        topic => $oldTopic,
-                                        def => 'move_err',
-                                        params => [ $newWeb, $newTopic,
-                                                    $attachment,
-                                                    shift->{-text} ] );
+            throw TWiki::OopsException(
+                'attention',
+                web => $oldWeb, topic => $oldTopic,
+                def => 'move_err',
+                params => [ $newWeb, $newTopic,
+                            $attachment,
+                            shift->{-text} ] );
         };
         return;
     }
