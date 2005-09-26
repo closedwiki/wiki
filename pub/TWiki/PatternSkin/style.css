@@ -11,7 +11,7 @@
 	C2	red hover link background color 											#D6000F 
 	C3	link label hover color														#fff
 	C4	
-	C5	color H2, code text															#a00
+	C5	color H2																	#a00
 	C6	grayed out text																#8E9195
 	C7	
 	C8	dark gray text																#666
@@ -25,7 +25,7 @@
 	C16 dark yellow lines															#FCD582
 	C17 text color																	#000
 	C18	neutral gray; hr, table borders, textarea, input, select borders			#ccc
-	C19	dark red, h3-h6, code, patternLeftBar text									#A40101
+	C19	dark red, h3-h6, patternLeftBar text										#A40101
 	C20	main orange-red; h1															#DE5D07
 	C21	pink; newlink background color, .patternSearchResultsPage .twikiHelp		#FFC0CB
 	C22	light yellow; attachment, form background									#FEFBF3
@@ -80,7 +80,7 @@ hr {
 pre, code, tt {
 	font-size:100%;
 	line-height:1.4em; /*C10*/
-	color:#A40101; /*C19*/
+	color:#7A4707;
 }
 /* put overflow pre in a scroll area */
 pre {
@@ -591,7 +591,7 @@ a:hover .twikiAccessKey {
 .patternLeftBar {
 	border-right:1px solid #E2DCC8;
 	border-bottom:1px solid #E2DCC8;
-	color:#777;
+	color:#555;
 	overflow:hidden;
 	background-color:transparent;
 }
@@ -601,11 +601,15 @@ a:hover .twikiAccessKey {
 }
 .patternLeftBar a:link,
 .patternLeftBar a:visited {
-	color:#A40101;
+	color:#7A4707;
 	text-decoration:none;
 }
 .patternLeftBar a:hover {
 	color:#fff;
+}
+.patternLeftBar b,
+.patternLeftBar strong {
+	color:#333;
 }
 .patternLeftBar ul {
 	padding:0;
