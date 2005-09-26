@@ -350,17 +350,17 @@ sub _findAttachments {
     # Please retain following print until this feature is out of beta
 #    	print "Topic: $web.$topic:\n";
 #    	use Data::Dumper;
-#    	print "In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub);
+#    	$this->{session}->writeDebug("In Meta:".Dumper(\%filesListedInMeta). "\n\nIn Pub:\n".Dumper(\%filesListedInPub));
 
     foreach my $file (keys %filesListedInPub) {
         if ($filesListedInMeta{$file}) {
             # Bring forward any missing yet wanted attributes
             foreach my $field qw(comment attr user) {
-              if ($filesListedInMeta{$file}{field}) {
-#              		print "$file: bringing forward field $field: was ".$filesListedInPub{$file}{$field};
+              if ($filesListedInMeta{$file}{$field}) {
+#              		$this->{session}->writeDebug("$file: bringing forward field $field: was ".$filesListedInPub{$file}{$field});
               		$filesListedInPub{$file}{$field} =
  		            $filesListedInMeta{$file}{$field};
-# 		            print " now: ".$filesListedInPub{$file}{$field}."\n";
+# 		            $this->{session}->writeDebug(" now: ".$filesListedInPub{$file}{$field}."\n");
               }
             }
          	# Develop:Bugs.Item452 - WHY IS USER STILL WRONG?
@@ -369,7 +369,7 @@ sub _findAttachments {
 
     # Please retain following print until this feature is out of beta
     #	use Data::Dumper;
-#        print "Result:".Dumper(\%filesListedInPub)."\n";
+# $this->{session}->writeDebug("Result:".Dumper(\%filesListedInPub)."\n");
 
 	# A comparison of the keys of the $filesListedInMeta and %filesListedInPub 
 	# would show files that were in Meta but have disappeared from Pub.
@@ -1271,34 +1271,36 @@ sub extractMetaData {
 
 sub _extractMetaDataAutoAttachments {
     my( $this, $user, $web, $topic, $version, $meta ) = @_;
-
-    my @knownAttachments = $meta->find('FILEATTACHMENT');
-    my $ka = undef; #ugly I know
-    if ($#knownAttachments) {
-        $ka = \@knownAttachments;
-		$this->{session}->writeDebug("\n\n<body>$web.$topic META: ".Dumper($meta->{'FILEATTACHMENT'})."\n");  
-	} else {
-		$this->{session}->writeDebug("$web.$topic: no attachments");
-	}
-
 	if ($TWiki::cfg{AutoAttachPubFiles}) {
 
+#		$this->{session}->writeDebug("$web.$topic META: ".Dumper($meta->{'FILEATTACHMENT'})."\n".Dumper($this));  
 
-		use Data::Dumper;
-		$Data::Dumper::Maxdepth = 2;
-		$this->{session}->writeDebug("$web.$topic META =".Dumper($meta));
-       	$this->{session}->writeDebug("AUTOATTACHING on $web.$topic\nFOUND BEFORE ".Dumper($ka)."\n");
+# TODO need to ensure that this is not called for every topic examined, but rather just the one we are specifically interested in
+#		return unless ("$web.$topic" eq $this->{session}{webName}.".".$this->{session}{topicName});
 
-       $this->{session}->writeDebug("KA2: ".Dumper(@knownAttachments));
+	    my @knownAttachments = $meta->find('FILEATTACHMENT');
+	    my $ka = undef; #ugly I know
+	    if ($#knownAttachments) {
+	        $ka = \@knownAttachments;
+		} 
+
+
+
+#		use Data::Dumper;
+#		$Data::Dumper::Maxdepth = 2;
+#		$this->{session}->writeDebug("$web.$topic META =".Dumper($meta));
+#      	$this->{session}->writeDebug("AUTOATTACHING on $web.$topic\nFOUND BEFORE ".Dumper($ka)."\n");
+
+#       $this->{session}->writeDebug("KA2: ".Dumper(@knownAttachments));
        my @attachmentsFoundInPub =
          _findAttachments($this, $web, $topic, $ka);
-       	$this->{session}->writeDebug("FOUND AFTER ".Dumper(\@attachmentsFoundInPub));
+#       	$this->{session}->writeDebug("FOUND AFTER ".Dumper(\@attachmentsFoundInPub));
 
 		if ($#attachmentsFoundInPub) {
 			$meta->putAll('FILEATTACHMENT', @attachmentsFoundInPub);
 		};
     } else {
-       	$this->{session}->writeDebug("NOT AUTOATTACHING on $web.$topic\n ".Dumper($ka)."\n");
+#       	$this->{session}->writeDebug("NOT AUTOATTACHING on $web.$topic\n ".Dumper($meta)."\n");
     }
     return $meta;
 }
