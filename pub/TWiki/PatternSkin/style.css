@@ -13,7 +13,7 @@
 	C4	
 	C5	color H2, code text															#a00
 	C6	grayed out text																#8E9195
-	C7	h2 background color															#FEFAF2
+	C7	
 	C8	dark gray text																#666
 	C9	neutral table bg gray that should work on light and dark backgrounds		#8E9195
 	C10	line-height																	1.4em
@@ -28,7 +28,7 @@
 	C19	dark red, h3-h6, code, patternLeftBar text									#A40101
 	C20	main orange-red; h1															#DE5D07
 	C21	pink; newlink background color, .patternSearchResultsPage .twikiHelp		#FFC0CB
-	C22	light yellow; attachment, form background									#FEFAF2
+	C22	light yellow; attachment, form background									#FEFBF3
 	C23	white; attachment, form table background									#fff
 	---------------------------------------------------------------------------------------	*/
 
@@ -192,7 +192,7 @@ select {
 	vertical-align:middle;
 	border-width:1px;
 	border-color:#ccc; /*C18*/
-	background-color:#FEFAF2; /*C22*/
+	background-color:#FEFBF3; /*C22*/
 	padding:1px;
 }
 textarea {
@@ -259,7 +259,7 @@ th.twikiSortedDescendingCol a:hover {
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
 	margin:2em 0;
-	background-color:#FCF9EE;
+	background-color:#FEFBF3; /*C22*/
 	padding:20px;
 	border-top:1px solid #E2DCC8;
 	border-bottom:1px solid #E2DCC8;
@@ -898,7 +898,7 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 	padding:.25em 10px .15em 10px;
 	margin:0 -10px .25em -10px;
 	font-weight:bold;
-	background-color:#FEFAF2; /*C7*/
+	background-color:#FEFBF3; /*C22*/
 	border-bottom:1px solid #ccc; /*C18*/
 	height:1.5em; /* or WIN/IE wont draw the backgound */
 }
