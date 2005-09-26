@@ -70,7 +70,7 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 # They do their own validation of the user and therefore
 # should not use "require valid-user"
 
-<FilesMatch "(attach|edit|manage|rename|save|upload|mail|.*auth).*">
+<FilesMatch "(attach|edit|manage|rename|save|upload|mail|logon|.*auth).*">
        require valid-user
 </FilesMatch>
 
