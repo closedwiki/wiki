@@ -259,6 +259,7 @@ sub old2new {
             $substs{$val} = $new;
         }
 
+        $val =~ s/"/\\"/g;
         return "\$cfg$new = \"$val\"; # $default\n";
     }
     return "";
