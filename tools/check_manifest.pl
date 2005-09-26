@@ -16,7 +16,7 @@ my @lost;
 foreach my $dir( grep { -d "../$_" }
                    split(/\n/, `svn ls ..`) ) {
     next if $dir =~ /^(test|tools|twikiplugins)/;
-    print "--------------------- Examining $dir\n";
+    print "Examining $dir\n";
     push( @lost,
           grep { !$man{$_} && !/\/TestCases\// && ! -d "../$_" }
             map{ "$dir$_" }
