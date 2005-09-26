@@ -69,10 +69,12 @@
 
 
 %TMPL:DEF{"content"}%<div class="twikiHidden"><hr /></div><a name="Content"> </a><div class="twikiHidden"> %_{"Start of topic"}% | <a href="#Actions">%_{"Skip to actions"}%</a><hr /></div>
+<div class="patternContent">
 <div class="patternTopic">%TEXT%<br class="twikiClear" />
 #TopicEnd
 </div><div class="twikiHidden"><hr />%_{"End of topic"}%<br /><a href="#Actions">%_{"Skip to actions"}%</a> | <a href="#PageTop">%_{"Back to top"}%</a><hr /></div>
-%TMPL:P{"form"}%%TMPL:P{"attachments"}%%TMPL:P{"topicaction"}%
+%TMPL:P{"form"}%%TMPL:P{"attachments"}%</div>
+%TMPL:P{"topicaction"}%
 %TMPL:P{"topicinfo"}%%TMPL:END%
 
 

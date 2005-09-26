@@ -253,10 +253,8 @@ th.twikiSortedDescendingCol a:hover {
 	font-size:94%; /*C15*/
 	color:#8E9195; /*C6*/
 }
-.patternViewPage .twikiAttachments,
-.patternViewPage .twikiForm,
-.patternPreviewPage .twikiAttachments,
-.patternPreviewPage .twikiForm {
+.patternContent .twikiAttachments,
+.patternContent .twikiForm {
 	background-color:#FCF9EE;
 	padding:20px;
 	border-top:1px solid #E2DCC8;
