@@ -60,7 +60,7 @@ sub forceAuthentication {
     $script =~ s/^(.*\/)([^\/]+)($TWiki::cfg{ScriptSuffix})?$/$1/o;
     my $scriptPath = $1;
     my $scriptName = $2;
-    $script .= $scriptPath.$scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
+    $script = $scriptPath.$scriptName.'auth'.$TWiki::cfg{ScriptSuffix};
     if( ! $query->remote_user() && -e $script ) {
         my $url = $ENV{REQUEST_URI};
         if( $url && $url =~ s/\/$scriptName/\/${scriptName}auth/ ) {
