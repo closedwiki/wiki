@@ -84,7 +84,7 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
     
     print "\n\n ...checking existing files from $CurrentDataDir\n";
 #TODO: need to find a way to detect non-Web directories so we don't make a mess of them..
-# (should i just ignore Dirs without any ,v files?) - i can't upgrade tehm anyway..
+# (should i just ignore Dirs without any ,v files?) - i can't upgrade them anyway..
 #upgrade templates..?
 
     my %findOptions;
@@ -146,15 +146,15 @@ sub copyNewTopics
 #    return if $filename =~ /,v$/;
 #    return if $filename =~ /.lock$/;
 #    return if $filename =~ /~$/;
-	return if $filename =~ /.svn.*/;	#don't follow into .svn dirs
+	return if $filename =~ /\.svn.*/;	#don't follow into .svn dirs
 
     if ( -d $filename) {
         print "\nprocessing directory $filename";
-	if ( !-d $destinationFilename ) {
-	    print " (creating $destinationFilename)";
-	    mkdir($destinationFilename, 0777);
-	}
-	print "\n";
+		if ( !-d $destinationFilename ) {
+	    	print " (creating $destinationFilename)";
+	    	mkdir($destinationFilename, 0777);
+		}
+		print "\n";
         return;
     }
     
@@ -171,14 +171,16 @@ sub getRLog
 {
     my ( $filename ) = $File::Find::name;
 
-# (see above)
-#    my ( $filename ) = @_;
-#    $filename = $BaseDir."/".$File::Find::name if (! $filename );
+	if ($filename =~ /\.rej$/) {		#don't copy reject files from upgrade 
+		#SMELL: this is going to be bad if someone has attached a .rej file...
+		print "\nfound rejected patch file from previous upgrade ($filename) - not copying it";
+		return;
+	}
 
     my ( $newFilename ) = $filename;
     if (!$filename =~ /^$CurrentDataDir/)
     {
-	die "getRLog found $filename that appears not to be in $CurrentDataDir tree! That's not supposed to happen: sorry!\n";
+		die "getRLog found $filename that appears not to be in $CurrentDataDir tree! That's not supposed to happen: sorry!\n";
     }
 	
     $newFilename =~ s/$CurrentDataDir/$NewReleaseDataDir/g;
