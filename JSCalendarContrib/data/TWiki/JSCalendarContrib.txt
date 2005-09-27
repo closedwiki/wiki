@@ -6,7 +6,11 @@ This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCale
 ---+ Detailed Documentation
 Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
 
-This package also includes a small Perl module to make using the calendar easier from TWiki plugins, using the new "addToHEAD" interface added to TWiki::Func inTWiki 'Dakar' release.
+This package also includes a small Perl module to make using the calendar easier from TWiki plugins. This module includes the function:
+<verbatim>
+addHEAD( $setup )
+</verbatim>
+that can automatically add the required headers to the page being rendered. =$setup= is the name of the calendar setup module; it can either be ommitted, in which case the method described in the Mishoo documentation can be used to create calendars, or it can be ='twiki'=, in which case a helper function is added that simplifies using calendars to set a value in a text field. For example,
 <verbatim>
     # Add styles and javascript for the calendar
     require TWiki::Contrib::JSCalendarContrib;
@@ -14,10 +18,30 @@ This package also includes a small Perl module to make using the calendar easier
         $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
         TWiki::Func::writeWarning('JSCalendarContrib >=0.961 not found '.$@);
     } else {
-        TWiki::Contrib::JSCalendarContrib::addHEAD();
+        TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
     }
+
+    $html .= CGI::textfield(
+        { name => 'datefield',
+          id => "id_datefield" });
+    $html .=
+          CGI::image_button(
+                      -name => 'datefield_calendar',
+                      -onclick =>
+                          "return showCalendar('id_datefield','%e %B %Y')",
+                      -src=> TWiki::Func::getPubUrlPath() . '/' .
+                        TWiki::Func::getTwikiWebname() .
+                            '/JSCalendarContrib/img.gif',
+                      -alt => 'Calendar',
+                      -align => 'MIDDLE' );
+            }
+        }
 </verbatim>
-The =TWiki::Contrib::JSCalendarContrib::addHEAD= method will add the required headers to each TWiki page. It can be called from =commonTagsHandler= for adding the header to all pages, or to =neforeEditHandler= just for edit pages etc.
+The first parameter to showCalendar is the id of the textfield. See the Mishoo documentation for details of the '$e %B %Y' parameter.
+
+Note that the header will only be added once, regardless of the number of times that addHEAD is called.
+
+=addHEAD= can be called from =commonTagsHandler= for adding the header to all pages, or to =beforeEditHandler= just for edit pages etc.
 
 ---++ Settings
 	* Name of the perl package

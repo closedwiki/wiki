@@ -20,9 +20,15 @@ sub addHEAD {
 </style>
 <script type='text/javascript' src='$base/calendar.js'></script>
 <script type='text/javascript' src='$base/lang/calendar-$lang.js'></script>
-<script type='text/javascript' src='$base/$setup.js'></script>
 HERE
     TWiki::Func::addToHEAD( 'JSCALENDAR_HEAD', $head );
+
+    # Add the setup separately; there might be different setups required
+    # in a single HTML page.
+    $head = <<HERE;
+<script type='text/javascript' src='$base/$setup.js'></script>
+HERE
+    TWiki::Func::addToHEAD( 'JSCALENDAR_HEAD'.$setup, $head );
 }
 
 1;

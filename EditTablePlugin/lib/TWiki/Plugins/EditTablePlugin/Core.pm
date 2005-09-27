@@ -24,8 +24,7 @@ use Assert;
 use vars qw(
             $preSp %params @format @formatExpanded
             $prefsInitialized $prefCHANGEROWS $prefEDITBUTTON
-            $prefJSCALENDARDATEFORMAT $prefJSCALENDARLANGUAGE
-            $prefJSCALENDAROPTIONS $prefQUIETSAVE
+            $prefQUIETSAVE
             $nrCols $encodeStart $encodeEnd $table $query
            );
 
@@ -39,12 +38,6 @@ sub process {
                     TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_QUIETSAVE') || 'on';
         $prefEDITBUTTON           = TWiki::Func::getPreferencesValue('EDITBUTTON') ||
                     TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_EDITBUTTON') || 'Edit table';
-        $prefJSCALENDARDATEFORMAT = TWiki::Func::getPreferencesValue('JSCALENDARDATEFORMAT') ||
-                    TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_JSCALENDARDATEFORMAT') || "%Y/%m/%d";
-        $prefJSCALENDARLANGUAGE   = TWiki::Func::getPreferencesValue('JSCALENDARLANGUAGE') ||
-                    TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_JSCALENDARLANGUAGE') || 'en';
-        $prefJSCALENDAROPTIONS    = TWiki::Func::getPreferencesValue('JSCALENDAROPTIONS') ||
-                    TWiki::Func::getPreferencesValue('EDITTABLEPLUGIN_JSCALENDAROPTIONS') || '';
         $prefsInitialized = 1;
     }
 
@@ -282,7 +275,10 @@ sub handleTableStart {
     my $viewUrl = TWiki::Func::getScriptUrl( $theWeb, $theTopic, 'viewauth' ) . "\#edittable$theTableNr";
     my $text = '';
     if( $doEdit ) {
-        TWiki::Contrib::JSCalendarContrib::addHEAD();
+        require TWiki::Contrib::JSCalendarContrib;
+        unless( $@ ) {
+            TWiki::Contrib::JSCalendarContrib::addHEAD( 'twiki' );
+        }
     }
     $text .= "$preSp<noautolink>\n" if $doEdit;
     $text .= "$preSp<a name=\"edittable$theTableNr\"></a>\n";
@@ -471,18 +467,27 @@ sub inputElement {
     } elsif( $type eq 'date' ) {
         my $ifFormat = '';
         $ifFormat = $bits[3] if( @bits > 3 );
-        $ifFormat = $ifFormat || $prefJSCALENDARDATEFORMAT;
+        $ifFormat ||= '%e %B %Y';
         $size = 10 if $size < 1;
         $theValue = TWiki::Plugins::EditTablePlugin::encodeValue( $theValue ) unless( $theValue eq '' );
-        $text .= "<input type=\"text\" name=\"$theName\" id=\"id$theName\" size=\"$size\" value=\"$theValue\" />";
+        $text .= CGI::textfield(
+            { name => $theName,
+              id => 'id'.$theName,
+              size=> $size,
+              value => $theValue });
         $text .= saveEditCellFormat( $cellFormat, $theName );
-        $text .= "<button type=\"reset\" id=\"trigger$theName\">...</button>";
-        $text .= "<script type=\"text/javascript\">";
-        $text .= "Calendar.setup(";
-        $text .= "{ inputField : \"id$theName\",";
-        $text .= "ifFormat : \"$ifFormat\",";
-        $text .= "button : \"trigger$theName\",";
-        $text .= "$prefJSCALENDAROPTIONS });</script>";
+        eval 'use TWiki::Contrib::JSCalendarContrib';
+        unless ( $@ ) {
+            $text .= CGI::image_button(
+                -name => 'calendar',
+                -onclick =>
+                  "return showCalendar('id$theName','$ifFormat')",
+                -src=> TWiki::Func::getPubUrlPath() . '/' .
+                  TWiki::Func::getTwikiWebname() .
+                      '/JSCalendarContrib/img.gif',
+                -alt => 'Calendar',
+                -align => 'MIDDLE' );
+        }
 
         $query->{'jscalendar'} = 1;
 
@@ -661,9 +666,11 @@ sub doEnableEdit {
     my $wikiUserName = TWiki::Func::getWikiUserName();
     if( ! TWiki::Func::checkAccessPermission( 'change', $wikiUserName, '', $theTopic, $theWeb ) ) {
         # user has no permission to change the topic
-        throw TWiki::OopsException( 'accessdenied',
-                                    def => 'topic_access',
-                                    web => $_[2], topic => $_[1] );
+        throw TWiki::OopsException(
+            'accessdenied',
+            def => 'topic_access',
+            web => $theWeb, topic => $theTopic,
+            params => [ 'change', 'denied' ] );
     }
 
     my( $oopsUrl, $lockUser ) = TWiki::Func::checkTopicEditLock( $theWeb, $theTopic );
