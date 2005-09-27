@@ -82,7 +82,7 @@ sub natSearch {
       next if $thisWeb eq "CVS";
       next if $thisWeb eq "Trash";
       next if $thisWeb =~ /^[._]/;
-      my $noSearchAll = &TWiki::Func::getPreferencesValue("NOSEARCHALL", $thisWeb);
+      my $noSearchAll = &TWiki::Func::getPreferencesValue("NOSEARCHALL", $thisWeb) || '';
       next if $noSearchAll eq "on";
       push @webList, $thisWeb;
     }
