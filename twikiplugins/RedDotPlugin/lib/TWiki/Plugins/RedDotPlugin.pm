@@ -22,7 +22,7 @@ use vars qw(
         $debug $styleLink $doneHeader $hasInitRedirector
     );
 
-$VERSION = '1.20';
+$VERSION = '1.25';
 
 ###############################################################################
 sub writeDebug {
