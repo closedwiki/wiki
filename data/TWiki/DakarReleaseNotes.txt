@@ -1,5 +1,14 @@
 ---+!! TWiki 'Dakar' Release
-'Dakar' is the first major release of the TWiki collaboration environment in nearly a year. The focus of this release has been on refactoring the code in the interests of *security*, *efficiency* and *maintainability*, though a range of sexy new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
+'Dakar' is the first major release of the TWiki collaboration environment in over a year. The focus of this release has been on refactoring the code in the interests of *security*, *efficiency* and *maintainability*, though a range of powerful new features are also included. The refactoring work has included tightening up the specification of certain key TWiki behaviours, which has resulted in some specification changes. The impact on end users has been minimised as far as possible.
+
+Key new features:
+   * Much simpler install and configuration
+   * Integrated session support
+   * Security sandbox blocks all possible routes for remote command excution on the server
+   * New editing model allows freer collaboration, without fear of overwriting other people's changes
+   * Multilingual UI
+   * Email confirmations for registration
+   * Hierarchical sub-webs
 
 Most of the redesign, refactoring and documentation work in Dakar release was done by [[TWiki:Main.CrawfordCurrie][Crawford Currie]] (http://c-dot.co.uk). Other major code contributions were made by:
    * [[TWiki:Main.AntonioTerceiro][Antonio Terceiro]] - internationalization framework
@@ -8,7 +17,6 @@ Most of the redesign, refactoring and documentation work in Dakar release was do
    * [[TWiki:Main.GregAbbas][Greg Abbas]] - integration of !SessionPlugin
    * [[TWiki:Main.MartinCleaver][Martin Cleaver]] - registration process, and auto-attachments
    * [[TWiki:Main.PeterNixon][Peter Nixon]] - hierarchical subwebs support
-   * [[TWiki:Main.RafaelAlvarez][Rafael Alvarez]] - sectional includes
    * [[TWiki:Main.ThomasWeigert][Thomas Weigert]] - preferences editing
 Other people who gave significant amounts of their time and patience to less sexy aspects of the work, or were pivotal in the design process, are:
    * [[TWiki:Main.AntonAylward][Anton Aylward]]
@@ -453,9 +461,6 @@ Dakar release includes new support for "context if" parameters to the %<nop>TMPL
 
 ---+++ Template Parameters
 %<nop>TMPL:P% now accepts parameters. Values passed in these parameters can be expanded in the %TMPL:DEF. See http://develop.twiki.org/~develop/cgi-bin/view/TWiki/TWikiTemplates for full details. (Remember, this happens at template expansion time, which is usually early in the rendering process.)
-
----+++ IFCONTEXT
-The new %IFCONTEXT TWiki variable can be used to instantiate different blocks of text depending on the current rendering context. See http://develop.twiki.org/~develop/cgi-bin/view/TWiki/TWikiVariables#VarIFCONTEXT for full details.
 
 ---+++ HTTP and HTTPS
 These two new !TWikiVariables give access to the HTTP headers sent by your browser. For example, your browser says your browser is %HTTP:{"User-Agent"}% (this will be filled in if you are running Dakar).
