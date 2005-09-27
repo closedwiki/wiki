@@ -64,6 +64,7 @@ sub commonTagsHandler {
 }
 
 ###############################################################################
+# TODO don't drop anchors
 sub initRedirector {
 
   return if $hasInitRedirector;
@@ -83,29 +84,34 @@ sub initRedirector {
   if ($theAction =~ /^edit/) {
     writeDebug("found edit");
     my $theRedirect = $query->param('redirect');
-    writeDebug("found theRedirect=$theRedirect") if $theRedirect;
-    if ($theRedirect && 
-	($theRedirect =~ /([A-Z]+[A-Za-z]+)\.([A-Za-z0-9.-]+)/ ||
-	$theRedirect =~ /([A-Za-z0-9.-]+)/)) {
+    if ($theRedirect) {
+      writeDebug("found theRedirect=$theRedirect");
       &TWiki::Func::setSessionValue($sessionKey, $theRedirect);
       writeDebug("init redirect to $theRedirect");
     }
   }
 
-  # execute redirect
-  elsif ($theAction =~ /^view/) { # only on view
-    writeDebug("found view");
-    my $theRedirect = &TWiki::Func::getSessionValue($sessionKey);
-    if ($theRedirect && $theRedirect ne '') {
+  # exectute redirect
+  if ($theAction =~ /^(view|save)/) {
+    my $theRedirect;
+    if ($theAction =~ /^view/) {
+      writeDebug("found view");
+      $theRedirect = &TWiki::Func::getSessionValue($sessionKey);
       &clearSessionValue($sessionKey);
-      &writeDebug("found theRedirect=$theRedirect in session");
-      my $redirectUrl; # get target
-      if ($theRedirect =~ /([A-Z]+[A-Za-z]+)\.([A-Za-z0-9.-]+)/) {
-	$redirectUrl = &TWiki::Func::getViewUrl($1,$2);
-      } elsif ($theRedirect =~ /([A-Za-z0-9.-]+)/) {
-	$redirectUrl = &TWiki::Func::getViewUrl($web,$1);
-      }
-      if ($redirectUrl && $redirectUrl ne &TWiki::Func::getViewUrl($web,$topic)) {
+    } else {
+      writeDebug("found save");
+      $theRedirect = $query->param('redirect');
+    }
+    if ($theRedirect) {
+      writeDebug("found theRedirect=$theRedirect");
+      my $toWeb = $web;
+      my $toTopic = $theRedirect;
+      if ($theRedirect =~ /(.*)\.(.*)/) {
+	$toWeb = $1;
+	$toTopic = $2;
+      } 
+      my $redirectUrl = &TWiki::Func::getViewUrl($toWeb,$toTopic);
+      if ($redirectUrl ne &TWiki::Func::getViewUrl($web,$topic)) {
 	&writeDebug("redirecting to $redirectUrl");
 	&TWiki::Func::redirectCgiQuery($query,$redirectUrl);
       }
