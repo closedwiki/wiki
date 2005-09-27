@@ -30,10 +30,10 @@ use Text::Diff;
 use File::Find;
 
 sub doAllDakarUpgrades {
-my ($newCfgFile, $oldCfgFile, $targetDir) = @_;
+my ($setlibPath, $targetDir) = @_;
 
 print "
-This script will help you upgrade an existing 'Cairo' (TWiki20040902)
+This script will help you upgrade an existing 'Cairo' (TWiki2004090*)
 installation to the latest 'Dakar' release. If you need to upgrade an
 earlier release, you should upgrade to 'Cairo' first.
 
@@ -88,38 +88,7 @@ print "2) I'm going to create new config files to match the configuration of
    new topic files from the release.
 4) I'm going to tell you what you need to do next!
 
-First, you need to tell me where I can get config info about your existing TWiki.
-Please tell me a path to either the setlib.cfg (preferred) or the TWiki.cfg...
 ";
-
-my ($configPath, $setlibPath, $libPath);
-
-#do {
-#    chomp ($configPath = <STDIN>) ;
-#} until ((-f "$configPath/setlib.cfg" || -f "$configPath/TWiki.cfg") ? 1 :
-#         (print("Hmmm - I can't see setlib.cfg or TWiki.cfg at $configPath ... please check and try again\n"), 0) 
-#        );
-
-if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
-    $libPath = "";
-    $setlibPath = $1;
-    $configPath = $1;
-} elsif ( $oldCfgFile =~ /(.*)TWiki.cfg/ ) {
-    $libPath = $1;
-    $configPath = $1;
-
-    print "OK - found TWiki.cfg.  Now I need you to tell me where the existing TWiki bin directory is:\n";
-
-    # this will only be used to find .htaccess at this point.   
-    # should also be used to fix up bin scripts with $scriptSuffix: TBD!
-    do
-    {
-		chomp ($setlibPath = <STDIN>) ;
-    }
-    until ((-d $setlibPath) ? 1 :
-	   (print("Hmmm -  $setlibPath doesn't even look like a directory!... please check and try again\n"), 0)
-	   );
-}
 
 # Now, should have finished asking the user questions...
 
@@ -139,24 +108,12 @@ foreach my $file (readdir(HERE)) {
 
 print "Preparing to write new format configuration files for you...\n\n";
 
-my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($configPath, $targetDir);   # dies on error, without doing damage
+my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($setlibPath, $targetDir);   # dies on error, without doing damage
 
-print "\n\nMerging your existing twiki data ($TWiki::dataDir) with new release twiki data...\n";
+print "\n\nMerging your existing twiki ($targetDir) with new release twiki ...\n";
 
 my $baseDir = `pwd`;
 chomp ($baseDir);
-
-#TWiki::Upgrade::UpdateTopics::UpdateTopics($TWiki::dataDir, "$baseDir/data", "$targetDir/data"); # dies on error, without doing damage
-#make sure we're in the right place still
-#chdir($baseDir);
-#print "OK - the merge process completed successfully.";
-# fix up permissions ... get them to a working state, if not ideal seurity-wise!
-# (we tell the user to check the permissions later anyhow)
-#print "
-#Now I'm giving everyone write access to pub & data in the target
-#area, so your web server user can access them.
-#";
-#find( sub {chmod 0777, $File::Find::name;} , "$targetDir/pub", "$targetDir/data");
 
 # set up .htaccess, if appropriate
 if (-f "$setlibPath/.htaccess") {
@@ -205,16 +162,16 @@ Applying your '\$scriptSuffix' ($TWiki::scriptSuffix) to the scripts in $targetD
         rename "$targetDir/bin/$f", "$targetDir/bin/$f$TWiki::scriptSuffix"
           or warn "Oops, couldn't rename $setlibPath/$f to $setlibPath/$f$TWiki::scriptSuffix : $!\n";
     }
-    print "\ndone\n";
 }
 
 # At last!
+    print "\ndoAllDakarUpgrades done.\n";
 
     return ($oldDataDir, $oldPubDir);
 }
 
 sub RemainingSteps {
-my ($newCfgFile, $oldCfgFile, $targetDir) = @_;
+my ($targetDir) = @_;
 print "
 OK, I'm finished.
 Now you need to
@@ -232,8 +189,8 @@ Now you need to
     merge in the new version manually.
 
 3.  Check the new LocalLib.cfg and LocalSite.cfg to make sure they
-    correctly reflect any local customisations you did in setlib.cfg
-    and TWiki.cfg.
+    correctly reflect any local customisations you previously did in 
+    setlib.cfg and TWiki.cfg.
 
 4.  Setup authentication for the new TWiki
 
@@ -244,7 +201,7 @@ Now you need to
 5.  Set the permissions appropriately for the new TWiki.
 
     I have given pub and data global read and write access, so your
-    new TWiki will work, but you might want tighter controls.
+    new TWiki will work, but you *SHOULD* configure tighter security.
 
 6.  Re-install plugins you were using
 

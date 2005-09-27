@@ -48,7 +48,7 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
 
     while (-d $TempDir ) { $TempDir .= 'p' }   # we want our own previously non-existing directory!
 
-    mkdir $TempDir or die "Uhoh - couldn't make a temporary directory called $TempDir: $!\n";
+    mkdir( $TempDir, 0777) or die "Uhoh - couldn't make a temporary directory called $TempDir: $!\n";
 
 #Set if you want to see the debug output
 #$debug = "yes";
@@ -72,7 +72,7 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
     print "\t although many of these rejected chages will be discardable, 
 \t please check them to see if your configuration is still ok\n\n";
 
-    mkdir $DestinationDataDir;
+    mkdir( $DestinationDataDir, 0777);
 
 #redirect stderr into a file (rcs dumps out heaps of info)
 
@@ -110,6 +110,14 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
     
     print "\n\n";
     
+    # fix up permissions ... get them to a working state, if not ideal seurity-wise!
+	# (we tell the user to check the permissions later anyhow)
+	print "
+		Now I'm giving everyone write access to $DestinationDataDir, 
+		so your web server user can access them.
+		";
+	find( sub {chmod 0777, $File::Find::name;} , $DestinationDataDir);
+    
     rmdir($TempDir);
     chdir($BaseDir);  # seems the kind thing to do :-)
 }
@@ -144,7 +152,7 @@ sub copyNewTopics
         print "\nprocessing directory $filename";
 	if ( !-d $destinationFilename ) {
 	    print " (creating $destinationFilename)";
-	    mkdir($destinationFilename);
+	    mkdir($destinationFilename, 0777);
 	}
 	print "\n";
         return;
@@ -186,7 +194,7 @@ sub getRLog
 
     if ( -d $filename ) {
 	print "\nprocessing directory (creating $destinationFilename)\n";
-        mkdir($destinationFilename);
+        mkdir($destinationFilename, 0777);
         return;
     }
     

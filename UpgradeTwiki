@@ -59,16 +59,16 @@ Create an upgraded twiki installation from an existing one
 and a new distribution.
 
 usage: UpgradeTWiki 
-usage: UpgradeTWiki <oldCfgFile> <outputDirectory>
+usage: UpgradeTWiki <oldSetlibCfgFile> <outputDirectory>
 will run the --dakar option and then the --upgradeTopics option (transfers your existing config, and upgrades your topics and pub files into the outputDirectory (doesn not modify your existing directories)
 
 usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
 does the CairoRelease upgrade (should end up incompatible with DakarRelease code)
 
-usage: UpgradeTWiki --dakar <newCfgFile> <oldCfgFile> <outputDirectory>
+usage: UpgradeTWiki --dakar <oldSetlibCfgFile> <oldCfgFile> <outputDirectory>
 does the DakarRelease upgrade
 
-usage: UpgradeTWiki --upgradeTopics <newCfgFile> <newDataDir> <oldDataDir> <outputDir>
+usage: UpgradeTWiki --upgradeTopics <oldSetlibCfgFile> <newDataDir> <oldDataDir> <outputDir>
 just tries to merge changes from newTopics (uses patch to merge with user changes)
 
 usage: UpgradeTWiki --moveTopics <newCfgFile>
@@ -89,7 +89,13 @@ EOUSAGE
     # Set library paths in @INC
     unshift @INC, $newCfgFileDir;
     unshift @INC, $newCfgFileDir.'/../lib';	#TODO: make sure its not a relative path
-    require 'setlib.cfg';
+    {
+        use Cwd;
+        my $current = cwd();
+        chdir $newCfgFileDir;
+        require 'setlib.cfg';
+        chdir $current;
+    }
 
 	eval 'use TWiki';
 	if ( $@ ) {
@@ -104,6 +110,15 @@ $outputDir = File::Spec->rel2abs( $outputDir ) ."/";
 $oldCfgFile = File::Spec->rel2abs( $oldCfgFile );
 $newCfgFile = File::Spec->rel2abs( $newCfgFile );
 
+my $oldSetlibPath = $oldCfgFile;
+if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
+    $oldSetlibPath = $1;
+} else {
+	$oldCfgFile .= '/setlib.cfg';
+}
+
+die "ERROR: setlib.cfg file not found at ($oldCfgFile)\n" unless (-e $oldCfgFile);
+
 
 print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile = ($newCfgFile), outputDir = ($outputDir)\n";
 
@@ -111,7 +126,8 @@ if ( $mode eq '' )
 {
 #run --dakar then --upgradeTopics
 	eval 'use TWiki::Upgrade::UpgradeToDakar';
-	my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades('./lib/TWiki.cfg', $oldCfgFile, $outputDir);
+	die "ERROR: $@" if ( $@ ); 
+	my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($oldSetlibPath, $outputDir);
 	$oldDataDir = File::Spec->rel2abs( $oldDataDir );
 	$oldPubDir = File::Spec->rel2abs( $oldPubDir );
 	my $newTWikiDir = File::Spec->rel2abs( '.' );
@@ -119,7 +135,7 @@ if ( $mode eq '' )
 	eval 'use TWiki::Upgrade::UpdateTopics';
 	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/data/', $oldDataDir, $outputDir.'/data/');
 	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/pub/', $oldPubDir, $outputDir.'/pub/');
-	TWiki::Upgrade::UpgradeToDakar::RemainingSteps('./lib/TWiki.cfg', $oldCfgFile, $outputDir);
+	TWiki::Upgrade::UpgradeToDakar::RemainingSteps($outputDir);
 } 
 elsif ( $mode eq 'dakar' ) 
 {
@@ -128,8 +144,8 @@ elsif ( $mode eq 'dakar' )
 		print "error: $@ \n";
 		return;
 	}
-	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($newCfgFile, $oldCfgFile, $outputDir);
-	TWiki::Upgrade::UpgradeToDakar::RemainingSteps('./lib/TWiki.cfg', $oldCfgFile, $outputDir);
+	TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($oldSetlibPath, $outputDir);
+	TWiki::Upgrade::UpgradeToDakar::RemainingSteps($outputDir);
 }
 elsif ( $mode eq 'cairo' ) 
 {
