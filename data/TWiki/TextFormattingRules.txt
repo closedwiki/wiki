@@ -402,7 +402,7 @@ You can use just about any HTML tag without a problem - however, there are a few
 
 ---+++ Script tags
 
-You can use =&lt;script>= tags in for your TWiki applications. However note that your TWiki administrator can disable =&lt;script>= in topics, and may have chosen to do so for security considerations.
+You can use HTML =&lt;script>= tags in for your TWiki applications. However note that your TWiki administrator can disable =&lt;script>= in topics, and may have chosen to do so for security considerations. TWiki markup and TWikiVariables are *not* expanded inside script tags.
 
 ---++ Hyperlinks
 
