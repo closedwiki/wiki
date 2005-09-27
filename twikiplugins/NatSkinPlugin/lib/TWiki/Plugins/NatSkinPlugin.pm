@@ -38,7 +38,7 @@ use vars qw(
 	%skinState $hasInitSkinState
     );
 
-$VERSION = '2.10';
+$VERSION = '2.50';
 
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';
@@ -196,8 +196,9 @@ sub initSkinState {
       writeDebug("found skinStyle=$skinState{'style'}");
       $theStyle = $skinState{'style'};
     } else {
+      writeDebug("getting skin state from session or pref");
       $theStyle = 
-	  &TWiki::Func::getSessionValue('NATSKIN_STYLE') ||
+	  &TWiki::Func::getSessionValue('NATSKIN_SKINSTYLE') ||
 	  &TWiki::Func::getPreferencesValue("SKINSTYLE") ||
 	  $defaultStyle;
     }
@@ -286,7 +287,7 @@ sub initSkinState {
 
   # store (part of the) state into session
   # SMELL: this will overwrite per web -> does it work with webs using different settings?
-  &TWiki::Func::setSessionValue('NATSKIN_STYLE', $skinState{'style'});
+  &TWiki::Func::setSessionValue('NATSKIN_SKINSTYLE', $skinState{'style'});
   &TWiki::Func::setSessionValue('NATSKIN_STYLEBORDER', $skinState{'border'});
   &TWiki::Func::setSessionValue('NATSKIN_STYLEBUTTONS', $skinState{'buttons'});
   &TWiki::Func::setSessionValue('NATSKIN_STYLESIDEBAR', $skinState{'sidebar'});
@@ -300,6 +301,7 @@ sub initSkinState {
 
   $skinState{'sidebar'} = $theToggleSideBar 
     if $theToggleSideBar && $theToggleSideBar ne '';
+
 }
 
 ###############################################################################
@@ -726,12 +728,12 @@ sub renderWebSideBar {
 sub ifDefinedImpl {
   my ($theVariable, $theAction, $theThen, $theElse, $theElsIfArgs) = @_;
 
-  writeDebug("called ifDefinedImpl()");
-  writeDebug("theVariable='$theVariable'");
-  writeDebug("theAction='$theAction'");
-  writeDebug("theThen='$theThen'");
-  writeDebug("theElse='$theElse'");
-  writeDebug("theElsIfArgs='$theElsIfArgs'");
+  #writeDebug("called ifDefinedImpl()");
+  #writeDebug("theVariable='$theVariable'");
+  #writeDebug("theAction='$theAction'");
+  #writeDebug("theThen='$theThen'");
+  #writeDebug("theElse='$theElse'");
+  #writeDebug("theElsIfArgs='$theElsIfArgs'") if $theElsIfArgs;
   
 
   if (!$theAction || $skinState{'action'} =~ /$theAction/) {
