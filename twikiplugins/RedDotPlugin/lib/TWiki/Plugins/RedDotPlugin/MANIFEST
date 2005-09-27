@@ -1,2 +1,3 @@
 data/TWiki/RedDotPlugin.txt
 lib/TWiki/Plugins/RedDotPlugin.pm
+pub/TWiki/RedDotPlugin/style.css

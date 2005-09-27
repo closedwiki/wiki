@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1127483607" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="MichaelDaum" date="1127825722" format="1.1" version="1.3"}%
 ---+!! <nop>RedDotPlugin
 
 This plugin renders a clickable red dot (<a style="color:red; font-weight:bold; padding-left:2px; padding-right:2px; line-height:100%; font-size:18px; text-decoration:none" href="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%SERVERTIME{"$year$mo$day$min$sec"}%">.</a>) to ease the edit access to
@@ -61,8 +61,9 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.MichaelDaum |
-|  Plugin Version: | v1.20, 23 Sep 2005 |
+|  Plugin Version: | v1.25, 27 Sep 2005 |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  27 Sep 2005: | added forgotten style.css; added support to redirect a save |
 |  23 Sep 2005: | added =text=, =style=, =grant= and =WHITEBOARD= feature |
 |  19 Sep 2005: | added redirect-to-origin feature |
 |  22 Aug 2005: | Initial version |
@@ -76,7 +77,7 @@ Note, however, that this feature only works on a TWiki/Dakar engine.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 23 Sep 2005
+-- TWiki:Main.MichaelDaum - 27 Sep 2005
 
 
 %META:FILEATTACHMENT{name="style.css" attr="" comment="" date="1124736061" path="style.css" size="157" user="MichaelDaum" version="1.1"}%
