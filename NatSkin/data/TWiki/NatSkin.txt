@@ -1,16 +1,16 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126003092" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="MichaelDaum" date="1127838420" format="1.0" version="1.11"}%
 %META:TOPICPARENT{name="WebHome"}%
----+!! The <nop>NatSkin
+---+!! The Natural Skin
 NatSkin is a skin driven by cascading stylesheets. This is a rework of the 
 TWiki:Plugins/CopyCatSkin by TWiki:Main/MattWilkie. It is used at the 
 [[http://nats-www.informatik.uni-hamburg.de/Main/WebHome][Natural Language Systems Division]] 
 (NATS) of the University of Hamburg, Germany. 
-The NatSkin comes with 19 predefined styles that are inspired by the 
+The NatSkin comes with 11 predefined styles that are inspired by the 
 [[http://www.movabletype.org][MovableType]] and 
 [[http://wordpress.org][WordPress]] among others a port of the Kubrick style by 
 [[http://binarybonsai.com][Michael Heilemann]].
 
-The NatSkin includes an enhanced navigation mechanism named Trash.TWikiWebSideBar.
+The NatSkin includes an enhanced navigation mechanism named WebSideBar.
 This combines the best of the old <nop>WebMenu idea from the <nop>GnuSkin and the <nop>WebLeftBar known from the TWiki:Plugins/PatternSkin by providing all the flexibility of the <nop>WebLeftBar
 including the MySideBar feature and an enhanced navigation scheme. See the NatSkinPlugin
 documentation for more information.
@@ -21,17 +21,13 @@ documentation for more information.
 You can try alternative styles
 
 	1 per request: by appending =style=&lt;skin-name>= to the end of the url; 
-	  if you use the SessionPlugin this will be sticky; 
-	  alternatively, use the style browser below. (tip: you might want to add
-	  %<nop>SKINSTYLEBROWSER% to your sidebar)
-	1 per topic: add a =%<nop>SETSKINSTYLE{"&lt;name>"}% to the topic text
+	  alternatively, use the NatSkinStyleBrowser
 	1 per user by setting a variable =SKINSYLE= on your %WIKIUSERNAME% homepage
 	1 per web by setting the variable =SKINSTYLE= in the WebPreferences
 	1 site-wide by setting the skinstyle in the %TWIKIWEB%.TWikiPreferences
 
-The default style is hardcoded into the NatSkinPlugin (Clean).
-
-%SKINSTYLEBROWSER%
+See the NatSkinPlugin for more information on how to predefine the variants of NatSkin.
+The default style is hardcoded into the NatSkinPlugin.
 
 ---++ Documentation
 (TODO: "refine" me)
@@ -41,8 +37,6 @@ The default style is hardcoded into the NatSkinPlugin (Clean).
 
 ---++ Installation
 	* Get the TWiki:Plugins.NatSkinPlugin supplementary package and install it.
-	* Get the TWiki:Plugins.RedDotPlugin for red dots on the Trash.TWikiWebSideBar (or delete
-	  the =%<nop>REDDOT{...}% macros from the Trash.TWikiWebSideBar topic).
 	* If you are installing on TWiki/Cairo then consider applying the patches 
 		* [[%ATTACHURL%/Cairo_UI_pm.diff][Cairo_UI_pm.diff]]: fixes a bug in =UI.pm=
 		* [[%ATTACHURL%/TablePlugin_pm.diff][TablePlugin_pm.diff]]: adds full CSS support

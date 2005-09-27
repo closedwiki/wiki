@@ -612,11 +612,27 @@ img.alignleft {
   margin-bottom:5px;
   padding:0px;
 }
-
-.blogSideBarCommenter {
-  font-size:0.8em;
+.blogSubComments {
+  margin-top:10px;
+}
+.blogSubComment {
+  padding-left:5px;
+  line-height:2em;
 }
 
+.blogSideBarCommenter {
+  font-size:0.9em;
+}
+
+.blogSideBar .blogSubmitButton {
+  width:100%;
+}
+.blogSideBar .twikiPageForm input,
+.blogSideBar .twikiPageForm {
+  width:90%;
+  margin:auto;
+  font-size:x-small;
+}
 /* BlackListPlugin */
 .blackList {
   border:0px;

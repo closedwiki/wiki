@@ -1,0 +1,3 @@
+TWiki::Plugins::NatSkinPlugin,>=2.50,perl,Required. Download and install from the TWiki:Plugins/NatSkinPlugin code library.
+TWiki::Plugins::SpreadSheetPlugin,>=1.018,perl,Required. Download and install from the TWiki:Plugins/SpreadSheetPlugin code library.
+TWiki::Plugins::RedDotPlugin,>=1.25,perl,Recommended; Download from TWiki:Plugins/RedDotPlugin repository.

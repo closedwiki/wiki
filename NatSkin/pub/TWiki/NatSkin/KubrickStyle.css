@@ -337,6 +337,7 @@ hr {
   font-family: 'Lucida Grande', 'Trebuchet MS', Verdana, Arial, Sans-Serif;
   font-size:small;
   color:#444;
+  padding:2px;
 }
 
 /* attachments */
@@ -489,10 +490,6 @@ hr {
   margin-top:5px;
   padding:1px; /* fix for konqueror */
 }
-.blogEntry img {
-  border:1px solid #ddd;
-  padding:3px;
-}
 .blogMore {
   font-size:0.9em;
 }
@@ -528,8 +525,13 @@ hr {
   font-size:80%;
 }
 .blogComments .blogCommentCount {
-  margin-left:0px;
   color:#444444;
+}
+.blogSubComments {
+  padding:5px;
+}
+.blogSubComment {
+  border-left:5px solid #aaa;
 }
 .blogNavigation {
   padding-top:2px;
@@ -569,6 +571,7 @@ hr {
 .blogSideBarCategories ul {
   text-indent:0px;
   padding-left:0px;
+  list-style-type: none;
 }
 
 /* BlackListPlugin */
@@ -583,4 +586,9 @@ hr {
 }
 .blackListTitle {
   border-bottom:1px dashed #999;
+}
+
+/* RedDotPlugin */
+.redDot {
+  font-family: 'Trebuchet MS', Verdana, Arial, Sans-Serif;
 }
