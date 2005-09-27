@@ -1717,10 +1717,11 @@ sub cleanUpRevID {
 
     return 0 unless $rev;
 
-    $rev =~ s/^r//i;
+    $rev =~ s/^r(ev)?//i;
     $rev =~ s/^\d+\.//; # clean up RCS rev number
+    $rev =~ s/[^\d]//g; # digits only
 
-    return $rev;
+    return TWiki::Sandbox::untaintUnchecked( $rev );
 }
 
 =pod
