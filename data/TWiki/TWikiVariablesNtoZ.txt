@@ -354,6 +354,8 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarWIKIHOMEURL
 ---+++ WIKIHOMEURL -- site home URL
+*DEPRECATED*, use %WIKILOGOURL% defined in WebPreferences instead. This variables value is defined in lib/TWiki.cfg::$wikiHomeUrl which is marked deprecated. Will be removed in future versions.
+
 	* The base URL of <nop>%WIKITOOLNAME%, is the link of the Home icon in the upper left corner, defined in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]]
 	* Syntax: =%<nop>WIKIHOMEURL%=
 	* Expands to: =%WIKIHOMEURL%=

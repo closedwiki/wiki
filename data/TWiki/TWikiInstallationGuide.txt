@@ -15,8 +15,11 @@ If you need help, ask a question in the TWiki:Support web or on TWiki:Codev.TWik
 ---+ Basic Installation
 
    1 *Download* the TWiki distribution from http://TWiki.org/download.html.
-   1 *Unpack the distribution* where you want to install it.
-   1 *Make sure* the user that runs CGI scripts on your system can read and write all files in the distribution.
+   1 *Make a directory* for the installation and *unpack the distribution* in it.
+   1 *Make sure* the user that runs CGI scripts on your system can read and write all files in the distribution.<br />Detailed instructions on file permissions are beyond the scope of this guide, but in general:
+      * During installation and configuration, the CGI user needs to be able to read and write _everything_ in the distribution,
+      * Once installation and configuration is complete, the CGI user needs write access to everything under the =data= and =pub= directories and to =lib/LocalSite.cfg=. _Everything else_ should be read-only.
+      * Everybody else should be denied access to everything, always.
    1 *Make sure* Perl 5 and the Perl CGI library are installed on your system. 
      <br />The default location of Perl is =/usr/bin/perl=. *If it's somewhere else*, change the path to Perl in the first line of each script in the =twiki/bin= directory.
      <br />%H% Some systems require a special extension on perl scripts (e.g. =.cgi= or =.pl=). If necessary, rename all files in =twiki/bin=  (i.e. rename =view= to =view.pl= etc). If you do this, make sure you set the =ScriptSuffix= option in =configure= (Step 6).

@@ -3,21 +3,11 @@
 %STARTINCLUDE%
 ---# TWiki Development Timeline
 
+---++ Dakar Release
+
+Details of DakarRelease can be found in DakarReleaseNotes
+
 ---++ 01-Sep-2004 Release (Cairo)
-
-__Major New Features__
-
-	* Automatic upgrade script, and easier first-time installation
-	* Attractive new skins, using a standard set of CSS classes, and a skin browser to help you choose
-	* New easier-to-use save options
-	* Many improvements to SEARCH
-	* Improved support for internationalisation
-	* Better topic management screens
-	* More pre-installed Plugins: !CommentPlugin, !EditTablePlugin, !RenderListPlugin, !SlideShowPlugin, !SmiliesPlugin, !SpreadSheetPlugin, !TablePlugin
-	* Improved Plugins API and more Plugin callbacks
-	* Better support for different authentication methods
-	* Many user interface and usability improvements
-	* And many, many more enhancements
 
 %TABLE{ columnwidths="90%, 10%"}%
 | *Details of New Features and Enhancements of 01-Sep-2004 Release* | *Developer, Sponsor* |
