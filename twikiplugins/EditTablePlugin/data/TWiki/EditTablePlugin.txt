@@ -123,17 +123,6 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* #Set EDITBUTTON = Edit table
 		* Set EDITBUTTON = Edit this table, %ATTACHURL%/edittable.gif
 
-	* Date format of [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML calendar]]:
-		* Set JSCALENDARDATEFORMAT = %Y/%m/%d
-
-	* Language of DHTML calendar, pointing to attached =calendar-&lt;code&gt;.js= language file: =en=, =af=, =br=, =ca=, =cs-win=, =da=, =de=, =du=, =el=, =es=, =fr=, =hr=, =hr-utf8=, =hu=, =it=, =jp=, =nl=, =no=, =pl=, =pt=, =ro=, =ru=, =sk=, =sp=, =sv=, =tr=, =zh=
-		* Set JSCALENDARLANGUAGE = en
-
-	* Additional options of DHTML calendar:
-		* Set JSCALENDAROPTIONS = 
-
-__Note:__ The Plugin looks for the =JSCALENDAR*= settings first in the TWiki Preferences, then in above Plugin settings
-
 ---++ Limitations and Known Issues
 
 	* This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |	right |=)
