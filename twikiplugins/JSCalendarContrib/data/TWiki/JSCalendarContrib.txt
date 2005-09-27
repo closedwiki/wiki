@@ -6,29 +6,18 @@ This module packages the [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCale
 ---+ Detailed Documentation
 Read [[%ATTACHURL%/doc/html/reference.html][the Mishoo documentation]] or [[%ATTACHURL%][visit the demo page]].
 
-This package also includes an extra Javascript to make using the calendar easier from TWiki plugins. In the normal way, include the styles in the header. For example,
+This package also includes a small Perl module to make using the calendar easier from TWiki plugins, using the new "addToHEAD" interface added to TWiki::Func inTWiki 'Dakar' release.
 <verbatim>
- <LINK TYPE="text/css" rel="stylesheet" href="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar-system.css" />
+    # Add styles and javascript for the calendar
+    require TWiki::Contrib::JSCalendarContrib;
+    if( $@ || !$TWiki::Contrib::JSCalendarContrib::VERSION ||
+        $TWiki::Contrib::JSCalendarContrib::VERSION < 0.961 ) {
+        TWiki::Func::writeWarning('JSCalendarContrib >=0.961 not found '.$@);
+    } else {
+        TWiki::Contrib::JSCalendarContrib::addHEAD();
+    }
 </verbatim>
-and in either header or text body put the standard scripts:
-<verbatim>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/calendar.js"></script>
-<!-- Language to use in calendars. The following languages are usually available from the JSCalendarContrib module: af br ca cs da de du el en es fi fr hr hr hu it jp ko ko lt lt nl no pl pl-utf8 pt ro ru si sk sp sv tr zh -->
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/lang/calendar-en.js"></script>
-</verbatim>
-Now also include (in header or text):
-<verbatim>
-<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/twiki.js"></script>
-</verbatim>
-you will then be able to create popup calendar buttons like this:
-<verbatim>
-<INPUT TYPE="text" NAME="My date" VALUE="Sat, 17 May 2003" SIZE="16" id="mydatefieldid"/>
-<button type="reset" onclick="return showCalendar('mydatefieldid','%e %B %Y')">
-  <img src="%PUBURL%/%TWIKIWEB%/JSCalendarContrib/img.gif" alt="Calendar"/>
-</button>
-</verbatim>
-
-See TWiki:Plugins/ActionTrackerPlugin for an example of this style of usage.
+The =TWiki::Contrib::JSCalendarContrib::addHEAD= method will add the required headers to each TWiki page. It can be called from =commonTagsHandler= for adding the header to all pages, or to =neforeEditHandler= just for edit pages etc.
 
 ---++ Settings
 	* Name of the perl package
