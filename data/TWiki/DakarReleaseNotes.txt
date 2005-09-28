@@ -217,7 +217,7 @@ The =configure= script can be used like the old =testenv= for public review of t
 
 ---++++ =configure= optional features
 
-New optional features include AutomaticAttachments and hierarchical webs. Both are switched off by default but can be enabled in =configure=.
+New optional features include {AutoAttachPubFiles} and {EnableHierarchicalWebs}. Both are switched off by default but can be enabled in =configure=.
 
 ---+++ Preferences
 
