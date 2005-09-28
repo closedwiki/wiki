@@ -15,12 +15,7 @@ If you want to use Javascript to create other data types in form fields, you can
 ---+ Settings
 	* Description:
 		* Set SHORTDESCRIPTION = Adds a =date= type to forms
-
-	* Setup for [[http://dynarch.com/mishoo/calendar.epl][Mishoo JSCalendar]]
-	* The following styles are available: system blue blue2 brown green tas win2k-1 win2k-2 win2k-cold-1 win2k-cold-2
-		* Set CAL_STYLE = system
-	* The following languages are available: af es ko-utf8 ru br fi lt si ca fr lt-utf8 sk cs-win hr nl sp da hr-utf8 no sv de hu pl tr du it pl-utf8 zh el jp pt en ko ro
-		* Set CAL_LANG = en
+See JSCalendarContrib for additional settings.
 
 ---+ Plugin Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
@@ -30,14 +25,6 @@ If you want to use Javascript to create other data types in form fields, you can
 	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 	%$DEPENDENCIES%
-	* Edit your =edit= template (in the templates directory). The actual file name to edit will depend on the skin you are using, but will usually be =edit.pattern.tmpl= or =edit.tmpl= or similar. Add the following line to the HEADER block:
-<verbatim>
-<!-- INCLUDEJSCALENDAR -->
-</verbatim>
-If you are using pattern skin ( =edit.pattern.tmpl= ), it should be added just after the line reading:
-<verbatim>
-%TMPL:DEF{"script"}%
-</verbatim>
 
 ---+ Plugin Info
 
