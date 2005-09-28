@@ -38,7 +38,7 @@ use vars qw(
 	%skinState $hasInitSkinState
     );
 
-$VERSION = '2.50';
+$VERSION = '2.51';
 
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';
@@ -366,9 +366,11 @@ sub endRenderingHandler {
   $_[0] =~ s/%MYSIDEBAR%/&renderMySideBar()/geo;
   $_[0] =~ s/(<a .*?href=[\"\']?)([^\"\'\s]+[\"\']?)(\s*[a-z]*)/renderExternalLink($1,$2,$3)/geoi;
 
-  # remove support for AliasPlugin if it is not installed
+  # remove leftover tags of supported plugins if they are not installed
+  # so that they are remove from the NatSkin templates
   $_[0] =~ s/%STARTALIASAREA%//go;
   $_[0] =~ s/%STOPALIASAREA%//go;
+  $_[0] =~ s/%REDDOT{.*?}%//go;
 }
 
 ###############################################################################
