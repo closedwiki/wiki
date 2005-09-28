@@ -47,33 +47,47 @@ use strict;
 $SIG{__DIE__} = sub { Carp::confess( $_[0] || '' ) };
 $SIG{'__WARN__'} = sub { die @_ };
 
-my %cfg; # TWiki config
+use vars qw( %cfg
+             $perlver
+             $perlvernum
+             $perlverRequired
+             $perlverRequiredString
+             $perlverRecommended
+             $perlVerPreferred
+             $ActivePerlRecommendedBuild
+             $GUESSED
+             $cgiModVerRecommended
+             $modPerlVersionRecommended
+             $rcsverRequired
+           );
 
 # Constants
-my $perlver;
-my $perlvernum = $];
-my $perlverRequired = 5.00503;        # Oldest supported version of Perl
-my $perlverRequiredString = '5.005_03';
-my $perlverRecommended = '5.6.1';
-my $perlVerPreferred = 5.006;    # 5.6 or higher has [:lower:] etc
-my $ActivePerlRecommendedBuild = 631;    # Fixes PERL5SHELL bugs
-my $GUESSED = <<'HERE';
+$perlver;
+$perlvernum = $];
+$perlverRequired = 5.00503;        # Oldest supported version of Perl
+$perlverRequiredString = '5.005_03';
+$perlverRecommended = '5.6.1';
+$perlVerPreferred = 5.006;    # 5.6 or higher has [:lower:] etc
+$ActivePerlRecommendedBuild = 631;    # Fixes PERL5SHELL bugs
+$GUESSED = <<'HERE';
 I guessed this setting. You are advised to confirm this setting (and any other guessed settings) and hit 'Next' to save before changing any other settings.
 HERE
 
 # CGI.pm version, on some platforms - actually need CGI 2.93 for mod_perl
 # 2.0 and CGI 2.90 for Cygwin Perl 5.8.0.  See 
 # http://perl.apache.org/products/apache-modules.html#Porting_CPAN_modules_to_mod_perl_2_0_Status
-my $cgiModVerRecommended = '2.93';
+$cgiModVerRecommended = '2.93';
 
 # Recommended mod_perl version if using mod_perl 2.0
 # (see Support.RegistryCookerBadFileDescriptor)
-my $modPerlVersionRecommended = '1.99_12';
+$modPerlVersionRecommended = '1.99_12';
 
-my $rcsverRequired = 5.7;
+$rcsverRequired = 5.7;
 
 # constants used in TWiki.cfg
 use vars qw($TRUE $FALSE );
+use vars qw( $basicMods $requiredMods $requiredModsNonUnix $optionalMods
+             $I18Mods );
 
 BEGIN {
     $TRUE = 1;
@@ -90,53 +104,51 @@ BEGIN {
     } else {
         $perlver = $perlvernum
     }
-}
 
-# Required for configure to work
-my $basicMods =
-  {
-   'CGI'             => "basic TWiki",
-   'CGI::Carp'       => "basic TWiki",
-   'Error'           => 'basic TWiki',
-  };
+    # Required for configure to work
+    $basicMods =
+      {
+          'CGI'             => "basic TWiki",
+          'CGI::Carp'       => "basic TWiki",
+          'Error'           => 'basic TWiki',
+      };
+    $requiredMods =
+      {
+          'File::Copy'      => 'basic TWiki',
+          'File::Spec'      => 'basic TWiki',
+          'FileHandle'      => 'basic TWiki',
+          'Algorithm::Diff' => 'basic TWiki',
+      };
 
-my $requiredMods =
-  {
-   'File::Copy'      => 'basic TWiki',
-   'File::Spec'      => 'basic TWiki',
-   'FileHandle'      => 'basic TWiki',
-   'Algorithm::Diff' => 'basic TWiki',
-  };
+    # Required on non-Unix platforms (mainly Windows)
+    $requiredModsNonUnix =
+      {
+          'Digest::SHA1' => "register script",
+          'MIME::Base64' => "register script",
+          'Net::SMTP'    => "registration emails and mailnotify",
+      };
+    # Optional modules on all platforms
+    $optionalMods =
+      {
+          'MIME::Base64'     => "HTTP Authentication to proxies",
+          'POSIX'            => "I18N (core module) and Security",
+          'Digest::MD5'      => "MD5 encoded passwords",
+          'Text::Diff'       => 'UpgradeTWiki',
+          'CGI::Cookie'      => "sessions",
+          'CGI::Session'     => "sessions",
+      };
 
-# Required on non-Unix platforms (mainly Windows)
-my $requiredModsNonUnix =
-  {
-   'Digest::SHA1' => "register script",
-   'MIME::Base64' => "register script",
-   'Net::SMTP'    => "registration emails and mailnotify",
-  };
-
-# Optional modules on all platforms
-my $optionalMods =
-  {
-   'MIME::Base64'     => "HTTP Authentication to proxies",
-   'POSIX'            => "I18N (core module) and Security",
-   'Digest::MD5'      => "MD5 encoded passwords",
-   'Text::Diff'       => 'UpgradeTWiki',
-   'CGI::Cookie'      => "sessions",
-   'CGI::Session'     => "sessions",
-  };
-
-my $I18Mods =
-  {
-   'Encode'           => "I18N conversions (core module in Perl 5.8)",
-   'Unicode::String'  => 'I18N conversions',
-   'Unicode::MapUTF8' => "I18N conversions",
-   'Unicode::Map'     => "I18N conversions",
-   'Unicode::Map8'    => "I18N conversions",
-   'Jcode'            => "I18N conversions",
-   'Locale::Maketext::Lexicon' => "I18N translations",
-  };
+    $I18Mods =
+      {
+          'Encode'           => "I18N conversions (core module in Perl 5.8)",
+          'Unicode::String'  => 'I18N conversions',
+          'Unicode::MapUTF8' => "I18N conversions",
+          'Unicode::Map'     => "I18N conversions",
+          'Unicode::Map8'    => "I18N conversions",
+          'Jcode'            => "I18N conversions",
+          'Locale::Maketext::Lexicon' => "I18N translations",
+      };
+};
 
 ########################################################################
 ##################### GLOBAL VARIABLES #################################
@@ -144,26 +156,24 @@ my $I18Mods =
 
 use CGI qw( :any );
 
-use vars qw( $cygwinRcsVerNum $perltype );
+use vars qw( $cygwinRcsVerNum $perltype $query $action );
 
-my $errors = 0; # reset for each block
-my $toterrors = 0;
-my $warnings = 0; # reset for each block
-my $totwarnings = 0;
-my $query = new CGI;
-my $url = $query->url();
-my $action = $query->param('action') || '';
-my $nextid = 0;
+$query = new CGI;
+$action = $query->param('action') || '';
 
 if( $action eq 'image' ) {
     _serveImage( $query->param('type'), $query->param('image' ));
+    exit 0;
 }
 
-#sub UNTAINTED($) {
-#    local(@_, $@, $^W) = @_;
-#    my $x;
-#    return ( eval { $x = $_[0], kill 0; 1 } );
-#}
+use vars qw( $errors $toterrors $warnings $totwarnings $url $nextid );
+
+$errors = 0; # reset for each block
+$toterrors = 0;
+$warnings = 0; # reset for each block
+$totwarnings = 0;
+$url = $query->url();
+$nextid = 0;
 
 ########################################################################
 ########################## FORMATTING ##################################
@@ -1791,9 +1801,11 @@ $| = 1;                  # no buffering - FIXME: mod_perl issue?
 
 eval "use CGI::Carp qw( fatalsToBrowser )";
 
+use vars qw ( $setlibAvail $brokenLocalSiteError $brokenTWikiCfgError
+              $js1 $css );
+
 # Set library paths in @INC, read TWiki.cfg and set locale, at compile time
 # Try to use setlib.cfg, use default path if missing
-my $setlibAvail;
 if ( -r './setlib.cfg' ) {
     require './setlib.cfg';
     $setlibAvail = 1;
@@ -1829,8 +1841,6 @@ unless( $TWiki::cfg{OS} ) {
     }
 }
 
-my $brokenLocalSiteError;
-
 # if this fails, ignore the problem, but we have to do it
 unless( eval 'do "LocalSite.cfg"' ) {
     # Capture the Perl error(s)
@@ -1841,7 +1851,6 @@ unless( eval 'do "LocalSite.cfg"' ) {
 # Read the configuration file now in order to set locale;
 # includes checking for broken syntax etc.  Need 'require'
 # to get the $!/$@ to work.
-my $brokenTWikiCfgError;
 unless( eval 'require "TWiki.cfg" ' ) {
     # Capture the Perl error(s)
     $brokenTWikiCfgError = 'require failed: '.
@@ -1857,7 +1866,7 @@ if( $TWiki::cfg{UseLocale} ) {
     import locale ();
 }
 
-my $js1 = <<'HERE';
+$js1 = <<'HERE';
 //<!--
 
 var lastOpenBlock = null;
@@ -1964,7 +1973,7 @@ function getElementsByClassName(class_name)
 //-->
 HERE
 
-my $css = <<'HERE';
+$css = <<'HERE';
 html body {
     line-height:1.4em; /*C10*/
     font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
@@ -2279,7 +2288,10 @@ HERE
 my $hdr = CGI::start_html(
     -title => 'TWiki Configuration',
     -head => [
-        CGI::meta( { name=>'robots', content=>'noindex' }),
+        CGI::meta({ 'http-equiv'=>'Pragma', content=>'no-cache' }),
+        CGI::meta({ 'http-equiv'=>'Cache-Control', content=>'no-cache' }),
+        CGI::meta({ 'http-equiv'=>'Expires', content=>0 }),
+        CGI::meta({ name=>'robots', content=>'noindex' }),
         CGI::Link( { -rel=>'icon', -href=>'configure?action=image;image=configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
         CGI::Link( { -rel=>'shortcut icon', -href=>'configure?action=image;image=logos/configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
         CGI::script( { language => 'JavaScript',
@@ -2287,7 +2299,7 @@ my $hdr = CGI::start_html(
         CGI::style( { -type=>'text/css' }, $css),
         CGI::script( { language => 'JavaScript',
                        type => 'text/javascript' }, $js2 ),
-	      ]);
+       ]);
 
 # XML confuses IE, so strip it out. This is fixed in CGI.pm 3.06.
 $hdr =~ s/^<\?xml.*?>//s;
@@ -2349,7 +2361,6 @@ HERE
         # use time to make sure we never allow cacheing
         $options .= CGI::hidden( 'action', 'update' );
         $options .= CGI::hidden( 'time', time() );
-
     }
     $options .= CGI::div({ class => 'optionHeader'}, 
         CGI::span({ class => 'twikiLeft' }, 'Settings' . 
