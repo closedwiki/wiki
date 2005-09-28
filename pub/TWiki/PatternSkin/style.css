@@ -736,27 +736,27 @@ a:hover .twikiAccessKey {
 .patternTop td {
 	vertical-align:middle;
 }
-.patternHomePath,
-.patternRevInfo {
+.patternTop .patternHomePath,
+.patternTop .patternRevInfo {
 	padding:.25em .5em .25em 0;
 	color:#8E9195; /*C6*/
 	line-height:1.25em;
 }
-.patternHomePath {
+.patternTop .patternHomePath {
 	color:#000; /*C17*/
 	text-align:left;
 	width:auto;
 }
-.patternRevInfo {
+.patternTop .patternRevInfo {
 	color:#8E9195; /*C6*/
 	float:right;
 	text-align:right;
 }
-.patternRevInfo a:link,
-.patternRevInfo a:visited {
+.patternTop .patternRevInfo a:link,
+.patternTop .patternRevInfo a:visited {
 	color:#8E9195; /*C6*/
 }
-.patternRevInfo a:hover {
+.patternTop .patternRevInfo a:hover {
 	color:#FCF5DF; /*C3*/
 }
 /* Button tool bar */
@@ -1008,5 +1008,27 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 }
 .patternBookViewList .patternSearchResultCount {
 	color:#8E9195; /*C6*/
+}
+
+/* Print */
+
+.patternPrintPage {
+	/*font-size: 12pt;*/
+}
+.patternPrintPage .patternMain {
+	padding:1em 2em 0 2em;
+	border-width:1px;
+	border-color:#fff #ddd #ddd #ddd;
+}
+.patternPrintPage .patternBottomBarContents {
+	padding-left:1em;
+}
+.patternPrintPage .patternTopicFooter {
+	margin:2em 0 2em 0;
+	font-size:94%;
+}
+.patternPrintPage .patternContent .twikiAttachments,
+.patternPrintPage .patternContent .twikiForm {
+	background:#fff;
 }
 

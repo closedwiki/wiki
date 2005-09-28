@@ -76,21 +76,14 @@
 /* Print */
 
 .patternPrintPage .patternMain {
-	margin-left:0;
-	margin-right:0;
-	padding:0 0 0 2em;
-	border-width:1px;
-	border-color:#ddd #fff #ddd #ddd;
+	margin-left:5%;
+	margin-right:5%;
 }
 .patternPrintPage .patternBottomBar {
-	margin-left:1em;
+	margin-left:5%;
 	margin-right:0;
 	padding:0;
 }
-.patternPrintPage .patternBottomBarContents {
-	padding-left:1em;
-}
-
 /* Plain */
 
 .patternPlainPage .patternMain {
