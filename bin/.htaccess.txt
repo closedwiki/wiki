@@ -2,16 +2,16 @@
 #
 # Controls access to TWiki scripts - to make Apache use it, rename this
 # file to '.htaccess' and REPLACE THE FOLLOWING STRINGS WITH PATHS
-# SPECIFIC TO YOUR INSTALLATION:
+# SPECIFIC TO YOUR INSTALLATION. Most required values can be seen in the
+# Path Settings section of =configure=.
 #
-# !FILE_path_to_TWiki!
-#    This is the absolute path to the directory where
-#    you installed TWiki (where you unzipped the installation). The first
-#    part should match the $dataDir setting in TWiki.cfg
-# !URL_path_to_TWiki!
-#    This is the URL path you put into the webserver for users to use to
-#    access TWiki.
-# !ADMIN_users!
+# {DataDir}
+#    Get the value from =configure=
+# {DefaultUrlHost}
+#    Get the value from =configure=
+# {ScriptUrlPath}
+#    Get the value from =configure=
+# {Administrators}
 #    Space-separated list of the login name(s) of the person(s) allowed
 #    to run the configure script
 
@@ -24,13 +24,13 @@ SetHandler cgi-script
 #
 
 # Authentication type (htpasswd file) (comment out this if you configure htpasswd / LDAP support)
-AuthUserFile !FILE_path_to_TWiki!/data/.htpasswd
+AuthUserFile {DataDir}/data/.htpasswd
 AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
 AuthType Basic
 
 #for htdigest password suport uncomment the following
-#AuthDigestDomain !URL_path_to_TWiki!/bin/viewauth !URL_path_to_TWiki!/bin/edit !URL_path_to_TWiki!/bin/preview !URL_path_to_TWiki!/bin/save !URL_path_to_TWiki!/bin/attach !URL_path_to_TWiki!/bin/upload !URL_path_to_TWiki!/bin/rename !URL_path_to_TWiki!/bin/manage !URL_path_to_TWiki!/bin/installpasswd !URL_path_to_TWiki!/bin/passwd
-#AuthDigestFile !FILE_path_to_TWiki!/data/.htdigest
+#AuthDigestDomain {DefaultUrlHost}{ScriptUrlPath}/viewauth {DefaultUrlHost}{ScriptUrlPath}/edit {DefaultUrlHost}{ScriptUrlPath}/preview {DefaultUrlHost}{ScriptUrlPath}/save {DefaultUrlHost}{ScriptUrlPath}/attach {DefaultUrlHost}{ScriptUrlPath}/upload {DefaultUrlHost}{ScriptUrlPath}/rename {DefaultUrlHost}{ScriptUrlPath}/manage {DefaultUrlHost}{ScriptUrlPath}/installpasswd {DefaultUrlHost}{ScriptUrlPath}/passwd
+#AuthDigestFile {DataDir}/data/.htdigest
 # For "Digest" authentication to work properly, this string must match
 # the value of configuration variable $authRealm
 #AuthName 'Enter your WikiName. (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
@@ -47,9 +47,9 @@ AuthType Basic
 #AuthType Basic
 
 # File to return on access control error (e.g. wrong password)
-# The path here must be a URL path, not a file pathname - first part should 
-# match the $scriptUrlPath in TWiki.cfg
-ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=oopsauth
+# By convention this is the TWikiRegsitration page, that allows users
+# to register with the TWiki. Apache requires this to be a *local* path.
+ErrorDocument 401 {ScriptUrlPath}/view/TWiki/TWikiRegistration
 
 <FilesMatch "[^/]*\.html$">
        SetHandler blabla
@@ -58,7 +58,7 @@ ErrorDocument 401 !URL_path_to_TWiki!/bin/oops/TWiki/TWikiRegistration?template=
 
 # configure should be restricted to a small number of users
 <FilesMatch "configure.*">
-       require user "!ADMIN_users!"
+       require user "{Administrators}"
 </FilesMatch>
 
 # These are scripts that might change content. The regular expression uses ".*"

@@ -86,18 +86,9 @@ sub run {
         }
     }
 
-    my $script = $ENV{'SCRIPT_FILENAME'};
-    if( $ENV{'REDIRECT_STATUS'} &&
-        $ENV{'REDIRECT_STATUS'} eq '401'
-        && $script !~/\boops\b/ ) {
-        # bail out if authentication failed and this isn't an
-        # oops script. The redirect is probably bogus.
-        die "Trying to redirect to $script on authentication failure; this is not permitted. The target must be an oops.";
-    }
-
     my $session = new TWiki( $user, $query );
     $session->{context}->{command_line} = $scripted;
-    
+
     local $SIG{__DIE__} = \&Carp::confess;
 
     # end of comment out in production version
