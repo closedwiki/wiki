@@ -152,13 +152,48 @@ Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and redirect the control to 
 
 ---++ =rdiff=
 
+Renders the differences between version of a TwikiTopic
+| topic | topic that we are showing the differences of |
+| rev1 | the higher revision |
+| rev2 | the lower revision |
+| render | the rendering style {sequential, sidebyside, raw, debug} |
+| type | history, diff, last} history diff, version to version, last version to previous |
+| context | number of lines of context |
+| skin | the skin(s) to use to display the diff |
+TODO:
+   * add a {word} render style
+   * move the common CGI param handling to one place
+   * move defaults somewhere
+
 ---++ =register=
 
 ---++ =rename=
+Used for renaming topics.
+
+| =skin= | skin(s) to use |
+| =newweb= | new web name |
+| =newtopic= | new topic name |
+| =breaklock= | |
+| =attachment= | |
+| =confirm= | if defined, requires a second level of confirmation |
+| =currentwebonly= | if defined, searches current web only for links to this topic |
+| =nonwikiword= | if defined, a non-wikiword is acceptable for the new topic name |
 
 ---++ =attach=
 
+Attach a file to a topic. CGI parameters are:
+
+| =filename= | Name of attachment |
+| =skin= | Skin(s) to use in presenting pages |
+
 ---++ =upload=
+
+| =hidefile= | if defined, will not show file in attachment table |
+| =filepath= | |
+| =filename= | |
+| =filecomment= | Comment to associate with file in attachment table |
+| =createlink= | if defined, will create a link to file at end of topic |
+| =changeproperties= | |
 
 ---++ =search=
 
