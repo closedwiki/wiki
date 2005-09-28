@@ -15,7 +15,7 @@ Most of the redesign, refactoring and documentation work in Dakar release was do
    * [[TWiki:Main.ArthurClemens][Arthur Clemens]] - templates
    * [[TWiki:Main.FlorianWeimer][Florian Weimer]] - security sandbox
    * [[TWiki:Main.GregAbbas][Greg Abbas]] - integration of !SessionPlugin
-   * [[TWiki:Main.MartinCleaver][Martin Cleaver]] - registration process, and auto-attachments
+   * [[TWiki:Main.MartinCleaver][Martin Cleaver]] - registration process, and automatic attachments
    * [[TWiki:Main.PeterNixon][Peter Nixon]] - hierarchical subwebs support
    * [[TWiki:Main.ThomasWeigert][Thomas Weigert]] - preferences editing
 Other people who gave significant amounts of their time and patience to less sexy aspects of the work, or were pivotal in the design process, are:
@@ -217,7 +217,7 @@ The =configure= script can be used like the old =testenv= for public review of t
 
 ---++++ =configure= optional features
 
-New optional features include TWiki:Codev.AutomaticAttachments.
+New optional features include AutomaticAttachments and hierarchical webs. Both are switched off by default but can be enabled in =configure=.
 
 ---+++ Preferences
 
