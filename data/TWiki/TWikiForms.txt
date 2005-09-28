@@ -133,16 +133,22 @@ Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreference
 
 	* If you add a new field to the form, then it will appear next time you edit a topic that uses the form.
 
-	* If you delete a field from the form, or change a field name, then the data will not be visible when you edit the topic (the changed form definition will be used). If you save the topic, the old data will be *lost* (though thanks to revision control, you can always see it in older versions of the topic)
+	* If you delete a field from the form, or change a field name, then the data will not be visible when you edit the topic (the changed form definition will be used). *If you save the topic, the old data will be lost* (though thanks to revision control, you can always see it in older versions of the topic)
 
 #UsingFormData
 ---++ Searching for Form Data
 TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
 
+---++ Extending the range of form data types
+Several plugins allow you to extend the range of data types accepted by forms. For example, the TWiki:Plugins.DateFieldPlugin lets you add a 'date' type to the available types.
+
+---++ Gotcha!
+   * Some browsers may strip linefeeds from =text= fields when a topic is saved. If you need linefeeds in a field, make sure it is a =textarea=.
+
 #FormsVsCategoryTables
 ---++ Importing Category Table Data
 
-Very old TWiki releases used a system called the "TWikiCategoryTable". Later releases support automatic import of this data.
+Very, very old TWiki releases used a system called the "TWikiCategoryTable". Later releases support automatic import of this data.
 
 On upgrading from the previous TWiki, a Form Template topic has to be built for each web that used a Category Table, recreating the fields and values from the old ==twikicatitems.tmpl==. The replacement Form Template must be set as the first item in the WebPreferences variable =WEBFORMS=. If missing, pages will display, but attempting to edit results in an error message.
 
