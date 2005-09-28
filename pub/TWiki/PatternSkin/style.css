@@ -9,7 +9,7 @@
 	CONSTANTS
 	C1	link color	 																#06c
 	C2	red hover link background color 											#D6000F 
-	C3	link label hover color														#fff
+	C3	link label hover color														#FCF5DF
 	C4	
 	C5	color H2																	#a00
 	C6	grayed out text																#8E9195
@@ -65,7 +65,6 @@ table {
 }
 th {
 	line-height:1.15em;
-	padding:.3em;
 	/* don't define more or you'll override TablePlugin settings */
 }
 strong, b {
@@ -158,14 +157,18 @@ h2 {
 :link:hover,
 :visited:hover {
 	text-decoration:none;
-	color:#FCF5DF; /*C14*/
+	color:#FCF5DF; /*C3*/
 	background-color:#D6000F; /*C2*/
+}
+:link:hover img,
+:visited:hover img {
+	background:transparent;
 }
 .patternTopic a:visited {
 	color:#666; /*C8*/
 }
 .patternTopic a:hover {
-	color:#FCF5DF; /*C14*/
+	color:#FCF5DF; /*C3*/
 }
 
 .twikiGrayText a:link,
@@ -173,7 +176,7 @@ h2 {
 	color:#8E9195; /*C6*/
 }
 .twikiGrayText a:hover {
-	color:#FCF5DF; /*C14*/
+	color:#FCF5DF; /*C3*/
 }
 img {
 	vertical-align:text-bottom;
@@ -213,12 +216,28 @@ label {
 /* Inline tables */
 .twikiTable {
     border-collapse: collapse;
+    border:1px solid #ddd;
 }
 .twikiTable td,
 .twikiTable th {
-    border:1px solid #ccc; /*C18*/
-    margin: 0;
-    padding: 5px;
+	border-left:1px solid #ddd;
+    border-right:1px solid #ddd;
+}
+.twikiTable th {
+    padding:.4em .5em;
+}
+.twikiTable td {
+    padding:.25em .5em;
+}
+.twikiTable th a:link,
+.twikiTable th a:visited,
+.twikiTable th a font {
+	color:#06c; /*C1*/
+}
+.twikiTable th a:hover,
+.twikiTable th a:hover font {
+	color:#FCF5DF; /*C3*/
+	background-color:#D6000F; /*C2*/
 }
 
 /* sorting of table columns */
@@ -528,7 +547,7 @@ a:hover .twikiAccessKey {
 	color:#D6000F; /*C2*/
 }
 .patternTopicAction .patternActionButtons a:hover {
-	color:#FCF5DF; /*C14*/
+	color:#FCF5DF; /*C3*/
 }
 .patternTopicAction .twikiAccessKey {
 	border-color:#C75305;
@@ -644,7 +663,7 @@ a:hover .twikiAccessKey {
 }
 .patternLeftBarPersonal a:hover {
 	text-decoration:none;
-	color:#FCF5DF; /*C14*/
+	color:#FCF5DF; /*C3*/
 	background-color:#D6000F; /*C2*/
 }
 
@@ -738,7 +757,7 @@ a:hover .twikiAccessKey {
 	color:#8E9195; /*C6*/
 }
 .patternRevInfo a:hover {
-	color:#FCF5DF; /*C14*/
+	color:#FCF5DF; /*C3*/
 }
 /* Button tool bar */
 .patternToolBar {
