@@ -3,9 +3,9 @@ This topic is a placeholder for registrations not yet completed.
 
 Attachments are made when people first register, held pending until the registration is confirmed and approved, and are removed when registration is completed.
 
-	* Set ALLOWTOPICVIEW = %MAINWEB%.TWikiAdminGroup
-	* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+			* Set ALLOWTOPICVIEW = %MAINWEB%.TWikiAdminGroup
+			* Set ALLOWTOPICRENAME = %MAINWEB%.TWikiAdminGroup
+			* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 
 
 __Related Topics:__ AdminToolsCategory
