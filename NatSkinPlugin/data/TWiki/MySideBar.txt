@@ -1,7 +1,7 @@
-%META:TOPICINFO{author="MichaelDaum" date="1125068546" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1127895037" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! %TOPIC%
-<a href="%SCRIPTURLPATH%/edit/%MAINWEB%/%WIKINAME%SideBar?%GMTIME{"$year$mo$day$hours$minutes$seconds"}%&topicparent=%WIKINAME%&templatetopic=MySideBarTemplate"> %CALC{"$IF($EXISTS(%MAINWEB%/%WIKINAME%SideBar),Edit,Create)"}%</a>
+<a href="%SCRIPTURLPATH%/edit/%MAINWEB%/%WIKINAME%SideBar?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%&topicparent=%WIKINAME%&templatetopic=%TWIKIWEB%.MySideBarTemplate"> %CALC{"$IF($EXISTS(%MAINWEB%/%WIKINAME%SideBar),Edit,Create)"}%</a>
 your personalized navigation sidebar.
 
 

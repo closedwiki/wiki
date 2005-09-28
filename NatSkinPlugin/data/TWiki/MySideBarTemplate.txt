@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AdminUser" date="1115627820" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1127893315" format="1.1" version="1.1"}%
 %META:TOPICPARENT{name="MySideBar"}%
 %STARTINCLUDE%
 ---+ My Sidebar%REDDOT{"%MAINWEB%.%WIKINAME%SideBar"}%
@@ -7,13 +7,14 @@
 		* 
 		* 
 	* <a>Documentation</a>
-		* [[Support.WelcomeGuest][Welcome Guest]]
-		* [[Support.UsersGuide][User's Guide]]
-		* [[Support.GoodStyle][Good Style]]
-		* [[Support.FrequentlyAskedQuestions][FAQs]]
-		* [[Support.FileAttachment][File Attachments]]
+		* [[%TWIKIWEB%.WelcomeGuest][Welcome Guest]]
+		* [[%TWIKIWEB%.TWikiUsersGuide][User's Guide]]
+		* [[%TWIKIWEB%.TWikiReferenceManual][Reference Manual]]
+		* [[%TWIKIWEB%.GoodStyle][Good Style]]
+		* [[%TWIKIWEB%.TWikiFAQ][FAQs]]
+		* [[%TWIKIWEB%.FileAttachment][File Attachments]]
 	* [[TWiki.InstalledPlugins][Plugins]]
-%FORMATLIST{"%ACTIVATEDPLUGINS%" join="$n" format="		* [[%TWIKIWEB%.$1Plugin][$1]]" pattern="(\w+)Plugin" sort="on"}%
+%FORMATLIST{"%ACTIVATEDPLUGINS%" separator="$n" format="		* [[%TWIKIWEB%.$1Plugin][$1]]" pattern="(\w+)Plugin" sort="on"}%
 %STOPINCLUDE%
 
 	* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
