@@ -1893,6 +1893,7 @@ sub spaceOutWikiWord {
     my $word = shift;
     my $sep = shift || ' ';
     $word =~ s/([$regex{lowerAlpha}])([$regex{upperAlpha}$regex{numeric}]+)/$1$sep$2/go;
+    $word =~ s/([$regex{upperAlpha}])([$regex{upperAlpha}])/$1$sep$2/go;
     $word =~ s/([$regex{numeric}])([$regex{upperAlpha}])/$1$sep$2/go;
     return $word;
 }
