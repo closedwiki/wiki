@@ -282,18 +282,14 @@ sub _shouldISortThisTable {
         return $sortAttachments;
     }
 
-    my $sortThisTable = $sortAllTables;
-    if( $sortAllTables ) {
-        # All cells in header are headings?
-        foreach my $cell ( @$header ) {
-            if( $cell->{type} ne 'th' ) {
-                $sortThisTable = 0;
-                last;
-            }
-        }
+    return 0 unless $sortAllTables;
+
+    # All cells in header are headings?
+    foreach my $cell ( @$header ) {
+        return 0 if( $cell->{type} ne 'th' );
     }
 
-    return $sortThisTable;
+    return 1;
 }
 
 # Guess if column is a date, number or plain text
@@ -591,8 +587,6 @@ sub handler {
     my @lines = split( /\r?\n/, $_[0] );
     for ( @lines ) {
         if( s/%TABLE(?:{(.*?)})?%/_parseParameters($1)/se ) {
-            # %TABLE tables are always sortable
-            $sortAllTables = 1;
             $acceptable = 1;
         }
         elsif( $acceptable &&
