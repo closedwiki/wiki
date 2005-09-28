@@ -41,7 +41,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 		* Set SORT = all
 
 	* Default table attributes:
-		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="1" cellspacing="1" headerbg="#eeeeee" headercolor="#000000" databg="#EBEAE8, #ffffff"
+		* Set TABLEATTRIBUTES = tableborder="0" cellpadding="1" cellspacing="1" headerbg="#e6e6e6" headercolor="#000000" databg="#eaeaea, #ffffff"
 
 ---++ Table Attributes
 
