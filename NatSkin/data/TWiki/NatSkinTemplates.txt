@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1125075424" format="1.0" version="1.7"}%
+%META:TOPICINFO{author="TWikiContributor" date="1125075424" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="NatSkin"}%
 ---+!! %TOPIC%
 (TODO: This docu only reflects the templates used on a beijing or cairo TWiki engine. The extra templates used on a dakar engine aren't listed here yet.)
