@@ -367,9 +367,9 @@ lib/TWiki/Users/Password.pm 0440
 lib/TWiki/Users.pm 0440
 lib/TWiki.cfg 0440
 lib/TWiki.pm 0440
-locale/de_DE.po 0440
-locale/es_MX.po 0440
-locale/pt_BR.po 0440
+locale/de.po 0440
+locale/es.po 0440
+locale/pt.po 0440
 LICENSE 0440
 pub/Main/TWikiContributor/AUTHORS 0660
 pub/Main/WebPreferences/favicon.ico 0660
