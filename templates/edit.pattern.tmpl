@@ -100,14 +100,11 @@
 	}
 
 	function indexOf(element,array) {
-		var i=array.length-1;
-		do 
-		{
+		for (var i = 0; i < array.length; i++) {
 			if (array[i]==element) {
 				return i;
 			}
-			i--;
-		} while (i>=0);
+        }
 		return -1;
 	}
 	
@@ -115,34 +112,27 @@
 	
 		var elements = [];
 		var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
-		var i = allObjects.length-1;
-		do 
-		{
+		for (var i = 0; i < allObjects.length; i++) {
 			if (allObjects.item(i).className.indexOf(className) != -1)
 				elements.push(allObjects.item(i));
-			i--;
-		} while (i>=0);
+		}
 		return elements;
 	}
 
 	function initTwist () {
-		makeHiddenElements = getElementsByClassName('twikiTwistMakeHidden');
-		var i = makeHiddenElements.length-1;
-		do 
-		{
-			replaceClass(makeHiddenElements[i], 'twikiTwistMakeHidden', 'twikiTwistHidden');
-			i--;
+        var makeHiddenElements =
+            getElementsByClassName('twikiTwistMakeHidden');
+        var i;
+		for (i = 0; i < makeHiddenElements.length; i++) {
+			replaceClass(makeHiddenElements[i], 'twikiTwistMakeHidden',
+                         'twikiTwistHidden');
 		}
-		while (i>=0);
 		
-		makeVisibleElements = getElementsByClassName('twikiTwistMakeVisible');
-		i = makeVisibleElements.length-1;
-		do 
-		{
+        var makeVisibleElements =
+            getElementsByClassName('twikiTwistMakeVisible');
+		for (i = 0; i < makeVisibleElements.length; i++) {
 			removeClass(makeVisibleElements[i], 'twikiTwistMakeVisible');
-			i--;
 		}
-		while (i>=0);
 	}
 	
 	function twist(id) {
