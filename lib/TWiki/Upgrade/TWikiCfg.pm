@@ -46,6 +46,7 @@ sub UpgradeTWikiConfig {
         $twikiLibPath = $setlibPath.$twikiLibPath unless
           $twikiLibPath =~ m#^/#;
         chdir($dir);
+        unshift(@INC, $twikiLibPath);
 
         print "Now generating new LocalLib.cfg from settings in old setlib.cfg...\n\n";
         my $newLibFile = "$targetDir/bin/LocalLib.cfg";
@@ -70,16 +71,21 @@ sub UpgradeTWikiConfig {
 
     # No need to upgrade if LocalSite.cfg is already good
     eval 'use TWiki';
-    if ( !$@ && defined &TWiki::new ) {
-        # SMELL: the LocalSite.cfg has to be explicitly read to
-        # make sure we get local definitions.
-        do "$twikiLibPath/LocalSite.cfg";
-        die "$twikiLibPath NOT SET $existingConfigInfo" if $TWiki::cfg{DataDir} eq 'NOT SET';
-        my $twiki = new TWiki();
-
+    if ( !$@ && defined &TWiki::new && -f "$twikiLibPath/TWiki/Client.pm" ) {
+        print STDERR "$twikiLibPath is a Dakar TWiki\n";
+        do 'LocalSite.cfg';
+        require 'TWiki.cfg';
+        die "Cannot read TWiki.cfg: $@" if $@;
+        foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
+                            PubDir TemplateDir ScriptUrlPath LocalesDir ) {
+            die "$twikiLibPath points to a non-functional TWiki"
+              unless $TWiki::cfg{$var};
+        }
+        do 'LocalSite.cfg';
         return( $TWiki::cfg{DataDir}, $TWiki::cfg{PubDir} );
     } else {
-        require Cairo2DakarCfg;
+        print STDERR "$twikiLibPath is a Cairo TWiki\n";
+        require TWiki::Upgrade::Cairo2DakarCfg;
 
         TWiki::requireConfig($twikiCfgFile);
 
