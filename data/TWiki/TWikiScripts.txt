@@ -18,8 +18,10 @@ $ save -topic MyWeb.MyTopic -user admin -action save -text "New text of the topi
 </verbatim>
 All parameters require a value.
 
----+++ Default parameters
+---+++ Common parameters
 All the scripts accept a number of common parameters. The first two components of the URL after the script name are taken as the web and the topic, respectively. Standard URL parameters are:
+
+| *Parameter* | *Description* | *Default* |
 | =topic= | If this is set to a URL, TWiki will immediately redirect to that URL. Otherwise it overrides the URL and is taken as the topic name (you can pass Web.<nop>TopicName) |
 | =user= | Command-line only; set the name of the user performing the action. Note: this usage is inherently insecure, as it bypasses webserver login constraints. For this reason only authorised users should be allowed to execute scripts from the command line. |
 | =skin= | Overrides the default skin path (see TWikiSkins) |
@@ -28,6 +30,7 @@ All the scripts accept a number of common parameters. The first two components o
 ---++ =save=
 The =save= script performs a range of save-related functions, as selected by the =action= parameter.
 
+| *Parameter* | *Description* | *Default* |
 | =action_save=1= | *default*; save, return to view, dontnotify is OFF |
 | =action_quietsave=1= | save, and return to view, =dontnotify= is ON |
 | =action_checkpoint= | save and redirect to the edit script, =dontnotify= is ON |
@@ -72,13 +75,13 @@ Merging is only enabled if the topic text comes from =text= and =originalrev= is
 Form field values are passed in parameters named 'field' - for example, if I have a field =Status= the parameter name is =Status=.
 
 ---++ =oops=
-
 This script is mainly used for rendering pages containing error messages, though it is also used for some functional actions such as manage pages (move topic etc).
 
 =oops= templates are used with the =oops= script to generate system messages. This is done to make internationalisation or other local customisations simple. 
 
 The =oops= script supports the following parameters:
 
+| *Parameter* | *Description* | *Default* |
 | =template= | Name of the template file to display |
 | =def= | Optional, can be set to the name of a single definition within =template=. This definition will be instantiated in the =template= wherever !%INSTANTIATE% is seen. This lets you use a single template file for many messages. For an example, see =oopsmanagebad.tmpl=. |
 | =paramN= | Where N is an integer from 1 upwards. These values will be substituted into =template= for %<nop>PARAM1% etc. |
@@ -86,6 +89,7 @@ The =oops= script supports the following parameters:
 ---++ =edit=
 The =edit= scipt understands the following parameters, typically supplied by HTML input fields:
 
+| *Parameter* | *Description* | *Default* |
 | =action= | Optional. Use the <code>edit<i>action</i></code> template instead of the standard =edit=, and if =action=text=, then hide the form |
 | =onlynewtopic= | If set, error if topic already exists |
 | =onlywikiname= | If set, error if topic name is not a WikiWord |
@@ -103,6 +107,7 @@ Form field values are passed in parameters named 'field' - for example, if I hav
 ---++ =view=
 Used for viewing topics.
 
+| *Parameter* | *Description* | *Default* |
 | =raw=on= | Shows the text of the topic in a scrollable textarea |
 | =raw=debug= | As =raw=on=, but also shows the metadata (forms etc) associated with the topic. |
 | =raw=text= | Shows only the source of the topic, as plain text (Content-type: text/plain). This is useful when you want to extract the source of a topic to a local file on disc. |
@@ -117,9 +122,9 @@ Using =skin=text= this way is *DEPRECATED*, and this hack will be removed in a f
 
 
 ---++ =viewfile=
-
 Used for viewing attachments. Normally, a site will publish the attachments (=pub=) directory using a URL. However if it contains sensitive information, you will want to protect attachments using TWikiAccessControls. In this case, you can use the =viewfile= script to give access to attachments while still checking access controls.
 
+| *Parameter* | *Description* | *Default* |
 | =filename= | name of attachment |
 | =rev= | Revision to view |
 
@@ -128,7 +133,6 @@ This script is _deprecated_. Its functions are covered by the =save= script.
 
 
 ---++ =rest=
-
 This script can be invoked via http in a similar way as the view script (see *Invocation Examples*, bellow) to execute a plugin method. It'll print the result directly to the stream unless the =endPoint= parameter is specified, in which case the control is redirected to the given topic.
 
 The =rest= script can receive one parameter:
@@ -151,25 +155,23 @@ Will invoke =TWiki::Plugin::EmptyPlugin::testRest=, and redirect the control to 
 =configure= is the browser script used for inspection and configuration of the TWiki configuration. None of the parameters to this script are useable for any purpose except =configure=.
 
 ---++ =rdiff=
-
 Renders the differences between version of a TwikiTopic
-| topic | topic that we are showing the differences of |
+
+| *Parameter* | *Description* | *Default* |
 | rev1 | the higher revision |
 | rev2 | the lower revision |
-| render | the rendering style {sequential, sidebyside, raw, debug} |
-| type | history, diff, last} history diff, version to version, last version to previous |
+| render | the rendering style {sequential, sidebyside, raw, debug} | DIFFRENDERSTYLE || =sequential= |
+| type | history, diff, last} history diff, version to version, last version to previous | =diff= |
 | context | number of lines of context |
-| skin | the skin(s) to use to display the diff |
 TODO:
    * add a {word} render style
-   * move the common CGI param handling to one place
-   * move defaults somewhere
 
 ---++ =register=
 
 ---++ =rename=
 Used for renaming topics.
 
+| *Parameter* | *Description* | *Default* |
 | =skin= | skin(s) to use |
 | =newweb= | new web name |
 | =newtopic= | new topic name |
@@ -180,14 +182,14 @@ Used for renaming topics.
 | =nonwikiword= | if defined, a non-wikiword is acceptable for the new topic name |
 
 ---++ =attach=
-
 Attach a file to a topic. CGI parameters are:
 
+| *Parameter* | *Description* | *Default* |
 | =filename= | Name of attachment |
-| =skin= | Skin(s) to use in presenting pages |
 
 ---++ =upload=
 
+| *Parameter* | *Description* | *Default* |
 | =hidefile= | if defined, will not show file in attachment table |
 | =filepath= | |
 | =filename= | |
@@ -196,45 +198,42 @@ Attach a file to a topic. CGI parameters are:
 | =changeproperties= | |
 
 ---++ =search=
-
 CGI gateway to the =%<nop>SEARCH%= functionality driven by the following CGI parameters:
 
-| =search= |
-| =web= | 
-| =topic= | 
-| =excludetopic= |
-| =scope= |
-| =order= |
-| =type= |
-| =regex= |
-| =limit= |
-| =reverse= |
-| =casesensitive= |
-| =nosummary= |
-| =nosearch= |
-| =noheader= |
-| =nototal= |
-| =bookview= |
-| =showlock= |
-| =expandvariables= |
-| =noempty= |
-| =template= |
-| =header= |
-| =format= |
-| =multiple= |
-| =separator= |
-
-See the documentation on [[TWikiVariables#VarSEARCH][%<nop>SEARCH%]] for a full description of parameters.
-
-There is no functional difference between this script and the =%<nop>SEARCH%= .
+| *Parameter:* | *Description:* | *Default:* |
+| ="text"= | Search term. Is a keyword search, literal search or regular expression search, depending on the =type= parameter. SearchHelp has more | required |
+| =search="text"= | (Alternative to above) | N/A |
+| =web="Name"= <br /> =web="%MAINWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. The special word =all= means all webs that doe *not* have the =NOSEARCHALL= variable set to =on= in their %WEBPREFSTOPIC%. You can specifically *exclude* webs from an =all= search using a minus sign - for example, =web="all,-Secretweb"=. | Current web |
+| =topic="%WEBPREFSTOPIC%"= <br /> =topic="*Bug"= | Limit search to topics: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | All topics in a web |
+| =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | None |
+| =type="keyword"= <br /> =type="literal"= <br /> =type="regex"= | Do a keyword search like =soap "web service" -shampoo=; a literal search like =web service=; or RegularExpression search like =soap;web service;!shampoo= | =%<nop>SEARCHVAR- DEFAULTTYPE%= [[TWikiPreferences][preferences]] setting (%SEARCHVARDEFAULTTYPE%) |
+| =scope="topic"= <br /> =scope="text"= <br /> =scope="all"= | Search topic name (title); the text (body) of topic; or all (both) | ="text"= |
+| =order="topic"= <br /> =order="created"= <br />  =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, topic creation time, last modified time, last editor, or named field of TWikiForms. The sorting is done web by web; in case you want to sort across webs, create a [[FormattedSearch][formatted]] table and sort it with TablePlugin's initsort | Sort by topic name |
+| =limit="all"= <br /> =limit="16"= | Limit the number of results returned. This is done after sorting if =order= is specified | All results |
+| =date="..."= | limits the results to those pages with latest edit time in the given TimeInterval.  | All results |
+| =reverse="on"= | Reverse the direction of the search | Ascending search |
+| =casesensitive="on"= | Case sensitive search | Ignore case |
+| =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
+| =nonoise="on"= | Shorthand for =nosummary="on" nosearch="on" nototal="on" zeroresults="off" noheader="on" noempty="on"= | Off |
+| =nosummary="on"= | Show topic title only | Show topic summary |
+| =nosearch="on"= | Suppress search string | Show search string |
+| =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
+| =nototal="on"= | Do not show number of topics found | Show number |
+| =zeroresults="off"= | Suppress all output if there are no hits | =zeroresults="on"=, displays: "Number of topics: 0" |
+| =noempty="on"= | Suppress results for webs that have no hits. | Show webs with no hits |
+| =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
+| =expandvariables="on"= | Expand variables before applying a FormattedSearch on a search hit. Useful to show the expanded text, e.g. to show the result of a SpreadSheetPlugin =%<nop>CALC{}%= instead of the formula | Raw text |
+| =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
+| =nofinalnewline="on"= | If =on=, the search variable does not end in a line by itself. Any text continuing immediately after the search tag on the same line will be rendered as part of the table generated by the search, if appropriate. | =off= |
+| =separator=", "= | Line separator between hits | Newline ="$n"= |
 
 ---++ =changes=
-
 Shows all the changes in the given web. 
 
 The =changes= script can receive one parameter:
 
-| =minor= | If 0, show only major changes. If 1, show all the changes (both minor and major) | Defaults to 0 |
+| *Parameter* | *Description* | *Default* |
+| =minor= | If 0, show only major changes. If 1, show all the changes (both minor and major) | 0 |
 
 The main difference between invoking this script or using WebChanges is that WebChanges is based on a =%<nop>SEARCH%=, while this script reads the =changes= file in each web, making it a faster alternative.
 
@@ -242,8 +241,14 @@ The main difference between invoking this script or using WebChanges is that Web
 
 ---++ =manage=
 
+| *Parameter* | *Description* | *Default* |
+
 ---++ =passwd=
 
+| *Parameter* | *Description* | *Default* |
+
 ---++ =resetpasswd=
+
+| *Parameter* | *Description* | *Default* |
 
 __Related Topics:__ AdminDocumentationCategory, DeveloperDocumentationCategory
