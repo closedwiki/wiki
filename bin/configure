@@ -87,7 +87,7 @@ $rcsverRequired = 5.7;
 # constants used in TWiki.cfg
 use vars qw($TRUE $FALSE );
 use vars qw( $basicMods $requiredMods $requiredModsNonUnix $optionalMods
-             $I18Mods );
+             $I18Mods $I18Mods_perl56 $I18Mods_perl58 );
 
 BEGIN {
     $TRUE = 1;
@@ -138,15 +138,23 @@ BEGIN {
           'CGI::Session'     => "sessions",
       };
 
-    $I18Mods =
+    $I18Mods = 
+    {
+        'Locale::Maketext::Lexicon' => "I18N translations",
+    };
+
+    $I18Mods_perl56 =
       {
-          'Encode'           => "I18N conversions (core module in Perl 5.8)",
           'Unicode::String'  => 'I18N conversions',
           'Unicode::MapUTF8' => "I18N conversions",
           'Unicode::Map'     => "I18N conversions",
           'Unicode::Map8'    => "I18N conversions",
           'Jcode'            => "I18N conversions",
-          'Locale::Maketext::Lexicon' => "I18N translations",
+      };
+
+    $I18Mods_perl58 =
+      {
+          'Encode'           => "I18N conversions (core module in Perl 5.8)",
       };
 };
 
@@ -1586,6 +1594,8 @@ HERE
     $set = _perlModulesCheck( $optionalMods );
     if($TWiki::cfg{UseLocale}) {
         $set .= _perlModulesCheck( $I18Mods );
+        $set .= _perlModulesCheck( $I18Mods_perl58 ) if $] >= 5.008;
+        $set .= _perlModulesCheck( $I18Mods_perl56 ) if ( $TWiki::cfg{UseLocale} && $] < 5.008 );
     }
     $block .= _setting("Optional Perl Modules",
                        CGI::start_table({width=>'100%'}).
