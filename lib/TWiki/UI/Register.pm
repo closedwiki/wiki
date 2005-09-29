@@ -1099,7 +1099,13 @@ sub _putRegDetailsByCode {
     }
     open( F, ">$file" ) or throw Error::Simple( 'Failed to open file: '.$! );
     print F '# Verification code',"\n";
-    print F Dumper( $data );
+    # SMELL: wierd jiggery-pokery required, otherwise Data::Dumper screws
+    # up the form fields when it saves. Perl bug? Probably to do with
+    # chucking around arrays, instead of references to them.
+    my $form = $data->{form};
+    delete $data->{form};
+    print F Dumper( $data, $form );
+    $data->{form} = $form;
     close( F );
 }
 
@@ -1117,8 +1123,9 @@ sub _verificationCodeFilename {
 sub _getRegDetailsByCode {
     my ( $code, $tmpDir ) = @_;
     my $file = _verificationCodeFilename( $code, $tmpDir );
-    use vars qw( $VAR1 );
+    use vars qw( $VAR1 $VAR2 );
     do $file;
+    $VAR1->{form} = $VAR2 if $VAR2;
     throw Error::Simple( 'Bad activation code '.$code ) if $!;
     return $VAR1;
 }
