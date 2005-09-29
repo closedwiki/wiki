@@ -360,6 +360,7 @@ lib/TWiki/Upgrade/UpdateTopics.pm 0440
 lib/TWiki/Upgrade/UpdateTopicsManualSymlinks.pm 0440
 lib/TWiki/Upgrade/UpgradeToCairo.pm 0440
 lib/TWiki/Upgrade/UpgradeToDakar.pm 0440
+lib/TWiki/Upgrade/Cairo2DakarCfg.pm 0440
 lib/TWiki/User.pm 0440
 lib/TWiki/Users/ApacheHtpasswdUser.pm 0440
 lib/TWiki/Users/HtPasswdUser.pm 0440
