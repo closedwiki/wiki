@@ -19,6 +19,7 @@ Create an upgraded twiki installation from an existing one
 and a new distribution.
 
 This script expects '.' to be the root of a TWiki distribution when it is called.
+
 =cut
 
 use strict;
@@ -37,6 +38,8 @@ This script will help you upgrade an existing 'Cairo' (TWiki2004090*)
 installation to the latest 'Dakar' release. If you need to upgrade an
 earlier release, you should upgrade to 'Cairo' first.
 
+(It will also upgrade an existing Dakar beta to a more recent release)
+
 The script works by examining the differences between a new 'Dakar'
 distribution and an existing 'Cairo' installation, and creating a
 new 'Dakar' installation that reflects your local customisations as
@@ -44,7 +47,7 @@ closely as possible.
 
 Checklist:
    - This script should be run in the directory where you unpacked the
-     'Dakar' distribution.
+     new 'Dakar' distribution.
    - The argument to the script is the path to a target directory
      where it will create the new installation
      (_not_ the same as where you unpacked the new distribution, nor
@@ -105,8 +108,6 @@ foreach my $file (readdir(HERE)) {
     print "$file\n";
     system("cp -R $file $targetDir");
 }
-
-print "Preparing to write new format configuration files for you...\n\n";
 
 my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($setlibPath, $targetDir);   # dies on error, without doing damage
 
