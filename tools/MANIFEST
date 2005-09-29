@@ -304,7 +304,6 @@ data/mime.types 0440
 DakarReleaseNotes.html 0440
 index.html 0440
 lib/Algorithm/Diff.pm 0440 DEPRECATED - replace with CPAN download
-lib/Assert.pm 0440 DEPRECATED - replace with CPAN download
 lib/Error.pm 0440 DEPRECATED - replace with CPAN download
 lib/Text/Diff.pm 0440 DEPRECATED - replace with CPAN download
 lib/Assert.pm 0440
