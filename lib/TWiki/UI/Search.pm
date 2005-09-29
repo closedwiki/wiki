@@ -51,7 +51,7 @@ Perform a search as dictated by CGI parameters:
 | =reverse="on"= | Reverse the direction of the search | Ascending search |
 | =casesensitive="on"= | Case sensitive search | Ignore case |
 | =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
-| =nonoise="on"= | Shorthand for =nosummary="on" nosearch="on" nototal="on" zeroresults="off" noheader="on" noempty="on" | Off |
+| =nonoise="on"= | Shorthand for =nosummary="on" nosearch="on" nototal="on" zeroresults="off" noheader="on" noempty="on"= | Off |
 | =nosummary="on"= | Show topic title only | Show topic summary |
 | =nosearch="on"= | Suppress search string | Show search string |
 | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
