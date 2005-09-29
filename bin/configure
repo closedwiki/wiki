@@ -1592,11 +1592,8 @@ HERE
     # Check that each of the optional Perl modules can be loaded, and
     # print its version number.
     $set = _perlModulesCheck( $optionalMods );
-    if($TWiki::cfg{UseLocale}) {
-        $set .= _perlModulesCheck( $I18Mods );
-        $set .= _perlModulesCheck( $I18Mods_perl58 ) if $] >= 5.008;
-        $set .= _perlModulesCheck( $I18Mods_perl56 ) if ( $TWiki::cfg{UseLocale} && $] < 5.008 );
-    }
+    $set .= _perlModulesCheck( $I18Mods );
+    $set .= _perlModulesCheck( $] >= 5.008 ? $I18Mods_perl58 : $I18Mods_perl56 );
     $block .= _setting("Optional Perl Modules",
                        CGI::start_table({width=>'100%'}).
                        $set.CGI::end_table());
