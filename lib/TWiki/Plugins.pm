@@ -174,7 +174,7 @@ sub load {
         }
 	foreach my $plugin ( sort keys %{$TWiki::cfg{Plugins}} )
 	{
-	    push @pluginList, $plugIn unless grep { /^$plugin$/ } @pluginList;
+	    push @pluginList, $plugin unless grep { /^$plugin$/ } @pluginList;
 	}
         if ( $query && defined( $query->param( 'debugenableplugins' ))) {
             @pluginList = split( /[,\s]+/, $query->param( 'debugenableplugins' ));
