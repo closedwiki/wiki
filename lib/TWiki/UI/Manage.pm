@@ -134,6 +134,27 @@ sub _isValidHTMLColor {
 
 }
 
+=pod
+
+---++ StaticMethod rename( $session )
+
+| =action= | one of =createweb=, =bulkRegister=, =deleteUserAccount=, =editSettings=, =saveSettings= | _none_ |
+
+| =*createweb*= |||
+| =newweb= |
+| =baseweb= |
+| =newtopic= |
+| =webbgcolor= |
+| =sitemapwhat= |
+| =sitemapuseto= |
+| =nosearchall= |
+
+| =topicName= |||
+| =webName= |||
+| =user= |||
+
+=cut
+
 sub _createWeb {
     my $session = shift;
 
