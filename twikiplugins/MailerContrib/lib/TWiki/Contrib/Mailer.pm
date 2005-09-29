@@ -33,10 +33,11 @@ Also supported is a simple API that can be used to change the Web<nop>Notify top
 =cut
 
 package TWiki::Contrib::Mailer;
+use URI;
 
 use vars qw ( $VERSION $verbose );
 
-$VERSION = '1.010';
+$VERSION = '1.011';
 
 =pod
 
@@ -54,10 +55,8 @@ only be called by =mailnotify= scripts.
 =cut
 
 sub mailNotify {
-    my $webs;
-    my $twiki;
-    ( $webs, $twiki, $verbose ) = @_;
-
+    #( $webs, $twiki, $verbose ) = @_;
+    my ( $webs, $twiki, $verbose, $sendmail ) = @_;
     my $webstr;
     if ( defined( $webs )) {
         $webstr = join( "|", @{$webs} );
@@ -66,7 +65,8 @@ sub mailNotify {
     $webstr =~ s/\*/\.\*/g;
 
     $twiki ||= new TWiki( $TWiki::cfg{DefaultUserLogin} );
-
+    $TWiki::cfg{MAILERCONTRIB}{sendmail}=$sendmail||0;
+    
     my $report = '';
     foreach my $web ( grep( /$webstr/o,
                             $twiki->{store}->getListOfWebs( 'user ') )) {
@@ -224,7 +224,8 @@ sub _generateEmails {
         # remove <nop> and <noautolink> tags
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
-        my $error = $twiki->{net}->sendEmail( $mail, 5 );
+        my $error;
+        $error = $twiki->{net}->sendEmail( $mail, 5 ) if $TWiki::cfg{MAILERCONTRIB}{sendmail};
         $sentMails++ unless $error;
     }
     $report .= "\t$sentMails change notifications\n";
