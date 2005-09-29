@@ -61,13 +61,13 @@
 ---+++ %_{"Rename failed"}%
 %_{"Cannot rename [_1] to [_2] because it already exists.", "%TOPIC%", "<nop>%PARAM1%.<nop>%PARAM2%"}%
 
-%_{"Please go _back_ in browser and try a new name"}%
+%_{"Please go _back_ in your browser and try a new name."}%
 %TMPL:END%
 %TMPL:DEF{"rename_web_exists"}%
 ---+++ %_{"Rename failed"}%
 %_{"Cannot rename [_1] to [_2] because it already exists." , "%WEB%", "<nop>%PARAM1%"}%
 
-%_{"Please go _back_ in browser and try a new name"}%
+%_{"Please go _back_ in your browser and try a new name."}%
 %TMPL:END%
 
 %TMPL:DEF{"rename_not_wikiword"}%
@@ -191,7 +191,7 @@
 ---+++ %_{"Incorrect [_1]", "%TWIKIWEB%.WikiName"}%
 %_{"The [_1] field must be your first and lastname in [_2], e.g. your capitalized first and lastname with spaces removed.", "%TWIKIWEB%.WikiName", "%TWIKIWEB%.WikiNotation"}%
 
-| *%_{"Good examples:"}%* | *%_{"Incorrect [_1]:", "%TWIKIWEB%.WikiNames"}%* |
+| *%_{"Good examples:"}%* | *%_{"Incorrect [_1]":, "%TWIKIWEB%.WikiNames"}%* |
 | =JohnSmith= | =John M. Smith= |
 | =RjMiller= | =RJ Miller= |
 | =RickO= | =Rick O= %_{"(single character last name)"}% |
