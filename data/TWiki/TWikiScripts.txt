@@ -160,7 +160,7 @@ Renders the differences between version of a TwikiTopic
 | *Parameter* | *Description* | *Default* |
 | rev1 | the higher revision |
 | rev2 | the lower revision |
-| render | the rendering style {sequential, sidebyside, raw, debug} | DIFFRENDERSTYLE || =sequential= |
+| render | the rendering style {sequential, sidebyside, raw, debug} | DIFFRENDERSTYLE, =sequential= |
 | type | history, diff, last} history diff, version to version, last version to previous | =diff= |
 | context | number of lines of context |
 TODO:
