@@ -172,7 +172,10 @@ sub load {
         if( $TWiki::cfg{PluginsOrder} ) {
             @pluginList = split( /[,\s]+/, $TWiki::cfg{PluginsOrder} );
         }
-        push( @pluginList, sort keys %{$TWiki::cfg{Plugins}} );
+	foreach my $plugin ( sort keys %{$TWiki::cfg{Plugins}} )
+	{
+	    push @plugInList, $plugIn unless grep { /^$plugin$/ } @plugInList;
+	}
         if ( $query && defined( $query->param( 'debugenableplugins' ))) {
             @pluginList = split( /[,\s]+/, $query->param( 'debugenableplugins' ));
         }
@@ -189,7 +192,7 @@ sub load {
             # Note this allows the same plugin to be listed
             # multiple times! Thus their handlers can be called
             # more than once.
-            push( @{$this->{plugins}}, $p );
+            push @{$this->{plugins}}, $p;
             my $anotherUser = $p->load();
             if( $anotherUser ) {
                 if( $userDefiner ) {
