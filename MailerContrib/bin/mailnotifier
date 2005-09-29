@@ -62,4 +62,6 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
 }
 
 use TWiki::Contrib::Mailer;
-TWiki::Contrib::Mailer::mailNotify( $sendmail, $verbose, \@webs );
+#TWiki::Contrib::Mailer::mailNotify( $sendmail, $verbose, \@webs );
+my $report = TWiki::Contrib::Mailer::mailNotify( \@webs, undef, $verbose, $sendmail );
+print $report."\n";
