@@ -166,8 +166,6 @@ Renders the differences between version of a TwikiTopic
 TODO:
    * add a {word} render style
 
----++ =register=
-
 ---++ =rename=
 Used for renaming topics.
 
@@ -240,15 +238,62 @@ The main difference between invoking this script or using WebChanges is that Web
 *NOTE*: The result from =changes= script and the topic WebChanges can be different, if the =changes= file is deleted from a web. In particular, in new installations the =changes= script will return no results while the WebChanges topic will.
 
 ---++ =manage=
-
+Performs a range of management functions.
 | *Parameter* | *Description* | *Default* |
+| =action= | One of =createweb=, =changePassword=, =bulkRegister=, =deleteUserAccount=, =editSettings= or =saveSettings= | none |
+
+---+++ =action=createweb=
+| *Parameter* | *Description* | *Default* |
+| =webbgcolor= | Background colour for the web | '' |
+| =sitemapwhat= | ? | '' |
+| =sitemapuseto= | What the web is used for | '' |
+| =nosearchall= | Value for NOSEARCHALL in the new web | '' |
+| =newweb= | Name of the new web | '' |
+| =baseweb= | Name of the web to copy to create the new web | '' |
+| =newtopic= | ? | '' |
+
+---+++ =action=changePassword=
+| *Parameter* | *Description* | *Default* |
+| =username= | Username | |
+| =oldpassword= | Existing password (plain text) | |
+| =password= | New password (plain text) | |
+| =passwordA= | New password confirmation (plain text) | |
+| =TopicName= | ? | |
+
+---+++ =action=bulkRegister=
+| *Parameter* | *Description* | *Default* |
+| =OverwriteHomeTopics= | ? | false |
+| =EmailUsersWithDetails= | ? | false |
+| =LogTopic= | ? | Same as topic name, with 'Result' appended. |
+
+---+++ =action=deleteUserAccount=
+| *Parameter* | *Description* | *Default* |
+| =password= | ? | none |
+
+---+++ =action=editSettings=
+No parameters
+
+---+++ =action=saveSettings=
+| *Parameter* | *Description* | *Default* |
+| =text= | Text of the topic | '' |
+| =originalrev= | Revision that the edit started on | Most recent revision |
+All other parameters may be interpreted as form fields, depending on the current form definition in the topic.
 
 ---++ =passwd=
 
 | *Parameter* | *Description* | *Default* |
+| =action= | one of =changePassword= or =resetPassword= | none |
+Other parameters as described under =manage=, =action=changePassword=.
+
+---++ =register=
+
+| *Parameter* | *Description* | *Default* |
+| =action= | =register= or =verify= or =resetPassword= or =approve= | |
 
 ---++ =resetpasswd=
 
 | *Parameter* | *Description* | *Default* |
+| =LoginName= | *list* of usernames to reset | none |
+| =Introduction= | ? | '' |
 
 __Related Topics:__ AdminDocumentationCategory, DeveloperDocumentationCategory
