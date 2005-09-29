@@ -1214,7 +1214,7 @@ sub _getDataFromQuery {
     }
     $data->{WikiName} = TWiki::Sandbox::untaintUnchecked($data->{WikiName});
     $data->{LoginName} ||= $data->{WikiName}
-      unless $TWiki::cfg{AllowLoginName};
+      unless $TWiki::cfg{Register}{AllowLoginName};
     if( !$data->{Name} &&
           defined $data->{FirstName} && defined $data->{LastName}) {
         $data->{Name} = $data->{FirstName}.' '.$data->{LastName};
