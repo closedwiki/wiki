@@ -43,7 +43,7 @@ Once you have your TWiki running, you can move on to customise it for your users
 ---+ Troubleshooting
 The first step is to re-run the =configure= script and make sure you have resolved all errors, and are happy that you understand any warnings.
 
-Faliing that, please check the topics listed below, they include some important tips for HP-UX, Solaris, OS/390, and many other platforms.
+Failing that, please check the topics listed below, they include some important tips for HP-UX, Solaris, OS/390, and many other platforms.
 	* For Unix or Linux, check TWiki:Codev/TWikiOnUnix and TWiki:Codev/TWikiOnLinux.
 	* For Windows, check the WindowsInstallCookbook. 
 	* For <nop>MacOS X, check TWiki:Codev/TWikiOnMacOSX. 

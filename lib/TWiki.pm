@@ -34,6 +34,9 @@ modules in the system. This package is the class for this singleton,
 and also contains the vast bulk of the basic constants and the per-
 site configuration mechanisms.
 
+Global variables are avoided wherever possible to avoid problems
+with CGI accelerators such as mod_perl.
+
 =cut
 
 package TWiki;

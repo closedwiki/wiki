@@ -1103,7 +1103,7 @@ sub _putRegDetailsByCode {
     # up the form fields when it saves. Perl bug? Probably to do with
     # chucking around arrays, instead of references to them.
     my $form = $data->{form};
-    delete $data->{form};
+    $data->{form} = undef;
     print F Dumper( $data, $form );
     $data->{form} = $form;
     close( F );

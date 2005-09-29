@@ -391,13 +391,11 @@ pub/TWiki/PatternSkin/layout.css 0660
 pub/TWiki/PatternSkin/patternskin_screenshot.gif 0660
 pub/TWiki/PatternSkin/patternskin_screenshot_full.gif 0660
 pub/TWiki/PatternSkin/style.css 0660
-pub/TWiki/PatternSkin/button_bg.gif
-pub/TWiki/PatternSkin/button_bg_high.gif
 pub/TWiki/PatternSkin/button_yellow_bg.gif
-pub/TWiki/PatternSkin/leftbar_personal_bg.gif
 pub/TWiki/PatternSkin/page_bg.gif
-pub/TWiki/PatternSkin/page_form_bg.gif
-pub/TWiki/PatternSkin/top_bg.gif
+pub/TWiki/PatternSkin/patternLeftBarPersonal_bg.gif
+pub/TWiki/PatternSkin/twikiPageForm_bg.gif
+pub/TWiki/PatternSkin/twikiTable_header_bg.gif
 pub/TWiki/PatternSkinCss/CSS_element_layout_view.pattern.tmpl.png 0660
 pub/TWiki/PatternSkinCustomization/LowRes.css 0660
 pub/TWiki/PatternSkinPalette/PatternSkinPalette.css 0660
@@ -681,6 +679,7 @@ pub/TWiki/TWikiDocGraphicsPattern/xsl.gif 0660
 pub/TWiki/TWikiDocGraphicsPattern/zip.gif 0660
 pub/TWiki/TWikiLogos/horzTWiki.gif 0660
 pub/TWiki/TWikiLogos/horzTWikiPowered.gif 0660
+pub/TWiki/TWikiLogos/horzTWikiPowered.png 0660
 pub/TWiki/TWikiLogos/smallLogo.gif 0660
 pub/TWiki/TWikiLogos/vertTWiki.gif 0660
 pub/TWiki/TWikiLogos/vertTWikiPowered.gif 0660
