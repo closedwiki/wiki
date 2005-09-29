@@ -209,6 +209,7 @@ foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
     print FH qq{\$TWiki::cfg{Regsiter}{HidePasswd} = 1;\n};
     print FH qq{\$TWiki::cfg{AutoAttachPubFiles} = 1;\n};
     print FH qq{\$TWiki::cfg{EnableHierarchicalWebs} = 1;\n};
+    print FH qq{\$TWiki::cfg{LoginManager} = 'TWiki::Client::TemplateLogin';\n};
 
     close( FH ) or die "Can't close $file: $! ???";
 }
