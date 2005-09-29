@@ -303,6 +303,7 @@ data/_default/WebTopicList.txt 0660
 data/mime.types 0440
 DakarReleaseNotes.html 0440
 index.html 0440
+lib/Assert.pm 0440
 lib/LocalSite.cfg.txt 0440
 lib/TWiki/Access.pm 0440
 lib/TWiki/AccessControlException.pm 0440
