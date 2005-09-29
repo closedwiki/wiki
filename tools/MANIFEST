@@ -303,9 +303,6 @@ data/_default/WebTopicList.txt 0660
 data/mime.types 0440
 DakarReleaseNotes.html 0440
 index.html 0440
-lib/Algorithm/Diff.pm 0440
-lib/Assert.pm 0440
-lib/Error.pm 0440
 lib/LocalSite.cfg.txt 0440
 lib/TWiki/Access.pm 0440
 lib/TWiki/AccessControlException.pm 0440
@@ -369,7 +366,6 @@ lib/TWiki/Users/Password.pm 0440
 lib/TWiki/Users.pm 0440
 lib/TWiki.cfg 0440
 lib/TWiki.pm 0440
-lib/Text/Diff.pm 0440
 locale/de_DE.po 0440
 locale/es_MX.po 0440
 locale/pt_BR.po 0440
