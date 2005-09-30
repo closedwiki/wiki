@@ -240,38 +240,31 @@ The main difference between invoking this script or using WebChanges is that Web
 ---++ =manage=
 Performs a range of management functions.
 | *Parameter* | *Description* | *Default* |
-| =action= | One of =createweb=, =changePassword=, =bulkRegister=, =deleteUserAccount=, =editSettings= or =saveSettings= | none |
+| =action= | One of =createweb=, =deleteUserAccount=, =editSettings= or =saveSettings= | none |
 
 ---+++ =action=createweb=
 | *Parameter* | *Description* | *Default* |
-| =webbgcolor= | Background colour for the web | '' |
-| =sitemapwhat= | ? | '' |
-| =sitemapuseto= | What the web is used for | '' |
-| =nosearchall= | Value for NOSEARCHALL in the new web | '' |
 | =newweb= | Name of the new web | '' |
 | =baseweb= | Name of the web to copy to create the new web | '' |
-| =newtopic= | ? | '' |
-
----+++ =action=changePassword=
-| *Parameter* | *Description* | *Default* |
-| =username= | Username | |
-| =oldpassword= | Existing password (plain text) | |
-| =password= | New password (plain text) | |
-| =passwordA= | New password confirmation (plain text) | |
-| =TopicName= | ? | |
-
----+++ =action=bulkRegister=
-| *Parameter* | *Description* | *Default* |
-| =OverwriteHomeTopics= | ? | false |
-| =EmailUsersWithDetails= | ? | false |
-| =LogTopic= | ? | Same as topic name, with 'Result' appended. |
+| =webbgcolor= | value for WEBBGCOLOR | '' |
+| =sitemapwhat= | Value for SITEMAPWHAT | '' |
+| =sitemapuseto= | Value for SITEMAPUSETO | '' |
+| =nosearchall= | Value for NOSEARCHALL | '' |
 
 ---+++ =action=deleteUserAccount=
+Unregisters (removes) the currently logged-in user.
 | *Parameter* | *Description* | *Default* |
-| =password= | ? | none |
+| =password= | Users' password | none |
 
 ---+++ =action=editSettings=
 No parameters
+
+---+++ =action=bulkRegister=
+See BulkRegistration.
+| *Parameter* | *Description* | *Default* |
+| =OverwriteHomeTopics= | Whether to overwrite existing home topics or not | false |
+| =EmailUsersWithDetails= | Whether to mail registered users or not | false |
+| =LogTopic= | Topic to save the log in | Same as topic name, with 'Result' appended. |
 
 ---+++ =action=saveSettings=
 | *Parameter* | *Description* | *Default* |
@@ -284,6 +277,14 @@ All other parameters may be interpreted as form fields, depending on the current
 | *Parameter* | *Description* | *Default* |
 | =action= | one of =changePassword= or =resetPassword= | none |
 Other parameters as described under =manage=, =action=changePassword=.
+
+---+++ =action=changePassword=
+| *Parameter* | *Description* | *Default* |
+| =username= | Username | |
+| =oldpassword= | Existing password (plain text) | |
+| =password= | New password (plain text) | |
+| =passwordA= | New password confirmation (plain text) | |
+| =TopicName= | ? | |
 
 ---++ =register=
 
