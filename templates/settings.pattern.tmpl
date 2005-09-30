@@ -13,7 +13,7 @@ toShow=new Array();
 toHide=new Array();
 
 function initForm() {
-  if (document.main.text) document.main.text.focus();
+  try { document.main.text.focus(); } catch (er) {}
   for (i = 0; i < toShow.length; i++) {
      if(dom) {
         document.getElementById(toShow[i]).style.display="inline";
