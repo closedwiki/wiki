@@ -24,13 +24,13 @@ SetHandler cgi-script
 #
 
 # Authentication type (htpasswd file) (comment out this if you configure htpasswd / LDAP support)
-AuthUserFile {DataDir}/data/.htpasswd
+AuthUserFile {DataDir}/.htpasswd
 AuthName 'Enter your WikiName: (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
 AuthType Basic
 
 #for htdigest password suport uncomment the following
 #AuthDigestDomain {DefaultUrlHost}{ScriptUrlPath}/viewauth {DefaultUrlHost}{ScriptUrlPath}/edit {DefaultUrlHost}{ScriptUrlPath}/preview {DefaultUrlHost}{ScriptUrlPath}/save {DefaultUrlHost}{ScriptUrlPath}/attach {DefaultUrlHost}{ScriptUrlPath}/upload {DefaultUrlHost}{ScriptUrlPath}/rename {DefaultUrlHost}{ScriptUrlPath}/manage {DefaultUrlHost}{ScriptUrlPath}/installpasswd {DefaultUrlHost}{ScriptUrlPath}/passwd
-#AuthDigestFile {DataDir}/data/.htdigest
+#AuthDigestFile {DataDir}/.htdigest
 # For "Digest" authentication to work properly, this string must match
 # the value of configuration variable $authRealm
 #AuthName 'Enter your WikiName. (First name and last name, no space, no dots, capitalized, e.g. JohnSmith). Cancel to register if you do not have one.'
