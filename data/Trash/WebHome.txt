@@ -3,6 +3,3 @@
 
 %SEARCH{".*" web="%INCLUDINGWEB%" regex="on" nototal="on" nosearch="on" order="modified" limit="15"}%
 [[WebChanges][%MAKETEXT{"more..."}%]]
-
-%SEARCH{ ".*" web="%INCLUDINGWEB%" regex="on" nototal="on" nosearch="on" order="modified" limit="35" format="[[$web.$topic][$pattern(.*TOPICMOVED.+?from=\"(.*?)\".*)]] <br />" }%
-
