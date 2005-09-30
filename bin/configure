@@ -62,7 +62,6 @@ use vars qw( %cfg
            );
 
 # Constants
-$perlver;
 $perlvernum = $];
 $perlverRequired = 5.00503;        # Oldest supported version of Perl
 $perlverRequiredString = '5.005_03';
