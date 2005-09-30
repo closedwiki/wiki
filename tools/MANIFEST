@@ -779,6 +779,7 @@ templates/oopsaccessdenied.tmpl 0440
 templates/oopsalerts.tmpl 0440
 templates/oopsattention.tmpl 0440
 templates/oopschangelanguage.tmpl 0440
+templates/oopslanguagechanged.tmpl 0440
 templates/oopsleaseconflict.tmpl 0440
 templates/oopsmore.pattern.tmpl 0440
 templates/oopsmore.tmpl 0440

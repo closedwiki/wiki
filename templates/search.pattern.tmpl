@@ -15,7 +15,7 @@
 
 
 
-%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">%_{"Results from [_1] web", "<nop>%WEB%"}%</span><span class="twikiRight">%_{"retrieved at [_1] GMT", "%DISPLAYTIME{\"$hour:$min\"}%"}%</span><br class="twikiClear" /></div>%REPEAT%<div class="patternSearchResults">
+%TMPL:DEF{"repeatedsearchblock"}%<div class="patternSearchResultsHeader" style="background-color:%WEBBGCOLOR%"><span class="twikiLeft">%_{"Results from [_1] web", "<nop>%WEB%"}%</span><span class="twikiRight">%_{"retrieved at [_1]", "%DISPLAYTIME{\"$hour:$min ($tz)\"}%"}%</span><br class="twikiClear" /></div>%REPEAT%<div class="patternSearchResults">
 <div class="twikiTopRow"><div class="twikiLeft">
 <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a></div>
 <div class="twikiRight twikiSRAuthor">
