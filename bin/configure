@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 #
 # TWiki Collaboration Platform, http://TWiki.org/
 #
@@ -2299,8 +2299,8 @@ my $hdr = CGI::start_html(
         CGI::meta({ 'http-equiv'=>'Cache-Control', content=>'no-cache' }),
         CGI::meta({ 'http-equiv'=>'Expires', content=>0 }),
         CGI::meta({ name=>'robots', content=>'noindex' }),
-        CGI::Link( { -rel=>'icon', -href=>'configure?action=image;image=configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
-        CGI::Link( { -rel=>'shortcut icon', -href=>'configure?action=image;image=logos/configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
+        CGI::Link( { -rel=>'icon', -href=>$ENV{SCRIPT_NAME}.'?action=image;image=configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
+        CGI::Link( { -rel=>'shortcut icon', -href=>$ENV{SCRIPT_NAME}.'?action=image;image=logos/configure.ico;type=image/x-icon', -type=>'image/x-icon' } ),
         CGI::script( { language => 'JavaScript',
                        type => 'text/javascript' }, $js1 ),
         CGI::style( { -type=>'text/css' }, $css),
@@ -2313,7 +2313,7 @@ $hdr =~ s/^<\?xml.*?>//s;
 print CGI::header('text/html'), $hdr;
 
 my $body = "";
-$body .= CGI::h1( CGI::img({src=>'configure?action=image&image=logo.png;type=image/png', alt=>'TWiki'}).
+$body .= CGI::h1( CGI::img({src=>$ENV{SCRIPT_NAME}.'?action=image;image=logo.png;type=image/png', alt=>'TWiki'}).
   '&nbsp;Configuration');
 
 my $update_disabled = 0;
