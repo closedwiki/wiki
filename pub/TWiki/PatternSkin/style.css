@@ -11,7 +11,8 @@
 	C2	red hover link background color 											#D6000F 
 	C3	link label hover color														#FCF5DF
 	C4	
-	C5	color H2																	#a00
+	C5	header color																#
+	
 	C6	grayed out text																#8E9195
 	C7	
 	C8	dark gray text																#666
@@ -102,16 +103,19 @@ h1, h2, h3, h4, h5, h6 {
 	line-height:104%;
 	padding:0;
 	margin:1em 0 .1em 0;
+	color:#a00; /*H5*/
 }
 h1 {
 	font-size:200%;
-	color:#a00;
 	margin:0 0 .5em 0;
+}
+h1 a:link,
+h1 a:visited {
+	color:#a00; /*H5*/
 }
 .patternNoViewPage h1 {
 	font-size:160%;
 }
-h2, h3, h4, h5, h6 {color:#a00;} /*C5*/
 h2 { font-size:135%;}
 h3 { font-size:125%;}
 h4 { font-size:118%;}
@@ -160,9 +164,11 @@ h2 {
 	color:#FCF5DF; /*C3*/
 	background-color:#D6000F; /*C2*/
 }
+:link img,
+:visited img,
 :link:hover img,
 :visited:hover img {
-	background:transparent;
+	background-color:transparent;
 }
 .patternTopic a:visited {
 	color:#666; /*C8*/
@@ -398,7 +404,6 @@ th.twikiSortedDescendingCol a:hover {
 	margin:1em 0;
 	padding:.3em 0 .6em 0;
 }
-
 .twikiToc ul {
 	list-style:outside;
 	padding:0 0 0 .5em;
@@ -958,10 +963,9 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 	font-weight:bold;
 }
 .patternSearchResultsPage .twikiHelp {
-	background-color:#FFC0CB; /*C21*/
 	display:block;
 	width:auto;
-	margin:.5em 0;
+	margin:.25em 0;
 }
 .patternSearchResults .twikiSRAuthor {
 	width:15%;

@@ -1,10 +1,14 @@
 %TMPL:INCLUDE{"edit"}%
 
+
+
 %TMPL:DEF{"focus"}%%TMPL:END%
 %TMPL:DEF{"simpleheader"}%
 <input type="hidden" name="editaction" value="form" />
----+ <nop>%TOPIC% %_{"(edit form)"}%
-%BR%%TMPL:END%
+---+ %TOPIC% %_{"(edit form)"}%
+%TMPL:END%
+
+
 
 %TMPL:DEF{"content"}%<div class="patternFormHolder"><form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 %TMPL:P{"simpleheader"}%

@@ -75,7 +75,7 @@ function initForm() {
 <div class="twikiEditTextarea">
 <input type="hidden" name="action" value="saveSettings" />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
-<textarea id='topic' name='text' wrap='virtual' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onKeyDown='if(window.event.keyCode==27)return false;'>
+<textarea id='topic' name='text' rows='%EDITBOXHEIGHT%' cols='%EDITBOXWIDTH%' style='%EDITBOXSTYLE%' onkeydown='if(window.event.keyCode==27)return false;'>
 %TEXT%
 </textarea>
 </div>
