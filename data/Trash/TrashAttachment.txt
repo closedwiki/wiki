@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="ArthurClemens" date="1092762941" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="WebHome"}%
----+ Placeholder for trashed attachments
+---+ %MAKETEXT{"Placeholder for trashed attachments"}%
 
 

@@ -4,4 +4,4 @@
 %META:TOPICPARENT{name="WebHome"}%
 %TOPICLIST{"	* [[$name]]"}%
 
-See also the verbose WebIndex.
+%MAKETEXT{"See also the verbose [_1]." args="WebIndex"}%

@@ -1,15 +1,14 @@
-%META:TOPICINFO{author="TWikiContributor" date="1121074130" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1127484504" format="1.1" version="1.2"}%
 %INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-
 ---
 
-	* <b><nop>%INCLUDINGWEB% Web</b>
-	* [[%HOMETOPIC%][Home]]
-	* [[WebTopicList][Index]]
-	* [[WebSearchAdvanced][Search]]
-	* [[WebChanges][Changes]]
-	* [[WebNotify][Notifications]]
-	* [[WebStatistics][Statistics]]
-	* [[WebPreferences][Preferences]]
+   * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
+   * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
+   * [[WebTopicList][%MAKETEXT{"Index"}%]]
+   * [[WebSearchAdvanced][%MAKETEXT{"Search"}%]]
+   * [[WebChanges][%MAKETEXT{"Changes"}%]]
+   * [[WebNotify][%MAKETEXT{"Notifications"}%]]
+   * [[WebStatistics][%MAKETEXT{"Statistics"}%]]
+   * [[WebPreferences][%MAKETEXT{"Preferences"}%]]
 

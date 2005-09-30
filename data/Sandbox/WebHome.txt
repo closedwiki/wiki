@@ -1,28 +1,28 @@
 %META:TOPICINFO{author="TWikiContributor" date="1120843468" format="1.1" version="1.2"}%
----+!! Welcome to the %WEB% web
+---+!! %MAKETEXT{"Welcome to the [_1] web" args="%WEB%"}%
 
-The <b><nop>%WEB%</b> web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the %TWIKIWEB%.TWikiTutorial to get a jumpstart on the <nop>%WIKITOOLNAME% tool. A good rule of thumb is to add at the end of the page and sign and date it with your %TWIKIWEB%.WikiName.
+%MAKETEXT{"The [_1] web is the sandbox you can use for testing. Everybody is welcome to add or delete some stuff. It is recommended to walk through the [_2] to get a jumpstart on the [_3] tool. A good rule of thumb is to add at the end of the page and sign and date it with your [_4]." args="<b><nop>%WEB%</b>,%TWIKIWEB%.TWikiTutorial,<nop>%WIKITOOLNAME%,%TWIKIWEB%.WikiName"}%
 
----++ Test Topics
+---++ %MAKETEXT{"Test Topics"}%
 
 <blockquote>
 <form action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/"> 
-Create a new document by name: &nbsp; (Use a topic name in TWiki.WikiNotation) <br /> 
+%MAKETEXT{"Create a new document by name:"}% &nbsp; %MAKETEXT{"(Use a topic name in TWiki.WikiNotation)"}% <br /> 
 <input type="text" name="topic" size="32" /> 
 <input type="hidden" name="onlywikiname" value="on" />
-<input type="submit" value="Create by Name" /> 
+<input type="submit" value='%MAKETEXT{"Create by Name"}%' /> 
 </form>
 
 <form name="createNewTestTopic" action="%SCRIPTURL%/edit%SCRIPTSUFFIX%/%BASEWEB%/TestTopicXXXXXXXXXX">
-Create a new auto-numbered test topic:
-<input type="submit" class="twikiSubmit" value="Create <nop>TestTopic###" />
+%MAKETEXT{"Create a new auto-numbered test topic:"}%
+<input type="submit" class="twikiSubmit" value='%MAKETEXT{"Create <nop>TestTopic###"}%' />
 </form>
 
-<h3 style="margin-top:0;display:inline;">Recently changed topics</h3>
-_Current time on this server: %SERVERTIME{"$day $month $year - $hour:$min"}%_
+<h3 style="margin-top:0;display:inline;">%MAKETEXT{"Recently changed topics"}%</h3>
+_%MAKETEXT{"Current time on this server:"}% %SERVERTIME{"$day $month $year - $hour:$min"}%_
 
 <dl>
 %SEARCH{ ".*" regex="on" nosearch="on" nototal="on" order="modified" reverse="off" limit="7" format="<dt>[[$topic]]</dt><dd>$summary<br /><span class='deem'><i>$date</i></span></dd>"}%
 </dl>
-_A more extensive changes list is available via the [[WebChanges][Recent Changes]] link in the navigation menu._
+_%MAKETEXT{"A more extensive changes list is available via the ~[~[[_1]~]~[Recent Changes~]~] link in the navigation menu." args="WebChanges"}%_
 </blockquote>
