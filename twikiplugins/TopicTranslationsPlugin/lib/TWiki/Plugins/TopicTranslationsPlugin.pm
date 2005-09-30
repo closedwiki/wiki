@@ -89,6 +89,7 @@ sub commonTagsHandler
     $_[0] =~ s/%TRANSLATIONS({(.*?)})?%/&handleTranslations($2)/ge;
     $_[0] =~ s/%CURRENTLANGUAGE%/&currentLanguage/ge;
     $_[0] =~ s/%DEFAULTLANGUAGE%/$defaultLanguage/ge;
+    $_[0] =~ s/%BASETRANSLATION({(.*?)})?%/&handleBaseTranslation($2)/ge;
 }
 
 # transform a language code into a suitable suffix for TWiki topics,
@@ -256,7 +257,7 @@ sub checkRedirection
     my $baseTopicName = findBaseTopicName();
     my $baseUrl = TWiki::Func::getViewUrl($web, $baseTopicName);
     my $editUrl = TWiki::Func::getScriptUrl($web, $baseTopicName, 'edit');
-    my $origin = $query->referer();
+    my $origin = $query->referer() || '';
     
     # we don't want to redirect if the user came from another translation of
     # this same topic, or from an edit
@@ -302,7 +303,7 @@ sub findTranslations
   $theTopic = shift || $topic;
   $theTopic = findBaseTopicName($theTopic);
 
-  my $norm,$exists;
+  my ($norm, $exists);
   my @items;
 
   foreach $lang (@translations) {
@@ -319,6 +320,12 @@ sub findTranslations
   }
   
   return @items;
+}
+
+sub handleBaseTranslation {
+  my $params = shift;
+  my $myTopic = TWiki::Func::extractNameValuePair($params, "topic") || $topic;
+  return findBaseTopicName($myTopic);
 }
 
 # =========================
