@@ -10,7 +10,7 @@
 	C1	link color	 																#06c
 	C2	red hover link background color 											#D6000F 
 	C3	link label hover color														#FCF5DF
-	C4	
+	C4	beige border color															#E2DCC8
 	C5	header color																#a00
 	C6	grayed out text																#8E9195
 	C7	
@@ -22,12 +22,12 @@
 	C13	light gray background														#eee
 	C14 light yellow background of action buttons									#FCF5DF
 	C15 somewhat smaller font size													94%
-	C16 dark yellow lines															#FCD582
+	C16 
 	C17 text color																	#000
 	C18	neutral gray; hr, table borders, textarea, input, select borders			#ccc
-	C19	dark red, h3-h6, patternLeftBar text										#A40101
-	C20	main orange-red; h1															#DE5D07
-	C21	pink; newlink background color, .patternSearchResultsPage .twikiHelp		#FFC0CB
+	C19	
+	C20	
+	C21	
 	C22	light yellow; attachment, form background									#FEFBF3
 	C23	white; attachment, form table background									#fff
 	---------------------------------------------------------------------------------------	*/
@@ -123,7 +123,7 @@ h6 { font-size:100%;}
 h2 {
 	display:block;
 	font-weight:600;
-	border-bottom:1px solid #E2DCC8;
+	border-bottom:1px solid #E2DCC8; /*C4*/
 	/* give h2 a background color for easy scanning: */
 	background-color:#FBFAF7;
 	padding:.2em 5px;
@@ -137,11 +137,19 @@ h2 {
 .twikiNewLink a:visited sup {
 	vertical-align:baseline;
 	font-size:100%;
-	background-color:#FFC0CB; /*C21*/
+	background-color:#fff;
+	padding:0 2px;
 	text-decoration:none;
+	color:#666;
+	border:1px solid #E2DCC8;
+}
+.twikiNewLink a:hover sup {
+	background-color:#D6000F; /*C2*/
+	color:#FCF5DF; /*C3*/
+	border-color:#D6000F; /*C2*/
 }
 .twikiNewLink {
-	border-bottom:1px solid #FFC0CB; /*C21*/
+	border-bottom:1px dotted #D6000F;
 }
 /* to override old Render.pm coded font color style */
 .twikiNewLink font {
@@ -285,8 +293,8 @@ th.twikiSortedDescendingCol a:hover {
 	margin:2em 0;
 	background-color:#FEFBF3; /*C22*/
 	padding:20px;
-	border-top:1px solid #E2DCC8;
-	border-bottom:1px solid #E2DCC8;
+	border-top:1px solid #E2DCC8; /*C4*/
+	border-bottom:1px solid #E2DCC8; /*C4*/
 	margin:0 0 -1px 0;
 }
 .twikiAttachments p { /* fix for extra generated <p> */
@@ -538,8 +546,8 @@ a:hover .twikiAccessKey {
 	margin:0 0 2em 0;
 	background-color:#FBF7E8;
 	padding:.5em 2em;
-	border-top:1px solid #E2DCC8;
-	border-bottom:1px solid #E2DCC8;
+	border-top:1px solid #E2DCC8; /*C4*/
+	border-bottom:1px solid #E2DCC8; /*C4*/
 }
 .patternTopicAction .twikiSeparator {
 	color:#aaa;
@@ -587,7 +595,7 @@ a:hover .twikiAccessKey {
 	background-color:#fff;
 	border-width:1px;
 	border-style:solid;
-	border-color:#E2DCC8 #E2DCC8 #E2DCC8 #E2DCC8;
+	border-color:#E2DCC8 #E2DCC8 #E2DCC8 #E2DCC8; /*C4*/
 }
 .patternNoViewPage .patternMain {
 	padding-top:2em;
@@ -612,15 +620,15 @@ a:hover .twikiAccessKey {
 
 /* Left bar */
 .patternLeftBar {
-	border-right:1px solid #E2DCC8;
-	border-bottom:1px solid #E2DCC8;
+	border-right:1px solid #E2DCC8; /*C4*/
+	border-bottom:1px solid #E2DCC8; /*C4*/
 	color:#555;
 	overflow:hidden;
 	background-color:transparent;
 }
 .patternLeftBar hr {
-	color:#E2DCC8;
-	background-color:#E2DCC8;
+	color:#E2DCC8; /*C4*/
+	background-color:#E2DCC8; /*C4*/
 }
 .patternLeftBar a:link,
 .patternLeftBar a:visited {
@@ -650,7 +658,7 @@ a:hover .twikiAccessKey {
 	width:auto;
 }
 .patternLeftBar .patternLanguageOption {
-	border-top:1px solid #E2DCC8;
+	border-top:1px solid #E2DCC8; /*C4*/
 	padding:.25em 0 .25em 1em;
 	font-size:94%; /*C15*/
 }
@@ -790,7 +798,7 @@ td.patternToolBar {
 .patternToolBar .patternButton a:visited {
 	display:block;
 	margin:0 0 -1px 4px;
-	border:1px solid #E2DCC8;
+	border:1px solid #E2DCC8; /*C4*/
 	background-color:#fff;
 	position:relative;
 	z-index:0;
@@ -817,7 +825,7 @@ td.patternToolBar {
 }
 .patternToolBarBottom {
 	position:relative;
-	border-top:1px solid #E2DCC8;
+	border-top:1px solid #E2DCC8; /*C4*/
 	margin:0 0 .5em 0;
 	z-index:2;
 }
