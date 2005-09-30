@@ -769,8 +769,6 @@ templates/login.pattern.tmpl 0440
 templates/oopsaccessdenied.pattern.tmpl
 templates/oopsleaseconflict.pattern.tmpl
 templates/oopssaveerr.pattern.tmpl
-templates/twiki.i18n.tmpl
-templates/view.i18n.tmpl
 templates/login.tmpl 0440
 templates/mailchanges.tmpl 0440
 templates/mailnotify.tmpl 0440
