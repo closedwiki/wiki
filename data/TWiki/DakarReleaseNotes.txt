@@ -253,14 +253,10 @@ Customized site preferences can now be saved in the {LocalSitePreferences} topic
 =favicon.ico= is a small graphic that _can_ appear in a variety of places in the browser: the titlebar, the taskbar, the address bar, bookmarks/favourites, and tabs.  Each web browser has a unique user interface, and as a result uses the Favicon in different ways.  _Most_ browsers display it in _most_ of the locations listed.
 
 Out of the box, TWiki is configured to easily customise the =favicon.ico= for each web.  To switch to a new =favicon.ico=, upload it to the desired web's <nop>WebPreferences.
-<verbatim>
-      * Set FAVICON = %PUBURL%/%WEB%/WebPreferences/favicon.ico
-</verbatim>
+      * <nop>Set FAVICON = %PUBURL%/%WEB%/WebPreferences/favicon.ico
 
 To provide a single, site-wide =favicon.ico=, hardcode a specific web, for example:
-<verbatim>
-      * Set FAVICON = %PUBURL%/%TWIKIWEB%/WebPreferences/favicon.ico
-</verbatim>
+      * <nop>Set FAVICON = %PUBURL%/%TWIKIWEB%/WebPreferences/favicon.ico
 
 ---++++ =FORCENEWREVISIONCHECKBOX=
 
@@ -279,16 +275,12 @@ NOTE: Although this feature is being introduced in this release, it is also bein
 Each web can have its own customised logo.  The simplest way is to upload a =logo.png= to a web's <nop>WebPreferences, and it will appear in the top-left corner.
 
 To change the logo's filename, set the =WEBLOGONAME= variable.  You'll especially need to do this if you use =.jpg= or =.gif= for the logo file format:
-<verbatim>
-      * Set WEBLOGONAME = MyLogo.jpg
-</verbatim>
+      * <nop>Set WEBLOGONAME = MyLogo.jpg
 
 RSS feeds have also been enhanced to use the web-specific logo.
 
 If you don't want to have custom logos on a per-web basic, but instead want to use a single, site-wide logo, hardcode a specific web in the =WEBLOGOURL= variable.  For example:
-<verbatim>
-      * Set WEBLOGOURL = %PUBURL%/%MAINWEB%/WebPreferences/logo.png
-</verbatim>
+      * <nop>Set WEBLOGOURL = %PUBURL%/%MAINWEB%/WebPreferences/logo.png
 
 ---++++ =WIKILOGOIMG=, =WIKILOGOURL=, =WIKILOGOALT=
 
