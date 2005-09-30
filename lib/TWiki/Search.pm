@@ -783,7 +783,7 @@ sub searchWeb {
 
                 my $srev = 'r' . $revNum;
                 if( $revNum eq '0' || $revNum eq '1' ) {
-                    $srev = CGI::span( { class => 'twikiNew' }, 'NEW' );
+                    $srev = CGI::span( { class => 'twikiNew' }, ($this->{session}->{i18n}->maketext('NEW')) );
                 }
                 $out =~ s/%REVISION%/$srev/o;
                 $out =~ s/%AUTHOR%/$revUser/o;
