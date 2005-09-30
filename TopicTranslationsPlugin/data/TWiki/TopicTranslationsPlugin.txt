@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AntonioTerceiro" date="1120422474" format="1.0" version="1.10"}%
+%META:TOPICINFO{author="AntonioTerceiro" date="1128026733" format="1.0" version="1.1"}%
 ---+!! !TopicTranslationsPlugin
 
 TopicTranslationsPlugin manages topics translations into several languages, by assigning suffixes
@@ -78,7 +78,7 @@ The default language (i.e., the first of the listed in =%<nop/>TOPICTRANSLATIONS
 Includes the translation of =<nop/>SomeTopic= that is in the same language as the current topic
 (as detected based on current topic's name suffix)
 
-Parameters =%<nop/>INCLUDETRANSLATION{}%= :
+Parameters for =%<nop/>INCLUDETRANSLATION{}%= :
 
 	* ="<nop/>MyTopic"= : include the suitable =<nop/>MyTopic= translation. Can be
 	  ="<nop/>MyTopic"= or ="<nop/>Web.MyTopic"=.
@@ -87,6 +87,16 @@ Parameters =%<nop/>INCLUDETRANSLATION{}%= :
 
 The initial motivation for this tag is to include a suitable menu, for example, based on
 current topic's language. But there are several other possibilities.
+
+---+++ =%<nop/>BASETRANSLATION{...}%=
+
+Expands to the name of the original topic (the one we are translating), i.e. the name of
+current topic without any language suffix.
+
+Parameters supported:
+
+	* <code>topic="<nop/>MyTopic"</code>: find base translation for <code>MyTopic</code> instead of
+	  current topic.
 
 ---++ Automatic Redirection
 
