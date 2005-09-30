@@ -31,7 +31,7 @@ Create a new web by filling out this form. __Note:__ It is not recommended to cr
 |  *Description:<br /> &nbsp;<br /> &nbsp;* | <input type="text" name="sitemapwhat" value="" size="60" /><br /> Enter a short description of the web. Write =Web.TopicName= instead of just =TopicName= if you include links. This will list the web in the %TWIKIWEB%.SiteMap (leave field empty if you prefer not to update the directory.) ||
 |  *Use to...<br /> &nbsp;* | <input type="text" name="sitemapuseto" value="...collaborate on" size="60" /><br /> Continue the sentence describing the intended use. This is also for the %TWIKIWEB%.SiteMap ||
 |  *Exclude web from "search all":* | <input type="radio" name="nosearchall" value="" checked="checked" /> No &nbsp; <input type="radio" name="nosearchall" value="on" /> Yes | Specify if you want to exclude the web from a "search all webs" search. Note that the %TWIKIWEB%.SiteMap will not list the web if you select Yes. |
-| | <input type="submit" value="Create new web" /> ||
+| *&nbsp;* | <input type="submit" value="Create new web" /> ||
 <input name="newtopic" type="hidden" value="%URLPARAM{"newtopic"}%" />
 <input name="action" type="hidden" value="createweb" />
 </form>
