@@ -1,5 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1025247318" format="1.1" version="$Rev$"}%
-%MAKETEXT{"This is the [_1].  Here you can undelete topics; deleted attachments are in TrashAttachment." args="<b><nop>%WEB%</b>"}%
+%MAKETEXT{"This is the Trash. Here you can undelete topics; deleted attachments are in TrashAttachment." args="<b><nop>%WEB%</b>"}%
 
 %SEARCH{".*" web="%INCLUDINGWEB%" regex="on" nototal="on" nosearch="on" order="modified" limit="15"}%
 [[WebChanges][%MAKETEXT{"more..."}%]]
