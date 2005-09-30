@@ -1,11 +1,11 @@
-# translation of es_MX.po to (mexican) spanish
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# TWiki translation for Spanish
+# This file is distributed under the same license as TWiki itself
+# Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
 # Will Norris
 msgid ""
 msgstr ""
-"Project-Id-Version: es_MX\n"
+"Project-Id-Version: TWiki $Id\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
