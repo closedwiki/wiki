@@ -1,6 +1,6 @@
 %TMPL:INCLUDE{"twiki"}%
 %TMPL:DEF{"focus"}%
-  document.main.text.focus();
+  if (document.main.text) document.main.text.focus();
 %TMPL:END%
 %TMPL:DEF{"script"}%
 <script type="text/javascript">

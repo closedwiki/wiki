@@ -16,7 +16,7 @@
 	}
 	
 	function initForm() {
-		document.main.text.focus();
+		if (document.main.text) document.main.text.focus();
 		for (i = 0; i < toShow.length; i++) {
 			if(dom) {
 				document.getElementById(toShow[i]).style.display="inline";
