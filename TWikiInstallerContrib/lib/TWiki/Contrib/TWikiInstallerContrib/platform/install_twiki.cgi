@@ -41,6 +41,7 @@ my $administrator;
 my $WIKIWEBMASTER;
 my $q;	# CGI object
 my $install_cgi;
+my $LocalSiteCfg;
 
 ################################################################################
 
@@ -188,37 +189,11 @@ if ( $tar =~ /^LATEST$/i ) {
 
 installTWikiExtension({ file => "../downloads/kernels/$tar.zip", name => 'TWiki', dir => "downloads/kernels", cdinto => 'twiki', mapDirs => $mapTWikiDirs });
 
-#--------------------------------------------------------------------------------
-# update LocalSite.cfg for local directories configuration
-print $q->h2( 'LocalSite.cfg' );
-
-# normalise pathnames (Sandbox.pm doesn't like .. in pathnames!)
-foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
-{
-    $localDirConfig->{ $dir } = abs_path( $localDirConfig->{ $dir } );
-}
-
-{ # write LocalSite.cfg
-    my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
-    open(FH, ">$file") or die "Can't open $file: $!";
-    foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir LocalesDir ) )
-    {
-	print FH qq{\$TWiki::cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
-    }
-#    print FH qq{\$TWiki::cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
-    print FH qq{\$TWiki::cfg{Regsiter}{HidePasswd} = 1;\n};
-    print FH qq{\$TWiki::cfg{AutoAttachPubFiles} = 1;\n};
-    print FH qq{\$TWiki::cfg{EnableHierarchicalWebs} = 1;\n};
-    print FH qq{\$TWiki::cfg{LoginManager} = 'TWiki::Client::TemplateLogin';\n};
-
-    close( FH ) or die "Can't close $file: $! ???";
-}
-
 { # write LocalLib.cfg
     my $file = "$mapTWikiDirs->{bin}->{dest}/LocalLib.cfg";
     open( FH, ">$file" ) or die "Can't open $file: $!";
     print FH <<'__LOCALLIB_CFG__';
-use vars qw( $twikiLibPath $CPANBASE );
+use vars qw( $twikiLibPath );
 
 # SMELL: duplicated code from bin/setlib.cfg
 use Cwd qw( abs_path );
@@ -258,7 +233,36 @@ foreach my $iType ( @types )
 	$ExtS->{file} ||= "../$iType->{dir}/$name.zip";
 	
 	installTWikiExtension({ file => $ExtS->{file}, name => $name, dir => $iType->{dir}, mapDirs => $mapTWikiDirs });
+	$LocalSiteCfg .= qq{\$TWiki::cfg{Plugins}{$name}{Enabled} = 1;\n};
     }
+}
+
+#--------------------------------------------------------------------------------
+# update LocalSite.cfg for local directories configuration
+print $q->h2( 'LocalSite.cfg' );
+
+# normalise pathnames (Sandbox.pm doesn't like .. in pathnames!)
+foreach my $dir ( qw( PubDir TemplateDir DataDir LogDir LocalesDir ) )
+{
+    $localDirConfig->{ $dir } = abs_path( $localDirConfig->{ $dir } );
+}
+
+{ # write LocalSite.cfg
+    foreach my $localSiteEntry ( qw( DefaultUrlHost ScriptUrlPath ScriptSuffix PubUrlPath PubDir TemplateDir DataDir LogDir LocalesDir ) )
+    {
+	$LocalSiteCfg .= qq{\$TWiki::cfg{$localSiteEntry} = "$localDirConfig->{$localSiteEntry}";\n};
+    }
+#    $LocalSiteCfg .= qq{\$TWiki::cfg{Htpasswd}{FileName} = "$cfg{DataDir}/.htpasswd";\n};
+    $LocalSiteCfg .= qq{\$TWiki::cfg{Regsiter}{HidePasswd} = 1;\n};
+    $LocalSiteCfg .= qq{\$TWiki::cfg{AutoAttachPubFiles} = 1;\n};
+    $LocalSiteCfg .= qq{\$TWiki::cfg{EnableHierarchicalWebs} = 1;\n};
+    $LocalSiteCfg .= qq{\$TWiki::cfg{LoginManager} = 'TWiki::Client::TemplateLogin';\n};
+    $LocalSiteCfg .= qq{\$TWiki::cfg{WarningsAreErrors} = 1;\n};
+
+    my $file = "$mapTWikiDirs->{lib}->{dest}/LocalSite.cfg";
+    open(FH, ">$file") or die "Can't open $file: $!";
+    print FH $LocalSiteCfg;
+    close( FH ) or die "Can't close $file: $! ???";
 }
 
 ################################################################################
