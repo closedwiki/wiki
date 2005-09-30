@@ -11,8 +11,7 @@
 	C2	red hover link background color 											#D6000F 
 	C3	link label hover color														#FCF5DF
 	C4	
-	C5	header color																#
-	
+	C5	header color																#a00
 	C6	grayed out text																#8E9195
 	C7	
 	C8	dark gray text																#666
@@ -799,7 +798,7 @@ td.patternToolBar {
 }
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
-	color:#D6000F; /*C2*/
+	color:#666; /*C8*/
 	text-decoration:none;
 }
 .patternToolBar .patternButton s,
@@ -825,7 +824,7 @@ td.patternToolBar {
 .patternToolBar a:link .twikiAccessKey,
 .patternToolBar a:visited .twikiAccessKey {
 	color:inherit;
-	border-color:#D6000F; /*C2*/
+	border-color:#666; /*C8*/
 }
 .patternToolBar a:hover .twikiAccessKey {
 	background-color:transparent;
