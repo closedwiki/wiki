@@ -45,8 +45,9 @@ function initForm() {
 
 
 
-%TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage" onload="initForm()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+%TMPL:DEF{"bodystart"}%<body class="patternNoViewPage" onload="initForm()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+
+
 
 %TMPL:DEF{"titleaction"}%%_{"(set preferences)"}% %TMPL:END%
 
@@ -55,8 +56,10 @@ function initForm() {
 %TMPL:DEF{"webaction"}%%_{"Preferences for"}%%TMPL:END%
 
 
+
 %TMPL:DEF{"simpleheader"}%
 ---+ %TMPL:P{"webaction"}% %TOPIC% %TMPL:END%
+
 
 
 %TMPL:DEF{"topicactionbuttons"}%
@@ -64,9 +67,11 @@ function initForm() {
 %TMPL:END%
 
 
-%TMPL:DEF{"content"}%
-%TMPL:P{"simpleheader"}%<div class="patternFormHolder"><form method="post" name="main" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 
+%TMPL:DEF{"content"}%
+%TMPL:P{"simpleheader"}%
+<div class="patternFormHolder">
+<form method="post" name="main" action="%SCRIPTURLPATH%/manage%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
 <div class="twikiEditTextarea">
 <input type="hidden" name="action" value="saveSettings" />
 <input type="hidden" name="originalrev" value="%ORIGINALREV%" />
