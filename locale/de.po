@@ -2667,6 +2667,14 @@ msgstr "abgefragt um %1 GMT"
 msgid "view"
 msgstr "Ansehen"
 
+#: templates/attach.pattern.tmpl:69
+msgid "Upload up to %ATTACHFILESIZELIMIT% KB."
+msgstr ""
+
+#: templates/attachagain.pattern.tmpl:19
+msgid "Update file %1"
+msgstr ""
+
 #~ msgid ""
 #~ "Your language will be changed to %1 from the next screen. [[%2][Click "
 #~ "here]] to proceed."

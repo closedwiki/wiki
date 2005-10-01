@@ -24,7 +24,7 @@
 	C15 somewhat smaller font size													94%
 	C16 
 	C17 text color																	#000
-	C18	neutral gray; hr, table borders, textarea, input, select borders			#ccc
+	C18	neutral gray; hr, borders of table, textarea, input, select					#ccc
 	C19	
 	C20	
 	C21	
@@ -307,7 +307,7 @@ th.twikiSortedDescendingCol a:hover {
 	border-spacing:0px;
 	empty-cells:show;
 	border:0px;
-	font-size:95%;
+	font-size:94%; /*C15*/
 	background-color:#fff; /*C23*/
 	border-top:1px solid #ccc; /*C18*/
 	border-right:1px solid #ccc; /*C18*/
@@ -401,6 +401,11 @@ th.twikiSortedDescendingCol a:hover {
 .twikiAttachments th.twikiSortedAscendingCol a:hover,
 .twikiAttachments th.twikiSortedDescendingCol a:hover {
 	background-color:transparent;
+}
+.twikiForm table table,
+.twikiForm table table th,
+.twikiForm table table td {
+	border:none;
 }
 
 /**	----------------------------------
@@ -517,7 +522,9 @@ a:hover .twikiAccessKey {
 	border:none;
 	color:inherit;
 }
-
+.twikiTwistPlaceholder {
+	color:#8E9195; /*C6*/
+}
 
 /*	-----------------------------------------------------------
 	Other styles
@@ -543,7 +550,7 @@ a:hover .twikiAccessKey {
 	font-size:94%; /*C15*/
 	line-height:1.5em;
 	color:#666; /*C8*/
-	margin:0 0 2em 0;
+	margin:0 0 3em 0;
 	background-color:#FBF7E8;
 	padding:.5em 2em;
 	border-top:1px solid #E2DCC8; /*C4*/
@@ -552,13 +559,13 @@ a:hover .twikiAccessKey {
 .patternTopicAction .twikiSeparator {
 	color:#aaa;
 }
-.patternTopicAction .patternActionButtons a:link,
-.patternTopicAction .patternActionButtons a:visited {
+.patternActionButtons a:link,
+.patternActionButtons a:visited {
 	text-decoration:none;
 	padding:1px 1px 2px 1px;
 	color:#D6000F; /*C2*/
 }
-.patternTopicAction .patternActionButtons a:hover {
+.patternActionButtons a:hover {
 	color:#FCF5DF; /*C3*/
 }
 .patternTopicAction .twikiAccessKey {
@@ -697,7 +704,7 @@ a:hover .twikiAccessKey {
 	border-collapse:collapse;
 	empty-cells:show;
 	border:1px solid #ccc;
-	margin:1em 0 2em 0;
+	margin:1em 0;
 	font-size:94%; /*C15*/
 }
 .patternVersatileTable th,
@@ -711,7 +718,7 @@ a:hover .twikiAccessKey {
 	background-color:#fff;
 }
 .patternVersatileTable th {
-	background-color:#efefef;
+	background-color:#eee; /*C13*/
 }
 .patternVersatileTable td.patternMainCol {
 	background-color:#E6F5D3;
@@ -894,6 +901,7 @@ td.patternToolBar {
 /* Attach page */
 
 .patternAttachPage .patternVersatileTable table {
+	margin-bottom:0;
 	width:auto;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
@@ -902,8 +910,14 @@ td.patternToolBar {
 .patternAttachPage .patternVersatileTable th {
 	text-align:right;
 }
-.patternMoveAttachment {
-	display:table;
+.patternPrevious {
+	margin:1em 0;
+}
+#moveattachment {
+	font-size:94%; /*C15*/
+}
+.patternPrevious table {
+	width:auto;
 }
 
 /* Rename page */
@@ -984,7 +998,7 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 }
 .patternSearchResultCount {
 	margin:.25em 0 1.5em 0;
-	font-size:95%;
+	font-size:94%; /*C15*/
 }
 .patternViewPage .patternSearchResultsBegin { /* for changes template with noheader="on" */
 	height:1px;

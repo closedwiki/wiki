@@ -2450,6 +2450,14 @@ msgstr ""
 msgid "view"
 msgstr "vea"
 
+#: templates/attach.pattern.tmpl:69
+msgid "Upload up to %ATTACHFILESIZELIMIT% KB."
+msgstr ""
+
+#: templates/attachagain.pattern.tmpl:19
+msgid "Update file %1"
+msgstr ""
+
 #~ msgid "%1 - Registration for %2"
 #~ msgstr "%1 - Registro de %2"
 

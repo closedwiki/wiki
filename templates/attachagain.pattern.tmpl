@@ -16,9 +16,12 @@
 
 
 %TMPL:DEF{"previousdetails"}%
----++ %{"Update file <span class="twikiTitle">%FILENAME%</span>"}%
+---++ %_{"Update file [_1]", "%FILENAME%"}%
+
 <div class="patternPrevious"><div class="twikiAttachments">
-%ATTACHTABLE%</div></div> %TMPL:END%
+%ATTACHTABLE% </div></div>
+<div id="moveattachment" class="patternActionButtons"><a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%_{"Move attachment..."}%</a></div>
+%TMPL:END%
 
 
 
@@ -39,22 +42,19 @@
   <td class="patternOldCol">
    <code>%FILEPATH%</code> <span class="twikiGrayText">%TMPL:P{"fileuser"}%</span>
   </td>
-  <td class="patternHelpCol patternOldCol">%_{"Select a new local file to update this attachment."}%</td>
+  <td class="patternHelpCol">%_{"Select a new local file to update this attachment."}%</td>
  </tr>%TMPL:END%
+
+
 
 %TMPL:DEF{"extranotes"}%
    * %_{"*Properties:* The comment and visibility (i.e. is attachment hidden) can be changed without uploading a file by pressing \"Change Properties\"; see [_1]." , "<a target=\"HiddenAttachment\" onclick=\"return launchWindow('%TWIKIWEB%','HiddenAttachment')\" href=\"%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/HiddenAttachment\" rel='nofollow'>HiddenAttachment</a>"}%
    * %_{"*Change comment:* If you use _Change Properties_ to change a comment, the comment shown in the topic will change, but the comment shown against the attachment history will be the comment when the file was uploaded."}%
-   * %_{"*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."}%
-%TMPL:END%
+   * %_{"*Local file:* If you select a different file in _Local file:_, it is this that will be updated or added."}% %TMPL:END%
 
 
 
-%TMPL:DEF{"topicactionbuttons"}%
-<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%
-<br />
-<a href="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%?attachment=%FILENAME%" rel='nofollow'>%_{"Move attachment..."}%</a>
-%TMPL:END%
+%TMPL:DEF{"topicactionbuttons"}%<input type="submit" class="twikiSubmit" value='%_{"Upload file"}%' /> %_{"or"}% %TMPL:P{"canceltopicaction"}%%TMPL:END%
 
 
 
