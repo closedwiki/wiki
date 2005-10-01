@@ -25,9 +25,35 @@
 
 
 
+%TMPL:DEF{"pagetitle"}%
+---+ %_{"Move or Delete File [_1]", "<code>%FILENAME%</code>"}%
+%TMPL:END%
+
+
+
+%TMPL:DEF{"toweb"}%
+<tr>
+<th>%_{"To web:"}%</th>
+<td class="patternMainCol"><select name="newweb" onchange="if (document.rename.newweb.value == 'Trash') { document.rename.newtopic.value = 'TrashAttachment'; }"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%WEB%" separator=" "}%  </select></td>
+<td class="patternMainCol patternHelpCol">%TMPL:P{"movewebhelp"}%</td>
+</tr>
+%TMPL:END%
+
+
+
+%TMPL:DEF{"totopic"}%
+<tr>
+<th>%_{"Topic name:"}%</th>
+<td class="patternMainCol"><input name="newtopic" value="%TOPIC%" /></td>
+<td class="patternMainCol patternHelpCol">%TMPL:P{"namehelp"}%</td>
+</tr>
+%TMPL:END%
+
+
+
 %TMPL:DEF{"content"}%
 <form name="rename" action="%SCRIPTURLPATH%/rename%SCRIPTSUFFIX%/%WEB%/%TOPIC%">
----+ %_{"Move or Delete File [_1]", "<code>%FILENAME%</code>"}%
+%TMPL:P{"pagetitle"}%
 <div class="patternVersatileTable">
 <table>
 <tr>
@@ -35,21 +61,12 @@
 <td class="patternOldCol"><b><nop>%WEB%.%TOPIC%</b></td>
 <td class="patternOldCol patternHelpCol"></td>
 </tr>
-<tr>
-<th>%_{"To web:"}%</th>
-<td class="patternMainCol"><select name="newweb"> %WEBLIST{"<option $marker value=$qname>$name</option>" webs="%TRASHWEB%,public" selection="%WEB%" separator=" "}% </select></td>
-<td class="patternMainCol patternHelpCol">%TMPL:P{"movewebhelp"}%</td>
-</tr>
-<tr>
-<th>%_{"Topic name:"}%</th>
-<td class="patternMainCol"><input name="newtopic" value="%TOPIC%" /></td>
-<td class="patternMainCol patternHelpCol">%TMPL:P{"namehelp"}%</td>
-</tr>
+%TMPL:P{"toweb"}%
+%TMPL:P{"totopic"}%
 </table>
 </div>
 <input type="hidden" name="attachment" value="%FILENAME%" />
 <div class="twikiHelp">
-*%_{"Note:"}%*
    * %_{"The attachment and any history will be moved to the new topic."}%
    * %_{"An error page will be shown if either of the topics are locked by another user."}%
    * %_{"Note that any URLs that refer to the attachment will be broken after this move."}%

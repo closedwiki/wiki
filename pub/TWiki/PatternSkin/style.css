@@ -120,7 +120,7 @@ h3 { font-size:125%;}
 h4 { font-size:118%;}
 h5 { font-size:110%;}
 h6 { font-size:100%;}
-h2 {
+.patternTopic h2 {
 	display:block;
 	font-weight:600;
 	border-bottom:1px solid #E2DCC8; /*C4*/
