@@ -8,7 +8,7 @@ If you forget your password, %TWIKIWEB%.ResetPassword will get a new one sent to
 Note that there are four default system users:
 	* !TWikiContributor is a placeholder for a TWiki developer, and is used in TWiki documentation
 	* !TWikiGuest is a guest user. This is used as a fallback if the user can't be identified.
-	* !TWikiRegsitrationAgent is a special user used during the new user registration process.
+	* !TWikiRegistrationAgent is a special user used during the new user registration process.
 	* !UnknownUser is used where the author of a previously stored piece of data can't be determined.
 
 %INCLUDE{"UserListHeader"}%
@@ -39,7 +39,7 @@ Note that there are four default system users:
 	* T - <a name="T">- - - -</a>
 	* TWikiContributor - 1 Jan 2005
 	* TWikiGuest - guest - 10 Feb 1999
-	* TWikiRegsitrationAgent - 1 Jan 2005
+	* TWikiRegistrationAgent - 1 Jan 2005
 	* U - <a name="U">- - - -</a>
 	* UnknownUser - 1 Jan 2005
 	* V - <a name="V">- - - -</a>
