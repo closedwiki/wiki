@@ -173,7 +173,7 @@ msgstr "(Use um nome de tópico na TWiki.WikiNotation)"
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
 msgstr "(__Sugestão:__ Que tal anexar uma foto sua ao seu tópico?)"
 
-#: templates/attach.pattern.tmpl:28
+#: templates/attach.pattern.tmpl:137
 msgid "(attach)"
 msgstr "(anexar)"
 
@@ -189,7 +189,7 @@ msgstr "(referências em todas as webs)"
 msgid "(change form)"
 msgstr "(alterar formulário)"
 
-#: templates/oopschangelanguage.tmpl:2
+#: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
 msgid "(change language)"
 msgstr "(alterar idioma)"
 
@@ -202,15 +202,15 @@ msgstr "(alterações)"
 msgid "(delete)"
 msgstr "(remover)"
 
-#: templates/editform.pattern.tmpl:6
+#: templates/editform.pattern.tmpl:8
 msgid "(edit form)"
 msgstr "(editar formulário)"
 
-#: templates/edittext.pattern.tmpl:5
+#: templates/edittext.pattern.tmpl:4
 msgid "(edit text)"
 msgstr "(editar texto)"
 
-#: templates/edit.pattern.tmpl:198 templates/edit.pattern.tmpl:211
+#: templates/edit.pattern.tmpl:200 templates/edit.pattern.tmpl:213
 msgid "(edit)"
 msgstr "(editar)"
 
@@ -253,7 +253,7 @@ msgstr "(resultados da busca)"
 msgid "(semicolon =;= for and)"
 msgstr "(ponto-e-vírgula =;= para *e*)"
 
-#: templates/settings.pattern.tmpl:51
+#: templates/settings.pattern.tmpl:52
 msgid "(set preferences)"
 msgstr "(configurar preferências)"
 
@@ -265,7 +265,7 @@ msgstr "(primeiro nome com um caractere só)"
 msgid "(single character last name)"
 msgstr "(último nome com um caractere só)"
 
-#: templates/attach.pattern.tmpl:39
+#: templates/attach.pattern.tmpl:162
 msgid ""
 "*Bug:* Internet Explorer 4.0 or earlier: If you get an \"Internal Server "
 "Error\" message when you upload a file, you need to try again. It should "
@@ -275,7 +275,7 @@ msgstr ""
 "\"Internal Server Error\" ao subir um arquivo, você precisa tentar de novo. "
 "Deve funcionar da segunda vez."
 
-#: templates/attachagain.pattern.tmpl:47
+#: templates/attachagain.pattern.tmpl:52
 msgid ""
 "*Change comment:* If you use _Change Properties_ to change a comment, the "
 "comment shown in the topic will change, but the comment shown against the "
@@ -285,7 +285,7 @@ msgstr ""
 "o comentário exibido no tópico vai mudar, mas o comentário exibido no "
 "histórico do anexo vai ser o comentário de quando o arquivo foi enviado."
 
-#: templates/attach.pattern.tmpl:38
+#: templates/attach.pattern.tmpl:161
 msgid ""
 "*Help:* Please see %TWIKIWEB%.FileAttachment for more information about "
 "attaching files."
@@ -293,7 +293,7 @@ msgstr ""
 "*Ajuda:* Por favor veja %TWIKIWEB%.FileAttachment para maiores informações "
 "sobre anexar arquivos."
 
-#: templates/attachagain.pattern.tmpl:48
+#: templates/attachagain.pattern.tmpl:53
 msgid ""
 "*Local file:* If you select a different file in _Local file:_, it is this "
 "that will be updated or added."
@@ -301,7 +301,7 @@ msgstr ""
 "*Arquivo local:* se você selecionar um arquivo diferente em _Arquivo local_,"
 "será esse arquivo que será alterado ou adicionado."
 
-#: templates/attachagain.pattern.tmpl:46
+#: templates/attachagain.pattern.tmpl:51
 msgid ""
 "*Properties:* The comment and visibility (i.e. is attachment hidden) can be "
 "changed without uploading a file by pressing \"Change Properties\"; see %1."
@@ -389,7 +389,7 @@ msgstr "Acesso negado"
 msgid "Access check on %1 failed"
 msgstr "Checagem de acesso a %1 falhou"
 
-#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:51
+#: templates/edit.pattern.tmpl:220 templates/preview.pattern.tmpl:51
 msgid "Access keys"
 msgstr "Teclas de atalho"
 
@@ -460,7 +460,7 @@ msgstr ""
 "Um endereço de e-mail é necessário para que a senha possa ser reiniciada.a "
 "senha)"
 
-#: templates/moveattachment.pattern.tmpl:54
+#: templates/moveattachment.pattern.tmpl:71
 msgid ""
 "An error page will be shown if either of the topics are locked by another "
 "user."
@@ -490,7 +490,7 @@ msgstr "Anexar uma imagem ou documento a este tópico"
 msgid "Attach file to topic %1"
 msgstr "Anexar uma imagem ou documento a %1"
 
-#: templates/attach.pattern.tmpl:33
+#: templates/attach.pattern.tmpl:142
 msgid "Attach image or document on %1"
 msgstr "Anexar uma imagem ou documento a %1"
 
@@ -514,7 +514,7 @@ msgstr "O anexo não existe"
 msgid "Attachment move failed"
 msgstr "Mover anexo falhou"
 
-#: templates/attach.pattern.tmpl:99
+#: templates/attach.pattern.tmpl:225
 msgid "Attachments will not be shown in topic view page."
 msgstr "Anexos não serão exibidos na página de visualização do tópico."
 
@@ -581,11 +581,11 @@ msgstr ""
 "Não foi possível obter um endereço de e-mail para %1 (necessário para "
 "reiniciar a senha)"
 
-#: templates/changeform.pattern.tmpl:18 templates/edit.pattern.tmpl:218
+#: templates/changeform.pattern.tmpl:18 templates/edit.pattern.tmpl:220
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:220
 msgid "Cancel editing and discard changes"
 msgstr "Cancelar edição e descartar alterações"
 
@@ -619,14 +619,14 @@ msgstr ""
 msgid "Change form"
 msgstr "Alterar formulário"
 
-#: templates/moveattachment.pattern.tmpl:34
+#: templates/moveattachment.pattern.tmpl:60
 #: templates/renamebase.pattern.tmpl:47
 #: templates/renamewebbase.pattern.tmpl:47
 msgid "Change from:"
 msgstr "Alterar de:"
 
 #: templates/oopschangelanguage.tmpl:23 templates/oopschangelanguage.tmpl:4
-#: templates/twiki.pattern.tmpl:208
+#: templates/oopslanguagechanged.tmpl:4 templates/twiki.pattern.tmpl:208
 msgid "Change language"
 msgstr "Alterar idioma"
 
@@ -640,11 +640,11 @@ msgstr "Alterar links em tópicos que façam referência a %1 em qualquer Web:"
 msgid "Change links in topics that refer to %1 in the %2 Web:"
 msgstr "Alterar links em tópicos que façam referência a %1 na Web %2:"
 
-#: templates/attachagain.pattern.tmpl:29
+#: templates/attachagain.pattern.tmpl:32
 msgid "Change properties only"
 msgstr "Apenas alterar propriedades"
 
-#: templates/edit.pattern.tmpl:206
+#: templates/edit.pattern.tmpl:208
 msgid "Change topic"
 msgstr "Alterar tópico"
 
@@ -666,7 +666,7 @@ msgstr "Alterado:"
 msgid "Changes"
 msgstr "Alterações"
 
-#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:48
+#: templates/edit.pattern.tmpl:220 templates/preview.pattern.tmpl:48
 #: templates/preview.pattern.tmpl:51
 msgid "Checkpoint"
 msgstr "Checkpoint"
@@ -704,7 +704,7 @@ msgstr ""
 msgid "Color %1 has an invalid format"
 msgstr "A cor %1 tem um formato inválido"
 
-#: templates/attach.pattern.tmpl:74 templates/attachtables.pattern.tmpl:45
+#: templates/attach.pattern.tmpl:200 templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
 msgid "Comment"
 msgstr "Comentário"
@@ -759,7 +759,7 @@ msgstr "Criar(&e)"
 msgid "Create <nop>TestTopic###"
 msgstr "Criar <nop>TestTopic###"
 
-#: templates/attach.pattern.tmpl:86
+#: templates/attach.pattern.tmpl:212
 msgid "Create a link to the attached file"
 msgstr "Criar um link para o arquivo anexado"
 
@@ -800,6 +800,7 @@ msgstr "Data"
 msgid "Dear %1"
 msgstr "Caro %1"
 
+#: templates/attachagain.pattern.tmpl:23
 #: templates/renameconfirm.pattern.tmpl:21
 #: templates/renamedelete.pattern.tmpl:40
 #: templates/renamedelete.pattern.tmpl:9
@@ -847,7 +848,7 @@ msgstr "Diferenças"
 msgid "Discard"
 msgstr "Descartar"
 
-#: templates/attach.pattern.tmpl:97
+#: templates/attach.pattern.tmpl:223
 msgid "Do not show attachment in table"
 msgstr "Não mostrar o anexo na tabela"
 
@@ -899,7 +900,7 @@ msgstr ""
 "Um erro foi encontrado pelo sistema de controle de versões ao salvar o "
 "arquivo %1. Por favor, notifique o administrador do %2."
 
-#: templates/settings.pattern.tmpl:81
+#: templates/settings.pattern.tmpl:86
 msgid "Each preference has the syntax"
 msgstr "Cada preferência tem a sintaxe"
 
@@ -961,7 +962,7 @@ msgstr ""
 msgid "Error: Unsupported protocol. (Must be 'http://domain/...')"
 msgstr "Erro: protocolo não suportado. (Deveria ser 'http://domínio/...')"
 
-#: templates/attach.pattern.tmpl:45
+#: templates/attach.pattern.tmpl:167
 msgid "Existing attachments"
 msgstr "Anexos existentes"
 
@@ -990,7 +991,7 @@ msgstr ""
 "Procurar tópicos <a href='%1' title='Procurar na web %2 por tópicos que "
 "façam link pra cá' accesskey='w'>na &web %2 </a> que façam link pra %3"
 
-#: templates/edit.pattern.tmpl:216 templates/preview.pattern.tmpl:46
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:46
 msgid "Force new revision"
 msgstr "Forçar nova revisão"
 
@@ -1012,7 +1013,7 @@ msgstr ""
 "('%TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Renomear e "
 "mover tópicos</a>."
 
-#: templates/settings.pattern.tmpl:80
+#: templates/settings.pattern.tmpl:85
 msgid ""
 "Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
 "TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Setting topic "
@@ -1049,13 +1050,17 @@ msgstr "Olá %1!"
 msgid "Help"
 msgstr "Ajuda"
 
-#: templates/attach.pattern.tmpl:94
+#: templates/attach.pattern.tmpl:220
 msgid "Hide file"
 msgstr "Esconder arquivo"
 
-#: templates/edit.pattern.tmpl:179
+#: templates/edit.pattern.tmpl:181
 msgid "Hide formatting help"
 msgstr "Esconder ajuda sobre formatação"
+
+#: templates/attach.pattern.tmpl:150
+msgid "Hide help"
+msgstr "Esconder ajuda"
 
 #: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
 #: data/TWiki/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:7
@@ -1143,7 +1148,7 @@ msgstr "Se você quiser criar essa esta página:"
 msgid "If you would like to create this web"
 msgstr "Se você quiser criar essa web"
 
-#: templates/attach.pattern.tmpl:89
+#: templates/attach.pattern.tmpl:215
 msgid "Images will be displayed, for other attachments a link will be created."
 msgstr "Imagens serão exibidas, para outros anexos um link será criado."
 
@@ -1237,7 +1242,7 @@ msgstr "Linha: %1"
 msgid "Line: %1 to %2"
 msgstr "Linha: %1 até %2"
 
-#: templates/attach.pattern.tmpl:83
+#: templates/attach.pattern.tmpl:209
 msgid "Link"
 msgstr "Link"
 
@@ -1249,7 +1254,7 @@ msgstr "Listar todos os tópicos na web %1 em ordem alfabética"
 msgid "List topics that start with the letter:"
 msgstr "Listar tópicos que comecem com a letra:"
 
-#: templates/attach.pattern.tmpl:63
+#: templates/attach.pattern.tmpl:189
 msgid "Local file"
 msgstr "Arquivo local"
 
@@ -1302,19 +1307,16 @@ msgstr "Mais ações sobre o tópico %1"
 msgid "More topic actions..."
 msgstr "Mais ações de tópico..."
 
+#: templates/attachagain.pattern.tmpl:23
 #: templates/moveattachment.pattern.tmpl:16
 msgid "Move"
 msgstr "Mover"
-
-#: templates/attachagain.pattern.tmpl:56
-msgid "Move attachment..."
-msgstr "Mover anexo..."
 
 #: templates/moveattachment.pattern.tmpl:7
 msgid "Move file attachment"
 msgstr "Mover arquivo anexo"
 
-#: templates/moveattachment.pattern.tmpl:30
+#: templates/moveattachment.pattern.tmpl:29
 msgid "Move or Delete File %1"
 msgstr "Mover ou Remover arquivo %1"
 
@@ -1374,16 +1376,16 @@ msgstr "Sem permissão para visualizar %1"
 msgid "No users to reset passwords for."
 msgstr "Nenhum usuário para reiniciar senha."
 
-#: templates/moveattachment.pattern.tmpl:55
+#: templates/moveattachment.pattern.tmpl:72
 msgid ""
 "Note that any URLs that refer to the attachment will be broken after this "
 "move."
 msgstr ""
 "Note que quaisquer URLs que se refiram ao anexo vão quebrar depois de mover."
 
-#: templates/moveattachment.pattern.tmpl:52 templates/registerconfirm.tmpl:13
-#: templates/registernotify.tmpl:22 templates/renamebase.pattern.tmpl:80
-#: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:79
+#: templates/registerconfirm.tmpl:13 templates/registernotify.tmpl:22
+#: templates/renamebase.pattern.tmpl:80
+#: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:84
 msgid "Note:"
 msgstr "Notas:"
 
@@ -1410,7 +1412,8 @@ msgid "Number of topics:"
 msgstr "Número de tópicos:"
 
 #: templates/oopsaccessdenied.pattern.tmpl:5 templates/oopsaccessdenied.tmpl:6
-#: templates/oopssaveerr.pattern.tmpl:5 templates/oopssaveerr.tmpl:11
+#: templates/oopslanguagechanged.tmpl:5 templates/oopssaveerr.pattern.tmpl:5
+#: templates/oopssaveerr.tmpl:11
 msgid "OK"
 msgstr "OK"
 
@@ -1512,15 +1515,15 @@ msgstr "Possíveis modelos de formulário"
 msgid "Preferences"
 msgstr "Preferências"
 
-#: templates/settings.pattern.tmpl:55
+#: templates/settings.pattern.tmpl:56
 msgid "Preferences for"
 msgstr "Preferências para"
 
-#: templates/edit.pattern.tmpl:218
+#: templates/edit.pattern.tmpl:220
 msgid "Preview"
 msgstr "Pré-visualizar"
 
-#: templates/attachagain.pattern.tmpl:38
+#: templates/attachagain.pattern.tmpl:41
 msgid "Previous upload"
 msgstr "Upload anterior"
 
@@ -1528,11 +1531,11 @@ msgstr "Upload anterior"
 msgid "Printable version of this topic"
 msgstr "Versão imprimível deste tópico"
 
-#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:51
+#: templates/edit.pattern.tmpl:220 templates/preview.pattern.tmpl:51
 msgid "Quiet Save"
 msgstr "Salvar em silêncio"
 
-#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:48
+#: templates/edit.pattern.tmpl:220 templates/preview.pattern.tmpl:48
 msgid "QuietSave"
 msgstr "Salvar em silêncio"
 
@@ -1545,7 +1548,7 @@ msgstr ""
 "colaboração. Para aprender mais, leia o TWikiTutorial, que é acessível a "
 "partir do mesmo link."
 
-#: templates/edit.pattern.tmpl:216
+#: templates/edit.pattern.tmpl:218
 msgid "Read new revision help text in new window"
 msgstr "Ler ajuda sobre nova revisão numa nova janela"
 
@@ -1624,7 +1627,7 @@ msgstr "Revisão:"
 msgid "Revisions:"
 msgstr "Revisões:"
 
-#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:51
+#: templates/edit.pattern.tmpl:220 templates/preview.pattern.tmpl:51
 msgid "Save"
 msgstr "Salvar"
 
@@ -1694,7 +1697,7 @@ msgstr "Veja também o mais rápido %1"
 msgid "See also the verbose %1."
 msgstr "Veja também o mais detalhado %1."
 
-#: templates/attachagain.pattern.tmpl:42
+#: templates/attachagain.pattern.tmpl:45
 msgid "Select a new local file to update this attachment."
 msgstr "Selecione um novo arquivo local para alterar esse anexo."
 
@@ -1707,7 +1710,7 @@ msgstr "Selecionar todos"
 msgid "Select the %1 Web to delete the topic."
 msgstr "Selecione a Web %1 para remover o tópico."
 
-#: templates/edit.pattern.tmpl:237
+#: templates/edit.pattern.tmpl:239
 msgid "Select, copy and paste your signature text to the bottom of your entry"
 msgstr ""
 "Selecione, copie e cole o texto da sua assinatura no final da sua entrada"
@@ -1716,9 +1719,13 @@ msgstr ""
 msgid "Set new topic parent:"
 msgstr "Indicar novo tópico pai:"
 
-#: templates/edit.pattern.tmpl:179
+#: templates/edit.pattern.tmpl:181
 msgid "Show formatting help"
 msgstr "Exibir ajuda sobre formatação"
+
+#: templates/attach.pattern.tmpl:150
+msgid "Show help"
+msgstr "Exibir ajuda"
 
 #: data/TWiki/NewUserTemplate.txt:13
 msgid ""
@@ -1904,7 +1911,7 @@ msgstr ""
 msgid "The activation code %1 is invalid."
 msgstr "O código de ativação %1 é inválido."
 
-#: templates/moveattachment.pattern.tmpl:53
+#: templates/moveattachment.pattern.tmpl:70
 msgid "The attachment and any history will be moved to the new topic."
 msgstr "O anexo e seu histórico serão movidos para o novo tópico."
 
@@ -2124,7 +2131,7 @@ msgid "To see if they have finished their edit yet, click 'Try Again'."
 msgstr ""
 "Para ver se ele(a) já terminou de editar, clique em 'Tentar novamente'."
 
-#: templates/moveattachment.pattern.tmpl:39
+#: templates/moveattachment.pattern.tmpl:36
 #: templates/renamebase.pattern.tmpl:52
 msgid "To web:"
 msgstr "Para web:"
@@ -2143,7 +2150,7 @@ msgstr ""
 msgid "Topic name"
 msgstr "Nome do tópico"
 
-#: templates/moveattachment.pattern.tmpl:44
+#: templates/moveattachment.pattern.tmpl:46
 #: templates/renamebase.pattern.tmpl:57
 msgid "Topic name:"
 msgstr "Nome do tópico:"
@@ -2152,7 +2159,7 @@ msgstr "Nome do tópico:"
 msgid "Topic save error"
 msgstr "Erro ao salvar tópico"
 
-#: templates/edit.pattern.tmpl:183
+#: templates/edit.pattern.tmpl:185
 msgid "Topic settings"
 msgstr "Preferências do tópico"
 
@@ -2212,7 +2219,7 @@ msgstr "Usuário e/ou senha não reconhecidos"
 msgid "Unrecognized action command %1"
 msgstr "Comando de ação %1 não conhecido"
 
-#: templates/settings.pattern.tmpl:63
+#: templates/settings.pattern.tmpl:66
 msgid "Update"
 msgstr "Atualizar"
 
@@ -2220,13 +2227,21 @@ msgstr "Atualizar"
 msgid "Update attachment *%FILENAME%* on *%TOPIC%*"
 msgstr "Atualizar o anexo *%FILENAME%* em *%TOPIC%*"
 
+#: templates/attachagain.pattern.tmpl:19
+msgid "Update file %1"
+msgstr "Atualizar arquivo %1"
+
 #: templates/attachagain.pattern.tmpl:14
 msgid "Update image or document on %TOPIC%"
 msgstr "Upload de imagem ou documento em %TOPIC%"
 
-#: templates/attachagain.pattern.tmpl:54 templates/attachnew.pattern.tmpl:23
+#: templates/attachagain.pattern.tmpl:57 templates/attachnew.pattern.tmpl:23
 msgid "Upload file"
 msgstr "Upload de arquivo"
+
+#: templates/attach.pattern.tmpl:195
+msgid "Upload up to %1 KB."
+msgstr "Uploads até %1 KB."
 
 #: templates/oopsattention.tmpl:272
 msgid "Uploaded file %1 does not exist or is empty"
@@ -2460,6 +2475,14 @@ msgstr ""
 "ou clicar no link no seu e-mail ou colocar o código no campo abaixo. (Esse "
 "código é da forma \"SeuNome.xxxx\")"
 
+#: templates/oopslanguagechanged.tmpl:11
+msgid ""
+"Your language will be changed to %1 from the next screen. You will be "
+"redirected to there right now. If you aren't, [[%2][click here]] to proceed."
+msgstr ""
+"Seu idioma será alterado para %1 a partir da próxima tela. Você será "
+"redirecionado para lá agora. Se não for, [[%2][clique aqui]] para continuar."
+
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
 msgstr "Sua senha foi alterada para %1."
@@ -2471,7 +2494,7 @@ msgstr ""
 "Seu tópico pessoal %1 está localizado em %2. Você pode personalizá-lo da "
 "forma que preferir:"
 
-#: templates/edit.pattern.tmpl:237
+#: templates/edit.pattern.tmpl:239
 msgid "Your signature to copy/paste:"
 msgstr "Sua assinatura pra copiar e colar:"
 
@@ -2490,7 +2513,7 @@ msgstr ""
 msgid "[[%1][Search]] for similar topics in all public webs"
 msgstr "[[%1][Procure]] por tópicos semelhantes em todas as webs públicas"
 
-#: templates/settings.pattern.tmpl:82
+#: templates/settings.pattern.tmpl:87
 msgid ""
 "[multiple of 3 spaces] * [space] Set [space] VARIABLENAME [space] = [value]"
 msgstr ""
@@ -2543,7 +2566,7 @@ msgstr "checkboxes de tópicos referenciados"
 msgid "fields are required."
 msgstr "campos obrigatórios"
 
-#: templates/edit.pattern.tmpl:216 templates/preview.pattern.tmpl:46
+#: templates/edit.pattern.tmpl:218 templates/preview.pattern.tmpl:46
 msgid "help"
 msgstr "ajuda"
 
@@ -2579,8 +2602,8 @@ msgstr "nenhum (remover tópico pai)"
 msgid "now %1"
 msgstr "agora %1"
 
-#: templates/attachagain.pattern.tmpl:54 templates/attachnew.pattern.tmpl:23
-#: templates/changeform.pattern.tmpl:18 templates/edit.pattern.tmpl:218
+#: templates/attachagain.pattern.tmpl:57 templates/attachnew.pattern.tmpl:23
+#: templates/changeform.pattern.tmpl:18 templates/edit.pattern.tmpl:220
 #: templates/moveattachment.pattern.tmpl:16
 #: templates/oopsleaseconflict.pattern.tmpl:15
 #: templates/preview.pattern.tmpl:48 templates/rename.pattern.tmpl:31
@@ -2588,7 +2611,7 @@ msgstr "agora %1"
 #: templates/renamedelete.pattern.tmpl:40 templates/renameweb.pattern.tmpl:31
 #: templates/renamewebconfirm.pattern.tmpl:25
 #: templates/renamewebdelete.pattern.tmpl:40
-#: templates/settings.pattern.tmpl:63
+#: templates/settings.pattern.tmpl:66
 msgid "or"
 msgstr "ou"
 
@@ -2604,20 +2627,8 @@ msgstr "obtidos em %1"
 msgid "view"
 msgstr "ver"
 
-#: templates/attach.pattern.tmpl:69
-msgid "Upload up to %ATTACHFILESIZELIMIT% KB."
-msgstr ""
-
-#: templates/attachagain.pattern.tmpl:19
-msgid "Update file %1"
-msgstr ""
-
-#~ msgid ""
-#~ "Your language will be changed to %1 from the next screen. [[%2][Click "
-#~ "here]] to proceed."
-#~ msgstr ""
-#~ "Seu idioma será alterado para %1 a partir da próxima tela. [[%2][Clique "
-#~ "aqui]] para continuar."
+#~ msgid "Move attachment..."
+#~ msgstr "Mover anexo..."
 
 #~ msgid "%1 - Registration for %2"
 #~ msgstr "%1 - Registro de %2"
