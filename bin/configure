@@ -1044,7 +1044,6 @@ sub _showPlugins {
                                  readdir DIR ) {
                 my $module = $file;
                 $module =~ s/\.pm$//;
-                my $discovered = $libDir.'/'.$file;
                 $TWiki::cfg{Plugins}{$module}{Enabled} ||= 0;
                 $module =~ /^(.*)$/;    # untaint
                 $module = $1;
