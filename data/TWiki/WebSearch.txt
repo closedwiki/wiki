@@ -15,7 +15,7 @@
 </td>
 </tr>
 <tr>
-<th class="last">%MAKETEXT{"Search where:"}%</td>
+<th class="last">%MAKETEXT{"Search where:"}%</th>
 <td class="last">
 <input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label><br />
 <input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label><br />
