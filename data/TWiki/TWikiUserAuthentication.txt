@@ -26,7 +26,7 @@ As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager 
 
 ---++ New User Registration
 
-New user registration uses the password manager to set and change passwords. It is also responsible for the new user verification process. the registration process supports *single user registration* via the TWikiRegistration page, and *bulk user registration* via the BulkRegsitration page (for admins only).
+New user registration uses the password manager to set and change passwords. It is also responsible for the new user verification process. the registration process supports *single user registration* via the TWikiRegistration page, and *bulk user registration* via the BulkRegistration page (for admins only).
 
 The registration process is responsible for creating user topics.
 

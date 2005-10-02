@@ -47,7 +47,7 @@ AuthType Basic
 #AuthType Basic
 
 # File to return on access control error (e.g. wrong password)
-# By convention this is the TWikiRegsitration page, that allows users
+# By convention this is the TWikiRegistration page, that allows users
 # to register with the TWiki. Apache requires this to be a *local* path.
 ErrorDocument 401 {ScriptUrlPath}/view/TWiki/TWikiRegistration
 
