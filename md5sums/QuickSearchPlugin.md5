@@ -1,5 +1,5 @@
-f523cd829edf3b7cade067b9151f9a5f ./templates/quicksearch.tmpl
-2ce27ecf8bb1dc4d4ff8d706fe86bf85 ./lib/TWiki/Plugins/QuickSearchPlugin/MANIFEST
-3a9ec81147182f0cef42e482747eadc9 ./lib/TWiki/Plugins/QuickSearchPlugin.pm
-d50e64afb45370fd7b5c2be73f8a1b46 ./lib/TWiki/Plugins/QuickSearchPlugin/build.pl
-40517cd713d85e3ef3bdcb119897cb2c ./data/TWiki/QuickSearchPlugin.txt
+f523cd829edf3b7cade067b9151f9a5f  ./templates/quicksearch.tmpl
+2ce27ecf8bb1dc4d4ff8d706fe86bf85  ./lib/TWiki/Plugins/QuickSearchPlugin/MANIFEST
+3a9ec81147182f0cef42e482747eadc9  ./lib/TWiki/Plugins/QuickSearchPlugin.pm
+d50e64afb45370fd7b5c2be73f8a1b46  ./lib/TWiki/Plugins/QuickSearchPlugin/build.pl
+40517cd713d85e3ef3bdcb119897cb2c  ./data/TWiki/QuickSearchPlugin.txt

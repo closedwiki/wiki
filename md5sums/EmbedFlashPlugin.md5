@@ -1,6 +1,6 @@
-6760de6b6cf6b25fb53ca9febe8f4784 ./lib/TWiki/Plugins/EmbedFlashPlugin.pm
-58599c7da42c98f04b86c6f5375549ca ./lib/TWiki/Plugins/EmbedFlashPlugin/build.pl
-d3e4ff63aaf798acca6686bc37f22008 ./lib/TWiki/Plugins/EmbedFlashPlugin/MANIFEST
-3dc027a8b684722633abcd47c8202c4e ./pub/TWiki/EmbedFlashPlugin/sample.fla
-b806def6daee15cd6a4c282ef55a86a9 ./pub/TWiki/EmbedFlashPlugin/sample.swf
-f6a189021a3f9e7ad6436b386fde765f ./data/TWiki/EmbedFlashPlugin.txt
+6760de6b6cf6b25fb53ca9febe8f4784  ./lib/TWiki/Plugins/EmbedFlashPlugin.pm
+58599c7da42c98f04b86c6f5375549ca  ./lib/TWiki/Plugins/EmbedFlashPlugin/build.pl
+d3e4ff63aaf798acca6686bc37f22008  ./lib/TWiki/Plugins/EmbedFlashPlugin/MANIFEST
+3dc027a8b684722633abcd47c8202c4e  ./pub/TWiki/EmbedFlashPlugin/sample.fla
+b806def6daee15cd6a4c282ef55a86a9  ./pub/TWiki/EmbedFlashPlugin/sample.swf
+f6a189021a3f9e7ad6436b386fde765f  ./data/TWiki/EmbedFlashPlugin.txt

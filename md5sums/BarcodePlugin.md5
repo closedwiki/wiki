@@ -1,6 +1,6 @@
-733704b6bf7975066742f4d1541275a1 ./data/TWiki/BarcodePlugin.txt
-694634f0050423cb022019e2f2dbfd00 ./lib/TWiki/Plugins/BarcodePlugin.pm
-1fad064fd585f41df777e3ab095fbf4c ./lib/TWiki/Plugins/BarcodePlugin/build.pl
-a2261ccd526bf8d3af9c7588899c5736 ./pub/TWiki/BarcodePlugin/example_0.png
-cfa8e7b79d26dd1f91b67d62ae8c4686 ./lib/TWiki/Plugins/BarcodePlugin/MANIFEST
-5971fdfd75d9f4eef852140c84166394 ./pub/TWiki/BarcodePlugin/example_1.png
+733704b6bf7975066742f4d1541275a1  ./data/TWiki/BarcodePlugin.txt
+694634f0050423cb022019e2f2dbfd00  ./lib/TWiki/Plugins/BarcodePlugin.pm
+1fad064fd585f41df777e3ab095fbf4c  ./lib/TWiki/Plugins/BarcodePlugin/build.pl
+a2261ccd526bf8d3af9c7588899c5736  ./pub/TWiki/BarcodePlugin/example_0.png
+cfa8e7b79d26dd1f91b67d62ae8c4686  ./lib/TWiki/Plugins/BarcodePlugin/MANIFEST
+5971fdfd75d9f4eef852140c84166394  ./pub/TWiki/BarcodePlugin/example_1.png

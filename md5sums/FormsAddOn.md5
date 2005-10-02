@@ -1,6 +1,6 @@
-3120875ec2f9162ff482ac42df56766c ./data/TWiki/FormsAddOn.txt
-723da3c2a1bf0025d751ec220f3227f2 ./pub/TWiki/FormsAddOn/form_def.jpg
-f4af4bbbc93162272ff610c1132b57a2 ./templates/oopsfielderr.tmpl
-38f76383783eda2e3032f70dfd53f225 ./pub/TWiki/FormsAddOn/alternate_form.jpg
-1a098aaee915f0a98238e5c425740e2d ./pub/TWiki/FormsAddOn/form_edit.jpg
-41149c55949bdcdf841a6983d4842b0e ./FormsAddOn.patch
+3120875ec2f9162ff482ac42df56766c  ./data/TWiki/FormsAddOn.txt
+723da3c2a1bf0025d751ec220f3227f2  ./pub/TWiki/FormsAddOn/form_def.jpg
+f4af4bbbc93162272ff610c1132b57a2  ./templates/oopsfielderr.tmpl
+38f76383783eda2e3032f70dfd53f225  ./pub/TWiki/FormsAddOn/alternate_form.jpg
+1a098aaee915f0a98238e5c425740e2d  ./pub/TWiki/FormsAddOn/form_edit.jpg
+41149c55949bdcdf841a6983d4842b0e  ./FormsAddOn.patch

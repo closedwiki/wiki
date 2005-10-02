@@ -1,5 +1,5 @@
-2c215e1c757130555dec74ceaa9eb10e ./lib/TWiki/Plugins/PreferencesPlugin/build.pl
-7cd9f7aa03e16f8a4286237244638bdd ./data/TWiki/TWikiPreferencesForm.txt
-2eeadca61b516d32cf1f0c3fcadc3b20 ./lib/TWiki/Plugins/PreferencesPlugin/MANIFEST
-5ff527ad494a89dfe1c405354e13d60c ./lib/TWiki/Plugins/PreferencesPlugin.pm
-ce234ca807d1711dfcb4f116ca0b0676 ./data/TWiki/PreferencesPlugin.txt
+2c215e1c757130555dec74ceaa9eb10e  ./lib/TWiki/Plugins/PreferencesPlugin/build.pl
+7cd9f7aa03e16f8a4286237244638bdd  ./data/TWiki/TWikiPreferencesForm.txt
+2eeadca61b516d32cf1f0c3fcadc3b20  ./lib/TWiki/Plugins/PreferencesPlugin/MANIFEST
+5ff527ad494a89dfe1c405354e13d60c  ./lib/TWiki/Plugins/PreferencesPlugin.pm
+ce234ca807d1711dfcb4f116ca0b0676  ./data/TWiki/PreferencesPlugin.txt

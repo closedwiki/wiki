@@ -1,5 +1,5 @@
-fe697dfab68d335ff40d5039f0589692 ./lib/TWiki/Plugins/EmbedBibPlugin/MANIFEST
-c89f41cc8cdef4c338aa85a32cf8550a ./pub/TWiki/EmbedBibPlugin/sample.bib
-43b3bbd94e53cc356ecc61547d4f6d43 ./data/TWiki/EmbedBibPlugin.txt
-9a74bf6feaf24cd4cd7d1d9bff98758c ./lib/TWiki/Plugins/EmbedBibPlugin.pm
-a9a518e2745ce7c9049c1d969ba8637d ./lib/TWiki/Plugins/EmbedBibPlugin/build.pl
+fe697dfab68d335ff40d5039f0589692  ./lib/TWiki/Plugins/EmbedBibPlugin/MANIFEST
+c89f41cc8cdef4c338aa85a32cf8550a  ./pub/TWiki/EmbedBibPlugin/sample.bib
+43b3bbd94e53cc356ecc61547d4f6d43  ./data/TWiki/EmbedBibPlugin.txt
+9a74bf6feaf24cd4cd7d1d9bff98758c  ./lib/TWiki/Plugins/EmbedBibPlugin.pm
+a9a518e2745ce7c9049c1d969ba8637d  ./lib/TWiki/Plugins/EmbedBibPlugin/build.pl

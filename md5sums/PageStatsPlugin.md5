@@ -1,5 +1,5 @@
-b9d8bbe264f4d14056cda457187be753 ./lib/TWiki/Plugins/OoPlugin.pm
-ac939d8753e6275e11a964e8736e87b8 ./lib/TWiki/Plugins/PageStatsPlugin.pm
-14f52bb8c7743f5815158fb1d454ead3 ./lib/TWiki/Plugins/PageStatsPlugin/build.pl
-9bcce808d772251f2fb7c2138d128482 ./data/TWiki/PageStatsPlugin.txt
-37a5de9bd19609289f296311c4cc2d4b ./lib/TWiki/Plugins/PageStatsPlugin/MANIFEST
+b9d8bbe264f4d14056cda457187be753  ./lib/TWiki/Plugins/OoPlugin.pm
+ac939d8753e6275e11a964e8736e87b8  ./lib/TWiki/Plugins/PageStatsPlugin.pm
+14f52bb8c7743f5815158fb1d454ead3  ./lib/TWiki/Plugins/PageStatsPlugin/build.pl
+9bcce808d772251f2fb7c2138d128482  ./data/TWiki/PageStatsPlugin.txt
+37a5de9bd19609289f296311c4cc2d4b  ./lib/TWiki/Plugins/PageStatsPlugin/MANIFEST

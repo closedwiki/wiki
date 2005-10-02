@@ -1,5 +1,5 @@
-dcb4d4aeaaea35cf0779f529bbf3c839 ./pub/TWiki/ExifMetaDataPlugin/picture.jpg
-3feebe409aa458e539cf9222b896658e ./data/TWiki/ExifMetaDataPlugin.txt
-69d5f85ac119ff5f518f6a36fb5338e8 ./lib/TWiki/Plugins/ExifMetaDataPlugin/MANIFEST
-4c149e4cfffe22c48237959062137e51 ./lib/TWiki/Plugins/ExifMetaDataPlugin.pm
-d37f1da1931414f9f9c05925a4fe69cd ./lib/TWiki/Plugins/ExifMetaDataPlugin/build.pl
+dcb4d4aeaaea35cf0779f529bbf3c839  ./pub/TWiki/ExifMetaDataPlugin/picture.jpg
+3feebe409aa458e539cf9222b896658e  ./data/TWiki/ExifMetaDataPlugin.txt
+69d5f85ac119ff5f518f6a36fb5338e8  ./lib/TWiki/Plugins/ExifMetaDataPlugin/MANIFEST
+4c149e4cfffe22c48237959062137e51  ./lib/TWiki/Plugins/ExifMetaDataPlugin.pm
+d37f1da1931414f9f9c05925a4fe69cd  ./lib/TWiki/Plugins/ExifMetaDataPlugin/build.pl

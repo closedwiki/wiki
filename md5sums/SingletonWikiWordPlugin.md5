@@ -1,5 +1,5 @@
-6e39edd3f8b21f64c1d6429bfc335d29 ./data/TWiki/SingletonWikiWordPlugin.txt
-a02aeda5088074cd3fac275b5da97e6b ./lib/TWiki/Plugins/SingletonWikiWordPlugin.pm
-ebaa2dff02377200291d4ca7ced21df9 ./lib/TWiki/Plugins/SingletonWikiWordPlugin/MANIFEST
-9f9c8b9beb3e54213cc7e11284b8f047 ./lib/TWiki/Plugins/SingletonWikiWordPlugin/build.pl
-75cfa7c3dee0eeca91212df6b836bc70 ./.project
+6e39edd3f8b21f64c1d6429bfc335d29  ./data/TWiki/SingletonWikiWordPlugin.txt
+a02aeda5088074cd3fac275b5da97e6b  ./lib/TWiki/Plugins/SingletonWikiWordPlugin.pm
+ebaa2dff02377200291d4ca7ced21df9  ./lib/TWiki/Plugins/SingletonWikiWordPlugin/MANIFEST
+9f9c8b9beb3e54213cc7e11284b8f047  ./lib/TWiki/Plugins/SingletonWikiWordPlugin/build.pl
+75cfa7c3dee0eeca91212df6b836bc70  ./.project

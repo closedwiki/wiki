@@ -1,8 +1,8 @@
-371c1ffce8616d929a14437a087f94e0 ./lib/TWiki/Plugins/BugzillaLinkPlugin/MANIFEST
-4d72c7c751a246392fe13bb2628a13cc ./pub/TWiki/BugzillaLinkPlugin/bug_small_white.png
-7a47acb84635558d6526e5f3f9d5d07b ./pub/TWiki/BugzillaLinkPlugin/bug_small.gif
-0c2bc5378f28fdfaeaed488d76a50dbe ./lib/TWiki/Plugins/BugzillaLinkPlugin.pm
-0a0e8153cd9a9d8c56b6d2d5efa2d73d ./pub/TWiki/BugzillaLinkPlugin/bug_small.png
-88c10e090f67bbf24ec70eaea0a1e809 ./data/TWiki/BugzillaLinkPlugin.txt
-c3b563c7fa92340619ed68ce94ebe89c ./pub/TWiki/BugzillaLinkPlugin/bug.gif
-79d31464bc34441bc8708c142cfb5fbd ./lib/TWiki/Plugins/BugzillaLinkPlugin/build.pl
+371c1ffce8616d929a14437a087f94e0  ./lib/TWiki/Plugins/BugzillaLinkPlugin/MANIFEST
+4d72c7c751a246392fe13bb2628a13cc  ./pub/TWiki/BugzillaLinkPlugin/bug_small_white.png
+7a47acb84635558d6526e5f3f9d5d07b  ./pub/TWiki/BugzillaLinkPlugin/bug_small.gif
+0c2bc5378f28fdfaeaed488d76a50dbe  ./lib/TWiki/Plugins/BugzillaLinkPlugin.pm
+0a0e8153cd9a9d8c56b6d2d5efa2d73d  ./pub/TWiki/BugzillaLinkPlugin/bug_small.png
+88c10e090f67bbf24ec70eaea0a1e809  ./data/TWiki/BugzillaLinkPlugin.txt
+c3b563c7fa92340619ed68ce94ebe89c  ./pub/TWiki/BugzillaLinkPlugin/bug.gif
+79d31464bc34441bc8708c142cfb5fbd  ./lib/TWiki/Plugins/BugzillaLinkPlugin/build.pl

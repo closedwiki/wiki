@@ -1,5 +1,5 @@
-be180e7baec55ae773da600c50123b62 ./bin/spellcheck
-ae0ef74ed63cd67672ebf4ed37c20c86 ./bin/view
-f4e45c3975b1fcda5b2b6f5e71719418 ./bin/spellcheck-preview
-18dccc8811641534aec113e9c481ccb2 ./templates/spellcheck.tmpl
-0fae7a64a998755391b3138da3940a88 ./templates/spellcheck-preview.tmpl
+be180e7baec55ae773da600c50123b62  ./bin/spellcheck
+ae0ef74ed63cd67672ebf4ed37c20c86  ./bin/view
+f4e45c3975b1fcda5b2b6f5e71719418  ./bin/spellcheck-preview
+18dccc8811641534aec113e9c481ccb2  ./templates/spellcheck.tmpl
+0fae7a64a998755391b3138da3940a88  ./templates/spellcheck-preview.tmpl

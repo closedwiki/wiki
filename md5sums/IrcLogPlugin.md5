@@ -1,4 +1,4 @@
-a4d5ed496a17a19bc0e1ad646e5883ca ./data/TWiki/IrcLogPlugin.txt
-94e26b8a79d5463834a385f0e1b71591 ./lib/TWiki/Plugins/IrcLogPlugin.pm
-a47909c52bcef3f10c63796b989f231b ./lib/TWiki/Plugins/IrcLogPlugin/MANIFEST
-71ecf88d7320adcdb301550ad9ff91c2 ./lib/TWiki/Plugins/IrcLogPlugin/build.pl
+a4d5ed496a17a19bc0e1ad646e5883ca  ./data/TWiki/IrcLogPlugin.txt
+94e26b8a79d5463834a385f0e1b71591  ./lib/TWiki/Plugins/IrcLogPlugin.pm
+a47909c52bcef3f10c63796b989f231b  ./lib/TWiki/Plugins/IrcLogPlugin/MANIFEST
+71ecf88d7320adcdb301550ad9ff91c2  ./lib/TWiki/Plugins/IrcLogPlugin/build.pl

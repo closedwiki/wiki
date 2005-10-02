@@ -1,5 +1,5 @@
-d68c53fca3899d63081063bbd5a64c7a ./lib/TWiki/Plugins/ApprovalPlugin.pm
-626c0703a8ce9fd706a95bd46dcc2865 ./data/TWiki/ApprovalPlugin.txt
-d143281fd0e0ddcad2d00e1c58df1d31 ./bin/.htaccess
-3c6897b413ca83e2cbdaaaeaca5cbe5f ./lib/TWiki/Plugins/ApprovalPlugin/MANIFEST
-62fd19708c14f1dcf208933bdc001616 ./lib/TWiki/Plugins/ApprovalPlugin/build.pl
+d68c53fca3899d63081063bbd5a64c7a  ./lib/TWiki/Plugins/ApprovalPlugin.pm
+626c0703a8ce9fd706a95bd46dcc2865  ./data/TWiki/ApprovalPlugin.txt
+d143281fd0e0ddcad2d00e1c58df1d31  ./bin/.htaccess
+3c6897b413ca83e2cbdaaaeaca5cbe5f  ./lib/TWiki/Plugins/ApprovalPlugin/MANIFEST
+62fd19708c14f1dcf208933bdc001616  ./lib/TWiki/Plugins/ApprovalPlugin/build.pl

@@ -1,7 +1,7 @@
-492d3d583ad86e68c9af0a2f3016ff5e ./lib/TWiki/Plugins/GenerateSearchPlugin/build.pl
-9240b27a34a27fccdd81486ce3210240 ./pub/TWiki/GenerateSearchPlugin/search.jpg
-cde38800dc0cccda6f172968f9947efe ./templates/oopsgensearch.tmpl
-cc1889d03c158764bf48ef9036335e27 ./bin/gensearch
-956f397cfc5bb8e67dbc05c72df0451c ./data/TWiki/GenerateSearchPlugin.txt
-20d5df03e54d18817b1005dbf88f7a42 ./lib/TWiki/Plugins/GenerateSearchPlugin/MANIFEST
-f626d7032c05de08d83986c77834fdd9 ./lib/TWiki/Plugins/GenerateSearchPlugin.pm
+492d3d583ad86e68c9af0a2f3016ff5e  ./lib/TWiki/Plugins/GenerateSearchPlugin/build.pl
+9240b27a34a27fccdd81486ce3210240  ./pub/TWiki/GenerateSearchPlugin/search.jpg
+cde38800dc0cccda6f172968f9947efe  ./templates/oopsgensearch.tmpl
+cc1889d03c158764bf48ef9036335e27  ./bin/gensearch
+956f397cfc5bb8e67dbc05c72df0451c  ./data/TWiki/GenerateSearchPlugin.txt
+20d5df03e54d18817b1005dbf88f7a42  ./lib/TWiki/Plugins/GenerateSearchPlugin/MANIFEST
+f626d7032c05de08d83986c77834fdd9  ./lib/TWiki/Plugins/GenerateSearchPlugin.pm

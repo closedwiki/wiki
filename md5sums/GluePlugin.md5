@@ -1,4 +1,4 @@
-4078aefc6b16e0b13156231ae5ad089d ./lib/TWiki/Plugins/GluePlugin/MANIFEST
-9971be8e7dd0834bc289d253fe6f95a9 ./lib/TWiki/Plugins/GluePlugin.pm
-02b22e938f5f4fedccb196fda9a24bad ./data/TWiki/GluePlugin.txt
-c3c4cd218ee7d46073ca3365f13f7d2a ./lib/TWiki/Plugins/GluePlugin/build.pl
+4078aefc6b16e0b13156231ae5ad089d  ./lib/TWiki/Plugins/GluePlugin/MANIFEST
+9971be8e7dd0834bc289d253fe6f95a9  ./lib/TWiki/Plugins/GluePlugin.pm
+02b22e938f5f4fedccb196fda9a24bad  ./data/TWiki/GluePlugin.txt
+c3c4cd218ee7d46073ca3365f13f7d2a  ./lib/TWiki/Plugins/GluePlugin/build.pl

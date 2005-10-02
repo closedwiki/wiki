@@ -1,5 +1,5 @@
-c821f9b872092148f9c3e749b7d7a172 ./lib/TWiki/Plugins/DateFieldPlugin/MANIFEST
-055211cf6a9edd47776b12c3008c1240 ./lib/TWiki/Plugins/DateFieldPlugin.pm
-2ba1f9484518a9a86106af2647cfdd58 ./lib/TWiki/Plugins/DateFieldPlugin/DEPENDENCIES
-d3f1048eb26ff54ae046d763ef2580ba ./data/TWiki/DateFieldPlugin.txt
-5c1f3be5b56f8f56d90206f781e40c0e ./lib/TWiki/Plugins/DateFieldPlugin/build.pl
+c821f9b872092148f9c3e749b7d7a172  ./lib/TWiki/Plugins/DateFieldPlugin/MANIFEST
+055211cf6a9edd47776b12c3008c1240  ./lib/TWiki/Plugins/DateFieldPlugin.pm
+2ba1f9484518a9a86106af2647cfdd58  ./lib/TWiki/Plugins/DateFieldPlugin/DEPENDENCIES
+d3f1048eb26ff54ae046d763ef2580ba  ./data/TWiki/DateFieldPlugin.txt
+5c1f3be5b56f8f56d90206f781e40c0e  ./lib/TWiki/Plugins/DateFieldPlugin/build.pl

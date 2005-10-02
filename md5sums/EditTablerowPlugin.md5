@@ -1,8 +1,8 @@
-4b19fc10848bfa0e31874fd5f6af73e3 ./lib/TWiki/Plugins/EditTablerowPlugin.pm
-483a91b5c3efc87252e50bf2b49d10a4 ./lib/TWiki/Plugins/EditTablerowPlugin/MANIFEST
-968c5b5d282f058f67f8b4a0f8139c6c ./data/TWiki/EditTablerowPlugin.txt
-6bfa383b7d344e475afb5f015cc91617 ./templates/editTableRow.tmpl
-30a141906f97c6c88e2bd852f721fcb6 ./lib/TWiki/Plugins/EditTablerowPlugin/build.pl
-dacb134f070a8096e83e270ed2472caf ./bin/editTableRow
-38c85cf2b21cb42312e1d162368b3efe ./bin/uploadTableRow
-f6c550243b7b345d066566af2995358e ./templates/editTableRow.pattern.tmpl
+4b19fc10848bfa0e31874fd5f6af73e3  ./lib/TWiki/Plugins/EditTablerowPlugin.pm
+483a91b5c3efc87252e50bf2b49d10a4  ./lib/TWiki/Plugins/EditTablerowPlugin/MANIFEST
+968c5b5d282f058f67f8b4a0f8139c6c  ./data/TWiki/EditTablerowPlugin.txt
+6bfa383b7d344e475afb5f015cc91617  ./templates/editTableRow.tmpl
+30a141906f97c6c88e2bd852f721fcb6  ./lib/TWiki/Plugins/EditTablerowPlugin/build.pl
+dacb134f070a8096e83e270ed2472caf  ./bin/editTableRow
+38c85cf2b21cb42312e1d162368b3efe  ./bin/uploadTableRow
+f6c550243b7b345d066566af2995358e  ./templates/editTableRow.pattern.tmpl

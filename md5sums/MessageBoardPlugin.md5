@@ -1,6 +1,6 @@
-eefd23fe8533ef5ff8a8c008687f3da5 ./lib/TWiki/Plugins/MessageBoardPlugin/MANIFEST
-d4f9d14d61c380bbc30832bca9892beb ./lib/TWiki/Plugins/MessageBoardPlugin/build.pl
-4195b7d8c618c04a84f56cbf32785c77 ./lib/TWiki/Plugins/MessageBoardPlugin.pm
-a26ce3f3e886f580dee9abf0f9e38807 ./data/TWiki/MessageBoardPlugin.txt
-c89bb34af803fcf4943f99998ca1fd09 ./pub/TWiki/MessageBoardPlugin/trashcan.png
-ee8436551b35a2986fd7fa9572d8325b ./pub/TWiki/MessageBoardPlugin/editicon.png
+eefd23fe8533ef5ff8a8c008687f3da5  ./lib/TWiki/Plugins/MessageBoardPlugin/MANIFEST
+d4f9d14d61c380bbc30832bca9892beb  ./lib/TWiki/Plugins/MessageBoardPlugin/build.pl
+4195b7d8c618c04a84f56cbf32785c77  ./lib/TWiki/Plugins/MessageBoardPlugin.pm
+a26ce3f3e886f580dee9abf0f9e38807  ./data/TWiki/MessageBoardPlugin.txt
+c89bb34af803fcf4943f99998ca1fd09  ./pub/TWiki/MessageBoardPlugin/trashcan.png
+ee8436551b35a2986fd7fa9572d8325b  ./pub/TWiki/MessageBoardPlugin/editicon.png

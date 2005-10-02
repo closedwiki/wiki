@@ -1,4 +1,4 @@
-83a962667eb30bcf210b227505d3e17f ./lib/TWiki/Plugins/DiskUsagePlugin/MANIFEST
-ace9c35f323340d434c2bcf9d0b0410c ./lib/TWiki/Plugins/DiskUsagePlugin.pm
-f865584b4ef16729b0c46b1cd3d72596 ./lib/TWiki/Plugins/DiskUsagePlugin/build.pl
-b4459d609ee16fa0b8f670d440c964ea ./data/TWiki/DiskUsagePlugin.txt
+83a962667eb30bcf210b227505d3e17f  ./lib/TWiki/Plugins/DiskUsagePlugin/MANIFEST
+ace9c35f323340d434c2bcf9d0b0410c  ./lib/TWiki/Plugins/DiskUsagePlugin.pm
+f865584b4ef16729b0c46b1cd3d72596  ./lib/TWiki/Plugins/DiskUsagePlugin/build.pl
+b4459d609ee16fa0b8f670d440c964ea  ./data/TWiki/DiskUsagePlugin.txt

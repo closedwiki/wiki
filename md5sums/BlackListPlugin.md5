@@ -1,4 +1,4 @@
-1eaa054ca1d72620a00eebc3d9cb0b48 ./lib/TWiki/Plugins/BlackListPlugin/build.pl
-d64d6fe18a73f73ce3ea6e921b91a6bc ./lib/TWiki/Plugins/BlackListPlugin.pm
-4b4671529e4980b9b3bbd52e038b6bdd ./data/TWiki/BlackListPlugin.txt
-89d2971f086d568fabe1d698b4c87829 ./lib/TWiki/Plugins/BlackListPlugin/MANIFEST
+1eaa054ca1d72620a00eebc3d9cb0b48  ./lib/TWiki/Plugins/BlackListPlugin/build.pl
+d64d6fe18a73f73ce3ea6e921b91a6bc  ./lib/TWiki/Plugins/BlackListPlugin.pm
+4b4671529e4980b9b3bbd52e038b6bdd  ./data/TWiki/BlackListPlugin.txt
+89d2971f086d568fabe1d698b4c87829  ./lib/TWiki/Plugins/BlackListPlugin/MANIFEST

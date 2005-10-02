@@ -1,4 +1,4 @@
-35d630d0ec3fdf2ba45471bf3d4841ee ./lib/TWiki/Plugins/PerlDocPlugin/build.pl
-f1b11052edd8e1920d32ae5a2654aefd ./lib/TWiki/Plugins/PerlDocPlugin.pm
-3f5c66dd05730b0c9de4bda99139b043 ./lib/TWiki/Plugins/PerlDocPlugin/MANIFEST
-edbca867f713de89c6ed112018ae4624 ./data/TWiki/PerlDocPlugin.txt
+35d630d0ec3fdf2ba45471bf3d4841ee  ./lib/TWiki/Plugins/PerlDocPlugin/build.pl
+f1b11052edd8e1920d32ae5a2654aefd  ./lib/TWiki/Plugins/PerlDocPlugin.pm
+3f5c66dd05730b0c9de4bda99139b043  ./lib/TWiki/Plugins/PerlDocPlugin/MANIFEST
+edbca867f713de89c6ed112018ae4624  ./data/TWiki/PerlDocPlugin.txt

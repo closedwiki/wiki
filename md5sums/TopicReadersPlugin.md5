@@ -1,5 +1,5 @@
-b1d18f0da176030352de8e619456addf ./lib/TWiki/Plugins/TopicReadersPlugin.pm
-45f88bc5cb72f2e7dd49483e2dca0a34 ./data/TWiki/TopicReadersPlugin.txt
-9ee7d9ea943b6fb944a7ead075011190 ./data/TWiki/TWikiReaders.txt
-995f88900f020b9cf7573a6314c3f2cf ./lib/TWiki/Plugins/TopicReadersPlugin/MANIFEST
-76a32f9888fea5832abde5931d9249f7 ./lib/TWiki/Plugins/TopicReadersPlugin/build.pl
+b1d18f0da176030352de8e619456addf  ./lib/TWiki/Plugins/TopicReadersPlugin.pm
+45f88bc5cb72f2e7dd49483e2dca0a34  ./data/TWiki/TopicReadersPlugin.txt
+9ee7d9ea943b6fb944a7ead075011190  ./data/TWiki/TWikiReaders.txt
+995f88900f020b9cf7573a6314c3f2cf  ./lib/TWiki/Plugins/TopicReadersPlugin/MANIFEST
+76a32f9888fea5832abde5931d9249f7  ./lib/TWiki/Plugins/TopicReadersPlugin/build.pl

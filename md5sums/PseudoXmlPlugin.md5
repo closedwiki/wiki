@@ -1,4 +1,4 @@
-53c7338e9f9a9d35a1ee9be5452b7a07 ./lib/TWiki/Plugins/PseudoXmlPlugin/build.pl
-edd3a46cb9783f510622fa9f6286d1af ./lib/TWiki/Plugins/PseudoXmlPlugin.pm
-de7fd3baef30df3c8dc541e39e4a5fdd ./lib/TWiki/Plugins/PseudoXmlPlugin/MANIFEST
-b1fd46d781f8045fb860b4a08e28cfd5 ./data/TWiki/PseudoXmlPlugin.txt
+53c7338e9f9a9d35a1ee9be5452b7a07  ./lib/TWiki/Plugins/PseudoXmlPlugin/build.pl
+edd3a46cb9783f510622fa9f6286d1af  ./lib/TWiki/Plugins/PseudoXmlPlugin.pm
+de7fd3baef30df3c8dc541e39e4a5fdd  ./lib/TWiki/Plugins/PseudoXmlPlugin/MANIFEST
+b1fd46d781f8045fb860b4a08e28cfd5  ./data/TWiki/PseudoXmlPlugin.txt
