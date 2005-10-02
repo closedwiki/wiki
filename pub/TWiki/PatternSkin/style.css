@@ -7,29 +7,49 @@
 
 /*	---------------------------------------------------------------------------------------
 	CONSTANTS
-	C1	link color	 																#06c
-	C2	red hover link background color 											#D6000F 
-	C3	link label hover color														#FCF5DF
-	C4	beige border color															#E2DCC8
-	C5	header color																#a00
-	C6	grayed out text																#8E9195
-	C7	
-	C8	dark gray text																#666
-	C9	neutral table bg gray that should work on light and dark backgrounds		#8E9195
-	C10	line-height																	1.4em
-	C11	small font size																85%
-	C12	horizontal bar padding (h2, patternTop)										10px
-	C13	light gray background														#eee
-	C14 light yellow background of action buttons									#FCF5DF
-	C15 somewhat smaller font size													94%
-	C16 
-	C17 text color																	#000
-	C18	neutral gray; hr, borders of table, textarea, input, select					#ccc
-	C19	
-	C20	
-	C21	
-	C22	light yellow; attachment, form background									#FEFBF3
-	C23	white; attachment, form table background									#fff
+	
+	Text colors
+	----------------------------------------
+	T1 text color																	#000
+	T2 link color																	#06c
+	T3 link hover text color														#FBF7E8
+	T4 link action button color (red) (same as BG2)									#D6000F
+	T5 header color																	#a00
+	T6 code text, left bar text														#7A4707
+	T7 muted (dark gray) text														#666
+	T8 grayed out text																#8E9195
+	T9 alert 																		#f00
+	
+	Background colors
+	----------------------------------------
+	BG1	white; attachment, form table background									#fff
+	BG2 link hover background color (red)  											#D6000F 
+	BG3	light gray																	#e6e6e6
+	BG4 active form field (not implemented yet)										#ffc
+	BG5 submit button, help background very light blue								#E9F2F9
+	BG6	patternTopicAction light yellow (same as T3)								#FBF7E8
+	BG7 header background (very light yellow)										#FDFAF1
+	BG8 accent on sorted table column												#ccc
+	BG9 light yellow; attachment, form background									#FEFBF3
+	
+	Border colors
+	----------------------------------------
+	BO1	light gray																	#e6e6e6
+	BO2 submit button border blue ('active')										#88B6CF
+	BO3	help, personal side bar light blue border									#CADDED
+	BO4 border color beige, header h2 bottom border									#E2DCC8
+	BO5 header h3..h5 bottom border	(75% of BO4)									#E9E4D2
+	BO6 neutral gray border															#ccc
+	BO7 light neutral gray															#ddd
+	BO9 alert border																#f00
+	
+	Sizes
+	----------------------------------------
+	S1 line-height																	1.4em
+	S2 small font size																85%
+	S3 horizontal bar padding (h2, patternTop)										10px
+	S4 somewhat smaller font size													94%
+
 	---------------------------------------------------------------------------------------	*/
 
 /*	-----------------------------------------------------------
@@ -38,9 +58,9 @@
 	
 /* HTML elements */
 html body {
-	line-height:1.4em; /*C10*/
+	line-height:1.4em; /*S1*/
 	font-family:"Lucida Grande", verdana, arial, sans-serif;
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 	color:#000; /*C17*/
 	margin:0;
 	padding:0;
@@ -71,15 +91,15 @@ strong, b {
 	font-weight:bold;
 }
 hr {
-	color:#ccc; /*C18*/
-	background-color:#ccc; /*C18*/
+	color:#ccc; /*BO6*/
+	background-color:#ccc; /*BO6*/
 	height:1px;
 	border:none;
 }
 pre, code, tt {
 	font-size:100%;
-	line-height:1.4em; /*C10*/
-	color:#7A4707;
+	line-height:1.4em; /*S1*/
+	color:#7A4707; /*T6*/
 }
 /* put overflow pre in a scroll area */
 pre {
@@ -93,7 +113,7 @@ html>body pre { /* hide from IE */
 	/*\*/ overflow:auto !important; /* */ overflow:scroll; width:auto; /* for Mac Safari */
 }
 ol li, ul li {
-	line-height:1.4em; /*C10*/
+	line-height:1.4em; /*S1*/
 }
 	
 /* Text */
@@ -102,54 +122,65 @@ h1, h2, h3, h4, h5, h6 {
 	line-height:104%;
 	padding:0;
 	margin:1em 0 .1em 0;
-	color:#a00; /*H5*/
+	color:#a00; /*T5*/
 }
-h1 {
+h1,
+.patternPreviewArea h1 {
 	font-size:200%;
 	margin:0 0 .5em 0;
 }
 h1 a:link,
 h1 a:visited {
-	color:#a00; /*H5*/
+	color:#a00; /*T5*/
 }
 .patternNoViewPage h1 {
 	font-size:160%;
 }
-h2 { font-size:135%;}
-h3 { font-size:125%;}
-h4 { font-size:118%;}
-h5 { font-size:110%;}
-h6 { font-size:100%;}
-.patternTopic h2 {
+
+.patternTopic h2,
+.patternTopic h3,
+.patternTopic h4,
+.patternTopic h5 {
 	display:block;
-	font-weight:600;
-	border-bottom:1px solid #E2DCC8; /*C4*/
-	/* give h2 a background color for easy scanning: */
-	background-color:#FBFAF7;
+	/* give header a background color for easy scanning: */
 	padding:.2em 5px;
 	margin:1em -5px .35em -5px;
 	height:auto;
 }
+.patternTopic h2 {
+	background-color:#FDFAF1;
+	border-bottom:1px solid #E2DCC8; /*BO4*/
+}
+.patternTopic h3,
+.patternTopic h4,
+.patternTopic h5 {
+	border-bottom:1px solid #E9E4D2; /*BO5*/
+}
+
 
 /* Links */
 /* somehow the twikiNewLink style have to be before the general link styles */
-.twikiNewLink a:link sup,
-.twikiNewLink a:visited sup {
+.twikiNewLink a sup {
+	text-align:center;
+	padding:0 2px;
 	vertical-align:baseline;
 	font-size:100%;
+}
+.twikiNewLink a:link sup,
+.twikiNewLink a:visited sup {
 	background-color:#fff;
-	padding:0 2px;
 	text-decoration:none;
-	color:#666;
-	border:1px solid #E2DCC8;
+	color:#666; /*T7*/
+	border:1px solid #E2DCC8; /*BO4*/
 }
 .twikiNewLink a:hover sup {
-	background-color:#D6000F; /*C2*/
-	color:#FCF5DF; /*C3*/
-	border-color:#D6000F; /*C2*/
+	text-decoration:none;
+	background-color:#D6000F; /*BG2*/
+	color:#FBF7E8; /*C3*/
+	border-color:#D6000F; /*BG2*/ /* (part of bg) */
 }
 .twikiNewLink {
-	border-bottom:1px dotted #D6000F;
+	border-bottom:1px dashed #666; /*T7*/
 }
 /* to override old Render.pm coded font color style */
 .twikiNewLink font {
@@ -162,14 +193,14 @@ h6 { font-size:100%;}
 :link:active,
 :visited:active {
 	text-decoration:underline;
-	color:#06c; /*C1*/;
+	color:#06c; /*T2*/;
 	background-color:transparent;
 }
 :link:hover,
 :visited:hover {
 	text-decoration:none;
-	color:#FCF5DF; /*C3*/
-	background-color:#D6000F; /*C2*/
+	color:#FBF7E8; /*C3*/
+	background-color:#D6000F; /*BG2*/
 }
 :link img,
 :visited img,
@@ -178,18 +209,18 @@ h6 { font-size:100%;}
 	background-color:transparent;
 }
 .patternTopic a:visited {
-	color:#666; /*C8*/
+	color:#666; /*T7*/
 }
 .patternTopic a:hover {
-	color:#FCF5DF; /*C3*/
+	color:#FBF7E8; /*C3*/
 }
 
 .twikiGrayText a:link,
 .twikiGrayText a:visited {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 }
 .twikiGrayText a:hover {
-	color:#FCF5DF; /*C3*/
+	color:#FBF7E8; /*C3*/
 }
 img {
 	vertical-align:text-bottom;
@@ -207,8 +238,8 @@ select {
 	font-size:100%;
 	vertical-align:middle;
 	border-width:1px;
-	border-color:#ccc; /*C18*/
-	background-color:#FEFBF3; /*C22*/
+	border-color:#ccc; /*BO6*/
+	background-color:#FEFBF3; /*BG9*/
 	padding:1px;
 }
 textarea {
@@ -229,12 +260,12 @@ label {
 /* Inline tables */
 .twikiTable {
     border-collapse: collapse;
-    border:1px solid #ddd;
+    border:1px solid #ddd; /*BO7*/
 }
 .twikiTable td,
 .twikiTable th {
-	border-left:1px solid #ddd;
-    border-right:1px solid #ddd;
+	border-left:1px solid #ddd; /*BO7*/
+    border-right:1px solid #ddd; /*BO7*/
 }
 .twikiTable th {
     padding:.4em .5em;
@@ -245,34 +276,68 @@ label {
 .twikiTable th a:link,
 .twikiTable th a:visited,
 .twikiTable th a font {
-	color:#06c; /*C1*/
+	text-decoration:none;
+	color:#06c; /*T2*/
 }
 .twikiTable th a:hover,
 .twikiTable th a:hover font {
-	color:#FCF5DF; /*C3*/
-	background-color:#D6000F; /*C2*/
+	text-decoration:none;
+	background-color:transparent;
+	color:#D6000F; /*T4*/
+	border-bottom:1px solid #D6000F; /*T4*/
 }
 
 /* sorting of table columns */
-/* not yet finalized for tables in topic text */
-th.twikiSortedAscendingCol a:link,
-th.twikiSortedAscendingCol a:visited {
-	border-top:1px solid #8E9195; /*C9*/
+
+.patternTopic th.twikiSortedAscendingCol,
+.patternTopic th.twikiSortedDescendingCol {
+	background-color:#ccc; /*BG8*/
 }
-th.twikiSortedAscendingCol a:hover {
+th.twikiSortedAscendingCol a:link,
+th.twikiSortedAscendingCol a:link font,
+th.twikiSortedAscendingCol a:visited,
+th.twikiSortedAscendingCol a:visited font,
+.twikiAttachments th.twikiSortedAscendingCol a:link,
+.twikiAttachments th.twikiSortedAscendingCol a:link font,
+.twikiAttachments th.twikiSortedAscendingCol a:visited,
+.twikiAttachments th.twikiSortedAscendingCol a:visited font {
 	text-decoration:none;
-	border-top:0;
-	border-bottom:1px dotted #8E9195; /*C9*/
+	border-top:1px solid #666; /*T7*/
+	
 }
 th.twikiSortedDescendingCol a:link,
-th.twikiSortedDescendingCol a:visited {
-	border-bottom:1px solid #8E9195; /*C9*/
+th.twikiSortedDescendingCol a:link font,
+th.twikiSortedDescendingCol a:visited,
+th.twikiSortedDescendingCol a:visited font,
+.twikiAttachments th.twikiSortedDescendingCol a:link,
+.twikiAttachments th.twikiSortedDescendingCol a:link font,
+.twikiAttachments th.twikiSortedDescendingCol a:visited,
+.twikiAttachments th.twikiSortedDescendingCol a:visited font {
 	text-decoration:none;
+	border-bottom:1px solid #666; /*T7*/
 }
-th.twikiSortedDescendingCol a:hover {
+th.twikiSortedAscendingCol a:hover,
+th.twikiSortedAscendingCol a:hover font,
+th.twikiSortedDescendingCol a:hover,
+th.twikiSortedDescendingCol a:hover font,
+.twikiAttachments th.twikiSortedAscendingCol a:hover,
+.twikiAttachments th.twikiSortedAscendingCol a:hover font,
+.twikiAttachments th.twikiSortedDescendingCol a:hover,
+.twikiAttachments th.twikiSortedDescendingCol a:hover font{
 	text-decoration:none;
-	border-bottom:0;
-	border-top:1px dotted #8E9195; /*C9*/
+	border:0;
+}
+th.twikiSortedAscendingCol a:hover,
+th.twikiSortedAscendingCol a:hover font,
+.twikiAttachments th.twikiSortedAscendingCol a:hover,
+.twikiAttachments th.twikiSortedAscendingCol a:hover font {
+	border-bottom:1px solid #D6000F; /*T4*/
+}
+th.twikiSortedDescendingCol a:hover,
+th.twikiSortedDescendingCol a:hover font,
+.twikiAttachments th.twikiSortedDescendingCol a:hover,
+.twikiAttachments th.twikiSortedDescendingCol a:hover font {
+	border-top:1px solid #D6000F; /*T4*/
 }
 
 /**	----------------------------------
@@ -282,19 +347,19 @@ th.twikiSortedDescendingCol a:hover {
 .twikiAttachments,
 .twikiForm {
 	margin:1em 0;
-	font-size:94%; /*C15*/
-	color:#666; /*C8*/
+	font-size:94%; /*S4*/
+	color:#666; /*T7*/
 }
 .patternEditPage .twikiForm {
-	color:#000;
+	color:#000; /*T1*/
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
 	margin:2em 0;
-	background-color:#FEFBF3; /*C22*/
+	background-color:#FEFBF3; /*BG9*/
 	padding:20px;
-	border-top:1px solid #E2DCC8; /*C4*/
-	border-bottom:1px solid #E2DCC8; /*C4*/
+	border-top:1px solid #E2DCC8; /*BO4*/
+	border-bottom:1px solid #E2DCC8; /*BO4*/
 	margin:0 0 -1px 0;
 }
 .twikiAttachments p { /* fix for extra generated <p> */
@@ -307,15 +372,15 @@ th.twikiSortedDescendingCol a:hover {
 	border-spacing:0px;
 	empty-cells:show;
 	border:0px;
-	font-size:94%; /*C15*/
-	background-color:#fff; /*C23*/
-	border-top:1px solid #ccc; /*C18*/
-	border-right:1px solid #ccc; /*C18*/
-	border-left:1px solid #ccc; /*C18*/
+	font-size:94%; /*S4*/
+	background-color:#fff; /*BG1*/
+	border-top:1px solid #ccc; /*BO6*/
+	border-right:1px solid #ccc; /*BO6*/
+	border-left:1px solid #ccc; /*BO6*/
 }
 .twikiAttachments table {
-	background-color:#fff; /*C23*/
-	line-height:1.4em; /*C10*/
+	background-color:#fff; /*BG1*/
+	line-height:1.4em; /*S1*/
 	width:auto;
 	voice-family: "\"}\""; /* hide the following for Explorer 5.x */
 	voice-family:inherit;
@@ -327,10 +392,10 @@ th.twikiSortedDescendingCol a:hover {
 .twikiForm th {
 	padding:.2em .6em;
 	height:2.5em;
-	border-color:#ccc; /*C18*/
-	border-left:1px solid #ccc; /*C18*/
-	border-bottom:1px solid #ccc; /*C18*/
-	background-color:#fff; /*C23*/
+	border-color:#ccc; /*BO6*/
+	border-left:1px solid #ccc; /*BO6*/
+	border-bottom:1px solid #ccc; /*BO6*/
+	background-color:#fff; /*BG1*/
 	vertical-align:middle;
 }
 .twikiAttachments th.twikiFirstCol,
@@ -347,10 +412,10 @@ th.twikiSortedDescendingCol a:hover {
 .twikiAttachments td,
 .twikiForm td {
 	border:0px;
-	border-bottom:1px solid #ccc; /*C18*/
+	border-bottom:1px solid #ccc; /*BO6*/
 	padding:.2em .6em;
-	background-color:#fff; /*C23*/
-	height:1.4em;
+	background-color:#fff; /*BG1*/
+	height:1.4em; /*S1*/
 	text-align:left;
 	vertical-align:top;
 }
@@ -368,13 +433,13 @@ th.twikiSortedDescendingCol a:hover {
 .twikiAttachments th a:visited,
 .twikiForm th a:link,
 .twikiForm th a:visited {
-	color:#06c; /*C1*/
-	border-color:#06c;
+	color:#06c; /*T2*/
+	border-color:#06c; /*T2*/
 	text-decoration:none;
 }
 .twikiAttachments th font,
 .twikiForm th font {
-	color:#06c; /*C1*/
+	color:#06c; /*T2*/
 }
 .twikiAttachments th a:hover,
 .twikiForm th a:hover {
@@ -390,17 +455,7 @@ th.twikiSortedDescendingCol a:hover {
 }
 .twikiAttachments th.twikiSortedAscendingCol,
 .twikiAttachments th.twikiSortedDescendingCol {
-	background-color:#f0f0f0;
-}
-.twikiAttachments th.twikiSortedAscendingCol a:link,
-.twikiAttachments th.twikiSortedAscendingCol a:visited,
-.twikiAttachments th.twikiSortedDescendingCol a:link,
-.twikiAttachments th.twikiSortedDescendingCol a:visited {
-	color:#06c;
-}
-.twikiAttachments th.twikiSortedAscendingCol a:hover,
-.twikiAttachments th.twikiSortedDescendingCol a:hover {
-	background-color:transparent;
+	background-color:#e6e6e6; /*BG3*/
 }
 .twikiForm table table,
 .twikiForm table table th,
@@ -430,34 +485,34 @@ th.twikiSortedDescendingCol a:hover {
 	margin:0;
 	padding:0;
 	font-weight:bold;
-	color:#666; /*C8*/
+	color:#666; /*T7*/
 }
 
 .twikiBroadcastMessage b,
 .twikiBroadcastMessage strong {
-	color:#f00;
+	color:#f00; /*T9*/
 }
 .twikiAlert {
-	color:#f00;
+	color:#f00; /*T9*/
 }
 .twikiGrayText {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 }
 .twikiSmall {
-	font-size:85%; /*C11*/
+	font-size:85%; /*S2*/
 }
 .twikiNew { }
 .twikiSummary {
-	font-size:85%; /*C11*/
+	font-size:85%; /*S2*/
 }
 .twikiEmulatedLink {
-	color:#06c; /*C1*/
+	color:#06c; /*T2*/
 	text-decoration:underline;
 }
 .twikiPageForm table {
 	width:100%;
-	border:1px solid #ddd;
-	background:#fff;
+	border:1px solid #ddd; /*BO7*/
+	background:#fff; /*BG1*/
 	margin:0 0 2em 0;
 }
 .twikiPageForm th,
@@ -466,7 +521,7 @@ th.twikiSortedDescendingCol a:hover {
 	padding:.15em;
 }
 .twikiPageForm th {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 }
 .twikiPageForm td {}
 .twikiPageForm th.last,
@@ -475,12 +530,12 @@ th.twikiSortedDescendingCol a:hover {
 }
 .twikiPageForm td.first {
 	padding-top:1em;
-	background:#e6e6e6;
+	background:#e6e6e6; /*BG3*/
 }
 .twikiPageForm hr {
-	border-color:#e6e6e6;
-	background-color:#e6e6e6;
-	color:#e6e6e6;
+	border-color:#e6e6e6; /*BO1*/
+	background-color:#e6e6e6; /*BO1*/
+	color:#e6e6e6; /*BO1*/
 }
 .twikiButton, 
 .twikiSubmit {
@@ -488,12 +543,12 @@ th.twikiSortedDescendingCol a:hover {
 	vertical-align:middle;
 }
 .twikiButton {
-	border-color:#ccc; /*C18*/
-	background-color:#e6e6e6;
+	border-color:#ccc; /*BO6*/
+	background-color:#e6e6e6; /*BG3*/
 }
 .twikiSubmit {
-	border-color:#88B6CF;
-	background-color:#CADDED;
+	border-color:#88B6CF; /*BO2*/
+	background-color:#E9F2F9; /*BG5*/
 }
 .twikiCheckbox,
 .twikiRadioButton {
@@ -502,11 +557,11 @@ th.twikiSortedDescendingCol a:hover {
 	vertical-align:middle;
 }
 .twikiHelp {
-	background-color:#E9F2F9;
+	background-color:#E9F2F9; /*BG5*/
 	padding:1em;
 	margin:.5em 0 1em 0;
-	border-top:1px solid #DAEAF5;
-	border-bottom:1px solid #DAEAF5;
+	border-top:1px solid #CADDED; /*BO3*/
+	border-bottom:1px solid #CADDED; /*BO3*/
 }
 .twikiHelp ul,
 .twikiHelp li {
@@ -515,7 +570,7 @@ th.twikiSortedDescendingCol a:hover {
 }
 .twikiAccessKey {
 	text-decoration:none;
-	border-bottom:1px solid #8E9195; /*C6*/
+	border-bottom:1px solid #8E9195; /*T8*/
 }
 a:hover .twikiAccessKey {
 	text-decoration:none;
@@ -523,7 +578,7 @@ a:hover .twikiAccessKey {
 	color:inherit;
 }
 .twikiTwistPlaceholder {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 }
 
 /*	-----------------------------------------------------------
@@ -536,7 +591,7 @@ a:hover .twikiAccessKey {
 .twikiAccessKey {
 	color:inherit;
 	text-decoration:none;
-	border-bottom:1px solid #8E9195; /*C6*/
+	border-bottom:1px solid #8E9195; /*T8*/
 }
 a:link .twikiAccessKey {
 	color:inherit;
@@ -547,14 +602,14 @@ a:hover .twikiAccessKey {
 }
 
 .patternTopicAction {
-	font-size:94%; /*C15*/
+	font-size:94%; /*S4*/
 	line-height:1.5em;
-	color:#666; /*C8*/
+	color:#666; /*T7*/
 	margin:0 0 3em 0;
 	background-color:#FBF7E8;
 	padding:.5em 2em;
-	border-top:1px solid #E2DCC8; /*C4*/
-	border-bottom:1px solid #E2DCC8; /*C4*/
+	border-top:1px solid #E2DCC8; /*BO4*/
+	border-bottom:1px solid #E2DCC8; /*BO4*/
 }
 .patternTopicAction .twikiSeparator {
 	color:#aaa;
@@ -563,17 +618,17 @@ a:hover .twikiAccessKey {
 .patternActionButtons a:visited {
 	text-decoration:none;
 	padding:1px 1px 2px 1px;
-	color:#D6000F; /*C2*/
+	color:#D6000F; /*T4*/
 }
 .patternActionButtons a:hover {
-	color:#FCF5DF; /*C3*/
+	color:#FBF7E8; /*C3*/
 }
 .patternTopicAction .twikiAccessKey {
 	border-color:#C75305;
 }
 
 .patternTopicAction label {
-	color:#000; /*C17*/
+	color:#000; /*T1*/
 }
 .patternTopicAction .patternSaveOptions {
 	margin-bottom:.5em;
@@ -582,31 +637,32 @@ a:hover .twikiAccessKey {
 	padding:.2em 0;
 }
 .patternMoved {
-	font-size:94%; /*C15*/
+	font-size:94%; /*S4*/
 	margin-bottom:1em;
 }
 .patternHelpCol {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 }
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
 	-----------------------------------------------------------	*/
 .patternWebIndicator {
-	background-color:#aaa;
+	background-color:#fff;
 }
 .patternPage {}
 .patternMiddleContainer {}
 .patternMain {
 	padding:0 1.5em 1em 2em;
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 	border-width:1px;
 	border-style:solid;
-	border-color:#E2DCC8 #E2DCC8 #E2DCC8 #E2DCC8; /*C4*/
+	border-color:#E2DCC8 #E2DCC8 #E2DCC8 #E2DCC8; /*BO4*/
 }
 .patternNoViewPage .patternMain {
 	padding-top:2em;
 	padding-bottom:2em;
+	border-bottom:none;
 }
 
 /* Top bar */
@@ -621,29 +677,29 @@ a:hover .twikiAccessKey {
 .patternTopBarContents .patternSearchBox td {
 	height:50px;
 	vertical-align:middle;
-	color:#8E9195; /*C6*/
-	font-size:94%; /*C15*/
+	color:#8E9195; /*T8*/
+	font-size:94%; /*S4*/
 }
 
 /* Left bar */
 .patternLeftBar {
-	border-right:1px solid #E2DCC8; /*C4*/
-	border-bottom:1px solid #E2DCC8; /*C4*/
+	border-right:1px solid #E2DCC8; /*BO4*/
+	border-bottom:1px solid #E2DCC8; /*BO4*/
 	color:#555;
 	overflow:hidden;
 	background-color:transparent;
 }
 .patternLeftBar hr {
-	color:#E2DCC8; /*C4*/
-	background-color:#E2DCC8; /*C4*/
+	color:#E2DCC8; /*BO4*/
+	background-color:#E2DCC8; /*BO4*/
 }
 .patternLeftBar a:link,
 .patternLeftBar a:visited {
-	color:#7A4707;
+	color:#7A4707; /*T6*/
 	text-decoration:none;
 }
 .patternLeftBar a:hover {
-	color:#fff;
+	color:#FBF7E8; /*C3*/
 }
 .patternLeftBar b,
 .patternLeftBar strong {
@@ -658,32 +714,32 @@ a:hover .twikiAccessKey {
 	padding-left:0;
 }
 .patternLeftBar .patternLeftBarContents {
-	font-size:94%; /*C15*/
+	font-size:94%; /*S4*/
 	font-weight:normal;
 	margin:0;
 	padding:0 0 1.7em 1em;
 	width:auto;
 }
 .patternLeftBar .patternLanguageOption {
-	border-top:1px solid #E2DCC8; /*C4*/
+	border-top:1px solid #E2DCC8; /*BO4*/
 	padding:.25em 0 .25em 1em;
-	font-size:94%; /*C15*/
+	font-size:94%; /*S4*/
 }
 .patternLeftBarPersonal {
 	margin:-1px -1px -.5em -1em;
 	padding:.25em 0 .25em 1em;
 	background-color:transparent;
-	border-top:1px solid #DAEAF5;
-	border-bottom:1px solid #DAEAF5;
+	border-top:1px solid #CADDED; /*BO3*/
+	border-bottom:1px solid #CADDED; /*BO3*/
 }
 .patternLeftBarPersonal a:link,
 .patternLeftBarPersonal a:visited {
-	color:#06c; /*C1*/;
+	color:#06c; /*T2*/;
 }
 .patternLeftBarPersonal a:hover {
 	text-decoration:none;
-	color:#FCF5DF; /*C3*/
-	background-color:#D6000F; /*C2*/
+	color:#FBF7E8; /*C3*/
+	background-color:#D6000F; /*BG2*/
 }
 
 /* Bottom bar */
@@ -692,8 +748,8 @@ a:hover .twikiAccessKey {
 }
 .patternBottomBarContents {
 	padding:.5em 2.5em 1.5em .25em;
-	font-size:94%; /*C15*/
-	color:#8E9195;	/*C6*/
+	font-size:94%; /*S4*/
+	color:#8E9195;	/*T8*/
 }
 
 /* table used in various places */
@@ -705,34 +761,34 @@ a:hover .twikiAccessKey {
 	empty-cells:show;
 	border:1px solid #ccc;
 	margin:1em 0;
-	font-size:94%; /*C15*/
+	font-size:94%; /*S4*/
 }
 .patternVersatileTable th,
 .patternVersatileTable td {
 	vertical-align:middle;
 	border:0px;
-	border-top:1px solid #ccc; /*C18*/
-	padding:10px 1em 10px 1.25em;
+	border-top:1px solid #ccc; /*BO6*/
+	padding:10px 1em 10px 1.25em; /*S3*/
 }
 .patternVersatileTable td {
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 }
 .patternVersatileTable th {
-	background-color:#eee; /*C13*/
+	background-color:#e6e6e6;
 }
 .patternVersatileTable td.patternMainCol {
-	background-color:#E6F5D3;
+	background-color:#ECFADC;
 }
 .patternVersatileTable th.patternMainCol {
-	background-color:#E6F5D3;
+	background-color:#ECFADC;
 }
 .patternVersatileTable th.patternOldCol,
 .patternVersatileTable td.patternOldCol {
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 	color:#000;
 }
 .patternVersatileTable input {
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 }
 .patternVersatileTable input.twikiCheckbox {
 	background-color:transparent;
@@ -745,8 +801,8 @@ a:hover .twikiAccessKey {
 }
 
 .patternTop {
-	font-size:94%; /*C15*/
-	color:#8E9195; /*C6*/
+	font-size:94%; /*S4*/
+	color:#8E9195; /*T8*/
 }
 .patternTop table {
 	border:none;
@@ -758,25 +814,25 @@ a:hover .twikiAccessKey {
 .patternTop .patternHomePath,
 .patternTop .patternRevInfo {
 	padding:.25em .5em .25em 0;
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 	line-height:1.25em;
 }
 .patternTop .patternHomePath {
-	color:#000; /*C17*/
+	color:#000; /*T1*/
 	text-align:left;
 	width:auto;
 }
 .patternTop .patternRevInfo {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 	float:right;
 	text-align:right;
 }
 .patternTop .patternRevInfo a:link,
 .patternTop .patternRevInfo a:visited {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 }
 .patternTop .patternRevInfo a:hover {
-	color:#FCF5DF; /*C3*/
+	color:#FBF7E8; /*C3*/
 }
 /* Button tool bar */
 .patternToolBar {
@@ -805,41 +861,41 @@ td.patternToolBar {
 .patternToolBar .patternButton a:visited {
 	display:block;
 	margin:0 0 -1px 4px;
-	border:1px solid #E2DCC8; /*C4*/
-	background-color:#fff;
+	border:1px solid #E2DCC8; /*BO4*/
+	background-color:#fff; /*BG1*/
 	position:relative;
 	z-index:0;
 	padding:.35em .6em;
 }
 .patternToolBar .patternButton a:link,
 .patternToolBar .patternButton a:visited {
-	color:#666; /*C8*/
+	color:#666; /*T7*/
 	text-decoration:none;
 }
 .patternToolBar .patternButton s,
 .patternToolBar .patternButton strike {
-	color:#ccc; /*C18*/
+	color:#8E9195; /*T8*/
 	border-color:#e0e0e0;
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 	text-decoration:none;
 }
 .patternToolBar .patternButton a:hover {
-	background-color:#D6000F; /*C2*/
-	color:#fff;
+	background-color:#D6000F; /*BG2*/
+	color:#FBF7E8; /*C3*/
 	text-decoration:none;
-	border-color:#D6000F; /*C2*/
+	border-color:#D6000F; /*T4*/
 	z-index:3;
 }
 .patternToolBarBottom {
 	position:relative;
-	border-top:1px solid #E2DCC8; /*C4*/
+	border-top:1px solid #E2DCC8; /*BO4*/
 	margin:0 0 .5em 0;
 	z-index:2;
 }
 .patternToolBar a:link .twikiAccessKey,
 .patternToolBar a:visited .twikiAccessKey {
 	color:inherit;
-	border-color:#666; /*C8*/
+	border-color:#666; /*T7*/
 }
 .patternToolBar a:hover .twikiAccessKey {
 	background-color:transparent;
@@ -856,14 +912,14 @@ td.patternToolBar {
 	width:100%;
 }
 .patternEditPage textarea#topic {
-	background-color:#fff;
+	background-color:#fff; /*BG1*/
 }
 .twikiChangeFormButton {
 	font-family:"Lucida Grande", verdana, arial, sans-serif;
 	padding:0;
 	margin:0;
-	color:#06c; /*C1*/
-	font-size:94%; /*C15*/
+	color:#06c; /*T2*/
+	font-size:94%; /*S4*/
 	background-color:transparent;
 	border:none;
 	text-decoration:underline;
@@ -872,12 +928,12 @@ td.patternToolBar {
 	margin-top:.25em;
 }
 .patternSig input {
-	color:#8E9195; /*C6*/
-	background-color:#fff;
+	color:#8E9195; /*T8*/
+	background-color:#fff; /*BG1*/
 }
 .patternAccessKeyInfo {
 	margin-top:1em;
-	color:#666; /*C8*/
+	color:#666; /*T7*/
 	background-color:#ECF2F9;
 	padding:.25em .5em;
 	border-top:1px solid #B5D5EC;
@@ -885,15 +941,19 @@ td.patternToolBar {
 }
 .patternAccessKeyInfo a:link,
 .patternAccessKeyInfo a:visited {
-	color:06c; /*C1*/
+	color:#06c; /*T2*/
 	text-decoration:underline;
+}
+.patternAccessKeyInfo a:hover {
+	color:#FBF7E8; /*T3*/
+	text-decoration:none;
 }
 
 /* Preview page */
 
 .patternPreviewArea {
-	background-color:#fff;
-	border:1px solid #f00;
+	background-color:#fff; /*BG1*/
+	border:1px solid #f00; /*BO9*/
 	margin:0em -.5em 2em -.5em;
 	padding:.5em;
 }
@@ -914,7 +974,7 @@ td.patternToolBar {
 	margin:1em 0;
 }
 #moveattachment {
-	font-size:94%; /*C15*/
+	font-size:94%; /*S4*/
 }
 .patternPrevious table {
 	width:auto;
@@ -931,9 +991,9 @@ td.patternToolBar {
 table#twikiSearchTable {background:none;} 
 table#twikiSearchTable th,
 table#twikiSearchTable td {padding:.5em; background-color:white;}
-table#twikiSearchTable th {width:15%; text-align:left; color:#8E9195; /*C6*/}
+table#twikiSearchTable th {width:15%; text-align:left; color:#8E9195;} /*T8*/
 table#twikiSearchTable td {width:85%;}
-table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
+table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;} /*BG3*/
 
 /*	-----------------------------------------------------------
 	Search results
@@ -944,11 +1004,11 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 .patternSearchResults {}
 
 .patternSearchResultsHeader {
-	padding:.25em 10px .15em 10px;
-	margin:0 -10px .25em -10px;
+	padding:.25em 10px .15em 10px; /*S3*/
+	margin:0 -10px .25em -10px; /*S3*/
 	font-weight:bold;
-	background-color:#FEFBF3; /*C22*/
-	border-bottom:1px solid #ccc; /*C18*/
+	background-color:#FEFBF3; /*BG9*/
+	border-bottom:1px solid #ccc; /*BO6*/
 	height:1.5em; /* or WIN/IE wont draw the backgound */
 }
 .patternSearchString {
@@ -965,10 +1025,10 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 }
 .patternSearchResults .twikiBottomRow {
 	padding-bottom:.25em;
-	border-bottom:1px solid #ddd;
+	border-bottom:1px solid #ddd; /*BO7*/
 }
 .patternSearchResults .twikiAlert {
-	color:#f00;
+	color:#f00; /*T9*/
 	font-weight:bold;
 }
 .patternSearchResults .twikiSummary .twikiAlert {
@@ -976,10 +1036,10 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 	font-weight:normal;
 }
 .patternSearchResults .twikiNew {
-	background-color:#E6F5D3;
+	background-color:#ECFADC;
 	border:1px solid #049804;
 	color:#049804;
-	font-size:85%; /*C11*/
+	font-size:85%; /*S2*/
 	padding:0 1px;
 	font-weight:bold;
 }
@@ -998,11 +1058,13 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 }
 .patternSearchResultCount {
 	margin:.25em 0 1.5em 0;
-	font-size:94%; /*C15*/
+	font-size:94%; /*S4*/
 }
 .patternViewPage .patternSearchResultsBegin { /* for changes template with noheader="on" */
 	height:1px;
-	border-bottom:1px solid #ddd;
+	border-bottom:1px solid #ddd; /*BO7*/
+	padding:0 10px; /*S3*/
+	margin:0 -10px; /*S3*/
 }
 
 /* Search results in book view format */
@@ -1011,28 +1073,28 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 	margin-bottom:1em;
 }
 .patternBookViewList .twikiTopRow {
-	padding:.2em 10px;
-	margin:2.5em -10px .15em -10px;
-	background-color:#8E9195; /*C6*/
-	color:#ccc; /*C18*/
+	padding:.2em 10px; /*S3*/
+	margin:2.5em -10px .15em -10px; /*S3*/
+	background-color:transparent; /* set to BGCOLOR in template */
+	color:#666; /*T7*/
 }
 .patternBookViewList .twikiTopRow a:link, 
 .patternBookViewList .twikiTopRow a:visited {
-	color:#fff;
+	color:#FBF7E8; /*C3*/
 }
 .patternBookViewList .twikiTopRow a:hover {
-	color:#06c; /*C1*/;
+	color:#06c; /*T2*/;
 }
 .patternBookViewList .twikiBottomRow {
 	font-size:100%;
 	padding:1em 0;
-	border-color:#ddd;
+	border-color:#ddd; /*BO7*/
 }
 .patternBookViewList .twikiBottomRow {
 	width:auto;
 }
 .patternBookViewList .patternSearchResultCount {
-	color:#8E9195; /*C6*/
+	color:#8E9195; /*T8*/
 }
 
 /* Print */
@@ -1043,17 +1105,17 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;}
 .patternPrintPage .patternMain {
 	padding:1em 2em 0 2em;
 	border-width:1px;
-	border-color:#fff #ddd #ddd #ddd;
+	border-color:#fff #ddd #ddd #ddd; /*BO7*/
 }
 .patternPrintPage .patternBottomBarContents {
 	padding-left:1em;
 }
 .patternPrintPage .patternTopicFooter {
 	margin:2em 0 2em 0;
-	font-size:94%;
+	font-size:94%; /*S4*/
 }
 .patternPrintPage .patternContent .twikiAttachments,
 .patternPrintPage .patternContent .twikiForm {
-	background:#fff;
+	background:#fff; /*BG1*/
 }
 
