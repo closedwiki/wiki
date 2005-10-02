@@ -15,7 +15,7 @@
 </td>
 </tr>
 <tr>
-<th>%MAKETEXT{"Search where:"}%</td>
+<th>%MAKETEXT{"Search where:"}%</th>
 <td>
 <input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label><br />
 <input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label><br />
@@ -25,7 +25,7 @@
 </td>
 </tr>
 <tr>
-<th>%MAKETEXT{"Sort results by:"}%</td>
+<th>%MAKETEXT{"Sort results by:"}%</th>
 <td>
 <input type="radio" class="twikiRadioButton" id="topic" name="order" value="topic" checked="checked" /><label for="topic"> %MAKETEXT{"Topic name"}%</label><br />
 <input type="radio" class="twikiRadioButton" id="modified" name="order" value="modified" /><label for="modified"> %MAKETEXT{"Last modified time"}%</label><br />
@@ -35,26 +35,26 @@
 </td>
 </tr>
 <tr>
-<th>%MAKETEXT{"Make search:"}%</td>
+<th>%MAKETEXT{"Make search:"}%</th>
 <td><input type="checkbox" class="twikiCheckbox" name="casesensitive" id="casesensitive" /><label for="casesensitive"> %MAKETEXT{"Case sensitive"}%</label><br />
 <input type="checkbox" class="twikiCheckbox" name="regex" id="regex" /><label for="regex"> %MAKETEXT{"Regular expression search"}%</label> <span class="twikiSmall">%MAKETEXT{"(semicolon =;= for and)"}% [[%TWIKIWEB%.RegularExpression][%MAKETEXT{"about regular expression search"}%]]</span>
 </td>
 </tr>
 <tr>
-<th><b>%MAKETEXT{"Don't show:"}%</b></td>
+<th><b>%MAKETEXT{"Don't show:"}%</b></th>
 <td><input type="checkbox" class="twikiCheckbox" name="nosearch" id="nosearch" /><label for="nosearch"> %MAKETEXT{"Search string"}%</label><br />
 <input type="checkbox" class="twikiCheckbox" name="nosummary" id="nosummary" /><label for="nosummary"> %MAKETEXT{"Summaries"}%</label><br />
 <input type="checkbox" class="twikiCheckbox" name="nototal" id="nototal" /><label for="nototal"> %MAKETEXT{"Total matches"}%</label>
 </td>
 </tr>
 <tr>
-<th>%MAKETEXT{"Do show:"}%</td>
+<th>%MAKETEXT{"Do show:"}%</th>
 <td><input type="checkbox" class="twikiCheckbox" name="bookview" id="bookview" /><label for="bookview"> !BookView</label> <span class="twikiSmall">[[%TWIKIWEB%.BookView][%MAKETEXT{"about BookView"}%]]</span><br />
 <input type="checkbox" class="twikiCheckbox" name="showlock" id="showlock" /><label for="showlock"> %MAKETEXT{"Locked topics"}%</label>
 </td>
 </tr>
 <tr>
-<th class="last">%MAKETEXT{"Limit results to:"}%</td>
+<th class="last">%MAKETEXT{"Limit results to:"}%</th>
 <td class="last"><input type="text" name="limit" id="limit" size="3" value="all" /><label for="limit"> %MAKETEXT{"Topics per web"}% </label><span class="twikiSmall">%MAKETEXT{"(=all= to show all topics)"}%</span>
 </td>
 </tr>
