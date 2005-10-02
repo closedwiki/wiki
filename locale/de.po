@@ -2,7 +2,7 @@
 # This file is distributed under the same license as TWiki itself
 # Copyright (C) 2005 Peter Thoeny, peter@thoeny.com and TWiki Contributors.
 # Translators:
-#   <add-yourself-here>
+#   André Ulrich
 msgid ""
 msgstr ""
 "Project-Id-Version: TWiki $Id\n"
@@ -48,7 +48,7 @@ msgstr "%1 Benutzer Authentifizierung"
 #: data/_default/WebLeftBar.txt:6
 #, fuzzy
 msgid "%1 Web"
-msgstr "%1 Startseite"
+msgstr "%1 Web"
 
 #: data/TWiki/WebLeftBarExample.txt:3 data/Trash/WebLeftBar.txt:5
 #, fuzzy
@@ -162,7 +162,7 @@ msgstr "(%1 vs. %2)"
 
 #: data/TWiki/WebSearchAdvanced.txt:58
 msgid "(=all= to show all topics)"
-msgstr ""
+msgstr "(=all= um alle Topics anzuzeigen)"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:18
 #: data/TWiki/WebTopicViewTemplate.txt:18
@@ -171,7 +171,7 @@ msgstr "(Mehr Optionen in WebSearch)"
 
 #: data/Sandbox/WebHome.txt:10
 msgid "(Use a topic name in TWiki.WikiNotation)"
-msgstr ""
+msgstr "(Benutzen Sie einen Topic Namen in TWiki.WikiNotation)"
 
 #: templates/oopsattention.tmpl:123
 msgid "(__Suggestion:__ How about uploading your picture to your topic?)"
@@ -236,7 +236,7 @@ msgstr "(Achtung)"
 #: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:24
 #, fuzzy
 msgid "(otherwise search %1 Web only)"
-msgstr "Nur %1 Web durchsuchen"
+msgstr "(ansonsten nur %1 Web durchsuchen)"
 
 #: templates/preview.pattern.tmpl:31 templates/preview.pattern.tmpl:41
 msgid "(preview)"
@@ -258,7 +258,7 @@ msgstr "(Suchergebnisse)"
 
 #: data/TWiki/WebSearchAdvanced.txt:40
 msgid "(semicolon =;= for and)"
-msgstr ""
+msgstr "(Semikolon =;= für und)"
 
 #: templates/settings.pattern.tmpl:51
 msgid "(set preferences)"
@@ -377,6 +377,8 @@ msgid ""
 "A more extensive changes list is available via the [[%1][Recent Changes]] "
 "link in the navigation menu."
 msgstr ""
+"Eine ausführlichere Änderungsliste steht über den [[%1][Aktuelle Änderungen]] "
+"Verweis im Navigations Menu zur Verfügung."
 
 #: templates/oopsalerts.tmpl:12
 msgid ""
@@ -430,7 +432,7 @@ msgstr "Administrative Pflege"
 #: data/TWiki/WebSearchAdvanced.txt:3
 #, fuzzy
 msgid "Advanced Search"
-msgstr "erweiterte Suche"
+msgstr "Erweiterte Suche"
 
 #: data/TWiki/WebSearch.txt:13
 #, fuzzy
@@ -439,7 +441,7 @@ msgstr "erweiterte Suche"
 
 #: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:24
 msgid "All public webs"
-msgstr ""
+msgstr "Alle öffentlichen Webs"
 
 #: data/TWiki/WebSearchAdvanced.txt:71
 #, fuzzy
@@ -515,12 +517,12 @@ msgstr "Anhang"
 
 #: lib/TWiki/UI/Manage.pm:342
 msgid "Attachment already exists in new topic"
-msgstr ""
+msgstr "Der Anhang existiert bereits in dem neuen Topic"
 
 #: lib/TWiki/UI/Manage.pm:322
 #, fuzzy
 msgid "Attachment does not exist"
-msgstr "%1 Topic existiert nicht"
+msgstr "Anhang existiert nicht"
 
 #: templates/oopsattention.tmpl:49
 msgid "Attachment move failed"
@@ -577,7 +579,7 @@ msgstr "Basis Web %1 fehlt oder existiert nicht"
 
 #: data/TWiki/WebSearch.txt:22 data/TWiki/WebSearchAdvanced.txt:22
 msgid "Both body and title"
-msgstr ""
+msgstr "Beides, Text und Titel"
 
 #: templates/oopsalerts.tmpl:10 templates/oopsattention.tmpl:39
 msgid "Can't find user %1"
@@ -615,7 +617,7 @@ msgstr "Konnte %1 nicht nach %2 umbenennen, da es bereits existiert"
 
 #: data/TWiki/WebSearchAdvanced.txt:39
 msgid "Case sensitive"
-msgstr ""
+msgstr "Groß-/Kleinschreibung beachten"
 
 #: templates/oopsattention.tmpl:266
 msgid ""
@@ -780,15 +782,15 @@ msgstr "Verweis auf die angehängte Datei erzeugen"
 
 #: data/Sandbox/WebHome.txt:17
 msgid "Create a new auto-numbered test topic:"
-msgstr ""
+msgstr "Ein neues, automatisch nummeriertes, Test Topic anlegen:"
 
 #: data/Sandbox/WebHome.txt:10
 msgid "Create a new document by name:"
-msgstr ""
+msgstr "Ein neues Dokument mit Hilfe eines Namens anlegen:"
 
 #: data/Sandbox/WebHome.txt:13
 msgid "Create by Name"
-msgstr ""
+msgstr "Durch Namen anlegen"
 
 #: data/TWiki/WebLeftBarExample.txt:11 data/TWiki/WebLeftBarLogin.txt:6
 msgid "Create personal sidebar"
@@ -804,7 +806,7 @@ msgstr "Legen Sie ein geeignetes Topic für die Formular-Definition an"
 
 #: data/Sandbox/WebHome.txt:22
 msgid "Current time on this server:"
-msgstr ""
+msgstr "Aktuelle Zeit auf diesem Server:"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
@@ -870,11 +872,11 @@ msgstr "Anhang nicht in Tabelle anzeigen"
 
 #: data/TWiki/WebSearchAdvanced.txt:51
 msgid "Do show:"
-msgstr ""
+msgstr "Anzeigen:"
 
 #: data/TWiki/WebSearchAdvanced.txt:44
 msgid "Don't show:"
-msgstr ""
+msgstr "Nicht anzeigenn:"
 
 #: templates/oopsattention.tmpl:50
 msgid ""
@@ -1175,7 +1177,7 @@ msgstr "Bilder werden angezeigt, für andere Anhänge wird ein Link erzeugt."
 
 #: data/TWiki/WebSearchAdvanced.txt:34
 msgid "In reversed order"
-msgstr ""
+msgstr "In umgekehrter Reihenfolge"
 
 #: templates/oopsattention.tmpl:191
 msgid "Incorrect %1"
@@ -1244,15 +1246,15 @@ msgstr "Sprung:"
 
 #: data/TWiki/WebSearchAdvanced.txt:32
 msgid "Last editor"
-msgstr ""
+msgstr "Letzter Bearbeiter"
 
 #: data/TWiki/WebSearchAdvanced.txt:31
 msgid "Last modified time"
-msgstr ""
+msgstr "Zeit der letzten Änderung"
 
 #: data/TWiki/WebSearchAdvanced.txt:57
 msgid "Limit results to:"
-msgstr ""
+msgstr "Ergebnisse beschränken auf:"
 
 #. ($left)
 #. ($right)
@@ -1271,11 +1273,11 @@ msgstr "Verweis"
 
 #: data/TWiki/WebSearch.txt:35 data/TWiki/WebSearchAdvanced.txt:69
 msgid "List all topics in the %1 web in alphabetical order"
-msgstr ""
+msgstr "Auflistung aller Topics in dem %1 Web in alphabetischer Reihenfolge"
 
 #: data/TWiki/WebSearch.txt:36 data/TWiki/WebSearchAdvanced.txt:70
 msgid "List topics that start with the letter:"
-msgstr ""
+msgstr "Auflistung aller Topics beginnend mit folgenden Buchstaben:"
 
 #: templates/attach.pattern.tmpl:63
 msgid "Local file"
@@ -1363,7 +1365,7 @@ msgstr "Meine Verweise"
 
 #: lib/TWiki/Search.pm:786
 msgid "NEW"
-msgstr ""
+msgstr "NEU"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:2
 #: data/TWiki/WebTopicViewTemplate.txt:2
@@ -1438,7 +1440,7 @@ msgstr "Notizen:"
 #: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:11
 #, fuzzy
 msgid "Notifications"
-msgstr "&Mehr Aktionen"
+msgstr "Benachrichtigungen"
 
 #: templates/search.pattern.tmpl:32 templates/searchbookview.pattern.tmpl:12
 #: templates/searchformat.pattern.tmpl:7
@@ -1460,7 +1462,7 @@ msgstr "Nur Mitglieder von %1 dürfen diese Aktion durchführen."
 
 #: data/TWiki/WebSearch.txt:33 data/TWiki/WebSearchAdvanced.txt:67
 msgid "Other search options:"
-msgstr ""
+msgstr "Weitere Such-Optionen:"
 
 #: templates/login.pattern.tmpl:41
 msgid "Password"
@@ -1582,6 +1584,9 @@ msgid ""
 "Read %1 to get a quick overview of this collaboration platform. To learn "
 "more, study the TWikiTutorial, which is accessible from the same link."
 msgstr ""
+"Lesen Sie %1, um einen schnellen Überblick über diese Kollaboration Plattform zu bekommen. "
+"Auführlichere Informationen bekommen Sie im TWikiTutorial, welches über den selben "
+"Verweis zu erreichen ist."
 
 #: templates/edit.pattern.tmpl:216
 msgid "Read new revision help text in new window"
@@ -1591,11 +1596,11 @@ msgstr "Lesen Sie den Hilfetext zu neuen Revision in einem neuen Fenster"
 #: data/TWiki/WebSearchAdvanced.txt:72
 #, fuzzy
 msgid "Recently changed topics"
-msgstr "Zugehörige Topics:"
+msgstr "Kürzlich geänderte Topics"
 
 #: data/TWiki/WebSearchAdvanced.txt:40
 msgid "Regular expression search"
-msgstr ""
+msgstr "Mit regulären Ausdrücke suchen"
 
 #: data/TWiki/NewUserTemplate.txt:24
 #, fuzzy
@@ -1813,7 +1818,7 @@ msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:28
 msgid "Sort results by:"
-msgstr ""
+msgstr "Ergebnisse sortieren nach:"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:18 templates/view.pattern.tmpl:71
 msgid "Start of topic"
@@ -1860,13 +1865,15 @@ msgstr "Abonnieren / Abbestellen von:"
 
 #: data/TWiki/WebSearchAdvanced.txt:46
 msgid "Summaries"
-msgstr ""
+msgstr "Zusammenfassungen"
 
 #: data/TWiki/WebSearch.txt:14
 msgid ""
 "TIP: to search for all topics that contain =\"SOAP\"=, =\"WSDL\"=, a literal "
 "=\"web service\"=, but not =\"shampoo\"=, write:"
 msgstr ""
+"TIPP: Um nach Topics zu suchen die =\"SOAP\"=, =\"WSDL\"= und den Begriff "
+"=\"web service\"= beinhalten, in denen aber nicht =\"shampoo\"= vorkommt, schreiben Sie:"
 
 #: templates/mailresetpassword.tmpl:3
 msgid "TWiki password reset for %1"
@@ -1892,7 +1899,7 @@ msgstr "Zugehörige Topics:"
 
 #: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:20
 msgid "Text body"
-msgstr ""
+msgstr "Text"
 
 #: templates/oopsattention.tmpl:121 templates/oopsattention.tmpl:138
 msgid "Thank you for registering"
@@ -2089,6 +2096,10 @@ msgid ""
 "subscribe, please add a bullet with your %2 in alphabetical order to this "
 "list:"
 msgstr ""
+"Dies ist ein Abonement-Service, um automatisch per E-Mail benachrichtigt zu "
+"werden, wenn ein Topic im %1 Web sich geändert hat. Um sich für diesen Service "
+"anzumelden fügen Sie einfach ihren %2 in alphabetischer Reihenfolge zu dieser "
+"Liste hinzu." 
 
 #: templates/mailnotify.tmpl:12
 msgid "This is an automated email from %1."
@@ -2104,6 +2115,8 @@ msgid ""
 "This is the Trash. Here you can undelete topics; deleted attachments are in "
 "TrashAttachment."
 msgstr ""
+"Dies ist der Abfall (Trash). Hier können Sie gelöschte Topics wiederherstellen; gelöschte "
+"Anhänge befinden sich in im Topic TrashAttachment."
 
 #: templates/renamedelete.pattern.tmpl:22
 #: templates/renamewebdelete.pattern.tmpl:22
@@ -2187,7 +2200,7 @@ msgstr " Topic konnte nicht vom alten Kategorie-Stil aktualisiert werden"
 #: data/TWiki/WebSearchAdvanced.txt:30
 #, fuzzy
 msgid "Topic name"
-msgstr "Topic Name:"
+msgstr "Topic Name"
 
 #: templates/moveattachment.pattern.tmpl:44
 #: templates/renamebase.pattern.tmpl:57
@@ -2206,7 +2219,7 @@ msgstr "Topic Einstellungen"
 #: data/TWiki/WebSearch.txt:21 data/TWiki/WebSearchAdvanced.txt:21
 #, fuzzy
 msgid "Topic title"
-msgstr "Topic Einstellungen"
+msgstr "Topic Titel"
 
 #: templates/oopsattention.tmpl:23
 msgid "Topic was merged"
@@ -2242,7 +2255,7 @@ msgstr ""
 
 #: data/TWiki/WebSearchAdvanced.txt:47
 msgid "Total matches"
-msgstr ""
+msgstr "Alle Treffer"
 
 #: templates/oopsleaseconflict.pattern.tmpl:7
 #: templates/oopsleaseconflict.tmpl:30
@@ -2292,7 +2305,7 @@ msgstr "Die hochgeladene Datei ist zu groß"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:13
 #: data/TWiki/WebTopicViewTemplate.txt:13
 msgid "Use the [[WebSearch][Search]] link on top of this page, or do a simple"
-msgstr ""
+msgstr "Benutzen Sie den Verweis [[WebSearch][Suche]] am Anfang der Seite oder machen Sie eine einfache"
 
 #: templates/oopsattention.tmpl:7
 msgid "User Account %1 Deleted"
@@ -2310,7 +2323,7 @@ msgstr "Benutzername"
 #: data/Main/WebLeftBar.txt:8
 #, fuzzy
 msgid "Users"
-msgstr "Benutzername"
+msgstr "Benutzer"
 
 #: templates/oopsattention.tmpl:130
 msgid ""
@@ -2414,7 +2427,7 @@ msgstr "Sie sind auch auf Topic %1 gelistet"
 #: templates/oopsattention.tmpl:289
 #, fuzzy
 msgid "You are denied access to the following topics in the web:"
-msgstr " Sie haben keinen Zugriff auf die folgenden Topics im Web:"
+msgstr "Sie haben keinen Zugriff auf die folgenden Topics im Web:"
 
 #: templates/view.pattern.tmpl:51
 msgid "You are here"
@@ -2565,11 +2578,11 @@ msgstr "Deutsch"
 
 #: data/TWiki/WebSearchAdvanced.txt:52 data/TWiki/WebSearchAdvanced.txt:71
 msgid "about BookView"
-msgstr ""
+msgstr "Infos zur BookView"
 
 #: data/TWiki/WebSearchAdvanced.txt:40
 msgid "about regular expression search"
-msgstr ""
+msgstr "Infos über Suchen mit regulären Ausdrücken"
 
 #: lib/TWiki/Access.pm:153
 msgid "access denied on topic"
