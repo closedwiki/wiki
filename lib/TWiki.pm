@@ -2433,7 +2433,12 @@ sub _INCLUDE {
         } # else fail silently
         return '';
     }
+
+    # compute include key
     $path = $incweb.'.'.$inctopic;
+    foreach my $k ( sort keys %$params ) {
+	$path .= ":$k=$params->{$k}";
+    }
 
     # prevent recursive includes. Note that the inclusion of a topic into
     # itself is not blocked; however subsequent attempts to include the
