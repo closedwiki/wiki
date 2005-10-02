@@ -1,0 +1,14 @@
+7a704bcc561202abb5d4ef91e43e9c24 ./lib/TWiki/Plugins/RevCommentPlugin.pm
+e9dfd40969b15e333b0adfe55eb33b88 ./data/TWiki/WebChangesWC.txt
+5dc5bbace2f0667aa2e201ad7999bb30 ./pub/TWiki/RevCommentPlugin/ExampleHistory.png
+ea8b98ce269535481c6ff17c82ad2224 ./templates/preview.classicWC.tmpl
+637dc4f744ab3d65b55b6e583d8ccd80 ./data/TWiki/RevComment.txt
+7cb0f5c0603e2d170d3d89bc811a88ee ./lib/TWiki/Plugins/RevCommentPlugin/MANIFEST
+95167d9728380eb2938233bec7604c4f ./pub/TWiki/RevCommentPlugin/ExampleWebChanges.png
+671f42b2175c12980be32482e4d1f22f ./lib/TWiki/Plugins/RevCommentPlugin/build.pl
+cbe81b4bc2615cea76afbd5093b1b25a ./templates/edit.patternWC.tmpl
+53d6ee7ad01f22dc151ec352e69b4914 ./data/TWiki/RevCommentPlugin.txt
+a2434751b78b00f0323df55b9bd857a7 ./templates/oopshistoryWCCR.tmpl
+cb21617d5ce264e4afcf208ee6c225bc ./templates/oopshistoryWC.tmpl
+e8158b8cb43bd269666afa5b50ffe924 ./templates/edit.classicWC.tmpl
+12da52dc3de08bffcd3f8f2acb431663 ./templates/preview.patternWC.tmpl

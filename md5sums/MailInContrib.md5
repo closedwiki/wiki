@@ -1,0 +1,7 @@
+24bcd8775ed0cb7a75a21f5920f2f422 ./bin/mailincron
+d6979a41e8f12ada1d171c1a9bd0d559 ./lib/TWiki/Contrib/MailInContrib/MANIFEST
+3ae43885a045fd55f415e90869df7cbc ./lib/TWiki/Contrib/MailInContrib/build.pl
+95ffa78311e1a852b14b06b442aec7c8 ./lib/TWiki/Contrib/MailInContrib/DEPENDENCIES
+153eed5cff9a731c3f46563c70256307 ./POSTINSTALL
+0be2fa4ed75d9f35e027db642eced4cb ./lib/TWiki/Contrib/MailInContrib.pm
+0d4ae5f233492c6ad43c464e170662e6 ./data/TWiki/MailInContrib.txt

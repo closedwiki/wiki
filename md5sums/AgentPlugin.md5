@@ -1,0 +1,4 @@
+347d4bcfc32f9c99e8621248a80ef497 ./lib/TWiki/Plugins/AgentPlugin/MANIFEST
+df614421c35b44120134a2ee482aadec ./lib/TWiki/Plugins/AgentPlugin.pm
+4e173c46b3b49b6656bc8c8528ac3b44 ./data/TWiki/AgentPlugin.txt
+bbd0f07dbcafa88ecfd52402c41f6bcc ./lib/TWiki/Plugins/AgentPlugin/build.pl

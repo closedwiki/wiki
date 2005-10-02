@@ -1,0 +1,4 @@
+05e5d915895cb43ffcf47190439aaa10 ./data/TWiki/BugzillaQueryPlugin.txt
+7c34aa3c074c408655b3accd5f787e51 ./lib/TWiki/Plugins/BugzillaQueryPlugin/build.pl
+22107a70251d1b0b557701b9b3bae594 ./lib/TWiki/Plugins/BugzillaQueryPlugin.pm
+608dedaab2e0168dd9733e97fbaf182d ./lib/TWiki/Plugins/BugzillaQueryPlugin/MANIFEST

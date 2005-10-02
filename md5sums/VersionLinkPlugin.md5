@@ -1,0 +1,4 @@
+5177fb3213167fd260ae2ffb01f5d1ac ./lib/TWiki/Plugins/VersionLinkPlugin.pm
+8bf16c18cf5e90f85dd77dc368065851 ./lib/TWiki/Plugins/VersionLinkPlugin/MANIFEST
+5e716178dc1b56f92ae3a34c12587f31 ./lib/TWiki/Plugins/VersionLinkPlugin/build.pl
+9de6c91cb08c13833e0a6fe5bff1f359 ./data/TWiki/VersionLinkPlugin.txt

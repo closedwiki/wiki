@@ -1,0 +1,8 @@
+fbe07ff54e9bd8cd080562dca5a745af ./lib/TWiki/Plugins/TablePlugin/build.pl
+a18df1f11fc913b1a5d18dc0987405da ./lib/TWiki/Plugins/TablePlugin/MANIFEST
+d4f0f1f122a47511ff0d0e244b17b887 ./lib/TWiki/Plugins/TablePlugin.pm
+4d995b525effa0e5c39d65656711c751 ./pub/TWiki/TablePlugin/diamond.gif
+9f9459f7737cb5c25d263cc67f3221ca ./lib/TWiki/Plugins/TablePlugin/Core.pm
+c9eb1626325639198d30d8d71a1aaebb ./pub/TWiki/TablePlugin/up.gif
+011594ea04001f99b62609391eb10cf2 ./pub/TWiki/TablePlugin/down.gif
+cf6b547fcffb702bd7c09f1edb0794db ./data/TWiki/TablePlugin.txt

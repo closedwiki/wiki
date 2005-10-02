@@ -1,0 +1,5 @@
+1c281ec6bf0fd2af9e7d6161ede4d8cf ./data/TWiki/MultiLangPlugin.txt
+dbf17e21dd17152cc509211bcf9020e3 ./lib/TWiki/Plugins/MultiLangPlugin/build.pl
+577a645bd150c104209f9151da4e43e8 ./data/TWiki/TranslationForm.txt
+827ca48632fe2bb99dd45bfdadfa7fb3 ./lib/TWiki/Plugins/MultiLangPlugin/MANIFEST
+2ab955790361484372b824a01a5a0e3d ./lib/TWiki/Plugins/MultiLangPlugin.pm

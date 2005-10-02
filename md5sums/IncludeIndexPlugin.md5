@@ -1,0 +1,4 @@
+2edbb90686792a1bb0a09e66ed0b0a4f ./lib/TWiki/Plugins/IncludeIndexPlugin.pm
+e6bfa138a204471de27306ca7cbc5ec1 ./lib/TWiki/Plugins/IncludeIndexPlugin/build.pl
+12093dbcf4faaa6caab6ccd1f20b0658 ./lib/TWiki/Plugins/IncludeIndexPlugin/MANIFEST
+15069e74526f0e45636f850ef0067e4a ./data/TWiki/IncludeIndexPlugin.txt

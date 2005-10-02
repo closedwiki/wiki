@@ -1,0 +1,7 @@
+658144cbe6e458eab6e1a3a7aff4b2d8 ./lib/TWiki/Contrib/PublishContrib/DEPENDENCIES
+a103441b89c768824ccb7a7279938863 ./lib/TWiki/Contrib/PublishContrib/build.pl
+9704dd830299aa2533f5917b6418116b ./lib/TWiki/Contrib/PublishContrib/MANIFEST
+c9ab2b8e1463b8437f7f4645309a425d ./lib/TWiki/Contrib/Publish.pm
+b486744b8d4e1d79c35291cd34c6c875 ./data/TWiki/PublishWeb.txt
+5642616df233a9101577a91dc4949847 ./data/TWiki/PublishContrib.txt
+335d54613c81bd45132ae965ec00a561 ./bin/publish

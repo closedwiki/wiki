@@ -1,0 +1,7 @@
+41720aa07a5d7b71d2359a2e0b1e8b6c ./lib/TWiki/Plugins/MacrosPlugin/MANIFEST
+68b329da9893e34099c7d8ad5cb9c940 ./lib/TWiki/Plugins/MacrosPlugin/DEPENDENCIES
+6fc3b56d0596f55465cd2c94fdc1b9bf ./lib/TWiki/Plugins/MacrosPlugin/build.pl
+a6fd578a0e32b9977ffc315d04a4db99 ./test/unit/MacrosPlugin/MacrosPluginSuite.pm
+f5ac1fc6557b85243e890940adad2dcf ./test/unit/MacrosPlugin/MacrosTest.pm
+06f4c3ca34de4ab4ae3857a1ed68ce1e ./data/TWiki/MacrosPlugin.txt
+1c29db14d4b66fbb97544f28a4b54d43 ./lib/TWiki/Plugins/MacrosPlugin.pm

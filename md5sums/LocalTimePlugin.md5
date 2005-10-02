@@ -1,0 +1,4 @@
+b67712c2eb5ee4ed9f56fb83d993c89d ./lib/TWiki/Plugins/LocalTimePlugin/MANIFEST
+c2bd3183a86b452e69b4cd6206927275 ./lib/TWiki/Plugins/LocalTimePlugin/build.pl
+11dfcd97ff12211e2741aff3df4e4a21 ./lib/TWiki/Plugins/LocalTimePlugin.pm
+fe17c2c19aa036191dc6b943b6d061a0 ./data/TWiki/LocalTimePlugin.txt

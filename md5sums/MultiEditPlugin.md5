@@ -1,0 +1,6 @@
+dfee0964a2a3c241a1ffdf82e8ee31bb ./lib/TWiki/Plugins/MultiEditPlugin/MANIFEST
+4caa06a78822f8015b4b7d2a4ba90795 ./lib/TWiki/Plugins/MultiEditPlugin.pm
+4124a3b3d69333bdf03c0fe1befcd17e ./pub/TWiki/MultiEditPlugin/multieditplugin_example.jgp
+f1c0b88d0c908acc8aae3a60e4285e8f ./bin/editonesection
+a6d7f4623edceb05314f86481b7db8e7 ./data/TWiki/MultiEditPlugin.txt
+ab8912208f21065f18405aa036bb53aa ./lib/TWiki/Plugins/MultiEditPlugin/build.pl

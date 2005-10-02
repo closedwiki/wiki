@@ -1,0 +1,17 @@
+7676bb7a2f41597e4f2e6463a04a29f9 ./lib/TWiki/Plugins/PeerPlugin.pm
+25d94919115c4fa3f0a85971391d02fd ./data/TWiki/PeerPlugin.txt
+84358f17a041b9b4e0c8de12cfd2bfd6 ./data/TWiki/PeerReviewInstall.txt
+8059f5b05bf736da0dd768a0f70e49fa ./data/TWiki/PeerReviewExamples.txt
+8deac116eadd59dd4f403be536974078 ./lib/TWiki/Plugins/PeerPlugin/build.pl
+b6c8598858c208bbd46ca7612275d4ee ./data/TWiki/PeerPluginView.txt
+b52877bd49902a6693928fad4dd7df48 ./lib/TWiki/Plugins/PeerPlugin/MANIFEST
+c5e00611e724dcc9d9a1546cbd550321 ./tools/dbitest
+de9fc1947781d9c63c47102685890d7d ./data/TWiki/PeerReviewStats.txt
+8cc4e01e63bccb68b70b2381977d189a ./data/TWiki/PeerPluginExtForm.txt
+eb44e2ba2482ec60b53ed5ca0fadb19f ./lib/TWiki/Plugins/PeerPlugin/Review.pm
+6905bcbdccd88f50bfe025d294f463f6 ./templates/peerview.tmpl
+19bbeaa34e026e7b42b1bff777e4d745 ./data/TWiki/PeerPluginUser.txt
+3ba5fc08c1f633f3ab0ff734090fec04 ./data/TWiki/PeerPluginForm.txt
+5e041bfb7064dcc6f7c7352d7578213b ./data/TWiki/PeerReviewDbiDbdSetUp.txt
+351f2dba3bd1097ecc04def13fcb5fae ./data/TWiki/PeerPluginExtView.txt
+edbd31ac82f83a8474dc5371661b31f4 ./data/TWiki/PeerReviewMySQLSetUp.txt

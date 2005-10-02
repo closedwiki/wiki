@@ -1,0 +1,5 @@
+f0e263214ba8bf4d415ec9e83d178802 ./lib/TWiki/Plugins/AliasPlugin/MANIFEST
+68ce4a017414612396124c57efbbbd14 ./lib/TWiki/Plugins/AliasPlugin/build.pl
+cb525e7051359b0056df636b836d0774 ./data/TWiki/AliasPlugin.txt
+e60efdfc4079f932be9b254588c45916 ./lib/TWiki/Plugins/AliasPlugin.pm
+b992ac5c60337ec000d9025c783eb1c9 ./data/TWiki/WebAliases.txt

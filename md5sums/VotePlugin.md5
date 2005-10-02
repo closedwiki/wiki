@@ -1,0 +1,5 @@
+6df5fcd814cb286105c7bf3d4d0898fe ./data/TWiki/VotePlugin.txt
+a811c4a21c00ee4848b7206ea03d98d3 ./lib/TWiki/Plugins/VotePlugin/build.pl
+b6bdaa6070db3459d26746bd70641b34 ./lib/TWiki/Plugins/VotePlugin/MANIFEST
+54460d5733852033f897b639f7e9a33c ./lib/TWiki/Plugins/VotePlugin.pm
+74a574746f050d8dc1fb2ca4d630a4c6 ./bin/vote

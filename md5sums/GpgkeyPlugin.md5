@@ -1,0 +1,5 @@
+dc161d4be9a1fe13bd9c862e8941a889 ./lib/TWiki/Plugins/GpgkeyPlugin/build.pl
+26e6c35a81b3f36c1bb60ea121542ff8 ./data/TWiki/GpgkeyPlugin.txt
+5b285336e4dc9c598247f852f3d2d055 ./README.GpgkeyPlugin
+abfd862321e8b2532e0fc2954545067a ./lib/TWiki/Plugins/GpgkeyPlugin/MANIFEST
+a15b47f244a40f92f51698c41b7e37f9 ./lib/TWiki/Plugins/GpgkeyPlugin.pm

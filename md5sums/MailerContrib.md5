@@ -1,0 +1,12 @@
+0a0fba0d119bfc8e94e50685712aa4e8 ./bin/mailnotifier
+ac8c3cd24cd6643b406b59db0f72010f ./data/TWiki/MailerContrib.txt
+fbb974321de224cd1690708dc1c42365 ./lib/TWiki/Contrib/MailerContrib/Subscription.pm
+3e695440f04e09f8c9760c65630945b5 ./test/unit/MailerContrib/MailerContribTests.pm
+c98f35fe3d57246e7d0e58254fc422da ./lib/TWiki/Contrib/MailerContrib/build.pl
+5fe5ddf6587121b83838a2e713433c72 ./lib/TWiki/Contrib/MailerContrib/DEPENDENCIES
+64fc51a875518993ef4970ed67026c06 ./lib/TWiki/Contrib/MailerContrib/WebNotify.pm
+77b394927e0979ac7ad00c61c8a6964c ./lib/TWiki/Contrib/MailerContrib/Change.pm
+9b1d324c78d47dd72a2e906787f0053c ./lib/TWiki/Contrib/MailerContrib/Subscriber.pm
+dbe8cda8303802e352442a3c2ed26add ./lib/TWiki/Contrib/MailerContrib/UpData.pm
+1dad7a98f185b935a0e7992d95c5d4ac ./lib/TWiki/Contrib/Mailer.pm
+a307d348c15ae86130cfc0c5ffda001a ./lib/TWiki/Contrib/MailerContrib/MANIFEST

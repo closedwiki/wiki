@@ -1,0 +1,7 @@
+f4720bedf91e5f608fff370545ac0454 ./pub/TWiki/FakeBasicAuthRegPlugin/oopsauth.tmpl
+8c777fefce0f4dfe3365af5ea544c084 ./lib/TWiki/Plugins/FakeBasicAuthRegPlugin.pm
+78ee592c121b66ad61b21741579a5307 ./lib/TWiki/Plugins/FakeBasicAuthRegPlugin/MANIFEST
+8ef217371f39789ac35259a2622a2238 ./data/TWiki/FakeBasicAuthRegPlugin.txt
+8ae74ca14ee4d9abe60f79aec5a8bfba ./pub/TWiki/FakeBasicAuthRegPlugin/TWikiRegistration.txt
+af6459acb3b4f2859897f01109cc0704 ./pub/TWiki/FakeBasicAuthRegPlugin/htaccess.txt
+548734f24812848d9fc93c734dfdef4e ./lib/TWiki/Plugins/FakeBasicAuthRegPlugin/build.pl

@@ -1,0 +1,5 @@
+d0b9b43679eedfd1810e14fcf88e5f5b ./data/TWiki/WebContributors.txt
+c91441e950714d4910ddb0fba305ab1d ./lib/TWiki/Plugins/ContributorsPlugin.pm
+08d0f5adab5635c50f7a3eb66233717c ./data/TWiki/ContributorsPlugin.txt
+ed967cc475105d9359d83c65c3a20f94 ./lib/TWiki/Plugins/ContributorsPlugin/MANIFEST
+c445be34ae69eebedf81e0511b36ac79 ./lib/TWiki/Plugins/ContributorsPlugin/build.pl

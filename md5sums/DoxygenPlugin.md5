@@ -1,0 +1,5 @@
+b733ae26dc9b73e50e59e4c0d19e1545 ./lib/TWiki/Plugins/DoxygenPlugin.pm
+e34b58d3a141bc9b97b8328495f8310d ./data/TWiki/DoxygenPluginTests.txt
+a943823ba35ca66a59084f99f18a97ac ./lib/TWiki/Plugins/DoxygenPlugin/MANIFEST
+4fe06e9ca044b1aa9ce56bb63a95ce06 ./data/TWiki/DoxygenPlugin.txt
+63ae8e032c786c556b886be74b81fe8d ./lib/TWiki/Plugins/DoxygenPlugin/build.pl

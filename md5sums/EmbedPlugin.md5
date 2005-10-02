@@ -1,0 +1,5 @@
+2dfa32f3cda652491e5f52957d62b8f8 ./lib/TWiki/Plugins/EmbedPlugin/MANIFEST
+a65990b578a08d2df234a0c881a9d745 ./lib/TWiki/Plugins/EmbedPlugin/build.pl
+88e2ff2498f0350ba918d50b12de7c5c ./lib/TWiki/Plugins/EmbedPlugin.pm
+f8ba002779e34765c0298ff9622ae12c ./data/TWiki/EmbedPlugin.txt
+373add800cf87350090f80857252651a ./pub/TWiki/EmbedPlugin/bells.mp3

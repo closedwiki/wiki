@@ -1,0 +1,4 @@
+9820514acd8deea60985fb22a70ac1b4 ./lib/TWiki/Plugins/SuggestLinksPlugin/MANIFEST
+643cfa1e08619c07d426558bed141721 ./lib/TWiki/Plugins/SuggestLinksPlugin.pm
+34759496bba763952d8578b4d9089961 ./lib/TWiki/Plugins/SuggestLinksPlugin/build.pl
+fa375b1129030f611cc5466bab151245 ./templates/edit.suggest.tmpl

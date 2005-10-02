@@ -1,0 +1,14 @@
+cba70d4605e78ba69176706a49a02a62 ./data/TWiki/NavPluginExample.txt
+bdd9bf70e5a3bd57475d5b46e83b5768 ./pub/TWiki/NavPlugin/toc.gif
+a2462f8abade963cd7e3ed7ac8153bb7 ./data/TWiki/NavPluginDev.txt
+8ec866cfad99fdbfc6915add6554fedf ./data/TWiki/NavPluginPageOne.txt
+81a95c6c070e0aa57d3e7c70a502bd67 ./data/TWiki/NavPluginLastPage.txt
+f49dfcfdfdc37c80dab50b61fb780f22 ./data/TWiki/NavPluginPageTwo.txt
+3165f3ceeccc8773b391425d8794885d ./templates/view.nav.tmpl
+cd518dc084bad84b08a33303ae5fb747 ./data/TWiki/NavPluginIndex.txt
+e096ff91f0373aecc59a6491145fba93 ./data/TWiki/NavPlugin.txt
+9c7939ceb7edd1689a1c8e5b77b36930 ./lib/TWiki/Plugins/NavPlugin/build.pl
+a9dc722c816f81fbd3beb2743ef65672 ./lib/TWiki/Plugins/NavPlugin.pm
+41f0e185fedc215d7f3528a111caaeff ./pub/TWiki/NavPlugin/next.gif
+77d24c334b09d4fba28182214bf02829 ./pub/TWiki/NavPlugin/prev.gif
+33cd7d7ad0b3738894ad7c78d8ab83a4 ./lib/TWiki/Plugins/NavPlugin/MANIFEST

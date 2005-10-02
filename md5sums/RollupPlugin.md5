@@ -1,0 +1,4 @@
+3ebbb5292d64fd422d076f0fcd70833f ./lib/TWiki/Plugins/RollupPlugin/MANIFEST
+748d0c2d291672de77850ff05757a9ff ./data/TWiki/RollupPlugin.txt
+ce9d015753e2ae71638eb846a230de8f ./lib/TWiki/Plugins/RollupPlugin/build.pl
+80f2e2e5d423eaf9c3aacdf33b94b6c7 ./lib/TWiki/Plugins/RollupPlugin.pm

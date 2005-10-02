@@ -1,0 +1,11 @@
+c59313b7f56723aa4fccceeb2ed94507 ./lib/TWiki/Plugins/NatSkinPlugin/MANIFEST
+dadc0ebbb7438a600564acad6e7588db ./lib/TWiki/Plugins/NatSkinPlugin/build.pl
+11fcb5e0e05d49b31b9e1e690eff4faf ./bin/natsearch
+3fb6208a768b9cd034649138c2f9de74 ./bin/natlogon
+b2e7428fe17b0cf0e05f03cba40fbd68 ./data/TWiki/MySideBarTemplate.txt
+bbefc2ab8e1327c0d99315559728043d ./lib/TWiki/Plugins/NatSkinPlugin.pm
+b8b2d7934feb78d7ca895bfb69720992 ./data/TWiki/MySideBar.txt
+679a406e289f2db174a15a347b8c0b53 ./lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm
+29feff423f9ae5bd8671ae542919b213 ./data/TWiki/NatSkinPlugin.txt
+8c3f48921587904df036fc7c69d4fb20 ./lib/TWiki/Plugins/NatSkinPlugin/Search.pm
+29b36a32213e1d6c28840bebda624758 ./lib/TWiki/Plugins/NatSkinPlugin/Auth.pm

@@ -1,0 +1,6 @@
+f9404a9d04293579f82c1562064dc4e5 ./data/TWiki/PluceneSearch.txt
+54c3333f2aba3549f74969f5dd70ccba ./bin/plucindex
+b05f23b2556b3e4261e4c893f7c97cd9 ./bin/plucsearch
+999775e0a3a35734d400fb389c901974 ./bin/plucupdate
+dd979b7be400c9f51e927c823bf91adc ./templates/plucsearch.tmpl
+d055ffbdeacc13b7cbea6acbec2d2933 ./templates/plucsearch.pattern.tmpl

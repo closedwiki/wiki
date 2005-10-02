@@ -1,0 +1,4 @@
+deb7ac2bcd20cf114145c3f78bbe0af7 ./data/TWiki/SourceHighlightPlugin.txt
+905d8fa9ecb5f8d6b5f9686e415a224d ./lib/TWiki/Plugins/SourceHighlightPlugin/MANIFEST
+fa98f70d609da85c2d8c29afb734aa49 ./lib/TWiki/Plugins/SourceHighlightPlugin/build.pl
+a2bed4a9f8391e6e04ce93ddb380d112 ./lib/TWiki/Plugins/SourceHighlightPlugin.pm

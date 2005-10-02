@@ -1,0 +1,4 @@
+4ea2c5100fae9575cf7d092df008be0c ./lib/TWiki/Plugins/ChildTopicTemplatePlugin.pm
+b648aad1fa1daefd812eaf91cd495ed7 ./lib/TWiki/Plugins/ChildTopicTemplatePlugin/MANIFEST
+0c90f631586d9857615bddb544f1f69a ./data/TWiki/ChildTopicTemplatePlugin.txt
+5d9784b19ab431f2cd9916a9331ed1df ./lib/TWiki/Plugins/ChildTopicTemplatePlugin/build.pl

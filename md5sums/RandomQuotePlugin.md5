@@ -1,0 +1,4 @@
+408551bb98b8cf1759e0445b0f204b9c ./lib/TWiki/Plugins/RandomQuotePlugin/build.pl
+5e1dddcc187772bbc28efc2def43bbbe ./lib/TWiki/Plugins/RandomQuotePlugin.pm
+ef0192a642b1e649a82367370853a6b4 ./lib/TWiki/Plugins/RandomQuotePlugin/MANIFEST
+3458f3dc671aa79fc0857c2b12f4dff2 ./data/TWiki/RandomQuotePlugin.txt

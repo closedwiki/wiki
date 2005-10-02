@@ -1,0 +1,4 @@
+8ae3379bcc2e2145c25de1b3ae4b604b ./lib/TWiki/Plugins/TextSectionPlugin/build.pl
+ad9eaa3d9f5af02afdcce435b1f3c2ca ./lib/TWiki/Plugins/TextSectionPlugin/MANIFEST
+b3d8f93013fb8be11730d55f216ac731 ./data/TWiki/TextSectionPlugin.txt
+51369f1540c7e973e2ec17af299a49ae ./lib/TWiki/Plugins/TextSectionPlugin.pm

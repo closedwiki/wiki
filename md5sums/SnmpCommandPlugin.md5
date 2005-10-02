@@ -1,0 +1,4 @@
+8a39c3f73b40292b5e4f21c17edaaade ./data/TWiki/SnmpCommandPlugin.txt
+e8ca7a68e23f20ddc277a37775eba9d1 ./lib/TWiki/Plugins/SnmpCommandPlugin.pm
+e4008bf7db9c24c8245fd2e8ec8d4fbc ./lib/TWiki/Plugins/SnmpCommandPlugin/MANIFEST
+d3c2840c2ee1d73625a4af3f417eaeb0 ./lib/TWiki/Plugins/SnmpCommandPlugin/build.pl

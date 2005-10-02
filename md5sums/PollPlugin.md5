@@ -1,0 +1,7 @@
+cd7de16d850f0c708736577a2da89435 ./lib/TWiki/Plugins/PollPlugin/MANIFEST
+07083b0331f1e22094c2a65cda07df53 ./data/TWiki/SmiliesPoll.txt
+d82ef8a4217898a1ad6ad6e60bd69997 ./lib/TWiki/Plugins/PollPlugin/build.pl
+9e3d5d48686eccd34c403351b067043d ./lib/TWiki/Plugins/PollPlugin.pm
+9e4ece696afeec40b21fbc0920fa1e37 ./data/TWiki/PollPlugin.txt
+01a4475dcbcee6cfea85c6c46ec5b8e1 ./templates/oopsaccessvote.tmpl
+14573ec76f5fd9d7a5f472846a020591 ./data/TWiki/PollExample.txt
