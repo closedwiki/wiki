@@ -42,8 +42,9 @@ public class TextTool extends CreationTool {
 	    pressedFigure = drawing().findFigureInside(x, y);
 	    if (pressedFigure instanceof TextHolder) {
 	        textHolder = (TextHolder) pressedFigure;
-	        if (!textHolder.acceptsTyping())
+	        if (!textHolder.acceptsTyping()) {
 	            textHolder = null;
+            }
         }
 	    if (textHolder != null) {
 	        beginEdit(textHolder);

@@ -1,9 +1,7 @@
-lib/TWiki/Contrib/DBCache.pm  Web cache class
-lib/TWiki/Contrib/Search.pm  SQL-style syntax search object
-lib/TWiki/Contrib/FileTime.pm  Cache support for remembering file dates
-lib/TWiki/Contrib/Array.pm  Array class 
-lib/TWiki/Contrib/Map.pm  Map class 
-lib/TWiki/Contrib/Archive.pm  Archiver used if Storable is not available 
-lib/TWiki/Contrib/DBCacheContrib/build.pl Build file
-lib/TWiki/Contrib/DBCacheContrib/test.zip  Test::Unit tests 
+lib/TWiki/Contrib/DBCacheContrib.pm  Web cache class
+lib/TWiki/Contrib/DBCacheContrib/Search.pm  SQL-style syntax search object
+lib/TWiki/Contrib/DBCacheContrib/FileTime.pm  Cache support for remembering file dates
+lib/TWiki/Contrib/DBCacheContrib/Array.pm  Array class 
+lib/TWiki/Contrib/DBCacheContrib/Map.pm  Map class 
+lib/TWiki/Contrib/DBCacheContrib/Archive.pm  Archiver used if Storable is not available 
 data/TWiki/DBCacheContrib.txt  Documentation topic 

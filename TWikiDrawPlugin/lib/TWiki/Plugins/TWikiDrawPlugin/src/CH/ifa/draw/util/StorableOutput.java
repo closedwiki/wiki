@@ -100,13 +100,24 @@ public  class StorableOutput extends Object {
         for(int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             switch(c) {
-		// RobWalker 17 Jul 2003 - suppress \r
-                case '\r': break;
-                case '\n': fStream.print('\\'); fStream.print('n'); break;
-                case '"' : fStream.print('\\'); fStream.print('"'); break;
-                case '\\': fStream.print('\\'); fStream.print('\\'); break;
-                case '\t': fStream.print('\\'); fStream.print('\t'); break;
-                default: fStream.print(c);
+                // RobWalker 17 Jul 2003 - suppress \r
+            case '\r': break;
+            case '\n': fStream.print('\\'); fStream.print('n'); break;
+            case '"' : fStream.print('\\'); fStream.print('"'); break;
+            case '\\': fStream.print('\\'); fStream.print('\\'); break;
+            case '\t': fStream.print('\\'); fStream.print('\t'); break;
+            default:
+                if ((c >= 0x0001) && (c <= 0x007F)) {
+                    fStream.print(c);
+                } else {
+                    String hex = Integer.toHexString(c);
+                    switch (hex.length()) {
+                    case 1:  fStream.print("\\\\u000" + hex); break;
+                    case 2:  fStream.print("\\\\u00" + hex); break;
+                    case 3:  fStream.print("\\\\u0" + hex); break;
+                    default: fStream.print("\\\\u" + hex); break;
+                    }
+	            }
             }
 
         }

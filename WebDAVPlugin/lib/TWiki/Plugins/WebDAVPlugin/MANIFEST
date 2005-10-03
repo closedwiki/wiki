@@ -5,7 +5,6 @@ lib/TWiki/Plugins/WebDAVPlugin.pm				Main plugin module
 lib/TWiki/Plugins/WebDAVPlugin/build.pl			Main build script
 lib/TWiki/Plugins/WebDAVPlugin/dumpLockDB.pl	Potections DB dump script
 lib/TWiki/Plugins/WebDAVPlugin/Permissions.pm	Perl module
-lib/TWiki/Plugins/WebDAVPlugin/test.zip			Zip of tests (using Test::Unit)
 lib/twiki_dav/autogen.sh						Build support script
 lib/twiki_dav/CHANGES							Documentation
 lib/twiki_dav/config.h.in						Build support script
