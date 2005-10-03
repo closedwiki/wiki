@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="SvenDowideit" date="1123942808" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 
 
 ---++ <nop>%WEB% Web Preferences
@@ -68,5 +68,3 @@ __Tools:__
 %INCLUDE{"%TWIKIWEB%.RenameWeb"}%
 
 %META:FILEATTACHMENT{name="favicon.ico" attachment="favicon.ico" attr="" comment="placeholder until NonInfringingLogo created" date="1100974473" path="favicon.ico" size="318" tmpFilename="/var/tmp/CGItemp25580" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="hands_banner.png" attachment="hands_banner.png" attr="" comment="" date="1123942808" path="hands_banner.png" size="23646" tmpFilename="/var/tmp/CGItemp4115" user="Main.SvenDowideit" version="0"}%
-
