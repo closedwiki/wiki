@@ -21,6 +21,9 @@ BEGIN {
 		unshift @INC, $pc;
 	}
 }
+
+use lib '.';
+
 use TWiki::Contrib::Build;
 
 use strict;
