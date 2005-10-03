@@ -132,7 +132,7 @@ use diagnostics;
 use Carp;
 use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
 
-$VERSION = '1.010';
+$VERSION = '$Rev$';
 
 my $NL = "\n";
 
@@ -209,7 +209,6 @@ sub new {
     }
     if ($this->{-v}) {
         print 'Building in ',$buildpldir,$NL;
-die if $rootModule;
         print 'Root module is  ',$rootModule,$NL if $rootModule;
         print 'Basedir is ',$basedir,$NL;
         print 'Component dir is ',$libpath,$NL;
@@ -260,7 +259,7 @@ die if $rootModule;
         push(@{$this->{files}},
              { name => $this->{project}.'_installer.pl',
                description => 'Install script',
-               permissions => 0770 });
+               permissions => 0440 });
         print STDERR 'Auto-adding install script to manifest',$NL;
     }
 
@@ -316,30 +315,13 @@ die if $rootModule;
         }
         if ($text =~ /^\$VERSION=(.*?);$/m) {
             $version = $1;
-        }
-        if ($text =~ /\@dependencies=\((.*?)\)/o ) {
-            $text = $1;
-            while ($text =~ s/package=>['"](.*?)['"],constraint=>['"](.*?)['"]//) {
-                my ($name,$ver,$found) = ($1,$2,0);
-                if ($name !~ /^TWiki::(Plugins|Contrib|AddOn)$/) {
-                    foreach my $dep (@{$this->{dependencies}}) {
-                        if ($dep->{name} eq $name) {
-                            $dep->{version} = $ver;
-                            $found = 1;
-                            last;
-                        }
-                    }
-                    unless ($found || $name eq 'TWiki::Plugins') {
-                        push(@{$this->{dependencies}},
-                             { name=>$name, version=>$ver, type=>'perl',
-                               description=>$name, trigger=>'' });
-                    }
-                }
+            if ($version =~ /\$Rev/ ) {
+                $version = _get_svn_version($this->{pm});
             }
         }
     } else {
         warn 'WARNING: '.$this->{pm}.
-          ' not found; cannot extract VERSION or in-code dependencies';
+          ' not found; cannot extract VERSION';
     }
     close(PF);
 
@@ -375,6 +357,17 @@ die if $rootModule;
     $this->{MODULE} = $this->{project};
 
     return $this;
+}
+
+sub _get_svn_version {
+    my $from = shift;
+    my $ver = `svn info $from`;
+    unless (!$ver ) {
+        if( $ver =~ /Revision: (\d+)/s ) {
+            return $1;
+        }
+    }
+    return undef;
 }
 
 =pod
@@ -480,7 +473,7 @@ chmod notation.
 sub prot {
     my ($this, $perms, $file) = @_;
 
-    $this->sys_action('chmod '.sprintf('0%03o', $perms).' '.$file);
+    $this->perl_action('chmod('.sprintf('0%03o', $perms).',"'.$file.'")');
 }
 
 =pod
@@ -499,6 +492,25 @@ sub sys_action {
     unless ($this->{-n}) {
         system($cmd);
         die 'Failed to '.$cmd.': '.$? if ($?);
+    }
+}
+
+=pod
+
+---++++ perl_action($cmd)
+Perform a "perl" command.
+
+=cut
+
+sub perl_action {
+    my ($this, $cmd) = @_;
+
+    if ($this->{-v} || $this->{-n}) {
+        print $cmd.$NL;
+    }
+    unless ($this->{-n}) {
+        eval $cmd;
+        die 'Failed to '.$cmd.': '.$@ if ($@);
     }
 }
 
@@ -557,7 +569,7 @@ sub target_test {
 
 =pod
 
----++++ filter
+---++++ filter_txt
 Expands tokens. The following tokens are supported:
    * %$MANIFEST% - TWiki table of files in MANIFEST
    * %$FILES% - hash keyed on file name mapping to permissions i.e. 'data/TWiki/ThsiTopic.txt' => 0664, 'lib/TWiki/Plugins/BlahPlugin.pm' => 0775
@@ -575,7 +587,7 @@ The filter is used in the generation of documentation topics and the installer
 
 =cut
 
-sub filter {
+sub filter_txt {
     my ($this, $from, $to) = @_;
 
     return unless (-f $from);
@@ -609,6 +621,34 @@ sub _expand {
         return $this->{$tok};
     } else {
         return '%$'.$tok.'%';
+    }
+}
+
+=pod
+
+---++++ filter_pm($from, $to)
+Filters expanding SVN rev number with correct version from repository
+
+=cut
+
+sub filter_pm {
+    my ($this, $from, $to) = @_;
+
+    open(IF, '<'.$from) || die 'No source topic '.$from.' for filter';
+    local $/ = undef;
+    my $text = <IF>;
+    close(IF);
+
+    my $ver = _get_svn_version($from);
+    if( $ver ) {
+        if( $text =~ s/\$Rev(: \d+)?\$/\$Rev: $ver\$/gso ) {
+        }
+    }
+
+    unless ($this->{-n}) {
+        open(OF, '>'.$to) || die 'No dest topic '.$to.' for filter';
+        print OF $text;
+        close(OF);
     }
 }
 
@@ -649,7 +689,11 @@ sub target_stage {
     foreach my $file (@{$this->{files}}) {
         if ($file->{name} =~ /\.txt$/) {
             my $txt = $file->{name};
-            $this->filter($this->{basedir}.'/'.$txt, $this->{tmpDir}.'/'.$txt);
+            $this->filter_txt($this->{basedir}.'/'.$txt, $this->{tmpDir}.'/'.$txt);
+        } elsif (
+            $file->{name} =~ /\.pm$/) {
+            my $txt = $file->{name};
+            $this->filter_pm($this->{basedir}.'/'.$txt, $this->{tmpDir}.'/'.$txt);
         }
     }
     if( -e $this->{tmpDir}.'/'.$this->{data_twiki_module}.'.txt' ) {
@@ -683,11 +727,11 @@ sub target_archive {
 
     $this->cd($this->{tmpDir});
     $this->sys_action('zip -r -q '.$project.'.zip *');
-    $this->sys_action('mv '.$this->{tmpDir}.'/'.$project.'.zip '.$this->{basedir}.'/'.
-                      $project.'.zip');
+    $this->perl_action('File::Copy::move("'.$this->{tmpDir}.'/'.$project.'.zip", "'.
+                         $this->{basedir}.'/'.$project.'.zip");');
     $this->sys_action('tar czpf '.$project.'.tgz *');
-    $this->sys_action('mv '.$this->{tmpDir}.'/'.$project.'.tgz '.$this->{basedir}.'/'.
-                      $project.'.tgz');
+    $this->perl_action('File::Copy::move("'.$this->{tmpDir}.'/'.$project.'.tgz", "'.
+                         $this->{basedir}.'/'.$project.'.tgz")');
 
     $this->sys_action('md5sum '.$this->{basedir}.'/'.$project.'.tgz '.
                         $this->{basedir}.'/'.$project.'.zip > '.
@@ -709,7 +753,7 @@ Copy all files in a file set from on directory root to another.
 
 sub copy_fileset {
     my ($this, $set, $from, $to, $apply_perms) = @_;
-    
+
     my $uncopied = scalar(@$set);
     if ($this->{-v} || $this->{-n}) {
         print 'Copying '.$uncopied.' files to '.$to.$NL;
@@ -1030,7 +1074,7 @@ sub target_installer {
         print 'Generating installer in ',$installScript,$NL;
     }
 
-    $this->filter( $template, $installScript );
+    $this->filter_txt( $template, $installScript );
 
     $this->prot(0755, $installScript);
 }
