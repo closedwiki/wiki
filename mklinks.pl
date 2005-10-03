@@ -36,7 +36,7 @@ BEGIN {
 # TODO mode should default according to windows, linux, etc.
     $Config = {
 #
-	   	root => Cwd::abs_path( "$FindBin::Bin/../" ),
+	   	root => Cwd::abs_path( "$FindBin::Bin" ),
 # 
 		mode => "cp",		
 		verbose => 0,
@@ -45,7 +45,8 @@ BEGIN {
 		man => 0,
 		extensions => [],
 		build => '',
-		destroy => ''
+		destroy => '',
+		dieOnError => 0
     };
     
     chdir($Config->{root}) || die "Cannot chdir to $Config->{root}";
@@ -83,11 +84,16 @@ sub configMode {
 	}
 }
 
-# BUG: Ignores extensions passed to it. They go in but disappear.
 sub configExtensions {
     my (@ext) = @_;	
 
-    push @{$Config->{extensions}}, @ext;
+	foreach my $ext (@ext) {
+		if (-d "$ext") {
+		    push @{$Config->{extensions}}, $ext;
+		} else {
+			print STDERR "IGNORING $ext - No such directory (did you mean to prefix it with 'twikiplugins/'?)\n";
+		}
+	}
 	print STDERR "Adding extensions: ".join(", ", @{$Config->{extensions}})."\n" if $Config->{debug};    
 
 	# default is to do all plugins and contribs
@@ -100,6 +106,8 @@ sub configExtensions {
 	    }
 	}
 	print STDERR "Extensions adding: ".join(", ", @{$Config->{extensions}})."\n" if $Config->{debug};;
+	
+
 }
 
 sub destroy {
@@ -122,9 +130,23 @@ sub build {
   my ($from, $to) = @_;
   print "\t\tBUILD $from -> $to\n";
   
+  my $dir = dirname($to);
+  unless (-d $dir) {
+  	print "\t\t\tMade $dir\n";
+  	mkdir $dir;
+  }
+  
   # SMELL should be a class
   if ($Config->{mode} eq "cp") {
-  	`$Config->{build} $from $to`;
+  	my $err = `$Config->{build} $from $to`;
+	if ($?) {
+		print "ERROR $? exit code whilst building $from -> $to\n";
+		if ($Config->{dieOnError}) {
+			die "\nABORTED as Config->{dieOnError} is set\n";
+		} else {
+			print "\nIGNORING as Config->{dieOnError} is unset\n";
+		}
+	}
   } else {
       die "Not implemented";
   }
@@ -240,11 +262,11 @@ sub main {
     foreach my $dir (@ext) { 
     	my $extension = basename($dir);
     	print "Linking $extension from $dir ... \n";
-    	
-		linkPubDir($dir, $extension);
+
 		linkLibDir($dir, $extension);
-		linkDataDir($dir, $extension);
 		linkTemplatesDir($dir, $extension);
+		linkDataDir($dir, $extension);
+		linkPubDir($dir, $extension);
 
 		print "... DONE\n\n";
 	}
