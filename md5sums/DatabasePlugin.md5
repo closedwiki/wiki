@@ -1,6 +1,0 @@
-eab69996509cdea973de185455c665a0  ./lib/TWiki/Plugins/DatabasePlugin.pm
-d7a3ca4e59d58b1c86a86cade64d160e  ./lib/TWiki/Plugins/DatabasePlugin/MANIFEST
-05f98d36f0f7f29ce3336b979455ffa8  ./data/TWiki/DatabasePlugin.txt
-8eaba14eae567e2b3f92e9f5c28c6580  ./bin/DatabasePluginEdit
-683fbc7019adf441efa5b1df17668142  ./bin/DatabasePluginConfig.pm
-66547caef1ab5523e894f9de996e6aa6  ./lib/TWiki/Plugins/DatabasePlugin/build.pl

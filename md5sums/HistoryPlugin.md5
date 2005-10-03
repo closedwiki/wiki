@@ -1,6 +1,0 @@
-7dac58bfcc5b6c12135462e096a0f568  ./lib/TWiki/Plugins/HistoryPlugin/build.pl
-e9c9219810ea3cf4862eec604cd96fb0  ./pub/TWiki/HistoryPlugin/screenshot.png
-13dd4957e710c7363c927f66ce3338c5  ./templates/oopshistory.tmpl
-45803185187e2ae8fc8f6c51d603b124  ./lib/TWiki/Plugins/HistoryPlugin.pm
-d77ef108a13cefe13e34f39894b94d8b  ./lib/TWiki/Plugins/HistoryPlugin/MANIFEST
-f367fba0c1c10e40117ae9475a58bacb  ./data/TWiki/HistoryPlugin.txt

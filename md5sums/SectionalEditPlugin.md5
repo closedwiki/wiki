@@ -1,8 +1,0 @@
-eff7fa06b9a34bd4501488fa8f0d2761  ./data/TWiki/SectionalEditPlugin.txt
-94997ce9e31d6c30a4ba6397e28438f2  ./lib/TWiki/Plugins/SectionalEditPlugin.pm
-f879b9169837fd62abafe939253a6d2a  ./bin/editsection
-135d8afa121dee093ef3f5e05565d757  ./lib/TWiki/Plugins/SectionalEditPlugin/MANIFEST
-477b6299ef4e062d53a2a7dfb63c5e34  ./templates/previewsection.tmpl
-666b7f14d1c9657ee7301c3b83389288  ./bin/previewsection
-24f84d13983afca4f1517bb982e25d04  ./templates/editsection.tmpl
-263123502625a84849e63abaacb5e4a5  ./lib/TWiki/Plugins/SectionalEditPlugin/build.pl

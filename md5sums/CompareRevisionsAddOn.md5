@@ -1,7 +1,0 @@
-671c1e181bbec8346568996eade4a4d8  ./bin/compare
-e64c51d7e12e204c10f3dc59d49e0a1d  ./lib/TWiki/UI/Compare.pm
-7b73bd9948236fc8cc9714fcf7debde9  ./templates/interweave.tmpl
-330301ad2d0f5524c21da1bfe5e3647c  ./data/TWiki/CompareRevisionsAddOn.txt
-3a5f313a8f88947715deeaf81820980c  ./templates/compare.tmpl
-6c000a9f76673d83cfa6bc656fd33184  ./templates/compare.pattern.tmpl
-a7799c01499261628a9f5cd5e7467397  ./templates/interweave.pattern.tmpl

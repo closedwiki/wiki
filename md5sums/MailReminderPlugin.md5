@@ -1,8 +1,0 @@
-7ced94f24ccb8bf642f5e1d0eb3a562d  ./data/TWiki/MailReminderPlugin.txt
-14ae17f10d9dcbff5e875703b75c848a  ./lib/TWiki/Plugins/MailReminderPlugin/calender_config_file
-14ae17f10d9dcbff5e875703b75c848a  ./lib/TWiki/Plugins/MailReminderPlugin/config_file
-253f3bd9e56b3810c87ef0e4ac8539fa  ./lib/TWiki/Plugins/MailReminderPlugin/build.pl
-fc843df90f6c028e89eece969cc7849a  ./lib/TWiki/Plugins/MailReminderPlugin.pm
-0f55658d46b8bc0b260e73967bf8e213  ./pub/TWiki/MailReminderPlugin/exclam.gif
-ebc14f1920513ad3577189f5ae9170cc  ./lib/TWiki/Plugins/MailReminderPlugin/cron.pl
-b2d070c0b5137294ce40a87646acd14a  ./lib/TWiki/Plugins/MailReminderPlugin/MANIFEST

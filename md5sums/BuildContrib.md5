@@ -1,7 +1,0 @@
-3b6855778dab8436a9eb088547450c88  ./lib/TWiki/Contrib/BuildContrib/BaseBuild.pm
-a72a3e4112bc84695590524cfe45d92d  ./lib/TWiki/Contrib/BuildContrib/build.pl
-320aa39e43aaf278e150c899bb5d8bc1  ./data/TWiki/BuildContrib.txt
-a06d3762e784046107e86a10759eebb6  ./lib/TWiki/Contrib/BuildContrib/TEMPLATE_installer.pl
-1ca294470ee44bdf3c16b797bcfb4162  ./lib/TWiki/Contrib/Build.pm
-3b382d28764063335d7e73e81ab3cbde  ./lib/TWiki/Contrib/BuildContrib/MANIFEST
-fbce7211241a5b89626c2eb05ff551d8  ./lib/TWiki/Contrib/BuildContrib/DEPENDENCIES

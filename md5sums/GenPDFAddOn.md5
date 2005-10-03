@@ -1,8 +1,0 @@
-62b46f41c3a7a788fc8685a34e937bcd  ./data/TWiki/GenPDFAddOnDemo.txt
-00bdb080483aebd2767baf374d5a45e3  ./lib/TWiki/Contrib/GenPDF.pm
-2a8ac09676277b5126be3e834c90aec3  ./bin/genpdf
-b66d0c574ca30b299574a398578c72d7  ./data/TWiki/GenPDFAddOn.txt
-e542d3f62226d40478d8ba8d780f0e85  ./data/TWiki/GenPDFExampleHeaderFooterTopic.txt
-7fc77c526d3689eb32737a5d213e3092  ./data/TWiki/GenPDFExampleTitleTopic.txt
-363fa819a81e471dd14d74fe85cef454  ./htmldoc_force_header.patch
-6212af7921d4b7220b887a837ec45216  ./GenPDFAddOn.zip

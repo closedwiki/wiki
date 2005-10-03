@@ -1,5 +1,0 @@
-e1bc3a83ebde2665d7357ceaee122909  ./lib/TWiki/Plugins/TestFixturePlugin/MANIFEST
-7bc3b0f562281ec70253a644f09152ca  ./data/TWiki/TestFixturePlugin.txt
-79082ff4b23c465d18828b6a2f477105  ./lib/TWiki/Plugins/TestFixturePlugin/HTMLDiffer.pm
-8c26e29346d060917b68e2f01440ca7e  ./lib/TWiki/Plugins/TestFixturePlugin/build.pl
-377237125b34b257998920afa8f8e2e4  ./lib/TWiki/Plugins/TestFixturePlugin.pm
