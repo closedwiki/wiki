@@ -672,7 +672,7 @@ a:hover .twikiAccessKey {
 }
 .patternTopBarContents {
 	margin:0;
-	padding:5px 2em 5px 1em; /* right padding same as .patternViewPage .patternMain */
+	padding:0 2em 0 1em; /* right padding same as .patternViewPage .patternMain */
 }
 .patternTopBarContents .patternSearchBox td {
 	height:50px;
@@ -925,7 +925,7 @@ td.patternToolBar {
 	text-decoration:underline;
 }
 .patternSig {
-	margin-top:.25em;
+	margin:.25em 0 0 0;
 }
 .patternSig input {
 	color:#8E9195; /*T8*/
