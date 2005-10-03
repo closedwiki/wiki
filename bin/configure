@@ -2124,8 +2124,7 @@ select {
     display:block;
 }
 .patternMain {
-    margin-left:8em;
-    margin-right:8em;
+    margin-left, margin-right:1em;
     padding:2em 3em 1em 3em;
     background-color:white;
     border-width:1px;
