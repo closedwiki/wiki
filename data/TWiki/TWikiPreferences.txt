@@ -21,8 +21,10 @@ _(Click for form-based editing of existing preferences.)_
 	* Web-specific background color: (is overwritten by web preferences)
 		* Set WEBBGCOLOR = #FFD8AA
 
-	* Image, URL and alternate tooltip text of web's logo: (can be overridden by WebPreferences)
-		* Set WEBLOGONAME = logo.png
+	* Image, URL and alternate tooltip text of web's logo. Note: don't
+    add your own local logos to the TWiki.TWikiLogos topic; create your
+    own logos topic instead.
+		* Set WEBLOGONAME = logo.gif
 		* Set WEBLOGOIMG = %PUBURL%/%BASEWEB%/%WEBPREFSTOPIC%/%WEBLOGONAME%
 		* Set WEBLOGOURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%HOMETOPIC%
 		* Set WEBLOGOALT = Home

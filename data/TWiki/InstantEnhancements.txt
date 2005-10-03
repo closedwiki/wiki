@@ -158,7 +158,7 @@ When you're creating main gateway pages, you may want to temporarily (or permane
 ---
 ---++ Change the Default Logo
 
-If you want to change the default logo, simply attach a new logo.png to the web's <nop>WebPreferences.  
+If you want to change the default logo, simply attach a new logo.gif to the web's <nop>WebPreferences.  
 
 You can change the logo's filename by overriding the name using WEBLOGONAME in <nop>WebPreferneces
 	* =Set WEBLOGONAME = filename.gif=
@@ -166,7 +166,7 @@ You can change the logo's filename by overriding the name using WEBLOGONAME in <
 Other cusomtisations are possible using =WEBLOGOIMG=, =WEBLOGOURL=, and =WEBLOGOALT= (they mirror the =WIKILOGO*= TWiki variables, but are applied to each web, rather than to the %<nop>WIKITOOLNAME%-based references)
 
 If you'd like to have the same customised logo for all the webs, make these changes in %TWIKIWEB%.TWikiPreferences instead of each web's <nop>WebPreferences, e.g.,
-	* =Set WEBLOGOIMG = %<nop>PUBURL%/%TWIKIWEB%/WebPreferences/mylogo.png=
+	* =Set WEBLOGOIMG = %<nop>PUBURL%/%TWIKIWEB%/WebPreferences/mylogo.gif=
 
 ----
 ---++ Customize Topic Classification Forms

@@ -272,9 +272,9 @@ NOTE: Although this feature is being introduced in this release, it is also bein
 
 ---++++ =WEBLOGONAME=, =WEBLOGOIMG=, =WEBLOGOURL=, =WEBLOGOALT=
 
-Each web can have its own customised logo.  The simplest way is to upload a =logo.png= to a web's <nop>WebPreferences, and it will appear in the top-left corner.
+Each web can have its own customised logo.  The simplest way is to upload a =logo.gif= to a web's <nop>WebPreferences, and it will appear in the top-left corner.
 
-To change the logo's filename, set the =WEBLOGONAME= variable.  You'll especially need to do this if you use =.jpg= or =.gif= for the logo file format:
+To change the logo's filename, set the =WEBLOGONAME= variable.  You'll especially need to do this if you use a different logo file format:
       * <nop>Set WEBLOGONAME = MyLogo.jpg
 
 RSS feeds have also been enhanced to use the web-specific logo.

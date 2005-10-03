@@ -67,5 +67,5 @@ __Tools:__
 %INCLUDE{"TWiki.RenameWeb"}%
 
 
-%META:FILEATTACHMENT{name="logo.png" attr="" comment="" date="1126793019" path="logo.png" size="3362" user="TWikiContributor" version=""}%
+%META:FILEATTACHMENT{name="logo.gif" attr="" comment="" date="1126793019" path="logo.png" size="3362" user="TWikiContributor" version=""}%
 %META:FILEATTACHMENT{name="favicon.ico" attr="" comment="" date="1125867877" path="favicon.ico" size="1750" user="TWikiContributor" version=""}%

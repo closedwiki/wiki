@@ -1,39 +1,57 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 ---+ TWiki Logos
+%STARTINCLUDE%
+<table cellpadding="5"><tr><td valign="top">
 
----++ smallLogo
-<img src="%ATTACHURLPATH%/smallLogo.gif" alt="TWiki"/>
-<a href="%ATTACHURLPATH%/smallLogo.gif">
-%BR%open
-</a>
+T-logo, transparent bg, 170x130: <br />
+    <img src="%ATTACHURLPATH%/T-logo170x130-t.gif" alt="T-logo, no text, transparent bg, 170x130"  />
 
----++ vertTWiki
-<img src="%ATTACHURLPATH%/vertTWiki.gif" alt="TWiki"/>
-<a href="%ATTACHURLPATH%/vertTWiki.gif">
-%BR%open
-</a>
+T-logo, transparent bg, 65x50: <br />
+    <img src="%ATTACHURLPATH%/T-logo65x50-t.gif" alt="T-logo, no text, transparent bg, 65x50"  />
 
----++ vertTWikiPowered
-<img src="%ATTACHURLPATH%/vertTWikiPowered.gif" alt="Powered by TWiki"/>
-<a href="%ATTACHURLPATH%/vertTWikiPowered.gif" alt="Powere">
-%BR%open
-</a>
+T-logo, transparent bg, 59x45: <br />
+    <img src="%ATTACHURLPATH%/T-logo59x45-t.gif" alt="T-logo, no text, transparent bg, 58x50"  />
 
----++ horzTWiki
-<img src="%ATTACHURLPATH%/horzTWiki.gif" alt="TWiki"/>
-<a href="%ATTACHURLPATH%/horzTWiki.gif">
-%BR%open
-</a>
+T-logo, transparent bg, 46x35: <br />
+    <img src="%ATTACHURLPATH%/T-logo46x35-t.gif" alt="T-logo, no text, transparent bg, 46x35"  />
 
----++ horzTWikiPowered
-<img src="%ATTACHURLPATH%/horzTWikiPowered.gif" alt="Powered by TWiki"/>
-<a href="%ATTACHURLPATH%/horzTWikiPowered.gif" alt="Powere">
-%BR%open
-</a>
+T-logo, transparent bg, 34x26: <br />
+    <img src="%ATTACHURLPATH%/T-logo34x26-t.gif" alt="T-logo, no text, transparent bg, 34x26"  />
 
-%META:FILEATTACHMENT{name="smallLogo.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="1854"}%
-%META:FILEATTACHMENT{name="vertTWiki.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="3884"}%
-%META:FILEATTACHMENT{name="vertTWikiPowered.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="4051"}%
-%META:FILEATTACHMENT{name="horzTWiki.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="3841"}%
-%META:FILEATTACHMENT{name="horzTWikiPowered.gif" attrs="" comment="" date="3000000000" path="" user="TWikiContributor" version="1.1" size="2984"}%
+T-logo, transparent bg, 16x16: <br />
+    <img src="%ATTACHURLPATH%/T-logo16x16-t.gif" alt="T-logo, transparent bg, 16x16"  />
+
+</td><td valign="top">
+
+T-logo, transparent bg, 456x130: <br />
+    <img src="%ATTACHURLPATH%/T-logo456x130-t.gif" alt="T-logo, transparent bg, 456x130"  />
+
+T-logo, transparent bg, 175x50: <br />
+    <img src="%ATTACHURLPATH%/T-logo175x50-t.gif" alt="T-logo, transparent bg, 175x50"  />
+
+T-logo, transparent bg, 158x45: <br />
+    <img src="%ATTACHURLPATH%/T-logo158x45-t.gif" alt="T-logo, transparent bg, 158x45"  />
+
+T-logo, transparent bg, 124x35: <br />
+    <img src="%ATTACHURLPATH%/T-logo124x35-t.gif" alt="T-logo, transparent bg, 124x35"  />
+
+T-logo, transparent bg, 109x31: <br />
+    <img src="%ATTACHURLPATH%/T-logo109x31-t.gif" alt="T-logo, transparent bg, 109x31"  />
+
+</td></tr></table>
+%STOPINCLUDE%
+%META:FILEATTACHMENT{name="T-logo456x130-t.gif" attr="" comment="T-logo, transparent bg, 456x130" date="1128238800" path="T-logo456x130-t.gif" size="10469" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo175x50-t.gif" attr="" comment="T-logo, transparent bg, 175x50" date="1128238897" path="T-logo175x50-t.gif" size="3383" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo158x45-t.gif" attr="" comment="T-logo, transparent bg, 158x45" date="1128238969" path="T-logo158x45-t.gif" size="3134" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo109x31-t.gif" attr="" comment="T-logo, transparent bg, 109x31" date="1128239049" path="T-logo109x31-t.gif" size="1879" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo170x130-t.gif" attr="" comment="T-logo, no text, transparent bg, 170x130" date="1128240471" path="T-logo170x130-t.gif" size="6103" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo65x50-t.gif" attr="" comment="T-logo, no text, transparent bg, 65x50" date="1128240543" path="T-logo65x50-t.gif" size="2048" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo59x45-t.gif" attr="" comment="T-logo, no text, transparent bg, 59x45" date="1128240543" path="T-logo59x45-t.gif" size="2048" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo58x45-t.gif" attr="" comment="T-logo, no text, transparent bg, 58x50" date="1128240610" path="T-logo59x45-t.gif" size="1905" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo34x26-t.gif" attr="" comment="T-logo, no text, transparent bg, 34x26" date="1128240800" path="T-logo34x26-t.gif" size="1290" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo16x16-t.gif" attr="" comment="T-logo, no text, transparent bg, 16x16" date="1128239302" path="T-logo16x16-t.gif" size="985" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="favicon.ico" attr="" comment="T-logo, favicon, 16x16" date="1128239322" path="favicon.ico" size="3638" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo124x35-t.gif" attr="" comment="T-logo, transparent bg, 124x35" date="1128301362" path="T-logo124x35-t.gif" size="2368" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="T-logo46x35-t.gif" attr="" comment="T-logo, no text, transparent bg, 46x35" date="1128301767" path="T-logo46x35-t.gif" size="1559" user="TWikiContributor" version="1.1"}%
+%META:FILEATTACHMENT{name="logo.svg" attr="" comment="Scalable Vector Graphics source" date="1128301767" path="logo.svg" size="1559" user="TWikiContributor" version="1.1"}%
 
