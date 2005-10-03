@@ -1,12 +1,12 @@
-%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
-
-<div class="twikiLeft">
-<a href="%WEBLOGOURL%"><img src="%WEBLOGOIMG%" border="0" alt="%WEBLOGOALT%"/></a>
-</div>
+%META:TOPICINFO{author="ArthurClemens" date="1128371875" format="1.1" version="1.2"}%
+<div class="twikiLeft" style="height:60px;"><table cellspacing="0" cellpadding="0" border="0">
+<tr><td valign="middle" height="60">
+<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%"/></a>
+</td></tr></table></div>
 <div class="twikiRight patternSearchBox">
 <table border="0" cellpadding="0" cellspacing="0">
 <tr>
-<td>
+<td valign="middle" height="60">
 <form name="top" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
 <label for="go">%MAKETEXT{"Jump:"}% </label><input type="text" id="go" name="topic" size="16" />
 </form>
@@ -14,4 +14,3 @@
 </tr>
 </table>
 </div>
-
