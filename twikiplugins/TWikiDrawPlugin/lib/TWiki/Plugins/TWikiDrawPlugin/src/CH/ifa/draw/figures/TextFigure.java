@@ -32,11 +32,6 @@ public  class TextFigure
     private String  fText;
     private Font    fFont;
     private boolean fIsReadOnly;
-    private int  fAlign;
-
-    private static final int TEXTALIGN_LEFT = 0;
-    private static final int TEXTALIGN_CENTRE = 1;
-    private static final int TEXTALIGN_RIGHT = 2;
 
     private Figure  fObservedFigure = null;
     private OffsetLocator fLocator = null;
@@ -51,12 +46,34 @@ public  class TextFigure
     private static final long serialVersionUID = 4599820785949456124L;
     private int textFigureSerializedDataVersion = 1;
 
+    private class LineIterator {
+        int place;
+        String s;
+
+        public LineIterator(String t) {
+            s = t;
+            place = 0;
+        }
+
+        public boolean hasMoreLines() {
+            return place < s.length();
+        }
+
+        public String nextLine() {
+            int end = s.indexOf("\n", place);
+            if (end < 0)
+                end = s.length();
+            String r = s.substring(place, end);
+            place = end + 1;
+            return r;
+        }
+    }
+
     public TextFigure() {
         fOriginX = 0;
         fOriginY = 0;
         fFont = createCurrentFont();
         setAttribute("FillColor", ColorMap.getColorMap().color("None"));
-	fAlign = TEXTALIGN_LEFT;
         fText = new String("");
         fSizeIsDirty = true;
     }
@@ -139,13 +156,6 @@ public  class TextFigure
             return new Integer(font.getStyle());
         if (name.equals("FontName"))
             return font.getName();
-	if (name.equals("TextAlign")) {
-	    switch (fAlign) {
-	    default: return "Left";
-	    case TEXTALIGN_CENTRE: return "Centre";
-	    case TEXTALIGN_RIGHT: return "Right";
-	    }
-	}
         return super.getAttribute(name);
     }
 
@@ -172,16 +182,6 @@ public  class TextFigure
             String n = (String)value;
             setFont(new Font(n, font.getStyle(), font.getSize()) );
         }
-	else if (name.equals("TextAlign")) {
-            String n = (String)value;
-	    if (n.equals("Centre"))
-		fAlign = TEXTALIGN_CENTRE;
-	    else if (n.equals("Right"))
-		fAlign = TEXTALIGN_RIGHT;
-	    else
-		fAlign = TEXTALIGN_LEFT;
-            changed();
-	}
         else
             super.setAttribute(name, value);
     }
@@ -221,38 +221,39 @@ public  class TextFigure
         g.setFont(fFont);
         g.setColor((Color) getAttribute("TextColor"));
         FontMetrics metrics = g.getFontMetrics(fFont);
-	StringTokenizer st = new StringTokenizer(fText, "\n");
-	Dimension d = textExtent();
-	
-	int orgy = fOriginY;
-	while (st.hasMoreTokens()) {
-	    String t = st.nextToken();
-	    int xpos = fOriginX;
-	    if (fAlign == TEXTALIGN_RIGHT) {
-		xpos += d.width - metrics.stringWidth(t);
-	    } else if (fAlign == TEXTALIGN_CENTRE) {
-		xpos += (d.width - metrics.stringWidth(t)) / 2;
-	    }
-	    g.drawString(t, xpos, orgy + metrics.getAscent());
-	    orgy += metrics.getHeight();
-	}
+        Dimension d = textExtent();
+
+        int orgy = fOriginY;
+	    LineIterator st = new LineIterator(fText);
+        while(st.hasMoreLines()) {
+            String t = st.nextLine();
+            int xpos = fOriginX;
+            String sAlign = (String)getAttribute("TextAlign");
+            if (sAlign.equals("Right")) {
+                xpos += d.width - metrics.stringWidth(t);
+            } else if (sAlign.equals("Centre")) {
+                xpos += (d.width - metrics.stringWidth(t)) / 2;
+            }
+            g.drawString(t, xpos, orgy + metrics.getAscent());
+            orgy += metrics.getHeight();
+        }
     }
 
     private Dimension textExtent() {
         if (!fSizeIsDirty)
             return new Dimension(fWidth, fHeight);
         FontMetrics metrics =
-	    Toolkit.getDefaultToolkit().getFontMetrics(fFont);
-	fWidth = 0;
-	fHeight = 0;
-	StringTokenizer st = new StringTokenizer(fText, "\n");
-	while (st.hasMoreTokens()) {
-	    String t = st.nextToken();
-	    fHeight += metrics.getHeight();
-	    int w = metrics.stringWidth(t);
-	    if (w > fWidth)
-		fWidth = w;
-	}
+            Toolkit.getDefaultToolkit().getFontMetrics(fFont);
+        fWidth = 0;
+        fHeight = 0;
+	    LineIterator st = new LineIterator(fText);
+        while(st.hasMoreLines()) {
+            String t = st.nextLine();
+            fHeight += metrics.getHeight();
+            int w = metrics.stringWidth(t);
+            if (w > fWidth)
+                fWidth = w;
+        }
 
         fSizeIsDirty = false;
         return new Dimension(fWidth, fHeight);
@@ -263,16 +264,16 @@ public  class TextFigure
     }
 
     private Dimension getRowsAndColumns(String text) {
-	int rows = 0;
-	int cols = 0;
-	StringTokenizer st = new StringTokenizer(fText, "\n");
-	while (st.hasMoreTokens()) {
-	    String t = st.nextToken();
-	    if (t.length() > cols)
-		cols = t.length();
-	    rows++;
-	}
-	return new Dimension(cols, rows);
+        int rows = 0;
+        int cols = 0;
+	    LineIterator st = new LineIterator(text);
+        while(st.hasMoreLines()) {
+            String t = st.nextLine();
+            if (t.length() > cols)
+                cols = t.length();
+            rows++;
+        }
+        return new Dimension(cols, rows);
     }
 
     /**
@@ -341,8 +342,9 @@ public  class TextFigure
     }
 
     public void connect(Figure figure) {
-        if (fObservedFigure != null)
+        if (fObservedFigure != null) {
             fObservedFigure.removeFigureChangeListener(this);
+        }
 
         fObservedFigure = figure;
         fLocator = new OffsetLocator(figure.connectedTextLocator(this));

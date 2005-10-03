@@ -3,6 +3,7 @@ package CH.ifa.draw.appframe;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Interface to controlling application, either an applet or a java
@@ -14,7 +15,15 @@ public interface Application {
     /** Get command-line or applet parameter */
     String getParameter(String name);
     /** Get URL relative to the codebase of the app */
-    URL getURL(String relURL) throws MalformedURLException;
+    InputStream getStream(String relURL) throws IOException;
     /** Popup a URL in a new frame */
-    void popupFrame(URL url, String title);
+    void popupFrame(String url, String title);
+    /** exit the application (applet or whatever) */
+    void exit();
+    boolean post(String url,
+                 String fileName,
+                 String type,
+                 String path,
+                 String content,
+                 String comment) throws IOException;
 }

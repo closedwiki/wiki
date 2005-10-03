@@ -209,6 +209,8 @@ sub new {
     }
     if ($this->{-v}) {
         print 'Building in ',$buildpldir,$NL;
+die if $rootModule;
+        print 'Root module is  ',$rootModule,$NL if $rootModule;
         print 'Basedir is ',$basedir,$NL;
         print 'Component dir is ',$libpath,$NL;
         print 'Using path '.join(':',@INC).$NL;

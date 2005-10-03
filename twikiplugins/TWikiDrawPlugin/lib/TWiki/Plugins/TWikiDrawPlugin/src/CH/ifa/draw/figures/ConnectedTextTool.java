@@ -18,7 +18,7 @@ import CH.ifa.draw.standard.*;
  */
 public  class ConnectedTextTool extends TextTool {
 
-    boolean     fConnected = false;
+    private boolean     fConnected = false;
 
     public ConnectedTextTool(DrawingView view, Figure prototype) {
         super(view, prototype);
@@ -31,11 +31,25 @@ public  class ConnectedTextTool extends TextTool {
     public void mouseDown(MouseEvent e, int x, int y) {
         super.mouseDown(e, x, y);
 
-	    Figure pressedFigure =  drawing().findFigureInside(x, y);
+	    Figure pressedFigure = drawing().findFigureInside(x, y);
 
 	    TextHolder textHolder = (TextHolder)createdFigure();
-        if (!fConnected && pressedFigure != null &&
-                     textHolder != null && pressedFigure != textHolder) {
+        if (!fConnected &&
+            pressedFigure != null &&
+            textHolder != null &&
+            pressedFigure != textHolder &&
+            // As near as I can figure it, if you use the default
+            // JHotDraw code below then there is a case where you
+            // can end up here with a TextHolder you are just starting
+            // to edit as the pressedFigure, and still set as the
+            // createdFigure (because the mouseUp gets missed, I guess?)
+            // Anyway, the upshot is that the text you just created
+            // gets detached from the object you created it on and
+            // attached to the figure you just started editing instead.
+            // The following two lines are a hack to avoid this, but they
+            // seem to work. CC 8/3/05
+            !((pressedFigure instanceof TextHolder) &&
+              ((TextHolder) pressedFigure).acceptsTyping())) {
             textHolder.connect(pressedFigure);
             fConnected = true;
         }

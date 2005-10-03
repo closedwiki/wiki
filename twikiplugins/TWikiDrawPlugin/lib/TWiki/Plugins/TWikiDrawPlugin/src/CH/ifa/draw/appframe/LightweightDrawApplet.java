@@ -15,46 +15,57 @@ import CH.ifa.draw.util.*;
 import CH.ifa.draw.applet.*;
 import CH.ifa.draw.contrib.*;
 
-public  class LightweightDrawApplet extends Applet implements Application {
-
+public abstract class LightweightDrawApplet extends Applet implements Application {
+    
     private Frame frame;
-
+    
     public void	init() {
         init(new DrawFrame("LightweightDrawApplet", this));
     }
-
+    
     protected void init(Frame f) {
-	frame = f;
-	frame.pack();
-	frame.show();
+        frame = f;
+        frame.pack();
+        frame.show();
     }
-
+    
     public void stop() {
-	frame.hide();
-	frame.dispose();
+        frame.hide();
+        frame.dispose();
     }
-
+    
     public void start() {
-	frame.show();
+        frame.show();
     }
-
+    
     /** Implement Application */
     public void showStatus(String s) {
-	super.showStatus(s);
+        super.showStatus(s);
     }
-
+    
     /** Implement Application */
     public String getParameter(String name) {
-	return super.getParameter(name);
+        return super.getParameter(name);
+    }
+
+    protected URL getURL(String rurl) throws IOException {
+        return new URL(getCodeBase(), rurl);
     }
 
     /** Implement Application */
-    public URL getURL(String relURL) throws MalformedURLException {
-	return new URL(getCodeBase(), relURL);
+    public InputStream getStream(String relURL) throws IOException {
+        return getURL(relURL).openStream();
+    }
+    
+    /** Implement Application */
+    public void popupFrame(String url, String name) {
+        try {
+            getAppletContext().showDocument(getURL(url), name);
+        } catch (IOException e) {
+            showStatus(name+" file not found");
+        }
     }
 
     /** Implement Application */
-    public void popupFrame(URL url, String title) {
-	getAppletContext().showDocument(url, title);
-    }
+    public abstract void exit();
 }

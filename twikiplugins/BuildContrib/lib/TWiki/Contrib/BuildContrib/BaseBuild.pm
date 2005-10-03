@@ -72,6 +72,7 @@ sub readManifest {
     my @otherModules;
     my $line;
     while ($line = <PF>) {
+        next if $line =~ /^\s*#/;
         if ( $line =~ /^!include\s+(\S+)\s*$/ ) {
             push(@otherModules, $1);
         } elsif ( $line =~ /^(\S+)\s+(\d\d\d\s+)?(\S.*)?\s*$/o ) {

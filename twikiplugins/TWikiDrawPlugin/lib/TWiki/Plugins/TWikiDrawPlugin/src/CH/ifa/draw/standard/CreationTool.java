@@ -82,7 +82,7 @@ public class CreationTool extends AbstractTool {
      */
     protected Figure createFigure() {
         if (fPrototype == null)
-		    throw new HJDError("No protoype defined");
+		    throw new HJDError("No prototype defined");
         return (Figure) fPrototype.clone();
     }
 

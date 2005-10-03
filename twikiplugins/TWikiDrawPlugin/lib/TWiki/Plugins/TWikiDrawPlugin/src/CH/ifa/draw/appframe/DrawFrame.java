@@ -415,8 +415,7 @@ public class DrawFrame extends Frame
 
     private void readFromStorableInput(String filename) {
         try {
-            URL url = fApplication.getURL(filename);
-            InputStream stream = url.openStream();
+            InputStream stream = fApplication.getStream(filename);
             StorableInput input = new StorableInput(stream);
             fDrawing.release();
 
@@ -425,14 +424,13 @@ public class DrawFrame extends Frame
         } catch (IOException e) {
             initDrawing();
             showStatus("Error reading " + filename + ": "+e);
-	    e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
     private void readFromObjectInput(String filename) {
         try {
-            URL url = fApplication.getURL(filename);
-            InputStream stream = url.openStream();
+            InputStream stream = fApplication.getStream(filename);
             ObjectInput input = new ObjectInputStream(stream);
             fDrawing.release();
             fDrawing = (Drawing)input.readObject();
@@ -472,13 +470,8 @@ public class DrawFrame extends Frame
      * page is derived as follows: codeBase+applicationClassname+Help.html"
      */
     protected void showHelp() {
-        try {
-            String helpPath = getClass().getName().replace('.', '/');
-            URL url = fApplication.getURL(helpPath + "Help.html");
-            fApplication.popupFrame(url, "Help");
-        } catch (IOException e) {
-            showStatus("Help file not found");
-        }
+        String helpPath = getClass().getName().replace('.', '/');
+        fApplication.popupFrame(helpPath + "Help.html", "Help");
     }
 }
 
