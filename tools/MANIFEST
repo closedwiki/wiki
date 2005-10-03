@@ -24,8 +24,8 @@ bin/twiki 0550
 bin/upload 0550
 bin/view 0550
 bin/viewfile 0550
-bin/logos/logo.png 0440
-bin/logos/configure.ico 0440
+bin/logos/T-logo34x26-t.gif
+bin/logos/favicon.ico
 bin/LocalLib.cfg.txt 440
 COPYING 0440
 COPYRIGHT 0440
@@ -377,9 +377,9 @@ locale/pt.po 0440
 LICENSE 0440
 pub/Main/TWikiContributor/AUTHORS 0660
 pub/Main/WebPreferences/favicon.ico 0660
-pub/Main/WebPreferences/logo.png 0660
+pub/Main/WebPreferences/logo.gif
 pub/Sandbox/WebPreferences/favicon.ico 0660
-pub/Sandbox/WebPreferences/logo.png 0660
+pub/Sandbox/WebPreferences/logo.gif
 pub/TWiki/TWiki/thoth_baboon.gif 0660
 pub/TWiki/ATasteOfTWiki/anarchy.gif 0660
 pub/TWiki/ATasteOfTWiki/hula.gif 0660
@@ -681,20 +681,27 @@ pub/TWiki/TWikiDocGraphicsPattern/xml-feed.gif 0660
 pub/TWiki/TWikiDocGraphicsPattern/xml.gif 0660
 pub/TWiki/TWikiDocGraphicsPattern/xsl.gif 0660
 pub/TWiki/TWikiDocGraphicsPattern/zip.gif 0660
-pub/TWiki/TWikiLogos/horzTWiki.gif 0660
-pub/TWiki/TWikiLogos/horzTWikiPowered.gif 0660
-pub/TWiki/TWikiLogos/smallLogo.gif 0660
-pub/TWiki/TWikiLogos/vertTWiki.gif 0660
-pub/TWiki/TWikiLogos/vertTWikiPowered.gif 0660
+pub/TWiki/TWikiLogos/T-logo109x31-t.gif
+pub/TWiki/TWikiLogos/T-logo124x35-t.gif
+pub/TWiki/TWikiLogos/T-logo158x45-t.gif
+pub/TWiki/TWikiLogos/T-logo16x16-t.gif
+pub/TWiki/TWikiLogos/T-logo170x130-t.gif
+pub/TWiki/TWikiLogos/T-logo175x50-t.gif
+pub/TWiki/TWikiLogos/T-logo34x26-t.gif
+pub/TWiki/TWikiLogos/T-logo456x130-t.gif
+pub/TWiki/TWikiLogos/T-logo46x35-t.gif
+pub/TWiki/TWikiLogos/T-logo59x45-t.gif
+pub/TWiki/TWikiLogos/T-logo65x50-t.gif
+pub/TWiki/TWikiLogos/favicon.ico
 pub/TWiki/TWikiTemplates/testscreen.gif 0660
 pub/TWiki/WabiSabi/wabisabi.gif 0660
 pub/TWiki/WebPreferences/favicon.ico 0660
-pub/TWiki/WebPreferences/logo.png 0660
+pub/TWiki/WebPreferences/logo.gif 0660
 pub/TWiki/WindowsInstallCookbook/cygwin-icon.gif 0660
 pub/Trash/WebPreferences/favicon.ico 0660
-pub/Trash/WebPreferences/logo.png 0660
+pub/Trash/WebPreferences/logo.gif 0660
 pub/_default/WebPreferences/favicon.ico 0660
-pub/_default/WebPreferences/logo.png 0660
+pub/_default/WebPreferences/logo.gif 0660
 pub/icn/_filetypes.txt 0440
 pub/icn/bat.gif 0440
 pub/icn/bmp.gif 0440
