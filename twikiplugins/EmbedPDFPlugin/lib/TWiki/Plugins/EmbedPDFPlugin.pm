@@ -56,7 +56,7 @@ use vars qw(
         $debug $linkText $prerendered
     );
 
-$VERSION = '1.102';
+$VERSION = '$Rev$';
 $pluginName = 'EmbedPDFPlugin';  # Name of this Plugin
 
 # =========================

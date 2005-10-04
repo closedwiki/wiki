@@ -31,7 +31,7 @@ use vars qw(
         $debug $tgPopup
     );
 
-$VERSION = '1.11';
+$VERSION = '$Rev$';
 $pluginName = 'TouchGraphPlugin'; 
 
 # =========================

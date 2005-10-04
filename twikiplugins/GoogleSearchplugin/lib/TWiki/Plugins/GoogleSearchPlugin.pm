@@ -58,7 +58,7 @@ use vars qw(
    
              );
 
-  $VERSION = '1.001';
+  $VERSION = '$Rev$';
   $debug = 1;
 
 # =========================

@@ -15,7 +15,7 @@ use vars qw(
             $debug %db
            );
 
-$VERSION = '1.202';
+$VERSION = '$Rev$';
 $pluginName = 'FormQueryPlugin';
 $debug = 0;
 

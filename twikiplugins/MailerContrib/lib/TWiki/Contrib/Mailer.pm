@@ -37,7 +37,7 @@ use URI;
 
 use vars qw ( $VERSION $verbose );
 
-$VERSION = '1.011';
+$VERSION = '$Rev$';
 
 =pod
 

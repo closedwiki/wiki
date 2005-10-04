@@ -4,7 +4,7 @@ use vars qw( $VERSION $pluginName );
 
 use TWiki::Attrs;
 
-$VERSION = '1.010';
+$VERSION = '$Rev$';
 
 my $pluginName = 'MacrosPlugin';
 

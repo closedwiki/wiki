@@ -42,7 +42,7 @@ $gatewayUrl   = "http://TWiki.org/cgi-bin/xtra/tzdate"; # URL of date and time g
 $gatewayParam = "?tz=";                                 # parameter of date and time gateway
 
 # do not change
-$VERSION = '1.111';
+$VERSION = '$Rev$';
 
 
 # =========================

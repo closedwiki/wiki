@@ -48,7 +48,7 @@ use vars qw(
         $exampleCfgVar $skipskin
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pstylebegin		= '^\.(\w+)\s*$';
 
 # =========================

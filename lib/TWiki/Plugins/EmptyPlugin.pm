@@ -1,19 +1,24 @@
 # Plugin for TWiki Collaboration Platform, http://TWiki.org/
 #
+# Copyright (C) 2005 TWiki Contributors. All Rights Reserved.
+# TWiki Contributors are listed in the AUTHORS file in the root
+# of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# Additional copyrights apply to some or all of the code in this
+# file as follows:
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
 # as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details, published at 
-# http://www.gnu.org/copyleft/gpl.html
-#
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 =pod
 
@@ -31,8 +36,10 @@ working.
 
 For increased performance, all handlers except initPlugin are
 disabled below. *To enable a handler* remove the leading DISABLE_ from
-the function name. You should comment out or delete the whole of
-handlers you don't use before you release your plugin.
+the function name. For efficiency and clarity, you should comment out or
+delete the whole of handlers you don't use before you release your
+plugin (or you can put __END__ on a line of it's own and move dead
+code below that line; Perl ignores anything after __END__).
 
 __NOTE:__ When developing a plugin it is important to remember that
 TWiki is tolerant of plugins that do not compile. In this case,
@@ -42,14 +49,22 @@ errors.
 
 =cut
 
-package TWiki::Plugins::EmptyPlugin;    # change the package name and $pluginName!!!
+# change the package name and $pluginName!!!
+package TWiki::Plugins::EmptyPlugin;
 
+# Always use strict to enforce variable scoping
 use strict;
 
-use vars qw( $VERSION $pluginName $debug $exampleCfgVar );
+# $VERSION is referred to by TWiki, and is the only global variable that
+# *must* exist in this package
+use vars qw( $VERSION $debug $pluginName );
 
-$VERSION = '1.200';
-$pluginName = 'EmptyPlugin';  # Name of this Plugin
+# Use $Rev$ for plugins checked in to Subversion. Otherwise use a number
+# (real or integer)
+$VERSION = '$Rev$';
+
+# Name of this Plugin, only used in this module
+$pluginName = 'EmptyPlugin';
 
 =pod
 
@@ -89,7 +104,7 @@ sub initPlugin {
 
     # Get plugin preferences, variables defined by:
     #   * Set EXAMPLE = ...
-    $exampleCfgVar = TWiki::Func::getPreferencesValue( "\U$pluginName\E_EXAMPLE" );
+    my $exampleCfgVar = TWiki::Func::getPreferencesValue( "\U$pluginName\E_EXAMPLE" );
     # There is also an equivalent:
     # $exampleCfgVar = TWiki::Func::getPluginPreferencesValue( 'EXAMPLE' );
     # that may _only_ be called from the main plugin package.
@@ -343,7 +358,7 @@ sub DISABLE_postRenderingHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
 This handler is called by the edit script just before presenting the edit text
-in the edit box.
+in the edit box. It is called once when the =edit= script is run.
 
 __NOTE__: meta-data may be embedded in the text passed to this handler (using %META: tags)
 
@@ -365,6 +380,7 @@ sub DISABLE_beforeEditHandler {
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
 This handler is called by the preview script just before presenting the text.
+It is called once when the =preview= script is run.
 
 __NOTE:__ this handler is _not_ called unless the text is previewed.
 
@@ -388,9 +404,9 @@ sub DISABLE_afterEditHandler {
    * =$text= - text _with embedded meta-data tags_
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
-   * =$meta= - the metadata of the topic being saved, represented by a TWiki::Meta object 
+   * =$meta= - the metadata of the topic being saved, represented by a TWiki::Meta object.
 
-This handler is called just before the save action.
+This handler is called each time a topic is saved.
 
 __NOTE:__ meta-data is embedded in $text (using %META: tags)
 
@@ -414,8 +430,8 @@ sub DISABLE_beforeSaveHandler {
    * =$web= - the name of the web in the current CGI query
    * =$error= - any error string returned by the save.
    * =$meta= - the metadata of the saved topic, represented by a TWiki::Meta object 
-   
-This handler is called just after the save action.
+
+This handler is called each time a topic is saved.
 
 __NOTE:__ meta-data is embedded in $text (using %META: tags)
 
@@ -436,7 +452,9 @@ sub DISABLE_afterSaveHandler {
    * =\%attrHash= - reference to hash of attachment attribute values
    * =$topic= - the name of the topic in the current CGI query
    * =$web= - the name of the web in the current CGI query
-This handler is called just before the save action. The attributes hash
+This handler is called once when an attachment is uploaded.
+
+The attributes hash
 will include at least the following attributes:
    * =attachment= => the attachment name
    * =comment= - the comment
@@ -497,7 +515,7 @@ If any merges are left unresolved after all plugins have been given a chance to 
    1 '+' and '-' text is always included in the the body text and text fields
    1 <del>conflict</del> <ins>markers</ins> are used to mark 'c' merges in text fields
 
-The merge handler is called whenever a merge is required to resolve concurrent edits on a topic.
+The merge handler is called whenever a topic is saved, and a merge is required to resolve concurrent edits on a topic.
 
 =cut
 

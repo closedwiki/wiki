@@ -21,7 +21,7 @@ use vars qw(
         $debug $userListSuffix $emailTextSuffix
     );
 
-$VERSION = '1.010';
+$VERSION = '$Rev$';
 
 $userListSuffix = 'NotifyUsers';
 $mailTextSuffix = 'NotifyText';

@@ -27,7 +27,7 @@ use vars qw(
 
 use I18N::AcceptLanguage;
 
-$VERSION = '1.103';
+$VERSION = '$Rev$';
 $pluginName = 'TopicTranslationsPlugin';  # Name of this Plugin
 
 # =========================

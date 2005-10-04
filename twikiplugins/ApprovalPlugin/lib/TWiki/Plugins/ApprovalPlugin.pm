@@ -67,7 +67,7 @@ use vars qw(
 	    %globPreferences
 	    );
 
-$VERSION = '1.121';
+$VERSION = '$Rev$';
 $pluginName = 'ApprovalPlugin';  # Name of this Plugin
 
 # =========================

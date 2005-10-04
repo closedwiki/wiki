@@ -36,7 +36,7 @@ use vars qw(
         %FormatMap %TreeTopics $RootLabel $cgi $CurrUrl
     );
 
-$VERSION = '0.311';
+$VERSION = '$Rev$';
 
 $RootLabel = "_"; # what we use to label the root of a tree if not a topic
 

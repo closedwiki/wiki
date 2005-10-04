@@ -30,7 +30,7 @@ use vars qw(
         $debug @wikiGroups $groupFile
     );
 
-  $VERSION = 1.1;
+  $VERSION = $Rev$;
   $pluginName = 'AddDBMGroupPlugin';
 
 # =========================

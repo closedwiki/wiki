@@ -27,7 +27,7 @@ package TWiki::Plugins::AntiWikiSpamPlugin;
 
 use vars qw( $VERSION $pluginName $debug );
 
-$VERSION = '0.100';
+$VERSION = '$Rev$';
 $pluginName = 'AntiWikiSpamPlugin';  # Name of this Plugin
 
 =pod

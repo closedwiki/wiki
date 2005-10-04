@@ -56,7 +56,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.11';
+$VERSION = '$Rev$';
 $pluginName = 'EmbedQTPlugin';  # Name of this Plugin
 
 # =========================

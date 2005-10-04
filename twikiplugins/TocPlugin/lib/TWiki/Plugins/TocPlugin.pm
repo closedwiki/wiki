@@ -45,7 +45,7 @@ use vars qw(
             $wif
            );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin

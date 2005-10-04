@@ -58,7 +58,7 @@ use vars qw(
         $debug $childTopicTemplateFound
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pluginName = 'ChildTopicTemplatePlugin';  # Name of this Plugin
 
 # =========================

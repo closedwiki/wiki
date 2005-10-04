@@ -21,7 +21,7 @@ use vars qw(
             $VERSION @topicList $defaultIncludes $defaultExcludes
     );
 
-$VERSION = '1.3';
+$VERSION = '$Rev$';
 
 sub initPlugin {
     my ( $topic, $web, $user, $installWeb ) = @_;

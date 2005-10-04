@@ -33,7 +33,7 @@ use strict;
 
 use vars qw( $VERSION $pluginName $debug @modes);
 
-$VERSION = '1.000';
+$VERSION = '$Rev$';
 $pluginName = 'TwistyPlugin';  # Name of this Plugin
 
 #there is no need to document this.

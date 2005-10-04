@@ -46,7 +46,7 @@ use vars qw(
             %interSiteTable
     );
 
-$VERSION = '1.108';
+$VERSION = '$Rev$';
 
 BEGIN {
     # 'Use locale' for internationalisation of Perl sorting and searching - 

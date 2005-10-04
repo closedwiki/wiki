@@ -23,7 +23,7 @@ use vars qw(
 	$defaultAliasTopic $foundError $isInitialized $insideAliasArea
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 # =========================
 sub writeDebug {

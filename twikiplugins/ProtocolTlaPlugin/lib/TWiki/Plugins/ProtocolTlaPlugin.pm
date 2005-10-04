@@ -30,7 +30,7 @@ use vars qw(
     );
 
 # XXX This version is beta-quality.  Check for new versions at twiki.org.
-$VERSION = '1.41';
+$VERSION = '$Rev$';
 $pluginName = 'ProtocolTlaPlugin';
 
 # =========================

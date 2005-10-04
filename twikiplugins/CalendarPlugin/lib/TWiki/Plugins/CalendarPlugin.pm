@@ -27,7 +27,7 @@ package TWiki::Plugins::CalendarPlugin;
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION $pluginName $debug
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
-$VERSION   = 1.117;
+$VERSION   = '$Rev$';
 #$VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
 #$VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
 #$VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters

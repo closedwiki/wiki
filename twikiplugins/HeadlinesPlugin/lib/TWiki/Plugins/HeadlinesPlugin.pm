@@ -44,7 +44,7 @@ use vars qw(
         $perlDigestMD5Found
     );
 
-$VERSION = '1.104';
+$VERSION = '$Rev$';
 $perlDigestMD5Found = 0;
 
 # =========================

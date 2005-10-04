@@ -19,7 +19,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $debug
     );
 
-$VERSION = '1.005';
+$VERSION = '$Rev$';
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;

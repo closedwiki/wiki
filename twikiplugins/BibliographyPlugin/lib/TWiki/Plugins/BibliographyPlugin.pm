@@ -55,7 +55,7 @@ use vars qw(
         $debug 
     );
 
-$VERSION = '1.020';
+$VERSION = '$Rev$';
 $pluginName = 'BibliographyPlugin';  # Name of this Plugin
 
 # =========================

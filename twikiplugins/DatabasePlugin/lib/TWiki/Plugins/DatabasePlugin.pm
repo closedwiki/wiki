@@ -116,7 +116,7 @@ use vars qw(
 	%db_username %db_password %db_hostname
     );
 
-$VERSION = '1.4';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin

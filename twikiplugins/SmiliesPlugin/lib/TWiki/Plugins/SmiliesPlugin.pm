@@ -26,7 +26,7 @@ use vars qw( $VERSION
             %smiliesUrls %smiliesEmotions
             $smiliesPubUrl $allPattern $smiliesFormat );
 
-$VERSION = '1.006';
+$VERSION = '$Rev$';
 
 sub initPlugin {
     my( $topic, $web, $user, $installWeb ) = @_;

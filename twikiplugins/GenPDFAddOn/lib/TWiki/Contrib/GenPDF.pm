@@ -54,7 +54,7 @@ use File::Temp;
 
 use vars qw($VERSION);
 
-$VERSION = '0.8';
+$VERSION = '$Rev$';
 $| = 1; # Autoflush buffers
 
 our $query = new CGI;

@@ -18,7 +18,7 @@ use strict;
 
 use vars qw( $VERSION $installWeb );
 
-$VERSION = '1.133';
+$VERSION = '$Rev$';
 
 sub initPlugin {
     my( $topic, $web, $user ) = @_;

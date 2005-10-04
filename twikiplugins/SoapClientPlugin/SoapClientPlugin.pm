@@ -56,7 +56,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.010';
+$VERSION = '$Rev$';
 $pluginName = 'SoapClientPlugin';  # Name of this Plugin
 
 use SOAP::Lite;

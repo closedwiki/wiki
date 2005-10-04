@@ -34,7 +34,7 @@ use vars qw(
         %vars
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin

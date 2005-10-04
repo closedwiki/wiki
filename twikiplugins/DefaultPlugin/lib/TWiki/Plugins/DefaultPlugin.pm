@@ -37,7 +37,7 @@ use vars qw(
         $debug $doOldInclude
     );
 
-$VERSION = '1.13';
+$VERSION = '$Rev$';
 $pluginName = 'DefaultPlugin';  # Name of this Plugin
 
 sub initPlugin {

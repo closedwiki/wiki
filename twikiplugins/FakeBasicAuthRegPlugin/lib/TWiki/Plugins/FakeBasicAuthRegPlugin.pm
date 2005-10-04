@@ -60,7 +60,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pluginName = 'FakeBasicAuthRegPlugin';  # Name of this Plugin
 
 # =========================

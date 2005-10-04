@@ -59,7 +59,7 @@ use vars qw(
 
 use Data::UUID;
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pluginName = 'GUIDPlugin';  # Name of this Plugin
 
 # =========================

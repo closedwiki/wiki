@@ -44,7 +44,7 @@ use vars qw(
 	    $perlDigestMD5Found $defaultFilter $defaultColor
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $perlDigestMD5Found = 0;
 
 # =========================

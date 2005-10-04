@@ -41,7 +41,7 @@ use vars qw( $web $topic $user $installWeb $VERSION
         $linkIcon $ratingSuffix 
         $listIconPrefix $listIconHeight $listIconWidth
         $ratingIconPrefix $ratingIconHeight $ratingIconWidth);
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 # =========================
 use TWiki::Plugins::PeerPlugin::Review;
 

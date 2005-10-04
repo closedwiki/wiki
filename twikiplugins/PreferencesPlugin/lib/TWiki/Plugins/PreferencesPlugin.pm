@@ -29,7 +29,7 @@ use vars qw(
             $query @shelter
            );
 
-$VERSION = '1.025';
+$VERSION = '$Rev$';
 
 my $MARKER = "\007";
 

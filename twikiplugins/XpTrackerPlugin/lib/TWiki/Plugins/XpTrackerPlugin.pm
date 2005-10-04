@@ -44,7 +44,7 @@ use vars qw ( @timeRec
     );
 
 use strict;
-$VERSION = '3.300';
+$VERSION = '$Rev$';
 
 $debug=0;
 

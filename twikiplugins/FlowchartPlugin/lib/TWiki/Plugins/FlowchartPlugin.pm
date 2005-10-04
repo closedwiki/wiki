@@ -61,7 +61,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '0.9';
+$VERSION = '$Rev$';
 # for th 1.0 need:
 #   * Validate data
 #   * show error message

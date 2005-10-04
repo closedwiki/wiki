@@ -47,7 +47,7 @@ use vars qw(
 	$patentUrl01 $patentUrl02 $patentUrl03 $patentApplicationUrl01 $patentApplicationUrl02 $patentApplicationUrl03 $patentText $patentApplicationText $patentImgUrl $patentApplicationImgUrl
     );
 
-$VERSION = '1.0';
+$VERSION = '$Rev$';
 
 # =========================
 sub  initPlugin

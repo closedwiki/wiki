@@ -45,7 +45,7 @@ use vars qw(
         $bgcolor $label $skipskin $leftjustify
     );
 
-$VERSION = '1.103';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin

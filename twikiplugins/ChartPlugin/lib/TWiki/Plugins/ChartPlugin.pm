@@ -43,7 +43,7 @@ use vars qw(
 	$defaultDataValue $defaultScale
     );
 
-$VERSION = '1.2';
+$VERSION = '$Rev$';
 $pluginInitialized = 0;
 $perlGDModuleFound = 0;
 $perlPOSIXModuleFound = 0;

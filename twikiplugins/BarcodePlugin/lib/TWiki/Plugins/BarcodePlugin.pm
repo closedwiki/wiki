@@ -43,7 +43,7 @@ use vars qw(
 		$pluginInitialized;
     );
 
-$VERSION = '1.102';
+$VERSION = '$Rev$';
 $pluginName = 'BarcodePlugin';  # Name of this Plugin
 
 # =========================

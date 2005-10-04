@@ -27,7 +27,7 @@ use vars qw(
         $renderingWeb $isGuest $revsToShow $skin
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin

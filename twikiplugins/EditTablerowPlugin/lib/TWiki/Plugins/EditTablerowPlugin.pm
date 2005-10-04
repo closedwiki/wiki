@@ -34,7 +34,7 @@ use vars qw(
         $prefsInitialized $prefCHANGEROWS $prefEDITBUTTON $prefEDITLINK
     );
 
-$VERSION = '1.124';
+$VERSION = '$Rev$';
 $prefsInitialized  = 0;
 
 # =========================

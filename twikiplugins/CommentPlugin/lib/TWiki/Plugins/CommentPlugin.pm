@@ -7,7 +7,7 @@ use TWiki::Func;
 
 use vars qw( $VERSION );
 
-$VERSION = '3.100';
+$VERSION = '$Rev$';
 
 sub initPlugin {
     #my ( $topic, $web, $user, $installWeb ) = @_;
