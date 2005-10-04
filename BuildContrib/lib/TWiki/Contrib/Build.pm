@@ -472,7 +472,6 @@ chmod notation.
 
 sub prot {
     my ($this, $perms, $file) = @_;
-    print "chmod($perms,$file)\n";
     $this->perl_action("chmod($perms,'$file')");
 }
 
