@@ -189,7 +189,7 @@ sub _createWeb {
     }
     $baseWeb = TWiki::Sandbox::untaintUnchecked( $baseWeb );
 
-    my $newTopic = $query->param( 'newtopic' ) || '';
+    my $newTopic = $query->param( 'newtopic' ) || $TWiki::cfg{HomeTopicName};
     # SMELL: check that it is a valid topic name?
     $newTopic = TWiki::Sandbox::untaintUnchecked( $newTopic );
 
@@ -222,8 +222,6 @@ sub _createWeb {
     }
 
     # everything OK, redirect to last message
-    $newTopic = $TWiki::cfg{HomeTopicName} unless( $newTopic );
-
     throw TWiki::OopsException
       ( 'attention',
         web => $newWeb,
