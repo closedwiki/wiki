@@ -92,7 +92,10 @@ sub check_dep {
                       $@;
                     $ok = 0;
                 } else {
-                    # The version variable exists
+                    # The version variable exists. Clean it up
+                    $ver =~ s/^.*\$Rev: (\d+)\$.*$/$1/;
+                    $ver =~ s/[^\d]//g;
+                    $ver ||= 0;
                     eval '$ok = ( $ver '.$dep->{version}.' )';
                     if( $@ || ! $ok ) {
                         # The version variable fails the constraint
