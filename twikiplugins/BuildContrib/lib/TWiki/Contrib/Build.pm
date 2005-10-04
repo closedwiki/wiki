@@ -313,7 +313,7 @@ sub new {
             $line =~ s/\s+//g;
             $text .= $line.$NL;
         }
-        if ($text =~ /^\$VERSION=(.*?);$/m) {
+        if ($text =~ /^\$VERSION\s*=(.*?);$/m) {
             $version = $1;
             if ($version =~ /\$Rev/ ) {
                 $version = _get_svn_version($this->{pm});
@@ -472,8 +472,8 @@ chmod notation.
 
 sub prot {
     my ($this, $perms, $file) = @_;
-
-    $this->perl_action('chmod('.sprintf('0%03o', $perms).',"'.$file.'")');
+    print "chmod($perms,$file)\n";
+    $this->perl_action("chmod($perms,'$file')");
 }
 
 =pod
@@ -646,7 +646,7 @@ sub filter_pm {
     }
 
     unless ($this->{-n}) {
-        open(OF, '>'.$to) || die 'No dest topic '.$to.' for filter';
+        open(OF, '>'.$to) || die 'Bad dest topic '.$to.' for filter:'.$!;
         print OF $text;
         close(OF);
     }
@@ -685,7 +685,7 @@ sub target_stage {
     $this->{tmpDir} = '/tmp/'.$$;
     $this->makepath($this->{tmpDir});
 
-    $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir}, 1);
+    $this->copy_fileset($this->{files}, $this->{basedir}, $this->{tmpDir});
     foreach my $file (@{$this->{files}}) {
         if ($file->{name} =~ /\.txt$/) {
             my $txt = $file->{name};
@@ -700,6 +700,7 @@ sub target_stage {
         $this->cp($this->{tmpDir}.'/'.$this->{data_twiki_module}.'.txt',
                   $this->{basedir}.'/'.$project.'.txt');
     }
+    $this->apply_perms($this->{files}, $this->{tmpDir} );
 
     if( $this->{other_modules} ) {
         my $libs = join(':',@INC);
@@ -752,7 +753,7 @@ Copy all files in a file set from on directory root to another.
 =cut
 
 sub copy_fileset {
-    my ($this, $set, $from, $to, $apply_perms) = @_;
+    my ($this, $set, $from, $to) = @_;
 
     my $uncopied = scalar(@$set);
     if ($this->{-v} || $this->{-n}) {
@@ -764,12 +765,27 @@ sub copy_fileset {
             die $from.'/'.$name.' does not exist - cannot copy';
         }
         $this->cp($from.'/'.$name, $to.'/'.$name);
-        if( $apply_perms && defined $file->{permissions} ) {
-            $this->prot($file->{permissions}, $to.'/'.$name);
-        }
         $uncopied--;
     }
     die 'Files left uncopied' if ($uncopied);
+}
+
+=pod
+
+---++++ apply_perms
+Apply perms to a fileset
+
+=cut
+
+sub apply_perms {
+    my ($this, $set, $to) = @_;
+
+    foreach my $file (@$set) {
+        my $name = $file->{name};
+        if( defined $file->{permissions} ) {
+            $this->prot($file->{permissions}, $to.'/'.$name);
+        }
+    }
 }
 
 =pod

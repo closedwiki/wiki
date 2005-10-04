@@ -75,24 +75,25 @@ sub readManifest {
         next if $line =~ /^\s*#/;
         if ( $line =~ /^!include\s+(\S+)\s*$/ ) {
             push(@otherModules, $1);
-        } elsif ( $line =~ /^(\S+)\s+(\d\d\d\s+)?(\S.*)?\s*$/o ) {
+        } elsif ( $line =~ /^(\S+)\s+(0?\d\d\d)?\s*(\S.*)?\s*$/o ) {
             my $name = $1;
-            my $permissions = 0;
-            $permissions = "0$2" if $2;
+            my $permissions = $2;
             my $desc = $3;
             unless( $permissions ) {
                 # No permissions in MANIFEST, read them from the file system
                 my @s = stat( $baseDir.'/'.$name );
                 if( $! ) {
                     # default perms
-                    $permissions = 0775;
+                    $permissions = 0774;
                 } else {
-                    $permissions = $s[2] & 0777;
+                    $permissions = ($s[2] & 0777);
                 }
             }
-            push(@files,
-                 { name => $1, description => ($3 || ''),
-                 permissions => $permissions });
+            $permissions = 0 unless defined $permissions;
+            $permissions =~ s/^00/0/;
+            my $n = { name => $name, description => ($desc || ''),
+                      permissions => $permissions };
+            push(@files, $n);
         }
     }
     close(PF);
