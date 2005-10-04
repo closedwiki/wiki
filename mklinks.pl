@@ -40,7 +40,7 @@ BEGIN {
 # 
 		mode => "cp",		
 		verbose => 0,
-		debug => 1,
+		debug => 0,
 		help => 0,
 		man => 0,
 		extensions => [],
@@ -112,12 +112,12 @@ sub configExtensions {
 
 sub destroy {
   my ($param) = @_;
-  print "\t\tDESTROY $param\n";
+  print "\t\tDESTROY $param\n" if $Config->{verbose};
   if ($Config->{mode} eq "cp") {
   	if (-f $param) {
-		print "\t\tDestroying $param\n";
+		print "\t\tDestroying $param\n" if $Config->{debug};
   	} else {
-  		print "\t\tNo $param to destroy\n";  	
+  		print "\t\tNo $param to destroy\n" if $Config->{debug}; 	
   	}
   	`$Config->{destroy} $param`;
     } else {
@@ -165,10 +165,10 @@ sub mklink {
     if ( -e $link ) {
         my $x =`diff -q $param $link`;
         if ( "$x" eq "" ) {
-        	print "$param and $link are not different - destroying $link\n";
+        	print "$param and $link are not different - destroying $link\n" if $Config->{debug};
             destroy $link;
         } else {
-            print "diff $param $link different - Keeping $link intact\n";
+            print "diff $param $link different - Keeping $link intact\n" if Config->{debug};
         }
     } 
     
@@ -228,34 +228,46 @@ sub getDataDir ($$) {
 }
 
 sub linkDataDir {
-	my ($dir, $ext) = @_;
-	my $data = getDataDir($dir, $ext);
-    print "DATA $data:\n" if $Config->{debug};
-    if ( -d $data) {
-
-        foreach my $txt (glob("$data/*.txt")) {
-            mklink $txt
-        }
+  my ($dir, $ext) = @_;
+  my $data = getDataDir($dir, $ext);
+  print "DATA $data:\n";# if $Config->{debug};
+  if ( -d $data) {
+    
+    foreach my $txt (glob("$data/*.txt")) {
+      mklink $txt
     }
+  }
 }
 
 sub getTemplateDir ($$) {
   my ($dir,$ext) = @_;
-  return "$dir/templates/TWiki/$ext";
+  return "$dir/templates";
+}
+
+sub getTestDir ($$) {
+  my ($dir,$ext) = @_;
+  return "$dir/test/unit/$ext";
 }
 
 sub linkTemplatesDir {
-	my ($dir, $ext) = @_;
-	my $templates = getTemplateDir($dir, $ext);
-
-	print "TEMPLATES $templates:\n" if $Config->{debug};;
-    if ( -d $templates ) {
-        foreach my $tmpl (glob("$templates/*.tmpl")) {
-            mklink $tmpl;
-        }
+  my ($dir, $ext) = @_;
+  my $templates = getTemplateDir($dir, $ext);
+  
+  print "TEMPLATES $templates:\n"; # if $Config->{debug};;
+  if ( -d $templates ) {
+    foreach my $tmpl (glob("$templates/*.tmpl")) {
+      mklink $tmpl;
     }
+  }
 }
 
+
+sub linkTestDir ($$) {
+   my ($dir, $ext) = @_;
+   my $tests = getTestDir($dir, $ext);
+   mklink $tests;
+
+}
 
 sub main {
 	my @ext = @{$Config->{extensions}};
@@ -267,6 +279,7 @@ sub main {
 		linkTemplatesDir($dir, $extension);
 		linkDataDir($dir, $extension);
 		linkPubDir($dir, $extension);
+	        linkTestDir($dir, $extension);
 
 		print "... DONE\n\n";
 	}
