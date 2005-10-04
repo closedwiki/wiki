@@ -13,7 +13,7 @@ use strict;
 use base qw(Term::Shell);
 use vars qw {$VERSION $config $prefix $prefixPath};
 
-$VERSION = "2.00";
+$VERSION = '$Rev$';
 
 my @systemModules =qw (TWiki::Contrib::TWikiShellContrib::Standard);
 

@@ -49,7 +49,7 @@ package TWiki::Contrib::DBCacheContrib;
 use vars qw( $initialised $storable $VERSION );
 
 $initialised = 0; # Not initialised until the first new
-$VERSION = '1.101';
+$VERSION = '$Rev$';
 $storable = 1;
 
 =begin text

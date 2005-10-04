@@ -66,7 +66,7 @@ use vars qw(
         %macros $prefix $rprefix $rLevel
     );
 
-$VERSION = '0.3';
+$VERSION = '$Rev$';
 $pluginName = 'RecursiveRenderPlugin';  # Name of this Plugin
 
 # =========================

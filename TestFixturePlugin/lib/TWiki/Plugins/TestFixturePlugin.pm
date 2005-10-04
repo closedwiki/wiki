@@ -47,7 +47,7 @@ use vars qw(
 
 use CGI qw( :any );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pluginName = 'TestFixturePlugin';
 
 

@@ -60,7 +60,7 @@ use vars qw(
         $debug $initialIdValue
     );
 
-$VERSION = '1.000';
+$VERSION = '$Rev$';
 $pluginName = 'MtdIdPlugin';  # Name of this Plugin
 
 # =========================

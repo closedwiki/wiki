@@ -30,7 +30,7 @@ use vars qw( $VERSION );
 use File::Spec;
 use File::Temp;
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 # These are set at initialization
 

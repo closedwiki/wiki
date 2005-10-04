@@ -31,7 +31,7 @@ package TWiki::Plugins::LoginNameAliasesPlugin;
 # =========================
 use vars qw($web $topic $user $installWeb $VERSION $pluginName);
 
-$VERSION = '1.2';
+$VERSION = '$Rev$';
 $pluginName = 'LoginNameAliasesPlugin';  # Name of this Plugin
 
 # =========================

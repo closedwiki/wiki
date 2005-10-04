@@ -56,7 +56,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $debug 
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $debug = 1;
 
 # =========================

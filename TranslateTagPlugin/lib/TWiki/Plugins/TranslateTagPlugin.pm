@@ -37,7 +37,7 @@ use vars qw(
 	$syntaxTag
     );
 
-$VERSION           = 1.1;
+$VERSION           = '$Rev$';
 $pluginName        = 'TranslateTagPlugin';	# this plugin name
 %translations      = ();			# mapping english -> translated
 %reverseTrans      = ();			# mapping translated -> english

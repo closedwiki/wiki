@@ -27,7 +27,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.021';
+$VERSION = '$Rev$';
 $pluginName = 'URLCachePlugin';  # Name of this Plugin
 
 # =========================

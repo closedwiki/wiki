@@ -25,7 +25,7 @@ use vars qw(
 use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
 
-$VERSION = '1.10';
+$VERSION = '$Rev$';
 $pluginName = 'VotePlugin';  # Name of this Plugin
 
 ###############################################################################

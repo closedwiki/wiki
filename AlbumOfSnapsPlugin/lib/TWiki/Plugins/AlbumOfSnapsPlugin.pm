@@ -72,7 +72,7 @@
     );
 
 # Following variable contains the version of our plugin 
-  $VERSION = 1.1;
+  $VERSION = '$Rev$';
 
 # Default debug option
   $debug = 1;

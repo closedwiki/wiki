@@ -46,7 +46,7 @@ use vars qw(
     );
 
 #this is the first release of this plugin
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 $pluginName = 'LaTeXToMathMLPlugin';  # Name of this Plugin
 

@@ -24,7 +24,7 @@ package TWiki::Plugins::TablePlugin;
 
 use vars qw( $topic $installWeb $VERSION $initialised );
 
-$VERSION = '1.014';
+$VERSION = '$Rev$';
 
 sub initPlugin {
     my( $web, $user );

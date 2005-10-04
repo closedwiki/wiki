@@ -56,7 +56,7 @@ use DBI;
 use vars qw( $web $topic $user $installWeb $VERSION $pluginName 
   $debug $url $showBugScript $bugListScript $dbHost $dbPort $dbName $dbUser $dbPasswd );
 
-$VERSION = '1.13';
+$VERSION = '$Rev$';
 $pluginName = "BugzillaQueryPlugin";  # Name of this Plugin
 
 # HERE YOU HAVE TO SPECIFY THE MYSQL CREDENTIALS

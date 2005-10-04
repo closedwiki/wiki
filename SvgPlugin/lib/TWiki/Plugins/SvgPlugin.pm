@@ -61,7 +61,7 @@ use vars qw(
 
 use Image::LibRSVG;
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pluginName = 'SvgPlugin';  # Name of this Plugin
 
 # =========================

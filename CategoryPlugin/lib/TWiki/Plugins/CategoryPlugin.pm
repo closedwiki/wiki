@@ -47,7 +47,7 @@ use vars qw(
         $globalCategoriesWeb $categoryImgUrl $categoryHeader $categorySearch 
     );
 
-$VERSION = '1.00';
+$VERSION = '$Rev$';
 
 # =========================
 sub  initPlugin

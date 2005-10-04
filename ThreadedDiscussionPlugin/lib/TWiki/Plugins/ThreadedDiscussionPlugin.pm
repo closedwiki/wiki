@@ -27,7 +27,7 @@ use vars qw(
 use CGI;
 use TWiki::Contrib::EditContrib;
 
-$VERSION = '1.132';
+$VERSION = '$Rev$';
 $pluginName = 'ThreadedDiscussionPlugin';
 
 # =========================

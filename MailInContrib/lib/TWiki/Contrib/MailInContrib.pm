@@ -31,7 +31,7 @@ use Error qw( :try );
 use vars qw ( $VERSION );
 use Carp;
 
-$VERSION = '1.101';
+$VERSION = '$Rev$';
 
 my $comment = 'Saved by mailincron';
 

@@ -52,7 +52,7 @@ use vars qw(
             $abbre
            );
 
-$VERSION = '1.100';
+$VERSION = '$Rev$';
 
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;

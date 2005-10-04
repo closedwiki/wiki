@@ -75,7 +75,7 @@ if(defined($TWiki::rcsDir)) {
     # do something for Dakar
 }
 
-$VERSION = '1.121';
+$VERSION = '$Rev$';
 $pluginName = 'RevCommentPlugin';  # Name of this Plugin
 
 $minorMark = '%MINOR%';

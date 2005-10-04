@@ -33,7 +33,7 @@ use vars qw(
 
 use Weather::Com;
 
-$VERSION = '0.102';
+$VERSION = '$Rev$';
 $pluginName = 'WeatherPlugin';
 
 # =========================

@@ -54,7 +54,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pluginName = 'ContributorsPlugin';  
 
 # =========================

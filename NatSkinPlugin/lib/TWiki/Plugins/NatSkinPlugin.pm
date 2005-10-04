@@ -38,7 +38,7 @@ use vars qw(
 	%skinState $hasInitSkinState
     );
 
-$VERSION = '2.51';
+$VERSION = '$Rev$';
 
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';

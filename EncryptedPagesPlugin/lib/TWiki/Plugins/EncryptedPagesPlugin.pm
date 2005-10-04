@@ -38,7 +38,7 @@ use vars qw(
     );
 
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 
 

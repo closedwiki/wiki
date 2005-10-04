@@ -6,7 +6,7 @@ use strict;
 use vars qw( @ISA $VERSION );
 
 use Exporter;
-$VERSION = '1.00';
+$VERSION = '$Rev$';
 @ISA = qw( Exporter );
 
 sub whoami { (caller(1))[3] }

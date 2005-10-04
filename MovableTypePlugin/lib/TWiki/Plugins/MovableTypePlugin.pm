@@ -62,7 +62,7 @@ use lib ( '/home/trommett/public_html/cgi-bin/extlib/' );
 use MT;
 use MT::ConfigMgr;
 
-$VERSION = '0.101';
+$VERSION = '$Rev$';
 $pluginName = 'MovableTypePlugin';  # Name of this Plugin
 
 # =========================

@@ -70,7 +70,7 @@ use vars qw(
     );
 
 
-#$VERSION = '1.021'; #pj# initial version
+#$VERSION = '$Rev$
 
 $pluginName = 'SnmpCommandPlugin';  # Name of this Plugin
 

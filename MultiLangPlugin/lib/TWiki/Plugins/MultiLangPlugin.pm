@@ -42,7 +42,7 @@ use vars qw(
 	    $translationUpToDate
     );
 
-$VERSION = '1.02';
+$VERSION = '$Rev$';
 $pluginName = 'MultiLangPlugin';  # Name of this Plugin
 
 my %langNames = (

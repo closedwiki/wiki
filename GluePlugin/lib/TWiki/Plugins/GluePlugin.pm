@@ -21,7 +21,7 @@ use vars qw(
         $VERSION $web $topic $doExpandCommonVariables
     );
 
-$VERSION = '1.5';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin { 

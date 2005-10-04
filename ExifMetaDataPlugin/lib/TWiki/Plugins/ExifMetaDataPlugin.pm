@@ -127,7 +127,7 @@ use vars qw(
     $web $topic $user $installWeb $VERSION $debug
 );
 
-$VERSION = '0.1';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin {

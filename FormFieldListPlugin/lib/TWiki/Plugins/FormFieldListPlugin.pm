@@ -72,7 +72,7 @@ use vars qw(
 	$debug
     );
 
-$VERSION = '2.000';
+$VERSION = '$Rev$';
 $pluginName = 'FormFieldListPlugin';   # Name of this Plugin
 
 

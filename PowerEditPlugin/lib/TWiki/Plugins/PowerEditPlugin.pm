@@ -21,7 +21,7 @@ use vars qw(
         $debug
     );
 
-$VERSION = '1.11';
+$VERSION = '$Rev$';
 $pluginName = 'PowerEditPlugin';  # Name of this Plugin
 
 sub initPlugin {

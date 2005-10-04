@@ -25,7 +25,7 @@ package TWiki::Plugins::TypographyPlugin;
 
 use vars qw($web $topic $user $installWeb $VERSION $debug $doOldInclude $renderingWeb);
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 
 
 

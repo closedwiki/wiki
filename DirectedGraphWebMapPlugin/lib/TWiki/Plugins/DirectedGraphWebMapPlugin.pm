@@ -59,7 +59,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $pluginName $debug
     );
 
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 $pluginName = 'DirectedGraphWebMapPlugin';  # Name of this Plugin
 
 our %webmap; # $webmap{$baseTopic}{$targetTopic} = 1 if $baseTopic links to $targetTopic.  DOES NOT CROSS WEBS

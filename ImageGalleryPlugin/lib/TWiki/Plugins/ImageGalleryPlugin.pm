@@ -23,7 +23,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $isInitialized $igpId
     );
 
-$VERSION = '3.1';
+$VERSION = '$Rev$';
 
 # =========================
 sub initPlugin {

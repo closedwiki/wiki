@@ -22,7 +22,7 @@ package TWiki::Plugins::PageStatsPlugin;
 use vars qw( @ISA $VERSION );
 
 use TWiki::Plugins::OoPlugin;
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 @ISA = ( 'TWiki::Plugins::OoPlugin' );
 
 sub new

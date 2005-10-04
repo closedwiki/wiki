@@ -24,7 +24,7 @@ use vars qw(
             $query $renderingWeb
     );
 
-$VERSION = '1.025';
+$VERSION = '$Rev$';
 $encodeStart = '--EditTableEncodeStart--';
 $encodeEnd   = '--EditTableEncodeEnd--';
 

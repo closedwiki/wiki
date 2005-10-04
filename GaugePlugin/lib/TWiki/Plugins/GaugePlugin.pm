@@ -35,7 +35,7 @@ use vars qw(
         $defaultTrendWidth $defaultTrendHeight
     );
 
-$VERSION = '1.102';
+$VERSION = '$Rev$';
 $pluginInitialized = 0;
 $perlGDModuleFound = 0;
 

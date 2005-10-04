@@ -55,7 +55,7 @@ use vars qw(
         $debug $doOldInclude $renderingWeb
     );
 
-$VERSION = '0.101';
+$VERSION = '$Rev$';
 $pluginName = 'RandomQuotePlugin';  # Name of this Plugin
 
 # =========================

@@ -28,7 +28,7 @@ use vars qw(
     );
 use Data::Dumper;
 
-$VERSION = '0.3';
+$VERSION = '$Rev$';
 $pluginName = 'ImmediateNotifyPlugin';  # Name of this Plugin
 
 sub debug {TWiki::Func::writeDebug(@_) if $debug;}

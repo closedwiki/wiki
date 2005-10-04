@@ -55,7 +55,7 @@ use vars qw(
         $debug $exampleCfgVar
     );
 
-$VERSION = '0.2';
+$VERSION = '$Rev$';
 $pluginName = 'LinkOptionsPlugin';  # Name of this Plugin
 
 $numLastWinWithoutName = 0;

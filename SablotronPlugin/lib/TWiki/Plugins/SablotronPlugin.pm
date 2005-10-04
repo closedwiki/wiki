@@ -42,7 +42,7 @@ use XML::Sablotron;
 
 my ($self, $processor, $code, $level, @fields, $error);
 
-$VERSION = '1.101';
+$VERSION = '$Rev$';
 
 sub initPlugin {
  ( $topic, $web, $user, $installWeb ) = @_;

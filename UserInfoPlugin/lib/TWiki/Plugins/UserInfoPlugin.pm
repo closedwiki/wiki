@@ -25,7 +25,7 @@ use vars qw(
 	$ignoreHosts $isInitialized $sessionDir
 );
 
-$VERSION = '1.3';
+$VERSION = '$Rev$';
 
 ###############################################################################
 sub writeDebug {

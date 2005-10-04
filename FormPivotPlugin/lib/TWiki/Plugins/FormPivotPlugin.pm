@@ -45,7 +45,7 @@ use strict;
 # =========================
 use vars qw( $web $topic $user $installWeb $VERSION
         $myConfigVar );
-$VERSION = '1.1';
+$VERSION = '$Rev$';
 # =========================
 sub initPlugin
 {

@@ -68,7 +68,7 @@ use vars qw(
         $FileChars 
     );
 
-$VERSION = '1.15';
+$VERSION = '$Rev$';
 
 $pluginName = 'SlashFilenamePlugin';  # Name of this Plugin
 

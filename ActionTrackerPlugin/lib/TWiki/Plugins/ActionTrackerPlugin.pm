@@ -33,7 +33,7 @@ use vars qw(
             $pluginName $defaultFormat
            );
 
-$VERSION = '2.100';
+$VERSION = '$Rev$';
 $initialised = 0;
 $pluginName = 'ActionTrackerPlugin';
 $installWeb = 'TWiki';
