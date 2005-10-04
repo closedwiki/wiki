@@ -75,7 +75,8 @@ use vars qw(
 	$theWeb $theTopic
     );
 
-$VERSION = '1.111';
+$VERSION = '1.012'; #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
+#$VERSION = '1.011'; #dro# improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg;
 #$VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
 #$VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
 #$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
@@ -165,15 +166,18 @@ sub initDefaults() {
 		daynames	=> undef,	# day names (overwrites lang attribute)
 		monthnames	=> undef,	# month names (overwrites lang attribute)
 		width		=> undef,	# table width
-		unknownparamsmsg=> '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%'
+		unknownparamsmsg=> '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see TWiki.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%',
+		enablepubholidays	=> 1,		# enable public holidays
+		showpubholidays	=> 0,		# show public holidays in a separate row
+		pubholidayicon	=> ':-)'	# public holiday icon
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
-	@renderedOptions = ( 'tablecaption', 'name', 'holidayicon', 'adayofficon', 'workicon', 'notatworkicon', 'compatmodeicon' );
+	@renderedOptions = ( 'tablecaption', 'name', 'holidayicon', 'adayofficon', 'workicon', 'notatworkicon', 'compatmodeicon', 'pubholidayicon' );
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode' );
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays' );
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
@@ -290,7 +294,7 @@ sub handleHolidaylist() {
 
 	&initRegexs(); 
 
-	return &renderHolidaylist(&fetchHolidaylist(&getTopicText()));
+	return &renderHolidaylist(&handlePublicHolidays(&fetchHolidaylist(&getTopicText())));
 }
 # =========================
 sub createUnknownParamsMessage {
@@ -463,6 +467,32 @@ sub fetchHolidaylist {
 	}
 	return (\%table, \%locationtable, \%icontable);
 }
+# =========================
+sub handlePublicHolidays {
+	my ($tableRef, $locationTableRef, $iconTableRef) = @_;
+	if ($options{enablepubholidays}) {
+		my $all = '!!__@ALL__!!';
+		$$tableRef{$all} = [ ];
+		$$locationTableRef{$all} = [ ];
+		$$iconTableRef{$all} = [ ];
+		my ($aptableref,$altableref,$aitableref) = ( $$tableRef{$all}, $$locationTableRef{$all}, $$iconTableRef{$all});
+		for my $person ( keys %{$tableRef} ) {
+			if (($person ne $all) && ($person =~ /\@all/i) ) {
+				my ($ptableref,$ltableref,$itableref) = 
+					( $$tableRef{$person}, $$locationTableRef{$person}, $$iconTableRef{$person});
+				for ( my $i=0; $i<$options{days}; $i++) {
+					if (defined $$ptableref[$i]) {
+						$$aptableref[$i] = 6;
+						$$altableref[$i] = (defined $$ltableref[$i]) ? $$ltableref[$i] : $$ptableref[$i];
+						$$aitableref[$i] = $$itableref[$i];
+					}
+				}
+			}
+		}	
+	}
+	return ($tableRef, $locationTableRef, $iconTableRef);
+}
+# =========================
 sub replaceSpecialDateNotations {
 	# replace special (business) notations:
 	### DDD Wn yyyy
@@ -472,6 +502,7 @@ sub replaceSpecialDateNotations {
 	### Week n yyyy
 	$line =~s /W(eek)?\s*([0-9]?[0-9])\s+($year_rx)/getFullDateFromBusinessDate('Mon',$2,$3)/egi;
 }
+# =========================
 sub fetchExceptions {
 
 	my @exceptions = ( );
@@ -501,6 +532,7 @@ sub fetchExceptions {
 
 	return \@exceptions;
 }
+# =========================
 sub getFullDateFromBusinessDate {
 	my($t_dow, $week, $year) = @_;
 
@@ -511,6 +543,7 @@ sub getFullDateFromBusinessDate {
 	}
 	return $ret;
 }
+# =========================
 sub handleCalendarEvents {
 	my ($strdate);
 
@@ -545,7 +578,7 @@ sub handleCalendarEvents {
 		for (my $i=0; $i < $options{days}; $i++) {
 			next if $$excref[$i];
 			my ($y,$m,$d) = Add_Delta_Days($yy,$mm,$dd,$i);
-			if (($mm1==$m)&&($dd1==$d)) {
+			if (($m==$mm1)&&($d==$dd1)) {
 				$$ptableref[$i] = 5;
 				$$ltableref[$i] = $descr;
 				$$itableref[$i] = $icon;
@@ -809,7 +842,8 @@ sub renderHolidaylist() {
 			   2 => $options{adayofficon},
 			   3 => $options{notatworkicon},
 			   4 => $options{notatworkicon},
-			   5 => $options{compatmodeicon}
+			   5 => $options{compatmodeicon},
+			   6 => $options{pubholidayicon}
 			);
 
 
@@ -818,9 +852,19 @@ sub renderHolidaylist() {
 		my $ltableref=$$locationTableRef{$person};
 		my $itableref=$$iconTableRef{$person};
 
+		my $aptableref=$$tableRef{'!!__@ALL__!!'};
+		my $altableref=$$locationTableRef{'!!__@ALL__!!'};
+		my $aitableref=$$iconTableRef{'!!__@ALL__!!'};
+
+
+		# ignore entries with @all
+		next if $options{enablepubholidays} && (!$options{showpubholidays}) && ($person =~ /\@all/i);
+		next if $person eq '!!__@ALL__!!';
+
 		# ignore table rows without a entry if removeatwork == 1
 		next if $options{removeatwork} && !grep(/[^0]+/, join('', map( $_ || 0, @{$ptableref})));
 
+		$person =~ s/\@all//ig if $options{enablepubholidays};
 		$text .= '<tr><th align="left"><noautolink>'.TWiki::Func::renderText($person,$web).'</noautolink></th>';
 		for (my $i=0; $i<$options{days}; $i++) {
 			my ($yy1, $mm1, $dd1) = Add_Delta_Days($yy, $mm, $dd, $i);
@@ -834,6 +878,14 @@ sub renderHolidaylist() {
 
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
+
+				# overwrite personal holidays with public holidays:
+				if ($options{enablepubholidays} && defined $$aptableref[$i]) {
+					$icon = $iconstates{$$aptableref[$i]};
+					$$itableref[$i]=$$aitableref[$i];
+					$$ltableref[$i]=$$altableref[$i];
+				}
+
 				if (defined $$itableref[$i]) {
 					$icon = $$itableref[$i];
 					$icon = TWiki::Func::renderText($icon, $web) if $icon !~ /^(\s|\&nbsp\;)*$/;
@@ -842,10 +894,14 @@ sub renderHolidaylist() {
 				eval { 
 					my $location = $$ltableref[$i] if defined $ltableref;
 					if (defined $location) {
+						$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
 
+						$location=~s/<!--.*?-->//g; # remove HTML comments
 						$location=encode_entities($location); # quote special characters like "<>
 
-						$location=~s/\[\[/!\[\[/g; # quote forced links
+						$location=~s/\[\[[^\]]+\]\[([^\]]+)\]\]/$1/g; # replace forced link with comment
+						$location=~s/\[\[([^\]]+)\]\]/$1/g; # replace forced link with comment
+						$location=~s/\[\[/!\[\[/g; # quote forced links - !!!unused
 						$location=~s/[A-Z][a-z0-9]+[\.\/]([A-Z])/$1/g; # delete Web names
 						$location=~s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/!$1/g; # quote WikiNames
 						$location=~s/\%\w+(\{[^\}\%]*\})?\%//g; # delete Vars
