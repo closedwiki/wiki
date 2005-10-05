@@ -199,6 +199,7 @@ You can enable/disable plugins using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][
 	* Set DISABLEDPLUGINS = This variable is no longer supported
 	* Set INSTALLEDPLUGINS = This variable is no longer supported. You can set the plugins execution order using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface.
 	* %T% *NOTE:* You can enable/disable plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
+	* detailed diagnostics can be found in InstalledPlugins
 
 
 ---++ Miscellaneous Settings
