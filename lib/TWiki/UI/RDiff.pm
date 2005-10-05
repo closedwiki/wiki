@@ -190,8 +190,9 @@ sub _renderDebug
 		
 	$result .= CGI::Tr(
 		CGI::td( {class=>'diffDebugLeft'}, CGI::div($left) ));
+	my $changedClass = ($left ne $right) ? 'twikiDiffChangedText' : '';
 	$result .= CGI::Tr(
-		CGI::td( {class=>'diffDebugRight'}, CGI::div($right) ));
+		CGI::td( {class=>'diffDebugRight'}, CGI::div( {class=>$changedClass}, $right) ));
 	
     return $result;
 }

@@ -31,6 +31,7 @@
 	BG7 header background (very light yellow)										#FDFAF1
 	BG8 accent on sorted table column												#ccc
 	BG9 light yellow; attachment, form background									#FEFBF3
+	BG10 diff: changed 																#ccf
 	
 	Border colors
 	----------------------------------------
@@ -1130,7 +1131,12 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;} /*B
 .patternDiffPage td.diffDebugRight {
 	border:1px solid #ccc; /*BO6*/
 }
+.patternDiffPage td.diffDebugLeft .twikiDiffChangedText,
+.patternDiffPage td.diffDebugRight .twikiDiffChangedText {
+	background:#ccf; /*BG10*/
+}
 .patternDiffPage td.diffDebugLeft {
 	background:#e6e6e6; /*BG3*/
 	border-bottom:none;
 }
+
