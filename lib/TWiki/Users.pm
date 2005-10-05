@@ -142,6 +142,10 @@ the user is not listed in TWikiUsers.
 If =$nocreate= is false, and no =$wikiname= is given, then the
 =$name= is used for both login name and wiki name.
 
+If nocreate is off, then a default user will be created with their wikiname
+set the same as their login name. This user/wiki name pair can be overridden
+by a later createUser call when the correct wikiname is known, if necessary.
+
 =cut
 
 sub findUser {
@@ -203,11 +207,19 @@ sub findUser {
         $wikiname = $name;
     }
 
-    return $this->_createUser( $name, $wikiname );
+    return $this->createUser( $name, $wikiname );
 }
 
-# force-create a user (even if they already exist)
-sub _createUser {
+=pod
+
+---++ ObjectMethod createUser( $login, $wikiname ) -> $userobject
+Create a user, and insert them in the maps (overwriting any current entry).
+Use this instead of findUser when you want to be sure you are not going to
+pick up any default user created by findUser. All parameters are required.
+
+=cut
+
+sub createUser {
     my( $this, $name, $wikiname ) = @_;
 
     my $object = new TWiki::User( $this->{session}, $name, $wikiname );

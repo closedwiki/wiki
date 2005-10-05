@@ -734,15 +734,13 @@ sub finish {
     $session->{client}->userLoggedIn( $data->{LoginName}, $data->{WikiName} );
 
     # add user to TWikiUsers topic
-    my $user = $session->{users}->findUser( $data->{LoginName},
-                                            $data->{WikiName} );
+    my $user = $session->{users}->createUser( $data->{LoginName},
+                                              $data->{WikiName} );
 
     my $agent = $session->{users}->findUser( $twikiRegistrationAgent,
                                              $twikiRegistrationAgent);
 
-    my $userTopic = 
-      $session->{users}->addUserToTWikiUsersTopic( $user,
-                                                   $agent);
+    my $userTopic = $session->{users}->addUserToTWikiUsersTopic( $user, $agent);
 
     # write log entry
     if ($TWiki::cfg{Log}{register}) {
