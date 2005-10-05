@@ -21,7 +21,7 @@
 <input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label><br />
 <input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %CALC{$IF($EXACT(%URLPARAM{scope}%,all),checked="checked")}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
 <hr />
-<input type="checkbox" class="twikiCheckbox" id="web" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%WEB%"}%</span>
+<input type="checkbox" class="twikiCheckbox" id="web" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
 </td>
 </tr>
 <tr>
