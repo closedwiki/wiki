@@ -1,9 +1,10 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127244827" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111931141" format="1.0" version="$Rev$"}%
+
 
 *TWiki Administrator Group*
 
-	* Set GROUP = 
-	* #Set ALLOWTOPICCHANGE = TWikiAdminGroup
+	* Set GROUP = ArthurClemens
+	* Set ALLOWTOPICCHANGE = TWikiAdminGroup
 
 __Related topics:__ %WIKIUSERSTOPIC%, TWikiGroups, %TWIKIWEB%.TWikiAccessControl
 
