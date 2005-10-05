@@ -1,8 +1,8 @@
 # Sample '.htaccess' file for subdirectories
 
 # Controls access to TWiki subdirectories other than 'bin' and 'pub'
-# - copy this into 'data', 'lib' and 'templates', naming it '.htaccess',
-# to have Apache use it.
+# - copy this into 'data', 'lib', 'locale', and 'templates'
+# naming it '.htaccess', to have Apache use it.
 
 # This is useful if you install TWiki on a web host, or an intranet host
 # where you can't edit the Apache http.conf file.  If you can edit the
