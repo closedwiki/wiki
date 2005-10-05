@@ -202,11 +202,9 @@ h1 a:visited {
 	color:#FBF7E8; /*C3*/
 	background-color:#D6000F; /*BG2*/
 }
-:link img,
-:visited img,
 :link:hover img,
 :visited:hover img {
-	background-color:transparent;
+	background:white;
 }
 .patternTopic a:visited {
 	color:#666; /*T7*/
