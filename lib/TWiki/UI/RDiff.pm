@@ -184,11 +184,15 @@ sub _renderDebug
     $right =~ s/&/&amp;/go;
     $right =~ s/</&lt;/go;
     $right =~ s/>/&gt;/go;
-
-    $result = CGI::hr().'type: '.$diffType;
-    $result .= CGI::div({style=>'border: 1px dotted;'}, $left);
-    $result .= CGI::div({style=>'border: 1px dotted;'}, $right);
-
+	
+	$result = CGI::Tr(
+		CGI::td( 'type: '. $diffType ));
+		
+	$result .= CGI::Tr(
+		CGI::td( {class=>'diffDebugLeft'}, CGI::div($left) ));
+	$result .= CGI::Tr(
+		CGI::td( {class=>'diffDebugRight'}, CGI::div($right) ));
+	
     return $result;
 }
 
@@ -340,7 +344,8 @@ sub _renderRevisionDiff
     }
     return CGI::table( { class => 'twikiDiffTable',
                          width => '100%',
-                         cellspacing => 0 }, $result );
+                         cellspacing => 0,
+                         cellpadding => 0}, $result );
 }
 
 =pod

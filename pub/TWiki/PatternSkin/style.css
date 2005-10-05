@@ -1119,3 +1119,20 @@ table#twikiSearchTable td.first {padding-top:1em; background-color:#e6e6e6;} /*B
 	background:#fff; /*BG1*/
 }
 
+/* Diff */
+
+.patternDiffPage .twikiDiffTable {
+	margin:2em 0;
+}
+.patternDiffPage .twikiDiffTable th,
+.patternDiffPage .twikiDiffTable td {
+	padding:.2em;
+}
+.patternDiffPage td.diffDebugLeft,
+.patternDiffPage td.diffDebugRight {
+	border:1px solid #ccc; /*BO6*/
+}
+.patternDiffPage td.diffDebugLeft {
+	background:#e6e6e6; /*BG3*/
+	border-bottom:none;
+}
