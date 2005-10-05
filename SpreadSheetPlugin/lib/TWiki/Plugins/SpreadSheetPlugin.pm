@@ -27,7 +27,7 @@ use vars qw(
         $web $topic $user $installWeb $VERSION $debug $skipInclude $doInit
     );
 
-$VERSION = '$Rev$
+$VERSION = '$Rev$';
 $doInit = 0;
 
 # =========================
