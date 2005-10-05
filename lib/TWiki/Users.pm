@@ -63,8 +63,8 @@ sub new {
     $this->{CACHED} = 0;
 
     # create the guest user
-    $this->_createUser( $TWiki::cfg{DefaultUserLogin},
-                        $TWiki::cfg{DefaultUserWikiName} );
+    $this->createUser( $TWiki::cfg{DefaultUserLogin},
+                       $TWiki::cfg{DefaultUserWikiName} );
 
     return $this;
 }
