@@ -602,9 +602,6 @@ sub filter_txt {
         open(OF, '>'.$to) || die 'No dest topic '.$to.' for filter';
     }
     print OF $text unless ($this->{-n});
-    if( $to =~ /\.txt$/ ) {
-        print OF '<!-- Do _not_ attempt to edit this topic; it is auto-generated. Please add comments/questions/remarks to the Dev topic instead. -->',$NL;
-    }
     close(OF) unless ($this->{-n});
 }
 
