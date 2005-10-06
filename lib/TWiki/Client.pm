@@ -138,12 +138,9 @@ sub loadSession {
     $this->{haveCookie} = defined($query->raw_cookie( $CGI::Session::NAME ));
 
     # Use file serialisation.
-    # An interesting experiment might be to change your serializer. Storable
-    # is a good option. See CGI::Session on http://search.cpan.org/
-    # for more information on adding ';initializer:Storable' after the
-    # 'driver:File' below (other serializers are available as well).
-    my $cgisession = CGI::Session->new( 'driver:File', $query,
-                                       { Directory => $TWiki::cfg{SessionDir} } );
+    my $cgisession = CGI::Session->new(
+        'driver:File', $query,
+        { Directory => $TWiki::cfg{SessionDir} } );
 
     $this->{cgisession} = $cgisession;
 
@@ -252,23 +249,13 @@ sub finish {
     my $cgisession = $this->{cgisession};
     return unless $cgisession;
 
-    # this predicate used to be
-    # $this->{sessionIsAuthenticated} && defined($cgisession),
-    # but that had the problem that sometimes an unauthenticated version
-    # of the session would overwrite the more recent authenticated version
-    # on disk. that's because with mod_perl, an unflushed session object
-    # would sometimes hang around. then when the apache server was
-    # terminated, it would get flushed. this way, if we didn't get a
-    # cookie then we'll tell the session manager that we don't want
-    # it to _ever_ flush the session.
-    if($this->{haveCookie}) {
-        $cgisession->flush();
-    } else {
-        # this is drastic and not really necessary, but unfortunately
-        # CGI::Session makes it impossible for us to say "don't
-        # _bother_ writing it to disk if you haven't already". :-(
-        $cgisession->delete();
+    unless ($this->{haveCookie}) {
+        # expire uncookied sessions immediately. We will end up flushing
+        # them and immediately deleting them, but there doesn't seem to
+        # be any other clean way of doing this.
+        $cgisession->expire( time() - 1 );
     }
+    $cgisession->flush();
     _expireDeadSessions();
 }
 
