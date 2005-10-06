@@ -1291,14 +1291,14 @@ sub _writeReport {
     }
 }
 
-sub _fixN {
+sub _removeNewlines {
     my( $theTag ) = @_;
     $theTag =~ s/[\r\n]+//gs;
     return $theTag;
 }
 
 # Convert relative URLs to absolute URIs
-sub _fixURL {
+sub _rewriteURLInInclude {
     my( $theHost, $theAbsPath, $url ) = @_;
 
     if( $url =~ /^\// ) {
@@ -1309,6 +1309,9 @@ sub _fixURL {
         $url = $theHost.$theAbsPath.'/'.$url;
     } elsif( $url =~ /^$regex{linkProtocolPattern}\:/o ) {
         # full qualified URL, do nothing
+    } elsif( $url =~ /^#/ ) {
+        # anchor. This needs to be left relative to the including topic
+        # so do nothing
     } elsif( $url ) {
         # FIXME: is this test enough to detect relative URLs?
         $url = $theHost.$theAbsPath.'/'.$url;
@@ -1343,10 +1346,11 @@ sub _cleanupIncludedHTML {
     $text =~ s/^.*?<\/head>//is;            # remove all HEAD
     $text =~ s/<script.*?<\/script>//gis;   # remove all SCRIPTs
     $text =~ s/^.*?<body[^>]*>//is;         # remove all to <BODY>
-    $text =~ s/(?:\n)<\/body>//is;          # remove </BODY>
-    $text =~ s/(?:\n)<\/html>//is;          # remove </HTML>
-    $text =~ s/(<[^>]*>)/&_fixN($1)/ges;     # join tags to one line each
-    $text =~ s/(\s(href|src|action)\=[\"\']?)([^\"\'\>\s]*)/$1 . &_fixURL( $host, $path, $3 )/geois;
+    $text =~ s/(?:\n)<\/body>.*//is;        # remove </BODY>
+    $text =~ s/(?:\n)<\/html>.*//is;        # remove </HTML>
+    $text =~ s/(<[^>]*>)/_removeNewlines($1)/ges;
+    # SMELL: this will miss all JavaScript links
+    $text =~ s/(\s(?:href|src|action)=(["']))(.*?)\2/$1._rewriteURLInInclude( $host, $path, $3 ).$2/geois;
 
     return $text;
 }
@@ -1431,8 +1435,8 @@ sub _includeUrl {
         $contentType = $1;
     }
     if( $contentType =~ /^text\/html/ ) {
-        $path =~ s/(.*)\/.*/$1/; # build path for relative address
-        $host = 'http://'.$host;   # build host for absolute address
+        $path =~ s/[#?].*$//;
+        $host = 'http://'.$host;
         if( $port != 80 ) {
             $host .= ":$port";
         }

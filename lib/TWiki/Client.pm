@@ -59,9 +59,10 @@ BEGIN {
 }
 
 # Marker chars
-my $M1 = chr(5);
-my $M2 = chr(6);
-my $M3 = chr(7);
+use vars qw( $M1 $M2 $M3 );
+$M1 = chr(5);
+$M2 = chr(6);
+$M3 = chr(7);
 
 =pod
 
@@ -74,7 +75,7 @@ for the given session.
 sub makeClient {
     my $twiki = shift;
     ASSERT($twiki->isa( 'TWiki')) if DEBUG;
-   
+
     if( $TWiki::cfg{UseClientSessions} ) {
         eval 'use CGI::Session; use CGI::Cookie';
         throw Error::Simple( $@ ) if $@;
@@ -106,9 +107,7 @@ sub new {
 
     # register tag handlers and values
     TWiki::registerTagHandler('LOGINURL', \&_LOGINURL);
-    #TWiki::registerTagHandler('LOGINURLPATH', \&_LOGINURLPATH);
     TWiki::registerTagHandler('LOGIN', \&_LOGIN);
-    #TWiki::registerTagHandler('LOGOUTURL', \&_LOGOUTURL);
     TWiki::registerTagHandler('LOGOUT', \&_LOGOUT);
     TWiki::registerTagHandler('SESSION_VARIABLE', \&_SESSION_VARIABLE);
     TWiki::registerTagHandler('AUTHENTICATED', \&_AUTHENTICATED);
@@ -201,7 +200,7 @@ sub loadSession {
     }
 
     # Use transparent session IDs if cookies don't seem to be working
-    $this->{useTransSID} = 
+    $this->{useTransSID} =
       ( !defined($query) || !$query->cookie( $CGI::Session::NAME ));
 
     $twiki->{SESSION_TAGS}{SESSIONID} = ( $sessionId || '' );
@@ -350,6 +349,77 @@ sub userLoggedIn {
     $this->{authUser} = $authUser;
 }
 
+# get an RE that matches a local script URL
+sub _myScriptURL {
+    my $this = shift;
+
+    my $s = $this->{_MYSCRIPTURL};
+    unless( $s ) {
+        my $s = quotemeta($this->{twiki}->getScriptUrl(
+                                            $M1, $M2, $M3 ));
+        $s =~ s@$M1@[^/]*?@go;
+        $s =~ s@$M2@[^#\?/]*@go;
+        $s =~ s@$M3@[^/]*?@go;
+        $this->{_MYSCRIPTURL} = $s;
+    }
+    return $s;
+}
+
+# Rewrite a URL inserting the session id
+sub _rewriteURL {
+    my( $this, $url ) = @_;
+
+    my $cgisession = $this->{cgisession};
+    return $url unless $cgisession;
+    return $url if $url =~ m/\?$CGI::Session::NAME=/;
+
+    my $s = $this->_myScriptURL();
+
+    # If the URL has no colon in it, or it matches the local script
+    # URL, it must be an internal URL and therefore needs the session.
+    if( $url !~ /:/ || $url =~ /^$s/ ) {
+        my $sessionId = $cgisession->id();
+
+        # strip off existing params
+        my $params = "?$CGI::Session::NAME=$sessionId";
+        if( $url =~ s/\?(.*)$// ) {
+            $params .= ";$1";
+        }
+
+        # strip off the anchor
+        my $anchor = '';
+        if( $url =~ s/(#.*)// ) {
+            $anchor = $1;
+        }
+
+        # rebuild the URL
+        $url .= $anchor.$params;
+    } # otherwise leave it untouched
+
+    return $url;
+}
+
+# Catch all FORMs and add a hidden Session ID variable.
+# Only do this if the form is pointing to an internal link.
+# This occurs if there are no colons in its target, if it has
+# no target, or if its target matches a getScriptUrl URL.
+# '$rest' is the bit of the initial form tag up to the closing >
+sub _rewriteFORM {
+    my( $this, $url, $rest ) = @_;
+
+    my $cgisession = $this->{cgisession};
+    return $url.$rest unless $cgisession;
+
+    my $s = $this->_myScriptURL();
+
+    if( $url !~ /:/ || $url =~ /^$s/ ) {
+        my $sessionId = $cgisession->id();
+        $rest .= CGI::hidden( -name => $CGI::Session::NAME,
+                              -value => $sessionId);
+    }
+    return $url.$rest;
+}
+
 =pod
 
 ---++ ObjectMethod endRenderingHandler()
@@ -365,57 +435,27 @@ sub endRenderingHandler {
 
     my $this = shift;
 
-    my $useTransSID = $this->{useTransSID};
     my $sessionId = $this->{sessionId};
 
     # If cookies are not turned on and transparent CGI session IDs are,
     # grab every URL that is an internal link and pass a CGI variable
     # with the session ID
-    if( $useTransSID ) {
-        # Internal links are specified by forms, hrefs, or onclicks that either
-        # point to a link with no colons in it or links that match links that
-        # would bve returned by getScriptUrl. Internal links are additionally
-        # specified by forms that have no target.
+    if( $this->{useTransSID} ) {
+        # rewrite internal links to include the transparent session ID
+        # Doesn't catch Javascript, because there are just so many ways
+        # to generate links from JS.
+        # SMELL: this would probably be done better using javascript
+        # that handles navigation away from this page, and uses the
+        # rules to rewrite any relative URLs at that time.
+        my $s = $this->_myScriptURL();
 
-        # Gather the URLs one would expect to be returned by getScriptUrl
-        # if a URL was inside of quotes (A) or outside of quotes (B) or
-        # inside of single quotes for javascript (C).
-        #
-        # SMELL: this will munge URLs in verbatim sections
-        #
-        # Use these later in all the regex's below.
-        my $myScriptUrlA = quotemeta($this->{twiki}->getScriptUrl( $M1, $M1,
-                                                                   $M1 ));
-        my $myScriptUrlB = $myScriptUrlA;
-        my $myScriptUrlC = $myScriptUrlA;
-        $myScriptUrlA =~ s/$M1/[^"#]*?/go;
-        $myScriptUrlB =~ s/$M1/[^\\s#>]*?/go;
-        $myScriptUrlC =~ s/$M1/[^'#>]*?/go;
+        # a href rewriting
+        $_[0] =~ s/(<a[^>]*(?<=\s)href=(["']))(.*?)(\2)/$1.$this->_rewriteURL($3).$4/geoi;
 
-        #
-        # NOTE: Lots of the defined's here are to quiet down the highly overrated perl -w
-        #
-
-        # Catch hyperlinks with targets containing no colon
-        $_[0] =~ s/(<a\s[^>]*?(?<=\s)href=)(?:(")([^:]*?)([#"])|([^:]*?(?=[#\s>])))/@{[ defined($5) ? "$1$5" : "$1$2$3" ]}@{[ ( (defined($3) && ($3=~m!\?!))||(defined($5) && ($5=~m!\?!)) ) ? ";" : "?" ]}$CGI::Session::NAME=$sessionId@{[defined($4) ? "$4" : ""]}/goi;
-
-        # Catch hyperlinks with targets that could be returned by getScriptUrl
-        $_[0] =~ s/(<a\s[^>]*?(?<=\s)href=)(?:(")((?-i:$myScriptUrlA[^"#]*?))([#"])|((?-i:$myScriptUrlB[^\s#>]*?).*?(?=[#\s>])))/@{[ defined($5) ? "$1$5" : "$1$2$3"]}@{[( (defined($3) && ($3=~m!\?!))||(defined($5) && ($5=~m!\?!)) )? ";" : "?" ]}$CGI::Session::NAME=$sessionId@{[ defined($4) ? "$4" : ""]}/goi;
-
-        # Catch onclicks that trigger changes of location.href to targets with no colon
-        $_[0] =~ s/(<[^>]*?\sonclick=(?:"[^"]*?|)(?=(?:javascript:|))location\.href=)(')([^:]*?)([#'])/$1$2$3@{[ ($3=~m!\?!) ? ";" :"?" ]}$CGI::Session::NAME=$sessionId$4/goi;
-
-        # Catch onclicks that trigger changes of location.href to targets that could be returned by getScriptUrl
-        $_[0] =~ s/(<[^>]*?\sonclick=(?:"[^"]*?|)(?=(?:javascript:|))location\.href=)(')((?-i:$myScriptUrlC[^'#]*?))([#'])/$1$2$3@{[ ($3=~m!\?!) ? ";" : "?" ]}$CGI::Session::NAME=$sessionId$4/goi;
-
-
-        # Catch all FORM elements and add a hidden Session ID variable
-        #
-        # Only do this if the form is pointing to an internal link. This occurs if there are no
-        # colons in its target, if it has no target, or if its target matches a getScriptUrl URL.
-        #
-        $_[0] =~ s%(<form[^>]*?>)%@{ [ "$1" . ( ( $1 =~ /^<form(?:(?!.*?\saction=).*?>|\s.*?(?<=\s)action=(?:"(?:[^:]*?|(?-i:$myScriptUrlA))"|(?:[^:"\s]*?|(?-i:$myScriptUrlB))(?:\s|>)))/ ) ? "\n<input type=\"hidden\" name=\"$CGI::Session::NAME\" value=\"$sessionId\" />" : "") ] }%gio;
-
+        # form action rewriting
+        # SMELL: Forms that have no target are also implicit internal
+        # links, but are not handled. Does this matter>
+        $_[0] =~ s/(<form[^>]*(?<=\s)(?:action)=(["']))(.*?)(\2[^>]*>)/$1.$this->_rewriteFORM($3, $4)/geoi;
     }
 
     # And, finally, the logon stuff
@@ -479,68 +519,11 @@ Don't forget to pass all query parameters through.
 sub redirectCgiQuery {
 
     my( $this, $query, $url ) = @_;
+
     my $cgisession = $this->{cgisession};
+    return 0 unless $cgisession;
 
-    unless( $cgisession ) {
-        # no session info to add
-        return 0;
-    }
-
-    my $sessionId = $this->{sessionId};
-    my $useTransSID = $this->{useTransSID};
-    my @urlparts;
-
-    if( $useTransSID && $url !~ m/\?$CGI::Session::NAME=/ ) {
-        # If the URL has no colon in it, it must be an internal URL
-        if( $url !~ /:/ ) {
-            # Does it already have CGI parameters passed?
-            if( $url =~ m/^(.*?)\?(.*)$/ ) {
-                $url = $1 . '?'.$CGI::Session::NAME.'='.$sessionId.';'.$2;
-            }
-            # Does it have any anchors passed?
-            elsif( $url =~ m/^(.*?)#(.*)$/ ) {
-                $url = $1.'?'.$CGI::Session::NAME.'='.$sessionId.'#'.$2;
-            }
-            # Otherwise, we're the first CGI parameter
-            else {
-                $url .= '?'.$CGI::Session::NAME.'='.$sessionId;
-            }
-
-        } else {
-            # It MAY be an external URL
-            # This could be better. This could be integrated into the above...
-            # This could use split instead of regex's...
-
-            # Remember our scriptUrl form to match internal URLs that are referred
-            # to like external URLs
-            my $myScriptUrl = quotemeta($this->{twiki}->getScriptUrl(
-                                            $M1, $M2, $M3 ));
-            $myScriptUrl =~ s@$M1@[^/]*?@go;
-            $myScriptUrl =~ s@$M2@[^#\?/]*@go;
-            $myScriptUrl =~ s@$M3@[^/]*?@go;
-
-            # If we start with our internal URL....
-            if( $url =~ /(^$myScriptUrl)/o ) {
-                my $theScript = $1;
-
-                # Are there other CGI parameters?
-                if( $url =~ /(?:^$theScript)(?:\?)(.*)/ ) {
-                    $url = $theScript . '?' . $CGI::Session::NAME . '=' .
-                      $sessionId . ';' . $1;
-                }
-                # Are there any anchors?
-                elsif( $url =~ /(?:^$theScript)(#.*)/ ) {
-                    $url = $theScript . '?' . $CGI::Session::NAME . '=' .
-                      $sessionId . $1;
-                }
-                # Otherwise, we're the first CGI parameter
-                else {
-                    $url = $theScript . '?' . $CGI::Session::NAME . '=' .
-                      $sessionId;
-                }
-            }
-        }
-    }
+    $url = $this->_rewriteURL( $url ) if $this->{useTransSID};
 
     # This usually won't be important, but just in case they haven't
     # yet received the cookie and happen to be redirecting, be sure
@@ -553,7 +536,7 @@ sub redirectCgiQuery {
     # So this is just a big fat precaution, just like the rest of this
     # whole handler.
     my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
-                                   -value => $cgisession->id,
+                                   -value => $cgisession->id(),
                                    -path => '/' );
     my @cs = @{$this->{cookies}};
     push @cs, $cookie;
