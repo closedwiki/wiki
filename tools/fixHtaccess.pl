@@ -1,8 +1,43 @@
 #! /usr/bin/perl -w
 # See http://twiki.org/cgi-bin/view/Codev/FixUpHtaccess
+# This will become a CommandSet for twikishell in Edinburgh
 
-my ($dataDir, $defaultUrlHost, $scriptUrlPath, $adminUsers) = getParams(@ARGV); 
-# e.g. ("/home/mrjc/wikiconsulting.com/twiki", "wikiconsulting.com/twiki");
+BinHtaccess::replaceBinHtaccess(@ARGV);
+my @subdirs = qw(lib data templates locale);
+SubDirHtaccess::installHtaccess('subdir-htaccess.txt', @subdirs);
+SubDirHtaccess::installHtaccess('pub-htaccess.txt', 'pub');
+#installRedirectRoot(".");
+
+package SubDirHtaccess;
+use File::Copy;
+
+sub installHtaccess {
+    my ($htaccess, @targetDir) = @_;
+
+    foreach my $dir (@targetDir) {
+	my $targetFile = $dir.'/.htaccess';
+	if (copy($htaccess, $targetFile)) {
+	    print "Copied $htaccess to $targetFile\n";
+	} else {
+	    print "Failed to copy $htaccess to $targetFile $?\n";
+	}
+    } 
+}
+
+sub installRedirectRoot {
+    my ($dir) = @_;
+    my $rootIndexFile = '$dir/index.html';
+
+    open FH, ">$rootIndexFile" || die "$@";
+    print FH "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=bin/view'>\n";
+    close FH;
+    print "Replaced $rootIndexFile with redirect\n";
+}
+
+
+package BinHtaccess;
+
+# e.g. ("/home/mrjc/wikiconsulting.com/twiki/data", "wikiconsulting.com/twiki");
 
 # {DataDir}
 #    Get the value from =configure=
@@ -12,35 +47,50 @@ my ($dataDir, $defaultUrlHost, $scriptUrlPath, $adminUsers) = getParams(@ARGV);
 #    Get the value from =configure=
 # {Administrators}
 
+sub replaceBinHtaccess {
+    my ($dataDir, $defaultUrlHost, $scriptUrlPath, $adminUsers) = getParams(@_); 
 
-my %patterns = ("{DataDir}" => $dataDir,
-		"{DefaultUrlHost}" => $defaultUrlHost,
-		"{ScriptUrlPath}" => $scriptUrlPath,
-	        "{Administrators}" => $adminUsers);
+    my $patterns = {"{DataDir}" => $dataDir,
+		    "{DefaultUrlHost}" => $defaultUrlHost,
+		    "{ScriptUrlPath}" => $scriptUrlPath,
+		    "{Administrators}" => $adminUsers};
+    use Data::Dumper;
+    print Dumper $patterns;
 
-unless (-d "bin") {
-  die "This must be run in the top level bin directory";
+    unless (-d "bin") {
+	die "This must be run in the top level directory";
+    }
+    
+    use FileHandle;
+    my $template = readBinHtaccessTemplate();
+    writeBinHtaccess(doSubstitutions($template, $patterns));
 }
 
-use FileHandle;
-chdir ($filePathToTwiki) || die "Can't get to $filePathToTwiki";
-
-my $htaccessTXTfh = new FileHandle("< bin/.htaccess.txt");
-local $/; undef $/;
-my $file = <$htaccessTXTfh>;
-close $htaccessTXTfh;
-
-foreach my $key (keys %patterns) {
-    my $value = $patterns{$key};
-    print "Replaced $key with $value ";
-    my $count = $file =~ s/$key/$value/g;
-    print "$count times\n";
+sub readBinHtaccessTemplate {
+    my $htaccessTXTfh = new FileHandle("< bin/.htaccess.txt");
+    local $/; undef $/;
+    my $content = <$htaccessTXTfh>;
+    close $htaccessTXTfh;
+    return $content;
 }
 
-my $htaccessFh = new FileHandle("> bin/.htaccess");
+sub doSubstitutions {
+    my ($template, $patterns) = @_;
+    foreach my $key (keys %$patterns) {
+	my $value = $patterns->{$key};
+	print "Replaced $key with $value ";
+	my $count = $template =~ s/$key/$value/g;
+	print "$count times\n";
+    }
+    return $template;
+}
 
-print $htaccessFh $file;
-close $htaccessFh;
+sub writeBinHtaccess {
+    my ($content) = @_;
+    my $htaccessFh = new FileHandle("> bin/.htaccess");
+    print $htaccessFh $content;
+    close $htaccessFh;
+}
 
 print `chmod og-w bin bin/*`;
 
@@ -83,7 +133,7 @@ scriptUrlPath  = base URL of TWiki when accessed by web
 adminUsers      = which .htpasswd users can access configure
 
 e.g.
-fixHtaccess.pl /home/account/wikiconsulting.com/twiki wikiconsulting.com /twiki YourAdminLoginName
+fixHtaccess.pl /home/account/wikiconsulting.com/twiki/data wikiconsulting.com /twiki YourAdminLoginName
 
 Note that you are responsible for putting an Admin LoginName into .htpasswd.
 On UNIX you can use the htpasswd tool for this.
