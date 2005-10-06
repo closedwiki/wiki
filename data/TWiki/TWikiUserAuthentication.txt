@@ -5,24 +5,22 @@
 
 _TWiki site access control and user activity tracking options_
 
-%TOC%
-
 Authentication, or "login", is the process by which a user lets TWiki know who they are.
 
-Authentication isn't just to do with access control. TWiki uses authentication to identify users, and uses those identities to keep track of who made changes, and manage a wide range of personal settings. With authentication enabled, users can personalise their environment and contribute as recognised individuals, instead of anonymous shadows.
+Authentication isn't just to do with access control. TWiki uses authentication to identify users, so it can keep track of who made changes, and manage a wide range of personal settings. With authentication enabled, users can personalise TWiki and contribute as recognised individuals, instead of shadows.
 
-TWiki authentication is extremely flexible, and can either stand alone or integrate with existing authentication schemes. You can set up TWiki to require authentication for every access, or set it up to require authentication only for changes. Authentication is also essential for effective access control.
+TWiki authentication is very flexible, and can either stand alone or integrate with existing authentication schemes. You can set up TWiki to require authentication for every access, or only for changes. Authentication is also essential for access control.
 
 *Quick Authentication Test* - Use the %<nop>WIKIUSERNAME% variable to return your current identity:
 	* You are %WIKIUSERNAME% 
 
 TWiki user authentication is split into three sections; password management, user registration, and login management. Password management deals with how users are recognised (authenticated). Registration deals with how new users are added to the wiki. Login management deals with how users log in.
 
-Once a user is logged on, they are remembered using a cookie in the browser, known as a "session cookie". This avoids them having to log on again and again.
+Once a user is logged on, they are remembered using a "session id" stored in a cookie in the browser (or by other less elegant means if the user has disabled cookies). This avoids them having to log on again and again.
 
 ---++ Password Management
 
-As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encoding schemes are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURL%/configure][ =configure= ]] interface for more details.
+As shipped, TWiki supports the Apache 'htpasswd' password manager. This manager supports the use of =.htpasswd= files on the server. These files can be unique to TWiki, or can be shared with other applications (such as an Apache webserver). A variety of password encodings are supported for flexibility when re-using existing files. See the descriptive comments in the Security Settings section of the [[%SCRIPTURL%/configure][ =configure= ]] interface for more details.
 
 ---++ New User Registration
 

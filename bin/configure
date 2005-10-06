@@ -2336,17 +2336,16 @@ if( $action eq 'update' ) {
 } else {
     $body .=  <<HERE;
 <p><strong>Use this page to set the configuration options for TWiki. Fill in the settings, and then press 'Next'.</strong></p>
-<div class="explanation"><div class="specialRemark">If you are installing TWiki for the first time, and you just want to get up and running, the only section you need to worry about below is
+<div class="explanation"><div class="specialRemark"><b>If you are installing TWiki for the first time</b>, and you just want to get up and running, the only section you need to worry about below is
 <a rel="nofollow" href="#" onclick="foldBlock('GeneralPathSettings'); return false;">General path settings</a>. You can always come
 back and configure other settings later.</div>
 <ul>
-    <li>If your TWiki site is already working, the front page should be
-<a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}">right here</a>.</li>
-<li>If you are on a public site, you will need to consider carefully
-how you are going to manage authentication and access control.</li>
-<li>There are a number of documentation topics describing how to
-configure TWiki for different platforms, and a lot of support
-available on <a href="http://twiki.org/cgi-bin/view/Codev/TWikiIRC">TWikiIRC</a> (irc.freenode.net, channel #twiki) and at <a href="http://twiki.org">TWiki.org</a>.</li>
+    <li><b>If your TWiki site is already working</b>, you can
+<a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiReferenceManual">click here</a> to browse to the TWiki Reference Manual.<ul>
+<li>You will now need to consider how you are going to manage authentication and access control. See the reference manual sections on <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiUserAuthentication">authentication</a> and <a rel="nofollow" href="$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/TWikiAccessControl">access control</a>, and the <a rel="nofollow" href="#" onclick="foldBlock(\'SecuritySetup\'); return false;">Security Setup</a> section below.</li></ul</li>
+<li><b>If you are on an odd platform</b> there are a lot of topics on TWiki.org describing <a href="http://twiki.org/cgi-bin/view/Codev/CategoryCookbook">how to
+configure TWiki for different platforms</a>.
+<li><b>If you get stuck</b> there is a lot of support available on <a href="http://twiki.org/cgi-bin/view/Codev/TWikiIRC">TWikiIRC</a> (irc.freenode.net, channel #twiki) and at <a href="http://twiki.org/cgi-bin/view/Support/WebHome">TWiki:Support</a>.</li>
 </ul>
 </div>
 <div class="remark">Explanation of color codes:

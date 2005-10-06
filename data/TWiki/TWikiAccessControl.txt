@@ -6,22 +6,17 @@
 
 _Restricting read and write access to topics and webs, by Users and groups_
 
-TWikiAccessControl allows you restrict access to single topics and entire webs, by individual user and by user Groups, in three areas: view; edit &amp; attach; and rename/move/delete. Access control, combined with TWikiUserAuthentication, lets you easily create and manage an extremely flexible, fine-grained privilege system.
+TWikiAccessControl allows you restrict access to single topics and entire webs, by individual user and by user Groups. Access control, combined with TWikiUserAuthentication, lets you easily create and manage an extremely flexible, fine-grained privilege system.
 
 ---++ An Important Control Consideration
 
-Open, freeform editing is the essence of WikiCulture - what makes TWiki different and often more effective than other collaboration tools. For that reason, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with care - the more restrictions, the less Wiki in the mix. Experience shows that _unrestricted write access_ works very well because:
-
+Open, freeform editing is the essence of WikiCulture - what makes TWiki different and often more effective than other collaboration tools. For that reason, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with great care - the more restrictions, the less Wiki in the mix. Experience shows that _unrestricted write access_ works very well because:
 	* *Peer influence* is enough to ensure that only relevant content is posted.
-
 	* *Peer editing* - the ability for anyone to rearrange all content on a page - keeps topics focussed.
-
 	* In TWiki, content is transparently preserved under *revision control*:
 		* Edits can be undone by the %MAINWEB%.TWikiAdminGroup (the default administrators group; see [[#ManagingGroups]]).
 		* Users are encouraged to edit and refactor (condense a long topic), since there's a safety net.
-
 As a *collaboration guideline*:
-
 	* Create broad-based Groups (for more and varied input), and...
 	* Avoid creating view-only Users (if you can read it, you should be able to contribute to it).
 
@@ -38,13 +33,10 @@ Access control is based on the familiar concept of Users and Groups. Users are d
 ---+++ Managing Users
 
 A user can create an account in TWikiRegistration. The following actions are performed:
-
-	* WikiName and encrypted password are recorded in =.htpasswd= if authentication is enabled.
+	* WikiName and encrypted password are recorded using the password manager if authentication is enabled.
 	* A confirmation e-mail is sent to the user.
 	* A user home page with the WikiName of the user is created in the %MAINWEB% web.
 	* The user is added to the %MAINWEB%.%WIKIUSERSTOPIC% topic.
-
-Users can be authenticated using Basic Authentication (htaccess) or SSL (secure server). In either case, TWikiUserAuthentication is required in order to track user identities, and use User and Group access control.
 
 The default visitor name is %MAINWEB%.TWikiGuest. This is the non-authenticated user.
 
@@ -54,20 +46,21 @@ The default visitor name is %MAINWEB%.TWikiGuest. This is the non-authenticated 
 Groups are defined by group topics created in the ==%MAINWEB%== web, like the %MAINWEB%.TWikiAdminGroup. To create a new group:
 	1. ==Edit== %MAINWEB%.TWikiGroups by entering a new topic with a name that ends in ==Group==. Example:
 		* ==<nop>SomeGroup==
-	1. *Set Preferences* for two Variables in the new group topic:
+	1. Define two TWikiVariables in the new group topic:
 		* ==Set <nop>GROUP = &lt; list of Users and/or Groups &gt;==
 		* ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and/or Groups &gt;==
 		* The GROUP variable is a comma-separated list of Users and/or other Groups. Example:
 			* ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
-		* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of Users and Groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. (This prevents Users not in the Group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
+		* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of Users and Groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents Users not in the Group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
 		* ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
    1. These are summarised on SitePermissions
 
 #SuperAdminGroup
 ---+++ The <nop>SuperAdminGroup
 
-By mistyping a user or group name in the ALLOWTOPICCHANGE setting, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, you can create *superusers*:
-	* Set the ==SuperAdminGroup== configuration setting to the wikiname of a group of Users who are always allowed to edit/view topics e.g. "TWikiAdminGroup".
+By mistyping a user or group name in the settings, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, you can create *superusers*:
+	* Edit the ==SuperAdminGroup== as described above and add the wikinames of a group of Users who are always allowed to edit/view topics e.g.
+      * ==Set <nop>GROUP= %MAINWEB%.ElizabethWindsor,%MAINWEB%.TonyBlair==
 
 ---++ Restricting Access
 
@@ -93,6 +86,12 @@ You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web.
 		* ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 		* ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
+*Be careful* with empty values for any of these. In older versions of TWiki,
+		* <code>Set <nop>ALLOWWEBVIEW = </code>
+meant the same as not setting it at all. However since TWiki Dakar release, it means _allow no-one access_ i.e. prevent anyone from viewing the web. Similarly
+		* <code>Set <nop>DENYWEBVIEW = </code>
+now means _do not deny anyone the right to view this web_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
+
 ---+++ Controlling access to a Topic
 
 	* You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
@@ -104,6 +103,12 @@ You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web.
 		* ==Set <nop>ALLOWTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
+
+*Be careful* with empty values for any of these. In older versions of TWiki,
+		* <code>Set <nop>ALLOWTOPICVIEW = </code>
+meant the same as not setting it at all. However since TWiki Dakar release, it means _allow no-one access_ i.e. prevent anyone from viewing the topic. Similarly
+		* <code>Set <nop>DENYTOPICVIEW = </code>
+now means _do not deny anyone the right to view this topic_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
 
 ---+++ Controlling access to Attachments
 
@@ -120,7 +125,7 @@ The easiest way to apply the same access control rules for attachments as apply 
   RewriteRule ^/twiki/pub/([^\/]+)/([^\/]+)/([^\/]+)$ /twiki/bin/viewfile/$1/$2?filename=$3 [L,PT]
 </verbatim>
 
-That way all the controls that apply to the topic also apply to attachments to the topic.
+That way all the controls that apply to the topic also apply to attachments to the topic. Other types of webserver have similar support.
 
 ---+++ How TWiki evaluates ALLOW/DENY settings
 
@@ -152,7 +157,7 @@ Another way of hiding webs is to keep them hidden by not publishing the URL and 
 
 This setup can be useful to hide a new web until content its ready for deployment.
 
-%X% *Obfuscating webs is insecure*, as anyone who knows the URL can access the web.
+%X% *Obfuscating webs is very insecure*, as anyone who knows the URL can access the web.
 
 ---+++ Authenticate all Webs and Restrict Selected Webs
 
