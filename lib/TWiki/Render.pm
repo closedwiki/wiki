@@ -547,18 +547,22 @@ sub _renderNonExistingWikiWord {
 
     if (ref $theTopic && ref $theTopic eq 'ARRAY') {
         my $num = 1;
+        my @posse = ();
         foreach my $t(@{ $theTopic }) {
             next if ! $t;
-            $ans .= CGI::a( { href=>$this->{session}->getScriptUrl
-                      ($theWeb, $t, 'edit',
-                       topicparent => $this->{session}->{webName}.'.'.
-                       $this->{session}->{topicName} ),
-                       rel=>'nofollow',
-                       title=>($this->{session}->{i18n}->maketext('Create this topic'))
+            push( @posse,
+                  CGI::a(
+                      { href => $this->{session}->getScriptUrl
+                          ($theWeb, $t, 'edit',
+                           topicparent => $this->{session}->{webName}.'.'.
+                             $this->{session}->{topicName} ),
+                        rel => 'nofollow',
+                        title => ($this->{session}->{i18n}->maketext('Create this topic'))
                     },
-                    $this->{NEWLINKSYMBOL} x $num . " " );
+                    $this->{NEWLINKSYMBOL} x $num ));
             $num++;
         }
+        $ans .= join( ' ', @posse );
     } else {
         $ans .= CGI::a( { href=>$this->{session}->getScriptUrl
                       ($theWeb, $theTopic, 'edit',
