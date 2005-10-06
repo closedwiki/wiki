@@ -1206,6 +1206,7 @@ HERE
                                               <<'HERE'
 To reset the password, log in to the server and delete the <code>
 $TWiki::cfg{Password} = '...';</code> line in <code>lib/LocalSite.cfg</code>
+<p /><font color="red"><b>Note on Security</b></font>: if you don't set a password, or the password is cracked, then <code>configure</code> could be used to do <strong>very</strong> nasty things to your server. If you are running TWiki on a public website, you are <strong>strongly</strong> advised to disable saving from <code>configure</code> by making <code>lib/LocalSite.cfg</code> readonly once you are happy with your configuration.
 HERE
                          ));
         $output .= CGI::p( <<'HERE'
