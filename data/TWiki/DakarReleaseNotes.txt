@@ -108,7 +108,7 @@ You know how to whistle, don't you Steve?
 You just put your lips together and blow.
 </td></tr>
 </table>
-As you can see, your changes have been merged with your colleagues. The merge is done on a line-by-line basis, and if your changes do not overlap, then change marks will not be used.
+As you can see, your changes have been merged with your colleagues. The merge is done on a line-by-line basis, and if your changes do not overlap, then change marks will not be used (as is the case for the last line of the example).
 
 Merging only applies to text fields. When there are conflicts in field data in forms such as checkboxes, radio buttons and selects, the most recent change (usually your change) always wins, even if someone else has changed the form since you started editing. All changes are of course available from the topic history.
 
@@ -116,7 +116,7 @@ Because there are cases where you actually want to avoid overlapping edits altog
 
 ---+++ Internationalisation
 
-TWiki will now pick up the language you are using in you browser, and try to present system messages in you chosen language, if it is available. If your preferred language is not available, TWiki will revert to English. You'll also have an option to choose a language different from that used in your browser.
+TWiki will now pick up the language you are using in your browser, and try to present system messages in that language, if it is available. If your preferred language is not available, TWiki will revert to English. You'll also have an option to choose a language different from that used in your browser.
 
 The translation is performed by the Perl standard internationalization framework. If you want to contribute a new language, it would be most welcome: See TWiki:Codev.TWikiLocalization for instructions on how to help.
 
@@ -189,6 +189,9 @@ And =%<nop>INCLUDE{"SampleTopic" section="inner"}%= will produce:
 In the same line, overlapped sections are allowed.
 
 ---++ Notes for !TWikiAdmins and !WikiMasters
+
+---+++ Upgrading
+See TWikiUpgradeGuide for help in upgrading an existing Cairo (Sep 2004) installation.
 
 ---+++ Security
 
@@ -402,10 +405,6 @@ The main impact of this is that some TWikiApplications may cease to work if they
 
 Note that because the TWiki spec allows double quotes within double-quoted strings in certain variable parameters it has been impossible to make the parser 100% deterministic. There may still be pathological cases where the parser may fail. In these cases, consider how open and close curly brackets are matched up.
 
----+++ Skin search paths
-
-New in Dakar release is support for _skin search paths_ which allow you to specify any number of skins, instead of the default single skin. If a template can't be found for the first skin in the path, then the second skin is used, and so on until the default template is used as a last resort. See %TWIKIWEB%.TWikiSkins for more information.
-
 ---+++ Encoding of form-field values
 The encoding used to escape characters in form-field values has had to change. The old encoding could very easily be confused by text strings in data values. Existing topics with the old encoding will still be loaded into TWiki as before, but if edited they will be saved with the new encoding. This should not affect you unless you have searches that look for the old encodings; specifically, the %<nop%_G_
 , %<nop>_Q_%, and %<nop>_P_% character sequences. Any such searches will not work any more, and need to be converted to search for the new encoding. Assuming they are =regex= type searches, you can use =(%<nop%_G_
@@ -430,6 +429,15 @@ This new variable for TWiki.FormattedSearch returns the number of instances a sp
 
 ---++ Notes for Skin Developers
 
+---+++ Skin search path
+Earlier releases of TWiki only allowed for a single skin, so customising a single template in a skin meant deriving a whole new skin. Dakar introduces the concept of a skin search path, which lets you combine skins additively. For example, you can customise just the view template by defining a new =view.mylocalskin.tmpl= and then setting
+   * =Set SKIN = mylocalskin,pattern=
+Since you have defined a view template for =mylocalskin=, it will be picked up when you view a topic because =mylocalskin= is first on the search path. But you didn't define =edit.mylocalskin.tmpl=, so when you edit the next skin on the search path will be used instead (in this case =edit.pattern.tmpl=). You can put as many skins on the search path as you like
+
+A new standard URL parameter, =cover=, allows you to push a different skin to the front of the skin search path for the duration of a single URL request. For example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WhatIsWikiWiki?cover=print.pattern. This gives you an extra level of flexibility when defining skins.
+
+See TWikiSkins for more information.
+
 ---+++ Supporting web names that are !WikiWords
 Although web names have been [[WebNameAsWikiName][permitted to be WikiWords]] since the CairoRelease, the base templates have been [[DefaultTemplatesSupportWebNameAsWikiWord][fixed]] for Dakar.
 
@@ -452,7 +460,7 @@ In Cairo release (and earlier) the only way to have an edit link that changed wi
 Dakar release includes new support for "context if" parameters to the %<nop>TMPL:P construct. See TWikiTemplates for details. The default templates shipped with Dakar have been modified to use this support. %<nop>EDITTOPIC has been deprecated, though it is still available as a simple edit link, defined in TWikiPreferences. Skin authors are strongly recommended to replace this link with context-if conditionals.
 
 ---+++ Template Parameters
-%<nop>TMPL:P% now accepts parameters. Values passed in these parameters can be expanded in the %TMPL:DEF. See http://develop.twiki.org/~develop/cgi-bin/view/TWiki/TWikiTemplates for full details. (Remember, this happens at template expansion time, which is usually early in the rendering process.)
+%<nop>TMPL:P% now accepts parameters. Values passed in these parameters will be expanded when the %TMPL:DEF is instantiated. See http://develop.twiki.org/~develop/cgi-bin/view/TWiki/TWikiTemplates for full details. (Remember, this happens at template expansion time, which is usually very early in the rendering process.)
 
 ---+++ HTTP and HTTPS
 These two new !TWikiVariables give access to the HTTP headers sent by your browser. For example, your browser says your browser is %HTTP:{"User-Agent"}% (this will be filled in if you are running Dakar).
@@ -570,7 +578,7 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.VarCachePlugin | Tested by TWiki:Main.CrawfordCurrie. |
 
 ---+++ Contributions that are known to work with Dakar
-| TWiki:Plugins.ActionTrackerPlugin | Tested by TWiki:Main.CrawfordCurrie. 2.023 required |
+| TWiki:Plugins.ActionTrackerPlugin | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.AgentPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.AliasPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.BeautifierPlugin | Cairo version seems to work |
@@ -600,14 +608,14 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.LinkOptionsPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.LocalCityTimePlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.LocalTimePlugin | Tested by TWiki:Main.CrawfordCurrie. |
-| TWiki:Plugins.MacrosPlugin | Tested by TWiki:Main.CrawfordCurrie. |
+| TWiki:Plugins.MacrosPlugin | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.MailerContrib | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.MailInContrib | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.NatSkinPlugin | Tested by TWiki:Main.MichaelDaum |
 | TWiki:Plugins.PerlDocPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.PreferencesPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.PseudoXmlPlugin | Tested by TWiki:Main.CrawfordCurrie. |
-| TWiki:Plugins.PublishAddOn | Tested by TWiki:Main.CrawfordCurrie.Version 1.302 required |
+| TWiki:Plugins.PublishAddOn | Tested by TWiki:Main.CrawfordCurrie |
 | TWiki:Plugins.RandomQuotePlugin | Tested by TWiki:Main.RafaelAlvarez |
 | TWiki:Plugins.RandomTopicPlugin | Tested by TWiki:Main.CrawfordCurrie. |
 | TWiki:Plugins.RedDotPlugin | Tested by TWiki:Main.MichaelDaum |
@@ -650,7 +658,7 @@ They probably work, we just can't be sure.
 | TWiki:Plugins.NetgrepPlugin | |
 | TWiki:Plugins.PhotonSkin | |
 | TWiki:Plugins.PollPlugin | |
-| TWiki:Plugins.PowerEditPlugin | |
+| TWiki:Plugins.PowerEditPlugin | Will not be updated by original author |
 | TWiki:Plugins.ProjectPlannerPlugin | |
 | TWiki:Plugins.RedirectPlugin | |
 | TWiki:Plugins.RollupPlugin | |
