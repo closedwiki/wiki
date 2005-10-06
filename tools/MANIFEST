@@ -848,3 +848,4 @@ UpgradeTwiki 0550
 !include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
+!include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/TwistyContrib
