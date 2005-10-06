@@ -1,0 +1,17 @@
+%META:TOPICINFO{author="ArthurClemens" date="1128637970" format="1.0" version="1.1"}%
+---+!! %TWIKIWEB%.PatternSkin CSS Cookbook
+
+%TOC%
+
+---++ Hide the left bar
+
+Use the =USERSTYLEURL= variable. No, variable is not used for users only; and the order in which variables are read makes that topic variables always take precedence over user variables. So write a =USERSTYLEURL= in a topic.
+
+Follow these steps:
+   1 Create a new topic, for instance HideLeftBar. You may also want to use a central place for styles - in that case you can choose TWikiPreferences, or a new topic [[TWiki.CustomStyles]] or something. I'll use the last one for the example below.
+   1 In that topic, attach a css file (see attached example). Use the file that matches your TWiki installation (current is Cairo).
+   1 In the topic where you wish to hide the left bar, write <code>   * Set USERSTYLEURL = %<nop>PUBURL%/TWiki/CustomStyles/hideleftbar_Dakar.css</code>
+
+
+%META:FILEATTACHMENT{name="hideleftbar_Cairo.css" attr="" comment="css to hide the left bar (Cairo)" date="1128637851" path="hideleftbar_Cairo.css" size="106" user="ArthurClemens" version="1.1"}%
+%META:FILEATTACHMENT{name="hideleftbar_Dakar.css" attr="" comment="css to hide the left bar (Dakar)" date="1128637872" path="hideleftbar_Dakar.css" size="112" user="ArthurClemens" version="1.1"}%
