@@ -366,7 +366,7 @@ To help contain the growth of wiki spam, TWiki now incorporates some features to
 ---+++ New User Registration 
 
 The new user registration process has been extensively reworked to improve usability and security of the registration process.
-   1 !FirstName and !LastName are taken separately and tabulated. See http://wiki.conceptmapping.org/People/UserListByLocation
+   1 !FirstName and !LastName are taken separately and tabulated. See Main.UserListByLocation
    1 Sends a email that the user has to respond to; registration data is staged until this is done
    1 Populates a form in the user topic, if there is one in the !NewUserTemplate. If there is no form, then bullets are used, as in pre-Dakar TWiki.
    1 Sends different emails to the WIKIWEBMASTER and the USER, with the user's containing the password unless {HidePasswdInRegistration} is set.
