@@ -18,10 +18,11 @@ package TWiki::Plugins::GluePlugin;
 
 # =========================
 use vars qw(
-        $VERSION $web $topic $doExpandCommonVariables
+        $VERSION $RELEASE $web $topic $doExpandCommonVariables
     );
 
 $VERSION = '$Rev$';
+$RELEASE = '1.5';
 
 # =========================
 sub initPlugin { 
