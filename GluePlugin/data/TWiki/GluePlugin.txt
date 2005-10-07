@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1124126460" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1124126460" format="1.0" version="1.1"}%
 ---+!! <nop>%TOPIC%
 %TOC%
 ---++ Description
