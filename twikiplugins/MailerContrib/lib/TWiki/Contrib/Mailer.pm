@@ -55,8 +55,8 @@ only be called by =mailnotify= scripts.
 =cut
 
 sub mailNotify {
-    #( $webs, $twiki, $verbose ) = @_;
-    my ( $webs, $twiki, $verbose, $sendmail ) = @_;
+    my ( $webs, $twiki, $sendmail );
+    ( $webs, $twiki, $verbose, $sendmail ) = @_;
     my $webstr;
     if ( defined( $webs )) {
         $webstr = join( "|", @{$webs} );
