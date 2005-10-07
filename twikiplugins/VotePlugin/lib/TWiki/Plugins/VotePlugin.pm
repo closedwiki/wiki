@@ -18,7 +18,7 @@ package TWiki::Plugins::VotePlugin;
 
 ###############################################################################
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $isInitialized
     );
 
@@ -26,6 +26,7 @@ use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
 
 $VERSION = '$Rev$';
+$RELEASE = '1.10;
 $pluginName = 'VotePlugin';  # Name of this Plugin
 
 ###############################################################################
