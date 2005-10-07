@@ -44,12 +44,13 @@ package TWiki::Plugins::AgentPlugin; 	# change the package name!!!
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug
         $query $browsers $userAgent
     );
 
 
 $VERSION    = '$Rev$';
+$RELEASE = 'Dakar';
 #$VERSION   = '1.000'; #at# initial release
 
 # =========================

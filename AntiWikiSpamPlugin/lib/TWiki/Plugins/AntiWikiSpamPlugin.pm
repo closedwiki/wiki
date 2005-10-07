@@ -25,9 +25,18 @@ check topic text when saving, refusing to save if it finds a matche.
 
 package TWiki::Plugins::AntiWikiSpamPlugin;
 
-use vars qw( $VERSION $pluginName $debug );
+use vars qw( $VERSION $RELEASE $pluginName $debug );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 $pluginName = 'AntiWikiSpamPlugin';  # Name of this Plugin
 
 =pod
@@ -66,8 +75,6 @@ sub initPlugin {
 This handler is called just before the save action, checks 
 
 __NOTE:__ meta-data is embedded in $text (using %META: tags)
-
-__Since:__ TWiki::Plugins::VERSION = '1.010'
 
 =cut
 

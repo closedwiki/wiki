@@ -55,7 +55,7 @@ package TWiki::Plugins::SlashFilenamePlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug 
         %Shares
         $StrictFilenames 
@@ -68,7 +68,16 @@ use vars qw(
         $FileChars 
     );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 
 $pluginName = 'SlashFilenamePlugin';  # Name of this Plugin
 
@@ -170,57 +179,6 @@ sub initPlugin
     # Plugin correctly initialized
     TWiki::Func::writeDebug( "- TWiki::Plugins::${pluginName}::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
-}
-
-# =========================
-sub DISABLE_startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-    my $sharePathStart;
-
-    TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-
-
-}
-
-# =========================
-sub DISABLE_commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/ge;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
-}
-
-
-# =========================
-sub DISABLE_outsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::outsidePREHandler( $renderingWeb.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion, once per line, before any changes,
-    # for lines outside <pre> and <verbatim> tags. 
-    # Use it to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-
-
 }
 
 # =========================

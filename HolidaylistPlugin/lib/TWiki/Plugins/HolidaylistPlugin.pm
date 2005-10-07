@@ -65,7 +65,7 @@ eval {
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug 
 	%defaults @renderedOptions @flagOptions $refText 
 	%months %daysofweek
@@ -75,19 +75,28 @@ use vars qw(
 	$theWeb $theTopic
     );
 
-$VERSION = '$Rev$'; #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
-#$VERSION = '1.011'; #dro# improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg;
-#$VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
-#$VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
-#$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
-#$VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
-#$VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
-#$VERSION = '1.005'; #dro# added new features (startdate support; weekendbgcolor); fixed documentation bugs
-#$VERSION = '1.004'; #dro# some performance improvements; code cleanup; documentation
-#$VERSION = '1.003'; #dro# fix plugin preferences handling; format column name; rename some subroutines
-#$VERSION = '1.002'; #dro# renders some options; fixes: white space bug, documentation bugs; 
-#$VERSION = '1.001'; #dro# complete reimplementation of HolidaylistPlugin
-#$VERSION = '1.021'; #pj# initial version
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
+$VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+ #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
+#VERSION = '1.011'; #dro# improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg;
+#VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
+#VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
+#VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
+#VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
+#VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
+#VERSION = '1.005'; #dro# added new features (startdate support; weekendbgcolor); fixed documentation bugs
+#VERSION = '1.004'; #dro# some performance improvements; code cleanup; documentation
+#VERSION = '1.003'; #dro# fix plugin preferences handling; format column name; rename some subroutines
+#VERSION = '1.002'; #dro# renders some options; fixes: white space bug, documentation bugs; 
+#VERSION = '1.001'; #dro# complete reimplementation of HolidaylistPlugin
+#VERSION = '1.021'; #pj# initial version
 
 $pluginName = 'HolidaylistPlugin';  # Name of this Plugin
 

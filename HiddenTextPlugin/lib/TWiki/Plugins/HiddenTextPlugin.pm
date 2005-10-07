@@ -52,11 +52,20 @@ package TWiki::Plugins::HiddenTextPlugin;    # change the package name and $plug
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $exampleCfgVar
     );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 $pluginName = 'HiddenTextPlugin';  # Name of this Plugin
 
 # =========================
@@ -82,32 +91,6 @@ sub initPlugin
 }
 
 # =========================
-sub DISABLE_initializeUserHandler
-{
-### my ( $loginName, $url, $pathInfo ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::initializeUserHandler( $_[0], $_[1] )" ) if $debug;
-
-    # Allows a plugin to set the username based on cookies. Called by TWiki::initialize.
-    # Return the user name, or "guest" if not logged in.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_registrationHandler
-{
-### my ( $web, $wikiName, $loginName ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::registrationHandler( $_[0], $_[1] )" ) if $debug;
-
-    # Allows a plugin to set a cookie at time of user registration.
-    # Called by the register script.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
 sub commonTagsHandler
 {
 ### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
@@ -122,65 +105,6 @@ sub commonTagsHandler
     # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/ge;
 
 	$_[0] =~ s/%STARTHIDDEN%(.*?)%ENDHIDDEN%/$1/sg;
-}
-
-# =========================
-sub DISABLE_startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::startRenderingHandler( $_[1] )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-}
-
-# =========================
-sub DISABLE_outsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    ##TWiki::Func::writeDebug( "- ${pluginName}::outsidePREHandler( $renderingWeb.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion, once per line, before any changes,
-    # for lines outside <pre> and <verbatim> tags. 
-    # Use it to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    ##TWiki::Func::writeDebug( "- ${pluginName}::insidePREHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion, once per line, before any changes,
-    # for lines inside <pre> and <verbatim> tags. 
-    # Use it to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/g;
-}
-
-# =========================
-sub DISABLE_endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::endRenderingHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just after the line loop, that is,
-    # after almost all XHTML rendering of a topic. <nop> tags are removed after this.
-
 }
 
 # =========================
@@ -233,75 +157,5 @@ sub afterEditHandler
 		$_[0] = "$storage $_[0]";
 	}
 }
-
-# =========================
-sub DISABLE_beforeSaveHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::Store::saveTopic just before the save action.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_writeHeaderHandler
-{
-### my ( $query ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::writeHeaderHandler( query )" ) if $debug;
-
-    # This handler is called by TWiki::writeHeader, just prior to writing header. 
-    # Return a single result: A string containing HTTP headers, delimited by CR/LF
-    # and with no blank lines. Plugin generated headers may be modified by core
-    # code before they are output, to fix bugs or manage caching. Plugins should no
-    # longer write headers to standard output.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_redirectCgiQueryHandler
-{
-### my ( $query, $url ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::redirectCgiQueryHandler( query, $_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::redirect. Use it to overload TWiki's internal redirect.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_getSessionValueHandler
-{
-### my ( $key ) = @_;   # do not uncomment, use $_[0] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::getSessionValueHandler( $_[0] )" ) if $debug;
-
-    # This handler is called by TWiki::getSessionValue. Return the value of a key.
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
-sub DISABLE_setSessionValueHandler
-{
-### my ( $key, $value ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    TWiki::Func::writeDebug( "- ${pluginName}::setSessionValueHandler( $_[0], $_[1] )" ) if $debug;
-
-    # This handler is called by TWiki::setSessionValue. 
-    # Use only in one Plugin.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
-
-}
-
-# =========================
 
 1;

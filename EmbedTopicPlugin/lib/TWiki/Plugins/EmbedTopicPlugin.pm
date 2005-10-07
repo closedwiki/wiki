@@ -36,11 +36,20 @@
 package TWiki::Plugins::EmbedTopicPlugin;    
 
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $bgcolor $hdcolor
     );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 $pluginName = 'EmbedTopicPlugin';  # Name of this Plugin
 
 sub initPlugin
@@ -276,7 +285,6 @@ sub beforeEditHandler
 
     # This handler is called by the edit script just before presenting the edit text
     # in the edit box. Use it to process the text before editing.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
     $_[0] =~ s/%T{(.+?)}/&expandBeforeEdit($1)/ige;
     $_[0] =~ s/%EmbedTopic{(.+?)}%/&expandBeforeEdit($1)/ige;
 }
@@ -288,7 +296,6 @@ sub beforeSaveHandler
     TWiki::Func::writeDebug( "- ${pluginName}::beforeSaveHandler( $_[2].$_[1] )" ) if $debug;
 
     # This handler is called by TWiki::Store::saveTopic just before the save action.
-    # New hook in TWiki::Plugins $VERSION = '1.010'
     $_[0] =~ s/%BeginTopic{(.+?)}%(.*?)%End{\1}%/&saveEmbed($1,$2,$_[2])/igse;
     $_[0] =~ s/%B{(.+?)}(.*?)%E{\1}/&saveEmbed($1,$2)/igse;
 }

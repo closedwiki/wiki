@@ -120,36 +120,4 @@ package TWiki::Plugins::XpTrackerPlugin::XpTrackerPluginDeadCode;
 #    return $result;
 #}
 
-# =========================
-sub DISABLE_startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-    &TWiki::Func::writeDebug( "- XpTrackerPlugin::startRenderingHandler( $_[1].$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-}
-
-# =========================
-sub DISABLE_outsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag.
-    # This is the place to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-}
-# =========================
-sub DISABLE_endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-	# This handler is called by getRenderedVersion just after the line loop
-}
-
 1;

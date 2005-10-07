@@ -46,10 +46,19 @@ package TWiki::Contrib::DBCacheContrib;
 
 @TWiki::Contrib::DBCacheContrib::ISA = ("TWiki::Contrib::DBCacheContrib::Map");
 
-use vars qw( $initialised $storable $VERSION );
+use vars qw( $initialised $storable $VERSION $RELEASE );
 
 $initialised = 0; # Not initialised until the first new
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 $storable = 1;
 
 =begin text

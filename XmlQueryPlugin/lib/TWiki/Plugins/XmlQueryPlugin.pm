@@ -34,7 +34,7 @@ use TWiki::Func;
 # =========================
 use strict;
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $activeCfgVar $initialized $xmldir $cache $cachelimit $cacheexpires $datadir $pubdir
     );
 
@@ -42,7 +42,17 @@ BEGIN {
     $initialized = 0;
     $xmldir = '/var/tmp/twiki_xml';
     $xmldir = 'c:/.twiki_xml' if $^O eq 'MSWin32' and $xmldir !~ /^\[a-z]\:/i;
+
+    # This should always be $Rev$ so that TWiki can determine the checked-in
+    # status of the plugin. It is used by the build automation tools, so
+    # you should leave it alone.
     $VERSION = '$Rev$';
+
+    # This is a free-form string you can use to "name" your own plugin version.
+    # It is *not* used by the build automation tools, but is reported as part
+    # of the version number in PLUGINDESCRIPTIONS.
+    $RELEASE = 'Dakar';
+
     $debug=0;
     $cache=undef;
     $cachelimit=1024*1024*100; # default 100 meg

@@ -29,7 +29,7 @@ package TWiki::Plugins::LocalCityTimePlugin;
 use vars qw(
         $web $topic $user $installWeb
         $tzDir $dateCmd $dateParam $gatewayUrl
-        $VERSION $debug $useDateCmd
+        $VERSION $RELEASE $debug $useDateCmd
     );
 
 # =========================
@@ -42,7 +42,16 @@ $gatewayUrl   = "http://TWiki.org/cgi-bin/xtra/tzdate"; # URL of date and time g
 $gatewayParam = "?tz=";                                 # parameter of date and time gateway
 
 # do not change
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 
 
 # =========================

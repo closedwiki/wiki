@@ -44,11 +44,20 @@ package TWiki::Plugins::StylePlugin; 	# change the package name!!!
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug
         $exampleCfgVar $skipskin
     );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 $pstylebegin		= '^\.(\w+)\s*$';
 
 # =========================
@@ -76,22 +85,6 @@ sub initPlugin
     return 1;
 }
 
-# =========================
-sub DISABLE_commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    &TWiki::Func::writeDebug( "- StylePlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
-}
-
-# =========================
 sub startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
@@ -146,30 +139,5 @@ sub outsidePREHandler
 	# span: ((style)(text))
 	$_[0] =~ s/\(\((\w+)\)\(([^\(\)]*)\)\)/<span class=$1>$2<\/span>/go;
 }
-
-# ------------------------=
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#   &TWiki::Func::writeDebug( "- StylePlugin::insidePREHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag.
-    # This is the place to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-}
-
-# ------------------------=
-sub DISABLE_endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-    &TWiki::Func::writeDebug( "- StylePlugin::endRenderingHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just after the line loop
-}
-
-# ------------------------=
 
 1;

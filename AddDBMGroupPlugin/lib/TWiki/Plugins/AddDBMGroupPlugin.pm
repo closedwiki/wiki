@@ -26,7 +26,7 @@ package TWiki::Plugins::AddDBMGroupPlugin;
 use strict;
 use Fcntl;
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug @wikiGroups $groupFile
     );
 

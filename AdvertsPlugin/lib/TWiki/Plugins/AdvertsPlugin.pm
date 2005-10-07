@@ -26,11 +26,12 @@ package TWiki::Plugins::AdvertsPlugin;
 
 # =========================
 use vars qw(
-  $web $topic $user $installWeb $VERSION $pluginName
+  $web $topic $user $installWeb $VERSION $RELEASE $pluginName
   $debug $phpAdsNewBase $selectionStringPrefix $selectionStringSuffix;
 );
 
-$VERSION    = '$Rev$';
+$VERSION = '$Rev$';
+$RELEASE = 'Dakar';
 $pluginName = 'AdvertsPlugin';    # Name of this Plugin
 
 # =========================

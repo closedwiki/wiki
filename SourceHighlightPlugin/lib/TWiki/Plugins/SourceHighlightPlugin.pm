@@ -25,12 +25,21 @@ package TWiki::Plugins::SourceHighlightPlugin;
 # $Id$
 
 use strict;
-use vars qw( $VERSION );
+use vars qw( $VERSION $RELEASE );
 
 use File::Spec;
 use File::Temp;
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 
 # These are set at initialization
 

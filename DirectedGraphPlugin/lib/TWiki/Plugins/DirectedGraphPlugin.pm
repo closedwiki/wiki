@@ -31,11 +31,20 @@ package TWiki::Plugins::DirectedGraphPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
         $debug $exampleCfgVar
     );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 $pluginName = 'DirectedGraphPlugin';
 use Digest::MD5 qw( md5_hex );
 #the MD5 and hash table are used to create a unique name for each graph
