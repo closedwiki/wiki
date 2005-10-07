@@ -18,11 +18,12 @@ package TWiki::Plugins::FilterPlugin;
 
 ###############################################################################
 use vars qw(
-        $web $topic $user $VERSION
+        $web $topic $user $VERSION $RELEASE
         $debug
     );
 
 $VERSION = '$Rev$';
+$RELEASE = '0.91';
 
 ###############################################################################
 sub writeDebug {
