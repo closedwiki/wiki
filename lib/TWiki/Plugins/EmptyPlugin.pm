@@ -59,9 +59,15 @@ use strict;
 # *must* exist in this package
 use vars qw( $VERSION $debug $pluginName );
 
-# Use $Rev$ for plugins checked in to Subversion. Otherwise use a number
-# (real or integer)
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in ACTIVATED_PLUGINS.
+$RELEASE = 'Dakar';
 
 # Name of this Plugin, only used in this module
 $pluginName = 'EmptyPlugin';

@@ -225,7 +225,7 @@ sub invoke {
     use strict 'refs';
 }
 
-# Get the version number of the specified plugin.
+# Get the VERSION number of the specified plugin.
 # SMELL: may die if the plugin doesn't compile
 sub getVersion {
     my $this = shift;
@@ -233,6 +233,17 @@ sub getVersion {
 
     no strict 'refs';
     return ${$this->{module}.'::VERSION'} || '';
+    use strict 'refs';
+}
+
+# Get the RELEASE of the specified plugin.
+# SMELL: may die if the plugin doesn't compile
+sub getRelease {
+    my $this = shift;
+    ASSERT($this->isa( 'TWiki::Plugin')) if DEBUG;
+
+    no strict 'refs';
+    return ${$this->{module}.'::RELEASE'} || '';
     use strict 'refs';
 }
 
@@ -251,6 +262,7 @@ sub getDescription {
     } else {
         return ' '.$this->{web}.'.'.
           $this->{name}.' ('.
+            $this->getRelease().
             $this->getVersion().
               '): '.$this->{description};
     }

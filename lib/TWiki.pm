@@ -2385,6 +2385,10 @@ sub _IF {
 # include hierarchy. Works for both URLs and absolute server paths.
 sub _INCLUDE {
     my ( $this, $params, $topic, $web ) = @_;
+
+    # compute include key before mangling params
+    my $key = $web.'.'.$topic.':'.$params->stringify();
+
     # Remove params, so they don't get expanded in the included page
     my $path = $params->remove('_DEFAULT') || '';
     my $pattern = $params->remove('pattern');
@@ -2438,20 +2442,14 @@ sub _INCLUDE {
         return '';
     }
 
-    # compute include key
-    $path = $incweb.'.'.$inctopic;
-    foreach my $k ( sort keys %$params ) {
-	$path .= ":$k=$params->{$k}";
-    }
-
     # prevent recursive includes. Note that the inclusion of a topic into
     # itself is not blocked; however subsequent attempts to include the
     # topic will fail.
-    if( grep( /^$path$/, @{$this->{includeStack}} )) {
+    if( $this->{includes}->{$key} ) {
         if( $warn eq 'on' ) {
             my $more = '';
-            if( $#{$this->{includeStack}} ) {
-                $more .= join( '/', @{$this->{includeStack}} );
+            if( defined $this->{includes} ) {
+                $more .= join( ', ', keys %{$this->{includes}} );
             }
             return $this->inlineAlert( 'alerts', 'already_included',
                                        $incweb, $inctopic, $more );
@@ -2466,7 +2464,7 @@ sub _INCLUDE {
     my %saveTags = %{$this->{SESSION_TAGS}};
     my $prefsMark = $this->{prefs}->mark();
 
-    push( @{$this->{includeStack}}, $path );
+    $this->{includes}->{$key} = 1;
     $this->{SESSION_TAGS}{INCLUDINGWEB} = $web;
     $this->{SESSION_TAGS}{INCLUDINGTOPIC} = $topic;
 
@@ -2530,7 +2528,7 @@ sub _INCLUDE {
     $this->_expandAllTags( \$text, $topic, $web );
 
     # restore the tags
-    pop( @{$this->{includeStack}} );
+    delete $this->{includes}->{$key};
     %{$this->{SESSION_TAGS}} = %saveTags;
 
     $this->{prefs}->restore( $prefsMark );
