@@ -1062,7 +1062,8 @@ sub _showPlugins {
           ( 'BOOLEAN', '', 
 #SMELL - i'm assuming that the Plugin topic is in the SystemWeb :(
 "<a rel=\"nofollow\" href=\"$TWiki::cfg{ScriptUrlPath}/view$TWiki::cfg{ScriptSuffix}/$TWiki::cfg{SystemWebName}/$m\">$m</a>",
-	  , '{Plugins}{'.$m.'}{Enabled}');
+            '{Plugins}{'.$m.'}{Enabled}'
+	    );
     }
     return $block;
 }
