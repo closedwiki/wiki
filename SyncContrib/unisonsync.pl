@@ -11,7 +11,7 @@ use File::Path;
 my $configFile = 'unisonsync.cfg';
 require $configFile;
 
-print Dumper($UnisonSync::options);
+#print Dumper($UnisonSync::options);
 die "No options hashref set" unless ($UnisonSync::options); 
 
 syncTWikiInstall($UnisonSync::options, @ARGV);
@@ -32,27 +32,7 @@ sub syncTWikiInstall {
 
 
 	foreach my $accountName (@accountNames) {
-		my $account = $accounts->{$accountName};
-		
-		if (!defined $account) {
-			$accounts->{$accountName} = {report=>''};
-			report($accounts->{$accountName}, "No such account '$accountName' - skipping\n");
-			next;
-		}
-
-		# Add to the structure a record of the account (user specifies it on the outside of the hash)
-		$account->{accountName}	= $accountName;
-
-		report($account, "Options: for $accountName:\n".Dumper($account)."\n") if ($account->{debug});
-		report($account, "Syncing $accountName\n") if ($account->{debug});
-		
-	    writePlinkLauncherScript($options, $account->{serverSite}, $account->{serverAccount}, $account->{clientServerPrivateKey});
-	    my @webs = @{$account->{webs}};
-	    foreach my $web (@webs) {
-			syncDir($account, $options, $options->{dataDir}, $web);
-			syncDir($account, $options, $options->{pubDir}, $web);
-	    }
-		deletePlinkLauncherScript($options, $account->{serverSite}, $account);
+		syncAccount($accounts, $accountName, $options);
 	}
 
 	print "\n-----\n";
@@ -64,14 +44,58 @@ sub syncTWikiInstall {
 
 sub report {
    my ($account, $text) = @_;
+   return unless $text;
    $account->{report} .= $text;
    print $text;
 }
 
+sub syncAccount {
+	my ($accounts, $accountName, $options) = @_;
+	my $account = $accounts->{$accountName};
+	if (!defined $account) {
+		$accounts->{$accountName} = {report=>''};
+		report($accounts->{$accountName}, "No such account '$accountName' - skipping\n");
+		next;
+	}
+
+	report($account, "\n\nSync report:\nAccount: ".$accountName."\n");
+	foreach my $key (%$options) {
+		my $value = $options->{$key};
+		if (!defined $account->{$key}) {
+			exposeAttribute($account, $key, $value);
+		} else {
+			report($account, "Warning: global key $value overridden by local account $accountName value ".$account->{$key}."\n");
+		}
+	}
+
+	exposeAttribute($account, 'accountName', $accountName);
+		
+	report($account, "Settings: for $accountName:\n".Dumper($account)."\n") if ($account->{debug} > 2);
+	report($account, "Syncing $accountName\n") if ($account->{debug});
+	
+    writePlinkLauncherScript($account);
+    my @webs = @{$account->{webs}};
+    foreach my $web (@webs) {
+    	syncWeb($account, $web);
+    }
+	deletePlinkLauncherScript($account);
+}
+
+sub syncWeb {
+	my ($account, $web) = @_;
+	use Date::Format;
+	my $timestamp = time2str('%Y%m%d-%H%M%S', time());
+	exposeAttribute($account, 'timestamp', $timestamp);
+	exposeAttribute($account, 'web', $web);
+	syncDir($account, $account->{dataDir}, $web);
+	syncDir($account, $account->{pubDir}, $web);
+}
+
 
 sub syncDir {
-	my ($account, $options, $dir, $web) = @_;
-	report($account, "Sync report\n\nAccount:".$account->{accountName}."\nWeb: $web\nDir: $dir\n");
+	my ($account, $dir, $web) = @_;
+	exposeAttribute($account, 'dir', $dir);
+	report($account, "Web: $web\nDir: $dir\n");
 
 # TODO: test you can set this to '' and have that override separation of webs.
 	unless ($account->{clientParentWeb}) {
@@ -90,13 +114,15 @@ sub syncDir {
     }
     my $serverDir = $dir.'/'.$optionalServerParentSlash.$web;
 	report($account, "\n... Syncing $dir \n") if ($account->{debug} > 1);
-	syncFileSet($account, $options, $clientDir, $serverDir);
+	syncFileSet($account, $clientDir, $serverDir);
 }
 
 sub syncFileSet {
-   my ($account, $options, $clientDir, $serverDir) = @_;
+   my ($account, $clientDir, $serverDir) = @_;
 
-   my $cmd = getSyncFileSetCommand($account, $options, $clientDir, $serverDir);
+   my $cmd = getSyncFileSetCommand($account, $clientDir, $serverDir);
+   report($account, "BEFORE SUBSTITUTIONS: ".$cmd."\n") if ($account->{debug} > 2);
+   $cmd = doSubstitutions($account, $cmd);
    report($account, $cmd."\n") if ($account->{debug} > 1);
    unless($account->{dryrun}) {
 	   report($account, `$cmd`);
@@ -117,28 +143,28 @@ sub optionalParentSlash {
 }
 
 sub getSyncFileSetCommand {
-    my ($account, $options, $clientDir, $serverDir) = @_;    
+    my ($account, $clientDir, $serverDir) = @_;    
 
 	my @optionalSshCmd = ();
 	my $optionalServerSpec = '';
 	if ($account->{serverSite}) {
-	   $optionalServerSpec = $options->{protocol}.'://'.$account->{serverSite}.'/';
-	   @optionalSshCmd = ("-sshcmd", $options->{plinkTempLauncherScriptFile});
+	   $optionalServerSpec = $account->{protocol}.'://'.$account->{serverSite}.'/';
+	   @optionalSshCmd = ("-sshcmd", $account->{plinkTempLauncherScriptFile});
 	}
 
     my $clientFileSet = $account->{clientRoot}.'/'.$clientDir;
     my $serverFileSet = $optionalServerSpec.$account->{serverRoot}.'/'.$serverDir;
 
-    my @unisonArgs = ("-batch", @optionalSshCmd, $account->{unisonOptions});
-    my @cmd = ($options->{clientUnisonExecutable}, $clientFileSet, $serverFileSet, @unisonArgs);
+    my @unisonArgs = (@optionalSshCmd, $account->{unisonOptions});
+    my @cmd = ($account->{clientUnisonExecutable}, $clientFileSet, $serverFileSet, @unisonArgs);
 
 	return join(' ',@cmd);
 }
 
 
 sub plinkLauncherScriptContents {
-	my ($options, $serverSite, $serverAccount, $clientServerPrivateKey) = @_;
-   return "\@\"$options->{plinkExecutable}\" $serverSite -i \"$clientServerPrivateKey\" -l $serverAccount -ssh $options->{serverUnisonExecutable} -server -contactquietly";
+	my ($account) = @_;
+   return "\@\"$account->{plinkExecutable}\" $account->{serverSite} -i \"$account->{clientServerPrivateKey}\" -l $account->{serverAccount} -ssh $account->{serverUnisonExecutable} -server -contactquietly";
 }
 
 =pod
@@ -150,18 +176,35 @@ n Cleaver\PuttyPrivateKey.ppk" -l mrjc -ssh unison -server -contactquietly
 =cut
 
 sub writePlinkLauncherScript {
-	my ($options, $serverSite, $serverAccount, $clientServerPrivateKey) = @_;
-	if ($serverSite) {
-	    open( FILE, ">$options->{plinkTempLauncherScriptFile}" );
-    	print FILE plinkLauncherScriptContents($options, $serverSite, $serverAccount, $clientServerPrivateKey);
+	my ($account) = @_;
+	if ($account->{serverSite}) {
+	    open( FILE, ">$account->{plinkTempLauncherScriptFile}" );
+    	print FILE plinkLauncherScriptContents($account);
 	    close(FILE);    
 	}
 }
 
 sub deletePlinkLauncherScript {
-	my ($options, $serverSite, $account) = @_;
-	if ($serverSite) {
-	    unlink $options->{plinkTempLauncherScriptFile} unless ($account->{debug} > 2);
+	my ($account) = @_;
+	if ($account->{serverSite}) {
+	    unlink $account->{plinkTempLauncherScriptFile} unless ($account->{debug} > 2);
 	}
 }
 
+# Add to the structure a record of the account (user specifies it on the outside of the hash)
+# SMELL - there should be a way of automatically taking the exposed attribute out of scope.
+sub exposeAttribute {
+	my ($account, $attribute, $value) = @_;
+	$account->{$attribute} = $value;
+	
+	report($account, "Exposed attribute '$attribute' = $value\n") if ($account->{debug} > 2);
+}
+
+sub doSubstitutions {
+ my ($account, $cmd) = @_;
+	foreach my $key (keys %$account) {
+		my $value = $account->{$key};
+		$cmd =~ s/%$key%/$value/g if ($value); #SMELL - this needs to be a literal key, e.g. pass key = '{$}'
+	}
+ return $cmd;
+}
