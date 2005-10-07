@@ -19,22 +19,28 @@ TWiki is written in Perl 5, uses a number of shell commands, and requires [[http
 | Cron/scheduler | %BULLET% Unix: =cron= %BB% Windows: =cron= equivalents |
 | Web server | Apache is well supported; for other servers, see the TWiki:Codev.CategoryCookbook lists |
 
+---+++ Required CPAN Modules
 The following Perl modules are used by TWiki:
+| *Module* | *Preferred version* |
+| CGI::Carp | >=1.26 |
+| Config | >=0 |
+| Cwd | >=3.05 | 
+| Data::Dumper | >=2.121 |
+| File::Copy | >=2.06 |
+| File::Find | >=1.05 |
+| File::Spec | >=3.05 |
+| FileHandle | >=2.01 |
+| IO::File | >=1.10 |
+| Time::Local | >=1.11 |
+
+---+++ Optional CPAN Modules
+---++ The following Perl modules may be used by TWiki:
 | *Module* | *Preferred version* | *Description* |
-| CGI::Carp | >=1.26 | Required. Available from the CPAN archive. |
-| CGI::Cookie | >=1.24 | Optional. Available from the CPAN archive. |
-| CGI::Session | >=3.95 | Optional. Available from the CPAN archive. |
-| Config | >=0 | Required. Available from the CPAN archive. |
-| Cwd | >=3.05 | Required. Available from the CPAN archive. |
-| Data::Dumper | >=2.121 | Required. Available from the CPAN archive. |
-| File::Copy | >=2.06 | Required. Available from the CPAN archive. |
-| File::Find | >=1.05 | Required. Available from the CPAN archive. |
-| File::Spec | >=3.05 | Required. Available from the CPAN archive. |
-| FileHandle | >=2.01 | Required. Available from the CPAN archive. |
-| IO::File | >=1.10 | Required. Available from the CPAN archive. |
-| Locale::Maketext::Lexicon | >=0 | Optional. Available from the CPAN archive. |
-| Net::SMTP | >=2.29 | Optional. Used for sending mail. |
-| Time::Local | >=1.11 | Required. Available from the CPAN archive. |
+| CGI::Cookie | >=1.24 | Used for session support |
+| CGI::Session | >=3.95 | Used for session support |
+| Locale::Maketext::Lexicon | >=0 | Used for I18N support |
+| Net::SMTP | >=2.29 | Used for sending mail |
+
 Most of them will probably already be available in your installation.
 You can check if they are available from the command-line like this
 <verbatim>
