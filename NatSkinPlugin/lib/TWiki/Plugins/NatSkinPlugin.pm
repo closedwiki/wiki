@@ -27,7 +27,7 @@ use TWiki::Plugins;
 
 ###############################################################################
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug
         $isGuest $defaultWikiUserName
 	$useSpamObfuscator $isBeijing $isDakar $isCairo
 	$maxRev $query $urlHost
@@ -39,6 +39,7 @@ use vars qw(
     );
 
 $VERSION = '$Rev$';
+$RELEASE = '2.51';
 
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';
@@ -117,11 +118,13 @@ sub doInit {
   if ($query) { # are we in cgi mode?
     # disable during register context
     my $theAction = $query->url(-relative=>1); # cannot use skinState yet, we are in initPlugin
-    $useSpamObfuscator = ($theAction =~ /^register/)?0:1; 
+    writeDebug("theAction=$theAction");
+    $useSpamObfuscator = ($theAction =~ /^(register|mailnotif)/)?0:1; 
   } else {
     $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
     writeDebug("no query ... batch mode");
   }
+  writeDebug("useSpamObfuscator=$useSpamObfuscator");
 
   # Plugin correctly initialized
   writeDebug("initPlugin ($web.$topic) is OK");
