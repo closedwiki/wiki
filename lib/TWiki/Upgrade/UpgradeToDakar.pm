@@ -1,5 +1,3 @@
-#!/usr/bin/perl -w
-
 # Support functionality for the TWiki Collaboration Platform, http://TWiki.org/
 #
 # A script to help people upgrade an existing TWiki to a new version
@@ -7,7 +5,8 @@
 #
 # Jul 2004 - written by Martin Gregory, martin@gregories.net
 # Changes copyright (C) 2005 Crawford Currie http://c-dot.co.uk
-#
+# Changes copyright (C) 2005 Sven Dowideit http://www.home.org.au
+
 
 package TWiki::Upgrade::UpgradeToDakar;
 
@@ -34,11 +33,9 @@ sub doAllDakarUpgrades {
 my ($setlibPath, $targetDir) = @_;
 
 print "
-This script will help you upgrade an existing 'Cairo' (TWiki2004090*)
-installation to the latest 'Dakar' release. If you need to upgrade an
-earlier release, you should upgrade to 'Cairo' first.
-
-(It will also upgrade an existing Dakar beta to a more recent release)
+This script will help you upgrade an existing 'Cairo' (TWiki2004090*) or Dakar 
+pre-release installation to the latest 'Dakar' release. If you need to upgrade 
+an earlier release, you should upgrade to 'Cairo' first.
 
 The script works by examining the differences between a new 'Dakar'
 distribution and an existing 'Cairo' installation, and creating a
@@ -48,7 +45,9 @@ closely as possible.
 Checklist:
    - This script should be run in the directory where you unpacked the
      new 'Dakar' distribution.
-   - The argument to the script is the path to a target directory
+   - The first argument to the script is the path to your esiting TWiki 
+     installation's setlib.cfg
+   - The second argument to the script is the path to a target directory
      where it will create the new installation
      (_not_ the same as where you unpacked the new distribution, nor
       where your existing TWiki installation is)
@@ -60,10 +59,8 @@ Notes:
    - The target directory does _not_ have to be web-accessible.
    - The paths specified in the configuration for your _existing_
      installation will be used in the target directory.
-   - Once you are done, you can rename the target directory as you
+   - Once you are done, you can rename or move the target directory as you
      want.
-   - You will be prompted to enter the path to your existing
-     installation.
    - I will not touch any files in your existing TWiki installation
      or in the distribution. Only the target directory will be
      written to.
@@ -87,8 +84,8 @@ mkdir $targetDir, 0755 or die "Couldn't create the target directory ($targetDir)
 
 print "2) I'm going to create new config files to match the configuration of
    your existing installation.
-3) I'm going to take a copy of your existing topics and merge in the
-   new topic files from the release.
+3) I'm going to take a copy of your existing topics and attachments and merge 
+   them in with new versions from the release.
 4) I'm going to tell you what you need to do next!
 
 ";
@@ -104,6 +101,7 @@ foreach my $file (readdir(HERE)) {
     next if ($file =~ /~$/);
     next if ($file =~ /.zip$/);
     next if ($file eq "data"); # UpgradeTopics will copy the data as appropriate.
+    next if ($file eq "pub"); # UpgradeTopics will copy the data as appropriate.
 
     print "$file\n";
     system("cp -R $file $targetDir");
@@ -112,9 +110,6 @@ foreach my $file (readdir(HERE)) {
 my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($setlibPath, $targetDir);   # dies on error, without doing damage
 
 print "\n\nMerging your existing twiki ($targetDir) with new release twiki ...\n";
-
-my $baseDir = `pwd`;
-chomp ($baseDir);
 
 # set up .htaccess, if appropriate
 if (-f "$setlibPath/.htaccess") {
@@ -164,9 +159,6 @@ Applying your '\$scriptSuffix' ($TWiki::scriptSuffix) to the scripts in $targetD
           or warn "Oops, couldn't rename $setlibPath/$f to $setlibPath/$f$TWiki::scriptSuffix : $!\n";
     }
 }
-
-# At last!
-    print "\ndoAllDakarUpgrades done.\n";
 
     return ($oldDataDir, $oldPubDir);
 }

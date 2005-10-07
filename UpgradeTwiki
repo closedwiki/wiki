@@ -8,7 +8,6 @@
 # Jul 2004 - written by Martin Gregory, martin@gregories.net
 # Changes copyright (C) 2005 Crawford Currie http://c-dot.co.uk
 # Changes copyright (C) 2005 Sven Dowideit http://www.home.org.au
-#    I'm the one to blame for it being broken at the moment (27-Mar-2005)
 #
 
 use strict;
@@ -117,7 +116,7 @@ if ( $oldCfgFile =~ /(.*)setlib.cfg/ ) {
 	$oldCfgFile .= '/setlib.cfg';
 }
 
-die "ERROR: setlib.cfg file not found at ($oldCfgFile)\n" unless (-e $oldCfgFile);
+die "ERROR: old TWiki's setlib.cfg file not found at ($oldCfgFile)\n" unless (-e $oldCfgFile);
 
 
 print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile = ($newCfgFile), outputDir = ($outputDir)\n";

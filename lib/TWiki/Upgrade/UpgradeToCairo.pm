@@ -1,4 +1,3 @@
-#!/usr/bin/perl -w
 
 # Support functionality for the TWiki Collaboration Platform, http://TWiki.org/
 #

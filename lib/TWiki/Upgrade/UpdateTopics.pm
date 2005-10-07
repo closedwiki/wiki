@@ -4,7 +4,7 @@
 # Jul 2004 - copied almost completely from Sven's updateTopics.pl script:
 #            put in a package and made a subroutine to work with UpgradeTWiki 
 #             by Martin "GreenAsJade" Gregory.
-# Apr 2005 - Sven's hacking to use for debian & DevelopBranch
+# Changes copyright (C) 2005 Sven Dowideit http://www.home.org.au
 
 # This version ignores symlinks in the existing wiki data: it creates a new 
 # wiki data tree updating the topics in the existing wiki data, even the
@@ -21,12 +21,12 @@ use Text::Diff;
 
 # Try to upgrade an installation's TWikiTopics using the rcs info in it.
 
-use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $BaseDir $debug $RcsLogFile $TempDir);
+use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $debug $RcsLogFile $TempDir);
 #					@DefaultWebTopics %LinkedDirPathsInWiki);
 
 sub UpdateTopics 
 {
-	$debug = 0;
+	$debug = 0;	#Set if you want to see the debug output
     $NewReleaseDataDir = shift or die "UpdateTopics not provided with new data directory!\n";
     $CurrentDataDir = shift or die "UpdateTopics not provided with existing data directory!\n";
     $DestinationDataDir = shift or die "DestinationDataDir not provided\n";
@@ -38,22 +38,7 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
     ($? >> 8 == 0) or die "Uh-oh - couldn't see an rcs executable on your path!  I really need one of those!\n";
 
     $whoCares = `which patch`;
-
     ($? >> 8 == 0) or die "Uh-oh - couldn't see a patch executable on your path!  I really need one of those!\n";
-
-    $BaseDir = `pwd`;
-    chomp ($BaseDir);
-
-    $TempDir = "$BaseDir/tmp";
-
-    while (-d $TempDir ) { $TempDir .= 'p' }   # we want our own previously non-existing directory!
-
-    mkdir( $TempDir, 0777) or die "Uhoh - couldn't make a temporary directory called $TempDir: $!\n";
-
-#Set if you want to see the debug output
-#$debug = "yes";
-
-    if ($debug) {print "$CurrentDataDir, $NewReleaseDataDir\n"; }
 
     print "\n";
     print "\t...new upgraded data will be put in $DestinationDataDir\n";
@@ -63,7 +48,7 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
     print "Output:\n";
     print "\tFor each file that has no versioning information in your existing twiki a _v_ will be printed\n";
     print "\tFor each file that has no changes from the previous release a _c_ will be printed\n";
-    print "\tFor each file that has no changes made in your existing release, a _u_ will be printed\n";
+    print "\tFor each file that has no changes made in your existing release, a _u_ will be printed (new version is copied)\n";
     print "\tFor each file where no commonality could be found, your existing one is used, and a _C_ will be printed\n";
     print "\tFor each file that has changes and a patch is generated a _p_ will be printed\n";
     print "\tFor each file that is new in the NewReleaseDataDir a _+_ will be printed\n";
@@ -73,11 +58,12 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
 \t please check them to see if your configuration is still ok\n\n";
 
     mkdir( $DestinationDataDir, 0777);
+    $TempDir = "$DestinationDataDir/tmp";
+    while (-d $TempDir ) { $TempDir .= 'p' }   # we want our own previously non-existing directory!
+    mkdir( $TempDir, 0777) or die "Uhoh - couldn't make a temporary directory called $TempDir: $!\n";
 
-#redirect stderr into a file (rcs dumps out heaps of info)
-
-    $RcsLogFile = $BaseDir."/rcs.log";
-
+	#redirect stderr into a file (rcs dumps out heaps of info)
+    $RcsLogFile = $DestinationDataDir."/rcs.log";
     unlink($RcsLogFile);  # let's have just the messages from this session!
 
     open(PATCH, "> $DestinationDataDir/patchTopics");
@@ -119,7 +105,6 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
 	find( sub {chmod 0777, $File::Find::name;} , $DestinationDataDir);
     
     rmdir($TempDir);
-    chdir($BaseDir);  # seems the kind thing to do :-)
 }
     
 # ============================================
@@ -160,7 +145,7 @@ sub copyNewTopics
     
     if (! -e $destinationFilename ) { 
         print "\nadding $filename (new in this release)" if ($debug);
-        print "+" if (!$debug);
+        print '+' if (!$debug);
         copy( $filename, $destinationFilename);
     }
     
@@ -268,15 +253,16 @@ sub getRLog
 	# (in which case:
 #TODO: what about manually updated files?
 
-        if ( $highestCommonRevision =~ /\d*\.\d*/ ) 
+
+#TODO: need to do something different if we are upgrading from a beta to the release
+    if ( $highestCommonRevision =~ /\d*\.\d*/ ) 
 	{
-            my $diff = doDiffToHead( $workingFilename, $highestCommonRevision );
+        my $diff = doDiffToHead( $workingFilename, $highestCommonRevision );
 
 	    $diff = removeVersionChangeDiff($diff);
             patchFile( $filename, $destinationFilename, $diff );
 
-            print "\npatching $newFilename from $filename ($highestCommonRevision)" if ($debug);
-            print "\n$newFilename: p\n" if (!$debug);
+            print "\ncreating a patch for $newFilename from $filename ($highestCommonRevision)";
             copy( $newFilename, $destinationFilename);
             copy( $newFilename.",v", $destinationFilename.",v");
         } elsif ($highestCommonRevision eq "head" ) {
@@ -291,22 +277,21 @@ sub getRLog
             #or a manual attempt at creating a topic off twiki.org?raw=on
 #TODO: do something nicer about this.. I think i need to do lots of diffs 
             #to see if there is any commonality
-            print "\nWarning: copying $filename (no common versions)" if ($debug);
-            print "\nNo common versions for $filename: C\n" if (!$debug);
+            print "\nWarning: copying $filename (no common versions) : C";
             copy( $filename, $destinationFilename);
             copy( $filename.",v", $destinationFilename.",v");
         }
 
-	if ( $doCiCo )
-	{
-	    unlink ($workingFilename, "$workingFilename,v") or
-		warn "Couldn't remove temporary files $workingFilename, $workingFilename,v: $! Could be trouble ahead...\n";
-	}
+		if ( $doCiCo )
+		{
+		    unlink ($workingFilename, "$workingFilename,v") or
+			warn "Couldn't remove temporary files $workingFilename, $workingFilename,v: $! Could be trouble ahead...\n";
+		}
 
     } else {
         #new file created by users
 #TODO: this will include topics copied using ManagingWebs (createWeb)
-        print "\ncopying $filename (new user's file)" if ($debug);
+        print "\ncopying $filename (user's existing file)" if ($debug);
         print "c" if (!$debug);
         copy( $filename, $destinationFilename);
         copy( $filename.",v", $destinationFilename.",v");
@@ -359,13 +344,13 @@ sub patchFile
 
     for($i = 0; $i < @diff ; $i++)
     {
-	if ($diff[$i] =~ m/<\s*\* Set WIKIWEBLIST = /)
-	{
-	    # come to mama
-	    # this had better be the value in the distribution!...
-	    $diff[$i] = '< 		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]';
-	    last;
-	}
+		if ($diff[$i] =~ m/<\s*\* Set WIKIWEBLIST = /)
+		{
+		    # come to mama
+		    # this had better be the value in the distribution!...
+		    $diff[$i] = '< 		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]';
+		    last;
+		}
     }
     
     $diff = join("\n", @diff);

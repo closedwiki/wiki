@@ -53,7 +53,7 @@ sub UpgradeTWikiConfig {
         open(NEW_CONFIG, ">$newLibFile") or die "Couldn't open $newLibFile to write it: $!\n";
         print NEW_CONFIG "# This is LocalLib.cfg. It contains the basic paths for your local\n";
         print NEW_CONFIG "# TWiki site.\n";
-        print NEW_CONFIG "\$twikiLibPath = '$targetDir/lib';";
+        print NEW_CONFIG "\$twikiLibPath = '$twikiLibPath';";
         close(NEW_CONFIG);
 
         if ($twikiLibPath =~ m|^[~/]|) {
@@ -73,15 +73,16 @@ sub UpgradeTWikiConfig {
     eval 'use TWiki';
     if ( !$@ && defined &TWiki::new && -f "$twikiLibPath/TWiki/Client.pm" ) {
         print STDERR "$twikiLibPath is a Dakar TWiki\n";
-        do 'LocalSite.cfg';
-        require 'TWiki.cfg';
-        die "Cannot read TWiki.cfg: $@" if $@;
+        use vars qw(%cfg);
+	%cfg = ();
+	copy("$twikiLibPath/LocalSite.cfg","$targetDir/lib/LocalSite.cfg");
         foreach my $var qw( DataDir DefaultUrlHost PubUrlPath
                             PubDir TemplateDir ScriptUrlPath LocalesDir ) {
             die "$twikiLibPath points to a non-functional TWiki"
               unless $TWiki::cfg{$var};
         }
         do 'LocalSite.cfg';
+	%TWiki::cfg = (%TWiki::cfg,%cfg);
         return( $TWiki::cfg{DataDir}, $TWiki::cfg{PubDir} );
     } else {
         print STDERR "$twikiLibPath is a Cairo TWiki\n";
