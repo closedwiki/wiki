@@ -3,5 +3,14 @@
 
 %TABLE{sort="on" initsort="1" initdirection="up"}%
 | *Last Modified* | *Web.Topic* | *Last Editor* |
-%SEARCH{ "." regex="on" nosearch="on" nototal="on" limit="%URLPARAM{"limit" default="25"}%" web="%URLPARAM{"web" default="all"}%" excludetopic="WebStatistics" reverse="on" order="modified" format="| $date - [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic?_foo=$rev][diff]] / [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic?type=last&render=sequential&context=1000&_foo=$rev][in-line diff]] - $rev | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic#foo_$rev][$web.$topic]] | $wikiusername |" }%
+%SEARCH{ "." 
+regex="on" 
+nosearch="on" 
+nototal="on" 
+limit="%URLPARAM{"limit" default="25"}%" 
+web="%URLPARAM{"web" default="all"}%" 
+excludetopic="WebStatistics" 
+order="modified" 
+format="| $date - [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic?_foo=$rev][diff]] / [[%SCRIPTURL%/rdiff%SCRIPTSUFFIX%/$web/$topic?type=last&render=sequential&context=1000&_foo=$rev][in-line diff]] - $rev | [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic#foo_$rev][$web.$topic]] | $wikiusername |" 
+}%
 
