@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1123241359" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1123241359" format="1.1" version="1.1"}%
 ---+ <nop>UserInfoPlugin
 
 This plugin analyses the log files of your twiki-engine and extracts usefull

@@ -20,12 +20,13 @@ use strict;
 
 ###############################################################################
 use vars qw(
-	$web $topic $user $installWeb $VERSION $debug @currentVisitors 
+	$web $topic $user $installWeb $VERSION $RELEASE $debug @currentVisitors 
 	$isDakar $twikiGuest @isoMonth
 	$ignoreHosts $isInitialized $sessionDir
 );
 
 $VERSION = '$Rev$';
+$RELEASE = '1.3';
 
 ###############################################################################
 sub writeDebug {
