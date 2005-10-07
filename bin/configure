@@ -2390,7 +2390,7 @@ HERE
     if( $update_disabled) {
         $body .= CGI::em("Update is disabled - $update_disabled");
     } else {
-        $body .= CGI::p(CGI::submit(-class=>'twikiSubmit', -value=>'Next'));
+        $body .= CGI::p(CGI::submit(-class=>'twikiSubmit', -value=>'Next', -accesskey=>'N'));
         $body .= CGI::end_form();
     }
 
