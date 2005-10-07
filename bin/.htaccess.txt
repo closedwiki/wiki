@@ -51,6 +51,9 @@ AuthType Basic
 # to register with the TWiki. Apache requires this to be a *local* path.
 ErrorDocument 401 {ScriptUrlPath}/view/TWiki/TWikiRegistration
 
+# Turn off directory indexing in this and sub directories
+Options -Indexes
+
 <FilesMatch "[^/]*\.html$">
        SetHandler blabla
        allow from all
