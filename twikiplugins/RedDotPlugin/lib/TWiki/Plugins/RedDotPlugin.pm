@@ -18,11 +18,12 @@ package TWiki::Plugins::RedDotPlugin;
 
 ###############################################################################
 use vars qw(
-        $web $topic $user $installWeb $VERSION
+        $web $topic $user $installWeb $VERSION $RELEASE
         $debug $styleLink $doneHeader $hasInitRedirector
     );
 
 $VERSION = '$Rev$';
+$RELEASE = '1.25';
 
 ###############################################################################
 sub writeDebug {
