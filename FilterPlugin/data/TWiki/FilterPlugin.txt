@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="MichaelDaum" date="1126809518" format="1.1" version="1.2"}%
+%META:TOPICINFO{author="TWikiContributor" date="1126809518" format="1.1" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This plugin allows to substitute and extract information from content by
