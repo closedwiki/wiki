@@ -18,7 +18,7 @@ package TWiki::Plugins::VotePlugin;
 
 ###############################################################################
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE
         $debug $isInitialized
     );
 
@@ -26,13 +26,12 @@ use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.10';
-$pluginName = 'VotePlugin';  # Name of this Plugin
+$RELEASE = '1.11';
 
 ###############################################################################
 # debug suite
 sub writeDebug {
-  &TWiki::Func::writeDebug("${pluginName} - $_[0]") if $debug;
+  &TWiki::Func::writeDebug("VotePlugin - $_[0]") if $debug;
 }
 
 ###############################################################################
@@ -54,33 +53,43 @@ sub commonTagsHandler {
 ###############################################################################
 # render the VOTE macro
 sub handleVote {
-  &writeDebug("handleVote called");
-  my $theAttributes = shift;
-  $theAttributes = "" if !$theAttributes;
+  my $args = shift;
+  $args = "" if !$args;
+  &writeDebug("called handleVote($args)");
 
-  my $theId = &TWiki::Func::extractNameValuePair($theAttributes, "id") || "";
-  my $theStyle = &TWiki::Func::extractNameValuePair($theAttributes, "style") || "bar";
-  my $theWidth = &TWiki::Func::extractNameValuePair($theAttributes, "width") || "200";
-  my $theColor = &TWiki::Func::extractNameValuePair($theAttributes, "color") || "lightblue";
-  my $theBgColor = &TWiki::Func::extractNameValuePair($theAttributes, "bgcolor") || "lightcyan";
-  my $theLimit = &TWiki::Func::extractNameValuePair($theAttributes, "limit") || "-1";
+  my $theId = &TWiki::Func::extractNameValuePair($args, 'id') || '';
+  my $theStyle = &TWiki::Func::extractNameValuePair($args, 'style') || 'bar';
+  my $theWidth = &TWiki::Func::extractNameValuePair($args, 'width') || '200';
+  my $theColor = &TWiki::Func::extractNameValuePair($args, 'color') || 'lightblue';
+  my $theBgColor = &TWiki::Func::extractNameValuePair($args, 'bgcolor') || 'lightcyan';
+  my $theLimit = &TWiki::Func::extractNameValuePair($args, 'limit') || '-1';
 
   my @theSelects = ();
   my @theOptions = ();
 
-  push @theSelects, &TWiki::Func::extractNameValuePair($theAttributes, "select1") ||
-    &TWiki::Func::extractNameValuePair($theAttributes, "select") || "";
-  push @theSelects, &TWiki::Func::extractNameValuePair($theAttributes, "select2") || "";
-  push @theSelects, &TWiki::Func::extractNameValuePair($theAttributes, "select3") || "";
-  push @theSelects, &TWiki::Func::extractNameValuePair($theAttributes, "select4") || "";
-  push @theSelects, &TWiki::Func::extractNameValuePair($theAttributes, "select5") || "";
+  my $tmp = &TWiki::Func::extractNameValuePair($args, 'select1') ||
+	 &TWiki::Func::extractNameValuePair($args, 'select');
+  push @theSelects, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'select2');
+  push @theSelects, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'select3');
+  push @theSelects, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'select4');
+  push @theSelects, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'select5');
+  push @theSelects, $tmp if $tmp;
 
-  push @theOptions, &TWiki::Func::extractNameValuePair($theAttributes, "options1") ||
-    &TWiki::Func::extractNameValuePair($theAttributes, "options") || "";
-  push @theOptions, &TWiki::Func::extractNameValuePair($theAttributes, "options2") || "";
-  push @theOptions, &TWiki::Func::extractNameValuePair($theAttributes, "options3") || "";
-  push @theOptions, &TWiki::Func::extractNameValuePair($theAttributes, "options4") || "";
-  push @theOptions, &TWiki::Func::extractNameValuePair($theAttributes, "options5") || "";
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'options1') ||
+	 &TWiki::Func::extractNameValuePair($args, 'options');
+  push @theOptions, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'options2');
+  push @theOptions, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'options3');
+  push @theOptions, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'options4');
+  push @theOptions, $tmp if $tmp;
+  $tmp = &TWiki::Func::extractNameValuePair($args, 'options5');
+  push @theOptions, $tmp if $tmp;
 
   # check attributes
   if (!@theOptions) {
@@ -279,11 +288,18 @@ sub getVotesFile
   my $id = shift;
 
   my $attachPath = &TWiki::Func::getPubDir() . "/$web/$topic";
-  my $votesFile = "$attachPath/Votes" . ($id?"_$id":"") . ".txt";
-
+  my $votesFile = "$attachPath/_Votes" . ($id?"_$id":"") . ".txt";
   &normalizeFileName($votesFile);
 
-  #&writeDebug("attachPath=$attachPath votesFile=$votesFile");
+  # to upgrade smoothly
+  my $oldVotesFile = "$attachPath/Votes" . ($id?"_$id":"") . ".txt";
+  &normalizeFileName($oldVotesFile);
+  #writeDebug("oldVotesFile=$oldVotesFile, newVotesFile=$votesFile");
+
+  if (-e $oldVotesFile && ! -e $votesFile) {
+    &TWiki::Func::writeWarning("renamed old votes file '$oldVotesFile' to '$votesFile'");
+    rename $oldVotesFile, $votesFile;
+  }
 
   return $votesFile;
 }
@@ -303,7 +319,7 @@ sub normalizeFileName {
     return &TWiki::normalizeFileName($fileName)
   }
   
-  writeDebug("WARNING: normalizeFileName not found ... you live dangerous");
+  &TWiki::Func::writeWarning("normalizeFileName not found ... you live dangerous");
   return $fileName;
 }
 

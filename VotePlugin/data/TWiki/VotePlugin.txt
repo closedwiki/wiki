@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1126717800" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128708491" format="1.1" version="1.1"}%
 ---+!! <nop>VotePlugin
 
 This plugin might be used to establish an online-voting system. Votes are
@@ -51,8 +51,10 @@ The plugin will count only you latest vote. You might only vote once a day.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v1.10 (2005-8-14) |
+|  Plugin Version: | v1.11 (2005-10-07) |
 |  Change History: | &nbsp; | 
+|  2005-10-07 | storing votes into =_Vote*.txt= now (was =Vote*.txt= before) ;\
+                fixed error messaging on empty argument lists |
 |  2005-09-14 | fixes for dakar |
 |  2005-03-14 | incorporated =getLocaldate()= function |
 |  2005-03-16 | use Cache API only if its there; delayed =use &lt;package&gt;= | 
@@ -67,5 +69,4 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Feedback: | TWiki:Plugins/VotePluginDev |
 |  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
 
--- TWiki:Main.MichaelDaum - 14 Sep 2005
-
+-- TWiki:Main.MichaelDaum - 7 Oct 2005
