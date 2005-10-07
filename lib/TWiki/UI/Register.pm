@@ -669,7 +669,6 @@ sub verifyEmailAddress {
 
     #    $this->{session}->writeLog('verifyuser', $loginName, $userName);
 
-    _emailRegistrationConfirmations( $session, $data );
 }
 
 =pod
@@ -710,6 +709,10 @@ sub finish {
     if (! exists $data->{WikiName}) {
         throw Error::Simple( 'no WikiName after reload');
     }
+
+    # inform user and admin about the registration. Note: do it now before 
+    # purgeKeys deletes the password.
+    _emailRegistrationConfirmations( $session, $data );
 
     my $log = _newUserFromTemplate($session, 'NewUserTemplate', $data);
 
