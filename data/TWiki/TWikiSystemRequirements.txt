@@ -31,13 +31,13 @@ The following Perl modules are used by TWiki:
 | File::Copy | >=2.06 |
 | File::Find | >=1.05 |
 | File::Spec | >=3.05 |
-| FileHandle | >=2.01 |
+| !FileHandle | >=2.01 |
 | IO::File | >=1.10 |
 | Text::Diff | |
 | Time::Local | >=1.11 |
 
 ---+++ Optional CPAN Modules
----++ The following Perl modules may be used by TWiki:
+The following Perl modules may be used by TWiki:
 | *Module* | *Preferred version* | *Description* |
 | CGI::Cookie | >=1.24 | Used for session support |
 | CGI::Session | >=3.95 | Used for session support |
