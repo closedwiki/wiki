@@ -20,10 +20,11 @@ package TWiki::Plugins::ImageGalleryPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $isInitialized $igpId
+        $web $topic $user $installWeb $VERSION $RELEASE $isInitialized $igpId
     );
 
 $VERSION = '$Rev$';
+$RELEASE = '3.1';
 
 # =========================
 sub initPlugin {
