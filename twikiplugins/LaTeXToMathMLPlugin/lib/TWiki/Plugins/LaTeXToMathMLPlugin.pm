@@ -41,12 +41,21 @@ use English;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $debug $pluginName
 		$equationNumber $equationList $hasAnyMarkup
     );
 
 #this is the first release of this plugin
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 
 $pluginName = 'LaTeXToMathMLPlugin';  # Name of this Plugin
 

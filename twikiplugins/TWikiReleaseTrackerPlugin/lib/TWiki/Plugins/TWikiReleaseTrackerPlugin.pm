@@ -28,7 +28,7 @@ use CGI;
 
 # =========================
 use vars qw(
-  $web $topic $user $installWeb $VERSION $pluginName
+  $web $topic $user $installWeb $VERSION $RELEASE $pluginName
   $debug $cgiQuery %showStatusFilter
   %listingFormat
 );

@@ -11,9 +11,18 @@ use Cwd;
 use strict;
 
 use base qw(Term::Shell);
-use vars qw {$VERSION $config $prefix $prefixPath};
+use vars qw { $VERSION $RELEASE $config $prefix $prefixPath};
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 
 my @systemModules =qw (TWiki::Contrib::TWikiShellContrib::Standard);
 

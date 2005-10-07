@@ -25,26 +25,28 @@ package TWiki::Plugins::CalendarPlugin;
 # use strict;
 
 # =========================
-use vars qw( $web $topic $user $installWeb $VERSION $pluginName $debug
+use vars qw( $web $topic $user $installWeb $VERSION $RELEASE $pluginName $debug
 	    $libsLoaded $libsError $defaultsInitialized %defaults );
 $VERSION   = '$Rev$';
-#$VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
-#$VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
-#$VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
-#$VERSION   = '1.013';  #mrjc# Added support for multiple sources in topic=
-#$VERSION   = '1.012';  #PTh# Added missing doc of gmtoffset parameter (was deleted in 1.011)
-#$VERSION   = '1.011';  #PTh# fix deep recursion bug; preview shows unsaved events; performance improvements
-#$VERSION   = '1.010';  #db# fix variable conflict in timezone code
-#$VERSION   = '1.009';  #db# fix to allow event topics in other webs
-#$VERSION   = '1.008';  #db# lang patch integrated, yearly day/mon repeaters added
-#$VERSION   = '1.007';  #ap# attributes for day headings
-#$VERSION   = '1.006';  #db# support Monthly items
-#$VERSION   = '1.005';  #ad# support Date intervals
-#$VERSION   = '1.004';  #as# only HTML::CalendarMonthSimple, ISO dates, options
-#$VERSION   = '1.003';  #as# now also with HTML::CalendarMonthSimple
-#$VERSION   = '1.002';  #cs# debug, relative month/year, highlight today
-#$VERSION   = '1.001';  #as# delayed load
-#$VERSION   = '1.000';  #as# initial release
+$RELEASE = 'Dakar';
+
+#VERSION   = '1.016';  #dab# Added support for anniversary events; changed "our" to "my" in module to support perl versions prior to 5.6.0
+#VERSION   = '1.015';  #pf# Added back support for preview showing unsaved events; Two loop fixes from DanielRohde
+#VERSION   = '1.014';  #nk# Added support for start and end dates in weekly repeaters
+#VERSION   = '1.013';  #mrjc# Added support for multiple sources in topic=
+#VERSION   = '1.012';  #PTh# Added missing doc of gmtoffset parameter (was deleted in 1.011)
+#VERSION   = '1.011';  #PTh# fix deep recursion bug; preview shows unsaved events; performance improvements
+#VERSION   = '1.010';  #db# fix variable conflict in timezone code
+#VERSION   = '1.009';  #db# fix to allow event topics in other webs
+#VERSION   = '1.008';  #db# lang patch integrated, yearly day/mon repeaters added
+#VERSION   = '1.007';  #ap# attributes for day headings
+#VERSION   = '1.006';  #db# support Monthly items
+#VERSION   = '1.005';  #ad# support Date intervals
+#VERSION   = '1.004';  #as# only HTML::CalendarMonthSimple, ISO dates, options
+#VERSION   = '1.003';  #as# now also with HTML::CalendarMonthSimple
+#VERSION   = '1.002';  #cs# debug, relative month/year, highlight today
+#VERSION   = '1.001';  #as# delayed load
+#VERSION   = '1.000';  #as# initial release
 
 $pluginName="CalendarPlugin";
 

@@ -44,11 +44,20 @@ package TWiki::Plugins::FormFieldsPlugin;
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug
         $exampleCfgVar $writeScript %template
     );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 
 # =========================
 sub initPlugin
@@ -87,49 +96,6 @@ sub init
            }
        }
    }
-}
-
-# =========================
-sub DISABLE_commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-    &TWiki::Func::writeDebug( "- EmptyPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-    # This is the place to define customized tags and variables
-    # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
-    # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
-}
-
-# =========================
-sub DISABLE_startRenderingHandler
-{
-### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
-
-    &TWiki::Func::writeDebug( "- EmptyPlugin::startRenderingHandler( $_[1].$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion just before the line loop
-
-    # do custom extension rule, like for example:
-    # $_[0] =~ s/old/new/go;
-}
-
-# =========================
-sub DISABLE_outsidePREHandler
-{
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-}
-
-# =========================
-sub DISABLE_endRenderingHandler
-{
 }
 
 sub multiselectItem

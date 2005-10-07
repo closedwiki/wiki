@@ -28,12 +28,21 @@ use TWiki::Plugins;
 
 # =========================
 use vars qw(
-            $web $topic $user $installWeb $VERSION $initialised
+            $web $topic $user $installWeb $VERSION $RELEASE $initialised
             $allActions $useNewWindow $debug
             $pluginName $defaultFormat
            );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 $initialised = 0;
 $pluginName = 'ActionTrackerPlugin';
 $installWeb = 'TWiki';
@@ -156,7 +165,6 @@ sub commonTagsHandler {
 
 # This handler is called by the edit script just before presenting
 # the edit text in the edit box.
-# New hook in TWiki::Plugins $VERSION = '1.010'
 # We use it to populate the actionform.tmpl template, which is then
 # inserted in the edit.action.tmpl as the %TEXT%.
 # We process the %META fields from the raw text of the topic and
@@ -297,7 +305,6 @@ sub _hiddenMeta {
 
 # This handler is called by the preview script just before
 # presenting the text.
-# New hook in TWiki::Plugins $VERSION = '1.010'
 # The skin name is passed over from the original invocation of
 # edit so if the skin is "action" we know we have been editing
 # an action and have to recombine fields to create the

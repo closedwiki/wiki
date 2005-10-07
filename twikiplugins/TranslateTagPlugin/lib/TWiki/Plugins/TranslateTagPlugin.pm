@@ -32,7 +32,7 @@ package TWiki::Plugins::TranslateTagPlugin;
 # =========================
 # use strict;
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug $pluginName
+        $web $topic $user $installWeb $VERSION $RELEASE $debug $pluginName
         $translationTopic %translations %reverseTrans
 	$syntaxTag
     );

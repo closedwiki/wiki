@@ -22,9 +22,17 @@ use strict;
 
 package TWiki::Plugins::TablePlugin;
 
-use vars qw( $topic $installWeb $VERSION $initialised );
+use vars qw( $topic $installWeb $VERSION $RELEASE $initialised );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
 
 sub initPlugin {
     my( $web, $user );

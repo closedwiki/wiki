@@ -130,9 +130,17 @@ use POSIX;
 use CGI ( -any );
 use diagnostics;
 use Carp;
-use vars qw( $VERSION $basedir $twiki_home $buildpldir $libpath );
+use vars qw( $VERSION $RELEASE $basedir $twiki_home $buildpldir $libpath );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
 
 my $NL = "\n";
 

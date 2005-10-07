@@ -41,11 +41,20 @@ use TWiki::Plugins::TocPlugin::TOC;
 
 # =========================
 use vars qw(
-            $web $topic $user $installWeb $VERSION $debug
+            $web $topic $user $installWeb $VERSION $RELEASE $debug
             $wif
            );
 
+# This should always be $Rev$ so that TWiki can determine the checked-in
+# status of the plugin. It is used by the build automation tools, so
+# you should leave it alone.
 $VERSION = '$Rev$';
+
+# This is a free-form string you can use to "name" your own plugin version.
+# It is *not* used by the build automation tools, but is reported as part
+# of the version number in PLUGINDESCRIPTIONS.
+$RELEASE = 'Dakar';
+
 
 # =========================
 sub initPlugin
@@ -69,21 +78,6 @@ sub initPlugin
 }
 
 # =========================
-sub DISABLE_commonTagsHandler
-{
-### my ( $text, $topic, $web ) = @_;   # do not uncomment, use $_[0], $_[1]... instead
-
-#  &TWiki::Func::writeDebug( "- TocPlugin::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
-
-  # This is the place to define customized tags and variables
-  # Called by sub handleCommonTags, after %INCLUDE:"..."%
-
-  # do custom extension rule, like for example:
-  # $_[0] =~ s/%XYZ%/&handleXyz()/geo;
-  # $_[0] =~ s/%XYZ{(.*?)}%/&handleXyz($1)/geo;
-}
-
-# =========================
 sub startRenderingHandler
 {
 ### my ( $text, $web ) = @_;   # do not uncomment, use $_[0], $_[1] instead
@@ -96,44 +90,5 @@ sub startRenderingHandler
   # $_[0] =~ s/old/new/go;
   $_[0] = TOC::processTopic($wif, $web, $topic, $_[0]);
 }
-
-# =========================
-sub DISABLE_outsidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#  &TWiki::Func::writeDebug( "- TocPlugin::outsidePREHandler( $web.$topic )" ) if $debug;
-
-  # This handler is called by getRenderedVersion, in loop outside of <PRE> tag.
-  # This is the place to define customized rendering rules.
-  # Note: This is an expensive function to comment out.
-  # Consider startRenderingHandler instead
-}
-
-# =========================
-sub DISABLE_insidePREHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-#   &TWiki::Func::writeDebug( "- TocPlugin::insidePREHandler( $web.$topic )" ) if $debug;
-
-    # This handler is called by getRenderedVersion, in loop inside of <PRE> tag.
-    # This is the place to define customized rendering rules.
-    # Note: This is an expensive function to comment out.
-    # Consider startRenderingHandler instead
-}
-
-# =========================
-sub DISABLE_endRenderingHandler
-{
-### my ( $text ) = @_;   # do not uncomment, use $_[0] instead
-
-  &TWiki::Func::writeDebug( "- TocPlugin::endRenderingHandler( $web.$topic )" ) if $debug;
-
-  # This handler is called by getRenderedVersion just after the line loop
-  $_[0] = TOC::processTopic($wif, $web, $topic, $_[0]);
-}
-
-# =========================
 
 1;
