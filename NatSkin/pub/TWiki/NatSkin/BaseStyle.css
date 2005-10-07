@@ -535,7 +535,7 @@ img.alignleft {
 .blogAbout,
 .blogEntry, .blogHeadline, .blogInfo, .blogDate, .blogText, .blogMore,
 .blogComments, .blogComment, .blogCommentDate, .blogRef, .blogNavigation,
-.blogNext, .blogPrev .blogCommentCount {
+.blogNext, .blogPrev, .blogCommentCount, .blogCommentNr, .blogCommentText {
    border:0px solid red;
 }
 
