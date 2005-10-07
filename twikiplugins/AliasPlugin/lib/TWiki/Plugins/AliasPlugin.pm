@@ -17,13 +17,14 @@
 package TWiki::Plugins::AliasPlugin;    # change the package name and $pluginName!!!
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION
+        $web $topic $user $installWeb $VERSION $RELEASE
         $aliasPattern $debug $aliasWikiWordsOnly
 	%seenAliasWebTopics $wordRegex $wikiWordRegex
 	$defaultAliasTopic $foundError $isInitialized $insideAliasArea
     );
 
 $VERSION = '$Rev$';
+$RELEASE = '1.1';
 
 # =========================
 sub writeDebug {

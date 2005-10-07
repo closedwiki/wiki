@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="AdminUser" date="1114620497" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1114620497" format="1.0" version="1.1"}%
 ---+!! <nop>AliasPlugin
 %TOC%
 
