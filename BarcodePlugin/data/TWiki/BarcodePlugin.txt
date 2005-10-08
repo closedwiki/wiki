@@ -73,6 +73,7 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 	  | ==pub/TWiki/BarcodePlugin/example_1.png== | Sample =barcode= image|
 	  | ==pub/TWiki/BarcodePlugin/example_0.png,v== | Sample =barcode= repository |
 	  | ==pub/TWiki/BarcodePlugin/example_1.png,v== | Sample =barcode= repository |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed:
 		* Check above examples if the "if installed" column shows images instead of variables.
 

@@ -252,6 +252,7 @@ using these settings will be changed accordingly.
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm== | security module |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
 	  | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
 	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
 	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)

@@ -120,6 +120,7 @@ __Note:__ You do not need to install anything on the browser to use this Plugin.
 	  | ==bin/uploadTableRow== |  |
 	  | ==templates/editTableRow.pattern.tmpl== |  |
 	  | ==templates/editTableRow.tmpl== |  |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Verify access and ownership settings for the new scripts.
 	* Edit your .htaccess file to require a valid user for the included scripts (if needed).
 	* For Beijing release point to a valid image for =EDITBUTTON=

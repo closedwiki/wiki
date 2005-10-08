@@ -59,6 +59,7 @@ Don't break other types of links...
 | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the plugin is correctly installed, by viewing %TOPIC%#NewFunctionalityTest
 
 ---+++ Plugin Info

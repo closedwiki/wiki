@@ -72,6 +72,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/WebAliases.txt== | definition of site-wide aliases |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* On TWiki/Dakar:
 	  You might add %<nop>STARTALIASAREA% and %<nop>STOPALIASAREA% surrounding the %<nop>TEXT% tag
 	  of the view and preview templates of your TWiki.TWikiSkins 

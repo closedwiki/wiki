@@ -36,6 +36,7 @@ __Note:__ You do not need to install anything on the browser to use this add-on.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	| *File* | *Description* |
 %$MANIFEST%
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 Unzip the zip over your TWiki installation. To build and install the Apache module, cd to =lib/twiki_dav= and follow the instructions on http://webdav.org/mod_dav/install.html
 
 *Note that administrator access will usually be required to install the Apache module.*

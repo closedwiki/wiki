@@ -128,6 +128,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==pub/TWiki/FlowchartPluginExample/flowchart_FlowchartPluginExample.svg== | The example base SVG |
 	  | ==pub/TWiki/FlowchartPluginExample/flowchartMapImg_FlowchartPluginExample.txt== | The example map file |
 	* Install the [[http://www.imagemagick.org][ImageMagick]]
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* See the TWiki.FlowchartPluginExample
 

@@ -104,7 +104,7 @@ Contents:
 	| ==templates/booktree.tmpl== | Template for bookview mode |
 
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any Plugins.WebPreferences topic).
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* If you see a tree of this topic here:
 
 %TREEVIEW{topic="TreePlugin"}%

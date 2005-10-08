@@ -32,6 +32,7 @@ This plugin will allow you to create variables in arbitrary topic pages, and not
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Check this topic here if the installation was successful
 	* Test if the plugin is correctly installed:
 		* Set THE_ANSWER = 42

@@ -37,6 +37,7 @@ Plugin settings are stored as preferences variables. The following variables are
 ---+++ Plugin Installation Instructions
 
 	* Unzip the =RevRecoverPlugin.zip= file into your TWiki installation.
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---+++ Plugin Info
 

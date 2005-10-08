@@ -63,6 +63,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==pub/TWiki/%TOPIC%/multieditplugin_example.jgp== |  |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==bin/editonesection== |  |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Verify access and ownership settings for the new scripts.
 	* Edit your .htaccess file to require a valid user for the editonesection script (if needed).
 	* Test if the installation was successful:

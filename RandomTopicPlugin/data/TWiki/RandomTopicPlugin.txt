@@ -52,6 +52,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
       %$MANIFEST%
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* If you see a table below of 5 random topics then you have successfully installed this:
 ----

@@ -54,6 +54,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==pub/%WEB%/%TOPIC%/TWikiBrasil.svg== | Sample drawing |
 	  | ==pub/%WEB%/%TOPIC%/TWikiBrasil-320-200.png== | Sample picture |
 	  | ==pub/%WEB%/%TOPIC%/TWikiBrasil-400x300.png== | Sample picture |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* see examples above.
 
