@@ -3,14 +3,14 @@
 Slide template for ATasteOfTWiki presentation
 
 %STARTINCLUDE%
-<font face="Verdana" color="white" size="+2">
+<font face="Verdana" color="#000000" size="+2">
 <table width="100%" border="0" cellspacing="0">
- <tr bgcolor="#0069D1">
+ <tr bgcolor="#4da6ff">
   <td valign="middle" colspan="2">
-	<font size="+4"><b>%SLIDETITLE%</b></font>
+	<font size="+4" face="Arial">%SLIDETITLE%</font>
   </td>
  </tr>
- <tr bgcolor="#0f87ff">
+ <tr bgcolor="#ffffff">
   <td>
 	<img src="%ATTACHURL%/sidebar.gif" width="1" height="480" alt="" />
   </td>
@@ -19,7 +19,7 @@ Slide template for ATasteOfTWiki presentation
 	%SLIDETEXT%
   </td>
  </tr>
- <tr bgcolor="#4da6ff">
+ <tr bgcolor="#dddddd">
   <td valign="middle" align="center" colspan="2">
 	<font size="-1" color="black">
 	 %SLIDENAVFIRST% %SLIDENAVPREV%
@@ -30,6 +30,11 @@ Slide template for ATasteOfTWiki presentation
  </tr>
 </table>
 </font>
+
+<style>
+.twikiGrayText {display:none;}
+td {vertical-align:top; padding:.2em .4em;}
+</style>
 %STOPINCLUDE%
 
 

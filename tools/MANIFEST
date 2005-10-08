@@ -384,10 +384,15 @@ pub/Main/WebPreferences/logo.gif
 pub/Sandbox/WebPreferences/favicon.ico 0660
 pub/Sandbox/WebPreferences/logo.gif
 pub/TWiki/TWiki/thoth_baboon.gif 0660
-pub/TWiki/ATasteOfTWiki/anarchy.gif 0660
-pub/TWiki/ATasteOfTWiki/hula.gif 0660
-pub/TWiki/ATasteOfTWiki/lego.gif 0660
+pub/TWiki/ATasteOfTWiki/Disney_logo.gif 0660
+pub/TWiki/ATasteOfTWiki/BT_logo.gif 0660
 pub/TWiki/ATasteOfTWiki/myco.gif 0660
+pub/TWiki/ATasteOfTWiki/lego.gif 0660
+pub/TWiki/ATasteOfTWiki/whiteboard.gif 0660
+pub/TWiki/ATasteOfTWiki/EpicGames_logo.gif 0660
+pub/TWiki/ATasteOfTWiki/wikiwikishuttle.jpg 0660
+pub/TWiki/ATasteOfTWiki/SAP_logo.gif 0660
+pub/TWiki/ATasteOfTWiki/Motorola_logo.gif 0660
 pub/TWiki/ClassicSkin/fullscreen.gif 0660
 pub/TWiki/ClassicSkin/screenshot.gif 0660
 pub/TWiki/FileAttachment/Sample.txt 0660

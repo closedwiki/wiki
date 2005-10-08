@@ -1,25 +1,31 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
+%META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 This is a short introductory training course for TWiki beginners.
 
 %SLIDESHOWSTART{template="ATasteOfTWikiTemplate"}%
 
 ---++ A Taste of TWiki
+<table cellspacing="10"><tr><td>
+<img src="%ATTACHURL%/wikiwikishuttle.jpg" alt="Wiki-Wiki Shuttle"  width="240" height="213" /><br /><span class="twikiGrayText twikiSmall">photo by [[http://www.flickr.com/photos/cogdog/][cogdogblog]]<br /> ([[http://creativecommons.org/licenses/by-nc-sa/2.0/][Creative Commons]])</span></td>
+<td>
 The basic function of TWiki is a Wiki (if that helps!)
 
 A Wiki is like a web site, except that you can edit the content in your browser
-<table width="100%"><tr><td>
+
 	* "Wiki" is short for "wiki wiki", the Hawaiian for "Quick"
 	* The idea originates from [[http://www.hyperdictionary.com/computing/hypercard][Macintosh Hypercard]], via [[http://www.c2.com/cgi/wiki?WardCunningham][Ward Cunningham]]
 	* In Ward's words, Wiki is _"the simplest online database that could possibly work"_
-	* A Wiki is basically a shared, online, persistant whiteboard
-</td><td align="right"><img src="%ATTACHURL%/hula.gif" alt=""  width="88" height="112" /></td></tr></table>
+	* A Wiki is basically a shared, online, persistant whiteboard</td></tr></table>
 
 ---++ TWiki Wiki
-TWiki implements the basic Wiki idea of a shared whiteboard
-<table width="100%"><tr><td>
+<table cellspacing="10"><tr><td>
+<img src="%ATTACHURL%/whiteboard.gif" alt="Whiteboard" width="240" height="160" />
+</td>
+<td>TWiki implements the basic Wiki idea of a shared whiteboard
+
 	* Anyone can add content<br />... or change what is written<br />... or change the organisation of the content
-	* Whatever what you write is<br />... nicely presented<br />... remembered... and never forgotten
-</td><td align="right"><img src="%ATTACHURL%/anarchy.gif" alt=""  width="112" height="112" /></td></tr></table>
+	* Whatever what you write is<br />... nicely presented<br />... remembered... and never forgotten</td></tr></table>
+
 TWiki also acts as an "application platform" to integrate a number of other functions.
 
 TWiki is an Open-Source development on [[http://twiki.org/][TWiki.org]]
@@ -27,14 +33,22 @@ TWiki is an Open-Source development on [[http://twiki.org/][TWiki.org]]
 	* with over 100 regular contributors in many countries
 
 ---++ Where is it used?
-	* TWiki is mainly used in commercial environments, often on corporate intranets
-		* Examples: Disney, SAP, British Telecom, Wind River, Motorola, <a href="http://udn.epicgames.com/Main/WebHome">Epic Games</a>
-	* A number of public Wiki sites also use TWiki
-		* Examples: <br /> https://uimon.cern.ch/twiki/bin/view/ <br /> http://csci.mrs.umn.edu/twiki/view <br /> 
+TWiki is mainly used in commercial environments, often on corporate intranets
+	* Examples: Disney, British Telecom, SAP, Wind River, Motorola, <a href="http://udn.epicgames.com/Main/WebHome">Epic Games</a><br/>
+      <table cellspacing="20"><tr>
+<td><img src="%ATTACHURL%/Disney_logo.gif" alt="Disney logo"  width="80" height="31" /></td>
+<td><img src="%ATTACHURL%/BT_logo.gif" alt="British Telecom logo"  width="80" height="41" /></td>
+<td><img src="%ATTACHURL%/SAP_logo.gif" alt="SAP logo"  width="80" height="40" /></td>
+<td><img src="%ATTACHURL%/Motorola_logo.gif" alt="Motorola logo"  width="80" height="65" /></td>
+<td><img src="%ATTACHURL%/EpicGames_logo.gif" alt="Epic Games logo"  width="80" height="65" /></td>
+</tr></table>
+
+A number of public Wiki sites also use TWiki
+	* Examples: <br /> https://uimon.cern.ch/twiki/bin/view/ <br /> http://csci.mrs.umn.edu/twiki/view
 
 ---++ TWiki Features
 TWiki builds on the original Wiki concept and adds a number of features that make it very useful in a business environment.
-	* TWiki pages are fully revision controlled, so a record of every change to every page is kept <table border="0" cellpadding="3" cellspacing="0"><tr><td bgcolor="#D0D0D0"><font color="black" size="-1">r1.6 <a>&gt;</a> r1.5 <a>&gt;</a> r1.4</font></td></tr></table>
+	* TWiki pages are fully revision controlled, so a record of every change to every page is kept <table border="0" cellpadding="3" cellspacing="0"><tr><td bgcolor="#D0D0D0"><font color="black" size="-1">r6 <a>&lt;</a> r5 <a>&lt;</a> r4</font></td></tr></table>
 	* The look-and-feel is highly configurable, through use of templates
 <table width="100%"><tr><td valign="top">
 	* A "plugins" interface eases
@@ -49,7 +63,7 @@ Basic TWiki can be used as:
 	* A document repository
 	* A collaborative authoring environment
 	* A notebook / scrapbook
-	* A chat room
+	* A chat room	
 
 ---++ Extended applications
 TWiki-with-extensions has been used as:
@@ -329,8 +343,3 @@ There are many other plugins, see http://TWiki.org/cgi-bin/view/Plugins
 %SLIDESHOWEND%
 
 __Related topics:__ WelcomeGuest, TWikiTutorial, ATasteOfTWikiTemplate
-
-%META:FILEATTACHMENT{name="hula.gif" attr="h" comment="" date="1079599072" path="C:\Data\Temp\hula.gif" size="8780" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="anarchy.gif" attr="h" comment="" date="1079598796" path="C:\Data\Temp\anarchy.gif" size="10363" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="lego.gif" attr="h" comment="" date="1079599120" path="C:\Data\Temp\lego.gif" size="4084" user="TWikiContributor" version="1.1"}%
-%META:FILEATTACHMENT{name="myco.gif" attr="h" comment="" date="1079599121" path="C:\Data\Temp\myco.gif" size="1833" user="TWikiContributor" version="1.1"}%
