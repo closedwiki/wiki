@@ -816,7 +816,8 @@ sub _newTopicScreen {
         $tmpl =~ s/%FILENAME%/$attachment/go;
     } elsif( $confirm ) {
         $tmpl = $session->{templates}->readTemplate( 'renameconfirm', $skin );
-    } elsif( $newWeb eq $TWiki::cfg{TrashWebName} ) {
+    } elsif( $newWeb eq $TWiki::cfg{TrashWebName} &&
+               $oldWeb ne $TWiki::cfg{TrashWebName}) {
         $tmpl = $session->{templates}->readTemplate( 'renamedelete', $skin );
     } else {
         $tmpl = $session->{templates}->readTemplate( 'rename', $skin );
