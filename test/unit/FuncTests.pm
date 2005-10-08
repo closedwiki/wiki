@@ -314,4 +314,15 @@ sub test_moveAttachment {
                                                  "Name1"));
 }
 
+sub test_workarea {
+    my $this = shift;
+
+    my $twiki = new TWiki();
+    $TWiki::Plugins::SESSION = $twiki;
+
+    my $dir = TWiki::Func::getWorkArea( 'TestPlugin' );
+    $this->assert( -d $dir );
+    unlink $dir;
+}
+
 1;
