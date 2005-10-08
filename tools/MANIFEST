@@ -318,6 +318,7 @@ lib/TWiki/Compatibility.pm 0440
 lib/TWiki/Data/DelimitedFile.pm 0440
 lib/TWiki/Form.pm 0440
 lib/TWiki/Func.pm 0440
+lib/TWiki/I18N/Extract.pm 0440
 lib/TWiki/I18N.pm 0440
 lib/TWiki/If.pm 0440
 lib/TWiki/Merge.pm 0440
