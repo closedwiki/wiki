@@ -43,6 +43,7 @@ use File::Copy;
 use File::Spec;
 use Assert;
 use TWiki::Time;
+use TWiki::Sandbox;
 
 =pod
 
@@ -200,6 +201,34 @@ sub readMetaData {
         return $this->_readFile( $file );
     }
     return '';
+}
+
+=pod
+
+---+++ ObjectMethod getWorkArea( $key ) -> $directorypath
+
+Gets a private directory uniquely identified by $key. The directory is
+intended as a work area for plugins.
+
+The standard is a directory named the same as "key" under
+$TWiki::cfg{RCS}{WorkAreaDir}
+
+=cut
+
+sub getWorkArea {
+    my( $this, $key ) = @_;
+
+    # untaint and detect nasties
+    $key = TWiki::Sandbox::normalizeFileName( $key );
+    throw Error::Simple( "Bad work area name $key" ) unless ( $key );
+
+    my $dir =  "$TWiki::cfg{RCS}{WorkAreaDir}/$key";
+
+    unless( -d $dir ) {
+        mkdir( $dir ) || throw Error::Simple(
+            'RCS: failed to create '.$key.'work area: '.$! );
+    }
+    return $dir;
 }
 
 =pod

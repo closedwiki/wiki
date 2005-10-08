@@ -561,6 +561,21 @@ sub getRevisionNumber {
     return $handler->numRevisions();
 }
 
+=pod
+
+---+++ ObjectMethod getWorkArea( $key ) -> $directorypath
+
+Gets a private directory uniquely identified by $key. The directory is
+intended as a work area for plugins. The directory will exist.
+
+=cut
+
+sub getWorkArea {
+    my( $this, $key ) = @_;
+
+    my $handler = $this->_getHandler( );
+    return $handler->getWorkArea( $key );
+}
 
 =pod
 

@@ -1563,6 +1563,27 @@ sub internalLink {
 
 =pod
 
+---+++ getWorkArea( $pluginName ) -> $directorypath
+
+Gets a private directory for the plugin. The plugin is entirely responsible
+for managing this directory; TWiki will not read from it, or write to it.
+
+The directory is guaranteed to exist, and to be writable by the webserver
+user. By default it will *not* be web accessible.
+
+The directory and it's contents are permanent, so plugins must be careful
+to keep their areas tidy.
+
+=cut
+
+sub getWorkArea {
+    my( $plugin ) = @_;
+    ASSERT($TWiki::Plugins::SESSION) if DEBUG;
+    return $TWiki::Plugins::SESSION->{store}->getWorkArea( $plugin );
+}
+
+=pod
+
 ---+++ formatTime( $time, $format, $timezone ) -> $text
 
 Format the time in seconds into the desired time string
