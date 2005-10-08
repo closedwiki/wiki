@@ -376,6 +376,8 @@ locale/de.po 0440
 locale/es.po 0440
 locale/pt.po 0440
 LICENSE 0440
+pub/_work_areas/.htaccess 0440
+pub/_work_areas/README 0660
 pub/Main/TWikiContributor/AUTHORS 0660
 pub/Main/WebPreferences/favicon.ico 0660
 pub/Main/WebPreferences/logo.gif
