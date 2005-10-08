@@ -432,9 +432,13 @@ This new variable for TWiki.FormattedSearch returns the number of instances a sp
 ---+++ Skin search path
 Earlier releases of TWiki only allowed for a single skin, so customising a single template in a skin meant deriving a whole new skin. Dakar introduces the concept of a skin search path, which lets you combine skins additively. For example, you can customise just the view template by defining a new =view.mylocalskin.tmpl= and then setting
    * =Set SKIN = mylocalskin,pattern=
-Since you have defined a view template for =mylocalskin=, it will be picked up when you view a topic because =mylocalskin= is first on the search path. But you didn't define =edit.mylocalskin.tmpl=, so when you edit the next skin on the search path will be used instead (in this case =edit.pattern.tmpl=). You can put as many skins on the search path as you like
+Since you have defined a view template for =mylocalskin=, it will be picked up when you view a topic because =mylocalskin= is first on the search path. But you didn't define =edit.mylocalskin.tmpl=, so when you edit the next skin on the search path will be used instead (in this case =edit.pattern.tmpl=). You can put as many skins on the search path as you like.
 
-A new standard URL parameter, =cover=, allows you to push a different skin to the front of the skin search path for the duration of a single URL request. For example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WhatIsWikiWiki?cover=print.pattern. This gives you an extra level of flexibility when defining skins.
+As with older releases, setting SKIN (or the =skin= parameter in the URL) replaces the existing skin path setting. Dakar supports _extension_ of the path as well, using _covers_.
+
+   * =Set COVER = mylocalskin=
+
+pushes a different skin to the front of the skin search path. There is also an equivalent =cover= URL parameter. For example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WhatIsWikiWiki?cover=print.pattern. This gives you an extra level of flexibility when defining skins.
 
 See TWikiSkins for more information.
 

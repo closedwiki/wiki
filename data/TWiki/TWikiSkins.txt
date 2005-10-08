@@ -49,7 +49,7 @@ You can use [[TWikiTemplates#TemplateVariables][template variables]], TWikiVaria
 #GoBox
 ---+++ The "Go" Box and Navigation Box
 
-The =%<nop>WEBTOPICLIST%= includes a "Go" box to jump to a topic. The box also understand URLs, e.g. you can type http://www.google.com/ to jump to an external web site. The feature is handy if you build a skin that has a select box of frequently used links, like Intranet home, employee database, sales database and such. A little <nop>JavaScript gets into action on the onSelect method of the select tag to fill the selected URL into the "Go" box field, then submits the form.
+The =%<nop>WEBTOPICLIST%= includes a "Jump" box to jump to a topic. The box also understands URLs, e.g. you can type http://www.google.com/ to jump to an external web site. The feature is handy if you build a skin that has a select box of frequently used links, like Intranet home, employee database, sales database and such. A little <nop>JavaScript gets into action on the onSelect method of the select tag to fill the selected URL into the "Go" box field, then submits the form.
 
 Here is an example form that has a select box and the "Go" box for illustration purposes. You need to have <nop>JavaScript enabled for this to work:
 
@@ -133,32 +133,26 @@ You can try all installed skins in TWikiSkinBrowser.
 
 ---++ Activating Skins
 
-A skin is activated by putting it on the skin search path. Either:
+TWiki uses a _skin search path_, which lets you combine skins additively. The skin path is defined using a combination of TWikiVariables and URL parameters.
 
-	* Prepend the skin name to the =SKIN= Preference variable in %TWIKIWEB%.TWikiPreferences, one of the WebPreferences, or in a user - %WIKIUSERNAME% - topic. For example,
-		* =Set SKIN = mine,pattern=
+TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. Each skin on the path is searched for in turn. For example, if you have set the skin path to =local,pattern= then =view.local.tmpl= will be searched for first, then =view.pattern.tmpl= and finally =view.tmpl=.
 
-	* _Replace_ the default skin path by adding =?skin=path= to the URL, for example:
-		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print.pattern (for the PatternSkin print view)
-		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=plain (for the plain view skin that has no header and footer)
-	* _Add_ a "cover" over the top of the existing skins by adding =?cover=path= to the URL, for example:
-		* %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?cover=myview (to add a skin called myview to the _start_ of the skin path)
+The basic skin is defined by setting the %<nop>SKIN% TWikiVariable:
+   * =Set SKIN = catskin,bearskin=
 
-TWiki works by asking for a template for a particular function - for example, 'view'. The detail of how templates are searched for is described in TWikiTemplates, but in summary, the templates directory is searched for a file called <code>view.</code><i>skin</i><code>.tmpl</code>, where _skin_ is the name of the skin e.g. =pattern=. If no template is found, then the fallback is to use =view.tmpl=. Each skin on the path is searched for in turn. For example, if you have set =SKIN= to =local,pattern= and =?skin=mine= then =view.mine.tmpl= will be searched for first, then =view.local.tmpl= and finally =view.pattern.tmpl=.
+You can also add a parameter to the URL: ?skin=catskin,bearskin
+
+Setting %<nop>SKIN% (or the =?skin= parameter in the URL) replaces the existing skin path setting. You can also _extend_ the existing skin path as well, using _covers_.
+
+   * =Set COVER = ruskin=
+
+This pushes a different skin to the front of the skin search path (so for our example above, that final skin path will be =ruskin,catskin,bearskin=). There is also an equivalent =cover= URL parameter.
+
+The full skin path is built up as follows: =%<nop>SKIN%= (or =?skin= if it is set), then =%<nop>COVER%= is added, then =?cover=.
 
 ---++ Hard Coded Skins
 
-The =text= skin is reserved for TWiki internal use. It is used with the =raw= URL parameter to create a URL that allows the recovery of the plain text of the topic. For example, the URL:
-<verbatim>
-http://myhost.com/twiki/bin/view/Codev/MyTopic?skin=text&contenttype=text/plain&raw=on
-</verbatim>
-will recover the plain text of the topic as presented to =edit=, s MIME type =text/plain=.
-<verabtim>
-http://myhost.com/twiki/bin/view/Codev/MyTopic?skin=text&contenttype=application/x-rabbit&raw=debug
-</verbatim>
-will recover the plain text of the topic as presented to =edit=, as MIME type =application/x-rabbit= (whatever that might be!
-
-=text= must be the _only_ skin in the skin path.
+The =text= skin is reserved for TWiki internal use.
 
 Skin names starting with =rss= also have a special meaning; if one or more of the skins in the skin path starts with 'rss' then 8-bit characters will be encoded as XML entities in the output, and the =content-type= header will be forced to =text/xml=.
 
