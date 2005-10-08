@@ -50,7 +50,7 @@ sub target_build {
     $this->cp( $this->{basedir}.'/AUTHORS',
                $this->{basedir}.'/pub/Main/TWikiContributor/AUTHORS' );
 
-    print `cd ../bin ; ./view TWiki.TWikiDocumentation skin plain > ../TWikiDocumentation.html 2> /dev/null`;
+    print `cd ../bin ; ./view TWiki.TWikiDocumentation skin plain | ../tools/fix_local_links.pl > ../TWikiDocumentation.html 2> /dev/null`;
     print `cd ../bin ; ./view TWiki.TWikiHistory skin plain > ../TWikiHistory.html 2> /dev/null`;
     print `cd ../bin ; ./view TWiki.DakarReleaseNotes skin plain > ../DakarReleaseNotes.html 2> /dev/null`;
 
