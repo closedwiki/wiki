@@ -117,6 +117,7 @@ data/TWiki/NewUserTemplate.txt 0660
 data/TWiki/ObjectMethod.txt 0660
 data/TWiki/PatternSkin.txt 0660
 data/TWiki/PatternSkinCss.txt 0660
+data/TWiki/PatternSkinCssCookbook.txt 0660
 data/TWiki/PatternSkinCustomization.txt 0660
 data/TWiki/PatternSkinPalette.txt 0660
 data/TWiki/PeterThoeny.txt 0660
@@ -402,6 +403,8 @@ pub/TWiki/PatternSkin/patternLeftBarPersonal_bg.gif 0660
 pub/TWiki/PatternSkin/twikiPageForm_bg.gif 0660
 pub/TWiki/PatternSkin/twikiTable_header_bg.gif 0660
 pub/TWiki/PatternSkinCss/CSS_element_layout_view.pattern.tmpl.png 0660
+pub/TWiki/PatternSkinCssCookbook/hideleftbar_Cairo.css 0660
+pub/TWiki/PatternSkinCssCookbook/hideleftbar_Dakar.css 0660
 pub/TWiki/PatternSkinCustomization/LowRes.css 0660
 pub/TWiki/PatternSkinPalette/PatternSkinPalette.css 0660
 pub/TWiki/PatternSkinPalette/filterColours.pl.txt 0660
