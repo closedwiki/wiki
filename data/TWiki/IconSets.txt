@@ -1,44 +1,13 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121343405" format="1.1" version="$Rev$"}%
 ---+!! Icon Sets
 
-*With Icon Sets every skin can have its own set of graphics/icons.*
+With Icon Sets every skin may have its own set of graphics/icons.
 
-%TOC%
-
----++ Icon Topic
-
-For this a topic is assigned as the "icon topic" (by setting the variable =%<nop>ICONTOPIC%=). Each time an image is retrieved, TWiki will get it from the attachments folder of this topic.
+For this a topic is assigned to be the "icon topic" (by setting the variable =%<nop>ICONTOPIC%= in %TWIKIWEB%.TWikiPreferences). Each time an image is retrieved, TWiki will get it from the attachments folder from this topic.
 
 To set ICONTOPIC, write in %TWIKIWEB%.TWikiPreferences:
 <verbatim>
-   * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphicsPattern
-</verbatim>
-(default) or
-<verbatim>
-   * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
+   * Set ICONTOPIC = %TWIKIWEB%.YourIconTopicName
 </verbatim>
 
----++ Graphics
-
-Graphics (smilies for instance) can be placed in a topic by using =%<nop>ICON{"icon name"}%=. You can use =%<nop>ICON{"help"}%= to get the image %ICON{"help"}%.%BR%
-Previously, =%<nop>ICON{}%= would only retrieve file type icons. Now you can get any image that is in the icon topic attachment folder.
-
-Image attachments that are used with =%<nop>ICON{}%= are always =gif= images.
-
----++ File icons
-
-File type icons are retrieved automatically, for instance when an attachment table is drawn.%BR%
-The icon images are mapped from a lookup table in the file =_filetypes.txt= to decide which graphic to display. When a corresponding file icon is not found, the file =else.gif= is used. Previously, =_filetypes.txt= could be found in folder =/pub/icn/=, but now this file is also attached to the icon topic. When new file icons are added, this attachment file should be updated as well.
-
----++ Full image paths
-
-To use Icon Set icons in a style sheet, call =%<nop>ICONPATH{"icon name"}%=. This will retrieve the whole (absolute) path of the image file.
-
-For instance, write:
-<verbatim>
-a.toggleIcon { background:url(%ICONPATH{"toggleclose"}%) no-repeat; }
-</verbatim>
-This will get the path of the file =toggleclose.gif=.
-
-
-__Related topics:__ TWikiSkins, %TWIKIWEB%.TWikiDocGraphics, %TWIKIWEB%.TWikiDocGraphicsPattern, %TWIKIWEB%.FileAttachment, AdminDocumentationCategory
+__Related topics:__ %TWIKIWEB%.TWikiDocGraphics, %TWIKIWEB%.FileAttachment, AdminDocumentationCategory

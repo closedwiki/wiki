@@ -175,16 +175,19 @@ _(Click for form-based editing of existing preferences.)_
 
 ---+++ PatternSkin
 
-	* Using attachments for styles 
+	* Default TWiki styles	    
 		* Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
 		* Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
+		* Set TWIKICOLORSURL = %PUBURL%/%TWIKIWEB%/PatternSkin/colors.css
+	* Custom overriding styles
 		* Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
 		* Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+		* Set USERCOLORSURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
 
 ---+++ Skin icons
 
-   * #Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
-   * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphicsPattern
+   * The topic from which graphics and icons are fetched with =%<nop>ICON{}%= syntax and in attachment tables. See %TWIKIWEB%.IconSets and %TWIKIWEB%.TWikiDocGraphics.
+      * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
 
 ---+++ Legacy support
    * Support for legacy "EDITTOPIC", used to be hard-coded, now replaced by TMPL:P conditional instantiation
