@@ -706,7 +706,7 @@ msgstr "Hier klicken"
 #: templates/oopsattention.tmpl:249
 #, fuzzy
 msgid "Click on [[%1][Debug topic text]]."
-msgstr "Klicken Sie auf [[][Topic Text auf Fehler überprüfen]]."
+msgstr "Klicken Sie auf [[%1][Topic Text auf Fehler überprüfen]]."
 
 #: lib/TWiki/Render.pm:184
 msgid ""
@@ -774,7 +774,7 @@ msgstr "A&nlegen"
 #: data/Sandbox/WebHome.txt:18
 #, fuzzy
 msgid "Create <nop>TestTopic###"
-msgstr "Dieses Topic anlegen"
+msgstr "Ein <nop>TestTopic### anlegen"
 
 #: templates/attach.pattern.tmpl:212
 msgid "Create a link to the attached file"
@@ -839,7 +839,7 @@ msgstr "Topic löschen..."
 
 #: templates/oopsmore.pattern.tmpl:7
 msgid "Delete topic:"
-msgstr "Gelöschtes Topic"
+msgstr "Topic löschen:"
 
 #: lib/TWiki/UI/RDiff.pm:239
 msgid "Deleted"
@@ -877,7 +877,7 @@ msgstr "Anzeigen:"
 
 #: data/TWiki/WebSearchAdvanced.txt:44
 msgid "Don't show:"
-msgstr "Nicht anzeigenn:"
+msgstr "Nicht anzeigen:"
 
 #: templates/oopsattention.tmpl:50
 msgid ""
@@ -1128,6 +1128,8 @@ msgid ""
 "If you already know the name of the topic, enter the name of the topic into "
 "the [[%1][Jump box]] at the top"
 msgstr ""
+"Wenn Sie bereits den Namen des Topics kennen, können Sie ihn in die "
+"[[%1][Sprung Box]] oben eingeben"
 
 #: templates/oopsaccessdenied.tmpl:27
 msgid "If you came here by clicking on a question mark link"
@@ -1313,7 +1315,7 @@ msgstr "Einloggen"
 #: data/TWiki/WebSearchAdvanced.txt:38
 #, fuzzy
 msgid "Make search:"
-msgstr "erweiterte Suche"
+msgstr "Suche gestalten:"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:6
 #: data/TWiki/WebTopicViewTemplate.txt:6
@@ -1323,7 +1325,8 @@ msgid ""
 "sensitive"
 msgstr ""
 "Bitten stellen Sie sicher, dass %1 korrekt geschrieben ist, und versuchen "
-"Sie es erneut. Wenn Sie nicht weiter kommen, schreiben Sie %2 eine E-Mail."
+"Sie es erneut. Achten Sie auf Groß- und Kleinschreibung. Wenn Sie nicht "
+"weiter kommen, schreiben Sie %2 eine E-Mail."
 
 #: templates/oopsattention.tmpl:158
 msgid "Missing Fields"
@@ -1374,7 +1377,7 @@ msgstr "NEU"
 #: data/TWiki/WebTopicViewTemplate.txt:2
 #, fuzzy
 msgid "NOTE: This Wiki topic does not exist yet"
-msgstr "%1 Topic existiert nicht"
+msgstr "HINWEIS: Dieses Wiki Topic existiert nicht"
 
 #: templates/oopsattention.tmpl:90
 msgid "Name of new web is missing"
@@ -1424,16 +1427,16 @@ msgstr ""
 #: templates/renamebase.pattern.tmpl:80
 #: templates/renamewebbase.pattern.tmpl:82 templates/settings.pattern.tmpl:84
 msgid "Note:"
-msgstr "Anmerkung:"
+msgstr "Hinweis:"
 
 #: templates/changeform.pattern.tmpl:34
 msgid "Notes"
-msgstr "Anmerkungen"
+msgstr "Hinweise"
 
 #: templates/oopschangelanguage.tmpl:8
 #, fuzzy
 msgid "Notes:"
-msgstr "Anmerkungen"
+msgstr "Hinweise:"
 
 #: templates/renamewebbase.pattern.tmpl:63
 msgid "Notices:"
@@ -1686,7 +1689,7 @@ msgstr "Änderungen speichern"
 #: templates/registernotifyadmin.tmpl:16
 #, fuzzy
 msgid "Saved to:"
-msgstr "Speichern"
+msgstr "Speichern nach:"
 
 #: data/Main/WebLeftBar.txt:11 data/Sandbox/WebLeftBar.txt:9
 #: data/TWiki/WebLeftBar.txt:9 data/TWiki/WebLeftBarExample.txt:6
@@ -1696,7 +1699,7 @@ msgstr "Speichern"
 #: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:9
 #, fuzzy
 msgid "Search"
-msgstr "Gesucht:"
+msgstr "Suchen"
 
 #: templates/backlinksallwebs.pattern.tmpl:10
 msgid "Search %1 &Web only"
@@ -1714,7 +1717,7 @@ msgstr "Alle Webs nach Topics durchsuchen, die hierher verweisen"
 #: data/TWiki/WebSearchAdvanced.txt:45
 #, fuzzy
 msgid "Search string"
-msgstr "Gesucht:"
+msgstr "Gesuchte Zeichenkette"
 
 #: templates/view.pattern.tmpl:82
 msgid "Search the <nop>%WEB% Web for topics that link to here"
@@ -1723,7 +1726,7 @@ msgstr "Das <nop>%WEB% Web nach Topics durchsuchen, die hierher verweisen"
 #: data/TWiki/WebSearch.txt:18 data/TWiki/WebSearchAdvanced.txt:18
 #, fuzzy
 msgid "Search where:"
-msgstr "Gesucht:"
+msgstr "Wo suchen:"
 
 #: templates/search.pattern.tmpl:37 templates/searchbookview.pattern.tmpl:6
 msgid "Searched:"
@@ -1778,7 +1781,7 @@ msgstr "Formatierungshilfe anzeigen"
 #: templates/attach.pattern.tmpl:150
 #, fuzzy
 msgid "Show help"
-msgstr "Formatierungshilfe anzeigen"
+msgstr "Hilfe anzeigen"
 
 #: data/TWiki/NewUserTemplate.txt:13
 msgid ""
@@ -1792,12 +1795,12 @@ msgstr ""
 #: data/TWiki/WebTopicViewTemplate.txt:7
 #, fuzzy
 msgid "Similar topics in this web (if any):"
-msgstr "Unter-Topics im %1 Web:"
+msgstr "Ähnliche Topics in diesem Web:"
 
 #: data/TWiki/WebSearchAdvanced.txt:13
 #, fuzzy
 msgid "Simple search"
-msgstr "erweiterte Suche"
+msgstr "Einfache Suche"
 
 #: templates/attachtables.pattern.tmpl:7
 msgid "Size"
@@ -1960,6 +1963,10 @@ msgid ""
 "jumpstart on the %3 tool. A good rule of thumb is to add at the end of the "
 "page and sign and date it with your %4."
 msgstr ""
+"Das %1 Web ist ein sogenannter Sandkasten, den Sie für Testzwecke nutzen können. "
+"Jeder ist eingeladen Inhalte zu erstellen und zu löschen. Es wird empfohlen %2 "
+"durchzuschauen, um einen Überblick über das %3 Werkzeug zu bekommen. Es gehört zum "
+"guten Ton am Ende eines Kommentars seine Signatur mit Datum in dem %4 zu hinterlassen."
 
 #: data/Sandbox/WebRss.txt:7 data/_default/WebRss.txt:5
 msgid ""
@@ -2300,7 +2307,7 @@ msgstr "Anhang *%FILENAME%* an *%TOPIC%* aktualisieren"
 
 #: templates/attachagain.pattern.tmpl:19
 msgid "Update file %1"
-msgstr ""
+msgstr "Datei %1 aktualisieren"
 
 #: templates/attachagain.pattern.tmpl:14
 msgid "Update image or document on %TOPIC%"
@@ -2312,7 +2319,7 @@ msgstr "Datei hochladen"
 
 #: templates/attach.pattern.tmpl:195
 msgid "Upload up to %1 KB."
-msgstr ""
+msgstr "Bis zu %1 KB hochladen."
 
 #: templates/oopsattention.tmpl:272
 msgid "Uploaded file %1 does not exist or is empty"
@@ -2417,17 +2424,17 @@ msgstr "Warnung: Konnte Topic %1 nicht finden"
 #: data/TWiki/WebSearch.txt:3
 #, fuzzy
 msgid "Web Search"
-msgstr "Gesucht:"
+msgstr "Web Suche"
 
 #: data/TWiki/WebLeftBarExample.txt:8 data/TWiki/WebLeftBarWebsList.txt:2
 #, fuzzy
 msgid "Webs"
-msgstr "&Web"
+msgstr "Webs"
 
 #: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
 #, fuzzy
 msgid "Welcome to the %1 web"
-msgstr "Gelöschte Topics werden in das %1 Web verschoben"
+msgstr "Willkommen im %1 Web"
 
 #: templates/attachtables.pattern.tmpl:45
 #: templates/attachtables.pattern.tmpl:7
@@ -2679,7 +2686,7 @@ msgstr "verwalten"
 #: data/Trash/WebHome.txt:5
 #, fuzzy
 msgid "more..."
-msgstr "(Mehr)"
+msgstr "mehr..."
 
 #: templates/oopsmore.pattern.tmpl:31
 msgid "none (remove topic parent)"
