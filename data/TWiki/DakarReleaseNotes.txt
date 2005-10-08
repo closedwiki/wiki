@@ -377,7 +377,7 @@ The new user registration process has been extensively reworked to improve usabi
    1 Obsoleted InstallPassword
 
 ---+++ Change notification support
-The old =mailnotify= script has been retired in favour of the TWiki.MailerContrib. The main difference you will see is that the script you call to generate change notifications has changed from =mailnotify= to =mailnotifier=. See TWiki.MailerContrib for information about functional changes.
+The old =mailnotify= script has been retired in favour of the TWiki.MailerContrib. See TWiki.MailerContrib for information about functional changes.
 
 ---+++ TWiki.SiteChanges
 
