@@ -41,43 +41,7 @@
  addLoadEvent(initPage);
     
 	function initPage() { }
-	function removeClass(element, classname) {
-		var classes = getClassList(element);
-		var index = indexOf(classname,classes);
-		if (index >= 0) {
-			classes.splice(index,1);
-			setClassList(element,classes);
-		}
-	}
-	function addClass(element, classname) {
-		var classes = getClassList(element);
-		if (indexOf(classname, classes)<0) {
-			classes[classes.length]=classname;
-			setClassList(element,classes);
-		}
-	}
-	function getClassList(element) {
-		if (element.classes) return element.classes; // cached in element property
-		if (element.className && element.className!="") {
-			element.classes = element.className.split(' ');
-			return element.classes;
-		}
-		return [];
-	}
-	function setClassList(element, classlist) {
-		element.className=classlist.join(' ');
-	}
-	function indexOf(element,array) {
-		var i=array.length-1;
-		do 
-		{
-			if (array[i]==element) {
-				return i;
-			}
-			i--;
-		} while (i>=0);
-		return -1;
-	}
+
 //]]>
 </script>%TMPL:END%
 
@@ -87,11 +51,13 @@
 <!-- Link to stylesheets in case javascript is off. -->
 <link id="twikiLayoutCss" rel="stylesheet" type="text/css" href="%TWIKILAYOUTURL%" media="all" />
 <link id="twikiStyleCss" rel="stylesheet" type="text/css" href="%TWIKISTYLEURL%" media="all" />
+<link id="twikiColorsCss" rel="stylesheet" type="text/css" href="%TWIKICOLORSURL%" media="all" />
 <!-- But if javascript is on, disable the links. -->
 <script type="text/javascript">
    if (document.getElementById) {
       document.getElementById("twikiLayoutCss").disabled = true;
       document.getElementById("twikiStyleCss").disabled = true;
+      document.getElementById("twikiColorsCss").disabled = true;
    }
 </script>
 <script type="text/javascript">
@@ -105,6 +71,10 @@ if ("%TWIKILAYOUTURL%".split("?")[0].length && "%TWIKILAYOUTURL%".split("TWIKILA
 /* Default TWiki style */
 if ("%TWIKISTYLEURL%".split("?")[0].length && "%TWIKISTYLEURL%".split("TWIKISTYLEURL")[0].length) {
 	document.write('@import url("%TWIKISTYLEURL%");'); 
+}
+/* Default TWiki colors */
+if ("%TWIKICOLORSURL%".split("?")[0].length && "%TWIKICOLORSURL%".split("TWIKICOLORSURL")[0].length) {
+	document.write('@import url("%TWIKICOLORSURL%");'); 
 }
 document.write('<\/style>');
 //-->
@@ -162,6 +132,10 @@ if ("%USERLAYOUTURL%".split("?")[0].length && "%USERLAYOUTURL%".split("USERLAYOU
 /* Custom overriding style per web or per topic */
 if ("%USERSTYLEURL%".split("?")[0].length && "%USERSTYLEURL%".split("USERSTYLEURL")[0].length) {
 	document.write('@import url("%USERSTYLEURL%");'); 
+}
+/* Custom overriding style per web or per topic */
+if ("%USERCOLORSURL%".split("?")[0].length && "%USERCOLORSURL%".split("USERCOLORSURL")[0].length) {
+	document.write('@import url("%USERCOLORSURL%");'); 
 }
 document.write('<\/style>');
 //-->
