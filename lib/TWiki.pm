@@ -829,14 +829,20 @@ sub getSkin {
     ASSERT($this->isa( 'TWiki')) if DEBUG;
 
     my $skinpath = $this->{prefs}->getPreferencesValue( 'SKIN' ) || '';
+
     if( $this->{cgiQuery} ) {
-        # Replace existing skin path
         my $resurface = $this->{cgiQuery}->param( 'skin' );
         $skinpath = $resurface if $resurface;
-        # add to skin path
-        my $epidermis = $this->{cgiQuery}->param( 'cover' );
+    }
+
+    my $epidermis = $this->{prefs}->getPreferencesValue( 'COVER' );
+    $skinpath = $epidermis.','.$skinpath if $epidermis;
+
+    if( $this->{cgiQuery} ) {
+        $epidermis = $this->{cgiQuery}->param( 'cover' );
         $skinpath = $epidermis.','.$skinpath if $epidermis;
     }
+
     return $skinpath;
 }
 
