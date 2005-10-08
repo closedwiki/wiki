@@ -122,14 +122,14 @@ BEGIN {
     # Required on non-Unix platforms (mainly Windows)
     $requiredModsNonUnix =
       {
-          'Digest::SHA1' => "register script",
-          'MIME::Base64' => "register script",
+          'MIME::Base64' => "SHA1 password encoding",
           'Net::SMTP'    => "registration emails and mailnotify",
       };
     # Optional modules on all platforms
     $optionalMods =
       {
-          'MIME::Base64'     => "HTTP Authentication to proxies",
+          'Digest::SHA1'     => "SHA1 password encoding",
+          'MIME::Base64'     => "HTTP Authentication to proxies, and SHA1 password encoding",
           'POSIX'            => "I18N (core module) and Security",
           'Digest::MD5'      => "MD5 encoded passwords",
           'Text::Diff'       => 'UpgradeTWiki',
@@ -137,7 +137,7 @@ BEGIN {
           'CGI::Session'     => "sessions",
       };
 
-    $I18Mods = 
+    $I18Mods =
     {
         'Locale::Maketext::Lexicon' => "I18N translations",
     };
