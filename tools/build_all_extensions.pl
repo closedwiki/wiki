@@ -2,40 +2,15 @@
 # Build and upload all the extensions, zipping those that don't have
 # proper build scripts
 use strict;
-use LWP;
 
-{
-    package UserAgent;
-
-    @UserAgent::ISA = qw(LWP::UserAgent);
-
-    use vars qw( $knownUser $knownPass );
-
-    sub get_basic_credentials {
-        my($self, $realm, $uri) = @_;
-        unless ( $knownUser ) {
-            print 'Logon to ',$uri->host_port,"\n";
-            print 'Enter ',$realm,': ';
-            $knownUser = <STDIN>;
-            chomp($knownUser);
-            return (undef, undef) unless length $knownUser;
-            print 'Password on ',$uri->host_port,': ';
-            system('stty -echo');
-            $knownPass = <STDIN>;
-            system('stty echo');
-            print "\n";  # because we disabled echo
-            chomp($knownPass);
-        }
-        return ($knownUser, $knownPass);
-    }
-}
+my $upload_files = ( $ARGV[0] =~ /^upload$/ ) || 0;
 
 my $pr = "../twikiplugins";
-my @knowns = split(/\n/, `grep '!include' MANIFEST`);
+chomp( my @knowns = `grep '!include' MANIFEST` );
 my @exts;
 
 opendir(D, $pr);
-foreach my $e ( grep { -d "$pr/$_" && !/^\./ } readdir D) {
+foreach my $e ( grep { -d "$pr/$_" && !/^\./ } sort readdir D) {
     next if grep { /^$e$/ } @knowns;
     print STDERR "BUILDING $e\n";
     my $type;
@@ -67,27 +42,6 @@ foreach my $e ( grep { -d "$pr/$_" && !/^\./ } readdir D) {
 }
 
 
-my $userAgent = UserAgent->new();
-$userAgent->agent( 'build_all_extensions' );
-
-foreach my $e ( @exts ) {
-    print "Uploading $e.tgz\n";
-    my $response =
-      $userAgent->post(
-          'http://twiki.org/cgi-bin/upload/Plugins/TWiki',
-          [
-              filename => $e.'.tgz',
-              filepath => [ "$pr/$e/$e.tgz" ],
-              filecomment => "See $e for details. Untar and run the installer script"
-             ],
-          'Content_Type' => 'form-data' );
-
-    print STDERR 'Upload of $e.tgz failed ', $response->request->uri,
-      ' -- ', $response->status_line, "\n", 'Aborting',"\n", $response->as_string
-        unless $response->is_redirect &&
-          $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/TWiki/;
-}
-
 sub build {
     my( $name, $inDir ) = @_;
 
@@ -105,4 +59,58 @@ sub just_zip {
 
     print STDERR `cd $pr/$name && tar zcf $name.tgz .`;
     print STDERR "JUST ZIPPED $name\n";
+}
+
+################################################################################
+
+use LWP;
+
+{
+    package UserAgent;
+
+    @UserAgent::ISA = qw(LWP::UserAgent);
+
+    use vars qw( $knownUser $knownPass );
+
+    sub get_basic_credentials {
+        my($self, $realm, $uri) = @_;
+        unless ( $knownUser ) {
+            print 'Logon to ',$uri->host_port,"\n";
+            print 'Enter ',$realm,': ';
+            $knownUser = <STDIN>;
+            chomp($knownUser);
+            return (undef, undef) unless length $knownUser;
+            print 'Password on ',$uri->host_port,': ';
+            system('stty -echo');
+            $knownPass = <STDIN>;
+            system('stty echo');
+            print "\n";  # because we disabled echo
+            chomp($knownPass);
+        }
+        return ($knownUser, $knownPass);
+    }
+}
+
+if ( $upload_files )
+{
+    my $userAgent = UserAgent->new();
+    $userAgent->agent( 'build_all_extensions' );
+    
+    foreach my $e ( @exts ) {
+	print "Uploading $e.tgz\n";
+	my $response =
+	    $userAgent->post(
+			     'http://twiki.org/cgi-bin/upload/Plugins/TWiki',
+			     [
+			      filename => $e.'.tgz',
+			      filepath => [ "$pr/$e/$e.tgz" ],
+			      filecomment => "See $e for details. Untar and run the installer script"
+			      ],
+			     'Content_Type' => 'form-data' );
+	
+	print STDERR 'Upload of $e.tgz failed ', $response->request->uri,
+	' -- ', $response->status_line, "\n", 'Aborting',"\n", $response->as_string
+	    unless $response->is_redirect &&
+	    $response->headers->header('Location') =~ /view([\.\w]*)\/Plugins\/TWiki/;
+    }
 }
