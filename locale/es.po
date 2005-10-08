@@ -401,7 +401,7 @@ msgstr "Acción %1: %2."
 msgid "Add form"
 msgstr "Añadir formulario"
 
-#: lib/TWiki/UI/RDiff.pm:241
+#: lib/TWiki/UI/RDiff.pm:246
 msgid "Added"
 msgstr "Anexar"
 
@@ -495,11 +495,11 @@ msgstr "Unir el nuevo archivo"
 msgid "Attachment"
 msgstr "Archivo"
 
-#: lib/TWiki/UI/Manage.pm:342
+#: lib/TWiki/UI/Manage.pm:340
 msgid "Attachment already exists in new topic"
 msgstr ""
 
-#: lib/TWiki/UI/Manage.pm:322
+#: lib/TWiki/UI/Manage.pm:320
 #, fuzzy
 msgid "Attachment does not exist"
 msgstr "La pagina %1 no existe"
@@ -637,7 +637,7 @@ msgstr "Cambiar propiedades solamente"
 msgid "Change topic"
 msgstr "Cambiar la pagina"
 
-#: lib/TWiki/UI/RDiff.pm:255 lib/TWiki/UI/RDiff.pm:261
+#: lib/TWiki/UI/RDiff.pm:260 lib/TWiki/UI/RDiff.pm:266
 msgid "Changed"
 msgstr ""
 
@@ -723,7 +723,7 @@ msgstr ""
 msgid "Continue to *[[%1][Create the new page]]*"
 msgstr ""
 
-#: data/TWiki/TWikiPreferences.txt:34
+#: data/TWiki/TWikiPreferences.txt:36
 msgid ""
 "Copyright %1 by the contributing authors. All material on this collaboration "
 "platform is the property of the contributing authors."
@@ -766,7 +766,7 @@ msgstr ""
 msgid "Create personal sidebar"
 msgstr ""
 
-#: lib/TWiki/Render.pm:557 lib/TWiki/Render.pm:568
+#: lib/TWiki/Render.pm:560 lib/TWiki/Render.pm:572
 msgid "Create this topic"
 msgstr "Crear esta pagina"
 
@@ -809,7 +809,7 @@ msgstr "Borrar la pagina..."
 msgid "Delete topic:"
 msgstr "Borrar la pagina:"
 
-#: lib/TWiki/UI/RDiff.pm:234
+#: lib/TWiki/UI/RDiff.pm:239
 msgid "Deleted"
 msgstr ""
 
@@ -1045,7 +1045,7 @@ msgstr ""
 msgid "How to activate your %1 registration"
 msgstr ""
 
-#: data/TWiki/TWikiPreferences.txt:34
+#: data/TWiki/TWikiPreferences.txt:36
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
 
@@ -1158,7 +1158,7 @@ msgid ""
 "will automatically be removed."
 msgstr ""
 
-#: data/TWiki/WebTopBar.txt:12
+#: data/TWiki/WebTopBar.txt:11
 msgid "Jump:"
 msgstr ""
 
@@ -1181,7 +1181,7 @@ msgid "Line: %1"
 msgstr ""
 
 #. ($left,$right)
-#: lib/TWiki/UI/RDiff.pm:270
+#: lib/TWiki/UI/RDiff.pm:275
 msgid "Line: %1 to %2"
 msgstr ""
 
@@ -1674,6 +1674,10 @@ msgstr ""
 msgid "Similar topics in this web (if any):"
 msgstr ""
 
+#: data/TWiki/WebSearchAdvanced.txt:13
+msgid "Simple search"
+msgstr ""
+
 #: templates/attachtables.pattern.tmpl:7
 msgid "Size"
 msgstr "Tamaño"
@@ -2080,7 +2084,7 @@ msgstr ""
 msgid "Try Again"
 msgstr ""
 
-#: lib/TWiki/UI/RDiff.pm:248
+#: lib/TWiki/UI/RDiff.pm:253
 msgid "Unchanged"
 msgstr ""
 

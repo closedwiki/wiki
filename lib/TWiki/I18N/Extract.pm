@@ -1,0 +1,122 @@
+# TWiki Enterprise Collaboration Platform, http://TWiki.org/
+#
+# Copyright (C) 1999-2005 Peter Thoeny, peter@thoeny.com
+# and TWiki Contributors. All Rights Reserved. TWiki Contributors
+# are listed in the AUTHORS file in the root of this distribution.
+# NOTE: Please extend that file, not this notice.
+#
+# Additional copyrights apply to some or all of the code in this
+# file as follows:
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version. For
+# more details read LICENSE in the root of this distribution.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# As per the GPL, removal of this notice is prohibited.
+
+use strict;
+
+=pod
+
+---+ package TWiki::I18N::Extract
+
+Support translatable strings extraction from TWiki topics and templates.
+Depends on Locale::Maketext::Extract (part of CPAN::Locale::Maketext::Lexicon).
+
+=cut
+
+package TWiki::I18N::Extract;
+
+use vars qw( $initialised $initError );
+BEGIN {
+    eval "use base 'Locale::Maketext::Extract'";
+    $initError = $@;
+    $initialised = !$initError;
+}
+
+
+##########################################################
+
+=pod
+
+---++ ClassMethod new ( $session ) -> $extract
+
+Constructor. Creates a fresh new Extract object. A $session object, instance of
+the TWiki class, is optional: if it's available, it'll be used for printing
+warnings.
+
+=cut
+
+sub new {
+
+    my $class = shift;
+    my $session = shift;
+
+    unless ( $initialised ) {
+        $session->writeWarning ( $initError ) if $session;
+        return undef;
+    }
+
+    my $self = new Locale::Maketext::Extract;
+    $self->{session} = $session;
+    return bless($self, $class);
+}
+
+=pod
+
+---++ ObjectMethod extract ( $file , $text )
+
+Extract the strings from =$text=,m using =$file= as the name of the current
+file being read (for comments in PO file, for example). Overrides the base
+class method but calls it so the base behavior is preserved.
+
+As in base class, extracted strings are just stored in the =$self='s internal
+table for further use (e.g. creating/updating a PO file). Nothing is returned.
+
+=cut
+
+sub extract {
+    my $self = shift;
+    my $file = shift;
+    local $_ = shift;
+
+    # do existing extraction
+    $self->SUPER::extract($file, $_);
+
+    my $line;
+  
+    # TWiki templates:
+    $line = 1; pos($_) = 0;
+    my $doublequoted = '"(\\\"|[^"])*"';
+    my @_lines = split(/\n/,$_);
+    foreach (@_lines) {
+        while (m/%(TMPL:MAKETEXT|_)\{\s*($doublequoted)(\s*,\s*($doublequoted))*\s*\}%/gm) {
+            my $str = substr($2, 1, -1);
+	    #print "$file: $str\n";
+            $str =~ s/\\"/"/g;
+	    #print "$file: $str\n";
+            $self->add_entry($str, [ $file, $line, '' ]);
+        }
+        $line ++;
+    }
+    # TWiki topics:
+    $line = 1; pos($_) = 0;
+    my @_lines = split(/\n/,$_);
+    foreach (@_lines) {
+        while (m/%MAKETEXT\{\s*(string=)?($doublequoted)(\s*args=($doublequoted))?\s*\}%/gm) {
+            my $str = substr($2, 1, -1);
+	    $str =~ s/\\"/"/g;
+	    $self->add_entry($str, [ $file, $line, '']);
+        }
+        $line ++;
+    }
+
+}
+
+1;

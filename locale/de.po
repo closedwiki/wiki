@@ -417,7 +417,7 @@ msgstr "Aktion %1: %2."
 msgid "Add form"
 msgstr "Formular hinzufügen"
 
-#: lib/TWiki/UI/RDiff.pm:241
+#: lib/TWiki/UI/RDiff.pm:246
 msgid "Added"
 msgstr "hinzugefügt"
 
@@ -515,11 +515,11 @@ msgstr "Neue Datei anhängen"
 msgid "Attachment"
 msgstr "Anhang"
 
-#: lib/TWiki/UI/Manage.pm:342
+#: lib/TWiki/UI/Manage.pm:340
 msgid "Attachment already exists in new topic"
 msgstr "Der Anhang existiert bereits in dem neuen Topic"
 
-#: lib/TWiki/UI/Manage.pm:322
+#: lib/TWiki/UI/Manage.pm:320
 #, fuzzy
 msgid "Attachment does not exist"
 msgstr "Anhang existiert nicht"
@@ -662,7 +662,7 @@ msgstr "Nur Eigenschaften ändern"
 msgid "Change topic"
 msgstr "Topic ändern"
 
-#: lib/TWiki/UI/RDiff.pm:255 lib/TWiki/UI/RDiff.pm:261
+#: lib/TWiki/UI/RDiff.pm:260 lib/TWiki/UI/RDiff.pm:266
 msgid "Changed"
 msgstr "Geändert"
 
@@ -751,7 +751,7 @@ msgstr "Wollen Sie weitermachen und versuchen, das Web umzubenennen?"
 msgid "Continue to *[[%1][Create the new page]]*"
 msgstr "Weiter um eine *[[%1][neue Seite]]* anzulegen"
 
-#: data/TWiki/TWikiPreferences.txt:34
+#: data/TWiki/TWikiPreferences.txt:36
 msgid ""
 "Copyright %1 by the contributing authors. All material on this collaboration "
 "platform is the property of the contributing authors."
@@ -796,7 +796,7 @@ msgstr "Durch Namen anlegen"
 msgid "Create personal sidebar"
 msgstr "Persönliche Seitenleiste anlegen"
 
-#: lib/TWiki/Render.pm:557 lib/TWiki/Render.pm:568
+#: lib/TWiki/Render.pm:560 lib/TWiki/Render.pm:572
 msgid "Create this topic"
 msgstr "Dieses Topic anlegen"
 
@@ -841,7 +841,7 @@ msgstr "Topic löschen..."
 msgid "Delete topic:"
 msgstr "Gelöschtes Topic"
 
-#: lib/TWiki/UI/RDiff.pm:234
+#: lib/TWiki/UI/RDiff.pm:239
 msgid "Deleted"
 msgstr "Gelöscht"
 
@@ -1106,7 +1106,7 @@ msgstr "Möchten Sie ihr Foto anhängen?"
 msgid "How to activate your %1 registration"
 msgstr "Wie Sie ihre %1 Registrierung aktivieren"
 
-#: data/TWiki/TWikiPreferences.txt:34
+#: data/TWiki/TWikiPreferences.txt:36
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
 "Ideen, Anfragen oder Probleme bezüglich %1? <a href='%2'>Feedback senden</a>"
@@ -1246,7 +1246,7 @@ msgstr ""
 "funktioniert. Zeichen wie z.B. Leerzeichen, die nicht in Topic Namen erlaubt "
 "sind, werden automatisch entfernt."
 
-#: data/TWiki/WebTopBar.txt:12
+#: data/TWiki/WebTopBar.txt:11
 msgid "Jump:"
 msgstr "Sprung:"
 
@@ -1269,7 +1269,7 @@ msgid "Line: %1"
 msgstr "Zeile: %1"
 
 #. ($left,$right)
-#: lib/TWiki/UI/RDiff.pm:270
+#: lib/TWiki/UI/RDiff.pm:275
 msgid "Line: %1 to %2"
 msgstr "Zeile: %1 bis %2"
 
@@ -1794,6 +1794,11 @@ msgstr ""
 msgid "Similar topics in this web (if any):"
 msgstr "Unter-Topics im %1 Web:"
 
+#: data/TWiki/WebSearchAdvanced.txt:13
+#, fuzzy
+msgid "Simple search"
+msgstr "erweiterte Suche"
+
 #: templates/attachtables.pattern.tmpl:7
 msgid "Size"
 msgstr "Größe"
@@ -2273,7 +2278,7 @@ msgstr "Alle Treffer"
 msgid "Try Again"
 msgstr "Nochmal versuchen"
 
-#: lib/TWiki/UI/RDiff.pm:248
+#: lib/TWiki/UI/RDiff.pm:253
 msgid "Unchanged"
 msgstr "Unverändert"
 

@@ -406,7 +406,7 @@ msgstr "Ação %1: %2."
 msgid "Add form"
 msgstr "Adicionar formulário"
 
-#: lib/TWiki/UI/RDiff.pm:241
+#: lib/TWiki/UI/RDiff.pm:246
 msgid "Added"
 msgstr "Adicionado"
 
@@ -502,11 +502,11 @@ msgstr "Anexar novo arquivo"
 msgid "Attachment"
 msgstr "Anexo"
 
-#: lib/TWiki/UI/Manage.pm:342
+#: lib/TWiki/UI/Manage.pm:340
 msgid "Attachment already exists in new topic"
 msgstr "O anexo já existe no tópico"
 
-#: lib/TWiki/UI/Manage.pm:322
+#: lib/TWiki/UI/Manage.pm:320
 msgid "Attachment does not exist"
 msgstr "O anexo não existe"
 
@@ -648,7 +648,7 @@ msgstr "Apenas alterar propriedades"
 msgid "Change topic"
 msgstr "Alterar tópico"
 
-#: lib/TWiki/UI/RDiff.pm:255 lib/TWiki/UI/RDiff.pm:261
+#: lib/TWiki/UI/RDiff.pm:260 lib/TWiki/UI/RDiff.pm:266
 msgid "Changed"
 msgstr "Alterado"
 
@@ -735,7 +735,7 @@ msgstr "Continuar e tentar renomear a web?"
 msgid "Continue to *[[%1][Create the new page]]*"
 msgstr "Continue e *[[%1][Crie a nova página]]*"
 
-#: data/TWiki/TWikiPreferences.txt:34
+#: data/TWiki/TWikiPreferences.txt:36
 msgid ""
 "Copyright %1 by the contributing authors. All material on this collaboration "
 "platform is the property of the contributing authors."
@@ -779,7 +779,7 @@ msgstr "Criar por nome"
 msgid "Create personal sidebar"
 msgstr "Criar barra lateral pessoal"
 
-#: lib/TWiki/Render.pm:557 lib/TWiki/Render.pm:568
+#: lib/TWiki/Render.pm:560 lib/TWiki/Render.pm:572
 msgid "Create this topic"
 msgstr "Criar este tópico"
 
@@ -823,7 +823,7 @@ msgstr "Remover tópico..."
 msgid "Delete topic:"
 msgstr "Remover tópico:"
 
-#: lib/TWiki/UI/RDiff.pm:234
+#: lib/TWiki/UI/RDiff.pm:239
 msgid "Deleted"
 msgstr "Removido"
 
@@ -1079,7 +1079,7 @@ msgstr "Que tal anexar sua foto?"
 msgid "How to activate your %1 registration"
 msgstr "Como ativar seu registro no %1"
 
-#: data/TWiki/TWikiPreferences.txt:34
+#: data/TWiki/TWikiPreferences.txt:36
 msgid "Ideas, requests, problems regarding %1? <a href='%2'>Send feedback</a>"
 msgstr ""
 "Idéias, solicitações, problemas com relação ao %1? <a href='%2'>Nos dê um "
@@ -1215,7 +1215,7 @@ msgstr ""
 "fazer links pra ela depois. Caracteres não permitidos em nomes de web, como "
 "espaços, serão removidos automaticamente."
 
-#: data/TWiki/WebTopBar.txt:12
+#: data/TWiki/WebTopBar.txt:11
 msgid "Jump:"
 msgstr "Pular para:"
 
@@ -1238,7 +1238,7 @@ msgid "Line: %1"
 msgstr "Linha: %1"
 
 #. ($left,$right)
-#: lib/TWiki/UI/RDiff.pm:270
+#: lib/TWiki/UI/RDiff.pm:275
 msgid "Line: %1 to %2"
 msgstr "Linha: %1 até %2"
 
@@ -1740,6 +1740,10 @@ msgstr ""
 msgid "Similar topics in this web (if any):"
 msgstr "Tópicos semelhantes nesta web (se existir):"
 
+#: data/TWiki/WebSearchAdvanced.txt:13
+msgid "Simple search"
+msgstr "Busca simples"
+
 #: templates/attachtables.pattern.tmpl:7
 msgid "Size"
 msgstr "Tamanho"
@@ -2207,7 +2211,7 @@ msgstr "Números de resultados"
 msgid "Try Again"
 msgstr "Tente novamente"
 
-#: lib/TWiki/UI/RDiff.pm:248
+#: lib/TWiki/UI/RDiff.pm:253
 msgid "Unchanged"
 msgstr "Inalterado"
 

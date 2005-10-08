@@ -3,10 +3,17 @@
 # Script to extract strings from TWiki sources and templates
 
 use strict;
-use Locale::Maketext::Extract::Run 'xgettext';
 
 # force the use from the root
 -d 'bin' and -d "lib" and -d 'tools' and -d 'templates' or die("You may only run this utility from the root directory of TWiki sources!");
+
+use File::Spec;
+
+my $cwd = `pwd` ;
+chomp($cwd);
+unshift(@INC, File::Spec->catfile($cwd, 'lib')); 
+eval "use TWiki::I18N::Extract";
+die($@) if $@;
 
 # config
 my $localesDir = "locale";
@@ -37,16 +44,12 @@ foreach my $source (<R>) {
 }
 close(R);
 
-#################### OR ########################
-# driven from 
-#my $bin = "find bin/* -name '[a-z]*'";
-#my $lib = "find lib -name '*.pm'";
-#system("($bin && $lib) > $sources_listing");
-#my @templates = `find templates/*`;
-#####################################################################
-
+# extract the strings in a new potfile.
 print("I: scanning sources, it may take some time...\n");
-xgettext("-o", $newpotfile, @sources);
+my $extractor = new TWiki::I18N::Extract;
+$extractor->extract_file($_) foreach @sources;
+$extractor->compile();
+$extractor->write_po($newpotfile);
 
 if (! -e $newpotfile) {
   # no extracted strings
