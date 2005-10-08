@@ -44,11 +44,12 @@ package TWiki::Plugins::BugzillaLinkPlugin; 	# change the package name!!!
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $debug
+        $web $topic $user $installWeb $VERSION $RELEASE $debug
 	$bugUrl $milestoneBugListUrl $milestoneBugListText $bugText $bugImgUrl
     );
 
-$VERSION = '1.300';
+$VERSION = '$Rev$';
+$RELEASE = '1.300';
 
 # =========================
 sub initPlugin
