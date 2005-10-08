@@ -303,7 +303,7 @@ sub testSimple {
 
     # capture stdout
     my @webs = ( $testWeb, $peopleWeb );
-    TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 1 );
+    TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 0 );
     #print "REPORT\n",join("\n\n", @mails);
 
     my %matched;
