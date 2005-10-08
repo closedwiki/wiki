@@ -14,6 +14,7 @@ package TWiki::Upgrade::UpdateTopics;
 
 use strict;
 
+use TWiki::Upgrade;
 use File::Find;
 use File::Copy;
 use File::Basename;
@@ -21,17 +22,18 @@ use Text::Diff;
 
 # Try to upgrade an installation's TWikiTopics using the rcs info in it.
 
-use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $debug $RcsLogFile $TempDir);
+use vars qw($CurrentDataDir $NewReleaseDataDir $DestinationDataDir $debug $RcsLogFile $TempDir $upgradeObj);
 #					@DefaultWebTopics %LinkedDirPathsInWiki);
 
 sub UpdateTopics 
 {
 	$debug = 0;	#Set if you want to see the debug output
+	$upgradeObj = shift;
     $NewReleaseDataDir = shift or die "UpdateTopics not provided with new data directory!\n";
     $CurrentDataDir = shift or die "UpdateTopics not provided with existing data directory!\n";
     $DestinationDataDir = shift or die "DestinationDataDir not provided\n";
 
-print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n";
+	$upgradeObj->writeToLogAndScreen("\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n");
 
     my $whoCares = `which rcsdiff`;   # we should use File::Which to do this, except that would mean
                                       # getting yet another .pm into lib, which seems like hard work?
@@ -40,22 +42,22 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
     $whoCares = `which patch`;
     ($? >> 8 == 0) or die "Uh-oh - couldn't see a patch executable on your path!  I really need one of those!\n";
 
-    print "\n";
-    print "\t...new upgraded data will be put in $DestinationDataDir\n";
-    print "\t   there will be no changes made to either the source data directory or $NewReleaseDataDir.\n\n"; 
-    print "\t This progam will attempt to use the rcs versioning information to upgrade the\n";
-    print "\t   contents of your distributed topics in $CurrentDataDir to the content in $NewReleaseDataDir.\n\n";
-    print "Output:\n";
-    print "\tFor each file that has no versioning information in your existing twiki a _v_ will be printed\n";
-    print "\tFor each file that has no changes from the previous release a _c_ will be printed\n";
-    print "\tFor each file that has no changes made in your existing release, a _u_ will be printed (new version is copied)\n";
-    print "\tFor each file where no commonality could be found, your existing one is used, and a _C_ will be printed\n";
-    print "\tFor each file that has changes and a patch is generated a _p_ will be printed\n";
-    print "\tFor each file that is new in the NewReleaseDataDir a _+_ will be printed\n";
-    print "\t When the script has attempted to patch the $NewReleaseDataDir, 
-\t *.rej files will contain the failed merges\n";
-    print "\t although many of these rejected chages will be discardable, 
-\t please check them to see if your configuration is still ok\n\n";
+    $upgradeObj->writeToLogAndScreen("\n");
+    $upgradeObj->writeToLogAndScreen("\t...new upgraded data will be put in $DestinationDataDir\n");
+    $upgradeObj->writeToLogAndScreen("\t   there will be no changes made to either the source data directory or $NewReleaseDataDir.\n\n"); 
+    $upgradeObj->writeToLogAndScreen("\t This progam will attempt to use the rcs versioning information to upgrade the\n");
+    $upgradeObj->writeToLogAndScreen("\t   contents of your distributed topics in $CurrentDataDir to the content in $NewReleaseDataDir.\n\n");
+    $upgradeObj->writeToLogAndScreen("Output:\n");
+    $upgradeObj->writeToLogAndScreen("\tFor each file that has no versioning information in your existing twiki a _v_ will be printed\n");
+    $upgradeObj->writeToLogAndScreen("\tFor each file that has no changes from the previous release a _c_ will be printed\n");
+    $upgradeObj->writeToLogAndScreen("\tFor each file that has no changes made in your existing release, a _u_ will be printed (new version is copied)\n");
+    $upgradeObj->writeToLogAndScreen("\tFor each file where no commonality could be found, your existing one is used, and a _C_ will be printed\n");
+    $upgradeObj->writeToLogAndScreen("\tFor each file that has changes and a patch is generated a _p_ will be printed\n");
+    $upgradeObj->writeToLogAndScreen("\tFor each file that is new in the NewReleaseDataDir a _+_ will be printed\n");
+    $upgradeObj->writeToLogAndScreen("\t When the script has attempted to patch the $NewReleaseDataDir, 
+\t *.rej files will contain the failed merges\n");
+    $upgradeObj->writeToLogAndScreen("\t although many of these rejected chages will be discardable, 
+\t please check them to see if your configuration is still ok\n\n");
 
     mkdir( $DestinationDataDir, 0777);
     $TempDir = "$DestinationDataDir/tmp";
@@ -68,7 +70,7 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
 
     open(PATCH, "> $DestinationDataDir/patchTopics");
     
-    print "\n\n ...checking existing files from $CurrentDataDir\n";
+    $upgradeObj->writeToLogAndScreen("\n\n ...checking existing files from $CurrentDataDir\n");
 #TODO: need to find a way to detect non-Web directories so we don't make a mess of them..
 # (should i just ignore Dirs without any ,v files?) - i can't upgrade them anyway..
 #upgrade templates..?
@@ -83,25 +85,25 @@ print "\n---\n$NewReleaseDataDir , $CurrentDataDir , $DestinationDataDir\n----\n
     close(PATCH);
 
 #do a find through $NewReleaseDataDir and copy all missing files & dirs
-    print "\n\n ... checking for new files in $NewReleaseDataDir";
+    $upgradeObj->writeToLogAndScreen("\n\n ... checking for new files in $NewReleaseDataDir");
     find(\&copyNewTopics, $NewReleaseDataDir);
     
 #run `patch patchTopics` in $DestinationDataDir
-    print "\nPatching topics (manually check the rejected patch (.rej) files)";
+    $upgradeObj->writeToLogAndScreen("\nPatching topics (manually check the rejected patch (.rej) files)");
     chdir($DestinationDataDir);
     `patch -p0 < patchTopics > patch.log`;
 #TODO: examing the .rej files to remove the ones that have already been applied
     find(\&listRejects, ".");
 #TODO: run `ci` in $DestinationDataDir
     
-    print "\n\n";
+    $upgradeObj->writeToLogAndScreen("\n\n");
     
     # fix up permissions ... get them to a working state, if not ideal seurity-wise!
 	# (we tell the user to check the permissions later anyhow)
-	print "
+	$upgradeObj->writeToLogAndScreen("
 		Now I'm giving everyone write access to $DestinationDataDir, 
 		so your web server user can access them.
-		";
+		");
 	find( sub {chmod 0777, $File::Find::name;} , $DestinationDataDir);
     
     rmdir($TempDir);
@@ -115,7 +117,7 @@ sub listRejects
     $filename = $File::Find::name;
 
     if ($filename =~ /.rej$/ ) {
-        print "\nPatch rejected: $filename";
+        $upgradeObj->writeToLogAndScreen("\nPatch rejected: $filename");
     }
 }
 
@@ -134,18 +136,17 @@ sub copyNewTopics
 	return if $filename =~ /\.svn.*/;	#don't follow into .svn dirs
 
     if ( -d $filename) {
-        print "\nprocessing directory $filename";
+        $upgradeObj->writeToLogAndScreen("\nprocessing directory $filename");
 		if ( !-d $destinationFilename ) {
-	    	print " (creating $destinationFilename)";
+	    	$upgradeObj->writeToLogAndScreen(" (creating $destinationFilename)");
 	    	mkdir($destinationFilename, 0777);
 		}
-		print "\n";
         return;
     }
     
     if (! -e $destinationFilename ) { 
-        print "\nadding $filename (new in this release)" if ($debug);
-        print '+' if (!$debug);
+        $upgradeObj->writeToLog("\nadding $filename (new in this release)");
+        $upgradeObj->writeToScreen('+');
         copy( $filename, $destinationFilename);
     }
     
@@ -158,7 +159,7 @@ sub getRLog
 
 	if ($filename =~ /\.rej$/) {		#don't copy reject files from upgrade 
 		#SMELL: this is going to be bad if someone has attached a .rej file...
-		print "\nfound rejected patch file from previous upgrade ($filename) - not copying it";
+		$upgradeObj->writeToLog("\nfound rejected patch file from previous upgrade ($filename) - not copying it");
 		return;
 	}
 
@@ -169,18 +170,19 @@ sub getRLog
     }
 	
     $newFilename =~ s/$CurrentDataDir/$NewReleaseDataDir/g;
-    print "\n$filename -> $newFilename : "  if ( $debug);
 
     my $destinationFilename = $filename;
     $destinationFilename =~ s/$CurrentDataDir/$DestinationDataDir/g;
 
     if ($filename =~ /,v$/ or $filename =~ /.lock$/ or $filename =~ /~$/) {
-	print "skipping\n" if $debug;
-	return;
+		#$upgradeObj->writeToLog("skipping ($filename)\n");
+		return;
     }
 
+    $upgradeObj->writeToLog("\n$filename -> $newFilename : ");
+
     if ( -d $filename ) {
-	print "\nprocessing directory (creating $destinationFilename)\n";
+	$upgradeObj->writeToLogAndScreen("\nprocessing directory (creating $destinationFilename)\n");
         mkdir($destinationFilename, 0777);
         return;
     }
@@ -188,7 +190,7 @@ sub getRLog
 #    if ( isFromDefaultWeb($filename) )
 #    {
 #        $newFilename =~ s|^(.*)/[^/]*/([^/]*)|$1/_default/$2|g;
-#        print "\n$filename appears to have been generated from from _default - merging with $newFilename from the new distribution" if ($debug);
+#        $upgradeObj->writeToLogAndScreen("\n$filename appears to have been generated from from _default - merging with $newFilename from the new distribution" if ($debug);
 #    }
     
     if (! -e $filename.",v" )
@@ -196,8 +198,8 @@ sub getRLog
         if ( $filename =~ /.txt$/ ) {
 	    # here we defer making an RCS file for this file to someone else :-)
 	    # (probably the process that checks all the new wiki files back in)
-            print "\nWarning: $filename does not have any rcs information" if ($debug);
-            print "v" if (! $debug);
+            $upgradeObj->writeToLog("\nWarning: $filename does not have any rcs information");
+            $upgradeObj->writeToScreen("v");
         }
         copy( $filename, $destinationFilename);
         return;
@@ -228,7 +230,7 @@ sub getRLog
 	{
 	    $workingFilename = "$TempDir/". basename($filename);
 	    
-	    print "Working file: $workingFilename\n" if ($debug);
+	    $upgradeObj->writeToLog("\nWorking file: $workingFilename");
 	    
 	    copy ( $filename, $workingFilename)
 		or die "Couldn't make copy of $filename at $workingFilename: $!\n";
@@ -247,7 +249,7 @@ sub getRLog
 	    system("ci -u -mUpdateTopics -t-missing_v $workingFilename 2>>RcsLogFile");
 	}
 
-        my $highestCommonRevision = findHighestCommonRevision( $workingFilename, $newFilename);
+    my $highestCommonRevision = findHighestCommonRevision( $workingFilename, $newFilename);
 
 	# is it the final version of $filename? 
 	# (in which case:
@@ -260,27 +262,29 @@ sub getRLog
         my $diff = doDiffToHead( $workingFilename, $highestCommonRevision );
 
 	    $diff = removeVersionChangeDiff($diff);
-            patchFile( $filename, $destinationFilename, $diff );
+        patchFile( $filename, $destinationFilename, $diff );
 
-            print "\ncreating a patch for $newFilename from $filename ($highestCommonRevision)";
+            $upgradeObj->writeToLog("\ncreating a patch for $newFilename from $filename ($highestCommonRevision)");
+            $upgradeObj->writeToScreen("p");
             copy( $newFilename, $destinationFilename);
             copy( $newFilename.",v", $destinationFilename.",v");
-        } elsif ($highestCommonRevision eq "head" ) {
+    } elsif ($highestCommonRevision eq "head" ) {
 	    # This uses the existing file rather than the new one, in case they manually
 	    # changed the exisiting one without using RCS.
-            print "\nhighest common revision is final revision in oldTopic (using new Version)" if ($debug);
-            print "u" if (!$debug);
+            $upgradeObj->writeToLog("\nhighest common revision is final revision in oldTopic (using new Version)");
+            $upgradeObj->writeToScreen("u");
             copy( $newFilename, $destinationFilename);
             copy( $newFilename.",v", $destinationFilename.",v");
-        } else {
+    } else {
             #no common versions - this might be a user created file, 
             #or a manual attempt at creating a topic off twiki.org?raw=on
 #TODO: do something nicer about this.. I think i need to do lots of diffs 
             #to see if there is any commonality
-            print "\nWarning: copying $filename (no common versions) : C";
+            $upgradeObj->writeToLog("\nWarning: copying $filename (no common versions)");
+            $upgradeObj->writeToScreen("C");
             copy( $filename, $destinationFilename);
             copy( $filename.",v", $destinationFilename.",v");
-        }
+    }
 
 		if ( $doCiCo )
 		{
@@ -291,8 +295,8 @@ sub getRLog
     } else {
         #new file created by users
 #TODO: this will include topics copied using ManagingWebs (createWeb)
-        print "\ncopying $filename (user's existing file)" if ($debug);
-        print "c" if (!$debug);
+        $upgradeObj->writeToLog("\ncopying $filename (user's existing file)");
+        $upgradeObj->writeToScreen("c");
         copy( $filename, $destinationFilename);
         copy( $filename.",v", $destinationFilename.",v");
     }
@@ -305,7 +309,7 @@ sub isFromDefaultWeb
 
     opendir(DEFAULTWEB, './data/_default') or die "Yikes - couldn't open ./data/_default: $! ... not safe to proceed!\n";
     my @DefaultWebTopics = grep(/.txt$/, readdir(DEFAULTWEB));
-    if ($debug) { print "_default topics in new distro: @DefaultWebTopics\n"; }
+    if ($debug) { $upgradeObj->writeToLogAndScreen("_default topics in new distro: @DefaultWebTopics\n"); }
 
     my $topic = basename($filename);
     return $topic if grep(/^$topic$/, @DefaultWebTopics);
@@ -316,13 +320,13 @@ sub doDiffToHead
 {
     my ( $filename, $highestCommonRevision ) = @_;
    
-#    print "$highestCommonRevision to ".getHeadRevisionNumber($filename)."\n";
-#    print "\n----------------\n".getRevision($filename, $highestCommonRevision);
-#     print "\n----------------\n".getRevision($filename, getHeadRevisionNumber($filename)) ;
-#    return diff ( getRevision($filename, $highestCommonRevision), getRevision($filename, getHeadRevisionNumber($filename)) );
+#    $upgradeObj->writeToLogAndScreen("$highestCommonRevision to ".getHeadRevisionNumber($filename)."\n");
+#    $upgradeObj->writeToLogAndScreen("\n----------------\n".getRevision($filename, $highestCommonRevision));
+#     $upgradeObj->writeToLogAndScreen("\n----------------\n".getRevision($filename, getHeadRevisionNumber($filename))) ;
+#    return diff ( getRevision($filename, $highestCommonRevision), getRevision($filename, getHeadRevisionNumber($filename)) ));
 
     my $cmd = "rcsdiff -r".$highestCommonRevision." -r".getHeadRevisionNumber($filename)." $filename";
-    print "\n----------------\n".$cmd  if ($debug);
+    $upgradeObj->writeToLogAndScreen("\n----------------\n".$cmd)  if ($debug);
     my $diffs =  `$cmd 2>>$RcsLogFile`;
     return $diffs;
 }
@@ -400,13 +404,13 @@ sub findHighestCommonRevision
     my $oldContent = "qwer";
     my $newContent = "qwer";
     while ( ( $oldContent ne "" ) & ($newContent ne "") ) {
-        print "\ncomparing $filename and $newFilename revision 1.$rev " if ($debug);
+        $upgradeObj->writeToLog("\ncomparing $filename and $newFilename revision 1.$rev ");
         $oldContent = getRevision( $filename, "1.".$rev);
         $newContent = getRevision( $newFilename, "1.".$rev);
         if ( ( $oldContent ne "" ) & ($newContent ne "") ) {
             my $diffs = diff( \$oldContent, \$newContent, {STYLE => "Unified"} );
-#            print "\n-----------------------|".$diffs."|-------------------\n";
-#            print "\n-------------------[".$oldContent."]----|".$diffs."|-------[".$newContent."]--------------\n";
+#            $upgradeObj->writeToLogAndScreen("\n-----------------------|".$diffs."|-------------------\n");
+#            $upgradeObj->writeToLogAndScreen("\n-------------------[".$oldContent."]----|".$diffs."|-------[".$newContent."]--------------\n");
             if ( $diffs eq "" ) {
                 #same!!
                 $commonRev = "1.".$rev;
@@ -415,7 +419,7 @@ sub findHighestCommonRevision
         $rev = $rev + 1;
     }
 
-    print "\nlastCommon = $commonRev (head = ".getHeadRevisionNumber( $filename).")" if ($debug);
+    $upgradeObj->writeToLog("\nlastCommon = $commonRev (head = ".getHeadRevisionNumber( $filename).")");
     
     if ( $commonRev eq getHeadRevisionNumber( $filename) ) {
         return "head";
@@ -433,7 +437,7 @@ sub getRevision
 # use rlog to test if the revision exists..
     my ( $cmd ) = "rlog -r".$rev." ".$filename;
 
-#print $cmd."\n";
+#$upgradeObj->writeToLogAndScreen($cmd."\n");
     my @response = `$cmd 2>>$RcsLogFile`;
 
     my $revision;
@@ -472,7 +476,7 @@ sub removeVersionChangeDiff
 
     $diff = join "\n", @diff;
 
-#    print "rVCD returning: \n$diff\n";
+#    $upgradeObj->writeToLogAndScreen("rVCD returning: \n$diff\n");
 
     return $diff;
 }

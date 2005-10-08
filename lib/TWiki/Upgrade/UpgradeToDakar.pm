@@ -24,13 +24,18 @@ This script expects '.' to be the root of a TWiki distribution when it is called
 use strict;
 
 use TWiki::Upgrade::TWikiCfg;
-use TWiki::Upgrade::UpdateTopics;
+use TWiki::Upgrade;
 use File::Copy;
 use Text::Diff;
 use File::Find;
 
+
 sub doAllDakarUpgrades {
-my ($setlibPath, $targetDir) = @_;
+my ($upgradeObj, $setlibPath, $targetDir) = @_;
+
+unless( -d "bin" && -d "lib" && -d "pub" && -d "templates" && -d "locale") {
+    die "The current directory should be the root of the new distribution. That means that all the normal TWiki directories should be here: bin, lib, pub, templates etc.\nThe current directory doesn't look like a TWiki distribution.";
+}
 
 print "
 This script will help you upgrade an existing 'Cairo' (TWiki2004090*) or Dakar 
@@ -69,13 +74,10 @@ Hit <enter> to continue:";
 
 <STDIN>;
 
-unless( -d "bin" && -d "lib" && -d "pub" && -d "templates" ) {
-    die "The current directory should be the root of the new distribution. That means that all the normal TWiki directories should be here: bin, lib, pub, templates etc.\nThe current directory doesn't look like a TWiki distribution.";
-}
 print"
 Here's what's about to happen:
 
-1) I'm going to create a new TWiki in $targetDir based on this new distribution
+1) I'm going to create a new TWiki in $targetDir based on this new distribution,
 ";
 
 $targetDir =~ s|/$||;  # avoid ugly double slashes.
@@ -87,76 +89,65 @@ print "2) I'm going to create new config files to match the configuration of
 3) I'm going to take a copy of your existing topics and attachments and merge 
    them in with new versions from the release.
 4) I'm going to tell you what you need to do next!
+   and i'm going to log all that you see on the screen from here on into 
+   $targetDir/UpgradeTWiki.log
 
 ";
 
 # Now, should have finished asking the user questions...
 
-print "Creating the $targetDir directory structure...\n";
-
-opendir(HERE , ".");
-
-foreach my $file (readdir(HERE)) {
-    next if ($file =~ /^\./);
-    next if ($file =~ /~$/);
-    next if ($file =~ /.zip$/);
-    next if ($file eq "data"); # UpgradeTopics will copy the data as appropriate.
-    next if ($file eq "pub"); # UpgradeTopics will copy the data as appropriate.
-
-    print "$file\n";
-    system("cp -R $file $targetDir");
-}
+$upgradeObj->copyInitialFiles('.');
 
 my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::TWikiCfg::UpgradeTWikiConfig($setlibPath, $targetDir);   # dies on error, without doing damage
 
-print "\n\nMerging your existing twiki ($targetDir) with new release twiki ...\n";
+$upgradeObj->writeToLogAndScreen("\n\nMerging your existing twiki ($targetDir) with new release twiki ...\n");
 
 # set up .htaccess, if appropriate
 if (-f "$setlibPath/.htaccess") {
     if (copy("$setlibPath/.htaccess", "$targetDir/bin/.htaccess")) {
-        print "
+        $upgradeObj->writeToLogAndScreen("
 Note: I copied your existing .htaccess into $targetDir/bin.
 
 The significant differences between the new template for .htacess
 and your previous one are:
 
-";
-        print join "\n", grep( /^[+-][^#]/ , split( /\r?\n/, diff("$targetDir/bin/.htaccess", "./bin/.htaccess.txt")));
+");
+        $upgradeObj->writeToLogAndScreen(join "\n", grep( /^[+-][^#]/ , split( /\r?\n/, diff("$targetDir/bin/.htaccess", "./bin/.htaccess.txt"))));
 
-        print "
+        $upgradeObj->writeToLogAndScreen("
 You may need to apply some of these differences to the new .htaccess
 that I created... that's up to you (I'm not going to mess with
 security settings at all!)
 
-Hit <enter> to continue:";
+Hit <enter> to continue:");
         <STDIN>;
     } else {
-	warn "
-I couldn't copy in your existing .htaccess file from $setlibPath to $targetDir/bin: $!\n";
+	$upgradeObj->writeToLogAndScreen("
+I couldn't copy in your existing .htaccess file from $setlibPath to $targetDir/bin: $!\n");
     }
 } else {
-    warn "
-Couldn't see a .htaccess in $setlibPath ... so I didn't try to help in that respect\n";
+    $upgradeObj->writeToLogAndScreen("
+Couldn't see a .htaccess in $setlibPath ... so I didn't try to help in that respect\n");
 }
 
 # now let's try to get their scriptSuffix right for them 
 # (Is this a good idea, I wonder?  Can't see why not...)
 
 if ($TWiki::scriptSuffix) {
-    print "
+    $upgradeObj->writeToLogAndScreen("
 Applying your '\$scriptSuffix' ($TWiki::scriptSuffix) to the scripts in $targetDir/bin...
-";
+");
 
     opendir(BINDIR, "$targetDir/bin") or 
-	warn "Ooops - couldn't open $targetDir/bin for reading... that's certainly strange! ($!)\n";
+	$upgradeObj->writeToLogAndScreen("Ooops - couldn't open $targetDir/bin for reading... that's certainly strange! ($!)\n");
 
     foreach my $f (readdir BINDIR)
     {
         next if ($f =~ m|\.|);  # scripts should not have dots, other things should!
 
-        print "$f ";
+        $upgradeObj->writeToLogAndScreen("$f ");
         rename "$targetDir/bin/$f", "$targetDir/bin/$f$TWiki::scriptSuffix"
-          or warn "Oops, couldn't rename $setlibPath/$f to $setlibPath/$f$TWiki::scriptSuffix : $!\n";
+          or $upgradeObj->writeToLogAndScreen("Oops, couldn't rename $setlibPath/$f to $setlibPath/$f$TWiki::scriptSuffix : $!\n");
     }
 }
 
@@ -164,8 +155,8 @@ Applying your '\$scriptSuffix' ($TWiki::scriptSuffix) to the scripts in $targetD
 }
 
 sub RemainingSteps {
-my ($targetDir) = @_;
-print "
+my ($upgradeObj, $targetDir) = @_;
+$upgradeObj->writeToLogAndScreen("
 OK, I'm finished.
 Now you need to
 
@@ -224,7 +215,7 @@ Now you need to
     It should be working.
 
 12. Enjoy!
-";
+");
 }
 
 1;

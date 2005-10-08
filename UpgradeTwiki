@@ -52,32 +52,8 @@ if ( ( $#ARGV >= 1 ) && ($mode eq 'moveTopics') ) { # must be 2 parameters
         $outputDir = $ARGV[1] || die "missing outputDir\n\n"; 
 	$newCfgFile = './bin/setlib.cfg';
 } else {
-	print <<EOUSAGE;
-
-Create an upgraded twiki installation from an existing one
-and a new distribution.
-
-usage: UpgradeTWiki 
-usage: UpgradeTWiki <oldSetlibCfgFile> <outputDirectory>
-will run the --dakar option and then the --upgradeTopics option (transfers your existing config, and upgrades your topics and pub files into the outputDirectory (doesn not modify your existing directories)
-
-usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
-does the CairoRelease upgrade (should end up incompatible with DakarRelease code)
-
-usage: UpgradeTWiki --dakar <oldSetlibCfgFile> <oldCfgFile> <outputDirectory>
-does the DakarRelease upgrade
-
-usage: UpgradeTWiki --upgradeTopics <oldSetlibCfgFile> <newDataDir> <oldDataDir> <outputDir>
-just tries to merge changes from newTopics (uses patch to merge with user changes)
-
-usage: UpgradeTWiki --moveTopics <newCfgFile>
-moves topics to the new Web layout (initially for DEVELOP) 
-WARNING: this needs to run on a functional install, and is not reversible (if it goes wrong)
-
-Note: if possible, point the cfgFile parameter to setlib.cfg, if it does not exist (or you can't find it) use TWiki.cfg.
-
-EOUSAGE
-        exit(1);
+	printUsage();
+    exit(1);
 }
 
 #set up the new libpath using the setlib.cfg file
@@ -100,7 +76,7 @@ EOUSAGE
 	if ( $@ ) {
 		die "Error finding TWiki.pm, please check your setlib.cfg file points to the lib dir using absolute paths\n";
 	}
-print "\nLoaded TWiki version: $TWiki::VERSION\n";
+	print "\nLoaded TWiki version: $TWiki::VERSION\n";
 
 #Make absolute paths from parameters
 $oldDataDir = File::Spec->rel2abs( $oldDataDir ) ."/";
@@ -123,18 +99,22 @@ print "UpgradeTWiki called with: ($mode), oldCfgFile = ($oldCfgFile), newCfgFile
 
 if ( $mode eq '' ) 
 {
-#run --dakar then --upgradeTopics
+	eval 'use TWiki::Upgrade';
+	die "ERROR: $@" if ( $@ ); 
+	my $upgradeObj = TWiki::Upgrade->new($outputDir);
+	
 	eval 'use TWiki::Upgrade::UpgradeToDakar';
 	die "ERROR: $@" if ( $@ ); 
-	my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($oldSetlibPath, $outputDir);
+	my ($oldDataDir, $oldPubDir) = TWiki::Upgrade::UpgradeToDakar::doAllDakarUpgrades($upgradeObj, $oldSetlibPath, $outputDir);
 	$oldDataDir = File::Spec->rel2abs( $oldDataDir );
 	$oldPubDir = File::Spec->rel2abs( $oldPubDir );
 	my $newTWikiDir = File::Spec->rel2abs( '.' );
-#	print "===========$oldDataDir\n============$oldPubDir\n";
+
 	eval 'use TWiki::Upgrade::UpdateTopics';
-	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/data/', $oldDataDir, $outputDir.'/data/');
-	TWiki::Upgrade::UpdateTopics::UpdateTopics($newTWikiDir.'/pub/', $oldPubDir, $outputDir.'/pub/');
-	TWiki::Upgrade::UpgradeToDakar::RemainingSteps($outputDir);
+	die "ERROR: $@" if ( $@ ); 
+	TWiki::Upgrade::UpdateTopics::UpdateTopics($upgradeObj, $newTWikiDir.'/data/', $oldDataDir, $outputDir.'/data/');
+	TWiki::Upgrade::UpdateTopics::UpdateTopics($upgradeObj, $newTWikiDir.'/pub/', $oldPubDir, $outputDir.'/pub/');
+	TWiki::Upgrade::UpgradeToDakar::RemainingSteps($upgradeObj, $outputDir);
 } 
 elsif ( $mode eq 'dakar' ) 
 {
@@ -173,7 +153,7 @@ elsif ( $mode eq 'moveTopics' )
 	use CGI;
         $query = new CGI( "" );
         $scripted = 1;
-        $user = "PeterThoeny"; 	#TODO: this should be replaced by a generic AdminUser
+        $user = "TWikiContibutor"; 	#TODO: this should be replaced by a generic AdminUser
         $url = "";
         $topic = "";
         $pathInfo = "";
@@ -195,4 +175,32 @@ elsif ( $mode eq 'moveTopics' )
     TWiki::Upgrade::MoveTopics::moveTopics( $session );
 
 #} elsif ( $mode eq '' ) {
+}
+
+sub printUsage {
+	print <<EOUSAGE;
+
+Create an upgraded twiki installation from an existing one
+and a new distribution.
+
+usage: UpgradeTWiki 
+usage: UpgradeTWiki <oldSetlibCfgFile> <outputDirectory>
+will run the --dakar option and then the --upgradeTopics option (transfers your existing config, and upgrades your topics and pub files into the outputDirectory (doesn not modify your existing directories)
+
+usage: UpgradeTWiki --cairo <newCfgFile> <oldCfgFile> <outputDirectory>
+does the CairoRelease upgrade (should end up incompatible with DakarRelease code)
+
+usage: UpgradeTWiki --dakar <oldSetlibCfgFile> <oldCfgFile> <outputDirectory>
+does the DakarRelease upgrade
+
+usage: UpgradeTWiki --upgradeTopics <oldSetlibCfgFile> <newDataDir> <oldDataDir> <outputDir>
+just tries to merge changes from newTopics (uses patch to merge with user changes)
+
+usage: UpgradeTWiki --moveTopics <newCfgFile>
+moves topics to the new Web layout (initially for DEVELOP) 
+WARNING: this needs to run on a functional install, and is not reversible (if it goes wrong)
+
+Note: if possible, point the cfgFile parameter to setlib.cfg, if it does not exist (or you can't find it) use TWiki.cfg.
+
+EOUSAGE
 }

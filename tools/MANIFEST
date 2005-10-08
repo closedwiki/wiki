@@ -358,6 +358,7 @@ lib/TWiki/UI/Statistics.pm 0440
 lib/TWiki/UI/Upload.pm 0440
 lib/TWiki/UI/View.pm 0440
 lib/TWiki/UI.pm 0440
+lib/TWiki/Upgrade.pm 0440
 lib/TWiki/Upgrade/MoveTopics.pm 0440
 lib/TWiki/Upgrade/TWikiCfg.pm 0440
 lib/TWiki/Upgrade/UpdateTopics.pm 0440

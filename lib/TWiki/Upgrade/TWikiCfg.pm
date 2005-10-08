@@ -30,6 +30,7 @@ Dialogs with the user on STDIN/STDOUT.
 =cut
 
 sub UpgradeTWikiConfig {
+	my @backupINC = @INC;
 
     my $existingConfigInfo = shift or die "UpgradeTWikiConfig not passed any arguments!\n";
     my $targetDir = (shift or '.');
@@ -82,7 +83,8 @@ sub UpgradeTWikiConfig {
               unless $TWiki::cfg{$var};
         }
         do 'LocalSite.cfg';
-	%TWiki::cfg = (%TWiki::cfg,%cfg);
+		%TWiki::cfg = (%TWiki::cfg,%cfg);
+		@INC = @backupINC;
         return( $TWiki::cfg{DataDir}, $TWiki::cfg{PubDir} );
     } else {
         print STDERR "$twikiLibPath is a Cairo TWiki\n";
@@ -93,7 +95,9 @@ sub UpgradeTWikiConfig {
         # and now we have the old definitions...
         # ...  write those out where we can, or new defaults where we can't
 
-        return TWiki::upgradeConfig($twikiCfgFile, $newConfigFile);
+		my ($dataDir, $pubDir) = TWiki::upgradeConfig($twikiCfgFile, $newConfigFile);
+		@INC = @backupINC;
+        return ($dataDir, $pubDir);
     }
 }
 
