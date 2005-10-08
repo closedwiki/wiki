@@ -44,27 +44,16 @@ package TWiki::Plugins::BugzillaLinkPlugin; 	# change the package name!!!
 
 # =========================
 use vars qw(
-        $web $topic $user $installWeb $VERSION $RELEASE $debug
+        $web $topic $user $installWeb $VERSION $debug
 	$bugUrl $milestoneBugListUrl $milestoneBugListText $bugText $bugImgUrl
     );
 
-# This should always be $Rev$ so that TWiki can determine the checked-in
-# status of the plugin. It is used by the build automation tools, so
-# you should leave it alone.
-$VERSION = '$Rev$';
-
-# This is a free-form string you can use to "name" your own plugin version.
-# It is *not* used by the build automation tools, but is reported as part
-# of the version number in PLUGINDESCRIPTIONS.
-$RELEASE = 'Dakar';
-
+$VERSION = '1.300';
 
 # =========================
 sub initPlugin
 {
     ( $topic, $web, $user, $installWeb ) = @_;
-
-    &TWiki::Func::writeDebug( "- TWiki::Plugins::BzgzillaLinkPlugin::initPlugin is OK" ) if $debug;
 
     # check for Plugins.pm versions
     if( $TWiki::Plugins::VERSION < 1 ) {
@@ -72,13 +61,16 @@ sub initPlugin
         return 0;
     }
 
-    # Get plugin preferences, the variable defined by:     
+    # Get plugin preferences
+
     $bugUrl = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGURL" )  || "http://localhost/bugzilla/show_bug.cgi?id=";
-    $milestoneBugListUrl = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MILESTONEBUGLISTURL" )  || "http://localhost/bugzilla/buglist.cgi?";
     $bugImgUrl = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGIMGURL" ) || "%TWIKIWEB%/BugzillaLinkPlugin/bug.gif";
+    $bugListUrl = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGLISTURL" )  || "http://localhost/bugzilla/buglist.cgi?";
+
     $bugText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_BUGTEXT" ) || "Bug #";
-    $milestoneBugListText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MILESTONEBUGLISTEXT" ) || "Buglist for Milestone ";
-     $myBugListText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MYBUGLISTEXT" ) || "Buglist for ";
+    $milestoneBugListText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MILESTONEBUGLISTTEXT" ) || "Buglist for Milestone ";
+    $keywordsBugListText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_KEYWORDBUGLISTTEXT" ) || "Buglist for keyword(s) ";
+    $myBugListText = &TWiki::Func::getPreferencesValue( "BUGZILLALINKPLUGIN_MYBUGLISTTEXT" ) || "Buglist for user ";
 
     # Get plugin debug flag
     $debug = &TWiki::Func::getPreferencesFlag( "BUGZILLAPLUGIN_DEBUG" );
@@ -99,7 +91,8 @@ sub commonTagsHandler
     # This is the place to define customized tags and variables
     # Called by sub handleCommonTags, after %INCLUDE:"..."%
     $_[0] =~ s/%BUG\{([0-9]+)\}%/&BugzillaShowBug($1)/geo;
-    $_[0] =~ s/%BUGLIST\{(.+)\}%/&BugzillaShowMilestoneBugList($1)/geo;
+    $_[0] =~ s/%BUGLISTMS\{(.+)\}%/&BugzillaShowMilestoneBugList($1)/geo;
+    $_[0] =~ s/%BUGLISTKEY\{(.+)\}%/&BugzillaShowKeywordsBugList($1)/geo;
     $_[0] =~ s/%MYBUGS\{(.+)\}%/&BugzillaShowMyBugList($1)/geo;
 }
 
@@ -114,12 +107,26 @@ sub BugzillaShowMilestoneBugList{
    my ($mID) = @_;
    ## display a bug img and a bugzilla milesteone bug list
    $mID =~ s/\s*(\S*)\s*/$1/;
-   return "$bugImgUrl [[$milestoneBugListUrl"."target_milestone=".$mID."b&target_milestone=$mID][$milestoneBugListText $mID]]";
+   return "$bugImgUrl [[$bugListUrl"."target_milestone=".$mID."b&target_milestone=$mID][$milestoneBugListText $mID]]";
+}
+
+sub BugzillaShowKeywordsBugList{
+   my ($keyWords) = @_;
+   # Determine if AND-type or OR-type search
+   my $type = "allwords";
+   $keyWords =~ s/\s*(\S*)\s*/$1/;
+   $keyWordsUse = $keyWords;
+   if ($_[0] =~ m/\w+,\w+/)
+   {
+      $type = "anywords";
+      $keyWordsUse =~ s/,/+/;
+   }
+   return "$bugImgUrl [[$bugListUrl"."keywords_type=$type&keywords=$keyWordsUse][$keywordsBugListText \"$keyWords\"]]";
 }
 
 sub BugzillaShowMyBugList{
    my ($mID) = @_;
    ## display a bug img and a bugzilla milesteone bug list
-   return "$bugImgUrl [[$milestoneBugListUrl"."bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1=$mID&emailtype1=exact&emailassigned_to1=1&emailreporter1=1][$myBugListText $mID]]";
+   return "$bugImgUrl [[$bugListUrl"."bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&email1=$mID&emailtype1=exact&emailassigned_to1=1&emailreporter1=1][$myBugListText $mID]]";
  }
 1;
