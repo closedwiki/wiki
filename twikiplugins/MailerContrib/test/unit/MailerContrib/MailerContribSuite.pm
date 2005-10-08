@@ -303,7 +303,7 @@ sub testSimple {
 
     # capture stdout
     my @webs = ( $testWeb, $peopleWeb );
-    TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 0 );
+    TWiki::Contrib::Mailer::mailNotify( \@webs, $twiki, 1 );
     #print "REPORT\n",join("\n\n", @mails);
 
     my %matched;
@@ -333,11 +333,11 @@ sub testSimple {
     foreach my $spec (@specs) {
         if ($spec->{topicsout} ne "") {
             $this->assert($matched{$spec->{email}},
-                          "Expected ".$spec->{email} . " got " .
+                          "Expected mails for ".$spec->{email} . " got " .
                          join(" ", keys %matched));
         } else {
             $this->assert(!$matched{$spec->{email}},
-                          "Unexpected ".$spec->{email} . " got " .
+                          "Unexpected mails for ".$spec->{email} . " got " .
                          join(" ", keys %matched));
         }
     }

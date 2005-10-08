@@ -109,8 +109,8 @@ sub expandHTML {
               $this->{CURR_REV}, 1 );
     }
 
-    $html =~ s/%TOPICNAME%/$this->{TOPIC}/go;
-    $html =~ s/%AUTHOR%/$this->{AUTHOR}/geo;
+    $html =~ s/%TOPICNAME%/$this->{TOPIC}/g;
+    $html =~ s/%AUTHOR%/$this->{AUTHOR}/g;
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
     $html =~ s/%TIME%/$tim/go;
     my $frev = '';
@@ -122,9 +122,9 @@ sub expandHTML {
             $frev = CGI::span( { class=>'twikiNew' }, 'NEW' );
         }
     }
-    $html =~ s/%REVISION%/$frev/go;
+    $html =~ s/%REVISION%/$frev/g;
     $html = $this->{SESSION}->{renderer}->getRenderedVersion( $html );
-    $html =~ s/%TEXTHEAD%/$this->{HTML_SUMMARY}/go;
+    $html =~ s/%TEXTHEAD%/$this->{HTML_SUMMARY}/g;
 
     return $html;
 }
@@ -137,7 +137,7 @@ Generate a plaintext version of this change.
 =cut
 
 sub expandPlain {
-    my ( $this, $web ) = @_;
+    my ( $this, $template ) = @_;
 
     unless( defined $this->{TEXT_SUMMARY} ) {
         my $s =
@@ -152,14 +152,26 @@ sub expandPlain {
     # URL-encode topic names for use of I18N topic names in plain text
     my $scriptUrl =
       $this->{SESSION}->getScriptUrl
-        ( URI::Escape::uri_escape( $web ),
+        ( URI::Escape::uri_escape( $this->{WEB} ),
           URI::Escape::uri_escape( $this->{TOPIC}),
           'view' );
     my $tim =  TWiki::Time::formatTime( $this->{TIME} );
-    my $expansion = "- ".$this->{TOPIC}." (".$this->{AUTHOR}.", $tim) r";
-    $expansion .= $this->{BASE_REV}."->r".$this->{CURR_REV};
-    $expansion .= "\n$scriptUrl\n$this->{TEXT_SUMMARY}\n";
-    return $expansion;
+    $template =~ s/%TOPICNAME%/$this->{TOPIC}/g;
+    $template =~ s/%AUTHOR%/$this->{AUTHOR}/g;
+    $template =~ s/%TIME%/$tim/g;
+    my $frev = '';
+    if( $this->{CURR_REV} ) {
+        if( $this->{CURR_REV} > 1 ) {
+            $frev = 'r'.$this->{BASE_REV}.'->r'.$this->{CURR_REV};
+        } else {
+            # new _since the last notification_
+            $frev = 'NEW';
+        }
+    }
+    $template =~ s/%REVISION%/$frev/g;
+    $template =~ s/%URL%/$scriptUrl/g;
+    $template =~ s/%TEXTHEAD%/$this->{TEXT_SUMMARY}/g;
+    return $template;
 }
 
 1;
