@@ -26,7 +26,7 @@ use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.11';
+$RELEASE = '1.20';
 
 ###############################################################################
 # debug suite
@@ -58,8 +58,8 @@ sub handleVote {
   &writeDebug("called handleVote($args)");
 
   my $theId = &TWiki::Func::extractNameValuePair($args, 'id') || '';
-  my $theStyle = &TWiki::Func::extractNameValuePair($args, 'style') || 'bar';
-  my $theWidth = &TWiki::Func::extractNameValuePair($args, 'width') || '200';
+  my $theStyle = &TWiki::Func::extractNameValuePair($args, 'style') || 'bar,perc,total';
+  my $theWidth = &TWiki::Func::extractNameValuePair($args, 'width') || '100%';
   my $theColor = &TWiki::Func::extractNameValuePair($args, 'color') || 'lightblue';
   my $theBgColor = &TWiki::Func::extractNameValuePair($args, 'bgcolor') || 'lightcyan';
   my $theLimit = &TWiki::Func::extractNameValuePair($args, 'limit') || '-1';
@@ -98,10 +98,6 @@ sub handleVote {
   if (!@theSelects) {
     return &showError("no options for your select specified");
   }
-  if ($theStyle !~ /^(bar|perc|total)$/) {
-    return &showError("unknown style $theStyle");
-  }
-
 
   # compute the result
   my $result = "<div class=\"Vote\">";
@@ -116,12 +112,15 @@ sub handleVote {
     my $selectName = $theSelects[$i];
     my $optionNames = $theOptions[$i];
     next if ! $optionNames;
+    &expandVars($selectName);
+    &expandVars($optionNames);
 
     $result .= "<tr><td><b>$selectName</b>&nbsp;</td>\n";
     $result .= "<td><select name=\"$selectName\" size=\"1\">\n";
     $result .= "<option selected value=\"\">Select ...</option>\n";
 
     foreach my $optionName (split /\s?,\s?/,$optionNames) {
+      writeDebug("setting selectOptions{$selectName}{$optionName}");
       $selectOptions{$selectName}{$optionName} = 1;
       $result .= "<option>$optionName</option>\n";
     }
@@ -137,6 +136,9 @@ sub handleVote {
   }
 
   $result .= "</table></form>\n";
+
+  # do some common substitutions
+  &expandVars($result);
  
 
   # read in the votes
@@ -153,10 +155,13 @@ sub handleVote {
 	my $data = $3;
 	#&writeDebug("date=$date voter=$voter data=$data");
 	foreach my $item (split(/\|/, $data)) {
+	  #writeDebug("item=$item");
 	  if ($item =~ /^(.+)=(.+)$/) {
+	    #writeDebug("key=$1, value=$2");
 	    if ($selectOptions{$1}{$2}) {
 	      $votes{$voter}{$1} = $2;
 	    } else {
+	      #&writeDebug("invalid votes key='$1', value='$2'");
 	      &TWiki::Func::writeWarning("invalid votes key='$1', value='$2' from $ENV{REMOTE_ADDR}, $user");
 	    }
 	  }
@@ -172,7 +177,7 @@ sub handleVote {
   foreach my $voter (keys %votes) {
     foreach my $key (keys %{$votes{$voter}}) {
       my $value = $votes{$voter}{$key};
-      &writeDebug("voter=$voter, vote for $key is $value");
+      #&writeDebug("voter=$voter, vote for $key is $value");
 
       # count frequency of a key
       $keyValueFreq{$key}{$value}++;
@@ -183,7 +188,7 @@ sub handleVote {
   }
   
   # render vote result
-  $result .= "<div class=\"VoteResult\"><table><tr><td>\n";#"| *$theId* | *counts* |\n";
+  $result .= "<div class=\"VoteResult\"><table><tr><td>\n";
   my $isFirst = 1;
   my $n;
   foreach my $key (sort keys %keyValueFreq) {
@@ -200,23 +205,38 @@ sub handleVote {
       $result .= "| $value | ";
       $freq = $keyValueFreq{$key}{$value};
       $perc = int(1000 * $freq / $totalVotes{$key}) / 10;
-      if ($theStyle eq 'total') {
-	$result .= $freq;
-      } elsif ($theStyle eq 'bar') {
+      if ($theStyle =~ /bar/) {
 	$result .= '<table width="' . $theWidth 
 	  . '" cellspacing="0" cellpadding="0"><tr>'
-	  . '<td style="border:0px" bgcolor="' . $theColor . '"'
+	  . '<td style="border:0px" bgcolor="' . $theColor . '" '
 	  . 'width="' . ($theWidth/100 * $perc) . '">'
 	  . '</td><td bgcolor="' . $theBgColor 
-	  . '" style="border:0px" align="right">' . $perc
-	  . '</td></tr></table>';
+	  . '" style="border:0px" align="right">';
+	if ($theStyle =~ /perc/) {
+	  $result .= "$perc\%";
+	  if ($theStyle =~ /total/) {
+	    $result .= "&nbsp;($freq)";
+	  }
+	} elsif ($theStyle =~ /total/) {
+       	  $result .= "$freq";
+	} else {
+	  $result .= '&nbsp;';
+	}
+	$result .= '</td></tr></table>';
+      } elsif ($theStyle =~ /perc/) {
+	$result .= $perc . '%';
+	if ($theStyle =~ /total/) {
+	  $result .= "&nbsp;($freq)";
+	}
       } else {
-	$result .= $perc;
+	$result .= $freq;
       }
       $result .= " |\n";
     }
-    #$result .= "|||\n";
-    #$result .= "| total | $totalVotes{$key} |\n";
+    if ($theStyle =~ /sum/) {
+      $result .= "|||\n";
+      $result .= "|  $totalVotes{$key} votes ||\n";
+    }
   }
   $result .= "\n</td></tr></table></div></div>";
 
@@ -252,7 +272,7 @@ sub vote {
 
   my $date = &getLocaldate();
 
-  if (0) { # for debugging
+  if (1) { # for debugging
     $host = int(rand(100)); # for testing
   } else {
     $host = md5_base64("$ENV{REMOTE_ADDR}$user$date");
@@ -337,6 +357,14 @@ sub getLocaldate {
 sub showError {
   my $msg = shift;
   return "<span class=\"twikiAlert\">Error: $msg</span>" ;
+}
+
+###############################################################################
+sub expandVars {
+  $_[0] =~ s/\$percnt/\%/go;
+  $_[0] =~ s/\$dollar/\$/go;
+  $_[0] =~ s/\$quote/\'/go;
+  $_[0] =~ s/\$doublequote/\"/go;
 }
 
 ###############################################################################

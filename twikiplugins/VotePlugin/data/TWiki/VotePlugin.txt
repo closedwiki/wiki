@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128708491" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128774754" format="1.1" version="1.1"}%
 ---+!! <nop>VotePlugin
 
 This plugin might be used to establish an online-voting system. Votes are
@@ -24,13 +24,18 @@ The %<nop>VOTE{ ... }% macro defines a poll using the following options:
 | *name* | *description* | *example* |
 | id | The identifier of a poll. This must be unique per topic. \
 		 You can thus have multiple independent votes on the same topic page. | <nop>FaroritMeal |
-| style | Possible values are =bar=, =perc= and =total= (default =bar=) \
-		 to specify the display style of the poll results. | =bar= |
+| style | Possible values are a combination of =bar=, =perc=, =total=  and =sum= \
+	  to specify the display style of the poll results \
+          (default =bar,perc,total=). | =bar= |
 | select&lt;n&gt; | As you can see in the above example multiple decisions can be made within \
 		 the same poll. This identifier must be unique within a poll. \
 		 You can have up to 5 selects per vote (sorry hardcoded;)) | Drinks |
 | options&lt;n&gt; | Each select&lt;n&gt; corresponds to set of options that \
 		 you must specify. | Beer,Wine,Milk |
+
+=select= and =option= might use the pseudo variables =$percnt=, =$dollar=, =$quote= and
+=$doublequote= to render the respective characters in the vote output otherwise not allowed
+in an argument to a TWiki tag.
 
 The %<nop>VOTE{ ... }% will generate the selection box(es) and the poll results.
 The plugin will count only you latest vote. You might only vote once a day.
@@ -47,13 +52,14 @@ The plugin will count only you latest vote. You might only vote once a day.
 	  | ==bin/vote== | Plugin cgi script |
 	  | ==data/TWiki/VotePlugin.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/VotePlugin.pm== | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v1.11 (2005-10-07) |
+|  Plugin Version: | v1.20 (2005-10-08) |
 |  Change History: | &nbsp; | 
+|  2005-10-08 | added added a little more style flexibility |
 |  2005-10-07 | storing votes into =_Vote*.txt= now (was =Vote*.txt= before) ;\
                 fixed error messaging on empty argument lists |
 |  2005-09-14 | fixes for dakar |
@@ -70,4 +76,5 @@ The plugin will count only you latest vote. You might only vote once a day.
 |  Feedback: | TWiki:Plugins/VotePluginDev |
 |  Appraisal: | TWiki:Plugins/VotePluginAppraisal |
 
--- TWiki:Main.MichaelDaum - 7 Oct 2005
+-- TWiki:Main.MichaelDaum - 8 Oct 2005
+
