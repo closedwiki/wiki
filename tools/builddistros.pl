@@ -41,6 +41,7 @@ if ( opendir( RELEASES, $outputDir ) )
     @dirReleases = grep { /^TWiki.+\.tar\.gz/ } readdir( RELEASES );  #or warn $!;
     closedir( RELEASES ) or warn $!;
 }
+print qq{<!-- KERNELS ->\n};
 foreach my $kernel ( reverse sort @dirReleases )
 {
     ( my $rel = $kernel ) =~ s/\.tar\.gz$//;
@@ -56,7 +57,7 @@ foreach my $kernel ( reverse sort @dirReleases )
     print qq{<a href="$homepage" >discussion</a>\n};
     print qq{<br />\n\n};  
 } 
-
+print qq{<!-- /KERNELS ->\n};
 print "<HR />\n";
 print "</BODY></HTML>";
 exit 0;
