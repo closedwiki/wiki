@@ -6,7 +6,7 @@ This is a short introductory training course for TWiki beginners.
 
 ---++ A Taste of TWiki
 <table cellspacing="10"><tr><td>
-<img src="%ATTACHURL%/wikiwikishuttle.jpg" alt="Wiki-Wiki Shuttle"  width="240" height="213" /><br /><span class="twikiGrayText twikiSmall">photo by [[http://www.flickr.com/photos/cogdog/][cogdogblog]]<br /> ([[http://creativecommons.org/licenses/by-nc-sa/2.0/][Creative Commons]])</span></td>
+<img src="%ATTACHURL%/hula.gif" alt="Hula girl"  width="113" height="111" /></td>
 <td>
 The basic function of TWiki is a Wiki (if that helps!)
 

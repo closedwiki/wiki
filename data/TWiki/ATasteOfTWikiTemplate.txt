@@ -32,8 +32,7 @@ Slide template for ATasteOfTWiki presentation
 </font>
 
 <style>
-.twikiGrayText {display:none;}
-td {vertical-align:top; padding:.2em .4em;}
+td {padding:.2em .4em;}
 </style>
 %STOPINCLUDE%
 
