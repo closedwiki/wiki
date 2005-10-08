@@ -36,7 +36,6 @@ package TWiki::Contrib::Mailer;
 use URI;
 
 use vars qw ( $VERSION $RELEASE $verbose );
-
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
@@ -64,8 +63,10 @@ only be called by =mailnotify= scripts.
 =cut
 
 sub mailNotify {
-    my ( $webs, $twiki, $sendmail );
-    ( $webs, $twiki, $verbose, $sendmail ) = @_;
+    my( $webs, $twiki, $noisy ) = @_;
+
+    $verbose = $noisy;
+
     my $webstr;
     if ( defined( $webs )) {
         $webstr = join( "|", @{$webs} );
@@ -74,8 +75,7 @@ sub mailNotify {
     $webstr =~ s/\*/\.\*/g;
 
     $twiki ||= new TWiki( $TWiki::cfg{DefaultUserLogin} );
-    $TWiki::cfg{MAILERCONTRIB}{sendmail}=$sendmail||0;
-    
+
     my $report = '';
     foreach my $web ( grep( /$webstr/o,
                             $twiki->{store}->getListOfWebs( 'user ') )) {
@@ -180,26 +180,26 @@ sub _generateEmails {
     my $report = '';
 
     my $skin = $twiki->{prefs}->getPreferencesValue( 'SKIN' );
-    my $template = $twiki->{templates}->readTemplate( 'mailchanges', $skin );
+    my $template = $twiki->{templates}->readTemplate( 'mailnotify', $skin );
+
     my $from = $twiki->{prefs}->getPreferencesValue('WIKIWEBMASTER');
     my $homeTopic = $TWiki::cfg{HomeTopicName};
 
-    $template = $twiki->handleCommonTags( $template, $web, $homeTopic );
-    $template =~ s/%META{.*?}%//go;
+    my $before_html = $twiki->{templates}->expandTemplate( 'HTML:before' );
+    my $middle_html = $twiki->{templates}->expandTemplate( 'HTML:middle' );
+    my $after_html = $twiki->{templates}->expandTemplate( 'HTML:after' );
 
+    my $before_plain = $twiki->{templates}->expandTemplate( 'PLAIN:before' );
+    my $middle_plain = $twiki->{templates}->expandTemplate( 'PLAIN:middle' );
+    my $after_plain = $twiki->{templates}->expandTemplate( 'PLAIN:after' );
+
+    my $mailtmpl = $twiki->{templates}->expandTemplate( 'MailNotifyBody' );
+    $mailtmpl = $twiki->handleCommonTags( $mailtmpl, $web, $homeTopic );
     if( $TWiki::cfg{RemoveImgInMailnotify} ) {
         # change images to [alt] text if there, else remove image
-        $template =~ s/<img\s[^>]*\balt=\"([^\"]+)[^>]*>/[$1]/goi;
-        $template =~ s/<img src=.*?[^>]>//goi;
+        $mailtmpl =~ s/<img\s[^>]*\balt=\"([^\"]+)[^>]*>/[$1]/goi;
+        $mailtmpl =~ s/<img src=.*?[^>]>//goi;
     }
-
-    my ( $before, $middle, $after) = split( /%REPEAT%/, $template );
-    $before = $twiki->{renderer}->getRenderedVersion( $before, $web,
-                                                      $homeTopic );
-    $after = $twiki->{renderer}->getRenderedVersion( $after, $web,
-                                                     $homeTopic );
-
-    my $mailtmpl = $twiki->{templates}->readTemplate( 'mailnotify', $skin );
 
     my $sentMails = 0;
 
@@ -210,8 +210,8 @@ sub _generateEmails {
         foreach my $change (sort { $a->{TOPIC} cmp $b->{TOPIC} }
                             @{$changeset->{$email}} ) {
 
-            $html .= $change->expandHTML( $middle );
-            $plain .= $change->expandPlain( $web );
+            $html .= $change->expandHTML( $middle_html );
+            $plain .= $change->expandPlain( $middle_plain );
         }
 
         $plain =~ s/\($TWiki::cfg{UsersWebName}\./\(/go;
@@ -220,8 +220,8 @@ sub _generateEmails {
 
         $mail =~ s/%EMAILFROM%/$from/go;
         $mail =~ s/%EMAILTO%/$email/go;
-        $mail =~ s/%EMAILBODY%/$before$html$after/go;
-        $mail =~ s/%TOPICLIST%/$plain/go;
+        $mail =~ s/%HTML_TEXT%/$before_html$html$after_html/go;
+        $mail =~ s/%PLAIN_TEXT%/$before_plain$plain$after_plain/go;
         $mail =~ s/%LASTDATE%/$lastTime/geo;
         $mail = $twiki->handleCommonTags( $mail, $web, $homeTopic );
 
@@ -234,7 +234,9 @@ sub _generateEmails {
         $mail =~ s/( ?) *<\/?(nop|noautolink)\/?>\n?/$1/gois;
 
         my $error;
-        $error = $twiki->{net}->sendEmail( $mail, 5 ) if $TWiki::cfg{MAILERCONTRIB}{sendmail};
+
+        $error = $twiki->{net}->sendEmail( $mail, 5 );
+
         $sentMails++ unless $error;
     }
     $report .= "\t$sentMails change notifications\n";

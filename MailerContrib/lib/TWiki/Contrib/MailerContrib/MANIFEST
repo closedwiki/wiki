@@ -7,5 +7,5 @@ lib/TWiki/Contrib/MailerContrib/build.pl
 lib/TWiki/Contrib/Mailer.pm
 data/TWiki/MailerContrib.txt
 bin/mailnotifier
+templates/mailnotify.tmpl
 MailerContrib_installer.pl
-

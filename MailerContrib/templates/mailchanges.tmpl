@@ -1,0 +1,36 @@
+%{
+   Template for the HTML part of the mails sent out by mailnotify. The
+   template is in three parts; header, body (which is repeated for each
+   change), and footer, all separated by %REPEAT%. The result is embedded
+   in mailnotify.tmpl, in the $EMAILBODY%.
+}%
+<table width="100%" border="0" cellpadding="0" cellspacing="4">
+<tr bgcolor="%WEBBGCOLOR%">
+  <td width="50%">
+    <b>%_{"Topics in [_1] web:", "<nop>%WEB%"}%</b>
+  </td><td width="30%">
+    <b>%_{"Changed:"}%</b> %_{"now [_1]", "%DISPLAYTIME{\"$hour:$min\"}%"}%
+  </td><td width="20%">
+    <b>%_{"Changed by:"}%</b>
+  </td>
+</tr>
+</table>
+%REPEAT%<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+  <td width="50%">
+    <a href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%"><b>%TOPICNAME%</b></a>
+  </td><td width="30%">
+    <a href="%SCRIPTURLPATH%/rdiff%SCRIPTSUFFIX%/%WEB%/%TOPICNAME%" rel='nofollow'>%TIME%</a> - %REVISION%
+  </td><td width="20%">
+    %AUTHOR%
+  </td>
+</tr>
+<tr>
+  <td colspan="2">
+    <font size="-1">
+    %TEXTHEAD% </font>
+  </td><td width="20%">
+    &nbsp;
+  </td>
+</tr></table>
+%REPEAT%<br clear="all" />

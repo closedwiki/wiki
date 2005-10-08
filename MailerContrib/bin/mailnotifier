@@ -31,7 +31,6 @@ BEGIN {
     require 'setlib.cfg';
 }
 
-my $sendmail = 0;
 my $verbose = 1;
 
 my @webs = ();
@@ -42,7 +41,6 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
     # a browser environment?
     use CGI;
     $query = new CGI;
-    $sendmail = $query->param( 'sendmail' ) || 0;
     $verbose = $query->param( 'verbose' ) || 1;
     my $webz = $query->param( 'webs' ) || "";
     @webs = split( /[, ]+/, $webz);
@@ -62,6 +60,6 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
 }
 
 use TWiki::Contrib::Mailer;
-#TWiki::Contrib::Mailer::mailNotify( $sendmail, $verbose, \@webs );
-my $report = TWiki::Contrib::Mailer::mailNotify( \@webs, undef, $verbose, $sendmail );
+
+my $report = TWiki::Contrib::Mailer::mailNotify( \@webs, undef, $verbose );
 print $report."\n" if $verbose;
