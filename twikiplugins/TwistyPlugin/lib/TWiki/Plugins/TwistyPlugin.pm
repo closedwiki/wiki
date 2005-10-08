@@ -82,7 +82,7 @@ sub _TWISTYSHOW {
     my $id=$params->{'id'}||'';
     my $link=$params->{'link'}||'';
     my $mode=$params->{'mode'}||'span';
-    return '<'.$mode.' id="'.$id.'show" class="twikiTwistMakeVisible"><a href="#" class="twikiTwistTrigger">'.$link.'</a></'.$mode.'>';
+    return '<'.$mode.' id="'.$id.'show" class="twistyMakeVisible"><a href="#" class="twistyTrigger">'.$link.'</a></'.$mode.'>';
 }
 
 sub _TWISTYHIDE {
@@ -91,7 +91,7 @@ sub _TWISTYHIDE {
     my $link=$params->{'link'}||'';
     my $mode=$params->{'mode'}||'span';
 
-    return '<'.$mode.' id="'.$id.'hide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" class="twikiTwistTrigger">'.$link.'</a></'.$mode.'>';
+    return '<'.$mode.' id="'.$id.'hide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">'.$link.'</a></'.$mode.'>';
 }
 
 sub _TWISTYTOGGLE {
@@ -99,7 +99,7 @@ sub _TWISTYTOGGLE {
     my $id=$params->{'id'}||'';
     my $mode=$params->{'mode'}||'span';
     unshift @modes,$mode;
-    return '<'.$mode.' id="'.$id.'toggle" class="twikiTwistMakeHidden">';
+    return '<'.$mode.' id="'.$id.'toggle" class="twistyMakeHidden">';
 }
 
 sub _ENDTWISTYTOGGLE {

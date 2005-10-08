@@ -1,7 +1,7 @@
 // hide straight away instead of waiting for onload
 // http://www.quirksmode.org/blog/archives/2005/06/three_javascrip_1.html#link4
 	document.write("<style type='text/css'>");
-	document.write(".twikiTwistMakeHidden {display:none;}");
+	document.write(".twistyMakeHidden {display:none;}");
 	document.write("<\/style>");
 
 // SMELL should this be a <link> to another stylesheet? (probably not worth it)
@@ -104,24 +104,24 @@
 
 	function initTwist () {
 		
-		makeHiddenElements = getElementsByClassName('twikiTwistMakeHidden');
+		makeHiddenElements = getElementsByClassName('twistyMakeHidden');
 		
 		var i = makeHiddenElements.length;
 		
 		while (i--)
 		{
-			replaceClass(makeHiddenElements[i], 'twikiTwistMakeHidden', 'twikiTwistHidden');
+			replaceClass(makeHiddenElements[i], 'twistyMakeHidden', 'twistyHidden');
 		}
 		
-		makeVisibleElements = getElementsByClassName('twikiTwistMakeVisible');
+		makeVisibleElements = getElementsByClassName('twistyMakeVisible');
 		i = makeVisibleElements.length;
 		
 		while (i--)
 		{
-			removeClass(makeVisibleElements[i], 'twikiTwistMakeVisible');
+			removeClass(makeVisibleElements[i], 'twistyMakeVisible');
 		}
 
-		triggerElements = getElementsByClassName('twikiTwistTrigger');
+		triggerElements = getElementsByClassName('twistyTrigger');
 		var i = triggerElements.length;
 		while (i--)
 		{
@@ -137,14 +137,14 @@
 		var hideControl = document.getElementById(id+'hide');
 		var toggleElem = document.getElementById(id+'toggle');
 		if (!toggleElem.twisted) {
-			addClass(showControl, 'twikiTwistHidden');	
-			removeClass(hideControl, 'twikiTwistHidden');
-			removeClass(toggleElem, 'twikiTwistHidden');
+			addClass(showControl, 'twistyHidden');	
+			removeClass(hideControl, 'twistyHidden');
+			removeClass(toggleElem, 'twistyHidden');
 			toggleElem.twisted = 1;
 		} else {
-			removeClass(showControl, 'twikiTwistHidden');
-			addClass(hideControl, 'twikiTwistHidden');
-			addClass(toggleElem, 'twikiTwistHidden');
+			removeClass(showControl, 'twistyHidden');
+			addClass(hideControl, 'twistyHidden');
+			addClass(toggleElem, 'twistyHidden');
 			toggleElem.twisted = 0;
 		}
 	}

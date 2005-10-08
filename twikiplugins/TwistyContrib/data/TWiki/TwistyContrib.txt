@@ -26,7 +26,7 @@ It's recommended to use the TWiki:Plugins.TwistyPlugin, as it ease the deploymen
 This Contrib should works in all versions of TWiki. It has been tested against TWiki:Codev.CairoRelease and TWiki:Codev.DakarRelease.
 ---++ Customization
 
-Skins can customize the color of the twisti placeholder by modifiying the =.twikiTwistPlaceholder= style.
+Skins can customize the color of the twisti placeholder by modifiying the =.twistyPlaceholder= style.
 
 ---++ Settings
 
@@ -56,9 +56,9 @@ If the contrib is properly installed, you should see a folding section bellow:
 <script type="text/javascript" src="%PUBURL%/TWiki/TwistyContrib/twist.js"></script>
 
 
-<span id="demoshow" class="twikiTwistMakeVisible"><a href="#" class="twikiTwistTrigger"> Unfold </a></span> <span id="demohide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" class="twikiTwistTrigger"> Fold </a></span> 
+<span id="demoshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger"> Unfold </a></span> <span id="demohide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger"> Fold </a></span> 
 ---
-<div id="demotoggle" class="twikiTwistMakeHidden">
+<div id="demotoggle" class="twistyMakeHidden">
 This is a folded text. Everything is OK.
 </div>
 ---

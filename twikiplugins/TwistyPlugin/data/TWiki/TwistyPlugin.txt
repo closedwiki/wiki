@@ -24,7 +24,7 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
 	 | =link="Link Text"= | The text to be used in the Twisty Show link | required |
 	 | =mode="div/span"= | Specify if the Twisty Show link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
 	* Example: =%<nop>TWISTYSHOW{id="demo" link=" Click to Unfold "}%= expands to 
-=&lt;span id="demoshow" class="twikiTwistMakeVisible"&gt;&lt;a href="#" class="twikiTwistTrigger"&gt; Click to Unfold &lt;/a>&lt;/span&gt;=
+=&lt;span id="demoshow" class="twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt; Click to Unfold &lt;/a>&lt;/span&gt;=
 	* Related: [[#VarTWISTYHIDE][TWISTYHIDE]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
 #VarTWISTYHIDE
@@ -36,7 +36,7 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
 	 | =link="Link Text"= | The text to be used in the Twisty Hide link | required |
 	 | =mode="div/span"= | Specify if the Twisty Hide link will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
 	* Example: =%<nop>TWISTYHIDE{id="demo" link=" Click to Fold "}%= expands to 
-=&lt;span id="demohide" class="twikiTwistHidden twikiTwistMakeVisible"&gt;&lt;a href="#" class="twikiTwistTrigger"&gt; Click to Fold &lt;/a>&lt;/span&gt;=
+=&lt;span id="demohide" class="twistyHidden twistyMakeVisible"&gt;&lt;a href="#" class="twistyTrigger"&gt; Click to Fold &lt;/a>&lt;/span&gt;=
 	* Related: [[#VarTWISTYSHOW][TWISTYSHOW]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]]
 
 #VarTWISTYTOGGLE
@@ -47,7 +47,7 @@ Check TWiki:Plugins.TwistyContrib for more information on the use of Twisty sect
 	 | =id= | Unique identifier. Used to link [[#VarTWISTYSHOW][TWISTYSHOW]], [[#VarTWISTYHIDE ][TWISTYHIDE ]] and [[#VarTWISTYTOGGLE][TWISTYTOGGLE]] | required  |
 	 | =mode="div/span"= | Specify if the Twisty Toggle section will use a =&lt;div&gt;= or a =&lt;span&gt;= tag| optional, defaults to =&lt;span&gt;= |
 	* Example: =%<nop>TWISTYTOOGLE{id="demo" mode="div"}%= expands to 
-=&lt;div id="demotoggle" class="twikiTwistMakeHidden"&gt;=
+=&lt;div id="demotoggle" class="twistyMakeHidden"&gt;=
 	* Related: [[#VarTWISTYHIDE][TWISTYHIDE]], [[#VarTWISTYHIDE][TWISTYHIDE]] an [[#VarENDTWISTYTOGGLE][ENDTWISTYTOGGLE]]
 
 #VarENDTWISTYTOGGLE
