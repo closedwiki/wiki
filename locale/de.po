@@ -46,12 +46,10 @@ msgstr "%1 Benutzer Authentifizierung"
 #: data/Main/WebLeftBar.txt:6 data/Sandbox/WebLeftBar.txt:6
 #: data/TWiki/WebLeftBarExample.txt:2 data/Trash/WebLeftBar.txt:4
 #: data/_default/WebLeftBar.txt:6
-#, fuzzy
 msgid "%1 Web"
 msgstr "%1 Web"
 
 #: data/TWiki/WebLeftBarExample.txt:3 data/Trash/WebLeftBar.txt:5
-#, fuzzy
 msgid "%1 Web Home"
 msgstr "%1 Startseite"
 
@@ -132,7 +130,6 @@ msgid "&Edit"
 msgstr "&Editieren"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:11
-#, fuzzy
 msgid "&Edit text"
 msgstr "&Text editieren"
 
@@ -195,7 +192,6 @@ msgid "(change form)"
 msgstr "(Formular wechseln)"
 
 #: templates/oopschangelanguage.tmpl:2 templates/oopslanguagechanged.tmpl:2
-#, fuzzy
 msgid "(change language)"
 msgstr "(Sprache wechseln)"
 
@@ -234,7 +230,6 @@ msgid "(oops)"
 msgstr "(Achtung)"
 
 #: data/TWiki/WebSearch.txt:24 data/TWiki/WebSearchAdvanced.txt:24
-#, fuzzy
 msgid "(otherwise search %1 Web only)"
 msgstr "(ansonsten nur %1 Web durchsuchen)"
 
@@ -340,7 +335,6 @@ msgstr ""
 "speichern."
 
 #: templates/oopsaccessdenied.tmpl:25
-#, fuzzy
 msgid ""
 "A %1 is divided into webs; each one represents one subject, one area of "
 "collaboration. You are trying to %2 in a web that does not exist."
@@ -357,7 +351,6 @@ msgstr ""
 "Hexadezimal, z.B. =#FFFF00=."
 
 #: templates/oopsattention.tmpl:125
-#, fuzzy
 msgid "A confirmation e-mail has been sent to %1"
 msgstr "Eine Bestätigungs E-Mail wurde an %1 gesendet"
 
@@ -430,12 +423,10 @@ msgid "Admin Maintenance"
 msgstr "Administrative Pflege"
 
 #: data/TWiki/WebSearchAdvanced.txt:3
-#, fuzzy
 msgid "Advanced Search"
 msgstr "Erweiterte Suche"
 
 #: data/TWiki/WebSearch.txt:13
-#, fuzzy
 msgid "Advanced search"
 msgstr "erweiterte Suche"
 
@@ -444,9 +435,8 @@ msgid "All public webs"
 msgstr "Alle öffentlichen Webs"
 
 #: data/TWiki/WebSearchAdvanced.txt:71
-#, fuzzy
 msgid "All topics in %1"
-msgstr "Unter-Topics im %1 Web:"
+msgstr "Alle Topics in %1"
 
 #: templates/renamebase.pattern.tmpl:35
 #: templates/renamewebbase.pattern.tmpl:33
@@ -462,7 +452,6 @@ msgstr ""
 "anderen Benutzernamen zu wählen."
 
 #: templates/oopsattention.tmpl:176
-#, fuzzy
 msgid ""
 "An e-mail could not be delivered. Please notify your %1 administrator, %2"
 msgstr ""
@@ -520,7 +509,6 @@ msgid "Attachment already exists in new topic"
 msgstr "Der Anhang existiert bereits in dem neuen Topic"
 
 #: lib/TWiki/UI/Manage.pm:320
-#, fuzzy
 msgid "Attachment does not exist"
 msgstr "Anhang existiert nicht"
 
@@ -677,9 +665,8 @@ msgstr "Geändert:"
 #: data/Main/WebLeftBar.txt:12 data/Sandbox/WebLeftBar.txt:10
 #: data/TWiki/WebLeftBar.txt:10 data/TWiki/WebLeftBarExample.txt:4
 #: data/Trash/WebLeftBar.txt:6 data/_default/WebLeftBar.txt:10
-#, fuzzy
 msgid "Changes"
-msgstr "Geändert"
+msgstr "Änderungen"
 
 #: templates/edit.pattern.tmpl:220 templates/preview.pattern.tmpl:48
 #: templates/preview.pattern.tmpl:51
@@ -704,7 +691,6 @@ msgid "Click here"
 msgstr "Hier klicken"
 
 #: templates/oopsattention.tmpl:249
-#, fuzzy
 msgid "Click on [[%1][Debug topic text]]."
 msgstr "Klicken Sie auf [[%1][Topic Text auf Fehler überprüfen]]."
 
@@ -772,7 +758,6 @@ msgid "Cr&eate"
 msgstr "A&nlegen"
 
 #: data/Sandbox/WebHome.txt:18
-#, fuzzy
 msgid "Create <nop>TestTopic###"
 msgstr "Ein <nop>TestTopic### anlegen"
 
@@ -851,7 +836,6 @@ msgid "Deleted topics will be moved to the %1 web"
 msgstr "Gelöschte Topics werden in das %1 Web verschoben"
 
 #: templates/oopsattention.tmpl:184
-#, fuzzy
 msgid "Did you want to [[%1][reset %2's password]]?"
 msgstr "Wollen Sie[[[_1]][%2's Passwort zurücksetzen]]?"
 
@@ -912,7 +896,6 @@ msgstr ""
 "System. Bitte informieren Sie Ihren %2 Administrator."
 
 #: templates/oopssaveerr.tmpl:6
-#, fuzzy
 msgid ""
 "During save of file %1 an error was found by the version control system. "
 "Please notify your %2 administrator."
@@ -938,7 +921,6 @@ msgid "Edit personal data"
 msgstr "Persönlichen Daten bearbeiten"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
-#, fuzzy
 msgid "Edit text"
 msgstr "Text editieren"
 
@@ -1037,15 +1019,14 @@ msgstr ""
 "Verschieben von Topics</a> anzeigen."
 
 #: templates/settings.pattern.tmpl:85
-#, fuzzy
 msgid ""
 "Get help on <a target='TWikiVariables' onclick=\"return launchWindow('%"
 "TWIKIWEB%','TWikiVariables')\" href='%1' rel='nofollow'>Setting topic "
 "preferences</a>."
 msgstr ""
-"Hilfe für das <a target='ManagingTopics' onclick=\"return launchWindow('%"
-"TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>Umbenennen und "
-"Verschieben von Topics</a> anzeigen."
+"Hilfe für das <a target='TWikiVariables' onclick=\"return launchWindow('%"
+"TWIKIWEB%','ManagingTopics')\" href=\"%1\" rel='nofollow'>definieren von "
+"Topic Einstellungen</a> anzeigen."
 
 #: templates/oopsattention.tmpl:234
 msgid ""
@@ -1072,7 +1053,6 @@ msgid "Hello %1!"
 msgstr "Halloa %1!"
 
 #: data/TWiki/WebSearch.txt:13 data/TWiki/WebSearchAdvanced.txt:13
-#, fuzzy
 msgid "Help"
 msgstr "Hilfe"
 
@@ -1085,9 +1065,8 @@ msgid "Hide formatting help"
 msgstr "Formatierungshilfe ausblenden"
 
 #: templates/attach.pattern.tmpl:150
-#, fuzzy
 msgid "Hide help"
-msgstr "Datei verstecken"
+msgstr "Hilfe verstecken"
 
 #: data/Main/WebLeftBar.txt:7 data/Sandbox/WebLeftBar.txt:7
 #: data/TWiki/WebLeftBar.txt:7 data/_default/WebLeftBar.txt:7
@@ -1161,9 +1140,10 @@ msgstr "Wenn Sie eine Volltextsuche wollten:"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:4
 #: data/TWiki/WebTopicViewTemplate.txt:4
-#, fuzzy
 msgid "If you used the \"Jump\" feature to jump to this page:"
-msgstr "Wenn Sie dieses Web anlegen wollen"
+msgstr ""
+"Wenn Sie die \"Sprung\" Funktion benutzt haben um "
+"auf diese Seite zu gelangen:"
 
 #: templates/oopsaccessdenied.tmpl:39
 msgid "If you want to create the topic"
@@ -1171,7 +1151,6 @@ msgstr "Wenn Sie das Topic anlegen wollen"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:21
 #: data/TWiki/WebTopicViewTemplate.txt:21
-#, fuzzy
 msgid "If you would like to create this page:"
 msgstr "Wenn Sie diese Seite anlegen wollen:"
 
@@ -1236,17 +1215,14 @@ msgstr ""
 "sind, werden automatisch entfernt."
 
 #: templates/renameweb.pattern.tmpl:22
-#, fuzzy
 msgid ""
 "It's usually best to choose a short name for the new web, as it is easier to "
 "link to them later on. Characters not allowed in web names, such as spaces "
 "will automatically be removed."
 msgstr ""
-"Es ist meist besser ein <a target='WikiWord' onclick=\"return launchWindow('%"
-"TWIKIWEB%','WikiWord')\" href='%1' rel='nofollow'>WikiWort</a> als neuen Web "
-"Namen zu wählen, da sonst die automatische Verlinkung möglicherweise nicht "
-"funktioniert. Zeichen wie z.B. Leerzeichen, die nicht in Topic Namen erlaubt "
-"sind, werden automatisch entfernt."
+"Es ist meist besser einen kurzen Namen für das neue Web zu wählen, da es "
+"nachher leichter ist darauf zu verweisen. Zeichen wie z.B. Leerzeichen, "
+"die nicht in Web Namen erlaubt sind, werden automatisch entfernt."
 
 #: data/TWiki/WebTopBar.txt:11
 msgid "Jump:"
@@ -1294,7 +1270,7 @@ msgstr "Lokale Datei"
 #: data/TWiki/WebSearchAdvanced.txt:53
 #, fuzzy
 msgid "Locked topics"
-msgstr "Keine Unter-Topics"
+msgstr "Gesperrte Topics"
 
 #: templates/twiki.pattern.tmpl:3
 msgid "Log In"
@@ -1313,20 +1289,17 @@ msgid "Logon"
 msgstr "Einloggen"
 
 #: data/TWiki/WebSearchAdvanced.txt:38
-#, fuzzy
 msgid "Make search:"
 msgstr "Suche gestalten:"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:6
 #: data/TWiki/WebTopicViewTemplate.txt:6
-#, fuzzy
 msgid ""
 "Make sure you spelled the %1 correctly and try again. Remember, a %2 is case "
 "sensitive"
 msgstr ""
 "Bitten stellen Sie sicher, dass %1 korrekt geschrieben ist, und versuchen "
-"Sie es erneut. Achten Sie auf Groß- und Kleinschreibung. Wenn Sie nicht "
-"weiter kommen, schreiben Sie %2 eine E-Mail."
+"Sie es erneut. Achten Sie beim %2 auf Groß- und Kleinschreibung."
 
 #: templates/oopsattention.tmpl:158
 msgid "Missing Fields"
@@ -1365,7 +1338,6 @@ msgstr ""
 "benennen Sie es in %1 um)."
 
 #: data/TWiki/NewUserTemplate.txt:5
-#, fuzzy
 msgid "My Links"
 msgstr "Meine Verweise"
 
@@ -1375,7 +1347,6 @@ msgstr "NEU"
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:2
 #: data/TWiki/WebTopicViewTemplate.txt:2
-#, fuzzy
 msgid "NOTE: This Wiki topic does not exist yet"
 msgstr "HINWEIS: Dieses Wiki Topic existiert nicht"
 
@@ -1434,7 +1405,6 @@ msgid "Notes"
 msgstr "Hinweise"
 
 #: templates/oopschangelanguage.tmpl:8
-#, fuzzy
 msgid "Notes:"
 msgstr "Hinweise:"
 
@@ -1444,7 +1414,6 @@ msgstr "Notizen:"
 
 #: data/Main/WebLeftBar.txt:13 data/Sandbox/WebLeftBar.txt:11
 #: data/TWiki/WebLeftBar.txt:11 data/_default/WebLeftBar.txt:11
-#, fuzzy
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
@@ -1558,7 +1527,6 @@ msgstr "Mögliche Formularvorlagen"
 
 #: data/Main/WebLeftBar.txt:15 data/Sandbox/WebLeftBar.txt:13
 #: data/TWiki/WebLeftBar.txt:13 data/_default/WebLeftBar.txt:13
-#, fuzzy
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -1601,7 +1569,6 @@ msgstr "Lesen Sie den Hilfetext zu neuen Revision in einem neuen Fenster"
 
 #: data/Sandbox/WebHome.txt:21 data/TWiki/WebSearch.txt:37
 #: data/TWiki/WebSearchAdvanced.txt:72
-#, fuzzy
 msgid "Recently changed topics"
 msgstr "Kürzlich geänderte Topics"
 
@@ -1610,7 +1577,6 @@ msgid "Regular expression search"
 msgstr "Mit regulären Ausdrücke suchen"
 
 #: data/TWiki/NewUserTemplate.txt:24
-#, fuzzy
 msgid "Related Topics:"
 msgstr "Zugehörige Topics:"
 
@@ -1687,7 +1653,6 @@ msgid "Save Changes"
 msgstr "Änderungen speichern"
 
 #: templates/registernotifyadmin.tmpl:16
-#, fuzzy
 msgid "Saved to:"
 msgstr "Speichern nach:"
 
@@ -1697,7 +1662,6 @@ msgstr "Speichern nach:"
 #: data/TWiki/WebTopicNonWikiTemplate.txt:15
 #: data/TWiki/WebTopicViewTemplate.txt:15 data/Trash/WebLeftBar.txt:8
 #: data/_default/WebHome.txt:12 data/_default/WebLeftBar.txt:9
-#, fuzzy
 msgid "Search"
 msgstr "Suchen"
 
@@ -1715,7 +1679,6 @@ msgid "Search all webs for topics that link to here"
 msgstr "Alle Webs nach Topics durchsuchen, die hierher verweisen"
 
 #: data/TWiki/WebSearchAdvanced.txt:45
-#, fuzzy
 msgid "Search string"
 msgstr "Gesuchte Zeichenkette"
 
@@ -1724,7 +1687,6 @@ msgid "Search the <nop>%WEB% Web for topics that link to here"
 msgstr "Das <nop>%WEB% Web nach Topics durchsuchen, die hierher verweisen"
 
 #: data/TWiki/WebSearch.txt:18 data/TWiki/WebSearchAdvanced.txt:18
-#, fuzzy
 msgid "Search where:"
 msgstr "Wo suchen:"
 
@@ -1779,7 +1741,6 @@ msgid "Show formatting help"
 msgstr "Formatierungshilfe anzeigen"
 
 #: templates/attach.pattern.tmpl:150
-#, fuzzy
 msgid "Show help"
 msgstr "Hilfe anzeigen"
 
@@ -1793,12 +1754,10 @@ msgstr ""
 
 #: data/TWiki/WebTopicNonWikiTemplate.txt:7
 #: data/TWiki/WebTopicViewTemplate.txt:7
-#, fuzzy
 msgid "Similar topics in this web (if any):"
 msgstr "Ähnliche Topics in diesem Web:"
 
 #: data/TWiki/WebSearchAdvanced.txt:13
-#, fuzzy
 msgid "Simple search"
 msgstr "Einfache Suche"
 
@@ -1872,7 +1831,6 @@ msgid "Submit"
 msgstr "Übermitteln"
 
 #: templates/registernotify.tmpl:18 templates/registernotifyadmin.tmpl:12
-#, fuzzy
 msgid "Submitted content:"
 msgstr "Übertragender Inhalt:"
 
@@ -1898,7 +1856,6 @@ msgid "TWiki password reset for %1"
 msgstr "TWiki Passwort zurücksetzen für %1"
 
 #: templates/oopschangelanguage.tmpl:15
-#, fuzzy
 msgid ""
 "TWiki's user interface is available in several languages. If you want to "
 "change the language for this session, choose one of the following and hit "
@@ -1911,9 +1868,8 @@ msgstr ""
 "Verweis an Ende der Seite, um zum vorherigen Topic zurück zu kehren."
 
 #: data/Sandbox/WebHome.txt:6
-#, fuzzy
 msgid "Test Topics"
-msgstr "Zugehörige Topics:"
+msgstr "Test Topics"
 
 #: data/TWiki/WebSearch.txt:20 data/TWiki/WebSearchAdvanced.txt:20
 msgid "Text body"
@@ -1932,7 +1888,6 @@ msgstr ""
 "speichern Sie diese E-Mail als zukünftige Referenz."
 
 #: templates/registerconfirm.tmpl:9
-#, fuzzy
 msgid ""
 "Thank you for registering in the %1 collaboration platform. Your "
 "verification code is %2."
@@ -1966,7 +1921,7 @@ msgstr ""
 "Das %1 Web ist ein sogenannter Sandkasten, den Sie für Testzwecke nutzen können. "
 "Jeder ist eingeladen Inhalte zu erstellen und zu löschen. Es wird empfohlen %2 "
 "durchzuschauen, um einen Überblick über das %3 Werkzeug zu bekommen. Es gehört zum "
-"guten Ton am Ende eines Kommentars seine Signatur mit Datum in dem %4 zu hinterlassen."
+"guten Ton am Ende eines Kommentars seine Signatur mit Datum und dem %4 zu hinterlassen."
 
 #: data/Sandbox/WebRss.txt:7 data/_default/WebRss.txt:5
 msgid ""
@@ -2063,7 +2018,6 @@ msgid "The two passwords you entered do not match."
 msgstr "Die beiden eingegebenen Passwörter stimmen nicht überein."
 
 #: data/Main/WebRss.txt:7
-#, fuzzy
 msgid ""
 "The web for users, groups and offices. TWiki is a Web-Based Collaboration "
 "Platform for the Corporate World."
@@ -2088,7 +2042,6 @@ msgstr ""
 "Bitte kontaktieren Sie %1."
 
 #: templates/oopsattention.tmpl:250
-#, fuzzy
 msgid "There should be a line that includes %1, look for %2 (or %3)"
 msgstr ""
 "Es sollte eine Zeile geben, die %1 inkludiert, bitte nach %2 (oder %2) "
@@ -2128,9 +2081,8 @@ msgid "This is an automated email from %1."
 msgstr "Dies ist eine automatisierte E-Mail von %1"
 
 #: templates/registernotifyadmin.tmpl:8
-#, fuzzy
 msgid "This is an automated email notification of user registration in %1."
-msgstr "Dies ist eine automatisierte E-Mail von %1"
+msgstr "Dies ist eine automatisierte E-Mail Benachrichtung über die Benutzer Registrierung in %1"
 
 #: data/Trash/WebHome.txt:2
 msgid ""
@@ -2216,9 +2168,8 @@ msgid "Topic Save Error"
 msgstr "Topic-Speichern-Fehler"
 
 #: templates/oopsattention.tmpl:253
-#, fuzzy
 msgid "Topic can not be upgraded from old style category table"
-msgstr " Topic konnte nicht vom alten Kategorie-Stil aktualisiert werden"
+msgstr "Topic konnte nicht im Stil der alten Kategorie-Tabelle aktualisiert werden"
 
 #: data/TWiki/WebSearchAdvanced.txt:30
 #, fuzzy
@@ -2231,7 +2182,6 @@ msgid "Topic name:"
 msgstr "Topic Name:"
 
 #: templates/oopssaveerr.tmpl:4
-#, fuzzy
 msgid "Topic save error"
 msgstr "Topic-Speichern-Fehler"
 
@@ -2240,7 +2190,6 @@ msgid "Topic settings"
 msgstr "Topic Einstellungen"
 
 #: data/TWiki/WebSearch.txt:21 data/TWiki/WebSearchAdvanced.txt:21
-#, fuzzy
 msgid "Topic title"
 msgstr "Topic Titel"
 
@@ -2253,9 +2202,8 @@ msgid "Topics in %1 web:"
 msgstr "Topics in %1 Web:"
 
 #: data/TWiki/WebSearchAdvanced.txt:58
-#, fuzzy
 msgid "Topics per web"
-msgstr "Topics in %1 Web:"
+msgstr "Topics per Web"
 
 #: templates/renamewebbase.pattern.tmpl:64
 msgid "Topics which are currently being edited by other users in the %1 Web:"
@@ -2345,7 +2293,6 @@ msgid "User Account %1 Deleted"
 msgstr "Benutzer Zugang %1 gelöscht"
 
 #: data/TWiki/WebLeftBar.txt:15
-#, fuzzy
 msgid "User Reference"
 msgstr "Benutzer Referenz"
 
@@ -2354,7 +2301,6 @@ msgid "Username"
 msgstr "Benutzername"
 
 #: data/Main/WebLeftBar.txt:8
-#, fuzzy
 msgid "Users"
 msgstr "Benutzer"
 
@@ -2387,9 +2333,8 @@ msgid "View raw text without formatting"
 msgstr "Quelltext ohne Formatierung ansehen"
 
 #: templates/oopsmore.pattern.tmpl:42
-#, fuzzy
 msgid "View revision"
-msgstr "Neuere Revision"
+msgstr "Revision ansehen"
 
 #: data/Main/PatternSkinUserViewTemplate.txt:7
 #: templates/oopsleaseconflict.pattern.tmpl:15
@@ -2417,22 +2362,18 @@ msgstr ""
 "inkludiert. %2"
 
 #: templates/oopsalerts.tmpl:6
-#, fuzzy
 msgid "Warning: Can't find topic %1"
 msgstr "Warnung: Konnte Topic %1 nicht finden"
 
 #: data/TWiki/WebSearch.txt:3
-#, fuzzy
 msgid "Web Search"
 msgstr "Web Suche"
 
 #: data/TWiki/WebLeftBarExample.txt:8 data/TWiki/WebLeftBarWebsList.txt:2
-#, fuzzy
 msgid "Webs"
 msgstr "Webs"
 
 #: data/Sandbox/WebHome.txt:2 data/_default/WebHome.txt:2
-#, fuzzy
 msgid "Welcome to the %1 web"
 msgstr "Willkommen im %1 Web"
 
@@ -2458,7 +2399,6 @@ msgid "You are also listed in the %1 topic"
 msgstr "Sie sind auch auf Topic %1 gelistet"
 
 #: templates/oopsattention.tmpl:289
-#, fuzzy
 msgid "You are denied access to the following topics in the web:"
 msgstr "Sie haben keinen Zugriff auf die folgenden Topics im Web:"
 
@@ -2556,25 +2496,23 @@ msgstr ""
 "Sie müssen wahrscheinlich Ihren Administrator, %1, fragen, um das zu tun."
 
 #: templates/oopsattention.tmpl:140
-#, fuzzy
 msgid ""
 "Your activation code has been sent to %1.  Either click on the link in your "
 "email or enter the code in the box below to activate your membership. (This "
 "code is of the form \"YourName.xxxx\")"
 msgstr ""
-"Ihr Aktivierungs-Code wurde nach %PARAM1% gesendet. Entweder klicken Sie auf "
+"Ihr Aktivierungs-Code wurde nach %1 gesendet. Entweder klicken Sie auf "
 "den Verweis in Ihrer Mail oder Sie fügen den Code in die Box unten ein, um "
 "Ihre Mitgliedschaft zu aktivieren.(Dieser Code ist von der Form \"IhrName."
 "xxxx\")"
 
 #: templates/oopslanguagechanged.tmpl:11
-#, fuzzy
 msgid ""
 "Your language will be changed to %1 from the next screen. You will be "
 "redirected to there right now. If you aren't, [[%2][click here]] to proceed."
 msgstr ""
-"Die Sprache wird ab der nächster Ansicht auf %1 geändert. [[%2][Hier "
-"drücken]] um fortzufahren."
+"Die Sprache wird ab der nächster Ansicht auf %1 geändert. Sie werden hierzu "
+"weitergeleitet. Falls dies nicht passiert bitte [[%2][Hier drücken]] um fortzufahren."
 
 #: templates/mailresetpassword.tmpl:10
 msgid "Your password has been changed to %1."
@@ -2684,7 +2622,6 @@ msgid "manage"
 msgstr "verwalten"
 
 #: data/Trash/WebHome.txt:5
-#, fuzzy
 msgid "more..."
 msgstr "mehr..."
 
@@ -2714,101 +2651,9 @@ msgid "put it back"
 msgstr "zurück verschieben"
 
 #: templates/search.pattern.tmpl:18
-#, fuzzy
 msgid "retrieved at %1"
-msgstr "abgefragt um %1 GMT"
+msgstr "abgefragt um %1"
 
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr "Ansehen"
-
-#~ msgid "Move attachment..."
-#~ msgstr "Anhang verschieben"
-
-#, fuzzy
-#~ msgid "See also the verbose WebIndex."
-#~ msgstr "Verwenden Sie ggf. den ausführlichen %1."
-
-#~ msgid ""
-#~ "Did you type in your login name and password correctly? Remember, both "
-#~ "are case sensitive."
-#~ msgstr ""
-#~ "Haben Sie ihren Login-Namen und ihr Passwort korrekt eingegeben? Beachten "
-#~ "Sie, dass bei beiden die Groß- und Kleinschrift wichtig ist."
-
-#, fuzzy
-#~ msgid "Edit topic text"
-#~ msgstr "Topic Text editieren"
-
-#~ msgid "Either you need to register or the authentication failed"
-#~ msgstr ""
-#~ "Entweder müssen Sie sich registrieren oder die Authentifizierung ist "
-#~ "fehlgeschlagen"
-
-#~ msgid "If you expected to be logged in at this point:"
-#~ msgstr "When Sie erwarten zu diesem Zeitpunkt eingeloggt zu sein:"
-
-#, fuzzy
-#~ msgid ""
-#~ "If you want to try again, go back in your browser and hit edit again."
-#~ msgstr ""
-#~ "Bitte gehen Sie mit Ihrem Browser zurück und überprüfen Sie es noch "
-#~ "einmal."
-
-#~ msgid "Incorrect %1:"
-#~ msgstr "Inkorrekt %1:"
-
-#, fuzzy
-#~ msgid "Jump to start of topic"
-#~ msgstr "Topic-Anfang"
-
-#~ msgid "Please go _back_ in browser and try a new name"
-#~ msgstr ""
-#~ "Bitte gehen Sie mit Ihrem Browser _zurück_ und versuchen Sie einen neuen "
-#~ "Namen"
-
-#~ msgid "Register"
-#~ msgstr "Registrierung"
-
-#~ msgid ""
-#~ "Registered users can [[%1][change passwords]] and [[%2][reset passwords]]."
-#~ msgstr ""
-#~ "Registrierte Benutzer können ihr [[%1][Passwort ändern]] und ihr [[%2]"
-#~ "[Passwort zurücksetzen]]."
-
-#~ msgid "Simply fill out the %1 form. It only takes a minute."
-#~ msgstr "Füllen Sie bitte das Formular aus, es dauert lediglich eine Minute"
-
-#, fuzzy
-#~ msgid "Skip to action links"
-#~ msgstr "Zu den Aktionen"
-
-#~ msgid ""
-#~ "To edit topics on this %1 collaborative web, you must be registered as a "
-#~ "user."
-#~ msgstr ""
-#~ "Zum Bearbeiten von Topics in diesem %1 Kollaborativen Web müssen Sie als "
-#~ "Benutzer registriert sein."
-
-#, fuzzy
-#~ msgid "To register as a new user:"
-#~ msgstr "Fehler beim Registrieren von Benutzer %1"
-
-#~ msgid ""
-#~ "You can also login anonymously as user *TWikiGuest* with password *guest*."
-#~ msgstr ""
-#~ "Sie können sich auch anonym als *TWikiGuest* Benutzer mit dem Passwort "
-#~ "*guest* anmelden."
-
-#, fuzzy
-#~ msgid "to &top"
-#~ msgstr "nach oben"
-
-#~ msgid "Back"
-#~ msgstr "Zurück"
-
-#~ msgid "Edit content"
-#~ msgstr "Inhalt editieren"
-
-#~ msgid "More"
-#~ msgstr "Mehr"
