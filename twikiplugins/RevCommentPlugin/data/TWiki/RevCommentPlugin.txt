@@ -90,6 +90,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==templates/oopshistoryWCCR.tmpl== | see below |
 	  | ==data/TWiki/WebChangesWC.txt== | Replacement for ==WebChanges.txt==, see below |
 	  | ==data/TWiki/RevComment.txt== | Help text |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 	* Test if the installation was successful:
 	  <ul>

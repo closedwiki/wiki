@@ -133,6 +133,7 @@ __Note:__ The ZIP file contains a =.htaccess= file to restrict the access to you
 	  | ==bin/.htaccess== | configuration to restrict access to view script |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Download example.
 
 ---++ Plugin Info

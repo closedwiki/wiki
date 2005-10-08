@@ -36,7 +36,7 @@ The Plugins.<nop>TocPluginHelp topic in the installation contains complete help 
 	| ==lib/TWiki/Plugins/TocPlugin/test.zip== | Test code |
 	| ==lib/TWiki/Plugins/TocPlugin/build.xml== | Ant build file |
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-	* Add ==Plugins.%TOPIC%== to the ==INSTALLEDPLUGINS== variable in %TWIKIWEB%.TWikiPreferences (or any WebPreferences topic).
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* If you see a link here: %REF{topic=TocPluginHelp,type=Section,name=installation}% then installation was successful
 	* Check the TocPluginHelp topic. You should see expanded section numbers.
 

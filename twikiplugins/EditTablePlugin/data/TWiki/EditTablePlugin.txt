@@ -146,6 +146,7 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
 	  | ==pub/TWiki/%TOPIC%/release-notes.html== | Mishoo DHTML calendar release notes |
 	  | ==pub/TWiki/%TOPIC%/*.js== | Mishoo DHTML calendar <nop>JavaScript files |
 	  | ==pub/TWiki/%TOPIC%/calendar-system.css== | Mishoo DHTML calendar stylesheet |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file. 
 	* The Mishoo DHTML calendar 0.9.5 is preinstalled and should work without any configuration. If you wish to use another language, specify the in the Plugin settings, or create a new language files, attach it to the Plugin topic, and change the Plugin settings
 	* Test if the Plugin is correctly installed:

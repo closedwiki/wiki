@@ -93,6 +93,7 @@ Use  %<nop>CONTRIBUTORS{web="TWiki" topic="TWikiPreferences"  last="7" rev="1.20
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==data/TWiki/WebContributors.txt== | Page to allow getting revision history from a URL |
 	  | ==data/TWiki/WebContributors.txt,v== | Revision history of WebContributors |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed:
 		* Check the above examples to see if the plugin operates as expected.
 

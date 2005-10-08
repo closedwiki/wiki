@@ -345,6 +345,7 @@ A lista de a-fazeres para a versão 1.0 estável:
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed: you should see rendered dates on the [[#Examples][example session]].
 </td><td>
 	* Baixe o arquivo ZIP da web Plugin (veja abaixo)

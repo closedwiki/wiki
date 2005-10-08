@@ -47,6 +47,7 @@ The plugin will count only you latest vote. You might only vote once a day.
 	  | ==bin/vote== | Plugin cgi script |
 	  | ==data/TWiki/VotePlugin.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/VotePlugin.pm== | Plugin Perl module |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 

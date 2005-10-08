@@ -86,7 +86,8 @@ If you are viewing with the nave skin and you want to "break-out" so that you ca
 		| ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 		| ==templates/view.nav.tmpl== | (skin for navigation) |
 		| ==pub/Plugins/NavPlugin/*.gif== | next, previous, and index images for the nav skin |
-	* Turn on NavPlugin in TWiki.TWikiPreferences.
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+
 	* Test if the plugin is correctly installed, by viewing %TOPIC%#NewFunctionalityTest
 
 ---+++ Known Issues/Limitations

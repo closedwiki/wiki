@@ -82,6 +82,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==bin/changenotify== | Perl script for changing notifications using NTF variable |
 	  | ==templates/htmlchanges.tmpl== | Template for generating HTML mails with notifications |
 	  | ==templates/view.NP.tmpl== | Template with example of using NTF variable |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin History
 	* Version 1.03

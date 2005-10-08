@@ -235,6 +235,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	| ==lib/TWiki/Plugins/PowerEditPlugin/source.zip== | Source and test code |
 	| ==lib/TWiki/Plugins/PowerEditPlugin.pm== | Plugin script |
 	* Unzip ==PowerEditPlugin.zip== in your twiki installation directory.
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* A command to invoke the editor can by added to the normal topic view by putting the following line into your =bin/view= template, immediately after the line reading %<nop>EDITTOPIC%:
 	<pre>
 	%<nop>TMPL:P{"sep"}% &lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=power">PowerEdit&lt;/a>

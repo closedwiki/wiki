@@ -61,6 +61,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==pub/TWiki/TouchGraphPlugin/touchgraph_applet.png== | screenshot |
 	  | ==pub/TWiki/TouchGraphAppletInstructions/kill.png== | icon for the applets stop button |
 	  | ==templates/view.tglaunch.tmpl== | special skin for popup window |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 	* Edit your crontab to schedule =/<i>path/to/twiki</i>/bin/tgdb= like =[[TWikiSiteTools#Setting_the_Automatic_Email_Sche][mailnotify]]=, e. g.:%BR% =4,19,34,49 * * * * cd /<i>path/to/twiki</i>/bin; ./tgdb > /dev/null=
 

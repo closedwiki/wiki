@@ -54,6 +54,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* To install the Beautifier library, either install it in the Perl library folder or unpack it into the twiki directory.  For the latter, the following files are installed:
 	  | *File:* | *Description:* |
 	  | ==lib/Beautifier/Context.pm== |  |
