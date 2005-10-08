@@ -66,6 +66,8 @@ foreach my $e ( grep { -d "$pr/$_" && !/^\./ } readdir D) {
     }
 }
 
+__END__
+
 my $userAgent = UserAgent->new();
 $userAgent->agent( 'build_all_extensions' );
 
