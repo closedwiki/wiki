@@ -264,7 +264,7 @@ sub finish {
 # Ths doesn't get run until after the user's query has been
 # responded to, so it shouldn't be burdensome.
 sub _expireDeadSessions {
-	my $time = time();
+	my $time = time() || 0;
 
 	opendir(D, $TWiki::cfg{SessionDir}) || return;
 	foreach my $file ( grep { /cgisess_[0-9a-f]{32}/ } readdir(D) ) {
@@ -272,8 +272,9 @@ sub _expireDeadSessions {
             $TWiki::cfg{SessionDir}.'/'.$file );
 		my @stat = stat( $file );
 
+        my $lat = $stat[8] || $stat[9] || $stat[10] || 0;
 		# Abort tiny 2-day olds. They can't be valid sessions.
-		if( $time - $stat[8] >= $TWiki::cfg{SessionExpiresAfter} &&
+		if( $time - $lat >= $TWiki::cfg{SessionExpiresAfter} &&
               $stat[7] <= 6 ) {
 			unlink $file;
 			next;
@@ -356,6 +357,8 @@ sub _myScriptURL {
 sub _rewriteURL {
     my( $this, $url ) = @_;
 
+    return $url unless $url;
+
     my $cgisession = $this->{cgisession};
     return $url unless $cgisession;
     return $url if $url =~ m/\?$CGI::Session::NAME=/;
@@ -370,7 +373,7 @@ sub _rewriteURL {
         # strip off existing params
         my $params = "?$CGI::Session::NAME=$sessionId";
         if( $url =~ s/\?(.*)$// ) {
-            $params .= ";$1";
+            $params .= ';'.$1;
         }
 
         # strip off the anchor
