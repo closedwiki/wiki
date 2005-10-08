@@ -639,8 +639,6 @@ templates/oopsaccessdenied.pattern.tmpl 0440
 templates/oopsleaseconflict.pattern.tmpl 0440
 templates/oopssaveerr.pattern.tmpl 0440
 templates/login.tmpl 0440
-templates/mailchanges.tmpl 0440
-templates/mailnotify.tmpl 0440
 templates/mailresetpassword.tmpl 0440
 templates/moveattachment.pattern.tmpl 0440
 templates/moveattachment.tmpl 0440
