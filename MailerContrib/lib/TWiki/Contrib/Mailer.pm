@@ -121,8 +121,6 @@ sub _processChanges {
           TWiki::Time::formatTime( $timeOfLastNotify ). "\n";
     }
 
-    # hash indexed on email address, each entry of which contains an
-    # array of MailerContrib::Change objects
     my %changeset;
     # hash indexed on email address, each entry contains a hash
     # of topics already processed in the change set for this email.
@@ -182,7 +180,6 @@ sub _generateEmails {
     my $skin = $twiki->{prefs}->getPreferencesValue( 'SKIN' );
     my $template = $twiki->{templates}->readTemplate( 'mailnotify', $skin );
 
-    my $from = $twiki->{prefs}->getPreferencesValue('WIKIWEBMASTER');
     my $homeTopic = $TWiki::cfg{HomeTopicName};
 
     my $before_html = $twiki->{templates}->expandTemplate( 'HTML:before' );
@@ -207,7 +204,7 @@ sub _generateEmails {
         my $html = '';
         my $plain = '';
 
-        foreach my $change (sort { $a->{TOPIC} cmp $b->{TOPIC} }
+        foreach my $change (sort { $a->{TIME} cmp $b->{TIME} }
                             @{$changeset->{$email}} ) {
 
             $html .= $change->expandHTML( $middle_html );
@@ -218,7 +215,6 @@ sub _generateEmails {
 
         my $mail = $mailtmpl;
 
-        $mail =~ s/%EMAILFROM%/$from/go;
         $mail =~ s/%EMAILTO%/$email/go;
         $mail =~ s/%HTML_TEXT%/$before_html$html$after_html/go;
         $mail =~ s/%PLAIN_TEXT%/$before_plain$plain$after_plain/go;
