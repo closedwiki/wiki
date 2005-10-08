@@ -63,7 +63,7 @@ use vars qw(
             %constantTags
             %functionTags
             %contextFreeSyntax
-            $VERSION
+            $VERSION $RELEASE
             $TRUE
             $FALSE
             $sharedSandbox
@@ -153,6 +153,7 @@ BEGIN {
     # DO NOT CHANGE THE FORMAT OF $VERSION
     # automatically expanded on checkin of this module
     $VERSION = '$Date$ $Rev$ ';
+    $RELEASE = 'Dakar';
     $VERSION =~ s/^.*?\((.*)\).*: (\d+) .*?$/$1 build $2/;
 
     # Default handlers for different %TAGS%

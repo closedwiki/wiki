@@ -259,13 +259,16 @@ sub getDescription {
     }
     if( $this->{disabled} ) {
         return ' !'.$this->{name}.': (disabled)';
-    } else {
-        return ' '.$this->{web}.'.'.
-          $this->{name}.' ('.
-            $this->getRelease().
-            $this->getVersion().
-              '): '.$this->{description};
-    }
+    } 
+
+    my $result = ' '.$this->{web}.'.'.$this->{name}.' (';
+    my $release = $this->getRelease();
+    my $version = $this->getVersion();
+    $version =~ s/\$Rev: (\d+) \$/$1/g;
+    $result .= $release.', ' if $release;
+    $result .= $version.'): '.$this->{description};
+
+    return $result;
 }
 
 1;
