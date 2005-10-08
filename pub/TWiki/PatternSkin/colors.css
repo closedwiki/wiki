@@ -1,0 +1,48 @@
+
+/*	-----------------------------------------------------------
+	COLOR
+	Appearance: colors
+	-----------------------------------------------------------	*/
+	
+/*	---------------------------------------------------------------------------------------
+	CONSTANTS
+	
+	Text colors
+	----------------------------------------
+	T1 text color																	#000
+	T2 link color																	#06c
+	T3 link hover text color														#FBF7E8
+	T4 link action button color (red) (same as BG2)									#D6000F
+	T5 header color																	#a00
+	T6 code text, left bar text														#7A4707
+	T7 muted (dark gray) text														#666
+	T8 grayed out text																#8E9195
+	T9 alert 																		#f00
+	
+	Background colors
+	----------------------------------------
+	BG1	white; attachment, form table background									#fff
+	BG2 link hover background color (red)  											#D6000F 
+	BG3	light gray																	#e6e6e6
+	BG4 active form field (not implemented yet)										#ffc
+	BG5 submit button, help background very light blue								#E9F2F9
+	BG6	patternTopicAction light yellow (same as T3)								#FBF7E8
+	BG7 header background (very light yellow)										#FDFAF1
+	BG8 accent on sorted table column												#ccc
+	BG9 light yellow; attachment, form background									#FEFBF3
+	BG10 diff: changed 																#ccf
+	
+	Border colors
+	----------------------------------------
+	BO1	light gray																	#e6e6e6
+	BO2 submit button border blue ('active')										#88B6CF
+	BO3	help, personal side bar light blue border									#CADDED
+	BO4 border color beige, header h2 bottom border									#E2DCC8
+	BO5 header h3..h5 bottom border	(75% of BO4)									#E9E4D2
+	BO6 neutral gray border															#ccc
+	BO7 light neutral gray															#ddd
+	BO9 alert border																#f00
+
+	---------------------------------------------------------------------------------------	*/
+ 
+ 

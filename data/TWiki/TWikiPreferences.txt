@@ -183,8 +183,8 @@ _(Click for form-based editing of existing preferences.)_
 
 ---+++ Skin icons
 
-	* #Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
-	* Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphicsPattern
+   * #Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphics
+   * Set ICONTOPIC = %TWIKIWEB%.TWikiDocGraphicsPattern
 
 ---+++ Legacy support
    * Support for legacy "EDITTOPIC", used to be hard-coded, now replaced by TMPL:P conditional instantiation
