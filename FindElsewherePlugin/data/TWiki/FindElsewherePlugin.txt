@@ -18,12 +18,13 @@ If a topic is not found in the current web, this plugin will look in the LOOKELS
 
 #NewFunctionalityTest
 New Functionality
-| *test case*         | *input*             | *output*       | *expected*       |
-| Found here          | <nop>WebHome        | WebHome        | <nop>WebHome     |
-| Found singular here | <nop>WebHomes       | WebHomes       | <nop>WebHomes    |
-| Found elsewhere     | <nop>TWikiAdminGroup | TWikiAdminGroup | <nop/>TWikiAdminGroup<sup>([[Main.TWikiAdminGroup][Main]])</sup> |
-| Found singular  elsewhere     | <nop>TWikiAdminGroups | TWikiAdminGroups | <nop/>TWikiAdminGroups<sup>([[Main.TWikiAdminGroup][Main]])</sup> |
-| Found elsewhere, spaced wiki word | [<nop/>[TWiki admin group]] | [[TWiki admin group]] | <em>TWiki admin group</em><sup>([[Main.TWikiAdminGroup][Main]])</sup> |
+| *test case*       | *input*      | *output* | *expected* |
+| Found in this web | <nop>WebHome | WebHome | <nop>WebHome |
+| Found singular here | <nop>WebHomes | WebHomes | <nop>WebHomes (link to WebHome) |
+| Found elsewhere | <nop>TWikiAdminGroup | TWikiAdminGroup | <nop>TWikiAdminGroup<sup>([[Main.TWikiAdminGroup][Main]])</sup> |
+| Found singular elsewhere | <nop>TWikiAdminGroups | TWikiAdminGroups | !TWikiAdminGroups |
+| Found elsewhere, spaced wiki word | [<nop/>[TWiki admin group]] | [[TWiki admin group]] | !TWiki admin group |
+| Found elsewhere, several webs | <nop>TWikiPreferences | TWikiPreferences | <em>TWiki admin group</em><sup>([[Main.TWikiPreferences][Main]],[[TWiki.TWikiPreferences][TWiki]])</sup> |
 | Found elsewhere, abbrev | ACRONYM | ACRONYM | (If ACRONYM is a topic defined in one of the LOOKELSEWHERE webs, a link to it should show up) |
 
 Don't break other types of links...

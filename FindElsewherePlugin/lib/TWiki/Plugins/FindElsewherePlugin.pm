@@ -44,7 +44,7 @@
 package TWiki::Plugins::FindElsewherePlugin;
 
 use vars qw(
-            $web $topic $user $installWeb $VERSION $RELEASE $debug
+            $web $topic $user $installWeb $VERSION $RELEASE
             $doPluralToSingular
             $wnre
             $wwre
@@ -62,7 +62,6 @@ $VERSION = '$Rev$';
 # of the version number in PLUGINDESCRIPTIONS.
 $RELEASE = 'Dakar';
 
-
 sub initPlugin {
     ( $topic, $web, $user, $installWeb ) = @_;
 
@@ -73,13 +72,12 @@ sub initPlugin {
     }
 
     # Get plugin preferences, the variable defined by:          * Set EXAMPLE = ...
-    $debug = TWiki::Func::getPreferencesFlag( "FINDELSEWHEREPLUGIN_DEBUG" );
 
-    $otherWebMulti =  TWiki::Func::getPreferencesValue( "FINDELSEWHEREPLUGIN_LOOKELSEWHERE" ) || "";
+    $otherWebMulti =  TWiki::Func::getPreferencesValue( 'FINDELSEWHEREPLUGIN_LOOKELSEWHERE' ) || "";
     @webList = split( /[\,\s]+/, $otherWebMulti );
-    TWiki::Func::writeDebug( "- TWiki::Plugins::FindElsewherePlugin will look in @webList" ) if $debug;
 
-    $doPluralToSingular =  TWiki::Func::getPreferencesFlag( "FINDELSEWHEREPLUGIN_PLURALTOSINGULAR" ) || "";
+    $doPluralToSingular =
+      TWiki::Func::getPreferencesFlag( 'FINDELSEWHEREPLUGIN_PLURALTOSINGULAR' ) || "";
 
     $wnre = TWiki::Func::getRegularExpression('webNameRegex');
     $wwre = TWiki::Func::getRegularExpression('wikiWordRegex');
@@ -87,14 +85,12 @@ sub initPlugin {
     $abbre = TWiki::Func::getRegularExpression('abbrevRegex');
 
     # Plugin correctly initialized
-    TWiki::Func::writeDebug( "- TWiki::Plugins::FindElsewherePlugin::initPlugin( $web.$topic ) is OK" ) if $debug;
     return 1;
 }
 
 sub preRenderingHandler {
     #my ( $text, \%map ) = @_;
 
-    TWiki::Func::writeDebug( "- FindElsewherePlugin::startRenderingHandler( $_[1].$topic )" ) if $debug;
 
     # Find instances of WikiWords not in this web, but in the otherWeb(s)
     # If the WikiWord is found in theWeb, put the word back unchanged
@@ -104,7 +100,7 @@ sub preRenderingHandler {
 
     # Match WikiWordAsWebName.WikiWord, WikiWords, [[wiki words]] and
     # WIK IWO RDS
-    $_[0] =~ s/([\s\(])($wnre\.$wwre|$wwre|\[\[[$manre\s]+\]\]|$abbre)/_findTopicElsewhere($_[1],$1,$2,$2,"")/geo;
+    $_[0] =~ s/(^|[\s\(])($wnre\.$wwre|$wwre|\[\[[$manre\s]+\]\]|$abbre)/$1._findTopicElsewhere($2)/geo;
 }
 
 sub _makeTopicLink {
@@ -113,84 +109,74 @@ sub _makeTopicLink {
 }
 
 sub _findTopicElsewhere {
-    # This was copied and pruned from TWiki::internalLink
-
-    my( $theWeb, $thePreamble, $theTopic, $theLinkText, $theAnchor ) = @_;
+    my $link = shift;
 
     # If we got ourselves a WikiWordAsWebName.WikiWord, we're done - return untouched info
-    if ($theTopic =~ /$wnre\.$wwre/o) {
-        return $thePreamble.$theTopic;
+    if ($link =~ /$wnre\.$wwre/o) {
+        return $link;
     }
 
     # preserve link style formatting
-    my $oldTheTopic = $theTopic;
+    my $original = $link;
 
     # Turn spaced-out names into WikiWords - upper case first letter of
     # whole link, and first of each word.
-    $theTopic =~ s/^(.)/\U$1/o;
-    $theTopic =~ s/\s(\w)/\U$1/go;
-    $theTopic =~ s/\[\[(\w)(.*)\]\]/\u$1$2/o;
+    $link =~ s/^(.)/\U$1/o;
+    $link =~ s/\s(\w)/\U$1/go;
+    $link =~ s/\[\[(\w)(.*)\]\]/\u$1$2/o;
 
-    my $text = $thePreamble;
+    my $text = '';
 
-    # Look in the current web, return when found
-    my $exist = TWiki::Func::topicExists( $theWeb, $theTopic );
-    if ( ! $exist ) {
-        if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) ) {
-            my $theTopicSingular = _makeSingular( $theTopic );
-            if( TWiki::Func::topicExists( $theWeb, $theTopicSingular ) ) {
-                TWiki::Func::writeDebug( "- $theTopicSingular was found in $theWeb." ) if $debug;
-                $text .= "$oldTheTopic"; # leave it as we found it
-                return $text;
-            }
+    my @topicLinks;
+
+    # Look in the current web
+    my $exist = TWiki::Func::topicExists( $web, $link );
+    return $original if $exist;
+
+    if( $doPluralToSingular && $link =~ /s$/ ) {
+        my $linkSingular = _makeSingular( $link );
+        if( TWiki::Func::topicExists( $web, $linkSingular ) ) {
+            # $linkSingular was found in $web.
+            return $original; # leave it as we found it
         }
-    } else {
-        TWiki::Func::writeDebug( "- $theTopic was found in $theWeb." ) if $debug;
-        $text .= "$oldTheTopic"; # leave it as we found it
-        return $text;
     }
 
     # Look in the other webs, return when found
-    my @topicLinks;
-    foreach ( @webList ) {
-        my $otherWeb = $_;
+    foreach my $otherWeb ( @webList ) {
 
-        # For systems running WebNameAsWikiName 
-        # If the $theTopic is a reference to a the name of 
-        # otherWeb, point at otherWeb.WebHome - MRJC
-        if ($otherWeb eq $theTopic) {
-            TWiki::Func::writeDebug( "- $theTopic is the name of another web $otherWeb." );# if $debug;
-            $text .= "[[$otherWeb.WebHome][$otherWeb]]";
-            return $text;
+        # If the $link is a reference to a the name of
+        # otherWeb, point at otherWeb.WebHome
+        if( $otherWeb eq $link ) {
+            return "[[$otherWeb.WebHome][$otherWeb]]";
         }
 
-        my $exist = TWiki::Func::topicExists( $otherWeb, $theTopic );
-        if ( ! $exist ) {
-            if ( ( $doPluralToSingular ) && ( $theTopic =~ /s$/ ) ) {
-                my $theTopicSingular = _makeSingular( $theTopic );
-                if( TWiki::Func::topicExists( $otherWeb, $theTopicSingular ) ) {
-                    TWiki::Func::writeDebug( "- $theTopicSingular was found in $otherWeb." ) if $debug;
-                    push(@topicLinks, _makeTopicLink($otherWeb,$theTopic));
-                }
+        my $exist = TWiki::Func::topicExists( $otherWeb, $link );
+        if( $exist ) {
+            # $link was found in $otherWeb.
+            push(@topicLinks, _makeTopicLink($otherWeb,$link));
+        } elsif ( ( $doPluralToSingular ) && ( $link =~ /s$/ ) ) {
+            my $linkSingular = _makeSingular( $link );
+            if( TWiki::Func::topicExists( $otherWeb, $linkSingular )) {
+                # $linkSingular was found in $otherWeb.
+                push(@topicLinks, _makeTopicLink($otherWeb,$link));
             }
-        } else  {
-            TWiki::Func::writeDebug( "- $theTopic was found in $otherWeb." ) if $debug;
-            push(@topicLinks, _makeTopicLink($otherWeb,$theTopic));
         }
     }
 
-    if ($#topicLinks >= 0) { # topic found elsewhere
+    if( scalar @topicLinks > 0 ) {
         # If link text [[was in this form]] <em> it
-        $theLinkText =~ s/\[\[(.*)\]\]/<em>$1<\/em>/go;
+        $original =~ s/\[\[(.*)\]\]/<em>$1<\/em>/go;
         # Prepend WikiWords with <nop>, preventing double links
-        $theLinkText =~ s/([\s\(])($wwre)/$1<nop>$2/go;
-        $text .= "<nop>$theLinkText<sup>(".join(",", @topicLinks ).")</sup>" ;
-    } else {
-        TWiki::Func::writeDebug( "- $theTopic is not in any of these webs: @webList." ) if $debug;
-        $text .= $theLinkText;
+        $original =~ s/([\s\(])($wwre)/$1<nop>$2/go;
+        if( scalar(@topicLinks) > 1 ) {
+            return "<nop>$original<sup>(".
+              join( ',', @topicLinks ).")</sup>" ;
+        } else {
+            return $topicLinks[0];
+        }
     }
-
-    return $text;
+    # $link is not in any of these webs
+    return $original;
 }
 
 sub _makeSingular {
