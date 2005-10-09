@@ -486,9 +486,12 @@ sub diff {
         $TWiki::cfg{NumberOfRevisions} < $maxrev ) {
         $breakRev = $maxrev - $TWiki::cfg{NumberOfRevisions} + 1;
     }
+    
+    #SMELL: this should be the same variable as in view script, and so on - thus be configurable
+    my $revSeperator = '&lt;';
 
     while( $i > 0 ) {
-        $revisions .= ' | '.
+        $revisions .= ' '.
           CGI::a( { href=>$session->getScriptUrl($webName, $topic, 'view',
                                                  rev => $i ),
                     rel => 'nofollow' }, $i);
@@ -497,16 +500,16 @@ sub diff {
                 $i = 1;
             } else {
                 if( ( $i == $rev1 ) && ( !$isMultipleDiff ) ) {
-                    $revisions .= ' | &gt;';
+                    $revisions .= $revSeperator;
                 } else {
                     $j = $i - 1;
-                    $revisions .= ' | '.
+                    $revisions .= ' '.
                       CGI::a( { href=>$session->getScriptUrl( $webName, $topic,
                                                               'rdiff',
                                                               rev1 => $i,
                                                               rev2 => $j ),
                                 rel => 'nofollow' },
-                              '&gt;');
+                              $revSeperator);
                 }
             }
         }
