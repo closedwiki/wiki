@@ -57,7 +57,7 @@ use strict;
 
 # $VERSION is referred to by TWiki, and is the only global variable that
 # *must* exist in this package
-use vars qw( $VERSION $debug $pluginName );
+use vars qw( $VERSION $RELEASE $debug $pluginName );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
