@@ -81,7 +81,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test above example if the installation was successful. You should see a "Nothing to do, no module specified" message below the form if the Plugin is enabled.
 
 ---+ Plugin Info

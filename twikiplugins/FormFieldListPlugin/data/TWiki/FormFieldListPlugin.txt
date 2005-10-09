@@ -47,7 +47,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* The expansion of =%<nop>FORMFIELDLIST{"<nop>TopicClassification,<nop>InstalledOnTwikiOrg,<nop>NotFound,<nop>DemoUrl" format="$title: $value." default="(Field _$title_ not set)" alttext="_$title_ field not found."}%= is
 %FORMFIELDLIST{"TopicClassification,InstalledOnTwikiOrg,NotFound,DemoUrl" format="$title: $value." default="(Field _$title_ not set)" alttext="_$title_ field not found."}%.

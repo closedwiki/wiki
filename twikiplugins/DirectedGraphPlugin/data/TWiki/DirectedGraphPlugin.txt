@@ -115,7 +115,7 @@ Dependencies:
 	  | Graphviz dot | Preprocessor for drawing directed graphs |
 	  | Digest::MD5 | MD5 Perl module |
 	  | Web fonts | Fonts required for dot's png creations |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 To install the web fonts, download this [[http://biostat.mc.vanderbilt.edu/twiki/pub/TWiki/DirectedGraphPlugin/webfonts-1.0-5.noarch.rpm][rpm]] and run the command *rpm --install webfonts-1.0-5.noarch.rpm* (Red Hat only).
 

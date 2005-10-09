@@ -11,12 +11,12 @@ to manually update the list, click [[%SCRIPTURL%/rest/%TOPIC%/forceUpdate][here]
 ---+++!! TODO list
 it is intended to 
    1 refuse to save a topic if the text contains a matching string - *DONE*
-      * need to make the Oops page better
+	* need to make the Oops page better
    2 automatically update the regex list from the configured source 
-      * either using a rest based url (*DONE*), a command line, or like Moin Moin, onSave, if the list is determined to be too out of date (*DONE*)
+	* either using a rest based url (*DONE*), a command line, or like Moin Moin, onSave, if the list is determined to be too out of date (*DONE*)
    3 consider mutliple source lists that are then merged (Though [[http://moinmoin.wikiwikiweb.de/ThomasWaldmann][ThomasWaldemann]] is currently doing this work for us __Thanks__ )
    4 have a local list to allow for quick responses - *DONE*
-      * and then provide a plain text version of this to be merged back
+	* and then provide a plain text version of this to be merged back
    5 add topic permissions to the spam topics, while filtering them out when using them for regex's
  
 %TOC%
@@ -27,34 +27,34 @@ it is intended to
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = prevents registered Wiki Spam from being saved
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = prevents registered Wiki Spam from being saved
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 0
 
-   * where to get the regex list to check for
-      * Set ANTISPAMREGEXLISTURL = http://arch.thinkmo.de/cgi-bin/spam-merge
-      * Set ANTISPAMREGEXLISTTOPIC = Plugins.AntiWikiSpamPluginList
-   * time in minutes between attempts to get a new version of the list
-      * Set GETLISTTIMEOUT = 60
-   * Local spam list (checked before the larger shared one)
-      * Set LOCALANTISPAMREGEXLISTTOPIC = Plugins.LocalAntiWikiSpamPluginList
+	* where to get the regex list to check for
+	* Set ANTISPAMREGEXLISTURL = http://arch.thinkmo.de/cgi-bin/spam-merge
+	* Set ANTISPAMREGEXLISTTOPIC = Plugins.AntiWikiSpamPluginList
+	* time in minutes between attempts to get a new version of the list
+	* Set GETLISTTIMEOUT = 60
+	* Local spam list (checked before the larger shared one)
+	* Set LOCALANTISPAMREGEXLISTTOPIC = Plugins.LocalAntiWikiSpamPluginList
 
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the installation was successful:
-      * _enter samples here_
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the installation was successful:
+	* _enter samples here_
 
 ---++ Plugin Info
 

@@ -71,7 +71,7 @@ Edit text defined here so you can change it for local languages. Text is shown w
 	| *File:* | *Description:* |
 %$MANIFEST%
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* To test if the plugin is correctly installed, view this topic in the installation and you should see a placeholder box below. Click on it.<br />
 	%DRAWING{empty}%
 	* Here's an example using an image map. Move the mouse over the image and watch the status bar.

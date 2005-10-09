@@ -26,34 +26,34 @@ This is what the above example table looks like using the plugin (clicking the e
 To use it add a button or a link to your skin (or to the topic) that runs the view script with ?edittable=1 at the end
 
 Here is a example you can cut and paste
-   * &lt;a href="%<nop>SCRIPTURLPATH%/view%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?edittable=1"&gt;Edit Tables&lt;/a&gt;
+	* &lt;a href="%<nop>SCRIPTURLPATH%/view%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?edittable=1"&gt;Edit Tables&lt;/a&gt;
 
 ---++ Plugin Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = _one line description here_
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = _one line description here_
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 0
 
-   * My own setting:
-      * Set HOWTO = got it!
+	* My own setting:
+	* Set HOWTO = got it!
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the installation was successful:
-      * _enter samples here_
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the installation was successful:
+	* _enter samples here_
 
 ---++ Plugin Info
 
@@ -73,5 +73,5 @@ __Related Topics:__ %TWIKIWEB%.TWikiPreferences, %TWIKIWEB%.TWikiPlugins
 
 -- TWiki:Main/RudiBierach - 13 Feb 2004
 
-   * [[%ATTACHURL%/EditInTablePlugin.zip][EditInTablePlugin.zip]]: initial release
+	* [[%ATTACHURL%/EditInTablePlugin.zip][EditInTablePlugin.zip]]: initial release
 

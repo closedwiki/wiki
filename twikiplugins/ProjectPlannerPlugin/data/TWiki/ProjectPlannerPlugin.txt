@@ -76,15 +76,15 @@ This is a list of all the tags available. These tags can be placed at relevant p
 
 ---+++ Status Summary Display
 
-   * Handling of the Est Days and Spent Days in Summary Views: The plugin computes cumulative totals based on the status of tasks. Hopefully, the following rules help understand the totals:
-      * _done_ status: It is assumed that the Spent Days is not updated and Est Days is the column that accurately describes the estimated days and spent days for that task. The Est Days is used for the _green_ color bar and Spent Days is ignored.
-      * _not started_ status: It is assumed that any Spent Days is meaningless and the Est Days is used for total days. The Est days will all show up as part of the _red_ bar in status.
-      * _waiting_ status: This status says the task is blocked for some reason. It is assumed that Spent Days is already spent and the remaining days (Est Days - Spent Days) is enough to finish the task after the reason for the block is removed. The Spent days are used as a _blue_ color bar in status from rev 2.040 onwards. The remaining days will add into the _red_ bar.
-      * _in progress_ status: The Spent Days are used towards the Spent total (and the orange color bar in status). The remaining days (Est Days - Spent Days) are used towards the _red_ color bars.
+	* Handling of the Est Days and Spent Days in Summary Views: The plugin computes cumulative totals based on the status of tasks. Hopefully, the following rules help understand the totals:
+	* _done_ status: It is assumed that the Spent Days is not updated and Est Days is the column that accurately describes the estimated days and spent days for that task. The Est Days is used for the _green_ color bar and Spent Days is ignored.
+	* _not started_ status: It is assumed that any Spent Days is meaningless and the Est Days is used for total days. The Est days will all show up as part of the _red_ bar in status.
+	* _waiting_ status: This status says the task is blocked for some reason. It is assumed that Spent Days is already spent and the remaining days (Est Days - Spent Days) is enough to finish the task after the reason for the block is removed. The Spent days are used as a _blue_ color bar in status from rev 2.040 onwards. The remaining days will add into the _red_ bar.
+	* _in progress_ status: The Spent Days are used towards the Spent total (and the orange color bar in status). The remaining days (Est Days - Spent Days) are used towards the _red_ color bars.
 
 ---+++ Usage Tips
 
-   * Naming Projects, Plans and Tasks: It is a good idea to name projects, plans and tasks so that you can group them by using wildcards when you want to display summaries and status. 
+	* Naming Projects, Plans and Tasks: It is a good idea to name projects, plans and tasks so that you can group them by using wildcards when you want to display summaries and status. 
 
 ---+++ Additional TWiki plugins/changes needed to get this plugin to work at its best
 
@@ -103,7 +103,7 @@ This is a list of all the tags available. These tags can be placed at relevant p
 | ==data/_yourweb_/PlanTemplate.txt== | Page template for a plan |
 | ==data/_yourweb_/NewPageError.txt== | Page displayed when a new page creation operation failed |
 | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module | 
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
  
 *NOTE*: The <nop>ProjectTemplate.txt and <nop>PlanTemplate.txt files need to be copied to the appropriate _yourweb_ web or you will see a blank page when you create the Project from the PPALLPROJECTS tagged page.
 

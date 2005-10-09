@@ -50,7 +50,7 @@ Performs a topic search and puts results into a table:
 ---+++ Plugin Installation Instructions
 
 	* Unzip the file in your twiki directory, will loaf lib/TWiki/Plugins/SearchToTablePlugin.pm and data/TWiki/SearchToTablePlugin.txt
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---+++ Plugin Info
 

@@ -5,10 +5,10 @@ This plugin provides an interface to query an LDAP directory and display the res
 
 ---++ Features
 
-   * Supports per-query filters
-   * Supports retrieval and display of JPEG photos (e.g., personnel images)
-   * Fields can be supplied through FORM links (see Examples below)
-   * Fully configurable defaults
+	* Supports per-query filters
+	* Supports retrieval and display of JPEG photos (e.g., personnel images)
+	* Fields can be supplied through FORM links (see Examples below)
+	* Fully configurable defaults
 
 ---++ Examples
 
@@ -26,7 +26,7 @@ Filter: <input type="text" name="ldapfilter" size="25">
 </verbatim>
 ...and the LdapPeople page will be called up with your input as the filter.
 </blockquote>
-   * Use this plugin on the TWikiRegister topic to auto-fill in some or all fields.
+	* Use this plugin on the TWikiRegister topic to auto-fill in some or all fields.
 
 ---++ <nop>%TOPIC% Setting Descriptions
 
@@ -47,44 +47,44 @@ Filter: <input type="text" name="ldapfilter" size="25">
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>LDAPPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = This plugin retrieves data from an LDAP directory and displays it on the current topic.
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = This plugin retrieves data from an LDAP directory and displays it on the current topic.
 
-   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-      * Set DEBUG = 0
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+	* Set DEBUG = 0
 
-   * LDAP host to connect to access the directory.
-      * Set HOST = ldap.yourorganization.com
+	* LDAP host to connect to access the directory.
+	* Set HOST = ldap.yourorganization.com
 
-   * LDAP port on the above host
-      * Set PORT = 389
+	* LDAP port on the above host
+	* Set PORT = 389
 
-   * The base DN to use for searching the LDAP directory.
-      * Set BASE = ou=whatever,dc=yourorganization,dc=com
+	* The base DN to use for searching the LDAP directory.
+	* Set BASE = ou=whatever,dc=yourorganization,dc=com
 
-   * The default header for returning query data
-      * Set HEADER = 
+	* The default header for returning query data
+	* Set HEADER = 
 
-   * The default format to use for returning data (similar to the FormattedSearch)
-      * Set FORMAT = 
+	* The default format to use for returning data (similar to the FormattedSearch)
+	* Set FORMAT = 
 
-   * The default sort order
-      * Set ORDER =
+	* The default sort order
+	* Set ORDER =
 
-   * The default separator for multiple values 
-      * Set MVFORMAT =
+	* The default separator for multiple values 
+	* Set MVFORMAT =
 
-   * Define the default LDAP attribute name for LDAP photo
-      * Set JPEGPHOTO = 
+	* Define the default LDAP attribute name for LDAP photo
+	* Set JPEGPHOTO = 
 
-   * Define the default LDAP Photo for an LDAP entry without one
-      * Set JPEGDEFAULTPHOTO = 
+	* Define the default LDAP Photo for an LDAP entry without one
+	* Set JPEGDEFAULTPHOTO = 
 
-   * Default filter  (*Note:* If you set this to =alias=TOPIC= the word =topic= will be replaced with the TOPIC of the page on which the LDAP tag is located  As an example, you can use the WIki username extracted from current TOPIC name to automatically display LDAP user information on any Wiki Home page.)
-      * Set DEFAULTFILTER = "alias=TOPIC"
+	* Default filter  (*Note:* If you set this to =alias=TOPIC= the word =topic= will be replaced with the TOPIC of the page on which the LDAP tag is located  As an example, you can use the WIki username extracted from current TOPIC name to automatically display LDAP user information on any Wiki Home page.)
+	* Set DEFAULTFILTER = "alias=TOPIC"
 
-   * Not Found Error Message
-      * Set NOTFOUNDERROR = 
+	* Not Found Error Message
+	* Set NOTFOUNDERROR = 
 
 ---++ Limitations and Known Issues
 	* Should have a =limit= parameter to limit the rows returned
@@ -94,16 +94,16 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, =
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
-   * Install the Net::LDAP module from CPAN or other source.
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Install the Net::LDAP module from CPAN or other source.
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the installation was successful:
-      * Copy one of the above examples into a Sandbox page, modify it for your own LDAP server, and see if it renders correctly.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the installation was successful:
+	* Copy one of the above examples into a Sandbox page, modify it for your own LDAP server, and see if it renders correctly.
 
 ---++ Plugin Info
 

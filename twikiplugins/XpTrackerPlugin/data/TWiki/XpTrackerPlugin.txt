@@ -134,7 +134,7 @@ Content:
 | ==lib/TWiki/Plugins/%TOPIC%.pm== | Main plugin Perl module | 
 | ==lib/TWiki/Plugins/Xp/*.pm== | plugin Perl submodules | 
 | ==pub/TWiki/%TOPIC%/sorttable.js== | javascript used to sort tables on the client side | 
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 
 <b>Installation test</b>

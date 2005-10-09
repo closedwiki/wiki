@@ -137,7 +137,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%Photoarchive/testimage.jpg,v== | Attached test image repository |
 	  | ==pub/TWiki/%TOPIC%== | Directory for future plugin internal data (empty) |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* You see here a sample image included with ==%<nop>PHOTOARCHIVEPLUGINRANDOM%==
 		

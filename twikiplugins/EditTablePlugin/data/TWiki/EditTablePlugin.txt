@@ -47,14 +47,14 @@ __Note:__ The =%<nop>EDITCELL{ }%=variable cannot be used by itself; place an =%
 ---++ Table Buttons
 
 <form>
-   * In page view mode:
-      * <input type="submit" name="et"   value="Edit table" onclick="return(false);" /> - turn the table into edit mode
-   * In edit mode:
-      * <input type="submit" name="etsave"   value="Save table"  onclick="return(false);" /> - save your changes
-      * <input type="submit" name="etqsave"   value="Quiet save"  onclick="return(false);" /> - save your changes without alerting subscribed WebNotify users
-      * <input type="submit" name="etaddrow" value="Add row" onclick="return(false);" /> - add row to the table (if enabled)
-      * <input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" /> - remove last row from the table (if enabled)
-      * <input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> - cancel without saving and release edit lock
+	* In page view mode:
+	* <input type="submit" name="et"   value="Edit table" onclick="return(false);" /> - turn the table into edit mode
+	* In edit mode:
+	* <input type="submit" name="etsave"   value="Save table"  onclick="return(false);" /> - save your changes
+	* <input type="submit" name="etqsave"   value="Quiet save"  onclick="return(false);" /> - save your changes without alerting subscribed WebNotify users
+	* <input type="submit" name="etaddrow" value="Add row" onclick="return(false);" /> - add row to the table (if enabled)
+	* <input type="submit" name="etdelrow" value="Delete last row" onclick="return(false);" /> - remove last row from the table (if enabled)
+	* <input type="submit" name="etcancel" value="Cancel" onclick="return(false);" /> - cancel without saving and release edit lock
 </form>
 
 ---++ Examples
@@ -107,35 +107,35 @@ Screenshot in edit mode:
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EDITTABLEPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Edit TWiki tables using edit fields, date pickers and drop down boxes
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Edit TWiki tables using edit fields, date pickers and drop down boxes
 
-   * Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
-      * Set DEBUG = 0
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=.  Default: =0=
+	* Set DEBUG = 0
 
-   * Default for change rows flag: =on=, =off=, =add=
-      * Set CHANGEROWS = on
+	* Default for change rows flag: =on=, =off=, =add=
+	* Set CHANGEROWS = on
 
-   * Default flag for quiet save option: =on= to show the Quiet Save button, =off= to hide
-      * Set QUIETSAVE = on
+	* Default flag for quiet save option: =on= to show the Quiet Save button, =off= to hide
+	* Set QUIETSAVE = on
 
-   * Default edit button: Specify =button text=, or specify =alternate text, image URL=
-      * #Set EDITBUTTON = Edit table
-      * Set EDITBUTTON = Edit this table, %ATTACHURL%/edittable.gif
+	* Default edit button: Specify =button text=, or specify =alternate text, image URL=
+	* #Set EDITBUTTON = Edit table
+	* Set EDITBUTTON = Edit this table, %ATTACHURL%/edittable.gif
 
 ---++ Limitations and Known Issues
 
-   * This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |   right |=)
-   * There is a performance issue when editing a large table, say, with more then 50 rows
-   * Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label
-   * You cannot put two =%<nop>EDITTABLE{}%= statements on the same line in the source
-   * You can include %-vars now in select values, by quoting them with &lt;nop&gt;, as in %&lt;nop&gt;X% for %<nop>X%, say for instance:
+	* This Plugin does not support TWiki table formatting like Multi-span cells (e.g. =| ... ||=) and cell justification (e.g. =|  centered  |   right |=)
+	* There is a performance issue when editing a large table, say, with more then 50 rows
+	* Variables like =%<nop>ATTACHURL%= get expanded unless they are in a label
+	* You cannot put two =%<nop>EDITTABLE{}%= statements on the same line in the source
+	* You can include %-vars now in select values, by quoting them with &lt;nop&gt;, as in %&lt;nop&gt;X% for %<nop>X%, say for instance:
      <br /> =select,1,%&lt;nop&gt;X%,%&lt;nop&gt;Y%=
 
 ---++ Plugin Installation Instructions
 This plugin is pre-installed with your TWiki release. You should not need to install it unless you are upgrading to a new version.
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
@@ -146,17 +146,17 @@ This plugin is pre-installed with your TWiki release. You should not need to ins
      | ==pub/TWiki/%TOPIC%/release-notes.html== | Mishoo DHTML calendar release notes |
      | ==pub/TWiki/%TOPIC%/*.js== | Mishoo DHTML calendar <nop>JavaScript files |
      | ==pub/TWiki/%TOPIC%/calendar-system.css== | Mishoo DHTML calendar stylesheet |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file. 
-   * The Mishoo DHTML calendar 0.9.5 is preinstalled and should work without any configuration. If you wish to use another language, specify the in the Plugin settings, or create a new language files, attach it to the Plugin topic, and change the Plugin settings
-   * Test if the Plugin is correctly installed:
-      * Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
-      * Click on *[&nbsp;Edit&nbsp;table&nbsp;]*, make changes and save the table
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* The Plugin depends on the =viewauth= script to authenticate the user. As described in %TWIKIWEB%.TWikiAccessControl, copy the =view= script to =viewauth= (or better, create a symbolic link) and add =viewauth= to the list of authenticated scripts in the =.htaccess= file. 
+	* The Mishoo DHTML calendar 0.9.5 is preinstalled and should work without any configuration. If you wish to use another language, specify the in the Plugin settings, or create a new language files, attach it to the Plugin topic, and change the Plugin settings
+	* Test if the Plugin is correctly installed:
+	* Check above example if there is an *[&nbsp;Edit&nbsp;table&nbsp;]* button below the table in above example
+	* Click on *[&nbsp;Edit&nbsp;table&nbsp;]*, make changes and save the table
 
 ---++ License
 
-   * The Edit Table Plugin is released under the [[http://www.gnu.org/licenses/gpl.html][GPL]]
-   * The [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML calendar]] bundled with this Plugin was created by Mihai Bazon and is released under the [[http://www.gnu.org/licenses/lgpl.html][LGPL]] -- thanks Mihai for the great tool :-)
+	* The Edit Table Plugin is released under the [[http://www.gnu.org/licenses/gpl.html][GPL]]
+	* The [[http://dynarch.com/mishoo/calendar.epl][Mishoo DHTML calendar]] bundled with this Plugin was created by Mihai Bazon and is released under the [[http://www.gnu.org/licenses/lgpl.html][LGPL]] -- thanks Mihai for the great tool :-)
 
 
 ---++ Plugin Info

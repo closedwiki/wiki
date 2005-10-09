@@ -24,9 +24,9 @@ The package includes the following pieces:
 ---+++ How to use the editor
 Basic help for most of the functions in the toolbar is available by "hovering" the mouse over the button. 
 Some functions require a bit more explanation:
-   * "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
-   * The rightmost drop-down will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
-   * "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
+	* "Insert No-Op" inserts a &lt;nop> region. Any TWiki syntax such as wikiwords or variables inside the region will be disabled in the rgeion. $lt;nop> regions may not extend over line breaks.
+	* The rightmost drop-down will give you a menu of TWiki variables that can be inserted. Any of these variables can be edited after they have been placed in the text, for example to add parameters.
+	* "Insert a WikiWord" will give you a menu of topics in the _current web_ that can be inserted. Topics are inserted as links, though typing wikiwords in plain text will work just as well.
 
 ---++++ Kupu Notes
 The version of Kupu shipped with this plugin is an uncustomised basic Kupu release. All the TWiki customisation is done as plugins and extensions to Kupu - the basic kupu code is shipped completely intact.
@@ -55,7 +55,7 @@ An example stand-alone convertor script for HTML to TWiki is included in the ins
 %$MANIFEST%
 	* Run ==%TOPIC%_installer== to automatically check and install other modules that this module depends on. You can also do this step manually. Dependencies:
 	%$DEPENDENCIES%
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* To enable the editor in one of your skins, add the following link to the skin alongside or in place of the existing 'edit' link:<br /><code>&lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=kupu"&gt;Kupu&lt;/a&gt;</code><br />As you can see this is just a standard edit link with the 'kupu' skin in place of the usual edit skin. Here it is for this topic: <a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=kupu">Kupu</a>. Try clicking on it, but _do not save_!
 
 ---++ Settings

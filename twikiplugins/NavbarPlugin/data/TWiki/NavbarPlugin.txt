@@ -50,7 +50,7 @@ See <nop>NavbarPluginExample at http://koala.ilog.fr/wiki/bin/view/Plugins/Navba
 ---+++ Plugin Installation Instructions
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. 
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed, by
 		* editing NavbarPluginExample and saving it (once) to generate the index
 		* viewing NavbarPluginExample and sub-pages

@@ -5,13 +5,13 @@ This plugin is based on TWiki:Plugins/TouchGraphAddOn
 . Instead of a standalone java app with its own HTML browser, <nop>%TOPIC% provides a popup window containing an applet.
 
 Advantages:
-   * no need to install anything but a Java Runtime on the clients.
-   * interacts with standard, full featured browsers instead of Java HTML component.
+	* no need to install anything but a Java Runtime on the clients.
+	* interacts with standard, full featured browsers instead of Java HTML component.
 
 
 ---++ Syntax Rules
 
-   * Insert %<nop>TGPOPUP% where you'd like to have a link to a popup window containing the applet. %BR% I have put it into the view action list (%<nop>TMPL:DEF{"topicaction"}% of =/<i>path/to/twiki</i>/bin/view.tmpl=).
+	* Insert %<nop>TGPOPUP% where you'd like to have a link to a popup window containing the applet. %BR% I have put it into the view action list (%<nop>TMPL:DEF{"topicaction"}% of =/<i>path/to/twiki</i>/bin/view.tmpl=).
 
    You can still use the unmodified standalone <nop>TGWikiBowser as well e. g. from the command line:
 <pre>
@@ -32,16 +32,16 @@ The window popping up schould resemble [[%ATTACHURL%/touchgraph_applet.png][this
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Displays the relations between topics of a web in a [[http://www.touchgraph.com/][TouchGraph]] applet
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Displays the relations between topics of a web in a [[http://www.touchgraph.com/][TouchGraph]] applet
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 0
 
-   * You may redefine TGPOPUP to your needs. 
+	* You may redefine TGPOPUP to your needs. 
 <verbatim>
 
-      * Set TGPOPUP = <a target="wikigraph" onClick="open('%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=tglaunch', 'wikigraph', 'titlebar=0,width=600,height=600,resizable,scrollbars'); return false" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=tglaunch title="The topology of the topics in this web (java applet)">Graph</a> 
+	* Set TGPOPUP = <a target="wikigraph" onClick="open('%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=tglaunch', 'wikigraph', 'titlebar=0,width=600,height=600,resizable,scrollbars'); return false" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=tglaunch title="The topology of the topics in this web (java applet)">Graph</a> 
 </verbatim>
 
 
@@ -49,8 +49,8 @@ Plugin settings are stored as preferences variables. To reference a plugin setti
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
@@ -61,11 +61,11 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
      | ==pub/TWiki/TouchGraphPlugin/touchgraph_applet.png== | screenshot |
      | ==pub/TWiki/TouchGraphAppletInstructions/kill.png== | icon for the applets stop button |
      | ==templates/view.tglaunch.tmpl== | special skin for popup window |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
-   * Edit your crontab to schedule =/<i>path/to/twiki</i>/bin/tgdb= like =[[TWikiSiteTools#Setting_the_Automatic_Email_Sche][mailnotify]]=, e. g.:%BR% =4,19,34,49 * * * * cd /<i>path/to/twiki</i>/bin; ./tgdb > /dev/null=
+	* Edit your crontab to schedule =/<i>path/to/twiki</i>/bin/tgdb= like =[[TWikiSiteTools#Setting_the_Automatic_Email_Sche][mailnotify]]=, e. g.:%BR% =4,19,34,49 * * * * cd /<i>path/to/twiki</i>/bin; ./tgdb > /dev/null=
 
-   * You'll get an applet error unless you have run ==tgdb== once.
+	* You'll get an applet error unless you have run ==tgdb== once.
 
 ---++ Plugin Info
 

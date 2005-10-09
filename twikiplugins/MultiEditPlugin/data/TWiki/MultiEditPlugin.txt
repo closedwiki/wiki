@@ -9,8 +9,8 @@ The motivation behind this plugin was to allow the separation of a topic into se
 
 ---++ Syntax Rules
 
-   * Enclose a portion of your topic by =&lt;section&gt;= and =&lt;/section&gt;= tags.
-   * Sections to be editable cannot be nested, but may appear anywhere within the topic.
+	* Enclose a portion of your topic by =&lt;section&gt;= and =&lt;/section&gt;= tags.
+	* Sections to be editable cannot be nested, but may appear anywhere within the topic.
 
 ---++ Examples
 
@@ -35,39 +35,39 @@ will render as shown in the picture below and allow each section to be edited in
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = This plugin allows arbitrary section of a topic to be edited individually
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = This plugin allows arbitrary section of a topic to be edited individually
 
-   * Debug plugin: (See output in =$logDir/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =$logDir/debug.txt=)
+	* Set DEBUG = 0
 
-   * Edit label (may also be an &lt;img&gt; tag):
-      * Set LABEL = Edit
-         * Example image tag: ="&lt;br&gt;&lt;img src=\"". &TWiki::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\"&gt;"=
+	* Edit label (may also be an &lt;img&gt; tag):
+	* Set LABEL = Edit
+	* Example image tag: ="&lt;br&gt;&lt;img src=\"". &TWiki::getPubUrlPath() . "/$installWeb/EditTablePlugin/edittable.gif\" alt=\"Edit\" border=\"0\"&gt;"=
 
-   * A comma separated list of skins *NOT* to allow editing(you'll probably want the print skin here):
-      * Set SKIPSKIN = print, plain
+	* A comma separated list of skins *NOT* to allow editing(you'll probably want the print skin here):
+	* Set SKIPSKIN = print, plain
 
-   * Placement of edit button =before= or =after= editable section
-      * Set PLACEMENT = after
+	* Placement of edit button =before= or =after= editable section
+	* Set PLACEMENT = after
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==pub/TWiki/%TOPIC%/multieditplugin_example.jgp== |  |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==bin/editonesection== |  |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Verify access and ownership settings for the new scripts.
-   * Edit your .htaccess file to require a valid user for the editonesection script (if needed).
-   * Test if the installation was successful:
-      * Try out above example
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Verify access and ownership settings for the new scripts.
+	* Edit your .htaccess file to require a valid user for the editonesection script (if needed).
+	* Test if the installation was successful:
+	* Try out above example
 
 ---++ Plugin Info
 

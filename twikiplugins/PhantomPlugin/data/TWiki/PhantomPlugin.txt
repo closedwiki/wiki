@@ -7,9 +7,9 @@ One of target of this plugin - help with documentation for developers. It have c
 
 ---++ Current Features
 
-   * Variables macro language. You can define variables on all TWiki pages. Read PhantomPluginVariables topic to get more information about this feature.
-   * Text Formatters. You can define how plugin will format text. For more information please read PhantomPluginFormatters topic.
-   * Highlighters. You can use predefined or create yourself custom highliters for text (or programmimg code). Read PhantomHighlighters topic to get more information about this feature.
+	* Variables macro language. You can define variables on all TWiki pages. Read PhantomPluginVariables topic to get more information about this feature.
+	* Text Formatters. You can define how plugin will format text. For more information please read PhantomPluginFormatters topic.
+	* Highlighters. You can use predefined or create yourself custom highliters for text (or programmimg code). Read PhantomHighlighters topic to get more information about this feature.
 
 ---++ Plugin Development 
 
@@ -23,24 +23,24 @@ Following variables may using in your work. You can customize each TWiki web by 
 
 ---+++ Plugin core settings
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Text processing plugin. Custom variables, custom text formatters etc.
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Text processing plugin. Custom variables, custom text formatters etc.
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 1
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 1
 
-   * Content type of every server response. You can use custom content type. If you don't set skin, this variable have effect only to HTTP header. If you enable a skin, in each template was a META tag with value of this variable. To get more information about skin support, please read PhantomSkin topic. You can leave it variable with empty value, then no content type will be used. This may solve the problem of displaying some non-ISO languages encodings.
-      * Set WEBCONTENTTYPE = text/html; charset=windows-1251
+	* Content type of every server response. You can use custom content type. If you don't set skin, this variable have effect only to HTTP header. If you enable a skin, in each template was a META tag with value of this variable. To get more information about skin support, please read PhantomSkin topic. You can leave it variable with empty value, then no content type will be used. This may solve the problem of displaying some non-ISO languages encodings.
+	* Set WEBCONTENTTYPE = text/html; charset=windows-1251
 
 ---+++ Plugins installation
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory.
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the installation was successful:
-      * The pages chage encoding to charset in %<nop>WEBCONTENTTYPE%
-      * Try [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=phantom]]
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the installation was successful:
+	* The pages chage encoding to charset in %<nop>WEBCONTENTTYPE%
+	* Try [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=phantom]]
 
 ---++ Plugin Info
 

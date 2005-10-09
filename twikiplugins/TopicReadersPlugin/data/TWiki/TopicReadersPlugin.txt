@@ -10,17 +10,17 @@ This is a plugin to list readers of a topic from a given date
 
 ---++ Settings
 
-   * The default format to use for returning data 
-      * Set READERSFORMAT = <li> %READERNAME% %M% %READERDATE%
+	* The default format to use for returning data 
+	* Set READERSFORMAT = <li> %READERNAME% %M% %READERDATE%
  
 
 ---++ General Settings
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = This plugin list readers of a TOPIC since a given date
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = This plugin list readers of a TOPIC since a given date
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 0
 
 
 ---++ Plugin Info

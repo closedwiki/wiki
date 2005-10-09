@@ -37,7 +37,7 @@ a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%INTERWIKIPLUGIN_SHORTDE
 
 	* Download the ZIP file from the Plugin web (see below)
 		* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Check that Open3 and either Ispell or Aspell is installed
 	* Edit settings in the ==spell.pl== and the ==edit.spell.tmpl== as necessary
 	* Currently there is no need to enable this plugin in TWiki.TWikiPreferences

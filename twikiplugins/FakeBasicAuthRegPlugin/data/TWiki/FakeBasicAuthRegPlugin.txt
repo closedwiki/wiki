@@ -28,7 +28,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==pub/TWiki/%TOPIC%/TWikiRegistration.txt== | Example configuration files |
 	  | ==pub/TWiki/%TOPIC%/oopsauth.tmpl== | Example configuration files |
 	  | ==pub/TWiki/%TOPIC%/htaccess.txt== | Example configuration files |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Make sure SSL is enabled in your Apache config file
 	* For Apache 1.3, add =SSLFakeBasicAuth= to your =httpd.conf= (for Apache 2.0, add =SSLOptions +FakeBasicAuth=)
 	* Copy =bin/.htaccess.txt= to =bin/.htaccess=

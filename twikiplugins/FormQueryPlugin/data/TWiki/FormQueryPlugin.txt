@@ -1,4 +1,4 @@
----+!! FormQueryPlugin
+vi---+!! FormQueryPlugin
 
 The FormQueryPlugin provides a query interface to the [[TWiki:Plugins/DBCacheContrib][TWiki::Contrib::DBCache]] module, giving a way to present query results as formatted tables.
 
@@ -84,17 +84,17 @@ At present there is no way to constrain a search on the contents of a contained 
 ---+++++ Fields
 Field references can be as simple as the name of a field, or may be more complex expressions that can even include embedded searches. The precise interpretation of the syntax depends on the type (Map or Array) of the object being referenced.
 *Arrays*
-   * _N_ where $n is a number will get the Nth entry in the array e.g. =attachments.9=
-   * =[_N_]= where $n is a number will also get the Nth entry in the array e.g. =attachments[9]=
-   * =X= will return the sum of the subfield =X= of each entry e.g. =TaskTable.Effort= will sum the =Effort= column in a table called =TaskTable=.
-   * =[?<i>search</i>]= will perform the given search over the entries in the array. Always returns an array result, even when there is only one result. For example: <code>attachments[?name='pitcha.gif']</code> will return an array of all the entries that have their subfield =name= set to =Sam=.
-   * =[*X]= will get a new array made from field X of each entry in this array. For example =attachments[*size]= will get an array of the sizes of each attachment.
+	* _N_ where $n is a number will get the Nth entry in the array e.g. =attachments.9=
+	* =[_N_]= where $n is a number will also get the Nth entry in the array e.g. =attachments[9]=
+	* =X= will return the sum of the subfield =X= of each entry e.g. =TaskTable.Effort= will sum the =Effort= column in a table called =TaskTable=.
+	* =[?<i>search</i>]= will perform the given search over the entries in the array. Always returns an array result, even when there is only one result. For example: <code>attachments[?name='pitcha.gif']</code> will return an array of all the entries that have their subfield =name= set to =Sam=.
+	* =[*X]= will get a new array made from field X of each entry in this array. For example =attachments[*size]= will get an array of the sizes of each attachment.
 *Maps*
-   * =X= will get the subfield named =X=. For example, =Product= will get the formfield named =Product=.
-   * =X.Y= will get the subfield =Y= of the subfield named =X=.
-   * =[X] = will get the subfield named =X= (so X[Y] and X.Y are synonymous).
+	* =X= will get the subfield named =X=. For example, =Product= will get the formfield named =Product=.
+	* =X.Y= will get the subfield =Y= of the subfield named =X=.
+	* =[X] = will get the subfield named =X= (so X[Y] and X.Y are synonymous).
 In all cases
-   * =#= means "reset to root". So =#.Y= will return the subfield =Y= of the Map at the root of the query.
+	* =#= means "reset to root". So =#.Y= will return the subfield =Y= of the Map at the root of the query.
 
 ---+++ Reports
 ---++++ <code>%TABLEFORMAT</code>
@@ -242,12 +242,12 @@ Set to 1 to enable internal consistency checks and other debug states.
 Set to 0 if you do not want to use the =Storable= module even if it is installed. The plugin is _much_ faster if =Storable= is installed and enabled.
 	* Set STORABLE = 1
 The plugin can be enabled gloablly, or on a per-web basis. If it is to be enabled globally, then the setting
-    * Set FQP_ENABLE = 1
+	* Set FQP_ENABLE = 1
 must appear in this topic. Otherwise the plugin can be enabled on a per-web basis by putting the =FQP_ENABLE= setting into the WebPreferences topic for the web.
 The remaining settings are defined on a per-web basis.
-   * [[#FqTables][FQTABLES]]
-   * [[#TopicRelations][FQRELATIONS]]
-   * [[#HighLightMap][HIGHLIGHTMAP]]
+	* [[#FqTables][FQTABLES]]
+	* [[#TopicRelations][FQRELATIONS]]
+	* [[#HighLightMap][HIGHLIGHTMAP]]
 
 #TopicRelations
 ---+++ Topic Relations
@@ -275,23 +275,23 @@ A feature of the plugin is that special words in the fields of <code>%SHOWQUERY<
 
 For example, let's say you want to detect the words "No progress" in a table field and highlight it in bold red text. This is done through a special topic in the web that contains a set of mappings from perl regular expressions that match the words to be recognised and the special formatting. For example, the highlight map might contain the following:
 <pre>
-   * /(No progress)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>
+	* /(No progress)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>
 </pre>
 The =/(No progress)/= defines the perl RE to be matched, and the HTML on the right of the equals defines what to replace it with. The =$1= inserts whatever was matched by the RE. The RE must match the whole string in the table field, so the above map will *NOT* match "No progress with editing"; to match that, you'd have to write:
 <pre>
-   * /(No progress)(.*)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>$2
+	* /(No progress)(.*)/ = &lt;font color=red>&lt;b>$1&lt;/b>&lt;/font>$2
 </pre>
 Only the first RE in the map matched by the string is expanded. Note that spaces between the '=' and the first non-whitespace character of the RHS are ignored. If you want a space here use <code>&amp;nbsp;</code>
 
 The default name of the map topic is =Highlight<nop>Map= though you can change this by setting the variable =FQHIGHLIGHTMAP= in Web<nop>Preferences to the name of the topic to use instead. For example
 <pre>
-   * <nop>Set FQHIGHLIGHTMAP = MyHighlightMap
+	* <nop>Set FQHIGHLIGHTMAP = MyHighlightMap
 </pre>
 
 Just about any formatting can be included on the LHS of the map; for example, you may want to leverage the SmiliesPlugin and translate "pass" to a smiley face and "fail" to a frown.
 <pre>
-   * /pass/ = :<nop>-)
-   * /fail/ = :<nop>-(
+	* /pass/ = :<nop>-)
+	* /fail/ = :<nop>-(
 </pre>
 
 ---
@@ -304,7 +304,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 	%$DEPENDENCIES%
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* The variable %<nop>FORMQUERYPLUGIN_ENABLE% must be set either globally or in the web where you want to use it.
 		* Set ENABLE = 1
 	* By default the plugin is enabled globally (on all webs). This may have an unwelcome performance impact, as the plugin may create a cache of topics in a web where it is not intended to be used. To enable the plugin for selected webs only, comment out the previous line (put a # in front of the word 'Set') and put the following line (without the #) into the WebPreferences topic of the web you want to enable it on:
