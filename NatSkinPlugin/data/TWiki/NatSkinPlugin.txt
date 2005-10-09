@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128882600" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128887434" format="1.0" version="1.1"}%
 ---+!! The Natural Skin Plugin
 
 This is the supplemental plugin for the NatSkin. This plugin is inspired
@@ -90,6 +90,7 @@ address the different implementations and incompatibilities (e.g. access to topi
 	 <li> =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on\
 			is beijing, cairo or dakar </li>\
 	 <li> =action="view,edit,preview,..."=: test the current topic action </li> \
+	 <li> =glue="on,off"=: control wether to eat surrounding whitespaces or not </li> \
   </ul> \
   The tag will render the "then" content if all tests evaluate to true and \
   the "else" content otherwise. Tested strings can be regular expressions. |
@@ -106,7 +107,7 @@ address the different implementations and incompatibilities (e.g. access to topi
   nested safely |
 | =%<nop>IFDEFINED{"&lt;<nop>TWikiML>" \
   [action="view,edit,preview,..."]? \
-  then="..." else="..."}%= \
+  then="..." else="..." glue="on,off"}%= \
 | returns "then" or "else" depeinding on the &lt;<nop>TWikiML> expression expanding to the \
   emtpy string or not and \
   the current topic action matching the given one; this tag works similar to the <nop>IfStatement\
@@ -261,9 +262,13 @@ using these settings will be changed accordingly.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.50 (2005-09-27) |
+|  Plugin Version: | v2.51 (2005-10-09) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  27 Sep 2005: | added IFSKINSTATE and IFDEFINED features; \
+|  09 Oct 2005: | rewrite of skin state: support switching border, \
+						sidebar, webbuttons and style independently; \
+						rewrite of the email obfuscator; \
+						improved skin style browser |
+|  27 Sep 2005: | added conditional content tags IFSKINSTATE and IFDEFINED; \
 						added web button support |
 |  30 Aug 2005: | added external link detection; fixed IFSKINSTYLE; \
 						added style support for the TWiki:Plugins.TablePlugin |
