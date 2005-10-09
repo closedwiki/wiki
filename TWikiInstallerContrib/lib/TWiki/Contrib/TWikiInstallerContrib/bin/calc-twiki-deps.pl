@@ -127,6 +127,7 @@ SVK
 ^Unicode::Map
 ^Unicode::String$
 ^Jcode
+^Net::SMTP$
 __MODULES__
 
 print $deps, "\n";
