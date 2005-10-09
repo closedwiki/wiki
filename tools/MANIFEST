@@ -733,3 +733,4 @@ UpgradeTwiki 0550
 !include twikiplugins/SmiliesPlugin/lib/TWiki/Plugins/SmiliesPlugin
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
+!include twikiplugins/TipsContrib/lib/TWiki/Plugins/TipsContrib

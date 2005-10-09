@@ -1,7 +1,4 @@
 lib/TWiki/Contrib/TipsContrib.pm
-lib/TWiki/Contrib/TipsContrib
-lib/TWiki/Contrib/TipsContrib/build.pl
-lib/TWiki/Contrib/TipsContrib/manifest
 data/TWiki/TWikiTip001.txt
 data/TWiki/TWikiTip002.txt
 data/TWiki/TWikiTip003.txt
