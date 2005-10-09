@@ -6,14 +6,14 @@ Keeping this help text short and simple is important since this page is aimed at
 ---
 %STARTINCLUDE%
 *Formatting help:*
-	* *bold* put word/phrase in asterisks: =<nop>*your phrase*=
-	* *bullet list* 3 spaces, asterisk, 1 space: =&nbsp;&nbsp;&nbsp;*&nbsp;your text=
-	* *headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&nbsp;Your Heading=
-	* *italic* put word/phrase in underscores: =_<nop>your words_=
-	* *links* use topic name or URL: =WebHome=, =http://yahoo.com=, or =[<nop>[http://yahoo.com/][link to Yahoo]]=
-	* *monospaced* put word/phrase in equal signs: =<nop>=your words==
-	* *paragraphs* separate with blank line
-	* <a target="TextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">More formatting help</a> and <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">hints on good style</a>
+   * *bold* put word/phrase in asterisks: =<nop>*your phrase*=
+   * *bullet list* 3 spaces, asterisk, 1 space: =&nbsp;&nbsp;&nbsp;*&nbsp;your text=
+   * *headings* 3 dashes, 1 to 6 pluses, 1 space: =---++&nbsp;Your Heading=
+   * *italic* put word/phrase in underscores: =_<nop>your words_=
+   * *links* use topic name or URL: =WebHome=, =http://yahoo.com=, or =[<nop>[http://yahoo.com/][link to Yahoo]]=
+   * *monospaced* put word/phrase in equal signs: =<nop>=your words==
+   * *paragraphs* separate with blank line
+   * <a target="TextFormattingRules" onclick="return launchWindow('%TWIKIWEB%','TextFormattingRules')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/TextFormattingRules">More formatting help</a> and <a target="GoodStyle" onclick="return launchWindow('%TWIKIWEB%','GoodStyle')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/GoodStyle">hints on good style</a>
 %STOPINCLUDE%
 ---
 

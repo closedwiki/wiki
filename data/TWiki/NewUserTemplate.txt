@@ -1,31 +1,31 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 %SPLIT%
-	* %KEY%: %VALUE%%SPLIT%
+   * %KEY%: %VALUE%%SPLIT%
 
 __%MAKETEXT{"My Links"}%__
-	* %MAKETEXT{"Visit [_1] to learn about TWiki" args="%TWIKIWEB%.WelcomeGuest"}%
-	* %MAKETEXT{"[_1] web to try out TWiki" args="Sandbox.%HOMETOPIC%"}%
-	* %MAKETEXT{"[_1] just for me" args="Sandbox.%TOPIC%Sandbox"}%
-	* 
-	* 
+   * %MAKETEXT{"Visit [_1] to learn about TWiki" args="%TWIKIWEB%.WelcomeGuest"}%
+   * %MAKETEXT{"[_1] web to try out TWiki" args="Sandbox.%HOMETOPIC%"}%
+   * %MAKETEXT{"[_1] just for me" args="Sandbox.%TOPIC%Sandbox"}%
+   * 
+   * 
 
 __%MAKETEXT{"Personal Preferences (details in [_1])" args="%TWIKIWEB%.TWikiVariables"}%__
-	* %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off: (see details in [_2])" args="%TWIKIWEB%.WikiWord,%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
-		* Set LINKTOOLTIPINFO = off
-	* %MAKETEXT{"Horizontal size of text edit box:"}%
-		* Set EDITBOXWIDTH = 70
-	* %MAKETEXT{"Vertical size of text edit box:"}%
-		* Set EDITBOXHEIGHT = 22
-	* %MAKETEXT{"Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable."}%
-		* Set EDITBOXSTYLE = width: 99%
-	* %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%MAINWEB%.WikiName"}%
-		* Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
+   * %MAKETEXT{"Show tool-tip topic info on mouse-over of [_1] links, on or off: (see details in [_2])" args="%TWIKIWEB%.WikiWord,%TWIKIWEB%.%WIKIPREFSTOPIC%"}%
+      * Set LINKTOOLTIPINFO = off
+   * %MAKETEXT{"Horizontal size of text edit box:"}%
+      * Set EDITBOXWIDTH = 70
+   * %MAKETEXT{"Vertical size of text edit box:"}%
+      * Set EDITBOXHEIGHT = 22
+   * %MAKETEXT{"Style of text edit box. =width: 99%= for full window width (default), =width: auto= to disable."}%
+      * Set EDITBOXSTYLE = width: 99%
+   * %MAKETEXT{"Write protect your home page: (set it to your [_1])" args="%MAINWEB%.WikiName"}%
+      * Set ALLOWTOPICCHANGE = %WIKIUSERNAME%
 
 __%MAKETEXT{"Related Topics:"}%__
-	* %TWIKIWEB%.ChangePassword
-	* %MAKETEXT{"[_1] has a list of other TWiki users." args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
-	* UserDocumentationCategory
-	* UserToolsCategory
+   * %TWIKIWEB%.ChangePassword
+   * %MAKETEXT{"[_1] has a list of other TWiki users." args="%MAINWEB%.%WIKIUSERSTOPIC%"}%
+   * UserDocumentationCategory
+   * UserToolsCategory
 
 %META:FORM{name="%MAINWEB%.UserForm"}%
 %META:PREFERENCE{name="VIEW_TEMPLATE" title="VIEW_TEMPLATE" type="Local" value="UserView"}%

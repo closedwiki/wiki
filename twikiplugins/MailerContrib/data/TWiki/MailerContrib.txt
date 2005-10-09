@@ -18,17 +18,17 @@ _three spaces_ * _SMTP mail address_ : _topics_ <br />
 _three spaces_ * [ _webname_ . ] _wikiName_ : _topics_
 
 where _topics_ is a space-separated list of topic names.
-	* Specify topics without a _Web._ prefix
-	* Topics must exist in this web.
-	* Topics may be specified using * wildcards
-	* Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature.
+   * Specify topics without a _Web._ prefix
+   * Topics must exist in this web.
+   * Topics may be specified using * wildcards
+   * Each topic may optionally be followed by an integer in parentheses, indicating the depth of the tree of children below that topic. Changes in all these children will be detected and reported along with changes to the topic itself. _Note_ This uses the TWiki "Topic parent" feature.
    * Each topic may optionally be preceded by a '+' or '-' sign. The '+' sign means "subscribe to this topic" (the same as not putting anything). The '-' sign means "don't send notifications regarding this topic". This allows users to elect to filter out changes to certain topics (and their children, to an arbitrary depth). Topic filters ('-') take precedence over topic includes ('+').
 
 For example:
 <verbatim>
-	* daisy@flowers.com
-	* daisy@flowers.com: Web*
-	* DaisyCutter: Petal* (1) WeedKillers (3) Red*Phlox
+   * daisy@flowers.com
+   * daisy@flowers.com: Web*
+   * DaisyCutter: Petal* (1) WeedKillers (3) Red*Phlox
     * StarTrekFan: * - *Wars - *sInTheirEyes - *shipTroopers
 </verbatim>
 A user may be listed many times in the <nop>%NOTIFYTOPIC% topic. Where a user has several lines in <nop>%NOTIFYTOPIC% that all match the same topic, they will only be notified of changes to that topic _once_.
@@ -48,10 +48,10 @@ The old =mailnotify= script had a side-effect; it would remove obsolete topic lo
 
 ---+ Installation Instructions
 This Contrib is pre-installed as part of the TWiki release package, and should only have to be re-installed if an upgrade is required.
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-	* Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
-	* To make sure the installation was successful, run the	=bin/mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory.
+   * Run the installer script =MailContrib_intaller.pl= or alternatively resolve all dependencies manually.
+   * To make sure the installation was successful, run the   =bin/mailnotify= script from the command line, with no parameters. In this case it will print out what it would have done to STDOUT.
 
 ---+ Setting up your cron job
 You need to set up a =cron= (or equivalent) job to run =bin/mailnotify=.
@@ -67,8 +67,8 @@ The script can also be used from the browser. The following CGI parameters are s
 | =webs= | Space or comma-separated list of webs to process |
 
 ---+ Settings
-	* Name of the perl package
-		* Set STUB = TWiki::Contrib::Mailer
+   * Name of the perl package
+      * Set STUB = TWiki::Contrib::Mailer
 
 ---+ Contrib Info
 

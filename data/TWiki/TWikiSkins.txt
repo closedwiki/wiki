@@ -79,8 +79,8 @@ Example: To use a style sheet for the broadcast message, add this to =view.myski
 <verbatim>
 <style type="text/css">
 .broadcastmessage {
-	 background: yellow; display:block;
-	 border-style:solid;border-width: 2px;border-color:red;
+    background: yellow; display:block;
+    border-style:solid;border-width: 2px;border-color:red;
 }
 .broadcastmessage strong {color: red}
 </style>

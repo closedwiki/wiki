@@ -11,39 +11,39 @@ File Attachments can be used to archive data, or to create powerful customized g
 
 ---+++ Document Management System
 
-	* You can use Attachments to store and retrieve documents (in any format, with associated graphics, and other media files); attach documents to specific TWiki topics; collaborate on documents with full revision control; distribute documents on a [[#AttachmentAccess][need-to-know basis]] using web and topic-level access control; create a central reference library that's easy to share with an user group spread around the world.
+   * You can use Attachments to store and retrieve documents (in any format, with associated graphics, and other media files); attach documents to specific TWiki topics; collaborate on documents with full revision control; distribute documents on a [[#AttachmentAccess][need-to-know basis]] using web and topic-level access control; create a central reference library that's easy to share with an user group spread around the world.
 
 ---+++ File Sharing
 
-	* For file sharing, FileAttachments on a series of topics can be used to quickly create a well-documented, categorized digital download center for all types of files: documents; graphics and other media; drivers and patches; applications; anything you can safely upload!
+   * For file sharing, FileAttachments on a series of topics can be used to quickly create a well-documented, categorized digital download center for all types of files: documents; graphics and other media; drivers and patches; applications; anything you can safely upload!
 
 ---+++ Web Authoring
 
-	* Through your Web browser, you can easily upload graphics (or sound files, or anything else you want to link to on a page) and place them on a single page, or use them across a web, or site-wide.
-		* __NOTE:__ You can also add graphics - any files - directly, typically by FTP upload. This requires FTP access, and may be more convenient if you have a large number of files to load. FTP-ed files can't be managed using browser-based Attachment controls. You can use your browser to create TWikiVariables shortcuts, like this %<nop>H% = %H%.
+   * Through your Web browser, you can easily upload graphics (or sound files, or anything else you want to link to on a page) and place them on a single page, or use them across a web, or site-wide.
+      * __NOTE:__ You can also add graphics - any files - directly, typically by FTP upload. This requires FTP access, and may be more convenient if you have a large number of files to load. FTP-ed files can't be managed using browser-based Attachment controls. You can use your browser to create TWikiVariables shortcuts, like this %<nop>H% = %H%.
 
 ---++ Uploading Files
 
-	* Click on the ==Attach== link at the bottom of the page. The =Attach= screen lets you browse for a file, add a comment, and upload it. The uploaded file will show up in the [[#FileAttachmentTable][File Attachment table]].
-		* __NOTE:__ The topic must already exist. It is a two step process if you want to attach a file to a non-existing topic; first create the topic, then add the file attachment.
-		* Any type of file can be uploaded. Some files that might pose a security risk are renamed, ex: =*.php= files are renamed to =*.php.txt= so that no one can place code that would be read in a .php file. 
-		* The previous upload path is retained for convenience. In case you make some changes to the local file and want to upload it, again you can copy the previous upload path into the Local file field.
-		* TWiki can limit the file size. This is defined by the =%<nop>ATTACHFILESIZELIMIT%= variable of the TWikiPreferences, currently set at %ATTACHFILESIZELIMIT% KB.
-			* %X% It's not recommended to upload files greater than a few hundred K through a browser. Large files can be extremely slow-loading, and often time out. Use an FTP site for large file uploads.
+   * Click on the ==Attach== link at the bottom of the page. The =Attach= screen lets you browse for a file, add a comment, and upload it. The uploaded file will show up in the [[#FileAttachmentTable][File Attachment table]].
+      * __NOTE:__ The topic must already exist. It is a two step process if you want to attach a file to a non-existing topic; first create the topic, then add the file attachment.
+      * Any type of file can be uploaded. Some files that might pose a security risk are renamed, ex: =*.php= files are renamed to =*.php.txt= so that no one can place code that would be read in a .php file. 
+      * The previous upload path is retained for convenience. In case you make some changes to the local file and want to upload it, again you can copy the previous upload path into the Local file field.
+      * TWiki can limit the file size. This is defined by the =%<nop>ATTACHFILESIZELIMIT%= variable of the TWikiPreferences, currently set at %ATTACHFILESIZELIMIT% KB.
+         * %X% It's not recommended to upload files greater than a few hundred K through a browser. Large files can be extremely slow-loading, and often time out. Use an FTP site for large file uploads.
 
 ---++ Downloading Files
 
-	* Click on the file in the [[#FileAttachmentTable][File Attachment table]].
+   * Click on the file in the [[#FileAttachmentTable][File Attachment table]].
 #AttachmentAccess
 
-	* %X% _NOTE:_ There is no access control on individual attachments. If you need control over single files, create a separate topic per file and set topic-level [[TWikiDocumentation#TWikiAccessControl][access restrictions]] for each.
+   * %X% _NOTE:_ There is no access control on individual attachments. If you need control over single files, create a separate topic per file and set topic-level [[TWikiDocumentation#TWikiAccessControl][access restrictions]] for each.
 
 ---++ Moving Attachment Files
 
 An attachment can be moved between topics. 
-	* Click ==Manage== on the Attachment to be moved.
-	* On the control screen, select the new web and/or topic.
-	* Click ==Move==. The attachment and its version history are moved. The original location is stored as [[TWikiDocumentation#Meta_Data_Definition][topic Meta Data]].
+   * Click ==Manage== on the Attachment to be moved.
+   * On the control screen, select the new web and/or topic.
+   * Click ==Move==. The attachment and its version history are moved. The original location is stored as [[TWikiDocumentation#Meta_Data_Definition][topic Meta Data]].
 
 ---++ Deleting Attachments
 
@@ -51,25 +51,25 @@ Move unwanted Attachments to web =Trash=, topic =TrashAttachment=.
 
 ---++ Linking to Attached Files
 
-	* Once a file is attached it can be referenced in the topic. Example:
-		1. ==Attach== file: =Sample.txt=
-		1. ==Edit== topic and enter: =%<nop>ATTACHURL%/Sample.txt=
-		1. ==Preview==: =%<nop>ATTACHURL%/Sample.txt= text appears as: %PUBURL%/%WEB%/%TOPIC%/Sample.txt, a link to the text file.
+   * Once a file is attached it can be referenced in the topic. Example:
+      1. ==Attach== file: =Sample.txt=
+      1. ==Edit== topic and enter: =%<nop>ATTACHURL%/Sample.txt=
+      1. ==Preview==: =%<nop>ATTACHURL%/Sample.txt= text appears as: %PUBURL%/%WEB%/%TOPIC%/Sample.txt, a link to the text file.
 
-	* To reference an attachment located in another topic, enter:
-		* =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/Sample.txt= (if it's within the same web)
-		* =%<nop>PUBURL%/Otherweb/OtherTopic/Sample.txt= (if it's in a different web)
+   * To reference an attachment located in another topic, enter:
+      * =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/Sample.txt= (if it's within the same web)
+      * =%<nop>PUBURL%/Otherweb/OtherTopic/Sample.txt= (if it's in a different web)
 
-	* Attached HTML files and text files can be inlined in a topic. Example:
-		1. ==Attach== file: =Sample.txt=
-		1. ==Edit== topic and write text: =%<nop>INCLUDE{"%<nop>ATTACHURL%/Sample.txt"}%=
-			* Content of attached file is shown inlined.
-			* Read more in IncludeTopicsAndWebPages.
+   * Attached HTML files and text files can be inlined in a topic. Example:
+      1. ==Attach== file: =Sample.txt=
+      1. ==Edit== topic and write text: =%<nop>INCLUDE{"%<nop>ATTACHURL%/Sample.txt"}%=
+         * Content of attached file is shown inlined.
+         * Read more in IncludeTopicsAndWebPages.
 
-	* GIF, JPG and PNG images can be attached and shown embedded in a topic. Example:
-		1. ==Attach== file: =Smile.gif=
-		1. ==Edit== topic and write text: =%<nop>ATTACHURL%/Smile.gif=
-		1. ==Preview==: text appears as %PUBURL%/%WEB%/%TOPIC%/Smile.gif, an image.
+   * GIF, JPG and PNG images can be attached and shown embedded in a topic. Example:
+      1. ==Attach== file: =Smile.gif=
+      1. ==Edit== topic and write text: =%<nop>ATTACHURL%/Smile.gif=
+      1. ==Preview==: text appears as %PUBURL%/%WEB%/%TOPIC%/Smile.gif, an image.
 
 #FileAttachmentTable
 ---++ File Attachment Contents Table
@@ -79,8 +79,8 @@ Files attached to a topic are displayed in a directory table, displayed at the b
 <blockquote class="twikiAttachments">
 <table border="1" cellspacing="0" cellpadding="1"> 
 <tr><th align="center" bgcolor="#99CCCC" class="twikiFirstCol"><strong>I</strong></th><th align="center" bgcolor="#99CCCC"><strong>Attachment</strong></th><th align="center" bgcolor="#99CCCC"> <strong>Action</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Size</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment</strong> </th></tr>
-<tr><td class="twikiFirstCol">%ICON{"txt"}%</td><td><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=&amp;filename=Sample.txt">Sample.txt</a>	  </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Sample.txt&amp;revInfo=1">manage</a>	  </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Just a sample  </td></tr>
-<tr><td class="twikiFirstCol">%ICON{"bmp"}%</td><td><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=&amp;filename=Smile.gif">Smile.gif</a>	  </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Smile.gif&amp;revInfo=1">manage</a>	  </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:38  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Smiley face  </td></tr>
+<tr><td class="twikiFirstCol">%ICON{"txt"}%</td><td><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=&amp;filename=Sample.txt">Sample.txt</a>     </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Sample.txt&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Just a sample  </td></tr>
+<tr><td class="twikiFirstCol">%ICON{"bmp"}%</td><td><a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=&amp;filename=Smile.gif">Smile.gif</a>     </td><td>  <a href="%SCRIPTURLPATH%/attach%SCRIPTSUFFIX%/%WEB%/%TOPIC%?filename=Smile.gif&amp;revInfo=1">manage</a>     </td><td align="right">  0.1 K  </td><td>  22 Jul 2000 - 19:38  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>  Smiley face  </td></tr>
 </table>
 </blockquote>
 
@@ -94,7 +94,7 @@ Clicking on a ==Manage== link takes you to a new page that looks a bit like this
 <nop><h2>Update attachment <code>Sample.txt</code></h2>
 <div class="twikiAttachments patternPrevious">
 <table border="1" cellspacing="0" cellpadding="1"> <tr><th align="center" bgcolor="#99CCCC"> <strong>Version</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Action</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Date</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Who</strong> </th><th align="center" bgcolor="#99CCCC"> <strong>Comment</strong> </th></tr>
-<tr><td>  1.1	</td><td>  <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.1&amp;filename=Sample.txt">view</a>  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>    Just a sample    </td></tr>
+<tr><td>  1.1   </td><td>  <a href="%SCRIPTURLPATH%/viewfile%SCRIPTSUFFIX%/%WEB%/%TOPIC%?rev=1.1&amp;filename=Sample.txt">view</a>  </td><td>  22 Jul 2000 - 19:37  </td><td>  <a href="UploadingUser">UploadingUser</a>  </td><td>    Just a sample    </td></tr>
 </table>
 </div>
 <p />
@@ -102,55 +102,55 @@ Clicking on a ==Manage== link takes you to a new page that looks a bit like this
 <table><tr>
   <th class="patternOldCol">Previous upload</th>
   <td class="patternOldCol">
-	<code>Sample.txt</code> <span class="twikiGrayText">(<a href="http://visiblearea.com/devtwiki/bin/view/Main/TWikiContributor" class="twikiLink">TWikiContributor</a>)</span>
+   <code>Sample.txt</code> <span class="twikiGrayText">(<a href="http://visiblearea.com/devtwiki/bin/view/Main/TWikiContributor" class="twikiLink">TWikiContributor</a>)</span>
   </td>
   <td class="patternHelpCol">Select a new local file to update this attachment.</td>
  </tr> 
-	<tr>
-		<th class="patternMainCol">
-			Local file
-		</th>
-		<td class="patternMainCol">
-			<input type="hidden" name="filename" value="Sample.txt" /><input type="file" name="filepath" value="Sample.txt" size="30" /> 
-		</td>
-		<td class="patternHelpCol patternMainCol">
+   <tr>
+      <th class="patternMainCol">
+         Local file
+      </th>
+      <td class="patternMainCol">
+         <input type="hidden" name="filename" value="Sample.txt" /><input type="file" name="filepath" value="Sample.txt" size="30" /> 
+      </td>
+      <td class="patternHelpCol patternMainCol">
 Upload up to 10000 KB.
-		</td>
-	</tr>
-	<tr>
-		<th>
-			Comment
-		</th>
-		<td>
-			<input class="comment" type="text" name="filecomment" value="Just a sample" maxlength="256" size="50" /> 
-		</td>
-		<td class="patternHelpCol"></td>
-	</tr>
-	<tr>
-		<th>
-			Link
-		</th>
-		<td>
-			<input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink"  /><label for="createlink">Create a link to the attached file</label>
-		</td>
-		<td class="patternHelpCol">
+      </td>
+   </tr>
+   <tr>
+      <th>
+         Comment
+      </th>
+      <td>
+         <input class="comment" type="text" name="filecomment" value="Just a sample" maxlength="256" size="50" /> 
+      </td>
+      <td class="patternHelpCol"></td>
+   </tr>
+   <tr>
+      <th>
+         Link
+      </th>
+      <td>
+         <input type="checkbox" class="twikiCheckbox" id="createlink" name="createlink"  /><label for="createlink">Create a link to the attached file</label>
+      </td>
+      <td class="patternHelpCol">
 Images will be displayed, for other attachments a link will be created.
-		</td>
-	</tr>
-	<tr>
-		<th>
-			Hide file
-		</th>
-		<td>
-			<input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile"  /><label for="hidefile">Do not show attachment in table</label>
-		</td>
-		<td class="patternHelpCol">Attachments will not be shown in topic view page.</td>
-	</tr>
-	<tr>
-	<th> </th>
-	<td colspan="2">
-		<input type="submit" class="twikiSubmit" name="changeproperties" value='Change properties only' />
-	</td>
+      </td>
+   </tr>
+   <tr>
+      <th>
+         Hide file
+      </th>
+      <td>
+         <input type="checkbox" class="twikiCheckbox" id="hidefile" name="hidefile"  /><label for="hidefile">Do not show attachment in table</label>
+      </td>
+      <td class="patternHelpCol">Attachments will not be shown in topic view page.</td>
+   </tr>
+   <tr>
+   <th> </th>
+   <td colspan="2">
+      <input type="submit" class="twikiSubmit" name="changeproperties" value='Change properties only' />
+   </td>
 </tr>
 </table>
 </div>
@@ -159,15 +159,15 @@ Images will be displayed, for other attachments a link will be created.
 </form>
 </blockquote>
 
-	* The first table is a list of all attachments, including their attributes. An =h= means the attachment is hidden, it isn't listed when viewing a topic.
+   * The first table is a list of all attachments, including their attributes. An =h= means the attachment is hidden, it isn't listed when viewing a topic.
 
-	* The second table is all the versions of the attachment. Click on *View* to see that version. If it's the most recent version, you'll be taken to an URL that always displays the latest version, which is usually what you want.
-		* *To change the comment* on an attachment, enter a new comment and then click *Change properties*.  Note that the comment listed against the specific version will not change, however the comment displayed when viewing the topic does change.  
-		* *To hide/unhide* an attachment, enable the ==Hide file== checkbox, then click ==Change properties==.
+   * The second table is all the versions of the attachment. Click on *View* to see that version. If it's the most recent version, you'll be taken to an URL that always displays the latest version, which is usually what you want.
+      * *To change the comment* on an attachment, enter a new comment and then click *Change properties*.  Note that the comment listed against the specific version will not change, however the comment displayed when viewing the topic does change.  
+      * *To hide/unhide* an attachment, enable the ==Hide file== checkbox, then click ==Change properties==.
 
 ---++ Known Issues
 
-	* Unlike topics, attachments are not locked during editing. As a workaround, you can change the comment to indicate an attachment file is being worked on - the comment on the specific version isn't lost, it's there when you list all versions of the attachment.
+   * Unlike topics, attachments are not locked during editing. As a workaround, you can change the comment to indicate an attachment file is being worked on - the comment on the specific version isn't lost, it's there when you list all versions of the attachment.
 
 %STOPINCLUDE%
 

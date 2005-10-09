@@ -15,174 +15,174 @@ _(Click for form-based editing of existing preferences.)_
 
 %X% *NOTE:* They are typically redefined in individual <nop>WebPreferences topics
 
-	* List of selected topics in a web - the second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%):
-		* Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
+   * List of selected topics in a web - the second line of the upper toolbar (usually overwritten in individual %WEBPREFSTOPIC%):
+      * Set WEBTOPICLIST = [[WebChanges][Changes]] %SEP% [[WebIndex][Index]] %SEP% [[WebSearch][Search]] %SEP% Go <input type="text" name="topic" size="16" />
 
-	* Web-specific background color: (is overwritten by web preferences)
-		* Set WEBBGCOLOR = #FFD8AA
+   * Web-specific background color: (is overwritten by web preferences)
+      * Set WEBBGCOLOR = #FFD8AA
 
-	* Image, URL and alternate tooltip text of web's logo. Note: don't
+   * Image, URL and alternate tooltip text of web's logo. Note: don't
     add your own local logos to the TWiki.TWikiLogos topic; create your
     own logos topic instead.
-		* Set WEBLOGONAME = logo.gif
-		* Set WEBLOGOIMG = %PUBURL%/%BASEWEB%/%WEBPREFSTOPIC%/%WEBLOGONAME%
-		* Set WEBLOGOURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%HOMETOPIC%
-		* Set WEBLOGOALT = Home
+      * Set WEBLOGONAME = logo.gif
+      * Set WEBLOGOIMG = %PUBURL%/%BASEWEB%/%WEBPREFSTOPIC%/%WEBLOGONAME%
+      * Set WEBLOGOURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%BASEWEB%/%HOMETOPIC%
+      * Set WEBLOGOALT = Home
 
-	* [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences
-		* Set FAVICON = %PUBURL%/%BASEWEB%/%WEBPREFSTOPIC%/favicon.ico
+   * [[http://favicon.org][favicon]]: Attach a =favicon.ico= to a web's WebPreferences or add a =FAVICON= setting to WebPreferences
+      * Set FAVICON = %PUBURL%/%BASEWEB%/%WEBPREFSTOPIC%/favicon.ico
 
-	* Copyright notice:
-		* Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="&copy; 1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%BASEWEB%.%BASETOPIC%"}%
+   * Copyright notice:
+      * Set WEBCOPYRIGHT = <span class="twikiRight"> <a href="http://twiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-80x15.gif" alt="This site is powered by the TWiki collaboration platform" title="This site is powered by the TWiki collaboration platform" border="0" /></a></span>%MAKETEXT{"Copyright [_1] by the contributing authors. All material on this collaboration platform is the property of the contributing authors." args="&copy; 1999-%GMTIME{$year}%"}% <br /> %MAKETEXT{"Ideas, requests, problems regarding [_1]? <a href='[_2]'>Send feedback</a>" args="<nop>%WIKITOOLNAME%,mailto:%WIKIWEBMASTER%?subject=%WIKITOOLNAME%&#32;Feedback&#32;on&#32;%BASEWEB%.%BASETOPIC%"}%
 
 
 
-	* Simplified Copyright notice for the WebRss feed (don't use any special characters, xml tags or WikiWords)
-		* Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
+   * Simplified Copyright notice for the WebRss feed (don't use any special characters, xml tags or WikiWords)
+      * Set WEBRSSCOPYRIGHT = Copyright %GMTIME{"$year"}% by contributing authors
 
-	* Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
-		* Set NOSEARCHALL =
+   * Exclude web from a =web="all"= search: (Set to =on= for hidden webs; is overwritten by web preferences)
+      * Set NOSEARCHALL =
 
-	* Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
-		* Set NOAUTOLINK = 
-		* __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
+   * Prevent automatic linking of [[%TWIKIWEB%.WikiWords][WikiWords]] and acronyms (if set to =on=); link <nop>WikiWords (if empty); can be overwritten by web preferences:
+      * Set NOAUTOLINK = 
+      * __Note:__ Use the =[<nop>[...][...]]= syntax to link topics in case you disabled <nop>WikiWord linking. The =&lt;noautolink&gt; ... &lt;/noautolink&gt;= syntax can be used to prevents links within a block of text.
 
-	* Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently if empty or =off=. Output warning message (defined in templates/oopsalerts.tmpl) if set to =on=. Otherwise output specific text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE{}%= :
-		* Set INCLUDEWARNING = on
+   * Warn if =%<nop>INCLUDE{}%= of topic fails: Fail silently if empty or =off=. Output warning message (defined in templates/oopsalerts.tmpl) if set to =on=. Otherwise output specific text (use =$topic= for topic). You can override this in web preferences, or by using a =warn="..."= parameter with =%<nop>INCLUDE{}%= :
+      * Set INCLUDEWARNING = on
 
 
 ---++ Default User Settings
 
 %X% *NOTE:* They are typically redefined in topics of individual %MAINWEB%.TWikiUsers
 
-	* Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%MAINWEB%.WikiName, $topic for the topic name, and $web for the web name
-		* Set LINKTOOLTIPINFO = off
-		* #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
+   * Show tool-tip topic info on mouse-over of WikiWord links. Setting can be on, off, or customized. An empty setting or off setting disables the tool-tips (for better performance). The setting can contain $summary to show the topic summary, $date for the last change date, $rev for the revision, $username for the login name of the last editor, $wikiname for the <nop>WikiName, $wikiusername for <nop>%MAINWEB%.WikiName, $topic for the topic name, and $web for the web name
+      * Set LINKTOOLTIPINFO = off
+      * #Set LINKTOOLTIPINFO = $username - $date - $rev: $summary
 
-	* Horizontal size of text edit box: (can be overwritten by user preferences)
-		* Set EDITBOXWIDTH = 70
+   * Horizontal size of text edit box: (can be overwritten by user preferences)
+      * Set EDITBOXWIDTH = 70
 
-	* Vertical size of text edit box: (can be overwritten by user preferences)
-		* Set EDITBOXHEIGHT = 15
+   * Vertical size of text edit box: (can be overwritten by user preferences)
+      * Set EDITBOXHEIGHT = 15
 
-	* Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
-		* Set EDITBOXSTYLE = width: 99%
+   * Style of text edit box. Set to =width: 99%= for full window width (default; this will overwrite the EDITBOXWIDTH setting), or =width: auto= to disable. This setting works for IE and some other recent browsers. (can be overwritten by user preferences)
+      * Set EDITBOXSTYLE = width: 99%
 
-	* Default state of the __Force New Revision__ (ForceNewRevision) check box in preview. Check box is initially checked if =Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
-		* Set FORCENEWREVISIONCHECKBOX = 
+   * Default state of the __Force New Revision__ (ForceNewRevision) check box in preview. Check box is initially checked if =Set FORCENEWREVISIONCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
+      * Set FORCENEWREVISIONCHECKBOX = 
 
-	* Default state of the __Minor Changes, Don't Notify__ (DontNotify) check box in preview. Check box is initially checked if =Set DONTNOTIFYCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
-		* Set DONTNOTIFYCHECKBOX = 
+   * Default state of the __Minor Changes, Don't Notify__ (DontNotify) check box in preview. Check box is initially checked if =Set DONTNOTIFYCHECKBOX = checked="checked"=, or unchecked if empty: (can be overwritten by user preferences)
+      * Set DONTNOTIFYCHECKBOX = 
 
-	* Default state of the __link__ check box in the attach file page. Checkbox is initially checked if =Set ATTACHLINKBOX = checked="checked"=, or unchecked if empty (=Set ATTACHLINKBOX ==). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
-		* Set ATTACHLINKBOX = 
+   * Default state of the __link__ check box in the attach file page. Checkbox is initially checked if =Set ATTACHLINKBOX = checked="checked"=, or unchecked if empty (=Set ATTACHLINKBOX ==). If checked, a link is created to the attached file at the end of the topic: (can be overwritten by user preferences)
+      * Set ATTACHLINKBOX = 
 
-	* Format of file link when the __link__ check box is checked: (can be overwritten by user preferences)
-		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
-		* Set ATTACHEDFILELINKFORMAT = \t* [[%ATTACHURL%/$name][$name]]: $comment
+   * Format of file link when the __link__ check box is checked: (can be overwritten by user preferences)
+      * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==\t== to tab (3 spaces for bullets).
+      * Set ATTACHEDFILELINKFORMAT = \t* [[%ATTACHURL%/$name][$name]]: $comment
 
-	* Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
-		* %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab (3 spaces for bullets).
+   * Format of images when the __link__ check box is checked: (can be overwritten by user preferences)
+      * %H% *NOTE:* Keyword ==$name== gets expanded to filename; ==$comment== to comment; ==$size== to ==width="..." height="..."== attribute of ==img== tag; ==\t== to tab (3 spaces for bullets).
 <verbatim>
-		* Set ATTACHEDIMAGEFORMAT = \t* $comment: <br />
-		  <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
+      * Set ATTACHEDIMAGEFORMAT = \t* $comment: <br />
+        <img src="%ATTACHURLPATH%/$name" alt="$name" $size />
 </verbatim>
 
 
 ---++ TWiki Platform Settings
 
-	* TWiki site name:
-		* Set WIKITOOLNAME = TWiki
+   * TWiki site name:
+      * Set WIKITOOLNAME = TWiki
 
-	* Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
-		* Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-140x40-t.gif
-		* Set WIKILOGOURL = http://TWiki.org/
-		* Set WIKILOGOALT = Powered by <nop>%WIKITOOLNAME%
+   * Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
+      * Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-140x40-t.gif
+      * Set WIKILOGOURL = http://TWiki.org/
+      * Set WIKILOGOALT = Powered by <nop>%WIKITOOLNAME%
 
-	* List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
-		* Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
-		* %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use the =%<nop>WEBLIST{}%= variable instead: <br />
-		  %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
+   * List of <nop>%WIKITOOLNAME% webs - on the first line of the upper toolbar (to add a new web, see ManagingWebs and %TWIKIWEB%.SiteMap):
+      * Set WIKIWEBLIST = [[%MAINWEB%.%HOMETOPIC%][%MAINWEB%]] %SEP% [[%TWIKIWEB%.%HOMETOPIC%][%TWIKIWEB%]] %SEP% [[Sandbox.%HOMETOPIC%][Sandbox]]
+      * %T% *NOTE:* To automatically list all non-hidden webs in alphabetical order, use the =%<nop>WEBLIST{}%= variable instead: <br />
+        %WEBLIST{"[[$name.%HOMETOPIC%][$name]]" separator=" %SEP% "}%
 
-	* Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
-		* Set ATTACHFILESIZELIMIT = 10000
+   * Maximum size of %TWIKIWEB%.FileAttachments in KB, 0 for no limit:
+      * Set ATTACHFILESIZELIMIT = 10000
 
-	* Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
-		* Set BROADCASTMESSAGE = 
-		* #Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow"><font color="red"><strong>NOTE:</strong></font><font size="-1">
-		  Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.
-		  </font></td></tr></table>
-		* If you use PatternSkin:
-		* #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.</div>
+   * Broadcast message for skins supporting a %<nop>BROADCASTMESSAGE% at the top of the page: (IMPORTANT: Set to empty message if not used; #Comment out unused messages)
+      * Set BROADCASTMESSAGE = 
+      * #Set BROADCASTMESSAGE = <table border="0" cellpadding="3" cellspacing="0" width="100%"><tr><td bgcolor="yellow"><font color="red"><strong>NOTE:</strong></font><font size="-1">
+        Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled <nop>%WIKITOOLNAME% maintenance.
+        </font></td></tr></table>
+      * If you use PatternSkin:
+      * #Set BROADCASTMESSAGE = <div class="twikiBroadcastMessage"> *NOTE:* Edit and Attach will be disabled today between 05:00 PM and 06:00 PM PDT (00:00 to 01:00 GMT) for a scheduled %WIKITOOLNAME% maintenance.</div>
 
 ---+++ Search Settings
 
-	* Default type for search, one of: keyword (for search engine like syntax), regex (for RegularExpression search), or literal (for verbatim search)
-		* Set SEARCHDEFAULTTTYPE = keyword
-	* Default for =%<nop>SEARCH{}%= variable, one of: keyword, regex, or literal
-		* Set SEARCHVARDEFAULTTYPE = literal
-	* Stop words, e.g., common words and characters to exclude from a keyword search:
-		* Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
+   * Default type for search, one of: keyword (for search engine like syntax), regex (for RegularExpression search), or literal (for verbatim search)
+      * Set SEARCHDEFAULTTTYPE = keyword
+   * Default for =%<nop>SEARCH{}%= variable, one of: keyword, regex, or literal
+      * Set SEARCHVARDEFAULTTYPE = literal
+   * Stop words, e.g., common words and characters to exclude from a keyword search:
+      * Set SEARCHSTOPWORDS = a, all, am, an, and, any, as, at, b, be, by, c, d, e, for, from, g, h, how, i, i'm, i.e., in, is, isn't, it, it's, its, j, k, l, m, n, o, of, on, or, p, q, r, s, t, that, that's, the, this, to, u, v, w, was, wasn't, what, what's, when, where, who, who's, will, with, x, y, z
 
 ---+++ Email and Proxy Server Settings
 
-	* TWiki webmaster email address:
-		* Set WIKIWEBMASTER = webmaster
+   * TWiki webmaster email address:
+      * Set WIKIWEBMASTER = webmaster
 
-	* TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
-		* Set WIKIWEBMASTERNAME = TWiki Administrator
+   * TWiki webmaster name (first name and last name, e.g. =Fred Smith=):
+      * Set WIKIWEBMASTERNAME = TWiki Administrator
 
 
 ---+++ Email Link Settings
 
-	* 'Mail this topic' mailto: link - can be included in topics, templates or skins
-		* Set MAILTHISTOPIC = [[mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL% %MAILTHISTOPICTEXT%]]
+   * 'Mail this topic' mailto: link - can be included in topics, templates or skins
+      * Set MAILTHISTOPIC = [[mailto:?subject=%BASETOPIC%&amp;body=%TOPICURL% %MAILTHISTOPICTEXT%]]
 
-	* 'Mail this topic' link text
-		* Set MAILTHISTOPICTEXT = Send a link to this page
+   * 'Mail this topic' link text
+      * Set MAILTHISTOPICTEXT = Send a link to this page
 
-	* URL for current topic
-		* Set TOPICURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%
+   * URL for current topic
+      * Set TOPICURL = %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%BASETOPIC%
 
 
 ---+++ HTTP-<nop>EQUIV Settings
 
-	* %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev/BackFromPreviewLosesText or TWiki:Codev/RefreshEditPage). These settings do not affect proxy caches.
+   * %T% *NOTE:* Changing cache behaviour with these settings should not be necessary and may cause cache-related problems (e.g. TWiki:Codev/BackFromPreviewLosesText or TWiki:Codev/RefreshEditPage). These settings do not affect proxy caches.
 
-	* ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
+   * ==http-equiv== meta tags for ==view==, ==rdiff==, ==attach==, ==search*== scripts:
 <verbatim>
-		* #Set HTTP_EQUIV_ON_VIEW = 
-		* Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&amp;contenttype=text/xml" />
+      * #Set HTTP_EQUIV_ON_VIEW = 
+      * Set HTTP_EQUIV_ON_VIEW =  <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/WebRss?skin=rss&amp;contenttype=text/xml" />
 </verbatim>
 
-	* ==http-equiv== meta tags for ==edit== script:
+   * ==http-equiv== meta tags for ==edit== script:
 <verbatim>
-		* Set HTTP_EQUIV_ON_EDIT = 
+      * Set HTTP_EQUIV_ON_EDIT = 
 </verbatim>
 
-	* ==http-equiv== meta tags for ==preview== script:
+   * ==http-equiv== meta tags for ==preview== script:
 <verbatim>
-		* Set HTTP_EQUIV_ON_PREVIEW = 
+      * Set HTTP_EQUIV_ON_PREVIEW = 
 </verbatim>
 
 
 ---++ Skin Settings
 
-	* Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
-		* Set SKIN = pattern
+   * Skin overriding the default TWiki templates: (can be overwritten by WebPreferences and user preferences) 
+      * Set SKIN = pattern
 
-	* __Note:__ See TWikiSkinBrowser for currently installed skins
+   * __Note:__ See TWikiSkinBrowser for currently installed skins
 
 ---+++ PatternSkin
 
-	* Default TWiki styles	    
-		* Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
-		* Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
-		* Set TWIKICOLORSURL = %PUBURL%/%TWIKIWEB%/PatternSkin/colors.css
-	* Custom overriding styles
-		* Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
-		* Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
-		* Set USERCOLORSURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+   * Default TWiki styles       
+      * Set TWIKILAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/layout.css
+      * Set TWIKISTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/style.css
+      * Set TWIKICOLORSURL = %PUBURL%/%TWIKIWEB%/PatternSkin/colors.css
+   * Custom overriding styles
+      * Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+      * Set USERSTYLEURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
+      * Set USERCOLORSURL = %PUBURL%/%TWIKIWEB%/PatternSkin/empty.css
 
 ---+++ Skin icons
 
@@ -199,120 +199,120 @@ _(Click for form-based editing of existing preferences.)_
 Currently activated plugins: %ACTIVATEDPLUGINS%
 
 You can enable/disable plugins using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface.
-	* Set DISABLEDPLUGINS = This variable is no longer supported
-	* Set INSTALLEDPLUGINS = This variable is no longer supported. You can set the plugins execution order using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface.
-	* %T% *NOTE:* You can enable/disable plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
-	* detailed diagnostics can be found in InstalledPlugins
+   * Set DISABLEDPLUGINS = This variable is no longer supported
+   * Set INSTALLEDPLUGINS = This variable is no longer supported. You can set the plugins execution order using the [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]] interface.
+   * %T% *NOTE:* You can enable/disable plugins by passing a comma-separated list of plugin names in the =debugenableplugins= url parameter; for example, %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?debugenableplugins=DefaultPlugin will display this topic with all plugins disabled except the DefaultPlugin.
+   * detailed diagnostics can be found in InstalledPlugins
 
 
 ---++ Miscellaneous Settings
 
-	* Line break:
-		* Set BR = <br />
+   * Line break:
+      * Set BR = <br />
 
-	* Bullet sign:
-		* Set BULLET = &#8226;
+   * Bullet sign:
+      * Set BULLET = &#8226;
 
-	* Line break and bullet with different levels of indentation:
-		* Set BB = <br />&#8226;
-		* Set BB2 = <br />&nbsp;&nbsp;&#8226;
-		* Set BB3 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
-		* Set BB4 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
+   * Line break and bullet with different levels of indentation:
+      * Set BB = <br />&#8226;
+      * Set BB2 = <br />&nbsp;&nbsp;&#8226;
+      * Set BB3 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
+      * Set BB4 = <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#8226;
 
-	* Colored text: (see more StandardColors)
-	  | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
-	  | You get: | %RED% red text %ENDCOLOR% and %GREEN% green text %ENDCOLOR% |
-		* __Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%=. If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, e.g. write =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
-		  <!-- Two sets of colors follow: Color test and color setting -->
-		* %YELLOW% *Set YELLOW = looks like this* %ENDCOLOR%
-		* %ORANGE% *Set ORANGE = looks like this* %ENDCOLOR%
-		* %RED% *Set RED = looks like this* %ENDCOLOR%
-		* %PINK% *Set PINK = looks like this* %ENDCOLOR%
-		* %PURPLE% *Set PURPLE = looks like this* %ENDCOLOR%
-		* %TEAL% *Set TEAL = looks like this* %ENDCOLOR%
-		* %NAVY% *Set NAVY = looks like this* %ENDCOLOR%
-		* %BLUE% *Set BLUE = looks like this* %ENDCOLOR%
-		* %AQUA% *Set AQUA = looks like this* %ENDCOLOR%
-		* %LIME% *Set LIME = looks like this* %ENDCOLOR%
-		* %GREEN% *Set GREEN = looks like this* %ENDCOLOR%
-		* %OLIVE% *Set OLIVE = looks like this* %ENDCOLOR%
-		* %MAROON% *Set MAROON = looks like this* %ENDCOLOR%
-		* %BROWN% *Set BROWN = looks like this* %ENDCOLOR%
-		* %BLACK% *Set BLACK = looks like this* %ENDCOLOR%
-		* %GRAY% *Set GRAY = looks like this* %ENDCOLOR%
-		* %SILVER% *Set SILVER = looks like this* %ENDCOLOR%
-		* <span style='background : #808080;'>%WHITE% *Set WHITE = looks like this (with gray background)* %ENDCOLOR%</span>
-		* The following color settings are enclosed in verbatim tags to avoid incorrect nesting of XHTML tags:
+   * Colored text: (see more StandardColors)
+     | You type: | =%<nop>RED% red text %<nop>ENDCOLOR% and %<nop>GREEN% green text %<nop>ENDCOLOR%= |
+     | You get: | %RED% red text %ENDCOLOR% and %GREEN% green text %ENDCOLOR% |
+      * __Note:__ =%&lt;color&gt;%= text must end with =%<nop>ENDCOLOR%=. If you want to switch from one color to another one you first need to end the active color with =%<nop>ENDCOLOR%=, e.g. write =%<nop>RED% some text %<nop>ENDCOLOR% %<nop>GREEN% more text %<nop>ENDCOLOR%=.
+        <!-- Two sets of colors follow: Color test and color setting -->
+      * %YELLOW% *Set YELLOW = looks like this* %ENDCOLOR%
+      * %ORANGE% *Set ORANGE = looks like this* %ENDCOLOR%
+      * %RED% *Set RED = looks like this* %ENDCOLOR%
+      * %PINK% *Set PINK = looks like this* %ENDCOLOR%
+      * %PURPLE% *Set PURPLE = looks like this* %ENDCOLOR%
+      * %TEAL% *Set TEAL = looks like this* %ENDCOLOR%
+      * %NAVY% *Set NAVY = looks like this* %ENDCOLOR%
+      * %BLUE% *Set BLUE = looks like this* %ENDCOLOR%
+      * %AQUA% *Set AQUA = looks like this* %ENDCOLOR%
+      * %LIME% *Set LIME = looks like this* %ENDCOLOR%
+      * %GREEN% *Set GREEN = looks like this* %ENDCOLOR%
+      * %OLIVE% *Set OLIVE = looks like this* %ENDCOLOR%
+      * %MAROON% *Set MAROON = looks like this* %ENDCOLOR%
+      * %BROWN% *Set BROWN = looks like this* %ENDCOLOR%
+      * %BLACK% *Set BLACK = looks like this* %ENDCOLOR%
+      * %GRAY% *Set GRAY = looks like this* %ENDCOLOR%
+      * %SILVER% *Set SILVER = looks like this* %ENDCOLOR%
+      * <span style='background : #808080;'>%WHITE% *Set WHITE = looks like this (with gray background)* %ENDCOLOR%</span>
+      * The following color settings are enclosed in verbatim tags to avoid incorrect nesting of XHTML tags:
 <verbatim>
-		* Set YELLOW = <font color="#ffff00">
-		* Set ORANGE = <font color="#ff6600">
-		* Set RED = <font color="#ff0000">
-		* Set PINK = <font color="#ff00ff">
-		* Set PURPLE = <font color="#800080">
-		* Set TEAL = <font color="#008080">
-		* Set NAVY = <font color="#000080">
-		* Set BLUE = <font color="#0000ff">
-		* Set AQUA = <font color="#00ffff">
-		* Set LIME = <font color="#00ff00">
-		* Set GREEN = <font color="#008000">
-		* Set OLIVE = <font color="#808000">
-		* Set MAROON = <font color="#800000">
-		* Set BROWN = <font color="#996633">
-		* Set BLACK = <font color="#000000">
-		* Set GRAY = <font color="#808080">
-		* Set SILVER = <font color="#c0c0c0">
-		* Set WHITE = <font color="#ffffff">
-		* Set ENDCOLOR = </font>
+      * Set YELLOW = <font color="#ffff00">
+      * Set ORANGE = <font color="#ff6600">
+      * Set RED = <font color="#ff0000">
+      * Set PINK = <font color="#ff00ff">
+      * Set PURPLE = <font color="#800080">
+      * Set TEAL = <font color="#008080">
+      * Set NAVY = <font color="#000080">
+      * Set BLUE = <font color="#0000ff">
+      * Set AQUA = <font color="#00ffff">
+      * Set LIME = <font color="#00ff00">
+      * Set GREEN = <font color="#008000">
+      * Set OLIVE = <font color="#808000">
+      * Set MAROON = <font color="#800000">
+      * Set BROWN = <font color="#996633">
+      * Set BLACK = <font color="#000000">
+      * Set GRAY = <font color="#808080">
+      * Set SILVER = <font color="#c0c0c0">
+      * Set WHITE = <font color="#ffffff">
+      * Set ENDCOLOR = </font>
 </verbatim>
 
 #DocGraphics
-	* Graphics used in TWiki documentation - view all images in %ICONTOPIC%. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
-		* Set H = %ICON{"help"}%
-		* Set I = %ICON{"tip"}%
-		* Set M = %ICON{"arrowright"}%
-		* Set N = %ICON{"new"}%
-		* Set P = %ICON{"pencil"}%
-		* Set Q = %ICON{"help"}%
-		* Set S = %ICON{"starred"}%
-		* Set T = %ICON{"tip"}%
-		* Set U = %ICON{"updated"}%
-		* Set X = %ICON{"warning"}%
-		* Set Y = %ICON{"choice-yes"}%
+   * Graphics used in TWiki documentation - view all images in %ICONTOPIC%. _(There are various ways to set up common icons as text variables. This is simply one quick approach.)_:
+      * Set H = %ICON{"help"}%
+      * Set I = %ICON{"tip"}%
+      * Set M = %ICON{"arrowright"}%
+      * Set N = %ICON{"new"}%
+      * Set P = %ICON{"pencil"}%
+      * Set Q = %ICON{"help"}%
+      * Set S = %ICON{"starred"}%
+      * Set T = %ICON{"tip"}%
+      * Set U = %ICON{"updated"}%
+      * Set X = %ICON{"warning"}%
+      * Set Y = %ICON{"choice-yes"}%
 
-	* Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
-		* Set NEWTOPICBGCOLOR = #FFFFCE
+   * Background color of non existing topic: ( default =cornsilk= or =#FFFFCE= )
+      * Set NEWTOPICBGCOLOR = #FFFFCE
 
-	* Font color of non existing topic: ( default =#0000FF= )
-		* Set NEWTOPICFONTCOLOR = #0000FF
+   * Font color of non existing topic: ( default =#0000FF= )
+      * Set NEWTOPICFONTCOLOR = #0000FF
 
-	* %TWIKIWEB%.PreviewBackground image:
-		* Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
+   * %TWIKIWEB%.PreviewBackground image:
+      * Set PREVIEWBGIMAGE = %PUBURLPATH%/%TWIKIWEB%/PreviewBackground/preview2bg.gif
 
 
 ---++ Access Control Settings
 
-	* Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
-		* #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
+   * Users or groups allowed to [[%TWIKIWEB%.ManagingWebs][create new webs]]: (ex: %MAINWEB%.TWikiAdminGroup)
+      * #Set ALLOWWEBMANAGE = %MAINWEB%.TWikiAdminGroup
 
 ---++ Creating New Preference Variables
  
 You can introduce new VARIABLES and use them in your topics and templates. There is no need to change the TWiki engine (Perl scripts).
-	* A preference is defined in a TWikiShorthand bullet item: ==[3 spaces] * [space] Set NAME = value== <br /> Example (as a nested bullet item, indented 6 spaces):
-		* S<nop>et WEBBGCOLOR = #FFFFC0
-	* Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs: ==%==. Example:
-		* When you write variable ==%WEB<nop>BGCOLOR%==, it gets expanded to =%WEBBGCOLOR%= .
+   * A preference is defined in a TWikiShorthand bullet item: ==[3 spaces] * [space] Set NAME = value== <br /> Example (as a nested bullet item, indented 6 spaces):
+      * S<nop>et WEBBGCOLOR = #FFFFC0
+   * Preferences are used as %TWIKIWEB%.TWikiVariables by enclosing the name in percent signs: ==%==. Example:
+      * When you write variable ==%WEB<nop>BGCOLOR%==, it gets expanded to =%WEBBGCOLOR%= .
 
-	* %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the webmaster email address.
+   * %X% The sequential order of the preference settings is significant. Define preferences that use other preferences FIRST. For example, set ==<nop>WEBCOPYRIGHT== before ==<nop>WIKIWEBMASTER== since the copyright notice uses the webmaster email address.
    * %X% In order to protect your custom variables from being overwritten when upgrading the [[%TWIKIWEB%.%TOPIC%]] topic, it is recommended that custom variables are defined in [[%MAINWEB%.%TOPIC%]].
 
 
 ---++ Related Topics
 
-	* %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
-	* %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
-	* %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
-	* %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
-	* TWiki:Plugins/PreferencesPlugin makes editing preferences a snap.
+   * %WEBPREFSTOPIC% has preferences of the <nop>%WEB% web.
+   * %MAINWEB%.%WIKIUSERSTOPIC% has a list of user topics. User topics can have optional user preferences.
+   * %TWIKIWEB%.TWikiVariables has a list of common =%<nop>VARIABLES%=.
+   * %TWIKIWEB%.TWikiAccessControl explains how to restrict access by users or groups.
+   * TWiki:Plugins/PreferencesPlugin makes editing preferences a snap.
 
 __Note__: Can't edit?
 [[%SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?raw=on][View raw topic]]

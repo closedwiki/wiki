@@ -64,8 +64,8 @@ perl -e 'use FileHandle; print $FileHandle::VERSION."\n"'
 
 The TWiki [[TWikiInstallationGuide][standard installation]] has extremely low browser requirements:
 
-	* HTML 3.2 compliant
-	* Cookies, if persistent sessions are required
+   * HTML 3.2 compliant
+   * Cookies, if persistent sessions are required
 
 CSS and Javascript are used in most skins, though there is a low-fat skin (Classic skin) available that minimises these requirements. Some skins will require more recent releases of browsers. The default skin (Pattern) is tested on IE 6, and Mozilla 5.0 based browsers (such as Firefox).
 
@@ -73,8 +73,8 @@ You can easily select a balance of browser capability versus look and feel.
 
 ---++ Important note about TWikiPlugins
 
-	* The TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
-		* %H% Plugins included in the TWiki distribution do not add requirements.
+   * The TWikiPlugins feature currently does not have compatibility guidelines for developers. Plugins can require just about anything -  browser-specific functions, stylesheets (CSS), Java applets, cookies, specific Perl modules,... - check the individual Plugin specs.
+      * %H% Plugins included in the TWiki distribution do not add requirements.
 
 
 __Related Topics:__ AdminDocumentationCategory

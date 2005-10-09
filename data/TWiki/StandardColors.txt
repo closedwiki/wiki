@@ -159,10 +159,10 @@
 </table>
 </pre>
 __Related web sites:__
-	* http://www.cloford.com/resources/colours/websafe2.htm
-	* http://html-color-codes.com/
-	* http://the-light.com/colclick.html 
-	* http://www.triplecode.com/munsell/
+   * http://www.cloford.com/resources/colours/websafe2.htm
+   * http://html-color-codes.com/
+   * http://the-light.com/colclick.html 
+   * http://www.triplecode.com/munsell/
 
 __Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory
 

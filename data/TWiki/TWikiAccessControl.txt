@@ -11,14 +11,14 @@ TWikiAccessControl allows you restrict access to single topics and entire webs, 
 ---++ An Important Control Consideration
 
 Open, freeform editing is the essence of WikiCulture - what makes TWiki different and often more effective than other collaboration tools. For that reason, it is strongly recommended that decisions to restrict read or write access to a web or a topic are made with great care - the more restrictions, the less Wiki in the mix. Experience shows that _unrestricted write access_ works very well because:
-	* *Peer influence* is enough to ensure that only relevant content is posted.
-	* *Peer editing* - the ability for anyone to rearrange all content on a page - keeps topics focussed.
-	* In TWiki, content is transparently preserved under *revision control*:
-		* Edits can be undone by the %MAINWEB%.TWikiAdminGroup (the default administrators group; see [[#ManagingGroups]]).
-		* Users are encouraged to edit and refactor (condense a long topic), since there's a safety net.
+   * *Peer influence* is enough to ensure that only relevant content is posted.
+   * *Peer editing* - the ability for anyone to rearrange all content on a page - keeps topics focussed.
+   * In TWiki, content is transparently preserved under *revision control*:
+      * Edits can be undone by the %MAINWEB%.TWikiAdminGroup (the default administrators group; see [[#ManagingGroups]]).
+      * Users are encouraged to edit and refactor (condense a long topic), since there's a safety net.
 As a *collaboration guideline*:
-	* Create broad-based Groups (for more and varied input), and...
-	* Avoid creating view-only Users (if you can read it, you should be able to contribute to it).
+   * Create broad-based Groups (for more and varied input), and...
+   * Avoid creating view-only Users (if you can read it, you should be able to contribute to it).
 
 ---++ Authentication vs. Access Control
 
@@ -33,10 +33,10 @@ Access control is based on the familiar concept of Users and Groups. Users are d
 ---+++ Managing Users
 
 A user can create an account in TWikiRegistration. The following actions are performed:
-	* WikiName and encrypted password are recorded using the password manager if authentication is enabled.
-	* A confirmation e-mail is sent to the user.
-	* A user home page with the WikiName of the user is created in the %MAINWEB% web.
-	* The user is added to the %MAINWEB%.%WIKIUSERSTOPIC% topic.
+   * WikiName and encrypted password are recorded using the password manager if authentication is enabled.
+   * A confirmation e-mail is sent to the user.
+   * A user home page with the WikiName of the user is created in the %MAINWEB% web.
+   * The user is added to the %MAINWEB%.%WIKIUSERSTOPIC% topic.
 
 The default visitor name is %MAINWEB%.TWikiGuest. This is the non-authenticated user.
 
@@ -44,22 +44,22 @@ The default visitor name is %MAINWEB%.TWikiGuest. This is the non-authenticated 
 ---+++ Managing Groups
 
 Groups are defined by group topics created in the ==%MAINWEB%== web, like the %MAINWEB%.TWikiAdminGroup. To create a new group:
-	1. ==Edit== %MAINWEB%.TWikiGroups by entering a new topic with a name that ends in ==Group==. Example:
-		* ==<nop>SomeGroup==
-	1. Define two TWikiVariables in the new group topic:
-		* ==Set <nop>GROUP = &lt; list of Users and/or Groups &gt;==
-		* ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and/or Groups &gt;==
-		* The GROUP variable is a comma-separated list of Users and/or other Groups. Example:
-			* ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
-		* ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of Users and Groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents Users not in the Group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
-		* ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
+   1. ==Edit== %MAINWEB%.TWikiGroups by entering a new topic with a name that ends in ==Group==. Example:
+      * ==<nop>SomeGroup==
+   1. Define two TWikiVariables in the new group topic:
+      * ==Set <nop>GROUP = &lt; list of Users and/or Groups &gt;==
+      * ==Set <nop>ALLOWTOPICCHANGE = &lt; list of Users and/or Groups &gt;==
+      * The GROUP variable is a comma-separated list of Users and/or other Groups. Example:
+         * ==Set GROUP = %MAINWEB%.<nop>SomeUser, %MAINWEB%.<nop>OtherUser, %MAINWEB%.<nop>SomeGroup==
+      * ALLOWTOPICCHANGE defines who is allowed to change the group topic; it is a comma delimited list of Users and Groups. You typically want to restrict that to the members of the group itself, so it should contain the name of the topic. This prevents Users not in the Group from editing the topic to give themselves or others access. For example, for the <nop>TWikiAdminGroup topic write:
+      * ==Set ALLOWTOPICCHANGE = %MAINWEB%.<nop>TWikiAdminGroup==
    1. These are summarised on SitePermissions
 
 #SuperAdminGroup
 ---+++ The <nop>SuperAdminGroup
 
 By mistyping a user or group name in the settings, it's possible to lock a topic so that no-one can edit it from a browser. To avoid this, you can create *superusers*:
-	* Edit the ==SuperAdminGroup== as described above and add the wikinames of a group of Users who are always allowed to edit/view topics e.g.
+   * Edit the ==SuperAdminGroup== as described above and add the wikinames of a group of Users who are always allowed to edit/view topics e.g.
       * ==Set <nop>GROUP= %MAINWEB%.ElizabethWindsor,%MAINWEB%.TonyBlair==
 
 ---++ Restricting Access
@@ -75,39 +75,39 @@ You can define who is allowed to read or write to a web or a topic. Note that so
 
 You can define restrictions of who is allowed to view a <nop>%WIKITOOLNAME% web. You can restrict access to certain webs to selected Users and Groups, by:
 
-	* *authenticating all webs and restricting selected webs:* Topic access in all webs is authenticated, and selected webs have restricted access.
-	* *authenticating and restricting selected webs only:* Provide unrestricted viewing access to open webs, with authentication and restriction only on selected webs.
+   * *authenticating all webs and restricting selected webs:* Topic access in all webs is authenticated, and selected webs have restricted access.
+   * *authenticating and restricting selected webs only:* Provide unrestricted viewing access to open webs, with authentication and restriction only on selected webs.
 
-	* You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
-		* ==Set <nop>DENYWEBVIEW = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWWEBVIEW = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>DENYWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+   * You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
+      * ==Set <nop>DENYWEBVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWWEBVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>DENYWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWWEBCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>DENYWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWWEBRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
 *Be careful* with empty values for any of these. In older versions of TWiki,
-		* <code>Set <nop>ALLOWWEBVIEW = </code>
+      * <code>Set <nop>ALLOWWEBVIEW = </code>
 meant the same as not setting it at all. However since TWiki Dakar release, it means _allow no-one access_ i.e. prevent anyone from viewing the web. Similarly
-		* <code>Set <nop>DENYWEBVIEW = </code>
+      * <code>Set <nop>DENYWEBVIEW = </code>
 now means _do not deny anyone the right to view this web_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
 
 ---+++ Controlling access to a Topic
 
-	* You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
-		* ==Set <nop>DENYTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>DENYTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>DENYTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+   * You can define these settings in the %WEBPREFSTOPIC% topic, preferable towards the end of the topic:
+      * ==Set <nop>DENYTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWTOPICVIEW = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>DENYTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWTOPICCHANGE = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>DENYTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWTOPICRENAME = &lt; comma-delimited list of Users and Groups &gt;==
 
 Remember when opening up access to specific topics within a restricted web that other topics in the web - for example, the WebLeftBar - may also be accessed when viewing the topics. The message you get when you are denied access should tell you what topic you were not permitted to access.
 
 *Be careful* with empty values for any of these. In older versions of TWiki,
-		* <code>Set <nop>ALLOWTOPICVIEW = </code>
+      * <code>Set <nop>ALLOWTOPICVIEW = </code>
 meant the same as not setting it at all. However since TWiki Dakar release, it means _allow no-one access_ i.e. prevent anyone from viewing the topic. Similarly
-		* <code>Set <nop>DENYTOPICVIEW = </code>
+      * <code>Set <nop>DENYTOPICVIEW = </code>
 now means _do not deny anyone the right to view this topic_. See "How TWiki evaluates ALLOW/DENY settings" below for more on this.
 
 ---+++ Controlling access to Attachments
@@ -153,7 +153,7 @@ When deciding whether to grant access, TWiki evaluates the following rules in or
 ---+++ Obfusticating Webs
 
 Another way of hiding webs is to keep them hidden by not publishing the URL and by preventing the ==all webs== search option from accessing obfuscated webs. Do so by enabling the ==NOSEARCHALL== variable in %WEBPREFSTOPIC%:
-	* ==Set <nop>NOSEARCHALL = on==
+   * ==Set <nop>NOSEARCHALL = on==
 
 This setup can be useful to hide a new web until content its ready for deployment.
 
@@ -163,13 +163,13 @@ This setup can be useful to hide a new web until content its ready for deploymen
 
 Use the following setup to authenticate users for topic viewing in all webs and to restrict access to selected webs:
 
-	1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
-		* ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
-		* __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
-	1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
-		* ==Set <nop>NOSEARCHALL = on==
-	1. *Add* ==view== to the list of authenticated scripts in the =.htaccess= file.
+   1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
+      * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
+      * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
+   1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
+      * ==Set <nop>NOSEARCHALL = on==
+   1. *Add* ==view== to the list of authenticated scripts in the =.htaccess= file.
 
 %H% This method only works if the ==view== script is authenticated, which means that all Users have to login, even for read-only access. (An open guest account, like %MAINWEB%.TWikiGuest, can get around this, allowing anyone to login to a common account with, for example, view-only access for public webs.) TWikiInstallationGuide has more on Basic Authentication, using the ==.htaccess== file.
 
@@ -177,15 +177,15 @@ Use the following setup to authenticate users for topic viewing in all webs and 
 
 Use the following setup to provide unrestricted viewing access to open webs, with authentication only on selected webs:
 
-	1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
-		* ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
-		* ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
-		* __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
-	1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
-		* ==Set <nop>NOSEARCHALL = on==
-	1. *Enable* =={RememberUserIPAddress}== in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]] as described in TWikiUserAuthentication. <nop>%WIKITOOLNAME% will now remember the IP address of an authenticated user. 
-	1. *Copy* the ==view== script to ==viewauth== (or better, create a symbolic link) 
-	1. *Add* ==viewauth== to the list of authenticated scripts in the =.htaccess= file. The ==view== script should not be listed in the =.htaccess= file.
+   1. *Restrict* view access to selected Users and Groups. Set one or both of these variables in its %WEBPREFSTOPIC% topic:
+      * ==Set <nop>DENYWEBVIEW = &lt; list of Users and Groups &gt;==
+      * ==Set <nop>ALLOWWEBVIEW = &lt; list of Users and Groups &gt;==
+      * __Note:__ =DENYWEBVIEW= is evaluated before =ALLOWWEBVIEW=. Access is denied if the authenticated person is in the =DENYWEBVIEW= list, or not in the =ALLOWWEBVIEW= list. Access is granted in case =DENYWEBVIEW= and =ALLOWWEBVIEW= is not defined.
+   1. *Hide* the web from an "all webs" search. Enable this restriction with the ==NOSEARCHALL== variable in its %WEBPREFSTOPIC% topic:
+      * ==Set <nop>NOSEARCHALL = on==
+   1. *Enable* =={RememberUserIPAddress}== in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]] as described in TWikiUserAuthentication. <nop>%WIKITOOLNAME% will now remember the IP address of an authenticated user. 
+   1. *Copy* the ==view== script to ==viewauth== (or better, create a symbolic link) 
+   1. *Add* ==viewauth== to the list of authenticated scripts in the =.htaccess= file. The ==view== script should not be listed in the =.htaccess= file.
 
 When a user accesses a web where you enabled view restriction, <nop>%WIKITOOLNAME% will redirect from the =view= script to the =viewauth= script once (this happens only if the user has never edited a topic). Doing so will ask for authentication. The =viewauth= script shows the requested topic if the user could log on and if the user is authorized to see that web.
 

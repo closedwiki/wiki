@@ -64,7 +64,7 @@ __Note:__ You need to install a [[http://www.macromedia.com/shockwave/download/d
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==pub/TWiki/EmbedFlashPlugin/sample.swf==| Sample Flash movie |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
    * Test if the plugin is correctly installed: you should see a Flash movie at the top of this page.
 
 

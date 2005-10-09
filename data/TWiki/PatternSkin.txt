@@ -16,16 +16,16 @@
 ---++ Supported browsers
 
 !PatternSkin has been tested successfully on the following browsers:
-	* Windows
-		* Internet Explorer 6.0, 5.5 (note: Explorer 5.0 is *not* supported: will function but shows visual quirks)
-		* Mozilla/Firefox
-	* Mac OS X
-		* Safari 1.2
-		* Mozilla/Firefox
+   * Windows
+      * Internet Explorer 6.0, 5.5 (note: Explorer 5.0 is *not* supported: will function but shows visual quirks)
+      * Mozilla/Firefox
+   * Mac OS X
+      * Safari 1.2
+      * Mozilla/Firefox
 
 Not tested, but will probably work (let me know):
-	* *nix
-		* Mozilla/Firefox
+   * *nix
+      * Mozilla/Firefox
 
 ---++ Installation
 
@@ -33,25 +33,25 @@ Not tested, but will probably work (let me know):
 
 *Note 2:* !PatternSkin is included with TWiki by default. Use the following instructions only if you are upgrading !PatternSkin.
 
-	* Download the ZIP file from the Skin Home page (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory
-	* Test if installed: %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=pattern
-	* For skin activation see %TWIKIWEB%.TWikiSkins
+   * Download the ZIP file from the Skin Home page (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory
+   * Test if installed: %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=pattern
+   * For skin activation see %TWIKIWEB%.TWikiSkins
 
 ---+++ Troubleshooting
 
 If you have set the SKIN variable setting to =pattern= and you still don't see the layout as on the <a href="%ATTACHURL%/patternskin_screenshot_full.png">screenshot</a>, a few settings in may have been disabled.
 
 Check these variables here:
-	* TWIKILAYOUTURL = %TWIKILAYOUTURL%
-	* TWIKISTYLEURL = %TWIKISTYLEURL%
-	* SKIN = %SKIN%
+   * TWIKILAYOUTURL = %TWIKILAYOUTURL%
+   * TWIKISTYLEURL = %TWIKISTYLEURL%
+   * SKIN = %SKIN%
 
 If TWIKILAYOUTURL or TWIKISTYLEURL don't give a value or point to non-existing files, check in %TWIKIWEB%.TWikiPreferences that the following variables do exist and that they are set to on:
 <pre>
-	* %<nop>TWIKIWEB%.PatternSkin settings:
-		* <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/layout.css
-		* <nop>Set TWIKISTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/style.css
+   * %<nop>TWIKIWEB%.PatternSkin settings:
+      * <nop>Set TWIKILAYOUTURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/layout.css
+      * <nop>Set TWIKISTYLEURL = %<nop>PUBURL%/%<nop>TWIKIWEB%/PatternSkin/style.css
 </pre>
 
 If this still does not work, contact the administrator who installs skins.
@@ -65,8 +65,8 @@ It is easy to tune the look and feel of !PatternSkin by changing the color and s
 You may also choose to radically change the look and create a !PatternSkin-based new skin. This is easier than to create a skin by writing new template files; you can concentrate on how things should look instead of what elements should get displayed.
 
 You can either:
-	* Change the =layout.css= and =style.css= attachment files for this topic (upload updated versions)
-	* In %TWIKIWEB%.TWikiPreferences, point the variables =TWIKILAYOUTURL= and =TWIKISTYLEURL= to other attachments, perhaps in another topic (your new skin topic?)
+   * Change the =layout.css= and =style.css= attachment files for this topic (upload updated versions)
+   * In %TWIKIWEB%.TWikiPreferences, point the variables =TWIKILAYOUTURL= and =TWIKISTYLEURL= to other attachments, perhaps in another topic (your new skin topic?)
 
 See for practical details: PatternSkinCustomization %BR%
 The CSS classes that !PatternSkin uses are documented in PatternSkinCss.
@@ -77,10 +77,10 @@ See: PatternSkinCustomization, PatternSkinPalette
 
 ---++ Further reading
 
-	* PatternSkinCustomization - Practical information on how to change the looks of !PatternSkin
-	* PatternSkinPalette - How to change the colors only
-	* PatternSkinCss - A reference to used CSS classes
-	* TWiki:Plugins/PatternSkinDev - Development page, bug reports, solutions from users
+   * PatternSkinCustomization - Practical information on how to change the looks of !PatternSkin
+   * PatternSkinPalette - How to change the colors only
+   * PatternSkinCss - A reference to used CSS classes
+   * TWiki:Plugins/PatternSkinDev - Development page, bug reports, solutions from users
 
 ---++ Skin Info
 
@@ -107,20 +107,20 @@ See: PatternSkinCustomization, PatternSkinPalette
 |  Download: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 ---++ Related topics
 
-	* TWikiCss
-	* WebBottomBar
-	* WebLeftBar
-	* WebLeftBarExample
-	* WebLeftBarPersonalTemplate
-	* WebLeftBarCookbook
-	* WebTopBar
-	* AdminDocumentationCategory
+   * TWikiCss
+   * WebBottomBar
+   * WebLeftBar
+   * WebLeftBarExample
+   * WebLeftBarPersonalTemplate
+   * WebLeftBarCookbook
+   * WebTopBar
+   * AdminDocumentationCategory
 
 See also [[%TOPIC%#Further_reading][Further reading]] on this page.
 
 Other skins:
-	* TWikiSkins
-	* TWikiSkinBrowser
+   * TWikiSkins
+   * TWikiSkinBrowser
 
 ---++ Feedback
 

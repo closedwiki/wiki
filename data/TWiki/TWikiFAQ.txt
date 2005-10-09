@@ -26,10 +26,10 @@ TODO: should this FAQ TWikiApplication be removed from the distributed TWikiKern
 
 Other places where you can find answers to your questions:
 
-	* TWikiDocumentation: All you need to know to install and configure <nop>%WIKITOOLNAME%
-	* TWikiTutorial: Get a jump start on using TWiki 
-	* GoodStyle: Things to consider when changing text
-	* WikiSyntax, TextFormattingRules: A quick one-two guide to TWiki shorthand basics
-	* TextFormattingFAQ: Answers to frequently asked questions about text styling in TWiki
-	* If you can't find an answer, ask a question - post it in the TWiki:Support web
+   * TWikiDocumentation: All you need to know to install and configure <nop>%WIKITOOLNAME%
+   * TWikiTutorial: Get a jump start on using TWiki 
+   * GoodStyle: Things to consider when changing text
+   * WikiSyntax, TextFormattingRules: A quick one-two guide to TWiki shorthand basics
+   * TextFormattingFAQ: Answers to frequently asked questions about text styling in TWiki
+   * If you can't find an answer, ask a question - post it in the TWiki:Support web
 

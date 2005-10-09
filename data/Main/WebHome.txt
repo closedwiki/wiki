@@ -18,6 +18,6 @@ and [[%TWIKIWEB%.TWikiPreferences]]). Replace this text with a description of yo
 <input type="submit" value="Search" />
 <br/>
 ([[WebSearchAdvanced][advanced search]])
-</form>	
+</form>   
 </blockquote>
 

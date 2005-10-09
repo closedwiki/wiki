@@ -17,20 +17,20 @@ Any fields you define in this table will end up in the User's topic. If a form (
 If you use the UserForm then ensure that it contains all the fields you define here. Otherwise they will disappear when the user edits their home topic!
 
 ---+++ Mandatory fields
-	* WikiName 
-	* Email
-	* !FirstName
-	* !LastName 
+   * WikiName 
+   * Email
+   * !FirstName
+   * !LastName 
 
 ---+++ Optional fields
-	* LoginName - if not set will register with WikiName
+   * LoginName - if not set will register with WikiName
 
 
 ---++ Settings
-		* Set REGISTERTOPIC = %MAINWEB%.UnprocessedRegistrations
-		* Set LOGTOPIC = %REGISTERTOPIC%Log
+      * Set REGISTERTOPIC = %MAINWEB%.UnprocessedRegistrations
+      * Set LOGTOPIC = %REGISTERTOPIC%Log
 
-		* Set OVERWRITEHOMETOPICS = 0
+      * Set OVERWRITEHOMETOPICS = 0
 
 ---+++ Example format
 The following should be inserted into your REGISTERTOPIC as a table.
@@ -40,17 +40,17 @@ The following should be inserted into your REGISTERTOPIC as a table.
 </verbatim>
 
 To use this:
-	1 Make sure that the Custom fields appear on the UserForm
-	2 Copy the above table to your clipboard
-	3 Click through and paste this on %REGISTERTOPIC%, save the topic and return here.
-	4 Click the Bulk register button below
-	5 Read %LOGTOPIC%
-	6 When you are ready, you probably want to use the BulkResetPassword page
+   1 Make sure that the Custom fields appear on the UserForm
+   2 Copy the above table to your clipboard
+   3 Click through and paste this on %REGISTERTOPIC%, save the topic and return here.
+   4 Click the Bulk register button below
+   5 Read %LOGTOPIC%
+   6 When you are ready, you probably want to use the BulkResetPassword page
 
 Notes:
-	1 The first row of the table dictates the heading format and that the fieldnames must be plain, i.e. *must not contain bolded* entries.
-	2 You are responsible for ensuring that the fieldnames appear in the [[%TWIKIWEB%.UserForm]]
-	3 Only members of the %MAINWEB%.TWikiAdminGroup can run this.
+   1 The first row of the table dictates the heading format and that the fieldnames must be plain, i.e. *must not contain bolded* entries.
+   2 You are responsible for ensuring that the fieldnames appear in the [[%TWIKIWEB%.UserForm]]
+   3 Only members of the %MAINWEB%.TWikiAdminGroup can run this.
 
 <FORM name="bulkRegister" action="%SCRIPTURL%/manage%SCRIPTSUFFIX%/%REGISTERTOPIC%" method="post">
 <input type="hidden" name="action" value="bulkRegister"/>

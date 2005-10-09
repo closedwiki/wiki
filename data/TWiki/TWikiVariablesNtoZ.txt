@@ -6,15 +6,15 @@ __Note:__ This topic is included by TWikiVariables
 %STARTINCLUDE%
 #VarNOP
 ---+++ NOP -- template text not to be expanded in instantiated topics 
-	* Syntax: =%<nop>NOP%=
-	* Syntax: =%<nop>NOP{...}%=
-	* Available in template topics only. See TWikiTemplates#HtmlTemplates for details. In normal topic text, simply expands to whatever is in the curly braces (if anything).
+   * Syntax: =%<nop>NOP%=
+   * Syntax: =%<nop>NOP{...}%=
+   * Available in template topics only. See TWikiTemplates#HtmlTemplates for details. In normal topic text, simply expands to whatever is in the curly braces (if anything).
 
 #VarNOTIFYTOPIC
 ---+++ NOTIFYTOPIC -- name of the notify topic
-	* Syntax: =%<nop>NOTIFYTOPIC%=
-	* Expands to: =%NOTIFYTOPIC%=, renders as [[%NOTIFYTOPIC%]]
-	* Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarSTATISTICSTOPIC][STATISTICSTOPIC]], [[#VarTOPIC][TOPIC]]
+   * Syntax: =%<nop>NOTIFYTOPIC%=
+   * Expands to: =%NOTIFYTOPIC%=, renders as [[%NOTIFYTOPIC%]]
+   * Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarSTATISTICSTOPIC][STATISTICSTOPIC]], [[#VarTOPIC][TOPIC]]
 
 #VarPLUGINDESCRIPTIONS
 ---+++ PLUGINDESCRIPTIONS -- list of plugin descriptions
@@ -24,29 +24,29 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarPLUGINVERSION
 ---+++ PLUGINVERSION -- the version of the TWiki Plugin API
-	* This is the =$TWiki::Plugins::VERSION= number, also indicating the version of the Func module
-	* Syntax: =%<nop>PLUGINVERSION%=
-	* Expands to: =%PLUGINVERSION%=
-	* Related: [[#VarPLUGINVERSION2][PLUGINVERSION{"name"}]], [[#VarWIKIVERSION][WIKIVERSION]]
+   * This is the =$TWiki::Plugins::VERSION= number, also indicating the version of the Func module
+   * Syntax: =%<nop>PLUGINVERSION%=
+   * Expands to: =%PLUGINVERSION%=
+   * Related: [[#VarPLUGINVERSION2][PLUGINVERSION{"name"}]], [[#VarWIKIVERSION][WIKIVERSION]]
 
 #VarPLUGINVERSION2
 ---+++ PLUGINVERSION{"name"} -- the version of an installed Plugin
-	* Syntax: =%<nop>PLUGINVERSION{"name"}%=
-	* Example: =%<nop>PLUGINVERSION{"InterwikiPlugin"}%= expands to =%PLUGINVERSION{"InterwikiPlugin"}%=
-	* Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKIVERSION][WIKIVERSION]],  [[#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#FAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]]
+   * Syntax: =%<nop>PLUGINVERSION{"name"}%=
+   * Example: =%<nop>PLUGINVERSION{"InterwikiPlugin"}%= expands to =%PLUGINVERSION{"InterwikiPlugin"}%=
+   * Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKIVERSION][WIKIVERSION]],  [[#VarACTIVATEDPLUGINS][ACTIVATEDPLUGINS]], [[#FAILEDPLUGINS][FAILEDPLUGINS]], [[#VarPLUGINDESCRIPTIONS][PLUGINDESCRIPTIONS]]
 
 #VarPUBURL
 ---+++ PUBURL -- the base URL of attachments
-	* Syntax: =%<nop>PUBURL%=
-	* Expands to: =%PUBURL%=
-	* Example: You can refer to a file attached to another topic with =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/image.gif=
-	* Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], FileAttachments
+   * Syntax: =%<nop>PUBURL%=
+   * Expands to: =%PUBURL%=
+   * Example: You can refer to a file attached to another topic with =%<nop>PUBURL%/%<nop>WEB%/OtherTopic/image.gif=
+   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], FileAttachments
 
 #VarPUBURLPATH
 ---+++ PUBURLPATH -- the base URL path of attachments
-	* Syntax: =%<nop>PUBURLPATH%=
-	* Expands to: =%PUBURLPATH%=
-	* Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], FileAttachments
+   * Syntax: =%<nop>PUBURLPATH%=
+   * Expands to: =%PUBURLPATH%=
+   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], FileAttachments
 
 #VarQUERYSTRING
 ---+++ QUERYSTRING -- full, unprocessed string of parameters to this URL
@@ -57,245 +57,245 @@ __Note:__ This topic is included by TWikiVariables
  
 #VarREMOTEADDR
 ---+++ REMOTE_ADDR -- environment variable
-	* Syntax: =%<nop>REMOTE_ADDR%=
-	* Expands to: =%REMOTE_ADDR%=
-	* Related: [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+   * Syntax: =%<nop>REMOTE_ADDR%=
+   * Expands to: =%REMOTE_ADDR%=
+   * Related: [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
 
 #VarREMOTEPORT
 ---+++ REMOTE_PORT -- environment variable
-	* Syntax: =%<nop>REMOTE_PORT%=
-	* Expands to: <code>%REMOTE_PORT%</code>
-	* Related: [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEUSER][REMOTE_USER]]
+   * Syntax: =%<nop>REMOTE_PORT%=
+   * Expands to: <code>%REMOTE_PORT%</code>
+   * Related: [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEUSER][REMOTE_USER]]
 
 #VarREMOTEUSER
 ---+++ REMOTE_USER -- environment variable
-	* Syntax: =%<nop>REMOTE_USER%=
-	* Expands to: <code>%REMOTE_USER%</code>
-	* Related: [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]]
+   * Syntax: =%<nop>REMOTE_USER%=
+   * Expands to: <code>%REMOTE_USER%</code>
+   * Related: [[#VarHTTPHOST][HTTP_HOST]], [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]]
 
 #VarREVINFO
 ---+++ REVINFO -- revision information of current topic
-	* Syntax: =%<nop>REVINFO%=
-	* Expands to: <code>%REVINFO%</code>
-	* Related: [[#VarREVINFO2][REVINFO{"format"}]]
+   * Syntax: =%<nop>REVINFO%=
+   * Expands to: <code>%REVINFO%</code>
+   * Related: [[#VarREVINFO2][REVINFO{"format"}]]
 
 #VarREVINFO2
 ---+++ REVINFO{"format"} -- formatted revision information of topic
-	* Syntax: =%<nop>REVINFO{"format"}%=
-	* Supported parameters:
-	  | *Parameter:* | *Description:* | *Default:* |
-	  | ="format"= | Format of revision information, see supported variables below | ="r1.$rev - $date - $wikiusername"= |
-	  | =web="..."= | Name of web | Current web |
-	  | =topic="..."= | Topic name | Current topic |
-	  | =rev="1.5"= | Specific revison number | Latest revision |
-	* Supported variables in format:
-	  | *Variable:* | *Unit:* | *Example* |
-	  | =$web= | Name of web | Current web |
-	  | =$topic= | Topic name | Current topic |
-	  | =$rev= | Revison number. Prefix =r1.= to get the usual =r1.5= format | =5= |
-	  | =$date= | Revision date | =11 Jul 2004= |
-	  | =$username= | Login username of revision | =jsmith= |
-	  | =$wikiname= | WikiName of revision | =JohnSmith= |
-	  | =$wikiusername= | <nop>WikiName with %MAINWEB% web prefix | =%MAINWEB%.JohnSmith= |
-	* Example: =%<nop>REVINFO{"$date - $wikiusername" rev="1.1"}%= returns revision info of first revision
-	* Related: [[#VarREVINFO][REVINFO]]
+   * Syntax: =%<nop>REVINFO{"format"}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="format"= | Format of revision information, see supported variables below | ="r1.$rev - $date - $wikiusername"= |
+     | =web="..."= | Name of web | Current web |
+     | =topic="..."= | Topic name | Current topic |
+     | =rev="1.5"= | Specific revison number | Latest revision |
+   * Supported variables in format:
+     | *Variable:* | *Unit:* | *Example* |
+     | =$web= | Name of web | Current web |
+     | =$topic= | Topic name | Current topic |
+     | =$rev= | Revison number. Prefix =r1.= to get the usual =r1.5= format | =5= |
+     | =$date= | Revision date | =11 Jul 2004= |
+     | =$username= | Login username of revision | =jsmith= |
+     | =$wikiname= | WikiName of revision | =JohnSmith= |
+     | =$wikiusername= | <nop>WikiName with %MAINWEB% web prefix | =%MAINWEB%.JohnSmith= |
+   * Example: =%<nop>REVINFO{"$date - $wikiusername" rev="1.1"}%= returns revision info of first revision
+   * Related: [[#VarREVINFO][REVINFO]]
 
 #VarSECTION
 ---+++ SECTION{"name"} -- Marks the start of a named section
    * Syntax: =%<nop>SECTION{"name"}%=
-	* Supported parameters:
-	  | *Parameter:* | *Description:* | *Default:* |
-	  | ="name"= | Name of the section. Must be unique inside a topic. | Mandatory parameter without a default |
-	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]]
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="name"= | Name of the section. Must be unique inside a topic. | Mandatory parameter without a default |
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarENDSECTION][ENDSECTION]]
 
 #VarSESSIONVARIABLE
 ---+++ SESSION_VARIABLE -- get, set or clear a session variable
    * Syntax: =%<nop>SESSION_VARIABLE{"name"}%=
    * Syntax: =%<nop>SESSION_VARIABLE{"name" set="value"}%=
    * Syntax: =%<nop>SESSION_VARIABLE{"name" clear=""}%=
-	* Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]]
+   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]]
 %H% The users ID is in the =AUTHUSER= session variable, and is read-only.
 
 #VarSESSIONID
 ---+++ SESSIONID -- The unique ID for this session | %SESSIONID% |
    * Syntax: =%<nop>SESSIONID%=
    * Expand to: %SESSIONID%
-	* Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarSESSIONVAR
 ---+++ SESSIONVAR -- The name of CGI and session variable that stores the session ID
    * Syntax: =%<nop>SESSIONVAR%=
    * Expand to: %SESSIONVAR%
-	* Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+   * Related: TWikiUserAuthentication, [[#VarAUTHREALM][AUTHREALM]], [[#VarSESSIONID][SESSIONID]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarSCRIPTURL
 ---+++ SCRIPTURL -- script URL of <nop>%WIKITOOLNAME%
-	* Syntax: =%<nop>SCRIPTURL%=
-	* Expands to: =%SCRIPTURL%=
-	* Example: To get the authenticated version of current topic write =%<nop>SCRIPTURL%/viewauth%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%= which expands to =%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%=
-	* Related: [[#VarPUBURL][PUBURL]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
+   * Syntax: =%<nop>SCRIPTURL%=
+   * Expands to: =%SCRIPTURL%=
+   * Example: To get the authenticated version of current topic write =%<nop>SCRIPTURL%/viewauth%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%= which expands to =%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%=
+   * Related: [[#VarPUBURL][PUBURL]], [[#VarSCRIPTSUFFIX][SCRIPTSUFFIX]], [[#VarSCRIPTURLPATH][SCRIPTURLPATH]]
 
 #VarSCRIPTURLPATH
 ---+++ SCRIPTURLPATH -- script URL path of <nop>%WIKITOOLNAME%
-	* Syntax: =%<nop>SCRIPTURLPATH%=
-	* Expands to: =%SCRIPTURLPATH%=
-	* Related: [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]]
+   * Syntax: =%<nop>SCRIPTURLPATH%=
+   * Expands to: =%SCRIPTURLPATH%=
+   * Related: [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]]
 
 #VarSCRIPTSUFFIX
 ---+++ SCRIPTSUFFIX -- script suffix
-	* Some <nop>%WIKITOOLNAME% installations require a file extension for CGI scripts like =.pl= or =.cgi=
-	* Syntax: =%<nop>SCRIPTSUFFIX%=
-	* Expands to: <code>%SCRIPTSUFFIX%</code>
-	* Related: [[#VarSCRIPTURL][SCRIPTURL]]
+   * Some <nop>%WIKITOOLNAME% installations require a file extension for CGI scripts like =.pl= or =.cgi=
+   * Syntax: =%<nop>SCRIPTSUFFIX%=
+   * Expands to: <code>%SCRIPTSUFFIX%</code>
+   * Related: [[#VarSCRIPTURL][SCRIPTURL]]
 
 #VarSEARCH
 ---+++ SEARCH{"text"} -- search content
-	* Inline search, shows a search result embedded in a topic
-	* Syntax: =%<nop>SEARCH{"text" ...}%=
-	* Supported parameters: [1]
-	  | *Parameter:* | *Description:* | *Default:* |
-	  | ="text"= | Search term. Is a keyword search, literal search or regular expression search, depending on the =type= parameter. SearchHelp has more | required |
-	  | =search="text"= | (Alternative to above) | N/A |
-	  | =web="Name"= <br /> =web="%MAINWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. The special word =all= means all webs that doe *not* have the =NOSEARCHALL= variable set to =on= in their %WEBPREFSTOPIC%. You can specifically *exclude* webs from an =all= search using a minus sign - for example, =web="all,-Secretweb"=. | Current web |
-	  | =topic="%WEBPREFSTOPIC%"= <br /> =topic="*Bug"= | Limit search to topics: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | All topics in a web |
-	  | =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | None |
-	  | =type="keyword"= <br /> =type="literal"= <br /> =type="regex"= | Do a keyword search like =soap "web service" -shampoo=; a literal search like =web service=; or RegularExpression search like =soap;web service;!shampoo= | =%<nop>SEARCHVAR- DEFAULTTYPE%= [[TWikiPreferences][preferences]] setting (%SEARCHVARDEFAULTTYPE%) |
-	  | =scope="topic"= <br /> =scope="text"= <br /> =scope="all"= | Search topic name (title); the text (body) of topic; or all (both) | ="text"= |
-	  | =order="topic"= <br /> =order="created"= <br />  =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, topic creation time, last modified time, last editor, or named field of TWikiForms. The sorting is done web by web; in case you want to sort across webs, create a [[FormattedSearch][formatted]] table and sort it with TablePlugin's initsort | Sort by topic name |
-	  | =limit="all"= <br /> =limit="16"= | Limit the number of results returned. This is done after sorting if =order= is specified | All results |
-	  | =date="..."= | limits the results to those pages with latest edit time in the given TimeInterval.  | All results |
-	  | =reverse="on"= | Reverse the direction of the search | Ascending search |
-	  | =casesensitive="on"= | Case sensitive search | Ignore case |
-	  | =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
-	  | =nonoise="on"= | Shorthand for =nosummary="on" nosearch="on" nototal="on" zeroresults="off" noheader="on" noempty="on" | Off |
-	  | =nosummary="on"= | Show topic title only | Show topic summary |
-	  | =nosearch="on"= | Suppress search string | Show search string |
-	  | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
-	  | =nototal="on"= | Do not show number of topics found | Show number |
-	  | =zeroresults="off"= | Suppress all output if there are no hits | =zeroresults="on"=, displays: "Number of topics: 0" |
-	  | =noempty="on"= | Suppress results for webs that have no hits. | Show webs with no hits |
-	  | =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
-	  | =expandvariables="on"= | Expand variables before applying a FormattedSearch on a search hit. Useful to show the expanded text, e.g. to show the result of a SpreadSheetPlugin =%<nop>CALC{}%= instead of the formula | Raw text |
-	  | =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
-	  | =nofinalnewline="on"= | If =on=, the search variable does not end in a line by itself. Any text continuing immediately after the search tag on the same line will be rendered as part of the table generated by the search, if appropriate. | =off= |
-	  | =separator=", "= | Line separator between hits | Newline ="$n"= |
-	* Example: =%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%=
-	* Example with format: =%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%= _(displays results in a table with header - [[FormattedSearch][details]])_
-	* %H% If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
-	* Related: [[#VarMETASEARCH][METASEARCH]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEBLIST][WEBLIST]], FormattedSearch
+   * Inline search, shows a search result embedded in a topic
+   * Syntax: =%<nop>SEARCH{"text" ...}%=
+   * Supported parameters: [1]
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="text"= | Search term. Is a keyword search, literal search or regular expression search, depending on the =type= parameter. SearchHelp has more | required |
+     | =search="text"= | (Alternative to above) | N/A |
+     | =web="Name"= <br /> =web="%MAINWEB%, Know"= <br /> =web="all"= | Comma-separated list of webs to search. The special word =all= means all webs that doe *not* have the =NOSEARCHALL= variable set to =on= in their %WEBPREFSTOPIC%. You can specifically *exclude* webs from an =all= search using a minus sign - for example, =web="all,-Secretweb"=. | Current web |
+     | =topic="%WEBPREFSTOPIC%"= <br /> =topic="*Bug"= | Limit search to topics: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | All topics in a web |
+     | =excludetopic="Web*"= <br /> =excludetopic="%HOMETOPIC%, <nop>WebChanges"= | Exclude topics from search: A topic, a topic with asterisk wildcards, or a list of topics separated by comma. | None |
+     | =type="keyword"= <br /> =type="literal"= <br /> =type="regex"= | Do a keyword search like =soap "web service" -shampoo=; a literal search like =web service=; or RegularExpression search like =soap;web service;!shampoo= | =%<nop>SEARCHVAR- DEFAULTTYPE%= [[TWikiPreferences][preferences]] setting (%SEARCHVARDEFAULTTYPE%) |
+     | =scope="topic"= <br /> =scope="text"= <br /> =scope="all"= | Search topic name (title); the text (body) of topic; or all (both) | ="text"= |
+     | =order="topic"= <br /> =order="created"= <br />  =order="modified"= <br /> =order="editby"= <br /> =order=<br />&nbsp;"formfield(name)"= | Sort the results of search by the topic names, topic creation time, last modified time, last editor, or named field of TWikiForms. The sorting is done web by web; in case you want to sort across webs, create a [[FormattedSearch][formatted]] table and sort it with TablePlugin's initsort | Sort by topic name |
+     | =limit="all"= <br /> =limit="16"= | Limit the number of results returned. This is done after sorting if =order= is specified | All results |
+     | =date="..."= | limits the results to those pages with latest edit time in the given TimeInterval.  | All results |
+     | =reverse="on"= | Reverse the direction of the search | Ascending search |
+     | =casesensitive="on"= | Case sensitive search | Ignore case |
+     | =bookview="on"= | BookView search, e.g. show complete topic text | Show topic summary |
+     | =nonoise="on"= | Shorthand for =nosummary="on" nosearch="on" nototal="on" zeroresults="off" noheader="on" noempty="on" | Off |
+     | =nosummary="on"= | Show topic title only | Show topic summary |
+     | =nosearch="on"= | Suppress search string | Show search string |
+     | =noheader="on"= | Suppress search header <br /> <span style='background: #FFB0B0;'> *Topics: Changed: By:* </span> | Show search header |
+     | =nototal="on"= | Do not show number of topics found | Show number |
+     | =zeroresults="off"= | Suppress all output if there are no hits | =zeroresults="on"=, displays: "Number of topics: 0" |
+     | =noempty="on"= | Suppress results for webs that have no hits. | Show webs with no hits |
+     | =header="..."= <br /> =format="..."= | Custom format results: see *[[FormattedSearch]]* for usage, variables &amp; examples | Results in table |
+     | =expandvariables="on"= | Expand variables before applying a FormattedSearch on a search hit. Useful to show the expanded text, e.g. to show the result of a SpreadSheetPlugin =%<nop>CALC{}%= instead of the formula | Raw text |
+     | =multiple="on"= | Multiple hits per topic. Each hit can be [[FormattedSearch][formatted]]. The last token is used in case of a regular expression ";" _and_ search | Only one hit per topic |
+     | =nofinalnewline="on"= | If =on=, the search variable does not end in a line by itself. Any text continuing immediately after the search tag on the same line will be rendered as part of the table generated by the search, if appropriate. | =off= |
+     | =separator=", "= | Line separator between hits | Newline ="$n"= |
+   * Example: =%<nop>SEARCH{"wiki" web="%MAINWEB%" scope="topic"}%=
+   * Example with format: =%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%= _(displays results in a table with header - [[FormattedSearch][details]])_
+   * %H% If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
+   * Related: [[#VarMETASEARCH][METASEARCH]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEBLIST][WEBLIST]], FormattedSearch
 
-	* [1] __Note__: The search form uses identical names for input fields.
+   * [1] __Note__: The search form uses identical names for input fields.
 
 #VarSERVERTIME
 ---+++ SERVERTIME -- server time
-	* Syntax: =%<nop>SERVERTIME%=
-	* Expands to: =%SERVERTIME%=
-	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME2][SERVERTIME{"format"}]]
+   * Syntax: =%<nop>SERVERTIME%=
+   * Expands to: =%SERVERTIME%=
+   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME2][SERVERTIME{"format"}]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarSERVERTIME2
 ---+++ SERVERTIME{"format"} -- formatted server time
-	* Same format qualifiers as =%<nop>GMTIME%=
-	* Syntax: =%<nop>SERVERTIME{"format"}%=
-	* Example: =%<nop>SERVERTIME{"$hou:$min"}%= expands to =%SERVERTIME{"$hou:$min"}%=
-	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
+   * Same format qualifiers as =%<nop>GMTIME%=
+   * Syntax: =%<nop>SERVERTIME{"format"}%=
+   * Example: =%<nop>SERVERTIME{"$hou:$min"}%= expands to =%SERVERTIME{"$hou:$min"}%=
+   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarSPACEDTOPIC
 ---+++ SPACEDTOPIC -- topic name, spaced and URL-encoded
-	* The current topic name with added spaces, for regular expression search of Ref-By
-	* Syntax: =%<nop>SPACEDTOPIC%=
-	* Expands to: =%SPACEDTOPIC%=
-	* Related: [[#VarTOPIC][TOPIC]]
+   * The current topic name with added spaces, for regular expression search of Ref-By
+   * Syntax: =%<nop>SPACEDTOPIC%=
+   * Expands to: =%SPACEDTOPIC%=
+   * Related: [[#VarTOPIC][TOPIC]]
 %T% This rather bizarre function is provided almost exclusively for generating URLs for searching for backlinks to topics.
 
 #VarSTARTINCLUDE
 ---+++ STARTINCLUDE -- start position of topic text if included
-	* If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everything exept the =%<nop>STARTINCLUDE%= variable itself. An optional parameter can be used to control whether the content is expanded.
-	* Syntax: =%<nop>STARTINCLUDE%=
-	* Syntax: =%<nop>STARTINCLUDE{param}%=
+   * If present in included topic, start to include text from this location up to the end, or up to the location of the =%<nop>STOPINCLUDE%= variable. A normal view of the topic shows everything exept the =%<nop>STARTINCLUDE%= variable itself. An optional parameter can be used to control whether the content is expanded.
+   * Syntax: =%<nop>STARTINCLUDE%=
+   * Syntax: =%<nop>STARTINCLUDE{param}%=
       * If param does not expand to a non-zero integer, then nothing will be included.
-	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]]
 
 #VarSTATISTICSTOPIC
 ---+++ STATISTICSTOPIC -- name of statistics topic
-	* Syntax: =%<nop>STATISTICSTOPIC%=
-	* Expands to: =%STATISTICSTOPIC%=, renders as [[%STATISTICSTOPIC%]]
-	* Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarNOTIFYTOPIC][NOTIFYTOPIC]], [[#VarTOPIC][TOPIC]]
+   * Syntax: =%<nop>STATISTICSTOPIC%=
+   * Expands to: =%STATISTICSTOPIC%=, renders as [[%STATISTICSTOPIC%]]
+   * Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarNOTIFYTOPIC][NOTIFYTOPIC]], [[#VarTOPIC][TOPIC]]
 
 #VarSTOPINCLUDE
 ---+++ STOPINCLUDE -- end position of topic text if included
-	* If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself.
-	* Syntax: =%<nop>STOPINCLUDE%=
-	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
+   * If present in included topic, stop to include text at this location and ignore the remaining text. A normal view of the topic shows everyting exept the =%<nop>STOPINCLUDE%= variable itself.
+   * Syntax: =%<nop>STOPINCLUDE%=
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSTARTINCLUDE][STARTINCLUDE]]
 
 #VarTOC
 ---+++ TOC -- table of contents of current topic
-	* Syntax: =%<nop>TOC%=
-	* Related: [[#VarTOC2][TOC{"SomeTopic"}]]
+   * Syntax: =%<nop>TOC%=
+   * Related: [[#VarTOC2][TOC{"SomeTopic"}]]
 
 #VarTOC2
 ---+++ TOC{"Topic"} -- table of contents
-	* Syntax: =%<nop>TOC{"SomeTopic" ...}%=
-	* Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;/h2&gt;"=) are taken into account. Any heading text after ="!!"= is excluded from the TOC; for example, write ="---+!! text"= if you do not want to list a header in the TOC
-	* Supported parameters:
-	 | *Parameter:* | *Description:* | *Default:* |
-	 | ="TopicName"= | topic name | Current topic |
-	 | =web="Name"= | Name of web | Current web |
-	 | =depth="2"= | Limit depth of headings shown in TOC | 6 |
-	 | =title="Some text"= | Title to appear at top of TOC | none |
-	* Example: =%<nop>TOC{depth="2"}%=
-	* Example: =%<nop>TOC{"TWikiDocumentation" web="%TWIKIWEB%" title="Contents:"}%=
-	* Example: see TWiki:Sandbox.TestTopicInclude
-	* Related: [[#VarTOC][TOC]]
+   * Syntax: =%<nop>TOC{"SomeTopic" ...}%=
+   * Table of Contents. Shows a TOC that is generated automatically based on headings of a topic. Headings in WikiSyntax (="---++ text"=) and HTML (="&lt;h2&gt;text&lt;/h2&gt;"=) are taken into account. Any heading text after ="!!"= is excluded from the TOC; for example, write ="---+!! text"= if you do not want to list a header in the TOC
+   * Supported parameters:
+    | *Parameter:* | *Description:* | *Default:* |
+    | ="TopicName"= | topic name | Current topic |
+    | =web="Name"= | Name of web | Current web |
+    | =depth="2"= | Limit depth of headings shown in TOC | 6 |
+    | =title="Some text"= | Title to appear at top of TOC | none |
+   * Example: =%<nop>TOC{depth="2"}%=
+   * Example: =%<nop>TOC{"TWikiDocumentation" web="%TWIKIWEB%" title="Contents:"}%=
+   * Example: see TWiki:Sandbox.TestTopicInclude
+   * Related: [[#VarTOC][TOC]]
 
 %X% TOC will generate links to the headings, so when a reader clicks on a heading it will jump straight where that heading is anchored in the text. If you have two headings with exactly the same text, then their anchors will also be identical and they won't be able to jump to them. To make the anchors unique, you can add an invisible HTML comment to the text of the heading. This will be hidden in normal view, but will force the anchors to be different. For example, <tt>---+ Heading &lt;!--5--&gt;</tt>.
 
 #VarTOPIC
 ---+++ TOPIC -- name of current topic
-	* Syntax: =%<nop>TOPIC%=
-	* Expands to: =%TOPIC%=, renders as [[%TOPIC%]]
-	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEB][WEB]]
+   * Syntax: =%<nop>TOPIC%=
+   * Expands to: =%TOPIC%=, renders as [[%TOPIC%]]
+   * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEB][WEB]]
 
 #VarTOPICLIST
 ---+++ TOPICLIST{"format"} -- topic index of a web
-	* The "format" defines the format of one topic item. It may include variables: The =$name= variable gets expanded to the topic name; the =$web= variable gets expanded to the name of the web.
-	* Syntax: =%<nop>TOPICLIST{"format" ...}%=
-	* Supported parameters:
-	 | *Parameter:* | *Description:* | *Default:* |
-	 | ="format"= | Format of one line, may include =$name= and =$web= variables | ="$name"= |
-	 | =format="format"= | (Alternative to above) | ="$name"= |
-	 | =separator=", "= | line separator | ="\n"= (new line) |
-	 | =web="Name"= | Name of web | Current web |
-	* Example: =%<nop>TOPICLIST{"	* $web.$name"}%= creates a bullet list of all topics
-	* Example: =%<nop>TOPICLIST{separator=", "}%= creates a comma separated list of all topics
-	* Example: =%<nop>TOPICLIST{" &lt;option&gt;$name&lt;/option&gt;"}%= creates an option list (for drop down menus)
-	* Related: [[#VarSEARCH][SEARCH]], [[#VarWEBLIST][WEBLIST]]
+   * The "format" defines the format of one topic item. It may include variables: The =$name= variable gets expanded to the topic name; the =$web= variable gets expanded to the name of the web.
+   * Syntax: =%<nop>TOPICLIST{"format" ...}%=
+   * Supported parameters:
+    | *Parameter:* | *Description:* | *Default:* |
+    | ="format"= | Format of one line, may include =$name= and =$web= variables | ="$name"= |
+    | =format="format"= | (Alternative to above) | ="$name"= |
+    | =separator=", "= | line separator | ="\n"= (new line) |
+    | =web="Name"= | Name of web | Current web |
+   * Example: =%<nop>TOPICLIST{"   * $web.$name"}%= creates a bullet list of all topics
+   * Example: =%<nop>TOPICLIST{separator=", "}%= creates a comma separated list of all topics
+   * Example: =%<nop>TOPICLIST{" &lt;option&gt;$name&lt;/option&gt;"}%= creates an option list (for drop down menus)
+   * Related: [[#VarSEARCH][SEARCH]], [[#VarWEBLIST][WEBLIST]]
 
 #VarTWIKIWEB
 ---+++ TWIKIWEB -- name of TWiki documentation web
-	* The web containing all documentation and site-wide preference settings for <nop>%WIKITOOLNAME%
-	* Syntax: =%<nop>TWIKIWEB%=
-	* Expands to: =%TWIKIWEB%=
-	* Related: [[#VarMAINWEB][MAINWEB]]
+   * The web containing all documentation and site-wide preference settings for <nop>%WIKITOOLNAME%
+   * Syntax: =%<nop>TWIKIWEB%=
+   * Expands to: =%TWIKIWEB%=
+   * Related: [[#VarMAINWEB][MAINWEB]]
 
 #VarURLPARAM
 ---+++ URLPARAM{"name"} -- get value of a URL parameter
-	* Returns the value of a URL parameter.
-	* Syntax: =%<nop>URLPARAM{"name"}%=
-	* Supported parameters:
-	  | *Parameter:* | *Description:* | *Default:* |
-	  | ="name"= | The name of a URL parameter | required |
-	  | =default="..."= | Default value in case parameter is empty or missing | empty string |
-	  | =newline="&lt;br /&gt;"= | Convert newlines in textarea to other delimiters | no conversion |
-	  | =encode="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. This is needed if text is put into an HTML form field | no encoding |
-	  | =encode="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | no encoding |
-	  | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
-	  | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (new line) |
-	* Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%TOPIC%?skin=print= URL. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print#VarURLPARAM][Test this]]: %URLPARAM{"skin"}%
-	* Related: [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
+   * Returns the value of a URL parameter.
+   * Syntax: =%<nop>URLPARAM{"name"}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="name"= | The name of a URL parameter | required |
+     | =default="..."= | Default value in case parameter is empty or missing | empty string |
+     | =newline="&lt;br /&gt;"= | Convert newlines in textarea to other delimiters | no conversion |
+     | =encode="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;=. This is needed if text is put into an HTML form field | no encoding |
+     | =encode="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | no encoding |
+     | =multiple="on"= %BR% =multiple="[<nop>[$item]]"= | If set, gets all selected elements of a =&lt;select multiple="multiple"&gt;= tag. A format can be specified, with =$item= indicating the element, e.g. =multiple="Option: $item"= | first element |
+     | =separator=", "= | Separator between multiple selections. Only relevant if multiple is specified | ="\n"= (new line) |
+   * Example: =%<nop>URLPARAM{"skin"}%= returns =print= for a =.../view/%WEB%/%TOPIC%?skin=print= URL. [[%SCRIPTURL%/viewauth%SCRIPTSUFFIX%/%WEB%/%TOPIC%?skin=print#VarURLPARAM][Test this]]: %URLPARAM{"skin"}%
+   * Related: [[#VarSEARCH][SEARCH]], FormattedSearch, [[#VarQUERYSTRING][QUERYSTRING]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
@@ -303,105 +303,105 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarUSERNAME
 ---+++ USERNAME -- your login username
-	* TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. Un-authenticated users are all %MAINWEB%.TWikiGuest.
-	* Syntax: =%<nop>USERNAME%=
-	* Expands to: =%USERNAME%=
-	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
+   * TWiki makes names available in three formats: USERNAME like =jsmith=, WIKINAME like =JohnSmith= and WIKIUSERNAME like =%MAINWEB%.JohnSmith=. Un-authenticated users are all %MAINWEB%.TWikiGuest.
+   * Syntax: =%<nop>USERNAME%=
+   * Expands to: =%USERNAME%=
+   * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarWIKINAME][WIKINAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], TWikiUserAuthentication
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarUSERLANGUAGE
 ---+++ USERLANGUAGE -- current user's language
-	* Returns the language code for the language used as the current user. This is the language actually used by TWiki Internationalization (e.g. in user interface).
-	* The language is detected from the user's browser, unless some site/web/user/session-defined setting overrides it:
-		* Is the =LANGUAGE= preference is set, it's used as user's language instead of any language detected from the browser.
-		* Avoid to define it =LANGUAGE= at a non per-user way, so each user can choose his/her preferred language.
-	* Related: [[#VarLANGUAGES][LANGUAGES]]
+   * Returns the language code for the language used as the current user. This is the language actually used by TWiki Internationalization (e.g. in user interface).
+   * The language is detected from the user's browser, unless some site/web/user/session-defined setting overrides it:
+      * Is the =LANGUAGE= preference is set, it's used as user's language instead of any language detected from the browser.
+      * Avoid to define it =LANGUAGE= at a non per-user way, so each user can choose his/her preferred language.
+   * Related: [[#VarLANGUAGES][LANGUAGES]]
 
 #VarVAR
 ---+++ VAR{"NAME" web="Web"} -- get a preference value from another web 
-	* Syntax: =%<nop>VAR{"NAME" web="Web"}%=
-	* Example: To get =%<nop>WEBBGCOLOR%= of the %MAINWEB% web write =%<nop>VAR{"WEBBGCOLOR" web="%MAINWEB%"}%=, which expands to =%VAR{"WEBBGCOLOR" web="%MAINWEB%"}%=
-	* Related: [[#VarWEBPREFSTOPIC][WEBPREFSTOPIC]]
+   * Syntax: =%<nop>VAR{"NAME" web="Web"}%=
+   * Example: To get =%<nop>WEBBGCOLOR%= of the %MAINWEB% web write =%<nop>VAR{"WEBBGCOLOR" web="%MAINWEB%"}%=, which expands to =%VAR{"WEBBGCOLOR" web="%MAINWEB%"}%=
+   * Related: [[#VarWEBPREFSTOPIC][WEBPREFSTOPIC]]
 
 #VarWEB
 ---+++ WEB -- name of current web
-	* Syntax: =%<nop>WEB%=
-	* Expands to: =<nop>%WEB%=
-	* Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarTOPIC][TOPIC]]
+   * Syntax: =%<nop>WEB%=
+   * Expands to: =<nop>%WEB%=
+   * Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarTOPIC][TOPIC]]
 
 #VarWEBLIST
 ---+++ WEBLIST{"format"} -- index of all webs
-	* List of all webs. Hidden webs are excluded, e.g. webs with a =NOSEARCHALL=on= preference variable. The ="format"= defines the format of one web item. The =$name= variable gets expanded to the name of the web, =$qname= gets expanded to double quoted name, =$marker= to =marker= where web matches =selection=.
-	* Syntax: =%<nop>WEBLIST{"format" ...}%=
-	* Supported parameters:
-	  | *Parameter:* | *Description:* | *Default:* |
-	  | ="format"= | Format of one line, may include =$name= variable | ="$name"= |
-	  | =format="format"= | (Alternative to above) | ="$name"= |
-	  | =separator=", "= | line separator | ="\n"= (new line) |
-	  | =webs="public"=	| comma sep list of Web, public expands to all non-hidden | ="public"= |
-	  | =marker="selected"= | Text for =$marker= where item matches =selection=, otherwise equals =""= | ="selected"= |
-	  | =selection="%<nop>WEB%"= | Current value to be selected in list | =section="%<nop>WEB%"= |
-	* Example: =%<nop>WEBLIST{"	* [<nop>[$name.%HOMETOPIC%]]"}%= creates a bullet list of all webs.
-	* Example: =%<nop>WEBLIST{"&lt;option $marker value=$qname&gt;$name&lt;/option&gt;" webs="Trash,public" selection="%WEB%" separator=" "}%= Dropdown of all public Webs + Trash Web, current Web highlighted.
-	* Related: [[#VarTOPICLIST][TOPICLIST]], [[#VarSEARCH][SEARCH]]
+   * List of all webs. Hidden webs are excluded, e.g. webs with a =NOSEARCHALL=on= preference variable. The ="format"= defines the format of one web item. The =$name= variable gets expanded to the name of the web, =$qname= gets expanded to double quoted name, =$marker= to =marker= where web matches =selection=.
+   * Syntax: =%<nop>WEBLIST{"format" ...}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | ="format"= | Format of one line, may include =$name= variable | ="$name"= |
+     | =format="format"= | (Alternative to above) | ="$name"= |
+     | =separator=", "= | line separator | ="\n"= (new line) |
+     | =webs="public"=   | comma sep list of Web, public expands to all non-hidden | ="public"= |
+     | =marker="selected"= | Text for =$marker= where item matches =selection=, otherwise equals =""= | ="selected"= |
+     | =selection="%<nop>WEB%"= | Current value to be selected in list | =section="%<nop>WEB%"= |
+   * Example: =%<nop>WEBLIST{"   * [<nop>[$name.%HOMETOPIC%]]"}%= creates a bullet list of all webs.
+   * Example: =%<nop>WEBLIST{"&lt;option $marker value=$qname&gt;$name&lt;/option&gt;" webs="Trash,public" selection="%WEB%" separator=" "}%= Dropdown of all public Webs + Trash Web, current Web highlighted.
+   * Related: [[#VarTOPICLIST][TOPICLIST]], [[#VarSEARCH][SEARCH]]
 
 #VarWEBPREFSTOPIC
 ---+++ WEBPREFSTOPIC -- name of web preferences topic
-	* Syntax: =%<nop>WEBPREFSTOPIC%=
-	* Expands to: =%WEBPREFSTOPIC%=, renders as [[%WEBPREFSTOPIC%]]
-	* Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarWIKIPREFSTOPIC][WIKIPREFSTOPIC]], [[#VarVAR][VAR]]
+   * Syntax: =%<nop>WEBPREFSTOPIC%=
+   * Expands to: =%WEBPREFSTOPIC%=, renders as [[%WEBPREFSTOPIC%]]
+   * Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarWIKIPREFSTOPIC][WIKIPREFSTOPIC]], [[#VarVAR][VAR]]
 
 #VarWIKIHOMEURL
 ---+++ WIKIHOMEURL -- site home URL
 *DEPRECATED*, use %WIKILOGOURL% defined in WebPreferences instead. This variables value is defined in lib/TWiki.cfg::$wikiHomeUrl which is marked deprecated. Will be removed in future versions.
 
-	* The base URL of <nop>%WIKITOOLNAME%, is the link of the Home icon in the upper left corner, defined in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]]
-	* Syntax: =%<nop>WIKIHOMEURL%=
-	* Expands to: =%WIKIHOMEURL%=
-	* Related: [[#VarWIKITOOLNAME][WIKITOOLNAME]]
+   * The base URL of <nop>%WIKITOOLNAME%, is the link of the Home icon in the upper left corner, defined in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%]]
+   * Syntax: =%<nop>WIKIHOMEURL%=
+   * Expands to: =%WIKIHOMEURL%=
+   * Related: [[#VarWIKITOOLNAME][WIKITOOLNAME]]
 
 #VarWIKINAME
 ---+++ WIKINAME -- your Wiki username
-	* The WikiName is the same as %<nop>USERNAME% if not defined in the %MAINWEB%.%WIKIUSERSTOPIC% topic
-	* Syntax: =%<nop>WIKINAME%=
-	* Expands to: =%WIKINAME%=
-	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
+   * The WikiName is the same as %<nop>USERNAME% if not defined in the %MAINWEB%.%WIKIUSERSTOPIC% topic
+   * Syntax: =%<nop>WIKINAME%=
+   * Expands to: =%WIKINAME%=
+   * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKIUSERNAME][WIKIUSERNAME]], [[#VarWIKIUSERSTOPIC][WIKIUSERSTOPIC]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create  new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarWIKIPREFSTOPIC
 ---+++ WIKIPREFSTOPIC -- name of site-wide preferences topic
-	* Syntax: =%<nop>WIKIPREFSTOPIC%=
-	* Expands to: =%WIKIPREFSTOPIC%=, renders as [[%WIKIPREFSTOPIC%]]
-	* Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarWEBPREFSTOPIC][WEBPREFSTOPIC]]
+   * Syntax: =%<nop>WIKIPREFSTOPIC%=
+   * Expands to: =%WIKIPREFSTOPIC%=, renders as [[%WIKIPREFSTOPIC%]]
+   * Related: [[#VarHOMETOPIC][HOMETOPIC]], [[#VarWEBPREFSTOPIC][WEBPREFSTOPIC]]
 
 #VarWIKITOOLNAME
 ---+++ WIKITOOLNAME -- name of your TWiki site
-	* Syntax: =%<nop>WIKITOOLNAME%=
-	* Expands to: =%WIKITOOLNAME%=
-	* Related: [[#VarWIKIHOMEURL][WIKIHOMEURL]], [[#VarWIKIVERSION][WIKIVERSION]]
+   * Syntax: =%<nop>WIKITOOLNAME%=
+   * Expands to: =%WIKITOOLNAME%=
+   * Related: [[#VarWIKIHOMEURL][WIKIHOMEURL]], [[#VarWIKIVERSION][WIKIVERSION]]
 
 #VarWIKIUSERNAME
 ---+++ WIKIUSERNAME -- your Wiki username with web prefix
-	* Your %<nop>WIKINAME% with %MAINWEB% web prefix, useful to point to your <nop>%WIKITOOLNAME% home page
-	* Syntax: =%<nop>WIKIUSERNAME%=
-	* Expands to: =%WIKIUSERNAME%=, renders as %WIKIUSERNAME%
-	* Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]]
+   * Your %<nop>WIKINAME% with %MAINWEB% web prefix, useful to point to your <nop>%WIKITOOLNAME% home page
+   * Syntax: =%<nop>WIKIUSERNAME%=
+   * Expands to: =%WIKIUSERNAME%=, renders as %WIKIUSERNAME%
+   * Related: [[#VarREMOTEUSER][REMOTE_USER]], [[#VarUSERNAME][USERNAME]], [[#VarWIKINAME][WIKINAME]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details
 
 #VarWIKIUSERSTOPIC
 ---+++ WIKIUSERSTOPIC -- name of topic listing all registers users
-	* Syntax: =%<nop>WIKIUSERSTOPIC%=
-	* Expands to: =%WIKIUSERSTOPIC%=, with %MAINWEB% prefix renders as %MAINWEB%.%WIKIUSERSTOPIC%
-	* Related: [[#VarWIKIUSERNAME][WIKIUSERNAME]]
+   * Syntax: =%<nop>WIKIUSERSTOPIC%=
+   * Expands to: =%WIKIUSERSTOPIC%=, with %MAINWEB% prefix renders as %MAINWEB%.%WIKIUSERSTOPIC%
+   * Related: [[#VarWIKIUSERNAME][WIKIUSERNAME]]
 
 #VarWIKIVERSION
 ---+++ WIKIVERSION -- the version of the installed TWiki engine
-	* Syntax: =%<nop>WIKIVERSION%=
-	* Expands to: =%WIKIVERSION%=
-	* Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKITOOLNAME][WIKITOOLNAME]]
+   * Syntax: =%<nop>WIKIVERSION%=
+   * Expands to: =%WIKIVERSION%=
+   * Related: [[#VarPLUGINVERSION][PLUGINVERSION]], [[#VarWIKITOOLNAME][WIKITOOLNAME]]
 %STOPINCLUDE%
 
 

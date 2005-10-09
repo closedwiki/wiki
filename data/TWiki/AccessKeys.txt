@@ -13,18 +13,18 @@ Its an alternative to using a mouse, or other pointing device, and can sometimes
 
 This depends on the browser you are using (see also cross-browser support below):
 
-	* If you use Internet Explorer
-		* Press and hold the 'Alt' key
-		* Press the required letter
-		* Release the keys and press the 'ENTER' key
+   * If you use Internet Explorer
+      * Press and hold the 'Alt' key
+      * Press the required letter
+      * Release the keys and press the 'ENTER' key
 
-	* If you use Netscape Navigator, Mozilla, or Firefox
-		* Press and hold the 'Alt' key
-		* Press the required letter
+   * If you use Netscape Navigator, Mozilla, or Firefox
+      * Press and hold the 'Alt' key
+      * Press the required letter
 
-	* If you are using a Mac
-		* Press and hold the 'Ctrl' key
-		* Press the required letter
+   * If you are using a Mac
+      * Press and hold the 'Ctrl' key
+      * Press the required letter
 
 [[http://www.salford.gov.uk/online/howto/accesskeys.htm][Learn more]]
 

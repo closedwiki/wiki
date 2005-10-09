@@ -9,9 +9,9 @@ _Plug-in enhanced feature add-ons, with a Plugin API for developers_
 
 You can add Plugins to extend TWiki functionality, without altering the core code. A plug-in approach lets you:
 
-	* add virtually unlimited features while keeping the main TWiki code compact and efficient;
-	* heavily customize an installation and still do clean updates to new versions of TWiki;
-	* rapidly develop new TWiki functions in Perl using the Plugin API.
+   * add virtually unlimited features while keeping the main TWiki code compact and efficient;
+   * heavily customize an installation and still do clean updates to new versions of TWiki;
+   * rapidly develop new TWiki functions in Perl using the Plugin API.
 
 Everything to do with TWiki Plugins - demos, new releases, downloads, development, general discussion - is available at TWiki.org, in the <b> TWiki:Plugins </b> web.
 
@@ -67,17 +67,17 @@ The TWikiFuncDotPm module (=lib/TWiki/Func.pm=) describes ALL the interfaces ava
 
 In addition to TWiki core functions, Plugins can use *predefined hooks*, or *call backs*, as described in the =lib/TWiki/Plugins/EmptyPlugin.pm= module.
 
-	* All but the initPlugin are disabled. To enable a call back, remove =DISABLE_= from the function name.
+   * All but the initPlugin are disabled. To enable a call back, remove =DISABLE_= from the function name.
 
 TWiki:Codev/StepByStepRenderingOrder helps you decide which rendering handler to use.
 
 ---+++ Hints on Writing Fast Plugins
 
-	* Delay initialization as late as possible. For example, if your plugin is a simple syntax processor, you might delay loading extra Perl modules until yu actually see the syntax in the text.
-	* For example, use an =eval= block like this:%BR%
-	  =eval { require IPC::Run }= %BR%
-	  =return "&lt;font color=\"red\"&gt;SamplePlugin: Can't load required modules ($@)&lt;/font&gt;" if $@;=
-	* You can use a flag to avoid running the initialization twice
+   * Delay initialization as late as possible. For example, if your plugin is a simple syntax processor, you might delay loading extra Perl modules until yu actually see the syntax in the text.
+   * For example, use an =eval= block like this:%BR%
+     =eval { require IPC::Run }= %BR%
+     =return "&lt;font color=\"red\"&gt;SamplePlugin: Can't load required modules ($@)&lt;/font&gt;" if $@;=
+   * You can use a flag to avoid running the initialization twice
 
 #CreatePlugins
 ---++ Creating Plugins
@@ -88,8 +88,8 @@ With a reasonable knowledge of the Perl scripting language, you can create new P
 
 A basic TWiki Plugin consists of two elements:
 
-	* a Perl module, ex: =MyFirstPlugin.pm=
-	* a documentation topic, ex: =MyFirstPlugin.txt=
+   * a Perl module, ex: =MyFirstPlugin.pm=
+   * a documentation topic, ex: =MyFirstPlugin.txt=
 
 The Perl module can be a block of code that connects with TWiki alone, or it can include other elements, like other Perl modules (including other Plugins), graphics, TWiki templates, external applications (ex: a Java applet), or just about anything else it can call.
 In particular, files that should be web-accessible (graphics, Java applets ...) are best placed as attachments of the =MyFirstPlugin= topic. Other needed Perl code is best placed in a =lib/TWiki/Plugins/MyFirstPlugin/= directory.
@@ -105,17 +105,17 @@ Copy file =lib/TWiki/Plugins/EmptyPlugin.pm= to =&lt;name&gt;Plugin.pm=. The =Em
 
 The Plugin documentation topic contains usage instructions and version details. It serves the Plugin files as %TWIKIWEB%.FileAttachments for downloading. (The doc topic is also included _in_ the [[#CreatePluginPackage][distribution package]].) To create a documentation topic:
 
-	1. *Copy* the Plugin topic template from TWiki.org. To copy the text, go to TWiki:Plugins/PluginPackage and:
-		* enter the Plugin name in the "How to Create a Plugin" section
-		* click Create
-		* select all in the Edit box &amp; copy 
-		* Cancel the edit
-		* go back to your site to the %TWIKIWEB% web
-		* In the GoBox enter your Plugin name, for example =MyFirstPlugin=, press enter and create the new topic
-		* paste &amp; save new Plugin topic on your site
-	2. *Customize* your Plugin topic.
-		* In case you plan to publish your Plugin at TWiki.org, use Interwiki names for author names, like TWiki:Main/%WIKINAME%. 
-	3. *Save* your topic, for use in [[#CreatePluginPackage][packaging]] and [[#PublishPlugin][publishing]] your Plugin.
+   1. *Copy* the Plugin topic template from TWiki.org. To copy the text, go to TWiki:Plugins/PluginPackage and:
+      * enter the Plugin name in the "How to Create a Plugin" section
+      * click Create
+      * select all in the Edit box &amp; copy 
+      * Cancel the edit
+      * go back to your site to the %TWIKIWEB% web
+      * In the GoBox enter your Plugin name, for example =MyFirstPlugin=, press enter and create the new topic
+      * paste &amp; save new Plugin topic on your site
+   2. *Customize* your Plugin topic.
+      * In case you plan to publish your Plugin at TWiki.org, use Interwiki names for author names, like TWiki:Main/%WIKINAME%. 
+   3. *Save* your topic, for use in [[#CreatePluginPackage][packaging]] and [[#PublishPlugin][publishing]] your Plugin.
 
 <blockquote style="background-color:#f5f5f5">
 *OUTLINE: Doc Topic Contents* <br />
@@ -127,8 +127,8 @@ Check the Plugins web on TWiki.org for the latest Plugin doc topic template. Her
 
 *Plugin Settings:* &lt;<i>Description and settings for custom Plugin %<nop>VARIABLES%, and those required by TWiki.</i>&gt;"
 
-	* *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering values works exactly like %TWIKIWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
-		* *Set &lt;<i>EXAMPLE = value added</i>&gt;*
+   * *Plugins Preferences* &lt;<i>If user settings are needed, explain... Entering values works exactly like %TWIKIWEB%.TWikiPreferences and WebPreferences: six (6) spaces and then:</i>&gt;"
+      * *Set &lt;<i>EXAMPLE = value added</i>&gt;*
 
 *Plugin Installation Instructions:* &lt;<i>Step-by-step set-up guide, user help, whatever it takes to install and run, goes here.</i>&gt;"
 
@@ -142,14 +142,14 @@ The TWiki:Plugins.BuildContrib is a powerful build environment that is used by t
 
 If you don't want (or can't) use the !BuildContrib, then a minimum Plugin release consists of a Perl module with a WikiName that ends in =Plugin=, ex: =MyFirstPlugin.pm=, and a documentation page with the same name(=MyFirstPlugin.txt=).
 
-	1. Distribute the Plugin files in a directory structure that mirrors TWiki. If your Plugin uses additional files, include them ALL:
-		* =lib/TWiki/Plugins/MyFirstPlugin.pm=
-		* =data/TWiki/MyFirstPlugin.txt=
-		* =pub/TWiki/MyFirstPlugin/uparrow.gif= [a required graphic]
-	2. Create a zip archive with the Plugin name (=MyFirstPlugin.zip=) and add the entire directory structure from Step 1. The archive should look like this:
-		* =lib/TWiki/Plugins/MyFirstPlugin.pm=
-		* =data/TWiki/MyFirstPlugin.txt=
-		* =pub/TWiki/MyFirstPlugin/uparrow.gif=
+   1. Distribute the Plugin files in a directory structure that mirrors TWiki. If your Plugin uses additional files, include them ALL:
+      * =lib/TWiki/Plugins/MyFirstPlugin.pm=
+      * =data/TWiki/MyFirstPlugin.txt=
+      * =pub/TWiki/MyFirstPlugin/uparrow.gif= [a required graphic]
+   2. Create a zip archive with the Plugin name (=MyFirstPlugin.zip=) and add the entire directory structure from Step 1. The archive should look like this:
+      * =lib/TWiki/Plugins/MyFirstPlugin.pm=
+      * =data/TWiki/MyFirstPlugin.txt=
+      * =pub/TWiki/MyFirstPlugin/uparrow.gif=
 
 #PublishPlugin
 ---+++ Publishing for Public Use

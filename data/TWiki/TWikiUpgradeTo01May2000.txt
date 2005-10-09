@@ -1,22 +1,22 @@
 %META:TOPICINFO{author="TWikiContributor" date="1111929255" format="1.0" version="$Rev$"}%
 To upgrade an earlier TWiki version like =01 Sep 1999= to version =01 May 2000= you should do the following things:
 
-	* Back up your system.
-	* Update the templates in the =/templates= directory (and its subdirs):
-		* Take the templates of the latest distribution as the base and merge your changes back into it.
-	* Update the Perl scripts in the =/bin= directory:
-		* Take the scripts of the latest distribution as the base and merge your changes back into it. Do so also for =wikicfg.pm= because it has important changes as well.
-	* Update topics:
-		* Copy the new Main. Main.TWikiPreferences topic (and =*,v= file) into your TWiki.Main web. Customize the topic to your needs.
-		* Copy the new Main. Main.WebPreferences, Main.WebStatistics topics (and =*,v= files) into all your webs. Customize all WebPreferences topics to your needs (e.g. web color).
-		* Copy WebSearch into all your webs, or modify the existing ones. __Reason:__ Some switches for search changed.
-		* Copy the TWiki documentation into your Main web: Topics TWikiDocumentation, TWikiUsernameVsLoginUsername, TWikiVariables, WebNotification, TWikiCategoryTable, TWikiImplementationNotes, TWikiInstallationGuide, TWikiUpgradeTo01May2000, TextFormattingRules, TWikiHistory .
-		* Copy the registration topic into your Main web:
-			* In case you are on an Intranet: Copy topic TWikiRegistration to Main.<nop>TWikiRegistration. Customize if needed.
-			* In case you are on a public server: Copy topic <nop>TWikiRegistrationPub to Main.<nop>TWikiRegistration. Customize if needed.
-		* Copy the Main. TWikiWebsTable topic (and =*,v= file) into your Main web and customize it. __Reason:__ The new release does not use the =*.inc= include files anymore.
-		* Optionally: Search for =%<nop>INCLUDE%'s= in all your webs and change them to the new =%<nop>INCLUDE{"file.ext"}%= syntax. __Note:__ Your old =%<nop>INCLUDE:"file.ext"%= syntax still works (the legacy rule is defined in =wikicfg.pm= .) 
-	* Add the <a href="http://TWiki.org/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> to your <nop>%WIKITOOLNAME% home page.
+   * Back up your system.
+   * Update the templates in the =/templates= directory (and its subdirs):
+      * Take the templates of the latest distribution as the base and merge your changes back into it.
+   * Update the Perl scripts in the =/bin= directory:
+      * Take the scripts of the latest distribution as the base and merge your changes back into it. Do so also for =wikicfg.pm= because it has important changes as well.
+   * Update topics:
+      * Copy the new Main. Main.TWikiPreferences topic (and =*,v= file) into your TWiki.Main web. Customize the topic to your needs.
+      * Copy the new Main. Main.WebPreferences, Main.WebStatistics topics (and =*,v= files) into all your webs. Customize all WebPreferences topics to your needs (e.g. web color).
+      * Copy WebSearch into all your webs, or modify the existing ones. __Reason:__ Some switches for search changed.
+      * Copy the TWiki documentation into your Main web: Topics TWikiDocumentation, TWikiUsernameVsLoginUsername, TWikiVariables, WebNotification, TWikiCategoryTable, TWikiImplementationNotes, TWikiInstallationGuide, TWikiUpgradeTo01May2000, TextFormattingRules, TWikiHistory .
+      * Copy the registration topic into your Main web:
+         * In case you are on an Intranet: Copy topic TWikiRegistration to Main.<nop>TWikiRegistration. Customize if needed.
+         * In case you are on a public server: Copy topic <nop>TWikiRegistrationPub to Main.<nop>TWikiRegistration. Customize if needed.
+      * Copy the Main. TWikiWebsTable topic (and =*,v= file) into your Main web and customize it. __Reason:__ The new release does not use the =*.inc= include files anymore.
+      * Optionally: Search for =%<nop>INCLUDE%'s= in all your webs and change them to the new =%<nop>INCLUDE{"file.ext"}%= syntax. __Note:__ Your old =%<nop>INCLUDE:"file.ext"%= syntax still works (the legacy rule is defined in =wikicfg.pm= .) 
+   * Add the <a href="http://TWiki.org/cgi-bin/view/Main/PoweredByTWikiLogo">PoweredByTWikiLogo</a> to your <nop>%WIKITOOLNAME% home page.
 
 
 __Related Topics:__ AdminDocumentationCategory

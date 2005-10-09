@@ -11,12 +11,12 @@ to convert your SVG drawings into PNG pictures.
 
 ---++ Syntax Rules
 
-	* %<nop/>SVG{"<code>drawing</code>" <em>parameters</em>}%
-		* where =drawing= is the filename of an attached SVG image.
-	* Parameters:
-	  | *Parameter* | *Description* | *Defaul value* |
-	  | =size= | the *maximum* size of the picture. The picture will be generated do fit in this size. !SvgPlugin will generate a picture the fits best in the given size, without distorting the image.  | =DEFAULTSIZE= setting below |
-	  | =topic= | The topic to which the drawing is attached. Can be =TheTopic= or =Web.TheTopic= | current topic |
+   * %<nop/>SVG{"<code>drawing</code>" <em>parameters</em>}%
+      * where =drawing= is the filename of an attached SVG image.
+   * Parameters:
+     | *Parameter* | *Description* | *Defaul value* |
+     | =size= | the *maximum* size of the picture. The picture will be generated do fit in this size. !SvgPlugin will generate a picture the fits best in the given size, without distorting the image.  | =DEFAULTSIZE= setting below |
+     | =topic= | The topic to which the drawing is attached. Can be =TheTopic= or =Web.TheTopic= | current topic |
 
 ---++ Examples
 
@@ -31,32 +31,32 @@ to convert your SVG drawings into PNG pictures.
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Shows SVG drawings as PNG pictures embeded in topics
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Shows SVG drawings as PNG pictures embeded in topics
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 1
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 1
 
-	* My own setting:
-		* Set DEFAULTSIZE = 320x200
+   * My own setting:
+      * Set DEFAULTSIZE = 320x200
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Install the =Image::LibRSVG= Perl module.
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-	  | ==pub/%WEB%/%TOPIC%/TWikiBrasil.svg== | Sample drawing |
-	  | ==pub/%WEB%/%TOPIC%/TWikiBrasil-320-200.png== | Sample picture |
-	  | ==pub/%WEB%/%TOPIC%/TWikiBrasil-400x300.png== | Sample picture |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the installation was successful:
-		* see examples above.
+   * Install the =Image::LibRSVG= Perl module.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+     | ==pub/%WEB%/%TOPIC%/TWikiBrasil.svg== | Sample drawing |
+     | ==pub/%WEB%/%TOPIC%/TWikiBrasil-320-200.png== | Sample picture |
+     | ==pub/%WEB%/%TOPIC%/TWikiBrasil-400x300.png== | Sample picture |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the installation was successful:
+      * see examples above.
 
 ---++ Plugin Info
 

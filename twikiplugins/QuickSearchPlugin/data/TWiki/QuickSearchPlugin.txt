@@ -63,7 +63,7 @@ Formatting is based on a template (quicksearch.tmpl) where the only fields updat
 
 
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory.
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* If you see the count of topics in the plugin web here:
 
 

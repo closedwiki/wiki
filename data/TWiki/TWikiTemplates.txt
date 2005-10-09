@@ -9,9 +9,9 @@ _Definition of the templates used to render all HTML pages displayed in TWiki_
 ---++ Overview
 
 There are three types of template:
-	* *Master Templates*: Define blocks of text for use in other templates
-	* *HTML Page Templates*: Define the layout of <nop>%WIKITOOLNAME% pages
-	* *Template Topics*: Define default text when you create a new topic
+   * *Master Templates*: Define blocks of text for use in other templates
+   * *HTML Page Templates*: Define the layout of <nop>%WIKITOOLNAME% pages
+   * *Template Topics*: Define default text when you create a new topic
 
 All three types of template use the TWiki template system.
 
@@ -21,18 +21,18 @@ _Templates_ are plain text with embedded _template directives_ that tell TWiki h
 
 #TemplateVariables
 ---+++ How Template Directives Work
-	* Template directives are embedded in templates.
-	* Directives are of the form ==%<nop>TMPL:&lt;key&gt;%== and ==%<nop>TMPL:&lt;key&gt;{"attr"}%==.
-	* Directives:
-		* ==%<nop>TMPL:INCLUDE{"file"}%==: Includes a template file. The file is found as described [[#FindingTemplates][below]].
-		* ==%<nop>TMPL:DEF{"block"}%==: Define a block. Text between this and the =%<nop>TMPL:END%= directive is not used in-place, but is saved for later use with =%<nop>TMPL:P=. Leading and trailing whitespace is ignored.
-		* ==%<nop>TMPL:END%==: Ends a block definition.
-		* ==%<nop>TMPL:P{"var"}%==: Includes a previously defined block.
-		* ==%<nop>{...}%==: is a comment.
-	* Two-pass processing lets you use a variable before or after declaring it.
-	* Templates and TWikiSkins work transparently and interchangeably. For example, you can create a skin that overloads only the =twiki.tmpl= master template, like =twiki.print.tmpl=, that redefines the header and footer.
-	* %H% Use of template directives is optional: templates work without them.
-	* %X% *NOTE:* Template directives work only for templates: they do not get processed in normal topic text.
+   * Template directives are embedded in templates.
+   * Directives are of the form ==%<nop>TMPL:&lt;key&gt;%== and ==%<nop>TMPL:&lt;key&gt;{"attr"}%==.
+   * Directives:
+      * ==%<nop>TMPL:INCLUDE{"file"}%==: Includes a template file. The file is found as described [[#FindingTemplates][below]].
+      * ==%<nop>TMPL:DEF{"block"}%==: Define a block. Text between this and the =%<nop>TMPL:END%= directive is not used in-place, but is saved for later use with =%<nop>TMPL:P=. Leading and trailing whitespace is ignored.
+      * ==%<nop>TMPL:END%==: Ends a block definition.
+      * ==%<nop>TMPL:P{"var"}%==: Includes a previously defined block.
+      * ==%<nop>{...}%==: is a comment.
+   * Two-pass processing lets you use a variable before or after declaring it.
+   * Templates and TWikiSkins work transparently and interchangeably. For example, you can create a skin that overloads only the =twiki.tmpl= master template, like =twiki.print.tmpl=, that redefines the header and footer.
+   * %H% Use of template directives is optional: templates work without them.
+   * %X% *NOTE:* Template directives work only for templates: they do not get processed in normal topic text.
 
 TMPL:P also supports simple parameters. For example, given the definition
 =%<nop>TMPL:DEF{"x"}% x%<nop>P%z%<nop>TMPL:END%= then =%<nop>TMPL:P{"x" P="y"}%= will expand to =xyz=.
@@ -117,10 +117,10 @@ Template topics define the default text for new topics. There are three types of
 </blockquote>
 When you create a new topic, TWiki locates a topic to use as a content template according to the following search order:
 
-	1. A topic name specified by the =templatetopic= CGI parameter
+   1. A topic name specified by the =templatetopic= CGI parameter
       * if no web is specified, the current web is searched first and then the %TWIKIWEB% web
-	1. <nop>WebTopicEditTemplate in the current web
-	1. <nop>WebTopicEditTemplate in the %TWIKIWEB% web
+   1. <nop>WebTopicEditTemplate in the current web
+   1. <nop>WebTopicEditTemplate in the %TWIKIWEB% web
 
 #TemplateTopicsVars
 ---+++ Edit Template Topics and Variable Expansion
@@ -154,8 +154,8 @@ This will restrict who can edit the template, but will get removed when a topic 
 =%<nop>NOP%= (or %<nop>NOP{}% can be used to prevent expansion of TWiki variables that would otherwise be expanded during topic creation e.g. =%<nop>%NOP%SERVERTIME%=.
 
 __Notes:__
-	* =%<nop>NOP{ ... }%= can span multiple lines. 
-	* The scan for the closing =}%= pattern is "non-greedy", that is, it stops at the first occurence. That means you have to protect variables with parameters located inside =%<nop>NOP{ ... }%=. To do this, insert a =%<nop>NOP%= between =}= and =%=. Example: =%<nop>NOP{ %<nop>GMTIME{"$year"}%<nop>NOP%% }%=.
+   * =%<nop>NOP{ ... }%= can span multiple lines. 
+   * The scan for the closing =}%= pattern is "non-greedy", that is, it stops at the first occurence. That means you have to protect variables with parameters located inside =%<nop>NOP{ ... }%=. To do this, insert a =%<nop>NOP%= between =}= and =%=. Example: =%<nop>NOP{ %<nop>GMTIME{"$year"}%<nop>NOP%% }%=.
 
 All other variables are unchanged, e.g. are carried over "as is" into the new topic.
 
@@ -164,28 +164,28 @@ All other variables are unchanged, e.g. are carried over "as is" into the new to
 Here is an example for creating new topics based on a specific template topic:
 
 <form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
-	* New example topic: 
-	  <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$yearx$mox$day}%" size="23" />
-	  <input type="hidden" name="templatetopic" value="ExampleTopicTemplate" />
-	  <input type="hidden" name="topicparent" value="%TOPIC%" />
-	  <input type="hidden" name="onlywikiname" value="on" />
-	  <input type="hidden" name="onlynewtopic" value="on" />
-	  <input type="submit" value="Create" />
-	  (date format is <nop>YYYYxMMxDD)
+   * New example topic: 
+     <input type="text" name="topic" value="ExampleTopic%SERVERTIME{$yearx$mox$day}%" size="23" />
+     <input type="hidden" name="templatetopic" value="ExampleTopicTemplate" />
+     <input type="hidden" name="topicparent" value="%TOPIC%" />
+     <input type="hidden" name="onlywikiname" value="on" />
+     <input type="hidden" name="onlynewtopic" value="on" />
+     <input type="submit" value="Create" />
+     (date format is <nop>YYYYxMMxDD)
 </form>
 
 The above form asks for a topic name. A hidden input tag named ==templatetopic== specifies ExampleTopicTemplate as the template topic to use. Here is the HTML source of the form:
 
 <pre>
 &lt;form name="new" action="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>INTURLENCODE{"%<nop>WEB%"}%/"&gt;
-	* New example topic: 
-	  &lt;input type="text" name="topic" value="ExampleTopic%<nop>SERVERTIME{$yearx$mox$day}%" size="23" /&gt;
-	  &lt;input type="hidden" name="templatetopic" value="ExampleTopicTemplate" /&gt;
-	  &lt;input type="hidden" name="topicparent" value="%<nop>TOPIC%" /&gt;
-	  &lt;input type="hidden" name="onlywikiname" value="on" /&gt;
-	  &lt;input type="hidden" name="onlynewtopic" value="on" /&gt;
-	  &lt;input type="submit" value="Create" /&gt;
-	  (date format is &lt;nop&gt;YYYYxMMxDD)
+   * New example topic: 
+     &lt;input type="text" name="topic" value="ExampleTopic%<nop>SERVERTIME{$yearx$mox$day}%" size="23" /&gt;
+     &lt;input type="hidden" name="templatetopic" value="ExampleTopicTemplate" /&gt;
+     &lt;input type="hidden" name="topicparent" value="%<nop>TOPIC%" /&gt;
+     &lt;input type="hidden" name="onlywikiname" value="on" /&gt;
+     &lt;input type="hidden" name="onlynewtopic" value="on" /&gt;
+     &lt;input type="submit" value="Create" /&gt;
+     (date format is &lt;nop&gt;YYYYxMMxDD)
 &lt;/form&gt;
 </pre>
 
@@ -216,30 +216,30 @@ The first line declares a delimiter variable called "sep", used to separate mult
 &lt;body bgcolor="#FFFFFF"&gt;
 &lt;table width="100%" border="0" cellpadding="3" cellspacing="0"&gt;
   &lt;tr&gt;
-	 &lt;td bgcolor="%<nop>WEBBGCOLOR%" rowspan="2" valign="top" width="1%"&gt;
-		&lt;a href<nop>="%<nop>WIKIHOMEURL%"&gt;
-		&lt;img src="%<nop>PUBURLPATH%/wikiHome.gif" border="0"&gt;&lt;/a&gt;
-	 &lt;/td&gt;
-	 &lt;td&gt;
-		&lt;b&gt;%<nop>WIKITOOLNAME% . %<nop>WEB% . &lt;/b&gt;&lt;font size="+2"&gt;
-		&lt;B&gt;%<nop>TOPIC%&lt;/b&gt; %<nop>TMPL:P{"titleaction"}%&lt;/font&gt;
-	 &lt;/td&gt;
+    &lt;td bgcolor="%<nop>WEBBGCOLOR%" rowspan="2" valign="top" width="1%"&gt;
+      &lt;a href<nop>="%<nop>WIKIHOMEURL%"&gt;
+      &lt;img src="%<nop>PUBURLPATH%/wikiHome.gif" border="0"&gt;&lt;/a&gt;
+    &lt;/td&gt;
+    &lt;td&gt;
+      &lt;b&gt;%<nop>WIKITOOLNAME% . %<nop>WEB% . &lt;/b&gt;&lt;font size="+2"&gt;
+      &lt;B&gt;%<nop>TOPIC%&lt;/b&gt; %<nop>TMPL:P{"titleaction"}%&lt;/font&gt;
+    &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr bgcolor="%<nop>WEBBGCOLOR%"&gt;
-	 &lt;td colspan="2"&gt;
-		%<nop>TMPL:P{"webaction"}%
-	 &lt;/td&gt;
+    &lt;td colspan="2"&gt;
+      %<nop>TMPL:P{"webaction"}%
+    &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;
 --- ++ %<nop>TMPL:P{"heading"}%
 %<nop>TMPL:P{"message"}%
 &lt;table width="100%" border="0" cellpadding="3" cellspacing="0"&gt;
   &lt;tr bgcolor="%<nop>WEBBGCOLOR%"&gt;
-	 &lt;td valign="top"&gt;
-		Topic &lt;b&gt;%<nop>TOPIC%&lt;/b&gt; . {
-		  %<nop>TMPL:P{"topicaction"}%
-		}
-	 &lt;/td&gt;
+    &lt;td valign="top"&gt;
+      Topic &lt;b&gt;%<nop>TOPIC%&lt;/b&gt; . {
+        %<nop>TMPL:P{"topicaction"}%
+      }
+    &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;
 &lt;/body&gt;
@@ -263,11 +263,11 @@ Test heading %<nop>TMPL:END%
 %<nop>TMPL:DEF{"message"}%
 Test =message=. Blah blah blah blah blah blah blah blah blah blah blah...
 
-	* Some more blah blah blah blah blah blah blah blah blah blah...
-	* Param1: %<nop>PARAM1%
-	* Param2: %<nop>PARAM2%
-	* Param3: %<nop>PARAM3%
-	* Param4: %<nop>PARAM4%
+   * Some more blah blah blah blah blah blah blah blah blah blah...
+   * Param1: %<nop>PARAM1%
+   * Param2: %<nop>PARAM2%
+   * Param3: %<nop>PARAM3%
+   * Param4: %<nop>PARAM4%
 %<nop>TMPL:END%
 %<nop>TMPL:DEF{"topicaction"}%
 Test =topicaction=:

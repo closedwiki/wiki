@@ -202,12 +202,12 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
  Three spaces, a dollar sign, the term, a colon, a space, followed by the definition.
 </td><td>
 <verbatim>
-	$ Sushi: Japan
-	$ Dim Sum: S.F.
+   $ Sushi: Japan
+   $ Dim Sum: S.F.
 </verbatim>
 </td><td>
-	$ Sushi: Japan
-	$ Dim Sum: S.F.
+   $ Sushi: Japan
+   $ Dim Sum: S.F.
 </td>
 </tr>
 <tr valign="top">
@@ -216,7 +216,7 @@ Multiple of three spaces, a type character, a dot, and another space. Several ty
 Each row of the table is a line containing of one or more cells. Each cell starts and ends with a vertical bar '|'. Any spaces at the beginning of a line are ignored.
    * to make a cell a header, put the text in asterisks =| <nop>*bold*<nop> |=
    * to center the contents of a cell, put an equal number of spaces on either side of the text (you need more than one space on each side)
-   * to right-align, put more spaces on the left |	  right-spaced |=
+   * to right-align, put more spaces on the left |     right-spaced |=
    * to span multiple columns, put the =|='s right next to each other =| 2 colspan ||=
    * You can split rows over multiple lines by putting a backslash ='\'= at the end of each line
    * Contents of table cells wrap automatically as determined by the browser.
@@ -268,7 +268,7 @@ WebNotify
 <verbatim>
 class CatAnimal {
   void purr() {
-	 <code here>
+    <code here>
   }
 }
 </verbatim>
@@ -277,7 +277,7 @@ class CatAnimal {
 <verbatim>
 class CatAnimal {
   void purr() {
-	 <code here>
+    <code here>
   }
 }
 </verbatim>
@@ -393,8 +393,8 @@ The rules described under __Forced Links__ apply for internal link references.
 You can use just about any HTML tag without a problem - however, there are a few usability and technical considerations to keep in mind.
 
    * On collaboration pages, it's better *not* to use HTML, but to use [[#TWikiShorthand][TWiki shorthand]] instead - this keeps the text uncluttered and easy to edit.
-	* Use [[http://www.w3.org/TR/xhtml1/][XHTML 1.0 Transitional]] syntax
-	* Remove all empty lines. TWiki inserts =&lt;p /&gt;= paragraph tags on empty lines, which causes problems if done between HTML tags that do not allow paragraph tags, like for example between table tags.
+   * Use [[http://www.w3.org/TR/xhtml1/][XHTML 1.0 Transitional]] syntax
+   * Remove all empty lines. TWiki inserts =&lt;p /&gt;= paragraph tags on empty lines, which causes problems if done between HTML tags that do not allow paragraph tags, like for example between table tags.
 
 %T% TWiki converts shorthand notation to HTML for display. To copy a fully marked-up page, simply view source in your browser and save the contents. If you need to save HTML frequently, you may want to check out TWiki:Plugins/PublishAddOn.
 
@@ -410,44 +410,44 @@ Being able to create links without any special formatting is a core TWiki featur
 
 ---+++ Internal Links
 
-	* GoodStyle is a WikiWord that links to the <nop>GoodStyle topic located in the current <nop>%WIKITOOLNAME% web.
+   * GoodStyle is a WikiWord that links to the <nop>GoodStyle topic located in the current <nop>%WIKITOOLNAME% web.
 
-	* NotExistingYet is a topic waiting to be written. Create the topic by clicking on the *?*. (Try clicking, but then, *Cancel* - creating the topic would wreck this example!)
+   * NotExistingYet is a topic waiting to be written. Create the topic by clicking on the *?*. (Try clicking, but then, *Cancel* - creating the topic would wreck this example!)
 
 ---+++ External Links
 
-	* =http://...=, =https://...=, =ftp://...=, =gopher://...=, =news://...=, =file://...=, =telnet://...=
-	  and =mailto:...@...= are linked automatically.
+   * =http://...=, =https://...=, =ftp://...=, =gopher://...=, =news://...=, =file://...=, =telnet://...=
+     and =mailto:...@...= are linked automatically.
 
-	* Email addresses like =name@domain.com= are linked automatically.
+   * Email addresses like =name@domain.com= are linked automatically.
 
-	* =[<nop>[Square bracket rules]]= let you easily create [[#SquareBrackets][non-WikiWord links]].
-		* You can also write =[<nop>[http://yahoo.com Yahoo home page]]= as an easier way of doing external links with descriptive text for the link, such as [[http://yahoo.com/ Yahoo home page]].
+   * =[<nop>[Square bracket rules]]= let you easily create [[#SquareBrackets][non-WikiWord links]].
+      * You can also write =[<nop>[http://yahoo.com Yahoo home page]]= as an easier way of doing external links with descriptive text for the link, such as [[http://yahoo.com/ Yahoo home page]].
 
 ---++ TWiki Variables
 
 TWiki Variables are names that are enclosed in percent signs =%= that are expanded on the fly.
 
-	* =%<nop>TOC%= : Automatically generates a table of contents based on headings in a topic - see the top of this page for an example.
+   * =%<nop>TOC%= : Automatically generates a table of contents based on headings in a topic - see the top of this page for an example.
 
-	* =%<nop>WEB%= : The current web, is <b><nop>%WEB%</b>.
+   * =%<nop>WEB%= : The current web, is <b><nop>%WEB%</b>.
 
-	* =%<nop>TOPIC%= : The current topic name, is <b>%TOPIC%</b>.
+   * =%<nop>TOPIC%= : The current topic name, is <b>%TOPIC%</b>.
 
-	* =%<nop>ATTACHURL%= : The attachment URL of the current topic. Example usage: If you attach a file to a topic you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= to show the URL of the file or the image in your text.
+   * =%<nop>ATTACHURL%= : The attachment URL of the current topic. Example usage: If you attach a file to a topic you can refer to it as =<b>%<nop>ATTACHURL%/image.gif</b>= to show the URL of the file or the image in your text.
 
-	* =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, includes another topic. The current <nop>%WIKITOOLNAME% web is the default web. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%</b>=
+   * =%<nop>INCLUDE{"SomeTopic"}%= : Server side include, includes another topic. The current <nop>%WIKITOOLNAME% web is the default web. Example: =<b>%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%</b>=
 
-	* =%<nop>SEARCH{"sushi"}%= : Inline search showing the search result embedded in a topic. FormattedSearch gives you control over formatting, useful for creating web-based applications.
+   * =%<nop>SEARCH{"sushi"}%= : Inline search showing the search result embedded in a topic. FormattedSearch gives you control over formatting, useful for creating web-based applications.
 
-	* TWikiPreferences defines some site-wide variables. Among others:
-		* *Line break:* Write =<span style='background : #FFFFCC;'><font color="#990000">%<nop>BR%</font></span>= to start a new line.
-		* *Colored text:* Write: =<span style='background : #FFFFCC;'><font color="#990000"> %<nop>RED% Red %<nop>ENDCOLOR% and %<nop>BLUE% blue %<nop>ENDCOLOR% colors</font></span>= to get: %RED% Red %ENDCOLOR% and %BLUE% blue %ENDCOLOR% colors.
-		* *Documentation Graphics:* Write: =<span style='background : #FFFFCC;'><font color="#990000"> %<nop>H% Help, %<nop>T% Tip, %<nop>X% Alert</font></span>= to get: %H% Help, %T% Tip, %X% Alert. For more info see TWikiDocGraphics.
+   * TWikiPreferences defines some site-wide variables. Among others:
+      * *Line break:* Write =<span style='background : #FFFFCC;'><font color="#990000">%<nop>BR%</font></span>= to start a new line.
+      * *Colored text:* Write: =<span style='background : #FFFFCC;'><font color="#990000"> %<nop>RED% Red %<nop>ENDCOLOR% and %<nop>BLUE% blue %<nop>ENDCOLOR% colors</font></span>= to get: %RED% Red %ENDCOLOR% and %BLUE% blue %ENDCOLOR% colors.
+      * *Documentation Graphics:* Write: =<span style='background : #FFFFCC;'><font color="#990000"> %<nop>H% Help, %<nop>T% Tip, %<nop>X% Alert</font></span>= to get: %H% Help, %T% Tip, %X% Alert. For more info see TWikiDocGraphics.
 
-	* There are many more variables, see *[[TWikiVariables]]*.
+   * There are many more variables, see *[[TWikiVariables]]*.
 
-	* To "escape" a variable, prefix it with an exclamation mark. Write: =!%<nop>SOMEVARIABLE%= to get: !%SOMEVARIABLE%.
+   * To "escape" a variable, prefix it with an exclamation mark. Write: =!%<nop>SOMEVARIABLE%= to get: !%SOMEVARIABLE%.
 
 ---++ <nop>TWikiPlugin Formatting Extensions
 
@@ -462,11 +462,11 @@ Check on current Plugin status and settings for this site in TWikiPreferences.
 
 TWiki formatting rules are fairly simple to use and quick to type. However, there are some things to watch out for, taken from the TextFormattingFAQ:
 
-	* *Q:* Text enclosed in angle brackets like =&lt;filename&gt;= is not displayed. How can I show it as it is?
-		* *A:* The ='&lt;'= and ='&gt;'= characters have a special meaning in HTML, they define HTML tags. You need to escape them, so write ='&amp;lt;'= instead of ='&lt;'=, and ='&amp;gt;'= instead of ='&gt;'=. <br /> Example: Type ='prog &amp;lt;filename&amp;gt;'= to get ='prog &lt;filename&gt;'=.
+   * *Q:* Text enclosed in angle brackets like =&lt;filename&gt;= is not displayed. How can I show it as it is?
+      * *A:* The ='&lt;'= and ='&gt;'= characters have a special meaning in HTML, they define HTML tags. You need to escape them, so write ='&amp;lt;'= instead of ='&lt;'=, and ='&amp;gt;'= instead of ='&gt;'=. <br /> Example: Type ='prog &amp;lt;filename&amp;gt;'= to get ='prog &lt;filename&gt;'=.
 
-	* *Q:* Why is the ='&'= character sometimes not displayed?
-		* *A:* The ='&'= character has a special meaning in HTML, it starts a so called character entity, i.e. ='&amp;copy;'= is the =&copy;= copyright character. You need to escape ='&amp;'= to see it as it is, so write ='&amp;amp;'= instead of ='&amp;'=. <br /> Example: Type ='This &amp;amp; that'= to get ='This &amp; that'=.
+   * *Q:* Why is the ='&'= character sometimes not displayed?
+      * *A:* The ='&'= character has a special meaning in HTML, it starts a so called character entity, i.e. ='&amp;copy;'= is the =&copy;= copyright character. You need to escape ='&amp;'= to see it as it is, so write ='&amp;amp;'= instead of ='&amp;'=. <br /> Example: Type ='This &amp;amp; that'= to get ='This &amp; that'=.
 
 
 

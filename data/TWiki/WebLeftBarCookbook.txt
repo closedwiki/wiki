@@ -7,10 +7,10 @@
 
 Each link is an item in a bullet list. So it can look like this:
 
-	* *My links*
-		* WebHome
-		* WebIndex
-		* WebChanges
+   * *My links*
+      * WebHome
+      * WebIndex
+      * WebChanges
 
 (but with _your_ personal topics).
 
@@ -19,10 +19,10 @@ The list is formatted with CSS, and the bullets themselves are not displayed, an
 <div class="patternLeftBar" style="position:relative; top:0; left:0;">
 <div class="patternLeftBarContents">
 <div class="patternLeftBarPersonal">
-	* *My links*
-		* WebHome
-		* WebIndex
-		* WebChanges
+   * *My links*
+      * WebHome
+      * WebIndex
+      * WebChanges
 </div>
 </div> 
 </div>

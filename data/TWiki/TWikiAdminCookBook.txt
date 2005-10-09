@@ -7,8 +7,8 @@ This page has some tips and tricks, particularly useful when you're installing T
 
 __See also:__
 
-	* InstantEnhancements - how to easily enhance a default TWiki using only your browser. Each item is designed to be quickly implemented.
-	* TWiki:Codev.UsabilityIdeas - has additional useful ideas. 
+   * InstantEnhancements - how to easily enhance a default TWiki using only your browser. Each item is designed to be quickly implemented.
+   * TWiki:Codev.UsabilityIdeas - has additional useful ideas. 
 
 ---
 ---++ During Installation
@@ -61,9 +61,9 @@ With more than 100 TWiki plugins (and counting), there are a lot to choose from.
 
 See TWiki:Codev.CategoryCookbook for ideas
 
-	* Simple workflow application: TWiki:Sandbox.ItemToDo 
-	* Simple inventory system with filtering capabilities: TWiki:Main.TWikiInstallation
-	* Simple change request application: TWiki:Sandbox.ChangeRequest
+   * Simple workflow application: TWiki:Sandbox.ItemToDo 
+   * Simple inventory system with filtering capabilities: TWiki:Main.TWikiInstallation
+   * Simple change request application: TWiki:Sandbox.ChangeRequest
 
 ---
 

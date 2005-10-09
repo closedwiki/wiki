@@ -134,7 +134,7 @@ a plugin setting write ==%<plugin>_<setting>%==, i.e. ==%INTERWIKIPLUGIN_SHORTDE
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==bin/%TOPIC%Config.pm== | Plugin configuration/initialization information |
 	  | ==bin/%TOPIC%Edit== | Routine which generates a frame based HTML page for editing a <nop>MySql table. <font color=red>NOTE: For security reasons, you MUST add this application to your .htaccess list as requiring a valid user since the output from this script will embed the database username and password allowing write access to the tables</font> |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed:
 		* You will need to configure your installation to know if it is working as expected.
 

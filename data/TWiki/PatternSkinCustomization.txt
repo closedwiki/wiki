@@ -10,30 +10,30 @@ This page describes ways to change the layout, fonts and colors of PatternSkin.
 ---++ Your own TWiki look
 
 You can easily create your own TWiki look by attaching modified css files to your home page:
-	* If you want to change the layout of the page, download layout.css from %TWIKIWEB%.PatternSkin
-	* If you want to change the spacing or colors, download style.css from %TWIKIWEB%.PatternSkin
-	* modify the CSS in either style sheet, using tips from this page
-	* [[%SCRIPTURL%/attach%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME% attach]] your modified !layout.css and/or !style.css to your home page 
-	* as shown below, add the =USERLAYOUTURL= and =USERSTYLEURL= settings to [[%MAINWEB%.%WIKINAME%][your home page]]
+   * If you want to change the layout of the page, download layout.css from %TWIKIWEB%.PatternSkin
+   * If you want to change the spacing or colors, download style.css from %TWIKIWEB%.PatternSkin
+   * modify the CSS in either style sheet, using tips from this page
+   * [[%SCRIPTURL%/attach%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME% attach]] your modified !layout.css and/or !style.css to your home page 
+   * as shown below, add the =USERLAYOUTURL= and =USERSTYLEURL= settings to [[%MAINWEB%.%WIKINAME%][your home page]]
 <verbatim>
-	* Personal %TWIKIWEB%.PatternSkin CSS settings
-		* Set USERLAYOUTURL = %PUBURL%/%MAINWEB%/%WIKINAME%/layout.css
-		* Set USERSTYLEURL = %PUBURL%/%MAINWEB%/%WIKINAME%/style.css
+   * Personal %TWIKIWEB%.PatternSkin CSS settings
+      * Set USERLAYOUTURL = %PUBURL%/%MAINWEB%/%WIKINAME%/layout.css
+      * Set USERSTYLEURL = %PUBURL%/%MAINWEB%/%WIKINAME%/style.css
 </verbatim>
 
 ---++ Screen parts
 
 The !PatternSkin view template uses four screen parts:
-	* The topic part - contains besides the topic content: action buttons, form table, attachment table, topic info  
-	* Top bar - used for a logo, contains Go box
-	* Left bar - site and web navigation, contains a personal link block; may contain a Go box
-	* Bottom bar - copyright, disclaimer
+   * The topic part - contains besides the topic content: action buttons, form table, attachment table, topic info  
+   * Top bar - used for a logo, contains Go box
+   * Left bar - site and web navigation, contains a personal link block; may contain a Go box
+   * Bottom bar - copyright, disclaimer
 
 These parts are dynamically included topics:
-	* Top bar: %TWIKIWEB%.WebTopBar 
-	* Left bar: included topic WebLeftBar (one !WebLeftBar topic per web)
-		* Personal links block: %MAINWEB%.%<nop>USERNAME%LeftBar. Your own personal leftbar: %MAINWEB%.%USERNAME%LeftBar
-	* Bottom bar: included topic %TWIKIWEB%.WebBottomBar
+   * Top bar: %TWIKIWEB%.WebTopBar 
+   * Left bar: included topic WebLeftBar (one !WebLeftBar topic per web)
+      * Personal links block: %MAINWEB%.%<nop>USERNAME%LeftBar. Your own personal leftbar: %MAINWEB%.%USERNAME%LeftBar
+   * Bottom bar: included topic %TWIKIWEB%.WebBottomBar
 
 ---+++ Top bar
 
@@ -45,15 +45,15 @@ If you want to have a custom top bar per web, place =%<nop>INCLUDE{%<nop>INCLUDI
 
 The menu items are css-formatted bullet lists. So in WebLeftBar you write:
 <verbatim>
-	* *Group*
-	* [[SomeTopic][Link 1]]
-	* [[AnotherTopic][Link 2]]
-	* [[ThirdTopic][Link 3]]
+   * *Group*
+   * [[SomeTopic][Link 1]]
+   * [[AnotherTopic][Link 2]]
+   * [[ThirdTopic][Link 3]]
 </verbatim>
 
 The left bar may contain a Go box instead of the top bar. Use:
 <verbatim>
-	* <input type="text" name="topic" size="16" />
+   * <input type="text" name="topic" size="16" />
 </verbatim>
 
 The personal left bar block is formatted like the rest of the left bar.
@@ -67,15 +67,15 @@ Add this to layout.css:
 <!-- /* -->
 <verbatim>
 .patternMain {
-	margin-left:0px;
+   margin-left:0px;
 }
 .patternLeftBar {
-	margin-left:100%;
+   margin-left:100%;
 }
 .patternBottomBar {
-	margin-left:1em;
-	margin-right:0;
-	padding:0;
+   margin-left:1em;
+   margin-right:0;
+   padding:0;
 }
 </verbatim>
 <!-- */ -->
@@ -83,11 +83,11 @@ Add this to style.css:
 <!-- /* -->
 <verbatim>
 .patternMain {
-	padding-left:1em;
-	padding-right:1em;
+   padding-left:1em;
+   padding-right:1em;
 }
 .patternBottomBarContents {
-	padding-left:0em;
+   padding-left:0em;
 }
 </verbatim>
 <!-- */ -->
@@ -95,8 +95,8 @@ Add this to style.css:
 
 This CSS is also attached to this topic, [[%ATTACHURL%/LowRes.css][LowRes.css]]. To use this style, add this to your home page:
 <verbatim>
-	* Personal %TWIKIWEB%.PatternSkin CSS settings
-		* Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkinCustomization/LowRes.css
+   * Personal %TWIKIWEB%.PatternSkin CSS settings
+      * Set USERLAYOUTURL = %PUBURL%/%TWIKIWEB%/PatternSkinCustomization/LowRes.css
 </verbatim>
 
 ---+++ Bottom bar
@@ -109,10 +109,10 @@ The top bar is 60 pixels high, and has a padding of 5 pixels on top, bottom and 
 
 You can also choose to set a background image for the top bar. In =style.css=, add this to .patternTopBar:
 <verbatim>
-	background-position:top left;
-	background-attachment:fixed;
-	background-repeat:no-repeat;
-	background-image:url(http://absolute_path_to_your_image);
+   background-position:top left;
+   background-attachment:fixed;
+   background-repeat:no-repeat;
+   background-image:url(http://absolute_path_to_your_image);
 </verbatim>
 and set the correct image file path.
 
@@ -126,22 +126,22 @@ Font styles are defined in =style.css= in these places:
 -->
 <verbatim>
 html body {
-	font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
+   font-family:"Lucida Grande", verdana, lucida, helvetica, sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
-	font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
+   font-family:"Lucida Grande", helvetica, lucida, verdana, sans-serif;
 }
 textarea {
-	font-family:monospace;
+   font-family:monospace;
 }
 input, select {
-	font-family:verdana,arial,sans-serif;
+   font-family:verdana,arial,sans-serif;
 }
 .patternSeparator {
-	font-family:Arial,sans-serif;
+   font-family:Arial,sans-serif;
 }
 .patternEditPage .patternSig input {
-	font-family:monospace;
+   font-family:monospace;
 }
 </verbatim>
 <!--
@@ -156,13 +156,13 @@ Scalable text is a big accessibility asset. If you notwithstanding want to have 
 <!-- /* -->
 <verbatim>
 html body {
-	... (keep)
+   ... (keep)
 }
 html>body {
-	... (keep)	
+   ... (keep)   
 }
 html body {
-	font-size:11px;
+   font-size:11px;
 }
 </verbatim>
 <!-- */ -->
@@ -185,44 +185,44 @@ This is an example css to give tables in topic text a similar appearance. This w
 <!-- /* -->
 <verbatim>
 .patternTopic table {
-	border-collapse:collapse;
-	padding:0px;
-	border-spacing:0px;
-	empty-cells:show;
-	border:0px;
+   border-collapse:collapse;
+   padding:0px;
+   border-spacing:0px;
+   empty-cells:show;
+   border:0px;
 }
 .patternTopic table th {
-	background-color:#ccc;
-	padding:0.5em 1em;
+   background-color:#ccc;
+   padding:0.5em 1em;
 }
 .patternTopic table td {
-	border:1px solid #eee;
+   border:1px solid #eee;
 }
 /* override hardcoded font color */
 .patternTopic table font {
-	color:#1e5bbd;
+   color:#1e5bbd;
 }
 .patternTopic table th a:link,
 .patternTopic table th a:visited {
-	color:#1e5bbd;
-	text-decoration:none;
+   color:#1e5bbd;
+   text-decoration:none;
 }
 /* don't show hover background color because we have a table header background */
 .patternTopic table th a:hover {
-	background-color:transparent;
-	text-decoration:underline;
-	border-width:1px;
+   background-color:transparent;
+   text-decoration:underline;
+   border-width:1px;
 }
 /* no underline if a sort indicator (line) is displayed */
 .patternTopic table th.twikiSortedDescendingCol a:hover,
 .patternTopic table th.twikiSortedAscendingCol a:hover {
-	text-decoration:none;
+   text-decoration:none;
 }
 /* hide sort icons */
 .patternTopic table th img,
 .patternTopic table th a:link img,
 .patternTopic table th a:visited img {
-	display:none;
+   display:none;
 }
 </verbatim>
 <!-- */ -->
@@ -233,7 +233,7 @@ The appearance of the form table and the attachment table are set in style.css u
 
 <!-- /* -->
 <verbatim>
-	white-space:nowrap;
+   white-space:nowrap;
 </verbatim>
 <!-- */ -->
 

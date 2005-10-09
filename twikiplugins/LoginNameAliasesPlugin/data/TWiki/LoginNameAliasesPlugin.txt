@@ -15,14 +15,14 @@ Because of security considerations, the plugin is not active unless a variable i
 
 <verbatim>
 
-	* Set DEBUG = off
-	* Set LOGGING = off
-	* Set USE_ALIASES = off
-	* Set REMOVE_PREFIX = 
-	* Set REMOVE_SUFFIX = 
-	* Set MAP_BLANK_USER = 
-	* Set MAP_UNREGISTERED = 
-	* Set RETURN_NOTHING_IF_UNCHANGED = on
+   * Set DEBUG = off
+   * Set LOGGING = off
+   * Set USE_ALIASES = off
+   * Set REMOVE_PREFIX = 
+   * Set REMOVE_SUFFIX = 
+   * Set MAP_BLANK_USER = 
+   * Set MAP_UNREGISTERED = 
+   * Set RETURN_NOTHING_IF_UNCHANGED = on
 
 </verbatim>
 
@@ -32,10 +32,10 @@ Because of security considerations, the plugin is not active unless a variable i
 <verbatim>
 
 Sample alias (disabled by a # character):
-	* #ALIAS: foo@BAR.COM foobar 
+   * #ALIAS: foo@BAR.COM foobar 
 
 </verbatim>
 
 
-	* Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
+   * Set ALLOWTOPICCHANGE = %MAINWEB%.TWikiAdminGroup
 

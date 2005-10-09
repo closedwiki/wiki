@@ -7,25 +7,25 @@ Slide template for ATasteOfTWiki presentation
 <table width="100%" border="0" cellspacing="0">
  <tr bgcolor="#4da6ff">
   <td valign="middle" colspan="2">
-	<font size="+4" face="Arial">%SLIDETITLE%</font>
+   <font size="+4" face="Arial">%SLIDETITLE%</font>
   </td>
  </tr>
  <tr bgcolor="#ffffff">
   <td>
-	<img src="%ATTACHURL%/sidebar.gif" width="1" height="480" alt="" />
+   <img src="%ATTACHURL%/sidebar.gif" width="1" height="480" alt="" />
   </td>
   <td valign="top" align="left">
-	<br />
-	%SLIDETEXT%
+   <br />
+   %SLIDETEXT%
   </td>
  </tr>
  <tr bgcolor="#dddddd">
   <td valign="middle" align="center" colspan="2">
-	<font size="-1" color="black">
-	 %SLIDENAVFIRST% %SLIDENAVPREV%
-	 Slide %SLIDENUM% of %SLIDEMAX%
-	 %SLIDENAVNEXT% %SLIDENAVLAST% <br>
-	Copyright &copy; %SERVERTIME{$year}% by the contributing authors</font>
+   <font size="-1" color="black">
+    %SLIDENAVFIRST% %SLIDENAVPREV%
+    Slide %SLIDENUM% of %SLIDEMAX%
+    %SLIDENAVNEXT% %SLIDENAVLAST% <br>
+   Copyright &copy; %SERVERTIME{$year}% by the contributing authors</font>
   </td>
  </tr>
 </table>

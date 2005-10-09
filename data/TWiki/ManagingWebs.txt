@@ -37,9 +37,9 @@ Create a new web by filling out this form. __Note:__ It is not recommended to cr
 </form>
 
 __Notes:__
-	* Attachments will NOT get copied over along with their topics
-	* While creating the new web TWiki will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
-	* TWiki does not edit the [[%TWIKIWEB%.TWikiPreferences]] file to update the =WIKIWEBLIST=.  This must be done by hand
+   * Attachments will NOT get copied over along with their topics
+   * While creating the new web TWiki will update the following variables in the WebPreferences: =WEBBGCOLOR=, =SITEMAPLIST=, =SITEMAPWHAT=, =SITEMAPUSETO= and =NOSEARCHALL=.  These variables are used to dynamically generate the SiteMap
+   * TWiki does not edit the [[%TWIKIWEB%.TWikiPreferences]] file to update the =WIKIWEBLIST=.  This must be done by hand
 
 ---++ Renaming or Deleting a Web
 

@@ -156,7 +156,7 @@ Oranges
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* If the plugin is installed correctly then the following two fruits
 	  will appear joined on one line: Apples
 

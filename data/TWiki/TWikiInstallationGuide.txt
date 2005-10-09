@@ -44,11 +44,11 @@ Once you have your TWiki running, you can move on to customise it for your users
 The first step is to re-run the =configure= script and make sure you have resolved all errors, and are happy that you understand any warnings.
 
 Failing that, please check the topics listed below, they include some important tips for HP-UX, Solaris, OS/390, and many other platforms.
-	* For Unix or Linux, check TWiki:Codev/TWikiOnUnix and TWiki:Codev/TWikiOnLinux.
-	* For Windows, check the TWiki:Codev/WindowsInstallCookbook. 
-	* For <nop>MacOS X, check TWiki:Codev/TWikiOnMacOSX. 
-	* To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/TWikiOnSourceForge
-	* For other platforms, see TWiki:Codev/TWikiOn, and search the TWiki:Codev and TWiki:Support webs for other installation notes.
+   * For Unix or Linux, check TWiki:Codev/TWikiOnUnix and TWiki:Codev/TWikiOnLinux.
+   * For Windows, check the TWiki:Codev/WindowsInstallCookbook. 
+   * For <nop>MacOS X, check TWiki:Codev/TWikiOnMacOSX. 
+   * To install TWiki on <nop>SourceForge, for use on a software development project, read TWiki:Codev/TWikiOnSourceForge
+   * For other platforms, see TWiki:Codev/TWikiOn, and search the TWiki:Codev and TWiki:Support webs for other installation notes.
 
 If you need help, ask a question in the TWiki:Support web or on IRC (irc.freenode.net, channel #twiki)
 

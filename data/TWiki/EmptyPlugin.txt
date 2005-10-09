@@ -5,9 +5,9 @@ This is an empty plugin you can use as a template to build your own %TWIKIWEB%.T
 
 To create your own plugin:
 
-	* Copy file ==TWiki/Plugins/EmptyPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
-	* Create a  ==&lt;name&gt;Plugin== topic in the %TWIKIWEB% web. Do so by visiting http://TWiki.org/cgi-bin/view/Plugins/ and starting a new topic to get the default plugin topic text (don't save the topic). Customize your plugin topic to your needs.
-	* See details in %TWIKIWEB%.TWikiPlugins.
+   * Copy file ==TWiki/Plugins/EmptyPlugin.pm== to ==&lt;name&gt;Plugin.pm== and customize the plugin.
+   * Create a  ==&lt;name&gt;Plugin== topic in the %TWIKIWEB% web. Do so by visiting http://TWiki.org/cgi-bin/view/Plugins/ and starting a new topic to get the default plugin topic text (don't save the topic). Customize your plugin topic to your needs.
+   * See details in %TWIKIWEB%.TWikiPlugins.
 
 ---++ Syntax Rules
 
@@ -18,18 +18,18 @@ To create your own plugin:
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>EMPTYPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = This plugin does nothing, but can be used as a template for your own plugins.
 
-	* Your own setting, i.e.:
-		* Set EXAMPLE = got it!
+   * Your own setting, i.e.:
+      * Set EXAMPLE = got it!
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
-	* This plugin is preinstalled, you do not need to install it.
+   * This plugin is preinstalled, you do not need to install it.
 
 ---++ Plugin Info
 

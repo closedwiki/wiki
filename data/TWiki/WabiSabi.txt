@@ -6,18 +6,18 @@ Wabi-sabi is a beauty of things imperfect, impermanent, and incomplete. It is th
 
 The concepts of wabi-sabi correlate with the concepts of Zen Buddhism, as the first Japanese involved with wabi-sabi were tea masters, priests, and monks who practiced Zen. Zen Buddhism originated in India, traveled to China in the 6th century, and was first introduced in Japan around the 12th century. Zen emphasizes "direct, intuitive insight into transcendental truth beyond all intellectual conception." At the core of wabi-sabi is the importance of transcending ways of looking and thinking about things/existence.
 
-	* All things are impermanent
-	* All things are imperfect
-	* All things are incomplete
+   * All things are impermanent
+   * All things are imperfect
+   * All things are incomplete
 
 Material characteristics of wabi-sabi:
 
-	* Suggestion of natural process
-	* Irregular
-	* Intimate
-	* Unpretentious
-	* Earthy
-	* Simple
+   * Suggestion of natural process
+   * Irregular
+   * Intimate
+   * Unpretentious
+   * Earthy
+   * Simple
 
 For more about wabi-sabi, see http://www.art.unt.edu/ntieva/artcurr/asian/wabisabi.html
 

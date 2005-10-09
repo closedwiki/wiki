@@ -4,37 +4,37 @@
 
 _Documentation for webmasters, system administrators, project managers, team leaders, and all other users of the TWiki advanced online collaboration platform._
 
-	* All manual sections in one big page:
-		* [[TWikiDocumentation][TWiki Documentation]] (560k)
-	* Manual sections in separate pages:
-		1. [[TWikiSystemRequirements][TWiki System Requirements]]
-		1. [[TWikiInstallationGuide][TWiki Installation Guide]]
-		1. [[TWikiUpgradeGuide][TWiki Upgrade Guide]]
-		1. [[TWikiUserAuthentication][TWiki User Authentication]]
-		1. [[TWikiAccessControl][TWiki Access Control]]
-		1. [[TextFormattingRules][Text Formatting Rules]]
-		1. [[TWikiVariables][TWiki Variables]]
-		1. [[FileAttachment][File Attachment]]
-		1. [[TWikiForms][TWiki Forms]]
-		1. [[TWikiTemplates][TWiki Templates]]
-		1. [[TWikiSkins][TWiki Skins]]
-		1. [[FormattedSearch][Formatted Search]]
-		1. [[TWikiMetaData][TWiki MetaData]]
-		1. [[TWikiPlugins][TWiki Plugins]]
-		1. [[TWikiFuncDotPm][TWiki::Func Module]]
-		1. [[TWikiScripts][CGI Scripts]]
-		1. [[TWikiSiteTools][TWiki Site Tools]] 
-		1. [[ManagingTopics][Managing Topics]] 
-		1. [[ManagingWebs][Managing Webs]]
-		1. [[ManagingUsers][Managing Users]]
-		* *Appendices*
-			* [[TWikiCss][TWiki CSS]]
-			* [[AppendixEncodeURLsWithUTF8][Encode URLs With UTF8]]
-			* [[TWikiHistory][TWiki Development Timeline]]
+   * All manual sections in one big page:
+      * [[TWikiDocumentation][TWiki Documentation]] (560k)
+   * Manual sections in separate pages:
+      1. [[TWikiSystemRequirements][TWiki System Requirements]]
+      1. [[TWikiInstallationGuide][TWiki Installation Guide]]
+      1. [[TWikiUpgradeGuide][TWiki Upgrade Guide]]
+      1. [[TWikiUserAuthentication][TWiki User Authentication]]
+      1. [[TWikiAccessControl][TWiki Access Control]]
+      1. [[TextFormattingRules][Text Formatting Rules]]
+      1. [[TWikiVariables][TWiki Variables]]
+      1. [[FileAttachment][File Attachment]]
+      1. [[TWikiForms][TWiki Forms]]
+      1. [[TWikiTemplates][TWiki Templates]]
+      1. [[TWikiSkins][TWiki Skins]]
+      1. [[FormattedSearch][Formatted Search]]
+      1. [[TWikiMetaData][TWiki MetaData]]
+      1. [[TWikiPlugins][TWiki Plugins]]
+      1. [[TWikiFuncDotPm][TWiki::Func Module]]
+      1. [[TWikiScripts][CGI Scripts]]
+      1. [[TWikiSiteTools][TWiki Site Tools]] 
+      1. [[ManagingTopics][Managing Topics]] 
+      1. [[ManagingWebs][Managing Webs]]
+      1. [[ManagingUsers][Managing Users]]
+      * *Appendices*
+         * [[TWikiCss][TWiki CSS]]
+         * [[AppendixEncodeURLsWithUTF8][Encode URLs With UTF8]]
+         * [[TWikiHistory][TWiki Development Timeline]]
 
-	* %T% *ADMINS:* In less than an hour, you can read through and customize the [[TWikiUsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
-		* TWikiAdminCookBook: Some tips that can be applied *before installation*
-		* InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
-		* AdminToolsCategory: Topics an admin typically needs, all in one page
+   * %T% *ADMINS:* In less than an hour, you can read through and customize the [[TWikiUsersGuide][User's Guide]] to reflect the exact feature set enabled on your own TWiki site. See also other enhancement pages: 
+      * TWikiAdminCookBook: Some tips that can be applied *before installation*
+      * InstantEnhancements: Simple tips (using just browser, no install needed) and quick (max couple of minutes).
+      * AdminToolsCategory: Topics an admin typically needs, all in one page
 
 __Related Topics:__ UserDocumentationCategory, AdminDocumentationCategory, DeveloperDocumentationCategory

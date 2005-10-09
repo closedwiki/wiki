@@ -10,17 +10,17 @@ Use the ==%<nop>INCLUDE{...}%== variable to embed the content of another topic o
 
 ==%<nop>INCLUDE{ "page" pattern="reg-exp" rev="1.2" }%==
 
-	* =="page"==: %BR%
-	  The nameless parameter specifies the page to include. It is
-		* The name of a topic located in the current web, e.g., ==%<nop>INCLUDE{"WebNotify"}%==
-		* A =Web.Topic= name specifying a topic in another web, e.g., ==%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%==
-		* A full qualified URL with ==http== protocol, domain name and optional port number, e.g., ==%<nop>INCLUDE{"http://twiki.org:80/index.html"}%==. Supported content types are ==text/html== and ==text/plain==. The full page is included by default, but the HTML header and scripts are stripped in case it is a web page.
+   * =="page"==: %BR%
+     The nameless parameter specifies the page to include. It is
+      * The name of a topic located in the current web, e.g., ==%<nop>INCLUDE{"WebNotify"}%==
+      * A =Web.Topic= name specifying a topic in another web, e.g., ==%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%==
+      * A full qualified URL with ==http== protocol, domain name and optional port number, e.g., ==%<nop>INCLUDE{"http://twiki.org:80/index.html"}%==. Supported content types are ==text/html== and ==text/plain==. The full page is included by default, but the HTML header and scripts are stripped in case it is a web page.
 
-	* ==pattern="reg-exp"==: %BR%
-	  The *pattern* parameter is optional and allows you to extract some parts of a web page. Specify a %TWIKIWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., ==pattern="^.*?(from here.*?to here).*"==. You need to make sure that the integrity of a web page is not compromised; for example, if you include a table, make sure to include everything including the table end tag.
+   * ==pattern="reg-exp"==: %BR%
+     The *pattern* parameter is optional and allows you to extract some parts of a web page. Specify a %TWIKIWEB%.RegularExpression that scans from start (='^'=) to end and contains the text you want to keep in parenthesis, e.g., ==pattern="^.*?(from here.*?to here).*"==. You need to make sure that the integrity of a web page is not compromised; for example, if you include a table, make sure to include everything including the table end tag.
 
-	* ==rev="1.x"==: %BR%
-	  The *rev* parameter is optional and allows you to include an earlier revision of a topic. This can be used to include an official version of a topic, e.g. one that has been signed of by management. This parameter does not apply to URLs.
+   * ==rev="1.x"==: %BR%
+     The *rev* parameter is optional and allows you to include an earlier revision of a topic. This can be used to include an official version of a topic, e.g. one that has been signed of by management. This parameter does not apply to URLs.
 
 __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUDE%==, ==%<nop>STOPINCLUDE%== and/or a *pattern* parameter. A pattern will only search between ==%<nop>STARTINCLUDE%== and ==%<nop>STOPINCLUDE%==.
 
@@ -35,15 +35,15 @@ __Note:__ All text of a topic is included unless you specify ==%<nop>STARTINCLUD
 
 ---+++ 2. Display Google's robot.txt file
 
-	* You type:
-		* ==%<nop>INCLUDE{"http://www.google.com/robots.txt"}%==
+   * You type:
+      * ==%<nop>INCLUDE{"http://www.google.com/robots.txt"}%==
 
 ---+++ 3. Display the current time in Tokyo in a TWiki page
 
-	* You type:
-		* ==Tokyo: %<nop>INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%==
-	* You get:
-		* Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
+   * You type:
+      * ==Tokyo: %<nop>INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%==
+   * You get:
+      * Tokyo: %INCLUDE{"http://TWiki.org/cgi-bin/xtra/tzdate?tz=Asia/Tokyo" pattern="^.*<\!--tzdate:date-->(.*?)<\!--/tzdate:date-->.*"}%
 
 __Related Topics:__ TWikiVariables, UserDocumentationCategory
 

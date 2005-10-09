@@ -13,77 +13,77 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarATTACHURL
 ---+++ ATTACHURL -- full URL for attachments in the current topic
-	* Syntax: =%<nop>ATTACHURL%=
-	* Expands to: =%ATTACHURL%=
-	* Example: If you attach a file you can refer to it as =%<nop>ATTACHURL%/image.gif=
-	* Related: [[#VarATTACHURLPATH][ATTACHURLPATH]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], FileAttachments
+   * Syntax: =%<nop>ATTACHURL%=
+   * Expands to: =%ATTACHURL%=
+   * Example: If you attach a file you can refer to it as =%<nop>ATTACHURL%/image.gif=
+   * Related: [[#VarATTACHURLPATH][ATTACHURLPATH]], [[#VarPUBURLPATH][PUBURLPATH]], [[#VarSCRIPTURL][SCRIPTURL]], FileAttachments
 
 #VarATTACHURLPATH
 ---+++ ATTACHURLPATH -- path of the attachment URL of the current topic
-	* Syntax: =%<nop>ATTACHURLPATH%=
-	* Expands to: =%ATTACHURLPATH%=
-	* Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], FileAttachments
+   * Syntax: =%<nop>ATTACHURLPATH%=
+   * Expands to: =%ATTACHURLPATH%=
+   * Related: [[#VarATTACHURL][ATTACHURL]], [[#VarPUBURL][PUBURL]], FileAttachments
 
 #VarAUTHREALM
 ---+++ AUTHREALM -- authentication realm
-	* String defined as {AuthRealm} in =configure=. This is used in certain password encodings, and in login templates as part of the login prompt.
-	* Syntax: =%<nop>AUTHREALM%=
-	* Expands to: %AUTHREALM%
-	* Related: TWikiUserAuthentication, [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+   * String defined as {AuthRealm} in =configure=. This is used in certain password encodings, and in login templates as part of the login prompt.
+   * Syntax: =%<nop>AUTHREALM%=
+   * Expands to: %AUTHREALM%
+   * Related: TWikiUserAuthentication, [[#VarSESSIONID][SESSIONID]], [[#VarSESSIONVAR][SESSIONVAR]], [[#VarLOGIN][LOGIN]], [[#VarLOGOUT][LOGOUT]], [[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarBASETOPIC
 ---+++ BASETOPIC -- base topic where an INCLUDE started
-	* The name of the topic where a single or nested INCLUDE started - same as =%<nop>TOPIC%= if there is no INCLUDE
-	* Syntax: =%<nop>BASETOPIC%=
-	* Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarTOPIC][TOPIC]]
+   * The name of the topic where a single or nested INCLUDE started - same as =%<nop>TOPIC%= if there is no INCLUDE
+   * Syntax: =%<nop>BASETOPIC%=
+   * Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarTOPIC][TOPIC]]
 
 #VarBASEWEB
 ---+++ BASEWEB -- base web where an INCLUDE started
-	* The web name where the includes started, e.g. the web of the first topic of nested includes. Same as =%<nop>WEB%= in case there is no include.
-	* Syntax: =%<nop>BASEWEB%=
-	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
+   * The web name where the includes started, e.g. the web of the first topic of nested includes. Same as =%<nop>WEB%= in case there is no include.
+   * Syntax: =%<nop>BASEWEB%=
+   * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
 #VarDATE
 ---+++ DATE - signature format date
-	* Syntax: =%<nop>DATE%=
-	* Expands to: =%DATE%=
-	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
+   * Syntax: =%<nop>DATE%=
+   * Expands to: =%DATE%=
+   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarDISPLAYTIME
 ---+++ DISPLAYTIME -- display time
-	* Syntax: =%<nop>DISPLAYTIME%=
-	* Expands to: =%DISPLAYTIME%=
-	* Related: [[#VarDISPLAYTIME2][DISPLAYTIME{"format"}]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
+   * Syntax: =%<nop>DISPLAYTIME%=
+   * Expands to: =%DISPLAYTIME%=
+   * Related: [[#VarDISPLAYTIME2][DISPLAYTIME{"format"}]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarDISPLAYTIME2
 ---+++ DISPLAYTIME{"format"} -- formatted display time
-	* Formatted time - either GMT or Local server time, depending on setting in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. Same format qualifiers as =%<nop>GMTIME%=
-	* Syntax: =%<nop>DISPLAYTIME{"format"}%=
-	* Example: =%<nop>DISPLAYTIME{"$hou:$min"}%= expands to =%DISPLAYTIME{"$hou:$min"}%=
-	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
+   * Formatted time - either GMT or Local server time, depending on setting in [[%SCRIPTURL%/configure%SCRIPTSUFFIX%][configure]]. Same format qualifiers as =%<nop>GMTIME%=
+   * Syntax: =%<nop>DISPLAYTIME{"format"}%=
+   * Example: =%<nop>DISPLAYTIME{"$hou:$min"}%= expands to =%DISPLAYTIME{"$hou:$min"}%=
+   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 #VarENCODE
 ---+++ ENCODE{"string"} -- encodes a string
-	* Syntax: =%<nop>ENCODE{"string"}%=
-	* Supported parameters:
-	 | *Parameter:* | *Description:* | *Default:* |
-	 | ="string"= | String to encode | required (can be empty) |
-	 | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;= | URL encoding |
-	 | =type="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | (this is the default) |
-	* Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
-	* Related: [[#VarURLPARAM][URLPARAM]]
+   * Syntax: =%<nop>ENCODE{"string"}%=
+   * Supported parameters:
+    | *Parameter:* | *Description:* | *Default:* |
+    | ="string"= | String to encode | required (can be empty) |
+    | =type="entity"= | Encode special characters into HTML entities, like a double quote into =&amp;#034;= | URL encoding |
+    | =type="url"= | Encode special characters for URL parameter use, like a double quote into =%22= | (this is the default) |
+   * Example: =%<nop>ENCODE{"spaced name"}%= expands to =%ENCODE{"spaced name"}%=
+   * Related: [[#VarURLPARAM][URLPARAM]]
 
 #VarENDSECTION
 ---+++ ENDSECTION{"name"} -- Marks the end of a named section
    * Syntax: =%<nop>ENDSECTION{"name"}%=
-	* Supported parameters:
-	  | *Parameter:* | *Description:* | *Default:* | 
-	  | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous %<nop>SEcTION% tag. | Mandatory parameter without a default |
-	* Related: [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]]
-	
-	
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* | 
+     | ="name"= | Name of the section. Must be unique inside a topic, and must match with a previous %<nop>SEcTION% tag. | Mandatory parameter without a default |
+   * Related: [[#VarINCLUDE][INCLUDE]], [[#VarSECTION][SECTION]]
+   
+   
 #VarFAILEDPLUGINS
 ---+++ FAILEDPLUGINS -- debugging for plugins that failed to load, and handler list
    * Syntax: =%<nop>FAILEDPLUGINS%=
@@ -92,62 +92,62 @@ __Note:__ This topic is included by TWikiVariables
 
 #VarFORMFIELD
 ---+++ FORMFIELD{"format"} -- renders a field in the form attached to some topic
-	* Syntax: =%<nop>FORMFIELD{"fieldname"}%=
-	* Supported parameters:
-	 | *Parameter:* | *Description:* | *Default:* |
-	 | ="fieldname"= | The name of a [[TWikiForms][TWiki form]] field | required |
-	 | =topic="..."= | Topic where form data is located. May be of the form =Web.<nop>TopicName= | Current topic |
-	 | =format="..."= | Format string. =$value= expands to the field value, and =$title= expands to the field title | ="$value"= |
-	 | =default="..."= | Text shown when no value is defined for the field | =""= |
-	 | =alttext="..."= | Text shown when field is not found in the form | =""= |
-	* Example: =%<nop>FORMFIELD{"<nop>ProjectName" topic="Projects.<nop>SushiProject" default="(not set)" alttext="<nop>ProjectName field found"}%= 
-	* Related: [[#VarSEARCH][SEARCH]]
+   * Syntax: =%<nop>FORMFIELD{"fieldname"}%=
+   * Supported parameters:
+    | *Parameter:* | *Description:* | *Default:* |
+    | ="fieldname"= | The name of a [[TWikiForms][TWiki form]] field | required |
+    | =topic="..."= | Topic where form data is located. May be of the form =Web.<nop>TopicName= | Current topic |
+    | =format="..."= | Format string. =$value= expands to the field value, and =$title= expands to the field title | ="$value"= |
+    | =default="..."= | Text shown when no value is defined for the field | =""= |
+    | =alttext="..."= | Text shown when field is not found in the form | =""= |
+   * Example: =%<nop>FORMFIELD{"<nop>ProjectName" topic="Projects.<nop>SushiProject" default="(not set)" alttext="<nop>ProjectName field found"}%= 
+   * Related: [[#VarSEARCH][SEARCH]]
 
 #VarGMTIME
 ---+++ GMTIME -- GM time
-	* Syntax: =%<nop>GMTIME%=
-	* Expands to: =%GMTIME%=
-	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
+   * Syntax: =%<nop>GMTIME%=
+   * Expands to: =%GMTIME%=
+   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME2][GMTIME{"format"}]], [[#VarSERVERTIME][SERVERTIME]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarGMTIME2
 ---+++ GMTIME{"format"} -- formatted GM time
-	* Syntax: =%<nop>GMTIME{"format"}%=
-	* Supported variables:
-	  | *Variable:* | *Unit:* | *Example* |
-	  | =$seconds= | seconds | 59 |
-	  | =$minutes= | minutes | 59 |
-	  | =$hours= | hours | 23 |
-	  | =$day= | day of month | 31 |
-	  | =$wday= | day of the Week (Sun, Mon, Tue, Wed, Thu, Fri, Sat) | Thu |
+   * Syntax: =%<nop>GMTIME{"format"}%=
+   * Supported variables:
+     | *Variable:* | *Unit:* | *Example* |
+     | =$seconds= | seconds | 59 |
+     | =$minutes= | minutes | 59 |
+     | =$hours= | hours | 23 |
+     | =$day= | day of month | 31 |
+     | =$wday= | day of the Week (Sun, Mon, Tue, Wed, Thu, Fri, Sat) | Thu |
       | =$dow= | day of the week (Sun = 0) | 2  |
       | =$week= | number of week in year (ISO 8601) | 34 |
-	  | =$month= | month in ISO format | Dec |
-	  | =$mo= | 2 digit month | 12 |
-	  | =$year= | 4 digit year | 1999 |
-	  | =$ye= | 2 digit year | 99 |
-	  | =$tz= | either "GMT" (if set to gmtime), or "Local" (if set to servertime) | GMT |
-	  | =$iso= | ISO format timestamp | %GMTIME{"$iso"}% |
-	  | =$rcs= | RCS format timestamp | %GMTIME{"$rcs"}% |
-	  | =$http= | E-mail & http format timestamp | %GMTIME{"$http"}% |
+     | =$month= | month in ISO format | Dec |
+     | =$mo= | 2 digit month | 12 |
+     | =$year= | 4 digit year | 1999 |
+     | =$ye= | 2 digit year | 99 |
+     | =$tz= | either "GMT" (if set to gmtime), or "Local" (if set to servertime) | GMT |
+     | =$iso= | ISO format timestamp | %GMTIME{"$iso"}% |
+     | =$rcs= | RCS format timestamp | %GMTIME{"$rcs"}% |
+     | =$http= | E-mail & http format timestamp | %GMTIME{"$http"}% |
       | =$epoch= | Number of seconds since 00:00 on 1st January, 1970 | %GMTIME{"$epoch"}% |
-	* Variables can be shortened to 3 characters
-	* Example: =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= expands to =%GMTIME{"$day $month, $year - $hour:$min:$sec"}%=
-	* Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
+   * Variables can be shortened to 3 characters
+   * Example: =%<nop>GMTIME{"$day $month, $year - $hour:$min:$sec"}%= expands to =%GMTIME{"$day $month, $year - $hour:$min:$sec"}%=
+   * Related: [[#VarDISPLAYTIME][DISPLAYTIME]], [[#VarGMTIME][GMTIME]], [[#VarSERVERTIME][SERVERTIME]]
 
 %X% When used in a template topic, this variable will be expanded when the template is used to create a new topic. See TWikiTemplates#TemplateTopicsVars for details.
 
 #VarHOMETOPIC
 ---+++ HOMETOPIC -- home topic in each web
-	* Syntax: =%<nop>HOMETOPIC%=
-	* Expands to: =%HOMETOPIC%=, renders as [[%HOMETOPIC%]]
-	* Related: [[#VarNOTIFYTOPIC][NOTIFYTOPIC]], [[#VarSTATISTICSTOPIC][STATISTICSTOPIC]], [[#VarTOPIC][TOPIC]]
+   * Syntax: =%<nop>HOMETOPIC%=
+   * Expands to: =%HOMETOPIC%=, renders as [[%HOMETOPIC%]]
+   * Related: [[#VarNOTIFYTOPIC][NOTIFYTOPIC]], [[#VarSTATISTICSTOPIC][STATISTICSTOPIC]], [[#VarTOPIC][TOPIC]]
 
 #VarHTTP
 ---+++ HTTP -- get HTTP headers
-	* Syntax: =%<nop>HTTP{'Header-name'}%=
-	* Related: [[#VarHTTPS][HTTPS]],[[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+   * Syntax: =%<nop>HTTP{'Header-name'}%=
+   * Related: [[#VarHTTPS][HTTPS]],[[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
 Called with the name of an HTTP header field, returns its value.
 Capitalization and the use of hyphens versus underscores are not significant.
 
@@ -161,75 +161,75 @@ of sites e.g. http://www.ericgiguere.com/tools/http-header-viewer.html
 
 #VarHTTPS
 ---+++ HTTPS -- get HTTPS headers
-	* Syntax: =%<nop>HTTPS%=
-	* Syntax: =%<nop>HTTPS{'Header-name'}%=
-	* Related: [[#VarHTTP][HTTP]],[[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+   * Syntax: =%<nop>HTTPS%=
+   * Syntax: =%<nop>HTTPS{'Header-name'}%=
+   * Related: [[#VarHTTP][HTTP]],[[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
 The same as %<nop>HTTP but operates on the HTTPS environment variables present when the SSL protocol is in effect. Can be used to determine whether SSL is turned on.
 
 #VarHTTPHOST
 ---+++ HTTP_HOST -- environment variable
-	* Syntax: =%<nop>HTTP_HOST%=
-	* Expands to: =%HTTP_HOST%=
-	* Related: [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
+   * Syntax: =%<nop>HTTP_HOST%=
+   * Expands to: =%HTTP_HOST%=
+   * Related: [[#VarREMOTEADDR][REMOTE_ADDR]], [[#VarREMOTEPORT][REMOTE_PORT]], [[#VarREMOTEUSER][REMOTE_USER]]
 
 #VarICON
 ---+++ ICON{"type"} -- small icon of common attachment types
-	* Small 16x16 pixel icon of common attachment types. Specify file type only, file name, or full path name
-	* Syntax: =%<nop>ICON{"type"}%=
-	* Samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
-	* Example: =%<nop>ICON{"pdf"}%= expands to %ICON{"pdf"}%
-	* Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
+   * Small 16x16 pixel icon of common attachment types. Specify file type only, file name, or full path name
+   * Syntax: =%<nop>ICON{"type"}%=
+   * Samples: %ICON{"bmp"}% =bmp=, %ICON{"doc"}% =doc=, %ICON{"gif"}% =gif=, %ICON{"hlp"}% =hlp=, %ICON{"html"}% =html=, %ICON{"mp3"}% =mp3=, %ICON{"pdf"}% =pdf=, %ICON{"ppt"}% =ppt=, %ICON{"txt"}% =txt=, %ICON{"xls"}% =xls=, %ICON{"xml"}% =xml=, %ICON{"zip"}% =zip=
+   * Example: =%<nop>ICON{"pdf"}%= expands to %ICON{"pdf"}%
+   * Related: %WIKIPREFSTOPIC%, FileAttachments, TWikiDocGraphics
 If the file type is not recognised, the default icon %ICON{}% is used.
 
 #VarIF
 ---+++ IF -- simple conditionals
-	* Syntax: =%<nop>IF{"CONDITION" then="THEN" else="ELSE"}%=
+   * Syntax: =%<nop>IF{"CONDITION" then="THEN" else="ELSE"}%=
 In the example above, if CONDITION evaluates to TRUE, then THEN will be included in the topic; otherwise ELSE will be included.
 
 See IfStatements for more information on how to write %IF statements.
 
 #VarINCLUDE
 ---+++ INCLUDE{"page"} -- include other topics or web pages
-	* Syntax: =%<nop>INCLUDE{"page" ...}%=
-	* Supported parameters:
-	| *Parameter:* | *Description:* | *Default:* |
-	| ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= | |
-	| ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= | |
-	| ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
-	| =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
-	| =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
-	| =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
-	| =section="name"= | Includes only the specified section, as defined in the included topic by the [[#VarSECTION][SECTION]] and [[#VarENDSECTION][ENDSECTION]] tags| |
+   * Syntax: =%<nop>INCLUDE{"page" ...}%=
+   * Supported parameters:
+   | *Parameter:* | *Description:* | *Default:* |
+   | ="SomeTopic"= | The name of a topic located in the current web, i.e. =%<nop>INCLUDE{"WebNotify"}%= | |
+   | ="Web.Topic"= | A topic in another web, i.e. =%<nop>INCLUDE{"%TWIKIWEB%.SiteMap"}%= | |
+   | ="http://..."= | A full qualified URL, i.e. =%<nop>INCLUDE{"http://twiki.org/"}%= <br /> %I% if the URL resolves to an attachment file on the server this will _automatically_ translate to a server-side include. | |
+   | =pattern="..."= | A RegularExpression pattern to include a subset of a topic or page | none |
+   | =rev="1.2"= | Include a previous topic revision; N/A for URLs | top revision |
+   | =warn="off"= | Warn if topic include fails: Fail silently (if =off=); output default warning (if set to =on=); else, output specific text (use =$topic= for topic name) | =%INCLUDEWARNING%= [[TWikiPreferences][preferences]] setting |
+   | =section="name"= | Includes only the specified section, as defined in the included topic by the [[#VarSECTION][SECTION]] and [[#VarENDSECTION][ENDSECTION]] tags| |
 Any other parameters will be defined as variables within the scope of the included topic. For example, =%<nop>INCLUDE{"AnotherTopic" PONE="val 1" PTWO="val 2"}%= will result in =%<nop>PONE%= and =%<nop>PTWO%= being defined within the included topic.
-	* Example: To include a part of a webpage, use this pattern: =%<nop>INCLUDE{"http://some.page.com/index.html" pattern="^.*?BEFORE(.*)AFTER.*" }%=, where =BEFORE= is the part of the page just before the inclusion, and =AFTER= is the part just after the inclusion. 
-	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], IncludeTopicsAndWebPages, [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]], [[#VarSECTION][SECTION]], [[#VarENDSECTION][ENDSECTION]]
+   * Example: To include a part of a webpage, use this pattern: =%<nop>INCLUDE{"http://some.page.com/index.html" pattern="^.*?BEFORE(.*)AFTER.*" }%=, where =BEFORE= is the part of the page just before the inclusion, and =AFTER= is the part just after the inclusion. 
+   * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], IncludeTopicsAndWebPages, [[#VarSTARTINCLUDE][STARTINCLUDE]], [[#VarSTOPINCLUDE][STOPINCLUDE]], [[#VarSECTION][SECTION]], [[#VarENDSECTION][ENDSECTION]]
 
 #VarINCLUDINGTOPIC
 ---+++ INCLUDINGTOPIC -- name of topic that includes current topic
-	* The name of the topic that includes the current topic - same as =%<nop>TOPIC%= in case there is no include
-	* Syntax: =%<nop>INCLUDINGTOPIC%=
-	* Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarTOPIC][TOPIC]]
+   * The name of the topic that includes the current topic - same as =%<nop>TOPIC%= in case there is no include
+   * Syntax: =%<nop>INCLUDINGTOPIC%=
+   * Related: [[#VarBASETOPIC][BASETOPIC]], [[#VarINCLUDINGWEB][INCLUDINGWEB]], [[#VarINCLUDE][INCLUDE]], [[#VarTOPIC][TOPIC]]
 
 
 #VarINCLUDINGWEB
 ---+++ INCLUDINGWEB -- web that includes current topic
-	* The web name of the topic that includes the current topic - same as =%<nop>WEB%= if there is no INCLUDE.
-	* Syntax: =%<nop>INCLUDINGWEB%=
-	* Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
+   * The web name of the topic that includes the current topic - same as =%<nop>WEB%= if there is no INCLUDE.
+   * Syntax: =%<nop>INCLUDINGWEB%=
+   * Related: [[#VarBASEWEB][BASEWEB]], [[#VarINCLUDINGTOPIC][INCLUDINGTOPIC]], [[#VarINCLUDE][INCLUDE]], [[#VarWEB][WEB]]
 
 #VarLANGUAGES
 ---+++ LANGUAGES -- TWiki available languages
-	* list the languages available (as _PO_ files) to TWiki.
-	  Those are the languages in which TWiki's user interface is available.
-	* Syntax: =%<nop>LANGUAGES{...}%=
-	* Supported parameters:
-	  | *Parameter:* | *Description:* | *Default:* |
-	  | =format=     | format for each item. See below for variables available in the format string. | ="   * $langname"= |
-	  | =sep=        | separator between items. | ="\n"= (newline) |
-	* =format= variables:
-	  | *Variable* | *Meaning* |
-	  | =$langname= | language's name, as informed by the translators |
-	  | =$langtag= | language's tag. Ex: =en=, =pt-br=, etc. |
+   * list the languages available (as _PO_ files) to TWiki.
+     Those are the languages in which TWiki's user interface is available.
+   * Syntax: =%<nop>LANGUAGES{...}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | =format=     | format for each item. See below for variables available in the format string. | ="   * $langname"= |
+     | =sep=        | separator between items. | ="\n"= (newline) |
+   * =format= variables:
+     | *Variable* | *Meaning* |
+     | =$langname= | language's name, as informed by the translators |
+     | =$langtag= | language's tag. Ex: =en=, =pt-br=, etc. |
         
 
 #VarLOCALSITEPREFS
@@ -242,13 +242,13 @@ Any other parameters will be defined as variables within the scope of the includ
 ---+++ LOGIN -- present a full login link
    * Syntax: =%<nop>LOGIN%=
    * Expand to: %LOGIN%
-	* Related: TWikiUserAuthentication,[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+   * Related: TWikiUserAuthentication,[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGOUT][LOGOUT]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 #VarLOGOUT
 ---+++ LOGOUT -- present a full logout link
    * Syntax: =%<nop>LOGOUT%=
    * Expand to: %LOGOUT%
-	* Related: TWikiUserAuthentication,[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
+   * Related: TWikiUserAuthentication,[[#VarSESSIONID][SESSIONID]],[[#VarSESSIONVAR][SESSIONVAR]],[[#VarLOGIN][LOGIN]],[[#VarSESSION_VARIABLE][SESSION_VARIABLE]]
 
 
 #VarMAKETEXT
@@ -273,10 +273,10 @@ Any other parameters will be defined as variables within the scope of the includ
 
 #VarMAINWEB
 ---+++ MAINWEB -- name of Main web
-	* The web containing %MAINWEB%.%WIKIUSERSTOPIC%, individual user topics and %MAINWEB%.TWikiGroups
-	* Syntax: =%<nop>MAINWEB%=
-	* Expands to: =%MAINWEB%=
-	* Related: [[#VarTWIKIWEB][TWIKIWEB]]
+   * The web containing %MAINWEB%.%WIKIUSERSTOPIC%, individual user topics and %MAINWEB%.TWikiGroups
+   * Syntax: =%<nop>MAINWEB%=
+   * Expands to: =%MAINWEB%=
+   * Related: [[#VarTWIKIWEB][TWIKIWEB]]
 
 #VarMETA
 ---+++ META - displays meta-data
@@ -297,20 +297,20 @@ Provided mainly for use in templates, this variable generates the parts of the t
 
 #VarMETASEARCH
 ---+++ METASEARCH -- special search of meta data
-	* Syntax: =%<nop>METASEARCH{...}%=
-	* Supported parameters:
-	  | *Parameter:* | *Description:* | *Default:* |
-	  | =type="topicmoved"= | What sort of search is required? <br /> ="topicmoved"= if search for a topic that may have been moved <br /> ="parent"= if searching for topics that have a specific parent i.e. its children <br /> ="field"= if searching for topics that have a particular form field value (use the =name= and =value= parameters to specify which field to search) | required |
-	  | =web="%<nop>WEB%"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. | current web |
-	  | =topic="%<nop>TOPIC%"= | The topic the search relates to, for =topicmoved= and =parent= searches | current topic |
-	  | =name= | form field to search, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
-	  | =value= | form field value, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
-	  | =title="Title"= | Text that is prefixed to any search results | empty |
-	  | =default="none"= | Default text shown if no search hit | empty |
-	* Example: =%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="This topic used to exist and was moved to: "}%=
-	* Example: You may want to use this in WebTopicViewTemplate and WebTopicNonWikiTemplate:<br /> =%<nop>METASEARCH{type="parent" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="Children: "}%=
-	* Example: =%<nop>METASEARCH{type="field" name="Country" value="China"}%=
-	* Related: [[#VarSEARCH][SEARCH]]
+   * Syntax: =%<nop>METASEARCH{...}%=
+   * Supported parameters:
+     | *Parameter:* | *Description:* | *Default:* |
+     | =type="topicmoved"= | What sort of search is required? <br /> ="topicmoved"= if search for a topic that may have been moved <br /> ="parent"= if searching for topics that have a specific parent i.e. its children <br /> ="field"= if searching for topics that have a particular form field value (use the =name= and =value= parameters to specify which field to search) | required |
+     | =web="%<nop>WEB%"= | Wiki web to search: A web, a list of webs separated by whitespace, or =all= webs. | current web |
+     | =topic="%<nop>TOPIC%"= | The topic the search relates to, for =topicmoved= and =parent= searches | current topic |
+     | =name= | form field to search, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
+     | =value= | form field value, for =field= type searches. May be a regular expression (see [[#VarSEARCH][SEARCH]]). | |
+     | =title="Title"= | Text that is prefixed to any search results | empty |
+     | =default="none"= | Default text shown if no search hit | empty |
+   * Example: =%<nop>METASEARCH{type="topicmoved" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="This topic used to exist and was moved to: "}%=
+   * Example: You may want to use this in WebTopicViewTemplate and WebTopicNonWikiTemplate:<br /> =%<nop>METASEARCH{type="parent" web="%<nop>WEB%" topic="%<nop>TOPIC%" title="Children: "}%=
+   * Example: =%<nop>METASEARCH{type="field" name="Country" value="China"}%=
+   * Related: [[#VarSEARCH][SEARCH]]
 %STOPINCLUDE%
 
 __Related Topics:__ UserDocumentationCategory

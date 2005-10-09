@@ -9,11 +9,11 @@
 <!--
 %COMMENT{type="TopicNameConstrainer" field="topic" noform="on"}%
 -->
-	  <input type="hidden" name="templatetopic" value="WebTopicEditTemplate" />
-	  <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
-	  <input type="hidden" name="onlywikiname" value="on" />
-	  <input type="hidden" name="onlynewtopic" value="on" />
-	  <input type="submit" value="Create" />
+     <input type="hidden" name="templatetopic" value="WebTopicEditTemplate" />
+     <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
+     <input type="hidden" name="onlywikiname" value="on" />
+     <input type="hidden" name="onlynewtopic" value="on" />
+     <input type="submit" value="Create" />
 </form>
 
 

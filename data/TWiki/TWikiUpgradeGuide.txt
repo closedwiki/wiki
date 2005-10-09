@@ -11,10 +11,10 @@ Dakar is a major new release. You can chose between an automated upgrade using a
 
 ---++ Upgrade Requirements
 
-	* Please review the AdminSkillsAssumptions before you upgrade TWiki
-	* To upgrade from a Cairo standard installation to the latest Dakar Production Release, follow the instructions below
-	* __NOTE:__ To upgrade from a *pre-Cairo* TWiki, start with %TWIKIWEB%.TWikiUpgradeToCairo
-	* To upgrade from a Beta of the new release, or if you made custom modifications, read through all new reference documentation, then use the procedure below as a guideline
+   * Please review the AdminSkillsAssumptions before you upgrade TWiki
+   * To upgrade from a Cairo standard installation to the latest Dakar Production Release, follow the instructions below
+   * __NOTE:__ To upgrade from a *pre-Cairo* TWiki, start with %TWIKIWEB%.TWikiUpgradeToCairo
+   * To upgrade from a Beta of the new release, or if you made custom modifications, read through all new reference documentation, then use the procedure below as a guideline
    * Once the upgrade has been applied, an existing earlier installation will still be able to read all the topics, but will not be able to write. Make sure you take a backup!
    * Not all Cairo plugins are supported with Dakar. Make sure the plugins you use can be upgraded as well!
 
@@ -32,34 +32,34 @@ The upgrade script will upgrade the *TWiki core only*. Plugins will need to be u
 
 It will:
 
-	* Create a new TWiki installation, placing the files from the distribution there as appropriate
-	* Where possible, merge the changes you've made in your existing topics and attachments into the new twiki
-	* Where not possible, it will tell you, and you can inspect those differences manually
-	* Create new configuration files for the new TWiki based on your existing configuation information
-	* Set the permissions in the new TWiki so that it should work straight away
-	* Attempt to setup authentication for your new TWiki, if you are using .htaccess in the old one
-	* Tell you what else you need to do
+   * Create a new TWiki installation, placing the files from the distribution there as appropriate
+   * Where possible, merge the changes you've made in your existing topics and attachments into the new twiki
+   * Where not possible, it will tell you, and you can inspect those differences manually
+   * Create new configuration files for the new TWiki based on your existing configuation information
+   * Set the permissions in the new TWiki so that it should work straight away
+   * Attempt to setup authentication for your new TWiki, if you are using .htaccess in the old one
+   * Tell you what else you need to do
 
 To perform the upgrade, you need to:
 
-	* Check first if there is a newer =UpgradeTwiki= script available, see TWiki:Codev.UpgradeTWiki
-	* Create a new directory for your new installation: Let's call this =distro/=
-	* Put the distribution zip file in =distro/=
-	* Unzip it
-	* Choose a directory for the new installation.  I will call this =new_twiki=.  This directory must not already exist.
-	* Change directory to =distro/= and run: %BR%
-	  =./UpgradeTwiki &lt;full path to existing_twiki's setlib.cfg&gt; &lt;full path to new_twiki&gt;=
-	* confirm your system settings by pointing your browser to =cgi-bin/configure=
+   * Check first if there is a newer =UpgradeTwiki= script available, see TWiki:Codev.UpgradeTWiki
+   * Create a new directory for your new installation: Let's call this =distro/=
+   * Put the distribution zip file in =distro/=
+   * Unzip it
+   * Choose a directory for the new installation.  I will call this =new_twiki=.  This directory must not already exist.
+   * Change directory to =distro/= and run: %BR%
+     =./UpgradeTwiki &lt;full path to existing_twiki's setlib.cfg&gt; &lt;full path to new_twiki&gt;=
+   * confirm your system settings by pointing your browser to =cgi-bin/configure=
 
 Assuming all goes well, =UpgradeTwiki= will give you the final instructions.
 
 There are a few points worth noting:
 
-	* =UpgradeTwiki= may not be able to merge all the changes you made in your existing TWiki into the new installation, but it will tell you which ones it couldn't deal with
-	* =UpgradeTwiki= creates the new installation in a new directory tree. It makes a complete copy of all your existing data, so:
-		* Clearly you need to point it to a location where there is enough space
-		* If you have symlinks under your =data/= directory in your existing installation, these are reproduced as actual directories in the new structure.	It is up to you to pull these sub-directories out again and re-symlink as needed
-	* =UpgradeTwiki= doesn't deal with custom templates or Plugins, you will have to reinstall these in the new installation.
+   * =UpgradeTwiki= may not be able to merge all the changes you made in your existing TWiki into the new installation, but it will tell you which ones it couldn't deal with
+   * =UpgradeTwiki= creates the new installation in a new directory tree. It makes a complete copy of all your existing data, so:
+      * Clearly you need to point it to a location where there is enough space
+      * If you have symlinks under your =data/= directory in your existing installation, these are reproduced as actual directories in the new structure.   It is up to you to pull these sub-directories out again and re-symlink as needed
+   * =UpgradeTwiki= doesn't deal with custom templates or Plugins, you will have to reinstall these in the new installation.
 
 If you use it, and would be kind enough to add your experiences to TWiki:Codev.UpgradeTWiki, it would be much appreciated.  The report of your experience will help to make =UpgradeTwiki= more robust.
 

@@ -35,7 +35,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Flip ENABLED switch to 1
 	* Test if the installation was successful:
 		* try uploading a zip file
