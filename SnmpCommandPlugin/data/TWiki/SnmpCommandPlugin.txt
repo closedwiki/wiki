@@ -20,27 +20,27 @@ The objects (OIDs) can be expressed as strings or as numbers.
 
 Example1: To walk thorugh the information from the system tree on the localhost
 <verbatim>
-   * %SNMPCOMMAND%
+	* %SNMPCOMMAND%
 </verbatim>
 Example2: To get the sysUpTime of the machine called myPC1 
 <verbatim>
-   * %SNMPCOMAMND{host="myPC1" method ="get" oid="sysUpTime.0"}% 
+	* %SNMPCOMAMND{host="myPC1" method ="get" oid="sysUpTime.0"}% 
 </verbatim>
 Example3: To get the sysUpTime and sysContact of the machine called myPC1 using the OID number.
 <verbatim>
-   * %SNMPCOMAMND{host="myPC1" method = "get" oid=".1.3.6.1.2.1.1.3.0 .1.3.6.1.2.1.1.4.0"}%
+	* %SNMPCOMAMND{host="myPC1" method = "get" oid=".1.3.6.1.2.1.1.3.0 .1.3.6.1.2.1.1.4.0"}%
 </verbatim>
 Example4: To display the network interface table for the machine called myPC2 using community string _bob_
 <verbatim>
-   * %SNMPCOMAMND{host="myPC2" method = "table" oid="ifTable" comm="bob"}%
+	* %SNMPCOMAMND{host="myPC2" method = "table" oid="ifTable" comm="bob"}%
 </verbatim>
 Example5: To display the storage information table for the machine called myPC2 using community string _bob_
 <verbatim>
-   * %SNMPCOMAMND{host="myPC2" method = "table" oid="ifTable" comm="bob"}%
+	* %SNMPCOMAMND{host="myPC2" method = "table" oid="ifTable" comm="bob"}%
 </verbatim>
 Example6: To display the UCD MIB tree information on the machine called myPC2.
 <verbatim>
-   * %SNMPCOMAMND{host="myPC2" method = "walk" oid="1.3.6.1.4.1.2021" }%
+	* %SNMPCOMAMND{host="myPC2" method = "walk" oid="1.3.6.1.4.1.2021" }%
 </verbatim>
 
  
@@ -69,20 +69,20 @@ Example6: To display the UCD MIB tree information on the machine called myPC2.
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = A plugin to query network devices via the snmp protocol.
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = A plugin to query network devices via the snmp protocol.
    
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the installation was successful:
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the installation was successful:
 
      If you are the administrator of the machine serving TWiki, type in the following on the command line to test if snmp is available and has been configured.
 

@@ -20,13 +20,13 @@ Using full syntax <nop>%ISNEW% takes one ore two options:
 ---+++ Examples:
 
 	* <nop>MyTopic <nop>%ISNEW%
-      * MyTopic %ISNEW%
+	* MyTopic %ISNEW%
 	* <nop>Web.ToPic <nop>%ISNEW%
-      * Web.ToPic %ISNEW%
+	* Web.ToPic %ISNEW%
 	* <nop>TopIc <nop>%ISNEW{days="15"}
-      * TopIc %ISNEW{days="15"}
+	* TopIc %ISNEW{days="15"}
 	* <nop>TopiC <nop>%ISNEW{days="20" version="1.4"}
-      * TopiC %ISNEW{days="20" version="1.4"}
+	* TopiC %ISNEW{days="20" version="1.4"}
 
 ---+++ <nop>%TOPIC% Settings
 

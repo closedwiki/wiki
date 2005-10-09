@@ -5,13 +5,13 @@ This plugin will allow you to create variables in arbitrary topic pages, and not
 
 ---+++ Syntax Rules 
 
-   * Set a variable:<br />
+	* Set a variable:<br />
       <nop>* Set VARIABLE_NAME = "some value"<br />
 
-   * Use a variable in the same Web:<br />
+	* Use a variable in the same Web:<br />
       %<nop>TopicName.VARIABLE_NAME%
 
-   * Use a variable from a different Web:<br />
+	* Use a variable from a different Web:<br />
       %<nop>Webname.TopicName.VARIABLE_NAME%
 
 
@@ -19,26 +19,26 @@ This plugin will allow you to create variables in arbitrary topic pages, and not
 
 ---+++ <nop>%TOPIC% Settings
 
-   * One line description, is shown in the [[TWiki.TextFormattingRules][TextFormattingRules]] topic
-      * Set SHORTDESCRIPTION = Set variables in arbitrary topics and refer to them from other topics within the same web
+	* One line description, is shown in the [[TWiki.TextFormattingRules][TextFormattingRules]] topic
+	* Set SHORTDESCRIPTION = Set variables in arbitrary topics and refer to them from other topics within the same web
 
-   * Debug %TOPIC% (see output in <code>data/debug.txt</code>)
-      * Set DEBUG = 0
+	* Debug %TOPIC% (see output in <code>data/debug.txt</code>)
+	* Set DEBUG = 0
 
 ---+++ Plugin Installation Instructions 
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Check this topic here if the installation was successful
-   * Test if the plugin is correctly installed:
-      * Set THE_ANSWER = 42
-      * You should see the answer here: [%THE_ANSWER%] (%<nop>THE_ANSWER%)
-      * and here: [%TopicVarsPlugin.THE_ANSWER%] (%<nop>TopicVarsPlugin.THE_ANSWER%)
-      * and here: [%TWiki.TopicVarsPlugin.THE_ANSWER%] (%<nop>TWiki.TopicVarsPlugin.THE_ANSWER%)
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Check this topic here if the installation was successful
+	* Test if the plugin is correctly installed:
+	* Set THE_ANSWER = 42
+	* You should see the answer here: [%THE_ANSWER%] (%<nop>THE_ANSWER%)
+	* and here: [%TopicVarsPlugin.THE_ANSWER%] (%<nop>TopicVarsPlugin.THE_ANSWER%)
+	* and here: [%TWiki.TopicVarsPlugin.THE_ANSWER%] (%<nop>TWiki.TopicVarsPlugin.THE_ANSWER%)
 
 
 ---+++ Plugin Info 

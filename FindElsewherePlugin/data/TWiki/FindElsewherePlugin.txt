@@ -4,9 +4,9 @@
 This plugin will automatically link to another web(s) if a topic isn't found in the current web.  
 
 This is useful for a TWiki site that wants to implement a glossar/dictionary web where common terms are defined and stored.  Without this plugin:
-   * Each web would need to create their own topic for a common term 
-   * Link to or INCLUDE the topic from where it is defined
-   * Authors need to remember to put the Web name in front of the topic name, such as [[TWiki.WikiWord]]
+	* Each web would need to create their own topic for a common term 
+	* Link to or INCLUDE the topic from where it is defined
+	* Authors need to remember to put the Web name in front of the topic name, such as [[TWiki.WikiWord]]
 
 Without this kind of plugin, it's likely that common terms used within an organization will be defined in multiple webs or the common terms will be unlinked wiki words (as if they didn't exist).
 
@@ -41,27 +41,27 @@ Don't break other types of links...
 
 ---+++ <nop>%TOPIC% Settings
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = If a topic isn't found in this web it will look in a predefined list of other webs and attempt to find it there.  
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = If a topic isn't found in this web it will look in a predefined list of other webs and attempt to find it there.  
 
-   * List other webs in which to look for topics that don't exist
-      * Set LOOKELSEWHERE = TWiki, Main
+	* List other webs in which to look for topics that don't exist
+	* Set LOOKELSEWHERE = TWiki, Main
 
-   * If the TWiki.WikiWord is plural but doesn't exist, also look for the singular word.  Note this setting is for looking in *other* webs only (plural to singular is still automatically done in the current web).
-      * Set PLURALTOSINGULAR = 1
+	* If the TWiki.WikiWord is plural but doesn't exist, also look for the singular word.  Note this setting is for looking in *other* webs only (plural to singular is still automatically done in the current web).
+	* Set PLURALTOSINGULAR = 1
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 0
 
 ---+++ Plugin Installation Instructions
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 | *File:* | *Description:* |
 | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the plugin is correctly installed, by viewing %TOPIC%#NewFunctionalityTest
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the plugin is correctly installed, by viewing %TOPIC%#NewFunctionalityTest
 
 ---+++ Plugin Info
 

@@ -42,9 +42,9 @@ You specify your actual test markup in the same way:
 
 Some notes about the comparison process:
 	1 The comparison is performed by HTML::Diff, which compares the HTML structures found in the text. See the documentation on HTML::Diff for help.
-      * whitespace is effectively ignored.
-      * The comparison is _insensitive_ to the order of parameters to the tags, but _all_ parameters must be present.
-      * All HTML entities are _normalised_ to &amp;#dd; style decimal entities before comparison, so &amp;lt; will match &amp;#60;
+	* whitespace is effectively ignored.
+	* The comparison is _insensitive_ to the order of parameters to the tags, but _all_ parameters must be present.
+	* All HTML entities are _normalised_ to &amp;#dd; style decimal entities before comparison, so &amp;lt; will match &amp;#60;
    1 The *actual* text is read from the raw source of the topic. No processing is done on it (except as described under =expand= and =rex=, above)
 	1 The comparison is done on the &lt;body&gt; of the topic only. At present there is no way to compare the &lt;head&gt;.
 	1 =expected= and =actual= blocks are matched up in the order they occur;

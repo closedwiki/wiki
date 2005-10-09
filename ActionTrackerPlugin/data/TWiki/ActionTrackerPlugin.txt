@@ -324,8 +324,8 @@ These settings can be overridden in the Web<nop>Preferences topic of the current
 		* #Set LATECOL = yellow
 		* #Set BADDATECOL = red
 		* #Set HEADERCOL = orange
-   * Full URL of the CSS to use in formatting actions.
-      * Set CSS = %PUBURL%/%TWIKIWEB%/ActionTrackerPlugin/styles.css
+	* Full URL of the CSS to use in formatting actions.
+	* Set CSS = %PUBURL%/%TWIKIWEB%/ActionTrackerPlugin/styles.css
 
 	* The format of the fields in the action editor. You can also set EDITBOXWIDTH and EDITBOXHEIGHT to override the defaults (which are %EDITBOXWIDTH%x%EDITBOXHEIGHT%) just for the action editor.
 		* Set EDITHEADER = | Assigned to | Due date | State | Notify |
@@ -363,7 +363,7 @@ __Note:__ These instructions are for the TWiki maintainer. No changes to your br
 	* =perl= ==%TOPIC%_installer.pl== to automatically check and install other TWiki modules that this module depends on. This script also includes an _uninstaller_ should you ever wish to remove the plugin from your installation.
 	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
 %$DEPENDENCIES%
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 	* If the plugin is installed and enabled correctly you should see a formatted action below:
 %ACTION{who=TWikiGuest,due="1 Jan 2003",open}% Example action

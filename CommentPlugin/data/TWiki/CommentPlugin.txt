@@ -132,7 +132,7 @@ All the usual TWikiVariables that can be used in a topic template can also be us
 		* Set DEFAULT_TYPE = below
 		
 ---+ Plugin Installation Instructions
-   * This plugin is pre-installed in your TWiki release.
+	* This plugin is pre-installed in your TWiki release.
 
 ---+ Plugin Info
 

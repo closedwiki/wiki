@@ -102,7 +102,7 @@ The ==lineformat== parameters can contain the following arguments:
 	require valid-user
 </Files>
 </verbatim>
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 ---++ Tips and Tricks
 	* DO NOT use the short line syntax for multidimensional polls!
 	* DO NOT write ==$p{0}%== inside the ==lineformat== argument *in the tag*, else you close the tag wrongly

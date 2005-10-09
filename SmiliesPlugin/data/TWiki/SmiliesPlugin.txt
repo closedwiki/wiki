@@ -42,29 +42,29 @@ Here is the list of smilies supported by this plugin. To add others, attach new 
 Plugin settings are stored as preferences variables. To reference
 a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Render smilies as icons, like =&nbsp;:-)= for :-) or =&nbsp;:cool:= for :cool:
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Render smilies as icons, like =&nbsp;:-)= for :-) or =&nbsp;:cool:= for :cool:
 
-   * The name of the topic containig your Smilies. Default: ==%WEB%.SmiliesPlugin==
-      * #Set TOPIC = %TWIKIWEB%.SmiliesPlugin
+	* The name of the topic containig your Smilies. Default: ==%WEB%.SmiliesPlugin==
+	* #Set TOPIC = %TWIKIWEB%.SmiliesPlugin
 
-   * The way the _emoticon_ is displayed. You can use ==$emoticon== (e.g. =:<nop>D=), ==$url== (e.g. =%<nop>ATTACHURL%/biggrin.gif=) and ==$tooltip== (e.g. ="big grin"=). Default: ==&lt;img src="$url" alt="$tooltip" title="$tooltip" border="0" /&gt;==
+	* The way the _emoticon_ is displayed. You can use ==$emoticon== (e.g. =:<nop>D=), ==$url== (e.g. =%<nop>ATTACHURL%/biggrin.gif=) and ==$tooltip== (e.g. ="big grin"=). Default: ==&lt;img src="$url" alt="$tooltip" title="$tooltip" border="0" /&gt;==
 <verbatim>
-      * #Set FORMAT = <img src="$url" alt="$emoticon" title="$emoticon" border="0" />
+	* #Set FORMAT = <img src="$url" alt="$emoticon" title="$emoticon" border="0" />
 </verbatim>
 
 ---++ Plugin Installation Instructions
 This plugin is installed by default with a TWiki release. You should not need to install the plugin unless it is for an upgrade.
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==pub/TWiki/%TOPIC%/*.gif== | Plugin icon files |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the plugin is correctly installed:
-      * You will see a series of icons on next line: <br />
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the plugin is correctly installed:
+	* You will see a series of icons on next line: <br />
         :-) :) :cool: :( :o :D ;) :p :rolleyes: :mad: :eek: :confused: >:-) >;-) :-X :ok: :yes: :no: :love: :skull:
 
 ---++ Plugin Info

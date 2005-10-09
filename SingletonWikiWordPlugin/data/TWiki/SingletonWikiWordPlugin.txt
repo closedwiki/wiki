@@ -19,10 +19,10 @@ Test:
 
 ---+++ Syntax Rules(none)
 ---+++ %TOPIC% 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
 	* Set SHORTDESCRIPTION = This plugin holds a function to implement the features listed on http://twiki.org/cgi-bin/view/Codev/?topic=SingletonWikiWord.
 
-   * Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
+	* Set DEBUG to 1 to get debug messages in =data/debug.txt=. Default: =0=
 	* Set DEBUG = 0
 
 	* There are no customisable settings  
@@ -30,7 +30,7 @@ Test:
 
 ---+++ Plugin Installation Instructions	
 
-* To install this plug-in you must install this topic and the .pm file.
+	* To install this plug-in you must install this topic and the .pm file.
 
 
 ---+++ Plugin Info

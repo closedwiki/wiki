@@ -28,7 +28,7 @@ at the top of the XML document where SablotronXsl is the name of the stylesheet 
 	  | ==data/TWiki/SablotronXml.txt== | Sample XML document |
 	  | ==data/TWiki/SablotronXml.txt,v== | Sample XML repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Check SablotronXml if %TOPIC% shows up in the list of activated plugins: %ACTIVATEDPLUGINS%
 
 ---+++ Design History

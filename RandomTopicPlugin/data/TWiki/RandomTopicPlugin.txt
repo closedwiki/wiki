@@ -8,16 +8,16 @@ _( Discussion in TWiki:Plugins/RandomTopicPluginDev )_
 
 ---++ Syntax Rules
 
-   * =%<nop>RANDOMTOPIC%= - inserts a single random topic name in it's place.
-   * =%<nop>RANDOMTOPIC{<i>params</i>}%= - inserts potentially more than one random topic, with user formatting. Parameters:
-      * topics="5" - Number of topics requested. Default is 1 topic
-      * include="^Web" - Perl regular expression. Only topics that match this expression will shown_. Default is set by RANDOMTOPICPLUGIN_INCLUDE (see below).
-      * exclude="^Web" - Perl regular expression. Any topics that match this expression will _never be shown_. Default is set by RANDOMTOPICPLUGIN_EXCLUDE (see below).
-      * format="<i> format string </i>" . The format string accepts 3 quoted parameters:
-         * =$t= will be expanded to =\t= (necessary for bullet lists)
-         * =$n= will be expanded to =\n= (So that things appear on separate lines - again for bullet lists
-         * =$topic= will be expanded to the randomly chosen name
-         * Default is a bullet list : "$t* $topic$n"
+	* =%<nop>RANDOMTOPIC%= - inserts a single random topic name in it's place.
+	* =%<nop>RANDOMTOPIC{<i>params</i>}%= - inserts potentially more than one random topic, with user formatting. Parameters:
+	* topics="5" - Number of topics requested. Default is 1 topic
+	* include="^Web" - Perl regular expression. Only topics that match this expression will shown_. Default is set by RANDOMTOPICPLUGIN_INCLUDE (see below).
+	* exclude="^Web" - Perl regular expression. Any topics that match this expression will _never be shown_. Default is set by RANDOMTOPICPLUGIN_EXCLUDE (see below).
+	* format="<i> format string </i>" . The format string accepts 3 quoted parameters:
+	* =$t= will be expanded to =\t= (necessary for bullet lists)
+	* =$n= will be expanded to =\n= (So that things appear on separate lines - again for bullet lists
+	* =$topic= will be expanded to the randomly chosen name
+	* Default is a bullet list : "$t* $topic$n"
 
 ---++ Examples
 
@@ -31,18 +31,18 @@ _( Discussion in TWiki:Plugins/RandomTopicPluginDev )_
 <tr><th bgcolor="#99CCCC"> <strong>HiddenAttachment</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">HiddenAttachment</a> </td></tr>
 <tr><th bgcolor="#99CCCC"> <strong>WikiName</strong> </th><td>  <a href="/twiki/bin/oops/System/RandomTopicPlugin?template=oopspreview">WikiName</a> </td></tr>
 </table>
-   * =%<nop>RANDOMTOPIC{topics="10" exclude="^Web"}%= - 10 random topics, excluding any that start with "Web".
+	* =%<nop>RANDOMTOPIC{topics="10" exclude="^Web"}%= - 10 random topics, excluding any that start with "Web".
 
 ---++ <nop>%TOPIC% Global Settings
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Pick a selection of Random Topics
-   * Perl regular expression matching topics to be selected from
-      * Set INCLUDE = 
-   * Perl regular expression matching topics to be excluded
-      * Set EXCLUDE = ^Web
+	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Pick a selection of Random Topics
+	* Perl regular expression matching topics to be selected from
+	* Set INCLUDE = 
+	* Perl regular expression matching topics to be excluded
+	* Set EXCLUDE = ^Web
 
 ---++ Plugin Installation Instructions
 
@@ -52,7 +52,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 	  | *File:* | *Description:* |
       %$MANIFEST%
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* If you see a table below of 5 random topics then you have successfully installed this:
 ----

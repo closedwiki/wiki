@@ -23,7 +23,7 @@ Buttons and hotkeys are all created by reading a user-defined URL which is set b
 
 For example,
 <pre>
-      * <nop>Set POWEREDIT_CONTROLS = %<nop>PUBURL%/Main/AlanTuring/Controls.txt
+	* <nop>Set POWEREDIT_CONTROLS = %<nop>PUBURL%/Main/AlanTuring/Controls.txt
 </pre>
 The control file contains a set of button panel and macro definitions in XML. For example:
 <pre>
@@ -40,11 +40,11 @@ The control file contains a set of button panel and macro definitions in XML. Fo
 &lt;/keys>
 </pre>
 In this example:
-   * The first button in the top panel will be labelled "Tele type" and will perform the sequence /cut/=/paste/= - which will cut the currently selected text, enter an '=' sign, paste the text and enter another '=' sign. The tooltip "TT text" will be displayed when the mouse is moved over the button.
-   * The second button will use the GIF file at the URL in its name to create an image button, and when invoked will execute the =space= macro, which in turn is defined to insert a ' ' character.
-      * Images for the editor basic commands are all statically bound (see Command below) and the following additional images are also statically bound: ITALIC TT BOLD UL OL
-   * The third button will use the statically bound COPY image (an image that doesn't have to be downloaded) and invoke the /copy/ editor command.
-   * The key "Ctrl+X" will be defined to perform the /cut/ command.
+	* The first button in the top panel will be labelled "Tele type" and will perform the sequence /cut/=/paste/= - which will cut the currently selected text, enter an '=' sign, paste the text and enter another '=' sign. The tooltip "TT text" will be displayed when the mouse is moved over the button.
+	* The second button will use the GIF file at the URL in its name to create an image button, and when invoked will execute the =space= macro, which in turn is defined to insert a ' ' character.
+	* Images for the editor basic commands are all statically bound (see Command below) and the following additional images are also statically bound: ITALIC TT BOLD UL OL
+	* The third button will use the statically bound COPY image (an image that doesn't have to be downloaded) and invoke the /copy/ editor command.
+	* The key "Ctrl+X" will be defined to perform the /cut/ command.
 	* The four button panels are named "top", "bottom", "left" and "right"
 	* There can be as many "macros" blocks as you like
 	* In button blocks, the name is used as the label on the button
@@ -152,8 +152,8 @@ The *RIGHT* element defines a set of [[#MapElement][MAP]] elements that define m
 <table>
 <tr><td>Syntax</td>		<td>&lt;MAP../&gt;</td></tr>
 <tr><td>Attributes</td>		<td>
-   * NAME= source of map; may be a key string, a macro name, a button name or the URL of a button image, depending on context.
-   * ACTION= macro string to execute
+	* NAME= source of map; may be a key string, a macro name, a button name or the URL of a button image, depending on context.
+	* ACTION= macro string to execute
 ACTION
 TIP
 </td></tr>
@@ -175,7 +175,7 @@ The *MAP* element defines a mapping from a string to an action. The action is al
 <table>
 <tr><td>Syntax</td>		<td>&lt;LOAD../&gt;</td></tr>
 <tr><td>Attributes</td>		<td>
-   * URL= URL
+	* URL= URL
 </td></tr>
 <tr><td>Contained in</td>	<td>File</td></tr>
 </table>
@@ -235,7 +235,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	| ==lib/TWiki/Plugins/PowerEditPlugin/source.zip== | Source and test code |
 	| ==lib/TWiki/Plugins/PowerEditPlugin.pm== | Plugin script |
 	* Unzip ==PowerEditPlugin.zip== in your twiki installation directory.
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* A command to invoke the editor can by added to the normal topic view by putting the following line into your =bin/view= template, immediately after the line reading %<nop>EDITTOPIC%:
 	<pre>
 	%<nop>TMPL:P{"sep"}% &lt;a href="%<nop>SCRIPTURLPATH%/edit%<nop>SCRIPTSUFFIX%/%<nop>WEB%/%<nop>TOPIC%?skin=power">PowerEdit&lt;/a>

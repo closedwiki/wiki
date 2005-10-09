@@ -110,7 +110,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/Sandbox/H2ODef.txt== | Part of the demo |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/%TOPIC%/spacer.gif== | Spacer image |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* Load topic EmbedTopicPluginDemo in the TWiki web and see if the topics WaterDef and H2ODef are embedded in it. 
 

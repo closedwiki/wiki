@@ -47,25 +47,25 @@ More information on Flash OBJECT and EMBED tag attributes: http://www.macromedia
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, for example, ==%<nop>EMBEDFLASHPLUGIN_SHORTDESCRIPTION%==
 
-   * One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
-      * Set SHORTDESCRIPTION = Embeds a Macromedia Flash file
+	* One line description, shown in the %TWIKIWEB%.TextFormattingRules topic:
+	* Set SHORTDESCRIPTION = Embeds a Macromedia Flash file
 
-   * Debug plugin: (See output in =data/debug.txt=)
-      * Set DEBUG = 0
+	* Debug plugin: (See output in =data/debug.txt=)
+	* Set DEBUG = 0
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You need to install a [[http://www.macromedia.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash][Macromedia Flash plugin]] on the browser to see the Flash content. The following instructions are for the administrator who installs the plugin on the server where TWiki is running.
 
-   * Download the ZIP file from the Plugin web (see below)
-   * Unzip ==%TOPIC%.zip== in your twiki installation directory.<br/>
+	* Download the ZIP file from the Plugin web (see below)
+	* Unzip ==%TOPIC%.zip== in your twiki installation directory.<br/>
    Contents:
      | *File:* | *Description:* |
      | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
      | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
      | ==pub/TWiki/EmbedFlashPlugin/sample.swf==| Sample Flash movie |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-   * Test if the plugin is correctly installed: you should see a Flash movie at the top of this page.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* Test if the plugin is correctly installed: you should see a Flash movie at the top of this page.
 
 
 ---++ Plugin Info

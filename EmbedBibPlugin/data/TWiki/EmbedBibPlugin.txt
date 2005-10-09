@@ -61,7 +61,7 @@ __Note:__ You need to install [[http://lml.ls.fi.upm.es/manuales/bibtool/][BibTo
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/EmbedBibPlugin/sample.bib==| Plugin sample <nop>BibTeX file |
 	  | ==pub/TWiki/EmbedBibPlugin/sample.bib,v==| Plugin sample <nop>BibTeX file repository |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed:
 		* A list of <nop>BibTeX entries: 
 
