@@ -152,7 +152,7 @@ __Note:__ This topic is included by TWikiVariables
 ---+++ SEARCH{"text"} -- search content
    * Inline search, shows a search result embedded in a topic
    * Syntax: =%<nop>SEARCH{"text" ...}%=
-   * Supported parameters: [1]
+   * Supported parameters:
      | *Parameter:* | *Description:* | *Default:* |
      | ="text"= | Search term. Is a keyword search, literal search or regular expression search, depending on the =type= parameter. SearchHelp has more | required |
      | =search="text"= | (Alternative to above) | N/A |
@@ -183,8 +183,6 @@ __Note:__ This topic is included by TWikiVariables
    * Example with format: =%<nop>SEARCH{"FAQ" scope="topic" nosearch="on" nototal="on" header="| *Topic: * | *Summary: * |" format="<nop>| $topic | $summary |"%= _(displays results in a table with header - [[FormattedSearch][details]])_
    * %H% If the TWiki:Plugins.TablePlugin is installed, you may set a =%<nop>TABLE{}%= variable just before the =%<nop>SEARCH{}%= to alter the output of a search.  Example: =%<nop>TABLE{ tablewidth="90%" }%=
    * Related: [[#VarMETASEARCH][METASEARCH]], [[#VarTOPICLIST][TOPICLIST]], [[#VarWEBLIST][WEBLIST]], FormattedSearch
-
-   * [1] __Note__: The search form uses identical names for input fields.
 
 #VarSERVERTIME
 ---+++ SERVERTIME -- server time
