@@ -329,7 +329,6 @@ sub getVotesFile
 sub normalizeFileName {
   my $fileName = shift;
 
-$debug = 1;
   if (defined &TWiki::Sandbox::normalizeFileName) {
     writeDebug("using TWiki::Sandbox::normalizeFileName");
     return &TWiki::Sandbox::normalizeFileName($fileName);
