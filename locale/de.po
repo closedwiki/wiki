@@ -2660,8 +2660,8 @@ msgstr "Ansehen"
 
 #: templates/attach.pattern.tmpl:66
 msgid "Show existing attachments"
-msgstr ""
+msgstr "Existierende Anhänge anzeigen"
 
 #: templates/attach.pattern.tmpl:66
 msgid "Hide existing attachments"
-msgstr ""
+msgstr "Existierende Anhänge verstecken"
