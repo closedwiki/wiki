@@ -61,27 +61,22 @@
 	}
 
 	function indexOf(element,array) {
-		var i=array.length;
-		while (i--)
-		{
-			if (array[i]==element) {
-				return i;
-			}
+      for (var i = 0; i < array.length; i++) {
+        if (array[i]==element) {
+          return i;
 		}
-		return -1;
-	}
+      }
+      return -1;
+    }
 	
 	function getElementsByClassName(className) {
 	
 		var elements = [];
 		var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
 		
-		var i = allObjects.length;
-		
-		while (i--)
-		{
-			if (allObjects.item(i).className.indexOf(className) != -1)
-				elements.push(allObjects.item(i));
+		for (var i = 0; i < allObjects.length; i++) {
+          if (allObjects.item(i).className.indexOf(className) != -1)
+            elements.push(allObjects.item(i));
 		}
 		return elements;
 	}
@@ -91,12 +86,9 @@
 		var elements = [];
 		var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
 		
-		var i = allObjects.length;
-		
-		while (i--)
-		{
-			if (allObjects.item(i).id.indexOf(id) != -1)
-				elements.push(allObjects.item(i));
+		for (var i = 0; i < allObjects.length; i++) {
+          if (allObjects.item(i).id.indexOf(id) != -1)
+            elements.push(allObjects.item(i));
 		}
 		return elements;
 	}
@@ -105,31 +97,23 @@
 	function initTwist () {
 		
 		makeHiddenElements = getElementsByClassName('twistyMakeHidden');
-		
-		var i = makeHiddenElements.length;
-		
-		while (i--)
-		{
-			replaceClass(makeHiddenElements[i], 'twistyMakeHidden', 'twistyHidden');
+		var i;
+		for (i = 0; i < makeHiddenElements.length; i++) {
+          replaceClass(makeHiddenElements[i], 'twistyMakeHidden', 'twistyHidden');
 		}
 		
 		makeVisibleElements = getElementsByClassName('twistyMakeVisible');
-		i = makeVisibleElements.length;
-		
-		while (i--)
-		{
-			removeClass(makeVisibleElements[i], 'twistyMakeVisible');
+		for (i = 0; i < makeVisibleElements.length; i++) {
+          removeClass(makeVisibleElements[i], 'twistyMakeVisible');
 		}
 
 		triggerElements = getElementsByClassName('twistyTrigger');
-		var i = triggerElements.length;
-		while (i--)
-		{
-			triggerElements[i].onclick = function(){
-				twist(this.parentNode.id.slice(0,-4));
-				return false;
-			};
-		}		
+		for (i = 0; i < triggerElements.length; i++) {
+          triggerElements[i].onclick = function(){
+            twist(this.parentNode.id.slice(0,-4));
+            return false;
+          };
+		}	
 	}
 	
 	function twist(id) {
