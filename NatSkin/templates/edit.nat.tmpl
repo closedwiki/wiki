@@ -5,7 +5,7 @@
 %TMPL:INCLUDE{"editsidebar"}%
 %TMPL:DEF{"meta"}% %HTTP_EQUIV_ON_EDIT% %TMPL:END%
 %TMPL:DEF{"titleaction"}%(edit)%TMPL:END%
-%TMPL:DEF{"onloadscript"}%onload="document.EditFormular.text.focus()"%TMPL:END%
+%TMPL:DEF{"onloadscript"}%document.EditFormular.text.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>" suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%%TOPIC%%TMPL:END%
 %TMPL:DEF{"content"}%
 <div class="natEdit">

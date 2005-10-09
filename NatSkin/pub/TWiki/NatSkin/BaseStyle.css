@@ -237,6 +237,9 @@ h1, h2, h3, h4, h5, h6 {
   padding-top:0px;
 }
 
+.natEmail {
+}
+
 /* search */
 .natSearchRenameContents {
   width:100%;
@@ -683,4 +686,3 @@ img.alignleft {
   font-size:18px;
   text-decoration:none;
 }
-

@@ -1,4 +1,5 @@
-From: %WIKIWEBMASTER%
+%TMPL:DEF{"MailNotifyBody"}%
+From: TWiki Administrator <%WIKIWEBMASTER%>
 To: %EMAILTO%
 Subject: %WIKITOOLNAME%.%WEB% - Automated notification of topic changes
 Content-Type: text/plain; charset=%CHARSET%
@@ -13,4 +14,13 @@ Subscribe / Unsubscribe in:
   %SCRIPTURL%/view%SCRIPTSUFFIX%/%WEB%/%NOTIFYTOPIC%
 
 New or changed topics in the %WEB% web, since %LASTDATE% GMT:
+
+%IFSKINSTATETHEN{release="dakar" glue="off"}%
+%PLAIN_TEXT%
+%ELSESKINSTATE%
 %TOPICLIST%
+%FISKINSTATE%
+%TMPL:END%
+%TMPL:DEF{PLAIN:middle}%- %AUTHOR%, %TIME%: %URL% 
+%TMPL:END%
+%TMPL:P{"MailNotifyBody"}%

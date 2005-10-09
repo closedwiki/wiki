@@ -15,7 +15,7 @@
 	</div>
       </td>
       %FISKINSTATE%
-      <td class="natMiddle natMain %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}%" valign="top">
+      <td class="natMiddle natMain %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft"}%" valign="top">
 	<div class="natMainContents"> %TMPL:P{"content"}% </div>
       </td> 
       %IFSKINSTATETHEN{sidebar="right"}%
@@ -32,7 +32,7 @@
       %FISKINSTATE%
     </tr>
     <tr>
-      <td class="natMiddle natMainFooter %IFSKINSTATE{sidebar="left|off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" then="natMiddleLeft"}%" valign="bottom">
+      <td class="natMiddle natMainFooter %IFSKINSTATE{sidebar="left|off" glue="off" then="natMiddleRight"}% %IFSKINSTATE{sidebar="right|off" glue="off" then="natMiddleLeft"}%" valign="bottom">
 	<div class="natMainFooterContents">%TMPL:P{"contentfooter"}%</div>
       </td>
     </tr>

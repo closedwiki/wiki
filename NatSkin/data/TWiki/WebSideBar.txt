@@ -15,7 +15,7 @@
 .navTrashSection {%CALC{"$IF($EXACT(%BASEWEB%,Trash),,display:none;)"}%}
 </style>
 ---+ Navigation%REDDOT{"%TWIKIWEB%.WebSideBar"}%
-<div class="navMainSection %IFSKINSTATE{buttons="on" then="navMain"}%">
+<div class="navMainSection %IFSKINSTATE{buttons="on" glue="off" then="navMain"}%">
 ---++ %WEBLINK{"Main"}%
 <div class="navMain">
 	* %CALC{"$IF($EXISTS(Support/WelcomeGuest),[[Support.WelcomeGuest][Welcome]],[[%TWIKIWEB%.WelcomeGuest][Welcome]])"}%
@@ -33,7 +33,7 @@
 <div style="%IFSKINSTATE{buttons="on" then="display:none"}%">
 %FORMATLIST{"%WEBLIST{webs="public" separator=" "}%" exclude="Main|TWiki|Sandbox|TestCases|Trash" split=" " separator="$n" format="<h2>$percntWEBLINK{\"$1\"}$percnt</h2>"}%
 </div>
-<div class="navUserSection %IFSKINSTATE{buttons="on" then="navUser"}%">
+<div class="navUserSection %IFSKINSTATE{buttons="on" glue="off" then="navUser"}%">
 ---++ %WEBLINK{"User"}%
 <div class="navUser">
 	* [[User.TWikiUsers][Accounts]]
@@ -45,7 +45,7 @@
 	* [[User.WebPreferences][Preferences]]
 </div>
 </div>
-<div class="navSupportSection %IFSKINSTATE{buttons="on" then="navSupport"}%">
+<div class="navSupportSection %IFSKINSTATE{buttons="on" glue="off" then="navSupport"}%">
 ---++ %WEBLINK{"Support"}%
 <div class="navSupport">
 	* [[Support.UsersGuide][User's Guide]]
@@ -59,7 +59,7 @@
 	* [[Support.WebPreferences][Preferences]] 
 </div>
 </div>
-<div class="navSandboxSection %IFSKINSTATE{buttons="on" then="navSandbox"}%">
+<div class="navSandboxSection %IFSKINSTATE{buttons="on" glue="off" then="navSandbox"}%">
 ---++ %WEBLINK{"Sandbox"}%
 <div class="navSandbox">
 	* [[Sandbox.WebTopicList][Index]]
@@ -69,7 +69,7 @@
 	* [[Sandbox.WebPreferences][Preferences]] 
 </div>
 </div>
-<div class="navTWikiSection %IFSKINSTATE{buttons="on" then="navTWiki"}%">
+<div class="navTWikiSection %IFSKINSTATE{buttons="on" glue="off" then="navTWiki"}%">
 ---++ %WEBLINK{web="%TWIKIWEB%" name="System"}%
 <div class="navTWiki">
 	* [[%TWIKIWEB%.InstalledPlugins][Plugins]]
@@ -81,7 +81,7 @@
 	* [[%TWIKIWEB%.TWikiPreferences][SitePreferences]] 
 </div>
 </div>
-<div class="navTestCasesSection %IFSKINSTATE{buttons="on" then="navTestCases"}%">
+<div class="navTestCasesSection %IFSKINSTATE{buttons="on" glue="off" then="navTestCases"}%">
 ---++ %WEBLINK{"TestCases"}%
 <div class="navTestCases">
 	* [[TestCases.CreateNewTestCaseForm][Create Test]]
