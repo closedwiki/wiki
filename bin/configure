@@ -377,10 +377,10 @@ sub _checkBinDir {
     my $ext = $TWiki::cfg{ScriptSuffix} || '';
     my $errs = '';
     opendir(D, $dir) or return ERROR("Cannot open $dir for read - check it exists, and that permissions are correct");
-    foreach my $script (grep { !/(^\.|\.cfg|\.txt)/ } readdir D) {
+    foreach my $script (grep { -f "$dir/$_" && /^\w+(\.\w+)?$/ } readdir D) {
         next if( $ext && $script !~ /\.$ext$/ );
-        if( !-x "$dir/$script" ) {
-            $errs .= WARN($script . ' is not executable');
+        if( $TWiki::cfg{OS} !~ /^Windows$/i && !-x "$dir/$script" ) {
+            $errs .= WARN($script . ' may not be executable');
         }
     }
     closedir(D);
@@ -1654,7 +1654,7 @@ HERE
         # Get names of primary and other groups.
         $grp = lc(qx(sh -c '( id -un ; id -gn) 2>/dev/null' 2>nul ));
         if ($?) { 
-            $grp = "[Cannott identify groups - no Cygwin 'id' or 'sh' command on path]";
+            $grp = "[Cannot identify groups - no Cygwin 'id' or 'sh' command on path]";
         }
     }
 
@@ -1709,7 +1709,9 @@ HERE
               );
         if( $perltype eq 'ActiveState' ) {
             $n .= WARN(<<HERE
-ActiveState Perl on IIS does not support safe pipes, which is the mechanism used by TWiki to prevent a range of attacks aimed at arbitrary command execution on the server. You are *highly* recommended not to use this particular configuration on a public server!
+ActiveState Perl on IIS does not support safe pipes, which is the mechanism used by TWiki to prevent a range
+of attacks aimed at arbitrary command execution on the server. You are <b>highly</b> recommended not to use this
+particular configuration on a public server (one exposed to the internet)
 HERE
                       );
             if( Win32::BuildNumber() < $ActivePerlRecommendedBuild ) {

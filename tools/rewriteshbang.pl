@@ -33,7 +33,7 @@ while (1) {
 };
 
 opendir(D, ".") || die "Can't open bin dir";;
-foreach my $file (grep { /^\w+$/ } readdir D) {
+foreach my $file (grep { -f && /^\w+$/ } readdir D) {
    replaceLine($file, $old, $new);
 }
 closedir(D);
@@ -49,9 +49,9 @@ sub replaceLine {
   $replacementMade = ($contents =~ s/$old/$new/);
 
   if ($replacementMade) {
- #   my $fh = new FileHandle(">$file") || die "Can't open $file for writing";
- #   print $fh $contents;
- #   close $fh;   
+    my $fh = new FileHandle(">$file") || die "Can't open $file for writing";
+    print $fh $contents;
+    close $fh;   
     print "$file modified\n";
   } else {
     print "$file unmodified\n";
