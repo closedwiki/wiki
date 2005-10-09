@@ -1,0 +1,23 @@
+%META:TOPICINFO{author="PeterThoeny" date="1107570391" format="1.0" version="1.1"}%
+%META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
+---+ Preference settings
+
+TWiki has four levels of preferences settings:
+	1 Site-level settings: %WIKIPREFSTOPIC%
+		* Site name, proxy settings, access control, skin
+	1 Web-level settings: located in each Web, e.g. %WEBPREFSTOPIC%
+		* Web specific access control, navigation links, colors
+	1 User-level settings: In each user's home page, e.g. %WIKIUSERNAME% 
+		* Edit Box Parameters
+			* Horizontal size of text edit box: 
+				* Set EDITBOXWIDTH = 70 
+			* Vertical size of text edit box: 
+				* Set EDITBOXHEIGHT = 15 
+	1 Topic-level settings: Affecting current topic, for web applications
+
+Preferences can be overridden by the next level down.
+
+[[TWikiTipsOfTheDay][See More Tips...]]
+
+-- TWiki:Main.PaulineCheung - 30 Jan 2005
+

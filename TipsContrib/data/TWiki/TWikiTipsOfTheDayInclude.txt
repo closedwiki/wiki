@@ -1,0 +1,22 @@
+%META:TOPICINFO{author="PeterThoeny" date="1121985706" format="1.0" version="1.2"}%
+%META:TOPICPARENT{name="TWikiTipsOfTheDayAdmin"}%
+---+ TWiki Tips Of the Day Include
+
+This Page randomly picks a Tip of the day to display. The %HOMETOPIC% includes the part between the horizontal rules.
+
+-----
+%STARTINCLUDE% <!--
+| Topic list:	  | %CALC{$SET(list, %SEARCH{ "^TWiki[Custom]*Tip[0-9A-Z]" web="%TWIKIWEB%, %MAINWEB%" topic="TWiki*Tip*" scope="topic" type="regex" casesensitive="on" nosearch="on" nototal="on" separator=", " format="$web.$topic" }%)$GET(list)}% |
+| Number of Tips: | %CALC{$SET(number,$LISTSIZE($GET(list)))$GET(number)}% |
+| Random Number:  | %CALC{$SET(number, $INT($RAND( $GET(number) ) + 1))$GET(number)}% | 
+| Web.Topic:		| %CALC{$SET(webtopic, $LISTITEM( $GET(number), $GET(list)))$GET(webtopic)}% |
+| Dot pos:		  | %CALC{$SET(pos, $FIND(., $GET(webtopic)))$GET(pos)}% |
+| Web:				| %CALC{$SET(web, $REPLACE($GET(webtopic), $GET(pos), 100))$GET(web)}% |
+| Topic:			 | %CALC{$SET(topic, $REPLACE($GET(webtopic), 1, $GET(pos)))$GET(topic)}% |
+| Full URL:		 | %CALC{$SET(webTotd,%SCRIPTURL%/view%SCRIPTSUFFIX%/$GET(web)/$GET(topic))}% |
+-->
+%CALC{$NOP(%)SEARCH{ \"^$GET(topic)$\" web=\"$GET(web)\" scope="topic" regex="on" nosearch=\"on\" nototal=\"on\" limit=\"1\" format=\"[[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][$pattern(.*?\-\-\-\+([^\n\r]+).*)]]<br /> $summary(100, noheader) [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][<img src=\\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/detail.gif\\" alt=\\"Detail\\" title=\\"Detail\\" width=\\"47\\" height=\\"12\\" border=\\"0\\" />]]\"}$NOP(%)}% %STOPINCLUDE%
+-----
+
+__See also:__ TWikiTipsOfTheDay, TWikiTipsOfTheDayAdmin
+
