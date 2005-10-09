@@ -36,8 +36,13 @@ use vars qw(
 	%knownStyles $hasInitKnownStyles
 	$knownStyleBorders $knownStyleSidebars
 	%skinState $hasInitSkinState
-	%emailCollection $nrEmails
+	%emailCollection $nrEmails $doneHeader
+	$STARTWW $ENDWW
     );
+
+# from Render.pm
+$STARTWW = qr/^|(?<=[\s\(])/m;
+$ENDWW = qr/$|(?=[\s\,\.\;\:\!\?\)])/m;
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
@@ -123,16 +128,24 @@ sub doInit {
   #writeDebug("defaultWikiUserName=$defaultWikiUserName, wikiUserName=$wikiUserName, isGuest=$isGuest");
 
   $query = &TWiki::Func::getCgiQuery();
+  $useSpamObfuscator = 1;
   if ($query) { # are we in cgi mode?
     # disable during register context
     my $theAction = $query->url(-relative=>1); # cannot use skinState yet, we are in initPlugin
+    my $theSkin = $query->param('skin') || '';
+    my $theContentType = $query->param('contenttype');
     writeDebug("theAction=$theAction");
-    $useSpamObfuscator = ($theAction =~ /^(register|mailnotif)/)?0:1; 
+    if ($theAction =~ /^(register|mailnotif|feed)/ || 
+	$theSkin eq 'rss' ||
+	$theContentType) {
+      $useSpamObfuscator = 0;
+    }
   } else {
     $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
     writeDebug("no query ... batch mode");
   }
   $nrEmails = 0;
+  $doneHeadere = 0;
   writeDebug("useSpamObfuscator=$useSpamObfuscator");
 
   # Plugin correctly initialized
@@ -182,33 +195,52 @@ sub initSkinState {
 
   my $theStyle;
   my $theStyleBorder;
+  my $theStyleButtons;
   my $theStyleSideBar;
+  my $theToggleSideBar;
   my $theRaw;
+  my $theReset;
 
+  my $doStickyStyle = 0;
+  my $doStickyBorder = 0;
+  my $doStickyButtons = 0;
+  my $doStickySideBar = 0;
+
+  # from query
   if ($query) {
-    $theStyle = $query->param('style');
-    $theStyleBorder = $query->param('styleborder'); 
-    $theStyleButtons = $query->param('stylebuttons'); 
-    $theStyleSideBar = $query->param('stylesidebar');
-    $theToggleSideBar = $query->param('togglesidebar');
-
     $theRaw = $query->param('raw');
+    $theReset = $query->param('reset');
+    if ($theReset) {
+      writeDebug("clearing session values");
+      &clearSessionValue('NATSKIN_SKINSTYLE');
+      &clearSessionValue('NATSKIN_STYLEBORDER');
+      &clearSessionValue('NATSKIN_STYLEBUTTONS');
+      &clearSessionValue('NATSKIN_STYLESIDEBAR');
+    } else {
+      $theStyle = $query->param('style');
+      $theStyleBorder = $query->param('styleborder'); 
+      $theStyleButtons = $query->param('stylebuttons'); 
+      $theStyleSideBar = $query->param('stylesidebar');
+      $theToggleSideBar = $query->param('togglesidebar');
+    }
 
-    writeDebug("urlparam style=$theStyle") if $theStyle;
-    writeDebug("urlparam styleborder=$theStyleBorder") if $theStyleBorder;
-    writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
-    writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
-    writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
+    #writeDebug("urlparam style=$theStyle") if $theStyle;
+    #writeDebug("urlparam styleborder=$theStyleBorder") if $theStyleBorder;
+    #writeDebug("urlparam stylebuttons=$theStyleButtons") if $theStyleButtons;
+    #writeDebug("urlparam stylesidebar=$theStyleSideBar") if $theStyleSideBar;
+    #writeDebug("urlparam togglesidebar=$theToggleSideBar") if $theToggleSideBar;
   }
 
   # handle style
   &initKnownStyles();
-  if (!$theStyle) {
+  if ($theStyle) {
+    $doStickyStyle = 1;
+  } else {
     if ($skinState{'style'}) {
-      writeDebug("found skinStyle=$skinState{'style'}");
+      #writeDebug("found skinStyle=$skinState{'style'}");
       $theStyle = $skinState{'style'};
     } else {
-      writeDebug("getting skin state from session or pref");
+      #writeDebug("getting skin state from session or pref");
       $theStyle = 
 	  &TWiki::Func::getSessionValue('NATSKIN_SKINSTYLE') ||
 	  &TWiki::Func::getPreferencesValue("SKINSTYLE") ||
@@ -216,15 +248,17 @@ sub initSkinState {
     }
   }
   $theStyle =~ s/\s+$//;
-  writeDebug("$theStyle is known") if $knownStyles{$theStyle};
-  writeDebug("$theStyle is UNKNOWN") unless $knownStyles{$theStyle};
+  #writeDebug("$theStyle is known") if $knownStyles{$theStyle};
+  #writeDebug("$theStyle is UNKNOWN") unless $knownStyles{$theStyle};
   $theStyle = $defaultStyle unless $knownStyles{$theStyle};
   $skinState{'style'} = $theStyle;
 
   # handle border
-  if (!$theStyleBorder) {
+  if ($theStyleBorder) {
+    $doStickyBorder = 1;
+  } else {
     if ($skinState{'border'}) {
-      writeDebug("found skinStyleBorder=$skinState{'border'}");
+      #writeDebug("found skinStyleBorder=$skinState{'border'}");
       $theStyleBorder = $skinState{'border'};
     } else {
       $theStyleBorder =
@@ -239,9 +273,11 @@ sub initSkinState {
   $skinState{'border'} = $theStyleBorder;
 
   # handle buttons
-  if (!$theStyleButtons) {
+  if ($theStyleButtons) {
+    $doStickyButtons = 1;
+  } else {
     if ($skinState{'buttons'}) {
-      writeDebug("found skinStyleButtons=$skinState{'buttons'}");
+      #writeDebug("found skinStyleButtons=$skinState{'buttons'}");
       $theStyleButtons = $skinState{'buttons'};
     } else {
       $theStyleButtons =
@@ -256,9 +292,11 @@ sub initSkinState {
   $skinState{'buttons'} = $theStyleButtons;
 
   # handle sidebar */
-  if (!$theStyleSideBar) {
+  if ($theStyleSideBar) {
+    $doStickySideBar = 1;
+  } else {
     if ($skinState{'sidebar'}) {
-      writeDebug("found skinStyleSideBar=$skinState{'sidebar'}");
+      #writeDebug("found skinStyleSideBar=$skinState{'sidebar'}");
       $theStyleSideBar = $skinState{'sidebar'};
     } else {
       $theStyleSideBar =
@@ -299,10 +337,14 @@ sub initSkinState {
 
   # store (part of the) state into session
   # SMELL: this will overwrite per web -> does it work with webs using different settings?
-  &TWiki::Func::setSessionValue('NATSKIN_SKINSTYLE', $skinState{'style'});
-  &TWiki::Func::setSessionValue('NATSKIN_STYLEBORDER', $skinState{'border'});
-  &TWiki::Func::setSessionValue('NATSKIN_STYLEBUTTONS', $skinState{'buttons'});
-  &TWiki::Func::setSessionValue('NATSKIN_STYLESIDEBAR', $skinState{'sidebar'});
+  &TWiki::Func::setSessionValue('NATSKIN_SKINSTYLE', $skinState{'style'}) 
+    if $doStickyStyle;
+  &TWiki::Func::setSessionValue('NATSKIN_STYLEBORDER', $skinState{'border'})
+    if $doStickyBorder;
+  &TWiki::Func::setSessionValue('NATSKIN_STYLEBUTTONS', $skinState{'buttons'})
+    if $doStickyButtons;
+  &TWiki::Func::setSessionValue('NATSKIN_STYLESIDEBAR', $skinState{'sidebar'})
+    if $doStickySideBar;
   &TWiki::Func::setSessionValue('TABLEATTRIBUTES', $tablePluginAttrs);
 
   # temporary toggles
@@ -368,8 +410,21 @@ sub commonTagsHandler
   # spam obfuscator
   if ($useSpamObfuscator) {
     $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(?:\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $2)/ge;
-    $_[0] =~ s/\b(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)/&renderEmailAddrs([$1])/ge;
+    $_[0] =~ s/$STARTWW(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)$ENDWW/&renderEmailAddrs([$1])/ge;
   }
+
+  if (!$doneHeader && !$isDakar) {
+    my $oldUseSpamObfuscator = $useSpamObfuscator;
+    $useSpamObfuscator = 0;
+    if($_[0] =~ s/<\/head>/&renderEmailObfuscator() . '<\/head>'/geo) {
+      writeDebug("wrote email obfuscator");
+      $doneHeader = 1;
+#      } else {
+#	writeDebug("no email obfuscator code");
+    }
+    $useSpamObfuscator = $oldUseSpamObfuscator;
+  }
+
 }
 
 ###############################################################################
@@ -384,19 +439,12 @@ sub endRenderingHandler {
   $_[0] =~ s/%STOPALIASAREA%//go;
   $_[0] =~ s/%REDDOT{.*?}%//go;
 
-  my $oldUseSpamObfuscator = $useSpamObfuscator;
-  $useSpamObfuscator = 0;
   if ($isDakar) {
+    my $oldUseSpamObfuscator = $useSpamObfuscator;
+    $useSpamObfuscator = 0;
     &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
-  } else {
-    if($_[0] =~ s/<\/head>/&renderEmailObfuscator() . '<\/head>'/geo) {
-      writeDebug("wrote email obfuscator");
-    } else {
-      writeDebug("no email obfuscator code");
-    }
+    $useSpamObfuscator = $oldUseSpamObfuscator;
   }
-  $useSpamObfuscator = $oldUseSpamObfuscator;
-
 }
 
 ###############################################################################
@@ -1325,7 +1373,7 @@ sub renderEmailObfuscator {
     $text .= "   delete addrs; addrs = new Array();\n";
   }
   $text .= "}\n";
-  $text .= "//--></script>\n";
+  $text .= "//-->\n</script>\n";
   return $text;
 }
 
@@ -1519,6 +1567,25 @@ sub escapeParameter {
   $_[0] =~ s/\$percnt/%/g;
   $_[0] =~ s/\$dollar/\$/g;
 }
+
+###############################################################################
+sub clearSessionValue {
+  my $key = shift;
+
+  # using dakar's client 
+  if (defined &TWiki::Client::clearSessionValue) {
+    return $TWiki::Plugins::SESSION->{client}->clearSessionValue($key);
+  }
+  
+  # using the SessionPlugin
+  if (defined &TWiki::Plugins::SessionPlugin::clearSessionValueHandler) {
+    return &TWiki::Plugins::SessionPlugin::clearSessionValueHandler($key);
+  }
+
+  # last resort
+  return &TWiki::Func::setSessionValue($key, undef);
+}
+
 
 1;
 
