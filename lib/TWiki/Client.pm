@@ -266,13 +266,11 @@ sub _expireDeadSessions {
         my $D;
 		eval $session;
 		next if ($@);
-print STDERR "Poking at A",$D->{_SESSION_ATIME},' E',$D->{_SESSION_ETIME}," at $time\n";
         # The session is expired if it hasn't been accessed in ages
         # or has exceeded its registered expiry time.
         if( $time >= $D->{_SESSION_ATIME} + $TWiki::cfg{SessionExpiresAfter} ||
               $D->{_SESSION_ETIME} && $time >= $D->{_SESSION_ETIME} ) {
             unlink( $file ) || die "Failed $!";
-print STDERR "Finished with $file\n";
             next;
         }
 	}
