@@ -79,6 +79,7 @@ sub makeClient {
     if( $TWiki::cfg{UseClientSessions} ) {
         eval 'use CGI::Session; use CGI::Cookie';
         throw Error::Simple( $@ ) if $@;
+        CGI::Session->name( 'TWIKISID' );
     }
 
     my $mgr;
@@ -131,29 +132,39 @@ sub loadSession {
 
     return undef unless( $TWiki::cfg{UseClientSessions} );
 
-    my $query = $this->{twiki}->{cgiQuery};
-
     my $twiki = $this->{twiki};
+    my $query = $twiki->{cgiQuery};
 
-    $this->{haveCookie} = defined($query->raw_cookie( $CGI::Session::NAME ));
-
-    # Use file serialisation.
-    my $cgisession = CGI::Session->new(
-        'driver:File', $query,
-        { Directory => $TWiki::cfg{SessionDir} } );
-
-    $this->{cgisession} = $cgisession;
-
-    my $sessionId = $cgisession->id();
-    $this->{sessionId} = $sessionId;
-
-    # Check, and clear bad, session.
-    $this->checkSession();
-
-    # See whether the user was logged in (first webserver, then
-    # session, then default)
+    # Try and get the user from the webserver
     my $authUser = $this->getUser( $this );
-    $authUser ||= $cgisession->param( 'AUTHUSER' );
+
+    my $cgisession;
+    my $sid;
+
+    # First, see if there is a cookied session
+    $sid = $query->cookie( $CGI::Session::NAME ) if $query;
+
+    # if there is no cookie, signal that we will want to use transparent
+    # session IDs if there is a session
+    $this->{useTransSID} = !defined($sid);
+
+    # if there is no cookie, try the URL param
+    $sid ||= $query->param( $CGI::Session::NAME ) if $query;
+
+    # if there's a session ID, get the session from disc
+    if( $sid ) {
+        $cgisession = new CGI::Session(
+            undef, $sid,
+            { Directory => $TWiki::cfg{SessionDir} } );
+        $this->{cgisession} = $cgisession;
+
+        # check that is really is ours; if not, expire it
+        if( $authUser && $cgisession->param( 'AUTHUSER' ) ne $authUser ) {
+            undef $cgisession;
+        } else {
+            $authUser ||= $cgisession->param( 'AUTHUSER' );
+        }
+    }
 
     # if we couldn't get the login manager or the http session to tell
     # us who the user is, then let's use the CGI "remote user"
@@ -161,47 +172,19 @@ sub loadSession {
     # or it might have come from Apache).
     $authUser ||= $twiki->{remoteUser};
 
-    # Save the users information again if they do not appear to be a guest
-    my $sessionIsAuthenticated =
-      ( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} );
+    # is this a logout?
+    if( $query && $query->param( 'logout' ) ) {
+        $cgisession->expire( time() ) if $cgisession;
 
-    my $do_logout = defined( $query ) && $query->param( 'logout' );
-    if( $do_logout ) {
-        $sessionIsAuthenticated = 0;
+        my $origurl = $query->url() . $query->path_info();
+        $this->redirectCgiQuery( $query, $origurl );
         $authUser = undef;
     }
 
-    if( ( $do_logout || $sessionIsAuthenticated )) {
-        $cgisession->param( 'AUTHUSER', $authUser );
-        $cgisession->flush();
-    }
+    $this->userLoggedIn( $authUser );
 
-    if( $do_logout ) {
-        my $origurl = $query->url() . $query->path_info();
-        #my $url = $twiki->getScriptUrl( $web, $topic, '' ).
-        #  '?origurl='.$origurl;
-        $this->redirectCgiQuery( $query, $origurl );
-
-        # mod_perl is okay with calling exit (it patches it) but
-        # the unit tests aren't. so doing a "redirect abort" should
-        # probably terminate processing using an exception.
-        # exit 0;
-    }
-
-    # Save our state to member variables, because we'll need them later.
-    $this->{authUser} = $authUser;
-    if( $sessionIsAuthenticated ) {
-        $twiki->enterContext( 'authenticated' );
-    } else {
-        $twiki->leaveContext( 'authenticated' );
-    }
-
-    # Use transparent session IDs if cookies don't seem to be working
-    $this->{useTransSID} =
-      ( !defined($query) || !$query->cookie( $CGI::Session::NAME ));
-
-    $twiki->{SESSION_TAGS}{SESSIONID} = ( $sessionId || '' );
-    $twiki->{SESSION_TAGS}{SESSIONVAR} = ( $CGI::Session::NAME || '' );
+    $twiki->{SESSION_TAGS}{SESSIONID} = $this->{sessionId};
+    $twiki->{SESSION_TAGS}{SESSIONVAR} = $CGI::Session::NAME;
 
     return $authUser;
 }
@@ -246,16 +229,6 @@ to. Flush the user's session (if any) to disk.
 sub finish {
     my $this = shift;
 
-    my $cgisession = $this->{cgisession};
-    return unless $cgisession;
-
-    unless ($this->{haveCookie}) {
-        # expire uncookied sessions immediately. We will end up flushing
-        # them and immediately deleting them, but there doesn't seem to
-        # be any other clean way of doing this.
-        $cgisession->expire( time() - 1 );
-    }
-    $cgisession->flush();
     _expireDeadSessions();
 }
 
@@ -293,13 +266,13 @@ sub _expireDeadSessions {
         my $D;
 		eval $session;
 		next if ($@);
-
+print STDERR "Poking at A",$D->{_SESSION_ATIME},' E',$D->{_SESSION_ETIME}," at $time\n";
         # The session is expired if it hasn't been accessed in ages
         # or has exceeded its registered expiry time.
         if( $time >= $D->{_SESSION_ATIME} + $TWiki::cfg{SessionExpiresAfter} ||
-              $D->{_SESSION_ETIME} &&
-                $time >= $D->{_SESSION_ATIME} + $D->{_SESSION_ETIME} ) {
-            unlink $file;
+              $D->{_SESSION_ETIME} && $time >= $D->{_SESSION_ETIME} ) {
+            unlink( $file ) || die "Failed $!";
+print STDERR "Finished with $file\n";
             next;
         }
 	}
@@ -320,18 +293,26 @@ message.
 
 sub userLoggedIn {
     my( $this, $authUser, $wikiName ) = @_;
-
     my $cgisession = $this->{cgisession};
-    return 0 unless $cgisession;
+    my $twiki = $this->{twiki};
 
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
+        # create new session if necessary
+        $cgisession ||= new CGI::Session(
+            undef, $twiki->{cgiQuery},
+            { Directory => $TWiki::cfg{SessionDir} } );
         $cgisession->param( 'AUTHUSER', $authUser );
-        $cgisession->flush();
-        $this->{twiki}->enterContext( 'authenticated' );
+        $twiki->enterContext( 'authenticated' );
+        $this->{sessionId} = $cgisession->id();
+        $this->{cgisession} = $cgisession;
     } else {
-        $cgisession->param( 'AUTHUSER', '' );
-        $cgisession->flush();
-        $this->{twiki}->leaveContext( 'authenticated' );
+        # if we are not authenticated, expire any existing session
+        $cgisession->expire( time() ) if $cgisession;
+        undef $this->{cgisession};
+        $authUser = undef;
+        $twiki->leaveContext( 'authenticated' );
+        $this->{useTransSID} = 0;
+        $this->{sessionId} = undef;
     }
 
     $this->{authUser} = $authUser;
@@ -358,9 +339,8 @@ sub _rewriteURL {
     my( $this, $url ) = @_;
 
     return $url unless $url;
-
-    my $cgisession = $this->{cgisession};
-    return $url unless $cgisession;
+    my $sessionId = $this->{sessionId};
+    return $url unless $sessionId;
     return $url if $url =~ m/\?$CGI::Session::NAME=/;
 
     my $s = $this->_myScriptURL();
@@ -368,7 +348,6 @@ sub _rewriteURL {
     # If the URL has no colon in it, or it matches the local script
     # URL, it must be an internal URL and therefore needs the session.
     if( $url !~ /:/ || $url =~ /^$s/ ) {
-        my $sessionId = $cgisession->id();
 
         # strip off existing params
         my $params = "?$CGI::Session::NAME=$sessionId";
@@ -397,15 +376,13 @@ sub _rewriteURL {
 sub _rewriteFORM {
     my( $this, $url, $rest ) = @_;
 
-    my $cgisession = $this->{cgisession};
-    return $url.$rest unless $cgisession;
+    return $url.$rest unless $this->{sessionId};
 
     my $s = $this->_myScriptURL();
 
     if( $url !~ /:/ || $url =~ /^$s/ ) {
-        my $sessionId = $cgisession->id();
         $rest .= CGI::hidden( -name => $CGI::Session::NAME,
-                              -value => $sessionId);
+                              -value => $this->{sessionId});
     }
     return $url.$rest;
 }
@@ -425,8 +402,6 @@ sub endRenderingHandler {
 
     my $this = shift;
 
-    my $sessionId = $this->{sessionId};
-
     # If cookies are not turned on and transparent CGI session IDs are,
     # grab every URL that is an internal link and pass a CGI variable
     # with the session ID
@@ -439,10 +414,10 @@ sub endRenderingHandler {
         # rules to rewrite any relative URLs at that time.
         my $s = $this->_myScriptURL();
 
-        # a href rewriting
+        # a href= rewriting
         $_[0] =~ s/(<a[^>]*(?<=\s)href=(["']))(.*?)(\2)/$1.$this->_rewriteURL($3).$4/geoi;
 
-        # form action rewriting
+        # form action= rewriting
         # SMELL: Forms that have no target are also implicit internal
         # links, but are not handled. Does this matter>
         $_[0] =~ s/(<form[^>]*(?<=\s)(?:action)=(["']))(.*?)(\2[^>]*>)/$1.$this->_rewriteFORM($3, $4)/geoi;
@@ -483,18 +458,16 @@ Modify a HTTP header
 sub modifyHeader {
     my( $this, $hopts ) = @_;
 
-    my $cgisession = $this->{cgisession};
-    return unless $cgisession;
+    return unless $this->{sessionId};
 
     my $query = $this->{twiki}->{cgiQuery};
 
     my $c = CGI::Cookie->new( -name => $CGI::Session::NAME,
-                              -value => $cgisession->id,
+                              -value => $this->{sessionId},
                               -path => '/' );
 
-    my @cs = @{$this->{cookies}};
-    push @cs, $c;
-    $hopts->{cookie} = \@cs;
+    push( @{$this->{cookies}}, $c );
+    $hopts->{cookie} = $this->{cookies};
 }
 
 =pod
@@ -510,8 +483,7 @@ sub redirectCgiQuery {
 
     my( $this, $query, $url ) = @_;
 
-    my $cgisession = $this->{cgisession};
-    return 0 unless $cgisession;
+    return 0 unless $this->{sessionId};
 
     $url = $this->_rewriteURL( $url ) if $this->{useTransSID};
 
@@ -526,11 +498,10 @@ sub redirectCgiQuery {
     # So this is just a big fat precaution, just like the rest of this
     # whole handler.
     my $cookie = CGI::Cookie->new( -name => $CGI::Session::NAME,
-                                   -value => $cgisession->id(),
+                                   -value => $this->{sessionId},
                                    -path => '/' );
-    my @cs = @{$this->{cookies}};
-    push @cs, $cookie;
-    print $query->redirect( -url => $url, -cookie => \@cs );
+    push( @{$this->{cookies}}, $cookie );
+    print $query->redirect( -url => $url, -cookie => $this->{cookies} );
 
     return 1;
 }
@@ -647,7 +618,6 @@ sub loginUrlPath {
     return $path;
 }
 
-
 =pod
 
 ---++ ObjectMethod getUser()
@@ -662,29 +632,6 @@ the username stored in the session will be used.
 
 sub getUser {
     return undef;
-}
-
-=pod
-
----++ ObjectMethod checkSession()
-
-Verify that the username we're given matches the session
-already stored, and clear the stored session if it doesn't.
-
-If there is another valid username stored in the session,
-then someone has somehow just borrowed a session ID from someone
-else. To prevent further havoc, clear this session (perhaps
-in the future it'd be better just to dispatch a new session ID
-to this user; however, if they already have the session ID of
-another user, it's probably best to get rid of it since it has
-been compromised).
-
-Only makes sense for session managers where there is an alternative source
-for a username apart from the stored session (e.g. Apache).
-
-=cut
-
-sub checkSession {
 }
 
 sub _LOGIN {
@@ -791,11 +738,10 @@ sub _dispLogon {
     my $topic = $twiki->{topicName};
     my $web = $twiki->{webName};
     my $sessionId = $this->{sessionId};
-    my $useTransSID = $this->{useTransSID};
 
     my $urlToUse = $this->loginUrlPath();
 
-    if( $useTransSID ) {
+    if( $this->{useTransSID} ) {
         $urlToUse .= ( '?' . $CGI::Session::NAME . '=' . $sessionId );
     }
 
