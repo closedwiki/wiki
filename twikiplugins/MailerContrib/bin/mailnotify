@@ -49,7 +49,9 @@ if( $ENV{'DOCUMENT_ROOT'} ) {
 } else {
     # Called from the command line
     foreach $arg ( @ARGV ) {
-        if ( $arg eq "-q" ) {
+        if( $arg eq "-m" ) {
+            $sendmail = 1;
+        } elsif ( $arg eq "-q" ) {
             $verbose = 0;
         } else {
             push( @webs, $arg );
