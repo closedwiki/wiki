@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1126809518" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128882263" format="1.0" version="1.1"}%
 ---+!! <nop>%TOPIC%
 
 This plugin allows to substitute and extract information from content by
@@ -72,7 +72,7 @@ This is a second comment.
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* _enter samples here_
 
@@ -92,4 +92,4 @@ This is a second comment.
 |  Feedback: | TWiki:Plugins/%TOPIC%Dev |
 |  Appraisal: | TWiki:Plugins/%TOPIC%Appraisal |
 
--- TWiki:Main.MichaelDaum - 22 Aug 2005
+--- TWiki:Main.MichaelDaum - 22 Aug 2005
