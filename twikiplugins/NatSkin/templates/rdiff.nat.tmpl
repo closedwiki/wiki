@@ -5,7 +5,7 @@
 %TMPL:INCLUDE{"rdiffbody"}% 
 %TMPL:DEF{"titleaction"}%(%REVTITLE2% vs. %REVTITLE1%)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
-%TMPL:DEF{"onloadscript"}%onload="document.SearchForm.search.focus()"%TMPL:END%
+%TMPL:DEF{"onloadscript"}%document.SearchForm.search.focus();%TMPL:END%
 %TMPL:DEF{"locator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>%META{"parent" dontrecurse="on" separator="<span class=\"natSep\">&middot;</span>"  suffix="<span class=\"natSep\">&middot;</span>" nowebhome="on"}%[[%TOPIC%]]%TMPL:END%
 %TMPL:DEF{"content"}%
 <style type="text/css">

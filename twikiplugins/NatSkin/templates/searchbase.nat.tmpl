@@ -6,5 +6,5 @@
 %TMPL:INCLUDE{"searchbox"}%
 %TMPL:DEF{"titleaction"}%(search)%TMPL:END%
 %TMPL:DEF{"meta"}% <meta name="robots" content="noindex, nofollow" /> %TMPL:END%
-%TMPL:DEF{"onloadscript"}%onload="document.SearchForm.search.focus()"%TMPL:END%
+%TMPL:DEF{"onloadscript"}%document.SearchForm.search.focus();%TMPL:END%
 %TMPL:DEF{"natWebLocator"}%<span class="natSep">&middot;</span>[[WebHome][%WEB%]]<span class="natSep">&middot;</span>[[%TOPIC%]]%TMPL:END%

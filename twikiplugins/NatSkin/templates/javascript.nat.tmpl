@@ -39,25 +39,58 @@ function submitEditFormular(script, action) {
   document.EditFormular.submit();
 }
 
-function writeEmailAddrs(addrs, linkText) {
-
-  var text = ('<' + 'a' + ' href' + '="mai' + 'lto:');
-
-  for (var i = 0; i < addrs.length; i++) {
-    text += addrs[i][0] + '@' + addrs[i][1] + '.' + addrs[i][2];
-    if (i < addrs.length-1) {
-      text += ', ';
+function writeEmailAddrs(addrs, linkText, id) {
+  var elem = document.getElementById(id);
+  if (elem) {
+    if (elem.firstChild) {
+      elem.removeChild(elem.firstChild);
     }
-  }
-  
-  if (linkText == '') {
+
+    var anchor = document.createElement("a");
+    elem.appendChild(anchor);
+
+    anchor.href = 'mailto:';
+
     for (var i = 0; i < addrs.length; i++) {
-      linkText += addrs[i][0] + '&#064;' + addrs[i][1] + '.' + addrs[i][2] + ' ';
+      anchor.href += addrs[i][1] + '@' + addrs[i][0] + '.' + addrs[i][2];
+      if (i < addrs.length-1) {
+	anchor.href += ', ';
+      }
+    }
+    
+    if (linkText == '') {
+      for (var i = 0; i < addrs.length; i++) {
+	linkText += addrs[i][1] + '@' + addrs[i][0] + '.' + addrs[i][2] + ' ';
+      }
+    }
+    var anchorText = document.createTextNode(linkText);
+    anchor.appendChild(anchorText);
+  }
+}
+
+// DON'T overwrite existing onload handlers
+//	http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+
+function addLoadEvent(func){
+  var oldonload = window.onload;
+  if (typeof window.onload != 'function') {
+    window.onload = function() {
+      func();
+    }
+  } else {
+    window.onload = function() {
+      oldonload();
+      func();
     }
   }
-
-  text += '">'+ linkText + '<' + '/a' + '>';
-
-  //window.alert('text = ' + text); 
-  document.write(text);
 }
+
+// default plugin impls
+function initObfuscator() {}
+
+function initPage() {
+  initObfuscator(); // SMELL: package this as a plugin of its own and use addLoadEvent
+  %TMPL:P{"onloadscript"}%
+}
+
+addLoadEvent(initPage);
