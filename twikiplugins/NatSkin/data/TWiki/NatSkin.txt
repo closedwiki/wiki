@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127838420" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128888660" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! The Natural Skin
 NatSkin is a skin driven by cascading stylesheets. This is a rework of the 
@@ -73,8 +73,24 @@ The default style is hardcoded into the NatSkinPlugin.
 |
 |  Base Name: | nat |
 |  Skin Author: | TWiki:Main/MichaelDaum |
-|  Skin Version: | v2.10 (2005-08-30) |
+|  Skin Version: | v2.51 (2005-10-09) |
 |  Change History: | <!-- specify latest version first -->&nbsp; |
+|  2005-10-09: | new release NatSkin-2.51: \
+					  reinvention of the NatSkinStyleBrowser; \
+					  reworked the standard WebSideBar; \
+					  extensive usage of the new conditional content tags \
+					  interfacing the skin state machine, i.e. switch the \
+					  sidebar from the left to the right etc.; \
+					  removed hard-coded links to a _Support_ web; \
+					  lots of fixes to catch up with the evolving dakar engine; \
+					  support for the TWiki:Plugins.TwistyPlugin; \
+					  support for the TWiki:Plugins.AliasPlugin; \
+					  skin state support for the TWiki:Plugins.TablePlugin; \
+					  new webbuttons in the topbar; \
+					  componentized style sheets for different skin states; \
+					  improved css of forms and tables; \
+					  better support for the upcomming <nop>BlogPlugin in every skin style; \
+					  plus the usual small css fixes |
 |  2005-08-30: | lots of css fixes for IE and Opera; \
 					  fixed topicactions for IE; \
 					  different cancel actions per engine |
