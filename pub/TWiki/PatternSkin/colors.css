@@ -26,13 +26,14 @@
 	BG2 link hover background color (red)  											#D6000F 
 	BG3	light gray																	#e6e6e6
 	BG4 active form field (not implemented yet)										#ffc
-	BG5 submit button, help background very light blue								#E9F2F9
+	BG5 help background very light blue												#E9F2F9
 	BG6	patternTopicAction light yellow (same as T3)								#FBF7E8
 	BG7 header background (very light yellow)										#FDFAF1
 	BG8 accent on sorted table column												#ccc
 	BG9 light yellow; attachment, form background									#FEFBF3
 	BG10 light green 'new'															#ECFADC
 	BG11 dark gray; diff header background (same as T8)								#8E9195
+	BG12 dark yellow, submit button													#FED764
 	
 	Border colors
 	----------------------------------------
@@ -111,7 +112,7 @@ h1 a:visited {
 }
 :link:hover img,
 :visited:hover img {
-	background:white;
+	background:#fff; /*BG1*/
 }
 
 .patternTopic a:visited {
@@ -138,61 +139,6 @@ select {
 .twikiGrayText a:hover {
 	color:#FBF7E8; /*C3*/
 }
-
-/* Inline tables */
-.twikiTable,
-.twikiTable td,
-.twikiTable th {
-	border-color:#ddd; /*BO7*/
-}
-.twikiTable th a:link,
-.twikiTable th a:visited,
-.twikiTable th a font {
-	color:#06c; /*T2*/
-}
-.twikiTable th a:hover,
-.twikiTable th a:hover font {
-	background-color:transparent;
-	color:#D6000F; /*T4*/
-	border-color:#D6000F; /*T4*/
-}
-/* sorting of table columns */
-.patternTopic th.twikiSortedAscendingCol,
-.patternTopic th.twikiSortedDescendingCol {
-	background-color:#ccc; /*BG8*/
-}
-th.twikiSortedAscendingCol a:link,
-th.twikiSortedAscendingCol a:link font,
-th.twikiSortedAscendingCol a:visited,
-th.twikiSortedAscendingCol a:visited font,
-.twikiAttachments th.twikiSortedAscendingCol a:link,
-.twikiAttachments th.twikiSortedAscendingCol a:link font,
-.twikiAttachments th.twikiSortedAscendingCol a:visited,
-.twikiAttachments th.twikiSortedAscendingCol a:visited font,
-th.twikiSortedDescendingCol a:link,
-th.twikiSortedDescendingCol a:link font,
-th.twikiSortedDescendingCol a:visited,
-th.twikiSortedDescendingCol a:visited font,
-.twikiAttachments th.twikiSortedDescendingCol a:link,
-.twikiAttachments th.twikiSortedDescendingCol a:link font,
-.twikiAttachments th.twikiSortedDescendingCol a:visited,
-.twikiAttachments th.twikiSortedDescendingCol a:visited font {
-	border-color:#666; /*T7*/
-}
-th.twikiSortedAscendingCol a:hover,
-th.twikiSortedAscendingCol a:hover font,
-.twikiAttachments th.twikiSortedAscendingCol a:hover,
-.twikiAttachments th.twikiSortedAscendingCol a:hover font,
-th.twikiSortedDescendingCol a:hover,
-th.twikiSortedDescendingCol a:hover font,
-.twikiAttachments th.twikiSortedDescendingCol a:hover,
-.twikiAttachments th.twikiSortedDescendingCol a:hover font {
-	border-color:#D6000F; /*T4*/
-}
-
-/**	----------------------------------
-*	Attachments table, form
-*	---------------------------------- */
 
 .twikiAttachments,
 .twikiForm {
@@ -278,13 +224,15 @@ th.twikiSortedDescendingCol a:hover font,
 	background-color:#e6e6e6; /*BO1*/
 	color:#e6e6e6; /*BO1*/
 }
-.twikiButton {
+.twikiButton,
+.twikiSubmit {
 	border-color:#ccc; /*BO6*/
+}
+.twikiButton {
 	background-color:#e6e6e6; /*BG3*/
 }
 .twikiSubmit {
-	border-color:#88B6CF; /*BO2*/
-	background-color:#E9F2F9; /*BG5*/
+	background-color:#FED764; /*BG12*/
 }
 .twikiCheckbox,
 .twikiRadioButton {
@@ -303,9 +251,72 @@ a:visited .twikiAccessKey,
 a:hover .twikiAccessKey {
 	color:inherit;
 }
+
+/*	-----------------------------------------------------------
+	Plugin elements
+	-----------------------------------------------------------	*/
+
+.twikiTable,
+.twikiTable td,
+.twikiTable th {
+	border-color:#ddd; /*BO7*/
+}
+.twikiTable th a:link,
+.twikiTable th a:visited,
+.twikiTable th a font {
+	color:#06c; /*T2*/
+}
+.twikiTable th a:hover,
+.twikiTable th a:hover font {
+	background-color:transparent;
+	color:#D6000F; /*T4*/
+	border-color:#D6000F; /*T4*/
+}
+/* sorting of table columns */
+.patternTopic th.twikiSortedAscendingCol,
+.patternTopic th.twikiSortedDescendingCol {
+	background-color:#ccc; /*BG8*/
+}
+th.twikiSortedAscendingCol a:link,
+th.twikiSortedAscendingCol a:link font,
+th.twikiSortedAscendingCol a:visited,
+th.twikiSortedAscendingCol a:visited font,
+.twikiAttachments th.twikiSortedAscendingCol a:link,
+.twikiAttachments th.twikiSortedAscendingCol a:link font,
+.twikiAttachments th.twikiSortedAscendingCol a:visited,
+.twikiAttachments th.twikiSortedAscendingCol a:visited font,
+th.twikiSortedDescendingCol a:link,
+th.twikiSortedDescendingCol a:link font,
+th.twikiSortedDescendingCol a:visited,
+th.twikiSortedDescendingCol a:visited font,
+.twikiAttachments th.twikiSortedDescendingCol a:link,
+.twikiAttachments th.twikiSortedDescendingCol a:link font,
+.twikiAttachments th.twikiSortedDescendingCol a:visited,
+.twikiAttachments th.twikiSortedDescendingCol a:visited font {
+	border-color:#666; /*T7*/
+}
+th.twikiSortedAscendingCol a:hover,
+th.twikiSortedAscendingCol a:hover font,
+.twikiAttachments th.twikiSortedAscendingCol a:hover,
+.twikiAttachments th.twikiSortedAscendingCol a:hover font,
+th.twikiSortedDescendingCol a:hover,
+th.twikiSortedDescendingCol a:hover font,
+.twikiAttachments th.twikiSortedDescendingCol a:hover,
+.twikiAttachments th.twikiSortedDescendingCol a:hover font {
+	border-color:#D6000F; /*T4*/
+}
+
 .twistyPlaceholder {
 	color:#8E9195; /*T8*/
 }
+a:hover.twistyTrigger {
+	color:#FBF7E8; /*T3*/
+}
+
+
+/*	-----------------------------------------------------------
+	Pattern skin specific elements
+	-----------------------------------------------------------	*/
 .patternTopicAction {
 	color:#666; /*T7*/
 	border-color:#E2DCC8; /*BO4*/
@@ -330,10 +341,6 @@ a:hover .twikiAccessKey {
 .patternHelpCol {
 	color:#8E9195; /*T8*/
 }
-
-/*	-----------------------------------------------------------
-	Pattern skin specific elements
-	-----------------------------------------------------------	*/
 .patternWebIndicator {
 	background-color:#fff;
 }
@@ -498,7 +505,7 @@ a:hover .twikiAccessKey {
 
 table#twikiSearchTable th,
 table#twikiSearchTable td {
-	background-color:white;
+	background-color:#fff; /*BG1*/
 	border-color:#ddd; /*BO7*/
 } 
 table#twikiSearchTable th {

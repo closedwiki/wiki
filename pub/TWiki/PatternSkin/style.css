@@ -11,9 +11,10 @@
 	Sizes
 	----------------------------------------
 	S1 line-height																	1.4em
-	S2 small font size																85%
+	S2 small font size, twikiSmall													85%
 	S3 horizontal bar padding (h2, patternTop)										5px
 	S4 somewhat smaller font size													94%
+	S5 form and attachment padding													20px
 
 	---------------------------------------------------------------------------------------	*/
 
@@ -166,10 +167,9 @@ label {
 }
 
 /*	-----------------------------------------------------------
-	TWiki styles
+	Plugin elements
 	-----------------------------------------------------------	*/
-
-/* Inline tables */
+	
 .twikiTable {
     border-collapse: collapse;
     border-width:1px;
@@ -250,9 +250,18 @@ th.twikiSortedDescendingCol a:hover font,
 	border-style:solid;	
 }
 
-/**	----------------------------------
-*	Attachments table, form
-*	---------------------------------- */
+a:link.twistyTrigger,
+a:visited.twistyTrigger {
+	text-decoration:none;
+}
+a:link .twistyLinkLabel,
+a:visited .twistyLinkLabel {
+	text-decoration:underline;
+}
+
+/*	-----------------------------------------------------------
+	TWiki styles
+	-----------------------------------------------------------	*/
 
 .twikiAttachments,
 .twikiForm {
@@ -261,7 +270,7 @@ th.twikiSortedDescendingCol a:hover font,
 }
 .patternContent .twikiAttachments,
 .patternContent .twikiForm {
-	padding:20px;
+	padding:20px; /*s5*/
 	border-width:1px 0 0 0;
 	border-style:solid;
 	margin:0 0 -1px 0;
@@ -350,9 +359,6 @@ th.twikiSortedDescendingCol a:hover font,
 	border:none;
 }
 
-/**	----------------------------------
-*	TOC
-*	---------------------------------- */
 
 .twikiToc {
 	margin:1em 0;
@@ -373,8 +379,12 @@ th.twikiSortedDescendingCol a:hover font,
 	padding:0em;
 	font-weight:bold;
 }
+
 .twikiSmall {
 	font-size:85%; /*S2*/
+}
+.twikiSmallish {
+	font-size:94%; /*S4*/
 }
 .twikiNew { }
 .twikiSummary {
@@ -401,6 +411,9 @@ th.twikiSortedDescendingCol a:hover font,
 }
 .twikiPageForm td.first {
 	padding-top:1em;
+}
+.twikiBroadcastMessage {
+	padding:.5em;
 }
 .twikiButton, 
 .twikiSubmit {
@@ -434,7 +447,7 @@ a:hover .twikiAccessKey {
 }
 
 /*	-----------------------------------------------------------
-	Other styles
+	Pattern skin specific elements
 	-----------------------------------------------------------	*/
 
 .patternSeparator {
@@ -445,7 +458,7 @@ a:hover .twikiAccessKey {
 	font-size:94%; /*S4*/
 	line-height:1.5em;
 	margin:0 0 3em 0;
-	padding:.5em 2em;
+	padding:.5em 20px; /*S5*/
 	border-width:1px 0;
 	border-style:solid;
 }
@@ -466,12 +479,7 @@ a:hover .twikiAccessKey {
 .patternMoved {
 	font-size:94%; /*S4*/
 	margin-bottom:1em;
-}
-
-/*	-----------------------------------------------------------
-	Pattern skin specific elements
-	-----------------------------------------------------------	*/
-	
+}	
 .patternWebIndicator {}
 .patternPage {}
 .patternMiddleContainer {}
@@ -740,7 +748,7 @@ table#twikiSearchTable td {
 } 
 table#twikiSearchTable th {
 	width:15%;
-	text-align:left;
+	text-align:right;
 }
 table#twikiSearchTable td {
 	width:85%;
