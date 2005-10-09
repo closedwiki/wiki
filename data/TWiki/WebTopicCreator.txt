@@ -1,8 +1,7 @@
 %META:TOPICINFO{author="TWikiContributor" date="1098812697" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
-<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<form name="new" action="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%INTURLENCODE{"%BASEWEB%"}%/">
 <!-- TODO: do we still need INTURLENCODE nastyness? -->
-
 <input type="text" name="topic" size="40" value="" onBlur="var sIn = this.value; var sOut = ''; var chgUpper = true; for ( var i = 0; i < sIn.length; i++ ) { var ch = sIn.charAt( i ); var ch2 = ''; if((ch=='&#224;')||(ch=='&#225;')||(ch=='&#226;')||(ch=='&#227;')||(ch=='&#229;') ) { ch = 'a'; } if( (ch=='&#232;')||(ch=='&#233;')||(ch=='&#234;') ) { ch = 'e'; } if( ch=='&#231;') { ch = 'c'; } if( ch=='&#241;') { ch = 'n'; } if( (ch=='&#242;')||(ch=='&#243;')||(ch=='&#244;') ) { ch = 'o'; } if( ch=='&#228;') { ch = 'a'; ch2 = 'e'; } if( ch=='&#246;') { ch = 'o'; ch2 = 'e'; } if( (ch=='&#249;')||(ch=='&#250;')||(ch=='&#251;') ) { ch = 'o'; } if( ch=='&#252;') { ch = 'u'; ch2 = 'e'; } if( ch=='&#196;') { ch = 'A'; ch2 = 'e'; } if( ch=='&#214;') { ch = 'O'; ch2 = 'e'; } if( ch=='&#220;') { ch = 'U'; ch2 = 'e'; } if( ch=='&#223;') { ch = 's'; ch2 = 's'; } if( ((ch>='a')&&(ch<='z')) || ((ch>='A')&&(ch<='Z')) ) { if( chgUpper ) { ch = ch.toUpperCase(); chgUpper = false; } sOut+=ch; if( ch2!='') { sOut+=ch2; } } else { if( ch==' ' ) { chgUpper = true; } } } this.form.topic.value=sOut;" />
 <!-- TODO: move JS to a separate file and make it callable on click of the button too -->
 <!-- TODO: blank out all the irrelevant links: Edit, Compose, Attach, Printable, ... Raw text, versions, History, More topic actions: could this be a CSS? -->
@@ -11,11 +10,11 @@
 %COMMENT{type="TopicNameConstrainer" field="topic" noform="on"}%
 -->
 	  <input type="hidden" name="templatetopic" value="WebTopicEditTemplate" />
-	  <input type="hidden" name="topicparent" value="%TOPIC%" />
+	  <input type="hidden" name="topicparent" value="%TOPICPARENT%" />
 	  <input type="hidden" name="onlywikiname" value="on" />
 	  <input type="hidden" name="onlynewtopic" value="on" />
 	  <input type="submit" value="Create" />
 </form>
 
 
-
+To create a new topic, enter name of topic and click 'create'
