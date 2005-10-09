@@ -36,18 +36,18 @@ use vars qw(
 	%knownStyles $hasInitKnownStyles
 	$knownStyleBorders $knownStyleSidebars
 	%skinState $hasInitSkinState
+	%emailCollection $nrEmails
     );
 
 # This should always be $Rev$ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
 $VERSION = '$Rev$';
-$RELEASE = '2.51';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = 'Dakar';
+$RELEASE = '2.51';
 
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';
@@ -132,6 +132,7 @@ sub doInit {
     $useSpamObfuscator = 0; # batch mode, i.e. mailnotification
     writeDebug("no query ... batch mode");
   }
+  $nrEmails = 0;
   writeDebug("useSpamObfuscator=$useSpamObfuscator");
 
   # Plugin correctly initialized
@@ -333,12 +334,12 @@ sub commonTagsHandler
   $_[0] =~ s/\%FORMATLIST{(.*?)}%/&renderFormatList($1)/geo; # SMELL: be a plugin
 
   # conditional content
-  $_[0] =~ s/%IFSKINSTATE{(.*?)}%/&renderIfSkinState($1)/geo;
-  while ($_[0] =~ s/\s*%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%\s*/&renderIfSkinStateThen($1, $2)/geos) {
+  $_[0] =~ s/(\s*)%IFSKINSTATE{(.*?)}%(\s*)/&renderIfSkinState($2, $1, $3)/geos;
+  while ($_[0] =~ s/(\s*)%IFSKINSTATETHEN{(?!.*%IFSKINSTATETHEN)(.*?)}%\s*(.*?)\s*%FISKINSTATE%(\s*)/&renderIfSkinStateThen($2, $3, $1, $4)/geos) {
     # nop
   }
-  $_[0] =~ s/%IFDEFINED{(.*?)}%/&renderIfDefined($1)/geo;
-  while ($_[0] =~ s/\s*%IFDEFINEDTHEN{(?!.*%IFDEFINEDTHEN)(.*?)}%\s*(.*?)\s*%FIDEFINED%\s*/&renderIfDefinedThen($1, $2)/geos) {
+  $_[0] =~ s/(\s*)%IFDEFINED{(.*?)}%(\s*)/&renderIfDefined($2, $1, $3)/geos;
+  while ($_[0] =~ s/(\s*)%IFDEFINEDTHEN{(?!.*%IFDEFINEDTHEN)(.*?)}%\s*(.*?)\s*%FIDEFINED%(\s*)/&renderIfDefinedThen($2, $3, $1, $4)/geos) {
     # nop
   }
 
@@ -366,7 +367,7 @@ sub commonTagsHandler
 
   # spam obfuscator
   if ($useSpamObfuscator) {
-    $_[0] =~ s/([\s\(])(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)(?=[\s\.\,\;\:\!\?\)])/$1 . &renderEmailAddrs([$2])/ge;
+    $_[0] =~ s/\b(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)/&renderEmailAddrs([$1])/ge;
     $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $3)/ge;
   }
 }
@@ -382,6 +383,20 @@ sub endRenderingHandler {
   $_[0] =~ s/%STARTALIASAREA%//go;
   $_[0] =~ s/%STOPALIASAREA%//go;
   $_[0] =~ s/%REDDOT{.*?}%//go;
+
+  my $oldUseSpamObfuscator = $useSpamObfuscator;
+  $useSpamObfuscator = 0;
+  if ($isDakar) {
+    &TWiki::Func::addToHEAD('EMAIL_OBFUSCATOR', &renderEmailObfuscator());
+  } else {
+    if($_[0] =~ s/<\/head>/&renderEmailObfuscator() . '<\/head>'/geo) {
+      writeDebug("wrote email obfuscator");
+    } else {
+      writeDebug("no email obfuscator code");
+    }
+  }
+  $useSpamObfuscator = $oldUseSpamObfuscator;
+
 }
 
 ###############################################################################
@@ -452,7 +467,7 @@ sub getReleaseName {
 
 ###############################################################################
 sub renderIfSkinStateThen {
-  my ($args, $text) = @_;
+  my ($args, $text, $before, $after) = @_;
 
   $args = '' unless $args;
 
@@ -479,10 +494,15 @@ sub renderIfSkinStateThen {
   my $theSideBar = &TWiki::Func::extractNameValuePair($args, 'sidebar');
   my $theRelease = lc &TWiki::Func::extractNameValuePair($args, 'release');
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action');
+  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
 
-  writeDebug("theStyle=$theStyle");
-  writeDebug("theThen=$theThen");
-  writeDebug("theElse=$theElse");
+  $before = '' if ($theGlue eq 'on') || !$before;
+  $after = '' if ($theGlue eq 'on') || !$after;
+  
+  #writeDebug("theStyle=$theStyle");
+  #writeDebug("theThen=$theThen");
+  #writeDebug("theElse=$theElse");
+
 
   # SMELL get a ifSkinStateTImpl
   if ((!$theStyle || $skinState{'style'} =~ /$theStyle/) &&
@@ -492,26 +512,25 @@ sub renderIfSkinStateThen {
       (!$theRelease || $skinState{'release'} =~ /$theRelease/) &&
       (!$theAction || $skinState{'action'} =~ /$theAction/)) {
     writeDebug("match then");
-    return $theThen if $theThen;
+    return $before.$theThen.$after if $theThen;
   } else {
     if ($elsIfArgs) {
       writeDebug("match elsif");
-      return "%IFSKINSTATETHEN{$elsIfArgs}%$theElse%FISKINSTATE%";
+      return $before."%IFSKINSTATETHEN{$elsIfArgs}%$theElse%FISKINSTATE%".$after;
     } else {
       writeDebug("match else");
-      return $theElse if $theElse;
+      return $before.$theElse.$after if $theElse;
     }
   }
 
   writeDebug("NO match");
-  return '';
+  return $before.$after;
   
 }
 
 ###############################################################################
 sub renderIfSkinState {
-  my $args = shift;
-
+  my ($args, $before, $after) = @_;
 
   my $theStyle = &TWiki::Func::extractNameValuePair($args) ||
 	      &TWiki::Func::extractNameValuePair($args, 'style');
@@ -522,12 +541,17 @@ sub renderIfSkinState {
   my $theSideBar = &TWiki::Func::extractNameValuePair($args, 'sidebar');
   my $theRelease = lc &TWiki::Func::extractNameValuePair($args, 'release');
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action');
+  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
 
 
   #writeDebug("called renderIfSkinState($args)");
+  #writeDebug("theGlue=$theGlue");
   #writeDebug("releaseName=" . lc &getReleaseName());
   #writeDebug("skinRelease=$skinState{'release'}");
   #writeDebug("theRelease=$theRelease");
+
+  $before = '' if ($theGlue eq 'on') || !$before;
+  $after = '' if ($theGlue eq 'on') || !$after;
 
   # SMELL get a ifSkinStateTImpl
   if ((!$theStyle || $skinState{'style'} =~ /$theStyle/) &&
@@ -539,14 +563,14 @@ sub renderIfSkinState {
 
     &escapeParameter($theThen);
     #writeDebug("match");
-    return $theThen if $theThen;
+    return $before.$theThen.$after if $theThen;
   } else {
-    &escapeParameter($theThen);
+    &escapeParameter($theElse);
     #writeDebug("NO match");
-    return $theElse if $theElse;
+    return $before.$theElse.$after if $theElse;
   }
 
-  return '';
+  return $before.$after;
 }
 
 ###############################################################################
@@ -739,7 +763,7 @@ sub renderWebSideBar {
 
 ###############################################################################
 sub ifDefinedImpl {
-  my ($theVariable, $theAction, $theThen, $theElse, $theElsIfArgs) = @_;
+  my ($theVariable, $theAction, $theThen, $theElse, $theElsIfArgs, $before, $after, $theGlue) = @_;
 
   #writeDebug("called ifDefinedImpl()");
   #writeDebug("theVariable='$theVariable'");
@@ -748,6 +772,8 @@ sub ifDefinedImpl {
   #writeDebug("theElse='$theElse'");
   #writeDebug("theElsIfArgs='$theElsIfArgs'") if $theElsIfArgs;
   
+  $before = '' if ($theGlue eq 'on') || !$before;
+  $after = '' if ($theGlue eq 'on') || !$after;
 
   if (!$theAction || $skinState{'action'} =~ /$theAction/) {
     if ($theVariable =~ /^%([A-Z]+)%$/) {
@@ -760,21 +786,21 @@ sub ifDefinedImpl {
 	$theVariable = &TWiki::Func::expandCommonVariables($theVariable);
 	$theThen =~ s/%$varName%/$theVariable/g;# SMELL: do we need to backport topic vars?
       } else {
-	return $theElse unless $theElsIfArgs;
+	return $before.$theElse.$after unless $theElsIfArgs;
 	$theVariable = '';
       }
     }
-    return $theThen if $theVariable ne ''; # variable is defined
+    return $before.$theThen.$after if $theVariable ne ''; # variable is defined
   }
   
-  return "%IFDEFINEDTHEN{$theElsIfArgs}%$theElse%FIDEFINED%" if $theElsIfArgs;
-  return $theElse; # variable is empty
+  return $before."%IFDEFINEDTHEN{$theElsIfArgs}%$theElse%FIDEFINED%".$after if $theElsIfArgs;
+  return $before.$theElse.$after; # variable is empty
 }
 
 ###############################################################################
 sub renderIfDefined {
 
-  my $args = shift;
+  my ($args, $before, $after) = @_;
 
   $args = '' unless $args;
 
@@ -784,13 +810,14 @@ sub renderIfDefined {
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
   my $theThen = &TWiki::Func::extractNameValuePair($args, 'then') || $theVariable;
   my $theElse = &TWiki::Func::extractNameValuePair($args, 'else') || '';
+  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
 
-  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse);
+  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, undef, $before, $after, $theGlue);
 }
 
 ###############################################################################
 sub renderIfDefinedThen {
-  my ($args, $text) = @_;
+  my ($args, $text, $before, $after) = @_;
 
   $args = '' unless $args;
 
@@ -811,8 +838,9 @@ sub renderIfDefinedThen {
 
   my $theVariable = &TWiki::Func::extractNameValuePair($args);
   my $theAction = &TWiki::Func::extractNameValuePair($args, 'action') || '';
+  my $theGlue = &TWiki::Func::extractNameValuePair($args, 'glue') || 'on';
 
-  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, $elsIfArgs);
+  return &ifDefinedImpl($theVariable, $theAction, $theThen, $theElse, $elsIfArgs, $before, $after, $theGlue);
 }
 
 ###############################################################################
@@ -1258,31 +1286,48 @@ sub renderEmailAddrs
 
   $linkText = '' unless $linkText;
 
-  writeDebug("called renderEmailAddrs");
+  #writeDebug("called renderEmailAddrs(" . 
+  #  join(", ", @$emailAddrs) .  ", $linkText)");
 
-  my $thisDebug = 0;
-  if ($thisDebug) {
-    TWiki::Func::writeDebug("called renderEmailAddrs(" . 
-    join(", ", @$emailAddrs) .  ", $linkText)");
+
+  my $emailKey = '_email'.$nrEmails;
+  $nrEmails++;
+
+  $emailCollection{$emailKey} = [$emailAddrs, $linkText]; 
+  my $text = "<span class=\"natEmail\" id=\"$emailKey\">$emailKey</span>";
+
+  #writeDebug("result: $text");
+  return $text;
+}
+
+###############################################################################
+sub renderEmailObfuscator {
+
+  writeDebug("called renderEmailObfuscator()");
+
+  my $text = "\n".
+    '<script language="javascript" type="text/javascript">'."\n".
+    '<!--'."\n";
+
+  $text .= "function initObfuscator() {\n";
+  $text .= "   var addrs = new Array();\n";
+  foreach my $emailKey (sort keys %emailCollection) {
+    my $emailAddrs = $emailCollection{$emailKey}->[0];
+    my $linkText = $emailCollection{$emailKey}->[1];
+    my $index = 0;
+    foreach my $addr (@$emailAddrs) {
+      next unless $addr =~ m/^([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)$/;
+      my $theAccount = $1;
+      my $theSubDomain = $2;
+      my $theTopDomain = $3;
+      $text .= "   addrs[$index] = new Array('$theSubDomain','$theAccount','$theTopDomain');\n";
+      $index++
+    }
+    $text .= "   writeEmailAddrs(addrs, '$linkText', '$emailKey');\n";
+    $text .= "   delete addrs; addrs = new Array();\n";
   }
-
-  my $text = 
-    '<script language="javascript" type="text/javascript">' .
-    "{ var addrs = new Array(); ";
-
-  my $index = 0;
-  foreach my $addr (@$emailAddrs) {
-    TWiki::Func::writeDebug("addr='$addr'") if $thisDebug;
-    next unless $addr =~ m/^([a-zA-Z0-9\-\_\.\+]+)\@([a-zA-Z0-9\-\_\.]+)\.(.+?)$/;
-    my $theAccount = $1;
-    my $theSubDomain = $2;
-    my $theTopDomain = $3;
-    $text .= "addrs[$index] = new Array('$theAccount','$theSubDomain','$theTopDomain'); ";
-    $index++;
-  }
-  $text .= "writeEmailAddrs(addrs, '$linkText'); }</script>";
-
-  TWiki::Func::writeDebug("result: $text") if $thisDebug;
+  $text .= "}\n";
+  $text .= "//--></script>\n";
   return $text;
 }
 
