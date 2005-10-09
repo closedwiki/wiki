@@ -26,7 +26,7 @@ use Digest::MD5 qw(md5_base64);
 use Fcntl qw(:flock);
 
 $VERSION = '$Rev$';
-$RELEASE = '1.20';
+$RELEASE = '1.21';
 
 ###############################################################################
 # debug suite
@@ -309,11 +309,11 @@ sub getVotesFile
 
   my $attachPath = &TWiki::Func::getPubDir() . "/$web/$topic";
   my $votesFile = "$attachPath/_Votes" . ($id?"_$id":"") . ".txt";
-  &normalizeFileName($votesFile);
+  $votesFile = &normalizeFileName($votesFile);
 
   # to upgrade smoothly
   my $oldVotesFile = "$attachPath/Votes" . ($id?"_$id":"") . ".txt";
-  &normalizeFileName($oldVotesFile);
+  $oldVotesFile = &normalizeFileName($oldVotesFile);
   #writeDebug("oldVotesFile=$oldVotesFile, newVotesFile=$votesFile");
 
   if (-e $oldVotesFile && ! -e $votesFile) {
@@ -329,6 +329,7 @@ sub getVotesFile
 sub normalizeFileName {
   my $fileName = shift;
 
+$debug = 1;
   if (defined &TWiki::Sandbox::normalizeFileName) {
     writeDebug("using TWiki::Sandbox::normalizeFileName");
     return &TWiki::Sandbox::normalizeFileName($fileName);
