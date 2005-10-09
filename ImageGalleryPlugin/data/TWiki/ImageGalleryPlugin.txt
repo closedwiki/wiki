@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="TWikiContributor" date="1126719428" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128882495" format="1.0" version="1.1"}%
 %META:TOPICPARENT{name="WebHome"}%
 ---+!! <nop>ImageGalleryPlugin
 %TOC%
@@ -161,7 +161,7 @@ Note, that the $comment variable will only display =&lt;comment&gt;= , that is w
 	  | ==pub/TWiki/%TOPIC%/style.css== | cascading style sheets |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | plugin interface |
 	  | ==lib/TWiki/Plugins/%TOPIC%/Core.pm== | core implementation |
-   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+	* (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---++ Plugin Info
 
