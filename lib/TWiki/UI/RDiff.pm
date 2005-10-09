@@ -188,12 +188,27 @@ sub _renderDebug
 	$result = CGI::Tr(
 		CGI::td( 'type: '. $diffType ));
 		
-	$result .= CGI::Tr(
-		CGI::td( {class=>'diffDebugLeft'}, CGI::div($left) ));
-	my $changedClass = ($left ne $right) ? 'twikiDiffChangedText' : '';
-	$result .= CGI::Tr(
-		CGI::td( {class=>'diffDebugRight'}, CGI::div( {class=>$changedClass}, $right) ));
-	
+	my %classMap =
+	  (
+	   '+' => [ 'twikiDiffAddedText'],
+	   '-' => [ 'twikiDiffDeletedText'],
+	   'c' => [ 'twikiDiffChangedText'],
+	   'u' => [ 'twikiDiffUnchangedText'],
+	   'l' => [ 'twikiDiffLineNumberHeader']
+	  );
+  
+  	my $styleClass = ' '.$classMap{$diffType}[0] || '';
+  	my $styleClassLeft = ($diffType ne 'c') ? $styleClass : '';
+  	my $styleClassRight = $styleClass;
+  	
+	if ($diffType ne '+') {
+   	    $result .= CGI::Tr( {class=>'twikiDiffDebug'},
+		    CGI::td( {class=>'twikiDiffDebugLeft'.$styleClassLeft}, CGI::div( $left) ));
+	}
+	if (($diffType ne '-') && ($diffType ne 'l')) {
+	    $result .= CGI::Tr( {class=>'twikiDiffDebug'},
+		    CGI::td( {class=>'twikiDiffDebugRight'.$styleClassRight}, CGI::div( $right) ));
+	}
     return $result;
 }
 
