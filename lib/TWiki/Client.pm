@@ -142,6 +142,9 @@ sub loadSession {
         'driver:File', $query,
         { Directory => $TWiki::cfg{SessionDir} } );
 
+    # This happens on develop; trapping to try to debug
+    return undef unless $cgisession;
+
     $this->{cgisession} = $cgisession;
 
     my $sessionId = $cgisession->id();
