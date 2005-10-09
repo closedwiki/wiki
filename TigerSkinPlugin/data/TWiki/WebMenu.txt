@@ -13,7 +13,7 @@ entry for Web
 
 
 
-	* SET DEFAULTITEMS = %ITEM{name="WebChanges" topic="WebChanges"}%,ITEM{name="WebIndex" topic="WebIndex"}%, %ITEM{name="WebNotify" topic="WebNotify"}%, %ITEM{name="WebStatistics" topic="WebStatistics"}%
+   * SET DEFAULTITEMS = %ITEM{name="WebChanges" topic="WebChanges"}%,ITEM{name="WebIndex" topic="WebIndex"}%, %ITEM{name="WebNotify" topic="WebNotify"}%, %ITEM{name="WebStatistics" topic="WebStatistics"}%
 
 
 

@@ -87,7 +87,7 @@ __Note:__ You do not need to install anything on your browser to use this plugin
 	  | ==pub/TWiki/GaugePlugin/trendeq.gif== | =trend= no change arrow |
 	  | ==pub/TWiki/GaugePlugin/trendup.gif== | =trend= up arrow |
 	  | ==pub/TWiki/GaugePlugin/trendnd.gif== | =trend= error message if =value= is not specified |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed:
 		* Check above examples if the "if installed" column shows images instead of variables.
 		* Check GaugePluginTests for some more test

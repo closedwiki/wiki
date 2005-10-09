@@ -13,19 +13,19 @@ This will display an *uneditable* text field and a date selection icon that can 
 If you want to use Javascript to create other data types in form fields, you can use this plugin as a model of how to do it.
 
 ---+ Settings
-	* Description:
-		* Set SHORTDESCRIPTION = Adds a =date= type to forms
+   * Description:
+      * Set SHORTDESCRIPTION = Adds a =date= type to forms
 See JSCalendarContrib for additional settings.
 
 ---+ Plugin Installation Instructions
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	| *File:* | *Description:* |
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   | *File:* | *Description:* |
 %$MANIFEST%
-	* Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
-	* Alternatively, manually make sure the dependencies listed in the table below are resolved.
-	%$DEPENDENCIES%
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Optionally, run ==%TOPIC%_installer== to automatically check and install other TWiki modules that this module depends on. You can also do this step manually.
+   * Alternatively, manually make sure the dependencies listed in the table below are resolved.
+   %$DEPENDENCIES%
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---+ Plugin Info
 

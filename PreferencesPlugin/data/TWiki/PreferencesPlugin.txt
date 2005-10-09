@@ -38,7 +38,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==data/TWiki/TWikiPreferencesForm.txt== | Example form |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* If the installation was successful, an edit button should appear below: %EDITPREFERENCES{ "%TWIKIWEB%.TWikiPreferencesForm" }%
 
 ---++ Plugin Info

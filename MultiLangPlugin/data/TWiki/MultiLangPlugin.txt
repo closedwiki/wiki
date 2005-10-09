@@ -138,7 +138,7 @@ __Note:__ You do not need to install anything on the browser to use this plug-in
 	  | =data/TWiki/%TOPIC%.txt= | Plugin topic |
 	  | =data/TWiki/TranslationForm.txt= | TWikiForms template |
 	  | =lib/TWiki/Plugins/%TOPIC%.pm= | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		* %<nop>MLP_USEFORM{ "SCRIPTURLFORM" lang="en"}% = %MLP_USEFORM{ "SCRIPTURLFORM" lang="en"}%
 		* %<nop>TRANSLATIONS% = %TRANSLATIONS%

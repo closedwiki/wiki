@@ -37,7 +37,7 @@ a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>L
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Check if the following =%<nop>LOCALCITYTIME{"Europe/Zurich"}%= works:
 		* %LOCALCITYTIME{"Europe/Zurich"}%
 	* Optionally enable internal date calculation with the =USEDATECOMMAND = 1= setting. This is faster then getting the data from the Date and Time Gateway page, but it depends on BSD / Linux style zoneinfo files and the =date= command; configure the =$tzDir=, =$dateCmd=, =$dateParam= settings in =twiki/lib/TWiki/Plugins/LocalCityTimePlugin.pm= in case needed.

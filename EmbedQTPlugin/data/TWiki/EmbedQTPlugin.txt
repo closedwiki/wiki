@@ -29,7 +29,7 @@ __Note:__ You need to install a <nop>QuickTime plugin on the browser to see the 
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
 	  | ==pub/TWiki/EmbedQTPlugin/sample.mov==| Plugin sample movie |
 	  | ==pub/TWiki/EmbedQTPlugin/sample.mov,v==| Plugin sample movie repository |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the plugin is correctly installed:
 		* A small <nop>QuickTime movie below: 
 

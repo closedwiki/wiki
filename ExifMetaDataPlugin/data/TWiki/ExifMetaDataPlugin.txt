@@ -62,7 +62,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
 	  | ==pub/TWiki/%TOPIC%/picture.jpg== | Sample jpeg file |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* Test if the installation was successful:
 		Write =%<nop>EXIFMETADATA%= anywhere in a topic. The variable gets expanded to the error message =EXIF-ERROR-01=.
 

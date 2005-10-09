@@ -13,35 +13,35 @@ address the different implementations and incompatibilities (e.g. access to topi
 %TOC%
 
 ---++ Current Features
-	* Sandbox security: backport of the dakar sandbox
-	* Login page: independent implementation of a login page (see ) for
-	  maximal compatibility with old TWiki releases
-	* WebSideBar: a configurable navigation bar on the 
-	  left hand side, with topic content on the right;
-	* MySideBar: every user can extend the sidebar with a personalized navigation
-	* <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
-	* Skin state: an internal representation of different ways to render the NatSkin concerning
-		* the style variant,
-		* the sidebar location,
-		* the page border decoration and
-		* the web buttons in the topbar 
-	* Conditional content: 
-		* USERACTIONS, NATLOGON: display topic actions depending on the user being logged in or not
-		* IFSKINSTATE: render skin differently depending on the current skin state
-		* IFACCESS: render different content or include topics depending on access rights
-		* IFDEFINED: render content based on twiki variables being defined or not (compare to the
-		  <nop>IfStatement of the upcomming dakar release)
-	* GROUPSUMMARY: render %MAINWEB%.TWikiGroups nicely
-	* Group based subsription: generate an automated email notification if a new TWiki
-	  user want's to join a TWiki Group
-	* email address obfuscation: all email addresses in topic texts are obfuscated by the use
-	  of dynamic html; so mailto links are still clickable while the pure html text does not
-	  allow to extract the addresses by respective web crawlers.
-	* marking external links: add a nice icon to offsite links
-	* skin style control: add infrastructure to get, set and display the skin style that
-	  is currently active using the NatSkinStyleBrowser
-	* FORMATLIST: render list items according a format parameter (will be externalized into
-	  a separate plugin asap).
+   * Sandbox security: backport of the dakar sandbox
+   * Login page: independent implementation of a login page (see ) for
+     maximal compatibility with old TWiki releases
+   * WebSideBar: a configurable navigation bar on the 
+     left hand side, with topic content on the right;
+   * MySideBar: every user can extend the sidebar with a personalized navigation
+   * <nop>NatSearch: a search+go box that combines advanced search with the GO feature of twiki
+   * Skin state: an internal representation of different ways to render the NatSkin concerning
+      * the style variant,
+      * the sidebar location,
+      * the page border decoration and
+      * the web buttons in the topbar 
+   * Conditional content: 
+      * USERACTIONS, NATLOGON: display topic actions depending on the user being logged in or not
+      * IFSKINSTATE: render skin differently depending on the current skin state
+      * IFACCESS: render different content or include topics depending on access rights
+      * IFDEFINED: render content based on twiki variables being defined or not (compare to the
+        <nop>IfStatement of the upcomming dakar release)
+   * GROUPSUMMARY: render %MAINWEB%.TWikiGroups nicely
+   * Group based subsription: generate an automated email notification if a new TWiki
+     user want's to join a TWiki Group
+   * email address obfuscation: all email addresses in topic texts are obfuscated by the use
+     of dynamic html; so mailto links are still clickable while the pure html text does not
+     allow to extract the addresses by respective web crawlers.
+   * marking external links: add a nice icon to offsite links
+   * skin style control: add infrastructure to get, set and display the skin style that
+     is currently active using the NatSkinStyleBrowser
+   * FORMATLIST: render list items according a format parameter (will be externalized into
+     a separate plugin asap).
 
 ---++ Syntax Rules
 | *Tag* | *Desciption* |
@@ -75,21 +75,21 @@ address the different implementations and incompatibilities (e.g. access to topi
   (1) urlparam =style=&lt;name>=, \
   (2) value of the session variable =NATSKIN_STYLE= and \
   (3) preference value =SKINSTYLE= set in \
-		(a) the user preferences \
-		(b) the WebPreferences or \
-		(c) %TWIKIWEB%.TWikiPreferences |
+      (a) the user preferences \
+      (b) the WebPreferences or \
+      (c) %TWIKIWEB%.TWikiPreferences |
 | =%<nop>IFSKINSTATE{&lt;tests> then="..." else="..."}%= \
 | conditionally returns content depending on the current skin state; \
   &lt;tests> can be \
   <ul> \
-	 <li> =style="&lt;name>"=: test if the current style is &lt;name> </li> \
-	 <li> =border="on,off,thin"=: test if the current border is on, off or "thin" </li> \
-	 <li> =buttons="on,off"=: test if the web buttons are currently on or off </li> \
-	 <li> =sidebar="left,right,off"=: \
-			test if the sidebar is currently on the right, left or off </li> \
-	 <li> =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on\
-			is beijing, cairo or dakar </li>\
-	 <li> =action="view,edit,preview,..."=: test the current topic action </li> \
+    <li> =style="&lt;name>"=: test if the current style is &lt;name> </li> \
+    <li> =border="on,off,thin"=: test if the current border is on, off or "thin" </li> \
+    <li> =buttons="on,off"=: test if the web buttons are currently on or off </li> \
+    <li> =sidebar="left,right,off"=: \
+         test if the sidebar is currently on the right, left or off </li> \
+    <li> =release="beijing,cairo,dakar"=: test if the twiki release this plugin is installed on\
+         is beijing, cairo or dakar </li>\
+    <li> =action="view,edit,preview,..."=: test the current topic action </li> \
   </ul> \
   The tag will render the "then" content if all tests evaluate to true and \
   the "else" content otherwise. Tested strings can be regular expressions. |
@@ -146,14 +146,14 @@ This is a cgi-script that is heavily based on the <nop>PhotonSearch of the TWiki
 So =natsearch= is basically a fork of that including fixes to similar security flaws that 
 hit the WebSearch those days also. Here's the list of differences:
 
-	* replaced the =a= flag with =g= to indicate global search
-	* obey the =NOSEARCHALL= flag for global search
-	* remember the original search string and insert it back into the input field
-	* added perl's =use strict= and fixed all warnings
-	* fixed several mod-perl issues
-	* add friendly message when nothing's been found
-	* use =noSpamPadding= to obfuscate email addresses
-	* light weighted google-like hit colorization
+   * replaced the =a= flag with =g= to indicate global search
+   * obey the =NOSEARCHALL= flag for global search
+   * remember the original search string and insert it back into the input field
+   * added perl's =use strict= and fixed all warnings
+   * fixed several mod-perl issues
+   * add friendly message when nothing's been found
+   * use =noSpamPadding= to obfuscate email addresses
+   * light weighted google-like hit colorization
 
 Please see the TWiki:Plugins/PhotonSkin for an explanation of the possible search parameters
 (TODO: maby move that stuff in here).
@@ -177,7 +177,7 @@ you don't have write access to the respective topic fragments.
 ---++ Plugin Settings
 Below are the settings which affect the behavior of the NatSkin.
 
-	* Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
+   * Set SHORTDESCRIPTION = Supplements the bare bones NatSkin theme for TWiki
 
 ---+++ Skin state configuration
 The skin state is controlled by a set of variables that are configured on the user's home topic,
@@ -185,38 +185,38 @@ the WebPreferences or the [[%TWIKIWEB%.TWikiPreferences]] and are then loaded in
 session of the user. So every setting can be changed by an url parameter to take effect for the
 duration of the user session. The default values are given below 
 
-	* switch to the given style,
-	  Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty,
-		<nop>SeaGreen, Squash or Stormy, url param =style=
-		* Set SKINSTYLE = Clean
-	* change the border decoration on, off or to thin (enabling a thin blog-like page layout),
-	  url param is =styleborder=
-		* Set STYLEBORDER = off
-	* switch on/of the web buttons in the top bar of the page
-		* Set STYLEBUTTONS = off
-	* switch the sidebar to be displayed on the right or left side or off, url param is =stylesidebar=
-		* Set STYLESIDEBAR = left
+   * switch to the given style,
+     Base, Clean, <nop>GeorgiaBlue, Gettysburg, Independence, Kubrick, <nop>PlainJane, Rusty,
+      <nop>SeaGreen, Squash or Stormy, url param =style=
+      * Set SKINSTYLE = Clean
+   * change the border decoration on, off or to thin (enabling a thin blog-like page layout),
+     url param is =styleborder=
+      * Set STYLEBORDER = off
+   * switch on/of the web buttons in the top bar of the page
+      * Set STYLEBUTTONS = off
+   * switch the sidebar to be displayed on the right or left side or off, url param is =stylesidebar=
+      * Set STYLESIDEBAR = left
 
 In addition there's a url parameter =togglesidebar= that disables the sidebar for this request
 only. 
 
 To emulate the Kubrick style on the old
 [[http://binarybonsai.com][BinaryBonsai]] (not the new K2 style) then copy-paste this
-	* Set SKINSTYLE = Kubrick
-	* Set STYLEBORDER = thin
-	* Set STYLEBUTTONS = on
-	* Set STYLESIDEBAR = right
+   * Set SKINSTYLE = Kubrick
+   * Set STYLEBORDER = thin
+   * Set STYLEBUTTONS = on
+   * Set STYLESIDEBAR = right
 to your [[%TWIKIWEB%.TWikiPreferences]]. Try out other settings using the NatSkinStyleBrowser,
 or even INCLUDE it in your [[%MAINWEB%.%WIKINAME%SideBar]].
 
 There are some constraints build into the NatSkin templates that try guarantee a pleasant appearance
 when combining the different skin states:
-	* If the styleborder is "thin" the sidebar will be disabled for the edit, manage, rdiff,
-	  natsearch, changes and search topic actions. 
-	* The web buttons will alternate with the sidebar so that they will not be displayed
-	  on the same side. 
-	* If the web buttons are enabled the default WebSideBar will disable the redundant 
-	  navigation to other webs.
+   * If the styleborder is "thin" the sidebar will be disabled for the edit, manage, rdiff,
+     natsearch, changes and search topic actions. 
+   * The web buttons will alternate with the sidebar so that they will not be displayed
+     on the same side. 
+   * If the web buttons are enabled the default WebSideBar will disable the redundant 
+     navigation to other webs.
 
 ---+++ Style support for the TablePlugin 
 These attributes will be loaded into your session and thereby overwriting any 
@@ -224,38 +224,38 @@ default settings on the TablePlugin topic. Depending on the skin style you are c
 using these settings will be changed accordingly.
 
 
-	* Set BASETABLEATTRIBUTES = databg="white" headercolor="black" headerbg="white" tableborder="0" cellpadding="0" cellspacing="0" 
-	* Set CLEANTABLEATTRIBUTES = headercolor="#444444"
-	* Set GEORGIABLUETABLEATTRIBUTES = headercolor="#999966"
-	* Set GETTYSBURGTABLEATTRIBUTES = headercolor="#03366"
-	* Set INDEPENDENCETABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set KUBRICKTABLEATTRIBUTES = databg="#f4f4f4, white" headercolor="#0055aa"
-	* Set PLAINJANETABLEATTRIBUTES = headercolor="#666666"
-	* Set RUSTYTABLEATTRIBUTES = headercolor="white"
-	* Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
-	* Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black", headerbg="black"
+   * Set BASETABLEATTRIBUTES = databg="white" headercolor="black" headerbg="white" tableborder="0" cellpadding="0" cellspacing="0" 
+   * Set CLEANTABLEATTRIBUTES = headercolor="#444444"
+   * Set GEORGIABLUETABLEATTRIBUTES = headercolor="#999966"
+   * Set GETTYSBURGTABLEATTRIBUTES = headercolor="#03366"
+   * Set INDEPENDENCETABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
+   * Set KUBRICKTABLEATTRIBUTES = databg="#f4f4f4, white" headercolor="#0055aa"
+   * Set PLAINJANETABLEATTRIBUTES = headercolor="#666666"
+   * Set RUSTYTABLEATTRIBUTES = headercolor="white"
+   * Set SEAGREENTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
+   * Set SQUASHTABLEATTRIBUTES = databg="white, #f0f0f0" headercolor="white"
+   * Set STORMYTABLEATTRIBUTES = databg="#333333, #444444" headercolor="#cccccc" headerbackground="black", headerbg="black"
 
 ---++ Plugin Installation Instructions
 
-	* Install the plugins this one depends on (see below) of not done so already.
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+   * Install the plugins this one depends on (see below) of not done so already.
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 
-	  | *File:* | *Description:* |
-	  | ==bin/natlogon== | logon cgi script |
-	  | ==bin/natsearch== | search cgi script |
-	  | ==data/TWiki/%TOPIC%.txt== | plugin topic |
-	  | ==data/TWiki/MySideBar.txt== | plugin to customize a personalized sidebar |
-	  | ==data/TWiki/MySideBarTemplate.txt== | topic template for MySideBar |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm== | security module |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
-	  | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
-	  customize the default style adding the variables SKINSTYLE, STYLEBORDER,
-	  STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
+     | *File:* | *Description:* |
+     | ==bin/natlogon== | logon cgi script |
+     | ==bin/natsearch== | search cgi script |
+     | ==data/TWiki/%TOPIC%.txt== | plugin topic |
+     | ==data/TWiki/MySideBar.txt== | plugin to customize a personalized sidebar |
+     | ==data/TWiki/MySideBarTemplate.txt== | topic template for MySideBar |
+     | ==lib/TWiki/Plugins/NatSkinPlugin.pm== | main module |
+     | ==lib/TWiki/Plugins/NatSkinPlugin/Sandbox.pm== | security module |
+     | ==lib/TWiki/Plugins/NatSkinPlugin/Search.pm== | <nop>NatSearch module |
+     | ==lib/TWiki/Plugins/NatSkinPlugin/Auth.pm== | authentication module |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * on [[%TWIKIWEB%.TWikiPreferences]] change the SKIN variable to "nat";
+     customize the default style adding the variables SKINSTYLE, STYLEBORDER,
+     STYLEBUTTONS and STYLESIDEBAR (see NatSkin)
 
 
 ---++ Plugin Info
@@ -264,9 +264,9 @@ using these settings will be changed accordingly.
 |  Plugin Version: | v2.50 (2005-09-27) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
 |  27 Sep 2005: | added IFSKINSTATE and IFDEFINED features; \
-						added web button support |
+                  added web button support |
 |  30 Aug 2005: | added external link detection; fixed IFSKINSTYLE; \
-						added style support for the TWiki:Plugins.TablePlugin |
+                  added style support for the TWiki:Plugins.TablePlugin |
 |  26 Aug 2005: | new NatSkin-2.0 release |
 |  28 Apr 2005: | pre-release to fix installation on TWiki/Cairo |
 |  16 Mar 2005: | Initial version |

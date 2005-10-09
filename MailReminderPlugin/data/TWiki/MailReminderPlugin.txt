@@ -211,7 +211,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | ==lib/TWiki/Plugins/%TOPIC%/config_file==	| Plugin configruraion file |
 	  | ==lib/TWiki/Plugins/%TOPIC%/calender_config_file== | Plugin configruraion file |
 	  | ==pub/TWiki/%TOPIC%/exclam.gif== | Image file |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 *Create Table to store events in my database*
 

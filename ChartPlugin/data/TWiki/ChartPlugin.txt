@@ -139,7 +139,7 @@ If the required parameters are not defined, then an error message is returned or
 	  | ==lib/TWiki/Plugins/%TOPIC%/Chart.pm== | Chart library Plugin Perl module |
 	  | ==lib/TWiki/Plugins/%TOPIC%/Table.pm== | Table library Plugin Perl module |
 	  | ==lib/TWiki/Plugins/%TOPIC%/Parameter.pm== | Parameter library Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* If you see =Permission denied= errors, verify that ownership and permissions are correct for the following making sure that ownership and permissions match existing directories ownerships and permissions:
 		* =pub/TWiki/ChartPlugin=
 	* Test if the plugin is correctly installed:

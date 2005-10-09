@@ -59,7 +59,7 @@ __Note:__ You do not need to install anything on the browser to use this plugin.
 	  | *File:* | *Description:* |
 	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
 	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 	* To get a smart-looking box around the code fragment, something like the following is needed in the skin's stylesheet. Note that you may need to change the class name if you modify the *FORMATCLASS* configuration variable above.
 
 <blockquote>

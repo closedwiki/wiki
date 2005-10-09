@@ -30,7 +30,7 @@ Plugin settings are stored as preferences variables.
 
 To install plugin:
 	* Unzip the archive to the top of your directory
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
 
 ---+++ Plugin Info
 

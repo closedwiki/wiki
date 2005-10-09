@@ -24,29 +24,29 @@ The plugin is designed to allow %<nop>MRDID% to work in both the normal page are
 
 Plugin settings are stored as preferences variables. To reference a plugin setting write ==%<nop>&lt;plugin&gt;_&lt;setting&gt;%==, i.e. ==%<nop>INTERWIKIPLUGIN_SHORTDESCRIPTION%==
 
-	* One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
-		* Set SHORTDESCRIPTION = Generates unique incrementing ID's with custom tags
+   * One line description, is shown in the %TWIKIWEB%.TextFormattingRules topic:
+      * Set SHORTDESCRIPTION = Generates unique incrementing ID's with custom tags
 
-	* Debug plugin: (See output in =data/debug.txt=)
-		* Set DEBUG = 0
+   * Debug plugin: (See output in =data/debug.txt=)
+      * Set DEBUG = 0
 
-	* If you want ID's to start at a value other than 1, change the value below:
-		* Set STARTINGIDVALUE = 1
+   * If you want ID's to start at a value other than 1, change the value below:
+      * Set STARTINGIDVALUE = 1
 
 ---++ Plugin Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this plugin. The following instructions are for the administrator who installs the plugin on the server where TWiki is running. 
 
-	* Download the ZIP file from the Plugin web (see below)
-	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
-	  | *File:* | *Description:* |
-	  | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
-	  | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
-	  | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
-    * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
-	* Test if the installation was successful:
-		* If it was installed correctly, you should see "MRDIDTESTx" below (where x is a number, probably 1). If it failed, you will probably see something like: %<nop>MRDID{ id="MRDIDTEST" }%.
-		* %MRDID{ id="MRDIDTEST1" }%
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+     | ==data/TWiki/%TOPIC%.txt== | Plugin topic |
+     | ==data/TWiki/%TOPIC%.txt,v== | Plugin topic repository |
+     | ==lib/TWiki/Plugins/%TOPIC%.pm== | Plugin Perl module |
+   * (Dakar) Visit =configure= in your TWiki installation, and enable the plugin in the {Plugins} section.
+   * Test if the installation was successful:
+      * If it was installed correctly, you should see "MRDIDTESTx" below (where x is a number, probably 1). If it failed, you will probably see something like: %<nop>MRDID{ id="MRDIDTEST" }%.
+      * %MRDID{ id="MRDIDTEST1" }%
 
 ---++ Plugin Info
 
