@@ -1,23 +1,25 @@
-%META:TOPICINFO{author="TWikiContributor" date="1127379290" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128877652" format="1.1" version="1.1"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%
 <div class="natSkinStyleBrowser">
 <form method="post" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
-<select name="style" onchange="this.form.submit();">
+<select name="style">
 <noautolink>
 %FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n"}%
 </noautolink>
 </select>&nbsp;
-	* <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Border On
-	* <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Border Off
-	* <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Thin Layout
-	* <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Left
-	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Right
-	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Sidebar Off
-	* <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Web Buttons On
-	* <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}% onclick="this.form.submit();"/>Web Buttons Off
+	* <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%"/>Border On
+	* <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%"/>Border Off
+	* <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%"/>Thin Layout
+	* <input type="radio" name="stylesidebar" value="left"%IFSKINSTATE{sidebar="left" then=" checked=\"checked\""}%"/>Sidebar Left
+	* <input type="radio" name="stylesidebar" value="right"%IFSKINSTATE{sidebar="right" then=" checked=\"checked\""}%"/>Sidebar Right
+	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%"/>Sidebar Off
+	* <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%"/>Web Buttons On
+	* <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%"/>Web Buttons Off
 <input type="hidden" name="search" value="%URLPARAM{search}%" />
 <input type="hidden" name="refresh" value="on" />
+<input type="submit" value="OK""/>
+<input type="submit" name="reset" value="Reset"/>
 </form>
 </div>
 %STOPINCLUDE%
