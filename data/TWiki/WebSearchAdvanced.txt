@@ -15,6 +15,7 @@
  order="%URLPARAM{order}%"
  reverse="%URLPARAM{reverse}%"
  regex="%URLPARAM{regex}%"
+ limit="%URLPARAM{limit}%"
 }%
 <noautolink>
 <div class="twikiPageForm">
@@ -40,7 +41,7 @@
 <tr>
 <th>%MAKETEXT{"Sort results by:"}%</th>
 <td>
-<input type="radio" class="twikiRadioButton" id="topic" name="order" value="topic" %IF{" '%URLPARAM{order default="topic"}%' = 'topic' " then="checked=\"checked\"" else=""}%/><label for="topic"> %MAKETEXT{"Topic name"}%</label><br />
+<input type="radio" class="twikiRadioButton" id="topic" name="order" value="topic" %IF{" '%URLPARAM{"order" default="topic"}%' = 'topic' " then="checked=\"checked\"" else=""}%/><label for="topic"> %MAKETEXT{"Topic name"}%</label><br />
 <input type="radio" class="twikiRadioButton" id="modified" name="order" value="modified" %IF{" '%URLPARAM{order}%' = 'modified' " then="checked=\"checked\"" else=""}%/><label for="modified"> %MAKETEXT{"Last modified time"}%</label><br />
 <input type="radio" class="twikiRadioButton" id="editby" name="order" value="editby" %IF{" '%URLPARAM{order}%' = 'editby' " then="checked=\"checked\"" else=""}%/><label for="editby"> %MAKETEXT{"Last editor"}%</label>
 <hr />
@@ -67,7 +68,7 @@
 </tr>
 <tr>
 <th class="last">%MAKETEXT{"Limit results to:"}%</th>
-<td class="last"><input type="text" id="limit" name="limit" size="3" value="%IF{" '%URLPARAM{limit default="all"}%' = 'all' " then="all" else="%URLPARAM{limit}%"}%" /><label for="limit"> %MAKETEXT{"Topics per web"}% </label><span class="twikiSmall">%MAKETEXT{"(=all= to show all topics)"}%</span>
+<td class="last"><input type="text" id="limit" name="limit" size="3" value="%IF{" '%URLPARAM{"limit" default="all"}%' = 'all' " then="all" else="%URLPARAM{limit}%"}%" /><label for="limit"> %MAKETEXT{"Topics per web"}% </label><span class="twikiSmall">%MAKETEXT{"(=all= to show all topics)"}%</span>
 </td>
 </tr>
 </table>
