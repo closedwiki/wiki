@@ -367,8 +367,8 @@ sub commonTagsHandler
 
   # spam obfuscator
   if ($useSpamObfuscator) {
+    $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(?:\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $2)/ge;
     $_[0] =~ s/\b(?:mailto\:)?([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\.[a-zA-Z0-9\-\_]+)/&renderEmailAddrs([$1])/ge;
-    $_[0] =~ s/\[\[mailto\:([a-zA-Z0-9\-\_\.\+]+\@[a-zA-Z0-9\-\_\.]+\..+?)(\s+|\]\[)(.*?)\]\]/&renderEmailAddrs([$1], $3)/ge;
   }
 }
 
@@ -1286,9 +1286,7 @@ sub renderEmailAddrs
 
   $linkText = '' unless $linkText;
 
-  #writeDebug("called renderEmailAddrs(" . 
-  #  join(", ", @$emailAddrs) .  ", $linkText)");
-
+  #writeDebug("called renderEmailAddrs(".join(", ", @$emailAddrs).", $linkText)");
 
   my $emailKey = '_email'.$nrEmails;
   $nrEmails++;
