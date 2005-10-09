@@ -2,7 +2,7 @@
 
 print <<END;
 This script must be run from the tools directory. It will scan the MANIFEST
-and compare the contents with what is checked in under subversion. Any#
+and compare the contents with what is checked in under subversion. Any
 differences are reported.
 
 The test, tools and twikiplugins directories are *not* scanned.
