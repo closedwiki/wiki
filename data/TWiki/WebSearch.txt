@@ -2,7 +2,14 @@
 %META:TOPICPARENT{name="WebHome"}%
 ---+ %MAKETEXT{"Web Search"}%
 
-%SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="%URLPARAM{nosearch}%" zeroresults="off%URLPARAM{search}%"}%
+%SEARCH{ 
+"%URLPARAM{search}%" 
+type="keyword" 
+scope="%URLPARAM{scope}%" 
+web="%URLPARAM{web}%" 
+nosearch="%URLPARAM{nosearch}%" 
+zeroresults="off%URLPARAM{search}%"
+}%
 <noautolink>
 <div class="twikiPageForm">
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
@@ -17,11 +24,11 @@
 <tr>
 <th class="last">%MAKETEXT{"Search where:"}%</th>
 <td class="last">
-<input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %CALC{$IF($EXACT(%URLPARAM{"scope" default="text"}%,text),checked="checked")}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label><br />
-<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %CALC{$IF($EXACT(%URLPARAM{scope}%,topic),checked="checked")}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label><br />
-<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %CALC{$IF($EXACT(%URLPARAM{scope}%,all),checked="checked")}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
+<input type="radio" class="twikiRadioButton" id="textbody" name="scope" value="text" %IF{" '%URLPARAM{"scope" default="text"}%' = 'text' " then="checked=\"checked\"" else=""}% /><label for="textbody"> %MAKETEXT{"Text body"}%</label><br />
+<input type="radio" class="twikiRadioButton" id="topictitle" name="scope" value="topic" %IF{" '%URLPARAM{scope}%' = 'topic' " then="checked=\"checked\"" else=""}% /><label for="topictitle"> %MAKETEXT{"Topic title"}%</label><br />
+<input type="radio" class="twikiRadioButton" id="both" name="scope" value="all" %IF{" '%URLPARAM{scope}%' = 'all' " then="checked=\"checked\"" else=""}% /><label for="both"> %MAKETEXT{"Both body and title"}%</label>
 <hr />
-<input type="checkbox" class="twikiCheckbox" id="web" name="web" %CALC{$IF($EXACT(%URLPARAM{web}%,),,checked="checked")}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
+<input type="checkbox" class="twikiCheckbox" id="web" name="web" %IF{" '%URLPARAM{web}%' = 'on'" then="checked=\"checked\"" else=""}% /><label for="web"> %MAKETEXT{"All public webs"}%</label> <span class="twikiSmall">%MAKETEXT{"(otherwise search [_1] Web only)" args="<nop>%INCLUDINGWEB%"}%</span>
 </td>
 </tr>
 </table>
