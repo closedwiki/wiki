@@ -3,17 +3,36 @@
 
 
 %TMPL:DEF{"script"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 <script type="text/javascript">
-<!--HIDE
-function initPage() { }
-function launchWindow( theWeb, theTopic ) {
-	var win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
-  if( win ) {
-    win.focus();
-  }
-  return false;
-}
-//STOP HIDING-->
+//<![CDATA[
+	// DON'T overwrite existing onload handlers
+	// http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+	function addLoadEvent(func){
+		var oldonload = window.onload;
+		if (typeof window.onload != 'function') {
+			window.onload = function() {
+			    func();
+            }
+		} else {
+			window.onload = function() {
+				oldonload();
+				func();
+			}
+		}
+	}
+	function initPage() { }
+	function launchWindow( theWeb, theTopic ) {
+		var win = open("%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/" + theWeb + "/" + theTopic + "?skin=plain", theTopic, "titlebar=0,width=500,height=480,resizable,scrollbars");
+	  if( win ) {
+		win.focus();
+	  }
+	  return false;
+	}
+
+	addLoadEvent(initPage);
+
+//]]>
 </script>%TMPL:END%
 
 
@@ -34,7 +53,7 @@ function launchWindow( theWeb, theTopic ) {
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage patternPreviewPage" onload="initPage()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+<body class="patternNoViewPage patternPreviewPage"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
 
 
 

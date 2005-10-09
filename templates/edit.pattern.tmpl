@@ -3,6 +3,7 @@
 
 
 %TMPL:DEF{"script"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	ns4 = (document.layers)? true:false;
@@ -12,9 +13,20 @@
 	toShow=new Array();
 	toHide=new Array();
 	
-	function init () {
-		initTwist();
-		initForm();
+	// DON'T overwrite existing onload handlers
+	// http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+	function addLoadEvent(func){
+		var oldonload = window.onload;
+		if (typeof window.onload != 'function') {
+			window.onload = function() {
+			    func();
+            }
+		} else {
+			window.onload = function() {
+				oldonload();
+				func();
+			}
+		}
 	}
 	
 	function initForm() {
@@ -64,113 +76,13 @@
 		return false;
 	}
 
-	/* Twist functions: */
-	
-	function removeClass(element, classname) {
-		var classes = getClassList(element);
-		var index = indexOf(classname,classes);
-		if (index >= 0) {
-			classes.splice(index,1);
-			setClassList(element,classes);
-		}
-	}
-
-	function addClass(element, classname) {
-		var classes = getClassList(element);
-		if (indexOf(classname, classes)<0) {
-			classes[classes.length]=classname;
-			setClassList(element,classes);
-		}
-	}
-
-	function replaceClass(element, oldclass, newclass) {
-		removeClass(element,oldclass);
-		addClass(element,newclass);
-	}
-
-	function getClassList(element) {
-		if (element.classes) return element.classes; // cached in element property
-		if (element.className && element.className!="") {
-			element.classes = element.className.split(' ');
-			return element.classes;
-		}
-		return [];
-	}
-
-	function setClassList(element, classlist) {
-		element.className=classlist.join(' ');
-	}
-
-	function indexOf(element,array) {
-		for (var i = 0; i < array.length; i++) {
-			if (array[i]==element) {
-				return i;
-			}
-        }
-		return -1;
-	}
-	
-	function getElementsByClassName(className) {
-	
-		var elements = [];
-		var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
-		for (var i = 0; i < allObjects.length; i++) {
-			if (allObjects.item(i).className.indexOf(className) != -1)
-				elements.push(allObjects.item(i));
-		}
-		return elements;
-	}
-
-	function initTwist () {
-        var makeHiddenElements =
-            getElementsByClassName('twikiTwistMakeHidden');
-        var i;
-		for (i = 0; i < makeHiddenElements.length; i++) {
-			replaceClass(makeHiddenElements[i], 'twikiTwistMakeHidden',
-                         'twikiTwistHidden');
-		}
-		
-        var makeVisibleElements =
-            getElementsByClassName('twikiTwistMakeVisible');
-		for (i = 0; i < makeVisibleElements.length; i++) {
-			removeClass(makeVisibleElements[i], 'twikiTwistMakeVisible');
-		}
-	}
-	
-	function twist(id) {
-		var showControl = document.getElementById(id+'show');
-		var hideControl = document.getElementById(id+'hide');
-		var toggleElem = document.getElementById(id+'toggle');
-		if (!toggleElem.twisted) {
-			addClass(showControl, 'twikiTwistHidden');
-			removeClass(hideControl, 'twikiTwistHidden');
-			removeClass(toggleElem, 'twikiTwistHidden');
-			toggleElem.twisted = 1;
-		} else {
-			removeClass(showControl, 'twikiTwistHidden');
-			addClass(hideControl, 'twikiTwistHidden');
-			addClass(toggleElem, 'twikiTwistHidden');
-			toggleElem.twisted = 0;
-		}
-	}
+	addLoadEvent(initForm);
 //]]>
 </script>%TMPL:END%
 
 
 
-%TMPL:DEF{"templatecustomstyle"}%
-<style type="text/css" media="all">
-	.twikiTwistHidden { display:none; }
-	.twikiTwistPlaceholder { /* defined in style.css*/  }
-	.twikiTwistMakeVisible { display:none; }
-</style>
-<script type="text/javascript">
-//<![CDATA[
-document.write("<style type='text/css'>");
-document.write(".twikiTwistMakeHidden {display:none;}");
-document.write("<\/style>");
-//]]>
-</script>%TMPL:END%
+%TMPL:DEF{"templatecustomstyle"}%%TMPL:END%
 
 
 
@@ -178,7 +90,7 @@ document.write("<\/style>");
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td class="patternToolBar">
-<span id="helpshow" class="twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Show formatting help"}%</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Hide formatting help"}%</a></span>
+<span id="helpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Show formatting help"}%%ICON{toggleopen}%</a></span><span id="helphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Hide formatting help"}%%ICON{toggleclose}%</a></span>&nbsp;
 </td>
 <td class="patternToolBar">
 <div class="patternToolBarButtons">
@@ -193,7 +105,7 @@ document.write("<\/style>");
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage patternEditPage" onload="init()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+<body class="patternNoViewPage patternEditPage"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
 
 
 
@@ -214,6 +126,10 @@ document.write("<\/style>");
 
 
 
+%TMPL:DEF{"syntaxhelp"}%%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%%TMPL:END%
+
+
+
 %TMPL:DEF{"topicaction"}%<div class="patternTopicAction"><div class="patternSaveOptions"><span class="patternSaveOptionsContents">
 <input type="checkbox" class="twikiCheckbox" title="Creates a new topic revision when saving" id="forcenewrevision" name="forcenewrevision" %FORCENEWREVISIONCHECKBOX% /><label for="forcenewrevision">%_{"Force new revision"}%</label> <a target="ForceNewRevision" onclick="return launchWindow('%TWIKIWEB%','ForceNewRevision')" href="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%TWIKIWEB%/ForceNewRevision" title='%_{"Read new revision help text in new window"}%' rel='nofollow'>%_{"help"}%</a></span></div>
 <div class="patternActionButtons">
@@ -223,7 +139,7 @@ document.write("<\/style>");
 
 %TMPL:DEF{"content"}%
 %TMPL:P{"simpleheader"}%
-%TMPL:P{"toolbar"}%<div id="helptoggle" class="twikiHelp twikiTwistHidden">%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>
+%TMPL:P{"toolbar"}%<div id="helptoggle" class="twikiHelp twistyHidden">%TMPL:P{"syntaxhelp"}%</div>
 <div class="patternFormHolder">
 <form name="main" action="%SCRIPTURLPATH%/save%SCRIPTSUFFIX%/%WEB%/%TOPIC%" method="post">
 <textarea id="topic" name="text" rows="%EDITBOXHEIGHT%" cols="%EDITBOXWIDTH%" style='%EDITBOXSTYLE%'>%TEXT%</textarea>
@@ -241,7 +157,7 @@ document.write("<\/style>");
 %TMPL:P{"topicaction"}%
 </form>
 </div>
-<div class="twikiHelp twikiTwistMakeHidden">%INCLUDE{"%TWIKIWEB%.WikiSyntaxSummary"}%</div>
+<div class="twikiHelp twistyMakeHidden">%TMPL:P{"syntaxhelp"}%</div>
 %TMPL:END%
 
 

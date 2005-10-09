@@ -3,6 +3,7 @@
 
 
 %TMPL:DEF{"script"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 	function initForm() {
@@ -16,121 +17,19 @@
 	  return false;
 	}
 	
-	function init () {
-		initTwist();
-		initForm();
-	}
-	/* Twist functions: */
-	
-	function removeClass(element, classname) {
-		var classes = getClassList(element);
-		var index = indexOf(classname,classes);
-		if (index >= 0) {
-			classes.splice(index,1);
-			setClassList(element,classes);
-		}
-	}
+	addLoadEvent(initForm);
 
-	function addClass(element, classname) {
-		var classes = getClassList(element);
-		if (indexOf(classname, classes)<0) {
-			classes[classes.length]=classname;
-			setClassList(element,classes);
-		}
-	}
-
-	function replaceClass(element, oldclass, newclass) {
-		removeClass(element,oldclass);
-		addClass(element,newclass);
-	}
-
-	function getClassList(element) {
-		if (element.classes) return element.classes; // cached in element property
-		if (element.className && element.className!="") {
-			element.classes = element.className.split(' ');
-			return element.classes;
-		}
-		return [];
-	}
-
-	function setClassList(element, classlist) {
-		element.className=classlist.join(' ');
-	}
-
-	function indexOf(element,array) {
-		for (var i = 0; i < array.length; i++) {
-			if (array[i]==element) {
-				return i;
-			}
-        }
-		return -1;
-	}
-	
-	function getElementsByClassName(className) {
-	
-		var elements = [];
-		var allObjects = (document.all) ? document.all : document.getElementsByTagName("*");
-		for (var i = 0; i < allObjects.length; i++) {
-			if (allObjects.item(i).className.indexOf(className) != -1)
-				elements.push(allObjects.item(i));
-		}
-		return elements;
-	}
-
-	function initTwist () {
-        var makeHiddenElements =
-            getElementsByClassName('twikiTwistMakeHidden');
-        var i;
-		for (i = 0; i < makeHiddenElements.length; i++) {
-			replaceClass(makeHiddenElements[i], 'twikiTwistMakeHidden', 'twikiTwistHidden');
-		}
-		
-        var makeVisibleElements =
-            getElementsByClassName('twikiTwistMakeVisible');
-		for (i = 0; i < makeVisibleElements.length; i++) {
-			removeClass(makeVisibleElements[i], 'twikiTwistMakeVisible');
-		}
-	}
-	
-	function twist(id) {
-		var showControl = document.getElementById(id+'show');
-		var hideControl = document.getElementById(id+'hide');
-		var toggleElem = document.getElementById(id+'toggle');
-		if (!toggleElem.twisted) {
-			addClass(showControl, 'twikiTwistHidden');
-			removeClass(hideControl, 'twikiTwistHidden');
-			removeClass(toggleElem, 'twikiTwistHidden');
-			toggleElem.twisted = 1;
-		} else {
-			removeClass(showControl, 'twikiTwistHidden');
-			addClass(hideControl, 'twikiTwistHidden');
-			addClass(toggleElem, 'twikiTwistHidden');
-			toggleElem.twisted = 0;
-		}
-	}
 //]]>
 </script> %TMPL:END%
 
 
 
-%TMPL:DEF{"templatecustomstyle"}%
-<style type="text/css" media="all">
-	.twikiTwistHidden { display:none; }
-	.twikiTwistPlaceholder { /* defined in style.css*/ }
-	.twikiTwistMakeVisible { display:none; }
-</style>
-<script type="text/javascript">
-//<![CDATA[
-document.write("<style type='text/css'>");
-document.write(".twikiTwistMakeHidden {display:none;}");
-document.write("<\/style>");
-//]]>
-</script>%TMPL:END%
+%TMPL:DEF{"templatecustomstyle"}%%TMPL:END%
 
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage patternAttachPage" onload="init()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+<body class="patternNoViewPage patternAttachPage"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
 
 
 
@@ -147,7 +46,7 @@ document.write("<\/style>");
 <table cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td class="patternToolBar">
-<span id="helpshow" class="twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Show help"}%</a></span><span id="helphide" class="twikiTwistHidden twikiTwistMakeVisible"><a href="#" onclick="twist('help'); return false;">%_{"Hide help"}%</a></span>
+<span id="helpshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Show help"}%%ICON{toggleopen}%</a></span><span id="helphide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Hide help"}%%ICON{toggleclose}%</a></span>
 </td>
 </tr>
 </table>
@@ -164,7 +63,10 @@ document.write("<\/style>");
 
 
 %TMPL:DEF{"existingattachments"}%
+<span class="twikiSmall"><span id="existingshow" class="twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Show existing attachments"}%</a>%ICON{toggleopen}%</span><span id="existinghide" class="twistyHidden twistyMakeVisible"><a href="#" class="twistyTrigger">%_{"Hide existing attachments"}%</a>%ICON{toggleclose}%</span></span>
+<div id="existingtoggle" class="twistyMakeHidden">
 %META{"attachments" all="on" title="<h2>%_{"Existing attachments"}%</h2>"}%
+</div>
 %TMPL:END%
 
 
@@ -177,7 +79,7 @@ document.write("<\/style>");
 <form name="main" enctype="multipart/form-data" action="%SCRIPTURLPATH%/upload%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%/%TOPIC%"}%" method="post">
 %TMPL:P{"simpleheader"}%
 %TMPL:P{"toolbar"}%
-<div id="helptoggle" class="twikiHelp twikiTwistHidden">
+<div id="helptoggle" class="twikiHelp twistyHidden">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%</div>
 <div>
@@ -228,7 +130,7 @@ document.write("<\/style>");
 </table>
 </div>
 %TMPL:P{"topicaction"}%</form>
-<div class="twikiHelp twikiTwistMakeHidden">
+<div class="twikiHelp twistyMakeHidden">
 %TMPL:P{"notes"}%
 %TMPL:P{"extranotes"}%
 </div>

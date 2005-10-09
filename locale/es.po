@@ -2477,6 +2477,14 @@ msgstr ""
 msgid "view"
 msgstr "vea"
 
+#: templates/attach.pattern.tmpl:66
+msgid "Show existing attachments"
+msgstr ""
+
+#: templates/attach.pattern.tmpl:66
+msgid "Hide existing attachments"
+msgstr ""
+
 #~ msgid "Move attachment..."
 #~ msgstr "Mover la union..."
 
@@ -2499,3 +2507,5 @@ msgstr "vea"
 
 #~ msgid "More"
 #~ msgstr "Mas"
+
+

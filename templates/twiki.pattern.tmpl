@@ -22,9 +22,8 @@
 <script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-// DON'T overwrite existing onload handlers
-//	http://simon.incutio.com/archive/2004/05/26/addLoadEvent
-
+	// DON'T overwrite existing onload handlers
+	// http://simon.incutio.com/archive/2004/05/26/addLoadEvent
 	function addLoadEvent(func){
 		var oldonload = window.onload;
 		if (typeof window.onload != 'function') {
@@ -39,9 +38,9 @@
 		}
 	}
     
- addLoadEvent(initPage);
-    
-	function initPage() { }
+   	function initPage() { }
+
+ 	addLoadEvent(initPage);    
 
 //]]>
 </script>%TMPL:END%
@@ -193,7 +192,7 @@ document.write('<\/style>');
 
 
 %TMPL:DEF{"bodystart"}%
-<body class="patternNoViewPage" onload="initPage()"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
+<body class="patternNoViewPage"><a name="PageTop"></a><div class="patternPage">%TMPL:END%
 
 
 

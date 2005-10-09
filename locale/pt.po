@@ -2631,6 +2631,14 @@ msgstr "obtidos em %1"
 msgid "view"
 msgstr "ver"
 
+#: templates/attach.pattern.tmpl:66
+msgid "Show existing attachments"
+msgstr ""
+
+#: templates/attach.pattern.tmpl:66
+msgid "Hide existing attachments"
+msgstr ""
+
 #~ msgid "Move attachment..."
 #~ msgstr "Mover anexo..."
 

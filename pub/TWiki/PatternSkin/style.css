@@ -1,7 +1,7 @@
 
 /*	-----------------------------------------------------------
 	STYLE
-	Appearance: margins, padding, fonts
+	Appearance: margins, padding, fonts, borders
 	-----------------------------------------------------------	*/
 	
 
@@ -12,7 +12,7 @@
 	----------------------------------------
 	S1 line-height																	1.4em
 	S2 small font size																85%
-	S3 horizontal bar padding (h2, patternTop)										10px
+	S3 horizontal bar padding (h2, patternTop)										5px
 	S4 somewhat smaller font size													94%
 
 	---------------------------------------------------------------------------------------	*/
@@ -451,8 +451,11 @@ a:hover .twikiAccessKey {
 }
 .patternActionButtons a:link,
 .patternActionButtons a:visited {
-	text-decoration:none;
 	padding:1px 1px 2px 1px;
+}
+.patternTopicAction .patternActionButtons a:link,
+.patternTopicAction .patternActionButtons a:visited {
+	text-decoration:none;
 }
 .patternTopicAction .patternSaveOptions {
 	margin-bottom:.5em;
@@ -564,7 +567,7 @@ a:hover .twikiAccessKey {
 	vertical-align:middle;
 	border-width:1px 0 0 0;
 	border-style:solid;
-	padding:10px 1em 10px 1.25em; /*S3*/
+	padding:5px 1em 5px 1.25em; /*S3*/
 }
 
 
@@ -755,8 +758,8 @@ table#twikiSearchTable td.first {
 .patternSearchResults {}
 
 .patternSearchResultsHeader {
-	padding:.25em 10px .15em 10px; /*S3*/
-	margin:0 -10px .25em -10px; /*S3*/
+	padding:.25em 5px .15em 5px; /*S3*/
+	margin:0 -5px .25em -5px; /*S3*/
 	font-weight:bold;
 	border-width:0 0 1px 0;
 	border-style:solid;
@@ -813,8 +816,8 @@ table#twikiSearchTable td.first {
 	height:1px;
 	border-width:0 0 1px 0;
 	border-style:solid;
-	padding:0 10px; /*S3*/
-	margin:0 -10px; /*S3*/
+	padding:0 5px; /*S3*/
+	margin:0 -5px; /*S3*/
 }
 
 /* Search results in book view format */
@@ -823,8 +826,8 @@ table#twikiSearchTable td.first {
 	margin-bottom:1em;
 }
 .patternBookViewList .twikiTopRow {
-	padding:.2em 10px; /*S3*/
-	margin:2.5em -10px .15em -10px; /*S3*/
+	padding:.2em 5px; /*S3*/
+	margin:2.5em -5px .15em -5px; /*S3*/
 }
 .patternBookViewList .twikiBottomRow {
 	font-size:100%;
