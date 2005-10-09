@@ -19,6 +19,7 @@
 
 
 %TMPL:DEF{"script"}%
+<script type="text/javascript" src="%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 // DON'T overwrite existing onload handlers
@@ -60,6 +61,10 @@
       document.getElementById("twikiColorsCss").disabled = true;
    }
 </script>
+<style type="text/css" media="all">
+/* Twisty */
+@import url("%PUBURL%/%TWIKIWEB%/TwistyContrib/twist.css");
+</style>
 <script type="text/javascript">
 <!--
 /* Use javascript to check if style urls are valid (non-empty) */
