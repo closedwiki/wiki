@@ -2,7 +2,20 @@
 %META:TOPICPARENT{name="WebSearch"}%
 ---+ %MAKETEXT{"Advanced Search"}%
 
-%SEARCH{ "%URLPARAM{search}%" type="keyword" scope="%URLPARAM{scope}%" web="%URLPARAM{web}%" nosearch="%URLPARAM{nosearch}%" zeroresults="off%URLPARAM{search}%"}%
+%SEARCH{
+ "%URLPARAM{search}%"
+ type="keyword"
+ scope="%URLPARAM{scope}%"
+ web="%URLPARAM{web}%"
+ nosearch="%URLPARAM{nosearch}%"
+ casesensitive="%URLPARAM{casesensitive}%"
+ bookview="%URLPARAM{bookview}%"
+ nosummary="%URLPARAM{nosummary}%"
+ nototal="%URLPARAM{nototal}%"
+ order="%URLPARAM{order}%"
+ reverse="%URLPARAM{reverse}%"
+ regex="%URLPARAM{regex}%"
+}%
 <noautolink>
 <div class="twikiPageForm">
 <form action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%INTURLENCODE{"%INCLUDINGWEB%/%INCLUDINGTOPIC%"}%">
@@ -49,8 +62,7 @@
 </tr>
 <tr>
 <th>%MAKETEXT{"Do show:"}%</th>
-<td><input type="checkbox" class="twikiCheckbox" name="bookview" id="bookview" /><label for="bookview"> !BookView</label> <span class="twikiSmall">[[%TWIKIWEB%.BookView][%MAKETEXT{"about BookView"}%]]</span><br />
-<input type="checkbox" class="twikiCheckbox" name="showlock" id="showlock" /><label for="showlock"> %MAKETEXT{"Locked topics"}%</label>
+<td><input type="checkbox" class="twikiCheckbox" name="bookview" id="bookview" /><label for="bookview"> !BookView</label> <span class="twikiSmall">[[%TWIKIWEB%.BookView][%MAKETEXT{"about BookView"}%]]</span>
 </td>
 </tr>
 <tr>
