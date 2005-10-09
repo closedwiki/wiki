@@ -2633,95 +2633,9 @@ msgstr "ver"
 
 #: templates/attach.pattern.tmpl:66
 msgid "Show existing attachments"
-msgstr ""
+msgstr "Exibir anexos existentes"
 
 #: templates/attach.pattern.tmpl:66
 msgid "Hide existing attachments"
-msgstr ""
+msgstr "Esconder anexos existentes"
 
-#~ msgid "Move attachment..."
-#~ msgstr "Mover anexo..."
-
-#~ msgid "%1 - Registration for %2"
-#~ msgstr "%1 - Registro de %2"
-
-#~ msgid ""
-#~ "Did you type in your login name and password correctly? Remember, both "
-#~ "are case sensitive."
-#~ msgstr ""
-#~ "Você digitou sem nome de usuário e senha corretamente? Lembre-se de que "
-#~ "nos dois casos maiúsculas e minúsculas fazem diferença."
-
-#~ msgid "Edit topic text"
-#~ msgstr "Editar o texto do tópico"
-
-#~ msgid "Either you need to register or the authentication failed"
-#~ msgstr "Ou você precisa se registrar ou a autenticação falhou"
-
-#~ msgid "If you expected to be logged in at this point:"
-#~ msgstr "Se você esperava estar identificado nesse ponto:"
-
-#~ msgid ""
-#~ "If you want to try again, go back in your browser and hit edit again."
-#~ msgstr ""
-#~ "Se quiser tentar de novo, volte no seu navegador e tente editar de novo."
-
-#~ msgid ""
-#~ "In case you got this email by mistake: Somebody (%1) registered  at the %"
-#~ "2 site using your mail address %3. Contact %4 if needed."
-#~ msgstr ""
-#~ "No caso de você ter recebido esse e-mail por engano: alguém (%1) "
-#~ "registrou-se no site %2 usando seu endereço de e-mail %3. Contate %4 de "
-#~ "necessário."
-
-#~ msgid "Incorrect %1:"
-#~ msgstr "%1 incorreto(a):"
-
-#~ msgid "Jump to start of topic"
-#~ msgstr "Pular para o final do tópico"
-
-#~ msgid "Please go _back_ in browser and try a new name"
-#~ msgstr "Por favor, _volte_ no navegador e tente um novo nome"
-
-#~ msgid "Register"
-#~ msgstr "Registrar-se"
-
-#~ msgid ""
-#~ "Registered users can [[%1][change passwords]] and [[%2][reset passwords]]."
-#~ msgstr ""
-#~ "Usuários registrados podem [[%1][alterar senhas]] e [[%2][reiniciar "
-#~ "senhas]]."
-
-#~ msgid "Simply fill out the %1 form. It only takes a minute."
-#~ msgstr "Apenas preencha o formulário %1. Leva apenas um minuto."
-
-#~ msgid "Skip to action links"
-#~ msgstr "Pular para links de ações"
-
-#~ msgid ""
-#~ "To edit topics on this %1 collaborative web, you must be registered as a "
-#~ "user."
-#~ msgstr ""
-#~ "Para editar tópicos nesta web colaborativa %1, você precisa ser um "
-#~ "usuário registrado."
-
-#~ msgid "To register as a new user:"
-#~ msgstr "Para se registrar como um novo usuário:"
-
-#~ msgid ""
-#~ "You can also login anonymously as user *TWikiGuest* with password *guest*."
-#~ msgstr ""
-#~ "Você também pode se permanecer anônimo, com o usuário *TWikiGuest* e com "
-#~ "a senha *guest*."
-
-#~ msgid "to &top"
-#~ msgstr "Ir pro &topo"
-
-#~ msgid "Back"
-#~ msgstr "Voltar"
-
-#~ msgid "Edit content"
-#~ msgstr "Editar conteúdo"
-
-#~ msgid "More"
-#~ msgstr "Mais"
