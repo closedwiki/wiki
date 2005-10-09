@@ -135,36 +135,18 @@ sub loadSession {
     my $twiki = $this->{twiki};
     my $query = $twiki->{cgiQuery};
 
+    $this->{haveCookie} = $query->raw_cookie();
+
     # Try and get the user from the webserver
     my $authUser = $this->getUser( $this );
 
-    my $cgisession;
-    my $sid;
+    # First, see if there is a cookied session, creating a new session
+    # if necessary.
+    my $cgisession = CGI::Session->new(
+        undef, $query,
+        { Directory => $TWiki::cfg{SessionDir} } );
 
-    # First, see if there is a cookied session
-    $sid = $query->cookie( $CGI::Session::NAME ) if $query;
-
-    # if there is no cookie, signal that we will want to use transparent
-    # session IDs if there is a session
-    $this->{useTransSID} = !defined($sid);
-
-    # if there is no cookie, try the URL param
-    $sid ||= $query->param( $CGI::Session::NAME ) if $query;
-
-    # if there's a session ID, get the session from disc
-    if( $sid ) {
-        $cgisession = new CGI::Session(
-            undef, $sid,
-            { Directory => $TWiki::cfg{SessionDir} } );
-        $this->{cgisession} = $cgisession;
-
-        # check that is really is ours; if not, expire it
-        if( $authUser && $cgisession->param( 'AUTHUSER' ) ne $authUser ) {
-            undef $cgisession;
-        } else {
-            $authUser ||= $cgisession->param( 'AUTHUSER' );
-        }
-    }
+    $authUser ||= $cgisession->param( 'AUTHUSER' );
 
     # if we couldn't get the login manager or the http session to tell
     # us who the user is, then let's use the CGI "remote user"
@@ -174,13 +156,12 @@ sub loadSession {
 
     # is this a logout?
     if( $query && $query->param( 'logout' ) ) {
-        $cgisession->expire( time() ) if $cgisession;
-
-        my $origurl = $query->url() . $query->path_info();
+        my $origurl = $query->url().$query->path_info();
         $this->redirectCgiQuery( $query, $origurl );
         $authUser = undef;
     }
 
+    $this->{cgisession} = $cgisession;
     $this->userLoggedIn( $authUser );
 
     $twiki->{SESSION_TAGS}{SESSIONID} = $this->{sessionId};
@@ -291,28 +272,26 @@ message.
 
 sub userLoggedIn {
     my( $this, $authUser, $wikiName ) = @_;
-    my $cgisession = $this->{cgisession};
+
     my $twiki = $this->{twiki};
 
+    my $cgisession = $this->{cgisession} ||
+      # create new session if necessary
+      CGI::Session->new(
+          undef, $twiki->{cgiQuery},
+          { Directory => $TWiki::cfg{SessionDir} } );
+    $this->{cgisession} = $cgisession;
+
     if( $authUser && $authUser ne $TWiki::cfg{DefaultUserLogin} ) {
-        # create new session if necessary
-        $cgisession ||= new CGI::Session(
-            undef, $twiki->{cgiQuery},
-            { Directory => $TWiki::cfg{SessionDir} } );
         $cgisession->param( 'AUTHUSER', $authUser );
         $twiki->enterContext( 'authenticated' );
-        $this->{sessionId} = $cgisession->id();
-        $this->{cgisession} = $cgisession;
     } else {
         # if we are not authenticated, expire any existing session
-        $cgisession->expire( time() ) if $cgisession;
-        undef $this->{cgisession};
-        $authUser = undef;
+        $cgisession->clear( [ 'AUTHUSER' ] );
         $twiki->leaveContext( 'authenticated' );
-        $this->{useTransSID} = 0;
-        $this->{sessionId} = undef;
     }
 
+    $this->{sessionId} = $cgisession->id();
     $this->{authUser} = $authUser;
 }
 
@@ -403,7 +382,7 @@ sub endRenderingHandler {
     # If cookies are not turned on and transparent CGI session IDs are,
     # grab every URL that is an internal link and pass a CGI variable
     # with the session ID
-    if( $this->{useTransSID} ) {
+    unless( $this->{haveCookie} ) {
         # rewrite internal links to include the transparent session ID
         # Doesn't catch Javascript, because there are just so many ways
         # to generate links from JS.
@@ -459,7 +438,6 @@ sub modifyHeader {
     return unless $this->{sessionId};
 
     my $query = $this->{twiki}->{cgiQuery};
-
     my $c = CGI::Cookie->new( -name => $CGI::Session::NAME,
                               -value => $this->{sessionId},
                               -path => '/' );
@@ -483,7 +461,7 @@ sub redirectCgiQuery {
 
     return 0 unless $this->{sessionId};
 
-    $url = $this->_rewriteURL( $url ) if $this->{useTransSID};
+    $url = $this->_rewriteURL( $url ) unless $this->{haveCookie};
 
     # This usually won't be important, but just in case they haven't
     # yet received the cookie and happen to be redirecting, be sure
@@ -739,8 +717,8 @@ sub _dispLogon {
 
     my $urlToUse = $this->loginUrlPath();
 
-    if( $this->{useTransSID} ) {
-        $urlToUse .= ( '?' . $CGI::Session::NAME . '=' . $sessionId );
+    unless( $this->{haveCookie} ) {
+        $urlToUse = $this->_rewriteURL( $urlToUse );
     }
 
     my $text = $twiki->{templates}->expandTemplate('LOG_IN');
