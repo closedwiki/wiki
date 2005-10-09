@@ -95,7 +95,7 @@ _(Click for form-based editing of existing preferences.)_
 		* Set WIKITOOLNAME = TWiki
 
 	* Image, URL and alternate tooltip text of the logo *for this installation*: you should change these settings for your site, or they can be overwridden in !WebPreferences for individual webs by defining these variables there.
-		* Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-124x35-t.gif
+		* Set WIKILOGOIMG = %PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-140x40-t.gif
 		* Set WIKILOGOURL = http://TWiki.org/
 		* Set WIKILOGOALT = Powered by <nop>%WIKITOOLNAME%
 

@@ -10,42 +10,45 @@ The official TWiki logo is a big "T" in a speech bubble convenying "working toge
 <table cellpadding="5"><tr><td valign="top">
 
 =T-logo-169x130-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-169x130-t.gif" alt="T-logo, no text, transparent bg, 169x130"  width="169" height="130"  />
+    <img src="%ATTACHURLPATH%/T-logo-169x130-t.gif" alt="T-logo, no text, transparent bg, 169x130" />
 
 =T-logo-65x50-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-65x50-t.gif" alt="T-logo, no text, transparent bg, 65x50"  width="65" height="50"  />
+    <img src="%ATTACHURLPATH%/T-logo-65x50-t.gif" alt="T-logo, no text, transparent bg, 65x50" />
 
 =T-logo-58x45-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-58x45-t.gif" alt="T-logo, no text, transparent bg, 58x50"  width="58" height="45"  />
+    <img src="%ATTACHURLPATH%/T-logo-58x45-t.gif" alt="T-logo, no text, transparent bg, 58x50" />
 
 =T-logo-46x35-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-46x35-t.gif" alt="T-logo, no text, transparent bg, 46x35"  width="46" height="35"  />
+    <img src="%ATTACHURLPATH%/T-logo-46x35-t.gif" alt="T-logo, no text, transparent bg, 46x35" />
 
 =T-logo-34x26-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-34x26-t.gif" alt="T-logo, no text, transparent bg, 34x26"  width="34" height="26"  />
+    <img src="%ATTACHURLPATH%/T-logo-34x26-t.gif" alt="T-logo, no text, transparent bg, 34x26" />
 
 =T-logo-16x16-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-16x16-t.gif" alt="T-logo, transparent bg, 16x16"  width="16" height="16"  />
+    <img src="%ATTACHURLPATH%/T-logo-16x16-t.gif" alt="T-logo, transparent bg, 16x16" />
 
 </td><td>&nbsp;</td><td valign="top">
 
 =T-logo-456x130-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-456x130-t.gif" alt="T-logo, transparent bg, 456x130"  width="456" height="130"  />
+    <img src="%ATTACHURLPATH%/T-logo-456x130-t.gif" alt="T-logo, transparent bg, 456x130" />
 
 =T-logo-175x50-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-175x50-t.gif" alt="T-logo, transparent bg, 175x50"  width="175" height="50"  />
+    <img src="%ATTACHURLPATH%/T-logo-175x50-t.gif" alt="T-logo, transparent bg, 175x50" />
 
 =T-logo-158x45-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-158x45-t.gif" alt="T-logo, transparent bg, 158x45"  width="158" height="45"  />
+    <img src="%ATTACHURLPATH%/T-logo-158x45-t.gif" alt="T-logo, transparent bg, 158x45" />
+
+=T-logo-140x40-t.gif=: <br />
+    <img src="%ATTACHURLPATH%/T-logo-140x40-t.gif" alt="T-logo, transparent bg, 158x45"  />
 
 =T-logo-124x35-t.gif=: <br />
     <img src="%ATTACHURLPATH%/T-logo-124x35-t.gif" alt="T-logo, transparent bg, 124x35"  />
 
 =T-logo-88x31-t.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-88x31-t.gif" alt="T-logo, transparent bg, 88x31"  width="88" height="31"  />
+    <img src="%ATTACHURLPATH%/T-logo-88x31-t.gif" alt="T-logo, transparent bg, 88x31"  />
 
 =T-logo-80x15.gif=: <br />
-    <img src="%ATTACHURLPATH%/T-logo-80x15.gif" alt="T-logo, 80x15"  width="80" height="15"  />
+    <img src="%ATTACHURLPATH%/T-logo-80x15.gif" alt="T-logo, 80x15" />
 
 </td></tr></table>
 %STOPINCLUDE%
@@ -67,7 +70,7 @@ You may NOT use any original artwork from TWiki.org, nor make or use modified ve
    * You may use the 'collaborate with TWiki' logo on a Web site that is powered by the TWiki collaboration platform.
    * You may use the 'collaborate with TWiki' logo in product description and promotional material IF and ONLY IF such use can in no way be interpreted as anything other than an attribution. Using the TWiki name and artwork in a manner that implies endorsement of a product or service is not allowed.
 
-TWiki<sup>TM</sup> is a trademark of TWiki:Main.PeterThoeny.
+TWiki&trade; is a trademark of TWiki:Main.PeterThoeny.
 
 ---++ Background and Feedback
 
