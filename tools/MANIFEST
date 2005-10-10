@@ -554,7 +554,6 @@ pub/TWiki/TWikiDocGraphics/rfc.gif 0660
 pub/TWiki/TWikiDocGraphics/right.gif 0660
 pub/TWiki/TWikiDocGraphics/rss-feed.gif 0660
 pub/TWiki/TWikiDocGraphics/rss-small.gif 0660
-pub/TWiki/TWikiDocGraphics/rss.gif 0660
 pub/TWiki/TWikiDocGraphics/searchtopic.gif 0660
 pub/TWiki/TWikiDocGraphics/sh.gif 0660
 pub/TWiki/TWikiDocGraphics/sniff.gif 0660
@@ -712,7 +711,8 @@ TWikiHistory.html 0440
 UpgradeTwiki 0550
 !include twikiplugins/JSCalendarContrib/lib/TWiki/Contrib/JSCalendarContrib
 !include twikiplugins/MailerContrib/lib/TWiki/Contrib/MailerContrib
-!include twikiplugins/TwistyContrib/lib/TWiki/Plugins/TwistyContrib
+!include twikiplugins/TipsContrib/lib/TWiki/Contrib/TipsContrib
+!include twikiplugins/TwistyContrib/lib/TWiki/Contrib/TwistyContrib
 !include twikiplugins/CommentPlugin/lib/TWiki/Plugins/CommentPlugin
 !include twikiplugins/EditTablePlugin/lib/TWiki/Plugins/EditTablePlugin
 !include twikiplugins/InterwikiPlugin/lib/TWiki/Plugins/InterwikiPlugin
@@ -721,4 +721,3 @@ UpgradeTwiki 0550
 !include twikiplugins/SmiliesPlugin/lib/TWiki/Plugins/SmiliesPlugin
 !include twikiplugins/SpreadSheetPlugin/lib/TWiki/Plugins/SpreadSheetPlugin
 !include twikiplugins/TablePlugin/lib/TWiki/Plugins/TablePlugin
-!include twikiplugins/TipsContrib/lib/TWiki/Plugins/TipsContrib
