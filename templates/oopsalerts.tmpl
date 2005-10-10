@@ -4,7 +4,7 @@
 %TMPL:DEF{"bad_protocol"}%       %_{"Error: Unsupported protocol. (Must be 'http://domain/...')"}% %TMPL:END%
 %TMPL:DEF{"bad_content"}%   %_{"Error: Unsupported content type: [_1] (Must be =text/html=, =text/plain= or =text/css=)", "%PARAM1%"}% %TMPL:END%
 %TMPL:DEF{"no_such_topic"}%      %_{"Warning: Can't find topic [_1]", "<nop>%PARAM1%"}% %TMPL:END%
-%TMPL:DEF{"already_included"}%   %_{"Warning: Can't INCLUDE [_1] twice, topic is already included. [_2]", "<nop>%PARAM1%.<nop>%PARAM2%", "%PARAM3%"}% %TMPL:END%
+%TMPL:DEF{"already_included"}%   %_{"Warning: Can't INCLUDE [_1] repeatedly, topic is already included. [_2]", "<nop>%PARAM1%.<nop>%PARAM2%", "%PARAM3%"}% %TMPL:END%
 %TMPL:DEF{"generic"}%            %PARAM1% %PARAM2% %PARAM3% %PARAM4%<br /> %TMPL:END%
 %TMPL:DEF{"missing_user"}%       %_{"The entry for user [_1] was missing in the password system.", "%PARAM1%"}%<br /> %TMPL:END%
 %TMPL:DEF{"notwikiuser"}%        %_{"Can't find user [_1]", "%PARAM1%"}%<br /> %TMPL:END%

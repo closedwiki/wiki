@@ -1961,7 +1961,7 @@ sub _expandAllTags {
     # when debugging The default is set to 16
     # to match the original limit on search expansion, though this of
     # course applies to _all_ tags and not just search.
-    $$text = $this->_processTags( $$text, 16, '', @_ );
+    $$text = $this->_processTags( $$text, 16, @_ );
 
     # restore previous context
     $this->{SESSION_TAGS}{TOPIC}   = $memTopic;
@@ -1981,13 +1981,14 @@ sub _processTags {
     return '' unless defined( $text );
 
     my $depth = shift;
-    my $expanding = shift;
 
     # my( $topic, $web ) = @_;
 
     unless ( $depth ) {
-        my $mess = "Max recursive depth reached: $expanding";
+        my $mess = "Max recursive depth reached: $text";
         $this->writeWarning( $mess );
+	$text =~ s/%.*?%//go; # prevent recursive expansions 
+                              # that just has been detected
         return $text;
     }
 
@@ -2043,8 +2044,8 @@ sub _processTags {
                     # tag, or can recursively expand the tag. The
                     # behaviour is different in each case.
                     #unshift( @queue, split( /(%)/, $e ));
-                    $stackTop .=
-                      $this->_processTags($e, $depth-1, $expanding , @_ );
+		    $stackTop .=
+		       $this->_processTags($e, $depth-1, @_ );
                 } else { # expansion failed
                     #print STDERR ' ' x $tell++,"EXPAND $tag FAILED\n" if $tell;
                     push( @stack, $stackTop );
@@ -2452,7 +2453,8 @@ sub _INCLUDE {
     # prevent recursive includes. Note that the inclusion of a topic into
     # itself is not blocked; however subsequent attempts to include the
     # topic will fail.
-    if( $this->{includes}->{$key} ) {
+    my $count = grep($web.'.'.$topic, keys %{$this->{includes}});
+    if( $this->{includes}->{$key} || $count > 99) {
         if( $warn eq 'on' ) {
             my $more = '';
             if( defined $this->{includes} ) {
