@@ -1,15 +1,10 @@
 %META:TOPICINFO{author="TWikiContributor" date="1122128753" format="1.1" version="$Rev$"}%
+<table><tr><td>
 ---+!! Welcome to the %WEB% Web
 
-<table><tr><td>
 *Welcome to TWiki:* a flexible, powerful, secure, yet simple web-based collaboration platform.  Use TWiki to run a project development space, a document management system, a knowledge base or any other groupware tool on either an intranet or on the Internet.
 
 This is the place to learn about TWiki features, find where to download it, and try it out for yourself...
-</td><td align="center">
-<a href="%WIKILOGOURL%"><img src="%WIKILOGOIMG%" border="0" alt="%WIKILOGOALT%" /></a><br />
-The official TWiki<sup>&trade;</sup> site is 
-http://twiki.org/
-</td></tr></table>
 
 ---++ Available Information
    * [[TWikiUsersGuide][User's Guide]]: Documentation for TWiki users
@@ -27,6 +22,25 @@ http://twiki.org/
 </form>
 </blockquote>
 
+</td><td width="25">&nbsp;</td><td width="200" valign="top">
+<form action="%SCRIPTURLPATH%/search%SCRIPTSUFFIX%/%INTURLENCODE{"%WEB%"}%/">
+<table border="0" cellspacing="0" cellpadding="8" width="100%"><tr><th bgcolor="%WEBBGCOLOR%">
+TWiki Tip of the Day
+</th></tr><tr><td bgcolor="#EEEEEE">
+%INCLUDE{TWikiTipsOfTheDayInclude}% </td>
+</tr></table>
+
+<table border="0" cellspacing="0" cellpadding="8" width="100%"><tr><td bgcolor="%WEBBGCOLOR%">
+<input type="text" name="search" size="22" /><br /><input type="submit" value="Search Docs" /><br /> 
+<font size="-2">More options in WebSearch</font>
+</td></tr></table>
+
+<table border="0" cellspacing="0" cellpadding="8" width="100%"><tr><td bgcolor="%WEBBGCOLOR%">
+<a href="http://TWiki.org/"><img src="%PUBURL%/%TWIKIWEB%/TWikiLogos/T-logo-158x45-t.gif" width="158" height="45" alt="Powered by TWiki" border="0" /></a><br />
+The official TWiki<sup>TM</sup> site is http://twiki.org/
+</td></tr></table>
+</form>
+</td></tr></table>
 ---++ Disclaimer
    * TWiki<sup>TM</sup> is a trademark of Peter Thoeny
    * __Note__: Twiki (with a lower case "w") is a robot character in the _Buck Rogers<sup>TM</sup> in the 25th Century_ TV series. TWiki (with an upper case "W") is not affiliated with the Dille Family Trust, the registered trademark owner of the _Buck Rogers_ name
