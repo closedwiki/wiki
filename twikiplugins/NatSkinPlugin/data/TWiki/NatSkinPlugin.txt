@@ -262,8 +262,9 @@ using these settings will be changed accordingly.
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main/MichaelDaum |
-|  Plugin Version: | v2.51 (2005-10-09) |
+|  Plugin Version: | v2.52 (2005-10-10) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Oct 2005: | added switchstyle feature to cycle thru all installed skin styles|
 |  09 Oct 2005: | rewrite of skin state: support switching border, \
 						sidebar, webbuttons and style independently; \
 						rewrite of the email obfuscator; \
@@ -287,5 +288,5 @@ using these settings will be changed accordingly.
 
 __Related Topics:__ TWiki:Plugins/NatSkinPlugin, TWiki:Plugins/NatSkin
 
--- TWiki:Main.MichaelDaum - 27 Sep 2005 
+-- TWiki:Main.MichaelDaum - 10 Oct 2005 
 
