@@ -184,9 +184,9 @@ a:hover {
 }
 .natSideBar ul {
   padding-left:0px;
+  list-style-type:none;
 }
 .natSideBar li {
-  list-style-type:none;
   border:1px solid white; /* IE fix */
 }
 
@@ -196,9 +196,12 @@ a:hover {
   padding:2px;
 }
 .natSideBar li {
-  padding-left:15px;
+  margin-left:15px;
   margin-bottom:0px;
   margin-top:0px;
+}
+.natSideBar ol li {
+  margin-left:5px;
 }
 .natWebLink a:hover,
 .natSideBar li a:hover {
@@ -288,4 +291,20 @@ a:hover {
 }
 .blogSideBarComments li {
   margin-bottom:0.5em;
+}
+.blogSideBarSection ul {
+  list-style-type:circle;
+}
+.blogSideBarSection ul li {
+  margin-left:25px;
+  line-height:1.1em;
+}
+.blogSideBarSection ol {
+  padding-left:5px;
+}
+.blogSideBarSection ol li {
+  margin-left:25px;
+}
+.blogAbout {
+  margin-left:15px;
 }

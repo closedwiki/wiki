@@ -25,10 +25,12 @@ if you have any questions.
   border-bottom:0px;
 }
 </style>
-<div style="float:right; width:35%; padding-left:10px; padding-bottom:10px; padding-top:20px">
-<img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/SepiaTWiki.png" alt="SepiaTWiki.png" />
-</div>
-<div style="padding-top:20px;margin-right:200px;">
+%IFSKINSTATETHEN{release="dakar"}%
+<img src="%WIKILOGOIMG%" alt="%WIKILOGOALT%" align="right" vspace="20px"/>
+%ELSESKINSTATE%
+<img src="%PUBURLPATH%/%TWIKIWEB%/NatSkin/SepiaTWiki.png" align="right" hspace="10px" vspace="20px" alt="SepiaTWiki.png" />
+%FISKINSTATE%
+<div style="margin-top:20px">
 <h1 class="%TMPL:P{"headingstyle"}%">%TMPL:P{"heading"}%</h1>
 %TMPL:P{"message"}%
 %TMPL:P{"contact"}%

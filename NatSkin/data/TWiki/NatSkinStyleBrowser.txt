@@ -1,13 +1,17 @@
-%META:TOPICINFO{author="TWikiContributor" date="1128877652" format="1.1" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1128955495" format="1.1" version="1.1"}%
 <div class="natSideBarContents">
 %STARTINCLUDE%
 <div class="natSkinStyleBrowser">
 <form method="post" action="%SCRIPTURLPATH%/view%SCRIPTSUFFIX%/%BASEWEB%/%BASETOPIC%">
-<select name="style">
+<table border="0">
+<tr><td colspan="2">
+<select style="width:100%" name="style">
 <noautolink>
 %FORMATLIST{"%KNOWNSTYLES%" pattern="\s*(.*)\s*" format="<option\%IFSKINSTATE{\"$1\" then=\" selected=\\"selected\\"\"}\%>$1</option>" join="\n"}%
 </noautolink>
-</select>&nbsp;
+</select>
+</td></tr>
+<tr><td colspan="2">
 	* <input type="radio" name="styleborder" value="on"%IFSKINSTATE{border="on" then=" checked=\"checked\""}%"/>Border On
 	* <input type="radio" name="styleborder" value="off"%IFSKINSTATE{border="off" then=" checked=\"checked\""}%"/>Border Off
 	* <input type="radio" name="styleborder" value="thin"%IFSKINSTATE{border="thin" then=" checked=\"checked\""}%"/>Thin Layout
@@ -16,10 +20,18 @@
 	* <input type="radio" name="stylesidebar" value="off"%IFSKINSTATE{sidebar="off" then=" checked=\"checked\""}%"/>Sidebar Off
 	* <input type="radio" name="stylebuttons" value="on"%IFSKINSTATE{buttons="on" then=" checked=\"checked\""}%"/>Web Buttons On
 	* <input type="radio" name="stylebuttons" value="off"%IFSKINSTATE{buttons="off" then=" checked=\"checked\""}%"/>Web Buttons Off
+</td></tr>
+<tr>
+<td><input style="width:100%" type="submit" name="switchstyle" value="Prev"/></td>
+<td><input style="width:100%" type="submit" name="switchstyle" value="Next"/></td>
+</tr>
+<tr>
+<td><input style="width:100%" type="submit" value="OK"/></td>
+<td><input style="width:100%" type="submit" name="reset" value="Reset"/></td>
+</tr>
+</table>
 <input type="hidden" name="search" value="%URLPARAM{search}%" />
 <input type="hidden" name="refresh" value="on" />
-<input type="submit" value="OK""/>
-<input type="submit" name="reset" value="Reset"/>
 </form>
 </div>
 %STOPINCLUDE%

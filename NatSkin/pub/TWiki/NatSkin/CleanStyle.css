@@ -288,18 +288,8 @@ hr {
   line-height:120%;
 }
 .blogSideBarSection ul {
-  margin:0px;
+  margin-left:0px;
 }
-.blogSideBarCategories ul,
-.blogSideBarLatest ul,
-.blogSideBarComments ul {
-  padding:0px;
-}
-.blogSideBarCategories li,
-.blogSideBarLatest li,
-.blogSideBarComments li {
-  list-style:none;
-}
-.blogSideBarComments li {
-  margin-bottom:0.5em;
+.blogSideBarSection ul li {
+  margin-bottom:0.4em;
 }
