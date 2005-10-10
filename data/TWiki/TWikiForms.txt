@@ -7,11 +7,11 @@ _Structured data (key-value pairs) attached to topics, according to a specificat
 
 ---++ Overview
 
-When forms are enabled for a web and a form is selected in a topic, an editable form appears in edit mode, and the contents are rendered as a table when the topic is viewed. You can define an unlimited number of different forms, though you can only have one form per topic. 
+When forms are enabled for a web, and a form is selected in a topic, the form data is shown when the topic is viewed, and the form can be edited in edit mode. You can define an as many different form types as you want, though you can only have one form per topic. 
 
 ---++ Defining a Form Template
 
-A Form Template is a specification of the fields in a form. A Form Template is simply a page containing a table, where each row of the table is one form field.
+A Form Template specifies the fields in a form. A Form Template is simply a page containing a TWiki table, where each row of the table is one form field.
 
 ---+++ Form Template Elements
 
@@ -99,7 +99,7 @@ when used in the value field of the form definition, will take the set of field 
 #EnablingForms
 ---++ Enabling Forms by Web
 
-Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreferences is optional and defines a list of possible form templates.
+Forms have to be enabled for each individual web. The ==WEBFORMS== variable in WebPreferences is optional and defines a list of possible form templates.
 <blockquote style="background-color:#f0f0f0">
 *Example:*
    * <nop>Set WEBFORMS = <nop>BugForm, <nop>FeatureForm, Books.<nop>BookLoanForm
@@ -120,9 +120,7 @@ Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreference
 
 ---++ Setting Up Multiple Form Options
 
-   * The optional ==WEBFORMS== variable defines alternative forms that can be selected by pressing *Change* in edit mode.
-   
-   * A topic template can use any form.
+   * The ==WEBFORMS== variable in WebPreferences lists the different forms that can be selected from the topic editor.
    
    * New topics with a form are created by simple HTML forms asking for a topic name. For example, you can have a =<nop>SubmitExpenseReport= topic where you can create new expense reports, a =<nop>SubmitVacationRequest= topic, and so on. These can specify the required template topic with its associated form.
 
@@ -140,7 +138,10 @@ Forms are enabled on a per web basis. The ==WEBFORMS== variable in WebPreference
 TWikiForms accept user-input data, stored as TWikiMetaData. Meta data also contains program-generated info about changes, attachments, etc. To find, format and display form and other meta data, see TWikiMetaData, ==SEARCH== and ==METASEARCH== variables in TWikiVariables, and [[FormattedSearch][TWiki Formatted Search]] for various options.
 
 ---++ Extending the range of form data types
-Several plugins allow you to extend the range of data types accepted by forms. For example, the TWiki:Plugins.DateFieldPlugin lets you add a 'date' type to the available types.
+Several plugins allow you to extend the range of data types accepted by forms. For example, the TWiki:Plugins.DateFieldPlugin lets you add a 'date' type to the available data types. All data types are single-valued (can only have one value) with the following exceptions:
+   * any type name starting with =checkbox=
+   * any type name with =+multi= anywhere in the name
+Types with names like this can both take multiple values.
 
 ---++ Gotcha!
    * Some browsers may strip linefeeds from =text= fields when a topic is saved. If you need linefeeds in a field, make sure it is a =textarea=.

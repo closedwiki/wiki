@@ -570,7 +570,7 @@ sub renderHidden {
         }
 
         if( $useDefaults && !defined( $value ) &&
-              $fieldDef->{type} !~ /^checkbox/ ) {
+              $fieldDef->{type} !~ /^checkbox|\+multi/ ) {
 
             $value = $fieldDef->{value};
         }
@@ -622,10 +622,12 @@ sub getFieldValuesFromQuery {
         my $param = $this->cgiName( $fieldDef->{name} );
 
         my $value = $query->param( $param );
-        if( $fieldDef->{type} =~ /^checkbox/ ) {
-            my @checked = $query->param ( $param );
-            $value = shift @checked;
-            foreach my $val (@checked) {
+
+        # checkbox and multi both allow multiple values
+        if( $fieldDef->{type} =~ /^checkbox|\+multi/ ) {
+            my @values = $query->param( $param );
+            $value = shift @values;
+            foreach my $val (@values) {
                 $value .= ", $val";
             }
         }
