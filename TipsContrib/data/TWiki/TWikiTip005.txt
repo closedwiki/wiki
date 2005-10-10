@@ -13,5 +13,5 @@ You will notice that the breadcrumb will now reflect the new parent.
 
 [[TWikiTipsOfTheDay][See More Tips...]]
 
--- Main.PaulineCheung - 19 Jan 2005
+-- TWiki:Main.PaulineCheung - 19 Jan 2005
 
