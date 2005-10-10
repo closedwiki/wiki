@@ -15,7 +15,7 @@ This Page randomly picks a Tip of the day to display. The %HOMETOPIC% includes t
 | Topic:			 | %CALC{$SET(topic, $REPLACE($GET(webtopic), 1, $GET(pos)))$GET(topic)}% |
 | Full URL:		 | %CALC{$SET(webTotd,%SCRIPTURL%/view%SCRIPTSUFFIX%/$GET(web)/$GET(topic))}% |
 -->
-%CALC{$NOP(%)SEARCH{ \"^$GET(topic)$\" web=\"$GET(web)\" scope="topic" regex="on" nosearch=\"on\" nototal=\"on\" limit=\"1\" format=\"[[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][$pattern(.*?\-\-\-\+([^\n\r]+).*)]]<br /> $summary(100, noheader) [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][%ICON{more}%<em>details...</em>]]\"}$NOP(%)}% %STOPINCLUDE%
+%CALC{$NOP(%)SEARCH{ \"^$GET(topic)$\" web=\"$GET(web)\" scope="topic" regex="on" nosearch=\"on\" nototal=\"on\" limit=\"1\" format=\"[[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][$pattern(.*?\-\-\-\+([^\n\r]+).*)]]<br /> $summary(100, noheader) [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][<img src=\\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/detail.gif\\" alt=\\"Detail\\" title=\\"Detail\\" width=\\"16\\" height=\\"16\\" border=\\"0\\" /><em>details...</em>]]\"}$NOP(%)}% %STOPINCLUDE%
 -----
 
 __See also:__ TWikiTipsOfTheDay, TWikiTipsOfTheDayAdmin
