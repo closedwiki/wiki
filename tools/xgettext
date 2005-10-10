@@ -32,7 +32,7 @@ foreach my $source (<R>) {
     my @fields = split(/\s/, $source);
     $source = $fields[0];
     if( $source =~ m/^bin\/[a-z]/ ||
-        $source =~ m/^lib\/.*\.pm$/ ||
+        ($source =~ m/^lib\/.*\.pm$/ && (! ($source =~ m/^lib\/CPAN\/.*\.pm$/))) ||
         $source =~ m/^templates\/.*\.tmpl$/ ||
         $source =~ m/^data\/TWiki\/.*Template\.txt$/ ||
         $source =~ m/^data\/TWiki\/TWikiPreferences\.txt$/ ||
