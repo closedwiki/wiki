@@ -52,7 +52,7 @@ $VERSION = '$Rev$';
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in ACTIVATED_PLUGINS.
-$RELEASE = '2.51';
+$RELEASE = '2.52';
 
 $defaultSkin    = 'nat';
 $defaultStyle   = 'Clean';
@@ -200,6 +200,7 @@ sub initSkinState {
   my $theToggleSideBar;
   my $theRaw;
   my $theReset;
+  my $theSwitchStyle;
 
   my $doStickyStyle = 0;
   my $doStickyBorder = 0;
@@ -209,6 +210,7 @@ sub initSkinState {
   # from query
   if ($query) {
     $theRaw = $query->param('raw');
+    $theSwitchStyle = $query->param('switchstyle');
     $theReset = $query->param('reset');
     if ($theReset) {
       writeDebug("clearing session values");
@@ -252,6 +254,33 @@ sub initSkinState {
   #writeDebug("$theStyle is UNKNOWN") unless $knownStyles{$theStyle};
   $theStyle = $defaultStyle unless $knownStyles{$theStyle};
   $skinState{'style'} = $theStyle;
+
+  # cycle styles
+  if ($theSwitchStyle) {
+    $theSwitchStyle = lc $theSwitchStyle;
+    $doStickyStyle = 1;
+    my $state = 0;
+    my $firstStyle;
+    my @knownStyles;
+    if ($theSwitchStyle eq 'next') {
+      @knownStyles = sort {$a cmp $b} keys %knownStyles #next
+    } else {
+      @knownStyles = sort {$b cmp $a} keys %knownStyles #prev
+    }
+    foreach my $style (@knownStyles) {
+      $firstStyle = $style unless $firstStyle;
+      if ($theStyle eq $style) {
+	$state = 1;
+	next;
+      }
+      if ($state == 1) {
+	$skinState{'style'} = $style;
+	$state = 2;
+	last;
+      }
+    }
+    $skinState{'style'} = $firstStyle if $state == 1;
+  }
 
   # handle border
   if ($theStyleBorder) {
