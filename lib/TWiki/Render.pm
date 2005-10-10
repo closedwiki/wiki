@@ -140,8 +140,8 @@ sub renderParent {
                  $visited{$parent} );
         $visited{$parent} = 1;
         unshift( @stack, "[[$parent][$pTopic]]" );
+        last if $dontRecurse;
         $parent = $store->getTopicParent( $pWeb, $pTopic );
-	last if $dontRecurse;
     }
     $text = join( $usesep, @stack );
 

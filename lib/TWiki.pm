@@ -2895,7 +2895,7 @@ sub _META {
     } elsif( $option eq 'moved' ) {
         return $this->{renderer}->renderMoved( $web, $topic, $meta, $params );
     } elsif( $option eq 'parent' ) {
-        $this->{renderer}->renderParent( $web, $topic, $meta, $params );
+        return $this->{renderer}->renderParent( $web, $topic, $meta, $params );
     }
 
     return '';
