@@ -1,4 +1,5 @@
 lib/TWiki/Contrib/TipsContrib.pm
+data/TWiki/TipsContrib.txt
 data/TWiki/TWikiTip001.txt
 data/TWiki/TWikiTip002.txt
 data/TWiki/TWikiTip003.txt

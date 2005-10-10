@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="PeterThoeny" date="1107573206" format="1.0" version="1.1"}%
+%META:TOPICINFO{author="TWikiContributor" date="1107573206" format="1.0" version="$Rev$"}%
 %META:TOPICPARENT{name="TWikiTipsOfTheDay"}%
 ---+ !SlideShowPlugin for presentations
 

@@ -1,0 +1,49 @@
+%META:TOPICINFO{author="TWikiContributor" date="1128972895" format="1.1" version="$Rev$"}%
+---+!! Tips Contrib Package
+
+Displays a rotating  "TWiki Tip of the Day" to help familiarize new users with TWiki features. Includes an application for creating custom tips for local installation.
+
+%TOC%
+
+---++ Summary of Contents
+   * Set on =TWikiTip= topics providing brief lessons on TWiki features. See TWikiTips.
+   * Set of topics for creating and managing =TWikiTipXXX= topics. See TWikiTipsOfTheDayAdmin.
+
+---++ Detailed Documentation
+   * See TWikiTipsOfTheDayAdmin for instructions on managing and displaying tips.
+   * See TWikiTipsOfTheDayAddNew for instructions for adding new custom tips.
+
+---++ Settings
+
+This extension requires no settings.  See TWikiTipsOfTheDayAdmin for administration details.
+
+   * One line description:
+      * Set SHORTDESCRIPTION = Displays rotating list of "TWiki Tip-of-the-day."
+
+---++ Installation Instructions
+
+__Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
+
+   * Download the ZIP file from the Plugin web (see below)
+   * Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
+     | *File:* | *Description:* |
+ %$MANIFEST%
+
+---++ Contrib Info
+
+|  Author: | Main.TWikiContributors |
+|  Copyright &copy;: |  2005, TWiki Contributors |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
+|  Dependencies: | none  |
+|  Version: | %$VERSION% |
+|  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  10 Oct 2005: | Initial version |
+|  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
+|  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
+|  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
+
+__Related Topics:__ %TWIKIWEB%.TWikiPreferences
+
+-- TWiki:Main/LynnwoodBrown - %$DATE%
+
+
