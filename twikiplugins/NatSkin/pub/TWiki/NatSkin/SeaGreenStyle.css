@@ -143,6 +143,7 @@ hr {
 
 .natSideBar ul {
   padding-left:38px;
+  color:#666666;
 }
 
 .natNotes {
@@ -365,3 +366,10 @@ hr {
   color:darkred;
 }
 
+/* blogging */
+.blogSideBarSection ul {
+  padding-left:1.5em;
+}
+.blogSideBarSection ul li {
+  margin-bottom:0.4em;
+}

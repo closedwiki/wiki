@@ -351,3 +351,15 @@ hr {
 .natSideBar .redDot a {
   color:#0F314E;
 }
+
+/* blogging */
+.blogSideBarSection ul {
+  padding-left:1.3em;
+}
+.blogSideBarSection ul li {
+  margin-bottom:0.6em;
+  line-height:1.1em;
+}
+.blogSideBarSection ol {
+  padding-left:2em;
+}

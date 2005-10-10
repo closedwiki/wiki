@@ -1,7 +1,7 @@
 <!-- template: defaulttopbar.nat.tmpl -->
 %TMPL:DEF{"defaulttopbar"}%
     <tr>
-      <td class="natTopBar natTopLeft" valign="top">
+      <td class="natTopBar natTopLeft %IFSKINSTATE{glue="off" action="oops" then="natTopRight"}%" valign="top">
 	<div class="natTopLeftContents">
 	  <div class="natWebTitle">
 	    <a href="%WIKILOGOURL%">%WIKITOOLNAME%</a><span class="natWebLocator">%TMPL:P{"locator"}%</span>
@@ -9,7 +9,7 @@
 	  <div class="natWebSlogan">%SITEMAPUSETO%</div>
 	</div>
       </td>
-      <td class="natTopBar natTopRight" valign="top">
+      <td class="natTopBar natTopRight" valign="top" style="%IFSKINSTATE{glue="off" action="oops" then="display:none"}%">
 	<div class="natTopRightContents">
 %IFSKINSTATETHEN{style="Kabrick" sidebar="right|off"}% 
 %ELSESKINSTATE%

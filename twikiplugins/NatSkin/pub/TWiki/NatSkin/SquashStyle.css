@@ -333,3 +333,7 @@ hr { border-bottom: 1px solid #999999; }
   color:#CC6600;
 }
 
+.blogSideBarSection ul {
+  padding-left:0px;
+  list-style-type:none;
+}
