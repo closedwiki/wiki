@@ -2381,3 +2381,7 @@ msgstr ""
 #: templates/attachtables.pattern.tmpl:50
 msgid "view"
 msgstr ""
+
+#: plugins/TipsContrib/TWikiTipsOfTheDayInclude
+msgid "Read on"
+msgstr ""

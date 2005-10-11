@@ -2600,3 +2600,6 @@ msgstr "obtidos em %1"
 msgid "view"
 msgstr "ver"
 
+#: plugins/TipsContrib/TWikiTipsOfTheDayInclude
+msgid "Read on"
+msgstr ""

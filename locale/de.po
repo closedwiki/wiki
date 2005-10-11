@@ -2630,6 +2630,10 @@ msgstr "abgefragt um %1"
 msgid "view"
 msgstr "Ansehen"
 
+#: plugins/TipsContrib/TWikiTipsOfTheDayInclude
+msgid "Read on"
+msgstr ""
+
 #, fuzzy
 #~ msgid "..."
 #~ msgstr "mehr..."

@@ -2451,6 +2451,10 @@ msgstr ""
 msgid "view"
 msgstr "vea"
 
+#: plugins/TipsContrib/TWikiTipsOfTheDayInclude
+msgid "Read on"
+msgstr ""
+
 #, fuzzy
 #~ msgid "..."
 #~ msgstr "(mas)"

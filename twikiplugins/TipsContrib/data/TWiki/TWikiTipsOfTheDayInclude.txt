@@ -16,9 +16,9 @@ This Page randomly picks a Tip of the day to display. The %HOMETOPIC% includes t
 | Full URL:		 | %CALC{$SET(webTotd,%SCRIPTURL%/view%SCRIPTSUFFIX%/$GET(web)/$GET(topic))}% |
 -->
 <div class="tipsOfTheDay">
-<b>TWiki Tip of the Day</b>
-<div class="tipsOfTheDayContents">
-%CALC{$NOP(%)SEARCH{ \"^$GET(topic)$\" web=\"$GET(web)\" scope="topic" regex="on" nosearch=\"on\" nototal=\"on\" limit=\"1\" format=\"[[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][$pattern(.*?\-\-\-\+([^\n\r]+).*)]]<br /> $summary(100, noheader) [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][<img src=\\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/detail.gif\\" alt=\\"Detail\\" title=\\"Detail\\" width=\\"16\\" height=\\"16\\" border=\\"0\\" /><em>details...</em>]]\"}$NOP(%)}% 
+<strong class="tipsOfTheDayHeader">%ICON{tip}% TWiki Tip of the Day</strong>
+<div class="tipsOfTheDayContents"><span class="tipsTitle">
+%CALC{$NOP(%)SEARCH{ \"^$GET(topic)$\" web=\"$GET(web)\" scope="topic" regex="on" nosearch=\"on\" nototal=\"on\" limit=\"1\" format=\"[[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][$pattern(.*?\-\-\-\+([^\n\r]+).*)]]</span><br /> $summary(100, noheader) [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][%MAKETEXT{"Read on"}%&nbsp;<img src=\\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/detail.gif\\" alt=\\"Detail\\" title=\\"Detail\\" width=\\"16\\" height=\\"16\\" border=\\"0\\" />]]\"}$NOP(%)}% 
 </div>
 </div>
 %STOPINCLUDE%
