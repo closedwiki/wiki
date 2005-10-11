@@ -10,12 +10,9 @@
 | [[TWikiTipsOfTheDayTemplate][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/viewtopic.gif" alt="View topic" border="0" width="16" height="16" />]] [[%SCRIPTURL%/edit%SCRIPTSUFFIX%/%WEB%/TWikiTipsOfTheDayTemplate?t=%SERVERTIME{$hou$min$sec}%][<img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/edittopic.gif" alt="Edit topic" border="0" width="16" height="16" />]] TWikiTipsOfTheDayTemplate | Template for new TWiki Tips |
 
 ---++ Focus Box Example
-
-<table border="0" cellspacing="0" cellpadding="8" width="200"><tr><th bgcolor="%WEBBGCOLOR%">
-TWiki Tip of the Day
-</th></tr><tr><td bgcolor="#EEEEEE">
-%INCLUDE{TWikiTipsOfTheDayInclude}% </td>
-</tr></table>
+<table border="0" width="200px"><tr><td>
+%INCLUDE{TWikiTipsOfTheDayInclude}% 
+</td></tr></table>
 
 -- TWiki:Main.PaulineCheung - 29 Jan 2005
 
