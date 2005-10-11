@@ -246,7 +246,7 @@ sub _expireDeadSessions {
 
         my $D;
 		eval $session;
-		next if ($@);
+		next if ( $@ || !$D );
         # The session is expired if it hasn't been accessed in ages
         # or has exceeded its registered expiry time.
         if( $time >= $D->{_SESSION_ATIME} + $TWiki::cfg{SessionExpiresAfter} ||
@@ -301,11 +301,10 @@ sub _myScriptURL {
 
     my $s = $this->{_MYSCRIPTURL};
     unless( $s ) {
-        my $s = quotemeta($this->{twiki}->getScriptUrl(
-                                            $M1, $M2, $M3 ));
-        $s =~ s@$M1@[^/]*?@go;
-        $s =~ s@$M2@[^#\?/]*@go;
-        $s =~ s@$M3@[^/]*?@go;
+        $s = quotemeta($this->{twiki}->getScriptUrl( $M1, $M2, $M3 ));
+        $s =~ s@\\$M1@[^/]*?@go;
+        $s =~ s@\\$M2@[^#\?/]*@go;
+        $s =~ s@\\$M3@[^/]*?@go;
         $this->{_MYSCRIPTURL} = $s;
     }
     return $s;
