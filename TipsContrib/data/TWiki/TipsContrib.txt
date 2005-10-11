@@ -20,6 +20,14 @@ This extension requires no settings.  See TWikiTipsOfTheDayAdmin for administrat
    * One line description:
       * Set SHORTDESCRIPTION = Displays rotating list of "TWiki Tip-of-the-day."
 
+---++ CSS used by !TipsContrib
+
+   * .tipsOfTheDay - overall container
+   * .tipsOfTheDayContents - container for tipsOfTheDayHeader and tipsOfTheDayText
+   * strong.tipsOfTheDayHeader - header that says "TWiki Tip of the Day"
+   * .tipsOfTheDayText - the tip; contains title and tip summary and link "Read on"
+   * .tipsOfTheDayTitle - title of the tip; the link to the tip topic
+
 ---++ Installation Instructions
 
 __Note:__ You do not need to install anything on the browser to use this contrib package. The following instructions are for the administrator who installs the package on the server where TWiki is running.
