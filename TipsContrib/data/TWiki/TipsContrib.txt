@@ -31,19 +31,19 @@ __Note:__ You do not need to install anything on the browser to use this contrib
 
 ---++ Contrib Info
 
-|  Author: | Main.TWikiContributors |
-|  Copyright &copy;: |  2005, TWiki Contributors |
+|  Author: | TWiki:Main.PeterThoeny |
+|  Copyright &copy;: | Copyright 2005 Peter Thoeny.  All Rights Reserved. |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Dependencies: | none  |
 |  Version: | %$VERSION% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  10 Oct 2005: | Initial version |
+|  10 Oct 2005: | Initial version - Packaging by TWiki:Main.LynnwoodBrown |
 |  Home: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC% |
 |  Feedback: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Dev |
 |  Appraisal: | http://TWiki.org/cgi-bin/view/Plugins/%TOPIC%Appraisal |
 
 __Related Topics:__ %TWIKIWEB%.TWikiPreferences
 
--- TWiki:Main/LynnwoodBrown - %$DATE%
+-- TWiki:Main.LynnwoodBrown - %$DATE%
 
 
