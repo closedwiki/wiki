@@ -1,12 +1,13 @@
 %META:TOPICINFO{author="AntonioTerceiro" date="1127484504" format="1.1" version="1.2"}%
-%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
+   * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][<nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
+   * [[%HOMETOPIC%][ %ICON{"home"}% %MAKETEXT{"Home"}%]]
+   * [[TWikiUsers][ %ICON{"person"}% %MAKETEXT{"Users"}%]]
+   * [[TWikiGroups][ %ICON{"group"}% %MAKETEXT{"Groups"}%]]
+   * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
+   * [[%INCLUDINGWEB%.WebSearchAdvanced][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+   * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
+   * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
+   * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
+   * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
 ---
-   * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
-   * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
-   * [[WebTopicList][%MAKETEXT{"Index"}%]]
-   * [[WebSearchAdvanced][%MAKETEXT{"Search"}%]]
-   * [[WebChanges][%MAKETEXT{"Changes"}%]]
-   * [[WebNotify][%MAKETEXT{"Notifications"}%]]
-   * [[WebStatistics][%MAKETEXT{"Statistics"}%]]
-   * [[WebPreferences][%MAKETEXT{"Preferences"}%]]
-
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%

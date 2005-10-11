@@ -1,8 +1,8 @@
 %META:TOPICINFO{author="ArthurClemens" date="1093167095" format="1.0" version="1.1"}%
+   * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][<nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
+   * [[%HOMETOPIC%][ %ICON{"home"}% %MAKETEXT{"Home"}%]]
+   * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
+   * [[WebSearchAdvanced][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+   * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
+---
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-----
-   * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
-   * [[%HOMETOPIC%][%MAKETEXT{"[_1] Web Home" args="%INCLUDINGWEB%"}%]]
-   * [[WebChanges][%MAKETEXT{"Changes"}%]]
-   * [[WebIndex][%MAKETEXT{"Index"}%]]
-   * [[WebSearch][%MAKETEXT{"Search"}%]]

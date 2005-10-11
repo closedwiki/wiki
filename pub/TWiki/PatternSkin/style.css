@@ -254,26 +254,39 @@ th.twikiSortedDescendingCol a:hover font,
 }
 
 /* TipsContrib */
-.patternTopic .tipsOfTheDay {
+.tipsOfTheDayContents .tipsOfTheDayTitle {
+	font-weight:bold;
+}
+.tipsOfTheDay {
 	border-width:1px;
 	border-style:solid;
 }
-.tipsOfTheDay .tipsTitle {
-	font-weight:bold;
-}
-.patternTopic .tipsOfTheDay .tipsOfTheDayHeader {
+.patternTopic .tipsOfTheDayHeader {
 	display:block;
 	padding:2px 5px;
 }
-.patternLeftBar .tipsOfTheDay .tipsOfTheDayHeader img {
-	display:none;
-}
-.patternTopic .tipsOfTheDayContents {
+.patternTopic .tipsOfTheDayText {
 	padding:5px;
 }
-.patternTopic .tipsOfTheDayContents a:link,
-.patternTopic .tipsOfTheDayContents a:visited {
+.patternTopic .tipsOfTheDayText a:link,
+.patternTopic .tipsOfTheDayText a:visited {
 	text-decoration:none;
+}
+/* TipsContrib - in left bar */
+.patternLeftBar .tipsOfTheDay {
+	margin:1em 0 .5em 0;
+	border-width:0;
+}
+.patternLeftBar .tipsOfTheDayHeader img {
+	display:none;
+}
+.patternLeftBar .tipsOfTheDayContents {
+	border-width:0;
+	padding:.25em .25em .5em .25em;
+}
+.patternLeftBar .tipsOfTheDayHeader {
+	display:block;
+	font-weight:normal;
 }
 
 /* TwistyContrib */

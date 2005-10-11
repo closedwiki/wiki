@@ -194,13 +194,21 @@ a:hover.twistyTrigger {
 }
 
 /* TipsContrib */
-.patternTopic .tipsOfTheDay {
+.tipsOfTheDay {
 	background-color:#E9F1F7; /*BG5*/ 
 	border-color:#BFD8ED; /*BO3*/
 }
-.patternTopic .tipsOfTheDay .tipsOfTheDayHeader {
+.patternTopic .tipsOfTheDayHeader {
 	background-color:#fff;
 	color:#333; /*T11*/
+}
+/* TipsContrib - in left bar */
+.patternLeftBar .tipsOfTheDayTitle a:link,
+.patternLeftBar .tipsOfTheDayTitle a:visited {
+	color:#a00; /*T5*/
+}
+.patternLeftBar .tipsOfTheDayTitle a:hover {
+	color:#FBF7E8; /*T3*/
 }
 
 /*	-----------------------------------------------------------

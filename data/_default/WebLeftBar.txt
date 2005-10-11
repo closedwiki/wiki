@@ -1,12 +1,11 @@
 %META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="$Rev$"}%
+   * <b>[[%INCLUDINGWEB%.%HOMETOPIC%][<nop>%MAKETEXT{"[_1] Web" args="%INCLUDINGWEB%"}%]]</b>
+   * [[%HOMETOPIC%][ %ICON{"home"}% %MAKETEXT{"Home"}%]]
+   * [[WebTopicList][ %ICON{"index"}% %MAKETEXT{"Index"}%]]
+   * [[WebSearchAdvanced][ %ICON{"searchtopic"}% %MAKETEXT{"Search"}%]]
+   * [[WebChanges][ %ICON{"changes"}% %MAKETEXT{"Changes"}%]]
+   * [[WebNotify][ %ICON{"notify"}% %MAKETEXT{"Notifications"}%]]
+   * [[WebStatistics][ %ICON{"statistics"}% %MAKETEXT{"Statistics"}%]]
+   * [[WebPreferences][ %ICON{"wrench"}% %MAKETEXT{"Preferences"}%]]
+---
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-----
-   * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
-   * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
-   * [[WebTopicList][%MAKETEXT{"Index"}%]]
-   * [[WebSearchAdvanced][%MAKETEXT{"Search"}%]]
-   * [[WebChanges][%MAKETEXT{"Changes"}%]] 
-   * [[WebNotify][%MAKETEXT{"Notifications"}%]] 
-   * [[WebStatistics][%MAKETEXT{"Statistics"}%]] 
-   * [[WebPreferences][%MAKETEXT{"Preferences"}%]] 
-   
