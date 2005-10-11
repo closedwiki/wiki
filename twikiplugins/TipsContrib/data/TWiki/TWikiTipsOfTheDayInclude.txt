@@ -18,7 +18,7 @@ This Page randomly picks a Tip of the day to display. The %HOMETOPIC% includes t
 <div class="tipsOfTheDay"><div class="tipsOfTheDayContents">
 <strong class="tipsOfTheDayHeader">%ICON{tip}% TWiki Tip of the Day</strong>
 <div class="tipsOfTheDayText"><span class="tipsOfTheDayTitle">
-%CALC{$NOP(%)SEARCH{ \"^$GET(topic)$\" web=\"$GET(web)\" scope="topic" regex="on" nosearch=\"on\" nototal=\"on\" limit=\"1\" format=\"[[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][$pattern(.*?\-\-\-\+([^\n\r]+).*)]]</span><br /> $summary(100, noheader) [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][%MAKETEXT{"Read on"}%&nbsp;<img src=\\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/detail.gif\\" alt=\\"Detail\\" title=\\"Detail\\" width=\\"16\\" height=\\"16\\" border=\\"0\\" />]]\"}$NOP(%)}% 
+%CALC{$NOP(%)SEARCH{ \"^$GET(topic)$\" web=\"$GET(web)\" scope="topic" regex="on" nosearch=\"on\" nototal=\"on\" limit=\"1\" format=\"[[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][$pattern(.*?\-\-\-\+([^\n\r]+).*)]]</span><br /> $summary(100, noheader) [[%SCRIPTURL%/view%SCRIPTSUFFIX%/$web/$topic][%MAKETEXT{"Read on"}%&nbsp;<img src=\\"%PUBURLPATH%/%TWIKIWEB%/TWikiDocGraphics/more-small.gif\\" alt=\\"Read more\\" title=\\"Read on\\" width=\\"14\\" height=\\"13\\" border=\\"0\\" />]]\"}$NOP(%)}% 
 </div>
 </div>
 </div>
