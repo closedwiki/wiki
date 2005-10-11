@@ -87,7 +87,7 @@ sub _processDir {
          $targetEntry=$shell->{config}->{TWIKI}{root}.'/'.$plugin.'.MF';
       } elsif ($entry =~ /$DEPENDENCIES/x) {
          $targetEntry=$shell->{config}->{TWIKI}{root}.'/'.$plugin.'.DEP';
-      } elsif ($entry =~ /^.+?(\.tar\.gz|\.zip|\.tgz|\.txt|_installer\.pl)/x) {
+      } elsif ($entry =~ /^.+?(\.tar\.gz|\.zip|\.tgz|_installer\.pl)/x) {
          next;
       } else {
          $targetEntry=$currentTargetDir.'/'.$entry;
@@ -98,9 +98,9 @@ sub _processDir {
       if (-d $src) {
          _processDir($shell,$currentSrcDir,$currentTargetDir,$entry,$plugin);
       } elsif (-f $src) {
-         if (-f $currentTargetDir.'/'.$entry) {
-            unlink  $currentTargetDir.'/'.$entry;
-         }
+         #if (-f $currentTargetDir.'/'.$entry) {
+         #   unlink  $currentTargetDir.'/'.$entry;
+         #  }
          
          makepath($currentTargetDir.'/'.$entry);
          $shell->printVerbose('copying '.$entry.' to '. $targetEntry."\n");
