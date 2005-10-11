@@ -1,8 +1,6 @@
 %META:TOPICINFO{author="AntonioTerceiro" date="1127484504" format="1.1" version="1.2"}%
-%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
 ---
-
    * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
    * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
    * [[WebTopicList][%MAKETEXT{"Index"}%]]

@@ -1,7 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1121074151" format="1.1" version="$Rev$"}%
-%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-
 ----
    * <b><nop>%INCLUDINGWEB% Web</b>
    * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
@@ -21,7 +19,7 @@
    * TWikiDocGraphics
    * TWikiSkinBrowser
    * InstalledPlugins
-
+---
    * <b>%MAKETEXT{"Admin Maintenance"}%</b>
    * AdminToolsCategory
    * InterWikis
@@ -30,10 +28,10 @@
    * TWikiAdminCookBook
    * %WIKIPREFSTOPIC%
    * %WEBPREFSTOPIC%
-
+---
    * *DocumentationCategories*
 %SEARCH{"DocumentationCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
-
+---
    * *ToolsCategories*
 %SEARCH{"ToolsCategory" scope="topic" excludetopic="%TOPIC%" nonoise="on" format="   * $web.$topic"}%
 

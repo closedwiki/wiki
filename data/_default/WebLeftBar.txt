@@ -1,7 +1,5 @@
 %META:TOPICINFO{author="TWikiContributor" date="1112002813" format="1.0" version="$Rev$"}%
-%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
 %INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
-
 ----
    * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
    * [[%HOMETOPIC%][%MAKETEXT{"Home"}%]]
@@ -11,4 +9,4 @@
    * [[WebNotify][%MAKETEXT{"Notifications"}%]] 
    * [[WebStatistics][%MAKETEXT{"Statistics"}%]] 
    * [[WebPreferences][%MAKETEXT{"Preferences"}%]] 
-----
+   

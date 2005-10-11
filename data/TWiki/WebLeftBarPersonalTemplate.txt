@@ -4,7 +4,7 @@ Customise this topic; samples and ideas available at TWiki:TWiki.WebLeftBarCookb
 %STARTINCLUDE%
    * *My links*
    * [[%WIKIUSERNAME%][My home page]]
-   * <a href="%SCRIPTURL%/search%SCRIPTSUFFIX%/Codev/?search=InterestedParties.*%USERNAME%&amp;regex=on" target="_top"><img src="%PUBURL%/%TWIKIWEB%/TWikiDocGraphics/stargold.gif" style="width:16px; height:16px; border:0px;" alt="Show me topics of interest" /></a>
-<div class="twikiSmall"><a href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=%GMTIME{"$year$mo$day$hours$minutes$seconds"}%">edit</a></div>
+   * 
+<a class="twikiSmall" href="%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%WEB%/%TOPIC%?t=20051011134358">edit</a>
 %STOPINCLUDE%
 

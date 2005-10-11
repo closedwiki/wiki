@@ -19,14 +19,15 @@
 	T8 grayed out text																#8E9195
 	T9 alert 																		#f00
 	T10 green 'new'																	#049804
+	T11 dark gray																	#333
 	
 	Background colors
 	----------------------------------------
 	BG1	white; attachment, form table background									#fff
 	BG2 link hover background color (red)  											#D6000F 
-	BG3	light gray																	#e6e6e6
+	BG3	light gray																	#efefef
 	BG4 active form field (not implemented yet)										#ffc
-	BG5 help background very light blue												#E9F2F9
+	BG5 info background very light blue												#E9F1F7
 	BG6	patternTopicAction light yellow (same as T3)								#FBF7E8
 	BG7 header background (very light yellow)										#FDFAF1
 	BG8 accent on sorted table column												#ccc
@@ -37,9 +38,9 @@
 	
 	Border colors
 	----------------------------------------
-	BO1	light gray																	#e6e6e6
+	BO1	light gray																	#efefef
 	BO2 submit button border blue ('active')										#88B6CF
-	BO3	help, personal side bar light blue border									#CADDED
+	BO3	info light blue border														#BFD8ED
 	BO4 border color beige, header h2 bottom border									#E2DCC8
 	BO5 header h3..h5 bottom border	(75% of BO4)									#E9E4D2
 	BO6 neutral gray border															#ccc
@@ -129,6 +130,80 @@ select {
 }
 
 /*	-----------------------------------------------------------
+	Plugin elements
+	-----------------------------------------------------------	*/
+
+/* TablePlugin */
+.twikiTable,
+.twikiTable td,
+.twikiTable th {
+	border-color:#ddd; /*BO7*/
+}
+.twikiTable th a:link,
+.twikiTable th a:visited,
+.twikiTable th a font {
+	color:#06c; /*T2*/
+}
+.twikiTable th a:hover,
+.twikiTable th a:hover font {
+	background-color:transparent;
+	color:#D6000F; /*T4*/
+	border-color:#D6000F; /*T4*/
+}
+
+/* TablePlugin - sorting of table columns */
+.patternTopic th.twikiSortedAscendingCol,
+.patternTopic th.twikiSortedDescendingCol {
+	background-color:#ccc; /*BG8*/
+}
+th.twikiSortedAscendingCol a:link,
+th.twikiSortedAscendingCol a:link font,
+th.twikiSortedAscendingCol a:visited,
+th.twikiSortedAscendingCol a:visited font,
+.twikiAttachments th.twikiSortedAscendingCol a:link,
+.twikiAttachments th.twikiSortedAscendingCol a:link font,
+.twikiAttachments th.twikiSortedAscendingCol a:visited,
+.twikiAttachments th.twikiSortedAscendingCol a:visited font,
+th.twikiSortedDescendingCol a:link,
+th.twikiSortedDescendingCol a:link font,
+th.twikiSortedDescendingCol a:visited,
+th.twikiSortedDescendingCol a:visited font,
+.twikiAttachments th.twikiSortedDescendingCol a:link,
+.twikiAttachments th.twikiSortedDescendingCol a:link font,
+.twikiAttachments th.twikiSortedDescendingCol a:visited,
+.twikiAttachments th.twikiSortedDescendingCol a:visited font {
+	border-color:#666; /*T7*/
+}
+th.twikiSortedAscendingCol a:hover,
+th.twikiSortedAscendingCol a:hover font,
+.twikiAttachments th.twikiSortedAscendingCol a:hover,
+.twikiAttachments th.twikiSortedAscendingCol a:hover font,
+th.twikiSortedDescendingCol a:hover,
+th.twikiSortedDescendingCol a:hover font,
+.twikiAttachments th.twikiSortedDescendingCol a:hover,
+.twikiAttachments th.twikiSortedDescendingCol a:hover font {
+	border-color:#D6000F; /*T4*/
+}
+
+/* TwistyContrib */
+.twistyPlaceholder {
+	color:#8E9195; /*T8*/
+}
+a:hover.twistyTrigger {
+	color:#FBF7E8; /*T3*/
+}
+
+/* TipsContrib */
+.patternTopic .tipsOfTheDay {
+	background-color:#E9F1F7; /*BG5*/ 
+	border-color:#BFD8ED; /*BO3*/
+}
+.patternTopic .tipsOfTheDay .tipsOfTheDayHeader {
+	background-color:#fff;
+	color:#333; /*T11*/
+}
+
+/*	-----------------------------------------------------------
 	TWiki styles
 	-----------------------------------------------------------	*/
 
@@ -190,7 +265,7 @@ select {
 }
 .twikiAttachments th.twikiSortedAscendingCol,
 .twikiAttachments th.twikiSortedDescendingCol {
-	background-color:#e6e6e6; /*BG3*/
+	background-color:#efefef; /*BG3*/
 }
 .twikiToc .twikiTocTitle {
 	color:#666; /*T7*/
@@ -217,19 +292,19 @@ select {
 	color:#8E9195; /*T8*/
 }
 .twikiPageForm td.first {
-	background:#e6e6e6; /*BG3*/
+	background:#efefef; /*BG3*/
 }
 .twikiPageForm hr {
-	border-color:#e6e6e6; /*BO1*/
-	background-color:#e6e6e6; /*BO1*/
-	color:#e6e6e6; /*BO1*/
+	border-color:#efefef; /*BO1*/
+	background-color:#efefef; /*BO1*/
+	color:#efefef; /*BO1*/
 }
 .twikiButton,
 .twikiSubmit {
 	border-color:#ccc; /*BO6*/
 }
 .twikiButton {
-	background-color:#e6e6e6; /*BG3*/
+	background-color:#efefef; /*BG3*/
 }
 .twikiSubmit {
 	background-color:#FED764; /*BG12*/
@@ -239,8 +314,8 @@ select {
 	background-color:transparent;
 }
 .twikiHelp {
-	background-color:#E9F2F9; /*BG5*/
-	border-color:#CADDED; /*BO3*/
+	background-color:#E9F1F7; /*BG5*/
+	border-color:#BFD8ED; /*BO3*/
 }
 .twikiAccessKey {
 	color:inherit;
@@ -251,68 +326,6 @@ a:visited .twikiAccessKey,
 a:hover .twikiAccessKey {
 	color:inherit;
 }
-
-/*	-----------------------------------------------------------
-	Plugin elements
-	-----------------------------------------------------------	*/
-
-.twikiTable,
-.twikiTable td,
-.twikiTable th {
-	border-color:#ddd; /*BO7*/
-}
-.twikiTable th a:link,
-.twikiTable th a:visited,
-.twikiTable th a font {
-	color:#06c; /*T2*/
-}
-.twikiTable th a:hover,
-.twikiTable th a:hover font {
-	background-color:transparent;
-	color:#D6000F; /*T4*/
-	border-color:#D6000F; /*T4*/
-}
-/* sorting of table columns */
-.patternTopic th.twikiSortedAscendingCol,
-.patternTopic th.twikiSortedDescendingCol {
-	background-color:#ccc; /*BG8*/
-}
-th.twikiSortedAscendingCol a:link,
-th.twikiSortedAscendingCol a:link font,
-th.twikiSortedAscendingCol a:visited,
-th.twikiSortedAscendingCol a:visited font,
-.twikiAttachments th.twikiSortedAscendingCol a:link,
-.twikiAttachments th.twikiSortedAscendingCol a:link font,
-.twikiAttachments th.twikiSortedAscendingCol a:visited,
-.twikiAttachments th.twikiSortedAscendingCol a:visited font,
-th.twikiSortedDescendingCol a:link,
-th.twikiSortedDescendingCol a:link font,
-th.twikiSortedDescendingCol a:visited,
-th.twikiSortedDescendingCol a:visited font,
-.twikiAttachments th.twikiSortedDescendingCol a:link,
-.twikiAttachments th.twikiSortedDescendingCol a:link font,
-.twikiAttachments th.twikiSortedDescendingCol a:visited,
-.twikiAttachments th.twikiSortedDescendingCol a:visited font {
-	border-color:#666; /*T7*/
-}
-th.twikiSortedAscendingCol a:hover,
-th.twikiSortedAscendingCol a:hover font,
-.twikiAttachments th.twikiSortedAscendingCol a:hover,
-.twikiAttachments th.twikiSortedAscendingCol a:hover font,
-th.twikiSortedDescendingCol a:hover,
-th.twikiSortedDescendingCol a:hover font,
-.twikiAttachments th.twikiSortedDescendingCol a:hover,
-.twikiAttachments th.twikiSortedDescendingCol a:hover font {
-	border-color:#D6000F; /*T4*/
-}
-
-.twistyPlaceholder {
-	color:#8E9195; /*T8*/
-}
-a:hover.twistyTrigger {
-	color:#FBF7E8; /*T3*/
-}
-
 
 /*	-----------------------------------------------------------
 	Pattern skin specific elements
@@ -373,11 +386,11 @@ a:hover.twistyTrigger {
 }
 .patternLeftBar b,
 .patternLeftBar strong {
-	color:#333;
+	color:#333; /*T11*/
 }
 .patternLeftBarPersonal {
-	background-color:transparent;
-	border-color:#CADDED; /*BO3*/
+	background-color:#E9F1F7;
+	border-color:#BFD8ED; /*BO3*/
 }
 .patternLeftBarPersonal a:link,
 .patternLeftBarPersonal a:visited {
@@ -401,7 +414,7 @@ a:hover.twistyTrigger {
 	background-color:#fff; /*BG1*/
 }
 .patternVersatileTable th {
-	background-color:#e6e6e6;
+	background-color:#efefef;
 }
 .patternVersatileTable th.patternMainCol,
 .patternVersatileTable td.patternMainCol {
@@ -483,8 +496,8 @@ a:hover.twistyTrigger {
 }
 .patternAccessKeyInfo {
 	color:#666; /*T7*/
-	background-color:#E9F2F9; /*BG5*/
-	border-color:#CADDED; /*BO3*/
+	background-color:#E9F1F7; /*BG5*/
+	border-color:#BFD8ED; /*BO3*/
 }
 .patternAccessKeyInfo a:link,
 .patternAccessKeyInfo a:visited {
@@ -512,7 +525,7 @@ table#twikiSearchTable th {
 	color:#8E9195; /*T8*/
 }
 table#twikiSearchTable td.first {
-	background-color:#e6e6e6; /*BG3*/
+	background-color:#efefef; /*BG3*/
 }
 
 /*	-----------------------------------------------------------

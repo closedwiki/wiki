@@ -114,10 +114,6 @@ document.write('<\/style>');
 	.patternPrintPage .patternMain {
 		background:#fff;
 	}
-	.patternLeftBarPersonal,
-	.twikiHelp {
-		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/patternLeftBarPersonal_bg.gif");
-	}
 	.twikiPageForm table {
 		background-image:url("%PUBURL%/%TWIKIWEB%/PatternSkin/twikiPageForm_bg.gif");
 	}
@@ -183,7 +179,10 @@ document.write('<\/style>');
 
 
 
-%TMPL:DEF{"leftbar"}%<div class="patternLeftBar">%IF{"context i18n_enabled" then="<div class=\"patternLanguageOption\">[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopschangelanguage][%_{"Change language"}%]]</div>"}%<div class="patternLeftBarContents">%INCLUDE{"%WEB%.WebLeftBar"}%</div></div>%TMPL:END%
+%TMPL:DEF{"leftbar"}%<div class="patternLeftBar">%IF{"context i18n_enabled" then="<div class=\"patternLanguageOption\">[[%SCRIPTURL%/oops%SCRIPTSUFFIX%/%WEB%/%TOPIC%?template=oopschangelanguage][%_{"Change language"}%]]</div>"}%%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
+<div class="patternLeftBarContents">
+%INCLUDE{"%WEB%.WebLeftBar"}%
+</div></div>%TMPL:END%
 
 
 

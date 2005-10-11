@@ -1,11 +1,8 @@
 %META:TOPICINFO{author="ArthurClemens" date="1093167095" format="1.0" version="1.1"}%
-<div class="patternLeftBarPersonal" style="margin-top:0;">
-%INCLUDE{"%IF{"context can_login" then="%TWIKIWEB%.WebLeftBarLogin"}%" warn="off"}%
+%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%
+----
    * <b>%MAKETEXT{"[_1] Web" args="<nop>%INCLUDINGWEB%"}%</b>
    * [[%HOMETOPIC%][%MAKETEXT{"[_1] Web Home" args="%INCLUDINGWEB%"}%]]
    * [[WebChanges][%MAKETEXT{"Changes"}%]]
    * [[WebIndex][%MAKETEXT{"Index"}%]]
    * [[WebSearch][%MAKETEXT{"Search"}%]]
-</div>
-----
-%INCLUDE{ "%TWIKIWEB%.WebLeftBarWebsList" }%

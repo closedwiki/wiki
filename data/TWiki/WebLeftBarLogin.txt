@@ -2,4 +2,5 @@
 %STARTINCLUDE%
 <div class="patternLeftBarPersonal">
 %IF{"context authenticated" then="%MAKETEXT{"Hello [_1]!" args="[[%WIKIUSERNAME%][%SPACEOUT{%WIKINAME%}%]]"}%%BR%%LOGOUT%" else="%LOGIN%"}%
-<div id="patternLeftBarPersonalContent">%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">%MAKETEXT{"Create personal sidebar"}%</a>"}%</div></div>
+<div id="patternLeftBarPersonalContent">%INCLUDE{"%MAINWEB%.%WIKINAME%LeftBar" warn="<a href=\"%SCRIPTURLPATH%/edit%SCRIPTSUFFIX%/%MAINWEB%/%WIKINAME%LeftBar?templatetopic=%TWIKIWEB%.WebLeftBarPersonalTemplate&amp;topicparent=%WIKINAME%\">%MAKETEXT{"Create personal sidebar"}%</a>"}%</div>
+</div>
